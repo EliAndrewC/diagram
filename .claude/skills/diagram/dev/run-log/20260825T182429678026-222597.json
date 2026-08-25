@@ -1,0 +1,14 @@
+{
+  "utc": "2026-08-25T18:24:29Z",
+  "target": "ci-merge",
+  "scope": "reference",
+  "seconds": 475,
+  "result": "FAILED",
+  "commit": "19cd585a",
+  "where": "codebuild",
+  "build_id": "gm-assistant-merge:347249b6-8d62-437f-b937-23ae5bd38320",
+  "minutes": 8.0,
+  "cost_usd": 0.64,
+  "compute": "BUILD_GENERAL1_XLARGE",
+  "reason": "done"
+}
