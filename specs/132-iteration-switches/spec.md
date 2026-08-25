@@ -4,7 +4,7 @@
 
 **Created**: 2026-08-25
 
-**Status**: Draft - awaiting `spec-fidelity` review (constitution XVI)
+**Status**: round 1 NOT FAITHFUL (two changes, both applied - see Review history); awaiting round 2
 
 **Input**: [`gm-request.md`](gm-request.md), verbatim and unedited. That file is the authority for
 this specification; the session's proposal recorded there is what the GM's *"that sounds like
@@ -104,7 +104,11 @@ before any map rolls; `make reference`, `make quick`, `make done` (reference sco
    and does NOT widen to the tier even after a clean run (the adaptive widening is the lock's
    business, not the state machine's).
 3. **Given** scope is locked, **When** `make reference`, `make quick`, `make done` (no FULL), or
-   `make map` with the tier's reference gen runs, **Then** it runs exactly as before.
+   `make map` with exactly one gen runs, **Then** it runs exactly as before.
+5. **Given** scope is locked, **When** `make map GEN="a.gen.py b.gen.py"`, `make map
+   GEN='pool/*/*.gen.py'`, `make cache-audit` (with or without `--all`) or `make regressions`
+   runs, **Then** it refuses before any map rolls - the rule is "one map per invocation", and the
+   enumeration in FR-010 is not where the guarantee lives.
 4. **Given** scope is locked, **When** `make scope-unlock REASON="..."` runs, **Then** the default
    returns, the release is recorded, and the printout reminds the operator that the pool has not
    been swept since the lock was set (constitution XIII: what accumulated is measured, not
@@ -117,18 +121,17 @@ before any map rolls; `make reference`, `make quick`, `make done` (reference sco
 Any session can see the switches' state, and the history of every throw and release is in git.
 
 **Independent Test**: `make switches` prints both axes with reason and date; `git log` on the
-setting file lists each change as its own commit.
+setting file lists each change as its own commit. (Round 1 removed a `make audit` reporting
+clause as unrequested.)
 
 **Acceptance Scenarios**:
 
 1. **Given** any state, **When** `make switches` runs, **Then** both axes print with state, reason,
-   who (the committer identity), UTC and the commit they were set at.
+   who (the committer identity) and UTC.
 2. **Given** a switch is thrown, **When** the target completes, **Then** the setting file is
    COMMITTED by the target itself (`chore: remote off - <reason>` / `chore: scope locked - ...`),
    so the state is never an uncommitted local difference and reaches every clone through the
-   normal sync.
-3. **Given** `make audit` runs, **Then** its report shows the current switch state and the throws
-   and releases in the audited period.
+   normal sync; the history of throws and releases is that file's git log.
 
 ### Edge Cases
 
@@ -143,6 +146,11 @@ setting file lists each change as its own commit.
 - **An environment variable, make variable or command-line flag that says "ignore the switch"**:
   does not exist. The only way past a thrown switch is the release target, which commits. This is
   the GM's *"literally cannot"* and feature 130's *"never through an environment variable"*.
+  **The existing test seams are inside this rule** (the reviewer's aside): `sync-with-main.sh`
+  honors `CI_ROUTE` / `CI_MERGE` today in any tree, and `CI_ROUTE=DIRECT` on a real clone would
+  skip the gated route entirely - a pre-existing hole this feature closes under Principle XIV: the
+  seams are honored ONLY in a tree with no diagram skill (a fixture), which is the only place the
+  tests use them. `mapcheck`'s `SCOPE` environment default is read through the lock like the flag.
 - **Remote off, and main has moved on engine paths since this clone's merge base**: the gated
   route refuses (the green local `make done` vouched for different engine content), and the
   refusal tells the session to merge main in and run `make done` again. Nothing is dispatched.
@@ -166,15 +174,17 @@ setting file lists each change as its own commit.
 **The setting**
 
 - **FR-001**: The switches MUST live in ONE tracked file in the diagram skill's `dev/` area,
-  holding both axes, each with `state`, `why`, `who`, `utc` and `commit`. Defaults (file absent):
-  remote `on`, scope `unlocked`.
+  holding both axes, each with `state`, `why`, `who` and `utc`. Defaults (file absent): remote
+  `on`, scope `unlocked`.
 - **FR-002**: A throw or release MUST be done through a make target that REQUIRES a reason,
   writes the file, and COMMITS it in the same target. There is no other supported write path.
 - **FR-003**: There MUST be no environment variable, make variable or flag that overrides a thrown
   switch. The release target is the only way back.
 - **FR-004**: A malformed file MUST fail closed (remote off, scope locked) and print why.
-- **FR-005**: `make switches` MUST print both axes with reason, who, UTC and commit; `make audit`
-  MUST include the current state and every throw/release in the audited period.
+- **FR-005**: `make switches` MUST print both axes with state, reason, who and UTC. (The history
+  of throws and releases is the git log of the file - FR-002 commits each one - and needs no
+  second reporting surface; the `spec-fidelity` review of round 1 removed a `make audit` clause
+  as unrequested.)
 
 **Remote off**
 
@@ -192,17 +202,25 @@ setting file lists each change as its own commit.
 
 **Scope locked**
 
-- **FR-010**: With scope locked, every target that rolls a map other than the tier's reference
-  settlement as part of a SWEEP MUST refuse before any map rolls and before any prompt: `cohort`,
-  `done FULL=1`, `test-full`, `tripwire`, `maps SCOPE=all`, `ci-check FULL=1`, `ci-check
-  TARGET=<operation>`, `ci-merge FULL=1`. The refusal names the reason, the date and
-  `make scope-unlock`.
+- **FR-010**: With scope locked, **no invocation of any target or module may roll a map other
+  than the tier's reference settlement, and no invocation may roll more than one map.** This is a
+  RULE; the list is its known instances, not its extent: `cohort`, `done FULL=1`, `test-full`,
+  `tripwire`, `maps SCOPE=all`, `cache-audit` (any form - its default rolls a subset of the pool
+  repeatedly, `--all` the whole pool), `regressions`, `ci-check FULL=1`, `ci-check
+  TARGET=<operation>`, `ci-merge FULL=1`, and `map` with more than one gen or a glob in `GEN`
+  (`pipeline.regen` takes a list, and `pool/*/*.gen.py` is the documented whole-pool sweep). Each
+  refuses before any map rolls and before any prompt, naming the reason, the date and
+  `make scope-unlock`. (Round 1 of the fidelity review found the enumeration left `cache-audit`
+  and a globbed `GEN` open - the exact failure the Makefile records for `cohort_audit`.)
 - **FR-011**: With scope locked, `make maps` (the adaptive command) MUST run the reference map
   alone and MUST NOT widen after a clean run.
 - **FR-012**: With scope locked, `make reference`, `make quick`, `make done` (reference scope),
-  `make test-file`, and `make map` with the tier's reference gen MUST behave exactly as today.
+  `make test-file`, and `make map` with exactly ONE gen MUST behave exactly as today. ONE map per
+  invocation is the whole carve-out: a second gen, or a glob, is a sweep and refuses (FR-010).
 - **FR-013**: The lock is enforced in BOTH the Makefile (the entry every operator uses) and the
-  Python entry points the sweeps run through (`cohort_audit`, `mapcheck`, the `ci` dispatcher), so
+  Python entry points the sweeps run through (`cohort_audit`, `mapcheck`, `cache_audit`,
+  `make_regressions`, `pipeline.regen` - which refuses a list longer than one - and the `ci`
+  dispatcher), so
   that neither a new make target nor a direct module call can roll a sweep unnoticed. (Everything
   already runs through `make` - feature 127 - so the Python layer is defense in depth, not the
   primary door.)
@@ -221,9 +239,12 @@ setting file lists each change as its own commit.
 - **FR-017**: The "why" of every rule above MUST be recorded where the rule lives (CLAUDE.md
   "Record the why", REQUIRED): the setting file's `CLAUDE.md`, a comment at each Makefile
   refusal, and the ci package's `CLAUDE.md` (a sixth condition).
-- **FR-018**: The decision NOT to gate single-map targets (`map` with a non-reference gen,
-  `hamlet`, `perf`) under the lock MUST be recorded with the alternatives priced (CLAUDE.md
-  "Record a decision to ACCEPT a limitation").
+- **FR-018**: The decision to leave ONE-map-per-invocation targets runnable under the lock (`map`
+  with a single gen, `hamlet`, `perf` - which rolls the reference set one seed at a time and is a
+  constitutional obligation for generator features) MUST be recorded with the alternatives priced
+  (CLAUDE.md "Record a decision to ACCEPT a limitation"). The GM's own definition of the suite is
+  *"forty eight different maps ... some number of different maps with some number of different
+  seeds per map"* - a sweep; one map is iteration.
 
 ### Key Entities
 
@@ -265,3 +286,12 @@ setting file lists each change as its own commit.
   other notion of an actor at a terminal (feature 129 research R1).
 - Feature 133 (the reference hamlet's acceptance) begins after this feature lands and works with
   both switches thrown for its whole span.
+
+## Review history (constitution XVI)
+
+- **Round 1 (2026-08-25): NOT FAITHFUL.** (1) FR-010 was an enumeration that left `cache-audit`
+  and a globbed / multi-gen `make map` runnable - two working full-pool routes under a lock whose
+  purpose is *"literally cannot"*. Rewritten as a rule (one map per invocation, reference only),
+  FR-012/FR-013/FR-018 and Story 2 amended, scenario 5 added. (2) The `make audit` reporting
+  clause, Story 3 scenario 3 and the `commit` field were unrequested; removed. The reviewer's
+  aside on the `CI_ROUTE`/`CI_MERGE` seams is recorded as an edge case and fixed in this feature.
