@@ -4,7 +4,7 @@
 
 **Created**: 2026-08-25
 
-**Status**: APPROVED by `spec-fidelity` - round 3 verdict **FAITHFUL** (2026-08-25), after rounds 1 and 2 returned changes (see Review history). **AMENDED the same day on the GM's second request** (the local `make done` short-circuits on the same rule as the remote gate: FR-019..FR-023) - amendment awaiting its own fidelity review.
+**Status**: APPROVED by `spec-fidelity` - round 3 verdict **FAITHFUL** (2026-08-25), after rounds 1 and 2 returned changes (see Review history). **AMENDED the same day on the GM's second request** (the local `make done` short-circuits on the same rule as the remote gate: FR-019..FR-023) - amendment: round 1 CHANGES REQUIRED (four, applied), awaiting round 2.
 
 **Input**: [`gm-request.md`](gm-request.md), verbatim and unedited. That file is the authority for
 this specification; the session's proposal recorded there is what the GM's *"that sounds like
@@ -260,21 +260,29 @@ to short circuit and skip AWS tests to these 5 minute tests as well for the make
 
 - **FR-019**: `make done` (reference scope) MUST check, BEFORE running anything, whether the last
   recorded verification is a green `make done` against exactly the content the gate exercises,
-  and if so MUST report `already verified` (naming that run's time and commit), re-stamp, record
-  `green-local done`, and exit green - in seconds, rolling no map and running no test.
-- **FR-020**: "The content the gate exercises" is the remote engine key (`l7r/**/*.py`, `tests/**`,
-  `pool/*.gen.py`, `pool/*.json`) PLUS what shapes how the gate runs and was excluded from the
-  remote key precisely because it is "covered locally": the skill's `Makefile`, `pyproject.toml`,
-  the lockfiles, and `scripts/**` (the guard scripts `hooks-test` runs). A documentation-only
-  change leaves this key unchanged; a change to any of these does not.
+  and if so MUST report `already verified` (naming that run's time and commit), record
+  `green-local done`, and exit green - in seconds, rolling no map and running no test. It may
+  re-write the `gate-stamp` ONLY because the gate key (FR-020) contains everything the stamp
+  hashes: a short-circuit can never stamp content no gate ran on (the review's point 2; a test
+  proves the containment).
+- **FR-020**: "The content the gate exercises" is a RULE - everything `make done` reads or runs -
+  and the list is its known instances, not its extent: every `*.py` under the skill directory
+  (what `lint`/`format`/`typecheck` walk and what `gate-stamp`'s `diagram` area hashes - so
+  `.explain.py` and `wip/*.gen.py` count, not only `l7r/**`), `tests/**`, `pool/*.gen.py` and
+  `pool/*.json` (the engine data the tests read), the skill's `Makefile`, `pyproject.toml`, the
+  lockfiles and their `.in` sources (the gate's own configuration), and `scripts/**` (what
+  `hooks-test` runs and `gate-stamp`'s `hooks` area hashes). The remote engine key excluded the
+  configuration paths precisely because they are "covered locally" - this is that coverage. A
+  documentation-only change leaves this key unchanged.
 - **FR-021**: The short-circuit MUST NOT apply to `FULL=1` (a different scope), and MUST NOT
   apply when the last verification is anything but a green `done` (a green `quick` or `reference`
   vouches for less than the gate does). A red last run never short-circuits.
-- **FR-022**: There is no flag to force the short-circuit; there IS a way to force the run
-  (`make done FORCE=1`, logged like a bypass with a reason), because re-verifying is never the
-  expensive mistake.
+- **FR-022**: There is no flag to force the short-circuit. (A `FORCE=` re-run flag was in the
+  first draft and removed at the amendment's fidelity review as unrequested - the remote rule it
+  copies has none.)
 - **FR-023**: Proven both ways: a docs-only edit after a green `done` short-circuits; an edit to
-  each kind of path in FR-020 does not.
+  each kind of path in FR-020 does not - including a `.py` under the skill outside `l7r/`,
+  `tests/` and `pool/`, the case the first draft's enumeration let through.
 
 ### Key Entities
 
@@ -333,3 +341,7 @@ to short circuit and skip AWS tests to these 5 minute tests as well for the make
   without new scope. Reviewer's aside recorded: under remote-off, when main has moved on engine
   paths the ritual refuses with the merge instruction rather than merging itself - the same
   sequence with the session as the driver.
+- **Amendment round 1 (2026-08-25): CHANGES REQUIRED.** (1) FR-020 was an enumeration that left
+  `.explain.py` and `wip/*.gen.py` - linted by the gate - outside the key; now a rule. (2) FR-019's
+  re-stamp made explicit as safe only because the key contains the stamp's areas. (3) `FORCE=`
+  removed as unrequested. (4) FR-023 covers the missed case. Applied.
