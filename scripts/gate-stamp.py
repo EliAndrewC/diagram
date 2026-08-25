@@ -34,7 +34,7 @@ import tempfile
 from pathlib import Path
 
 # area name -> repo-relative root. Each must have a Makefile whose `done` target stamps it.
-AREAS = {"diagram": ".claude/skills/diagram", "webapp": "webapp"}
+AREAS = {"diagram": ".claude/skills/diagram"}  # the webapp area lives in gm-assistant since feature 131
 
 
 def _git(*args: str, cwd: Path | None = None) -> str:

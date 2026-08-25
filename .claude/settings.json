@@ -8,7 +8,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "/gm-assistant/scripts/clone-sync-hooks.sh prompt",
+            "command": "/diagram/scripts/clone-sync-hooks.sh prompt",
             "timeout": 60,
             "statusMessage": "Syncing session clone with main..."
           }
@@ -21,7 +21,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "/gm-assistant/scripts/clone-sync-hooks.sh pretool",
+            "command": "/diagram/scripts/clone-sync-hooks.sh pretool",
             "timeout": 30
           }
         ]
@@ -31,7 +31,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "/gm-assistant/scripts/batching-hooks.sh pretool",
+            "command": "/diagram/scripts/batching-hooks.sh pretool",
             "timeout": 10
           }
         ]
@@ -41,7 +41,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "/gm-assistant/scripts/no-poll-hooks.sh pretool",
+            "command": "/diagram/scripts/no-poll-hooks.sh pretool",
             "timeout": 10
           }
         ]
@@ -51,7 +51,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "/gm-assistant/scripts/gate-hooks.sh pretool",
+            "command": "/diagram/scripts/gate-hooks.sh pretool",
             "timeout": 10
           }
         ]
@@ -61,7 +61,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "/gm-assistant/scripts/no-branch-hooks.sh pretool",
+            "command": "/diagram/scripts/no-branch-hooks.sh pretool",
             "timeout": 10
           }
         ]
@@ -71,7 +71,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "/gm-assistant/scripts/make-only-hooks.sh pretool"
+            "command": "/diagram/scripts/make-only-hooks.sh pretool"
           }
         ]
       },
@@ -80,7 +80,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "/gm-assistant/scripts/guard-file-hooks.sh pretool"
+            "command": "/diagram/scripts/guard-file-hooks.sh pretool"
           }
         ]
       },
@@ -89,7 +89,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "/gm-assistant/scripts/readme-hooks.sh pretool"
+            "command": "/diagram/scripts/readme-hooks.sh pretool"
           }
         ]
       },
@@ -98,7 +98,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "/gm-assistant/scripts/repo-safety-hooks.sh pretool"
+            "command": "/diagram/scripts/repo-safety-hooks.sh pretool"
           }
         ]
       },
@@ -107,7 +107,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "/gm-assistant/scripts/house-style-hooks.sh pretool"
+            "command": "/diagram/scripts/house-style-hooks.sh pretool"
           }
         ]
       },
@@ -116,7 +116,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "/gm-assistant/scripts/source-block-hooks.sh pretool"
+            "command": "/diagram/scripts/source-block-hooks.sh pretool"
           }
         ]
       }
@@ -127,7 +127,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "/gm-assistant/scripts/batching-hooks.sh posttool",
+            "command": "/diagram/scripts/batching-hooks.sh posttool",
             "timeout": 10
           }
         ]

@@ -82,7 +82,7 @@ while still showing green. Prefer this to widening the gate quietly.
 map DATA. A check can just as easily be gated on where it is RUNNING, and then it disables itself in
 exactly one place: the place you always run it. `tests/hamletgen/test_surface.py`'s census skipped any
 file with `.clones` among its path parts - which reads as "do not walk other sessions' clones", but
-tests the ABSOLUTE path. Every session works inside `/gm-assistant/.clones/<name>/`, so the condition
+tests the ABSOLUTE path. Every session works inside `/diagram/.clones/<name>/`, so the condition
 was true for EVERY file, the census returned the empty set, and `test_census_matches_pin` compared
 nothing against its pin list. Inside a clone it saw **0 names; with the guard gone it sees 50** - and
 it had been hiding two genuinely unpinned consumers (`hg.driver`, `hg.sink`) introduced by the very

@@ -243,6 +243,7 @@ Subject names: lowercase-kebab-case, descriptive (e.g., `ochiba-magistracy`, `wa
 - [`tests/check_village/`](tests/check_village/) - negative-fixture unit tests for the gate itself: each asserts a check FIRES on a deliberately-broken synthetic manifest (so a silently-neutered check is caught). Add a fixture when you add or tighten a check
 - [`tests/settlement/`](tests/settlement/) - unit tests for the `settlement.py` branches the pool generators don't exercise (unused vocabulary methods, internal fallbacks)
 - [`pyproject.toml`](pyproject.toml) - pytest + coverage config. Coverage is enforced per-module by the Makefile since the 2026-08-16 legacy freeze: 100% on every measured module except the `settlement/` package, whose above-hamlet wings are exercised by nothing until those tiers convert to scripted generation and which therefore holds a ratchet floor (`SETTLEMENT_COV_FLOOR` in the Makefile). Run `python3 -m pytest` from the skill dir (needs `pytest` + `pytest-cov`); the full suite must run together or the coverage numbers are meaningless
+(gm-assistant is mounted read-only at `/gm-assistant`; on GitHub: <https://github.com/EliAndrewC/gm-assistant/tree/main/setting>)
 - `/gm-assistant/setting/village-headsmen.md` - village structure, strip-allocation/usufruct, headman role (Mode B grounding)
 - `/gm-assistant/setting/median-domain.md` - sizing data (samurai per town, etc.)
 - `/gm-assistant/setting/government.md` - role hierarchies (ministries, magistrates, etc.)

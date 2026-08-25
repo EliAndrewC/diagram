@@ -12,7 +12,7 @@ The setting models administrative/domestic culture on Edo-period Japan first, wi
 
 ## Inputs
 
-The main agent passes you a subject name. All paths are under `/gm-assistant/.claude/skills/diagram/`:
+The main agent passes you a subject name. All paths are under `/diagram/.claude/skills/diagram/`:
 
 - `pool/<subject>.png` - the rendered plan (Read it as an image; this is what the GM sees)
 - `pool/<subject>.svg` - the source (geometry: divide px by 3 for real feet)

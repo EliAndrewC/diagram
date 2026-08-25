@@ -1,20 +1,29 @@
-# L5R Setting Generation Project
+# L7R Diagram - the settlement and building map generator
 
-This project is a Legend of the Five Rings tabletop RPG worldbuilding environment. The GM uses Claude Code to generate setting details (NPCs, locations, items, etc.) guided by their extensive setting notes and evolving preferences.
+<!-- container-mounts: ../gm-assistant:/gm-assistant -->
+<!-- container-workdir: /diagram -->
 
-<!-- Dev-container config consumed by scripts/launch-container.sh. Format is HOST:CONTAINER. -->
-<!-- container-ports: 8080:8080 8091:8090 -->
-<!-- container-mounts: ..:/host-l7r-repo -->
-<!-- container-workdir: /gm-assistant -->
-<!-- (distinct mount path per repo so Claude memory under ~/.claude/projects/ stays separate across sibling repos) -->
+This repository is the `/diagram` skill of the GM's L5R worldbuilding project, split out of
+[`EliAndrewC/gm-assistant`](https://github.com/EliAndrewC/gm-assistant) on 2026-08-25 (feature 131)
+because it had *"grown into a project into its own right"* with rules the rest of that repository
+should not carry: **every change here is a spec-kit feature; everything runs through `make`; the
+merge gate runs on AWS CodeBuild (feature 130, once implemented).** The skill still lives at
+[`.claude/skills/diagram/`](.claude/skills/diagram/) - the SAME path as before the split, on
+purpose, so nothing in the engine, the pool generators or the feature-127 guards moved.
+
+**Read next**: [`.claude/skills/diagram/SKILL.md`](.claude/skills/diagram/SKILL.md) (usage) and
+[`.claude/skills/diagram/CLAUDE.md`](.claude/skills/diagram/CLAUDE.md) (the dev loop - auto-loads
+when you edit under it). The GM's setting notes that the research cites live in gm-assistant
+(`setting/`, `cosmology/`, `campaigns/`) - mounted read-only at `/gm-assistant` in this container,
+and on GitHub at <https://github.com/EliAndrewC/gm-assistant/tree/main/setting>. The canonical
+campaign notes remain `/host-l7r-repo/setting/l7r.md` in the GM's `l7r` repo; this repository never
+edits them.
+
+**A feature is identified by REPOSITORY + number from 2026-08-25.** This repository continues from
+132; gm-assistant restarts at 200. Features 001-131 that concern the diagram live here with their
+numbers; the five that do not (001-004, 011) stayed in gm-assistant.
 
 ## Core Rules
-
-### Canonical Source
-
-The GM's canonical notes file is `/host-l7r-repo/setting/l7r.md` - the GM's `EliAndrewC/l7r` repo, bind-mounted from the host. This file is the master record of campaign and setting notes. The GM appends to it directly from their laptop, and you append to it via the [Note Intake Workflow](#note-intake-workflow) below when the GM pastes notes into the chat. If the mount is not present, the container was not launched per [`/gm-assistant/README.md`](README.md) - ask the GM rather than guessing.
-
-The GM handles all git operations (`add`, `commit`, `push`) from their laptop. From inside the container, **never run `git commit` or `git push`** against the mount; read-only operations like `git log` / `git diff` are fine if you need historical context.
 
 ### Protecting the GM's Writing
 
@@ -26,9 +35,7 @@ AI-generated content (preferences, generation instructions, examples of liked/di
 
 This convention applies to ALL files in the project - both skill files and reference directory files.
 
-### File Organization
-
-#### Skills (invocable as /slash-commands)
+### Skills (invocable as /slash-commands)
 
 Each skill lives in `/.claude/skills/<skill-name>/SKILL.md` with YAML frontmatter. Skills are for *generating* specific types of content.
 
@@ -44,12 +51,8 @@ Reference directories hold organized source material and context. Each directory
 
 ### Generation Behavior
 
-- When generating content, draw on the GM's source notes for tone, style, and setting details.
 - Preference feedback from the GM is captured in memory and incorporated into skill files over time.
 - Never invent setting details that contradict the GM's source notes.
-- **A request to generate a character IS the authorization to upload it** (GM 2026-08-17). When the GM asks for an NPC to be generated (`/chargen`) or a backstory synthesized (`/synthesize`), do NOT present a review menu, do NOT ask whether they are sure, and do NOT wait - upload, then report what you uploaded with the full prose reproduced in your reply, and offer a re-roll/rewrite as an offer that blocks nothing. OP records are editable and both skills are re-runnable end to end, so a draft the GM dislikes costs one follow-up message, while a gate costs a round trip on every character including all the ones they would have approved unchanged. This does NOT relax three things: the `backstory-review` subagent still runs every time (Principle I - a check on YOUR work, never a request for the GM's approval); a genuinely-missing *input* is still worth one question; and an ambiguous character match is still a question, because that is about which record gets written to. Full rule in each skill's own "NO PRE-REVIEW GATE" step.
-- **Every NPC you create gets an AI portrait, asked for or not** (GM 2026-07-25). This is part of a finished NPC, not an optional extra - never create a character, present it, and then offer the portrait as a follow-up. `/chargen` already does this (its Step 3c); `/synthesize` does it conditionally (Step 5 - only when the existing record has no `[[File:...]]` embed in its `bio`); and creating an NPC by any other path (hand-rolling with the chargen engine, calling `op.create_character` directly) carries the same obligation. The mechanism is `art.generate_prompt` -> `art.generate_image_base64` -> `art.get_headshot_crop`/`crop_headshot` -> `op.upload_avatar` (browser-sim; the OAuth API silently no-ops on avatar fields) plus `op.upload_image` for the full-body `bio` embed. **`op.upload_avatar` does not attach the image to anything** - it posts to `/uploads` and returns an id, which `create_character` binds via the form's `new_avatar_upload_id`. For a character that ALREADY exists you must then call `op.set_character_avatar(slug, upload_id)`, which re-submits the edit form with the id patched in; without it the character silently ends up with no headshot even though every call returned 200. Verify with `avatar_url` from `op.existing_characters()` - the character page's HTML does not expose the portrait, so it cannot be used as a check. `art.generate_prompt` is caste-aware, so pass the whole character dict rather than a hand-built one; read the returned PNG back before uploading to confirm it is a real, caste-correct portrait, and fix any problem at the prompt rather than with post-processing.
-- Skills should reference the relevant reference directories for shared context (e.g., `/temple` should draw on `/setting/` for demographics and `/cosmology/` for Fortune theology).
 - **Hyphens only - no em-dashes (U+2014) or en-dashes (U+2013) anywhere in the project**, including generated content, webapp templates, skill files, specs, docs, and tests. This applies project-wide, not just to `l7r.md`.
 - **American spellings, never British ones.** Always use: `color`, `center`/`centered`, `gray`, `honor`, `judgment`, `catalog`, `labeled`/`labeling`, `behavior`, `neighbor`/`neighborhood`, `analyze`/`organize`/`recognize` (the `-ize` forms), `artifact`, `defense`, `license`, `practice` (both noun and verb), `skeptic`, `story` (of a building), `while`, `traveled`, `modeled`, `program`, `meter`, `liter`, `mold`, `plow`, `curb`, `draft`, `aging`, `marvelous`, `jewelry`, `skillful`. Never their British counterparts (the `-our`, `-re`, `-ise`, `-ce`-noun, doubled-`l`, and `-ogue` forms). This applies project-wide and to **everything**: generated content, prose, docs, specs, skill files, webapp templates, tests, comments and docstrings, **and code identifiers** (variable names, parameters, dict keys, CSS class names). The one exception is the GM's own writing - never "correct" text inside `<!-- SOURCE: GM NOTES -->` blocks or in `l7r.md`, and leave direct quotations of it alone.
 - **Constitution Principle XI** (Japanese Authenticity): any kanji that surfaces in generated content - relic names, sword names, given names, temple titles, vow refrains, decorative stamps - must pass the kanji ↔ romaji ↔ meaning triangle. Real characters, plausible reading, English meaning that maps back. Stylized readings are allowed when explained in surrounding prose.
@@ -57,103 +60,10 @@ Reference directories hold organized source material and context. Each directory
 - **Record a decision to ACCEPT a limitation, and the alternatives that were declined (REQUIRED)** (GM 2026-08-17: *"we should always document this kind of decision... that way if we look it up later, we'll know it was a deliberate decision"*). The rule above covers a decision that produced a rule; this covers the other kind - where we looked at something imperfect and deliberately chose to leave it. Undocumented, those are indistinguishable from bugs, and the next session "fixes" them. So write down **what was accepted, what it costs in observable terms, which alternatives were priced, and who chose** - the rejected options matter as much as the chosen one, because they are what stops the question being reopened from scratch. Worked example: [`.claude/skills/diagram/settlements/water.md`](.claude/skills/diagram/settlements/water.md) "THE TAPER IS SUB-PERCEPTUAL AT TRUE SCALE" - the GM asked why a channel did not visibly narrow, the honest answer was that at true scale it cannot, two legibility multipliers were priced against keeping true size, and the ruling plus both declined numbers are recorded where the next reader will meet the map.
 - **RESEARCH BEFORE YOU ASK FOR A RULING (REQUIRED)** (GM 2026-08-18, constitution Principle XII). A question about how a place was actually built, farmed or lived in is a RESEARCH question. Run the search pass FIRST; the GM is asked only when the record turns out silent or contradictory, and the ask must say what was searched, what was found, and why it does not settle the matter. This binds the review loop hardest, because that is where these surface: a reviewer writing *"this wants a one-line ruling"* has identified a QUESTION, not delegated it. Two questions queued for the GM on 2026-08-17 - whether a byre may stand beside a wellhead, and whether a hamlet's back rank needs a way - were both answered by one research pass the next morning.
 - **TWO SUPPORTABLE ANSWERS BECOME A KNOB, NOT A CHOICE (REQUIRED)** (GM 2026-08-18, constitution Principle XII). Where the research shows a thing was genuinely done more than one way, do NOT pick the reading you prefer: make it a **tunable knob with per-settlement variance**, rolled from the map's own seed like every other knob. The reason is a project goal rather than a historical one - these maps exist for players who must tell one settlement from another at a glance, so *"we want settlements which are within historical norms while being as different from one another as is justifiable by our historical research"*. Every place the record permits two forms is a place two maps can honestly differ, and picking one throws that away permanently. The ladder: research it; if decisive, implement what it says; if it supports two forms, add the knob; only if it is silent does the GM rule. (The older "calibrated liberty" clause still covers a DEGREE along a continuum - how large, how dense, how often - never a choice between distinct FORMS.)
-- **"People" has caste meaning.** In the Celestial Order only samurai are "people"; heimen are "half-people", hinin "non-people". In demographic, statistical, or analytical writing use `humans` / `inhabitants` / `population` / a specific caste term - never "4 out of every 5 people work the land". `people` is fine for samurai specifically, and in narrative, lore, dialogue, vow and folktale voice. Full rule in [`docs/l7r-style.md`](docs/l7r-style.md).
+- **"People" has caste meaning.** In the Celestial Order only samurai are "people"; heimen are "half-people", hinin "non-people". In demographic, statistical, or analytical writing use `humans` / `inhabitants` / `population` / a specific caste term - never "4 out of every 5 people work the land". `people` is fine for samurai specifically, and in narrative, lore, dialogue, vow and folktale voice. Full rule in [`docs/l7r-style.md`](docs/l7r-style.md) (copied from gm-assistant; the canonical copy is there).
 - **"Domain", never "demesne"**, for territory administered at any tier, including compounds ("Imperial domain"). Silently fix `demesne` -> `domain` in any text you edit.
 - **Gender-neutral office-holders.** Use `they`/`their`/`them` for a GENERIC daimyo, governor, magistrate, minister, or samurai; specific named characters keep their own pronouns.
 
-## Skills
-
-| Skill | Purpose |
-|-------|---------|
-| `/sword` | Generate famous swords with histories and properties |
-| `/temple` | Generate temples, monk NPCs, temple daily life |
-| `/relic` | Generate temple relics, cursed items, supposedly-supernatural objects |
-| `/vow` | Generate oaths and vows for various orders and roles |
-| `/place-names` | Generate Rokugani place names at four scales (province, town, village, hamlet) with suffix-aware emit-time notes and a tagged pool |
-| `/calendar` | Generate seasonal details, festivals, agricultural events |
-| `/law` | Generate legal cases, rulings, magistrate proceedings |
-| `/fortune` | Generate cosmological content, soothsaying, omens, Fortune theology |
-| `/moto` | Generate Moto culture content, Yassa rulings, horse culture, Burning Sands |
-| `/bounty` | Generate bounties, Wasp clan content, minor clan details |
-| `/name` | Generate Rokugani personal names with meanings in varied formats. Args: `[m\|f] [p] [N]` - supports shorthand and concatenation (e.g. `pf3`) |
-| `/diagram` | Generate SVG top-down diagrams of L5R locations (manor plans, village layouts, temple plans, etc.) and render to PNG |
-| `/dream` | Generate Rokugani dream-omen scenes: randomized d10 dream tables for PCs seeking a fortune's (or other spirit's) will in sleep, grounded in Kitsu Okura's six-doctrine theology of attunement. Strange, open fragments that describe the dream's events and never its meaning; shared no-dream/noise bands, a 10-is-always-significant Coda, and a two-tier (public / gitignored-local) spoiler-safe pool |
-| `/synthesize` | Write a backstory for an existing Obsidian Portal NPC, Claude-native (in-session prose - no external LLM; the webapp button still uses Gemini): reads the OP record + tagline and the campaign-context cast, researches the setting files directly, **uploads with no pre-review gate**, merges into GM-only notes. Args: `<character name> [ - steering]` |
-| `/chargen` | Make a brand-new NPC end-to-end and upload it to Obsidian Portal: roll a skeleton character with the chargen engine (asking only about genuinely-missing essentials), write a Claude-native backstory (the `/synthesize` method, not Gemini) from the rolled attributes, generate and attach an AI portrait, and create the OP record. Public by default; GM-only if the concept says private/hidden. Args: `<free-text character concept>` |
-| `/weather` | Ground Rokugan weather in real historical data: map a place to a continental-US climate analog (latitude, distance from ocean, elevation) and read actual recorded weather for a Rokugani calendar date translated to a real-world date. Args: `<place> <month> <day>` |
-
-## Testing
-
-- **Framework:** pytest with pytest-cov
-- **Location:** Tests live alongside the code they test as `test_<module>.py`
-- **Coverage target:** 100% line coverage for pure logic. External boundaries (HTTP requests, browser sessions) are tested via saved fixtures, not mocks of the transport layer.
-- **Running:** `pytest <skill-dir> -v` for a specific skill, or `pytest --cov=<skill-dir> --cov-report=term-missing` for coverage
-
-## Reference Directories
-
-| Directory | Contents |
-|-----------|----------|
-| `/setting/` | Demographics, government, ranks, castes, economics, geography |
-| `/campaigns/` | Campaign timelines, NPC/PC backstories, Order of Lord Moon |
-| `/hooks/` | Adventure hooks by setting type |
-| `/cosmology/` | Moon court, stories, maho, gaijin religion, Fortune theology |
-| `/notes/` | Miscellaneous source material, not yet organized into a dedicated reference directory |
-
-## Reference docs (load on demand)
-
-These were split out of this file so they are not in every session's context. Each one states when to load it; the short always-on version of each rule stays below.
-
-| Doc | Load it when |
-|---|---|
-| [`docs/l7r-style.md`](docs/l7r-style.md) | Editing `/host-l7r-repo/setting/l7r.md`, or writing prose into an Obsidian Portal wiki page or character record. Numbers, voice, Family/Clan capitalization, heading hierarchy and the curated TOC. |
-| [`docs/session-clones.md`](docs/session-clones.md) | Setting up a clone, hitting a clone/sync hook block, resolving a push conflict, anything about render-sync, or starting a spec-kit feature while other sessions are running (spec-number claim protocol). |
-| [`docs/iteration-loop.md`](docs/iteration-loop.md) | You want the measured evidence behind a loop rule, or you are about to argue with one. |
-| [`docs/container.md`](docs/container.md) | Launching or rebuilding the container, diagnosing a "command not found" / "No module named" failure, adding a permanent dependency, or bumping Python. |
-| [`docs/spec-kit-and-reviews.md`](docs/spec-kit-and-reviews.md) | Adding a rule to a review subagent (`building-review`, `backstory-review`, `frontend-review`), or wiring spec-kit hooks. |
-
-Skill docs follow the same pattern: [`/.claude/skills/diagram/SKILL.md`](.claude/skills/diagram/SKILL.md) indexes [`settlements/`](.claude/skills/diagram/settlements/) (11 topic files) and [`buildings/`](.claude/skills/diagram/buildings/). **Read a skill's index, then load only the topics the subject calls for.**
-
-## Note Intake Workflow
-
-When the GM pastes raw campaign notes into the chat - actions a character took at the table, new lore that came up in play, NPC backstory beats, world-building ideas - your job is to **copy-edit for presentability** and **write the notes to two destinations**:
-
-1. **`/host-l7r-repo/setting/l7r.md`** - always, no exceptions. You decide where in the file to insert based on topic. Don't append at the end if a better-placed paragraph exists. Match the tone of the surrounding section.
-
-2. **Obsidian Portal** - exactly one of these, as specified by the GM at intake time:
-   - **A specific character's record** - the GM names the character AND specifies whether the note goes to **GM-only notes** (`game_master_info`) or to the public **Wish Lists and Goals** section of the bio (`bio`, edited as a Textile heading-anchored subsection). Look up via `op.existing_characters()` (returns `{id, slug, name, …}`). To edit the Wish Lists and Goals subsection: read the current `bio`, locate the `Wish Lists and Goals` heading, splice your addition under it, then send the full updated body via `op.update_character(id, bio=...)`. Avatars/images go via the browser-sim path - the OAuth API silently no-ops on avatar fields.
-   - **A wiki page** - the GM says "wiki." You decide which page based on topic. Look up via `op.existing_wiki_pages()` (returns `{id, slug, name, wiki_page_url, …}`). Update via `op.update_wiki_page(id, ...)` with `body` (public Textile), `game_master_info` (GM-only), or `name` / `tags` / `is_game_master_only`. Adventure Log entries also use the blog-post fields `post_title` / `post_tagline` / `post_time`. **If no existing page is a good fit, ask before creating a new one** - page proliferation is hard to undo.
-
-**Routing is your judgment call, not the GM's.** Make a best-guess routing decision based on the content - propose specific destinations rather than asking "where does this go?" Notes may be split across multiple destinations (different paragraphs going to different wiki pages, or some content to the wiki + some to a character record) - splitting is expected and fine. If you're highly confident in the routing (e.g. "more Imperial bounties" → the bounties skill/data), proceed and report exactly what you did. If you have any uncertainty about a destination, **present your proposed routing and ask for confirmation before writing** - phrased as "I think this goes to X, confirm?", never as an open-ended "where does this go?". When the GM is explicit about destination (e.g. "save this to character Akodo Toturi, GM-only"), use what they said; for character intake, you still need both the character name AND whether the content is GM-only vs Wish Lists/Goals - if either is missing, ask with a guess.
-
-**Granularity of routing proposals**: work at the **page / destination level**, not the section-within-page level. Say "the Fox Clan page for most, the Three Man Alliance page for the cash/rice paragraph," not "this paragraph at h3 X, that paragraph between h3 Y and h3 Z." The GM trusts you to decide section/paragraph placement within a page once the destination is confirmed - don't ask them to approve those choices individually.
-
-**Copy-edit rules**:
-
-- Raw input → readable prose. Fix grammar, punctuation, sentence structure, fragments. Expand shorthand into full sentences. The result should be presentable, not a transcript.
-- Preserve meaning and voice. The GM's register is laconic and matter-of-fact; don't add flowery elaboration, don't smooth into marketing tone, don't introduce claims or implications the source didn't make.
-- If a fragment is too cryptic to interpret with confidence, stop and ask rather than guess.
-- **Tone matches `l7r.md` at both destinations.** Read nearby sections of `l7r.md` to calibrate before writing to either `l7r.md` itself or to OP. Don't shift register based on audience - what's good for `l7r.md` is good for the wiki/character bio too.
-- For OP destinations: convert to Textile (not Markdown). Match nearby pages' conventions (`\r\n` line endings, `bq).` for blockquotes, `[[wiki-slug]]` for internal links).
-- **Silently correct known GM-typos** in any text you write or any existing wiki/character content you happen to be editing:
-  - "Chancellary" → "Chancellery"
-- Always report back exactly where each piece was written (which page or `l7r.md` section; which character record; public Wish Lists/Goals vs GM-only) - never assume the GM will read the diff blind.
-
-**Implementation pointers**:
-
-- `/gm-assistant/webapp/chargen/op.py` - all the API helpers (`existing_characters`, `update_character`, `existing_wiki_pages`, `get_wiki_page`, `create_wiki_page`, `update_wiki_page`, `delete_wiki_page`). All use the OAuth path. Image uploads remain browser-sim.
-- OAuth creds live in `[obsidian_portal]` of `development-secrets.ini`; rotation via `probe_op_oauth.py --full` (see [`/gm-assistant/webapp/probe_op_oauth.py`](webapp/probe_op_oauth.py)).
-- This workflow is intentionally **documented in CLAUDE.md rather than a skill**. Skills in this project are content *generators*; intake is a routing workflow that should be present in every session's context.
-
-## L7R House Style
-
-The full style guide - numbers (AP-style with overrides), narrator voice, Family/Clan capitalization, heading hierarchy and the **curated, never-regenerated** TOC, and the known silent-fix typos (`Chancellary` -> `Chancellery`; `Otaku`, not `Utaku`) - lives in [`docs/l7r-style.md`](docs/l7r-style.md). **Load it before any edit to `l7r.md` or any prose written into Obsidian Portal.**
-
-The handful of conventions that apply to *everything* the project generates, not just `l7r.md`, are in Generation Behavior above: hyphens only, American spellings, the caste sense of "people", "domain" not "demesne", gender-neutral office-holders.
-
-Two process rules worth having in front of you at all times:
-
-- If `Edit` fails with "file modified since read", re-grep the anchor text and try again - never trust line numbers across multiple edits.
-- Never bulk-regenerate `l7r.md`'s TOC; the GM curates it. Insert only the new entries, and `git diff` to prove nothing else moved.
 
 ## Development Workflow
 
@@ -283,8 +193,8 @@ Package-specific timings and skill-specific lessons live in that skill's dev-loo
 
 **Session clones (REQUIRED for every session that modifies this repo).** Any session about to change a file here works in an isolated clone under `.clones/` - never in main's tree. The normal path:
 
-- **Clone name = this session's name, kebab-cased.** Resolve it - do not guess: your `session_id` is in your scratchpad path; grep `~/.claude/sessions/*.json` for that id and read its `.name`. `gm-assistant` is a FORBIDDEN clone name; an unnamed or auto-derived session has no valid workspace, so ask the GM to `/rename` it before doing repo work.
-- **Create it with** `git clone /gm-assistant .clones/<session-name>`, then set `user.name`/`user.email` inside it (repo-local config does not copy). Reuse an existing clone for a resumed session.
+- **Clone name = this session's name, kebab-cased.** Resolve it - do not guess: your `session_id` is in your scratchpad path; grep `~/.claude/sessions/*.json` for that id and read its `.name`. `diagram` (this repository's own name) and `gm-assistant` are FORBIDDEN clone names; an unnamed or auto-derived session has no valid workspace, so ask the GM to `/rename` it before doing repo work.
+- **Create it with** `git clone /diagram .clones/<session-name>`, then set `user.name`/`user.email` inside it (repo-local config does not copy). Reuse an existing clone for a resumed session.
 - **Sync in at the start of EVERY new piece of work** - `git pull origin main` inside the clone - not just at the final push.
 - **Stop-work ritual, EVERY time you stop** (task done, milestone, or pausing for GM input): commit in the clone, then run [`scripts/sync-with-main.sh`](scripts/sync-with-main.sh) `done` from inside it (locked pull+push, then render-sync). **Never `git push --force`** - it is the one thing that overwrites other sessions' work.
 - **Main is the integration point, never a workspace.** The ONLY thing a session runs in main's tree is render-sync. No generators, no tests, no writes. Read-only commands are fine.
@@ -333,17 +243,18 @@ watching a test go red.
 
 **Key paths**:
 
-- `.specify/memory/constitution.md` - the constitution
+- `.specify/memory/constitution.md` - the constitution (copied from gm-assistant at the split; the two diverge from here)
 - `.specify/templates/plan-template.md` - Constitution Check gate lives here
-- `/gm-assistant/webapp-prototype/` - static frontend prototypes (current: relics index + detail)
-- `/gm-assistant/webapp/` - **L7R Toolkit** (CherryPy + Jinja2). Run with `cherryd --import l7r.app` from this dir (`l7r` itself is a namespace portion with no code in it since feature 119 - the mount is a side effect of `l7r.app`). Routes: `/` landing, `/relics`, `/relics/<slug>`, `/names` (with `?gender=` / `?caste=` filters), `/places`, `/places/<slug>`, `/dreams` (dream-divination framework + example gallery, public `pool/` tier only), `/dreams/<slug>`, `/chargen/*` (legacy chargen mounted as a sub-app). New code under `l7r/`, a **PEP 420 namespace portion** shared with the diagram engine's `l7r.diagram.*` - never give it an `__init__.py`, in either tree (feature 119; `tests/test_namespace_portion.py` guards it). Legacy chargen modules on Principle X grace period.
-- `/gm-assistant/webapp/Makefile` - `make done` runs ruff + format check + mypy --strict + pytest + 100% coverage gate
-- `/gm-assistant/webapp/tests/screenshot.py` and `tests/dom_audit.py` - Playwright suite for Principle I verification at GM-100 / GM-200 / tablet / mobile. The screenshot script outputs multi-scroll contact sheets to `/tmp/l7r-shots/sheet-<page>-<viewport>.png`.
-- `/gm-assistant/.claude/agents/frontend-review.md` - independent design-review subagent. Invoke before declaring a UI change done if the same agent implemented AND reviewed.
-- `/gm-assistant/.claude/agents/settlement-review.md` - independent review of **Mode B settlement maps** (hamlets/villages/towns/cities), the counterpart of `building-review`. Scoped to the residue a green `check_village` gate cannot see: glyph legibility, feature FORM vs position, agreement with a Mode A sheet of the same compound, generic annotations, feature-vs-slack, and the twin-detector. Reads `meta.ftpx` for scale - do NOT point `size-audit` at a settlement map, it hardcodes the Mode A 3 px = 1 ft.
-- `/gm-assistant/.claude/agents/backstory-review.md` - independent review of synthesized NPC prose (`/synthesize`, `/chargen`), run automatically by those skills before the GM sees a backstory. Holds a **growing catalog of previously GM-caught mistakes** plus the baseline canon/style rules and sweeps them by enumeration, so recurring errors are fixed in-session. When the GM catches a new category of mistake in generated prose, distil it into a general rule here (follow the Subagent-check TDD procedure).
-- `/gm-assistant/.claude/skills/diagram/migration-plan.md` - **standing project plan** for converting `/diagram` from hand-authored maps to scripted generation (hours per map -> ~15 s, with the same 189-check gate). Says which map types are converted, what order the rest go in, and the bar a conversion clears. Individual conversions are spec-kit features; the plan outlives them. **Read it before drawing or scripting a settlement map, and update its status table when a conversion lands.**
-- `/gm-assistant/.claude/skills/relic/pool/` - exemplar of the pool data convention (Principle III)
-- `/gm-assistant/.claude/skills/name/pool-male.jsonl` + `pool-female.jsonl` - the 200-name pool consumed by the `/names` section
+- `.claude/skills/diagram/SKILL.md` - usage; `.claude/skills/diagram/CLAUDE.md` - the dev loop (auto-loads under that tree)
+- `.claude/skills/diagram/migration-plan.md` - **standing project plan** for converting `/diagram` from hand-authored maps to scripted generation. **Read it before drawing or scripting a settlement map, and update its status table when a conversion lands.**
+- `.claude/agents/settlement-review.md`, `building-review.md`, `size-audit.md` - the independent reviews of Mode B maps and Mode A plans (mandatory before a map ships); `.claude/agents/spec-fidelity.md` - the spec review (constitution XVI)
+- `/gm-assistant/` (read-only mount) - the setting notes the research cites (`setting/`, `cosmology/`), the webapp, the content skills. Nothing here writes there.
 
 Spec-kit features (the `specify` -> `plan` -> `tasks` -> `implement` flow) live under `specs/NNN-*/`. There is deliberately **no single "active plan" tracked here** - a hardcoded pointer just goes stale as features come and go. For current status, look at the highest-numbered `specs/` dir, its `tasks.md` checkboxes, and `git log`.
+
+**Since the split (feature 131, 2026-08-25)**: this repository's main is `/diagram`; session
+clones are `/diagram/.clones/<name>`; the ritual, the hooks, the guards and `gate-stamp` derive
+that root from git rather than hardcoding it. The webapp is not here - `webapp/make done` and the
+Playwright suite belong to gm-assistant. The Note Intake Workflow, the content skills
+(`/chargen`, `/synthesize`, `/name`, ...) and Obsidian Portal are gm-assistant's; a session here
+does none of that.

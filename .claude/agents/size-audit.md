@@ -48,7 +48,7 @@ the ceiling.
 
 ## Inputs
 
-Paths under `/gm-assistant/.claude/skills/diagram/`:
+Paths under `/diagram/.claude/skills/diagram/`:
 
 - `pool/<subject>.svg` - the geometry source of truth. Scale: **3 px = 1 ft**
   (divide px by 3). Parse the actual rects, line gaps (gate openings are gaps

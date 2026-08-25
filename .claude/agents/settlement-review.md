@@ -32,7 +32,7 @@ only defects needing **judgment** come to a subagent. So:
 ## Inputs
 
 The main agent passes you a subject name and its pool folder. Paths are under
-`/gm-assistant/.claude/skills/diagram/`:
+`/diagram/.claude/skills/diagram/`:
 
 - `pool/<type>/<subject>.png` - the rendered map. **Read it as an image. This is what the GM sees.**
 - `pool/<type>/<subject>.json` - the manifest: every feature's real recorded geometry
