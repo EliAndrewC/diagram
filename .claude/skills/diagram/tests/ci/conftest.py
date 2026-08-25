@@ -110,6 +110,10 @@ class FakeClient:
         self.calls.append(("list_prefix", prefix))
         return sorted(k for k in self.objects if k.startswith(prefix))
 
+    def delete_object(self, bucket: str, key: str) -> None:
+        self.calls.append(("delete_object", key))
+        self.objects.pop(key, None)
+
     def names(self) -> list[str]:
         return [c[0] for c in self.calls]
 

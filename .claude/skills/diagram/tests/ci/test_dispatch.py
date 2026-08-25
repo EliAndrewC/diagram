@@ -147,8 +147,11 @@ def test_check_dispatches_exactly_one_build_and_records_it(repo: Path) -> None:
     assert kw["projectName"] == config.PROJECT_CHECK and "# check" in kw["buildspecOverride"] and kw["computeTypeOverride"] == config.COMPUTE_TYPE
     env = {e["name"]: e["value"] for e in kw["environmentVariablesOverride"]}
     assert env["MAKE_TARGET"] == "done" and env["MAILBOX"] == "session/clone" and env["CI_SCOPE"] == "reference" and env["GIT_SHA"] == git(repo, "rev-parse", "HEAD")
-    assert ("put_object", f"go/{out.build_id}") in client.calls, "the build is released only after the reference check"
-    assert c.events == ["lint:0", "push:0", f"start_build:{out.build_id}", "reference:0", "go"]
+    uuid = out.build_id.split(":")[-1]
+    assert ("put_object", f"go/{uuid}") in client.calls, "the build is released only after the reference check, and the key is the uuid the build polls"
+    assert ("delete_object", f"go/{uuid}") in client.calls, "the fake build never consumes its signal, so the dispatcher's leftover cleanup removes it"
+    assert c.events == ["lint:0", "push:0", "image:stock", f"start_build:{out.build_id}", "reference:0", "go", "go:cleaned"]
+    assert "imageOverride" not in kw, "no image marker in the bucket: the stock image bootstraps"
     logs = [json.loads(p.read_text(encoding="utf-8")) for p in (repo / S / "dev" / "run-log").glob("*.json")]
     assert len(logs) == 1 and logs[0]["where"] == "codebuild" and logs[0]["build_id"] == out.build_id and logs[0]["result"] == "SUCCEEDED" and logs[0]["minutes"] == 1.0
     assert any(ln.startswith("  | ") for ln in lines), "the build log streams into the output"
@@ -166,6 +169,15 @@ def test_merge_uses_the_merge_project_and_full_scope_travels(repo: Path, monkeyp
     kw = next(k for n, k in client.calls if n == "start_build")
     env = {e["name"]: e["value"] for e in kw["environmentVariablesOverride"]}
     assert kw["projectName"] == config.PROJECT_MERGE and env["MAKE_TARGET"] == "done FULL=1" and env["CI_SCOPE"] == "full"
+
+
+def test_the_custom_image_is_used_once_its_marker_exists(repo: Path) -> None:
+    engine_delta_with_green(repo, False)
+    client = FakeClient(artifacts={"image/latest.txt": b"abc 2026-08-25"})
+    c, _ = ctx(repo, client=client)
+    assert dispatch.run(c).rc == 0 and "image:custom" in c.events
+    kw = next(k for n, k in client.calls if n == "start_build")
+    assert kw["imageOverride"] == "123.dkr.ecr/x:latest" and kw["imagePullCredentialsTypeOverride"] == "SERVICE_ROLE"
 
 
 def test_an_operation_target_is_dispatched_as_itself(repo: Path) -> None:
@@ -198,6 +210,8 @@ def test_a_failed_remote_build_records_failed_gate(repo: Path) -> None:
     c, _ = ctx(repo, client=client)
     out = dispatch.run(c)
     assert out.rc == 1 and out.result == "FAILED"
+    # the build died before consuming its go signal (the fake never deletes it): the dispatcher cleans it up
+    assert ("delete_object", f"go/{out.build_id.split(':')[-1]}") in client.calls and "go:cleaned" in c.events
     assert state.read(repo).event == state.FAILED  # type: ignore[union-attr]
     assert "stop_build" not in client.names()
 

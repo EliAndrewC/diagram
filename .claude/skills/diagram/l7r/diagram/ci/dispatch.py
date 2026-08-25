@@ -46,6 +46,7 @@ class AwsClient(Protocol):
     def put_object(self, bucket: str, key: str, body: bytes) -> None: ...
     def get_object(self, bucket: str, key: str) -> bytes | None: ...
     def list_prefix(self, bucket: str, prefix: str) -> list[str]: ...
+    def delete_object(self, bucket: str, key: str) -> None: ...
 
 
 class AccessDenied(Exception):
@@ -119,6 +120,9 @@ class Boto3Client:  # pragma: no cover - the real transport; its response SHAPES
     def list_prefix(self, bucket: str, prefix: str) -> list[str]:
         r = self._s3.list_objects_v2(Bucket=bucket, Prefix=prefix)
         return [str(o["Key"]) for o in r.get("Contents", [])]
+
+    def delete_object(self, bucket: str, key: str) -> None:
+        self._s3.delete_object(Bucket=bucket, Key=key)
 
 
 @dataclass
@@ -257,14 +261,22 @@ def run(ctx: Context) -> Outcome:
         {"name": "COMPUTE_TYPE", "value": config.COMPUTE_TYPE, "type": "PLAINTEXT"},
         {"name": "PARK_TIMEOUT_S", "value": str(config.PARK_TIMEOUT_S), "type": "PLAINTEXT"},
     ]
+    # THE CUSTOM IMAGE IS USED ONLY ONCE IT EXISTS: `make ci-image` writes image/latest.txt to the
+    # bucket when the push to ECR succeeds. Without it the build runs on the stock image and
+    # bootstraps (buildspec/run.sh) - slower, measured, never blocked on a step only a terminal can
+    # take. Measured the hard way: the first real dispatch (build 6913a24d, 2026-08-25) carried an
+    # unconditional override and died in PROVISIONING with "manifest unknown" - one billed minute.
+    image_kw: dict[str, Any] = {}
+    if ctx.client.get_object(ctx.secrets.ci_bucket, "image/latest.txt") is not None:
+        image_kw = {"imageOverride": f"{ctx.secrets.ecr_image}:latest", "imagePullCredentialsTypeOverride": "SERVICE_ROLE"}
+    ctx.events.append("image:custom" if image_kw else "image:stock")
     try:
         started = ctx.client.start_build(
             projectName=project,
             buildspecOverride=spec_path.read_text(encoding="utf-8"),
             environmentVariablesOverride=env,
             computeTypeOverride=config.COMPUTE_TYPE,
-            imageOverride=f"{ctx.secrets.ecr_image}:latest",
-            imagePullCredentialsTypeOverride="SERVICE_ROLE",
+            **image_kw,
         )
     except AccessDenied as e:
         ctx.events.append("start_build:denied")
@@ -293,7 +305,7 @@ def run(ctx: Context) -> Outcome:
         return Outcome(rc=1, verdict="ABORTED(local-reference)", build_id=build_id, result="aborted-local-reference", minutes=mins)
 
     # 4. release
-    ctx.client.put_object(ctx.secrets.ci_bucket, f"go/{build_id}", b"go")
+    ctx.client.put_object(ctx.secrets.ci_bucket, f"go/{build_id.split(':')[-1]}", b"go")  # the build polls go/<uuid> - the id's project prefix is not part of the key
     ctx.events.append("go")
     ctx.out("ci: reference settlement clean - build released")
 
@@ -302,6 +314,10 @@ def run(ctx: Context) -> Outcome:
     result = str(build.get("buildStatus", "?"))
     mins = billed_minutes(build)
     ok = result == "SUCCEEDED"
+    # a build that died before wait-go (provisioning, a clone failure) never consumed its signal
+    if ctx.client.get_object(ctx.secrets.ci_bucket, f"go/{build_id.split(':')[-1]}") is not None:
+        ctx.client.delete_object(ctx.secrets.ci_bucket, f"go/{build_id.split(':')[-1]}")
+        ctx.events.append("go:cleaned")
     if not ok:
         state.write(ctx.root, state.FAILED, f"ci-{ctx.mode}")
     fetched = fetch_artifacts(ctx, build_id)
