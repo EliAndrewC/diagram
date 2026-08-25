@@ -26,7 +26,11 @@ SKILL = ".claude/skills/diagram/"
 # (directory under the skill, accepted suffixes). An empty suffix tuple means "everything under it".
 _ENGINE_DIRS: tuple[tuple[str, tuple[str, ...]], ...] = (
     ("l7r/", (".py",)),
-    ("tests/", ()),  # a test change can change what the gate proves - fixtures included
+    # tests/ is NOT engine content (GM 2026-08-25, feature 132 FR-024, asked and answered: *"if the only
+    # thing that changed were tests AND the previous test run was green then we skipped the lengthy AWS
+    # tests"* - "Yes, locally AND on AWS"). A tests-only delta is DIRECT, outside the engine key, and
+    # outside gate-stamp's diagram area. The cost is recorded in the spec: a test edited after the last
+    # green run lands unexecuted and runs on the next real gate. Feature 130's first cut had tests/ here.
     ("pool/", (".gen.py", ".json")),  # a generator, or a manifest (a generator's output under test)
 )
 # NOT engine, by the GM's definition (2026-08-25): "code changes which would be exercised by the

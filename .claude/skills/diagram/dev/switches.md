@@ -121,8 +121,8 @@ and exits green in seconds - no map rolled, no test run. The run-log gets an `al
 entry so the audit can see how often it happens.
 
 **The key is EXACTLY the dispatcher's** (`state.already_verified`): the content hash of every
-`*.py` under the skill (`gate-stamp`'s `diagram` hash - the dispatcher's `green-local-since-edit`
-condition; `.explain.py` and `wip/*.gen.py` count) and the engine key over `tests/**`,
+`*.py` under the skill outside `tests/` (`gate-stamp`'s `diagram` hash - the dispatcher's
+`green-local-since-edit` condition; `.explain.py` and `wip/*.gen.py` count) and the engine key over
 `pool/*.gen.py`, `pool/*.json` (its `tree-not-already-verified` condition). **The Makefile,
 `pyproject.toml`, the lockfiles and `scripts/` are NOT in it**, exactly as they are not in the
 remote key - GM 2026-08-25, second amendment, after seeing a Makefile change re-run the gate: *"I
@@ -136,10 +136,12 @@ next real gate. A docs-only change matches nothing.
 asserts "a green gate ran on exactly this Python" - and the check compares that SAME hash, loaded
 from `gate-stamp.py` itself (`tests/ci/test_state.py` proves the two are one computation).
 
-**On "tests-only + previous run green -> skip"** (the GM's second sentence): feature 130 puts
-`tests/` in the engine set and has no exemption; what exists is the local-done rule of 2026-08-25,
-and the short-circuit mirrors it - a green run that already covered the changed tests is reused; a
-test edited after it is new code and runs once.
+**Tests-only changes skip BOTH gates** (the GM's ruling, FR-024). The GM remembered an AWS rule
+"if the only thing that changed were tests AND the previous test run was green then we skipped"
+that feature 130 had not implemented (`tests/` was in the engine set); the session asked rather
+than resolving it, and the GM chose *"Yes, locally AND on AWS"*. So `tests/` is outside the route
+decision, the engine key and `gate-stamp`'s `diagram` area. The recorded cost: a test edited after
+the last green run lands on main unexecuted and runs on the next real gate.
 
 **What never short-circuits**: `FULL=1` (a different scope); a last record that is a green `quick`,
 `reference` or `test-file` (they vouch for less than the gate); a red last run. And there is no

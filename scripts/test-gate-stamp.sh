@@ -29,6 +29,10 @@ W=$TMP/clone; git clone -q "$MAIN" "$W"
 echo more >> "$W/README.md"; git -C "$W" commit -qam docs
 OUT=$(cd "$W" && python3 "$STAMP" --check origin/main 2>&1); check "docs-only change: no stamp needed" 0 $?
 
+# a tests-only change needs no stamp either (feature 132 FR-024, the GM's ruling): tests/ is outside the diagram area
+mkdir -p "$W/.claude/skills/diagram/tests"; echo 'def test_x(): pass' > "$W/.claude/skills/diagram/tests/test_x.py"; git -C "$W" add -A; git -C "$W" commit -qm tests
+OUT=$(cd "$W" && python3 "$STAMP" --check origin/main 2>&1); check "tests-only change: no stamp needed (FR-024)" 0 $?
+
 # a guard-script change with NO hooks stamp is refused - THE motivating case
 echo 'echo changed' > "$W/scripts/x-hooks.sh"; git -C "$W" commit -qam guard
 OUT=$(cd "$W" && python3 "$STAMP" --check origin/main 2>&1); check "scripts/ change, no hooks stamp -> refused" 1 $?

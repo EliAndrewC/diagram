@@ -73,16 +73,15 @@ def test_already_verified_only_after_a_green_done_against_unchanged_engine_conte
     assert not ok and "Python changed" in why
     state.write(repo, state.GREEN, "done")
     assert state.already_verified(repo)[0]
-    # a test or pool manifest edit invalidates it too (the engine key)
+    # a tests-only edit KEEPS it (FR-024, the GM's ruling "Yes, locally AND on AWS") - neither the hash nor the key sees tests/
     (repo / S / "tests").mkdir(exist_ok=True)
     (repo / S / "tests" / "test_new.py").write_text("def test_x(): pass\n")
-    ok, why = state.already_verified(repo)
-    assert not ok and ("Python changed" in why or "test or pool" in why)
-    state.write(repo, state.GREEN, "done")
+    assert state.already_verified(repo)[0], "a tests-only edit does not owe the gate"
+    # a pool manifest edit invalidates it (the engine key)
     (repo / S / "pool").mkdir(exist_ok=True)
     (repo / S / "pool" / "x.json").write_text("{}\n")
     ok, why = state.already_verified(repo)
-    assert not ok and "test or pool" in why
+    assert not ok and "pool" in why
 
 
 def test_the_short_circuit_key_contains_everything_the_stamp_hashes(repo: Path) -> None:

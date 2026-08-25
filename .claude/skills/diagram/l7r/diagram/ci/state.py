@@ -115,7 +115,7 @@ def already_verified(root: Path) -> tuple[bool, str]:
     if st.hash != current_hash(root):
         return False, f"`make done` was green at {st.utc} ({st.commit}), but the skill's Python changed since - that run vouched for different code"
     if not st.engine_key or st.engine_key != engine_key_worktree(root):
-        return False, f"`make done` was green at {st.utc} ({st.commit}), but a test or pool gen/manifest changed since - that run vouched for different content"
+        return False, f"`make done` was green at {st.utc} ({st.commit}), but a pool gen or manifest changed since - that run vouched for different content"
     return (
         True,
         f"already verified: `make done` was green at {st.utc} ({st.commit}) against exactly this engine content - nothing it exercises has changed (docs, the Makefile, config and scripts/ do not count)",

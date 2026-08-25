@@ -49,6 +49,8 @@ shell guards.
 
 - [x] T22 GM's words recorded verbatim; FR-019/020/023 rewritten; `already_verified` re-keyed on the skill-Python hash + engine key; `is_gate`/`gate_key` removed; tests rewritten (Makefile/pyproject/scripts edits keep the verdict, `.explain.py`/tests/pool edits do not); docs corrected; fidelity review of the second amendment
 
+- [x] T23 the GM's ruling on tests-only changes (FR-024, "Yes, locally AND on AWS"): `tests/` out of `is_engine` (route + engine key), out of `gate-stamp`'s diagram area (`EXCLUDE`, companion case added), out of the short-circuit; tests and docs follow; fidelity round 2 of the second amendment
+
 ## Phase 6 - throw the switches for feature 133
 
 - [x] T16 `make ci-off` and `make scope-lock` thrown on the GM's instruction of 2026-08-25 (the two commits before this feature's landing)

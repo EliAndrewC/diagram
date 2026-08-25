@@ -15,12 +15,13 @@ S = ".claude/skills/diagram/"
 ENGINE = [
     S + "l7r/diagram/settlement/houses.py",
     S + "l7r/diagram/ci/dispatch.py",
-    S + "tests/settlement/test_houses.py",
-    S + "tests/fixtures/gate_check_names.json",
     S + "pool/hamlets/inashiro.gen.py",
     S + "pool/hamlets/inashiro.json",
 ]
 NOT_ENGINE = [
+    # tests/ (feature 132 FR-024, the GM's ruling "Yes, locally AND on AWS"): a tests-only delta is DIRECT
+    S + "tests/settlement/test_houses.py",
+    S + "tests/fixtures/gate_check_names.json",
     S + "SKILL.md",
     S + "CLAUDE.md",
     S + "dev/run-log/20260825T000000000000-1.json",
@@ -66,7 +67,7 @@ def test_route_and_reason() -> None:
     d = Delta("b", ("docs/x.md",), ())
     assert d.route == "DIRECT" and "none of them diagram engine code" in d.reason
     g = Delta("b", tuple(ENGINE), tuple(ENGINE))
-    assert g.route == "GATED" and "+2 more" in g.reason and "6 engine path" in g.reason
+    assert g.route == "GATED" and "4 engine path" in g.reason
 
 
 def test_delta_is_our_commits_only(repo: Path) -> None:
@@ -137,4 +138,7 @@ def test_the_worktree_key_ignores_the_makefile_and_docs(repo: Path) -> None:
     assert engine_key_worktree(repo) == k0
     (repo / S / "tests").mkdir(exist_ok=True)
     (repo / S / "tests" / "test_new.py").write_text("def test_x(): pass\n")
-    assert engine_key_worktree(repo) != k0, "a test is engine content"
+    assert engine_key_worktree(repo) == k0, "a test is NOT engine content (FR-024, the GM's ruling)"
+    (repo / S / "pool").mkdir(exist_ok=True)
+    (repo / S / "pool" / "x.json").write_text("{}\n")
+    assert engine_key_worktree(repo) != k0, "a pool manifest is"

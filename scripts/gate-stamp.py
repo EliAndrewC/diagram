@@ -45,6 +45,11 @@ AREAS: dict[str, tuple[str, tuple[str, ...]]] = {
     "diagram": (".claude/skills/diagram", ("*.py",)),  # the webapp area lives in gm-assistant since feature 131
     "hooks": ("scripts", ("*.sh", "*.py")),
 }
+# Subtrees an area does NOT hash. tests/ (feature 132 FR-024, the GM's ruling 2026-08-25, asked and
+# answered "Yes, locally AND on AWS"): a tests-only change owes no gate - not the build, not the local
+# `make done`, and not this stamp, which would otherwise refuse the push for want of a green run. The
+# recorded cost: a test edited after the last green run lands unexecuted and runs on the next real gate.
+EXCLUDE: dict[str, tuple[str, ...]] = {"diagram": ("tests/",)}
 
 
 def _git(*args: str, cwd: Path | None = None) -> str:
@@ -63,11 +68,16 @@ def _area_files(root: Path, area_path: str, patterns: tuple[str, ...]) -> list[P
     module nobody has added yet is still code the gate ran on, and omitting it would let an
     untracked file slip past."""
     out = _git("ls-files", "-co", "--exclude-standard", "--", *(f"{area_path}/{pat}" for pat in patterns), cwd=root)
-    return sorted({root / line for line in out.splitlines() if line.strip()})
+    return sorted({root / line for line in out.splitlines() if line.strip() and not _excluded(line, area_path)})
+
+
+def _excluded(path: str, area_path: str) -> bool:
+    area = next((a for a, (p, _pats) in AREAS.items() if p == area_path), None)
+    return any(path.startswith(f"{area_path}/{sub}") for sub in EXCLUDE.get(area or "", ()))
 
 
 def _matches(path: str, area_path: str, patterns: tuple[str, ...]) -> bool:
-    return path.startswith(area_path + "/") and any(path.endswith(pat.lstrip("*")) for pat in patterns)
+    return path.startswith(area_path + "/") and not _excluded(path, area_path) and any(path.endswith(pat.lstrip("*")) for pat in patterns)
 
 
 def hash_files(files: list[Path]) -> str:
