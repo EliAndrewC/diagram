@@ -118,6 +118,9 @@ the doc is right - it is where the measurement lives.
 | `make ci-check` | **PAID** (~$0.40 est.) - the iteration check on CodeBuild: lint locally, build parked, reference locally, then `make done` against the merge with the latest main; `FULL=1` (prompts), `TARGET=cohort` etc. | measured in `timings.md` |
 | `make ci-merge` | **PAID** - the push's gated route; called by `sync-with-main.sh`, never by hand | - |
 | `make ci-image` | **PAID** (~$1), prompts - rebuild the build image from `Dockerfile.ci`; the GM's to run | - |
+| `make switches` | the iteration switches (feature 132): `remote on\|off`, `scope unlocked\|reference`, with reason, who and when | ~1 s |
+| `make ci-off REASON=...` / `ci-on` | **remote off**: nothing dispatches to CodeBuild, `ci-check`/`ci-image`/`FULL=1` refuse, the gated push lands on a green local `make done` (LOCAL-GATED). Commits the switch | ~1 s |
+| `make scope-lock REASON=...` / `scope-unlock` | **scope locked**: no invocation rolls a map other than the reference settlement or more than one map - `cohort`, `tripwire`, `test-full`, `done FULL=1`, `cache-audit`, `regressions`, `perf`, `maps SCOPE=all` and any remote sweep refuse and name the unlock. Commits the switch. Doctrine: [`dev/switches.md`](dev/switches.md) | ~1 s |
 | `make perf-report AGAINST=<NNN>-start` | the trend, then the **BAND** the newest pair reaches (feature 129): 1 any increase, 2 >5% total / >10% seed, 3 >10% / >20% - per environment, both measurements | ~1 s |
 | `make perf-explain WHY="..."` / `perf-confirm` / `perf-audit` / `perf-signoff` | the review records a band owes; `perf-confirm` and `perf-audit` are the **`perf-audit` subagent's** (they decline without `AS=perf-audit`); `perf-signoff` is the GM's, at a terminal | ~1 s |
 | `make perf-review` | does every environment's newest pair carry the records its band owes? The PUSH runs this | ~1 s |

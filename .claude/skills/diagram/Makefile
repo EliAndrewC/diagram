@@ -73,10 +73,22 @@ STATE = python3 -m l7r.diagram.ci state
 # still gates; REF_OK is the one, separate, logged way to skip that step, as for every other target.
 done:
 	@$(if $(FULL),$(SWITCH) check scope "done FULL=1",true)
-	@$(if $(FULL),$(MAKE) --no-print-directory bypass-audit REF_WHY="$(REF_WHY)",true)
-# (GUARD_EDIT_OK: feature 132 - a FULL run is a pool sweep, so the scope lock refuses it BEFORE the prompt)
-	@$(if $(REF_OK),$(LOGBYPASS) permitted "REF_OK - reference step skipped: $(REF_WHY)"; printf '\nreference step SKIPPED (REF_OK, logged to dev/bypass-log/)\n',$(MAKE) --no-print-directory reference)
-	@T0=$$(date +%s); fail=""; \
+# (GUARD_EDIT_OK: feature 132 - a FULL run is a pool sweep, so the scope lock refuses it BEFORE the prompt.
+#  THE LOCAL SHORT-CIRCUIT (same feature, the GM's amendment): reference scope reuses the verdict in hand when
+#  the last record is a green `make done` against exactly this gate content - the engine key PLUS the Makefile,
+#  pyproject, lockfiles, scripts/ and EVERY .py under the skill - the rule is "everything the gate reads or runs",
+#  ci/delta.py is_gate). "It's only documentation" then costs seconds, not five minutes. Never for FULL (a
+#  different scope). No flag forces either direction (GUARD_EDIT_OK: the amendment's fidelity review removed a
+#  FORCE= re-run flag as unrequested; the remote rule it copies has none). ONE shell block, so `exit 0` ends the
+#  target before the reference step. Re-stamping is safe only because the gate key contains every file the stamp hashes.)
+	@if [ -z "$(FULL)" ] && python3 -m l7r.diagram.ci verified-done; then \
+	  root=$$(git rev-parse --show-toplevel 2>/dev/null) && [ -n "$$root" ] && python3 "$$root/scripts/gate-stamp.py" --write diagram || true; \
+	  $(LOGRUN) done reference 0 already-verified; $(STATE) green-local done; \
+	  printf '\n\033[1mgate green\033[0m (already verified - nothing the gate exercises has changed since the last green run)\n'; exit 0; \
+	fi; \
+	$(if $(FULL),$(MAKE) --no-print-directory bypass-audit REF_WHY="$(REF_WHY)" || exit 1;,) \
+	$(if $(REF_OK),$(LOGBYPASS) permitted "REF_OK - reference step skipped: $(REF_WHY)"; printf '\nreference step SKIPPED (REF_OK, logged to dev/bypass-log/)\n';,$(MAKE) --no-print-directory reference || exit 1;) \
+	T0=$$(date +%s); fail=""; \
 	for phase in lint format typecheck hooks-test $(if $(FULL),test-full perf-gate,test); do \
 	  printf '\n\033[1m== %s ==\033[0m\n' "$$phase"; \
 	  $(MAKE) --no-print-directory $$phase || fail="$$fail $$phase"; \

@@ -37,6 +37,7 @@ class VerificationState:
     hash: str
     commit: str
     engine_key: str = ""  # delta.engine_key_worktree at the time of the run - what a green local `done` VOUCHES for (GM 2026-08-25)
+    gate_key: str = ""  # delta.gate_key_worktree: the engine key PLUS what shapes the gate - what `make done` may SHORT-CIRCUIT on (feature 132)
 
 
 def _gate_stamp(root: Path) -> ModuleType:
@@ -67,18 +68,54 @@ def read(root: Path) -> VerificationState | None:
         return None
     data = json.loads(path.read_text(encoding="utf-8"))
     return VerificationState(
-        event=str(data["event"]), target=str(data["target"]), utc=str(data["utc"]), hash=str(data["hash"]), commit=str(data.get("commit", "")), engine_key=str(data.get("engine_key", ""))
+        event=str(data["event"]),
+        target=str(data["target"]),
+        utc=str(data["utc"]),
+        hash=str(data["hash"]),
+        commit=str(data.get("commit", "")),
+        engine_key=str(data.get("engine_key", "")),
+        gate_key=str(data.get("gate_key", "")),
     )
 
 
 def write(root: Path, event: str, target: str) -> VerificationState:
     if event not in (GREEN, FAILED):
         raise ValueError(f"unknown verification event {event!r} (want {GREEN} or {FAILED})")
-    from l7r.diagram.ci.delta import engine_key_worktree
+    from l7r.diagram.ci.delta import engine_key_worktree, gate_key_worktree
 
-    st = VerificationState(event=event, target=target, utc=time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()), hash=current_hash(root), commit=_commit(root), engine_key=engine_key_worktree(root))
+    st = VerificationState(
+        event=event,
+        target=target,
+        utc=time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
+        hash=current_hash(root),
+        commit=_commit(root),
+        engine_key=engine_key_worktree(root),
+        gate_key=gate_key_worktree(root),
+    )
     (root / STATE_FILE).write_text(json.dumps(asdict(st), indent=2) + "\n", encoding="utf-8")
     return st
+
+
+def already_verified(root: Path) -> tuple[bool, str]:
+    """THE LOCAL SHORT-CIRCUIT (feature 132 amendment, GM 2026-08-25: *"apply the same rules that
+    decide whether to short circuit and skip AWS tests to these 5 minute tests as well for the
+    make done procedure"*). True when the last recorded verification is a green `make done` whose
+    gate key equals the working tree's now - nothing the gate exercises has changed, so the verdict
+    in hand is the verdict a re-run would produce. A green `quick` or `reference` vouches for less
+    than the gate does and never qualifies; a red run never does."""
+    from l7r.diagram.ci.delta import gate_key_worktree
+
+    st = read(root)
+    if st is None:
+        return False, "no local check recorded in this clone"
+    if st.event != GREEN or st.target != "done":
+        return False, f"the last record is `make {st.target}` ({st.event}) - only a green `make done` can be reused"
+    if not st.gate_key or st.gate_key != gate_key_worktree(root):
+        return (
+            False,
+            f"`make done` was green at {st.utc} ({st.commit}), but something the gate exercises changed since (engine code, tests, pool gens, the Makefile, pyproject, a lockfile or scripts/)",
+        )
+    return True, f"already verified: `make done` was green at {st.utc} ({st.commit}) against exactly this gate content - nothing it exercises has changed (docs do not count)"
 
 
 def describe(st: VerificationState | None, now_hash: str) -> str:

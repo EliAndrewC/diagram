@@ -195,3 +195,33 @@ def test_make_switch_targets_require_a_reason_and_commit(fixture_skill: Path) ->
     assert p.returncode == 0 and not sw.read(fixture_skill).scope_locked and "measured, not remembered" in p.stdout
     log = subprocess.run(["git", "-C", str(root), "log", "--oneline"], capture_output=True, text=True).stdout
     assert log.count("\n") == 4  # four throws/releases, four commits
+
+
+# ---- THE LOCAL SHORT-CIRCUIT of `make done` (feature 132 amendment, FR-019..FR-023) ----------------
+
+
+def test_make_done_short_circuits_on_an_unchanged_gate_key(fixture_skill: Path) -> None:
+    from l7r.diagram.ci import state
+
+    root = fixture_skill.parents[2]
+    (root / "scripts").mkdir()
+    (root / "scripts" / "gate-stamp.py").write_bytes((SKILL.parents[2] / "scripts" / "gate-stamp.py").read_bytes())
+    subprocess.run(["git", "-C", str(root), "config", "user.email", "t@t"], check=True)
+    subprocess.run(["git", "-C", str(root), "config", "user.name", "t"], check=True)
+    subprocess.run(["git", "-C", str(root), "add", "-A"], check=True)
+    subprocess.run(["git", "-C", str(root), "commit", "-qm", "base"], check=True)
+    state.write(root, state.GREEN, "done")
+    p = make(fixture_skill, "done")
+    assert p.returncode == 0 and "already verified" in p.stdout and "reference settlement" not in p.stdout, p.stdout + p.stderr
+    (root / "docs").mkdir()
+    (root / "docs" / "note.md").write_text("only documentation\n")
+    p = make(fixture_skill, "done")
+    assert p.returncode == 0 and "already verified" in p.stdout, p.stdout + p.stderr
+    assert any(json.loads(f.read_text())["result"] == "already-verified" for f in (fixture_skill / "dev" / "run-log").glob("*.json"))
+    # a gate-shaping edit invalidates the record (there is no flag in either direction - FR-022)
+    (fixture_skill / "pyproject.toml").write_text((fixture_skill / "pyproject.toml").read_text() + "\n# edited\n")
+    assert not state.already_verified(root)[0]
+    assert "$(FORCE)" not in (SKILL / "Makefile").read_text()
+    # FULL never short-circuits (here it is refused for lack of a terminal, before any prompt - the point is it never said "already verified")
+    p = make(fixture_skill, "done", "FULL=1")
+    assert "already verified" not in p.stdout

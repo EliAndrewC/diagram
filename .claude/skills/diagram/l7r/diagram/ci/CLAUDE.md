@@ -24,8 +24,16 @@ do not want to run anything on AWS"* come first, and the speedup second.
 | [`dispatch.py`](dispatch.py) | the sequence, and the boto3 boundary behind a small protocol - every external call injected so the suite drives it against RECORDED responses (`tests/ci/fixtures/`) |
 | [`__main__.py`](__main__.py) | `status | check | merge | image | state | door | remote-spend`, `assert_via_make` at the top |
 
-## The five conditions, and the GM's words each rests on
+## The conditions, and the GM's words each rests on
 
+0. **remote-enabled** (feature 132, printed first) - `dev/switches.json` says remote is on. *"if it
+   is disabled, then we do not use it as a gate. and we do not dispatch to it while we are doing
+   iteration."* With remote OFF nothing dispatches: `check` and `image` refuse before a client is
+   built, and `merge` becomes LOCAL-GATED - the other conditions are still judged, and the verdict
+   is SKIP-VERIFIED only when a green local `make done` vouches for the merged engine content
+   (condition 4's local rule); otherwise `REFUSE(remote-enabled)` and the work stays in the clone.
+   Thrown and released by `make ci-off` / `make ci-on`, which commit; no variable overrides it.
+   The doctrine: [`../../../dev/switches.md`](../../../dev/switches.md).
 1. **route-is-gated** - our delta touches engine code. *"if we make any updates that are only outside
    of the diagram skill, then we do not want to run anything on AWS ... even if the diagram
    documentation was touched, but not the code itself, then we should not rerun the tests."* The

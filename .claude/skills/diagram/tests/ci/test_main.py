@@ -171,3 +171,9 @@ def test_remote_off_merge_is_local_gated(remote_off: Path, monkeypatch: pytest.M
     out = capsys.readouterr().out
     assert "SKIP-VERIFIED" in out and "no build" in out
     assert (remote_off / ".git" / "ci-verdict").read_text(encoding="utf-8").strip() == "SKIP-VERIFIED"
+
+
+def test_verified_done_subcommand(roots: Path, capsys: pytest.CaptureFixture[str]) -> None:
+    assert cli.main(["verified-done"]) == 1 and "no local check" in capsys.readouterr().out
+    state.write(roots, state.GREEN, "done")
+    assert cli.main(["verified-done"]) == 0 and "already verified" in capsys.readouterr().out

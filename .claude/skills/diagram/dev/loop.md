@@ -183,6 +183,12 @@ to houses; dry-to-wet crossings) surfaced in one pass instead of five.
 
 ## The remote runs (feature 130): when CodeBuild is used, and what each costs
 
+**The GM can switch the remote OFF** (feature 132: `make ci-off REASON=...`, released by `make ci-on`)
+- then nothing on this page dispatches, `make ci-status` shows `remote-enabled` failing first, and the
+gated push lands on a green local `make done` instead (LOCAL-GATED). A second switch, `make
+scope-lock`, refuses every map SWEEP (cohort, FULL, tripwire, cache-audit, regressions, perf) until
+`make scope-unlock`. Both are committed files with no override; see [`switches.md`](switches.md).
+
 **A session does not decide whether to go remote - the conditions do.** `make ci-status` prints
 them, free. Five conditions, all checked locally before any AWS call, every one printed even after
 the first fails: the delta has engine code (`l7r/**/*.py`, `tests/`, `pool/*.gen.py|*.json` - the code the

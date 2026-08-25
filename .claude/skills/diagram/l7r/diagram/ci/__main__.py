@@ -33,7 +33,7 @@ def _roots() -> tuple[Path, Path]:
 
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(prog="l7r.diagram.ci", description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("command", choices=["status", "check", "merge", "image", "state", "door", "remote-spend", "engine-key"])
+    ap.add_argument("command", choices=["status", "check", "merge", "image", "state", "door", "remote-spend", "engine-key", "verified-done"])
     ap.add_argument("args", nargs="*")
     ap.add_argument("--full", action="store_true", help="the full sweep (the Makefile has already run the local prompt)")
     ap.add_argument("--target", default=None, help="ci-check only: an expensive operation to run remotely instead of the gate")
@@ -50,6 +50,10 @@ def main(argv: list[str] | None = None) -> int:
         st = state.write(root, a.args[0], a.args[1])
         print(f"verification-state: {st.event} ({st.target}) recorded")
         return 0
+    if a.command == "verified-done":
+        ok, why = state.already_verified(root)
+        print(f"make done: {why}")
+        return 0 if ok else 1
     if a.command == "door":
         ok, why = door.check(root, skill)
         print(f"bypass-audit: {why}")
