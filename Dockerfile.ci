@@ -2,19 +2,23 @@
 # (buildspec/image.yml) - the laptop never needs Docker - and pushed to ECR as :latest.
 #
 # ubuntu:26.04 because that is what the dev container runs: the same apt `resvg` (0.46) and DejaVu
-# faces, the same system Python 3.14, so a render or a font that differs between laptop and build
-# is a bug rather than an environment. ONE source of truth for what "installed" means: the same
-# container-scripts/setup-dev-env.sh the laptop runs, in --image mode (no claude() wrapper, no
-# ~/.bashrc, no boto3 - the build talks to S3 through the AWS CLI installed below).
+# faces, the same system Python 3.14. The pinned lockfiles go into a venv through uv - the SAME
+# route buildspec/run.sh uses to bootstrap the stock image (proven on builds d73cac86, 81359962) -
+# because system pip on 26.04 refuses to replace Debian-packaged dependencies
+# (`uninstall-no-record-file`, build b3617f0d). The venv is first on PATH, so `python3` IS 3.14
+# with the lockfiles, and `make` needs no environment of its own.
 FROM ubuntu:26.04
-ENV DEBIAN_FRONTEND=noninteractive PIP_BREAK_SYSTEM_PACKAGES=1 PYTHONDONTWRITEBYTECODE=1
+ENV DEBIAN_FRONTEND=noninteractive PYTHONDONTWRITEBYTECODE=1 PATH=/opt/venv/bin:/root/.local/bin:/usr/local/bin:/usr/bin:/bin
 RUN apt-get update -qq && apt-get install -y -qq --no-install-recommends \
-        python3 python3-pip git make curl ca-certificates unzip util-linux \
+        python3 git make curl ca-certificates unzip util-linux \
+        resvg fonts-dejavu-core fonts-dejavu-extra \
     && rm -rf /var/lib/apt/lists/*
 # the AWS CLI v2 - the build's S3 reads and writes go through it with the service role
 RUN curl -sS "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o /tmp/awscli.zip \
     && unzip -q /tmp/awscli.zip -d /tmp && /tmp/aws/install && rm -rf /tmp/aws /tmp/awscli.zip
-COPY container-scripts/setup-dev-env.sh /tmp/repo/container-scripts/setup-dev-env.sh
-COPY .claude/skills/diagram/requirements.txt .claude/skills/diagram/requirements-dev.txt /tmp/repo/.claude/skills/diagram/
-RUN apt-get update -qq && bash /tmp/repo/container-scripts/setup-dev-env.sh --image && rm -rf /var/lib/apt/lists/* /tmp/repo
-RUN resvg --version && python3 --version && git --version && aws --version
+COPY .claude/skills/diagram/requirements.txt .claude/skills/diagram/requirements-dev.txt /tmp/req/
+RUN curl -LsSf https://astral.sh/uv/install.sh | sh \
+    && uv venv -q --python 3.14 /opt/venv \
+    && uv pip install -q --python /opt/venv/bin/python -r /tmp/req/requirements.txt -r /tmp/req/requirements-dev.txt \
+    && rm -rf /tmp/req
+RUN resvg --version && python3 --version && python3 -c "import shapely, PIL, pytest, mypy, xdist" && git --version && aws --version

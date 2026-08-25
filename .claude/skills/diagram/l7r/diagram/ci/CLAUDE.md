@@ -79,9 +79,10 @@ that can present any of these as diligence -
   named case);
 - answering the FULL prompt from inside a build via an environment variable (the door reads only a
   committed entry - a forgery is a tracked-file diff);
-- a session answering its own prompt through a pseudo-terminal (`spec-fidelity` ruled this an
-  EXCEPTION on 2026-08-25: the operator the prompt waits on is not the session; the two prompted
-  targets - `ci-image` and any `FULL=1` dispatch - are the GM's to answer at a terminal).
+- a session answering its own prompt through a pseudo-terminal: `spec-fidelity` ruled this an
+  EXCEPTION on 2026-08-25, and the GM authorized it in their own words later that day. A session
+  that answers MUST record in the reason that it did, quoting the authorization - the entry is
+  how `make audit` tells a session's answer from the GM's (the reviewer's aside: an actor field).
 
 ## Admin-key task still open (R8, FR-016)
 

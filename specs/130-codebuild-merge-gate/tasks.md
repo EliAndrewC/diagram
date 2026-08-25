@@ -58,7 +58,7 @@
 verified record and the audit entry, with no path to main.
 **Independent test**: [quickstart.md](quickstart.md) §4.
 
-- [x] T018 (Dockerfile.ci runs setup-dev-env.sh --image; the image is an OPTIMIZATION - buildspec/run.sh bootstraps Python 3.14 + resvg on the stock image until image/latest.txt exists) [US3] Write `Dockerfile.ci` (`FROM` the CodeBuild standard image; `RUN container-scripts/setup-dev-env.sh --image`) and add the `--image` mode to `setup-dev-env.sh` (skips the `claude()` wrapper and `.bashrc`)
+- [x] T018 (Dockerfile.ci installs the same apt set and lockfiles through a uv venv - an `--image` mode of setup-dev-env.sh was tried and retired when system pip on 26.04 refused Debian-packaged deps, build b3617f0d; the image is an OPTIMIZATION - buildspec/run.sh bootstraps Python 3.14 + resvg on the stock image until image/latest.txt exists) [US3] Write `Dockerfile.ci` (`FROM` the CodeBuild standard image; `RUN container-scripts/setup-dev-env.sh --image`) and add the `--image` mode to `setup-dev-env.sh` (skips the `claude()` wrapper and `.bashrc`)
 - [ ] T019 [US3] 💵 (~$1, one image build) `make ci-image`: prompted, cancel-by-default, reason logged via the existing `LOGBYPASS`, refused non-interactive; builds on the check project and pushes to ECR; update both projects' `image` to the ECR URI
 - [x] T020 (the Makefile refuses with no terminal and logs `refused`; exercised by hand: `make ci-image </dev/null` -> REFUSED) [US3] **FIRES**: `make ci-image` with no terminal is refused (same shape as `bypass-audit`; extend that test)
 - [ ] T021 [US3] **STAYS QUIET**: `make ci-image` in a terminal with a reason proceeds and logs `permitted`
@@ -95,7 +95,7 @@ still lands docs for free.
 ## Phase 6: User Story 3 (second half) - The short-circuit at merge time
 
 - [x] T041 (dispatch.would_be_tree + verified_lookup; test_skip_verified_pushes_nothing_and_logs_the_build) [US3] `make ci-merge` computes the would-be tree with `git merge-tree --write-tree origin/main HEAD` (research R2), looks up `verified/<tree>.json`, and on a hit prints SKIP-VERIFIED naming the build id
-- [ ] T042 [US3] 💵 ($0 expected) `make ci-check` green, then immediately `sync-with-main.sh done` on the same tree: no build, direct push, the run-log entry says `skip-verified:<build id>` (SC-003)
+- [x] T042 (demonstrated live 2026-08-25: after build d73cac86 verified tree 4c77874b, `make ci-status` on the unchanged clone answered SKIP-VERIFIED naming that build id, with no build and $0; the ritual's SKIP-VERIFIED branch (direct push) is exercised by scripts/test-sync-with-main.sh case 7) [US3] 💵 ($0 expected) `make ci-check` green, then immediately `sync-with-main.sh done` on the same tree: no build, direct push, the run-log entry says `skip-verified:<build id>` (SC-003)
 - [x] T043 (tests/ci/test_decision.py::test_skip_verified_and_scope_rule - a different tree has no record) [US3] **FIRES**: advance main with an unrelated commit; the same `sync-with-main.sh done` now dispatches (tree differs)
 
 ## Phase 7: User Story 4 - Audit and cost

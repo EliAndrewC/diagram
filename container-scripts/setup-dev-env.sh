@@ -18,16 +18,14 @@ set -euo pipefail
 
 REPO="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 CHECK_ONLY=0
-IMAGE_MODE=0
 [ "${1:-}" = "--check" ] && CHECK_ONLY=1
-# --image (feature 130): building the CodeBuild image from Dockerfile.ci. Same apt and pip set as
-# the laptop, ONE source of truth; skips what only makes sense on a laptop (the claude() wrapper,
-# ~/.bashrc, main's git config) and runs as root with no sudo. boto3 is a laptop-only dependency
-# (the dispatcher); the build talks to S3 through the AWS CLI the image carries.
-[ "${1:-}" = "--image" ] && IMAGE_MODE=1
+# The CodeBuild image (Dockerfile.ci, feature 130) installs the same apt set and the same lockfiles
+# by its own RUN lines - through a uv venv, because system pip on ubuntu 26.04 refuses to replace
+# Debian-packaged dependencies (build b3617f0d). An `--image` mode of this script was tried first
+# and retired for that reason; keep the two lists in step by hand when either changes.
 SUDO=sudo; [ "$(id -u)" = 0 ] && SUDO=""
 
-in_container() { [ -f /run/.containerenv ] || [ -f /.dockerenv ] || [ "$IMAGE_MODE" = 1 ]; }
+in_container() { [ -f /run/.containerenv ] || [ -f /.dockerenv ]; }
 
 if ! in_container && [ "${SETUP_ALLOW_HOST:-}" != 1 ]; then
     echo "ERROR: this installs system packages and is meant to run INSIDE the dev container."
@@ -64,7 +62,6 @@ check_all() {
     # dev deps - the quality gate itself
     _t "python: pytest + cov + xdist"            "python3 -c 'import pytest, pytest_cov, xdist'"
     _t "python: ruff mypy"                       "python3 -m ruff --version; python3 -m mypy --version"
-    if [ "$IMAGE_MODE" = 1 ]; then return $bad; fi
     # feature 130: the CodeBuild dispatcher's AWS boundary (laptop side only)
     _t "python: boto3 (CodeBuild dispatcher)"    "python3 -c 'import boto3'"
     # the claude() wrapper that appends this repo's standing authorizations to the system prompt.
@@ -106,11 +103,6 @@ SKILL="$REPO/.claude/skills/diagram"
 pip install --quiet --break-system-packages \
     -r "$SKILL/requirements.txt" \
     -r "$SKILL/requirements-dev.txt"
-if [ "$IMAGE_MODE" = 1 ]; then
-    echo "==> image mode: verifying and stopping here (no wrapper, no git config, no boto3)"
-    check_all && exit 0
-    exit 1
-fi
 pip install --quiet --break-system-packages -r "$SKILL/requirements-ci.txt"
 
 # ---- the claude() wrapper ----------------------------------------------------------------------

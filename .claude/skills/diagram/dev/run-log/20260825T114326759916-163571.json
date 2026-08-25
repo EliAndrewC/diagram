@@ -1,0 +1,14 @@
+{
+  "utc": "2026-08-25T11:43:26Z",
+  "target": "ci-image",
+  "scope": "image",
+  "seconds": 83,
+  "result": "FAILED",
+  "commit": "b6b0bedc",
+  "where": "codebuild",
+  "build_id": "gm-assistant-check:b3617f0d-1c15-4053-acce-dce510a7c70f",
+  "minutes": 2.0,
+  "cost_usd": 0.16,
+  "compute": "BUILD_GENERAL1_XLARGE",
+  "reason": "Dockerfile.ci -> ECR"
+}
