@@ -36,7 +36,7 @@ shell guards.
 - [x] T12 `guard-file-hooks.sh` pattern + test case for `dev/switches.json`
 - [x] T13 `dev/switches.md` (the why, the fail-closed rule, the single-map decision with priced alternatives), ci `CLAUDE.md` sixth condition, root `CLAUDE.md` enforcement row + ladder note, `dev/loop.md`
 - [x] T14 prove-it-fires (2026-08-25, each deletion restored with `git checkout`): removing `$(SWEEP_OK)` from `cohort` -> `tests/test_switches.py::test_make_sweeps_refuse_under_the_lock[cohort]` RED; dropping the `elif remote_off` branch in `decision.py` -> `test_remote_off_never_dispatches` + `test_remote_off_does_not_short_circuit_a_full_scope_on_a_reference_record` RED; dropping the lock check in `cohort_audit.main` -> `tests/tools/test_scope_lock.py::test_cohort_refuses_first` RED; honoring `CI_ROUTE` in every tree again -> `scripts/test-sync-with-main.sh` 7c RED (3 checks)
-- [ ] T15 `make hooks-test` green; `make done` green; bypass-log audit for the feature (none expected)
+- [x] T15 `make hooks-test` green (14 suites); `make done` green twice (301 s pre-amendment, 304 s on the amended code), then `already verified` in 1.2 s on the docs-only tail - the amendment proven on its own feature; bypass-log audit: no entries added by this feature
 
 ## Phase 5b - the amendment (GM 2026-08-25: `make done` short-circuits like the remote gate)
 
@@ -47,5 +47,5 @@ shell guards.
 
 ## Phase 6 - throw the switches for feature 133
 
-- [ ] T16 `make ci-off REASON=...` and `make scope-lock REASON=...` on the GM's instruction of 2026-08-25, committed
-- [ ] T17 stop-work ritual: `sync-with-main.sh done` lands 132 (gated route, local-done rule)
+- [x] T16 `make ci-off` and `make scope-lock` thrown on the GM's instruction of 2026-08-25 (the two commits before this feature's landing)
+- [x] T17 stop-work ritual: `sync-with-main.sh done` lands 132 through the new GATED-LOCAL route (remote already off) on the local-done rule
