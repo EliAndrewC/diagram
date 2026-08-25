@@ -38,8 +38,8 @@ Python too. `sync-with-main.sh` learns a third route name. Every refusal has a t
 
 ```json
 {
-  "remote": {"state": "off", "why": "...", "who": "Eli Courtwright", "utc": "2026-08-25T18:00:00Z", "commit": "abc1234"},
-  "scope":  {"state": "reference", "why": "...", "who": "...", "utc": "...", "commit": "..."}
+  "remote": {"state": "off", "why": "...", "who": "Eli Courtwright", "utc": "2026-08-25T18:00:00Z"},
+  "scope":  {"state": "reference", "why": "...", "who": "...", "utc": "..."}
 }
 ```
 
@@ -49,9 +49,9 @@ with both axes CLOSED and `error` set (FR-004). `remote.state in {"on","off"}`,
 
 `python3 -m l7r.diagram.switches` (registered in `_invocation.OPERATIONS` as `switches`, cheap):
 
-- `show` - both axes (FR-005; `make switches`, and a block in `make audit`)
+- `show` - both axes (FR-005; `make switches`)
 - `set remote off|on --why W` / `set scope reference|unlocked --why W` - writes the file with
-  who/utc/commit; the make target commits it (FR-002). Refuses an empty `--why`.
+  who/utc; the make target commits it (FR-002). Refuses an empty `--why`.
 - `check remote WHAT` / `check scope WHAT` - exit 0 if allowed, else prints the refusal (reason,
   date, the release target, the local route for WHAT) and exits 1 (FR-006, FR-010).
 
@@ -64,7 +64,6 @@ with both axes CLOSED and `error` set (FR-004). `remote.state in {"on","off"}`,
 - `REMOTE_OK = @python3 -m l7r.diagram.switches check remote $@` first in `ci-check`, `ci-image`.
   `ci-merge` does NOT get it - the dispatcher handles remote-off itself because it must still
   produce the LOCAL-GATED verdict for the ritual (FR-008).
-- `audit` prints `switches show` first.
 
 ### The dispatcher (FR-006..009)
 
@@ -96,9 +95,12 @@ multi-map entry point, not a list of targets:
 - `tools.make_regressions.main`: refuse under the lock (rebuilds the corpus from many seeds).
 - Makefile: `SWEEP_OK` also first in `cache-audit` and `regressions`; `map` passes through to the
   module's own check (the list is only known there).
-- Left runnable, recorded in `dev/switches.md` with the alternatives priced (FR-018): `map` with one
-  gen, `hamlet`, `perf` (four seeds, one at a time, a constitutional obligation), `placement-stages`
-  (the reference map's stages).
+- `tools.perf_snapshot --record` refuses under the lock (round 2: several seeds is a sweep);
+  `SWEEP_OK` first in `perf` and `perf-gate`. A feature landing under the lock records "bookends
+  not taken - scope locked" in its plan; they are owed at unlock.
+- Left runnable, recorded in `dev/switches.md` with the alternatives priced (FR-018): the FR-012
+  set - `map` with one gen, `hamlet` with one spec, `perf-profile` (one seed, one stage),
+  `placement-stages` (the reference map's stages), and every no-map target.
 
 ### The test seams (the reviewer's aside, Principle XIV)
 
