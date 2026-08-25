@@ -6,9 +6,9 @@
     "utc": "2026-08-25T20:50:09Z"
   },
   "scope": {
-    "state": "unlocked",
-    "why": "",
-    "who": "",
-    "utc": ""
+    "state": "reference",
+    "why": "GM 2026-08-25: the reference hamlet only until Eli accepts it (feature 133); no sweeps, release with make scope-unlock",
+    "who": "Eli Courtwright",
+    "utc": "2026-08-25T20:50:09Z"
   }
 }
