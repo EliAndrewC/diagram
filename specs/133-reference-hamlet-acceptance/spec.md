@@ -1,0 +1,160 @@
+# Feature Specification: The Reference Hamlet Is Accepted by the GM
+
+**Feature Branch**: none - this project does not use feature branches (`SPECIFY_FEATURE=133-reference-hamlet-acceptance`)
+
+**Created**: 2026-08-25
+
+**Status**: Draft skeleton - awaiting `spec-fidelity` review (constitution XVI)
+
+**Input**: [`gm-request.md`](gm-request.md), verbatim and unedited. That file is the authority for
+this specification.
+
+## The feature, in one sentence
+
+Inashiro (seed 4), the reference hamlet, is brought to the state where **the GM accepts it as the
+developer** - one task at a time, each task named by the GM, each task timed - and the period is
+itself a **dry run of the iteration workflow**, measuring whether the tooling lets a simple change
+cost a simple amount of time.
+
+## Why this exists (the GM's words)
+
+- *"for the current period, I would like to focus on getting our reference hamlet to be exactly
+  right. and address all known issues with it"*
+- *"I would like to provide the tasks one at a time. Part of my reasoning for this is that I am
+  going to use the length of time which each task takes to implement in order to measure the
+  effectiveness of our tooling and our approach."*
+- *"this is the dry run for how we will do this kind of feature iteration in the future."*
+- *"iterations are expensive in terms of wall clock time. And if me asking for a simple change
+  results in half an hour of work being done when it should have only taken five minutes, then
+  that limits the number of changes that I can make in a single day."*
+
+## The shape of the feature
+
+This is **deliberately a skeleton**. Its task list holds the tooling the GM asked for at the very
+beginning, then one open slot per task the GM will name, then the acceptance task. The GM's own
+instruction: *"I don't want these results thrown off by the time that it will take to generate the
+skeleton"* - so the skeleton phase (this spec, the tracker, the doctrine text) is NOT a measured
+task, and every task the GM names afterwards IS.
+
+The feature **stays in the clone until the GM accepts**: its last task cannot be ticked by a
+session, so the gated route's feature-complete condition refuses to land engine work (feature 130
+FR-011). The skeleton itself is pushed to main once, as the spec-number claim the project requires
+and so a fresh session's clone carries it; after that, only the tooling in Phase 0 lands (it is
+outside the engine set and lands DIRECT) and the map work does not.
+
+## User Scenarios & Testing
+
+### User Story 1 - A task, timed (Priority: P1)
+
+The GM opens a fresh session and names one defect on the map. The session records when the task
+was given, does the work, verifies it on Inashiro alone, records when it was done and what ran,
+and reports the elapsed time with the result.
+
+**Independent Test**: `tasks.md` carries, for the task, the GM's words, the given-at and done-at
+timestamps, the elapsed minutes, and the list of gate/map runs the run-log shows in that window.
+
+**Acceptance Scenarios**:
+
+1. **Given** the GM names a task, **When** the session starts it, **Then** the task is appended to
+   `tasks.md` with the GM's words verbatim and a `given` timestamp (UTC) before any work starts.
+2. **Given** the task is done and verified, **Then** the entry gains `done`, the elapsed minutes,
+   and the run-log entries in that window (every `make done`, `make reference`, `make map`), so
+   the GM can ask *"why did that take so long?"* against a record rather than a memory.
+3. **Given** a task took longer than its shape suggested, **Then** the entry says why, in one of
+   the GM's three categories: more complicated than expected; ran lengthier tests than needed;
+   more cycles than needed (small change, long test, repeat) - and, where it is the tooling, a
+   follow-up task is proposed.
+
+### User Story 2 - What AWS would have done (Priority: P1)
+
+Remote is off for the whole period. Every time a paid run WOULD have started - a gated push that
+would have dispatched, a `ci-check`, a `ci-image`, a `FULL=1` - the tooling records it, with the
+estimate, so the period can be audited afterwards: *"were we about to spend many hours and many
+dollars of tests?"*
+
+**Independent Test**: throw remote off in a fixture; attempt each paid target; each attempt
+leaves an auditable entry that no spend figure counts; `make ci-status` reports the count.
+
+**Acceptance Scenarios**:
+
+1. **Given** remote is off, **When** any paid target is attempted, or the gated route would have
+   dispatched, **Then** a run-log entry with `where: would-have-dispatched` is written carrying
+   the target, scope, estimated minutes and cost, the reason, and the commit - and it is NOT
+   summed into month-to-date spend.
+2. **Given** such entries exist, **When** `make ci-status` or `make audit` runs, **Then** a "Would
+   have dispatched (remote off)" block lists them with a total estimated cost.
+3. **Given** the period ends, **Then** the acceptance task's record includes the audit: how many
+   times a paid run would have started, and for each whether it should have - a "no" is a tooling
+   defect to fix, per the GM: *"if the answer turns out to be no, then that means that we need to
+   make more tooling changes in order to be smarter about when we run the longer tests."*
+
+### User Story 3 - The feature cannot reach main incomplete (Priority: P1)
+
+The GM: *"our automated tooling should stop it from going back into main. Right? ... this will
+also be a good test for seeing whether working on a feature through speckit triggers those gates
+successfully. To be honest, I'm not sure how the tooling can know whether we're working on a
+feature or not."*
+
+**What exists today (the answer to the GM's question)**: the tooling knows the active feature from
+`.specify/feature.json` in the clone (or `SPECIFY_FEATURE`), and the GATED route refuses to land
+engine work unless that feature has no open task and a FAITHFUL spec (feature 130 FR-011). The
+DIRECT route (docs, tests, ci/, config) does not consult the feature at all - which is the *"ways
+to get things into main outside the context of features"* the GM suspected.
+
+**Acceptance Scenarios**:
+
+1. **Given** 133 has an open task and the clone's delta touches engine code, **When** the ritual
+   runs, **Then** the push is refused with `feature-complete` named - proven on this feature the
+   first time a map task lands in the clone.
+2. **Given** the DIRECT route ignores the feature, **Then** this feature records that as the
+   known gap and the GM decides whether to close it (FR-006) - the session does not.
+
+### Edge Cases
+
+- **The GM names a task the tooling cannot do in reference scope** (a knob wanting three maps): the
+  session says so in the task entry and does the reference-map half; the rest is a task for after
+  unlock.
+- **A task turns up a defect elsewhere**: fixed in that task (constitution XIV), its time counted
+  in that task and called out in the entry, so the measurement is honest about where time went.
+- **A task's fix wants a pool map re-rolled**: refused by the lock; the entry says so; it waits.
+
+## Requirements
+
+- **FR-001**: The feature's final task is *"the GM accepts the current state of Inashiro"* and
+  MUST be tickable only on the GM's explicit word, recorded verbatim in `tasks.md`.
+- **FR-002**: Tasks are added ONE AT A TIME, on the GM's word, verbatim; the skeleton adds none
+  of the GM's map tasks in advance.
+- **FR-003**: Each GM task MUST carry the given/done UTC timestamps, the elapsed minutes, the
+  run-log entries in that window, and - if the time was out of proportion - which of the GM's three
+  causes applied and what follows from it.
+- **FR-004**: With remote off, every attempt that would have started a paid run MUST be recorded
+  as a `would-have-dispatched` run-log entry (target, scope, estimated minutes and cost, reason,
+  commit), excluded from spend, and reported by `make ci-status` and `make audit`. This is built
+  in the skeleton phase - *"part of this feature should, at the very beginning, involve modifying
+  our tooling so that when AWS testing is turned off, we still track when it would have run."*
+- **FR-005**: The acceptance task's record MUST include the audit of those entries: for each,
+  should it have run? Every "no" names the tooling change it implies.
+- **FR-006**: The known gap - the DIRECT route lands docs/tests/ci/config without consulting the
+  active feature - is recorded here as a QUESTION for the GM, with the candidate rule (an
+  incomplete active feature limits DIRECT pushes to its own `specs/` directory and docs) and its
+  cost (milestone pushes of tooling would need the feature's tasks closed or a second feature).
+  Not implemented unless the GM says so.
+- **FR-007**: The motivation - iteration wall-clock is the cost that limits how many changes the
+  GM can make in a day; every command chosen, every tooling improvement, every interaction with
+  the tooling is judged against it - MUST be written into the constitution, the root `CLAUDE.md`
+  and the skill's `SKILL.md`/`CLAUDE.md` where it is not already, in the skeleton phase, as a
+  project goal for every future session.
+
+## Success Criteria
+
+- **SC-001**: Every GM task in `tasks.md` has a measured elapsed time and a run-log window.
+- **SC-002**: With remote off, zero paid runs happen and every would-have-run is on record.
+- **SC-003**: The feature cannot land engine work while any task is open - observed, not assumed.
+- **SC-004**: The GM ticks the acceptance task.
+
+## Assumptions
+
+- Feature 132's switches stay thrown for the whole period (remote off, scope reference).
+- The skeleton phase is not measured; every GM-named task is.
+- "Accepted by the GM as the developer" is the GM's judgment of the rendered map
+  (`pool/hamlets/inashiro.png`), not a check passing.
