@@ -10,7 +10,7 @@ phases:
     commands:
       - git clone -q --filter=blob:none "https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPO}" bootstrap
       - git -C bootstrap fetch -q origin "refs/heads/${MAILBOX}:refs/remotes/origin/${MAILBOX}"
-      - git -C bootstrap checkout -q --detach "$GIT_SHA" -- buildspec/run.sh
+      - git -C bootstrap checkout -q "$GIT_SHA" -- buildspec/run.sh
   build:
     commands:
       - bash bootstrap/buildspec/run.sh
