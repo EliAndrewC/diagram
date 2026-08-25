@@ -38,18 +38,18 @@
 ## Phase 4: The real extraction (plan note 2 - removal LAST)
 
 - [x] T019 Fresh clone → `filter-repo` with the SAME path list → add the new remote → push `main` (the ruleset from T004 is already on it, so this is the first and last non-ff-free push)
-- [ ] T020 Clone the new repository into the container at the new mount; run T013-T015 for real; record the numbers
+- [x] T020 Clone the new repository into the container at the new mount; run T013-T015 for real; record the numbers
 - [x] T021 Repoint CodeBuild: `GITHUB_REPO` on both projects (session's key suffices, R7); the GM pastes the new PAT into the existing secret (revoking the old one is optional housekeeping)
 - [x] T022 Copy the 32 diagram memory notes and their index lines into the new path's memory directory (R6); add a note in gm-assistant's memory saying where the diagram went
-- [ ] T023 gm-assistant removal commit: delete ONLY the MOVE items of FR-001's table (the skill, the 47 spec directories, `make-only-hooks.sh`, `_hookmatch.py` and their companion, the three diagram review agents), keep every COPY and STAY item, apply T006/T008/T009; `webapp/make done` green; push through the ritual
-- [ ] T024 The `Blocked by` lines and `T000` tasks (T011) land in the NEW repository, where 129 and 130 now live
-- [ ] T025 Reference sweep grep across both real repositories and both memory directories: zero LIVE hits (SC-004)
+- [x] T023 gm-assistant removal commit: delete ONLY the MOVE items of FR-001's table (the skill, the 47 spec directories, `make-only-hooks.sh`, `_hookmatch.py` and their companion, the three diagram review agents), keep every COPY and STAY item, apply T006/T008/T009; `webapp/make done` green; push through the ritual
+- [x] T024 The `Blocked by` lines and `T000` tasks (T011) land in the NEW repository, where 129 and 130 now live
+- [x] T025 Reference sweep grep across both real repositories and both memory directories: zero LIVE hits (SC-004)
 
 ## Phase 5: Close
 
-- [ ] T026 The new repository's `timings.md`: a dated block "131 - first gate in the new repository" with T020's numbers beside T001's
+- [x] T026 The new repository's `timings.md`: a dated block "131 - first gate in the new repository" with T020's numbers beside T001's
 - [ ] T027 Report to the GM: the URL, the assumptions made (name; copies vs shared; renders; numbering 132 / 200; the rehearsal), the three things that changed for them (two mounts; sessions for diagram work open in the new repository; feature = repo + number), and that 129/130 are now unblocked
-- [ ] T028 Audit `dev/bypass-log/` for entries added during this feature (expected: none)
+- [x] T028 Audit `dev/bypass-log/` for entries added during this feature (expected: none)
 
 ---
 
@@ -99,3 +99,5 @@ dashes that the webapp's repo-wide dash scan flagged - a pre-existing failure in
   still the GM's to create** (block force pushes, restrict deletions).
 - 32 memory notes + 16 index lines copied to `~/.claude/projects/-diagram/memory/`; a
   `project-diagram-moved-to-own-repo` note added to both memories.
+
+- T028 result: no `dev/bypass-log/` entries were added during this feature (every gate was a plain `make done`); the run-log entries the gates wrote are committed as history.

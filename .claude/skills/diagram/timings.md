@@ -329,3 +329,19 @@ things nobody would have guessed from the totals alone.
 | &nbsp;&nbsp;↳ format (ruff format --check) | | 0.1 s | 0% |
 | &nbsp;&nbsp;↳ typecheck (mypy --strict, 9 modules) | | 0.2 s | 0% |
 | &nbsp;&nbsp;↳ test (pytest -n auto + 100% coverage gate) | | 3 min 45.2 s | 99% |
+
+## 2026-08-25 - feature 131: first gate in the diagram repository (hand-recorded, not timings.py)
+
+context: this container (22 threads, laptop), python 3.14, commit 4d2dbdbb in /diagram/.clones/aws
+
+| run | tests | failed (known gitignored-artifact gap) | test phase | hooks-test |
+|---|---|---|---|---|
+| baseline, gm-assistant clone (`4ecdcedd`) | 3,464 passed | 2 | 223.6 s | 12 suites |
+| rehearsal, throwaway extraction | 3,465 passed | 2 | 164.6 s (idle machine) | 12 |
+| **real, `/diagram/.clones/aws`** | **3,465 passed** | **2** | 221.2 s (a webapp gate ran beside it) | **12** |
+
+The +1 is `test_main_derives_main_repo_from_this_checkout_when_not_given` (feature 131's
+`render_cache` change). The two failures are `test_every_live_pool_png_matches_its_own_svg_viewbox`
+and `test_crown_fills_covers_every_recorded_crown`, which need pool renders a fresh clone does not
+have (constitution XIII, the 2026-08-24 clause) - they pass once render-sync has run in main.
+Nothing slowed: the wall-clock difference between rows is machine contention, not code.
