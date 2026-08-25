@@ -1,0 +1,7 @@
+{
+  "utc": "2026-08-25T11:42:02Z",
+  "target": "ci-image",
+  "commit": "8f4adb30",
+  "outcome": "permitted",
+  "why": "feature 130 first image build - GM 2026-08-25: \"all of them look like things that you should be capable of kicking off\" (session answering with the GM standing authorization)"
+}
