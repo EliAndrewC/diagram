@@ -1,0 +1,126 @@
+{
+  "clone": "diagram-architecture",
+  "commit": "24ecca65",
+  "cpus": 22,
+  "environment": "local",
+  "host": "laptop",
+  "hostname": "4d7e8948eb5d",
+  "image": "laptop",
+  "label": "129-end",
+  "machine": "x86_64",
+  "median_seconds": 76.3,
+  "reference": {
+    "down_deg": 90,
+    "households": 15,
+    "name": "Inashiro",
+    "water_sink": "pond"
+  },
+  "rows": [
+    {
+      "asked": 15,
+      "form": "nucleated",
+      "houses": 15,
+      "seconds": 27.1,
+      "seed": 4,
+      "shape": "crescent",
+      "stages": {
+        "appurtenances": 0.12,
+        "crossings": 0.27,
+        "field": 3.66,
+        "frame": 0.02,
+        "hinterland": 3.03,
+        "homesteads": 0.44,
+        "notice": 6.33,
+        "seat": 0.03,
+        "sink": 0.01,
+        "track": 4.39,
+        "water_frame": 0.0,
+        "web": 8.43,
+        "windbreak": 0.2,
+        "woodland": 0.14
+      }
+    },
+    {
+      "asked": 15,
+      "form": "nucleated",
+      "houses": 15,
+      "seconds": 80.6,
+      "seed": 25,
+      "shape": "crescent",
+      "stages": {
+        "appurtenances": 0.51,
+        "crossings": 0.16,
+        "field": 4.5,
+        "frame": 0.0,
+        "hinterland": 3.0,
+        "homesteads": 0.88,
+        "notice": 5.4,
+        "seat": 0.04,
+        "sink": 0.01,
+        "track": 3.27,
+        "water_frame": 0.0,
+        "web": 62.56,
+        "windbreak": 0.06,
+        "woodland": 0.2
+      }
+    },
+    {
+      "asked": 15,
+      "form": "nucleated",
+      "houses": 15,
+      "seconds": 72.1,
+      "seed": 39,
+      "shape": "round",
+      "stages": {
+        "appurtenances": 0.71,
+        "crossings": 0.32,
+        "field": 2.65,
+        "frame": 0.0,
+        "hinterland": 3.15,
+        "homesteads": 0.39,
+        "notice": 9.96,
+        "seat": 0.04,
+        "sink": 0.01,
+        "track": 7.66,
+        "water_frame": 0.0,
+        "web": 46.95,
+        "windbreak": 0.22,
+        "woodland": 0.08
+      }
+    },
+    {
+      "asked": 15,
+      "form": "nucleated",
+      "houses": 15,
+      "seconds": 88.6,
+      "seed": 47,
+      "shape": "round",
+      "stages": {
+        "appurtenances": 0.85,
+        "crossings": 0.22,
+        "field": 25.98,
+        "frame": 0.0,
+        "hinterland": 2.94,
+        "homesteads": 0.27,
+        "notice": 8.17,
+        "seat": 0.04,
+        "sink": 0.0,
+        "track": 13.55,
+        "water_frame": 0.0,
+        "web": 36.28,
+        "windbreak": 0.14,
+        "woodland": 0.14
+      }
+    }
+  ],
+  "seeds": [
+    4,
+    25,
+    39,
+    47
+  ],
+  "subject": "feature 129: the three performance bands per environment, the review records, the perf-audit subagent, tier-2 profiling; feature 130 T080 records",
+  "total_seconds": 268.4,
+  "utc": "20260825T121255Z",
+  "worst_seconds": 88.6
+}
