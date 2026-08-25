@@ -1,0 +1,103 @@
+#!/usr/bin/env bash
+# Tests for sync-with-main.sh - the route decision, the mirror refresh, and the gated/direct pushes
+# (feature 130; constitution XVIII: the route decision is a guard, so it ships with its test).
+# Run: scripts/test-sync-with-main.sh   (exit 0 = all green). Runs under `make hooks-test`, which
+# derives this companion's name from the script's (test-<script>).
+#
+# The fixture stands in for the whole topology: a bare "github" repository, a MAIN checkout that is
+# its mirror, and a session CLONE under main/.clones/. CLONE_MAIN, CLONE_GITHUB, CI_ROUTE and
+# CI_MERGE are the script's test seams - the real route decision calls `make ci-status ROUTE=1`,
+# which needs the whole skill and is tested in tests/ci/; here the seam supplies the answer.
+set -uo pipefail
+HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+RITUAL="$HERE/sync-with-main.sh"
+PASS=0; FAIL=0
+T=$(mktemp -d); trap 'rm -rf "$T"' EXIT
+export GIT_AUTHOR_NAME=t GIT_AUTHOR_EMAIL=t@t GIT_COMMITTER_NAME=t GIT_COMMITTER_EMAIL=t@t HOME=$T
+
+check() { # label expected-rc actual-rc
+  if [ "$2" = "$3" ]; then printf 'ok    %s (rc=%s)\n' "$1" "$3"; else printf 'FAIL  %s (expected rc=%s, got rc=%s)\n      out: %s\n' "$1" "$2" "$3" "${OUT:-}"; FAIL=$((FAIL+1)); return; fi
+  PASS=$((PASS+1))
+}
+expect_out() { case "$OUT" in *"$1"*) : ;; *) echo "FAIL  output lacks '$1': $OUT"; FAIL=$((FAIL+1)) ;; esac; }
+
+# ---- fixture ------------------------------------------------------------------------------------
+topology() { # $1 = name; builds $T/$1/{github.git,main,main/.clones/c}
+  local d=$T/$1; rm -rf "$d"; mkdir -p "$d"
+  git init -q --bare -b main "$d/github.git"
+  git init -q -b main "$d/seed"; ( cd "$d/seed" && mkdir -p scripts .claude/skills/x && echo base > f && echo '.clones/' > .gitignore && echo 'def a(): return 1' > .claude/skills/x/a.py && cp "$HERE"/*.sh "$HERE"/*.py scripts/ && git add -A && git commit -qm base && git push -q "$d/github.git" HEAD:main )
+  git clone -q "$d/github.git" "$d/main"
+  git -C "$d/main" config receive.denyCurrentBranch updateInstead
+  mkdir -p "$d/main/.clones/.session-clones"
+  git clone -q "$d/github.git" "$d/main/.clones/c"
+  echo "$d"
+}
+ritual() { # $1 = topology dir, then args
+  local d=$1; shift
+  ( cd "$d/main/.clones/c" && CLONE_MAIN="$d/main" CLONE_GITHUB="$d/github.git" GITHUB_TOKEN=unused "$RITUAL" "$@" 2>&1 )
+}
+stamp_hooks() { ( cd "$1/main/.clones/c" && python3 scripts/gate-stamp.py --write hooks >/dev/null ); }
+
+echo "1. sync-in refreshes the mirror from GitHub main, then the clone"
+D=$(topology a)
+( cd "$D/seed" && echo more > g && git add -A && git commit -qm upstream && git push -q "$D/github.git" HEAD:main )
+OUT=$(ritual "$D" sync-in); check "sync-in from a clean clone" 0 $?
+[ "$(git -C "$D/main" rev-parse HEAD)" = "$(git -C "$D/github.git" rev-parse main)" ] && PASS=$((PASS+1)) || { echo "FAIL  mirror did not fast-forward to GitHub main"; FAIL=$((FAIL+1)); }
+[ "$(git -C "$D/main/.clones/c" rev-parse HEAD)" = "$(git -C "$D/github.git" rev-parse main)" ] && PASS=$((PASS+1)) || { echo "FAIL  clone did not merge GitHub main"; FAIL=$((FAIL+1)); }
+expect_out "synced with GitHub main"
+
+echo "2. sync-in --mirror-only advances the mirror and leaves the clone alone (a dirty clone's turn)"
+D=$(topology b)
+( cd "$D/seed" && echo more > g && git add -A && git commit -qm upstream && git push -q "$D/github.git" HEAD:main )
+before=$(git -C "$D/main/.clones/c" rev-parse HEAD)
+OUT=$(ritual "$D" sync-in --mirror-only); check "sync-in --mirror-only" 0 $?
+[ "$(git -C "$D/main" rev-parse HEAD)" = "$(git -C "$D/github.git" rev-parse main)" ] && PASS=$((PASS+1)) || { echo "FAIL  mirror not advanced"; FAIL=$((FAIL+1)); }
+[ "$(git -C "$D/main/.clones/c" rev-parse HEAD)" = "$before" ] && PASS=$((PASS+1)) || { echo "FAIL  clone was touched"; FAIL=$((FAIL+1)); }
+
+echo "3. IT FIRES: a hand commit in the mirror stops sync-in with the fast-forward message"
+D=$(topology c)
+( cd "$D/main" && echo rogue > rogue && git add -A && git commit -qm "committed in main by hand" )
+( cd "$D/seed" && echo more > g && git add -A && git commit -qm upstream && git push -q "$D/github.git" HEAD:main )
+OUT=$(ritual "$D" sync-in); check "mirror cannot fast-forward -> refused" 1 $?
+expect_out "cannot fast-forward"
+
+echo "4. DIRECT route: a docs-only delta pushes straight to GitHub main, no build, mirror follows"
+D=$(topology d)
+( cd "$D/main/.clones/c" && echo docs > note.md && git add -A && git commit -qm docs )
+OUT=$(CI_ROUTE=DIRECT CI_MERGE="false" ritual "$D" push); check "direct push" 0 $?
+[ "$(git -C "$D/github.git" rev-parse main)" = "$(git -C "$D/main/.clones/c" rev-parse HEAD)" ] && PASS=$((PASS+1)) || { echo "FAIL  GitHub main did not receive the direct push"; FAIL=$((FAIL+1)); }
+[ "$(git -C "$D/main" rev-parse HEAD)" = "$(git -C "$D/github.git" rev-parse main)" ] && PASS=$((PASS+1)) || { echo "FAIL  mirror did not follow"; FAIL=$((FAIL+1)); }
+expect_out "route DIRECT"
+
+echo "5. GATED route, refused: nothing lands, the work stays in the clone"
+D=$(topology e)
+( cd "$D/main/.clones/c" && echo 'def a(): return 2' > .claude/skills/x/a.py && git add -A && git commit -qm engine ); stamp_hooks "$D"
+gh_before=$(git -C "$D/github.git" rev-parse main)
+OUT=$(CI_ROUTE=GATED CI_MERGE="false" ritual "$D" push); check "gated route refused by ci-merge -> push fails" 1 $?
+[ "$(git -C "$D/github.git" rev-parse main)" = "$gh_before" ] && PASS=$((PASS+1)) || { echo "FAIL  something landed on GitHub main"; FAIL=$((FAIL+1)); }
+expect_out "nothing landed"
+
+echo "6. GATED route, dispatched: the build lands the merge on GitHub main; the clone fast-forwards; mirror follows"
+D=$(topology f)
+( cd "$D/main/.clones/c" && echo 'def a(): return 3' > .claude/skills/x/a.py && git add -A && git commit -qm engine ); stamp_hooks "$D"
+# the "build": merges main into the mailbox commit and pushes the result to GitHub main
+BUILD="git -C $D/main/.clones/c push -q $D/github.git HEAD:main && echo DISPATCHED > $D/main/.clones/c/.git/ci-verdict"
+OUT=$(CI_ROUTE=GATED CI_MERGE="$BUILD" ritual "$D" push); check "gated route dispatched" 0 $?
+[ "$(git -C "$D/github.git" rev-parse main)" = "$(git -C "$D/main/.clones/c" rev-parse HEAD)" ] && PASS=$((PASS+1)) || { echo "FAIL  clone and GitHub main differ after the gated push"; FAIL=$((FAIL+1)); }
+[ "$(git -C "$D/main" rev-parse HEAD)" = "$(git -C "$D/github.git" rev-parse main)" ] && PASS=$((PASS+1)) || { echo "FAIL  mirror did not follow the gated landing"; FAIL=$((FAIL+1)); }
+
+echo "7. GATED route, SKIP-VERIFIED: the clone pushes directly (a build already verified this tree)"
+D=$(topology g)
+( cd "$D/main/.clones/c" && echo 'def a(): return 4' > .claude/skills/x/a.py && git add -A && git commit -qm engine ); stamp_hooks "$D"
+OUT=$(CI_ROUTE=GATED CI_MERGE="echo SKIP-VERIFIED > $D/main/.clones/c/.git/ci-verdict" ritual "$D" push); check "skip-verified pushes directly" 0 $?
+[ "$(git -C "$D/github.git" rev-parse main)" = "$(git -C "$D/main/.clones/c" rev-parse HEAD)" ] && PASS=$((PASS+1)) || { echo "FAIL  skip-verified did not land"; FAIL=$((FAIL+1)); }
+
+echo "8. origins are re-pointed at GitHub once, and said so"
+D=$(topology h)
+git -C "$D/main/.clones/c" remote set-url origin "$D/main"
+OUT=$(ritual "$D" sync-in); check "sync-in with a stale origin" 0 $?
+expect_out "origin of"
+[ "$(git -C "$D/main/.clones/c" remote get-url origin)" = "$D/github.git" ] && PASS=$((PASS+1)) || { echo "FAIL  origin not re-pointed"; FAIL=$((FAIL+1)); }
+
+echo "-----"
+if [ "$FAIL" -eq 0 ]; then echo "all sync-with-main tests passed ($PASS checks)"; exit 0; else echo "SOME TESTS FAILED ($FAIL)"; exit 1; fi

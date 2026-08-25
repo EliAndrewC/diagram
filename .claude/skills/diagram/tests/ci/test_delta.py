@@ -1,0 +1,92 @@
+"""The classifier walks every path KIND and pins each one (T007) - a new kind cannot be silently
+engine or silently docs - and the delta is what OUR commits changed, never what main contributed (R1)."""
+
+from __future__ import annotations
+
+from pathlib import Path
+
+import pytest
+
+from l7r.diagram.ci.delta import Delta, compute_delta, is_engine
+from tests.ci.conftest import commit, git
+
+S = ".claude/skills/diagram/"
+
+ENGINE = [
+    S + "l7r/diagram/settlement/houses.py",
+    S + "l7r/diagram/ci/dispatch.py",
+    S + "tests/settlement/test_houses.py",
+    S + "tests/fixtures/gate_check_names.json",
+    S + "pool/hamlets/inashiro.gen.py",
+    S + "pool/hamlets/inashiro.json",
+    S + "Makefile",
+    S + "pyproject.toml",
+    S + "requirements.txt",
+    S + "requirements-dev.in",
+]
+NOT_ENGINE = [
+    S + "SKILL.md",
+    S + "CLAUDE.md",
+    S + "dev/run-log/20260825T000000000000-1.json",
+    S + "dev/bypass-log/20260825T000000000000-1.json",
+    S + "dev/perf-log/20260825T000000Z-130-start-x.json",
+    S + "dev/loop.md",
+    S + "future-work/something.md",
+    S + "settlements/water.md",
+    S + "buildings/manor.md",
+    S + "research/farms.md",
+    S + "pool/hamlets/inashiro.notes.md",
+    S + "pool/hamlets/inashiro.png",
+    S + "pool/hamlets/inashiro.svg",
+    S + "timings.md",
+    S + "l7r/diagram/settlement/CLAUDE.md",
+    "CLAUDE.md",
+    "docs/session-clones.md",
+    "specs/130-codebuild-merge-gate/tasks.md",
+    "scripts/sync-with-main.sh",
+    "buildspec/merge.yml",
+    ".specify/memory/constitution.md",
+]
+
+
+@pytest.mark.parametrize("path", ENGINE)
+def test_engine_kinds_are_engine(path: str) -> None:
+    assert is_engine(path), path
+
+
+@pytest.mark.parametrize("path", NOT_ENGINE)
+def test_non_engine_kinds_are_not(path: str) -> None:
+    assert not is_engine(path), path
+
+
+def test_route_and_reason() -> None:
+    assert Delta("b", (), ()).route == "DIRECT"
+    assert "nothing to push" in Delta("b", (), ()).reason
+    d = Delta("b", ("docs/x.md",), ())
+    assert d.route == "DIRECT" and "none of them diagram engine code" in d.reason
+    g = Delta("b", tuple(ENGINE), tuple(ENGINE))
+    assert g.route == "GATED" and "+6 more" in g.reason and "10 engine path" in g.reason
+
+
+def test_delta_is_our_commits_only(repo: Path) -> None:
+    """Main advances with an engine change; we merge it in; our own delta is still docs-only (R1)."""
+    # main gets an engine commit "elsewhere": build it on a branch and move origin/main to it
+    git(repo, "checkout", "-q", "-b", "upstream")
+    commit(repo, S + "l7r/diagram/m.py", "x = 2\n", "main-side engine change")
+    git(repo, "update-ref", "refs/remotes/origin/main", "HEAD")
+    git(repo, "checkout", "-q", "main")
+    commit(repo, "docs/note.md", "ours\n", "our docs commit")
+    git(repo, "merge", "-q", "--no-edit", "upstream")
+    d = compute_delta(repo)
+    assert d.files == ("docs/note.md",), d.files
+    assert d.route == "DIRECT"
+
+
+def test_delta_sees_our_engine_change(repo: Path) -> None:
+    commit(repo, S + "l7r/diagram/m.py", "x = 3\n")
+    d = compute_delta(repo)
+    assert d.engine == (S + "l7r/diagram/m.py",) and d.route == "GATED"
+
+
+def test_a_clone_at_main_has_an_empty_delta(repo: Path) -> None:
+    assert compute_delta(repo).files == ()

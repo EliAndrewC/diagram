@@ -6,7 +6,17 @@
 
 .PHONY: done lint format typecheck test test-full guard perf perf-report maps reference bypass-audit quick durations test-file audit perf-gate hooks-test explain \
 	 map cohort tripwire hamlet cache-audit regressions placement-stages pool-index compound render-sync \
-	 gate-manifest why-placed site-justice crop jogs pack-audit scatter-audit timings citybudget help
+	 gate-manifest why-placed site-justice crop jogs pack-audit scatter-audit timings citybudget help \
+	 ci-status ci-check ci-merge ci-image commit-permitted
+
+# THE VERIFICATION STATE (feature 130, FR-012 - GUARD_EDIT_OK: adding the CodeBuild gate). Every
+# local target that proves something records it in .git/verification-state.json with the content
+# hash of the engine's Python at that moment; the dispatcher refuses a paid run unless the most
+# recent record is a GREEN local check against EXACTLY the code being pushed. The GM's case: *"make
+# done fails, and then they make a change, and then just immediately run make done again without
+# running a more targeted test first ... This feels like something that we should be able to
+# actually prevent."* A failed gate records failed-gate; a source edit is caught by the hash.
+STATE = python3 -m l7r.diagram.ci state
 
 # Runs EVERY phase and reports all failures together (GM 2026-07-25). It used to be
 # `done: lint format typecheck test`, which make stops at the first failure - so a lint slip hid a
@@ -31,16 +41,24 @@
 #
 # The constitution requires every diagram feature to AUDIT dev/bypass-log.jsonl as a closing step -
 # read the entries added during the feature and say, in writing, whether each was justified.
+# FULL RUNS THE REFERENCE CHECK TOO (feature 130, FR-034, research R15 - GUARD_EDIT_OK: fixing a
+# defect). Before this, `bypass-audit` ran IN PLACE OF `reference` when FULL was set, so a full run
+# went prompt -> lint -> ... -> the whole suite with no reference-first stop; the prompt had been
+# built as the reference BYPASS. The GM's understanding ("there is no way to short circuit that")
+# was true only of reference scope. Now: the prompt authorizes the EXPENSE, then the reference map
+# still gates; REF_OK is the one, separate, logged way to skip that step, as for every other target.
 done:
-	@$(if $(FULL),$(MAKE) --no-print-directory bypass-audit REF_WHY="$(REF_WHY)",$(MAKE) --no-print-directory reference)
+	@$(if $(FULL),$(MAKE) --no-print-directory bypass-audit REF_WHY="$(REF_WHY)",true)
+	@$(if $(REF_OK),$(LOGBYPASS) permitted "REF_OK - reference step skipped: $(REF_WHY)"; printf '\nreference step SKIPPED (REF_OK, logged to dev/bypass-log/)\n',$(MAKE) --no-print-directory reference)
 	@T0=$$(date +%s); fail=""; \
 	for phase in lint format typecheck hooks-test $(if $(FULL),test-full perf-gate,test); do \
 	  printf '\n\033[1m== %s ==\033[0m\n' "$$phase"; \
 	  $(MAKE) --no-print-directory $$phase || fail="$$fail $$phase"; \
 	done; \
-	if [ -n "$$fail" ]; then $(LOGRUN) done "$(if $(FULL),full,reference)" "$$(( $$(date +%s) - $$T0 ))" "failed:$$fail"; printf '\n\033[1mGATE FAILED:%s\033[0m (every phase ran - fix them together, then re-run once)\n' "$$fail"; exit 1; fi; \
+	if [ -n "$$fail" ]; then $(LOGRUN) done "$(if $(FULL),full,reference)" "$$(( $$(date +%s) - $$T0 ))" "failed:$$fail"; $(STATE) failed-gate done; printf '\n\033[1mGATE FAILED:%s\033[0m (every phase ran - fix them together, then re-run once)\n' "$$fail"; exit 1; fi; \
 	root=$$(git rev-parse --show-toplevel 2>/dev/null) && [ -n "$$root" ] && python3 "$$root/scripts/gate-stamp.py" --write diagram || true; \
 	$(LOGRUN) done "$(if $(FULL),full,reference)" "$$(( $$(date +%s) - $$T0 ))" green; \
+	$(STATE) green-local done; \
 	$(if $(FULL),printf '\n\033[1mgate green (FULL - every pool map re-gated, seeds 41-44 rolled)\033[0m\n',printf '\n\033[1mgate green\033[0m (reference settlement + non-map tests; `make done FULL=1` also rolls the other pool maps)\n')
 
 # THE REFERENCE-HAMLET PERFORMANCE BOOKENDS (constitution VI, GM 2026-08-23).
@@ -268,7 +286,8 @@ citybudget:     ## the city/capital space-budget planner
 # landed on main, because nothing at push time knew the guards had been edited.
 hooks-test:     ## run every scripts/test-*-hooks.sh, and prove each guard still has a companion
 	@root=$$(git rev-parse --show-toplevel); fail=""; n=0; \
-	for h in $$root/scripts/*-hooks.sh $$root/scripts/review-gate.sh $$root/scripts/gate-stamp.py; do \
+	for h in $$root/scripts/*-hooks.sh $$root/scripts/review-gate.sh $$root/scripts/gate-stamp.py $$root/scripts/sync-with-main.sh; do \
+	  : "(GUARD_EDIT_OK: sync-with-main.sh joins the roster - its route decision is a guard, feature 130 T031)"; \
 	  b=$$(basename $$h); case $$b in test-*) continue ;; esac; \
 	  t=test-$${b%.py}; case $$t in *.sh) ;; *) t=$$t.sh ;; esac; \
 	  if [ ! -f "$$root/scripts/$$t" ]; then \
@@ -297,8 +316,13 @@ perf-gate:      ## require the feature's -start bookend, take -end, and FAIL on 
 	  printf 'Set SPECIFY_FEATURE=NNN-slug (spec-kit work) or FEATURE=NNN, so the bookends can be paired.\n\n'; \
 	  exit 1; \
 	fi; \
+	if [ -n "$$CODEBUILD_BUILD_ID" ] && ! ls dev/perf-log/*"$$n"-start*codebuild*.json >/dev/null 2>&1; then \
+	  printf '\n\033[1mPERF GATE (in-build): taking the %s-start bookend on the pre-merge main, in a detached worktree.\033[0m\n' "$$n"; \
+	  git worktree add -q --detach /tmp/base"$$n" origin/main && ( cd /tmp/base"$$n"/.claude/skills/diagram && $(MAKE) --no-print-directory perf LABEL="$$n-start" ) && cp /tmp/base"$$n"/.claude/skills/diagram/dev/perf-log/*"$$n-start"*.json dev/perf-log/ || exit 1; \
+	fi; \
 	if ! ls dev/perf-log/*"$$n"-start*.json >/dev/null 2>&1; then \
 	  printf '\n\033[1mPERF GATE: no %s-start bookend exists, so a regression cannot be measured.\033[0m\n\n' "$$n"; \
+	  printf '(GUARD_EDIT_OK: inside a CodeBuild build both bookends are taken in-run - feature 130, FR-028)\n' >/dev/null; \
 	  printf 'Constitution VI wants it taken on UNMODIFIED code, before the first edit. Retroactively is\n'; \
 	  printf 'fine and is what the regression baseline already does - take it in a detached worktree at\n'; \
 	  printf 'the pre-feature commit:\n\n'; \
@@ -312,7 +336,9 @@ perf-gate:      ## require the feature's -start bookend, take -end, and FAIL on 
 	$(MAKE) --no-print-directory perf LABEL="$$n-end" >/dev/null; \
 	$(MAKE) --no-print-directory perf-report AGAINST="$$n-start"
 
-audit:          ## how the gate has actually been used - every run, and every bypass
+# (GUARD_EDIT_OK: the audit gains "Remote spend" - feature 130, FR-020)
+audit:          ## how the gate has actually been used - every run, every bypass, and remote spend
+	@python3 -m l7r.diagram.ci remote-spend
 	@python3 -c "import json,glob,collections,os; \
 rows=sorted((json.load(open(f)) for f in glob.glob('dev/run-log/*.json')),key=lambda r:r.get('utc','')); \
 print(chr(10)+'\033[1mGate runs\033[0m (dev/run-log/)'); \
@@ -334,7 +360,39 @@ print()"
 help:           ## list every target with its one-line purpose
 	@printf '\n\033[1mOperations\033[0m - everything runs through one of these.\n\n'
 	@grep -hE '^[a-z][a-z0-9-]*:.*##' $(MAKEFILE_LIST) | sed 's/:.*##/\t/' | sort | awk -F'\t' '{printf "  \033[1m%-18s\033[0m %s\n", $$1, $$2}'
-	@printf '\nTimes: quick ~33s | reference ~26s | done ~5.5min (NOT the quick one) | done FULL=1 ~6min\n\n'
+	@printf '\nTimes: quick ~33s | reference ~26s | done ~5.5min (NOT the quick one) | done FULL=1 ~6min\n'
+	@printf 'Remote (paid, CodeBuild): ci-status (free) | ci-check [FULL=1|TARGET=op] | ci-merge (the push) | ci-image - see dev/loop.md\n\n'
+
+# ---- THE CODEBUILD TARGETS (feature 130 - GUARD_EDIT_OK: adding four new PAID operations) -------
+# Every remote run is PAID, so these are the most guarded operations in the repository. The
+# dispatcher (l7r/diagram/ci/) checks five conditions locally before any AWS call, runs lint and the
+# reference settlement locally with the build parked in parallel, and refuses a re-dispatch after a
+# failed gate until a local check is green. `ci-merge` is the push's gated route and is called by
+# scripts/sync-with-main.sh - never by hand. `ci-status` is the free "why won't it dispatch".
+ci-status:      ## free: delta, route, verification state, verified lookup, remote spend   ROUTE=1 -> just DIRECT|GATED
+	$(RUN).ci status $(if $(ROUTE),--route,)
+
+ci-check:       ## the iteration check on CodeBuild (PAID)     FULL=1 (prompts) | TARGET=cohort etc.
+	@$(if $(FULL),$(MAKE) --no-print-directory bypass-audit REF_WHY="$(REF_WHY)" && $(MAKE) --no-print-directory commit-permitted,true)
+	$(RUN).ci check $(if $(FULL),--full,) $(if $(TARGET),--target "$(TARGET)",)
+
+ci-merge:       ## the merge action's gated route (PAID) - called by sync-with-main.sh push   FULL=1 (prompts)
+	@$(if $(FULL),$(MAKE) --no-print-directory bypass-audit REF_WHY="$(REF_WHY)" && $(MAKE) --no-print-directory commit-permitted,true)
+	$(RUN).ci merge $(if $(FULL),--full,)
+
+# the operator's `permitted` answer becomes a commit, so the build finds it in the tree it tests (FR-025)
+commit-permitted:
+	@f=$$(ls -t dev/bypass-log/*.json | head -1); why=$$(python3 -c "import json,sys; print(json.load(open(sys.argv[1]))['why'][:60])" "$$f"); \
+	git add dev/bypass-log && git commit -q -m "chore: authorize FULL sweep - $$why" && echo "committed $$f ($$why)"
+
+ci-image:       ## rebuild the CodeBuild image from Dockerfile.ci and push it to ECR (PAID, ~$$1; prompts)
+	@if [ ! -t 0 ]; then printf '\n\033[1mREFUSED: ci-image is a paid operation and its prompt needs a terminal.\033[0m Run it in the foreground.\n\n'; $(LOGBYPASS) refused "ci-image with no terminal"; exit 1; fi; \
+	printf '\n\033[1mAbout to rebuild the CodeBuild image on AWS\033[0m (~$$1, a few minutes). Needed only when\n'; \
+	printf 'setup-dev-env.sh, Dockerfile.ci or a lockfile changed. Press Enter to CANCEL.\n\nReason to continue (Enter cancels): '; \
+	read why || true; \
+	if [ -z "$$why" ]; then $(LOGBYPASS) cancelled "(ci-image backed out at the prompt)"; printf 'Cancelled.\n'; exit 1; fi; \
+	$(LOGBYPASS) permitted "$$why"; git add dev/bypass-log; git commit -q -m "chore: authorize image rebuild - $$why" || true
+	$(RUN).ci image
 
 
 # THE LOG RECORDS WHAT HAPPENED, NOT ONLY WHAT WAS ALLOWED (FR-012). Without `outcome`, a session
@@ -368,11 +426,14 @@ LOGRUN = python3 -c "import json,os,subprocess,sys,time; \
   os.makedirs('dev/run-log',exist_ok=True); \
   open(f'dev/run-log/{ts}-{os.getpid()}.json','w').write(json.dumps({'utc':time.strftime('%Y-%m-%dT%H:%M:%SZ',time.gmtime()),'target':sys.argv[1],'scope':sys.argv[2],'seconds':int(sys.argv[3]),'result':sys.argv[4],'commit':h},indent=2)+chr(10))"
 
+# THE TARGET RECORDS THE SCOPE (feature 130 - GUARD_EDIT_OK: the build-side door keys on it). `done`
+# with FULL=1 logs as `done FULL`, `ci-merge FULL=1` as `ci-merge FULL`: the entry is what the build
+# reads to decide whether the full scope was authorized, and "done" alone could not say.
 LOGBYPASS = python3 -c "import json,os,subprocess,sys,time; \
   h=subprocess.run(['git','rev-parse','--short','HEAD'],capture_output=True,text=True).stdout.strip(); \
   ts=time.strftime('%Y%m%dT%H%M%S',time.gmtime())+'%06d'%(time.time_ns()//1000%1000000); \
   os.makedirs('dev/bypass-log',exist_ok=True); \
-  open(f'dev/bypass-log/{ts}-{os.getpid()}.json','w').write(json.dumps({'utc':time.strftime('%Y-%m-%dT%H:%M:%SZ',time.gmtime()),'target':'$(MAKECMDGOALS)','commit':h,'outcome':sys.argv[1],'why':sys.argv[2]},indent=2)+chr(10))"
+  open(f'dev/bypass-log/{ts}-{os.getpid()}.json','w').write(json.dumps({'utc':time.strftime('%Y-%m-%dT%H:%M:%SZ',time.gmtime()),'target':'$(MAKECMDGOALS)$(if $(FULL), FULL,)','commit':h,'outcome':sys.argv[1],'why':sys.argv[2]},indent=2)+chr(10))"
 
 QUICK_BUDGET = 60
 
@@ -388,8 +449,9 @@ QUICK_BUDGET = 60
 # gate). Exists because gating bare pytest left "re-run the file I just changed" with no route, and a
 # guard that blocks a legitimate action without offering the alternative is one that gets worked
 # around - the same gap `make durations` filled for "why is this slow".
+# (GUARD_EDIT_OK: a green test-file records green-local - feature 130, FR-012)
 test-file:      ## run ONE test file, whole              FILE=tests/pipeline/test_gencache.py
-	@python3 -m pytest -n auto -q --no-cov $(FILE)
+	@python3 -m pytest -n auto -q --no-cov $(FILE) && $(STATE) green-local test-file
 
 # WHY EVERY CHECK FAILED ON THE REFERENCE MAP, in detail rather than by name.
 #
@@ -423,10 +485,20 @@ quick:
 	    printf 'A test near the top of that list without @pytest.mark.rolls_map is the cause.\n\n'; \
 	    exit 1; \
 	  fi
-	@printf '\n\033[1mquick: clean\033[0m - the %s map-rolling tests were NOT run; `make done` before pushing.\n' "$$(python3 -m pytest -q --no-cov --collect-only -m rolls_map 2>/dev/null | tail -1 | grep -oE '^[0-9]+' || echo 'slow')" 
+	@printf '\n\033[1mquick: clean\033[0m - the %s map-rolling tests were NOT run; `make done` before pushing.\n' "$$(python3 -m pytest -q --no-cov --collect-only -m rolls_map 2>/dev/null | tail -1 | grep -oE '^[0-9]+' || echo 'slow')"
+	@$(STATE) green-local quick
+# (GUARD_EDIT_OK: a green quick records green-local - feature 130, FR-012)
 
+# THE BUILD-SIDE DOOR (feature 130, FR-025, research R11 - GUARD_EDIT_OK: a second door that opens
+# only to a COMMITTED answer). Inside a CodeBuild build there is no terminal to answer the prompt,
+# and the answer must not come from an environment variable (the tier-2 override with extra steps).
+# So the build accepts the full scope only if the tree it tests carries a `permitted` entry in
+# dev/bypass-log/ whose commit is an ancestor of HEAD and NOT of origin/main - the operator's
+# answer at the LOCAL prompt, committed by `commit-permitted` and shipped with the work. Locally,
+# with CODEBUILD_BUILD_ID unset, every line below behaves exactly as before (FR-026).
 bypass-audit:
-	@why="$(REF_WHY)"; \
+	@if [ -n "$$CODEBUILD_BUILD_ID" ]; then python3 -m l7r.diagram.ci door && exit 0; printf '\n\033[1mREFUSED: the FULL scope in a build needs the committed answer to the local prompt.\033[0m\n\n'; exit 1; fi; \
+	why="$(REF_WHY)"; \
 	if [ -n "$$why" ] && [ ! -t 0 ]; then \
 	  printf "\n\033[1mREFUSED: a FULL run with REF_WHY set, with nothing attached to answer for it.\033[0m\n\n"; \
 	  printf "The prompt below exists because its default answer is NO. Passing REF_WHY on the\n"; \
@@ -460,10 +532,13 @@ bypass-audit:
 	fi; \
 	mkdir -p dev; \
 	$(LOGBYPASS) permitted "$$why"; \
-	printf '\nlogged to dev/bypass-log.jsonl - proceeding\n\n'
+	printf '\nlogged to dev/bypass-log/ - proceeding\n\n'
+# (GUARD_EDIT_OK: the message named a file that does not exist - the log is a directory; feature 130 T073, Principle XIV)
 
 reference:
 	@python3 -c "import sys; sys.path.insert(0, '.'); 	from l7r.diagram import hamletgen as hg; 	r = hg.generate(hg.HamletSpec(name='Inashiro', seed=4, households=15, down_deg=90, water_sink='pond'), out_base=None, render=False); 	print('\033[1mreference settlement (Inashiro, seed 4): ' + ('CLEAN\033[0m' if r.ok else 'FAILING\033[0m -> ' + ', '.join(r.failures))); 	sys.exit(0 if r.ok else 1)" || { 	  printf '\n\033[1mSTOPPING HERE.\033[0m The reference settlement is red, so nothing more expensive runs.\n'; 	  printf 'Fix Inashiro first - it rebuilds in about a minute. Everything else is 4x to 25x that,\n'; 	  printf 'and none of it can tell you anything useful while the one map you iterate on is broken.\n'; 	  printf '(REF_OK=1 overrides, when the reference map is expected to fail.)\n\n'; exit 1; }
+	@$(STATE) green-local reference
+# (GUARD_EDIT_OK: a green reference records green-local - feature 130, FR-012)
 
 maps:
 	@python3 -m l7r.diagram.tools.mapcheck

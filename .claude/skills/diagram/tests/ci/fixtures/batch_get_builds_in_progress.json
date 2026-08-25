@@ -1,0 +1,144 @@
+{
+  "builds": [
+    {
+      "id": "gm-assistant-check:5b2da2c0-2666-4b44-9981-ae82236f5caf",
+      "buildNumber": 2,
+      "startTime": "2026-08-24T17:10:36.859000+00:00",
+      "currentPhase": "BUILD",
+      "buildStatus": "IN_PROGRESS",
+      "projectName": "gm-assistant-check",
+      "phases": [
+        {
+          "phaseType": "SUBMITTED",
+          "phaseStatus": "SUCCEEDED",
+          "startTime": "2026-08-24T17:10:36.859000+00:00",
+          "endTime": "2026-08-24T17:10:36.935000+00:00",
+          "durationInSeconds": 0
+        },
+        {
+          "phaseType": "QUEUED",
+          "phaseStatus": "SUCCEEDED",
+          "startTime": "2026-08-24T17:10:36.935000+00:00",
+          "endTime": "2026-08-24T17:10:37.598000+00:00",
+          "durationInSeconds": 0
+        },
+        {
+          "phaseType": "PROVISIONING",
+          "phaseStatus": "SUCCEEDED",
+          "startTime": "2026-08-24T17:10:37.598000+00:00",
+          "endTime": "2026-08-24T17:10:45.579000+00:00",
+          "durationInSeconds": 7,
+          "contexts": [
+            {
+              "statusCode": "",
+              "message": ""
+            }
+          ]
+        },
+        {
+          "phaseType": "DOWNLOAD_SOURCE",
+          "phaseStatus": "SUCCEEDED",
+          "startTime": "2026-08-24T17:10:45.579000+00:00",
+          "endTime": "2026-08-24T17:10:46.536000+00:00",
+          "durationInSeconds": 0,
+          "contexts": [
+            {
+              "statusCode": "",
+              "message": ""
+            }
+          ]
+        },
+        {
+          "phaseType": "INSTALL",
+          "phaseStatus": "SUCCEEDED",
+          "startTime": "2026-08-24T17:10:46.536000+00:00",
+          "endTime": "2026-08-24T17:10:46.607000+00:00",
+          "durationInSeconds": 0,
+          "contexts": [
+            {
+              "statusCode": "",
+              "message": ""
+            }
+          ]
+        },
+        {
+          "phaseType": "PRE_BUILD",
+          "phaseStatus": "SUCCEEDED",
+          "startTime": "2026-08-24T17:10:46.607000+00:00",
+          "endTime": "2026-08-24T17:10:46.648000+00:00",
+          "durationInSeconds": 0,
+          "contexts": [
+            {
+              "statusCode": "",
+              "message": ""
+            }
+          ]
+        }
+      ],
+      "source": {
+        "type": "NO_SOURCE",
+        "buildspec": "version: 0.2\nphases:\n  build:\n    commands:\n      - echo gm-assistant placeholder build OK && nproc && free -g\n",
+        "insecureSsl": false
+      },
+      "secondarySources": [],
+      "secondarySourceVersions": [],
+      "artifacts": {
+        "location": ""
+      },
+      "cache": {
+        "type": "NO_CACHE"
+      },
+      "environment": {
+        "type": "LINUX_CONTAINER",
+        "image": "aws/codebuild/standard:7.0",
+        "computeType": "BUILD_GENERAL1_XLARGE",
+        "environmentVariables": [
+          {
+            "name": "GITHUB_REPO",
+            "value": "EliAndrewC/gm-assistant",
+            "type": "PLAINTEXT"
+          },
+          {
+            "name": "CI_BUCKET",
+            "value": "gm-assistant-ci-130071571821",
+            "type": "PLAINTEXT"
+          },
+          {
+            "name": "ECR_IMAGE",
+            "value": "130071571821.dkr.ecr.us-east-1.amazonaws.com/gm-assistant-ci",
+            "type": "PLAINTEXT"
+          },
+          {
+            "name": "GIT_SHA",
+            "value": "",
+            "type": "PLAINTEXT"
+          },
+          {
+            "name": "MAKE_TARGET",
+            "value": "done",
+            "type": "PLAINTEXT"
+          }
+        ],
+        "privilegedMode": true,
+        "imagePullCredentialsType": "CODEBUILD"
+      },
+      "logs": {
+        "groupName": "/aws/codebuild/gm-assistant",
+        "streamName": "gm-assistant-check/5b2da2c0-2666-4b44-9981-ae82236f5caf",
+        "deepLink": "https://console.aws.amazon.com/cloudwatch/home?region=us-east-1#logsV2:log-groups/log-group/$252Faws$252Fcodebuild$252Fgm-assistant/log-events/gm-assistant-check$252F5b2da2c0-2666-4b44-9981-ae82236f5caf",
+        "cloudWatchLogsArn": "arn:aws:logs:us-east-1:130071571821:log-group:/aws/codebuild/gm-assistant:log-stream:gm-assistant-check/5b2da2c0-2666-4b44-9981-ae82236f5caf",
+        "cloudWatchLogs": {
+          "status": "ENABLED",
+          "groupName": "/aws/codebuild/gm-assistant",
+          "streamName": "gm-assistant-check"
+        }
+      },
+      "timeoutInMinutes": 45,
+      "queuedTimeoutInMinutes": 480,
+      "buildComplete": true,
+      "initiator": "gm-assistant-ci"
+    }
+  ],
+  "buildsNotFound": [],
+  "_note": "derived from batch_get_builds_succeeded.json by rewinding to mid-BUILD; the field shapes are the recorded ones"
+}

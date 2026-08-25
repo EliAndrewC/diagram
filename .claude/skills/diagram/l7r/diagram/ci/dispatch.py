@@ -1,0 +1,384 @@
+"""The dispatch sequence, and the AWS boundary behind a small protocol.
+
+THE SEQUENCE (FR-033..FR-037, the GM's five arrows), the same for every remote target:
+
+    0. conditions          free   delta, feature (merge only), state, verified record  -> refuse / skip
+    1. lint+format+types   ~5 s   fail -> stop, NOTHING has touched AWS
+    2. push mailbox, start_build (the build PARKS at wait-go)          provisioning overlaps step 3
+    3. make reference      ~26 s  fail -> stop_build(OUR id), state failed-gate, no go signal
+    4. put go/<build-id>          the build proceeds: merge main, gate, record, (merge: push main)
+    5. stream the log; exit with the build's status; run-log entry with minutes and cost
+
+EVERYTHING EXTERNAL IS INJECTED - `sh` for git/make, `client` for AWS, `sleep` for the clock - so
+the suite drives the whole sequence against SAVED responses (Principle X's fixture rule, never a
+transport mock) and can assert the two things that matter most: that no `start_build` happens on a
+refusal, and that `stop_build` is only ever called with the id this dispatcher got back.
+
+WHY THE BUILDSPEC TRAVELS WITH THE CALL. The projects were created with `NO_SOURCE` and a
+placeholder inline buildspec. Rather than editing the projects (a state nobody can review), the
+dispatcher passes the repository's own `buildspec/<mode>.yml` as `buildspecOverride`, so the build
+runs whatever the tree under test says - reviewable in a diff, like every other guard here.
+"""
+
+from __future__ import annotations
+
+import math
+import os
+import subprocess
+import time
+from collections.abc import Callable, Mapping
+from dataclasses import dataclass, field
+from pathlib import Path
+from typing import Any, Protocol
+
+from l7r.diagram.ci import config, decision, door, features, runlog, state
+from l7r.diagram.ci.delta import compute_delta
+
+ShResult = tuple[int, str]
+Sh = Callable[[list[str], Path, Mapping[str, str] | None], ShResult]
+
+
+class AwsClient(Protocol):
+    def start_build(self, **kw: Any) -> dict[str, Any]: ...
+    def batch_get_builds(self, ids: list[str]) -> dict[str, Any]: ...
+    def stop_build(self, id: str) -> dict[str, Any]: ...
+    def get_log_events(self, group: str, stream: str, token: str | None) -> dict[str, Any]: ...
+    def put_object(self, bucket: str, key: str, body: bytes) -> None: ...
+    def get_object(self, bucket: str, key: str) -> bytes | None: ...
+    def list_prefix(self, bucket: str, prefix: str) -> list[str]: ...
+
+
+class AccessDenied(Exception):
+    """An AWS AccessDeniedException, with the operation it named."""
+
+    def __init__(self, operation: str, message: str) -> None:
+        super().__init__(message)
+        self.operation = operation
+
+
+def default_sh(args: list[str], cwd: Path, env: Mapping[str, str] | None) -> ShResult:
+    merged = dict(os.environ)
+    if env:
+        merged.update(env)
+    p = subprocess.run(args, cwd=str(cwd), env=merged, capture_output=True, text=True)
+    return p.returncode, p.stdout + p.stderr
+
+
+class Boto3Client:
+    """The real boundary. Constructed only by `__main__`, never by a test."""
+
+    def __init__(self, secrets: config.Secrets) -> None:
+        import boto3  # type: ignore[import-untyped]  # local: the suite never imports it
+        import botocore.exceptions  # type: ignore[import-untyped]
+
+        self._errors = botocore.exceptions
+        ses = boto3.Session(aws_access_key_id=secrets.access_key_id, aws_secret_access_key=secrets.secret_access_key, region_name=secrets.region)
+        self._cb = ses.client("codebuild")
+        self._logs = ses.client("logs")
+        self._s3 = ses.client("s3")
+
+    def _wrap(self, fn: Callable[[], Any], operation: str) -> Any:
+        try:
+            return fn()
+        except self._errors.ClientError as e:  # pragma: no cover - the real transport; the shape is fixture-tested
+            if e.response.get("Error", {}).get("Code") == "AccessDeniedException":
+                raise AccessDenied(operation, str(e)) from e
+            raise
+
+    def start_build(self, **kw: Any) -> dict[str, Any]:
+        return dict(self._wrap(lambda: self._cb.start_build(**kw), "codebuild:StartBuild"))
+
+    def batch_get_builds(self, ids: list[str]) -> dict[str, Any]:
+        return dict(self._cb.batch_get_builds(ids=ids))
+
+    def stop_build(self, id: str) -> dict[str, Any]:
+        return dict(self._cb.stop_build(id=id))
+
+    def get_log_events(self, group: str, stream: str, token: str | None) -> dict[str, Any]:
+        kw: dict[str, Any] = {"logGroupName": group, "logStreamName": stream, "startFromHead": True}
+        if token:
+            kw["nextToken"] = token
+        try:
+            return dict(self._logs.get_log_events(**kw))
+        except self._errors.ClientError as e:  # pragma: no cover - the stream does not exist until the build starts writing
+            if e.response.get("Error", {}).get("Code") == "ResourceNotFoundException":
+                return {"events": [], "nextForwardToken": token}
+            raise
+
+    def put_object(self, bucket: str, key: str, body: bytes) -> None:
+        self._wrap(lambda: self._s3.put_object(Bucket=bucket, Key=key, Body=body), "s3:PutObject")
+
+    def get_object(self, bucket: str, key: str) -> bytes | None:
+        try:
+            return bytes(self._s3.get_object(Bucket=bucket, Key=key)["Body"].read())
+        except self._errors.ClientError as e:  # pragma: no cover - the miss is the common case and is fixture-tested
+            if e.response.get("Error", {}).get("Code") in ("NoSuchKey", "404"):
+                return None
+            raise
+
+    def list_prefix(self, bucket: str, prefix: str) -> list[str]:
+        r = self._s3.list_objects_v2(Bucket=bucket, Prefix=prefix)
+        return [str(o["Key"]) for o in r.get("Contents", [])]
+
+
+@dataclass
+class Context:
+    root: Path
+    skill: Path
+    mode: str  # merge | check | image
+    scope: str = "reference"  # reference | full
+    operation: str | None = None  # ci-check TARGET=<expensive op>
+    secrets: config.Secrets | None = None
+    client: AwsClient | None = None
+    sh: Sh = default_sh
+    sleep: Callable[[float], None] = time.sleep
+    out: Callable[[str], None] = print
+    stream_poll_s: float = config.STREAM_POLL_S
+    events: list[str] = field(default_factory=list)  # what happened, in order - the audit and the tests read it
+
+
+@dataclass
+class Outcome:
+    rc: int
+    verdict: str
+    build_id: str = ""
+    result: str = ""
+    minutes: float = 0.0
+
+
+def clone_name(root: Path) -> str:
+    return root.name
+
+
+def mailbox(root: Path) -> str:
+    return config.MAILBOX_PREFIX + clone_name(root)
+
+
+def make_target(ctx: Context) -> str:
+    if ctx.operation:
+        return ctx.operation
+    return "done FULL=1" if ctx.scope == "full" else "done"
+
+
+def would_be_tree(ctx: Context) -> tuple[str | None, str]:
+    """The tree the merge would produce (R2), or None with the conflict text."""
+    rc, out = ctx.sh(["git", "merge-tree", "--write-tree", "origin/main", "HEAD"], ctx.root, None)
+    if rc != 0:
+        return None, out.strip()
+    return out.strip().splitlines()[0].strip(), ""
+
+
+def verified_lookup(ctx: Context, tree: str | None) -> decision.VerifiedRecord | None:
+    if tree is None or ctx.client is None or ctx.secrets is None:
+        return None
+    body = ctx.client.get_object(ctx.secrets.ci_bucket, f"verified/{tree}.json")
+    if body is None:
+        return None
+    import json
+
+    d = json.loads(body.decode("utf-8"))
+    return decision.VerifiedRecord(tree=str(d.get("tree", tree)), build_id=str(d.get("build_id", "?")), scope=str(d.get("scope", "reference")), utc=str(d.get("utc", "")))
+
+
+def billed_minutes(build: dict[str, Any]) -> float:
+    """CodeBuild bills every phase from PROVISIONING on, rounded up to the minute."""
+    secs = sum(int(p.get("durationInSeconds", 0)) for p in build.get("phases", []) if p.get("phaseType") not in ("SUBMITTED", "QUEUED", "COMPLETED"))
+    return float(max(1, math.ceil(secs / 60))) if secs else 0.0
+
+
+def status_text(ctx: Context) -> tuple[str, decision.DispatchDecision]:
+    """`make ci-status`: the whole picture, no AWS call unless a lookup is possible and the route is GATED."""
+    ctx.sh(["git", "fetch", "-q", "origin"], ctx.root, None)
+    delta = compute_delta(ctx.root)
+    st = state.read(ctx.root)
+    now = state.current_hash(ctx.root)
+    feat = features.feature_status(ctx.root, features.active_feature(ctx.root))
+    tree, conflict = would_be_tree(ctx)
+    verified = verified_lookup(ctx, tree) if delta.route == "GATED" else None
+    d = decision.decide(delta, st, now, verified, None, ctx.mode if ctx.mode in (decision.MERGE, decision.CHECK) else decision.CHECK, feat, ctx.scope, runlog.month_to_date(ctx.skill), ctx.operation)
+    text = decision.render(d, ctx.mode, ctx.scope)
+    head = [f"delta: merge-base {delta.base[:12]}, {len(delta.files)} file(s), route {delta.route}", f"state: {state.describe(st, now)}"]
+    head.append(f"would-be tree: {tree[:12]}" if tree else f"would-be tree: MERGE CONFLICT with origin/main - merge main locally, resolve, commit:\n  {conflict[:400]}")
+    return "\n".join(head) + "\n" + text, d
+
+
+def run(ctx: Context) -> Outcome:
+    """The five arrows. Returns the exit status the make target exits with."""
+    t0 = time.time()
+    assert ctx.client is not None and ctx.secrets is not None, "run() needs a client and secrets (status_text() does not)"
+    text, d = status_text(ctx)
+    ctx.out(text)
+    tree, conflict = would_be_tree(ctx)
+    if tree is None:
+        ctx.out("ci: REFUSED - the merge with the latest main conflicts locally; nothing dispatched (a paid build would only have told you the same)")
+        return Outcome(rc=1, verdict="REFUSE(merge-conflict)")
+    if ctx.scope == "full":
+        ok, why = door.check(ctx.root, ctx.skill)
+        ctx.out(f"ci: FULL scope - {why}")
+        if not ok:
+            return Outcome(rc=1, verdict="REFUSE(full-not-authorized)")
+    if not d.dispatches:
+        ctx.out(f"ci: {d.verdict} - nothing dispatched" if not d.skip_verified else "ci: SKIP-VERIFIED - no build; the caller pushes directly")
+        if d.skip_verified:
+            rec = next(c for c in d.conditions if c.name == "tree-not-already-verified")
+            runlog.write_remote(ctx.skill, f"ci-{ctx.mode}", ctx.scope, int(time.time() - t0), "skip-verified", rec.why.split(" by ")[-1].split(" ")[0], 0.0, rec.why)
+        return Outcome(rc=0 if d.skip_verified else 1, verdict=d.verdict)
+
+    # 1. the cheap local checks - nothing about AWS has happened yet (FR-033)
+    rc, out = ctx.sh(["make", "--no-print-directory", "lint", "format", "typecheck"], ctx.skill, None)
+    ctx.events.append(f"lint:{rc}")
+    if rc != 0:
+        ctx.out(out)
+        ctx.out("ci: lint/format/types FAILED locally - nothing dispatched")
+        return Outcome(rc=1, verdict="REFUSE(lint)")
+    ctx.out("ci: lint, format, types clean - starting the build (parked) while the reference check runs locally")
+
+    # 2. mailbox + start, parked
+    box = mailbox(ctx.root)
+    rc, out = ctx.sh(
+        ["git", "push", "-q", "--force", f"https://github.com/{config.GITHUB_REPO}", f"HEAD:refs/heads/{box}"],
+        ctx.root,
+        {"GIT_ASKPASS": str(ctx.root / "scripts" / "git-askpass-token.sh"), "GITHUB_TOKEN": ctx.secrets.github_pat, "GIT_TERMINAL_PROMPT": "0"},
+    )
+    ctx.events.append(f"push:{rc}")
+    if rc != 0:
+        ctx.out(out)
+        ctx.out(f"ci: could not push the mailbox branch {box} to GitHub - nothing dispatched")
+        return Outcome(rc=1, verdict="REFUSE(mailbox-push)")
+    rc, sha = ctx.sh(["git", "rev-parse", "HEAD"], ctx.root, None)
+    project = config.PROJECT_MERGE if ctx.mode == decision.MERGE else config.PROJECT_CHECK
+    spec_path = ctx.root / "buildspec" / f"{ctx.mode}.yml"
+    env = [
+        {"name": "GIT_SHA", "value": sha.strip(), "type": "PLAINTEXT"},
+        {"name": "MAILBOX", "value": box, "type": "PLAINTEXT"},
+        {"name": "MAKE_TARGET", "value": make_target(ctx), "type": "PLAINTEXT"},
+        {"name": "CI_MODE", "value": ctx.mode, "type": "PLAINTEXT"},
+        {"name": "CI_SCOPE", "value": "operation" if ctx.operation else ctx.scope, "type": "PLAINTEXT"},
+        {"name": "COMPUTE_TYPE", "value": config.COMPUTE_TYPE, "type": "PLAINTEXT"},
+        {"name": "PARK_TIMEOUT_S", "value": str(config.PARK_TIMEOUT_S), "type": "PLAINTEXT"},
+    ]
+    try:
+        started = ctx.client.start_build(
+            projectName=project,
+            buildspecOverride=spec_path.read_text(encoding="utf-8"),
+            environmentVariablesOverride=env,
+            computeTypeOverride=config.COMPUTE_TYPE,
+            imageOverride=f"{ctx.secrets.ecr_image}:latest",
+            imagePullCredentialsTypeOverride="SERVICE_ROLE",
+        )
+    except AccessDenied as e:
+        ctx.events.append("start_build:denied")
+        if "StartBuild" in e.operation or "StartBuild" in str(e):
+            ctx.out("ci: REFUSED - the monthly hard stop has TRIPPED (FR-021): IAM policy gm-assistant-ci-circuit-breaker is attached to user gm-assistant-ci and denies codebuild:StartBuild.")
+            ctx.out("    To re-enable (admin key): aws iam detach-user-policy --user-name gm-assistant-ci --policy-arn arn:aws:iam::130071571821:policy/gm-assistant-ci-circuit-breaker")
+            return Outcome(rc=1, verdict="REFUSE(breaker-tripped)")
+        ctx.out(f"ci: AWS refused {e.operation}: {e}")  # pragma: no cover - a different denial, reported as itself
+        return Outcome(rc=1, verdict="REFUSE(aws-denied)")  # pragma: no cover
+    build_id = str(started["build"]["id"])
+    ctx.events.append(f"start_build:{build_id}")
+    ctx.out(f"ci: build {build_id} started on {project} (parked at wait-go, {config.PARK_TIMEOUT_S} s ceiling)")
+
+    # 3. the reference settlement(s), locally - `make reference` runs every tier's reference map
+    rc, out = ctx.sh(["make", "--no-print-directory", "reference"], ctx.skill, None)
+    ctx.events.append(f"reference:{rc}")
+    if rc != 0:
+        ctx.out(out)
+        ctx.client.stop_build(build_id)
+        ctx.events.append(f"stop_build:{build_id}")
+        state.write(ctx.root, state.FAILED, f"ci-{ctx.mode}")
+        b = ctx.client.batch_get_builds([build_id])["builds"][0]
+        mins = billed_minutes(b)
+        runlog.write_remote(ctx.skill, f"ci-{ctx.mode}", ctx.scope, int(time.time() - t0), "aborted-local-reference", build_id, mins, "reference settlement red locally; parked build stopped")
+        ctx.out(f"ci: reference settlement RED locally - build {build_id} stopped ({mins:.0f} billed min, ~${mins * config.RATE_PER_MIN:.2f})")
+        return Outcome(rc=1, verdict="ABORTED(local-reference)", build_id=build_id, result="aborted-local-reference", minutes=mins)
+
+    # 4. release
+    ctx.client.put_object(ctx.secrets.ci_bucket, f"go/{build_id}", b"go")
+    ctx.events.append("go")
+    ctx.out("ci: reference settlement clean - build released")
+
+    # 5. stream, then settle
+    build = stream(ctx, build_id)
+    result = str(build.get("buildStatus", "?"))
+    mins = billed_minutes(build)
+    ok = result == "SUCCEEDED"
+    if not ok:
+        state.write(ctx.root, state.FAILED, f"ci-{ctx.mode}")
+    fetched = fetch_artifacts(ctx, build_id)
+    runlog.write_remote(ctx.skill, f"ci-{ctx.mode}", "operation" if ctx.operation else ctx.scope, int(time.time() - t0), result, build_id, mins, make_target(ctx))
+    ctx.out(f"ci: build {build_id} {result} - {mins:.0f} billed min, ~${mins * config.RATE_PER_MIN:.2f}" + (f"; {len(fetched)} artifact file(s) fetched" if fetched else ""))
+    return Outcome(rc=0 if ok else 1, verdict="DISPATCHED", build_id=build_id, result=result, minutes=mins)
+
+
+def stream(ctx: Context, build_id: str) -> dict[str, Any]:
+    """Poll the build and print its log as it is written (R5). Returns the final build record."""
+    assert ctx.client is not None and ctx.secrets is not None
+    token: str | None = None
+    phase = ""
+    while True:
+        build = dict(ctx.client.batch_get_builds([build_id])["builds"][0])
+        cur = str(build.get("currentPhase", ""))
+        if cur != phase:
+            ctx.out(f"ci: [{cur}]")
+            phase = cur
+        logs = build.get("logs", {}) or {}
+        stream_name = str(logs.get("streamName") or build_id.split(":")[-1])
+        group = str(logs.get("groupName") or ctx.secrets.log_group)
+        page = ctx.client.get_log_events(group, stream_name, token)
+        for ev in page.get("events", []):
+            ctx.out("  | " + str(ev.get("message", "")).rstrip("\n"))
+        token = str(page.get("nextForwardToken") or token or "") or None
+        if build.get("buildStatus") != "IN_PROGRESS":
+            return build
+        ctx.sleep(ctx.stream_poll_s)
+
+
+def fetch_artifacts(ctx: Context, build_id: str) -> list[Path]:
+    """FULL perf snapshots go to dev/perf-log/; an operation's report to dev/ci-artifacts/<uuid>/."""
+    assert ctx.client is not None and ctx.secrets is not None
+    uuid = build_id.split(":")[-1]
+    prefix = f"artifacts/{uuid}/"
+    got: list[Path] = []
+    for key in ctx.client.list_prefix(ctx.secrets.ci_bucket, prefix):
+        rel = key[len(prefix) :]
+        if not rel:
+            continue
+        dest = ctx.skill / "dev" / "perf-log" / rel.split("/", 1)[1] if rel.startswith("perf-log/") and "/" in rel else ctx.skill / "dev" / "ci-artifacts" / uuid / rel
+        body = ctx.client.get_object(ctx.secrets.ci_bucket, key)
+        if body is None:
+            continue
+        dest.parent.mkdir(parents=True, exist_ok=True)
+        dest.write_bytes(body)
+        got.append(dest)
+    return got
+
+
+def run_image(ctx: Context) -> Outcome:
+    """`make ci-image`: one build on the check project that docker-builds Dockerfile.ci and pushes it to ECR."""
+    t0 = time.time()
+    assert ctx.client is not None and ctx.secrets is not None
+    rc, sha = ctx.sh(["git", "rev-parse", "HEAD"], ctx.root, None)
+    box = mailbox(ctx.root)
+    rc, out = ctx.sh(
+        ["git", "push", "-q", "--force", f"https://github.com/{config.GITHUB_REPO}", f"HEAD:refs/heads/{box}"],
+        ctx.root,
+        {"GIT_ASKPASS": str(ctx.root / "scripts" / "git-askpass-token.sh"), "GITHUB_TOKEN": ctx.secrets.github_pat, "GIT_TERMINAL_PROMPT": "0"},
+    )
+    if rc != 0:
+        ctx.out(out)
+        return Outcome(rc=1, verdict="REFUSE(mailbox-push)")
+    started = ctx.client.start_build(
+        projectName=config.PROJECT_CHECK,
+        buildspecOverride=(ctx.root / "buildspec" / "image.yml").read_text(encoding="utf-8"),
+        environmentVariablesOverride=[{"name": "GIT_SHA", "value": sha.strip(), "type": "PLAINTEXT"}, {"name": "MAILBOX", "value": box, "type": "PLAINTEXT"}],
+        computeTypeOverride="BUILD_GENERAL1_MEDIUM",
+        privilegedModeOverride=True,
+    )
+    build_id = str(started["build"]["id"])
+    ctx.events.append(f"start_build:{build_id}")
+    build = stream(ctx, build_id)
+    result = str(build.get("buildStatus", "?"))
+    mins = billed_minutes(build)
+    runlog.write_remote(ctx.skill, "ci-image", "image", int(time.time() - t0), result, build_id, mins, "Dockerfile.ci -> ECR")
+    ctx.out(f"ci-image: build {build_id} {result} - {mins:.0f} billed min")
+    return Outcome(rc=0 if result == "SUCCEEDED" else 1, verdict="DISPATCHED", build_id=build_id, result=result, minutes=mins)

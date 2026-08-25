@@ -1,0 +1,22 @@
+# buildspec/image.yml - `make ci-image`: build Dockerfile.ci on CodeBuild and push it to ECR as
+# :latest. Runs on the CHECK project's stock image with privileged mode (docker-in-docker), a MEDIUM
+# compute type (a docker build wants no 36 cores). Paid, prompted locally, logged like every other
+# bypass; rare - only when setup-dev-env.sh or a lockfile changes.
+version: 0.2
+phases:
+  install:
+    commands:
+      - git clone -q "https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPO}" repo
+      - git -C repo fetch -q origin "refs/heads/${MAILBOX}:refs/remotes/origin/${MAILBOX}"
+      - git -C repo checkout -q --detach "$GIT_SHA"
+  pre_build:
+    commands:
+      - aws ecr get-login-password --region "$AWS_DEFAULT_REGION" | docker login --username AWS --password-stdin "${ECR_IMAGE%/*}"
+  build:
+    commands:
+      - cd repo && docker build -f Dockerfile.ci -t "${ECR_IMAGE}:latest" -t "${ECR_IMAGE}:${GIT_SHA}" .
+  post_build:
+    commands:
+      - docker push "${ECR_IMAGE}:latest"
+      - docker push "${ECR_IMAGE}:${GIT_SHA}"
+      - echo "pushed ${ECR_IMAGE}:latest (${GIT_SHA})"

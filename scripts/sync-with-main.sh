@@ -85,14 +85,53 @@ ensure_git_config() {
 }
 ensure_git_config
 
+# GITHUB MAIN IS MAIN (feature 130, FR-001, research R7). The clone's `origin` and the mirror's are
+# GitHub over HTTPS - the container has no SSH key, and the public repository needs no credential
+# to READ; a push presents the PAT through GIT_ASKPASS (scripts/git-askpass-token.sh) from
+# development-secrets.ini, never on a command line. A remote still pointing at the local mirror or
+# at the SSH URL is re-pointed here, once, and said so. CLONE_GITHUB stays as the test seam.
+GITHUB_URL=${CLONE_GITHUB:-https://github.com/EliAndrewC/diagram}
+ensure_github_origin() {
+  local tree url
+  for tree in "$ROOT" "$MAIN"; do
+    url=$(git -C "$tree" remote get-url origin 2>/dev/null || true)
+    if [ "$url" != "$GITHUB_URL" ]; then
+      git -C "$tree" remote set-url origin "$GITHUB_URL" 2>/dev/null || git -C "$tree" remote add origin "$GITHUB_URL"
+      echo "sync-with-main: origin of $tree -> $GITHUB_URL (was '${url:-none}'; GitHub main is the integration point since feature 130)"
+    fi
+  done
+  export GIT_ASKPASS="$ROOT/scripts/git-askpass-token.sh" GIT_TERMINAL_PROMPT=0
+  if [ -z "${GITHUB_TOKEN:-}" ] && [ -f "$ROOT/$SKILL_DIR/l7r/diagram/ci/config.py" ]; then
+    GITHUB_TOKEN=$(cd "$ROOT/$SKILL_DIR" && python3 -c "import sys; from pathlib import Path; from l7r.diagram.ci.config import load_secrets; print(load_secrets(Path(sys.argv[1])).github_pat)" "$ROOT" 2>/dev/null || true)
+    export GITHUB_TOKEN
+  fi
+}
+ensure_github_origin
+
+# THE MIRROR IS REFRESHED FROM GITHUB MAIN, UNDER THE LOCK, FAST-FORWARD ONLY (FR-030). It is
+# nobody's workspace, so a refusal here means someone committed in main by hand - the ritual stops
+# and says so rather than merging in the mirror. Render-sync follows, cache-short-circuited.
+mirror_refresh() {
+  flock "$LOCK" git -C "$MAIN" pull -q --ff-only origin main \
+    || die "mirror $MAIN cannot fast-forward to GitHub main - someone committed there by hand (main is a MIRROR, nobody's workspace). Inspect 'git -C $MAIN log origin/main..HEAD' and move that work into a clone."
+}
+
+# SYNC-IN IS THE WHOLE FLOW (feature 130, FR-030, plan design note 8): fetch GitHub main -> mirror
+# fast-forward -> render-sync in the mirror -> [clean clone only] merge into the clone. The prompt
+# hook runs the mirror half on EVERY turn, dirty clone or not - mid-task work is sacred, the mirror
+# is not anyone's work - and the clone half only when the clone is clean.
 sync_in() {
+  git fetch -q origin || die "cannot fetch GitHub main from $GITHUB_URL"
+  mirror_refresh
+  render_sync
+  if [ "${1:-}" = "--mirror-only" ]; then echo "sync-with-main: mirror refreshed from GitHub main (clone left alone - mid-task)"; return 0; fi
   git pull --no-rebase origin main
   # No render pull-in anymore (GM 2026-07-22): its old rationale was that a clone's stale renders
   # would flow back into main via render-sync's copy - but render-sync no longer copies anything,
   # it REGENERATES main in place, so nothing flows clone -> main and the clone never needs main's
   # renders. A clone regenerates whatever map it iterates on; the GM browses renders in main.
   date > "$ROOT/.git/sync-with-main.stamp"
-  echo "sync-with-main: clone synced with main (git)"
+  echo "sync-with-main: clone synced with GitHub main (git)"
 }
 
 push_cmd() {
@@ -123,6 +162,7 @@ push_cmd() {
   # which contains our own commits and false-flags every push (the script's own first dogfood run
   # caught exactly that bug: a no-op pull reported our just-pushed files as overlap).
   local base before ours theirs overlap
+  git fetch -q origin || die "cannot fetch GitHub main from $GITHUB_URL"   # the delta and the route are judged against the LATEST main
   base=$(git rev-parse origin/main)
   before=$(git rev-parse HEAD)
   ours=$(git diff --name-only "$base"...HEAD | sort -u)
@@ -137,7 +177,34 @@ push_cmd() {
   # were constitutional and unenforced, and both had already been skipped in practice. Checked here
   # because this is the moment work becomes everyone else's problem.
   "$(dirname "$0")/review-gate.sh" || exit 1
-  flock "$LOCK" sh -c 'git pull --no-rebase origin main && git push origin HEAD:main'
+  # TWO ROUTES TO MAIN, CHOSEN BY THE DELTA, NEVER BY THE SESSION (feature 130, FR-002). The delta
+  # is inspected against the LATEST GitHub main (fetched above). DIRECT: no diagram engine code in
+  # our own commits - today's locked pull+push, free. GATED: engine code - `make ci-merge` runs the
+  # dispatch conditions, and on DISPATCH a CodeBuild build merges the latest main into the work,
+  # runs the gate and fast-forward-pushes the result to GitHub main itself; the clone then
+  # fast-forwards to what landed. On SKIP-VERIFIED (a build already verified this exact tree) the
+  # clone pushes directly. There is no local override of the gated route (FR-018): a gated delta
+  # that cannot be dispatched stays in the clone. CI_ROUTE / CI_MERGE are the test seams.
+  local route
+  if [ -n "${CI_ROUTE:-}" ]; then route=$CI_ROUTE
+  elif [ -f "$ROOT/$SKILL_DIR/Makefile" ]; then
+    route=$( { cd "$ROOT/$SKILL_DIR" && make --no-print-directory ci-status ROUTE=1; } 2>/dev/null | tail -1 || true)
+    # AN UNDECIDED ROUTE IS NOT A DIRECT ROUTE. If the dispatcher could not answer, engine code
+    # could be sitting in the delta; falling through to the free push would land it ungated.
+    case "$route" in DIRECT|GATED) ;; *) die "could not decide the route ('make ci-status ROUTE=1' said '${route:-nothing}') - not pushing. Run it by hand in $SKILL_DIR to see why." ;; esac
+  else route=DIRECT; fi   # a tree with no diagram skill (a fixture) has nothing to gate
+  echo "sync-with-main: route $route (diagram engine code in our delta -> GATED, CodeBuild; otherwise DIRECT)"
+  if [ "$route" = GATED ]; then
+    if [ -n "${CI_MERGE:-}" ]; then bash -c "$CI_MERGE"; else ( cd "$ROOT/$SKILL_DIR" && make --no-print-directory ci-merge ${FULL:+FULL=1} ); fi \
+      || die "gated route: nothing landed (the conditions or the build refused - see above; the work stays in this clone)"
+    case "$(cat "$ROOT/.git/ci-verdict" 2>/dev/null)" in
+      SKIP-VERIFIED) flock "$LOCK" sh -c 'git pull --no-rebase origin main && git push origin HEAD:main' ;;
+      *)             flock "$LOCK" git pull -q --ff-only origin main || die "the build landed the merge on GitHub main but this clone cannot fast-forward to it - inspect 'git log origin/main..HEAD'" ;;
+    esac
+  else
+    flock "$LOCK" sh -c 'git pull --no-rebase origin main && git push origin HEAD:main'
+  fi
+  mirror_refresh
   theirs=$(git diff --name-only "$before"..HEAD | sort -u)
   date > "$ROOT/.git/sync-with-main.stamp"  # post-push the clone is at main's tip = synced by definition
   overlap=$(comm -12 <(printf '%s\n' "$ours") <(printf '%s\n' "$theirs"))
@@ -196,8 +263,10 @@ render_sync() {
   fi
 }
 
+# `done FULL=1` / `push FULL=1`: the full sweep on CodeBuild, its prompt answered locally first
+for arg in "$@"; do case "$arg" in FULL=1) export FULL=1 ;; esac; done
 case "${1:-}" in
-  sync-in)     sync_in ;;
+  sync-in)     sync_in "${2:-}" ;;
   push)        push_cmd ;;
   render-sync) render_sync ;;
   done)        push_cmd; render_sync ;;

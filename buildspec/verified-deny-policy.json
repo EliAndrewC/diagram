@@ -1,0 +1,14 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "OnlyTheBuildWritesVerifiedRecords",
+      "Effect": "Deny",
+      "NotPrincipal": {
+        "AWS": "arn:aws:iam::130071571821:role/gm-assistant-codebuild-role"
+      },
+      "Action": "s3:PutObject",
+      "Resource": "arn:aws:s3:::gm-assistant-ci-130071571821/verified/*"
+    }
+  ]
+}

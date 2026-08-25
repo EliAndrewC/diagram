@@ -180,3 +180,44 @@ and, for each candidate predicate (marsh-only vs both-banks-cultivated vs cultiv
 ...), prints what each would drop/keep per map - then read it once and pick the winner. This is how
 the footbridge rule's edge cases (polder toe-planks cross onto the DIKE; village-edge planks cross
 to houses; dry-to-wet crossings) surfaced in one pass instead of five.
+
+## The remote runs (feature 130): when CodeBuild is used, and what each costs
+
+**A session does not decide whether to go remote - the conditions do.** `make ci-status` prints
+them, free. Five conditions, all checked locally before any AWS call, every one printed even after
+the first fails: the delta has engine code (`l7r/`, `tests/`, `pool/*.gen.py|*.json`, Makefile,
+pyproject - docs never); on a merge, the named spec-kit feature is complete; the last recorded
+verification is a GREEN local target (`quick`, `reference`, `test-file`, a local `done`) against
+EXACTLY this code (a red gate or a source edit since resets it - run `make quick`); the tree the
+merge would produce is not already verified by a build; the monthly hard stop has not tripped.
+
+**Every remote target runs the same ladder**: lint/format/types locally (seconds; fail -> nothing
+touches AWS) -> the build is started and PARKS (provisioning overlaps the next step) -> `make
+reference` locally -> red: the parked build is stopped (a queued build is free, a started one
+costs its partial minute; `run-log` records `aborted-local-reference`) | green: the build is
+released, merges the LATEST GitHub main into the work (a conflict fails in seconds), runs `make
+$MAKE_TARGET`, and on green writes `verified/<tree>.json`. The log streams into the command's
+output and the command exits with the build's status - background it and act on the notification,
+exactly like `make done`.
+
+| target | what it runs remotely | prompts? | cost (est. until `timings.md` says) |
+|---|---|---|---|
+| `make ci-check` | `make done` (reference scope) on `gm-assistant-check` (concurrency 3); no path to main | no | ~5 min, ~$0.40 |
+| `make ci-check FULL=1` | `make done FULL=1` - every pool map, the ratchet, both coverage floors, `perf-gate` with BOTH bookends taken in-build | **yes, locally** - the GM's | ~8 min, ~$0.65 |
+| `make ci-check TARGET=<op>` | any `expensive` operation (`cohort N=48`, `cache-audit`, `regressions`, ...); its report comes back under `dev/ci-artifacts/<build>/` | no | by the operation |
+| `sync-with-main.sh done` on a GATED delta | `make ci-merge`: `make done` on `gm-assistant-merge` (concurrency 1), then the build fast-forward-pushes the merge to GitHub main | no (`FULL=1`: yes) | ~5 min, ~$0.40; $0 on SKIP-VERIFIED |
+| `make ci-image` | docker-builds `Dockerfile.ci` on CodeBuild and pushes it to ECR; until it exists builds bootstrap on the stock image | **yes** - the GM's | ~$1, rare |
+
+**A green `make ci-check` followed by `sync-with-main.sh done` on the same tree is free**: the
+merge action finds the verified record and pushes directly (SKIP-VERIFIED). Main advancing in
+between changes the tree and a build runs - no invalidation logic exists or is needed.
+
+**What stays local, always**: `quick`, `reference`, `test-file`, `durations`, `maps`, a plain
+`make done`, every read-only diagnostic. None of them makes a network call.
+
+**Cost is visible before and after**: the pre-dispatch printout carries the estimate and the
+month-to-date; `make audit` gains a "Remote spend" block summed from `dev/run-log/` entries with
+`where: codebuild` (never from Cost Explorer, which costs money to ask). The account-side controls
+- $10/day and $75/month budgets emailing at every 20%, a $100/month hard stop that attaches a
+StartBuild deny to the session's user, a live alarm at 125 build-minutes per rolling day - are
+described in `specs/130-codebuild-merge-gate/spec.md`'s baseline table and are not repo code.

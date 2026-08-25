@@ -114,3 +114,6 @@ top_up-improvement.md
 # specs/NNN-*/ while CURRENT_BRANCH still reads correctly. Each clone writes its own; nothing
 # shares it. See CLAUDE.md 'Concurrent sessions' and scripts/clone-sync-hooks.sh's re-track guard.
 .specify/feature.json
+
+# feature 130: the AWS/GitHub credentials the CodeBuild dispatcher reads (see development-secrets.ini.example)
+development-secrets.ini

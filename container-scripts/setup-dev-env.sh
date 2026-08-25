@@ -18,9 +18,16 @@ set -euo pipefail
 
 REPO="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 CHECK_ONLY=0
+IMAGE_MODE=0
 [ "${1:-}" = "--check" ] && CHECK_ONLY=1
+# --image (feature 130): building the CodeBuild image from Dockerfile.ci. Same apt and pip set as
+# the laptop, ONE source of truth; skips what only makes sense on a laptop (the claude() wrapper,
+# ~/.bashrc, main's git config) and runs as root with no sudo. boto3 is a laptop-only dependency
+# (the dispatcher); the build talks to S3 through the AWS CLI the image carries.
+[ "${1:-}" = "--image" ] && IMAGE_MODE=1
+SUDO=sudo; [ "$(id -u)" = 0 ] && SUDO=""
 
-in_container() { [ -f /run/.containerenv ] || [ -f /.dockerenv ]; }
+in_container() { [ -f /run/.containerenv ] || [ -f /.dockerenv ] || [ "$IMAGE_MODE" = 1 ]; }
 
 if ! in_container && [ "${SETUP_ALLOW_HOST:-}" != 1 ]; then
     echo "ERROR: this installs system packages and is meant to run INSIDE the dev container."
@@ -57,6 +64,9 @@ check_all() {
     # dev deps - the quality gate itself
     _t "python: pytest + cov + xdist"            "python3 -c 'import pytest, pytest_cov, xdist'"
     _t "python: ruff mypy"                       "python3 -m ruff --version; python3 -m mypy --version"
+    if [ "$IMAGE_MODE" = 1 ]; then return $bad; fi
+    # feature 130: the CodeBuild dispatcher's AWS boundary (laptop side only)
+    _t "python: boto3 (CodeBuild dispatcher)"    "python3 -c 'import boto3'"
     # the claude() wrapper that appends this repo's standing authorizations to the system prompt.
     # ~/.bashrc is NOT on a bind mount (only the repo and ~/.claude survive a rebuild), so this has
     # to be re-established on every fresh container exactly like the apt and pip state.
@@ -80,8 +90,8 @@ fi
 # without asking. Never work around a missing dependency - install it.
 echo "==> system packages (apt)"
 if ! command -v resvg >/dev/null 2>&1 || [ ! -f "$ITALIC_FONT" ]; then
-    sudo apt-get update -qq
-    sudo apt-get install -y -qq resvg fonts-dejavu-core fonts-dejavu-extra
+    $SUDO apt-get update -qq
+    $SUDO apt-get install -y -qq resvg fonts-dejavu-core fonts-dejavu-extra
 else
     echo "    already present"
 fi
@@ -96,6 +106,12 @@ SKILL="$REPO/.claude/skills/diagram"
 pip install --quiet --break-system-packages \
     -r "$SKILL/requirements.txt" \
     -r "$SKILL/requirements-dev.txt"
+if [ "$IMAGE_MODE" = 1 ]; then
+    echo "==> image mode: verifying and stopping here (no wrapper, no git config, no boto3)"
+    check_all && exit 0
+    exit 1
+fi
+pip install --quiet --break-system-packages -r "$SKILL/requirements-ci.txt"
 
 # ---- the claude() wrapper ----------------------------------------------------------------------
 # WHY a system-prompt append and not a CLAUDE.md line: CLAUDE.md sits BELOW the system prompt in the

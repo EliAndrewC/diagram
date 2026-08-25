@@ -1,0 +1,16 @@
+# buildspec/check.yml - the iteration check (gm-assistant-check). Passed to start_build as
+# buildspecOverride by l7r/diagram/ci/dispatch.py; the projects themselves hold only a placeholder.
+# Everything real is in buildspec/run.sh, shared with merge.yml; MODE is the only difference.
+version: 0.2
+env:
+  variables:
+    MODE: check
+phases:
+  install:
+    commands:
+      - git clone -q --filter=blob:none "https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPO}" bootstrap
+      - git -C bootstrap fetch -q origin "refs/heads/${MAILBOX}:refs/remotes/origin/${MAILBOX}"
+      - git -C bootstrap checkout -q --detach "$GIT_SHA" -- buildspec/run.sh
+  build:
+    commands:
+      - bash bootstrap/buildspec/run.sh

@@ -133,7 +133,7 @@ mkdir -p "$FMAIN5/.clones/bare/.claude/skills/x" && echo 'def a(): return 1' > "
   echo c1 > "$FMAIN5/.clones/bare/g"; git -C "$FMAIN5/.clones/bare" add g scripts .claude; git -C "$FMAIN5/.clones/bare" commit -qm c1 )
 ( cd "$FMAIN5/.clones/bare" && python3 scripts/gate-stamp.py --write hooks )   # the commit changes scripts/, and a scripts/ change pushes only behind a green hooks-test stamp (GUARD_EDIT_OK: fixture follows the new gate)
 [ -z "$(git -C "$FMAIN5" config --get receive.denyCurrentBranch || true)" ] || { echo "FAIL  fixture: main5 already had denyCurrentBranch"; FAILED=1; }
-OUT=$(cd "$FMAIN5/.clones/bare" && HOME=$TMP CLONE_MAIN="$FMAIN5" "$RITUAL" push 2>&1); RC=$?
+OUT=$(cd "$FMAIN5/.clones/bare" && HOME=$TMP CLONE_MAIN="$FMAIN5" CLONE_GITHUB="$FMAIN5" "$RITUAL" push 2>&1); RC=$?   # CLONE_GITHUB: the fixture main stands in for GitHub (GUARD_EDIT_OK: feature 130 made origin = GitHub)
 check "ritual push from a bare fixture (no updateInstead, no identity) succeeds" 0 "$RC"
 [ "$(git -C "$FMAIN5" config --get receive.denyCurrentBranch)" = updateInstead ] || { echo "FAIL  ritual did not set updateInstead on main: $OUT"; FAILED=1; }
 [ "$(git -C "$FMAIN5/.clones/bare" config --get user.email)" = eli@t ] || { echo "FAIL  ritual did not set the clone's identity from main's tip author: $OUT"; FAILED=1; }
@@ -159,7 +159,7 @@ echo scratch > "$FJC/scratch"   # dirty: the hook stops before its sync-in path,
 printf '%s' "$FJC" > "$FMAIN4/.clones/.session-clones/sid-fj"
 
 OUT=$(printf '{"session_id":"sid-fj"}' \
-      | CLONE_MAIN="$FMAIN4" CLONE_SESSIONS_DIR="$SESS" "$HOOK" prompt 2>&1); RC=$?
+      | CLONE_MAIN="$FMAIN4" CLONE_GITHUB="$FMAIN4" CLONE_SESSIONS_DIR="$SESS" "$HOOK" prompt 2>&1); RC=$?
 check "tracked feature.json -> prompt still exits 0 (warn, never block)" 0 "$RC"
 case $OUT in *"feature.json is TRACKED"*) printf 'ok    tracked feature.json is named in the warning\n' ;;
              *) printf 'FAIL  tracked feature.json produced no warning\n      out: %s\n' "$OUT"; FAILED=1 ;; esac
@@ -168,7 +168,7 @@ case $OUT in *"git rm --cached"*) printf 'ok    warning carries the fix command\
 
 # once per session - a warning that repeats every prompt is noise the GM learns to skip
 OUT=$(printf '{"session_id":"sid-fj"}' \
-      | CLONE_MAIN="$FMAIN4" CLONE_SESSIONS_DIR="$SESS" "$HOOK" prompt 2>&1)
+      | CLONE_MAIN="$FMAIN4" CLONE_GITHUB="$FMAIN4" CLONE_SESSIONS_DIR="$SESS" "$HOOK" prompt 2>&1)
 case $OUT in *"feature.json is TRACKED"*) printf 'FAIL  warning repeated (should be once per session)\n'; FAILED=1 ;;
              *) printf 'ok    warning is once per session\n' ;; esac
 
@@ -176,7 +176,7 @@ case $OUT in *"feature.json is TRACKED"*) printf 'FAIL  warning repeated (should
 git -C "$FJC" rm -q --cached .specify/feature.json; git -C "$FJC" commit -qm untrack
 rm -f "$FMAIN4/.clones/.session-clones/sid-fj.feature-json-notice"
 OUT=$(printf '{"session_id":"sid-fj"}' \
-      | CLONE_MAIN="$FMAIN4" CLONE_SESSIONS_DIR="$SESS" "$HOOK" prompt 2>&1)
+      | CLONE_MAIN="$FMAIN4" CLONE_GITHUB="$FMAIN4" CLONE_SESSIONS_DIR="$SESS" "$HOOK" prompt 2>&1)
 case $OUT in *"feature.json is TRACKED"*) printf 'FAIL  warning fires on an UNTRACKED pointer\n      out: %s\n' "$OUT"; FAILED=1 ;;
              *) printf 'ok    silent when the pointer is untracked\n' ;; esac
 

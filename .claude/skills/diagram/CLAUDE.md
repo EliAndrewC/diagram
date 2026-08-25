@@ -42,6 +42,7 @@ still resolve here, because a wrong depth is silent and just lands one directory
 | [`l7r/diagram/sitegen/`](l7r/diagram/sitegen/CLAUDE.md) | tier-agnostic generation machinery the tiers SHARE (geometry, types, worker counts) | you are adding a tier generator, or moving a stage out of one |
 | [`l7r/diagram/pipeline/`](l7r/diagram/pipeline/CLAUDE.md) | how a map gets regenerated, cached, rendered and indexed | the cache is behaving oddly, or you are changing how generation is DRIVEN |
 | [`l7r/diagram/tools/`](l7r/diagram/tools/CLAUDE.md) | read-only diagnostics and audits you run by hand | a map came out wrong and you need to ask WHY, or a number needs measuring |
+| [`l7r/diagram/ci/`](l7r/diagram/ci/CLAUDE.md) | the CodeBuild dispatcher: when a PAID remote run may start, and how it is driven (feature 130) | a remote run refused, or you are changing when money may be spent |
 | [`tests/`](tests/CLAUDE.md) | every test, mirroring the source layout, plus the frozen fixtures | you need to find or add a test |
 | `pool/` | the shipped maps: `<name>.gen.py`, its manifest, its render, its `.notes.md` design journal | - |
 | `wip/` | maps staged outside the pool (not gated, not swept) | - |
@@ -112,7 +113,11 @@ the doc is right - it is where the measurement lives.
 | `make durations` | where the suite's time goes - run this when a target feels slow | ~35 s |
 | `make maps` | picks its own scope from how the last run went | 1 min - many |
 | `make done` | reference + lint/types + the whole suite + coverage floors | **~5.5 min - NOT the quick check** |
-| `make done FULL=1` | + every pool map + the seeds 41-44 ratchet; PROMPTS, cancels by default | ~6 min |
+| `make done FULL=1` | prompt (cancel by default), THEN the reference map, THEN every pool map + the seeds 41-44 ratchet + `perf-gate` | ~6 min |
+| `make ci-status` | **free** - the delta, its route (DIRECT/GATED), the verification state, whether the would-be tree is already verified, month-to-date remote spend. The "why won't it dispatch" answer | ~2 s |
+| `make ci-check` | **PAID** (~$0.40 est.) - the iteration check on CodeBuild: lint locally, build parked, reference locally, then `make done` against the merge with the latest main; `FULL=1` (prompts), `TARGET=cohort` etc. | measured in `timings.md` |
+| `make ci-merge` | **PAID** - the push's gated route; called by `sync-with-main.sh`, never by hand | - |
+| `make ci-image` | **PAID** (~$1), prompts - rebuild the build image from `Dockerfile.ci`; the GM's to run | - |
 
 **Nothing runs outside make.** A bare interpreter reaching an engine entry point, a bare pytest, or a
 make driven by a foreign makefile is refused before it executes (`scripts/make-only-hooks.sh`), and

@@ -127,6 +127,26 @@ def measure(seeds: tuple[int, ...]) -> list[dict[str, object]]:
     return rows
 
 
+def machine_identity() -> dict[str, str]:
+    """WHERE a snapshot was taken, as the key `perf-gate` pairs bookends by (feature 130, FR-029).
+
+    `host` is a machine CLASS, not a hostname: the laptop's container gets a fresh random hostname
+    on every rebuild, so pairing on it would refuse every laptop-vs-laptop comparison across a
+    rebuild - the spec's "hostname plus CPU model" is recorded beside it as information, and the
+    class is what pairs. A build reports `codebuild:<compute type>` and the image it ran on, so a
+    change of compute type or image is a different machine and refuses to pair - which is the point:
+    laptop and build numbers were never comparable, and pretending otherwise is how feature 126
+    shipped a +51% slowdown unnoticed."""
+    if os.environ.get("CODEBUILD_BUILD_ID"):
+        return {"host": f"codebuild:{os.environ.get('COMPUTE_TYPE', 'unknown')}", "image": os.environ.get("CODEBUILD_BUILD_IMAGE", "unknown"), "hostname": platform.node()}
+    return {"host": "laptop", "image": "laptop", "hostname": platform.node()}
+
+
+def identity_of(snap: dict[str, object]) -> tuple[str, str]:
+    """Snapshots older than feature 130 carry no identity; every one of them was taken on the laptop."""
+    return (str(snap.get("host", "laptop")), str(snap.get("image", "laptop")))
+
+
 def record(label: str, seeds: tuple[int, ...]) -> str:
     os.makedirs(LOG_DIR, exist_ok=True)
     print(f"reference hamlet ({REFERENCE['name']} spec) across seeds {list(seeds)}:", flush=True)
@@ -142,6 +162,7 @@ def record(label: str, seeds: tuple[int, ...]) -> str:
         "subject": _git("log", "-1", "--pretty=%s"),
         "cpus": os.cpu_count(),
         "machine": platform.machine(),
+        **machine_identity(),
         "reference": REFERENCE,
         "seeds": list(seeds),
         "total_seconds": round(sum(totals), 1),
@@ -174,9 +195,11 @@ def report(against: str | None) -> int:
     if not snaps:
         print("no snapshots yet - run: make perf")
         return 0
-    print(f"{'utc':<18}{'label':<18}{'commit':<10}{'total':>8}{'median':>8}{'worst':>8}")
+    print(f"{'utc':<18}{'label':<18}{'commit':<10}{'total':>8}{'median':>8}{'worst':>8}  machine")
     for s in snaps:
-        print(f"{str(s['utc']):<18}{str(s['label'])[:17]:<18}{str(s['commit']):<10}{float(s['total_seconds']):>7.1f}s{float(s['median_seconds']):>7.1f}s{float(s['worst_seconds']):>7.1f}s")
+        print(
+            f"{str(s['utc']):<18}{str(s['label'])[:17]:<18}{str(s['commit']):<10}{float(s['total_seconds']):>7.1f}s{float(s['median_seconds']):>7.1f}s{float(s['worst_seconds']):>7.1f}s  {identity_of(s)[0]}"
+        )
 
     base = None
     if against:
@@ -205,6 +228,12 @@ def report(against: str | None) -> int:
     if cur is None:
         print(f"\nonly one snapshot exists ({against!r}) - nothing to compare it against")
         return 0
+    # ONLY THE SAME MACHINE CLASS PAIRS (FR-029). A laptop `-start` against a build `-end` is a
+    # meaningless number, and a meaningless number that prints looks like an answer.
+    if identity_of(cur) != identity_of(base):
+        print(f"\nREFUSED: {cur['label']} was taken on {identity_of(cur)} and {base['label']} on {identity_of(base)} - snapshots pair only within one machine class.")
+        print("A FULL build takes BOTH bookends itself (the -start on the pre-merge main); a laptop pair needs a laptop -start.")
+        return 1
     print(f"\n{cur['label']} vs {base['label']}:")
     bad = 0
     was_total = now_total = 0.0

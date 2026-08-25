@@ -1,0 +1,16 @@
+# buildspec/merge.yml - the merge gate (gm-assistant-merge, concurrency 1). Identical to check.yml
+# except MODE, which makes run.sh fast-forward-push the verified merge result to main and delete
+# the mailbox. A non-fast-forward rejection fails the build ("main moved; re-run") - no retry.
+version: 0.2
+env:
+  variables:
+    MODE: merge
+phases:
+  install:
+    commands:
+      - git clone -q --filter=blob:none "https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPO}" bootstrap
+      - git -C bootstrap fetch -q origin "refs/heads/${MAILBOX}:refs/remotes/origin/${MAILBOX}"
+      - git -C bootstrap checkout -q --detach "$GIT_SHA" -- buildspec/run.sh
+  build:
+    commands:
+      - bash bootstrap/buildspec/run.sh

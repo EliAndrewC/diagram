@@ -194,6 +194,7 @@ def _reason() -> str:
 #
 # `cost` decides PROMPTING only. REFUSAL applies to every row.
 OPERATIONS: dict[str, tuple[str, str]] = {
+    "l7r.diagram.ci": ("ci-status", "expensive"),  # feature 130: PAID remote runs; ci-status is the free diagnostic every refusal names
     "l7r.diagram.hamletgen": ("hamlet", "expensive"),
     "l7r.diagram.pipeline.regen": ("map", "expensive"),
     "l7r.diagram.pipeline.render_cache": ("render-sync", "expensive"),

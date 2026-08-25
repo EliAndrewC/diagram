@@ -1,0 +1,9 @@
+{
+  "Error": {
+    "Code": "AccessDeniedException",
+    "Message": "User: arn:aws:iam::130071571821:user/gm-assistant-ci is not authorized to perform: codebuild:StartBuild on resource: arn:aws:codebuild:us-east-1:130071571821:project/gm-assistant-merge with an explicit deny in an identity-based policy"
+  },
+  "ResponseMetadata": {
+    "HTTPStatusCode": 400
+  }
+}

@@ -235,8 +235,17 @@ case $MODE in
       fi
     fi
 
+    # THE MIRROR ADVANCES EVERY TURN, DIRTY CLONE OR NOT (feature 130, FR-030 - GUARD_EDIT_OK: the
+    # mirror half of sync-in is unconditional). Mid-task work is sacred, so the CLONE merge is
+    # skipped as before; but GitHub main is the integration point now and /diagram is a mirror
+    # nobody works in, so refreshing it (and its renders) loses nothing and keeps what the GM
+    # browses from lagging GitHub by more than one turn.
     if [ -n "$(git -C "$clone" status --porcelain 2>/dev/null)" ]; then
-      echo "clone-sync: $clone has uncommitted work (mid-task) - auto sync-in skipped; finish and run sync-with-main.sh done"
+      if out=$(cd "$clone" && scripts/sync-with-main.sh sync-in --mirror-only 2>&1); then
+        echo "clone-sync: $clone has uncommitted work (mid-task) - clone merge skipped; mirror refreshed from GitHub main. Finish and run sync-with-main.sh done"
+      else
+        echo "clone-sync: $clone has uncommitted work (mid-task) - clone merge skipped; mirror refresh FAILED: $(printf '%s' "$out" | tail -1)"
+      fi
       exit 0
     fi
     if out=$(cd "$clone" && scripts/sync-with-main.sh sync-in 2>&1); then

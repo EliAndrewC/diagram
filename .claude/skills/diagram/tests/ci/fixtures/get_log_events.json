@@ -1,0 +1,236 @@
+{
+  "events": [
+    {
+      "timestamp": 1787591447157,
+      "message": "[Container] 2026/08/24 17:10:45.362210 Running on CodeBuild On-demand\n",
+      "ingestionTime": 1787591447175
+    },
+    {
+      "timestamp": 1787591447157,
+      "message": "[Container] 2026/08/24 17:10:45.362221 Waiting for agent ping\n",
+      "ingestionTime": 1787591447175
+    },
+    {
+      "timestamp": 1787591447157,
+      "message": "[Container] 2026/08/24 17:10:45.601210 Waiting for DOWNLOAD_SOURCE\n",
+      "ingestionTime": 1787591447175
+    },
+    {
+      "timestamp": 1787591447157,
+      "message": "[Container] 2026/08/24 17:10:46.054179 Phase is DOWNLOAD_SOURCE\n",
+      "ingestionTime": 1787591447175
+    },
+    {
+      "timestamp": 1787591447157,
+      "message": "[Container] 2026/08/24 17:10:46.055373 CODEBUILD_SRC_DIR=/codebuild/output/src3161987673/src\n",
+      "ingestionTime": 1787591447175
+    },
+    {
+      "timestamp": 1787591447157,
+      "message": "[Container] 2026/08/24 17:10:46.055479 YAML location is /codebuild/readonly/buildspec.yml\n",
+      "ingestionTime": 1787591447175
+    },
+    {
+      "timestamp": 1787591447157,
+      "message": "[Container] 2026/08/24 17:10:46.057424 Processing environment variables\n",
+      "ingestionTime": 1787591447175
+    },
+    {
+      "timestamp": 1787591447157,
+      "message": "[Container] 2026/08/24 17:10:46.325098 No runtime version selected in buildspec.\n",
+      "ingestionTime": 1787591447175
+    },
+    {
+      "timestamp": 1787591447157,
+      "message": "[Container] 2026/08/24 17:10:46.358459 Moving to directory /codebuild/output/src3161987673/src\n",
+      "ingestionTime": 1787591447175
+    },
+    {
+      "timestamp": 1787591447157,
+      "message": "[Container] 2026/08/24 17:10:46.358500 Cache is not defined in the buildspec\n",
+      "ingestionTime": 1787591447175
+    },
+    {
+      "timestamp": 1787591447157,
+      "message": "[Container] 2026/08/24 17:10:46.408782 Skip cache due to: no paths specified to be cached\n",
+      "ingestionTime": 1787591447175
+    },
+    {
+      "timestamp": 1787591447157,
+      "message": "[Container] 2026/08/24 17:10:46.409016 Registering with agent\n",
+      "ingestionTime": 1787591447175
+    },
+    {
+      "timestamp": 1787591447157,
+      "message": "[Container] 2026/08/24 17:10:46.443919 Phases found in YAML: 1\n",
+      "ingestionTime": 1787591447175
+    },
+    {
+      "timestamp": 1787591447157,
+      "message": "[Container] 2026/08/24 17:10:46.443968  BUILD: 1 commands\n",
+      "ingestionTime": 1787591447175
+    },
+    {
+      "timestamp": 1787591447157,
+      "message": "[Container] 2026/08/24 17:10:46.444197 Phase complete: DOWNLOAD_SOURCE State: SUCCEEDED\n",
+      "ingestionTime": 1787591447175
+    },
+    {
+      "timestamp": 1787591447157,
+      "message": "[Container] 2026/08/24 17:10:46.444214 Phase context status code:  Message: \n",
+      "ingestionTime": 1787591447175
+    },
+    {
+      "timestamp": 1787591447157,
+      "message": "[Container] 2026/08/24 17:10:46.549799 Entering phase INSTALL\n",
+      "ingestionTime": 1787591447175
+    },
+    {
+      "timestamp": 1787591447157,
+      "message": "[Container] 2026/08/24 17:10:46.584139 Phase complete: INSTALL State: SUCCEEDED\n",
+      "ingestionTime": 1787591447175
+    },
+    {
+      "timestamp": 1787591447157,
+      "message": "[Container] 2026/08/24 17:10:46.584162 Phase context status code:  Message: \n",
+      "ingestionTime": 1787591447175
+    },
+    {
+      "timestamp": 1787591447157,
+      "message": "[Container] 2026/08/24 17:10:46.622532 Entering phase PRE_BUILD\n",
+      "ingestionTime": 1787591447175
+    },
+    {
+      "timestamp": 1787591447157,
+      "message": "[Container] 2026/08/24 17:10:46.624084 Phase complete: PRE_BUILD State: SUCCEEDED\n",
+      "ingestionTime": 1787591447175
+    },
+    {
+      "timestamp": 1787591447157,
+      "message": "[Container] 2026/08/24 17:10:46.624099 Phase context status code:  Message: \n",
+      "ingestionTime": 1787591447175
+    },
+    {
+      "timestamp": 1787591447157,
+      "message": "[Container] 2026/08/24 17:10:46.661017 Entering phase BUILD\n",
+      "ingestionTime": 1787591447175
+    },
+    {
+      "timestamp": 1787591447157,
+      "message": "[Container] 2026/08/24 17:10:46.719583 Running command echo gm-assistant placeholder build OK && nproc && free -g\n",
+      "ingestionTime": 1787591447175
+    },
+    {
+      "timestamp": 1787591447157,
+      "message": "gm-assistant placeholder build OK\n",
+      "ingestionTime": 1787591447175
+    },
+    {
+      "timestamp": 1787591447157,
+      "message": "36\n",
+      "ingestionTime": 1787591447175
+    },
+    {
+      "timestamp": 1787591447157,
+      "message": "               total        used        free      shared  buff/cache   available\n",
+      "ingestionTime": 1787591447175
+    },
+    {
+      "timestamp": 1787591447157,
+      "message": "Mem:              68           0          64           0           3          67\n",
+      "ingestionTime": 1787591447175
+    },
+    {
+      "timestamp": 1787591447157,
+      "message": "Swap:              0           0           0\n",
+      "ingestionTime": 1787591447175
+    },
+    {
+      "timestamp": 1787591447157,
+      "message": "\n",
+      "ingestionTime": 1787591447175
+    },
+    {
+      "timestamp": 1787591447157,
+      "message": "[Container] 2026/08/24 17:10:46.761742 Phase complete: BUILD State: SUCCEEDED\n",
+      "ingestionTime": 1787591447175
+    },
+    {
+      "timestamp": 1787591447157,
+      "message": "[Container] 2026/08/24 17:10:46.761765 Phase context status code:  Message: \n",
+      "ingestionTime": 1787591447175
+    },
+    {
+      "timestamp": 1787591447157,
+      "message": "[Container] 2026/08/24 17:10:46.796373 Entering phase POST_BUILD\n",
+      "ingestionTime": 1787591447175
+    },
+    {
+      "timestamp": 1787591447157,
+      "message": "[Container] 2026/08/24 17:10:46.798270 Phase complete: POST_BUILD State: SUCCEEDED\n",
+      "ingestionTime": 1787591447175
+    },
+    {
+      "timestamp": 1787591447157,
+      "message": "[Container] 2026/08/24 17:10:46.798290 Phase context status code:  Message: \n",
+      "ingestionTime": 1787591447175
+    },
+    {
+      "timestamp": 1787591447157,
+      "message": "[Container] 2026/08/24 17:10:46.849114 Set report auto-discover timeout to 5 seconds\n",
+      "ingestionTime": 1787591447175
+    },
+    {
+      "timestamp": 1787591447157,
+      "message": "[Container] 2026/08/24 17:10:46.849151 Expanding base directory path:  .\n",
+      "ingestionTime": 1787591447175
+    },
+    {
+      "timestamp": 1787591447157,
+      "message": "[Container] 2026/08/24 17:10:46.851084 Assembling file list\n",
+      "ingestionTime": 1787591447175
+    },
+    {
+      "timestamp": 1787591447157,
+      "message": "[Container] 2026/08/24 17:10:46.851093 Expanding .\n",
+      "ingestionTime": 1787591447175
+    },
+    {
+      "timestamp": 1787591447157,
+      "message": "[Container] 2026/08/24 17:10:46.853209 Expanding file paths for base directory .\n",
+      "ingestionTime": 1787591447175
+    },
+    {
+      "timestamp": 1787591447157,
+      "message": "[Container] 2026/08/24 17:10:46.853222 Assembling file list\n",
+      "ingestionTime": 1787591447175
+    },
+    {
+      "timestamp": 1787591447157,
+      "message": "[Container] 2026/08/24 17:10:46.853224 Expanding **/*\n",
+      "ingestionTime": 1787591447175
+    },
+    {
+      "timestamp": 1787591447157,
+      "message": "[Container] 2026/08/24 17:10:46.855339 No matching auto-discover report paths found\n",
+      "ingestionTime": 1787591447175
+    },
+    {
+      "timestamp": 1787591447157,
+      "message": "[Container] 2026/08/24 17:10:46.855354 Report auto-discover file discovery took 0.006240 seconds\n",
+      "ingestionTime": 1787591447175
+    },
+    {
+      "timestamp": 1787591447157,
+      "message": "[Container] 2026/08/24 17:10:46.855362 Phase complete: UPLOAD_ARTIFACTS State: SUCCEEDED\n",
+      "ingestionTime": 1787591447175
+    },
+    {
+      "timestamp": 1787591447157,
+      "message": "[Container] 2026/08/24 17:10:46.855368 Phase context status code:  Message: \n",
+      "ingestionTime": 1787591447175
+    }
+  ],
+  "nextForwardToken": "f/39864621382120875893719893717821651108056632664802066477/s",
+  "nextBackwardToken": "b/39864621382120875893719893717821651108056632664802066432/s"
+}

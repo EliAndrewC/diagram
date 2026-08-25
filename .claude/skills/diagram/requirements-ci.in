@@ -1,0 +1,3 @@
+# The CodeBuild dispatcher's AWS boundary (feature 130) - laptop side only; the build image does
+# not install this (it uses the AWS CLI). Re-lock: pip-compile --output-file=requirements-ci.txt requirements-ci.in
+boto3

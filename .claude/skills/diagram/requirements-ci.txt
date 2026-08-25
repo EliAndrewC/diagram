@@ -1,0 +1,12 @@
+#
+# Locked 2026-08-25 for the diagram repository (feature 130): the dispatcher's boto3, at the version
+# installed and exercised against the real account that day.
+# Re-lock:  pip-compile --output-file=requirements-ci.txt requirements-ci.in
+#
+boto3==1.43.79
+botocore==1.43.79
+jmespath==1.1.0
+python-dateutil==2.9.0.post0
+s3transfer==0.19.2
+six==1.17.0
+urllib3==2.7.0
