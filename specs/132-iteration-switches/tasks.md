@@ -28,6 +28,8 @@ shell guards.
 
 - [ ] T10 `mapcheck`: lock -> reference only, no widening, `--scope all` refused; tests
 - [ ] T11 `cohort_audit`: lock refused first; tests
+- [ ] T11b `pipeline.regen` (more than one gen refused), `cache_audit`, `make_regressions` refuse under the lock; `SWEEP_OK` on `cache-audit`/`regressions`; tests
+- [ ] T11c `sync-with-main.sh` seams honored only in a tree with no diagram skill Makefile; test case
 
 ## Phase 5 - guards and records
 

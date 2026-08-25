@@ -85,6 +85,28 @@ with both axes CLOSED and `error` set (FR-004). `remote.state in {"on","off"}`,
 SKIP-VERIFIED). `FULL=1` with remote off is refused by ci-merge. Companion:
 `scripts/test-sync-with-main.sh` gains the third route via the `CI_ROUTE`/`CI_MERGE` seams.
 
+### The rule: ONE map per invocation, reference only (FR-010, FR-012, FR-013)
+
+Round 1 of the fidelity review turned the enumeration into a rule, so the Python layer covers every
+multi-map entry point, not a list of targets:
+
+- `pipeline.regen.main`: under the lock, more than one gen -> refuse (a glob expands in the shell
+  before make sees it, so the module is where a globbed `GEN` is caught).
+- `tools.cache_audit.main`: refuse under the lock (its default rolls a subset repeatedly).
+- `tools.make_regressions.main`: refuse under the lock (rebuilds the corpus from many seeds).
+- Makefile: `SWEEP_OK` also first in `cache-audit` and `regressions`; `map` passes through to the
+  module's own check (the list is only known there).
+- Left runnable, recorded in `dev/switches.md` with the alternatives priced (FR-018): `map` with one
+  gen, `hamlet`, `perf` (four seeds, one at a time, a constitutional obligation), `placement-stages`
+  (the reference map's stages).
+
+### The test seams (the reviewer's aside, Principle XIV)
+
+`sync-with-main.sh` honors `CI_ROUTE`, `CI_MERGE` and `CI_PERF_REVIEW` only when
+`$ROOT/$SKILL_DIR/Makefile` is ABSENT - the fixture case its test builds (`.claude/skills/x`). On a
+real clone they are ignored, so `CI_ROUTE=DIRECT` can no longer skip the gated route. The
+companion test gains a case proving a real-shaped tree ignores the seam.
+
 ### mapcheck / cohort_audit (FR-011, FR-013)
 
 - `mapcheck`: `--scope all` under lock -> refuse; `auto` under lock -> reference only, no
