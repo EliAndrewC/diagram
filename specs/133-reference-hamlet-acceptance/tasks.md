@@ -9,7 +9,7 @@ measured - the GM's instruction.
 - [x] T01 `spec-fidelity` review of this skeleton: round 1 one change (no route promise), round 2 FAITHFUL - recorded in spec.md
 - [x] T02 the would-have-dispatched trail (FR-004): `runlog.write_would_have` + `would_have_report` (inside `remote_spend_report`, so `make ci-status` and `make audit` show it); written from `ci/__main__.py` (remote-off refusals of check/image, LOCAL-GATED merges whose verdict is `REFUSE(remote-enabled)` = would have DISPATCHED) and from the Makefile's `REMOTE_OK` via `ci remote-ok`; entirely in `ci/` + Makefile so the skeleton's delta stays DIRECT; tests in `tests/ci/test_runlog.py` + `test_main.py`; `make quick` green
 - [x] T03 the doctrine (FR-007): constitution v2.3.0 "Iteration wall-clock is the cost" (the GM's words), root CLAUDE.md iteration heading, skill CLAUDE.md "The goal all of this serves", SKILL.md "The working rule behind the tooling"
-- [ ] T04 skeleton pushed to main (the spec-number claim; DIRECT - nothing in it is engine content) so a fresh session's clone carries it; `.specify/feature.json` points at 133 in this clone
+- [x] T04 skeleton pushed to main at 8b796dcb (route DIRECT, observed - the delta was specs, docs, ci/, Makefile, tests); a fresh session's clone carries it. `.specify/feature.json` is gitignored: the fresh session must point it at `specs/133-reference-hamlet-acceptance` (or export SPECIFY_FEATURE) before its first task, so the gated route knows the feature
 
 ## Phase 1 - the GM's tasks, one at a time (measured)
 
