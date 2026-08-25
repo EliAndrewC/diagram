@@ -32,6 +32,8 @@ OUT=$(cd "$W" && python3 "$STAMP" --check origin/main 2>&1); check "docs-only ch
 # a tests-only change needs no stamp either (feature 132 FR-024, the GM's ruling): tests/ is outside the diagram area
 mkdir -p "$W/.claude/skills/diagram/tests"; echo 'def test_x(): pass' > "$W/.claude/skills/diagram/tests/test_x.py"; git -C "$W" add -A; git -C "$W" commit -qm tests
 OUT=$(cd "$W" && python3 "$STAMP" --check origin/main 2>&1); check "tests-only change: no stamp needed (FR-024)" 0 $?
+mkdir -p "$W/.claude/skills/diagram/l7r/diagram/ci"; echo 'x = 1' > "$W/.claude/skills/diagram/l7r/diagram/ci/decision.py"; git -C "$W" add -A; git -C "$W" commit -qm ci
+OUT=$(cd "$W" && python3 "$STAMP" --check origin/main 2>&1); check "ci-only change: no stamp needed (FR-025)" 0 $?
 
 # a guard-script change with NO hooks stamp is refused - THE motivating case
 echo 'echo changed' > "$W/scripts/x-hooks.sh"; git -C "$W" commit -qam guard

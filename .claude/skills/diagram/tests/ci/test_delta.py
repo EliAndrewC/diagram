@@ -14,11 +14,13 @@ S = ".claude/skills/diagram/"
 
 ENGINE = [
     S + "l7r/diagram/settlement/houses.py",
-    S + "l7r/diagram/ci/dispatch.py",
     S + "pool/hamlets/inashiro.gen.py",
     S + "pool/hamlets/inashiro.json",
 ]
 NOT_ENGINE = [
+    # l7r/diagram/ci/ (feature 132 FR-025, the GM: "isn't it actually test code?"): tooling, DIRECT
+    S + "l7r/diagram/ci/dispatch.py",
+    S + "l7r/diagram/ci/CLAUDE.md",
     # tests/ (feature 132 FR-024, the GM's ruling "Yes, locally AND on AWS"): a tests-only delta is DIRECT
     S + "tests/settlement/test_houses.py",
     S + "tests/fixtures/gate_check_names.json",
@@ -67,7 +69,7 @@ def test_route_and_reason() -> None:
     d = Delta("b", ("docs/x.md",), ())
     assert d.route == "DIRECT" and "none of them diagram engine code" in d.reason
     g = Delta("b", tuple(ENGINE), tuple(ENGINE))
-    assert g.route == "GATED" and "4 engine path" in g.reason
+    assert g.route == "GATED" and "3 engine path" in g.reason
 
 
 def test_delta_is_our_commits_only(repo: Path) -> None:

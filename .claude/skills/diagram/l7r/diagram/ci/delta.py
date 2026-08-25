@@ -33,6 +33,11 @@ _ENGINE_DIRS: tuple[tuple[str, tuple[str, ...]], ...] = (
     # green run lands unexecuted and runs on the next real gate. Feature 130's first cut had tests/ here.
     ("pool/", (".gen.py", ".json")),  # a generator, or a manifest (a generator's output under test)
 )
+# Subtrees of l7r/ that are NOT engine either (feature 132 FR-025, GM 2026-08-25): the ci package is
+# tooling that decides whether the tests need to run - *"the engine itself isn't using it ... which
+# makes it test code"*. Nothing in it is imported by a generator; its tests are fast and live in
+# `make quick`, which is the check a ci-only change gets. Exactly what the GM named.
+_NOT_ENGINE_DIRS: tuple[str, ...] = ("l7r/diagram/ci/",)
 # NOT engine, by the GM's definition (2026-08-25): "code changes which would be exercised by the
 # tests". The Makefile, pyproject.toml, the lockfiles and scripts/ shape HOW the gate runs, and the
 # local gate, gate-stamp and the hook suites cover them - they never cost a build. The first day's
@@ -48,7 +53,7 @@ def is_engine(path: str) -> bool:
     rel = path[len(SKILL) :]
     if rel in _ENGINE_FILES:
         return True
-    if rel.endswith(".notes.md"):
+    if rel.endswith(".notes.md") or rel.startswith(_NOT_ENGINE_DIRS):
         return False
     for prefix, suffixes in _ENGINE_DIRS:
         if rel.startswith(prefix):

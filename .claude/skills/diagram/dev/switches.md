@@ -143,6 +143,12 @@ than resolving it, and the GM chose *"Yes, locally AND on AWS"*. So `tests/` is 
 decision, the engine key and `gate-stamp`'s `diagram` area. The recorded cost: a test edited after
 the last green run lands on main unexecuted and runs on the next real gate.
 
+**`l7r/diagram/ci/` is exempt the same way** (FR-025, the GM: *"isn't it actually test code? Like
+the engine itself isn't using it, right?"*). It is tooling that decides whether the tests run;
+nothing in it reaches a map; its tests are fast and inside `make quick`. A ci-only change is DIRECT
+and needs no stamp. `switches.py`, `_invocation.py` and `tools/` are the same kind of code and were
+left in the engine set because the GM named `ci/` - add them if wanted.
+
 **What never short-circuits**: `FULL=1` (a different scope); a last record that is a green `quick`,
 `reference` or `test-file` (they vouch for less than the gate); a red last run. And there is no
 flag in either direction - a `FORCE=` re-run flag was drafted and removed at the fidelity review as

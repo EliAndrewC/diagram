@@ -49,3 +49,7 @@ facts stated (no such AWS rule existed - feature 130 put `tests/` in the engine 
 options: No (tests stay in the key); Yes, locally AND on AWS; Yes, locally only. The GM chose:
 
 > Yes, locally AND on AWS
+
+## 2026-08-25, the GM on the ci/ package (after FR-024 landed through its fourth gate of the day)
+
+> Okay, but as a sanity check: you said it's "engine" code, but isn't it actually test code?  Like the engine itself isn't using it, right?  Isn't it only part of what decides whether the tests need to be run, which makes it test code?  I suspect the ci/ directory should join the list of exempted things along with the tests themselves.

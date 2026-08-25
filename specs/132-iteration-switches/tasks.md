@@ -51,6 +51,8 @@ shell guards.
 
 - [x] T23 the GM's ruling on tests-only changes (FR-024, "Yes, locally AND on AWS"): `tests/` out of `is_engine` (route + engine key), out of `gate-stamp`'s diagram area (`EXCLUDE`, companion case added), out of the short-circuit; tests and docs follow; fidelity round 2 of the second amendment
 
+- [x] T24 FR-025 (the GM: ci/ is test code): `l7r/diagram/ci/` out of `is_engine` and gate-stamp's diagram area; companion cases; docs; `make quick` is its check; fidelity review
+
 ## Phase 6 - throw the switches for feature 133
 
 - [x] T16 `make ci-off` and `make scope-lock` thrown on the GM's instruction of 2026-08-25 (the two commits before this feature's landing)

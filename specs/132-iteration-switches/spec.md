@@ -4,7 +4,7 @@
 
 **Created**: 2026-08-25
 
-**Status**: APPROVED by `spec-fidelity` - round 3 verdict **FAITHFUL** (2026-08-25), after rounds 1 and 2 returned changes (see Review history). **AMENDED the same day on the GM's second request** (the local `make done` short-circuits on the same rule as the remote gate: FR-019..FR-023) - amendment APPROVED at round 2 (**FAITHFUL**, 2026-08-25); **AMENDED AGAIN on the GM's third message** (the key is the remote key, not wider: Makefile/scripts/config changes do not owe the gate) - second amendment: round 1 NOT FAITHFUL (the tests-only sentence was the session's to ask, not resolve); the GM ruled (FR-024); **round 2 FAITHFUL** (2026-08-25).
+**Status**: APPROVED by `spec-fidelity` - round 3 verdict **FAITHFUL** (2026-08-25), after rounds 1 and 2 returned changes (see Review history). **AMENDED the same day on the GM's second request** (the local `make done` short-circuits on the same rule as the remote gate: FR-019..FR-023) - amendment APPROVED at round 2 (**FAITHFUL**, 2026-08-25); **AMENDED AGAIN on the GM's third message** (the key is the remote key, not wider: Makefile/scripts/config changes do not owe the gate) - second amendment: round 1 NOT FAITHFUL (the tests-only sentence was the session's to ask, not resolve); the GM ruled (FR-024); **round 2 FAITHFUL** (2026-08-25). **FR-025** (ci/ exempt, the GM's words) added after; awaiting its review.
 
 **Input**: [`gm-request.md`](gm-request.md), verbatim and unedited. That file is the authority for
 this specification; the session's proposal recorded there is what the GM's *"that sounds like
@@ -295,6 +295,15 @@ to short circuit and skip AWS tests to these 5 minute tests as well for the make
   here it is the GM's ruling, recorded verbatim above. The cost, stated so it is a decision and
   not an oversight: a test edited after the last green run can land on main without having
   executed; it executes on the next real gate.
+- **FR-025 (the GM, 2026-08-25)**: *"isn't it actually test code? Like the engine itself isn't
+  using it, right? Isn't it only part of what decides whether the tests need to be run, which
+  makes it test code? I suspect the ci/ directory should join the list of exempted things along
+  with the tests themselves."* So `l7r/diagram/ci/**` is exempt exactly as `tests/**` is: a
+  ci-only delta takes the DIRECT route, is outside the engine key, and is outside `gate-stamp`'s
+  `diagram` area. Nothing in `ci/` is imported by a generator or the engine; its tests are in
+  `tests/ci/` and run inside `make quick`, which is the check a ci-only change gets. Exactly `ci/`
+  - the GM named it; `switches.py`, `_invocation.py` and `tools/` are the same kind of code and
+  are left for the GM to add if wanted (recorded here so the question is not reopened blind).
 
 ### Key Entities
 

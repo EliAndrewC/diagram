@@ -49,7 +49,9 @@ AREAS: dict[str, tuple[str, tuple[str, ...]]] = {
 # answered "Yes, locally AND on AWS"): a tests-only change owes no gate - not the build, not the local
 # `make done`, and not this stamp, which would otherwise refuse the push for want of a green run. The
 # recorded cost: a test edited after the last green run lands unexecuted and runs on the next real gate.
-EXCLUDE: dict[str, tuple[str, ...]] = {"diagram": ("tests/",)}
+# l7r/diagram/ci/ joins it (FR-025, GM 2026-08-25: "isn't it actually test code? ... the ci/ directory should
+# join the list of exempted things along with the tests themselves") - its tests are fast and inside `make quick`.
+EXCLUDE: dict[str, tuple[str, ...]] = {"diagram": ("tests/", "l7r/diagram/ci/")}
 
 
 def _git(*args: str, cwd: Path | None = None) -> str:
