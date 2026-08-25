@@ -372,9 +372,10 @@ help:           ## list every target with its one-line purpose
 ci-status:      ## free: delta, route, verification state, verified lookup, remote spend   ROUTE=1 -> just DIRECT|GATED
 	$(RUN).ci status $(if $(ROUTE),--route,)
 
-ci-check:       ## the iteration check on CodeBuild (PAID)     FULL=1 (prompts) | TARGET=cohort etc.
+ci-check:       ## the iteration check on CodeBuild (PAID)     FULL=1 (prompts) | TARGET=cohort etc. | NO_GO=1 (FR-036 self-abort proof)
 	@$(if $(FULL),$(MAKE) --no-print-directory bypass-audit REF_WHY="$(REF_WHY)" && $(MAKE) --no-print-directory commit-permitted,true)
-	$(RUN).ci check $(if $(FULL),--full,) $(if $(TARGET),--target "$(TARGET)",)
+	$(RUN).ci check $(if $(FULL),--full,) $(if $(TARGET),--target "$(TARGET)",) $(if $(NO_GO),--no-go,)
+# (GUARD_EDIT_OK: NO_GO=1 is the FR-036 measurement - the build must abort itself when nobody releases it; feature 130 T076)
 
 ci-merge:       ## the merge action's gated route (PAID) - called by sync-with-main.sh push   FULL=1 (prompts)
 	@$(if $(FULL),$(MAKE) --no-print-directory bypass-audit REF_WHY="$(REF_WHY)" && $(MAKE) --no-print-directory commit-permitted,true)

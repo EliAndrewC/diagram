@@ -99,5 +99,14 @@ OUT=$(ritual "$D" sync-in); check "sync-in with a stale origin" 0 $?
 expect_out "origin of"
 [ "$(git -C "$D/main/.clones/c" remote get-url origin)" = "$D/github.git" ] && PASS=$((PASS+1)) || { echo "FAIL  origin not re-pointed"; FAIL=$((FAIL+1)); }
 
+echo "9. the build's push line is a compare-and-swap: main moved between fetch and push -> rejected, nothing lands (R3, T036)"
+D=$(topology i)
+git clone -q "$D/github.git" "$D/build"; git clone -q "$D/github.git" "$D/other"
+( cd "$D/other" && echo 2 > g && git add g && git commit -qm "landed in between" && git push -q origin HEAD:main )
+( cd "$D/build" && echo 3 > h && git add h && git commit -qm "the merge result" )
+OUT=$(cd "$D/build" && { git push origin HEAD:main 2>&1 || echo "main moved; re-run (the push was not a fast-forward - nothing landed)"; }); check "non-fast-forward push refused" 0 $?
+expect_out "main moved; re-run"
+[ "$(git -C "$D/github.git" log -1 --format=%s main)" = "landed in between" ] && PASS=$((PASS+1)) || { echo "FAIL  something landed over the in-between commit"; FAIL=$((FAIL+1)); }
+
 echo "-----"
 if [ "$FAIL" -eq 0 ]; then echo "all sync-with-main tests passed ($PASS checks)"; exit 0; else echo "SOME TESTS FAILED ($FAIL)"; exit 1; fi

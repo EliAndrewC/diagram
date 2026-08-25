@@ -132,6 +132,7 @@ class Context:
     mode: str  # merge | check | image
     scope: str = "reference"  # reference | full
     operation: str | None = None  # ci-check TARGET=<expensive op>
+    no_go: bool = False  # ci-check NO_GO=1: never release the parked build - proves FR-036's self-abort, costs the park ceiling
     secrets: config.Secrets | None = None
     client: AwsClient | None = None
     sh: Sh = default_sh
@@ -304,10 +305,14 @@ def run(ctx: Context) -> Outcome:
         ctx.out(f"ci: reference settlement RED locally - build {build_id} stopped ({mins:.0f} billed min, ~${mins * config.RATE_PER_MIN:.2f})")
         return Outcome(rc=1, verdict="ABORTED(local-reference)", build_id=build_id, result="aborted-local-reference", minutes=mins)
 
-    # 4. release
-    ctx.client.put_object(ctx.secrets.ci_bucket, f"go/{build_id.split(':')[-1]}", b"go")  # the build polls go/<uuid> - the id's project prefix is not part of the key
-    ctx.events.append("go")
-    ctx.out("ci: reference settlement clean - build released")
+    # 4. release - unless this run exists to prove that a build nobody releases aborts itself (FR-036)
+    if ctx.no_go:
+        ctx.events.append("go:withheld")
+        ctx.out(f"ci: NO_GO=1 - the go signal is WITHHELD; the build must abort itself after {config.PARK_TIMEOUT_S} s")
+    else:
+        ctx.client.put_object(ctx.secrets.ci_bucket, f"go/{build_id.split(':')[-1]}", b"go")  # the build polls go/<uuid> - the id's project prefix is not part of the key
+        ctx.events.append("go")
+        ctx.out("ci: reference settlement clean - build released")
 
     # 5. stream, then settle
     build = stream(ctx, build_id)

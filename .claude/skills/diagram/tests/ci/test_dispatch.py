@@ -314,3 +314,14 @@ def test_an_artifact_key_that_vanishes_between_list_and_get_is_skipped(repo: Pat
     uuid = fx["build"]["id"].split(":")[-1]
     c, _ = ctx(repo, client=Flaky(artifacts={f"artifacts/{uuid}/report/x.txt": b"x"}))
     assert dispatch.run(c).rc == 0 and not (repo / S / "dev" / "ci-artifacts").exists()
+
+
+def test_no_go_withholds_the_signal_and_never_stops_the_build(repo: Path) -> None:
+    """FR-036's measurement knob: the build must abort ITSELF; the dispatcher neither releases nor stops it."""
+    engine_delta_with_green(repo, False)
+    client = FakeClient(statuses=["IN_PROGRESS", "FAILED"])
+    c, lines = ctx(repo, client=client)
+    c.no_go = True
+    out = dispatch.run(c)
+    assert out.rc == 1 and "go:withheld" in c.events and "put_object" not in client.names() and "stop_build" not in client.names()
+    assert any("WITHHELD" in ln for ln in lines)

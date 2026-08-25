@@ -377,3 +377,12 @@ GM asked for are elsewhere: the laptop's CPU is free during the run, the merge i
 the LATEST main sequentially, and `FULL=1` / `cohort` (the 25-minute class) are where 36 cores
 should tell - measured when those run. Stock-image bootstrap cost (24 s) vs the custom image's
 pull time is the `make ci-image` decision, the GM's to trigger.
+| d73cac86 | **GREEN end to end** (T024): provisioning 7 s, clone 57 s, bootstrap 20 s, `make done` 355 s (3,570 passed, 2 skipped in 240 s), verified record written | 8 | first SKIP-VERIFIED lookup followed |
+
+Other numbers from the same day: `sync-in --mirror-only` (the every-turn mirror refresh) **1.17 s**;
+console-derived spend 25 min vs run-log 24 min (SC-005, one run's rounding); parking saves the
+whole local lint+reference window (~30 s) because `go` was already present when every released
+build reached wait-go (T078, derived). Compute type: XLARGE kept without buying the 2xlarge run
+(T028) - the suite is not CPU-bound at 36 vCPU.
+| 81359962 | **`make cohort N=48`** (T082, `ci-check TARGET=`): bootstrap 24 s, reference then 48 seeds in **856 s** on 36 vCPU - the laptop's 20-25 min run; 34/48 passed (the cohort's standing residue) | 16 | $1.28 - the number the feature was argued from |
+| 6277e60a | `ci-check NO_GO=1` (T076): parked with the signal withheld, aborted itself after 120 s - the dead-dispatcher ceiling | 5 | $0.40 |
