@@ -20,8 +20,11 @@ BUILD_UUID=${CODEBUILD_BUILD_ID##*:}
 SKILL=.claude/skills/diagram
 
 echo "== fetch: $GITHUB_REPO @ $MAILBOX ($GIT_SHA), mode=$MODE target='$MAKE_TARGET' scope=$CI_SCOPE"
-git clone -q --filter=blob:none "https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPO}" repo
+# the buildspec's install phase already cloned once (to fetch this script); reuse it - a blob:none
+# clone of this repository measured ~56 s on the first real build, and paying it twice is waste
+if [ -d bootstrap/.git ]; then mv bootstrap repo; else git clone -q --filter=blob:none "https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPO}" repo; fi
 cd repo
+git checkout -q -- . 2>/dev/null || true
 git config user.name "gm-assistant-ci"; git config user.email "ci@gm-assistant.invalid"
 git fetch -q origin "refs/heads/${MAILBOX}:refs/remotes/origin/${MAILBOX}"
 tip=$(git rev-parse "origin/${MAILBOX}")
@@ -36,6 +39,22 @@ until aws s3api head-object --bucket "$CI_BUCKET" --key "go/$BUILD_UUID" >/dev/n
 done
 aws s3 rm --quiet "s3://$CI_BUCKET/go/$BUILD_UUID"
 echo "== go received after ${waited}s"
+
+# STOCK-IMAGE BOOTSTRAP. The custom image (Dockerfile.ci, `make ci-image`) is an OPTIMIZATION the
+# operator enables from a terminal; until it exists - and whenever the dispatcher finds no image
+# marker - the build runs on aws/codebuild/standard and installs what the gate needs here: Python
+# 3.14 through uv (prebuilt, seconds), the two pinned lockfiles, resvg from its release tarball,
+# and the DejaVu faces. Measured in timings.md beside the image's provisioning time.
+if ! python3 -c 'import sys; sys.exit(0 if sys.version_info[:2] == (3, 14) else 1)' 2>/dev/null || ! command -v resvg >/dev/null; then
+  echo "== bootstrap (stock image): python 3.14 via uv, lockfiles, resvg, fonts"
+  t0=$(date +%s)
+  curl -LsSf https://astral.sh/uv/install.sh | sh >/dev/null 2>&1; export PATH="$HOME/.local/bin:$PATH"
+  uv venv -q --python 3.14 /tmp/venv && . /tmp/venv/bin/activate
+  uv pip install -q -r "$SKILL/requirements.txt" -r "$SKILL/requirements-dev.txt"
+  curl -sSL "https://github.com/linebender/resvg/releases/download/v0.46.0/resvg-linux-x86_64.tar.gz" | tar -xz -C /usr/local/bin resvg
+  (apt-get install -y -qq fonts-dejavu-core fonts-dejavu-extra >/dev/null 2>&1 || (apt-get update -qq >/dev/null && apt-get install -y -qq fonts-dejavu-core fonts-dejavu-extra >/dev/null))
+  echo "== bootstrap done in $(( $(date +%s) - t0 ))s: $(python3 --version), resvg $(resvg --version)"
+fi
 
 echo "== merge: origin/main -> $MAILBOX"
 main_sha=$(git rev-parse origin/main)

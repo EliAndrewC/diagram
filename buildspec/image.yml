@@ -19,4 +19,5 @@ phases:
     commands:
       - docker push "${ECR_IMAGE}:latest"
       - docker push "${ECR_IMAGE}:${GIT_SHA}"
-      - echo "pushed ${ECR_IMAGE}:latest (${GIT_SHA})"
+      - echo "${GIT_SHA} $(date -u +%Y-%m-%dT%H:%M:%SZ)" > /tmp/latest.txt && aws s3 cp --quiet /tmp/latest.txt "s3://${CI_BUCKET}/image/latest.txt"
+      - echo "pushed ${ECR_IMAGE}:latest (${GIT_SHA}); marker image/latest.txt written - dispatches use the custom image from now on"
