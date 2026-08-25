@@ -386,3 +386,9 @@ build reached wait-go (T078, derived). Compute type: XLARGE kept without buying 
 (T028) - the suite is not CPU-bound at 36 vCPU.
 | 81359962 | **`make cohort N=48`** (T082, `ci-check TARGET=`): bootstrap 24 s, reference then 48 seeds in **856 s** on 36 vCPU - the laptop's 20-25 min run; 34/48 passed (the cohort's standing residue) | 16 | $1.28 - the number the feature was argued from |
 | 6277e60a | `ci-check NO_GO=1` (T076): parked with the signal withheld, aborted itself after 120 s - the dead-dispatcher ceiling | 5 | $0.40 |
+| 1d2c16de | **`make cohort N=48` on `BUILD_GENERAL1_2XLARGE` (72 vCPU)** - the T028 comparison the GM asked for: bootstrap 7 s, cohort **824 s** vs 856 s on xlarge (-4%), 34/48 as before | 18 | **$3.60** vs $1.28 - 2.8x the money for 32 s |
+
+**T028 decided by measurement**: the cohort gains 4% from doubling the cores (it is bounded by
+its slowest seeds, not by width - `cohort_audit` fans 48 seeds over cpus-2 workers and the wall
+clock is the worst seed either way) at 2.5x the per-minute rate and 2.8x the bill. `xlarge` stays
+the default for every target; the `COMPUTE=` knob remains for the next workload that might scale.
