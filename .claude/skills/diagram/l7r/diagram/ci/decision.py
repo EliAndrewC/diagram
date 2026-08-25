@@ -97,6 +97,11 @@ def decide(
         )
     else:
         conds.append(Condition("green-local-since-edit", True, f"`make {state.target}` green at {state.utc} against exactly this code"))
+    # AN OPERATION IS NEVER SHORT-CIRCUITED: a verified record says a GATE passed on this tree; it says
+    # nothing about a cohort or a cache audit (the first cohort dispatch, 2026-08-25, was skipped by
+    # the reference record the same tree had just earned).
+    if operation:
+        verified = None
     if verified is not None and verified.satisfies(scope):
         conds.append(Condition("tree-not-already-verified", False, f"this exact tree was verified {verified.scope}-scope by {verified.build_id} - no second build (SKIP-VERIFIED)"))
     elif verified is not None:

@@ -75,6 +75,12 @@ def test_skip_verified_and_scope_rule() -> None:
     assert decision.decide(GATED, green(), NOW, ref, None, decision.CHECK, None, "reference").skip_verified
 
 
+def test_an_operation_is_never_skip_verified() -> None:
+    full = decision.VerifiedRecord("t", "gm-assistant-check:2", "full")
+    d = decision.decide(GATED, green(), NOW, full, None, decision.CHECK, None, "reference", 0.0, "cohort N=48")
+    assert d.verdict == "DISPATCH" and "no verified record" in next(c.why for c in d.conditions if c.name == "tree-not-already-verified")
+
+
 def test_a_verified_tree_does_not_rescue_a_refusal() -> None:
     ref = decision.VerifiedRecord("t", "b", "reference")
     assert decision.decide(GATED, failed(), NOW, ref, None, decision.CHECK, None).verdict == "REFUSE(green-local-since-edit)"

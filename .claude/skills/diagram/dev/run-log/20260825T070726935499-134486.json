@@ -1,0 +1,13 @@
+{
+  "utc": "2026-08-25T07:07:26Z",
+  "target": "ci-check",
+  "scope": "reference",
+  "seconds": 0,
+  "result": "skip-verified",
+  "commit": "970203c2",
+  "where": "codebuild",
+  "build_id": "gm-assistant-check:d73cac86-7dd1-4d4f-9730-5385de9c9669",
+  "minutes": 0.0,
+  "cost_usd": 0.0,
+  "reason": "this exact tree was verified reference-scope by gm-assistant-check:d73cac86-7dd1-4d4f-9730-5385de9c9669 - no second build (SKIP-VERIFIED)"
+}

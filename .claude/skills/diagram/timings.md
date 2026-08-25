@@ -357,3 +357,23 @@ context: this container (22 threads, laptop), python 3.14.4, commit bdc43b97, de
 The remote numbers (the same `make done` on CodeBuild `xlarge`, stock image with bootstrap vs the
 custom image; `2xlarge`; provisioning; the parked-start saving) are appended below this block as
 each paid run lands - one row per build, with its build id, so `make audit` and this ledger agree.
+
+### The remote runs (`gm-assistant-check`, `BUILD_GENERAL1_XLARGE` 36 vCPU, $0.08/min), one row per build
+
+| build | what it proved / where it died | billed min | notes |
+|---|---|---|---|
+| 6913a24d | died in PROVISIONING: unconditional ECR image override (marker guard lost) | 1 | dispatcher fix |
+| c12aca4f | INSTALL: `git checkout --detach <sha> -- path` is invalid; clone of the repo (blob:none) = 56 s | 2 | buildspec fix |
+| 93af6342 | reached wait-go, park/release WORKED (go found on first poll); `aws s3 rm -q` is not a flag | 2 | run.sh fix |
+| 4483c680 | died silently after the signal: the role lacks `s3:DeleteObject` under `set -e` | 3 | run.sh fix + ERR trap |
+| e2511c85 | **the whole gate ran**: provisioning 7 s, INSTALL (clone) 57 s, bootstrap 24 s (uv python 3.14 + lockfiles + resvg + fonts), merge, `make done` 357 s: **3,570 passed, 2 skipped in 241 s**; only `typecheck` red (boto3 absent from the image, an inline ignore cannot serve both environments) | 8 | mypy override |
+
+**What e2511c85 says about the number this feature was argued from**: the test phase on 36 vCPU
+took 241 s against 221-225 s on the 22-thread laptop - `pytest -n auto` here is not CPU-bound at
+that width (the pool's map-rolling tests and the regression replay set the floor), so the stock
+image buys NO speedup on reference scope; the gate's remote wall was 357 s vs 347 s locally, plus
+7 + 57 + 24 s of provisioning, clone and bootstrap, for a session-side wall of 473 s. The wins the
+GM asked for are elsewhere: the laptop's CPU is free during the run, the merge is verified against
+the LATEST main sequentially, and `FULL=1` / `cohort` (the 25-minute class) are where 36 cores
+should tell - measured when those run. Stock-image bootstrap cost (24 s) vs the custom image's
+pull time is the `make ci-image` decision, the GM's to trigger.
