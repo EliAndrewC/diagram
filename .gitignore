@@ -117,3 +117,5 @@ top_up-improvement.md
 
 # feature 130: the AWS/GitHub credentials the CodeBuild dispatcher reads (see development-secrets.ini.example)
 development-secrets.ini
+# feature 129: raw cProfile output stays out of this repository (FR-011a); the derived table is committed
+.claude/skills/diagram/dev/perf-raw/

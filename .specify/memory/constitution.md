@@ -1,7 +1,17 @@
 <!--
 SYNC IMPACT REPORT
 ==================
-Version change: 1.16.0 → 2.0.0
+Version change: 2.0.0 → 2.1.0
+
+Version 2.1.0 (amended 2026-08-25): Principle VI's performance clause becomes the GM's three-band
+matrix (feature 129): any increase on the total or any seed owes an explanation confirmed by the
+perf-audit subagent; >5% / >10% the subagent's escalated audit on the three criteria; >10% / >20%
+the GM's personal sign-off before the push - each environment judged against its own history, a
+cross-environment comparison refused. The 10% merge-blocking cap is retired (the GM: no ceiling so
+long as the reviewer agrees). Records are bound to commit + numbers; the push enforces them. MINOR:
+an existing principle materially expanded.
+
+PRIOR (1.16.0 → 2.0.0):
 
 Version 2.0.0 (amended 2026-08-25): THIS REPOSITORY'S EDITION. The constitution was copied verbatim
 from gm-assistant when feature 131 split the diagram skill into its own repository, and the GM asked
@@ -609,37 +619,49 @@ artifacts. Specifically:
       make perf LABEL=<NNN>-end       # last thing, before the push
       make perf-report AGAINST=<NNN>-start
 
-  **TWO BANDS, and they are different numbers on purpose** (GM 2026-08-24: *"it
-  is okay if things can get a few percentage points slower, though we probably
-  need some kind of maximum threshold"*).
+  **THREE BANDS, on BOTH measurements, PER ENVIRONMENT** (GM 2026-08-24 and
+  2026-08-25; feature 129 - this replaces the two-band rule of 2026-08-24,
+  whose 10% "cap" is now band 3's total line rather than a merge-blocking
+  ceiling: *"there is no ceiling for allowing it to go forward so long as the
+  subagent reviewer agrees"*, with the GM's own sign-off above it):
 
-  - **Any seed more than 5% slower must be DIAGNOSED** - the same 5% the project
-    already treats as a whole-process speedup worth having, applied in the other
-    direction. Diagnosed means explained and either fixed or accepted in writing
-    with the number; it does not mean noticed. A single seed never blocks a merge
-    on its own.
-  - **The TOTAL across the seed set is capped at 10%.** Over it, the slowdown is a
-    Principle XIII regression with the usual three exits: fix it, revert it, or
-    get an explicit GM waiver for that number.
+      band            on the TOTAL     on ANY SINGLE SEED   what it takes
+      1  explain      any increase     any increase         a written explanation AND a perf-audit subagent confirming it matches the stage delta
+      2  audit        > 5%             > 10%                the subagent independently finds the increase NECESSARY, COMMENSURATE with the functionality gained, and with NO GOOD WAY AROUND IT
+      3  GM sign-off  > 10%            > 20%                the GM personally, at a terminal, BEFORE the work is committed back to main
 
-  One figure cannot be both the point where you start thinking and the point where
-  you must stop, and until 2026-08-24 it was doing both jobs badly - too strict at
-  the bottom, where 5% on one seed is inside the noise of a loaded machine, and
-  absent at the top, where a seed could double and the rule was satisfied by
-  writing down that it doubled.
-
-  **Why the AGGREGATE is what gets capped in this engine.** A feature that reorders
-  stages changes what every seed is DOING - the maps are genuinely different
-  afterwards - so one seed's before-and-after is not the same work measured twice,
-  while the total still answers the question the bookends exist for. The known cost,
-  accepted rather than overlooked: one pathological seed can hide inside a good
-  average. It still prints and still owes a written diagnosis. A 50% per-seed
-  ceiling was priced alongside the cap and declined, as the second axis to tune
-  rather than the first; 25% was priced as the cap and the GM chose 10%, told that
-  it will fire on ordinary work.
+  - A band fires when EITHER measurement crosses its line; each rung keeps
+    everything below it. Feature 128's pair - total -29.9%, seed 47 +30.7% -
+    is band 3: faster overall, and still the GM's to sign off.
+  - **Each ENVIRONMENT is judged against its own history** - local against
+    local, CodeBuild against CodeBuild - and a feature satisfies every
+    environment it runs in. A cross-environment comparison is REFUSED, never
+    displayed: on machines of different sizes the percentage is
+    indistinguishable from a regression. Every snapshot records its
+    environment explicitly; nothing infers it from a CPU count.
+  - Explained means what CAUSED the change, in the session's words; the
+    tooling pre-populates the delta and the per-stage breakdown so nothing is
+    retyped, and a machine-written line is noticed, not explained. The
+    measured per-seed noise floor (1.7% on this laptop) may be CITED in an
+    explanation; it is never a bar below which nothing is owed.
+  - The records - explanation, confirmation, audit, sign-off - are one file
+    per event in `dev/perf-log/`, bound to the end snapshot's commit and exact
+    percentages (a stale one is refused by name), carrying who granted them. A
+    negative or inconclusive verdict never lets the work proceed.
+  - Nothing distinguishes a subagent's shell from the session's (measured,
+    feature 129 research R1), so the confirm/audit commands PROMPT and decline
+    unless the caller declares `AS=perf-audit`; the `perf-audit` agent is the
+    only one that does, and the main session launches it rather than writing
+    the record itself. The gate PRINTS what a delta owes (`make done`); the
+    PUSH enforces it (`make perf-review` in `sync-with-main.sh`).
+  - Evidence is tiered: the per-stage delta every snapshot already carries
+    (free, always) answers which stage grew; `make perf-profile` (cProfile of
+    one stage of one seed, +225% on that stage - measured) answers which
+    function, only when the stage delta cannot. Raw profiles stay out of this
+    repository; the derived table (kilobytes) is committed and stands alone.
 
   Calibration: feature 126, the incident that created these bookends, was +51%
-  total and +146% on its worst seed. It fails the cap five times over.
+  total and +146% on its worst seed - band 3 five times over.
 
   - **Seeds, not one map.** The reference hamlet is rolled across a fixed seed
     set, because a single seed can be pathologically good as easily as bad.
@@ -1508,4 +1530,4 @@ document wins; where this document is silent, defer to the project's
 guidance. This constitution is the higher-level authority; CLAUDE.md
 operationalizes it.
 
-**Version**: 2.0.0 | **Ratified**: 2026-05-27 | **Last Amended**: 2026-08-25
+**Version**: 2.1.0 | **Ratified**: 2026-05-27 | **Last Amended**: 2026-08-25

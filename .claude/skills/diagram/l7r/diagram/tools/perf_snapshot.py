@@ -44,6 +44,7 @@ import subprocess
 import sys
 import time
 from contextlib import redirect_stdout
+from typing import Any
 
 # THE CAP ON THE AGGREGATE, above which a slowdown stops being a thing to explain and becomes a
 # Principle XIII regression (fix, revert, or an explicit GM waiver). The GM set it at 10% on
@@ -54,7 +55,7 @@ from contextlib import redirect_stdout
 # the point where you start thinking and the point where you must stop, and until now it was doing
 # both jobs badly: too strict at the bottom (5% on one seed is inside the noise of a loaded machine)
 # and absent at the top (a seed could double and the rule was satisfied by writing that down).
-TOTAL_SLOWDOWN_CAP_PCT = 10.0
+TOTAL_SLOWDOWN_CAP_PCT = 10.0  # since feature 129 this is band 3's TOTAL line (GM sign-off), no longer a merge-blocking cap; perf_bands.py holds the matrix
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 SKILL = os.path.dirname(os.path.dirname(os.path.dirname(HERE)))
@@ -66,7 +67,7 @@ LOG_DIR = os.path.join(SKILL, "dev", "perf-log")
 # THE REFERENCE HAMLET. Inashiro's own spec, held fixed so snapshots stay comparable across months.
 # Changing any of this invalidates the trend, so do not tune it to make a number look better - add a
 # second reference instead, and say in its docstring what it is for.
-REFERENCE = {"name": "Inashiro", "households": 15, "down_deg": 90, "water_sink": "pond"}
+REFERENCE: dict[str, Any] = {"name": "Inashiro", "households": 15, "down_deg": 90, "water_sink": "pond"}
 
 # FOUR SEEDS, CHOSEN TO SPREAD ACROSS THE ROLLED KNOBS rather than to be fast. Seed 4 is Inashiro's
 # own; 25 and 47 were the two slowest seeds found when this tool was written (160s and 86s), and 39
@@ -95,15 +96,15 @@ def _where() -> str:
     return os.path.basename(top) if top else "unknown"
 
 
-def measure(seeds: tuple[int, ...]) -> list[dict[str, object]]:
+def measure(seeds: tuple[int, ...]) -> list[dict[str, Any]]:
     """Roll the reference hamlet on each seed, timing every stage."""
     from l7r.diagram.hamletgen import HamletSpec, plan_site
     from l7r.diagram.hamletgen.driver import STAGES
     from l7r.diagram.settlement import Settlement
 
-    rows: list[dict[str, object]] = []
+    rows: list[dict[str, Any]] = []
     for seed in seeds:
-        plan = plan_site(HamletSpec(seed=seed, **REFERENCE))  # type: ignore[arg-type]
+        plan = plan_site(HamletSpec(seed=seed, **REFERENCE))
         s = Settlement(W=plan.W, H=plan.H, seed=plan.spec.seed)
         s._avoid_seats = []  # type: ignore[attr-defined]
         stages: dict[str, float] = {}
@@ -137,21 +138,23 @@ def machine_identity() -> dict[str, str]:
     change of compute type or image is a different machine and refuses to pair - which is the point:
     laptop and build numbers were never comparable, and pretending otherwise is how feature 126
     shipped a +51% slowdown unnoticed."""
+    # `environment` is the FIRST-CLASS field (feature 129, FR-013): recorded here, never inferred from
+    # cpus/machine/host, which describe a machine rather than saying where a run happened.
     if os.environ.get("CODEBUILD_BUILD_ID"):
-        return {"host": f"codebuild:{os.environ.get('COMPUTE_TYPE', 'unknown')}", "image": os.environ.get("CODEBUILD_BUILD_IMAGE", "unknown"), "hostname": platform.node()}
-    return {"host": "laptop", "image": "laptop", "hostname": platform.node()}
+        return {"environment": "codebuild", "host": f"codebuild:{os.environ.get('COMPUTE_TYPE', 'unknown')}", "image": os.environ.get("CODEBUILD_BUILD_IMAGE", "unknown"), "hostname": platform.node()}
+    return {"environment": "local", "host": "laptop", "image": "laptop", "hostname": platform.node()}
 
 
-def identity_of(snap: dict[str, object]) -> tuple[str, str]:
-    """Snapshots older than feature 130 carry no identity; every one of them was taken on the laptop."""
-    return (str(snap.get("host", "laptop")), str(snap.get("image", "laptop")))
+def identity_of(snap: dict[str, Any]) -> tuple[str, str, str]:
+    """(environment, host, image). Snapshots older than features 129/130 carry neither field; every one of them was local, on the laptop."""
+    return (str(snap.get("environment") or "local"), str(snap.get("host", "laptop")), str(snap.get("image", "laptop")))
 
 
 def record(label: str, seeds: tuple[int, ...]) -> str:
     os.makedirs(LOG_DIR, exist_ok=True)
     print(f"reference hamlet ({REFERENCE['name']} spec) across seeds {list(seeds)}:", flush=True)
     rows = measure(seeds)
-    totals = [float(r["seconds"]) for r in rows]  # type: ignore[arg-type]
+    totals = [float(r["seconds"]) for r in rows]
     stamp = time.strftime("%Y%m%dT%H%M%SZ", time.gmtime())
     clone = _where()
     snap = {
@@ -179,7 +182,7 @@ def record(label: str, seeds: tuple[int, ...]) -> str:
     return path
 
 
-def _load() -> list[dict[str, object]]:
+def _load() -> list[dict[str, Any]]:
     if not os.path.isdir(LOG_DIR):
         return []
     out = []
@@ -198,7 +201,7 @@ def report(against: str | None) -> int:
     print(f"{'utc':<18}{'label':<18}{'commit':<10}{'total':>8}{'median':>8}{'worst':>8}  machine")
     for s in snaps:
         print(
-            f"{str(s['utc']):<18}{str(s['label'])[:17]:<18}{str(s['commit']):<10}{float(s['total_seconds']):>7.1f}s{float(s['median_seconds']):>7.1f}s{float(s['worst_seconds']):>7.1f}s  {identity_of(s)[0]}"
+            f"{str(s['utc']):<18}{str(s['label'])[:17]:<18}{str(s['commit']):<10}{float(s['total_seconds']):>7.1f}s{float(s['median_seconds']):>7.1f}s{float(s['worst_seconds']):>7.1f}s  {identity_of(s)[0]}/{identity_of(s)[1]}"
         )
 
     base = None
@@ -231,27 +234,38 @@ def report(against: str | None) -> int:
     # ONLY THE SAME MACHINE CLASS PAIRS (FR-029). A laptop `-start` against a build `-end` is a
     # meaningless number, and a meaningless number that prints looks like an answer.
     if identity_of(cur) != identity_of(base):
-        print(f"\nREFUSED: {cur['label']} was taken on {identity_of(cur)} and {base['label']} on {identity_of(base)} - snapshots pair only within one machine class.")
-        print("A FULL build takes BOTH bookends itself (the -start on the pre-merge main); a laptop pair needs a laptop -start.")
+        print(
+            f"\nREFUSED: {cur['label']} is a {identity_of(cur)[0]} snapshot ({identity_of(cur)[1]}, {identity_of(cur)[2]}) and {base['label']} is {identity_of(base)[0]} ({identity_of(base)[1]}, {identity_of(base)[2]}) - the bands are evaluated PER ENVIRONMENT, and a cross-environment percentage is indistinguishable from a regression (feature 129, FR-014)."
+        )
+        print("A FULL build takes BOTH bookends itself (the -start on the pre-merge main); a local pair needs a local -start.")
         return 1
     print(f"\n{cur['label']} vs {base['label']}:")
     bad = 0
     was_total = now_total = 0.0
-    by_seed = {int(r["seed"]): r for r in base["rows"]}  # type: ignore[index,call-overload]
-    for r in cur["rows"]:  # type: ignore[union-attr]
-        b = by_seed.get(int(r["seed"]))  # type: ignore[index,call-overload]
+    by_seed: dict[int, dict[str, Any]] = {int(r["seed"]): r for r in base["rows"]}
+    for r in cur["rows"]:
+        b = by_seed.get(int(r["seed"]))
         if not b:
             continue
-        was, now = float(b["seconds"]), float(r["seconds"])  # type: ignore[index,arg-type]
+        was, now = float(b["seconds"]), float(r["seconds"])
         was_total, now_total = was_total + was, now_total + now
         pct = (now - was) / was * 100.0 if was else 0.0
         # 5% IS THE PROJECT'S OWN THRESHOLD for a whole-process speedup mattering; the same figure is
         # used here in the other direction, so a slowdown is called out at the size a speedup counts.
         flag = "  <-- SLOWER" if pct > 5.0 else ("  faster" if pct < -5.0 else "")
         bad += 1 if pct > 5.0 else 0
-        print(f"  seed {int(r['seed']):>3}  {was:>6.1f}s -> {now:>6.1f}s  {pct:+6.1f}%{flag}")  # type: ignore[index,call-overload]
+        print(f"  seed {int(r['seed']):>3}  {was:>6.1f}s -> {now:>6.1f}s  {pct:+6.1f}%{flag}")
     total_pct = (now_total - was_total) / was_total * 100.0 if was_total else 0.0
     print(f"\n  TOTAL     {was_total:>6.1f}s -> {now_total:>6.1f}s  {total_pct:+6.1f}%")
+    # THE GM'S THREE BANDS (feature 129, 2026-08-24) decide what this pair OWES; they are enforced at
+    # the PUSH by perf_review --check, and printed here and at the gate (FR-009b) so nothing is
+    # surprised. The two-band rule below (5% diagnose / 10% cap) is superseded: the diagnose line
+    # still prints as advice, and the 10% exit is gone - "there is no ceiling ... so long as the
+    # subagent reviewer agrees", with the GM's own sign-off above 10% total / 20% per seed.
+    from l7r.diagram.tools import perf_bands
+
+    print()
+    print(perf_bands.render(perf_bands.evaluate(base, cur)))
     if bad:
         print(f"\n{bad} seed(s) more than 5% slower - DIAGNOSE each in writing (constitution VI).")
         print("Diagnosed means explained and either fixed or accepted with the number, not noticed.")
@@ -273,10 +287,6 @@ def report(against: str | None) -> int:
     # average. The per-seed line still prints and still owes a written diagnosis, so a seed that
     # doubles is visible - it just does not stop the merge alone. A 50% per-seed ceiling was priced
     # alongside this and declined, as the second axis to tune rather than the first.
-    if total_pct > TOTAL_SLOWDOWN_CAP_PCT:
-        print(f"\nTOTAL is {total_pct:+.1f}%, over the {TOTAL_SLOWDOWN_CAP_PCT:.0f}% cap - that is a REGRESSION")
-        print("(constitution XIII): fix it, revert it, or get an explicit GM waiver for this number.")
-        return 1
     return 0
 
 

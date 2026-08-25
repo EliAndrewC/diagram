@@ -202,6 +202,8 @@ OPERATIONS: dict[str, tuple[str, str]] = {
     "l7r.diagram.tools.cohort_audit": ("cohort", "expensive"),
     "l7r.diagram.tools.mapcheck": ("tripwire", "expensive"),
     "l7r.diagram.tools.perf_snapshot": ("perf", "expensive"),
+    "l7r.diagram.tools.perf_review": ("perf-review", "cheap"),  # feature 129: the review records and the push-time check
+    "l7r.diagram.tools.perf_profile": ("perf-profile", "expensive"),  # feature 129: tier 2 - cProfile of one stage of one seed
     "l7r.diagram.tools.cache_audit": ("cache-audit", "expensive"),
     "l7r.diagram.tools.make_regressions": ("regressions", "expensive"),
     "l7r.diagram.tools.placement_stages": ("placement-stages", "expensive"),

@@ -177,6 +177,12 @@ push_cmd() {
   # were constitutional and unenforced, and both had already been skipped in practice. Checked here
   # because this is the moment work becomes everyone else's problem.
   "$(dirname "$0")/review-gate.sh" || exit 1
+  # THE PERFORMANCE BANDS ARE ENFORCED HERE (feature 129, FR-001/FR-002/FR-009): the GM's words for
+  # band 3 are "before it is committed back to main", so the push - not the gate - is where a
+  # missing explanation, confirmation, audit or sign-off stops the work. `make perf-review` names
+  # exactly which record is owed. CI_PERF_REVIEW is the test seam (a fixture has no skill).
+  if [ -n "${CI_PERF_REVIEW:-}" ]; then bash -c "$CI_PERF_REVIEW"; elif [ -f "$ROOT/$SKILL_DIR/Makefile" ]; then ( cd "$ROOT/$SKILL_DIR" && make --no-print-directory perf-review ); else true; fi \
+    || die "the performance bands owe a record (above) - the work stays in this clone until it exists (feature 129)"
   # TWO ROUTES TO MAIN, CHOSEN BY THE DELTA, NEVER BY THE SESSION (feature 130, FR-002). The delta
   # is inspected against the LATEST GitHub main (fetched above). DIRECT: no diagram engine code in
   # our own commits - today's locked pull+push, free. GATED: engine code - `make ci-merge` runs the

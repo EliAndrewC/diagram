@@ -40,14 +40,14 @@ def logdir(tmp_path: Any, monkeypatch: pytest.MonkeyPatch) -> Any:
     return tmp_path
 
 
-def test_the_cap_FIRES_on_an_aggregate_slowdown(logdir: Any, capsys: pytest.CaptureFixture[str]) -> None:
-    """Over the cap is a REGRESSION, and the report must exit nonzero so a merge can be blocked."""
+def test_a_20_percent_total_is_band_3_and_the_report_says_who_it_needs(logdir: Any, capsys: pytest.CaptureFixture[str]) -> None:
+    """Feature 129 superseded the 10% CAP: the report exits 0 and PRINTS the band (FR-009b); the push enforces it."""
     _snap(logdir, "900-start", {1: 100.0, 2: 100.0}, "20260824T000000Z")
     _snap(logdir, "900-end", {1: 120.0, 2: 120.0}, "20260824T010000Z")
-    assert ps.report("900-start") == 1
+    assert ps.report("900-start") == 0
     out = capsys.readouterr().out
-    assert "REGRESSION" in out
-    assert "+20.0%" in out
+    assert "REGRESSION" not in out and "+20.0%" in out
+    assert "band 3" in out and "total +20.0% > 10%" in out and "GM" in out
 
 
 def test_the_cap_STAYS_QUIET_when_the_aggregate_improves_even_with_a_slower_seed(logdir: Any, capsys: pytest.CaptureFixture[str]) -> None:
@@ -62,6 +62,7 @@ def test_the_cap_STAYS_QUIET_when_the_aggregate_improves_even_with_a_slower_seed
     assert "DIAGNOSE" in out, "a seed over 5% must still be called out"
     assert "REGRESSION" not in out
     assert "-29.9%" in out
+    assert "band 3" in out and "seed 47 +30.7% > 20%" in out, "SC-002b: faster overall, but seed 47 needs the GM"
 
 
 def test_a_seed_inside_the_noise_band_is_not_even_mentioned(logdir: Any, capsys: pytest.CaptureFixture[str]) -> None:
@@ -75,5 +76,5 @@ def test_a_seed_inside_the_noise_band_is_not_even_mentioned(logdir: Any, capsys:
 
 
 def test_the_cap_is_the_number_the_GM_set() -> None:
-    """Pinned so a later session cannot drift it without the test saying so out loud."""
+    """Pinned so a later session cannot drift it without the test saying so out loud - since feature 129 it is band 3's TOTAL line."""
     assert ps.TOTAL_SLOWDOWN_CAP_PCT == 10.0

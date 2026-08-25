@@ -67,7 +67,7 @@ Reference directories hold organized source material and context. Each directory
 
 ## Development Workflow
 
-This project uses spec-driven development governed by [`.specify/memory/constitution.md`](.specify/memory/constitution.md) (v2.0.0 since 2026-08-25 - this repository's edition; 18 numbered principles, I and II not applicable here, 11 NON-NEGOTIABLE). The constitution is the higher-level authority; this CLAUDE.md operationalizes it.
+This project uses spec-driven development governed by [`.specify/memory/constitution.md`](.specify/memory/constitution.md) (v2.1.0 since 2026-08-25 - this repository's edition; 18 numbered principles, I and II not applicable here, 11 NON-NEGOTIABLE). The constitution is the higher-level authority; this CLAUDE.md operationalizes it.
 
 **When to use spec-kit:**
 
@@ -227,6 +227,7 @@ Package-specific timings and skill-specific lessons live in that skill's dev-loo
 | nothing is pushed that a green gate did not see (XIII): engine Python needs a green `make done`, a guard script (`scripts/*.sh`, `scripts/*.py`) a green `make hooks-test` | [`scripts/gate-stamp.py`](scripts/gate-stamp.py), stamped by each gate on success and checked by `sync-with-main.sh` at PUSH time; `scripts/test-gate-stamp.sh` proves both refusals. Added 2026-08-25 after a red `hooks-test` chained with `;` landed on main - the stamp only covered engine Python |
 | both perf bookends exist; a seed >5% slower must be DIAGNOSED and a total >10% BLOCKS as a regression (VI) | `make perf-gate`, a phase of `make done FULL=1`; the two bands are in `tools/perf_snapshot.py` with `tests/tools/test_perf_snapshot.py` proving each fires |
 | no `-k` subset before the gate; no branches; no polling; batching | the pre-existing `gate`/`no-branch`/`no-poll`/`batching` hooks |
+| a performance increase owes its records before the push (feature 129): any increase on the total or any seed, per environment, needs a written explanation + a `perf-audit` confirmation; >5% total / >10% seed the escalated audit; >10% / >20% the GM's sign-off at a terminal | [`l7r/diagram/tools/perf_review.py`](.claude/skills/diagram/l7r/diagram/tools/perf_review.py) `--check`, run by `sync-with-main.sh` at PUSH time (`make perf-review`), printed by `make done` (`perf-gate`); `tests/tools/test_perf_bands.py` + `test_perf_review.py`; the main session cannot write the records - the commands prompt and decline without `AS=perf-audit` (research R1: nothing else distinguishes the shells) |
 | a paid CodeBuild run starts only when five conditions pass (engine delta; complete feature on a merge; green local check against this code; no verified record; breaker up), and never after a red gate without a green local target (feature 130) | [`l7r/diagram/ci/`](.claude/skills/diagram/l7r/diagram/ci/CLAUDE.md), `tests/ci/` (99 cases against recorded AWS responses); the route is decided by `sync-with-main.sh` push, tested by `scripts/test-sync-with-main.sh`; the mirror refresh by the same; the build-side FULL door by `tests/ci/test_door.py` |
 
 **Deliberately NOT enforced**, because a guard that fires on correct work teaches a session to bypass

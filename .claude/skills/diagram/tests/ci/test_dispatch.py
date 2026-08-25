@@ -41,6 +41,8 @@ def ctx(repo: Path, mode: str = CHECK, client: FakeClient | None = None, sh: Scr
 def engine_delta_with_green(repo: Path, feature: bool = True, monkeypatch: pytest.MonkeyPatch | None = None) -> None:
     commit(repo, S + "l7r/diagram/m.py", "x = 2\n", "engine work")
     state.write(repo, state.GREEN, "quick")
+    if monkeypatch is not None:
+        monkeypatch.delenv("SPECIFY_FEATURE", raising=False)  # a CodeBuild run exports it (build a6e2afe6 failed this suite on exactly that)
     if feature and monkeypatch is not None:
         d = repo / "specs" / "130-x"
         d.mkdir(parents=True)
@@ -135,8 +137,8 @@ def test_the_breaker_is_reported_with_the_detach_instruction(repo: Path) -> None
 # ---- the happy path, and the parked-build abort ----------------------------------------------------
 
 
-def test_check_dispatches_exactly_one_build_and_records_it(repo: Path) -> None:
-    engine_delta_with_green(repo, False)
+def test_check_dispatches_exactly_one_build_and_records_it(repo: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    engine_delta_with_green(repo, False, monkeypatch)
     client = FakeClient(artifacts={})
     c, lines = ctx(repo, client=client)
     out = dispatch.run(c)

@@ -7,7 +7,29 @@
 .PHONY: done lint format typecheck test test-full guard perf perf-report maps reference bypass-audit quick durations test-file audit perf-gate hooks-test explain \
 	 map cohort tripwire hamlet cache-audit regressions placement-stages pool-index compound render-sync \
 	 gate-manifest why-placed site-justice crop jogs pack-audit scatter-audit timings citybudget help \
-	 ci-status ci-check ci-merge ci-image commit-permitted
+	 ci-status ci-check ci-merge ci-image commit-permitted \
+	 perf-explain perf-confirm perf-audit perf-signoff perf-review perf-profile
+
+# ---- THE PERFORMANCE BANDS (feature 129 - GUARD_EDIT_OK: adding the review-record operations) ----
+# Any increase (total OR any seed, per ENVIRONMENT) owes a written explanation and a perf-audit
+# subagent's confirmation; >5% total / >10% seed owes the escalated audit; >10% / >20% owes the GM's
+# personal sign-off before the push. `perf-report` and `perf-gate` PRINT the verdict (FR-009b);
+# `perf-review` (run by sync-with-main.sh at the push) ENFORCES it. A subagent's shell is not
+# distinguishable from the session's (research R1), so confirm/audit PROMPT and decline without
+# AS=perf-audit - the declaration is recorded, and the record's content is what a self-grant fakes.
+PERF_REVIEW = python3 -m l7r.diagram.tools.perf_review
+perf-explain:   ## band 1, first half: the session's written cause     WHY="..." [ENV=local|codebuild]
+	@$(PERF_REVIEW) explain --why "$(WHY)" --environment "$(or $(ENV),local)"
+perf-confirm:   ## band 1, second half - the perf-audit SUBAGENT runs this   VERDICT=consistent|inconsistent AS=perf-audit
+	@$(PERF_REVIEW) confirm --verdict "$(VERDICT)" --note "$(NOTE)" --as "$(or $(AS),main)" --environment "$(or $(ENV),local)"
+perf-audit:     ## band 2 - the subagent adjudicates   VERDICT=justified|not-justified|cannot-determine NECESSARY= COMMENSURATE= NO_WAY_AROUND= AS=perf-audit
+	@$(PERF_REVIEW) audit --verdict "$(VERDICT)" --necessary "$(NECESSARY)" --commensurate "$(COMMENSURATE)" --no-way-around "$(NO_WAY_AROUND)" --note "$(NOTE)" --as "$(or $(AS),main)" --environment "$(or $(ENV),local)"
+perf-signoff:   ## band 3 - the GM, at a terminal   WHY="..."
+	@$(PERF_REVIEW) signoff --why "$(WHY)" --as GM --environment "$(or $(ENV),local)"
+perf-review:    ## does every environment's newest bookend pair carry the records its band owes? (the push runs this)
+	@$(PERF_REVIEW) check
+perf-profile:   ## tier 2 evidence: cProfile ONE stage of ONE seed   SEED=25 STAGE=web
+	$(RUN).tools.perf_profile --seed "$(SEED)" --stage "$(STAGE)"
 
 # THE VERIFICATION STATE (feature 130, FR-012 - GUARD_EDIT_OK: adding the CodeBuild gate). Every
 # local target that proves something records it in .git/verification-state.json with the content

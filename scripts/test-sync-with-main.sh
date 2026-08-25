@@ -108,5 +108,14 @@ OUT=$(cd "$D/build" && { git push origin HEAD:main 2>&1 || echo "main moved; re-
 expect_out "main moved; re-run"
 [ "$(git -C "$D/github.git" log -1 --format=%s main)" = "landed in between" ] && PASS=$((PASS+1)) || { echo "FAIL  something landed over the in-between commit"; FAIL=$((FAIL+1)); }
 
+echo "10. the performance bands are enforced at the push (feature 129): a refused review stops it, a passing one does not"
+D=$(topology j)
+( cd "$D/main/.clones/c" && echo docs > note.md && git add -A && git commit -qm docs )
+gh_before=$(git -C "$D/github.git" rev-parse main)
+OUT=$(CI_ROUTE=DIRECT CI_PERF_REVIEW="echo 'perf-review: [local] band 3 - MISSING: the GM sign-off'; false" ritual "$D" push); check "IT FIRES: a refused perf-review stops the push" 1 $?
+expect_out "performance bands owe a record"
+[ "$(git -C "$D/github.git" rev-parse main)" = "$gh_before" ] && PASS=$((PASS+1)) || { echo "FAIL  the push landed despite the refused review"; FAIL=$((FAIL+1)); }
+OUT=$(CI_ROUTE=DIRECT CI_PERF_REVIEW="echo 'perf-review: nothing owed'" ritual "$D" push); check "STAYS QUIET: a passing perf-review pushes" 0 $?
+
 echo "-----"
 if [ "$FAIL" -eq 0 ]; then echo "all sync-with-main tests passed ($PASS checks)"; exit 0; else echo "SOME TESTS FAILED ($FAIL)"; exit 1; fi

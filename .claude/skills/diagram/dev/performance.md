@@ -152,3 +152,32 @@ Two rules, and the second is the one that is easy to half-do:
 `test_matrix_survives_geometry_far_off_the_canvas` in `tests/check_village/` is the guard, timed rather
 than structural on purpose: the failure mode is unbounded work, and the correct-vs-broken margin is
 a fraction of a second against effectively forever.
+
+## The three bands, and who answers for an increase (feature 129, 2026-08-25)
+
+The GM's matrix, evaluated on BOTH measurements and PER ENVIRONMENT (local against local history,
+CodeBuild against CodeBuild - a cross-environment pair is REFUSED, never displayed):
+
+    band            TOTAL          ANY SEED     what it takes
+    1  explain      > 0%           > 0%         `make perf-explain WHY=...` (yours) + `make perf-confirm ... AS=perf-audit` (the subagent's)
+    2  audit        > 5%           > 10%        `make perf-audit VERDICT=justified NECESSARY= COMMENSURATE= NO_WAY_AROUND= AS=perf-audit`
+    3  GM sign-off  > 10%          > 20%        `make perf-signoff WHY=...` - the GM, at a terminal, before the push
+
+`make perf-report` / `make done` PRINT the band and the stages that grew (FR-009b); `make perf-review`
+- run by `sync-with-main.sh` at the push - ENFORCES it. Records are one file per event in
+`dev/perf-log/`, bound to the end snapshot's commit and exact percentages: a stale one is refused by
+name, a negative or inconclusive verdict never counts.
+
+**Why the subagent's commands prompt instead of checking.** Measured 2026-08-25: a subagent's shell
+carries the SAME `CLAUDE_CODE_SESSION_ID`, `CLAUDE_PID` and parent as the main session's - nothing
+distinguishes them. So `perf-confirm`/`perf-audit` print the GM's words ("if you are the main
+session, you should not continue") and decline without `AS=perf-audit`; the declaration is
+recorded, and what a self-grant costs is a false analysis written into a tracked file.
+
+**Evidence is tiered, and tier 1 is free.** Every snapshot already carries a per-stage breakdown;
+the report prints which stage grew and by how much, and that answers most band-1 and band-2
+questions. When it cannot say WHICH FUNCTION, `make perf-profile SEED=n STAGE=s` runs cProfile on
+that one stage of that one seed - measured at +225% on the real generation workload (27.4 s -> 89.0 s
+on seed 4), which is why it is triggered, never always-on. The derived top-25 table (kilobytes) is
+committed; the raw `.prof` stays in the gitignored `dev/perf-raw/` and goes to the profile-archive
+repository once the GM creates it (`PERF_ARCHIVE=<git url>`).

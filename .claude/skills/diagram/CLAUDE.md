@@ -118,6 +118,10 @@ the doc is right - it is where the measurement lives.
 | `make ci-check` | **PAID** (~$0.40 est.) - the iteration check on CodeBuild: lint locally, build parked, reference locally, then `make done` against the merge with the latest main; `FULL=1` (prompts), `TARGET=cohort` etc. | measured in `timings.md` |
 | `make ci-merge` | **PAID** - the push's gated route; called by `sync-with-main.sh`, never by hand | - |
 | `make ci-image` | **PAID** (~$1), prompts - rebuild the build image from `Dockerfile.ci`; the GM's to run | - |
+| `make perf-report AGAINST=<NNN>-start` | the trend, then the **BAND** the newest pair reaches (feature 129): 1 any increase, 2 >5% total / >10% seed, 3 >10% / >20% - per environment, both measurements | ~1 s |
+| `make perf-explain WHY="..."` / `perf-confirm` / `perf-audit` / `perf-signoff` | the review records a band owes; `perf-confirm` and `perf-audit` are the **`perf-audit` subagent's** (they decline without `AS=perf-audit`); `perf-signoff` is the GM's, at a terminal | ~1 s |
+| `make perf-review` | does every environment's newest pair carry the records its band owes? The PUSH runs this | ~1 s |
+| `make perf-profile SEED=25 STAGE=web` | tier-2 evidence: cProfile of ONE stage of ONE seed (+225% on that stage); the derived table is committed, the raw `.prof` is not | ~3x the stage |
 
 **Nothing runs outside make.** A bare interpreter reaching an engine entry point, a bare pytest, or a
 make driven by a foreign makefile is refused before it executes (`scripts/make-only-hooks.sh`), and
@@ -130,6 +134,7 @@ it as the cheap option, because it deselected two FILES and could not see that t
 rolled maps. Marking is `@pytest.mark.rolls_map`, guarded by `tests/test_markers.py`.
 
 
+- **A performance increase is never silently absorbed** (feature 129, constitution VI): `make perf-report` names the band; any increase on any seed or the total - per environment - owes `make perf-explain WHY=...` from you and a confirmation from the **`perf-audit` subagent** (launch it; never pass `AS=perf-audit` yourself); above 5%/10% the subagent's audit; above 10%/20% the GM's sign-off. The push refuses without them.
 - Iterate on the ONE motivating map; run the full test bed exactly **once**, at the end. That final
   sweep is MANDATORY whenever shared engine code changed (`settlement/`, `check_village/`,
   `waterfields/`, a scripted engine).

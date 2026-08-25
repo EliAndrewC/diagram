@@ -30,7 +30,7 @@ def test_a_laptop_start_and_a_build_end_REFUSE_to_pair(logdir: Any, capsys: pyte
     _snap(logdir, "130-end", {1: 50.0}, "20260825T010000Z", host="codebuild:BUILD_GENERAL1_XLARGE", image="ecr/x:latest")
     assert ps.report("130-start") == 1
     out = capsys.readouterr().out
-    assert "REFUSED" in out and "('laptop', 'laptop')" in out and "codebuild:BUILD_GENERAL1_XLARGE" in out
+    assert "REFUSED" in out and "is a local snapshot" in out and "codebuild:BUILD_GENERAL1_XLARGE" in out
 
 
 def test_two_build_snapshots_on_one_image_pair(logdir: Any, capsys: pytest.CaptureFixture[str]) -> None:
@@ -50,4 +50,5 @@ def test_identity_is_a_class_not_a_hostname(monkeypatch: pytest.MonkeyPatch) -> 
     monkeypatch.setenv("CODEBUILD_BUILD_IMAGE", "ecr/x:latest")
     build = ps.machine_identity()
     assert build["host"] == "codebuild:BUILD_GENERAL1_XLARGE" and build["image"] == "ecr/x:latest"
-    assert ps.identity_of({}) == ("laptop", "laptop")
+    assert ps.identity_of({}) == ("local", "laptop", "laptop")
+    assert build["environment"] == "codebuild" and lap["environment"] == "local", "the environment is recorded, never inferred (FR-013)"

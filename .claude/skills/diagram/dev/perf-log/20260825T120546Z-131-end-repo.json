@@ -1,0 +1,125 @@
+{
+  "clone": "repo",
+  "commit": "ae348f5",
+  "cpus": 36,
+  "host": "codebuild:BUILD_GENERAL1_XLARGE",
+  "hostname": "93c4b359d122",
+  "image": "130071571821.dkr.ecr.us-east-1.amazonaws.com/gm-assistant-ci:latest",
+  "label": "131-end",
+  "machine": "x86_64",
+  "median_seconds": 83.6,
+  "reference": {
+    "down_deg": 90,
+    "households": 15,
+    "name": "Inashiro",
+    "water_sink": "pond"
+  },
+  "rows": [
+    {
+      "asked": 15,
+      "form": "nucleated",
+      "houses": 15,
+      "seconds": 28.6,
+      "seed": 4,
+      "shape": "crescent",
+      "stages": {
+        "appurtenances": 0.14,
+        "crossings": 0.27,
+        "field": 3.82,
+        "frame": 0.04,
+        "hinterland": 3.17,
+        "homesteads": 0.45,
+        "notice": 6.31,
+        "seat": 0.03,
+        "sink": 0.01,
+        "track": 4.81,
+        "water_frame": 0.0,
+        "web": 9.21,
+        "windbreak": 0.2,
+        "woodland": 0.15
+      }
+    },
+    {
+      "asked": 15,
+      "form": "nucleated",
+      "houses": 15,
+      "seconds": 88.4,
+      "seed": 25,
+      "shape": "crescent",
+      "stages": {
+        "appurtenances": 0.52,
+        "crossings": 0.16,
+        "field": 4.85,
+        "frame": 0.0,
+        "hinterland": 3.15,
+        "homesteads": 0.9,
+        "notice": 5.39,
+        "seat": 0.04,
+        "sink": 0.01,
+        "track": 3.53,
+        "water_frame": 0.0,
+        "web": 69.56,
+        "windbreak": 0.06,
+        "woodland": 0.2
+      }
+    },
+    {
+      "asked": 15,
+      "form": "nucleated",
+      "houses": 15,
+      "seconds": 78.8,
+      "seed": 39,
+      "shape": "round",
+      "stages": {
+        "appurtenances": 0.73,
+        "crossings": 0.33,
+        "field": 2.83,
+        "frame": 0.0,
+        "hinterland": 3.32,
+        "homesteads": 0.4,
+        "notice": 10.09,
+        "seat": 0.05,
+        "sink": 0.01,
+        "track": 8.4,
+        "water_frame": 0.0,
+        "web": 52.34,
+        "windbreak": 0.23,
+        "woodland": 0.08
+      }
+    },
+    {
+      "asked": 15,
+      "form": "nucleated",
+      "houses": 15,
+      "seconds": 97.2,
+      "seed": 47,
+      "shape": "round",
+      "stages": {
+        "appurtenances": 0.87,
+        "crossings": 0.22,
+        "field": 27.94,
+        "frame": 0.0,
+        "hinterland": 3.09,
+        "homesteads": 0.27,
+        "notice": 8.24,
+        "seat": 0.05,
+        "sink": 0.0,
+        "track": 14.93,
+        "water_frame": 0.0,
+        "web": 41.27,
+        "windbreak": 0.15,
+        "woodland": 0.14
+      }
+    }
+  ],
+  "seeds": [
+    4,
+    25,
+    39,
+    47
+  ],
+  "subject": "chore: authorize FULL sweep - feature 130 T080: the full sweep on the check project, both",
+  "total_seconds": 293.0,
+  "utc": "20260825T120546Z",
+  "worst_seconds": 97.2
+}

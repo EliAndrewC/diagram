@@ -1,0 +1,122 @@
+{
+  "clone": "base131",
+  "commit": "2f37278",
+  "cpus": 36,
+  "label": "131-start",
+  "machine": "x86_64",
+  "median_seconds": 83.0,
+  "reference": {
+    "down_deg": 90,
+    "households": 15,
+    "name": "Inashiro",
+    "water_sink": "pond"
+  },
+  "rows": [
+    {
+      "asked": 15,
+      "form": "nucleated",
+      "houses": 15,
+      "seconds": 28.5,
+      "seed": 4,
+      "shape": "crescent",
+      "stages": {
+        "appurtenances": 0.14,
+        "crossings": 0.27,
+        "field": 3.76,
+        "frame": 0.04,
+        "hinterland": 3.15,
+        "homesteads": 0.45,
+        "notice": 6.3,
+        "seat": 0.03,
+        "sink": 0.01,
+        "track": 4.81,
+        "water_frame": 0.0,
+        "web": 9.17,
+        "windbreak": 0.2,
+        "woodland": 0.15
+      }
+    },
+    {
+      "asked": 15,
+      "form": "nucleated",
+      "houses": 15,
+      "seconds": 87.2,
+      "seed": 25,
+      "shape": "crescent",
+      "stages": {
+        "appurtenances": 0.52,
+        "crossings": 0.16,
+        "field": 4.79,
+        "frame": 0.0,
+        "hinterland": 3.12,
+        "homesteads": 0.9,
+        "notice": 5.38,
+        "seat": 0.04,
+        "sink": 0.01,
+        "track": 3.52,
+        "water_frame": 0.0,
+        "web": 68.49,
+        "windbreak": 0.06,
+        "woodland": 0.2
+      }
+    },
+    {
+      "asked": 15,
+      "form": "nucleated",
+      "houses": 15,
+      "seconds": 78.7,
+      "seed": 39,
+      "shape": "round",
+      "stages": {
+        "appurtenances": 0.72,
+        "crossings": 0.33,
+        "field": 2.79,
+        "frame": 0.0,
+        "hinterland": 3.29,
+        "homesteads": 0.4,
+        "notice": 10.06,
+        "seat": 0.05,
+        "sink": 0.01,
+        "track": 8.41,
+        "water_frame": 0.0,
+        "web": 52.32,
+        "windbreak": 0.23,
+        "woodland": 0.08
+      }
+    },
+    {
+      "asked": 15,
+      "form": "nucleated",
+      "houses": 15,
+      "seconds": 96.4,
+      "seed": 47,
+      "shape": "round",
+      "stages": {
+        "appurtenances": 0.87,
+        "crossings": 0.22,
+        "field": 27.5,
+        "frame": 0.0,
+        "hinterland": 3.07,
+        "homesteads": 0.27,
+        "notice": 8.21,
+        "seat": 0.05,
+        "sink": 0.0,
+        "track": 14.96,
+        "water_frame": 0.0,
+        "web": 40.99,
+        "windbreak": 0.15,
+        "woodland": 0.14
+      }
+    }
+  ],
+  "seeds": [
+    4,
+    25,
+    39,
+    47
+  ],
+  "subject": "feature 131: the diagram repository's first gate matches the gm-assistant baseline - timings, task records",
+  "total_seconds": 290.8,
+  "utc": "20260825T120052Z",
+  "worst_seconds": 96.4
+}
