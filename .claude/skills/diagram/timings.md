@@ -345,3 +345,15 @@ The +1 is `test_main_derives_main_repo_from_this_checkout_when_not_given` (featu
 and `test_crown_fills_covers_every_recorded_crown`, which need pool renders a fresh clone does not
 have (constitution XIII, the 2026-08-24 clause) - they pass once render-sync has run in main.
 Nothing slowed: the wall-clock difference between rows is machine contention, not code.
+
+## 2026-08-25 - feature 130 (CodeBuild merge gate): the local baseline (hand-recorded, not timings.py)
+
+context: this container (22 threads, laptop), python 3.14.4, commit bdc43b97, detached worktree /tmp/base130
+
+| run | tests | test phase | `make done` wall | hooks-test |
+|---|---|---|---|---|
+| **130-start, laptop** (T001/T002, unmodified code) | **3,467 passed** | 224.8 s | **347 s** | 13 suites |
+
+The remote numbers (the same `make done` on CodeBuild `xlarge`, stock image with bootstrap vs the
+custom image; `2xlarge`; provisioning; the parked-start saving) are appended below this block as
+each paid run lands - one row per build, with its build id, so `make audit` and this ledger agree.

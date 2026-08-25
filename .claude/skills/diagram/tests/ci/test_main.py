@@ -71,6 +71,17 @@ def test_check_and_merge_run_the_dispatcher(roots: Path, capsys: pytest.CaptureF
     assert (roots / ".git" / "ci-verdict").read_text(encoding="utf-8").strip() == "REFUSE(feature-complete)"
 
 
+def test_a_cheap_operation_is_refused_as_a_remote_target_and_an_expensive_one_dispatches(roots: Path, capsys: pytest.CaptureFixture[str]) -> None:
+    commit(roots, S + "l7r/diagram/m.py", "x = 2\n")
+    state.write(roots, state.GREEN, "quick")
+    assert cli.main(["check", "--target", "site-justice"]) == 1
+    assert "only an EXPENSIVE operation" in capsys.readouterr().out
+    assert cli.main(["check", "--target", "not-a-target"]) == 1
+    assert cli.main(["check", "--target", "cohort N=48"]) == 0
+    entry = json.loads(next((roots / S / "dev" / "run-log").glob("*.json")).read_text(encoding="utf-8"))
+    assert entry["scope"] == "operation" and entry["reason"] == "cohort N=48"
+
+
 def test_image_and_target_validation(roots: Path) -> None:
     assert cli.main(["image"]) == 0
     with pytest.raises(SystemExit):

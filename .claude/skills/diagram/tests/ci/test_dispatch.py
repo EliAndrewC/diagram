@@ -288,3 +288,15 @@ def test_stream_falls_back_to_the_build_uuid_as_stream_name(repo: Path) -> None:
     c, lines = ctx(repo, client=client)
     build = dispatch.stream(c, "gm-assistant-check:uuid-1")
     assert build["buildStatus"] == "SUCCEEDED" and any(ln.startswith("ci: [") for ln in lines)
+
+
+def test_an_artifact_key_that_vanishes_between_list_and_get_is_skipped(repo: Path) -> None:
+    class Flaky(FakeClient):
+        def get_object(self, bucket: str, key: str) -> bytes | None:
+            return None if key.startswith("artifacts/") else super().get_object(bucket, key)
+
+    engine_delta_with_green(repo, False)
+    fx = json.loads((Path(__file__).parent / "fixtures" / "start_build.json").read_text(encoding="utf-8"))
+    uuid = fx["build"]["id"].split(":")[-1]
+    c, _ = ctx(repo, client=Flaky(artifacts={f"artifacts/{uuid}/report/x.txt": b"x"}))
+    assert dispatch.run(c).rc == 0 and not (repo / S / "dev" / "ci-artifacts").exists()

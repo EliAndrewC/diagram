@@ -55,6 +55,18 @@ def main(argv: list[str] | None = None) -> int:
         print(runlog.remote_spend_report(skill))
         return 0
 
+    if a.target:
+        # ONLY AN EXPENSIVE OPERATION MAY RUN REMOTELY (FR-010, fourth request): the registry decides,
+        # so `cohort` dispatches and a cheap/read-only diagnostic is refused before any AWS call.
+        from l7r.diagram._invocation import OPERATIONS
+
+        costs = {target: cost for _mod, (target, cost) in OPERATIONS.items()}
+        head = a.target.split()[0]
+        if costs.get(head) != "expensive":
+            print(
+                f"ci-check: REFUSED - TARGET={head!r} is {costs.get(head, 'not a registered operation')}; only an EXPENSIVE operation runs remotely (cohort, cache-audit, regressions, ...). Run it locally."
+            )
+            return 1
     ctx = dispatch.Context(root=root, skill=skill, mode=a.command if a.command != "status" else decision.CHECK, scope=scope, operation=a.target)
     if a.command == "status":
         if a.route:

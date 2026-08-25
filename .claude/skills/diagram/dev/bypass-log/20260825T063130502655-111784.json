@@ -1,0 +1,7 @@
+{
+  "utc": "2026-08-25T06:31:30Z",
+  "target": "ci-image",
+  "commit": "42b13533",
+  "outcome": "refused",
+  "why": "ci-image with no terminal"
+}
