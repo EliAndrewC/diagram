@@ -4,7 +4,7 @@
 
 **Created**: 2026-08-25
 
-**Status**: APPROVED by `spec-fidelity` - round 3 verdict **FAITHFUL** (2026-08-25), after rounds 1 and 2 returned changes (see Review history). **AMENDED the same day on the GM's second request** (the local `make done` short-circuits on the same rule as the remote gate: FR-019..FR-023) - amendment: round 1 CHANGES REQUIRED (four, applied), awaiting round 2.
+**Status**: APPROVED by `spec-fidelity` - round 3 verdict **FAITHFUL** (2026-08-25), after rounds 1 and 2 returned changes (see Review history). **AMENDED the same day on the GM's second request** (the local `make done` short-circuits on the same rule as the remote gate: FR-019..FR-023) - amendment APPROVED at round 2 (**FAITHFUL**, 2026-08-25).
 
 **Input**: [`gm-request.md`](gm-request.md), verbatim and unedited. That file is the authority for
 this specification; the session's proposal recorded there is what the GM's *"that sounds like
@@ -345,3 +345,6 @@ to short circuit and skip AWS tests to these 5 minute tests as well for the make
   `.explain.py` and `wip/*.gen.py` - linted by the gate - outside the key; now a rule. (2) FR-019's
   re-stamp made explicit as safe only because the key contains the stamp's areas. (3) `FORCE=`
   removed as unrequested. (4) FR-023 covers the missed case. Applied.
+- **Amendment round 2 (2026-08-25): FAITHFUL.** Reviewer's aside checked: `dev/switches.json` is
+  outside the gate key on purpose - reference-scope `make done` never reads it (only `FULL=1` does,
+  and FULL never short-circuits), so a throw or release cannot change what a reference gate proves.
