@@ -1,0 +1,126 @@
+{
+  "clone": "repo",
+  "commit": "568039c",
+  "cpus": 36,
+  "environment": "codebuild",
+  "host": "codebuild:BUILD_GENERAL1_XLARGE",
+  "hostname": "84c6b5fef28b",
+  "image": "130071571821.dkr.ecr.us-east-1.amazonaws.com/gm-assistant-ci:latest",
+  "label": "129-noise-c",
+  "machine": "x86_64",
+  "median_seconds": 83.3,
+  "reference": {
+    "down_deg": 90,
+    "households": 15,
+    "name": "Inashiro",
+    "water_sink": "pond"
+  },
+  "rows": [
+    {
+      "asked": 15,
+      "form": "nucleated",
+      "houses": 15,
+      "seconds": 28.6,
+      "seed": 4,
+      "shape": "crescent",
+      "stages": {
+        "appurtenances": 0.14,
+        "crossings": 0.28,
+        "field": 3.78,
+        "frame": 0.04,
+        "hinterland": 3.15,
+        "homesteads": 0.46,
+        "notice": 6.33,
+        "seat": 0.03,
+        "sink": 0.01,
+        "track": 4.81,
+        "water_frame": 0.0,
+        "web": 9.18,
+        "windbreak": 0.2,
+        "woodland": 0.15
+      }
+    },
+    {
+      "asked": 15,
+      "form": "nucleated",
+      "houses": 15,
+      "seconds": 88.1,
+      "seed": 25,
+      "shape": "crescent",
+      "stages": {
+        "appurtenances": 0.52,
+        "crossings": 0.16,
+        "field": 4.81,
+        "frame": 0.0,
+        "hinterland": 3.14,
+        "homesteads": 0.91,
+        "notice": 5.39,
+        "seat": 0.04,
+        "sink": 0.01,
+        "track": 3.52,
+        "water_frame": 0.0,
+        "web": 69.29,
+        "windbreak": 0.06,
+        "woodland": 0.2
+      }
+    },
+    {
+      "asked": 15,
+      "form": "nucleated",
+      "houses": 15,
+      "seconds": 78.6,
+      "seed": 39,
+      "shape": "round",
+      "stages": {
+        "appurtenances": 0.73,
+        "crossings": 0.33,
+        "field": 2.8,
+        "frame": 0.0,
+        "hinterland": 3.3,
+        "homesteads": 0.4,
+        "notice": 10.07,
+        "seat": 0.05,
+        "sink": 0.01,
+        "track": 8.41,
+        "water_frame": 0.0,
+        "web": 52.2,
+        "windbreak": 0.23,
+        "woodland": 0.08
+      }
+    },
+    {
+      "asked": 15,
+      "form": "nucleated",
+      "houses": 15,
+      "seconds": 96.5,
+      "seed": 47,
+      "shape": "round",
+      "stages": {
+        "appurtenances": 0.87,
+        "crossings": 0.22,
+        "field": 27.75,
+        "frame": 0.0,
+        "hinterland": 3.07,
+        "homesteads": 0.27,
+        "notice": 8.24,
+        "seat": 0.05,
+        "sink": 0.0,
+        "track": 14.91,
+        "water_frame": 0.0,
+        "web": 40.86,
+        "windbreak": 0.15,
+        "woodland": 0.14
+      }
+    }
+  ],
+  "seeds": [
+    4,
+    25,
+    39,
+    47
+  ],
+  "subject": "feature 129: the trend loader skips review records (found by the perf-audit subagent on the first real confirmation); the band-1 confirmation record",
+  "total_seconds": 291.8,
+  "utc": "20260825T123159Z",
+  "worst_seconds": 96.5
+}

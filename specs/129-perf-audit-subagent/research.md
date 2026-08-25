@@ -58,12 +58,26 @@ triggered profile. **Tier 1 = the stage delta, always, free. Tier 2 = `make perf
 STAGE=s`, triggered, derived top-N table committed (kilobytes), raw `.prof` kept out of this
 repository.**
 
-## R4 - The noise floor on CodeBuild is still to be measured (FR-016)
+## R4 - The noise floor on CodeBuild (FR-016) - MEASURED 2026-08-25, and it matches the laptop's
 
-Local floor (spec, 3 runs at `4ecdced`): 0.7% total, 1.7% per seed. CodeBuild: a task of this feature
-runs `make ci-check TARGET="perf LABEL=129-noise-{a,b,c}"` three times on one unchanged commit;
-snapshots come back as build artifacts into `dev/perf-log/` (feature 130). Recorded in this file
-when taken; a floor materially different from local is a REPORT to the GM, not a re-derived band.
+Three `make ci-check TARGET="perf LABEL=129-noise-{a,b,c}"` runs on one unchanged commit (builds
+8f16f7df, 7fb2f3b6, dc0dc235; `BUILD_GENERAL1_XLARGE`, the custom image), snapshots returned as build
+artifacts:
+
+| seed | run a | run b | run c | spread |
+|---|---|---|---|---|
+| 4 | 28.6 s | 28.8 s | 28.6 s | 0.7% |
+| 25 | 87.1 s | 87.9 s | 88.1 s | 1.1% |
+| 39 | 77.7 s | 78.5 s | 78.6 s | 1.1% |
+| 47 | 96.8 s | 97.2 s | 96.5 s | 0.7% |
+| **TOTAL** | **290.2 s** | **292.4 s** | **291.8 s** | **0.8%** |
+
+**Worst per-seed spread 1.1%; total spread 0.8%** - against the laptop's 1.7% / 0.7%. Not materially
+different: the GM's thresholds (set against 0.7%/1.7%) hold in both environments without
+re-derivation, and both escalation triggers stay 5-7x above their floor there too. CodeBuild is
+~8% slower per seed than the laptop (single-thread speed; the 36 cores do not help one generator),
+which is exactly why a local pair and a CodeBuild pair are never compared (FR-014). Corroborated by
+the two in-build bookends of build a6e2afe6 (290.8 s vs 293.0 s, +0.8%, on identical generator code).
 
 ## R5 - The environment is a first-class field, recorded not inferred (FR-013/FR-014)
 

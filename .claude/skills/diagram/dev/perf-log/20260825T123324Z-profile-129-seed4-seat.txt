@@ -1,0 +1,36 @@
+perf-profile seed 4 stage seat: 0.1s under cProfile (the stages before it took 3.6s unprofiled; cProfile itself is ~+225%, research R2)
+raw: dev/perf-raw/20260825T123324Z-seed4-seat.prof (gitignored; archive: no archive configured - set PERF_ARCHIVE=<git url> once the GM creates the profile repository (FR-011a); the derived table here stands on its own (FR-011b))
+
+         193651 function calls (188026 primitive calls) in 0.076 seconds
+
+   Ordered by: cumulative time
+   List reduced from 32 to 25 due to restriction <25>
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+        1    0.000    0.000    0.078    0.078 /diagram/.clones/diagram-architecture/.claude/skills/diagram/l7r/diagram/hamletgen/ways.py:1717(stage_seat)
+        1    0.001    0.001    0.078    0.078 /diagram/.clones/diagram-architecture/.claude/skills/diagram/l7r/diagram/hamletgen/cluster.py:55(seat_cluster)
+      107    0.008    0.000    0.061    0.001 /diagram/.clones/diagram-architecture/.claude/skills/diagram/l7r/diagram/hamletgen/cluster.py:34(back_fouled)
+    54604    0.020    0.000    0.053    0.000 /diagram/.clones/diagram-architecture/.claude/skills/diagram/l7r/diagram/hamletgen/cluster.py:51(<genexpr>)
+    53042    0.031    0.000    0.036    0.000 /diagram/.clones/diagram-architecture/.claude/skills/diagram/l7r/diagram/settlement/_geom/primitives.py:24(point_in_poly)
+ 5868/243    0.002    0.000    0.013    0.000 {built-in method builtins.min}
+     1050    0.001    0.000    0.011    0.000 /diagram/.clones/diagram-architecture/.claude/skills/diagram/l7r/diagram/hamletgen/cluster.py:168(<genexpr>)
+     4682    0.002    0.000    0.008    0.000 /diagram/.clones/diagram-architecture/.claude/skills/diagram/l7r/diagram/settlement/_geom/primitives.py:46(seg_dist)
+    58151    0.005    0.000    0.005    0.000 {built-in method builtins.len}
+     4747    0.003    0.000    0.005    0.000 /diagram/.clones/diagram-architecture/.claude/skills/diagram/l7r/diagram/settlement/_geom/primitives.py:37(seg_closest)
+      668    0.000    0.000    0.003    0.000 /diagram/.clones/diagram-architecture/.claude/skills/diagram/l7r/diagram/hamletgen/cluster.py:118(<genexpr>)
+       65    0.000    0.000    0.002    0.000 /diagram/.clones/diagram-architecture/.claude/skills/diagram/l7r/diagram/hamletgen/cluster.py:21(below_drain)
+      585    0.000    0.000    0.001    0.000 /diagram/.clones/diagram-architecture/.claude/skills/diagram/l7r/diagram/hamletgen/cluster.py:28(<lambda>)
+     4839    0.001    0.000    0.001    0.000 {built-in method math.hypot}
+     4796    0.001    0.000    0.001    0.000 {built-in method builtins.max}
+      157    0.000    0.000    0.000    0.000 /diagram/.clones/diagram-architecture/.claude/skills/diagram/l7r/diagram/sitegen/geom.py:40(unit)
+        1    0.000    0.000    0.000    0.000 /diagram/.clones/diagram-architecture/.claude/skills/diagram/l7r/diagram/settlement/land/wet.py:162(toe_band)
+        1    0.000    0.000    0.000    0.000 /diagram/.clones/diagram-architecture/.claude/skills/diagram/l7r/diagram/sitegen/geom.py:36(centroid)
+        2    0.000    0.000    0.000    0.000 {built-in method builtins.sum}
+      170    0.000    0.000    0.000    0.000 /diagram/.clones/diagram-architecture/.claude/skills/diagram/l7r/diagram/settlement/land/wet.py:184(<genexpr>)
+        1    0.000    0.000    0.000    0.000 /diagram/.clones/diagram-architecture/.claude/skills/diagram/l7r/diagram/sitegen/geom.py:45(crop_polys)
+        1    0.000    0.000    0.000    0.000 {method 'disable' of '_lsprof.Profiler' objects}
+       74    0.000    0.000    0.000    0.000 /diagram/.clones/diagram-architecture/.claude/skills/diagram/l7r/diagram/sitegen/geom.py:37(<genexpr>)
+        8    0.000    0.000    0.000    0.000 /diagram/.clones/diagram-architecture/.claude/skills/diagram/l7r/diagram/hamletgen/ways.py:1766(<lambda>)
+       12    0.000    0.000    0.000    0.000 {method 'get' of 'dict' objects}
+
+

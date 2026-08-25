@@ -1,0 +1,126 @@
+{
+  "clone": "repo",
+  "commit": "7303684",
+  "cpus": 36,
+  "environment": "codebuild",
+  "host": "codebuild:BUILD_GENERAL1_XLARGE",
+  "hostname": "95e792416b35",
+  "image": "130071571821.dkr.ecr.us-east-1.amazonaws.com/gm-assistant-ci:latest",
+  "label": "129-noise-a",
+  "machine": "x86_64",
+  "median_seconds": 82.4,
+  "reference": {
+    "down_deg": 90,
+    "households": 15,
+    "name": "Inashiro",
+    "water_sink": "pond"
+  },
+  "rows": [
+    {
+      "asked": 15,
+      "form": "nucleated",
+      "houses": 15,
+      "seconds": 28.6,
+      "seed": 4,
+      "shape": "crescent",
+      "stages": {
+        "appurtenances": 0.14,
+        "crossings": 0.28,
+        "field": 3.79,
+        "frame": 0.04,
+        "hinterland": 3.17,
+        "homesteads": 0.46,
+        "notice": 6.36,
+        "seat": 0.03,
+        "sink": 0.01,
+        "track": 4.79,
+        "water_frame": 0.0,
+        "web": 9.19,
+        "windbreak": 0.2,
+        "woodland": 0.15
+      }
+    },
+    {
+      "asked": 15,
+      "form": "nucleated",
+      "houses": 15,
+      "seconds": 87.1,
+      "seed": 25,
+      "shape": "crescent",
+      "stages": {
+        "appurtenances": 0.52,
+        "crossings": 0.16,
+        "field": 4.83,
+        "frame": 0.0,
+        "hinterland": 3.13,
+        "homesteads": 0.92,
+        "notice": 5.44,
+        "seat": 0.04,
+        "sink": 0.01,
+        "track": 3.51,
+        "water_frame": 0.0,
+        "web": 68.26,
+        "windbreak": 0.06,
+        "woodland": 0.2
+      }
+    },
+    {
+      "asked": 15,
+      "form": "nucleated",
+      "houses": 15,
+      "seconds": 77.7,
+      "seed": 39,
+      "shape": "round",
+      "stages": {
+        "appurtenances": 0.72,
+        "crossings": 0.34,
+        "field": 2.82,
+        "frame": 0.0,
+        "hinterland": 3.3,
+        "homesteads": 0.41,
+        "notice": 10.14,
+        "seat": 0.05,
+        "sink": 0.01,
+        "track": 8.33,
+        "water_frame": 0.0,
+        "web": 51.29,
+        "windbreak": 0.23,
+        "woodland": 0.08
+      }
+    },
+    {
+      "asked": 15,
+      "form": "nucleated",
+      "houses": 15,
+      "seconds": 96.8,
+      "seed": 47,
+      "shape": "round",
+      "stages": {
+        "appurtenances": 0.87,
+        "crossings": 0.22,
+        "field": 27.94,
+        "frame": 0.0,
+        "hinterland": 3.07,
+        "homesteads": 0.28,
+        "notice": 8.28,
+        "seat": 0.05,
+        "sink": 0.0,
+        "track": 14.79,
+        "water_frame": 0.0,
+        "web": 40.99,
+        "windbreak": 0.15,
+        "woodland": 0.14
+      }
+    }
+  ],
+  "seeds": [
+    4,
+    25,
+    39,
+    47
+  ],
+  "subject": "feature 129: the 129-end bookend and the session's band-1 explanation",
+  "total_seconds": 290.2,
+  "utc": "20260825T121927Z",
+  "worst_seconds": 96.8
+}
