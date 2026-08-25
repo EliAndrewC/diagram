@@ -4,11 +4,17 @@
     {
       "Sid": "OnlyTheBuildWritesVerifiedRecords",
       "Effect": "Deny",
-      "NotPrincipal": {
-        "AWS": "arn:aws:iam::130071571821:role/gm-assistant-codebuild-role"
-      },
+      "Principal": "*",
       "Action": "s3:PutObject",
-      "Resource": "arn:aws:s3:::gm-assistant-ci-130071571821/verified/*"
+      "Resource": "arn:aws:s3:::gm-assistant-ci-130071571821/verified/*",
+      "Condition": {
+        "StringNotLike": {
+          "aws:PrincipalArn": [
+            "arn:aws:iam::130071571821:role/gm-assistant-codebuild-role",
+            "arn:aws:sts::130071571821:assumed-role/gm-assistant-codebuild-role/*"
+          ]
+        }
+      }
     }
   ]
 }

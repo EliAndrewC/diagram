@@ -90,7 +90,10 @@ if [ -d "$SKILL/dev/ci-report" ]; then aws s3 cp --quiet --recursive "$SKILL/dev
 echo "== record: verified/$tree.json ($CI_SCOPE)"
 printf '{"tree":"%s","build_id":"%s","project":"%s","scope":"%s","utc":"%s","main":"%s","work":"%s","target":"%s"}\n' \
   "$tree" "$CODEBUILD_BUILD_ID" "$MODE" "$CI_SCOPE" "$(date -u +%Y-%m-%dT%H:%M:%SZ)" "$main_sha" "$GIT_SHA" "$MAKE_TARGET" > /tmp/verified.json
-aws s3 cp --quiet /tmp/verified.json "s3://$CI_BUCKET/verified/$tree.json"
+# THE RECORD IS THE SKIP-VERIFIED OPTIMIZATION, NOT THE VERDICT: a merge whose gate passed lands even
+# when the bucket refuses the write (build 347249b6 failed here under a bucket policy whose
+# NotPrincipal did not match the assumed-role session - the policy is now condition-form).
+aws s3 cp --quiet /tmp/verified.json "s3://$CI_BUCKET/verified/$tree.json" || echo "(verified record NOT written - the bucket policy refused this principal; the next merge of this tree will run a build instead of SKIP-VERIFIED)"
 
 if [ "$MODE" = merge ]; then
   echo "== push: HEAD -> main (fast-forward only)"
