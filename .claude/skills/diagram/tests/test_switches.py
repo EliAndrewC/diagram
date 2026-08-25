@@ -218,10 +218,16 @@ def test_make_done_short_circuits_on_an_unchanged_gate_key(fixture_skill: Path) 
     p = make(fixture_skill, "done")
     assert p.returncode == 0 and "already verified" in p.stdout, p.stdout + p.stderr
     assert any(json.loads(f.read_text())["result"] == "already-verified" for f in (fixture_skill / "dev" / "run-log").glob("*.json"))
-    # a gate-shaping edit invalidates the record (there is no flag in either direction - FR-022)
+    # the GM's second amendment: a Makefile / pyproject / scripts edit does NOT owe the gate (there is no flag in either direction - FR-022)
     (fixture_skill / "pyproject.toml").write_text((fixture_skill / "pyproject.toml").read_text() + "\n# edited\n")
-    assert not state.already_verified(root)[0]
+    (fixture_skill / "Makefile").write_text((fixture_skill / "Makefile").read_text() + "\n# edited\n")
+    (root / "scripts" / "x-hooks.sh").write_text("echo guard\n")
+    p = make(fixture_skill, "done")
+    assert p.returncode == 0 and "already verified" in p.stdout, p.stdout + p.stderr
     assert "$(FORCE)" not in (SKILL / "Makefile").read_text()
+    # a .py under the skill (even outside l7r/) DOES: the decision says so
+    (fixture_skill / ".explain.py").write_text("x = 1\n")
+    assert not state.already_verified(root)[0]
     # FULL never short-circuits (here it is refused for lack of a terminal, before any prompt - the point is it never said "already verified")
     p = make(fixture_skill, "done", "FULL=1")
     assert "already verified" not in p.stdout

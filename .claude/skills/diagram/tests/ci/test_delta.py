@@ -119,44 +119,22 @@ def test_the_worktree_key_equals_the_tree_key_for_the_same_content(repo: Path) -
     assert engine_key_worktree(repo) != k_wt
 
 
-# ---- the GATE key (feature 132 amendment): the engine key plus what shapes the gate --------------
+# ---- the short-circuit key IS the remote key (feature 132, second amendment) ---------------------
 
 
-@pytest.mark.parametrize(
-    "path",
-    [
-        S + "Makefile",
-        S + "pyproject.toml",
-        S + "requirements.txt",
-        S + "requirements-dev.in",
-        "scripts/gate-stamp.py",
-        "scripts/x-hooks.sh",
-        S + "l7r/diagram/m.py",
-        S + "tests/test_x.py",
-        S + ".explain.py",
-        S + "wip/shiro-daika.gen.py",
-    ],
-)
-def test_gate_kinds_are_gate(path: str) -> None:
-    from l7r.diagram.ci.delta import is_gate
-
-    assert is_gate(path)
+@pytest.mark.parametrize("path", [S + "Makefile", S + "pyproject.toml", S + "requirements.txt", S + "requirements-dev.in", "scripts/gate-stamp.py", "scripts/x-hooks.sh", S + "dev/switches.json"])
+def test_config_scripts_and_settings_are_not_engine(path: str) -> None:
+    """The GM's second amendment: a Makefile, config or scripts/ change does not owe `make done` - the
+    engine key does not move, exactly as it does not move for the remote gate."""
+    assert not is_engine(path)
 
 
-@pytest.mark.parametrize("path", ["docs/x.md", "CLAUDE.md", S + "dev/switches.md", S + "dev/switches.json", S + "pool/hamlets/x.notes.md", "specs/132-x/spec.md", S + "SKILL.md"])
-def test_docs_and_settings_are_not_gate(path: str) -> None:
-    from l7r.diagram.ci.delta import is_gate
-
-    assert not is_gate(path)
-
-
-def test_the_gate_key_moves_with_the_makefile_but_not_with_docs(repo: Path) -> None:
-    from l7r.diagram.ci.delta import gate_key_worktree
-
-    k0 = gate_key_worktree(repo)
+def test_the_worktree_key_ignores_the_makefile_and_docs(repo: Path) -> None:
+    k0 = engine_key_worktree(repo)
     (repo / "docs").mkdir(exist_ok=True)
     (repo / "docs" / "x.md").write_text("docs\n")
-    assert gate_key_worktree(repo) == k0
     (repo / S / "Makefile").write_text("all:\n\t@true\n")
-    k1 = gate_key_worktree(repo)
-    assert k1 != k0 and engine_key_worktree(repo) == engine_key(repo, "HEAD")  # the ENGINE key did not move: the Makefile is gate-only
+    assert engine_key_worktree(repo) == k0
+    (repo / S / "tests").mkdir(exist_ok=True)
+    (repo / S / "tests" / "test_new.py").write_text("def test_x(): pass\n")
+    assert engine_key_worktree(repo) != k0, "a test is engine content"

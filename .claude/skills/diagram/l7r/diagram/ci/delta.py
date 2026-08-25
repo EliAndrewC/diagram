@@ -18,7 +18,6 @@ from __future__ import annotations
 
 import hashlib
 import subprocess
-from collections.abc import Callable
 from dataclasses import dataclass
 from pathlib import Path
 
@@ -99,48 +98,12 @@ def engine_key(root: Path, tree: str) -> str:
     return hashlib.sha256("\n".join(rows).encode()).hexdigest()
 
 
-_GATE_FILES = ("Makefile", "pyproject.toml")
-
-
-def is_gate(path: str) -> bool:
-    """Is this repo-relative path something the LOCAL gate exercises (feature 132 amendment)?
-
-    THE RULE: everything `make done` reads or runs - and this predicate is its known instances,
-    not its extent. EVERY `*.py` under the skill (what lint/format/typecheck walk and what
-    `gate-stamp`'s `diagram` area hashes: `.explain.py` and `wip/*.gen.py` count, not only
-    `l7r/**` - the amendment's fidelity review caught the narrower list), the engine key's data
-    (`tests/**`, `pool/*.gen.py`, `pool/*.json`), the gate's own configuration (Makefile,
-    pyproject.toml, the pip lockfiles and their `.in` sources), and `scripts/**` (what `hooks-test`
-    runs and `gate-stamp`'s `hooks` area hashes). The configuration paths were excluded from the
-    REMOTE key precisely because they are "covered locally" (GM 2026-08-25) - this is that
-    coverage. A documentation-only change matches nothing here, which is the whole point: *"it's
-    only documentation"* must not cost a five-minute gate. CONTAINMENT MATTERS: the short-circuit
-    re-writes the gate-stamp, which is safe only because every file the stamp hashes is in this
-    key - `tests/ci/test_state.py` proves it against gate-stamp's own file list.
-    """
-    if is_engine(path) or path.startswith("scripts/"):
-        return True
-    if not path.startswith(SKILL):
-        return False
-    rel = path[len(SKILL) :]
-    return rel.endswith(".py") or rel in _GATE_FILES or (rel.startswith("requirements") and rel.endswith((".txt", ".in")))
-
-
 def engine_key_worktree(root: Path) -> str:
     """`engine_key` for the WORKING TREE (tracked + untracked-not-ignored engine files, current
     contents), so a `make done` run before committing keys the same content the commit will carry.
     Blob ids come from `git hash-object`, so the formula is identical to `engine_key(tree)`."""
-    return _worktree_key(root, is_engine)
-
-
-def gate_key_worktree(root: Path) -> str:
-    """`_worktree_key` over `is_gate` - what a green local `make done` vouched for, exactly."""
-    return _worktree_key(root, is_gate)
-
-
-def _worktree_key(root: Path, keep: Callable[[str], bool]) -> str:
     out = _git(root, "ls-files", "-co", "--exclude-standard")
-    paths = sorted(p for p in out.splitlines() if p.strip() and keep(p) and (root / p).is_file())
+    paths = sorted(p for p in out.splitlines() if p.strip() and is_engine(p) and (root / p).is_file())
     if not paths:
         return hashlib.sha256(b"").hexdigest()
     shas = subprocess.run(["git", "-C", str(root), "hash-object", "--stdin-paths"], input="\n".join(paths) + "\n", capture_output=True, text=True, check=True).stdout.split()

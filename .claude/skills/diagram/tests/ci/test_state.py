@@ -46,10 +46,10 @@ def test_the_hash_is_gate_stamps_not_a_reimplementation(repo: Path) -> None:
     assert state.current_hash(repo) == after_docs
 
 
-# ---- the local short-circuit (feature 132 amendment) ---------------------------------------------
+# ---- the local short-circuit (feature 132 amendment; re-keyed by the second amendment) -----------
 
 
-def test_already_verified_only_after_a_green_done_against_unchanged_gate_content(repo: Path) -> None:
+def test_already_verified_only_after_a_green_done_against_unchanged_engine_content(repo: Path) -> None:
     ok, why = state.already_verified(repo)
     assert not ok and "no local check" in why
     state.write(repo, state.GREEN, "quick")
@@ -58,31 +58,38 @@ def test_already_verified_only_after_a_green_done_against_unchanged_gate_content
     state.write(repo, state.FAILED, "done")
     assert not state.already_verified(repo)[0]
     st = state.write(repo, state.GREEN, "done")
-    assert st.gate_key and state.read(repo).gate_key == st.gate_key  # type: ignore[union-attr]
     ok, why = state.already_verified(repo)
     assert ok and "already verified" in why and st.commit in why
+    # the GM's second amendment: docs, the Makefile, config and scripts/ do NOT owe the gate
     (repo / "docs").mkdir(exist_ok=True)
     (repo / "docs" / "note.md").write_text("only documentation\n")
-    assert state.already_verified(repo)[0], "a docs-only change keeps the verdict"
     (repo / S / "Makefile").write_text("all:\n\t@true\n")
+    (repo / S / "pyproject.toml").write_text("[tool.x]\n")
+    (repo / "scripts" / "x-hooks.sh").write_text("echo guard\n")
+    assert state.already_verified(repo)[0], "a docs / Makefile / config / scripts change keeps the verdict"
+    # a .py under the skill OUTSIDE l7r/, tests/ and pool/ still invalidates it: the hash is gate-stamp's
+    (repo / S / ".explain.py").write_text("x = 1\n")
     ok, why = state.already_verified(repo)
-    assert not ok and "changed since" in why
+    assert not ok and "Python changed" in why
     state.write(repo, state.GREEN, "done")
-    (repo / S / "l7r" / "diagram" / "m.py").write_text("x = 'edited'\n")
-    assert not state.already_verified(repo)[0], "an engine edit invalidates it too"
+    assert state.already_verified(repo)[0]
+    # a test or pool manifest edit invalidates it too (the engine key)
+    (repo / S / "tests").mkdir(exist_ok=True)
+    (repo / S / "tests" / "test_new.py").write_text("def test_x(): pass\n")
+    ok, why = state.already_verified(repo)
+    assert not ok and ("Python changed" in why or "test or pool" in why)
+    state.write(repo, state.GREEN, "done")
+    (repo / S / "pool").mkdir(exist_ok=True)
+    (repo / S / "pool" / "x.json").write_text("{}\n")
+    ok, why = state.already_verified(repo)
+    assert not ok and "test or pool" in why
 
 
-def test_the_gate_key_contains_everything_the_stamp_hashes(repo: Path) -> None:
-    """FR-019: the short-circuit re-writes the gate-stamp, which is safe ONLY if every file the
-    stamp hashes is in the gate key. Proven against gate-stamp's own file lists, in the real
-    repository, both areas - including a .py under the skill outside l7r/, tests/ and pool/."""
-    from l7r.diagram.ci.delta import is_gate
+def test_the_short_circuit_key_contains_everything_the_stamp_hashes(repo: Path) -> None:
+    """FR-019: the short-circuit re-writes the gate-stamp. Safe because the check compares the SAME
+    hash the stamp writes - gate-stamp's diagram area, loaded from the script itself."""
     from tests.ci.conftest import REPO_ROOT
 
     gs = state._gate_stamp(REPO_ROOT)
-    for _area, (area_path, patterns) in gs.AREAS.items():
-        files = gs._area_files(REPO_ROOT, area_path, patterns)
-        assert files, area_path
-        for f in files:
-            assert is_gate(str(f.relative_to(REPO_ROOT))), f"{f} is hashed by gate-stamp but outside the gate key"
-    assert is_gate(S + ".explain.py") and is_gate(S + "wip/x.gen.py")
+    area_path, patterns = gs.AREAS["diagram"]
+    assert state.current_hash(REPO_ROOT) == str(gs.hash_files(gs._area_files(REPO_ROOT, area_path, patterns)))

@@ -75,12 +75,13 @@ done:
 	@$(if $(FULL),$(SWITCH) check scope "done FULL=1",true)
 # (GUARD_EDIT_OK: feature 132 - a FULL run is a pool sweep, so the scope lock refuses it BEFORE the prompt.
 #  THE LOCAL SHORT-CIRCUIT (same feature, the GM's amendment): reference scope reuses the verdict in hand when
-#  the last record is a green `make done` against exactly this gate content - the engine key PLUS the Makefile,
-#  pyproject, lockfiles, scripts/ and EVERY .py under the skill - the rule is "everything the gate reads or runs",
-#  ci/delta.py is_gate). "It's only documentation" then costs seconds, not five minutes. Never for FULL (a
-#  different scope). No flag forces either direction (GUARD_EDIT_OK: the amendment's fidelity review removed a
-#  FORCE= re-run flag as unrequested; the remote rule it copies has none). ONE shell block, so `exit 0` ends the
-#  target before the reference step. Re-stamping is safe only because the gate key contains every file the stamp hashes.)
+#  the last record is a green `make done` against exactly this engine
+#  content - EXACTLY the dispatcher's two keys, the skill-Python hash and the engine key over tests/pool data; the
+#  Makefile, pyproject, lockfiles and scripts/ are NOT in it, as they are not in the remote key (GM 2026-08-25, second
+#  amendment: "we were omitting make done results for changes to the hooks or scripts or makefile"). "It's only
+#  documentation" then costs seconds, not five minutes. Never for FULL (a different scope). No flag forces either
+#  direction (GUARD_EDIT_OK: the fidelity review removed a FORCE= flag as unrequested). ONE shell block, so `exit 0`
+#  ends the target before the reference step. Re-stamping is safe because the key includes the stamp's own hash.)
 	@if [ -z "$(FULL)" ] && python3 -m l7r.diagram.ci verified-done; then \
 	  root=$$(git rev-parse --show-toplevel 2>/dev/null) && [ -n "$$root" ] && python3 "$$root/scripts/gate-stamp.py" --write diagram || true; \
 	  $(LOGRUN) done reference 0 already-verified; $(STATE) green-local done; \
