@@ -40,3 +40,12 @@ recorded so the reviewer can see what "that" refers to in the acceptance below):
 ## 2026-08-25, the second amendment (after 132 landed, seeing the amended gate re-run on a Makefile change)
 
 > I thought we were omitting `make done` results for changes to the hooks or scripts or makefile changes, etc.  I also thorugh we had a rule where if the only thing that changed were tests AND the previous test run was green then we skipped the lengthy AWS tests - we should do the same thing for the expensive 5 minute tests.
+
+## 2026-08-25, the GM's ruling on tests-only changes (answering the session's question)
+
+The session put the question after the fidelity reviewer found it had resolved the second sentence
+itself: *"Should a tests-only change (after a green `make done`) skip the 5-minute gate?"* with the
+facts stated (no such AWS rule existed - feature 130 put `tests/` in the engine set) and three
+options: No (tests stay in the key); Yes, locally AND on AWS; Yes, locally only. The GM chose:
+
+> Yes, locally AND on AWS

@@ -4,7 +4,7 @@
 
 **Created**: 2026-08-25
 
-**Status**: APPROVED by `spec-fidelity` - round 3 verdict **FAITHFUL** (2026-08-25), after rounds 1 and 2 returned changes (see Review history). **AMENDED the same day on the GM's second request** (the local `make done` short-circuits on the same rule as the remote gate: FR-019..FR-023) - amendment APPROVED at round 2 (**FAITHFUL**, 2026-08-25); **AMENDED AGAIN on the GM's third message** (the key is the remote key, not wider: Makefile/scripts/config changes do not owe the gate) - second amendment awaiting review.
+**Status**: APPROVED by `spec-fidelity` - round 3 verdict **FAITHFUL** (2026-08-25), after rounds 1 and 2 returned changes (see Review history). **AMENDED the same day on the GM's second request** (the local `make done` short-circuits on the same rule as the remote gate: FR-019..FR-023) - amendment APPROVED at round 2 (**FAITHFUL**, 2026-08-25); **AMENDED AGAIN on the GM's third message** (the key is the remote key, not wider: Makefile/scripts/config changes do not owe the gate) - second amendment: round 1 NOT FAITHFUL (the tests-only sentence was the session's to ask, not resolve); the GM ruled (FR-024); awaiting round 2.
 
 **Input**: [`gm-request.md`](gm-request.md), verbatim and unedited. That file is the authority for
 this specification; the session's proposal recorded there is what the GM's *"that sounds like
@@ -267,8 +267,8 @@ to short circuit and skip AWS tests to these 5 minute tests as well for the make
 - **FR-020**: "The content the gate exercises" is EXACTLY what the remote rule keys on - the GM's
   second amendment: *"I thought we were omitting `make done` results for changes to the hooks or
   scripts or makefile changes, etc."* Two things, both already computed by the dispatcher: the
-  content hash of every `*.py` under the skill (`gate-stamp`'s `diagram` area - the dispatcher's
-  `green-local-since-edit` condition), and the engine key (`l7r/**/*.py`, `tests/**`,
+  content hash of every `*.py` under the skill EXCEPT `tests/` (`gate-stamp`'s `diagram` area -
+  the dispatcher's `green-local-since-edit` condition), and the engine key (`l7r/**/*.py`,
   `pool/*.gen.py`, `pool/*.json` - its `tree-not-already-verified` condition). The Makefile,
   `pyproject.toml`, the lockfiles and `scripts/**` are NOT in the key, exactly as they are not in
   the remote one: a change to them does not owe a `make done` (the guard scripts owe `make
@@ -281,9 +281,20 @@ to short circuit and skip AWS tests to these 5 minute tests as well for the make
 - **FR-022**: There is no flag to force the short-circuit. (A `FORCE=` re-run flag was in the
   first draft and removed at the amendment's fidelity review as unrequested - the remote rule it
   copies has none.)
-- **FR-023**: Proven both ways: a docs-only edit, a Makefile edit and a `scripts/` edit after a
-  green `done` all short-circuit; an edit to a `.py` under the skill (including one outside
-  `l7r/`, e.g. `.explain.py`), to a test, or to a pool gen does not.
+- **FR-023**: Proven both ways: a docs-only edit, a Makefile edit, a `scripts/` edit and an edit
+  confined to `tests/**` after a green `done` all short-circuit; an edit to a `.py` under the
+  skill outside `tests/` (including one outside `l7r/`, e.g. `.explain.py`) or to a pool gen or
+  manifest does not, and a test edit combined with one of those does not.
+- **FR-024 (the GM's ruling, 2026-08-25)**: *"if the only thing that changed were tests AND the
+  previous test run was green then we skipped the lengthy AWS tests - we should do the same thing
+  for the expensive 5 minute tests"* - asked which side, the GM chose *"Yes, locally AND on AWS"*.
+  So `tests/**` is NOT engine content anywhere: a tests-only delta takes the DIRECT route (no
+  build), is outside the engine key, and is outside `gate-stamp`'s `diagram` area (which
+  otherwise would refuse the push for want of a green stamp). This deliberately narrows what
+  `gate-stamp` hashes, which feature 130's FR-008 forbade a dispatch list from doing on its own -
+  here it is the GM's ruling, recorded verbatim above. The cost, stated so it is a decision and
+  not an oversight: a test edited after the last green run can land on main without having
+  executed; it executes on the next real gate.
 
 ### Key Entities
 
@@ -352,8 +363,7 @@ to short circuit and skip AWS tests to these 5 minute tests as well for the make
 - **Second amendment (2026-08-25, after landing):** the GM saw the amended gate re-run on a
   Makefile change and overruled the widened key: *"I thought we were omitting `make done` results
   for changes to the hooks or scripts or makefile changes, etc."* FR-020 now keys on exactly what
-  the dispatcher keys on (the skill-Python hash + the engine key). On the GM's second sentence
-  (tests-only + previous green -> skip AWS): no such exemption exists in feature 130 (FR-008 puts
-  `tests/` in the engine set); what exists is the local-done rule of 2026-08-25, which the
-  short-circuit mirrors - a green run that already covered the changed tests is reused, a test
-  edit after it is new code and runs once.
+  the dispatcher keys on. **Round 1: NOT FAITHFUL** - the spec had resolved the GM's second
+  sentence (tests-only + previous green -> skip) by declaring its premise false: the AWS rule the GM
+  remembered does not exist (feature 130 puts `tests/` in the engine set), but that is authority to
+  ASK, not to drop the request. The session asked; the GM ruled "Yes, locally AND on AWS" (FR-024).
