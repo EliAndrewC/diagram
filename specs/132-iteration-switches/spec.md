@@ -4,7 +4,7 @@
 
 **Created**: 2026-08-25
 
-**Status**: APPROVED by `spec-fidelity` - round 3 verdict **FAITHFUL** (2026-08-25), after rounds 1 and 2 returned changes (see Review history). Implementation may begin.
+**Status**: APPROVED by `spec-fidelity` - round 3 verdict **FAITHFUL** (2026-08-25), after rounds 1 and 2 returned changes (see Review history). **AMENDED the same day on the GM's second request** (the local `make done` short-circuits on the same rule as the remote gate: FR-019..FR-023) - amendment awaiting its own fidelity review.
 
 **Input**: [`gm-request.md`](gm-request.md), verbatim and unedited. That file is the authority for
 this specification; the session's proposal recorded there is what the GM's *"that sounds like
@@ -251,6 +251,30 @@ clause as unrequested.)
   *"forty eight different maps ... some number of different maps with some number of different
   seeds per map"* - a sweep; one map is iteration, and refusing it would make the lock refuse the
   work the lock exists to protect.
+
+**The local gate short-circuits like the remote one (amendment, GM 2026-08-25)**
+
+The GM's words: *"this also seems like the kind of thing which shouldn't even run the normal 5
+minute tests, right?! Like it's only documentation. Can we apply the same rules that decide whether
+to short circuit and skip AWS tests to these 5 minute tests as well for the make done procedure?"*
+
+- **FR-019**: `make done` (reference scope) MUST check, BEFORE running anything, whether the last
+  recorded verification is a green `make done` against exactly the content the gate exercises,
+  and if so MUST report `already verified` (naming that run's time and commit), re-stamp, record
+  `green-local done`, and exit green - in seconds, rolling no map and running no test.
+- **FR-020**: "The content the gate exercises" is the remote engine key (`l7r/**/*.py`, `tests/**`,
+  `pool/*.gen.py`, `pool/*.json`) PLUS what shapes how the gate runs and was excluded from the
+  remote key precisely because it is "covered locally": the skill's `Makefile`, `pyproject.toml`,
+  the lockfiles, and `scripts/**` (the guard scripts `hooks-test` runs). A documentation-only
+  change leaves this key unchanged; a change to any of these does not.
+- **FR-021**: The short-circuit MUST NOT apply to `FULL=1` (a different scope), and MUST NOT
+  apply when the last verification is anything but a green `done` (a green `quick` or `reference`
+  vouches for less than the gate does). A red last run never short-circuits.
+- **FR-022**: There is no flag to force the short-circuit; there IS a way to force the run
+  (`make done FORCE=1`, logged like a bypass with a reason), because re-verifying is never the
+  expensive mistake.
+- **FR-023**: Proven both ways: a docs-only edit after a green `done` short-circuits; an edit to
+  each kind of path in FR-020 does not.
 
 ### Key Entities
 

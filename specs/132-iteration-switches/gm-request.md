@@ -32,3 +32,7 @@ recorded so the reviewer can see what "that" refers to in the acceptance below):
 ## 2026-08-25, the acceptance
 
 > Yes. That sounds like exactly what I want. Please proceed with that. Thanks.
+
+## 2026-08-25, the amendment (same session, after the implementation's first `make done` was launched)
+
+> Okay, this also seems like the kind of thing which shouldn't even run the normal 5 minute tests, right?!  Like it's only documentation.  Can we apply the same rules that decide whether to short circuit and skip AWS tests to these 5 minute tests as well for the make done procedure?

@@ -9,33 +9,33 @@ shell guards.
 
 ## Phase 1 - the setting and the module
 
-- [ ] T02 `l7r/diagram/switches.py`: dataclasses, `read` (absent -> defaults, malformed -> closed), `write`, `check`, CLI `show|set|check`; registered in `_invocation.OPERATIONS`
-- [ ] T03 `tests/test_switches.py` at 100% on the module
+- [x] T02 `l7r/diagram/switches.py`: dataclasses, `read` (absent -> defaults, malformed -> closed), `write`, `check`, CLI `show|set|check`; registered in `_invocation.OPERATIONS`
+- [x] T03 `tests/test_switches.py` at 100% on the module
 
 ## Phase 2 - the Makefile
 
-- [ ] T04 targets `ci-off`, `ci-on`, `scope-lock`, `scope-unlock`, `switches` (REASON required, file committed by the target)
-- [ ] T05 `SWEEP_OK` first in `cohort`, `tripwire`, `test-full`; conditional in `done`/`ci-check`/`ci-merge` (FULL), `ci-check` (TARGET), `maps` (SCOPE=all); `REMOTE_OK` first in `ci-check`, `ci-image`; `audit` shows switches
-- [ ] T06 fixture test proving each Makefile refusal fires under the lock / remote off and that `reference`, `quick`, `done` are untouched
+- [x] T04 targets `ci-off`, `ci-on`, `scope-lock`, `scope-unlock`, `switches` (REASON required, file committed by the target)
+- [x] T05 `SWEEP_OK` first in `cohort`, `tripwire`, `test-full`; conditional in `done`/`ci-check`/`ci-merge` (FULL), `ci-check` (TARGET), `maps` (SCOPE=all); `REMOTE_OK` first in `ci-check`, `ci-image`; `audit` shows switches
+- [x] T06 fixture test proving each Makefile refusal fires under the lock / remote off and that `reference`, `quick`, `done` are untouched
 
 ## Phase 3 - the dispatcher and the ritual
 
-- [ ] T07 `decision.decide` gains `remote_off`; verdict table; tests
-- [ ] T08 `ci/__main__.py`: remote off -> no client constructed; check/image refuse; merge -> LOCAL-GATED verdict; `--route` prints GATED-LOCAL; tests
-- [ ] T09 `sync-with-main.sh`: GATED-LOCAL route name and line; `scripts/test-sync-with-main.sh` case
+- [x] T07 `decision.decide` gains `remote_off`; verdict table; tests
+- [x] T08 `ci/__main__.py`: remote off -> no client constructed; check/image refuse; merge -> LOCAL-GATED verdict; `--route` prints GATED-LOCAL; tests
+- [x] T09 `sync-with-main.sh`: GATED-LOCAL route name and line; `scripts/test-sync-with-main.sh` case
 
 ## Phase 4 - the Python sweeps
 
-- [ ] T10 `mapcheck`: lock -> reference only, no widening, `--scope all` refused; tests
-- [ ] T11 `cohort_audit`: lock refused first; tests
-- [ ] T11b `pipeline.regen` (more than one gen refused), `cache_audit`, `make_regressions` refuse under the lock; `SWEEP_OK` on `cache-audit`/`regressions`; tests
-- [ ] T11c `sync-with-main.sh` seams honored only in a tree with no diagram skill Makefile; test case
+- [x] T10 `mapcheck`: lock -> reference only, no widening, `--scope all` refused; tests
+- [x] T11 `cohort_audit`: lock refused first; tests
+- [x] T11b `pipeline.regen` (more than one gen refused), `cache_audit`, `make_regressions` refuse under the lock; `SWEEP_OK` on `cache-audit`/`regressions`; tests
+- [x] T11c `sync-with-main.sh` seams honored only in a tree with no diagram skill Makefile; test case
 
 ## Phase 5 - guards and records
 
-- [ ] T12 `guard-file-hooks.sh` pattern + test case for `dev/switches.json`
-- [ ] T13 `dev/switches.md` (the why, the fail-closed rule, the single-map decision with priced alternatives), ci `CLAUDE.md` sixth condition, root `CLAUDE.md` enforcement row + ladder note, `dev/loop.md`
-- [ ] T14 prove-it-fires: delete each refusal in turn, watch a test go red (record which test here)
+- [x] T12 `guard-file-hooks.sh` pattern + test case for `dev/switches.json`
+- [x] T13 `dev/switches.md` (the why, the fail-closed rule, the single-map decision with priced alternatives), ci `CLAUDE.md` sixth condition, root `CLAUDE.md` enforcement row + ladder note, `dev/loop.md`
+- [x] T14 prove-it-fires (2026-08-25, each deletion restored with `git checkout`): removing `$(SWEEP_OK)` from `cohort` -> `tests/test_switches.py::test_make_sweeps_refuse_under_the_lock[cohort]` RED; dropping the `elif remote_off` branch in `decision.py` -> `test_remote_off_never_dispatches` + `test_remote_off_does_not_short_circuit_a_full_scope_on_a_reference_record` RED; dropping the lock check in `cohort_audit.main` -> `tests/tools/test_scope_lock.py::test_cohort_refuses_first` RED; honoring `CI_ROUTE` in every tree again -> `scripts/test-sync-with-main.sh` 7c RED (3 checks)
 - [ ] T15 `make hooks-test` green; `make done` green; bypass-log audit for the feature (none expected)
 
 ## Phase 6 - throw the switches for feature 133
