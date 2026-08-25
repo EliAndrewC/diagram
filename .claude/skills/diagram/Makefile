@@ -261,22 +261,30 @@ citybudget:     ## the city/capital space-budget planner
 #
 # Cheap enough to sit in every `make done`: the whole set is seconds, because a hook test feeds JSON
 # to a script and reads an exit code. Nothing here rolls a map.
+# A GREEN RUN STAMPS THE `hooks` AREA (gate-stamp.py, 2026-08-25 - GUARD_EDIT_OK: adding a gate).
+# scripts/*.sh and scripts/*.py are gated code, and this is the gate that covers them; the push-time
+# guard refuses a scripts/ change whose stamp is missing or stale, exactly as it refuses engine
+# Python without a green `make done`. Motivating case: a RED hooks-test followed by `commit; ritual`
+# landed on main, because nothing at push time knew the guards had been edited.
 hooks-test:     ## run every scripts/test-*-hooks.sh, and prove each guard still has a companion
 	@root=$$(git rev-parse --show-toplevel); fail=""; n=0; \
-	for h in $$root/scripts/*-hooks.sh $$root/scripts/review-gate.sh; do \
+	for h in $$root/scripts/*-hooks.sh $$root/scripts/review-gate.sh $$root/scripts/gate-stamp.py; do \
 	  b=$$(basename $$h); case $$b in test-*) continue ;; esac; \
-	  if [ ! -f "$$root/scripts/test-$$b" ]; then \
-	    printf '\n\033[1mGUARD WITHOUT A TEST: %s has no scripts/test-%s\033[0m\n' "$$b" "$$b"; \
+	  t=test-$${b%.py}; case $$t in *.sh) ;; *) t=$$t.sh ;; esac; \
+	  if [ ! -f "$$root/scripts/$$t" ]; then \
+	    printf '\n\033[1mGUARD WITHOUT A TEST: %s has no scripts/%s\033[0m\n' "$$b" "$$t"; \
 	    printf 'A guard ships with its companion. Without one, nothing can tell whether it still\n'; \
 	    printf 'fires - or whether it fires on correct work, which is the more expensive failure.\n\n'; \
 	    fail="$$fail $$b"; continue; \
 	  fi; \
 	  n=$$((n+1)); \
-	  "$$root/scripts/test-$$b" >/tmp/ht.$$$$ 2>&1 || { printf '\n\033[1mHOOK TESTS FAILED: %s\033[0m\n' "$$b"; sed 's/^/  /' /tmp/ht.$$$$; fail="$$fail $$b"; }; \
+	  "$$root/scripts/$$t" >/tmp/ht.$$$$ 2>&1 || { printf '\n\033[1mHOOK TESTS FAILED: %s\033[0m\n' "$$b"; sed 's/^/  /' /tmp/ht.$$$$; fail="$$fail $$b"; }; \
 	  rm -f /tmp/ht.$$$$; \
 	done; \
 	if [ -n "$$fail" ]; then printf '\n\033[1mhooks-test FAILED:%s\033[0m\n\n' "$$fail"; exit 1; fi; \
-	printf 'hooks-test: %s guard suites green\n' "$$n"
+	python3 "$$root/scripts/gate-stamp.py" --write hooks; \
+	printf 'hooks-test: %s guard suites green (hooks area stamped)\n' "$$n"
+# (GUARD_EDIT_OK: adds gate-stamp.py to the guard roster with a .sh companion, and stamps the hooks area on green)
 
 perf-gate:      ## require the feature's -start bookend, take -end, and FAIL on a regression
 	@f="$(or $(FEATURE),$(SPECIFY_FEATURE))"; \

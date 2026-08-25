@@ -131,6 +131,7 @@ cp -r "$HERE" "$FMAIN5/.clones/bare/scripts"   # the push runs review-gate.sh an
 mkdir -p "$FMAIN5/.clones/bare/.claude/skills/x" && echo 'def a(): return 1' > "$FMAIN5/.clones/bare/.claude/skills/x/a.py"   # check-duplicate-defs refuses to scan nothing
 ( export GIT_AUTHOR_NAME=x GIT_AUTHOR_EMAIL=x@t GIT_COMMITTER_NAME=x GIT_COMMITTER_EMAIL=x@t
   echo c1 > "$FMAIN5/.clones/bare/g"; git -C "$FMAIN5/.clones/bare" add g scripts .claude; git -C "$FMAIN5/.clones/bare" commit -qm c1 )
+( cd "$FMAIN5/.clones/bare" && python3 scripts/gate-stamp.py --write hooks )   # the commit changes scripts/, and a scripts/ change pushes only behind a green hooks-test stamp (GUARD_EDIT_OK: fixture follows the new gate)
 [ -z "$(git -C "$FMAIN5" config --get receive.denyCurrentBranch || true)" ] || { echo "FAIL  fixture: main5 already had denyCurrentBranch"; FAILED=1; }
 OUT=$(cd "$FMAIN5/.clones/bare" && HOME=$TMP CLONE_MAIN="$FMAIN5" "$RITUAL" push 2>&1); RC=$?
 check "ritual push from a bare fixture (no updateInstead, no identity) succeeds" 0 "$RC"

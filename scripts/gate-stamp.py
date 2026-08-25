@@ -20,8 +20,14 @@ first thing anyone learned would be how to bypass the guard. Per-area, because t
 independent gates (the diagram skill and the webapp); a repo-wide hash would let a webapp change be
 blocked by a gate that never covers it, and vice versa.
 
-Areas with no gate of their own (specs/, scripts/) are deliberately NOT gated: inventing a
-requirement nobody can satisfy is how a guard gets disabled.
+Areas with no gate of their own (specs/) are deliberately NOT gated: inventing a requirement
+nobody can satisfy is how a guard gets disabled. `scripts/` USED to be in that list, and that went
+stale the day feature 127 made `make hooks-test` a gate phase: the guards had a gate, and a change
+to them still never needed a stamp. Measured 2026-08-25 - a session chained `commit; ritual` behind
+a RED hooks-test and the push went through, because the only Python that changed was under
+`scripts/`. So `scripts/*.sh` and `scripts/*.py` are the `hooks` area, stamped by a green
+`make hooks-test` alone (seconds, and the gate that actually covers them) and by `make done`,
+which runs it. Editing this file is itself a `hooks`-area change.
 """
 
 from __future__ import annotations
@@ -33,8 +39,12 @@ import sys
 import tempfile
 from pathlib import Path
 
-# area name -> repo-relative root. Each must have a Makefile whose `done` target stamps it.
-AREAS = {"diagram": ".claude/skills/diagram"}  # the webapp area lives in gm-assistant since feature 131
+# area name -> (repo-relative root, glob patterns the area's gate covers). Each area's gate stamps it
+# on success: `make done` stamps `diagram`, `make hooks-test` stamps `hooks` (and `done` runs it).
+AREAS: dict[str, tuple[str, tuple[str, ...]]] = {
+    "diagram": (".claude/skills/diagram", ("*.py",)),  # the webapp area lives in gm-assistant since feature 131
+    "hooks": ("scripts", ("*.sh", "*.py")),
+}
 
 
 def _git(*args: str, cwd: Path | None = None) -> str:
@@ -48,11 +58,16 @@ def _root() -> Path | None:
         return None  # not a git checkout: the guard is a no-op rather than an obstacle
 
 
-def _py_files(root: Path, area_path: str) -> list[Path]:
-    """Tracked AND untracked-but-not-ignored .py under `area_path` - a new module nobody has added
-    yet is still Python the gate ran on, and omitting it would let an untracked file slip past."""
-    out = _git("ls-files", "-co", "--exclude-standard", "--", f"{area_path}/*.py", cwd=root)
+def _area_files(root: Path, area_path: str, patterns: tuple[str, ...]) -> list[Path]:
+    """Tracked AND untracked-but-not-ignored files under `area_path` matching `patterns` - a new
+    module nobody has added yet is still code the gate ran on, and omitting it would let an
+    untracked file slip past."""
+    out = _git("ls-files", "-co", "--exclude-standard", "--", *(f"{area_path}/{pat}" for pat in patterns), cwd=root)
     return sorted({root / line for line in out.splitlines() if line.strip()})
+
+
+def _matches(path: str, area_path: str, patterns: tuple[str, ...]) -> bool:
+    return path.startswith(area_path + "/") and any(path.endswith(pat.lstrip("*")) for pat in patterns)
 
 
 def hash_files(files: list[Path]) -> str:
@@ -74,32 +89,34 @@ def write_stamp(area: str) -> int:
     root = _root()
     if root is None:
         return 0
-    _stamp_path(root, area).write_text(hash_files(_py_files(root, AREAS[area])))
+    area_path, patterns = AREAS[area]
+    _stamp_path(root, area).write_text(hash_files(_area_files(root, area_path, patterns)))
     return 0
 
 
-def check(base: str) -> int:
-    """Refuse areas whose Python changed since `base` without a matching green stamp."""
-    root = _root()
+def check(base: str, root: Path | None = None) -> int:
+    """Refuse areas whose gated code changed since `base` without a matching green stamp."""
+    root = root or _root()
     if root is None:
         return 0
     changed = _git("diff", "--name-only", f"{base}...HEAD", cwd=root).splitlines()
     bad: list[str] = []
-    for area, area_path in AREAS.items():
-        if not any(c.startswith(area_path + "/") and c.endswith(".py") for c in changed):
+    for area, (area_path, patterns) in AREAS.items():
+        if not any(_matches(c, area_path, patterns) for c in changed):
             continue
         stamp = _stamp_path(root, area)
-        want = hash_files(_py_files(root, area_path))
+        want = hash_files(_area_files(root, area_path, patterns))
+        gate = "make hooks-test" if area == "hooks" else "make done"
         if not stamp.is_file():
-            bad.append(f"{area}: no green gate has been recorded at all")
+            bad.append(f"{area}: no green gate has been recorded at all ({gate} stamps it)")
         elif stamp.read_text().strip() != want:
-            bad.append(f"{area}: the last green gate ran against DIFFERENT Python than you are pushing")
+            bad.append(f"{area}: the last green gate ran against DIFFERENT code than you are pushing ({gate} again)")
     if not bad:
         return 0
     print("gate-stamp: refusing to push Python that no green gate has seen (constitution Principle XIII):", file=sys.stderr)
     for line in bad:
         print(f"  {line}", file=sys.stderr)
-    print("gate-stamp: run `make done` in that area and push again - it stamps on success.", file=sys.stderr)
+    print("gate-stamp: run the named gate in .claude/skills/diagram and push again - it stamps on success.", file=sys.stderr)
     print("gate-stamp: a cohort/sweep regression is NOT covered here; check it separately.", file=sys.stderr)
     print("gate-stamp: escape hatch, with a reason: GATE_STAMP_OK='<why this push is safe>'", file=sys.stderr)
     return 1
@@ -131,7 +148,7 @@ def selftest() -> int:
 
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description=__doc__)
-    ap.add_argument("--write", choices=sorted(AREAS), help="record a green gate for this area")
+    ap.add_argument("--write", choices=sorted(AREAS), help="record a green gate for this area (diagram: make done; hooks: make hooks-test)")
     ap.add_argument("--check", metavar="BASE", help="refuse changed-Python areas with no matching stamp (BASE is usually origin/main)")
     ap.add_argument("--selftest", action="store_true")
     args = ap.parse_args(argv)
