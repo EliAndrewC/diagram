@@ -67,7 +67,7 @@ Reference directories hold organized source material and context. Each directory
 
 ## Development Workflow
 
-This project uses spec-driven development governed by [`.specify/memory/constitution.md`](.specify/memory/constitution.md) (currently v1.12.1, 15 principles, 8 NON-NEGOTIABLE). The constitution is the higher-level authority; this CLAUDE.md operationalizes it.
+This project uses spec-driven development governed by [`.specify/memory/constitution.md`](.specify/memory/constitution.md) (v2.0.0 since 2026-08-25 - this repository's edition; 18 numbered principles, I and II not applicable here, 11 NON-NEGOTIABLE). The constitution is the higher-level authority; this CLAUDE.md operationalizes it.
 
 **When to use spec-kit:**
 

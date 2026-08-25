@@ -66,19 +66,14 @@ Each gate must be marked PASS, N/A (with one-line justification), or DEFERRED
 (with a Complexity Tracking entry). DEFERRED gates require explicit GM
 approval before /speckit-tasks may run.
 
-- **I. Accessibility-First Viewports**: Does the feature introduce or modify
-  any UI? If yes, the plan MUST commit to running the screenshot-as-feedback
-  workflow at GM-100 (1850×1050), GM-200 (925×525), tablet (800×1100), and
-  mobile (390×844) before any UI task is reported done, and MUST commit to a
-  zero-overflow DOM audit (no `text-overflow: ellipsis` truncation, no
-  `overflow: hidden` clipping of meaningful content, no element with
-  `scrollWidth/scrollHeight > offsetWidth/offsetHeight`).
+- **I. Accessibility-First Viewports**: NOT APPLICABLE in this repository
+  (constitution 2.0.0) - it governs gm-assistant's webapp. Write "N/A - no
+  UI in this repository". If a feature ever does add a browser page here,
+  that is the signal to reinstate the gm-assistant entry, not to skip it.
 
-- **II. Bold, Intentional Design**: If the feature introduces new UI surfaces,
-  the plan MUST name the aesthetic direction (e.g., "editorial Japanese
-  archive," "brutalist tool"), MUST name the typographic system, MUST commit
-  to using the `frontend-design` plugin for greenfield UI work, and MUST NOT
-  default to generic AI typography (Inter, Roboto, system sans).
+- **II. Bold, Intentional Design**: NOT APPLICABLE in this repository, same
+  reason. Map style is governed by the skill's design doctrine
+  (`SKILL.md`, `settlements/`, `buildings/`) and reviewed under VI.
 
 - **III. Pool Data Conventions**: If the feature adds or modifies generated
   content of a recurring kind, the plan MUST specify the markdown-with-YAML
@@ -92,12 +87,14 @@ approval before /speckit-tasks may run.
   block and list any references-by-path that other files will use.
 
 - **V. Protecting the GM's Writing (NON-NEGOTIABLE)**: The plan MUST NOT
-  include any task that modifies content inside SOURCE markers except the
-  canonical-source sync workflow described in `/gm-assistant/CLAUDE.md`.
+  include any task that modifies content inside SOURCE markers - there is no
+  sync exception in this repository; SOURCE blocks are frozen excerpts.
 
 - **VI. Verify Before Reporting Done**: The plan MUST list the verification
-  steps each task will run before being marked complete - pytest for Python
-  logic, screenshot suite + DOM audit for UI, spot-check of delegated work.
+  steps each task will run before being marked complete - `make done` for
+  Python, `settlement-review` / `building-review` + `size-audit` for a map,
+  spot-check of delegated work. Every generator step is TWO steps (reference
+  settlement, then pool - `make maps`), both as tasks.
 
 - **VII. De-Localized Generation by Default**: If the feature generates pool
   content, the plan MUST default to generic / reusable framing (clan-level

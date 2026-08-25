@@ -1,7 +1,26 @@
 <!--
 SYNC IMPACT REPORT
 ==================
-Version change: 1.14.0 → 1.15.0
+Version change: 1.16.0 → 2.0.0
+
+Version 2.0.0 (amended 2026-08-25): THIS REPOSITORY'S EDITION. The constitution was copied verbatim
+from gm-assistant when feature 131 split the diagram skill into its own repository, and the GM asked
+for the copy to be fixed. Principles I (viewports) and II (design) govern a webapp this repository
+does not contain; they are retained AS NUMBERED so the dozens of references to III-XVIII by numeral
+stay true, and marked NOT APPLICABLE HERE with a pointer to gm-assistant's edition. Principle V's
+canonical-sync exception is gm-assistant's; here SOURCE blocks are frozen excerpts. Principle VI's
+UI bullet, Principle X's chargen references, the Technical Standards (Playwright, CherryPy, Fly,
+configobj), the screenshot workflow, the memory path and the runtime-guidance path are rewritten
+for /diagram. Nothing that binds the diagram engine changed in meaning. MAJOR, because two
+principles are scoped out of force - the honest label for "removed", even though their numbers stay.
+The version history below this entry is gm-assistant's and is kept as the shared lineage.
+
+Templates requiring review/update:
+  ✅ .specify/templates/plan-template.md - Principle I/II gate entries now say "not applicable in
+                              this repository" and the VI entry names make done / the review agents.
+  ✅ CLAUDE.md - the version line.
+
+PRIOR (1.14.0 → 1.15.0):
 
 Version 1.15.0 (amended 2026-08-24): adds Principle XVIII - a guard ships with its test companion and
 that companion RUNS in the gate. Motivating measurement: the enforcement audit found eight hook
@@ -338,18 +357,30 @@ Version 1.0.0 history (initial ratification on 2026-05-27):
   plan template.
 -->
 
-# L7R Toolkit Constitution
+# L7R Diagram Constitution
 
-This constitution governs the L7R toolkit project - a working setup of Claude
-Code skills, generated content pools, and a forthcoming webapp frontend for a
-custom Legend of the Five Rings tabletop RPG setting. It is the highest-level
-guide for how Claude Code agents and human contributors collaborate on this
-codebase. All specifications, plans, implementations, and reviews MUST comply
-with the principles below.
+This constitution governs the L7R Diagram project - the settlement and building
+map generator (`/diagram`) for a custom Legend of the Five Rings tabletop RPG
+setting, split out of the GM's `gm-assistant` toolkit on 2026-08-25 (feature
+131). It is the highest-level guide for how Claude Code agents and human
+contributors collaborate on this codebase. All specifications, plans,
+implementations, and reviews MUST comply with the principles below.
+
+It began as a verbatim copy of gm-assistant's constitution and the two diverge
+from 2.0.0. The principle NUMBERS are shared lineage and are never reused: every
+spec, plan, hook message and code comment in this repository cites principles by
+numeral, so a principle that does not apply here is kept in place and marked
+rather than deleted.
 
 ## Core Principles
 
 ### I. Accessibility-First Viewports (NON-NEGOTIABLE)
+
+**NOT APPLICABLE IN THIS REPOSITORY.** This principle governs the webapp and
+generated HTML pages, which live in gm-assistant. The diagram repository ships
+SVG/PNG maps reviewed by `settlement-review`, `building-review` and
+`size-audit` (Principle VI), not browser pages. The text is retained unchanged
+for the shared numbering; gm-assistant's edition is the one in force for it.
 
 The GM uses Chrome at 200% browser zoom on a 1850×1173 outer window
 (effective CSS viewport ≈ 925×525). All UI work - webapp pages, generated
@@ -400,6 +431,11 @@ practical, route the contact sheet to the frontend-review subagent for an
 independent pass. The author rationalizes choices the reviewer would not.
 
 ### II. Bold, Intentional Design
+
+**NOT APPLICABLE IN THIS REPOSITORY** - same reason as Principle I: it governs
+frontend pages, which this repository has none of. Map style is governed by the
+skill's own style library and design doctrine (`.claude/skills/diagram/SKILL.md`,
+`settlements/`, `buildings/`). Text retained for the shared numbering.
 
 Frontend work uses the official `frontend-design` Claude Code plugin and
 follows its discipline: commit to a clear aesthetic direction per page,
@@ -458,9 +494,10 @@ be modified, rephrased, summarized, reworded, or "improved" by any agent.
 Only the GM may edit those sections, and only when they explicitly
 instruct an agent to do so.
 
-The sole automated exception is the canonical-source sync workflow
-documented in `/gm-assistant/CLAUDE.md`: when the GM has updated their
-GitHub notes, downstream SOURCE blocks MUST be updated to match exactly.
+There is no automated exception in this repository. (gm-assistant's edition
+carries one - its canonical-source sync workflow.) Here a SOURCE block is a
+frozen point-in-time excerpt of the GM's notes; drift from the canonical
+`/host-l7r-repo/setting/l7r.md` is expected and is never "corrected".
 
 AI-generated content (preferences, generation instructions, examples of
 liked/disliked output, scaffolding, layout text) lives outside SOURCE
@@ -471,15 +508,15 @@ markers and MAY be updated freely.
 No agent or skill may report a task complete without verifying the actual
 artifacts. Specifically:
 
-- **Python skills**: Run `pytest` for the relevant skill directory. Target
-  100% line coverage on pure logic. External boundaries (HTTP, browser
-  sessions, third-party APIs) are tested via saved fixtures, not via
+- **Python**: the gate is `make done` in `.claude/skills/diagram/` (lint,
+  format, `mypy --strict`, the hook suites, pytest with the coverage floors -
+  nothing runs outside make, per feature 127). Target 100% line coverage on
+  pure logic. External boundaries are tested via saved fixtures, not via
   transport-layer mocks.
-- **UI changes**: Run the Playwright screenshot suite at the four standard
-  viewports (GM-100, GM-200, tablet, mobile) AND a DOM-overflow audit
-  (`scrollWidth/scrollHeight > offsetWidth/offsetHeight`, computed
-  `text-overflow: ellipsis` truncation, `-webkit-line-clamp` clipping).
-  Both MUST be clean before the change is reported as done.
+- **Maps**: a Mode B map is reviewed by `settlement-review` and a Mode A
+  plan by `building-review` + `size-audit` before it ships (the author is
+  not a reliable reviewer of their own visual output); `review-gate.sh`
+  enforces it at push time.
 - **Delegated work**: When a subagent or skill reports completion, the
   caller MUST spot-check the artifacts (read a sample of changed files,
   run a verification query) before relaying the result to the user.
@@ -682,8 +719,9 @@ or with established figures in the GM's notes.
 
 ### X. Python Discipline (NON-NEGOTIABLE)
 
-Python code in this project - the chargen webapp, the skill helpers, the
-forthcoming backend service - MUST meet the following standards. Failing
+Python code in this project - the diagram engine and its generators, checks,
+pipeline and tools under `.claude/skills/diagram/l7r/diagram/` - MUST meet
+the following standards. Failing
 any single rule is reason enough to refuse "done" status.
 
 1. **Lint passes**: `ruff check` MUST pass on all production paths. The
@@ -697,8 +735,9 @@ any single rule is reason enough to refuse "done" status.
 
 3. **Type checking is strict**: `mypy --strict` MUST pass on production
    modules. Public functions and methods carry full type annotations.
-   Existing chargen code that predates this principle has a one-time
-   grace period to migrate; new code does not.
+   The per-module ratchet that once relaxed the legacy engine modules is
+   fully retired (all of `settlement/`, `check_village/`, `waterfields/`
+   are strict); new code is strict from the start.
 
 4. **Red-green TDD**:
    - New non-trivial behavior is introduced **test-first**: the test
@@ -740,11 +779,11 @@ any single rule is reason enough to refuse "done" status.
     parametrized test over a family of near-identical tests. The
     parameter list documents the variation surface explicitly.
 
-11. **Configuration over hardcoding**: Runtime configuration uses
-    ConfigObj INI files (validated by `configspec.ini`) for chargen and
-    other legacy paths; pydantic-settings for env-var-driven new code.
-    Magic strings and environment-dependent constants MUST NOT be
-    hardcoded in production paths.
+11. **Configuration over hardcoding**: Magic strings and
+    environment-dependent constants MUST NOT be hardcoded in production
+    paths - the repository root, in particular, is derived from git
+    (`gate-stamp`, the hooks, the ritual all do), never written as a
+    literal, because it was `/gm-assistant` and is now `/diagram`.
 
 12. **Functions stay at human scale** (added v1.5.0, GM-directed
     2026-08-15): a function that has grown past a few hundred logical
@@ -1340,46 +1379,43 @@ shell command that writes one. It carries no silent escape - a genuine exception
 ## Technical Standards
 
 **Languages and runtimes**
-- Python 3.14 (system Python on the dev sandbox and the Fly prod image;
-  bumped from 3.13 when the standard dev container moved to 3.14,
-  GM-directed 2026-07-20).
-- Node.js for headless-browser tooling (Playwright bundles its own
-  Chromium binary; do not assume a system Chrome).
+- Python 3.14 (system Python in the dev container; bumped from 3.13 when
+  the standard dev container moved to 3.14, GM-directed 2026-07-20).
+- `resvg` renders SVG to PNG (no fallback renderer), with the DejaVu
+  faces installed - `container-scripts/setup-dev-env.sh` establishes both.
 
 **Python tooling (per Principle X)**
 - **Lint + format**: `ruff` (lint + formatter, single tool). Config lives
-  in `pyproject.toml`.
-- **Type checking**: `mypy --strict` on production modules. The mypy
-  config lives in `pyproject.toml` or `mypy.ini`.
-- **Testing**: `pytest` + `pytest-cov`. Coverage enforced via
-  `pytest --cov-fail-under=100` for pure-logic packages.
-- **Dependency management**: source-of-truth in `requirements.in`,
-  compiled to `requirements.txt` via `uv pip compile` (or `pip-compile`).
-  `uv.lock` is acceptable for `uv`-native projects.
-- **Config validation**: `configobj` with `configspec.ini` for the
-  chargen pattern; `pydantic-settings` for env-var-driven new code.
+  in `.claude/skills/diagram/pyproject.toml`.
+- **Type checking**: `mypy --strict` on production modules, configured in
+  the same `pyproject.toml`; `l7r/` is a PEP 420 namespace portion and
+  never gains an `__init__.py`.
+- **Testing**: `pytest` + `pytest-cov` + `pytest-xdist`, always under a
+  make target (`make quick`, `make done`, `make done FULL=1`); the
+  coverage floors are set by the Makefile, 100% on every measured module
+  except the ratcheted `settlement/` package.
+- **Dependency management**: source-of-truth in
+  `.claude/skills/diagram/requirements.in` / `requirements-dev.in`, compiled
+  to the `.txt` lockfiles with `pip-compile`, pinned; a re-lock that bumps
+  ruff or mypy is a reviewed change, since it can change what the gate says.
 - **Logging**: stdlib `logging` with `logging.getLogger(__name__)`.
 
-**UI / browser tooling**
-- `playwright` (Python async API) with bundled Chromium for screenshots
-  and DOM-overflow audits.
-- Standard viewport set: GM-100 (1850×1050), GM-200 (925×525), tablet
-  (800×1100), mobile (390×844 with `device_scale_factor=2`).
-
 **Test layout**
-- Test files live alongside the code as `test_<module>.py`.
-- Saved fixtures for external boundaries live in a `fixtures/`
-  subdirectory next to the tests that consume them.
+- Tests live under `.claude/skills/diagram/tests/`, mirroring the source
+  layout (`tests/CLAUDE.md` indexes them).
+- Frozen negative fixtures - manifests of maps that were once wrong - live
+  in `pool/regressions/`; saved fixtures for external boundaries live in a
+  `fixtures/` subdirectory next to the tests that consume them.
 - Test names describe behavior (not implementation); parametrize
-  variant inputs.
+  variant inputs. A map-rolling test carries `@pytest.mark.rolls_map`.
 
-**Webapp conventions**
-- Static prototypes live under `/gm-assistant/webapp-prototype/`.
-- The chargen backend (CherryPy + Jinja2) lives under `/gm-assistant/webapp/`.
-- A `relics.js` (or analogous) bundle inlines pool data as
-  `window.<NAME>_BUNDLE` so prototypes work over `file://` without a
-  server. A parallel `relics.json` artifact is produced for future API
-  parity.
+**Repository layout conventions**
+- The skill stays at `.claude/skills/diagram/` - the same path as before
+  the split, so nothing in the engine, the pool generators or the guards
+  moved. The engine is `l7r/diagram/`; shipped maps are `pool/<tier>/`;
+  staged maps are `wip/`.
+- The GM's setting notes are read from gm-assistant, mounted read-only at
+  `/gm-assistant`; the canonical `l7r.md` is never edited from here.
 
 **Secrets**
 - `development-secrets.ini` files MUST be gitignored. The corresponding
@@ -1395,34 +1431,27 @@ with `/speckit-plan`, decompose with `/speckit-tasks`, and execute with
 `/speckit-implement`. Constitutional principles are enforced at the plan
 gate via the *Constitution Check* section of `plan-template.md`.
 
-**Screenshot-as-feedback workflow (mandatory for UI changes)**
-The verification workflow described in Principle I and VI MUST be run
-before any UI change is reported as done. The canonical implementation
-lives at `/gm-assistant/webapp-prototype/relics/screenshot.py` and runs:
-
-1. Boot the prototype via `python3 -m http.server` on port 8123.
-2. For each of GM-100 (1850×1050), GM-200 (925×525), tablet (800×1100),
-   and mobile (390×844, dsf=2): take a full-page screenshot and an
-   above-the-fold screenshot.
-3. Run a DOM-overflow audit using Playwright's `page.evaluate` over
-   `.card`, `.card__top`, `.card__name`, `.card__entity`,
-   `.card__type`, `.card__kanji`, and any other narrow-target selectors
-   added by the change.
-4. Report dimensions (page height, card height, hero/foot heights) and
-   any overflow / truncation findings to the user.
+**Map review workflow (mandatory before a map ships)**
+The verification described in Principle VI: a Mode B map goes to
+`settlement-review`, a Mode A plan to `building-review` and `size-audit`,
+and the findings are acted on before the map enters `pool/`.
+`scripts/review-gate.sh` refuses the push otherwise.
 
 **Python "done" checklist (mandatory per Principle X)**
-A Python change is not complete until all of the following pass on the
-modified package:
+A Python change is not complete until `make done` is green in
+`.claude/skills/diagram/` - it runs, together and reporting every failure
+at once:
 
 1. `ruff check`
 2. `ruff format --check`
 3. `mypy --strict` (on production modules)
-4. `pytest`
-5. `pytest --cov-fail-under=100` (on pure-logic packages)
+4. `make hooks-test` (every guard's test companion, Principle XVIII)
+5. `pytest -n auto` with the Makefile's coverage floors
+   (`make done FULL=1` also re-gates every pool map and runs the
+   perf gate)
 
-Subagents and skills MUST run all five before reporting Python work
-done. The TDD order - write failing test, watch it fail, implement,
+Nothing in this list is run bare - `scripts/make-only-hooks.sh` refuses
+it. The TDD order - write failing test, watch it fail, implement,
 watch it pass, refactor - is the working mode for new code.
 
 **Delegation**
@@ -1433,7 +1462,7 @@ delegated work before reporting success.
 
 **Memory and persistent context**
 The agent maintains persistent memory at
-`/home/agent/.claude/projects/-gm-assistant/memory/`. Memory entries follow
+`/home/agent/.claude/projects/-diagram/memory/`. Memory entries follow
 the format and rules described in the harness system prompt; this
 constitution does not duplicate them, but the agent's behavior MUST be
 consistent with both the constitution and the memory rules.
@@ -1441,7 +1470,7 @@ consistent with both the constitution and the memory rules.
 ## Governance
 
 This constitution supersedes ad-hoc development practices for the L7R
-toolkit project. Where this document conflicts with other guidance, this
+Diagram project. Where this document conflicts with other guidance, this
 document wins; where this document is silent, defer to the project's
 `CLAUDE.md` and the conventions established there.
 
@@ -1467,15 +1496,16 @@ document wins; where this document is silent, defer to the project's
 - Every plan generated via `/speckit-plan` includes a Constitution Check
   gate that verifies the plan against each principle. Plans that fail
   the check MUST be revised before tasks are generated.
-- UI changes verified by the screenshot/overflow workflow have an
-  automatic compliance signal: zero overflows + clean screenshots = pass.
-- Generated content (relics, names, etc.) is checked against the pool
-  conventions (Principle III) and the de-localization rule (Principle VII)
-  before being added to a pool.
+- A green `make done` is the automatic compliance signal for Python;
+  a shipped map carries its review record (`review-gate.sh`).
+- Generated content is checked against the pool conventions (Principle
+  III) and the de-localization rule (Principle VII) before being added to
+  a pool.
 
 **Runtime guidance**
-`/gm-assistant/CLAUDE.md` and the per-directory CLAUDE.md files remain the
-day-to-day runtime guidance. This constitution is the higher-level
-authority; CLAUDE.md operationalizes it.
+`/diagram/CLAUDE.md` and the per-directory CLAUDE.md files (the skill's
+`.claude/skills/diagram/CLAUDE.md` above all) remain the day-to-day runtime
+guidance. This constitution is the higher-level authority; CLAUDE.md
+operationalizes it.
 
-**Version**: 1.16.0 | **Ratified**: 2026-05-27 | **Last Amended**: 2026-08-24
+**Version**: 2.0.0 | **Ratified**: 2026-05-27 | **Last Amended**: 2026-08-25
