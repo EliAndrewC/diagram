@@ -109,8 +109,9 @@ to get things into main outside the context of features"* the GM suspected.
 1. **Given** 133 has an open task and the clone's delta touches engine code, **When** the ritual
    runs, **Then** the push is refused with `feature-complete` named - proven on this feature the
    first time a map task lands in the clone.
-2. **Given** the DIRECT route ignores the feature, **Then** this feature records that as the
-   known gap and the GM decides whether to close it (FR-006) - the session does not.
+2. **Given** a feature has an open task, **When** any push is attempted from a clone whose delta
+   touches its spec directory or whose pointer names it, **Then** the push is refused on BOTH
+   routes unless the delta is that spec directory alone (FR-006, the GM's ruling).
 
 ### Edge Cases
 
@@ -137,11 +138,16 @@ to get things into main outside the context of features"* the GM suspected.
   our tooling so that when AWS testing is turned off, we still track when it would have run."*
 - **FR-005**: The acceptance task's record MUST include the audit of those entries: for each,
   should it have run? Every "no" names the tooling change it implies.
-- **FR-006**: The known gap - the DIRECT route lands docs/tests/ci/config without consulting the
-  active feature - is recorded here as a QUESTION for the GM, with the candidate rule (an
-  incomplete active feature limits DIRECT pushes to its own `specs/` directory and docs) and its
-  cost (milestone pushes of tooling would need the feature's tasks closed or a second feature).
-  Not implemented unless the GM says so.
+- **FR-006 (the GM's ruling, 2026-08-25)**: the DIRECT-route gap was put to the GM after the
+  skeleton itself was pushed to main against their intent (*"even though we are literally working
+  on a feature and that feature is not yet done, you still pushed back to main anyway"*). Ruled:
+  **a feature in progress lands nothing, on either route.** The active feature is DERIVED - any
+  `specs/NNN-*/tasks.md` with an open task that the delta touches or that `.specify/feature.json`
+  names - so it cannot be evaded by not setting the pointer; there is no flag; the ONE exception,
+  which the GM kept, is a delta consisting solely of that feature's own `specs/` directory (the
+  spec-number claim). Enforced in `scripts/sync-with-main.sh` at push time, proven both ways in
+  `scripts/test-sync-with-main.sh` (7d). Recorded cost: while a feature is open in a clone, that
+  clone lands nothing else either - an unrelated fix goes through another clone.
 - **FR-007**: The motivation - iteration wall-clock is the cost that limits how many changes the
   GM can make in a day; every command chosen, every tooling improvement, every interaction with
   the tooling is judged against it - MUST be written into the constitution, the root `CLAUDE.md`

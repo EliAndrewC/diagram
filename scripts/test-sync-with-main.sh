@@ -108,6 +108,27 @@ OUT=$(CI_ROUTE=DIRECT CI_MERGE="true" ritual "$D" push); check "a real-shaped tr
 expect_out "could not decide the route"
 [ "$(git -C "$D/github.git" rev-parse main)" != "$(git -C "$D/main/.clones/c" rev-parse HEAD)" ] && PASS=$((PASS+1)) || { echo "FAIL  the seam bypassed the gated route"; FAIL=$((FAIL+1)); }
 
+echo "7d. A FEATURE IN PROGRESS LANDS NOTHING (feature 133): open tasks refuse both routes; the spec directory alone is the one exception"
+D=$(topology fp)
+( cd "$D/main/.clones/c" && mkdir -p specs/140-x && printf -- '- [ ] T01 open\n' > specs/140-x/tasks.md && echo 'FAITHFUL' > specs/140-x/spec.md && echo docs > note.md && git add -A && git commit -qm "feature plus docs" )
+OUT=$(CI_ROUTE=DIRECT CI_MERGE="false" ritual "$D" push); check "IT FIRES: open tasks + an unrelated file -> refused on the DIRECT route" 1 $?
+expect_out "IN PROGRESS"
+expect_out "note.md"
+[ "$(git -C "$D/github.git" rev-parse main)" != "$(git -C "$D/main/.clones/c" rev-parse HEAD)" ] && PASS=$((PASS+1)) || { echo "FAIL  a feature in progress landed"; FAIL=$((FAIL+1)); }
+D=$(topology fq)
+( cd "$D/main/.clones/c" && mkdir -p specs/140-x && printf -- '- [ ] T01 open\n' > specs/140-x/tasks.md && echo 'FAITHFUL' > specs/140-x/spec.md && git add -A && git commit -qm "the claim" )
+OUT=$(CI_ROUTE=DIRECT CI_MERGE="false" ritual "$D" push); check "the spec directory ALONE (the number claim) is allowed" 0 $?
+expect_out "the claim), allowed"
+( cd "$D/main/.clones/c" && echo docs > note.md && git add -A && git commit -qm docs )
+OUT=$(CI_ROUTE=DIRECT CI_MERGE="false" ritual "$D" push); check "a later docs push from the same clone: the delta no longer touches the spec dir -> the pointer decides" 0 $?
+( cd "$D/main/.clones/c" && mkdir -p .specify && echo '{"feature_directory": "specs/140-x"}' > .specify/feature.json && echo more > note.md && git add -A && git commit -qm docs2 )
+OUT=$(CI_ROUTE=DIRECT CI_MERGE="false" ritual "$D" push); check "IT FIRES: the pointer names a feature with open tasks -> refused even for docs" 1 $?
+( cd "$D/main/.clones/c" && printf -- '- [x] T01 done\n' > specs/140-x/tasks.md && git add -A && git commit -qm done )
+OUT=$(CI_ROUTE=DIRECT CI_MERGE="false" ritual "$D" push); check "STAYS QUIET: every task ticked -> the docs land" 0 $?
+( cd "$D/main/.clones/c" && echo 'def a(): return 9' > .claude/skills/x/a.py && printf -- '- [x] T01 done\n- [ ] T02 the GM accepts\n' > specs/140-x/tasks.md && git add -A && git commit -qm engine ); stamp_hooks "$D"
+OUT=$(CI_ROUTE=GATED CI_MERGE="echo SKIP-VERIFIED > $D/main/.clones/c/.git/ci-verdict" ritual "$D" push); check "IT FIRES on the GATED route too, before ci-merge is even consulted" 1 $?
+expect_out "IN PROGRESS"
+
 echo "8. origins are re-pointed at GitHub once, and said so"
 D=$(topology h)
 git -C "$D/main/.clones/c" remote set-url origin "$D/main"

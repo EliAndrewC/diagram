@@ -166,6 +166,33 @@ push_cmd() {
   base=$(git rev-parse origin/main)
   before=$(git rev-parse HEAD)
   ours=$(git diff --name-only "$base"...HEAD | sort -u)
+  # A FEATURE IN PROGRESS LANDS NOTHING - ON EITHER ROUTE (feature 133, GM 2026-08-25: *"even though
+  # we are literally working on a feature and that feature is not yet done, you still pushed back to
+  # main anyway. And that is the kind of thing that I am trying to prevent with this tooling."*).
+  # The active feature is DERIVED, not declared, so it cannot be evaded by not setting the pointer:
+  # any specs/NNN-*/tasks.md with an open box that (a) our delta touches, or (b) .specify/feature.json
+  # names, is a feature in progress. While one exists the push is refused - DIRECT or GATED, no flag -
+  # with ONE mechanical exception the GM kept: a delta consisting solely of that feature's own
+  # specs/NNN-*/ directory (the spec-number claim for concurrent sessions). Nothing else rides along.
+  local active="" pointer="" f
+  pointer=$(python3 -c 'import json,sys; print(json.load(open(sys.argv[1])).get("feature_directory","").rstrip("/"))' "$ROOT/.specify/feature.json" 2>/dev/null || true)
+  for f in $(printf '%s\n' "$ours" | grep -oE '^specs/[^/]+' | sort -u) "$pointer"; do
+    [ -n "$f" ] && [ -f "$ROOT/$f/tasks.md" ] && grep -qE '^\s*- \[ \]' "$ROOT/$f/tasks.md" && active="$active $f"
+  done
+  active=$(printf '%s\n' $active | sort -u | tr '\n' ' ' | sed 's/ *$//')
+  if [ -n "$active" ]; then
+    local outside
+    outside=$(printf '%s\n' "$ours" | grep -vE "^(${active// /|})/" || true)
+    if [ -n "$outside" ] || [ "$(printf '%s\n' $active | wc -l)" -gt 1 ]; then
+      printf '\n\033[1mREFUSED: feature %s is IN PROGRESS (open tasks) - nothing lands on main until it is complete.\033[0m\n' "$active" >&2
+      printf 'Neither route lands a feature in progress, and there is no flag. The one exception is a push of\n' >&2
+      printf 'that feature'"'"'s own specs/ directory ALONE (the spec-number claim); this delta also touches:\n' >&2
+      printf '%s\n' "$outside" | sed 's/^/  /' >&2
+      printf 'Finish the feature (every task ticked, including the GM'"'"'s acceptance where the spec has one), or move the\nunrelated change to another clone. The work stays here - mid-task work is sacred.\n\n' >&2
+      exit 1
+    fi
+    echo "sync-with-main: feature $active is in progress - this push is its specs/ directory alone (the claim), allowed"
+  fi
   # pull+push as ONE locked unit: no other session can slip a push into the gap (CLAUDE.md step 2).
   # HEAD:main, NOT main (GM 2026-07-27): `git push origin main` pushes the local REF NAMED main and
   # ignores what is checked out, so a session on any other branch silently pushed a stale ref and

@@ -11,6 +11,8 @@ measured - the GM's instruction.
 - [x] T03 the doctrine (FR-007): constitution v2.3.0 "Iteration wall-clock is the cost" (the GM's words), root CLAUDE.md iteration heading, skill CLAUDE.md "The goal all of this serves", SKILL.md "The working rule behind the tooling"
 - [x] T04 skeleton pushed to main at 8b796dcb (route DIRECT, observed - the delta was specs, docs, ci/, Makefile, tests); a fresh session's clone carries it. `.specify/feature.json` is gitignored: the fresh session must point it at `specs/133-reference-hamlet-acceptance` (or export SPECIFY_FEATURE) before its first task, so the gated route knows the feature
 
+- [x] T05 (unmeasured, the GM's ruling FR-006): a feature in progress lands nothing on either route - derived active feature, spec-directory-only exception; `sync-with-main.sh` + test 7d (fires on DIRECT, on GATED, via the pointer; quiet when every task is ticked and for the claim). Note: this guard cannot itself reach main while 133 is open - it lives in this clone (`reference-testing`), which the fresh session should reuse by taking the same name
+
 ## Phase 1 - the GM's tasks, one at a time (measured)
 
 _(appended as the GM names them; each entry: the GM's words verbatim, then `given | done | elapsed | runs:` and a `note:` only if the time was out of proportion)_
