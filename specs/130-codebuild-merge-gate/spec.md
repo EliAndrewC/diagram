@@ -699,6 +699,18 @@ and the *"reconstituted"* numbers are the build-machine bookends.
 
 ## Review history
 
+### Consequence of feature 131 (the split, landed 2026-08-25) - not a new request
+
+This repository now IS the diagram project, so the route/delta distinction between "the diagram
+skill" and "the rest of the repository" (FR-002, FR-008, FR-009, the Delta entity's engine-path
+list) collapses to **engine code vs docs**: a delta touching `.claude/skills/diagram/{l7r,tests,
+pool}/`, the Makefile or `pyproject.toml` takes the gated route; a docs-only delta (any `*.md`,
+`dev/*-log/`, `specs/`) takes the direct route. `gate-stamp`'s area table has one area. The webapp
+and the content skills are in gm-assistant and never enter this feature. Nothing else in this spec
+changes; the plan's `ENGINE_PATHS` list is unchanged in content and simply no longer needs an
+"outside the skill" branch.
+
+
 ### Third amendment (GM's fourth request, 2026-08-24) - REVIEW PENDING
 
 Changed: FR-010 (every registered expensive operation may run remotely through the iteration
