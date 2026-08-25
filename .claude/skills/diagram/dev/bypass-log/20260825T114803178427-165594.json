@@ -1,0 +1,7 @@
+{
+  "utc": "2026-08-25T11:48:03Z",
+  "target": "bypass-audit FULL",
+  "commit": "0cb01343",
+  "outcome": "permitted",
+  "why": "feature 130 T080: the full sweep on the check project, both perf bookends in-build - GM 2026-08-25 authorized the session to answer (\"all of them look like things that you should be capable of kicking off\")"
+}
