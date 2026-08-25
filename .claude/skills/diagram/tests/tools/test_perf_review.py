@@ -139,7 +139,9 @@ def test_environments_are_checked_independently(log: Path, capsys: pytest.Captur
 
 
 def test_no_feature_and_no_pair_for_environment(log: Path, capsys: pytest.CaptureFixture[str]) -> None:
-    assert pr.main(["check", "--feature", "", "--log-dir", str(log)]) == 2
+    assert pr.main(["check", "--feature", "", "--log-dir", str(log)]) == 0, "a docs-only push names no feature and owes nothing (the first direct push after 129 was refused here)"
+    assert "nothing to review" in capsys.readouterr().out
+    assert pr.main(["explain", "--why", "x", "--feature", "", "--log-dir", str(log)]) == 2
     band(log, 1.0)
     assert run(log, "show", env="codebuild") == 2 and "no 129-start/-end pair for environment 'codebuild'" in capsys.readouterr().err
 

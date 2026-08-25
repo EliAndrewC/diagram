@@ -174,6 +174,12 @@ def main(argv: list[str] | None = None) -> int:
     a = ap.parse_args(argv)
     log_dir = Path(a.log_dir)
     if not a.feature:
+        # THE PUSH RUNS `check` ON EVERY PUSH, feature or not. A docs-only push carries no feature and
+        # owes nothing; an engine push without one is refused by the gated route's own
+        # feature-complete condition (feature 130). Found by the first direct push after 129 landed.
+        if a.command == "check":
+            print("perf-review: no feature named (SPECIFY_FEATURE unset) - nothing to review; an engine delta without a feature is refused at the gated route")
+            return 0
         print("perf-review: no feature named - export SPECIFY_FEATURE=NNN-slug", file=sys.stderr)
         return 2
     if a.command == "check":
