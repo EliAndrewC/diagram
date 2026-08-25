@@ -16,6 +16,7 @@ cannot be silently either.
 
 from __future__ import annotations
 
+import hashlib
 import subprocess
 from dataclasses import dataclass
 from pathlib import Path
@@ -75,3 +76,18 @@ def compute_delta(root: Path, base_ref: str = "origin/main") -> Delta:
     base = _git(root, "merge-base", base_ref, "HEAD").strip()
     files = tuple(sorted(f for f in _git(root, "diff", "--name-only", base, "HEAD").splitlines() if f.strip()))
     return Delta(base=base, files=files, engine=tuple(f for f in files if is_engine(f)))
+
+
+def engine_key(root: Path, tree: str) -> str:
+    """The VERIFICATION KEY: a hash over the ENGINE paths' blob ids in `tree` (a tree or commit ref).
+
+    A green build vouches for the engine CONTENT it tested - not for the docs beside it. Keying the
+    record by the whole tree (the first cut, feature 130 R2) threw a $0.64 verification away every
+    time a .notes.md, a run-log entry or a buildspec changed after the build (GM 2026-08-25: the same
+    tests against literally the same content must not be paid for twice). The same `is_engine` that
+    decides the ROUTE decides what is hashed, so the two can never disagree about what "engine" is.
+    Computed from `git ls-tree` - no checkout, and the build computes it the same way on its merge.
+    """
+    out = _git(root, "ls-tree", "-r", tree)
+    rows = sorted(f"{line.split()[2]} {line.split(maxsplit=3)[3]}" for line in out.splitlines() if line.strip() and is_engine(line.split(maxsplit=3)[3]))
+    return hashlib.sha256("\n".join(rows).encode()).hexdigest()

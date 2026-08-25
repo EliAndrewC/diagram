@@ -11,6 +11,7 @@ import pytest
 
 from l7r.diagram.ci import config, dispatch, state
 from l7r.diagram.ci.decision import CHECK, MERGE
+from l7r.diagram.ci.delta import engine_key
 from tests.ci.conftest import FakeClient, ScriptedSh, commit, git
 
 S = ".claude/skills/diagram/"
@@ -223,7 +224,8 @@ def test_a_failed_remote_build_records_failed_gate(repo: Path) -> None:
 def test_skip_verified_pushes_nothing_and_logs_the_build(repo: Path) -> None:
     engine_delta_with_green(repo, False)
     tree = git(repo, "merge-tree", "--write-tree", "origin/main", "HEAD").splitlines()[0]
-    client = FakeClient(verified={f"verified/{tree}.json": json.dumps({"tree": tree, "build_id": "gm-assistant-check:earlier", "scope": "reference", "utc": "x"}).encode()})
+    key = engine_key(repo, tree)
+    client = FakeClient(verified={f"verified/{key}.json": json.dumps({"tree": tree, "engine_key": key, "build_id": "gm-assistant-check:earlier", "scope": "reference", "utc": "x"}).encode()})
     c, lines = ctx(repo, client=client)
     out = dispatch.run(c)
     assert out.rc == 0 and out.verdict == "SKIP-VERIFIED" and "start_build" not in client.names()
@@ -235,6 +237,10 @@ def test_skip_verified_pushes_nothing_and_logs_the_build(repo: Path) -> None:
     )
     c2, _ = ctx(repo, client=FakeClient(verified=dict(client.objects)), scope="full")
     assert dispatch.run(c2).verdict == "DISPATCHED"
+    # a DOCS commit after the verification keeps the shortcut: the engine content is what was tested
+    commit(repo, "docs/after.md", "written after the build\n")
+    c3, _ = ctx(repo, client=FakeClient(verified=dict(client.objects)))
+    assert dispatch.run(c3).verdict == "SKIP-VERIFIED", "a docs-only change after a green build must not cost a build"
 
 
 def test_artifacts_land_in_perf_log_and_ci_artifacts(repo: Path) -> None:
@@ -295,10 +301,14 @@ def test_default_sh_runs_a_real_command(tmp_path: Path) -> None:
 
 
 def test_verified_lookup_shapes(repo: Path) -> None:
-    c, _ = ctx(repo, client=FakeClient(verified={"verified/t.json": b'{"build_id": "b", "scope": "full"}'}))
-    rec = dispatch.verified_lookup(c, "t")
-    assert rec is not None and rec.tree == "t" and rec.scope == "full" and rec.build_id == "b"
-    assert dispatch.verified_lookup(c, None) is None and dispatch.verified_lookup(c, "missing") is None
+    tree = git(repo, "rev-parse", "HEAD^{tree}")
+    key = engine_key(repo, tree)
+    c, _ = ctx(repo, client=FakeClient(verified={f"verified/{key}.json": b'{"build_id": "b", "scope": "full"}'}))
+    rec = dispatch.verified_lookup(c, tree)
+    assert rec is not None and rec.tree == tree and rec.scope == "full" and rec.build_id == "b"
+    assert dispatch.verified_lookup(c, None) is None
+    commit(repo, S + "l7r/diagram/m.py", "x = 'other engine content'\n")
+    assert dispatch.verified_lookup(c, git(repo, "rev-parse", "HEAD^{tree}")) is None, "different engine content, no record"
 
 
 def test_stream_falls_back_to_the_build_uuid_as_stream_name(repo: Path) -> None:

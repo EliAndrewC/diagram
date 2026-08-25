@@ -1,7 +1,13 @@
 <!--
 SYNC IMPACT REPORT
 ==================
-Version change: 2.0.0 → 2.1.0
+Version change: 2.1.0 → 2.2.0
+
+Version 2.2.0 (amended 2026-08-25): history is never rewritten - no squashing, no rebasing, no
+amending of shared commits, no force pushes (GM 2026-08-25), enforced by the repo-safety hook. A
+new rule in Principle VI: MINOR.
+
+PRIOR (2.0.0 → 2.1.0):
 
 Version 2.1.0 (amended 2026-08-25): Principle VI's performance clause becomes the GM's three-band
 matrix (feature 129): any increase on the total or any seed owes an explanation confirmed by the
@@ -670,6 +676,16 @@ artifacts. Specifically:
     is finding out why, not adding to it.
   - Snapshots live one-file-per-run in `.claude/skills/diagram/dev/perf-log/`, so
     concurrent clones never conflict. Never edit or delete one.
+  - **History is never rewritten: no squashing, no rebasing, no amending of
+    shared commits, no force pushes** (GM 2026-08-25). Every landing is a real
+    merge commit with its parents. Two reasons: the commit history is the
+    project's record of decisions; and the verified-tree records, the review
+    records and the bookends are keyed by the content and commits that were
+    tested - a rewrite would silently invalidate a paid verification. The
+    `main` ruleset refuses force pushes and deletions to every credential;
+    `scripts/repo-safety-hooks.sh` refuses `git rebase`, `pull --rebase`,
+    `merge --squash` and `commit --amend` in a session.
+
   - This does not replace `GEN_TIME_BUDGETS`, which is a per-gen ceiling. This is
     a trend, and it answers the other question: is it getting slower, and when.
 
@@ -1530,4 +1546,4 @@ document wins; where this document is silent, defer to the project's
 guidance. This constitution is the higher-level authority; CLAUDE.md
 operationalizes it.
 
-**Version**: 2.1.0 | **Ratified**: 2026-05-27 | **Last Amended**: 2026-08-25
+**Version**: 2.2.0 | **Ratified**: 2026-05-27 | **Last Amended**: 2026-08-25

@@ -32,7 +32,7 @@ def _roots() -> tuple[Path, Path]:
 
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(prog="l7r.diagram.ci", description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("command", choices=["status", "check", "merge", "image", "state", "door", "remote-spend"])
+    ap.add_argument("command", choices=["status", "check", "merge", "image", "state", "door", "remote-spend", "engine-key"])
     ap.add_argument("args", nargs="*")
     ap.add_argument("--full", action="store_true", help="the full sweep (the Makefile has already run the local prompt)")
     ap.add_argument("--target", default=None, help="ci-check only: an expensive operation to run remotely instead of the gate")
@@ -53,6 +53,11 @@ def main(argv: list[str] | None = None) -> int:
         ok, why = door.check(root, skill)
         print(f"bypass-audit: {why}")
         return 0 if ok else 1
+    if a.command == "engine-key":
+        from l7r.diagram.ci.delta import engine_key
+
+        print(engine_key(root, a.args[0] if a.args else "HEAD"))
+        return 0
     if a.command == "remote-spend":
         print(runlog.remote_spend_report(skill))
         return 0

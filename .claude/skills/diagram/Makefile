@@ -393,6 +393,9 @@ help:           ## list every target with its one-line purpose
 # scripts/sync-with-main.sh - never by hand. `ci-status` is the free "why won't it dispatch".
 ci-status:      ## free: delta, route, verification state, verified lookup, remote spend   ROUTE=1 -> just DIRECT|GATED
 	$(RUN).ci status $(if $(ROUTE),--route,)
+# the verification key of a tree - the build records a green gate under it (GUARD_EDIT_OK: feature 130, keyed by engine content since 2026-08-25)
+engine-key:
+	@$(RUN).ci engine-key $(or $(REF),HEAD)
 
 ci-check:       ## the iteration check on CodeBuild (PAID)     FULL=1 (prompts) | TARGET=cohort etc. | NO_GO=1 (FR-036 self-abort proof)
 	@$(if $(FULL),$(MAKE) --no-print-directory bypass-audit REF_WHY="$(REF_WHY)" && $(MAKE) --no-print-directory commit-permitted,true)

@@ -67,7 +67,7 @@ Reference directories hold organized source material and context. Each directory
 
 ## Development Workflow
 
-This project uses spec-driven development governed by [`.specify/memory/constitution.md`](.specify/memory/constitution.md) (v2.1.0 since 2026-08-25 - this repository's edition; 18 numbered principles, I and II not applicable here, 11 NON-NEGOTIABLE). The constitution is the higher-level authority; this CLAUDE.md operationalizes it.
+This project uses spec-driven development governed by [`.specify/memory/constitution.md`](.specify/memory/constitution.md) (v2.2.0 since 2026-08-25 - this repository's edition; 18 numbered principles, I and II not applicable here, 11 NON-NEGOTIABLE). The constitution is the higher-level authority; this CLAUDE.md operationalizes it.
 
 **When to use spec-kit:**
 
@@ -202,6 +202,7 @@ Package-specific timings and skill-specific lessons live in that skill's dev-loo
 - **Git ownership:** the session does all commits/merges/pushes; the merge project's credential is the only other thing that writes GitHub main, and the `main` ruleset stops it (and everyone) from rewriting history. Never commit or push against `/host-l7r-repo`.
 - **Paid, prompted targets** (`make ci-image`, any `FULL=1` dispatch) exist to be answered by a person; a session answering its own prompt through a pseudo-terminal was ruled an EXCEPTION by `spec-fidelity` on 2026-08-25, and the GM then authorized it in their own words the same day (*"all of them look like things that you should be capable of kicking off"*). So a session MAY answer, and the logged reason MUST say it did and quote that authorization - the bypass-log entry is how the audit tells a session's answer from the GM's. Never through an environment variable. `make ci-check` (reference scope) and the gated push need no prompt.
 - **Commit on `main` inside the clone** - never on a branch. `sync-with-main.sh` pushes `HEAD:main`, so what you committed is what lands.
+- **NEVER REWRITE HISTORY** (GM 2026-08-25, constitution VI): no `git rebase`, no `pull --rebase`, no `merge --squash`, no `commit --amend`, no force push. Every landing is a real merge commit with its parents intact. The history is the record, and the verified-tree records, review records and perf bookends are keyed by the commits and content that were actually tested - a rewrite would silently throw away a paid verification. Enforced by [`scripts/repo-safety-hooks.sh`](scripts/repo-safety-hooks.sh).
 - Hooks enforce all of this ([`scripts/clone-sync-hooks.sh`](scripts/clone-sync-hooks.sh)): the forbidden name, name-routing to another session's clone, a live-session claim, and a clean-but-stale HEAD. A dirty tree is never blocked - mid-task work is sacred. **If a hook blocks you, the full spec and every failure mode is in [`docs/session-clones.md`](docs/session-clones.md).**
 - **Gotcha:** keep `pytest`/`ripgrep` scoped to the working dir - they do not read `.gitignore`, so a repo-root run double-collects every clone.
 - **NAME THE TREE IN THE COMMAND; never carry a `cd` into it** (measured 2026-08-17). A bare `cd` persists for the REST of that command AND into the next Bash call, so a block opening `cd /gm-assistant && ...` silently answers about MAIN for everything after it - including the half you labeled CLONE. That cost one session two wrong readings of its own state in a single sitting, the second one immediately after writing up the first. Measured behavior: `( cd X && ... )` in a subshell leaks nothing, either way; a bare `cd X` leaks both ways. So:
@@ -216,7 +217,7 @@ Package-specific timings and skill-specific lessons live in that skill's dev-loo
 
 | rule | mechanism |
 |---|---|
-| never `git push --force` | [`scripts/repo-safety-hooks.sh`](scripts/repo-safety-hooks.sh) - no escape; "never" stops meaning never the moment one exists |
+| never `git push --force`; never rewrite history (rebase, pull --rebase, merge --squash, commit --amend) | [`scripts/repo-safety-hooks.sh`](scripts/repo-safety-hooks.sh) - no escape; "never" stops meaning never the moment one exists |
 | no git writes to `/host-l7r-repo` | same script; EDITS there stay legal, the intake workflow needs them |
 | the GM's SOURCE blocks are not editable (V) | [`scripts/source-block-hooks.sh`](scripts/source-block-hooks.sh) - checks containment against the file on disk |
 | hyphens only; American spellings | [`scripts/house-style-hooks.sh`](scripts/house-style-hooks.sh) - exempts the GM's writing and the files that must quote the rule |

@@ -32,7 +32,7 @@ from pathlib import Path
 from typing import Any, Protocol
 
 from l7r.diagram.ci import config, decision, door, features, runlog, state
-from l7r.diagram.ci.delta import compute_delta
+from l7r.diagram.ci.delta import compute_delta, engine_key
 
 ShResult = tuple[int, str]
 Sh = Callable[[list[str], Path, Mapping[str, str] | None], ShResult]
@@ -175,9 +175,10 @@ def would_be_tree(ctx: Context) -> tuple[str | None, str]:
 
 
 def verified_lookup(ctx: Context, tree: str | None) -> decision.VerifiedRecord | None:
+    """By the ENGINE KEY of the would-be tree (delta.engine_key), never by the whole tree."""
     if tree is None or ctx.client is None or ctx.secrets is None:
         return None
-    body = ctx.client.get_object(ctx.secrets.ci_bucket, f"verified/{tree}.json")
+    body = ctx.client.get_object(ctx.secrets.ci_bucket, f"verified/{engine_key(ctx.root, tree)}.json")
     if body is None:
         return None
     import json
@@ -204,7 +205,11 @@ def status_text(ctx: Context) -> tuple[str, decision.DispatchDecision]:
     d = decision.decide(delta, st, now, verified, None, ctx.mode if ctx.mode in (decision.MERGE, decision.CHECK) else decision.CHECK, feat, ctx.scope, runlog.month_to_date(ctx.skill), ctx.operation)
     text = decision.render(d, ctx.mode, ctx.scope)
     head = [f"delta: merge-base {delta.base[:12]}, {len(delta.files)} file(s), route {delta.route}", f"state: {state.describe(st, now)}"]
-    head.append(f"would-be tree: {tree[:12]}" if tree else f"would-be tree: MERGE CONFLICT with origin/main - merge main locally, resolve, commit:\n  {conflict[:400]}")
+    head.append(
+        f"would-be tree: {tree[:12]}, engine key {engine_key(ctx.root, tree)[:12]} (what a verified record is keyed by)"
+        if tree
+        else f"would-be tree: MERGE CONFLICT with origin/main - merge main locally, resolve, commit:\n  {conflict[:400]}"
+    )
     return "\n".join(head) + "\n" + text, d
 
 

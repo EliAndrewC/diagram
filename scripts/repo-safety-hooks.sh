@@ -49,6 +49,18 @@ if re.search(POS + r"git\b[^\n;|&]*\bpush\b[^\n;|&]*(?:--force(?:-with-lease)?|(
     print("force-push"); raise SystemExit
 if re.search(POS + r"git\b[^\n;|&]*(?:--force(?:-with-lease)?)[^\n;|&]*\bpush\b", c):
     print("force-push"); raise SystemExit
+# HISTORY IS NEVER REWRITTEN (GM 2026-08-25, constitution VI - GUARD_EDIT_OK: adding the rule). No
+# rebase, no squash merge, no amend: every landing is a real merge commit, because the verified-tree
+# records, the review records and the perf bookends are keyed by the commits and content that were
+# actually tested, and a rewrite silently throws a paid verification away.
+# `git rebase` the SUBCOMMAND, and `--rebase` the FLAG - never `--no-rebase`, which is what the
+# pull in the ritual says (the first cut blocked it: the eighth mention-versus-invocation slip in
+# this repo). NO APOSTROPHES IN THESE COMMENTS: this Python sits inside a single-quoted bash string.
+# (GUARD_EDIT_OK: the pattern refuses only the rewrite, not the flag that forbids it)
+if re.search(POS + r"git\b(?:\s+-C\s+\S+|\s+-\S+)*\s+rebase\b", c) or re.search(POS + r"git\b[^\n;|&]*\bpull\b[^\n;|&]*(?<![\w-])--rebase\b", c):
+    print("history-rewrite"); raise SystemExit
+if re.search(POS + r"git\b[^\n;|&]*\bmerge\b[^\n;|&]*--squash", c) or re.search(POS + r"git\b[^\n;|&]*\bcommit\b[^\n;|&]*--amend", c):
+    print("history-rewrite"); raise SystemExit
 
 if "HOST_GIT_OK" not in cmd:
     # a git WRITE aimed at the GM own repo, by -C or by a cd into it
@@ -81,6 +93,23 @@ overwriting. There is deliberately no escape hatch here: "never" stops meaning n
 exists.
 
 (scripts/repo-safety-hooks.sh; CLAUDE.md session-clone workflow)
+TAIL
+    exit 2 ;;
+  history-rewrite)
+    cat >&2 <<'TAIL'
+BLOCKED: a history rewrite (rebase, pull --rebase, merge --squash, or commit --amend).
+
+This project never rewrites history (GM 2026-08-25, constitution VI): every landing is a real merge
+commit with its parents intact. The history is the record of decisions, and the verified-tree
+records, the perf-review records and the performance bookends are keyed by the commits and content
+that were actually tested - a rewrite would throw a paid verification away without saying so.
+
+What to do instead:
+  - to bring main in:   scripts/sync-with-main.sh sync-in   (a merge, never a rebase)
+  - to fix a commit:    make another commit that fixes it
+  - to combine work:    a merge commit (git merge --no-edit <ref>)
+
+No escape hatch: "never" stops meaning never the moment one exists. (GUARD_EDIT_OK: new guard)
 TAIL
     exit 2 ;;
   host-git-write)

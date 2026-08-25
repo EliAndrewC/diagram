@@ -39,10 +39,12 @@ do not want to run anything on AWS"* come first, and the speedup second.
    unsuccessful make done, in which case it should just short circuit immediately and refuse to
    run without even dispatching to AWS."* A source edit after the green run also refuses (the
    Assumptions reading in the spec: the green run vouched for different code).
-4. **tree-not-already-verified** - a green build already verified the exact tree the merge would
-   produce, so no second build. *"we can keep track of whether the commit hash that will land on
-   main has already had a successful remote run ... This saves both time and money."* Keyed by
-   TREE, not commit (R2).
+4. **tree-not-already-verified** - a green build already verified the ENGINE CONTENT the merge
+   would produce, so no second build. *"we can keep track of whether the commit hash that will land
+   on main has already had a successful remote run ... This saves both time and money."* Keyed by
+   the engine key (`delta.engine_key`: a hash over the engine paths' blobs in the merge tree),
+   not by the commit and - since 2026-08-25 - not by the whole tree either: a docs edit after a
+   green build keeps the verification (the first day's tree key threw one away, $0.64).
 5. **breaker-not-tripped** - the monthly hard stop's deny policy; discovered at `start_build`,
    reported with the detach command (FR-021).
 

@@ -82,6 +82,13 @@ def test_a_cheap_operation_is_refused_as_a_remote_target_and_an_expensive_one_di
     assert entry["scope"] == "operation" and entry["reason"] == "cohort N=48" and entry["compute"] == "BUILD_GENERAL1_2XLARGE"
 
 
+def test_engine_key_subcommand(roots: Path, capsys: pytest.CaptureFixture[str]) -> None:
+    assert cli.main(["engine-key"]) == 0
+    key = capsys.readouterr().out.strip()
+    assert len(key) == 64
+    assert cli.main(["engine-key", "HEAD^{tree}"]) == 0 and capsys.readouterr().out.strip() == key
+
+
 def test_image_and_target_validation(roots: Path) -> None:
     assert cli.main(["image"]) == 0
     with pytest.raises(SystemExit):

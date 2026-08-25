@@ -87,13 +87,17 @@ if [ -d "$SKILL/dev/ci-report" ]; then aws s3 cp --quiet --recursive "$SKILL/dev
 
 [ "$rc" -eq 0 ] || { echo "== gate RED - no record, nothing pushed"; exit "$rc"; }
 
-echo "== record: verified/$tree.json ($CI_SCOPE)"
-printf '{"tree":"%s","build_id":"%s","project":"%s","scope":"%s","utc":"%s","main":"%s","work":"%s","target":"%s"}\n' \
-  "$tree" "$CODEBUILD_BUILD_ID" "$MODE" "$CI_SCOPE" "$(date -u +%Y-%m-%dT%H:%M:%SZ)" "$main_sha" "$GIT_SHA" "$MAKE_TARGET" > /tmp/verified.json
+# THE RECORD IS KEYED BY THE ENGINE CONTENT the gate tested (a hash over the engine paths' blobs in
+# the merge tree - the same function the dispatcher looks up with), not by the whole tree: a docs
+# change after a green build must not throw the verification away (GM 2026-08-25).
+key=$(cd "$SKILL" && make --no-print-directory engine-key REF=HEAD)
+echo "== record: verified/$key.json ($CI_SCOPE; tree $tree)"
+printf '{"tree":"%s","engine_key":"%s","build_id":"%s","project":"%s","scope":"%s","utc":"%s","main":"%s","work":"%s","target":"%s"}\n' \
+  "$tree" "$key" "$CODEBUILD_BUILD_ID" "$MODE" "$CI_SCOPE" "$(date -u +%Y-%m-%dT%H:%M:%SZ)" "$main_sha" "$GIT_SHA" "$MAKE_TARGET" > /tmp/verified.json
 # THE RECORD IS THE SKIP-VERIFIED OPTIMIZATION, NOT THE VERDICT: a merge whose gate passed lands even
 # when the bucket refuses the write (build 347249b6 failed here under a bucket policy whose
 # NotPrincipal did not match the assumed-role session - the policy is now condition-form).
-aws s3 cp --quiet /tmp/verified.json "s3://$CI_BUCKET/verified/$tree.json" || echo "(verified record NOT written - the bucket policy refused this principal; the next merge of this tree will run a build instead of SKIP-VERIFIED)"
+aws s3 cp --quiet /tmp/verified.json "s3://$CI_BUCKET/verified/$key.json" || echo "(verified record NOT written - the bucket policy refused this principal; the next merge of this tree will run a build instead of SKIP-VERIFIED)"
 
 if [ "$MODE" = merge ]; then
   echo "== push: HEAD -> main (fast-forward only)"

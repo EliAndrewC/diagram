@@ -7,7 +7,7 @@ from pathlib import Path
 
 import pytest
 
-from l7r.diagram.ci.delta import Delta, compute_delta, is_engine
+from l7r.diagram.ci.delta import Delta, compute_delta, engine_key, is_engine
 from tests.ci.conftest import commit, git
 
 S = ".claude/skills/diagram/"
@@ -90,3 +90,17 @@ def test_delta_sees_our_engine_change(repo: Path) -> None:
 
 def test_a_clone_at_main_has_an_empty_delta(repo: Path) -> None:
     assert compute_delta(repo).files == ()
+
+
+def test_the_engine_key_ignores_docs_and_moves_with_engine_content(repo: Path) -> None:
+    """A green build vouches for the ENGINE content; a docs edit afterwards keeps the key (GM 2026-08-25)."""
+    k0 = engine_key(repo, "HEAD")
+    commit(repo, "docs/note.md", "docs only\n")
+    commit(repo, S + "SKILL.md", "skill docs\n")
+    commit(repo, S + "dev/run-log/x.json", "{}\n")
+    assert engine_key(repo, "HEAD") == k0, "docs, skill docs and a run-log entry do not move the key"
+    commit(repo, S + "l7r/diagram/m.py", "x = 2\n")
+    k1 = engine_key(repo, "HEAD")
+    assert k1 != k0
+    assert engine_key(repo, "HEAD^{tree}") == k1, "a tree ref keys identically to its commit"
+    assert len(k1) == 64

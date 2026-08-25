@@ -48,6 +48,14 @@ REPO_SAFETY = [
     # the seventh mention-versus-invocation case: a message ABOUT the rule
     ("a commit message quoting the rule", cmd('git commit -m "never git push --force here"'), "ok"),
     ("a heredoc message quoting it", cmd("git commit -F - <<MSG\nblocks git push --force\nMSG"), "ok"),
+    # history is never rewritten (GM 2026-08-25, constitution VI)
+    ("a rebase", cmd("git rebase origin/main"), "blocked"),
+    ("a pull with --rebase", cmd("git -C /diagram/.clones/x pull --rebase origin main"), "blocked"),
+    ("a squash merge", cmd("git merge --squash session/other"), "blocked"),
+    ("an amend", cmd("git commit --amend --no-edit"), "blocked"),
+    ("an ordinary merge", cmd("git merge --no-edit origin/main"), "ok"),
+    ("the ritual's pull", cmd("git pull --no-rebase origin main"), "ok"),
+    ("a commit message mentioning rebase", cmd('git commit -m "no rebase or squash here"'), "ok"),
     ("git write to the GM repo", cmd("git -C /host-l7r-repo commit -m x"), "blocked"),
     ("git add to the GM repo", cmd("cd /host-l7r-repo && git add setting/l7r.md"), "blocked"),
     # read-only git there is explicitly ALLOWED by CLAUDE.md

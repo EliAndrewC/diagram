@@ -218,3 +218,13 @@ legitimate reasons, so the prompt was written as the reference BYPASS. The GM's 
 **Decision (FR-034)**: `done FULL=1` = `bypass-audit` (authorizes the expense) THEN `reference`
 (unless `REF_OK`, which logs its own reason as it does for every other target) THEN the phases.
 Two separate bypasses for two separate things. Applies locally and in the build identically.
+
+## R2, refined 2026-08-25 - the key is the ENGINE CONTENT, not the whole tree
+
+The tree key was right about commits (two merges of the same content differ only in timestamp) and
+wrong about docs: a `.notes.md`, a run-log entry or a buildspec edited after a green build changed
+the tree and threw the verification away, and the GM saw a $0.64 build re-run the gate on engine
+content it had already passed. The record is now keyed by `delta.engine_key(tree)` - a hash over
+the blob ids of the ENGINE paths (the same `is_engine` the route uses) in the merge tree, computed
+by the dispatcher for the lookup and by the build (`make engine-key`) for the record. Same content,
+same key, whatever the docs did in between; the scope field still separates FULL from reference.
