@@ -4,7 +4,7 @@
 
 **Created**: 2026-08-25
 
-**Status**: Draft skeleton - awaiting `spec-fidelity` review (constitution XVI)
+**Status**: round 1 CHANGES REQUIRED (one sentence, applied); awaiting round 2
 
 **Input**: [`gm-request.md`](gm-request.md), verbatim and unedited. That file is the authority for
 this specification.
@@ -39,8 +39,11 @@ task, and every task the GM names afterwards IS.
 The feature **stays in the clone until the GM accepts**: its last task cannot be ticked by a
 session, so the gated route's feature-complete condition refuses to land engine work (feature 130
 FR-011). The skeleton itself is pushed to main once, as the spec-number claim the project requires
-and so a fresh session's clone carries it; after that, only the tooling in Phase 0 lands (it is
-outside the engine set and lands DIRECT) and the map work does not.
+and so a fresh session's clone carries it; after that, the route for any further push is decided
+by the delta as always (`ci/delta.py` `is_engine`), never by this spec: any delta touching engine
+paths - including `l7r/diagram/switches.py` - is GATED and is refused while T99 is open, which is
+precisely the behavior SC-003 exists to observe. (Round 1 of the fidelity review struck a sentence
+here that had pre-judged the route.)
 
 ## User Scenarios & Testing
 
@@ -158,3 +161,10 @@ to get things into main outside the context of features"* the GM suspected.
 - The skeleton phase is not measured; every GM-named task is.
 - "Accepted by the GM as the developer" is the GM's judgment of the rendered map
   (`pool/hamlets/inashiro.png`), not a check passing.
+
+## Review history (constitution XVI)
+
+- **Round 1 (2026-08-25): CHANGES REQUIRED** - one: the spec had asserted that the Phase 0 tooling
+  "lands DIRECT" when `switches.py` is engine code and would be GATED. Removed; the route is the
+  delta's to decide and this feature's to observe. FR-006 (the DIRECT-route gap as a QUESTION) and
+  pushing the skeleton to main were both judged faithful.

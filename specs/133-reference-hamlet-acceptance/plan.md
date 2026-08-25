@@ -56,8 +56,10 @@ never from memory.
 month-to-date is untouched) and listed by a new `would_have_report(skill)` block in
 `remote_spend_report`. Written from `ci/__main__.py` wherever remote-off refuses or the merge is
 LOCAL-GATED with a decision that would otherwise have been DISPATCH (computed by calling `decide`
-once more with `remote_off=None`), and from the Makefile's `REMOTE_OK` refusals (`ci-check`,
-`ci-image`) through `switches check remote` - which gains the write. Tests in `tests/ci/`.
+once more with `remote_off=None`), and the Makefile's `REMOTE_OK` (`ci-check`, `ci-image`) becomes `python3 -m l7r.diagram.ci
+remote-ok <target>` - the same refusal text, plus the write - so the whole tracker lives in `ci/`
+(exempt from the gate since 132 FR-025) and the Makefile; `switches.py` is untouched, so the
+skeleton's delta stays DIRECT and can land for the fresh session. Tests in `tests/ci/`.
 
 ### The doctrine (FR-007)
 
