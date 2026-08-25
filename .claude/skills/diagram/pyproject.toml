@@ -62,6 +62,14 @@ explicit_package_bases = true
 mypy_path = "."
 files = ["l7r/diagram/settlement", "l7r/diagram/check_village", "l7r/diagram/waterfields", "l7r/diagram/hamletgen", "l7r/diagram/sitegen", "l7r/diagram/ci", "l7r/diagram/compound.py", "l7r/diagram/citybudget.py", "l7r/diagram/tools/pack_audit.py", "l7r/diagram/tools/why_placed.py", "l7r/diagram/tools/scatter_audit.py", "l7r/diagram/tools/timings.py", "l7r/diagram/pipeline/pool_index.py", "l7r/diagram/pipeline/poolmaps.py"]
 
+# boto3 ships no type information and is absent from the BUILD image on purpose (the build talks to
+# S3 through the AWS CLI), so mypy sees `import-untyped` on the laptop and `import-not-found` in a
+# CodeBuild run - an inline ignore cannot satisfy both under --strict (build e2511c85 failed its
+# typecheck phase on exactly that). The override covers both environments.
+[[tool.mypy.overrides]]
+module = ["boto3", "boto3.*", "botocore", "botocore.*"]
+ignore_missing_imports = true
+
 # RATCHET FULLY RETIRED: all three legacy engine modules (waterfields.py, check_village.py,
 # settlement.py) have been migrated to mypy --strict and the per-module override that relaxed them is
 # gone, so the gate now blocks any backsliding across the whole Mode B engine. NEW modules are strict

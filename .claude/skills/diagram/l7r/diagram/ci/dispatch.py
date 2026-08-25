@@ -69,8 +69,8 @@ class Boto3Client:  # pragma: no cover - the real transport; its response SHAPES
     """The real boundary. Constructed only by `__main__`, never by a test."""
 
     def __init__(self, secrets: config.Secrets) -> None:
-        import boto3  # type: ignore[import-untyped]  # local: the suite never imports it
-        import botocore.exceptions  # type: ignore[import-untyped]
+        import boto3  # local: the suite never imports it, and the build image does not carry it
+        import botocore.exceptions
 
         self._errors = botocore.exceptions
         ses = boto3.Session(aws_access_key_id=secrets.access_key_id, aws_secret_access_key=secrets.secret_access_key, region_name=secrets.region)
