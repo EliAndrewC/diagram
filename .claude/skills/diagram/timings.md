@@ -392,3 +392,4 @@ build reached wait-go (T078, derived). Compute type: XLARGE kept without buying 
 its slowest seeds, not by width - `cohort_audit` fans 48 seeds over cpus-2 workers and the wall
 clock is the worst seed either way) at 2.5x the per-minute rate and 2.8x the bill. `xlarge` stays
 the default for every target; the `COMPUTE=` knob remains for the next workload that might scale.
+| b3617f0d, 5b376edc, b2056da1 | `make ci-image` (T019): system pip on 26.04 refused Debian deps; Docker Hub 429'd CodeBuild; then **built and pushed in 96 s wall** from an ECR Public base through a uv venv | 2+1+2 (MEDIUM, $0.01/min) | ~$0.05 - the image exists; dispatches now pull it instead of bootstrapping |
