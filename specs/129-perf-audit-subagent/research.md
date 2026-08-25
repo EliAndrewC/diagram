@@ -100,10 +100,9 @@ surprised at the push. On CodeBuild the FULL build takes both bookends itself (f
 `codebuild` pair appears in `dev/perf-log/` after a FULL run and the push evaluates that environment
 too, independently (FR-015).
 
-## R7 - The profile archive repository does not exist yet (FR-011a)
+## R7 - The profile archive repository (FR-011a): `EliAndrewC/mapgen-perflogs`, created by the GM 2026-08-25
 
-**Verified** 2026-08-25 (`GET /users/EliAndrewC/repos`): no repository for profile artifacts. It is the
-GM's to create. Until it exists, `make perf-profile` keeps the raw `.prof` under the gitignored
-`dev/perf-raw/` and the derived evidence is committed here; the archive push is a documented step
-that reports "no archive configured" and degrades (FR-011b) - the finding is in this repository
-either way.
+`perf_profile.DEFAULT_ARCHIVE` points at it; pushes authenticate with the CodeBuild PAT through
+`scripts/git-askpass-token.sh`. The first archived artifact was this feature's own seed-4 `seat`
+profile. `PERF_ARCHIVE=` (empty) disables the step; any failure degrades to a message and the
+derived table committed here stands alone (FR-011b).

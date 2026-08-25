@@ -84,10 +84,9 @@ that can present any of these as diligence -
   that answers MUST record in the reason that it did, quoting the authorization - the entry is
   how `make audit` tells a session's answer from the GM's (the reviewer's aside: an actor field).
 
-## Admin-key task still open (R8, FR-016)
+## The `verified/` write path (R8, FR-016) - closed 2026-08-25
 
-The session key (`gm-assistant-ci`) can still `PutObject` under `verified/`. The bucket policy that
-denies it to every principal except `gm-assistant-codebuild-role` is in
-[`buildspec/verified-deny-policy.json`](../../../../../buildspec/verified-deny-policy.json) and
-needs the admin key: `aws s3api put-bucket-policy --bucket gm-assistant-ci-130071571821 --policy file://buildspec/verified-deny-policy.json`.
-Until it is applied, FR-016's "MUST be unable" is not true and T023 stays unticked.
+The bucket policy in [`buildspec/verified-deny-policy.json`](../../../../../buildspec/verified-deny-policy.json)
+denies `s3:PutObject` under `verified/` to every principal except `gm-assistant-codebuild-role`.
+Applied with the admin key on 2026-08-25 and verified: the session key gets `AccessDenied` there and
+still writes `go/`. Only a build can write a verified record.

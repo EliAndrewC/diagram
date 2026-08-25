@@ -180,7 +180,8 @@ questions. When it cannot say WHICH FUNCTION, `make perf-profile SEED=n STAGE=s`
 that one stage of that one seed - measured at +225% on the real generation workload (27.4 s -> 89.0 s
 on seed 4), which is why it is triggered, never always-on. The derived top-25 table (kilobytes) is
 committed; the raw `.prof` stays in the gitignored `dev/perf-raw/` and goes to the profile-archive
-repository once the GM creates it (`PERF_ARCHIVE=<git url>`).
+repository `EliAndrewC/mapgen-perflogs` (the default; `PERF_ARCHIVE=` empty disables it), pushed with the
+CodeBuild PAT through `scripts/git-askpass-token.sh`; a failed push degrades to a message.
 
 **If the harness does not know the `perf-audit` agent type** (it loads `.claude/agents/` from
 `/diagram` at session start, so a session that predates the file - or runs before it lands on main -

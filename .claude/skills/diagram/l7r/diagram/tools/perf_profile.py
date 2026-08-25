@@ -34,6 +34,29 @@ if SKILL not in sys.path:
     sys.path.insert(0, SKILL)
 LOG_DIR = os.path.join(SKILL, "dev", "perf-log")
 RAW_DIR = os.path.join(SKILL, "dev", "perf-raw")
+# THE PROFILE ARCHIVE (FR-011a): the second repository the GM created on 2026-08-25 for raw profiles.
+# Pushed with the same PAT the CodeBuild dispatcher uses, through scripts/git-askpass-token.sh -
+# never on a command line. PERF_ARCHIVE= overrides (an empty value disables the archive step).
+DEFAULT_ARCHIVE = "https://github.com/EliAndrewC/mapgen-perflogs"
+
+
+def _archive_url() -> str:
+    return os.environ.get("PERF_ARCHIVE", DEFAULT_ARCHIVE)
+
+
+def _git_env() -> dict[str, str]:
+    """git with the PAT from development-secrets.ini via GIT_ASKPASS (feature 130's helper)."""
+    env = dict(os.environ)
+    try:
+        from pathlib import Path
+
+        from l7r.diagram.ci.config import load_secrets
+
+        root = Path(SKILL).parents[2]
+        env.update({"GIT_ASKPASS": str(root / "scripts" / "git-askpass-token.sh"), "GITHUB_TOKEN": load_secrets(root).github_pat, "GIT_TERMINAL_PROMPT": "0"})
+    except FileNotFoundError:
+        pass  # no secrets: an anonymous clone still works for a public archive; the push will say so
+    return env
 
 
 def profile_stage(seed: int, stage: str, top: int = 25) -> tuple[str, str]:
@@ -78,28 +101,32 @@ def profile_stage(seed: int, stage: str, top: int = 25) -> tuple[str, str]:
 
 
 def archive_status() -> str:
-    url = os.environ.get("PERF_ARCHIVE", "")
-    return (
-        f"configured ({url})" if url else "no archive configured - set PERF_ARCHIVE=<git url> once the GM creates the profile repository (FR-011a); the derived table here stands on its own (FR-011b)"
-    )
+    url = _archive_url()
+    return f"configured ({url})" if url else "archive disabled (PERF_ARCHIVE is empty); the derived table here stands on its own (FR-011b)"
 
 
 def archive(raw: str) -> str:
-    url = os.environ.get("PERF_ARCHIVE", "")
+    """Push one raw profile to the archive repository; a failure degrades, never breaks (FR-011b)."""
+    url = _archive_url()
     if not url:
         return "archive skipped: " + archive_status()
     work = os.path.join(RAW_DIR, "archive")
+    env = _git_env()
     try:
         if not os.path.isdir(os.path.join(work, ".git")):
-            subprocess.run(["git", "clone", "-q", "--depth", "1", url, work], check=True, capture_output=True, text=True, timeout=120)
-        dest = os.path.join(work, os.path.basename(raw))
-        subprocess.run(["cp", raw, dest], check=True)
+            subprocess.run(["git", "clone", "-q", "--depth", "1", url, work], check=True, capture_output=True, text=True, timeout=120, env=env)
+        else:
+            subprocess.run(["git", "-C", work, "pull", "-q", "--ff-only"], check=True, capture_output=True, text=True, timeout=120, env=env)
+        for k, v in (("user.name", "diagram perf-profile"), ("user.email", "perf-profile@diagram.invalid")):
+            subprocess.run(["git", "-C", work, "config", k, v], check=True)
+        subprocess.run(["cp", raw, os.path.join(work, os.path.basename(raw))], check=True)
         subprocess.run(["git", "-C", work, "add", os.path.basename(raw)], check=True, capture_output=True)
         subprocess.run(["git", "-C", work, "commit", "-q", "-m", f"profile {os.path.basename(raw)}"], check=True, capture_output=True, text=True)
-        subprocess.run(["git", "-C", work, "push", "-q"], check=True, capture_output=True, text=True, timeout=120)
-        return f"archived to {url}"
+        subprocess.run(["git", "-C", work, "push", "-q", "origin", "HEAD"], check=True, capture_output=True, text=True, timeout=120, env=env)
+        return f"archived {os.path.basename(raw)} to {url}"
     except (subprocess.CalledProcessError, subprocess.TimeoutExpired) as e:  # pragma: no cover - the remote's failure modes
-        return f"archive FAILED ({e}) - the derived table is committed here regardless (FR-011b)"
+        detail = (getattr(e, "stderr", "") or str(e)).strip()[-300:]
+        return f"archive FAILED ({detail}) - the derived table is committed here regardless (FR-011b)"
 
 
 def main(argv: list[str] | None = None) -> int:
