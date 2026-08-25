@@ -68,6 +68,90 @@ minka ridge heights cross-checked against surviving farmhouses.
 
 - *Historical scale - the real numbers (research grounding, for calibrating the glyph).* A homestead grove is a substantial STAND, not a few trees. The best hard data is a 1987 survey of Kashima in the Tonami plain (the classic *kainyo* dispersed-farmstead country, 46 households): **~33 trees of trunk diameter >= 10 cm per homestead**, of which cedar (*sugi*) was ~48% (**~16 cedars per house**), the rest spread over ~83 other species; **~6 species per homestead** (range 1-14); a large/notable homestead ran **200+ trees across 31 species**. That count is trunks >= 10 cm ONLY - it EXCLUDES the bamboo stand (hundreds of culms), saplings, and the trimmed hedge layer - so the honest figure for a typical grove is **~30-40 mature trees + a bamboo grove + understory**, and a big one **100-200+**. The grove canopy footprint is therefore the LARGEST homestead appurtenance - **bigger than the farmhouse**, and far bigger than the garden or threshing yard - wrapping the N/W as a belt several trees deep. The map need not draw every tree (houses/yards are already oversized symbols), but per Principle "relative sizes roughly honest" the grove glyph must read at the RIGHT relative scale: clearly the dominant homestead feature, a dense stand suggesting dozens of trees - not a garden-sized clump of 5-10. *(Cross-check on the windward rule: Okinawa's homestead groves sit on the E/N sides, because the islands' damaging wind is the typhoon/NE monsoon, not the mainland NW - same logic, different geography, which is exactly why `windward` is a per-map knob.)*
 
+## The garden's sun, and how far the windbreak shades (researched 2026-08-25, feature 133 T10)
+
+**Grounds:** the garden half of the sun corridor (`_sun_corridor_ok` / `_gardens_sun_ok`,
+`gardens_unshaded_by_neighbors`); the belt's afternoon lane (`west_sun_lane`, `WEST_SUN_FT`,
+`village_trees_unshade_from_west`).
+
+*What prompted it (GM 2026-08-25):* "there is not enough space for sunlight to hit the gardens and
+thrashing yards ... The Windbreak Forest ... is so close to the gardens ... that I do not believe
+that those gardens would get sufficient sunlight." Measured on the reference hamlet before the
+fix: every threshing yard cleared the 39 ft corridor (nearest neighbor 42 ft), but **7 of 16
+garden beds had a neighbor's wall 4-38 ft to their south**, and the belt's nearest clump stood
+**8-43 ft west** of three beds and two yards. The yard rule had been stated for the yard and never
+for the bed - the same one-obstacle shape that hid the yard rule itself for months.
+
+*The garden takes the yard's corridor - one number, not two.* A dooryard garden's binding season
+is the shoulder month too: autumn greens and daikon are in the ground under the same 28 deg 9am
+sun that dries the rice, so a minka's ~20 ft ridge shades a bed 39 ft off exactly as it shades a
+yard. The growing-season figure is shorter (a 60-70 deg noon sun in the 4th-7th months throws
+7-12 ft), so the shoulder binds, as it does for the yard. Rule: **39 ft of clear ground south of
+every bed**, both directions at placement, gated by `gardens_unshaded_by_neighbors` on scripted
+maps. The bed is side-dependent (SE/SW/E/W), so its half of the test lives in `_bundle_side_fits`
+and refuses one SIDE rather than the whole seat - a bed the SE would put in a shadow moves to the
+other flank. Cost on Inashiro: none visible - all 15 households seat, beds now 41-242 ft clear.
+
+*The belt's height, from the record.* Searched: igune (Sendai/Osaki), kainyo (Tonami),
+tsuijimatsu (Izumo), Musashino yashikirin, Okinawa fukugi, Chinese fengshui woods. Found: the
+Sendai igune planting list classes sugi/keyaki/kuromatsu/hinoki as "tall trees" at **>= 15 m**,
+sub-canopy ~10 m, shrubs ~3 m; Tohoku sources put a mature skeleton at **20 m+**; the one MEASURED
+igune (Osaki, drone survey, 2022) is **"about 10 m"**, tall sugi on the west with a lower layer to
+8 m; Tonami's kainyo "over 10 m", sugi 2-3 rows thick on the S and W; Izumo's tsuijimatsu pines are
+**clipped to 8-12 m** every 4-5 years, the one attested topping practice; Okinawa fukugi belts
+average 7-10 m. Kainyo/igune are limb-pruned (*edauchi*), never height-capped. So the attested
+band is **~10 m for a working belt, 15-25 m for an untended mature stand**.
+
+*Where the plots stood, from the record.* The Tonami model homestead (Research Institute, 1996):
+house faces E, away from the SW wind; the front (E) yard is the work yard, "securing adequate open
+space" with only fruit trees and a persimmon in the yard center; S and W carry 2-3 rows of sugi;
+the N/W bamboo strip is "shady ... always damp" and given to the kitchen drain and service sheds.
+Tohoku: the S-facing open ground in front is the drying yard. So the record's answer is that the
+HOUSE BODY was the spacer - plots on the sunlit lee side, the belt behind - and it holds **no
+measured plot-to-treeline distance**. For a nucleated village's communal belt the record is
+silent altogether. Hence the number is DERIVED, as the 39 ft was.
+
+*The shadow, computed for the season that matters.* At 38N in the shoulder month the 3pm sun
+stands 28 deg high at azimuth ~232, so a belt throws 1.9 x its height to the NORTHEAST - a
+10 m (33 ft) belt ~63 ft, of which **~50 ft reaches eastward**; a 15 m belt ~95 ft / ~75 ft.
+In the 7th month the same hour gives ~35 ft / ~50 ft. The shoulder binds.
+
+*The decision:* **50 ft of clear ground west and southwest of every yard and bed** (the 3pm
+shadow starts from the southwest, so the keep-out runs from a plot's north edge to 50 ft below its
+south edge), enforced when the belt is planted (`village_grove` refuses the clump and re-seats it
+deeper; `belt_polygon` moves its near face out by the lane where the wind puts the belt west), and
+gated by `village_trees_unshade_from_west`. Windbreak-role groves only: the copse is the dooryard's
+own persimmon and bamboo, which the record puts IN the yard.
+
+*75 ft was tried first and declined - a ruling, not a taste.* 75 is the same geometry at 15 m,
+the class floor of an untended stand. At 75 the belt must stand so far off the west rank that it
+falls outside the frame the hard features set, and the frame does not open for the belt (GM
+2026-07-20, `settlements/presentation.md`: the communal windbreak clips at the view edge, gated by
+`crop_hugs_content`). Measured on Inashiro: the belt fell from 131 clumps to 38 and
+`village_windbreak_is_continuous` went red. At 50 it stands whole (81 clumps, continuous) inside
+today's frame. **What is accepted**: a belt kept at working height, and a belt that is mostly OFF THE PAGE on
+the west - measured by `settlement-review` on the shipped render: visible canopy 0-40 px per band,
+median ~15 px, blank for ~90 ft (y 700-790, where the connector leaves) and 1-4 px for ~75 ft
+(y 1075-1150); 85% of the 81 clumps stand outside the view. `village_windbreak_is_continuous` is
+green because it reads geometry, not the page. The arithmetic says this is not tunable away: the
+frame stops 48 px west of the westernmost hard feature and the lane keeps clump centers 66 px
+west of the same plot, so on any row with a plot the belt's near canopy shows at most ~7 px.
+**The two rulings conflict** - a belt that stands off the plots (2026-08-25) and a frame that
+does not open for the belt (2026-07-20) - and only the GM can reconcile them; the state shipped
+is the one that honors both to the letter. **What was priced and declined**: letting
+the windbreak set the frame (reverses the 2026-07-20 ruling - the GM's to reopen, not a session's);
+a lane scaled to 15 m without moving the frame (measured: the belt is dropped). **Who chose**: the
+session, on the measurement; the GM can raise the belt to 15 m by reopening the frame ruling.
+
+*Departures taken knowingly:* the lane is a square, not a solar wedge that swings through the
+afternoon (the yard's south corridor takes the same shortcut); the 12 px in `belt_polygon`'s
+stand-off is an average plot overhang, and the clump filter is the guarantee behind it.
+
+*Sources:* Sendai City igune species list (city.sendai.jp); Minami/Yonezawa/Okaze 2022, Osaki
+igune drone survey (J-STAGE, LES 38(2)); Tonami Scattered-Village Research Institute 1996 model
+homestead; Izumo tsuijimatsu (Kanto Gakuin column); ISA Arboriculture & Urban Forestry 37(1) on
+fukugi; solar elevations computed for 38N.
+
 ## May a byre stand beside a wellhead? (researched 2026-08-18)
 
 **Answer: yes, and the vernacular puts them far closer than our maps do. No GM ruling wanted.**

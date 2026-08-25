@@ -62,6 +62,32 @@ def test_village_grove_skips_clumps_in_a_yards_sun_corridor():
         assert not (abs(cx - 300) < 15 + r and se - r < cy < se + 22 + r)
 
 
+def test_village_grove_keeps_the_windbreak_out_of_a_plots_west_sun_lane():
+    """Feature 133 T10: with `west_sun_lane` on, a windbreak clump never stands in the lane (50 ft
+    in the generator; any value here) west/southwest of a yard or bed; a copse is exempt, and the
+    rule is off by default."""
+    poly = [(100, 300), (400, 300), (400, 600), (100, 600)]
+    plot = {"x": 380, "y": 420, "w": 30, "h": 20}  # west edge 365, y 410..430
+
+    def lane_hit(s):
+        return [(cx, cy) for g in s.M["village_groves"] for cx, cy in g["clumps"] if 365 - 75 - g["r"] < cx < 365 + g["r"] and 410 - g["r"] < cy < 430 + 75 + g["r"]]
+
+    off = _nuc_village()
+    off.M["threshing_yards"] = [plot]
+    off.village_grove(poly, role="windbreak")
+    assert lane_hit(off), "off by default: the belt plants right up to the yard"
+    on = _nuc_village()
+    on.M["threshing_yards"] = [plot]
+    on.west_sun_lane(75)
+    n_on = on.village_grove(poly, role="windbreak")
+    assert n_on > 0 and not lane_hit(on), "the lane is clear, and the belt still stands"
+    copse = _nuc_village()
+    copse.M["gardens"] = [plot]
+    copse.west_sun_lane(75)
+    copse.village_grove(poly, role="copse", dense=False)
+    assert lane_hit(copse), "a copse is the dooryard's own trees and is not held to the belt's lane"
+
+
 def test_grove_fits_rejects_a_belt_over_a_dry_strip():
     # the windbreak's canopy stays out of the barley exactly as it stays out of the paddy
     s = _crop_settlement()

@@ -145,6 +145,113 @@ def _seg_0285_071__yards_unshaded_by_neighbors(
     return _kept(locals(), ('gap', 'hh_', 'nshade', 'par', 'sun_ft', 'sun_ftpx', 'yd'))
 
 
+# ...AND THE KITCHEN GARDEN GETS THE SAME CORRIDOR (feature 133 T10, GM 2026-08-25: "there is not
+# enough space for sunlight to hit the gardens and thrashing yards"). The rule above was stated for
+# the yard and never for the garden - the one-obstacle shape the yard rule itself was missed by -
+# and on the reference hamlet 7 of 16 gardens stood with a neighbor's wall 4-38 ft to their south
+# while every yard passed. A dooryard garden's binding season is the same shoulder month as the
+# drying yard's (autumn greens and daikon under a 28 deg 9am sun), so the number is the yard's 39
+# ft, not a second constant; the derivation is in research/homesteads.md, "The garden's sun".
+# Gated on `meta.generated_by` for the reason 071 gives. A bed's own house is exempt by position
+# (a bed is never placed north of its house - `gardens_on_sunny_side`), so only NEIGHBORS count.
+
+
+def _seg_0285_990__gardens_unshaded_by_neighbors(
+    *,
+    check: Any = _UNBOUND,
+    g_gap: Any = _UNBOUND,
+    g_hh: Any = _UNBOUND,
+    g_par: Any = _UNBOUND,
+    g_shade: Any = _UNBOUND,
+    gardens: Any = _UNBOUND,
+    gd: Any = _UNBOUND,
+    houses: Any = _UNBOUND,
+    meta: Any = _UNBOUND,
+    scale: Any = _UNBOUND,
+    sun_ft: Any = _UNBOUND,
+    sun_ftpx: Any = _UNBOUND,
+) -> dict[str, Any]:
+    """Gate segment 0285.990 (gardens_unshaded_by_neighbors) - feature 133 T10."""
+    if scale in ('town', 'village', 'hamlet') and meta.get("generated_by"):
+        sun_ft = 39.0
+        sun_ftpx = float(meta.get("ftpx") or 1)
+        g_shade = []
+        for gd in gardens:
+            g_par = gd.get("of")
+            for g_hh in houses:
+                if g_par and abs(g_hh["x"] - g_par[0]) < 1 and abs(g_hh["y"] - g_par[1]) < 1:
+                    continue  # its own house: a bed is never north of it
+                if abs(g_hh["x"] - gd["x"]) >= (g_hh["w"] + gd["w"]) / 2:
+                    continue  # not in the bed's sun corridor
+                g_gap = ((g_hh["y"] - g_hh["h"] / 2) - (gd["y"] + gd["h"] / 2)) * sun_ftpx
+                if 0 < g_gap < sun_ft:
+                    g_shade.append((round(gd["x"]), round(gd["y"])))
+                    break
+        check(
+            "gardens_unshaded_by_neighbors",
+            not g_shade,
+            f"garden bed(s) {g_shade[:3]} stand within {sun_ft:.0f} ft of a NEIGHBOR's farmhouse to their SOUTH - "
+            f"a minka's ~20 ft ridge throws 39 ft of shadow by 9am in the shoulder months, so the bed loses its "
+            f"growing sun. The placer keeps the same corridor south of every bed it keeps south of every yard "
+            f"(s.sun_corridor(39)); a bed may also stand on the house's other flank, out of the shadow",
+        )
+    return _kept(locals(), ('g_gap', 'g_hh', 'g_par', 'g_shade', 'gd', 'sun_ft', 'sun_ftpx'))
+
+
+# THE WINDBREAK KEEPS OUT OF THE AFTERNOON SUN (feature 133 T10, GM 2026-08-25: "the windbreak
+# forest ... is so close to the gardens ... that I do not believe that those gardens would get
+# sufficient sunlight"). A belt is the tallest thing on the map - a working igune measures ~10 m -
+# and at 3pm in the shoulder month a 33 ft belt throws ~50 ft of shadow EASTWARD (sun at 28 deg,
+# azimuth ~232). So no windbreak clump may stand within 50 ft WEST of a yard's or bed's west edge,
+# from its north edge to 50 ft below its south edge (the southwest). A square, not a solar wedge -
+# the yard's south corridor takes the same knowing departure. WINDBREAK-ROLE groves only: the copse
+# is the dooryard's persimmon and bamboo, which the record puts IN the sunlit yard. Gated on
+# `meta.generated_by` like 071 (the frozen pool never opted in). research/homesteads.md.
+
+
+def _seg_0285_991__village_trees_unshade_from_west(
+    *,
+    M: Any = _UNBOUND,
+    check: Any = _UNBOUND,
+    gardens: Any = _UNBOUND,
+    meta: Any = _UNBOUND,
+    scale: Any = _UNBOUND,
+    w_cx: Any = _UNBOUND,
+    w_cy: Any = _UNBOUND,
+    w_f: Any = _UNBOUND,
+    w_ft: Any = _UNBOUND,
+    w_ftpx: Any = _UNBOUND,
+    w_g: Any = _UNBOUND,
+    w_lane: Any = _UNBOUND,
+    w_r: Any = _UNBOUND,
+    w_shade: Any = _UNBOUND,
+    w_wb: Any = _UNBOUND,
+    w_x0: Any = _UNBOUND,
+    w_y0: Any = _UNBOUND,
+    w_y1: Any = _UNBOUND,
+    yards: Any = _UNBOUND,
+) -> dict[str, Any]:
+    """Gate segment 0285.991 (village_trees_unshade_from_west) - feature 133 T10."""
+    if scale in ('town', 'village', 'hamlet') and meta.get("generated_by"):
+        w_ft = 50.0
+        w_ftpx = float(meta.get("ftpx") or 1)
+        w_lane = w_ft / w_ftpx
+        w_wb = [(w_cx, w_cy, float(w_g.get("r") or 0.0)) for w_g in M.get("village_groves", []) if w_g.get("role") == "windbreak" for w_cx, w_cy in (w_g.get("clumps") or [])]
+        w_shade = []
+        for w_f in yards + gardens:
+            w_x0, w_y0, w_y1 = w_f["x"] - w_f["w"] / 2, w_f["y"] - w_f["h"] / 2, w_f["y"] + w_f["h"] / 2
+            if any(w_x0 - w_lane - w_r < w_cx < w_x0 + w_r and w_y0 - w_r < w_cy < w_y1 + w_lane + w_r for w_cx, w_cy, w_r in w_wb):
+                w_shade.append((round(w_f["x"]), round(w_f["y"])))
+        check(
+            "village_trees_unshade_from_west",
+            not w_shade,
+            f"a windbreak tree stands within {w_ft:.0f} ft WEST/SOUTHWEST of yard/garden(s) {w_shade[:3]} - a 10 m "
+            f"belt throws ~50 ft of afternoon shadow eastward in the shoulder month, so the plot loses the 9-to-3 "
+            f"day's second half. Keep the belt out of the west sun-lane (the generator does it with s.west_sun_lane(50))",
+        )
+    return _kept(locals(), ('w_cx', 'w_cy', 'w_f', 'w_ft', 'w_ftpx', 'w_g', 'w_lane', 'w_r', 'w_shade', 'w_wb', 'w_x0', 'w_y0', 'w_y1'))
+
+
 def _seg_0285_072__yards_unshaded_by_groves(*, check: Any = _UNBOUND, scale: Any = _UNBOUND, shaded: Any = _UNBOUND) -> dict[str, Any]:
     """Gate segment 0285.072 (yards_unshaded_by_groves) - body verbatim from _seg_0285__wells_clear_of_shrine_and_torii (feature 024 per-check split; guards re-evaluated in the body, see split_oversized.py)."""
     if scale in ('town', 'village', 'hamlet') and scale in ('town', 'village', 'hamlet', 'city'):

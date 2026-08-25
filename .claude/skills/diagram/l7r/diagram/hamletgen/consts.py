@@ -238,6 +238,27 @@ SPUR_SETBACK = 17.0
 # (~26) + 39 already comes to about the 92 ft the cluster band was independently sized at.
 SUN_CORRIDOR_FT = 39.0
 
+# How much open ground a threshing yard or a garden bed needs to its WEST and SOUTHWEST of the
+# communal windbreak, in feet - the AFTERNOON sun (feature 133 T10, GM 2026-08-25). The belt is the
+# tallest thing on the map. Its height is taken at 10 m = 33 ft: the one MEASURED igune in the
+# record (Osaki, drone survey) is "about 10 m", Tonami's kainyo "over 10 m", Izumo's clipped pines
+# 8-12 m - a WORKING belt, limb-pruned and kept. At 3pm in the shoulder month at 38N the sun stands
+# 28 deg high at azimuth ~232, so the shadow runs 1.9 x height to the NORTHEAST: ~63 ft, of which
+# ~50 ft is EASTWARD reach. 50 ft is the rule - the same 9-to-3 window the yard's south corridor
+# protects, now for the afternoon half; the growing-season figure is smaller (~35 ft in the 7th
+# month), so the shoulder month binds, as it does for the yard.
+#
+# 75 ft WAS TRIED FIRST AND DECLINED (2026-08-25), and the reason is a ruling, not a taste: 75 is
+# the same geometry at 15 m, the floor of the Sendai "tall tree" class an untended mature
+# sugi/keyaki stand reaches (15-25 m). At 75 the belt has to stand so far off the west rank that it
+# falls outside the frame the hard features set, and the frame does NOT open for the belt (GM
+# 2026-07-20: the communal windbreak clips at the view edge; `crop_hugs_content`). Measured on
+# Inashiro: 131 clumps -> 38, `village_windbreak_is_continuous` red. At 50 the belt stands whole
+# (81 clumps, continuous) inside today's frame. So 10 m is the calibrated value - a DEGREE along
+# the attested band, not a choice between forms - and raising it means reopening the frame ruling
+# first. research/homesteads.md, "The garden's sun, and how far the windbreak shades".
+WEST_SUN_FT = 50.0
+
 # THE FIELD ARCHETYPES this generator can draw, and why there are two rather than five. The pool's
 # hamlets span five (`valley_paddy`, `polder_grid`, `mulberry_dike_fishpond`, `contour_terraces`,
 # `ribbon_valley`) and they are not variations on one shape - a comb fan is grown around a head-race

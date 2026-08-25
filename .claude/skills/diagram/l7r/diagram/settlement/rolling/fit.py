@@ -255,13 +255,44 @@ class BundleFitMixin:
                 continue
             if abs(ty[0] - hx) < (ty[2] + hw) / 2 + side and 0 < (hy - hh / 2) - (ty[1] + ty[3] / 2) < reach:
                 return False
+            # ...NOR A NEIGHBOR'S GARDEN BEDS (feature 133 T10, GM 2026-08-25: "there is not enough
+            # space for sunlight to hit the gardens"). The corridor was stated for the yard and never
+            # for the garden - the same one-obstacle shape the yard rule itself was missed by - and
+            # on the reference hamlet 7 of 16 gardens had a neighbor's wall 4-38 ft to their south.
+            # A kitchen garden's binding season is the same shoulder month (autumn greens, daikon)
+            # as the drying yard's, so it takes the SAME corridor; research/homesteads.md.
+            for tg in g.get("gardens", ()):
+                if abs(tg[0] - hx) < (tg[2] + hw) / 2 + side and 0 < (hy - hh / 2) - (tg[1] + tg[3] / 2) < reach:
+                    return False
         # ...and this YARD must not sit in a standing house's shadow
         return not any(abs(b["x"] - yx) < (b["w"] + yw) / 2 + side and 0 < (b["y"] - b["h"] / 2) - (yy + yh / 2) < reach for b in self.M.get("houses", []))
+
+    def _gardens_sun_ok(self: Settlement, geom: Any) -> bool:  # type: ignore[misc]
+        """The side-DEPENDENT half of the sun corridor: this bundle's garden bed(s) must not sit in a
+        standing house's shadow. Lives apart from `_sun_corridor_ok` because the beds move with the
+        garden side, and `_fits_any_side` tests the side-independent half once for all four sides -
+        folding this in there would refuse every side for the one bed that SE puts in a shadow.
+        Same corridor and the same 2 ft placer margin as the yard (see `_sun_corridor_ok`)."""
+        ft = getattr(self, "_sun_corridor_ft", 0.0)
+        if not ft:
+            return True
+        reach, side = self.px(ft + 2.0), self.px(2.0)
+        houses = self.M.get("houses", [])
+        return all(not any(abs(b["x"] - gx) < (b["w"] + gw) / 2 + side and 0 < (b["y"] - b["h"] / 2) - (gy + gh / 2) < reach for b in houses) for gx, gy, gw, gh in geom["gardens"])
 
     def sun_corridor(self: Settlement, feet: float) -> None:  # type: ignore[misc]
         """Ask the placer to keep `feet` of open ground SOUTH of every threshing yard (see
         `_sun_corridor_ok`). Off by default; a generator opts in."""
         self._sun_corridor_ft = float(feet)
+
+    def west_sun_lane(self: Settlement, feet: float) -> None:  # type: ignore[misc]
+        """Ask the communal belt (`village_grove`, windbreak mix) to keep `feet` of open ground WEST
+        and SOUTHWEST of every threshing yard and garden bed - the afternoon sun. Off by default; a
+        generator opts in, exactly as with `sun_corridor` (feature 133 T10, GM 2026-08-25: "the
+        windbreak forest ... is so close to the gardens ... that I do not believe that those gardens
+        would get sufficient sunlight"). The number's derivation is in research/homesteads.md, "The
+        garden's sun, and how far the windbreak shades"."""
+        self._west_sun_ft = float(feet)
 
     def _bundle_common_fits(self: Settlement, geom: Any, grove_off_field: bool = True) -> bool:  # type: ignore[misc]
         """The fit checks that do NOT depend on which side the garden is on - the house, the south threshing
@@ -298,6 +329,8 @@ class BundleFitMixin:
         if self.bound and any(not point_in_poly(vx, vy, self.bound) for vx, vy in self._rect_corners(geom["bbox"])):
             return False
         if any(self._rect_blocked(g, fields=True) for g in geom["gardens"]):
+            return False
+        if not self._gardens_sun_ok(geom):
             return False
         return all(not (abs(cx - px) < (W + pw) / 2 + 2 and abs(cy - py) < (H + ph) / 2 + 2) for px, py, pw, ph, *_ in self.placed)
 

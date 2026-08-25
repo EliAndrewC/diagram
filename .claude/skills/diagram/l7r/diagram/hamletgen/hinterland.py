@@ -757,6 +757,16 @@ def belt_polygon(s: Settlement, plan: SitePlan) -> Poly:
     # tree.
     crops: list[Poly] = [list(plan.envelope), *crop_polys(s)]
 
+    # THE NEAR FACE STANDS OFF THE AFTERNOON SUN-LANE when the belt lies to the WEST (feature 133
+    # T10). `village_grove` refuses every clump inside `west_sun_lane` of a yard's or garden's west
+    # edge, and a belt whose polygon starts 36 px behind the fringe HOUSE center would have its whole
+    # front filtered away where a garden hangs off a west wall - a thinned, ragged belt rather than a
+    # belt moved back. So the face itself moves: by the lane, scaled by how much of the wind points
+    # west (`-wx`: 1 for a W wind, ~0.7 for NW/SW, 0 for N/E/S), plus 12 px - the west-most plot's
+    # edge sits ~48 px past its house center (half-house 23 + gap 3 + bed ~22) and the 36 px face
+    # already covers 36 of it. The filter is still the guarantee; this keeps the belt whole.
+    _sun_off = max(0.0, -wx) * (float(getattr(s, "_west_sun_ft", 0.0)) + 12.0)
+
     def band(span_f: float, back: float) -> Poly:
         cols = profile(span_f)
         # 36 px, not 24. `village_grove` filters clumps against every structure and crop, and it
@@ -764,8 +774,8 @@ def belt_polygon(s: Settlement, plan: SitePlan) -> Poly:
         # have its DRAWN clumps average back onto the cluster's own line, which is what
         # `village_windbreak_on_windward_side` measures (Kashikawa: polygon centroid +137, drawn
         # centroid -5). The extra 12 px comes out of the 150 px embrace budget and leaves plenty.
-        near = [rag((ccx + wx * (u + 36.0 + back) + px * v, ccy + wy * (u + 36.0 + back) + py * v)) for v, u in cols]
-        far = [rag((ccx + wx * (u + 146.0 + back) + px * v, ccy + wy * (u + 146.0 + back) + py * v)) for v, u in reversed(cols)]
+        near = [rag((ccx + wx * (u + 36.0 + _sun_off + back) + px * v, ccy + wy * (u + 36.0 + _sun_off + back) + py * v)) for v, u in cols]
+        far = [rag((ccx + wx * (u + 146.0 + _sun_off + back) + px * v, ccy + wy * (u + 146.0 + _sun_off + back) + py * v)) for v, u in reversed(cols)]
         return near + far
 
     def fouled(poly: Poly) -> bool:

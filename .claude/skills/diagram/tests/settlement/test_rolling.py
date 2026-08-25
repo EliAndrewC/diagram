@@ -96,6 +96,26 @@ def test_garden_shaded_detects_a_house_to_the_south():
     assert s._garden_shaded((900, 450, 22, 12)) is False  # open sky to the south -> not shaded
 
 
+def test_sun_corridor_covers_a_neighbors_garden_and_this_bundles_gardens():
+    """Feature 133 T10: both directions of the garden corridor, and the side split that keeps the
+    side-dependent half out of `_sun_corridor_ok` (which `_fits_any_side` runs once for all sides)."""
+    s = _nuc_village()
+    s.sun_corridor(39)
+    # a standing bundle with a bed on its E flank at (440, 400) 22x24 -> bed south edge 412
+    s.M["houses"].append({"x": 400, "y": 400, "w": 46, "h": 28, "geom": {"yard": (400, 430, 36, 26), "gardens": [(440, 400, 22, 24)]}})
+    under_bed = {"house": (440, 450, 46, 28), "yard": (440, 480, 36, 26), "gardens": []}  # wall 24 ft south of the bed
+    assert s._sun_corridor_ok(under_bed) is False  # a new house may not shade a standing bed
+    clear = {"house": (440, 500, 46, 28), "yard": (440, 530, 36, 26), "gardens": []}  # wall 74 ft south of the bed, 43 from the yard: past 39 + 2 on both
+    assert s._sun_corridor_ok(clear) is True
+    # ...and a new bundle's OWN beds against standing houses, side by side, not all-or-nothing
+    s.M["houses"].append({"x": 300, "y": 470, "w": 46, "h": 28})  # a house whose wall is at y=456
+    assert s._gardens_sun_ok({"gardens": [(300, 430, 22, 24)]}) is False  # bed south edge 442, wall 14 ft off
+    assert s._gardens_sun_ok({"gardens": [(300, 380, 22, 24)]}) is True  # 64 ft: clear
+    assert s._gardens_sun_ok({"gardens": [(600, 430, 22, 24)]}) is True  # not in the corridor laterally
+    s._sun_corridor_ft = 0.0
+    assert s._gardens_sun_ok({"gardens": [(300, 430, 22, 24)]}) is True  # off by default, like the yard rule
+
+
 def test_headman_refuses_a_non_toscale_map():
     # the legacy (pre-to-scale) headman rec branch was dead code after the Hikari fix and is gone
     s = Settlement(800, 800, seed=5)
@@ -365,6 +385,7 @@ _ROLLING_SURFACE = frozenset(
         "scatter_seeds",
         "sun_corridor",
         "waterfront_seeds",
+        "west_sun_lane",
         # private - reached through self., including from OUTSIDE the package
         "_bbox_of",
         "_bundle_common_fits",
@@ -381,6 +402,7 @@ _ROLLING_SURFACE = frozenset(
         "_garden_beds",
         "_garden_beds_clear",
         "_garden_shaded",
+        "_gardens_sun_ok",
         "_kura_side",
         "_nearest_field_point",
         "_nearest_placed_point",

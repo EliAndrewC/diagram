@@ -24,6 +24,7 @@ from tests.check_village._builders import (
     _yard,
     bldg,
     f,
+    garden,
     house,
     manifest,
     well,
@@ -53,6 +54,30 @@ def test_yards_unshaded_by_neighbors_fires_only_on_a_scripted_map():
     )
     clear["meta"].update(ftpx=1, generated_by="hamletgen")
     assert "yards_unshaded_by_neighbors" not in f(clear), "a yard with its sun must pass"
+
+
+def test_gardens_unshaded_by_neighbors_fires_only_on_a_scripted_map():
+    """Feature 133 T10: the garden takes the yard's 39 ft corridor, under the same migration gate."""
+    shaded = manifest(
+        houses=[house(x=400, y=400), house(x=440, y=440)],  # the neighbor's wall 14 ft south of the bed (bed bottom 412, wall 426)
+        gardens=[garden(x=440, y=400, of=(400, 400))],  # a bed on the E flank
+    )
+    shaded["meta"]["ftpx"] = 1
+    assert "gardens_unshaded_by_neighbors" not in f(shaded), "an UNTAGGED (hand-authored) map is exempt by decision"
+    shaded["meta"]["generated_by"] = "hamletgen"
+    assert "gardens_unshaded_by_neighbors" in f(shaded), "a scripted map must be held to it"
+    clear = manifest(
+        houses=[house(x=400, y=400), house(x=440, y=480)],  # 54 ft: past the corridor
+        gardens=[garden(x=440, y=400, of=(400, 400))],
+    )
+    clear["meta"].update(ftpx=1, generated_by="hamletgen")
+    assert "gardens_unshaded_by_neighbors" not in f(clear), "a bed with its sun must pass"
+    own = manifest(
+        houses=[house(x=400, y=400)],
+        gardens=[garden(x=400, y=380, of=(400, 400))],  # its own house south of it: exempt (gardens_on_sunny_side owns that)
+    )
+    own["meta"].update(ftpx=1, generated_by="hamletgen")
+    assert "gardens_unshaded_by_neighbors" not in f(own), "only a NEIGHBOR's house counts"
 
 
 def test_gardens_present_fires_when_a_farmhouse_has_none():
@@ -383,6 +408,27 @@ def test_village_trees_unshade_fires_when_a_clump_is_south_of_a_garden():
         "village_groves": [{"role": "copse", "r": 11, "clumps": [[300, 425]], "poly": [[280, 410], [320, 410], [320, 440], [280, 440]]}],
     }  # clump S of the garden
     assert "village_trees_unshade_yards_and_gardens" in f(M)
+
+
+def test_village_trees_unshade_from_west_fires_on_a_windbreak_clump_west_or_southwest():
+    """Feature 133 T10: the belt's afternoon lane - 50 ft west/southwest of every yard and bed, on a
+    scripted map, for windbreak-role groves only (the copse is exempt by the record)."""
+
+    def M(role, clump):
+        return {
+            "meta": {"scale": "hamlet", "ftpx": 1, "generated_by": "hamletgen"},
+            "gardens": [{"x": 300, "y": 400, "w": 30, "h": 20, "rot": 0, "of": [340, 400]}],  # west edge 285, y 390..410
+            "village_groves": [{"role": role, "r": 14, "clumps": [clump], "poly": [[200, 300], [290, 300], [290, 500], [200, 500]]}],
+        }
+
+    assert "village_trees_unshade_from_west" in f(M("windbreak", [240, 400])), "45 ft due west: shaded"
+    assert "village_trees_unshade_from_west" in f(M("windbreak", [250, 460])), "the southwest quadrant counts too"
+    assert "village_trees_unshade_from_west" not in f(M("windbreak", [215, 400])), "70 ft west (clump edge 56): clear"
+    assert "village_trees_unshade_from_west" not in f(M("windbreak", [240, 340])), "northwest of the bed shades nothing"
+    assert "village_trees_unshade_from_west" not in f(M("copse", [240, 400])), "a dooryard copse is not a 10 m belt"
+    legacy = M("windbreak", [240, 400])
+    del legacy["meta"]["generated_by"]
+    assert "village_trees_unshade_from_west" not in f(legacy), "the frozen pool never opted in"
 
 
 def test_village_trees_unshade_passes_when_the_clump_is_north():

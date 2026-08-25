@@ -1079,3 +1079,36 @@ placer change of its own size rather than something to slip into this delta.
   the connector's gateway pointed this map's spur AWAY from the field it serves: 248 ft at the start
   receding to 281 ft at the tip. `_cluster_edge_toward` fixed it to 46 -> 13 ft. Found by
   `settlement-review` on a roll already reported clean, which is the whole argument for the reviewer.
+
+## 2026-08-25, feature 133 T10: the gardens and the belt get their sun
+
+The GM's first task of the acceptance period: *"there is not enough space for sunlight to hit the
+gardens and thrashing yards ... the Windbreak Forest ... is so close to the gardens."* Measured
+before the change: every yard cleared the 39 ft south corridor (nearest neighbor 42 ft - the rule
+landed 2026-08-13 and the GM was looking at an older render), but **7 of 16 garden beds had a
+neighbor's wall 4-38 ft to their south**, and the belt's nearest clump stood 8-43 ft west of five
+plots. Two rules were missing, not one.
+
+| | before | after |
+|---|---|---|
+| beds with a wall < 39 ft south | 7 of 16 | **0** (nearest 41 ft) |
+| yards with a wall < 39 ft south | 0 of 15 | 0 (nearest 42 ft) |
+| nearest belt clump W/SW of a plot | 8 ft | **>= 50 ft** |
+| belt clumps | 131 | 81 |
+| belt canopy visible on the page (per band) | ~115 px | 0-40 px, median ~15 |
+| households seated | 15 | 15 |
+
+The bed now takes the yard's 39 ft corridor (`gardens_unshaded_by_neighbors`), and the belt keeps
+a 50 ft afternoon lane west and southwest of every plot (`village_trees_unshade_from_west`),
+enforced when each is placed. Derivations in
+[`research/homesteads.md`](../../research/homesteads.md), "The garden's sun".
+
+**The belt is thinner on the page, and that is a ruling, not a defect.** Standing off the plots
+puts the belt's near face at about the frame edge; the frame does not open for a windbreak (GM
+2026-07-20, it clips at the view edge), so only 0-40 px of canopy shows per band (median ~15 px,
+blank for ~90 ft at y 700-790 and near-blank for ~75 ft at y 1075-1150 - `settlement-review`'s
+measurement, not the author's) before the belt runs off the map. On the page it reads as woodland
+beyond the frame rather than a belt embracing the cluster; the check is green because it reads
+geometry. That is the point where the two rulings meet, and it is recorded as the GM's to settle. A 75 ft lane - the 15 m mature-stand figure - was measured first and dropped the belt to 38
+clumps with a hole; the only way to keep a taller belt whole is to let it set the frame, which is
+the 2026-07-20 ruling's to reopen.

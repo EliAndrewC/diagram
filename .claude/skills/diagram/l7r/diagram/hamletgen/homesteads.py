@@ -13,7 +13,7 @@ from typing import Any
 from l7r.diagram.settlement import Settlement, point_in_poly, surface_water_dist
 from l7r.diagram.sitegen.geom import centroid, unit
 
-from .consts import BUNDLE_PITCH, CLUSTER_DRAWN_ASPECT, CLUSTER_ROW_SPAN, CLUSTER_SPAN_FACTOR, LANE_FRONTAGE_STANDOFF, SUN_CORRIDOR_FT, Pt
+from .consts import BUNDLE_PITCH, CLUSTER_DRAWN_ASPECT, CLUSTER_ROW_SPAN, CLUSTER_SPAN_FACTOR, LANE_FRONTAGE_STANDOFF, SUN_CORRIDOR_FT, WEST_SUN_FT, Pt
 from .plan import SitePlan
 
 # ---- STAGE 5: the homesteads --------------------------------------------------------------------
@@ -204,6 +204,10 @@ def stage_homesteads(s: Settlement, plan: SitePlan) -> None:
     # ridge; the noon figure is 21. The engine's rule is opt-in and this is where the scripted tier
     # opts in - the hand-authored maps keep their packing until they are converted.
     s.sun_corridor(SUN_CORRIDOR_FT)
+    # ...AND THE SAME CORRIDOR NOW COVERS THE GARDEN BEDS (feature 133 T10), inside `sun_corridor`.
+    # The belt's afternoon lane is opted into HERE too, though it is only read at `stage_windbreak`:
+    # the two sun rules are one decision, made at the same place, for the same reason.
+    s.west_sun_lane(WEST_SUN_FT)
     seat = plan.seat
     ax, ay = seat["along"]
     ox, oy = seat["out"]
