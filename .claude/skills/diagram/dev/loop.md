@@ -185,8 +185,9 @@ to houses; dry-to-wet crossings) surfaced in one pass instead of five.
 
 **A session does not decide whether to go remote - the conditions do.** `make ci-status` prints
 them, free. Five conditions, all checked locally before any AWS call, every one printed even after
-the first fails: the delta has engine code (`l7r/`, `tests/`, `pool/*.gen.py|*.json`, Makefile,
-pyproject - docs never); on a merge, the named spec-kit feature is complete; the last recorded
+the first fails: the delta has engine code (`l7r/**/*.py`, `tests/`, `pool/*.gen.py|*.json` - the code the
+tests exercise; never docs, and never the Makefile, pyproject, the lockfiles or the hooks, which are
+covered locally); on a merge, the named spec-kit feature is complete; the last recorded
 verification is a GREEN local target (`quick`, `reference`, `test-file`, a local `done`) against
 EXACTLY this code (a red gate or a source edit since resets it - run `make quick`); the tree the
 merge would produce is not already verified by a build; the monthly hard stop has not tripped.

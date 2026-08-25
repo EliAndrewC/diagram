@@ -29,7 +29,12 @@ _ENGINE_DIRS: tuple[tuple[str, tuple[str, ...]], ...] = (
     ("tests/", ()),  # a test change can change what the gate proves - fixtures included
     ("pool/", (".gen.py", ".json")),  # a generator, or a manifest (a generator's output under test)
 )
-_ENGINE_FILES = ("Makefile", "pyproject.toml", "requirements.txt", "requirements-dev.txt", "requirements.in", "requirements-dev.in")
+# NOT engine, by the GM's definition (2026-08-25): "code changes which would be exercised by the
+# tests". The Makefile, pyproject.toml, the lockfiles and scripts/ shape HOW the gate runs, and the
+# local gate, gate-stamp and the hook suites cover them - they never cost a build. The first day's
+# list carried the Makefile, pyproject and the lockfiles as engine on the theory that they change
+# what the gate runs; that theory dispatched a build for a Makefile comment.
+_ENGINE_FILES: tuple[str, ...] = ()
 
 
 def is_engine(path: str) -> bool:

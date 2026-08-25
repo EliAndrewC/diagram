@@ -21,10 +21,11 @@ Delta
 .claude/skills/diagram/tests/**            (a test change can change what the gate proves)
 .claude/skills/diagram/pool/**/*.gen.py
 .claude/skills/diagram/pool/**/*.json      (a manifest is a generator's output under test)
-.claude/skills/diagram/Makefile
-.claude/skills/diagram/pyproject.toml
-.claude/skills/diagram/requirements*.txt
 ```
+
+**Refined 2026-08-25 (GM)**: the Makefile, `pyproject.toml` and the lockfiles are NOT engine - they
+shape how the gate runs, not what it tests; the local gate, `gate-stamp` and the hook suites cover
+them, and they never cost a build.
 
 Everything else under the skill is NOT engine: `*.md` anywhere, `dev/**` (the three append-only logs,
 the stage plates), `future-work/`, `settlements/`, `buildings/`, `research/`, `pool/**/*.notes.md`,

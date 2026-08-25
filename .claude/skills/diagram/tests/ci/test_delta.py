@@ -19,10 +19,6 @@ ENGINE = [
     S + "tests/fixtures/gate_check_names.json",
     S + "pool/hamlets/inashiro.gen.py",
     S + "pool/hamlets/inashiro.json",
-    S + "Makefile",
-    S + "pyproject.toml",
-    S + "requirements.txt",
-    S + "requirements-dev.in",
 ]
 NOT_ENGINE = [
     S + "SKILL.md",
@@ -40,6 +36,11 @@ NOT_ENGINE = [
     S + "pool/hamlets/inashiro.svg",
     S + "timings.md",
     S + "l7r/diagram/settlement/CLAUDE.md",
+    # how the gate RUNS, not what it tests (GM 2026-08-25): covered locally, never dispatched
+    S + "Makefile",
+    S + "pyproject.toml",
+    S + "requirements.txt",
+    S + "requirements-dev.in",
     "CLAUDE.md",
     "docs/session-clones.md",
     "specs/130-codebuild-merge-gate/tasks.md",
@@ -65,7 +66,7 @@ def test_route_and_reason() -> None:
     d = Delta("b", ("docs/x.md",), ())
     assert d.route == "DIRECT" and "none of them diagram engine code" in d.reason
     g = Delta("b", tuple(ENGINE), tuple(ENGINE))
-    assert g.route == "GATED" and "+6 more" in g.reason and "10 engine path" in g.reason
+    assert g.route == "GATED" and "+2 more" in g.reason and "6 engine path" in g.reason
 
 
 def test_delta_is_our_commits_only(repo: Path) -> None:
