@@ -48,8 +48,8 @@ scripts/sync-with-main.sh done
 
 Expect, if §4 verified this tree and main has not moved: "SKIP-VERIFIED", a direct push, no build.
 Otherwise: a build on `gm-assistant-merge` that merges main, gates, pushes `HEAD:main`, deletes the
-mailbox; the clone fast-forwards to it; `/gm-assistant` fast-forwards to it; render-sync runs there.
-`git -C /gm-assistant log -1` and GitHub's `main` show the same commit.
+mailbox; the clone fast-forwards to it; `/diagram` fast-forwards to it; render-sync runs there.
+`git -C /diagram log -1` and GitHub's `main` show the same commit.
 
 ## 6. What the guards must refuse (free)
 
@@ -76,8 +76,8 @@ scripts/sync-with-main.sh done FULL=1        (the merge action only - the iterat
 ## 8. Sync at the tooling level (amendment; free)
 
 Push a docs commit to GitHub `main` from your laptop. Send any message to a session. Then:
-`git -C /gm-assistant log -1`, the clone's `git log -1`, and the mirror's `pool/index.html` mtime
-all reflect it. Commit by hand in `/gm-assistant` (don't - but for the test): the next turn's
+`git -C /diagram log -1`, the clone's `git log -1`, and the mirror's `pool/index.html` mtime
+all reflect it. Commit by hand in `/diagram` (don't - but for the test): the next turn's
 sync-in stops with "mirror cannot fast-forward".
 
 ## 9. Local checks first, build parked (second amendment)

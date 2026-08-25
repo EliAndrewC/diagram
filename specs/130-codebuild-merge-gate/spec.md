@@ -14,6 +14,14 @@ no longer stands in for the reference check) - third-request amendment APPROVED 
 The GM's instruction is explicit: *"you can write the SpecKit feature, you cannot actually automate
 it yet"*. Implementation waits for a separate go.
 
+**Updated for the split (2026-08-25, after feature 131 landed)**: every reference to the laptop
+mirror `/gm-assistant` and to the GitHub remote `EliAndrewC/gm-assistant` across this directory now
+reads `/diagram` / `EliAndrewC/diagram` - the repository this feature runs in. Nothing else changed.
+The AWS resource names (`gm-assistant-merge`, `gm-assistant-check`, `gm-assistant-codebuild-role`,
+`gm-assistant-ci`) are the names of resources that ALREADY EXIST in the account and are kept as-is;
+renaming them is an admin-key task for the GM, not a documentation edit, and the build fetches
+whichever repository its source setting names.
+
 **Input**: The GM's request is recorded verbatim in [`gm-request.md`](gm-request.md). **That file is
 the authority for this specification.** It was written before this spec and must not be edited.
 
@@ -104,7 +112,7 @@ so the fidelity reviewer can check each against `gm-request.md`, and so the plan
 **The delegated decision - where main lives - and how it is resolved.** The GM thought aloud: *"the
 local clones push to remote GitHub branches rather than... pushing back to Maine locally. I don't
 know."* and then *"I don't really care. I just want to do whatever everyone else is doing."* This
-spec resolves it as: **GitHub `main` becomes the integration point; `/gm-assistant` on the laptop
+spec resolves it as: **GitHub `main` becomes the integration point; `/diagram` on the laptop
 becomes a mirror of it.** A session clone stays exactly what it is today - an isolated workspace on
 local `main`, no branches checked out - and pushes its HEAD to a GitHub *mailbox* branch
 (`session/<clone-name>`) purely so the build has a commit to fetch. The build merges GitHub `main`
@@ -113,7 +121,7 @@ render-sync runs in the mirror exactly as it does in main today. The GM's laptop
 GitHub" job disappears, because GitHub main IS main.
 
 *The alternative, priced and declined* (recorded per the project's rule on accepted limitations):
-keep local `/gm-assistant` as the integration point and ship only a verification record back from
+keep local `/diagram` as the integration point and ship only a verification record back from
 the build. Declined because GitHub `main` lags local main whenever the GM has not pushed, so the
 build would merge a STALE main and the GM's *"always getting the latest thing"* would be false by
 construction; fixing that means shipping local main's tip to the build alongside the work, which is
@@ -313,26 +321,26 @@ a committed reason: refused by the build.
 ### User Story 7 - GitHub main flows into the mirror and every clone without anyone remembering (Priority: P1)
 
 A landing happens on GitHub `main` - from a build, a direct push, or the GM's own laptop. The next
-time any session does anything, its clone is at that main, `/gm-assistant` is at that main, and the
-renders the GM browses in `/gm-assistant` reflect it. No session ran a command to make that so.
+time any session does anything, its clone is at that main, `/diagram` is at that main, and the
+renders the GM browses in `/diagram` reflect it. No session ran a command to make that so.
 
 **Why this priority**: The GM's second request, in the GM's words *"tooling level, not ... 'remember
 to do it' level"* - and the project's whole history of guards is that a rule kept only in memory
 does not hold.
 
 **Independent Test**: push a commit to GitHub `main` from outside any session; start a session turn;
-`git -C /gm-assistant log -1` and the clone's `HEAD` both show it, and the mirror's renders match.
+`git -C /diagram log -1` and the clone's `HEAD` both show it, and the mirror's renders match.
 
 **Acceptance Scenarios**:
 
 1. **Given** GitHub `main` has advanced and the clone is CLEAN, **When** a session turn starts,
-   **Then** the prompt hook fetches GitHub `main`, fast-forwards `/gm-assistant` to it under the
+   **Then** the prompt hook fetches GitHub `main`, fast-forwards `/diagram` to it under the
    ritual lock, runs render-sync there, and merges it into the clone - in that order.
 2. **Given** GitHub `main` has advanced and the clone is DIRTY (mid-task), **When** a session turn
    starts, **Then** the fetch, the mirror fast-forward and render-sync still run; only the clone
    merge is skipped, with today's "mid-task, sync-in skipped" message. Mid-task work is sacred;
    the mirror is nobody's workspace and cannot fall behind because a session is busy.
-3. **Given** `/gm-assistant` cannot fast-forward (someone committed there by hand), **When** the
+3. **Given** `/diagram` cannot fast-forward (someone committed there by hand), **When** the
    mirror step runs, **Then** it stops and says so rather than merging in the mirror.
 4. **Given** nothing has changed, **When** a turn starts, **Then** it costs what sync-in costs today -
    the fetch, a no-op fast-forward, and render-sync's cache short-circuit.
@@ -427,7 +435,7 @@ expensive AWS dispatch if we are not going to run the local tests."*
 
 **Where main lives, and how work reaches it**
 
-- **FR-001**: GitHub `main` MUST be the integration point. `/gm-assistant` on the laptop MUST become
+- **FR-001**: GitHub `main` MUST be the integration point. `/diagram` on the laptop MUST become
   a mirror that is updated from GitHub `main` after every landing and never pushed to directly by a
   session. Session clones are unchanged as workspaces.
 - **FR-002**: There MUST be exactly two routes to main, chosen by the delta inspection of FR-007,
@@ -548,7 +556,7 @@ AWS call, and a refusal names the condition
 **Sync at the tooling level** (second request)
 
 - **FR-030**: At the start of EVERY session turn, regardless of the clone's working-tree state, the
-  tooling MUST fetch GitHub `main`, fast-forward `/gm-assistant` to it under the ritual lock
+  tooling MUST fetch GitHub `main`, fast-forward `/diagram` to it under the ritual lock
   (stopping with a message if it cannot), and run render-sync there - so the mirror and the GM's
   browsed renders never lag GitHub `main` by more than one turn. The clone-side merge keeps today's
   behavior: it runs on a clean clone and is skipped, with the existing message, on a dirty one. The
@@ -650,7 +658,7 @@ and the *"reconstituted"* numbers are the build-machine bookends.
   coverage floors and `perf-gate`; cancelling at the prompt produces zero builds; a mailbox without
   the committed reason produces a build that refused the full scope.
 - **SC-009**: After a push to GitHub `main` from outside any session, one session turn later
-  `/gm-assistant` and its renders reflect it whatever state the clone is in, and a CLEAN clone
+  `/diagram` and its renders reflect it whatever state the clone is in, and a CLEAN clone
   reflects it too - verified by commit hash and by a render's content hash - with no command run
   by hand.
 - **SC-010**: Every `perf-gate` verdict pairs two build-machine snapshots from one FULL run, and
@@ -674,7 +682,7 @@ and the *"reconstituted"* numbers are the build-machine bookends.
   reads it as refuse, because the green run vouched for different code - the same reasoning
   `gate-hooks.sh` already applies to `-k` subsets. If the reviewer finds this an addition, the
   fallback is to treat "green local test at any point since the last failed gate" as sufficient.
-- **The public repository.** `EliAndrewC/gm-assistant` is public, which is what makes the ruleset on
+- **The public repository.** `EliAndrewC/diagram` is public, which is what makes the ruleset on
   `main` available on the GM's plan. Mailbox branches are therefore public too; nothing secret is
   tracked, and `development-secrets.ini` stays gitignored.
 - **The mirror is updated every turn and by every landing**, under the same lock render-sync uses

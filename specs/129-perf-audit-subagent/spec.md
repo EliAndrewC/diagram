@@ -10,6 +10,10 @@
 work on the spec"*). The measurements below were taken before implementation precisely so they would
 be in hand when it begins.
 
+**Checked for the split (2026-08-25, after feature 131 landed)**: this specification names no
+repository path or remote - nothing here referred to `/gm-assistant`, so nothing changed. It is
+implemented in `/diagram` (this repository), after feature 130.
+
 **Input**: [`gm-request.md`](gm-request.md), verbatim and unedited.
 
 **Supersedes**: the two-band slowdown rule added to constitution VI earlier the same day (v1.16.0).

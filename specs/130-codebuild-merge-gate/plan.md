@@ -14,7 +14,7 @@ the laptop runs, and on green fast-forward-pushes the merge to `main` and record
 verified. A delta without engine code pushes directly to GitHub `main`, as today, for free. Five
 conditions are checked locally before a cent is spent, a green iteration run short-circuits the
 merge for the same tree, and every remote run lands in the local audit with its cost. GitHub `main`
-becomes the integration point; `/gm-assistant` becomes a mirror that render-sync runs in.
+becomes the integration point; `/diagram` becomes a mirror that render-sync runs in.
 
 **Amended on the GM's second request (same day):** the full sweep (`make done FULL=1`) goes to
 CodeBuild too - its cancel-by-default prompt runs locally, the `permitted` answer is committed into
@@ -206,7 +206,7 @@ way it already reaches render-sync: `make --no-print-directory ci-merge`.
    basename, which the clone-sync hooks already validate. A stale mailbox from a failed build is
    overwritten by the next push (mailbox branches are the one place a force push is fine, and the
    ruleset does not cover them).
-5. **The mirror pull uses `--ff-only`.** If it ever fails, someone committed in `/gm-assistant`
+5. **The mirror pull uses `--ff-only`.** If it ever fails, someone committed in `/diagram`
    directly, which the existing guards forbid; the ritual stops and says so.
 6. **The FULL door on the build side** (R11): `bypass-audit` gains one more branch, evaluated only
    when `CODEBUILD_BUILD_ID` is set AND a `permitted` entry exists in `dev/bypass-log/` whose

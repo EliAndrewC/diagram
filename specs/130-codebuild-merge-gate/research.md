@@ -96,17 +96,17 @@ pull+push), `review-gate.sh` (default range `origin/main..HEAD`), `gate-stamp.py
 the base as an argument), and two comments. `no-branch-hooks.sh` and `repo-safety-hooks.sh` mention
 the words only in prose.
 
-**Decision**: a session clone's `origin` becomes GitHub (`ssh://git@github.com/EliAndrewC/gm-assistant`,
-exactly what `/gm-assistant`'s own `origin` is today). Every `origin/main` reference then means
+**Decision**: a session clone's `origin` becomes GitHub (`ssh://git@github.com/EliAndrewC/diagram`,
+exactly what `/diagram`'s own `origin` is today). Every `origin/main` reference then means
 "GitHub main" with no edit, and sync-in pulls the latest main directly rather than through the
-mirror. `/gm-assistant` keeps its remote and gains nothing: it is updated by `git -C /gm-assistant
+mirror. `/diagram` keeps its remote and gains nothing: it is updated by `git -C /diagram
 pull --ff-only origin main` under the ritual lock after every landing, and render-sync runs there as
 now. Existing clones need a one-time `git remote set-url origin <github>`; the clone-creation step
-in CLAUDE.md changes from `git clone /gm-assistant` to a clone of GitHub (or a local clone followed by
+in CLAUDE.md changes from `git clone /diagram` to a clone of GitHub (or a local clone followed by
 the set-url, which is faster and keeps the objects local).
 
 **What the direct route does**: `git push origin HEAD:main` from the clone, fast-forward only,
-preceded by the same local guards as today. `updateInstead` on `/gm-assistant` becomes irrelevant
+preceded by the same local guards as today. `updateInstead` on `/diagram` becomes irrelevant
 (nothing pushes to it any more) and is left configured - it is harmless.
 
 ## R8 - Only the build can write a verified record, and that is an IAM change
