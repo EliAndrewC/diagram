@@ -4,7 +4,7 @@
 
 **Created**: 2026-08-25
 
-**Status**: APPROVED by `spec-fidelity` - round 3 verdict **FAITHFUL** (2026-08-25), after rounds 1 and 2 returned changes (see Review history). **AMENDED the same day on the GM's second request** (the local `make done` short-circuits on the same rule as the remote gate: FR-019..FR-023) - amendment APPROVED at round 2 (**FAITHFUL**, 2026-08-25).
+**Status**: APPROVED by `spec-fidelity` - round 3 verdict **FAITHFUL** (2026-08-25), after rounds 1 and 2 returned changes (see Review history). **AMENDED the same day on the GM's second request** (the local `make done` short-circuits on the same rule as the remote gate: FR-019..FR-023) - amendment APPROVED at round 2 (**FAITHFUL**, 2026-08-25); **AMENDED AGAIN on the GM's third message** (the key is the remote key, not wider: Makefile/scripts/config changes do not owe the gate) - second amendment awaiting review.
 
 **Input**: [`gm-request.md`](gm-request.md), verbatim and unedited. That file is the authority for
 this specification; the session's proposal recorded there is what the GM's *"that sounds like
@@ -262,27 +262,28 @@ to short circuit and skip AWS tests to these 5 minute tests as well for the make
   recorded verification is a green `make done` against exactly the content the gate exercises,
   and if so MUST report `already verified` (naming that run's time and commit), record
   `green-local done`, and exit green - in seconds, rolling no map and running no test. It may
-  re-write the `gate-stamp` ONLY because the gate key (FR-020) contains everything the stamp
-  hashes: a short-circuit can never stamp content no gate ran on (the review's point 2; a test
-  proves the containment).
-- **FR-020**: "The content the gate exercises" is a RULE - everything `make done` reads or runs -
-  and the list is its known instances, not its extent: every `*.py` under the skill directory
-  (what `lint`/`format`/`typecheck` walk and what `gate-stamp`'s `diagram` area hashes - so
-  `.explain.py` and `wip/*.gen.py` count, not only `l7r/**`), `tests/**`, `pool/*.gen.py` and
-  `pool/*.json` (the engine data the tests read), the skill's `Makefile`, `pyproject.toml`, the
-  lockfiles and their `.in` sources (the gate's own configuration), and `scripts/**` (what
-  `hooks-test` runs and `gate-stamp`'s `hooks` area hashes). The remote engine key excluded the
-  configuration paths precisely because they are "covered locally" - this is that coverage. A
-  documentation-only change leaves this key unchanged.
+  re-write the `gate-stamp` ONLY because the key (FR-020) includes the stamp's own hash: a
+  short-circuit can never stamp content no gate ran on (a test proves it).
+- **FR-020**: "The content the gate exercises" is EXACTLY what the remote rule keys on - the GM's
+  second amendment: *"I thought we were omitting `make done` results for changes to the hooks or
+  scripts or makefile changes, etc."* Two things, both already computed by the dispatcher: the
+  content hash of every `*.py` under the skill (`gate-stamp`'s `diagram` area - the dispatcher's
+  `green-local-since-edit` condition), and the engine key (`l7r/**/*.py`, `tests/**`,
+  `pool/*.gen.py`, `pool/*.json` - its `tree-not-already-verified` condition). The Makefile,
+  `pyproject.toml`, the lockfiles and `scripts/**` are NOT in the key, exactly as they are not in
+  the remote one: a change to them does not owe a `make done` (the guard scripts owe `make
+  hooks-test`, as before). A documentation-only change leaves both unchanged. (The first draft of
+  this amendment widened the key to those paths on the reviewer's containment argument; the GM
+  overruled it in their own words, and containment is met by the hash itself.)
 - **FR-021**: The short-circuit MUST NOT apply to `FULL=1` (a different scope), and MUST NOT
   apply when the last verification is anything but a green `done` (a green `quick` or `reference`
   vouches for less than the gate does). A red last run never short-circuits.
 - **FR-022**: There is no flag to force the short-circuit. (A `FORCE=` re-run flag was in the
   first draft and removed at the amendment's fidelity review as unrequested - the remote rule it
   copies has none.)
-- **FR-023**: Proven both ways: a docs-only edit after a green `done` short-circuits; an edit to
-  each kind of path in FR-020 does not - including a `.py` under the skill outside `l7r/`,
-  `tests/` and `pool/`, the case the first draft's enumeration let through.
+- **FR-023**: Proven both ways: a docs-only edit, a Makefile edit and a `scripts/` edit after a
+  green `done` all short-circuit; an edit to a `.py` under the skill (including one outside
+  `l7r/`, e.g. `.explain.py`), to a test, or to a pool gen does not.
 
 ### Key Entities
 
@@ -348,3 +349,11 @@ to short circuit and skip AWS tests to these 5 minute tests as well for the make
 - **Amendment round 2 (2026-08-25): FAITHFUL.** Reviewer's aside checked: `dev/switches.json` is
   outside the gate key on purpose - reference-scope `make done` never reads it (only `FULL=1` does,
   and FULL never short-circuits), so a throw or release cannot change what a reference gate proves.
+- **Second amendment (2026-08-25, after landing):** the GM saw the amended gate re-run on a
+  Makefile change and overruled the widened key: *"I thought we were omitting `make done` results
+  for changes to the hooks or scripts or makefile changes, etc."* FR-020 now keys on exactly what
+  the dispatcher keys on (the skill-Python hash + the engine key). On the GM's second sentence
+  (tests-only + previous green -> skip AWS): no such exemption exists in feature 130 (FR-008 puts
+  `tests/` in the engine set); what exists is the local-done rule of 2026-08-25, which the
+  short-circuit mirrors - a green run that already covered the changed tests is reused, a test
+  edit after it is new code and runs once.

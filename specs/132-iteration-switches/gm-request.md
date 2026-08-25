@@ -36,3 +36,7 @@ recorded so the reviewer can see what "that" refers to in the acceptance below):
 ## 2026-08-25, the amendment (same session, after the implementation's first `make done` was launched)
 
 > Okay, this also seems like the kind of thing which shouldn't even run the normal 5 minute tests, right?!  Like it's only documentation.  Can we apply the same rules that decide whether to short circuit and skip AWS tests to these 5 minute tests as well for the make done procedure?
+
+## 2026-08-25, the second amendment (after 132 landed, seeing the amended gate re-run on a Makefile change)
+
+> I thought we were omitting `make done` results for changes to the hooks or scripts or makefile changes, etc.  I also thorugh we had a rule where if the only thing that changed were tests AND the previous test run was green then we skipped the lengthy AWS tests - we should do the same thing for the expensive 5 minute tests.
