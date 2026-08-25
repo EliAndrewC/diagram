@@ -122,7 +122,7 @@ case $OUT in *"FORBIDDEN"*) : ;; *) echo "FAIL  ritual refusal message missing '
 # no committer identity; both refused the split repository's first push (2026-08-25). The ritual
 # now sets them, so a bare fixture must push cleanly and end up configured.
 FMAIN5=$TMP/main5
-git init -q "$FMAIN5"
+git init -q -b main "$FMAIN5"   # the push-time guards check against origin/main, so the fixture's branch must be main
 ( export GIT_AUTHOR_NAME=Eli GIT_AUTHOR_EMAIL=eli@t GIT_COMMITTER_NAME=Eli GIT_COMMITTER_EMAIL=eli@t
   echo m0 > "$FMAIN5/f"; git -C "$FMAIN5" add f; git -C "$FMAIN5" commit -qm m0 )
 mkdir -p "$FMAIN5/.clones/.session-clones"
