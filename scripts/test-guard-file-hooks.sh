@@ -27,6 +27,8 @@ check blocked "$ROOT/scripts/make-only-hooks.sh"
 check blocked "$ROOT/scripts/guard-file-hooks.sh"
 check blocked "$ROOT/.claude/settings.json"
 check blocked "$ROOT/.claude/settings.json" "x" "Write"
+check blocked "$ROOT/.claude/skills/diagram/dev/switches.json"
+check blocked "$ROOT/.claude/skills/diagram/dev/switches.json" "x" "Write"
 
 echo
 echo "2. IT STAYS QUIET on everything else (FR-016)"

@@ -49,11 +49,11 @@ def test_feature_incomplete_refuses_merge_but_not_check() -> None:
 
 def test_transition_table_rows() -> None:
     absent = decision.decide(GATED, None, NOW, None, None, decision.CHECK, None)
-    assert absent.verdict == "REFUSE(green-local-since-edit)" and "no local check recorded" in absent.conditions[1].why
+    assert absent.verdict == "REFUSE(green-local-since-edit)" and "no local check recorded" in absent.conditions[2].why
     red = decision.decide(GATED, failed(), NOW, None, None, decision.CHECK, None)
-    assert red.verdict == "REFUSE(green-local-since-edit)" and "last gate FAILED" in red.conditions[1].why and "make quick" in red.conditions[1].why
+    assert red.verdict == "REFUSE(green-local-since-edit)" and "last gate FAILED" in red.conditions[2].why and "make quick" in red.conditions[2].why
     stale = decision.decide(GATED, green("older"), NOW, None, None, decision.CHECK, None)
-    assert stale.verdict == "REFUSE(green-local-since-edit)" and "different code" in stale.conditions[1].why
+    assert stale.verdict == "REFUSE(green-local-since-edit)" and "different code" in stale.conditions[2].why
     fresh = decision.decide(GATED, green(), NOW, None, None, decision.CHECK, None)
     assert fresh.verdict == "DISPATCH"
 
@@ -104,3 +104,37 @@ def test_estimate_and_render_golden() -> None:
     assert decision.estimate("full", 0.0).minutes == config.ESTIMATE_MINUTES["full"]
     refused = decision.render(decision.decide(DIRECT, None, NOW, None, None, decision.MERGE, None), "merge", "reference")
     assert "[--] route-is-gated" in refused and refused.endswith("verdict: REFUSE(route-is-gated)")
+
+
+# ---- REMOTE OFF (feature 132): the first row, and the LOCAL-GATED verdict table ----------------
+
+
+def test_remote_on_is_the_first_row_and_passes() -> None:
+    d = decision.decide(GATED, green(), NOW, None, None, decision.MERGE, COMPLETE)
+    assert d.conditions[0].name == "remote-enabled" and d.conditions[0].passed and d.verdict == "DISPATCH"
+
+
+def test_remote_off_never_dispatches() -> None:
+    d = decision.decide(GATED, green(), NOW, None, None, decision.MERGE, COMPLETE, remote_off="remote is OFF since T by GM: iterating")
+    assert d.verdict == "REFUSE(remote-enabled)" and not d.dispatches
+    assert d.conditions[0].name == "remote-enabled" and not d.conditions[0].passed and "iterating" in d.conditions[0].why
+    assert "[--] remote-enabled" in decision.render(d, "merge", "reference")
+
+
+def test_remote_off_with_a_local_green_done_is_skip_verified() -> None:
+    local = decision.VerifiedRecord("t", "local:make-done@abc", "reference")
+    d = decision.decide(GATED, green(), NOW, local, None, decision.MERGE, COMPLETE, remote_off="off")
+    assert d.verdict == "SKIP-VERIFIED" and d.skip_verified  # LOCAL-GATED: the caller pushes, nothing dispatches
+
+
+def test_remote_off_still_reports_the_other_failing_condition_first() -> None:
+    d = decision.decide(GATED, green(), NOW, None, None, decision.MERGE, OPEN, remote_off="off")
+    assert d.verdict == "REFUSE(feature-complete)"  # an incomplete feature does not land locally either
+    d2 = decision.decide(DIRECT, green(), NOW, None, None, decision.CHECK, None, remote_off="off")
+    assert d2.verdict == "REFUSE(route-is-gated)"
+
+
+def test_remote_off_does_not_short_circuit_a_full_scope_on_a_reference_record() -> None:
+    local = decision.VerifiedRecord("t", "local:make-done@abc", "reference")
+    d = decision.decide(GATED, green(), NOW, local, None, decision.MERGE, COMPLETE, scope="full", remote_off="off")
+    assert d.verdict == "REFUSE(remote-enabled)"

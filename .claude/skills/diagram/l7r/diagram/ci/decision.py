@@ -79,8 +79,16 @@ def decide(
     scope: str = "reference",
     month_to_date_usd: float = 0.0,
     operation: str | None = None,
+    remote_off: str | None = None,
 ) -> DispatchDecision:
     conds: list[Condition] = []
+    # REMOTE OFF IS THE FIRST ROW (feature 132). The GM's reusable switch: *"if it is disabled, then
+    # we do not use it as a gate. and we do not dispatch to it."* It is reported first because it
+    # is the one fact that makes every other row moot for DISPATCH - and it is NOT the first
+    # refusal: with remote off, a merge whose engine content a green local `make done` vouches for
+    # still lands (SKIP-VERIFIED, the LOCAL-GATED route), so the other conditions are judged first
+    # and remote-off only decides between "push on the local verdict" and "nothing happens".
+    conds.append(Condition("remote-enabled", remote_off is None, remote_off or "remote is on (dev/switches.json)"))
     conds.append(Condition("route-is-gated", delta.route == "GATED", delta.reason))
     if mode == MERGE:
         f = feature or FeatureStatus(name=None)
@@ -112,11 +120,13 @@ def decide(
     conds.append(Condition("breaker-not-tripped", breaker is None, breaker or "the monthly hard stop has not tripped"))
 
     est = estimate(scope, month_to_date_usd, operation)
-    failing = [c for c in conds if not c.passed and c.name != "tree-not-already-verified"]
+    failing = [c for c in conds if not c.passed and c.name not in ("tree-not-already-verified", "remote-enabled")]
     if failing:
         verdict = f"REFUSE({failing[0].name})"
     elif verified is not None and verified.satisfies(scope):
         verdict = "SKIP-VERIFIED"
+    elif remote_off is not None:
+        verdict = "REFUSE(remote-enabled)"  # LOCAL-GATED with nothing local to vouch for it: nothing dispatches
     else:
         verdict = "DISPATCH"
     return DispatchDecision(conditions=tuple(conds), estimate=est, verdict=verdict)

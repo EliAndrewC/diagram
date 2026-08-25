@@ -22,6 +22,7 @@ from l7r.diagram._invocation import assert_via_make
 # a bare `python3 -m l7r.diagram.ci merge` cannot get as far as a network call.
 assert_via_make("l7r.diagram.ci", "ci-status  (free)  |  make ci-check  |  make ci-merge  (paid; called by sync-with-main.sh)")
 
+from l7r.diagram import switches  # noqa: E402
 from l7r.diagram.ci import config, decision, dispatch, door, runlog, state  # noqa: E402
 
 
@@ -83,22 +84,43 @@ def main(argv: list[str] | None = None) -> int:
         no_go=a.no_go and a.command == "check",
         compute=a.compute if a.command == "check" else config.COMPUTE_TYPE,
     )
+    # REMOTE OFF (feature 132): read BEFORE any credential is loaded or any client is built, so that
+    # with the switch thrown no AWS call is even possible. `status` still answers (without a
+    # lookup); `check` and `image` refuse outright; `merge` becomes LOCAL-GATED - it writes the
+    # verdict the push ritual reads, and that verdict is SKIP-VERIFIED only when a green local
+    # `make done` vouches for exactly the engine content the merge would produce.
+    remote_off = switches.read(skill).remote_off
     if a.command == "status":
         if a.route:
             from l7r.diagram.ci.delta import compute_delta
 
             ctx.sh(["git", "fetch", "-q", "origin"], root, None)
-            print(compute_delta(root).route)
+            route = compute_delta(root).route
+            print("GATED-LOCAL" if route == "GATED" and remote_off else route)
             return 0
-        try:
-            ctx.secrets = config.load_secrets(root)
-            ctx.client = dispatch.Boto3Client(ctx.secrets)
-        except (FileNotFoundError, ImportError) as e:  # a status with no credentials is still useful
-            print(f"(no AWS lookup: {e})")
+        if not remote_off:
+            try:
+                ctx.secrets = config.load_secrets(root)
+                ctx.client = dispatch.Boto3Client(ctx.secrets)
+            except (FileNotFoundError, ImportError) as e:  # a status with no credentials is still useful
+                print(f"(no AWS lookup: {e})")
         text, _d = dispatch.status_text(ctx)
         print(text)
         print(runlog.remote_spend_report(skill))
         return 0
+    if remote_off:
+        if a.command != "merge":
+            switches.check(skill, "remote", f"ci-{a.command}")
+            return 1
+        text, d = dispatch.status_text(ctx)
+        print(text)
+        (root / ".git" / "ci-verdict").write_text(d.verdict + "\n", encoding="utf-8")
+        if d.skip_verified:
+            print("ci-merge: LOCAL-GATED (remote off) - a green local `make done` vouches for this engine content; the caller pushes directly, no build")
+            return 0
+        print(f"ci-merge: LOCAL-GATED (remote off) - {d.verdict}: nothing landed. With remote off the merge needs a green local `make done` on the")
+        print("  merged engine content: `git pull --no-rebase origin main` (if main moved), then `make done`, then `scripts/sync-with-main.sh done` again.")
+        return 1
 
     ctx.secrets = config.load_secrets(root)
     ctx.client = dispatch.Boto3Client(ctx.secrets)

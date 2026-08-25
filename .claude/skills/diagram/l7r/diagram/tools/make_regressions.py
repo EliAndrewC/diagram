@@ -57,6 +57,11 @@ def positive_targets(fn):
 
 
 def main():
+    # THE SCOPE LOCK (feature 132): rebuilding the corpus rolls many seeds - a sweep - so it refuses first.
+    from l7r.diagram import switches
+
+    if switches.locked_out("regressions"):
+        return 2
     os.makedirs(OUT, exist_ok=True)
     # wipe ONLY the previously auto-captured fixtures (tagged with a test_checks.py source); leave
     # hand-dropped real-map captures (any other source) untouched so a regen never clobbers them.
@@ -136,4 +141,4 @@ if __name__ == "__main__":
     # REFUSE unless invoked through this project's make (feature 127). At the TOP of the
     # entry point, never in a loop - the determination reads /proc and is cached per process.
     guard("l7r.diagram.tools.make_regressions")
-    main()
+    raise SystemExit(main() or 0)

@@ -39,6 +39,9 @@ except Exception:
 
 case "$FILE" in
   */.claude/skills/diagram/Makefile|*/scripts/*-hooks.sh|*/.claude/settings.json) ;;
+  # (GUARD_EDIT_OK: feature 132 - the iteration switches are a guard; a hand edit is flagged like any other, the
+  #  make targets `ci-off` / `ci-on` / `scope-lock` / `scope-unlock` are the supported write path)
+  */.claude/skills/diagram/dev/switches.json) ;;
   *) exit 0 ;;
 esac
 

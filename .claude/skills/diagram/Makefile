@@ -4,7 +4,9 @@
 # mypy uses a per-module ratchet (see pyproject.toml): the legacy engine modules are relaxed until
 # each is migrated to --strict in its own pass; new modules are strict immediately.
 
+# (GUARD_EDIT_OK: feature 132 adds the iteration switches - a new guard and five new operations)
 .PHONY: done lint format typecheck test test-full guard perf perf-report maps reference bypass-audit quick durations test-file audit perf-gate hooks-test explain \
+	 switches ci-off ci-on scope-lock scope-unlock _switch \
 	 map cohort tripwire hamlet cache-audit regressions placement-stages pool-index compound render-sync \
 	 gate-manifest why-placed site-justice crop jogs pack-audit scatter-audit timings citybudget help \
 	 ci-status ci-check ci-merge ci-image commit-permitted \
@@ -70,7 +72,9 @@ STATE = python3 -m l7r.diagram.ci state
 # was true only of reference scope. Now: the prompt authorizes the EXPENSE, then the reference map
 # still gates; REF_OK is the one, separate, logged way to skip that step, as for every other target.
 done:
+	@$(if $(FULL),$(SWITCH) check scope "done FULL=1",true)
 	@$(if $(FULL),$(MAKE) --no-print-directory bypass-audit REF_WHY="$(REF_WHY)",true)
+# (GUARD_EDIT_OK: feature 132 - a FULL run is a pool sweep, so the scope lock refuses it BEFORE the prompt)
 	@$(if $(REF_OK),$(LOGBYPASS) permitted "REF_OK - reference step skipped: $(REF_WHY)"; printf '\nreference step SKIPPED (REF_OK, logged to dev/bypass-log/)\n',$(MAKE) --no-print-directory reference)
 	@T0=$$(date +%s); fail=""; \
 	for phase in lint format typecheck hooks-test $(if $(FULL),test-full perf-gate,test); do \
@@ -209,16 +213,48 @@ done:
 REF_FIRST = @$(if $(REF_OK),$(MAKE) --no-print-directory bypass-audit REF_WHY="$(REF_WHY)",$(MAKE) --no-print-directory reference)
 RUN = @python3 -m l7r.diagram
 
+# ---- THE ITERATION SWITCHES (feature 132 - GUARD_EDIT_OK: a new guard, thrown by the GM) ----------
+#
+# Two committed switches in dev/switches.json, read here and in every Python entry point that can
+# roll more than one map. `remote off`: nothing dispatches to CodeBuild and the gated push lands on
+# a green local `make done` instead. `scope reference`: no invocation rolls a map other than the
+# reference settlement, and none rolls more than one. Thrown and released ONLY by the four targets
+# below, each demanding a REASON and committing the file - there is no variable or flag past a
+# thrown switch, by design. WHY (GM 2026-08-25): *"not only do we not run the full test suite, but
+# we literally cannot because just telling you, please make sure not to run the full tests. In the
+# past has frequently resulted in the full tests getting run, and that costs both time and actual
+# money now that we are running on AWS."* The doctrine and the priced alternatives: dev/switches.md.
+SWITCH = python3 -m l7r.diagram.switches
+SWEEP_OK = @$(SWITCH) check scope "$@"
+REMOTE_OK = @$(SWITCH) check remote "$@"
+
+switches:       ## the iteration switches: remote on|off, scope unlocked|reference (feature 132)
+	@$(SWITCH) show
+ci-off:         ## REMOTE OFF - nothing dispatches to CodeBuild; the gated push lands on a green local make done   REASON="..."
+	@$(MAKE) --no-print-directory _switch AXIS=remote STATE=off MSG="remote off" REASON="$(REASON)"
+ci-on:          ## REMOTE ON - the default; the gated route may dispatch again   REASON="..."
+	@$(MAKE) --no-print-directory _switch AXIS=remote STATE=on MSG="remote on" REASON="$(REASON)"
+scope-lock:     ## SCOPE LOCKED to the reference settlement - every sweep refuses   REASON="..."
+	@$(MAKE) --no-print-directory _switch AXIS=scope STATE=reference MSG="scope locked" REASON="$(REASON)"
+scope-unlock:   ## SCOPE UNLOCKED - the default; sweeps run again (and are owed)   REASON="..."
+	@$(MAKE) --no-print-directory _switch AXIS=scope STATE=unlocked MSG="scope unlocked" REASON="$(REASON)"
+_switch:
+	@[ -n "$(REASON)" ] || { printf '\n\033[1mREFUSED: a reason is required\033[0m - a reason someone will READ is a decision you have to defend.\n  make <target> REASON="..."\n\n'; exit 1; }
+	@$(SWITCH) set $(AXIS) $(STATE) --why "$(REASON)"
+	@git add dev/switches.json && git commit -q -m "chore: $(MSG) - $(REASON)" && printf '\ncommitted: %s - %s\n' "$(MSG)" "$(REASON)"
+
 # --- expensive: they generate ---------------------------------------------------------------
 map:            ## regenerate ONE gen and gate it            GEN=pool/hamlets/inashiro.gen.py
 	$(REF_FIRST)
 	$(RUN).pipeline.regen $(or $(GEN),pool/hamlets/inashiro.gen.py)
 
 cohort:         ## roll N seeds and report every failure      N=48
+	$(SWEEP_OK)
 	$(REF_FIRST)
 	$(RUN).tools.cohort_audit --count $(or $(N),48)
 
 tripwire:       ## the middle tier: reference map, then the tripwire seeds
+	$(SWEEP_OK)
 	$(RUN).tools.mapcheck $(if $(SCOPE),--scope $(SCOPE),)
 
 hamlet:         ## generate one hamlet from the CLI           ARGS="--name X --seed 4 ..."
@@ -226,10 +262,12 @@ hamlet:         ## generate one hamlet from the CLI           ARGS="--name X --s
 	$(RUN).hamletgen $(ARGS)
 
 cache-audit:    ## does using the generation cache change any map?
+	$(SWEEP_OK)
 	$(REF_FIRST)
 	$(RUN).tools.cache_audit $(ARGS)
-
+# (GUARD_EDIT_OK: feature 132 - cache-audit and regressions roll many maps, so the scope lock refuses them first)
 regressions:    ## rebuild the frozen negative-fixture corpus
+	$(SWEEP_OK)
 	$(REF_FIRST)
 	$(RUN).tools.make_regressions $(ARGS)
 
@@ -328,7 +366,9 @@ hooks-test:     ## run every scripts/test-*-hooks.sh, and prove each guard still
 # (GUARD_EDIT_OK: adds gate-stamp.py to the guard roster with a .sh companion, and stamps the hooks area on green)
 
 perf-gate:      ## require the feature's -start bookend, take -end, and FAIL on a regression
-	@f="$(or $(FEATURE),$(SPECIFY_FEATURE))"; \
+	$(SWEEP_OK)
+	@: "(GUARD_EDIT_OK: feature 132 - a perf snapshot rolls several seeds, a sweep under the scope lock)"; \
+	f="$(or $(FEATURE),$(SPECIFY_FEATURE))"; \
 	if [ -z "$$f" ] && [ -f ../../../.specify/feature.json ]; then \
 	  f=$$(python3 -c "import json;print(json.load(open('../../../.specify/feature.json'))['feature_directory'].split('/')[-1])" 2>/dev/null); \
 	fi; \
@@ -398,13 +438,19 @@ engine-key:
 	@$(RUN).ci engine-key $(or $(REF),HEAD)
 
 ci-check:       ## the iteration check on CodeBuild (PAID)     FULL=1 (prompts) | TARGET=cohort etc. | NO_GO=1 (FR-036 self-abort proof)
+	$(REMOTE_OK)
+	@$(if $(FULL)$(TARGET),$(SWITCH) check scope "ci-check $(if $(FULL),FULL=1,TARGET=$(TARGET))",true)
 	@$(if $(FULL),$(MAKE) --no-print-directory bypass-audit REF_WHY="$(REF_WHY)" && $(MAKE) --no-print-directory commit-permitted,true)
+# (GUARD_EDIT_OK: feature 132 - remote off refuses every ci-check before any AWS call; FULL and TARGET are sweeps under the scope lock)
 	$(RUN).ci check $(if $(FULL),--full,) $(if $(TARGET),--target "$(TARGET)",) $(if $(NO_GO),--no-go,) $(if $(COMPUTE),--compute "$(COMPUTE)",)
 # (GUARD_EDIT_OK: NO_GO=1 is the FR-036 measurement - the build must abort itself when nobody releases it; feature 130 T076.
 #  COMPUTE=BUILD_GENERAL1_2XLARGE is the T028 scaling measurement the GM asked for on 2026-08-25; the default stays xlarge)
 
 ci-merge:       ## the merge action's gated route (PAID) - called by sync-with-main.sh push   FULL=1 (prompts)
+	@$(if $(FULL),$(SWITCH) check scope "ci-merge FULL=1",true)
 	@$(if $(FULL),$(MAKE) --no-print-directory bypass-audit REF_WHY="$(REF_WHY)" && $(MAKE) --no-print-directory commit-permitted,true)
+# (GUARD_EDIT_OK: feature 132 - FULL is a sweep under the scope lock. Remote-off is NOT checked here: the dispatcher
+#  handles it itself, because with remote off it must still produce the LOCAL-GATED verdict the push ritual reads)
 	$(RUN).ci merge $(if $(FULL),--full,)
 
 # the operator's `permitted` answer becomes a commit, so the build finds it in the tree it tests (FR-025)
@@ -413,7 +459,9 @@ commit-permitted:
 	git add dev/bypass-log && git commit -q -m "chore: authorize FULL sweep - $$why" && echo "committed $$f ($$why)"
 
 ci-image:       ## rebuild the CodeBuild image from Dockerfile.ci and push it to ECR (PAID, ~$$1; prompts)
-	@if [ ! -t 0 ]; then printf '\n\033[1mREFUSED: ci-image is a paid operation and its prompt needs a terminal.\033[0m Run it in the foreground.\n\n'; $(LOGBYPASS) refused "ci-image with no terminal"; exit 1; fi; \
+	$(REMOTE_OK)
+	@: "(GUARD_EDIT_OK: feature 132 - remote off refuses the image rebuild before the prompt)"; \
+	if [ ! -t 0 ]; then printf '\n\033[1mREFUSED: ci-image is a paid operation and its prompt needs a terminal.\033[0m Run it in the foreground.\n\n'; $(LOGBYPASS) refused "ci-image with no terminal"; exit 1; fi; \
 	printf '\n\033[1mAbout to rebuild the CodeBuild image on AWS\033[0m (~$$1, a few minutes). Needed only when\n'; \
 	printf 'setup-dev-env.sh, Dockerfile.ci or a lockfile changed. Press Enter to CANCEL.\n\nReason to continue (Enter cancels): '; \
 	read why || true; \
@@ -568,9 +616,12 @@ reference:
 # (GUARD_EDIT_OK: a green reference records green-local - feature 130, FR-012)
 
 maps:
+	@$(if $(filter all,$(SCOPE)),$(SWITCH) check scope "maps SCOPE=all",true)
 	@python3 -m l7r.diagram.tools.mapcheck
+# (GUARD_EDIT_OK: feature 132 - `maps SCOPE=all` is refused under the lock; mapcheck itself never widens while locked)
 
 perf:
+	$(SWEEP_OK)
 	@python3 -m l7r.diagram.tools.perf_snapshot --record --label "$(or $(LABEL),adhoc)"
 
 perf-report:
@@ -628,9 +679,10 @@ SETTLEMENT_COV_FLOOR = 94
 # The tests that roll a map other than the reference one. `test` deselects them; `test-full` does not.
 DESELECT = --deselect tests/test_villages.py --deselect tests/hamletgen/test_driver.py
 
-test-full: DESELECT =
-test-full: COV_FLOORS = 1
-test-full: test
+# (GUARD_EDIT_OK: feature 132 - test-full rolls every pool map, so the scope lock refuses it before `test` starts)
+test-full:
+	$(SWEEP_OK)
+	@$(MAKE) --no-print-directory test DESELECT= COV_FLOORS=1
 
 # A DESELECTED TEST TAKES ITS COVERAGE WITH IT, so the reference scope CANNOT hold the 100% floor
 # (measured 2026-08-24, the first green-path run of this restructure). Deselecting

@@ -92,6 +92,22 @@ D=$(topology g)
 OUT=$(CI_ROUTE=GATED CI_MERGE="echo SKIP-VERIFIED > $D/main/.clones/c/.git/ci-verdict" ritual "$D" push); check "skip-verified pushes directly" 0 $?
 [ "$(git -C "$D/github.git" rev-parse main)" = "$(git -C "$D/main/.clones/c" rev-parse HEAD)" ] && PASS=$((PASS+1)) || { echo "FAIL  skip-verified did not land"; FAIL=$((FAIL+1)); }
 
+echo "7b. GATED-LOCAL route (remote off, feature 132): SKIP-VERIFIED pushes directly; a refusal keeps the work in the clone"
+D=$(topology gl)
+( cd "$D/main/.clones/c" && echo 'def a(): return 5' > .claude/skills/x/a.py && git add -A && git commit -qm engine ); stamp_hooks "$D"
+OUT=$(CI_ROUTE=GATED-LOCAL CI_MERGE="false" ritual "$D" push); check "gated-local refused by ci-merge -> push fails" 1 $?
+expect_out "route GATED (local - remote off)"
+[ "$(git -C "$D/github.git" rev-parse main)" != "$(git -C "$D/main/.clones/c" rev-parse HEAD)" ] && PASS=$((PASS+1)) || { echo "FAIL  a refused gated-local push landed"; FAIL=$((FAIL+1)); }
+OUT=$(CI_ROUTE=GATED-LOCAL CI_MERGE="echo SKIP-VERIFIED > $D/main/.clones/c/.git/ci-verdict" ritual "$D" push); check "gated-local skip-verified pushes directly" 0 $?
+[ "$(git -C "$D/github.git" rev-parse main)" = "$(git -C "$D/main/.clones/c" rev-parse HEAD)" ] && PASS=$((PASS+1)) || { echo "FAIL  gated-local skip-verified did not land"; FAIL=$((FAIL+1)); }
+
+echo "7c. THE SEAMS ARE IGNORED IN A REAL-SHAPED TREE (feature 132): CI_ROUTE=DIRECT cannot skip the gated route"
+D=$(topology gs)
+( cd "$D/main/.clones/c" && mkdir -p .claude/skills/diagram && printf 'ci-status:\n\t@false\nperf-review:\n\t@true\n' > .claude/skills/diagram/Makefile && echo 'def a(): return 6' > .claude/skills/x/a.py && git add -A && git commit -qm engine ); stamp_hooks "$D"
+OUT=$(CI_ROUTE=DIRECT CI_MERGE="true" ritual "$D" push); check "a real-shaped tree with CI_ROUTE=DIRECT does not push" 1 $?
+expect_out "could not decide the route"
+[ "$(git -C "$D/github.git" rev-parse main)" != "$(git -C "$D/main/.clones/c" rev-parse HEAD)" ] && PASS=$((PASS+1)) || { echo "FAIL  the seam bypassed the gated route"; FAIL=$((FAIL+1)); }
+
 echo "8. origins are re-pointed at GitHub once, and said so"
 D=$(topology h)
 git -C "$D/main/.clones/c" remote set-url origin "$D/main"

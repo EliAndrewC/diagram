@@ -305,6 +305,14 @@ def main(argv: list[str] | None = None) -> int:
     a = ap.parse_args(argv)
     seeds = tuple(int(x) for x in a.seeds.split(",")) if a.seeds else DEFAULT_SEEDS
     if a.record:
+        # THE SCOPE LOCK (feature 132): a snapshot rolls the reference settlement at SEVERAL seeds -
+        # "some number of different maps with some number of different seeds per map", the GM's
+        # definition of the suite - so under the lock no bookend is taken; they are owed at unlock.
+        # `--report` reads the log and is not a roll, so it stays available.
+        from l7r.diagram import switches
+
+        if switches.locked_out(f"perf --record ({len(seeds)} seeds)"):
+            return 2
         record(a.label, seeds)
     if a.report or not a.record:
         return report(a.against)

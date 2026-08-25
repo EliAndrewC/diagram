@@ -390,3 +390,12 @@ def test_a_local_done_does_not_suffice_when_main_moved_on_engine_paths_or_for_qu
     git(repo, "checkout", "-q", "main")
     c3, _ = ctx(repo, client=FakeClient())
     assert dispatch.run(c3).verdict == "DISPATCHED"
+
+
+def test_remote_off_reason_reads_the_switch(repo: Path) -> None:
+    from l7r.diagram import switches
+
+    assert dispatch.remote_off_reason(repo / S) is None
+    switches.write(repo / S, "remote", "off", "budget", who="GM")
+    why = dispatch.remote_off_reason(repo / S)
+    assert why is not None and "remote is OFF" in why and "budget" in why and "GM" in why and "make ci-on" in why

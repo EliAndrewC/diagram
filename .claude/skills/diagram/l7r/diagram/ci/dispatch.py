@@ -31,6 +31,7 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any, Protocol
 
+from l7r.diagram import switches
 from l7r.diagram.ci import config, decision, door, features, runlog, state
 from l7r.diagram.ci.delta import compute_delta, engine_key
 
@@ -187,6 +188,15 @@ def verified_lookup(ctx: Context, tree: str | None) -> decision.VerifiedRecord |
     return decision.VerifiedRecord(tree=str(d.get("tree", tree)), build_id=str(d.get("build_id", "?")), scope=str(d.get("scope", "reference")), utc=str(d.get("utc", "")))
 
 
+def remote_off_reason(skill: Path) -> str | None:
+    """None while remote is on; otherwise the text the `remote-enabled` condition carries (feature 132)."""
+    sw = switches.read(skill)
+    if not sw.remote_off:
+        return None
+    a = sw.remote
+    return f"remote is OFF since {a.utc} by {a.who or '?'}: {a.why} - nothing dispatches; `make ci-on REASON=...` releases it"
+
+
 def billed_minutes(build: dict[str, Any]) -> float:
     """CodeBuild bills every phase from PROVISIONING on, rounded up to the minute."""
     secs = sum(int(p.get("durationInSeconds", 0)) for p in build.get("phases", []) if p.get("phaseType") not in ("SUBMITTED", "QUEUED", "COMPLETED"))
@@ -211,7 +221,19 @@ def status_text(ctx: Context) -> tuple[str, decision.DispatchDecision]:
     # operation, which the laptop is not asked to run.
     if verified is None and tree is not None and st is not None and st.event == state.GREEN and st.target == "done" and st.engine_key and st.engine_key == engine_key(ctx.root, tree):
         verified = decision.VerifiedRecord(tree=tree, build_id=f"local:make-done@{st.commit}", scope="reference", utc=st.utc)
-    d = decision.decide(delta, st, now, verified, None, ctx.mode if ctx.mode in (decision.MERGE, decision.CHECK) else decision.CHECK, feat, ctx.scope, runlog.month_to_date(ctx.skill), ctx.operation)
+    d = decision.decide(
+        delta,
+        st,
+        now,
+        verified,
+        None,
+        ctx.mode if ctx.mode in (decision.MERGE, decision.CHECK) else decision.CHECK,
+        feat,
+        ctx.scope,
+        runlog.month_to_date(ctx.skill),
+        ctx.operation,
+        remote_off_reason(ctx.skill),
+    )
     text = decision.render(d, ctx.mode, ctx.scope)
     head = [f"delta: merge-base {delta.base[:12]}, {len(delta.files)} file(s), route {delta.route}", f"state: {state.describe(st, now)}"]
     head.append(

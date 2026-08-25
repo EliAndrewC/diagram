@@ -181,7 +181,12 @@ push_cmd() {
   # band 3 are "before it is committed back to main", so the push - not the gate - is where a
   # missing explanation, confirmation, audit or sign-off stops the work. `make perf-review` names
   # exactly which record is owed. CI_PERF_REVIEW is the test seam (a fixture has no skill).
-  if [ -n "${CI_PERF_REVIEW:-}" ]; then bash -c "$CI_PERF_REVIEW"; elif [ -f "$ROOT/$SKILL_DIR/Makefile" ]; then ( cd "$ROOT/$SKILL_DIR" && make --no-print-directory perf-review ); else true; fi \
+  # THE TEST SEAMS ARE HONORED ONLY IN A FIXTURE (feature 132, Principle XIV - the fidelity
+  # reviewer's aside): a tree with no diagram skill Makefile is the only tree the tests build, and
+  # on a real clone `CI_ROUTE=DIRECT` would have skipped the gated route entirely. So the seams
+  # (CI_PERF_REVIEW, CI_ROUTE, CI_MERGE) are read only when that Makefile is absent.
+  local seams=""; [ -f "$ROOT/$SKILL_DIR/Makefile" ] || seams=1
+  if [ -n "$seams" ] && [ -n "${CI_PERF_REVIEW:-}" ]; then bash -c "$CI_PERF_REVIEW"; elif [ -f "$ROOT/$SKILL_DIR/Makefile" ]; then ( cd "$ROOT/$SKILL_DIR" && make --no-print-directory perf-review ); else true; fi \
     || die "the performance bands owe a record (above) - the work stays in this clone until it exists (feature 129)"
   # TWO ROUTES TO MAIN, CHOSEN BY THE DELTA, NEVER BY THE SESSION (feature 130, FR-002). The delta
   # is inspected against the LATEST GitHub main (fetched above). DIRECT: no diagram engine code in
@@ -191,17 +196,23 @@ push_cmd() {
   # fast-forwards to what landed. On SKIP-VERIFIED (a build already verified this exact tree) the
   # clone pushes directly. There is no local override of the gated route (FR-018): a gated delta
   # that cannot be dispatched stays in the clone. CI_ROUTE / CI_MERGE are the test seams.
+  # THREE ROUTES since feature 132: GATED-LOCAL is the gated route with remote OFF (dev/switches.json)
+  # - `make ci-merge` then dispatches nothing and answers SKIP-VERIFIED only when a green local
+  # `make done` vouches for the merged engine content; otherwise the work stays in the clone.
   local route
-  if [ -n "${CI_ROUTE:-}" ]; then route=$CI_ROUTE
+  if [ -n "$seams" ] && [ -n "${CI_ROUTE:-}" ]; then route=$CI_ROUTE
   elif [ -f "$ROOT/$SKILL_DIR/Makefile" ]; then
     route=$( { cd "$ROOT/$SKILL_DIR" && make --no-print-directory ci-status ROUTE=1; } 2>/dev/null | tail -1 || true)
     # AN UNDECIDED ROUTE IS NOT A DIRECT ROUTE. If the dispatcher could not answer, engine code
     # could be sitting in the delta; falling through to the free push would land it ungated.
-    case "$route" in DIRECT|GATED) ;; *) die "could not decide the route ('make ci-status ROUTE=1' said '${route:-nothing}') - not pushing. Run it by hand in $SKILL_DIR to see why." ;; esac
+    case "$route" in DIRECT|GATED|GATED-LOCAL) ;; *) die "could not decide the route ('make ci-status ROUTE=1' said '${route:-nothing}') - not pushing. Run it by hand in $SKILL_DIR to see why." ;; esac
   else route=DIRECT; fi   # a tree with no diagram skill (a fixture) has nothing to gate
-  echo "sync-with-main: route $route (diagram engine code in our delta -> GATED, CodeBuild; otherwise DIRECT)"
-  if [ "$route" = GATED ]; then
-    if [ -n "${CI_MERGE:-}" ]; then bash -c "$CI_MERGE"; else ( cd "$ROOT/$SKILL_DIR" && make --no-print-directory ci-merge ${FULL:+FULL=1} ); fi \
+  case "$route" in
+    GATED-LOCAL) echo "sync-with-main: route GATED (local - remote off): engine code in our delta, nothing dispatches; a green local make done on the merged engine content pushes, otherwise the work stays here" ;;
+    *)           echo "sync-with-main: route $route (diagram engine code in our delta -> GATED, CodeBuild; otherwise DIRECT)" ;;
+  esac
+  if [ "$route" = GATED ] || [ "$route" = GATED-LOCAL ]; then
+    if [ -n "$seams" ] && [ -n "${CI_MERGE:-}" ]; then bash -c "$CI_MERGE"; else ( cd "$ROOT/$SKILL_DIR" && make --no-print-directory ci-merge ${FULL:+FULL=1} ); fi \
       || die "gated route: nothing landed (the conditions or the build refused - see above; the work stays in this clone)"
     case "$(cat "$ROOT/.git/ci-verdict" 2>/dev/null)" in
       SKIP-VERIFIED) flock "$LOCK" sh -c 'git pull --no-rebase origin main && git push origin HEAD:main' ;;

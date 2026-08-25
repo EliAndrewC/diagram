@@ -109,3 +109,65 @@ def test_roots_resolve_to_this_repository() -> None:
     root, skill = cli._roots()
     assert skill == root / ".claude" / "skills" / "diagram" and (root / ".git").exists()
     assert git(root, "rev-parse", "--show-toplevel") == str(root)
+
+
+# ---- REMOTE OFF (feature 132): no client is ever constructed --------------------------------------
+
+
+@pytest.fixture
+def remote_off(roots: Path, monkeypatch: pytest.MonkeyPatch) -> Path:
+    from l7r.diagram import switches
+
+    switches.write(roots / S, "remote", "off", "no AWS this week", who="GM")
+
+    def never(secrets: config.Secrets) -> FakeClient:
+        raise AssertionError("a client was constructed with remote off")
+
+    monkeypatch.setattr(dispatch, "Boto3Client", never)
+    return roots
+
+
+def test_remote_off_route_and_status_need_no_client(remote_off: Path, capsys: pytest.CaptureFixture[str]) -> None:
+    commit(remote_off, S + "l7r/diagram/m.py", "x = 2\n")
+    assert cli.main(["status", "--route"]) == 0 and capsys.readouterr().out.strip() == "GATED-LOCAL"
+    assert cli.main(["status"]) == 0
+    out = capsys.readouterr().out
+    assert "[--] remote-enabled" in out and "no AWS this week" in out
+    commit(remote_off, "docs/x.md", "d\n")
+    git(remote_off, "update-ref", "refs/remotes/origin/main", "HEAD")  # a DIRECT delta stays DIRECT
+    assert cli.main(["status", "--route"]) == 0 and capsys.readouterr().out.strip() == "DIRECT"
+
+
+def test_remote_off_check_and_image_refuse_and_name_ci_on(remote_off: Path, capsys: pytest.CaptureFixture[str]) -> None:
+    commit(remote_off, S + "l7r/diagram/m.py", "x = 2\n")
+    state.write(remote_off, state.GREEN, "quick")
+    assert cli.main(["check"]) == 1
+    err = capsys.readouterr().err
+    assert "remote is OFF" in err and "make ci-on" in err and "ci-check" in err
+    assert cli.main(["image"]) == 1 and "ci-image" in capsys.readouterr().err
+    assert not list((remote_off / S / "dev" / "run-log").glob("*.json"))  # no remote run was even attempted
+
+
+def test_remote_off_merge_is_local_gated(remote_off: Path, monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]) -> None:
+    commit(remote_off, S + "l7r/diagram/m.py", "x = 2\n")
+    state.write(remote_off, state.GREEN, "quick")
+    # no complete feature: refused, with the merge-and-rerun instruction, and the verdict file written
+    assert cli.main(["merge"]) == 1
+    out = capsys.readouterr().out
+    assert "LOCAL-GATED" in out and "REFUSE(feature-complete)" in out
+    assert (remote_off / ".git" / "ci-verdict").read_text(encoding="utf-8").strip() == "REFUSE(feature-complete)"
+    # a complete feature but only `make quick` green: nothing vouches for the merged engine content
+    d = remote_off / "specs" / "132-x"
+    d.mkdir(parents=True)
+    (d / "tasks.md").write_text("- [x] T001 done\n", encoding="utf-8")
+    (d / "spec.md").write_text("FAITHFUL\n", encoding="utf-8")
+    monkeypatch.setenv("SPECIFY_FEATURE", "132-x")
+    assert cli.main(["merge"]) == 1
+    out = capsys.readouterr().out
+    assert "REFUSE(remote-enabled)" in out and "git pull --no-rebase origin main" in out and "make done" in out
+    # a green local `make done` on exactly this engine content: SKIP-VERIFIED - the caller pushes, no build
+    state.write(remote_off, state.GREEN, "done")
+    assert cli.main(["merge"]) == 0
+    out = capsys.readouterr().out
+    assert "SKIP-VERIFIED" in out and "no build" in out
+    assert (remote_off / ".git" / "ci-verdict").read_text(encoding="utf-8").strip() == "SKIP-VERIFIED"
