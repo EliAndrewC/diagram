@@ -7,7 +7,9 @@
 # because system pip on 26.04 refuses to replace Debian-packaged dependencies
 # (`uninstall-no-record-file`, build b3617f0d). The venv is first on PATH, so `python3` IS 3.14
 # with the lockfiles, and `make` needs no environment of its own.
-FROM ubuntu:26.04
+# ECR Public rather than Docker Hub: CodeBuild's shared egress is rate-limited by Docker Hub
+# (429 Too Many Requests, build 5b376edc); Canonical publishes the same image on ECR Public.
+FROM public.ecr.aws/ubuntu/ubuntu:26.04
 ENV DEBIAN_FRONTEND=noninteractive PYTHONDONTWRITEBYTECODE=1 PATH=/opt/venv/bin:/root/.local/bin:/usr/local/bin:/usr/bin:/bin
 RUN apt-get update -qq && apt-get install -y -qq --no-install-recommends \
         python3 git make curl ca-certificates unzip util-linux \
