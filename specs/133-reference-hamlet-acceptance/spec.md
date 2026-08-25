@@ -4,7 +4,7 @@
 
 **Created**: 2026-08-25
 
-**Status**: round 1 CHANGES REQUIRED (one sentence, applied); awaiting round 2
+**Status**: APPROVED by `spec-fidelity` - round 2 verdict **FAITHFUL** (2026-08-25), after round 1 returned one change. The skeleton may be built.
 
 **Input**: [`gm-request.md`](gm-request.md), verbatim and unedited. That file is the authority for
 this specification.
@@ -168,3 +168,5 @@ to get things into main outside the context of features"* the GM suspected.
   "lands DIRECT" when `switches.py` is engine code and would be GATED. Removed; the route is the
   delta's to decide and this feature's to observe. FR-006 (the DIRECT-route gap as a QUESTION) and
   pushing the skeleton to main were both judged faithful.
+- **Round 2 (2026-08-25): FAITHFUL.** The change applied without new scope. Aside: the spec names
+  `T99` by id; if the task ids change, that sentence goes stale.

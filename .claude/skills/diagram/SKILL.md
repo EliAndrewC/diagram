@@ -9,6 +9,18 @@ Generate top-down SVG plans of Rokugani locations - magistrate manors, village l
 
 The skill's first worked example is [`pool/magistracies/ochiba-magistracy.svg`](pool/magistracies/ochiba-magistracy.svg) (County Magistrate Kitsune Tatsuya's two-courtyard manor). All conventions below were extracted from that work, and `pool/magistracies/ochiba-magistracy.svg` is the canonical template - copy it as the starting point for new diagrams and edit from there rather than rebuilding from scratch.
 
+## The working rule behind the tooling
+
+Everything under `make` here - the reference-first gates, the switches, the short-circuits, the
+CodeBuild dispatcher's conditions - exists for one reason the GM stated on 2026-08-25 (constitution
+v2.3.0): *"iterations are expensive in terms of wall clock time. And if me asking for a simple
+change results in half an hour of work being done when it should have only taken five minutes, then
+that limits the number of changes that I can make in a single day."* A session drawing or fixing a
+map picks the cheapest command that answers its question (`make reference`, `make map` on the one
+map, `make quick`), batches changes so one verification covers many, and treats a simple task that
+ran long as a finding about the tooling. The dev loop with the measured numbers is
+[`CLAUDE.md`](CLAUDE.md).
+
 ## Core principle: roughly to scale
 
 Every diagram now carries a **declared scale** - the GM's scale ladder (2026-07, extended to Mode A):

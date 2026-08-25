@@ -50,6 +50,61 @@ def write_remote(
     return path
 
 
+WOULD_HAVE = "would-have-dispatched"
+
+
+def write_would_have(skill: Path, target: str, scope: str, minutes: float, reason: str, rate: float = config.RATE_PER_MIN) -> Path:
+    """THE WOULD-HAVE-DISPATCHED TRAIL (feature 133 FR-004, GM 2026-08-25): with remote OFF, every
+    attempt that would have started a paid run is recorded - *"I would hate to have it be the case
+    that turning off AWS suppresses the finding that we would have been dispatching to AWS to run
+    many hours and many dollars of tests."* Same file shape as a remote entry, `where` set to
+    `would-have-dispatched`, and NEVER counted as spend (`remote_entries` filters on `codebuild`).
+    The period's audit (FR-005) reads these back and asks, for each, whether it should have run."""
+    os.makedirs(skill / RUN_LOG, exist_ok=True)
+    ts = time.strftime("%Y%m%dT%H%M%S", time.gmtime()) + f"{time.time_ns() // 1000 % 1000000:06d}"
+    entry = {
+        "utc": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
+        "target": target,
+        "scope": scope,
+        "seconds": 0,
+        "result": WOULD_HAVE,
+        "commit": _short_head(skill),
+        "where": WOULD_HAVE,
+        "build_id": "",
+        "minutes": round(minutes, 2),
+        "cost_usd": round(minutes * rate, 4),
+        "compute": config.COMPUTE_TYPE,
+        "reason": reason,
+    }
+    path = skill / RUN_LOG / f"{ts}-{os.getpid()}.json"
+    path.write_text(json.dumps(entry, indent=2) + "\n", encoding="utf-8")
+    return path
+
+
+def would_have_entries(skill: Path) -> list[dict[str, Any]]:
+    rows: list[dict[str, Any]] = []
+    for f in sorted(glob.glob(str(skill / RUN_LOG / "*.json"))):
+        try:
+            r = json.loads(Path(f).read_text(encoding="utf-8"))
+        except ValueError:
+            continue
+        if r.get("where") == WOULD_HAVE:
+            rows.append(r)
+    return rows
+
+
+def would_have_report(skill: Path) -> str:
+    rows = would_have_entries(skill)
+    lines = ["\033[1mWould have dispatched\033[0m (remote off; dev/run-log/, where=would-have-dispatched) - audited at the period's end, never counted as spend"]
+    for r in rows[-15:]:
+        lines.append(f"  {r['utc']}  {str(r['target']):<16} {str(r['scope']):<9} ~{float(r['minutes']):>4.0f} min  ~${float(r['cost_usd']):>5.2f}  {str(r.get('reason', ''))[:70]}")
+    if not rows:
+        lines.append("  (none)")
+    else:
+        lines.append(f"  {len(rows)} attempt(s), ~${sum(float(r['cost_usd']) for r in rows):.2f} not spent")
+    return "\n".join(lines)
+
+
 def remote_entries(skill: Path) -> list[dict[str, Any]]:
     rows: list[dict[str, Any]] = []
     for f in sorted(glob.glob(str(skill / RUN_LOG / "*.json"))):
@@ -75,4 +130,4 @@ def remote_spend_report(skill: Path) -> str:
     if not rows:
         lines.append("  (no remote runs yet)")
     lines.append(f"  month-to-date: ${month_to_date(skill):.2f} over {sum(1 for r in rows if str(r.get('utc', '')).startswith(time.strftime('%Y-%m', time.gmtime())))} run(s) this month")
-    return "\n".join(lines)
+    return "\n".join(lines) + "\n" + would_have_report(skill)

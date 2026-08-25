@@ -102,6 +102,15 @@ settlement map, and update its status table when a conversion lands**) and
 Each line below is the rule; the doc named after it is the evidence. Where the two ever disagree,
 the doc is right - it is where the measurement lives.
 
+**The goal all of this serves** (GM 2026-08-25, feature 133, constitution v2.3.0): *"if me asking
+for a simple change results in half an hour of work being done when it should have only taken five
+minutes, then that limits the number of changes that I can make in a single day."* Every command
+below is chosen against that - the cheaper one that answers the question wins; one verification
+covers a batch of changes; a simple task that ran long is diagnosed (more complicated than
+expected / lengthier tests than needed / more cycles than needed) and the tooling is improved when
+it is the tooling. With remote off, a paid run the tooling was about to start is still recorded
+(`make ci-status` "Would have dispatched") and audited at the period's end.
+
 **The loop** ([`dev/loop.md`](dev/loop.md))
 
 **THE COMMAND MAP, with measured times** (feature 127; every number is a stopwatch, not an estimate):

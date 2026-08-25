@@ -145,7 +145,9 @@ def test_remote_off_check_and_image_refuse_and_name_ci_on(remote_off: Path, caps
     err = capsys.readouterr().err
     assert "remote is OFF" in err and "make ci-on" in err and "ci-check" in err
     assert cli.main(["image"]) == 1 and "ci-image" in capsys.readouterr().err
-    assert not list((remote_off / S / "dev" / "run-log").glob("*.json"))  # no remote run was even attempted
+    from l7r.diagram.ci import runlog
+
+    assert runlog.remote_entries(remote_off / S) == []  # no remote run was attempted - only would-have-dispatched entries (feature 133)
 
 
 def test_remote_off_merge_is_local_gated(remote_off: Path, monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]) -> None:
@@ -177,3 +179,38 @@ def test_verified_done_subcommand(roots: Path, capsys: pytest.CaptureFixture[str
     assert cli.main(["verified-done"]) == 1 and "no local check" in capsys.readouterr().out
     state.write(roots, state.GREEN, "done")
     assert cli.main(["verified-done"]) == 0 and "already verified" in capsys.readouterr().out
+
+
+# ---- the would-have-dispatched trail (feature 133 FR-004): every refused paid attempt is on record --
+
+
+def test_remote_off_refusals_leave_would_have_entries(remote_off: Path, monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]) -> None:
+    from l7r.diagram.ci import runlog
+
+    skill = remote_off / S
+    commit(remote_off, S + "l7r/diagram/m.py", "x = 2\n")
+    state.write(remote_off, state.GREEN, "quick")
+    assert cli.main(["check"]) == 1 and "would-have-dispatched" in capsys.readouterr().err
+    assert cli.main(["image"]) == 1
+    assert cli.main(["remote-ok", "ci-check"]) == 1 and "would-have-dispatched" in capsys.readouterr().err
+    assert cli.main(["remote-ok", "ci-image"]) == 1
+    rows = runlog.would_have_entries(skill)
+    assert [r["target"] for r in rows] == ["ci-check", "ci-image", "ci-check", "ci-image"]
+    assert runlog.month_to_date(skill) == 0.0
+    # a merge that WOULD have dispatched (complete feature, green quick, nothing verified) is recorded too
+    d = remote_off / "specs" / "133-x"
+    d.mkdir(parents=True)
+    (d / "tasks.md").write_text("- [x] T001 done\n", encoding="utf-8")
+    (d / "spec.md").write_text("FAITHFUL\n", encoding="utf-8")
+    monkeypatch.setenv("SPECIFY_FEATURE", "133-x")
+    assert cli.main(["merge"]) == 1 and "would-have-dispatched" in capsys.readouterr().out
+    assert runlog.would_have_entries(skill)[-1]["target"] == "ci-merge"
+    # ...and one that is SKIP-VERIFIED is not: nothing would have run
+    state.write(remote_off, state.GREEN, "done")
+    n = len(runlog.would_have_entries(skill))
+    assert cli.main(["merge"]) == 0 and len(runlog.would_have_entries(skill)) == n
+    assert "Would have dispatched" in runlog.remote_spend_report(skill)
+
+
+def test_remote_ok_passes_when_remote_is_on(roots: Path) -> None:
+    assert cli.main(["remote-ok", "ci-check"]) == 0

@@ -239,7 +239,9 @@ RUN = @python3 -m l7r.diagram
 # money now that we are running on AWS."* The doctrine and the priced alternatives: dev/switches.md.
 SWITCH = python3 -m l7r.diagram.switches
 SWEEP_OK = @$(SWITCH) check scope "$@"
-REMOTE_OK = @$(SWITCH) check remote "$@"
+# (GUARD_EDIT_OK: feature 133 FR-004 - a refused paid target also leaves a would-have-dispatched run-log entry, so
+#  remote-off never hides how often money was about to be spent; the check itself is unchanged, ci/ does the write)
+REMOTE_OK = @python3 -m l7r.diagram.ci remote-ok "$@"
 
 switches:       ## the iteration switches: remote on|off, scope unlocked|reference (feature 132)
 	@$(SWITCH) show

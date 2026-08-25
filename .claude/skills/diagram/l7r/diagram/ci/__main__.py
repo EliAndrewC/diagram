@@ -33,7 +33,7 @@ def _roots() -> tuple[Path, Path]:
 
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(prog="l7r.diagram.ci", description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("command", choices=["status", "check", "merge", "image", "state", "door", "remote-spend", "engine-key", "verified-done"])
+    ap.add_argument("command", choices=["status", "check", "merge", "image", "state", "door", "remote-spend", "engine-key", "verified-done", "remote-ok"])
     ap.add_argument("args", nargs="*")
     ap.add_argument("--full", action="store_true", help="the full sweep (the Makefile has already run the local prompt)")
     ap.add_argument("--target", default=None, help="ci-check only: an expensive operation to run remotely instead of the gate")
@@ -50,6 +50,15 @@ def main(argv: list[str] | None = None) -> int:
         st = state.write(root, a.args[0], a.args[1])
         print(f"verification-state: {st.event} ({st.target}) recorded")
         return 0
+    if a.command == "remote-ok":
+        # the Makefile's REMOTE_OK line (ci-check, ci-image): the switch's refusal, plus the trail entry
+        what = a.args[0] if a.args else "ci-check"
+        if switches.check(skill, "remote", what):
+            return 0
+        est = decision.estimate("reference", 0.0, "image" if what.startswith("ci-image") else (None if what == "ci-check" else "operation"))
+        runlog.write_would_have(skill, what, "operation" if what != "ci-check" else "reference", est.minutes, f"remote off: `make {what}` attempted and refused")
+        print(f"(recorded as would-have-dispatched, ~{est.minutes:.0f} build-min ~${est.cost_usd:.2f} - `make ci-status` lists these; the period's audit reads them)", file=sys.stderr)
+        return 1
     if a.command == "verified-done":
         ok, why = state.already_verified(root)
         print(f"make done: {why}")
@@ -113,8 +122,14 @@ def main(argv: list[str] | None = None) -> int:
         print(runlog.remote_spend_report(skill))
         return 0
     if remote_off:
+        # THE WOULD-HAVE-DISPATCHED TRAIL (feature 133 FR-004): a refused paid target, or a merge that
+        # would have DISPATCHED, leaves an auditable run-log entry with the estimate - so remote-off
+        # never hides how often the tooling was about to spend money. Audited at the period's end.
         if a.command != "merge":
             switches.check(skill, "remote", f"ci-{a.command}")
+            est = decision.estimate(scope, 0.0, a.target or ("image" if a.command == "image" else None))
+            runlog.write_would_have(skill, f"ci-{a.command}", "operation" if a.target or a.command == "image" else scope, est.minutes, f"remote off: `make ci-{a.command}` attempted and refused")
+            print(f"(recorded as would-have-dispatched, ~{est.minutes:.0f} build-min ~${est.cost_usd:.2f} - `make ci-status` lists these; the period's audit reads them)", file=sys.stderr)
             return 1
         text, d = dispatch.status_text(ctx)
         print(text)
@@ -122,6 +137,9 @@ def main(argv: list[str] | None = None) -> int:
         if d.skip_verified:
             print("ci-merge: LOCAL-GATED (remote off) - a green local `make done` vouches for this engine content; the caller pushes directly, no build")
             return 0
+        if d.verdict == "REFUSE(remote-enabled)":  # every other condition passed: with remote on this would have been a paid build
+            runlog.write_would_have(skill, "ci-merge", scope, d.estimate.minutes, "remote off: the gated merge would have DISPATCHED (no green local `make done` on the merged engine content)")
+            print(f"(recorded as would-have-dispatched, ~{d.estimate.minutes:.0f} build-min ~${d.estimate.cost_usd:.2f})")
         print(f"ci-merge: LOCAL-GATED (remote off) - {d.verdict}: nothing landed. With remote off the merge needs a green local `make done` on the")
         print("  merged engine content: `git pull --no-rebase origin main` (if main moved), then `make done`, then `scripts/sync-with-main.sh done` again.")
         return 1

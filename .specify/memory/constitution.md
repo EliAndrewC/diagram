@@ -1,7 +1,12 @@
 <!--
 SYNC IMPACT REPORT
 ==================
-Version change: 2.1.0 → 2.2.0
+Version change: 2.2.0 → 2.3.0
+
+Version 2.3.0 (amended 2026-08-25, feature 133): the Development Workflow gains "Iteration
+wall-clock is the cost" - the GM's statement of the goal every guard, gate and switch in this
+repository serves, recorded so every future session judges its commands, its tooling proposals and
+its use of the tooling against it.
 
 Version 2.2.0 (amended 2026-08-25): history is never rewritten - no squashing, no rebasing, no
 amending of shared commits, no force pushes (GM 2026-08-25), enforced by the repo-safety hook. A
@@ -1491,6 +1496,26 @@ at once:
 Nothing in this list is run bare - `scripts/make-only-hooks.sh` refuses
 it. The TDD order - write failing test, watch it fail, implement,
 watch it pass, refactor - is the working mode for new code.
+
+**Iteration wall-clock is the cost (GM 2026-08-25, feature 133)**
+The GM's words, which are the goal every guard, gate, switch and
+short-circuit in this repository serves: *"iterations are expensive in
+terms of wall clock time. And if me asking for a simple change results in
+half an hour of work being done when it should have only taken five
+minutes, then that limits the number of changes that I can make in a
+single day."* And: *"This is a core motivation behind everything that we
+have done in the tooling, and gating that exists for this repository.
+Every future session should keep this in mind as a project goal. both for
+the commands that we choose to run and for the way in which we look for
+opportunities to improve our tooling and for how we interact with that
+tooling."* So a session asks, of every command, whether the cheaper one
+answers the question; batches changes so one verification covers many;
+and when a simple task took long, names which of the GM's three causes
+applied - more complicated than expected, lengthier tests than needed, or
+more cycles than needed (small change, long test, repeat) - and, when it
+is the tooling, proposes the tooling change. A paid or lengthy run that
+the tooling was about to start is a finding to record even when a switch
+stopped it (feature 133 FR-004).
 
 **Delegation**
 Subagents are used for parallel generation and large-context work.

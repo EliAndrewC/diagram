@@ -30,3 +30,23 @@ def test_report_with_no_remote_runs(repo: Path) -> None:
     skill = repo / ".claude" / "skills" / "diagram"
     rep = runlog.remote_spend_report(skill)
     assert "(no remote runs yet)" in rep and "month-to-date: $0.00" in rep
+
+
+# ---- the would-have-dispatched trail (feature 133 FR-004) -----------------------------------------
+
+
+def test_would_have_entries_are_recorded_reported_and_never_spend(repo: Path) -> None:
+    from l7r.diagram.ci import runlog
+
+    skill = repo / ".claude" / "skills" / "diagram"
+    before = runlog.month_to_date(skill)
+    p = runlog.write_would_have(skill, "ci-check", "reference", 5.0, "remote off: attempted")
+    d = json.loads(p.read_text(encoding="utf-8"))
+    assert d["where"] == "would-have-dispatched" and d["result"] == "would-have-dispatched" and d["minutes"] == 5.0 and d["cost_usd"] == round(5.0 * 0.08, 4)
+    assert runlog.month_to_date(skill) == before, "an estimate is never spend"
+    assert runlog.remote_entries(skill) == [] or all(r["where"] == "codebuild" for r in runlog.remote_entries(skill))
+    rows = runlog.would_have_entries(skill)
+    assert len(rows) == 1 and rows[0]["reason"] == "remote off: attempted"
+    rep = runlog.remote_spend_report(skill)
+    assert "Would have dispatched" in rep and "ci-check" in rep and "1 attempt(s)" in rep and "not spent" in rep
+    assert "(none)" in runlog.would_have_report(repo / "nowhere")
