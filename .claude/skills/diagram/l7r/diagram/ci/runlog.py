@@ -26,7 +26,9 @@ def _short_head(skill: Path) -> str:
     return out.stdout.strip()
 
 
-def write_remote(skill: Path, target: str, scope: str, seconds: int, result: str, build_id: str, minutes: float, reason: str = "") -> Path:
+def write_remote(
+    skill: Path, target: str, scope: str, seconds: int, result: str, build_id: str, minutes: float, reason: str = "", rate: float = config.RATE_PER_MIN, compute: str = config.COMPUTE_TYPE
+) -> Path:
     os.makedirs(skill / RUN_LOG, exist_ok=True)
     ts = time.strftime("%Y%m%dT%H%M%S", time.gmtime()) + f"{time.time_ns() // 1000 % 1000000:06d}"
     entry = {
@@ -39,7 +41,8 @@ def write_remote(skill: Path, target: str, scope: str, seconds: int, result: str
         "where": "codebuild",
         "build_id": build_id,
         "minutes": round(minutes, 2),
-        "cost_usd": round(minutes * config.RATE_PER_MIN, 4),
+        "cost_usd": round(minutes * rate, 4),
+        "compute": compute,
         "reason": reason,
     }
     path = skill / RUN_LOG / f"{ts}-{os.getpid()}.json"

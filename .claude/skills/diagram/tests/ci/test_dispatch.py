@@ -325,3 +325,17 @@ def test_no_go_withholds_the_signal_and_never_stops_the_build(repo: Path) -> Non
     out = dispatch.run(c)
     assert out.rc == 1 and "go:withheld" in c.events and "put_object" not in client.names() and "stop_build" not in client.names()
     assert any("WITHHELD" in ln for ln in lines)
+
+
+def test_the_compute_knob_reaches_the_build_and_prices_the_run(repo: Path) -> None:
+    engine_delta_with_green(repo, False)
+    client = FakeClient()
+    c, lines = ctx(repo, client=client, operation="cohort N=48")
+    c.compute = "BUILD_GENERAL1_2XLARGE"
+    assert dispatch.run(c).rc == 0
+    kw = next(k for n, k in client.calls if n == "start_build")
+    env = {e["name"]: e["value"] for e in kw["environmentVariablesOverride"]}
+    assert kw["computeTypeOverride"] == "BUILD_GENERAL1_2XLARGE" and env["COMPUTE_TYPE"] == "BUILD_GENERAL1_2XLARGE"
+    entry = json.loads(next((repo / S / "dev" / "run-log").glob("*.json")).read_text(encoding="utf-8"))
+    assert entry["compute"] == "BUILD_GENERAL1_2XLARGE" and entry["cost_usd"] == round(1.0 * config.RATES["BUILD_GENERAL1_2XLARGE"], 4)
+    assert any("on BUILD_GENERAL1_2XLARGE" in ln for ln in lines)

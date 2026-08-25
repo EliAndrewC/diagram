@@ -23,6 +23,10 @@ from pathlib import Path
 # in timings.md (feature 130, T028). $0.08 per build-minute, billed from PROVISIONING to end.
 RATE_PER_MIN = 0.08
 COMPUTE_TYPE = "BUILD_GENERAL1_XLARGE"
+# Per-minute rates by compute type (us-east-1 Linux on-demand price list, 2026-08): the knob
+# `make ci-check COMPUTE=BUILD_GENERAL1_2XLARGE` exists to MEASURE whether a workload scales past 36
+# vCPU - the default stays the constant above until a number says otherwise (timings.md, T028).
+RATES = {"BUILD_GENERAL1_XLARGE": 0.08, "BUILD_GENERAL1_2XLARGE": 0.20, "BUILD_GENERAL1_LARGE": 0.02, "BUILD_GENERAL1_MEDIUM": 0.01}
 PROJECT_MERGE = "gm-assistant-merge"  # concurrency 1 - the merge queue
 PROJECT_CHECK = "gm-assistant-check"  # concurrency 3 - the iteration check
 GITHUB_REPO = "EliAndrewC/diagram"

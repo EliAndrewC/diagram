@@ -77,9 +77,9 @@ def test_a_cheap_operation_is_refused_as_a_remote_target_and_an_expensive_one_di
     assert cli.main(["check", "--target", "site-justice"]) == 1
     assert "only an EXPENSIVE operation" in capsys.readouterr().out
     assert cli.main(["check", "--target", "not-a-target"]) == 1
-    assert cli.main(["check", "--target", "cohort N=48"]) == 0
+    assert cli.main(["check", "--target", "cohort N=48", "--compute", "BUILD_GENERAL1_2XLARGE"]) == 0
     entry = json.loads(next((roots / S / "dev" / "run-log").glob("*.json")).read_text(encoding="utf-8"))
-    assert entry["scope"] == "operation" and entry["reason"] == "cohort N=48"
+    assert entry["scope"] == "operation" and entry["reason"] == "cohort N=48" and entry["compute"] == "BUILD_GENERAL1_2XLARGE"
 
 
 def test_image_and_target_validation(roots: Path) -> None:

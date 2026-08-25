@@ -37,6 +37,7 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--full", action="store_true", help="the full sweep (the Makefile has already run the local prompt)")
     ap.add_argument("--target", default=None, help="ci-check only: an expensive operation to run remotely instead of the gate")
     ap.add_argument("--route", action="store_true", help="status only: print just DIRECT or GATED")
+    ap.add_argument("--compute", default=config.COMPUTE_TYPE, choices=sorted(config.RATES), help="check only: the compute type, for the scaling measurement (T028)")
     ap.add_argument("--no-go", action="store_true", help="check only: withhold the go signal so the parked build aborts itself (the FR-036 measurement)")
     a = ap.parse_args(argv)
     root, skill = _roots()
@@ -68,7 +69,15 @@ def main(argv: list[str] | None = None) -> int:
                 f"ci-check: REFUSED - TARGET={head!r} is {costs.get(head, 'not a registered operation')}; only an EXPENSIVE operation runs remotely (cohort, cache-audit, regressions, ...). Run it locally."
             )
             return 1
-    ctx = dispatch.Context(root=root, skill=skill, mode=a.command if a.command != "status" else decision.CHECK, scope=scope, operation=a.target, no_go=a.no_go and a.command == "check")
+    ctx = dispatch.Context(
+        root=root,
+        skill=skill,
+        mode=a.command if a.command != "status" else decision.CHECK,
+        scope=scope,
+        operation=a.target,
+        no_go=a.no_go and a.command == "check",
+        compute=a.compute if a.command == "check" else config.COMPUTE_TYPE,
+    )
     if a.command == "status":
         if a.route:
             from l7r.diagram.ci.delta import compute_delta

@@ -132,6 +132,7 @@ class Context:
     mode: str  # merge | check | image
     scope: str = "reference"  # reference | full
     operation: str | None = None  # ci-check TARGET=<expensive op>
+    compute: str = config.COMPUTE_TYPE  # ci-check COMPUTE=BUILD_GENERAL1_2XLARGE: the scaling measurement (T028)
     no_go: bool = False  # ci-check NO_GO=1: never release the parked build - proves FR-036's self-abort, costs the park ceiling
     secrets: config.Secrets | None = None
     client: AwsClient | None = None
@@ -259,7 +260,7 @@ def run(ctx: Context) -> Outcome:
         {"name": "MAKE_TARGET", "value": make_target(ctx), "type": "PLAINTEXT"},
         {"name": "CI_MODE", "value": ctx.mode, "type": "PLAINTEXT"},
         {"name": "CI_SCOPE", "value": "operation" if ctx.operation else ctx.scope, "type": "PLAINTEXT"},
-        {"name": "COMPUTE_TYPE", "value": config.COMPUTE_TYPE, "type": "PLAINTEXT"},
+        {"name": "COMPUTE_TYPE", "value": ctx.compute, "type": "PLAINTEXT"},
         {"name": "PARK_TIMEOUT_S", "value": str(config.PARK_TIMEOUT_S), "type": "PLAINTEXT"},
     ]
     # THE CUSTOM IMAGE IS USED ONLY ONCE IT EXISTS: `make ci-image` writes image/latest.txt to the
@@ -276,7 +277,7 @@ def run(ctx: Context) -> Outcome:
             projectName=project,
             buildspecOverride=spec_path.read_text(encoding="utf-8"),
             environmentVariablesOverride=env,
-            computeTypeOverride=config.COMPUTE_TYPE,
+            computeTypeOverride=ctx.compute,
             **image_kw,
         )
     except AccessDenied as e:
@@ -289,7 +290,7 @@ def run(ctx: Context) -> Outcome:
         return Outcome(rc=1, verdict="REFUSE(aws-denied)")  # pragma: no cover
     build_id = str(started["build"]["id"])
     ctx.events.append(f"start_build:{build_id}")
-    ctx.out(f"ci: build {build_id} started on {project} (parked at wait-go, {config.PARK_TIMEOUT_S} s ceiling)")
+    ctx.out(f"ci: build {build_id} started on {project} / {ctx.compute} (parked at wait-go, {config.PARK_TIMEOUT_S} s ceiling)")
 
     # 3. the reference settlement(s), locally - `make reference` runs every tier's reference map
     rc, out = ctx.sh(["make", "--no-print-directory", "reference"], ctx.skill, None)
@@ -301,8 +302,11 @@ def run(ctx: Context) -> Outcome:
         state.write(ctx.root, state.FAILED, f"ci-{ctx.mode}")
         b = ctx.client.batch_get_builds([build_id])["builds"][0]
         mins = billed_minutes(b)
-        runlog.write_remote(ctx.skill, f"ci-{ctx.mode}", ctx.scope, int(time.time() - t0), "aborted-local-reference", build_id, mins, "reference settlement red locally; parked build stopped")
-        ctx.out(f"ci: reference settlement RED locally - build {build_id} stopped ({mins:.0f} billed min, ~${mins * config.RATE_PER_MIN:.2f})")
+        rate = config.RATES.get(ctx.compute, config.RATE_PER_MIN)
+        runlog.write_remote(
+            ctx.skill, f"ci-{ctx.mode}", ctx.scope, int(time.time() - t0), "aborted-local-reference", build_id, mins, "reference settlement red locally; parked build stopped", rate, ctx.compute
+        )
+        ctx.out(f"ci: reference settlement RED locally - build {build_id} stopped ({mins:.0f} billed min, ~${mins * rate:.2f})")
         return Outcome(rc=1, verdict="ABORTED(local-reference)", build_id=build_id, result="aborted-local-reference", minutes=mins)
 
     # 4. release - unless this run exists to prove that a build nobody releases aborts itself (FR-036)
@@ -326,8 +330,9 @@ def run(ctx: Context) -> Outcome:
     if not ok:
         state.write(ctx.root, state.FAILED, f"ci-{ctx.mode}")
     fetched = fetch_artifacts(ctx, build_id)
-    runlog.write_remote(ctx.skill, f"ci-{ctx.mode}", "operation" if ctx.operation else ctx.scope, int(time.time() - t0), result, build_id, mins, make_target(ctx))
-    ctx.out(f"ci: build {build_id} {result} - {mins:.0f} billed min, ~${mins * config.RATE_PER_MIN:.2f}" + (f"; {len(fetched)} artifact file(s) fetched" if fetched else ""))
+    rate = config.RATES.get(ctx.compute, config.RATE_PER_MIN)
+    runlog.write_remote(ctx.skill, f"ci-{ctx.mode}", "operation" if ctx.operation else ctx.scope, int(time.time() - t0), result, build_id, mins, make_target(ctx), rate, ctx.compute)
+    ctx.out(f"ci: build {build_id} {result} - {mins:.0f} billed min on {ctx.compute}, ~${mins * rate:.2f}" + (f"; {len(fetched)} artifact file(s) fetched" if fetched else ""))
     return Outcome(rc=0 if ok else 1, verdict="DISPATCHED", build_id=build_id, result=result, minutes=mins)
 
 
