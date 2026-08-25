@@ -53,7 +53,7 @@ Edo jails held the accused pending judgment; sentences were exile, flogging, fin
 
 **Sources:** not recorded - the finding is in the prose below; add a key to `SOURCES.md` when it is re-consulted
 
-Both traditions ran the paperwork on locally-hired commoners under a tiny elite staff: Japanese *tedai* were farmers' and merchants' second sons; Chinese counties ran on dozens of statutory (hundreds of actual) local clerks and runners. Scaled to an L7R county (~6,800 inhabitants, vs ~100,000-200,000 for a Chinese county), that becomes ~3-4 clerks at ~4-5 koku/yr. They are scribes by caste (heimen artisans per `/gm-assistant/setting/castes.md`), live in town, commute to the manor, and as permanent locals are the office's institutional memory under successive magistrates - and its natural tax-farming pressure point.
+Both traditions ran the paperwork on locally-hired commoners under a tiny elite staff: Japanese *tedai* were farmers' and merchants' second sons; Chinese counties ran on dozens of statutory (hundreds of actual) local clerks and runners. Scaled to an L7R county (~6,800 inhabitants, vs ~100,000-200,000 for a Chinese county), that becomes ~3-4 clerks at ~4-5 koku/yr. They are scribes by caste (heimen artisans per `/host-l7r-repo/gm-assistant/setting/castes.md`), live in town, commute to the manor, and as permanent locals are the office's institutional memory under successive magistrates - and its natural tax-farming pressure point.
 ## Staff housing spans a real spectrum
 
 **Grounds:** drives the staff-housing knob; this SOFTENED the older note that on-grounds barracks were an L5R divergence from Edo practice

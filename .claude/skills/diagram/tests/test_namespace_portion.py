@@ -1,7 +1,7 @@
 """Guard: `l7r` must stay a PEP 420 namespace portion, and `l7r.diagram` a regular package.
 
 Feature 119 put the engine under `l7r.diagram` so that it shares one parent package with the
-toolkit webapp's `l7r.app` / `l7r.names` / ... in `/gm-assistant/webapp/l7r/`. That sharing works
+toolkit webapp's `l7r.app` / `l7r.names` / ... in `/host-l7r-repo/gm-assistant/webapp/l7r/`. That sharing works
 only because NEITHER `l7r/` directory has an `__init__.py`: a regular package terminates the import
 search, so the moment one portion becomes regular, the other silently stops existing.
 

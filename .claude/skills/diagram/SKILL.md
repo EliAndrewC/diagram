@@ -53,7 +53,7 @@ This skill covers two kinds of diagram that share the conventions below (palette
 
 ## Workflow
 
-1. **Pre-design conversation.** Talk to the GM about what's present. Ask about scale (manor vs. village vs. temple vs. battlefield), notable features (workshops, shrines, garrisons), the residing NPC(s), the surrounding context (walled? what's outside?). Pull sizing and role context from the relevant setting files (`/gm-assistant/setting/median-domain.md`, `/gm-assistant/setting/government.md`, `/gm-assistant/setting/hierarchies.md`).
+1. **Pre-design conversation.** Talk to the GM about what's present. Ask about scale (manor vs. village vs. temple vs. battlefield), notable features (workshops, shrines, garrisons), the residing NPC(s), the surrounding context (walled? what's outside?). Pull sizing and role context from the relevant setting files (`/host-l7r-repo/gm-assistant/setting/median-domain.md`, `/host-l7r-repo/gm-assistant/setting/government.md`, `/host-l7r-repo/gm-assistant/setting/hierarchies.md`).
 
    **Settle the WATER FLOW before drawing anything - at EVERY tier, not just cities** (GM rule 2026-07-24). Before a single feature is placed, decide the map's **drainage bearing** (`meta(water_flow=<deg>)`, 0 = east / 90 = south) and, separately, the land's fall (`meta(down_deg=...)`). These are not the same fact and must not be derived from each other: a valley floor runs across the fall of the sides it lies between, and a dug contour channel is built almost parallel to the contours. Flow direction is a property of the LANDSCAPE, so reason from the regional terrain first - a mountain range running northwest to southeast throws settlements off both flanks, draining northeast on one side and southwest on the other, so establish which side of which range this place sits on. Everything downstream of that decision depends on it: which end of the settlement takes the tanneries and the burakumin quarter, which way the dyer may rinse, where the drains discharge, and which way a moat flushes. Watercourse polylines are authored UPSTREAM-FIRST. **Aim for verisimilitude, not uniformity**: do NOT make every watercourse on a map run the same way - local topography varies and most of these works are artificial (a ditch dug ALONG a slope is how you intercept downhill flow). The one hard rule is that water never gains elevation; the anti-pattern to avoid is the classic fantasy-map river running parallel to a mountain range along its base. When a course runs across the fall, be able to say why and record it. These maps carry no contour lines by design, so the declared data is the ONLY place the terrain exists. See [`settlements/water.md`](settlements/water.md).
 
@@ -171,9 +171,9 @@ L5R/L7R blends historical periods. When uncertain about authenticity:
 - **L5R deliberate divergences from history** (do NOT "correct" these):
   - Major Inari shrines in Fox lands may be substantial halls rather than modest standalone shrines.
   - Temple organization follows the L5R hierarchy (Grand Abbot, Stewards, etc.); see [`/.claude/skills/temple/SKILL.md`](../temple/SKILL.md).
-  - Caste assignments may differ from historical Japan. For night-soil specifically: in L7R, burakumin handle this for samurai and wealthy merchants (matching L5R canon); farmers and other tenant peasants handle their own, because they need the fertilizer and could not plausibly afford to outsource. (Note: L5R-era materials called this caste "eta" - L7R has dropped that term as a real-world slur and uses "burakumin" throughout. See [`/gm-assistant/setting/castes.md`](../../../setting/castes.md).)
+  - Caste assignments may differ from historical Japan. For night-soil specifically: in L7R, burakumin handle this for samurai and wealthy merchants (matching L5R canon); farmers and other tenant peasants handle their own, because they need the fertilizer and could not plausibly afford to outsource. (Note: L5R-era materials called this caste "eta" - L7R has dropped that term as a real-world slur and uses "burakumin" throughout. See [`/host-l7r-repo/gm-assistant/setting/castes.md`](https://github.com/EliAndrewC/gm-assistant/blob/main/setting/castes.md).)
 
-For sizing - samurai per town, building footprint conventions, role hierarchies - draw on `/gm-assistant/setting/median-domain.md`, `/gm-assistant/setting/demographics.md`, `/gm-assistant/setting/government.md`, `/gm-assistant/setting/hierarchies.md`.
+For sizing - samurai per town, building footprint conventions, role hierarchies - draw on `/host-l7r-repo/gm-assistant/setting/median-domain.md`, `/host-l7r-repo/gm-assistant/setting/demographics.md`, `/host-l7r-repo/gm-assistant/setting/government.md`, `/host-l7r-repo/gm-assistant/setting/hierarchies.md`.
 
 ## Render pipeline
 
@@ -244,11 +244,11 @@ Subject names: lowercase-kebab-case, descriptive (e.g., `ochiba-magistracy`, `wa
 - [`tests/settlement/`](tests/settlement/) - unit tests for the `settlement.py` branches the pool generators don't exercise (unused vocabulary methods, internal fallbacks)
 - [`pyproject.toml`](pyproject.toml) - pytest + coverage config. Coverage is enforced per-module by the Makefile since the 2026-08-16 legacy freeze: 100% on every measured module except the `settlement/` package, whose above-hamlet wings are exercised by nothing until those tiers convert to scripted generation and which therefore holds a ratchet floor (`SETTLEMENT_COV_FLOOR` in the Makefile). Run `python3 -m pytest` from the skill dir (needs `pytest` + `pytest-cov`); the full suite must run together or the coverage numbers are meaningless
 (gm-assistant is mounted read-only at `/gm-assistant`; on GitHub: <https://github.com/EliAndrewC/gm-assistant/tree/main/setting>)
-- `/gm-assistant/setting/village-headsmen.md` - village structure, strip-allocation/usufruct, headman role (Mode B grounding)
-- `/gm-assistant/setting/median-domain.md` - sizing data (samurai per town, etc.)
-- `/gm-assistant/setting/government.md` - role hierarchies (ministries, magistrates, etc.)
-- `/gm-assistant/setting/hierarchies.md` - administrative structure (province / county / village)
-- `/gm-assistant/setting/demographics.md` - populations
+- `/host-l7r-repo/gm-assistant/setting/village-headsmen.md` - village structure, strip-allocation/usufruct, headman role (Mode B grounding)
+- `/host-l7r-repo/gm-assistant/setting/median-domain.md` - sizing data (samurai per town, etc.)
+- `/host-l7r-repo/gm-assistant/setting/government.md` - role hierarchies (ministries, magistrates, etc.)
+- `/host-l7r-repo/gm-assistant/setting/hierarchies.md` - administrative structure (province / county / village)
+- `/host-l7r-repo/gm-assistant/setting/demographics.md` - populations
 - [`/.claude/skills/temple/SKILL.md`](../temple/SKILL.md) - temple organization (for diagrams of religious sites)
 - [`/.claude/skills/relic/SKILL.md`](../relic/SKILL.md) - Japanese authenticity triangle; relic conventions
 - `/.specify/memory/constitution.md` - Principle I (visual verification before declaring done), Principle XI (Japanese authenticity)

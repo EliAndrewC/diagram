@@ -29,7 +29,7 @@ in_container() { [ -f /run/.containerenv ] || [ -f /.dockerenv ]; }
 
 if ! in_container && [ "${SETUP_ALLOW_HOST:-}" != 1 ]; then
     echo "ERROR: this installs system packages and is meant to run INSIDE the dev container."
-    echo "Start one with scripts/launch-container.sh, then run this from the repository root."
+    echo "Start one with gm-assistant's scripts/launch-container.sh (run from this repository's root), then run this from the repository root."
     echo "(Override on a machine you are sure about: SETUP_ALLOW_HOST=1)"
     exit 1
 fi

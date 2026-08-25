@@ -8,7 +8,7 @@ environment variable (the live 20%-steps email). Change the compute type and bot
 WHERE THE SECRETS COME FROM. `development-secrets.ini` is gitignored and lives at the repository
 root; a `.example` beside it names every key. Resolution order: `$DIAGRAM_SECRETS`, the working
 tree's root, the main tree's root (a clone's grandparent), and finally gm-assistant's
-`webapp/development-secrets.ini` mounted read-only at /gm-assistant - the file the AWS session
+`webapp/development-secrets.ini` under the /host-l7r-repo mount (gm-assistant is /host-l7r-repo/gm-assistant since 2026-08-25) - the file the AWS session
 wrote the keys into on 2026-08-24, so a container that has it needs nothing copied.
 """
 
@@ -77,7 +77,7 @@ def candidate_paths(root: Path) -> list[Path]:
     out.append(root / "development-secrets.ini")
     if root.parent.name == ".clones":
         out.append(root.parent.parent / "development-secrets.ini")
-    out.append(Path("/gm-assistant/webapp/development-secrets.ini"))
+    out.append(Path("/host-l7r-repo/gm-assistant/webapp/development-secrets.ini"))
     return out
 
 

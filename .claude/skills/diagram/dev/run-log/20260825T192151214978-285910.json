@@ -1,0 +1,14 @@
+{
+  "utc": "2026-08-25T19:21:51Z",
+  "target": "ci-merge",
+  "scope": "reference",
+  "seconds": 0,
+  "result": "skip-verified",
+  "commit": "6276397e",
+  "where": "codebuild",
+  "build_id": "a",
+  "minutes": 0.0,
+  "cost_usd": 0.0,
+  "compute": "BUILD_GENERAL1_XLARGE",
+  "reason": "this engine content was verified reference-scope by a green local `make done` on exactly this engine content (main adds none) - no second build (SKIP-VERIFIED)"
+}

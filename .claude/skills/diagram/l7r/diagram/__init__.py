@@ -4,7 +4,7 @@ This is a REGULAR package (it has this file) sitting inside `l7r/`, which is a P
 portion (it deliberately has no `__init__.py`). The asymmetry is the point of feature 119:
 
 - `l7r/` has no `__init__.py`, so this directory's contents merge with the other `l7r` portion in
-  `/gm-assistant/webapp/` under one parent package. `import l7r.app` and
+  `/host-l7r-repo/gm-assistant/webapp/` under one parent package. `import l7r.app` and
   `import l7r.diagram.settlement` therefore work in the same interpreter, which is what makes it
   possible for the toolkit webapp to render a map without two colliding top-level packages both
   named `l7r`.

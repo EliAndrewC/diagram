@@ -1,6 +1,6 @@
 # L7R Diagram - the settlement and building map generator
 
-<!-- container-mounts: ../gm-assistant:/gm-assistant -->
+<!-- container-mounts: ..:/host-l7r-repo -->
 <!-- container-workdir: /diagram -->
 
 This repository is the `/diagram` skill of the GM's L5R worldbuilding project, split out of
@@ -14,7 +14,9 @@ purpose, so nothing in the engine, the pool generators or the feature-127 guards
 **Read next**: [`.claude/skills/diagram/SKILL.md`](.claude/skills/diagram/SKILL.md) (usage) and
 [`.claude/skills/diagram/CLAUDE.md`](.claude/skills/diagram/CLAUDE.md) (the dev loop - auto-loads
 when you edit under it). The GM's setting notes that the research cites live in gm-assistant
-(`setting/`, `cosmology/`, `campaigns/`) - mounted read-only at `/gm-assistant` in this container,
+(`setting/`, `cosmology/`, `campaigns/`) - mounted at `/host-l7r-repo/gm-assistant` in this container (the whole `l7r` checkout is
+mounted at `/host-l7r-repo`, the same mount gm-assistant uses, and this repository and gm-assistant
+are both subdirectories of it),
 and on GitHub at <https://github.com/EliAndrewC/gm-assistant/tree/main/setting>. The canonical
 campaign notes remain `/host-l7r-repo/setting/l7r.md` in the GM's `l7r` repo; this repository never
 edits them.
@@ -245,7 +247,7 @@ watching a test go red.
 
 **Review subagents are pre-authorized (GM 2026-07-27).** Claude Code's default system prompt tells a session not to call the Agent tool unless the user asked - a sensible default that nonetheless sits ABOVE this file in the instruction hierarchy, so it silently outranked the mandate to run `settlement-review` before shipping a Mode B map, and three city maps went out unreviewed with nothing warning. The fix is [`container-scripts/append-system-prompt.md`](container-scripts/append-system-prompt.md), loaded via `--append-system-prompt` by the `claude()` wrapper that `setup-dev-env.sh` installs into `~/.bashrc`: it lands AFTER that line with the same authority and grants standing authorization for the four review agents only. **If a review agent ever gets skipped again, check `type claude` first** - the wrapper is per-container and dies with a rebuild. Broad fan-out, `Workflow`, and deep research still need an explicit request.
 
-**Container.** Launch with [`scripts/launch-container.sh`](scripts/launch-container.sh) from the repo root. On every fresh container run `container-scripts/setup-dev-env.sh` once (`--check` re-verifies in ~3s - run it the moment something that used to work fails with "command not found" / "No module named" / "resvg not found"). **INSTALL WHAT YOU NEED** - passwordless sudo exists precisely so a session can `apt-get install` or pip-install without asking; never reject a design *because* a dependency is not currently installed. Ports/mounts, the Python 3.14 pin, the two lockfiles and the server-binding logic are in [`docs/container.md`](docs/container.md).
+**Container.** Launch with gm-assistant's `scripts/launch-container.sh` from THIS repo root (`../gm-assistant/scripts/launch-container.sh`; it reads the current repo's `CLAUDE.md` for the mounts and workdir). The script lives in gm-assistant only, on purpose (GM 2026-08-25: one copy, one repository) - this repository carries no copy. On every fresh container run `container-scripts/setup-dev-env.sh` once (`--check` re-verifies in ~3s - run it the moment something that used to work fails with "command not found" / "No module named" / "resvg not found"). **INSTALL WHAT YOU NEED** - passwordless sudo exists precisely so a session can `apt-get install` or pip-install without asking; never reject a design *because* a dependency is not currently installed. Ports/mounts, the Python 3.14 pin, the two lockfiles and the server-binding logic are in [`docs/container.md`](docs/container.md).
 
 **Key paths**:
 
@@ -254,7 +256,7 @@ watching a test go red.
 - `.claude/skills/diagram/SKILL.md` - usage; `.claude/skills/diagram/CLAUDE.md` - the dev loop (auto-loads under that tree)
 - `.claude/skills/diagram/migration-plan.md` - **standing project plan** for converting `/diagram` from hand-authored maps to scripted generation. **Read it before drawing or scripting a settlement map, and update its status table when a conversion lands.**
 - `.claude/agents/settlement-review.md`, `building-review.md`, `size-audit.md` - the independent reviews of Mode B maps and Mode A plans (mandatory before a map ships); `.claude/agents/spec-fidelity.md` - the spec review (constitution XVI)
-- `/gm-assistant/` (read-only mount) - the setting notes the research cites (`setting/`, `cosmology/`), the webapp, the content skills. Nothing here writes there.
+- `/host-l7r-repo/gm-assistant/` (inside the `/host-l7r-repo` mount of the GM's `l7r` checkout) - the setting notes the research cites (`setting/`, `cosmology/`), the webapp, the content skills. Nothing here writes there, and nothing here runs git against `/host-l7r-repo`.
 
 Spec-kit features (the `specify` -> `plan` -> `tasks` -> `implement` flow) live under `specs/NNN-*/`. There is deliberately **no single "active plan" tracked here** - a hardcoded pointer just goes stale as features come and go. For current status, look at the highest-numbered `specs/` dir, its `tasks.md` checkboxes, and `git log`.
 

@@ -20,7 +20,7 @@ def test_secrets_resolution_order(tmp_path: Path, monkeypatch: pytest.MonkeyPatc
     clone.mkdir(parents=True)
     monkeypatch.delenv("DIAGRAM_SECRETS", raising=False)
     paths = config.candidate_paths(clone)
-    assert paths[0] == clone / "development-secrets.ini" and paths[1] == main / "development-secrets.ini" and paths[-1].as_posix().startswith("/gm-assistant/")
+    assert paths[0] == clone / "development-secrets.ini" and paths[1] == main / "development-secrets.ini" and paths[-1].as_posix().startswith("/host-l7r-repo/gm-assistant/")
     monkeypatch.setenv("DIAGRAM_SECRETS", str(tmp_path / "env.ini"))
     assert config.candidate_paths(clone)[0] == tmp_path / "env.ini"
     (tmp_path / "env.ini").write_text("[aws]\nregion = eu-west-1\naccess_key_id = AK\nsecret_access_key = SK\nci_bucket = b\necr_image = e\n[github]\ncodebuild_pat = P\n", encoding="utf-8")

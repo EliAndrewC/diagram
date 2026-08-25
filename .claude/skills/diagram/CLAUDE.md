@@ -19,7 +19,7 @@ is in instead of paging this file.
 
 **Why the extra two levels.** `l7r/` here is a PEP 420 *namespace portion* - it deliberately has no
 `__init__.py` - and it shares the `l7r` parent package with the L7R Toolkit webapp's `l7r.app` /
-`l7r.names` in `/gm-assistant/webapp/l7r/`. Both directories contribute to one `l7r.__path__`, so
+`l7r.names` in `/host-l7r-repo/gm-assistant/webapp/l7r/`. Both directories contribute to one `l7r.__path__`, so
 `import l7r.app` and `import l7r.diagram.settlement` work in the same interpreter and the webapp
 can render a map without two colliding top-level packages named `l7r`. **Never create
 `l7r/__init__.py`**: that makes it a regular package, terminates the import search, and makes the
