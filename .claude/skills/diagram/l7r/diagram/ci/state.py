@@ -36,6 +36,7 @@ class VerificationState:
     utc: str
     hash: str
     commit: str
+    engine_key: str = ""  # delta.engine_key_worktree at the time of the run - what a green local `done` VOUCHES for (GM 2026-08-25)
 
 
 def _gate_stamp(root: Path) -> ModuleType:
@@ -65,13 +66,17 @@ def read(root: Path) -> VerificationState | None:
     if not path.is_file():
         return None
     data = json.loads(path.read_text(encoding="utf-8"))
-    return VerificationState(event=str(data["event"]), target=str(data["target"]), utc=str(data["utc"]), hash=str(data["hash"]), commit=str(data.get("commit", "")))
+    return VerificationState(
+        event=str(data["event"]), target=str(data["target"]), utc=str(data["utc"]), hash=str(data["hash"]), commit=str(data.get("commit", "")), engine_key=str(data.get("engine_key", ""))
+    )
 
 
 def write(root: Path, event: str, target: str) -> VerificationState:
     if event not in (GREEN, FAILED):
         raise ValueError(f"unknown verification event {event!r} (want {GREEN} or {FAILED})")
-    st = VerificationState(event=event, target=target, utc=time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()), hash=current_hash(root), commit=_commit(root))
+    from l7r.diagram.ci.delta import engine_key_worktree
+
+    st = VerificationState(event=event, target=target, utc=time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()), hash=current_hash(root), commit=_commit(root), engine_key=engine_key_worktree(root))
     (root / STATE_FILE).write_text(json.dumps(asdict(st), indent=2) + "\n", encoding="utf-8")
     return st
 

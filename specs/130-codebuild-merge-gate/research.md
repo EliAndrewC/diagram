@@ -228,3 +228,13 @@ content it had already passed. The record is now keyed by `delta.engine_key(tree
 the blob ids of the ENGINE paths (the same `is_engine` the route uses) in the merge tree, computed
 by the dispatcher for the lookup and by the build (`make engine-key`) for the record. Same content,
 same key, whatever the docs did in between; the scope field still separates FULL from reference.
+
+## The spec's "a green local `make done` still dispatches" edge case - SUPERSEDED by the GM, 2026-08-25
+
+The spec kept it because the remote run merges the LATEST main; the GM watched three reference-scope
+merge builds re-run a gate the laptop had just passed, on merges where main added no engine
+content, and ruled that pointless. Now: a green local `make done` records the engine key of what it
+tested, and the push treats it as a reference-scope verification when the would-be merge carries
+the same engine key - i.e. when main has no engine changes since the merge base. When main DID move
+on engine paths, the local verdict is stale by construction and a build runs, which is the case the
+spec's reasoning was actually about. FULL and operations never take this shortcut.

@@ -353,3 +353,40 @@ def test_the_compute_knob_reaches_the_build_and_prices_the_run(repo: Path) -> No
     entry = json.loads(next((repo / S / "dev" / "run-log").glob("*.json")).read_text(encoding="utf-8"))
     assert entry["compute"] == "BUILD_GENERAL1_2XLARGE" and entry["cost_usd"] == round(1.0 * config.RATES["BUILD_GENERAL1_2XLARGE"], 4)
     assert any("on BUILD_GENERAL1_2XLARGE" in ln for ln in lines)
+
+
+def test_a_green_local_done_on_the_same_engine_content_means_no_build(repo: Path) -> None:
+    """GM 2026-08-25: the remote reference gate is the local `make done` plus the merge with main;
+    when main adds no engine content, the local verdict stands and the push goes direct."""
+    commit(repo, S + "l7r/diagram/m.py", "x = 2\n", "engine work")
+    state.write(repo, state.GREEN, "done")
+    client = FakeClient()
+    c, lines = ctx(repo, client=client)
+    out = dispatch.run(c)
+    assert out.verdict == "SKIP-VERIFIED" and out.rc == 0 and "start_build" not in client.names()
+    assert any("green local `make done`" in ln for ln in lines)
+    # docs after the done: still no build
+    commit(repo, "docs/x.md", "later\n")
+    c2, _ = ctx(repo, client=FakeClient())
+    assert dispatch.run(c2).verdict == "SKIP-VERIFIED"
+
+
+def test_a_local_done_does_not_suffice_when_main_moved_on_engine_paths_or_for_quick_or_for_FULL(repo: Path) -> None:
+    commit(repo, S + "l7r/diagram/m.py", "x = 2\n", "engine work")
+    state.write(repo, state.GREEN, "quick")
+    c, _ = ctx(repo, client=FakeClient())
+    assert dispatch.run(c).verdict == "DISPATCHED", "quick is not the gate"
+    state.write(repo, state.GREEN, "done")
+    # FULL is not a reference-scope verdict
+    (repo / S / "dev" / "bypass-log" / "p.json").write_text(
+        json.dumps({"target": "ci-check FULL", "commit": git(repo, "rev-parse", "--short", "HEAD"), "outcome": "permitted", "why": "w"}), encoding="utf-8"
+    )
+    c2, _ = ctx(repo, client=FakeClient(), scope="full")
+    assert dispatch.run(c2).verdict == "DISPATCHED"
+    # main moves on an ENGINE path after the local done: the merge would test content nobody has seen
+    git(repo, "checkout", "-q", "-b", "upstream", "HEAD~1")
+    commit(repo, S + "l7r/diagram/other.py", "z = 1\n", "main-side engine change")
+    git(repo, "update-ref", "refs/remotes/origin/main", "HEAD")
+    git(repo, "checkout", "-q", "main")
+    c3, _ = ctx(repo, client=FakeClient())
+    assert dispatch.run(c3).verdict == "DISPATCHED"

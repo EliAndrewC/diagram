@@ -7,7 +7,7 @@ from pathlib import Path
 
 import pytest
 
-from l7r.diagram.ci.delta import Delta, compute_delta, engine_key, is_engine
+from l7r.diagram.ci.delta import Delta, compute_delta, engine_key, engine_key_worktree, is_engine
 from tests.ci.conftest import commit, git
 
 S = ".claude/skills/diagram/"
@@ -105,3 +105,15 @@ def test_the_engine_key_ignores_docs_and_moves_with_engine_content(repo: Path) -
     assert k1 != k0
     assert engine_key(repo, "HEAD^{tree}") == k1, "a tree ref keys identically to its commit"
     assert len(k1) == 64
+
+
+def test_the_worktree_key_equals_the_tree_key_for_the_same_content(repo: Path) -> None:
+    """A `make done` before committing keys the content the commit will carry - one formula, two sources."""
+    assert engine_key_worktree(repo) == engine_key(repo, "HEAD")
+    (repo / S / "l7r/diagram/m.py").write_text("x = 7\n", encoding="utf-8")  # uncommitted engine edit
+    k_wt = engine_key_worktree(repo)
+    assert k_wt != engine_key(repo, "HEAD"), "the working tree moved, HEAD did not"
+    commit(repo, S + "l7r/diagram/m.py", "x = 7\n")
+    assert engine_key(repo, "HEAD") == k_wt, "once committed, the tree keys identically"
+    (repo / S / "l7r/diagram/new.py").write_text("y = 1\n", encoding="utf-8")  # untracked engine file counts
+    assert engine_key_worktree(repo) != k_wt

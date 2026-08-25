@@ -45,6 +45,10 @@ do not want to run anything on AWS"* come first, and the speedup second.
    the engine key (`delta.engine_key`: a hash over the engine paths' blobs in the merge tree),
    not by the commit and - since 2026-08-25 - not by the whole tree either: a docs edit after a
    green build keeps the verification (the first day's tree key threw one away, $0.64).
+   And a green LOCAL `make done` on exactly this engine content counts too, when main adds no
+   engine content to the merge (GM 2026-08-25): the remote reference gate is the same `make done`
+   plus the merge, so with nothing new from main it would only re-prove a verdict in hand. A build
+   runs when main moved on engine paths since your merge base, or for FULL / an operation.
 5. **breaker-not-tripped** - the monthly hard stop's deny policy; discovered at `start_build`,
    reported with the detach command (FR-021).
 

@@ -15,7 +15,7 @@ S = ".claude/skills/diagram/"
 def test_absent_then_green_then_hash_changes_on_edit(repo: Path) -> None:
     assert state.read(repo) is None
     st = state.write(repo, state.GREEN, "quick")
-    assert st.event == state.GREEN and st.target == "quick" and st.hash == state.current_hash(repo) and st.commit
+    assert st.event == state.GREEN and st.target == "quick" and st.hash == state.current_hash(repo) and st.commit and len(st.engine_key) == 64
     again = state.read(repo)
     assert again == st
     assert "current code" in state.describe(again, state.current_hash(repo))

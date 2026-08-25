@@ -96,3 +96,16 @@ def engine_key(root: Path, tree: str) -> str:
     out = _git(root, "ls-tree", "-r", tree)
     rows = sorted(f"{line.split()[2]} {line.split(maxsplit=3)[3]}" for line in out.splitlines() if line.strip() and is_engine(line.split(maxsplit=3)[3]))
     return hashlib.sha256("\n".join(rows).encode()).hexdigest()
+
+
+def engine_key_worktree(root: Path) -> str:
+    """`engine_key` for the WORKING TREE (tracked + untracked-not-ignored engine files, current
+    contents), so a `make done` run before committing keys the same content the commit will carry.
+    Blob ids come from `git hash-object`, so the formula is identical to `engine_key(tree)`."""
+    out = _git(root, "ls-files", "-co", "--exclude-standard")
+    paths = sorted(p for p in out.splitlines() if p.strip() and is_engine(p) and (root / p).is_file())
+    if not paths:
+        return hashlib.sha256(b"").hexdigest()
+    shas = subprocess.run(["git", "-C", str(root), "hash-object", "--stdin-paths"], input="\n".join(paths) + "\n", capture_output=True, text=True, check=True).stdout.split()
+    rows = sorted(f"{sha} {path}" for sha, path in zip(shas, paths, strict=True))
+    return hashlib.sha256("\n".join(rows).encode()).hexdigest()

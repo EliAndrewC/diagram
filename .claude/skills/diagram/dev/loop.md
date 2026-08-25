@@ -209,7 +209,7 @@ exactly like `make done`.
 | `sync-with-main.sh done` on a GATED delta | `make ci-merge`: `make done` on `gm-assistant-merge` (concurrency 1), then the build fast-forward-pushes the merge to GitHub main | no (`FULL=1`: yes) | ~5 min, ~$0.40; $0 on SKIP-VERIFIED |
 | `make ci-image` | docker-builds `Dockerfile.ci` on CodeBuild and pushes it to ECR; until it exists builds bootstrap on the stock image | **yes** - the GM's | ~$1, rare |
 
-**A green `make ci-check` followed by `sync-with-main.sh done` on the same tree is free**: the
+**A green local `make done` followed by `sync-with-main.sh done` is free** when main has added no engine content since your merge base (the local verdict IS the remote one then - GM 2026-08-25). Likewise **a green `make ci-check` followed by `sync-with-main.sh done` on the same engine content is free**: the
 merge action finds the verified record and pushes directly (SKIP-VERIFIED). Main advancing in
 between changes the tree and a build runs - no invalidation logic exists or is needed.
 

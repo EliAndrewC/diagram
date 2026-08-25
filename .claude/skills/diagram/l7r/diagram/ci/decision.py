@@ -103,7 +103,8 @@ def decide(
     if operation:
         verified = None
     if verified is not None and verified.satisfies(scope):
-        conds.append(Condition("tree-not-already-verified", False, f"this exact tree was verified {verified.scope}-scope by {verified.build_id} - no second build (SKIP-VERIFIED)"))
+        who = "a green local `make done` on exactly this engine content (main adds none)" if verified.build_id.startswith("local:") else f"{verified.build_id}"
+        conds.append(Condition("tree-not-already-verified", False, f"this engine content was verified {verified.scope}-scope by {who} - no second build (SKIP-VERIFIED)"))
     elif verified is not None:
         conds.append(Condition("tree-not-already-verified", True, f"verified only at {verified.scope} scope by {verified.build_id}; a {scope} run is still owed"))
     else:

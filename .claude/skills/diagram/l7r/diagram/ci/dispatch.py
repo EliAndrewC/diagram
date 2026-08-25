@@ -202,6 +202,15 @@ def status_text(ctx: Context) -> tuple[str, decision.DispatchDecision]:
     feat = features.feature_status(ctx.root, features.active_feature(ctx.root))
     tree, conflict = would_be_tree(ctx)
     verified = verified_lookup(ctx, tree) if delta.route == "GATED" else None
+    # A GREEN LOCAL `make done` VOUCHES FOR THE ENGINE CONTENT IT TESTED (GM 2026-08-25, superseding
+    # the spec's edge case "a green local done still dispatches"). The remote reference-scope gate
+    # is the same `make done`; what it adds is the merge with the LATEST main - and when main has
+    # no engine changes since the merge base, the would-be merge's engine key equals what the local
+    # gate just tested, so a build would re-prove a verdict already in hand. A build runs only when
+    # main moved on engine paths (the genuine "second check is invalid" case), or for FULL / an
+    # operation, which the laptop is not asked to run.
+    if verified is None and tree is not None and st is not None and st.event == state.GREEN and st.target == "done" and st.engine_key and st.engine_key == engine_key(ctx.root, tree):
+        verified = decision.VerifiedRecord(tree=tree, build_id=f"local:make-done@{st.commit}", scope="reference", utc=st.utc)
     d = decision.decide(delta, st, now, verified, None, ctx.mode if ctx.mode in (decision.MERGE, decision.CHECK) else decision.CHECK, feat, ctx.scope, runlog.month_to_date(ctx.skill), ctx.operation)
     text = decision.render(d, ctx.mode, ctx.scope)
     head = [f"delta: merge-base {delta.base[:12]}, {len(delta.files)} file(s), route {delta.route}", f"state: {state.describe(st, now)}"]
