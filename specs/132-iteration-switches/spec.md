@@ -4,7 +4,7 @@
 
 **Created**: 2026-08-25
 
-**Status**: round 1 NOT FAITHFUL (two changes, both applied - see Review history); awaiting round 2
+**Status**: rounds 1 and 2 NOT FAITHFUL (changes applied - see Review history); awaiting round 3
 
 **Input**: [`gm-request.md`](gm-request.md), verbatim and unedited. That file is the authority for
 this specification; the session's proposal recorded there is what the GM's *"that sounds like
@@ -105,14 +105,14 @@ before any map rolls; `make reference`, `make quick`, `make done` (reference sco
    business, not the state machine's).
 3. **Given** scope is locked, **When** `make reference`, `make quick`, `make done` (no FULL), or
    `make map` with exactly one gen runs, **Then** it runs exactly as before.
-5. **Given** scope is locked, **When** `make map GEN="a.gen.py b.gen.py"`, `make map
-   GEN='pool/*/*.gen.py'`, `make cache-audit` (with or without `--all`) or `make regressions`
-   runs, **Then** it refuses before any map rolls - the rule is "one map per invocation", and the
-   enumeration in FR-010 is not where the guarantee lives.
-4. **Given** scope is locked, **When** `make scope-unlock REASON="..."` runs, **Then** the default
+4. **Given** scope is locked, **When** `make map GEN="a.gen.py b.gen.py"`, `make map
+   GEN='pool/*/*.gen.py'`, `make cache-audit` (with or without `--all`), `make regressions` or
+   `make perf` runs, **Then** it refuses before any map rolls - the rule is "one map per
+   invocation", and the enumeration in FR-010 is not where the guarantee lives.
+5. **Given** scope is locked, **When** `make scope-unlock REASON="..."` runs, **Then** the default
    returns, the release is recorded, and the printout reminds the operator that the pool has not
-   been swept since the lock was set (constitution XIII: what accumulated is measured, not
-   remembered).
+   been swept and no perf bookend taken since the lock was set (constitution XIII: what
+   accumulated is measured, not remembered).
 
 ---
 
@@ -210,13 +210,19 @@ clause as unrequested.)
   TARGET=<operation>`, `ci-merge FULL=1`, and `map` with more than one gen or a glob in `GEN`
   (`pipeline.regen` takes a list, and `pool/*/*.gen.py` is the documented whole-pool sweep). Each
   refuses before any map rolls and before any prompt, naming the reason, the date and
-  `make scope-unlock`. (Round 1 of the fidelity review found the enumeration left `cache-audit`
-  and a globbed `GEN` open - the exact failure the Makefile records for `cohort_audit`.)
+  `make scope-unlock`. **`perf` and `perf-gate` are in this list**: a snapshot rolls the reference
+  settlement at several seeds, which is *"some number of different maps with some number of
+  different seeds per map"* - a sweep. Under the lock the performance bookends are not taken; a
+  feature that lands while the lock is on records that in its plan, and the bookends are owed when
+  the lock is released. (Round 1 of the fidelity review found the enumeration left `cache-audit`
+  and a globbed `GEN` open; round 2 found `perf` carved out in FR-018 - the same failure twice.)
 - **FR-011**: With scope locked, `make maps` (the adaptive command) MUST run the reference map
   alone and MUST NOT widen after a clean run.
-- **FR-012**: With scope locked, `make reference`, `make quick`, `make done` (reference scope),
-  `make test-file`, and `make map` with exactly ONE gen MUST behave exactly as today. ONE map per
-  invocation is the whole carve-out: a second gen, or a glob, is a sweep and refuses (FR-010).
+- **FR-012**: THE ONE STATEMENT of what runs under the lock: an invocation that rolls NO map
+  (`make quick`, `make test-file`, `make done` in reference scope's non-map phases, `make
+  switches`, every `cheap` operation) or exactly ONE map (`make reference`, `make map` with one
+  gen, `make hamlet` with one spec, `make perf-profile` - one seed, one stage). Everything else
+  refuses (FR-010). No other requirement re-lists the permitted set.
 - **FR-013**: The lock is enforced in BOTH the Makefile (the entry every operator uses) and the
   Python entry points the sweeps run through (`cohort_audit`, `mapcheck`, `cache_audit`,
   `make_regressions`, `pipeline.regen` - which refuses a list longer than one - and the `ci`
@@ -239,12 +245,12 @@ clause as unrequested.)
 - **FR-017**: The "why" of every rule above MUST be recorded where the rule lives (CLAUDE.md
   "Record the why", REQUIRED): the setting file's `CLAUDE.md`, a comment at each Makefile
   refusal, and the ci package's `CLAUDE.md` (a sixth condition).
-- **FR-018**: The decision to leave ONE-map-per-invocation targets runnable under the lock (`map`
-  with a single gen, `hamlet`, `perf` - which rolls the reference set one seed at a time and is a
-  constitutional obligation for generator features) MUST be recorded with the alternatives priced
-  (CLAUDE.md "Record a decision to ACCEPT a limitation"). The GM's own definition of the suite is
+- **FR-018**: The DECISION that one-map invocations (FR-012's set - which this requirement does
+  not re-list) stay runnable under the lock MUST be recorded with the alternatives priced
+  (CLAUDE.md "Record a decision to ACCEPT a limitation"): the GM's definition of the suite is
   *"forty eight different maps ... some number of different maps with some number of different
-  seeds per map"* - a sweep; one map is iteration.
+  seeds per map"* - a sweep; one map is iteration, and refusing it would make the lock refuse the
+  work the lock exists to protect.
 
 ### Key Entities
 
@@ -295,3 +301,7 @@ clause as unrequested.)
   FR-012/FR-013/FR-018 and Story 2 amended, scenario 5 added. (2) The `make audit` reporting
   clause, Story 3 scenario 3 and the `commit` field were unrequested; removed. The reviewer's
   aside on the `CI_ROUTE`/`CI_MERGE` seams is recorded as an edge case and fixed in this feature.
+- **Round 2 (2026-08-25): NOT FAITHFUL.** FR-018 had left `perf` runnable - four seeds is a sweep
+  by the GM's own definition - and FR-012/FR-018 stated the permitted set twice with different
+  contents. `perf`/`perf-gate` now refuse under the lock (FR-010); FR-012 is the single statement
+  of what runs; FR-018 records only the decision. Story 2's scenarios renumbered.
