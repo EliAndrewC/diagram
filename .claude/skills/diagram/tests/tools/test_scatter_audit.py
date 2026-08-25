@@ -268,7 +268,11 @@ def test_crown_fills_covers_every_recorded_crown():
             f"- parse_bases is reading a family in LOCAL coordinates (an unresolved transform), so the audit is judging it in the wrong place"
         )
         checked += 1
-    assert checked, "no live scripted map had both a .svg and a .json - the guard checked nothing"
+    # A FRESH CLONE HAS NO LIVE RENDERS (gitignored; `make done` never draws one), so this used to
+    # fail on every new checkout - the second of feature 131's two "known gitignored-artifact gap"
+    # failures. A guard with nothing to check is SKIPPED, visibly, with the route to arming it.
+    if not checked:
+        pytest.skip("no live scripted map has both a .svg and a .json in this checkout - `make map` regenerates the reference hamlet with its render, then this guard has something to check")
 
 
 def test_a_family_that_parses_nothing_the_manifest_records_is_a_LOUD_failure(tmp_path, monkeypatch, capsys):

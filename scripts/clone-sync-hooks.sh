@@ -52,15 +52,17 @@ except Exception:
 # THE ROOT IS DERIVED FROM THE HOOK'S cwd, NOT HARDCODED (feature 131, 2026-08-25 - GUARD_EDIT_OK:
 # the split needs one script that works in both repositories). The harness hands every hook the
 # session's cwd; its git top level is either main itself or a clone at <main>/.clones/<name>, and
-# main is the part before /.clones/. CLONE_MAIN stays as the test seam; /gm-assistant is the
-# fallback when there is no cwd at all (a hook driven by hand with an empty payload).
+# main is the part before /.clones/. CLONE_MAIN stays as the test seam; the fallback when there is
+# no cwd at all (a hook driven by hand with an empty payload) is the repository THIS script lives
+# in - since feature 131 that is /diagram here and /gm-assistant there, so it cannot be a literal
+# (GUARD_EDIT_OK: split residue - the literal named the OTHER repository's main).
 derive_main() {
   local cwd top
   cwd=$(field cwd)
   top=$(git -C "${cwd:-/nonexistent}" rev-parse --show-toplevel 2>/dev/null || true)
   case "$top" in
     */.clones/*) printf '%s' "${top%%/.clones/*}" ;;
-    "")          printf '%s' /gm-assistant ;;
+    "")          printf '%s' "$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)" ;;
     *)           printf '%s' "$top" ;;
   esac
 }

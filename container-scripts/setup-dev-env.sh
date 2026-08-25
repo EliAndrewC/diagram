@@ -48,18 +48,15 @@ check_all() {
     # without it every italic map label silently renders upright.
     _t "resvg (diagram PNG renderer)"            "command -v resvg"
     _t "DejaVu Serif italic face"                "[ -f $ITALIC_FONT ]"
-    # webapp prod deps (also used by the skills: OP API, portraits, weather, name scraping)
-    _t "python: cherrypy jinja2 configobj yaml"  "python3 -c 'import cherrypy, jinja2, configobj, yaml'"
-    _t "python: requests + oauthlib + bs4"       "python3 -c 'import requests, requests_oauthlib, bs4'"
-    _t "python: pillow numpy cv2 google.genai"   "python3 -c 'import PIL, numpy, cv2, google.genai'"
+    # the engine's runtime deps (feature 131: THIS repository's lockfiles under the skill, beside
+    # pyproject.toml - the webapp's cherrypy/playwright set stayed in gm-assistant with the webapp).
     # shapely backs the /diagram seam-closing pass (waterfields/seams.py) - the one place the
     # field engine needs real polygon booleans, so a missing wheel breaks map generation, not a test
     _t "python: shapely (diagram field engine)"  "python3 -c 'import shapely'"
+    _t "python: pillow (render_cache, crop_map)" "python3 -c 'import PIL'"
     # dev deps - the quality gate itself
     _t "python: pytest + cov + xdist"            "python3 -c 'import pytest, pytest_cov, xdist'"
     _t "python: ruff mypy"                       "python3 -m ruff --version; python3 -m mypy --version"
-    _t "playwright chromium (UI screenshots)"    "python3 -c 'from playwright.sync_api import sync_playwright
-with sync_playwright() as p: p.chromium.launch().close()'"
     # the claude() wrapper that appends this repo's standing authorizations to the system prompt.
     # ~/.bashrc is NOT on a bind mount (only the repo and ~/.claude survive a rebuild), so this has
     # to be re-established on every fresh container exactly like the apt and pip state.
@@ -91,18 +88,14 @@ fi
 
 echo "==> python packages (pip)"
 # --break-system-packages: this container's python is the system python and there is no venv by
-# design (every skill and the webapp share one interpreter).
+# design (the skill's tools and its gate share one interpreter). The lockfiles live beside the
+# skill's pyproject.toml (feature 131): the first session in the split repository found this line
+# still reading webapp/requirements.txt from gm-assistant, which does not exist here, so a fresh
+# container could not be provisioned at all.
+SKILL="$REPO/.claude/skills/diagram"
 pip install --quiet --break-system-packages \
-    -r "$REPO/webapp/requirements.txt" \
-    -r "$REPO/webapp/requirements-dev.txt"
-
-echo "==> playwright browser + its OS libraries"
-# --with-deps is REQUIRED, not optional (learned 2026-07-25): a bare `playwright install chromium`
-# downloads the browser and reports success, but the binary then dies on launch with
-# "libglib-2.0.so.0: cannot open shared object file" because the OS libraries it links against are
-# not in this image. --with-deps apt-installs those too (it shells out to sudo, which is why this
-# script belongs inside the container). ~180MB download, skipped when already unpacked.
-python3 -m playwright install --with-deps chromium >/dev/null
+    -r "$SKILL/requirements.txt" \
+    -r "$SKILL/requirements-dev.txt"
 
 # ---- the claude() wrapper ----------------------------------------------------------------------
 # WHY a system-prompt append and not a CLAUDE.md line: CLAUDE.md sits BELOW the system prompt in the
@@ -139,8 +132,9 @@ echo "    installed - takes effect in NEW shells (or run: source ~/.bashrc)"
 echo "==> verifying"
 if check_all; then
     echo
-    echo "dev environment ready. Next: cd webapp && make done   (or, for the diagram skill,"
-    echo "cd .claude/skills/diagram && make done - both must be run from a .clones/ workspace)"
+    echo "dev environment ready. Next: cd .claude/skills/diagram && make quick"
+    echo "(from a .clones/<session> workspace, never main; \`make map\` first on a fresh clone so"
+    echo "the reference hamlet has a render for the pool-artifact tests to check)"
 else
     echo
     echo "ERROR: something is still missing after install - see MISSING lines above"

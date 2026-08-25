@@ -275,7 +275,12 @@ def test_every_live_pool_png_matches_its_own_svg_viewbox():
         pw, ph = struct.unpack(">II", Path(png_path).read_bytes()[16:24])
         assert abs(round(pw * vh / vw) - ph) <= 2, f"{os.path.basename(png_path)} is {pw}x{ph} but its own SVG renders to {pw}x{round(pw * vh / vw)} - the PNG is not this SVG"
         checked += 1
-    assert checked, "no live scripted map had both a .svg and a .png - the guard checked nothing"
+    # A FRESH CLONE HAS NO LIVE RENDERS AT ALL (they are gitignored, and `make done` never draws one),
+    # so this used to fail on every new checkout and read as a regression - feature 131's first gate in
+    # the split repository ledgered it as one of two "known gitignored-artifact gap" failures. A guard
+    # with nothing to check is not a failed guard; it is a SKIPPED one, and the skip says how to arm it.
+    if not checked:
+        pytest.skip("no live scripted map has both a .svg and a .png in this checkout - `make map` regenerates the reference hamlet with its render, then this guard has something to check")
 
 
 def test_main_derives_main_repo_from_this_checkout_when_not_given(tmp_path, monkeypatch):
@@ -291,4 +296,6 @@ def test_main_derives_main_repo_from_this_checkout_when_not_given(tmp_path, monk
     assert rc.main(["--pool", str(tmp_path), "--skill-dir", str(tmp_path)]) == 0
     here = os.path.dirname(os.path.abspath(rc.__file__))
     expected = subprocess.run(["git", "-C", here, "rev-parse", "--show-toplevel"], capture_output=True, text=True, check=True).stdout.strip()
-    assert seen["main_repo"] == expected and os.path.isdir(os.path.join(expected, ".git"))
+    # `.git` is a directory in a clone and a FILE in a detached worktree (the baseline tree CLAUDE.md
+    # prescribes), so test for existence: the assertion is "this is a git checkout", not its shape
+    assert seen["main_repo"] == expected and os.path.exists(os.path.join(expected, ".git"))

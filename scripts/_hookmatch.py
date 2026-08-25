@@ -44,11 +44,21 @@ def _strip_heredocs(cmd: str) -> str:
     return re.sub(r"<<-?\s*['\"]?(\w+)['\"]?\n.*?\n\s*\1\b", " <<BODY ", cmd, flags=re.S)
 
 
+def _strip_quotes(cmd: str) -> str:
+    """A quoted string is an argument, never a command - EXCEPT the one after `-c`, which an
+    interpreter executes. Blanked before matching, because `_POS` counts `;` and `|` as command
+    separators and a quoted regex or message carries them freely: `grep -E "^(ruff|pytest)="`
+    fired as a bare pytest run (2026-08-25, the split repository's first session, writing a
+    requirements file), which is the mention-versus-invocation defect this module exists to
+    prevent. `python3 -c "import pytest; pytest.main()"` keeps its quote and stays blocked."""
+    return re.sub(r"(?<!-c )(?<!-c\t)([\"'])(?:\\.|(?!\1).)*\1", r"\1\1", cmd, flags=re.S)
+
+
 def classify(cmd: str) -> str:
     if not cmd or "GUARD_EDIT_OK" in cmd:
         return "ok"
     raw = cmd
-    c = _strip_heredocs(cmd)
+    c = _strip_quotes(_strip_heredocs(cmd))
 
     def at(pat: str) -> bool:
         return re.search(_POS + pat, c) is not None
@@ -75,32 +85,6 @@ def classify(cmd: str) -> str:
     # made the mention-versus-invocation mistake - a grep, a commit message, and now a docstring -
     # which is worth stating plainly: proximity is the signal, presence never is.
     if any(re.search(pat, raw) for pat in _GUARD_WRITE):
-        return "guard-write"
-    return "ok"
-    raw = cmd
-    c = _strip_heredocs(cmd)
-
-    def at(pat: str) -> bool:
-        return re.search(_POS + pat, c) is not None
-
-    if at(r"make\s+(?:-\S+\s+)*(?:-f|--file|--makefile)(?:[=\s]|$)"):
-        return "foreign-makefile"
-    if at(rf"{_PY}\s+(?:-\S+\s+)*-m\s+l7r\.diagram\.") or at(rf"{_PY}\s+\S*l7r/diagram/(?:pipeline/regen|hamletgen/__main__)\.py"):
-        return "engine-entry-point"
-    if at(rf"(?:{_PY}\s+(?:-\S+\s+)*-m\s+)?pytest\b"):
-        return "bare-pytest"
-    # AN OVERRIDE COUNTS WHEREVER IT SITS ON THE COMMAND. `REF_WHY=x make done` puts it in front;
-    # `make done FULL=1 REF_WHY=x` passes it as a make argument. Both skip the prompt, so both are
-    # tier 2 - the first cut only matched the leading form and the suite caught it immediately.
-    if re.search(r"\b(?:REF_WHY|REF_OK|GATE_OK)=", c) and (at(r"make\b") or re.search(_POS + r"(?:REF_WHY|REF_OK|GATE_OK)=", c)):
-        return "inline-override"
-    # GUARD-WRITE READS THE RAW COMMAND, NOT THE STRIPPED ONE, and this is the one place where that
-    # is right. Everywhere else a heredoc body is prose to be ignored; here it is the payload that
-    # does the writing - `python3 - <<PY ... write_text("...Makefile") ... PY` is precisely the route
-    # that slipped past layer 3 all day. Stripping it would reopen the hole that stripping was added
-    # to close, in the same commit. The residual cost is that prose ABOUT writing a guard file can
-    # trip this; GUARD_EDIT_OK covers it, and that is the cheaper error of the two.
-    if re.search(r"(?:Makefile|-hooks\.sh|settings\.json)", raw) and re.search(r"(?:^|\s)>>?\s|sed\s+-i|write_text|(?:^|\s)tee\s", raw):
         return "guard-write"
     return "ok"
 

@@ -40,6 +40,7 @@ check "tier 1: a pool sweep run bare"          blocked "python3 -m l7r.diagram.p
 check "tier 1: regen by script path"           blocked "python3 l7r/diagram/pipeline/regen.py pool/hamlets/x.gen.py"
 check "tier 1: bare pytest"                    blocked "python3 -m pytest -n auto"
 check "tier 1: bare pytest, plain name"        blocked "pytest tests/hamletgen -q"
+check "tier 1: pytest run in-process via -c"   blocked "python3 -c 'import pytest; pytest.main()'"
 check "tier 2: the documented override"        blocked "make done FULL=1 REF_WHY=pre-push verification"
 check "tier 2: the reference-gate override"    blocked "REF_OK=1 make maps"
 check "tier 2: the -k gate override"           blocked "GATE_OK=1 make done"
@@ -61,6 +62,14 @@ check "a hook's own test"                      ok "scripts/test-make-only-hooks.
 check "an unrelated python one-liner"          ok "python3 -c 'print(1)'"
 # The word 'pytest' appearing inside a make invocation is the gate doing its job, not a bypass.
 check "make running pytest internally"         ok "make test  # runs pytest under the hood"
+# A `|` or `;` INSIDE A QUOTED STRING is not a command separator (2026-08-25: a pip-freeze grep
+# for the lockfile pins was blocked as a bare pytest run - the mention-versus-invocation defect).
+check "a quoted regex naming pytest"           ok "pip freeze | grep -iE '^(numpy|pytest|ruff)=='"
+check "a quoted message naming pytest"         ok "git commit -m 'gate: ruff clean; pytest green'"
+check "a heredoc naming pytest"                ok "cat > requirements-dev.in <<'EOF'
+pytest
+pytest-cov
+EOF"
 
 echo
 echo "2b. TIER 5 VIA BASH - a guard file written by shell rather than the Edit tool"
