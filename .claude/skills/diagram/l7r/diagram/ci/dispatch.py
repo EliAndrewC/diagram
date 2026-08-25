@@ -262,6 +262,8 @@ def run(ctx: Context) -> Outcome:
         {"name": "CI_SCOPE", "value": "operation" if ctx.operation else ctx.scope, "type": "PLAINTEXT"},
         {"name": "COMPUTE_TYPE", "value": ctx.compute, "type": "PLAINTEXT"},
         {"name": "PARK_TIMEOUT_S", "value": str(config.PARK_TIMEOUT_S), "type": "PLAINTEXT"},
+        # the build's perf-gate pairs bookends by feature number: it must be THIS feature, not the highest specs/ dir
+        {"name": "SPECIFY_FEATURE", "value": features.active_feature(ctx.root) or "", "type": "PLAINTEXT"},
     ]
     # THE CUSTOM IMAGE IS USED ONLY ONCE IT EXISTS: `make ci-image` writes image/latest.txt to the
     # bucket when the push to ECR succeeds. Without it the build runs on the stock image and

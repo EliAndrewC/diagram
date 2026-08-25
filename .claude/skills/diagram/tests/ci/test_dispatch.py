@@ -147,6 +147,7 @@ def test_check_dispatches_exactly_one_build_and_records_it(repo: Path) -> None:
     assert kw["projectName"] == config.PROJECT_CHECK and "# check" in kw["buildspecOverride"] and kw["computeTypeOverride"] == config.COMPUTE_TYPE
     env = {e["name"]: e["value"] for e in kw["environmentVariablesOverride"]}
     assert env["MAKE_TARGET"] == "done" and env["MAILBOX"] == "session/clone" and env["CI_SCOPE"] == "reference" and env["GIT_SHA"] == git(repo, "rev-parse", "HEAD")
+    assert env["SPECIFY_FEATURE"] == "", "no feature named in this fixture"
     uuid = out.build_id.split(":")[-1]
     assert ("put_object", f"go/{uuid}") in client.calls, "the build is released only after the reference check, and the key is the uuid the build polls"
     assert ("delete_object", f"go/{uuid}") in client.calls, "the fake build never consumes its signal, so the dispatcher's leftover cleanup removes it"
@@ -169,6 +170,7 @@ def test_merge_uses_the_merge_project_and_full_scope_travels(repo: Path, monkeyp
     kw = next(k for n, k in client.calls if n == "start_build")
     env = {e["name"]: e["value"] for e in kw["environmentVariablesOverride"]}
     assert kw["projectName"] == config.PROJECT_MERGE and env["MAKE_TARGET"] == "done FULL=1" and env["CI_SCOPE"] == "full"
+    assert env["SPECIFY_FEATURE"] == "130-x", "the build pairs its perf bookends by this feature"
 
 
 def test_the_custom_image_is_used_once_its_marker_exists(repo: Path) -> None:
