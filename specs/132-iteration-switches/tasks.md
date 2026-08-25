@@ -38,6 +38,13 @@ shell guards.
 - [x] T14 prove-it-fires (2026-08-25, each deletion restored with `git checkout`): removing `$(SWEEP_OK)` from `cohort` -> `tests/test_switches.py::test_make_sweeps_refuse_under_the_lock[cohort]` RED; dropping the `elif remote_off` branch in `decision.py` -> `test_remote_off_never_dispatches` + `test_remote_off_does_not_short_circuit_a_full_scope_on_a_reference_record` RED; dropping the lock check in `cohort_audit.main` -> `tests/tools/test_scope_lock.py::test_cohort_refuses_first` RED; honoring `CI_ROUTE` in every tree again -> `scripts/test-sync-with-main.sh` 7c RED (3 checks)
 - [ ] T15 `make hooks-test` green; `make done` green; bypass-log audit for the feature (none expected)
 
+## Phase 5b - the amendment (GM 2026-08-25: `make done` short-circuits like the remote gate)
+
+- [x] T18 amendment recorded verbatim in gm-request.md; FR-019..FR-023; fidelity round 1 CHANGES REQUIRED (four, applied), round 2 pending at the time of writing
+- [x] T19 `delta.is_gate` / `gate_key_worktree` (a RULE: every .py under the skill, tests, pool data, Makefile, pyproject, lockfiles, scripts/); `state.gate_key` + `already_verified`; `ci verified-done`; the `done` recipe's one-shell short-circuit; no FORCE
+- [x] T20 tests: is_gate kinds incl. `.explain.py`/`wip/*.gen.py`; key moves with the Makefile not docs; `already_verified` table; stamp containment against gate-stamp's own file lists; CLI; the real Makefile short-circuits in a fixture and FULL never does
+- [x] T21 records: dev/switches.md section, skill CLAUDE.md `make done` row, root CLAUDE.md docs-only bullet
+
 ## Phase 6 - throw the switches for feature 133
 
 - [ ] T16 `make ci-off REASON=...` and `make scope-lock REASON=...` on the GM's instruction of 2026-08-25, committed

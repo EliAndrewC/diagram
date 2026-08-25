@@ -107,6 +107,38 @@ stop a slow hand-rolled sweep. Observable: `git log dev/run-log/` would show it.
 **Who chose**: the session, under the spec's FR-012/FR-018; the spec was graded FAITHFUL against
 the GM's words at round 3 (2026-08-25).
 
+## `make done` short-circuits on the same rule as the remote gate (the amendment)
+
+GM, 2026-08-25, seeing a five-minute gate follow documentation-only commits: *"this also seems like
+the kind of thing which shouldn't even run the normal 5 minute tests, right?! Like it's only
+documentation. Can we apply the same rules that decide whether to short circuit and skip AWS tests
+to these 5 minute tests as well for the make done procedure?"*
+
+So `make done` (reference scope) first asks `python3 -m l7r.diagram.ci verified-done`: is the last
+recorded verification a green `make done` whose **gate key** equals the working tree's now? If so
+it prints `already verified` with that run's time and commit, re-stamps, records `green-local done`
+and exits green in seconds - no map rolled, no test run. The run-log gets an `already-verified`
+entry so the audit can see how often it happens.
+
+**The gate key is a RULE - everything `make done` reads or runs** (`ci/delta.py` `is_gate`; the
+list is its known instances, not its extent): every `*.py` under the skill (what lint/format/
+typecheck walk and what `gate-stamp`'s `diagram` area hashes - `.explain.py` and `wip/*.gen.py`
+included, the case the first draft's list missed and the fidelity review caught), `tests/**`,
+`pool/*.gen.py`, `pool/*.json`, the skill's `Makefile`, `pyproject.toml`, the lockfiles and their
+`.in` sources, and `scripts/**`. It is WIDER than the remote engine key on purpose: the remote key
+left the configuration paths out *because they are covered locally* - this is that coverage, and
+a Makefile edit is not documentation. A docs-only change matches nothing.
+
+**Why re-stamping is safe**: the short-circuit re-writes `gate-stamp`'s `diagram` stamp, which
+asserts "a green gate ran on exactly this Python". That is true only if every file the stamp
+hashes is inside the gate key - proven in `tests/ci/test_state.py` against gate-stamp's own file
+list, in the real repository, both areas.
+
+**What never short-circuits**: `FULL=1` (a different scope); a last record that is a green `quick`,
+`reference` or `test-file` (they vouch for less than the gate); a red last run. And there is no
+flag in either direction - a `FORCE=` re-run flag was drafted and removed at the fidelity review as
+unrequested; the remote rule this copies has none.
+
 ## When the lock is released
 
 `make scope-unlock` prints the reminder: nothing swept the pool and no perf bookend was taken while

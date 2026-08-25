@@ -126,6 +126,15 @@ case to its test.
 targets and the priced alternatives), the ci `CLAUDE.md` sixth condition, CLAUDE.md's enforcement
 table row, `dev/loop.md` ladder note, comments at each Makefile line.
 
+### The amendment: `make done` short-circuits (FR-019..FR-023)
+
+`delta.is_gate` (a rule over everything the gate reads or runs) and `gate_key_worktree`; the
+`VerificationState` gains `gate_key`; `state.already_verified(root)` is the decision; `ci
+verified-done` exposes it; the `done` recipe is ONE shell block whose first step exits 0 on
+`already verified` (re-stamp, run-log `already-verified`, `green-local done`). Never for FULL; no
+flag in either direction. Containment (the key holds every file gate-stamp hashes) is what makes
+the re-stamp honest, and a test proves it against gate-stamp's own lists.
+
 ## Test design
 
 - `tests/test_switches.py`: read defaults / absent / malformed (fail closed) / write round-trip /
