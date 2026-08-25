@@ -12,6 +12,7 @@
 #   record    on green: verified/<tree>.json (scope-tagged, FR-027), artifacts (perf-log, reports)
 #   push      merge mode only: fast-forward push HEAD:main; a rejection means main moved - fail, no retry (R3)
 set -euo pipefail
+trap 'echo "run.sh: FAILED at line $LINENO (exit $?)"' ERR   # a silent set -e exit cost a build to diagnose (4483c680)
 : "${MODE:?check|merge}" "${GIT_SHA:?}" "${MAILBOX:?}" "${CI_BUCKET:?}" "${GITHUB_REPO:?}" "${GITHUB_TOKEN:?}"
 MAKE_TARGET=${MAKE_TARGET:-done}
 CI_SCOPE=${CI_SCOPE:-reference}
@@ -37,7 +38,8 @@ until aws s3api head-object --bucket "$CI_BUCKET" --key "go/$BUILD_UUID" >/dev/n
   if [ "$waited" -ge "$PARK_TIMEOUT_S" ]; then echo "aborted: no go signal after ${PARK_TIMEOUT_S}s (the dispatcher is gone)"; exit 1; fi
   sleep 2; waited=$((waited+2))
 done
-aws s3 rm --quiet "s3://$CI_BUCKET/go/$BUILD_UUID"
+# the service role may not hold s3:DeleteObject (build 4483c680 died here, silently); the dispatcher deletes a leftover signal itself
+aws s3 rm --quiet "s3://$CI_BUCKET/go/$BUILD_UUID" 2>/dev/null || echo "(go signal not deleted - the dispatcher cleans it up)"
 echo "== go received after ${waited}s"
 
 # STOCK-IMAGE BOOTSTRAP. The custom image (Dockerfile.ci, `make ci-image`) is an OPTIMIZATION the
