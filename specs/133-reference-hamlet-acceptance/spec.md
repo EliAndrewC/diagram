@@ -107,8 +107,10 @@ to get things into main outside the context of features"* the GM suspected.
 **Acceptance Scenarios**:
 
 1. **Given** 133 has an open task and the clone's delta touches engine code, **When** the ritual
-   runs, **Then** the push is refused with `feature-complete` named - proven on this feature the
-   first time a map task lands in the clone.
+   runs, **Then** the push is refused - since FR-006 the in-progress check fires first and names
+   `IN PROGRESS` (the gated route's `feature-complete` condition sits behind it). OBSERVED on this
+   feature on 2026-08-25: the ritual refused this clone's own T05 push, naming
+   `scripts/sync-with-main.sh` as outside the spec directory.
 2. **Given** a feature has an open task, **When** any push is attempted from a clone whose delta
    touches its spec directory or whose pointer names it, **Then** the push is refused on BOTH
    routes unless the delta is that spec directory alone (FR-006, the GM's ruling).
@@ -176,3 +178,5 @@ to get things into main outside the context of features"* the GM suspected.
   pushing the skeleton to main were both judged faithful.
 - **Round 2 (2026-08-25): FAITHFUL.** The change applied without new scope. Aside: the spec names
   `T99` by id; if the task ids change, that sentence goes stale.
+- **FR-006 amendment (2026-08-25): FAITHFUL** at round 1. Reviewer's aside applied: User Story 3
+  scenario 1 now names `IN PROGRESS` as the observed refusal, and records the live observation.
