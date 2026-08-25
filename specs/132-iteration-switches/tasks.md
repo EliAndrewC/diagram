@@ -45,6 +45,10 @@ shell guards.
 - [x] T20 tests: is_gate kinds incl. `.explain.py`/`wip/*.gen.py`; key moves with the Makefile not docs; `already_verified` table; stamp containment against gate-stamp's own file lists; CLI; the real Makefile short-circuits in a fixture and FULL never does
 - [x] T21 records: dev/switches.md section, skill CLAUDE.md `make done` row, root CLAUDE.md docs-only bullet
 
+## Phase 5c - the second amendment (GM 2026-08-25, after landing: the key is the remote key)
+
+- [x] T22 GM's words recorded verbatim; FR-019/020/023 rewritten; `already_verified` re-keyed on the skill-Python hash + engine key; `is_gate`/`gate_key` removed; tests rewritten (Makefile/pyproject/scripts edits keep the verdict, `.explain.py`/tests/pool edits do not); docs corrected; fidelity review of the second amendment
+
 ## Phase 6 - throw the switches for feature 133
 
 - [x] T16 `make ci-off` and `make scope-lock` thrown on the GM's instruction of 2026-08-25 (the two commits before this feature's landing)

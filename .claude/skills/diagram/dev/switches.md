@@ -120,19 +120,26 @@ it prints `already verified` with that run's time and commit, re-stamps, records
 and exits green in seconds - no map rolled, no test run. The run-log gets an `already-verified`
 entry so the audit can see how often it happens.
 
-**The gate key is a RULE - everything `make done` reads or runs** (`ci/delta.py` `is_gate`; the
-list is its known instances, not its extent): every `*.py` under the skill (what lint/format/
-typecheck walk and what `gate-stamp`'s `diagram` area hashes - `.explain.py` and `wip/*.gen.py`
-included, the case the first draft's list missed and the fidelity review caught), `tests/**`,
-`pool/*.gen.py`, `pool/*.json`, the skill's `Makefile`, `pyproject.toml`, the lockfiles and their
-`.in` sources, and `scripts/**`. It is WIDER than the remote engine key on purpose: the remote key
-left the configuration paths out *because they are covered locally* - this is that coverage, and
-a Makefile edit is not documentation. A docs-only change matches nothing.
+**The key is EXACTLY the dispatcher's** (`state.already_verified`): the content hash of every
+`*.py` under the skill (`gate-stamp`'s `diagram` hash - the dispatcher's `green-local-since-edit`
+condition; `.explain.py` and `wip/*.gen.py` count) and the engine key over `tests/**`,
+`pool/*.gen.py`, `pool/*.json` (its `tree-not-already-verified` condition). **The Makefile,
+`pyproject.toml`, the lockfiles and `scripts/` are NOT in it**, exactly as they are not in the
+remote key - GM 2026-08-25, second amendment, after seeing a Makefile change re-run the gate: *"I
+thought we were omitting `make done` results for changes to the hooks or scripts or makefile
+changes, etc."* The first draft widened the key to those paths on the fidelity reviewer's
+containment argument; the GM overruled it. What covers them instead is unchanged: the guard
+scripts owe `make hooks-test` (gate-stamp's `hooks` area), and a Makefile edit is exercised by the
+next real gate. A docs-only change matches nothing.
 
 **Why re-stamping is safe**: the short-circuit re-writes `gate-stamp`'s `diagram` stamp, which
-asserts "a green gate ran on exactly this Python". That is true only if every file the stamp
-hashes is inside the gate key - proven in `tests/ci/test_state.py` against gate-stamp's own file
-list, in the real repository, both areas.
+asserts "a green gate ran on exactly this Python" - and the check compares that SAME hash, loaded
+from `gate-stamp.py` itself (`tests/ci/test_state.py` proves the two are one computation).
+
+**On "tests-only + previous run green -> skip"** (the GM's second sentence): feature 130 puts
+`tests/` in the engine set and has no exemption; what exists is the local-done rule of 2026-08-25,
+and the short-circuit mirrors it - a green run that already covered the changed tests is reused; a
+test edited after it is new code and runs once.
 
 **What never short-circuits**: `FULL=1` (a different scope); a last record that is a green `quick`,
 `reference` or `test-file` (they vouch for less than the gate); a red last run. And there is no
