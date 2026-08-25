@@ -34,7 +34,7 @@ until aws s3api head-object --bucket "$CI_BUCKET" --key "go/$BUILD_UUID" >/dev/n
   if [ "$waited" -ge "$PARK_TIMEOUT_S" ]; then echo "aborted: no go signal after ${PARK_TIMEOUT_S}s (the dispatcher is gone)"; exit 1; fi
   sleep 2; waited=$((waited+2))
 done
-aws s3 rm -q "s3://$CI_BUCKET/go/$BUILD_UUID"
+aws s3 rm --quiet "s3://$CI_BUCKET/go/$BUILD_UUID"
 echo "== go received after ${waited}s"
 
 echo "== merge: origin/main -> $MAILBOX"
@@ -59,17 +59,17 @@ cd ../../..
 # artifacts: perf snapshots (a FULL run took both bookends in-build) and any operation report
 if ls "$SKILL"/dev/perf-log/*.json >/dev/null 2>&1; then
   for f in $(git status --porcelain --untracked-files=all -- "$SKILL/dev/perf-log" | awk '{print $2}'); do
-    aws s3 cp -q "$f" "s3://$CI_BUCKET/artifacts/$BUILD_UUID/perf-log/$(basename "$f")"
+    aws s3 cp --quiet "$f" "s3://$CI_BUCKET/artifacts/$BUILD_UUID/perf-log/$(basename "$f")"
   done
 fi
-if [ -d "$SKILL/dev/ci-report" ]; then aws s3 cp -q --recursive "$SKILL/dev/ci-report" "s3://$CI_BUCKET/artifacts/$BUILD_UUID/report/"; fi
+if [ -d "$SKILL/dev/ci-report" ]; then aws s3 cp --quiet --recursive "$SKILL/dev/ci-report" "s3://$CI_BUCKET/artifacts/$BUILD_UUID/report/"; fi
 
 [ "$rc" -eq 0 ] || { echo "== gate RED - no record, nothing pushed"; exit "$rc"; }
 
 echo "== record: verified/$tree.json ($CI_SCOPE)"
 printf '{"tree":"%s","build_id":"%s","project":"%s","scope":"%s","utc":"%s","main":"%s","work":"%s","target":"%s"}\n' \
   "$tree" "$CODEBUILD_BUILD_ID" "$MODE" "$CI_SCOPE" "$(date -u +%Y-%m-%dT%H:%M:%SZ)" "$main_sha" "$GIT_SHA" "$MAKE_TARGET" > /tmp/verified.json
-aws s3 cp -q /tmp/verified.json "s3://$CI_BUCKET/verified/$tree.json"
+aws s3 cp --quiet /tmp/verified.json "s3://$CI_BUCKET/verified/$tree.json"
 
 if [ "$MODE" = merge ]; then
   echo "== push: HEAD -> main (fast-forward only)"

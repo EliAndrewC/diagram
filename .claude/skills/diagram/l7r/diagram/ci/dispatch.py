@@ -345,6 +345,18 @@ def stream(ctx: Context, build_id: str) -> dict[str, Any]:
             ctx.out("  | " + str(ev.get("message", "")).rstrip("\n"))
         token = str(page.get("nextForwardToken") or token or "") or None
         if build.get("buildStatus") != "IN_PROGRESS":
+            # DRAIN: the build is over but CloudWatch may hold more pages than the one just read - the
+            # first real failure (build 93af6342) showed a log that jumped from wait-go to POST_BUILD
+            # with the failing command's output missing, because the poll returned as soon as the
+            # status was terminal. A page with no events means the stream is exhausted.
+            for _ in range(50):
+                page = ctx.client.get_log_events(group, stream_name, token)
+                events = page.get("events", [])
+                for ev in events:
+                    ctx.out("  | " + str(ev.get("message", "")).rstrip("\n"))
+                token = str(page.get("nextForwardToken") or token or "") or None
+                if not events:
+                    break
             return build
         ctx.sleep(ctx.stream_poll_s)
 
