@@ -1,0 +1,14 @@
+{
+  "remote": {
+    "state": "off",
+    "why": "GM 2026-08-25: iterate on the reference hamlet (feature 133) with nothing dispatched to AWS; reusable setting, release with make ci-on",
+    "who": "Eli Courtwright",
+    "utc": "2026-08-25T20:50:09Z"
+  },
+  "scope": {
+    "state": "unlocked",
+    "why": "",
+    "who": "",
+    "utc": ""
+  }
+}
