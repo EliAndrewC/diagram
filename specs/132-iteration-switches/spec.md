@@ -4,7 +4,7 @@
 
 **Created**: 2026-08-25
 
-**Status**: APPROVED by `spec-fidelity` - round 3 verdict **FAITHFUL** (2026-08-25), after rounds 1 and 2 returned changes (see Review history). **AMENDED the same day on the GM's second request** (the local `make done` short-circuits on the same rule as the remote gate: FR-019..FR-023) - amendment APPROVED at round 2 (**FAITHFUL**, 2026-08-25); **AMENDED AGAIN on the GM's third message** (the key is the remote key, not wider: Makefile/scripts/config changes do not owe the gate) - second amendment: round 1 NOT FAITHFUL (the tests-only sentence was the session's to ask, not resolve); the GM ruled (FR-024); awaiting round 2.
+**Status**: APPROVED by `spec-fidelity` - round 3 verdict **FAITHFUL** (2026-08-25), after rounds 1 and 2 returned changes (see Review history). **AMENDED the same day on the GM's second request** (the local `make done` short-circuits on the same rule as the remote gate: FR-019..FR-023) - amendment APPROVED at round 2 (**FAITHFUL**, 2026-08-25); **AMENDED AGAIN on the GM's third message** (the key is the remote key, not wider: Makefile/scripts/config changes do not owe the gate) - second amendment: round 1 NOT FAITHFUL (the tests-only sentence was the session's to ask, not resolve); the GM ruled (FR-024); **round 2 FAITHFUL** (2026-08-25).
 
 **Input**: [`gm-request.md`](gm-request.md), verbatim and unedited. That file is the authority for
 this specification; the session's proposal recorded there is what the GM's *"that sounds like
@@ -367,3 +367,7 @@ to short circuit and skip AWS tests to these 5 minute tests as well for the make
   sentence (tests-only + previous green -> skip) by declaring its premise false: the AWS rule the GM
   remembered does not exist (feature 130 puts `tests/` in the engine set), but that is authority to
   ASK, not to drop the request. The session asked; the GM ruled "Yes, locally AND on AWS" (FR-024).
+- **Second amendment round 2 (2026-08-25): FAITHFUL.** Reviewer's aside recorded for the GM: because
+  the route is structural, a tests-only delta after a RED gate still takes the DIRECT route, while
+  locally FR-021 would run the gate for the same delta; the engine content is still covered by its
+  own green stamp, so nothing unverified but the test lands.
