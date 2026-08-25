@@ -181,3 +181,9 @@ that one stage of that one seed - measured at +225% on the real generation workl
 on seed 4), which is why it is triggered, never always-on. The derived top-25 table (kilobytes) is
 committed; the raw `.prof` stays in the gitignored `dev/perf-raw/` and goes to the profile-archive
 repository once the GM creates it (`PERF_ARCHIVE=<git url>`).
+
+**If the harness does not know the `perf-audit` agent type** (it loads `.claude/agents/` from
+`/diagram` at session start, so a session that predates the file - or runs before it lands on main -
+gets "Agent type 'perf-audit' not found"): launch a `general-purpose` agent and tell it to read and
+follow `.claude/agents/perf-audit.md` as the `perf-audit` role. That is how feature 129's own
+confirmation was produced on 2026-08-25. The record still says `declared: perf-audit`.

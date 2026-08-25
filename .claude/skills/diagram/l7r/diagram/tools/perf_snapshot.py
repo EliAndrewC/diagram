@@ -189,7 +189,12 @@ def _load() -> list[dict[str, Any]]:
     for fn in sorted(os.listdir(LOG_DIR)):
         if fn.endswith(".json"):
             with open(os.path.join(LOG_DIR, fn)) as fh:
-                out.append(json.load(fh))
+                d = json.load(fh)
+            # dev/perf-log/ also holds the REVIEW RECORDS since feature 129 (`kind: explanation | ...`,
+            # no rows, no label); the trend is snapshots only. Found by the perf-audit subagent on the
+            # feature's own first confirmation: the report died with KeyError('utc') on the record.
+            if "rows" in d and "label" in d:
+                out.append(d)
     return out
 
 

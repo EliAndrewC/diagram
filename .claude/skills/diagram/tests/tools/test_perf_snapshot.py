@@ -78,3 +78,12 @@ def test_a_seed_inside_the_noise_band_is_not_even_mentioned(logdir: Any, capsys:
 def test_the_cap_is_the_number_the_GM_set() -> None:
     """Pinned so a later session cannot drift it without the test saying so out loud - since feature 129 it is band 3's TOTAL line."""
     assert ps.TOTAL_SLOWDOWN_CAP_PCT == 10.0
+
+
+def test_a_review_record_in_the_log_dir_does_not_break_the_trend(logdir: Any, capsys: pytest.CaptureFixture[str]) -> None:
+    """Feature 129 keeps its review records beside the snapshots; the report must read past them (found by the perf-audit subagent)."""
+    _snap(logdir, "903-start", {1: 100.0}, "20260825T000000Z")
+    _snap(logdir, "903-end", {1: 101.0}, "20260825T010000Z")
+    (logdir / "20260825T020000Z-review-903-explanation-local-c.json").write_text(json.dumps({"kind": "explanation", "feature": "903-x", "explanation": "noise"}), encoding="utf-8")
+    assert ps.report("903-start") == 0
+    assert "band 1" in capsys.readouterr().out

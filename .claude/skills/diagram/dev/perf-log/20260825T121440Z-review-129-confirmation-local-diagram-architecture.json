@@ -1,0 +1,33 @@
+{
+  "band": 1,
+  "base": {
+    "commit": "ae348f5f",
+    "label": "129-start",
+    "utc": "20260825T120024Z"
+  },
+  "binding": "22ad79656b19618c56a29dbf0bbae3049736ea20d3a165a23d03d9762fee09fc",
+  "end": {
+    "commit": "24ecca65",
+    "label": "129-end",
+    "utc": "20260825T121255Z"
+  },
+  "environment": "local",
+  "feature": "129-perf-audit-subagent",
+  "granted_by": {
+    "declared": "perf-audit",
+    "session_id": "2e04113c-d5de-479a-afd4-5aa18129f3f0",
+    "utc": "20260825T121440Z"
+  },
+  "kind": "confirmation",
+  "measurements": {
+    "seeds": {
+      "25": -0.7,
+      "39": 1.0,
+      "4": 0.0,
+      "47": -0.8
+    },
+    "total_pct": -0.2
+  },
+  "note": "web stage on seed 39 (+0.8s, 46.17->46.95s, seed +1.0%) is the only growth and sits inside the 1.7% per-seed spread of the three identical-code noise runs (seed 39: 70.7-71.9s); the l7r/ diff is tools/ plus two registry rows in _invocation.py, no generator stage code",
+  "verdict": "consistent"
+}
