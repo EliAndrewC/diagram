@@ -4,7 +4,7 @@
 
 **Created**: 2026-08-25
 
-**Status**: rounds 1 and 2 NOT FAITHFUL (changes applied - see Review history); awaiting round 3
+**Status**: APPROVED by `spec-fidelity` - round 3 verdict **FAITHFUL** (2026-08-25), after rounds 1 and 2 returned changes (see Review history). Implementation may begin.
 
 **Input**: [`gm-request.md`](gm-request.md), verbatim and unedited. That file is the authority for
 this specification; the session's proposal recorded there is what the GM's *"that sounds like
@@ -305,3 +305,7 @@ clause as unrequested.)
   by the GM's own definition - and FR-012/FR-018 stated the permitted set twice with different
   contents. `perf`/`perf-gate` now refuse under the lock (FR-010); FR-012 is the single statement
   of what runs; FR-018 records only the decision. Story 2's scenarios renumbered.
+- **Round 3 (2026-08-25): FAITHFUL.** Nothing missing, nothing added; the round-2 changes applied
+  without new scope. Reviewer's aside recorded: under remote-off, when main has moved on engine
+  paths the ritual refuses with the merge instruction rather than merging itself - the same
+  sequence with the session as the driver.

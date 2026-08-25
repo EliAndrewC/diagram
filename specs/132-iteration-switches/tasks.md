@@ -5,7 +5,7 @@ shell guards.
 
 ## Phase 0 - review
 
-- [ ] T01 `spec-fidelity` round 1 verdict recorded in spec.md (FAITHFUL required before T03+)
+- [x] T01 `spec-fidelity`: round 1 NOT FAITHFUL, round 2 NOT FAITHFUL, round 3 FAITHFUL - recorded in spec.md
 
 ## Phase 1 - the setting and the module
 
