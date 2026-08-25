@@ -129,6 +129,20 @@ claude() {
 BASHRC_BLOCK
 echo "    installed - takes effect in NEW shells (or run: source ~/.bashrc)"
 
+# ---- main's repo-local git config ---------------------------------------------------------------
+# A fresh checkout has neither setting and the ritual's first push is refused for both (measured
+# 2026-08-25, the split repository's first session). scripts/sync-with-main.sh also establishes
+# them on every run; doing it here too means a brand-new container is ready before any clone exists.
+echo "==> main's repo-local git config"
+if [ "$(git -C "$REPO" config --get receive.denyCurrentBranch || true)" != updateInstead ]; then
+    git -C "$REPO" config receive.denyCurrentBranch updateInstead && echo "    set receive.denyCurrentBranch=updateInstead"
+fi
+if [ -z "$(git -C "$REPO" config --get user.email || true)" ] && [ -n "$(git -C "$REPO" log -1 --format=%ae 2>/dev/null)" ]; then
+    git -C "$REPO" config user.name "$(git -C "$REPO" log -1 --format=%an)"
+    git -C "$REPO" config user.email "$(git -C "$REPO" log -1 --format=%ae)"
+    echo "    set committer identity from main's tip author: $(git -C "$REPO" config user.name) <$(git -C "$REPO" config user.email)>"
+fi
+
 echo "==> verifying"
 if check_all; then
     echo

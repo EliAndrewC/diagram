@@ -60,6 +60,31 @@ case "$(basename "$ROOT")" in
 esac
 cd "$ROOT"
 
+# REPO-LOCAL GIT CONFIG IS ESTABLISHED HERE, NOT BY HAND (GM 2026-08-25: "could they be done
+# automatically?"). Two settings used to be one-time manual steps that a fresh checkout silently
+# lacked - the split repository's first push was refused for both: main needs
+# receive.denyCurrentBranch=updateInstead (the push-to-checkout this script relies on), and a fresh
+# clone copies no user.name/user.email, so its first commit fails with "Author identity unknown".
+# Neither is a write to main's TREE, so the ritual may set them; the identity is derived from the
+# author of main's tip commit, which in this project is always the GM. Idempotent, and it says what
+# it set so a surprising identity is visible rather than silent.
+ensure_git_config() {
+  if [ "$(git -C "$MAIN" config --get receive.denyCurrentBranch || true)" != updateInstead ]; then
+    git -C "$MAIN" config receive.denyCurrentBranch updateInstead
+    echo "sync-with-main: set receive.denyCurrentBranch=updateInstead on $MAIN (one-time, now automatic)"
+  fi
+  local tree name email
+  for tree in "$MAIN" "$ROOT"; do
+    if [ -z "$(git -C "$tree" config --get user.email || true)" ]; then
+      name=$(git -C "$MAIN" log -1 --format=%an) && email=$(git -C "$MAIN" log -1 --format=%ae)
+      [ -n "$email" ] || die "cannot derive a committer identity: $MAIN has no commits"
+      git -C "$tree" config user.name "$name" && git -C "$tree" config user.email "$email"
+      echo "sync-with-main: set committer identity on $tree to '$name <$email>' (from main's tip author)"
+    fi
+  done
+}
+ensure_git_config
+
 sync_in() {
   git pull --no-rebase origin main
   # No render pull-in anymore (GM 2026-07-22): its old rationale was that a clone's stale renders

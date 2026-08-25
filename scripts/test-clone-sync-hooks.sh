@@ -117,6 +117,27 @@ OUT=$(cd "$FMAIN/.clones/gm-assistant" && CLONE_MAIN="$FMAIN" "$RITUAL" sync-in 
 check "ritual refuses to run from .clones/gm-assistant" 1 "$RC"
 case $OUT in *"FORBIDDEN"*) : ;; *) echo "FAIL  ritual refusal message missing 'FORBIDDEN': $OUT"; FAILED=1 ;; esac
 
+# ---- sync-with-main.sh establishes repo-local git config itself (GUARD_EDIT_OK: new test case) --
+# A fresh checkout of main lacks receive.denyCurrentBranch=updateInstead and a fresh clone copies
+# no committer identity; both refused the split repository's first push (2026-08-25). The ritual
+# now sets them, so a bare fixture must push cleanly and end up configured.
+FMAIN5=$TMP/main5
+git init -q "$FMAIN5"
+( export GIT_AUTHOR_NAME=Eli GIT_AUTHOR_EMAIL=eli@t GIT_COMMITTER_NAME=Eli GIT_COMMITTER_EMAIL=eli@t
+  echo m0 > "$FMAIN5/f"; git -C "$FMAIN5" add f; git -C "$FMAIN5" commit -qm m0 )
+mkdir -p "$FMAIN5/.clones/.session-clones"
+git clone -q "$FMAIN5" "$FMAIN5/.clones/bare"
+cp -r "$HERE" "$FMAIN5/.clones/bare/scripts"   # the push runs review-gate.sh and check-duplicate-defs.py from the clone
+mkdir -p "$FMAIN5/.clones/bare/.claude/skills/x" && echo 'def a(): return 1' > "$FMAIN5/.clones/bare/.claude/skills/x/a.py"   # check-duplicate-defs refuses to scan nothing
+( export GIT_AUTHOR_NAME=x GIT_AUTHOR_EMAIL=x@t GIT_COMMITTER_NAME=x GIT_COMMITTER_EMAIL=x@t
+  echo c1 > "$FMAIN5/.clones/bare/g"; git -C "$FMAIN5/.clones/bare" add g scripts .claude; git -C "$FMAIN5/.clones/bare" commit -qm c1 )
+[ -z "$(git -C "$FMAIN5" config --get receive.denyCurrentBranch || true)" ] || { echo "FAIL  fixture: main5 already had denyCurrentBranch"; FAILED=1; }
+OUT=$(cd "$FMAIN5/.clones/bare" && HOME=$TMP CLONE_MAIN="$FMAIN5" "$RITUAL" push 2>&1); RC=$?
+check "ritual push from a bare fixture (no updateInstead, no identity) succeeds" 0 "$RC"
+[ "$(git -C "$FMAIN5" config --get receive.denyCurrentBranch)" = updateInstead ] || { echo "FAIL  ritual did not set updateInstead on main: $OUT"; FAILED=1; }
+[ "$(git -C "$FMAIN5/.clones/bare" config --get user.email)" = eli@t ] || { echo "FAIL  ritual did not set the clone's identity from main's tip author: $OUT"; FAILED=1; }
+[ "$(git -C "$FMAIN5" log -1 --format=%s)" = c1 ] || { echo "FAIL  push-to-checkout did not land on main5: $OUT"; FAILED=1; }
+
 # ---- prompt-mode: the .specify/feature.json re-track guard -------------------------------------
 # The pointer must stay gitignored. common.sh resolves FEATURE_DIR from it at priority 2, ABOVE the
 # SPECIFY_FEATURE env var at priority 3, so a TRACKED copy merges between concurrent sessions and
