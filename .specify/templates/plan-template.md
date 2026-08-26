@@ -149,6 +149,10 @@ approval before /speckit-tasks may run.
     (topography / season / tenure / economy). A design that does not match is
     changed or dropped HERE, not implemented and revisited. Grounding that
     led to REJECTING a design MUST be recorded too.
+- [ ] **XII, decisions for the reader (GM 2026-08-26)**: every rendering decision this plan
+      makes is classified accurate / deviation / guess with its reason, lands in `research/` +
+      the operative doc + a pointer at the point of change, and is listed in the spec's
+      "Decisions Recorded" table. A guess is labelled a guess.
   - **Closing (final phase, before "done")**: re-examine the RENDERED
     ARTIFACT (the PNG - not the code, not the intent) and confirm each element
     still matches the Phase 0 findings. This is separate from the automated

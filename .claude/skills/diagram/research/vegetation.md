@@ -59,3 +59,18 @@ Every entry: what the research found, the decision it drove, and any deliberate 
 - *What prompted it.* After the drawn-width fix (previous section), tufts still seeded the 10-16 ft berm strips between the supply channels and the dry hem plots: the drawn-width skip (2 px pad) and the 6 ft crop margin each guarded their own edge and left a legal sliver mid-strip. The GM read the strips as scrub crowding the channels and resolved the open decision: the bank takes a margin too.
 - *The decision.* The `commons` scatter (all roles) stands its base points `_BANK_MARGIN_FT = 6.0` real feet off the drawn water edge of every IRRIGATION course - `M['channels']` and `M['drawn_channels']` at their drawn (piece-tapered) widths, converted at the map's `ftpx`. The reasoning is the crop margin's, applied to the bank: a supply channel's bank is maintained ground - walked for sluice operation and bund upkeep, its grass scythed for fodder on the same rotation as the field margins - so woody scrub never establishes within a swath of the water. 6 ft = one scythe swath, the same figure as `_CROP_MARGIN_FT`. Between them the crop margin and the bank margin close any berm strip up to ~12 ft of bare ground, which covers every hem berm the comb builds (Inashiro's run 3-9 ft).
 - *Deliberate exclusions.* (1) STREAMS take no margin - a natural brook bank is vegetated to the water's edge, and the 2026-08-16 settlement-review pass explicitly praised the ABSENCE of a sterile halo on the banks; only the engineered courses are maintained ground. (2) The reed `marsh` keeps its no-margin rule from the crop-margin entry - reeds ARE the water fringe. (3) Grass-tuft blade TIPS keep their few-feet lean allowance, exactly as at crop edges.
+
+
+## The marsh margin: grass grades into reed; woody cover stands on the dry ground - GUESS
+
+**Label: guess** (reasoning, unsourced; GM 2026-08-26, feature 133 T12). When the scrub scatter was
+made to stop at the marsh, a hard cut at the polygon exposed a ruled line (the reeds feather inset
+from it), and letting every scrub family thin into the reeds put pines and brush standing in the
+bog. The form chosen - grass blades alone grade into the reeds over the marsh's own feather, pines
+and brush dots stop at the polygon - rests on the general ecology of a wetland margin (hydrophytic
+sedge and grass toward the water, shrubs and trees on the drier rise) and on the GM's reading of the
+map, not on a searched source for a Chinese or Japanese paddy-valley toe. It is plausible and it is
+a guess; a reader of the future interactive map is told so. What the marsh glyphs ARE: teal reed
+tufts (*ashi / yoshi*, 葦, the common reed - not bamboo), a soft blue-green wet tint, and pale
+glints of standing water; the olive blades at its margin are the dry commons' grass fading in.
+**Grounds:** `settlements/vegetation.md` "Scrub NEVER scatters into a marsh"; `cover.py` `_in_soft`.

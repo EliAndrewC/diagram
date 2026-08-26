@@ -1,7 +1,14 @@
 <!--
 SYNC IMPACT REPORT
 ==================
-Version change: 2.2.0 → 2.3.0
+Version change: 2.4.0 → 2.5.0
+
+Version 2.5.0 (amended 2026-08-26, feature 133): Principle XII gains "EVERY RENDERING DECISION IS
+CAPTURED FOR THE READER WHO WILL CLICK ON IT" - the GM's statement of the long-term goal (interactive
+HTML maps where a player hovers or clicks a feature and learns what it is, why it is there, and
+whether it is historically accurate, a deliberate deviation, or a guess) and the three-way
+classification every decision must carry from now on. The spec template gains a mandatory
+"Decisions Recorded" section; the plan template's Constitution Check gains the row. MINOR.
 
 Version 2.3.0 (amended 2026-08-25, feature 133): the Development Workflow gains "Iteration
 wall-clock is the cost" - the GM's statement of the goal every guard, gate and switch in this
@@ -1085,6 +1092,64 @@ element whose DEGREE is uncertain along a continuum (how large, how dense, how
 often) where the project needs one figure to draw. Where the uncertainty is
 between DISTINCT FORMS, it is a knob.
 
+**EVERY RENDERING DECISION IS CAPTURED FOR THE READER WHO WILL CLICK ON IT (GM
+2026-08-26).** The record-the-why rules (`CLAUDE.md`: the why of every
+research-driven rule; the alternatives declined when a limitation is
+accepted) have a purpose beyond protecting the next session from redoing the
+research, and the purpose decides what must be captured. The GM's long-term
+goal, in their words: *"one of my goals is to be able to create HTML versions
+of these maps. After all, the maps themselves begin as coordinates, which get
+rendered into SVG, which get converted to png image files, but that could
+easily also be extended to render an HTML version ... a player might hover
+over a brush land and then see it highlighted and then be able to click on it
+to learn more about it. This would allow us to do things like explain why is
+there a brush land here, what is meant by these glyphs that are being
+rendered, and so forth. And then, of course, this would be most useful when
+rendering city maps where players might highlight a type of building and then
+see every building of that type highlighted and then be able to click on it
+to learn more about that type of building ... a tannery or a dojo or a Samurai
+country estate ... Why are they placed where they are on the map? What are
+some interesting historical facts about them?"* Their examples of what that
+reader is told: a tannery stands by water because hides are soaked, so it is
+always beside a stream, a drainage ditch or a river on our maps; wells are
+drawn larger than true size because a well matters to a premodern settlement
+and must be visible; a few samurai country estates stand nearer the city than
+the attested distance so that the feature is visible without zooming out, and
+so the GM has one to point to when players visit one.
+
+So every decision about how a map is rendered - a glyph, a size, a placement
+rule, a distance, a density, a color convention - MUST be recorded in a form
+that reader can be shown, and MUST say which of THREE things it is:
+
+1. **Historically accurate** - what the record says, with the finding that
+   grounds it (Principle XII's research bookends already require this).
+2. **A deliberate deviation** - drawn other than the record says, and WHY:
+   legibility (the well), showing a feature type on the sheet (the near
+   estate), consistency with Legend of the Five Rings canon, or a priced
+   trade-off (`CLAUDE.md`: record the accepted limitation and the
+   alternatives declined).
+3. **A guess** - the record is silent or gives no firm number, and this is
+   what we chose and on what reasoning. Unsourced reasoning is not a fault,
+   but an unlabelled guess is: the reader must never be told a guess is a
+   finding. (Today's example: "a bog's margin is sedge grading into reed, and
+   woody cover stands on the dry ground above it" was the reasoning behind
+   letting grass alone grade into the marsh - it is plausible and it is
+   unsourced, and `research/vegetation.md` says so.)
+
+Where it lives: the finding and its classification in the skill's `research/`
+file for that feature family (the interactive map will read from there); the
+operative rule in the `settlements/` or `buildings.md` doc; the pointer at the
+point of change in the code. A feature's `spec.md` lists, in its "Decisions
+Recorded" section, every rendering decision it made and where each landed -
+the spec review (Principle XVI) checks that section against the diff. This
+will be built long after the decisions are made; the record is kept now
+because a decision unrecorded at the time it is made is unrecoverable later,
+and because *"it is very important that all decisions that we make about how
+maps are rendered be captured so that we can communicate both what is
+historically accurate and what deviates as well as the things that we had to
+make guesses about because there simply are not firm numbers about such
+things."*
+
 **Enforcement.** `/speckit-plan` MUST record both gates in its Constitution
 Check. A feature that cannot state its grounding is not ready to build. The
 findings MUST be written where the rule lives (per the "record the why" rule
@@ -1586,4 +1651,4 @@ document wins; where this document is silent, defer to the project's
 guidance. This constitution is the higher-level authority; CLAUDE.md
 operationalizes it.
 
-**Version**: 2.4.0 | **Ratified**: 2026-05-27 | **Last Amended**: 2026-08-26
+**Version**: 2.5.0 | **Ratified**: 2026-05-27 | **Last Amended**: 2026-08-26

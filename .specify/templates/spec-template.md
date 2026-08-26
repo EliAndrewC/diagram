@@ -117,6 +117,22 @@
 - **SC-003**: [User satisfaction metric, e.g., "90% of users successfully complete primary task on first attempt"]
 - **SC-004**: [Business metric, e.g., "Reduce support tickets related to [X] by 50%"]
 
+## Decisions Recorded *(mandatory for any feature that changes what a map draws or states)*
+
+<!--
+  Constitution XII, "every rendering decision is captured for the reader who will click on it"
+  (GM 2026-08-26): the long-term goal is an interactive HTML map where a player clicks a feature
+  and is told what it is, why it is there, and whether that is historically accurate, a deliberate
+  deviation, or a guess. List EVERY rendering decision this feature makes - a glyph, a size, a
+  placement rule, a distance, a density - with its class and where the record landed. The spec
+  review (Principle XVI) checks this table against the diff. Delete the section only for a
+  feature that draws and states nothing (tooling, docs, tests).
+-->
+
+| Decision | Class (accurate / deviation / guess) | Why | Recorded at |
+|---|---|---|---|
+| [e.g. footplanks over every ditch >= 2 ft] | [guess - the record is silent on whether a 2-shaku ditch was planked; the GM ruled] | [...] | [`research/water.md#...`, `settlements/water.md`, comment at `waterfields/frame.py:FOOTPLANK_MIN_FT`] |
+
 ## Assumptions
 
 <!--

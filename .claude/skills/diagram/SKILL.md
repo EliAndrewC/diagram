@@ -21,6 +21,20 @@ map, `make quick`), batches changes so one verification covers many, and treats 
 ran long as a finding about the tooling. The dev loop with the measured numbers is
 [`CLAUDE.md`](CLAUDE.md).
 
+## What the record is for: the interactive map (long-term goal, GM 2026-08-26)
+
+Every map begins as coordinates, becomes SVG, becomes PNG - and will one day also become **HTML**,
+where a player hovers a feature to see it highlighted and clicks it to learn what it is, why it is
+there, and whether that is historically accurate, a deliberate deviation, or a guess. On a city map:
+highlight every tannery, dojo or samurai country estate at once and read the research behind it -
+a tannery stands by water because hides are soaked; a well is drawn larger than life because it
+matters and must be visible; a few estates stand nearer the city than attested so the feature type
+is on the sheet and the GM has one to point to. That reader is why [`research/`](research/) keeps
+the finding behind every rule, why [`settlements/`](settlements/) and [`buildings.md`](buildings.md)
+keep the rule, why the code keeps a pointer at the point of change, and why every decision carries
+one of three labels: **accurate / deviation / guess**. Nothing is built for it yet; the record is
+kept now because a decision unrecorded when it is made cannot be recovered later. Constitution XII.
+
 ## Core principle: roughly to scale
 
 Every diagram now carries a **declared scale** - the GM's scale ladder (2026-07, extended to Mode A):
