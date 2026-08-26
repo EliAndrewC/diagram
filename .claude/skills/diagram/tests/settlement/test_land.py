@@ -67,7 +67,10 @@ def test_hinterland_scrub_ring_and_marsh_downhill_each_cardinal():
     # angle: 90=S(+y), 270=N(-y), 0=E(+x), 180=W(-x).
     import math
 
-    for down_deg in (90, 270, 0, 180):
+    from tests._scope import subset
+
+    # QUICK: one cardinal per axis (S, E); EXHAUSTIVE: all four. Last full run green 2026-08-26 (T19).
+    for down_deg in subset((90, 0, 270, 180), 2):
         s = _hamlet_with_field(down_deg)
         s.hinterland()
         toe = [m for m in s.M["marshes"] if m["role"] == "toe"]

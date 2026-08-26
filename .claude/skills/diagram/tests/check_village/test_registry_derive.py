@@ -169,7 +169,7 @@ def test_derive_guard_fires_on_override_outside_free():
 def test_dropping_the_needs_override_diverges_from_the_fixture():
     """The 0324_500 override is load-bearing: without it the derived needs is the conservative
     superset and the fixture oracle catches the divergence (research.md R5)."""
-    fields = _derive_fields(reg._PKG_DIR)
+    fields = reg._cached_fields(reg._source_key()) or _derive_fields(reg._PKG_DIR)  # the cache is the same fields when its key matches (T19)
     derived = fields["_seg_0324_500__comb_supply_commands_both_flanks"].needs
     frozen = next(tuple(r["needs"]) for r in FIXTURE["rows"] if r["name"] == "_seg_0324_500__comb_supply_commands_both_flanks")
     assert derived != frozen

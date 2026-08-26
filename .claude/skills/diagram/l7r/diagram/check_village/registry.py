@@ -166,7 +166,7 @@ def _cached_fields(key: str) -> dict[str, _SegFields] | None:
         data = json.loads(_CACHE_PATH.read_text())
         if data["key"] != key:
             return None
-        return {d["name"]: _SegFields(tuple(d["free"]), tuple(d["writes"]), tuple(d["checks"]), tuple(d["needs"]), bool(d["meta"]), bool(d["always"])) for d in data["rows"]}
+        return {d["name"]: _SegFields(tuple(d["free"]), tuple(d["writes"]), tuple(d["checks"]), tuple(d.get("needs_raw", d["needs"])), bool(d["meta"]), bool(d["always"])) for d in data["rows"]}
     except OSError, ValueError, KeyError, TypeError:
         return None
 
@@ -175,6 +175,7 @@ def _derive_rows(names: set[str], fresh: bool = False) -> list[dict[str, Any]]:
     """`fresh=True` derives from the AST no matter what the disk cache holds - the round-trip tests
     that PROVE the cache faithful must not read the cache to do it."""
     fields = (None if fresh else _cached_fields(_source_key())) or _derive_fields(_PKG_DIR)
+    raw_needs = {nm: f.needs for nm, f in fields.items()}  # before the overrides - cached as `needs_raw` so a cached derivation can be re-overridden
     if set(fields) != names:
         raise _DerivationError(f"AST scan and import scan disagree on segments: {sorted(set(fields) ^ names)}")
     for nm, needs in _NEEDS_OVERRIDES.items():
@@ -187,7 +188,7 @@ def _derive_rows(names: set[str], fresh: bool = False) -> list[dict[str, Any]]:
     for nm in _ordered_names(names, _PLACEMENTS):
         f = fields[nm]
         # JSON-shaped (lists, not tuples) so freshly derived rows compare equal to cached ones
-        out.append({"name": nm, "free": list(f.free), "writes": list(f.writes), "checks": list(f.checks), "needs": list(f.needs), "meta": f.meta, "always": f.always})
+        out.append({"name": nm, "free": list(f.free), "writes": list(f.writes), "checks": list(f.checks), "needs": list(f.needs), "meta": f.meta, "always": f.always, "needs_raw": list(raw_needs[nm])})
     return out
 
 

@@ -1,7 +1,13 @@
 <!--
 SYNC IMPACT REPORT
 ==================
-Version change: 2.6.0 → 2.7.0
+Version change: 2.7.0 → 2.8.0
+
+Version 2.8.0 (amended 2026-08-26, feature 133 T19): the Development Workflow gains "A test's cost is a
+cost, and the phase sets the standard" - the GM's ruling that, in this phase, a slow test must earn
+its time: sweeps run a documented subset by default and their exhaustive form on request
+(`EXHAUSTIVE=1`), with the last exhaustive green recorded in the docstring; the balance may swing
+back when wrong maps become the larger problem. MINOR.
 
 Version 2.7.0 (amended 2026-08-26, feature 133): Principle XII gains "A GUESS IS THE LAST RESORT - THE
 RESEARCH PASS ALWAYS RUNS FIRST": any decision that would be labelled a guess gets the search pass
@@ -1624,6 +1630,29 @@ and lands its findings as follow-ups. Every pass is a row in
 `docs/review-ledger.md`, and a miss becomes a rule in the agent, proven to
 fire on the unfixed artifact. Doctrine: `.claude/skills/diagram/dev/reviews.md`.
 
+**A test's cost is a cost, and the phase sets the standard (GM 2026-08-26,
+feature 133 T19).** The GM: *"our project has gone through a phase in which
+for a long time, we had problems with the maps being wrong. And so we really
+ratcheted up our standards for what it took to make a map pass. But now that
+we have locked in on a way to generate maps in a scripted way which is
+generally correct ... having tests that take a long time to run is the bigger
+problem, and that is impairing our ability to move forward."* So, in this
+phase: a test above the quick suite's cutoff (~0.5 s) must EARN its time. Ask
+of each one what is taking the time, and whether the test gives nearly all of
+its value cheaper - one seed instead of a sweep, two cardinals instead of
+four, a 3-fan comb instead of a 5-fan one, one axis of a matrix instead of the
+product, the tier's own maps instead of the whole pool. A sweep that is kept
+runs its documented subset by default and its full form under `EXHAUSTIVE=1`
+(`tests/_scope.py`); the docstring records the date the exhaustive form last
+ran green, so the subset is a recorded decision and the full check can be
+re-run whenever there is cause. Evidence, not habit, decides: the GM's
+judgment is that seed-dependent passes slipping through is *"not based on any
+real evidence in this case"*, and the balance is expected to swing back -
+*"we might reach a point ... where we find that maps with problems being
+generated is a larger issue than the iteration time"* - at which point the
+subsets widen again. Either way it is a documented setting, not a lost
+standard.
+
 **Cycle discipline (GM 2026-08-26, feature 133 T10)**
 The round trip, not the test, is the cost: a quick run is ~35 s and the
 model turn around it is longer. Measured on the first task of the
@@ -1693,4 +1722,4 @@ document wins; where this document is silent, defer to the project's
 guidance. This constitution is the higher-level authority; CLAUDE.md
 operationalizes it.
 
-**Version**: 2.7.0 | **Ratified**: 2026-05-27 | **Last Amended**: 2026-08-26
+**Version**: 2.8.0 | **Ratified**: 2026-05-27 | **Last Amended**: 2026-08-26

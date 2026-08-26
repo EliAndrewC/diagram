@@ -66,5 +66,11 @@ def pool_tier_glob(request):  # type: ignore[no-untyped-def]
 
 
 def pytest_report_header(config):  # type: ignore[no-untyped-def]
+    from tests._scope import EXHAUSTIVE
+
     tier = config.getoption("--tier")
-    return f"tier: {tier} - tests tagged for other tiers only are deselected (scope locked to the reference settlement)" if tier else None
+    lines = []
+    if tier:
+        lines.append(f"tier: {tier} - tests tagged for other tiers only are deselected (scope locked to the reference settlement)")
+    lines.append("scope: EXHAUSTIVE - every sweep in full" if EXHAUSTIVE else "scope: quick - sweeps run their documented subset (EXHAUSTIVE=1 for the full form)")
+    return lines

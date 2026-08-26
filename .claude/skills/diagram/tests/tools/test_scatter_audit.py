@@ -228,7 +228,7 @@ def test_crown_fills_covers_every_recorded_crown(pool_tier_glob):
         recorded = len(json.loads(Path(stem + ".json").read_text()).get("tree_crowns") or []) // 3
         if not recorded:
             continue
-        parsed = sa.parse_bases(Path(stem + ".svg").read_text())["crown"]
+        parsed = sa.parse_bases(Path(stem + ".svg").read_text(), families=("crown",))["crown"]  # crowns only: the guard is about CROWN_FILLS
         assert len(parsed) >= recorded, f"{os.path.basename(stem)}: parsed {len(parsed)} crowns against {recorded} recorded - CROWN_FILLS has lost a drawing site"
         # ...AND ON THE CANVAS, which counting cannot tell you. The count half of this guard passed
         # at 1446 >= 1446 for weeks while ~78% of the crown family was adjudicated at LOCAL

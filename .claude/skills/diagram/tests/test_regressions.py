@@ -43,6 +43,26 @@ HERE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))  # the skill 
 CORPUS = sorted(glob.glob(os.path.join(HERE, "pool", "regressions", "*.json")))
 
 
+def _fixture_tier(path):
+    """The fixture's own settlement tier, read cheaply from the head of the file (meta is the first
+    key of every manifest), so the corpus participates in `--tier` (GM 2026-08-26, T19): a hamlet
+    run replays the hamlet and village fixtures, not the 352 city ones."""
+    import re
+
+    with open(path) as fh:
+        m = re.search(r'"scale":\s*"(hamlet|village|town|city|capital)"', fh.read(4096))
+    return m.group(1) if m else None
+
+
+def _corpus_params():
+    out = []
+    for p in CORPUS:
+        tier = _fixture_tier(p)
+        marks = [pytest.mark.tiers(tier)] if tier else []
+        out.append(pytest.param(p, marks=marks, id=os.path.basename(p)))
+    return out
+
+
 def _load(path):
     with open(path) as fh:
         M = json.load(fh)
@@ -62,7 +82,7 @@ def test_corpus_is_not_empty():
     assert CORPUS, "no regression fixtures found in pool/regressions/"
 
 
-@pytest.mark.parametrize("path", CORPUS, ids=[os.path.basename(p) for p in CORPUS])
+@pytest.mark.parametrize("path", _corpus_params())
 def test_regression_fixture_still_fires(path):
     M, fires = _load(path)
     failed = _replay(M, fires)

@@ -154,9 +154,9 @@ def test_bund_junctions_pile_earth_only_where_bunds_actually_cross():
 def test_land_use_overlay_draws_and_records_each_kind():
     from l7r.diagram.waterfields import build_comb
 
-    net = build_comb(1900, 2680, (760, 320), 5, down_deg=90, field_fall=1260, offtakes_a=(0.32, 0.7), offtakes_b=())
+    net = build_comb(1300, 1700, (520, 220), 3, down_deg=90, field_fall=760, offtakes_a=(0.32, 0.7), offtakes_b=())
     for overlay in ("mulberry_fishpond", "lotus", "tea_fringe"):
-        s = Settlement(2000, 2800, seed=3)
+        s = Settlement(1400, 1800, seed=3)
         s.meta(name="LU", scale="village", ftpx=1, down_deg=90)
         n = s.apply_land_use(net, overlay, __import__("random").Random(1))
         assert n > 0 and s.M["meta"]["land_use_overlay"] == overlay and s.out
@@ -169,7 +169,7 @@ def test_land_use_overlay_draws_and_records_each_kind():
             assert rec["eligible"] == "wet" and len(rec["plots"]) == n
             assert all(tuple(p) in wet for p in rec["plots"])
     # "none" records zero and draws nothing extra
-    s0 = Settlement(2000, 2800, seed=3)
+    s0 = Settlement(1400, 1800, seed=3)
     s0.meta(name="LU0", scale="village", ftpx=1, down_deg=90)
     assert s0.apply_land_use(net, "none", __import__("random").Random(1)) == 0
     with pytest.raises(ValueError):
@@ -181,14 +181,14 @@ def test_land_use_overlay_topography_paths():
     growth, and the named wholesale-conversion opt-out that ignores the topographic filter."""
     from l7r.diagram.waterfields import build_comb
 
-    net = build_comb(1900, 2680, (760, 320), 5, down_deg=90, field_fall=1260, offtakes_a=(0.32, 0.7), offtakes_b=())
+    net = build_comb(1300, 1700, (520, 220), 3, down_deg=90, field_fall=760, offtakes_a=(0.32, 0.7), offtakes_b=())
     dry = {**net, "plots": [{**p, "low": False} for p in net["plots"]]}  # a field with NO low/wet ground
-    s = Settlement(2000, 2800, seed=3)
+    s = Settlement(1400, 1800, seed=3)
     s.meta(name="LU1", scale="village", ftpx=1, down_deg=90)
     assert s.apply_land_use(dry, "lotus", __import__("random").Random(1)) == 0  # draws nothing, honestly
     assert s.M["land_use"][-1]["plots"] == []
     # eligible="all" is the ARCHETYPE opt-out: it converts ordinary rice ground too
-    s2 = Settlement(2000, 2800, seed=3)
+    s2 = Settlement(1400, 1800, seed=3)
     s2.meta(name="LU2", scale="village", ftpx=1, down_deg=90)
     n2 = s2.apply_land_use(dry, "mulberry_fishpond", __import__("random").Random(1), fraction=0.9, eligible="all")
     assert n2 > 0 and s2.M["land_use"][-1]["eligible"] == "all"
@@ -196,7 +196,7 @@ def test_land_use_overlay_topography_paths():
     # records them - every plot is either converted or a recorded leftover, none floats as a bare outline
     assert len(s2.M["land_use"][-1]["leftover_plots"]) == len(dry["plots"]) - n2
     # the partial-overlay path records no leftovers (its unconverted plots are ordinary comb paddies)
-    s3 = Settlement(2000, 2800, seed=3)
+    s3 = Settlement(1400, 1800, seed=3)
     s3.meta(name="LU3", scale="village", ftpx=1, down_deg=90)
     s3.apply_land_use(net, "mulberry_fishpond", __import__("random").Random(1))
     assert s3.M["land_use"][-1]["leftover_plots"] == []

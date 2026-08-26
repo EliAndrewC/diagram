@@ -266,13 +266,13 @@ def test_build_comb_supply_banks_hems_bunds_onto_the_channel_banks():
         return n
 
     kw = dict(down_deg=90, field_fall=1260, offtakes_a=(0.32, 0.7), offtakes_b=(0.5,))
-    net = build_comb(1900, 2680, (760, 320), 5, supply_banks=True, **kw)
+    net = build_comb(1300, 1700, (520, 220), 3, supply_banks=True, **kw)  # a 3-fan comb (T19: the 5-fan one cost 2.3 s and proved the same clearance)
     assert any(c.get("role") != "drain" for c in net["channels"])  # the comb drew supply strokes
     assert buried_corners(net, BANK_MARGIN - 0.15) == 0  # every corner clear of every bank (the gate's own line)
     # ... and the legacy default really is the legacy carve: the same comb without the flag lays
     # sector-boundary bunds ON the thread centerlines, i.e. inside the drawn water. If this half
     # ever goes green, the fix has become the default and the flag (plus this guard) can retire.
-    assert buried_corners(build_comb(1900, 2680, (760, 320), 5, **kw), -0.15) > 0
+    assert buried_corners(build_comb(1300, 1700, (520, 220), 3, **kw), -0.15) > 0
 
 
 def test_paddy_grain_hits_the_real_feet_target():

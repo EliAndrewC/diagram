@@ -302,14 +302,14 @@ def test_cluster_anchor_places_each_position_on_the_right_dry_margin():
 def test_plot_texture_drives_build_comb_grain():
     from l7r.diagram.waterfields import build_comb
 
-    s = Settlement(2000, 2800, seed=1)
+    s = Settlement(1400, 1800, seed=1)
     s.meta(name="Pt", scale="village", ftpx=2)  # ftpx>=2 -> the real-feet calibration branch (the ft/px=1 hamlet legacy branch is covered by honda/shimizu)
     # small_irregular vs large_block must produce visibly different plot counts on the SAME field
     a_small, step_small = s.plot_texture("small_irregular", "organic")
     a_large, _step_large = s.plot_texture("large_block", "organic")
     assert a_small < a_large  # smaller plot_across = smaller paddies
-    net_small = build_comb(1900, 2680, (760, 320), 5, down_deg=90, field_fall=1260, offtakes_a=(0.32, 0.7), offtakes_b=(), plot_across=a_small, row_step=step_small)
-    net_large = build_comb(1900, 2680, (760, 320), 5, down_deg=90, field_fall=1260, offtakes_a=(0.32, 0.7), offtakes_b=(), plot_across=a_large)
+    net_small = build_comb(1300, 1700, (520, 220), 3, down_deg=90, field_fall=760, offtakes_a=(0.32, 0.7), offtakes_b=(), plot_across=a_small, row_step=step_small)
+    net_large = build_comb(1300, 1700, (520, 220), 3, down_deg=90, field_fall=760, offtakes_a=(0.32, 0.7), offtakes_b=(), plot_across=a_large)
     assert len(net_small["plots"]) > len(net_large["plots"])  # small paddies -> more plots
     # grid tightens the row-step spread vs organic
     _a, org = s.plot_texture("medium", "organic")

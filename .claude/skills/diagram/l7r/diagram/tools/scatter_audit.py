@@ -75,7 +75,7 @@ def _translated_spans(svg: str) -> list[tuple[int, int, float, float]]:
     return spans
 
 
-def parse_bases(svg: str) -> dict[str, list[Base]]:
+def parse_bases(svg: str, families: tuple[str, ...] | None = None) -> dict[str, list[Base]]:
     """Every scatter BASE point per family, in document order, in WORLD coordinates.
 
     Most element coords already are world coords - `crop_to_content` crops via the viewBox and never
@@ -90,11 +90,18 @@ def parse_bases(svg: str) -> dict[str, list[Base]]:
     guard that counts is blind to a family that sees the right NUMBER of things somewhere else; the
     guard is positional now, and this parser resolves the transform."""
     fams: dict[str, list[Base]] = {"blade": [], "dot": [], "pine": [], "crown": [], "reed": []}
+    want = set(families) if families else set(fams)  # `families` limits the parse to the ones asked for (a crown guard need not scan 220k blades)
     for group, fam in ((_BLADE_GROUP, "blade"), (_REED_GROUP, "reed")):
+        if fam not in want:
+            continue
         for body in group.findall(svg):
             fams[fam] += [(float(x), float(y)) for x, y in _LINE_BASE.findall(body)]
-    fams["dot"] = [(float(x), float(y)) for x, y in _DOT.findall(svg)]
-    fams["pine"] = [(float(x), float(y)) for x, y, _, _ in _PINE.findall(svg)]
+    if "dot" in want:
+        fams["dot"] = [(float(x), float(y)) for x, y in _DOT.findall(svg)]
+    if "pine" in want:
+        fams["pine"] = [(float(x), float(y)) for x, y, _, _ in _PINE.findall(svg)]
+    if "crown" not in want:
+        return fams
     spans = _translated_spans(svg)
 
     def _offset(at: int) -> tuple[float, float]:

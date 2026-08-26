@@ -244,8 +244,18 @@ def test_justice_town_fixture_passes_every_justice_check():
 
 @pytest.mark.parametrize("hazard,expect,where,build,exempt", _HAZARDS, ids=[h[0].replace(" ", "_").replace("'", "") for h in _HAZARDS])
 def test_every_solid_struct_is_gated_off_every_hazard(hazard, expect, where, build, exempt):
+    """TWO AXES IN THE QUICK FORM, THE FULL MATRIX UNDER EXHAUSTIVE (GM 2026-08-26, T19). The property
+    is that every check reads `solid_structs(M)` rather than a hand list of keys, and a hand list
+    fails on a MISSING KEY, not on a missing (key, hazard) pair - so each hazard is proven against
+    the first struct kind here, and every struct kind is proven against one hazard in
+    `test_every_solid_struct_is_gated_off_one_hazard`. That is ~35 targeted gates instead of ~300
+    (25.8 s of quick, the single largest item). Full matrix last run green: 2026-08-26
+    (`make quick EXHAUSTIVE=1`)."""
+    from tests._scope import EXHAUSTIVE
+
     missed = []
-    for key in check_village._OVERLAP_STRUCTS:
+    keys = check_village._OVERLAP_STRUCTS if EXHAUSTIVE else tuple(k for k in check_village._OVERLAP_STRUCTS if k not in exempt)[:1]
+    for key in keys:
         if key in exempt:
             continue
         M = _haz_base()
@@ -257,6 +267,23 @@ def test_every_solid_struct_is_gated_off_every_hazard(hazard, expect, where, bui
         f"{missed} sit on {hazard} without tripping {expect} - every _OVERLAP_STRUCTS key must be gated off every "
         f"hazard. The check is probably reading a hand-written list of manifest keys instead of solid_structs(M)."
     )
+
+
+def test_every_solid_struct_is_gated_off_one_hazard():
+    """The other axis of the matrix above: every `_OVERLAP_STRUCTS` key against one hazard (the
+    moat - a linear feature every solid must clear), so a key missing from a hand-written list is
+    caught here even though the quick form of the matrix tests one key per hazard."""
+    hazard, expect, where, build, exempt = _HAZARDS[1]
+    missed = []
+    for key in check_village._OVERLAP_STRUCTS:
+        if key in exempt:
+            continue
+        M = _haz_base()
+        M.update(build())
+        M.setdefault(key, []).append(solid(key, *where))
+        if expect not in f(M):
+            missed.append(key)
+    assert not missed, f"{missed} sit on {hazard} without tripping {expect}"
 
 
 def test_the_new_trade_works_are_classified_in_both_registries():

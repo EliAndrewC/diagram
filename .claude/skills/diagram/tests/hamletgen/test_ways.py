@@ -293,8 +293,10 @@ def test_join_orphan_ways_gives_up_rather_than_forcing_a_link() -> None:
     # The barrier has to be genuinely CLOSED, not merely long: a link may now go the long way round,
     # which is the fix that joined the two halves of a split hamlet. A fence it can walk around is
     # not a test of giving up, it is a test of the detour.
-    s = _StubSettlement(lanes=[[(0.0, 0.0), (0.0, 200.0)], [(900.0, 0.0), (900.0, 200.0)]])
-    box = [(700.0, -300.0), (1150.0, -300.0), (1150.0, 520.0), (700.0, 520.0)]
+    # a 300 px gap, not 900: the router searches the whole gap before giving up, and a 900 px one
+    # cost 1.9 s for the same "walled in" verdict (T19, 2026-08-26)
+    s = _StubSettlement(lanes=[[(0.0, 0.0), (0.0, 200.0)], [(300.0, 0.0), (300.0, 200.0)]])
+    box = [(200.0, -300.0), (450.0, -300.0), (450.0, 520.0), (200.0, 520.0)]
     assert hg.ways._join_orphan_ways(s, [box], [], []) == 0
     assert len(s.M["lanes"]) == 2, "no link drawn when the orphan is walled in"
 

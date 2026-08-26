@@ -115,6 +115,8 @@ def _census() -> set[str]:
             path = os.path.join(root, fn)
             with open(path) as fh:
                 src = fh.read()
+            if "waterfields" not in src:
+                continue  # cannot consume what it never names (T19: skips the AST parse of ~280 files)
             try:
                 tree = ast.parse(src)
             except SyntaxError:  # a scratch or wip file that does not parse is not a consumer
