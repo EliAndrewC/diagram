@@ -556,6 +556,27 @@ ours is a straight contour band with square lateral ends. Curving it would be mo
 band is a ground-cover region whose reeds are scattered and feathered to nothing at the margin, so
 the square end is not visible as an edge. Revisit if a map ever shows one.
 
+*REVISITED 2026-08-26 (feature 133 T30) - a map showed one.* The GM, on Inashiro: *"I would have
+expected that the marshland would run parallel to the drainage ditch, but what we actually have is
+a drainage ditch which runs at an angle ... and then marshland where the demarcation ... appears to
+run exactly east to west parallel to the edge of the map. that makes it look like a mistake rather
+than a feature of the geography."* Measured: the collector descends 19.5 deg across the contours to
+reach its pond; the band's single contour through the fan's lowest point left a **324 px wedge of
+dry ground** below the collector's upper reach and reeds 90 px ABOVE its lower end. The research
+pass (label: **accurate**): MAFF's field-drainage design standard places the field-toe interceptor
+drain (承水路) *"nearly parallel to the contours, with a gentle gradient"*, and the collectors
+(集水路/排水路) *perpendicular* to them at 200-300 m spacing
+([MAFF 排水路の形状・構造と適用条件](https://www.maff.go.jp/j/nousin/noukan/tyotei/kizyun/pdf/04_hojou_hata_gijutsusho20-23.pdf));
+the fan-toe spring line is an arc along the fan's foot (above). So in reality the toe drain and the
+wet edge run TOGETHER, and our collector's drawn grade is a legibility exaggeration of a fall of
+~0.1% (**deviation**, recorded: the drain is drawn steep so its flow reads; the marsh must not
+inherit that fiction). *The decision:* `toe_band`'s inner edge is now sampled across the slope - at
+each station `pad` above the LOCAL lowest crop point, smoothed over three stations - so the reeds
+begin at the fan's foot everywhere along the collector (Inashiro: 57-89 px above the drain on every
+station, the reeds tucked under the crop by the paddy skip). The earlier note in
+`settlements/water.md` that the wedge "is nevertheless correct" because the ground sits at rice
+height is superseded: that argument took the drawn 20-degree grade for a real one.
+
 *What it changed:* dry ground appears at both lateral ends of every toe (Ikegami's spans x 402-1799
 on a 1900 px canvas, where it used to run -120 to 2020), and with it the settlements get their
 downslope exits back. Two connectors that had been turned out sideways purely because the old band

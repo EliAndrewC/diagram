@@ -207,7 +207,31 @@ class WetGroundMixin:
         u_lo, u_hi = min(us) - pad, max(us) + pad
         cu = [c[0] * ux + c[1] * uy for c in corners]
         u0, u1 = max(min(cu), u_lo), min(max(cu), u_hi)
-        return [(u * ux + v * dx, u * uy + v * dy) for u, v in ((u0, v_in), (u1, v_in), (u1, v_out), (u0, v_out))]
+        # THE INNER EDGE FOLLOWS THE FAN'S TOE, NOT ONE CONTOUR (GM 2026-08-26, feature 133 T30; researched -
+        # research/water.md "the marsh follows the fan's toe"). It used to be a single contour through the
+        # crop's lowest point anywhere, so on Inashiro the collector, which descends ~20 deg across the
+        # contours to reach its pond, left a 324 px wedge of dry ground below its upper reach while the
+        # reeds climbed above its lower end - and the boundary ran dead parallel to the frame, which the
+        # GM read as a mistake. It was: wet ground at a fan's foot is the spring line where the fan's
+        # seepage re-emerges, an ARC along the toe (the 2026-08-12 note already said "curving it would be
+        # more faithful"), and MAFF's own drainage standard puts the field-toe interceptor drain (承水路)
+        # nearly parallel to the contours - so in reality the toe drain and the wet edge run TOGETHER,
+        # and our collector's 20 deg grade is the drawn legibility of a fall that is really ~0.1%.
+        # Sampled across the slope: at each cross-slope station the edge sits `pad` above the LOCAL
+        # lowest crop point (a window of `pad` each side), so the reeds still tuck under the crop and the
+        # collector on every station. Smoothed by a running maximum over three stations so a fan corner
+        # cannot notch the band.
+        step = max(24.0, pad / 3)
+        n = max(2, int((u1 - u0) / step) + 1)
+        stations = [u0 + (u1 - u0) * k / (n - 1) for k in range(n)]
+        vs = [p[0] * dx + p[1] * dy for p in cult]
+        local: list[float] = []
+        for u in stations:
+            near = [v for v, uu in zip(vs, us, strict=True) if abs(uu - u) <= pad]
+            local.append((max(near) if near else v_in + pad) - pad)
+        edge = [max(local[max(0, k - 1) : k + 2]) for k in range(n)]
+        inner = [(u * ux + v * dx, u * uy + v * dy) for u, v in zip(stations, edge, strict=True)]
+        return inner + [(u1 * ux + v_out * dx, u1 * uy + v_out * dy), (u0 * ux + v_out * dx, u0 * uy + v_out * dy)]
 
 
 def surface_water_dist(M: Any, x: float, y: float) -> float:

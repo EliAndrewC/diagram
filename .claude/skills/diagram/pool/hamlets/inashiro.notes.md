@@ -1182,3 +1182,18 @@ and Chinese record; red pine a dry-slope tree. So grass grading into the reeds w
 is ACCURATE; an alder-willow carr along the toe is a second supportable form and a knob candidate
 (not built). `research/vegetation.md`. And a constitution rule (v2.7.0): a guess is the last resort -
 the research pass always runs first.
+
+
+## 2026-08-26 - the marsh follows the collector (feature 133 T30)
+
+The GM: *"I would have expected that the marshland would run parallel to the drainage ditch ...
+the demarcation ... appears to run exactly east to west parallel to the edge of the map. that makes
+it look like a mistake."* It was one, and a recorded note had defended it: the toe's inner edge was
+ONE contour through the fan's lowest point, so below the collector's upper reach lay a 324 px wedge
+of dry scrub while reeds climbed 90 px above its lower end. Research (MAFF drainage standard): the
+field-toe interceptor drain runs nearly parallel to the contours; the wet edge is the arc along the
+fan's foot; the collector's 20-degree drawn grade is legibility, not height. `toe_band` now samples
+its inner edge across the slope (`pad` above the local crop bottom, smoothed) - on this map the
+reeds begin 57-89 px above the drain on every station, i.e. at the fan's foot, tucked under the crop
+by the paddy skip. Labels: the marsh-follows-the-toe rule ACCURATE; the drain's drawn grade a
+recorded DEVIATION. No per-task review (dev/reviews.md); the GM looks at the map.
