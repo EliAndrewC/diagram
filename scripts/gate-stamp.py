@@ -33,7 +33,9 @@ which runs it. Editing this file is itself a `hooks`-area change.
 from __future__ import annotations
 
 import argparse
+import ast
 import hashlib
+import json
 import subprocess
 import sys
 import tempfile
@@ -82,13 +84,67 @@ def _matches(path: str, area_path: str, patterns: tuple[str, ...]) -> bool:
     return path.startswith(area_path + "/") and not _excluded(path, area_path) and any(path.endswith(pat.lstrip("*")) for pat in patterns)
 
 
-def hash_files(files: list[Path]) -> str:
-    """Content hash of `files`, order-independent (each path is hashed with its own bytes)."""
+def semantic_bytes(data: bytes, name: str) -> bytes:
+    """What a gate actually exercised: for a `.py` file, its AST with every docstring stripped and no
+    line/column attributes; any other file, its bytes verbatim.
+
+    WHY (GM 2026-08-26, feature 133 T11): a record-the-why comment is REQUIRED at the point of change
+    in this project, and a comment-only edit used to re-key the gate - four and a half minutes of
+    tests re-run over text Python never executes. Bytecode was priced and declined: `co_consts`
+    carries docstrings and the line table carries every comment's line shift, so `.pyc` moves on
+    exactly the edits this exists to ignore. The AST with docstrings removed and attributes dropped
+    (`ast.dump` default) is blind to comments, docstrings, blank lines and formatting, and moves on
+    every token that runs. A file that does not parse hashes as bytes - unparseable is still content.
+    ONE definition: `l7r/diagram/ci/delta.py` (the engine key) loads this module by path and calls
+    it on blob contents, so the short-circuit key and the push stamp cannot disagree."""
+    if not name.endswith(".py"):
+        return data
+    try:
+        tree = ast.parse(data)
+    except (SyntaxError, ValueError):
+        return data
+    for node in ast.walk(tree):
+        body = getattr(node, "body", None)
+        if isinstance(node, ast.Module | ast.ClassDef | ast.FunctionDef | ast.AsyncFunctionDef) and body and isinstance(body[0], ast.Expr) and isinstance(body[0].value, ast.Constant) and isinstance(body[0].value.value, str):
+            del body[0]
+    return ast.dump(tree).encode()
+
+
+_CACHE_NAME = "semantic-id-cache.json"
+
+
+def content_id(data: bytes, name: str, root: Path | None = None) -> str:
+    """sha256 of `semantic_bytes(data, name)`, memoized per repository under `.git/` by the sha of
+    the RAW bytes. Parsing and dumping ~280 files cost 13 s per check (measured 2026-08-26: the
+    `already verified` answer went from 1 s to 14 s), and the raw sha -> semantic id map is a pure
+    function, so it is computed once per distinct file content and read back forever after. Without a
+    repository root the id is computed directly - correctness never depends on the cache."""
+    raw = hashlib.sha256(data).hexdigest()
+    if not name.endswith(".py"):
+        return raw
+    cache = (root / ".git" / _CACHE_NAME) if root is not None and (root / ".git").is_dir() else None
+    table: dict[str, str] = {}
+    if cache is not None and cache.is_file():
+        try:
+            table = json.loads(cache.read_text(encoding="utf-8"))
+        except ValueError:
+            table = {}
+    if raw in table:
+        return table[raw]
+    sem = hashlib.sha256(semantic_bytes(data, name)).hexdigest()
+    if cache is not None:
+        table[raw] = sem
+        cache.write_text(json.dumps(table), encoding="utf-8")
+    return sem
+
+
+def hash_files(files: list[Path], root: Path | None = None) -> str:
+    """Content hash of `files`, order-independent (each path is hashed with its own SEMANTIC id)."""
     h = hashlib.sha256()
     for path in sorted(files):
         h.update(str(path).encode())
         h.update(b"\0")
-        h.update(path.read_bytes() if path.is_file() else b"<missing>")
+        h.update(content_id(path.read_bytes(), path.name, root).encode() if path.is_file() else b"<missing>")
         h.update(b"\0")
     return h.hexdigest()
 
@@ -102,8 +158,21 @@ def write_stamp(area: str) -> int:
     if root is None:
         return 0
     area_path, patterns = AREAS[area]
-    _stamp_path(root, area).write_text(hash_files(_area_files(root, area_path, patterns)))
+    _stamp_path(root, area).write_text(hash_files(_area_files(root, area_path, patterns), root))
     return 0
+
+
+def fresh(area: str, root: Path | None = None) -> int:
+    """0 when `area`'s stamp matches its CURRENT files - the gate that stamped it has seen exactly
+    this code, so re-running it proves nothing new. `make done` uses this to skip `hooks-test`
+    (84 s of a 170 s locked gate, measured 2026-08-26) unless a guard script changed since its last
+    green run - the same rule `done` applies to itself, applied to the hooks area (GM 2026-08-26)."""
+    root = root or _root()
+    if root is None:
+        return 1
+    area_path, patterns = AREAS[area]
+    stamp = _stamp_path(root, area)
+    return 0 if stamp.is_file() and stamp.read_text().strip() == hash_files(_area_files(root, area_path, patterns), root) else 1
 
 
 def check(base: str, root: Path | None = None) -> int:
@@ -117,7 +186,7 @@ def check(base: str, root: Path | None = None) -> int:
         if not any(_matches(c, area_path, patterns) for c in changed):
             continue
         stamp = _stamp_path(root, area)
-        want = hash_files(_area_files(root, area_path, patterns))
+        want = hash_files(_area_files(root, area_path, patterns), root)
         gate = "make hooks-test" if area == "hooks" else "make done"
         if not stamp.is_file():
             bad.append(f"{area}: no green gate has been recorded at all ({gate} stamps it)")
@@ -155,6 +224,24 @@ def selftest() -> int:
         if hash_files([a, b]) == before:
             print("gate-stamp selftest: a deleted .py did NOT change the hash", file=sys.stderr)
             return 1
+        # the hash is blind to comments, docstrings and formatting, and only to those
+        a.write_text("def f(x):\n    return x + 1\n")
+        code = hash_files([a, b])
+        a.write_text('"""module doc"""\n\n# a comment\n\ndef f(x):\n    """f doc"""\n    return  x+1  # trailing\n')
+        if hash_files([a, b]) != code:
+            print("gate-stamp selftest: a comment/docstring/format-only edit CHANGED the hash", file=sys.stderr)
+            return 1
+        a.write_text("def f(x):\n    return x + 2\n")
+        if hash_files([a, b]) == code:
+            print("gate-stamp selftest: a one-token code change did NOT change the hash", file=sys.stderr)
+            return 1
+        c = Path(tmp) / "c.json"
+        c.write_text("{}\n")
+        j = hash_files([a, b, c])
+        c.write_text("{} \n")
+        if hash_files([a, b, c]) == j:
+            print("gate-stamp selftest: a non-.py file is hashed by its bytes and must move on any edit", file=sys.stderr)
+            return 1
     return 0
 
 
@@ -163,9 +250,12 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--write", choices=sorted(AREAS), help="record a green gate for this area (diagram: make done; hooks: make hooks-test)")
     ap.add_argument("--check", metavar="BASE", help="refuse changed-Python areas with no matching stamp (BASE is usually origin/main)")
     ap.add_argument("--selftest", action="store_true")
+    ap.add_argument("--fresh", choices=sorted(AREAS), help="exit 0 if this area's stamp matches its current files (nothing to re-run)")
     args = ap.parse_args(argv)
     if args.selftest:
         return selftest()
+    if args.fresh:
+        return fresh(args.fresh)
     if args.write:
         return write_stamp(args.write)
     if args.check:

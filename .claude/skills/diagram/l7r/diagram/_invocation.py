@@ -261,6 +261,6 @@ def assert_via_make(operation: str, target: str) -> None:
         "    make quick        ~33 s    lint, types, every test that does not roll a map\n"
         "    make reference    ~26 s    one seed of the reference hamlet\n"
         "    make help                  every operation, with what it does\n"
-        "    make done         ~5.5 min the full gate - NOT the quick check\n\n"
+        "    make done         ~75 s locked / ~4.5 min unlocked - the full gate, NOT the quick check\n\n"
     )
     raise SystemExit(2)

@@ -122,6 +122,23 @@ def test_the_worktree_key_equals_the_tree_key_for_the_same_content(repo: Path) -
     assert engine_key_worktree(repo) != k_wt
 
 
+def test_the_key_is_blind_to_comments_docstrings_and_formatting(repo: Path) -> None:
+    """A record-the-why comment must not re-open the gate (GM 2026-08-26, feature 133 T11): the key
+    is the docstring-stripped AST of each .py, so only tokens that RUN move it; a .json keys on bytes."""
+    commit(repo, S + "l7r/diagram/m.py", "def f(x):\n    return x + 1\n")
+    k0 = engine_key(repo, "HEAD")
+    commit(repo, S + "l7r/diagram/m.py", '"""doc"""\n# why: see research\n\n\ndef f(x):\n    """f."""\n    return  x+1  # note\n')
+    assert engine_key(repo, "HEAD") == k0, "comments, docstrings and formatting do not move the key"
+    assert engine_key_worktree(repo) == k0, "...on the working tree either"
+    commit(repo, S + "l7r/diagram/m.py", "def f(x):\n    return x + 2\n")
+    assert engine_key(repo, "HEAD") != k0, "one code token moves it"
+    (repo / S / "pool").mkdir(exist_ok=True)
+    commit(repo, S + "pool/a.json", "{}\n")
+    k1 = engine_key(repo, "HEAD")
+    commit(repo, S + "pool/a.json", "{} \n")
+    assert engine_key(repo, "HEAD") != k1, "a manifest keys on its bytes - any edit moves it"
+
+
 # ---- the short-circuit key IS the remote key (feature 132, second amendment) ---------------------
 
 

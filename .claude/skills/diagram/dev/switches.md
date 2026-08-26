@@ -80,7 +80,7 @@ because the Makefile's own record says a guard on one door is not a guard.
 
 | refuses under the lock | still runs |
 |---|---|
-| `cohort`, `tripwire`, `maps SCOPE=all`, `test-full`, `done FULL=1`, `cache-audit` (any form), `regressions`, `perf`, `perf-gate`, `ci-check FULL=1`, `ci-check TARGET=<op>`, `ci-merge FULL=1`, `map` with more than one gen or a glob | `reference`, `quick`, `done` (reference scope), `test-file`, `map` with ONE gen, `hamlet` with one spec, `perf-profile` (one seed, one stage), `placement-stages`, `perf-report`, `maps` (reference map alone - it never widens while locked, whatever the last run said) |
+| `cohort`, `tripwire`, `maps SCOPE=all`, `test-full`, `done FULL=1`, `cache-audit` (any form), `regressions`, `perf`, `perf-gate`, `ci-check FULL=1`, `ci-check TARGET=<op>`, `ci-merge FULL=1`, `map` with more than one gen or a glob | `reference`, `quick`, `done` (reference scope - and since 2026-08-26 its `test` phase DEFERS the `rolls_map` tests, see below), `test-file`, `map` with ONE gen, `hamlet` with one spec, `perf-profile` (one seed, one stage), `placement-stages`, `perf-report`, `maps` (reference map alone - it never widens while locked, whatever the last run said) |
 
 ### THE DECISION: one-map invocations stay runnable (recorded, with the alternatives priced)
 
@@ -154,10 +154,33 @@ left in the engine set because the GM named `ci/` - add them if wanted.
 flag in either direction - a `FORCE=` re-run flag was drafted and removed at the fidelity review as
 unrequested; the remote rule this copies has none.
 
+### THE DECISION: the lock defers the map-rolling tests too (GM 2026-08-26, feature 133 T11)
+
+**Measured**: under the lock `make done` took ~4.5 min, 233 s of it pytest - and the time was the
+`rolls_map` tests: a 48-seed cohort (135 s), polder hamlets (119 s), the real pool through the gen
+cache (93 s), a fan-out comparison (89 s). Maps other than the reference, rolled through the test
+suite the lock was written to stop. The GM: *"I thought that our stuff was specifically designed to
+not do five minute passes for this kind of feature at this stage."*
+
+**Accepted**: while `scope` is `reference`, the gate's `test` phase runs `-m "not rolls_map"`
+(Makefile `ROLL_DESELECT`) and prints that it did; the verified-state record carries the scope, and
+`already_verified` refuses a locked-scope record once the lock is released, so the first `make done`
+after `make scope-unlock` runs the deferred tests. Never under `COV_FLOORS` (a `test-full` is refused
+under the lock anyway).
+
+**What it costs**: an engine change that breaks a cohort or a polder hamlet is found at unlock, not
+in the cycle that made it - the same accepted cost the lock already carries for sweeps and perf
+bookends, and for the same reason: the period is for iterating on ONE map.
+
+**Alternatives priced**: keep running them (four minutes of every cycle spent on maps the period says
+not to roll - declined by the GM); deselect only the non-reference rollers (no marker tells them
+apart, and the reference map is already rolled by `make reference` in the same gate - declined as a
+distinction without a saving).
+
 ## When the lock is released
 
-`make scope-unlock` prints the reminder: nothing swept the pool and no perf bookend was taken while
-it was locked, so run `make maps` and the owed `make perf` bookends then - what accumulated is
-measured, not remembered (constitution XIII). Pool regressions that built up under the lock are
+`make scope-unlock` prints the reminder: nothing swept the pool, ran the map-rolling tests or took a
+perf bookend while it was locked, so run `make maps`, `make done` (which will not short-circuit) and
+the owed `make perf` bookends then - what accumulated is measured, not remembered (constitution XIII). Pool regressions that built up under the lock are
 found at unlock; that is the accepted cost of the period, and the closing task of the feature that
 used it.

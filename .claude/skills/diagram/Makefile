@@ -92,6 +92,8 @@ done:
 	T0=$$(date +%s); fail=""; \
 	for phase in lint format typecheck hooks-test $(if $(FULL),test-full perf-gate,test); do \
 	  printf '\n\033[1m== %s ==\033[0m\n' "$$phase"; \
+	  if [ "$$phase" = hooks-test ] && root=$$(git rev-parse --show-toplevel 2>/dev/null) && python3 "$$root/scripts/gate-stamp.py" --fresh hooks; then \
+	    printf 'hooks-test: already green against exactly these guard scripts - skipped (gate-stamp --fresh hooks; 84 s measured 2026-08-26)\n'; continue; fi; \
 	  $(MAKE) --no-print-directory $$phase || fail="$$fail $$phase"; \
 	done; \
 	if [ -n "$$fail" ]; then $(LOGRUN) done "$(if $(FULL),full,reference)" "$$(( $$(date +%s) - $$T0 ))" "failed:$$fail"; $(STATE) failed-gate done; printf '\n\033[1mGATE FAILED:%s\033[0m (every phase ran - fix them together, then re-run once)\n' "$$fail"; exit 1; fi; \
@@ -701,6 +703,19 @@ SETTLEMENT_COV_FLOOR = 94
 # when there is nothing left to merge.
 # The tests that roll a map other than the reference one. `test` deselects them; `test-full` does not.
 DESELECT = --deselect tests/test_villages.py --deselect tests/hamletgen/test_driver.py
+# THE LOCK DEFERS THE MAP-ROLLING TESTS TOO (GM 2026-08-26, feature 133 T11). Measured that day: under
+# `scope reference`, `make done`'s pytest phase took 233 s of a 4.5 min gate, and the time was the
+# `rolls_map` tests - a 48-seed cohort, polder hamlets, the real pool through the gen cache - i.e. maps
+# other than the reference, rolled through the suite the lock was meant to stop ("no invocation rolls a
+# map other than the reference settlement"). So while the scope is locked the `test` phase deselects
+# `rolls_map`, and the record it writes carries the scope: `already_verified` refuses it once the lock is
+# released, so the first `make done` after `scope-unlock` runs them - owed at unlock, exactly like the
+# sweeps and the perf bookends. Never under COV_FLOORS (test-full is refused under the lock anyway).
+# Alternatives priced: keep running them (four minutes per cycle spent on maps the period says not to
+# roll); deselect only the NON-reference rollers (no marker tells them apart, and the reference map is
+# already rolled by `make reference` in the same gate). The reference-rolling tests are covered at unlock.
+SCOPE_STATE = $(shell $(SWITCH) state scope 2>/dev/null)
+ROLL_DESELECT = $(if $(COV_FLOORS),,$(if $(filter reference,$(SCOPE_STATE)),-m "not rolls_map",))
 
 # (GUARD_EDIT_OK: feature 132 - test-full rolls every pool map, so the scope lock refuses it before `test` starts)
 test-full:
@@ -732,7 +747,8 @@ test-full:
 COV_FLOORS =
 
 test:
-	@if python3 -c "import xdist" >/dev/null 2>&1; then python3 -m pytest -n auto $(DESELECT); else python3 -m pytest $(DESELECT); fi; ec=$$?; \
+	@$(if $(ROLL_DESELECT),printf '\033[1mmap-rolling tests DEFERRED\033[0m (scope locked to the reference settlement) - owed at `make scope-unlock`\n';,)
+	@if python3 -c "import xdist" >/dev/null 2>&1; then python3 -m pytest -n auto $(DESELECT) $(ROLL_DESELECT); else python3 -m pytest $(DESELECT) $(ROLL_DESELECT); fi; ec=$$?; \
 	if [ $$ec -ne 0 ]; then python3 ../../../scripts/uncovered-in-diff.py || true; exit $$ec; fi; \
 	python3 -m coverage combine --append >/dev/null 2>&1 || true; \
 	if [ -z "$(COV_FLOORS)" ]; then \

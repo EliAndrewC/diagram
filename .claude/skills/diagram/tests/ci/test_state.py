@@ -24,6 +24,33 @@ def test_absent_then_green_then_hash_changes_on_edit(repo: Path) -> None:
     assert "DIFFERENT code" in state.describe(again, state.current_hash(repo))
 
 
+def test_a_comment_edit_keeps_the_hash(repo: Path) -> None:
+    """The stamp's hash is gate-stamp's semantic one: a comment appended to engine Python after a green
+    run does not read as different code (GM 2026-08-26)."""
+    before = state.current_hash(repo)
+    (repo / S / "l7r/diagram/m.py").write_text("# the why\nx = 1  # still 1\n", encoding="utf-8")
+    assert state.current_hash(repo) == before
+    (repo / S / "l7r/diagram/m.py").write_text("x = 11\n", encoding="utf-8")
+    assert state.current_hash(repo) != before
+
+
+def test_a_locked_scope_record_does_not_survive_the_unlock(repo: Path) -> None:
+    """Under `scope reference` the gate defers the map-rolling tests (GM 2026-08-26), so its green
+    record is reused while the lock holds and refused the moment it is released."""
+    from l7r.diagram import switches
+
+    skill = repo / S
+    switches.write(skill, "scope", "reference", "test", who="t")
+    st = state.write(repo, state.GREEN, "done")
+    assert st.scope == "reference"
+    assert state.already_verified(repo)[0], "still locked: the record stands"
+    switches.write(skill, "scope", "unlocked", "test", who="t")
+    ok, why = state.already_verified(repo)
+    assert not ok and "deferred" in why and "LOCKED" in why
+    st2 = state.write(repo, state.GREEN, "done")
+    assert st2.scope == "unlocked" and state.already_verified(repo)[0]
+
+
 def test_failed_gate_is_recorded_and_describe_handles_none(repo: Path) -> None:
     st = state.write(repo, state.FAILED, "done")
     assert st.event == state.FAILED

@@ -56,6 +56,23 @@ case $OUT in *"diagram: no green gate"*) : ;; *) echo "FAIL  refusal must name t
 ( cd "$W" && python3 "$STAMP" --write diagram )
 OUT=$(cd "$W" && python3 "$STAMP" --check origin/main 2>&1); check "both areas stamped -> allowed" 0 $?
 
+# a comment or docstring added AFTER the green run is not "different code" (GM 2026-08-26): the stamp
+# hashes the docstring-stripped AST of each .py, so only a token that runs re-opens the gate
+printf '"""why this is 2"""\n# see research/water.md\nx = 2  # unchanged\n' > "$W/.claude/skills/diagram/m.py"; git -C "$W" commit -qam why
+OUT=$(cd "$W" && python3 "$STAMP" --check origin/main 2>&1); check "comment/docstring edit after the stamp -> still allowed" 0 $?
+echo 'x = 3' > "$W/.claude/skills/diagram/m.py"; git -C "$W" commit -qam engine3
+OUT=$(cd "$W" && python3 "$STAMP" --check origin/main 2>&1); check "code edit after the stamp -> refused" 1 $?
+( cd "$W" && python3 "$STAMP" --write diagram )
+
+# --fresh: the stamp matches the current guard scripts -> 0 (make done skips hooks-test); an edit -> 1
+( cd "$W" && python3 "$STAMP" --write hooks )
+( cd "$W" && python3 "$STAMP" --fresh hooks ); check "--fresh hooks right after the stamp -> 0" 0 $?
+echo 'echo edited once more' > "$W/scripts/x-hooks.sh"
+( cd "$W" && python3 "$STAMP" --fresh hooks ); check "--fresh hooks after a guard edit -> 1" 1 $?
+echo 'x = 4' > "$W/.claude/skills/diagram/m.py"
+( cd "$W" && python3 "$STAMP" --fresh diagram ); check "--fresh diagram after an engine edit -> 1" 1 $?
+git -C "$W" commit -qam guard3
+
 # a .py under scripts/ is a hooks-area file too (gate-stamp.py, _hookmatch.py live there)
 echo 'y = 1' > "$W/scripts/_helper.py"; git -C "$W" add -A; git -C "$W" commit -qm helper
 OUT=$(cd "$W" && python3 "$STAMP" --check origin/main 2>&1); check "new scripts/*.py, stamp predates it -> refused" 1 $?

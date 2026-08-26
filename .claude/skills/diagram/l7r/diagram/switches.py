@@ -214,10 +214,15 @@ def main(argv: list[str] | None = None) -> int:
     c = sub.add_parser("check")
     c.add_argument("axis", choices=("remote", "scope"))
     c.add_argument("what")
+    q = sub.add_parser("state", help="print one axis's bare state - what the Makefile reads to shape a target")
+    q.add_argument("axis", choices=("remote", "scope"))
     a = ap.parse_args(argv)
     skill = Path.cwd()
     if a.cmd == "show":
         print(describe(read(skill)))
+        return 0
+    if a.cmd == "state":
+        print(getattr(read(skill), a.axis).state)
         return 0
     if a.cmd == "set":
         try:
@@ -228,7 +233,7 @@ def main(argv: list[str] | None = None) -> int:
         print(describe(sw))
         if a.axis == "scope" and a.state == "unlocked":
             print(
-                "\nscope UNLOCKED. Nothing rolled a sweep or took a perf bookend while it was locked: run `make maps` and the\nowed `make perf` bookends now - what accumulated is measured, not remembered (constitution XIII)."
+                "\nscope UNLOCKED. Nothing rolled a sweep, ran the map-rolling tests or took a perf bookend while it was locked: run\n`make maps`, `make done` (its next run does NOT short-circuit - the locked record deferred those tests) and the\nowed `make perf` bookends now - what accumulated is measured, not remembered (constitution XIII)."
             )
         return 0
     return 0 if check(skill, a.axis, a.what) else 1

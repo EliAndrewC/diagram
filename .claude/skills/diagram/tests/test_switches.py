@@ -159,6 +159,20 @@ def make(skill: Path, *args: str) -> subprocess.CompletedProcess[str]:
 LOCKED_TARGETS = ("cohort", "tripwire", "test-full", "cache-audit", "regressions", "perf", "perf-gate", "done FULL=1", "ci-check FULL=1", "ci-check TARGET=cohort", "ci-merge FULL=1", "maps SCOPE=all")
 
 
+def test_make_test_defers_the_map_rolling_tests_under_the_lock(fixture_skill: Path, monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]) -> None:
+    """GM 2026-08-26: the 4-minute gate under the lock was the `rolls_map` tests rolling OTHER maps;
+    the lock now deselects them in `test`, says so, and never under the coverage floors."""
+    from l7r.diagram import switches
+
+    assert "not rolls_map" not in make(fixture_skill, "-n", "test").stdout
+    switches.write(fixture_skill, "scope", "reference", "test", who="t")
+    out = make(fixture_skill, "-n", "test").stdout
+    assert '-m "not rolls_map"' in out and "DEFERRED" in out
+    assert "not rolls_map" not in make(fixture_skill, "-n", "test", "COV_FLOORS=1").stdout
+    monkeypatch.chdir(fixture_skill)
+    assert switches.main(["state", "scope"]) == 0 and capsys.readouterr().out.strip() == "reference"
+
+
 @pytest.mark.parametrize("target", LOCKED_TARGETS)
 def test_make_sweeps_refuse_under_the_lock(fixture_skill: Path, target: str) -> None:
     sw.write(fixture_skill, "scope", "reference", "fixture lock")

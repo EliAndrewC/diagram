@@ -100,21 +100,40 @@ def engine_key(root: Path, tree: str) -> str:
     time a .notes.md, a run-log entry or a buildspec changed after the build (GM 2026-08-25: the same
     tests against literally the same content must not be paid for twice). The same `is_engine` that
     decides the ROUTE decides what is hashed, so the two can never disagree about what "engine" is.
-    Computed from `git ls-tree` - no checkout, and the build computes it the same way on its merge.
+    Computed from `git ls-tree` + `git cat-file` - no checkout, and the build computes it the same
+    way on its merge. Each file's id is its SEMANTIC content (`_content_id`), not its blob sha: a
+    comment or docstring edit to engine Python keeps the key (GM 2026-08-26).
     """
     out = _git(root, "ls-tree", "-r", tree)
-    rows = sorted(f"{line.split()[2]} {line.split(maxsplit=3)[3]}" for line in out.splitlines() if line.strip() and is_engine(line.split(maxsplit=3)[3]))
-    return hashlib.sha256("\n".join(rows).encode()).hexdigest()
+    entries = [(line.split()[2], line.split(maxsplit=3)[3]) for line in out.splitlines() if line.strip() and is_engine(line.split(maxsplit=3)[3])]
+    blobs = subprocess.run(["git", "-C", str(root), "cat-file", "--batch"], input="".join(f"{sha}\n" for sha, _ in entries).encode(), capture_output=True, check=True).stdout
+    rows, pos = [], 0
+    for _sha, path in entries:
+        nl = blobs.index(b"\n", pos)
+        size = int(blobs[pos:nl].split()[2])
+        data = blobs[nl + 1 : nl + 1 + size]
+        pos = nl + 1 + size + 1
+        rows.append(f"{_content_id(root, data, path)} {path}")
+    return hashlib.sha256("\n".join(sorted(rows)).encode()).hexdigest()
+
+
+def _content_id(root: Path, data: bytes, path: str) -> str:
+    """The id of one engine file's content AS THE GATE SEES IT: `gate-stamp.py`'s `semantic_bytes`
+    (a `.py` keys on its docstring-stripped AST, so a comment or docstring edit keeps the key; anything
+    else on its bytes), loaded by path from the same script so there is ONE definition. GM 2026-08-26
+    (feature 133 T11): a record-the-why comment must not cost a second gate run."""
+    from l7r.diagram.ci.state import _gate_stamp  # local: state imports nothing from here
+
+    return str(_gate_stamp(root).content_id(data, path, root))
 
 
 def engine_key_worktree(root: Path) -> str:
     """`engine_key` for the WORKING TREE (tracked + untracked-not-ignored engine files, current
     contents), so a `make done` run before committing keys the same content the commit will carry.
-    Blob ids come from `git hash-object`, so the formula is identical to `engine_key(tree)`."""
+    Content ids come from `_content_id` on the file bytes, so the formula is identical to `engine_key(tree)`."""
     out = _git(root, "ls-files", "-co", "--exclude-standard")
     paths = sorted(p for p in out.splitlines() if p.strip() and is_engine(p) and (root / p).is_file())
     if not paths:
         return hashlib.sha256(b"").hexdigest()
-    shas = subprocess.run(["git", "-C", str(root), "hash-object", "--stdin-paths"], input="\n".join(paths) + "\n", capture_output=True, text=True, check=True).stdout.split()
-    rows = sorted(f"{sha} {path}" for sha, path in zip(shas, paths, strict=True))
+    rows = sorted(f"{_content_id(root, (root / p).read_bytes(), p)} {p}" for p in paths)
     return hashlib.sha256("\n".join(rows).encode()).hexdigest()

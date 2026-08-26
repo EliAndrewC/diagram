@@ -64,8 +64,8 @@ Every operation in this project goes through a make target, so the expensive one
 the cheap one would do first. The scale, so the choice is informed rather than habitual:
 
     make reference    ~26 s    one seed of the reference hamlet - answers most questions
-    make quick        ~4 min   lint, types, and every test that does not roll a map, stops at first
-    make done         ~5.5 min reference + lint/types + 3,420 tests - NOT the quick check
+    make quick        ~33 s    lint, types, and every test that does not roll a map, stops at first
+    make done         ~75 s locked / ~4.5 min unlocked (measured 2026-08-26) - reference + lint/types + the suite; NOT the quick check
     make done FULL=1  ~6 min   + every pool map + the seeds 41-44 ratchet; prompts, cancels by default
 
 If this fired on correct work, that is a BUG in the hook and worth fixing rather than working
@@ -82,7 +82,7 @@ case "$VERDICT" in
   engine-entry-point)
     block "an engine entry point run outside make." "make <target>   (see future-work/ and the Makefile for the operation list)" ;;
   bare-pytest)
-    block "pytest run directly rather than through make. The suite is ~4.5 minutes and its coverage floors only hold under the make targets that set them up." "make quick   (~4 min, stops at the first failure)  or  make done   (~5.5 min)" ;;
+    block "pytest run directly rather than through make. The suite is ~4.5 minutes unlocked and its coverage floors only hold under the make targets that set them up." "make quick   (~33 s, stops at the first failure)  or  make done   (~75 s with scope locked, ~4.5 min unlocked)" ;;
   inline-override)
     block "an override supplied on the command line, which skips the prompt whose default answer is CANCEL. That prompt is the whole mechanism: it exists to be answered, not pre-empted." "make <target>   without the override, and answer the prompt if it appears" ;;
   guard-write)
