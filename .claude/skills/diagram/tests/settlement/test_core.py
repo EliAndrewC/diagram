@@ -258,8 +258,14 @@ def test_build_comb_supply_banks_hems_bunds_onto_the_channel_banks():
                 continue
             cum = polyline_cum(pts)
             w0, w1 = float(c["w"]), float(c.get("w_tail", c["w"]))
+            # a corner farther from the stroke's bbox than the widest possible bank could reach cannot be buried (T20: 61k clearance calls -> a few thousand)
+            reach = max(w0, w1) / 2 + BANK_MARGIN + 2.0
+            bx0, by0 = min(p[0] for p in pts) - reach, min(p[1] for p in pts) - reach
+            bx1, by1 = max(p[0] for p in pts) + reach, max(p[1] for p in pts) + reach
             for pl in net["plots"]:
                 for q in pl["poly"]:
+                    if not (bx0 <= q[0] <= bx1 and by0 <= q[1] <= by1):
+                        continue
                     gap, halfw, past, _foot, _nrm = supply_bank_clearance(q, pts, w0, w1, cum)
                     if not past and gap < halfw + line_off:
                         n += 1

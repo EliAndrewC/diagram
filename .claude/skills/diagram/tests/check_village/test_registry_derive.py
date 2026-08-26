@@ -24,6 +24,7 @@ import pytest
 from l7r.diagram import check_village
 from l7r.diagram.check_village import registry as reg
 from l7r.diagram.check_village.registry_analysis import _DerivationError, _derive_fields
+from tests._scope import EXHAUSTIVE
 
 HERE = Path(__file__).resolve().parent
 FIXTURE = json.loads((HERE.parent / "fixtures" / "registry_legacy_rows.json").read_text())
@@ -208,6 +209,10 @@ def test_derive_guard_fires_on_duplicate_segment_def(tmp_path):
 # ---- cache ---------------------------------------------------------------------------------
 
 
+@pytest.mark.skipif(
+    not EXHAUSTIVE,
+    reason="derives the registry from the AST to PROVE the cache faithful (~2.5 s); the proof runs under EXHAUSTIVE=1 and at every gate that sets it (GM 2026-08-26, T20) - last exhaustive green 2026-08-26",
+)
 def test_cache_round_trip_and_failure_soft(tmp_path, monkeypatch):
     monkeypatch.setattr(reg, "_CACHE_PATH", tmp_path / "sub" / "registry_rows.json")
     names = {r.fn.__name__ for r in reg.GATE_SEGMENTS}
@@ -222,6 +227,10 @@ def test_cache_round_trip_and_failure_soft(tmp_path, monkeypatch):
     assert reg._load_cached(key, names) is None  # corrupt -> derive live
 
 
+@pytest.mark.skipif(
+    not EXHAUSTIVE,
+    reason="derives the registry from the AST to PROVE the cache faithful (~2.5 s); the proof runs under EXHAUSTIVE=1 and at every gate that sets it (GM 2026-08-26, T20) - last exhaustive green 2026-08-26",
+)
 def test_cached_rows_rebuild_identical_registry():
     rows = reg._derive_rows({r.fn.__name__ for r in reg.GATE_SEGMENTS}, fresh=True)
     rebuilt = tuple(reg._row(d, reg._fns) for d in rows)
@@ -236,6 +245,7 @@ def test_cache_store_is_failure_soft_when_unwritable(tmp_path, monkeypatch, capl
     assert "not written" in caplog.text
 
 
+@pytest.mark.skipif(not EXHAUSTIVE, reason="a forced cache miss derives from the AST (~1.6 s) to prove the miss path; under EXHAUSTIVE=1 (GM 2026-08-26, T20) - last exhaustive green 2026-08-26")
 def test_assemble_derives_on_cache_miss_and_loads_on_hit(tmp_path, monkeypatch):
     monkeypatch.setattr(reg, "_CACHE_PATH", tmp_path / "cache.json")
     names = {r.fn.__name__ for r in reg.GATE_SEGMENTS}

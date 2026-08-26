@@ -308,8 +308,9 @@ def test_plot_texture_drives_build_comb_grain():
     a_small, step_small = s.plot_texture("small_irregular", "organic")
     a_large, _step_large = s.plot_texture("large_block", "organic")
     assert a_small < a_large  # smaller plot_across = smaller paddies
-    net_small = build_comb(1300, 1700, (520, 220), 3, down_deg=90, field_fall=760, offtakes_a=(0.32, 0.7), offtakes_b=(), plot_across=a_small, row_step=step_small)
-    net_large = build_comb(1300, 1700, (520, 220), 3, down_deg=90, field_fall=760, offtakes_a=(0.32, 0.7), offtakes_b=(), plot_across=a_large)
+    # ONE fan each (T20, GM 2026-08-26): the property is "smaller plot_across -> more plots on the same field", which any fan shows; two 5-fan combs cost 4 s for it
+    net_small = build_comb(900, 1100, (360, 160), 1, down_deg=90, field_fall=500, offtakes_a=(0.5,), offtakes_b=(), plot_across=a_small, row_step=step_small)
+    net_large = build_comb(900, 1100, (360, 160), 1, down_deg=90, field_fall=500, offtakes_a=(0.5,), offtakes_b=(), plot_across=a_large)
     assert len(net_small["plots"]) > len(net_large["plots"])  # small paddies -> more plots
     # grid tightens the row-step spread vs organic
     _a, org = s.plot_texture("medium", "organic")

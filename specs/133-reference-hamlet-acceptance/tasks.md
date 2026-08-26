@@ -73,6 +73,10 @@ _(from T11 on, each entry also carries its cycle plan before work starts - `scaf
       measure: per-test durations before/after; quick pytest wall before/after
       verify: each cheapened test's exhaustive form run once and recorded in its docstring; `make quick`; `make done`
 
+- [x] T20 **the slow-test review, round 2** - the GM (2026-08-26): *"Does the longest test which proves the cache faithful really need to be run every time? ... let's make that [indexing] change and see how much of an improvement it makes. Then let's pick another test like test_plot_texture_drives_build_comb_grain and analyze it. Where does its runtime go?"*
+      given ~2026-08-26T20:55Z | done 2026-08-26T20:11Z | runs: make quick x3, make done x1, profiles x3, exhaustive x1 (green)
+      note: (1) the three registry tests that derive from the AST to PROVE the cache (round trip, rebuild-identical, derive-on-miss) are EXHAUSTIVE-only now - 2.8 + 2.5 + 1.6 s that prove nothing about a hamlet. (2) `buried_corners` in the supply-banks test: a bbox prefilter per channel (61k clearance calls -> a few thousand); the test 2.77 -> 1.29 s, the rest is building two combs. (3) `test_plot_texture_drives_build_comb_grain`: 95% was two 3-fan `build_comb` calls (~1 s each, 73% of that in `close_seams`); the property ("smaller plot_across -> more plots on the same field") holds on any fan, so it builds two ONE-fan combs: 2.30 -> 0.77 s. `close_seams` itself profiled: no hot loop - ~25k small shapely calls spread evenly (buffers, bounds, unions), the geometry of closing a comb's seams; not a defect, a candidate only if comb building ever dominates a map.
+
 ## Phase 9 - acceptance
 
 - [ ] T90 the would-have-dispatched audit (FR-005): every entry in the period, and for each whether it should have run; each "no" names a tooling change
