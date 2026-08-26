@@ -13,7 +13,7 @@ from typing import Any
 import pytest
 
 FIXTURES = Path(__file__).parent / "fixtures"
-REPO_ROOT = Path(__file__).resolve().parents[5]  # the real repository, for scripts/gate-stamp.py
+REPO_ROOT = Path(__file__).resolve().parents[6]  # tests/tooling/ci/ is one level deeper than tests/ci/ was (T29)  # the real repository, for scripts/gate-stamp.py
 
 
 def load(name: str) -> dict[str, Any]:

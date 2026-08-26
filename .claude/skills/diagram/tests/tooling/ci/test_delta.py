@@ -8,7 +8,7 @@ from pathlib import Path
 import pytest
 
 from l7r.diagram.ci.delta import Delta, compute_delta, engine_key, engine_key_worktree, is_engine
-from tests.ci.conftest import commit, git
+from tests.tooling.ci.conftest import commit, git
 
 S = ".claude/skills/diagram/"
 

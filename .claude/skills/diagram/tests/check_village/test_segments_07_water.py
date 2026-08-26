@@ -1,10 +1,7 @@
 """Split from test_checks.py by feature 025 - see tests/check_village/CLAUDE.md for the index."""
 
-import pytest
-
 from tests.check_village._builders import (
     _bridge_map,
-    _cap_water,
     _channel,
     _confluence,
     _drain_ditch,
@@ -15,10 +12,8 @@ from tests.check_village._builders import (
     _mj_map,
     _moat_city,
     _moat_map,
-    _paddy_f,
     _sink_channel,
     _water_map,
-    bldg,
     f,
     f_only,
 )
@@ -114,12 +109,6 @@ def test_pond_fed_from_edge_fires_when_the_feeder_starts_mid_map():
 def test_pond_fed_from_edge_passes_when_the_feeder_comes_from_the_edge():
     M = {"pond": [400, 300, 150, 90], "streams": [{"poly": [[10, 10], [420, 320]], "frm": {"kind": "offmap"}, "to": {"kind": "pond"}, "w": 9}]}
     assert "pond_fed_from_edge" not in f_only(M, "pond_fed_from_edge")
-
-
-@pytest.mark.tiers("town")
-def test_fields_clear_of_wall_fires():
-    M = {"meta": {"scale": "town", "walled": True}, "wall": [[250, 50], [250, 500], [260, 500]], "fields": [_field("f", 100, 100, 400, 400)], "gate": [250, 500]}
-    assert "fields_clear_of_wall" in f_only(M, "fields_clear_of_wall")
 
 
 def test_fields_show_water_source_branches():
@@ -364,81 +353,16 @@ def test_watercourse_ends_reach_water_allows_a_canal_tail_at_the_crop_edge():
     assert "watercourse_ends_reach_water" not in f_only(M, "watercourse_ends_reach_water")
 
 
-@pytest.mark.tiers("town")
-def test_town_margins_clothed_fires_on_a_bare_sheet():
-    M = {"meta": {"scale": "town", "W": 1000, "H": 1000}}
-    assert "town_margins_clothed" in f_only(M, "town_margins_clothed")
-
-
-@pytest.mark.tiers("town")
-def test_town_margins_clothed_passes_when_the_ground_is_worked():
-    M = {"meta": {"scale": "town", "W": 1000, "H": 1000}, "commons": [{"x": 500, "y": 500, "w": 1000, "h": 1000, "role": "grazing", "poly": [[-10, -10], [1010, -10], [1010, 1010], [-10, 1010]]}]}
-    assert "town_margins_clothed" not in f_only(M, "town_margins_clothed")
-
-
 # ---- near_ring_cultivated_fraction (feature 013): a well-sited town/city sits in packed farmland,
 # so the flat, uncommitted near-ring ground must be CULTIVATED (paddy/veg fields, dry plots, gardens)
 # to the near_ring_density tier's floor. Bare scrub on that ground counts against; the sub-100%
 # threshold leaves room for the genuine fallow/margin scrub. Town + city only.
-@pytest.mark.tiers("town")
-def test_near_ring_cultivated_fraction_fires_on_a_sparse_town():
-    M = {"meta": {"scale": "town", "W": 1000, "H": 1000}}  # bare sheet, 0% cultivated
-    assert "near_ring_cultivated_fraction" in f_only(M, "near_ring_cultivated_fraction")
-
-
-@pytest.mark.tiers("town")
-def test_near_ring_cultivated_fraction_passes_when_the_near_ring_is_cropped():
-    # dry cropland over ~62% of the flat frame clears the dense town floor (0.28, combs-only doctrine)
-    M = {"meta": {"scale": "town", "W": 1000, "H": 1000}, "dry_plots": [{"poly": [[0, 0], [1000, 0], [1000, 620], [0, 620]], "crop": "soy", "theta": 0.0}]}
-    assert "near_ring_cultivated_fraction" not in f_only(M, "near_ring_cultivated_fraction")
-
-
-@pytest.mark.tiers("town")
-def test_near_ring_cultivated_fraction_thin_tier_tolerates_a_scrubbier_ring():
-    # ~26% cultivated: fires when declared 'dense' (floor 0.28), passes when declared 'thin' (floor 0.12)
-    cover = [{"poly": [[0, 0], [1000, 0], [1000, 260], [0, 260]], "crop": "soy", "theta": 0.0}]
-    dense = {"meta": {"scale": "town", "W": 1000, "H": 1000}, "dry_plots": cover}
-    thin = {"meta": {"scale": "town", "W": 1000, "H": 1000, "near_ring_density": "thin"}, "dry_plots": cover}
-    assert "near_ring_cultivated_fraction" in f_only(dense, "near_ring_cultivated_fraction")
-    assert "near_ring_cultivated_fraction" not in f_only(thin, "near_ring_cultivated_fraction")
 
 
 def test_near_ring_cultivated_fraction_ignores_village_and_hamlet_sheets():
     for sc in ("village", "hamlet"):
         M = {"meta": {"scale": sc, "W": 1000, "H": 1000}}  # bare, but the near-ring rule is town/city only
         assert "near_ring_cultivated_fraction" not in f_only(M, "near_ring_cultivated_fraction")
-
-
-@pytest.mark.tiers("town")
-def test_near_ring_paddy_dominant_fires_when_dry_grain_dominates():
-    # a big dry-grain field, only a sliver of paddy -> dry dominates -> fires
-    M = {"meta": {"scale": "town", "W": 1000, "H": 1000}, "fields": [_paddy_f(0, 0, 120, 120)], "dry_plots": [{"poly": [[0, 300], [1000, 300], [1000, 900], [0, 900]], "crop": "soy", "theta": 0.0}]}
-    assert "near_ring_paddy_dominant" in f_only(M, "near_ring_paddy_dominant")
-
-
-@pytest.mark.tiers("town")
-def test_near_ring_paddy_dominant_passes_when_paddy_dominates():
-    M = {"meta": {"scale": "town", "W": 1000, "H": 1000}, "fields": [_paddy_f(0, 0, 1000, 700)], "dry_plots": [{"poly": [[0, 800], [200, 800], [200, 900], [0, 900]], "crop": "soy", "theta": 0.0}]}
-    assert "near_ring_paddy_dominant" not in f_only(M, "near_ring_paddy_dominant")
-
-
-@pytest.mark.tiers("town")
-def test_near_ring_paddy_dominant_ignores_gardens_as_dry_grain():
-    # a large GARDEN dry area is NOT dry-grain; a modest paddy still dominates the grain (there is none)
-    M = {"meta": {"scale": "town", "W": 1000, "H": 1000}, "fields": [_paddy_f(0, 0, 300, 300)], "dry_plots": [{"poly": [[0, 400], [1000, 400], [1000, 900], [0, 900]], "crop": "garden", "theta": 0.0}]}
-    assert "near_ring_paddy_dominant" not in f_only(M, "near_ring_paddy_dominant")
-
-
-@pytest.mark.tiers("town")
-def test_near_ring_paddy_dominant_excludes_a_paddy_combs_own_dry_hem():
-    # a paddy field's dry HEM (a dry plot within the paddy field's envelope) is part of the paddy system,
-    # not competing dry grain: a big paddy field whose only dry plot sits inside it stays paddy-dominant
-    M = {
-        "meta": {"scale": "town", "W": 1000, "H": 1000},
-        "fields": [{"name": "comb", "kind": "paddy", "outline": [[0, 0], [900, 0], [900, 700], [0, 700]], "bbox": [0, 0, 900, 700]}],
-        "dry_plots": [{"poly": [[100, 100], [800, 100], [800, 300], [100, 300]], "crop": "barley", "theta": 0.0}],  # a hem INSIDE the paddy bbox
-    }
-    assert "near_ring_paddy_dominant" not in f_only(M, "near_ring_paddy_dominant")
 
 
 def test_near_ring_paddy_dominant_ignores_village_and_hamlet_sheets():
@@ -451,15 +375,6 @@ def test_near_ring_paddy_dominant_ignores_village_and_hamlet_sheets():
 # commons/pasture/coppice cover poly that CONTAINS an occupied structure or a wellhead is claiming
 # grazed waste where the town stands. Scrub lives on the outskirts only; field barns are exempt
 # (a hay barn stands in the grazed ground it serves).
-@pytest.mark.tiers("town")
-def test_scrub_clear_of_urban_fabric_fires_when_scrub_claims_the_town():
-    M = {
-        "meta": {"scale": "town"},
-        "commons": [{"x": 500, "y": 500, "w": 400, "h": 400, "rot": 0, "role": "grazing", "seq": 1, "poly": [[300, 300], [700, 300], [700, 700], [300, 700]]}],
-        "buildings": [bldg(500, 500)],  # a merchant house deep inside the claimed scrub
-        "wells": [{"x": 400, "y": 400, "r": 8, "vr": 12}],  # a wellhead inside it too
-    }
-    assert "scrub_clear_of_urban_fabric" in f_only(M, "scrub_clear_of_urban_fabric")
 
 
 def test_scrub_clear_of_urban_fabric_fires_on_a_farmhouse_in_the_scrub():
@@ -474,32 +389,10 @@ def test_scrub_clear_of_urban_fabric_fires_on_a_farmhouse_in_the_scrub():
     assert "scrub_clear_of_urban_fabric" in f_only(M, "scrub_clear_of_urban_fabric")
 
 
-@pytest.mark.tiers("town")
-def test_scrub_clear_of_urban_fabric_passes_when_scrub_hugs_the_outskirts():
-    M = {
-        "meta": {"scale": "town"},
-        "commons": [
-            {"x": 500, "y": 500, "w": 400, "h": 400, "rot": 0, "role": "grazing", "seq": 1, "poly": [[300, 300], [700, 300], [700, 700], [300, 700]]},
-            {"x": 0, "y": 0, "w": 0, "h": 0, "rot": 0, "role": "grazing", "seq": 2, "poly": [[0, 0], [1, 0]]},  # degenerate record - skipped, never a crash
-        ],
-        "buildings": [bldg(500, 500, kind="barn"), bldg(900, 900)],  # the hay barn IN the grazing is legal; the merchant stands outside
-        "wells": [{"x": 800, "y": 300, "r": 8, "vr": 12}],  # outside the poly
-    }
-    assert "scrub_clear_of_urban_fabric" not in f_only(M, "scrub_clear_of_urban_fabric")
-
-
 # ---- channels_join_water_not_cross (GM 2026-07-23): a channel/ditch never runs straight ACROSS the
 # moat/river centerline - water joins water at a confluence (the mouth ends at the bank; the recorded
 # topology ends ON the centerline, so first/last-segment touches at the crossed water segment are the
 # sanctioned join).
-@pytest.mark.tiers("town")
-def test_channels_join_water_not_cross_fires_on_a_channel_through_the_moat():
-    M = {
-        "meta": {"scale": "town", "W": 500, "H": 500},
-        "moat": [[50, 100], [450, 100], [450, 110]],
-        "channels": [{"poly": [[100, 30], [100, 180]], "frm": {"kind": "offmap"}, "to": {"kind": "offmap"}, "w": 2.5}],
-    }
-    assert "channels_join_water_not_cross" in f_only(M, "channels_join_water_not_cross")
 
 
 def test_channels_join_water_not_cross_exempts_a_tap_ending_on_the_centerline():
@@ -509,16 +402,6 @@ def test_channels_join_water_not_cross_exempts_a_tap_ending_on_the_centerline():
         "channels": [{"poly": [[100, 100], [100, 180]], "frm": {"kind": "moat"}, "to": {"kind": "offmap"}, "w": 2.5}],
     }
     assert "channels_join_water_not_cross" not in f_only(M, "channels_join_water_not_cross")
-
-
-@pytest.mark.tiers("town")
-def test_channels_join_water_not_cross_fires_on_a_ditch_through_the_river():
-    M = {
-        "meta": {"scale": "town", "W": 500, "H": 500},
-        "river": {"pts": [[200, 20], [200, 480]], "w": 40},
-        "field_ditches": [{"poly": [[80, 300], [350, 300]], "role": "main", "field": "f1", "w": 4, "w_tail": 4}],
-    }
-    assert "channels_join_water_not_cross" in f_only(M, "channels_join_water_not_cross")
 
 
 # ---- channel_gates_at_water_junctions (GM 2026-07-23): a moat/river tap hands off to the comb canal
@@ -714,16 +597,6 @@ def test_moat_junction_skips_degenerate_channels():
         assert "moat_junctions_swept_with_the_current" not in f_only(M, "moat_junctions_swept_with_the_current")
 
 
-@pytest.mark.tiers("capital")
-def test_stream_runs_off_edge_accepts_a_trunk_river_tap():
-    """A sluiced moat feeder taps the trunk river (feature 020's capital) - the river is itself
-    edge-sourced, so a stream rooted on it inherits a real source the way an edge end does."""
-    M = _cap_water()
-    M["moat"] = [[900, 100], [900, 900]]
-    M["streams"].append({"poly": [[1180, 300], [1000, 350], [905, 400]], "frm": {"kind": "river"}, "to": {"kind": "moat"}, "w": 16})
-    assert "stream_runs_off_edge[1]" not in f(M)
-
-
 def test_bridges_seat_on_water_fires_on_a_dry_deck():
     """A deck seated on NO water at all - the floating towpath plank (settlement-review
     2026-08-10): the drain's re-route moved the ford and the deck kept its old seat, and
@@ -748,18 +621,6 @@ def test_sluice_gates_on_water():
     re-route (GM 2026-08-10)."""
     assert "sluice_gates_on_water" not in f_only(_water_map(sluice_gates=[{"x": 500, "y": 508, "rot": 0}]), "sluice_gates_on_water")
     assert "sluice_gates_on_water" in f_only(_water_map(sluice_gates=[{"x": 500, "y": 700, "rot": 0}]), "sluice_gates_on_water")
-
-
-@pytest.mark.tiers("capital")
-def test_aqueduct_taps_water_lands_dry():
-    """The intake must touch its river; the terminus (settling basin) must land clear of the
-    moat - the capital's ended IN the moat (GM 2026-08-10)."""
-    ok = _water_map(aqueducts=[{"poly": [[500, 512], [700, 300]], "w": 3}])
-    assert "aqueduct_taps_water_lands_dry" not in f_only(ok, "aqueduct_taps_water_lands_dry")
-    dry_intake = _water_map(aqueducts=[{"poly": [[500, 460], [700, 300]], "w": 3}])
-    assert "aqueduct_taps_water_lands_dry" in f_only(dry_intake, "aqueduct_taps_water_lands_dry")
-    in_moat = _water_map(aqueducts=[{"poly": [[500, 512], [700, 255]], "w": 3}], moat=[[600, 250], [800, 250], [800, 350], [600, 350]], moat_width=22)  # terminus lands in the moat channel itself
-    assert "aqueduct_taps_water_lands_dry" in f_only(in_moat, "aqueduct_taps_water_lands_dry")
 
 
 def test_tanning_yards_on_water():

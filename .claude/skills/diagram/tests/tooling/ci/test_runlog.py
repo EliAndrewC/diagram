@@ -6,7 +6,7 @@ import json
 from pathlib import Path
 
 from l7r.diagram.ci import config, runlog
-from tests.ci.conftest import git
+from tests.tooling.ci.conftest import git
 
 
 def test_entry_shape_and_month_to_date(repo: Path) -> None:

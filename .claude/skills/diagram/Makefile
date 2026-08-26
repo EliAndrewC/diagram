@@ -577,8 +577,8 @@ durations:
 	@python3 -m pytest -n $(XDIST_WORKERS) -q --no-cov $(if $(MARK),-m "$(MARK)",-m "not rolls_map and not coverage_only" --deselect tests/test_villages.py) --durations=$(or $(N),12) 2>&1 | grep -E "^[0-9.]+s (call|setup)|passed|failed" | head -$$(( $(or $(N),12) + 2 ))
 
 quick:
-	@python3 -m ruff check --fix l7r/ tests/ && python3 -m ruff format l7r/ tests/ && python3 -m mypy
-	@start=$$(date +%s); $(EXHAUSTIVE_ENV) python3 -m pytest -n $(XDIST_WORKERS) --dist worksteal $(TESTMON) -q --no-cov -x --ff -m "not rolls_map and not coverage_only" --deselect tests/test_villages.py $(TIER_SELECT); ec=$$?; \
+	@python3 -m ruff check --fix l7r/ tests/ && python3 -m ruff format l7r/ tests/ && $(MYPY)
+	@start=$$(date +%s); $(EXHAUSTIVE_ENV) python3 -m pytest -n $(XDIST_WORKERS) --dist worksteal $(TESTMON) -q --no-cov -x --ff -m "not rolls_map and not coverage_only" --deselect tests/test_villages.py $(TIER_SELECT) $(QUICK_TREE); ec=$$?; \
 	  el=$$(( $$(date +%s) - start )); \
 	  if [ $$ec -ne 0 ]; then exit $$ec; fi; \
 	  if [ $$el -gt $(QUICK_BUDGET) ]; then \
@@ -751,6 +751,14 @@ EXHAUSTIVE_ENV = $(if $(EXHAUSTIVE),L7R_TESTS_EXHAUSTIVE=1,)
 # tracked - a test that reads one re-runs only when its code changes - which is why the GATE never uses
 # testmon and runs everything. `make quick ALL=1` runs every quick test regardless.
 TESTMON = $(if $(ALL),--no-testmon,--testmon-forceselect)
+# THE QUICK TREE (GM 2026-08-26, T29): `tests/` IS the quick suite; everything that is not quick lives in its own
+# tree and is not even COLLECTED by quick - tests/tier_town and tests/tier_city (relevant to other tiers),
+# tests/gate (the corpus, the coverage carriers, the map-rolling tests) and tests/tooling (collected only when the
+# tooling changed since the last record, `ci tooling-fresh`). The gate collects all of `tests/`. Collection is
+# paid per worker, so ~1,000 fewer items is ~0.4 s of a 3.3 s floor - and the layout says what each test is.
+QUICK_TREE = tests --ignore=tests/tier_town --ignore=tests/tier_city --ignore=tests/gate $(shell python3 -m l7r.diagram.ci tooling-fresh >/dev/null 2>&1 && echo --ignore=tests/tooling)
+# mypy through its daemon (dmypy): the warm daemon re-checks only what changed, ~0.25 s -> ~0.1 s per quick; one-shot on CodeBuild
+MYPY = $(if $(CODEBUILD_BUILD_ID),python3 -m mypy,python3 -m mypy.dmypy run --)
 # THE GATE IS ALWAYS EXHAUSTIVE (constitution v2.9.0, GM 2026-08-26): `make quick` runs each test's quick form,
 # `make done` its full form - the corpus, the full matrices, the full-size canvases, the tooling tests.
 GATE_EXHAUSTIVE_ENV = L7R_TESTS_EXHAUSTIVE=1

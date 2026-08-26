@@ -10,14 +10,6 @@ from l7r.diagram.settlement import Settlement, seg_dist
 from tests.settlement._builders import _assert_no_glyph_overlaps, _cap020, _city, _crop_settlement, _town
 
 
-@pytest.mark.tiers("town")
-def test_granary_draws_a_storehouse_row():
-    # opt-in rice-transit granary: a row of n fireproof kura, recorded for town_has_granary
-    s = _town()
-    stores = s.granary(500, 500, n=3)
-    assert len(stores) == 3 and s.M["granary"]["n"] == 3 and s.M["granary"]["label"] == "granary"
-
-
 def test_cemetery_default_is_a_ruled_rectangle():
     s = _crop_settlement()
     s.cemetery(300, 300, 100, 70)
@@ -38,28 +30,6 @@ def test_cemetery_common_ground_defaults_organic():
     s = _crop_settlement()
     s.cemetery(300, 300, 100, 70, parish=False)
     assert "<path" in s.out[-1] and 'width="100"' not in s.out[-1]
-
-
-@pytest.mark.tiers("city")
-def test_cemetery_organic_false_keeps_the_louzeyuan_rectangle():
-    # the deliberate per-city override: a plotted Chinese-style charity ground stays a ruled rectangle
-    s = _crop_settlement()
-    s.cemetery(300, 300, 100, 70, parish=False, organic=False)
-    assert 'width="100"' in s.out[-1] and "<path" not in s.out[-1]
-
-
-@pytest.mark.tiers("city")
-def test_animal_ground_records_a_yard_and_optional_label():
-    # the city_no_large_empty_space remedy: a standalone stable-yard scatter claiming a pocket
-    s = _crop_settlement()
-    s.animal_ground(400, 400, r=60)  # no label - the rails and animals read on their own
-    s.flush_stable_yards()
-    yd = s.M["stable_yards"][-1]
-    assert (yd["x"], yd["y"], yd["r"], yd["of"], yd["troughs"]) == (400, 400, 60, [400, 400], 2)
-    assert "troughs_at" in yd  # the cluster anchor stable_troughs_beside_well validates
-    s.animal_ground(700, 700, r=52, label="caravan ground")
-    s.flush_stable_yards()
-    assert s.M["labels"][-1][5] == "caravan ground"  # label boxes are [x0, y0, x1, y1, z, text]
 
 
 def test_caravan_scale_yard_gets_three_troughs_beside_the_nearest_well():
@@ -326,32 +296,7 @@ def test_stable_yard_heaps_avoid_a_neighboring_yards_rails():
         assert d >= 24.9, f"heap at ({dh['x']}, {dh['y']}) sits {d:.1f}px from the neighboring yard's rail"
 
 
-@pytest.mark.tiers("town")
-def test_merchant_residences_stop_at_the_requested_count():
-    # the placed >= count early-break: with more storefronts than requested homes, the loop
-    # must stop at the cap (previously covered by the towns' legacy gens)
-    s = Settlement(W=1600, H=1600, seed=4)
-    s.meta(name="Mr", scale="town", ftpx=1)
-    rd = [(300, 1100), (1300, 1100)]
-    s.road(rd, label="post road")  # merchant_residences derives its band from the ROAD, not a street
-    s.frontage(rd, ["shop"] * 8, width=24, spacing=64, skip=rd)
-    n0 = sum(1 for b in s.M["buildings"] if b["kind"] == "merchant_large")
-    s.merchant_residences(0)  # count already satisfied -> the cap break fires on the first storefront
-    assert sum(1 for b in s.M["buildings"] if b["kind"] == "merchant_large") == n0
-    s.merchant_residences(1)
-    assert sum(1 for b in s.M["buildings"] if b["kind"] == "merchant_large") <= n0 + 1
-
-
 # ---- the justice works (feature 015) ----------------------------------------------------------
-@pytest.mark.tiers("town")
-def test_punishment_spot_records_true_size_and_reserves_ground():
-    s = _town()
-    s.punishment_spot(400, 400, rot=30)
-    p = s.M["punishment_spots"][0]
-    assert (p["w"], p["h"]) == (30.0, 12.0)  # ~30x12 real ft, true size at town grain (1 ft/px)
-    assert p["rot"] == 30.0
-    assert (400, 400, 30.0, 12.0) in s.placed  # reserved against the urban pack
-    assert s.block_polys  # and against footprint-blocking placers
 
 
 def test_punishment_spot_draws_no_notice_board():
@@ -405,16 +350,6 @@ def test_boundary_marker_is_a_location_marker():
     assert (300, 300, b["vw"], b["vh"]) in s.placed  # overlap uses the drawn box, like the wells
 
 
-@pytest.mark.tiers("town")
-def test_boundary_marker_floor_never_shrinks_a_stone():
-    # The marker floor lifts a sub-glyph stone; it must not shrink one that already draws larger.
-    s = Settlement(1000, 1000, seed=1)
-    s.meta(name="B", scale="town", ftpx=0.25)  # 4 px per foot - the true stone is already 12 px
-    s.boundary_marker(300, 300)
-    b = s.M["boundary_markers"][0]
-    assert b["vw"] == b["w"] == 12.0
-
-
 def test_justice_works_can_be_unlabeled():
     s = _town()
     s.punishment_spot(200, 200, label=None)
@@ -444,20 +379,6 @@ def test_granary_rot_turns_the_row_and_records_rotated_stores():
     recs = s.M["granaries"]
     assert len(recs) == 3 and all(r["rot"] == -54 for r in recs)
     assert recs[0]["x"] != recs[1]["x"] and recs[0]["y"] != recs[1]["y"]  # the row marches along the turned axis
-
-
-@pytest.mark.tiers("capital")
-def test_granary_append_records_a_list_for_a_capital_with_two_granaries():
-    """A capital holds its grain in TWO places for two reasons (the domain's working rice at the
-    wharf, the Emperor's stores beside it) - the legacy single M['granary'] dict cannot carry
-    both, so append=True records each store into the M['granaries'] LIST instead."""
-    s = _cap020()
-    s.granary(400, 400, n=3, w=20, h=12, gap=8, label="domain granary", append=True)
-    s.granary(800, 300, n=2, w=20, h=12, gap=8, label="Imperial granaries", append=True)
-    assert "granary" not in s.M  # the legacy dict is untouched
-    assert len(s.M["granaries"]) == 5  # one record per store, so the matrix can see each
-    assert {r["label"] for r in s.M["granaries"]} == {"domain granary", "Imperial granaries"}
-    assert all("w" in r and "h" in r for r in s.M["granaries"])
 
 
 # ---- feature 021: districts + retainer terraces -----------------------------------------------

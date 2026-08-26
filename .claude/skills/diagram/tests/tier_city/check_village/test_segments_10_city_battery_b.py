@@ -1,0 +1,525 @@
+"""tier city tests split out of `tests.check_village.test_segments_10_city_battery_b` (feature 133 T29, GM 2026-08-26): `make quick` collects
+`tests/` minus the tier, gate and tooling trees, so these are neither imported nor collected while the scope is
+locked to another tier; the gate collects everything. Helpers stay in the source module and are imported."""
+
+import pytest
+
+from l7r.diagram import check_village
+from tests.check_village._builders import (
+    _CITY_WALL,
+    _CITY_WALL_SMALL,
+    _RING,
+    WALL,
+    WALLSQ,
+    _cap_gov,
+    _city_estates,
+    _estate_city,
+    _fort_city,
+    _n_temples,
+    _ring_city,
+    _temple_city,
+    _ward006,
+    _ward_city,
+    _ward_residents_city,
+    _ward_servant_city,
+    bldg,
+    f,
+    f_only,
+    manifest,
+)
+
+
+@pytest.mark.tiers("city")
+def test_city_estates_clear_of_roads_fires_when_an_estate_straddles_the_road():
+    # GM 2026-07 (Nagahara): a samurai estate on the bridge road out of the city
+    base = dict(roads=[{"pts": [[850, 850], [1200, 1100]], "w": 26}], road_width=26)
+    fire = _fort_city(manors=[{"x": 1000, "y": 965, "w": 90, "h": 60, "rot": 0, "gate_dir": "south"}], **base)
+    assert "city_estates_clear_of_roads" in f_only(fire, "city_estates_clear_of_roads")
+    ok = _fort_city(manors=[{"x": 1000, "y": 700, "w": 90, "h": 60, "rot": 0, "gate_dir": "south"}], **base)
+    assert "city_estates_clear_of_roads" not in f_only(ok, "city_estates_clear_of_roads")
+
+
+@pytest.mark.tiers("capital", "city")
+def test_city_estates_toward_capital_respects_the_declared_direction():
+    # GM 2026-07: estates cluster toward Otosan Uchi - per-city (Tango SE, Nagahara NE)
+    ne = [{"x": 900, "y": 100, "w": 90, "h": 60, "rot": 0, "gate_dir": "south"}]  # NE of the wall centroid (500,500)
+    M = _fort_city(manors=ne)
+    M["meta"]["capital_dir"] = "northeast"
+    assert "city_estates_toward_capital" not in f_only(M, "city_estates_toward_capital")
+    M2 = _fort_city(manors=ne)
+    M2["meta"]["capital_dir"] = "southeast"  # they are NOT to the SE
+    assert "city_estates_toward_capital" in f_only(M2, "city_estates_toward_capital")
+
+
+@pytest.mark.tiers("city")
+def test_city_temples_dedicated_requires_the_clan_patron_fortunes():
+    # GM 2026-07 (Nagahara, Crab): a great Temple of Suitengu is wrong - Crab patrons are Bishamon + Ebisu
+    def temples(*names):
+        return [{"x": 300 + 40 * i, "y": 300, "w": 100, "h": 64, "rot": 0, "kind": "temple", "label": f"Temple of {n}"} for i, n in enumerate(names)]
+
+    stray = _fort_city(religious=temples("Bishamon", "Ebisu", "Suitengu"))
+    stray["meta"]["clan"] = "Crab"
+    assert "city_temples_dedicated" in f_only(stray, "city_temples_dedicated")
+    good = _fort_city(religious=temples("Bishamon", "Ebisu"))
+    good["meta"]["clan"] = "Crab"
+    assert "city_temples_dedicated" not in f_only(good, "city_temples_dedicated")
+    missing = _fort_city(religious=temples("Bishamon"))
+    missing["meta"]["clan"] = "Crab"  # only one patron present
+    assert "city_temples_dedicated" in f_only(missing, "city_temples_dedicated")
+
+
+@pytest.mark.tiers("city")
+def test_city_has_ring_road_fires_when_missing():
+    assert "city_has_ring_road" in f_only(_fort_city(), "city_has_ring_road")
+
+
+@pytest.mark.tiers("city")
+def test_city_has_ring_road_passes_when_present():
+    assert "city_has_ring_road" not in f_only(_fort_city(ring_road=_RING), "city_has_ring_road")
+
+
+@pytest.mark.tiers("city")
+def test_city_streets_meet_through_lanes_fires_when_a_street_undershoots_the_ring():
+    # a street ending 40px short of the ring (its left side sits at x=240), heading at it
+    assert "city_streets_meet_through_lanes" in f_only(_ring_city([[[400, 500], [280, 500]]]), "city_streets_meet_through_lanes")
+
+
+@pytest.mark.tiers("city")
+def test_city_streets_meet_through_lanes_fires_when_a_street_overshoots_the_ring():
+    # a street poking ~6px PAST the ring (ending at x=234, the ring is at x=240) - a stub through the far side
+    assert "city_streets_meet_through_lanes" in f_only(_ring_city([[[400, 500], [234, 500]]]), "city_streets_meet_through_lanes")
+
+
+@pytest.mark.tiers("city")
+def test_city_streets_meet_through_lanes_passes_when_it_meets_the_bed():
+    assert "city_streets_meet_through_lanes" not in f_only(_ring_city([[[400, 500], [248, 500]]]), "city_streets_meet_through_lanes")  # ends in the ring bed
+
+
+@pytest.mark.tiers("city")
+def test_city_streets_meet_through_lanes_fires_when_an_alley_undershoots_the_ring():
+    # the check covers gravel ALLEYS too, not just paved streets - the laborer-warren case the GM caught:
+    # an alley running straight at the ring and stopping ~40px short
+    M = _fort_city(ring_road=_RING, ring_road_width=15, alleys=[{"pts": [[400, 500], [280, 500]]}])
+    assert "city_streets_meet_through_lanes" in f_only(M, "city_streets_meet_through_lanes")
+
+
+@pytest.mark.tiers("city")
+def test_city_streets_meet_through_lanes_passes_when_an_alley_meets_the_ring():
+    M = _fort_city(ring_road=_RING, ring_road_width=15, alleys=[{"pts": [[400, 500], [246, 500]]}])  # ends in the ring bed
+    assert "city_streets_meet_through_lanes" not in f_only(M, "city_streets_meet_through_lanes")
+
+
+@pytest.mark.tiers("city")
+def test_ring_road_kept_clear_passes_when_clear():
+    # a dwelling parked in the city center, well inside the ring
+    M = _fort_city(ring_road=_RING, ring_road_width=15, buildings=[{"kind": "samurai", "x": 500, "y": 500, "w": 40, "h": 40, "rot": 0}])
+    assert "ring_road_kept_clear" not in f_only(M, "ring_road_kept_clear")
+
+
+@pytest.mark.tiers("city")
+def test_city_graveyard_clear_of_ring_road_fires_inside_the_eaves_forgiveness():
+    # the Tango gap: a NARROW city-scale ring (20ft = ~6.7px) with a graveyard edge 2px off the
+    # centerline - deep inside the drawn bed, but ring_road_kept_clear's (width - 6) / 2 forgiven
+    # bed collapses to ~0.33px and waves it through; the graveyard check must still fire
+    M = _fort_city(ring_road=_RING, ring_road_width=20 / 3, cemeteries=[{"x": 218, "y": 500, "w": 40, "h": 30, "rot": 0}])
+    fails = f(M)
+    assert "city_graveyard_clear_of_ring_road" in fails
+    assert "ring_road_kept_clear" not in fails  # the gap this check exists to close
+
+
+@pytest.mark.tiers("city")
+def test_city_graveyard_clear_of_ring_road_fires_on_a_mausoleum():
+    M = _fort_city(ring_road=_RING, ring_road_width=15, mausoleums=[{"x": 760, "y": 500, "w": 44, "h": 32, "rot": 0}])
+    assert "city_graveyard_clear_of_ring_road" in f_only(M, "city_graveyard_clear_of_ring_road")
+
+
+@pytest.mark.tiers("city")
+def test_city_graveyard_clear_of_ring_road_passes_when_clear():
+    M = _fort_city(ring_road=_RING, ring_road_width=20 / 3, cemeteries=[{"x": 210, "y": 500, "w": 40, "h": 30, "rot": 0}])
+    assert "city_graveyard_clear_of_ring_road" not in f_only(M, "city_graveyard_clear_of_ring_road")
+
+
+@pytest.mark.tiers("city")
+def test_city_graveyard_clear_of_ring_road_passes_without_a_ring():
+    assert "city_graveyard_clear_of_ring_road" not in f_only(_fort_city(cemeteries=[{"x": 240, "y": 500, "w": 40, "h": 30, "rot": 0}]), "city_graveyard_clear_of_ring_road")
+
+
+@pytest.mark.tiers("city")
+def test_city_multi_temple_exception_fires_on_a_third_temple_with_nothing_declared():
+    """religion-and-death.md has always said >2 major temples is the MARKED exception, but until
+    feature 016 nothing enforced it - a city could draw six temples and ship green."""
+    M = _temple_city(_n_temples(3))
+    assert "city_multi_temple_exception_declared" in f_only(M, "city_multi_temple_exception_declared")
+
+
+@pytest.mark.tiers("city")
+def test_city_multi_temple_exception_passes_once_a_recognized_reason_is_declared():
+    M = _temple_city(_n_temples(3))
+    M["meta"]["temple_exception"] = "changed_hands"
+    assert "city_multi_temple_exception_declared" not in f_only(M, "city_multi_temple_exception_declared")
+
+
+@pytest.mark.tiers("city")
+def test_city_multi_temple_exception_passes_for_the_fox_eight_precinct_program():
+    M = _temple_city(_n_temples(8))
+    M["meta"]["temple_exception"] = "fox_structure"
+    assert "city_multi_temple_exception_declared" not in f_only(M, "city_multi_temple_exception_declared")
+
+
+@pytest.mark.tiers("city")
+def test_city_multi_temple_exception_rejects_an_unrecognized_reason():
+    """A fixed vocabulary, not free text: an unrecognized reason must FAIL rather than pass by
+    virtue of being non-empty, or the declaration stops meaning anything."""
+    M = _temple_city(_n_temples(3))
+    M["meta"]["temple_exception"] = "because the GM said so"
+    assert "city_multi_temple_exception_declared" in f_only(M, "city_multi_temple_exception_declared")
+
+
+@pytest.mark.tiers("city")
+def test_city_multi_temple_exception_leaves_the_ordinary_two_temple_city_alone():
+    M = _temple_city(_n_temples(2))
+    assert "city_multi_temple_exception_declared" not in f_only(M, "city_multi_temple_exception_declared")
+
+
+@pytest.mark.tiers("city")
+def test_city_temple_neighborhood_has_shrines_fires_when_bare():
+    rel = [{"kind": "temple", "x": 400, "y": 400, "w": 80, "h": 60}, {"kind": "temple", "x": 550, "y": 420, "w": 80, "h": 60}]
+    assert "city_temple_neighborhood_has_shrines" in f_only(_temple_city(rel), "city_temple_neighborhood_has_shrines")
+
+
+@pytest.mark.tiers("city")
+def test_city_temple_neighborhood_has_shrines_passes_with_shrines():
+    rel = [{"kind": "temple", "x": 400, "y": 400, "w": 80, "h": 60}, {"kind": "temple", "x": 550, "y": 420, "w": 80, "h": 60}]
+    rel += [{"kind": "small_shrine", "x": 450 + i * 20, "y": 480, "w": 32, "h": 24, "rot": 0} for i in range(3)]
+    assert "city_temple_neighborhood_has_shrines" not in f_only(_temple_city(rel), "city_temple_neighborhood_has_shrines")
+
+
+@pytest.mark.tiers("city")
+def test_city_temple_neighborhood_has_shrines_skips_a_lone_temple():
+    # a single temple (e.g. the warrior-fortune temple among the samurai) is not a neighborhood
+    assert "city_temple_neighborhood_has_shrines" not in f_only(_temple_city([{"kind": "temple", "x": 400, "y": 400, "w": 80, "h": 60}]), "city_temple_neighborhood_has_shrines")
+
+
+@pytest.mark.tiers("city")
+def test_city_merchant_estates_clear_of_wall_moat_fires():
+    # an estate COURT straddling the TOP wall (not just the house inside)
+    assert "city_merchant_estates_clear_of_wall_moat" in f_only(_estate_city([{"x": 500, "y": 210, "w": 78, "h": 58}]), "city_merchant_estates_clear_of_wall_moat")
+
+
+@pytest.mark.tiers("city")
+def test_city_merchant_estates_clear_of_buildings_fires_on_a_temple():
+    # an estate court over a temple whose CENTER is outside the court (so it is not its own inner house)
+    M = _estate_city([{"x": 500, "y": 500, "w": 78, "h": 58}], religious=[{"x": 500, "y": 560, "w": 80, "h": 80, "kind": "temple", "label": "Temple"}])
+    assert "city_merchant_estates_clear_of_buildings" in f_only(M, "city_merchant_estates_clear_of_buildings")
+
+
+@pytest.mark.tiers("city")
+def test_city_merchant_estates_clear_of_buildings_fires_on_another_estate():
+    # two estate courts overlapping each other (the for-else estate-vs-estate path)
+    M = _estate_city([{"x": 500, "y": 500, "w": 78, "h": 58}, {"x": 540, "y": 500, "w": 78, "h": 58}])
+    assert "city_merchant_estates_clear_of_buildings" in f_only(M, "city_merchant_estates_clear_of_buildings")
+
+
+@pytest.mark.tiers("city")
+def test_city_merchant_estate_gate_clear_fires_when_gate_into_a_temple():
+    # the estate wall abuts a temple below it (fine), but its gate opens SOUTH straight into the temple
+    M = _estate_city([{"x": 500, "y": 500, "w": 78, "h": 58, "gate": [500, 529], "gate_dir": "south"}], religious=[{"x": 500, "y": 560, "w": 80, "h": 60, "kind": "temple", "label": "T"}])
+    assert "city_merchant_estate_gate_clear" in f_only(M, "city_merchant_estate_gate_clear")
+
+
+@pytest.mark.tiers("city")
+def test_city_merchant_estate_gate_clear_passes_when_gate_points_away():
+    # same abutting temple, but the gate opens NORTH onto open ground
+    M = _estate_city([{"x": 500, "y": 500, "w": 78, "h": 58, "gate": [500, 471], "gate_dir": "north"}], religious=[{"x": 500, "y": 560, "w": 80, "h": 60, "kind": "temple", "label": "T"}])
+    assert "city_merchant_estate_gate_clear" not in f_only(M, "city_merchant_estate_gate_clear")
+
+
+@pytest.mark.tiers("city")
+def test_city_merchant_estates_clear_passes_when_well_placed():
+    M = _estate_city([{"x": 500, "y": 500, "w": 78, "h": 58}], buildings=[{"x": 500, "y": 500, "w": 36, "h": 25, "rot": 0, "kind": "merchant_large"}])
+    assert "city_merchant_estates_clear_of_wall_moat" not in f_only(M, "city_merchant_estates_clear_of_wall_moat")
+    assert "city_merchant_estates_clear_of_buildings" not in f_only(M, "city_merchant_estates_clear_of_buildings")
+
+
+@pytest.mark.tiers("city")
+def test_city_ward_fence_meets_wall_fires_on_a_gap():
+    # a fence end floating 100px inside the wall, nowhere near it - a clear walk-around gap
+    assert "city_ward_fence_meets_wall" in f_only(_ward_city([[300, 795], [300, 400]]), "city_ward_fence_meets_wall")
+
+
+@pytest.mark.tiers("city")
+def test_city_ward_fence_meets_wall_fires_when_end_in_a_gate_opening():
+    # the end sits ON the wall polygon but right at a gate, where the wall is cut - it meets nothing
+    assert "city_ward_fence_meets_wall" in f_only(_ward_city([[500, 205], [795, 500]]), "city_ward_fence_meets_wall")
+
+
+@pytest.mark.tiers("city")
+def test_city_ward_fence_meets_wall_passes_when_ends_abut_solid_wall():
+    # both ends on solid rampart, clear of the gate openings
+    assert "city_ward_fence_meets_wall" not in f_only(_ward_city([[300, 205], [795, 500]]), "city_ward_fence_meets_wall")
+
+
+@pytest.mark.tiers("city")
+def test_city_ward_fence_under_wall_fires_without_a_cap():
+    # the fence ends abut the wall but no wall cap is drawn on top (z), so the fence paints over it
+    M = _ward_city([[300, 205], [795, 500]])
+    M["wards"][0].update({"z": 100, "wall_caps": []})
+    assert "city_ward_fence_under_wall" in f_only(M, "city_ward_fence_under_wall")
+
+
+@pytest.mark.tiers("city")
+def test_city_ward_fence_under_wall_passes_with_caps_on_top():
+    # a wall cap (higher z) over each end -> the rampart renders on top, the fence runs under it
+    M = _ward_city([[300, 205], [795, 500]])
+    M["wards"][0].update({"z": 100, "wall_caps": [{"x": 300, "y": 200, "z": 150}, {"x": 800, "y": 500, "z": 151}]})
+    assert "city_ward_fence_under_wall" not in f_only(M, "city_ward_fence_under_wall")
+
+
+@pytest.mark.tiers("city")
+def test_city_samurai_estates_vary_in_size_fires_when_uniform():
+    estates = [{"x": x, "y": y, "w": 100, "h": 80} for x, y in [(880, 600), (900, 880), (620, 880)]]  # 3 (in range), spread apart, all identical
+    M = {"meta": {"scale": "city", "walled": True, "W": 1000, "H": 1000}, "wall": WALLSQ, "gates": [[500, 200], [500, 800]], "manors": estates}
+    fails = f(M)
+    assert "city_samurai_estates_vary_in_size" in fails
+    assert "city_samurai_estates_outside" not in fails  # 3 IS in the 1-3 range
+    assert "city_samurai_estates_dispersed" not in fails  # spread >= 200px apart
+
+
+@pytest.mark.tiers("city")
+def test_city_samurai_estates_outside_fires_when_too_many():
+    # 4 estates shown - more than the 1-3 a city map should show (the rest are dispersed off-map, miles out)
+    estates = [{"x": x, "y": y, "w": 90 + i * 6, "h": 60} for i, (x, y) in enumerate([(880, 560), (900, 820), (620, 880), (860, 700)])]
+    M = {"meta": {"scale": "city", "walled": True, "W": 1000, "H": 1000}, "wall": WALLSQ, "gates": [[500, 200], [500, 800]], "manors": estates}
+    assert "city_samurai_estates_outside" in f_only(M, "city_samurai_estates_outside")
+
+
+@pytest.mark.tiers("city")
+def test_city_samurai_estates_dispersed_fires_on_a_tight_cluster():
+    # 3 estates packed together (< 200px apart) - a cluster ringing the wall, not dispersed country seats
+    estates = [{"x": x, "y": y, "w": 90 + i * 6, "h": 60} for i, (x, y) in enumerate([(860, 840), (900, 900), (960, 870)])]
+    M = {"meta": {"scale": "city", "walled": True, "W": 1000, "H": 1000}, "wall": WALLSQ, "gates": [[500, 200], [500, 800]], "manors": estates}
+    fails = f(M)
+    assert "city_samurai_estates_dispersed" in fails
+    assert "city_samurai_estates_outside" not in fails  # 3 is a valid count; it is the CLUSTERING that fires
+
+
+@pytest.mark.tiers("city")
+def test_city_temples_clear_of_wall_branches():
+    # three temples hitting the three footprint-vs-barrier paths: A contains a wall vertex
+    # (point_in_poly), B is crossed by a wall edge (segments_cross), C's corner sits on it (seg_dist)
+    rel = [
+        {"kind": "temple", "label": "A", "x": 500, "y": 500, "w": 200, "h": 200},
+        {"kind": "temple", "label": "B", "x": 300, "y": 500, "w": 16, "h": 300},
+        {"kind": "temple", "label": "C", "x": 200, "y": 500, "w": 40, "h": 8},
+    ]
+    M = {"meta": {"scale": "city", "walled": True, "W": 1000, "H": 1000}, "wall": [[100, 500], [500, 500], [900, 500]], "gates": [[500, 500], [500, 800]], "religious": rel}
+    assert "city_temples_clear_of_wall_moat" in f_only(M, "city_temples_clear_of_wall_moat")
+
+
+@pytest.mark.tiers("city")
+def test_city_government_clear_of_wall_moat_fires():
+    M = {
+        "meta": {"scale": "city", "walled": True, "W": 1000, "H": 1000},
+        "wall": WALLSQ,
+        "gates": [[500, 200], [500, 800]],
+        "governor_mansion": {"x": 800, "y": 500, "w": 120, "h": 90, "label": "Gov"},
+    }  # straddles the right wall edge
+    assert "city_government_clear_of_wall_moat" in f_only(M, "city_government_clear_of_wall_moat")
+
+
+@pytest.mark.tiers("city")
+def test_city_fields_clear_of_wall_moat_fires():
+    ff = {"name": "ff", "kind": "paddy", "bbox": [700, 400, 900, 600], "outline": [[700, 400], [900, 400], [900, 600], [700, 600]]}  # straddles the right wall edge
+    M = {"meta": {"scale": "city", "walled": True, "W": 1000, "H": 1000}, "wall": WALLSQ, "gates": [[500, 200], [500, 800]], "fields": [ff]}
+    assert "city_fields_clear_of_wall_moat" in f_only(M, "city_fields_clear_of_wall_moat")
+
+
+@pytest.mark.tiers("city")
+def test_city_governor_mansion_large_fires_when_small():
+    M = {
+        "meta": {"scale": "city", "walled": True, "W": 1000, "H": 1000},
+        "wall": WALLSQ,
+        "gates": [[500, 200], [500, 800]],
+        "governor_mansion": {"x": 500, "y": 500, "w": 80, "h": 60, "label": "Gov"},  # tiny
+        "manors": [{"x": 990, "y": 990, "w": 200, "h": 150}],
+    }  # an estate grander than the governor
+    assert "city_governor_mansion_large" in f_only(M, "city_governor_mansion_large")
+
+
+@pytest.mark.tiers("city")
+def test_city_ministries_cluster_fires_on_stray_ministry():
+    M = {
+        "meta": {"scale": "city", "walled": True, "W": 2000, "H": 2000},
+        "wall": WALLSQ,
+        "gates": [[500, 200], [500, 800]],
+        "governor_mansion": {"x": 500, "y": 500, "w": 200, "h": 150, "label": "Gov"},
+        "ministries": [{"x": 1800, "y": 1800, "w": 80, "h": 50, "name": "Ministry of War"}],
+    }  # far from the yamen
+    assert "city_ministries_cluster_at_government" in f_only(M, "city_ministries_cluster_at_government")
+
+
+@pytest.mark.tiers("capital", "city")
+def test_city_estates_toward_capital_fires_on_the_wrong_side():
+    # renamed from city_estates_in_southeast: the direction is per-city (meta capital_dir),
+    # defaulting to SE. A NW estate is on the wrong side of a default (SE-capital) city.
+    M = {"meta": {"scale": "city", "walled": True, "W": 1000, "H": 1000}, "wall": WALLSQ, "gates": [[500, 200], [500, 800]], "manors": [{"x": 60, "y": 60, "w": 100, "h": 80, "rot": 0}]}  # NW, not SE
+    assert "city_estates_toward_capital" in f_only(M, "city_estates_toward_capital")
+
+
+@pytest.mark.tiers("city")
+def test_city_pond_clear_of_wall_moat_fires():
+    M = {"meta": {"scale": "city", "walled": True, "W": 1000, "H": 1000}, "wall": WALLSQ, "gates": [[500, 200], [500, 800]], "pond": [800, 500, 60, 40]}  # ellipse straddling the right wall edge
+    assert "city_pond_clear_of_wall_moat" in f_only(M, "city_pond_clear_of_wall_moat")
+
+
+@pytest.mark.tiers("city")
+def test_city_temples_inside_walls_fires_on_outside_temple():
+    M = {
+        "meta": {"scale": "city", "walled": True, "W": 1000, "H": 1000},
+        "wall": WALLSQ,
+        "gates": [[500, 200], [500, 800]],
+        "religious": [{"kind": "temple", "label": "T", "x": 990, "y": 500, "w": 60, "h": 40}],
+    }
+    assert "city_temples_inside_walls" in f_only(M, "city_temples_inside_walls")
+
+
+@pytest.mark.tiers("city")
+def test_city_estates_overlap_and_barrier_fire():
+    est = [{"x": 810, "y": 500, "w": 80, "h": 60}, {"x": 822, "y": 512, "w": 80, "h": 60}]  # overlap + on the wall edge
+    M = {"meta": {"scale": "city", "walled": True, "W": 1000, "H": 1000}, "wall": WALLSQ, "gates": [[500, 200], [500, 800]], "manors": est}
+    fails = f(M)
+    assert "city_estates_no_overlap" in fails
+    assert "city_estates_clear_of_wall_moat" in fails
+
+
+@pytest.mark.tiers("city")
+def test_city_estate_gates_vary_fires_when_all_identical():
+    assert "city_estate_gates_vary" in f_only(_city_estates(["west"] * 5), "city_estate_gates_vary")
+
+
+@pytest.mark.tiers("city")
+def test_city_estate_gates_vary_passes_when_mixed():
+    assert "city_estate_gates_vary" not in f_only(_city_estates(["south", "west", "north", "south", "west"]), "city_estate_gates_vary")
+
+
+@pytest.mark.tiers("city")
+def test_city_gate_towers_clear_of_gate_furniture():
+    wall = _CITY_WALL_SMALL
+    base = {
+        "meta": {"scale": "city", "walled": True},
+        "wall": wall,
+        "gates": [[500, 200]],
+        "gate_structs": [{"x": 500, "y": 230, "w": 40, "h": 40, "kind": "tower"}, {"x": 560, "y": 230, "w": 60, "h": 44, "kind": "inspection"}],
+    }
+    assert "city_gate_towers_clear_of_gate_furniture" not in f_only(base, "city_gate_towers_clear_of_gate_furniture")  # 60px apart, clear
+    over = {**base, "gate_structs": [{"x": 500, "y": 230, "w": 40, "h": 40, "kind": "tower"}, {"x": 530, "y": 230, "w": 60, "h": 44, "kind": "inspection"}]}
+    assert "city_gate_towers_clear_of_gate_furniture" in f_only(over, "city_gate_towers_clear_of_gate_furniture")  # 30px -> footprints overlap
+
+
+@pytest.mark.tiers("city")
+def test_city_ward_fence_clear_of_structures_fires_on_a_building_on_the_fence():
+    clear = _ward006(buildings=[bldg(350, 550, "samurai")])  # inside the ward, off the fence
+    assert "city_ward_fence_clear_of_structures" not in f_only(clear, "city_ward_fence_clear_of_structures")
+    onfence = _ward006(buildings=[bldg(350, 500, "samurai")])  # centered ON the top fence line
+    assert "city_ward_fence_clear_of_structures" in f_only(onfence, "city_ward_fence_clear_of_structures")
+    maus = _ward006(mausoleums=[{"x": 500, "y": 600, "w": 44, "h": 32, "rot": 0}])  # the E fence passes through it
+    assert "city_ward_fence_clear_of_structures" in f_only(maus, "city_ward_fence_clear_of_structures")
+
+
+@pytest.mark.tiers("city")
+def test_city_kido_on_ward_fence_fires_when_the_gate_is_beside_the_fence():
+    on = _ward006()  # kido at (500,600) is ON the E fence (x=500)
+    assert "city_kido_on_ward_fence" not in f_only(on, "city_kido_on_ward_fence")
+    beside = _ward006(kido=[{"x": 470, "y": 600, "horizontal": False, "bbox": [460, 590, 480, 610]}])  # 30px inside
+    assert "city_kido_on_ward_fence" in f_only(beside, "city_kido_on_ward_fence")
+
+
+@pytest.mark.tiers("city")
+def test_city_ward_fence_clear_fires_when_two_ward_fences_cross():
+    wall = _CITY_WALL
+    a = {"name": "a", "boundary": [[200, 400], [600, 400], [600, 401]], "z": 10}
+    b = {"name": "b", "boundary": [[400, 200], [400, 600], [401, 600]], "z": 10}  # crosses a's fence at (400,400)
+    M = {"meta": {"scale": "city", "walled": True}, "wall": wall, "gates": [[500, 200]], "wards": [a, b], "kido": []}
+    assert "city_ward_fence_clear_of_structures" in f_only(M, "city_ward_fence_clear_of_structures")
+
+
+@pytest.mark.tiers("city")
+def test_city_samurai_ward_residents_only_fires_on_commoners_inside_the_ward():
+    # the Minami defect (GM 2026-08-02) in synthetic form: commoner dwellings/commerce standing
+    # on the samurai side of the ward fence
+    for kind in ("laborer", "merchant_house", "shop", "burakumin"):
+        assert "city_samurai_ward_residents_only" in f_only(_ward_residents_city(bldg(600, 600, kind=kind)), "city_samurai_ward_residents_only")
+
+
+@pytest.mark.tiers("city")
+def test_city_samurai_ward_residents_only_passes_residents_and_outsiders():
+    # samurai + their live-in servant inside; a laborer OUTSIDE the fence; a monk_house inside
+    # (a temple's clergy row may stand in the ward - Tango's Bishamon precinct)
+    M = _ward_residents_city(bldg(600, 600, kind="samurai"), bldg(620, 660, kind="servant"), bldg(200, 200, kind="laborer"), bldg(700, 700, kind="monk_house"))
+    assert "city_samurai_ward_residents_only" not in f_only(M, "city_samurai_ward_residents_only")
+
+
+@pytest.mark.tiers("city")
+def test_city_samurai_ward_residents_only_skips_unnamed_wards_and_degenerate_geometry():
+    # legacy ward records carry no name - nothing to adjudicate against
+    M = manifest(wall=WALL, wall_stroke=11.0, gates=[[500, 50], [500, 950]], wards=[{"boundary": [[400, 945], [400, 400], [945, 400]], "stroke": 5.0}], buildings=[bldg(600, 600, kind="laborer")])
+    M["meta"].update(scale="city", walled=True)
+    assert "city_samurai_ward_residents_only" not in f_only(M, "city_samurai_ward_residents_only")
+    # and a fence/wall too degenerate to close yields no interior at all
+    assert check_village._ward_interior([[400, 400]], WALL) is None
+    assert check_village._ward_interior([[400, 945], [400, 400]], []) is None
+    # a "ring" of coincident points has zero perimeter - nothing to walk an arc along
+    assert check_village._ward_interior([[400, 945], [400, 400]], [[7, 7], [7, 7], [7, 7]]) is None
+
+
+@pytest.mark.tiers("city")
+def test_city_ward_servants_housed_as_ranges_fires_on_a_freestanding_cottage():
+    # the GM 2026-08-02 defect: barring the commoner kinds handed their ground to the servant
+    # packs, and a detached servant cottage inside the fence reads as the fabric the fence excludes
+    M = _ward_servant_city(bldg(600, 600, kind="samurai", w=19, h=13), bldg(700, 700, kind="servant", w=10, h=7))
+    assert "city_ward_servants_housed_as_ranges" in f_only(M, "city_ward_servants_housed_as_ranges")
+
+
+@pytest.mark.tiers("city")
+def test_city_ward_servants_housed_as_ranges_fires_when_detached_from_its_named_host():
+    # it names a host, but stands 40px off it - service accommodation that serves nothing
+    M = _ward_servant_city(bldg(600, 600, kind="samurai", w=19, h=13), bldg(700, 600, kind="servant", w=19, h=5, of=[600, 600]))
+    assert "city_ward_servants_housed_as_ranges" in f_only(M, "city_ward_servants_housed_as_ranges")
+
+
+@pytest.mark.tiers("city")
+def test_city_ward_servants_housed_as_ranges_fires_on_a_range_drawn_as_a_cottage():
+    # abutting its host, but square - the nagaya read comes from the PROPORTION, not the position
+    M = _ward_servant_city(bldg(600, 600, kind="samurai", w=19, h=13), bldg(613, 600, kind="servant", w=7, h=7, of=[600, 600]))
+    assert "city_ward_servants_housed_as_ranges" in f_only(M, "city_ward_servants_housed_as_ranges")
+
+
+@pytest.mark.tiers("city")
+def test_city_ward_servants_housed_as_ranges_passes_an_attached_range():
+    # the shipped arrangement: a 19x5 range abutting its master's flank, flush with the frontage
+    M = _ward_servant_city(bldg(600, 600, kind="samurai", w=19, h=13), bldg(619.6, 604, kind="servant", w=19, h=5, of=[600, 600]))
+    assert "city_ward_servants_housed_as_ranges" not in f_only(M, "city_ward_servants_housed_as_ranges")
+    # ...and a servant OUTSIDE the fence is none of this check's business
+    M2 = _ward_servant_city(bldg(600, 600, kind="samurai", w=19, h=13), bldg(200, 200, kind="servant", w=10, h=7))
+    assert "city_ward_servants_housed_as_ranges" not in f_only(M2, "city_ward_servants_housed_as_ranges")
+
+
+@pytest.mark.tiers("city")
+def test_city_ward_servants_housed_as_ranges_skips_a_ward_that_cannot_be_closed():
+    # a degenerate fence yields no interior polygon - nothing to adjudicate servants against
+    M = _ward_servant_city(bldg(600, 600, kind="samurai", w=19, h=13), bldg(700, 700, kind="servant", w=10, h=7))
+    M["wards"] = [{"name": "samurai", "boundary": [[400, 945]], "stroke": 5.0}]
+    assert "city_ward_servants_housed_as_ranges" not in f_only(M, "city_ward_servants_housed_as_ranges")
+
+
+@pytest.mark.tiers("capital", "city")
+def test_ring_road_kept_clear_fires_on_a_manor_and_runs_at_capital_scale():
+    """Two stacked gaps (GM 2026-08-09, 'estates should not overlap with the ring-road'): manors
+    are overlap TARGETS, so the registry-driven victim list never included them - and the whole
+    check lived under scale=="city", so a capital never ran it at all. Four lineage estates stood
+    on the capital's patrol road with a green gate."""
+    M = _cap_gov()
+    M["ring_road"] = [[100, 500], [900, 500]]
+    M["ring_road_width"] = 15
+    M["manors"][0]["x"], M["manors"][0]["y"] = 500, 500  # squarely on the patrol road
+    assert "ring_road_kept_clear" in f_only(M, "ring_road_kept_clear")

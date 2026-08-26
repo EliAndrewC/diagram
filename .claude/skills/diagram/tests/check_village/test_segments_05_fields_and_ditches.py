@@ -1,7 +1,5 @@
 """Gate checks for field cover, cremation, streams and field ditches (test_segments_05_fields_and_funerary split by feature 122; tests verbatim)."""
 
-import pytest
-
 from tests.check_village._builders import (
     _FORK_MAINS,
     _MON,
@@ -58,21 +56,6 @@ def test_groves_clear_of_dry_plots_passes_when_the_belt_hugs_the_edge():
         "village_groves": [{"role": "belt", "r": 11, "clumps": [[400, 396]], "poly": [[380, 384], [420, 384], [420, 408], [380, 408]]}],
     }
     assert "groves_clear_of_dry_plots" not in f_only(M, "groves_clear_of_dry_plots")
-
-
-@pytest.mark.tiers("city")
-def test_field_ditches_ground_via_the_moat():
-    # a MOATED city's combs ground at the moat both ways: the supply taps it (frm=moat is a SOURCE -
-    # it is a fed watercourse, per city_moat_irrigates_fields) and a collector may empty into it
-    # (to=moat is a SINK - the moat is the city's storm drain). Added for Tango's comb-field port.
-    M = {
-        "field_ditches": [{"poly": [[300, 300], [500, 300]], "role": "main", "field": "f"}, {"poly": [[300, 600], [500, 600]], "role": "drain", "field": "f"}],
-        "channels": [
-            {"poly": [[290, 296], [304, 308]], "frm": {"kind": "moat"}, "to": {"kind": "field", "name": "f"}, "w": 2.5},
-            {"poly": [[494, 596], [520, 612]], "frm": {"kind": "drain"}, "to": {"kind": "moat"}, "w": 2.5},
-        ],
-    }
-    assert "field_ditches_reach_source_and_sink" not in f_only(M, "field_ditches_reach_source_and_sink")
 
 
 def test_delivery_ditches_taper_fires_on_a_blunt_ditch():
@@ -166,16 +149,6 @@ def test_field_supply_visibly_sourced_fires_on_a_dangling_comb_origin():
     assert "field_supply_visibly_sourced[x]" in f(_supply_M([450, 250], drawn_channels=[{"pts": [[900, 900], [950, 950]]}]))
 
 
-@pytest.mark.tiers("city")
-def test_field_supply_visibly_sourced_passes_on_a_moat_bank():
-    # a comb origin on the moat bed is sourced (the moat-fed city-comb pattern)
-    M = _supply_M([450, 110])
-    M["streams"] = []
-    M["moat"] = [[100, 100], [800, 100], [800, 105]]
-    M["moat_width"] = 26
-    assert "field_supply_visibly_sourced[x]" not in f(M)
-
-
 def test_field_supply_visibly_sourced_passes_on_a_pond_rim():
     # a comb origin inside/on the pond ellipse is sourced (Tango's in-wall nw1 comb)
     M = _supply_M([450, 250])
@@ -223,15 +196,6 @@ def test_field_supply_visibly_sourced_passes_on_a_river_bank():
     M = _supply_M([450, 110])
     M["streams"] = []
     M["river"] = {"pts": [[100, 100], [800, 100]], "w": 40}
-    assert "field_supply_visibly_sourced[x]" not in f(M)
-
-
-@pytest.mark.tiers("town")
-def test_field_supply_visibly_sourced_passes_on_a_cargo_canal():
-    # a comb origin on a cargo-canal bank is sourced (a Lion-lands water-town form)
-    M = _supply_M([450, 104])
-    M["streams"] = []
-    M["canals"] = [{"poly": [[100, 100], [800, 100]], "w": 12}]
     assert "field_supply_visibly_sourced[x]" not in f(M)
 
 
@@ -513,21 +477,6 @@ def test_cemetery_clear_of_shrine_fires_on_a_mausoleum_on_the_hall():
     # the off-the-hall rule covers MAUSOLEA too, not just graveyards (this one overlaps the shrine hall)
     M = {"meta": {"scale": "village"}, "mausoleums": [{"x": 540, "y": 520, "w": 74, "h": 58, "rot": 0}], "religious": [{"kind": "shrine", "x": 500, "y": 500, "w": 100, "h": 68}]}
     assert "cemetery_clear_of_shrine" in f_only(M, "cemetery_clear_of_shrine")
-
-
-@pytest.mark.tiers("city")
-def test_city_graveyard_count_fires_when_too_few():
-    assert "city_graveyard_count" in f_only(_city_dead(cems=[(300, 300)]), "city_graveyard_count")
-
-
-@pytest.mark.tiers("city")
-def test_city_graveyard_count_fires_when_too_many():
-    assert "city_graveyard_count" in f_only(_city_dead(cems=[(300, 300), (350, 300), (400, 300), (700, 300), (100, 100)]), "city_graveyard_count")
-
-
-@pytest.mark.tiers("city")
-def test_city_graveyard_count_passes_at_three():
-    assert "city_graveyard_count" not in f_only(_city_dead(), "city_graveyard_count")
 
 
 def test_walled_graveyards_inside_and_outside_fires_when_all_inside():

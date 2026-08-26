@@ -1,7 +1,5 @@
 """Split from test_settlement.py by feature 025 - see tests/settlement/CLAUDE.md for the index."""
 
-import pytest
-
 from l7r.diagram import check_village
 from l7r.diagram.settlement import Settlement
 from tests.settlement._builders import _crop_settlement, _nuc_village, _scatter_base_points, _town
@@ -282,17 +280,6 @@ def test_yard_fits_rejects_dry_crop_plots():
     # center 14px OUTSIDE the hem (so the center-based _in_blocked test passes it) but the 40px
     # footprint still laps the plot - only the rect test can catch this one
     assert not s._yard_fits(476, 500, 40, 26, 440, 500)
-
-
-@pytest.mark.tiers("town")
-def test_grove_fits_rejects_wall_overlap():
-    # a belt arm is footprint-checked against the town wall: the corridor test is center-only,
-    # so a wide arm centered clear of the rampart could still lap the stroke (Hirameki, 2026-07)
-    s = Settlement(W=1000, H=1000, seed=1)
-    s.meta(name="Gw", scale="town", ftpx=1)
-    assert s._grove_fits(500, 500, 90, 40, [(470, 470)])  # no wall: fits
-    s.M["wall"] = [(540, 300), (540, 700)]
-    assert not s._grove_fits(500, 500, 90, 40, [(470, 470)])  # east corner laps the wall stroke
 
 
 def test_fit_helpers_reject_out_of_bounds_spots():

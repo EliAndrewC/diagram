@@ -40,7 +40,7 @@ import pytest
 from l7r.diagram import check_village
 from tests._scope import EXHAUSTIVE
 
-HERE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))  # the skill root; the tests live one level down in tests/
+HERE = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))  # the skill root; this file lives two levels down in tests/gate/
 CORPUS = sorted(glob.glob(os.path.join(HERE, "pool", "regressions", "*.json")))
 
 

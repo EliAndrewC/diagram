@@ -10,7 +10,7 @@ DISPATCH only - it must never narrow what `scripts/gate-stamp.py` hashes (that g
 list and its own reasons). Documentation, design notes, research, the append-only logs and a pool
 map's `.notes.md` are not engine code even inside the skill; the GM: *"even if the diagram
 documentation was touched, but not the code itself, then we should not rerun the tests."*
-`tests/ci/test_delta.py` walks every path KIND and pins its classification, so a new kind of file
+`tests/tooling/ci/test_delta.py` walks every path KIND and pins its classification, so a new kind of file
 cannot be silently either.
 """
 

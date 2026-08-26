@@ -4,3 +4,4 @@
 .mapcheck.json
 # pytest-testmon: per-clone change-selection database (T28)
 .testmondata*
+.dmypy.json

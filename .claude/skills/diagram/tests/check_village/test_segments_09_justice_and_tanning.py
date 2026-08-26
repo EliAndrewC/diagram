@@ -1,38 +1,12 @@
 """Split from test_checks.py by feature 025 - see tests/check_village/CLAUDE.md for the index."""
 
-import pytest
-
 from l7r.diagram import check_village
-from tests.check_village._builders import _TY_DIAG, _WHY, WALL, _dw, _fall_map, _justice_town, _side_map, _tower, _ty_map, _waived_map, _wf_map, bldg, bstone, exground, f_only, house, pspot
-
+from tests.check_village._builders import _TY_DIAG, _WHY, WALL, _fall_map, _justice_town, _side_map, _ty_map, _waived_map, _wf_map, bldg, bstone, exground, f_only, pspot
 
 # ---- streets_have_buildings: the case that motivated this file ----------------------------
 # A building beside a north-south lane but FRONTING the east-west cross-street (it is nearer
 # the cross) must NOT count as serving the lane - so a lane with only such neighbors reads as
 # empty. The old proximity-only check missed this; this fixture pins the fix.
-@pytest.mark.tiers("town")
-def test_streets_have_buildings_fires_when_building_fronts_the_other_street():
-    M = {
-        "meta": {"scale": "town", "walled": True},
-        "wall": WALL,
-        "town_streets": [
-            {"pts": [[700, 380], [700, 620]], "w": 18},  # the lane (should read empty)
-            {"pts": [[200, 500], [950, 500]], "w": 22, "main": True},  # the cross it actually fronts
-        ],
-        "buildings": [bldg(760, 500)],  # nearest the cross, not the lane
-    }
-    assert "streets_have_buildings" in f_only(M, "streets_have_buildings")
-
-
-@pytest.mark.tiers("town")
-def test_streets_have_buildings_passes_when_a_building_fronts_the_street():
-    M = {
-        "meta": {"scale": "town", "walled": True},
-        "wall": WALL,
-        "town_streets": [{"pts": [[700, 400], [700, 600]], "w": 18, "main": True}],
-        "buildings": [bldg(720, 500)],  # nearest THIS street, covers its short length
-    }
-    assert "streets_have_buildings" not in f_only(M, "streets_have_buildings")
 
 
 # ---- wall_hugs_the_town: a wall that encloses large empty corner space ---------------------
@@ -40,55 +14,6 @@ def test_streets_have_buildings_passes_when_a_building_fronts_the_street():
 # a big square enclosure leaves three faces running over empty space - that must fire. A town
 # whose buildings sit near every face must NOT. (The hill, when present, counts as occupancy -
 # a wall may legitimately climb/skirt terrain rather than leveling it.)
-@pytest.mark.tiers("town")
-def test_wall_hugs_the_town_fires_on_empty_corner_space():
-    M = {"meta": {"scale": "town", "walled": True}, "wall": WALL, "buildings": [bldg(120, 120)]}  # one building, far from the right/bottom faces
-    assert "wall_hugs_the_town" in f_only(M, "wall_hugs_the_town")
-
-
-@pytest.mark.tiers("town")
-def test_wall_hugs_the_town_passes_when_buildings_line_every_face():
-    near = [bldg(x, y) for x in (120, 500, 880) for y in (120, 500, 880)]  # a 3x3 grid hugging all faces
-    M = {"meta": {"scale": "town", "walled": True}, "wall": WALL, "buildings": near}
-    assert "wall_hugs_the_town" not in f_only(M, "wall_hugs_the_town")
-
-
-@pytest.mark.tiers("town")
-def test_walled_town_has_gate_market_fires_when_no_market_outside():
-    # the only business sits INSIDE the wall, so there is no extramural market at the gate
-    M = {"meta": {"scale": "town", "walled": True}, "wall": WALL, "gate": [500, 950], "buildings": [bldg(500, 500, kind="merchant")]}
-    assert "walled_town_has_gate_market" in f_only(M, "walled_town_has_gate_market")
-
-
-@pytest.mark.tiers("town")
-def test_walled_town_gate_market_opt_out_suppresses_the_check():
-    # meta(gate_market=False) - a purely military or suppressed gate - skips the requirement
-    M = {"meta": {"scale": "town", "walled": True, "gate_market": False}, "wall": WALL, "gate": [500, 950], "buildings": [bldg(500, 500, kind="merchant")]}
-    assert "walled_town_has_gate_market" not in f_only(M, "walled_town_has_gate_market")
-
-
-@pytest.mark.tiers("town")
-def test_walled_town_commoners_inside_walls_fires_on_an_outside_laborer():
-    M = {
-        "meta": {"scale": "town", "walled": True},
-        "wall": [[300, 300], [700, 300], [700, 700], [300, 700]],
-        "gate": [500, 700],
-        "buildings": [_dw(900, 500, "laborer")],
-        "fire_towers": [_tower(500, 500)],
-    }
-    assert "walled_town_commoners_inside_walls" in f_only(M, "walled_town_commoners_inside_walls")
-
-
-@pytest.mark.tiers("town")
-def test_walled_town_commoners_inside_walls_allows_burakumin_and_gate_merchants():
-    M = {
-        "meta": {"scale": "town", "walled": True},
-        "wall": [[300, 300], [700, 300], [700, 700], [300, 700]],
-        "gate": [500, 700],
-        "buildings": [_dw(900, 500, "burakumin"), _dw(520, 780, "merchant"), _dw(500, 500, "laborer")],
-        "fire_towers": [_tower(500, 500)],
-    }
-    assert "walled_town_commoners_inside_walls" not in f_only(M, "walled_town_commoners_inside_walls")
 
 
 def test_settlement_has_tanning_yard_fires_when_a_watered_town_keeps_none():
@@ -116,27 +41,6 @@ def test_tanning_yard_on_water_fires_when_the_yard_sits_on_dry_ground():
 
 def test_tanning_yard_on_water_passes_on_the_bank():
     assert "tanning_yard_on_water" not in f_only(_ty_map(), "tanning_yard_on_water")
-
-
-@pytest.mark.tiers("city")
-def test_tanning_yard_outside_walls_fires_when_the_work_is_inside():
-    M = _ty_map(
-        meta={"scale": "city", "walled": True, "ftpx": 3},
-        wall=WALL,
-        tanning_yards=[{"x": 500, "y": 500, "w": 27, "h": 17, "rot": 0, "label": "tanning yard"}],
-    )
-    assert "tanning_yard_outside_walls" in f_only(M, "tanning_yard_outside_walls")
-
-
-@pytest.mark.tiers("city")
-def test_tanning_yard_outside_walls_passes_beyond_the_rampart():
-    M = _ty_map(
-        meta={"scale": "city", "walled": True, "ftpx": 3},
-        wall=WALL,
-        streams=[{"poly": [[500, 100], [500, 1300]], "w": 8}],
-        tanning_yards=[{"x": 500, "y": 1100, "w": 27, "h": 17, "rot": 0, "label": "tanning yard"}],
-    )
-    assert "tanning_yard_outside_walls" not in f_only(M, "tanning_yard_outside_walls")
 
 
 def test_tanning_yard_clear_of_dwellings_fires_when_a_house_stands_beside_it():
@@ -270,27 +174,6 @@ def test_tanning_yard_square_to_its_water_ignores_a_repeated_polyline_point():
     assert "tanning_yard_square_to_its_water" in f_only(M, "tanning_yard_square_to_its_water")
 
 
-@pytest.mark.tiers("town")
-def test_water_flow_declared_fires_when_a_watered_map_declares_no_bearing():
-    M = _wf_map(meta={"scale": "town", "walled": False, "ftpx": 1, "down_deg": 90})
-    assert "water_flow_declared" in f_only(M, "water_flow_declared")
-
-
-@pytest.mark.tiers("town")
-def test_water_flow_consistent_with_slope_fires_when_water_would_run_uphill():
-    # 90 deg or more off the fall = a net uphill component, which gravity forbids
-    M = _wf_map(meta={"scale": "town", "walled": False, "ftpx": 1, "down_deg": 90, "water_flow": 270})
-    assert "water_flow_consistent_with_slope" in f_only(M, "water_flow_consistent_with_slope")
-
-
-@pytest.mark.tiers("town")
-def test_water_flow_consistent_with_slope_passes_a_near_contour_divergence():
-    # 85 deg off the fall is a CONTOUR work (a canal is built near-parallel to the contours),
-    # realistic and must not be flagged - only crossing 90 is impossible
-    M = _wf_map(meta={"scale": "town", "walled": False, "ftpx": 1, "down_deg": 90, "water_flow": 5})
-    assert "water_flow_consistent_with_slope" not in f_only(M, "water_flow_consistent_with_slope")
-
-
 def test_watercourses_declare_flow_fires_on_an_untagged_course():
     M = _wf_map(streams=[{"poly": [[500, 100], [500, 900]], "w": 8}])
     assert "watercourses_declare_flow" in f_only(M, "watercourses_declare_flow")
@@ -310,20 +193,6 @@ def test_watercourses_flow_downstream_exempts_the_level_canal():
     # Nagahara's cargo canal runs against the drainage and is CORRECT - it is a navigation cut
     M = _wf_map(canals=[{"poly": [[900, 500], [100, 500]], "w": 12, "flow": "level", "flow_deg": None}])
     assert "watercourses_flow_downstream" not in f_only(M, "watercourses_flow_downstream")
-
-
-@pytest.mark.tiers("city")
-def test_moat_declares_circulation_fires_on_a_moat_with_no_inlet_or_outlet():
-    M = _wf_map(meta={"scale": "city", "walled": True, "ftpx": 3, "water_flow": 90}, wall=WALL, moat=WALL)
-    assert "moat_declares_circulation" in f_only(M, "moat_declares_circulation")
-
-
-@pytest.mark.tiers("city")
-def test_settlement_has_tanning_yard_honors_the_declared_opt_out():
-    # meta(tannery=False): a settlement with water but no legitimate site on it (Tango)
-    M = _ty_map(meta={"scale": "city", "walled": False, "ftpx": 3, "tannery": False})
-    M.pop("tanning_yards")
-    assert "settlement_has_tanning_yard" not in f_only(M, "settlement_has_tanning_yard")
 
 
 def test_tanning_yard_discharges_to_nothing_drawn_from_fires_on_a_course_feeding_a_pond():
@@ -359,20 +228,6 @@ def test_tanning_yard_downstream_checks_skip_a_yard_with_no_watercourse_at_all()
     assert "tanning_yard_below_every_intake" not in f_only(M, "tanning_yard_below_every_intake")
 
 
-@pytest.mark.tiers("town")
-def test_tanning_yard_below_every_intake_ignores_an_intake_on_a_DIFFERENT_course():
-    # Hoshizora's real situation: the town's intakes are on a watercourse the yard's water never
-    # reaches, so they must not be charged against it
-    M = _ty_map(channels=[{"poly": [[100, 700], [180, 720]], "frm": {"kind": "stream"}, "to": {"kind": "field", "name": "f1"}, "w": 2.5}])
-    assert "tanning_yard_below_every_intake" not in f_only(M, "tanning_yard_below_every_intake")
-
-
-@pytest.mark.tiers("city")
-def test_settlement_declares_a_land_fall_fires_when_nothing_declares_a_slope():
-    # the hole that let both provincial cities skip every drainage-slope rule behind a green gate
-    assert "settlement_declares_a_land_fall" in f_only(_fall_map(), "settlement_declares_a_land_fall")
-
-
 def test_settlement_declares_a_land_fall_accepts_a_map_level_bearing():
     M = _fall_map()
     M["meta"]["down_deg"] = 90
@@ -391,30 +246,6 @@ def test_settlement_declares_a_land_fall_is_not_satisfied_by_water_flow_alone():
     M = _fall_map()
     M["meta"]["water_flow"] = 90
     assert "settlement_declares_a_land_fall" in f_only(M, "settlement_declares_a_land_fall")
-
-
-@pytest.mark.tiers("town")
-def test_town_has_punishment_spot_fires_when_the_seat_keeps_none():
-    assert "town_has_punishment_spot" in f_only(_justice_town(punishment_spots=[]), "town_has_punishment_spot")
-
-
-@pytest.mark.tiers("town")
-def test_town_has_punishment_spot_can_be_opted_out():
-    M = _justice_town(punishment_spots=[])
-    M["meta"] = {**M["meta"], "punishment_spot": False}
-    assert "town_has_punishment_spot" not in f_only(M, "town_has_punishment_spot")
-
-
-@pytest.mark.tiers("town")
-def test_town_has_execution_ground_fires_when_the_seat_keeps_none():
-    assert "town_has_execution_ground" in f_only(_justice_town(execution_grounds=[]), "town_has_execution_ground")
-
-
-@pytest.mark.tiers("town")
-def test_town_has_execution_ground_can_be_opted_out():
-    M = _justice_town(execution_grounds=[])
-    M["meta"] = {**M["meta"], "execution_ground": False}
-    assert "town_has_execution_ground" not in f_only(M, "town_has_execution_ground")
 
 
 def test_punishment_spot_in_the_core_fires_on_a_spot_out_in_the_fields():
@@ -499,13 +330,6 @@ def test_execution_ground_off_the_farmland_fires_on_a_ground_in_a_paddy():
     assert "execution_ground_off_the_farmland" in f_only(M, "execution_ground_off_the_farmland")
 
 
-@pytest.mark.tiers("town")
-def test_execution_ground_on_the_outcast_side_fires_on_the_opposite_side():
-    # West of the core while the burakumin quarter lies east - pollution runs ONE way out of a town.
-    M = _justice_town(execution_grounds=[exground(-600, 1060)], boundary_markers=[bstone(0, 1020)])
-    assert "execution_ground_on_the_outcast_side" in f_only(M, "execution_ground_on_the_outcast_side")
-
-
 def test_execution_ground_on_the_outcast_side_is_skipped_without_a_quarter():
     # A settlement with no burakumin dwellings has no outcast side to measure against.
     M = _justice_town(buildings=[], execution_grounds=[exground(-600, 1060)], boundary_markers=[bstone(0, 1020)])
@@ -515,13 +339,6 @@ def test_execution_ground_on_the_outcast_side_is_skipped_without_a_quarter():
 def test_tanning_yard_on_the_outcast_side_fires_when_the_yard_faces_the_other_way():
     # core ~(290,410) sits BETWEEN the quarter (northwest) and the yard at (466,500) to the southeast
     assert "tanning_yard_on_the_outcast_side" in f_only(_side_map([(200, 200), (240, 200)], [(360, 620), (360, 620)]), "tanning_yard_on_the_outcast_side")
-
-
-@pytest.mark.tiers("city")
-def test_tanning_yard_on_the_outcast_side_passes_when_far_but_on_the_same_side():
-    """The Nagahara case: ~300px of separation is FINE as long as the bearing agrees - the rule is
-    directional, and a metric rule here would condemn a correct city map."""
-    assert "tanning_yard_on_the_outcast_side" not in f_only(_side_map([(380, 800), (420, 800)], [(200, 200), (240, 200)]), "tanning_yard_on_the_outcast_side")
 
 
 def test_tanning_yard_on_the_outcast_side_abstains_with_no_ordinary_dwellings():
@@ -560,25 +377,3 @@ def test_a_waived_check_prints_WAIVE_and_a_closing_summary(capsys):
     out = capsys.readouterr().out
     assert "WAIVE tanning_yard_on_the_outcast_side" in out
     assert "WAIVED tanning_yard_on_the_outcast_side: The Emperor lies southeast" in out
-
-
-@pytest.mark.tiers("town")
-def test_execution_ground_no_nearer_the_houses_than_its_stone_fires_when_the_ground_is_further_in():
-    """The GM's formulation, 2026-07-27: the stone should be closer to the town's edge than the
-    ground. The between-ness test above cannot see this - it compares two distances to the core
-    CENTROID, which orders the pair radially about one point while a settlement is not a disc. Here
-    the ground keeps its 126 px of kegare clearance and is still 10 px further IN than the stone that
-    is supposed to bound it, so both of the older rules are satisfied and the map is still wrong."""
-    M = _justice_town(boundary_markers=[bstone(1160, 1010)], execution_grounds=[exground(1500, 1060)], houses=[house(440 + 30 * i, 940) for i in range(6)] + [house(1500, 1230)])
-    assert "execution_ground_past_the_boundary_marker" not in f_only(M, "execution_ground_past_the_boundary_marker")  # the centroid arithmetic is satisfied...
-    assert "execution_ground_no_nearer_the_houses_than_its_stone" in f_only(M, "execution_ground_no_nearer_the_houses_than_its_stone")  # ...and the ground is still inside the line
-
-
-@pytest.mark.tiers("city", "town")
-def test_execution_ground_no_nearer_the_houses_than_its_stone_measures_a_walled_seat_to_its_RAMPART():
-    """And the settlement edge is the WALL where there is one. Measuring a walled city to its
-    nearest dwelling lets an isolated farmstead in the hinterland stand for the town - Tango's
-    ground sits in the extramural fields with a farmhouse further out than itself, which read as
-    'nearer the town' than a stone plainly between the city and it."""
-    M = _justice_town(wall=WALL, boundary_markers=[bstone(1000, 1010)], execution_grounds=[exground(1500, 1060)], houses=[house(440 + 30 * i, 940) for i in range(6)] + [house(1620, 1060)])
-    assert "execution_ground_no_nearer_the_houses_than_its_stone" not in f_only(M, "execution_ground_no_nearer_the_houses_than_its_stone")

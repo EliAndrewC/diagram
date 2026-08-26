@@ -221,21 +221,6 @@ def test_skeleton_layout_rejects_unknown_kind():
         settlement.skeleton_layout("spiral", 0, 0, 10, 10)
 
 
-@pytest.mark.tiers("city")
-def test_wall_tower_spacing_px_scales_with_tier():
-    """The per-city defense tier sets the max mural-tower spacing. siege = aimed-lethal bowshot
-    (197 ft), >=2 everywhere, so spacing == range; garrison = full war-bow (328 ft), >=2, so the
-    wider range; peaceful keeps only >=1 flanking tower within aimed-lethal range, so its spacing
-    is DOUBLE (a tower every 2*197 ft - the sparser Xi'an crossfire). At 3 ft/px (city scale):"""
-    ppf = 1.0 / 3.0  # px per ft
-    assert settlement.wall_tower_spacing_px(ppf, "siege") == 197.0 * ppf
-    assert settlement.wall_tower_spacing_px(ppf, "garrison") == 328.0 * ppf
-    assert settlement.wall_tower_spacing_px(ppf, "peaceful") == 2 * 197.0 * ppf
-    # siege is tighter than garrison; peaceful is the loosest
-    assert settlement.wall_tower_spacing_px(ppf, "siege") < settlement.wall_tower_spacing_px(ppf, "garrison")
-    assert settlement.wall_tower_spacing_px(ppf, "peaceful") > settlement.wall_tower_spacing_px(ppf, "garrison")
-
-
 def test_wall_tower_spacing_px_unknown_tier_falls_back_to_garrison():
     ppf = 1.0 / 3.0
     assert settlement.wall_tower_spacing_px(ppf, "nonsense") == settlement.wall_tower_spacing_px(ppf, "garrison")

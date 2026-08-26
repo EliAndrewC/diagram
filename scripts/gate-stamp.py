@@ -140,7 +140,7 @@ def content_id(data: bytes, name: str, root: Path | None = None) -> str:
 
 # THE CACHE IS LOADED ONCE PER PROCESS AND WRITTEN ONCE PER MISS, not read and rewritten per file:
 # the first cut re-parsed the 27 KB JSON for each of ~280 files, and a warm hash pass still cost
-# 2.7 s (measured 2026-08-26 in tests/ci/test_state.py). Keyed by the cache path so two roots in one
+# 2.7 s (measured 2026-08-26 in tests/tooling/ci/test_state.py). Keyed by the cache path so two roots in one
 # process (the tests' fixture repos) never share a table.
 _cache_tables: dict[Path, dict[str, str]] = {}
 _cache_dirty: set[int] = set()

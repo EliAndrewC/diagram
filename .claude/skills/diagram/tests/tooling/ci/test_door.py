@@ -9,7 +9,7 @@ from pathlib import Path
 import pytest
 
 from l7r.diagram.ci import door
-from tests.ci.conftest import commit, git
+from tests.tooling.ci.conftest import commit, git
 
 S = ".claude/skills/diagram/"
 

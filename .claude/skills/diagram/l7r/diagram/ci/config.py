@@ -3,7 +3,7 @@
 THE ONE RATE CONSTANT. `RATE_PER_MIN` is what every cost line in the audit is computed from, and it
 is mirrored in exactly one other place: the `gm-assistant-ci-monthly-alert` Lambda's `RATE_PER_MIN`
 environment variable (the live 20%-steps email). Change the compute type and both move together -
-`tests/ci/test_config.py` pins the value so the change is deliberate.
+`tests/tooling/ci/test_config.py` pins the value so the change is deliberate.
 
 WHERE THE SECRETS COME FROM. `development-secrets.ini` is gitignored and lives at the repository
 root; a `.example` beside it names every key. Resolution order: `$DIAGRAM_SECRETS`, the working

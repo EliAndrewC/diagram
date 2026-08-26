@@ -12,7 +12,7 @@ import pytest
 from l7r.diagram.ci import config, dispatch, state
 from l7r.diagram.ci.decision import CHECK, MERGE
 from l7r.diagram.ci.delta import engine_key
-from tests.ci.conftest import FakeClient, ScriptedSh, commit, git
+from tests.tooling.ci.conftest import FakeClient, ScriptedSh, commit, git
 
 S = ".claude/skills/diagram/"
 

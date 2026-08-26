@@ -1,10 +1,7 @@
 """Gate checks for supply roadways, commons, graveyards and channel sources (test_segments_05_fields_and_funerary split by feature 122; tests verbatim)."""
 
-import pytest
-
 from l7r.diagram import check_village
 from tests.check_village._builders import (
-    _MOAT,
     _PADDY,
     WALL,
     _city_dead,
@@ -12,7 +9,6 @@ from tests.check_village._builders import (
     _crem_road,
     _crem_temple,
     _paddy_field_rec,
-    _town_dead,
     _water_grave,
     bldg,
     f,
@@ -79,21 +75,6 @@ def test_funerary_set_back_cremation_may_sit_nearer_than_a_grave():
     crem = {**base, "cremation_grounds": [{"x": 300, "y": 288, "w": 116, "h": 80, "rot": 0}]}
     assert "funerary_set_back_from_water" in f_only(grave, "funerary_set_back_from_water")
     assert "funerary_set_back_from_water" not in f_only(crem, "funerary_set_back_from_water")
-
-
-@pytest.mark.tiers("city")
-def test_funerary_set_back_inside_wall_grave_exempt_from_moat():
-    # a graveyard just inside the wall is shielded from the (outside) moat by the rampart -> exempt
-    WALLSQ = [[200, 200], [800, 200], [800, 800], [200, 800]]
-    M = {"meta": {"scale": "city"}, "wall": WALLSQ, "moat": _MOAT, "moat_width": 22, "cemeteries": [{"x": 230, "y": 500, "w": 50, "h": 36, "rot": 0, "parish": True}]}
-    assert "funerary_set_back_from_water" not in f_only(M, "funerary_set_back_from_water")
-
-
-@pytest.mark.tiers("city")
-def test_funerary_set_back_outside_wall_grave_subject_to_moat():
-    WALLSQ = [[200, 200], [800, 200], [800, 800], [200, 800]]
-    M = {"meta": {"scale": "city"}, "wall": WALLSQ, "moat": _MOAT, "moat_width": 22, "cemeteries": [{"x": 120, "y": 500, "w": 50, "h": 36, "rot": 0, "parish": True}]}
-    assert "funerary_set_back_from_water" in f_only(M, "funerary_set_back_from_water")
 
 
 def test_funerary_set_back_fires_near_a_rice_paddy():
@@ -165,71 +146,6 @@ def test_cremation_not_between_temple_and_road_passes_when_no_temple_nearby():
     assert "cremation_ground_not_between_temple_and_road" not in f_only(_crem_temple((300, 360), mon_xy=(300, 1500)), "cremation_ground_not_between_temple_and_road")
 
 
-@pytest.mark.tiers("city")
-def test_city_temples_have_graveyards_fires_when_a_temple_unserved():
-    assert "city_temples_have_graveyards" in f_only(_city_dead(temples=[(320, 320, "A", True), (680, 700, "B", True)]), "city_temples_have_graveyards")
-
-
-@pytest.mark.tiers("city")
-def test_city_temples_have_graveyards_exempts_a_flagged_temple():
-    assert "city_temples_have_graveyards" not in f_only(_city_dead(temples=[(320, 320, "A", True), (680, 700, "B", False)]), "city_temples_have_graveyards")
-
-
-@pytest.mark.tiers("city")
-def test_city_has_mausoleum_fires_when_missing():
-    assert "city_has_mausoleum" in f_only(_city_dead(maus=[]), "city_has_mausoleum")
-
-
-@pytest.mark.tiers("city")
-def test_city_has_mausoleum_fires_when_outside_walls():
-    assert "city_has_mausoleum" in f_only(_city_dead(maus=[(100, 100)]), "city_has_mausoleum")
-
-
-@pytest.mark.tiers("city")
-def test_city_has_mausoleum_fires_when_far_from_quarter():
-    assert "city_has_mausoleum" in f_only(_city_dead(maus=[(260, 740)], gov=(740, 260)), "city_has_mausoleum")
-
-
-@pytest.mark.tiers("city")
-def test_city_has_mausoleum_passes_when_by_quarter():
-    assert "city_has_mausoleum" not in f_only(_city_dead(), "city_has_mausoleum")
-
-
-@pytest.mark.tiers("city")
-def test_city_has_cremation_ground_fires_when_inside_walls():
-    assert "city_has_cremation_ground" in f_only(_city_dead(crem=[(500, 400)]), "city_has_cremation_ground")
-
-
-@pytest.mark.tiers("city")
-def test_city_has_cremation_ground_passes_when_outside():
-    assert "city_has_cremation_ground" not in f_only(_city_dead(), "city_has_cremation_ground")
-
-
-@pytest.mark.tiers("city")
-def test_city_has_ossuary_fires_when_far_from_cremation():
-    assert "city_has_ossuary" in f_only(_city_dead(oss=[(900, 100)]), "city_has_ossuary")
-
-
-@pytest.mark.tiers("city")
-def test_city_has_ossuary_passes_when_by_cremation():
-    assert "city_has_ossuary" not in f_only(_city_dead(), "city_has_ossuary")
-
-
-@pytest.mark.tiers("town")
-def test_town_has_cremation_ground_fires_when_missing():
-    assert "town_has_cremation_ground" in f_only(_town_dead([]), "town_has_cremation_ground")
-
-
-@pytest.mark.tiers("town")
-def test_town_has_cremation_ground_fires_when_among_dwellings():
-    assert "town_has_cremation_ground" in f_only(_town_dead([(320, 300)]), "town_has_cremation_ground")
-
-
-@pytest.mark.tiers("town")
-def test_town_has_cremation_ground_passes_when_at_the_edge():
-    assert "town_has_cremation_ground" not in f_only(_town_dead([(900, 900)]), "town_has_cremation_ground")
-
-
 def test_sacred_and_graves_off_marsh_fires_and_passes_on_dry_ground():
     # a shrine hall or a graveyard must NOT sit on a reed marsh (the wet valley toe) - only on dry ground.
     marsh = [[400, 400], [700, 400], [700, 700], [400, 700]]  # a toe marsh
@@ -291,51 +207,9 @@ def test_roads_clear_of_marsh_exempts_a_defense_belt_causeway():
     assert "roads_clear_of_marsh" not in f_only(M, "roads_clear_of_marsh")
 
 
-@pytest.mark.tiers("town")
-def test_town_monasteries_have_graveyards_fires_when_unserved():
-    M = {"meta": {"scale": "town"}, "religious": [{"x": 500, "y": 500, "w": 100, "h": 70, "kind": "monastery"}]}
-    assert "town_monasteries_have_graveyards" in f_only(M, "town_monasteries_have_graveyards")
-
-
-@pytest.mark.tiers("town")
-def test_town_monasteries_have_graveyards_passes_with_precinct_ground_or_opt_out():
-    M = {"meta": {"scale": "town"}, "religious": [{"x": 500, "y": 500, "w": 100, "h": 70, "kind": "monastery"}], "cemeteries": [{"x": 560, "y": 420, "w": 80, "h": 60, "rot": 0}]}
-    assert "town_monasteries_have_graveyards" not in f_only(M, "town_monasteries_have_graveyards")
-    M2 = {"meta": {"scale": "town"}, "religious": [{"x": 500, "y": 500, "w": 100, "h": 70, "kind": "monastery", "graveyard": False}]}
-    assert "town_monasteries_have_graveyards" not in f_only(M2, "town_monasteries_have_graveyards")
-
-
-@pytest.mark.tiers("town")
-def test_town_has_ossuary_fires_when_missing():
-    M = {"meta": {"scale": "town"}, "cremation_grounds": [{"x": 200, "y": 800, "w": 75, "h": 52, "rot": 0}]}
-    assert "town_has_ossuary" in f_only(M, "town_has_ossuary")
-
-
-@pytest.mark.tiers("town")
-def test_town_has_ossuary_passes_beside_the_cremation_ground():
-    M = {"meta": {"scale": "town"}, "cremation_grounds": [{"x": 200, "y": 800, "w": 75, "h": 52, "rot": 0}], "ossuaries": [{"x": 260, "y": 860, "w": 20, "h": 20, "rot": 0}]}
-    assert "town_has_ossuary" not in f_only(M, "town_has_ossuary")
-
-
-@pytest.mark.tiers("town")
-def test_geometry_within_canvas_fires_on_a_stray_town_wall_vertex():
-    M = {"meta": {"scale": "town", "W": 2000, "H": 1300}, "wall": [[300, 300], [9999999, 300], [700, 700]]}
-    assert "geometry_within_canvas" in f_only(M, "geometry_within_canvas")
-
-
 # ---- dry_plots_off_hill (feature 013): a hill slope carries dry hill-crops/tea/woodland/scrub, never
 # flooded paddy - and the near-ring dry-field tiler must not stray onto it either (no_field_on_hill
 # reads only M["fields"], so this closes the dry-plot half).
-@pytest.mark.tiers("town")
-def test_dry_plots_off_hill_fires_when_a_plot_sits_on_the_hill():
-    M = {"meta": {"scale": "town"}, "hill": [500, 500, 200, 150], "dry_plots": [{"poly": [[480, 480], [520, 480], [520, 520], [480, 520]], "crop": "soy", "theta": 0.0}]}
-    assert "dry_plots_off_hill" in f_only(M, "dry_plots_off_hill")
-
-
-@pytest.mark.tiers("town")
-def test_dry_plots_off_hill_passes_when_plots_avoid_the_hill():
-    M = {"meta": {"scale": "town"}, "hill": [500, 500, 200, 150], "dry_plots": [{"poly": [[50, 50], [90, 50], [90, 90], [50, 90]], "crop": "soy", "theta": 0.0}]}
-    assert "dry_plots_off_hill" not in f_only(M, "dry_plots_off_hill")
 
 
 # ---- comb_supply_commands_both_flanks (2026-08-16) -----------------------------------------------

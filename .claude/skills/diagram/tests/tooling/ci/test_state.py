@@ -7,7 +7,7 @@ from pathlib import Path
 import pytest
 
 from l7r.diagram.ci import state
-from tests.ci.conftest import commit
+from tests.tooling.ci.conftest import commit
 
 S = ".claude/skills/diagram/"
 
@@ -161,7 +161,7 @@ def test_already_verified_only_after_a_green_done_against_unchanged_engine_conte
 def test_the_short_circuit_key_contains_everything_the_stamp_hashes(repo: Path) -> None:
     """FR-019: the short-circuit re-writes the gate-stamp. Safe because the check compares the SAME
     hash the stamp writes - gate-stamp's diagram area, loaded from the script itself."""
-    from tests.ci.conftest import REPO_ROOT
+    from tests.tooling.ci.conftest import REPO_ROOT
 
     gs = state._gate_stamp(REPO_ROOT)
     area_path, patterns = gs.AREAS["diagram"]

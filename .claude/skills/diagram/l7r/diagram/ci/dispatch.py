@@ -66,7 +66,7 @@ def default_sh(args: list[str], cwd: Path, env: Mapping[str, str] | None) -> ShR
     return p.returncode, p.stdout + p.stderr
 
 
-class Boto3Client:  # pragma: no cover - the real transport; its response SHAPES are what tests/ci/fixtures/ record
+class Boto3Client:  # pragma: no cover - the real transport; its response SHAPES are what tests/tooling/ci/fixtures/ record
     """The real boundary. Constructed only by `__main__`, never by a test."""
 
     def __init__(self, secrets: config.Secrets) -> None:

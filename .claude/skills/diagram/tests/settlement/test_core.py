@@ -7,10 +7,10 @@ import tempfile
 
 import pytest
 
-from l7r.diagram.settlement import Settlement, roll_merchant_estate_count, roll_torii_count, surface_water_dist, village_population
+from l7r.diagram.settlement import Settlement, roll_torii_count, surface_water_dist, village_population
 from l7r.diagram.waterfields import dedup_ring, floor_overhang, pointed_ring, polyline_cum, supply_bank_clearance
 from tests._scope import full_or
-from tests.settlement._builders import _cap020, _castle_map, _city, _crop_settlement, _max_turn_deg, _memo_city, _shoelace, _torii_city, _town
+from tests.settlement._builders import _cap020, _castle_map, _city, _crop_settlement, _max_turn_deg, _memo_city, _shoelace, _town
 
 
 def test_png_width_env_overrides_render_resolution(monkeypatch):
@@ -101,18 +101,6 @@ def test_rects_overlap_detects_overlap_and_separation():
     assert rects_overlap(a, [(5, 5), (15, 5), (15, 15), (5, 15)]) is True  # corner-overlapping
     assert rects_overlap(a, [(20, 0), (30, 0), (30, 10), (20, 10)]) is False  # separated on x
     assert rects_overlap(a, [(0, 20), (10, 20), (10, 30), (0, 30)]) is False  # separated on y
-
-
-@pytest.mark.tiers("city")
-def test_shrine_hall_rolls_torii_count_per_temple():
-    # the 2026-07-23 full re-roll: torii=[...] is avenue GEOMETRY; the COUNT is a seeded
-    # per-temple roll on the tier's TORII_WEIGHTS column, recorded on the religious rec
-    import random as _rr
-
-    expect = roll_torii_count("city", _rr.Random(9 * 977 + 600 * 31 + 500 * 57))
-    s = _torii_city()
-    assert s.M["religious"][-1]["torii_count"] == expect
-    assert len(s.M["torii"]) == expect
 
 
 def test_roll_torii_count_distributions():
@@ -409,28 +397,6 @@ def test_settlement_form_water_town_is_lion_gated():
     assert lion.resolve("settlement_form") == "water_town"
 
 
-@pytest.mark.tiers("city")
-def test_roll_merchant_estate_count_distribution():
-    # 30/40/30 for 1/2/3 at city scale - the granted-privilege distribution (MERCHANT_ESTATE_WEIGHTS)
-    import collections
-    import random as _rr
-
-    from l7r.diagram.settlement import MERCHANT_ESTATE_WEIGHTS
-
-    rng = _rr.Random(7)
-    n = 6000
-    c = collections.Counter(roll_merchant_estate_count("city", rng) for _ in range(n))
-    assert set(c) == {1, 2, 3}
-    for count, wt in MERCHANT_ESTATE_WEIGHTS["city"]:
-        assert abs(c[count] / n - wt) < 0.03
-
-    class _One:  # rng.random() lives in [0,1) so the exhaustion return is defensively dead - prove it anyway (the roll_torii_count precedent)
-        def random(self):
-            return 1.0
-
-    assert roll_merchant_estate_count("city", _One()) == 3  # exhaustion falls to the last bucket
-
-
 def test_build_polder_mosaic_knob():
     # GM 2026-07-22: the `mosaic` knob roughs a surveyed polder GRID into an accreted, creek-fitted MOSAIC
     # (some 桑基魚塘 dike-pond districts read that way; some 圩田 polders read as the clean grid). It must be
@@ -520,20 +486,6 @@ def test_round_channel_joints_leaves_offtakes_and_gentle_seams_alone():
     assert e["pts"] == [(0.0, 0.0), (200.0, 0.0)]
 
 
-@pytest.mark.tiers("city")
-def test_execution_ground_is_sized_and_screened_by_tier():
-    t = _town()
-    t.execution_ground(500, 500)
-    e = t.M["execution_grounds"][0]
-    assert (e["w"], e["h"]) == (60.0, 60.0)  # county tier: ~60x60 real ft
-    assert e["screened"] is False  # a county ground is open to the road on every side
-    c = _city()
-    c.execution_ground(500, 500)
-    ec = c.M["execution_grounds"][0]
-    assert (ec["w"], ec["h"]) == (round(c.px(100), 1), round(c.px(60), 1))  # city tier: ~100x60 real ft
-    assert ec["screened"] is True
-
-
 def test_kiln_rotation_carries_the_body_and_the_quarters_with_it():
     """`rot` lays the kiln's upslope axis along local +x, so a rotated works must report rotated
     world coordinates for both - a body recorded in the unrotated frame would be measured against
@@ -600,13 +552,6 @@ def test_seat_memo_tolerates_bound_being_SET_but_not_unset():
     s.bound = None
     memo.sync()
     assert (100.0, 200.0) not in memo.level("laborer", 10, 6, 7)
-
-
-@pytest.mark.tiers("capital")
-def test_a_capital_declares_its_scale_and_takes_the_city_building_grain():
-    s, _ = _castle_map()
-    assert s.M["meta"]["scale"] == "capital"
-    assert s.bscale == pytest.approx(1 / 3)
 
 
 @pytest.mark.parametrize("gate_dir", ["south", "north", "east", "west"])
@@ -712,21 +657,6 @@ def test_sluice_gate_label_names_the_black_bar():
     n4 = len(s4.top)
     s4.sluice_gate(500, 500, span=26)  # a 66 ft leat: the frame spans bank to bank
     assert 'x="-13.0"' in "".join(s4.top[n4:])  # the posts stand on the abutments, not mid-water
-
-
-@pytest.mark.tiers("capital", "city")
-def test_manor_ink_parameter_marks_foreign_sovereign_ground():
-    """The Imperial Magistrate's compound is foreign sovereign ground and must not read as another
-    domain office: the manor form, in its own ink (settlements/capitals.md, 'Compounds with no
-    provincial equivalent')."""
-    s1 = _cap020()
-    s1.manor(700, 700, 240, 180, "Imperial Magistrate's Compound", gate_dir="west")
-    assert "ink" not in s1.M["manors"][0]  # the default stays byte-identical for every old map
-    s2 = _cap020()
-    n0 = len(s2.out)
-    s2.manor(700, 700, 240, 180, "Imperial Magistrate's Compound", gate_dir="west", ink="#274D3D")
-    assert s2.M["manors"][0]["ink"] == "#274D3D"
-    assert 'stroke="#274D3D"' in "".join(s2.out[n0:])
 
 
 def test_a_homestead_may_not_stand_in_a_neighbours_drying_sun():

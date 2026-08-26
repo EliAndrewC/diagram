@@ -1,7 +1,5 @@
 """Split from test_checks.py by feature 025 - see tests/check_village/CLAUDE.md for the index."""
 
-import pytest
-
 from l7r.diagram import check_village
 from tests.check_village._builders import (
     _EAST_SHADE,
@@ -185,16 +183,6 @@ def test_farmhouses_shed_separately_ignores_a_derelict():
         "houses": [{"x": 500, "y": 500, "w": 46, "h": 28, "kind": "plain", "rot": 0}, {"x": 550, "y": 500, "w": 46, "h": 28, "kind": "abandoned", "rot": 0}],
     }
     assert "farmhouses_shed_separately" not in f_only(M, "farmhouses_shed_separately")
-
-
-@pytest.mark.tiers("city")
-def test_labels_clear_of_other_buildings_fires_on_a_caption_over_a_torii_arch():
-    # GM 2026-07-27: an arch is "never covered by the 'temple of X' label" - and the hall's OWN
-    # caption was the commonest offender, since caption and sando both want the ground at the front.
-    # A torii is a bare [x, y, z] triple, so it needed its own branch in the victim builder; before
-    # that it was classified and still checked nothing.
-    M = {"meta": {"scale": "city", "ftpx": 3}, "labels": [[480, 552, 620, 566, 5, "Temple of Bishamon"]], "torii": [[500, 560, 1]]}
-    assert "labels_clear_of_other_buildings" in f_only(M, "labels_clear_of_other_buildings")
 
 
 def test_wells_clear_of_shrine_and_torii_fires_when_a_well_sits_under_the_torii():
@@ -948,62 +936,11 @@ def test_a_caption_over_a_wellhead_is_caught():
     assert "wells" in check_village._LABEL_GROUP
 
 
-@pytest.mark.tiers("city")
-def test_theater_stage_caption_may_sit_on_its_precinct_but_not_on_the_town():
-    """A stage caption is allowed onto TEMPLE ground, and nothing else it does not name.
-
-    `theater_stage` sites the stage inside a temple/monastery precinct (and
-    `theater_stage_by_temple` enforces it), so once the caption is seated by the standoff ladder
-    against the stage's rotated extent, every seat within reach of its subject lands on precinct
-    ground. Before this, correcting the rotation-blind caption offset simply moved Tango's caption
-    off its own stage and onto a monk house, then onto a hall - a green map made worse by a fix.
-
-    The second half is the part that matters: the allowance is scoped to `temple`, so a stage
-    caption dumped on a merchant house still fires. An allowance nobody bounds is not a rule.
-    """
-    M = manifest(meta={"scale": "city", "ftpx": 3, "W": 2000, "H": 2000, "name": "Nowhere"})
-    M["religious"] = [{"x": 500, "y": 500, "w": 300, "h": 300, "kind": "temple"}]
-    M["labels"] = [[440, 480, 560, 492, 1, "theater stage"]]
-    assert "labels_clear_of_other_buildings" not in check_village.gate(M, verbose=False)
-
-    M["buildings"] = [{"x": 1200, "y": 1200, "w": 40, "h": 30, "kind": "merchant"}]
-    M["labels"] = [[1180, 1190, 1240, 1202, 1, "theater stage"]]
-    assert "labels_clear_of_other_buildings" in check_village.gate(M, verbose=False)
-
-
-@pytest.mark.tiers("town")
-def test_labels_clear_of_other_buildings_reads_the_tilted_quad():
-    # the pre-tilt box [0..3] laps the merchant, but the -30 deg glyph run swings clear below it -
-    # judged by its box the caption would false-flag; judged by its true quad it is clean
-    M = manifest(meta={"scale": "town", "ftpx": 1, "W": 1000, "H": 1000}, buildings=[bldg(120, 106, kind="merchant", w=20, h=16)])
-    M["labels"] = [[100, 100, 240, 112, 1, "stray caption", None, -30.0]]
-    assert "labels_clear_of_other_buildings" not in f_only(M, "labels_clear_of_other_buildings")
-    M["labels"] = [[100, 100, 240, 112, 1, "stray caption"]]  # the same record level DOES lap it
-    assert "labels_clear_of_other_buildings" in f_only(M, "labels_clear_of_other_buildings")
-
-
 def test_labels_within_image_uses_the_tilted_reach():
     lvl = [100, 20, 240, 32, 1, "near the top edge"]
     assert "labels_within_image" not in f_only({"meta": {}, "labels": [lvl]}, "labels_within_image")
     # tilted -30, the run's high end pokes past the frame the level box sat inside
     assert "labels_within_image" in f_only({"meta": {}, "labels": [[*lvl[:6], None, -30.0]]}, "labels_within_image")
-
-
-@pytest.mark.tiers("city", "town")
-def test_a_plural_granaries_caption_may_cover_its_own_stores():
-    """'domain granaries' does not CONTAIN the group word 'granary', so the derived
-    caption-permission rule alone could not permit the plural captions the wharf complexes
-    carry - the synonym branch does (GM 2026-08-09, the singular/plural label question).
-    Tested at CITY scale because labels_clear_of_other_buildings runs in the town/city block;
-    the control proves the granaries pair is actually judged, not skipped."""
-    M = {
-        "meta": {"scale": "city", "W": 1000, "H": 1000},
-        "granaries": [{"x": 550, "y": 560, "w": 40, "h": 24, "rot": 0, "label": "domain granaries"}],
-        "labels": [[480, 550, 640, 566, 5, "domain granaries"]],
-    }
-    assert "labels_clear_of_other_buildings" not in f_only(M, "labels_clear_of_other_buildings")
-    M["labels"] = [[480, 550, 640, 566, 5, "flophouse row"]]  # a foreign caption on the stores still fires
-    assert "labels_clear_of_other_buildings" in f_only(M, "labels_clear_of_other_buildings")
 
 
 def test_feature_022_targeted_verdict_matches_the_full_gate():

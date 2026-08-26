@@ -45,5 +45,5 @@ def test_a_file_with_neither_section_loads_empty(tmp_path: Path, monkeypatch: py
 
 
 def test_the_example_matches_the_repo_file() -> None:
-    root = Path(__file__).resolve().parents[5]
+    root = Path(__file__).resolve().parents[6]  # tests/tooling/ci/ (T29)
     assert (root / "development-secrets.ini.example").read_text(encoding="utf-8") == config.SECRETS_EXAMPLE

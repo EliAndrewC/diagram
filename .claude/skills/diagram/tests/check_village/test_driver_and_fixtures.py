@@ -16,7 +16,6 @@ from tests.check_village._builders import (
     _capital_manifest,
     _feature_022_manifest,
     _haz_base,
-    _justice_town,
     _tv,
     bldg,
     bstone,
@@ -236,13 +235,6 @@ def test_convex_hull_degenerate_point_clouds():
     assert cv.poly_area(cv.convex_hull([(0.0, 0.0), (1.0, 1.0)])) == 0.0
 
 
-@pytest.mark.tiers("town")
-def test_justice_town_fixture_passes_every_justice_check():
-    # The control. Without it, a check that fires on EVERYTHING would look like a working check.
-    bad = f(_justice_town())
-    assert not {n for n in bad if n.startswith(("punishment_spot", "execution_ground", "town_has_punishment", "town_has_execution"))}
-
-
 @pytest.mark.parametrize("hazard,expect,where,build,exempt", _HAZARDS, ids=[h[0].replace(" ", "_").replace("'", "") for h in _HAZARDS])
 def test_every_solid_struct_is_gated_off_every_hazard(hazard, expect, where, build, exempt):
     """TWO AXES IN THE QUICK FORM, THE FULL MATRIX UNDER EXHAUSTIVE (GM 2026-08-26, T19). The property
@@ -339,14 +331,6 @@ def test_capital_packed_overflow_names_the_wall_resize_cure(capsys):
     check_village.gate(M, verbose=True)
     out = capsys.readouterr().out
     assert "CANNOT WORK WITHOUT RESIZING THE WALL" in out
-
-
-@pytest.mark.tiers("town")
-def test_cistern_wells_with_no_aqueduct_fire():
-    """A josui-ido cistern-well claims to draw on a buried main - with NO aqueduct on the map
-    there is nothing to tap (coverage: the no-aqueduct branch)."""
-    M = {"meta": {"scale": "town"}, "wells": [{"x": 500, "y": 500, "kind": "cistern"}]}
-    assert any("cistern" in c for c in f(M)), "the no-aqueduct cistern must fail the josui-ido rule"
 
 
 def test_feature_022_gate_refuses_an_unknown_check_name():
