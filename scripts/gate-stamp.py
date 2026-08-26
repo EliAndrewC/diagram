@@ -122,20 +122,48 @@ def content_id(data: bytes, name: str, root: Path | None = None) -> str:
     raw = hashlib.sha256(data).hexdigest()
     if not name.endswith(".py"):
         return raw
-    cache = (root / ".git" / _CACHE_NAME) if root is not None and (root / ".git").is_dir() else None
-    table: dict[str, str] = {}
-    if cache is not None and cache.is_file():
-        try:
-            table = json.loads(cache.read_text(encoding="utf-8"))
-        except ValueError:
-            table = {}
+    table = _cache_table(root)
     if raw in table:
         return table[raw]
     sem = hashlib.sha256(semantic_bytes(data, name)).hexdigest()
-    if cache is not None:
-        table[raw] = sem
-        cache.write_text(json.dumps(table), encoding="utf-8")
+    table[raw] = sem
+    _cache_dirty.add(id(table))
+    _flush_cache(root)
     return sem
+
+
+# THE CACHE IS LOADED ONCE PER PROCESS AND WRITTEN ONCE PER MISS, not read and rewritten per file:
+# the first cut re-parsed the 27 KB JSON for each of ~280 files, and a warm hash pass still cost
+# 2.7 s (measured 2026-08-26 in tests/ci/test_state.py). Keyed by the cache path so two roots in one
+# process (the tests' fixture repos) never share a table.
+_cache_tables: dict[Path, dict[str, str]] = {}
+_cache_dirty: set[int] = set()
+
+
+def _cache_path(root: Path | None) -> Path | None:
+    return (root / ".git" / _CACHE_NAME) if root is not None and (root / ".git").is_dir() else None
+
+
+def _cache_table(root: Path | None) -> dict[str, str]:
+    path = _cache_path(root)
+    if path is None:
+        return {}
+    if path not in _cache_tables:
+        table: dict[str, str] = {}
+        if path.is_file():
+            try:
+                table = json.loads(path.read_text(encoding="utf-8"))
+            except ValueError:
+                table = {}
+        _cache_tables[path] = table
+    return _cache_tables[path]
+
+
+def _flush_cache(root: Path | None) -> None:
+    path = _cache_path(root)
+    if path is not None and id(_cache_tables.get(path)) in _cache_dirty:
+        path.write_text(json.dumps(_cache_tables[path]), encoding="utf-8")
+        _cache_dirty.discard(id(_cache_tables[path]))
 
 
 def hash_files(files: list[Path], root: Path | None = None) -> str:

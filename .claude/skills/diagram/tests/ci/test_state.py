@@ -34,6 +34,21 @@ def test_a_comment_edit_keeps_the_hash(repo: Path) -> None:
     assert state.current_hash(repo) != before
 
 
+def test_a_green_subset_run_does_not_forget_a_green_done(repo: Path) -> None:
+    """GM 2026-08-26: `make quick` after a green `make done` on identical content must not cost the
+    next `make done` its short-circuit; a red run, or a changed source, still replaces the record."""
+    state.write(repo, state.GREEN, "done")
+    assert state.already_verified(repo)[0]
+    st = state.write(repo, state.GREEN, "quick")
+    assert st.target == "done" and state.already_verified(repo)[0], "the green gate still stands after a green quick"
+    state.write(repo, state.FAILED, "quick")
+    assert not state.already_verified(repo)[0], "a red run replaces it"
+    state.write(repo, state.GREEN, "done")
+    (repo / S / "l7r/diagram/m.py").write_text("x = 5\n", encoding="utf-8")
+    st = state.write(repo, state.GREEN, "quick")
+    assert st.target == "quick", "changed content: the quick record is the truth now"
+
+
 def test_a_locked_scope_record_does_not_survive_the_unlock(repo: Path) -> None:
     """Under `scope reference` the gate defers the map-rolling tests (GM 2026-08-26), so its green
     record is reused while the lock holds and refused the moment it is released."""
@@ -118,4 +133,4 @@ def test_the_short_circuit_key_contains_everything_the_stamp_hashes(repo: Path) 
 
     gs = state._gate_stamp(REPO_ROOT)
     area_path, patterns = gs.AREAS["diagram"]
-    assert state.current_hash(REPO_ROOT) == str(gs.hash_files(gs._area_files(REPO_ROOT, area_path, patterns)))
+    assert state.current_hash(REPO_ROOT) == str(gs.hash_files(gs._area_files(REPO_ROOT, area_path, patterns), REPO_ROOT))  # with the root, so the semantic cache serves it (2.7 s -> ms without)

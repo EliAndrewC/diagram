@@ -83,6 +83,24 @@ def write(root: Path, event: str, target: str) -> VerificationState:
         raise ValueError(f"unknown verification event {event!r} (want {GREEN} or {FAILED})")
     from l7r.diagram.ci.delta import engine_key_worktree
 
+    # A GREEN SUBSET NEVER FORGETS A GREEN GATE (GM 2026-08-26, the make quick profile). `quick`,
+    # `test-file` and `reference` each record themselves here, and the record is ONE slot - so a
+    # `make quick` after a green `make done` on the same content replaced the gate's verdict with a
+    # lesser one, and the next `make done` ran its 70 s again for nothing (measured: it did, on the
+    # first commit after this rule was noticed). If the standing record is a green `done` against
+    # exactly this content, a green run of anything smaller leaves it standing.
+    prior = read(root)
+    if (
+        event == GREEN
+        and target != "done"
+        and prior is not None
+        and prior.event == GREEN
+        and prior.target == "done"
+        and prior.hash == current_hash(root)
+        and prior.engine_key == engine_key_worktree(root)
+    ):
+        return prior
+
     st = VerificationState(
         event=event,
         target=target,
