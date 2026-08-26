@@ -143,11 +143,21 @@ class GroundCoverMixin:
                     or boxed_hit(px, py, avd_b.near(px, py))
                 ):  # ... and OUT of any keep-out (the hamlet cluster stays clear of cover)
                     return True
-                for sp in soft_polys:  # ...and THINNING INTO a soft keep-out (a marsh) over its own feather
+                for sp in soft_polys:  # ...and GRASS thins INTO a soft keep-out (a marsh) over its own feather
                     if point_in_poly(px, py, sp):
                         return random.random() < min(1.0, edge_dist(px, py, sp) / soft_feather)
                 ed = edge_dist(px, py, poly)
                 return ed < feather and random.random() > (ed / feather) ** drop
+
+            def _in_soft(px: float, py: float) -> bool:
+                """WOODY glyphs (brush dots, pines) are HARD-excluded from a marsh; only GRASS grades into it.
+                Round 2 of the T12 fix let every family thin into the reeds over the 46 px band, and at fit
+                zoom a 1,600 px seam of pines standing in the bog read as the very overlap the GM had
+                asked to remove (GM 2026-08-26: *"it looks like it is still overlapping!"*). The ecology
+                agrees: a bog's margin is sedge and grass grading into reeds; pine and brush stand on the
+                dry ground above it. So blades keep the soft ramp (a wild edge, no ruled line) and the
+                woody families stop dead at the polygon."""
+                return any(point_in_poly(px, py, sp) for sp in soft_polys)
 
             # NO solid fill: a filled polygon always has a crisp geometric EDGE (that read as a rhombus). Each land
             # type is defined PURELY by its feathered scatter, which thins to nothing at the margin - so the ground
@@ -209,6 +219,8 @@ class GroundCoverMixin:
                     if _sparse(gx, gy, 0.7):
                         continue
                     if random.random() < 0.14:  # a low brush dot
+                        if _in_soft(gx, gy):
+                            continue  # WOODY: never in the bog (see _in_soft)
                         g.append(f'<circle cx="{gx:.1f}" cy="{gy:.1f}" r="{random.uniform(1.5, 2.4) * bs:.1f}" fill="#94A063" fill-opacity="0.85"/>')
                     else:  # a grass tuft: a few short diverging blades (bucketed - see the note at `blades`)
                         for _ in range(3):
@@ -217,7 +229,7 @@ class GroundCoverMixin:
                 if role != "pasture":  # the SCRAGGLY pines belong to cut-over scrub, NOT to open pasture
                     for _ in range(max(2, int(area / (6000 * bs * bs)))):  # a few SCRAGGLY hill pines (sparse, individual, open)
                         px, py = random.uniform(x0 + 6, x1 - 6), random.uniform(y0 + 6, y1 - 6)
-                        if _sparse(px, py, 0.5, 14 * bs):  # lean = the tallest pine's tip reach, so no pine leans over a crop
+                        if _sparse(px, py, 0.5, 14 * bs) or _in_soft(px, py):  # lean = the tallest pine's tip reach, so no pine leans over a crop; and never in the bog
                             continue
                         th = random.uniform(9, 14) * bs
                         g.append(f'<line x1="{px:.1f}" y1="{py:.1f}" x2="{px:.1f}" y2="{py - th:.1f}" stroke="#7A6A48" stroke-width="{1.1 * bs:.1f}"/>')  # thin trunk

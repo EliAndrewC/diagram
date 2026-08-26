@@ -154,7 +154,9 @@ def adjudicate(fams: dict[str, list[Base]], manifest: dict[str, Any], map_name: 
                 violations.append({"x": x, "y": y, "family": fam, "keepout": "water+cutbank"})
             elif boxed_hit(x, y, crop.near(x, y), edge_pad=crop_pad - _QUANT_EPS):
                 violations.append({"x": x, "y": y, "family": fam, "keepout": "crop"})
-            elif boxed_hit(x, y, marsh.near(x, y)) and any(point_in_poly(x, y, mp) and edge_dist(x, y, mp) > marsh_feather for mp in marsh_polys):
+            elif boxed_hit(x, y, marsh.near(x, y)) and any(
+                point_in_poly(x, y, mp) and (fam != "blade" or edge_dist(x, y, mp) > marsh_feather) for mp in marsh_polys
+            ):  # grass may grade into the reeds over the feather; a dot, pine or crown never stands in the bog
                 violations.append({"x": x, "y": y, "family": fam, "keepout": "marsh"})
             else:
                 for (lo, hi), grid in zip(DENSITY_BANDS, bands, strict=True):
