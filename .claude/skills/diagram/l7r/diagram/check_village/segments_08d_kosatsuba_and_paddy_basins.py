@@ -3,6 +3,7 @@
 import math
 from typing import Any
 
+from l7r.diagram.settlement.structures.fixtures import KOSATSUBA_VERGE_FT
 from l7r.diagram.waterfields import dedup_ring, floor_overhang, pointed_ring
 
 from .common_01_geometry import Poly, clip_to_convex, convex_hull, point_in_poly, poly_area, seg_closest, seg_dist
@@ -149,10 +150,18 @@ def _seg_0546__hamlet_has_kosatsuba(
             else "the settlement posts the state's standing law on an official notice board (s.kosatsuba(...) or s.place_kosatsuba(); meta(kosatsuba=False) to omit)",
         )
         routes_kb = ([M["road"]] if M.get("road") else []) + [st["pts"] for st in M.get("town_streets", [])] + ([M["lane"]] if M.get("lane") else []) + [ln["pts"] for ln in M.get("lanes", [])]
-        lim_kb = 60.0 / float(meta.get("ftpx") or 1)  # ~60 REAL feet at any scale
+        # ROADSIDE at the lane tiers (GM 2026-08-26, feature 133 T13): a hamlet or village board's
+        # CENTER stands within lane-half + board-half + KOSATSUBA_VERGE_FT (+2 ft slack) of a lane's
+        # centerline - the same band the placer seats in. Town and city boards keep the 60 ft rule
+        # until their pool maps are re-rolled under the new placer (owed at unlock).
+        lim_kb = ((1.5 + 2.5 + KOSATSUBA_VERGE_FT + 2.0) if scale in ("hamlet", "village") else 60.0) / float(meta.get("ftpx") or 1)  # real feet at any scale
         if kbs and routes_kb:
             far_kb = [(round(b["x"]), round(b["y"])) for b in kbs if min(seg_dist(b["x"], b["y"], r[k], r[k + 1]) for r in routes_kb for k in range(len(r) - 1)) > lim_kb]
-            check("kosatsuba_by_the_road", not far_kb, f"notice board(s) at {far_kb} stand more than ~60 real ft from every road/main street - a kosatsu is read where people pass")
+            check(
+                "kosatsuba_by_the_road",
+                not far_kb,
+                f"notice board(s) at {far_kb} stand more than {'~12 real ft (roadside)' if scale in ('hamlet', 'village') else '~60 real ft'} from every road/lane - a kosatsu is read where people pass",
+            )
             # ON A MAIN WAY, not merely ON A WAY (GM 2026-08-02, from Ubame: the board stood a
             # legal 49 ft off a side lane while the high street - the road, 23 structures on
             # its frontage - ran 200 ft away; "it should be along the main road, in order to

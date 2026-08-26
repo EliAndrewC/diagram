@@ -51,7 +51,8 @@ def test_village_and_hamlet_have_kosatsuba():
     assert "village_has_kosatsuba" in f({"meta": {"scale": "village"}})
     assert "hamlet_has_kosatsuba" in f({"meta": {"scale": "hamlet"}})
     assert "hamlet_has_kosatsuba" not in f({"meta": {"scale": "hamlet", "kosatsuba": False}})
-    ok = f({"meta": {"scale": "village", "ftpx": 2}, "kosatsuba": [_kosatsuba(500, 512)], "lanes": [{"pts": [[0, 500], [1000, 500]], "w": 5}]})
+    # ...and stands ROADSIDE: 5 px = 10 ft off the lane at village grain (24 ft, the pre-2026-08-26 fixture, now fires - see test_hamlet_and_village_boards_must_be_roadside)
+    ok = f({"meta": {"scale": "village", "ftpx": 2}, "kosatsuba": [_kosatsuba(500, 505)], "lanes": [{"pts": [[0, 500], [1000, 500]], "w": 5}]})
     assert "village_has_kosatsuba" not in ok and "kosatsuba_by_the_road" not in ok
     marooned = f({"meta": {"scale": "hamlet"}, "kosatsuba": [_kosatsuba(500, 700)], "lane": [[0, 500], [1000, 500]]})
     assert "kosatsuba_by_the_road" in marooned
@@ -680,3 +681,13 @@ def test_paddy_bunds_do_not_stagger_ignores_a_quad():
 def test_paddy_bunds_do_not_stagger_is_off_for_a_legacy_map():
     # no meta.generated_by = a legacy comb map; it inherits the rule at conversion (migration doctrine)
     assert "paddy_bunds_do_not_stagger" not in f(_stag_M([_STAIR], gen=None))
+
+
+def test_hamlet_and_village_boards_must_be_roadside():
+    # GM 2026-08-26 (feature 133 T13): at the lane tiers the board stands within ~12 ft
+    # (center to lane centerline) - 24 ft off, Inashiro's old seat, fires; 10 ft passes.
+    # Towns keep the 60 ft rule until their maps re-roll.
+    lane = [[0, 500], [1000, 500]]
+    assert "kosatsuba_by_the_road" in f({"meta": {"scale": "hamlet", "ftpx": 1}, "kosatsuba": [_kosatsuba(500, 524)], "lane": lane})
+    assert "kosatsuba_by_the_road" not in f({"meta": {"scale": "village", "ftpx": 2}, "kosatsuba": [_kosatsuba(500, 505)], "lane": lane})
+    assert "kosatsuba_by_the_road" not in f({"meta": {"scale": "town"}, "kosatsuba": [_kosatsuba(500, 524)], "road": lane})

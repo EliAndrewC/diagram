@@ -36,6 +36,13 @@ _(from T11 on, each entry also carries its cycle plan before work starts - `scaf
       measure: count scatter glyphs inside marsh polygons on the manifest before/after
       verify: `make maps`, `make done` (locked, ~75 s), `settlement-review`
 
+- [x] T13 **the notice board goes roadside** - the GM (2026-08-26): *"I believe that the notice board should probably be a little closer to the village line. Right now, it is Many many seat back from the land, but I would expect it to be essentially roadside. Right? Please add a placement rule that puts the notice board down after the village lanes have been established and then puts it right next to one of the village lanes."*
+      given 2026-08-26T15:33Z | done 2026-08-26T15:42Z (make done green; Inashiro board center 24 ft -> 9 ft off its lane edge, board edge ~6.5 ft; `kosatsuba_by_the_road` tightened to roadside at hamlet/village) | elapsed see clock note | runs: make maps x1, make quick x3, make done x2 (~78 s)
+      note: the ORDER the GM asked for already held (`stage_notice` runs after `stage_web`, dev/placement.md stage 8); the drift was the placer's 60 ft search radius plus caption clearance outranking nearness. Research (kosatsuba at the village entrance, roadside, crossroads, bridgehead, the headman's gate) settled it as ACCURATE before the change. Towns/cities keep 60 ft until their maps re-roll at unlock - owed. Red gates: 1 (a SIM108 lint + a tuple type after adding the gap field). CLOCK: the `given` stamp reads 15:33Z but the container clock had drifted against the earlier entries (T12 closed 14:44Z with two long tasks between); elapsed is taken from the run-log next time, not from two `date` calls.
+      scaffold: find the kosatsuba placer + its stage + its check; measure its distance to the nearest lane on Inashiro before/after
+      measure: distance board-edge -> nearest lane edge from the manifest
+      verify: `make maps`, `make done` (locked); no per-task review (dev/reviews.md)
+
 ## Phase 9 - acceptance
 
 - [ ] T90 the would-have-dispatched audit (FR-005): every entry in the period, and for each whether it should have run; each "no" names a tooling change

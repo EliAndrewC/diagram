@@ -22,6 +22,19 @@ Every Edo town AND village kept the official edict board - standing shogunal/dom
 
 the ofuregaki circulars reached the peasantry through exactly this board, posted where the settlement's one lane carries everyone - by the headman's frontage or the lane junction/entrance, since the headman (or in a hamlet the senior farmer answering to the village headman) received, copied, and relayed the circulars and was REQUIRED to be functionally literate for the job. One reader per settlement makes the board work - notices were also read aloud by officials - so peasant literacy is no objection even at a 50-inhabitant hamlet; the board is also the state's standing presence in a place that may see a magistrate's deputy twice a year.
 
+- **Roadside, not merely near the road - ACCURATE (researched 2026-08-26, feature 133 T13).** The
+  bakufu set kosatsuba *"at points of heavy passage: barriers and ports, the foot of large bridges,
+  and the entrances and centers of towns and villages"*; in farming villages *"at the village center,
+  the shrine precinct, or the place where villagers assembled"*; also *"at bridgeheads and before
+  the gate of the village officials' houses"* ([Fuchu kosatsuba, Tokyo Jinjacho](http://www.tokyo-jinjacho.or.jp/goshahou/fuchukousatsuba/);
+  [Ogose town cultural property H26-04](https://www.town.ogose.saitama.jp/kamei/shogaigakushu/bunkazai/kaisetsu/explanation_cultural/H26_04.html);
+  [高札 - Wikipedia (ja)](https://ja.wikipedia.org/wiki/%E9%AB%98%E6%9C%AD); [Adachi museum, 高札](https://www.city.adachi.tokyo.jp/hakubutsukan/chiikibunka/hakubutsukan/shiryo-kosatsu.html)).
+  Every attested site is ON the way - a verge, a gate front, a bridge foot - never a plot of open
+  ground beside it. Decision: `KOSATSUBA_VERGE_FT` = 6 ft from tread edge to board edge at the
+  hamlet and village tiers; the 60 ft band (2026-07-24) stays only as the fallback when no roadside
+  seat fits, and for towns and cities until their maps re-roll. Deviation noted: the 60 ft figure was
+  never a finding, it was the first placer's search radius wearing a rule's clothes.
+
 ## The justice works - why a county seat executes, and why the ground is outside
 
 **Grounds:** the punishment-ground and execution-ground vocabulary and their twelve checks (feature 015)

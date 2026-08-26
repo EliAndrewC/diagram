@@ -26,6 +26,17 @@ from .._knobs import KOSATSUBA_MARKER_MIN_PX, PUNISHMENT_SPOT_FT
 # note beside `_pick` in `kosatsuba` for why this satisfices rather than maximizes, and why 5 ft.
 CAPTION_LANE_TARGET_FT = 3.0
 
+# THE BOARD IS ROADSIDE (GM 2026-08-26, feature 133 T13: *"I would expect it to be essentially
+# roadside ... puts it right next to one of the village lanes"*). Real feet from the tread's EDGE to
+# the board's near edge. Research (research/urban-features.md): the kosatsu stood where traffic
+# passed - the village entrance, the roadside, a crossroads, a bridgehead, the headman's gate - so a
+# board 24 ft off its lane (Inashiro before this) is set back from the very thing it is for. The
+# placer searched out to 60 ft and ranked caption clearance above nearness, which is how it walked
+# out. Now: at the hamlet and village tiers only seats inside this band are eligible when any fits
+# (the 60 ft band remains the fallback, and `kosatsuba_by_the_road` tightens to this band at those
+# tiers); towns and cities keep the 60 ft rule until their pool maps are re-rolled at unlock.
+KOSATSUBA_VERGE_FT = 6.0
+
 if TYPE_CHECKING:
     from ..core import Settlement
 
@@ -562,7 +573,7 @@ class PublicFixturesMixin:
 
         tw_lab = self.label_caption_hw(label, 8.0) if label else 0.0  # the caption half-width the seat must also hold, as RECORDED
         kb_boxes = self.label_blockers("kosatsuba")  # built once: the probe tests many seats against the same map
-        cands: list[tuple[int, float, float, float, float, int | None]] = []  # (busy, score, x, y, rot, label_above|None)
+        cands: list[tuple[int, float, float, float, float, int | None, float]] = []  # (busy, score, x, y, rot, label_above|None, gap from tread edge to board edge)
         for pts, _rw in routes:
             for i in range(len(pts) - 1):
                 (ax, ay), (bx, by) = pts[i], pts[i + 1]
@@ -589,10 +600,17 @@ class PublicFixturesMixin:
                                 # traffic and out to the quiet end of the road, which is how Ubame's
                                 # board came to stand across the bridge from its own town.
                                 lab = 0 if self.label_seat_clear(x, y + h / 2 + 11, tw_lab, 8.0, kb_boxes) else (1 if self.label_seat_clear(x, y - h / 2 - 11, tw_lab, 8.0, kb_boxes) else None)
-                                cands.append((busy, busy * 10 - off / 3, x, y, rot, lab))
+                                cands.append((busy, busy * 10 - off / 3, x, y, rot, lab, off - _rw / 2 - h / 2))  # last: the gap from tread edge to board edge
                             off += 5.0
         if not cands:
             return None
+        # ROADSIDE FIRST (GM 2026-08-26): at the lane tiers, if any seat stands within KOSATSUBA_VERGE_FT
+        # of a tread, only those seats compete - the caption and traffic preferences below then choose
+        # AMONG roadside seats instead of trading the roadside away for a clearer caption.
+        if str((self.M.get("meta") or {}).get("scale") or "") in ("hamlet", "village"):
+            roadside = [c for c in cands if c[6] <= KOSATSUBA_VERGE_FT / ftpx + 1e-6]
+            if roadside:
+                cands = roadside
         # ON THE TRAFFIC IS THE RULE; A FITTING CAPTION IS ONLY THE PREFERENCE WITHIN IT. Scoring the
         # caption as a flat bonus large enough to outrank traffic was tried first and re-committed the
         # original sin at one remove: where no seat on a tight village frontage has a clear caption,
@@ -638,7 +656,7 @@ class PublicFixturesMixin:
                     return True
             return False
 
-        _b, _s, x, y, rot, lab = max((c for c in cands if c[0] >= floor), key=lambda c: (_sitable(c[2], c[3], w / 2, h / 2), c[5] is not None, c[1]))
+        _b, _s, x, y, rot, lab, _gap = max((c for c in cands if c[0] >= floor), key=lambda c: (_sitable(c[2], c[3], w / 2, h / 2), c[5] is not None, c[1]))
         # `lab` NO LONGER DECIDES THE CAPTION'S SIDE, and that was the last thing keeping two cohort
         # seeds notched. It is computed above by testing `label_seat_clear` at the DEFAULT distance
         # only - `y +/- h/2 + 11` - so it reports "below is blocked" for a board whose below seat is
