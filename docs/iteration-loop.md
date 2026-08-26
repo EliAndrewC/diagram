@@ -104,3 +104,31 @@ Why a "simple" fix ran long, and what each finding bought:
 - **Projected shape after the fan-out: ~28-30 min for this task, ~20 of it model latency.** Past
   that point the remaining cost is reasoning and the verification rituals, which is where it should
   be.
+
+
+## The `make quick` profile (GM 2026-08-26): where 30 s went, and where 23 s still goes
+
+Measured on the 22-core container, scope locked, 3,675 tests in the quick set.
+
+| component | before | after | how |
+|---|---|---|---|
+| ruff check --fix + ruff format + mypy (warm cache) | 0.33 s | 0.33 s | already negligible |
+| pytest collection (every worker collects the whole suite; not imports - 0.29 s of imports, the rest is pytest walking ~3,700 tests: parametrization + fixture resolution, spread evenly ~0.6 s per test directory) | 5.4 s | 5.4 s | the floor; no single directory to cut |
+| worker spawn | ~0.3 s | ~0.3 s | negligible (-n 0 costs the same as -n 22) |
+| test execution, ideal (270 CPU-s / 22 workers) | 12.3 s | 11.3 s | - |
+| scheduling tail (critical path + `--dist load` imbalance) | ~12 s | ~5 s | the 9.0 s critical-path test was a full-gate **coverage carrier** - it exists to execute 33 deep statements under coverage, and quick runs `--no-cov`, so it proved nothing there; `coverage_only` marker, 4 tests deselected (29.3 -> 24.6 s). Then `--dist worksteal` in place of `load`, which hands each worker a fixed slice and leaves the last worker running ~5 s alone (27.5 -> 22.0 s wall) |
+| **`make quick` wall** | **~30 s** | **~23 s** | |
+
+Amdahl's reading of what is left (23 s): 5.4 s collection is fixed and evenly spread; 11.3 s is
+the parallel ideal of 250 CPU-seconds of real tests; ~5 s is the remaining tail (the longest
+single tests are now 4.3 s: a site-justice proposal, a city-frame check, a comb-grain roll). The
+only lever left worth more than a second is the CPU itself: the two biggest files are
+`test_regressions.py` (the corpus replay, 33 s CPU after the carriers left) and
+`check_village/test_driver_and_fixtures.py` (32 s CPU - "every solid struct is gated off every
+hazard", ~3 s per parameter because each runs a targeted gate on a whole fixture). Halving those
+would save ~3 s of wall. Not taken: a 23 s quick is at the point where a model turn costs more than
+the test run, so the next gain is fewer turns, not a faster gate.
+
+Also enforced from the same day: `make quick` and `make done` never share a command
+(`gate-hooks.sh`) - `quick` is a subset of the 70 s locked `done`, and chaining them was 1.5 min of
+duplicated tests in one 11-minute task.

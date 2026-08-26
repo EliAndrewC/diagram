@@ -43,6 +43,10 @@ _(from T11 on, each entry also carries its cycle plan before work starts - `scaf
       measure: distance board-edge -> nearest lane edge from the manifest
       verify: `make maps`, `make done` (locked); no per-task review (dev/reviews.md)
 
+- [x] T14 **the make quick profile and the quick+done rule** - the GM (2026-08-26): *"Running make quick and make done in parallel. Seems like it was not necessary here so we can update our process to not do that and maybe even update the tooling to forbid that ... I am also interested in the thirty seconds that make quick takes. Can you do a performance analysis of that for me? ... so we can do an Amdahl's law analysis of it"*
+      given ~2026-08-26T16:00Z | done 2026-08-26T16:35Z | elapsed ~35 min (of which one 10-minute experiment timed out: `make durations MARK=` drops the test_villages deselect and ran its 7-minute test) | runs: make quick x5 (timed), make durations x4, hooks-test x1
+      note: measured, not guessed - docs/iteration-loop.md "The make quick profile". 30 s -> 23 s: the 9 s critical-path test was a coverage carrier that proves nothing without coverage (`coverage_only` marker, 4 tests out of quick), and `--dist worksteal` closes the scheduler tail. Collection (5.4 s) is the floor, evenly spread. The quick+done rule is enforced by gate-hooks.sh with its test.
+
 ## Phase 9 - acceptance
 
 - [ ] T90 the would-have-dispatched audit (FR-005): every entry in the period, and for each whether it should have run; each "no" names a tooling change
