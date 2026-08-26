@@ -93,6 +93,12 @@ addopts = "--cov --cov-report=term"
 # fails if a map-rolling test is missing one.
 markers = [
     "rolls_map: generates a settlement; slow (25-110 s). Deselected by `make quick`, run by `make done`.",
+    # `coverage_only` (GM 2026-08-26, the make quick profile): a test that exists to CARRY LINE COVERAGE -
+    # it replays a frozen fixture through the full gate so 33 deep statements execute - proves nothing
+    # `make quick` measures (quick runs --no-cov), and its four cases were the four longest tests in the
+    # quick set (9.0 / 5.4 / 3.4 / 3.2 s), the 9 s one alone being the run's critical path on 22 workers.
+    # Deselected by `make quick`; `make done` runs them under coverage where they earn their keep.
+    "coverage_only: replays a fixture through the full gate purely as a coverage carrier. Deselected by `make quick`, run by `make done`.",
 ]
 
 [tool.coverage.run]

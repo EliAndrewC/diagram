@@ -69,6 +69,15 @@ run "$(bash_ev 'pytest test_settlement.py -k foo')"
 check "another session is unaffected" ok $?
 teardown
 
+echo "8. quick and done never share a command (GM 2026-08-26)"
+setup
+run "$(bash_ev 'make quick 2>&1 | tail -2; make done 2>&1 | tail -2')"; check "quick + done in one command -> blocked" blocked $?
+run "$(bash_ev 'make done 2>&1 | tail -1 && make quick')"; check "done + quick in one command -> blocked" blocked $?
+run "$(bash_ev 'make quick')"; check "quick alone ok" ok $?
+run "$(bash_ev 'make done')"; check "done alone ok" ok $?
+run "$(bash_ev 'GATE_OK: comparing the two; make quick; make done')"; check "escape with a reason" ok $?
+teardown
+
 echo
 if [ "$FAIL" -eq 0 ]; then echo "test-gate-hooks: all $PASS checks passed"; exit 0; fi
 echo "test-gate-hooks: $FAIL FAILED, $PASS passed"; exit 1

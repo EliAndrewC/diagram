@@ -96,6 +96,7 @@ _FULL_GATE_SENTINELS = [
 ]
 
 
+@pytest.mark.coverage_only
 @pytest.mark.parametrize("name", _FULL_GATE_SENTINELS)
 def test_full_gate_coverage_sentinel(name):
     path = os.path.join(HERE, "pool", "regressions", name)
@@ -123,6 +124,7 @@ _FROZEN_POOL_COVERAGE_CARRIERS = [
 ]
 
 
+@pytest.mark.coverage_only
 @pytest.mark.parametrize("rel", _FROZEN_POOL_COVERAGE_CARRIERS)
 def test_frozen_pool_full_gate_coverage_carrier(rel):
     with open(os.path.join(HERE, "pool", rel)) as fh:

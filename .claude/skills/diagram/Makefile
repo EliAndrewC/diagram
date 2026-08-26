@@ -571,11 +571,11 @@ explain:        ## why a map is failing - every check with its message.   SEED=2
 	@SEED=$(or $(SEED),4) python3 .explain.py
 
 durations:
-	@python3 -m pytest -n auto -q --no-cov $(if $(MARK),-m "$(MARK)",-m "not rolls_map" --deselect tests/test_villages.py) --durations=$(or $(N),12) 2>&1 | grep -E "^[0-9.]+s (call|setup)|passed|failed" | head -$$(( $(or $(N),12) + 2 ))
+	@python3 -m pytest -n auto -q --no-cov $(if $(MARK),-m "$(MARK)",-m "not rolls_map and not coverage_only" --deselect tests/test_villages.py) --durations=$(or $(N),12) 2>&1 | grep -E "^[0-9.]+s (call|setup)|passed|failed" | head -$$(( $(or $(N),12) + 2 ))
 
 quick:
 	@python3 -m ruff check --fix l7r/ tests/ && python3 -m ruff format l7r/ tests/ && python3 -m mypy
-	@start=$$(date +%s); python3 -m pytest -n auto -q --no-cov -x --ff -m "not rolls_map" --deselect tests/test_villages.py; ec=$$?; \
+	@start=$$(date +%s); python3 -m pytest -n auto -q --no-cov -x --ff -m "not rolls_map and not coverage_only" --deselect tests/test_villages.py; ec=$$?; \
 	  el=$$(( $$(date +%s) - start )); \
 	  if [ $$ec -ne 0 ]; then exit $$ec; fi; \
 	  if [ $$el -gt $(QUICK_BUDGET) ]; then \

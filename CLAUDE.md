@@ -183,6 +183,7 @@ that has found a path forward takes it.
   `make done FULL=1` (prompts, cancels by default, logs a reason). Every refusal names the target that
   does the job, because a guard that blocks a legitimate question without giving the route is a guard
   that gets worked around.
+- **`make quick` while iterating, `make done` ONCE at the end - never both in one command.** `quick` is a subset of the locked `done` (~70 s), so chaining them re-runs ~30 s of tests for nothing (measured 2026-08-26: 3 times in an 11-minute task). **ENFORCED** by [`scripts/gate-hooks.sh`](scripts/gate-hooks.sh) (escape: `GATE_OK` with a reason).
 - **Never re-run what the gate just ran, and never run pytest without `-n auto`.** Serial pytest is ~7x slower here; a green `make done` is already the proof. (Cost of getting this wrong, once: 13.2 minutes, 19% of a feature.)
 - **`make done` reports ALL failures together.** Fix everything it lists, then re-run once. On a coverage failure it also prints the lines you changed that no test reaches.
 - **Background the final gate - and NEVER poll it.** Act on the completion notification. **ENFORCED** by [`scripts/no-poll-hooks.sh`](scripts/no-poll-hooks.sh), which blocks `pgrep -f`, sleep-loops, and the `command sleep` bypass. (A wait on genuinely EXTERNAL state passes by putting `POLL_OK` in the command with a note saying what it waits for.)

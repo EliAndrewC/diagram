@@ -61,6 +61,16 @@ case "$MODE" in
     [ "$TOOL" = Bash ] || exit 0
     case "$CMD" in *GATE_OK*) rm -f "$STATE"; exit 0 ;; esac
 
+    # QUICK AND DONE NEVER SHARE A COMMAND (GM 2026-08-26). `make quick` is a strict subset of the
+    # locked `make done` (~70 s), so chaining them re-runs ~30 s of the same tests for nothing -
+    # measured three times in one 11-minute task, 1.5 min of pure duplication. The habit came from
+    # when `done` cost 4.5 min; it costs 70 s now. Run `quick` while iterating, `done` once at the end.
+    case "$CMD" in
+      *"make quick"*"make done"*|*"make done"*"make quick"*)
+        echo "BLOCKED: \`make quick\` and \`make done\` in ONE command. \`quick\` is a subset of \`done\` (~70 s with scope locked), so this re-runs ~30 s of the same tests for nothing (measured 2026-08-26: 3 times in one task, 1.5 min). Run \`make quick\` while iterating, \`make done\` ONCE when you think it is finished - never both. (GATE_OK with a reason if you truly need both.)" >&2
+        exit 2
+        ;;
+    esac
     # the GATE itself
     case "$CMD" in
       *"make done"*|*"make -C"*done*)
