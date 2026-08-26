@@ -20,6 +20,7 @@ import hashlib
 import subprocess
 from dataclasses import dataclass
 from pathlib import Path
+from typing import Any
 
 SKILL = ".claude/skills/diagram/"
 
@@ -164,7 +165,9 @@ def engine_key_worktree(root: Path) -> str:
     fresh = [p for p in paths if p in changed or p not in staged]
     ids = dict(staged)
     if fresh:
-        ids.update(zip(fresh, subprocess.run(["git", "-C", str(root), "hash-object", "--stdin-paths"], input="\n".join(fresh) + "\n", capture_output=True, text=True, check=True).stdout.split(), strict=True))
+        ids.update(
+            zip(fresh, subprocess.run(["git", "-C", str(root), "hash-object", "--stdin-paths"], input="\n".join(fresh) + "\n", capture_output=True, text=True, check=True).stdout.split(), strict=True)
+        )
     entries = [(ids[p], p) for p in paths]
     by_sha = {sha: p for sha, p in entries}
     return _key_from_ids(root, entries, lambda miss: {s: (root / by_sha[s]).read_bytes() for s in miss})
