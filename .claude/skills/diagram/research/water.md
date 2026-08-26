@@ -421,6 +421,23 @@ carries the sketch its fix would follow.
   general shape: when a placer has constraints its checker cannot model, a hard refusal on a shared
   rule will always find the gap between them - make the shared rule a PREFERENCE on the placer's side
   and tighten the checker's own question instead.
+- **RULED 2026-08-26 (GM, feature 133 T11): the line moves from 3.0 ft to 2.0 ft.** The GM asked
+  of the reference hamlet: *"I think there should probably be plank bridges over the irrigated
+  channels in a few places. Right? Or are these too narrow for that? They don't look too narrow. Is
+  it intentional that they're missing or an oversight?"* It was intentional - the 2026-08-17 line
+  above - but the 3.0 ft figure was a session's reading of "a stride", never researched and never
+  put to the GM. The research pass (web, Japanese and English, six queries): the traditional
+  farm-level water channel is **2 shaku, ~60 cm** (farm paths 3 shaku, the *sanshaku-michi*),
+  which is precisely the width of our delivery ditches (`DELIVERY_FT` 2.5 -> 1.2); modern
+  ほ場整備 standard drawings size the smallest field ditches at 30-60 cm and carry a crossing at every
+  plot entrance, but that is machinery-era practice; and NOTHING found says whether an Edo farmer
+  laid a board over a 2-shaku ditch or stepped it. Two supportable readings would have become a
+  knob (Principle XII); a silent record goes to the GM, and the GM had already ruled on the map.
+  So **`FOOTPLANK_MIN_FT` = 2.0**: the standard farm ditch earns a board, the ~1.2-1.5 ft tails do
+  not. On Inashiro: 6 planks -> 10 - one per delivery branch (2.0 / 2.0 / 1.95 ft of water, seated
+  just below the branch heads because the head itself is a confluence) and two more down the main
+  (2.8 / 2.4 ft); the two 1.8 ft branches stay unplanked. The placer's wide-first seating and the
+  single shared predicate are untouched, so the placer/check split cannot reopen.
 - **ACCEPTED (not fixed) 2026-08-17: the visibility floor lands exactly on the paddy bund's stroke
   width.** `MIN_CHANNEL_PX` is 1.5 and `aze_w` at hamlet grain is also 1.5, so the finest water tier
   is drawn at precisely the width of the field boundaries it runs among, separated only by hue.

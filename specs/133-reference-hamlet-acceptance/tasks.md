@@ -22,6 +22,12 @@ _(from T11 on, each entry also carries its cycle plan before work starts - `scaf
   `given 2026-08-25T22:43Z | done 2026-08-25T23:55Z (make done green, 3669 passed; settlement-review: sun rules confirmed on every plot, needs-work on the belt being off-page - a conflict between the 2026-07-20 frame ruling and this lane, the GM's to settle; recorded in research/homesteads.md). GM 2026-08-26 chose to open the frame at the belt's inner face (option A): `windbreak_face` (median of the per-band front row - the first cut used the single most protruding clump and the reviewer sent it back) + `crop_boxes` + `crop_hugs_content` + `village_grove(face_margin=)`; ~45 min over two rounds; `make done` green x2, settlement-review PASS; committed 0dfb0f6b
   note: measured first - the yard rule already held (min 42 ft); the beds (7 of 16 shaded) and the belt (8 ft off) had no rule. The belt lane was priced at 75 ft (15 m stand) and declined to 50 ft (10 m working belt) because the frame does not open for the windbreak (GM 2026-07-20) - at 75 the belt dropped to 38 clumps with a hole. Time went to: one research pass (~5 min, parallel), the segment-name/fixture-order conventions (2 cycles), and `make map REF_OK=1` stalling on an interactive prompt (8 min) - the tooling lesson: after a red reference, `make maps` is the regen route, never an override
 
+- [ ] T11 **plank bridges over the irrigation channels** - the GM (2026-08-26): *"My next issue with the reference Hamlet map is that I think there should probably be planck bridges over the irrigated channels in a few places. Right? Or are these two narrow for that? They don't look too narrow. Is it intentional that they're missing or an oversight? Please add them if they should be there in the appropriate places."*
+      given 2026-08-26T04:28Z | done - | elapsed - | runs: -
+      scaffold: none new - `channel_footbridges` + `long_ditches_have_a_footbridge` + `worth_planking` already exist; the question is the 3.0 ft stride threshold (a session's 2026-08-17 call, not a GM ruling)
+      measure: research first (Principle XII); then count planks per ditch role on the regenerated Inashiro from the manifest
+      verify: `make maps` (reference scope) once; `settlement-review` on the plank placement
+
 ## Phase 9 - acceptance
 
 - [ ] T90 the would-have-dispatched audit (FR-005): every entry in the period, and for each whether it should have run; each "no" names a tooling change

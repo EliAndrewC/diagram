@@ -428,7 +428,13 @@ raggedness preserved, Mizuguchi's re-seated cluster coherent (wells, lanes, kosa
   past stroke when nothing governs. The residual 2.0 ft is geometric rather than a bug: the stand-off
   is applied along ONE canal's normal and cannot clear a stroke crossing at an angle.
 
-  **Planks only where you cannot stride** (`FOOTPLANK_MIN_FT` = 3.0 ft, `worth_planking`, called by
+  **Planks only where you cannot stride** (`FOOTPLANK_MIN_FT` = 3.0 ft at the time - **2.0 ft since
+  the GM's ruling of 2026-08-26, feature 133 T11**: the GM looked at this map and asked why the
+  delivery ditches carried no planks - *"They don't look too narrow"* - the research pass put the
+  traditional farm ditch at 2 shaku, exactly their width, and found the record silent on whether it
+  was planked, so the GM ruled; planks 6 -> 10, one per delivery branch at ~2.0 ft plus two more down
+  the main at 2.8 and 2.4 ft, the two 1.8 ft branches and the drain still bare - full record in
+  `research/water.md`; `worth_planking`, called by
   the placer AND by `long_ditches_have_a_footbridge` so they cannot disagree). This map: **15 planks
   -> 7**, removing exactly the eight that decked delivery ditches 1.8-2.5 ft wide.
 

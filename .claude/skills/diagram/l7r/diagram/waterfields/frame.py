@@ -101,10 +101,18 @@ CANAL_BERM_FT = 5.0
 # which was harmless while the net was 5-6x oversize and absurd the moment it went to true size:
 # eight of Inashiro's fifteen planks were decking water 1.7-2.3 ft wide, with 3-4 ft abutments each
 # side. A plank bridge is a real object a household builds and maintains; nobody builds one over
-# something they can stride across. 3 ft is about that stride, and it lands cleanly in the gap the
-# measured pool leaves - the delivery ditches carry 1.8-2.5 ft and the supply canals 3.0-4.5, so the
-# rule separates "step over it" from "lay a board" without cutting through either group.
-FOOTPLANK_MIN_FT = 3.0
+# something they can stride across.
+#
+# WHERE THE LINE SITS: 2.0 ft = 2 shaku (~60 cm), the attested width of the traditional farm-level
+# ditch (GM ruling 2026-08-26, feature 133 T11). It first stood at 3.0 ft - "about a stride", a
+# session's own judgment - which landed in the gap the measured pool leaves (deliveries 1.8-2.5 ft,
+# supply canals 3.0-4.5) and so decked the canals only. The GM, looking at the reference hamlet,
+# asked why the delivery ditches had no planks; the research pass found the traditional 小用水路 at
+# 2 shaku and the record SILENT on whether a ditch of that width was planked or stepped, so the GM
+# ruled on the map: they are not too narrow. At 2.0 the standard farm ditch earns a board and only
+# the ~1.2-1.5 ft tails are stepped over. Full record: research/water.md "a plank is laid only over
+# water you cannot stride across".
+FOOTPLANK_MIN_FT = 2.0
 
 
 def worth_planking(w_px: float, w_tail_px: float, ftpx: float) -> bool:
