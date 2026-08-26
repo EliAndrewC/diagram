@@ -207,3 +207,23 @@ Day's arc, `make quick` under the hamlet tier: **30 s -> 14.2 s wall**; pytest 2
 | the hinterland scatters (1.35, 1.1, 0.8 s) | a 1000 px scatter each | the scatter density is the property; a smaller canvas would test a sparser sheet - kept at the size the doctrine draws |
 
 **Not done, deliberately**: shrinking the corpus by sampling (every fixture is a distinct bad map, there is no redundancy to remove), and any change to what the engine draws.
+
+
+## Where `make quick` stood at the end of 2026-08-26 (hamlet lock, 8 workers)
+
+**7.5 s wall** (three runs: 7.56, 7.46, 7.70), pytest 6.2 s, 1,972 tests + 360 deferred to the gate;
+the gate's exhaustive test phase 2,502 tests in 26.7 s. Composition of the 7.5 s:
+
+| piece | s |
+|---|---|
+| pytest + xdist with zero tests (startup, 8 spawns, 8 collections, teardown) | 3.6 |
+| the tests themselves: 17.9 CPU-s at 8-wide | ~2.3 |
+| ruff check + format + mypy | 0.36 |
+| make, the switch reads, the state write, the run-log | ~1.2 |
+
+The day: 33 s -> 7.5 s. What moved it, largest first: the check tests asking the gate one
+TARGETED question instead of running all 189 checks (1,430 sites; per-test work 30 -> 17 s); the
+scope lock deferring the map-rolling tests; the tier tags; the corpus and the tooling tests
+leaving quick for the gate; `worksteal`; the coverage carriers; a second collection hidden in a
+closing message; the fixture sizes. The floor now is pytest's own overhead (48%); the tests are
+the smallest third.
