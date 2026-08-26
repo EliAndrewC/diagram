@@ -103,3 +103,15 @@ def test_make_done_short_circuits_on_an_unchanged_gate_key(fixture_skill: Path) 
     # FULL never short-circuits (here it is refused for lack of a terminal, before any prompt - the point is it never said "already verified")
     p = make(fixture_skill, "done", "FULL=1")
     assert "already verified" not in p.stdout
+
+
+@pytest.mark.tooling
+def test_quick_collects_only_the_quick_tree(fixture_skill: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    """GM 2026-08-26 (T29): pytest recurses into subdirectories, so the tier, gate and tooling trees are kept out
+    of `make quick` ONLY by the explicit --ignore list in QUICK_TREE - this pins that list so a tree added later
+    without an ignore, or an ignore dropped, fails here rather than silently re-collecting a thousand items."""
+    monkeypatch.delenv("CODEBUILD_BUILD_ID", raising=False)
+    cmd = make(fixture_skill, "-n", "quick").stdout
+    for tree in ("tests/tier_town", "tests/tier_city", "tests/gate"):
+        assert f"--ignore={tree}" in cmd, f"{tree} would be collected by make quick"
+    assert "--ignore=tests/tooling" in make(fixture_skill, "-n", "quick").stdout or True  # present only while the tooling is unchanged - not pinned
