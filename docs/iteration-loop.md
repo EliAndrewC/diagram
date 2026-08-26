@@ -230,3 +230,24 @@ scope lock deferring the map-rolling tests; the tier tags; the corpus and the to
 leaving quick for the gate; `worksteal`; the coverage carriers; a second collection hidden in a
 closing message; the fixture sizes. The floor now is pytest's own overhead (48%); the tests are
 the smallest third.
+
+
+## The test tree, since 2026-08-26 (feature 133 T29)
+
+`tests/` IS the quick suite. Everything that is not quick lives in a tree of its own and is not
+even collected by `make quick`:
+
+| tree | holds | collected by |
+|---|---|---|
+| `tests/` (with its packages) | the unit forms, relevant to the lane tiers or to every tier | quick and the gate |
+| `tests/tier_town/`, `tests/tier_city/` | tests tagged for other tiers only (232 + 451 functions), mirrored package paths | the gate; quick once the scope lock moves to that tier |
+| `tests/gate/` | the bad-map corpus, the coverage carriers, the map-rolling tests | the gate only |
+| `tests/tooling/` | tests that RUN the make/ci/pipeline tooling (+ the whole ci package) | the gate; quick only when the tooling changed (`ci tooling-fresh`) |
+
+Moved tests import their helpers from the source module; a fixture they take comes through the
+tree's `conftest.py` (a parameter name is a use pytest sees and ruff does not). The tier and
+tooling MARKERS stay on the moved tests as the exact filter; the trees are the collection scope.
+Measured: the zero-test floor on the quick tree 3.5 -> 3.1 s; `make quick ALL=1` (everything quick
+runs) 8.7 -> ~7.0 s wall for 1,971 tests; with testmon, an unchanged tree answers in ~3.5 s and a
+one-file edit in ~4-7 s. `dmypy run` replaces one-shot mypy in quick (~0.25 -> ~0.1 s after the
+first run; one-shot on CodeBuild).
