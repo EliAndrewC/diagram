@@ -36,6 +36,7 @@ def test_label_hits_counts_a_grove_under_the_label():
     assert s._label_hits(500, 500, "Ministry of Test", 12) >= 1
 
 
+@pytest.mark.tiers("city")
 def test_label_hits_counts_gate_furniture_arches_and_wellheads():
     # the ladder's scorer must see every drawn glyph a caption can bury. A torii is a bare [x, y, z]
     # triple and a wellhead has no w/h, so neither is in self.placed and both were invisible to it
@@ -50,6 +51,7 @@ def test_label_hits_counts_gate_furniture_arches_and_wellheads():
     assert s._label_hits(300, 300, "caption", 11) == 3
 
 
+@pytest.mark.tiers("city")
 def test_dojos_roll_follows_the_samurai_cohort():
     # GM formula 2026-07-25: 1 private dojo per full 200 SAMURAI (the city's ~10% share of its
     # population) + a remainder-fraction chance of one extra, floored at 1; count= pins; too few
@@ -77,6 +79,7 @@ def test_dojos_roll_follows_the_samurai_cohort():
         s4.dojos([(300, 300)])  # a guaranteed 2 needs 2 seats
 
 
+@pytest.mark.tiers("city")
 def test_martial_hall_and_dojo_draw_their_researched_program():
     # sizes are TRUE feet, not legibility choices (settlements.md "Historical grounding: martial
     # training in a provincial city"): the state hall is a 130x100 ft compound whose archery lane
@@ -201,6 +204,7 @@ def test_a_castle_caption_can_be_hand_seated():
     assert s_def.M["labels"][-1] != s_hand.M["labels"][-1]
 
 
+@pytest.mark.tiers("capital", "city")
 def test_ministry_label_inside_stacks_two_lines_on_the_glyph():
     """The capital's ministry captions sit ON the glyph (GM 2026-08-09) - the estate rule
     applied to the state offices, two stacked lines because the long names cannot fit the

@@ -235,6 +235,7 @@ def test_convex_hull_degenerate_point_clouds():
     assert cv.poly_area(cv.convex_hull([(0.0, 0.0), (1.0, 1.0)])) == 0.0
 
 
+@pytest.mark.tiers("town")
 def test_justice_town_fixture_passes_every_justice_check():
     # The control. Without it, a check that fires on EVERYTHING would look like a working check.
     bad = f(_justice_town())
@@ -312,6 +313,7 @@ def test_capital_packed_overflow_names_the_wall_resize_cure(capsys):
     assert "CANNOT WORK WITHOUT RESIZING THE WALL" in out
 
 
+@pytest.mark.tiers("town")
 def test_cistern_wells_with_no_aqueduct_fire():
     """A josui-ido cistern-well claims to draw on a buried main - with NO aqueduct on the map
     there is nothing to tap (coverage: the no-aqueduct branch)."""

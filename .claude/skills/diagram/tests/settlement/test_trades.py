@@ -20,6 +20,7 @@ def test_trade_works_caption_hand_seat_moves_the_label_and_its_band():
     assert abs((lab2[0] + lab2[2]) / 2 - 400) < 1.0 and lab2[1] > 300
 
 
+@pytest.mark.tiers("city")
 def test_bathhouses_roll_follows_the_population_formula():
     # GM formula 2026-07-24 (second refinement): 1 per full 2,000 population + a remainder-
     # fraction chance of one extra (2,500 -> 1 + 25%, 3,000 -> 1 + 50%, 4,000 -> exactly 2);

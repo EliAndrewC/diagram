@@ -3,6 +3,8 @@
 import math
 import re
 
+import pytest
+
 from l7r.diagram import settlement
 from l7r.diagram.settlement import Settlement, seg_dist
 from tests.settlement._builders import _cap020, _caption_size, _crop_settlement, _inwall_settlement, _plank_bed, _town
@@ -27,6 +29,7 @@ def test_wall_walk_crosses_multiple_edges():
     assert abs(ang - 180) < 1e-6  # the run is horizontal; walking west the edge points in -x
 
 
+@pytest.mark.tiers("city")
 def test_city_wall_tower_slides_along_the_wall_for_a_kido():
     # tower_skip: a mural tower yields its vertex to a future kido, but the vertex stays COVERED by
     # a tower a short way along the wall (not a whole-vertex jump leaving a bare, indefensible arc).
@@ -42,6 +45,7 @@ def test_city_wall_tower_slides_along_the_wall_for_a_kido():
     assert any(d < 180 for d in ds)  # ...but a tower still stands a short slide away (< a full segment)
 
 
+@pytest.mark.tiers("city")
 def test_city_wall_tower_drops_when_boxed_in_on_both_sides():
     # ...and when the slide finds no clear ground either way, the tower is dropped (the 75-deg
     # spacing check tolerates one gap)
@@ -53,6 +57,7 @@ def test_city_wall_tower_drops_when_boxed_in_on_both_sides():
     assert all(m.hypot(t["x"] - pts[6][0], t["y"] - pts[6][1]) > 60 for t in s.M["wall_towers"])
 
 
+@pytest.mark.tiers("city")
 def test_river_canal_dock_jetty_water_gate_defaults():
     # exercise the river-city glyph methods with their DEFAULT widths/lengths + the moat(river=)
     # open-arc path and the water-gate tower-skip vertex (Nagahara passes explicit sizes; this
@@ -74,6 +79,7 @@ def test_river_canal_dock_jetty_water_gate_defaults():
     assert s.M["moat"][0] != s.M["moat"][-1]  # OPEN arc (ends do not close on themselves)
 
 
+@pytest.mark.tiers("city")
 def test_moat_river_junction_feet_tilt_with_the_current():
     # GM 2026-07-24 hydrology review: the junction feet are NOT square rfoot tees. The upstream
     # (inlet) end shifts UPSTREAM off its square foot - a near-square, sediment-wary intake with
@@ -95,6 +101,7 @@ def test_moat_river_junction_feet_tilt_with_the_current():
         assert out_shift > in_shift  # the outlet sweeps harder - the researched asymmetry
 
 
+@pytest.mark.tiers("city")
 def test_moat_river_junction_tilts_follow_a_reversed_river():
     # the OTHER branch of the tilt bookkeeping (keep[0]'s end downstream): same asymmetry when the
     # river runs bottom -> top (upstream-first pts reversed). Deterministic on purpose - this branch
@@ -114,6 +121,7 @@ def test_moat_river_junction_tilts_follow_a_reversed_river():
     assert out_shift > in_shift  # the outlet sweeps harder - the researched asymmetry
 
 
+@pytest.mark.tiers("city")
 def test_city_wall_gateposts_orient_to_the_wall_tangent():
     # GM 2026-07: gateposts were hard-coded N/S (vertical rects); on an E/W gate they must stand
     # N and S of the opening, oriented to the wall's local tangent - so a gate on a vertical wall
@@ -148,6 +156,7 @@ def test_moat_closes_into_a_ring_without_a_river():
     assert s.M["moat"][0] == s.M["moat"][-1]
 
 
+@pytest.mark.tiers("city")
 def test_city_gate_tower_flips_to_the_other_flank_when_one_is_blocked():
     # the gate tower belongs AT the gate: with its PRIMARY flank blocked by a kido span, it does NOT walk
     # far out along the wall - it flips to the OTHER flank at the same short arc, still at the opening.
@@ -164,6 +173,7 @@ def test_city_gate_tower_flips_to_the_other_flank_when_one_is_blocked():
     assert all(m.hypot(tower[0]["x"] - bx, tower[0]["y"] - by) > 45 for bx, by in blocks)  # on the clear OTHER flank
 
 
+@pytest.mark.tiers("city")
 def test_city_gate_tower_steps_out_when_both_near_flanks_are_blocked():
     # only when BOTH near-gate flanks are blocked does the tower step OUTWARD along the wall (the arc walk):
     # kido spans on each side of the gate leave it nowhere at the opening, so it walks clear.
@@ -178,6 +188,7 @@ def test_city_gate_tower_steps_out_when_both_near_flanks_are_blocked():
     assert tower and all(m.hypot(tower[0]["x"] - bx, tower[0]["y"] - by) > 45 for bx, by in blocks)  # placed, walked clear of every blocked span
 
 
+@pytest.mark.tiers("city")
 def test_city_gate_tower_falls_back_when_every_spot_is_blocked():
     # both flanks blocked at EVERY arc out to the cap: the tower is still placed exactly once (the last
     # candidate is taken rather than the loop running past the cap with nothing placed).
@@ -191,6 +202,7 @@ def test_city_gate_tower_falls_back_when_every_spot_is_blocked():
     assert len([gs for gs in s.M["gate_structs"] if gs.get("kind") == "tower"]) == 1
 
 
+@pytest.mark.tiers("city")
 def test_city_mural_tower_yields_a_vertex_shoulder_to_shoulder_with_a_gate_tower():
     # the mural-tower loop skips a wall vertex within 110px of a GATE tower (a mural tower there would read
     # as a double). This fires only when the gate tower has stepped OUT toward the next even vertex - which
@@ -296,6 +308,7 @@ def test_channel_footbridges_skips_a_crossing_to_uncultivated_ground():
     assert n == 0 and not s.M["bridges"]  # no cultivated ground on the far bank -> no useful crossing -> no plank
 
 
+@pytest.mark.tiers("city")
 def test_governor_mansion_caption_sits_inside_its_walls():
     # GM 2026-08-08. The court is drawn blank on purpose (its buildings are a separate Mode A
     # sheet), so it is guaranteed clear ground on a packed city map, and the band above the walls
@@ -312,6 +325,7 @@ def test_governor_mansion_caption_sits_inside_its_walls():
     assert len([lb for lb in s.M["labels"] if lb[5] == "Governor's Mansion"]) == 1  # manor drew none
 
 
+@pytest.mark.tiers("city")
 def test_governor_mansion_can_be_left_unlabeled():
     s = Settlement(1400, 1400, seed=7)
     s.meta(name="C", scale="city", ftpx=3)
@@ -321,6 +335,7 @@ def test_governor_mansion_can_be_left_unlabeled():
 
 
 # ---- city_wall: a mural tower BOXED IN on both sides is dropped ----------------------------
+@pytest.mark.tiers("city")
 def test_city_wall_drops_a_mural_tower_boxed_in_on_both_sides():
     # the NW vertex is ringed by keep-clear (kido) points carpeting BOTH wall flanks out past the
     # farthest slide arc, so every slide candidate stays blocked and the tower is dropped (spacing
@@ -364,6 +379,7 @@ def test_inwall_drain_outfall_trims_gates_and_records_the_conduit():
     assert c["poly"][0] == [round(cut[0], 1), round(cut[1], 1)]  # the conduit starts at the cut
 
 
+@pytest.mark.tiers("town")
 def test_inwall_drain_outfall_normalizes_orientation_and_degenerate_cases():
     # outfall-FIRST input comes back outfall-first (the caller's orientation is preserved)
     s = _inwall_settlement()
@@ -402,6 +418,7 @@ def test_moat_flow_declares_a_closed_ring_circulation():
     assert s.M["moat_flow"] == {"inlet": [120.4, 200.5], "outlet": [800.0, 640.0]}
 
 
+@pytest.mark.tiers("capital")
 def test_towpath_records_a_list_and_draws_no_roadbed_or_centerline():
     """A towpath is NOT a road (research/cities/capitals.md, 'A river gets a TOWPATH, not a
     road'): no roadbed fill, no dashed centerline, one hairline at the linework floor."""
@@ -436,6 +453,7 @@ def test_aqueduct_records_intake_channel_and_terminus():
     assert rec["w"] > 0
 
 
+@pytest.mark.tiers("capital")
 def test_aqueduct_draws_no_arcade():
     """NO ARCADED AQUEDUCT EXISTS in either anchor tradition (research/cities/capitals.md): the
     vocabulary is a gravity canal at grade, a buried pipe, and a flume bridge only where water
@@ -449,6 +467,7 @@ def test_aqueduct_draws_no_arcade():
         assert cmds <= {"M", "L"}, f"curve commands {cmds - {'M', 'L'}} in the aqueduct glyph - an arch has no business here"
 
 
+@pytest.mark.tiers("capital")
 def test_quay_faces_the_bank_with_stepped_landings():
     """The working face at a river wharf is the BANK, faced and notched with steps - not the piers
     (research/cities/river-cities.md: a river's level moves feet across the year, so a flight of
@@ -467,6 +486,7 @@ def test_quay_faces_the_bank_with_stepped_landings():
     assert any(cl > q["w"] / 2 for _p, cl in s.corridors), "the face reserves its own working strip"
 
 
+@pytest.mark.tiers("capital")
 def test_quay_takes_a_default_width_from_the_map_scale():
     s = settlement.Settlement(1200, 1200, seed=4)
     s.meta(scale="capital", ftpx=3)
@@ -506,6 +526,7 @@ def test_a_footplank_is_never_laid_on_a_bend_its_deck_cannot_clear():
             assert gap >= 4.0 / 2 + 2.0, f"deck corner {round(gap, 1)}px from its own ditch - the abutment stands in the water"
 
 
+@pytest.mark.tiers("capital", "city")
 def test_farmland_ring_taps_water_gates_it_and_rings_the_households():
     """A city is ringed by its farmland, and the belt loop that draws it belongs in ONE place.
     Every provincial-city gen carried its own copy - which is why ringing a capital read as new
@@ -540,6 +561,7 @@ def test_farmland_ring_taps_water_gates_it_and_rings_the_households():
     assert s.M["sluice_gates"], "the head-race is gated where tap water becomes canal water"
 
 
+@pytest.mark.tiers("city")
 def test_farmland_ring_withdraws_a_field_whose_ground_cannot_carry_it():
     """comb_field records the field BEFORE its water is declared, so a fan that fails to carve
     would leave a paddy with no source, no drain and no farmhouses - drawn, recorded, and invisible
@@ -563,6 +585,7 @@ def test_farmland_ring_withdraws_a_field_whose_ground_cannot_carry_it():
     assert not [f for f in s.M.get("fields") or [] if f.get("name") == "doomed"], "...and it is not left on the map"
 
 
+@pytest.mark.tiers("city")
 def test_farmland_ring_sweeps_a_moat_offtake_downstream():
     """A moat offtake leaves at an ACUTE angle pointing downstream - a square tap sheds sediment
     into its own mouth and says nothing on the page about which way the water runs. The ring does
@@ -590,6 +613,7 @@ def test_farmland_ring_sweeps_a_moat_offtake_downstream():
     assert s.M["sluice_gates"], "the head-race is gated"
 
 
+@pytest.mark.tiers("capital", "city")
 def test_farmland_ring_taps_a_segment_and_opens_the_bound():
     """Two options a capital needs and the provincial cities do not. A river drawn with FIVE
     vertices has no vertex near where the gen meant to tap, so the tap must land on the nearest
@@ -621,6 +645,7 @@ def test_farmland_ring_taps_a_segment_and_opens_the_bound():
     assert s.bound == [[0, 0], [200, 0], [200, 200], [0, 200]], "the bound is restored afterwards"
 
 
+@pytest.mark.tiers("capital", "city")
 def test_farmland_ring_upslope_keeps_households_out_of_the_wet_toe():
     """A plain ring walks the WHOLE envelope and projects each seat outward, so on the low edge it
     throws households into the ground below the drainage collector - the wettest in the valley, and
@@ -656,6 +681,7 @@ def test_farmland_ring_upslope_keeps_households_out_of_the_wet_toe():
     assert all(y <= drain_y for _x, y in seats), "no household below the drainage line"
 
 
+@pytest.mark.tiers("capital")
 def test_ring_upslope_refuses_a_seat_below_the_drain():
     """The drain test measures to the drain LINE, not the field's center: a seat can be upslope of
     the middle and still below the collector where it bends, and that ground is the wet toe."""
@@ -728,6 +754,7 @@ def _own_callables(cls):
     return {k for k, v in vars(cls).items() if callable(v) or isinstance(v, staticmethod)}
 
 
+@pytest.mark.tiers("city")
 def test_no_pre_split_city_member_was_lost_in_the_move():
     # SUBSET, not equality, for the reason feature 112 recorded in its own guard: Stage 2
     # decomposes the oversized methods into named private helpers, so the composed class
@@ -748,6 +775,7 @@ def test_no_two_city_submixins_define_the_same_name():
             assert not overlap, f"{a.__name__} and {b.__name__} both define {sorted(overlap)} - MRO would orphan one"
 
 
+@pytest.mark.tiers("city")
 def test_every_city_member_resolves_on_settlement_itself():
     # what consumers actually rely on: the name reaching Settlement, not merely CityMixin
     unreachable = sorted(n for n in _CITY_SURFACE if not hasattr(Settlement, n))

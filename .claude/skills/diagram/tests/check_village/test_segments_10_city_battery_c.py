@@ -1,5 +1,7 @@
 """Split from test_checks.py by feature 025 - see tests/check_village/CLAUDE.md for the index."""
 
+import pytest
+
 from tests.check_village._builders import (
     _CITY_WALL,
     _MOAT_FEEDER,
@@ -21,28 +23,33 @@ from tests.check_village._builders import (
 )
 
 
+@pytest.mark.tiers("city")
 def test_no_groves_inside_walls_fires():
     M = {"meta": {"scale": "city", "walled": True}, "wall": _CITY_WALL, "houses": [_farmhouse(500, 500)], "groves": [_grove(465, 470, 500, 500)]}  # of (500,500) is inside the wall
     assert "no_groves_inside_walls" in f(M)
 
 
+@pytest.mark.tiers("city")
 def test_no_groves_inside_walls_passes_for_an_outside_farm():
     M = {"meta": {"scale": "city", "walled": True}, "wall": _CITY_WALL, "houses": [_farmhouse(1200, 500)], "groves": [_grove(1165, 470, 1200, 500)]}  # of (1200,500) is outside
     assert "no_groves_inside_walls" not in f(M)
 
 
+@pytest.mark.tiers("city")
 def test_city_labels_placed_with_subject_fires_when_label_is_across_the_wall():
     # the samurai cluster is INSIDE the wall but its label floats OUTSIDE (over the moat) - misleading
     M = _city_with_samurai([850, 492, 950, 508, 0, "samurai neighborhood"])  # center (900,500), outside WALLSQ
     assert "city_labels_placed_with_subject" in f(M)
 
 
+@pytest.mark.tiers("city")
 def test_city_labels_placed_with_subject_fires_when_label_far_from_cluster():
     # label inside the wall but nowhere near its samurai houses (they are at ~(420,420), label at (730,720))
     M = _city_with_samurai([680, 712, 780, 728, 0, "samurai neighborhood"])
     assert "city_labels_placed_with_subject" in f(M)
 
 
+@pytest.mark.tiers("city")
 def test_city_labels_placed_with_subject_fires_when_label_over_a_field():
     # burakumin houses sit just south, but the label floats over a paddy to their north
     field = {"name": "f", "kind": "paddy", "bbox": [360, 360, 520, 520], "outline": [[360, 360], [520, 360], [520, 520], [360, 520]]}
@@ -58,6 +65,7 @@ def test_city_labels_placed_with_subject_fires_when_label_over_a_field():
     assert "city_labels_placed_with_subject" in f(M)
 
 
+@pytest.mark.tiers("city")
 def test_city_labels_placed_with_subject_skips_labels_with_no_known_subject():
     # a zone-suffix label whose subject we can't identify ("potters district" - no such building kind)
     # cannot be verified, so it is skipped rather than flagged
@@ -65,12 +73,14 @@ def test_city_labels_placed_with_subject_skips_labels_with_no_known_subject():
     assert "city_labels_placed_with_subject" not in f(M)
 
 
+@pytest.mark.tiers("city")
 def test_city_labels_placed_with_subject_passes_when_among_the_cluster():
     # label inside the wall AND among its samurai houses (center ~(420,410)) - the correct placement
     M = _city_with_samurai([370, 402, 470, 418, 0, "samurai neighborhood"])
     assert "city_labels_placed_with_subject" not in f(M)
 
 
+@pytest.mark.tiers("city")
 def test_city_flophouse_in_humble_quarter_fires_next_to_merchants():
     # an in-wall flophouse cheek-by-jowl with a merchant house - a doss-house does not belong in the
     # nicer quarter
@@ -84,6 +94,7 @@ def test_city_flophouse_in_humble_quarter_fires_next_to_merchants():
     assert "city_flophouse_in_humble_quarter" in f(M)
 
 
+@pytest.mark.tiers("city")
 def test_city_flophouse_in_humble_quarter_fires_next_to_burakumin():
     M = {
         "meta": {"scale": "city", "walled": True, "W": 1000, "H": 1000},
@@ -95,6 +106,7 @@ def test_city_flophouse_in_humble_quarter_fires_next_to_burakumin():
     assert "city_flophouse_in_humble_quarter" in f(M)
 
 
+@pytest.mark.tiers("city")
 def test_city_flophouse_in_humble_quarter_passes_when_humble_and_clear():
     # in-wall flophouse with only laborers nearby - the humble sector, correctly placed
     M = {
@@ -107,6 +119,7 @@ def test_city_flophouse_in_humble_quarter_passes_when_humble_and_clear():
     assert "city_flophouse_in_humble_quarter" not in f(M)
 
 
+@pytest.mark.tiers("city")
 def test_city_canal_reaches_dock_fires_when_short_and_passes_when_it_feeds_the_basin():
     # the canal must connect the water to the dock basin (like a street reaching the road)
     river = {"pts": [[900, 100], [900, 900]], "w": 40}
@@ -117,6 +130,7 @@ def test_city_canal_reaches_dock_fires_when_short_and_passes_when_it_feeds_the_b
     assert "city_canal_reaches_dock" not in f(reach)
 
 
+@pytest.mark.tiers("city")
 def test_city_canal_shares_moat_mouth_fires_on_a_second_mouth_and_passes_on_the_moat_handoff():
     # GM 2026-07-23 (Nagahara's water-gate corner): the cargo canal opened its OWN river mouth
     # 36 real ft beside the moat's downstream junction, riding collinearly inside the moat arm's
@@ -134,6 +148,7 @@ def test_city_canal_shares_moat_mouth_fires_on_a_second_mouth_and_passes_on_the_
     assert "city_canal_reaches_dock" not in fails  # the moat handoff satisfies "reaches the water"
 
 
+@pytest.mark.tiers("city")
 def test_city_moat_junction_angles_fires_on_square_tees_and_passes_when_tilted():
     # GM 2026-07-24 (Nagahara hydrology review): both moat-river junctions met the river as
     # identical square tees - an rfoot-projection artifact. The outlet must sweep downstream
@@ -147,6 +162,7 @@ def test_city_moat_junction_angles_fires_on_square_tees_and_passes_when_tilted()
     assert "city_moat_junction_angles" not in f(tilted)  # inlet tilted upstream, outlet swept downstream
 
 
+@pytest.mark.tiers("city")
 def test_city_wharf_jetties_on_bank_fires_when_floating_and_passes_on_the_bank():
     # a jetty is a finger from the near bank into the water, not a bar floating mid-stream
     river = {"pts": [[900, 100], [900, 900]], "w": 40}  # centerline x900, near (city) bank x880
@@ -183,11 +199,13 @@ def test_log_boom_serves_the_lumber_yard_ties_pen_to_yard():
     assert "log_boom_serves_the_lumber_yard" in f(far)
 
 
+@pytest.mark.tiers("city", "town")
 def test_city_streets_have_buildings_fires_on_an_empty_city_street():
     M = {"meta": {"scale": "city", "walled": True, "W": 1000, "H": 1000}, "wall": WALLSQ, "gates": [[500, 200], [500, 800]], "town_streets": [{"pts": [[300, 300], [700, 300]], "w": 20}]}
     assert "city_streets_have_buildings" in f(M)
 
 
+@pytest.mark.tiers("city", "town")
 def test_city_streets_have_buildings_ignores_frontage_across_a_ward_fence():
     # the buildings hug the street (60px away) but a ward fence runs BETWEEN them and it: they front
     # whatever lies on their own side, not this street, so the street still reads as empty and fires.
@@ -205,17 +223,20 @@ def test_city_streets_have_buildings_ignores_frontage_across_a_ward_fence():
     assert "city_streets_have_buildings" in f(M)
 
 
+@pytest.mark.tiers("city")
 def test_city_larger_streets_lined_fires_on_a_bare_street():
     # a main avenue through open ground inside the wall, no buildings within ~58px of it
     assert "city_larger_streets_lined" in f(_street_city([{"pts": [[300, 500], [700, 500]], "w": 22, "main": True}]))
 
 
+@pytest.mark.tiers("city")
 def test_city_larger_streets_lined_passes_when_lined():
     # the same avenue, shophouses lining it ~32px off on both sides
     blds = [bldg(x, 500 + s * 32, kind="shop", w=20, h=14) for x in range(320, 701, 40) for s in (-1, 1)]
     assert "city_larger_streets_lined" not in f(_street_city([{"pts": [[300, 500], [700, 500]], "w": 22, "main": True}], buildings=blds))
 
 
+@pytest.mark.tiers("city")
 def test_city_larger_streets_lined_exempts_a_government_avenue():
     # a bare avenue, but two ministry compounds front it -> a government avenue, exempt (its frontage
     # is the spaced ministries, governed by city_ministries_front_a_street, not shops/houses)
@@ -223,12 +244,14 @@ def test_city_larger_streets_lined_exempts_a_government_avenue():
     assert "city_larger_streets_lined" not in f(M)
 
 
+@pytest.mark.tiers("city")
 def test_city_gate_caravan_facilities_fires_without_inn_and_stables():
     # a gate with only a flophouse - no prominent inn, no large stables for the wagon-trains' animals
     M = _caravan_city(flophouses=[{"x": 500, "y": 300, "w": 88, "h": 42, "rot": 0}])
     assert "city_gate_caravan_facilities" in f(M)
 
 
+@pytest.mark.tiers("city")
 def test_city_gate_caravan_facilities_passes_with_the_full_cluster():
     M = _caravan_city(
         flophouses=[{"x": 450, "y": 300, "w": 88, "h": 42, "rot": 0}],
@@ -237,6 +260,7 @@ def test_city_gate_caravan_facilities_passes_with_the_full_cluster():
     assert "city_gate_caravan_facilities" not in f(M)
 
 
+@pytest.mark.tiers("city")
 def test_city_gate_caravan_facilities_fires_when_stables_hemmed_in():
     # the full cluster is present, but the stables is hemmed in by dwellings (no open ground for animals)
     blds = [{"x": 470, "y": 380, "w": 92, "h": 44, "kind": "stables", "rot": 0}, {"x": 520, "y": 320, "w": 66, "h": 48, "kind": "inn", "rot": 0}]
@@ -245,6 +269,7 @@ def test_city_gate_caravan_facilities_fires_when_stables_hemmed_in():
     assert "city_gate_caravan_facilities" in f(M)
 
 
+@pytest.mark.tiers("city", "town")
 def test_city_streets_connected_and_empty_space_fire():
     # two town streets far apart with no road -> two disconnected groups; the interior is almost
     # all empty (no buildings/fields), and a pond sits on a grid point (the pond-as-occupancy path)
@@ -260,12 +285,14 @@ def test_city_streets_connected_and_empty_space_fire():
     assert "city_no_large_empty_space" in fails
 
 
+@pytest.mark.tiers("city")
 def test_city_no_large_empty_space_fires_on_an_unclaimed_pocket():
     # the footprint-aware rebuild (GM 2026-07-23, Tango's north gate): a pocket far smaller than
     # the old vast-void threshold still fires when nothing claims it
     assert "city_no_large_empty_space" in f(_es_pocket_city())
 
 
+@pytest.mark.tiers("city")
 def test_city_no_large_empty_space_passes_when_an_animal_ground_claims_the_pocket():
     # the standing remedy: the SAME pocket goes green once a stable-yard / animal-ground record
     # claims the open ground as deliberate working space (s.animal_ground)
@@ -273,6 +300,7 @@ def test_city_no_large_empty_space_passes_when_an_animal_ground_claims_the_pocke
     assert "city_no_large_empty_space" not in f(M)
 
 
+@pytest.mark.tiers("city", "town")
 def test_city_has_dye_works_fires_when_the_yard_is_far_from_water():
     # a dyer's yard needs rinsing/vat water ON site - a yard in the dry middle of town fails even
     # though one exists (settlements.md "TRADE WORKS"; the presence branch is covered by the pinned
@@ -287,6 +315,7 @@ def test_city_has_dye_works_fires_when_the_yard_is_far_from_water():
     assert "city_has_dye_works" in f(M)
 
 
+@pytest.mark.tiers("city")
 def test_city_kiln_outside_walls_fires_on_an_intramural_kiln():
     # fire law + smoke: a kiln INSIDE the rampart is the defect even though a kiln exists
     M = {
@@ -298,6 +327,7 @@ def test_city_kiln_outside_walls_fires_on_an_intramural_kiln():
     assert "city_kiln_outside_walls" in f(M)
 
 
+@pytest.mark.tiers("city")
 def test_city_bathhouse_count_follows_the_population_formula():
     # GM formula 2026-07-24 (second refinement): 1 sento per full 2,000 population + a
     # remainder-fraction chance of one extra (Edo's peak ratio, ~1 per ~2,100 residents);
@@ -322,6 +352,7 @@ def test_city_bathhouse_count_follows_the_population_formula():
     assert "city_has_bathhouse" not in f(city(3000, 1, roll=1))
 
 
+@pytest.mark.tiers("city")
 def test_city_river_port_has_lumber_yard_fires_when_missing_and_skips_landlocked():
     # a river-port city (meta river_port) must keep a riverside zaimokuya; a landlocked city
     # skips the check entirely (the GM's Tango/Nagahara split - timber moves by water at scale)
@@ -335,6 +366,7 @@ def test_city_river_port_has_lumber_yard_fires_when_missing_and_skips_landlocked
     assert "city_river_port_has_lumber_yard" not in f(M)
 
 
+@pytest.mark.tiers("city", "town")
 def test_city_streets_connected_fires_on_a_gap_wider_than_45px():
     # two parallel streets 60px apart: the old 95px tolerance bridged them, the tightened 45px
     # does not - a grid that stops short of the road reads as a separated network, not connected
@@ -347,6 +379,7 @@ def test_city_streets_connected_fires_on_a_gap_wider_than_45px():
     assert "city_streets_connected" in f(M)
 
 
+@pytest.mark.tiers("city", "town")
 def test_city_streets_connected_requires_beds_to_actually_overlap():
     # a cross-street whose end stops 30px short of the through-street: under the old flat 45px
     # tolerance this "connected", but the two paved beds (half-widths 9+9) do not touch, so you
@@ -363,6 +396,7 @@ def test_city_streets_connected_requires_beds_to_actually_overlap():
     assert "city_streets_connected" in f(M)
 
 
+@pytest.mark.tiers("city")
 def test_city_flophouse_inside_walls_fires_when_only_outside():
     M = {
         "meta": {"scale": "city", "walled": True, "W": 1000, "H": 1000},
@@ -373,6 +407,7 @@ def test_city_flophouse_inside_walls_fires_when_only_outside():
     assert "city_flophouse_inside_walls" in f(M)
 
 
+@pytest.mark.tiers("city")
 def test_city_flophouse_outside_each_gate_fires_when_a_gate_lacks_one():
     M = {
         "meta": {"scale": "city", "walled": True, "W": 1000, "H": 1000},
@@ -386,6 +421,7 @@ def test_city_flophouse_outside_each_gate_fires_when_a_gate_lacks_one():
     assert "city_flophouse_outside_each_gate" in f(M)
 
 
+@pytest.mark.tiers("city")
 def test_city_estates_multiple_shown_fires_when_none_in_view():
     # PADDY-FIRST doctrine (GM 2026-07-23): ONE estate in view suffices (the rest sit farther out,
     # implied off-map) - so the check fires only when NO estate shows at all.
@@ -401,6 +437,7 @@ def test_city_estates_multiple_shown_fires_when_none_in_view():
     assert "city_estates_multiple_shown" in f(M)
 
 
+@pytest.mark.tiers("city")
 def test_city_estates_multiple_shown_passes_with_a_single_estate_in_view():
     # the paddy-first floor: a lone estate (even a fraction at the frame edge) is the accurate signal
     M = {
@@ -415,11 +452,13 @@ def test_city_estates_multiple_shown_passes_with_a_single_estate_in_view():
     assert "city_estates_multiple_shown" not in f(M)
 
 
+@pytest.mark.tiers("city")
 def test_city_road_label_outside_walls_fires_when_inside():
     M = {"meta": {"scale": "city", "walled": True, "W": 1000, "H": 1000}, "wall": WALLSQ, "gates": [[500, 200], [500, 800]], "road_label": [500, 500]}  # dead center, inside the walls
     assert "city_road_label_outside_walls" in f(M)
 
 
+@pytest.mark.tiers("city", "town")
 def test_city_streets_no_near_miss_fires_on_a_sliver_gap():
     # two street segments ~18px apart that do NOT cross - they almost touch but never meet
     M = {
@@ -434,6 +473,7 @@ def test_city_streets_no_near_miss_fires_on_a_sliver_gap():
     assert "city_streets_no_near_miss" in f(M)
 
 
+@pytest.mark.tiers("city", "town")
 def test_city_streets_no_intersection_stub_fires_on_a_short_overshoot():
     # a vertical street crosses a horizontal one and then stops 25px past it - a dangling stub
     M = {
@@ -448,6 +488,7 @@ def test_city_streets_no_intersection_stub_fires_on_a_short_overshoot():
     assert "city_streets_no_intersection_stub" in f(M)
 
 
+@pytest.mark.tiers("city", "town")
 def test_city_streets_no_intersection_stub_passes_when_streets_run_well_past():
     # the same crossing, but the vertical street continues well past (to 700) - a real grid line
     M = {
@@ -459,6 +500,7 @@ def test_city_streets_no_intersection_stub_passes_when_streets_run_well_past():
     assert "city_streets_no_intersection_stub" not in f(M)
 
 
+@pytest.mark.tiers("city", "town")
 def test_city_torii_over_streets_fires_when_torii_under_street():
     # a torii on the street but with a LOWER draw-z than the street -> the street paints over it
     M = {
@@ -471,6 +513,7 @@ def test_city_torii_over_streets_fires_when_torii_under_street():
     assert "city_torii_over_streets" in f(M)
 
 
+@pytest.mark.tiers("city", "town")
 def test_city_temple_approach_has_torii_fires_when_street_runs_up_without_one():
     # a street terminates right at the temple front but there is no torii arch on it
     M = {
@@ -483,6 +526,7 @@ def test_city_temple_approach_has_torii_fires_when_street_runs_up_without_one():
     assert "city_temple_approach_has_torii" in f(M)
 
 
+@pytest.mark.tiers("city")
 def test_view_treats_the_crop_as_the_map_edge():
     # the Imperial road must run off the map edge through both gates. With a cropped city view,
     # "the edge" is the view, not the full canvas - a road that exits the view (but not the
@@ -498,6 +542,7 @@ def test_view_treats_the_crop_as_the_map_edge():
     assert "city_imperial_road_through" not in f(base)  # road now exits the view -> runs through
 
 
+@pytest.mark.tiers("city", "town")
 def test_city_civic_clear_of_streets_fires():
     M = {
         "meta": {"scale": "city", "walled": True, "W": 1000, "H": 1000},
@@ -509,6 +554,7 @@ def test_city_civic_clear_of_streets_fires():
     assert "city_civic_clear_of_streets" in f(M)
 
 
+@pytest.mark.tiers("city")
 def test_city_outside_field_and_gate_market_fire():
     ff = {"name": "ff", "kind": "paddy", "bbox": [1500, 1500, 1800, 1800], "outline": [[1500, 1500], [1800, 1500], [1800, 1800], [1500, 1800]]}
     M = {"meta": {"scale": "city", "walled": True, "W": 2000, "H": 2000}, "wall": WALLSQ, "gates": [[500, 200], [500, 800]], "fields": [ff]}
@@ -518,6 +564,7 @@ def test_city_outside_field_and_gate_market_fire():
     assert "city_has_gate_market" in fails
 
 
+@pytest.mark.tiers("city")
 def test_city_gate_guardhouse_and_moat_irrigation_fire():
     bigf = {"name": "bf", "kind": "paddy", "bbox": [960, 200, 1180, 900], "outline": [[960, 200], [1180, 200], [1180, 900], [960, 900]]}
     M = {
@@ -532,17 +579,20 @@ def test_city_gate_guardhouse_and_moat_irrigation_fire():
     assert "city_moat_irrigates_fields" in fails  # big outside field, no channel feeds it
 
 
+@pytest.mark.tiers("city")
 def test_city_no_inwall_farms_fires_without_agricultural_district():
     # a field whose centroid sits inside the wall, and no meta(agricultural_district=True)
     M = {"meta": {"scale": "city", "walled": True, "W": 1000, "H": 1000}, "wall": WALLSQ, "gates": [[500, 200], [500, 800]], "fields": [_field("f", 400, 400, 600, 600)]}
     assert "city_no_inwall_farms" in f(M)
 
 
+@pytest.mark.tiers("city")
 def test_city_no_inwall_farms_allowed_with_agricultural_district():
     M = {"meta": {"scale": "city", "walled": True, "agricultural_district": True, "W": 1000, "H": 1000}, "wall": WALLSQ, "gates": [[500, 200], [500, 800]], "fields": [_field("f", 400, 400, 600, 600)]}
     assert "city_no_inwall_farms" not in f(M)
 
 
+@pytest.mark.tiers("city")
 def test_city_moat_checks_fire_when_moat_neither_surrounds_nor_is_fed():
     M = {"meta": {"scale": "city", "walled": True, "W": 1000, "H": 1000}, "wall": WALLSQ, "gates": [[500, 200], [500, 800]], "moat": [[400, 400], [600, 400], [600, 600], [400, 600]]}
     fails = f(M)
@@ -550,15 +600,18 @@ def test_city_moat_checks_fire_when_moat_neither_surrounds_nor_is_fed():
     assert "city_moat_fed_offmap" in fails  # no stream feeds it
 
 
+@pytest.mark.tiers("city")
 def test_city_moat_feeder_matches_width_fires_when_narrow():
     # a 9px trickle reaching a 22px moat - too thin to keep it supplied
     assert "city_moat_feeder_matches_width" in f(_feeder_city(9))
 
 
+@pytest.mark.tiers("city")
 def test_city_moat_feeder_matches_width_passes_when_matched():
     assert "city_moat_feeder_matches_width" not in f(_feeder_city(22))
 
 
+@pytest.mark.tiers("city")
 def test_city_moat_has_outfall_passes_with_a_flush_through_ring():
     # feeder on the W rim + outfall on the E rim (opposite faces) = a flow-through moat; the extra
     # in-city ditch does NOT reach the moat, so it is not mistaken for a tap
@@ -566,11 +619,13 @@ def test_city_moat_has_outfall_passes_with_a_flush_through_ring():
     assert "city_moat_has_outfall" not in f(_drain_city([_MOAT_FEEDER, _MOAT_OUTFALL, inland]))
 
 
+@pytest.mark.tiers("city")
 def test_city_moat_has_outfall_fires_when_a_fed_moat_cannot_drain():
     # a full-flow feeder into a closed moat with no outfall - conservation of flow, it would overflow
     assert "city_moat_has_outfall" in f(_drain_city([_MOAT_FEEDER]))
 
 
+@pytest.mark.tiers("city", "town")
 def test_streets_may_front_open_ground():
     """021: a street along a commons (the castle's cleared ring, a festival ground) serves that
     ground - it is not a bare stretch. Without the commons the same street fires."""

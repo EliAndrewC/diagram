@@ -29,6 +29,7 @@ def test_face_street_rot_without_streets_and_with_a_road():
     assert r is not None and d < 100
 
 
+@pytest.mark.tiers("town")
 def test_pack_shortfall_is_reported(capsys):
     # the "no silent caps" principle applied to placement (2026-07-24 town audit: Hirameki's
     # gate market authored 12 businesses, landed 4, and nothing said so)
@@ -78,6 +79,7 @@ def test_place_kosatsuba_reads_road_and_lane_routes_and_skips_degenerate_segment
     assert len(s.M["kosatsuba"]) == 1
 
 
+@pytest.mark.tiers("town")
 def test_place_kosatsuba_samples_only_the_main_way_when_one_is_declared():
     # GM 2026-08-02 (Ubame): the board goes ALONG the main road, never a side street - even
     # when the side lane's node is busier. With a road on the map, the lane's verges are not
@@ -94,6 +96,7 @@ def test_place_kosatsuba_samples_only_the_main_way_when_one_is_declared():
     assert abs(s.M["kosatsuba"][0]["y"] - 300) <= 60  # the road's band, not the busy lane's
 
 
+@pytest.mark.tiers("town")
 def test_kosatsuba_label_xy_hand_seats_the_caption():
     # both caption bands can be taken at a junction seat (Nagahara's market bend: drum tower
     # in the below band, the ward gate's glyph + caption stack in the above band) - label_xy
@@ -106,6 +109,7 @@ def test_kosatsuba_label_xy_hand_seats_the_caption():
     assert abs((lab[0] + lab[2]) / 2 - 560) < 2  # seated at the hand x, not the default below-seat
 
 
+@pytest.mark.tiers("city")
 def test_fill_declares_a_capacity_budget_and_stays_silent(capsys):
     # fill=True marks the request as "place up to N" (the city district-fill idiom), so an
     # under-fill is intended, not drift - no warning
@@ -149,6 +153,7 @@ def test_commons_clears_the_urban_halo_around_buildings():
         assert not (430 - hd <= px <= 430 + hd and 300 - hd <= py <= 300 + hd)
 
 
+@pytest.mark.tiers("town")
 def test_commons_keeps_scrub_off_the_road_bed():
     # the old skip knew only LANES, so scrub drew on the Imperial Road bed (Hoshizora); the
     # corridor set now covers lanes + town streets + the road
@@ -230,6 +235,7 @@ def test_merchant_residences_respects_the_bound():
     assert s.merchant_residences() == 0
 
 
+@pytest.mark.tiers("city")
 def test_rowpack_lays_touching_terraces():
     # the GM row-packing doctrine: city commoner housing goes down as CONTIGUOUS terraces -
     # most units share a party wall (hairline seam <= 1.2px), never the old detached scatter
@@ -247,6 +253,7 @@ def test_rowpack_lays_touching_terraces():
     assert sum(1 for g in gaps if g <= 1.2) >= 0.55 * len(bs)
 
 
+@pytest.mark.tiers("city")
 def test_rowpack_respects_canvas_edge_and_bound():
     # rows must not spill off the canvas margins (title/edge zone) or outside a bounding
     # ring (the city's ring road) - both rejections clip the terrace, they don't crash it
@@ -267,6 +274,7 @@ def test_rowpack_blocked_zone_terminates_and_places_nothing():
     assert s.rowpack((200, 200, 600, 300), ["laborer"] * 30) == 0
 
 
+@pytest.mark.tiers("town")
 def test_pack_businesses_only_line_the_frontage():
     # face_streets=True (businesses mode): a spot with no street within reach places NOTHING -
     # shops exist to catch passing feet, they never scatter into a streetless interior. (This
@@ -278,6 +286,7 @@ def test_pack_businesses_only_line_the_frontage():
     assert s.M["buildings"] == []
 
 
+@pytest.mark.tiers("city")
 def test_ministry_auto_label_side_prefers_empty_ground():
     # the GM label doctrine (2026-07): a label that CAN sit in empty ground, should. With no
     # label_below override the ministry scores both spots against what is already placed and
@@ -317,6 +326,7 @@ def test_merchant_estate_raises_when_no_clear_seat_exists():
         s.merchant_estate(600, 600, 100, 80)
 
 
+@pytest.mark.tiers("city")
 def test_merchant_estates_rolls_seats_and_records_the_target():
     import random as _rr
 
@@ -331,6 +341,7 @@ def test_merchant_estates_rolls_seats_and_records_the_target():
     assert s.M["meta"]["merchant_estate_roll"] == n
 
 
+@pytest.mark.tiers("city")
 def test_merchant_estates_pin_overrides_the_roll():
     s = Settlement(1200, 1200, seed=11)
     s.meta(name="c", scale="city", ftpx=3)
@@ -340,6 +351,7 @@ def test_merchant_estates_pin_overrides_the_roll():
     assert s.M["meta"]["merchant_estate_roll"] == 2
 
 
+@pytest.mark.tiers("city")
 def test_merchant_estates_raises_when_seats_run_short():
     s = Settlement(1200, 1200, seed=11)
     s.meta(name="c", scale="city", ftpx=3)
@@ -355,6 +367,7 @@ def test_place_punishment_spot_is_a_no_op_when_opted_out():
     assert not s.M["punishment_spots"]
 
 
+@pytest.mark.tiers("town")
 def test_place_punishment_spot_needs_a_street_to_site_on():
     # No road, no town street, no lane: there is no traffic to site the display on, so the siter
     # declines rather than dropping it somewhere arbitrary (the presence check then fires).
@@ -368,6 +381,7 @@ def test_place_punishment_spot_skips_a_degenerate_route_segment():
     assert s.place_punishment_spot() is not None
 
 
+@pytest.mark.tiers("city")
 def test_place_punishment_spot_declines_when_no_verge_is_within_the_siting_band():
     # At a very coarse grain the ~60-real-ft band is narrower than the road's own tread plus the
     # feature, so no candidate offset is legal at all - the siter must return None, not guess.
@@ -388,6 +402,7 @@ def test_place_punishment_spot_walks_the_label_off_a_building_it_would_cover():
     assert abs((lb[1] + lb[3]) / 2 - below_default) > 4  # the label moved off its default band
 
 
+@pytest.mark.tiers("city")
 def test_martial_hall_caption_takes_the_emptier_side():
     # "martial hall" is wide relative to a 43x33 px compound, so the caption side is a real
     # decision: a hall seated beside the yamen would otherwise drop its label on the governor.
@@ -490,6 +505,7 @@ def test_servant_ranges_attach_to_their_own_household():
         assert r["h"] == pytest.approx(s.px(s.SERVANT_RANGE_DEPTH_FT))
 
 
+@pytest.mark.tiers("city")
 def test_servant_ranges_is_a_noop_without_a_ward():
     s = Settlement(1000, 1000, seed=1)
     s.meta(name="W", scale="city", ftpx=3)
@@ -542,6 +558,7 @@ def test_servant_ranges_refuses_a_seat_whose_own_door_is_blocked():
     assert (round(seat["x"], 1), round(seat["y"], 1)) not in seated  # that seat is refused; another flank may still serve
 
 
+@pytest.mark.tiers("city")
 def test_manor_label_inside_fits_the_court():
     """A city estate's caption lives INSIDE the blank court (GM 2026-08-09), sized to clear the
     walls - and a small estate gets a smaller face rather than an overflowing one."""
@@ -570,6 +587,7 @@ def test_theater_stage_records_every_stage_not_just_the_last():
     assert recs[0].get("kind") == "machi" or recs[0].get("kind") == "monzen" or "kind" in recs[0]
 
 
+@pytest.mark.tiers("capital", "city")
 def test_a_dense_row_lines_a_way_that_bends_inside_the_fronted_stretch():
     """The fronted stretch and the way's own corridor segments rarely coincide: a road runs the
     height of the map and a shop row lines 500 px of it, and the road BENDS inside that stretch.

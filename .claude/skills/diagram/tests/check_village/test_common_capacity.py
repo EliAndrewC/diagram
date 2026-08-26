@@ -3,6 +3,8 @@
 import json
 import pathlib
 
+import pytest
+
 from l7r.diagram import check_village
 from tests.check_village._builders import _CITY_WALL_SMALL, _FULL_Q, _POND_OUTLIER, _SHRINE_GRAVEYARD_GROUP, _diamond_city, _dwell_grid, _lanes, _pop_city, _ward_lane, bldg
 
@@ -27,6 +29,7 @@ def test_crop_advisory_occupancy_includes_hill_forest_and_marsh():
     assert len(adv) == 1 and adv[0]["kind"] == "pond"
 
 
+@pytest.mark.tiers("city")
 def test_crop_advisory_skips_a_city():
     assert check_village.crop_relocatable_singletons({**_POND_OUTLIER, "meta": {"scale": "city", "view": [0, 0, 1400, 1000]}}) == []
 
@@ -201,6 +204,7 @@ def test_lane_ward_shortfalls_uses_fence_centroid_when_no_governor_mansion():
     assert check_village.lane_ward_shortfalls(M)
 
 
+@pytest.mark.tiers("city", "town")
 def test_city_capacity_ascii_map_classes_every_cell_kind():
     # one manifest carrying a cell of each class, sampled fine enough to hit each branch.
     M = _diamond_city(
@@ -223,6 +227,7 @@ def test_city_capacity_ascii_map_classes_every_cell_kind():
     assert rep["grid_step"] == 20 and rep["grid_origin"] == (0, 0)
 
 
+@pytest.mark.tiers("city")
 def test_city_capacity_skips_footprintless_item():
     # a dwelling dict with no "w" is skipped by _rects (no rect to sample) but still COUNTS
     # toward placed D - exercises the "if 'w' not in it: continue" guard without crashing.
@@ -233,6 +238,7 @@ def test_city_capacity_skips_footprintless_item():
 
 
 # ---- feature 006: reworked capacity verdict (usable residential ground + reserve) ------------
+@pytest.mark.tiers("city")
 def test_city_capacity_counts_only_in_wall_dwellings():
     # extramural dwellings do not inflate the placed count
     wall = _CITY_WALL_SMALL
@@ -241,6 +247,7 @@ def test_city_capacity_counts_only_in_wall_dwellings():
     assert check_village.city_capacity(M)["placed"] == 20  # the outside one is not counted
 
 
+@pytest.mark.tiers("city")
 def test_city_capacity_per_quarter_table_lists_residential_quarters():
     q = {"poly": _FULL_Q, "zone": "residential", "kind": None, "name": "warren"}
     civic = {"poly": [[600, 600], [790, 600], [790, 790], [600, 790]], "zone": "civic", "kind": None, "name": "yamen"}

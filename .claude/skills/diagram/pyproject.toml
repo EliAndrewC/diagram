@@ -99,6 +99,14 @@ markers = [
     # quick set (9.0 / 5.4 / 3.4 / 3.2 s), the 9 s one alone being the run's critical path on 22 workers.
     # Deselected by `make quick`; `make done` runs them under coverage where they earn their keep.
     "coverage_only: replays a fixture through the full gate purely as a coverage carrier. Deselected by `make quick`, run by `make done`.",
+    # `tiers(...)` (GM 2026-08-26, feature 133 T17): the settlement tiers a test is RELEVANT to - a test that
+    # exercises a town/city/capital-only feature proves nothing about the hamlet on the sheet while scope is
+    # locked to the reference hamlet. Untagged = relevant to every tier. Under `scope reference` the suite
+    # runs with `--tier hamlet` and skips tests whose tiers exclude it (719 functions on 2026-08-26, tagged by
+    # a scripted first pass over the tier names each test's body mentions; hamlet and village share the
+    # homestead engine, so a test naming either stays in). The long-run idea, recorded in docs/iteration-loop.md:
+    # derive relevance from the DIFF since the last green run instead of from hand tags.
+    "tiers(*names): the settlement tiers this test is relevant to (hamlet, village, town, city, capital). Untagged = all. `--tier X` deselects tests whose tiers exclude X.",
 ]
 
 [tool.coverage.run]

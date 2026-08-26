@@ -102,6 +102,7 @@ def test_rects_overlap_detects_overlap_and_separation():
     assert rects_overlap(a, [(0, 20), (10, 20), (10, 30), (0, 30)]) is False  # separated on y
 
 
+@pytest.mark.tiers("city")
 def test_shrine_hall_rolls_torii_count_per_temple():
     # the 2026-07-23 full re-roll: torii=[...] is avenue GEOMETRY; the COUNT is a seeded
     # per-temple roll on the tier's TORII_WEIGHTS column, recorded on the religious rec
@@ -401,6 +402,7 @@ def test_settlement_form_water_town_is_lion_gated():
     assert lion.resolve("settlement_form") == "water_town"
 
 
+@pytest.mark.tiers("city")
 def test_roll_merchant_estate_count_distribution():
     # 30/40/30 for 1/2/3 at city scale - the granted-privilege distribution (MERCHANT_ESTATE_WEIGHTS)
     import collections
@@ -511,6 +513,7 @@ def test_round_channel_joints_leaves_offtakes_and_gentle_seams_alone():
     assert e["pts"] == [(0.0, 0.0), (200.0, 0.0)]
 
 
+@pytest.mark.tiers("city")
 def test_execution_ground_is_sized_and_screened_by_tier():
     t = _town()
     t.execution_ground(500, 500)
@@ -592,6 +595,7 @@ def test_seat_memo_tolerates_bound_being_SET_but_not_unset():
     assert (100.0, 200.0) not in memo.level("laborer", 10, 6, 7)
 
 
+@pytest.mark.tiers("capital")
 def test_a_capital_declares_its_scale_and_takes_the_city_building_grain():
     s, _ = _castle_map()
     assert s.M["meta"]["scale"] == "capital"
@@ -703,6 +707,7 @@ def test_sluice_gate_label_names_the_black_bar():
     assert 'x="-13.0"' in "".join(s4.top[n4:])  # the posts stand on the abutments, not mid-water
 
 
+@pytest.mark.tiers("capital", "city")
 def test_manor_ink_parameter_marks_foreign_sovereign_ground():
     """The Imperial Magistrate's compound is foreign sovereign ground and must not read as another
     domain office: the manor form, in its own ink (settlements/capitals.md, 'Compounds with no

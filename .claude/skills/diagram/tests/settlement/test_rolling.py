@@ -40,6 +40,7 @@ def test_rect_hits_detects_a_pure_edge_crossing():
     assert not s._rect_hits((500, 500, 40, 40), [[(900, 900), (950, 900), (950, 950), (900, 950)]])
 
 
+@pytest.mark.tiers("city")
 def test_farmsteads_legacy_skips_grove_for_a_city_intramural_farm():
     # the legacy farmsteads inwall-grove skip: a farm INSIDE a city wall (scale=city, inwall_groves off)
     # gets no windward grove (intramural land is too precious and the urban fabric shelters it). Uses the

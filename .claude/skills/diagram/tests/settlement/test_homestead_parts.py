@@ -1,5 +1,7 @@
 """Split from test_settlement.py by feature 025 - see tests/settlement/CLAUDE.md for the index."""
 
+import pytest
+
 from l7r.diagram import check_village
 from l7r.diagram.settlement import Settlement
 from tests.settlement._builders import _crop_settlement, _nuc_village, _scatter_base_points, _town
@@ -282,6 +284,7 @@ def test_yard_fits_rejects_dry_crop_plots():
     assert not s._yard_fits(476, 500, 40, 26, 440, 500)
 
 
+@pytest.mark.tiers("town")
 def test_grove_fits_rejects_wall_overlap():
     # a belt arm is footprint-checked against the town wall: the corridor test is center-only,
     # so a wide arm centered clear of the rampart could still lap the stroke (Hirameki, 2026-07)

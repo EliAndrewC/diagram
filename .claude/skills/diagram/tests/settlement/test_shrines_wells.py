@@ -104,6 +104,7 @@ def test_marsh_keeps_reeds_off_a_building():
     assert len(s.M["marshes"]) == 1
 
 
+@pytest.mark.tiers("city")
 def test_shrine_hall_extends_a_multi_point_avenue_along_its_own_step():
     # >= 2 given points: extension continues the avenue's OWN stride, not the 44px default
     s = Settlement(1200, 1200, seed=9)
@@ -114,6 +115,7 @@ def test_shrine_hall_extends_a_multi_point_avenue_along_its_own_step():
     assert sorted(t[1] for t in s.M["torii"]) == pytest.approx([524, 534, 544], abs=0.1)
 
 
+@pytest.mark.tiers("city")
 def test_shrine_hall_roll_below_geometry_draws_the_first_n():
     # a roll/pin smaller than the supplied avenue keeps the arches nearest the hall
     s = Settlement(1200, 1200, seed=9)
@@ -157,6 +159,7 @@ def test_shrine_hall_refuses_an_avenue_that_cannot_be_shortened_clear():
         s.shrine_hall(600, 500, "Temple", w=s.px(130), h=s.px(84), kind="temple", torii=[(600, 560), (600, 570)], torii_count=7)
 
 
+@pytest.mark.tiers("city")
 def test_shrine_hall_repitches_an_overwide_avenue_along_its_own_line():
     # GM 2026-07-25: the gen authors the avenue's LINE, the engine owns its STRIDE. An authored run
     # wider than two rail-spans is re-laid at the ~20 ft house pitch, resampled by arc length along
@@ -182,6 +185,7 @@ def test_shrine_hall_leaves_an_avenue_inside_the_pitch_band_alone():
     assert [t[1] for t in s.M["torii"]] == pytest.approx([527, 542, 557], abs=0.1)
 
 
+@pytest.mark.tiers("city")
 def test_ward_refuses_a_fence_laid_across_a_standing_torii():
     # the Nagahara case (GM 2026-07-25): the fence is drawn AFTER the temple, so the avenue could not
     # have avoided it - the wall side must catch it, since neither feature can move once drawn
@@ -193,6 +197,7 @@ def test_ward_refuses_a_fence_laid_across_a_standing_torii():
         s.ward("samurai", [(300, 521), (900, 521)], gates=[])
 
 
+@pytest.mark.tiers("city")
 def test_avenue_at_threshold_slides_a_marooned_sando_in_to_its_hall():
     # GM 2026-07-27: "the distance from the front of the temple should be the same as the distance
     # between each torii arch". Tango's Bishamon sando was spaced right at 20 ft and authored 139 ft
@@ -207,6 +212,7 @@ def test_avenue_at_threshold_slides_a_marooned_sando_in_to_its_hall():
     assert ys[0] - (500 + s.px(84) / 2) == pytest.approx(10, abs=0.1)  # ...and the gap to the hall now MATCHES it
 
 
+@pytest.mark.tiers("city")
 def test_avenue_at_threshold_pulls_a_beside_the_hall_gate_onto_the_flank_it_stands_off():
     # a run authored off to the SIDE is measured to the hall's nearest FACE, not its center (the
     # footprint discipline), so it slides onto the flank it actually stands off rather than diagonally
@@ -220,6 +226,7 @@ def test_avenue_at_threshold_pulls_a_beside_the_hall_gate_onto_the_flank_it_stan
     assert tx - (600 + s.px(130) / 2) == pytest.approx(s.px(settlement.TORII_PITCH_FT), abs=0.1)
 
 
+@pytest.mark.tiers("city")
 def test_avenue_at_threshold_leaves_a_degenerate_avenue_alone():
     # nothing to seat, and an arch drawn ON the hall is torii_clear_of_shrine's defect to report -
     # this method translates a sando, it does not paper over a broken one
@@ -230,6 +237,7 @@ def test_avenue_at_threshold_leaves_a_degenerate_avenue_alone():
     assert s._avenue_at_threshold(300, 300, 40, 30, on_the_hall) == on_the_hall
 
 
+@pytest.mark.tiers("city")
 def test_hall_caption_steps_out_of_its_own_sando():
     # GM 2026-07-27: an arch is "never covered by the 'temple of X' label". A hall's caption and its
     # approach both want the ground at the hall's face, so bringing the arches to the threshold put
@@ -244,6 +252,7 @@ def test_hall_caption_steps_out_of_its_own_sando():
     assert cap[1] > max(ay for _, ay in arches)  # here it stayed on the gen's side, stepping past the far end of the sando
 
 
+@pytest.mark.tiers("town")
 def test_open_seat_answers_where_a_feature_can_actually_stand():
     # GM 2026-07-25: fitting one extra well into a packed quarter cost three regenerate-and-check
     # cycles of hand-picked coordinates because nothing outside the engine could ask _fits where
@@ -293,6 +302,7 @@ def test_draft_byres_keeps_off_the_paddy():
     assert len(placed) == 1 and placed[0][0] < 330  # the byre lands on the dry (W) side, off the paddy
 
 
+@pytest.mark.tiers("city", "town")
 def test_draft_byres_uses_the_legacy_size_off_the_to_scale_tiers():
     # a legacy tier (town/city) sizes its byre from the urban glyph grain (bscale), not px(feet) - the
     # non-to-scale branch of the byre sizer.
@@ -324,6 +334,7 @@ def test_shrine_well_returns_none_when_boxed_in():
     assert s.shrine_well(400, 400) is None and not s.M["wells"]
 
 
+@pytest.mark.tiers("city")
 def test_a_hall_caption_is_the_same_size_as_a_ministry_caption():
     # GM 2026-08-08: a caption is sized by its GLYPH, not by the institution's rank. A city temple
     # hall and a ministry office are the same size class of building (96-140 ft against 114-140),
@@ -349,6 +360,7 @@ def test_shrine_draws_and_records_a_religious_hall():
     assert any(r["kind"] == "shrine" and r["x"] == 300 for r in s.M["religious"])
 
 
+@pytest.mark.tiers("city")
 def test_shrine_hall_guard_refuses_unscaled_pixels_at_coarse_scales():
     # the latent-footgun guard (2026-07-21): four city temples shipped as fixed 100x64 px = 300x192 real ft.
     # At any ftpx > 1, raw-pixel dims implying an impossible hall must raise; s.px(real_ft) passes.
@@ -360,6 +372,7 @@ def test_shrine_hall_guard_refuses_unscaled_pixels_at_coarse_scales():
     assert any(r["kind"] == "temple" for r in s.M["religious"])
 
 
+@pytest.mark.tiers("city", "town")
 def test_farm_wells_seats_in_a_dooryard_dodging_crop():
     """The SUCCESS path of the dooryard grid scan (previously covered only incidentally by the city
     regens, which stopped triggering it once Tango's belt got its own seeded wells 2026-07-21): the
@@ -380,6 +393,7 @@ def test_farm_wells_seats_in_a_dooryard_dodging_crop():
     assert w["y"] > 514  # on the rim slack below the drawn crop (+14 margin), never on the crop
 
 
+@pytest.mark.tiers("town")
 def test_farm_wells_drops_a_cluster_with_no_seatable_ground():
     """A steading whose whole reach-disc is blocked ground gets skipped rather than spinning the
     cover loop forever - the well simply cannot seat, and the gate will say so."""
@@ -391,6 +405,7 @@ def test_farm_wells_drops_a_cluster_with_no_seatable_ground():
     assert not s.M["wells"]
 
 
+@pytest.mark.tiers("town")
 def test_farm_wells_falls_back_to_envelope_rim_slack():
     """When a steading's whole neighborhood sits inside a field ENVELOPE (the smoothed outline
     claiming more than the crop fills), the primary seating fails and the fallback suspends the
@@ -407,6 +422,7 @@ def test_farm_wells_falls_back_to_envelope_rim_slack():
     assert not (430 <= wx <= 570 and 430 <= wy <= 570)  # seated on rim slack, not on the crop
 
 
+@pytest.mark.tiers("city")
 def test_open_seat_refuses_a_seat_whose_FOOTPRINT_crosses_the_bound():
     """The martial-hall bug, as a unit test (GM 2026-07-25). s.bound is the ring-road loop a city
     packs inside, and `_fits` tests only a candidate's CENTER against it - so open_seat handed back
@@ -457,6 +473,7 @@ def test_place_wells_cistern_kind_is_recorded():
     assert len(ws) == len(seats)
 
 
+@pytest.mark.tiers("city")
 def test_open_seat_disc_uses_the_true_radius_of_a_round_candidate():
     """A wellhead is a DISC, so its reach is its radius - not the half-diagonal of the probe box
     around it, which is the documented over-restriction in this skill's CLAUDE.md. Exact rather

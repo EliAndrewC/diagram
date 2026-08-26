@@ -10,6 +10,7 @@ from l7r.diagram.settlement import Settlement, seg_dist
 from tests.settlement._builders import _assert_no_glyph_overlaps, _cap020, _city, _crop_settlement, _town
 
 
+@pytest.mark.tiers("town")
 def test_granary_draws_a_storehouse_row():
     # opt-in rice-transit granary: a row of n fireproof kura, recorded for town_has_granary
     s = _town()
@@ -39,6 +40,7 @@ def test_cemetery_common_ground_defaults_organic():
     assert "<path" in s.out[-1] and 'width="100"' not in s.out[-1]
 
 
+@pytest.mark.tiers("city")
 def test_cemetery_organic_false_keeps_the_louzeyuan_rectangle():
     # the deliberate per-city override: a plotted Chinese-style charity ground stays a ruled rectangle
     s = _crop_settlement()
@@ -46,6 +48,7 @@ def test_cemetery_organic_false_keeps_the_louzeyuan_rectangle():
     assert 'width="100"' in s.out[-1] and "<path" not in s.out[-1]
 
 
+@pytest.mark.tiers("city")
 def test_animal_ground_records_a_yard_and_optional_label():
     # the city_no_large_empty_space remedy: a standalone stable-yard scatter claiming a pocket
     s = _crop_settlement()
@@ -323,6 +326,7 @@ def test_stable_yard_heaps_avoid_a_neighboring_yards_rails():
         assert d >= 24.9, f"heap at ({dh['x']}, {dh['y']}) sits {d:.1f}px from the neighboring yard's rail"
 
 
+@pytest.mark.tiers("town")
 def test_merchant_residences_stop_at_the_requested_count():
     # the placed >= count early-break: with more storefronts than requested homes, the loop
     # must stop at the cap (previously covered by the towns' legacy gens)
@@ -339,6 +343,7 @@ def test_merchant_residences_stop_at_the_requested_count():
 
 
 # ---- the justice works (feature 015) ----------------------------------------------------------
+@pytest.mark.tiers("town")
 def test_punishment_spot_records_true_size_and_reserves_ground():
     s = _town()
     s.punishment_spot(400, 400, rot=30)
@@ -400,6 +405,7 @@ def test_boundary_marker_is_a_location_marker():
     assert (300, 300, b["vw"], b["vh"]) in s.placed  # overlap uses the drawn box, like the wells
 
 
+@pytest.mark.tiers("town")
 def test_boundary_marker_floor_never_shrinks_a_stone():
     # The marker floor lifts a sub-glyph stone; it must not shrink one that already draws larger.
     s = Settlement(1000, 1000, seed=1)
@@ -440,6 +446,7 @@ def test_granary_rot_turns_the_row_and_records_rotated_stores():
     assert recs[0]["x"] != recs[1]["x"] and recs[0]["y"] != recs[1]["y"]  # the row marches along the turned axis
 
 
+@pytest.mark.tiers("capital")
 def test_granary_append_records_a_list_for_a_capital_with_two_granaries():
     """A capital holds its grain in TWO places for two reasons (the domain's working rice at the
     wharf, the Emperor's stores beside it) - the legacy single M['granary'] dict cannot carry

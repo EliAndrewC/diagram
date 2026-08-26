@@ -60,6 +60,43 @@ def _rolls_a_map(node: ast.AST) -> bool:
     return False
 
 
+def test_tiers_markers_name_only_real_tiers() -> None:
+    """The `tiers` marker (feature 133 T17) is only useful if its names are the five the conftest knows."""
+    import ast
+    import re
+
+    bad = []
+    for path in sorted(TESTS.glob("**/*.py")):
+        for m in re.finditer(r"@pytest\.mark\.tiers\((.*?)\)", path.read_text(encoding="utf-8")):
+            names = ast.literal_eval("(" + m.group(1) + ",)")
+            if not names or any(n not in ("hamlet", "village", "town", "city", "capital") for n in names):
+                bad.append((path.name, m.group(1)))
+    assert not bad, f"tiers markers with unknown or empty tier names: {bad}"
+
+
+def test_the_tier_option_deselects_only_tests_tagged_for_other_tiers(pytester) -> None:  # type: ignore[no-untyped-def]
+    """Fire-proof for the conftest hook: under --tier hamlet, a city-only test is deselected, a
+    hamlet-inclusive one and an untagged one run; without --tier all three run."""
+    pytester.makeconftest(
+        (TESTS / "conftest.py").read_text(encoding="utf-8").split("pytest_plugins")[0] + "\n" + (TESTS / "conftest.py").read_text(encoding="utf-8").split('pytest_plugins = ["pytester"]')[1]
+    )
+    pytester.makeini("[pytest]\nmarkers =\n    tiers(*names): tiers\n")
+    pytester.makepyfile(
+        """
+        import pytest
+        @pytest.mark.tiers("city", "town")
+        def test_city_only(): pass
+        @pytest.mark.tiers("hamlet", "village")
+        def test_lane_tiers(): pass
+        def test_untagged(): pass
+        """
+    )
+    r = pytester.runpytest_inprocess("-p", "no:cacheprovider", "--tier", "hamlet", "-q")
+    r.assert_outcomes(passed=2, deselected=1)
+    r = pytester.runpytest_inprocess("-p", "no:cacheprovider", "-q")
+    r.assert_outcomes(passed=3)
+
+
 def test_every_map_rolling_test_carries_the_rolls_map_marker() -> None:
     missing: list[str] = []
     for p in sorted(TESTS.rglob("test_*.py")):

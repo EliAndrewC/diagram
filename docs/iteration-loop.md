@@ -132,3 +132,23 @@ the test run, so the next gain is fewer turns, not a faster gate.
 Also enforced from the same day: `make quick` and `make done` never share a command
 (`gate-hooks.sh`) - `quick` is a subset of the 70 s locked `done`, and chaining them was 1.5 min of
 duplicated tests in one 11-minute task.
+
+
+## Tier relevance (GM 2026-08-26, feature 133 T17) - and the idea kept for later
+
+While scope is locked to the reference hamlet, tests that exercise town/city/capital-only features
+prove nothing about the map on the sheet. Every test carries a `tiers(...)` marker naming the tiers
+it is relevant to (untagged = all); the suite runs with `--tier hamlet` under the lock and deselects
+the rest - 731 tests on the day it landed, quick 22 -> 19.5 s wall (the remaining floor is
+collection, 5.4 s, and the untagged city-fixture gate tests that test shared checks). The first
+tagging pass was SCRIPTED from the tier names each test's body mentions, written into the source as
+ordinary decorators so it is reviewable and correctable by hand; hamlet and village share the
+homestead engine, so a test naming either stays in.
+
+**Kept for later, in the GM's words:** *"in the long run, we could actually do something more
+efficient where based on what code changed, we would be able to detect what types of settlements a
+test is relevant for in an automated way based on a diff that occurred since the last time that we
+had a successful test run."* That is change-based test selection: map each test to the modules it
+imports/executes (coverage data from a green run gives this for free), then after a green run select
+only the tests whose footprint intersects the diff. Not built; the hand tags are the proof of
+concept it would replace.

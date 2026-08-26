@@ -23,3 +23,35 @@ from l7r.diagram._invocation import assert_via_make
 
 # At import of the suite's root conftest - once, before any test runs.
 assert_via_make("the test suite", "quick   (~33 s)  or  make done   (~5.5 min, the full gate)")
+
+pytest_plugins = ["pytester"]
+
+TIERS = ("hamlet", "village", "town", "city", "capital")
+
+
+def pytest_addoption(parser):  # type: ignore[no-untyped-def]
+    parser.addoption(
+        "--tier", default=None, choices=TIERS, help="run only tests relevant to this settlement tier (untagged tests always run); the Makefile passes the reference tier while scope is locked"
+    )
+
+
+def pytest_collection_modifyitems(config, items):  # type: ignore[no-untyped-def]
+    """TIER RELEVANCE (GM 2026-08-26, feature 133 T17): while scope is locked to the reference hamlet,
+    a test tagged `tiers("town", "city")` cannot say anything about the map on the sheet - skip it.
+    A test with no `tiers` marker is relevant to every tier and always runs."""
+    tier = config.getoption("--tier")
+    if not tier:
+        return
+    keep, drop = [], []
+    for item in items:
+        m = item.get_closest_marker("tiers")
+        (drop if m is not None and tier not in m.args else keep).append(item)
+    if drop:
+        config.hook.pytest_deselected(items=drop)
+        items[:] = keep
+        config._tier_dropped = len(drop)  # type: ignore[attr-defined]
+
+
+def pytest_report_header(config):  # type: ignore[no-untyped-def]
+    tier = config.getoption("--tier")
+    return f"tier: {tier} - tests tagged for other tiers only are deselected (scope locked to the reference settlement)" if tier else None

@@ -371,6 +371,7 @@ def test_near_ring_cropland_skips_a_grove_clump_outside_its_belt_poly():
         assert not (qx0 - 12 <= 500 <= qx1 + 12 and qy0 - 12 <= 500 <= qy1 + 12)
 
 
+@pytest.mark.tiers("city")
 def test_near_ring_cropland_keeps_a_city_ring_outside_the_wall():
     s = Settlement(1000, 1000, seed=1)
     s.meta(name="C", scale="city")
@@ -398,6 +399,7 @@ def test_near_ring_paddy_places_off_edge_basins_recorded_as_paddy_fields():
     assert len(made) == n and all(fld["kind"] == "paddy" for fld in made)
 
 
+@pytest.mark.tiers("town")
 def test_near_ring_paddy_skips_interior_ground_with_no_reachable_water():
     # a town (no moat) with a big frame: interior basins far from the edge have no water -> skipped;
     # only the off-edge band is filled. So no placed basin sits deep in the middle.
@@ -411,6 +413,7 @@ def test_near_ring_paddy_skips_interior_ground_with_no_reachable_water():
             assert touches_edge  # only edge-watered basins were placed
 
 
+@pytest.mark.tiers("town")
 def test_near_ring_paddy_waters_a_basin_from_a_pond_ring():
     # an INTERIOR bbox (never touches the frame edge, no moat) - so a basin can ONLY be watered by the pond ring
     s = Settlement(1400, 1400, seed=5)
@@ -420,6 +423,7 @@ def test_near_ring_paddy_waters_a_basin_from_a_pond_ring():
     assert n > 0 and any(fld["name"].startswith("nrp_") for fld in s.M["fields"])
 
 
+@pytest.mark.tiers("town")
 def test_near_ring_paddy_keeps_basins_off_streams_and_the_hill():
     s = Settlement(1400, 1400, seed=4)
     s.meta(name="T", scale="town")
@@ -435,6 +439,7 @@ def test_near_ring_paddy_keeps_basins_off_streams_and_the_hill():
                 assert not (((vx - 700) / (200 * 1.35)) ** 2 + ((vy - 200) / (140 * 1.35)) ** 2 <= 1.0)  # off the hill
 
 
+@pytest.mark.tiers("city")
 def test_near_ring_paddy_moat_feeds_a_walled_city_basin_with_a_channel():
     s = Settlement(1400, 1400, seed=6)
     s.meta(name="C", scale="city")
@@ -460,6 +465,7 @@ def test_near_ring_paddy_moat_feeds_a_walled_city_basin_with_a_channel():
             assert seg_dist(430, 700, c["poly"][0], c["poly"][-1]) > 25
 
 
+@pytest.mark.tiers("city")
 def test_near_ring_paddy_respects_the_moat_current_when_the_moat_is_fed():
     # a moat fed by a stream from the north flows south; every moat intake must tap upstream of its basin
     s = Settlement(1600, 1600, seed=7)
@@ -475,6 +481,7 @@ def test_near_ring_paddy_respects_the_moat_current_when_the_moat_is_fed():
             assert ey - sy >= -8  # field-end not upstream (north) of the moat tap - flows with the southward current
 
 
+@pytest.mark.tiers("city")
 def test_near_ring_paddy_keeps_basins_off_a_polygon_cemetery():
     # a funerary ground recorded as a POLYGON (not an x/w dict) still sets the paddy back (funerary_set_back_from_water)
     s = Settlement(1400, 1400, seed=9)
@@ -547,6 +554,7 @@ def test_marsh_waterside_role():
         s.marsh([(0, 0), (10, 0), (10, 10)], role="lagoon")
 
 
+@pytest.mark.tiers("capital")
 def test_commons_bare_records_the_claim_and_draws_nothing():
     """render='bare' claims the ground (full record: role, poly, render) but scatters no scrub -
     the GM's no-glyphs-on-claimed-capital-ground ruling (021)."""

@@ -575,7 +575,7 @@ durations:
 
 quick:
 	@python3 -m ruff check --fix l7r/ tests/ && python3 -m ruff format l7r/ tests/ && python3 -m mypy
-	@start=$$(date +%s); python3 -m pytest -n auto --dist worksteal -q --no-cov -x --ff -m "not rolls_map and not coverage_only" --deselect tests/test_villages.py; ec=$$?; \
+	@start=$$(date +%s); python3 -m pytest -n auto --dist worksteal -q --no-cov -x --ff -m "not rolls_map and not coverage_only" --deselect tests/test_villages.py $(TIER_SELECT); ec=$$?; \
 	  el=$$(( $$(date +%s) - start )); \
 	  if [ $$ec -ne 0 ]; then exit $$ec; fi; \
 	  if [ $$el -gt $(QUICK_BUDGET) ]; then \
@@ -722,6 +722,11 @@ DESELECT = --deselect tests/test_villages.py --deselect tests/hamletgen/test_dri
 # already rolled by `make reference` in the same gate). The reference-rolling tests are covered at unlock.
 SCOPE_STATE = $(shell $(SWITCH) state scope 2>/dev/null)
 ROLL_DESELECT = $(if $(COV_FLOORS),,$(if $(filter reference,$(SCOPE_STATE)),-m "not rolls_map",))
+# TIER RELEVANCE (GM 2026-08-26, feature 133 T17): the reference settlement is a hamlet, so while scope is
+# locked the suite skips tests tagged for other tiers only (`tiers` marker, tests/conftest.py). The tier is
+# named here, once; never under COV_FLOORS.
+REFERENCE_TIER = hamlet
+TIER_SELECT = $(if $(COV_FLOORS),,$(if $(filter reference,$(SCOPE_STATE)),--tier $(REFERENCE_TIER),))
 
 # (GUARD_EDIT_OK: feature 132 - test-full rolls every pool map, so the scope lock refuses it before `test` starts)
 test-full:
@@ -757,7 +762,7 @@ test:
 # --dist worksteal (GM 2026-08-26, the make quick profile): the default `load` scheduler hands each worker a
 # fixed slice up front, so on a suite whose tests range from 5 ms to 4 s the last worker finishes ~5 s after
 # the rest; worksteal lets idle workers take from busy ones. Measured on quick: 27.5 s -> 22.0 s wall.
-	@if python3 -c "import xdist" >/dev/null 2>&1; then python3 -m pytest -n auto --dist worksteal $(DESELECT) $(ROLL_DESELECT); else python3 -m pytest $(DESELECT) $(ROLL_DESELECT); fi; ec=$$?; \
+	@if python3 -c "import xdist" >/dev/null 2>&1; then python3 -m pytest -n auto --dist worksteal $(DESELECT) $(ROLL_DESELECT) $(TIER_SELECT); else python3 -m pytest $(DESELECT) $(ROLL_DESELECT) $(TIER_SELECT); fi; ec=$$?; \
 	if [ $$ec -ne 0 ]; then python3 ../../../scripts/uncovered-in-diff.py || true; exit $$ec; fi; \
 	python3 -m coverage combine --append >/dev/null 2>&1 || true; \
 	if [ -z "$(COV_FLOORS)" ]; then \

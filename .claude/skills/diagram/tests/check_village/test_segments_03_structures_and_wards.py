@@ -3,6 +3,8 @@
 import math
 import sys
 
+import pytest
+
 from l7r.diagram import check_village
 from tests.check_village._builders import (
     _CHAN,
@@ -29,6 +31,7 @@ from tests.check_village._builders import (
 
 
 # ---- a feature-footprint overlap check ----------------------------------------------------
+@pytest.mark.tiers("town")
 def test_no_structure_on_wall_fires():
     # on the TOP rampart segment - note the wall is an OPEN polyline (the closing edge is not
     # a real wall segment, since a real rampart is an arc anchored to a hill), so the building
@@ -37,6 +40,7 @@ def test_no_structure_on_wall_fires():
     assert "no_structure_on_wall" in f(M)
 
 
+@pytest.mark.tiers("town")
 def test_flophouse_on_road_overlaps_like_any_structure():
     # a standalone civic building (flophouse) is now checked for overlaps too: one sitting on
     # the road must trip no_structure_on_road, exactly as a shop would.
@@ -62,6 +66,7 @@ def test_no_structure_on_wall_branches():
     assert "no_structure_on_wall" in _feature_overlap({"walled": True}, "wall", FEAT)
 
 
+@pytest.mark.tiers("town")
 def test_no_structure_on_street_branch():
     assert "no_structure_on_street" in _feature_overlap({"walled": True}, "town_streets", [{"pts": FEAT, "w": 24}])
 
@@ -74,6 +79,7 @@ def test_no_structure_on_channel_branches():
 
 
 # ---- town street-layout FAIL branches -----------------------------------------------------
+@pytest.mark.tiers("town")
 def test_businesses_front_streets_fires():
     M = {
         "meta": {"scale": "town", "walled": True},
@@ -84,6 +90,7 @@ def test_businesses_front_streets_fires():
     assert "businesses_front_streets" in f(M)
 
 
+@pytest.mark.tiers("town")
 def test_housing_off_main_street_fires():
     M = {
         "meta": {"scale": "town", "walled": True},
@@ -94,6 +101,7 @@ def test_housing_off_main_street_fires():
     assert "housing_off_main_street" in f(M)
 
 
+@pytest.mark.tiers("town")
 def test_roads_drawn_under_overlays_fires():
     M = {
         "meta": {"scale": "town"},
@@ -142,6 +150,7 @@ def test_irrigation_channels_hairline_passes_at_the_floor():
     assert "irrigation_channels_hairline" not in f(M)
 
 
+@pytest.mark.tiers("city")
 def test_irrigation_channels_hairline_allows_a_drain_outfall_culvert_at_four():
     # a drain-outfall culvert carries the fan's whole runoff and matches the drain's outfall width
     # (4.0 at the city grain) - it is not a field ditch, so its ceiling is 4.5 (GM 2026-07-23)
@@ -229,6 +238,7 @@ def test_dry_plots_clear_of_paddies_passes_when_the_hem_abuts_the_bund():
     assert "dry_plots_clear_of_paddies" not in f(M)
 
 
+@pytest.mark.tiers("city", "town")
 def test_city_lanes_layered_by_width_fires_when_narrow_over_wide():
     # the wide Imperial road (26) is drawn EARLY (low z) and a narrow street (18) that crosses it is
     # drawn later (high z): the narrow lane paints over the wider road - the wider must be on top.
@@ -244,39 +254,46 @@ def test_city_lanes_layered_by_width_fires_when_narrow_over_wide():
     assert "city_lanes_layered_by_width" in f(M)
 
 
+@pytest.mark.tiers("city")
 def test_city_lane_under_wall_fires_when_a_street_touches_the_wall():
     # a street whose end reaches the wall (z above the rampart's) renders OVER it - away from any gate
     M = _walled(streets=[{"pts": [[300, 300], [300, 205]], "w": 18, "z": 100}])
     assert "city_lane_under_wall" in f(M)
 
 
+@pytest.mark.tiers("city")
 def test_city_lane_under_wall_fires_when_a_street_crosses_the_wall():
     M = _walled(streets=[{"pts": [[300, 150], [300, 300]], "w": 18, "z": 100}])  # crosses the top edge off-gate
     assert "city_lane_under_wall" in f(M)
 
 
+@pytest.mark.tiers("city")
 def test_city_lane_under_wall_passes_at_a_gate_opening():
     # a road through the gate crosses the wall ring there, but the gate is a genuine opening - exempt
     M = _walled(streets=[{"pts": [[500, 400], [500, 150]], "w": 18, "z": 100}])  # crosses at the gate (500,200)
     assert "city_lane_under_wall" not in f(M)
 
 
+@pytest.mark.tiers("city")
 def test_city_lane_under_wall_passes_when_lane_already_under():
     M = _walled(streets=[{"pts": [[300, 300], [300, 205]], "w": 18, "z": 5}])  # z below wall_z (10)
     assert "city_lane_under_wall" not in f(M)
 
 
+@pytest.mark.tiers("city", "town")
 def test_city_lane_under_wall_handles_an_open_town_wall():
     # a town wall is an open arc (not a closed ring); a street touching it off-gate still fires
     M = {"meta": {"scale": "town"}, "wall": [[200, 500], [500, 200], [800, 500]], "wall_z": 10, "gate": [500, 200], "town_streets": [{"pts": [[300, 600], [352, 352]], "w": 18, "z": 100}]}
     assert "city_lane_under_wall" in f(M)
 
 
+@pytest.mark.tiers("city")
 def test_city_lanes_under_ward_fences_fires_when_a_lane_renders_over_a_fence():
     M = {"meta": {"scale": "city"}, "wards": [{"name": "samurai", "boundary": [[300, 500], [700, 500]], "z": 10}], "alleys": [{"pts": [[400, 300], [400, 505]], "w": 10, "z": 100}]}
     assert "city_lanes_under_ward_fences" in f(M)
 
 
+@pytest.mark.tiers("city")
 def test_city_lanes_under_ward_fences_passes_when_crossing_at_a_kido():
     M = {
         "meta": {"scale": "city"},
@@ -322,6 +339,7 @@ def test_label_hugs_its_referent_passes_a_caption_tucked_against_its_subject():
     assert "label_hugs_its_referent" not in f(M)
 
 
+@pytest.mark.tiers("city")
 def test_label_hugs_its_referent_skips_a_caption_with_no_subject():
     # a district caption names an AREA, not a feature, so it records no referent and is exempt
     # (city_labels_placed_with_subject governs those instead)
@@ -456,6 +474,7 @@ def test_title_has_placard_fires_on_a_pre_placard_manifest():
     assert "title_has_placard" not in f(M)
 
 
+@pytest.mark.tiers("city")
 def test_no_structure_on_canal_fires_and_passes():
     # GM 2026-07 (Nagahara, first city with a cargo canal): a merchant house in the canal water
     canal = [{"poly": [[300, 500], [700, 500]], "w": 14}]
@@ -465,12 +484,14 @@ def test_no_structure_on_canal_fires_and_passes():
     assert "no_structure_on_canal" not in f(ok)
 
 
+@pytest.mark.tiers("city")
 def test_city_ward_cap_flush_to_wall_fires_when_a_cap_juts():
     # a straight cap whose far vertex juts 30px off the wall face (the corner-stub artifact)
     ward = {"name": "samurai", "boundary": [[200, 500], [500, 500]], "wall_caps": [{"x": 200, "y": 500, "pts": [[200, 500], [230, 500]]}]}
     assert "city_ward_cap_flush_to_wall" in f(_fort_city(wards=[ward]))
 
 
+@pytest.mark.tiers("city")
 def test_city_ward_cap_flush_to_wall_passes_when_flush():
     # a cap that lies ALONG the west wall face (x=200): both vertices sit on the wall
     ward = {"name": "samurai", "boundary": [[200, 500], [500, 500]], "wall_caps": [{"x": 200, "y": 500, "pts": [[200, 484], [200, 516]]}]}
@@ -486,6 +507,7 @@ def test_intersections_are_crossroads_passes_when_edges_under_beds():
     assert "intersections_are_crossroads" not in f({"ground_edge_zmax": 19, "ground_bed_zmin": 20})
 
 
+@pytest.mark.tiers("city", "town")
 def test_city_lane_under_wall_fires_when_street_crosses_wall_off_gate():
     # an E-W street punched clean through the wall (crossing both side faces, far from the N/S gates)
     # and drawn OVER it: a lane must run UNDER the rampart except at a gate.
@@ -499,6 +521,7 @@ def test_city_lane_under_wall_fires_when_street_crosses_wall_off_gate():
     assert "city_lane_under_wall" in f(M)
 
 
+@pytest.mark.tiers("city", "town")
 def test_businesses_front_streets_fires_when_shops_are_interior():
     M = {
         "meta": {"scale": "city", "walled": True},
@@ -510,6 +533,7 @@ def test_businesses_front_streets_fires_when_shops_are_interior():
     assert "businesses_front_streets" in f(M)
 
 
+@pytest.mark.tiers("city")
 def test_alleys_serve_buildings_fires_on_a_lane_to_nowhere():
     # a 400px alley serving only two dwellings - a lane running off into empty space
     M = {
@@ -522,6 +546,7 @@ def test_alleys_serve_buildings_fires_on_a_lane_to_nowhere():
     assert "alleys_serve_buildings" in f(M)
 
 
+@pytest.mark.tiers("city", "town")
 def test_alleys_serve_buildings_fires_on_a_redundant_lane_beside_a_street():
     # an alley laid parallel and CLOSE to a street it duplicates: every dwellling fronts the
     # street (it is nearer), so the alley uniquely serves nothing - a redundant lane. Buildings
@@ -539,6 +564,7 @@ def test_alleys_serve_buildings_fires_on_a_redundant_lane_beside_a_street():
     assert "alleys_serve_buildings" in f(M)
 
 
+@pytest.mark.tiers("town")
 def test_no_structure_on_street_fires_on_alley_over_building():
     M = {
         "meta": {"scale": "town", "walled": False},
@@ -574,6 +600,7 @@ def test_walled_structure_yields_to_ward_wall_passes_when_not_abutting():
     assert "walled_structure_yields_to_ward_wall" not in f(_maus_ward([], maus_cy=2000))
 
 
+@pytest.mark.tiers("city")
 def test_walled_structure_yields_to_ward_wall_fires_on_a_vertical_fence():
     # the mausoleum's EAST wall (x = cx+27 = 1535) runs along a VERTICAL ward fence at x=1535
     M = {
@@ -585,6 +612,7 @@ def test_walled_structure_yields_to_ward_wall_fires_on_a_vertical_fence():
     assert "walled_structure_yields_to_ward_wall" in f(M)
 
 
+@pytest.mark.tiers("city")
 def test_walled_structure_yields_to_ward_wall_skips_compounds_outside_the_wall():
     # a compound OUTSIDE the city wall is not held to the rule (wards are an intramural feature)
     M = _maus_ward([])
@@ -599,6 +627,7 @@ def test_walled_structure_yields_to_ward_wall_skips_tilted_compounds():
     assert "walled_structure_yields_to_ward_wall" not in f(M)
 
 
+@pytest.mark.tiers("city")
 def test_no_structure_on_moat_fires_when_a_structure_sits_on_it():
     M = {
         "meta": {"scale": "city"},
@@ -630,12 +659,14 @@ def test_no_structure_on_pond_passes_when_clear():
     assert "no_structure_on_pond" not in f(M)
 
 
+@pytest.mark.tiers("town")
 def test_fire_tower_on_wall_overlaps_like_any_structure():
     # fire_towers are in _OVERLAP_STRUCTS, so a tower on the wall trips no_structure_on_wall
     M = {"meta": {"scale": "town", "walled": True}, "wall": [[100, 500], [900, 500]], "gate": [500, 500], "fire_towers": [_tower(500, 500)]}
     assert "no_structure_on_wall" in f(M)
 
 
+@pytest.mark.tiers("town")
 def test_fire_tower_standoff_fires_when_flush_with_a_building():
     # tower half-width 13 + shop half-width 20 -> centers 536 apart leave a 3px gap: too tight
     # (the far building exercises the distance prefilter)
@@ -657,6 +688,7 @@ def test_no_structure_on_canal_fires_when_canal_vertex_inside_footprint():
     assert "no_structure_on_canal" in f(M)
 
 
+@pytest.mark.tiers("city")
 def test_torii_and_religious_clear_of_works_and_ring():
     # GM placement rules (2026-07-21, caught on Tango): torii keep clear of halls/towers/the ring
     # road; religious footprints keep clear of towers/the ring road. An ordinary street through a
@@ -679,6 +711,7 @@ def test_torii_and_religious_clear_of_works_and_ring():
     assert "religious_clear_of_ring_and_towers" not in f({**base, "religious": [hall]})
 
 
+@pytest.mark.tiers("city")
 def test_torii_clear_of_walls():
     # GM 2026-07-25, caught on Nagahara: the 7th arch of the Ebisu sando stood IN the samurai ward
     # fence. A torii is a FREESTANDING gateway and a wall is a continuous barrier, so an arch never
@@ -792,18 +825,21 @@ def test_every_solid_feature_classified_for_labels_fires_on_an_unclassified_key(
     assert "every_solid_feature_classified_for_labels" in f(M)
 
 
+@pytest.mark.tiers("city")
 def test_city_ward_fence_joins_wall_not_crosses_fires_on_an_end_poking_through():
     # the fence runs up to the north rampart (y50) and out the far side by 10px
     M = _ward_wall([[500, 400], [500, 40]])
     assert "city_ward_fence_joins_wall_not_crosses" in f(M)
 
 
+@pytest.mark.tiers("city")
 def test_city_ward_fence_joins_wall_not_crosses_clear_when_the_end_lands_on_the_centerline():
     # ending ON the wall line is the JOIN: the 2.5px linecap tip stays inside the 5.5px rampart band
     M = _ward_wall([[500, 400], [500, 50]])
     assert "city_ward_fence_joins_wall_not_crosses" not in f(M)
 
 
+@pytest.mark.tiers("city")
 def test_city_ward_fence_joins_wall_not_crosses_reads_the_INK_not_the_vertex():
     # the Minami shape, and the reason the defect shipped green: the end vertex sits only 4px
     # outside the wall - well inside city_ward_fence_meets_wall's 10px tolerance, so THAT check
@@ -814,12 +850,14 @@ def test_city_ward_fence_joins_wall_not_crosses_reads_the_INK_not_the_vertex():
     assert "city_ward_fence_joins_wall_not_crosses" in f(M)
 
 
+@pytest.mark.tiers("city")
 def test_city_ward_fence_joins_wall_not_crosses_fires_on_a_crossing_mid_run():
     # both ENDS are inside; the fence dives out through the north rampart and back mid-run
     M = _ward_wall([[400, 400], [500, 20], [600, 400]])
     assert "city_ward_fence_joins_wall_not_crosses" in f(M)
 
 
+@pytest.mark.tiers("city")
 def test_city_ward_fence_joins_wall_not_crosses_ignores_a_degenerate_boundary():
     M = _ward_wall([[500, 400]])
     assert "city_ward_fence_joins_wall_not_crosses" not in f(M)
@@ -847,6 +885,7 @@ def test_label_hugs_its_referent_measures_the_tilted_quad():
     assert "label_hugs_its_referent" in f({"meta": {}, "labels": [adrift]})
 
 
+@pytest.mark.tiers("capital", "city")
 def test_religious_matches_scale_capital_takes_temples():
     """A capital is the city tier at 4x - temples, same as a provincial city. The scale map did
     not know 'capital' and demanded NO religious building at all (feature 020)."""
@@ -856,6 +895,7 @@ def test_religious_matches_scale_capital_takes_temples():
     assert "religious_matches_scale" not in f(M)
 
 
+@pytest.mark.tiers("city")
 def test_businesses_on_street_measured_from_bed_edge():
     """021: the on-street reach is bed half-width + 85 real ft - a shop hugging a wide trunk
     road's paving edge is ON the street; one two blocks out is not."""

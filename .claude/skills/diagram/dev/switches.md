@@ -80,7 +80,7 @@ because the Makefile's own record says a guard on one door is not a guard.
 
 | refuses under the lock | still runs |
 |---|---|
-| `cohort`, `tripwire`, `maps SCOPE=all`, `test-full`, `done FULL=1`, `cache-audit` (any form), `regressions`, `perf`, `perf-gate`, `ci-check FULL=1`, `ci-check TARGET=<op>`, `ci-merge FULL=1`, `map` with more than one gen or a glob | `reference`, `quick`, `done` (reference scope - and since 2026-08-26 its `test` phase DEFERS the `rolls_map` tests, see below; per-task `settlement-review` is deferred too, to acceptance and unlock - `dev/reviews.md`), `test-file`, `map` with ONE gen, `hamlet` with one spec, `perf-profile` (one seed, one stage), `placement-stages`, `perf-report`, `maps` (reference map alone - it never widens while locked, whatever the last run said) |
+| `cohort`, `tripwire`, `maps SCOPE=all`, `test-full`, `done FULL=1`, `cache-audit` (any form), `regressions`, `perf`, `perf-gate`, `ci-check FULL=1`, `ci-check TARGET=<op>`, `ci-merge FULL=1`, `map` with more than one gen or a glob | `reference`, `quick`, `done` (reference scope - and since 2026-08-26 its `test` phase DEFERS the `rolls_map` tests, see below; per-task `settlement-review` is deferred too, to acceptance and unlock - `dev/reviews.md`; and the suite runs with `--tier hamlet`, skipping the 700-odd tests tagged `tiers(...)` for town/city/capital only - see CLAUDE.md "tier relevance"), `test-file`, `map` with ONE gen, `hamlet` with one spec, `perf-profile` (one seed, one stage), `placement-stages`, `perf-report`, `maps` (reference map alone - it never widens while locked, whatever the last run said) |
 
 ### THE DECISION: one-map invocations stay runnable (recorded, with the alternatives priced)
 

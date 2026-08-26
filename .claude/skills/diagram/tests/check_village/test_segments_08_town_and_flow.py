@@ -1,5 +1,7 @@
 """Gate checks for ponds, marshes, drainage, flow bands, the burakumin seam and the town battery (test_segments_08_town_and_fire split by feature 122; tests verbatim)."""
 
+import pytest
+
 from tests.check_village._builders import (
     _FIELD_400,
     _POND_FEED,
@@ -244,6 +246,7 @@ def test_pond_clear_of_field_passes_when_the_pond_is_below_the_field():
     assert "pond_clear_of_field" not in f(M)
 
 
+@pytest.mark.tiers("city")
 def test_pond_clear_of_field_exempts_a_decorative_pond_not_wired_to_a_field():
     # a city garden pond overlapping a farmland sample, with NO channel wiring it to the field, is exempt
     M = {"pond": [400, 400, 120, 80], "fields": [_FIELD_400]}  # no pond channel -> not an irrigation pond
@@ -251,50 +254,60 @@ def test_pond_clear_of_field_exempts_a_decorative_pond_not_wired_to_a_field():
 
 
 # ---- town_has_granary: the opt-in rice-transit granary (default OFF) -----------------------
+@pytest.mark.tiers("town")
 def test_town_has_granary_off_by_default():
     # a standard county seat keeps grain in the yamen - no granary declared, no check
     assert "town_has_granary" not in f({"meta": {"scale": "town"}})
 
 
+@pytest.mark.tiers("town")
 def test_town_has_granary_fires_when_declared_but_not_drawn():
     assert "town_has_granary" in f({"meta": {"scale": "town", "granary": True}})
 
 
+@pytest.mark.tiers("town")
 def test_town_has_granary_passes_when_drawn():
     M = {"meta": {"scale": "town", "granary": True}, "granary": {"x": 500, "y": 500, "n": 3, "stores": [], "label": "granary"}}
     assert "town_has_granary" not in f(M)
 
 
 # ---- town_has_merchant_storehouses: several attached kura expected -------------------------
+@pytest.mark.tiers("town")
 def test_town_has_merchant_storehouses_fires_when_too_few():
     assert "town_has_merchant_storehouses" in f({"meta": {"scale": "town"}})  # 0 < 3
 
 
+@pytest.mark.tiers("town")
 def test_town_has_merchant_storehouses_passes_with_several():
     M = {"meta": {"scale": "town"}, "storehouses": [{"x": i, "y": 0} for i in range(4)]}
     assert "town_has_merchant_storehouses" not in f(M)
 
 
 # ---- town_has_flophouse: cheap market-day lodging (default-on, opt-in to more) --------------
+@pytest.mark.tiers("town")
 def test_town_has_flophouse_fires_when_absent_by_default():
     assert "town_has_flophouse" in f({"meta": {"scale": "town"}})  # 0 < default 1
 
 
+@pytest.mark.tiers("town")
 def test_town_has_flophouse_requires_more_when_declared():
     M = {"meta": {"scale": "town", "flophouses": 2}, "flophouses": [{"x": 500, "y": 500, "w": 104, "h": 46, "rot": 0}]}
     assert "town_has_flophouse" in f(M)  # 1 < 2
 
 
+@pytest.mark.tiers("town")
 def test_town_has_flophouse_opt_out_with_zero():
     assert "town_has_flophouse" not in f({"meta": {"scale": "town", "flophouses": 0}})
 
 
+@pytest.mark.tiers("town")
 def test_town_monasteries_dedicated_fires_on_wrong_fortune():
     # Lion's patrons are Bishamon + Daikoku; a Benten monastery is wrong (no override declared)
     M = {"meta": {"scale": "town", "clan": "Lion"}, "religious": [_monastery("Bishamon"), _monastery("Benten")]}
     assert "town_monasteries_dedicated" in f(M)
 
 
+@pytest.mark.tiers("town")
 def test_town_monasteries_dedicated_passes_with_correct_fortunes():
     M = {"meta": {"scale": "town", "clan": "Lion"}, "religious": [_monastery("Bishamon"), _monastery("Daikoku")]}
     assert "town_monasteries_dedicated" not in f(M)
@@ -334,18 +347,22 @@ def test_shrine_avenue_fronts_the_hall_exempts_a_gateway_beside_the_hall():
     assert "shrine_avenue_fronts_the_hall" not in f(_shrine_avenue(300, 460))
 
 
+@pytest.mark.tiers("town")
 def test_town_has_caravan_inn_passes_with_inn_stables_open_ground():
     assert "town_has_caravan_inn" not in f(_town_caravan())
 
 
+@pytest.mark.tiers("town")
 def test_town_has_caravan_inn_fires_without_stables():
     assert "town_has_caravan_inn" in f(_town_caravan(stables=False))
 
 
+@pytest.mark.tiers("town")
 def test_town_has_caravan_inn_fires_when_outside_the_walls():
     assert "town_has_caravan_inn" in f(_town_caravan(walled=True, inn_xy=(40, 40), st_xy=(40, 100)))
 
 
+@pytest.mark.tiers("town")
 def test_town_has_caravan_inn_fires_when_stables_hemmed_in():
     # the stables needs open ground (a pasture) - >4 dwellings crowding it fails
     M = _town_caravan()
@@ -353,12 +370,14 @@ def test_town_has_caravan_inn_fires_when_stables_hemmed_in():
     assert "town_has_caravan_inn" in f(M)
 
 
+@pytest.mark.tiers("town")
 def test_town_has_caravan_inn_passes_when_inn_fronts_road():
     M = _town_caravan(inn_xy=(500, 560), st_xy=(500, 640))
     M["road"] = [[100, 500], [900, 500]]  # the inn (y560) fronts the road (y500), nothing between
     assert "town_has_caravan_inn" not in f(M)
 
 
+@pytest.mark.tiers("town")
 def test_town_has_caravan_inn_fires_when_inn_behind_shops():
     M = _town_caravan(inn_xy=(500, 560), st_xy=(500, 640))
     M["road"] = [[100, 500], [900, 500]]
@@ -366,6 +385,7 @@ def test_town_has_caravan_inn_fires_when_inn_behind_shops():
     assert "town_has_caravan_inn" in f(M)
 
 
+@pytest.mark.tiers("town")
 def test_town_has_caravan_inn_fires_when_inn_far_from_any_road():
     M = _town_caravan(inn_xy=(500, 560), st_xy=(500, 640))
     M["road"] = [[100, 200], [900, 200]]  # the road is far away - the inn is not along it
@@ -386,18 +406,22 @@ def test_inn_faces_the_road_passes_when_facing():
     assert "inn_faces_the_road" not in f(M)
 
 
+@pytest.mark.tiers("town")
 def test_town_merchant_housing_varied_fires_when_uniform():
     assert "town_merchant_housing_varied" in f(_town_housing(m_large=0, l_large=3))
 
 
+@pytest.mark.tiers("town")
 def test_town_merchant_housing_varied_passes_when_mixed():
     assert "town_merchant_housing_varied" not in f(_town_housing(m_large=4, l_large=3))
 
 
+@pytest.mark.tiers("town")
 def test_town_laborer_housing_varied_fires_when_uniform():
     assert "town_laborer_housing_varied" in f(_town_housing(m_large=4, l_large=0))
 
 
+@pytest.mark.tiers("town")
 def test_town_laborer_housing_varied_passes_when_mixed():
     assert "town_laborer_housing_varied" not in f(_town_housing(m_large=4, l_large=3))
 
@@ -416,6 +440,7 @@ def test_merchant_residences_behind_businesses_fires_when_laborers_crowd_the_hom
     assert "merchant_residences_behind_businesses" in f(_town_behind(res_x=230, lab_x=240))
 
 
+@pytest.mark.tiers("town")
 def test_merchant_residences_behind_businesses_skipped_without_a_road():
     # a walled town has no trunk M["road"]; the single-axis test must not run
     M = _town_behind(res_x=140, lab_x=240)
@@ -461,25 +486,30 @@ def test_manor_gate_faces_town_fires_facing_away():
     assert "manor_gate_faces_town" in f(_town_manor("north"))  # north gate faces away from the SE town
 
 
+@pytest.mark.tiers("town")
 def test_manor_gate_faces_town_passes_facing_the_road():
     # town centroid is SE, but a north gate faces an Imperial road to the manor's north -> ok
     assert "manor_gate_faces_town" not in f(_town_manor("north", road=[[100, 150], [600, 150]]))
 
 
+@pytest.mark.tiers("town")
 def test_walled_town_has_fire_tower_fires_when_absent():
     # WALLED towns only (GM 2026-07-24, reverting the 2026-07 audit widening): an unwalled seat
     # keeps fire bells and kura, not a tower - see settlements.md "Fire towers"
     assert "walled_town_has_fire_tower" in f({"meta": {"scale": "town", "walled": True}})
 
 
+@pytest.mark.tiers("town")
 def test_walled_town_has_fire_tower_passes_with_one():
     assert "walled_town_has_fire_tower" not in f({"meta": {"scale": "town", "walled": True}, "fire_towers": [_tower(500, 500)]})
 
 
+@pytest.mark.tiers("town")
 def test_walled_town_has_fire_tower_opt_out():
     assert "walled_town_has_fire_tower" not in f({"meta": {"scale": "town", "walled": True, "fire_tower": False}})
 
 
+@pytest.mark.tiers("town")
 def test_unwalled_town_needs_no_fire_tower():
     # an OPEN town's detached fabric has its own natural breaks; the presence check is walled-only
     # (and the widened town_has_fire_tower name must stay gone)
@@ -495,6 +525,7 @@ def test_town_has_kosatsuba_fires_when_absent():
     assert "town_has_kosatsuba" in f({"meta": {"scale": "town", "walled": True}})
 
 
+@pytest.mark.tiers("town")
 def test_town_kosatsuba_passes_by_a_main_street():
     # sited on the traffic artery: within ~60 ft of a road or main street (town_streets branch)
     M = {"meta": {"scale": "town"}, "kosatsuba": [_kosatsuba(500, 530)], "town_streets": [{"pts": [[0, 500], [1000, 500]], "w": 28}]}
@@ -502,12 +533,14 @@ def test_town_kosatsuba_passes_by_a_main_street():
     assert "town_has_kosatsuba" not in fails and "kosatsuba_by_the_road" not in fails
 
 
+@pytest.mark.tiers("town")
 def test_kosatsuba_by_the_road_fires_when_marooned():
     # a board deep in the back blocks defeats the institution (road branch of the routes)
     M = {"meta": {"scale": "town"}, "kosatsuba": [_kosatsuba(500, 900)], "road": [[0, 500], [1000, 500]]}
     assert "kosatsuba_by_the_road" in f(M)
 
 
+@pytest.mark.tiers("town")
 def test_kosatsuba_on_a_main_way_fires_on_a_side_lane_board():
     # GM 2026-08-02 (Ubame): the board sat a legal 49 ft off a side lane while the high street
     # ran 200 ft away. Where the map declares a way hierarchy, only a MAIN way seats the board -
@@ -525,6 +558,7 @@ def test_kosatsuba_on_a_main_way_fires_on_a_side_lane_board():
     assert "kosatsuba_on_a_main_way" not in on_road
 
 
+@pytest.mark.tiers("town")
 def test_kosatsuba_on_a_main_way_reads_the_main_street_flag():
     # a main: True town street is a main way; an unflagged one is a side street
     main_st = {"pts": [[0, 500], [1000, 500]], "w": 28, "main": True}
@@ -545,11 +579,13 @@ def test_kosatsuba_on_a_main_way_exempts_maps_with_no_declared_hierarchy():
     assert "kosatsuba_on_a_main_way" not in unflagged
 
 
+@pytest.mark.tiers("town")
 def test_town_kosatsuba_opt_out():
     # a suppressed or backwater seat may omit it
     assert "town_has_kosatsuba" not in f({"meta": {"scale": "town", "kosatsuba": False}})
 
 
+@pytest.mark.tiers("town")
 def test_kosatsuba_routeless_map_skips_the_siting_check():
     # no road/street recorded: presence still gates, the siting check stays quiet
     fails = f({"meta": {"scale": "town"}, "kosatsuba": [_kosatsuba(500, 900)]})
@@ -560,6 +596,7 @@ def test_kosatsuba_routeless_map_skips_the_siting_check():
     assert "kosatsuba_by_the_road" in marooned and "kosatsuba_faces_the_road" not in marooned
 
 
+@pytest.mark.tiers("town")
 def test_kosatsuba_faces_the_road_fires_when_edge_on():
     # GM 2026-07-27: a kosatsu is a BROADSIDE signboard - stood across the road it fronts, its
     # face goes edge-on to the traffic the siting check fought for, and both the presence and

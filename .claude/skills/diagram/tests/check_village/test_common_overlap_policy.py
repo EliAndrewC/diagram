@@ -1,5 +1,7 @@
 """Split from test_checks.py by feature 025 - see tests/check_village/CLAUDE.md for the index."""
 
+import pytest
+
 from l7r.diagram import check_village
 from tests.check_village._builders import _gate_parts, bldg, house, manifest
 
@@ -14,6 +16,7 @@ def test_poly_gap_overlap_containment_edgecross_and_separated():
     assert check_village.poly_gap(sq, [[20, 0], [30, 0], [30, 10], [20, 10]]) == 10.0  # separated by 10
 
 
+@pytest.mark.tiers("city")
 def test_matrix_extracts_a_ward_gates_parts_and_splits_off_the_guard_box():
     got = [k for k, *_ in check_village.matrix_extents({"meta": {"scale": "city"}, "kido": [_gate_parts()]})]
     assert sorted(got) == ["kido", "kido_guard_box"]
@@ -23,11 +26,13 @@ def test_matrix_extracts_a_ward_gates_parts_and_splits_off_the_guard_box():
     assert [k for k, *_ in check_village.matrix_extents({"meta": {"scale": "city"}, "kido": [bare]})] == ["kido"]
 
 
+@pytest.mark.tiers("city")
 def test_the_parts_of_one_gate_do_not_accuse_each_other():
     # every part shares one object id, so the annex-on-its-own-parent test spares the glyph's pieces
     assert not [v for v in check_village.matrix_violations({"meta": {"scale": "city"}, "kido": [_gate_parts()]}) if "kido" in (v[0], v[1])]
 
 
+@pytest.mark.tiers("city")
 def test_matrix_sees_the_multi_road_list_and_a_flower_beds_outline():
     # `roads` (the multi-road list) and `flower_fields` (which stores its ring as `outline`, not
     # `poly`) were the other two classified-but-never-extracted keys found by the same audit
@@ -54,6 +59,7 @@ def test_water_setback_scales_with_waterway_width():
     assert check_village.water_setback(9) < check_village.water_setback(22)  # wider water, more set-back
 
 
+@pytest.mark.tiers("city")
 def test_matrix_survives_geometry_far_off_the_canvas():
     """A stray vertex must not make the overlap matrix allocate the world.
 
@@ -81,6 +87,7 @@ def test_matrix_survives_geometry_far_off_the_canvas():
     assert time.time() - t0 < 5.0, "the overlap matrix is walking cells for off-canvas geometry again - clamp the index box on BOTH insert and query"
 
 
+@pytest.mark.tiers("capital")
 def test_matrix_extracts_the_feature_020_linear_keys():
     """A record with no extents is invisible to every matrix check in both directions - feature
     019's blindness. The towpath records 'pts' and the aqueduct 'poly'; both must extract as

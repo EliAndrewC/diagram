@@ -1,5 +1,7 @@
 """Split from test_checks.py by feature 025 - see tests/check_village/CLAUDE.md for the index."""
 
+import pytest
+
 from tests.check_village._builders import WALLSQ, _bridge_map, _capital_manifest, _skew_bridge_map, f, house
 
 
@@ -31,6 +33,7 @@ def test_roads_bridge_water_fires_on_an_unbridged_lane_over_a_canal():
     assert "roads_bridge_water" not in f(M)
 
 
+@pytest.mark.tiers("city")
 def test_roads_bridge_water_fires_where_the_ring_road_crosses_the_cargo_canal():
     """The RING ROAD is a carried way and the CARGO CANAL is a watercourse.
 
@@ -49,6 +52,7 @@ def test_roads_bridge_water_fires_where_the_ring_road_crosses_the_cargo_canal():
     assert "roads_bridge_water" not in f(M)
 
 
+@pytest.mark.tiers("city")
 def test_roads_bridge_water_ignores_an_undrawn_conduit_channel():
     """An UNDRAWN channel (topo_channel's `drawn: False`) is a buried conduit recorded for water
     topology - there is no seam on the ground, so a way over its line crosses nothing. Tango's ring
@@ -65,6 +69,7 @@ def test_roads_bridge_water_ignores_an_undrawn_conduit_channel():
     assert "roads_bridge_water" in f(M)
 
 
+@pytest.mark.tiers("capital", "city")
 def test_roads_bridge_water_fires_on_an_unbridged_trunk_road_over_the_city_moat():
     """M["roads"] - every trunk road but the Imperial one - crossing the MOAT. Both the drawer and
     the checker omitted the roads list until feature 020 factored the carried-ways and
@@ -83,6 +88,7 @@ def test_roads_bridge_water_fires_on_an_unbridged_trunk_road_over_the_city_moat(
     assert "roads_bridge_water" not in f(M)
 
 
+@pytest.mark.tiers("city")
 def test_roads_bridge_water_fires_on_an_unbridged_road_over_the_river():
     """The trunk RIVER, in the shape s.river() actually records: a streams entry plus the
     M['river'] dict carrying 'pts' (not 'poly' - the shared source reads both). A road crossing
@@ -99,6 +105,7 @@ def test_roads_bridge_water_fires_on_an_unbridged_road_over_the_river():
     assert "roads_bridge_water" not in f(M)
 
 
+@pytest.mark.tiers("capital", "city")
 def test_roads_bridge_water_fires_on_an_unbridged_way_over_a_castle_moat():
     """A castle's OWN moat is water like any other - the capital's ceremonial avenue crosses it
     at the ote-mon, and that crossing was invisible to both sides until the shared source."""
@@ -113,6 +120,7 @@ def test_roads_bridge_water_fires_on_an_unbridged_way_over_a_castle_moat():
     assert "roads_bridge_water" not in f(M)
 
 
+@pytest.mark.tiers("city")
 def test_watercourse_crosses_wall_at_water_gate():
     """A watercourse pierces a rampart ONLY at a water gate (GM 2026-08-09: Nagahara's canal had
     drifted 40px off its gate and ran under the wall - an index-anchored moat vertex moved in a
@@ -131,6 +139,7 @@ def test_watercourse_crosses_wall_at_water_gate():
     assert "watercourse_crosses_wall_at_water_gate" not in f(M)
 
 
+@pytest.mark.tiers("capital", "city")
 def test_gate_roads_join_the_ring_fires_on_a_stub_and_passes_when_joined():
     """A gate's road must JOIN the ring road, not stop on the sill (GM 2026-08-09: the
     capital's side-gate trunk roads STARTED at the gate point, so the gate opened onto 90 ft
@@ -184,6 +193,7 @@ def test_bridges_align_with_their_way_exempts_standalone_footplanks():
 # ---- feature 021: the capital housing layer ---------------------------------------------------
 
 
+@pytest.mark.tiers("capital")
 def test_capital_districts_declared_fires_when_fabric_stands_undeclared():
     """Once dwellings stand, the capital records which district each pack filled (T003) - the
     rank-gradient check's ground truth. The bare 020 state (no fabric) stays legal."""
@@ -195,6 +205,7 @@ def test_capital_districts_declared_fires_when_fabric_stands_undeclared():
     assert "capital_districts_declared" not in f(M)
 
 
+@pytest.mark.tiers("capital")
 def test_capital_rank_gradient_fires_on_an_inverted_band():
     """The jokamachi law (research 021 item 1): walled yashiki nearest the castle, retainer
     terraces at the band edge. Red: the yashiki band's members sit BEYOND the terrace band's."""
@@ -222,6 +233,7 @@ def test_terraces_are_ranges_fires_on_a_single_unit():
     assert "terraces_are_ranges" not in f(M)
 
 
+@pytest.mark.tiers("capital")
 def test_capital_housing_matches_band_targets_fires_on_a_band_shortfall():
     """T006: the 018 budget is the housing authority - each band's drawn count lands on its
     dwelling_target (max(2, 5%) tolerance), so a quietly-short band fires by name."""
@@ -234,6 +246,7 @@ def test_capital_housing_matches_band_targets_fires_on_a_band_shortfall():
     assert "capital_housing_matches_band_targets" not in f(M)
 
 
+@pytest.mark.tiers("town")
 def test_cistern_wells_sit_on_the_buried_main():
     """Research 021 item 4: josui-ido tap the mokuhi mains that run UNDER THE STREETS from
     the settling basin at the gate - so a cistern-well stands within the band (~600 real ft
@@ -252,6 +265,7 @@ def test_cistern_wells_sit_on_the_buried_main():
     assert "cistern_wells_in_service_band" not in f(M)
 
 
+@pytest.mark.tiers("town")
 def test_kido_close_the_machi_mouths():
     """Research 021 item 6 (the ward MESH): every street mouth into a machi district gets its
     night-barred kido; a mouth without one fires. The mouths come from the SAME shared source
@@ -284,6 +298,7 @@ def test_precinct_interiors_within_reservation():
     assert "precinct_interiors_within_reservation" in f(M)  # administration overhangs east edge
 
 
+@pytest.mark.tiers("capital")
 def test_precinct_graveyard_claims_closed():
     """T017 red-green: a temple with graveyard=True and no burial plot within 230px fires; the
     drawn plot closes the 020 claim."""
@@ -324,6 +339,7 @@ def test_teramachi_backstrip_lean():
     assert "teramachi_backstrip_lean" not in f(M)
 
 
+@pytest.mark.tiers("capital")
 def test_capital_packed_band_is_validated_as_two_bands_not_one_total():
     """The wall-resize lesson (GM 2026-08-10): a correct TOTAL must not hide an in-wall
     shortfall spilled into the suburbs - and that specific combination names its own cure."""
@@ -346,6 +362,7 @@ def test_capital_packed_band_is_validated_as_two_bands_not_one_total():
     assert "capital_housing_matches_band_targets" in fails
 
 
+@pytest.mark.tiers("capital")
 def test_capital_interior_slack_in_band():
     """The wall-settles-first rule (GM 2026-08-10): claimed-open ground beyond 15% of the
     interior names the wall oversized and demands re-derivation BEFORE fine iteration."""
@@ -370,6 +387,7 @@ def test_monzen_floor_fires_on_too_few_commercial_buildings():
     assert "monzen_fronts_the_approach" in f(M)
 
 
+@pytest.mark.tiers("capital", "city")
 def test_wells_not_clustered():
     """GM 2026-08-10: the capital had knots of 4-6 wellheads together, unlike every other pool
     map (all max at 4 inside a 150 ft radius). Accretion from chasing a local household count."""
@@ -379,6 +397,7 @@ def test_wells_not_clustered():
     assert "wells_not_clustered" in f(knot)
 
 
+@pytest.mark.tiers("city")
 def test_extramural_features_tethered_and_gate_markets_start_at_their_gate():
     """GM 2026-08-10: "the kiln works is wayyyyy out in the middle of nowhere" and "the gate
     markets look pretty far from the actual gates". Everything outside a wall belongs to
@@ -397,6 +416,7 @@ def test_extramural_features_tethered_and_gate_markets_start_at_their_gate():
     assert "gate_markets_start_at_their_gate" not in f({**base, "buildings": shops_at})
 
 
+@pytest.mark.tiers("city")
 def test_animal_yards_clear_of_compound_gates():
     """GM 2026-08-10: no samurai wants dung piles at their front door. Measured to the GATE
     POINT, so a yard behind the compound's back wall is ordinary city ground."""
@@ -407,6 +427,7 @@ def test_animal_yards_clear_of_compound_gates():
     assert "animal_yards_clear_of_compound_gates" not in f(behind)
 
 
+@pytest.mark.tiers("city")
 def test_map_frame_hugs_its_content():
     """GM 2026-08-10: a stale per-side crop override (south=240, east=700) left dead margin on
     two flanks. Each side of the view needs real drawn content within 260 ft of the edge."""
@@ -422,6 +443,7 @@ def test_map_frame_hugs_its_content():
     assert "map_frame_hugs_its_content" in f(loose)
 
 
+@pytest.mark.tiers("capital", "city")
 def test_ways_cross_water_on_a_deck():
     """GM 2026-08-10: "roads should not overlap with water without a bridge present." Unlike
     roads_bridge_water this reads EVERY drawn way (alleys and lanes included) and tests bed
@@ -434,6 +456,7 @@ def test_ways_cross_water_on_a_deck():
     assert "ways_cross_water_on_a_deck" not in f({**base, "alleys": [{"pts": [[400, 300], [400, 460]], "w": 10}]})
 
 
+@pytest.mark.tiers("city")
 def test_new_2026_08_10_check_edge_cases():
     """Degenerate shapes the GM-review checks must survive, and the wall-reach clause that keeps
     a works on the near farm ground legal: a one-point way, a compound with an unknown gate
@@ -460,6 +483,7 @@ def test_new_2026_08_10_check_edge_cases():
     assert "extramural_features_tethered" in f(far)  # 600px = 1,800 ft, past the attested band
 
 
+@pytest.mark.tiers("city")
 def test_sluice_gates_centered_on_their_channel():
     """GM 2026-08-10, after the SAME defect recurred: a sluice gate's frame spans BANK TO BANK,
     so its center must sit on the channel's CENTERLINE - not merely inside the water's band.
@@ -471,6 +495,7 @@ def test_sluice_gates_centered_on_their_channel():
     assert "sluice_gates_centered_on_their_channel" in f(off)
 
 
+@pytest.mark.tiers("city")
 def test_frontage_shops_face_their_way():
     """GM 2026-08-10: one shop in the north gate market's row faced away from the road while its
     four neighbors faced it. A storefront IS its street face."""
@@ -483,6 +508,7 @@ def test_frontage_shops_face_their_way():
     assert "frontage_shops_face_their_way" not in f(interior)
 
 
+@pytest.mark.tiers("city")
 def test_captions_sit_by_their_feature_and_clear_the_defenses():
     """GM 2026-08-10: the settling-basin caption sat ON the city wall and the intake-weir caption
     far from its weir. One rule keeps a caption BY what it names; the other keeps it off the
@@ -498,6 +524,7 @@ def test_captions_sit_by_their_feature_and_clear_the_defenses():
     assert "captions_clear_of_the_defenses" not in f(off_wall)
 
 
+@pytest.mark.tiers("city", "town")
 def test_city_streets_serve_both_sides():
     """GM 2026-08-10: "several city streets extend out into empty space with nothing on either
     side of them and also not leading to anywhere... essentially a road to nowhere check."
@@ -514,6 +541,7 @@ def test_city_streets_serve_both_sides():
     assert "city_streets_serve_both_sides" not in f(lined)
 
 
+@pytest.mark.tiers("city")
 def test_new_checks_skip_degenerate_records():
     """The 2026-08-10 checks tolerate the shapes a real manifest holds: an INLAND store that is
     not a waterside work, a label tuple too short to carry text, and a one-vertex road."""
@@ -528,6 +556,7 @@ def test_new_checks_skip_degenerate_records():
     assert "captions_clear_of_the_defenses" not in f(legacy)
 
 
+@pytest.mark.tiers("capital")
 def test_funerary_ground_within_reach_and_one_complex():
     """GM 2026-08-10, researched: nothing in the record holds the funerary ground far off the
     wall - ritual pollution is satisfied by being outside at all (Kyoto's Injo-ji stood ON the
@@ -544,6 +573,7 @@ def test_funerary_ground_within_reach_and_one_complex():
     assert "funerary_complex_is_one_ground" in f(split)
 
 
+@pytest.mark.tiers("city")
 def test_extramural_housing_serves_its_work():
     """GM 2026-08-10: worker housing outside the wall exists to put hands next to the quay, the
     granaries or the gate market - "the whole point of those houses being outside the city
@@ -556,6 +586,7 @@ def test_extramural_housing_serves_its_work():
     assert "extramural_housing_serves_its_work" in f(across)
 
 
+@pytest.mark.tiers("city", "town")
 def test_streets_reach_neighbors_catches_perpendicular_approaches():
     """GM 2026-08-10: "two city streets which approach each other... generally should
     intersect." The aligned-only test missed a street ending a short way off one it meets at a

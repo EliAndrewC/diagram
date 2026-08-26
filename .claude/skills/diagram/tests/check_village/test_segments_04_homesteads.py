@@ -1,5 +1,7 @@
 """Split from test_checks.py by feature 025 - see tests/check_village/CLAUDE.md for the index."""
 
+import pytest
+
 from l7r.diagram import check_village
 from tests.check_village._builders import (
     _EAST_SHADE,
@@ -184,6 +186,7 @@ def test_farmhouses_shed_separately_ignores_a_derelict():
     assert "farmhouses_shed_separately" not in f(M)
 
 
+@pytest.mark.tiers("city")
 def test_labels_clear_of_other_buildings_fires_on_a_caption_over_a_torii_arch():
     # GM 2026-07-27: an arch is "never covered by the 'temple of X' label" - and the hall's OWN
     # caption was the commonest offender, since caption and sando both want the ground at the front.
@@ -944,6 +947,7 @@ def test_a_caption_over_a_wellhead_is_caught():
     assert "wells" in check_village._LABEL_GROUP
 
 
+@pytest.mark.tiers("city")
 def test_theater_stage_caption_may_sit_on_its_precinct_but_not_on_the_town():
     """A stage caption is allowed onto TEMPLE ground, and nothing else it does not name.
 
@@ -966,6 +970,7 @@ def test_theater_stage_caption_may_sit_on_its_precinct_but_not_on_the_town():
     assert "labels_clear_of_other_buildings" in check_village.gate(M, verbose=False)
 
 
+@pytest.mark.tiers("town")
 def test_labels_clear_of_other_buildings_reads_the_tilted_quad():
     # the pre-tilt box [0..3] laps the merchant, but the -30 deg glyph run swings clear below it -
     # judged by its box the caption would false-flag; judged by its true quad it is clean
@@ -983,6 +988,7 @@ def test_labels_within_image_uses_the_tilted_reach():
     assert "labels_within_image" in f({"meta": {}, "labels": [[*lvl[:6], None, -30.0]]})
 
 
+@pytest.mark.tiers("city", "town")
 def test_a_plural_granaries_caption_may_cover_its_own_stores():
     """'domain granaries' does not CONTAIN the group word 'granary', so the derived
     caption-permission rule alone could not permit the plural captions the wharf complexes

@@ -1,5 +1,7 @@
 """Gate checks for field cover, cremation, streams and field ditches (test_segments_05_fields_and_funerary split by feature 122; tests verbatim)."""
 
+import pytest
+
 from tests.check_village._builders import (
     _FORK_MAINS,
     _MON,
@@ -57,6 +59,7 @@ def test_groves_clear_of_dry_plots_passes_when_the_belt_hugs_the_edge():
     assert "groves_clear_of_dry_plots" not in f(M)
 
 
+@pytest.mark.tiers("city")
 def test_field_ditches_ground_via_the_moat():
     # a MOATED city's combs ground at the moat both ways: the supply taps it (frm=moat is a SOURCE -
     # it is a fed watercourse, per city_moat_irrigates_fields) and a collector may empty into it
@@ -162,6 +165,7 @@ def test_field_supply_visibly_sourced_fires_on_a_dangling_comb_origin():
     assert "field_supply_visibly_sourced[x]" in f(_supply_M([450, 250], drawn_channels=[{"pts": [[900, 900], [950, 950]]}]))
 
 
+@pytest.mark.tiers("city")
 def test_field_supply_visibly_sourced_passes_on_a_moat_bank():
     # a comb origin on the moat bed is sourced (the moat-fed city-comb pattern)
     M = _supply_M([450, 110])
@@ -221,6 +225,7 @@ def test_field_supply_visibly_sourced_passes_on_a_river_bank():
     assert "field_supply_visibly_sourced[x]" not in f(M)
 
 
+@pytest.mark.tiers("town")
 def test_field_supply_visibly_sourced_passes_on_a_cargo_canal():
     # a comb origin on a cargo-canal bank is sourced (a Lion-lands water-town form)
     M = _supply_M([450, 104])
@@ -509,14 +514,17 @@ def test_cemetery_clear_of_shrine_fires_on_a_mausoleum_on_the_hall():
     assert "cemetery_clear_of_shrine" in f(M)
 
 
+@pytest.mark.tiers("city")
 def test_city_graveyard_count_fires_when_too_few():
     assert "city_graveyard_count" in f(_city_dead(cems=[(300, 300)]))
 
 
+@pytest.mark.tiers("city")
 def test_city_graveyard_count_fires_when_too_many():
     assert "city_graveyard_count" in f(_city_dead(cems=[(300, 300), (350, 300), (400, 300), (700, 300), (100, 100)]))
 
 
+@pytest.mark.tiers("city")
 def test_city_graveyard_count_passes_at_three():
     assert "city_graveyard_count" not in f(_city_dead())
 

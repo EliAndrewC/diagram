@@ -1,5 +1,7 @@
 """Gate checks for kosatsuba, punishment spots, paddy plot seams and basins (test_segments_08_town_and_fire split by feature 122; tests verbatim)."""
 
+import pytest
+
 from l7r.diagram import check_village
 from tests.check_village._builders import (
     _BB_FILLER,
@@ -17,6 +19,7 @@ from tests.check_village._builders import (
 )
 
 
+@pytest.mark.tiers("town")
 def test_kosatsuba_at_a_junction_may_face_either_way():
     # ANY route segment inside the siting band counts, not merely the nearest: a board at a
     # crossing legitimately fronts one of the two ways that meet there (the real case -
@@ -29,12 +32,14 @@ def test_kosatsuba_at_a_junction_may_face_either_way():
     assert "kosatsuba_faces_the_road" not in f(M)
 
 
+@pytest.mark.tiers("city")
 def test_city_has_kosatsuba_fires_when_absent():
     # cities port the institution up (GM 2026-07-24): a city DRAWS the set
     assert "city_has_kosatsuba" in f({"meta": {"scale": "city"}})
     assert "city_has_kosatsuba" not in f({"meta": {"scale": "city", "kosatsuba": False}})
 
 
+@pytest.mark.tiers("city")
 def test_city_kosatsuba_floor_is_gates_plus_central():
     # the principal central board + one per main gate (GM 2026-07-24): 2 gates -> floor 3
     road = [[0, 500], [2000, 500]]
@@ -58,6 +63,7 @@ def test_village_and_hamlet_have_kosatsuba():
     assert "kosatsuba_by_the_road" in marooned
 
 
+@pytest.mark.tiers("city")
 def test_city_kosatsuba_per_gate_fires_on_an_uncovered_gate():
     # draw the SET: every main gate's approach corridor carries a board (~800 real ft);
     # one gate covered, the other bare -> fires and names the bare gate's coordinates
@@ -70,6 +76,7 @@ def test_city_kosatsuba_per_gate_fires_on_an_uncovered_gate():
     assert "city_kosatsuba_per_gate" in f(M)
 
 
+@pytest.mark.tiers("city")
 def test_city_kosatsuba_per_gate_passes_when_every_gate_is_covered():
     M = {
         "meta": {"scale": "city", "ftpx": 3},
@@ -80,6 +87,7 @@ def test_city_kosatsuba_per_gate_passes_when_every_gate_is_covered():
     assert "city_kosatsuba_per_gate" not in f(M)
 
 
+@pytest.mark.tiers("city", "town")
 def test_city_kosatsuba_siting_threshold_is_scale_aware():
     # the ~60 ft siting limit is REAL feet: 30 px off the road passes at town grain (30 ft)
     # but fires at city grain (1 px = 3 ft -> 90 ft)
@@ -108,6 +116,7 @@ def test_defense_marsh_girds_the_walls_needs_a_fortified_perimeter():
     assert "defense_marsh_girds_the_walls" in f(M)
 
 
+@pytest.mark.tiers("town")
 def test_defense_marsh_girds_the_walls_fires_inside_the_circuit():
     # the wet belt reaches INSIDE the wall - the inundation protects the wall; inside is the town
     M = {
@@ -145,21 +154,25 @@ def test_defense_marsh_girds_the_walls_skips_a_degenerate_poly():
     assert "defense_marsh_girds_the_walls" not in f(M)
 
 
+@pytest.mark.tiers("town")
 def test_town_samurai_housing_varied_fires_on_uniform_small_houses():
     M = {"meta": {"scale": "town", "population": 100}, "buildings": [_dw(400 + i * 60, 400, "samurai") for i in range(6)]}
     assert "town_samurai_housing_varied" in f(M)
 
 
+@pytest.mark.tiers("town")
 def test_town_samurai_housing_varied_passes_with_a_senior_house():
     M = {"meta": {"scale": "town", "population": 100}, "buildings": [_dw(400, 340, "samurai_large")] + [_dw(400 + i * 60, 400, "samurai") for i in range(5)]}
     assert "town_samurai_housing_varied" not in f(M)
 
 
+@pytest.mark.tiers("town")
 def test_burakumin_quarter_segregated_fires_when_interleaved():
     M = {"meta": {"scale": "town", "population": 100}, "buildings": [_dw(500, 500, "burakumin"), _dw(530, 510, "laborer")]}
     assert "burakumin_quarter_segregated" in f(M)
 
 
+@pytest.mark.tiers("town")
 def test_burakumin_quarter_segregated_passes_with_open_ground_between():
     M = {"meta": {"scale": "town", "population": 100}, "buildings": [_dw(500, 500, "burakumin"), _dw(700, 500, "laborer")]}
     assert "burakumin_quarter_segregated" not in f(M)
@@ -182,6 +195,7 @@ def test_drain_runs_cross_slope_fires_on_a_drain_running_with_the_fall():
     assert "drain_runs_cross_slope" in f(_drain_map())
 
 
+@pytest.mark.tiers("city")
 def test_drain_runs_cross_slope_uses_the_FIELD_s_own_fall_not_the_map_s():
     # same drain, but this field falls EAST (0 deg) - so the drain now runs across its own contour
     # and is correct. A city ringed by farmland drains several ways at once; one map-level constant
@@ -230,6 +244,7 @@ def test_drain_flows_downhill_still_fires_on_a_genuinely_backwards_drain():
     assert "drain_flows_downhill" in f(M)
 
 
+@pytest.mark.tiers("city")
 def test_drainage_slope_checks_skip_a_drain_whose_field_declares_no_fall():
     # a city declares no map-level down_deg (no single bearing can describe a settlement whose fans
     # fall 210 deg apart), so a drain belonging to a field WITHOUT its own slope has nothing to be
@@ -254,6 +269,7 @@ def test_the_justice_works_are_forbidden_below_a_seat_of_justice():
     assert "execution_ground_only_at_a_seat_of_justice" in bad
 
 
+@pytest.mark.tiers("town")
 def test_burakumin_quarter_segregated_passes_across_a_real_seam():
     # The control for the ratchet entry: 60 ft of open ground between the walls is the rule met.
     M = manifest(meta={"scale": "town", "ftpx": 1, "W": 2000, "H": 2000}, buildings=[bldg(500, 500, kind="burakumin", w=38, h=26), bldg(500 + 19 + 17 + 61, 500, kind="laborer", w=34, h=24)])

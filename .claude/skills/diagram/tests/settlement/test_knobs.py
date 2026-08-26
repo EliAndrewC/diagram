@@ -221,6 +221,7 @@ def test_skeleton_layout_rejects_unknown_kind():
         settlement.skeleton_layout("spiral", 0, 0, 10, 10)
 
 
+@pytest.mark.tiers("city")
 def test_wall_tower_spacing_px_scales_with_tier():
     """The per-city defense tier sets the max mural-tower spacing. siege = aimed-lethal bowshot
     (197 ft), >=2 everywhere, so spacing == range; garrison = full war-bow (328 ft), >=2, so the

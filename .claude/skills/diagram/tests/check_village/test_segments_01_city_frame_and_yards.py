@@ -1,5 +1,7 @@
 """Split from test_checks.py by feature 025 - see tests/check_village/CLAUDE.md for the index."""
 
+import pytest
+
 from l7r.diagram import check_village
 from tests.check_village._builders import (
     _CITY_WALL,
@@ -133,6 +135,7 @@ def test_hard_features_within_frame_lets_the_windbreak_clip_but_not_vanish():
     assert "hard_features_within_frame" in f(M2)
 
 
+@pytest.mark.tiers("city")
 def test_guard_box_on_the_ward_fence_is_a_defect_though_the_gateway_on_it_is_not():
     # GM 2026-07-27: "ward gates seem to sometimes overlap with neighborhood walls". The GATEWAY
     # stands on the fence - the gate IS the opening. The guard box is a building on the verge and
@@ -144,6 +147,7 @@ def test_guard_box_on_the_ward_fence_is_a_defect_though_the_gateway_on_it_is_not
     assert "features_do_not_overlap" in f(thru_box)
 
 
+@pytest.mark.tiers("city")
 def test_stable_troughs_beside_well_fires_when_the_cluster_is_far_from_every_well():
     # the pre-fix Nagahara defect: a trough cluster a real bucket-CARRY (>40 real ft) from every
     # well - watering is a relay at the wellhead, the bucket poured straight into the trough
@@ -155,6 +159,7 @@ def test_stable_troughs_beside_well_fires_when_the_cluster_is_far_from_every_wel
     assert "stable_troughs_beside_well" in f(M)
 
 
+@pytest.mark.tiers("city")
 def test_stable_troughs_beside_well_fires_when_the_cluster_went_unrecorded():
     # troughs > 0 with no troughs_at: the anchor is part of the record's contract - an
     # unrecorded cluster cannot be validated, so it fails rather than passing silently
@@ -166,6 +171,7 @@ def test_stable_troughs_beside_well_fires_when_the_cluster_went_unrecorded():
     assert "stable_troughs_beside_well" in f(M)
 
 
+@pytest.mark.tiers("city")
 def test_stable_troughs_beside_well_passes_beside_a_well_and_skips_troughless_yards():
     # a cluster hugging a wellhead (~24 real ft, the placement's own offset) passes; a yard that
     # drew no troughs (fully blocked ground) has nothing to anchor and is skipped
@@ -182,6 +188,7 @@ def test_stable_troughs_beside_well_passes_beside_a_well_and_skips_troughless_ya
     assert "stable_troughs_clear_of_buildings" not in fails  # box clear of the roof square too
 
 
+@pytest.mark.tiers("city")
 def test_stable_troughs_clear_of_buildings_fires_when_a_trough_clips_a_well_roof():
     # the Tango caravan-ground defect: a 3-trough stack hugging its well on a near-vertical ray -
     # the box bottom reaches into the well-house roof square
@@ -193,6 +200,7 @@ def test_stable_troughs_clear_of_buildings_fires_when_a_trough_clips_a_well_roof
     assert "stable_troughs_clear_of_buildings" in f(M)
 
 
+@pytest.mark.tiers("city")
 def test_stable_troughs_clear_of_buildings_fires_when_a_trough_clips_a_building():
     # the cluster is a bucket-pour from its well, but the drawn rects land on a building footprint
     M = {
@@ -204,6 +212,7 @@ def test_stable_troughs_clear_of_buildings_fires_when_a_trough_clips_a_building(
     assert "stable_troughs_clear_of_buildings" in f(M)
 
 
+@pytest.mark.tiers("city")
 def test_stable_troughs_clear_of_buildings_fires_when_the_box_went_unrecorded():
     # troughs > 0 with no troughs_box: the drawn extent is part of the record's contract
     M = {
@@ -214,6 +223,7 @@ def test_stable_troughs_clear_of_buildings_fires_when_the_box_went_unrecorded():
     assert "stable_troughs_clear_of_buildings" in f(M)
 
 
+@pytest.mark.tiers("city")
 def test_stable_yard_furniture_fires_when_a_rail_tip_reaches_the_road():
     # the center-only placement bug (GM 2026-07-24): rail center 12px off the road centerline
     # clears the ~4.3px tread, but the 18px rail's tip (len/2 + 2.4 post reach = 11.4) lands on it
@@ -236,6 +246,7 @@ def test_stable_yard_furniture_fires_when_a_rail_tip_reaches_the_road():
     assert "stable_yard_furniture_clear_of_roads_walls" in f(M)
 
 
+@pytest.mark.tiers("city")
 def test_stable_yard_furniture_fires_when_a_dung_heap_lies_against_the_wall():
     # a heap whose drawn edge (rx 2.5) reaches inside the rampart's ~5px clearance stroke
     M = {
@@ -256,6 +267,7 @@ def test_stable_yard_furniture_fires_when_a_dung_heap_lies_against_the_wall():
     assert "stable_yard_furniture_clear_of_roads_walls" in f(M)
 
 
+@pytest.mark.tiers("city")
 def test_stable_yard_furniture_passes_clear_and_skips_unrecorded_legacy_yards():
     # a rail 30px off the road and a heap in open ground pass; a legacy yard record with no
     # rails/dung_heaps keys (the pre-2026-07-24 pinned fixtures) is skipped, never retro-failed
@@ -279,6 +291,7 @@ def test_stable_yard_furniture_passes_clear_and_skips_unrecorded_legacy_yards():
     assert "stable_yard_furniture_clear_of_roads_walls" not in f(M)
 
 
+@pytest.mark.tiers("city")
 def test_dung_heaps_clear_of_hitch_rails_fires_across_yards_within_24px():
     # round 2 (GM 2026-07-25): the heap sits 20px from a NEIGHBORING yard's rail - inside the
     # 24px floor, yet round 1's same-yard-only pairing (and its 14px floor) passed exactly this
@@ -309,6 +322,7 @@ def test_dung_heaps_clear_of_hitch_rails_fires_across_yards_within_24px():
     assert "dung_heaps_clear_of_hitch_rails" in f(M)
 
 
+@pytest.mark.tiers("city")
 def test_dung_heaps_clear_of_hitch_rails_passes_at_24px_or_more():
     # the muck pile belongs NEAR the yard's working edge - 30px off the rail line is fine
     M = {
@@ -356,6 +370,7 @@ def test_farrier_keeps_fire_gap_passes_at_a_real_fire_gap():
     assert "farrier_keeps_fire_gap" not in f(_farrier_map(200, 250))
 
 
+@pytest.mark.tiers("city")
 def test_city_has_farrier_fires_on_a_city_with_no_shoeing_forge():
     # a provincial city's gate caravan yard concentrates enough horses to keep a dedicated forge
     M = _farrier_map(320, 200, scale="city", walled=True)
@@ -365,6 +380,7 @@ def test_city_has_farrier_fires_on_a_city_with_no_shoeing_forge():
     assert "city_has_farrier" in f(M)
 
 
+@pytest.mark.tiers("town")
 def test_imperial_road_town_farrier_is_gated_on_the_declaration():
     # the deliberate Hoshizora/Hirameki split: a relay/post town ON the Imperial Road works
     # courier and caravan horses hard enough to keep a forge; a market town off the road does not,
@@ -377,12 +393,14 @@ def test_imperial_road_town_farrier_is_gated_on_the_declaration():
     assert "imperial_road_town_has_farrier" not in f(off_road)
 
 
+@pytest.mark.tiers("town")
 def test_population_consistent_with_housing_fires_when_dwellings_too_few():
     # population is dwellings x5, not total buildings x5; 10 dwellings imply ~50 residents, not 3000
     M = {"meta": {"scale": "town", "walled": False, "population": 3000}, "buildings": [bldg(120 + i * 60, 120, kind="laborer") for i in range(10)]}
     assert "population_consistent_with_housing" in f(M)
 
 
+@pytest.mark.tiers("town")
 def test_structures_clear_of_trees_fires_when_a_crown_is_drawn_over_a_building():
     # a tree drawn on a roof erases the building - no drawn crown may overlap any ROOFED footprint,
     # and a ROTATED building is covered conservatively by its half-diagonal (as at placement).
@@ -395,6 +413,7 @@ def test_structures_clear_of_trees_fires_when_a_crown_is_drawn_over_a_building()
     assert "structures_clear_of_trees" not in f({**base, "threshing_yards": [yard(800, 800, of=(300, 300))], "tree_crowns": [800, 800, 6]})
 
 
+@pytest.mark.tiers("city")
 def test_city_capacity_too_small_when_wall_cannot_hold_target():
     # a 400px diamond holds ~200 well-packed; declaring 3000 (target 600) is far too small.
     rep = check_village.city_capacity(_diamond_city(3000))
@@ -404,6 +423,7 @@ def test_city_capacity_too_small_when_wall_cannot_hold_target():
     assert "city_wall_sized_to_population" in f(_diamond_city(3000))
 
 
+@pytest.mark.tiers("city")
 def test_city_capacity_too_big_when_wall_dwarfs_target():
     rep = check_village.city_capacity(_diamond_city(100))  # target 20, inherent ~200
     assert rep["verdict"] == "shrink"
@@ -411,6 +431,7 @@ def test_city_capacity_too_big_when_wall_dwarfs_target():
     assert "city_wall_sized_to_population" in f(_diamond_city(100))
 
 
+@pytest.mark.tiers("city")
 def test_city_capacity_underpacked_when_wall_right_but_placement_sparse():
     # target 100 (pop 500) sits inside the inherent band (~118 at RHO 1.49/1000), but only 10
     # dwellings placed -> the WALL is fine, the PLACEMENT is sparse (below the 7% population
@@ -421,6 +442,7 @@ def test_city_capacity_underpacked_when_wall_right_but_placement_sparse():
     assert "city_wall_sized_to_population" not in f(_diamond_city(500, dwellings=10))
 
 
+@pytest.mark.tiers("city")
 def test_city_capacity_about_right_when_sized_and_packed():
     rep = check_village.city_capacity(_diamond_city(500, dwellings=95))
     assert rep["verdict"] == "sized_and_packed"
@@ -437,6 +459,7 @@ def test_population_counts_only_in_wall_dwellings_for_a_walled_city():
     assert "population_consistent_with_housing" in f(_pop_city(spilled))
 
 
+@pytest.mark.tiers("city")
 def test_city_commoner_dwellings_inside_walls_fires_on_a_spilled_commoner():
     inside = [bldg(300 + (i % 10) * 20, 300, "laborer") for i in range(20)]
     assert "city_commoner_dwellings_inside_walls" not in f(_pop_city(inside))
@@ -445,6 +468,7 @@ def test_city_commoner_dwellings_inside_walls_fires_on_a_spilled_commoner():
     assert "city_commoner_dwellings_inside_walls" in f(_pop_city(leaky))
 
 
+@pytest.mark.tiers("city")
 def test_city_commoner_dwellings_exempts_samurai_and_shops_outside():
     # samurai country estate + a gate-market shop OUTSIDE the wall are legitimate; not flagged.
     inside = [bldg(300 + (i % 10) * 20, 300, "laborer") for i in range(20)]
@@ -452,12 +476,14 @@ def test_city_commoner_dwellings_exempts_samurai_and_shops_outside():
     assert "city_commoner_dwellings_inside_walls" not in f(_pop_city(exempt_outside))
 
 
+@pytest.mark.tiers("city")
 def test_city_quarters_declared_fires_when_absent_passes_when_present():
     assert "city_quarters_declared" in f({"meta": {"scale": "city"}, "wall": _CITY_WALL_SMALL, "buildings": []})
     ok = _qcity([{"poly": _FULL_Q, "zone": "residential", "kind": None, "name": "q"}])
     assert "city_quarters_declared" not in f(ok)
 
 
+@pytest.mark.tiers("city")
 def test_city_quarters_tile_interior_passes_on_a_clean_two_half_tiling():
     left = {"poly": [[200, 200], [500, 200], [500, 800], [200, 800]], "zone": "residential", "kind": None, "name": "L"}
     right = {"poly": [[500, 200], [800, 200], [800, 800], [500, 800]], "zone": "residential", "kind": None, "name": "R"}
@@ -466,6 +492,7 @@ def test_city_quarters_tile_interior_passes_on_a_clean_two_half_tiling():
     assert "city_quarters_tile_interior" not in f(_qcity([left, right], b))
 
 
+@pytest.mark.tiers("city")
 def test_city_quarters_tile_interior_fires_on_gap_overlap_and_spill():
     half = {"poly": [[200, 200], [500, 200], [500, 800], [200, 800]], "zone": "civic", "kind": None, "name": "half"}
     assert "city_quarters_tile_interior" in f(_qcity([half]))  # only half covered -> gap
@@ -476,12 +503,14 @@ def test_city_quarters_tile_interior_fires_on_gap_overlap_and_spill():
     assert "city_quarters_tile_interior" in f(_qcity([spill]))  # extends past the wall
 
 
+@pytest.mark.tiers("city")
 def test_city_residential_density_passes_in_band():
     q = {"poly": _FULL_Q, "zone": "residential", "kind": None, "name": "warren"}
     b = _dwell_grid(210, 790, 210, 790, 17)  # 289 dwellings evenly spread -> in band, no dead zone
     assert "city_residential_quarters_dense_enough" not in f(_qcity([q], b))
 
 
+@pytest.mark.tiers("city")
 def test_city_residential_density_fires_below_floor_and_above_ceil():
     q = {"poly": _FULL_Q, "zone": "residential", "kind": None, "name": "warren"}
     sparse = _dwell_grid(210, 790, 210, 790, 6)  # 36 dwellings -> below floor
@@ -490,6 +519,7 @@ def test_city_residential_density_fires_below_floor_and_above_ceil():
     assert "city_residential_quarters_dense_enough" in f(_qcity([q], crammed))
 
 
+@pytest.mark.tiers("city")
 def test_city_residential_density_fires_on_a_dead_zone_despite_a_good_average():
     # in-band average, but every dwelling is jammed into one corner - the far half is a dead zone.
     q = {"poly": _FULL_Q, "zone": "residential", "kind": None, "name": "lopsided"}
@@ -497,6 +527,7 @@ def test_city_residential_density_fires_on_a_dead_zone_despite_a_good_average():
     assert "city_residential_quarters_dense_enough" in f(_qcity([q], corner))
 
 
+@pytest.mark.tiers("city")
 def test_city_civic_quarter_passes_with_a_compound_fires_when_bare():
     civic = {"poly": _FULL_Q, "zone": "civic", "kind": None, "name": "yamen precinct"}
     with_compound = _qcity([civic], governor_mansion={"x": 500, "y": 500, "w": 400, "h": 300, "rot": 0})
@@ -505,6 +536,7 @@ def test_city_civic_quarter_passes_with_a_compound_fires_when_bare():
     assert "city_civic_quarter_not_mostly_open" in f(bare)
 
 
+@pytest.mark.tiers("city")
 def test_city_reserve_within_cap_passes_under_and_fires_over():
     small = {"poly": [[250, 250], [500, 250], [500, 500], [250, 500]], "zone": "reserve", "kind": "drill_ground", "name": "drill"}
     assert "city_reserve_within_cap" not in f(_qcity([small]))  # 62500/360000 = 17% <= 20%
@@ -512,6 +544,7 @@ def test_city_reserve_within_cap_passes_under_and_fires_over():
     assert "city_reserve_within_cap" in f(_qcity([big]))  # 90000/360000 = 25% > 20%
 
 
+@pytest.mark.tiers("city")
 def test_city_capacity_shrinks_when_reserve_over_cap():
     # a city whose empty ground is declared reserve beyond the cap reads SHRINK, never sized_and_packed
     over = {"poly": [[250, 250], [560, 250], [560, 560], [250, 560]], "zone": "reserve", "kind": "drill_ground", "name": "drill"}
@@ -524,6 +557,7 @@ def test_city_capacity_shrinks_when_reserve_over_cap():
     assert "city_wall_sized_to_population" in f(M)
 
 
+@pytest.mark.tiers("city")
 def test_quarter_checks_skip_a_degenerate_zero_area_quarter():
     # collinear (zero-area) quarters are skipped by the residential-density and civic-open loops
     # rather than dividing by zero.
@@ -538,6 +572,7 @@ def test_quarter_checks_skip_a_degenerate_zero_area_quarter():
     check_village.city_capacity(M)  # does not crash on a degenerate quarter
 
 
+@pytest.mark.tiers("city")
 def test_city_geometry_within_canvas_fires_on_a_stray_vertex():
     good = _qcity([{"poly": _FULL_Q, "zone": "residential", "kind": None, "name": "q"}], meta={"scale": "city", "W": 3200, "H": 2700})
     assert "city_geometry_within_canvas" not in f(good)
@@ -550,6 +585,7 @@ def test_city_geometry_within_canvas_fires_on_a_stray_vertex():
     assert "city_geometry_within_canvas" in f(bad)  # a vertex millions of px off is flagged
 
 
+@pytest.mark.tiers("city")
 def test_gate_does_not_hang_on_a_runaway_quarter_vertex():
     # the sweeps must terminate on garbage geometry (the whole point of sweep_hi) - if this test
     # runs to completion at all, the sweep did not loop forever.
@@ -594,6 +630,7 @@ def test_charcoal_yard_keeps_fire_gap_fires_on_a_crowded_yard():
     assert "charcoal_yard_keeps_fire_gap" not in f(clear)
 
 
+@pytest.mark.tiers("city")
 def test_charcoal_yard_keeps_fire_gap_measures_in_REAL_feet_not_pixels():
     """The threshold converts through meta.ftpx, so 30 ft means the same distance at every tier -
     a pixel constant would silently become 90 ft on a 3 ft/px city sheet."""
@@ -611,6 +648,7 @@ def test_charcoal_yard_has_cooling_ground_fires_on_a_covered_only_yard():
     assert "charcoal_yard_has_cooling_ground" not in f(_fuel_map())
 
 
+@pytest.mark.tiers("town")
 def test_settlement_has_charcoal_yard_fires_only_when_the_district_is_declared():
     """Opt-in, like meta(granary=True): an ordinary county seat declares nothing and is exempt."""
     M = manifest(meta={"scale": "town", "ftpx": 1, "W": 1000, "H": 1000, "charcoal_district": True})
@@ -619,6 +657,7 @@ def test_settlement_has_charcoal_yard_fires_only_when_the_district_is_declared()
     assert "settlement_has_charcoal_yard" not in f(M)
 
 
+@pytest.mark.tiers("town")
 def test_settlement_has_refining_forge_fires_only_when_the_district_is_declared():
     M = manifest(meta={"scale": "town", "ftpx": 1, "W": 1000, "H": 1000, "iron_district": True})
     assert "settlement_has_refining_forge" in f(M)
@@ -690,6 +729,7 @@ def test_kiln_keeps_fire_gap_fails_a_record_that_cannot_be_measured():
     assert "kiln_keeps_fire_gap" in f(_kiln_map(body=None))
 
 
+@pytest.mark.tiers("city")
 def test_kiln_keeps_fire_gap_measures_in_REAL_feet_not_pixels():
     """The threshold converts through meta.ftpx, so 60 ft means the same distance at every tier
     rather than silently becoming 180 ft on a 3 ft/px city sheet."""
@@ -711,6 +751,7 @@ def test_kiln_keeps_fire_gap_is_measured_on_the_ROTATED_cottage():
 
 
 # ---- found by the settlement-review agent, 2026-07-26 -------------------------------------------
+@pytest.mark.tiers("town")
 def test_manor_walls_clear_of_ways_fires_on_a_road_through_the_compound():
     """`manors` lives in _OVERLAP_TARGETS - the registry of things others must avoid - and never in
     _OVERLAP_STRUCTS, so the whole no_structure_on_* battery reads a manor as a hazard and nothing
@@ -724,6 +765,7 @@ def test_manor_walls_clear_of_ways_fires_on_a_road_through_the_compound():
     assert "manor_walls_clear_of_ways" not in f(M)
 
 
+@pytest.mark.tiers("town")
 def test_structures_stay_on_their_side_of_a_border():
     """A border is overlap-EXEMPT so a frontier compound may stand its WALL on the line - but that
     is not licence to build ACROSS it. The test is on the CENTER, which is exactly what keeps the
@@ -745,6 +787,7 @@ def test_structures_stay_on_their_side_of_a_border():
     assert "structures_stay_on_their_side_of_a_border" not in f(bmap(manors=[{"x": 755, "y": 300, "w": 290, "h": 200, "rot": 0, "label": "M"}]))
 
 
+@pytest.mark.tiers("town")
 def test_border_checks_abstain_when_there_is_no_border_or_no_housing():
     """A map with no drawn border has no side to be on, and one with no dwellings has no side to
     judge from - neither may raise a finding, and neither may crash."""
@@ -819,6 +862,7 @@ def test_matrix_reads_drawn_extents_not_envelopes():
     assert not [e for e in check_village.matrix_extents(M) if e[0] == "commons"]
 
 
+@pytest.mark.tiers("town")
 def test_farmsteads_reach_their_fields_unsevered_fires_across_a_road():
     # every reachable field vertex lies across the road from the house -> severed (hoshizora's
     # lone south-of-road farmhouse inside the merchant block, GM 2026-08-02)
@@ -835,6 +879,7 @@ def test_farmsteads_reach_their_fields_unsevered_fires_across_a_road():
     assert "farmsteads_reach_their_fields_unsevered" not in f(M)
 
 
+@pytest.mark.tiers("capital")
 def test_population_consistency_runs_at_capital_and_counts_terrace_units():
     """T006: the housing battery binds the capital too - and a terrace range houses `units`
     households under its one roof, so units count as dwellings toward the declared figure."""
@@ -849,6 +894,7 @@ def test_population_consistency_runs_at_capital_and_counts_terrace_units():
     assert "population_consistent_with_housing" not in f(M)  # 20 units x 5 = 100
 
 
+@pytest.mark.tiers("capital", "city")
 def test_capital_population_counts_yashiki_manors_and_outwall_samurai():
     """T006 arithmetic: the capital's declared figure covers the WHOLE cohort - yashiki-band
     households are manors (not buildings), and the out-wall 15% of the samurai cohort
@@ -873,6 +919,7 @@ def test_capital_population_counts_yashiki_manors_and_outwall_samurai():
     assert "population_consistent_with_housing" not in f(M)
 
 
+@pytest.mark.tiers("capital", "city")
 def test_capital_civic_quarter_tolerates_ceremonial_breadth():
     """Research 021: the Corridor of a Thousand Steps is a vast open axis flanked by office
     files - a capital's civic band legitimately runs to 90% open where a provincial yamen
@@ -893,6 +940,7 @@ def test_capital_civic_quarter_tolerates_ceremonial_breadth():
     assert "city_civic_quarter_not_mostly_open" in f(Mp)
 
 
+@pytest.mark.tiers("city")
 def test_commoner_dwellings_at_the_wharf_suburb_are_exempt():
     """021, the kashi form: a bank-quay city keeps its landing OUTSIDE the wall and the
     brokers/warehouse folk live at it - a commoner dwelling within ~300px of the wharf works
@@ -905,6 +953,7 @@ def test_commoner_dwellings_at_the_wharf_suburb_are_exempt():
     assert "city_commoner_dwellings_inside_walls" not in f(M)  # the same house IS the quay suburb
 
 
+@pytest.mark.tiers("capital")
 def test_placement_runs_meet_their_ask_fires_on_a_run_that_landed_short():
     """A placer that drops most of what it was asked for is authored-vs-landed drift, and the
     record _shortfall writes is only worth writing if something reads it back (the capital drew
@@ -914,6 +963,7 @@ def test_placement_runs_meet_their_ask_fires_on_a_run_that_landed_short():
     assert "placement_runs_meet_their_ask" in check_village.gate(M, verbose=False)
 
 
+@pytest.mark.tiers("town")
 def test_placement_runs_meet_their_ask_spares_a_run_that_missed_by_a_hair():
     """A row that seats all but a couple has met its ask - the two pool towns that record a
     shortfall at all (Ubame 21/23, Hirameki 13/14) are exactly this case and must stay green."""
@@ -949,6 +999,7 @@ def test_waterworks_caption_beside_its_point_is_fine():
     assert "waterworks_captions_stand_at_their_point" not in check_village.gate(M, verbose=False)
 
 
+@pytest.mark.tiers("capital", "town")
 def test_roadside_works_stand_on_their_road():
     """A doss-house exists to catch travelers off a particular road, and a kiln carts its fuel
     along one - so both stand on that way and lie along it. Nine flophouses on the capital came out
@@ -959,6 +1010,7 @@ def test_roadside_works_stand_on_their_road():
     assert "roadside_works_stand_on_their_road" in check_village.gate(M, verbose=False)
 
 
+@pytest.mark.tiers("town")
 def test_roadside_work_lying_along_its_road_is_fine():
     M = manifest()
     M["town_streets"] = [{"pts": [[100, 100], [900, 100]], "w": 18}]
@@ -966,6 +1018,7 @@ def test_roadside_work_lying_along_its_road_is_fine():
     assert "roadside_works_stand_on_their_road" not in check_village.gate(M, verbose=False)
 
 
+@pytest.mark.tiers("town")
 def test_a_kiln_carries_no_distance_rule_only_an_angle():
     """A nuisance works belongs OUT of town by its nature - the rule for it is alignment, not
     proximity (the pool's kilns sit 482-1517 ft from the nearest way, correctly)."""
@@ -975,6 +1028,7 @@ def test_a_kiln_carries_no_distance_rule_only_an_angle():
     assert "roadside_works_stand_on_their_road" not in check_village.gate(M, verbose=False)
 
 
+@pytest.mark.tiers("town")
 def test_manor_walls_fire_when_a_way_ENDS_inside_the_compound():
     """The _mw_gap helper returns 0.0 the moment a way SEGMENT ENDPOINT lies inside the wall
     rect - the crossing loop never runs. Before feature 022 this branch was only reached

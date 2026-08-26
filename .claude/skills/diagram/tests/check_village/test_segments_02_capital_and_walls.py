@@ -12,6 +12,7 @@ def test_city_interior_fields_farmhouse_density_fires_when_under_farmed():
     assert "city_interior_fields_farmhouse_density" in f(M)
 
 
+@pytest.mark.tiers("city")
 def test_city_interior_fields_farmhouse_density_passes_when_densely_ringed():
     # a dense ring wrapping the WHOLE perimeter (top, bottom, both sides) - a worked in-wall field
     houses = (
@@ -24,12 +25,14 @@ def test_city_interior_fields_farmhouse_density_passes_when_densely_ringed():
     assert "city_interior_fields_farmhouse_density" not in f(M)
 
 
+@pytest.mark.tiers("city")
 def test_city_interior_fields_farmhouse_density_skipped_without_agricultural_district():
     # an ordinary city (no in-wall farming declared) is not held to the rule even if a field strays inside
     M = _agri_city([], agri=False)
     assert "city_interior_fields_farmhouse_density" not in f(M)
 
 
+@pytest.mark.tiers("city")
 def test_city_interior_fields_farmhouse_density_skips_a_tiny_field_sliver():
     # an in-wall field too small to merit its own farmhouse ring (edge < 120px) is skipped, not flagged
     tiny = {"name": "tiny", "kind": "paddy", "bbox": [480, 480, 505, 505], "outline": [[480, 480], [505, 480], [505, 505], [480, 505]]}  # ~100px perimeter
@@ -47,6 +50,7 @@ def test_wall_towers_evenly_spaced_passes_on_an_even_ring():
     assert "wall_towers_evenly_spaced" not in f(_fort_city(wall_towers=_ring_towers(100)))
 
 
+@pytest.mark.tiers("city")
 def test_city_wall_tower_coverage_exempts_the_kido_keepclear_band():
     # a 300px tower hole in a dense 30px ring on the west curtain: mid-hole, points lose their 2nd tower
     # (garrison R ~121: the 2nd comes from 30px beyond a hole edge, so the thin band is y~441-559) and the
@@ -58,17 +62,20 @@ def test_city_wall_tower_coverage_exempts_the_kido_keepclear_band():
     assert "city_wall_tower_coverage" not in f(_fort_city(wall_towers=tw, wall_tower_keepclears=[[200, 500]]))
 
 
+@pytest.mark.tiers("city")
 def test_city_wall_tower_coverage_fires_when_sparse():
     # only the 2 gate towers: the whole curtain between them sits out of flanking range of a 2nd tower
     M = _fort_city(wall_towers=[{"x": 500, "y": 200}, {"x": 500, "y": 800}])
     assert "city_wall_tower_coverage" in f(M)
 
 
+@pytest.mark.tiers("city")
 def test_city_wall_tower_coverage_passes_when_densely_ringed():
     # a 60px-spaced ring keeps every curtain point within garrison range (328 ft / ~121 px) of >= 2 towers
     assert "city_wall_tower_coverage" not in f(_fort_city(wall_towers=_ring_towers(60)))
 
 
+@pytest.mark.tiers("city")
 def test_city_wall_tower_coverage_siege_tier_demands_more_than_garrison():
     # the SAME 100px-spaced ring passes garrison (R~121) but fails siege (R~78, still >=2): the tier tightens it
     ring = _ring_towers(100)
@@ -87,6 +94,7 @@ def test_outside_fields_farmhouse_density_fires_on_a_bare_shown_field():
     assert "outside_fields_farmhouse_density" in f(M)
 
 
+@pytest.mark.tiers("town")
 def test_outside_fields_farmhouse_density_passes_when_edge_is_a_tiny_sliver():
     # a field whose only on-map edge is a tiny corner (< 120px) is too small a sliver to require
     # farmhouses - its workers are off-map with the rest of the field. Must NOT fire.
@@ -95,6 +103,7 @@ def test_outside_fields_farmhouse_density_passes_when_edge_is_a_tiny_sliver():
     assert "outside_fields_farmhouse_density" not in f(M)
 
 
+@pytest.mark.tiers("city")
 def test_wells_troughs_rails_clear_of_each_other_fires_on_nagaharas_rail_across_its_well():
     # the real GM-caught defect (2026-07-25), verbatim geometry: an 18px rail laid straight over a
     # wellhead roof square AND over the trough cluster hugging it - three glyphs on one spot
@@ -118,6 +127,7 @@ def test_wells_troughs_rails_clear_of_each_other_fires_on_nagaharas_rail_across_
     assert "wells_troughs_rails_clear_of_each_other" in fails
 
 
+@pytest.mark.tiers("city")
 def test_wells_troughs_rails_clear_of_each_other_fires_when_a_rail_reaches_a_NEIGHBOR_yards_troughs():
     # the cross-yard hole the dung-heap rule had to be widened for twice: two yards sit close
     # enough that yard A's rail lies over yard B's trough cluster - a pair no within-one-yard
@@ -133,6 +143,7 @@ def test_wells_troughs_rails_clear_of_each_other_fires_when_a_rail_reaches_a_NEI
     assert "wells_troughs_rails_clear_of_each_other" in f(M)
 
 
+@pytest.mark.tiers("city")
 def test_wells_troughs_rails_clear_of_each_other_fires_on_two_wellheads_sunk_on_one_spot():
     # wells are placed by machinery that predates the yards entirely, so the rule has to cover the
     # well/well pair too - two roof squares 5px apart are one unreadable blob
@@ -143,6 +154,7 @@ def test_wells_troughs_rails_clear_of_each_other_fires_on_two_wellheads_sunk_on_
     assert "wells_troughs_rails_clear_of_each_other" in f(M)
 
 
+@pytest.mark.tiers("city")
 def test_wells_troughs_rails_clear_of_each_other_passes_when_the_three_stand_side_by_side():
     # the rule is GLYPH-level, not a working clearance: the troughs are SUPPOSED to hug their well
     # (the bucket-pour relay) and animals stand between rail and trough, so a cluster 1.6px off the
@@ -167,6 +179,7 @@ def test_wells_troughs_rails_clear_of_each_other_passes_when_the_three_stand_sid
     assert "wells_troughs_rails_clear_of_each_other" not in f(M)
 
 
+@pytest.mark.tiers("city", "town")
 def test_poor_housing_mostly_interior_fires_when_laborers_on_the_street():
     M = {
         "meta": {"scale": "city", "walled": True},
@@ -178,6 +191,7 @@ def test_poor_housing_mostly_interior_fires_when_laborers_on_the_street():
     assert "poor_housing_mostly_interior" in f(M)
 
 
+@pytest.mark.tiers("city", "town")
 def test_no_isolated_dwelling_cluster_fires_on_a_cut_off_block():
     # a 36-house block whose only street is far away - a giant cluster with no street OR alley near it
     blds = [bldg(380 + (i % 6) * 26, 380 + (i // 6) * 26, kind="laborer") for i in range(36)]
@@ -191,6 +205,7 @@ def test_no_isolated_dwelling_cluster_fires_on_a_cut_off_block():
     assert "no_isolated_dwelling_cluster" in f(M)
 
 
+@pytest.mark.tiers("city", "town")
 def test_no_isolated_dwelling_cluster_passes_when_an_alley_reaches_it():
     blds = [bldg(380 + (i % 6) * 26, 380 + (i // 6) * 26, kind="laborer") for i in range(36)]
     M = {
@@ -204,6 +219,7 @@ def test_no_isolated_dwelling_cluster_passes_when_an_alley_reaches_it():
     assert "no_isolated_dwelling_cluster" not in f(M)
 
 
+@pytest.mark.tiers("city")
 def test_vegetable_tracts_skip_the_farmstead_ring_checks():
     # kind="vegetable" in-wall garden tracts are worked by the surrounding quarters (well/
     # night-soil fed urban plots), so neither field_ringed nor the in-wall agricultural
@@ -219,26 +235,31 @@ def test_vegetable_tracts_skip_the_farmstead_ring_checks():
     assert "city_interior_fields_farmhouse_density" not in fails
 
 
+@pytest.mark.tiers("city")
 def test_city_wall_matches_budget_fires_when_no_budget_is_declared():
     # budget-first is the city workflow: a walled city without meta.budget is unsized by construction
     assert "city_wall_matches_budget" in f(_budget_city())
 
 
+@pytest.mark.tiers("city")
 def test_city_wall_matches_budget_fires_on_over_enclosure():
     # required 300k, enclosed 360k = +20% - the empty-space defect (unjustified open ground)
     assert "city_wall_matches_budget" in f(_budget_city({"required_interior_px2": 300_000.0}))
 
 
+@pytest.mark.tiers("city")
 def test_city_wall_matches_budget_fires_on_under_enclosure():
     # required 400k, enclosed 360k = -10% - the wall cannot hold the program
     assert "city_wall_matches_budget" in f(_budget_city({"required_interior_px2": 400_000.0}))
 
 
+@pytest.mark.tiers("city")
 def test_city_wall_matches_budget_passes_within_tolerance():
     # required 350k, enclosed 360k = +2.9% - inside +8%/-5%
     assert "city_wall_matches_budget" not in f(_budget_city({"required_interior_px2": 350_000.0}))
 
 
+@pytest.mark.tiers("city", "town")
 def test_city_wall_matches_budget_is_scoped_to_walled_cities_only():
     town = {"meta": {"scale": "town", "walled": True}, "wall": [[200, 200], [800, 200], [800, 800], [200, 800]]}
     assert "city_wall_matches_budget" not in f(town)
@@ -246,6 +267,7 @@ def test_city_wall_matches_budget_is_scoped_to_walled_cities_only():
     assert "city_wall_matches_budget" not in f(unwalled)
 
 
+@pytest.mark.tiers("city")
 def test_city_house_doors_unblocked_fires_when_a_door_opens_into_a_back_wall():
     # two rot=0 rows 1.5px apart (an eave gap): the TOP row's door (facing down) opens straight
     # into the bottom row's back wall - the defect the GM flagged on the shipped cities
@@ -254,6 +276,7 @@ def test_city_house_doors_unblocked_fires_when_a_door_opens_into_a_back_wall():
     assert "city_house_doors_unblocked" in f(_door_city(top + bot))
 
 
+@pytest.mark.tiers("city")
 def test_city_house_doors_unblocked_passes_back_to_back_pair_facing_outward():
     # the SAME two rows with the top row rotated 180 (door up, into open ground): a proper
     # back-to-back nagaya pair - both doors open outward
@@ -262,6 +285,7 @@ def test_city_house_doors_unblocked_passes_back_to_back_pair_facing_outward():
     assert "city_house_doors_unblocked" not in f(_door_city(top + bot))
 
 
+@pytest.mark.tiers("city")
 def test_city_house_doors_unblocked_passes_across_a_walkable_roji():
     # facing rows separated by a walkable lane (>= ~10 real ft): doors open onto the roji, fine
     top = [bldg(300 + i * 41, 300, "laborer", w=40, h=24) for i in range(3)]  # door down
@@ -269,6 +293,7 @@ def test_city_house_doors_unblocked_passes_across_a_walkable_roji():
     assert "city_house_doors_unblocked" not in f(_door_city(top + bot))
 
 
+@pytest.mark.tiers("city")
 def test_city_house_doors_unblocked_respects_rotation_axes():
     # a west-facing house (rot=90: door toward -x) with a neighbor tight on its WEST is blocked;
     # the same neighbor on its EAST, facing EAST itself (rot=270), is a proper back-to-back
@@ -287,6 +312,7 @@ def test_city_house_doors_scope_excludes_villages_and_farmhouses():
     assert "city_house_doors_unblocked" not in f({"meta": {"scale": "village"}, "buildings": top + bot})
 
 
+@pytest.mark.tiers("city")
 def test_city_rows_max_two_deep_fires_on_a_three_deep_stack():
     # three eave-gapped rows: the middle row has walls hard against BOTH long faces - trapped
     rows = []
@@ -295,6 +321,7 @@ def test_city_rows_max_two_deep_fires_on_a_three_deep_stack():
     assert "city_rows_max_two_deep" in f(_door_city(rows))
 
 
+@pytest.mark.tiers("city")
 def test_city_rows_max_two_deep_passes_pairs_split_by_roji():
     # 2 rows + walkable gap + 2 rows: nobody is trapped (the canonical pair cadence)
     rows = []
@@ -305,6 +332,7 @@ def test_city_rows_max_two_deep_passes_pairs_split_by_roji():
     assert "city_rows_max_two_deep" not in f(_door_city(rows))
 
 
+@pytest.mark.tiers("city")
 def test_city_rows_max_two_deep_ignores_side_by_side_terraces():
     # a long terrace of party-wall units (touching along w) is the doctrine, not a violation
     row = [bldg(300 + i * 40.4, 300, "laborer", w=40, h=24) for i in range(8)]
@@ -343,10 +371,12 @@ def test_merchant_estate_wall_fires_on_a_fire_tower_and_passes_when_clear():
     assert "merchant_estate_wall_clear_of_fire_towers" not in f(clear)
 
 
+@pytest.mark.tiers("city")
 def test_merchant_estate_wall_checks_skip_maps_without_estates():
     assert "merchant_estate_wall_clear_of_water" not in f({"meta": {"scale": "city"}, "docks": [{"x": 540, "y": 490, "w": 54, "h": 34, "rot": 0}]})
 
 
+@pytest.mark.tiers("city", "town")
 def test_merchant_estate_wall_fires_on_a_street_crossing():
     # a city street's band running under the estate's west wall (GM 2026-07-19 follow-up)
     hit = _mest_city(town_streets=[{"pts": [[470, 400], [470, 600]], "w": 6.0}])
@@ -356,6 +386,7 @@ def test_merchant_estate_wall_fires_on_a_street_crossing():
     assert "merchant_estate_wall_clear_of_streets" in f(road)
 
 
+@pytest.mark.tiers("town")
 def test_merchant_estate_wall_passes_streets_at_a_distance():
     clear = _mest_city(town_streets=[{"pts": [[440, 400], [440, 600]], "w": 6.0}], road=[[400, 560], [600, 560]], road_width=8.7)
     assert "merchant_estate_wall_clear_of_streets" not in f(clear)
@@ -386,6 +417,7 @@ def test_compound_gates_to_scale_passes_a_real_gate():
     assert "compound_gates_to_scale" not in f(_scaled_city(manors=[m], governor_mansion=gov))
 
 
+@pytest.mark.tiers("city")
 def test_cremation_ground_to_scale_fires_oversized_passes_in_band():
     # the old fixed 116x80px glyph at 3 ft/px = 348x240 ft - bigger than the crematory serving metropolitan Edo
     assert "cremation_ground_to_scale" in f(_scaled_city(cremation_grounds=[{"x": 500, "y": 500, "w": 116, "h": 80, "rot": 0}]))
@@ -393,6 +425,7 @@ def test_cremation_ground_to_scale_fires_oversized_passes_in_band():
     assert "cremation_ground_to_scale" not in f(_scaled_city(cremation_grounds=[{"x": 500, "y": 500, "w": 43, "h": 30, "rot": 0}]))
 
 
+@pytest.mark.tiers("city")
 def test_ossuary_to_scale_fires_oversized_passes_in_band():
     # the old fixed mound = 276x180 ft - kofun-sized; a pauper bone mound is 10-30 ft. The band top is
     # 32 ft (tightened 2026-07-21): the earlier legibility-sized glyph (9px floor -> 54 real ft at city
@@ -418,6 +451,7 @@ def test_burial_grounds_sized_to_population_fires_on_a_village_only_undersized_g
     assert "burial_grounds_sized_to_population" in f(M)
 
 
+@pytest.mark.tiers("city")
 def test_burial_grounds_sized_to_population_passes_the_city_split():
     # ~1.8 acres split across common ground + parish yards is inside the 0.4-2.2 acre city band
     M = _scaled_city(cemeteries=[{"x": 500, "y": 500, "w": 90, "h": 64, "rot": 0}, {"x": 800, "y": 500, "w": 44, "h": 32, "rot": 0}, {"x": 900, "y": 700, "w": 44, "h": 32, "rot": 0}])
@@ -469,11 +503,13 @@ def test_city_fan_heads_quilted_moat_exclusion_and_degenerate_segments():
         (0.80, True),  # the wall cannot hold the program
     ],
 )
+@pytest.mark.tiers("capital")
 def test_capital_wall_matches_budget_fires_only_outside_the_declared_tolerances(frac, fires):
     fired = "capital_wall_matches_budget" in check_village.gate(_capital_manifest(interior_frac=frac))
     assert fired is fires
 
 
+@pytest.mark.tiers("capital", "city")
 def test_capital_wall_matches_budget_reuses_the_provincial_tolerances():
     """Inherited deliberately - they are pinned by the shipped-Tango / rejected-Nagahara pair, and
     nothing about a capital argues for different slack."""
@@ -481,6 +517,7 @@ def test_capital_wall_matches_budget_reuses_the_provincial_tolerances():
     assert check_village.BUDGET_TOL_UNDER == 0.05
 
 
+@pytest.mark.tiers("capital")
 def test_a_capital_that_declares_no_budget_FAILS_rather_than_skipping_the_conformance_check():
     """The FR-015 ratchet. Without it the map would skip capital_wall_matches_budget entirely and
     show green - and a check that never RUNS looks exactly like a check that passes."""
@@ -489,29 +526,34 @@ def test_a_capital_that_declares_no_budget_FAILS_rather_than_skipping_the_confor
     assert "capital_wall_matches_budget" not in failures  # it has nothing to compare against
 
 
+@pytest.mark.tiers("capital")
 def test_a_capital_that_declares_a_budget_passes_the_ratchet():
     assert "capital_declares_a_budget" not in check_village.gate(_capital_manifest())
 
 
 @pytest.mark.parametrize("scale", ["village", "town", "city"])
+@pytest.mark.tiers("capital")
 def test_neither_capital_check_runs_on_any_other_scale(scale):
     failures = check_village.gate(_capital_manifest(budget=False, scale=scale))
     assert "capital_declares_a_budget" not in failures
     assert "capital_wall_matches_budget" not in failures
 
 
+@pytest.mark.tiers("capital")
 def test_capital_has_six_ministries_fires_when_one_is_missing():
     M = _cap_gov()
     M["ministries"] = [m for m in M["ministries"] if m["name"] != "Ministry of War"]
     assert "capital_has_six_ministries" in f(M)
 
 
+@pytest.mark.tiers("capital")
 def test_capital_school_check_fires_when_absent():
     M = _cap_gov()
     M["ministries"] = [m for m in M["ministries"] if m["name"].startswith("Ministry of")]
     assert "capital_has_domain_school" in f(M)
 
 
+@pytest.mark.tiers("capital")
 def test_capital_chancellery_fires_when_a_compound_is_drawn():
     """The council of lineage representatives meets IN the castle (GM 2026-08-09, researched:
     Edo's Hyojosho/Roju within the castle, China's Grand Secretariat inside the palace) - a
@@ -521,6 +563,7 @@ def test_capital_chancellery_fires_when_a_compound_is_drawn():
     assert "capital_chancellery_meets_in_the_castle" in f(M)
 
 
+@pytest.mark.tiers("capital")
 def test_capital_domain_school_may_be_the_hanko_record():
     M = _cap_gov()
     M["ministries"] = [m for m in M["ministries"] if m["name"] != "Domain School"]
@@ -530,6 +573,7 @@ def test_capital_domain_school_may_be_the_hanko_record():
     assert "capital_school_on_the_axis" not in fails
 
 
+@pytest.mark.tiers("capital")
 def test_capital_castle_approach_fires_when_no_way_leaves_the_castle_gate():
     M = _cap_gov()
     M["roads"] = [{"pts": [[500, 700], [500, 1000]], "w": 26}]
@@ -539,6 +583,7 @@ def test_capital_castle_approach_fires_when_no_way_leaves_the_castle_gate():
     assert "capital_ministries_front_the_avenue" not in fails
 
 
+@pytest.mark.tiers("capital")
 def test_capital_ministries_front_the_avenue_fires_on_a_strayed_ministry():
     M = _cap_gov()
     war = next(m for m in M["ministries"] if m["name"] == "Ministry of War")
@@ -546,6 +591,7 @@ def test_capital_ministries_front_the_avenue_fires_on_a_strayed_ministry():
     assert "capital_ministries_front_the_avenue" in f(M)
 
 
+@pytest.mark.tiers("capital")
 def test_capital_school_on_the_axis_fires_when_it_strays():
     M = _cap_gov()
     sc = next(m for m in M["ministries"] if m["name"] == "Domain School")
@@ -553,6 +599,7 @@ def test_capital_school_on_the_axis_fires_when_it_strays():
     assert "capital_school_on_the_axis" in f(M)
 
 
+@pytest.mark.tiers("capital")
 def test_capital_government_offices_dont_abut_fires_on_touching_offices():
     M = _cap_gov()
     works = next(m for m in M["ministries"] if m["name"] == "Ministry of Works")
@@ -560,6 +607,7 @@ def test_capital_government_offices_dont_abut_fires_on_touching_offices():
     assert "capital_government_offices_dont_abut" in f(M)
 
 
+@pytest.mark.tiers("capital")
 def test_capital_declares_lineages_fires_when_the_declaration_is_missing():
     """The FR-015 ratchet again: without the declaration every lineage check would SKIP while
     showing green, so the missing declaration is itself the failure."""
@@ -571,18 +619,21 @@ def test_capital_declares_lineages_fires_when_the_declaration_is_missing():
     assert "capital_lineage_bands_visibly_distinct" not in fails
 
 
+@pytest.mark.tiers("capital")
 def test_capital_lineage_compounds_labeled_fires_on_a_missing_lineage():
     M = _cap_gov()
     M["manors"] = [m for m in M["manors"] if m.get("lineage") != "kurogi"]
     assert "capital_lineage_compounds_labeled" in f(M)
 
 
+@pytest.mark.tiers("capital")
 def test_capital_lineage_compounds_labeled_fires_on_an_unlabeled_compound():
     M = _cap_gov()
     M["manors"][0]["label"] = ""  # the compound stands but nothing names it
     assert "capital_lineage_compounds_labeled" in f(M)
 
 
+@pytest.mark.tiers("capital")
 def test_capital_ruling_lineage_gets_no_compound():
     M = _cap_gov()
     M["manors"][3]["lineage"] = "daika"
@@ -590,12 +641,14 @@ def test_capital_ruling_lineage_gets_no_compound():
     assert "capital_ruling_lineage_seat_is_the_castle" in f(M)
 
 
+@pytest.mark.tiers("capital")
 def test_capital_castle_without_a_gate_record_is_skipped_by_the_avenue_scan():
     M = _cap_gov()
     del M["castles"][0]["gate"]
     assert "capital_castle_has_approach_avenue" in f(M)  # no gate to anchor an avenue on
 
 
+@pytest.mark.tiers("capital")
 def test_capital_ruling_lineage_may_be_declared_in_the_band_map():
     """A gen may declare all nine lineages with bands, the ruling one among them - it is skipped
     rather than demanded a compound (its seat is the castle)."""
@@ -606,12 +659,14 @@ def test_capital_ruling_lineage_may_be_declared_in_the_band_map():
     assert "capital_ruling_lineage_seat_is_the_castle" not in fails
 
 
+@pytest.mark.tiers("capital")
 def test_capital_aqueduct_with_no_recorded_channel_is_skipped():
     M = _cap_water()
     M["aqueducts"] = [{"poly": [], "w": 8}]  # an empty channel - nothing to judge
     assert "capital_aqueduct_terminates_at_a_gate" not in f(M)
 
 
+@pytest.mark.tiers("capital", "city")
 def test_capital_estate_labels_inside_fires_on_an_outside_caption():
     """A city estate's caption lives INSIDE its blank court (GM 2026-08-09) - hung outside it
     sits where 021's fabric must flow."""
@@ -622,6 +677,7 @@ def test_capital_estate_labels_inside_fires_on_an_outside_caption():
     assert "capital_estate_labels_inside" not in f(M)
 
 
+@pytest.mark.tiers("capital")
 def test_capital_lineage_bands_visibly_distinct_fires_on_a_band_size_collision():
     M = _cap_gov()
     kurogi = next(m for m in M["manors"] if m["lineage"] == "kurogi")
@@ -629,36 +685,42 @@ def test_capital_lineage_bands_visibly_distinct_fires_on_a_band_size_collision()
     assert "capital_lineage_bands_visibly_distinct" in f(M)
 
 
+@pytest.mark.tiers("capital")
 def test_capital_waterfront_checks_pass_on_the_fixture():
     fails = f(_cap_water())
     for c in ("capital_has_aqueduct", "capital_aqueduct_terminates_at_a_gate", "capital_aqueduct_stays_outside_the_wall", "capital_no_road_parallels_river"):
         assert c not in fails, c
 
 
+@pytest.mark.tiers("capital")
 def test_capital_has_aqueduct_fires_when_absent():
     M = _cap_water()
     M["aqueducts"] = []
     assert "capital_has_aqueduct" in f(M)
 
 
+@pytest.mark.tiers("capital")
 def test_capital_aqueduct_terminates_at_a_gate_fires_far_from_any_gate():
     M = _cap_water()
     M["aqueducts"][0]["poly"][-1] = [1030, 800]
     assert "capital_aqueduct_terminates_at_a_gate" in f(M)
 
 
+@pytest.mark.tiers("capital")
 def test_capital_aqueduct_stays_outside_the_wall_fires_on_an_interior_channel():
     M = _cap_water()
     M["aqueducts"][0]["poly"].append([500, 500])  # an open cut through the walled interior
     assert "capital_aqueduct_stays_outside_the_wall" in f(M)
 
 
+@pytest.mark.tiers("capital")
 def test_capital_no_road_parallels_river_fires_on_a_shadowing_road():
     M = _cap_water()
     M["roads"] = [{"pts": [[1180, 0], [1180, 1000]], "w": 26}]  # a trunk road hugging the bank end to end
     assert "capital_no_road_parallels_river" in f(M)
 
 
+@pytest.mark.tiers("capital")
 def test_capital_no_road_parallels_river_passes_a_bridged_crossing():
     M = _cap_water()
     M["roads"] = [{"pts": [[900, 500], [1400, 500]], "w": 26}]  # ACROSS the river, not along it
