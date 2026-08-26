@@ -1,7 +1,13 @@
 <!--
 SYNC IMPACT REPORT
 ==================
-Version change: 2.4.0 → 2.5.0
+Version change: 2.5.0 → 2.6.0
+
+Version 2.6.0 (amended 2026-08-26, feature 133): the Development Workflow gains "Reviews run at
+acceptance and unlock, in the background" - under the scope lock the GM is the reviewer of the one
+map on the sheet and no per-task `settlement-review` runs; a review never blocks the GM's look and is
+never waited on; every pass is a ledger row. Also: linters autocorrect, never fail (ruff --fix +
+format in place); the batching guard exempts image reads. MINOR.
 
 Version 2.5.0 (amended 2026-08-26, feature 133): Principle XII gains "EVERY RENDERING DECISION IS
 CAPTURED FOR THE READER WHO WILL CLICK ON IT" - the GM's statement of the long-term goal (interactive
@@ -1582,6 +1588,18 @@ is the tooling, proposes the tooling change. A paid or lengthy run that
 the tooling was about to start is a finding to record even when a switch
 stopped it (feature 133 FR-004).
 
+**Reviews run at acceptance and unlock, in the background (GM 2026-08-26,
+feature 133 T12).** Three serial `settlement-review` passes on one task added
+~10 minutes and the second passed a map the GM rejected on sight. While the
+scope switch is locked the GM looks at every result and IS the reviewer of the
+one map on the sheet: no per-task review runs; the independent review runs
+once at acceptance and at unlock (the pool re-roll, where the agent earns its
+time). Whenever a review runs it runs in the background after the map is
+handed back - or beside a LONG gate, never `make quick` - is never waited on,
+and lands its findings as follow-ups. Every pass is a row in
+`docs/review-ledger.md`, and a miss becomes a rule in the agent, proven to
+fire on the unfixed artifact. Doctrine: `.claude/skills/diagram/dev/reviews.md`.
+
 **Cycle discipline (GM 2026-08-26, feature 133 T10)**
 The round trip, not the test, is the cost: a quick run is ~35 s and the
 model turn around it is longer. Measured on the first task of the
@@ -1651,4 +1669,4 @@ document wins; where this document is silent, defer to the project's
 guidance. This constitution is the higher-level authority; CLAUDE.md
 operationalizes it.
 
-**Version**: 2.5.0 | **Ratified**: 2026-05-27 | **Last Amended**: 2026-08-26
+**Version**: 2.6.0 | **Ratified**: 2026-05-27 | **Last Amended**: 2026-08-26

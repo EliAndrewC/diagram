@@ -37,6 +37,11 @@ serial_turn; check "turn 1 allowed" ok $?
 serial_turn; check "turn 2 allowed" ok $?
 serial_turn; check "turn 3 allowed" ok $?
 serial_turn; check "turn 4 BLOCKED (streak hit 3)" blocked $?
+teardown; setup
+# an image Read is acting on a result, never recon (GM 2026-08-26): at the threshold it passes
+serial_turn; serial_turn; serial_turn
+sleep 0.35; "$HOOK" pretool <<<'{"session_id":"t1","tool_name":"Read","tool_input":{"file_path":"/tmp/x/crop.png"}}' 2>/tmp/bt.err; check "image Read at the threshold is NOT blocked" ok $?
+sleep 0.35; "$HOOK" pretool <<<'{"session_id":"t1","tool_name":"Read","tool_input":{"file_path":"/tmp/x/notes.md"}}' 2>/tmp/bt.err; check "text Read at the threshold still IS" blocked $?
 grep -q "send them TOGETHER" /tmp/bt.err && { echo "  ok    block message says what to do"; PASS=$((PASS+1)); } || { echo "  FAIL  block message unhelpful"; FAIL=$((FAIL+1)); }
 grep -q "patch MISS" /tmp/bt.err && { echo "  ok    block message carries the retry-patch fold tip"; PASS=$((PASS+1)); } || { echo "  FAIL  no retry-patch tip in the message"; FAIL=$((FAIL+1)); }
 grep -q "pad with no-op" /tmp/bt.err && { echo "  ok    block message forbids padding the window"; PASS=$((PASS+1)); } || { echo "  FAIL  no anti-padding tip in the message"; FAIL=$((FAIL+1)); }

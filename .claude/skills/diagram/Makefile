@@ -574,7 +574,7 @@ durations:
 	@python3 -m pytest -n auto -q --no-cov $(if $(MARK),-m "$(MARK)",-m "not rolls_map" --deselect tests/test_villages.py) --durations=$(or $(N),12) 2>&1 | grep -E "^[0-9.]+s (call|setup)|passed|failed" | head -$$(( $(or $(N),12) + 2 ))
 
 quick:
-	@python3 -m ruff check l7r/ tests/ && python3 -m ruff format --check l7r/ tests/ && python3 -m mypy
+	@python3 -m ruff check --fix l7r/ tests/ && python3 -m ruff format l7r/ tests/ && python3 -m mypy
 	@start=$$(date +%s); python3 -m pytest -n auto -q --no-cov -x --ff -m "not rolls_map" --deselect tests/test_villages.py; ec=$$?; \
 	  el=$$(( $$(date +%s) - start )); \
 	  if [ $$ec -ne 0 ]; then exit $$ec; fi; \
@@ -672,13 +672,19 @@ guard:
 
 lint format typecheck test: | guard
 
+# LINT AND FORMAT AUTOCORRECT, THEY DO NOT FAIL (GM 2026-08-26: *"having linters autocorrect everything is a
+# standard practice ... having every run of the linter simply fix linting errors rather than failing on them
+# seems like it is what we want"*). Three of one day's red gates were import order and formatting - each a
+# 75 s gate plus a model turn spent on something with no decision in it. `ruff check --fix` applies every
+# safe fix and still exits non-zero on what it cannot fix (a real finding); `ruff format` rewrites in place
+# (black-compatible; the gate key is semantic, so a reformat never re-opens it).
 lint:
-	python3 -m ruff check .
+	python3 -m ruff check --fix .
 	python3 ../../../scripts/check-duplicate-defs.py --selftest
 	python3 ../../../scripts/check-duplicate-defs.py ../../..
 
 format:
-	python3 -m ruff format --check .
+	python3 -m ruff format .
 
 typecheck:
 	python3 -m mypy

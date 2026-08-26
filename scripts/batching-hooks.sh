@@ -73,7 +73,14 @@ is_background() { printf '%s' "$INPUT" | grep -q '"run_in_background"[[:space:]]
 # the event payload, and a rare false pass just keeps the hook quiet (it fails open).
 is_recon_call() {
   case "$TOOL" in
-    Read|Grep|Glob) return 0 ;;
+    Read)
+      # A Read of an IMAGE is never recon (GM 2026-08-26). Viewing the crop you just rendered is
+      # acting on a result, and an image cannot be folded into a Bash command - so the hook blocked
+      # a session four times in one task on exactly the call the loop rules ask for, each block a
+      # wasted round trip. Text reads keep the old rule.
+      if printf '%s' "$INPUT" | grep -qiE '"file_path"[[:space:]]*:[[:space:]]*"[^"]+\.(png|jpe?g|gif|webp|bmp)"'; then return 1; fi
+      return 0 ;;
+    Grep|Glob) return 0 ;;
     Bash) ;;
     *) return 1 ;;
   esac

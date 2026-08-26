@@ -235,8 +235,10 @@ rolled maps. Marking is `@pytest.mark.rolls_map`, guarded by `tests/test_markers
   main carrying one (constitution Principle XIII). "It rotated" is not a defense.
 
 **Reviews** ([`dev/reviews.md`](dev/reviews.md)) - `settlement-review` is mandatory before a Mode B
-map ships. Say the SCOPE (`DELTA:` vs `FULL`), one map per agent in parallel, and launch it the
-moment the map's regen + gate is green, BEFORE your own visual pass. **A finding OUTSIDE the delta
+map ships - which since 2026-08-26 means at ACCEPTANCE and at UNLOCK, not per task: while `scope`
+is locked the GM looks at every result and no per-task review runs; when one runs it runs in the
+background after the map is handed back (or beside a LONG gate, never `make quick`) and is never
+waited on. Say the SCOPE (`DELTA:` vs `FULL`), one map per agent in parallel. **A finding OUTSIDE the delta
 is still yours to fix** (constitution Principle XIV) - a reviewer pointed at a delta reliably turns
 up unrelated defects, and that is it working.
 

@@ -31,6 +31,32 @@ Three rules, all of them free:
 
 Same three rules apply to `building-review` and `backstory-review`.
 
+## WHEN a review runs (GM 2026-08-26) - and it never blocks the GM's look
+
+The GM, after a task in which three serial `settlement-review` passes added ~10 minutes and the
+second of them passed a map the GM rejected on sight: *"iterating in a way that allows me to look at
+something more quickly will probably be more productive than having a built in independent
+reviewer, which runs multiple times on every pass."* So:
+
+- **While `scope` is LOCKED (the reference-hamlet iteration period), no per-task review.** The GM
+  is looking at every result and is the faster, more authoritative reviewer of the one map on the
+  sheet. Gate green -> hand the map back. The independent review runs at **acceptance** (one FULL
+  pass of the reference settlement before T99 is ticked) and at **unlock** (the pool re-roll, where
+  48 seeds are more than the GM can look at - the place an automated reviewer earns its time).
+  `make scope-unlock` names it among the owed work.
+- **When a review does run, it runs in the BACKGROUND, after the map is handed back** - or in
+  parallel with a LONG gate (`make done FULL=1`, a CodeBuild run), never alongside `make quick`
+  (~30 s: launching a 3-minute review "in parallel" with it just serializes). A finding becomes a
+  follow-up task; it never holds the result.
+- **Never busy-wait on one.** Same rule as the gate: act on the completion notification.
+- **The push-time gate is unchanged** (`review-gate.sh`: a re-rolled pool map carries a logged
+  review) - under FR-006 the push is the feature's end, which is exactly the acceptance pass above.
+- **Every FINDING is a row in [`docs/review-ledger.md`](../../../../docs/review-ledger.md), written
+  by the SESSION, never by the reviewer** (the GM: you may disagree with the reviewer, and the log
+  must say both what was found and whether it was acted on - fixed / recorded-only / declined with
+  why / MISSED-BY-REVIEWER). In the same commit that acts on the review. The first miss on record (T12 round 2: the mechanism measured, the picture not judged)
+  became the agent's fit-zoom-first rule.
+
 ## A finding OUTSIDE the delta is still yours to fix
 
 Constitution **Principle XIV** (GM 2026-08-17). An independent reviewer pointed at a DELTA reliably

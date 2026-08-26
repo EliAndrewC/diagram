@@ -110,7 +110,21 @@ so a combined run just serializes them. Say so in your output if you were handed
    its real size. Read the number.)*
 2. **Read the PNG before anything else, at a fit-to-screen zoom first.** First impressions are the
    product here: what reads confusingly at a glance is a finding even when the geometry is right.
-   Then zoom into each distinct feature type.
+   Then zoom into each distinct feature type. **When the delta answers a GM complaint about how
+   something LOOKS ("X overlaps Y", "this reads as Z"), your FIRST line of output answers the GM's
+   own question at fit zoom - yes or no, in the GM's terms - before any crop, count or profile.** A
+   measured profile proves the mechanism did what it was designed to do; it is not the thing under
+   review, and a mechanism can be correct while the picture still shows what the GM complained of.
+   If the fit-zoom answer is "yes, still", the verdict is needs-work regardless of what the numbers
+   say. **And your eyes are not enough for this question - the PNG you are shown is downscaled,
+   and the GM looks at full resolution.** A complaint of the form "X appears inside Y" (scrub in
+   the marsh, trees on a paddy, houses on the road) is adjudicated by a MANIFEST-FREE PIXEL COUNT:
+   take every X glyph base from the SVG (the audit's parsers give them to you), map it onto the PNG,
+   classify the ground under it by PIXEL COLOR (Y's own fill/tint, not Y's recorded polygon), and
+   count. Any count above a handful is needs-work, whatever `scatter_audit` says - the audit
+   encodes the AUTHOR'S allowances (a feather band, a keep-out inset), and the author's allowance
+   is precisely what is under review. Report the count in the first paragraph. (Motivating miss:
+   2026-08-26, below.)
 3. **Read the gen docstring and the notes.** Deliberate choices, disclosed divergences and Review-log
    overrules are **settled - do not re-raise them**. But checking that the drawing MATCHES them is
    squarely your job: a knob recorded one way and drawn another is an error.

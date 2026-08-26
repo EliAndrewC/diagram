@@ -233,7 +233,7 @@ def main(argv: list[str] | None = None) -> int:
         print(describe(sw))
         if a.axis == "scope" and a.state == "unlocked":
             print(
-                "\nscope UNLOCKED. Nothing rolled a sweep, ran the map-rolling tests or took a perf bookend while it was locked: run\n`make maps`, `make done` (its next run does NOT short-circuit - the locked record deferred those tests) and the\nowed `make perf` bookends now - what accumulated is measured, not remembered (constitution XIII)."
+                "\nscope UNLOCKED. Nothing rolled a sweep, ran the map-rolling tests, ran a per-task settlement-review or took a perf\nbookend while it was locked: run `make maps`, `make done` (its next run does NOT short-circuit - the locked record\ndeferred those tests), the owed `make perf` bookends and a settlement-review of the re-rolled pool now, in the\nbackground - what accumulated is measured, not remembered (constitution XIII; dev/reviews.md)."
             )
         return 0
     return 0 if check(skill, a.axis, a.what) else 1
