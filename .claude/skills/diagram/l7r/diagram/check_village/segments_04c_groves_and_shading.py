@@ -101,6 +101,11 @@ def _seg_0285_070__cyx(
 # SCRIPTED path, and each legacy map inherits it at the moment it is converted to a
 # generator. The exemption therefore cannot rot: it is not a list anyone has to prune,
 # it is the absence of a tag that conversion adds.
+#
+# WHAT COUNTS AS A NEIGHBOR TO THE SOUTH: a FARMHOUSE (`houses`), with ANY lateral overlap of the
+# yard's span. Byres and sheds are not in the list on purpose - a ~10 ft ridge throws ~19 ft at the
+# 28 deg shoulder sun, inside the yard's own 3 ft gap tolerance of the rule's intent - so a byre
+# 25 ft south of a yard is not a finding (settlement-review, Inashiro 2026-08-26, measured one).
 
 
 def _seg_0285_071__yards_unshaded_by_neighbors(

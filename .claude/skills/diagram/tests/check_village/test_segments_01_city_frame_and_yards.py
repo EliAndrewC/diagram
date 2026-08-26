@@ -64,6 +64,19 @@ def test_crop_hugs_content_fires_when_the_frame_is_held_open():
     assert "crop_hugs_content" in f(M)
 
 
+def test_crop_hugs_content_counts_the_windbreaks_inner_face_but_not_its_depth():
+    """GM 2026-08-26 (feature 133 T10): the belt's inner FACE is frame-setting, the belt behind it is
+    not - so a view opened 48 px past the front row of crowns passes, and one opened past the
+    whole belt (Kikuta's defect) still fires."""
+    belt = {"role": "windbreak", "r": 14, "clumps": [[x, y] for x in (150, 200, 250) for y in (-200, -150, -100, -50)], "poly": [[100, -220], [300, -220], [300, -30], [100, -30]]}
+    house = {"x": 200, "y": 100, "w": 40, "h": 30, "rot": 0, "kind": "plain"}
+    face = -50 + 14  # the southernmost clump row's crowns end here, facing the house
+    snug = {"meta": {"scale": "village", "view": [150, face - 48, 120, 115 - (face - 48)]}, "houses": [house], "village_groves": [belt]}
+    assert "crop_hugs_content" not in f(snug), "48 px past the face is the margin, not slack"
+    wide = {"meta": {"scale": "village", "view": [150, -300, 120, 415]}, "houses": [house], "village_groves": [belt]}
+    assert "crop_hugs_content" in f(wide), "the belt's depth still may not hold the frame open"
+
+
 def test_crop_hugs_content_passes_on_a_snug_frame():
     M = {
         "meta": {"scale": "village", "view": [150, 45, 120, 110]},

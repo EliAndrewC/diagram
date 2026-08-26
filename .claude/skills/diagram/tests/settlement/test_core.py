@@ -206,6 +206,27 @@ def test_crop_boxes_keeps_a_lone_forests_own_span():
     assert s._crop_boxes(city=False) == [(1800.0, 2000.0, 0.0, 1500.0, "forest")]
 
 
+def test_crop_boxes_frames_the_windbreaks_inner_face_only_across_the_wind():
+    """GM 2026-08-26 (feature 133 T10): the belt's inner FACE sets the frame - one line, across the
+    wind - while the belt's depth and its shoulders still clip. Amends 2026-07-20."""
+    from l7r.diagram.settlement._knobs import windbreak_face
+
+    s = Settlement(2000, 1500, seed=1)
+    s.M["houses"] = [{"x": 600, "y": 700, "w": 46, "h": 28}, {"x": 640, "y": 800, "w": 46, "h": 28}]
+    clumps = [[400, y] for y in range(500, 1001, 50)] + [[440, y] for y in range(500, 1001, 50)] + [[480, 750]]
+    s.M["village_groves"] = [{"x": 440, "y": 750, "w": 80, "h": 500, "rot": 0, "role": "windbreak", "r": 14.0, "clumps": clumps, "poly": []}]
+    # x axis, houses to the east; the front row is 440 in ten of eleven 25 px bands and 480 in one,
+    # so the face is the MEDIAN front (440) + r, not the one protruding clump (480)
+    assert windbreak_face(clumps, 14.0, s.M["houses"]) == (0, 1, 454.0)
+    boxes = s._crop_boxes(city=False)
+    face = [b for b in boxes if "windbreak face" in b[4]]
+    assert face == [(454.0, 454.0, 686.0, 814.0, "village_groves[0] windbreak face")]  # a line at the face, clamped to the houses' y extent
+    s.M["village_groves"][0]["role"] = "copse"
+    assert not [b for b in s._crop_boxes(city=False) if "windbreak" in b[4]]  # a copse never sets the frame
+    assert windbreak_face([], 14.0, s.M["houses"]) is None and windbreak_face(clumps, 14.0, []) is None
+    assert windbreak_face([[600, 200], [600, 240]], 14.0, s.M["houses"]) == (1, 1, 254.0)  # a belt to the NORTH faces south
+
+
 def test_commons_and_marsh_skip_the_pond_and_watercourses():
     # ground-cover (scrub, reeds) never draws OVER open water: a big commons/marsh poly covering a pond + stream
     # skips those points at scatter time (the pond-check + _on_watercourse branches). Just assert it runs + records.

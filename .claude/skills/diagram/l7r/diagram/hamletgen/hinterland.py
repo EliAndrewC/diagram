@@ -646,7 +646,20 @@ def stage_windbreak(s: Settlement, plan: SitePlan) -> None:
     # the belt still clips at the page edge the way every other soft cover does (and the way
     # `settlements/presentation.md` requires) and only ink nobody can see is dropped. An inset was
     # tried first and cost Sawada 46% of its canopy - see the comment at the skip.
-    s.village_grove(_dented, role="windbreak", within=(_fx0, _fy0, _fx1, _fy1))
+    # ...AND THE WINDWARD EDGE FOLLOWS THE BELT'S OWN FACE (GM 2026-08-26, feature 133 T10). The
+    # frame now includes the belt's inner face plus CROP_MARGIN (`crop_boxes`, "windbreak face"),
+    # so on the wind axis the `within` window is opened to the whole band and `face_margin` does the
+    # precise trim from the face the clumps actually form - the other three edges keep the hard
+    # frame exactly as before. Without this the belt was clamped to a frame set by the houses, and
+    # a belt standing off the plots for their sun fell outside it (85% of Inashiro's clumps).
+    _bxs = [q[0] for q in _dented]
+    _bys = [q[1] for q in _dented]
+    _wx, _wy = plan.wind
+    if abs(_wx) >= abs(_wy):
+        _fx0, _fx1 = (min(_fx0, min(_bxs) - 30.0), _fx1) if _wx < 0 else (_fx0, max(_fx1, max(_bxs) + 30.0))
+    else:
+        _fy0, _fy1 = (min(_fy0, min(_bys) - 30.0), _fy1) if _wy < 0 else (_fy0, max(_fy1, max(_bys) + 30.0))
+    s.village_grove(_dented, role="windbreak", within=(_fx0, _fy0, _fx1, _fy1), face_margin=CROP_MARGIN)
     # The COPSE fills the leafy gaps AMONG the homes, over the house cloud. That is only reasonable
     # ground because `stage_homesteads` now bounds every seat to the cluster band: over a cloud with
     # a strewn farmstead in it, this became a scatter across 1,446 x 1,244 px - a wood over the whole

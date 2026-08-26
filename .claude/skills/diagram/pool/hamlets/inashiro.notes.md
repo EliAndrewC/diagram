@@ -1112,3 +1112,23 @@ beyond the frame rather than a belt embracing the cluster; the check is green be
 geometry. That is the point where the two rulings meet, and it is recorded as the GM's to settle. A 75 ft lane - the 15 m mature-stand figure - was measured first and dropped the belt to 38
 clumps with a hole; the only way to keep a taller belt whole is to let it set the frame, which is
 the 2026-07-20 ruling's to reopen.
+
+### 2026-08-26 - the GM opens the frame at the belt's face
+
+*"The map is being cropped in a way that is cutting off more than we want ... treat the innermost
+edge of the windbreak forest as being something that is preserved."* Done: the belt's inner face is
+now a frame-setting box (`windbreak_face` in `crop_boxes`, the same face `crop_hugs_content`
+counts), with the standard 48 px margin; the belt's depth and shoulders still clip. Measured on
+this map: view edge 1023 -> 1015, the front row of crowns shows whole (48 px at the face), 93
+clumps drawn (141 after the median-face fix below); 20 of them have center + r(14) west of the
+view edge and 0 have center + 0.9 x clump(28) west of it - the depth of the belt clipping, as the
+2026-08-18 doctrine intends (was 81 clumps with 85% outside the view).
+
+*Corrected by `settlement-review` the same day, and the first version's mechanism was wrong.* The
+face was taken at the belt's single most protruding clump, and the front row wanders 51 ft
+(x 998-1049), so the margin's 48 px of canopy showed at ONE band and the ink median was ~17 px
+with four blank bands - still a page-edge fringe. The notes blamed the lanes crossing the belt;
+measured, the connector explains y 683-808 and the back lane's end y 983-1033, and NOTHING
+crosses at 1083-1158 - those clumps simply sat at x 1009-1013 with their crowns off the page.
+The face is now the MEDIAN of the per-band front row (`windbreak_face`), which moves the frame
+to the belt's typical edge instead of its one outlier.

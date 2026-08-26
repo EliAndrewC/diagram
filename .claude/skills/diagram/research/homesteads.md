@@ -136,12 +136,17 @@ median ~15 px, blank for ~90 ft (y 700-790, where the connector leaves) and 1-4 
 green because it reads geometry, not the page. The arithmetic says this is not tunable away: the
 frame stops 48 px west of the westernmost hard feature and the lane keeps clump centers 66 px
 west of the same plot, so on any row with a plot the belt's near canopy shows at most ~7 px.
-**The two rulings conflict** - a belt that stands off the plots (2026-08-25) and a frame that
-does not open for the belt (2026-07-20) - and only the GM can reconcile them; the state shipped
-is the one that honors both to the letter. **What was priced and declined**: letting
+**The two rulings conflicted** - a belt that stands off the plots (2026-08-25) and a frame that
+does not open for the belt (2026-07-20) - and the GM reconciled them the next day: *"treat the
+innermost edge of the windbreak forest as being something that is preserved"*. The belt's inner
+FACE now sets the frame with the standard 48 px margin (`windbreak_face`, `crop_boxes`,
+`settlements/presentation.md`); the belt's depth still clips. Measured after: the front row shows
+whole (48 px at the face), no clump is drawn wholly off-page, per-band visible canopy 5-48 px
+(the thin bands are where the connector crosses the belt's line, a form matter, not the crop). **What was priced and declined**: letting
 the windbreak set the frame (reverses the 2026-07-20 ruling - the GM's to reopen, not a session's);
 a lane scaled to 15 m without moving the frame (measured: the belt is dropped). **Who chose**: the
-session, on the measurement; the GM can raise the belt to 15 m by reopening the frame ruling.
+session, on the measurement, and the GM on 2026-08-26 chose to open the frame at the face rather
+than shrink or raise the belt - 10 m stays as the record's measured working height.
 
 *Departures taken knowingly:* the lane is a square, not a solar wedge that swings through the
 afternoon (the yard's south corridor takes the same shortcut); the 12 px in `belt_polygon`'s

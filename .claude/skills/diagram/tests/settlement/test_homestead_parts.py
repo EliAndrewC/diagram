@@ -88,6 +88,26 @@ def test_village_grove_keeps_the_windbreak_out_of_a_plots_west_sun_lane():
     assert lane_hit(copse), "a copse is the dooryard's own trees and is not held to the belt's lane"
 
 
+def test_village_grove_face_margin_drops_only_clumps_no_frame_could_show():
+    """GM 2026-08-26 (feature 133 T10): with `face_margin`, a windbreak clump whose whole crown lies
+    deeper than the belt's inner face + margin is never inked; everything the margin can show stays."""
+    poly = [(100, 300), (400, 300), (400, 600), (100, 600)]
+    full = _nuc_village()
+    full.M["houses"] = [{"x": 700, "y": 450, "w": 46, "h": 28}]
+    n_full = full.village_grove(poly, role="windbreak")
+    trimmed = _nuc_village()
+    trimmed.M["houses"] = [{"x": 700, "y": 450, "w": 46, "h": 28}]
+    n_trim = trimmed.village_grove(poly, role="windbreak", face_margin=48)
+    from l7r.diagram.settlement._knobs import windbreak_face
+
+    g = trimmed.M["village_groves"][0]
+    _axis, _sign, inner = windbreak_face(g["clumps"], g["r"], trimmed.M["houses"])
+    assert (_axis, _sign) == (0, 1)
+    assert 0 < n_trim < n_full, "the deep side of a 300 px band is beyond any 48 px margin"
+    assert all(cx - inner >= -(48 + 2 * g["r"] * 0.9) for cx, _cy in g["clumps"]), "every kept clump can show ink inside face + margin"
+    assert inner == windbreak_face(full.M["village_groves"][0]["clumps"], 14.0, full.M["houses"])[2], "the trim never moves the face"
+
+
 def test_grove_fits_rejects_a_belt_over_a_dry_strip():
     # the windbreak's canopy stays out of the barley exactly as it stays out of the paddy
     s = _crop_settlement()

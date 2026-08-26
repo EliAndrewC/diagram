@@ -4,6 +4,7 @@ import math
 from typing import Any
 
 from l7r.diagram.settlement import crop_boxes, forest_frame_span
+from l7r.diagram.settlement._knobs import windbreak_face
 
 from .common_01_geometry import (
     seg_dist,
@@ -685,6 +686,14 @@ def _seg_0033__hard_features_within_frame(
             pcx, pcy, prx, pry = M["pond"]
             fsx += [pcx - prx, pcx + prx]
             fsy += [pcy - pry, pcy + pry]
+        # ...AND THE WINDBREAK'S INNER FACE, exactly as `crop_boxes` counts it (GM 2026-08-26,
+        # feature 133 T10, amending 2026-07-20 - see settlements/presentation.md). The face is one
+        # line across the wind; along the belt it adds nothing this list did not already hold, so
+        # only the windward edge may open, and only by the margin past the front row of crowns.
+        for _wg in M.get("village_groves", []):
+            _wface = windbreak_face(_wg.get("clumps") or [], float(_wg.get("r") or 0.0), M.get("houses", [])) if _wg.get("role") == "windbreak" else None
+            if _wface is not None:
+                (fsx if _wface[0] == 0 else fsy).append(_wface[2])
         if M.get("forest"):  # the big EDGE forest is frame-setting exactly as the crop counts it:
             # revealed only a band deep on the axis it FACES, and not frame-setting at all on the
             # axis it RUNS ALONG (a tree line off both canvas ends bounds nothing) - forest_frame_span.

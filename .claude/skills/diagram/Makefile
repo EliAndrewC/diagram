@@ -479,7 +479,7 @@ ci-image:       ## rebuild the CodeBuild image from Dockerfile.ci and push it to
 	if [ ! -t 0 ]; then printf '\n\033[1mREFUSED: ci-image is a paid operation and its prompt needs a terminal.\033[0m Run it in the foreground.\n\n'; $(LOGBYPASS) refused "ci-image with no terminal"; exit 1; fi; \
 	printf '\n\033[1mAbout to rebuild the CodeBuild image on AWS\033[0m (~$$1, a few minutes). Needed only when\n'; \
 	printf 'setup-dev-env.sh, Dockerfile.ci or a lockfile changed. Press Enter to CANCEL.\n\nReason to continue (Enter cancels): '; \
-	read why || true; \
+	if [ ! -t 0 ]; then printf '\n\033[1mREFUSED: this prompt has no terminal to answer it\033[0m - a backgrounded or piped run cannot be asked; run it in the foreground, or use the target that does not prompt.\n\n'; exit 1; fi; read why || true; \
 	if [ -z "$$why" ]; then $(LOGBYPASS) cancelled "(ci-image backed out at the prompt)"; printf 'Cancelled.\n'; exit 1; fi; \
 	$(LOGBYPASS) permitted "$$why"; git add dev/bypass-log; git commit -q -m "chore: authorize image rebuild - $$why" || true
 	$(RUN).ci image
@@ -612,7 +612,7 @@ bypass-audit:
 	  printf 'on a non-reference map; you are about to push and need the full pre-push verdict.\n'; \
 	  printf 'Not legitimate: wanting to see everything, impatience, or "while I am here".\n\n'; \
 	  printf 'Reason to continue (Enter cancels): '; \
-	  read why || true; \
+	  if [ ! -t 0 ]; then printf '\n\033[1mREFUSED: this prompt has no terminal to answer it\033[0m - a backgrounded or piped run cannot be asked; run it in the foreground, or use the target that does not prompt.\n\n'; exit 1; fi; read why || true; \
 	fi; \
 	if [ -z "$$why" ]; then \
 	  $(LOGBYPASS) cancelled "(no reason given - backed out at the prompt)"; \

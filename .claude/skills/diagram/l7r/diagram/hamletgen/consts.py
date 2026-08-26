@@ -255,8 +255,10 @@ SUN_CORRIDOR_FT = 39.0
 # 2026-07-20: the communal windbreak clips at the view edge; `crop_hugs_content`). Measured on
 # Inashiro: 131 clumps -> 38, `village_windbreak_is_continuous` red. At 50 the belt stands whole
 # (81 clumps, continuous) inside today's frame. So 10 m is the calibrated value - a DEGREE along
-# the attested band, not a choice between forms - and raising it means reopening the frame ruling
-# first. research/homesteads.md, "The garden's sun, and how far the windbreak shades".
+# the attested band, not a choice between forms. THE FRAME QUESTION WAS THEN SETTLED SEPARATELY
+# (GM 2026-08-26): the belt's inner face now sets the frame (`windbreak_face`), so a taller belt
+# would no longer be cropped away - 10 m stays because it is the record's measured working height,
+# not because the frame forces it. research/homesteads.md, "The garden's sun".
 WEST_SUN_FT = 50.0
 
 # THE FIELD ARCHETYPES this generator can draw, and why there are two rather than five. The pool's

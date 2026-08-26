@@ -709,6 +709,47 @@ def moat_swept_tap(ring: Any, inlet: Pt, outlet: Pt, other: Pt, near: Pt, want_d
     return (round(best[0], 1), round(best[1], 1))
 
 
+def windbreak_face(clumps: Sequence[Sequence[float]], r: float, houses: Sequence[Mapping[str, Any]]) -> tuple[int, int, float] | None:
+    """The communal belt's INNER FACE - the edge of its canopy that faces the settlement.
+
+    Returns `(axis, sign, coord)`: `axis` 0 for x / 1 for y (the axis the belt stands off along -
+    the one with the larger offset between the belt's clump centroid and the houses' centroid),
+    `sign` +1 when the houses lie on the increasing side, and `coord` the FRONT ROW's typical
+    innermost clump center plus `r` toward the houses - i.e. where the front row's canopy ends.
+    None with no clumps or no houses. ONE definition, read by `crop_boxes` (the face sets the
+    frame) and by `village_grove` (a clump wholly beyond face + margin is never inked), so the
+    crop and the planting cannot disagree about where the belt begins - GM 2026-08-26, feature
+    133 T10.
+
+    THE FRONT ROW'S MEDIAN, NOT ITS SINGLE MOST PROTRUDING CLUMP (settlement-review, Inashiro
+    2026-08-26). The belt is seeded on a jittered grid, so its front row wanders - 51 ft on
+    Inashiro - and a face taken at `max()` gave the margin's 48 px of canopy to exactly ONE band
+    while the ink median across the belt was ~17 px with four blank bands: a page-edge fringe, not
+    a belt. So the belt is binned in 25 px bands along its length, the frontmost clump of each band
+    is taken, and the face is the MEDIAN of those: the typical front, which is what the eye reads
+    as the belt's edge. Straightening the front row itself was priced and declined here - the
+    jitter is the recorded decision that "a grove hugs the land and is not a ruled wall"."""
+    if not clumps or not houses:
+        return None
+    bx = sum(c[0] for c in clumps) / len(clumps)
+    by = sum(c[1] for c in clumps) / len(clumps)
+    hx = sum(h["x"] for h in houses) / len(houses)
+    hy = sum(h["y"] for h in houses) / len(houses)
+    dx, dy = hx - bx, hy - by
+    axis = 0 if abs(dx) >= abs(dy) else 1
+    sign = 1 if (dx if axis == 0 else dy) >= 0 else -1
+    along = 1 - axis
+    fronts: dict[int, float] = {}
+    for c in clumps:
+        band = int(c[along] // 25.0)
+        v = float(c[axis])
+        if band not in fronts or (v > fronts[band] if sign > 0 else v < fronts[band]):
+            fronts[band] = v
+    ordered = sorted(fronts.values())
+    inner = ordered[len(ordered) // 2]
+    return (axis, sign, inner + sign * r)
+
+
 def crop_boxes(M: Any, city: bool, ftpx: float, W: float, H: float) -> list[tuple[float, float, float, float, str]]:
     """Every feature that SETS the render frame, as labeled boxes (x0, x1, y0, y1, what).
 
@@ -779,6 +820,33 @@ def crop_boxes(M: Any, city: bool, ftpx: float, W: float, H: float) -> list[tupl
     if M.get("pond"):
         cx, cy, rx, ry = M["pond"]
         out.append((cx - rx, cx + rx, cy - ry, cy + ry, "pond"))
+    # THE WINDBREAK'S INNER FACE SETS THE FRAME - the face only, not the belt (GM 2026-08-26,
+    # feature 133 T10, amending 2026-07-20). The older ruling counted no village grove at all,
+    # because a whole belt held Kikuta's north edge ~300 px open with nothing but trees in the
+    # band. Once the belt learned to stand off the plots for their afternoon sun (`west_sun_lane`)
+    # that ruling cropped it away outright: on Inashiro 85% of the clumps fell outside the view and
+    # the page showed a 0-40 px sliver. The GM's resolution: "treat the innermost edge of the
+    # windbreak forest as being something that is preserved" - so the FACE is a frame-setting box,
+    # one crown deep and only ACROSS the wind: along the belt it is clamped to the extent the hard
+    # features already set, so the belt's shoulders never drag the frame out the way Kikuta's did.
+    # The margin then shows the front row whole and the second partly, and the rest still clips at
+    # the edge as "the wood continues". `village_grove` reads the same face to skip clumps that
+    # could never be seen.
+    _hx = [v for b in out for v in (b[0], b[1])]
+    _hy = [v for b in out for v in (b[2], b[3])]
+    for i, g in enumerate(M.get("village_groves", [])):
+        if g.get("role") != "windbreak" or not _hx:
+            continue
+        _r = float(g.get("r") or 0.0)
+        _face = windbreak_face(g.get("clumps") or [], _r, M.get("houses", []))
+        if _face is None:
+            continue
+        _axis, _sign, _inner = _face
+        _cl = g["clumps"]
+        if _axis == 0:
+            out.append((_inner, _inner, max(min(c[1] for c in _cl) - _r, min(_hy)), min(max(c[1] for c in _cl) + _r, max(_hy)), f"village_groves[{i}] windbreak face"))
+        else:
+            out.append((max(min(c[0] for c in _cl) - _r, min(_hx)), min(max(c[0] for c in _cl) + _r, max(_hx)), _inner, _inner, f"village_groves[{i}] windbreak face"))
     if M.get("forest"):  # a big EDGE feature: revealed a band deep on the axis it FACES, and not
         fpts = M["forest"]  # frame-setting at all on the axis it RUNS ALONG (see forest_frame_span)
         fxs = forest_reveal_x(fpts, M.get("forest_edge"), Settlement.FOREST_REVEAL_FT / ftpx, W)

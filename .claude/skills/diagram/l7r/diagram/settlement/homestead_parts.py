@@ -6,6 +6,7 @@ from collections.abc import Iterator, Sequence
 from typing import TYPE_CHECKING, Any
 
 from ._geom import _union_area, boxed_seg_hit, edge_dist, point_in_poly, seg_dist
+from ._knobs import windbreak_face
 
 if TYPE_CHECKING:
     from .core import Settlement
@@ -409,7 +410,7 @@ class HomesteadPartsMixin:
             self._record_crowns(drawn)
             random.setstate(st)
 
-    def village_grove(self: Settlement, poly: Any, role: str = "windbreak", dense: bool = True, within: tuple[float, float, float, float] | None = None) -> int:  # type: ignore[misc]
+    def village_grove(self: Settlement, poly: Any, role: str = "windbreak", dense: bool = True, within: tuple[float, float, float, float] | None = None, face_margin: float | None = None) -> int:  # type: ignore[misc]
         """A COMMUNAL village grove - the Chinese *fengshui* forest (风水林). Unlike the per-house *yashikirin*,
         a NUCLEATED village shelters behind ONE village-scale grove, in three roles (see settlements.md 'Village
         windbreak'):
@@ -617,6 +618,7 @@ class HomesteadPartsMixin:
 
         nx, ny = max(1, round((x1 - x0) / step)), max(1, round((y1 - y0) / step))
         clumps: list[Any] = []
+        seated: list[tuple[float, float]] = []  # unrounded seats, inked after the face trim below
         for iy in range(ny + 1):
             for ix in range(nx + 1):
                 gx = x0 + ix * (x1 - x0) / nx
@@ -679,8 +681,24 @@ class HomesteadPartsMixin:
                     if _alt is None:
                         continue
                     jx, jy = _alt
-                self._draw_grove(jx, jy, clump, clump, face=(0, -1), mix=mix)
+                seated.append((jx, jy))
                 clumps.append([round(jx, 1), round(jy, 1)])
+        # THE FACE TRIM, then the ink (GM 2026-08-26, feature 133 T10). With `face_margin` the
+        # caller says the frame will follow this belt's INNER FACE by that margin (`crop_boxes`
+        # reads the same `windbreak_face`), so a clump whose whole crown lies deeper than
+        # face + margin has no page to be seen on and is not inked - the same "only wholly off the
+        # page" rule the `within` window applies on the other edges. Seating first and drawing
+        # after is what makes this possible: the face is known only once every clump is down.
+        # Draw order and positions are those of the seating loop, so nothing else moves.
+        if face_margin is not None and clumps:
+            _face = windbreak_face(clumps, cr, self.M.get("houses", []))
+            if _face is not None:
+                _axis, _sign, _inner = _face
+                _keep = [k for k, (px_, py_) in enumerate(seated) if _sign * ((px_, py_)[_axis] - _inner) >= -(face_margin + clump * 0.9)]
+                seated = [seated[k] for k in _keep]
+                clumps = [clumps[k] for k in _keep]
+        for jx, jy in seated:
+            self._draw_grove(jx, jy, clump, clump, face=(0, -1), mix=mix)
         if clumps:
             # A COPSE IS RECORDED AT THE SIZE IT WAS DRAWN, not at the size it was asked for.
             #
