@@ -45,8 +45,8 @@ def _seg_0438_015__nr_moat(*, M: Any = _UNBOUND, scale: Any = _UNBOUND) -> dict[
     return _kept(locals(), ('nr_moat',))
 
 
-def _seg_0438_016__nr_lines_3(*, M: Any = _UNBOUND, nr_lines: Any = _UNBOUND, nr_moat: Any = _UNBOUND, scale: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 0438.016 (nr_lines, nr_lines_b) - body verbatim from _seg_0438__near_ring_cultivated_fraction (feature 024 per-check split; guards re-evaluated in the body, see split_oversized.py)."""
+def _seg_0438_016__nr_lines_3(*, M: Any = _UNBOUND, nr_boxes: Any = _UNBOUND, nr_lines: Any = _UNBOUND, nr_moat: Any = _UNBOUND, scale: Any = _UNBOUND) -> dict[str, Any]:
+    """Gate segment 0438.016 (nr_lines, nr_lines_b, nr_boxes_b) - body verbatim from _seg_0438__near_ring_cultivated_fraction (feature 024 per-check split; guards re-evaluated in the body, see split_oversized.py)."""
     if scale in ('town', 'city') and nr_moat:
         nr_lines.append((nr_moat, M.get("moat_width", 22) / 2 + 8))
     # INDEXED, NOT COARSENED (GM 2026-08-26, feature 133 T15; this package's CLAUDE.md "when a check is
@@ -57,7 +57,11 @@ def _seg_0438_016__nr_lines_3(*, M: Any = _UNBOUND, nr_lines: Any = _UNBOUND, nr
     # every pool manifest and regression fixture when this landed). Built ONCE here, after the last
     # append, and handed to both samplers.
     nr_lines_b = boxed_grid(boxed_segs(nr_lines)) if scale in ('town', 'city') else None
-    return _kept(locals(), ('nr_lines', 'nr_lines_b'))
+    # ...and the structure halo boxes the same way: a 4-tuple (x0, y0, x1, y1) IS its own box, which is
+    # the shape PointGrid files (the last four fields), so the scan below becomes a bucket lookup
+    # followed by the identical `<=` test. 4.6M box comparisons per check across one 50-gate probe.
+    nr_boxes_b = boxed_grid(nr_boxes) if scale in ('town', 'city') else None
+    return _kept(locals(), ('nr_lines', 'nr_lines_b', 'nr_boxes_b'))
 
 
 def _seg_0438_017__nr_wall(*, M: Any = _UNBOUND, scale: Any = _UNBOUND) -> dict[str, Any]:
@@ -159,7 +163,7 @@ def _seg_0438_024__bx0(
     gx: Any = _UNBOUND,
     gy: Any = _UNBOUND,
     nr_band: Any = _UNBOUND,
-    nr_boxes: Any = _UNBOUND,
+    nr_boxes_b: Any = _UNBOUND,
     nr_cult: Any = _UNBOUND,
     nr_cultc: Any = _UNBOUND,
     nr_elig: Any = _UNBOUND,
@@ -184,7 +188,7 @@ def _seg_0438_024__bx0(
                     or (nr_band is not None and nr_wall is not None and poly_dist(gx, gy, nr_wall) > nr_band)  # beyond the near ring: countryside, not judged here
                     or (nr_hill is not None and in_ellipse(gx, gy, nr_hill, 1.45))
                     or (nr_pond is not None and in_ellipse(gx, gy, [nr_pond[0], nr_pond[1], nr_pond[2] + 20, nr_pond[3] + 20]))
-                    or any(bx0 <= gx <= bx1 and by0 <= gy <= by1 for bx0, by0, bx1, by1 in nr_boxes)
+                    or any(bx0 <= gx <= bx1 and by0 <= gy <= by1 for bx0, by0, bx1, by1 in nr_boxes_b.near(gx, gy))  # indexed (segment 016)
                     or boxed_seg_hit(gx, gy, nr_lines_b.near(gx, gy))  # indexed; same test as the scan it replaced (see segment 016)
                     or any(point_in_poly(gx, gy, p_) for p_ in nr_skip)
                 )
@@ -348,7 +352,7 @@ def _seg_0438_036__bx0_1(
     gx: Any = _UNBOUND,
     gy: Any = _UNBOUND,
     nr_band: Any = _UNBOUND,
-    nr_boxes: Any = _UNBOUND,
+    nr_boxes_b: Any = _UNBOUND,
     nr_hill: Any = _UNBOUND,
     nr_lines_b: Any = _UNBOUND,
     nr_pond: Any = _UNBOUND,
@@ -371,7 +375,7 @@ def _seg_0438_036__bx0_1(
                     or (nr_band is not None and nr_wall is not None and poly_dist(gx, gy, nr_wall) > nr_band)  # beyond the near ring: countryside (same cap as the fraction sampler above)
                     or (nr_hill is not None and in_ellipse(gx, gy, nr_hill, 1.45))
                     or (nr_pond is not None and in_ellipse(gx, gy, [nr_pond[0], nr_pond[1], nr_pond[2] + 20, nr_pond[3] + 20]))
-                    or any(bx0 <= gx <= bx1 and by0 <= gy <= by1 for bx0, by0, bx1, by1 in nr_boxes)
+                    or any(bx0 <= gx <= bx1 and by0 <= gy <= by1 for bx0, by0, bx1, by1 in nr_boxes_b.near(gx, gy))  # indexed (segment 016)
                     or boxed_seg_hit(gx, gy, nr_lines_b.near(gx, gy))  # indexed; same test as the scan it replaced (see segment 016)
                     or any(point_in_poly(gx, gy, p_) for p_ in nr_skip)
                 )

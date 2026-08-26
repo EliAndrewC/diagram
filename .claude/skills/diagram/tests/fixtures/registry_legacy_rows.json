@@ -17316,17 +17316,20 @@
    "name": "_seg_0438_016__nr_lines_3",
    "free": [
     "M",
+    "nr_boxes",
     "nr_lines",
     "nr_moat",
     "scale"
    ],
    "writes": [
     "nr_lines",
-    "nr_lines_b"
+    "nr_lines_b",
+    "nr_boxes_b"
    ],
    "checks": [],
    "needs": [
     "M",
+    "nr_boxes",
     "nr_lines",
     "nr_moat",
     "scale"
@@ -17493,7 +17496,7 @@
     "gx",
     "gy",
     "nr_band",
-    "nr_boxes",
+    "nr_boxes_b",
     "nr_cult",
     "nr_cultc",
     "nr_elig",
@@ -17525,7 +17528,7 @@
     "gx",
     "gy",
     "nr_band",
-    "nr_boxes",
+    "nr_boxes_b",
     "nr_cult",
     "nr_cultc",
     "nr_elig",
@@ -17771,7 +17774,7 @@
     "gx",
     "gy",
     "nr_band",
-    "nr_boxes",
+    "nr_boxes_b",
     "nr_hill",
     "nr_lines_b",
     "nr_pond",
@@ -17804,7 +17807,7 @@
     "gx",
     "gy",
     "nr_band",
-    "nr_boxes",
+    "nr_boxes_b",
     "nr_hill",
     "nr_lines_b",
     "nr_pond",

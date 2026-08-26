@@ -549,6 +549,7 @@ def _seg_0434__town_margins_clothed(
         if tm_wall:
             tm_lines.append((tm_wall, 40.0))
         tm_lines_b = boxed_grid(boxed_segs(tm_lines))  # INDEXED, NOT COARSENED (T15, GM 2026-08-26) - see segment 0438.016 for the why; same strict test, pruned candidates
+        tm_boxes_b = boxed_grid(tm_boxes)  # the halo boxes too (a 4-tuple is its own box)
         tm_hill = M.get("hill")
         tm_pond = M.get("pond")
         tm_bare = tm_total = 0
@@ -558,7 +559,7 @@ def _seg_0434__town_margins_clothed(
             while tx < EX1:
                 tm_total += 1
                 covered = (
-                    any(bx0 <= tx <= bx1 and by0 <= ty <= by1 for bx0, by0, bx1, by1 in tm_boxes)
+                    any(bx0 <= tx <= bx1 and by0 <= ty <= by1 for bx0, by0, bx1, by1 in tm_boxes_b.near(tx, ty))
                     or (tm_wall is not None and len(tm_wall) >= 3 and point_in_poly(tx, ty, tm_wall))
                     or any(point_in_poly(tx, ty, p_) for p_ in tm_polys)
                     or boxed_seg_hit(tx, ty, tm_lines_b.near(tx, ty))
