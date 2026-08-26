@@ -54,6 +54,10 @@ _(from T11 on, each entry also carries its cycle plan before work starts - `scaf
       measure: gate wall on Inashiro + a city fixture before/after (in-process timer); the 4.35 s site_justice test; make quick pytest wall
       verify: the checks' verdicts identical on every pool manifest + regression fixture (exact test, pruned candidates); `make quick`; `make done`
 
+- [x] T16 **the easy win and the four-second test** - the GM (2026-08-26): *"I agree that we should take the easy win, so please do that ... let's take a look at the settlement/test_fields.py::test_land_use_overlay_topography_paths test specifically. That takes more than four seconds to run. Can you break down that one test and what it is spending all of its time doing?"*
+      given ~2026-08-26T18:05Z | done 2026-08-26T17:56Z | runs: make quick x2, make done x1, in-process profiles x3
+      note: (1) the registry guard tests re-derived the whole registry from the AST (~3 s) four times; `_derive_fields` is now memoized per unchanged source in-process (returning a copy - the first cut handed out the memo itself and `_derive_rows` rewrote it). (2) the fields test: 3.15 of 4.41 s was ONE engine helper, `_landuse_dikepond_sluices._target`, scanning every densified channel point and every other pond's outline for each of ~1,000 sluice anchors (7.8M `_fall` calls); a point grid queried at the 62 px reach, survivors iterated in original order for identical tie-breaking - 4,732 sluices over 16 variants byte-identical; the test 4.41 -> 0.84 s, and every dike-pond map generates faster. Not a test substitution: the test was fine, the engine was quadratic.
+
 ## Phase 9 - acceptance
 
 - [ ] T90 the would-have-dispatched audit (FR-005): every entry in the period, and for each whether it should have run; each "no" names a tooling change

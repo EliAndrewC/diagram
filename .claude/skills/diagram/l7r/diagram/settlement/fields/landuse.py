@@ -300,14 +300,29 @@ class LandUseMixin:
                     _cpts.append((a[0] + (b[0] - a[0]) * k / steps, a[1] + (b[1] - a[1]) * k / steps))
         waters = [dp["water"] for dp in dikeponds]
         _reach, _margin = 62.0, 8.0
+        # INDEXED, NOT COARSENED (GM 2026-08-26, feature 133 T16). `_target` used to scan EVERY densified
+        # channel point plus every other pond's outline for each of the ~1,000 sluice anchors - 7.8M
+        # `_fall` calls on a 522-plot comb, 3.2 s of a 4.4 s test (profiled). A connection must lie within
+        # `_reach`, so a point grid queried at that pad hands back only the candidates that can qualify.
+        # EXACT: the survivors are iterated in their ORIGINAL scan order (channel points first, then the
+        # ponds in index order, each in outline order), so the strict `d < bd` tie-breaking picks the same
+        # point the full scan did - verified on 16 variants x 2 seeds before this landed.
+        from l7r.diagram.settlement._geom import boxed_grid
+
+        _cand_grid = boxed_grid(
+            [(n, -1, q[0], q[1], q[0], q[1], q[0], q[1]) for n, q in enumerate(_cpts)]
+            + [(len(_cpts) + n, j, q[0], q[1], q[0], q[1], q[0], q[1]) for n, (j, q) in enumerate((j, q) for j, w2 in enumerate(waters) for q in w2)]
+        )
 
         def _target(anchor: Pt, i: int, uphill: bool) -> Pt | None:
             # nearest connection point (a channel point OR another pond's edge) strictly up/down-hill of it
             af = _fall(anchor)
             best: Pt | None = None
             bd = _reach * _reach
-            cands = _cpts + [q for j, w2 in enumerate(waters) if j != i for q in w2]
-            for q in cands:
+            for _n, j, qx, qy, _x0, _y0, _x1, _y1 in sorted(_cand_grid.near(anchor[0], anchor[1], _reach), key=lambda c: c[0]):
+                if j == i:
+                    continue  # a pond does not connect to itself
+                q = (qx, qy)
                 qf = _fall(q)
                 if (qf < af - _margin) if uphill else (qf > af + _margin):
                     d = (anchor[0] - q[0]) ** 2 + (anchor[1] - q[1]) ** 2

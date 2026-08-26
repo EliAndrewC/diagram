@@ -261,9 +261,27 @@ def _segment_parts(node: ast.FunctionDef) -> tuple[list[ast.stmt], tuple[str, ..
     return body[:-1], writes
 
 
+_FIELDS_MEMO: dict[tuple[Path, tuple[tuple[str, int, int], ...]], dict[str, _SegFields]] = {}
+
+
 def _derive_fields(pkg_dir: Path) -> dict[str, _SegFields]:
     """Derive every row's six metadata fields from the package sources. Pure: reads files, holds
-    no state, imports nothing - the caller binds actual function objects by name."""
+    no state, imports nothing - the caller binds actual function objects by name.
+
+    MEMOIZED per process on (pkg_dir, every file's size and mtime) - a pure function of the sources,
+    so a repeat call on unchanged files returns the same object. The derivation is ~3 s of AST work
+    over 25 segment files, and four registry guard tests each re-derived it in full to prove one
+    override rule (GM 2026-08-26, the make quick profile: the only easy win on the ten-slowest list).
+    A tmp-dir derivation (the shape guards) keys on its own path and is never confused with the
+    package's."""
+    key = (pkg_dir, tuple((f.name, f.stat().st_size, f.stat().st_mtime_ns) for f in sorted(pkg_dir.glob("*.py"))))
+    hit = _FIELDS_MEMO.get(key)
+    if hit is None:
+        hit = _FIELDS_MEMO[key] = _derive_fields_uncached(pkg_dir)
+    return dict(hit)  # a COPY: `_derive_rows` rewrites rows in the dict it is handed (the needs overrides), and the memo must stay pristine
+
+
+def _derive_fields_uncached(pkg_dir: Path) -> dict[str, _SegFields]:
     trees = [ast.parse(f.read_text()) for f in sorted(pkg_dir.glob("*.py"))]
     emissions: dict[str, list[str]] = {}
     for tree in trees:
