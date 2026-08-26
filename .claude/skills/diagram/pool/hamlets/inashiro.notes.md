@@ -1162,3 +1162,16 @@ list, drew no reeds at all; and a marsh recorded BEFORE a scrub pass sits in `bl
 no-build bog, which the scatter hard-skipped as if it were a building - `marsh_blocks` now tells the
 two apart. Catch-rate: review round 1 found the ruled edge (a real defect the author's own crops
 had not shown at fit zoom); round 2 PASS - it measured the depth profile as the exact complement of the reed ramp and 0 scrub past the feather, and noted (no action) that the west edge ramps over ~25-30 px against the north edge's 46: the soft polygon is `toe_band(down_deg, pad)`, likely wider than the recorded marsh on that side.
+
+**Round 3 (the GM, on reloading: *"it looks like it is still overlapping!"*).** Round 2 had let EVERY
+scrub family thin into the marsh over the 46 px band, and along the 1,600 px north seam that put
+dozens of pines and brush dots standing in the reeds - at fit zoom, exactly the overlap the GM had
+asked to remove. Review round 2 had measured the depth profile and passed the form; the GM judged
+the picture. Final form: **brush dots and pines are hard-excluded from every marsh polygon; grass
+blades alone grade into the reeds** (a bog margin is sedge into reed; woody cover stands on the dry
+ground above), and `make scatter-audit` holds exactly that line (0 violations). Review round 3
+looked at fit zoom FIRST, then ran a manifest-free pixel check: 0 woody bases on bog-colored pixels
+anywhere on the sheet; grass front wobbles +-10 units, no ruled line, no bare strip, no brush wall
+on the dry side. PASS. Catch-rate: round 2 was a reviewer miss (recorded in `docs/review-ledger.md`);
+round 3 caught nothing new beyond two nitpicks (this entry; the audit is blind to wet ground drawn
+wider than its recorded polygon - not the case here).
