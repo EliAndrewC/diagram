@@ -45,9 +45,9 @@ def main(argv: list[str] | None = None) -> int:
     scope = "full" if a.full else "reference"
 
     if a.command == "state":
-        if len(a.args) != 2:
-            ap.error("state needs EVENT TARGET")
-        st = state.write(root, a.args[0], a.args[1])
+        if len(a.args) not in (2, 3) or (len(a.args) == 3 and a.args[2] != "reused"):
+            ap.error("state needs EVENT TARGET [reused]")
+        st = state.write(root, a.args[0], a.args[1], reused=len(a.args) == 3)
         print(f"verification-state: {st.event} ({st.target}) recorded")
         return 0
     if a.command == "remote-ok":

@@ -55,6 +55,7 @@ def _probe_cmd() -> str:
     return f'{sys.executable} -c "{_PROBE.format(skill=str(SKILL))}"'
 
 
+@pytest.mark.tooling
 def test_a_child_spawned_under_make_INHERITS_make() -> None:
     """STAYS QUIET - and this test replaced one that was subtly, instructively wrong.
 
@@ -81,6 +82,7 @@ def test_a_child_spawned_under_make_INHERITS_make() -> None:
     assert out.stdout.strip() == expected, "a child must inherit this process's verdict, whichever it is"
 
 
+@pytest.mark.tooling
 def test_make_in_this_repo_is_accepted(tmp_path: Path) -> None:
     """STAYS QUIET: make -> sh -c -> python, which is EVERY make recipe.
 
@@ -96,6 +98,7 @@ def test_make_in_this_repo_is_accepted(tmp_path: Path) -> None:
         work.rmdir()
 
 
+@pytest.mark.tooling
 def test_a_foreign_makefile_is_refused(tmp_path: Path) -> None:
     """FIRES: `make -f /tmp/evil.mk`, the hole a bare ancestry check leaves open.
 
@@ -113,6 +116,7 @@ def test_a_foreign_makefile_is_refused(tmp_path: Path) -> None:
     assert _run_probe(tmp_path, _probe_cmd(), cwd=tmp_path, makefile=tmp_path / "evil.mk") == expected
 
 
+@pytest.mark.tooling
 def test_a_make_run_outside_the_repo_is_refused(tmp_path: Path) -> None:
     """FIRES: a make whose cwd is outside the repository is not this project's make."""
     # Same inheritance caveat as the test above: an outer qualifying make is still an ancestor.
@@ -120,6 +124,7 @@ def test_a_make_run_outside_the_repo_is_refused(tmp_path: Path) -> None:
     assert _run_probe(tmp_path, _probe_cmd(), cwd=tmp_path) == expected
 
 
+@pytest.mark.tooling
 def test_a_multiprocessing_child_under_make_is_accepted(tmp_path: Path) -> None:
     """STAYS QUIET: pool workers sit three levels below make, and pytest-xdist and `cohort()` both
     use that shape. Detecting only the immediate parent would refuse every worker."""

@@ -5,6 +5,7 @@ import re
 
 from l7r.diagram import settlement
 from l7r.diagram.settlement import Settlement
+from tests._scope import full_or
 
 
 def _town():
@@ -110,7 +111,7 @@ def _city():
 
 
 def _hamlet_with_field(down_deg):
-    s = Settlement(1000, 1000, seed=1)
+    s = Settlement(full_or(600, 1000), full_or(600, 1000), seed=1)
     s.meta(name="H", scale="hamlet", down_deg=down_deg)
     s.field_polys.append([(400, 400), (600, 400), (600, 600), (400, 600)])  # a paddy centered at (500,500)
     return s

@@ -192,6 +192,7 @@ def test_a_second_gen_in_the_same_process_records_its_own_full_dep_set(tmp_path,
     assert {q for _, q in first["functions"]} - bodies <= quals, (first["functions"], sorted(quals))
 
 
+@pytest.mark.tooling
 def test_a_gen_that_ends_by_exiting_does_not_kill_the_sweep(tmp_path, monkeypatch):
     """Every Mode A gen ends `raise SystemExit(main())` - a normal successful return for a script,
     but `runpy` runs it in THIS interpreter, so it used to propagate straight out of regen.py and
@@ -205,6 +206,7 @@ def test_a_gen_that_ends_by_exiting_does_not_kill_the_sweep(tmp_path, monkeypatc
     assert deps["functions"], "the dep capture must survive the exit too"
 
 
+@pytest.mark.tooling
 def test_a_gen_that_exits_NONZERO_still_fails_loudly(tmp_path, monkeypatch):
     # the other direction: a real failure must not be swallowed by the tolerance above
     eng, gen, _ = _fixture(tmp_path)
@@ -354,6 +356,7 @@ def test_the_deps_state_is_stable_within_a_process():
     assert first and not first.startswith("unresolvable-")
 
 
+@pytest.mark.tooling
 def test_a_foreign_parallel_coverage_file_reaches_the_report(tmp_path):
     """R3 spike - THE load-bearing mechanism of the cache-backed gate (026): a parallel-mode
     coverage data file present beside the session's data file is merged by
@@ -379,6 +382,7 @@ def test_a_foreign_parallel_coverage_file_reaches_the_report(tmp_path):
     assert d.returncode == 0, f"the foreign data file's lines must reach the combined report:\n{d.stdout}{d.stderr}"
 
 
+@pytest.mark.tooling
 @pytest.mark.rolls_map
 def test_the_gate_reuses_a_verified_hit(tmp_path, monkeypatch, clean_gatehit):
     """026 guarantee 1: on a verified hit NO generation executes in any process - and a hit is
@@ -399,6 +403,7 @@ def test_the_gate_reuses_a_verified_hit(tmp_path, monkeypatch, clean_gatehit):
     assert gencache.gate_obtain(str(gen)) == (str(out), "HIT", None)
 
 
+@pytest.mark.tooling
 @pytest.mark.rolls_map
 def test_a_hit_still_runs_current_checks(tmp_path, monkeypatch, clean_gatehit):
     """026 guarantee 5: checking is never cached - the gate's caller judges whatever manifest the
@@ -421,6 +426,7 @@ def test_a_hit_still_runs_current_checks(tmp_path, monkeypatch, clean_gatehit):
     assert rc != 0, "the current check battery must judge a served manifest - a hit is not a verdict"
 
 
+@pytest.mark.tooling
 @pytest.mark.rolls_map
 def test_an_entry_without_coverage_data_is_a_gate_miss(tmp_path, monkeypatch, clean_gatehit):
     """026 guarantee 4: an iteration-path entry (regen.py stores no coverage) cannot satisfy the
@@ -439,6 +445,7 @@ def test_an_entry_without_coverage_data_is_a_gate_miss(tmp_path, monkeypatch, cl
     assert how2 == "HIT"
 
 
+@pytest.mark.tooling
 @pytest.mark.rolls_map
 def test_gate_miss_stores_coverage_the_next_hit_replays(tmp_path, monkeypatch, clean_gatehit):
     """026 guarantees 1+2 composed: the coverage a miss stores is byte-for-byte the file a later
@@ -456,6 +463,7 @@ def test_gate_miss_stores_coverage_the_next_hit_replays(tmp_path, monkeypatch, c
     assert Path(new.pop()).read_bytes() == stored
 
 
+@pytest.mark.tooling
 @pytest.mark.rolls_map
 def test_a_hit_is_refused_when_its_stored_coverage_names_a_file_that_is_gone(tmp_path, monkeypatch, clean_gatehit):
     """A stored coverage file that measures a DELETED module makes the entry unusable, so it is a
@@ -489,6 +497,7 @@ def test_a_hit_is_refused_when_its_stored_coverage_names_a_file_that_is_gone(tmp
     assert how == "REGENERATED", "an entry whose coverage measures a vanished file must regenerate, not replay"
 
 
+@pytest.mark.tooling
 @pytest.mark.rolls_map
 def test_gate_bypass_forces_regeneration(tmp_path, monkeypatch, clean_gatehit):
     """026 guarantee 3 - and the test OWNS the environment (the DIAGRAM_ALLOW_SLOW_GENS lesson,
@@ -545,6 +554,7 @@ def test_the_real_pool_round_trips_through_the_cache():
             Path(p).write_bytes(data)
 
 
+@pytest.mark.tooling
 def test_regen_skips_frozen_legacy_maps():
     """The 2026-08-16 legacy freeze, enforced at the ITERATION path: `regen.py pool/*/*.gen.py`
     must not rewrite a frozen exhibit - the engine drifts freely now, so a re-run would replace

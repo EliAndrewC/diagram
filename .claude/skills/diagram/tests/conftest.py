@@ -41,17 +41,38 @@ def pytest_collection_modifyitems(config, items):  # type: ignore[no-untyped-def
     """TIER RELEVANCE (GM 2026-08-26, feature 133 T17): while scope is locked to the reference hamlet,
     a test tagged `tiers("town", "city")` cannot say anything about the map on the sheet - skip it.
     A test with no `tiers` marker is relevant to every tier and always runs."""
+    from tests._scope import EXHAUSTIVE
+
     tier = config.getoption("--tier")
-    if not tier:
-        return
+    skip_tooling = _tooling_unchanged() and not EXHAUSTIVE
     keep, drop = [], []
     for item in items:
         m = item.get_closest_marker("tiers")
-        (drop if m is not None and tier not in m.args else keep).append(item)
+        if (m is not None and tier and tier not in m.args) or (skip_tooling and (item.get_closest_marker("tooling") is not None or "/tests/ci/" in str(item.fspath))):
+            drop.append(item)
+        else:
+            keep.append(item)
     if drop:
         config.hook.pytest_deselected(items=drop)
         items[:] = keep
         config._tier_dropped = len(drop)  # type: ignore[attr-defined]
+
+
+def _tooling_unchanged() -> bool:
+    """TOOLING TESTS RUN ONLY WHEN THE TOOLING CHANGED (GM 2026-08-26, T22): true when the tooling hash
+    recorded by the last green `make done` equals the current one. Any doubt (no record, no git
+    root, a read error) means the tests run."""
+    import json
+    from pathlib import Path
+
+    try:
+        from l7r.diagram.ci import state
+
+        root = Path(__file__).resolve().parents[4]
+        rec = json.loads((root / state.STATE_FILE).read_text(encoding="utf-8"))
+        return bool(rec.get("tooling")) and rec["tooling"] == state.tooling_hash(root)
+    except Exception:  # noqa: BLE001 - any failure to decide means "run them"
+        return False
 
 
 _TIER_DIRS = {"hamlet": "hamlets", "village": "villages", "town": "towns", "city": "provincial-cities", "capital": "capitals"}
@@ -73,4 +94,6 @@ def pytest_report_header(config):  # type: ignore[no-untyped-def]
     if tier:
         lines.append(f"tier: {tier} - tests tagged for other tiers only are deselected (scope locked to the reference settlement)")
     lines.append("scope: EXHAUSTIVE - every sweep in full" if EXHAUSTIVE else "scope: quick - sweeps run their documented subset (EXHAUSTIVE=1 for the full form)")
+    if not EXHAUSTIVE and _tooling_unchanged():
+        lines.append("tooling: unchanged since the last green gate - the make/ci/pipeline tooling tests are deselected")
     return lines

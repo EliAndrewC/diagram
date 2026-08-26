@@ -49,6 +49,23 @@ def test_a_green_subset_run_does_not_forget_a_green_done(repo: Path) -> None:
     assert st.target == "quick", "changed content: the quick record is the truth now"
 
 
+def test_a_green_done_records_the_tooling_hash_and_a_build_file_edit_moves_it(repo: Path) -> None:
+    """GM 2026-08-26 (T22): `make quick` skips the `tooling` tests while the tooling is unchanged
+    since the last green gate - so the gate must record the hash, a quick must not re-vouch, and
+    any tooling file (the fixture skill's build file here) must move it."""
+    build = repo / S / "Makefile"
+    build.write_text("quick:\n\techo hi\n", encoding="utf-8")
+    st = state.write(repo, state.GREEN, "done")
+    assert st.tooling and st.tooling == state.tooling_hash(repo)
+    st_q = state.write(repo, state.GREEN, "quick")
+    assert st_q.tooling == st.tooling, "a quick carries the gate's tooling record forward, it does not re-vouch"
+    build.write_text("quick:\n\techo changed\n", encoding="utf-8")
+    assert state.tooling_hash(repo) != st.tooling
+    st_r = state.write(repo, state.GREEN, "done", reused=True)
+    assert st_r.tooling == st.tooling, "a short-circuited gate carries the last REAL gate's tooling record - it ran nothing"
+    assert state.write(repo, state.GREEN, "done").tooling == state.tooling_hash(repo), "a real gate re-vouches"
+
+
 def test_a_locked_scope_record_does_not_survive_the_unlock(repo: Path) -> None:
     """Under `scope reference` the gate defers the map-rolling tests (GM 2026-08-26), so its green
     record is reused while the lock holds and refused the moment it is released."""

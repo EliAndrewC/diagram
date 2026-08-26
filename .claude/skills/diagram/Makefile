@@ -84,7 +84,7 @@ done:
 #  ends the target before the reference step. Re-stamping is safe because the key includes the stamp's own hash.)
 	@if [ -z "$(FULL)" ] && python3 -m l7r.diagram.ci verified-done; then \
 	  root=$$(git rev-parse --show-toplevel 2>/dev/null) && [ -n "$$root" ] && python3 "$$root/scripts/gate-stamp.py" --write diagram || true; \
-	  $(LOGRUN) done reference 0 already-verified; $(STATE) green-local done; \
+	  $(LOGRUN) done reference 0 already-verified; $(STATE) green-local done reused; \
 	  printf '\n\033[1mgate green\033[0m (already verified - nothing the gate exercises has changed since the last green run)\n'; exit 0; \
 	fi; \
 	$(if $(FULL),$(MAKE) --no-print-directory bypass-audit REF_WHY="$(REF_WHY)" || exit 1;,) \
@@ -729,6 +729,9 @@ REFERENCE_TIER = hamlet
 # EXHAUSTIVE=1 (GM 2026-08-26, T19): tests that sweep seeds / kinds / cardinals run the FULL sweep instead of
 # their documented quick subset (tests/_scope.py). `make quick EXHAUSTIVE=1`; `make done EXHAUSTIVE=1`.
 EXHAUSTIVE_ENV = $(if $(EXHAUSTIVE),L7R_TESTS_EXHAUSTIVE=1,)
+# THE GATE IS ALWAYS EXHAUSTIVE (constitution v2.9.0, GM 2026-08-26): `make quick` runs each test's quick form,
+# `make done` its full form - the corpus, the full matrices, the full-size canvases, the tooling tests.
+GATE_EXHAUSTIVE_ENV = L7R_TESTS_EXHAUSTIVE=1
 TIER_SELECT = $(if $(COV_FLOORS),,$(if $(filter reference,$(SCOPE_STATE)),--tier $(REFERENCE_TIER),))
 
 # (GUARD_EDIT_OK: feature 132 - test-full rolls every pool map, so the scope lock refuses it before `test` starts)
@@ -765,7 +768,7 @@ test:
 # --dist worksteal (GM 2026-08-26, the make quick profile): the default `load` scheduler hands each worker a
 # fixed slice up front, so on a suite whose tests range from 5 ms to 4 s the last worker finishes ~5 s after
 # the rest; worksteal lets idle workers take from busy ones. Measured on quick: 27.5 s -> 22.0 s wall.
-	@if python3 -c "import xdist" >/dev/null 2>&1; then $(EXHAUSTIVE_ENV) python3 -m pytest -n auto --dist worksteal $(DESELECT) $(ROLL_DESELECT) $(TIER_SELECT); else $(EXHAUSTIVE_ENV) python3 -m pytest $(DESELECT) $(ROLL_DESELECT) $(TIER_SELECT); fi; ec=$$?; \
+	@if python3 -c "import xdist" >/dev/null 2>&1; then $(GATE_EXHAUSTIVE_ENV) python3 -m pytest -n auto --dist worksteal $(DESELECT) $(ROLL_DESELECT) $(TIER_SELECT); else $(GATE_EXHAUSTIVE_ENV) python3 -m pytest $(DESELECT) $(ROLL_DESELECT) $(TIER_SELECT); fi; ec=$$?; \
 	if [ $$ec -ne 0 ]; then python3 ../../../scripts/uncovered-in-diff.py || true; exit $$ec; fi; \
 	python3 -m coverage combine --append >/dev/null 2>&1 || true; \
 	if [ -z "$(COV_FLOORS)" ]; then \

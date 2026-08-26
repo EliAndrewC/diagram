@@ -38,6 +38,7 @@ import os
 import pytest
 
 from l7r.diagram import check_village
+from tests._scope import EXHAUSTIVE
 
 HERE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))  # the skill root; the tests live one level down in tests/
 CORPUS = sorted(glob.glob(os.path.join(HERE, "pool", "regressions", "*.json")))
@@ -82,6 +83,7 @@ def test_corpus_is_not_empty():
     assert CORPUS, "no regression fixtures found in pool/regressions/"
 
 
+@pytest.mark.skipif(not EXHAUSTIVE, reason="the bad-map corpus replays at the GATE, not in quick (GM 2026-08-26, T22: most fixtures date from hand placement; every one still runs at every make done)")
 @pytest.mark.parametrize("path", _corpus_params())
 def test_regression_fixture_still_fires(path):
     M, fires = _load(path)

@@ -107,6 +107,12 @@ markers = [
     # homestead engine, so a test naming either stays in). The long-run idea, recorded in docs/iteration-loop.md:
     # derive relevance from the DIFF since the last green run instead of from hand tags.
     "tiers(*names): the settlement tiers this test is relevant to (hamlet, village, town, city, capital). Untagged = all. `--tier X` deselects tests whose tiers exclude X.",
+    # `tooling` (GM 2026-08-26, T22): a test that exercises the Makefile, the scripts, the ci dispatcher, the
+    # pipeline or the invocation guard by RUNNING them (make in a fixture, git repos in tmp, coverage subprocesses).
+    # Skipped by `make quick` while the tooling files are unchanged since the last green `make done` (the state
+    # file records their hash); always run at the gate. "no reason to run a five-CPU-second test to validate the
+    # makefile behavior if we don't make any changes to the makefile itself."
+    "tooling: exercises the make/ci/pipeline tooling by running it. Skipped by quick when the tooling is unchanged since the last green gate; always run at the gate.",
 ]
 
 [tool.coverage.run]

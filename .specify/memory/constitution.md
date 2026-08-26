@@ -1,7 +1,14 @@
 <!--
 SYNC IMPACT REPORT
 ==================
-Version change: 2.7.0 → 2.8.0
+Version change: 2.8.0 → 2.9.0
+
+Version 2.9.0 (amended 2026-08-26, feature 133 T22): "Quick runs the unit form; the gate runs the
+integration form" - the GM's clarification that the quick suite had been carrying integration and
+end-to-end tests at unit-test size and cost. Four consequences written in: the gate is always
+EXHAUSTIVE; a test with a quick form runs it in quick and its full form at the gate; tests that
+exercise the tooling by running it carry `tooling` and run in quick only when the tooling changed
+since the last green gate; the bad-map corpus replays at the gate, not in quick. MINOR.
 
 Version 2.8.0 (amended 2026-08-26, feature 133 T19): the Development Workflow gains "A test's cost is a
 cost, and the phase sets the standard" - the GM's ruling that, in this phase, a slow test must earn
@@ -1630,6 +1637,41 @@ and lands its findings as follow-ups. Every pass is a row in
 `docs/review-ledger.md`, and a miss becomes a rule in the agent, proven to
 fire on the unfixed artifact. Doctrine: `.claude/skills/diagram/dev/reviews.md`.
 
+**Quick runs the unit form; the gate runs the integration form (GM 2026-08-26,
+feature 133 T22).** The GM, on the audit: *"if you look at what we are testing
+right now, this is not such a large project that I would expect the tests to
+be taking as long as they are. So I think that that means that we are doing
+what amounts to integration tests or end to end tests at the quick unit test
+level, which is the wrong place for them to be even though the tests that we
+have implemented are valid and good."* So `make quick` is a UNIT suite and
+`make done` (locally now, on AWS later) is the INTEGRATION suite, and the
+same test may belong to both in two forms:
+
+1. **A test with a quick form runs it in quick and its full form at the
+   gate** - a 2-fan comb and then the 5-fan one, a 600 px scatter and then
+   the 1,000 px one, one cardinal per axis and then all four, one axis of a
+   matrix and then the product. `tests/_scope.py` (`full_or`, `subset`,
+   `EXHAUSTIVE`); the gate always sets `EXHAUSTIVE`. Moving the full form to
+   the gate is not dropping it.
+2. **A test that exercises the tooling BY RUNNING IT** - `make` in a fixture,
+   git repositories in tmp, coverage subprocesses, the invocation guard's
+   process tree - carries `tooling` and runs in quick only when the tooling
+   changed since the last green gate (the gate records a hash over the build
+   file, pyproject, `scripts/`, the ci and pipeline packages, the switches,
+   the invocation guard and the suite's conftest). Real tooling tests, not
+   mocks: *"paying the price of that type of test in order to ensure
+   correctness is probably worthwhile, but only if we're running it in
+   situations where it is actually called for."*
+3. **The bad-map corpus replays at the gate**, every fixture, every time -
+   and not in quick: most of it dates from hand placement, and a saved bad
+   map proves a CHECK, not the map on the sheet.
+4. **A proof of tooling** (a cache is faithful, a roster is complete, a
+   whole-tree scan) is gate-only for the same reason.
+
+The unit form must still prove the property; what it drops is size and
+repetition, never the assertion. And the gate is the place the full forms
+live, which is why nothing lands without it.
+
 **A test's cost is a cost, and the phase sets the standard (GM 2026-08-26,
 feature 133 T19).** The GM: *"our project has gone through a phase in which
 for a long time, we had problems with the maps being wrong. And so we really
@@ -1722,4 +1764,4 @@ document wins; where this document is silent, defer to the project's
 guidance. This constitution is the higher-level authority; CLAUDE.md
 operationalizes it.
 
-**Version**: 2.8.0 | **Ratified**: 2026-05-27 | **Last Amended**: 2026-08-26
+**Version**: 2.9.0 | **Ratified**: 2026-05-27 | **Last Amended**: 2026-08-26

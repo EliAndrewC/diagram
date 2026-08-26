@@ -38,6 +38,7 @@ class VerificationState:
     commit: str
     engine_key: str = ""  # delta.engine_key_worktree at the time of the run - what a green local `done` VOUCHES for (GM 2026-08-25)
     scope: str = ""  # the scope switch when written; "reference" = the map-rolling tests were deferred
+    tooling: str = ""  # tooling_hash at the last green `done` - `make quick` skips the `tooling` tests while it still matches
 
 
 def _gate_stamp(root: Path) -> ModuleType:
@@ -75,10 +76,11 @@ def read(root: Path) -> VerificationState | None:
         commit=str(data.get("commit", "")),
         engine_key=str(data.get("engine_key", "")),
         scope=str(data.get("scope", "")),
+        tooling=str(data.get("tooling", "")),
     )
 
 
-def write(root: Path, event: str, target: str) -> VerificationState:
+def write(root: Path, event: str, target: str, reused: bool = False) -> VerificationState:
     if event not in (GREEN, FAILED):
         raise ValueError(f"unknown verification event {event!r} (want {GREEN} or {FAILED})")
     from l7r.diagram.ci.delta import engine_key_worktree
@@ -109,9 +111,38 @@ def write(root: Path, event: str, target: str) -> VerificationState:
         commit=_commit(root),
         engine_key=engine_key_worktree(root),
         scope=_scope(root),
+        # only a gate that RAN vouches for the tooling; a short-circuited `done` (`reused`) carries the
+        # last real gate's record forward - the first cut re-hashed on the short-circuit and quick then
+        # skipped tooling tests no gate had run on a changed Makefile (caught 2026-08-26, T22)
+        tooling=tooling_hash(root) if (target == "done" and not reused) else (prior.tooling if prior is not None else ""),
     )
     (root / STATE_FILE).write_text(json.dumps(asdict(st), indent=2) + "\n", encoding="utf-8")
     return st
+
+
+# The files the `tooling` tests exercise (tests/conftest.py, GM 2026-08-26, T22). Hashed on every green
+# `make done`; `make quick` skips the tooling tests while the hash is unchanged.
+TOOLING_PATHS = ("Makefile", "pyproject.toml", "l7r/diagram/ci", "l7r/diagram/pipeline", "l7r/diagram/switches.py", "l7r/diagram/_invocation.py", "tests/conftest.py", "tests/_scope.py")
+
+
+def tooling_hash(root: Path) -> str:
+    """A content hash over the tooling the `tooling` tests run: the skill's Makefile/pyproject, the ci
+    and pipeline packages, the switches and the invocation guard, the suite's conftest - plus the
+    repo's scripts/. Raw bytes, deliberately: a Makefile comment IS a Makefile change worth one run."""
+    import hashlib
+
+    skill = root / ".claude" / "skills" / "diagram"
+    h = hashlib.sha256()
+    files: list[Path] = []
+    for rel in TOOLING_PATHS:
+        p = skill / rel
+        files += sorted(p.rglob("*")) if p.is_dir() else [p]
+    files += sorted((root / "scripts").glob("*"))
+    for f in files:
+        if f.is_file() and "__pycache__" not in f.parts:
+            h.update(str(f.relative_to(root)).encode())
+            h.update(f.read_bytes())
+    return h.hexdigest()
 
 
 def _scope(root: Path) -> str:
