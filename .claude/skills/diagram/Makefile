@@ -735,7 +735,10 @@ REFERENCE_TIER = hamlet
 # once on the laptop, so flooding every core only slows the others. CodeBuild is dedicated to the run, so
 # it takes `auto` (36 vCPU on the xlarge). CODEBUILD_BUILD_ID is set in every CodeBuild build and nowhere
 # else - the inverse of "is this the laptop", and it needs no hostname.
-XDIST_WORKERS = $(if $(CODEBUILD_BUILD_ID),auto,8)
+# ...and never more workers than the box has cores (GM 2026-08-26: "I wouldn't want to run eight workers on a
+# machine that only has four cores") - min(8, nproc). CPU_COUNT is overridable so the small-box branch is testable.
+CPU_COUNT ?= $(shell nproc 2>/dev/null || echo 8)
+XDIST_WORKERS = $(if $(CODEBUILD_BUILD_ID),auto,$(shell [ "$(CPU_COUNT)" -lt 8 ] && echo "$(CPU_COUNT)" || echo 8))
 # EXHAUSTIVE=1 (GM 2026-08-26, T19): tests that sweep seeds / kinds / cardinals run the FULL sweep instead of
 # their documented quick subset (tests/_scope.py). `make quick EXHAUSTIVE=1`; `make done EXHAUSTIVE=1`.
 EXHAUSTIVE_ENV = $(if $(EXHAUSTIVE),L7R_TESTS_EXHAUSTIVE=1,)

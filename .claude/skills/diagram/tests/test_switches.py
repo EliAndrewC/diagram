@@ -165,9 +165,10 @@ def test_make_uses_eight_workers_on_a_shared_box_and_every_core_on_codebuild(fix
     """GM 2026-08-26 (T23): the quick set is as fast on 8 workers as on 22, and the laptop runs several
     sessions at once - so 8 everywhere except CodeBuild, which is dedicated and announces itself."""
     monkeypatch.delenv("CODEBUILD_BUILD_ID", raising=False)
-    assert "-n 8" in make(fixture_skill, "-n", "quick").stdout
+    assert "-n 8" in make(fixture_skill, "-n", "quick", "CPU_COUNT=22").stdout
+    assert "-n 4" in make(fixture_skill, "-n", "quick", "CPU_COUNT=4").stdout, "never more workers than cores (GM 2026-08-26)"
     monkeypatch.setenv("CODEBUILD_BUILD_ID", "diagram-merge:abc")
-    assert "-n auto" in make(fixture_skill, "-n", "quick").stdout
+    assert "-n auto" in make(fixture_skill, "-n", "quick", "CPU_COUNT=4").stdout
 
 
 def test_make_test_defers_the_map_rolling_tests_under_the_lock(fixture_skill: Path, monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]) -> None:
