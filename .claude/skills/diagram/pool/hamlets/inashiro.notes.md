@@ -1175,3 +1175,10 @@ anywhere on the sheet; grass front wobbles +-10 units, no ruled line, no bare st
 on the dry side. PASS. Catch-rate: round 2 was a reviewer miss (recorded in `docs/review-ledger.md`);
 round 3 caught nothing new beyond two nitpicks (this entry; the audit is blind to wet ground drawn
 wider than its recorded polygon - not the case here).
+
+**Research pass (GM, same day).** The margin form was recorded as a guess; the GM asked for the
+research. Found: the hydrosere reed -> sedge/wet meadow -> alder/willow -> dry ground in the Japanese
+and Chinese record; red pine a dry-slope tree. So grass grading into the reeds with no pine or brush
+is ACCURATE; an alder-willow carr along the toe is a second supportable form and a knob candidate
+(not built). `research/vegetation.md`. And a constitution rule (v2.7.0): a guess is the last resort -
+the research pass always runs first.

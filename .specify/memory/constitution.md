@@ -1,7 +1,12 @@
 <!--
 SYNC IMPACT REPORT
 ==================
-Version change: 2.5.0 → 2.6.0
+Version change: 2.6.0 → 2.7.0
+
+Version 2.7.0 (amended 2026-08-26, feature 133): Principle XII gains "A GUESS IS THE LAST RESORT - THE
+RESEARCH PASS ALWAYS RUNS FIRST": any decision that would be labelled a guess gets the search pass
+before it is recorded, whoever raised the question and however small it looks (the GM: *"that is the
+kind of project that this is"*). MINOR.
 
 Version 2.6.0 (amended 2026-08-26, feature 133): the Development Workflow gains "Reviews run at
 acceptance and unlock, in the background" - under the scope lock the GM is the reviewer of the one
@@ -1098,6 +1103,25 @@ element whose DEGREE is uncertain along a continuum (how large, how dense, how
 often) where the project needs one figure to draw. Where the uncertainty is
 between DISTINCT FORMS, it is a knob.
 
+**A GUESS IS THE LAST RESORT - THE RESEARCH PASS ALWAYS RUNS FIRST (GM 2026-08-26).**
+The rule above ("research precedes a ruling") binds when a question is about
+to be put to the GM. This one binds EARLIER and WIDER: whenever a session is
+about to make any decision about how a place was built, farmed, planted or
+lived in and does not know what the record would show - whether the question
+came from the GM, a reviewer, a test, or the session's own uncertainty, and
+however small it looks - it runs the search pass FIRST, before choosing and
+before writing the decision down. The "guess" label of the three-way
+classification below is reserved for a record that was searched and found
+silent; an unsearched decision may not wear it. The GM: *"if a question came
+up where we had to make this kind of a decision and we didn't know what the
+research would show, we should just always do the research. because that is
+the kind of project that this is."* Motivating case: the marsh-margin form
+(feature 133 T12) was chosen on ecological reasoning and recorded as a guess;
+the research pass, run the same day on the GM's instruction, found the reed ->
+sedge -> alder/willow hydrosere in the Japanese and Chinese record, confirmed
+the form as accurate, and surfaced a second supportable form (an alder-willow
+carr) that became a knob candidate - none of which a guess could have given.
+
 **EVERY RENDERING DECISION IS CAPTURED FOR THE READER WHO WILL CLICK ON IT (GM
 2026-08-26).** The record-the-why rules (`CLAUDE.md`: the why of every
 research-driven rule; the alternatives declined when a limitation is
@@ -1669,4 +1693,4 @@ document wins; where this document is silent, defer to the project's
 guidance. This constitution is the higher-level authority; CLAUDE.md
 operationalizes it.
 
-**Version**: 2.6.0 | **Ratified**: 2026-05-27 | **Last Amended**: 2026-08-26
+**Version**: 2.7.0 | **Ratified**: 2026-05-27 | **Last Amended**: 2026-08-26

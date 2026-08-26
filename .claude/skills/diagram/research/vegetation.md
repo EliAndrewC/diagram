@@ -61,16 +61,42 @@ Every entry: what the research found, the decision it drove, and any deliberate 
 - *Deliberate exclusions.* (1) STREAMS take no margin - a natural brook bank is vegetated to the water's edge, and the 2026-08-16 settlement-review pass explicitly praised the ABSENCE of a sterile halo on the banks; only the engineered courses are maintained ground. (2) The reed `marsh` keeps its no-margin rule from the crop-margin entry - reeds ARE the water fringe. (3) Grass-tuft blade TIPS keep their few-feet lean allowance, exactly as at crop edges.
 
 
-## The marsh margin: grass grades into reed; woody cover stands on the dry ground - GUESS
+## The marsh margin: reed -> sedge/grass -> dry ground; woody at a reed edge is alder or willow, never pine - ACCURATE (researched 2026-08-26)
 
-**Label: guess** (reasoning, unsourced; GM 2026-08-26, feature 133 T12). When the scrub scatter was
-made to stop at the marsh, a hard cut at the polygon exposed a ruled line (the reeds feather inset
-from it), and letting every scrub family thin into the reeds put pines and brush standing in the
-bog. The form chosen - grass blades alone grade into the reeds over the marsh's own feather, pines
-and brush dots stop at the polygon - rests on the general ecology of a wetland margin (hydrophytic
-sedge and grass toward the water, shrubs and trees on the drier rise) and on the GM's reading of the
-map, not on a searched source for a Chinese or Japanese paddy-valley toe. It is plausible and it is
-a guess; a reader of the future interactive map is told so. What the marsh glyphs ARE: teal reed
-tufts (*ashi / yoshi*, 葦, the common reed - not bamboo), a soft blue-green wet tint, and pale
-glints of standing water; the olive blades at its margin are the dry commons' grass fading in.
+**Label: accurate** for the rule as drawn (grass alone grades into the reeds; no pine or brush in
+the marsh); **the managed-margin reasoning below is unsourced and marked**. Researched 2026-08-26
+on the GM's instruction after the T12 reviewer raised it (it had been recorded as a GUESS the same
+day - the label was honest and the research was owed).
+
+**What the record says.** The textbook hydrosere - the zonation from open water to dry land that
+every lowland wetland shows in space - runs open water -> littoral -> **reed swamp** (*Phragmites*,
+ヨシ) -> **sedge / wet meadow** (*Carex*, *Calamagrostis*, スゲ) -> **alluvial / swamp WOODLAND** ->
+dry ground ([Packer et al. 2017, Biological Flora of *Phragmites australis*](https://besjournals.onlinelibrary.wiley.com/doi/full/10.1111/1365-2745.12797)).
+In Japan the woody stage is **alder** (*Alnus japonica*, ハンノキ林) and **willow** (タチヤナギ群落):
+the Kushiro Mire, mainly reed, is being invaded by alder where it dries, and the reed-sedge
+community with a fluctuating water table is what resists that invasion
+([Kushiro Mire, Ecohydrology & Hydrobiology 2014](https://www.sciencedirect.com/science/article/abs/pii/S1642359314000706));
+a northern-Japan wetland classified into reed swamp, *Carex lyngbyei* marsh, and reed/*Calamagrostis*
+grassland with *Spiraea* shrubs ([Otanoshike, Ecological Research 2004](https://link.springer.com/article/10.1111/j.1440-1703.2004.00644.x));
+the national river-vegetation classification names ヨシ群落, マコモ群落 and タチヤナギ群落 as the
+low-wetland communities and ハンノキ林 as the eutrophic-mire woodland
+([MLIT river-environment vegetation classes](https://www.nilim.go.jp/lab/fbg/ksnkankyo/mizukokuweb/system/maegaki.files/shiryo2.pdf);
+[Hotes, wetland ecosystem diversity](https://www.airies.or.jp/attach.php/6a6f75726e616c5f31322d316a706e/save/0/0/12_1-04.pdf)).
+Northeast-China floodplains show the same ladder: emergent *Carex* marsh streamside, meadow marsh
+at intermediate flooding, *Calamagrostis* wet meadow on the terrace
+([PLOS One 2016](https://journals.plos.org/plosone/article?id=10.1371%2Fjournal.pone.0153972)).
+**Red pine** (*Pinus densiflora*, アカマツ) - the scraggly pine our scrub draws - is a tree of
+ridges, rocky slopes and well-drained poor soil, drought-tolerant, absent from wet lowland
+([Gymnosperm Database](https://www.conifers.org/pi/Pinus_densiflora.php); [Mt. Takao museum](https://www.takao599museum.jp/treasures/selected/1419/?lang=en)).
+
+**The decision it drives.** (1) Pines and dry brush inside the reeds: unsupported in every source -
+the hard exclusion stands as ACCURATE. (2) Grass grading into the reeds over the margin: ACCURATE -
+it is the sedge / wet-meadow zone of the hydrosere, drawn with the commons' blade glyph. (3) Woody
+plants DO stand at a reed margin in the natural state - but they are alder and willow, a wet
+woodland the engine has no glyph for. **Two supportable forms, so a KNOB, not a choice (Principle
+XII):** a managed toe (reeds and sedge cut for thatch and fodder, the margin kept open - the current
+form) versus an alder-willow carr along the toe (a distinct wet-woodland glyph, deliberately unlike
+the dry scrub and the fengshui grove). Recorded as future work, not built here; when built, it is a
+per-settlement roll like every other knob. *Unsourced, and labelled so:* that Edo-period reed beds
+were mown (ヨシ刈り, 茅場) and that mowing is what kept the margin open - plausible, searched, not found.
 **Grounds:** `settlements/vegetation.md` "Scrub NEVER scatters into a marsh"; `cover.py` `_in_soft`.
