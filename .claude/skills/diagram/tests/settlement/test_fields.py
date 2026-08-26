@@ -155,7 +155,7 @@ def test_bund_junctions_pile_earth_only_where_bunds_actually_cross():
 def test_land_use_overlay_draws_and_records_each_kind():
     from l7r.diagram.waterfields import build_comb
 
-    net = build_comb(1300, 1700, (520, 220), full_or(3, 5), down_deg=90, field_fall=760, offtakes_a=(0.32, 0.7), offtakes_b=())
+    net = build_comb(1300, 1700, (520, 220), full_or(2, 5), down_deg=90, field_fall=760, offtakes_a=(0.32, 0.7), offtakes_b=())
     for overlay in ("mulberry_fishpond", "lotus", "tea_fringe"):
         s = Settlement(1400, 1800, seed=3)
         s.meta(name="LU", scale="village", ftpx=1, down_deg=90)
@@ -182,7 +182,7 @@ def test_land_use_overlay_topography_paths():
     growth, and the named wholesale-conversion opt-out that ignores the topographic filter."""
     from l7r.diagram.waterfields import build_comb
 
-    net = build_comb(1300, 1700, (520, 220), full_or(3, 5), down_deg=90, field_fall=760, offtakes_a=(0.32, 0.7), offtakes_b=())
+    net = build_comb(1300, 1700, (520, 220), full_or(2, 5), down_deg=90, field_fall=760, offtakes_a=(0.32, 0.7), offtakes_b=())
     dry = {**net, "plots": [{**p, "low": False} for p in net["plots"]]}  # a field with NO low/wet ground
     s = Settlement(1400, 1800, seed=3)
     s.meta(name="LU1", scale="village", ftpx=1, down_deg=90)
@@ -255,14 +255,14 @@ def test_draw_comb_field_existing_stream_and_cascade_sources():
 
     s = Settlement(W=1400, H=1400, seed=5)
     s.meta(name="Cs", scale="town", ftpx=1, down_deg=90)
-    net = build_comb(1400, 1400, (700, 200), full_or(2, 5), down_deg=90, field_fall=400)
+    net = build_comb(1400, 1400, (700, 200), full_or(1, 5), down_deg=90, field_fall=400)
     net["brook"] = []
     n_streams = len(s.M["streams"])
     s.draw_comb_field(net, "f1", {"kind": "stream"})  # no polyline -> no stream drawn
     assert len(s.M["streams"]) == n_streams
     assert s.M["channels"][-1]["to"] == {"kind": "field", "name": "f1"}  # hairline still recorded
     n_chan = len(s.M["channels"])
-    net2 = build_comb(1400, 1400, (700, 200), full_or(3, 6), down_deg=90, field_fall=400)
+    net2 = build_comb(1400, 1400, (700, 200), full_or(2, 6), down_deg=90, field_fall=400)
     net2["brook"] = []
     s.draw_comb_field(net2, "f2", {"kind": "cascade"})  # cascade: the caller wires the source
     assert len(s.M["channels"]) == n_chan  # no hairline appended
@@ -310,7 +310,7 @@ def test_draw_comb_field_drops_hem_plots_on_a_prior_fan():
 
     s = Settlement(W=1400, H=1400, seed=5)
     s.meta(name="Cp", scale="town", ftpx=1, down_deg=90)
-    net = build_comb(1400, 1400, (700, 200), full_or(2, 5), down_deg=90, field_fall=400)
+    net = build_comb(1400, 1400, (700, 200), full_or(1, 5), down_deg=90, field_fall=400)
     net["brook"] = []
     on_rice = [p for p in net["dry_plots"]]
     assert on_rice, "the comb must produce a hem for the drop to be observable"
@@ -454,7 +454,7 @@ def test_draw_comb_field_records_rings_and_beads():
 
     s = Settlement(W=1400, H=1400, seed=5)
     s.meta(name="Rb", scale="town", ftpx=1, down_deg=90)
-    net = build_comb(1400, 1400, (700, 200), full_or(2, 5), down_deg=90, field_fall=400)
+    net = build_comb(1400, 1400, (700, 200), full_or(1, 5), down_deg=90, field_fall=400)
     net["brook"] = []
     s.draw_comb_field(net, "f1", {"kind": "stream"})
     fld = s.M["fields"][-1]
@@ -470,7 +470,7 @@ def test_draw_comb_field_drops_beads_in_pond_water():
 
     s = Settlement(W=1400, H=1400, seed=7)
     s.meta(name="Pw", scale="town", ftpx=1, down_deg=90)
-    net = build_comb(1400, 1400, (700, 200), full_or(2, 5), down_deg=90, field_fall=400)
+    net = build_comb(1400, 1400, (700, 200), full_or(1, 5), down_deg=90, field_fall=400)
     net["brook"] = []
     net["bund_beans"] = [(700.0, 1000.0), (300.0, 300.0), (500.0, 180.0)]
     s.M["field_ponds"] = [{"x": 300.0, "y": 300.0, "rx": 20.0, "ry": 15.0}]
