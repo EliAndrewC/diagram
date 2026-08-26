@@ -1161,4 +1161,4 @@ the first cut folded the toe band into the shared `avoid` list and the marsh, wh
 list, drew no reeds at all; and a marsh recorded BEFORE a scrub pass sits in `block_polys` as a
 no-build bog, which the scatter hard-skipped as if it were a building - `marsh_blocks` now tells the
 two apart. Catch-rate: review round 1 found the ruled edge (a real defect the author's own crops
-had not shown at fit zoom); round 2 pending.
+had not shown at fit zoom); round 2 PASS - it measured the depth profile as the exact complement of the reed ramp and 0 scrub past the feather, and noted (no action) that the west edge ramps over ~25-30 px against the north edge's 46: the soft polygon is `toe_band(down_deg, pad)`, likely wider than the recorded marsh on that side.
