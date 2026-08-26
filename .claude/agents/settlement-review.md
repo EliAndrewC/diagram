@@ -121,10 +121,13 @@ so a combined run just serializes them. Say so in your output if you were handed
    the marsh, trees on a paddy, houses on the road) is adjudicated by a MANIFEST-FREE PIXEL COUNT:
    take every X glyph base from the SVG (the audit's parsers give them to you), map it onto the PNG,
    classify the ground under it by PIXEL COLOR (Y's own fill/tint, not Y's recorded polygon), and
-   count. Any count above a handful is needs-work, whatever `scatter_audit` says - the audit
-   encodes the AUTHOR'S allowances (a feather band, a keep-out inset), and the author's allowance
-   is precisely what is under review. Report the count in the first paragraph. (Motivating miss:
-   2026-08-26, below.)
+   count - of the glyph FAMILIES the complaint names (the GM said "small pine trees and such": pines,
+   brush; a family the recorded doctrine explicitly admits, such as grass grading into reeds per
+   `settlements/vegetation.md`, is counted separately and reported, not charged). Any count above a
+   handful is needs-work, whatever `scatter_audit` says - the audit encodes the AUTHOR'S allowances
+   (a feather band, a keep-out inset), and the author's allowance is precisely what is under review.
+   Report the count in the first paragraph. (Motivating miss and the validated run: 2026-08-26,
+   below.)
 3. **Read the gen docstring and the notes.** Deliberate choices, disclosed divergences and Review-log
    overrules are **settled - do not re-raise them**. But checking that the drawing MATCHES them is
    squarely your job: a knob recorded one way and drawn another is an error.
@@ -405,6 +408,21 @@ they should never have been handed. So when you find something you cannot adjudi
 *(Populated by the Subagent-check TDD procedure in `docs/spec-kit-and-reviews.md`: a rule is added
 here in GENERAL form, run against the unfixed artifact, and only once it FIRES is the specific
 instance recorded below. An example here means the rule demonstrably has teeth.)*
+
+**Pixel-count rule for "X inside Y", 2026-08-26 - Inashiro (reference hamlet), feature 133 T12. RED
+then GREEN, in two attempts.** The GM's complaint: scrub "growing out of the marshland in exactly the
+same pattern" as outside it. Round 2 of the fix let every scrub family thin into the marsh over the
+reeds' 46 px feather; the round-2 review measured the depth profile, found it the designed
+complement of the reed ramp, and PASSED - and the GM, reloading the PNG, said *"it looks like it is
+still overlapping!"* (pines and brush standing in the reeds along 1,600 px of the north seam). The
+first rule tried - "answer the GM's question at fit zoom before measuring" - was run against that
+same round-2 render and STILL PASSED it: the reviewer's downscaled view of a 2,600 px sheet does not
+show what the GM sees at full size, so a vision-only rule has no teeth here. The rule that fired is
+the manifest-free pixel count above: run against the round-2 render it returned needs-work on
+**1,260 scrub bases on marsh-tinted ground inside the frame (2,584 on marsh ink), all within the
+46 px band, at near-outside density for the first 20 px** - the audit's 0 violations overruled
+because the audit encoded the author's own allowance. Round 3 (woody families hard-excluded, grass
+alone grading in) passes the same count at 0 woody bases on bog-colored pixels.
 
 **Traffic-siting rule, 2026-07-27 - Ubame (unwalled town), added in general form and run against the
 unfixed map. RED then GREEN.** The GM's report was "the notice board in Ubame does not look
