@@ -66,6 +66,21 @@ def test_a_green_done_records_the_tooling_hash_and_a_build_file_edit_moves_it(re
     assert state.write(repo, state.GREEN, "done").tooling == state.tooling_hash(repo), "a real gate re-vouches"
 
 
+def test_record_tooling_vouches_for_the_tooling_without_touching_the_gate_verdict(repo: Path) -> None:
+    """`make tooling` (T24) writes only the tooling hash: a standing green `done` keeps its verdict, and
+    with no record at all a `tooling` record is created that `already_verified` still refuses."""
+    st = state.write(repo, state.GREEN, "done")
+    (repo / S / "Makefile").write_text("quick:\n\techo v2\n", encoding="utf-8")
+    h = state.record_tooling(repo)
+    after = state.read(repo)
+    assert after is not None and after.tooling == h == state.tooling_hash(repo) and after.target == "done" and after.hash == st.hash
+    assert state.already_verified(repo)[0], "the gate verdict is untouched"
+    (repo / state.STATE_FILE).unlink()
+    state.record_tooling(repo)
+    fresh = state.read(repo)
+    assert fresh is not None and fresh.target == "tooling" and not state.already_verified(repo)[0]
+
+
 def test_a_locked_scope_record_does_not_survive_the_unlock(repo: Path) -> None:
     """Under `scope reference` the gate defers the map-rolling tests (GM 2026-08-26), so its green
     record is reused while the lock holds and refused the moment it is released."""

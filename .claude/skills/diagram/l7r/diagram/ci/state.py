@@ -153,6 +153,22 @@ def _scope(root: Path) -> str:
     return switches.read(root / ".claude" / "skills" / "diagram").scope.state
 
 
+def record_tooling(root: Path) -> str:
+    """`make tooling` ran every `tooling` test green: vouch for the current tooling in the standing record
+    (or a fresh one) without touching the gate verdict. GM 2026-08-26 (T24): *"I don't want to wait until
+    we have to make another change to reap the performance benefits of not rerunning those tests."*"""
+    prior = read(root)
+    h = tooling_hash(root)
+    if prior is None:
+        st = VerificationState(
+            event=GREEN, target="tooling", utc=time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()), hash=current_hash(root), commit=_commit(root), engine_key="", scope=_scope(root), tooling=h
+        )
+    else:
+        st = VerificationState(**{**asdict(prior), "tooling": h})
+    (root / STATE_FILE).write_text(json.dumps(asdict(st), indent=2) + "\n", encoding="utf-8")
+    return h
+
+
 def already_verified(root: Path) -> tuple[bool, str]:
     """THE LOCAL SHORT-CIRCUIT (feature 132 amendment, GM 2026-08-25: *"apply the same rules that
     decide whether to short circuit and skip AWS tests to these 5 minute tests as well for the

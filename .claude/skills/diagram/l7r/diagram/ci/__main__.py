@@ -33,7 +33,7 @@ def _roots() -> tuple[Path, Path]:
 
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(prog="l7r.diagram.ci", description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("command", choices=["status", "check", "merge", "image", "state", "door", "remote-spend", "engine-key", "verified-done", "remote-ok"])
+    ap.add_argument("command", choices=["status", "check", "merge", "image", "state", "door", "remote-spend", "engine-key", "verified-done", "remote-ok", "tooling-green"])
     ap.add_argument("args", nargs="*")
     ap.add_argument("--full", action="store_true", help="the full sweep (the Makefile has already run the local prompt)")
     ap.add_argument("--target", default=None, help="ci-check only: an expensive operation to run remotely instead of the gate")
@@ -59,6 +59,9 @@ def main(argv: list[str] | None = None) -> int:
         runlog.write_would_have(skill, what, "operation" if what != "ci-check" else "reference", est.minutes, f"remote off: `make {what}` attempted and refused")
         print(f"(recorded as would-have-dispatched, ~{est.minutes:.0f} build-min ~${est.cost_usd:.2f} - `make ci-status` lists these; the period's audit reads them)", file=sys.stderr)
         return 1
+    if a.command == "tooling-green":
+        print(f"tooling: recorded green for {state.record_tooling(root)[:12]} - `make quick` skips the tooling tests until the tooling changes")
+        return 0
     if a.command == "verified-done":
         ok, why = state.already_verified(root)
         print(f"make done: {why}")

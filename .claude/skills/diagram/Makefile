@@ -549,6 +549,9 @@ QUICK_BUDGET = 60
 # guard that blocks a legitimate action without offering the alternative is one that gets worked
 # around - the same gap `make durations` filled for "why is this slow".
 # (GUARD_EDIT_OK: a green test-file records green-local - feature 130, FR-012)
+tooling:        ## run every `tooling` test (make/ci/pipeline, exhaustive) and record them green so `make quick` skips them until the tooling changes
+	@$(GATE_EXHAUSTIVE_ENV) python3 -m pytest -n $(XDIST_WORKERS) -q --no-cov -m tooling && python3 -m l7r.diagram.ci tooling-green
+
 test-file:      ## run ONE test file, whole              FILE=tests/pipeline/test_gencache.py
 	@python3 -m pytest -n $(XDIST_WORKERS) -q --no-cov $(FILE) && $(STATE) green-local test-file
 

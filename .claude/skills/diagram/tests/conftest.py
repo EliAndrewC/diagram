@@ -47,8 +47,10 @@ def pytest_collection_modifyitems(config, items):  # type: ignore[no-untyped-def
     skip_tooling = _tooling_unchanged() and not EXHAUSTIVE
     keep, drop = [], []
     for item in items:
+        if "/tests/ci/" in str(item.fspath) and item.get_closest_marker("tooling") is None:
+            item.add_marker(pytest.mark.tooling)  # the ci package's tests are tooling tests by location (git repos in tmp, the dispatcher)
         m = item.get_closest_marker("tiers")
-        if (m is not None and tier and tier not in m.args) or (skip_tooling and (item.get_closest_marker("tooling") is not None or "/tests/ci/" in str(item.fspath))):
+        if (m is not None and tier and tier not in m.args) or (skip_tooling and item.get_closest_marker("tooling") is not None):
             drop.append(item)
         else:
             keep.append(item)

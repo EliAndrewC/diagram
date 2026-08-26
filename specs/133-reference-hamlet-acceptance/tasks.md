@@ -89,6 +89,10 @@ _(from T11 on, each entry also carries its cycle plan before work starts - `scaf
       given ~2026-08-26T22:20Z | done 2026-08-26T20:58Z | runs: make quick x2 (timed at 1/4/8/22 workers first: 41.4 / 13.4 / 9.9 / 10.1 s)
       note: `XDIST_WORKERS = $(if $(CODEBUILD_BUILD_ID),auto,8)` on every pytest invocation - CodeBuild announces itself, which is the inverse of "is this the laptop" and needs no hostname; proven both ways by a `tooling` test on the real Makefile.
 
+- [x] T24 **`make tooling`** - the GM (2026-08-26): *"surely there is some way that we can force that ... I don't want to wait until we have to make another change to reap the performance benefits of not rerunning those tests."*
+      given ~2026-08-26T22:35Z | done 2026-08-26T21:00Z | runs: make tooling x1 (173 passed, 6 s), make quick x1
+      note: `make tooling` runs every `tooling` test (the marker; tests/ci/ is marked by location in the conftest) in the exhaustive form and, on green, records the tooling hash alone (`ci tooling-green` -> `state.record_tooling`), leaving the gate verdict untouched - tested. quick under the hamlet tier: 1,972 tests + 360 deferred, 8.3 s pytest, 11.6 s wall (30 s / 33 s this morning).
+
 ## Phase 9 - acceptance
 
 - [ ] T90 the would-have-dispatched audit (FR-005): every entry in the period, and for each whether it should have run; each "no" names a tooling change
