@@ -575,7 +575,7 @@ durations:
 
 quick:
 	@python3 -m ruff check --fix l7r/ tests/ && python3 -m ruff format l7r/ tests/ && python3 -m mypy
-	@start=$$(date +%s); python3 -m pytest -n auto -q --no-cov -x --ff -m "not rolls_map and not coverage_only" --deselect tests/test_villages.py; ec=$$?; \
+	@start=$$(date +%s); python3 -m pytest -n auto --dist worksteal -q --no-cov -x --ff -m "not rolls_map and not coverage_only" --deselect tests/test_villages.py; ec=$$?; \
 	  el=$$(( $$(date +%s) - start )); \
 	  if [ $$ec -ne 0 ]; then exit $$ec; fi; \
 	  if [ $$el -gt $(QUICK_BUDGET) ]; then \
@@ -754,7 +754,10 @@ COV_FLOORS =
 
 test:
 	@$(if $(ROLL_DESELECT),printf '\033[1mmap-rolling tests DEFERRED\033[0m (scope locked to the reference settlement) - owed at `make scope-unlock`\n';,)
-	@if python3 -c "import xdist" >/dev/null 2>&1; then python3 -m pytest -n auto $(DESELECT) $(ROLL_DESELECT); else python3 -m pytest $(DESELECT) $(ROLL_DESELECT); fi; ec=$$?; \
+# --dist worksteal (GM 2026-08-26, the make quick profile): the default `load` scheduler hands each worker a
+# fixed slice up front, so on a suite whose tests range from 5 ms to 4 s the last worker finishes ~5 s after
+# the rest; worksteal lets idle workers take from busy ones. Measured on quick: 27.5 s -> 22.0 s wall.
+	@if python3 -c "import xdist" >/dev/null 2>&1; then python3 -m pytest -n auto --dist worksteal $(DESELECT) $(ROLL_DESELECT); else python3 -m pytest $(DESELECT) $(ROLL_DESELECT); fi; ec=$$?; \
 	if [ $$ec -ne 0 ]; then python3 ../../../scripts/uncovered-in-diff.py || true; exit $$ec; fi; \
 	python3 -m coverage combine --append >/dev/null 2>&1 || true; \
 	if [ -z "$(COV_FLOORS)" ]; then \
