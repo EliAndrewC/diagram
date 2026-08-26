@@ -85,6 +85,10 @@ _(from T11 on, each entry also carries its cycle plan before work starts - `scaf
       given ~2026-08-26T21:45Z | done 2026-08-26T20:48Z | runs: make quick x5, make done x2 (both short-circuits - tests/tooling do not re-key the engine, FR-024)
       note: constitution v2.9.0 (the GM's words) + root CLAUDE.md + tests/_scope.py. Mechanism: the gate always sets EXHAUSTIVE; `full_or(quick, full)` picks comb fans (2 vs 5) and canvases (600 vs 1000 px); the corpus is gate-only; `tooling` marker (+ everything under tests/ci/) deselected by quick while `tooling_hash` (Makefile, pyproject, scripts/, ci, pipeline, switches, invocation, conftest) equals the last REAL gate's record - a short-circuited gate carries the prior record forward (the first cut re-hashed on the short-circuit; caught and tested). quick under the hamlet tier: 2,137 tests + 360 skipped in 9.6 s pytest, ~12-13 s wall (the tooling tests run in quick until the next real gate records their hash). Day: 30 s -> ~12 s.
 
+- [x] T23 **eight workers on the laptop, every core on CodeBuild** - the GM (2026-08-26): *"having each session's unit test use only eight cores sounds like it is probably going to make better use of my limited resources ... not flooding the CPU during unit tests in order to play nice with other things that are running there makes sense to me in a way that it would not make sense on something like AWS code build"*
+      given ~2026-08-26T22:20Z | done 2026-08-26T20:58Z | runs: make quick x2 (timed at 1/4/8/22 workers first: 41.4 / 13.4 / 9.9 / 10.1 s)
+      note: `XDIST_WORKERS = $(if $(CODEBUILD_BUILD_ID),auto,8)` on every pytest invocation - CodeBuild announces itself, which is the inverse of "is this the laptop" and needs no hostname; proven both ways by a `tooling` test on the real Makefile.
+
 ## Phase 9 - acceptance
 
 - [ ] T90 the would-have-dispatched audit (FR-005): every entry in the period, and for each whether it should have run; each "no" names a tooling change

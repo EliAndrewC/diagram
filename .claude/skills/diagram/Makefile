@@ -550,7 +550,7 @@ QUICK_BUDGET = 60
 # around - the same gap `make durations` filled for "why is this slow".
 # (GUARD_EDIT_OK: a green test-file records green-local - feature 130, FR-012)
 test-file:      ## run ONE test file, whole              FILE=tests/pipeline/test_gencache.py
-	@python3 -m pytest -n auto -q --no-cov $(FILE) && $(STATE) green-local test-file
+	@python3 -m pytest -n $(XDIST_WORKERS) -q --no-cov $(FILE) && $(STATE) green-local test-file
 
 # WHY EVERY CHECK FAILED ON THE REFERENCE MAP, in detail rather than by name.
 #
@@ -571,11 +571,11 @@ explain:        ## why a map is failing - every check with its message.   SEED=2
 	@SEED=$(or $(SEED),4) python3 .explain.py
 
 durations:
-	@python3 -m pytest -n auto -q --no-cov $(if $(MARK),-m "$(MARK)",-m "not rolls_map and not coverage_only" --deselect tests/test_villages.py) --durations=$(or $(N),12) 2>&1 | grep -E "^[0-9.]+s (call|setup)|passed|failed" | head -$$(( $(or $(N),12) + 2 ))
+	@python3 -m pytest -n $(XDIST_WORKERS) -q --no-cov $(if $(MARK),-m "$(MARK)",-m "not rolls_map and not coverage_only" --deselect tests/test_villages.py) --durations=$(or $(N),12) 2>&1 | grep -E "^[0-9.]+s (call|setup)|passed|failed" | head -$$(( $(or $(N),12) + 2 ))
 
 quick:
 	@python3 -m ruff check --fix l7r/ tests/ && python3 -m ruff format l7r/ tests/ && python3 -m mypy
-	@start=$$(date +%s); $(EXHAUSTIVE_ENV) python3 -m pytest -n auto --dist worksteal -q --no-cov -x --ff -m "not rolls_map and not coverage_only" --deselect tests/test_villages.py $(TIER_SELECT); ec=$$?; \
+	@start=$$(date +%s); $(EXHAUSTIVE_ENV) python3 -m pytest -n $(XDIST_WORKERS) --dist worksteal -q --no-cov -x --ff -m "not rolls_map and not coverage_only" --deselect tests/test_villages.py $(TIER_SELECT); ec=$$?; \
 	  el=$$(( $$(date +%s) - start )); \
 	  if [ $$ec -ne 0 ]; then exit $$ec; fi; \
 	  if [ $$el -gt $(QUICK_BUDGET) ]; then \
@@ -726,6 +726,13 @@ ROLL_DESELECT = $(if $(COV_FLOORS),,$(if $(filter reference,$(SCOPE_STATE)),-m "
 # locked the suite skips tests tagged for other tiers only (`tiers` marker, tests/conftest.py). The tier is
 # named here, once; never under COV_FLOORS.
 REFERENCE_TIER = hamlet
+# WORKERS: 8 ON A SHARED BOX, EVERY CORE ON CODEBUILD (GM 2026-08-26, T23). Measured on the 22-core dev
+# container: the quick set is as fast on 8 workers as on 22 (9.9 vs 10.1 s - each worker costs ~0.17 s to
+# spawn and collect, and past 8 that buys back the parallel gain), while the GM runs several sessions at
+# once on the laptop, so flooding every core only slows the others. CodeBuild is dedicated to the run, so
+# it takes `auto` (36 vCPU on the xlarge). CODEBUILD_BUILD_ID is set in every CodeBuild build and nowhere
+# else - the inverse of "is this the laptop", and it needs no hostname.
+XDIST_WORKERS = $(if $(CODEBUILD_BUILD_ID),auto,8)
 # EXHAUSTIVE=1 (GM 2026-08-26, T19): tests that sweep seeds / kinds / cardinals run the FULL sweep instead of
 # their documented quick subset (tests/_scope.py). `make quick EXHAUSTIVE=1`; `make done EXHAUSTIVE=1`.
 EXHAUSTIVE_ENV = $(if $(EXHAUSTIVE),L7R_TESTS_EXHAUSTIVE=1,)
@@ -768,7 +775,7 @@ test:
 # --dist worksteal (GM 2026-08-26, the make quick profile): the default `load` scheduler hands each worker a
 # fixed slice up front, so on a suite whose tests range from 5 ms to 4 s the last worker finishes ~5 s after
 # the rest; worksteal lets idle workers take from busy ones. Measured on quick: 27.5 s -> 22.0 s wall.
-	@if python3 -c "import xdist" >/dev/null 2>&1; then $(GATE_EXHAUSTIVE_ENV) python3 -m pytest -n auto --dist worksteal $(DESELECT) $(ROLL_DESELECT) $(TIER_SELECT); else $(GATE_EXHAUSTIVE_ENV) python3 -m pytest $(DESELECT) $(ROLL_DESELECT) $(TIER_SELECT); fi; ec=$$?; \
+	@if python3 -c "import xdist" >/dev/null 2>&1; then $(GATE_EXHAUSTIVE_ENV) python3 -m pytest -n $(XDIST_WORKERS) --dist worksteal $(DESELECT) $(ROLL_DESELECT) $(TIER_SELECT); else $(GATE_EXHAUSTIVE_ENV) python3 -m pytest $(DESELECT) $(ROLL_DESELECT) $(TIER_SELECT); fi; ec=$$?; \
 	if [ $$ec -ne 0 ]; then python3 ../../../scripts/uncovered-in-diff.py || true; exit $$ec; fi; \
 	python3 -m coverage combine --append >/dev/null 2>&1 || true; \
 	if [ -z "$(COV_FLOORS)" ]; then \
