@@ -47,6 +47,13 @@ _(from T11 on, each entry also carries its cycle plan before work starts - `scaf
       given ~2026-08-26T16:00Z | done 2026-08-26T16:35Z | elapsed ~35 min (of which one 10-minute experiment timed out: `make durations MARK=` drops the test_villages deselect and ran its 7-minute test) | runs: make quick x5 (timed), make durations x4, hooks-test x1
       note: measured, not guessed - docs/iteration-loop.md "The make quick profile". 30 s -> 23 s: the 9 s critical-path test was a coverage carrier that proves nothing without coverage (`coverage_only` marker, 4 tests out of quick), and `--dist worksteal` closes the scheduler tail. Collection (5.4 s) is the floor, evenly spread. The quick+done rule is enforced by gate-hooks.sh with its test.
 
+- [x] T15 **the gate's three brute-force checks go on the spatial index** - the GM (2026-08-26): *"Yes. Please do that as your next task. That sounds like it is definitely worthwhile."* (on: the two land-fall/hem samplers and `town_margins_clothed` running seg_dist over ~756k point-segment pairs per gate, ~90% of a gate's cost; 50 of the 59 tests over 1 s are gate runs)
+      given 2026-08-26T16:48Z | done 2026-08-26T17:27Z | elapsed see note | runs: in-process gate sweep x2 (856 manifests: 1,389 s before, 623 s after), make quick x2, make done x1
+      note: EXACT - 0 verdict differences over all 856 pool manifests + regression fixtures (the index prunes candidates; `boxed_seg_hit` is the same strict `seg_dist < hw`). Gates: Ubame 933 -> 626 ms, Minami 2,895 -> 2,417, Inashiro unchanged (the near-ring checks are town/city-only); the whole-pool sweep 2.2x faster. Fallout handled: the frozen registry oracle's four rows edited by hand (policy written into the test docstring), leaked loop names removed from the segment signatures. COST: the baseline sweep took 23 min in the foreground because I guessed "a few hundred" manifests at 1.6 s and there are 856 - the GM asked whether I was waiting on something that would never fire; it was CPU-bound and finished, but a sweep that size belongs in the background from the start with its size stated first.
+      scaffold: none new - `boxed_grid`/`boxed_segs`/`boxed_seg_hit` in `settlement/_geom/indexes.py`
+      measure: gate wall on Inashiro + a city fixture before/after (in-process timer); the 4.35 s site_justice test; make quick pytest wall
+      verify: the checks' verdicts identical on every pool manifest + regression fixture (exact test, pruned candidates); `make quick`; `make done`
+
 ## Phase 9 - acceptance
 
 - [ ] T90 the would-have-dispatched audit (FR-005): every entry in the period, and for each whether it should have run; each "no" names a tooling change

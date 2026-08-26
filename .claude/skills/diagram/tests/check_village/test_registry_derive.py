@@ -4,7 +4,11 @@ The registry stopped being hand-maintained data on 2026-08-16; these tests hold 
 explicit roster used to provide (clause 14: move the safety property into tests proven to fire):
 
 1. Fixture equality: every derived row equals its pre-collapse counterpart, by name, all six
-   fields (`tests/fixtures/registry_legacy_rows.json`, frozen and never regenerated).
+   fields (`tests/fixtures/registry_legacy_rows.json`, frozen at the migration and never
+   REGENERATED - a row is edited by hand, alone, only when its segment is deliberately changed, so
+   the oracle keeps catching accidental drift in every other row. Edited so far: 2026-08-26,
+   feature 133 T15 - four rows (0434, 0438.016/024/036) when the near-ring samplers and
+   town_margins_clothed went onto the spatial index and their leaked loop names left).
 2. Order: the fixture's order is a subsequence of the derived order - the execution contract.
 3. Structural invariants: literal-return shape, unique keys, needs within free, META_CHECKS.
 4. Fire-proofs: every guard demonstrably fails on a synthetic violation (a checker never seen

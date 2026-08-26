@@ -16868,14 +16868,11 @@
     "d_",
     "f_",
     "g_",
-    "hw_",
-    "i_",
     "k_",
     "ln_",
     "meta",
     "o_",
     "p_",
-    "pl_",
     "road",
     "s_",
     "scale",
@@ -16905,13 +16902,11 @@
     "d_",
     "f_",
     "g_",
-    "hw_",
     "i_",
     "k_",
     "ln_",
     "o_",
     "p_",
-    "pl_",
     "s_",
     "st_",
     "tm_bare",
@@ -17326,7 +17321,8 @@
     "scale"
    ],
    "writes": [
-    "nr_lines"
+    "nr_lines",
+    "nr_lines_b"
    ],
    "checks": [],
    "needs": [
@@ -17496,20 +17492,17 @@
     "committed",
     "gx",
     "gy",
-    "hw_",
-    "i_",
     "nr_band",
     "nr_boxes",
     "nr_cult",
     "nr_cultc",
     "nr_elig",
     "nr_hill",
-    "nr_lines",
+    "nr_lines_b",
     "nr_pond",
     "nr_skip",
     "nr_wall",
     "p_",
-    "pl_",
     "scale"
    ],
    "writes": [
@@ -17520,12 +17513,9 @@
     "committed",
     "gx",
     "gy",
-    "hw_",
-    "i_",
     "nr_cultc",
     "nr_elig",
-    "p_",
-    "pl_"
+    "p_"
    ],
    "checks": [],
    "needs": [
@@ -17540,7 +17530,7 @@
     "nr_cultc",
     "nr_elig",
     "nr_hill",
-    "nr_lines",
+    "nr_lines_b",
     "nr_pond",
     "nr_skip",
     "nr_wall",
@@ -17780,12 +17770,10 @@
     "committed",
     "gx",
     "gy",
-    "hw_",
-    "i_",
     "nr_band",
     "nr_boxes",
     "nr_hill",
-    "nr_lines",
+    "nr_lines_b",
     "nr_pond",
     "nr_skip",
     "nr_wall",
@@ -17794,7 +17782,6 @@
     "nrp_paddy",
     "nrp_pc",
     "p_",
-    "pl_",
     "scale"
    ],
    "writes": [
@@ -17805,12 +17792,9 @@
     "committed",
     "gx",
     "gy",
-    "hw_",
-    "i_",
     "nrp_dc",
     "nrp_pc",
-    "p_",
-    "pl_"
+    "p_"
    ],
    "checks": [],
    "needs": [
@@ -17822,7 +17806,7 @@
     "nr_band",
     "nr_boxes",
     "nr_hill",
-    "nr_lines",
+    "nr_lines_b",
     "nr_pond",
     "nr_skip",
     "nr_wall",

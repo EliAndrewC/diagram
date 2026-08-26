@@ -3,6 +3,8 @@
 import math
 from typing import Any
 
+from l7r.diagram.settlement._geom import boxed_grid, boxed_seg_hit, boxed_segs
+
 from .common_01_geometry import Poly, point_in_poly, poly_dist, seg_dist, segments_cross, unit_dir
 from .common_02_overlap_policy import in_ellipse
 from .common_03_capacity import _UNBOUND, _kept
@@ -44,10 +46,18 @@ def _seg_0438_015__nr_moat(*, M: Any = _UNBOUND, scale: Any = _UNBOUND) -> dict[
 
 
 def _seg_0438_016__nr_lines_3(*, M: Any = _UNBOUND, nr_lines: Any = _UNBOUND, nr_moat: Any = _UNBOUND, scale: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 0438.016 (nr_lines) - body verbatim from _seg_0438__near_ring_cultivated_fraction (feature 024 per-check split; guards re-evaluated in the body, see split_oversized.py)."""
+    """Gate segment 0438.016 (nr_lines, nr_lines_b) - body verbatim from _seg_0438__near_ring_cultivated_fraction (feature 024 per-check split; guards re-evaluated in the body, see split_oversized.py)."""
     if scale in ('town', 'city') and nr_moat:
         nr_lines.append((nr_moat, M.get("moat_width", 22) / 2 + 8))
-    return _kept(locals(), ('nr_lines',))
+    # INDEXED, NOT COARSENED (GM 2026-08-26, feature 133 T15; this package's CLAUDE.md "when a check is
+    # slow, INDEX it"). The two near-ring samplers below (024, 036) walk a 25 px grid and, at every
+    # point, ran `seg_dist` against EVERY segment of EVERY line here - ~756k pairs per check per gate,
+    # ~90% of a gate's cost with `town_margins_clothed`. `boxed_seg_hit` over a `PointGrid` is the same
+    # strict `seg_dist < hw` test on a pruned candidate list, so every verdict is identical (proven on
+    # every pool manifest and regression fixture when this landed). Built ONCE here, after the last
+    # append, and handed to both samplers.
+    nr_lines_b = boxed_grid(boxed_segs(nr_lines)) if scale in ('town', 'city') else None
+    return _kept(locals(), ('nr_lines', 'nr_lines_b'))
 
 
 def _seg_0438_017__nr_wall(*, M: Any = _UNBOUND, scale: Any = _UNBOUND) -> dict[str, Any]:
@@ -148,20 +158,17 @@ def _seg_0438_024__bx0(
     committed: Any = _UNBOUND,
     gx: Any = _UNBOUND,
     gy: Any = _UNBOUND,
-    hw_: Any = _UNBOUND,
-    i_: Any = _UNBOUND,
     nr_band: Any = _UNBOUND,
     nr_boxes: Any = _UNBOUND,
     nr_cult: Any = _UNBOUND,
     nr_cultc: Any = _UNBOUND,
     nr_elig: Any = _UNBOUND,
     nr_hill: Any = _UNBOUND,
-    nr_lines: Any = _UNBOUND,
+    nr_lines_b: Any = _UNBOUND,
     nr_pond: Any = _UNBOUND,
     nr_skip: Any = _UNBOUND,
     nr_wall: Any = _UNBOUND,
     p_: Any = _UNBOUND,
-    pl_: Any = _UNBOUND,
     scale: Any = _UNBOUND,
 ) -> dict[str, Any]:
     """Gate segment 0438.024 (bx0, bx1, by0, by1) - body verbatim from _seg_0438__near_ring_cultivated_fraction (feature 024 per-check split; guards re-evaluated in the body, see split_oversized.py)."""
@@ -178,7 +185,7 @@ def _seg_0438_024__bx0(
                     or (nr_hill is not None and in_ellipse(gx, gy, nr_hill, 1.45))
                     or (nr_pond is not None and in_ellipse(gx, gy, [nr_pond[0], nr_pond[1], nr_pond[2] + 20, nr_pond[3] + 20]))
                     or any(bx0 <= gx <= bx1 and by0 <= gy <= by1 for bx0, by0, bx1, by1 in nr_boxes)
-                    or any(any(seg_dist(gx, gy, pl_[i_], pl_[i_ + 1]) < hw_ for i_ in range(len(pl_) - 1)) for pl_, hw_ in nr_lines)
+                    or boxed_seg_hit(gx, gy, nr_lines_b.near(gx, gy))  # indexed; same test as the scan it replaced (see segment 016)
                     or any(point_in_poly(gx, gy, p_) for p_ in nr_skip)
                 )
                 if committed:
@@ -189,7 +196,7 @@ def _seg_0438_024__bx0(
                     nr_cultc += 1
                 gx += 25
             gy += 25
-    return _kept(locals(), ('bx0', 'bx1', 'by0', 'by1', 'committed', 'gx', 'gy', 'hw_', 'i_', 'nr_cultc', 'nr_elig', 'p_', 'pl_'))
+    return _kept(locals(), ('bx0', 'bx1', 'by0', 'by1', 'committed', 'gx', 'gy', 'nr_cultc', 'nr_elig', 'p_'))
 
 
 def _seg_0438_025__nr_frac(*, nr_cultc: Any = _UNBOUND, nr_elig: Any = _UNBOUND, scale: Any = _UNBOUND) -> dict[str, Any]:
@@ -340,12 +347,10 @@ def _seg_0438_036__bx0_1(
     committed: Any = _UNBOUND,
     gx: Any = _UNBOUND,
     gy: Any = _UNBOUND,
-    hw_: Any = _UNBOUND,
-    i_: Any = _UNBOUND,
     nr_band: Any = _UNBOUND,
     nr_boxes: Any = _UNBOUND,
     nr_hill: Any = _UNBOUND,
-    nr_lines: Any = _UNBOUND,
+    nr_lines_b: Any = _UNBOUND,
     nr_pond: Any = _UNBOUND,
     nr_skip: Any = _UNBOUND,
     nr_wall: Any = _UNBOUND,
@@ -354,7 +359,6 @@ def _seg_0438_036__bx0_1(
     nrp_paddy: Any = _UNBOUND,
     nrp_pc: Any = _UNBOUND,
     p_: Any = _UNBOUND,
-    pl_: Any = _UNBOUND,
     scale: Any = _UNBOUND,
 ) -> dict[str, Any]:
     """Gate segment 0438.036 (bx0, bx1, by0, by1) - body verbatim from _seg_0438__near_ring_cultivated_fraction (feature 024 per-check split; guards re-evaluated in the body, see split_oversized.py)."""
@@ -368,7 +372,7 @@ def _seg_0438_036__bx0_1(
                     or (nr_hill is not None and in_ellipse(gx, gy, nr_hill, 1.45))
                     or (nr_pond is not None and in_ellipse(gx, gy, [nr_pond[0], nr_pond[1], nr_pond[2] + 20, nr_pond[3] + 20]))
                     or any(bx0 <= gx <= bx1 and by0 <= gy <= by1 for bx0, by0, bx1, by1 in nr_boxes)
-                    or any(any(seg_dist(gx, gy, pl_[i_], pl_[i_ + 1]) < hw_ for i_ in range(len(pl_) - 1)) for pl_, hw_ in nr_lines)
+                    or boxed_seg_hit(gx, gy, nr_lines_b.near(gx, gy))  # indexed; same test as the scan it replaced (see segment 016)
                     or any(point_in_poly(gx, gy, p_) for p_ in nr_skip)
                 )
                 if not committed and any(point_in_poly(gx, gy, p_) for p_ in nrp_paddy):
@@ -377,7 +381,7 @@ def _seg_0438_036__bx0_1(
                     nrp_dc += 1
                 gx += 25
             gy += 25
-    return _kept(locals(), ('bx0', 'bx1', 'by0', 'by1', 'committed', 'gx', 'gy', 'hw_', 'i_', 'nrp_dc', 'nrp_pc', 'p_', 'pl_'))
+    return _kept(locals(), ('bx0', 'bx1', 'by0', 'by1', 'committed', 'gx', 'gy', 'nrp_dc', 'nrp_pc', 'p_'))
 
 
 def _seg_0438_037__near_ring_paddy_dominant(

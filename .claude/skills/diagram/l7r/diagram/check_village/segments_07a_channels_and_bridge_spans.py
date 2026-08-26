@@ -4,6 +4,7 @@ import math
 from typing import Any
 
 from l7r.diagram.settlement import sat_overlap
+from l7r.diagram.settlement._geom import boxed_grid, boxed_seg_hit, boxed_segs
 
 from .common_01_geometry import Poly, Pt, _struct_rect, point_in_poly, poly_dist, rect_corners, seg_dist, seg_intersect, segments_cross
 from .common_02_overlap_policy import FOOT_BANK_REACH, _ditch_plankable, _footbridge_useful_ground, in_ellipse
@@ -493,14 +494,11 @@ def _seg_0434__town_margins_clothed(
     d_: Any = _UNBOUND,
     f_: Any = _UNBOUND,
     g_: Any = _UNBOUND,
-    hw_: Any = _UNBOUND,
-    i_: Any = _UNBOUND,
     k_: Any = _UNBOUND,
     ln_: Any = _UNBOUND,
     meta: Any = _UNBOUND,
     o_: Any = _UNBOUND,
     p_: Any = _UNBOUND,
-    pl_: Any = _UNBOUND,
     road: Any = _UNBOUND,
     s_: Any = _UNBOUND,
     scale: Any = _UNBOUND,
@@ -550,6 +548,7 @@ def _seg_0434__town_margins_clothed(
         tm_wall = M.get("wall")
         if tm_wall:
             tm_lines.append((tm_wall, 40.0))
+        tm_lines_b = boxed_grid(boxed_segs(tm_lines))  # INDEXED, NOT COARSENED (T15, GM 2026-08-26) - see segment 0438.016 for the why; same strict test, pruned candidates
         tm_hill = M.get("hill")
         tm_pond = M.get("pond")
         tm_bare = tm_total = 0
@@ -562,7 +561,7 @@ def _seg_0434__town_margins_clothed(
                     any(bx0 <= tx <= bx1 and by0 <= ty <= by1 for bx0, by0, bx1, by1 in tm_boxes)
                     or (tm_wall is not None and len(tm_wall) >= 3 and point_in_poly(tx, ty, tm_wall))
                     or any(point_in_poly(tx, ty, p_) for p_ in tm_polys)
-                    or any(any(seg_dist(tx, ty, pl_[i_], pl_[i_ + 1]) < hw_ for i_ in range(len(pl_) - 1)) for pl_, hw_ in tm_lines)
+                    or boxed_seg_hit(tx, ty, tm_lines_b.near(tx, ty))
                     or (tm_hill is not None and in_ellipse(tx, ty, tm_hill, 1.45))
                     or (tm_pond is not None and in_ellipse(tx, ty, [tm_pond[0], tm_pond[1], tm_pond[2] + 30, tm_pond[3] + 30]))
                 )
@@ -589,13 +588,11 @@ def _seg_0434__town_margins_clothed(
             'd_',
             'f_',
             'g_',
-            'hw_',
             'i_',
             'k_',
             'ln_',
             'o_',
             'p_',
-            'pl_',
             's_',
             'st_',
             'tm_bare',
