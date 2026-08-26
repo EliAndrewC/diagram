@@ -1517,6 +1517,21 @@ is the tooling, proposes the tooling change. A paid or lengthy run that
 the tooling was about to start is a finding to record even when a switch
 stopped it (feature 133 FR-004).
 
+**Cycle discipline (GM 2026-08-26, feature 133 T10)**
+The round trip, not the test, is the cost: a quick run is ~35 s and the
+model turn around it is longer. Measured on the first task of the
+acceptance period, ~30 of 57 minutes were cycles - four convention misses
+found one per run, two records written before they were measured. So a
+session MUST (1) re-read the whole diff for convention misses before the
+first test run and fix everything a failing run lists before the next
+one; (2) use the scaffold where one exists (`make new-check`) rather than
+hand-writing a convention; (3) never write a number into a record that
+was not measured on the artifact, with the measuring tool where one
+exists (`make sun-audit`); and (4) run one verification at the end of a
+batch, never one per rule. A spec-kit task that adds a check, a rule or
+a record carries these steps in its own text, so the discipline is read
+at the moment it applies rather than remembered.
+
 **Delegation**
 Subagents are used for parallel generation and large-context work.
 Whenever a subagent is delegated a task whose output is shipped to the
@@ -1571,4 +1586,4 @@ document wins; where this document is silent, defer to the project's
 guidance. This constitution is the higher-level authority; CLAUDE.md
 operationalizes it.
 
-**Version**: 2.2.0 | **Ratified**: 2026-05-27 | **Last Amended**: 2026-08-25
+**Version**: 2.4.0 | **Ratified**: 2026-05-27 | **Last Amended**: 2026-08-26

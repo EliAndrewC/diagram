@@ -8,7 +8,7 @@
 .PHONY: done lint format typecheck test test-full guard perf perf-report maps reference bypass-audit quick durations test-file audit perf-gate hooks-test explain \
 	 switches ci-off ci-on scope-lock scope-unlock _switch \
 	 map cohort tripwire hamlet cache-audit regressions placement-stages pool-index compound render-sync \
-	 gate-manifest why-placed site-justice crop jogs pack-audit scatter-audit timings citybudget help \
+	 gate-manifest why-placed site-justice crop jogs pack-audit scatter-audit sun-audit new-check timings citybudget help \
 	 ci-status ci-check ci-merge ci-image commit-permitted \
 	 perf-explain perf-confirm perf-audit perf-signoff perf-review perf-profile
 
@@ -326,6 +326,13 @@ pack-audit:     ## empty space and geometry in a Mode A compound SVG
 scatter-audit:  ## is drawn ground cover standing where keep-outs should have stopped it?
 	$(RUN).tools.scatter_audit $(ARGS)
 
+sun-audit:      ## the sun rules and the belt's page presence, off the manifest   M=pool/hamlets/inashiro.json
+	$(RUN).tools.sun_audit $(or $(M),pool/hamlets/inashiro.json)
+
+new-check:      ## scaffold a gate check: segment stub, sorted fixture entry, test stub   NAME=... FILE=segments_*.py TEST=test_segments_*.py
+	@test -n "$(NAME)" -a -n "$(FILE)" -a -n "$(TEST)" || { printf 'make new-check NAME=<check_name> FILE=l7r/diagram/check_village/segments_XX.py TEST=tests/check_village/test_segments_XX.py\n'; exit 2; }
+	$(RUN).tools.new_check --name $(NAME) --file $(FILE) --test $(TEST)
+
 timings:        ## where the generation loop's time goes
 	$(RUN).tools.timings $(ARGS)
 
@@ -566,7 +573,7 @@ durations:
 
 quick:
 	@python3 -m ruff check l7r/ tests/ && python3 -m ruff format --check l7r/ tests/ && python3 -m mypy
-	@start=$$(date +%s); python3 -m pytest -n auto -q --no-cov -x -m "not rolls_map" --deselect tests/test_villages.py; ec=$$?; \
+	@start=$$(date +%s); python3 -m pytest -n auto -q --no-cov -x --ff -m "not rolls_map" --deselect tests/test_villages.py; ec=$$?; \
 	  el=$$(( $$(date +%s) - start )); \
 	  if [ $$ec -ne 0 ]; then exit $$ec; fi; \
 	  if [ $$el -gt $(QUICK_BUDGET) ]; then \
@@ -626,7 +633,8 @@ bypass-audit:
 # (GUARD_EDIT_OK: the message named a file that does not exist - the log is a directory; feature 130 T073, Principle XIV)
 
 reference:
-	@python3 -c "import sys; sys.path.insert(0, '.'); 	from l7r.diagram import hamletgen as hg; 	r = hg.generate(hg.HamletSpec(name='Inashiro', seed=4, households=15, down_deg=90, water_sink='pond'), out_base=None, render=False); 	print('\033[1mreference settlement (Inashiro, seed 4): ' + ('CLEAN\033[0m' if r.ok else 'FAILING\033[0m -> ' + ', '.join(r.failures))); 	sys.exit(0 if r.ok else 1)" || { 	  printf '\n\033[1mSTOPPING HERE.\033[0m The reference settlement is red, so nothing more expensive runs.\n'; 	  printf 'Fix Inashiro first - it rebuilds in about a minute. Everything else is 4x to 25x that,\n'; 	  printf 'and none of it can tell you anything useful while the one map you iterate on is broken.\n'; 	  printf '(REF_OK=1 overrides, when the reference map is expected to fail.)\n\n'; exit 1; }
+	@python3 -c "import sys; sys.path.insert(0, '.'); 	from l7r.diagram import hamletgen as hg; 	r = hg.generate(hg.HamletSpec(name='Inashiro', seed=4, households=15, down_deg=90, water_sink='pond'), out_base=None, render=False); 	print('\033[1mreference settlement (Inashiro, seed 4): ' + ('CLEAN\033[0m' if r.ok else 'FAILING\033[0m -> ' + ', '.join(r.failures))); 	sys.exit(0 if r.ok else 1)" || { 	  printf '\n\033[1mSTOPPING HERE.\033[0m The reference settlement is red, so nothing more expensive runs.\n'; 	  printf 'Fix Inashiro first - it rebuilds in about a minute. Everything else is 4x to 25x that,\n'; 	  printf 'and none of it can tell you anything useful while the one map you iterate on is broken.\n'; 	  printf 'To REGENERATE it and read every failure in full: \033[1mmake maps\033[0m (reference only under the lock).\n'; \
+	  printf 'Do not reach for REF_OK=1 - it prompts, and a prompt with no terminal is refused.\n\n'; exit 1; }
 	@$(STATE) green-local reference
 # (GUARD_EDIT_OK: a green reference records green-local - feature 130, FR-012)
 

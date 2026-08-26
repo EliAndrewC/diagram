@@ -117,7 +117,9 @@ it is the tooling. With remote off, a paid run the tooling was about to start is
 
 | command | what it does | time |
 |---|---|---|
-| `make quick` | lint, types, and every test that does not roll a map; stops at the first failure | **~33 s** |
+| `make quick` | lint, types, and every test that does not roll a map; stops at the first failure, failed-first (`--ff`) so a fix that did not take fails in seconds | **~33 s** |
+| `make sun-audit M=...` | the sun rules and the belt's page presence off the manifest - the numbers a record may quote | ~1 s |
+| `make new-check NAME= FILE= TEST=` | scaffold a gate check: segment stub with the next key, sorted fixture entry, test stub with builders imported | ~1 s |
 | `make reference` | one seed of the reference hamlet (Inashiro), alone | **~26 s** |
 | `make durations` | where the suite's time goes - run this when a target feels slow | ~35 s |
 | `make maps` | picks its own scope from how the last run went | 1 min - many |
@@ -158,6 +160,14 @@ rolled maps. Marking is `@pytest.mark.rolls_map`, guarded by `tests/test_markers
 - Never re-run what `make done` just ran, and never run pytest serially (~7x slower here).
 - Never run a pytest BESIDE a running gate - two writers on the same pool maps is a source of false RED.
 - Update the predictably-affected unit tests in the SAME edit as the engine change.
+- **CYCLE DISCIPLINE** (GM 2026-08-26, constitution v2.4.0; measured on feature 133 T10, where ~30 of
+  57 minutes were round trips): **re-read the WHOLE diff for convention misses before the first
+  test run** - an unimported builder, an undeclared segment input, an unsorted fixture, a wrong test
+  coordinate are ten-second fixes that cost a full model round trip each when a test finds them one
+  at a time; fix everything a failing run lists before re-running; **scaffold a check with
+  `make new-check`** so the conventions cannot be missed; and **never write a number into a record
+  that was not measured on the artifact** (`make sun-audit` for the sun and the belt) - a guessed
+  figure is a correction round the reviewer will make you pay.
 
 **Placement** ([`dev/placement.md`](dev/placement.md))
 

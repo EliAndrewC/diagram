@@ -21,6 +21,8 @@ Not `python3 tools/why_placed.py`. A package module run as a loose script puts `
 | Where can this feature legally go, under all the interacting rules? | `site_justice` |
 | Is there too much empty space in this Mode A compound? Does its SVG break a geometric rule? | `pack_audit` |
 | Is drawn ground cover standing somewhere the engine's keep-outs should have stopped it? | `scatter_audit` |
+| Do the yards and beds have their sun, is the belt off the plots, and how much of the belt is actually on the page? MEASURE THIS BEFORE WRITING A NUMBER INTO A RECORD | `sun_audit` (`make sun-audit`) |
+| I am adding a gate check - write the segment stub, the sorted fixture entry and the test stub for me | `new_check` (`make new-check`) |
 | Does using the generation cache ever change what a map looks like? | `cache_audit` |
 | I fixed one hamlet - does the fix generalize across a cohort, and what exactly collides? | `cohort_audit` |
 | I want to look closely at one spot on a rendered map, in manifest coordinates | `crop_map` |
