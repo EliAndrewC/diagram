@@ -101,6 +101,10 @@ _(from T11 on, each entry also carries its cycle plan before work starts - `scaf
       given ~2026-08-26T23:20Z | done 2026-08-26T21:15Z | runs: make quick x5, durations x1, make test (exhaustive) x1
       note: supply-banks 3 -> 2 fans, cascade sources 2/3 -> 1/2, hem-is-cropland 2 -> 1, overlay tests 3 -> 2, intake-snaps 2/3 -> 1/2 - all quick forms, all green, the full forms at the gate. Final numbers in the reply and docs/iteration-loop.md.
 
+- [x] T27 **the make-side second, measured and mostly removed** - the GM (2026-08-26): *"I thought that the make side helpers didn't get tested unless the actual tooling changed ... are we still running that even when the only thing that we're doing is updating the tests themselves?"*
+      given ~2026-08-26T23:50Z | done 2026-08-26T22:06Z | runs: make quick x6, hooks-test x2
+      note: they were not tests - the Makefile's own machinery on every run: make + shell reads 0.09 s, ruff/mypy 0.36 s, the state write 0.33 s. The state write's 0.31 s was `engine_key_worktree` re-hashing all ~1,060 engine files (856 regression manifests included) through `git hash-object` on every green run; now the semantic cache is keyed by git's own blob id, unchanged files take their id from the index (`ls-files -s`), and only modified/untracked files are hashed - 314 -> 80 ms, the state write 326 -> 106 ms, and the tree path answers from the cache in 12 ms (was a full cat-file of every blob). Exact (the worktree/tree identity test and the guard suite both green).
+
 ## Phase 9 - acceptance
 
 - [ ] T90 the would-have-dispatched audit (FR-005): every entry in the period, and for each whether it should have run; each "no" names a tooling change

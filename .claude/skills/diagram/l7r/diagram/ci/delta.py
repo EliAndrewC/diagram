@@ -106,25 +106,41 @@ def engine_key(root: Path, tree: str) -> str:
     """
     out = _git(root, "ls-tree", "-r", tree)
     entries = [(line.split()[2], line.split(maxsplit=3)[3]) for line in out.splitlines() if line.strip() and is_engine(line.split(maxsplit=3)[3])]
-    blobs = subprocess.run(["git", "-C", str(root), "cat-file", "--batch"], input="".join(f"{sha}\n" for sha, _ in entries).encode(), capture_output=True, check=True).stdout
-    rows, pos = [], 0
-    for _sha, path in entries:
+    return _key_from_ids(root, entries, lambda shas: _cat_blobs(root, shas))
+
+
+def _cat_blobs(root: Path, shas: list[str]) -> dict[str, bytes]:
+    """Blob contents by id, one `git cat-file --batch` call - only for the ids the semantic cache lacks."""
+    if not shas:
+        return {}
+    blobs = subprocess.run(["git", "-C", str(root), "cat-file", "--batch"], input="".join(f"{s}\n" for s in shas).encode(), capture_output=True, check=True).stdout
+    out: dict[str, bytes] = {}
+    pos = 0
+    for sha in shas:
         nl = blobs.index(b"\n", pos)
         size = int(blobs[pos:nl].split()[2])
-        data = blobs[nl + 1 : nl + 1 + size]
+        out[sha] = blobs[nl + 1 : nl + 1 + size]
         pos = nl + 1 + size + 1
-        rows.append(f"{_content_id(root, data, path)} {path}")
-    return hashlib.sha256("\n".join(sorted(rows)).encode()).hexdigest()
+    return out
 
 
-def _content_id(root: Path, data: bytes, path: str) -> str:
-    """The id of one engine file's content AS THE GATE SEES IT: `gate-stamp.py`'s `semantic_bytes`
-    (a `.py` keys on its docstring-stripped AST, so a comment or docstring edit keeps the key; anything
-    else on its bytes), loaded by path from the same script so there is ONE definition. GM 2026-08-26
-    (feature 133 T11): a record-the-why comment must not cost a second gate run."""
+def _key_from_ids(root: Path, entries: list[tuple[str, str]], fetch: Any) -> str:
+    """The engine key from (git blob id, path) pairs. A `.py` keys on its SEMANTIC id, served from the
+    cache by blob id; only cache MISSES are read (`fetch(shas) -> {sha: bytes}`). Anything else keys on
+    the blob id itself. (T27, GM 2026-08-26: this used to read every engine file on every green run.)"""
     from l7r.diagram.ci.state import _gate_stamp  # local: state imports nothing from here
 
-    return str(_gate_stamp(root).content_id(data, path, root))
+    gs = _gate_stamp(root)
+    table = gs._cache_table(root)
+    misses = [sha for sha, p in entries if p.endswith(".py") and sha not in table]
+    contents = fetch(misses)
+    rows = []
+    for sha, p in entries:
+        if p.endswith(".py"):
+            rows.append(f"{table.get(sha) or gs.content_id(contents[sha], p, root)} {p}")
+        else:
+            rows.append(f"{sha} {p}")
+    return hashlib.sha256("\n".join(sorted(rows)).encode()).hexdigest()
 
 
 def engine_key_worktree(root: Path) -> str:
@@ -135,5 +151,20 @@ def engine_key_worktree(root: Path) -> str:
     paths = sorted(p for p in out.splitlines() if p.strip() and is_engine(p) and (root / p).is_file())
     if not paths:
         return hashlib.sha256(b"").hexdigest()
-    rows = sorted(f"{_content_id(root, (root / p).read_bytes(), p)} {p}" for p in paths)
-    return hashlib.sha256("\n".join(rows).encode()).hexdigest()
+    # RAW IDS FROM GIT, CONTENTS ONLY ON A MISS (GM 2026-08-26, T27): this ran on every green run and cost
+    # 0.31 s of a 7.5 s quick - reading all 160 engine files in Python to sha256 them, when `git hash-object`
+    # does exactly that in C and the semantic cache is keyed by that very sha. Now: one git call for the
+    # raw ids, the cache answers every hit, and a file is read only when its semantic id is not cached.
+    # THE INDEX ALREADY KNOWS EVERY UNCHANGED FILE'S BLOB ID (T27). `git hash-object` over all ~1,060 engine
+    # files - the 856 regression manifests included - cost 270 ms on every green run; `ls-files -s` hands
+    # back the staged ids in 15 ms, so only files that differ from the index (modified, or untracked) are
+    # hashed. Exact: a modified file's index id is stale and is never used.
+    staged = {line.split()[3]: line.split()[1] for line in _git(root, "ls-files", "-s", "--", *paths).splitlines() if line.strip()}
+    changed = set(_git(root, "diff", "--name-only", "--", *paths).splitlines())
+    fresh = [p for p in paths if p in changed or p not in staged]
+    ids = dict(staged)
+    if fresh:
+        ids.update(zip(fresh, subprocess.run(["git", "-C", str(root), "hash-object", "--stdin-paths"], input="\n".join(fresh) + "\n", capture_output=True, text=True, check=True).stdout.split(), strict=True))
+    entries = [(ids[p], p) for p in paths]
+    by_sha = {sha: p for sha, p in entries}
+    return _key_from_ids(root, entries, lambda miss: {s: (root / by_sha[s]).read_bytes() for s in miss})

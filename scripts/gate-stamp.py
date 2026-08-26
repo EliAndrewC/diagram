@@ -113,13 +113,19 @@ def semantic_bytes(data: bytes, name: str) -> bytes:
 _CACHE_NAME = "semantic-id-cache.json"
 
 
+def git_blob_id(data: bytes) -> str:
+    """The id git gives these bytes as a blob: sha1 over the 'blob <len>\\0' header + bytes. Computed
+    here so a caller with contents in hand gets the same key `git ls-tree` and `git hash-object` print."""
+    return hashlib.sha1(b"blob %d\0" % len(data) + data).hexdigest()  # noqa: S324 - an identity, not a security hash
+
+
 def content_id(data: bytes, name: str, root: Path | None = None) -> str:
     """sha256 of `semantic_bytes(data, name)`, memoized per repository under `.git/` by the sha of
     the RAW bytes. Parsing and dumping ~280 files cost 13 s per check (measured 2026-08-26: the
     `already verified` answer went from 1 s to 14 s), and the raw sha -> semantic id map is a pure
     function, so it is computed once per distinct file content and read back forever after. Without a
     repository root the id is computed directly - correctness never depends on the cache."""
-    raw = hashlib.sha256(data).hexdigest()
+    raw = git_blob_id(data)  # the cache is keyed by GIT's own blob id, so `ls-tree`/`hash-object` answer a hit without reading the file (T27)
     if not name.endswith(".py"):
         return raw
     table = _cache_table(root)
