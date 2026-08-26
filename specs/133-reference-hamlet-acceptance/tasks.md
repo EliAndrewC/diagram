@@ -93,6 +93,10 @@ _(from T11 on, each entry also carries its cycle plan before work starts - `scaf
       given ~2026-08-26T22:35Z | done 2026-08-26T21:00Z | runs: make tooling x1 (173 passed, 6 s), make quick x1
       note: `make tooling` runs every `tooling` test (the marker; tests/ci/ is marked by location in the conftest) in the exhaustive form and, on green, records the tooling hash alone (`ci tooling-green` -> `state.record_tooling`), leaving the gate verdict untouched - tested. quick under the hamlet tier: 1,972 tests + 360 deferred, 8.3 s pytest, 11.6 s wall (30 s / 33 s this morning).
 
+- [x] T25 **the slowest quick tests, third look - and the second collection** - the GM (2026-08-26): *"my intuition is still that we are taking much longer than we need to, and that we could probably cut that number in half if we really tried to. So I kind of want to see why it is that you think that we can't do that or that we could but shouldn't."*
+      given ~2026-08-26T22:50Z | done 2026-08-26T21:08Z | runs: make quick x8, make tooling x2, durations x2
+      note: measured the wall's composition first: per-test work is 31 CPU-s (3.8 s at 8 workers), a zero-test session is 3.8 s, and ~3 s sat OUTSIDE pytest - 2 s of which was the `quick: clean` message running a SECOND full pytest collection just to count the map-rolling tests (now a grep of the marker). Quick forms for the commons glyph scatter and one perimeter-dike test; the dike-top test keeps its full envelope (its assertion counts crest points). The GM's "cut in half" is now bounded by pytest+xdist's own ~3.8 s and ~4 s of parallel work spread over ~1,700 tests at ~20 ms each - the judgment table is in the reply and docs/iteration-loop.md.
+
 ## Phase 9 - acceptance
 
 - [ ] T90 the would-have-dispatched audit (FR-005): every entry in the period, and for each whether it should have run; each "no" names a tooling change

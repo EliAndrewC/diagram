@@ -587,7 +587,8 @@ quick:
 	    printf 'A test near the top of that list without @pytest.mark.rolls_map is the cause.\n\n'; \
 	    exit 1; \
 	  fi
-	@printf '\n\033[1mquick: clean\033[0m - the %s map-rolling tests were NOT run; `make done` before pushing.\n' "$$(python3 -m pytest -q --no-cov --collect-only -m rolls_map 2>/dev/null | tail -1 | grep -oE '^[0-9]+' || echo 'slow')"
+	@printf '\n\033[1mquick: clean\033[0m - the %s map-rolling tests were NOT run; `make done` before pushing.\n' "$$(grep -rho '@pytest.mark.rolls_map' tests | wc -l)"
+# (the count used to come from a SECOND pytest collection of the whole suite, ~2 s of every quick - GM 2026-08-26, T25)
 	@$(STATE) green-local quick
 # (GUARD_EDIT_OK: a green quick records green-local - feature 130, FR-012)
 

@@ -8,6 +8,7 @@ import pytest
 
 from l7r.diagram import check_village, settlement
 from l7r.diagram.settlement import Settlement
+from tests._scope import full_or
 from tests.settlement._builders import _crop_settlement, _hamlet_with_field, _nuc_village, _town
 
 
@@ -128,8 +129,8 @@ def test_commons_glyph_variants_draw_and_record_each_role():
     # the three distinct land-cover looks exercised directly (independent of the village gens): woodland =
     # tree CROWNS, pasture = open GRASS (no pines), commons/grazing = grass + a few scraggly PINES. Each is
     # given a non-empty `avoid` keep-out so the avoid-skip is exercised too. A marsh keep-out is checked as well.
-    poly = [(200, 200), (800, 200), (800, 800), (200, 800)]
-    keepout = [[(400, 400), (600, 400), (600, 600), (400, 600)]]  # a central keep-out the scatter stays out of
+    poly = full_or([(200, 200), (500, 200), (500, 500), (200, 500)], [(200, 200), (800, 200), (800, 800), (200, 800)])  # quick: a 300 px square; gate: 600
+    keepout = [full_or([(300, 300), (400, 300), (400, 400), (300, 400)], [(400, 400), (600, 400), (600, 600), (400, 600)])]  # a central keep-out the scatter stays out of
     for role in ("woodland", "pasture", "commons", "grazing"):
         s = Settlement(1000, 1000, seed=3)
         s.meta(name="C", scale="hamlet")
@@ -170,9 +171,9 @@ def test_hinterland_dispersed_keepout_is_per_homestead():
 
 
 def test_perimeter_dike_draws_an_irregular_earthwork_band():
-    s = Settlement(1400, 1400, seed=3)
+    s = Settlement(full_or(900, 1400), full_or(900, 1400), seed=3)
     s.meta(name="D", scale="hamlet", ftpx=1, toscale=True, households=8, field_archetype="polder_grid")
-    env = [(200, 200), (200, 1000), (900, 1000), (900, 200), (200, 200)]
+    env = full_or([(150, 150), (150, 650), (600, 650), (600, 150), (150, 150)], [(200, 200), (200, 1000), (900, 1000), (900, 200), (200, 200)])
     s.perimeter_dike(env, seed=5)
     dk = s.M["dikes"][0]
     assert dk["label"] == "perimeter dike"
@@ -182,12 +183,12 @@ def test_perimeter_dike_draws_an_irregular_earthwork_band():
     assert all(0 <= x <= 1400 and 0 <= y <= 1400 for x, y in dk["outline"])
     # a label was recorded, and drawing is deterministic per seed
     assert any(lbl[5] == "perimeter dike" for lbl in s.M["labels"] if len(lbl) > 5)
-    s2 = Settlement(1400, 1400, seed=3)
+    s2 = Settlement(full_or(900, 1400), full_or(900, 1400), seed=3)
     s2.meta(name="D", scale="hamlet", ftpx=1, toscale=True, households=8, field_archetype="polder_grid")
     s2.perimeter_dike(env, seed=5)
     assert s2.M["dikes"][0]["outline"] == dk["outline"]
     # an empty label skips the caption but still draws + records the band
-    s3 = Settlement(1400, 1400, seed=3)
+    s3 = Settlement(full_or(900, 1400), full_or(900, 1400), seed=3)
     s3.meta(name="D", scale="hamlet", ftpx=1, toscale=True, households=8, field_archetype="polder_grid")
     s3.perimeter_dike(env, seed=5, label="")
     assert s3.M["dikes"] and not any(len(lbl) > 5 and lbl[5] == "perimeter dike" for lbl in s3.M.get("labels", []))
@@ -506,7 +507,7 @@ def test_dike_top_houses_seats_a_single_file_on_the_crest():
 
     s = Settlement(1400, 1400, seed=5)
     s.meta(name="DT", scale="hamlet", ftpx=1, toscale=True, households=8, terrain="low", field_archetype="polder_grid")
-    env = [(300, 300), (1100, 300), (1100, 1100), (300, 1100)]
+    env = [(300, 300), (1100, 300), (1100, 1100), (300, 1100)]  # full size in quick too: the assertion counts >= 60 crest points, a property of this envelope's length
     s.perimeter_dike(env, seed=7, gaps=[(500, 300), (700, 300)])
     dk = s.M["dikes"][0]
     # the crest centerline is recorded, and every crest point sits on the band
@@ -536,9 +537,9 @@ def test_dike_top_houses_seats_a_single_file_on_the_crest():
 def test_farmsteads_keep_dike_top_houses():
     # farmsteads() rebuilds M['houses'] from the pending-bundle survivors; dike-top houses are not
     # pending farmsteads, so they must survive the rebuild rather than being silently dropped.
-    s = Settlement(1400, 1400, seed=5)
+    s = Settlement(full_or(900, 1400), full_or(900, 1400), seed=5)
     s.meta(name="DT", scale="hamlet", ftpx=1, toscale=True, households=8, terrain="low", field_archetype="polder_grid")
-    s.perimeter_dike([(300, 300), (1100, 300), (1100, 1100), (300, 1100)], seed=7)
+    s.perimeter_dike(full_or([(200, 200), (700, 200), (700, 700), (200, 700)], [(300, 300), (1100, 300), (1100, 1100), (300, 1100)]), seed=7)
     s.dike_top_houses(4, seed=11, span=(0.0, 0.25))
     before = [h for h in s.M["houses"] if h.get("on_dike")]
     assert before
