@@ -245,7 +245,7 @@ def test_main_no_allow_main_flag(repo):
     assert Path(rc._predicted_svg(gen)[:-4] + ".ran").read_text() == "unset"
 
 
-def test_every_live_pool_png_matches_its_own_svg_viewbox():
+def test_every_live_pool_png_matches_its_own_svg_viewbox(pool_tier_glob):
     """A shipped PNG must depict the SVG beside it - the guard that would have caught four hamlets
     shipping the PREVIOUS roll's image while their manifests were current (2026-08-17).
 
@@ -262,7 +262,7 @@ def test_every_live_pool_png_matches_its_own_svg_viewbox():
     from l7r.diagram.pipeline import poolmaps
 
     checked = 0
-    for gen in sorted(glob.glob(os.path.join(HERE, "pool", "*", "*.gen.py"))):
+    for gen in sorted(glob.glob(os.path.join(HERE, "pool", pool_tier_glob, "*.gen.py"))):  # the tier's own maps under --tier
         if poolmaps.classify(gen) != "scripted":
             continue  # frozen legacy renders are committed exhibits; Mode A compounds have no viewBox contract here
         stem = gen[: -len(".gen.py")]

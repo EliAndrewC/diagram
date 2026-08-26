@@ -157,8 +157,24 @@ def _store_cache(key: str, rows: list[dict[str, Any]]) -> None:
         _log.warning("registry cache not written (%s); every import will re-derive", exc)
 
 
-def _derive_rows(names: set[str]) -> list[dict[str, Any]]:
-    fields = _derive_fields(_PKG_DIR)
+def _cached_fields(key: str) -> dict[str, _SegFields] | None:
+    """The six fields of every segment, rebuilt from the on-disk row cache when its key matches the
+    current sources - regardless of the caller's `names`, so a disagreement guard can still compare
+    them. Failure-soft like `_load_cached`. (GM 2026-08-26, the make quick profile: the guard tests
+    re-derived the whole registry from the AST, ~3 s, once per worker; the cache already held it.)"""
+    try:
+        data = json.loads(_CACHE_PATH.read_text())
+        if data["key"] != key:
+            return None
+        return {d["name"]: _SegFields(tuple(d["free"]), tuple(d["writes"]), tuple(d["checks"]), tuple(d["needs"]), bool(d["meta"]), bool(d["always"])) for d in data["rows"]}
+    except OSError, ValueError, KeyError, TypeError:
+        return None
+
+
+def _derive_rows(names: set[str], fresh: bool = False) -> list[dict[str, Any]]:
+    """`fresh=True` derives from the AST no matter what the disk cache holds - the round-trip tests
+    that PROVE the cache faithful must not read the cache to do it."""
+    fields = (None if fresh else _cached_fields(_source_key())) or _derive_fields(_PKG_DIR)
     if set(fields) != names:
         raise _DerivationError(f"AST scan and import scan disagree on segments: {sorted(set(fields) ^ names)}")
     for nm, needs in _NEEDS_OVERRIDES.items():
@@ -184,7 +200,7 @@ def _assemble(names: set[str]) -> list[dict[str, Any]]:
     key = _source_key()
     rows = _load_cached(key, names)
     if rows is None:
-        rows = _derive_rows(names)
+        rows = _derive_rows(names, fresh=True)
         _store_cache(key, rows)
     return rows
 

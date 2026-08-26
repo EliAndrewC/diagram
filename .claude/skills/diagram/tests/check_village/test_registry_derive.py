@@ -211,7 +211,7 @@ def test_derive_guard_fires_on_duplicate_segment_def(tmp_path):
 def test_cache_round_trip_and_failure_soft(tmp_path, monkeypatch):
     monkeypatch.setattr(reg, "_CACHE_PATH", tmp_path / "sub" / "registry_rows.json")
     names = {r.fn.__name__ for r in reg.GATE_SEGMENTS}
-    rows = reg._derive_rows(names)
+    rows = reg._derive_rows(names, fresh=True)  # the proof must derive, not read the cache it is proving
     key = reg._source_key()
     assert reg._load_cached(key, names) is None  # cold: no file yet
     reg._store_cache(key, rows)
@@ -223,7 +223,7 @@ def test_cache_round_trip_and_failure_soft(tmp_path, monkeypatch):
 
 
 def test_cached_rows_rebuild_identical_registry():
-    rows = reg._derive_rows({r.fn.__name__ for r in reg.GATE_SEGMENTS})
+    rows = reg._derive_rows({r.fn.__name__ for r in reg.GATE_SEGMENTS}, fresh=True)
     rebuilt = tuple(reg._row(d, reg._fns) for d in rows)
     assert rebuilt == reg.GATE_SEGMENTS
 

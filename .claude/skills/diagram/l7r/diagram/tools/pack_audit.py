@@ -473,21 +473,45 @@ def coverage(plan: ParsedPlan, cell: int = 2) -> float:
 
 
 def _perimeter_band(g: _Grids, depth_cells: int) -> Grid:
-    """Inside cells within depth_cells of the interior edge (a wall), by cardinal rays."""
-    band = _blank(g.w, g.h)
-    for gy in range(g.h):
-        for gx in range(g.w):
-            if not g.inside[gy][gx]:
-                continue
-            near = False
-            for d in range(1, depth_cells + 1):
-                for ny, nx in ((gy - d, gx), (gy + d, gx), (gy, gx - d), (gy, gx + d)):
-                    if not (0 <= ny < g.h and 0 <= nx < g.w) or not g.inside[ny][nx] or g.divider[ny][nx]:
-                        near = True
-                        break
-                if near:
-                    break
-            band[gy][gx] = near
+    """Inside cells within depth_cells of the interior edge (a wall), by cardinal rays.
+
+    A DISTANCE TRANSFORM, not a ray walk (GM 2026-08-26, the make quick profile): the first form
+    walked up to `depth_cells` cells in four directions from EVERY cell - ~6M checks per call on a
+    200 x 200 grid, 1.4 s for the four calls one report test makes. Two sweeps per axis give each
+    cell its distance to the nearest blocking cell (outside the plan, a divider, or the grid edge)
+    in each cardinal direction; a cell is in the band iff the least of the four is within
+    `depth_cells`, which is exactly what the ray walk decided. Proven equal on random grids
+    (tests/tools/test_pack_audit.py)."""
+    w, h = g.w, g.h
+    band = _blank(w, h)
+    INF = w + h + 1
+
+    def blocking(gy: int, gx: int) -> bool:
+        return not g.inside[gy][gx] or bool(g.divider[gy][gx])
+
+    dist = [[INF] * w for _ in range(h)]
+    for gy in range(h):
+        row = dist[gy]
+        d = 1  # the grid edge is a blocking cell one step outside
+        for gx in range(w):  # nearest blocker to the LEFT (or the edge) - a cell's OWN status never counts (the ray walk starts at d=1)
+            row[gx] = min(row[gx], d)
+            d = 1 if blocking(gy, gx) else d + 1
+        d = 1
+        for gx in range(w - 1, -1, -1):  # ...and to the RIGHT
+            row[gx] = min(row[gx], d)
+            d = 1 if blocking(gy, gx) else d + 1
+    for gx in range(w):
+        d = 1
+        for gy in range(h):  # nearest blocker ABOVE
+            dist[gy][gx] = min(dist[gy][gx], d)
+            d = 1 if blocking(gy, gx) else d + 1
+        d = 1
+        for gy in range(h - 1, -1, -1):  # ...and BELOW
+            dist[gy][gx] = min(dist[gy][gx], d)
+            d = 1 if blocking(gy, gx) else d + 1
+    for gy in range(h):
+        for gx in range(w):
+            band[gy][gx] = bool(g.inside[gy][gx]) and dist[gy][gx] <= depth_cells
     return band
 
 

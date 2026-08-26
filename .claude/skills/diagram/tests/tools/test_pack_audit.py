@@ -869,3 +869,36 @@ def test_structure_on_wall_fires_on_the_frozen_ochiba_fixture() -> None:
     with open(os.path.join(_FIX, "ochiba-layout-red.svg")) as fh:
         hit = pa.structures_on_walls(pa.parse_svg(fh.read()))
     assert [(h.wall, round(h.into_ft, 1)) for h in hit] == [("court divider", 1.0)]
+
+
+def test_perimeter_band_equals_the_ray_walk_it_replaced() -> None:
+    """The distance-transform `_perimeter_band` (2026-08-26) must decide every cell exactly as the
+    four-direction ray walk did - checked on random grids with dividers, holes and edges."""
+    import random
+    from types import SimpleNamespace
+
+    def ray_walk(inside, divider, w, h, depth):
+        band = [[False] * w for _ in range(h)]
+        for gy in range(h):
+            for gx in range(w):
+                if not inside[gy][gx]:
+                    continue
+                near = False
+                for d in range(1, depth + 1):
+                    for ny, nx in ((gy - d, gx), (gy + d, gx), (gy, gx - d), (gy, gx + d)):
+                        if not (0 <= ny < h and 0 <= nx < w) or not inside[ny][nx] or divider[ny][nx]:
+                            near = True
+                            break
+                    if near:
+                        break
+                band[gy][gx] = near
+        return band
+
+    rng = random.Random(7)
+    for trial in range(12):
+        w, h = rng.randint(3, 24), rng.randint(3, 24)
+        inside = [[rng.random() < 0.85 for _ in range(w)] for _ in range(h)]
+        divider = [[rng.random() < 0.05 for _ in range(w)] for _ in range(h)]
+        depth = rng.randint(1, 6)
+        g = SimpleNamespace(w=w, h=h, inside=inside, divider=divider)
+        assert pa._perimeter_band(g, depth) == ray_walk(inside, divider, w, h, depth), f"trial {trial}: w={w} h={h} depth={depth}"

@@ -207,7 +207,7 @@ def test_main_missing_ftpx_exits_two(tmp_path, capsys):
     assert "ftpx" in capsys.readouterr().err
 
 
-def test_crown_fills_covers_every_recorded_crown():
+def test_crown_fills_covers_every_recorded_crown(pool_tier_glob):
     """`CROWN_FILLS` claims to be every color the engine paints a RECORDED crown with. That claim
     has rotted twice in one day - first the audit's own stale copy (0% coverage), then a
     replacement that missed every woodland-commons canopy (63%) while its comment asserted the old
@@ -219,7 +219,7 @@ def test_crown_fills_covers_every_recorded_crown():
     from l7r.diagram.pipeline import poolmaps
 
     checked = 0
-    for gen in sorted(glob.glob(os.path.join(HERE, "pool", "*", "*.gen.py"))):
+    for gen in sorted(glob.glob(os.path.join(HERE, "pool", pool_tier_glob, "*.gen.py"))):  # the tier's own maps under --tier
         if poolmaps.classify(gen) != "scripted":
             continue  # frozen maps predate the palette and are never re-rendered
         stem = gen[: -len(".gen.py")]

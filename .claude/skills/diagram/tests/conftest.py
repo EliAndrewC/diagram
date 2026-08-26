@@ -19,6 +19,8 @@ the file I just changed" with no answer but the override.
 
 from __future__ import annotations
 
+import pytest
+
 from l7r.diagram._invocation import assert_via_make
 
 # At import of the suite's root conftest - once, before any test runs.
@@ -50,6 +52,17 @@ def pytest_collection_modifyitems(config, items):  # type: ignore[no-untyped-def
         config.hook.pytest_deselected(items=drop)
         items[:] = keep
         config._tier_dropped = len(drop)  # type: ignore[attr-defined]
+
+
+_TIER_DIRS = {"hamlet": "hamlets", "village": "villages", "town": "towns", "city": "provincial-cities", "capital": "capitals"}
+
+
+@pytest.fixture
+def pool_tier_glob(request):  # type: ignore[no-untyped-def]
+    """The pool subdirectory pattern a pool-wide test sweeps: the tier's own directory under
+    `--tier X` (GM 2026-08-26: a hamlet run has no reason to parse every city's SVG), `*` otherwise."""
+    tier = request.config.getoption("--tier")
+    return _TIER_DIRS[tier] if tier else "*"
 
 
 def pytest_report_header(config):  # type: ignore[no-untyped-def]
