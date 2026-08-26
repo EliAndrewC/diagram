@@ -1139,3 +1139,26 @@ measured, the connector explains y 683-808 and the back lane's end y 983-1033, a
 crosses at 1083-1158 - those clumps simply sat at x 1009-1013 with their crowns off the page.
 The face is now the MEDIAN of the per-band front row (`windbreak_face`), which moves the frame
 to the belt's typical edge instead of its one outlier.
+
+
+## 2026-08-26 - scrub never scatters into the marsh (feature 133 T12)
+
+The GM: *"We have scrub land on the map which appears to overlap with the marshland ... my guess is
+that that is a mistake."* It was. Only the toe-side scrub strip had ever been handed the toe band as
+a keep-out (2026-08-12); the ring's side strips, the interior fill and every gen-placed patch drew
+brush discs, blades and pines straight through the reeds, and none of them knew the pond-fringe
+marsh recorded before them. `make scatter-audit` now adjudicates `marsh`: **3,370** scrub bases
+inside this map's marshes before, **0** after (reeds unchanged at 40,364).
+
+**The form of the fix took two rounds.** Round 1 made the marsh a HARD keep-out in `commons()`;
+settlement-review caught the second-order effect - the marsh thins its reeds to nothing over a
+46 px feather inside its polygon, so a hard cut at the polygon left a ruled line with a ~40 ft bare
+strip on the toe's straight west edge (the diagonal north edge hid it under lapping tint discs).
+Round 2: the marsh is a SOFT keep-out - scrub is kept with probability 1 at the marsh edge and 0 at
+feather depth, the complement of the reeds' ramp - so the two covers interleave into a wild edge;
+the audit permits scrub within that band. Two traps on the way, both measured rather than guessed:
+the first cut folded the toe band into the shared `avoid` list and the marsh, which takes the same
+list, drew no reeds at all; and a marsh recorded BEFORE a scrub pass sits in `block_polys` as a
+no-build bog, which the scatter hard-skipped as if it were a building - `marsh_blocks` now tells the
+two apart. Catch-rate: review round 1 found the ruled edge (a real defect the author's own crops
+had not shown at fit zoom); round 2 pending.

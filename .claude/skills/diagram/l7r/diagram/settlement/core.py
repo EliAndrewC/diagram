@@ -90,6 +90,9 @@ class Settlement(
         self.field_polys: list[Any] = Indexed()  # smoothed outlines used for blocking (Indexed: _in_blocked keeps a spatial index on it)
         self.ellipses: list[Any] = []  # (cx, cy, rx, ry) hill/pond/manor - block houses
         self.block_polys: list[Any] = Indexed()  # arbitrary no-build polygons (e.g. forest) (Indexed: _in_blocked keeps a spatial index on it)
+        self.marsh_blocks: list[
+            Any
+        ] = []  # the SAME objects a marsh put into block_polys - so the scrub scatter can tell a bog (a SOFT keep-out it feathers into) from a building (hard); GM 2026-08-26, T12
         # HARD no-build ground, tested against a candidate's whole FOOTPRINT rather than its center.
         # `block_polys` deliberately mixes two different things - hard ground (crop, pond, bog) and
         # SOFT reservations (caption bands, civic aprons, fence standoffs) that a footprint routinely

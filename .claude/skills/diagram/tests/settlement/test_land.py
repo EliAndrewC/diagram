@@ -706,5 +706,12 @@ def test_commons_keeps_scrub_off_every_recorded_marsh():
     s.commons([(20, 250), (330, 250), (330, 720), (20, 720)])  # a scrub pass that straddles the marsh
     fams = parse_bases("".join(s.out))
     assert len(fams["reed"]) == n_reed and fams["blade"] and fams["dot"], "reeds untouched, scrub drawn around them"
+    from l7r.diagram.settlement._geom import edge_dist
+    from l7r.diagram.settlement.land.wet import MARSH_FEATHER_BS
+
+    deep = MARSH_FEATHER_BS * s.bscale
     for fam in ("blade", "dot", "pine"):
-        assert not [b for b in fams[fam] if inside(b[0], b[1], wet)], f"{fam} scattered inside the marsh"
+        assert not [b for b in fams[fam] if inside(b[0], b[1], wet) and edge_dist(b[0], b[1], wet) > deep], f"{fam} scattered deep inside the marsh"
+    # ...but it THINS INTO the marsh over the reeds' own feather (settlement-review 2026-08-26: a hard
+    # cut left a ruled line and a bare strip on the toe's straight edge), so the band is not empty
+    assert [b for b in fams["blade"] if inside(b[0], b[1], wet)], "no scrub in the feather band - the edge would be a ruled line"

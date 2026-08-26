@@ -32,7 +32,8 @@ from pathlib import Path
 from typing import Any, cast
 
 from l7r.diagram.settlement import Settlement
-from l7r.diagram.settlement._geom import CROWN_FILLS, boxed_grid, boxed_hit, boxed_polys, boxed_seg_hit, boxed_segs
+from l7r.diagram.settlement._geom import CROWN_FILLS, boxed_grid, boxed_hit, boxed_polys, boxed_seg_hit, boxed_segs, edge_dist, point_in_poly
+from l7r.diagram.settlement.land.wet import MARSH_FEATHER_BS
 
 Base = tuple[float, float]
 
@@ -140,7 +141,9 @@ def adjudicate(fams: dict[str, list[Base]], manifest: dict[str, Any], map_name: 
     # supposed to overlap with the scrubland rendering"*). Reeds are the marsh's own cover; a scrub
     # base inside a marsh polygon is dry-ground cover drawn under wet ground - before the fix Inashiro
     # carried thousands of them across its whole toe band and pond fringe.
-    marsh = boxed_grid(boxed_polys([m["poly"] for m in manifest.get("marshes", []) if m.get("poly")]))
+    marsh_polys = [[tuple(q) for q in m["poly"]] for m in manifest.get("marshes", []) if m.get("poly")]
+    marsh = boxed_grid(boxed_polys(marsh_polys))
+    marsh_feather = MARSH_FEATHER_BS * float(getattr(view, "bscale", 1.0))  # scrub may thin INTO the marsh over its reed feather (cover.py `soft`)
     bands = [boxed_grid(boxed_segs(_water_segs(view, extra=hi))) for _, hi in DENSITY_BANDS]
 
     violations: list[dict[str, Any]] = []
@@ -151,7 +154,7 @@ def adjudicate(fams: dict[str, list[Base]], manifest: dict[str, Any], map_name: 
                 violations.append({"x": x, "y": y, "family": fam, "keepout": "water+cutbank"})
             elif boxed_hit(x, y, crop.near(x, y), edge_pad=crop_pad - _QUANT_EPS):
                 violations.append({"x": x, "y": y, "family": fam, "keepout": "crop"})
-            elif boxed_hit(x, y, marsh.near(x, y)):  # a base exactly ON the band's edge counts (4 of 3,374 on Inashiro sat at x = the toe's own left edge - the residue, not a defect)
+            elif boxed_hit(x, y, marsh.near(x, y)) and any(point_in_poly(x, y, mp) and edge_dist(x, y, mp) > marsh_feather for mp in marsh_polys):
                 violations.append({"x": x, "y": y, "family": fam, "keepout": "marsh"})
             else:
                 for (lo, hi), grid in zip(DENSITY_BANDS, bands, strict=True):

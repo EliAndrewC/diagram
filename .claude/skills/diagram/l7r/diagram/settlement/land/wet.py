@@ -1,6 +1,7 @@
 """WET GROUND: the reed marsh, the contour band that decides where it lies, the trim that keeps a
 way out of it, and the package's one surface-water distance predicate.
 
+
 The BAND is the load-bearing idea. Wet ground is defined by HEIGHT, so `toe_band` returns a CONTOUR
 band perpendicular to the fall rather than an axis-aligned box - a rectangle is only an honest
 contour at a 0/90/180/270 fall, and at a diagonal it slices across the slope. Its WIDTH comes from
@@ -24,6 +25,8 @@ import random
 from typing import TYPE_CHECKING, Any
 
 from .._geom import Pt, boxed_grid, boxed_hit, boxed_polys, boxed_seg_hit, boxed_segs, edge_dist, point_in_poly, seg_dist
+
+MARSH_FEATHER_BS = 46  # the reeds thin to nothing over this band (x bscale) inside the polygon; `commons` thins its scrub INTO the marsh over the same band
 
 if TYPE_CHECKING:
     from ..core import Settlement
@@ -58,7 +61,7 @@ class WetGroundMixin:
         area = (x1 - x0) * (y1 - y0)
         st = random.getstate()
         random.seed(int(abs(x0) * 5 + abs(y0) * 7 + round(x1 - x0)))
-        feather = 46 * bs
+        feather = MARSH_FEATHER_BS * bs
         pond = self.M.get("pond")
         halo_rects, halo_circles = self._urban_keepouts((x0, y0, x1, y1))  # the urban-clearance halo (see _urban_keepouts): reeds no more belong in a dooryard than scrub does
         corridors = self._corridor_buffers(3 * bs)  # every trodden tread (lane/street/road), not just lanes
@@ -122,7 +125,9 @@ class WetGroundMixin:
             }
         )
         if role != "pond_fringe":  # the wet valley TOE (and the defensive belt) is UNBUILDABLE: register it as a no-build keep-out
-            self.block_polys.append([(round(px, 1), round(py, 1)) for px, py in poly])  # so nothing is placed/dug on a bog (a thin pond-fringe shore ring is exempt)
+            blk = [(round(px, 1), round(py, 1)) for px, py in poly]
+            self.block_polys.append(blk)  # so nothing is placed/dug on a bog (a thin pond-fringe shore ring is exempt)
+            self.marsh_blocks.append(blk)  # ...and the scrub scatter treats it as the marsh it is (soft), not as a building (hard)
 
     def trim_off_marsh(self: Settlement, pts: Any, margin: float = 6.0) -> Any:  # type: ignore[misc]
         """Shorten a way so neither END stands on drawn marshland (GM 2026-08-12).

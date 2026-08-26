@@ -24,13 +24,14 @@ import random
 from typing import TYPE_CHECKING, Any
 
 from .._geom import Poly, boxed_grid, boxed_hit, boxed_polys, boxed_seg_hit, boxed_segs, edge_dist, point_in_poly
+from ..land.wet import MARSH_FEATHER_BS
 
 if TYPE_CHECKING:
     from ..core import Settlement
 
 
 class GroundCoverMixin:
-    def commons(self: Settlement, poly: Any, role: str = "commons", avoid: Any = (), render: str = "scrub") -> None:  # type: ignore[misc]
+    def commons(self: Settlement, poly: Any, role: str = "commons", avoid: Any = (), render: str = "scrub", soft: Any = ()) -> None:  # type: ignore[misc]
         """FUEL-AND-FODDER COMMONS - the degraded open grazing/scrub on the far (upslope / windward) side,
         BEYOND the fengshui back-grove: coarse grass, low brush, and a FEW scattered SCRAGGLY pines, kept
         cropped bare by constant firewood + grass gathering. Deliberately drawn OPEN and SPARSE on drier,
@@ -49,7 +50,12 @@ class GroundCoverMixin:
         # inside its marshes (`make scatter-audit`, which now adjudicates "marsh"). Reeds are the
         # marsh's own cover; scrub stops where the wet ground starts. Taken here, at the source, so a
         # caller cannot forget it; the toe band that is only computed later is passed in by hinterland.
-        avoid = [*avoid, *(m["poly"] for m in self.M.get("marshes", []) if m.get("poly"))]
+        # A SOFT keep-out, not a hard one (settlement-review 2026-08-26, round 1): the marsh thins its
+        # reeds to nothing over a 46 px feather INSIDE its polygon, so a hard cut at the polygon left a
+        # ruled line and a ~40 ft bare strip on the toe's straight west edge. The scrub instead thins
+        # INTO the marsh over that same band - kept with probability 1 at the edge, 0 at feather depth,
+        # the complement of the reeds' ramp - so the two covers interleave into a wild edge.
+        soft = [*soft, *(m["poly"] for m in self.M.get("marshes", []) if m.get("poly"))]
         # SCOPED (2026-08-08): the tuft/brush scatter is decoration keyed to the common it fills.
         if render == "bare":
             # CLAIMED but UNDRAWN ground (GM 2026-08-10, on the capital's ring bands reading as
@@ -108,8 +114,12 @@ class GroundCoverMixin:
             # the exact edge test wants (boxed_hit's contract); the exact test gets the per-glyph lean.
             crop_pad = self.px(self._CROP_MARGIN_FT)
             fld_b = boxed_grid(boxed_polys(list(self.field_polys) + list(self.dry_polys), pad=crop_pad + 14 * bs))
-            blk_b = boxed_grid(boxed_polys(self.block_polys))
+            # a marsh recorded BEFORE this pass sits in block_polys as a no-build bog; it is a SOFT keep-out
+            # here (below), so it must not also be a hard one - or the feathered edge never happens
+            blk_b = boxed_grid(boxed_polys([bp for bp in self.block_polys if not any(bp is mb for mb in self.marsh_blocks)]))
             clr_b, avd_b, cor_b = boxed_grid(boxed_polys(self.clearings)), boxed_grid(boxed_polys(avoid)), boxed_grid(boxed_segs(corridors))
+            soft_polys = [[tuple(q) for q in sp] for sp in soft]
+            soft_feather = MARSH_FEATHER_BS * bs  # the marsh's own reed feather (wet.py), so the two ramps are complements
             # drawn water pre-boxed once (see _watercourse_segs); irrigation channels additionally
             # carry the CUT-BANK margin (_BANK_MARGIN_FT - a maintained bank is scythed like a field
             # margin), streams stay at drawn width so the brook's natural bank keeps its grass
@@ -133,6 +143,9 @@ class GroundCoverMixin:
                     or boxed_hit(px, py, avd_b.near(px, py))
                 ):  # ... and OUT of any keep-out (the hamlet cluster stays clear of cover)
                     return True
+                for sp in soft_polys:  # ...and THINNING INTO a soft keep-out (a marsh) over its own feather
+                    if point_in_poly(px, py, sp):
+                        return random.random() < min(1.0, edge_dist(px, py, sp) / soft_feather)
                 ed = edge_dist(px, py, poly)
                 return ed < feather and random.random() > (ed / feather) ** drop
 
@@ -346,14 +359,15 @@ class GroundCoverMixin:
         # ...and EVERY scrub pass gets it, not just the toe strip (GM 2026-08-26, T12): the ring's side
         # strips and the interior fill reach into the toe band too, and the marsh is drawn AFTER them,
         # so `commons()`'s own marsh keep-out cannot see it yet - it has to be handed in.
-        # A SEPARATE list: the marsh call below takes `avoid` as well, and a marsh handed its own band as
-        # a keep-out draws no reeds at all (measured on the first cut of this fix - the toe went bare).
-        scrub_avoid = [*avoid, *([toe_poly] if toe_poly else [])]
+        # As a SOFT keep-out (see `commons`), and NEVER folded into `avoid`: the marsh call below takes
+        # `avoid` too, and a marsh handed its own band draws no reeds at all (measured on the first
+        # cut of this fix - the toe went bare).
+        soft = [toe_poly] if toe_poly else []
         if commons:
             for p in ring(0, max(W, H)):  # the cut-over SCRUB commons: the DOMINANT denuded-hill cover
-                self.commons(p, role=scrub_role, avoid=scrub_avoid)  # (managed woodland is added as a FEW patches by the gen)
+                self.commons(p, role=scrub_role, avoid=avoid, soft=soft)  # (managed woodland is added as a FEW patches by the gen)
             if toe_poly and toe_side not in skip_sides:
-                self.commons(toe_strip(0, max(W, H)), role=scrub_role, avoid=scrub_avoid)
+                self.commons(toe_strip(0, max(W, H)), role=scrub_role, avoid=avoid, soft=soft)
             # ...and the INTERIOR. The ring lays strips only OUTSIDE the cultivated bbox, but an irregular field
             # (a comb FAN) does not fill its own bbox: it leaves open VOIDS INSIDE it that nothing else clothes
             # - the strips are outside them and the marsh is a contour band below them - so they render as BARE
@@ -363,7 +377,7 @@ class GroundCoverMixin:
             # are. Ground the crop does not use is still ground, and it is grazed. A SOLID field (a polder grid
             # fills its whole bbox, no voids) has nothing to clothe here, so `interior_fill=False` skips it.
             if interior_fill:
-                self.commons([(fx0, fy0), (fx1, fy0), (fx1, fy1), (fx0, fy1)], role=scrub_role, avoid=scrub_avoid)
+                self.commons([(fx0, fy0), (fx1, fy0), (fx1, fy1), (fx0, fy1)], role=scrub_role, avoid=avoid, soft=soft)
         if marsh:
             # The toe is a CONTOUR BAND, not an axis-aligned box. Wet ground is defined by HEIGHT, and every
             # other feature here (field, comb, drain, the marsh_on_low_ground check) resolves height by
