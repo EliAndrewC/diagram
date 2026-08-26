@@ -14,7 +14,6 @@ from l7r.diagram import switches as sw
 from tests.test_switches import (
     LOCKED_TARGETS,
     SKILL,
-    fixture_skill,  # noqa: F401 - fixtures the moved tests take as parameters (a name in a signature is a use pytest sees and ruff does not)
     make,
 )
 

@@ -19,7 +19,6 @@ from tests.pipeline.test_gencache import (
     HERE,
     _fixture,
     _with_engine,  # fixtures the moved tests take as parameters
-    clean_gatehit,  # noqa: F401 - fixtures the moved tests take as parameters (a name in a signature is a use pytest sees and ruff does not)
 )
 
 
