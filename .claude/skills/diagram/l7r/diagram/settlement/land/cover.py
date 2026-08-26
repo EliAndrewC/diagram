@@ -40,6 +40,16 @@ class GroundCoverMixin:
         also carried the graves + dry hill-crops): settlements.md 'Village windbreak' / back-slope land use. Recorded
         in M['commons']. `role` picks the glyph (woodland / pasture / commons); `avoid` is a list of KEEP-OUT
         polygons (e.g. the hamlet cluster) the scatter stays out of, so ground-cover never creeps onto them."""
+        # EVERY RECORDED MARSH IS A KEEP-OUT FOR SCRUB (GM 2026-08-26, feature 133 T12: *"do we mean to
+        # show ... small pine trees and such growing out of the marshland in exactly the same pattern as
+        # ... outside of the marshland? my guess is that that is a mistake"*). It was: only the toe-side
+        # strip was handed the toe band (2026-08-12), so the left/right ring strips, the interior fill
+        # and every gen-placed patch scattered dry-ground scrub straight through the reeds, and none of
+        # them knew the pond-fringe marsh recorded before them - Inashiro carried ~40k scrub bases
+        # inside its marshes (`make scatter-audit`, which now adjudicates "marsh"). Reeds are the
+        # marsh's own cover; scrub stops where the wet ground starts. Taken here, at the source, so a
+        # caller cannot forget it; the toe band that is only computed later is passed in by hinterland.
+        avoid = [*avoid, *(m["poly"] for m in self.M.get("marshes", []) if m.get("poly"))]
         # SCOPED (2026-08-08): the tuft/brush scatter is decoration keyed to the common it fills.
         if render == "bare":
             # CLAIMED but UNDRAWN ground (GM 2026-08-10, on the capital's ring bands reading as
@@ -333,11 +343,17 @@ class GroundCoverMixin:
         # scrub as the other three - handed the marsh as a keep-out, so it stops where the reeds start
         # and the two never overlap. Computed BEFORE the commons pass for that reason.
         toe_poly = self.toe_band(down_deg, pad) if marsh else []
+        # ...and EVERY scrub pass gets it, not just the toe strip (GM 2026-08-26, T12): the ring's side
+        # strips and the interior fill reach into the toe band too, and the marsh is drawn AFTER them,
+        # so `commons()`'s own marsh keep-out cannot see it yet - it has to be handed in.
+        # A SEPARATE list: the marsh call below takes `avoid` as well, and a marsh handed its own band as
+        # a keep-out draws no reeds at all (measured on the first cut of this fix - the toe went bare).
+        scrub_avoid = [*avoid, *([toe_poly] if toe_poly else [])]
         if commons:
             for p in ring(0, max(W, H)):  # the cut-over SCRUB commons: the DOMINANT denuded-hill cover
-                self.commons(p, role=scrub_role, avoid=avoid)  # (managed woodland is added as a FEW patches by the gen)
+                self.commons(p, role=scrub_role, avoid=scrub_avoid)  # (managed woodland is added as a FEW patches by the gen)
             if toe_poly and toe_side not in skip_sides:
-                self.commons(toe_strip(0, max(W, H)), role=scrub_role, avoid=[*avoid, toe_poly])
+                self.commons(toe_strip(0, max(W, H)), role=scrub_role, avoid=scrub_avoid)
             # ...and the INTERIOR. The ring lays strips only OUTSIDE the cultivated bbox, but an irregular field
             # (a comb FAN) does not fill its own bbox: it leaves open VOIDS INSIDE it that nothing else clothes
             # - the strips are outside them and the marsh is a contour band below them - so they render as BARE
@@ -347,7 +363,7 @@ class GroundCoverMixin:
             # are. Ground the crop does not use is still ground, and it is grazed. A SOLID field (a polder grid
             # fills its whole bbox, no voids) has nothing to clothe here, so `interior_fill=False` skips it.
             if interior_fill:
-                self.commons([(fx0, fy0), (fx1, fy0), (fx1, fy1), (fx0, fy1)], role=scrub_role, avoid=avoid)
+                self.commons([(fx0, fy0), (fx1, fy0), (fx1, fy1), (fx0, fy1)], role=scrub_role, avoid=scrub_avoid)
         if marsh:
             # The toe is a CONTOUR BAND, not an axis-aligned box. Wet ground is defined by HEIGHT, and every
             # other feature here (field, comb, drain, the marsh_on_low_ground check) resolves height by

@@ -684,3 +684,27 @@ def test_surface_water_dist_survives_the_split_at_both_import_paths():
 
     assert settlement.surface_water_dist is land.surface_water_dist
     assert settlement.surface_water_dist({"channels": [], "streams": []}, 0, 0) == 1e9
+
+
+def test_commons_keeps_scrub_off_every_recorded_marsh():
+    """GM 2026-08-26 (feature 133 T12): scrub scattered straight through the reeds. Every commons pass
+    now treats every recorded marsh polygon as a keep-out, at the source."""
+    from l7r.diagram.tools.scatter_audit import parse_bases
+
+    def inside(px: float, py: float, poly: list[tuple[float, float]]) -> bool:
+        hit = False
+        for i in range(len(poly)):
+            (x0, y0), (x1, y1) = poly[i], poly[(i + 1) % len(poly)]
+            if (y0 > py) != (y1 > py) and px < x0 + (py - y0) * (x1 - x0) / (y1 - y0):
+                hit = not hit
+        return hit
+
+    s = _nuc_village()  # field to the EAST (x >= 640)
+    wet = [(40, 280), (300, 280), (300, 700), (40, 700)]  # open ground WEST of the field
+    s.marsh(wet)
+    n_reed = len(parse_bases("".join(s.out))["reed"])
+    s.commons([(20, 250), (330, 250), (330, 720), (20, 720)])  # a scrub pass that straddles the marsh
+    fams = parse_bases("".join(s.out))
+    assert len(fams["reed"]) == n_reed and fams["blade"] and fams["dot"], "reeds untouched, scrub drawn around them"
+    for fam in ("blade", "dot", "pine"):
+        assert not [b for b in fams[fam] if inside(b[0], b[1], wet)], f"{fam} scattered inside the marsh"

@@ -136,6 +136,11 @@ def adjudicate(fams: dict[str, list[Base]], manifest: dict[str, Any], map_name: 
     crop_polys = [f["outline"] for f in manifest.get("fields", []) if f.get("outline")]
     crop_polys += [d["poly"] for d in manifest.get("dry_plots", []) if d.get("poly")]
     crop = boxed_grid(boxed_polys(crop_polys, pad=crop_pad))
+    # THE MARSH IS A KEEP-OUT FOR SCRUB (GM 2026-08-26, feature 133 T12: *"the marshland is not
+    # supposed to overlap with the scrubland rendering"*). Reeds are the marsh's own cover; a scrub
+    # base inside a marsh polygon is dry-ground cover drawn under wet ground - before the fix Inashiro
+    # carried thousands of them across its whole toe band and pond fringe.
+    marsh = boxed_grid(boxed_polys([m["poly"] for m in manifest.get("marshes", []) if m.get("poly")]))
     bands = [boxed_grid(boxed_segs(_water_segs(view, extra=hi))) for _, hi in DENSITY_BANDS]
 
     violations: list[dict[str, Any]] = []
@@ -146,6 +151,8 @@ def adjudicate(fams: dict[str, list[Base]], manifest: dict[str, Any], map_name: 
                 violations.append({"x": x, "y": y, "family": fam, "keepout": "water+cutbank"})
             elif boxed_hit(x, y, crop.near(x, y), edge_pad=crop_pad - _QUANT_EPS):
                 violations.append({"x": x, "y": y, "family": fam, "keepout": "crop"})
+            elif boxed_hit(x, y, marsh.near(x, y)):  # a base exactly ON the band's edge counts (4 of 3,374 on Inashiro sat at x = the toe's own left edge - the residue, not a defect)
+                violations.append({"x": x, "y": y, "family": fam, "keepout": "marsh"})
             else:
                 for (lo, hi), grid in zip(DENSITY_BANDS, bands, strict=True):
                     if boxed_seg_hit(x, y, grid.near(x, y)):
@@ -153,7 +160,7 @@ def adjudicate(fams: dict[str, list[Base]], manifest: dict[str, Any], map_name: 
                         break
     return {
         "map": map_name,
-        "families_checked": {"adjudicated": list(ADJUDICATED), "keepouts": ["water+cutbank", "crop"], "report_only": ["reed"]},
+        "families_checked": {"adjudicated": list(ADJUDICATED), "keepouts": ["water+cutbank", "crop", "marsh"], "report_only": ["reed"]},
         "counts": {fam: len(pts) for fam, pts in fams.items()},
         "violations": violations,
         "density_bands": density,

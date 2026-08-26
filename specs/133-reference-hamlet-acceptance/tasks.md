@@ -29,6 +29,12 @@ _(from T11 on, each entry also carries its cycle plan before work starts - `scaf
       measure: research first (Principle XII); then count planks per ditch role on the regenerated Inashiro from the manifest
       verify: `make maps` (reference scope) once; `settlement-review` on the plank placement
 
+- [ ] T12 **scrub overlapping the marsh** - the GM (2026-08-26): *"We have scrub land on the map which appears to overlap with the marshland. Is that intentional? Like, do we mean to show that there are, like, small pine trees and such growing out of the marshland in exactly the same pattern as the trees and grass and scrub brushes and such? that are outside of the marshland? my guess is that that is a mistake and that the marshland is not supposed to overlap with the scrubland rendering. What do you think? go ahead and make whatever adjustments are necessary based on your evaluation and findings."*
+      given 2026-08-26T05:52Z | done - | elapsed - | runs: -
+      scaffold: `scatter_audit` already exists (checks water+cutbank, crop) - extend its exclusion set to the marsh polygons if the scatter is not already kept off them
+      measure: count scatter glyphs inside marsh polygons on the manifest before/after
+      verify: `make maps`, `make done` (locked, ~75 s), `settlement-review`
+
 ## Phase 9 - acceptance
 
 - [ ] T90 the would-have-dispatched audit (FR-005): every entry in the period, and for each whether it should have run; each "no" names a tooling change
