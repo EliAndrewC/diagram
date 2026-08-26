@@ -105,6 +105,10 @@ _(from T11 on, each entry also carries its cycle plan before work starts - `scaf
       given ~2026-08-26T23:50Z | done 2026-08-26T22:06Z | runs: make quick x6, hooks-test x2
       note: they were not tests - the Makefile's own machinery on every run: make + shell reads 0.09 s, ruff/mypy 0.36 s, the state write 0.33 s. The state write's 0.31 s was `engine_key_worktree` re-hashing all ~1,060 engine files (856 regression manifests included) through `git hash-object` on every green run; now the semantic cache is keyed by git's own blob id, unchanged files take their id from the index (`ls-files -s`), and only modified/untracked files are hashed - 314 -> 80 ms, the state write 326 -> 106 ms, and the tree path answers from the cache in 12 ms (was a full cat-file of every blob). Exact (the worktree/tree identity test and the guard suite both green).
 
+- [x] T28 **pytest-testmon in `make quick`** - the GM (2026-08-26): *"I do like the idea of pytest-testmon - the fact that we don't have to implement it ourselves from first principles makes the idea much more appealing to try out now."*
+      given ~2026-08-27T00:20Z | done 2026-08-26T22:23Z | runs: trial x9 (the first four found selection silently OFF under `-m`; `--testmon-forceselect` fixed it), make quick x4, make tooling x1
+      note: adopted with `--testmon-forceselect`; `make quick ALL=1` escapes; `.testmondata` gitignored; dependency in requirements-dev.in + the lock + the setup check. Measured in the trial: unchanged -> 0 tests / 3.3 s; a no-op line in commons() -> 10 tests / 6.7 s; a test edited -> 1 test / 3.6 s; full -> 8.7 s. Limit recorded: data-file edits do not select (the gate covers them). The GM's "long-run idea" from T17 is now the mechanism in use.
+
 ## Phase 9 - acceptance
 
 - [ ] T90 the would-have-dispatched audit (FR-005): every entry in the period, and for each whether it should have run; each "no" names a tooling change

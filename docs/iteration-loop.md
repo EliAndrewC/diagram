@@ -145,13 +145,16 @@ tagging pass was SCRIPTED from the tier names each test's body mentions, written
 ordinary decorators so it is reviewable and correctable by hand; hamlet and village share the
 homestead engine, so a test naming either stays in.
 
-**Kept for later, in the GM's words:** *"in the long run, we could actually do something more
-efficient where based on what code changed, we would be able to detect what types of settlements a
-test is relevant for in an automated way based on a diff that occurred since the last time that we
-had a successful test run."* That is change-based test selection: map each test to the modules it
-imports/executes (coverage data from a green run gives this for free), then after a green run select
-only the tests whose footprint intersects the diff. Not built; the hand tags are the proof of
-concept it would replace.
+**Built the same day, off the shelf (T28):** the GM's long-run idea - *"based on what code changed,
+we would be able to detect ... in an automated way"* - is `pytest-testmon`, adopted in `make quick`
+on 2026-08-26 with `--testmon-forceselect` (plain `--testmon` stops selecting whenever `-m` is used).
+It records, per test, the code the test executed, and selects only tests whose executed code
+changed. Measured: nothing changed -> "no tests ran" in 3.3 s; a one-line engine edit -> 10 tests in
+6.7 s; one test function edited -> 1 test in 3.6 s; the first run in a fresh clone pays ~3 s to
+build `.testmondata` (gitignored, per clone). Limits, stated: data files are not tracked, so a test
+that reads a fixture or manifest re-runs only when its CODE changes - which is why the gate never
+selects; and `make quick ALL=1` runs every quick test on demand. The tier tags stay: they answer a
+different question (relevance to the map on the sheet) and compose with it.
 
 
 ## The "collection" floor is not collection (measured 2026-08-26, after the GM asked for a quick-tests folder)

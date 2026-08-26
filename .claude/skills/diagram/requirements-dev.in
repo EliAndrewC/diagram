@@ -5,5 +5,6 @@ mypy
 pytest
 pytest-cov
 pytest-xdist
+pytest-testmon
 types-shapely
 pip-tools    # re-locks these files

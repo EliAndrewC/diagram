@@ -2,3 +2,5 @@
 # pytest-cov/xdist parallel-mode data files; transient, merged by `coverage combine`
 .coverage.*
 .mapcheck.json
+# pytest-testmon: per-clone change-selection database (T28)
+.testmondata*

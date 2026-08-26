@@ -578,7 +578,7 @@ durations:
 
 quick:
 	@python3 -m ruff check --fix l7r/ tests/ && python3 -m ruff format l7r/ tests/ && python3 -m mypy
-	@start=$$(date +%s); $(EXHAUSTIVE_ENV) python3 -m pytest -n $(XDIST_WORKERS) --dist worksteal -q --no-cov -x --ff -m "not rolls_map and not coverage_only" --deselect tests/test_villages.py $(TIER_SELECT); ec=$$?; \
+	@start=$$(date +%s); $(EXHAUSTIVE_ENV) python3 -m pytest -n $(XDIST_WORKERS) --dist worksteal $(TESTMON) -q --no-cov -x --ff -m "not rolls_map and not coverage_only" --deselect tests/test_villages.py $(TIER_SELECT); ec=$$?; \
 	  el=$$(( $$(date +%s) - start )); \
 	  if [ $$ec -ne 0 ]; then exit $$ec; fi; \
 	  if [ $$el -gt $(QUICK_BUDGET) ]; then \
@@ -743,6 +743,14 @@ XDIST_WORKERS = $(if $(CODEBUILD_BUILD_ID),auto,$(shell [ "$(CPU_COUNT)" -lt 8 ]
 # EXHAUSTIVE=1 (GM 2026-08-26, T19): tests that sweep seeds / kinds / cardinals run the FULL sweep instead of
 # their documented quick subset (tests/_scope.py). `make quick EXHAUSTIVE=1`; `make done EXHAUSTIVE=1`.
 EXHAUSTIVE_ENV = $(if $(EXHAUSTIVE),L7R_TESTS_EXHAUSTIVE=1,)
+# CHANGE-BASED SELECTION IN QUICK (GM 2026-08-26, T28): pytest-testmon records, per test, the code it executed, and
+# on the next run selects only the tests whose executed code changed - the GM's long-run idea, off the shelf.
+# `--testmon-forceselect`, because plain `--testmon` silently stops selecting whenever `-m` is used (its own help).
+# Measured: nothing changed -> "no tests ran" in 3.3 s; a one-line engine edit -> 10 tests in 6.7 s; the first
+# run after a fresh clone pays ~3 s to build `.testmondata`. Data files (fixtures, manifests, SVGs) are NOT
+# tracked - a test that reads one re-runs only when its code changes - which is why the GATE never uses
+# testmon and runs everything. `make quick ALL=1` runs every quick test regardless.
+TESTMON = $(if $(ALL),--no-testmon,--testmon-forceselect)
 # THE GATE IS ALWAYS EXHAUSTIVE (constitution v2.9.0, GM 2026-08-26): `make quick` runs each test's quick form,
 # `make done` its full form - the corpus, the full matrices, the full-size canvases, the tooling tests.
 GATE_EXHAUSTIVE_ENV = L7R_TESTS_EXHAUSTIVE=1
