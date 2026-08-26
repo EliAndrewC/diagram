@@ -251,3 +251,25 @@ Measured: the zero-test floor on the quick tree 3.5 -> 3.1 s; `make quick ALL=1`
 runs) 8.7 -> ~7.0 s wall for 1,971 tests; with testmon, an unchanged tree answers in ~3.5 s and a
 one-file edit in ~4-7 s. `dmypy run` replaces one-shot mypy in quick (~0.25 -> ~0.1 s after the
 first run; one-shot on CodeBuild).
+
+
+## DECLINED, by the GM (2026-08-26): a persistent test runner
+
+**What was asked:** whether warm worker processes (a per-clone daemon that has imported the engine
+and collected the suite, forking workers per run) would remove the ~3 s pytest/xdist floor.
+
+**What was measured** (a fork-server prototype, eight children, the quick tree): forked from a warm
+base 11.9 / 13.9 s; the same eight started cold 14.9 s; `make quick ALL=1` with xdist and
+work-stealing 7.0 s. The warmth itself is worth ~1 s of wall (interpreter start + engine import,
+paid in parallel); pytest's own startup and the per-process COLLECTION cannot be forked away,
+because pytest cannot reuse a collected session across processes; and a runner without xdist's
+balancing loses 5-7 s to static slicing.
+
+**What it would cost:** a bespoke runner (warm workers + work-stealing + a pre-collected session)
+that must be per clone (each session's warm state is that clone's code), local only (never on
+CodeBuild), and must die with the Claude session that spawned it - the failure mode being dozens of
+orphaned interpreters accumulating over months of sessions in one container.
+
+**The decision:** not built. ~1 s per run does not buy that lifecycle risk. The GM: *"I agree with
+that finding."* Reopen only if the per-run count makes a second matter AND pytest grows a way to
+reuse collection across processes.
