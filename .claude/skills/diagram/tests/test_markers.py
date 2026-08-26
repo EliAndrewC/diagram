@@ -20,6 +20,10 @@ from __future__ import annotations
 import ast
 import pathlib
 
+import pytest
+
+from tests._scope import EXHAUSTIVE
+
 # THE RECEIVER IS PART OF THE SIGNAL, and leaving it out was the fourth instance of this feature's
 # recurring mistake. `build` and `generate` are ordinary words: `tests/check_village/` passes a
 # callable named `build` as a PARAMETRIZED FIXTURE ARGUMENT, so matching the bare name reported two
@@ -97,6 +101,9 @@ def test_the_tier_option_deselects_only_tests_tagged_for_other_tiers(pytester) -
     r.assert_outcomes(passed=3)
 
 
+@pytest.mark.skipif(
+    not EXHAUSTIVE, reason="a whole-tree source scan (~1 s) that guards a roster, not a map; under EXHAUSTIVE=1 and at the gate (GM 2026-08-26, T21) - last exhaustive green 2026-08-26"
+)
 def test_every_map_rolling_test_carries_the_rolls_map_marker() -> None:
     missing: list[str] = []
     for p in sorted(TESTS.rglob("test_*.py")):

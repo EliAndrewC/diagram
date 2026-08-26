@@ -489,14 +489,14 @@ def test_draw_comb_field_snaps_the_intake_onto_a_nearby_stream():
     s = Settlement(W=1400, H=1400, seed=5)
     s.meta(name="Sn", scale="town", ftpx=1, down_deg=90)
     s.stream([(680, 50), (680, 1350)], width=9)  # runs 20px west of the sluice
-    net = build_comb(1400, 1400, (700, 200), 5, down_deg=90, field_fall=400)
+    net = build_comb(1400, 1400, (700, 200), 2, down_deg=90, field_fall=400)
     net["brook"] = []
     s.draw_comb_field(net, "f1", {"kind": "stream"})
     hx, hy = s.M["channels"][-1]["poly"][0]
     assert abs(hx - 680) < 0.5 and abs(hy - 200) < 0.5  # snapped onto the centerline
     s2 = Settlement(W=1400, H=1400, seed=6)
     s2.meta(name="Sn2", scale="town", ftpx=1, down_deg=90)
-    net2 = build_comb(1400, 1400, (700, 200), 6, down_deg=90, field_fall=400)
+    net2 = build_comb(1400, 1400, (700, 200), 3, down_deg=90, field_fall=400)
     net2["brook"] = []
     s2.draw_comb_field(net2, "f2", {"kind": "stream", "stream": [(700, 40), (702, 120), (700, 200)]})
     assert s2.M["channels"][-1]["poly"][0] == [700, 200]  # feeder ends at the sluice: already joined

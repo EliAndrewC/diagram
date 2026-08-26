@@ -22,6 +22,7 @@ from tests.check_village._builders import (
     bstone,
     exground,
     f,
+    f_only,
     garden,
     grove,
     house,
@@ -261,7 +262,7 @@ def test_every_solid_struct_is_gated_off_every_hazard(hazard, expect, where, bui
         M = _haz_base()
         M.update(build())
         M.setdefault(key, []).append(solid(key, *where))
-        if expect not in f(M):
+        if expect not in f_only(M, expect):  # targeted: the question is about ONE check
             missed.append(key)
     assert not missed, (
         f"{missed} sit on {hazard} without tripping {expect} - every _OVERLAP_STRUCTS key must be gated off every "
@@ -281,7 +282,7 @@ def test_every_solid_struct_is_gated_off_one_hazard():
         M = _haz_base()
         M.update(build())
         M.setdefault(key, []).append(solid(key, *where))
-        if expect not in f(M):
+        if expect not in f_only(M, expect):  # targeted: the question is about ONE check
             missed.append(key)
     assert not missed, f"{missed} sit on {hazard} without tripping {expect}"
 
@@ -308,7 +309,7 @@ def test_a_border_line_under_a_compound_wall_trips_nothing():
 
 @pytest.mark.parametrize(("name", "build", "offset", "must_fire", "why"), _GAP_RATCHET, ids=[r[0] for r in _GAP_RATCHET])
 def test_gap_verdicts_read_footprints_not_centers(name, build, offset, must_fire, why):
-    fired = name in f(build(offset))
+    fired = name in f_only(build(offset), name)
     assert fired == must_fire, f"{name}: expected {'a failure' if must_fire else 'no failure'} at the disagreement offset ({why}) - this check is measuring centers or circumscribed radii again"
 
 

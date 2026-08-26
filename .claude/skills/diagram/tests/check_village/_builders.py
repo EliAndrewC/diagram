@@ -12,6 +12,14 @@ def f(M):
     return set(check_village.gate(M, verbose=False))
 
 
+def f_only(M, *names):
+    """The failures among `names` only - a TARGETED gate (the registry runs the named checks and
+    their dependencies, nothing else). Exact for any assertion of the form `name in f(M)` /
+    `name not in f(M)`, and ~10x cheaper than the full gate on a city fixture (GM 2026-08-26, T21:
+    a test that loops twenty fixtures through the full gate to ask one question each)."""
+    return set(check_village.gate(M, verbose=False, only=set(names)))
+
+
 def bldg(x, y, kind="merchant", rot=0, w=40, h=28, **kw):
     return {"x": x, "y": y, "w": w, "h": h, "rot": rot, "kind": kind, **kw}
 

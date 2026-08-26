@@ -178,3 +178,32 @@ marker deselection already drops: **~0.2-0.4 s**, not 5. And fewer workers cut t
 cost more in execution (240 CPU-s / W): the optimum is more workers than we have cores. Not done.
 What WOULD move the floor is a persistent test runner (workers that stay warm between runs) - a
 different tool, noted, not pursued.
+
+
+## The quick-test audit (GM 2026-08-26, feature 133 T19-T21) - every test above 0.3 s, and the call made on it
+
+The principles applied, in the order they were learned today (constitution v2.8.0 "a test's cost is a cost"):
+
+1. **Fixture size**: the smallest field, canvas or grid that shows the property (a 1- or 2-fan comb, not 5; a 600 px near-ring grid, not 1,000).
+2. **Products become axes; sweeps become documented subsets** with the full form under `EXHAUSTIVE=1` and the last exhaustive green in the docstring.
+3. **Proofs of tooling** (a cache is faithful, a roster is complete, a whole-tree scan) prove nothing about a map: `EXHAUSTIVE`/gate only.
+4. **Tier relevance**: a test, a corpus fixture or a pool sweep tagged for other tiers does not run under the lock.
+5. **A test helper's brute-force loop gets the same index the engine got** (bbox prefilters, targeted gates: ask the gate ONE question with `only=`, not 189).
+6. **Wall, not CPU, is the goal**: 22 workers make 26 CPU-s of independent tests ~1.2 s of wall; the floor is ~6 s of pytest/xdist overhead plus the longest single test.
+
+Day's arc, `make quick` under the hamlet tier: **30 s -> 14.2 s wall**; pytest 29 -> 11.3 s; per-test total 270 -> 100 s; tests over 1 s: 59 -> 18.
+
+**Changed on the audit (T21)**, beyond T19/T20: the two hazard-matrix axes and the gap-ratchet and label-registry tests ask the gate one targeted question each instead of running all 189 checks (principle 5); seven comb tests build 2-fan combs (1); the near-ring tests use a 600 px grid (1); the rolls_map-marker guard and the waterfields census, both whole-tree source scans, moved to EXHAUSTIVE (3).
+
+**Kept, with the reason - these are the judgment calls for the GM to overrule:**
+
+| test | cost | why it is kept as is |
+|---|---|---|
+| the regression corpus (251 hamlet/village fixtures) | 24 CPU-s, ~1.2 s wall | every saved bad map still trips its check - the GM's own doctrine; 251 independent tests parallelize completely, so it costs ~1 s of wall; the true fix is change-based selection (run a fixture only when its check's segment changed since the last green run), recorded above as the long-run idea |
+| `test_switches` make-driven refusals (12 targets + 4) | ~5 CPU-s | they run the REAL Makefile in a fixture and prove each refusal; ~0.2 s per `make` is process cost (Makefile parse + the switch read); a cheaper fixture would test a copy of the logic, not the logic |
+| `test_a_foreign_parallel_coverage_file_reaches_the_report` | 1.3 s | spawns a real coverage subprocess to prove a real merge path |
+| the ci tests (git repos in tmp) | 0.3-0.6 s each | each builds a real git repo with subprocess git; the behavior under test is git's |
+| supply-banks (2.0 s), hem-is-cropland (1.6 s), intake-snaps (1.2 s), cascade sources (1.2 s) | building 2-3 combs each | each property needs a drawn comb with a stream/hem/second fan; already at 2 fans; the rest is `close_seams`, which profiled as evenly spread geometry, not a hot loop |
+| the hinterland scatters (1.35, 1.1, 0.8 s) | a 1000 px scatter each | the scatter density is the property; a smaller canvas would test a sparser sheet - kept at the size the doctrine draws |
+
+**Not done, deliberately**: shrinking the corpus by sampling (every fixture is a distinct bad map, there is no redundancy to remove), and any change to what the engine draws.

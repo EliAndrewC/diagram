@@ -254,14 +254,14 @@ def test_draw_comb_field_existing_stream_and_cascade_sources():
 
     s = Settlement(W=1400, H=1400, seed=5)
     s.meta(name="Cs", scale="town", ftpx=1, down_deg=90)
-    net = build_comb(1400, 1400, (700, 200), 5, down_deg=90, field_fall=400)
+    net = build_comb(1400, 1400, (700, 200), 2, down_deg=90, field_fall=400)
     net["brook"] = []
     n_streams = len(s.M["streams"])
     s.draw_comb_field(net, "f1", {"kind": "stream"})  # no polyline -> no stream drawn
     assert len(s.M["streams"]) == n_streams
     assert s.M["channels"][-1]["to"] == {"kind": "field", "name": "f1"}  # hairline still recorded
     n_chan = len(s.M["channels"])
-    net2 = build_comb(1400, 1400, (700, 200), 6, down_deg=90, field_fall=400)
+    net2 = build_comb(1400, 1400, (700, 200), 3, down_deg=90, field_fall=400)
     net2["brook"] = []
     s.draw_comb_field(net2, "f2", {"kind": "cascade"})  # cascade: the caller wires the source
     assert len(s.M["channels"]) == n_chan  # no hairline appended
@@ -309,7 +309,7 @@ def test_draw_comb_field_drops_hem_plots_on_a_prior_fan():
 
     s = Settlement(W=1400, H=1400, seed=5)
     s.meta(name="Cp", scale="town", ftpx=1, down_deg=90)
-    net = build_comb(1400, 1400, (700, 200), 5, down_deg=90, field_fall=400)
+    net = build_comb(1400, 1400, (700, 200), 2, down_deg=90, field_fall=400)
     net["brook"] = []
     on_rice = [p for p in net["dry_plots"]]
     assert on_rice, "the comb must produce a hem for the drop to be observable"
@@ -325,7 +325,7 @@ def test_draw_comb_field_trims_an_inwall_drain_through_the_helper():
     from l7r.diagram.waterfields import build_comb
 
     s = _inwall_settlement()
-    net = build_comb(1000, 1000, (500, 200), 5, down_deg=90, field_fall=300)
+    net = build_comb(1000, 1000, (500, 200), 2, down_deg=90, field_fall=300)
     net["brook"] = []
     s.draw_comb_field(net, "f1", {"kind": "stream"}, inwall_drain_moat_bias=(0, 0))
     assert any((c.get("frm") or {}).get("kind") == "drain" and (c.get("to") or {}).get("kind") == "moat" and c.get("drawn") is False for c in s.M["channels"])
@@ -434,7 +434,7 @@ def test_a_comb_hem_is_registered_as_CROPLAND_not_only_as_no_build_ground():
 
     s = Settlement(1800, 1800, seed=5)
     s.meta(name="Hem", scale="hamlet", ftpx=1, toscale=True, households=12, down_deg=90, water_flow=90)
-    net = build_comb(1800, 1800, (700.0, 380.0), 5, down_deg=90, field_fall=800)
+    net = build_comb(1800, 1800, (700.0, 380.0), 2, down_deg=90, field_fall=800)
     s.draw_comb_field(net, "hem-paddies", {"kind": "stream", "stream": [(700.0, -40.0), (700.0, 380.0)]})
     assert s.M["dry_plots"], "the fixture must actually draw a dry hem, or it proves nothing"
     assert len(s.dry_polys) == len(s.M["dry_plots"]), "every DRAWN hem plot is registered as cropland"
@@ -453,7 +453,7 @@ def test_draw_comb_field_records_rings_and_beads():
 
     s = Settlement(W=1400, H=1400, seed=5)
     s.meta(name="Rb", scale="town", ftpx=1, down_deg=90)
-    net = build_comb(1400, 1400, (700, 200), 5, down_deg=90, field_fall=400)
+    net = build_comb(1400, 1400, (700, 200), 2, down_deg=90, field_fall=400)
     net["brook"] = []
     s.draw_comb_field(net, "f1", {"kind": "stream"})
     fld = s.M["fields"][-1]
@@ -469,7 +469,7 @@ def test_draw_comb_field_drops_beads_in_pond_water():
 
     s = Settlement(W=1400, H=1400, seed=7)
     s.meta(name="Pw", scale="town", ftpx=1, down_deg=90)
-    net = build_comb(1400, 1400, (700, 200), 7, down_deg=90, field_fall=400)
+    net = build_comb(1400, 1400, (700, 200), 2, down_deg=90, field_fall=400)
     net["brook"] = []
     net["bund_beans"] = [(700.0, 1000.0), (300.0, 300.0), (500.0, 180.0)]
     s.M["field_ponds"] = [{"x": 300.0, "y": 300.0, "rx": 20.0, "ry": 15.0}]

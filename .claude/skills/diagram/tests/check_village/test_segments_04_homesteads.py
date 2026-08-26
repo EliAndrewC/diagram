@@ -26,6 +26,7 @@ from tests.check_village._builders import (
     _yard,
     bldg,
     f,
+    f_only,
     garden,
     house,
     manifest,
@@ -909,10 +910,10 @@ def test_labels_clear_of_other_buildings_reads_the_label_registry():
     passed the gate. The permission side is derived from the same registry - a group's name IS the
     caption word - so a newly classified feature needs no second entry to caption itself."""
     for key, own in (("execution_grounds", "execution ground"), ("punishment_spots", "punishment ground"), ("fire_towers", "fire tower"), ("martial_halls", "martial hall")):
-        assert "labels_clear_of_other_buildings" in f(_label_map("Temple of Benten", key)), key
-        assert "labels_clear_of_other_buildings" not in f(_label_map(own, key)), key
+        assert "labels_clear_of_other_buildings" in f_only(_label_map("Temple of Benten", key), "labels_clear_of_other_buildings"), key
+        assert "labels_clear_of_other_buildings" not in f_only(_label_map(own, key), "labels_clear_of_other_buildings"), key
     # ...and a caption naming a DIFFERENT registered feature is still a mislabel
-    assert "labels_clear_of_other_buildings" in f(_label_map("dojo", "execution_grounds"))
+    assert "labels_clear_of_other_buildings" in f_only(_label_map("dojo", "execution_grounds"), "labels_clear_of_other_buildings")
 
 
 def test_wells_among_dwellings_counts_a_kiln_works_cottages():

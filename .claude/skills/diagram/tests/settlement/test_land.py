@@ -300,7 +300,7 @@ def test_perimeter_dike_notches_the_band_at_a_gap_on_it():
 def test_near_ring_cropland_rejects_an_unknown_density():
     s = _town()
     with pytest.raises(ValueError, match="near_ring_density"):
-        s.near_ring_cropland((0, 0, 1000, 1000), density="lush")
+        s.near_ring_cropland((0, 0, 600, 600), density="lush")
 
 
 def test_near_ring_cropland_returns_zero_for_a_degenerate_bbox():
@@ -310,7 +310,7 @@ def test_near_ring_cropland_returns_zero_for_a_degenerate_bbox():
 
 def test_near_ring_cropland_fills_clear_ground_and_records_dry_plots():
     s = _town()
-    n = s.near_ring_cropland((0, 0, 1000, 1000), density="dense", seed=3)
+    n = s.near_ring_cropland((0, 0, 600, 600), density="dense", seed=3)
     assert n > 0
     assert len(s.M["dry_plots"]) == n
     assert len(s.dry_polys) == n  # recorded as no-build cropland
@@ -321,7 +321,7 @@ def test_near_ring_cropland_fills_clear_ground_and_records_dry_plots():
 def test_near_ring_cropland_density_tiers_are_monotonic():
     def count(tier):
         s = _town()
-        return s.near_ring_cropland((0, 0, 1000, 1000), density=tier, seed=7)
+        return s.near_ring_cropland((0, 0, 600, 600), density=tier, seed=7)
 
     assert count("dense") > count("medium") > count("thin") > 0
 
@@ -329,18 +329,18 @@ def test_near_ring_cropland_density_tiers_are_monotonic():
 def test_near_ring_cropland_reads_meta_near_ring_density_when_density_is_none():
     s = _town()
     s.meta(near_ring_density="thin")
-    thin = s.near_ring_cropland((0, 0, 1000, 1000), density=None, seed=2)
+    thin = s.near_ring_cropland((0, 0, 600, 600), density=None, seed=2)
     s2 = _town()
-    dense = s2.near_ring_cropland((0, 0, 1000, 1000), density="dense", seed=2)
+    dense = s2.near_ring_cropland((0, 0, 600, 600), density="dense", seed=2)
     assert thin < dense  # the meta default ('thin') fills less than an explicit 'dense'
 
 
 def test_near_ring_cropland_can_be_all_garden_or_all_grain():
     s = _town()
-    s.near_ring_cropland((0, 0, 1000, 1000), density="dense", seed=1, garden_frac=1.0)
+    s.near_ring_cropland((0, 0, 600, 600), density="dense", seed=1, garden_frac=1.0)
     assert s.M["dry_plots"] and all(p["crop"] == "garden" for p in s.M["dry_plots"])
     s2 = _town()
-    s2.near_ring_cropland((0, 0, 1000, 1000), density="dense", seed=1, garden_frac=0.0)
+    s2.near_ring_cropland((0, 0, 600, 600), density="dense", seed=1, garden_frac=0.0)
     assert s2.M["dry_plots"] and all(p["crop"] != "garden" for p in s2.M["dry_plots"])
 
 
@@ -350,7 +350,7 @@ def test_near_ring_cropland_skips_fields_structures_hill_and_groves():
     s.field_polys.append([(0, 700), (400, 700), (400, 1000), (0, 1000)])  # a paddy block, SW
     s.M["houses"] = [{"x": 800, "y": 800, "w": 40, "h": 30, "rot": 0}]  # a dwelling, SE
     s.M["village_groves"] = [{"poly": [[600, 600], [760, 600], [760, 760], [600, 760]], "role": "copse", "clumps": [[680, 680]]}]
-    s.near_ring_cropland((0, 0, 1000, 1000), density="dense", seed=5)
+    s.near_ring_cropland((0, 0, 600, 600), density="dense", seed=5)
     from l7r.diagram.settlement import point_in_poly
 
     for p in s.M["dry_plots"]:
@@ -367,7 +367,7 @@ def test_near_ring_cropland_skips_a_grove_clump_outside_its_belt_poly():
     # test) is what keeps a plot off it, so no dry plot may cover the stray clump
     s = _town()
     s.M["village_groves"] = [{"poly": [], "clumps": [[500, 500]]}]  # empty belt poly -> only the clump guard applies
-    s.near_ring_cropland((0, 0, 1000, 1000), density="dense", seed=6)
+    s.near_ring_cropland((0, 0, 600, 600), density="dense", seed=6)
     for p in s.M["dry_plots"]:
         qx0, qy0 = min(v[0] for v in p["poly"]), min(v[1] for v in p["poly"])
         qx1, qy1 = max(v[0] for v in p["poly"]), max(v[1] for v in p["poly"])
@@ -379,7 +379,7 @@ def test_near_ring_cropland_keeps_a_city_ring_outside_the_wall():
     s = Settlement(1000, 1000, seed=1)
     s.meta(name="C", scale="city")
     s.M["wall"] = [[300, 300], [700, 300], [700, 700], [300, 700]]  # a square rampart
-    s.near_ring_cropland((0, 0, 1000, 1000), density="dense", seed=4)
+    s.near_ring_cropland((0, 0, 600, 600), density="dense", seed=4)
     from l7r.diagram.settlement import point_in_poly
 
     for p in s.M["dry_plots"]:

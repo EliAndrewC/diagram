@@ -27,6 +27,7 @@ import types
 import pytest
 
 from l7r.diagram import waterfields
+from tests._scope import EXHAUSTIVE
 
 HERE = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))  # the skill root
 
@@ -162,6 +163,9 @@ def test_aliased_underscore_reexport_is_identical(name: str, owner: str) -> None
     assert getattr(waterfields, name) is getattr(importlib.import_module(owner), name)
 
 
+@pytest.mark.skipif(
+    not EXHAUSTIVE, reason="a whole-tree source scan (~1 s) that guards a roster, not a map; under EXHAUSTIVE=1 and at the gate (GM 2026-08-26, T21) - last exhaustive green 2026-08-26"
+)
 def test_census_covers_every_real_consumer() -> None:
     """The mechanical census: every name any file reaches through waterfields resolves,
     and every censused name is pinned above (so the pinned lists cannot go stale)."""
