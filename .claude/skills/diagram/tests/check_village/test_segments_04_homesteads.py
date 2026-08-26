@@ -48,15 +48,15 @@ def test_yards_unshaded_by_neighbors_fires_only_on_a_scripted_map():
         threshing_yards=[yard(x=400, y=445, of=(400, 400))],
     )
     shaded["meta"]["ftpx"] = 1
-    assert "yards_unshaded_by_neighbors" not in f(shaded), "an UNTAGGED (hand-authored) map is exempt by decision"
+    assert "yards_unshaded_by_neighbors" not in f_only(shaded, "yards_unshaded_by_neighbors"), "an UNTAGGED (hand-authored) map is exempt by decision"
     shaded["meta"]["generated_by"] = "hamletgen"
-    assert "yards_unshaded_by_neighbors" in f(shaded), "a scripted map must be held to it"
+    assert "yards_unshaded_by_neighbors" in f_only(shaded, "yards_unshaded_by_neighbors"), "a scripted map must be held to it"
     clear = manifest(
         houses=[house(x=400, y=400), house(x=400, y=560)],
         threshing_yards=[yard(x=400, y=445, of=(400, 400))],
     )
     clear["meta"].update(ftpx=1, generated_by="hamletgen")
-    assert "yards_unshaded_by_neighbors" not in f(clear), "a yard with its sun must pass"
+    assert "yards_unshaded_by_neighbors" not in f_only(clear, "yards_unshaded_by_neighbors"), "a yard with its sun must pass"
 
 
 def test_gardens_unshaded_by_neighbors_fires_only_on_a_scripted_map():
@@ -66,36 +66,36 @@ def test_gardens_unshaded_by_neighbors_fires_only_on_a_scripted_map():
         gardens=[garden(x=440, y=400, of=(400, 400))],  # a bed on the E flank
     )
     shaded["meta"]["ftpx"] = 1
-    assert "gardens_unshaded_by_neighbors" not in f(shaded), "an UNTAGGED (hand-authored) map is exempt by decision"
+    assert "gardens_unshaded_by_neighbors" not in f_only(shaded, "gardens_unshaded_by_neighbors"), "an UNTAGGED (hand-authored) map is exempt by decision"
     shaded["meta"]["generated_by"] = "hamletgen"
-    assert "gardens_unshaded_by_neighbors" in f(shaded), "a scripted map must be held to it"
+    assert "gardens_unshaded_by_neighbors" in f_only(shaded, "gardens_unshaded_by_neighbors"), "a scripted map must be held to it"
     clear = manifest(
         houses=[house(x=400, y=400), house(x=440, y=480)],  # 54 ft: past the corridor
         gardens=[garden(x=440, y=400, of=(400, 400))],
     )
     clear["meta"].update(ftpx=1, generated_by="hamletgen")
-    assert "gardens_unshaded_by_neighbors" not in f(clear), "a bed with its sun must pass"
+    assert "gardens_unshaded_by_neighbors" not in f_only(clear, "gardens_unshaded_by_neighbors"), "a bed with its sun must pass"
     own = manifest(
         houses=[house(x=400, y=400)],
         gardens=[garden(x=400, y=380, of=(400, 400))],  # its own house south of it: exempt (gardens_on_sunny_side owns that)
     )
     own["meta"].update(ftpx=1, generated_by="hamletgen")
-    assert "gardens_unshaded_by_neighbors" not in f(own), "only a NEIGHBOR's house counts"
+    assert "gardens_unshaded_by_neighbors" not in f_only(own, "gardens_unshaded_by_neighbors"), "only a NEIGHBOR's house counts"
 
 
 def test_gardens_present_fires_when_a_farmhouse_has_none():
     M = {"meta": {"scale": "village"}, "houses": [_farmhouse(500, 500)], "gardens": []}
-    assert "gardens_present" in f(M)
+    assert "gardens_present" in f_only(M, "gardens_present")
 
 
 def test_gardens_on_sunny_side_fires_on_a_north_garden():
     M = {"meta": {"scale": "village"}, "houses": [_farmhouse(500, 500)], "gardens": [{"x": 520, "y": 455, "w": 24, "h": 16, "rot": 0, "of": [500, 500]}]}  # y=455 is north of 500
-    assert "gardens_on_sunny_side" in f(M)
+    assert "gardens_on_sunny_side" in f_only(M, "gardens_on_sunny_side")
 
 
 def test_gardens_smaller_than_farmhouse_fires_on_an_oversize_garden():
     M = {"meta": {"scale": "village"}, "houses": [_farmhouse(500, 500)], "gardens": [{"x": 545, "y": 500, "w": 60, "h": 40, "rot": 0, "of": [500, 500]}]}  # bigger than the house
-    assert "gardens_smaller_than_farmhouse" in f(M)
+    assert "gardens_smaller_than_farmhouse" in f_only(M, "gardens_smaller_than_farmhouse")
 
 
 def test_gardens_clear_of_paddies_fires_on_a_garden_in_a_field():
@@ -105,7 +105,7 @@ def test_gardens_clear_of_paddies_fires_on_a_garden_in_a_field():
         "fields": [_field("p", 480, 480, 600, 600)],
         "gardens": [{"x": 530, "y": 530, "w": 24, "h": 16, "rot": 0, "of": [500, 500]}],
     }  # sits inside the paddy
-    assert "gardens_clear_of_paddies" in f(M)
+    assert "gardens_clear_of_paddies" in f_only(M, "gardens_clear_of_paddies")
 
 
 def test_gardens_clear_of_structures_fires_when_a_garden_covers_another_building():
@@ -115,7 +115,7 @@ def test_gardens_clear_of_structures_fires_when_a_garden_covers_another_building
         "buildings": [bldg(545, 500, "shop")],
         "gardens": [{"x": 545, "y": 500, "w": 24, "h": 16, "rot": 0, "of": [500, 500]}],
     }  # on the shop, not its own house
-    assert "gardens_clear_of_structures" in f(M)
+    assert "gardens_clear_of_structures" in f_only(M, "gardens_clear_of_structures")
 
 
 def test_gardens_clear_of_sheds_fires_when_a_garden_covers_the_shed():
@@ -126,7 +126,7 @@ def test_gardens_clear_of_sheds_fires_when_a_garden_covers_the_shed():
         "farm_sheds": [{"x": 500, "y": 476, "w": 20, "h": 9, "rot": 0, "of": [500, 500]}],  # kura on the north wall
         "gardens": [{"x": 500, "y": 478, "w": 24, "h": 16, "rot": 0, "of": [500, 500]}],
     }  # on the shed
-    assert "gardens_clear_of_sheds" in f(M)
+    assert "gardens_clear_of_sheds" in f_only(M, "gardens_clear_of_sheds")
 
 
 def test_gardens_clear_of_channels_fires_when_a_garden_sits_on_a_ditch():
@@ -137,13 +137,13 @@ def test_gardens_clear_of_channels_fires_when_a_garden_sits_on_a_ditch():
         "gardens": [{"x": 540, "y": 500, "w": 24, "h": 16, "rot": 0, "of": [500, 500]}],
         "field_ditches": [{"poly": [[540, 480], [540, 520]], "role": "drain", "w": 6, "field": "f"}],
     }
-    assert "gardens_clear_of_channels" in f(M)
+    assert "gardens_clear_of_channels" in f_only(M, "gardens_clear_of_channels")
 
 
 def test_farm_sheds_attached_fires_on_a_stranded_kura():
     # a kura recorded far from every farmhouse (a move-procedure stranded it in the open courtyard) must trip
     M = {"meta": {"scale": "village"}, "houses": [{"x": 500, "y": 500, "w": 44, "h": 29, "kind": "plain", "rot": 0}], "farm_sheds": [{"x": 800, "y": 800, "w": 20, "h": 9, "rot": 0, "of": [500, 500]}]}
-    assert "farm_sheds_attached" in f(M)
+    assert "farm_sheds_attached" in f_only(M, "farm_sheds_attached")
 
 
 def test_farmhouses_shed_separately_fires_on_a_pair_that_merges_into_one_building():
@@ -156,7 +156,7 @@ def test_farmhouses_shed_separately_fires_on_a_pair_that_merges_into_one_buildin
         "meta": {"scale": "hamlet", "ftpx": 1},
         "houses": [{"x": 500, "y": 500, "w": 46, "h": 28, "kind": "plain", "rot": 0}, {"x": 550, "y": 500, "w": 46, "h": 28, "kind": "plain", "rot": 0}],
     }  # 4 ft of daylight between the walls
-    assert "farmhouses_shed_separately" in f(near)
+    assert "farmhouses_shed_separately" in f_only(near, "farmhouses_shed_separately")
 
 
 def test_farmhouses_shed_separately_passes_at_an_ordinary_nucleated_spacing():
@@ -165,7 +165,7 @@ def test_farmhouses_shed_separately_passes_at_an_ordinary_nucleated_spacing():
         "meta": {"scale": "hamlet", "ftpx": 1},
         "houses": [{"x": 500, "y": 500, "w": 46, "h": 28, "kind": "plain", "rot": 0}, {"x": 570, "y": 500, "w": 46, "h": 28, "kind": "plain", "rot": 0}],
     }  # 24 ft apart
-    assert "farmhouses_shed_separately" not in f(far)
+    assert "farmhouses_shed_separately" not in f_only(far, "farmhouses_shed_separately")
 
 
 def test_farmhouses_shed_separately_measures_FEET_not_pixels():
@@ -174,8 +174,8 @@ def test_farmhouses_shed_separately_measures_FEET_not_pixels():
     # The same 6 px wall gap is 6 ft at a hamlet (1 ft/px) - a merge - and 12 ft at a village
     # (2 ft/px), which is honest spacing. So the SAME geometry must fire at one tier and not the other.
     houses = [{"x": 500, "y": 500, "w": 23, "h": 14, "kind": "plain", "rot": 0}, {"x": 529, "y": 500, "w": 23, "h": 14, "kind": "plain", "rot": 0}]
-    assert "farmhouses_shed_separately" in f({"meta": {"scale": "hamlet", "ftpx": 1}, "houses": houses}), "6 px = 6 ft at a hamlet: a merge"
-    assert "farmhouses_shed_separately" not in f({"meta": {"scale": "village", "ftpx": 2}, "houses": houses}), "the same 6 px = 12 ft at a village: honest spacing"
+    assert "farmhouses_shed_separately" in f_only({"meta": {"scale": "hamlet", "ftpx": 1}, "houses": houses}, "farmhouses_shed_separately"), "6 px = 6 ft at a hamlet: a merge"
+    assert "farmhouses_shed_separately" not in f_only({"meta": {"scale": "village", "ftpx": 2}, "houses": houses}, "farmhouses_shed_separately"), "the same 6 px = 12 ft at a village: honest spacing"
 
 
 def test_farmhouses_shed_separately_ignores_a_derelict():
@@ -184,7 +184,7 @@ def test_farmhouses_shed_separately_ignores_a_derelict():
         "meta": {"scale": "hamlet", "ftpx": 1},
         "houses": [{"x": 500, "y": 500, "w": 46, "h": 28, "kind": "plain", "rot": 0}, {"x": 550, "y": 500, "w": 46, "h": 28, "kind": "abandoned", "rot": 0}],
     }
-    assert "farmhouses_shed_separately" not in f(M)
+    assert "farmhouses_shed_separately" not in f_only(M, "farmhouses_shed_separately")
 
 
 @pytest.mark.tiers("city")
@@ -194,19 +194,19 @@ def test_labels_clear_of_other_buildings_fires_on_a_caption_over_a_torii_arch():
     # A torii is a bare [x, y, z] triple, so it needed its own branch in the victim builder; before
     # that it was classified and still checked nothing.
     M = {"meta": {"scale": "city", "ftpx": 3}, "labels": [[480, 552, 620, 566, 5, "Temple of Bishamon"]], "torii": [[500, 560, 1]]}
-    assert "labels_clear_of_other_buildings" in f(M)
+    assert "labels_clear_of_other_buildings" in f_only(M, "labels_clear_of_other_buildings")
 
 
 def test_wells_clear_of_shrine_and_torii_fires_when_a_well_sits_under_the_torii():
     # a well scattered under the torii arch (its disc overlaps the arch box) reads as a wellhead in the gateway
     M = {"meta": {"scale": "village"}, "torii": [[500, 500, 1]], "wells": [{"x": 505, "y": 502, "r": 8}]}
-    assert "wells_clear_of_shrine_and_torii" in f(M)
+    assert "wells_clear_of_shrine_and_torii" in f_only(M, "wells_clear_of_shrine_and_torii")
 
 
 def test_garden_plots_are_quads_fires_on_a_non_quad_poly():
     # a garden whose recorded footprint poly has 3 vertices (a triangle, not a quadrilateral)
     M = {"meta": {"scale": "village"}, "houses": [_farmhouse(500, 500)], "gardens": [{"x": 520, "y": 520, "w": 24, "h": 16, "rot": 0, "of": [500, 500], "poly": [[509, 513], [531, 513], [520, 527]]}]}
-    assert "garden_plots_are_quads" in f(M)
+    assert "garden_plots_are_quads" in f_only(M, "garden_plots_are_quads")
 
 
 def test_garden_plots_are_quads_fires_when_poly_pokes_outside_its_rect():
@@ -217,7 +217,7 @@ def test_garden_plots_are_quads_fires_when_poly_pokes_outside_its_rect():
         "houses": [_farmhouse(500, 500)],
         "gardens": [{"x": 520, "y": 520, "w": 24, "h": 16, "rot": 0, "of": [500, 500], "poly": [[560, 513], [531, 513], [530, 527], [510, 527]]}],
     }
-    assert "garden_plots_are_quads" in f(M)
+    assert "garden_plots_are_quads" in f_only(M, "garden_plots_are_quads")
 
 
 def test_garden_plots_are_quads_passes_on_a_valid_inscribed_quad():
@@ -226,7 +226,7 @@ def test_garden_plots_are_quads_passes_on_a_valid_inscribed_quad():
         "houses": [_farmhouse(500, 500)],
         "gardens": [{"x": 520, "y": 520, "w": 24, "h": 16, "rot": 0, "of": [500, 500], "poly": [[509, 513], [531, 512], [530, 527], [510, 528]]}],
     }
-    assert "garden_plots_are_quads" not in f(M)
+    assert "garden_plots_are_quads" not in f_only(M, "garden_plots_are_quads")
 
 
 def test_garden_area_within_norms_fires_on_an_oversize_garden():
@@ -236,7 +236,7 @@ def test_garden_area_within_norms_fires_on_an_oversize_garden():
         "houses": [_farmhouse(500, 500)],
         "gardens": [{"x": 560, "y": 500, "w": 60, "h": 60, "rot": 0, "of": [500, 500], "poly": [[530, 470], [590, 470], [590, 530], [530, 530]]}],
     }
-    assert "garden_area_within_norms" in f(M)
+    assert "garden_area_within_norms" in f_only(M, "garden_area_within_norms")
 
 
 def test_garden_area_within_norms_fires_on_a_tiny_garden():
@@ -246,7 +246,7 @@ def test_garden_area_within_norms_fires_on_a_tiny_garden():
         "houses": [_farmhouse(500, 500)],
         "gardens": [{"x": 520, "y": 500, "w": 5, "h": 4, "rot": 0, "of": [500, 500], "poly": [[517.5, 498], [522.5, 498], [522.5, 502], [517.5, 502]]}],
     }
-    assert "garden_area_within_norms" in f(M)
+    assert "garden_area_within_norms" in f_only(M, "garden_area_within_norms")
 
 
 def test_garden_area_within_norms_passes_and_sums_fragmented_beds():
@@ -256,41 +256,41 @@ def test_garden_area_within_norms_passes_and_sums_fragmented_beds():
         {"x": 530, "y": 500, "w": 12, "h": 10, "rot": 0, "of": [500, 500], "poly": [[524, 495], [536, 495], [536, 505], [524, 505]]},
     ]
     M = {"meta": {"scale": "village"}, "houses": [_farmhouse(500, 500)], "gardens": beds}
-    assert "garden_area_within_norms" not in f(M)
+    assert "garden_area_within_norms" not in f_only(M, "garden_area_within_norms")
 
 
 def test_groves_on_windward_side_fires_on_a_lee_grove():
     # default windward NW; a grove on the SE (lee/sunny) side of its house is backwards
     M = {"meta": {"scale": "village"}, "houses": [_farmhouse(500, 500)], "groves": [_grove(540, 540, 500, 500)]}  # SE of the house, not the windward NW
-    assert "groves_on_windward_side" in f(M)
+    assert "groves_on_windward_side" in f_only(M, "groves_on_windward_side")
 
 
 def test_groves_on_windward_side_respects_meta_windward():
     # with the wind keyed to the NE, a grove on the SW is on the lee side and fires
     M = {"meta": {"scale": "village", "windward": "NE"}, "houses": [_farmhouse(500, 500)], "groves": [_grove(460, 540, 500, 500)]}  # SW, but windward is NE
-    assert "groves_on_windward_side" in f(M)
+    assert "groves_on_windward_side" in f_only(M, "groves_on_windward_side")
 
 
 def test_groves_on_windward_side_passes_on_a_nw_grove():
     M = {"meta": {"scale": "village"}, "houses": [_farmhouse(500, 500)], "groves": [_grove(465, 470, 500, 500)]}  # NW of the house - windward
-    assert "groves_on_windward_side" not in f(M)
+    assert "groves_on_windward_side" not in f_only(M, "groves_on_windward_side")
 
 
 def test_groves_clear_of_paddies_fires_on_a_grove_in_a_field():
     M = {"meta": {"scale": "village"}, "houses": [_farmhouse(500, 500)], "fields": [_field("p", 440, 440, 600, 600)], "groves": [_grove(465, 470, 500, 500)]}  # NW corner sits inside the paddy
-    assert "groves_clear_of_paddies" in f(M)
+    assert "groves_clear_of_paddies" in f_only(M, "groves_clear_of_paddies")
 
 
 def test_groves_clear_of_structures_fires_when_a_grove_covers_another_building():
     M = {"meta": {"scale": "village"}, "houses": [_farmhouse(500, 500)], "buildings": [bldg(460, 470, "shop")], "groves": [_grove(460, 470, 500, 500)]}  # on the shop, not its own house
-    assert "groves_clear_of_structures" in f(M)
+    assert "groves_clear_of_structures" in f_only(M, "groves_clear_of_structures")
 
 
 def test_groves_where_possible_fires_when_a_clear_windward_farm_has_none():
     # 12 farmhouses with open windward sides (no fields/structs/corridors) and no groves -> the generator
     # would have placed groves; a grove-less farm with clear windward room is flagged
     M = {"meta": {"scale": "village"}, "houses": [_farmhouse(300 + 60 * i, 400) for i in range(12)], "groves": []}
-    assert "groves_where_possible" in f(M)
+    assert "groves_where_possible" in f_only(M, "groves_where_possible")
 
 
 def test_groves_where_possible_passes_when_windward_is_blocked():
@@ -298,7 +298,7 @@ def test_groves_where_possible_passes_when_windward_is_blocked():
     houses = [_farmhouse(300 + 60 * i, 400) for i in range(12)]
     fields = [_field(f"f{i}", 280 + 60 * i, 330, 340 + 60 * i, 395) for i in range(12)]  # field just N of each house
     M = {"meta": {"scale": "village", "windward": "N"}, "houses": houses, "fields": fields, "groves": []}
-    assert "groves_where_possible" not in f(M)
+    assert "groves_where_possible" not in f_only(M, "groves_where_possible")
 
 
 def test_groves_where_possible_tolerates_a_yard_strip_shaded_windward_side():
@@ -314,19 +314,19 @@ def test_groves_where_possible_tolerates_a_yard_strip_shaded_windward_side():
     # (yd.y + h/2 + 11) sits 6px from the seat, well inside the strip test
     yards = [yard(300 + 60 * i, cy - 30, of=(300 + 60 * i, 400)) for i in range(12)]
     M = {"meta": {"scale": "village", "windward": "N"}, "houses": houses, "threshing_yards": yards, "groves": []}
-    assert "groves_where_possible" not in f(M)
+    assert "groves_where_possible" not in f_only(M, "groves_where_possible")
 
 
 def test_groves_where_possible_skipped_for_a_nucleated_village():
     # a NUCLEATED village shelters behind the COMMUNAL windbreak, not per-house groves, so bare farms with
     # clear windward room must NOT fire groves_where_possible - though the SAME setup DOES fire when dispersed
     houses = [_farmhouse(300 + 60 * i, 400) for i in range(12)]
-    assert "groves_where_possible" in f({"meta": {"scale": "village"}, "houses": houses, "groves": []})
-    assert "groves_where_possible" not in f({"meta": {"scale": "village", "nucleated": True}, "houses": houses, "groves": []})
+    assert "groves_where_possible" in f_only({"meta": {"scale": "village"}, "houses": houses, "groves": []}, "groves_where_possible")
+    assert "groves_where_possible" not in f_only({"meta": {"scale": "village", "nucleated": True}, "houses": houses, "groves": []}, "groves_where_possible")
 
 
 def test_village_windbreak_present_fires_when_a_nucleated_village_has_none():
-    assert "village_windbreak_present" in f(_nuc_village_M(_nuc_grid(), []))
+    assert "village_windbreak_present" in f_only(_nuc_village_M(_nuc_grid(), []), "village_windbreak_present")
 
 
 def test_village_windbreak_present_passes_with_a_back_grove_on_the_windward_side():
@@ -343,13 +343,13 @@ def test_village_windbreak_on_windward_side_fires_on_a_lee_belt():
     ccx = sum(h["x"] for h in houses) / len(houses)
     ccy = sum(h["y"] for h in houses) / len(houses)
     wb = [{"x": ccx + 150, "y": ccy + 150, "w": 72, "h": 300, "rot": 0, "role": "windbreak"}]  # SE = the sunny lee
-    assert "village_windbreak_on_windward_side" in f(_nuc_village_M(houses, wb))
+    assert "village_windbreak_on_windward_side" in f_only(_nuc_village_M(houses, wb), "village_windbreak_on_windward_side")
 
 
 def test_village_groves_clear_of_paddies_fires_on_a_grove_in_a_field():
     # no recorded clumps -> the bbox center is all there is to test (older maps)
     M = _nuc_village_M(_nuc_grid(), [{"x": 600, "y": 600, "w": 40, "h": 40, "rot": 0, "role": "copse"}], fields=[_field("p", 540, 540, 700, 700)])
-    assert "village_groves_clear_of_paddies" in f(M)
+    assert "village_groves_clear_of_paddies" in f_only(M, "village_groves_clear_of_paddies")
 
 
 def test_village_groves_clear_of_paddies_tests_the_trees_not_the_bounding_box():
@@ -357,10 +357,10 @@ def test_village_groves_clear_of_paddies_tests_the_trees_not_the_bounding_box():
     # stands on dry ground (Ueda's 87-clump back belt) - that must pass ...
     field = [_field("p", 540, 540, 700, 700)]
     crescent = {"x": 600, "y": 600, "w": 200, "h": 200, "rot": 0, "role": "windbreak", "r": 14, "clumps": [[480, 520], [500, 480], [520, 460]]}
-    assert "village_groves_clear_of_paddies" not in f(_nuc_village_M(_nuc_grid(), [crescent], fields=field))
+    assert "village_groves_clear_of_paddies" not in f_only(_nuc_village_M(_nuc_grid(), [crescent], fields=field), "village_groves_clear_of_paddies")
     # ... while a single tree actually standing in the paddy fires, even with the box center on dry ground
     intruder = {"x": 300, "y": 300, "w": 200, "h": 200, "rot": 0, "role": "copse", "r": 11, "clumps": [[260, 260], [600, 600]]}
-    assert "village_groves_clear_of_paddies" in f(_nuc_village_M(_nuc_grid(), [intruder], fields=field))
+    assert "village_groves_clear_of_paddies" in f_only(_nuc_village_M(_nuc_grid(), [intruder], fields=field), "village_groves_clear_of_paddies")
 
 
 def test_gardens_clear_of_groves_fires_when_a_garden_is_buried():
@@ -370,19 +370,19 @@ def test_gardens_clear_of_groves_fires_when_a_garden_is_buried():
         "gardens": [{"x": 540, "y": 500, "w": 24, "h": 16, "rot": 0, "of": [500, 500]}],
         "groves": [_grove(540, 500, 700, 700)],
     }  # grove sits squarely on the garden
-    assert "gardens_clear_of_groves" in f(M)
+    assert "gardens_clear_of_groves" in f_only(M, "gardens_clear_of_groves")
 
 
 def test_groves_are_substantial_fires_on_tiny_groves():
     houses = [_farmhouse(300 + 60 * i, 300) for i in range(6)]
     groves = [_grove(285 + 60 * i, 270, 300 + 60 * i, 300, w=10, h=10) for i in range(6)]  # clumps, ~0.08x the house
-    assert "groves_are_substantial" in f({"meta": {"scale": "village"}, "houses": houses, "groves": groves})
+    assert "groves_are_substantial" in f_only({"meta": {"scale": "village"}, "houses": houses, "groves": groves}, "groves_are_substantial")
 
 
 def test_groves_are_substantial_passes_with_belts():
     houses = [_farmhouse(300 + 60 * i, 300) for i in range(6)]
     groves = [_big_grove(300 + 60 * i, 300, 300 + 60 * i, 300) for i in range(6)]
-    assert "groves_are_substantial" not in f({"meta": {"scale": "village"}, "houses": houses, "groves": groves})
+    assert "groves_are_substantial" not in f_only({"meta": {"scale": "village"}, "houses": houses, "groves": groves}, "groves_are_substantial")
 
 
 def test_yards_unshaded_by_groves_fires():
@@ -393,7 +393,7 @@ def test_yards_unshaded_by_groves_fires():
         "threshing_yards": [{"x": 500, "y": 540, "w": 32, "h": 20, "rot": 0, "of": [500, 500]}],
         "groves": [_grove(500, 562, 700, 700)],
     }  # grove just south of the yard (its south edge ~550)
-    assert "yards_unshaded_by_groves" in f(M)
+    assert "yards_unshaded_by_groves" in f_only(M, "yards_unshaded_by_groves")
 
 
 def test_village_trees_unshade_fires_when_a_clump_is_south_of_a_yard():
@@ -402,7 +402,7 @@ def test_village_trees_unshade_fires_when_a_clump_is_south_of_a_yard():
         "threshing_yards": [{"x": 300, "y": 400, "w": 40, "h": 24, "rot": 0, "of": [300, 380]}],
         "village_groves": [{"role": "copse", "r": 11, "clumps": [[300, 430]], "poly": [[280, 415], [320, 415], [320, 445], [280, 445]]}],
     }  # clump S of the yard
-    assert "village_trees_unshade_yards_and_gardens" in f(M)
+    assert "village_trees_unshade_yards_and_gardens" in f_only(M, "village_trees_unshade_yards_and_gardens")
 
 
 def test_village_trees_unshade_fires_when_a_clump_is_south_of_a_garden():
@@ -411,7 +411,7 @@ def test_village_trees_unshade_fires_when_a_clump_is_south_of_a_garden():
         "gardens": [{"x": 300, "y": 400, "w": 30, "h": 20, "rot": 0, "of": [300, 380]}],
         "village_groves": [{"role": "copse", "r": 11, "clumps": [[300, 425]], "poly": [[280, 410], [320, 410], [320, 440], [280, 440]]}],
     }  # clump S of the garden
-    assert "village_trees_unshade_yards_and_gardens" in f(M)
+    assert "village_trees_unshade_yards_and_gardens" in f_only(M, "village_trees_unshade_yards_and_gardens")
 
 
 def test_village_trees_unshade_from_west_fires_on_a_windbreak_clump_west_or_southwest():
@@ -425,14 +425,14 @@ def test_village_trees_unshade_from_west_fires_on_a_windbreak_clump_west_or_sout
             "village_groves": [{"role": role, "r": 14, "clumps": [clump], "poly": [[200, 300], [290, 300], [290, 500], [200, 500]]}],
         }
 
-    assert "village_trees_unshade_from_west" in f(M("windbreak", [240, 400])), "45 ft due west: shaded"
-    assert "village_trees_unshade_from_west" in f(M("windbreak", [250, 460])), "the southwest quadrant counts too"
-    assert "village_trees_unshade_from_west" not in f(M("windbreak", [215, 400])), "70 ft west (clump edge 56): clear"
-    assert "village_trees_unshade_from_west" not in f(M("windbreak", [240, 340])), "northwest of the bed shades nothing"
-    assert "village_trees_unshade_from_west" not in f(M("copse", [240, 400])), "a dooryard copse is not a 10 m belt"
+    assert "village_trees_unshade_from_west" in f_only(M("windbreak", [240, 400]), "village_trees_unshade_from_west"), "45 ft due west: shaded"
+    assert "village_trees_unshade_from_west" in f_only(M("windbreak", [250, 460]), "village_trees_unshade_from_west"), "the southwest quadrant counts too"
+    assert "village_trees_unshade_from_west" not in f_only(M("windbreak", [215, 400]), "village_trees_unshade_from_west"), "70 ft west (clump edge 56): clear"
+    assert "village_trees_unshade_from_west" not in f_only(M("windbreak", [240, 340]), "village_trees_unshade_from_west"), "northwest of the bed shades nothing"
+    assert "village_trees_unshade_from_west" not in f_only(M("copse", [240, 400]), "village_trees_unshade_from_west"), "a dooryard copse is not a 10 m belt"
     legacy = M("windbreak", [240, 400])
     del legacy["meta"]["generated_by"]
-    assert "village_trees_unshade_from_west" not in f(legacy), "the frozen pool never opted in"
+    assert "village_trees_unshade_from_west" not in f_only(legacy, "village_trees_unshade_from_west"), "the frozen pool never opted in"
 
 
 def test_village_trees_unshade_passes_when_the_clump_is_north():
@@ -448,19 +448,19 @@ def test_village_trees_unshade_passes_when_the_clump_is_north():
             }
         ],
     }
-    assert "village_trees_unshade_yards_and_gardens" not in f(M)
+    assert "village_trees_unshade_yards_and_gardens" not in f_only(M, "village_trees_unshade_yards_and_gardens")
 
 
 # --- labels_within_image (a label must not run off the edge of the rendered frame) ---
 def test_labels_within_image_fires_when_a_label_runs_off_the_edge():
     # the default canvas is 1820x1180; this label pokes past the right edge
     M = {"meta": {}, "labels": [[1750, 500, 1900, 512, 1, "off the right edge"]]}
-    assert "labels_within_image" in f(M)
+    assert "labels_within_image" in f_only(M, "labels_within_image")
 
 
 def test_labels_within_image_passes_when_inside():
     M = {"meta": {}, "labels": [[100, 100, 300, 112, 1, "comfortably inside"]]}
-    assert "labels_within_image" not in f(M)
+    assert "labels_within_image" not in f_only(M, "labels_within_image")
 
 
 def test_margins_form_continuous_ring_passes_when_the_frame_is_clothed():
@@ -470,7 +470,7 @@ def test_margins_form_continuous_ring_passes_when_the_frame_is_clothed():
         "fields": [_field("p", 0, 0, 400, 150)],
         "commons": [{"poly": [[0, 140], [400, 140], [400, 300], [0, 300]], "role": "grazing"}],
     }
-    assert "margins_form_continuous_ring" not in f(M)
+    assert "margins_form_continuous_ring" not in f_only(M, "margins_form_continuous_ring")
 
 
 def test_margins_form_continuous_ring_fires_on_bare_open_plain():
@@ -481,14 +481,14 @@ def test_margins_form_continuous_ring_fires_on_bare_open_plain():
         "fields": [_field("p", 500, 0, 650, 150)],
         "commons": [{"poly": [[0, 0], [480, 0], [480, 300], [0, 300]], "role": "grazing"}],
     }
-    assert "margins_form_continuous_ring" in f(M)
+    assert "margins_form_continuous_ring" in f_only(M, "margins_form_continuous_ring")
 
 
 def test_margins_form_continuous_ring_ignores_town_and_city_sheets():
     # urban sheets cover the ground with streets/wards/walls these feature sets do not model -
     # the satoyama-ring doctrine is village/hamlet scope only
     M = {"meta": {"scale": "town", "view": [0, 0, 400, 300]}}
-    assert "margins_form_continuous_ring" not in f(M)
+    assert "margins_form_continuous_ring" not in f_only(M, "margins_form_continuous_ring")
 
 
 def test_scatter_respects_swept_clearings_fires_on_cover_before_the_collar():
@@ -499,7 +499,7 @@ def test_scatter_respects_swept_clearings_fires_on_cover_before_the_collar():
         "commons": [{"poly": [[50, 50], [400, 50], [400, 400], [50, 400]], "role": "grazing", "seq": 1}],
         "clearings": [{"poly": [[100, 100], [200, 100], [200, 200], [100, 200]], "seq": 1}],
     }
-    assert "scatter_respects_swept_clearings" in f(M)
+    assert "scatter_respects_swept_clearings" in f_only(M, "scatter_respects_swept_clearings")
 
 
 def test_scatter_respects_swept_clearings_passes_when_the_ground_was_reserved():
@@ -514,7 +514,7 @@ def test_scatter_respects_swept_clearings_passes_when_the_ground_was_reserved():
             {"poly": [[100, 100], [200, 100], [200, 200], [100, 200]], "seq": 1},
         ],
     }
-    assert "scatter_respects_swept_clearings" not in f(M)
+    assert "scatter_respects_swept_clearings" not in f_only(M, "scatter_respects_swept_clearings")
 
 
 def test_scatter_respects_swept_clearings_passes_when_the_cover_draws_after():
@@ -524,7 +524,7 @@ def test_scatter_respects_swept_clearings_passes_when_the_cover_draws_after():
         "commons": [{"poly": [[50, 50], [400, 50], [400, 400], [50, 400]], "role": "grazing", "seq": 1}],
         "clearings": [{"poly": [[100, 100], [200, 100], [200, 200], [100, 200]], "seq": 0}],
     }
-    assert "scatter_respects_swept_clearings" not in f(M)
+    assert "scatter_respects_swept_clearings" not in f_only(M, "scatter_respects_swept_clearings")
 
 
 def test_harvest_and_garden_checks_cover_the_headman():
@@ -546,17 +546,17 @@ def test_wells_sized_to_population_bands():
     # shrine temizu wells are excluded from the count
     base = {"meta": {"scale": "village", "households": 70}}
     M = {**base, "wells": [{"x": 100 * i, "y": 100, "r": 8, "shrine": False} for i in range(5)]}
-    assert "wells_sized_to_population" not in f(M)  # 14 hh/well - in band
+    assert "wells_sized_to_population" not in f_only(M, "wells_sized_to_population")  # 14 hh/well - in band
     M = {**base, "wells": [{"x": 100, "y": 100, "r": 8, "shrine": False}]}
-    assert "wells_sized_to_population" in f(M)  # 70 hh/well - parched
+    assert "wells_sized_to_population" in f_only(M, "wells_sized_to_population")  # 70 hh/well - parched
     M = {**base, "wells": [{"x": 60 * i, "y": 100, "r": 8, "shrine": False} for i in range(12)]}
-    assert "wells_sized_to_population" in f(M)  # 5.8 hh/well - urban-tenement density in a village
+    assert "wells_sized_to_population" in f_only(M, "wells_sized_to_population")  # 5.8 hh/well - urban-tenement density in a village
     M = {**base, "wells": [{"x": 100 * i, "y": 100, "r": 8, "shrine": False} for i in range(5)] + [{"x": 900, "y": 900, "r": 8, "shrine": True}] * 9}
-    assert "wells_sized_to_population" not in f(M)  # shrine wells do not tip the band
+    assert "wells_sized_to_population" not in f_only(M, "wells_sized_to_population")  # shrine wells do not tip the band
     H = {"meta": {"scale": "hamlet", "households": 16}, "wells": [{"x": 100 * i, "y": 100, "r": 8, "shrine": False} for i in range(6)]}
-    assert "wells_sized_to_population" not in f(H)  # 2.7 hh/well - per-farmstead hamlet pattern, in band
+    assert "wells_sized_to_population" not in f_only(H, "wells_sized_to_population")  # 2.7 hh/well - per-farmstead hamlet pattern, in band
     H["wells"] = []
-    assert "wells_sized_to_population" in f(H)  # a settlement with no draw-well at all
+    assert "wells_sized_to_population" in f_only(H, "wells_sized_to_population")  # a settlement with no draw-well at all
 
 
 def test_lanes_clear_of_dry_plots_fires_on_a_path_through_the_crop():
@@ -564,87 +564,87 @@ def test_lanes_clear_of_dry_plots_fires_on_a_path_through_the_crop():
     # lane running along the plot's edge (a path hugs the field margin by design) passes
     plot = {"poly": [[300, 300], [400, 300], [400, 400], [300, 400]], "crop": "barley", "theta": 0}
     M = {"meta": {"scale": "village"}, "dry_plots": [plot], "lanes": [{"pts": [[250, 350], [450, 350]], "width": 5}]}
-    assert "lanes_clear_of_dry_plots" in f(M)
+    assert "lanes_clear_of_dry_plots" in f_only(M, "lanes_clear_of_dry_plots")
     M["lanes"] = [{"pts": [[250, 300], [450, 300]], "width": 5}]  # along the top edge - touching, not through
-    assert "lanes_clear_of_dry_plots" not in f(M)
+    assert "lanes_clear_of_dry_plots" not in f_only(M, "lanes_clear_of_dry_plots")
     M["lanes"] = [{"pts": [[250, 250], [450, 250]], "width": 5}]  # clear of the plot entirely
-    assert "lanes_clear_of_dry_plots" not in f(M)
+    assert "lanes_clear_of_dry_plots" not in f_only(M, "lanes_clear_of_dry_plots")
 
 
 def test_labels_within_image_uses_the_cropped_view():
     # with a crop set, the frame is the viewBox - a label inside the full canvas but WEST of the crop
     # (a city map crops tight to the walls) is clipped and fires
     M = {"meta": {"view": [658, 448, 1884, 1764]}, "labels": [[300, 690, 500, 702, 1, "west of the crop"]]}
-    assert "labels_within_image" in f(M)
+    assert "labels_within_image" in f_only(M, "labels_within_image")
 
 
 def test_labels_clear_of_other_buildings_fires_when_label_over_a_foreign_building():
     # a "flophouse" label spilling onto a merchant house next door
-    assert "labels_clear_of_other_buildings" in f(_lbl_city(buildings=[_bldg("merchant_house")]))
+    assert "labels_clear_of_other_buildings" in f_only(_lbl_city(buildings=[_bldg("merchant_house")]), "labels_clear_of_other_buildings")
 
 
 def test_labels_clear_of_other_buildings_fires_when_guard_label_over_a_flophouse():
     M = _lbl_city(labels=[[470, 490, 560, 510, 1, "gate guard house + inspection"]], flophouses=[{"x": 500, "y": 500, "w": 90, "h": 42, "rot": 0}])
-    assert "labels_clear_of_other_buildings" in f(M)
+    assert "labels_clear_of_other_buildings" in f_only(M, "labels_clear_of_other_buildings")
 
 
 def test_labels_clear_of_other_buildings_passes_over_its_own_building():
-    assert "labels_clear_of_other_buildings" not in f(_lbl_city(flophouses=[{"x": 500, "y": 500, "w": 90, "h": 42, "rot": 0}]))
+    assert "labels_clear_of_other_buildings" not in f_only(_lbl_city(flophouses=[{"x": 500, "y": 500, "w": 90, "h": 42, "rot": 0}]), "labels_clear_of_other_buildings")
 
 
 def test_labels_clear_of_other_buildings_passes_over_a_fronting_shop():
     # a market/zone label may clip a street-fronting shop (shops line every quarter)
     M = _lbl_city(labels=[[480, 490, 520, 510, 1, "gate market"]], buildings=[_bldg("shop")])
-    assert "labels_clear_of_other_buildings" not in f(M)
+    assert "labels_clear_of_other_buildings" not in f_only(M, "labels_clear_of_other_buildings")
 
 
 def test_labels_clear_of_other_buildings_passes_for_a_zone_label_over_its_cluster():
     M = _lbl_city(labels=[[480, 490, 520, 510, 1, "samurai neighborhood"]], buildings=[_bldg("samurai", w=56, h=40)])
-    assert "labels_clear_of_other_buildings" not in f(M)
+    assert "labels_clear_of_other_buildings" not in f_only(M, "labels_clear_of_other_buildings")
 
 
 def test_labels_clear_town_monastery_label_over_graveyard_fires():
     M = _lbl_town("Monastery of Bishamon", cemeteries=[{"x": 500, "y": 500, "w": 80, "h": 50, "rot": 0, "parish": True}])
-    assert "labels_clear_of_other_buildings" in f(M)
+    assert "labels_clear_of_other_buildings" in f_only(M, "labels_clear_of_other_buildings")
 
 
 def test_labels_clear_town_graveyard_label_over_temple_fires():
     M = _lbl_town("graveyard", religious=[{"kind": "monastery", "x": 500, "y": 500, "w": 80, "h": 50, "label": "M"}])
-    assert "labels_clear_of_other_buildings" in f(M)
+    assert "labels_clear_of_other_buildings" in f_only(M, "labels_clear_of_other_buildings")
 
 
 def test_labels_clear_town_funerary_label_over_funerary_passes():
     # the funerary structures cluster, so a funerary label may cover any of them
     M = _lbl_town("cremation ground", cemeteries=[{"x": 500, "y": 500, "w": 80, "h": 50, "rot": 0, "parish": True}])
-    assert "labels_clear_of_other_buildings" not in f(M)
+    assert "labels_clear_of_other_buildings" not in f_only(M, "labels_clear_of_other_buildings")
 
 
 def test_labels_clear_town_street_label_over_merchant_passes():
     # a street/road label runs along its frontage, so it may clip the storefronts it lines
     M = _lbl_town("main street", buildings=[_bldg("merchant", w=60, h=40)])
-    assert "labels_clear_of_other_buildings" not in f(M)
+    assert "labels_clear_of_other_buildings" not in f_only(M, "labels_clear_of_other_buildings")
 
 
 def test_settlement_has_wells_fires_when_too_few():
     # 40 farm households, no wells at all
-    assert "settlement_has_wells" in f(_rural("village", [(300 + i * 10, 300) for i in range(40)], []))
+    assert "settlement_has_wells" in f_only(_rural("village", [(300 + i * 10, 300) for i in range(40)], []), "settlement_has_wells")
 
 
 def test_settlement_dwellings_watered_fires_when_a_house_is_dry():
     # one house 600px from the only well, with no irrigation nearby
-    assert "settlement_dwellings_watered" in f(_rural("village", [(300, 300), (300, 900)], [(300, 300)]))
+    assert "settlement_dwellings_watered" in f_only(_rural("village", [(300, 300), (300, 900)], [(300, 300)]), "settlement_dwellings_watered")
 
 
 def test_settlement_dwellings_watered_passes_via_irrigation():
     # the far house has no well within reach but sits beside a stream
     M = _rural("hamlet", [(300, 900)], [(300, 300)], streams=[{"poly": [[200, 880], [400, 880]], "frm": None, "to": None, "w": 9}])
-    assert "settlement_dwellings_watered" not in f(M)
+    assert "settlement_dwellings_watered" not in f_only(M, "settlement_dwellings_watered")
 
 
 def test_remote_shrine_has_own_well_fires_when_a_set_apart_shrine_has_none():
     # the shrine sits far from the houses AND far from the one well -> it must keep its OWN well close by
     M = _rural("village", [(300, 300)], [(310, 305)], religious=[{"x": 1200, "y": 1200, "w": 30, "h": 24, "kind": "shrine"}])
-    assert "remote_shrine_has_own_well" in f(M)
+    assert "remote_shrine_has_own_well" in f_only(M, "remote_shrine_has_own_well")
 
 
 def test_remote_shrine_has_own_well_passes_with_a_well_close_by():
@@ -654,7 +654,7 @@ def test_remote_shrine_has_own_well_passes_with_a_well_close_by():
         [(310, 305), (1210, 1205)],  # a second well right beside the remote shrine
         religious=[{"x": 1200, "y": 1200, "w": 30, "h": 24, "kind": "shrine"}],
     )
-    assert "remote_shrine_has_own_well" not in f(M)
+    assert "remote_shrine_has_own_well" not in f_only(M, "remote_shrine_has_own_well")
 
 
 def test_remote_shrine_own_well_not_required_when_a_ditch_is_near():
@@ -666,13 +666,13 @@ def test_remote_shrine_own_well_not_required_when_a_ditch_is_near():
         religious=[{"x": 1200, "y": 1200, "w": 30, "h": 24, "kind": "shrine"}],
         field_ditches=[{"poly": [[1180, 1180], [1220, 1220]], "w": 5, "role": "main", "field": "p"}],
     )
-    assert "remote_shrine_has_own_well" in f(M)  # the ditch by the shrine does not count
+    assert "remote_shrine_has_own_well" in f_only(M, "remote_shrine_has_own_well")  # the ditch by the shrine does not count
 
 
 def test_remote_shrine_among_the_houses_is_exempt():
     # a shrine near the dwellings shares the village wells - no own well required
     M = _rural("village", [(300, 300)], [(310, 305)], religious=[{"x": 360, "y": 340, "w": 30, "h": 24, "kind": "shrine"}])
-    assert "remote_shrine_has_own_well" not in f(M)
+    assert "remote_shrine_has_own_well" not in f_only(M, "remote_shrine_has_own_well")
 
 
 def test_wells_clear_of_paddies_fires_on_a_well_in_the_fan():
@@ -685,97 +685,97 @@ def test_wells_clear_of_paddies_fires_on_a_well_in_the_fan():
     basin = [[600, 600], [900, 600], [900, 900], [600, 900]]
     paddy = {"name": "f1", "kind": "paddy", "outline": [[400, 400], [900, 400], [900, 900], [400, 900]], "bbox": [400, 400, 900, 900], "plot_polys": [basin]}
     inside = manifest(fields=[paddy], wells=[well(750, 750)], houses=[house(750, 950)])
-    assert "wells_clear_of_paddies" in f(inside)
+    assert "wells_clear_of_paddies" in f_only(inside, "wells_clear_of_paddies")
     outside = manifest(fields=[paddy], wells=[well(750, 990)], houses=[house(750, 950)])
-    assert "wells_clear_of_paddies" not in f(outside)
+    assert "wells_clear_of_paddies" not in f_only(outside, "wells_clear_of_paddies")
     # the DRAWN head may not lap a basin either - the same strictness as the dry-plot rule
     grazing = manifest(fields=[paddy], wells=[well(750, 594, vr=12)], houses=[house(750, 950)])
-    assert "wells_clear_of_paddies" in f(grazing)
+    assert "wells_clear_of_paddies" in f_only(grazing, "wells_clear_of_paddies")
     # ...but the fan's unplanted RIM SLACK stays legal: inside the smoothed envelope, clear of every
     # drawn basin. That margin is where farm_wells seats the well of a steading boxed in by crop, and
     # reading the envelope as water instead is what left Tango's east pair with no seat at all
     slack = manifest(fields=[paddy], wells=[well(450, 450)], houses=[house(450, 950)])
-    assert "wells_clear_of_paddies" not in f(slack)
+    assert "wells_clear_of_paddies" not in f_only(slack, "wells_clear_of_paddies")
     # a field recording NO drawn basins falls back to its outline, so the rural tiers - which record
     # none - are not silently exempt from a rule the cities are held to
     unplotted = manifest(fields=[{k: v for k, v in paddy.items() if k != "plot_polys"}], wells=[well(450, 450)], houses=[house(450, 950)])
-    assert "wells_clear_of_paddies" in f(unplotted)
+    assert "wells_clear_of_paddies" in f_only(unplotted, "wells_clear_of_paddies")
     # ...and a DRY plot is expressly allowed: this rule is about standing water, not about crops
     dry = manifest(dry_plots=[{"poly": [[400, 400], [900, 400], [900, 900], [400, 900]], "crop": "barley"}], wells=[well(650, 650)], houses=[house(650, 940)])
-    assert "wells_clear_of_paddies" not in f(dry)
+    assert "wells_clear_of_paddies" not in f_only(dry, "wells_clear_of_paddies")
 
 
 def test_wells_among_dwellings_fires_on_a_stray_well():
     # a well far out in open country, no house beside it
-    assert "wells_among_dwellings" in f(_rural("village", [(300, 300)], [(900, 900)]))
+    assert "wells_among_dwellings" in f_only(_rural("village", [(300, 300)], [(900, 900)]), "wells_among_dwellings")
 
 
 def test_wells_among_dwellings_passes_when_beside_a_house():
-    assert "wells_among_dwellings" not in f(_rural("village", [(300, 300)], [(340, 300)]))
+    assert "wells_among_dwellings" not in f_only(_rural("village", [(300, 300)], [(340, 300)]), "wells_among_dwellings")
 
 
 def test_wells_sized_to_buildings_fires_when_too_small():
     # a 10px wellhead (the dense-city size) beside 44px village farmhouses - far too small
-    assert "wells_sized_to_buildings" in f(_well_size_city(5.0))
+    assert "wells_sized_to_buildings" in f_only(_well_size_city(5.0), "wells_sized_to_buildings")
 
 
 def test_wells_sized_to_buildings_passes_when_proportional():
     # scaled to the village grain (~24px), about half a farmhouse
-    assert "wells_sized_to_buildings" not in f(_well_size_city(11.9))
+    assert "wells_sized_to_buildings" not in f_only(_well_size_city(11.9), "wells_sized_to_buildings")
 
 
 def test_harvest_yards_present_fires_when_any_farmhouse_lacks_one():
     # 5 of 6 yards - even one farmhouse without a yard fails (the work yard was universal)
-    assert "harvest_yards_present" in f(_harvest(_SIX, [_yard(h) for h in _SIX[:5]]))
+    assert "harvest_yards_present" in f_only(_harvest(_SIX, [_yard(h) for h in _SIX[:5]]), "harvest_yards_present")
 
 
 def test_harvest_yards_present_passes_when_every_farmhouse_has_one():
-    assert "harvest_yards_present" not in f(_harvest(_SIX, [_yard(h) for h in _SIX]))
+    assert "harvest_yards_present" not in f_only(_harvest(_SIX, [_yard(h) for h in _SIX]), "harvest_yards_present")
 
 
 def test_harvest_yards_smaller_than_farmhouse_fires_when_oversize():
-    assert "harvest_yards_smaller_than_farmhouse" in f(_harvest([(300, 300)], [_yard((300, 300), w=60, h=44)]))
+    assert "harvest_yards_smaller_than_farmhouse" in f_only(_harvest([(300, 300)], [_yard((300, 300), w=60, h=44)]), "harvest_yards_smaller_than_farmhouse")
 
 
 def test_harvest_yards_smaller_than_farmhouse_passes_when_small():
-    assert "harvest_yards_smaller_than_farmhouse" not in f(_harvest([(300, 300)], [_yard((300, 300))]))
+    assert "harvest_yards_smaller_than_farmhouse" not in f_only(_harvest([(300, 300)], [_yard((300, 300))]), "harvest_yards_smaller_than_farmhouse")
 
 
 def test_harvest_yards_on_sunny_side_fires_when_north_of_house():
     # +y is south; a yard ABOVE its house center sits on the shady north/back side
     y = {"x": 300, "y": 260, "w": 32, "h": 20, "rot": 0, "of": [300, 300]}
-    assert "harvest_yards_on_sunny_side" in f(_harvest([(300, 300)], [y]))
+    assert "harvest_yards_on_sunny_side" in f_only(_harvest([(300, 300)], [y]), "harvest_yards_on_sunny_side")
 
 
 def test_harvest_yards_on_sunny_side_passes_when_south_of_house():
     y = {"x": 300, "y": 340, "w": 32, "h": 20, "rot": 0, "of": [300, 300]}
-    assert "harvest_yards_on_sunny_side" not in f(_harvest([(300, 300)], [y]))
+    assert "harvest_yards_on_sunny_side" not in f_only(_harvest([(300, 300)], [y]), "harvest_yards_on_sunny_side")
 
 
 def test_harvest_yards_clear_of_paddies_fires_when_in_a_paddy():
     # the yard footprint sits inside the field (400,400)-(600,600) - a dry floor in the flooded paddy
     y = {"x": 500, "y": 500, "w": 32, "h": 20, "rot": 0, "of": [460, 460]}
     M = _harvest([(460, 460)], [y], fields=[{"name": "a", "kind": "paddy", "bbox": [400, 400, 600, 600], "outline": _PADDY_SQ}])
-    assert "harvest_yards_clear_of_paddies" in f(M)
+    assert "harvest_yards_clear_of_paddies" in f_only(M, "harvest_yards_clear_of_paddies")
 
 
 def test_harvest_yards_clear_of_paddies_passes_when_clear():
     y = {"x": 720, "y": 300, "w": 32, "h": 20, "rot": 0, "of": [676, 300]}
     M = _harvest([(676, 300)], [y], fields=[{"name": "a", "kind": "paddy", "bbox": [400, 400, 600, 600], "outline": _PADDY_SQ}])
-    assert "harvest_yards_clear_of_paddies" not in f(M)
+    assert "harvest_yards_clear_of_paddies" not in f_only(M, "harvest_yards_clear_of_paddies")
 
 
 def test_harvest_yards_clear_of_structures_fires_on_another_building():
     # the yard (344,300) overlaps a shop - only its OWN farmhouse (300,300) may underlie it
     M = _harvest([(300, 300)], [_yard((300, 300))])
     M["buildings"] = [{"x": 352, "y": 300, "w": 44, "h": 30, "rot": 0, "kind": "shop"}]
-    assert "harvest_yards_clear_of_structures" in f(M)
+    assert "harvest_yards_clear_of_structures" in f_only(M, "harvest_yards_clear_of_structures")
 
 
 def test_harvest_yards_clear_of_structures_passes_when_only_on_its_own_house():
     M = _harvest([(300, 300)], [_yard((300, 300))])
     M["buildings"] = [{"x": 700, "y": 700, "w": 44, "h": 30, "rot": 0, "kind": "shop"}]  # far away
-    assert "harvest_yards_clear_of_structures" not in f(M)
+    assert "harvest_yards_clear_of_structures" not in f_only(M, "harvest_yards_clear_of_structures")
 
 
 # ---- grove_clumps_clear_of_structures: a tree blob may abut but not overlap a farmstead ----
@@ -785,40 +785,40 @@ def test_grove_clumps_clear_of_structures_fires_on_a_clump_over_a_house():
         "houses": [{"x": 500, "y": 500, "w": 40, "h": 30, "rot": 0, "kind": "plain"}],
         "village_groves": [{"role": "copse", "r": 11, "clumps": [[515, 505]]}],
     }  # blob center inside the house
-    assert "grove_clumps_clear_of_structures" in f(on)
+    assert "grove_clumps_clear_of_structures" in f_only(on, "grove_clumps_clear_of_structures")
     beside = {**on, "village_groves": [{"role": "copse", "r": 11, "clumps": [[560, 505]]}]}  # abuts, off the wall
-    assert "grove_clumps_clear_of_structures" not in f(beside)
+    assert "grove_clumps_clear_of_structures" not in f_only(beside, "grove_clumps_clear_of_structures")
 
 
 def test_grove_clumps_clear_of_structures_covers_a_garden_and_a_shed():
     # the check sweeps the whole homestead, not just houses - a clump on a garden or a farm shed also fires
     gd = {"meta": {"scale": "village"}, "gardens": [{"x": 500, "y": 500, "w": 20, "h": 18, "rot": 0, "of": [500, 470]}], "village_groves": [{"role": "copse", "r": 11, "clumps": [[500, 500]]}]}
-    assert "grove_clumps_clear_of_structures" in f(gd)
+    assert "grove_clumps_clear_of_structures" in f_only(gd, "grove_clumps_clear_of_structures")
     sh = {"meta": {"scale": "village"}, "farm_sheds": [{"x": 500, "y": 500, "w": 24, "h": 20, "rot": 0, "of": [470, 500]}], "village_groves": [{"role": "copse", "r": 11, "clumps": [[500, 500]]}]}
-    assert "grove_clumps_clear_of_structures" in f(sh)
+    assert "grove_clumps_clear_of_structures" in f_only(sh, "grove_clumps_clear_of_structures")
 
 
 def test_gardens_unshaded_from_east_fires_when_avoidable():
-    assert "gardens_unshaded_from_east" in f(_EAST_SHADE)  # clear ground to the S -> the garden should have moved
+    assert "gardens_unshaded_from_east" in f_only(_EAST_SHADE, "gardens_unshaded_from_east")  # clear ground to the S -> the garden should have moved
 
 
 def test_gardens_unshaded_from_east_exempts_a_south_boxed_garden():
     # each obstacle type to the S boxes the garden in -> unavoidable -> exempt (exercises every _bed_clear branch)
     house_s = {**_EAST_SHADE, "houses": _EAST_SHADE["houses"] + [{"x": 320, "y": 325, "w": 44, "h": 44, "rot": 0, "kind": "plain"}]}
-    assert "gardens_unshaded_from_east" not in f(house_s)
+    assert "gardens_unshaded_from_east" not in f_only(house_s, "gardens_unshaded_from_east")
     yard_s = {**_EAST_SHADE, "threshing_yards": [{"x": 320, "y": 325, "w": 44, "h": 44, "rot": 0, "of": [999, 999]}]}
-    assert "gardens_unshaded_from_east" not in f(yard_s)
+    assert "gardens_unshaded_from_east" not in f_only(yard_s, "gardens_unshaded_from_east")
     lane_s = {**_EAST_SHADE, "lanes": [{"pts": [[280, 325], [360, 325]], "w": 40}]}  # a wide lane bars the whole shift band
-    assert "gardens_unshaded_from_east" not in f(lane_s)
+    assert "gardens_unshaded_from_east" not in f_only(lane_s, "gardens_unshaded_from_east")
     water_s = {**_EAST_SHADE, "channels": [{"poly": [[280, 325], [360, 325]], "frm": {"kind": "offmap"}, "to": {"kind": "offmap"}}]}
-    assert "gardens_unshaded_from_east" not in f(water_s)
+    assert "gardens_unshaded_from_east" not in f_only(water_s, "gardens_unshaded_from_east")
     hill_s = {**_EAST_SHADE, "hill": [320, 325, 30, 30]}
-    assert "gardens_unshaded_from_east" not in f(hill_s)
+    assert "gardens_unshaded_from_east" not in f_only(hill_s, "gardens_unshaded_from_east")
 
 
 def test_gardens_unshaded_from_east_skips_when_no_per_house_groves():
     # the rule is scoped to villages whose farms carry per-house windward groves; with none, it does not run
-    assert "gardens_unshaded_from_east" not in f({k: v for k, v in _EAST_SHADE.items() if k != "groves"})
+    assert "gardens_unshaded_from_east" not in f_only({k: v for k, v in _EAST_SHADE.items() if k != "groves"}, "gardens_unshaded_from_east")
 
 
 def test_wells_clear_of_trees_fires_on_grove_forest_woodland_grect_but_passes_when_clear():
@@ -827,15 +827,15 @@ def test_wells_clear_of_trees_fires_on_grove_forest_woodland_grect_but_passes_wh
     base = {"meta": {"scale": "village"}, "houses": [bldg(300, 300, "laborer")]}
     well = {"x": 500, "y": 500, "r": 8, "vr": 12}
     on_grove = {**base, "wells": [well], "village_groves": [{"role": "windbreak", "x": 505, "y": 505, "r": 14, "clumps": [[505, 505]]}]}
-    assert "wells_clear_of_trees" in f(on_grove)
+    assert "wells_clear_of_trees" in f_only(on_grove, "wells_clear_of_trees")
     on_forest = {**base, "wells": [well], "forest": [[400, 400], [600, 400], [600, 600], [400, 600]]}
-    assert "wells_clear_of_trees" in f(on_forest)
+    assert "wells_clear_of_trees" in f_only(on_forest, "wells_clear_of_trees")
     on_wood = {**base, "wells": [well], "commons": [{"x": 500, "y": 500, "role": "woodland", "poly": [[440, 440], [560, 440], [560, 560], [440, 560]]}]}
-    assert "wells_clear_of_trees" in f(on_wood)
+    assert "wells_clear_of_trees" in f_only(on_wood, "wells_clear_of_trees")
     on_grect = {**base, "wells": [well], "groves": [{"x": 505, "y": 505, "w": 40, "h": 30, "of": [300, 300], "face": [0, -1]}]}
-    assert "wells_clear_of_trees" in f(on_grect)
+    assert "wells_clear_of_trees" in f_only(on_grect, "wells_clear_of_trees")
     clear = {**base, "wells": [well], "village_groves": [{"role": "windbreak", "x": 900, "y": 900, "r": 14, "clumps": [[900, 900]]}]}
-    assert "wells_clear_of_trees" not in f(clear)
+    assert "wells_clear_of_trees" not in f_only(clear, "wells_clear_of_trees")
 
 
 def test_wells_clear_of_trees_fires_on_a_drawn_crown_over_the_wellhead():
@@ -843,8 +843,8 @@ def test_wells_clear_of_trees_fires_on_a_drawn_crown_over_the_wellhead():
     # A crown drawn onto the wellhead fires even with no grove/forest record anywhere near it.
     base = manifest(houses=[bldg(300, 300, "laborer")])
     wl = well(500, 500)
-    assert "wells_clear_of_trees" in f({**base, "wells": [wl], "tree_crowns": [508, 495, 9]})
-    assert "wells_clear_of_trees" not in f({**base, "wells": [wl], "tree_crowns": [540, 495, 9]})
+    assert "wells_clear_of_trees" in f_only({**base, "wells": [wl], "tree_crowns": [508, 495, 9]}, "wells_clear_of_trees")
+    assert "wells_clear_of_trees" not in f_only({**base, "wells": [wl], "tree_crowns": [540, 495, 9]}, "wells_clear_of_trees")
 
 
 # ---- gardens_unshaded_from_east: a garden truly boxed in to the SOUTH by a bog is EXEMPT ----
@@ -860,7 +860,7 @@ def test_gardens_unshaded_from_east_exempt_when_south_shift_blocked_by_a_bog():
         "groves": [{"x": 545, "y": 500, "w": 40, "h": 30, "of": [999, 999]}],  # neighbor grove hard against the garden's east
         "marshes": [{"poly": [[480, 510], [520, 510], [520, 600], [480, 600]]}],  # bog fills the whole southward corridor
     }
-    assert "gardens_unshaded_from_east" not in f(M)
+    assert "gardens_unshaded_from_east" not in f_only(M, "gardens_unshaded_from_east")
 
 
 def test_village_windbreak_embraces_cluster_fires_on_far_corner_masses_only():
@@ -868,14 +868,14 @@ def test_village_windbreak_embraces_cluster_fires_on_far_corner_masses_only():
     houses = [{"x": 500 + i * 30, "y": 500, "w": 23, "h": 14, "kind": "plain", "rot": 0} for i in range(12)]
     far = {"x": 900, "y": 100, "w": 120, "h": 60, "role": "windbreak", "clumps": [[880 + j * 6, 100] for j in range(14)]}
     M = {"meta": {"scale": "village", "nucleated": True}, "houses": houses, "village_groves": [far]}
-    assert "village_windbreak_embraces_cluster" in f(M)
+    assert "village_windbreak_embraces_cluster" in f_only(M, "village_windbreak_embraces_cluster")
 
 
 def test_village_windbreak_embraces_cluster_passes_when_the_belt_nestles():
     houses = [{"x": 500 + i * 30, "y": 500, "w": 23, "h": 14, "kind": "plain", "rot": 0} for i in range(12)]
     belt = {"x": 590, "y": 420, "w": 300, "h": 50, "role": "windbreak", "clumps": [[470 + j * 22, 425] for j in range(14)]}
     M = {"meta": {"scale": "village", "nucleated": True}, "houses": houses, "village_groves": [belt]}
-    assert "village_windbreak_embraces_cluster" not in f(M)
+    assert "village_windbreak_embraces_cluster" not in f_only(M, "village_windbreak_embraces_cluster")
 
 
 def test_village_windbreak_scales_with_cluster_fires_on_a_belt_too_thin_for_the_cluster():
@@ -887,20 +887,20 @@ def test_village_windbreak_scales_with_cluster_fires_on_a_belt_too_thin_for_the_
 def test_village_windbreak_scales_with_cluster_counts_per_house_groves():
     # a map that ALSO groves its farmhouses (Hikari-no-Sato does both) banks those yashikirin footprints
     M = _thin_belt_cluster(groves=[_grove(500 + i * 30 - 18, 480, 500 + i * 30, 500, w=40, h=40) for i in range(12)])
-    assert "village_windbreak_scales_with_cluster" not in f(M)
+    assert "village_windbreak_scales_with_cluster" not in f_only(M, "village_windbreak_scales_with_cluster")
 
 
 def test_village_windbreak_forest_exempts_only_when_it_shelters_the_cluster():
     # a REAL FOREST standing at the cluster's windward (NW) back, within nestling reach, IS the wind wall
     near = _thin_belt_cluster(forest=[[400, 360], [420, 420], [400, 470]])
-    assert "village_windbreak_scales_with_cluster" not in f(near)
+    assert "village_windbreak_scales_with_cluster" not in f_only(near, "village_windbreak_scales_with_cluster")
     # ... but a wood on the LEE side, half a map away, shelters nothing - no exemption (Moritono's Shirin
     # Forest, 1,089 ft east of the hamlet under an NW wind, GM 2026-07-25)
     far = _thin_belt_cluster(forest=[[1500, 200], [1520, 600], [1500, 900]])
-    assert "village_windbreak_scales_with_cluster" in f(far)
+    assert "village_windbreak_scales_with_cluster" in f_only(far, "village_windbreak_scales_with_cluster")
     # ... and neither does a wood that is CLOSE but downwind (the lee side of the same cluster)
     lee = _thin_belt_cluster(forest=[[900, 560], [940, 600], [900, 640]])
-    assert "village_windbreak_scales_with_cluster" in f(lee)
+    assert "village_windbreak_scales_with_cluster" in f_only(lee, "village_windbreak_scales_with_cluster")
 
 
 def test_labels_clear_of_other_buildings_reads_the_label_registry():
@@ -925,9 +925,9 @@ def test_wells_among_dwellings_counts_a_kiln_works_cottages():
     # with no dwellings at all, which would make the negative half pass for the wrong reason
     M = _kiln_map(quarters=((500.0, 570.0),), houses=[house(100, 100)])
     M["wells"] = [well(500, 550)]
-    assert "wells_among_dwellings" not in f(M)
+    assert "wells_among_dwellings" not in f_only(M, "wells_among_dwellings")
     M["kilns"][0]["quarters"] = []
-    assert "wells_among_dwellings" in f(M)
+    assert "wells_among_dwellings" in f_only(M, "wells_among_dwellings")
 
 
 def test_a_caption_over_a_wellhead_is_caught():
@@ -943,8 +943,8 @@ def test_a_caption_over_a_wellhead_is_caught():
         M["labels"] = [[440, 494, 560, 506, 1, text]]
         return M
 
-    assert "labels_clear_of_other_buildings" in f(wmap("merchant houses & shops"))
-    assert "labels_clear_of_other_buildings" not in f(wmap("well"))  # a caption may name what it covers
+    assert "labels_clear_of_other_buildings" in f_only(wmap("merchant houses & shops"), "labels_clear_of_other_buildings")
+    assert "labels_clear_of_other_buildings" not in f_only(wmap("well"), "labels_clear_of_other_buildings")  # a caption may name what it covers
     assert "wells" in check_village._LABEL_GROUP
 
 
@@ -977,16 +977,16 @@ def test_labels_clear_of_other_buildings_reads_the_tilted_quad():
     # judged by its box the caption would false-flag; judged by its true quad it is clean
     M = manifest(meta={"scale": "town", "ftpx": 1, "W": 1000, "H": 1000}, buildings=[bldg(120, 106, kind="merchant", w=20, h=16)])
     M["labels"] = [[100, 100, 240, 112, 1, "stray caption", None, -30.0]]
-    assert "labels_clear_of_other_buildings" not in f(M)
+    assert "labels_clear_of_other_buildings" not in f_only(M, "labels_clear_of_other_buildings")
     M["labels"] = [[100, 100, 240, 112, 1, "stray caption"]]  # the same record level DOES lap it
-    assert "labels_clear_of_other_buildings" in f(M)
+    assert "labels_clear_of_other_buildings" in f_only(M, "labels_clear_of_other_buildings")
 
 
 def test_labels_within_image_uses_the_tilted_reach():
     lvl = [100, 20, 240, 32, 1, "near the top edge"]
-    assert "labels_within_image" not in f({"meta": {}, "labels": [lvl]})
+    assert "labels_within_image" not in f_only({"meta": {}, "labels": [lvl]}, "labels_within_image")
     # tilted -30, the run's high end pokes past the frame the level box sat inside
-    assert "labels_within_image" in f({"meta": {}, "labels": [[*lvl[:6], None, -30.0]]})
+    assert "labels_within_image" in f_only({"meta": {}, "labels": [[*lvl[:6], None, -30.0]]}, "labels_within_image")
 
 
 @pytest.mark.tiers("city", "town")
@@ -1001,9 +1001,9 @@ def test_a_plural_granaries_caption_may_cover_its_own_stores():
         "granaries": [{"x": 550, "y": 560, "w": 40, "h": 24, "rot": 0, "label": "domain granaries"}],
         "labels": [[480, 550, 640, 566, 5, "domain granaries"]],
     }
-    assert "labels_clear_of_other_buildings" not in f(M)
+    assert "labels_clear_of_other_buildings" not in f_only(M, "labels_clear_of_other_buildings")
     M["labels"] = [[480, 550, 640, 566, 5, "flophouse row"]]  # a foreign caption on the stores still fires
-    assert "labels_clear_of_other_buildings" in f(M)
+    assert "labels_clear_of_other_buildings" in f_only(M, "labels_clear_of_other_buildings")
 
 
 def test_feature_022_targeted_verdict_matches_the_full_gate():

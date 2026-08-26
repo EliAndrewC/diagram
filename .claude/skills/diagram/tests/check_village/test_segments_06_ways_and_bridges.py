@@ -2,22 +2,22 @@
 
 import pytest
 
-from tests.check_village._builders import WALLSQ, _bridge_map, _capital_manifest, _skew_bridge_map, f, house
+from tests.check_village._builders import WALLSQ, _bridge_map, _capital_manifest, _skew_bridge_map, f, f_only, house
 
 
 def test_roads_bridge_water_fires_when_unbridged():
     # the road runs straight through the stream with no bridge
-    assert "roads_bridge_water" in f(_bridge_map([]))
+    assert "roads_bridge_water" in f_only(_bridge_map([]), "roads_bridge_water")
 
 
 def test_roads_bridge_water_passes_when_bridged():
-    assert "roads_bridge_water" not in f(_bridge_map([{"x": 500, "y": 500, "rot": 0, "span": 37, "w": 26}]))
+    assert "roads_bridge_water" not in f_only(_bridge_map([{"x": 500, "y": 500, "rot": 0, "span": 37, "w": 26}]), "roads_bridge_water")
 
 
 def test_roads_bridge_water_passes_when_road_runs_alongside_water():
     # a road parallel to a stream, never intersecting it, needs no bridge
     M = {"meta": {"scale": "village", "W": 1000, "H": 1000}, "road": [[100, 480], [900, 480]], "streams": [{"poly": [[100, 520], [900, 520]], "frm": None, "to": None, "w": 9}], "bridges": []}
-    assert "roads_bridge_water" not in f(M)
+    assert "roads_bridge_water" not in f_only(M, "roads_bridge_water")
 
 
 def test_roads_bridge_water_fires_on_an_unbridged_lane_over_a_canal():
@@ -28,9 +28,9 @@ def test_roads_bridge_water_fires_on_an_unbridged_lane_over_a_canal():
         "field_ditches": [{"poly": [[500, 100], [500, 900]], "w": 5, "role": "main", "field": "p"}],
         "bridges": [],
     }
-    assert "roads_bridge_water" in f(M)
+    assert "roads_bridge_water" in f_only(M, "roads_bridge_water")
     M["bridges"] = [{"x": 500, "y": 500, "rot": 0, "span": 32, "w": 6}]
-    assert "roads_bridge_water" not in f(M)
+    assert "roads_bridge_water" not in f_only(M, "roads_bridge_water")
 
 
 @pytest.mark.tiers("city")
@@ -47,9 +47,9 @@ def test_roads_bridge_water_fires_where_the_ring_road_crosses_the_cargo_canal():
         "canals": [{"poly": [[500, 100], [500, 900]], "w": 12}],
         "bridges": [],
     }
-    assert "roads_bridge_water" in f(M)
+    assert "roads_bridge_water" in f_only(M, "roads_bridge_water")
     M["bridges"] = [{"x": 500, "y": 500, "rot": 0, "span": 40, "w": 7}]
-    assert "roads_bridge_water" not in f(M)
+    assert "roads_bridge_water" not in f_only(M, "roads_bridge_water")
 
 
 @pytest.mark.tiers("city")
@@ -64,9 +64,9 @@ def test_roads_bridge_water_ignores_an_undrawn_conduit_channel():
         "channels": [{"poly": [[500, 100], [500, 900]], "frm": {"kind": "offmap"}, "to": {"kind": "offmap"}, "w": 2.5, "drawn": False}],
         "bridges": [],
     }
-    assert "roads_bridge_water" not in f(M)
+    assert "roads_bridge_water" not in f_only(M, "roads_bridge_water")
     M["channels"][0]["drawn"] = True  # ...but a channel that IS dug and drawn must be carried over
-    assert "roads_bridge_water" in f(M)
+    assert "roads_bridge_water" in f_only(M, "roads_bridge_water")
 
 
 @pytest.mark.tiers("capital", "city")
@@ -83,9 +83,9 @@ def test_roads_bridge_water_fires_on_an_unbridged_trunk_road_over_the_city_moat(
         "moat_width": 22,
         "bridges": [],
     }
-    assert "roads_bridge_water" in f(M)
+    assert "roads_bridge_water" in f_only(M, "roads_bridge_water")
     M["bridges"] = [{"x": 500, "y": 500, "rot": 0, "span": 50, "w": 26}]
-    assert "roads_bridge_water" not in f(M)
+    assert "roads_bridge_water" not in f_only(M, "roads_bridge_water")
 
 
 @pytest.mark.tiers("city")
@@ -100,9 +100,9 @@ def test_roads_bridge_water_fires_on_an_unbridged_road_over_the_river():
         "streams": [{"poly": [[500, 100], [500, 900]], "frm": {"kind": "offmap"}, "to": {"kind": "offmap"}, "w": 40}],
         "bridges": [],
     }
-    assert "roads_bridge_water" in f(M)
+    assert "roads_bridge_water" in f_only(M, "roads_bridge_water")
     M["bridges"] = [{"x": 500, "y": 500, "rot": 0, "span": 68, "w": 26}]
-    assert "roads_bridge_water" not in f(M)
+    assert "roads_bridge_water" not in f_only(M, "roads_bridge_water")
 
 
 @pytest.mark.tiers("capital", "city")
@@ -115,9 +115,9 @@ def test_roads_bridge_water_fires_on_an_unbridged_way_over_a_castle_moat():
         "castles": [{"x": 500, "y": 250, "w": 120, "h": 90, "rot": 0, "gate": [500, 295], "moat": [[500, 420], [500, 900]], "moat_width": 26, "label": "Castle"}],
         "bridges": [],
     }
-    assert "roads_bridge_water" in f(M)
+    assert "roads_bridge_water" in f_only(M, "roads_bridge_water")
     M["bridges"] = [{"x": 500, "y": 500, "rot": 0, "span": 54, "w": 30}]
-    assert "roads_bridge_water" not in f(M)
+    assert "roads_bridge_water" not in f_only(M, "roads_bridge_water")
 
 
 @pytest.mark.tiers("city")
@@ -132,11 +132,11 @@ def test_watercourse_crosses_wall_at_water_gate():
         "water_gates": [{"x": 700, "y": 500, "w": 36, "h": 22, "rot": 0, "z": 1}],
         "canals": [{"poly": [[900, 500], [650, 500]], "w": 12}],  # through the gate
     }
-    assert "watercourse_crosses_wall_at_water_gate" not in f(M)
+    assert "watercourse_crosses_wall_at_water_gate" not in f_only(M, "watercourse_crosses_wall_at_water_gate")
     M["canals"] = [{"poly": [[900, 560], [650, 560]], "w": 12}]  # under the wall, 60px off the gate
-    assert "watercourse_crosses_wall_at_water_gate" in f(M)
+    assert "watercourse_crosses_wall_at_water_gate" in f_only(M, "watercourse_crosses_wall_at_water_gate")
     M["canals"] = [{"poly": [[900, 560], [650, 560]], "w": 12, "drawn": False}]  # a buried culvert pierces nothing
-    assert "watercourse_crosses_wall_at_water_gate" not in f(M)
+    assert "watercourse_crosses_wall_at_water_gate" not in f_only(M, "watercourse_crosses_wall_at_water_gate")
 
 
 @pytest.mark.tiers("capital", "city")
@@ -146,18 +146,18 @@ def test_gate_roads_join_the_ring_fires_on_a_stub_and_passes_when_joined():
     of bare ground inside the wall). A way joins by a vertex near the ring or by crossing it."""
     ring = [[130, 130], [870, 130], [870, 870], [130, 870], [130, 130]]
     M = {"meta": {"scale": "city"}, "ring_road": ring, "gates": [[500, 100]], "roads": [{"pts": [[50, 50], [60, 60]], "w": 8}, {"pts": [[500, 100], [500, 0]], "w": 26}]}
-    assert "gate_roads_join_the_ring" in f(M)  # the road runs outward only - a stub on the sill
+    assert "gate_roads_join_the_ring" in f_only(M, "gate_roads_join_the_ring")  # the road runs outward only - a stub on the sill
     M["roads"][1]["pts"] = [[500, 134], [500, 100], [500, 0]]  # extended inward, vertex on the ring
-    assert "gate_roads_join_the_ring" not in f(M)
+    assert "gate_roads_join_the_ring" not in f_only(M, "gate_roads_join_the_ring")
     M["roads"][1]["pts"] = [[500, 200], [500, 0]]  # or the way CROSSES the ring outright
-    assert "gate_roads_join_the_ring" not in f(M)
+    assert "gate_roads_join_the_ring" not in f_only(M, "gate_roads_join_the_ring")
 
 
 def test_bridges_align_with_their_way_passes_a_solved_deck():
     # a deck seated on the crossing and bearing with the road - what s.bridges() produces
-    assert "bridges_align_with_their_way" not in f(_skew_bridge_map())
+    assert "bridges_align_with_their_way" not in f_only(_skew_bridge_map(), "bridges_align_with_their_way")
     # ...and a deck may point either way along the road: a plank has no forward direction
-    assert "bridges_align_with_their_way" not in f(_skew_bridge_map(rot=180))
+    assert "bridges_align_with_their_way" not in f_only(_skew_bridge_map(rot=180), "bridges_align_with_their_way")
 
 
 def test_bridges_align_with_their_way_fires_on_a_skewed_deck():
@@ -179,7 +179,7 @@ def test_bridges_align_with_their_way_fires_on_a_deck_that_carries_nothing():
     # a deck over water with no way on it at all: either the way or the watercourse is unrecorded
     M = _bridge_map([{"x": 500, "y": 500, "rot": 0, "span": 37, "w": 26}])
     del M["road"]
-    assert "bridges_align_with_their_way" in f(M)
+    assert "bridges_align_with_their_way" in f_only(M, "bridges_align_with_their_way")
 
 
 def test_bridges_align_with_their_way_exempts_standalone_footplanks():
@@ -187,7 +187,7 @@ def test_bridges_align_with_their_way_exempts_standalone_footplanks():
     the alignment rule would fire on every correct one. Its own rules are long_ditches_have_a_
     footbridge and footbridges_reach_useful_ground."""
     M = _skew_bridge_map(rot=90, foot=True)  # square across the road it is nowhere near carrying
-    assert "bridges_align_with_their_way" not in f(M)
+    assert "bridges_align_with_their_way" not in f_only(M, "bridges_align_with_their_way")
 
 
 # ---- feature 021: the capital housing layer ---------------------------------------------------
@@ -198,11 +198,11 @@ def test_capital_districts_declared_fires_when_fabric_stands_undeclared():
     """Once dwellings stand, the capital records which district each pack filled (T003) - the
     rank-gradient check's ground truth. The bare 020 state (no fabric) stays legal."""
     M = _capital_manifest()
-    assert "capital_districts_declared" not in f(M)  # no fabric yet - legal
+    assert "capital_districts_declared" not in f_only(M, "capital_districts_declared")  # no fabric yet - legal
     M["houses"] = [house(500, 500)]
-    assert "capital_districts_declared" in f(M)
+    assert "capital_districts_declared" in f_only(M, "capital_districts_declared")
     M["districts"] = [{"name": "east machi", "kind": "machi", "poly": [[0, 0], [1000, 0], [1000, 1000], [0, 1000]]}]
-    assert "capital_districts_declared" not in f(M)
+    assert "capital_districts_declared" not in f_only(M, "capital_districts_declared")
 
 
 @pytest.mark.tiers("capital")
@@ -217,10 +217,10 @@ def test_capital_rank_gradient_fires_on_an_inverted_band():
     ]
     M["manors"] = [{"x": 800, "y": 200, "w": 60, "h": 40, "label": "Hazama Estate"}]
     M["terraces"] = [{"x": 300, "y": 200, "w": 36, "h": 7, "rot": 0, "units": 5, "z": 1}]
-    assert "capital_rank_gradient" in f(M)
+    assert "capital_rank_gradient" in f_only(M, "capital_rank_gradient")
     M["districts"][0]["poly"], M["districts"][1]["poly"] = M["districts"][1]["poly"], M["districts"][0]["poly"]
     M["manors"][0]["x"], M["terraces"][0]["x"] = 300, 800
-    assert "capital_rank_gradient" not in f(M)
+    assert "capital_rank_gradient" not in f_only(M, "capital_rank_gradient")
 
 
 def test_terraces_are_ranges_fires_on_a_single_unit():
@@ -228,9 +228,9 @@ def test_terraces_are_ranges_fires_on_a_single_unit():
     roof over several household cells."""
     M = _capital_manifest()
     M["terraces"] = [{"x": 500, "y": 500, "w": 6, "h": 7, "rot": 0, "units": 1, "z": 1}]
-    assert "terraces_are_ranges" in f(M)
+    assert "terraces_are_ranges" in f_only(M, "terraces_are_ranges")
     M["terraces"][0]["units"] = 6
-    assert "terraces_are_ranges" not in f(M)
+    assert "terraces_are_ranges" not in f_only(M, "terraces_are_ranges")
 
 
 @pytest.mark.tiers("capital")
@@ -241,9 +241,9 @@ def test_capital_housing_matches_band_targets_fires_on_a_band_shortfall():
     M["meta"]["budget"]["dwelling_target"] = {"samurai_yashiki": 5, "samurai_detached": 0, "samurai_terrace": 0, "packed": 0, "dwellings": 5}
     M["districts"] = [{"name": "castle foot", "kind": "yashiki", "rank_band": "yashiki", "poly": [[0, 0], [1000, 0], [1000, 1000], [0, 1000]]}]
     M["manors"] = [{"x": 300, "y": 300, "w": 60, "h": 40, "label": "Hazama Estate"}]
-    assert "capital_housing_matches_band_targets" in f(M)  # 1 drawn vs 5
+    assert "capital_housing_matches_band_targets" in f_only(M, "capital_housing_matches_band_targets")  # 1 drawn vs 5
     M["manors"] += [{"x": 300 + 80 * i, "y": 500, "w": 60, "h": 40, "label": "Estate"} for i in range(4)]
-    assert "capital_housing_matches_band_targets" not in f(M)
+    assert "capital_housing_matches_band_targets" not in f_only(M, "capital_housing_matches_band_targets")
 
 
 @pytest.mark.tiers("town")
@@ -256,13 +256,13 @@ def test_cistern_wells_sit_on_the_buried_main():
     M["aqueducts"] = [{"poly": [[900, 100], [700, 300]], "w": 8, "intake": [900, 100], "to": [700, 300]}]
     M["town_streets"] = [{"pts": [[700, 300], [700, 700]], "w": 5}]
     M["wells"] = [{"x": 705, "y": 420, "r": 8, "vr": 6, "shrine": False, "private": False, "kind": "cistern"}]
-    assert "cistern_wells_in_service_band" not in f(M)  # on the street, 120px from the basin
+    assert "cistern_wells_in_service_band" not in f_only(M, "cistern_wells_in_service_band")  # on the street, 120px from the basin
     M["wells"][0]["x"], M["wells"][0]["y"] = 705, 620  # 320px out - beyond the main's reach
-    assert "cistern_wells_in_service_band" in f(M)
+    assert "cistern_wells_in_service_band" in f_only(M, "cistern_wells_in_service_band")
     M["wells"][0]["x"], M["wells"][0]["y"] = 760, 380  # in reach but 55px off any street
-    assert "cistern_wells_in_service_band" in f(M)
+    assert "cistern_wells_in_service_band" in f_only(M, "cistern_wells_in_service_band")
     M["wells"][0].pop("kind")  # a dug draw-well may stand anywhere wells stand
-    assert "cistern_wells_in_service_band" not in f(M)
+    assert "cistern_wells_in_service_band" not in f_only(M, "cistern_wells_in_service_band")
 
 
 @pytest.mark.tiers("town")
@@ -273,9 +273,9 @@ def test_kido_close_the_machi_mouths():
     M = _capital_manifest()
     M["districts"] = [{"name": "east machi", "kind": "machi", "poly": [[300, 300], [700, 300], [700, 700], [300, 700]]}]
     M["town_streets"] = [{"pts": [[100, 500], [900, 500]], "w": 5}]  # crosses at (300,500) and (700,500)
-    assert "kido_close_the_machi_mouths" in f(M)  # two mouths, no kido
+    assert "kido_close_the_machi_mouths" in f_only(M, "kido_close_the_machi_mouths")  # two mouths, no kido
     M["kido"] = [{"x": 312, "y": 500, "parts": [], "guard": None}, {"x": 688, "y": 500, "parts": [], "guard": None}]
-    assert "kido_close_the_machi_mouths" not in f(M)
+    assert "kido_close_the_machi_mouths" not in f_only(M, "kido_close_the_machi_mouths")
 
 
 def test_precinct_interiors_within_reservation():
@@ -283,7 +283,7 @@ def test_precinct_interiors_within_reservation():
     dormitory overhanging the reservation fires."""
     M = _capital_manifest()
     M["precincts"] = [{"x": 500, "y": 500, "w": 130, "h": 100, "rear": "north", "graveyard": False}]
-    assert "precinct_interiors_within_reservation" in f(M)  # declared, nothing drawn
+    assert "precinct_interiors_within_reservation" in f_only(M, "precinct_interiors_within_reservation")  # declared, nothing drawn
     halls = [
         {"x": 456, "y": 462, "w": 16, "h": 10, "kind": "residence", "precinct": [500, 500]},
         {"x": 455, "y": 480, "w": 12, "h": 8, "kind": "kitchen", "precinct": [500, 500]},
@@ -293,9 +293,9 @@ def test_precinct_interiors_within_reservation():
         {"x": 446, "y": 502, "w": 14, "h": 9, "kind": "administration", "precinct": [500, 500]},
     ]
     M["precinct_halls"] = halls
-    assert "precinct_interiors_within_reservation" not in f(M)
+    assert "precinct_interiors_within_reservation" not in f_only(M, "precinct_interiors_within_reservation")
     M["precinct_halls"] = halls[:-1] + [{"x": 570, "y": 502, "w": 14, "h": 9, "kind": "administration", "precinct": [500, 500]}]
-    assert "precinct_interiors_within_reservation" in f(M)  # administration overhangs east edge
+    assert "precinct_interiors_within_reservation" in f_only(M, "precinct_interiors_within_reservation")  # administration overhangs east edge
 
 
 @pytest.mark.tiers("capital")
@@ -306,9 +306,9 @@ def test_precinct_graveyard_claims_closed():
     M["precincts"] = [{"x": 500, "y": 500, "w": 130, "h": 100, "rear": "north", "graveyard": True}]
     M["precinct_halls"] = [{"x": 456 + i, "y": 462, "w": 4, "h": 4, "kind": k, "precinct": [500, 500]} for i, k in enumerate(("residence", "kitchen", "dormitory", "dormitory", "library"))]
     M["religious"] = [{"kind": "temple", "x": 500, "y": 500, "w": 50, "h": 33, "label": "Temple of Benten", "graveyard": True}]
-    assert "precinct_graveyard_claims_closed" in f(M)
+    assert "precinct_graveyard_claims_closed" in f_only(M, "precinct_graveyard_claims_closed")
     M["cemeteries"] = [{"x": 544, "y": 464, "w": 24, "h": 16, "rot": 0, "parish": True}]  # rot: the capital now runs the funerary block (GM 2026-08-10)
-    assert "precinct_graveyard_claims_closed" not in f(M)
+    assert "precinct_graveyard_claims_closed" not in f_only(M, "precinct_graveyard_claims_closed")
 
 
 def test_monzen_fronts_the_approach():
@@ -321,9 +321,9 @@ def test_monzen_fronts_the_approach():
     shops = [{"kind": "shop", "x": 460 + 12 * i, "y": 600, "w": 8, "h": 6} for i in range(7)]
     M["buildings"] = M.get("buildings", []) + shops
     M["districts"] = (M.get("districts") or []) + [{"name": "blind monzen", "kind": "monzen", "poly": [[430, 380], [570, 380], [570, 445], [430, 445]]}]
-    assert "monzen_fronts_the_approach" in f(M)  # north of the temple, torii face south
+    assert "monzen_fronts_the_approach" in f_only(M, "monzen_fronts_the_approach")  # north of the temple, torii face south
     M["districts"][-1] = {"name": "monzen", "kind": "monzen", "poly": [[430, 560], [570, 560], [570, 640], [430, 640]]}
-    assert "monzen_fronts_the_approach" not in f(M)
+    assert "monzen_fronts_the_approach" not in f_only(M, "monzen_fronts_the_approach")
 
 
 def test_teramachi_backstrip_lean():
@@ -334,9 +334,9 @@ def test_teramachi_backstrip_lean():
     ty = sum(p9[1] for p9 in M["wall"]) / len(M["wall"])
     M["religious"] = (M.get("religious") or []) + [{"kind": "temple", "x": wallx - 130, "y": ty, "w": 32, "h": 21, "label": "Temple of Ebisu"}]
     M["buildings"] = M.get("buildings", []) + [{"kind": "laborer", "x": wallx - 60, "y": ty, "w": 10, "h": 7}]
-    assert "teramachi_backstrip_lean" in f(M)
+    assert "teramachi_backstrip_lean" in f_only(M, "teramachi_backstrip_lean")
     M["buildings"][-1]["kind"] = "monk_house"
-    assert "teramachi_backstrip_lean" not in f(M)
+    assert "teramachi_backstrip_lean" not in f_only(M, "teramachi_backstrip_lean")
 
 
 @pytest.mark.tiers("capital")
@@ -371,7 +371,7 @@ def test_capital_interior_slack_in_band():
     r = f(M)
     assert "capital_interior_slack_in_band" in r  # 36% of a 1M interior
     M["commons"][0]["poly"] = [[100, 100], [400, 100], [400, 400], [100, 400]]  # 9%
-    assert "capital_interior_slack_in_band" not in f(M)
+    assert "capital_interior_slack_in_band" not in f_only(M, "capital_interior_slack_in_band")
 
 
 def test_monzen_floor_fires_on_too_few_commercial_buildings():
@@ -384,7 +384,7 @@ def test_monzen_floor_fires_on_too_few_commercial_buildings():
     M["torii"] = [(500, 580), (500, 620)]
     M["districts"] = (M.get("districts") or []) + [{"name": "thin monzen", "kind": "monzen", "poly": [[430, 560], [570, 560], [570, 650], [430, 650]]}]
     M["buildings"] = M.get("buildings", []) + [{"x": 460, "y": 600, "w": 8, "h": 6, "kind": "shop", "rot": 0}]  # torii inside, but ONE shop
-    assert "monzen_fronts_the_approach" in f(M)
+    assert "monzen_fronts_the_approach" in f_only(M, "monzen_fronts_the_approach")
 
 
 @pytest.mark.tiers("capital", "city")
@@ -392,9 +392,9 @@ def test_wells_not_clustered():
     """GM 2026-08-10: the capital had knots of 4-6 wellheads together, unlike every other pool
     map (all max at 4 inside a 150 ft radius). Accretion from chasing a local household count."""
     spread = {"meta": {"scale": "city", "ftpx": 3}, "wells": [{"x": 100 + 200 * i, "y": 100, "kind": None} for i in range(6)]}
-    assert "wells_not_clustered" not in f(spread)
+    assert "wells_not_clustered" not in f_only(spread, "wells_not_clustered")
     knot = {"meta": {"scale": "city", "ftpx": 3}, "wells": [{"x": 500 + 9 * i, "y": 500 + 7 * i, "kind": None} for i in range(6)]}
-    assert "wells_not_clustered" in f(knot)
+    assert "wells_not_clustered" in f_only(knot, "wells_not_clustered")
 
 
 @pytest.mark.tiers("city")
@@ -408,12 +408,12 @@ def test_extramural_features_tethered_and_gate_markets_start_at_their_gate():
         "gates": [[500, 200], [500, 800]],
         "roads": [{"pts": [[500, 200], [500, -400]], "w": 9}],
     }
-    assert "extramural_features_tethered" in f({**base, "kilns": [{"x": 2400, "y": 2400, "w": 30, "h": 20, "rot": 0}]})
-    assert "extramural_features_tethered" not in f({**base, "kilns": [{"x": 520, "y": -150, "w": 30, "h": 20, "rot": 0}]})
+    assert "extramural_features_tethered" in f_only({**base, "kilns": [{"x": 2400, "y": 2400, "w": 30, "h": 20, "rot": 0}]}, "extramural_features_tethered")
+    assert "extramural_features_tethered" not in f_only({**base, "kilns": [{"x": 520, "y": -150, "w": 30, "h": 20, "rot": 0}]}, "extramural_features_tethered")
     shops_far = [{"x": 500 + 20 * i, "y": -55, "w": 10, "h": 8, "rot": 0, "kind": "shop"} for i in range(4)]  # 255px out: inside the market reach, past the head allowance
-    assert "gate_markets_start_at_their_gate" in f({**base, "buildings": shops_far})
+    assert "gate_markets_start_at_their_gate" in f_only({**base, "buildings": shops_far}, "gate_markets_start_at_their_gate")
     shops_at = [{"x": 500 + 20 * i, "y": 130, "w": 10, "h": 8, "rot": 0, "kind": "shop"} for i in range(4)]
-    assert "gate_markets_start_at_their_gate" not in f({**base, "buildings": shops_at})
+    assert "gate_markets_start_at_their_gate" not in f_only({**base, "buildings": shops_at}, "gate_markets_start_at_their_gate")
 
 
 @pytest.mark.tiers("city")
@@ -422,9 +422,9 @@ def test_animal_yards_clear_of_compound_gates():
     POINT, so a yard behind the compound's back wall is ordinary city ground."""
     manor = {"x": 500, "y": 500, "w": 100, "h": 80, "rot": 0, "gate_dir": "south", "label": "Test Estate"}
     at_gate = {"meta": {"scale": "city", "ftpx": 3}, "manors": [manor], "stable_yards": [{"x": 500, "y": 580, "r": 40, "of": [500, 580], "troughs": 1, "rails": []}]}
-    assert "animal_yards_clear_of_compound_gates" in f(at_gate)
+    assert "animal_yards_clear_of_compound_gates" in f_only(at_gate, "animal_yards_clear_of_compound_gates")
     behind = {"meta": {"scale": "city", "ftpx": 3}, "manors": [manor], "stable_yards": [{"x": 500, "y": 380, "r": 40, "of": [500, 380], "troughs": 1, "rails": []}]}
-    assert "animal_yards_clear_of_compound_gates" not in f(behind)
+    assert "animal_yards_clear_of_compound_gates" not in f_only(behind, "animal_yards_clear_of_compound_gates")
 
 
 @pytest.mark.tiers("city")
@@ -435,12 +435,12 @@ def test_map_frame_hugs_its_content():
         "meta": {"scale": "city", "ftpx": 3, "view": [0, 0, 900, 900]},
         "buildings": [{"x": 20, "y": 20, "w": 8, "h": 6, "rot": 0, "kind": "laborer"}, {"x": 880, "y": 880, "w": 8, "h": 6, "rot": 0, "kind": "laborer"}],
     }
-    assert "map_frame_hugs_its_content" not in f(tight)
+    assert "map_frame_hugs_its_content" not in f_only(tight, "map_frame_hugs_its_content")
     loose = {
         "meta": {"scale": "city", "ftpx": 3, "view": [0, 0, 900, 3000]},
         "buildings": [{"x": 20, "y": 20, "w": 8, "h": 6, "rot": 0, "kind": "laborer"}, {"x": 880, "y": 400, "w": 8, "h": 6, "rot": 0, "kind": "laborer"}],
     }
-    assert "map_frame_hugs_its_content" in f(loose)
+    assert "map_frame_hugs_its_content" in f_only(loose, "map_frame_hugs_its_content")
 
 
 @pytest.mark.tiers("capital", "city")
@@ -450,10 +450,10 @@ def test_ways_cross_water_on_a_deck():
     OVERLAP, not centerline crossing - the capital's shore path lay in the moat drain with no
     plank and the crossing rule never saw it."""
     base = {"meta": {"scale": "city", "ftpx": 3}, "streams": [{"poly": [[0, 500], [1000, 500]], "w": 20}]}
-    assert "ways_cross_water_on_a_deck" in f({**base, "alleys": [{"pts": [[400, 300], [400, 700]], "w": 10}]})
+    assert "ways_cross_water_on_a_deck" in f_only({**base, "alleys": [{"pts": [[400, 300], [400, 700]], "w": 10}]}, "ways_cross_water_on_a_deck")
     decked = {**base, "alleys": [{"pts": [[400, 300], [400, 700]], "w": 10}], "bridges": [{"x": 400, "y": 500, "rot": 90, "span": 34, "w": 10}]}
-    assert "ways_cross_water_on_a_deck" not in f(decked)
-    assert "ways_cross_water_on_a_deck" not in f({**base, "alleys": [{"pts": [[400, 300], [400, 460]], "w": 10}]})
+    assert "ways_cross_water_on_a_deck" not in f_only(decked, "ways_cross_water_on_a_deck")
+    assert "ways_cross_water_on_a_deck" not in f_only({**base, "alleys": [{"pts": [[400, 300], [400, 460]], "w": 10}]}, "ways_cross_water_on_a_deck")
 
 
 @pytest.mark.tiers("city")
@@ -463,14 +463,14 @@ def test_new_2026_08_10_check_edge_cases():
     side, a malformed yard record, and a kiln 900 ft from the wall with no road under it."""
     water = {"meta": {"scale": "city", "ftpx": 3}, "streams": [{"poly": [[0, 500], [1000, 500]], "w": 20}]}
     # a one-vertex way has no segment to sample - it must not raise, and must not fire
-    assert "ways_cross_water_on_a_deck" not in f({**water, "alleys": [{"pts": [[400, 500]], "w": 10}]})
+    assert "ways_cross_water_on_a_deck" not in f_only({**water, "alleys": [{"pts": [[400, 500]], "w": 10}]}, "ways_cross_water_on_a_deck")
     # gate_dir the mapping does not know, and a yard record with no x
     odd = {
         "meta": {"scale": "city", "ftpx": 3},
         "manors": [{"x": 500, "y": 500, "w": 100, "h": 80, "rot": 0, "gate_dir": "northeast", "label": "Odd Estate"}],
         "stable_yards": [{"x": 500, "y": 900, "r": 40, "of": [500, 900], "troughs": 1, "rails": [], "troughs_at": [500, 900]}],
     }
-    assert "animal_yards_clear_of_compound_gates" not in f(odd)
+    assert "animal_yards_clear_of_compound_gates" not in f_only(odd, "animal_yards_clear_of_compound_gates")
     # the wall-reach clause: a works on the near farm ground, no road under it, is tethered
     near = {
         "meta": {"scale": "city", "walled": True, "W": 3000, "H": 3000, "ftpx": 3},
@@ -478,9 +478,9 @@ def test_new_2026_08_10_check_edge_cases():
         "gates": [[500, 200], [500, 800]],
         "kilns": [{"x": 500, "y": 1000, "w": 30, "h": 20, "rot": 0}],
     }
-    assert "extramural_features_tethered" not in f(near)  # 200px past the wall = 600 ft
+    assert "extramural_features_tethered" not in f_only(near, "extramural_features_tethered")  # 200px past the wall = 600 ft
     far = {**near, "kilns": [{"x": 500, "y": 1400, "w": 30, "h": 20, "rot": 0}]}
-    assert "extramural_features_tethered" in f(far)  # 600px = 1,800 ft, past the attested band
+    assert "extramural_features_tethered" in f_only(far, "extramural_features_tethered")  # 600px = 1,800 ft, past the attested band
 
 
 @pytest.mark.tiers("city")
@@ -490,9 +490,9 @@ def test_sluice_gates_centered_on_their_channel():
     The old rule measured to the bank, so a gate two-thirds of a half-width off-center passed
     while reading as detached from the water it gates."""
     on = {"meta": {"scale": "city", "ftpx": 3}, "streams": [{"poly": [[0, 500], [1000, 500]], "w": 22}], "sluice_gates": [{"x": 500, "y": 501, "rot": 90}]}
-    assert "sluice_gates_centered_on_their_channel" not in f(on)
+    assert "sluice_gates_centered_on_their_channel" not in f_only(on, "sluice_gates_centered_on_their_channel")
     off = {**on, "sluice_gates": [{"x": 500, "y": 516, "rot": 90}]}  # 16px off a 22px channel
-    assert "sluice_gates_centered_on_their_channel" in f(off)
+    assert "sluice_gates_centered_on_their_channel" in f_only(off, "sluice_gates_centered_on_their_channel")
 
 
 @pytest.mark.tiers("city")
@@ -501,11 +501,11 @@ def test_frontage_shops_face_their_way():
     four neighbors faced it. A storefront IS its street face."""
     base = {"meta": {"scale": "city", "ftpx": 3}, "roads": [{"pts": [[0, 100], [1000, 100]], "w": 20}]}
     facing = {**base, "buildings": [{"x": 500, "y": 140, "w": 12, "h": 9, "rot": 180, "kind": "shop"}]}
-    assert "frontage_shops_face_their_way" not in f(facing)
+    assert "frontage_shops_face_their_way" not in f_only(facing, "frontage_shops_face_their_way")
     away = {**base, "buildings": [{"x": 500, "y": 140, "w": 12, "h": 9, "rot": 0, "kind": "shop"}]}
-    assert "frontage_shops_face_their_way" in f(away)
+    assert "frontage_shops_face_their_way" in f_only(away, "frontage_shops_face_their_way")
     interior = {**base, "buildings": [{"x": 500, "y": 400, "w": 12, "h": 9, "rot": 0, "kind": "shop"}]}
-    assert "frontage_shops_face_their_way" not in f(interior)
+    assert "frontage_shops_face_their_way" not in f_only(interior, "frontage_shops_face_their_way")
 
 
 @pytest.mark.tiers("city")
@@ -515,13 +515,13 @@ def test_captions_sit_by_their_feature_and_clear_the_defenses():
     rampart, whose ink swallows the text and which the caption would otherwise appear to name."""
     base = {"meta": {"scale": "city", "ftpx": 3}, "streams": [{"poly": [[0, 500], [1000, 500]], "w": 20}]}
     near = {**base, "sluice_gates": [{"x": 500, "y": 500, "rot": 0}], "labels": [[470, 470, 540, 480, 1, "sluice gate"]]}
-    assert "captions_sit_by_their_feature" not in f(near)
+    assert "captions_sit_by_their_feature" not in f_only(near, "captions_sit_by_their_feature")
     far = {**base, "sluice_gates": [{"x": 500, "y": 500, "rot": 0}], "labels": [[900, 200, 970, 210, 1, "sluice gate"]]}
-    assert "captions_sit_by_their_feature" in f(far)
+    assert "captions_sit_by_their_feature" in f_only(far, "captions_sit_by_their_feature")
     on_wall = {"meta": {"scale": "city", "ftpx": 3}, "wall": WALLSQ, "labels": [[770, 470, 830, 480, 1, "settling basin"]]}  # straddles the x=800 wall face
-    assert "captions_clear_of_the_defenses" in f(on_wall)
+    assert "captions_clear_of_the_defenses" in f_only(on_wall, "captions_clear_of_the_defenses")
     off_wall = {"meta": {"scale": "city", "ftpx": 3}, "wall": WALLSQ, "labels": [[600, 470, 680, 480, 1, "settling basin"]]}
-    assert "captions_clear_of_the_defenses" not in f(off_wall)
+    assert "captions_clear_of_the_defenses" not in f_only(off_wall, "captions_clear_of_the_defenses")
 
 
 @pytest.mark.tiers("city", "town")
@@ -532,13 +532,13 @@ def test_city_streets_serve_both_sides():
     fires when a long stretch is bare on BOTH."""
     base = {"meta": {"scale": "city", "walled": True, "W": 2000, "H": 2000, "ftpx": 3}, "wall": WALLSQ, "gates": [[500, 200], [500, 800]]}
     bare = {**base, "town_streets": [{"pts": [[300, 400], [900, 400]], "w": 18}]}
-    assert "city_streets_serve_both_sides" in f(bare)
+    assert "city_streets_serve_both_sides" in f_only(bare, "city_streets_serve_both_sides")
     lined = {
         **base,
         "town_streets": [{"pts": [[300, 400], [900, 400]], "w": 18}],
         "buildings": [{"x": 320 + 60 * i, "y": 360, "w": 14, "h": 10, "rot": 0, "kind": "laborer"} for i in range(11)],
     }
-    assert "city_streets_serve_both_sides" not in f(lined)
+    assert "city_streets_serve_both_sides" not in f_only(lined, "city_streets_serve_both_sides")
 
 
 @pytest.mark.tiers("city")
@@ -546,14 +546,14 @@ def test_new_checks_skip_degenerate_records():
     """The 2026-08-10 checks tolerate the shapes a real manifest holds: an INLAND store that is
     not a waterside work, a label tuple too short to carry text, and a one-vertex road."""
     water = {"meta": {"scale": "city", "ftpx": 3}, "streams": [{"poly": [[0, 500], [1000, 500]], "w": 20}]}
-    assert "waterside_works_follow_the_bank" not in f({**water, "granaries": [{"x": 500, "y": 900, "w": 20, "h": 12, "rot": 0}]})
-    assert "roads_join_the_network" not in f({"meta": {"scale": "city", "ftpx": 3, "W": 1000, "H": 1000}, "roads": [{"pts": [[500, 500]], "w": 20}]})
+    assert "waterside_works_follow_the_bank" not in f_only({**water, "granaries": [{"x": 500, "y": 900, "w": 20, "h": 12, "rot": 0}]}, "waterside_works_follow_the_bank")
+    assert "roads_join_the_network" not in f_only({"meta": {"scale": "city", "ftpx": 3, "W": 1000, "H": 1000}, "roads": [{"pts": [[500, 500]], "w": 20}]}, "roads_join_the_network")
     # LEGACY LABEL RECORDS: the regression corpus holds manifests whose labels predate the text
     # field. Removing this guard on the evidence of live maps alone crashed the gate before five
     # fixtures reached their own check, and they silently stopped firing (2026-08-10).
     legacy = {"meta": {"scale": "city", "ftpx": 3}, "wall": WALLSQ, "sluice_gates": [{"x": 500, "y": 500, "rot": 0}], "labels": [[760, 470, 840, 480, 7]]}
-    assert "captions_sit_by_their_feature" not in f(legacy)
-    assert "captions_clear_of_the_defenses" not in f(legacy)
+    assert "captions_sit_by_their_feature" not in f_only(legacy, "captions_sit_by_their_feature")
+    assert "captions_clear_of_the_defenses" not in f_only(legacy, "captions_clear_of_the_defenses")
 
 
 @pytest.mark.tiers("capital")
@@ -565,12 +565,12 @@ def test_funerary_ground_within_reach_and_one_complex():
     three features are ONE ground (Kozukappara held all three within ~290 ft)."""
     base = {"meta": {"scale": "capital", "walled": True, "W": 4000, "H": 4000, "ftpx": 3}, "wall": WALLSQ, "gates": [[500, 200]]}
     near = {**base, "cemeteries": [{"x": 500, "y": 900, "w": 60, "h": 40, "rot": 0}], "cremation_grounds": [{"x": 560, "y": 940, "w": 40, "h": 30, "rot": 0}]}
-    assert "funerary_ground_within_reach" not in f(near)
-    assert "funerary_complex_is_one_ground" not in f(near)
+    assert "funerary_ground_within_reach" not in f_only(near, "funerary_ground_within_reach")
+    assert "funerary_complex_is_one_ground" not in f_only(near, "funerary_complex_is_one_ground")
     far = {**base, "cemeteries": [{"x": 500, "y": 1300, "w": 60, "h": 40, "rot": 0}]}
-    assert "funerary_ground_within_reach" in f(far)  # 500px past the wall = 1,500 ft
+    assert "funerary_ground_within_reach" in f_only(far, "funerary_ground_within_reach")  # 500px past the wall = 1,500 ft
     split = {**near, "cremation_grounds": [{"x": 1400, "y": 900, "w": 40, "h": 30, "rot": 0}]}
-    assert "funerary_complex_is_one_ground" in f(split)
+    assert "funerary_complex_is_one_ground" in f_only(split, "funerary_complex_is_one_ground")
 
 
 @pytest.mark.tiers("city")
@@ -581,9 +581,9 @@ def test_extramural_housing_serves_its_work():
     facilities." A row across the channel from all of it is a suburb with no reason."""
     base = {"meta": {"scale": "city", "walled": True, "W": 3000, "H": 3000, "ftpx": 3}, "wall": WALLSQ, "gates": [[500, 200]], "granaries": [{"x": 500, "y": 1000, "w": 20, "h": 12, "rot": 0}]}
     beside = {**base, "buildings": [{"x": 520 + 12 * i, "y": 1040, "w": 10, "h": 7, "rot": 0, "kind": "laborer"} for i in range(6)]}
-    assert "extramural_housing_serves_its_work" not in f(beside)
+    assert "extramural_housing_serves_its_work" not in f_only(beside, "extramural_housing_serves_its_work")
     across = {**base, "buildings": [{"x": 1800 + 12 * i, "y": 2200, "w": 10, "h": 7, "rot": 0, "kind": "laborer"} for i in range(6)]}
-    assert "extramural_housing_serves_its_work" in f(across)
+    assert "extramural_housing_serves_its_work" in f_only(across, "extramural_housing_serves_its_work")
 
 
 @pytest.mark.tiers("city", "town")
@@ -595,8 +595,8 @@ def test_streets_reach_neighbors_catches_perpendicular_approaches():
     look perpendicular. It must compare against the other street's own bearing."""
     base = {"meta": {"scale": "city", "walled": True, "W": 2000, "H": 2000, "ftpx": 3}, "wall": WALLSQ, "gates": [[500, 200]]}
     tee = {**base, "town_streets": [{"pts": [[400, 300], [400, 900]], "w": 10}, {"pts": [[470, 600], [900, 600]], "w": 10}]}
-    assert "city_streets_reach_their_neighbors" in f(tee)  # the east street stops 70px off the north-south one
+    assert "city_streets_reach_their_neighbors" in f_only(tee, "city_streets_reach_their_neighbors")  # the east street stops 70px off the north-south one
     joined = {**base, "town_streets": [{"pts": [[400, 300], [400, 900]], "w": 10}, {"pts": [[402, 600], [900, 600]], "w": 10}]}
-    assert "city_streets_reach_their_neighbors" not in f(joined)
+    assert "city_streets_reach_their_neighbors" not in f_only(joined, "city_streets_reach_their_neighbors")
     parallel = {**base, "town_streets": [{"pts": [[400, 300], [400, 900]], "w": 10}, {"pts": [[460, 300], [460, 900]], "w": 10}]}
-    assert "city_streets_reach_their_neighbors" not in f(parallel)  # 60px apart and PARALLEL - not a failed junction
+    assert "city_streets_reach_their_neighbors" not in f_only(parallel, "city_streets_reach_their_neighbors")  # 60px apart and PARALLEL - not a failed junction

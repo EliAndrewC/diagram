@@ -17,6 +17,8 @@ def f_only(M, *names):
     their dependencies, nothing else). Exact for any assertion of the form `name in f(M)` /
     `name not in f(M)`, and ~10x cheaper than the full gate on a city fixture (GM 2026-08-26, T21:
     a test that loops twenty fixtures through the full gate to ask one question each)."""
+    if set(names) & set(check_village.META_CHECKS):
+        return f(M)  # a META check (waivers_are_live, ...) judges the whole run and cannot run targeted - the driver refuses it
     return set(check_village.gate(M, verbose=False, only=set(names)))
 
 

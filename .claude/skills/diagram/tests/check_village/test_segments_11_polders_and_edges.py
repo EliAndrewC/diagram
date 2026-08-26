@@ -5,13 +5,13 @@ import math
 import pytest
 
 from l7r.diagram import check_village
-from tests.check_village._builders import _WHY, _farmhouse, _feature_022_manifest, _field, _waived_map, f
+from tests.check_village._builders import _WHY, _farmhouse, _feature_022_manifest, _field, _waived_map, f_only
 
 
 def test_torii_match_roll_fires_when_the_drawn_count_drifts_from_the_target():
     # the hall recorded a rolled/pinned target of 3 but only 1 arch is attributed to it
     M = {"meta": {"scale": "city"}, "religious": [{"kind": "temple", "label": "T", "x": 500, "y": 500, "w": 100, "h": 80, "torii_count": 3}], "torii": [[500, 560, 1]]}
-    assert "torii_match_roll" in f(M)
+    assert "torii_match_roll" in f_only(M, "torii_match_roll")
 
 
 def test_torii_match_roll_passes_on_match_and_skips_unrecorded_halls():
@@ -24,17 +24,17 @@ def test_torii_match_roll_passes_on_match_and_skips_unrecorded_halls():
         ],
         "torii": [[500, 560, 1], [900, 950, 1]],
     }
-    assert "torii_match_roll" not in f(M)
+    assert "torii_match_roll" not in f_only(M, "torii_match_roll")
 
 
 def test_taxfree_plots_not_required_when_absent():
     M = {"meta": {"scale": "village"}, "fields": [_field("f", 100, 100, 400, 400)], "houses": [_farmhouse(60, 250)]}
-    assert "taxfree_plots_in_range" not in f(M)  # a village that does not denote them is fine
+    assert "taxfree_plots_in_range" not in f_only(M, "taxfree_plots_in_range")  # a village that does not denote them is fine
 
 
 def test_taxfree_plots_range_validated_when_present():
     M = {"meta": {"scale": "village"}, "fields": [_field("f", 100, 100, 400, 400)], "houses": [_farmhouse(60, 250)], "taxfree": [[200, 200]]}  # 1 present, law wants 2-3
-    assert "taxfree_plots_in_range" in f(M)
+    assert "taxfree_plots_in_range" in f_only(M, "taxfree_plots_in_range")
 
 
 def test_torii_avenue_meets_the_hall_fires_on_a_sando_authored_away_from_its_temple():
@@ -46,7 +46,7 @@ def test_torii_avenue_meets_the_hall_fires_on_a_sando_authored_away_from_its_tem
         "religious": [{"kind": "temple", "label": "T", "x": 500, "y": 500, "w": 100, "h": 80, "torii_count": 3}],
         "torii": [[500, 640, 1], [500, 660, 1], [500, 680, 1]],
     }
-    assert "torii_avenue_meets_the_hall" in f(M)
+    assert "torii_avenue_meets_the_hall" in f_only(M, "torii_avenue_meets_the_hall")
 
 
 def test_torii_avenue_meets_the_hall_passes_when_the_gap_matches_the_pitch():
@@ -56,7 +56,7 @@ def test_torii_avenue_meets_the_hall_passes_when_the_gap_matches_the_pitch():
         "religious": [{"kind": "temple", "label": "T", "x": 500, "y": 500, "w": 100, "h": 80, "torii_count": 3}],
         "torii": [[500, 560, 1], [500, 580, 1], [500, 600, 1]],
     }
-    assert "torii_avenue_meets_the_hall" not in f(M)
+    assert "torii_avenue_meets_the_hall" not in f_only(M, "torii_avenue_meets_the_hall")
 
 
 def test_torii_avenue_meets_the_hall_spares_the_villages_tighter_threshold():
@@ -68,7 +68,7 @@ def test_torii_avenue_meets_the_hall_spares_the_villages_tighter_threshold():
         "religious": [{"kind": "shrine", "x": 500, "y": 500, "w": 30, "h": 20, "torii_count": 3}],
         "torii": [[500, 519, 1], [500, 534, 1], [500, 549, 1]],
     }
-    assert "torii_avenue_meets_the_hall" not in f(M)
+    assert "torii_avenue_meets_the_hall" not in f_only(M, "torii_avenue_meets_the_hall")
 
 
 def test_temple_torii_face_the_street():
@@ -82,12 +82,12 @@ def test_temple_torii_face_the_street():
         "religious": [{"kind": "temple", "label": "T", "x": 500, "y": 500, "w": 50, "h": 33, "torii_count": 2}],
         "torii": [[500, 560, 1], [500, 590, 1]],  # arches marching AWAY from the road
     }
-    assert "temple_torii_face_the_street" in f(M)
+    assert "temple_torii_face_the_street" in f_only(M, "temple_torii_face_the_street")
     M["torii"] = [[500, 445, 1], [500, 420, 1]]  # between hall and road - an approacher passes under
-    assert "temple_torii_face_the_street" not in f(M)
+    assert "temple_torii_face_the_street" not in f_only(M, "temple_torii_face_the_street")
     M["road"] = [[100, 60], [900, 60]]  # the way moves out of reach - the rule skips, it does not guess
     M["torii"] = [[500, 560, 1], [500, 590, 1]]
-    assert "temple_torii_face_the_street" not in f(M)
+    assert "temple_torii_face_the_street" not in f_only(M, "temple_torii_face_the_street")
 
 
 # ---- dwellings must not sit in the WET low toe below the field's drainage ditch (feature 005 / GM 2026-07) ----
@@ -98,11 +98,11 @@ def test_contour_terraces_require_stepped_cross_slope_bands():
     # that run downhill (channels, not terrace lips), fires.
     base = {"meta": {"scale": "hamlet", "down_deg": 90, "field_archetype": "contour_terraces"}}
     good = {**base, "terrace_bunds": [*([[100, 200 + i * 80], [900, 200 + i * 80]] for i in range(10)), [[500, 900]]]}  # 10 wide E-W bands + a degenerate 1-pt bund (skipped)
-    assert "contour_terraces_are_stepped_bands" not in f(good)
+    assert "contour_terraces_are_stepped_bands" not in f_only(good, "contour_terraces_are_stepped_bands")
     few = {**base, "terrace_bunds": [[[100, 200 + i * 80], [900, 200 + i * 80]] for i in range(4)]}  # only 4
-    assert "contour_terraces_are_stepped_bands" in f(few)
+    assert "contour_terraces_are_stepped_bands" in f_only(few, "contour_terraces_are_stepped_bands")
     downhill = {**base, "terrace_bunds": [[[100 + i * 40, 200], [100 + i * 40, 900]] for i in range(10)]}  # bunds run N-S (downhill)
-    assert "contour_terraces_are_stepped_bands" in f(downhill)
+    assert "contour_terraces_are_stepped_bands" in f_only(downhill, "contour_terraces_are_stepped_bands")
 
 
 def test_polder_field_must_fill_its_bbox():
@@ -110,20 +110,24 @@ def test_polder_field_must_fill_its_bbox():
     # outline covering only a fraction of its bbox fires.
     base = {"meta": {"scale": "hamlet", "field_archetype": "polder_grid"}}
     rect = {**base, "fields": [{"name": "p", "kind": "paddy", "outline": [[100, 100], [900, 100], [900, 1300], [100, 1300]], "bbox": [100, 100, 900, 1300]}]}
-    assert "polder_fills_its_bbox" not in f(rect)
+    assert "polder_fills_its_bbox" not in f_only(rect, "polder_fills_its_bbox")
     fan = {**base, "fields": [{"name": "p", "kind": "paddy", "outline": [[500, 100], [900, 1300], [100, 1300]], "bbox": [100, 100, 900, 1300]}]}  # a triangle covers ~half its bbox
-    assert "polder_fills_its_bbox" in f(fan)
+    assert "polder_fills_its_bbox" in f_only(fan, "polder_fills_its_bbox")
 
 
 def test_structures_clear_of_dike():
     # GM 2026-07-22: no farmhouse and no windbreak clump may sit ON the perimeter dike earthwork band.
     dike = [[100, 100], [900, 100], [900, 900], [100, 900]]
     base = {"meta": {"scale": "hamlet", "field_archetype": "polder_grid"}, "dikes": [{"outline": dike, "w_min": 14.0, "w_max": 38.0}]}
-    assert "structures_clear_of_dike" in f({**base, "houses": [{"x": 500, "y": 500, "w": 40, "h": 26, "rot": 0, "kind": "plain"}]})  # house on the dike
-    assert "structures_clear_of_dike" in f({**base, "village_groves": [{"clumps": [[500, 500], [1200, 1200]]}]})  # a clump on the dike
-    assert "structures_clear_of_dike" not in f({**base, "houses": [{"x": 1200, "y": 500, "w": 40, "h": 26, "rot": 0, "kind": "plain"}], "village_groves": [{"clumps": [[1200, 1200]]}]})
+    assert "structures_clear_of_dike" in f_only({**base, "houses": [{"x": 500, "y": 500, "w": 40, "h": 26, "rot": 0, "kind": "plain"}]}, "structures_clear_of_dike")  # house on the dike
+    assert "structures_clear_of_dike" in f_only({**base, "village_groves": [{"clumps": [[500, 500], [1200, 1200]]}]}, "structures_clear_of_dike")  # a clump on the dike
+    assert "structures_clear_of_dike" not in f_only(
+        {**base, "houses": [{"x": 1200, "y": 500, "w": 40, "h": 26, "rot": 0, "kind": "plain"}], "village_groves": [{"clumps": [[1200, 1200]]}]}, "structures_clear_of_dike"
+    )
     # a non-polder map (no dike) never trips it
-    assert "structures_clear_of_dike" not in f({"meta": {"scale": "hamlet", "field_archetype": "valley_paddy"}, "houses": [{"x": 500, "y": 500, "w": 40, "h": 26, "rot": 0, "kind": "plain"}]})
+    assert "structures_clear_of_dike" not in f_only(
+        {"meta": {"scale": "hamlet", "field_archetype": "valley_paddy"}, "houses": [{"x": 500, "y": 500, "w": 40, "h": 26, "rot": 0, "kind": "plain"}]}, "structures_clear_of_dike"
+    )
 
 
 def test_polder_channels_clear_of_dike():
@@ -132,13 +136,15 @@ def test_polder_channels_clear_of_dike():
     dike = [[100, 100], [900, 100], [900, 900], [100, 900]]  # a simple square "band" outline
     base = {"meta": {"scale": "hamlet", "field_archetype": "polder_grid"}, "dikes": [{"outline": dike, "w_min": 14.0, "w_max": 38.0}]}
     inside = {"poly": [[200, 200], [300, 200], [400, 200], [500, 200], [600, 200], [700, 200]], "role": "main", "field": "p"}  # 6 pts in the band
-    assert "polder_channels_clear_of_dike" in f({**base, "field_ditches": [inside]})
+    assert "polder_channels_clear_of_dike" in f_only({**base, "field_ditches": [inside]}, "polder_channels_clear_of_dike")
     outside = {"poly": [[200, 50], [500, 50], [800, 50], [200, 1000]], "role": "main", "field": "p"}  # all outside the band
-    assert "polder_channels_clear_of_dike" not in f({**base, "field_ditches": [outside]})
+    assert "polder_channels_clear_of_dike" not in f_only({**base, "field_ditches": [outside]}, "polder_channels_clear_of_dike")
     sluices = {"poly": [[200, 150], [500, 1000], [800, 150]], "role": "drain", "field": "p"}  # 2 crossings <= 4
-    assert "polder_channels_clear_of_dike" not in f({**base, "field_ditches": [sluices]})
+    assert "polder_channels_clear_of_dike" not in f_only({**base, "field_ditches": [sluices]}, "polder_channels_clear_of_dike")
     # a non-polder archetype never trips it, and no dike -> polder_dike_is_earthwork owns that case
-    assert "polder_channels_clear_of_dike" not in f({"meta": {"scale": "hamlet", "field_archetype": "valley_paddy"}, "dikes": base["dikes"], "field_ditches": [inside]})
+    assert "polder_channels_clear_of_dike" not in f_only(
+        {"meta": {"scale": "hamlet", "field_archetype": "valley_paddy"}, "dikes": base["dikes"], "field_ditches": [inside]}, "polder_channels_clear_of_dike"
+    )
 
 
 def test_polder_edges_wander():
@@ -148,11 +154,11 @@ def test_polder_edges_wander():
     base = {"meta": {"scale": "hamlet", "down_deg": 90, "field_archetype": "polder_grid"}, "dikes": dike}
     # an axis-aligned rectangle - with a leading ZERO-LENGTH segment the check skips - scores 0% off-axis
     rect = {**base, "fields": [{"name": "p", "kind": "paddy", "outline": [[100, 100], [100, 100], [900, 100], [900, 1300], [100, 1300], [100, 100]], "bbox": [100, 100, 900, 1300]}]}
-    assert "polder_edges_wander" in f(rect)
+    assert "polder_edges_wander" in f_only(rect, "polder_edges_wander")
     wavy = [(100 + 45 * math.sin(i / 3.0), 100 + i * 24) for i in range(50)] + [(900 + 45 * math.sin(i / 3.0), 1300 - i * 24) for i in range(50)]
     wavy.append(wavy[0])
     passd = {**base, "fields": [{"name": "p", "kind": "paddy", "outline": [[round(x, 1), round(y, 1)] for x, y in wavy], "bbox": [55, 100, 945, 1300]}]}
-    assert "polder_edges_wander" not in f(passd)
+    assert "polder_edges_wander" not in f_only(passd, "polder_edges_wander")
 
 
 def test_polder_dike_gapped_at_sluices():
@@ -162,8 +168,10 @@ def test_polder_dike_gapped_at_sluices():
     outline = [[150, 150], [850, 150], [850, 1250], [150, 1250]]  # the field outline sits inside the band
     base = {"meta": {"scale": "hamlet", "field_archetype": "polder_grid"}, "fields": [{"name": "p", "kind": "paddy", "outline": outline, "bbox": [150, 150, 850, 1250]}]}
     crosser = {"poly": [[500, 700], [500, 120], [500, 50]], "role": "main", "field": "p"}  # field -> through band -> outside
-    assert "polder_dike_gapped_at_sluices" in f({**base, "dikes": [{"outline": band, "w_min": 14.0, "w_max": 38.0, "gaps": []}], "field_ditches": [crosser]})
-    assert "polder_dike_gapped_at_sluices" not in f({**base, "dikes": [{"outline": band, "w_min": 14.0, "w_max": 38.0, "gaps": [[500, 110]]}], "field_ditches": [crosser]})
+    assert "polder_dike_gapped_at_sluices" in f_only({**base, "dikes": [{"outline": band, "w_min": 14.0, "w_max": 38.0, "gaps": []}], "field_ditches": [crosser]}, "polder_dike_gapped_at_sluices")
+    assert "polder_dike_gapped_at_sluices" not in f_only(
+        {**base, "dikes": [{"outline": band, "w_min": 14.0, "w_max": 38.0, "gaps": [[500, 110]]}], "field_ditches": [crosser]}, "polder_dike_gapped_at_sluices"
+    )
 
 
 def test_dikepond_water_within_banks_and_rounded():
@@ -180,20 +188,20 @@ def test_dikepond_water_within_banks_and_rounded():
         return [[cx + 30 * math.cos(a), cy + 30 * math.sin(a)] for a in [i * math.pi / 6 for i in range(12)]]
 
     good = [{"parcel": parcel(200 + 120 * i, 300), "water": rounded(200 + 120 * i, 300)} for i in range(12)]
-    assert "dikepond_water_within_banks" not in f({**base, "dikeponds": good})
-    assert "dikepond_corners_rounded" not in f({**base, "dikeponds": good})
+    assert "dikepond_water_within_banks" not in f_only({**base, "dikeponds": good}, "dikepond_water_within_banks")
+    assert "dikepond_corners_rounded" not in f_only({**base, "dikeponds": good}, "dikepond_corners_rounded")
     # no recorded dikeponds at all -> both fire
-    assert "dikepond_water_within_banks" in f(base)
-    assert "dikepond_corners_rounded" in f(base)
+    assert "dikepond_water_within_banks" in f_only(base, "dikepond_water_within_banks")
+    assert "dikepond_corners_rounded" in f_only(base, "dikepond_corners_rounded")
     # water spilling past its parcel -> within_banks fires (a rounded ring blown up to r=80, past the +-50 bank)
     spill = [
         {"parcel": parcel(200 + 120 * i, 300), "water": [[cx, cy] for cx, cy in [(200 + 120 * i + 80 * math.cos(a), 300 + 80 * math.sin(a)) for a in [j * math.pi / 6 for j in range(12)]]]}
         for i in range(12)
     ]
-    assert "dikepond_water_within_banks" in f({**base, "dikeponds": spill})
+    assert "dikepond_water_within_banks" in f_only({**base, "dikeponds": spill}, "dikepond_water_within_banks")
     # a 4-vertex sharp quad (inside its parcel) -> corners_rounded fires
     sharp = [{"parcel": parcel(200 + 120 * i, 300), "water": [[190 + 120 * i, 290], [210 + 120 * i, 290], [210 + 120 * i, 310], [190 + 120 * i, 310]]} for i in range(12)]
-    assert "dikepond_corners_rounded" in f({**base, "dikeponds": sharp})
+    assert "dikepond_corners_rounded" in f_only({**base, "dikeponds": sharp}, "dikepond_corners_rounded")
 
 
 def test_mulberry_banks_clear_of_channels():
@@ -215,14 +223,14 @@ def test_mulberry_banks_clear_of_channels():
 
     ponds = [{"parcel": parcel(200 + 120 * i, 300), "water": rounded(200 + 120 * i, 300), "bank": bank(200 + 120 * i, 300)} for i in range(12)]
     clear = {"poly": [[100, 380], [1700, 380]], "role": "lateral", "field": "p"}  # runs BELOW every bank (banks end at y=355)
-    assert "mulberry_banks_clear_of_channels" not in f({**base, "dikeponds": ponds, "field_ditches": [clear]})
+    assert "mulberry_banks_clear_of_channels" not in f_only({**base, "dikeponds": ponds, "field_ditches": [clear]}, "mulberry_banks_clear_of_channels")
     grazing = {"poly": [[100, 355], [1700, 355]], "role": "lateral", "field": "p"}  # runs ON the bank edge - the dike toe
-    assert "mulberry_banks_clear_of_channels" not in f({**base, "dikeponds": ponds, "field_ditches": [grazing]})
+    assert "mulberry_banks_clear_of_channels" not in f_only({**base, "dikeponds": ponds, "field_ditches": [grazing]}, "mulberry_banks_clear_of_channels")
     through = {"poly": [[100, 300], [1700, 300]], "role": "lateral", "field": "p"}  # runs THROUGH the middle of every bank
-    assert "mulberry_banks_clear_of_channels" in f({**base, "dikeponds": ponds, "field_ditches": [through]})
+    assert "mulberry_banks_clear_of_channels" in f_only({**base, "dikeponds": ponds, "field_ditches": [through]}, "mulberry_banks_clear_of_channels")
     # a pond whose bank went unrecorded fires - the record is the teeth, dropping it cannot disable the check
     unrecorded = [{k: v for k, v in p.items() if k != "bank"} for p in ponds]
-    assert "mulberry_banks_clear_of_channels" in f({**base, "dikeponds": unrecorded, "field_ditches": [clear]})
+    assert "mulberry_banks_clear_of_channels" in f_only({**base, "dikeponds": unrecorded, "field_ditches": [clear]}, "mulberry_banks_clear_of_channels")
 
 
 def test_dikeponds_fed_and_drained():
@@ -246,21 +254,21 @@ def test_dikeponds_fed_and_drained():
             out.append({"a": [200, cy + 30], "b": [100, cy + 50], "kind": "drain"})  # drain: network-end downhill, on the canal
         return out
 
-    assert "dikeponds_fed_and_drained" not in f({**base, "dikeponds": ponds, "dikepond_sluices": good_sl()})
-    assert "dikeponds_fed_and_drained" in f({**base, "dikeponds": ponds})  # no sluices -> sealed
+    assert "dikeponds_fed_and_drained" not in f_only({**base, "dikeponds": ponds, "dikepond_sluices": good_sl()}, "dikeponds_fed_and_drained")
+    assert "dikeponds_fed_and_drained" in f_only({**base, "dikeponds": ponds}, "dikeponds_fed_and_drained")  # no sluices -> sealed
     bad_feed = good_sl()
     bad_feed[0] = {"a": [200, 90], "b": [100, 130], "kind": "feed"}  # pond0 feed network-end DOWNHILL -> one-way (drain only)
-    assert "dikeponds_fed_and_drained" in f({**base, "dikeponds": ponds, "dikepond_sluices": bad_feed})
+    assert "dikeponds_fed_and_drained" in f_only({**base, "dikeponds": ponds, "dikepond_sluices": bad_feed}, "dikeponds_fed_and_drained")
     bad_drain = good_sl()
     bad_drain[1] = {"a": [200, 150], "b": [100, 110], "kind": "drain"}  # pond0 drain network-end UPHILL -> drains uphill
-    assert "dikeponds_fed_and_drained" in f({**base, "dikeponds": ponds, "dikepond_sluices": bad_drain})
+    assert "dikeponds_fed_and_drained" in f_only({**base, "dikeponds": ponds, "dikepond_sluices": bad_drain}, "dikeponds_fed_and_drained")
     bad_reach = good_sl()
     bad_reach[0] = {"a": [200, 90], "b": [2000, 70], "kind": "feed"}  # feed far-end reaches nothing
-    assert "dikeponds_fed_and_drained" in f({**base, "dikeponds": ponds, "dikepond_sluices": bad_reach})
+    assert "dikeponds_fed_and_drained" in f_only({**base, "dikeponds": ponds, "dikepond_sluices": bad_reach}, "dikeponds_fed_and_drained")
     crossing = good_sl()
     crossing[0] = {"a": [220, 150], "b": [100, 90], "kind": "feed"}  # pond0: feed goes up-left...
     crossing[1] = {"a": [220, 90], "b": [100, 150], "kind": "drain"}  # ...drain goes down-left, so the two cross
-    assert "dikeponds_fed_and_drained" in f({**base, "dikeponds": ponds, "dikepond_sluices": crossing})
+    assert "dikeponds_fed_and_drained" in f_only({**base, "dikeponds": ponds, "dikepond_sluices": crossing}, "dikeponds_fed_and_drained")
 
 
 def test_polder_floor_is_ring_interior():
@@ -280,21 +288,21 @@ def test_polder_floor_is_ring_interior():
         "fields": [{"name": "p", "kind": "paddy", "outline": [[100, 100], [300, 100], [300, 300], [100, 300]], "bbox": [100, 100, 300, 300]}],
     }
     on_ring = {**base, "comb_floors": {"p": [[100, 100], [300, 100], [300, 300], [100, 300]]}}  # the floor IS the ring loop
-    assert "polder_floor_is_ring_interior" not in f(on_ring)
+    assert "polder_floor_is_ring_interior" not in f_only(on_ring, "polder_floor_is_ring_interior")
     off_ring = {**base, "comb_floors": {"p": [[50, 50], [350, 50], [350, 350], [50, 350]]}}  # the dike-boundary envelope, ~50 px out
-    assert "polder_floor_is_ring_interior" in f(off_ring)
+    assert "polder_floor_is_ring_interior" in f_only(off_ring, "polder_floor_is_ring_interior")
 
 
 def test_polder_dike_is_earthwork():
     # GM 2026-07-22: a polder/dike-pond map must record a perimeter-dike earthwork band of VARYING width;
     # a missing dike or a uniform-width one (the reverted post-1949 ruled rectangle) fires.
     base = {"meta": {"scale": "hamlet", "field_archetype": "polder_grid"}}
-    assert "polder_dike_is_earthwork" in f(base)  # no dike recorded at all
-    assert "polder_dike_is_earthwork" in f({**base, "dikes": [{"outline": [], "w_min": 20.0, "w_max": 22.0}]})  # near-uniform width
-    assert "polder_dike_is_earthwork" not in f({**base, "dikes": [{"outline": [], "w_min": 14.0, "w_max": 38.0}]})
-    assert "polder_dike_is_earthwork" in f({"meta": {"scale": "hamlet", "field_archetype": "mulberry_dike_fishpond"}})
+    assert "polder_dike_is_earthwork" in f_only(base, "polder_dike_is_earthwork")  # no dike recorded at all
+    assert "polder_dike_is_earthwork" in f_only({**base, "dikes": [{"outline": [], "w_min": 20.0, "w_max": 22.0}]}, "polder_dike_is_earthwork")  # near-uniform width
+    assert "polder_dike_is_earthwork" not in f_only({**base, "dikes": [{"outline": [], "w_min": 14.0, "w_max": 38.0}]}, "polder_dike_is_earthwork")
+    assert "polder_dike_is_earthwork" in f_only({"meta": {"scale": "hamlet", "field_archetype": "mulberry_dike_fishpond"}}, "polder_dike_is_earthwork")
     # a non-polder archetype never trips it
-    assert "polder_dike_is_earthwork" not in f({"meta": {"scale": "hamlet", "field_archetype": "valley_paddy"}})
+    assert "polder_dike_is_earthwork" not in f_only({"meta": {"scale": "hamlet", "field_archetype": "valley_paddy"}}, "polder_dike_is_earthwork")
 
 
 def test_polder_parcel_fabric_must_vary():
@@ -307,12 +315,12 @@ def test_polder_parcel_fabric_must_vary():
     varied = [[142, 68], [142, 66], [75, 142], [44, 142], [142, 142], [290, 142]] * 11
     for arch in ("polder_grid", "mulberry_dike_fishpond"):
         base = {"meta": {"scale": "hamlet", "field_archetype": arch}}
-        assert "polder_parcels_vary" in f({**base, "fields": [{**field, "plots": [[142.0, 142.0]] * 66}]})
-        assert "polder_parcels_vary" in f({**base, "fields": [field]})  # no parcel geometry recorded
-        assert "polder_parcels_vary" in f({**base, "fields": [{**field, "plots": varied[:6]}]})  # too few to judge
-        assert "polder_parcels_vary" not in f({**base, "fields": [{**field, "plots": varied}]})
+        assert "polder_parcels_vary" in f_only({**base, "fields": [{**field, "plots": [[142.0, 142.0]] * 66}]}, "polder_parcels_vary")
+        assert "polder_parcels_vary" in f_only({**base, "fields": [field]}, "polder_parcels_vary")  # no parcel geometry recorded
+        assert "polder_parcels_vary" in f_only({**base, "fields": [{**field, "plots": varied[:6]}]}, "polder_parcels_vary")  # too few to judge
+        assert "polder_parcels_vary" not in f_only({**base, "fields": [{**field, "plots": varied}]}, "polder_parcels_vary")
     # a non-polder archetype never trips it, plots or not
-    assert "polder_parcels_vary" not in f({"meta": {"scale": "hamlet", "field_archetype": "valley_paddy"}, "fields": [{**field, "plots": [[142.0, 142.0]] * 66}]})
+    assert "polder_parcels_vary" not in f_only({"meta": {"scale": "hamlet", "field_archetype": "valley_paddy"}, "fields": [{**field, "plots": [[142.0, 142.0]] * 66}]}, "polder_parcels_vary")
 
 
 def test_torii_avenue_pitch_capped():
@@ -327,13 +335,13 @@ def test_torii_avenue_pitch_capped():
             "torii": [[500, 560 + pitch_px * i, 9] for i in range(n)],
         }
 
-    assert "torii_avenue_pitch_capped" in f(m(61))  # Hirameki's Bishamon, the town case
-    assert "torii_avenue_pitch_capped" in f(m(38, ftpx=3))  # Tango's Bishamon at 114 ft, the widest in the pool
-    assert "torii_avenue_pitch_capped" not in f(m(20))  # the house pitch
-    assert "torii_avenue_pitch_capped" not in f(m(16, ftpx=2))  # a village avenue at 32 ft sits AT the cap and passes
-    assert "torii_avenue_pitch_capped" in f(m(17, ftpx=2))  # ... 34 ft does not
-    assert "torii_avenue_pitch_capped" not in f(m(61, torii_outlier=True))  # a designated donation-row site is exempt
-    assert "torii_avenue_pitch_capped" not in f(m(61, n=1))  # a lone arch has no pitch to measure
+    assert "torii_avenue_pitch_capped" in f_only(m(61), "torii_avenue_pitch_capped")  # Hirameki's Bishamon, the town case
+    assert "torii_avenue_pitch_capped" in f_only(m(38, ftpx=3), "torii_avenue_pitch_capped")  # Tango's Bishamon at 114 ft, the widest in the pool
+    assert "torii_avenue_pitch_capped" not in f_only(m(20), "torii_avenue_pitch_capped")  # the house pitch
+    assert "torii_avenue_pitch_capped" not in f_only(m(16, ftpx=2), "torii_avenue_pitch_capped")  # a village avenue at 32 ft sits AT the cap and passes
+    assert "torii_avenue_pitch_capped" in f_only(m(17, ftpx=2), "torii_avenue_pitch_capped")  # ... 34 ft does not
+    assert "torii_avenue_pitch_capped" not in f_only(m(61, torii_outlier=True), "torii_avenue_pitch_capped")  # a designated donation-row site is exempt
+    assert "torii_avenue_pitch_capped" not in f_only(m(61, n=1), "torii_avenue_pitch_capped")  # a lone arch has no pitch to measure
 
 
 def test_torii_count_canonical_numerology():
@@ -350,13 +358,13 @@ def test_torii_count_canonical_numerology():
         }
 
     for bad in (2, 4, 8, 0):
-        assert "torii_count_canonical" in f(m(bad)), bad
+        assert "torii_count_canonical" in f_only(m(bad), "torii_count_canonical"), bad
     for ok in (1, 3, 7):
-        assert "torii_count_canonical" not in f(m(ok)), ok
-    assert "torii_count_canonical" not in f(m(4, torii_outlier=True))  # marked outlier - always with a story
+        assert "torii_count_canonical" not in f_only(m(ok), "torii_count_canonical"), ok
+    assert "torii_count_canonical" not in f_only(m(4, torii_outlier=True), "torii_count_canonical")  # marked outlier - always with a story
     M = m(3)
     M["religious"].append({"kind": "small_shrine", "x": 510, "y": 585, "w": 12, "h": 9})  # nearer the arches than the hall
-    assert "torii_count_canonical" not in f(M)  # exempt AND excluded from attribution
+    assert "torii_count_canonical" not in f_only(M, "torii_count_canonical")  # exempt AND excluded from attribution
 
 
 def test_polder_parcels_must_front_a_ditch():
@@ -369,13 +377,13 @@ def test_polder_parcels_must_front_a_ditch():
     served = [[140, 70, 430, 100 + 90 * i] for i in range(7)] + [[140, 140, 570, 100 + 160 * i] for i in range(7)]
     for arch in ("polder_grid", "mulberry_dike_fishpond"):
         base = {"meta": {"scale": "hamlet", "field_archetype": arch}, "field_ditches": [lat]}
-        assert "polder_parcels_front_water" not in f({**base, "fields": [{**field, "plots": served}]})
+        assert "polder_parcels_front_water" not in f_only({**base, "fields": [{**field, "plots": served}]}, "polder_parcels_front_water")
         adrift = [*served, [140, 140, 880, 1280]]  # one parcel ~380px from the lateral
-        assert "polder_parcels_front_water" in f({**base, "fields": [{**field, "plots": adrift}]})
+        assert "polder_parcels_front_water" in f_only({**base, "fields": [{**field, "plots": adrift}]}, "polder_parcels_front_water")
         no_cent = [*served, [140.0, 140.0]]  # pre-fix 2-tuple record: no centroid = no frontage
-        assert "polder_parcels_front_water" in f({**base, "fields": [{**field, "plots": no_cent}]})
+        assert "polder_parcels_front_water" in f_only({**base, "fields": [{**field, "plots": no_cent}]}, "polder_parcels_front_water")
         # no ditches recorded at all -> everything is unfronted
-        assert "polder_parcels_front_water" in f({"meta": base["meta"], "fields": [{**field, "plots": served}]})
+        assert "polder_parcels_front_water" in f_only({"meta": base["meta"], "fields": [{**field, "plots": served}]}, "polder_parcels_front_water")
 
 
 def test_polder_parcels_must_be_organic():
@@ -391,33 +399,37 @@ def test_polder_parcels_must_be_organic():
     organic = [[*p[:4], 30, 1] for p in ruled]
     for arch in ("polder_grid", "mulberry_dike_fishpond"):
         base = {"meta": {"scale": "hamlet", "field_archetype": arch}, "field_ditches": [lat]}
-        assert "polder_parcels_are_organic" in f({**base, "fields": [{**field, "plots": ruled}]})
-        assert "polder_parcels_are_organic" in f({**base, "fields": [{**field, "plots": [p[:4] for p in ruled]}]})  # pre-fix record
-        assert "polder_parcels_are_organic" in f({**base, "fields": [field]})  # no parcel geometry at all
-        assert "polder_parcels_are_organic" in f({**base, "fields": [{**field, "plots": [*organic, ruled[0]]}]})  # one ruled few-vertex quad is enough
-        assert "polder_parcels_are_organic" in f({**base, "fields": [{**field, "plots": [[*p[:4], 8, 1] for p in ruled]}]})  # eased but barely sampled
-        assert "polder_parcels_are_organic" in f({**base, "fields": [{**field, "plots": [[*p[:4], 30, 3] for p in ruled]}]})  # densely sampled, but nothing has eased
-        assert "polder_parcels_are_organic" not in f({**base, "fields": [{**field, "plots": [*organic[:-2], [*organic[0][:4], 30, 4]]}]})  # a few all-square parcels are honest
-        assert "polder_parcels_are_organic" not in f({**base, "fields": [{**field, "plots": organic}]})
+        assert "polder_parcels_are_organic" in f_only({**base, "fields": [{**field, "plots": ruled}]}, "polder_parcels_are_organic")
+        assert "polder_parcels_are_organic" in f_only({**base, "fields": [{**field, "plots": [p[:4] for p in ruled]}]}, "polder_parcels_are_organic")  # pre-fix record
+        assert "polder_parcels_are_organic" in f_only({**base, "fields": [field]}, "polder_parcels_are_organic")  # no parcel geometry at all
+        assert "polder_parcels_are_organic" in f_only({**base, "fields": [{**field, "plots": [*organic, ruled[0]]}]}, "polder_parcels_are_organic")  # one ruled few-vertex quad is enough
+        assert "polder_parcels_are_organic" in f_only({**base, "fields": [{**field, "plots": [[*p[:4], 8, 1] for p in ruled]}]}, "polder_parcels_are_organic")  # eased but barely sampled
+        assert "polder_parcels_are_organic" in f_only(
+            {**base, "fields": [{**field, "plots": [[*p[:4], 30, 3] for p in ruled]}]}, "polder_parcels_are_organic"
+        )  # densely sampled, but nothing has eased
+        assert "polder_parcels_are_organic" not in f_only(
+            {**base, "fields": [{**field, "plots": [*organic[:-2], [*organic[0][:4], 30, 4]]}]}, "polder_parcels_are_organic"
+        )  # a few all-square parcels are honest
+        assert "polder_parcels_are_organic" not in f_only({**base, "fields": [{**field, "plots": organic}]}, "polder_parcels_are_organic")
     # a non-polder archetype never trips it
-    assert "polder_parcels_are_organic" not in f({"meta": {"scale": "hamlet", "field_archetype": "valley_paddy"}, "fields": [{**field, "plots": ruled}]})
+    assert "polder_parcels_are_organic" not in f_only({"meta": {"scale": "hamlet", "field_archetype": "valley_paddy"}, "fields": [{**field, "plots": ruled}]}, "polder_parcels_are_organic")
 
 
 def test_ribbon_valley_must_be_long_and_narrow():
     base = {"meta": {"scale": "hamlet", "down_deg": 90, "field_archetype": "ribbon_valley"}}
     thin = {**base, "fields": [{"name": "r", "kind": "paddy", "outline": [[400, 100], [700, 100], [700, 2000], [400, 2000]], "bbox": [400, 100, 700, 2000]}]}  # 300 wide x 1900 long
-    assert "ribbon_is_long_and_narrow" not in f(thin)
+    assert "ribbon_is_long_and_narrow" not in f_only(thin, "ribbon_is_long_and_narrow")
     squat = {**base, "fields": [{"name": "r", "kind": "paddy", "outline": [[100, 100], [1400, 100], [1400, 900], [100, 900]], "bbox": [100, 100, 1400, 900]}]}  # 1300 x 800, too broad
-    assert "ribbon_is_long_and_narrow" in f(squat)
+    assert "ribbon_is_long_and_narrow" in f_only(squat, "ribbon_is_long_and_narrow")
 
 
 def test_mulberry_dike_fishpond_needs_a_block_of_ponds():
     base = {"meta": {"scale": "hamlet", "field_archetype": "mulberry_dike_fishpond"}}
     rect_ol = [[100, 100], [900, 100], [900, 1300], [100, 1300]]
     good = {**base, "fields": [{"name": "p", "kind": "paddy", "outline": rect_ol, "bbox": [100, 100, 900, 1300]}], "land_use": [{"overlay": "mulberry_fishpond", "count": 40}]}
-    assert "dikepond_is_ponds_in_a_block" not in f(good)
+    assert "dikepond_is_ponds_in_a_block" not in f_only(good, "dikepond_is_ponds_in_a_block")
     no_ponds = {**base, "fields": [{"name": "p", "kind": "paddy", "outline": rect_ol, "bbox": [100, 100, 900, 1300]}]}  # a block but no fishponds
-    assert "dikepond_is_ponds_in_a_block" in f(no_ponds)
+    assert "dikepond_is_ponds_in_a_block" in f_only(no_ponds, "dikepond_is_ponds_in_a_block")
 
 
 def test_overlays_must_sit_on_the_low_wet_ground():
@@ -427,15 +439,15 @@ def test_overlays_must_sit_on_the_low_wet_ground():
     `land_use[].plots` is written by the OVERLAY pass - two independent records, not a self-report."""
     base = {"meta": {"scale": "village", "land_use_overlay": "lotus"}, "wet_plots": [[100, 100], [140, 100], [180, 100]]}
     good = {**base, "land_use": [{"overlay": "lotus", "count": 2, "plots": [[100, 100], [140, 100]]}]}
-    assert "overlays_on_wet_ground_only" not in f(good)
+    assert "overlays_on_wet_ground_only" not in f_only(good, "overlays_on_wet_ground_only")
     off = {**base, "land_use": [{"overlay": "lotus", "count": 2, "plots": [[100, 100], [900, 900]]}]}  # one plot up on dry rice ground
-    assert "overlays_on_wet_ground_only" in f(off)
+    assert "overlays_on_wet_ground_only" in f_only(off, "overlays_on_wet_ground_only")
     # the ORIGINAL defect this feature fixed: a uniform random sample over ALL plots, so nothing lands on wet ground
     random_sample = {**base, "land_use": [{"overlay": "lotus", "count": 3, "plots": [[500, 220], [730, 640], [910, 480]]}]}
-    assert "overlays_on_wet_ground_only" in f(random_sample)
+    assert "overlays_on_wet_ground_only" in f_only(random_sample, "overlays_on_wet_ground_only")
     # the NAMED wholesale-conversion opt-out (the dike-pond ARCHETYPE) is exempt by design, not by accident
     archetype = {**base, "land_use": [{"overlay": "lotus", "count": 2, "eligible": "all", "plots": [[900, 900]]}]}
-    assert "overlays_on_wet_ground_only" not in f(archetype)
+    assert "overlays_on_wet_ground_only" not in f_only(archetype, "overlays_on_wet_ground_only")
 
 
 def test_land_use_overlay_drawn_tolerates_having_no_eligible_ground():
@@ -443,11 +455,11 @@ def test_land_use_overlay_drawn_tolerates_having_no_eligible_ground():
     not trip the gate - but a declared overlay that simply never called apply_land_use still must."""
     base = {"meta": {"scale": "village", "land_use_overlay": "lotus"}}
     no_ground = {**base, "wet_plots": [], "land_use": [{"overlay": "lotus", "count": 0, "plots": []}]}
-    assert "land_use_overlay_drawn" not in f(no_ground)
+    assert "land_use_overlay_drawn" not in f_only(no_ground, "land_use_overlay_drawn")
     never_called = {**base, "wet_plots": [[100, 100]], "land_use": []}
-    assert "land_use_overlay_drawn" in f(never_called)
+    assert "land_use_overlay_drawn" in f_only(never_called, "land_use_overlay_drawn")
     had_ground_but_empty = {**base, "wet_plots": [[100, 100]], "land_use": [{"overlay": "lotus", "count": 0, "plots": []}]}
-    assert "land_use_overlay_drawn" in f(had_ground_but_empty)
+    assert "land_use_overlay_drawn" in f_only(had_ground_but_empty, "land_use_overlay_drawn")
 
 
 def test_paddy_features_match_archetype_fires_on_wrong_type():
@@ -455,17 +467,17 @@ def test_paddy_features_match_archetype_fires_on_wrong_type():
     dike-pond), and a right-type placement must not. Ponds must also sit on low/wet ground."""
     base = {"meta": {"scale": "village", "field_archetype": "polder_grid"}, "fields": [{"name": "p", "kind": "paddy", "outline": [[0, 0], [500, 0], [500, 500], [0, 500]], "bbox": [0, 0, 500, 500]}]}
     # rock outcrop on a polder (alluvial silt, no bedrock) - wrong
-    assert "paddy_features_match_archetype" in f({**base, "field_rocks": [{"x": 100, "y": 100}]})
+    assert "paddy_features_match_archetype" in f_only({**base, "field_rocks": [{"x": 100, "y": 100}]}, "paddy_features_match_archetype")
     # a pond on a polder is fine (borrow-pit) IF on low ground
     good = {**base, "wet_plots": [[100, 100]], "field_ponds": [{"x": 100, "y": 100, "rx": 20, "ry": 14}]}
-    assert "paddy_features_match_archetype" not in f(good)
-    assert "field_ponds_on_low_ground" not in f(good)
+    assert "paddy_features_match_archetype" not in f_only(good, "paddy_features_match_archetype")
+    assert "field_ponds_on_low_ground" not in f_only(good, "field_ponds_on_low_ground")
     # a pond NOT on low ground fires the placement check
     offlow = {**base, "wet_plots": [[100, 100]], "field_ponds": [{"x": 400, "y": 400, "rx": 20, "ry": 14}]}
-    assert "field_ponds_on_low_ground" in f(offlow)
+    assert "field_ponds_on_low_ground" in f_only(offlow, "field_ponds_on_low_ground")
     # NOTHING is allowed on a dike-pond map (open water is its fabric)
     dp = {**base, "meta": {"scale": "village", "field_archetype": "mulberry_dike_fishpond"}, "field_ponds": [{"x": 100, "y": 100, "rx": 20, "ry": 14}], "wet_plots": [[100, 100]]}
-    assert "paddy_features_match_archetype" in f(dp)
+    assert "paddy_features_match_archetype" in f_only(dp, "paddy_features_match_archetype")
 
 
 def test_dike_top_houses_on_the_dike():
@@ -475,12 +487,14 @@ def test_dike_top_houses_on_the_dike():
     dike = [[100, 100], [900, 100], [900, 900], [100, 900]]
     base = {"meta": {"scale": "hamlet", "field_archetype": "polder_grid"}, "dikes": [{"outline": dike, "w_min": 14.0, "w_max": 38.0}]}
     on = {**base, "houses": [{"x": 500, "y": 500, "w": 46, "h": 28, "rot": 0, "kind": "plain", "on_dike": True}]}
-    assert "dike_top_houses_on_the_dike" not in f(on)
-    assert "structures_clear_of_dike" not in f(on)  # the crest house is exempt from the keep-off rule
+    assert "dike_top_houses_on_the_dike" not in f_only(on, "dike_top_houses_on_the_dike")
+    assert "structures_clear_of_dike" not in f_only(on, "structures_clear_of_dike")  # the crest house is exempt from the keep-off rule
     off = {**base, "houses": [{"x": 1300, "y": 500, "w": 46, "h": 28, "rot": 0, "kind": "plain", "on_dike": True}]}
-    assert "dike_top_houses_on_the_dike" in f(off)  # a tagged house floating off the bank
+    assert "dike_top_houses_on_the_dike" in f_only(off, "dike_top_houses_on_the_dike")  # a tagged house floating off the bank
     # tagged houses on a map with NO dike at all fire too - the tag is never a free pass
-    assert "dike_top_houses_on_the_dike" in f({"meta": {"scale": "hamlet"}, "houses": [{"x": 500, "y": 500, "w": 46, "h": 28, "rot": 0, "kind": "plain", "on_dike": True}]})
+    assert "dike_top_houses_on_the_dike" in f_only(
+        {"meta": {"scale": "hamlet"}, "houses": [{"x": 500, "y": 500, "w": 46, "h": 28, "rot": 0, "kind": "plain", "on_dike": True}]}, "dike_top_houses_on_the_dike"
+    )
 
 
 def test_polder_waterward_flanks_wet():
@@ -488,28 +502,28 @@ def test_polder_waterward_flanks_wet():
     # flank must READ wet (waterside/toe marsh or open water), not the same dry scrub as the landward shore.
     dike = [[300, 300], [1100, 300], [1100, 1100], [300, 1100]]
     dry = {"meta": {"scale": "hamlet", "field_archetype": "polder_grid", "waterward": ["W", "E", "N", "S"]}, "dikes": [{"outline": dike, "w_min": 14.0, "w_max": 38.0}]}
-    assert "polder_waterward_flanks_wet" in f(dry)  # all four declared, nothing wet anywhere
+    assert "polder_waterward_flanks_wet" in f_only(dry, "polder_waterward_flanks_wet")  # all four declared, nothing wet anywhere
     wet_w = {
         **dry,
         "meta": {**dry["meta"], "waterward": ["W"]},
         "marshes": [{"x": 200, "y": 700, "w": 200, "h": 900, "role": "waterside", "poly": [[100, 250], [300, 250], [300, 1150], [100, 1150]]}],
     }
-    assert "polder_waterward_flanks_wet" not in f(wet_w)  # a waterside reed fringe covers the west flank
+    assert "polder_waterward_flanks_wet" not in f_only(wet_w, "polder_waterward_flanks_wet")  # a waterside reed fringe covers the west flank
     wet_s = {
         **dry,
         "meta": {**dry["meta"], "waterward": ["S"]},
         "marshes": [{"x": 700, "y": 1300, "w": 1040, "h": 330, "role": "toe", "poly": [[180, 1120], [1220, 1120], [1220, 1450], [180, 1450]]}],
     }
-    assert "polder_waterward_flanks_wet" not in f(wet_s)  # the auto toe marsh already wets the low flank
+    assert "polder_waterward_flanks_wet" not in f_only(wet_s, "polder_waterward_flanks_wet")  # the auto toe marsh already wets the low flank
     # an undeclared map skips (a valley comb has no dike facing water)
-    assert "polder_waterward_flanks_wet" not in f({"meta": {"scale": "hamlet", "field_archetype": "polder_grid"}, "dikes": dry["dikes"]})
+    assert "polder_waterward_flanks_wet" not in f_only({"meta": {"scale": "hamlet", "field_archetype": "polder_grid"}, "dikes": dry["dikes"]}, "polder_waterward_flanks_wet")
 
 
 def test_the_waiver_meta_checks_cannot_themselves_be_waived():
     """Otherwise the hatch swallows its own guard: one waiver silencing waivers_are_live would let
     every other waiver rot unreported."""
     M = _waived_map({"waivers_are_live": _WHY, "tanning_yard_on_watr": _WHY})
-    assert "waivers_are_live" in f(M)
+    assert "waivers_are_live" in f_only(M, "waivers_are_live")
 
 
 def test_feature_022_gate_refuses_a_meta_check_in_targeted_mode():
@@ -529,7 +543,7 @@ def test_field_ponds_sunk_into_one_plot_fires_when_bunds_cross_the_water():
     pond = {"x": 100, "y": 100, "rx": 30, "ry": 20}
     host = [[70, 80], [130, 80], [130, 120], [70, 120]]  # the host plot ring: touching the shore is fine
     good = {**base, "field_ponds": [pond], "fields": [{**_field("p", 0, 0, 500, 500), "plot_rings": [host]}]}
-    assert "field_ponds_sunk_into_one_plot" not in f(good)
+    assert "field_ponds_sunk_into_one_plot" not in f_only(good, "field_ponds_sunk_into_one_plot")
     hem = [[100, 60], [100, 140], [110, 140], [110, 60]]  # runs straight through the water
     bad = {**base, "field_ponds": [pond], "fields": [{**_field("p", 0, 0, 500, 500), "plot_rings": [host], "drain_hem": [hem]}]}
-    assert "field_ponds_sunk_into_one_plot" in f(bad)
+    assert "field_ponds_sunk_into_one_plot" in f_only(bad, "field_ponds_sunk_into_one_plot")

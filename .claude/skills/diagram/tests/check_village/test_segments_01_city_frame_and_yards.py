@@ -21,6 +21,7 @@ from tests.check_village._builders import (
     _qcity,
     bldg,
     f,
+    f_only,
     garden,
     house,
     manifest,
@@ -34,13 +35,13 @@ def test_a_paid_matrix_debt_fires_so_the_line_gets_deleted(monkeypatch):
     while the entry recording them stayed behind."""
     monkeypatch.setitem(check_village._MATRIX_OUTSTANDING, "Nowhere", {("dry_plots", "manors"): 2})
     M = manifest(meta={"scale": "village", "ftpx": 1, "W": 1000, "H": 1000, "name": "Nowhere"})
-    assert "matrix_debts_still_owed" in f(M)  # the map draws neither, so the debt is paid
+    assert "matrix_debts_still_owed" in f_only(M, "matrix_debts_still_owed")  # the map draws neither, so the debt is paid
 
 
 def test_an_unpaid_matrix_debt_stays_quiet(monkeypatch):
     monkeypatch.setitem(check_village._MATRIX_OUTSTANDING, "Nowhere", {})
     M = manifest(meta={"scale": "village", "ftpx": 1, "W": 1000, "H": 1000, "name": "Nowhere"})
-    assert "matrix_debts_still_owed" not in f(M)
+    assert "matrix_debts_still_owed" not in f_only(M, "matrix_debts_still_owed")
 
 
 def test_hard_features_within_frame_fires_on_a_feature_clipped_by_the_crop():
@@ -52,7 +53,7 @@ def test_hard_features_within_frame_fires_on_a_feature_clipped_by_the_crop():
         "wells": [{"x": 600, "y": 300, "r": 8}],
         "cemeteries": [{"x": 360, "y": 500, "w": 100, "h": 70, "rot": 0}],
     }
-    assert "hard_features_within_frame" in f(M)
+    assert "hard_features_within_frame" in f_only(M, "hard_features_within_frame")
 
 
 def test_crop_hugs_content_fires_when_the_frame_is_held_open():
@@ -63,7 +64,7 @@ def test_crop_hugs_content_fires_when_the_frame_is_held_open():
         "houses": [{"x": 200, "y": 100, "w": 40, "h": 30, "rot": 0, "kind": "plain"}],
         "village_groves": [{"poly": [[100, -290], [300, -290], [300, 60], [100, 60]], "role": "windbreak"}],
     }
-    assert "crop_hugs_content" in f(M)
+    assert "crop_hugs_content" in f_only(M, "crop_hugs_content")
 
 
 def test_crop_hugs_content_counts_the_windbreaks_inner_face_but_not_its_depth():
@@ -74,9 +75,9 @@ def test_crop_hugs_content_counts_the_windbreaks_inner_face_but_not_its_depth():
     house = {"x": 200, "y": 100, "w": 40, "h": 30, "rot": 0, "kind": "plain"}
     face = -50 + 14  # the southernmost clump row's crowns end here, facing the house
     snug = {"meta": {"scale": "village", "view": [150, face - 48, 120, 115 - (face - 48)]}, "houses": [house], "village_groves": [belt]}
-    assert "crop_hugs_content" not in f(snug), "48 px past the face is the margin, not slack"
+    assert "crop_hugs_content" not in f_only(snug, "crop_hugs_content"), "48 px past the face is the margin, not slack"
     wide = {"meta": {"scale": "village", "view": [150, -300, 120, 415]}, "houses": [house], "village_groves": [belt]}
-    assert "crop_hugs_content" in f(wide), "the belt's depth still may not hold the frame open"
+    assert "crop_hugs_content" in f_only(wide, "crop_hugs_content"), "the belt's depth still may not hold the frame open"
 
 
 def test_crop_hugs_content_passes_on_a_snug_frame():
@@ -84,7 +85,7 @@ def test_crop_hugs_content_passes_on_a_snug_frame():
         "meta": {"scale": "village", "view": [150, 45, 120, 110]},
         "houses": [{"x": 200, "y": 100, "w": 40, "h": 30, "rot": 0, "kind": "plain"}],
     }
-    assert "crop_hugs_content" not in f(M)
+    assert "crop_hugs_content" not in f_only(M, "crop_hugs_content")
 
 
 def test_crop_hugs_content_reveals_only_a_band_of_a_canvas_filling_forest():
@@ -97,11 +98,11 @@ def test_crop_hugs_content_reveals_only_a_band_of_a_canvas_filling_forest():
         "forest": [[400, 0], [400, 500], [1000, 500], [1000, 0]],
         "forest_edge": [[400, 0], [400, 500]],
     }
-    assert "crop_hugs_content" in f(M)
-    assert "crop_hugs_content" not in f({**M, "meta": {**M["meta"], "view": [150, 45, 360, 110]}})  # snug: the reveal band exactly
+    assert "crop_hugs_content" in f_only(M, "crop_hugs_content")
+    assert "crop_hugs_content" not in f_only({**M, "meta": {**M["meta"], "view": [150, 45, 360, 110]}}, "crop_hugs_content")  # snug: the reveal band exactly
     # a wood recorded WITHOUT its tree line keeps the legacy rule - the whole clamped polygon is
     # frame-setting, so the same wide view reads as snug
-    assert "crop_hugs_content" not in f({**M, "forest_edge": None})
+    assert "crop_hugs_content" not in f_only({**M, "forest_edge": None}, "crop_hugs_content")
 
 
 def test_crop_hugs_content_is_not_excused_by_a_forest_running_off_both_canvas_ends():
@@ -115,8 +116,8 @@ def test_crop_hugs_content_is_not_excused_by_a_forest_running_off_both_canvas_en
         "forest": [[400, -10], [400, 510], [1000, 510], [1000, -10]],
         "forest_edge": [[400, -10], [400, 510]],
     }
-    assert "crop_hugs_content" in f(M)
-    assert "crop_hugs_content" not in f({**M, "meta": {**M["meta"], "view": [150, 255, 360, 90]}})
+    assert "crop_hugs_content" in f_only(M, "crop_hugs_content")
+    assert "crop_hugs_content" not in f_only({**M, "meta": {**M["meta"], "view": [150, 255, 360, 90]}}, "crop_hugs_content")
 
 
 def test_hard_features_within_frame_lets_the_windbreak_clip_but_not_vanish():
@@ -126,13 +127,13 @@ def test_hard_features_within_frame_lets_the_windbreak_clip_but_not_vanish():
         "meta": {"scale": "village", "view": [0, 0, 400, 300]},
         "village_groves": [{"poly": [[100, -200], [300, -200], [300, 80], [100, 80]], "role": "windbreak"}],
     }
-    assert "hard_features_within_frame" not in f(M)
+    assert "hard_features_within_frame" not in f_only(M, "hard_features_within_frame")
     # ... but one ENTIRELY outside the view is a lost feature and still fires
     M2 = {
         "meta": {"scale": "village", "view": [0, 0, 400, 300]},
         "village_groves": [{"poly": [[100, -200], [300, -200], [300, -40], [100, -40]], "role": "windbreak"}],
     }
-    assert "hard_features_within_frame" in f(M2)
+    assert "hard_features_within_frame" in f_only(M2, "hard_features_within_frame")
 
 
 @pytest.mark.tiers("city")
@@ -144,7 +145,7 @@ def test_guard_box_on_the_ward_fence_is_a_defect_though_the_gateway_on_it_is_not
     assert not [v for v in check_village.matrix_violations(thru_gateway) if "kido_guard_box" in (v[0], v[1])]
     thru_box = {"meta": {"scale": "city"}, "kido": [_gate_parts()], "wards": [{"name": "samurai", "boundary": [[300, 520], [700, 520]]}]}
     assert [v for v in check_village.matrix_violations(thru_box) if "kido_guard_box" in (v[0], v[1])]
-    assert "features_do_not_overlap" in f(thru_box)
+    assert "features_do_not_overlap" in f_only(thru_box, "features_do_not_overlap")
 
 
 @pytest.mark.tiers("city")
@@ -156,7 +157,7 @@ def test_stable_troughs_beside_well_fires_when_the_cluster_is_far_from_every_wel
         "stable_yards": [{"x": 500, "y": 500, "r": 72.0, "of": [500, 500], "troughs": 2, "troughs_at": [530.0, 500.0]}],
         "wells": [{"x": 700, "y": 500, "r": 8, "vr": 4.0}],  # 170 px = 510 real ft from the cluster
     }
-    assert "stable_troughs_beside_well" in f(M)
+    assert "stable_troughs_beside_well" in f_only(M, "stable_troughs_beside_well")
 
 
 @pytest.mark.tiers("city")
@@ -168,7 +169,7 @@ def test_stable_troughs_beside_well_fires_when_the_cluster_went_unrecorded():
         "stable_yards": [{"x": 500, "y": 500, "r": 72.0, "of": [500, 500], "troughs": 2}],
         "wells": [{"x": 505, "y": 500, "r": 8, "vr": 4.0}],
     }
-    assert "stable_troughs_beside_well" in f(M)
+    assert "stable_troughs_beside_well" in f_only(M, "stable_troughs_beside_well")
 
 
 @pytest.mark.tiers("city")
@@ -197,7 +198,7 @@ def test_stable_troughs_clear_of_buildings_fires_when_a_trough_clips_a_well_roof
         "stable_yards": [{"x": 500, "y": 500, "r": 80.0, "of": [500, 500], "troughs": 3, "troughs_at": [502.0, 492.4], "troughs_box": [499.7, 487.8, 504.3, 497.0]}],
         "wells": [{"x": 500, "y": 500, "r": 8, "vr": 4.0}],  # roof top edge at y=496 < box bottom 497
     }
-    assert "stable_troughs_clear_of_buildings" in f(M)
+    assert "stable_troughs_clear_of_buildings" in f_only(M, "stable_troughs_clear_of_buildings")
 
 
 @pytest.mark.tiers("city")
@@ -209,7 +210,7 @@ def test_stable_troughs_clear_of_buildings_fires_when_a_trough_clips_a_building(
         "wells": [{"x": 510, "y": 492, "r": 8, "vr": 4.0}],  # beside_well is satisfied
         "buildings": [{"x": 500, "y": 486, "w": 20, "h": 8}],  # footprint bottom at y=490 > box top 489.6
     }
-    assert "stable_troughs_clear_of_buildings" in f(M)
+    assert "stable_troughs_clear_of_buildings" in f_only(M, "stable_troughs_clear_of_buildings")
 
 
 @pytest.mark.tiers("city")
@@ -220,7 +221,7 @@ def test_stable_troughs_clear_of_buildings_fires_when_the_box_went_unrecorded():
         "stable_yards": [{"x": 500, "y": 500, "r": 72.0, "of": [500, 500], "troughs": 2, "troughs_at": [492.1, 500.0]}],
         "wells": [{"x": 500, "y": 500, "r": 8, "vr": 4.0}],
     }
-    assert "stable_troughs_clear_of_buildings" in f(M)
+    assert "stable_troughs_clear_of_buildings" in f_only(M, "stable_troughs_clear_of_buildings")
 
 
 @pytest.mark.tiers("city")
@@ -243,7 +244,7 @@ def test_stable_yard_furniture_fires_when_a_rail_tip_reaches_the_road():
             }
         ],
     }
-    assert "stable_yard_furniture_clear_of_roads_walls" in f(M)
+    assert "stable_yard_furniture_clear_of_roads_walls" in f_only(M, "stable_yard_furniture_clear_of_roads_walls")
 
 
 @pytest.mark.tiers("city")
@@ -264,7 +265,7 @@ def test_stable_yard_furniture_fires_when_a_dung_heap_lies_against_the_wall():
             }
         ],
     }
-    assert "stable_yard_furniture_clear_of_roads_walls" in f(M)
+    assert "stable_yard_furniture_clear_of_roads_walls" in f_only(M, "stable_yard_furniture_clear_of_roads_walls")
 
 
 @pytest.mark.tiers("city")
@@ -288,7 +289,7 @@ def test_stable_yard_furniture_passes_clear_and_skips_unrecorded_legacy_yards():
             {"x": 300, "y": 300, "r": 60.0, "of": [300, 300], "troughs": 0},
         ],
     }
-    assert "stable_yard_furniture_clear_of_roads_walls" not in f(M)
+    assert "stable_yard_furniture_clear_of_roads_walls" not in f_only(M, "stable_yard_furniture_clear_of_roads_walls")
 
 
 @pytest.mark.tiers("city")
@@ -319,7 +320,7 @@ def test_dung_heaps_clear_of_hitch_rails_fires_across_yards_within_24px():
             },
         ],
     }
-    assert "dung_heaps_clear_of_hitch_rails" in f(M)
+    assert "dung_heaps_clear_of_hitch_rails" in f_only(M, "dung_heaps_clear_of_hitch_rails")
 
 
 @pytest.mark.tiers("city")
@@ -339,35 +340,35 @@ def test_dung_heaps_clear_of_hitch_rails_passes_at_24px_or_more():
             }
         ],
     }
-    assert "dung_heaps_clear_of_hitch_rails" not in f(M)
+    assert "dung_heaps_clear_of_hitch_rails" not in f_only(M, "dung_heaps_clear_of_hitch_rails")
 
 
 def test_farrier_serves_a_stables_fires_on_a_forge_with_no_stables_in_reach():
     # a shoeing forge earns its own premises ONLY where horses concentrate (settlements.md
     # "TRADE WORKS" -> FARRIERY): the ordinary smith who also shoes stays inside the shop rows,
     # so a forge on a random street corner is the European coaching-inn image, not a Rokugani seat
-    assert "farrier_serves_a_stables" in f(_farrier_map(800, 800))
+    assert "farrier_serves_a_stables" in f_only(_farrier_map(800, 800), "farrier_serves_a_stables")
     M = _farrier_map(800, 800)
     M["buildings"] = []  # ... and a map with NO stables at all fails the same way
-    assert "farrier_serves_a_stables" in f(M)
+    assert "farrier_serves_a_stables" in f_only(M, "farrier_serves_a_stables")
 
 
 def test_farrier_serves_a_stables_passes_beside_the_caravan_yard():
     # 250 real ft is the reach; at ftpx=1 a forge 120px off its stables is well inside it
-    assert "farrier_serves_a_stables" not in f(_farrier_map(320, 200))
+    assert "farrier_serves_a_stables" not in f_only(_farrier_map(320, 200), "farrier_serves_a_stables")
 
 
 def test_farrier_keeps_fire_gap_fires_on_a_forge_against_the_stall_range():
     # an OPEN forge against a hay-and-timber stall range is the fire a stable yard does not
     # survive, so the smithy stands across the ground, never attached. Both an overlapping forge
     # and one merely crowding the wall are the same defect.
-    assert "farrier_keeps_fire_gap" in f(_farrier_map(200, 200))  # squarely on top of the stables
-    assert "farrier_keeps_fire_gap" in f(_farrier_map(200, 240))  # 5 ft of daylight - not enough
+    assert "farrier_keeps_fire_gap" in f_only(_farrier_map(200, 200), "farrier_keeps_fire_gap")  # squarely on top of the stables
+    assert "farrier_keeps_fire_gap" in f_only(_farrier_map(200, 240), "farrier_keeps_fire_gap")  # 5 ft of daylight - not enough
 
 
 def test_farrier_keeps_fire_gap_passes_at_a_real_fire_gap():
     # ~6 real ft clear of every footprint (buildings.md's wooden-service fire gap) is the floor
-    assert "farrier_keeps_fire_gap" not in f(_farrier_map(200, 250))
+    assert "farrier_keeps_fire_gap" not in f_only(_farrier_map(200, 250), "farrier_keeps_fire_gap")
 
 
 @pytest.mark.tiers("city")
@@ -377,7 +378,7 @@ def test_city_has_farrier_fires_on_a_city_with_no_shoeing_forge():
     M["farriers"] = []
     M["wall"] = [[100, 100], [900, 100], [900, 900], [100, 900]]
     M["gates"] = [[500, 100]]
-    assert "city_has_farrier" in f(M)
+    assert "city_has_farrier" in f_only(M, "city_has_farrier")
 
 
 @pytest.mark.tiers("town")
@@ -387,17 +388,17 @@ def test_imperial_road_town_farrier_is_gated_on_the_declaration():
     # so the check is gated on meta(imperial_road=True) rather than on town scale alone
     M = _farrier_map(320, 200, imperial_road=True)
     M["farriers"] = []
-    assert "imperial_road_town_has_farrier" in f(M)
+    assert "imperial_road_town_has_farrier" in f_only(M, "imperial_road_town_has_farrier")
     off_road = _farrier_map(320, 200)
     off_road["farriers"] = []
-    assert "imperial_road_town_has_farrier" not in f(off_road)
+    assert "imperial_road_town_has_farrier" not in f_only(off_road, "imperial_road_town_has_farrier")
 
 
 @pytest.mark.tiers("town")
 def test_population_consistent_with_housing_fires_when_dwellings_too_few():
     # population is dwellings x5, not total buildings x5; 10 dwellings imply ~50 residents, not 3000
     M = {"meta": {"scale": "town", "walled": False, "population": 3000}, "buildings": [bldg(120 + i * 60, 120, kind="laborer") for i in range(10)]}
-    assert "population_consistent_with_housing" in f(M)
+    assert "population_consistent_with_housing" in f_only(M, "population_consistent_with_housing")
 
 
 @pytest.mark.tiers("town")
@@ -405,12 +406,12 @@ def test_structures_clear_of_trees_fires_when_a_crown_is_drawn_over_a_building()
     # a tree drawn on a roof erases the building - no drawn crown may overlap any ROOFED footprint,
     # and a ROTATED building is covered conservatively by its half-diagonal (as at placement).
     base = manifest(meta={"scale": "town"}, houses=[bldg(300, 300, "laborer")])
-    assert "structures_clear_of_trees" in f({**base, "buildings": [bldg(600, 600, "servant")], "tree_crowns": [618, 600, 8]})
-    assert "structures_clear_of_trees" not in f({**base, "buildings": [bldg(600, 600, "servant")], "tree_crowns": [660, 600, 8]})
+    assert "structures_clear_of_trees" in f_only({**base, "buildings": [bldg(600, 600, "servant")], "tree_crowns": [618, 600, 8]}, "structures_clear_of_trees")
+    assert "structures_clear_of_trees" not in f_only({**base, "buildings": [bldg(600, 600, "servant")], "tree_crowns": [660, 600, 8]}, "structures_clear_of_trees")
     # ... every roofed kind counts, not just dwellings (here a storehouse), and a crown that only
     # reaches the OPEN yard beside a building is fine - yards have their own sun rules
-    assert "structures_clear_of_trees" in f({**base, "storehouses": [{"x": 800, "y": 800, "w": 40, "h": 30, "rot": 0}], "tree_crowns": [822, 800, 6]})
-    assert "structures_clear_of_trees" not in f({**base, "threshing_yards": [yard(800, 800, of=(300, 300))], "tree_crowns": [800, 800, 6]})
+    assert "structures_clear_of_trees" in f_only({**base, "storehouses": [{"x": 800, "y": 800, "w": 40, "h": 30, "rot": 0}], "tree_crowns": [822, 800, 6]}, "structures_clear_of_trees")
+    assert "structures_clear_of_trees" not in f_only({**base, "threshing_yards": [yard(800, 800, of=(300, 300))], "tree_crowns": [800, 800, 6]}, "structures_clear_of_trees")
 
 
 @pytest.mark.tiers("city")
@@ -420,7 +421,7 @@ def test_city_capacity_too_small_when_wall_cannot_hold_target():
     assert rep["verdict"] == "enlarge"
     assert rep["suggested_wall_scale"] > 1  # enlarge
     # and the gate check surfaces it
-    assert "city_wall_sized_to_population" in f(_diamond_city(3000))
+    assert "city_wall_sized_to_population" in f_only(_diamond_city(3000), "city_wall_sized_to_population")
 
 
 @pytest.mark.tiers("city")
@@ -428,7 +429,7 @@ def test_city_capacity_too_big_when_wall_dwarfs_target():
     rep = check_village.city_capacity(_diamond_city(100))  # target 20, inherent ~200
     assert rep["verdict"] == "shrink"
     assert rep["suggested_wall_scale"] < 1  # shrink
-    assert "city_wall_sized_to_population" in f(_diamond_city(100))
+    assert "city_wall_sized_to_population" in f_only(_diamond_city(100), "city_wall_sized_to_population")
 
 
 @pytest.mark.tiers("city")
@@ -439,33 +440,33 @@ def test_city_capacity_underpacked_when_wall_right_but_placement_sparse():
     rep = check_village.city_capacity(_diamond_city(500, dwellings=10))
     assert rep["verdict"] == "densify"
     # underpacked is NOT a wall-size fault, so the gate check stays silent
-    assert "city_wall_sized_to_population" not in f(_diamond_city(500, dwellings=10))
+    assert "city_wall_sized_to_population" not in f_only(_diamond_city(500, dwellings=10), "city_wall_sized_to_population")
 
 
 @pytest.mark.tiers("city")
 def test_city_capacity_about_right_when_sized_and_packed():
     rep = check_village.city_capacity(_diamond_city(500, dwellings=95))
     assert rep["verdict"] == "sized_and_packed"
-    assert "city_wall_sized_to_population" not in f(_diamond_city(500, dwellings=95))
+    assert "city_wall_sized_to_population" not in f_only(_diamond_city(500, dwellings=95), "city_wall_sized_to_population")
 
 
 def test_population_counts_only_in_wall_dwellings_for_a_walled_city():
     # 20 dwellings inside -> ~100 residents, passes.
     inside = [bldg(300 + (i % 10) * 20, 300, "laborer") for i in range(20)]
-    assert "population_consistent_with_housing" not in f(_pop_city(inside))
+    assert "population_consistent_with_housing" not in f_only(_pop_city(inside), "population_consistent_with_housing")
     # 15 inside + 5 spilled OUTSIDE (x=50) = 20 total: the OLD count (all 20) would pass, but only
     # the 15 in-wall now count -> ~75 residents -> fails. The spill cannot rescue the figure.
     spilled = [bldg(300 + (i % 10) * 20, 300, "laborer") for i in range(15)] + [bldg(50, 300 + i * 20, "laborer") for i in range(5)]
-    assert "population_consistent_with_housing" in f(_pop_city(spilled))
+    assert "population_consistent_with_housing" in f_only(_pop_city(spilled), "population_consistent_with_housing")
 
 
 @pytest.mark.tiers("city")
 def test_city_commoner_dwellings_inside_walls_fires_on_a_spilled_commoner():
     inside = [bldg(300 + (i % 10) * 20, 300, "laborer") for i in range(20)]
-    assert "city_commoner_dwellings_inside_walls" not in f(_pop_city(inside))
+    assert "city_commoner_dwellings_inside_walls" not in f_only(_pop_city(inside), "city_commoner_dwellings_inside_walls")
     # one laborer outside the wall -> fires (hard zero)
     leaky = inside + [bldg(50, 500, "laborer")]
-    assert "city_commoner_dwellings_inside_walls" in f(_pop_city(leaky))
+    assert "city_commoner_dwellings_inside_walls" in f_only(_pop_city(leaky), "city_commoner_dwellings_inside_walls")
 
 
 @pytest.mark.tiers("city")
@@ -473,14 +474,14 @@ def test_city_commoner_dwellings_exempts_samurai_and_shops_outside():
     # samurai country estate + a gate-market shop OUTSIDE the wall are legitimate; not flagged.
     inside = [bldg(300 + (i % 10) * 20, 300, "laborer") for i in range(20)]
     exempt_outside = inside + [bldg(50, 300, "samurai"), bldg(50, 400, "samurai_large"), bldg(900, 500, "shop")]
-    assert "city_commoner_dwellings_inside_walls" not in f(_pop_city(exempt_outside))
+    assert "city_commoner_dwellings_inside_walls" not in f_only(_pop_city(exempt_outside), "city_commoner_dwellings_inside_walls")
 
 
 @pytest.mark.tiers("city")
 def test_city_quarters_declared_fires_when_absent_passes_when_present():
-    assert "city_quarters_declared" in f({"meta": {"scale": "city"}, "wall": _CITY_WALL_SMALL, "buildings": []})
+    assert "city_quarters_declared" in f_only({"meta": {"scale": "city"}, "wall": _CITY_WALL_SMALL, "buildings": []}, "city_quarters_declared")
     ok = _qcity([{"poly": _FULL_Q, "zone": "residential", "kind": None, "name": "q"}])
-    assert "city_quarters_declared" not in f(ok)
+    assert "city_quarters_declared" not in f_only(ok, "city_quarters_declared")
 
 
 @pytest.mark.tiers("city")
@@ -489,34 +490,34 @@ def test_city_quarters_tile_interior_passes_on_a_clean_two_half_tiling():
     right = {"poly": [[500, 200], [800, 200], [800, 800], [500, 800]], "zone": "residential", "kind": None, "name": "R"}
     # both packed enough to pass density, so we isolate the tiling result
     b = _dwell_grid(230, 470, 230, 770, 12) + _dwell_grid(530, 770, 230, 770, 12)
-    assert "city_quarters_tile_interior" not in f(_qcity([left, right], b))
+    assert "city_quarters_tile_interior" not in f_only(_qcity([left, right], b), "city_quarters_tile_interior")
 
 
 @pytest.mark.tiers("city")
 def test_city_quarters_tile_interior_fires_on_gap_overlap_and_spill():
     half = {"poly": [[200, 200], [500, 200], [500, 800], [200, 800]], "zone": "civic", "kind": None, "name": "half"}
-    assert "city_quarters_tile_interior" in f(_qcity([half]))  # only half covered -> gap
+    assert "city_quarters_tile_interior" in f_only(_qcity([half]), "city_quarters_tile_interior")  # only half covered -> gap
     dup = {"poly": _FULL_Q, "zone": "civic", "kind": None, "name": "a"}
     dup2 = {"poly": _FULL_Q, "zone": "civic", "kind": None, "name": "b"}
-    assert "city_quarters_tile_interior" in f(_qcity([dup, dup2]))  # doubled -> overlap
+    assert "city_quarters_tile_interior" in f_only(_qcity([dup, dup2]), "city_quarters_tile_interior")  # doubled -> overlap
     spill = {"poly": [[50, 200], [800, 200], [800, 800], [50, 800]], "zone": "civic", "kind": None, "name": "s"}
-    assert "city_quarters_tile_interior" in f(_qcity([spill]))  # extends past the wall
+    assert "city_quarters_tile_interior" in f_only(_qcity([spill]), "city_quarters_tile_interior")  # extends past the wall
 
 
 @pytest.mark.tiers("city")
 def test_city_residential_density_passes_in_band():
     q = {"poly": _FULL_Q, "zone": "residential", "kind": None, "name": "warren"}
     b = _dwell_grid(210, 790, 210, 790, 17)  # 289 dwellings evenly spread -> in band, no dead zone
-    assert "city_residential_quarters_dense_enough" not in f(_qcity([q], b))
+    assert "city_residential_quarters_dense_enough" not in f_only(_qcity([q], b), "city_residential_quarters_dense_enough")
 
 
 @pytest.mark.tiers("city")
 def test_city_residential_density_fires_below_floor_and_above_ceil():
     q = {"poly": _FULL_Q, "zone": "residential", "kind": None, "name": "warren"}
     sparse = _dwell_grid(210, 790, 210, 790, 6)  # 36 dwellings -> below floor
-    assert "city_residential_quarters_dense_enough" in f(_qcity([q], sparse))
+    assert "city_residential_quarters_dense_enough" in f_only(_qcity([q], sparse), "city_residential_quarters_dense_enough")
     crammed = _dwell_grid(210, 790, 210, 790, 30)  # 900 dwellings -> above ceil
-    assert "city_residential_quarters_dense_enough" in f(_qcity([q], crammed))
+    assert "city_residential_quarters_dense_enough" in f_only(_qcity([q], crammed), "city_residential_quarters_dense_enough")
 
 
 @pytest.mark.tiers("city")
@@ -524,24 +525,24 @@ def test_city_residential_density_fires_on_a_dead_zone_despite_a_good_average():
     # in-band average, but every dwelling is jammed into one corner - the far half is a dead zone.
     q = {"poly": _FULL_Q, "zone": "residential", "kind": None, "name": "lopsided"}
     corner = _dwell_grid(210, 400, 210, 400, 16)  # ~256 dwellings, density over the whole quarter in band
-    assert "city_residential_quarters_dense_enough" in f(_qcity([q], corner))
+    assert "city_residential_quarters_dense_enough" in f_only(_qcity([q], corner), "city_residential_quarters_dense_enough")
 
 
 @pytest.mark.tiers("city")
 def test_city_civic_quarter_passes_with_a_compound_fires_when_bare():
     civic = {"poly": _FULL_Q, "zone": "civic", "kind": None, "name": "yamen precinct"}
     with_compound = _qcity([civic], governor_mansion={"x": 500, "y": 500, "w": 400, "h": 300, "rot": 0})
-    assert "city_civic_quarter_not_mostly_open" not in f(with_compound)
+    assert "city_civic_quarter_not_mostly_open" not in f_only(with_compound, "city_civic_quarter_not_mostly_open")
     bare = _qcity([civic], ministries=[{"x": 500, "y": 500, "w": 130, "h": 90, "rot": 0}])  # tiny building in a big quarter
-    assert "city_civic_quarter_not_mostly_open" in f(bare)
+    assert "city_civic_quarter_not_mostly_open" in f_only(bare, "city_civic_quarter_not_mostly_open")
 
 
 @pytest.mark.tiers("city")
 def test_city_reserve_within_cap_passes_under_and_fires_over():
     small = {"poly": [[250, 250], [500, 250], [500, 500], [250, 500]], "zone": "reserve", "kind": "drill_ground", "name": "drill"}
-    assert "city_reserve_within_cap" not in f(_qcity([small]))  # 62500/360000 = 17% <= 20%
+    assert "city_reserve_within_cap" not in f_only(_qcity([small]), "city_reserve_within_cap")  # 62500/360000 = 17% <= 20%
     big = {"poly": [[250, 250], [550, 250], [550, 550], [250, 550]], "zone": "reserve", "kind": "drill_ground", "name": "drill"}
-    assert "city_reserve_within_cap" in f(_qcity([big]))  # 90000/360000 = 25% > 20%
+    assert "city_reserve_within_cap" in f_only(_qcity([big]), "city_reserve_within_cap")  # 90000/360000 = 25% > 20%
 
 
 @pytest.mark.tiers("city")
@@ -554,7 +555,7 @@ def test_city_capacity_shrinks_when_reserve_over_cap():
     assert rep["verdict"] == "shrink"  # reserve_frac over the 20% cap forces shrink
     assert rep["reserve_frac"] > check_village.RESERVE_CAP_FRAC
     # and the gate check surfaces it
-    assert "city_wall_sized_to_population" in f(M)
+    assert "city_wall_sized_to_population" in f_only(M, "city_wall_sized_to_population")
 
 
 @pytest.mark.tiers("city")
@@ -575,14 +576,14 @@ def test_quarter_checks_skip_a_degenerate_zero_area_quarter():
 @pytest.mark.tiers("city")
 def test_city_geometry_within_canvas_fires_on_a_stray_vertex():
     good = _qcity([{"poly": _FULL_Q, "zone": "residential", "kind": None, "name": "q"}], meta={"scale": "city", "W": 3200, "H": 2700})
-    assert "city_geometry_within_canvas" not in f(good)
+    assert "city_geometry_within_canvas" not in f_only(good, "city_geometry_within_canvas")
     bad = {
         "meta": {"scale": "city", "W": 3200, "H": 2700},
         "wall": _CITY_WALL_SMALL + [[9_000_000, 9_000_000]],
         "quarters": [{"poly": _FULL_Q, "zone": "residential", "kind": None, "name": "q"}],
         "buildings": [],
     }
-    assert "city_geometry_within_canvas" in f(bad)  # a vertex millions of px off is flagged
+    assert "city_geometry_within_canvas" in f_only(bad, "city_geometry_within_canvas")  # a vertex millions of px off is flagged
 
 
 @pytest.mark.tiers("city")
@@ -602,20 +603,20 @@ def test_gate_does_not_hang_on_a_runaway_quarter_vertex():
 def test_crop_not_held_open_fires_on_a_lone_small_feature_far_out():
     # one 28px-tall building ~400px south of everything else: it alone makes the image taller
     M = _crop_map(buildings=[bldg(500, 500), bldg(540, 500), bldg(520, 900)])
-    assert "crop_not_held_open_by_one_feature" in f(M)
+    assert "crop_not_held_open_by_one_feature" in f_only(M, "crop_not_held_open_by_one_feature")
 
 
 def test_crop_not_held_open_spares_a_LARGE_outlying_feature():
     # a pond out on its own is the outlying CONTENT - big, and meant to be there. This is the
     # case that made the rule a RATIO rather than a flat gap (ponds measured 1.03-1.35x in the pool)
     M = _crop_map(pond=[520, 900, 200, 200])
-    assert "crop_not_held_open_by_one_feature" not in f(M)
+    assert "crop_not_held_open_by_one_feature" not in f_only(M, "crop_not_held_open_by_one_feature")
 
 
 def test_crop_not_held_open_honors_the_declared_opt_out():
     M = _crop_map(buildings=[bldg(500, 500), bldg(540, 500), bldg(520, 900)])
     M["meta"]["crop_outlier_ok"] = True
-    assert "crop_not_held_open_by_one_feature" not in f(M)
+    assert "crop_not_held_open_by_one_feature" not in f_only(M, "crop_not_held_open_by_one_feature")
 
 
 def test_charcoal_yard_keeps_fire_gap_fires_on_a_crowded_yard():
@@ -626,8 +627,8 @@ def test_charcoal_yard_keeps_fire_gap_fires_on_a_crowded_yard():
     below the crematory's smell-carried-on-air figure."""
     tight = _fuel_map(houses=[house(500, 500 + 29 + 14 + 20)])  # 20 real ft off the yard
     clear = _fuel_map(houses=[house(500, 500 + 29 + 14 + 60)])  # 60 real ft off it
-    assert "charcoal_yard_keeps_fire_gap" in f(tight)
-    assert "charcoal_yard_keeps_fire_gap" not in f(clear)
+    assert "charcoal_yard_keeps_fire_gap" in f_only(tight, "charcoal_yard_keeps_fire_gap")
+    assert "charcoal_yard_keeps_fire_gap" not in f_only(clear, "charcoal_yard_keeps_fire_gap")
 
 
 @pytest.mark.tiers("city")
@@ -636,33 +637,37 @@ def test_charcoal_yard_keeps_fire_gap_measures_in_REAL_feet_not_pixels():
     a pixel constant would silently become 90 ft on a 3 ft/px city sheet."""
     M = _fuel_map(houses=[house(500, 500 + 29 + 14 + 20)])
     M["meta"]["ftpx"] = 3  # the same PIXEL gap is now 60 real ft, which clears
-    assert "charcoal_yard_keeps_fire_gap" not in f(M)
+    assert "charcoal_yard_keeps_fire_gap" not in f_only(M, "charcoal_yard_keeps_fire_gap")
 
 
 def test_charcoal_yard_has_cooling_ground_fires_on_a_covered_only_yard():
     """A yard with no open apron has nowhere to stand a fresh load apart from the conditioned
     stock, which is the documented handling rule (24 hours in the open; 8 days of air clears it).
     A roofed shed is equally required - the county's premium good is bought for a dry burn."""
-    assert "charcoal_yard_has_cooling_ground" in f(_fuel_map(charcoal_yards=[{"x": 500, "y": 500, "w": 88, "h": 58, "rot": 0, "label": "charcoal yard", "sheds": 2}]))
-    assert "charcoal_yard_has_cooling_ground" in f(_fuel_map(charcoal_yards=[{"x": 500, "y": 500, "w": 88, "h": 58, "rot": 0, "label": "charcoal yard", "sheds": 0, "apron": [0, 0, 30, 20]}]))
-    assert "charcoal_yard_has_cooling_ground" not in f(_fuel_map())
+    assert "charcoal_yard_has_cooling_ground" in f_only(
+        _fuel_map(charcoal_yards=[{"x": 500, "y": 500, "w": 88, "h": 58, "rot": 0, "label": "charcoal yard", "sheds": 2}]), "charcoal_yard_has_cooling_ground"
+    )
+    assert "charcoal_yard_has_cooling_ground" in f_only(
+        _fuel_map(charcoal_yards=[{"x": 500, "y": 500, "w": 88, "h": 58, "rot": 0, "label": "charcoal yard", "sheds": 0, "apron": [0, 0, 30, 20]}]), "charcoal_yard_has_cooling_ground"
+    )
+    assert "charcoal_yard_has_cooling_ground" not in f_only(_fuel_map(), "charcoal_yard_has_cooling_ground")
 
 
 @pytest.mark.tiers("town")
 def test_settlement_has_charcoal_yard_fires_only_when_the_district_is_declared():
     """Opt-in, like meta(granary=True): an ordinary county seat declares nothing and is exempt."""
     M = manifest(meta={"scale": "town", "ftpx": 1, "W": 1000, "H": 1000, "charcoal_district": True})
-    assert "settlement_has_charcoal_yard" in f(M)
+    assert "settlement_has_charcoal_yard" in f_only(M, "settlement_has_charcoal_yard")
     del M["meta"]["charcoal_district"]
-    assert "settlement_has_charcoal_yard" not in f(M)
+    assert "settlement_has_charcoal_yard" not in f_only(M, "settlement_has_charcoal_yard")
 
 
 @pytest.mark.tiers("town")
 def test_settlement_has_refining_forge_fires_only_when_the_district_is_declared():
     M = manifest(meta={"scale": "town", "ftpx": 1, "W": 1000, "H": 1000, "iron_district": True})
-    assert "settlement_has_refining_forge" in f(M)
+    assert "settlement_has_refining_forge" in f_only(M, "settlement_has_refining_forge")
     del M["meta"]["iron_district"]
-    assert "settlement_has_refining_forge" not in f(M)
+    assert "settlement_has_refining_forge" not in f_only(M, "settlement_has_refining_forge")
 
 
 def test_refining_forge_stands_off_dwellings():
@@ -672,8 +677,8 @@ def test_refining_forge_stands_off_dwellings():
     live ignition source, but somebody is standing at it)."""
     close = _forge_map(homes=[(500, 500 + 24 + 14 + 30)])
     clear = _forge_map(homes=[(500, 500 + 24 + 14 + 70)])
-    assert "refining_forge_stands_off_dwellings" in f(close)
-    assert "refining_forge_stands_off_dwellings" not in f(clear)
+    assert "refining_forge_stands_off_dwellings" in f_only(close, "refining_forge_stands_off_dwellings")
+    assert "refining_forge_stands_off_dwellings" not in f_only(clear, "refining_forge_stands_off_dwellings")
 
 
 def test_refining_forge_downwind_reads_the_maps_own_windward_declaration():
@@ -681,16 +686,16 @@ def test_refining_forge_downwind_reads_the_maps_own_windward_declaration():
     meta(windward=...), so a map with a different exposure gets a different answer instead of a
     hardcoded corner. Under the default NW monsoon the forge belongs SE of the housing."""
     homes = [(300, 300), (360, 300), (300, 360)]
-    assert "refining_forge_downwind" not in f(_forge_map(700, 700, homes))  # SE of the housing
-    assert "refining_forge_downwind" in f(_forge_map(60, 60, homes))  # NW of it - straight upwind
+    assert "refining_forge_downwind" not in f_only(_forge_map(700, 700, homes), "refining_forge_downwind")  # SE of the housing
+    assert "refining_forge_downwind" in f_only(_forge_map(60, 60, homes), "refining_forge_downwind")  # NW of it - straight upwind
     # ...and reversing the declared wind reverses the verdict, which is the whole point of the knob
-    assert "refining_forge_downwind" in f(_forge_map(700, 700, homes, windward="SE"))
-    assert "refining_forge_downwind" not in f(_forge_map(60, 60, homes, windward="SE"))
+    assert "refining_forge_downwind" in f_only(_forge_map(700, 700, homes, windward="SE"), "refining_forge_downwind")
+    assert "refining_forge_downwind" not in f_only(_forge_map(60, 60, homes, windward="SE"), "refining_forge_downwind")
 
 
 def test_refining_forge_downwind_abstains_when_the_map_has_no_dwellings():
     """Nothing to smoke over, nothing to judge - the rule must not divide by an empty centroid."""
-    assert "refining_forge_downwind" not in f(_forge_map(60, 60, ()))
+    assert "refining_forge_downwind" not in f_only(_forge_map(60, 60, ()), "refining_forge_downwind")
 
 
 def test_kiln_works_houses_its_workers_fires_on_a_lone_kiln():
@@ -699,8 +704,8 @@ def test_kiln_works_houses_its_workers_fires_on_a_lone_kiln():
     rather than at its customers, and the trade was organized in kiln households living at their
     kilns (Song/Ming kiln districts first, Seto/Tokoname/Imado corroborating). So a kiln drawn as a
     lone glyph is recording a place nobody could work."""
-    assert "kiln_works_houses_its_workers" in f(_kiln_map(quarters=()))
-    assert "kiln_works_houses_its_workers" not in f(_kiln_map())
+    assert "kiln_works_houses_its_workers" in f_only(_kiln_map(quarters=()), "kiln_works_houses_its_workers")
+    assert "kiln_works_houses_its_workers" not in f_only(_kiln_map(), "kiln_works_houses_its_workers")
 
 
 def test_kiln_keeps_fire_gap_fires_on_a_cottage_against_the_kiln():
@@ -711,22 +716,22 @@ def test_kiln_keeps_fire_gap_fires_on_a_cottage_against_the_kiln():
     # kiln body bottom edge is at 470 + 8; cottage half-height is 9
     tight = _kiln_map(quarters=((500.0, 470 + 8 + 20 + 9),))
     clear = _kiln_map(quarters=((500.0, 470 + 8 + 70 + 9),))
-    assert "kiln_keeps_fire_gap" in f(tight)
-    assert "kiln_keeps_fire_gap" not in f(clear)
+    assert "kiln_keeps_fire_gap" in f_only(tight, "kiln_keeps_fire_gap")
+    assert "kiln_keeps_fire_gap" not in f_only(clear, "kiln_keeps_fire_gap")
 
 
 def test_kiln_keeps_fire_gap_also_measures_the_settlements_own_structures():
     """Not just the works' own cottages - the gap is owed to every footprint on the map. A works
     whose own quarters stand clear but which crowds a neighbor's house is the same hazard."""
-    assert "kiln_keeps_fire_gap" in f(_kiln_map(houses=[house(500, 470 - 8 - 20 - 9)]))
-    assert "kiln_keeps_fire_gap" not in f(_kiln_map(houses=[house(500, 470 - 8 - 70 - 9)]))
+    assert "kiln_keeps_fire_gap" in f_only(_kiln_map(houses=[house(500, 470 - 8 - 20 - 9)]), "kiln_keeps_fire_gap")
+    assert "kiln_keeps_fire_gap" not in f_only(_kiln_map(houses=[house(500, 470 - 8 - 70 - 9)]), "kiln_keeps_fire_gap")
 
 
 def test_kiln_keeps_fire_gap_fails_a_record_that_cannot_be_measured():
     """A record with no `body` FAILS rather than skipping. This file's standing hazard is that a
     check which never runs looks exactly like a check that passes - and a kiln whose body is not
     recorded is precisely a fire gap nobody can measure, which is the worse of the two states."""
-    assert "kiln_keeps_fire_gap" in f(_kiln_map(body=None))
+    assert "kiln_keeps_fire_gap" in f_only(_kiln_map(body=None), "kiln_keeps_fire_gap")
 
 
 @pytest.mark.tiers("city")
@@ -734,7 +739,7 @@ def test_kiln_keeps_fire_gap_measures_in_REAL_feet_not_pixels():
     """The threshold converts through meta.ftpx, so 60 ft means the same distance at every tier
     rather than silently becoming 180 ft on a 3 ft/px city sheet."""
     M = _kiln_map(quarters=((500.0, 470 + 8 + 20 + 9),), ftpx=3)  # the same PIXEL gap is now 60 real ft
-    assert "kiln_keeps_fire_gap" not in f(M)
+    assert "kiln_keeps_fire_gap" not in f_only(M, "kiln_keeps_fire_gap")
 
 
 def test_kiln_keeps_fire_gap_is_measured_on_the_ROTATED_cottage():
@@ -747,7 +752,7 @@ def test_kiln_keeps_fire_gap_is_measured_on_the_ROTATED_cottage():
     # seat outside [562, 567) is read the same way by both and proves nothing; the first draft of
     # this test used one, passed under the revert, and was worthless.
     tight = _kiln_map(quarters=((500.0, 564.0),), rot=90.0)
-    assert "kiln_keeps_fire_gap" in f(tight)
+    assert "kiln_keeps_fire_gap" in f_only(tight, "kiln_keeps_fire_gap")
 
 
 # ---- found by the settlement-review agent, 2026-07-26 -------------------------------------------
@@ -760,9 +765,9 @@ def test_manor_walls_clear_of_ways_fires_on_a_road_through_the_compound():
     M = manifest(meta={"scale": "town", "ftpx": 1, "W": 1200, "H": 1200})
     M["manors"] = [{"x": 600, "y": 300, "w": 290, "h": 200, "rot": 0, "label": "Magistrate's Manor"}]
     M["road"], M["road_width"] = [[0, 395], [1200, 395]], 26  # north edge 382, INSIDE the south wall at 400
-    assert "manor_walls_clear_of_ways" in f(M)
+    assert "manor_walls_clear_of_ways" in f_only(M, "manor_walls_clear_of_ways")
     M["road"] = [[0, 460], [1200, 460]]  # north edge 447, clear of it
-    assert "manor_walls_clear_of_ways" not in f(M)
+    assert "manor_walls_clear_of_ways" not in f_only(M, "manor_walls_clear_of_ways")
 
 
 @pytest.mark.tiers("town")
@@ -779,12 +784,12 @@ def test_structures_stay_on_their_side_of_a_border():
         M["buildings"] = list(extra_buildings)
         return M
 
-    assert "structures_stay_on_their_side_of_a_border" not in f(bmap(bldg(600, 400)))
-    assert "structures_stay_on_their_side_of_a_border" in f(bmap(bldg(1000, 400)))  # over the line
+    assert "structures_stay_on_their_side_of_a_border" not in f_only(bmap(bldg(600, 400)), "structures_stay_on_their_side_of_a_border")
+    assert "structures_stay_on_their_side_of_a_border" in f_only(bmap(bldg(1000, 400)), "structures_stay_on_their_side_of_a_border")  # over the line
     # a garden or a yard counts too - it is our ground being claimed, not just our roofs
-    assert "structures_stay_on_their_side_of_a_border" in f(bmap(gardens=[garden(1020, 500)]))
+    assert "structures_stay_on_their_side_of_a_border" in f_only(bmap(gardens=[garden(1020, 500)]), "structures_stay_on_their_side_of_a_border")
     # ...and a compound whose WALL sits on the line but whose CENTER is ours stays legal
-    assert "structures_stay_on_their_side_of_a_border" not in f(bmap(manors=[{"x": 755, "y": 300, "w": 290, "h": 200, "rot": 0, "label": "M"}]))
+    assert "structures_stay_on_their_side_of_a_border" not in f_only(bmap(manors=[{"x": 755, "y": 300, "w": 290, "h": 200, "rot": 0, "label": "M"}]), "structures_stay_on_their_side_of_a_border")
 
 
 @pytest.mark.tiers("town")
@@ -792,19 +797,19 @@ def test_border_checks_abstain_when_there_is_no_border_or_no_housing():
     """A map with no drawn border has no side to be on, and one with no dwellings has no side to
     judge from - neither may raise a finding, and neither may crash."""
     M = manifest(meta={"scale": "town", "ftpx": 1, "W": 1200, "H": 1200}, buildings=[bldg(1000, 400)])
-    assert "structures_stay_on_their_side_of_a_border" not in f(M)
+    assert "structures_stay_on_their_side_of_a_border" not in f_only(M, "structures_stay_on_their_side_of_a_border")
     M["borders"] = [{"poly": [[900, 0], [900, 1200]], "label": "b"}]
     M["buildings"] = []
-    assert "structures_stay_on_their_side_of_a_border" not in f(M)
+    assert "structures_stay_on_their_side_of_a_border" not in f_only(M, "structures_stay_on_their_side_of_a_border")
 
 
 def test_features_do_not_overlap_catches_a_crop_plot_in_a_watercourse():
     """The defect this feature was opened for, caught by the GENERAL rule with no pair-specific code."""
     plot = [[500, 500], [560, 500], [560, 560], [500, 560]]
     M = _mx_map(dry_plots=[{"poly": plot, "crop": "barley", "theta": 0}], streams=[{"poly": [[530, 400], [530, 700]], "w": 9}])
-    assert "features_do_not_overlap" in f(M)
+    assert "features_do_not_overlap" in f_only(M, "features_do_not_overlap")
     M["streams"] = [{"poly": [[900, 400], [900, 700]], "w": 9}]  # moved clear
-    assert "features_do_not_overlap" not in f(M)
+    assert "features_do_not_overlap" not in f_only(M, "features_do_not_overlap")
 
 
 def test_matrix_permits_an_annex_on_its_OWN_parent_only():
@@ -813,8 +818,8 @@ def test_matrix_permits_an_annex_on_its_OWN_parent_only():
     express, and which the first pool run duly found twice."""
     own = _mx_map(buildings=[bldg(500, 500)], storehouses=[{"x": 500, "y": 512, "w": 20, "h": 14, "of": [500, 500]}])
     other = _mx_map(buildings=[bldg(500, 500), bldg(560, 500)], storehouses=[{"x": 556, "y": 500, "w": 20, "h": 14, "of": [500, 500]}])
-    assert "features_do_not_overlap" not in f(own)
-    assert "features_do_not_overlap" in f(other)
+    assert "features_do_not_overlap" not in f_only(own, "features_do_not_overlap")
+    assert "features_do_not_overlap" in f_only(other, "features_do_not_overlap")
 
 
 def test_matrix_permits_two_annexes_of_one_household_to_abut():
@@ -823,7 +828,7 @@ def test_matrix_permits_two_annexes_of_one_household_to_abut():
         threshing_yards=[yard(500, 540, of=(500, 500))],
         gardens=[garden(500, 552, of=(500, 500))],
     )
-    assert "features_do_not_overlap" not in f(M)
+    assert "features_do_not_overlap" not in f_only(M, "features_do_not_overlap")
 
 
 def test_matrix_permits_a_ditch_on_its_own_field_but_not_another():
@@ -849,16 +854,16 @@ def test_every_feature_classified_for_matrix_is_the_ratchet(monkeypatch):
     """A drawn key with no class must fail BY NAME - the whole promise is 'add one line and you are
     protected', which only holds if forgetting the line is loud."""
     M = _mx_map(houses=[house(500, 500)])
-    assert "every_feature_classified_for_matrix" not in f(M)
+    assert "every_feature_classified_for_matrix" not in f_only(M, "every_feature_classified_for_matrix")
     monkeypatch.delitem(check_village.OVERLAP_CLASS, "houses")
-    assert "every_feature_classified_for_matrix" in f(M)
+    assert "every_feature_classified_for_matrix" in f_only(M, "every_feature_classified_for_matrix")
 
 
 def test_matrix_reads_drawn_extents_not_envelopes():
     """A commons is an ENVELOPE around a sparse scatter and is permissive besides, so it is never
     even extracted; testing envelopes is what made the motivating survey over-report ~2x."""
     M = _mx_map(commons=[{"x": 500, "y": 500, "w": 400, "h": 400, "rot": 0, "role": "grazing", "poly": [[300, 300], [700, 300], [700, 700], [300, 700]]}], houses=[house(500, 500)])
-    assert "features_do_not_overlap" not in f(M)
+    assert "features_do_not_overlap" not in f_only(M, "features_do_not_overlap")
     assert not [e for e in check_village.matrix_extents(M) if e[0] == "commons"]
 
 
@@ -873,10 +878,10 @@ def test_farmsteads_reach_their_fields_unsevered_fires_across_a_road():
         "roads": [{"pts": [[0, 675], [1000, 675]], "w": 26}],
         "houses": [house(500, 700)],
     }
-    assert "farmsteads_reach_their_fields_unsevered" in f(M)
+    assert "farmsteads_reach_their_fields_unsevered" in f_only(M, "farmsteads_reach_their_fields_unsevered")
     # a second field on the house's own side of the road un-severs it
     M["fields"].append({"name": "f2", "kind": "paddy", "bbox": [600, 700, 750, 800], "outline": [[600, 700], [750, 700], [750, 800], [600, 800]]})
-    assert "farmsteads_reach_their_fields_unsevered" not in f(M)
+    assert "farmsteads_reach_their_fields_unsevered" not in f_only(M, "farmsteads_reach_their_fields_unsevered")
 
 
 @pytest.mark.tiers("capital")
@@ -885,13 +890,13 @@ def test_population_consistency_runs_at_capital_and_counts_terrace_units():
     households under its one roof, so units count as dwellings toward the declared figure."""
     M = _capital_manifest()
     M["meta"]["population"] = 100
-    assert "population_consistent_with_housing" in f(M)  # zero dwellings vs 100 declared
+    assert "population_consistent_with_housing" in f_only(M, "population_consistent_with_housing")  # zero dwellings vs 100 declared
     M["terraces"] = [
         {"x": 300, "y": 300, "w": 108, "h": 7, "rot": 0, "units": 10, "z": 1},
         {"x": 600, "y": 300, "w": 108, "h": 7, "rot": 0, "units": 10, "z": 1},
     ]
     M["districts"] = [{"name": "castle foot", "kind": "terrace", "rank_band": "terrace", "poly": [[0, 0], [1000, 0], [1000, 1000], [0, 1000]]}]
-    assert "population_consistent_with_housing" not in f(M)  # 20 units x 5 = 100
+    assert "population_consistent_with_housing" not in f_only(M, "population_consistent_with_housing")  # 20 units x 5 = 100
 
 
 @pytest.mark.tiers("capital", "city")
@@ -914,9 +919,9 @@ def test_capital_population_counts_yashiki_manors_and_outwall_samurai():
     # the capital census counts the WHOLE cohort, suburbs included: 2 manors + 2 samurai +
     # 2 laborers + 2 terrace units = 8 dwellings = 40 people (WHERE the out-wall pair may
     # stand is city_commoner_dwellings_inside_walls' business, not the census's):
-    assert "population_consistent_with_housing" in f(M)  # declared 30 - off by two houses
+    assert "population_consistent_with_housing" in f_only(M, "population_consistent_with_housing")  # declared 30 - off by two houses
     M["meta"]["population"] = 40  # ...and 40 closes the arithmetic exactly
-    assert "population_consistent_with_housing" not in f(M)
+    assert "population_consistent_with_housing" not in f_only(M, "population_consistent_with_housing")
 
 
 @pytest.mark.tiers("capital", "city")
@@ -934,10 +939,10 @@ def test_capital_civic_quarter_tolerates_ceremonial_breadth():
     }
     Mc = _capital_manifest()
     Mc.update({k: v for k, v in base.items()})
-    assert "city_civic_quarter_not_mostly_open" not in f(Mc)
+    assert "city_civic_quarter_not_mostly_open" not in f_only(Mc, "city_civic_quarter_not_mostly_open")
     Mp = _capital_manifest(scale="city")
     Mp.update({k: v for k, v in base.items()})
-    assert "city_civic_quarter_not_mostly_open" in f(Mp)
+    assert "city_civic_quarter_not_mostly_open" in f_only(Mp, "city_civic_quarter_not_mostly_open")
 
 
 @pytest.mark.tiers("city")
@@ -948,9 +953,9 @@ def test_commoner_dwellings_at_the_wharf_suburb_are_exempt():
     hard-zero rule stands."""
     M = _capital_manifest()
     M["buildings"] = [{"x": 1500, "y": 500, "w": 12, "h": 9, "kind": "merchant", "rot": 0}]
-    assert "city_commoner_dwellings_inside_walls" in f(M)  # extramural, no wharf near
+    assert "city_commoner_dwellings_inside_walls" in f_only(M, "city_commoner_dwellings_inside_walls")  # extramural, no wharf near
     M["jetties"] = [{"x": 1520, "y": 560, "rot": 0, "len": 13, "z": 1}]
-    assert "city_commoner_dwellings_inside_walls" not in f(M)  # the same house IS the quay suburb
+    assert "city_commoner_dwellings_inside_walls" not in f_only(M, "city_commoner_dwellings_inside_walls")  # the same house IS the quay suburb
 
 
 @pytest.mark.tiers("capital")
@@ -1038,4 +1043,4 @@ def test_manor_walls_fire_when_a_way_ENDS_inside_the_compound():
     M = manifest(meta={"scale": "town", "ftpx": 1, "W": 1200, "H": 1200})
     M["manors"] = [{"x": 600, "y": 300, "w": 290, "h": 200, "rot": 0, "label": "Magistrate's Manor"}]
     M["road"], M["road_width"] = [[0, 300], [600, 300]], 26  # terminates ON the manor center
-    assert "manor_walls_clear_of_ways" in f(M)
+    assert "manor_walls_clear_of_ways" in f_only(M, "manor_walls_clear_of_ways")

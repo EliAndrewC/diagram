@@ -14,6 +14,7 @@ from tests.check_village._builders import (
     bldg,
     exground,
     f,
+    f_only,
     manifest,
     pspot,
 )
@@ -29,14 +30,14 @@ def test_kosatsuba_at_a_junction_may_face_either_way():
         "kosatsuba": [dict(_kosatsuba(500, 480), rot=90)],
         "town_streets": [{"pts": [[0, 500], [1000, 500]], "w": 28}, {"pts": [[540, 0], [540, 1000]], "w": 28}],
     }
-    assert "kosatsuba_faces_the_road" not in f(M)
+    assert "kosatsuba_faces_the_road" not in f_only(M, "kosatsuba_faces_the_road")
 
 
 @pytest.mark.tiers("city")
 def test_city_has_kosatsuba_fires_when_absent():
     # cities port the institution up (GM 2026-07-24): a city DRAWS the set
-    assert "city_has_kosatsuba" in f({"meta": {"scale": "city"}})
-    assert "city_has_kosatsuba" not in f({"meta": {"scale": "city", "kosatsuba": False}})
+    assert "city_has_kosatsuba" in f_only({"meta": {"scale": "city"}}, "city_has_kosatsuba")
+    assert "city_has_kosatsuba" not in f_only({"meta": {"scale": "city", "kosatsuba": False}}, "city_has_kosatsuba")
 
 
 @pytest.mark.tiers("city")
@@ -53,9 +54,9 @@ def test_city_kosatsuba_floor_is_gates_plus_central():
 def test_village_and_hamlet_have_kosatsuba():
     # the ofuregaki reached the peasantry through the village/hamlet board via the literate
     # headman (GM 2026-07-24); siting works off the LANE network at these tiers
-    assert "village_has_kosatsuba" in f({"meta": {"scale": "village"}})
-    assert "hamlet_has_kosatsuba" in f({"meta": {"scale": "hamlet"}})
-    assert "hamlet_has_kosatsuba" not in f({"meta": {"scale": "hamlet", "kosatsuba": False}})
+    assert "village_has_kosatsuba" in f_only({"meta": {"scale": "village"}}, "village_has_kosatsuba")
+    assert "hamlet_has_kosatsuba" in f_only({"meta": {"scale": "hamlet"}}, "hamlet_has_kosatsuba")
+    assert "hamlet_has_kosatsuba" not in f_only({"meta": {"scale": "hamlet", "kosatsuba": False}}, "hamlet_has_kosatsuba")
     # ...and stands ROADSIDE: 5 px = 10 ft off the lane at village grain (24 ft, the pre-2026-08-26 fixture, now fires - see test_hamlet_and_village_boards_must_be_roadside)
     ok = f({"meta": {"scale": "village", "ftpx": 2}, "kosatsuba": [_kosatsuba(500, 505)], "lanes": [{"pts": [[0, 500], [1000, 500]], "w": 5}]})
     assert "village_has_kosatsuba" not in ok and "kosatsuba_by_the_road" not in ok
@@ -73,7 +74,7 @@ def test_city_kosatsuba_per_gate_fires_on_an_uncovered_gate():
         "road": [[0, 500], [2000, 500]],
         "gates": [[520, 500], [1900, 500]],
     }
-    assert "city_kosatsuba_per_gate" in f(M)
+    assert "city_kosatsuba_per_gate" in f_only(M, "city_kosatsuba_per_gate")
 
 
 @pytest.mark.tiers("city")
@@ -84,7 +85,7 @@ def test_city_kosatsuba_per_gate_passes_when_every_gate_is_covered():
         "road": [[0, 500], [2000, 500]],
         "gates": [[520, 500], [1900, 500]],
     }
-    assert "city_kosatsuba_per_gate" not in f(M)
+    assert "city_kosatsuba_per_gate" not in f_only(M, "city_kosatsuba_per_gate")
 
 
 @pytest.mark.tiers("city", "town")
@@ -92,8 +93,8 @@ def test_city_kosatsuba_siting_threshold_is_scale_aware():
     # the ~60 ft siting limit is REAL feet: 30 px off the road passes at town grain (30 ft)
     # but fires at city grain (1 px = 3 ft -> 90 ft)
     road = [[0, 500], [1000, 500]]
-    assert "kosatsuba_by_the_road" not in f({"meta": {"scale": "town"}, "kosatsuba": [_kosatsuba(500, 530)], "road": road})
-    assert "kosatsuba_by_the_road" in f({"meta": {"scale": "city", "ftpx": 3}, "kosatsuba": [_kosatsuba(500, 530)], "road": road})
+    assert "kosatsuba_by_the_road" not in f_only({"meta": {"scale": "town"}, "kosatsuba": [_kosatsuba(500, 530)], "road": road}, "kosatsuba_by_the_road")
+    assert "kosatsuba_by_the_road" in f_only({"meta": {"scale": "city", "ftpx": 3}, "kosatsuba": [_kosatsuba(500, 530)], "road": road}, "kosatsuba_by_the_road")
     ok = f({"meta": {"scale": "city", "ftpx": 3}, "kosatsuba": [_kosatsuba(500, 515)], "road": road})
     assert "kosatsuba_by_the_road" not in ok and "city_has_kosatsuba" not in ok
 
@@ -106,14 +107,14 @@ def test_city_kosatsuba_siting_threshold_is_scale_aware():
 # looser legacy band and must fire.
 def test_households_consistent_uses_legacy_band_when_not_to_scale():
     M = {"meta": {"scale": "town", "households": 100}}  # town => scale != "village", no toscale => legacy band
-    assert "households_consistent" in f(M)
+    assert "households_consistent" in f_only(M, "households_consistent")
 
 
 # ---- defense_marsh_girds_the_walls (the engineered defensive wet belt, GM 2026-07-23) ----------
 def test_defense_marsh_girds_the_walls_needs_a_fortified_perimeter():
     # a defensive inundation on a map with NO wall or moat defends nothing
     M = {"meta": {}, "marshes": [{"x": 500, "y": 500, "w": 100, "h": 100, "role": "defense", "poly": [[450, 450], [550, 450], [550, 550], [450, 550]]}]}
-    assert "defense_marsh_girds_the_walls" in f(M)
+    assert "defense_marsh_girds_the_walls" in f_only(M, "defense_marsh_girds_the_walls")
 
 
 @pytest.mark.tiers("town")
@@ -124,7 +125,7 @@ def test_defense_marsh_girds_the_walls_fires_inside_the_circuit():
         "wall": [[300, 300], [700, 300], [700, 700], [300, 700]],
         "marshes": [{"x": 500, "y": 500, "w": 100, "h": 100, "role": "defense", "poly": [[450, 450], [550, 450], [550, 550], [450, 550]]}],
     }
-    assert "defense_marsh_girds_the_walls" in f(M)
+    assert "defense_marsh_girds_the_walls" in f_only(M, "defense_marsh_girds_the_walls")
 
 
 def test_defense_marsh_girds_the_walls_fires_when_detached():
@@ -134,7 +135,7 @@ def test_defense_marsh_girds_the_walls_fires_when_detached():
         "wall": [[300, 300], [700, 300], [700, 700], [300, 700]],
         "marshes": [{"x": 940, "y": 940, "w": 80, "h": 80, "role": "defense", "poly": [[900, 900], [980, 900], [980, 980], [900, 980]]}],
     }
-    assert "defense_marsh_girds_the_walls" in f(M)
+    assert "defense_marsh_girds_the_walls" in f_only(M, "defense_marsh_girds_the_walls")
 
 
 def test_defense_marsh_girds_the_walls_passes_hugging_the_moat():
@@ -145,37 +146,37 @@ def test_defense_marsh_girds_the_walls_passes_hugging_the_moat():
         "moat": [[280, 280], [720, 280], [720, 720], [280, 720], [280, 280]],
         "marshes": [{"x": 760, "y": 500, "w": 60, "h": 400, "role": "defense", "poly": [[730, 300], [790, 300], [790, 700], [730, 700]]}],
     }
-    assert "defense_marsh_girds_the_walls" not in f(M)
+    assert "defense_marsh_girds_the_walls" not in f_only(M, "defense_marsh_girds_the_walls")
 
 
 def test_defense_marsh_girds_the_walls_skips_a_degenerate_poly():
     # a 2-point sliver carries no area to test - skipped, no crash (and no wall demanded for it)
     M = {"meta": {}, "marshes": [{"x": 500, "y": 500, "w": 10, "h": 10, "role": "defense", "poly": [[490, 495], [510, 505]]}]}
-    assert "defense_marsh_girds_the_walls" not in f(M)
+    assert "defense_marsh_girds_the_walls" not in f_only(M, "defense_marsh_girds_the_walls")
 
 
 @pytest.mark.tiers("town")
 def test_town_samurai_housing_varied_fires_on_uniform_small_houses():
     M = {"meta": {"scale": "town", "population": 100}, "buildings": [_dw(400 + i * 60, 400, "samurai") for i in range(6)]}
-    assert "town_samurai_housing_varied" in f(M)
+    assert "town_samurai_housing_varied" in f_only(M, "town_samurai_housing_varied")
 
 
 @pytest.mark.tiers("town")
 def test_town_samurai_housing_varied_passes_with_a_senior_house():
     M = {"meta": {"scale": "town", "population": 100}, "buildings": [_dw(400, 340, "samurai_large")] + [_dw(400 + i * 60, 400, "samurai") for i in range(5)]}
-    assert "town_samurai_housing_varied" not in f(M)
+    assert "town_samurai_housing_varied" not in f_only(M, "town_samurai_housing_varied")
 
 
 @pytest.mark.tiers("town")
 def test_burakumin_quarter_segregated_fires_when_interleaved():
     M = {"meta": {"scale": "town", "population": 100}, "buildings": [_dw(500, 500, "burakumin"), _dw(530, 510, "laborer")]}
-    assert "burakumin_quarter_segregated" in f(M)
+    assert "burakumin_quarter_segregated" in f_only(M, "burakumin_quarter_segregated")
 
 
 @pytest.mark.tiers("town")
 def test_burakumin_quarter_segregated_passes_with_open_ground_between():
     M = {"meta": {"scale": "town", "population": 100}, "buildings": [_dw(500, 500, "burakumin"), _dw(700, 500, "laborer")]}
-    assert "burakumin_quarter_segregated" not in f(M)
+    assert "burakumin_quarter_segregated" not in f_only(M, "burakumin_quarter_segregated")
 
 
 def test_marsh_on_low_ground_exempts_the_waterside_fringe():
@@ -186,13 +187,13 @@ def test_marsh_on_low_ground_exempts_the_waterside_fringe():
         "fields": [{"name": "p", "kind": "paddy", "outline": [[300, 300], [1100, 300], [1100, 1100], [300, 1100]], "bbox": [300, 300, 1100, 1100]}],
     }
     west_fringe = {**base, "marshes": [{"x": 200, "y": 700, "w": 200, "h": 900, "rot": 0, "role": "waterside", "poly": [[100, 250], [300, 250], [300, 1150], [100, 1150]]}]}
-    assert "marsh_on_low_ground" not in f(west_fringe)  # same fall as the field centroid - exempt
+    assert "marsh_on_low_ground" not in f_only(west_fringe, "marsh_on_low_ground")  # same fall as the field centroid - exempt
     uphill_toe = {**base, "marshes": [{"x": 700, "y": 200, "w": 800, "h": 200, "rot": 0, "role": "toe", "poly": [[300, 100], [1100, 100], [1100, 300], [300, 300]]}]}
-    assert "marsh_on_low_ground" in f(uphill_toe)  # a TOE marsh uphill of the paddy still fires
+    assert "marsh_on_low_ground" in f_only(uphill_toe, "marsh_on_low_ground")  # a TOE marsh uphill of the paddy still fires
 
 
 def test_drain_runs_cross_slope_fires_on_a_drain_running_with_the_fall():
-    assert "drain_runs_cross_slope" in f(_drain_map())
+    assert "drain_runs_cross_slope" in f_only(_drain_map(), "drain_runs_cross_slope")
 
 
 @pytest.mark.tiers("city")
@@ -202,7 +203,7 @@ def test_drain_runs_cross_slope_uses_the_FIELD_s_own_fall_not_the_map_s():
     # cannot describe it (Tango's fans span 210 deg).
     M = _drain_map()
     M["fields"][0]["down_deg"] = 0
-    assert "drain_runs_cross_slope" not in f(M)
+    assert "drain_runs_cross_slope" not in f_only(M, "drain_runs_cross_slope")
 
 
 def test_drain_runs_cross_slope_exempts_a_trimmed_inwall_drain():
@@ -210,7 +211,7 @@ def test_drain_runs_cross_slope_exempts_a_trimmed_inwall_drain():
     # so what remains is the last leg to the outfall - a stub, not a contour collector
     M = _drain_map()
     M["field_ditches"][0]["trimmed"] = True
-    assert "drain_runs_cross_slope" not in f(M)
+    assert "drain_runs_cross_slope" not in f_only(M, "drain_runs_cross_slope")
 
 
 def test_drain_flows_downhill_reads_the_NAMED_discharge_channel_over_an_uphill_edge():
@@ -222,7 +223,7 @@ def test_drain_flows_downhill_reads_the_NAMED_discharge_channel_over_an_uphill_e
         field_ditches=[{"role": "drain", "field": "f1", "poly": [[400, 20], [700, 300]], "w": 1.5}],
         channels=[{"poly": [[700, 300], [780, 360]], "frm": {"kind": "drain", "name": "f1"}, "to": {"kind": "offmap"}, "w": 2.5}],
     )
-    assert "drain_flows_downhill" not in f(M)
+    assert "drain_flows_downhill" not in f_only(M, "drain_flows_downhill")
 
 
 def test_drain_flows_downhill_ignores_a_discharge_channel_naming_ANOTHER_field():
@@ -232,7 +233,7 @@ def test_drain_flows_downhill_ignores_a_discharge_channel_naming_ANOTHER_field()
         field_ditches=[{"role": "drain", "field": "f1", "poly": [[400, 20], [700, 300]], "w": 1.5}],
         channels=[{"poly": [[700, 300], [780, 360]], "frm": {"kind": "drain", "name": "SOMEWHERE-ELSE"}, "to": {"kind": "offmap"}, "w": 2.5}],
     )
-    assert "drain_flows_downhill" in f(M)
+    assert "drain_flows_downhill" in f_only(M, "drain_flows_downhill")
 
 
 def test_drain_flows_downhill_still_fires_on_a_genuinely_backwards_drain():
@@ -241,7 +242,7 @@ def test_drain_flows_downhill_still_fires_on_a_genuinely_backwards_drain():
         streams=[{"poly": [[300, 250], [900, 250]], "w": 8, "flow": "forward", "flow_deg": 0.0, "frm": {"kind": "offmap"}, "to": {"kind": "offmap"}}],
         field_ditches=[{"role": "drain", "field": "f1", "poly": [[400, 260], [430, 800]], "w": 1.5}],
     )
-    assert "drain_flows_downhill" in f(M)
+    assert "drain_flows_downhill" in f_only(M, "drain_flows_downhill")
 
 
 @pytest.mark.tiers("city")
@@ -273,45 +274,45 @@ def test_the_justice_works_are_forbidden_below_a_seat_of_justice():
 def test_burakumin_quarter_segregated_passes_across_a_real_seam():
     # The control for the ratchet entry: 60 ft of open ground between the walls is the rule met.
     M = manifest(meta={"scale": "town", "ftpx": 1, "W": 2000, "H": 2000}, buildings=[bldg(500, 500, kind="burakumin", w=38, h=26), bldg(500 + 19 + 17 + 61, 500, kind="laborer", w=34, h=24)])
-    assert "burakumin_quarter_segregated" not in f(M)
+    assert "burakumin_quarter_segregated" not in f_only(M, "burakumin_quarter_segregated")
 
 
 def test_bund_beans_on_bunds_fires_on_a_bead_buried_by_a_later_plot():
     # a bead on the host's east bund (x=400) sits 100px inside the filler, which paints after
     # its host - the bund stroke under it is not visible ground on the finished map
-    assert "bund_beans_on_bunds" in f(_bb_M([[400, 300]], [_BB_HOST, _BB_FILLER]))
+    assert "bund_beans_on_bunds" in f_only(_bb_M([[400, 300]], [_BB_HOST, _BB_FILLER]), "bund_beans_on_bunds")
 
 
 def test_bund_beans_on_bunds_fires_on_a_bead_in_open_ground():
     # a bead near no bund at all (the bare fan floor)
-    assert "bund_beans_on_bunds" in f(_bb_M([[700, 700]], [_BB_HOST, _BB_FILLER]))
+    assert "bund_beans_on_bunds" in f_only(_bb_M([[700, 700]], [_BB_HOST, _BB_FILLER]), "bund_beans_on_bunds")
 
 
 def test_bund_beans_on_bunds_passes_beads_on_visible_bunds():
     # the host's west bund (x=200) stands clear of the filler; and a bead on the FILLER's own
     # west bund (x=300), though it lies deep inside the host, is legal - the filler paints
     # last, so its stroke is the visible one and the bead reads as sitting on that seam
-    assert "bund_beans_on_bunds" not in f(_bb_M([[200, 300], [300, 300]], [_BB_HOST, _BB_FILLER]))
+    assert "bund_beans_on_bunds" not in f_only(_bb_M([[200, 300], [300, 300]], [_BB_HOST, _BB_FILLER]), "bund_beans_on_bunds")
 
 
 def test_bund_beans_on_bunds_skips_manifests_without_the_recording():
     # pre-2026-08-15 manifests record no plot_rings; regeneration adds them (the recording is
     # unconditional at the one draw site - see test_draw_comb_field_records_rings_and_beads)
-    assert "bund_beans_on_bunds" not in f(_bb_M([[400, 300]], []))
+    assert "bund_beans_on_bunds" not in f_only(_bb_M([[400, 300]], []), "bund_beans_on_bunds")
 
 
 def test_bund_beans_on_bunds_survives_geometry_far_off_the_canvas():
     # negative fixtures carry deliberately insane geometry; the index box is clamped to the
     # canvas on insert, so an off-map ring is skipped (it is not visible ground - a bead
     # claiming to sit on it still fires) instead of allocating billions of grid cells
-    assert "bund_beans_on_bunds" in f(_bb_M([[9000000, 300]], [[[8999900, 200], [9000100, 200], [9000100, 400], [8999900, 400]]]))
+    assert "bund_beans_on_bunds" in f_only(_bb_M([[9000000, 300]], [[[8999900, 200], [9000100, 200], [9000100, 400], [8999900, 400]]]), "bund_beans_on_bunds")
 
 
 def test_bund_beans_on_bunds_fires_on_a_bead_under_the_ditch_nets_stroke():
     # the ditch net draws LATE - over bund and bead alike - so a bead inside a late stroke's
     # drawn band is buried ink: the record attests a bead nobody can see
     M = {**_bb_M([[200, 300]], [_BB_HOST]), "drawn_channels": [{"pts": [[200, 180], [200, 420]], "late": True, "w0": 8.0, "w1": 8.0}]}
-    assert "bund_beans_on_bunds" in f(M)
+    assert "bund_beans_on_bunds" in f_only(M, "bund_beans_on_bunds")
 
 
 def test_bund_beans_on_bunds_ignores_early_water_and_the_banks():
@@ -325,15 +326,15 @@ def test_bund_beans_on_bunds_ignores_early_water_and_the_banks():
             {"pts": [[205, 180], [205, 420]], "late": True, "w0": 8.0, "w1": 8.0},
         ],
     }
-    assert "bund_beans_on_bunds" not in f(M)
+    assert "bund_beans_on_bunds" not in f_only(M, "bund_beans_on_bunds")
 
 
 def test_bund_beans_on_bunds_fires_on_a_bead_in_pond_water():
     # the source pond and a pocket pond both paint water over the bead's ground; a degenerate
     # pond thinner than the tolerance cannot bury anything (the guard, not a verdict)
-    assert "bund_beans_on_bunds" in f({**_bb_M([[200, 300]], [_BB_HOST]), "pond": [200, 300, 30, 20]})
-    assert "bund_beans_on_bunds" in f({**_bb_M([[200, 300]], [_BB_HOST]), "field_ponds": [{"x": 200, "y": 300, "rx": 30, "ry": 20}]})
-    assert "bund_beans_on_bunds" not in f({**_bb_M([[200, 300]], [_BB_HOST]), "pond": [200, 300, 1.5, 1.5]})
+    assert "bund_beans_on_bunds" in f_only({**_bb_M([[200, 300]], [_BB_HOST]), "pond": [200, 300, 30, 20]}, "bund_beans_on_bunds")
+    assert "bund_beans_on_bunds" in f_only({**_bb_M([[200, 300]], [_BB_HOST]), "field_ponds": [{"x": 200, "y": 300, "rx": 30, "ry": 20}]}, "bund_beans_on_bunds")
+    assert "bund_beans_on_bunds" not in f_only({**_bb_M([[200, 300]], [_BB_HOST]), "pond": [200, 300, 1.5, 1.5]}, "bund_beans_on_bunds")
 
 
 # ---- comb_floor_ends_at_the_collector: floor past the (flat-extended) drain line -------------
@@ -601,8 +602,8 @@ def _worth_M(rings, cell=1488.0, gen="hamletgen"):
 
 def test_paddy_basins_are_worth_their_bund_fires_on_a_fragment_of_the_design_cell():
     # 0.20 of a 1,488 sq ft cell is 298; a 15 x 15 basin is 225, a 40 x 40 one is 1,600.
-    assert "paddy_basins_are_worth_their_bund" in f(_worth_M([_box(100, 100, 140, 140), _box(300, 300, 315, 315)]))
-    assert "paddy_basins_are_worth_their_bund" not in f(_worth_M([_box(100, 100, 140, 140), _box(300, 300, 340, 340)]))
+    assert "paddy_basins_are_worth_their_bund" in f_only(_worth_M([_box(100, 100, 140, 140), _box(300, 300, 315, 315)]), "paddy_basins_are_worth_their_bund")
+    assert "paddy_basins_are_worth_their_bund" not in f_only(_worth_M([_box(100, 100, 140, 140), _box(300, 300, 340, 340)]), "paddy_basins_are_worth_their_bund")
 
 
 def test_paddy_basins_are_worth_their_bund_skips_a_field_recording_no_design_cell():
@@ -611,7 +612,7 @@ def test_paddy_basins_are_worth_their_bund_skips_a_field_recording_no_design_cel
     # on the map the check does not run at all rather than passing vacuously.
     M = _worth_M([_box(300, 300, 315, 315)])
     del M["fields"][0]["cell"]
-    assert "paddy_basins_are_worth_their_bund" not in f(M)
+    assert "paddy_basins_are_worth_their_bund" not in f_only(M, "paddy_basins_are_worth_their_bund")
 
 
 def test_paddy_basins_are_worth_their_bund_ignores_a_degenerate_ring():
@@ -619,12 +620,12 @@ def test_paddy_basins_are_worth_their_bund_ignores_a_degenerate_ring():
     # floor stated as an area - but it is not a basin at all and there is nothing to absorb. The
     # guard is defensive (no shipped manifest carries one), which is exactly why it needs a test:
     # without one the branch is unreachable and a later edit could invert it unnoticed.
-    assert "paddy_basins_are_worth_their_bund" not in f(_worth_M([_box(100, 100, 140, 140), [[500, 500], [520, 500]]]))
+    assert "paddy_basins_are_worth_their_bund" not in f_only(_worth_M([_box(100, 100, 140, 140), [[500, 500], [520, 500]]]), "paddy_basins_are_worth_their_bund")
 
 
 def test_paddy_basins_are_worth_their_bund_is_off_for_a_legacy_map():
     # no meta.generated_by = a legacy comb map; it inherits the rule at conversion (migration doctrine)
-    assert "paddy_basins_are_worth_their_bund" not in f(_worth_M([_box(300, 300, 315, 315)], gen=None))
+    assert "paddy_basins_are_worth_their_bund" not in f_only(_worth_M([_box(300, 300, 315, 315)], gen=None), "paddy_basins_are_worth_their_bund")
 
 
 def _stag_M(rings, gen="hamletgen", ftpx=1.0):
@@ -643,27 +644,27 @@ _STRAIGHT = [[100, 0], [100, 300], [300, 300], [300, 0]]
 
 
 def test_paddy_bunds_do_not_stagger_fires_on_a_flight_of_steps():
-    assert "paddy_bunds_do_not_stagger" in f(_stag_M([_STAIR]))
+    assert "paddy_bunds_do_not_stagger" in f_only(_stag_M([_STAIR]), "paddy_bunds_do_not_stagger")
 
 
 def test_paddy_bunds_do_not_stagger_allows_a_single_nudge():
     # ONE step is an awkward corner where a scrap of ground had one home; a FLIGHT of them is a weld
     # pitch out of register with the fabric. The absolute rule lives in tools/jogs.py.
-    assert "paddy_bunds_do_not_stagger" not in f(_stag_M([_ONE_STEP]))
-    assert "paddy_bunds_do_not_stagger" not in f(_stag_M([_STRAIGHT]))
+    assert "paddy_bunds_do_not_stagger" not in f_only(_stag_M([_ONE_STEP]), "paddy_bunds_do_not_stagger")
+    assert "paddy_bunds_do_not_stagger" not in f_only(_stag_M([_STRAIGHT]), "paddy_bunds_do_not_stagger")
 
 
 def test_paddy_bunds_do_not_stagger_passes_steps_too_small_to_see():
     # 2 ft is under the 3 ft floor `paddy_plot_seams_shared` reasons to from AZE_FT: two bunds this
     # close draw as one line.
     tiny = [[100, 0], [100, 60], [102, 60], [102, 120], [104, 120], [104, 300], [300, 300], [300, 0]]
-    assert "paddy_bunds_do_not_stagger" not in f(_stag_M([tiny]))
+    assert "paddy_bunds_do_not_stagger" not in f_only(_stag_M([tiny]), "paddy_bunds_do_not_stagger")
 
 
 def test_paddy_bunds_do_not_stagger_passes_long_limbs():
     # a 40 ft hop is not a step in a wall, it is a LIMB - the honest odd shape reclamation leaves
     limbs = [[100, 0], [100, 60], [140, 60], [140, 120], [180, 120], [180, 300], [400, 300], [400, 0]]
-    assert "paddy_bunds_do_not_stagger" not in f(_stag_M([limbs]))
+    assert "paddy_bunds_do_not_stagger" not in f_only(_stag_M([limbs]), "paddy_bunds_do_not_stagger")
 
 
 def test_paddy_bunds_do_not_stagger_passes_a_gently_curving_bund():
@@ -671,13 +672,13 @@ def test_paddy_bunds_do_not_stagger_passes_a_gently_curving_bund():
     # near-parallel, with a few feet of offset coming purely from the bend. Kuwabata's long curved
     # parcels reported 57 steps on 43 rings without the corner test and 0 with it.
     curve = [[0, 0]] + [[30 * k, 7 * k + 1.5 * k * k] for k in range(1, 9)] + [[240, 500], [0, 500]]
-    assert "paddy_bunds_do_not_stagger" not in f(_stag_M([curve]))
+    assert "paddy_bunds_do_not_stagger" not in f_only(_stag_M([curve]), "paddy_bunds_do_not_stagger")
 
 
 def test_paddy_bunds_do_not_stagger_passes_a_narrow_basin_on_its_own_end_wall():
     # THE REASON HEADINGS ARE COMPARED OVER THE FULL CIRCLE. A thin rectangle is two long parallel
     # runs a short link apart, which modulo 180 deg is indistinguishable from a step.
-    assert "paddy_bunds_do_not_stagger" not in f(_stag_M([[[100, 100], [100, 112], [400, 112], [400, 100]]]))
+    assert "paddy_bunds_do_not_stagger" not in f_only(_stag_M([[[100, 100], [100, 112], [400, 112], [400, 100]]]), "paddy_bunds_do_not_stagger")
 
 
 def test_paddy_bunds_do_not_stagger_reads_the_step_in_feet_at_city_scale():
@@ -685,18 +686,18 @@ def test_paddy_bunds_do_not_stagger_reads_the_step_in_feet_at_city_scale():
     # same way at every tier: at ftpx 3 a 1 px hop is 3 real ft and on the floor, 0.6 px is under it.
     big = [[100, 0], [100, 20], [101, 20], [101, 40], [102, 40], [102, 100], [200, 100], [200, 0]]
     small = [[100, 0], [100, 20], [100.6, 20], [100.6, 40], [101.2, 40], [101.2, 100], [200, 100], [200, 0]]
-    assert "paddy_bunds_do_not_stagger" in f(_stag_M([big], ftpx=3.0))
-    assert "paddy_bunds_do_not_stagger" not in f(_stag_M([small], ftpx=3.0))
+    assert "paddy_bunds_do_not_stagger" in f_only(_stag_M([big], ftpx=3.0), "paddy_bunds_do_not_stagger")
+    assert "paddy_bunds_do_not_stagger" not in f_only(_stag_M([small], ftpx=3.0), "paddy_bunds_do_not_stagger")
 
 
 def test_paddy_bunds_do_not_stagger_ignores_a_quad():
     # a four-vertex ring has no room for a run, a hop and the run resuming
-    assert "paddy_bunds_do_not_stagger" not in f(_stag_M([[[100, 100], [100, 200], [200, 205], [200, 100]]]))
+    assert "paddy_bunds_do_not_stagger" not in f_only(_stag_M([[[100, 100], [100, 200], [200, 205], [200, 100]]]), "paddy_bunds_do_not_stagger")
 
 
 def test_paddy_bunds_do_not_stagger_is_off_for_a_legacy_map():
     # no meta.generated_by = a legacy comb map; it inherits the rule at conversion (migration doctrine)
-    assert "paddy_bunds_do_not_stagger" not in f(_stag_M([_STAIR], gen=None))
+    assert "paddy_bunds_do_not_stagger" not in f_only(_stag_M([_STAIR], gen=None), "paddy_bunds_do_not_stagger")
 
 
 def test_hamlet_and_village_boards_must_be_roadside():
@@ -704,6 +705,6 @@ def test_hamlet_and_village_boards_must_be_roadside():
     # (center to lane centerline) - 24 ft off, Inashiro's old seat, fires; 10 ft passes.
     # Towns keep the 60 ft rule until their maps re-roll.
     lane = [[0, 500], [1000, 500]]
-    assert "kosatsuba_by_the_road" in f({"meta": {"scale": "hamlet", "ftpx": 1}, "kosatsuba": [_kosatsuba(500, 524)], "lane": lane})
-    assert "kosatsuba_by_the_road" not in f({"meta": {"scale": "village", "ftpx": 2}, "kosatsuba": [_kosatsuba(500, 505)], "lane": lane})
-    assert "kosatsuba_by_the_road" not in f({"meta": {"scale": "town"}, "kosatsuba": [_kosatsuba(500, 524)], "road": lane})
+    assert "kosatsuba_by_the_road" in f_only({"meta": {"scale": "hamlet", "ftpx": 1}, "kosatsuba": [_kosatsuba(500, 524)], "lane": lane}, "kosatsuba_by_the_road")
+    assert "kosatsuba_by_the_road" not in f_only({"meta": {"scale": "village", "ftpx": 2}, "kosatsuba": [_kosatsuba(500, 505)], "lane": lane}, "kosatsuba_by_the_road")
+    assert "kosatsuba_by_the_road" not in f_only({"meta": {"scale": "town"}, "kosatsuba": [_kosatsuba(500, 524)], "road": lane}, "kosatsuba_by_the_road")
