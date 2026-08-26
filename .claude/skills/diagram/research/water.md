@@ -438,6 +438,18 @@ carries the sketch its fix would follow.
   just below the branch heads because the head itself is a confluence) and two more down the main
   (2.8 / 2.4 ft); the two 1.8 ft branches stay unplanked. The placer's wide-first seating and the
   single shared predicate are untouched, so the placer/check split cannot reopen.
+  *Review record (settlement-review, pass):* the three branch planks sit at the TAIL of each
+  branch's qualifying run, 160-250 ft below the head - because `n` is counted over the qualifying
+  run while the slot's `base` is still mid-ditch, and the wide-first sort takes the qualifying seat
+  nearest it. ACCEPTED: each lands exactly on a bund crossing mid-field, and a head seat would stand
+  ~120 ft from the canal plank at the junction. The width under a seat is `taper_w` (square-root
+  taper); the review's linear read gave 1.95 ft for one seat that the authoritative taper puts at
+  or above 2.0 - so that is the measurement to use, not w -> w_tail interpolated linearly. Also
+  noted, not worth a rule: the parallel pair at x~2225/2240 has one branch planked and its twin
+  12 ft away not, the price of two deliveries running 5-25 ft apart for 300 ft (pre-existing
+  geometry). And at 2.7 px against 3.0-3.7 px, the unplanked 1.8 ft branches are indistinguishable
+  from the planked ones on the page - the rule is invisible to a reader, which is fine: the map
+  shows some branches with a crossing and some without.
 - **ACCEPTED (not fixed) 2026-08-17: the visibility floor lands exactly on the paddy bund's stroke
   width.** `MIN_CHANNEL_PX` is 1.5 and `aze_w` at hamlet grain is also 1.5, so the finest water tier
   is drawn at precisely the width of the field boundaries it runs among, separated only by hue.

@@ -335,6 +335,15 @@ class BridgesMixin:
                 # ditch the gate required a plank on and the placer would not lay, because the
                 # placer's other constraints (houses, hem crop, other decks, oblique confluences)
                 # ruled out every wide seat and it had no way to say "then take the best one".
+                # WHERE THIS LANDS ON A TAPERING BRANCH (accepted, settlement-review 2026-08-26,
+                # feature 133 T11): `n` counts the QUALIFYING run but `base` is still the midpoint of
+                # the WHOLE ditch, so on a branch whose head 30-50% qualifies, the nearest qualifying
+                # seat to mid-ditch is the TAIL of that run - the plank lands 160-250 ft below the
+                # head, not at the widest water. Seating from the qualifying run instead would put it
+                # at the head, ~120 ft from the canal plank that already stands at the junction, and
+                # the review judged mid-field the better crossing. Left as is on purpose; the width
+                # under such a seat is `taper_w` (square-root taper), which is the authoritative
+                # measurement - a linear read of w -> w_tail understates it by ~0.05 ft.
                 for frac in sorted(_cands, key=lambda fr: (not _wide_enough(fr), abs(fr))):
                     _arc = max(0.0, min(total, base + frac * total))
                     px, py, ang = _at_arc(pts, seg, _arc)
