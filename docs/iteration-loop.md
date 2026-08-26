@@ -152,3 +152,29 @@ had a successful test run."* That is change-based test selection: map each test 
 imports/executes (coverage data from a green run gives this for free), then after a green run select
 only the tests whose footprint intersects the diff. Not built; the hand tags are the proof of
 concept it would replace.
+
+
+## The "collection" floor is not collection (measured 2026-08-26, after the GM asked for a quick-tests folder)
+
+The GM: *"could we not move the quick tests into their own folder, and then the pytest command
+which invokes the quick tests searches only that folder? ... save us, like, five seconds."* Measured
+with a per-file collect timer and a session profile - the earlier "5.4 s collection" figure was
+wrong about WHAT it was:
+
+| piece | measured |
+|---|---|
+| collecting all 91 files, one process (`--collect-only`, `-n 0`) | **1.0 s** of item creation (2.1 s wall with pytest's 0.8 s startup) |
+| a zero-test session, 1 worker | 2.1 s |
+| a zero-test session, 4 workers | 2.7 s |
+| a zero-test session, 22 workers | 5.7 s |
+| interpreter exit after importing the engine | negligible (0.6 s total process, 0.55 of it import) |
+| plugin autoload disabled | no change (only xdist and cov are installed) |
+
+So the floor is **~2 s of pytest startup + ~0.17 s per xdist worker** - each of the 22 workers is an
+interpreter that bootstraps over execnet, imports the engine (0.55 s) and collects the whole suite
+(1 s CPU) under 22-way contention, and the master waits for the slowest. Collection proper is 1 s of
+that and it happens in parallel. A quick-tests folder would skip the ~20% of items the tier and
+marker deselection already drops: **~0.2-0.4 s**, not 5. And fewer workers cut the fixed cost but
+cost more in execution (240 CPU-s / W): the optimum is more workers than we have cores. Not done.
+What WOULD move the floor is a persistent test runner (workers that stay warm between runs) - a
+different tool, noted, not pursued.
