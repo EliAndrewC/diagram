@@ -218,6 +218,7 @@ OPERATIONS: dict[str, tuple[str, str]] = {
     "l7r.diagram.tools.pack_audit": ("pack-audit", "cheap"),
     "l7r.diagram.tools.scatter_audit": ("scatter-audit", "cheap"),
     "l7r.diagram.tools.sun_audit": ("sun-audit", "cheap"),
+    "l7r.diagram.tools.family_census": ("family-census", "cheap"),  # feature 134: a read-only manifest census
     "l7r.diagram.tools.new_check": ("new-check", "cheap"),
     "l7r.diagram.tools.timings": ("timings", "cheap"),
 }

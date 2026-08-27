@@ -21,12 +21,14 @@ Checked off only when verified on Kuwabata (and Inashiro unchanged). T99 is the 
 
 ## Phase 2 - the conversion
 
-- [x] T20 the archetype in the spec and the plan: `mulberry_dike_fishpond` in FIELD_ARCHETYPES (not ROLLED), cardinal falls, the per-archetype polder table (cell, parcel mix, gap, mosaic), `pond_layout` as a rolled knob with Kuwabata pinned to mosaic; tests in tests/hamletgen/test_plan.py
+- [ ] T20 the archetype in the spec and the plan: `mulberry_dike_fishpond` in FIELD_ARCHETYPES (not ROLLED), cardinal falls, the per-archetype polder table (cell, parcel mix, gap, mosaic), `pond_layout` as a rolled knob with Kuwabata pinned to mosaic; tests in tests/hamletgen/test_plan.py
       given 2026-08-27T23:05Z | done 2026-08-27T23:40Z (with T21-T24; one sitting) | runs: quick x4, map x4, hamlet x3, family-census x2, gate-manifest x4
+      OPEN ONLY FOR T11: the code and the map are done; the box stays open until the source-reader confirms the entries (constitution v2.12.0 refuses a ticked physical task with an open box)
       note: the record already answered every number (`build_polder` TRUE-SCALE SIZING, research/archetypes.md 'Grid vs mosaic', 'The 6:4 water-to-dike ratio'); `POLDER_FABRIC`, `POND_LAYOUTS`, `DIKEPOND_CONVERSION` carry the why. The source-reader box is owed with T11: those entries' `Sources:` lines read 'not recorded'
       research: physical (the numbers are the record's: build_polder TRUE-SCALE SIZING, research 'Grid vs mosaic')
       - [x] research pass (the record: pointers above)  - [ ] source-reader confirmed (T11)  - [ ] recorded and cited (T11)
-- [x] T21 the stage: `stage_polder` parameterized by the table; the dike-pond path applies the wholesale overlay, declares `field_archetype` / `pond_layout` / `waterward`, draws the waterward reed fringe; every `== "polder_grid"` in the generator becomes `is_polder(plan)`; footbridge caps on the dike-pond ring
+- [ ] T21 the stage: `stage_polder` parameterized by the table; the dike-pond path applies the wholesale overlay, declares `field_archetype` / `pond_layout` / `waterward`, draws the waterward reed fringe; every `== "polder_grid"` in the generator becomes `is_polder(plan)`; footbridge caps on the dike-pond ring
+      OPEN ONLY FOR T11, as T20
       note: three defects met and fixed here (XIV): the windbreak drew over the header reservoir (`village_grove` had no pond keep-out); `_touch_junctions` closed a 30 ft lane onto its own start (a 28 ft loop, `lanes_bend_like_paths`); the fringe first went in the hinterland and was drawn over an already-routed connector (`roads_clear_of_marsh`) - now its own stage after the seat. The seams check stands aside for dike-pond fabric (two rings a dike apart ARE the system). Crossing caps: village on a toe flank -> that toe 3, far toe 0; at the head or foot -> both toes 2 (a capped-to-zero toe was a long ditch with no plank)
       research: physical (research 'Polder siting', 'Polder ring canal' crossings)
       - [x] research pass (the record: research/archetypes.md 'Polder siting', settlements.md 'Polder ring canal')  - [ ] source-reader confirmed (T11)  - [ ] recorded and cited (T11)
