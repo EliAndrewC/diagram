@@ -335,6 +335,7 @@ def main(argv: Sequence[str] | None = None) -> int:
     ap.add_argument("--down-deg", type=float, default=None)
     ap.add_argument("--sink", choices=("pond", "offmap"), default=None)
     ap.add_argument("--windward", default=None)
+    ap.add_argument("--bamboo", choices=("none", "homestead", "thicket", "both"), default=None, help="pin the bamboo knob (feature 133 T47: one map per knob value is owed at unlock)")
     ap.add_argument("--out", default=None, help="write <out>.svg/.png/.json")
     ap.add_argument("--no-render", action="store_true")
     ap.add_argument("--batch", type=int, default=0, help="roll N hamlets from consecutive seeds and gate them all")
@@ -358,7 +359,7 @@ def main(argv: Sequence[str] | None = None) -> int:
         return 0 if good == len(reports) else 1
 
     report = generate(
-        HamletSpec(name=args.name, seed=args.seed, households=args.households, down_deg=args.down_deg, water_sink=args.sink, windward=args.windward),
+        HamletSpec(name=args.name, seed=args.seed, households=args.households, down_deg=args.down_deg, water_sink=args.sink, windward=args.windward, bamboo=args.bamboo),
         out_base=args.out,
         render=not args.no_render,
     )

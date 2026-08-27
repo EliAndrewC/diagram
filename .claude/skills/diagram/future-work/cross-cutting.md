@@ -156,3 +156,13 @@ has hit repeatedly under a different name (`cluster_shape` was rolled, printed i
 and read by nothing for months). So: prefer the measurement wherever both exist. **Not implemented
 yet** - recorded here as DECIDED-AND-PENDING per the same 2026-08-24 direction that a code change
 should not be started mid-feature.
+
+## NOTE 2026-08-27 (feature 133 T90): the would-have-dispatched trail was empty for the whole period
+
+Zero entries between the lock (2026-08-25) and the unlock (2026-08-27). Not because nothing was
+built - 30 tasks landed in the clone - but because FR-006 refused every push before the route was
+decided, so the recorder (which fires when the GATED route would dispatch) never ran. `make ci-status`
+prints "(none)", which reads as "nothing wanted a build"; the honest reading is "no push got far
+enough to want one". A one-line change when it matters: `ci-status` could count the FR-006 refusals
+in the period beside the trail, so an empty trail says which of the two it is. Not a task - the
+audit's answer (should any have run? no) does not change either way.
