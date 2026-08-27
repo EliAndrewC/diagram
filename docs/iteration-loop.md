@@ -273,3 +273,18 @@ orphaned interpreters accumulating over months of sessions in one container.
 **The decision:** not built. ~1 s per run does not buy that lifecycle risk. The GM: *"I agree with
 that finding."* Reopen only if the per-run count makes a second matter AND pytest grows a way to
 reuse collection across processes.
+
+
+## A task clock is read, never estimated - second incident (2026-08-27, feature 133 T32)
+
+T11 recorded the first: an "elapsed 17 min" that was an estimate, corrected to 11 from the run-log.
+T32 did it again in the other direction - "~45 min" written into the task note at close, when the
+transcript clock says 12.5 min (request 02:19:00Z, final report 02:31:31Z). The GM then planned
+around the wrong number ("forty five minutes is obviously a lot longer than the six minutes ... I
+would like another detailed breakdown"), which is the whole cost: a wrong clock does not just
+misstate one task, it misleads the decision about what kind of task is affordable. The rule stands
+and gets a mechanism: **at close, the `given` stamp is already in the entry, so `elapsed` is
+`date -u` minus it - compute it, never type it.** The transcript breakdown for T32: 9.4 min model
+latency (75%), 2.1 min tool execution, 31 tool calls in 17 turns, three regen cycles of ~2.5 min
+each (measure, look, fix), the two longest single gaps the 75 s and 90 s it took to compose the two
+large code edits.
