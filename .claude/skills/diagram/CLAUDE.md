@@ -86,6 +86,7 @@ those before you argue with a rule.
 | [`dev/lessons.md`](dev/lessons.md) | A fix is not working and you are about to try another one - dead ends already walked, claims that turned out wrong, and the SHAPES those failures take |
 | [`dev/decisions.md`](dev/decisions.md) | You are about to build on a property of the engine nobody decided, or you are leaving a decision open for a later session |
 | [`dev/reviews.md`](dev/reviews.md) | You are about to launch `settlement-review`, `building-review` or `backstory-review` |
+| [`dev/skill-boundary.md`](dev/skill-boundary.md) | You are wondering whether building plans (Mode A) and settlement maps (Mode B) should be separate skills or packages, you are adding a new Mode A building type, or a Mode A `.gen.py` is about to appear - the 2026-08-27 decision to keep one skill, the prediction of what would change it (a generator, not a building count), and the order to split in when it does |
 
 [`future-work/`](future-work/CLAUDE.md) is the deferred-engineering backlog, split by map type on
 2026-08-24 - load `farming-communities.md` for hamlet/village work, `cities.md` for towns and above,
