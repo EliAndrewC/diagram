@@ -1,7 +1,13 @@
 <!--
 SYNC IMPACT REPORT
 ==================
-Version change: 2.8.0 → 2.9.0
+Version change: 2.9.0 → 2.10.0
+
+Version 2.10.0 (amended 2026-08-27, feature 133 T43): Principle XII gains "EVERY RESEARCH FINDING
+CITES ITS SOURCES, AND A SOURCE IS SOMETHING A READER CAN CHECK" - the GM's rule that citations are
+stored, not only reported, for the interactive map's sake; the source-quality order; AI-generated
+encyclopedias (Grokipedia) are never citable; a web-search summary is a pointer, not a source.
+MINOR.
 
 Version 2.9.0 (amended 2026-08-26, feature 133 T22): "Quick runs the unit form; the gate runs the
 integration form" - the GM's clarification that the quick suite had been carrying integration and
@@ -1202,6 +1208,22 @@ future pass does not reinvent it.
 This principle is NON-NEGOTIABLE because the failure it guards against is
 SILENT: historically impossible output looks perfectly fine, passes the gate,
 and is only caught if a human happens to ask about it.
+
+**EVERY RESEARCH FINDING CITES ITS SOURCES, AND A SOURCE IS SOMETHING A READER CAN CHECK**
+(GM 2026-08-27, feature 133 T43). A research entry - in `research/`, a feature's `research.md`,
+or wherever a finding is first written down - ends with a `**Sources:**` line naming what was
+consulted, registered by key in `research/SOURCES.md` with what each source was used FOR. This
+is not for the session that wrote it; it is for the interactive map the project is building
+toward, where a reader clicks a feature and is owed the source behind the claim - and it is what
+lets a later reader tell an over-stretched citation from a finding. Source quality, in order:
+primary and scholarly work first; a serious reference (a museum, a ministry, a university, a
+standards body, an established encyclopedia such as Wikipedia, and always its underlying
+references over the article itself); never an AI-generated encyclopedia or summary as a citable
+source (Grokipedia included): its content is machine-rewritten from other sources with no
+editorial community and no provenance a reader can follow, so citing it hands the reader a dead
+end. A web-search summary is a pointer to sources, never a source. Findings recorded before this
+rule without sources are re-sourced when next revisited (`research/SOURCES.md` keeps the queue),
+not rewritten wholesale.
 
 ### XIII. No Known Regressions (NON-NEGOTIABLE)
 

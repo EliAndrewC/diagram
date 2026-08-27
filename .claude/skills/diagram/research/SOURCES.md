@@ -6,6 +6,19 @@
 
 Cite by key in an entry's `**Sources:**` line. Add a key here the first time a source is used, with what it was used FOR - that second field is what makes a stale or over-stretched citation visible later.
 
+**Required, not optional** (GM 2026-08-27, constitution v2.10.0): every research finding cites its sources here. **What counts as a source**, in order: primary and scholarly work; a serious reference - museum, ministry, university, standards body, an established encyclopedia such as Wikipedia (and its underlying references over the article itself). **Never an AI-generated encyclopedia or summary** (Grokipedia included): machine-rewritten from other sources, no editorial community, no provenance a reader can follow - citing it hands the interactive map's reader a dead end. A web-search result summary is a pointer to sources, never a source.
+
+## Re-sourcing queue
+
+Findings recorded before the rule, or on a source the rule now excludes. Each is re-sourced when its entry is next revisited - not rewritten wholesale - and struck from this list then.
+
+- `zhengyi-householder-priests` (Grokipedia, *Zhengyi Dao*) - specs/016-minami-provincial-city/research.md; the Patheos half of the key stands
+- Economy of the Song dynasty (Grokipedia) - specs/107-ubame-town/research.md and research/urban-features.md, charcoal-driven demand
+- History of agriculture in China (Grokipedia) - research/urban-features.md
+- Nagoya Castle (Grokipedia; site documentation) - the site documentation half stands
+- Jokamachi surveys (Grokipedia; Nakasendo Way, *Castle Towns*) - the Nakasendo Way half stands
+
+
 ## Works cited
 
 ### `tabayashi-1986`

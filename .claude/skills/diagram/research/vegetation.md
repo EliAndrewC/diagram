@@ -134,8 +134,8 @@ shared with the marsh (one ramp for every soft edge, so two edges never read dif
 reason). Not built, recorded: an abandoned-coppice shrub layer is a real second form for a
 DESERTED settlement, never for an inhabited one.
 
-**Sources:** satoyama floor management and the coppice cycle (the Geography Hub and Grokipedia
-satoyama summaries; the abandoned-coppice shrub-layer succession study, AGRIS); woodland-edge
+**Sources:** satoyama floor management and the coppice cycle (the Geography Hub, and Wikipedia
+"Satoyama" with its references; the abandoned-coppice shrub-layer succession study, AGRIS); woodland-edge
 structure (Wikipedia "Woodland edge"; EUNIS "Thermophile woodland fringes"; Springer "Forest Edges,
 Scrub, Hedges and Their Herb Communities"); yashikirin as managed residence woodland (Forests 2025,
 Okinawa homestead windbreaks).
@@ -181,7 +181,7 @@ harmonic wobble and its 0.80 floor DRAWING conventions; the strip form a recorde
 Yamaguni district case study; the Indiana DLC "Village Commons in Japan"; Totman, *The Green
 Archipelago*); coppice management and cycle (Takeuchi et al., *Satoyama: The Traditional Rural
 Landscape of Japan*, Springer; Wikipedia "Satoyama"); the Musashino strip holdings (Kichijoji
-history, Grokipedia/Wikipedia; the shogunate's 1664 survey).
+history, Wikipedia "Kichijōji"; the shogunate's 1664 survey).
 
 
 ## Bamboo: how common, where it stood, and how to show it (researched 2026-08-27, feature 133 T42 - a question, not yet a rule)
@@ -229,7 +229,7 @@ bamboo at all (frost line) and where: the damp N/W strip of the cluster, a take-
 margin's shady end, or both; (4) the gate learns `bamboo_stands` in the overlap matrix and a
 legibility check (a stand under ~20 ft across does not read).
 
-**Sources:** satoyama composition and Edo farmstead groves (Grokipedia "Satoyama"; Japanese Wiki
+**Sources:** satoyama composition and Edo farmstead groves (Wikipedia "Satoyama"; Japanese Wiki
 Corpus "Satoyama"; Web Japan / Kids Web Japan on the Shirakawa farmstead); bamboo uses (Highlighting
 Japan 2022 "The Characteristics and Many Uses of Japanese Bamboo"); hardiness and the northern limit
 (PFAF and Gardenia on *Phyllostachys bambusoides* / *edulis*; the PMC study of moso and madake

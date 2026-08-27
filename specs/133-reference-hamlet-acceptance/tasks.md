@@ -201,6 +201,10 @@ _(from T11 on, each entry also carries its cycle plan before work starts - `scaf
       given 2026-08-27T13:46Z | done 2026-08-27T13:46Z | elapsed 0 min (a question: research pass + measurement + answer, no engine change) | runs: none
       note: measured - Inashiro draws 315 bamboo glyphs (20% of its 1,554 crown/culm glyphs, 311 of them inside the windbreak belt, 4 in the copse), each a to-scale single culm-and-top ~6 ft across that reads as nothing at fit zoom; research recorded in research/vegetation.md "Bamboo: how common, where, and how to show it"; the recommendation (a stand-level glyph at legibility scale + a per-settlement bamboo knob) is the GM's to name as a task.
 
+- [x] T43 **sources are stored, and Grokipedia is not one** - the GM (2026-08-27): *"are we storing the source citations? We should start doing that going forward ... Is that already a rule? If not, then we should make it a rule as part of this ... Do you think that I am overreacting by considering setting a project rule that says that we never use this as a source?"*
+      given 2026-08-27T14:09Z | done 2026-08-27T14:09Z | elapsed 0 min (docs-only: rule + re-sourcing) | runs: none
+      note: measured - citations WERE being stored (research/SOURCES.md keyed registry; ~100 `**Sources:**` lines) but the root CLAUDE.md still called them "optional (usually overkill)"; Grokipedia appeared 8 times (3 from this session, 5 older). Rule made: constitution v2.10.0 (Principle XII), root CLAUDE.md, SOURCES.md "what counts as a source" + a re-sourcing queue for the 5 older citations; today's 3 re-sourced to Wikipedia articles.
+
 ## Phase 9 - acceptance
 
 - [ ] T90 the would-have-dispatched audit (FR-005): every entry in the period, and for each whether it should have run; each "no" names a tooling change
