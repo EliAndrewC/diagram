@@ -15,6 +15,16 @@ def test_the_report_line_names_the_map_and_its_verdict() -> None:
     assert not bad.ok and "FAIL" in bad.line() and "a_check" in bad.line()
 
 
+def test_the_report_line_attributes_the_map_to_its_roll() -> None:
+    """Feature 133 T33 (GM 2026-08-27): a re-rolled map says so - attempt four shipped with a reversed
+    connector on T31 and nothing on the sheet or in the report attributed it."""
+    plan = a_plan()
+    first = hg.Report(plan=plan, failures=[]).line()
+    assert "attempt 1" in first and "re-rolled" not in first
+    fourth = hg.Report(plan=plan, failures=[], attempt=4, rerolled_after=["farmhouses_reach_a_way"] * 3).line()
+    assert "attempt 4 (re-rolled after: farmhouses_reach_a_way)" in fourth
+
+
 _PIN = {22: frozenset({"field_ringed"}), 24: frozenset({"paddy_bunds_clear_the_supply_channels"})}
 
 

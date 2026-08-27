@@ -134,6 +134,13 @@ _(from T11 on, each entry also carries its cycle plan before work starts - `scaf
       measure: per-vertex turn angles on every Inashiro lane; sharp-turn pairs within a short run (zigzag); a lane's non-adjacent segments within a tread of each other (loop); before/after
       verify: `make maps`, `make quick`, `make done`; the GM looks
 
+- [x] T33 **guard the 39-minute case** - the GM (2026-08-27): *"there are some fixes that we should make to prevent the thirty nine minute case. The fabricated shortcut should ideally have some extra tooling to block it from happening since it costs time. And I guess the engine mechanism that changes the map silently so that we have proper attribution for which attempt generated the map. Please make those changes now."*
+      given 2026-08-27T03:17Z | done 2026-08-27T03:21Z | elapsed 4 min (computed: done minus given) | runs: make maps x1, make quick x1, make hooks-test x1, make done x1
+      note: (1) `scripts/discard-hooks.sh` + 21-case test: a checkout/restore is refused only when git says the named path is DIRTY in the tree the command names (`git -C` or cwd); clean files, branch switches, `--staged`, mentions pass; escape `DISCARD_OK`. Wired in settings.json, in the hooks-test roster automatically. NOTE: hooks run from main's `/diagram/scripts/`, so this guard is live for every session only once 133 lands - until then it exists in this clone alone. (2) `driver.py`: every roll stamps `meta.roll_attempt` / `meta.roll_after`; `Report.line()` prints `attempt N (re-rolled after: ...)`, so `make maps` shows it; Inashiro is attempt 1. Unit test on the line; recorded in the root guard table and hamletgen/CLAUDE.md.
+      scaffold: a `discard-hooks.sh` guard (git checkout/restore that discards a modified tracked file) + its test, wired like the other guards; `hamletgen/driver.py` records the attempt and its reason in meta; `make maps` prints it
+      measure: the guard fires on `git checkout -- <modified file>` and stays quiet on a clean file / a branch switch / a commit-message mention; Inashiro's meta carries attempt 1
+      verify: `make hooks-test`, `make quick`, `make done`
+
 ## Phase 9 - acceptance
 
 - [ ] T90 the would-have-dispatched audit (FR-005): every entry in the period, and for each whether it should have run; each "no" names a tooling change

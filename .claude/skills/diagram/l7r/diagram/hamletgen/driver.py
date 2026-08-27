@@ -109,6 +109,13 @@ class Report:
     # re-gate (or, worse, re-build) to get it - `cohort_audit` did exactly that by calling `build`
     # instead of `generate`, which silently measured a different code path than the one that ships.
     fail_lines: list[str] = field(default_factory=list)
+    # WHICH ROLL THIS IS (feature 133 T33). The re-roll loop below can ship attempt four with a
+    # different connector and a different web, and until 2026-08-27 nothing on the map or in the
+    # report said so - a session read attempt four as its own fix for most of a task. The attempt
+    # and the checks that forced each re-roll are carried here AND in the manifest's meta
+    # (`roll_attempt`, `roll_after`), so the picture can always be attributed to the roll that drew it.
+    attempt: int = 1
+    rerolled_after: list[str] = field(default_factory=list)
 
     @property
     def ok(self) -> bool:
@@ -116,10 +123,11 @@ class Report:
 
     def line(self) -> str:
         p = self.plan
+        roll = f"attempt {self.attempt}" + (f" (re-rolled after: {', '.join(dict.fromkeys(self.rerolled_after))})" if self.attempt > 1 else "")
         return (
             f"{p.spec.name:<18} seed={p.spec.seed:<4} hh={p.placed}/{p.spec.households:<3} "
             f"acres={p.acres:5.1f}/{p.target_acres:5.1f} fall={int(p.down_deg):<4} wind={p.windward:<3} "
-            f"sink={p.water_sink:<7} {p.cluster_shape[:9]:<10} {p.lane_skeleton:<6} "
+            f"sink={p.water_sink:<7} {p.cluster_shape[:9]:<10} {p.lane_skeleton:<6} {roll:<10} "
             f"{'OK' if self.ok else 'FAIL: ' + ', '.join(self.failures[:4])}"
         )
 
@@ -162,7 +170,7 @@ def generate(spec: HamletSpec, out_base: str | None = None, render: bool = True)
 
     plan = plan_site(spec)
 
-    def _roll(avoid: Sequence[tuple[float, float]], out: str | None = None) -> tuple[Settlement, list[str], list[tuple[float, float]], list[str]]:
+    def _roll(avoid: Sequence[tuple[float, float]], out: str | None = None, attempt: int = 1, after: Sequence[str] = ()) -> tuple[Settlement, list[str], list[tuple[float, float]], list[str]]:
         """Build, finish and gate once. Returns the settlement, the gate's verdict, and the seats the
         GATE ITSELF names as unreached - read off its message, never recomputed. A hand-rolled
         reach measure was tried and was wrong on five of six seeds (see future-work 2b): it
@@ -175,6 +183,10 @@ def generate(spec: HamletSpec, out_base: str | None = None, render: bool = True)
         # map at all. Introduced when this retry loop began finishing a copy to gate it and then
         # finishing the same object again for real.
         s2 = build(plan, avoid=avoid)
+        # ATTRIBUTION (T33): the manifest says which roll drew it, and why the earlier ones were
+        # rejected, so a changed connector or web is never mistaken for the effect of an edit.
+        s2.M["meta"]["roll_attempt"] = attempt
+        s2.M["meta"]["roll_after"] = list(dict.fromkeys(after))
         if out is not None:
             s2.finish(out, render=render)
         else:
@@ -203,13 +215,17 @@ def generate(spec: HamletSpec, out_base: str | None = None, render: bool = True)
     avoid: list[tuple[float, float]] = []
     kept: list[tuple[float, float]] = []  # the avoid list that produced the map we are keeping
     stale = False  # ...and whether the files on disk came from a later roll we then rejected
+    attempt = kept_attempt = 1
+    after: list[str] = []  # the checks that forced each re-roll, in order
     for _ in range(4):
         if "farmhouses_reach_a_way" not in failures or not seats:
             break
         avoid = avoid + seats
-        _s2, f2, seats2, lines2 = _roll(avoid, out_base)
+        after = after + ["farmhouses_reach_a_way"]
+        attempt += 1
+        _s2, f2, seats2, lines2 = _roll(avoid, out_base, attempt, after)
         if len(f2) <= len(failures):
-            failures, seats, lines, kept = f2, seats2, lines2, list(avoid)
+            failures, seats, lines, kept, kept_attempt = f2, seats2, lines2, list(avoid), attempt
         else:
             stale = True
             break
@@ -220,8 +236,8 @@ def generate(spec: HamletSpec, out_base: str | None = None, render: bool = True)
         # RE-EMIT ONLY - the verdict is already known. Generation is deterministic, so this rebuild
         # is the same map with the same failures; taking the re-gate's answer instead would let a
         # second opinion overwrite the one that was actually chosen.
-        _roll(kept, out_base)
-    return Report(plan=plan, failures=failures, path=out_base, fail_lines=lines)
+        _roll(kept, out_base, kept_attempt, after[: kept_attempt - 1])
+    return Report(plan=plan, failures=failures, path=out_base, fail_lines=lines, attempt=kept_attempt, rerolled_after=after[: kept_attempt - 1])
 
 
 def cohort(count: int, first_seed: int = 1, households: int | None = None, jobs: int | None = None) -> list[Report]:
