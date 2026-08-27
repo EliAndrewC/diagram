@@ -2030,3 +2030,16 @@ seat inside the house cloud's hull when the worst walk is within ~30 ft of the o
 that wants the pool re-rolled and reviewed, i.e. its own task. The reviewer also noted the copse
 (`village_groves[1]`) is two clumps - the T10 sun lane consumed it; the record stays because a copse
 role with two trees is the honest output, not a drawing error.
+
+## OPEN 2026-08-27 (feature 133 T91, WAIVED - ONE session fixes this, by the GM's word): the tier under the T99 engine
+
+Tripwire seeds 27, 33, 37 (and 47, pre-existing) fail under the engine the GM accepted on the
+reference hamlet; pinned in `tools/mapcheck.py` `TRIPWIRE_EXPECTED`, evidence and bisect in
+`specs/133-reference-hamlet-acceptance/tasks.md` T91. The GM: multiple simultaneous sessions will
+run, and *"it would be wasteful to have all of them fixing this at the same time"* - so this is
+claimed by whichever session the GM names, and no other session touches it. What that session
+inherits: seed 33 wants `village_grove` to THIN around a plot inside the band rather than the face
+dodging it (the face-dodge rotated the hole to seed 41 - recorded in hinterland.py); seed 37 wants
+the orphan joiner in `_touch_junctions` to accept the 30-35 ft links the smoothing leaves (see why it
+refuses them first); seed 27 wants the two new checks (T32 bends, T49 bamboo-off-lanes) satisfied on
+a layout other than Inashiro's; seed 47 is the old set. Then drop each pin row and run the 48-cohort.

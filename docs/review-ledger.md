@@ -33,4 +33,5 @@ or a later pass found what this one should have).
 | 2026-08-27 | settlement-review | same pass | - | coops mostly at the back wall against the doc's "flank" | yes | doc fixed (the record says only "in their yard") |
 | 2026-08-27 | settlement-review | same pass | - | woodland stocking ~50% bare per parcel; copse of 2 clumps; caption across the lane from the board; three apex strips | - | recorded-only (notes; the stocking is a rotation-stage knob candidate, future work) |
 | 2026-08-27 | settlement-review | same pass | - | **MISSED-BY-REVIEWER**: nothing the reviewer could see - the unlock sweep found a knot-collapse crash and three tripwire-seed regressions the lock had hidden; a single-map FULL pass cannot see a tier | (the author missed them for two days) | fixed at unlock (crash guard; the bisect below) |
+| 2026-08-27 | unlock sweep (make maps, the tripwire) | the tier under the T99 engine | needs-work | seeds 27/33/37 regressed in the period (bisected: T10; T41+T32; two new checks); 47 pre-existing; one crash | YES - two days of single-map iteration | crash fixed; the three WAIVED by the GM as expected failures for one session (T91) |
 

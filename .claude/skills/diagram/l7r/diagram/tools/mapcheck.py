@@ -75,6 +75,32 @@ TIERS: dict[str, str] = {"hamlets": "inashiro"}
 #
 # Five seeds rather than one, because they cost seconds each and a detector that misses is worthless.
 TRIPWIRE_SEEDS = (27, 33, 37, 41, 47)
+# EXPECTED FAILURES, BY THE GM'S WAIVER (feature 133 T91, 2026-08-27). At the T99 unlock four tripwire
+# seeds were red; the bisect (specs/133-reference-hamlet-acceptance/tasks.md T91) put seed 33's hole
+# at T10, seed 37's stubs at T41's re-roll under T32's smoothing, seed 27's failures on two checks
+# ADDED in the period, and seed 47 red since before the lock. The waiver, verbatim: the GM (2026-08-27): "add a waiver for them but mark them as expected failures, and then I will have a specific background session work on fixing them instead of either blocking on getting them fixed before merging into main or having a bunch of different sessions, all duplicating work".
+# The rule is `baseline_verdict`'s: a pinned seed whose failures stay inside its set is EXPECTED; any
+# check outside the set is a regression; a pinned seed that comes up CLEAN is a stale pin and fails
+# too, so the fix that lands must also drop its row here. ONE session fixes these - see the
+# future-work entry "the tier under the T99 engine".
+TRIPWIRE_EXPECTED: dict[int, frozenset[str]] = {
+    27: frozenset({"lanes_bend_like_paths", "lanes_clear_of_bamboo"}),
+    33: frozenset({"village_windbreak_is_continuous"}),
+    37: frozenset({"lanes_bend_like_paths", "lanes_form_one_network"}),
+    47: frozenset({"fields_clear_of_road", "lanes_form_one_network", "lanes_reach_something", "long_ditches_have_a_footbridge"}),
+}
+
+
+def tripwire_verdict(seed: int, failures: list[str]) -> tuple[str, bool]:
+    """(the line's mark, is_bad) for one tripwire seed against `TRIPWIRE_EXPECTED`."""
+    actual = {f.split("[")[0] for f in failures}
+    expected = TRIPWIRE_EXPECTED.get(seed, frozenset())
+    if not actual:
+        return ("ok", False) if not expected else (f"CLEAN but pinned as expected {sorted(expected)} - STALE PIN, drop its TRIPWIRE_EXPECTED row", True)
+    new = sorted(actual - expected)
+    if new:
+        return (f"REGRESSION {new} (expected only {sorted(expected)})" if expected else ", ".join(sorted(actual)[:3]), True)
+    return (f"expected (waived T91): {', '.join(sorted(actual))}", False)
 
 
 def _live_gens(tier: str) -> list[str]:
@@ -137,9 +163,9 @@ def _tripwire() -> list[str]:
     bad: list[str] = []
     for seed in TRIPWIRE_SEEDS:
         rep = hg.generate(hg.HamletSpec(name=f"Tripwire-{seed}", seed=seed, households=10 + (seed * 7) % 11), out_base=None, render=False)
-        mark = "ok" if rep.ok else ", ".join(rep.failures[:3])
+        mark, is_bad = tripwire_verdict(seed, list(rep.failures))
         print(f"  tripwire seed {seed:>2}: {mark}", flush=True)
-        if not rep.ok:
+        if is_bad:
             bad.append(f"seed{seed}")
     return bad
 
