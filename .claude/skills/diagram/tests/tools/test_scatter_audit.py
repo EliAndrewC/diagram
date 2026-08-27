@@ -121,10 +121,13 @@ def test_adjudicate_flags_woody_scatter_inside_a_grove_but_not_its_crowns():
     """Feature 133 T34 (GM 2026-08-27: "Should scrubland overlap with forests? ... it seems like it
     shouldn't"): a brush dot inside a village grove's polygon is a violation; a crown there is the
     grove itself; a dot outside is clean."""
-    m = _manifest(village_groves=[{"role": "windbreak", "r": 14.0, "clumps": [[250, 250]], "poly": [[200, 200], [300, 200], [300, 300], [200, 300]]}])
-    svg = _one_dot_svg(250.0, 250.0) + _one_dot_svg(320.0, 250.0) + '<g transform="translate(250,250)"><circle cx="0" cy="0" r="6" fill="#4E6E3A"/></g>'
+    m = _manifest(
+        village_groves=[{"role": "windbreak", "r": 14.0, "clumps": [[250, 250]], "poly": [[200, 200], [300, 200], [300, 300], [200, 300]]}],
+        commons=[{"role": "woodland", "poly": [[400, 400], [500, 400], [500, 500], [400, 500]]}, {"role": "grazing", "poly": [[0, 0], [600, 0], [600, 600], [0, 600]]}],
+    )
+    svg = _one_dot_svg(250.0, 250.0) + _one_dot_svg(320.0, 250.0) + _one_dot_svg(450.0, 450.0) + '<g transform="translate(250,250)"><circle cx="0" cy="0" r="6" fill="#4E6E3A"/></g>'
     report = sa.adjudicate(sa.parse_bases(svg), m, "t")
-    assert [(v["family"], v["keepout"]) for v in report["violations"]] == [("dot", "grove")]
+    assert [(v["family"], v["keepout"]) for v in report["violations"]] == [("dot", "grove"), ("dot", "grove")]  # the belt AND the coppice patch (T35); the grazing commons is not a wood
     assert "grove" in report["families_checked"]["keepouts"]
 
 

@@ -128,6 +128,7 @@ it; `tools/scatter_audit.py` holds a `grove` keep-out): brush dots and pines are
 every village-grove polygon; grass blades thin into it over the reed feather (46 units) and are gone
 beyond it; crowns are the grove. Inashiro before: 2,688 blades, 158 dots, 11 pines inside the belt
 polygon; after: 1,263 blades, all within the 46-unit fringe, no dots, no pines, audit 0 violations.
+**REVISITED the same day (T35):** the first cut applied this to the windbreak only and left the coppice patches scattered through - the GM saw it at once. The record above never supported that split: the coppice IS the worked wood. Every woodland commons is now a soft keep-out too (the patches are scanned before the scrub is laid), and the audit adjudicates them.
 Labels: the clear floor and the grass fringe ACCURATE; the 46-unit feather a DRAWING convention
 shared with the marsh (one ramp for every soft edge, so two edges never read differently for no
 reason). Not built, recorded: an abandoned-coppice shrub layer is a real second form for a

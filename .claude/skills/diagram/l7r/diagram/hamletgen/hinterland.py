@@ -28,8 +28,15 @@ def stage_hinterland(s: Settlement, plan: SitePlan) -> None:
     # THE BELT IS COMPUTED HERE, two stages before it is drawn, so the scrub can keep out of it
     # (T34): the belt derives from the houses alone, which are final by now, and `stage_woodland`
     # recomputes the same polygon. Woody scatter stops at the belt's line; grass grades into it.
+    # EVERY WOOD, not only the belt (T35, GM 2026-08-27: "Did you only make it not overlap with the
+    # windbreak forest and then keep it overlapping with the other forests or something?"). The
+    # coppice patches are scanned here too - the scan keeps off the marsh, so the marsh is drawn
+    # first, then the patches are found, then the scrub is scattered with every wood as a soft
+    # keep-out. `stage_woodland` draws the patches from `plan.woodland_polys`.
     plan.belt = belt_polygon(s, plan)
-    s.hinterland(soft_extra=[plan.belt] if plan.belt else ())
+    s.hinterland(commons=False)
+    plan.woodland_polys = open_ground_patches(s, plan, plan.woodland_patches)
+    s.hinterland(marsh=False, soft_extra=[*([plan.belt] if plan.belt else []), *plan.woodland_polys])
 
 
 CROP_MARGIN = 48.0  # the one crop margin, shared by stage_frame's crop_to_content call and the
@@ -586,7 +593,9 @@ def stage_woodland(s: Settlement, plan: SitePlan) -> None:
     so its per-crown filter sees every structure already standing (the engine's DRAW ORDER rule).
     Computing early and drawing late satisfies both."""
     plan.belt = belt_polygon(s, plan)
-    for patch in open_ground_patches(s, plan, plan.woodland_patches):
+    # The patches were SCANNED in `stage_hinterland` (T35) - before the scrub, so the scrub kept out
+    # of them; the scan needs the marsh drawn and nothing this stage adds. Drawn here, over open ground.
+    for patch in plan.woodland_polys:
         s.commons(patch, role="woodland")
 
 

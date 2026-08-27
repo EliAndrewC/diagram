@@ -148,6 +148,13 @@ _(from T11 on, each entry also carries its cycle plan before work starts - `scaf
       measure: scatter bases by family inside each woodland/windbreak polygon and within its edge band, on Inashiro, before/after
       verify: `make maps`, `make scatter-audit`, `make quick`, `make done`; the GM looks
 
+- [x] T35 **scrub under the other woods too** - the GM (2026-08-27): *"inashiro.png still clearly shows scrubland overlapping with the forests, though. What am I missing? Did you only make it not overlap with the windbreak forest and then keep it overlapping with the other forests or something?"*
+      given 2026-08-27T03:33Z | done 2026-08-27T03:37Z | elapsed 4 min (computed) | runs: make maps x1, make scatter-audit x1, make quick x1, make done x1
+      note: a T34 miss, not a new finding - the coppice patches (2,439/1,758/504 blades, 135/95/38 dots, 11/5/2 pines) were left scattered through and the record called it "by design"; the research never made that distinction. Fix: patches scanned in stage_hinterland between the marsh and the scrub (hinterland() now runs in two calls, marsh then commons, the toe computed for both), passed as soft keep-outs with the belt, drawn by stage_woodland from plan.woodland_polys; the audit adjudicates every woodland commons. After: 0 dots, 0 pines, fringe grass only. Records corrected in settlements/vegetation.md and research/vegetation.md.
+      scaffold: hamletgen/hinterland.py (`stage_woodland`'s patches, `open_ground_patches`), settlement/land/cover.py (`commons` role="woodland" and what it scatters under its crowns), the T34 soft keep-out
+      measure: bases by family inside every woodland-commons polygon and every grove polygon on Inashiro, before/after
+      verify: `make maps`, `make scatter-audit`, `make quick`, `make done`; the GM looks
+
 ## Phase 9 - acceptance
 
 - [ ] T90 the would-have-dispatched audit (FR-005): every entry in the period, and for each whether it should have run; each "no" names a tooling change

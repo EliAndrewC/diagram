@@ -1257,3 +1257,17 @@ woody glyphs stop at the line, grass thins in over the reed feather. After: no d
 blades all inside the 46-unit fringe; `make scatter-audit` 0 violations with its new `grove`
 keep-out. Labels: clear floor and grass fringe ACCURATE; the shared feather a DRAWING convention.
 No per-task review (scope locked); the GM looks.
+
+
+## 2026-08-27 - and not under the coppice either (feature 133 T35)
+
+The GM, on the T34 result: *"still clearly shows scrubland overlapping with the forests ... Did you
+only make it not overlap with the windbreak forest and then keep it overlapping with the other
+forests or something?"* Yes: the three coppice patches carried 2,439 / 1,758 / 504 blades,
+135 / 95 / 38 brush dots and 11 / 5 / 2 pines, and the T34 record had called that "by design" - a
+distinction the research never made. Fix: the patches are scanned in `stage_hinterland` between
+the marsh and the scrub (the scan keeps off the marsh, the scrub keeps off the patches), drawn in
+`stage_woodland` from `plan.woodland_polys`; the audit's `grove` keep-out covers every woodland
+commons. After: no dots, no pines; grass only in the fringe (786 / 633 / 321 blades, fading to none
+by 46 units). Audit 0 violations. The lesson recorded in the T34 entry: when the GM's question is
+"should X overlap Y", the fix covers every Y, and the record does not get to carve one out.

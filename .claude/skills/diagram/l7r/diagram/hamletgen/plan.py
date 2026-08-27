@@ -126,6 +126,9 @@ class SitePlan:
     sink_brook: Poly = field(default_factory=list)
     watercourses: list[tuple[Pt, Pt]] = field(default_factory=list)
     belt: Poly = field(default_factory=list)
+    # The coppice patches, scanned in `stage_hinterland` BEFORE the scrub is scattered so the scrub
+    # keeps out of them, and drawn by `stage_woodland` (T35, GM 2026-08-27).
+    woodland_polys: list[Poly] = field(default_factory=list)
     seat: dict[str, Any] = field(default_factory=dict)
     placed: int = 0
     acres: float = 0.0

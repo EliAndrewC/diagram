@@ -153,7 +153,11 @@ def adjudicate(fams: dict[str, list[Base]], manifest: dict[str, Any], map_name: 
     marsh_feather = MARSH_FEATHER_BS * float(getattr(view, "bscale", 1.0))  # scrub may thin INTO the marsh over its reed feather (cover.py `soft`)
     # THE GROVE IS A SOFT KEEP-OUT TOO (feature 133 T34): a managed wood's floor is clear of brush
     # and pine, and grass fades out over the same feather. Crowns are exempt - they ARE the grove.
+    # ...and every WOODLAND commons (the coppice patches) is a wood too (T35, GM 2026-08-27: "Did you
+    # only make it not overlap with the windbreak forest and then keep it overlapping with the
+    # other forests or something?" - yes, and the research never supported the distinction).
     grove_polys = [[tuple(q) for q in g["poly"]] for g in manifest.get("village_groves", []) if g.get("poly")]
+    grove_polys += [[tuple(q) for q in c["poly"]] for c in manifest.get("commons", []) if c.get("role") == "woodland" and c.get("poly")]
     grove = boxed_grid(boxed_polys(grove_polys))
     bands = [boxed_grid(boxed_segs(_water_segs(view, extra=hi))) for _, hi in DENSITY_BANDS]
 

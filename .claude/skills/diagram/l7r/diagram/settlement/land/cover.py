@@ -368,7 +368,10 @@ class GroundCoverMixin:
         # exactly what stands on a dry footslope beside a reed flat, so the toe side gets the same
         # scrub as the other three - handed the marsh as a keep-out, so it stops where the reeds start
         # and the two never overlap. Computed BEFORE the commons pass for that reason.
-        toe_poly = self.toe_band(down_deg, pad) if marsh else []
+        # The toe is computed whether or not the marsh is DRAWN on this call: the scrub needs it as a
+        # soft keep-out either way, and the hamlet generator draws the marsh and the scrub in two
+        # calls (T35) so the coppice scan can run between them.
+        toe_poly = self.toe_band(down_deg, pad)
         # ...and EVERY scrub pass gets it, not just the toe strip (GM 2026-08-26, T12): the ring's side
         # strips and the interior fill reach into the toe band too, and the marsh is drawn AFTER them,
         # so `commons()`'s own marsh keep-out cannot see it yet - it has to be handed in.
