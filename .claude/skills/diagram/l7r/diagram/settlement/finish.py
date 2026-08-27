@@ -1,5 +1,6 @@
 """Split from settlement.py by feature 025 - see settlement/CLAUDE.md for the index."""
 
+import itertools
 import json
 import math
 import os
@@ -9,7 +10,7 @@ import sys
 from collections.abc import Sequence
 from typing import TYPE_CHECKING, Any
 
-from ._geom import LAND, Pt, label_quad, label_tilt, linear_tilt, linear_tilt_full, point_in_poly, seg_closest, seg_dist, segments_cross
+from ._geom import LAND, Poly, Pt, label_quad, label_tilt, linear_tilt, linear_tilt_full, point_in_poly, rects_overlap, seg_closest, seg_dist, segments_cross
 
 if TYPE_CHECKING:
     from .core import Settlement
@@ -18,12 +19,17 @@ if TYPE_CHECKING:
 class FinishMixin:
     # ---- annotation
 
-    def _record_label(self: Settlement, x: float, y: float, text: str, size: float, anchor: str, z: int, ref: Sequence[float] | None = None, rot: float = 0.0) -> None:  # type: ignore[misc]
+    def _record_label(  # type: ignore[misc]
+        self: Settlement, x: float, y: float, text: str, size: float, anchor: str, z: int, ref: Sequence[float] | None = None, rot: float = 0.0, box: tuple[float, float, float, float] | None = None
+    ) -> None:
         w = len(text) * size * 0.55  # rough serif advance; slightly generous so near-misses flag
         x0 = x - w / 2 if anchor == "middle" else (x - w if anchor == "end" else x)
         # record the TEXT (element [5]) too, so the gate can verify a zone/neighborhood label actually
         # sits with the cluster it names (same side of the wall, among its buildings)
-        rec: list[Any] = [round(x0, 1), round(y - size * 0.8, 1), round(x0 + w, 1), round(y + size * 0.25, 1), z, text]
+        # `box` is the WRAPPED caption's block (T39) - narrower and taller than the one-line box;
+        # a one-line caption passes none and records exactly what it always did.
+        bx0, by0, bx1, by1 = box if box is not None else (x0, y - size * 0.8, x0 + w, y + size * 0.25)
+        rec: list[Any] = [round(bx0, 1), round(by0, 1), round(bx1, 1), round(by1, 1), z, text]
         if ref is not None or rot:
             # element [6]: the box of the ONE feature this caption names, recorded only by the
             # standoff-ladder path (`place_caption` / the road label). A district caption names an
@@ -52,6 +58,7 @@ class FinishMixin:
         rot: float = 0.0,
         linear: bool = False,
         full_tilt: bool = False,
+        wrap: bool = True,
     ) -> None:
         esc = text.replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;')
         st = ' font-style="italic"' if italic else ''
@@ -67,18 +74,86 @@ class FinishMixin:
         # `full_tilt=True` (linear subjects only) takes linear_tilt_full's unclamped angle - the
         # GM's 2026-08-09 extension for along-row captions like the wharf granary rows
         tilt = (linear_tilt_full(rot) if full_tilt else linear_tilt(rot)) if linear else label_tilt(rot)
-        if tilt:
-            w_ = len(text) * size * 0.55
-            x0_ = x - w_ / 2 if anchor == "middle" else (x - w_ if anchor == "end" else x)
-            tr = f' transform="rotate({tilt:.1f} {x0_ + w_ / 2:.1f} {y - size * 0.275:.1f})"'
-        else:
-            tr = ''
+        # A CAPTION WRAPS WHEN THAT IS WHAT CLEARS IT (GM 2026-08-27, feature 133 T39): *"if the label
+        # was split across multiple lines, and that caused it to not overlap with anything, then we
+        # should do that. If running the label on one line caused it to not overlap with anything,
+        # then we should do that. If both things cause the label to overlap with something, then we
+        # can just pick one."* One line first; then two, then three, each tested as its rotated block
+        # against every footprint and every caption already on the sheet; the first clear layout is
+        # drawn, and when none is clear the one-liner is. See `_caption_lines` for how a label is cut.
+        lines = self._caption_lines(text, x, y, size, anchor, tilt) if wrap else [text]
+        n = len(lines)
+        lh = size * 1.15  # line pitch: the one-line box is 1.05 em tall, and a hair of lead between lines
+        w_ = max(len(ln) for ln in lines) * size * 0.55
+        x0_ = x - w_ / 2 if anchor == "middle" else (x - w_ if anchor == "end" else x)
+        cx_, cy_ = x0_ + w_ / 2, y - size * 0.275  # the one-line box's center; a wrapped block keeps it
+        box = (x0_, cy_ - (size * 1.05 + (n - 1) * lh) / 2, x0_ + w_, cy_ + (size * 1.05 + (n - 1) * lh) / 2)
+        tr = f' transform="rotate({tilt:.1f} {cx_:.1f} {cy_:.1f})"' if tilt else ''
         # labels live in the topmost LABEL layer so nothing - not a road, not a wall, not a kido or torii
         # - ever paints over the text (a label must always be fully readable)
+        if n == 1:
+            body = esc
+            y_first = y
+        else:
+            y_first = y - (n - 1) * lh / 2
+            body = "".join(f'<tspan x="{x:.0f}" dy="{0 if i == 0 else lh:.1f}">{ln.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")}</tspan>' for i, ln in enumerate(lines))
         z = self.add_label(
-            f'<text x="{x:.0f}" y="{y:.0f}" text-anchor="{anchor}" font-size="{size}" font-weight="{weight}"{st}{tr} fill="{color}" paint-order="stroke" stroke="{LAND}" stroke-width="3">{esc}</text>'
+            f'<text x="{x:.0f}" y="{y_first:.0f}" text-anchor="{anchor}" font-size="{size}" font-weight="{weight}"{st}{tr} fill="{color}" paint-order="stroke" stroke="{LAND}" stroke-width="3">{body}</text>'
         )
-        self._record_label(x, y, text, size, anchor, z, ref, tilt)
+        self._record_label(x, y, text, size, anchor, z, ref, tilt, box=box if n > 1 else None)
+
+    def _caption_lines(self: Settlement, text: str, x: float, y: float, size: float, anchor: str, tilt: float) -> list[str]:  # type: ignore[misc]
+        """The lines a caption is set on: one if that clears the sheet, else the first of two or three
+        that does, else one (feature 133 T39 - the rule is in `label`).
+
+        HOW A LABEL IS CUT. Words are never broken; a cut is a split of the word list into contiguous
+        lines. Among the splits into `n` lines the one with the SHORTEST longest line wins (the block
+        is as narrow as it can be), ties broken toward even lengths. A line that is only one short
+        word - "of", "the", "to", anything of three letters or fewer - is refused whenever the label
+        has more words than lines, so "Shrine of Benten" is cut as "Shrine of / Benten" or
+        "Shrine / of Benten", never with "of" alone (the GM: *"put it on whichever line had fewer
+        letters otherwise"*). Three lines are tried only after two, and only for three words or more.
+
+        WHAT COUNTS AS OVERLAP: the caption's block, rotated about its center by `tilt` exactly as
+        the SVG is, against `label_blockers()` - every recorded footprint (rotation-aware AABBs) and
+        every caption already on the sheet - with the separating-axis test, so a tilted block is
+        judged by its true quad rather than by a bounding box that would wrap for nothing."""
+        words = text.split()
+        if len(words) < 2:
+            return [text]
+        blockers: list[Poly] = self.label_blocker_quads() + [label_quad(lb) for lb in self.M["labels"] if len(lb) > 3]
+        lh = size * 1.15
+
+        def _clear(lines: list[str]) -> bool:
+            n = len(lines)
+            w_ = max(len(ln) for ln in lines) * size * 0.55
+            x0_ = x - w_ / 2 if anchor == "middle" else (x - w_ if anchor == "end" else x)
+            h_ = size * 1.05 + (n - 1) * lh
+            cy_ = y - size * 0.275
+            quad = label_quad([x0_, cy_ - h_ / 2, x0_ + w_, cy_ + h_ / 2, 0, text, None, tilt])
+            return not any(rects_overlap(quad, b) for b in blockers)
+
+        def _cut(n: int) -> list[str] | None:
+            best: tuple[tuple[int, int], list[str]] | None = None
+            for cuts in itertools.combinations(range(1, len(words)), n - 1):
+                bounds = (0, *cuts, len(words))
+                lines = [" ".join(words[a:b]) for a, b in zip(bounds, bounds[1:], strict=False)]
+                if len(words) > n and any(len(ln) <= 3 for ln in lines):
+                    continue  # a short word never stands alone
+                score = (max(len(ln) for ln in lines), max(len(ln) for ln in lines) - min(len(ln) for ln in lines))
+                if best is None or score < best[0]:
+                    best = (score, lines)
+            return best[1] if best else None
+
+        if _clear([text]):
+            return [text]
+        for n in (2, 3):
+            if n > len(words):
+                break
+            lines = _cut(n)
+            if lines and _clear(lines):
+                return lines
+        return [text]
 
     def _text_width(self: Settlement, s: str, fs: float) -> float:  # type: ignore[misc]
         """Measured pixel width of bold `s` at font-size `fs` in the RENDER font (DejaVu Serif Bold -

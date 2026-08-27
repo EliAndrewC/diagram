@@ -7,9 +7,31 @@ import math
 from typing import TYPE_CHECKING
 
 from .._geom import (
+    Poly,
     Pt,
     label_aabb,
     seg_dist,
+)
+
+# Ground cover and land parcels a caption may stand on - not blockers (see `label_blocker_quads`).
+LABEL_GROUND_KEYS = frozenset(
+    {
+        "commons",
+        "marshes",
+        "village_groves",
+        "groves",
+        "pastures",
+        "fields",
+        "dry_plots",
+        "wet_plots",
+        "fallow_patches",
+        "forest_patches",
+        "flower_fields",
+        "quarters",
+        "districts",
+        "clearings",
+        "taxfree",
+    }
 )
 
 if TYPE_CHECKING:
@@ -32,9 +54,25 @@ class CaptionProbesMixin:
         ROTATION-AWARE, because `labels_clear_of_other_buildings` tests each building\'s AABB and a
         rotated shopfront\'s AABB is much larger than its w/h - probing the unrotated rect passes here
         and still fails the gate."""
-        boxes: list[tuple[float, float, float, float]] = []
+        boxes = [(min(px for px, _ in q), min(py for _, py in q), max(px for px, _ in q), max(py for _, py in q)) for q in self.label_blocker_quads(skip_key)]
+        boxes += [label_aabb(lb) for lb in self.M["labels"] if len(lb) > 3]  # AABB: a tilted caption blocks the ground its rotated run can reach
+        return boxes
+
+    def label_blocker_quads(self: Settlement, skip_key: str | None = None) -> list[Poly]:  # type: ignore[misc]
+        """Every FOOTPRINT a caption must miss, as its true rotated quad (the corner ring the glyph
+        is drawn with) - the source `label_blockers` boxes, and what the wrap rule (`_caption_lines`,
+        feature 133 T39) tests against, because a caption that clears a tilted house by a few feet
+        clears the house, not its bounding box.
+
+        GROUND IS NOT A BLOCKER (found under T39). The derived walk takes every recorded list of
+        dicts with w/h, and on a hamlet that includes the scrub `commons` strips and the marsh - a
+        canvas-sized rectangle each - so every caption on the sheet "overlapped" something, the wrap
+        rule never fired, and every seat probe built on this list had been reporting blocked ground
+        wherever the scrub is drawn, i.e. everywhere. A caption stands on scrub, grass, a grove or a
+        paddy the way a name stands on a map; it must miss the BUILT things."""
+        quads: list[Poly] = []
         for key, recs in self.M.items():
-            if key == skip_key or not isinstance(recs, list):
+            if key == skip_key or key in LABEL_GROUND_KEYS or not isinstance(recs, list):
                 continue
             for o in recs:
                 if not (isinstance(o, dict) and all(isinstance(o.get(f), (int, float)) for f in ("x", "y", "w", "h"))):
@@ -43,11 +81,8 @@ class CaptionProbesMixin:
                 ca, sa = math.cos(a), math.sin(a)
                 hw2, hh2 = o["w"] / 2, o["h"] / 2
                 cs = ((-hw2, -hh2), (hw2, -hh2), (hw2, hh2), (-hw2, hh2))
-                xs = [o["x"] + dx * ca - dy * sa for dx, dy in cs]
-                ys = [o["y"] + dx * sa + dy * ca for dx, dy in cs]
-                boxes.append((min(xs), min(ys), max(xs), max(ys)))
-        boxes += [label_aabb(lb) for lb in self.M["labels"] if len(lb) > 3]  # AABB: a tilted caption blocks the ground its rotated run can reach
-        return boxes
+                quads.append([(o["x"] + dx * ca - dy * sa, o["y"] + dx * sa + dy * ca) for dx, dy in cs])
+        return quads
 
     def label_caption_hw(self: Settlement, label: str, size: float) -> float:  # type: ignore[misc]
         """A caption\'s half-width AS RECORDED. `_record_label` writes len(text) * size * 0.55, and

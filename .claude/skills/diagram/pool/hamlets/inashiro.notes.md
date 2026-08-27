@@ -1299,3 +1299,16 @@ interpretation recorded for the GM: a square rotation (0/90/180/270) keeps a lev
 a horizontal edge, so level is aligned. Held by `labels_align_with_their_referent` (the referent box
 matched to the rotated record at its center); pre-fix manifest frozen as a regression fixture.
 Label: a cartographic convention - DRAWING.
+
+
+## 2026-08-27 - the notice board's caption wraps (feature 133 T39)
+
+The GM: the one-line caption crossed a farmhouse, and split as "notice / board" at the same angle it
+would not. Now a placement rule in `label()` for every caption: one line if it clears, else two,
+else three, else one (`_caption_lines`). Found on the way: `label_blockers` counted the scrub
+commons and the marsh as blockers - canvas-sized rectangles - so every caption "overlapped" and
+every seat probe on that list had been reporting blocked ground everywhere; ground families are
+now excluded (`LABEL_GROUND_KEYS`), and the wrap decision tests true rotated footprints rather than
+their bounding boxes (the two-line block clears the tilted farmhouse by a few feet that its AABB
+swallowed). Inashiro: "notice / board", block 26 x 18 at 57.2 degrees, record [1198, 1010, 1225,
+1028]. Label: cartographic convention - DRAWING.

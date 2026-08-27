@@ -136,6 +136,36 @@ def test_label_carries_the_subjects_own_angle_for_lines_and_boxes_alike():
     assert recs[2][7] == 72.0
 
 
+def test_label_wraps_onto_two_lines_only_when_that_clears_the_sheet():
+    """GM 2026-08-27 (feature 133 T39): one line if it clears; else the first of two or three lines
+    that does; else one. A house standing where the one-liner's ends would fall, but not where a
+    two-line block falls, makes the caption wrap; open ground keeps it on one line; a house under the
+    whole seat leaves it on one line ("we can just pick one"). Three seats, because a caption already
+    placed is itself a blocker for the next."""
+    s = Settlement(W=1000, H=1000, seed=1)  # a bare sheet: nothing near a seat but what the test puts there
+    s.label(500, 300, "notice board", 8)  # open ground: one line, the record exactly as before
+    L = s.M["labels"][-1]
+    assert len(L) == 6 and "<tspan" not in s.toplabels[-1] and abs((L[2] - L[0]) - 12 * 8 * 0.55) < 0.01
+    s.M["houses"].append({"x": 470, "y": 497, "w": 20, "h": 30, "rot": 0})  # under the one-liner's left end only
+    s.label(500, 500, "notice board", 8)  # the wrapped block (26 wide) clears the house; the one-liner (53 wide) does not
+    L = s.M["labels"][-1]
+    assert s.toplabels[-1].count("<tspan") == 2
+    assert abs((L[2] - L[0]) - 6 * 8 * 0.55) < 0.01 and L[3] - L[1] > 8 * 1.05  # narrower, taller
+    s.M["houses"].append({"x": 500, "y": 797, "w": 20, "h": 30, "rot": 0})  # under the middle: nothing clears
+    s.label(500, 800, "notice board", 8)
+    assert "<tspan" not in s.toplabels[-1], "when no layout clears, the one-liner is drawn"
+
+
+def test_label_never_leaves_a_short_word_on_its_own_line():
+    s = Settlement(W=1000, H=1000, seed=1)  # a bare sheet: nothing near the seat but what the test puts there
+    s.M["houses"].append({"x": 452, "y": 497, "w": 20, "h": 30, "rot": 0})  # blocks the 16-char one-liner's left end
+    s.label(500, 500, "Shrine of Benten", 9)
+    body = s.toplabels[-1]
+    assert body.count("<tspan") == 2
+    lines = [t.split(">", 1)[1].split("<")[0] for t in body.split("<tspan")[1:]]
+    assert "of" not in lines and lines in (["Shrine of", "Benten"], ["Shrine", "of Benten"])
+
+
 def test_label_rot_emits_a_center_rotation_and_appends_the_tilt():
     s = _town()
     s.label(500, 500, "tilted", 9, rot=150)  # a caller passes the FEATURE rotation; label() folds it
