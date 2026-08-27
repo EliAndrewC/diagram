@@ -6,9 +6,9 @@
     "utc": "2026-08-25T20:50:09Z"
   },
   "scope": {
-    "state": "reference",
-    "why": "GM 2026-08-25: the reference hamlet only until Eli accepts it (feature 133); no sweeps, release with make scope-unlock",
+    "state": "unlocked",
+    "why": "GM 2026-08-27: the reference hamlet is accepted as complete (feature 133 T99 pending only the acceptance record) - the deferred sweeps, map-rolling tests, knob maps and perf bookends are owed now",
     "who": "Eli Courtwright",
-    "utc": "2026-08-25T20:50:09Z"
+    "utc": "2026-08-27T19:21:24Z"
   }
 }
