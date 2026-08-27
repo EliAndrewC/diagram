@@ -289,6 +289,14 @@ _(from T46 on, each entry also says `research: rendering` or `research: physical
       measure: `git config user.email` in the clone and the mirror after one sync-in; the next commit's author
       verify: `make hooks-test` (sync-with-main.sh is a guard); the commit that closes this task carries the new address
 
+- [ ] T52 **what is a paddy hamlet still missing? - a completeness pass** - the GM (2026-08-27): *"What things would exist on a noticeable percentage of farmhouses that we are not currently representing on our maps ... What, if anything, are we missing? I want to make sure that we get our reference hamlet correct by including all of the things that would be there for this type of farming settlement before we move on to others."*
+      given 2026-08-27T17:13Z | done - | elapsed - | runs: -
+      research: physical
+      - [ ] research pass (a census of the farmstead's and the hamlet's features in the record vs the map, then a source-reader pass on the candidates)  - [ ] source-reader confirmed  - [ ] recorded and cited
+      scaffold: none until the GM picks from the gap list - this task delivers the list with prevalence and a reading of each
+      measure: the feature families Inashiro records vs the read record's list
+      verify: the record; the GM chooses
+
 ## Phase 9 - acceptance
 
 - [ ] T90 the would-have-dispatched audit (FR-005): every entry in the period, and for each whether it should have run; each "no" names a tooling change

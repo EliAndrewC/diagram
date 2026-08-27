@@ -371,6 +371,71 @@ ResearchGate "Scheme of bund, terrace, and field dimensions" (the 15-150 cm widt
 "Paddy". Corrected 2026-08-27 under the read-what-you-cite rule (T44): the first record cited the
 unread pages as if read.
 
+## What stood on a farmstead - the inventory, with numbers (researched 2026-08-27, feature 133 T52)
+
+The GM: *"What things would exist on a noticeable percentage of farmhouses that we are not currently
+representing on our maps ... What, if anything, are we missing?"* A `source-reader` pass (37 fetches)
+plus one paper the session read itself, page by page.
+
+**READ - the one quantified source.** Sugiura Tadashi, "農村集落における農家の付属建物について - 宮城県宮崎町の例"
+(On the ancillary buildings of farmhouses in agricultural settlements: Miyazaki-machi, Miyagi),
+*Tōhoku Chiri* 25(3), 1973, pp. 145-152 (JStage tga1948/25/3/25_3_145): a July 1972 survey of all
+87 households in three hamlets (Asahi, Kita-Nagasaida, Minami-Nagasaida) on the terrace south of the
+Naruse river, every roofed outbuilding counted and classified by function. Averages per household:
+4.38 outbuildings (4.57 for farm households) - "surprisingly many" against the Tōhoku norm of a single
+main building. Table 5 gives buildings PER HOUSEHOLD by function; the B1 column is houses built
+before 1944 - the traditional stock, and the one that speaks for our period:
+privy outbuilding (便所) **0.87**; firewood shed (マキ小屋) **0.76**; straw shed (ワラ小屋) **0.68**; barn
+(納屋) 0.58; work shed (作業場) 0.55; livestock shed (畜舎) 0.55; storehouse (くら) 0.24; compost/
+manure shed (堆肥舎) 0.24; bath shed (浴室) 0.29 (all-house average); chicken coop (鶏舎) 0.16
+(0.28 all houses); general storage (物置) 0.48 (all); well house (井戸小屋) 0.19 (all); pickle shed
+(つけもの小屋) 0.24; hasa shed 0.13; household shrine (社) 0.03; charcoal shed 0.01. Table 6 gives what
+was INSIDE the old main house instead: livestock 60.5% of B1 households, bath 52.6%, privy 31.6%.
+Scope, stated: 1972, Tōhoku (snow country, 5 km from the mountains, 145 cm max snow) - a region the
+author himself says is unusually many-building; the Edo hamlet this map draws is temperate lowland,
+so these are the SHAPE of a farmstead's inventory and an upper band on counts, not a transplant.
+
+**The reader's pass, on the rest** (READ unless marked): shared wells outnumbered private ones,
+"井戸の掘削費用が高額で ... 共同所有の井戸が多かった" (ja.wikipedia 井戸) - the map's communal wells are the
+norm; the harvest drying rack (稲架, hasa) "主に収穫後の田畑に作られることが多い" - stands IN THE FIELDS after
+harvest, seasonal, some regions leaving the frame up (ja.wikipedia 稲架); the household shrine
+(屋敷神) is a small stone or wood hokora in a plot corner, N/W or N/E (ja.wikipedia 屋敷神) - attested,
+and Sugiura counts it at 3 per 100 households, so RARE; dosojin and jizo stand on the road and at
+passes, jizo also "in the villages" (nakasendoway.com) - a village-ENTRANCE stone is summary-only;
+a gate (屋敷門) is a WARRIOR house's feature (JAANUS) - not a commoner farmstead's without a source;
+the magariya attached stable is a Nanbu/Tōhoku cold form - our separate byres are the temperate
+reading; a headman-class compound (Chiba museum's Boso-no-Mura reconstruction) had eight buildings:
+主屋・土蔵・長屋門・馬小屋・納屋・木小屋・作業小屋・井戸 - the top of the ladder, not the typical plot.
+SUMMARY-ONLY: persimmon "planted in the gardens of farming families without exception" from the late
+Edo (MAFF, unfetched); firewood "stacked behind a shed or along the yashiki's front wall" (Chiba
+museum, mojibake on fetch); straw ricks (waraguro) built around a pole to ~2 m and kept to spring;
+the goemon-buro bath as a standalone shed common among farmers; water mills RARE - a 1788 record
+counts 33 waterwheels on the whole Musashino plateau; kabata a spring-fed Shiga regional form; the
+communal village graveyard the Edo norm, the farmstead grave (屋敷墓) a Heian-Muromachi elite
+practice; chickens kept before Meiji mainly for time-telling and fighting, so a coop is uncertain.
+
+**What the map draws today vs the inventory.** Drawn: the house (three sizes), ONE attached kura on
+some, the threshing yard, the garden, the household bamboo, the grove; hamlet: wells, byres, belt,
+coppice, board, planks, pond, marsh. NOT drawn, in order of the read prevalence: the privy (0.87 -
+near-universal, a 1-ken shed on the plot's back or side, and in China the muck cluster with the
+animal sheds, research above); the firewood stack/shed (0.76); the straw stack (0.68, seasonal in
+the yard); a second and third work building (naya 0.58 + work shed 0.55 + storage 0.48 against our
+one shed on some houses); the manure/compost heap (0.24); the bath shed (0.29); the chicken coop
+(0.16-0.28, uncertain for Edo); the well house over a private well (0.19); the persimmon in the
+yard (summary-only, "without exception"); the hasa frames in the fields (seasonal); the hamlet
+graveyard; a wayside jizo. Not owed: a gate, a mill, kabata, an in-house stable.
+
+Labels: every number above ACCURATE for 1972 Miyagi and a GUIDE elsewhere (stated scope); the
+persimmon and the firewood placement SUMMARY-ONLY; nothing here is drawn yet - this entry is the
+list the GM chooses from.
+
+**Sources (read):** Sugiura 1973 (JStage PDF, read pp. 145-152); ja.wikipedia 井戸, 稲架, 屋敷神;
+nakasendoway.com "Dosojin"; Chiba Prefectural Museum, Boso-no-Mura headman farmstead page; JAANUS
+"yashikimon" (via the reader). **Pointers, not read:** MAFF (persimmon); the Chiba museum housing
+page (mojibake); kubota.co.jp / JA Hiroshima (waraguro); japaaan / ohgaki (goemon-buro); mizu.gr.jp
+(the 1788 waterwheel count); NDL reference desk (屋敷墓); ja.wikipedia 外便所 (the fetched text was
+Australian in scope).
+
 ## Does a hamlet have to be NUCLEATED at all? (researched 2026-08-23)
 
 **Answer: no. Three forms are supportable, so the form becomes a seeded knob (Principle XII), and

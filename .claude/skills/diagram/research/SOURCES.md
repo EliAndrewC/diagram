@@ -25,6 +25,12 @@ Findings recorded before the rule, or on a source the rule now excludes. Each is
 
 ## Works cited
 
+### `sugiura-1973-fuzoku`
+
+Sugiura Tadashi, 「農村集落における農家の付属建物について - 宮城県宮崎町の例」, *Tōhoku Chiri* 25(3): 145-152, 1973 (JStage tga1948/25/3/25_3_145; READ 2026-08-27, all eight pages)
+
+*Used for:* the per-household inventory of farmstead outbuildings by function (Table 5) and what stood inside the old main house (Table 6) - privy 0.87, firewood shed 0.76, straw shed 0.68, barn 0.58, work shed 0.55, livestock shed 0.55, kura 0.24, manure shed 0.24, bath 0.29, coop 0.16-0.28, household shrine 0.03; scope 1972 Tōhoku, stated wherever quoted
+
 ### `tabayashi-1986`
 
 Tabayashi 1986, *Geographical Review of Japan* 60(1) (jstage grj1984b/60/1)
