@@ -4,7 +4,7 @@
 
 **Created**: 2026-08-27
 
-**Status**: DRAFT - awaiting the `spec-fidelity` review (constitution XVI)
+**Status**: APPROVED by `spec-fidelity` - round 3 verdict **FAITHFUL** (2026-08-27), after rounds 1 and 2 each returned changes. Implementation may begin.
 
 **Input**: [`gm-request.md`](gm-request.md), verbatim and unedited. That file is the authority for
 this specification.
@@ -31,22 +31,29 @@ reference hamlet, Inashiro, as a **generalized mechanism** that any scripted ham
 
 ## How the request was read
 
-The request was dictated, and three phrases are transcription slips. Each is read as follows, and
-the fidelity review is asked to confirm the reading:
+The request was dictated, and four phrases are transcription slips or hedges. Each is read as
+follows, and the fidelity review is asked to confirm the reading:
 
 | the GM's words | read as | why |
 |---|---|---|
 | *"If I highlight a flushing field, I want all flushing fields on the map to become highlighted"* | the **flooded** (paddy) plots - the wet field | the map's fields are paddies (`wet_plots` in the manifest); "flooded field" is the only field kind the phrase can name. If the GM meant the fallow patches, those are a class of their own below (FR-007) and nothing is lost |
 | *"the earthen buns"* / *"the earthen bunds"* | the paddy bunds | said correctly in the same sentence |
 | *"the different Categories of bamboo grudge"* | bamboo **grove** | the sentence before names *"the shared bamboo grove"* |
+| *"a generalized process that will kind of work for other hamlets as well"* | the mechanism is built once, in the shared engine, so any scripted hamlet's run writes the page - **proven on the reference hamlet**, the GM's stated starting point (*"We can start with the reference hamlet specifically"*) | "kind of work" is a weaker bar than a passing suite; a second hamlet's page is expected to work, and is checked when scope unlocks (SC-008), but the feature is not held to it |
 
-One further reading that is NOT a slip but a judgment: the GM says *"all of the village lanes ...
-treated as a single feature"*. The connector track to the off-map road is not a village lane (it
-predates the settlement - `dev/placement.md`, "ways are split by provenance"), so it is a class of
-its own and its explanation says why (FR-005). This is one of the judgment calls the GM
-anticipated (*"we have a lot of different judgment calls to make about what things get
-highlighted"*), and every one of them is listed in FR-007 so the GM can overrule any of them by
-name.
+**All ways are one feature.** The GM: *"all of the village lanes ... if they were not connected, I
+would still expect them to all be highlighted and to be treated as a single feature."* That is the
+only instruction about ways, and it covers every lane on the map - the connector to the off-map
+road and the field spur included. The engine's own distinction between them (provenance - `dev/
+placement.md`) is about generation order, and the GM has already closed it as a basis for
+exceptions (`dev/RESUME-HERE.md`: *"ANY lane. There is no exogenous class, no connector
+exception"*). The lane explanation MAY mention that the connector predates the settlement; it is
+not a separate class. (A first draft of this spec made it one; the fidelity review struck it.)
+
+**The judgment calls are listed so the GM can overrule any by name.** The GM: *"we have a lot of
+different judgment calls to make about what things get highlighted and which things do not"* -
+so FR-007 lists every class, and FR-002 provides for the second half of that sentence: a thing
+the GM rules does NOT highlight is declared as such, not left unclassed.
 
 ## User Scenarios & Testing *(mandatory)*
 
@@ -75,20 +82,19 @@ highlighted state; then the same for two disconnected pieces of one class (FR-00
 
 ### User Story 2 - Different kinds light up separately (Priority: P1)
 
-The player hovers a farmhouse: the farmhouses light, and the storage sheds attached to them do
-not. Hovering an attached storage shed lights the storage sheds and not the detached animal sheds
+The player hovers a farmhouse: the farmhouses light, and the storage sheds (attached or detached) do
+not. Hovering a storage shed lights the storage sheds and not the detached animal sheds
 (byres); hovering a byre lights the byres alone. Hovering the shelter belt lights the whole
 windbreak and none of the other tree patches; hovering a copse lights the copses and not the
 windbreak. Hovering a household bamboo patch lights those and not the shared grove.
 
-**Independent Test**: for every pair of classes the GM named as distinct (farmhouse / attached
-shed / byre; windbreak / other trees; homestead bamboo / shared grove; bund / bund beans; each dry
+**Independent Test**: for every pair of classes the GM named as distinct (farmhouse / storage shed / byre; windbreak / other trees; homestead bamboo / shared grove; bund / bund beans; each dry
 crop against the others), a headless-browser test hovers one and asserts the other is dark.
 
 **Acceptance Scenarios**:
 
 1. **Given** the pointer is on a farmhouse, **Then** no shed of either kind is highlighted.
-2. **Given** the pointer is on an attached storage shed, **Then** no byre is highlighted, and the
+2. **Given** the pointer is on a storage shed, **Then** no byre is highlighted, and the
    reverse.
 3. **Given** the pointer is on the windbreak, **Then** no copse, woodland or homestead tree is
    highlighted, and the reverse.
@@ -140,7 +146,7 @@ class that has a sibling class present on THIS map - the sibling's name.
 2. **Given** the modal is open, **When** the player presses Escape, clicks the close control or
    clicks outside the modal, **Then** it closes and the highlight state resumes.
 3. **Given** the class has a sibling class on this map (windbreak with copse or woodland; each dry
-   crop with the others; beans with bunds; homestead bamboo with a shared grove; attached shed
+   crop with the others; beans with bunds; homestead bamboo with a shared grove; storage shed
    with byre), **Then** the explanation names the sibling and says how the two differ.
 4. **Given** the sibling class is NOT on this map (a hamlet with no woodland commons), **Then**
    the explanation does not claim it is.
@@ -170,8 +176,10 @@ The GM regenerates any scripted hamlet (Inashiro today; the other hamletgen maps
 `.html` beside its `.svg`, `.png` and `.json`, with the same interaction. The pool index links to
 it. Render-sync writes it into main beside the renders, so it is browsed where the renders are.
 
-**Independent Test**: regenerate a second scripted hamlet and assert its `.html` exists, opens in
-the headless browser, and passes the same hover/click checks for the classes it contains.
+**Independent Test**: the reference hamlet's run writes its `.html` through the shared engine
+path with nothing hamlet-specific in the way (SC-008); on unlock, regenerate a second scripted
+hamlet and assert its `.html` exists, opens in the headless browser, and passes the same
+hover/click checks for the classes it contains.
 
 **Acceptance Scenarios**:
 
@@ -183,9 +191,9 @@ the headless browser, and passes the same hover/click checks for the classes it 
 
 ### Edge Cases
 
-- **Ink that belongs to no class** (the background, the title placard, the scale bar, the frame):
-  never highlights and never opens a modal. Anything else on the map that belongs to no class is a
-  DEFECT, caught by a gate check (FR-009) rather than left as dead ground.
+- **Ink on the not-highlighted list** (the background, the title placard, the scale bar):
+  never highlights and never opens a modal. Ink that is in no class AND not on that list is ink
+  nobody has ruled on - a DEFECT, caught by a gate check (FR-009) rather than left as dead ground.
 - **Ink that belongs to two classes at once** (the beans on the bund): the topmost element under
   the pointer decides. The beans are drawn over the bund, so hovering a bean is the beans and
   hovering the bund beside it is the bund. An element is never in two classes.
@@ -208,18 +216,20 @@ the headless browser, and passes the same hover/click checks for the classes it 
   MUST also write `<base>.html`, a single self-contained file that opens from `file://` with no
   server, no network access and no external asset. The page shows the same map, at the same
   viewport, as the PNG.
-- **FR-002 (every feature has a class)**: every drawn feature on the map MUST belong to exactly
-  one **feature class** - the unit of highlighting. A class is a kind of thing, not an instance:
-  "farmhouse", not "the third farmhouse". Its members highlight together regardless of whether
-  they touch (the GM: *"if they were not connected, I would still expect them to all be highlighted
-  and to be treated as a single feature"*).
+- **FR-002 (every feature is ruled on)**: every drawn feature on the map MUST either belong to
+  exactly one **feature class** - the unit of highlighting - or be on an explicitly declared
+  **not-highlighted** list (the GM: *"judgment calls to make about what things get highlighted and
+  which things do not"*). A class is a kind of thing, not an instance: "farmhouse", not "the third
+  farmhouse". Its members highlight together regardless of whether they touch (the GM: *"if they
+  were not connected, I would still expect them to all be highlighted and to be treated as a
+  single feature"*). The not-highlighted list starts with the frame (background, title placard,
+  scale bar) and grows only by a recorded ruling.
 - **FR-003 (hover)**: when the pointer enters any ink of a class, every element of that class on
   the map MUST take a visibly distinct highlighted state and every other class MUST stay as drawn;
   when the pointer leaves, the state clears. The highlight MUST be legible against every fill on
   the map (the pale rice, the dark pine of the beans, the blue water, the parchment ground).
 - **FR-004 (separate kinds)**: classes MUST be distinguished at the grain the GM named:
-  farmhouse vs. attached storage shed vs. byre; windbreak vs. copse vs. woodland commons vs. the
-  trees of a homestead; homestead bamboo vs. a shared bamboo grove; the bund vs. the beans on it;
+  farmhouse vs. storage shed vs. byre; windbreak vs. copse vs. woodland commons vs. persimmon; homestead bamboo vs. a shared bamboo grove; the bund vs. the beans on it;
   each dry crop from the others; marsh from scrub. The full vocabulary is FR-007.
 - **FR-005 (the explanation)**: clicking a highlighted class MUST open a modal that gives, for
   that class: its name; what it is; why it stands where it does on the map; its constitution XII
@@ -235,42 +245,46 @@ the headless browser, and passes the same hover/click checks for the classes it 
   the GM can overrule any by name. Each row is one class; the "siblings" column is what its
   explanation must distinguish it from when both are on the map.
 
+  The siblings column is **symmetric** (if A names B, B names A) and names only classes in this
+  table - FR-005 keys the distinguishing text off it in both directions.
+
   | class | what it covers on the map | siblings |
   |---|---|---|
-  | farmhouse | the dwelling of each household | attached storage shed; byre |
-  | attached storage shed | the lean-to shed drawn against a farmhouse (`houses[].shed`) and the detached farm sheds of the same household (`farm_sheds`) - storage either way | farmhouse; byre |
-  | byre | the draft-animal sheds (`byres`) | attached storage shed |
+  | farmhouse | the dwelling of each household | storage shed; byre |
+  | storage shed | the lean-to shed drawn against a farmhouse (`houses[].shed`) and the detached farm sheds of the same household (`farm_sheds`) - storage either way; the GM's distinction is storage vs. animals | farmhouse; byre |
+  | byre | the draft-animal sheds (`byres`) | farmhouse; storage shed; hen coop |
   | threshing yard | the work yard of each household | garden |
-  | garden | the kitchen garden of each household | threshing yard; dry crops |
-  | privy | the household privy | - |
+  | garden | the kitchen garden of each household | threshing yard; millet; buckwheat; barley |
+  | privy | the household privy | manure heap |
   | woodpile | the fuel stack | - |
   | manure heap | the muck heap | privy |
   | bathhouse | the household bath | - |
   | hen coop | the coop | byre |
-  | household shrine | the hokora | shrine (when a shrine stands on the map) |
-  | persimmon | the dooryard persimmon tree | homestead grove; copse |
+  | household shrine | the hokora | - |
+  | persimmon | the dooryard persimmon tree | copse |
   | homestead bamboo | the bamboo patch by a farmhouse (`bamboo_stands[role=homestead]`) | shared bamboo grove |
   | shared bamboo grove | a bamboo stand held in common (`bamboo_stands` with any other role, when present) | homestead bamboo |
   | windbreak | the shelter belt (`village_groves[role=windbreak]`) | copse; woodland commons |
-  | copse | a village tree stand that is not the belt (`village_groves[role=copse]`) | windbreak; woodland commons |
+  | copse | a village tree stand that is not the belt (`village_groves[role=copse]`) | windbreak; woodland commons; persimmon |
   | woodland commons | the woodland of the commons (`commons[role=woodland]`) | windbreak; copse |
   | scrub and rough grazing | the grazing commons (`commons[role=grazing]`) | marsh |
-  | marsh | every marsh patch, whatever its role (`marshes`) - the GM: *"all of the marshland"* | scrub and rough grazing |
-  | paddy | every wet plot | dry crops; fallow |
+  | marsh | every marsh patch, whatever its role (`marshes`) - the GM: *"all of the marshland"* | scrub and rough grazing; pond |
+  | paddy | every wet plot | millet; buckwheat; barley; fallow |
   | bund | the earthen bunds between and around the paddies | bund beans |
   | bund beans | the soybeans on the bunds | bund |
-  | millet | dry plots under millet | buckwheat; barley |
-  | buckwheat | dry plots under buckwheat | millet; barley |
-  | barley | dry plots under barley | millet; buckwheat |
-  | fallow | the fallow patches (when present) | paddy; dry crops |
+  | millet | dry plots under millet | buckwheat; barley; paddy; fallow; garden |
+  | buckwheat | dry plots under buckwheat | millet; barley; paddy; fallow; garden |
+  | barley | dry plots under barley | millet; buckwheat; paddy; fallow; garden |
+  | fallow | the fallow patches (when present) | paddy; millet; buckwheat; barley |
   | stream | the brook | field ditch; pond |
-  | field ditch | the intake, head race, branches and drain (`field_ditches`, `channels`) | stream |
-  | pond | the tameike | marsh; stream |
-  | village lane | every lane of the web and the internal skeleton (`lanes` that are not the connector) - one class whether or not they meet | connector track |
-  | connector track | the way to the off-map road (`lanes[connector]`) | village lane |
+  | field ditch | the intake, head race, branches and drain (`field_ditches`, `channels`) | stream; pond |
+  | pond | the tameike | stream; field ditch; marsh |
+  | village lane | EVERY lane on the map - the web, the internal skeleton, the connector to the off-map road and the field spur - one class whether or not they meet; the text may say the connector predates the settlement | - |
   | footbridge | every plank and deck over water | - |
   | well | the wellheads | - |
   | notice board | the kosatsuba, with its label | - |
+
+  **Not highlighted** (FR-002's declared list): the background, the title placard, the scale bar.
 
   A class in this table that a given map does not contain is simply absent from that page.
 - **FR-008 (the explanations are the record)**: the explanation text for a class MUST be drawn
@@ -279,9 +293,10 @@ the headless browser, and passes the same hover/click checks for the classes it 
   **guess** and says so; it is never presented as a finding (constitution XII: *"an unlabelled
   guess is the one failure"*). The explanations are written once, per class, in one place that any
   hamlet's page reads; a map-specific explanation is not a goal.
-- **FR-009 (no unclassed ink)**: a gate check MUST fail when a generated map contains drawn ink
-  that belongs to no class, other than the frame (background, title placard, scale bar). The check
-  runs on the reference hamlet and, on unlock, on every scripted hamlet in the pool.
+- **FR-009 (no unruled ink)**: a gate check MUST fail when a generated map contains drawn ink
+  that is neither in a class nor on the declared not-highlighted list (FR-002) - ink nobody has
+  ruled on. A deliberate "this does not highlight" ruling never turns the gate red. The check runs
+  on the reference hamlet and, on unlock, on every scripted hamlet in the pool.
 - **FR-010 (the SVG and PNG are unchanged)**: adding the HTML target MUST NOT change what the SVG
   and PNG show. Inashiro's PNG after this feature is byte-identical to the PNG before it, and so is
   every other pool map's.
@@ -296,6 +311,7 @@ the headless browser, and passes the same hover/click checks for the classes it 
 
 - **Feature class**: the unit of highlighting and explanation - a name, the manifest features it
   covers, its siblings, its explanation, its constitution XII label, its sources.
+- **Not-highlighted list**: the declared ink that is ruled out of highlighting (FR-002).
 - **The HTML page**: the map's SVG, with every primitive tagged by class, plus the styling and
   script that implement hover, highlight, click and the modal, plus the class explanations for
   the classes present on that map.
@@ -315,11 +331,13 @@ the headless browser, and passes the same hover/click checks for the classes it 
   entering a class, measured in the headless browser; the page finishes loading in under 5 s.
 - **SC-005**: Inashiro's PNG and every other pool map's PNG are byte-identical before and after
   the feature (FR-010), checked by hash.
-- **SC-006**: the unclassed-ink check (FR-009) reports zero unclassed elements on Inashiro, and a
-  regression fixture with one deliberately unclassed element makes it fail.
+- **SC-006**: the unruled-ink check (FR-009) reports zero unruled elements on Inashiro, and a
+  regression fixture with one deliberately unruled element makes it fail; an element on the
+  not-highlighted list does not.
 - **SC-007**: every class explanation carries exactly one of the three labels and a sources line.
-- **SC-008**: a second scripted hamlet's `.html` passes the same browser test for the classes it
-  contains (US6).
+- **SC-008**: the `.html` is written by the shared mechanism for any scripted hamlet run, proven
+  on the reference hamlet; when scope unlocks, a second scripted hamlet's page passes the same
+  browser test for the classes it contains (US6) - owed then, not a condition of this feature.
 
 ## Decisions Recorded *(mandatory for any feature that changes what a map draws or states)*
 
@@ -334,12 +352,25 @@ against the explanations shipped.
 | the class vocabulary itself (FR-007) - which kinds are distinguished | judgment, not history - the GM's, delegated to this spec | the GM: *"we have a lot of different judgment calls to make about what things get highlighted"* | this spec; the class registry the plan names |
 | one row per class explanation | (filled at implementation, from the research entry each cites) | | the class registry; the `research/` entry it cites |
 
+## Review history
+
+- **Round 1** (2026-08-27, `spec-fidelity` against `gm-request.md`): CHANGES REQUIRED - (1) the
+  connector track was carved out of "village lane" against the GM's one sentence on ways and the
+  GM's recorded closing of that argument; (2) "attached storage shed" misnamed its detached
+  members; (3) the siblings column named classes not in the table and was one-way; (4) FR-002 /
+  FR-009 made unclassed ink a defect where the GM said some things do not highlight; (5) SC-008
+  held the feature to a second hamlet where the GM said "start with the reference hamlet" and
+  "kind of work". All five applied.
+- **Round 2** (2026-08-27): CHANGES REQUIRED - one item: "attached storage shed" survived in
+  FR-004 and four user-story lines, contradicting FR-007's `storage shed`; FR-004 now names
+  FR-007's classes verbatim. Applied.
+- **Round 3** (2026-08-27): **FAITHFUL**. Aside recorded: FR-004 abbreviates `scrub and rough grazing` to "scrub"; the registry is written from FR-007, never from FR-004.
+
 ## Assumptions
 
 - **"Flushing field" is the flooded paddy** (see "How the request was read"). If the GM meant
   another kind of field, it is already its own class and nothing changes.
-- **The connector track is not a village lane** - the one judgment that narrows a sentence of the
-  request; it is declared above so the GM can overrule it.
+- **Every lane is one class**, the connector included (see "How the request was read").
 - **One explanation per class, not per map**: the GM asked that the explanation *"reference the
   fact that these things are distinguished from one another"*; the distinguishing text is written
   per sibling pair and included only when both are on the map. Nothing in the request asks for
