@@ -122,11 +122,14 @@ more accurate. Two findings, one from land use and one from vegetation structure
   trees cut on a cycle). So brush and young pine under the crowns of an inhabited village's grove
   is the form the read record does not show; the floor is litter-raked ground under a canopy cut
   every 15-20 years.
-- **The edge is a gradient, and it is grass.** Woodland-edge ecology describes the transition as a
-  herb FRINGE outside, a shrub BELT, and the woody MANTLE - canopy closure falling from near-complete
-  inside to partial at the boundary, and vegetation height stepping down from crown to shrub to
-  herb. On a worked wood the shrub belt is what gets cut; the grass fringe is what remains, and it
-  thins out under the first crowns.
+- **The edge is a gradient, and it is grass.** READ (German Wikipedia "Waldrand", found by the
+  `source-reader` run of 2026-08-27 when the English pointer turned out not to carry the terms):
+  "Ein idealer, ausgewachsener Waldrand gliedert sich von außen nach innen in Krautsaum,
+  Strauchgürtel und Waldmantel" - an ideal mature forest edge runs, outside to inside, herb fringe,
+  shrub belt, forest mantle. SUMMARY-ONLY: the EUNIS E5.2 factsheet's "mantle ... and fringe"
+  (the page 404s). NOT-FOUND and dropped: the "canopy closure near-complete inside to partial at
+  the boundary" sentence the first record carried. On a worked wood the shrub belt is what gets
+  cut; the grass fringe is what remains, and it thins out under the first crowns.
 
 **Rule** (`settlement/land/cover.py` `hinterland(soft_extra=)` -> `commons(soft=)`, the T12 marsh
 machinery reused; `hamletgen/hinterland.py` computes the belt two stages early so the scrub can see
@@ -143,9 +146,14 @@ DESERTED settlement, never for an inhabited one.
 **Sources (read):** Wikipedia "Satoyama"; the Geography Hub, "Japan's Satoyama Landscapes"; Uehara,
 Shigematsu, Fujii, Iwamoto (2009), "Succession of shrub-layer vegetation and situation of wild
 Rhododendron in the abandoned Satoyama coppice forest" (AGRIS record). **Pointers, not read:**
-Wikipedia "Woodland edge"; EUNIS "Thermophile woodland fringes"; Springer "Forest Edges, Scrub,
-Hedges and Their Herb Communities" (the mantle-and-fringe structure came from search summaries);
-Forests 2025 on Okinawa homestead windbreaks. Corrected 2026-08-27 under T44.
+Springer "Forest Edges, Scrub, Hedges and Their Herb Communities"; EUNIS "Thermophile woodland
+fringes" (404); Forests 2025 on Okinawa homestead windbreaks (MDPI 403). **Read by the
+source-reader run (T45):** German Wikipedia "Waldrand" (herb fringe / shrub belt / forest mantle);
+"Distribution and utilization of homestead windbreak Fukugi trees", PMC 7898781 - "Homestead
+windbreaks are managed as part of a residence and are strips of trees planted and maintained to
+alter wind flow and microclimate ... designed based on Feng Shui concepts in the Ryukyu Kingdom,
+around 300 years ago". English Wikipedia "Woodland edge" was read and does NOT carry the
+three-layer terms. Corrected 2026-08-27 under T44 and T45.
 
 
 ## How is a coppice lot bounded? By ridge, stream and path - never by a page axis (researched 2026-08-18, revisited 2026-08-27, feature 133 T36)
@@ -209,9 +217,14 @@ covered geta; it made shakuhachi. READ (PMC 5723622, the moso/madake range study
 Honshu, as well as the coasts of northern Honshu"; stands "were not found at study sites where ...
 mean annual minimum temperature was below -16.8°C", and "moso and madake bamboo distribution in
 northern Japan depends primarily on temperature", agreeing with prior work "that moso bamboo cannot
-withstand temperatures around or below -18 to -20°C". UNVERIFIED (403; from search summaries):
-that a typical Edo farmstead kept "a grove where they could harvest bamboo" (Kids Web Japan); the
-madake -15 C hardiness figure (PFAF); the broader list of uses (Highlighting Japan). So: a lowland
+withstand temperatures around or below -18 to -20°C". READ (the `source-reader` run, T45):
+madake "Minimum Temp: 5°F (-15°C), Hardiness Zone: 7" (completebamboo.com), with other readable
+growers giving -18 to -23 C - a spread, not a number; and no read source says new SHOOTS take
+frost, only that "colder weather will likely cause frost damage to leaves and canes" (bambubatu),
+so that clause is softened to "frost-tender at the margin". SUMMARY-ONLY, still: that a typical Edo
+farmstead kept "a grove where they could harvest bamboo" (Kids Web Japan - the page and its
+archives all 403; no corroborating snippet found, so it carries no weight here); the broader list
+of uses (Highlighting Japan). So: a lowland
 paddy hamlet in a temperate province has bamboo as a matter of course, and a cold upland one may
 have none - that half is read. THAT is the axis of variance the
 project wants: two attested forms, a knob per settlement (Principle XII).
@@ -247,7 +260,9 @@ legibility check (a stand under ~20 ft across does not read).
 
 **Sources (read):** Wikipedia "Satoyama"; Wikipedia "Phyllostachys bambusoides"; "Detecting
 latitudinal and altitudinal expansion of invasive bamboo Phyllostachys edulis and Phyllostachys
-bambusoides in Japan", PMC 5723622. **Pointers, not read (403):** Kids Web Japan (the Shirakawa
-farmstead); PFAF and Gardenia (hardiness); Highlighting Japan 2022 (uses); Wikimedia Commons
-"Japanese Map symbol (Bamboo grove)" (not fetched; the symbol's existence is the claim). Corrected
-2026-08-27 under the read-what-you-cite rule (T44).
+bambusoides in Japan", PMC 5723622; completebamboo.com, bambubatu.com and practicalplants.org on
+madake hardiness (T45 run); ridgelineimages.com "Reading GSI Topographic Maps" - the bamboo forest
+(竹林) symbol listed as its own category beside broad-leaved (広葉樹林) and coniferous (針葉樹林)
+forest, and distinct from the bamboo-grass (笹地) symbol (T45 run). **Pointers, not read (403):**
+Kids Web Japan (the Shirakawa farmstead); PFAF and Gardenia; Highlighting Japan 2022 (uses).
+Corrected 2026-08-27 under the read-what-you-cite rule (T44) and the source-reader run (T45).

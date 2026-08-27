@@ -19,7 +19,7 @@ Findings recorded before the rule, or on a source the rule now excludes. Each is
 - History of agriculture in China (Grokipedia) - research/urban-features.md
 - Nagoya Castle (Grokipedia; site documentation) - the site documentation half stands
 - Jokamachi surveys (Grokipedia; Nakasendo Way, *Castle Towns*) - the Nakasendo Way half stands
-- Unread pointers left by 2026-08-27's entries (T32, T34-T36, T41, T42), each marked "not read" in its entry: the bund-width figure (ResearchGate/Britannica), madake hardiness (PFAF/Gardenia), the Shirakawa farmstead bamboo grove (Kids Web Japan), the turn-minimization claim (Ma et al. 2024, *EPB*), the woodland mantle-and-fringe structure (EUNIS/Springer), the Okinawa windbreak paper (Forests 2025), the GSI bamboo symbol page
+- Still summary-only after the `source-reader` run of 2026-08-27 (T45), each labeled in its entry: the bund-width convention (IRRI, unreachable; FAO read and larger); the Shirakawa farmstead bamboo grove (Kids Web Japan, 403 with no corroboration); the turn-minimization sentence (Ma et al. 2024 full text - the abstract's angle finding IS read); EUNIS E5.2 (404). Resolved by that run: madake hardiness (read, three growers), the forest-edge three layers (German Wikipedia "Waldrand"), the Okinawa windbreak (PMC 7898781), the GSI bamboo symbol (ridgelineimages.com).
 
 
 ## Works cited

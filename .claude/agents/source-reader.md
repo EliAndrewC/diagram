@@ -37,7 +37,10 @@ A list of items, each: **the claim as written in the entry** (verbatim), **the s
    about the subject - never "does this page support X?" A page asked whether it agrees will agree.
 3. **Judge the claim against the quoted text, in context.** Numbers must match; scope must match
    (a Korean bund is not "paddy bunds"); the source's own hedges carry over ("possibly native to
-   Japan" is not "native to Japan").
+   Japan" is not "native to Japan"); and THE SAME WORD CAN NAME A DIFFERENT THING - on this agent's
+   first run (2026-08-27) it marked "turning angle 90-120°" READ from an abstract whose "angle" was
+   a simulated agent's angle of VISION. Ask what the noun refers to in the source before matching
+   it to the claim; when it refers to something else, the verdict is CONTRADICTED, not READ.
 4. **Never substitute your own knowledge for the page.** If the page does not say it, it is not
    READ, however true you believe the claim to be.
 

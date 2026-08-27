@@ -280,8 +280,15 @@ Two lines of evidence, one from how paths form and one from how villages are lai
   desire paths are not necessarily straight - they follow least resistance, sidestepping slopes and
   obstacles. UNVERIFIED (the paper is paywalled and its abstract could not be fetched; the phrase
   came from a search summary of Ma, Brandt, Seipel and Ma 2024): that walkers "consciously or
-  unconsciously minimize the number and severity of turns" and that turning angle outweighs depth
-  of vision. What the read sources DO support is enough for the rule: a worn path is the shortest
+  unconsciously minimize the number and severity of turns". CONTRADICTED IN SCOPE (the abstract,
+  read via ideas.repec.org, T45 - and caught only on the session's spot-check of the reader's
+  quote): the paper's "angle (found to be limited to a narrow range of 90-120°)" is the simulated
+  agent's ANGLE OF VISION, a visual parameter of the model set against "depth of vision" - not a
+  walker's turning angle. The search summary had recast a field-of-view parameter as a
+  turn-minimization finding, the first record repeated it, and a reader matching words found it
+  "read". So that paper supports nothing here about turns; the sentence stays as a summary-only
+  claim of unknown provenance, and the rule does not lean on it. What the read sources DO support
+  is enough for the rule: a worn path is the shortest
   or easiest route between two points, so a switchback within a few paces - which is neither - is
   a path nobody walks, and a path nobody walks is never worn.
 - **Village morphology.** The lanes of a nucleated Japanese or Chinese village are the gaps left
@@ -308,9 +315,10 @@ minimizes its turns; a bend sits at a plot corner); 140 degrees / 50 degrees wit
 **Sources (read):** Wikipedia "Desire path" (citing Hampton and Cole 1988 for the fifteen-passage
 figure); 99% Invisible, "Least Resistance: How Desire Paths Can Lead to Better Design". **Pointers,
 not read (paywalled/403):** Ma, Brandt, Seipel and Ma (2024), *Environment and Planning B*
-(agent-based desire paths; the turn-minimization claim); the 2025 *Landscape and Urban Planning*
-energy-based desire-path paper. The plot-corner geometry is the 2026-08-18 entry's. Corrected
-2026-08-27 under the read-what-you-cite rule (T44).
+(agent-based desire paths; its abstract READ via ideas.repec.org and found to be about the
+agents' angle of VISION, not turning - the turn-minimization sentence is not from it); the 2025
+*Landscape and Urban Planning* energy-based desire-path paper. The plot-corner geometry is the
+2026-08-18 entry's. Corrected 2026-08-27 under T44 and the T45 spot-check.
 
 ## How close does a farmhouse stand to the paddy? Up against it - but never on the bund (researched 2026-08-27, feature 133 T41)
 
@@ -326,9 +334,14 @@ question is not one anyone measured - so the floor is DERIVED from three atteste
   constructed and maintained to retain water in the paddies and to allow the passage of people and
   transportation of tools", and "farmers generally maintain levee grasslands by periodic mowing".
   READ (Wikipedia "Paddy field"): plots "separated by bunds approximately 10 cm in height" (a Korean
-  example). UNVERIFIED (constitution v2.11.0 - the pages could not be fetched, the figures come
-  from a search summary): a bund 15-150 cm wide, typically 30-50 cm; so "about 1.5 ft" is a
-  working figure, not a finding.
+  example). SUMMARY-ONLY (the `source-reader` run of 2026-08-27, T45): the IRRI Rice Knowledge
+  Bank's "How to construct bunds" - unreachable to the tool, seen in a search snippet - says
+  "bunds should be constructed no wider and taller than 50 cm x 30 cm ... high enough (at least
+  20 cm) to avoid overflowing"; the "15-150 cm" range was seen nowhere. READ, and pulling the other
+  way: FAO's basin-irrigation manual (fao.org/4/ac180e/AC180E07.htm) gives a permanent "dry bund"
+  a 25 cm minimum height (60 recommended) and a 180 cm base tapering to 60 cm - a different, heavier
+  structure than a field partition. So "about 1.5 ft" is one convention among several, and the
+  6 ft floor below leans on it lightly.
 - **The house's roof reaches past its wall.** A thatched farmhouse's eaves overhang the wall by
   about 3 ft - UNSOURCED here: it is the figure the `FARMHOUSE_EAVE_GAP_FT` rule already spends
   between neighboring houses, carried over rather than re-read; its drip line is where the wall's
