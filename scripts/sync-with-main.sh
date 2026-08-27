@@ -124,14 +124,26 @@ sync_in() {
   git fetch -q origin || die "cannot fetch GitHub main from $GITHUB_URL"
   mirror_refresh
   render_sync
-  if [ "${1:-}" = "--mirror-only" ]; then echo "sync-with-main: mirror refreshed from GitHub main (clone left alone - mid-task)"; return 0; fi
+  if [ "${1:-}" = "--mirror-only" ]; then clone_index_refresh; echo "sync-with-main: mirror refreshed from GitHub main (clone left alone - mid-task)"; return 0; fi
   git pull --no-rebase origin main
+  clone_index_refresh
   # No render pull-in anymore (GM 2026-07-22): its old rationale was that a clone's stale renders
   # would flow back into main via render-sync's copy - but render-sync no longer copies anything,
   # it REGENERATES main in place, so nothing flows clone -> main and the clone never needs main's
   # renders. A clone regenerates whatever map it iterates on; the GM browses renders in main.
   date > "$ROOT/.git/sync-with-main.stamp"
   echo "sync-with-main: clone synced with GitHub main (git)"
+}
+
+# THE CLONE GETS ITS OWN POOL INDEX (GM 2026-08-27). pool/index.html is derived and gitignored, and
+# render-sync writes only main's - so a clone had none, and the GM could not use it as an index of
+# that clone's work in progress. Refreshed on BOTH sync-in branches (a dirty, mid-task clone is
+# exactly where a WIP index matters) through the skill's `pool-index-if-stale`, whose `find -newer`
+# check makes a no-change turn cost milliseconds. Never fatal: a broken index must not stop a sync.
+clone_index_refresh() {
+  [ -f "$ROOT/$SKILL_DIR/Makefile" ] || return 0
+  ( cd "$ROOT/$SKILL_DIR" && make --no-print-directory pool-index-if-stale ) \
+    || echo "sync-with-main: WARNING - pool index refresh failed in the clone (run: make pool-index in $SKILL_DIR)" >&2
 }
 
 push_cmd() {
