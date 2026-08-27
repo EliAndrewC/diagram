@@ -4,7 +4,7 @@
 
 **Created**: 2026-08-27
 
-**Status**: Draft - awaiting the `spec-fidelity` review (constitution XVI)
+**Status**: Draft - `spec-fidelity` round 2 pending (constitution XVI)
 
 **Input**: [`gm-request.md`](gm-request.md), verbatim and unedited. That file is the authority for
 this specification.
@@ -133,7 +133,8 @@ before and after this feature - the reference hamlet does not move.
    in, **Then** Inashiro regenerates to exactly the accepted manifest.
 2. **Given** a reference-hamlet feature that cannot honestly stand on a dike-pond hamlet, **When**
    the generator omits it, **Then** the omission is recorded (the research, the rule, the pointer)
-   and visible in the spec's Decisions Recorded table.
+   in the spec's Decisions Recorded table AND carried into the findings presented to the GM
+   (FR-007), who rules on it at acceptance.
 
 ---
 
@@ -183,10 +184,13 @@ push refuses to land the feature's engine work while it is open.
 - Kuwabata's household count (16) is inside the hamlet band; if the fitted polder cannot reach the
   acreage the count demands at the calibrated cell size, the fit reports it rather than stretching
   the cell.
-- Where the record supports two forms for a dike-pond composition (a uniform chessboard versus a
-  mosaic; willow versus mulberry on the water face), the generator rolls between them per seed
-  (constitution XII, the knob rule), and Kuwabata's declaration pins the form the hand-authored map
-  showed the GM.
+- Where the record supports two forms for a dike-pond composition, the two cases are judged
+  separately. A form composed only of things already on these maps (a uniform chessboard versus a
+  mosaic of the same ponds) is a knob rolled per seed (constitution XII), with Kuwabata's
+  declaration pinning the form the hand-authored map showed the GM. A form whose alternative
+  introduces a thing NOT already drawn on Inashiro or the hand-authored Kuwabata (willow on the
+  water face, for one) is NOT implemented in this feature: it goes on the audit list for the GM to
+  choose, because the GM said *"at least not in this specific case"*.
 
 ## Requirements
 
@@ -205,10 +209,16 @@ push refuses to land the feature's engine work while it is open.
 - **FR-006**: A research pass MUST precede the generator work and the audit, cite what it reads,
   and route every claim through the source-reader (constitution XII, v2.11.0).
 - **FR-007**: The audit MUST deliver a list of candidate features with prevalence, source and a
-  drawability reading, plus a not-owed list with reasons, and the session MUST stop and present it
-  without implementing any item.
-- **FR-008**: No new CATEGORY of map feature MAY be added in this feature unless the GM chooses it
-  in their own words, recorded in the task that adds it.
+  drawability reading, plus a not-owed list with reasons, AND every reference-hamlet feature family
+  omitted from Kuwabata under FR-002, each with its archetype reason and research pointer - so the
+  GM decides at acceptance whether each omission is right; the session MUST stop and present the
+  whole of it without implementing any item.
+- **FR-008**: No map feature that does not already stand on the hand-authored Kuwabata or on
+  Inashiro's accepted manifest MAY be added in this feature - in the conversion phase any more than
+  in the audit phase - unless the GM chooses it in their own words, recorded in the task that adds
+  it. The GM gave this twice: *"I don't think that you should move forward with adding new map
+  features without talking to me first"* and *"I don't want you adding new categories of things
+  to these maps without running them by me first, at least not in this specific case."*
 - **FR-009**: The feature MUST close only on the GM's acceptance, recorded verbatim in its final
   task; that task is never ticked by a session.
 - **FR-010**: Every task is classified `research: rendering | physical | procedure`; physical tasks
@@ -264,4 +274,10 @@ Filled as the work lands; each row is a rendering decision this feature makes, w
 
 ## Review history (constitution XVI)
 
-- (pending) round 1 `spec-fidelity`.
+- Round 1 (2026-08-27): three changes. (1) FR-008 bound only a new "category"; the GM's broader
+  sentence had no FR - FR-008 now bars any feature not already on Inashiro or the hand-authored
+  Kuwabata, in the conversion phase too. (2) The knob edge case bundled pond layout (things already
+  drawn) with willow-vs-mulberry (a plant not on the maps) - split; the second goes to the audit
+  list. (3) FR-007's list ran one way only; it now carries every reference-hamlet family omitted
+  under FR-002, so the GM sees the omissions the way they saw the missing bamboo.
+- (pending) round 2.
