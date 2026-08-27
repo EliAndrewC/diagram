@@ -59,8 +59,10 @@ NOTES: dict[str, tuple[str, str]] = {
         "any built thing exists. That is the ordering decision with the longest reach on the whole map: "
         "the settlement afterwards takes whatever margin the field leaves it. Where that margin curves, "
         "the cluster has to curve with it. This is also where WATER first becomes ink - the intake, the "
-        "head race and the field ditches arrive in the same call that lays the plots, which is why there "
-        "is no plate showing water alone. See the closing note.",
+        "head race and the field ditches arrive in the same call that lays the plots (`build_comb` returns "
+        "the canals and the plots together), which is why there is no plate showing water alone: "
+        "splitting the stage to manufacture one was priced and declined, because STAGES is the "
+        "generator's design and a page does not get to reorder it.",
     ),
     "stage_sink": (
         "Where the runoff goes",
@@ -110,21 +112,36 @@ NOTES: dict[str, tuple[str, str]] = {
         "no check measures. They also run after the byres and wells, not merely after the houses; between "
         "the two, their corridors reserved courtyard ground and exiled fixtures up to 210 ft. A DISPERSED "
         "hamlet draws nothing here at all, because it has no internal network - its farmsteads stand in "
-        "their own holdings and the connector is the only way on the map.",
+        "their own holdings and the connector is the only way on the map. The web is then READ AS "
+        "SHAPES before the stage ends (feature 133 T31/T32): every near-junction is closed so the "
+        "lanes are one network in ink rather than by tolerance, each junction is made once, ends "
+        "within a few paces meet at one node, and every lane is string-pulled and cleared of hairpins "
+        "and zigzags - a worn path minimizes its turns, and a bend sits at a plot corner.",
     ),
     "stage_notice": (
         "The notice board",
         "The kosatsuba stands ON a way, so it cannot be placed until the ways are final - which is after "
         "the web, not with the other structures. This is the clearest case on the map of a feature whose "
-        "position is defined by something drawn later than itself.",
+        "position is defined by something drawn later than itself. It stands on the verge, a few feet "
+        "off the tread (feature 133 T13) - a kosatsu is read where people pass.",
     ),
     "stage_hinterland": (
-        "Scrub and rough grazing",
-        "Ground cover fills what is left, so it runs after everything it must avoid. It reads the drawn features as obstacles rather than reserving anything from them.",
+        "The marsh, then scrub and rough grazing",
+        "Ground cover fills what is left, so it runs after everything it must avoid; it reads the drawn "
+        "features as obstacles rather than reserving anything from them. Three moves, in order: the reed "
+        "marsh at the wet toe, its inner edge following the fan's foot along the collector (T30); then the "
+        "coppice patches are SCANNED (not yet drawn) and the shelter belt is computed, both from the "
+        "houses as they stand; then the scrub is scattered with every wood as a soft keep-out - brush and "
+        "pine stop at a wood's line and at the marsh, grass grades into them over one shared feather "
+        "(T12, T34, T35). The floor of a worked village wood was kept clear, so no scrub stands under "
+        "its crowns.",
     ),
     "stage_woodland": (
         "The woodland commons",
-        "Managed coppice on ground nothing else wanted. After the hinterland so it sits in real open ground rather than in ground the scrub was about to take.",
+        "Managed coppice on ground nothing else wanted, drawn on the parcels the previous stage scanned - "
+        "so the scrub has already kept out of them. Each parcel is an irregular ring inside the reach its "
+        "keep-outs were tested at, never a rectangle (T36): an iriai wood was bounded by ridge, stream and "
+        "path, and governed by rules rather than parcel lines.",
     ),
     "stage_windbreak": (
         "The shelter belt",
@@ -251,14 +268,14 @@ def build_page(out_dir: str, width: int, spec: HamletSpec) -> str:
         "font:16px/1.6 Georgia,'Times New Roman',serif}",
         ".wrap{max-width:1180px;margin:0 auto}",
         "h1{font-size:1.9rem;margin:0 0 .3rem}",
-        ".lede{color:var(--dim);max-width:60ch;margin:0 0 2rem}",
+        ".lede{color:var(--dim);margin:0 0 2rem}",
         ".stage{background:var(--card);border:1px solid var(--rule);border-radius:6px;",
         "padding:1.1rem 1.25rem 1.4rem;margin:0 0 1.6rem}",
         ".hd{display:flex;gap:.7rem;align-items:baseline;flex-wrap:wrap;margin-bottom:.35rem}",
         ".n{font:700 .95rem/1 ui-monospace,SFMono-Regular,Menlo,monospace;color:var(--dim)}",
         ".t{font-size:1.15rem;font-weight:700}",
         ".fn{font:.85rem/1 ui-monospace,SFMono-Regular,Menlo,monospace;color:var(--dim)}",
-        ".why{color:var(--ink);max-width:72ch;margin:.2rem 0 .9rem}",
+        ".why{color:var(--ink);margin:.2rem 0 .9rem}",
         "img{display:block;width:100%;height:auto;border:1px solid var(--rule);border-radius:3px;background:#fff}",
         ".noink{border:1px dashed var(--rule);border-radius:3px;padding:1rem 1.15rem;background:transparent}",
         ".noink .cap{font:700 .8rem/1.4 ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.06em;",
@@ -267,14 +284,11 @@ def build_page(out_dir: str, width: int, spec: HamletSpec) -> str:
         ".kv div{display:flex;gap:.6rem;justify-content:space-between;border-bottom:1px dotted var(--rule);",
         "padding:.15rem 0;font:.87rem/1.5 ui-monospace,SFMono-Regular,Menlo,monospace}",
         ".kv .k{color:var(--dim)}.kv .v{color:var(--ink);font-weight:700;text-align:right}",
-        ".closing{border-top:1px solid var(--rule);margin-top:2.4rem;padding-top:1.3rem;color:var(--ink);max-width:72ch}",
-        ".closing h2{font-size:1.05rem;margin:0 0 .5rem}",
-        ".closing p{margin:0 0 .7rem}",
         "</style>",
         '<div class="wrap">',
         "<h1>Hamlet placement order</h1>",
         f'<p class="lede">{escape(spec.name)}, rolled one stage at a time. Each plate is the map as it stands '
-        "after that stage and nothing later - the same build, snapshotted thirteen times. Read "
+        f"after that stage and nothing later - the same build (the driver's first roll), snapshotted {len(STAGES)} times. Read "
         "<code>dev/placement.md</code> for the rules; this is what they look like. Generated by "
         "<code>python3 -m l7r.diagram.tools.placement_stages</code> - re-run it when <code>STAGES</code> changes.</p>",
     ]
@@ -295,27 +309,8 @@ def build_page(out_dir: str, width: int, spec: HamletSpec) -> str:
                 "</div></div>",
             ]
         parts.append("</section>")
-    # RECORDING AN ACCEPTED LIMITATION, per the project rule - what was accepted, what it costs, and
-    # which alternatives were priced and declined. Without this the missing water-only plate reads as
-    # an oversight and the next session "fixes" it by splitting a pipeline stage.
-    parts += [
-        '<div class="closing">',
-        "<h2>Why there is no water-only plate</h2>",
-        "<p>The original ask was to see the map <em>&ldquo;when it is only the water, and then when we "
-        "have added only the rice paddy fields&rdquo;</em>. There is no such moment to photograph: "
-        "<code>build_comb</code> is a single pure call that returns the canals and the plots together, "
-        "and <code>stage_field</code> draws both. Plate 02 is therefore the earliest state in which "
-        "water exists at all.</p>",
-        "<p>Two ways to manufacture the plate were priced and declined. Splitting "
-        "<code>stage_field</code> into a channels pass and a plots pass would change "
-        "<code>STAGES</code>, which is the generator's design rather than a convenience - "
-        "reordering it to suit a documentation page is the tail wagging the dog. Having this tool "
-        "draw the channels itself would make a diagnostic that re-derives engine internals, which "
-        "<code>tools/CLAUDE.md</code> forbids for a measured reason: such a tool drifts from the "
-        "engine and then reports the wrong thing with total confidence.</p>",
-        "<p>So plate 02 shows water and paddy together, deliberately.</p>",
-        "</div>",
-    ]
+    # The "why there is no water-only plate" closing note was folded into stage 02's own prose
+    # (GM 2026-08-27, feature 133 T37: the page ends with its last plate).
     parts.append("</div>")
     page = os.path.join(out_dir, "hamlet-placement.html")
     with open(page, "w") as fh:
