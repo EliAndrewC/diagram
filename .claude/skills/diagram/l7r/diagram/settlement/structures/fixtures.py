@@ -426,6 +426,13 @@ class PublicFixturesMixin:
             # comment a few lines up asserted these maps "pass `label_hugs_its_referent`" when nothing
             # had ever measured them. Textbook "a check that never RUNS looks exactly like a check that
             # passes" (this skill's CLAUDE.md), found by a reviewer rather than by the gate.
+            # HALF THE AIR (T40, GM 2026-08-27): the chosen seat stands a full standoff off the board;
+            # the caption is then pulled half the remaining gap toward the board's own footprint.
+            _bq = [
+                (x + dx * _m.cos(_m.radians(rot)) - dy * _m.sin(_m.radians(rot)), y + dx * _m.sin(_m.radians(rot)) + dy * _m.cos(_m.radians(rot)))
+                for dx, dy in ((-hw, -hh), (hw, -hh), (hw, hh), (-hw, hh))
+            ]
+            _lx, _ly = self.pull_caption_toward((_lx, _ly), label, 8, "middle", _t, _bq)
             self.label(_lx, _ly, label, 8, italic=True, color="#7A5A30", rot=_t, ref=(x - hw, y - hh, x + hw, y + hh))
         return z
 

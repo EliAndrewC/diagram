@@ -183,6 +183,13 @@ _(from T11 on, each entry also carries its cycle plan before work starts - `scaf
       measure: on Inashiro, every caption's overlap count one-line vs wrapped; the board's caption before/after
       verify: `make maps`, `make quick`, `make done`; the GM looks
 
+- [x] T40 **the notice board's caption closer to the board** - the GM (2026-08-27): *"the notice board label could be a little bit closer to the notice board itself ... Maybe half of the empty space between the notice board and the label could be eliminated, by which I mean you could move the label fifty percent of the way toward the thing that it is labeling. Let's try that and see how it looks."*
+      given 2026-08-27T13:18Z | done 2026-08-27T13:21Z | elapsed 3 min (computed) | runs: make maps x1, make quick x1, make done x1
+      note: measured 11.0 px of air quad-to-quad; `pull_caption_toward` (captions.py) moves the seat half the gap along the line of centers, refused if the pulled block would touch anything; applied at the kosatsuba caption only, for the GM to judge; after 5.5 px. Unit test; presentation.md rule; notes.
+      scaffold: the board's caption seat in structures/fixtures.py `kosatsuba` (the outward-walked candidates and `_pick`), the caption block from T39
+      measure: the gap between the caption block's quad and the board's quad on Inashiro, before/after (target: half)
+      verify: `make maps`, `make quick`, `make done`; the GM looks
+
 ## Phase 9 - acceptance
 
 - [ ] T90 the would-have-dispatched audit (FR-005): every entry in the period, and for each whether it should have run; each "no" names a tooling change

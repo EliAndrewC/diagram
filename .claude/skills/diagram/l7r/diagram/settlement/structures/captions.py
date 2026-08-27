@@ -10,6 +10,8 @@ from .._geom import (
     Poly,
     Pt,
     label_aabb,
+    label_quad,
+    rects_overlap,
     seg_dist,
 )
 
@@ -83,6 +85,47 @@ class CaptionProbesMixin:
                 cs = ((-hw2, -hh2), (hw2, -hh2), (hw2, hh2), (-hw2, hh2))
                 quads.append([(o["x"] + dx * ca - dy * sa, o["y"] + dx * sa + dy * ca) for dx, dy in cs])
         return quads
+
+    def pull_caption_toward(self: Settlement, seat: Pt, text: str, size: float, anchor: str, tilt: float, subject: Poly, frac: float = 0.5) -> Pt:  # type: ignore[misc]
+        """Move a caption's seat `frac` of the way across the empty air between its block and the
+        subject's footprint (feature 133 T40, GM 2026-08-27: *"half of the empty space between the
+        notice board and the label could be eliminated ... move the label fifty percent of the way
+        toward the thing that it is labeling"*). The block is the one `label()` will draw at this
+        seat - wrapped or not (`_caption_lines`), tilted about its center - and the gap is measured
+        quad to quad, so a caption beside a tilted board closes on the board and not on its bounding
+        box. The pull is refused (the seat returned unchanged) when the pulled block would touch the
+        subject or any other blocker, so this can only ever tighten a clear seat."""
+        lines = self._caption_lines(text, seat[0], seat[1], size, anchor, tilt)
+        n = len(lines)
+        w_ = max(len(ln) for ln in lines) * size * 0.55
+        h_ = size * 1.05 + (n - 1) * size * 1.15
+
+        def _block(sx: float, sy: float) -> Poly:
+            x0 = sx - w_ / 2 if anchor == "middle" else (sx - w_ if anchor == "end" else sx)
+            cy = sy - size * 0.275
+            return label_quad([x0, cy - h_ / 2, x0 + w_, cy + h_ / 2, 0, text, None, tilt])
+
+        def _gap(p: Poly, q: Poly) -> float:
+            return min(min(seg_dist(a[0], a[1], q[i], q[(i + 1) % len(q)]) for a in p for i in range(len(q))), min(seg_dist(b[0], b[1], p[i], p[(i + 1) % len(p)]) for b in q for i in range(len(p))))
+
+        before = _block(*seat)
+        if rects_overlap(before, subject):
+            return seat
+        gap = _gap(before, subject)
+        if gap <= 0.5:
+            return seat
+        bc = (sum(p[0] for p in before) / len(before), sum(p[1] for p in before) / len(before))
+        sc = (sum(p[0] for p in subject) / len(subject), sum(p[1] for p in subject) / len(subject))
+        d = math.dist(bc, sc)
+        if d < 1e-6:
+            return seat
+        ux, uy = (sc[0] - bc[0]) / d, (sc[1] - bc[1]) / d
+        pulled = (seat[0] + ux * gap * frac, seat[1] + uy * gap * frac)
+        after = _block(*pulled)
+        blockers = [q for q in self.label_blocker_quads() if q != subject] + [label_quad(lb) for lb in self.M["labels"] if len(lb) > 3]
+        if rects_overlap(after, subject) or any(rects_overlap(after, q) for q in blockers):
+            return seat
+        return pulled
 
     def label_caption_hw(self: Settlement, label: str, size: float) -> float:  # type: ignore[misc]
         """A caption\'s half-width AS RECORDED. `_record_label` writes len(text) * size * 0.55, and

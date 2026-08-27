@@ -1312,3 +1312,13 @@ now excluded (`LABEL_GROUND_KEYS`), and the wrap decision tests true rotated foo
 their bounding boxes (the two-line block clears the tilted farmhouse by a few feet that its AABB
 swallowed). Inashiro: "notice / board", block 26 x 18 at 57.2 degrees, record [1198, 1010, 1225,
 1028]. Label: cartographic convention - DRAWING.
+
+
+## 2026-08-27 - the board's caption pulled half the air closer (feature 133 T40)
+
+The GM: *"move the label fifty percent of the way toward the thing that it is labeling. Let's try
+that and see how it looks."* Measured first: 11.0 px of air between the wrapped block's quad and the
+board's quad. `pull_caption_toward` moves the seat half that gap along the line of centers, only
+when the pulled block stays clear of the board and everything else. After: 5.5 px. Applied to
+the kosatsuba caption for the GM to judge; the helper is general (any subject quad) and is not yet
+called by the other caption placers - that is the GM's call after seeing this one.

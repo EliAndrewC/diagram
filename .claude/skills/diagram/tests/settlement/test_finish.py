@@ -156,6 +156,19 @@ def test_label_wraps_onto_two_lines_only_when_that_clears_the_sheet():
     assert "<tspan" not in s.toplabels[-1], "when no layout clears, the one-liner is drawn"
 
 
+def test_pull_caption_toward_closes_half_the_air_and_refuses_a_collision():
+    """Feature 133 T40 (GM 2026-08-27: "move the label fifty percent of the way toward the thing that
+    it is labeling"): a level caption 20 px below a 40x20 board is pulled ~10 px up; a caption whose
+    pulled block would land on another footprint keeps its seat."""
+    s = Settlement(W=1000, H=1000, seed=1)
+    board = [(480.0, 490.0), (520.0, 490.0), (520.0, 510.0), (480.0, 510.0)]
+    seat = (500.0, 510.0 + 20.0 + 8 * 0.8)  # the one-line box's top edge 20 px under the board's bottom
+    pulled = s.pull_caption_toward(seat, "notice board", 8, "middle", 0.0, board)
+    assert abs(pulled[0] - 500.0) < 1e-6 and abs((seat[1] - pulled[1]) - 10.0) < 0.5
+    s.M["houses"].append({"x": 500, "y": 525, "w": 60, "h": 6, "rot": 0})  # a sliver across the pulled block's path
+    assert s.pull_caption_toward(seat, "notice board", 8, "middle", 0.0, board) == seat
+
+
 def test_label_never_leaves_a_short_word_on_its_own_line():
     s = Settlement(W=1000, H=1000, seed=1)  # a bare sheet: nothing near the seat but what the test puts there
     s.M["houses"].append({"x": 452, "y": 497, "w": 20, "h": 30, "rot": 0})  # blocks the 16-char one-liner's left end
