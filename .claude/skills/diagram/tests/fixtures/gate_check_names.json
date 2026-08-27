@@ -343,6 +343,7 @@
   "house_count_in_range",
   "households_consistent",
   "houses_clear_of_lanes",
+  "houses_clear_of_paddies",
   "houses_face_south",
   "houses_off_corridors",
   "housing_aligned_behind_storefronts",

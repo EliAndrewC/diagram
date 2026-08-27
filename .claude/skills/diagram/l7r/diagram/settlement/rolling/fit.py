@@ -300,6 +300,13 @@ class BundleFitMixin:
         garden side at a given position, so it is tested once per position."""
         if self._rect_blocked(geom["house"], fields=True) or self._rect_blocked(geom["yard"], fields=True) or ("shed" in geom and self._rect_blocked(geom["shed"], fields=True)):
             return False
+        # THE WALL HOLDS ITS OWN FLOOR OFF THE PADDY (feature 133 T41). `_rect_blocked` refuses a house
+        # that LAPS a paddy and nothing more, so a seat could put the wall on the bund - Inashiro's
+        # closest house stood 0.9 ft off while the band's own standoff held the rest at 10-13 ft.
+        # `_wall_on_the_bund` (houses.py, with `HOUSE_PADDY_GAP_FT` and its research) tests the four
+        # corners at the 6 ft floor; the yard and garden keep their own rules.
+        if self._wall_on_the_bund(geom["house"][0], geom["house"][1], geom["house"][2], geom["house"][3], 0.0):
+            return False
         if self._house_on_a_tread(geom["house"]):
             return False
         if self._house_too_near_a_neighbor(geom["house"]):

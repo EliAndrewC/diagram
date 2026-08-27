@@ -3,7 +3,7 @@
 import math
 from typing import Any
 
-from l7r.diagram.settlement import FARMHOUSE_EAVE_GAP_FT, courtyard_annex_span, sat_overlap, surface_water_dist
+from l7r.diagram.settlement import FARMHOUSE_EAVE_GAP_FT, HOUSE_PADDY_GAP_FT, courtyard_annex_span, sat_overlap, surface_water_dist
 
 from .common_01_geometry import (
     _OVERLAP_STRUCTS,
@@ -15,7 +15,7 @@ from .common_01_geometry import (
     segments_cross,
     within_edge_gap,
 )
-from .common_02_overlap_policy import in_ellipse
+from .common_02_overlap_policy import edge_dist, in_ellipse
 from .common_03_capacity import _UNBOUND, _kept
 
 
@@ -943,3 +943,41 @@ def _seg_0609__byres_stand_in_their_declared_form(*, M: Any = _UNBOUND, check: A
                 f"that household's yard; a shed out on the shared ground is the OTHER form and must say so",
             )
     return _kept(locals(), ())
+
+
+# WHY: <one paragraph - what the research found, the decision it drove, the departure taken>.
+# Declare EVERY input the body reads as a keyword parameter (an undeclared one is a NameError at
+# gate time, not at import), and keep the `_kept` tuple a LITERAL of the names this body binds.
+
+
+# `HOUSE_PADDY_GAP_FT` and its why live with the placer (settlement/houses.py) - placement and its check read ONE number.
+
+
+def _seg_0609_500__houses_clear_of_paddies(
+    *,
+    M: Any = _UNBOUND,
+    check: Any = _UNBOUND,
+    meta: Any = _UNBOUND,
+    scale: Any = _UNBOUND,
+    houses_clear_of_paddies_bad: Any = _UNBOUND,
+) -> dict[str, Any]:
+    """Gate segment 0609_500 (houses_clear_of_paddies) - every farmhouse WALL (its rotated footprint, not its center) stands at least `HOUSE_PADDY_GAP_FT` off every paddy outline (GM 2026-08-27, feature 133 T41: "actually touching looks wrong to me")."""
+    if scale in ("hamlet", "village", "town"):
+        houses_clear_of_paddies_bad = []
+        _hcp_gap = HOUSE_PADDY_GAP_FT / float(meta.get("ftpx") or 1.0)
+        _hcp_fields = [[(float(a), float(b)) for a, b in f["outline"]] for f in (M.get("fields") or []) if f.get("outline")]
+        for _h in M.get("houses") or []:
+            _a = math.radians(float(_h.get("rot") or 0.0))
+            _ca, _sa = math.cos(_a), math.sin(_a)
+            _hw, _hh = float(_h["w"]) / 2.0, float(_h["h"]) / 2.0
+            _corners = [(float(_h["x"]) + dx * _ca - dy * _sa, float(_h["y"]) + dx * _sa + dy * _ca) for dx, dy in ((-_hw, -_hh), (_hw, -_hh), (_hw, _hh), (-_hw, _hh))]
+            for _fp in _hcp_fields:
+                if any(point_in_poly(cx, cy, _fp) or edge_dist(cx, cy, _fp) < _hcp_gap for cx, cy in _corners):
+                    houses_clear_of_paddies_bad.append((round(float(_h["x"])), round(float(_h["y"]))))
+                    break
+        check(
+            "houses_clear_of_paddies",
+            not houses_clear_of_paddies_bad,
+            f"farmhouse(s) at {houses_clear_of_paddies_bad[:3]} stand nearer than {HOUSE_PADDY_GAP_FT:.0f} ft to a paddy outline (a wall on the bund; the levee is the footpath and the eaves overhang it) - the seat must hold the set-back from the FOOTPRINT, not the center (settlement.houses._fits)",
+        )
+    return _kept(locals(), ("houses_clear_of_paddies_bad",))

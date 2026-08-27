@@ -308,6 +308,46 @@ planning, *Landscape and Urban Planning*, 2025; the 99% Invisible and Geography 
 desire-path formation); the plot-corner geometry from the nucleated-village morphology already
 cited in the 2026-08-18 entry.
 
+## How close does a farmhouse stand to the paddy? Up against it - but never on the bund (researched 2026-08-27, feature 133 T41)
+
+The GM: *"One of the farmhouses in the reference hamlet appears to actually be touching the edge of
+the rice paddy fields. Is this realistic? ... I do imagine that they would be pretty much right up
+against the edge, but actually touching looks wrong to me."* Measured first: one house's corner
+0.9 ft from the paddy outline; every other house 10-13 ft; threshing yards as close as 7 ft.
+
+**What the record gives, and what it does not.** No source states a setback in feet - the
+question is not one anyone measured - so the floor is DERIVED from three attested parts:
+
+- **The bund (aze) is a thing, not a line.** Paddy bunds are at least 20 cm high and 15-150 cm wide,
+  typically 30-50 cm (about 1.5 ft), shaped to the paddy's topography; a paddy is bordered by
+  them to hold 10-15 cm of water most of the season. The MARGIN levee of a paddy block is also its
+  working footpath (the *azemichi*), constructed and maintained "to retain water in the paddies
+  and to allow the passage of people and transportation of tools", and its grass is cut.
+- **The house's roof reaches past its wall.** A thatched farmhouse's eaves overhang the wall by
+  about 3 ft (this is the same eave the `FARMHOUSE_EAVE_GAP_FT` rule already spends between
+  neighboring houses); its drip line is where the wall's rain lands.
+- **The plot fronts the paddy.** The nucleated cluster stands on the field margin with its face to
+  the water (the *背山面水* seat, research above), so "right up against the edge" is the norm the
+  GM expects, and the seat band's own standoff (12 px) draws it.
+
+**Therefore** a wall nearer than bund + path + eave stands with its roof over the levee path and its
+drip line in the rice. 1.5 + ~1.5 + 3 ft is 6 ft, the floor a wall may never cross - a MINIMUM
+below the 10-13 ft the placer already draws, so nothing else on the map moves. The touching house
+was not a rule but a measurement error: the 14 px field set-back was held from the seat's CENTER,
+so a house 28 ft deep seated 14 px off the paddy stood with its wall on the bund (the CENTER-vs-
+FOOTPRINT trap `dev/placement.md` names). Now `_wall_on_the_bund` tests the four corners in both
+seat paths (`settlement/houses.py` `_fits`, `settlement/rolling/fit.py` `_bundle_common_fits`),
+and the gate holds it (`houses_clear_of_paddies`, same constant). Inashiro after: 7.1 ft, one house
+moved 6 px, nothing else changed.
+
+Labels: the bund's width and its footpath role ACCURATE (measured ranges); the 6 ft floor a
+DERIVED threshold from attested parts, not a finding in itself; "up against the edge" ACCURATE.
+
+**Sources:** bund dimensions (ResearchGate, "Scheme of bund, terrace, and field dimensions";
+Britannica "Paddy"); levees as maintained footpaths (Earthworm species on rice paddy levees in
+Japanese satoyama, PMC 2020; the JStage levee-grassland study); *azemichi* (Jepang.org);
+Wikipedia "Paddy field".
+
 ## Does a hamlet have to be NUCLEATED at all? (researched 2026-08-23)
 
 **Answer: no. Three forms are supportable, so the form becomes a seeded knob (Principle XII), and

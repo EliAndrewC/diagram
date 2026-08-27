@@ -190,6 +190,13 @@ _(from T11 on, each entry also carries its cycle plan before work starts - `scaf
       measure: the gap between the caption block's quad and the board's quad on Inashiro, before/after (target: half)
       verify: `make maps`, `make quick`, `make done`; the GM looks
 
+- [x] T41 **a farmhouse touching the paddy edge** - the GM (2026-08-27): *"One of the farmhouses in the reference hamlet appears to actually be touching the edge of the rice paddy fields. Is this realistic? Is there some minimum distance that should exist between the edge of the fields and the farmhouses? I do imagine that they would be pretty much right up against the edge, but actually touching looks wrong to me. What do you think? I guess this could be a research pass unless our existing research already shows the answer to this."*
+      given 2026-08-27T13:25Z | done 2026-08-27T13:38Z | elapsed 13 min (computed; includes resolving a merge conflict from main at the start) | runs: make maps x4, make quick x3, make done x1
+      note: measured (0.9 ft; the rest 10-13); research pass (3 queries): no source gives a setback, the floor is DERIVED - bund ~1.5 ft (measured range 15-150 cm) that is also the footpath + ~3 ft eaves = 6 ft; mechanism the CENTER-vs-FOOTPRINT trap (14 px set-back from the seat center); fix `_wall_on_the_bund` at the corners in both seat paths + check `houses_clear_of_paddies` (one constant) + fixture. One follow-on defect: the moved house exposed a string-pulled lane chord 2.1 ft from a garden corner - `_TOUCH_GAP` 1 -> 4 ft. After: 7.1 ft, attempt 1 kept.
+      scaffold: the seat band / house packing against the field margin (hamletgen/cluster.py, homesteads.py), the field envelope and its hem; research/homesteads.md + research/fields.md on the house-to-paddy gap
+      measure: every farmhouse footprint's distance to the paddy envelope on Inashiro; the closest one
+      verify: research first (Principle XII); `make maps`, `make quick`, `make done`; the GM looks
+
 ## Phase 9 - acceptance
 
 - [ ] T90 the would-have-dispatched audit (FR-005): every entry in the period, and for each whether it should have run; each "no" names a tooling change

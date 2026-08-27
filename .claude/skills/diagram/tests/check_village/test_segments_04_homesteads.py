@@ -1038,3 +1038,16 @@ def test_village_groves_visibly_stocked_fires_on_a_grove_that_was_never_drawn():
     # a zero-area record is SKIPPED, not divided by (coverage: the `_area <= 0` branch)
     degenerate = manifest(meta=meta, village_groves=[{"role": "copse", "w": 0.0, "h": 0.0, "r": 11.0, "clumps": []}])
     assert "village_groves_visibly_stocked" not in check_village.gate(degenerate, verbose=False, only=only)
+
+
+def test_houses_clear_of_paddies_fires_and_passes():
+    """A farmhouse WALL stands at least 6 ft off every paddy outline (GM 2026-08-27, T41: "actually
+    touching looks wrong to me"). A 40x30 house whose east wall is 1 ft from the paddy fires; the same
+    house 10 ft off passes; a rotated house is judged by its rotated corners."""
+    paddy = [_field("f", 500, 100, 900, 700)]
+    touching = manifest(houses=[house(x=479, y=400)], fields=paddy)  # a 40-wide house: its east wall at x=499
+    assert "houses_clear_of_paddies" in f_only(touching, "houses_clear_of_paddies"), "a wall on the bund must fire"
+    clear = manifest(houses=[house(x=470, y=400)], fields=paddy)  # east wall at x=490: 10 ft off
+    assert "houses_clear_of_paddies" not in f_only(clear, "houses_clear_of_paddies")
+    turned = manifest(houses=[dict(house(x=470, y=400), rot=45)], fields=paddy)  # the rotated corner reaches x=494.7
+    assert "houses_clear_of_paddies" in f_only(turned, "houses_clear_of_paddies"), "a rotated corner counts"

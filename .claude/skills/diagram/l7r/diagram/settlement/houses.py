@@ -8,6 +8,17 @@ from typing import TYPE_CHECKING, Any, cast
 from ._geom import PointGrid, Pt, boxed_polys, drawn_extent, edge_dist, indexed_grid, point_in_poly, quad_hits_poly, rot_rect, seg_dist
 from ._knobs import skeleton_layout
 
+# HOW FAR A FARMHOUSE WALL STANDS OFF THE PADDY (researched 2026-08-27, feature 133 T41; the record
+# in research/homesteads.md "How close does a farmhouse stand to the paddy?"). The paddy's margin is
+# a bund (aze) 15-150 cm wide, typically 30-50 - about 1.5 ft - that is ALSO the working footpath
+# (azemichi) along which people and tools pass; a thatched farmhouse's eaves overhang its wall by
+# about 3 ft. A wall nearer than bund + path + eave puts the roof over the levee path and the drip
+# line in the rice. 6 ft is that sum, rounded down: the floor a wall may never cross. A MINIMUM, not
+# the norm - the seat band's own 12 px standoff puts the front row 10-13 ft off, which is "right up
+# against the edge" as the GM expects. Real feet; `px()` scales it per tier. Held by the gate's
+# `houses_clear_of_paddies`.
+HOUSE_PADDY_GAP_FT = 6.0
+
 if TYPE_CHECKING:
     from .core import Settlement
 
@@ -67,6 +78,23 @@ class HousesMixin:
                     "of": [round(cx, 1), round(cy, 1)],
                 }
             )
+
+    def _wall_on_the_bund(self: Settlement, x: float, y: float, w: float, h: float, rot: float) -> bool:  # type: ignore[misc]
+        """Would any CORNER of this footprint stand nearer than `HOUSE_PADDY_GAP_FT` to a paddy?
+
+        THE CENTER-vs-FOOTPRINT TRAP, found on the reference hamlet (GM 2026-08-27, feature 133 T41:
+        *"One of the farmhouses ... appears to actually be touching the edge of the rice paddy
+        fields ... actually touching looks wrong to me"*). `_in_blocked` holds the 14 px field
+        set-back from the seat's CENTER, so a house 28 ft deep seated 14 px off the paddy stands with
+        its wall on the bund - Inashiro had one corner 0.9 ft from the outline while every other
+        house stood 10-13 ft off. This tests the rotated corners against the field outlines at the
+        wall's own floor (`dev/placement.md`, "gap verdicts read footprints, never centers")."""
+        gap = self.px(HOUSE_PADDY_GAP_FT)
+        for cx, cy in rot_rect(x, y, w, h, rot):
+            for poly, *_ in self._keepout_index(self.field_polys, "field_keepout", 14.0).near(cx, cy):
+                if point_in_poly(cx, cy, poly) or edge_dist(cx, cy, poly) < gap:
+                    return True
+        return False
 
     def _in_blocked(self: Settlement, x: float, y: float) -> bool:  # type: ignore[misc]
         # bbox pre-filter (cached, same idea as _rect_hits): a point outside a polygon's bbox - expanded by
@@ -307,6 +335,8 @@ class HousesMixin:
         if self.bound and not point_in_poly(x, y, self.bound):  # stay inside a bounding ring (city wall)
             return False
         if self._in_blocked(x, y) or (corridors and self._near_corridor(x, y, skip)):
+            return False
+        if self._wall_on_the_bund(x, y, w, h, rot or 0.0):
             return False
         if corridors and self._on_a_tread(x, y, w, h, skip):
             return False

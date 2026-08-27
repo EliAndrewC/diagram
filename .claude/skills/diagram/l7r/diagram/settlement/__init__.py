@@ -107,6 +107,7 @@ from ._knobs import skeleton_layout as skeleton_layout
 from ._knobs import wall_tower_spacing_px as wall_tower_spacing_px
 from ._knobs import web_cuts as web_cuts
 from .core import Settlement as Settlement
+from .houses import HOUSE_PADDY_GAP_FT as HOUSE_PADDY_GAP_FT
 from .land import surface_water_dist as surface_water_dist
 from .shrines_wells import COURTYARD_REACH as COURTYARD_REACH
 from .shrines_wells import courtyard_annex_span as courtyard_annex_span

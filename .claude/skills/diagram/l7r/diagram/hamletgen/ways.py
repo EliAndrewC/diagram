@@ -1130,7 +1130,11 @@ _ORPHAN_REACH = 150.0  # ft: how far a stranded piece may be linked back to the 
 # garden fence share a line in a real village (the plot FRONTS the lane), so the last few feet into
 # a junction are tested against footprints only: the link may not cross a house, a bed, a yard or
 # water, and it may run along a fence.
-_TOUCH_GAP = 1.0
+# 4 ft, not 1: the gate's overlap matrix extends a lane by its tread (3 ft wide, so 1.5 each side)
+# plus rounding, and the first cut at 1 ft let a string-pulled chord run 2.1 ft from a garden's
+# corner - clear of the footprint, inside the tread's ink (`features_do_not_overlap`, lanes vs
+# gardens, feature 133 T41). A junction link may still brush a fence; it may not paint on it.
+_TOUCH_GAP = 4.0
 
 
 def _clear_touch(a: Pt, b: Pt, hard: list[Poly], walls: Sequence[Poly], water: list[tuple[Pt, Pt]]) -> bool:

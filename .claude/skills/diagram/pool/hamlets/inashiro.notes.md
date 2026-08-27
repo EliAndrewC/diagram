@@ -1322,3 +1322,16 @@ board's quad. `pull_caption_toward` moves the seat half that gap along the line 
 when the pulled block stays clear of the board and everything else. After: 5.5 px. Applied to
 the kosatsuba caption for the GM to judge; the helper is general (any subject quad) and is not yet
 called by the other caption placers - that is the GM's call after seeing this one.
+
+
+## 2026-08-27 - no wall on the bund (feature 133 T41)
+
+The GM saw a farmhouse touching the paddy. Measured: one corner 0.9 ft from the outline, every
+other house 10-13 ft. Research (`research/homesteads.md`): a bund is ~1.5 ft wide and is the
+footpath; eaves overhang ~3 ft; so a 6 ft floor at the wall, derived from attested parts. The
+mechanism was the CENTER-vs-FOOTPRINT trap: the 14 px field set-back was held from the seat's
+center. Now the four corners are tested (`_wall_on_the_bund`, both seat paths) and the gate holds
+`houses_clear_of_paddies`. After: 7.1 ft, the one house moved 6 px, attempt 1 kept. On the way the
+junction-link gap (`_TOUCH_GAP`) went 1 -> 4 ft: a string-pulled chord ran 2.1 ft from a garden
+corner, clear of the footprint but inside the tread's ink. Labels: bund and path ACCURATE, the
+floor DERIVED.
