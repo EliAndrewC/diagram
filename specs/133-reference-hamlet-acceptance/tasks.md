@@ -246,6 +246,15 @@ _(from T46 on, each entry also says `research: rendering` or `research: physical
       measure: the test red on a ticked physical task with an open box (T36 as found), green once resolved honestly
       verify: `make quick`; `make done`
 
+- [x] T47 **bamboo as a stand, visible** - the GM (2026-08-27): *"It sounds as if you do have an idea of how to incorporate bamboo and in particular making the bamboo, which we believe already to be present, visible on our reference hamlet. So please make that change in the manner that you had previously proposed."*
+      given 2026-08-27T15:19Z | done 2026-08-27T15:31Z | elapsed 12 min (computed) | runs: make maps x4, make scatter-audit x1, make quick x4, make placement-stages x1, make done x1
+      note: a new feature family end to end - knob, record, glyph, seat scan, stage (STAGES is 15 now; the page re-plated), matrix/caption/audit rows, three checks with tests. Inashiro rolled homestead: one 46 x 29 ft stand north of the cluster; the 315 culm glyphs in the belt are 0. Three defects of my own cost a cycle each: an over-strict assertion aborted the first batch and silently dropped the mix change (re-applied), a lost `hx` variable, and a latent `field_polys` annotation mismatch my new access path surfaced (aligned). Knob-per-value maps (three) owed at unlock under the scope lock.
+      research: physical
+      - [x] research pass (the T42 record, research/vegetation.md "Bamboo: how common, where it stood, and how to show it" - no new pass)  - [x] source-reader confirmed (the T45 run: range/hardiness READ, the GSI symbol READ, the farmstead grove SUMMARY-ONLY)  - [x] recorded and cited (research/vegetation.md BUILT addendum with labels; settlements/vegetation.md rule; the notes)
+      scaffold: a `bamboo` knob (none/homestead/thicket/both) in settlement/_knobs.py + hamletgen plan; `bamboo_stand` record + stand-level glyph (settlement); a `stage_bamboo` in the STAGES tuple after the windbreak, its polygon computed in stage_hinterland as a soft keep-out; bamboo out of the grove species mix; overlap matrix + caption group + scatter-audit keep-out; checks (declaration, legibility floor, clear of paddies); placement-stages page re-plated; dev/placement.md draw order
+      measure: bamboo glyphs inside the belt (315 today) -> 0; the stand's extent and its gap to houses/paddy/lanes on Inashiro; a map per knob value (three, per the knob rule) once the scope unlocks - under the lock, the reference roll only
+      verify: `make maps`, `make scatter-audit`, `make quick`, `make done`; the GM looks
+
 ## Phase 9 - acceptance
 
 - [ ] T90 the would-have-dispatched audit (FR-005): every entry in the period, and for each whether it should have run; each "no" names a tooling change

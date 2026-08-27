@@ -36,7 +36,10 @@ def stage_hinterland(s: Settlement, plan: SitePlan) -> None:
     plan.belt = belt_polygon(s, plan)
     s.hinterland(commons=False)
     plan.woodland_polys = open_ground_patches(s, plan, plan.woodland_patches)
-    s.hinterland(marsh=False, soft_extra=[*([plan.belt] if plan.belt else []), *plan.woodland_polys])
+    # ...and the bamboo stands (T47), seated now for the same reason: a stand is a wood, and the
+    # scrub keeps out of it. Drawn by `stage_bamboo`, after the belt.
+    plan.bamboo_polys = bamboo_seats(s, plan)
+    s.hinterland(marsh=False, soft_extra=[*([plan.belt] if plan.belt else []), *plan.woodland_polys, *plan.bamboo_polys])
 
 
 CROP_MARGIN = 48.0  # the one crop margin, shared by stage_frame's crop_to_content call and the
@@ -542,6 +545,117 @@ def _parcel_outline(s: Settlement, x: float, y: float, hw: float, hh: float, bc:
         lx, ly = re * f * math.cos(t), re * f * math.sin(t)
         ring.append((x + lx * bc - ly * bs, y + lx * bs + ly * bc))
     return ring
+
+
+# THE BAMBOO STANDS (feature 133 T47, GM 2026-08-27; research/vegetation.md "Bamboo: how common, where it
+# stood, and how to show it"). Two attested places, the `bamboo` knob's forms: the HOMESTEAD stand on the
+# cluster's damp, shady side - the N/W strip of the yashiki the record gives to the kitchen drain and the
+# service sheds - and the THICKET (take-yabu), a harvested stand at the field margin's shady end. Sizes are
+# a working household stand and a working thicket, in real feet; a stand under ~20 ft across does not read
+# at fit zoom, which the gate's legibility floor holds. The shady side is drawn as the NORTH of the cluster
+# (the sun is south; the record's "N/W strip" is the side the house shades), a reading recorded as such.
+BAMBOO_HOMESTEAD_FT = (48.0, 34.0)
+BAMBOO_THICKET_FT = (84.0, 58.0)
+BAMBOO_LEGIBLE_FT = 20.0
+
+
+def bamboo_seats(s: Settlement, plan: SitePlan) -> list[Poly]:
+    """Where the hamlet's bamboo stands go, per the `bamboo` knob - SCANNED, like the coppice patches.
+
+    A candidate is a rect on an 8 ft lattice around its target, refused when any of its perimeter
+    samples stands on a house, yard, garden, shed, byre, well, board, lane, paddy, marsh, pond, the belt,
+    a coppice patch or the other stand (each with its own pad), and the surviving candidate nearest the
+    target wins; a stand that fits nowhere at full size is tried once at 70%, then dropped - a hamlet
+    with no room for bamboo draws none rather than a sliver. Outlines are irregular rings inside the
+    tested rect (`_parcel_outline`), because a thicket has a hard but not a ruled edge."""
+    forms = {"none": [], "homestead": ["homestead"], "thicket": ["thicket"], "both": ["homestead", "thicket"]}[plan.bamboo]
+    houses = s.M.get("houses", [])
+    if not forms or not houses:
+        return []
+    px = s.px
+    [float(o["x"]) for o in houses]
+    hy = [float(o["y"]) for o in houses]
+    north = min(hy)
+    top = sorted(houses, key=lambda o: o["y"])[:3]
+    home_target = (sum(float(o["x"]) for o in top) / len(top), north - px(40.0))
+    env = [(float(a), float(b)) for a, b in plan.envelope]
+    if env:
+        ecx, ecy = sum(q[0] for q in env) / len(env), sum(q[1] for q in env) / len(env)
+        near = min(env, key=lambda q: math.hypot(q[0] - home_target[0], q[1] - north))
+        d = math.hypot(near[0] - ecx, near[1] - ecy) or 1.0
+        thicket_target = (near[0] + (near[0] - ecx) / d * px(50.0), near[1] + (near[1] - ecy) / d * px(50.0))
+    else:  # pragma: no cover - a hamlet always has its field
+        thicket_target = home_target
+    rects: list[tuple[float, float, float, float, float]] = []  # (x, y, w, h, pad)
+    for key, pad in (("houses", 10.0), ("threshing_yards", 8.0), ("gardens", 8.0), ("farm_sheds", 8.0), ("byres", 8.0), ("wells", 14.0), ("kosatsuba", 12.0)):
+        for o in s.M.get(key, []):
+            if all(isinstance(o.get(f), (int, float)) for f in ("x", "y", "w", "h")):
+                rects.append((float(o["x"]), float(o["y"]), float(o["w"]), float(o["h"]), px(pad)))
+    lanes = [([(float(a), float(b)) for a, b in ln["pts"]], float(ln.get("w", 3)) / 2 + px(10.0)) for ln in s.M.get("lanes", []) if len(ln.get("pts") or []) >= 2]
+    polys: list[tuple[Poly, float]] = [(list(f), px(12.0)) for f in s.field_polys]
+    polys += [([(float(a), float(b)) for a, b in m["poly"]], px(6.0)) for m in s.M.get("marshes", []) if m.get("poly")]
+    polys += [(list(plan.belt), px(10.0))] if plan.belt else []
+    polys += [(list(w), px(20.0)) for w in plan.woodland_polys]
+    pond = s.M.get("pond")
+    tp = title_pocket(s, plan)
+
+    def _blocked(x: float, y: float) -> bool:
+        if x < 30 or y < 30 or x > s.W - 30 or y > s.H - 30:
+            return True
+        if tp[0] <= x <= tp[2] and tp[1] <= y <= tp[3]:
+            return True
+        for rx, ry, rw, rh, pad in rects:
+            if abs(x - rx) <= rw / 2 + pad and abs(y - ry) <= rh / 2 + pad:
+                return True
+        for pts, half in lanes:
+            if any(seg_dist(x, y, pts[k], pts[k + 1]) < half for k in range(len(pts) - 1)):
+                return True
+        for poly, pad in polys:
+            if len(poly) >= 3 and (point_in_poly(x, y, poly) or min(seg_dist(x, y, poly[k], poly[(k + 1) % len(poly)]) for k in range(len(poly))) < pad):
+                return True
+        if not pond:
+            return False
+        return bool(((x - pond[0]) / (pond[2] + px(30.0))) ** 2 + ((y - pond[1]) / (pond[3] + px(30.0))) ** 2 <= 1.0)
+
+    def _fits(cx: float, cy: float, hw: float, hh: float) -> bool:
+        samples = [(cx + dx * hw, cy + dy * hh) for dx in (-1.0, -0.5, 0.0, 0.5, 1.0) for dy in (-1.0, 0.0, 1.0)]
+        return not any(_blocked(x, y) for x, y in samples)
+
+    out: list[Poly] = []
+    for form in forms:
+        wft, hft = BAMBOO_HOMESTEAD_FT if form == "homestead" else BAMBOO_THICKET_FT
+        target = home_target if form == "homestead" else thicket_target
+        step = px(8.0)
+        best: tuple[float, float, float] | None = None
+        for scale in (1.0, 0.7):
+            hw, hh = px(wft) * scale / 2, px(hft) * scale / 2
+            reach = px(220.0)
+            y = target[1] - reach
+            while y <= target[1] + reach:
+                x = target[0] - reach
+                while x <= target[0] + reach:
+                    if _fits(x, y, hw, hh):
+                        d = math.hypot(x - target[0], y - target[1])
+                        if best is None or d < best[0]:
+                            best = (d, x, y)
+                    x += step
+                y += step
+            if best is not None:
+                ring = _parcel_outline(s, best[1], best[2], hw, hh, 1.0, 0.0)
+                out.append(ring)
+                polys.append((ring, px(30.0)))  # the second stand keeps off the first
+                break
+    return out
+
+
+def stage_bamboo(s: Settlement, plan: SitePlan) -> None:
+    """The bamboo stands, drawn on the seats `stage_hinterland` scanned (T47). After the belt, so the
+    stand-level glyph lies over the scrub that already kept out of it; `meta.bamboo` records the roll
+    so the gate can hold "declared and drawn"."""
+    s.M["meta"]["bamboo"] = plan.bamboo
+    forms = {"none": [], "homestead": ["homestead"], "thicket": ["thicket"], "both": ["homestead", "thicket"]}[plan.bamboo]
+    for role, ring in zip(forms, plan.bamboo_polys, strict=False):
+        s.bamboo_stand(ring, role=role)
 
 
 def content_box(s: Settlement, plan: SitePlan, pad: float = 0.0) -> tuple[float, float, float, float]:

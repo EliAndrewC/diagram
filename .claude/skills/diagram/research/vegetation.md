@@ -264,6 +264,25 @@ bamboo at all (frost line) and where: the damp N/W strip of the cluster, a take-
 margin's shady end, or both; (4) the gate learns `bamboo_stands` in the overlap matrix and a
 legibility check (a stand under ~20 ft across does not read).
 
+**BUILT (feature 133 T47, GM 2026-08-27: "make that change in the manner that you had previously
+proposed").** The four points above, as built: (1) `bamboo_stand` (settlement/homestead_parts.py)
+records `M['bamboo_stands']` - a polygon whose position and extent are to scale - and draws a
+stand-level glyph: paired culm strokes with a leafy fork on a 7 ft jittered grid, pale yellow-green,
+no fill. (2) Bamboo left the grove species mix (`_draw_grove`: windbreak 20% -> 0, dooryard copse
+45% -> 0). (3) The `bamboo` knob (settlement/_knobs.py; `BAMBOO_FORMS` in hamletgen/consts.py):
+none / homestead / thicket / both, rolled per settlement; `hamletgen.bamboo_seats` scans a seat for
+each form - the homestead stand on the cluster's shady side (drawn as its NORTH, the side the house
+shades; the record's "N/W strip" read that way), the thicket at the field margin's shady end - and
+`stage_bamboo` draws them after the belt; the scrub keeps out of them (T34's soft keep-out).
+(4) The gate: `bamboo_declared_and_drawn`, `bamboo_stands_legible` (20 ft floor), and
+`bamboo_stands_clear_of_paddies`; the overlap matrix and the caption groups know the record; the
+scatter audit treats a stand as a wood. Inashiro rolled `homestead`: one stand of 46 x 29 ft and
+25 marks north of the cluster; 315 invisible culm glyphs became 0.
+Labels: bamboo's presence below the frost line and its two places ACCURATE (read); the stand
+glyph a DEVIATION for legibility (the GSI convention; the marks are symbolic, the extent is not);
+the sizes (48 x 34 and 84 x 58 ft) and the 7 ft mark pitch DRAWING conventions; "north = the shady
+side" a READING of the record's N/W, recorded as such.
+
 **Sources (read):** Wikipedia "Satoyama"; Wikipedia "Phyllostachys bambusoides"; "Detecting
 latitudinal and altitudinal expansion of invasive bamboo Phyllostachys edulis and Phyllostachys
 bambusoides in Japan", PMC 5723622; completebamboo.com, bambubatu.com and practicalplants.org on

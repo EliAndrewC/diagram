@@ -622,5 +622,9 @@ FIELD_ADJ_PX = 165.0
 SETTLEMENT_FORMS = ("nucleated",)
 _SETTLEMENT_FORMS_WHEN_GROVES_WORK = ("nucleated", "nucleated", "nucleated", "nucleated", "nucleated", "dispersed", "dispersed", "dispersed", "linear", "linear")
 
+# Where the hamlet's bamboo stands (feature 133 T47; the `bamboo` knob's roll table). Weighted so a
+# temperate lowland hamlet usually has one - the research puts bamboo below the frost line as a
+# matter of course - and "none" is the cold-upland minority. Read the knob's note in `_knobs.py`.
+BAMBOO_FORMS = ("homestead", "homestead", "thicket", "both", "none")
 PLOT_SIZES = ("small_irregular", "medium", "medium", "large_block")
 GRAIN_DRIFTS = (-8, -4, 0, 0, 4, 8)

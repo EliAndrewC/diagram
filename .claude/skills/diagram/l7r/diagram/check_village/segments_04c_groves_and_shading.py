@@ -1208,3 +1208,93 @@ def _seg_0617__captions_clear_the_ways_they_stand_on(*, M: Any = _UNBOUND, check
             f"(fixtures.py's kosatsuba); the clearance is not monotonic in the offset, so the ladder has to reach past the first dip",
         )
     return _kept(locals(), ())
+
+
+# WHY: <one paragraph - what the research found, the decision it drove, the departure taken>.
+# Declare EVERY input the body reads as a keyword parameter (an undeclared one is a NameError at
+# gate time, not at import), and keep the `_kept` tuple a LITERAL of the names this body binds.
+
+
+def _seg_0618_500__bamboo_declared_and_drawn(
+    *,
+    M: Any = _UNBOUND,
+    check: Any = _UNBOUND,
+    meta: Any = _UNBOUND,
+    scale: Any = _UNBOUND,
+    bamboo_declared_and_drawn_bad: Any = _UNBOUND,
+) -> dict[str, Any]:
+    """Gate segment (bamboo_declared_and_drawn) - the `bamboo` knob a map declares in meta is what it drew: "none" draws no stand, any other value at least one (feature 133 T47). A check on a declaration that never runs looks exactly like a check that passes, so the declaration itself is required on a scripted hamlet."""
+    if scale in ("hamlet", "village", "town"):
+        bamboo_declared_and_drawn_bad = []
+        _bdd_knob = meta.get("bamboo")
+        _bdd_n = len(M.get("bamboo_stands") or [])
+        if meta.get("generated_by") or _bdd_knob is not None:
+            if _bdd_knob is None:
+                bamboo_declared_and_drawn_bad.append(("meta.bamboo", "undeclared"))
+            elif _bdd_knob == "none" and _bdd_n:
+                bamboo_declared_and_drawn_bad.append(("meta.bamboo", f"none but {_bdd_n} drawn"))
+            elif _bdd_knob != "none" and _bdd_n == 0:
+                bamboo_declared_and_drawn_bad.append(("meta.bamboo", f"{_bdd_knob} but nothing drawn"))
+        check(
+            "bamboo_declared_and_drawn",
+            not bamboo_declared_and_drawn_bad,
+            f"bamboo declaration vs drawing: {bamboo_declared_and_drawn_bad[:3]} - meta.bamboo (the knob) and M['bamboo_stands'] must agree; a hamlet with no room for its stand draws none AND says none (hamletgen.bamboo_seats / stage_bamboo)",
+        )
+    return _kept(locals(), ("bamboo_declared_and_drawn_bad",))
+
+
+# WHY: <one paragraph - what the research found, the decision it drove, the departure taken>.
+# Declare EVERY input the body reads as a keyword parameter (an undeclared one is a NameError at
+# gate time, not at import), and keep the `_kept` tuple a LITERAL of the names this body binds.
+
+
+def _seg_0618_501__bamboo_stands_legible(
+    *,
+    M: Any = _UNBOUND,
+    check: Any = _UNBOUND,
+    meta: Any = _UNBOUND,
+    scale: Any = _UNBOUND,
+    bamboo_stands_legible_bad: Any = _UNBOUND,
+) -> dict[str, Any]:
+    """Gate segment (bamboo_stands_legible) - a drawn bamboo stand is at least BAMBOO_LEGIBLE_FT (20 ft) across on both axes: a culm cannot be drawn at this scale, so the stand-level glyph is the only thing a reader sees, and a sliver reads as nothing (feature 133 T47)."""
+    if scale in ("hamlet", "village", "town"):
+        bamboo_stands_legible_bad = []
+        _bsl_floor = 20.0 / float(meta.get("ftpx") or 1.0)
+        for _b in M.get("bamboo_stands") or []:
+            if float(_b.get("w", 0)) < _bsl_floor or float(_b.get("h", 0)) < _bsl_floor:
+                bamboo_stands_legible_bad.append((round(float(_b["x"])), round(float(_b["y"]))))
+        check(
+            "bamboo_stands_legible",
+            not bamboo_stands_legible_bad,
+            f"bamboo stand(s) at {bamboo_stands_legible_bad[:3]} narrower than 20 ft on an axis - a stand that small does not read at fit zoom; seat a whole stand or none (hamletgen.bamboo_seats drops one that fits nowhere at 70%)",
+        )
+    return _kept(locals(), ("bamboo_stands_legible_bad",))
+
+
+# WHY: <one paragraph - what the research found, the decision it drove, the departure taken>.
+# Declare EVERY input the body reads as a keyword parameter (an undeclared one is a NameError at
+# gate time, not at import), and keep the `_kept` tuple a LITERAL of the names this body binds.
+
+
+def _seg_0618_502__bamboo_stands_clear_of_paddies(
+    *,
+    M: Any = _UNBOUND,
+    check: Any = _UNBOUND,
+    meta: Any = _UNBOUND,
+    scale: Any = _UNBOUND,
+    bamboo_stands_clear_of_paddies_bad: Any = _UNBOUND,
+) -> dict[str, Any]:
+    """Gate segment (bamboo_stands_clear_of_paddies) - no vertex of a bamboo stand lies inside a paddy outline: a take-yabu stands on the dry margin above the rice, never in it (feature 133 T47)."""
+    if scale in ("hamlet", "village", "town"):
+        bamboo_stands_clear_of_paddies_bad = []
+        _bcp_fields = [[(float(a), float(b)) for a, b in f["outline"]] for f in (M.get("fields") or []) if f.get("outline")]
+        for _b in M.get("bamboo_stands") or []:
+            _bp = [(float(a), float(c)) for a, c in (_b.get("poly") or [])]
+            if any(point_in_poly(q[0], q[1], fp) for fp in _bcp_fields for q in _bp):
+                bamboo_stands_clear_of_paddies_bad.append((round(float(_b["x"])), round(float(_b["y"]))))
+        check(
+            "bamboo_stands_clear_of_paddies",
+            not bamboo_stands_clear_of_paddies_bad,
+            f"bamboo stand(s) at {bamboo_stands_clear_of_paddies_bad[:3]} stand in a flooded paddy - a take-yabu grows on the dry margin; the seat scan keeps 12 ft off the outline (hamletgen.bamboo_seats)",
+        )
+    return _kept(locals(), ("bamboo_stands_clear_of_paddies_bad",))

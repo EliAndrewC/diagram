@@ -149,6 +149,16 @@ NOTES: dict[str, tuple[str, str]] = {
         "deferred to the flush at the end - drawn here it would be painted over by nothing, but its "
         "crowns must be filtered against every structure, and not all of them exist yet.",
     ),
+    "stage_bamboo": (
+        "The bamboo stands",
+        "A take-yabu is a clonal thicket with a hard edge - a stand, not a seasoning - and a culm is inches "
+        "across, so at this scale bamboo is drawn as a STAND-LEVEL glyph: the stand's position and extent to "
+        "scale, the marks inside symbolic (the convention of Japan's own topographic legend, which gives bamboo "
+        "its own symbol beside broadleaf and conifer). Seated by the previous stage on the cluster's shady side "
+        "or at the field margin's shady end, per the `bamboo` knob; drawn here, after the belt, over scrub that "
+        "already kept out of it. Before this stage existed bamboo was 20% of the belt's crowns, one six-foot "
+        "culm at a time, and invisible.",
+    ),
     "stage_crossings": (
         "Planks and decks",
         "Every way that crosses water gets its deck HERE, which is why the earlier way stages are free to cross a ditch: the crossing is legal because this stage will deck it.",

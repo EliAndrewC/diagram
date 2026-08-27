@@ -13,6 +13,7 @@ from typing import Any
 from l7r.diagram.settlement import knob_rng
 
 from .consts import (
+    BAMBOO_FORMS,
     CARDINAL_BEARINGS,
     CLUSTER_SHAPES,
     FALL_BEARINGS,
@@ -64,6 +65,7 @@ class HamletSpec:
     cluster_shape: str | None = None
     lane_skeleton: str | None = None
     lane_web: str | None = None
+    bamboo: str | None = None
     settlement_form: str | None = None
     field_archetype: str | None = None
     plot_size: str | None = None
@@ -102,6 +104,7 @@ class SitePlan:
     cluster_shape: str
     lane_skeleton: str
     lane_web: str
+    bamboo: str
     # WHICH KIND OF SETTLEMENT THIS IS - nucleated, dispersed or linear. Read by seating (which
     # passes offer seats), by the lane derivation (whether an internal network exists at all), by
     # the grove choice (one village belt or a kainyo per farmstead), and by the two access checks.
@@ -129,6 +132,8 @@ class SitePlan:
     # The coppice patches, scanned in `stage_hinterland` BEFORE the scrub is scattered so the scrub
     # keeps out of them, and drawn by `stage_woodland` (T35, GM 2026-08-27).
     woodland_polys: list[Poly] = field(default_factory=list)
+    # The bamboo stands (T47), scanned in `stage_hinterland` before the scrub, drawn by `stage_bamboo`.
+    bamboo_polys: list[Poly] = field(default_factory=list)
     seat: dict[str, Any] = field(default_factory=dict)
     placed: int = 0
     acres: float = 0.0
@@ -223,6 +228,7 @@ def plan_site(spec: HamletSpec) -> SitePlan:
         cluster_shape=spec.cluster_shape or str(_roll(spec.seed, "cluster_shape", CLUSTER_SHAPES)),
         lane_skeleton=spec.lane_skeleton or str(_roll(spec.seed, "lane_skeleton", LANE_SKELETONS)),
         lane_web=spec.lane_web or str(_roll(spec.seed, "lane_web", LANE_WEBS)),
+        bamboo=spec.bamboo or str(_roll(spec.seed, "bamboo", BAMBOO_FORMS)),
         settlement_form=spec.settlement_form or str(_roll(spec.seed, "settlement_form", SETTLEMENT_FORMS)),
         field_archetype=_archetype,
         plot_size=spec.plot_size or str(_roll(spec.seed, "plot_size", PLOT_SIZES)),

@@ -21,7 +21,7 @@ from l7r.diagram.sitegen.jobs import default_jobs as default_jobs  # noqa: PLC04
 
 from .consts import REF_HOUSEHOLDS
 from .frame import stage_crossings, stage_frame, stage_notice
-from .hinterland import stage_hinterland, stage_windbreak, stage_woodland
+from .hinterland import stage_bamboo, stage_hinterland, stage_windbreak, stage_woodland
 from .homesteads import stage_appurtenances, stage_homesteads
 from .plan import HamletSpec, SitePlan, plan_site
 from .sink import stage_sink
@@ -90,6 +90,7 @@ STAGES = (
     stage_hinterland,
     stage_woodland,
     stage_windbreak,
+    stage_bamboo,  # the bamboo stands, over the scrub that kept out of them (feature 133 T47)
     stage_crossings,
     stage_frame,
 )

@@ -87,7 +87,7 @@ class Settlement(
         self._samurai_ward_interiors: list[Poly] = []  # closed samurai-ward region(s), cached by s.ward - s.building refuses WARD_BARRED_KINDS inside them
         self.bound: Any = None  # optional bounding polygon: placement stays inside it (city wall)
         self.view: Any = None  # optional (ox,oy,w,h) viewBox crop - render/checks treat it as the map edge
-        self.field_polys: list[Any] = Indexed()  # smoothed outlines used for blocking (Indexed: _in_blocked keeps a spatial index on it)
+        self.field_polys: Indexed = Indexed()  # smoothed outlines used for blocking (Indexed: _in_blocked keeps a spatial index on it)
         self.ellipses: list[Any] = []  # (cx, cy, rx, ry) hill/pond/manor - block houses
         self.block_polys: list[Any] = Indexed()  # arbitrary no-build polygons (e.g. forest) (Indexed: _in_blocked keeps a spatial index on it)
         self.marsh_blocks: list[
@@ -182,6 +182,7 @@ class Settlement(
             "kosatsuba": [],
             "field_ditches": [],
             "village_groves": [],
+            "bamboo_stands": [],
             "commons": [],
             "dry_plots": [],
             "marshes": [],

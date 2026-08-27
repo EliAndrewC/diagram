@@ -1335,3 +1335,15 @@ center. Now the four corners are tested (`_wall_on_the_bund`, both seat paths) a
 junction-link gap (`_TOUCH_GAP`) went 1 -> 4 ft: a string-pulled chord ran 2.1 ft from a garden
 corner, clear of the footprint but inside the tread's ink. Labels: bund and path ACCURATE, the
 floor DERIVED.
+
+
+## 2026-08-27 - bamboo, as a stand (feature 133 T47)
+
+The GM asked whether there was bamboo on the map; there was - 315 to-scale culm glyphs, 20% of the
+windbreak's crowns, invisible. Built as proposed under T42: the `bamboo` knob rolled `homestead`
+for seed 4, so one stand of 46 x 29 ft (25 marks) stands on the cluster's shady north side, between
+the top farmhouses and the belt; the belt and the copse are cedar/broadleaf and fruit now. Glyph:
+paired culms with a leafy fork, pale yellow-green, the GSI convention - a DEVIATION for legibility,
+the extent to scale. Gate: three new checks green; audit 0 violations; attempt 1 kept. Labels in
+research/vegetation.md. For the GM to judge on the sheet: the stand reads as a pale block at fit
+zoom; if it wants more presence, the mark pitch (7 ft) and the stand sizes are the constants.

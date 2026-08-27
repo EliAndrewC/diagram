@@ -274,6 +274,7 @@ _OVERLAP_EXEMPT = {
     "log_booms": "a cabled chain of floating logs holding rafted timber against the bank - it FLOATS on the river, so overlapping the water is the whole point, exactly as a jetty deck does",
     "field_ditches": "in-field irrigation ditches (main/laterals/drain) - water lines drawn ON the paddy, validated by water_channels_obtuse_turns + field_ditches_terminate, not solid structures",
     "village_groves": "the COMMUNAL fengshui windbreak (back-village belt / water-mouth cluster / bamboo copses) - vegetation drawn LAST in open ground at the cluster margins; a copse may abut a house, validated by the village_windbreak_* checks",
+    "bamboo_stands": "a BAMBOO STAND (take-yabu) drawn as a stand-level glyph at the cluster's damp N/W strip or the field margin's shady end (feature 133 T47) - vegetation drawn LAST in open ground; the stand's extent is to scale, its marks symbolic",
     "districts": "declarative fabric districts (feature 021), the quarter overlay's sibling - named pack regions validated by capital_districts_declared / capital_rank_gradient, never drawn",
     "precincts": "a sovereign-temple precinct RESERVATION (feature 021) - a region record like a district; its drawn content is precinct_halls, which carry their own classes",
     "quarters": "declarative zoning overlays (feature 006), not solid structures - they intentionally contain buildings and are validated by the city_quarters_* / per-quarter density checks",
@@ -519,7 +520,7 @@ OVERLAP_CLASS: dict[str, str] = {
     # the intramural patrol strip has its OWN precise rule (ring_road_kept_clear), which knows the
     # real bed width and which frontages may legitimately stand against it; the matrix defers
     **{k: "RING_ROAD" for k in ("ring_road",)},
-    **{k: "VEGETATION" for k in ("village_groves", "groves", "forest", "tree_stands", "tree_crowns")},
+    **{k: "VEGETATION" for k in ("village_groves", "bamboo_stands", "groves", "forest", "tree_stands", "tree_crowns")},
 }
 
 # A permissive class may be overlapped by anything, and is never extracted. The reason matters as

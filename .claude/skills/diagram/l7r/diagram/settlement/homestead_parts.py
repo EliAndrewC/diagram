@@ -363,7 +363,14 @@ class HomesteadPartsMixin:
             st = random.getstate()
             random.seed(int(abs(cx) * 5 + abs(cy) * 3 + round(w)))
             n = max(5, min(28, round(w * h / (bs * bs * 48))))  # ~ one crown per ~48 px^2 at 2 ft/px (a ~5 m crown); ~40 across the 6:1 L-grove
-            b_th, c_th = (0.20, 0.58) if mix == "windbreak" else (0.45, 0.45)  # dooryard = bamboo + fruit, no conifer
+            # BAMBOO LEFT THE MIX (feature 133 T47, GM 2026-08-27). It used to be 20% of a windbreak's
+            # crowns and 45% of a dooryard copse's, drawn one culm at a time - 315 six-foot glyphs on
+            # Inashiro that no one could see as bamboo, and not how bamboo grows: a stand is a clonal
+            # thicket with a hard edge, not a seasoning through a cedar belt. Bamboo is now its own
+            # feature (`bamboo_stand`, the `bamboo` knob). The windbreak is cedar-backed with broadleaf;
+            # the dooryard copse is fruit broadleaf. The culm glyph below is kept for the record and is
+            # unreachable at these thresholds.
+            b_th, c_th = (0.0, 0.38) if mix == "windbreak" else (0.0, 0.0)  # dooryard = fruit broadleaf, no conifer
             items: list[Any] = []
             for _ in range(n):
                 px = random.uniform(-w / 2 + 2, w / 2 - 2)
@@ -409,6 +416,67 @@ class HomesteadPartsMixin:
             self.add(''.join(g))
             self._record_crowns(drawn)
             random.setstate(st)
+
+    def bamboo_stand(self: Settlement, poly: Any, role: str = "homestead") -> int:  # type: ignore[misc]
+        """A BAMBOO STAND - a take-yabu: a clonal thicket with a hard edge, drawn as a STAND-LEVEL glyph
+        (feature 133 T47, GM 2026-08-27; research/vegetation.md "Bamboo: how common, where it stood, and
+        how to show it").
+
+        THE GLYPH IS A DELIBERATE DEVIATION FOR LEGIBILITY, recorded like the oversized wellhead: a culm is
+        inches across and cannot be drawn at 1 px = 1 ft, so the stand's POSITION and EXTENT (`poly`) are to
+        scale and the marks inside it are symbolic - the convention Japan's own GSI topographic legend uses,
+        a distinct bamboo-grove symbol beside the broadleaf and conifer ones, so a reader can tell the three
+        apart at map scale. Each mark is a pair of culm strokes with a leafy fork, in bamboo's pale
+        yellow-green, on a jittered grid dense enough to read as one block at fit zoom; nothing is filled,
+        per the no-solid-fill rule for cover. `role` is "homestead" (the damp N/W strip of the cluster) or
+        "thicket" (the take-yabu at the field margin). Recorded in M['bamboo_stands'] (bbox + role + poly);
+        the marks are decoration keyed to the stand (positional randomness)."""
+        pts = [(float(a), float(b)) for a, b in poly]
+        xs, ys = [q[0] for q in pts], [q[1] for q in pts]
+        x0, x1, y0, y1 = min(xs), max(xs), min(ys), max(ys)
+        bs = self.bscale
+        g = ['<g class="bamboo">']
+        step = 7.0 * bs
+        n = 0
+        y = y0 + step * 0.5
+        row = 0
+        while y < y1:
+            x = x0 + step * (0.5 if row % 2 == 0 else 1.0)
+            while x < x1:
+                jx, jy = x + (self._hjit(x, y, 91.0) - 0.5) * step * 0.6, y + (self._hjit(x, y, 92.0) - 0.5) * step * 0.6
+                if point_in_poly(jx, jy, pts):
+                    h = (5.0 + 3.0 * self._hjit(x, y, 93.0)) * bs  # a mark 5-8 ft tall: legible, not a tree
+                    lean = (self._hjit(x, y, 94.0) - 0.5) * 1.6 * bs
+                    # two culms leaning together, and a leafy fork at the top of the taller one
+                    g.append(
+                        f'<path d="M{jx - 1.2 * bs:.1f},{jy:.1f} l{lean:.1f},{-h:.1f} M{jx + 1.2 * bs:.1f},{jy:.1f} l{-lean * 0.6:.1f},{-h * 0.8:.1f}" stroke="#9AAE3C" stroke-width="{0.9 * bs:.2f}" fill="none" stroke-linecap="round"/>'
+                    )
+                    tx, ty = jx - 1.2 * bs + lean, jy - h
+                    g.append(
+                        f'<path d="M{tx:.1f},{ty:.1f} l{-2.2 * bs:.1f},{-1.6 * bs:.1f} M{tx:.1f},{ty:.1f} l{2.4 * bs:.1f},{-1.2 * bs:.1f} M{tx:.1f},{ty:.1f} l{0.4 * bs:.1f},{-2.6 * bs:.1f}" stroke="#B9CC5A" stroke-width="{0.8 * bs:.2f}" fill="none" stroke-linecap="round"/>'
+                    )
+                    n += 1
+                x += step
+            y += step * 0.86
+            row += 1
+        g.append("</g>")
+        if n == 0:
+            return 0
+        z = self.add("".join(g))
+        self.M.setdefault("bamboo_stands", []).append(
+            {
+                "x": round((x0 + x1) / 2, 1),
+                "y": round((y0 + y1) / 2, 1),
+                "w": round(x1 - x0, 1),
+                "h": round(y1 - y0, 1),
+                "rot": 0,
+                "role": role,
+                "z": z,
+                "marks": n,
+                "poly": [[round(a, 1), round(b, 1)] for a, b in pts],
+            }
+        )
+        return n
 
     def village_grove(self: Settlement, poly: Any, role: str = "windbreak", dense: bool = True, within: tuple[float, float, float, float] | None = None, face_margin: float | None = None) -> int:  # type: ignore[misc]
         """A COMMUNAL village grove - the Chinese *fengshui* forest (风水林). Unlike the per-house *yashikirin*,

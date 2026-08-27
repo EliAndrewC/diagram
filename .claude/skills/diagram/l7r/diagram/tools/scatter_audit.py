@@ -158,6 +158,7 @@ def adjudicate(fams: dict[str, list[Base]], manifest: dict[str, Any], map_name: 
     # other forests or something?" - yes, and the research never supported the distinction).
     grove_polys = [[tuple(q) for q in g["poly"]] for g in manifest.get("village_groves", []) if g.get("poly")]
     grove_polys += [[tuple(q) for q in c["poly"]] for c in manifest.get("commons", []) if c.get("role") == "woodland" and c.get("poly")]
+    grove_polys += [[tuple(q) for q in b["poly"]] for b in manifest.get("bamboo_stands", []) if b.get("poly")]  # a bamboo stand is a wood too (T47)
     grove = boxed_grid(boxed_polys(grove_polys))
     bands = [boxed_grid(boxed_segs(_water_segs(view, extra=hi))) for _, hi in DENSITY_BANDS]
 

@@ -288,7 +288,7 @@ class FinishMixin:
         # two woods two-thirds invisible, and the title reading as smudged. The grazing parcels stay
         # excluded, which is what keeps a title from having nowhere to sit.
         _woodland = [c for c in self.M.get("commons", []) if c.get("role") == "woodland" and c.get("poly")]
-        for o in self.M.get("village_groves", []) + self.M.get("marshes", []) + _woodland:
+        for o in self.M.get("village_groves", []) + self.M.get("bamboo_stands", []) + self.M.get("marshes", []) + _woodland:
             polys.append([tuple(p) for p in o["poly"]])
         for fd in self.M.get("fields", []):
             polys.append([tuple(p) for p in fd["outline"]])

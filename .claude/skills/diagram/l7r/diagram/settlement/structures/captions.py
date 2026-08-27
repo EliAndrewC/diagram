@@ -21,6 +21,7 @@ LABEL_GROUND_KEYS = frozenset(
         "commons",
         "marshes",
         "village_groves",
+        "bamboo_stands",
         "groves",
         "pastures",
         "fields",

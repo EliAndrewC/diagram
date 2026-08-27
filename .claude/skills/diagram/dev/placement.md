@@ -51,8 +51,9 @@ sequence one-to-one. Where the two disagree, `STAGES` wins for anything under `h
 | 9 | `stage_hinterland` | scrub and rough grazing |
 | 10 | `stage_woodland` | woodland commons |
 | 11 | `stage_windbreak` | the shelter belt |
-| 12 | `stage_crossings` | planks and decks over every way that crosses water |
-| 13 | `stage_frame` | crop to content, title, scalebar |
+| 12 | `stage_bamboo` | the bamboo stands, on seats the hinterland stage scanned (feature 133 T47) |
+| 13 | `stage_crossings` | planks and decks over every way that crosses water |
+| 14 | `stage_frame` | crop to content, title, scalebar |
 
 **WAYS ARE SPLIT BY PROVENANCE, NOT BY TIMING** (feature 126, 2026-08-23). The GM asked whether
 laying lanes before houses reflects how lanes form, and it does not - a lane between farmsteads is

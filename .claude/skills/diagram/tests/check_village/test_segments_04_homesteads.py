@@ -1051,3 +1051,28 @@ def test_houses_clear_of_paddies_fires_and_passes():
     assert "houses_clear_of_paddies" not in f_only(clear, "houses_clear_of_paddies")
     turned = manifest(houses=[dict(house(x=470, y=400), rot=45)], fields=paddy)  # the rotated corner reaches x=494.7
     assert "houses_clear_of_paddies" in f_only(turned, "houses_clear_of_paddies"), "a rotated corner counts"
+
+
+def test_bamboo_declared_and_drawn_fires_and_passes():
+    """The `bamboo` knob and the drawn stands agree (feature 133 T47)."""
+    stand = {"x": 500.0, "y": 300.0, "w": 48.0, "h": 34.0, "rot": 0, "role": "homestead", "poly": [[476, 283], [524, 283], [524, 317], [476, 317]]}
+    assert "bamboo_declared_and_drawn" in f_only(manifest(houses=[house(x=400, y=400)], meta={"bamboo": "homestead"}), "bamboo_declared_and_drawn"), "declared, nothing drawn"
+    assert "bamboo_declared_and_drawn" in f_only(manifest(houses=[house(x=400, y=400)], meta={"bamboo": "none"}, bamboo_stands=[stand]), "bamboo_declared_and_drawn"), "none declared, one drawn"
+    assert "bamboo_declared_and_drawn" not in f_only(manifest(houses=[house(x=400, y=400)], meta={"bamboo": "homestead"}, bamboo_stands=[stand]), "bamboo_declared_and_drawn")
+    assert "bamboo_declared_and_drawn" not in f_only(manifest(houses=[house(x=400, y=400)], meta={"bamboo": "none"}), "bamboo_declared_and_drawn")
+
+
+def test_bamboo_stands_legible_fires_and_passes():
+    """A stand reads only above 20 ft on both axes (feature 133 T47)."""
+    stand = {"x": 500.0, "y": 300.0, "w": 48.0, "h": 34.0, "rot": 0, "role": "homestead", "poly": [[476, 283], [524, 283], [524, 317], [476, 317]]}
+    sliver = dict(stand, w=12.0, poly=[[494, 283], [506, 283], [506, 317], [494, 317]])
+    assert "bamboo_stands_legible" in f_only(manifest(houses=[house(x=400, y=400)], meta={"bamboo": "homestead"}, bamboo_stands=[sliver]), "bamboo_stands_legible")
+    assert "bamboo_stands_legible" not in f_only(manifest(houses=[house(x=400, y=400)], meta={"bamboo": "homestead"}, bamboo_stands=[stand]), "bamboo_stands_legible")
+
+
+def test_bamboo_stands_clear_of_paddies_fires_and_passes():
+    """A take-yabu stands on the dry margin, never in the rice (feature 133 T47)."""
+    stand = {"x": 500.0, "y": 300.0, "w": 48.0, "h": 34.0, "rot": 0, "role": "homestead", "poly": [[476, 283], [524, 283], [524, 317], [476, 317]]}
+    paddy = [_field("f", 500, 300, 900, 700)]  # the stand's south-east corner lies in it
+    assert "bamboo_stands_clear_of_paddies" in f_only(manifest(houses=[house(x=400, y=400)], fields=paddy, bamboo_stands=[stand]), "bamboo_stands_clear_of_paddies")
+    assert "bamboo_stands_clear_of_paddies" not in f_only(manifest(houses=[house(x=400, y=400)], fields=[_field("f", 600, 400, 900, 700)], bamboo_stands=[stand]), "bamboo_stands_clear_of_paddies")
