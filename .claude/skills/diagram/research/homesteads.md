@@ -105,7 +105,7 @@ band is **~10 m for a working belt, 15-25 m for an untended mature stand**.
 *Where the plots stood, from the record.* The Tonami model homestead (Research Institute, 1996):
 house faces E, away from the SW wind; the front (E) yard is the work yard, "securing adequate open
 space" with only fruit trees and a persimmon in the yard center; S and W carry 2-3 rows of sugi;
-the N/W bamboo strip is "shady ... always damp" and given to the kitchen drain and service sheds.
+the N/W bamboo strip is "shady ... always damp" and given to the kitchen drain and service sheds. (SUMMARY-ONLY, flagged under T48: no fetched source carries this sentence, and ja.wikipedia "屋敷林" puts Tonami's bamboo on the SOUTH side with the storehouses - see research/vegetation.md.)
 Tohoku: the S-facing open ground in front is the drying yard. So the record's answer is that the
 HOUSE BODY was the spacer - plots on the sunlit lee side, the belt behind - and it holds **no
 measured plot-to-treeline distance**. For a nucleated village's communal belt the record is

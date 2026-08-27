@@ -1347,3 +1347,18 @@ paired culms with a leafy fork, pale yellow-green, the GSI convention - a DEVIAT
 the extent to scale. Gate: three new checks green; audit 0 violations; attempt 1 kept. Labels in
 research/vegetation.md. For the GM to judge on the sheet: the stand reads as a pale block at fit
 zoom; if it wants more presence, the mark pitch (7 ft) and the stand sizes are the constants.
+
+
+## 2026-08-27 - household bamboo, per farmstead (feature 133 T48)
+
+The GM understood the one stand as the hamlet's communal thicket and asked whether household bamboo
+belonged in each farmstead block, on which side, and how often. Research (the source-reader pass,
+research/vegetation.md): every Tonami farmstead stood in its grove and bamboo was one of its
+secondary species (READ); the side varies - with the storehouses on the south there, at the wet
+edge, the grove to the wind (READ / SUMMARY-ONLY) - so it is rolled per house; no share is recorded,
+so presence is a GUESS at 0.6. Inashiro (knob `homestead`): 8 of 15 farmsteads keep a 22 x 16 ft
+strip beside the house; the earlier single stand was the `thicket` form and is not on this roll.
+The strips' reservations moved the notice board's engine seat outside the cluster for the first
+time, which exposed three latent defects in the roadside re-seat (ghost ink of the popped board and
+caption; a 16 ft offset against the 6 ft verge; alignment to a lane that was not the nearest) -
+all fixed. Gate clean, audit 0, attempt 1.

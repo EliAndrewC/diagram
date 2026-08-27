@@ -283,11 +283,48 @@ glyph a DEVIATION for legibility (the GSI convention; the marks are symbolic, th
 the sizes (48 x 34 and 84 x 58 ft) and the 7 ft mark pitch DRAWING conventions; "north = the shady
 side" a READING of the record's N/W, recorded as such.
 
-**Sources (read):** Wikipedia "Satoyama"; Wikipedia "Phyllostachys bambusoides"; "Detecting
-latitudinal and altitudinal expansion of invasive bamboo Phyllostachys edulis and Phyllostachys
-bambusoides in Japan", PMC 5723622; completebamboo.com, bambubatu.com and practicalplants.org on
+**REVISITED (feature 133 T48, GM 2026-08-27): household bamboo, per farmstead - which side, and how
+common.** The GM asked whether a farmstead's own bamboo always stood to the north-west and whether
+every farmstead had one. A `source-reader` pass (27 fetches) answered what could be read:
+
+- WHERE (READ, ja.wikipedia "屋敷林"): on the Tonami plain "南側には蔵や納屋などがあり、無花果や葡萄、
+  柿などの果実がなる植物や竹などが植えられていた" - storehouses and barns on the SOUTH side, and there
+  the fruit trees and the bamboo; and separately, "河川の近い家や水害の多い地域では、防水用として
+  ハンノキや、根を張る竹を植えて土壌の流出を防いでいる" - by rivers and in flood-prone ground, bamboo (and
+  alder) planted for its roots. READ (tsuijimatsu.com): the kainyo "はスギが中心で、ほかにアテ（アスナロ）
+  ・ケヤキ・カシ類・竹・柿・栗などで" - cedar central, bamboo among the secondary species. SUMMARY-ONLY:
+  the grove as a whole faces the local harmful wind - north and west (Isawa, Iwate; Hikawa, Shimane),
+  west (Iide, Yamagata), south and west (Tonami) - a regional table the reader saw in a search snippet
+  and could not fetch. NOT CONFIRMED: the earlier record's "N/W strip ... kitchen drain" sentence (the
+  1996 Tonami model homestead, research/homesteads.md) - no fetched source carries it. So the SIDE is
+  two-formed at least (with the storehouses; at the wet edge; on the wind side) and is ROLLED per
+  farmstead, weighted toward the back of the house and the shed's side (Principle XII: two supportable
+  forms become a knob, here a per-house roll).
+- HOW COMMON (READ, Visit Toyama): on the Tonami plain "each house has been surrounded by homestead
+  woodland ... over 7,000 houses", with "cedar, Japanese zelkova, and bamboo ... used as materials for
+  building new houses as well as materials for various everyday tools"; READ (tsuijimatsu.com):
+  "竹は日常生活の資材として重要なものでした". NOT-FOUND: any share of farmsteads keeping bamboo, and any
+  source distinguishing household bamboo from the communal take-yabu by number. So the presence rate
+  is a GUESS - `HOUSEHOLD_BAMBOO_PREVALENCE` 0.6, "one of several secondary species" read as common but
+  not universal, set like the shed's - labeled as such.
+- BUILT: `hamletgen.household_bamboo` seats a 22 x 16 ft strip per farmstead that rolls one, side
+  rolled (back 0.45 / shed side 0.30 / windward 0.15 / other flank 0.10), reserved with the sheds and
+  gardens so the lanes and wells keep off it, drawn by `stage_bamboo` with the stand glyph; the knob's
+  `homestead` value now means these strips, `thicket` the one communal stand, `both` both. Inashiro
+  (rolled `homestead`): 8 of 15 farmsteads keep a strip. The legibility floor is the short axis (14 ft).
+  On the way: the notice board's roadside re-seat left the first board's and caption's INK behind when
+  it popped their records (two boards, one record), stood the board 16 ft off its lane against T13's
+  6 ft verge, and could align a board to a lane that was not its nearest - three latent defects the
+  reservations exposed, fixed in `hamletgen/frame.py`.
+
+**Sources (read):** ja.wikipedia "屋敷林" (the Tonami south-side passage; bamboo at the wet edge);
+築地松景観保全対策推進協議会, tsuijimatsu.com/62 (kainyo species; bamboo as daily material); Visit
+Toyama, "Sankyoson" (7,000 farmsteads each in its grove); Wikipedia "Satoyama"; Wikipedia
+"Phyllostachys bambusoides"; "Detecting latitudinal and altitudinal expansion of invasive bamboo
+Phyllostachys edulis and Phyllostachys bambusoides in Japan", PMC 5723622; completebamboo.com, bambubatu.com and practicalplants.org on
 madake hardiness (T45 run); ridgelineimages.com "Reading GSI Topographic Maps" - the bamboo forest
 (竹林) symbol listed as its own category beside broad-leaved (広葉樹林) and coniferous (針葉樹林)
 forest, and distinct from the bamboo-grass (笹地) symbol (T45 run). **Pointers, not read (403):**
-Kids Web Japan (the Shirakawa farmstead); PFAF and Gardenia; Highlighting Japan 2022 (uses).
-Corrected 2026-08-27 under the read-what-you-cite rule (T44) and the source-reader run (T45).
+Kids Web Japan (the Shirakawa farmstead); PFAF and Gardenia; Highlighting Japan 2022 (uses); the
+regional wind-side table for the grove (search snippet of 屋敷林 / Satte city); the Osaki igune
+dwarf-bamboo composition (Springer, paywalled - and DWARF bamboo is not a stand). Corrected 2026-08-27 under the read-what-you-cite rule (T44) and the source-reader run (T45).

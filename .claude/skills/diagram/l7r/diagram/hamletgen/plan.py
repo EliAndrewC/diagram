@@ -134,6 +134,7 @@ class SitePlan:
     woodland_polys: list[Poly] = field(default_factory=list)
     # The bamboo stands (T47), scanned in `stage_hinterland` before the scrub, drawn by `stage_bamboo`.
     bamboo_polys: list[Poly] = field(default_factory=list)
+    bamboo_roles: list[str] = field(default_factory=list)  # "thicket" (communal, one) or "homestead" (per farmstead), parallel to bamboo_polys
     seat: dict[str, Any] = field(default_factory=dict)
     placed: int = 0
     acres: float = 0.0

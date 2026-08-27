@@ -126,6 +126,15 @@ class CaptionProbesMixin:
         blockers = [q for q in self.label_blocker_quads() if q != subject] + [label_quad(lb) for lb in self.M["labels"] if len(lb) > 3]
         if rects_overlap(after, subject) or any(rects_overlap(after, q) for q in blockers):
             return seat
+        # ...AND NOT ONTO A WAY (T48): `captions_clear_the_ways_they_stand_on` wants the caption's box
+        # clear of every tread by its halo; a pull that lands it on a lane is refused like a footprint.
+        ac = (sum(p[0] for p in after) / len(after), sum(p[1] for p in after) / len(after))
+        reach = max(math.dist(ac, p) for p in after)
+        for ln in self.M.get("lanes", []):
+            pts = ln.get("pts") or []
+            half = float(ln.get("w", 5)) / 2 + 3.0 + 2.0
+            if any(seg_dist(ac[0], ac[1], (float(pts[k][0]), float(pts[k][1])), (float(pts[k + 1][0]), float(pts[k + 1][1]))) < half + reach for k in range(len(pts) - 1)):
+                return seat
         return pulled
 
     def label_caption_hw(self: Settlement, label: str, size: float) -> float:  # type: ignore[misc]

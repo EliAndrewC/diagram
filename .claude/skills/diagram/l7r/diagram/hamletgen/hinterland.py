@@ -38,7 +38,7 @@ def stage_hinterland(s: Settlement, plan: SitePlan) -> None:
     plan.woodland_polys = open_ground_patches(s, plan, plan.woodland_patches)
     # ...and the bamboo stands (T47), seated now for the same reason: a stand is a wood, and the
     # scrub keeps out of it. Drawn by `stage_bamboo`, after the belt.
-    plan.bamboo_polys = bamboo_seats(s, plan)
+    plan.bamboo_polys += bamboo_seats(s, plan)  # the household strips are already in it (stage_appurtenances)
     s.hinterland(marsh=False, soft_extra=[*([plan.belt] if plan.belt else []), *plan.woodland_polys, *plan.bamboo_polys])
 
 
@@ -547,16 +547,14 @@ def _parcel_outline(s: Settlement, x: float, y: float, hw: float, hh: float, bc:
     return ring
 
 
-# THE BAMBOO STANDS (feature 133 T47, GM 2026-08-27; research/vegetation.md "Bamboo: how common, where it
-# stood, and how to show it"). Two attested places, the `bamboo` knob's forms: the HOMESTEAD stand on the
-# cluster's damp, shady side - the N/W strip of the yashiki the record gives to the kitchen drain and the
-# service sheds - and the THICKET (take-yabu), a harvested stand at the field margin's shady end. Sizes are
-# a working household stand and a working thicket, in real feet; a stand under ~20 ft across does not read
-# at fit zoom, which the gate's legibility floor holds. The shady side is drawn as the NORTH of the cluster
-# (the sun is south; the record's "N/W strip" is the side the house shades), a reading recorded as such.
-BAMBOO_HOMESTEAD_FT = (48.0, 34.0)
+# THE BAMBOO STANDS (feature 133 T47/T48, GM 2026-08-27; research/vegetation.md "Bamboo: how common, where
+# it stood, and how to show it"). Two attested forms, the `bamboo` knob's values: the THICKET (take-yabu),
+# ONE communal stand at the village edge held and cut under the village's rules like its coppice, seated
+# here on the cluster's shady side; and HOUSEHOLD bamboo, a small strip on each farmstead that keeps one
+# (`household_bamboo` in homesteads.py, seated with the sheds and gardens). The thicket's size is a working
+# harvested stand in real feet; a stand under the legibility floor does not read at fit zoom.
 BAMBOO_THICKET_FT = (84.0, 58.0)
-BAMBOO_LEGIBLE_FT = 20.0
+BAMBOO_LEGIBLE_FT = 14.0  # the SHORT axis: a household strip is ~16 ft deep and reads; below this, nothing does
 
 
 def bamboo_seats(s: Settlement, plan: SitePlan) -> list[Poly]:
@@ -568,7 +566,7 @@ def bamboo_seats(s: Settlement, plan: SitePlan) -> list[Poly]:
     target wins; a stand that fits nowhere at full size is tried once at 70%, then dropped - a hamlet
     with no room for bamboo draws none rather than a sliver. Outlines are irregular rings inside the
     tested rect (`_parcel_outline`), because a thicket has a hard but not a ruled edge."""
-    forms = {"none": [], "homestead": ["homestead"], "thicket": ["thicket"], "both": ["homestead", "thicket"]}[plan.bamboo]
+    forms = ["thicket"] if plan.bamboo in ("thicket", "both") else []
     houses = s.M.get("houses", [])
     if not forms or not houses:
         return []
@@ -622,9 +620,9 @@ def bamboo_seats(s: Settlement, plan: SitePlan) -> list[Poly]:
         return not any(_blocked(x, y) for x, y in samples)
 
     out: list[Poly] = []
-    for form in forms:
-        wft, hft = BAMBOO_HOMESTEAD_FT if form == "homestead" else BAMBOO_THICKET_FT
-        target = home_target if form == "homestead" else thicket_target
+    for _form in forms:
+        wft, hft = BAMBOO_THICKET_FT
+        target = thicket_target
         step = px(8.0)
         best: tuple[float, float, float] | None = None
         for scale in (1.0, 0.7):
@@ -643,7 +641,7 @@ def bamboo_seats(s: Settlement, plan: SitePlan) -> list[Poly]:
             if best is not None:
                 ring = _parcel_outline(s, best[1], best[2], hw, hh, 1.0, 0.0)
                 out.append(ring)
-                polys.append((ring, px(30.0)))  # the second stand keeps off the first
+                plan.bamboo_roles.append("thicket")
                 break
     return out
 
@@ -653,8 +651,7 @@ def stage_bamboo(s: Settlement, plan: SitePlan) -> None:
     stand-level glyph lies over the scrub that already kept out of it; `meta.bamboo` records the roll
     so the gate can hold "declared and drawn"."""
     s.M["meta"]["bamboo"] = plan.bamboo
-    forms = {"none": [], "homestead": ["homestead"], "thicket": ["thicket"], "both": ["homestead", "thicket"]}[plan.bamboo]
-    for role, ring in zip(forms, plan.bamboo_polys, strict=False):
+    for role, ring in zip(plan.bamboo_roles, plan.bamboo_polys, strict=True):
         s.bamboo_stand(ring, role=role)
 
 

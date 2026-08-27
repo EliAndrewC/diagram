@@ -1063,7 +1063,7 @@ def test_bamboo_declared_and_drawn_fires_and_passes():
 
 
 def test_bamboo_stands_legible_fires_and_passes():
-    """A stand reads only above 20 ft on both axes (feature 133 T47)."""
+    """A stand reads only above 14 ft on its short axis (feature 133 T47/T48: a 22 x 16 household strip passes, a 12 ft sliver fires)."""
     stand = {"x": 500.0, "y": 300.0, "w": 48.0, "h": 34.0, "rot": 0, "role": "homestead", "poly": [[476, 283], [524, 283], [524, 317], [476, 317]]}
     sliver = dict(stand, w=12.0, poly=[[494, 283], [506, 283], [506, 317], [494, 317]])
     assert "bamboo_stands_legible" in f_only(manifest(houses=[house(x=400, y=400)], meta={"bamboo": "homestead"}, bamboo_stands=[sliver]), "bamboo_stands_legible")

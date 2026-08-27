@@ -1256,17 +1256,17 @@ def _seg_0618_501__bamboo_stands_legible(
     scale: Any = _UNBOUND,
     bamboo_stands_legible_bad: Any = _UNBOUND,
 ) -> dict[str, Any]:
-    """Gate segment (bamboo_stands_legible) - a drawn bamboo stand is at least BAMBOO_LEGIBLE_FT (20 ft) across on both axes: a culm cannot be drawn at this scale, so the stand-level glyph is the only thing a reader sees, and a sliver reads as nothing (feature 133 T47)."""
+    """Gate segment (bamboo_stands_legible) - a drawn bamboo stand is at least BAMBOO_LEGIBLE_FT (14 ft) across on its short axis: a culm cannot be drawn at this scale, so the stand-level glyph is the only thing a reader sees, and a sliver reads as nothing (feature 133 T47)."""
     if scale in ("hamlet", "village", "town"):
         bamboo_stands_legible_bad = []
-        _bsl_floor = 20.0 / float(meta.get("ftpx") or 1.0)
+        _bsl_floor = 14.0 / float(meta.get("ftpx") or 1.0)  # the SHORT axis (hamletgen.BAMBOO_LEGIBLE_FT): a 22 x 16 household strip reads
         for _b in M.get("bamboo_stands") or []:
-            if float(_b.get("w", 0)) < _bsl_floor or float(_b.get("h", 0)) < _bsl_floor:
+            if min(float(_b.get("w", 0)), float(_b.get("h", 0))) < _bsl_floor:
                 bamboo_stands_legible_bad.append((round(float(_b["x"])), round(float(_b["y"]))))
         check(
             "bamboo_stands_legible",
             not bamboo_stands_legible_bad,
-            f"bamboo stand(s) at {bamboo_stands_legible_bad[:3]} narrower than 20 ft on an axis - a stand that small does not read at fit zoom; seat a whole stand or none (hamletgen.bamboo_seats drops one that fits nowhere at 70%)",
+            f"bamboo stand(s) at {bamboo_stands_legible_bad[:3]} narrower than 14 ft on its short axis - a stand that small does not read at fit zoom; seat a whole stand or none (hamletgen.bamboo_seats drops one that fits nowhere at 70%)",
         )
     return _kept(locals(), ("bamboo_stands_legible_bad",))
 

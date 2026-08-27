@@ -7,7 +7,8 @@ from __future__ import annotations
 
 import math
 
-from l7r.diagram.settlement import Settlement
+from l7r.diagram.settlement import Settlement, seg_dist
+from l7r.diagram.settlement.structures.fixtures import KOSATSUBA_VERGE_FT
 
 from .hinterland import CROP_MARGIN
 from .plan import SitePlan
@@ -56,13 +57,26 @@ def stage_notice(s: Settlement, plan: SitePlan) -> None:
         hy0, hy1 = min(h["y"] for h in hs), max(h["y"] for h in hs)
         if not (hx0 - 30 <= spot[0] <= hx1 + 30 and hy0 - 30 <= spot[1] <= hy1 + 30):
             board = s.M["kosatsuba"].pop()
+            # ...AND ITS INK (feature 133 T48). Popping the record and the caption left the first
+            # board's GLYPH in the top layer, so a map whose engine seat fell outside the cloud
+            # shipped two boards with one record - found the day the household bamboo strips moved
+            # the engine's seat. `kosatsuba` records its `add_top` z; blank that entry.
+            _top = getattr(s, "top", None)
+            _zi = int(board.get("z", -1)) - int(getattr(s, "TOPZ", 0))
+            if _top is not None and 0 <= _zi < len(_top):
+                _top[_zi] = ""
             # ...and its CAPTION with it. `kosatsuba` records the board and calls `self.label`, so
             # popping only the board leaves an orphan "notice board" caption sitting where the board
             # used to be - which is the very label the frame could not hold, still failing
             # `labels_within_image` after the board itself had moved.
             for _li in range(len(s.M.get("labels", [])) - 1, -1, -1):
                 if len(s.M["labels"][_li]) > 5 and s.M["labels"][_li][5] == "notice board":
-                    s.M["labels"].pop(_li)
+                    _lab = s.M["labels"].pop(_li)
+                    # ...and the caption's INK, in the label layer (T48, the same defect one layer up)
+                    _tl = getattr(s, "toplabels", None)
+                    _lz = int(_lab[4]) - int(getattr(s, "LABELZ", 0))
+                    if _tl is not None and 0 <= _lz < len(_tl):
+                        _tl[_lz] = ""
                     break
             best: tuple[float, float, float, float] | None = None
             for lane in s.M.get("lanes", []):
@@ -76,9 +90,21 @@ def stage_notice(s: Settlement, plan: SitePlan) -> None:
                     rot = math.degrees(math.atan2(by - ay, bx - ax))
                     for t in range(int(seg // 12) + 1):
                         mx, my = ax + (bx - ax) * (t * 12 / seg), ay + (by - ay) * (t * 12 / seg)
+                        # ROADSIDE, per T13's verge (feature 133 T48): the old 16 px offset stood the
+                        # board outside `kosatsuba_by_the_road`'s band the first time this path ran
+                        # on the reference hamlet. Tread half-width + the verge + the board's half depth.
+                        _pxf = getattr(s, "px", None)  # the frame test drives this with a stub that has no scale
+                        _off = float(lane.get("w", 3)) / 2 + (_pxf(KOSATSUBA_VERGE_FT) if _pxf else KOSATSUBA_VERGE_FT) + _BOARD_H / 2
                         for side in (1.0, -1.0):
-                            cx2, cy2 = mx + ux * 16.0 * side, my + uy * 16.0 * side
+                            cx2, cy2 = mx + ux * _off * side, my + uy * _off * side
                             if not (hx0 <= cx2 <= hx1 and hy0 <= cy2 <= hy1):
+                                continue
+                            # THE WAY IT FRONTS IS THE WAY IT IS NEAREST (T48): at a junction a verge
+                            # of lane A can lie nearer lane B, and `kosatsuba_faces_the_road` measures
+                            # the board against its NEAREST way - so a board aligned to A read 90
+                            # degrees off B. Refuse a seat whose nearest way runs across this one.
+                            _nb = _nearest_way_bearing(s, cx2, cy2)
+                            if _nb is not None and min(abs((_nb - rot) % 180.0), 180.0 - abs((_nb - rot) % 180.0)) > 15.0:
                                 continue
                             if not s._fits(cx2, cy2, _BOARD_W, _BOARD_H, corridors=False):
                                 continue
@@ -97,6 +123,19 @@ def stage_notice(s: Settlement, plan: SitePlan) -> None:
                 s.kosatsuba(best[1], best[2], rot=best[3])
             else:  # pragma: no cover - no verge inside the cloud takes a board; keep the engine's seat rather than none
                 s.M["kosatsuba"].append(board)
+
+
+def _nearest_way_bearing(s: Settlement, x: float, y: float) -> float | None:
+    """The bearing (degrees) of the nearest lane segment to (x, y), or None with no lanes."""
+    best: tuple[float, float] | None = None
+    for ln in s.M.get("lanes") or []:
+        pts = ln.get("pts") or []
+        for k in range(len(pts) - 1):
+            a, b = (float(pts[k][0]), float(pts[k][1])), (float(pts[k + 1][0]), float(pts[k + 1][1]))
+            d = seg_dist(x, y, a, b)
+            if best is None or d < best[0]:
+                best = (d, math.degrees(math.atan2(b[1] - a[1], b[0] - a[0])))
+    return None if best is None else best[1]
 
 
 def stage_frame(s: Settlement, plan: SitePlan) -> None:
