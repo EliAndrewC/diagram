@@ -289,10 +289,11 @@ _(from T46 on, each entry also says `research: rendering` or `research: physical
       measure: `git config user.email` in the clone and the mirror after one sync-in; the next commit's author
       verify: `make hooks-test` (sync-with-main.sh is a guard); the commit that closes this task carries the new address
 
-- [ ] T52 **what is a paddy hamlet still missing? - a completeness pass** - the GM (2026-08-27): *"What things would exist on a noticeable percentage of farmhouses that we are not currently representing on our maps ... What, if anything, are we missing? I want to make sure that we get our reference hamlet correct by including all of the things that would be there for this type of farming settlement before we move on to others."*
-      given 2026-08-27T17:13Z | done - | elapsed - | runs: -
+- [x] T52 **what is a paddy hamlet still missing? - a completeness pass** - the GM (2026-08-27): *"What things would exist on a noticeable percentage of farmhouses that we are not currently representing on our maps ... What, if anything, are we missing? I want to make sure that we get our reference hamlet correct by including all of the things that would be there for this type of farming settlement before we move on to others."*
+      given 2026-08-27T17:13Z | done 2026-08-27T17:21Z | elapsed 8 min (computed; the reader 4.4 min of it) | runs: source-reader x1 (Sonnet, 37 fetches); one PDF read by the session (poppler installed for it)
+      note: a gap LIST, not a change - the GM chooses. Read prevalence per old (pre-1944) farmstead, 1972 Miyagi: privy 0.87, firewood 0.76, straw 0.68, barn 0.58 + work shed 0.55 + storage 0.48 (against our one shed on some houses), livestock shed 0.55, manure shed 0.24, bath 0.29, coop 0.16-0.28, well house 0.19, household shrine 0.03. Not owed: gate (samurai), mill (33 on the whole Musashino plateau in 1788), kabata (Shiga), in-house stable (Tōhoku).
       research: physical
-      - [ ] research pass (a census of the farmstead's and the hamlet's features in the record vs the map, then a source-reader pass on the candidates)  - [ ] source-reader confirmed  - [ ] recorded and cited
+      - [x] research pass (the census, the reader's 18-row table, and Sugiura 1973 read in full - the one quantified inventory)  - [x] source-reader confirmed (the T52 run; the PDF the reader could not open was read by the session)  - [x] recorded and cited (research/homesteads.md "What stood on a farmstead - the inventory, with numbers"; SOURCES.md `sugiura-1973-fuzoku`)
       scaffold: none until the GM picks from the gap list - this task delivers the list with prevalence and a reading of each
       measure: the feature families Inashiro records vs the read record's list
       verify: the record; the GM chooses
