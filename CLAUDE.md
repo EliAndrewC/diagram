@@ -13,7 +13,9 @@ purpose, so nothing in the engine, the pool generators or the feature-127 guards
 
 **Read next**: [`.claude/skills/diagram/SKILL.md`](.claude/skills/diagram/SKILL.md) (usage) and
 [`.claude/skills/diagram/CLAUDE.md`](.claude/skills/diagram/CLAUDE.md) (the dev loop - auto-loads
-when you edit under it). The GM's setting notes that the research cites live in gm-assistant
+when you edit under it). Building plans (Mode A) and settlement maps (Mode B) are deliberately ONE
+skill and one package - the decision, and what would change it, in
+[`.claude/skills/diagram/dev/skill-boundary.md`](.claude/skills/diagram/dev/skill-boundary.md). The GM's setting notes that the research cites live in gm-assistant
 (`setting/`, `cosmology/`, `campaigns/`) - mounted at `/host-l7r-repo/gm-assistant` in this container (the whole `l7r` checkout is
 mounted at `/host-l7r-repo`, the same mount gm-assistant uses, and this repository and gm-assistant
 are both subdirectories of it),
