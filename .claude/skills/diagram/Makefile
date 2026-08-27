@@ -7,7 +7,7 @@
 # (GUARD_EDIT_OK: feature 132 adds the iteration switches - a new guard and five new operations)
 .PHONY: done lint format typecheck test test-full guard perf perf-report maps reference bypass-audit quick durations test-file audit perf-gate hooks-test explain \
 	 switches ci-off ci-on scope-lock scope-unlock _switch \
-	 map cohort tripwire hamlet cache-audit regressions placement-stages pool-index compound render-sync \
+	 map cohort tripwire hamlet cache-audit regressions placement-stages pool-index pool-index-if-stale compound render-sync \
 	 gate-manifest why-placed site-justice crop jogs pack-audit scatter-audit sun-audit new-check timings citybudget help \
 	 ci-status ci-check ci-merge ci-image commit-permitted \
 	 perf-explain perf-confirm perf-audit perf-signoff perf-review perf-profile
@@ -264,6 +264,7 @@ _switch:
 map:            ## regenerate ONE gen and gate it            GEN=pool/hamlets/inashiro.gen.py
 	$(REF_FIRST)
 	$(RUN).pipeline.regen $(or $(GEN),pool/hamlets/inashiro.gen.py)
+	@$(MAKE) --no-print-directory pool-index-if-stale
 
 cohort:         ## roll N seeds and report every failure      N=48
 	$(SWEEP_OK)
@@ -277,6 +278,7 @@ tripwire:       ## the middle tier: reference map, then the tripwire seeds
 hamlet:         ## generate one hamlet from the CLI           ARGS="--name X --seed 4 ..."
 	$(REF_FIRST)
 	$(RUN).hamletgen $(ARGS)
+	@$(MAKE) --no-print-directory pool-index-if-stale
 
 cache-audit:    ## does using the generation cache change any map?
 	$(SWEEP_OK)
@@ -294,6 +296,20 @@ placement-stages: ## re-plate the stage-by-stage walk-through page
 
 pool-index:     ## rebuild the pool index
 	$(RUN).pipeline.pool_index $(ARGS)
+
+# THE INDEX FOLLOWS THE TREE IT IS IN (GM 2026-08-27). pool/index.html is derived and gitignored, so
+# a session clone had NO index at all - render-sync only ever wrote main's - and the GM wants one per
+# clone as an index of THAT clone's work in progress (a render absent from the clone says "not
+# rendered", which is the honest state of the clone). Called from sync-in on every turn and after
+# every map-drawing target, so the check must be near-free: it is a single `find -newer` over the
+# pool's manifests, renders and notes, and the rebuild (~0.5 s) runs only when one of them is newer
+# than the index or the index is missing. mtimes, not hashes: no state file to keep, and a false
+# "stale" costs half a second while a false "fresh" is impossible (a rewrite always bumps a mtime).
+pool-index-if-stale: ## rebuild the pool index only when a manifest, render or notes file is newer
+	@if [ ! -f pool/index.html ] || [ -n "$$(find pool -newer pool/index.html \( -name '*.json' -o -name '*.png' -o -name '*.notes.md' \) -print -quit)" ]; then \
+	  $(MAKE) --no-print-directory pool-index; \
+	fi
+# (GUARD_EDIT_OK: adds a derived-artifact refresh, no gate or prompt is touched - GM 2026-08-27)
 
 compound:       ## draw a Mode A compound plan                ARGS=<out.svg>
 	$(RUN).compound $(ARGS)
@@ -647,6 +663,7 @@ reference:
 maps:
 	@$(if $(filter all,$(SCOPE)),$(SWITCH) check scope "maps SCOPE=all",true)
 	@python3 -m l7r.diagram.tools.mapcheck
+	@$(MAKE) --no-print-directory pool-index-if-stale
 # (GUARD_EDIT_OK: feature 132 - `maps SCOPE=all` is refused under the lock; mapcheck itself never widens while locked)
 
 perf:

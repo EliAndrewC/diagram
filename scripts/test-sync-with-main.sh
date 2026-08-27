@@ -54,6 +54,19 @@ OUT=$(ritual "$D" sync-in --mirror-only); check "sync-in --mirror-only" 0 $?
 [ "$(git -C "$D/main" rev-parse HEAD)" = "$(git -C "$D/github.git" rev-parse main)" ] && PASS=$((PASS+1)) || { echo "FAIL  mirror not advanced"; FAIL=$((FAIL+1)); }
 [ "$(git -C "$D/main/.clones/c" rev-parse HEAD)" = "$before" ] && PASS=$((PASS+1)) || { echo "FAIL  clone was touched"; FAIL=$((FAIL+1)); }
 
+echo "2b. sync-in refreshes the CLONE's pool index on both branches, only when it is stale"
+D=$(topology b2)
+mkdir -p "$D/main/.clones/c/.claude/skills/diagram/pool/hamlets"
+printf 'pool-index:\n\t@echo built >> pool/index.html\npool-index-if-stale:\n\t@if [ ! -f pool/index.html ] || [ -n "$$(find pool -newer pool/index.html \\( -name "*.json" -o -name "*.png" -o -name "*.notes.md" \\) -print -quit)" ]; then $(MAKE) --no-print-directory pool-index; fi\n' > "$D/main/.clones/c/.claude/skills/diagram/Makefile"
+IDX="$D/main/.clones/c/.claude/skills/diagram/pool/index.html"
+OUT=$(ritual "$D" sync-in --mirror-only); check "mirror-only sync-in with no index" 0 $?
+[ "$(cat "$IDX" 2>/dev/null)" = "built" ] && PASS=$((PASS+1)) || { echo "FAIL  missing index was not built on the dirty-clone branch"; FAIL=$((FAIL+1)); }
+OUT=$(ritual "$D" sync-in); check "sync-in with a fresh index" 0 $?
+[ "$(cat "$IDX")" = "built" ] && PASS=$((PASS+1)) || { echo "FAIL  fresh index was rebuilt (efficiency check did not hold)"; FAIL=$((FAIL+1)); }
+touch -d '-10 seconds' "$IDX"; echo '{}' > "$D/main/.clones/c/.claude/skills/diagram/pool/hamlets/x.json"
+OUT=$(ritual "$D" sync-in); check "sync-in after a manifest changed" 0 $?
+[ "$(cat "$IDX")" = "$(printf 'built\nbuilt')" ] && PASS=$((PASS+1)) || { echo "FAIL  stale index was not rebuilt: $(cat "$IDX")"; FAIL=$((FAIL+1)); }
+
 echo "3. IT FIRES: a hand commit in the mirror stops sync-in with the fast-forward message"
 D=$(topology c)
 ( cd "$D/main" && echo rogue > rogue && git add -A && git commit -qm "committed in main by hand" )
