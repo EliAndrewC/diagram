@@ -1,7 +1,11 @@
 <!--
 SYNC IMPACT REPORT
 ==================
-Version change: 2.10.0 → 2.11.0
+Version change: 2.11.0 → 2.11.1
+
+Version 2.11.1 (amended 2026-08-27, feature 133 T44, the GM's clarification): a claim from a
+search summary of a paper that cannot be read MAY be asserted and cited - labeled SUMMARY-ONLY;
+only citing a summary as if read is forbidden. PATCH.
 
 Version 2.11.0 (amended 2026-08-27, feature 133 T44): Principle XII gains "READ WHAT YOU CITE" -
 a source is cited only after the session has read the text itself, never from a search summary
@@ -1235,8 +1239,12 @@ not another page's paraphrase - and the finding written down is what THAT text s
 context. The failure this guards against is the academic one: a paper cited for the opposite of
 what it found, by someone who skimmed one passage, or who inherited another writer's
 mischaracterization and read the source to confirm it. Where a source cannot be fetched (a
-paywall, a blocked host), it is not cited as read: the entry either finds a source it can read or
-records the claim as unverified with the pointer it came from. The GM's own words on the level of
+paywall, a blocked host), the claim MAY still be asserted and the source still cited - the GM's
+ruling, 2026-08-27: *"it is perfectly acceptable for us to assert a claim ... even if we are only
+able to see a search summary of a paywalled paper ... as long as we document when we cite the
+source that we were relying on a search summary of a paywall paper rather than the paper itself"* -
+so the entry says which it was: READ, or SUMMARY-ONLY (not read, with what was seen). The one
+thing forbidden is citing a summary as if the text had been read. The GM's own words on the level of
 rigor: the consequences of a wrong bund width on a hobby map are small and the players have been
 told the level of rigor honestly - but the project still wants as much rigor as its time and
 tokens allow, and reading the source is the cheapest rigor there is.
