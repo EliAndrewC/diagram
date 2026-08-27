@@ -1197,3 +1197,25 @@ its inner edge across the slope (`pad` above the local crop bottom, smoothed) - 
 reeds begin 57-89 px above the drain on every station, i.e. at the fan's foot, tucked under the crop
 by the paddy skip. Labels: the marsh-follows-the-toe rule ACCURATE; the drain's drawn grade a
 recorded DEVIATION. No per-task review (dev/reviews.md); the GM looks at the map.
+
+
+## 2026-08-27 - the lanes form one network (feature 133 T31)
+
+The GM: *"there's just a bunch of random scattered lanes strewn about without much rhyme or reason
+... a short section of lane, between three farmhouses. It does not really connect to anything on
+either end ... I would have expected something like a lane leading to the reference hamlet and then
+probably just not even anything between the farmhouses. Is that right? Is that wrong? What does our
+research show?"* The research (`research/homesteads.md`, 2026-08-18 and 2026-08-23, revisited under
+T31) answers both halves without a new pass: a track to the hamlet and nothing between the houses is
+the DISPERSED form (a `settlement_form` knob value); Inashiro rolled NUCLEATED, and for that form the
+record is decisive - the houses are served by an INTERCONNECTED web of narrow lanes. So the form was
+right and the drawing was wrong. Measured before: 9 lanes in 6 components, three pieces ending 29 ft
+from the network beside a garden bed - the fabric margin had clipped them there, and every pass
+counted "within 30 ft" as joined, so no gate saw it. After (`_touch_junctions`, `_clear_touch`,
+`lanes_form_one_network`): 10 lanes, 1 component, every house within 100 ft of a way, and the same
+attempt-1 layout the GM was looking at (a first cut that deleted an unjoinable piece stranded a house,
+tripped the driver's re-roll and shipped attempt 4 with the connector reversed - kept as a warning at
+the point of change). Labels: interconnected web ACCURATE; lane along a fence ACCURATE; the margins
+DRAWING conventions. Pre-fix manifest frozen as
+`pool/regressions/lanes_form_one_network_fires_on_the_pre_fix_inashiro.json`. No per-task review
+(scope locked; dev/reviews.md); the GM looks at the map.

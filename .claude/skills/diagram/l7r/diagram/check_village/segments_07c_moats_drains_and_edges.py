@@ -1251,3 +1251,58 @@ def _seg_0607__lanes_reach_something(*, M: Any = _UNBOUND, check: Any = _UNBOUND
             f"a lane exists to be fronted; a tread that stops in bare grass serves no house, reaches no field and connects to nothing (the connector is exempt - it leaves the map)",
         )
     return _kept(locals(), ())
+
+
+# WHY: <one paragraph - what the research found, the decision it drove, the departure taken>.
+# Declare EVERY input the body reads as a keyword parameter (an undeclared one is a NameError at
+# gate time, not at import), and keep the `_kept` tuple a LITERAL of the names this body binds.
+
+
+def _seg_0619_500__lanes_form_one_network(
+    *,
+    M: Any = _UNBOUND,
+    check: Any = _UNBOUND,
+    meta: Any = _UNBOUND,
+    scale: Any = _UNBOUND,
+    lanes_form_one_network_bad: Any = _UNBOUND,
+) -> dict[str, Any]:
+    """Gate segment 0619_500 (lanes_form_one_network) - every lane is one connected network IN INK: each lane touches the rest (a 4 ft tolerance, the rounding of two treads), not merely comes within 30 ft."""
+    # WHY (GM 2026-08-27, feature 133 T31): the research says a nucleated cluster is threaded by an
+    # INTERCONNECTED system of lanes (research/homesteads.md), but every reach rule here tolerated a
+    # gap - a lane end within 40 ft of another way "reached" it - so Inashiro shipped nine lanes in six
+    # components with 29 px of bare ground between the pieces, and the GM read it as "random scattered
+    # lanes ... does not connect to anything on either end". A junction is where two treads MEET.
+    # Components are joined by a TOUCH (4 ft); a lane that leaves the map (the connector) anchors the
+    # network. `hamletgen._touch_junctions` is the placer-side of this rule.
+    if scale in ("hamlet", "village", "town"):
+        lanes_form_one_network_bad = []
+        _lfn = [[(float(a), float(b)) for a, b in (ln.get("pts") or [])] for ln in (M.get("lanes") or [])]
+        _lfn = [pl for pl in _lfn if len(pl) >= 2]
+        if len(_lfn) >= 2:
+            _par = list(range(len(_lfn)))
+
+            def _lfn_find(i: int) -> int:
+                while _par[i] != i:
+                    _par[i] = _par[_par[i]]
+                    i = _par[i]
+                return i
+
+            for _i in range(len(_lfn)):
+                for _j in range(_i + 1, len(_lfn)):
+                    _sj = list(zip(_lfn[_j], _lfn[_j][1:], strict=False))
+                    _si = list(zip(_lfn[_i], _lfn[_i][1:], strict=False))
+                    _touch = any(seg_dist(q[0], q[1], a, b) <= 4.0 for q in (_lfn[_i][0], _lfn[_i][-1]) for a, b in _sj) or any(
+                        seg_dist(q[0], q[1], a, b) <= 4.0 for q in (_lfn[_j][0], _lfn[_j][-1]) for a, b in _si
+                    )
+                    if _touch:
+                        _par[_lfn_find(_i)] = _lfn_find(_j)
+            _roots = {_lfn_find(i) for i in range(len(_lfn))}
+            if len(_roots) > 1:
+                _main = _lfn_find(next((k for k, ln in enumerate(M.get("lanes") or []) if ln.get("connector")), 0))
+                lanes_form_one_network_bad = [(round(_lfn[k][0][0]), round(_lfn[k][0][1])) for k in range(len(_lfn)) if _lfn_find(k) != _main]
+        check(
+            "lanes_form_one_network",
+            not lanes_form_one_network_bad,
+            f"{len(lanes_form_one_network_bad)} lane(s) starting at {lanes_form_one_network_bad[:3]} do not TOUCH the settlement's network - the pieces stop short of one another (within 30 ft counted as joined, but the ink shows a gap); a junction is where two treads meet (hamletgen._touch_junctions)",
+        )
+    return _kept(locals(), ("lanes_form_one_network_bad",))

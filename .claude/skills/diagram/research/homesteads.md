@@ -243,6 +243,27 @@ morphology literature; the back-lane framework from planned-village morphology (
 premise arrangement of traditional Manchu village in Northeast China", *Japan Architectural Review*
 (2020).
 
+**REVISITED 2026-08-27 (feature 133 T31) - the GM asked the question the other way round.** Looking at
+Inashiro: *"a bunch of random scattered lanes strewn about without much rhyme or reason ... a short
+section of lane, between three farmhouses. It does not really connect to anything on either end ...
+I would have expected something like a lane leading to the reference hamlet and then probably just
+not even anything between the farmhouses. Is that right? Is that wrong? What does our research
+show?"* The record above already answers both halves, and no new pass was needed. (1) A lane to the
+hamlet and NOTHING between the farmhouses is a real form - it is the DISPERSED hamlet of the next
+section (散村, each steading reached from the field paths, no village street), and it is a knob
+value, not a correction. (2) For a NUCLEATED cluster, which is what Inashiro rolled, the record is
+decisive the other way: "every house in the nucleated village is accessible via the INTERCONNECTED
+system of narrow lanes and alleys" - the lanes are the point of compactness, and they are one
+network. So the research says the FORM on Inashiro is right and the DRAWING was wrong: the web was
+connected only by tolerance (every pass treated an end within 30 ft of another way as joined) and
+disconnected in ink - nine lanes in six components, ends stopping 29 ft short where the fabric margin
+had clipped them beside a garden fence. That is the "scattered" look. The fix is in
+`hamletgen/ways.py` (`_touch_junctions`, `_clear_touch`) and the gate holds it
+(`lanes_form_one_network`): a junction is where two treads MEET. Label: the interconnected web is
+ACCURATE for a nucleated cluster; a lane that runs along a garden fence to reach its junction is
+ACCURATE too (the plot fronts the lane; the 7 ft fabric margin is a drawing convenience, not a
+finding - see `_TOUCH_GAP`).
+
 ## Does a hamlet have to be NUCLEATED at all? (researched 2026-08-23)
 
 **Answer: no. Three forms are supportable, so the form becomes a seeded knob (Principle XII), and

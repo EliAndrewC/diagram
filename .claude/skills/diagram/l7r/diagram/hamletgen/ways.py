@@ -526,6 +526,7 @@ def stage_web(s: Settlement, plan: SitePlan) -> None:
     # curing the symptom.
     _bridge_collinear_breaks(s, hard_built, walls, list(plan.watercourses) + drawn_water)
     _serve_stragglers(s, plan, hard, fabric, list(plan.watercourses) + drawn_water)
+    _touch_junctions(s, hard_built, walls, list(plan.watercourses) + drawn_water)
     # ...AND JOIN ORPHANS AGAIN, LAST. The first pass runs before the bridges and the footpaths, so
     # it can only see the lanes that exist then - on cohort seed 39 that was FOUR of the twelve the
     # map finishes with, and the eight added afterwards formed a second network of their own. Every
@@ -982,7 +983,10 @@ def _join_orphan_ways(s: Settlement, hard: list[Poly], walls: Sequence[Poly], wa
                 break
         if link is None or best is None:
             return made
-        link = _trim_to_service(link, [sg for j in main for sg in zip(ways[j], ways[j][1:], strict=False)], [(float(q["x"]), float(q["y"])) for q in s.M.get("houses", [])])
+        # NOT trimmed to service (T31, GM 2026-08-27): `_trim_to_service` pulled the link's ends back to
+        # "within 40 ft of a way" - so the very link laid to JOIN an orphan stopped 29 px short of the
+        # network it was joining, and the web shipped as pieces. A link runs from the orphan's vertex to
+        # the network's foot point; both ends serve by construction.
         _w = max(
             (
                 float(_l.get("w", 3))
@@ -995,6 +999,139 @@ def _join_orphan_ways(s: Settlement, hard: list[Poly], walls: Sequence[Poly], wa
         _draw_web(s, link, int(_w))
         made += 1
     return made  # pragma: no cover - six links is far more than any hamlet needs
+
+
+def _touch_junctions(s: Settlement, hard: list[Poly], walls: Sequence[Poly], water: list[tuple[Pt, Pt]]) -> int:
+    """The LAST pass over the web: every lane end that stands NEAR another way is extended to TOUCH it.
+
+    THE NETWORK WAS CONNECTED BY TOLERANCE AND DISCONNECTED IN INK (GM 2026-08-27, feature 133 T31:
+    *"a bunch of random scattered lanes strewn about without much rhyme or reason ... a short section
+    of lane, between three farmhouses. It does not really connect to anything on either end"*).
+    Every pass here - the orphan-joiner, the stub trimmer, the service trim, the reach checks - treats
+    an end within `_LANE_JOIN_FT` (30 ft) of another way as JOINED, so a web could pass every gate
+    while its pieces stopped 29 px short of one another. On Inashiro that was nine lanes in six
+    components. The research the web exists to honor says "interconnected" (research/homesteads.md),
+    and a junction is a place where two treads meet, not two ends that nearly do.
+
+    Straight when the last stretch is clear, routed when it is not; the lane's record and its ink are
+    rewritten together (`reink_lane`). Ends that stop at a house or leave the map are left alone - a
+    door path ends at its door. `lanes_form_one_network` holds the line. Returns the ends closed."""
+    closed = 0
+    for _pass in range(3):  # a touch can bring another end into reach; converge
+        lanes = s.M.get("lanes") or []
+        moved = 0
+        for i, ln in enumerate(lanes):
+            if ln.get("connector") or len(ln.get("pts") or []) < 2:
+                continue
+            pts = [(float(x), float(y)) for x, y in ln["pts"]]
+            others = [
+                (a, b)
+                for k, o in enumerate(lanes)
+                if k != i and len(o.get("pts") or []) >= 2
+                for a, b in zip([(float(x), float(y)) for x, y in o["pts"]], [(float(x), float(y)) for x, y in o["pts"]][1:], strict=False)
+            ]
+            if not others:
+                continue
+            new = list(pts)
+            for end in (0, -1):
+                q = new[end]
+                foot = min((seg_closest(q[0], q[1], a, b) for a, b in others), key=lambda z: math.dist(q, z))
+                d = math.dist(q, foot)
+                if d <= 2.0 or d > _LANE_JOIN_FT:
+                    continue
+                link = [q, foot] if _clear_touch(q, foot, hard, walls, water) else _route(q, foot, hard, walls, water, gap=WEB_FABRIC_GAP, pad_mult=2.0, cell=10.0)
+                if not link or polyline_len(link) > _LINK_DIRECTNESS * d:
+                    continue
+                new = (list(reversed(link[1:])) + new) if end == 0 else (new + link[1:])
+                closed += 1
+                moved += 1
+            if new != pts:
+                ln["pts"] = [[round(x, 1), round(y, 1)] for x, y in new]
+                s.reink_lane(i)
+        if not moved:
+            break
+    # ONE NETWORK OR NOTHING. Whatever still stands apart after the touches is joined to the main
+    # network by a routed link from its nearest vertex (reach up to `_ORPHAN_REACH`), and a component
+    # that cannot be joined is REMOVED - record and ink together, as `trim_lane_stubs` does - because a
+    # fragment serving three houses and touching nothing is what the GM read as "random scattered
+    # lanes"; if a house is left unserved by that, `farmhouses_reach_a_way` says so honestly.
+    for _pass in range(4):
+        lanes = s.M.get("lanes") or []
+        ways = [[(float(x), float(y)) for x, y in ln["pts"]] for ln in lanes]
+        comp = _components(ways, 4.0)
+        seed = next((i for i, ln in enumerate(lanes) if ln.get("connector")), 0)
+        main = comp[seed] if comp else None
+        orphans = [i for i in range(len(ways)) if comp[i] != main and len(ways[i]) >= 2]
+        if not orphans:
+            break
+        main_segs = [sg for j in range(len(ways)) if comp[j] == main for sg in zip(ways[j], ways[j][1:], strict=False)]
+        joined = False
+        for i in sorted(orphans, key=lambda k: -polyline_len(ways[k])):
+            cands = sorted(((math.dist(v, q), v, q) for v in ways[i] for q in [min((seg_closest(v[0], v[1], a, b) for a, b in main_segs), key=lambda z: math.dist(v, z))]), key=lambda c: c[0])
+            for d, v, q in cands[:12]:
+                if d > _ORPHAN_REACH:
+                    break
+                link = [v, q] if _clear_touch(v, q, hard, walls, water) else _route(v, q, hard, walls, water, gap=WEB_FABRIC_GAP, pad_mult=2.0, cell=10.0)
+                if link and polyline_len(link) <= _LINK_DIRECTNESS * max(d, 1.0):
+                    _draw_web(s, link, int(float(lanes[i].get("w", 3))))
+                    joined = True
+                    break
+            if joined:
+                break
+        if not joined:
+            # KEPT, not dropped. The first cut of this pass DELETED a piece it could not link, and
+            # on Inashiro that stranded a farmhouse the piece was serving: `farmhouses_reach_a_way`
+            # failed, the driver's re-roll loop (`driver.py`) took over, and the map that came out
+            # was attempt four - a different connector heading and a different web, with nothing on
+            # the map saying why. A lane that serves a house is worth more than a clean component
+            # count; the disconnection stays visible through `lanes_form_one_network` instead.
+            s.M["meta"]["lane_orphans"] = len(orphans)
+            break
+    return closed
+
+
+_ORPHAN_REACH = 150.0  # ft: how far a stranded piece may be linked back to the network before it is left as it is
+
+# A JUNCTION LINK CROSSES NOTHING, BUT IT MAY BRUSH A FENCE. The 29 ft gaps this pass closes are
+# made by the fabric margin itself: `clear_runs` clips a lane wherever it passes within
+# `WEB_FABRIC_GAP` (7 ft) of a garden or a yard, and where two lanes meet beside a plot that is
+# exactly where the cut lands - measured on Inashiro, every refused link was 29 ft long, sat 6-15 ft
+# from a garden, and `_clear_link` refused it on the same margin that had made it. A lane and a
+# garden fence share a line in a real village (the plot FRONTS the lane), so the last few feet into
+# a junction are tested against footprints only: the link may not cross a house, a bed, a yard or
+# water, and it may run along a fence.
+_TOUCH_GAP = 1.0
+
+
+def _clear_touch(a: Pt, b: Pt, hard: list[Poly], walls: Sequence[Poly], water: list[tuple[Pt, Pt]]) -> bool:
+    """`_clear_link` at footprint margins - for the short link that closes a junction (see `_TOUCH_GAP`)."""
+    span = math.dist(a, b)
+    if span < 1.0:
+        return True
+    runs = clear_runs([a, b], hard, _TOUCH_GAP, step=3.0, lines=water, tight=walls, tight_margin=_TOUCH_GAP, floor=0.5)
+    return any(polyline_len(r) >= span - 3.0 for r in runs)
+
+
+def _components(ways: Sequence[Poly], touch: float) -> list[int]:
+    """Connected-component label per way, joined by an END within `touch` of another way's tread."""
+    par = list(range(len(ways)))
+
+    def find(i: int) -> int:
+        while par[i] != i:
+            par[i] = par[par[i]]
+            i = par[i]
+        return i
+
+    segs = [list(zip(w, w[1:], strict=False)) for w in ways]
+    for i in range(len(ways)):
+        for j in range(i + 1, len(ways)):
+            if len(ways[i]) < 2 or len(ways[j]) < 2:
+                continue
+            if any(seg_dist(q[0], q[1], a, b) <= touch for q in (ways[i][0], ways[i][-1]) for a, b in segs[j]) or any(
+                seg_dist(q[0], q[1], a, b) <= touch for q in (ways[j][0], ways[j][-1]) for a, b in segs[i]
+            ):
+                par[find(i)] = find(j)
+    return [find(i) for i in range(len(ways))]
 
 
 def _net_segs(s: Settlement) -> list[tuple[Pt, Pt]]:

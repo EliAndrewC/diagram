@@ -16,6 +16,8 @@ from tests.check_village._builders import (
     _water_map,
     f,
     f_only,
+    house,
+    manifest,
 )
 
 
@@ -859,3 +861,17 @@ def test_no_farmhouse_stands_on_a_lane_passes_when_the_lane_runs_past_them():
         [{"x": 560, "y": 700, "w": 46, "h": 28, "rot": 0, "kind": "plain"}],
     )
     assert "no_farmhouse_stands_on_a_lane" not in f_only(M, "no_farmhouse_stands_on_a_lane"), "60 px clear of the tread is a house beside a lane, not on it"
+
+
+def test_lanes_form_one_network_fires_and_passes():
+    """Every lane touches the rest in ink (GM 2026-08-27, T31: "random scattered lanes ... does not
+    really connect to anything on either end" - nine lanes in six components on Inashiro, joined only
+    by the 30 ft tolerance). A 20 px gap fires; the same lanes touching pass."""
+    gap = manifest(
+        houses=[house(x=400, y=400)], lane=[[0, 500], [300, 500]], lanes=[{"pts": [[0, 500], [300, 500]], "w": 6, "connector": True}, {"pts": [[320, 500], [320, 700]], "w": 3, "connector": False}]
+    )
+    assert "lanes_form_one_network" in f_only(gap, "lanes_form_one_network"), "a 20 px gap between two lanes must fire"
+    touch = manifest(
+        houses=[house(x=400, y=400)], lane=[[0, 500], [300, 500]], lanes=[{"pts": [[0, 500], [300, 500]], "w": 6, "connector": True}, {"pts": [[300, 500], [300, 700]], "w": 3, "connector": False}]
+    )
+    assert "lanes_form_one_network" not in f_only(touch, "lanes_form_one_network"), "touching lanes are one network"
