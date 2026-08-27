@@ -1,7 +1,7 @@
 {
   "utc": "2026-08-27T17:01:02Z",
   "target": "history rewrite (author/committer email) on the clone's unpushed range",
-  "commit": "3df78687",
+  "commit": "96f4ff01",
   "outcome": "permitted",
   "why": "feature 133 T51: the GM's explicit waiver of constitution VI's no-rewrite rule, 2026-08-27 (\"Yes. I am willing to give you a waiver in order to allow you to do this rewrite\"), for re-authoring the 85 unpushed commits from eli.courtwright@gmail.com to eli@courtwright.org; run with git filter-branch --env-filter over origin/main..HEAD so the three merge commits keep their parents; the trees are untouched; run-log shas re-mapped afterwards",
   "commit_before_rewrite": "f7dfdb5b"

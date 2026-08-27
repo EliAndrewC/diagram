@@ -4,6 +4,6 @@
   "scope": "reference",
   "seconds": 48,
   "result": "failed: lint typecheck test",
-  "commit": "e8d53cd3",
+  "commit": "edea8ffe",
   "commit_before_rewrite": "8098a6dd"
 }
