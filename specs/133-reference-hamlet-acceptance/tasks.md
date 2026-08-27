@@ -280,6 +280,14 @@ _(from T46 on, each entry also says `research: rendering` or `research: physical
       measure: the drawn widths vs the read record; the map changes only if the record says the widths are wrong
       verify: the record; `make maps` if a width changes
 
+- [x] T51 **one committer identity for every container** - the GM (2026-08-27): *"I would like to make all commits as 'Eli Courtwright' ... with the eli@courtwright.org email address. Is there a way to do that for both this container and all other containers? Like maybe with some setting in my shared ~/.claude which gets volumed into all of my working containers?"*
+      given 2026-08-27T16:35Z | done 2026-08-27T16:38Z | elapsed 3 min (computed) | runs: sync-in x2, make hooks-test x1
+      note: `~/.claude/gitconfig` (the shared volume) holds the one identity; `~/.gitconfig` includes it (written by setup-dev-env.sh and by ensure_git_config on every sync-in, as a backstop); both scripts now read that file directly and set every repo-local identity FROM it - `git config --global --get` does not follow an include, which cost one cycle. Fallback to main's tip author only when the file is absent. Applied here: clone and mirror both eli@courtwright.org; this task's own commit is the proof. gm-assistant's copy of setup-dev-env.sh needs the same eleven lines (a gm-assistant session's change).
+      research: procedure
+      scaffold: `~/.claude/gitconfig` on the shared volume; `~/.gitconfig` includes it, written by container-scripts/setup-dev-env.sh and by sync-with-main.sh's ensure_git_config; both scripts prefer the global identity over main's tip author (which is how the gmail address perpetuated itself)
+      measure: `git config user.email` in the clone and the mirror after one sync-in; the next commit's author
+      verify: `make hooks-test` (sync-with-main.sh is a guard); the commit that closes this task carries the new address
+
 ## Phase 9 - acceptance
 
 - [ ] T90 the would-have-dispatched audit (FR-005): every entry in the period, and for each whether it should have run; each "no" names a tooling change

@@ -73,13 +73,29 @@ ensure_git_config() {
     git -C "$MAIN" config receive.denyCurrentBranch updateInstead
     echo "sync-with-main: set receive.denyCurrentBranch=updateInstead on $MAIN (one-time, now automatic)"
   fi
-  local tree name email
+  # THE IDENTITY COMES FROM THE GM'S SHARED ~/.claude/gitconfig (GM 2026-08-27, feature 133 T51),
+  # included from ~/.gitconfig - written here as a backstop so a container that never re-ran
+  # setup-dev-env.sh still picks it up on its next sync-in. Deriving it from main's tip author was
+  # a loop: whatever address the last commit carried became the next commit's, forever. The tip
+  # author is now only the fallback for a container with no shared identity at all.
+  if [ -f "$HOME/.claude/gitconfig" ] && ! grep -qs 'claude/gitconfig' "$HOME/.gitconfig" 2>/dev/null; then
+    printf '[include]\n\tpath = ~/.claude/gitconfig\n' >> "$HOME/.gitconfig"
+    echo "sync-with-main: ~/.gitconfig now includes ~/.claude/gitconfig (the GM's shared identity)"
+  fi
+  local tree name email gname gemail
+  # read the shared file itself: `git config --global --get` reads ~/.gitconfig alone and does not follow its include
+  gname=$(git config --file "$HOME/.claude/gitconfig" --get user.name 2>/dev/null || true); gemail=$(git config --file "$HOME/.claude/gitconfig" --get user.email 2>/dev/null || true)
   for tree in "$MAIN" "$ROOT"; do
-    if [ -z "$(git -C "$tree" config --get user.email || true)" ]; then
+    if [ -n "$gemail" ]; then
+      if [ "$(git -C "$tree" config --get user.email || true)" != "$gemail" ] || [ "$(git -C "$tree" config --get user.name || true)" != "$gname" ]; then
+        git -C "$tree" config user.name "$gname" && git -C "$tree" config user.email "$gemail"
+        echo "sync-with-main: set committer identity on $tree to '$gname <$gemail>' (from ~/.claude/gitconfig)"
+      fi
+    elif [ -z "$(git -C "$tree" config --get user.email || true)" ]; then
       name=$(git -C "$MAIN" log -1 --format=%an) && email=$(git -C "$MAIN" log -1 --format=%ae)
       [ -n "$email" ] || die "cannot derive a committer identity: $MAIN has no commits"
       git -C "$tree" config user.name "$name" && git -C "$tree" config user.email "$email"
-      echo "sync-with-main: set committer identity on $tree to '$name <$email>' (from main's tip author)"
+      echo "sync-with-main: set committer identity on $tree to '$name <$email>' (from main's tip author - no ~/.claude/gitconfig found)"
     fi
   done
 }

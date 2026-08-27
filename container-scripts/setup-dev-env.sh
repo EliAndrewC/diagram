@@ -145,10 +145,21 @@ echo "==> main's repo-local git config"
 if [ "$(git -C "$REPO" config --get receive.denyCurrentBranch || true)" != updateInstead ]; then
     git -C "$REPO" config receive.denyCurrentBranch updateInstead && echo "    set receive.denyCurrentBranch=updateInstead"
 fi
-if [ -z "$(git -C "$REPO" config --get user.email || true)" ] && [ -n "$(git -C "$REPO" log -1 --format=%ae 2>/dev/null)" ]; then
+# THE COMMITTER IDENTITY IS THE GM'S SHARED ONE (GM 2026-08-27, feature 133 T51): ~/.claude is the
+# one home directory mounted into every working container, so ~/.claude/gitconfig holds the name
+# and address once, and each container's ~/.gitconfig includes it. Deriving from main's tip author
+# (the previous rule) was a loop - the last commit's address became the next one's forever.
+if [ -f "$HOME/.claude/gitconfig" ]; then
+    if ! grep -qs 'claude/gitconfig' "$HOME/.gitconfig" 2>/dev/null; then
+        printf '[include]\n\tpath = ~/.claude/gitconfig\n' >> "$HOME/.gitconfig" && echo "    ~/.gitconfig includes ~/.claude/gitconfig"
+    fi
+    git -C "$REPO" config user.name "$(git config --file "$HOME/.claude/gitconfig" --get user.name)"
+    git -C "$REPO" config user.email "$(git config --file "$HOME/.claude/gitconfig" --get user.email)"
+    echo "    committer identity from ~/.claude/gitconfig: $(git -C "$REPO" config user.name) <$(git -C "$REPO" config user.email)>"
+elif [ -z "$(git -C "$REPO" config --get user.email || true)" ] && [ -n "$(git -C "$REPO" log -1 --format=%ae 2>/dev/null)" ]; then
     git -C "$REPO" config user.name "$(git -C "$REPO" log -1 --format=%an)"
     git -C "$REPO" config user.email "$(git -C "$REPO" log -1 --format=%ae)"
-    echo "    set committer identity from main's tip author: $(git -C "$REPO" config user.name) <$(git -C "$REPO" config user.email)>"
+    echo "    set committer identity from main's tip author (no ~/.claude/gitconfig): $(git -C "$REPO" config user.name) <$(git -C "$REPO" config user.email)>"
 fi
 
 echo "==> verifying"
