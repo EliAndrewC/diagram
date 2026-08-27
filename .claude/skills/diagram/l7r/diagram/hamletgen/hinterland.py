@@ -25,7 +25,11 @@ def stage_hinterland(s: Settlement, plan: SitePlan) -> None:
     hills were stripped for fuel and timber over centuries, so the DOMINANT cover past the fields is
     scrub, not forest). It runs after the structures so the scatter skips them, and before the woods
     so the woodland patches draw on top of the scrub they stand in."""
-    s.hinterland()
+    # THE BELT IS COMPUTED HERE, two stages before it is drawn, so the scrub can keep out of it
+    # (T34): the belt derives from the houses alone, which are final by now, and `stage_woodland`
+    # recomputes the same polygon. Woody scatter stops at the belt's line; grass grades into it.
+    plan.belt = belt_polygon(s, plan)
+    s.hinterland(soft_extra=[plan.belt] if plan.belt else ())
 
 
 CROP_MARGIN = 48.0  # the one crop margin, shared by stage_frame's crop_to_content call and the

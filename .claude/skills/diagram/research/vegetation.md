@@ -100,3 +100,41 @@ the dry scrub and the fengshui grove). Recorded as future work, not built here; 
 per-settlement roll like every other knob. *Unsourced, and labelled so:* that Edo-period reed beds
 were mown (ヨシ刈り, 茅場) and that mowing is what kept the margin open - plausible, searched, not found.
 **Grounds:** `settlements/vegetation.md` "Scrub NEVER scatters into a marsh"; `cover.py` `_in_soft`.
+
+
+## Does scrub stand under a village wood? No - the floor was worked clear; grass fringes the edge (researched 2026-08-27, feature 133 T34)
+
+The GM: *"Should scrubland overlap with forests? It seems like it shouldn't. Like, visually, it looks
+weird. but maybe what is being represented is more accurate than what I am imagining."* It was not
+more accurate. Two findings, one from land use and one from vegetation structure:
+
+- **A satoyama wood's floor was kept clear, on purpose.** The village woodlands of the Edo period
+  were worked ground: fallen branches and leaves were collected and the undergrowth cut, the
+  litter (*ochiba*) and cut shrubs going to the paddies as fertilizer and the wood to the hearth as
+  fuel and charcoal, on a ten-to-twenty-year coppice cycle. A shrub layer under the trees is what
+  an ABANDONED coppice grows (the succession studies date it to the 1960s, when propane replaced
+  firewood) - so brush and young pine under the crowns of an inhabited village's grove is the one
+  form the record rules out. The homestead windbreak (*yashikirin*) is managed as part of the
+  residence, the same way.
+- **The edge is a gradient, and it is grass.** Woodland-edge ecology describes the transition as a
+  herb FRINGE outside, a shrub BELT, and the woody MANTLE - canopy closure falling from near-complete
+  inside to partial at the boundary, and vegetation height stepping down from crown to shrub to
+  herb. On a worked wood the shrub belt is what gets cut; the grass fringe is what remains, and it
+  thins out under the first crowns.
+
+**Rule** (`settlement/land/cover.py` `hinterland(soft_extra=)` -> `commons(soft=)`, the T12 marsh
+machinery reused; `hamletgen/hinterland.py` computes the belt two stages early so the scrub can see
+it; `tools/scatter_audit.py` holds a `grove` keep-out): brush dots and pines are hard-excluded from
+every village-grove polygon; grass blades thin into it over the reed feather (46 units) and are gone
+beyond it; crowns are the grove. Inashiro before: 2,688 blades, 158 dots, 11 pines inside the belt
+polygon; after: 1,263 blades, all within the 46-unit fringe, no dots, no pines, audit 0 violations.
+Labels: the clear floor and the grass fringe ACCURATE; the 46-unit feather a DRAWING convention
+shared with the marsh (one ramp for every soft edge, so two edges never read differently for no
+reason). Not built, recorded: an abandoned-coppice shrub layer is a real second form for a
+DESERTED settlement, never for an inhabited one.
+
+**Sources:** satoyama floor management and the coppice cycle (the Geography Hub and Grokipedia
+satoyama summaries; the abandoned-coppice shrub-layer succession study, AGRIS); woodland-edge
+structure (Wikipedia "Woodland edge"; EUNIS "Thermophile woodland fringes"; Springer "Forest Edges,
+Scrub, Hedges and Their Herb Communities"); yashikirin as managed residence woodland (Forests 2025,
+Okinawa homestead windbreaks).

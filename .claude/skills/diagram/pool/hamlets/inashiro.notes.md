@@ -1241,3 +1241,19 @@ lane turns down the cluster; the 8 ft last leg of L2 into the node is a bend rou
 the chord, kept. Held by `lanes_bend_like_paths`; pre-fix manifest frozen as
 `pool/regressions/lanes_bend_like_paths_fires_on_the_pre_fix_inashiro.json`. Labels: the principle
 ACCURATE, the thresholds DRAWING conventions. No per-task review (scope locked); the GM looks.
+
+
+## 2026-08-27 - no scrub under the windbreak (feature 133 T34)
+
+The GM: *"Should scrubland overlap with forests? It seems like it shouldn't ... but maybe what is
+being represented is more accurate than what I am imagining."* Measured first: inside the belt
+polygon stood 2,688 grass blades, 158 brush dots and 11 pines. Mechanism: draw order - the scrub
+(stage 7) is drawn before the belt exists (stage 9), so it could not keep out of it. Research
+(`research/vegetation.md`): a worked village wood's floor was kept clear (litter and undergrowth
+went to the paddies and the hearth), with a grass fringe at the edge; a shrub layer under the crowns
+is what an abandoned coppice grows. Fix: the belt polygon is computed in `stage_hinterland` (it
+derives from the houses, final by then) and passed as a SOFT keep-out - the T12 marsh rule reused:
+woody glyphs stop at the line, grass thins in over the reed feather. After: no dots, no pines, 1,263
+blades all inside the 46-unit fringe; `make scatter-audit` 0 violations with its new `grove`
+keep-out. Labels: clear floor and grass fringe ACCURATE; the shared feather a DRAWING convention.
+No per-task review (scope locked); the GM looks.

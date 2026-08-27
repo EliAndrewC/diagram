@@ -273,6 +273,7 @@ class GroundCoverMixin:
         marsh_role: str = "toe",
         scrub_role: str = "grazing",
         skip_sides: Any = (),
+        soft_extra: Any = (),
     ) -> None:
         """Lay out a settlement's non-arable HINTERLAND: a reed MARSH at the downhill TOE (below the paddy's
         drainage line, where wet-rice reclamation stops and the valley floor stays reed wetland) and the
@@ -374,7 +375,16 @@ class GroundCoverMixin:
         # As a SOFT keep-out (see `commons`), and NEVER folded into `avoid`: the marsh call below takes
         # `avoid` too, and a marsh handed its own band draws no reeds at all (measured on the first
         # cut of this fix - the toe went bare).
-        soft = [toe_poly] if toe_poly else []
+        # SOFT keep-outs: grass grades into them over the reed feather, woody glyphs stop at the line
+        # (`commons` `_in_soft`). The toe marsh (T12), and whatever the caller adds - the hamlet
+        # generator passes the WINDBREAK BELT (feature 133 T34, GM 2026-08-27: "Should scrubland
+        # overlap with forests? ... it seems like it shouldn't"). Researched: a managed village wood's
+        # floor was kept CLEAR - litter raked and undergrowth cut for fuel and paddy fertilizer - with
+        # a grass fringe at the edge (the woodland-edge mantle-and-fringe), so brush and pine never
+        # stand under the crowns and grass thins out inside the first few paces. The belt is drawn
+        # two stages later, so without this the scrub could not see it: Inashiro carried 2,688
+        # blades, 158 brush dots and 11 pines inside the belt polygon.
+        soft = [*([toe_poly] if toe_poly else []), *[[tuple(q) for q in sp] for sp in soft_extra]]
         if commons:
             for p in ring(0, max(W, H)):  # the cut-over SCRUB commons: the DOMINANT denuded-hill cover
                 self.commons(p, role=scrub_role, avoid=avoid, soft=soft)  # (managed woodland is added as a FEW patches by the gen)

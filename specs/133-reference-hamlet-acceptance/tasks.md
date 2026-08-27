@@ -141,6 +141,13 @@ _(from T11 on, each entry also carries its cycle plan before work starts - `scaf
       measure: the guard fires on `git checkout -- <modified file>` and stays quiet on a clean file / a branch switch / a commit-message mention; Inashiro's meta carries attempt 1
       verify: `make hooks-test`, `make quick`, `make done`
 
+- [x] T34 **scrub inside the forest** - the GM (2026-08-27): *"Should scrubland overlap with forests? It seems like it shouldn't. Like, visually, it looks weird. but maybe what is being represented is more accurate than what I am imagining. Still, it seems like it shouldn't overlap."*
+      given 2026-08-27T03:25Z | done 2026-08-27T03:31Z | elapsed 6 min (computed) | runs: make maps x1, make scatter-audit x1, make quick x1, make done x1
+      note: measured first (bases by family inside the belt polygon: 2,688 blades, 158 brush dots, 11 pines); mechanism draw order (scrub at stage 7, belt at stage 9). Research: the satoyama floor was worked clear, the edge is a grass fringe - the GM's instinct was right, the drawing was not "more accurate". Fix: belt computed in stage_hinterland and passed as a soft keep-out (the T12 marsh machinery); audit gains a `grove` keep-out + test. After: 0 dots, 0 pines, 1,263 blades all inside the 46-unit fringe, audit 0 violations. Recorded in research/vegetation.md, settlements/vegetation.md, the notes.
+      scaffold: settlement/land/cover.py (`commons`, the scatter keep-outs - the marsh case was T12), tools/scatter_audit.py (the families and their keep-outs), the woodland/windbreak polygons
+      measure: scatter bases by family inside each woodland/windbreak polygon and within its edge band, on Inashiro, before/after
+      verify: `make maps`, `make scatter-audit`, `make quick`, `make done`; the GM looks
+
 ## Phase 9 - acceptance
 
 - [ ] T90 the would-have-dispatched audit (FR-005): every entry in the period, and for each whether it should have run; each "no" names a tooling change

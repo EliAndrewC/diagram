@@ -151,6 +151,10 @@ def adjudicate(fams: dict[str, list[Base]], manifest: dict[str, Any], map_name: 
     marsh_polys = [[tuple(q) for q in m["poly"]] for m in manifest.get("marshes", []) if m.get("poly")]
     marsh = boxed_grid(boxed_polys(marsh_polys))
     marsh_feather = MARSH_FEATHER_BS * float(getattr(view, "bscale", 1.0))  # scrub may thin INTO the marsh over its reed feather (cover.py `soft`)
+    # THE GROVE IS A SOFT KEEP-OUT TOO (feature 133 T34): a managed wood's floor is clear of brush
+    # and pine, and grass fades out over the same feather. Crowns are exempt - they ARE the grove.
+    grove_polys = [[tuple(q) for q in g["poly"]] for g in manifest.get("village_groves", []) if g.get("poly")]
+    grove = boxed_grid(boxed_polys(grove_polys))
     bands = [boxed_grid(boxed_segs(_water_segs(view, extra=hi))) for _, hi in DENSITY_BANDS]
 
     violations: list[dict[str, Any]] = []
@@ -165,6 +169,8 @@ def adjudicate(fams: dict[str, list[Base]], manifest: dict[str, Any], map_name: 
                 point_in_poly(x, y, mp) and (fam != "blade" or edge_dist(x, y, mp) > marsh_feather) for mp in marsh_polys
             ):  # grass may grade into the reeds over the feather; a dot, pine or crown never stands in the bog
                 violations.append({"x": x, "y": y, "family": fam, "keepout": "marsh"})
+            elif fam != "crown" and boxed_hit(x, y, grove.near(x, y)) and any(point_in_poly(x, y, gp) and (fam != "blade" or edge_dist(x, y, gp) > marsh_feather) for gp in grove_polys):
+                violations.append({"x": x, "y": y, "family": fam, "keepout": "grove"})
             else:
                 for (lo, hi), grid in zip(DENSITY_BANDS, bands, strict=True):
                     if boxed_seg_hit(x, y, grid.near(x, y)):
@@ -172,7 +178,7 @@ def adjudicate(fams: dict[str, list[Base]], manifest: dict[str, Any], map_name: 
                         break
     return {
         "map": map_name,
-        "families_checked": {"adjudicated": list(ADJUDICATED), "keepouts": ["water+cutbank", "crop", "marsh"], "report_only": ["reed"]},
+        "families_checked": {"adjudicated": list(ADJUDICATED), "keepouts": ["water+cutbank", "crop", "marsh", "grove"], "report_only": ["reed"]},
         "counts": {fam: len(pts) for fam, pts in fams.items()},
         "violations": violations,
         "density_bands": density,

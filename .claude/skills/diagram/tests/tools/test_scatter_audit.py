@@ -117,6 +117,17 @@ def test_adjudicate_flags_crop_margin_violations_from_fields_outline_and_dry_plo
     assert [v["keepout"] for v in report["violations"]] == ["crop", "crop"]  # 4 px < 6 ft margin; 20 px clear
 
 
+def test_adjudicate_flags_woody_scatter_inside_a_grove_but_not_its_crowns():
+    """Feature 133 T34 (GM 2026-08-27: "Should scrubland overlap with forests? ... it seems like it
+    shouldn't"): a brush dot inside a village grove's polygon is a violation; a crown there is the
+    grove itself; a dot outside is clean."""
+    m = _manifest(village_groves=[{"role": "windbreak", "r": 14.0, "clumps": [[250, 250]], "poly": [[200, 200], [300, 200], [300, 300], [200, 300]]}])
+    svg = _one_dot_svg(250.0, 250.0) + _one_dot_svg(320.0, 250.0) + '<g transform="translate(250,250)"><circle cx="0" cy="0" r="6" fill="#4E6E3A"/></g>'
+    report = sa.adjudicate(sa.parse_bases(svg), m, "t")
+    assert [(v["family"], v["keepout"]) for v in report["violations"]] == [("dot", "grove")]
+    assert "grove" in report["families_checked"]["keepouts"]
+
+
 def test_reeds_are_counted_but_never_adjudicated():
     m = _manifest(drawn_channels=[{"pts": [[100, 100], [100, 700]], "w0": 14.0, "w1": 14.0}])
     svg = '<g stroke="#6E9377"><line x1="104.0" y1="400.0" x2="104.0" y2="396.0"/></g>'  # ON the water edge
