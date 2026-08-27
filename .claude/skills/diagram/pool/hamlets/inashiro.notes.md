@@ -1386,3 +1386,5 @@ size; the research and the guess labels in research/homesteads.md "The farmstead
 straw rick is deferred with seasonal maps (T60).
 
 **2026-08-27 (T61).** `fixtures_min={"shrine": 1}` on the spec: the reference hamlet always carries one hokora so its rendering can be judged (seed 4 already rolled one at 1266,1154, on the plot of the house at 1303,1179; the floor is declared and held by the gate).
+
+**2026-08-27 (T62).** The hokora is drawn at the 6 ft small-shed module in vermilion with a torii before it - at 3 ft the GM could not tell what it was; a glyph convention, recorded as a deviation.

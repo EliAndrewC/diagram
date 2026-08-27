@@ -378,6 +378,14 @@ _(from T46 on, each entry also says `research: rendering` or `research: physical
       measure: Inashiro: shrine 1 (floor 1 met), other counts unchanged; quick green
       verify: `make maps`, `make quick`, `make done`; the GM looks at the hokora at 1266,1154
 
+- [x] T62 **the hokora at the small-shed size, red and distinctive** - the GM (2026-08-27): *"I think it needs to be a little bit bigger than that because it's difficult to tell what it even is. I think as a glyph rendering convention, we could make it the same size as one of those small sheds ... So making this about that size, but also red and visually distinctive in some other way seems like a good way to communicate what it is."*
+      given 2026-08-27T19:15Z | done 2026-08-27T19:15Z | elapsed 4 min (computed from the message) | runs: make maps x1, make crop x2, make quick x1, make done x1
+      note: `FIXTURE_FT["shrine"]` 3 -> 6 ft (the privy/bath module); the glyph is a vermilion hall with a pale ridge and a torii (two posts + a lintel wider than the hall) standing before its door; recorded as a DEVIATION for legibility in settlements/homesteads.md, research/homesteads.md and the spec's Decisions Recorded (the measured stone is ~1.3 ft). Inashiro: the one hokora at 1266,1154 now reads at cluster zoom
+      research: rendering
+      scaffold: as built
+      measure: the crop at 1.6x - red hall + torii legible beside the sheds; quick green
+      verify: `make maps`, `make quick`, `make done`; the GM looks
+
 ## Phase 9 - acceptance
 
 - [ ] T90 the would-have-dispatched audit (FR-005): every entry in the period, and for each whether it should have run; each "no" names a tooling change

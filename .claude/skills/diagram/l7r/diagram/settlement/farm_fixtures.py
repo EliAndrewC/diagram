@@ -23,14 +23,16 @@ if TYPE_CHECKING:
 # ~35 cm long stacked ~1.5 m high, a row a few meters long (modern stacking practice; the object is
 # unchanged). manure: a heap by the privy/stable (size GUESS). bath: a goemon-buro shed, one ken
 # (GUESS within the ken module). coop: a ground-level enclosure (Qimin Yaoshu 養雞), square in the
-# Ming find (size GUESS). shrine: a small hokora at the plot's corner (size GUESS, small).
+# Ming find (size GUESS). shrine: the one measured hokora is a 40 cm stone (READ); at 3 ft the GM could
+# not tell what it was, so it is DRAWN at the small-shed size - vermilion, a torii mark in front - as a
+# glyph rendering convention (GM 2026-08-27, T62; recorded as a deviation in settlements/homesteads.md).
 FIXTURE_FT: dict[str, tuple[float, float]] = {
     "privy": (6.0, 6.0),
     "woodpile": (10.0, 3.5),
     "manure": (8.0, 6.0),
     "bath": (6.0, 6.0),
     "coop": (5.0, 5.0),
-    "shrine": (3.0, 3.0),
+    "shrine": (6.0, 6.0),  # DRAWN at the small-shed module, not the ~1.3 ft stone: a glyph convention (GM 2026-08-27, T62)
 }
 PERSIMMON_CROWN_FT = 9.0  # radius: a yard persimmon's crown runs ~5-6 m across (uekipedia: tree 5-10 m tall)
 FIXTURE_KINDS = tuple(FIXTURE_FT)
@@ -63,9 +65,13 @@ class FarmFixturesMixin:
             g.append(f'<rect x="{x0:.1f}" y="{y0:.1f}" width="{w:.1f}" height="{h:.1f}" fill="#B9A070" stroke="{edge}" stroke-width="0.8"/>')
             for k in (-0.25, 0.0, 0.25):  # the slats/niches of the enclosure
                 g.append(f'<line x1="{k * w:.1f}" y1="{y0 + 0.8:.1f}" x2="{k * w:.1f}" y2="{-y0 - 0.8:.1f}" stroke="{edge}" stroke-width="0.6"/>')
-        else:  # shrine - the household hokora, in the religious red so a rare thing is seen
-            g.append(f'<rect x="{x0:.1f}" y="{y0:.1f}" width="{w:.1f}" height="{h:.1f}" fill="{SHRINE_RED}" stroke="#5A1A10" stroke-width="1.2"/>')
-            g.append(f'<line x1="{x0 - 1:.1f}" y1="{-y0 + 2.2:.1f}" x2="{-x0 + 1:.1f}" y2="{-y0 + 2.2:.1f}" stroke="{SHRINE_RED}" stroke-width="1.4"/>')  # its little torii bar
+        else:  # shrine - the household hokora, in the religious red so a rare thing is seen (T58/T62)
+            g.append(f'<rect x="{x0:.1f}" y="{y0:.1f}" width="{w:.1f}" height="{h:.1f}" rx="0.8" fill="{SHRINE_RED}" stroke="#5A1A10" stroke-width="1.2"/>')
+            g.append(f'<line x1="{x0 + 1:.1f}" y1="{y0 + h * 0.35:.1f}" x2="{-x0 - 1:.1f}" y2="{y0 + h * 0.35:.1f}" stroke="#F2C9B0" stroke-width="1"/>')  # the ridge
+            ty = -y0 + 2.6  # a little torii standing before the door: two posts and a lintel wider than the hall
+            g.append(f'<line x1="{x0 - 1.5:.1f}" y1="{ty:.1f}" x2="{-x0 + 1.5:.1f}" y2="{ty:.1f}" stroke="{SHRINE_RED}" stroke-width="1.6"/>')
+            g.append(f'<line x1="{x0 + 0.6:.1f}" y1="{ty - 0.4:.1f}" x2="{x0 + 0.6:.1f}" y2="{ty + 2.2:.1f}" stroke="{SHRINE_RED}" stroke-width="1.1"/>')
+            g.append(f'<line x1="{-x0 - 0.6:.1f}" y1="{ty - 0.4:.1f}" x2="{-x0 - 0.6:.1f}" y2="{ty + 2.2:.1f}" stroke="{SHRINE_RED}" stroke-width="1.1"/>')
         g.append("</g>")
         self.add_top("".join(g))
         rec: dict[str, Any] = {"kind": kind, "x": round(cx, 1), "y": round(cy, 1), "w": round(w, 1), "h": round(h, 1), "rot": round(rot, 1)}

@@ -191,6 +191,6 @@ to get things into main outside the context of features"* the GM suspected.
 | only the bath SHED share drawn, the in-house baths undrawn (T56) | ACCURATE (Sugiura's two forms) | same |
 | the chicken coop in imperial China's proportions (T59) | ACCURATE that it existed and was widespread (READ); the share a GUESS | same |
 | the household shrine rare (T58) - the GM chose between two attested patterns; the every-house pattern declined | DEVIATION by ruling, recorded with the alternative | same |
-| the hokora drawn 3 ft where the one measured stone is 1.3 ft; the vermilion and the torii bar | DEVIATION (legibility; the GM's red convention) - flagged | same |
+| the hokora drawn at the 6 ft small-shed module where the one measured stone is 1.3 ft; the vermilion, the ridge and the torii before it (T58, T62) | DEVIATION (legibility; the GM's glyph convention, ruled 2026-08-27) | same |
 | the persimmon's four fruit dots | DEVIATION (a naming convention, not a season) | same |
 | the straw rick and the hasa frames not drawn (T60) | DEFERRED (seasonal maps) | future-work/farming-communities.md |

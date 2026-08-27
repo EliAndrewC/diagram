@@ -611,10 +611,11 @@ Corner: NE (鬼門) - *"屋敷の一隅、特に鬼門（北東隅）に、石�
 NW 17 of 37 and NE 11 of 37 in a Kameyama survey (SUMMARY-ONLY - the page would not render); SW
 *"屋敷の西南隅に祀られているのが普通"* in Tokushima (READ) - three corners attested, rolled NW .45 / NE
 .35 / SW .20. Size: *"石造か木造の小祠"* (READ); one measured example *"幅・奥行き・高さ各40cm位の石の祠"*
-(Tokushima, READ) - about 1.3 ft. DRAWN at 3 x 3 ft, the footprint of a hokora with its plinth and
-offering stones - a GUESS above the one measured stone, flagged to the GM as the one place a true
-size would be invisible (1.3 px); the vermilion and the bold stroke, not the size, are what make it
-notable (the GM's own rendering convention, T58).
+(Tokushima, READ) - about 1.3 ft. DRAWN at 6 x 6 ft, the small-shed module (T62; it was 3 x 3 for T58 and the GM *"could not tell
+what it even is"*) - a DEVIATION for legibility above the one measured stone, the GM's ruling: *"as
+a glyph rendering convention, we could make it the same size as one of those small sheds ... but
+also red and visually distinctive in some other way"* - vermilion, a ridge line and a torii standing
+before the door.
 
 **The persimmon - READ.** *"だからどこの庭先にも柿の木が植えてある"* (toyoko-housing, READ) - hence a persimmon
 in every dooryard; and *"江戸時代の農学者 宮崎安貞は、家屋敷の周りに柿の木を植える事を奨励した"* - the Edo

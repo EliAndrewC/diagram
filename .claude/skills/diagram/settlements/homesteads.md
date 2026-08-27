@@ -103,8 +103,8 @@ Generator surface for the shipped knobs: `s.lane_skeleton(kind, cx, cy, ex, ey)`
 Each farmstead may carry, at TRUE size and raked with its house: a **privy** (6 x 6 ft) at the back
 door, the gate or the naya (rolled); a **manure heap** (8 x 6) beyond the privy; a **bath shed** (6 x 6)
 at the back or a flank; a **chicken coop** (5 x 5) on the flank by the yard; a **woodpile** (10 x 3.5)
-against the back wall or the kura's; a **household shrine** (3 x 3, the religious vermilion with its
-torii bar - the GM's "red marking" convention) at the plot's NW/NE/SW corner, RARE and capped at the
+against the back wall or the kura's; a **household shrine** (drawn at 6 x 6, the small-shed module - the
+measured stone is ~1.3 ft; vermilion with a torii standing before it - the GM's "red marking" convention, T58/T62) at the plot's NW/NE/SW corner, RARE and capped at the
 share; and a **persimmon** (an 18 ft crown with four fruit dots - the convention that names the tree)
 beside the house. Presence per house is positional against a per-hamlet SHARE rolled once from the
 seed inside a researched band and declared in `meta.farm_fixtures` (`hamletgen/homesteads.py`
@@ -114,5 +114,5 @@ research, verdict by verdict: `research/homesteads.md` "The farmstead's fixtures
 `farm_fixtures_attached` (a fixture stands within its kind's reach of ITS house), `farm_fixtures_as_declared`
 (declared kinds only, one of a kind per house, the shrine as rare as declared, a privy present).
 Record classes: the privy's independence, the coop, the two shrine patterns, the persimmon's
-ubiquity are ACCURATE; the vermilion, the fruit dots and the 3 ft hokora footprint are DEVIATIONS
-for legibility (the true stone is ~1.3 ft); every share band and every other size is a GUESS.
+ubiquity are ACCURATE; the vermilion, the fruit dots and the hokora drawn at the 6 ft shed module are DEVIATIONS
+for legibility (the true stone is ~1.3 ft; at 3 ft the GM could not tell what it was, T62); every share band and every other size is a GUESS.
