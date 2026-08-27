@@ -4,5 +4,6 @@
   "scope": "reference",
   "seconds": 315,
   "result": "green",
-  "commit": "db191b0b"
+  "commit": "0c229d74",
+  "commit_before_rewrite": "db191b0b"
 }

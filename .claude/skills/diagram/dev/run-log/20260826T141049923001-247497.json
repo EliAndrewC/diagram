@@ -4,5 +4,6 @@
   "scope": "reference",
   "seconds": 54,
   "result": "failed: test",
-  "commit": "b6869513"
+  "commit": "b2fea87c",
+  "commit_before_rewrite": "b6869513"
 }
