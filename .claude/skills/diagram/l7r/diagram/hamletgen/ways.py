@@ -578,6 +578,11 @@ def stage_web(s: Settlement, plan: SitePlan) -> None:
             # AND THE INK WITH IT - see `Settlement.reink_lane`. Shortening the record alone left the
             # drawn lane longer than the checked one, which is the quietest kind of wrong there is.
             s.reink_lane(_i)
+    # LAST: read every lane as a shape and take out what feet would never wear (T32) - after the
+    # trim, because the trim is the last pass that changes a record; then touch once more, because
+    # cutting a hairpin's arm can move an end.
+    _smooth_web(s, hard_built, walls, list(plan.watercourses) + drawn_water)
+    _touch_junctions(s, hard_built, walls, list(plan.watercourses) + drawn_water)
     s.M["meta"]["lane_web"] = plan.lane_web
 
 
@@ -1024,21 +1029,46 @@ def _touch_junctions(s: Settlement, hard: list[Poly], walls: Sequence[Poly], wat
             if ln.get("connector") or len(ln.get("pts") or []) < 2:
                 continue
             pts = [(float(x), float(y)) for x, y in ln["pts"]]
-            others = [
-                (a, b)
-                for k, o in enumerate(lanes)
-                if k != i and len(o.get("pts") or []) >= 2
-                for a, b in zip([(float(x), float(y)) for x, y in o["pts"]], [(float(x), float(y)) for x, y in o["pts"]][1:], strict=False)
-            ]
-            if not others:
+            # ONLY WAYS THIS LANE DOES NOT ALREADY MEET (T32). Linking a free end to a way the lane
+            # already runs through drew a 180-degree retrace - Inashiro's lane 7 went 20 ft west,
+            # then back east over its own tread, because the way it "reached" was the one whose end
+            # stood on it. A junction is made once.
+            _my_segs = list(zip(pts, pts[1:], strict=False))
+            _by_way: list[tuple[int, list[tuple[Pt, Pt]], Poly]] = []
+            for k, o in enumerate(lanes):
+                if k == i or len(o.get("pts") or []) < 2:
+                    continue
+                _op = [(float(x), float(y)) for x, y in o["pts"]]
+                _os = list(zip(_op, _op[1:], strict=False))
+                if any(seg_dist(v[0], v[1], a, b) <= 4.0 for v in _op for a, b in _my_segs) or any(seg_dist(v[0], v[1], a, b) <= 4.0 for v in pts for a, b in _os):
+                    continue
+                _by_way.append((k, _os, _op))
+            if not _by_way:
                 continue
             new = list(pts)
             for end in (0, -1):
                 q = new[end]
-                foot = min((seg_closest(q[0], q[1], a, b) for a, b in others), key=lambda z: math.dist(q, z))
-                d = math.dist(q, foot)
+                _best = min(
+                    ((math.dist(q, z), z, k, _op) for k, _os, _op in _by_way for z in [min((seg_closest(q[0], q[1], a, b) for a, b in _os), key=lambda z: math.dist(q, z))]), key=lambda t: t[0]
+                )
+                d, foot, k, _op = _best
                 if d <= 2.0 or d > _LANE_JOIN_FT:
                     continue
+                # END MEETS END: two lanes whose ends stand near each other are ONE lane with a
+                # hole in it, and the honest join is to run the other lane's end onto this one -
+                # a link from tread to tread drew an 8 ft jog that read as a loop (T32). The other
+                # lane's end is moved onto `q` when its last stretch stays legal.
+                _oe = 0 if math.dist(foot, _op[0]) <= 4.0 else (-1 if math.dist(foot, _op[-1]) <= 4.0 else None)
+                if _oe is not None and len(_op) >= 2 and not lanes[k].get("connector"):
+                    _nb = _op[1] if _oe == 0 else _op[-2]
+                    if _clear_touch(_nb, q, hard, walls, water) and math.dist(_nb, q) <= 2.0 * math.dist(_nb, _op[_oe]) + 4.0:
+                        _np = list(_op)
+                        _np[_oe] = q
+                        lanes[k]["pts"] = [[round(x, 1), round(y, 1)] for x, y in _np]
+                        s.reink_lane(k)
+                        closed += 1
+                        moved += 1
+                        continue
                 link = [q, foot] if _clear_touch(q, foot, hard, walls, water) else _route(q, foot, hard, walls, water, gap=WEB_FABRIC_GAP, pad_mult=2.0, cell=10.0)
                 if not link or polyline_len(link) > _LINK_DIRECTNESS * d:
                     continue
@@ -1132,6 +1162,216 @@ def _components(ways: Sequence[Poly], touch: float) -> list[int]:
             ):
                 par[find(i)] = find(j)
     return [find(i) for i in range(len(ways))]
+
+
+def _turn_deg(a: Pt, b: Pt, c: Pt) -> float:
+    """The change of heading at `b` on the run a -> b -> c, in degrees: 0 straight on, 180 doubled back."""
+    v1 = (b[0] - a[0], b[1] - a[1])
+    v2 = (c[0] - b[0], c[1] - b[1])
+    n1, n2 = math.hypot(*v1), math.hypot(*v2)
+    if n1 < 1e-6 or n2 < 1e-6:
+        return 0.0
+    return math.degrees(math.acos(max(-1.0, min(1.0, (v1[0] * v2[0] + v1[1] * v2[1]) / (n1 * n2)))))
+
+
+# HOW A WORN LANE BENDS (researched 2026-08-27, feature 133 T32; research/homesteads.md "How does a
+# village lane bend?"). A footpath is the line feet wear: the desire-line literature finds walkers
+# minimize the NUMBER and the SEVERITY of turns, and a village lane bends at plot corners and runs
+# straight between them. Nobody walks out fifteen feet and back, so a hairpin is never worn; nobody
+# jinks twice in forty feet where a straight line is open, so a zigzag is never worn. The three
+# numbers are drawing thresholds, not findings: a HAIRPIN is a turn past 140 degrees; a ZIGZAG is two
+# turns past 50 degrees within 40 ft of path (about a dozen paces); an arm is worth removing only
+# when it is shorter than 40 ft and reaches nothing of its own.
+_HAIRPIN_DEG = 140.0
+_ZIGZAG_DEG = 50.0
+_ZIGZAG_RUN_FT = 40.0
+_ARM_FT = 40.0
+_JOG_FT = 6.0  # a vertex this close to the chord that replaces it was a jog, not a bend
+_KNOT_FT = 25.0  # ends of different lanes this close are one junction, not several
+
+
+def _smooth_web(s: Settlement, hard: list[Poly], walls: Sequence[Poly], water: list[tuple[Pt, Pt]]) -> int:
+    """The LAST pass over the web: take out what feet would never have worn.
+
+    THE WEB WAS ASSEMBLED FROM FRAGMENTS AND NEVER READ AS LINES (GM 2026-08-27, feature 133 T32:
+    *"there's a place where it looks like a loop-de-loop, which isn't how a lane would look. And then
+    there's another place where it zig-zags just below the loop de loop for no apparent reason"*).
+    Every earlier pass adds geometry - `clear_runs` cuts a 4 ft-stepped run, a join appends a link, a
+    touch appends another, a trim takes an end off - and none of them looks at the lane it leaves
+    behind as a SHAPE. Inashiro's lane 2 was 140 ft of path for a 49 ft chord, folded twice inside
+    50 ft; lane 1 began with a 15 ft out-and-back; three lanes knotted into a bow-tie where one ran
+    on across another for 20 ft. All legal by every gate, because the gates measured reach.
+
+    Three repairs, each on the lane's RECORD with the ink rewritten (`reink_lane`), and each tested
+    against the same footprint legality a junction link gets (`_clear_touch`):
+      1. STRING-PULL - from each vertex, jump to the furthest later vertex the straight line reaches
+         without crossing a footprint. This is what `_route` does to its own output; nothing did it to
+         the assembled lane. It removes the zigzags and the dense 4 ft stepping in one move.
+      2. HAIRPIN - a turn past `_HAIRPIN_DEG` with a short arm (under `_ARM_FT`) on one side: the arm
+         is cut, unless its tip is the lane's only contact with another way.
+      3. BOW-TIE - where two lanes cross each other mid-run and one runs on past the crossing for
+         less than `_ARM_FT`, that tail is cut back to the crossing, which becomes the junction.
+    Ends are never moved except by cutting an arm, so every junction `_touch_junctions` made holds.
+    `lanes_bend_like_paths` holds the line. Returns the number of lanes rewritten."""
+    changed = 0
+    lanes = s.M.get("lanes") or []
+
+    def _others_segs(skip: int) -> list[tuple[Pt, Pt]]:
+        return [
+            (a, b)
+            for k, o in enumerate(lanes)
+            if k != skip and len(o.get("pts") or []) >= 2
+            for a, b in zip([(float(x), float(y)) for x, y in o["pts"]], [(float(x), float(y)) for x, y in o["pts"]][1:], strict=False)
+        ]
+
+    def _touching(q: Pt, segs: Sequence[tuple[Pt, Pt]]) -> bool:
+        return any(seg_dist(q[0], q[1], a, b) <= 4.0 for a, b in segs)
+
+    for i, ln in enumerate(lanes):
+        if ln.get("connector") or len(ln.get("pts") or []) < 3:
+            continue
+        pts = [(float(x), float(y)) for x, y in ln["pts"]]
+        others = _others_segs(i)
+        # 2. hairpins first, so a string-pull does not shortcut across the fold and keep the arm
+        for _round in range(3):
+            cut = False
+            for k in range(1, len(pts) - 1):
+                if _turn_deg(pts[k - 1], pts[k], pts[k + 1]) < _HAIRPIN_DEG:
+                    continue
+                head, tail = polyline_len(pts[: k + 1]), polyline_len(pts[k:])
+                if head <= tail and head < _ARM_FT and not (_touching(pts[0], others) and not _touching(pts[k], others)):
+                    pts = pts[k:]
+                    cut = True
+                    break
+                if tail < head and tail < _ARM_FT and not (_touching(pts[-1], others) and not _touching(pts[k], others)):
+                    pts = pts[: k + 1]
+                    cut = True
+                    break
+            if not cut or len(pts) < 3:
+                break
+
+        # 1. string-pull. A chord is taken at the web's own margins (`_clear_link`), or at footprint
+        # margins when it is a SIMPLIFICATION - every vertex it replaces lies within `_JOG_FT` of it -
+        # because a new line across open ground owes the houses their corridor (the first cut took
+        # every footprint-legal chord and put a lane through a house's clearance and a bed's edge:
+        # `houses_clear_of_lanes`, `features_do_not_overlap`), while the 4 ft stepping and the jogs
+        # a junction leaves are the SAME line drawn badly.
+        def _shortcut_ok(a: int, b: int, pts: Poly = pts) -> bool:
+            if _clear_link(pts[a], pts[b], hard, walls, water):
+                return True
+            if not _clear_touch(pts[a], pts[b], hard, walls, water):
+                return False
+            return all(seg_dist(v[0], v[1], pts[a], pts[b]) <= _JOG_FT for v in pts[a + 1 : b])
+
+        out = [pts[0]]
+        a = 0
+        while a < len(pts) - 1:
+            b = len(pts) - 1
+            while b > a + 1 and not _shortcut_ok(a, b):
+                b -= 1
+            out.append(pts[b])
+            a = b
+        pts = out
+        if [[round(x, 1), round(y, 1)] for x, y in pts] != ln["pts"]:
+            ln["pts"] = [[round(x, 1), round(y, 1)] for x, y in pts]
+            s.reink_lane(i)
+            changed += 1
+    # 4. KNOTS: ends of different lanes that stand within `_KNOT_FT` of one another meet at ONE
+    # node. Three lanes arriving at three points a few feet apart drew a closed triangle on
+    # Inashiro (the GM's "loop-de-loop"): each end had touched a tread, so every gate was
+    # satisfied, and the eye read a loop. The node is the end that already lies on a THROUGH
+    # lane's tread (a T stays a T), else the ends' centroid; every end in the cluster is moved
+    # onto it, and a lane running through the cluster has its vertices there replaced by the
+    # node, so it passes through the junction rather than beside it.
+    _ends: list[tuple[int, int, Pt]] = [
+        (i, e, ((float(ln["pts"][e][0]), float(ln["pts"][e][1])))) for i, ln in enumerate(lanes) if not ln.get("connector") and len(ln.get("pts") or []) >= 2 for e in (0, -1)
+    ]
+    _seen: set[tuple[int, int]] = set()
+    for i, e, q in _ends:
+        if (i, e) in _seen:
+            continue
+        cluster = [(j, f, r) for j, f, r in _ends if j != i and (j, f) not in _seen and math.dist(q, r) <= _KNOT_FT]
+        if not cluster:
+            continue
+        cluster.append((i, e, q))
+        # the node: an end standing on a lane that is NOT one of the cluster's own lanes' ends
+        _members = {j for j, _f, _r in cluster}
+        node: Pt | None = None
+        for _j, _f, r in cluster:
+            for k, o in enumerate(lanes):
+                if k in _members or len(o.get("pts") or []) < 2:
+                    continue
+                _op = [(float(x), float(y)) for x, y in o["pts"]]
+                if any(seg_dist(r[0], r[1], a, b) <= 4.0 for a, b in zip(_op, _op[1:], strict=False)):
+                    node = r
+                    break
+            if node is not None:
+                break
+        if node is None:
+            node = (sum(r[0] for _j, _f, r in cluster) / len(cluster), sum(r[1] for _j, _f, r in cluster) / len(cluster))
+        for j, f, _r in cluster:
+            _seen.add((j, f))
+            _p = [(float(x), float(y)) for x, y in lanes[j]["pts"]]
+            _p[f] = node
+            # vertices of this lane inside the knot collapse onto the node too
+            _p = [v for v in _p if v == node or math.dist(v, node) > _KNOT_FT] if len(_p) > 2 else _p
+            _q: Poly = []
+            for v in _p:
+                if not _q or v != _q[-1]:
+                    _q.append(v)
+            _nb = _q[1] if f == 0 else _q[-2]
+            if len(_q) >= 2 and _clear_touch(_nb, node, hard, walls, water) and [[round(x, 1), round(y, 1)] for x, y in _q] != lanes[j]["pts"]:
+                lanes[j]["pts"] = [[round(x, 1), round(y, 1)] for x, y in _q]
+                s.reink_lane(j)
+                changed += 1
+    # 3. bow-ties: a lane that crosses another mid-run and runs on for less than an arm
+    for i, ln in enumerate(lanes):
+        if ln.get("connector") or len(ln.get("pts") or []) < 2:
+            continue
+        pts = [(float(x), float(y)) for x, y in ln["pts"]]
+        for k in range(len(pts) - 1):
+            for j, o in enumerate(lanes):
+                if j == i or len(o.get("pts") or []) < 2:
+                    continue
+                opts = [(float(x), float(y)) for x, y in o["pts"]]
+                for m in range(len(opts) - 1):
+                    x = _seg_cross(pts[k], pts[k + 1], opts[m], opts[m + 1])
+                    if x is None:
+                        continue
+                    head, tail = polyline_len(pts[: k + 1]) + math.dist(pts[k], x), math.dist(x, pts[k + 1]) + polyline_len(pts[k + 1 :])
+                    if tail < _ARM_FT and tail <= head:
+                        pts = [*pts[: k + 1], x]
+                    elif head < _ARM_FT and head < tail:
+                        pts = [x, *pts[k + 1 :]]
+                    else:
+                        continue
+                    ln["pts"] = [[round(px, 1), round(py, 1)] for px, py in pts]
+                    s.reink_lane(i)
+                    changed += 1
+                    break
+                else:
+                    continue
+                break
+            else:
+                continue
+            break
+    return changed
+
+
+def _seg_cross(a: Pt, b: Pt, c: Pt, d: Pt) -> Pt | None:
+    """Where segment a-b crosses segment c-d STRICTLY inside both (never at an end), else None."""
+    r = (b[0] - a[0], b[1] - a[1])
+    q = (d[0] - c[0], d[1] - c[1])
+    den = r[0] * q[1] - r[1] * q[0]
+    if abs(den) < 1e-9:
+        return None
+    w = (c[0] - a[0], c[1] - a[1])
+    t = (w[0] * q[1] - w[1] * q[0]) / den
+    u = (w[0] * r[1] - w[1] * r[0]) / den
+    eps = 0.02
+    if eps < t < 1 - eps and eps < u < 1 - eps:
+        return (a[0] + t * r[0], a[1] + t * r[1])
+    return None
 
 
 def _net_segs(s: Settlement) -> list[tuple[Pt, Pt]]:

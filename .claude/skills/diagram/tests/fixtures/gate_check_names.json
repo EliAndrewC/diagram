@@ -368,6 +368,7 @@
   "labels_within_image",
   "land_use_overlay_drawn",
   "lane_ends_front_different_houses",
+  "lanes_bend_like_paths",
   "lanes_clear_of_dry_plots",
   "lanes_do_not_break_mid_run",
   "lanes_form_one_network",

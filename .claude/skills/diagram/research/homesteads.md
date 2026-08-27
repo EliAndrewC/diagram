@@ -264,6 +264,50 @@ ACCURATE for a nucleated cluster; a lane that runs along a garden fence to reach
 ACCURATE too (the plot fronts the lane; the 7 ft fabric margin is a drawing convenience, not a
 finding - see `_TOUCH_GAP`).
 
+## How does a village lane bend? (researched 2026-08-27, feature 133 T32)
+
+**Answer: like a line feet wear - as few turns as the plots allow, none of them sharp, and never
+back on itself. Decisive on the principle; the thresholds are drawing conventions.**
+
+The GM, on Inashiro after T31: *"there are at least 2 places on the map where the zig-zagging looks
+unnatural. There's a place where it looks like a loop-de-loop, which isn't how a lane would look. And
+then there's another place where it zig-zags just below the loop de loop for no apparent reason."*
+Two lines of evidence, one from how paths form and one from how villages are laid out:
+
+- **Desire-line research.** An unpaved path is worn by repeated walking - as few as fifteen
+  traversals will mark one - and walkers choose it on effort. The pedestrian-modeling literature
+  finds that people *"consciously or unconsciously minimize the number and severity of turns"*
+  between origin and destination, taking a slightly longer route to avoid a turn, and that turn
+  angle has a stronger effect on the emergent path pattern than depth of vision. So a switchback
+  within a few paces is a path nobody walks, and a path nobody walks is never worn: the hairpin and
+  the zigzag are not merely ugly, they are shapes a footpath cannot have.
+- **Village morphology.** The lanes of a nucleated Japanese or Chinese village are the gaps left
+  between household plots - the "gridiron of narrow lanes" of the 2026-08-18 entry - so a lane bends
+  at a PLOT CORNER and runs straight between corners. A bend has a reason on the ground (a fence, a
+  bed, a yard); a bend with nothing at its elbow is a drawing artifact.
+
+**What was wrong in the generator.** Not a placement rule - an absence of one. The web is assembled
+from fragments: `clear_runs` cuts 4 ft-stepped runs between the steadings, joins append links, the
+touch pass appends more, trims take ends off, and no pass ever read the assembled lane as a shape.
+Three artifacts, all measured on Inashiro: a 180-degree RETRACE where the touch pass linked a lane's
+free end to a way that lane already ran through; a KNOT where three lanes arrived at three points a
+few feet apart (a closed triangle - the GM's loop-de-loop); and a lane of 140 ft for a 49 ft chord,
+folded twice inside 50 ft, where a fabric-margin clip and a touch link met.
+
+**The rule** (`hamletgen/ways.py` `_smooth_web`, the last pass of `stage_web`; the gate's
+`lanes_bend_like_paths`): string-pull every lane (a chord at the web's own margins, or at footprint
+margins when it only removes jogs within 6 ft of the old line); cut a hairpin's arm when it is under
+40 ft; collapse ends within 25 ft of one another onto ONE node; cut a tail that runs on past a
+crossing for under 40 ft; and make each junction once. Labels: the principle ACCURATE (a worn path
+minimizes its turns; a bend sits at a plot corner); 140 degrees / 50 degrees within 40 ft / 25 ft /
+6 ft are DRAWING thresholds chosen at the scale of a dozen paces, not findings.
+
+**Sources:** the desire-path and turn-minimization findings from the pedestrian-movement literature
+(agent-based desire-path modeling, *Environment and Planning B*, 2024; energy-based desire-path
+planning, *Landscape and Urban Planning*, 2025; the 99% Invisible and Geography Realm summaries of
+desire-path formation); the plot-corner geometry from the nucleated-village morphology already
+cited in the 2026-08-18 entry.
+
 ## Does a hamlet have to be NUCLEATED at all? (researched 2026-08-23)
 
 **Answer: no. Three forms are supportable, so the form becomes a seeded knob (Principle XII), and

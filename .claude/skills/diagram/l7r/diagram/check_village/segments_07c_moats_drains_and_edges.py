@@ -1306,3 +1306,57 @@ def _seg_0619_500__lanes_form_one_network(
             f"{len(lanes_form_one_network_bad)} lane(s) starting at {lanes_form_one_network_bad[:3]} do not TOUCH the settlement's network - the pieces stop short of one another (within 30 ft counted as joined, but the ink shows a gap); a junction is where two treads meet (hamletgen._touch_junctions)",
         )
     return _kept(locals(), ("lanes_form_one_network_bad",))
+
+
+# WHY: <one paragraph - what the research found, the decision it drove, the departure taken>.
+# Declare EVERY input the body reads as a keyword parameter (an undeclared one is a NameError at
+# gate time, not at import), and keep the `_kept` tuple a LITERAL of the names this body binds.
+
+
+def _seg_0619_501__lanes_bend_like_paths(
+    *,
+    M: Any = _UNBOUND,
+    check: Any = _UNBOUND,
+    meta: Any = _UNBOUND,
+    scale: Any = _UNBOUND,
+    lanes_bend_like_paths_bad: Any = _UNBOUND,
+) -> dict[str, Any]:
+    """Gate segment 0619_501 (lanes_bend_like_paths) - a lane bends the way feet wear a path: no hairpin (a turn past 140 degrees), no zigzag (two turns past 50 degrees within 40 ft of path).
+
+    GM 2026-08-27 (feature 133 T32): *"there's a place where it looks like a loop-de-loop, which
+    isn't how a lane would look. And then there's another place where it zig-zags just below the
+    loop de loop for no apparent reason."* Researched (research/homesteads.md "How does a village
+    lane bend?"): a footpath is the line feet wear, and walkers minimize the number and the severity
+    of turns - a switchback within a few paces is never worn. The web is assembled from fragments
+    (clear runs, links, touches, trims) and no pass read the result as a SHAPE, so Inashiro's lane 2
+    was 140 ft of path for a 49 ft chord, folded twice inside 50 ft. `hamletgen._smooth_web` is the
+    fix; this holds it. The thresholds are drawing conventions, not findings."""
+    if scale in ("hamlet", "village", "town"):
+        lanes_bend_like_paths_bad = []
+        for _lbp_ln in M.get("lanes") or []:
+            if _lbp_ln.get("connector"):
+                continue
+            _lbp = [(float(a), float(b)) for a, b in (_lbp_ln.get("pts") or [])]
+            if len(_lbp) < 3:
+                continue
+            _lbp_turns: list[tuple[int, float]] = []
+            for _k in range(1, len(_lbp) - 1):
+                _v1 = (_lbp[_k][0] - _lbp[_k - 1][0], _lbp[_k][1] - _lbp[_k - 1][1])
+                _v2 = (_lbp[_k + 1][0] - _lbp[_k][0], _lbp[_k + 1][1] - _lbp[_k][1])
+                _n1, _n2 = math.hypot(*_v1), math.hypot(*_v2)
+                if _n1 < 1e-6 or _n2 < 1e-6:
+                    continue
+                _deg = math.degrees(math.acos(max(-1.0, min(1.0, (_v1[0] * _v2[0] + _v1[1] * _v2[1]) / (_n1 * _n2)))))
+                if _deg >= 140.0:
+                    lanes_bend_like_paths_bad.append((round(_lbp[_k][0]), round(_lbp[_k][1])))
+                elif _deg >= 50.0:
+                    _lbp_turns.append((_k, _deg))
+            for (_ka, _da), (_kb, _db) in zip(_lbp_turns, _lbp_turns[1:], strict=False):
+                if sum(math.dist(_lbp[_j], _lbp[_j + 1]) for _j in range(_ka, _kb)) <= 40.0:
+                    lanes_bend_like_paths_bad.append((round(_lbp[_ka][0]), round(_lbp[_ka][1])))
+        check(
+            "lanes_bend_like_paths",
+            not lanes_bend_like_paths_bad,
+            f"lane bend(s) at {lanes_bend_like_paths_bad[:3]} that feet would never wear - a hairpin (turn >= 140 deg) or a zigzag (two turns >= 50 deg within 40 ft); the fix is at the way (hamletgen._smooth_web): string-pull the run, cut the arm, meet at one node",
+        )
+    return _kept(locals(), ("lanes_bend_like_paths_bad",))

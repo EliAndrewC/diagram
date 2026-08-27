@@ -1219,3 +1219,25 @@ the point of change). Labels: interconnected web ACCURATE; lane along a fence AC
 DRAWING conventions. Pre-fix manifest frozen as
 `pool/regressions/lanes_form_one_network_fires_on_the_pre_fix_inashiro.json`. No per-task review
 (scope locked; dev/reviews.md); the GM looks at the map.
+
+
+## 2026-08-27 - the lanes bend like paths (feature 133 T32)
+
+The GM, after T31: *"there are at least 2 places on the map where the zig-zagging looks unnatural.
+There's a place where it looks like a loop-de-loop ... And then there's another place where it
+zig-zags just below the loop de loop for no apparent reason ... perhaps you can look at the other
+branches and such and do a review to see what other smoothing is needed."* Measured first, every
+non-connector lane: lane 2 was 140 ft of path for a 49 ft chord with turns of 90/130/129 degrees
+inside 12 ft (the zigzag); lane 1 began with a 15 ft out-and-back (the loop, with lane 2's fold
+beside it); lanes 7/9/6 knotted into a bow-tie; every lane was a 4 ft-stepped polyline. Research
+(`research/homesteads.md` "How does a village lane bend?"): a worn path minimizes the number and
+severity of its turns; a bend sits at a plot corner. The whole web is now read as shapes once, last
+(`_smooth_web`): string-pulled, hairpin arms cut, ends within 25 ft collapsed onto one node, tails
+past a crossing cut; and the touch pass makes each junction once and joins end to end. After: 9
+lanes, sharpest turn 94 degrees (a plot corner), longest lane 1.9x its chord, 3-6 vertices each;
+the board re-seated on its verge (10 ft). The review of the other branches: L3's two bends (50 and
+74 degrees) sit at the two garden corners it rounds; L5's 94-degree corner is where the top rank's
+lane turns down the cluster; the 8 ft last leg of L2 into the node is a bend round a bed, 7.8 ft off
+the chord, kept. Held by `lanes_bend_like_paths`; pre-fix manifest frozen as
+`pool/regressions/lanes_bend_like_paths_fires_on_the_pre_fix_inashiro.json`. Labels: the principle
+ACCURATE, the thresholds DRAWING conventions. No per-task review (scope locked); the GM looks.

@@ -127,6 +127,13 @@ _(from T11 on, each entry also carries its cycle plan before work starts - `scaf
       measure: the lane graph on Inashiro - components, dead ends, what each end touches - before/after
       verify: `make maps`, `make done`; the GM looks
 
+- [x] T32 **lane smoothing** - the GM (2026-08-27): *"there are at least 2 places on the map where the zig-zagging looks unnatural. There's a place where it looks like a loop-de-loop, which isn't how a lane would look. And then there's another place where it zig-zags just below the loop de loop for no apparent reason. This feels like something that needs both better placement rules and automated checks to detect ... perhaps you can look at the other branches and such and do a review to see what other smoothing is needed."*
+      given 2026-08-27T02:19Z | done 2026-08-27T02:31Z | elapsed ~45 min | runs: make maps x4, make quick x1, make done x1
+      note: measured first (every lane's turns, path/chord, self-proximity): the loop was a 180-degree retrace (the touch pass linked a free end to a way the lane already met) beside a lane folded twice in 50 ft (140 ft of path for a 49 ft chord); three more knots and bow-ties elsewhere; every lane a 4 ft-stepped polyline. Research (desire lines: walkers minimize the number and severity of turns; village lanes bend at plot corners) recorded as a new research section. Fix: `_smooth_web`, the last pass of stage_web (string-pull at the web's margins or footprint margins for jog removal; hairpin arms cut; ends within 25 ft collapsed to one node; tails past a crossing cut), `_touch_junctions` makes each junction once and joins end to end; check `lanes_bend_like_paths`; pre-fix manifest frozen. After: 9 lanes, sharpest turn 94 deg, longest 1.9x chord, board re-seated. Time: more complicated than expected - three regen cycles because the first cut took every footprint-legal chord (a lane through a house's corridor) and the knot only showed once the retrace was gone; each cycle was one measured defect, not a guess.
+      scaffold: hamletgen/ways.py (the web passes, `_route` string-pulling, `_touch_junctions`); a new check on lane geometry in check_village
+      measure: per-vertex turn angles on every Inashiro lane; sharp-turn pairs within a short run (zigzag); a lane's non-adjacent segments within a tread of each other (loop); before/after
+      verify: `make maps`, `make quick`, `make done`; the GM looks
+
 ## Phase 9 - acceptance
 
 - [ ] T90 the would-have-dispatched audit (FR-005): every entry in the period, and for each whether it should have run; each "no" names a tooling change

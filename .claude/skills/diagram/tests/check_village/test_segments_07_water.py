@@ -875,3 +875,15 @@ def test_lanes_form_one_network_fires_and_passes():
         houses=[house(x=400, y=400)], lane=[[0, 500], [300, 500]], lanes=[{"pts": [[0, 500], [300, 500]], "w": 6, "connector": True}, {"pts": [[300, 500], [300, 700]], "w": 3, "connector": False}]
     )
     assert "lanes_form_one_network" not in f_only(touch, "lanes_form_one_network"), "touching lanes are one network"
+
+
+def test_lanes_bend_like_paths_fires_and_passes():
+    """A lane bends the way feet wear a path (GM 2026-08-27, T32: "a loop-de-loop ... zig-zags ... for
+    no apparent reason"): a hairpin (turn >= 140 deg) fires, a zigzag (two turns >= 50 deg within
+    40 ft) fires, a gentle bend and a single corner pass."""
+    hairpin = manifest(houses=[house(x=400, y=400)], lane=[[0, 500], [300, 500]], lanes=[{"pts": [[0, 500], [300, 500], [300, 700], [300, 690]], "w": 3}])
+    assert "lanes_bend_like_paths" in f_only(hairpin, "lanes_bend_like_paths"), "an out-and-back arm must fire"
+    zigzag = manifest(houses=[house(x=400, y=400)], lane=[[0, 500], [300, 500]], lanes=[{"pts": [[0, 500], [300, 500], [310, 520], [330, 505], [340, 700]], "w": 3}])
+    assert "lanes_bend_like_paths" in f_only(zigzag, "lanes_bend_like_paths"), "two sharp turns inside 40 ft must fire"
+    corner = manifest(houses=[house(x=400, y=400)], lane=[[0, 500], [300, 500]], lanes=[{"pts": [[0, 500], [300, 500], [300, 700], [420, 780]], "w": 3}])
+    assert "lanes_bend_like_paths" not in f_only(corner, "lanes_bend_like_paths"), "a corner and a bend are how a lane runs"
