@@ -20,6 +20,7 @@ from .consts import (
     FOOTPATH_FABRIC_GAP,
     LANE_CLEARANCE,
     MIN_WEB_GAP,
+    POLDER_ARCHETYPES,
     SPUR_SETBACK,
     TRACK_FABRIC_GAP,
     WEB_CLEARANCE,
@@ -2265,7 +2266,7 @@ def stage_track(s: Settlement, plan: SitePlan) -> None:
     # worse than pointless: every near target crosses the ring canal, so `path_violations` scored the
     # nearby vertices badly and the least-bad candidate ran from the cluster straight ACROSS the
     # block to a vertex on the far side (`fields_clear_of_road` on 4 of 12 cardinal polders).
-    if plan.field_archetype == "polder_grid":
+    if plan.field_archetype in POLDER_ARCHETYPES:  # both polder archetypes (feature 134)
         s.M["meta"]["lane_skeleton"] = plan.lane_skeleton
         toe = s.toe_band()
         drawn_wet = [[(float(a), float(b)) for a, b in m["poly"]] for m in s.M.get("marshes", []) if m.get("role") != "defense" and m.get("poly")]

@@ -67,7 +67,10 @@ def _public_clashes(modules: list[types.ModuleType]) -> list[tuple[str, str, str
 # The count is the LIST's length - it was carrying a stale figure from an earlier census, which is
 # harmless only because `test_census_matches_pin` reads the list and never the comment.
 CONSUMED_PUBLIC = [
+    "CARDINAL_BEARINGS",
     "FIELD_ARCHETYPES",
+    "POLDER_ARCHETYPES",
+    "POLDER_FABRIC",
     "GROSS_ACRES_PER_HOUSEHOLD",
     "HamletSpec",
     "OFFTAKE_LADDER",
@@ -107,6 +110,8 @@ CONSUMED_PUBLIC = [
     "pond_clear_of_crop",
     "pond_setback",
     "pull_clear",
+    "polder_crossing_caps",
+    "polder_flanks",
     "push_out_of",
     "route_around",
     "seat_cluster",
@@ -114,6 +119,7 @@ CONSUMED_PUBLIC = [
     "stage_notice",
     "stage_water_frame",
     "unit",
+    "waterward_flanks",
     "well_target",
     "windward_for",
 ]

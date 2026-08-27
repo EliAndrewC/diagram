@@ -531,6 +531,14 @@ class HomesteadPartsMixin:
         # the village is the pond's open FORECOURT (the banyuetang fronted the settlement's ceremony/work
         # ground), so keeping the copse fringe off that band too is the historically right reading, not slack.
         occ += [(cp["cx"], cp["cy"], cp["r"] + clump * 0.90) for cp in self.M.get("crescent_ponds", [])]
+        # ... and OFF THE POND - the tameike or a polder's header reservoir (feature 134: the first
+        # scripted dike-pond seated its village at the block's head, so the windbreak's band ran
+        # over the reservoir and 15 clumps stood in open water; nothing in this list knew the pond).
+        # `M["pond"]` is [cx, cy, rx, ry]; the keep-out is the longer semi-axis + the canopy reach,
+        # the same reading as the crescent pond above. `trees_clear_of_water` gates it.
+        _pnd = self.M.get("pond")
+        if _pnd:
+            occ.append((float(_pnd[0]), float(_pnd[1]), max(float(_pnd[2]), float(_pnd[3])) + clump * 0.90))
         # ... and OFF A GROVE THAT IS ALREADY PLANTED (settlement-review x1, 2026-08-19). Nothing here
         # kept one grove out of another, and the copse is seated AFTER the windbreak, so it simply
         # planted itself in the belt: measured on Inashiro, clump-to-nearest-belt-clump distances of

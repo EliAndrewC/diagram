@@ -365,6 +365,16 @@ def test_paddy_seams_fires_on_a_bund_ring_drawn_inside_a_basin():
     assert "paddy_plot_seams_shared" in _seam_f(_seam_M([_box(10, 10, 210, 210), _box(60, 60, 160, 160)]))
 
 
+def test_paddy_seams_stands_aside_for_a_dike_pond_block():
+    # feature 134: two ponds a dike apart are the 桑基魚塘 fabric, not a doubled aze - the ~22 ft
+    # strip between the rings IS the planted dike. The same rings fire on a paddy field.
+    rings = [_box(10, 10, 110, 110), _box(132, 10, 232, 110)]
+    assert "paddy_plot_seams_shared" in _seam_f(_seam_M(rings))
+    M = _seam_M(rings)
+    M["meta"]["field_archetype"] = "mulberry_dike_fishpond"
+    assert "paddy_plot_seams_shared" not in _seam_f(M)
+
+
 def test_paddy_seams_passes_basins_that_share_their_bund_exactly():
     assert "paddy_plot_seams_shared" not in _seam_f(_seam_M([_box(10, 10, 110, 110), _box(110, 10, 210, 110)]))
 

@@ -19,7 +19,7 @@ from l7r.diagram._invocation import guard
 from l7r.diagram.settlement import Settlement
 from l7r.diagram.sitegen.jobs import default_jobs as default_jobs  # noqa: PLC0414 - explicit re-export so `hamletgen.default_jobs` still resolves under --strict
 
-from .consts import REF_HOUSEHOLDS
+from .consts import FIELD_ARCHETYPES, REF_HOUSEHOLDS
 from .frame import stage_crossings, stage_frame, stage_notice
 from .hinterland import stage_bamboo, stage_hinterland, stage_windbreak, stage_woodland
 from .homesteads import stage_appurtenances, stage_homesteads
@@ -336,6 +336,8 @@ def main(argv: Sequence[str] | None = None) -> int:
     ap.add_argument("--sink", choices=("pond", "offmap"), default=None)
     ap.add_argument("--windward", default=None)
     ap.add_argument("--bamboo", choices=("none", "homestead", "thicket", "both"), default=None, help="pin the bamboo knob (feature 133 T47: one map per knob value is owed at unlock)")
+    ap.add_argument("--archetype", choices=FIELD_ARCHETYPES, default=None, help="pin the field archetype (feature 134: the dike-pond is opt-in, like the polder)")
+    ap.add_argument("--pond-layout", choices=("grid", "mosaic"), default=None, help="pin a dike-pond's arrangement (feature 134: one map per knob value is owed)")
     ap.add_argument("--out", default=None, help="write <out>.svg/.png/.json")
     ap.add_argument("--no-render", action="store_true")
     ap.add_argument("--batch", type=int, default=0, help="roll N hamlets from consecutive seeds and gate them all")
@@ -359,7 +361,17 @@ def main(argv: Sequence[str] | None = None) -> int:
         return 0 if good == len(reports) else 1
 
     report = generate(
-        HamletSpec(name=args.name, seed=args.seed, households=args.households, down_deg=args.down_deg, water_sink=args.sink, windward=args.windward, bamboo=args.bamboo),
+        HamletSpec(
+            name=args.name,
+            seed=args.seed,
+            households=args.households,
+            down_deg=args.down_deg,
+            water_sink=args.sink,
+            windward=args.windward,
+            bamboo=args.bamboo,
+            field_archetype=args.archetype,
+            pond_layout=args.pond_layout,
+        ),
         out_base=args.out,
         render=not args.no_render,
     )

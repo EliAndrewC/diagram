@@ -10,8 +10,10 @@ import math
 from l7r.diagram.settlement import Settlement, seg_dist
 from l7r.diagram.settlement.structures.fixtures import KOSATSUBA_VERGE_FT
 
+from .consts import POLDER_ARCHETYPES
 from .hinterland import CROP_MARGIN
 from .plan import SitePlan
+from .water import polder_crossing_caps
 
 _BOARD_W, _BOARD_H = 14.0, 8.0  # the kosatsuba plank's footprint, as the re-seat probe measures it
 
@@ -25,7 +27,14 @@ def stage_crossings(s: Settlement, plan: SitePlan) -> None:
     the engine's own `bridges()` docstring says so and the `roads_bridge_water` check enforces it."""
     s.bridges()
     if s.M.get("field_ditches"):
-        s.channel_footbridges(spacing=300)
+        if plan.field_archetype in POLDER_ARCHETYPES:
+            # A POLDER'S RING CANAL is crossed where the village is (feature 134; the rule the
+            # hand-authored polders carried, `polder_crossing_caps`): planks cluster on the
+            # settlement-side toe collector, one per interior lateral, none on the feeder, the far
+            # toe or the drain. Spacing as the hand-authored maps had it.
+            s.channel_footbridges(spacing=320, seg_caps=polder_crossing_caps(plan))
+        else:
+            s.channel_footbridges(spacing=300)
 
 
 def stage_notice(s: Settlement, plan: SitePlan) -> None:

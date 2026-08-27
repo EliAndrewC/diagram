@@ -26,6 +26,8 @@ from .consts import (
     LANE_WEBS,
     OFFTAKE_LADDER,
     PLOT_SIZES,
+    POLDER_ARCHETYPES,
+    POND_LAYOUTS,
     REF_HOUSEHOLDS,
     ROLLED_ARCHETYPES,
     SETTLEMENT_FORMS,
@@ -69,6 +71,7 @@ class HamletSpec:
     fixtures_min: dict[str, int] | None = None  # at least N of a farmstead fixture kind, e.g. {"shrine": 1} (feature 133 T61)
     settlement_form: str | None = None
     field_archetype: str | None = None
+    pond_layout: str | None = None  # a dike-pond's arrangement, grid | mosaic (feature 134; `POND_LAYOUTS`)
     plot_size: str | None = None
     grain_drift: int | None = None
     woodland_patches: int | None = None
@@ -78,6 +81,8 @@ class HamletSpec:
     def __post_init__(self) -> None:
         if self.field_archetype is not None and self.field_archetype not in FIELD_ARCHETYPES:
             raise ValueError(f"field_archetype {self.field_archetype!r} is not one this generator draws: {sorted(FIELD_ARCHETYPES)}")
+        if self.pond_layout is not None and self.pond_layout not in POND_LAYOUTS:
+            raise ValueError(f"pond_layout {self.pond_layout!r} must be one of {sorted(set(POND_LAYOUTS))} (research/archetypes.md 'Grid vs mosaic')")
         lo, hi = HOUSEHOLD_BAND
         if not lo <= self.households <= hi:
             raise ValueError(
@@ -112,6 +117,9 @@ class SitePlan:
     # `settlement_form_asked` preserves the ROLL when a site cannot take that form; see `stage_track`.
     settlement_form: str
     field_archetype: str
+    # THE DIKE-POND'S ARRANGEMENT (feature 134): "grid" or "mosaic", rolled for a dike-pond hamlet
+    # and pinned to "grid" for a rice polder (see `POND_LAYOUTS`). Read by `stage_polder`.
+    pond_layout: str
     plot_size: str
     grain_drift: int
     woodland_patches: int
@@ -213,7 +221,10 @@ def plan_site(spec: HamletSpec) -> SitePlan:
     # which follows its own water down whatever slope it finds, is the one that sits on a diagonal.
     # A GM who pins `down_deg` is still honored - the pin is a fact about that place.
     _archetype = spec.field_archetype or str(_roll(spec.seed, "field_archetype", ROLLED_ARCHETYPES))
-    _falls = CARDINAL_BEARINGS if _archetype == "polder_grid" else FALL_BEARINGS
+    _falls = CARDINAL_BEARINGS if _archetype in POLDER_ARCHETYPES else FALL_BEARINGS
+    # A dike-pond rolls its arrangement; a rice polder IS the surveyed grid (`POND_LAYOUTS`), and
+    # pinning it there rather than rolling keeps every polder_grid map exactly as it was.
+    _pond_layout = (spec.pond_layout or str(_roll(spec.seed, "pond_layout", POND_LAYOUTS))) if _archetype == "mulberry_dike_fishpond" else "grid"
     down_deg = spec.down_deg if spec.down_deg is not None else float(_roll(spec.seed, "down_deg", _falls))
     # A hamlet is ONE comb draining down ONE valley, so its drainage bearing IS its fall unless the
     # GM declares otherwise. Recording both separately keeps the map honest about which fact is
@@ -237,6 +248,7 @@ def plan_site(spec: HamletSpec) -> SitePlan:
         fixtures_min={k: int(v) for k, v in (spec.fixtures_min or {}).items()},
         settlement_form=spec.settlement_form or str(_roll(spec.seed, "settlement_form", SETTLEMENT_FORMS)),
         field_archetype=_archetype,
+        pond_layout=_pond_layout,
         plot_size=spec.plot_size or str(_roll(spec.seed, "plot_size", PLOT_SIZES)),
         grain_drift=spec.grain_drift if spec.grain_drift is not None else int(_roll(spec.seed, "grain_drift", GRAIN_DRIFTS)),
         woodland_patches=spec.woodland_patches if spec.woodland_patches is not None else int(_roll(spec.seed, "woodland_patches", (2, 3, 3, 4))),

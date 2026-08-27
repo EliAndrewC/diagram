@@ -268,6 +268,17 @@ def test_crown_fills_covers_every_recorded_crown(pool_tier_glob):
         anchors = [(_flat[i], _flat[i + 1]) for i in range(0, len(_flat), 3)]
         for _g in json.loads(Path(stem + ".json").read_text()).get("village_groves") or []:
             anchors += [(c[0], c[1]) for c in _g["clumps"]]
+        # ...and the DIKE-POND BANKS (feature 134): a mulberry_dike_fishpond map draws tens of
+        # thousands of coppiced mulberry crowns along its recorded `dikeponds[].bank` rings, which
+        # are crowns to `CROWN_FILLS` but stand on no `tree_crowns` or clump record - the bank
+        # polygon is their anchor.
+        for _dp in json.loads(Path(stem + ".json").read_text()).get("dikeponds") or []:
+            anchors += [(float(q[0]), float(q[1])) for q in _dp.get("bank") or []]
+        # ...and the PERIMETER DIKE, planted with willow and mulberry rows along its band
+        # (`perimeter_dike`; research/archetypes.md "Why dikes were planted at all") - anchored on
+        # the recorded `dikes[].outline`.
+        for _dk in json.loads(Path(stem + ".json").read_text()).get("dikes") or []:
+            anchors += [(float(q[0]), float(q[1])) for q in _dk.get("outline") or []]
         reach = 60.0
         buckets: dict[tuple[int, int], list[tuple[float, float]]] = {}
         for ax, ay in anchors:

@@ -9,11 +9,11 @@ import math
 from collections.abc import Mapping
 from typing import Any
 
-from l7r.diagram.settlement import Settlement, point_in_poly, seg_intersect, segments_cross
+from l7r.diagram.settlement import Settlement, knob_rng, point_in_poly, seg_intersect, segments_cross
 from l7r.diagram.sitegen.geom import crosses_poly, net_acres, poly_area
 from l7r.diagram.waterfields import build_comb, build_polder
 
-from .consts import FAN_ASPECTS, GRAIN, POLDER_CELL_FT, REF_CANAL_A, REF_CANAL_B, REF_FIELD_FALL, Poly, Pt
+from .consts import DIKEPOND_CONVERSION, FAN_ASPECTS, GRAIN, POLDER_ARCHETYPES, POLDER_FABRIC, POND_LAYOUT_MOSAIC, REF_CANAL_A, REF_CANAL_B, REF_FIELD_FALL, Poly, Pt
 from .plan import SitePlan, _roll
 
 # ---- STAGE 1: the water frame -------------------------------------------------------------------
@@ -260,13 +260,19 @@ def stage_polder(s: Settlement, plan: SitePlan) -> None:
 
     The SOURCE is a header reservoir OUTSIDE the dike above the high corner, charged through a sluice
     in the dike - not a brook running in over the crop, which is what a valley hamlet has."""
-    net = fit_polder(plan, plan.spec.seed)
+    # BOTH polder archetypes come through here (feature 134): the fabric table sets the module and
+    # the parcel mix, the knob sets the arrangement, and the dike-pond's overlay is applied once the
+    # grid is drawn - see `POLDER_ARCHETYPES` in consts.py for why the dike-pond is a polder.
+    fabric = POLDER_FABRIC[plan.field_archetype]
+    mosaic = POND_LAYOUT_MOSAIC if plan.pond_layout == "mosaic" else 0.0
+    net = fit_polder(plan, plan.spec.seed, fabric=fabric, mosaic=mosaic)
     plan.net = net
     plan.acres = net_acres(net, plan.ftpx)
     plan.envelope = [(round(x, 1), round(y, 1)) for x, y in net["envelope"]]
     s.field_polys.append(list(plan.envelope))
     s.meta(dry_furrows_vary=False)
-    s.M["meta"]["field_archetype"] = "polder_grid"
+    s.M["meta"]["field_archetype"] = plan.field_archetype
+    s.M["meta"]["pond_layout"] = plan.pond_layout
     s.M["meta"]["water_source"] = "reservoir"
     s.M["meta"]["water_source_position"] = "corner_high"
     # THE HEADER RESERVOIR sits OUTSIDE the dike, above the block's high end, on the fall axis -
@@ -324,6 +330,15 @@ def stage_polder(s: Settlement, plan: SitePlan) -> None:
     # such junction, which is why this is the polder's flag rather than the engine's default.
     s.draw_comb_field(net, f"{plan.spec.name.lower()}-polder", {"kind": "pond", "pond": pond}, join_head=True)
     plan.sink_pond = None
+    # THE DIKE-POND SYSTEM (桑基魚塘): convert (almost) every cell to a fish pond rimmed by a
+    # mulberry dike. `eligible="all"` is the archetype's named opt-out of the topographic filter -
+    # this map IS the wholesale-conversion end state, the rare case where a whole district went
+    # over to ponds and bought its grain in (research/archetypes.md "The three overlay values").
+    # Applied right after the grid is drawn and BEFORE the perimeter dike, so the ponds' banks and
+    # the repainted leftovers are field ground the dike band and the houses draw over. Its RNG is
+    # positional (`knob_rng`), so adding it re-rolls nothing else on the map.
+    if plan.field_archetype == "mulberry_dike_fishpond":
+        s.apply_land_use(net, "mulberry_fishpond", knob_rng(plan.spec.seed, "mulberry_fishpond"), fraction=DIKEPOND_CONVERSION, eligible="all")
     # THE PERIMETER DIKE - the defining polder feature, and the reason a polder is a polder: an
     # irregular hand-piled earthwork band following the water edge in organic bends (fish-scale
     # polder, 鱼鳞圩). Drawn HERE, before the village, so it sits UNDER the houses that line it.
@@ -378,7 +393,7 @@ def stage_polder(s: Settlement, plan: SitePlan) -> None:
                 s.corridors.append(([a, b], 30.0))
 
 
-def fit_polder(plan: SitePlan, seed: int, tolerance: float = 0.06, rounds: int = 9) -> dict[str, Any]:
+def fit_polder(plan: SitePlan, seed: int, tolerance: float = 0.06, rounds: int = 9, fabric: Mapping[str, Any] | None = None, mosaic: float = 0.0) -> dict[str, Any]:
     """SOLVE the polder grid for the acreage the household count demands - the flat-ground sibling of
     `fit_field`, and it bisects the same way for the same reason.
 
@@ -397,7 +412,8 @@ def fit_polder(plan: SitePlan, seed: int, tolerance: float = 0.06, rounds: int =
     # and it has to be recomputed per candidate because the bisection changes the extent.
     dx, dy = plan.fall
     ux, uy = -dy, dx  # across the fall
-    cellpx = POLDER_CELL_FT / plan.ftpx
+    fab = fabric if fabric is not None else POLDER_FABRIC["polder_grid"]
+    cellpx = float(fab["cell"]) / plan.ftpx
     lo, hi = 6, 44
     best: dict[str, Any] | None = None
     for _ in range(rounds):
@@ -415,7 +431,9 @@ def fit_polder(plan: SitePlan, seed: int, tolerance: float = 0.06, rounds: int =
         # hand-piled, fish-scale irregularity as the archetype can carry at that size.
         net = None
         for wander in (0.5, 0.4, 0.3, 0.2, 0.12):
-            net = build_polder(plan.W, plan.H, origin, seed, down_deg=plan.down_deg, rows=rows, cols=cols, cell=cellpx, edge_wander=wander)
+            net = build_polder(
+                plan.W, plan.H, origin, seed, down_deg=plan.down_deg, rows=rows, cols=cols, cell=cellpx, parcel_mix=tuple(fab["parcel_mix"]), gap=tuple(fab["gap"]), edge_wander=wander, mosaic=mosaic
+            )
             _env = [(float(a), float(b)) for a, b in net["envelope"]]
             _xs = [q[0] for q in _env]
             _ys = [q[1] for q in _env]
@@ -443,7 +461,7 @@ def stage_field(s: Settlement, plan: SitePlan) -> None:
     Second, because the water is first and the field is grown AROUND the water (the water-first
     inversion `waterfields.py` exists for). The head sluice comes from `head_sluice`, which puts the
     intake at the field's high head - gravity, not a knob."""
-    if plan.field_archetype == "polder_grid":
+    if plan.field_archetype in POLDER_ARCHETYPES:
         stage_polder(s, plan)
         return
     dx, dy = plan.fall
@@ -493,3 +511,90 @@ def stage_field(s: Settlement, plan: SitePlan) -> None:
         outside = [(a, b) for a, b in zip(run, run[1:], strict=False) if not point_in_poly((a[0] + b[0]) / 2, (a[1] + b[1]) / 2, plan.envelope)]
         for a, b in outside:
             s.corridors.append(([a, b], 30.0))
+
+
+# ---- the polder's flanks (feature 134) --------------------------------------------------------------
+
+
+def _compass(v: Pt) -> str:
+    """The compass letter a screen-space vector points to (screen y grows DOWN, so +y is S)."""
+    return ("E" if v[0] > 0 else "W") if abs(v[0]) >= abs(v[1]) else ("S" if v[1] > 0 else "N")
+
+
+def polder_flanks(plan: SitePlan) -> dict[str, str]:
+    """The four flanks of a polder block as compass letters, in the roles the composition uses.
+
+    `head` is where the water comes in (uphill), `foot` where it leaves, `plus` the +cross side -
+    the one `build_polder` names the settlement side and gives the `e_toe` collector - and `minus`
+    the other; `cluster` is the flank the seated village actually stands on (from `plan.seat`,
+    empty before `stage_seat`). Polders are laid to cardinal falls, so every letter is exact."""
+    dx, dy = plan.fall
+    out = plan.seat.get("out") if plan.seat else None
+    return {
+        "head": _compass((-dx, -dy)),
+        "foot": _compass((dx, dy)),
+        "plus": _compass((dy, -dx)),
+        "minus": _compass((-dy, dx)),
+        "cluster": _compass((float(out[0]), float(out[1]))) if out else "",
+    }
+
+
+def waterward_flanks(plan: SitePlan) -> list[str]:
+    """Which flanks of the dike face the fluctuating water it was reclaimed from.
+
+    Research/archetypes.md 'Polder siting': outside the dike is the lake, creek, reed marsh or
+    mudflat the block was dug out of - EXCEPT on the landward flank where the polder abuts the
+    natural shore, which is where the village stands (nobody lives on a flood-fighting earthwork
+    when dry ground is a few steps away), and the head flank, where the header reservoir already
+    stands as the wild water. So: the foot (the outfall side, already wet) and the cross flank(s)
+    the cluster does not occupy. This is the hand-authored Kuwabata's and Enokida's `["W", "S"]`
+    derived rather than declared."""
+    f = polder_flanks(plan)
+    return [q for q in (f["minus"], f["plus"], f["foot"]) if q != f["cluster"]]
+
+
+def stage_waterward(s: Settlement, plan: SitePlan) -> None:
+    """The reed fringe along every water-facing flank of a polder dike, and its declaration.
+
+    Called from `stage_hinterland` BEFORE the engine's own toe marsh and scrub, so the scatter keeps
+    out of it. Each strip hugs the dike's outer face (reeds auto-skip the band and the ponds via the
+    keep-outs) and runs off the frame - it is wild ground continuing, not a feature with an edge,
+    so `crop_to_content` ignores it. `meta.waterward` declares the flanks for
+    `polder_waterward_flanks_wet`, which samples 28 px outside the dike's extreme on each and wants
+    14 of 20 points wet: the strip overlaps the band by 60 px inward for that reason, exactly as the
+    hand-authored polders drew it. A polder that declares nothing skips the check silently - the
+    'check that never runs' shape - which is why the scripted tier declares."""
+    if plan.field_archetype not in POLDER_ARCHETYPES or not s.M.get("dikes"):  # pragma: no cover - polders always draw their dike
+        return
+    pts = [p for dk in s.M["dikes"] for p in dk.get("outline", [])]
+    x0, x1 = min(p[0] for p in pts), max(p[0] for p in pts)
+    y0, y1 = min(p[1] for p in pts), max(p[1] for p in pts)
+    W, H = float(s.W), float(s.H)
+    strips: dict[str, Poly] = {
+        "W": [(-20.0, y0 - 30.0), (x0 + 60.0, y0 - 30.0), (x0 + 60.0, y1 + 20.0), (-20.0, y1 + 20.0)],
+        "E": [(x1 - 60.0, y0 - 30.0), (W + 20.0, y0 - 30.0), (W + 20.0, y1 + 20.0), (x1 - 60.0, y1 + 20.0)],
+        "N": [(x0 - 30.0, -20.0), (x1 + 20.0, -20.0), (x1 + 20.0, y0 + 60.0), (x0 - 30.0, y0 + 60.0)],
+        "S": [(x0 - 30.0, y1 - 60.0), (x1 + 20.0, y1 - 60.0), (x1 + 20.0, H + 20.0), (x0 - 30.0, H + 20.0)],
+    }
+    flanks = waterward_flanks(plan)
+    for q in flanks:
+        s.marsh(strips[q], role="waterside")
+    s.meta(waterward=flanks)
+
+
+def polder_crossing_caps(plan: SitePlan) -> dict[str, int]:
+    """Where plank crossings go on a polder's ring canal (research 2026-07-22, settlements.md
+    'Polder ring canal'): people cross to the fields where they LIVE and then walk the bund network,
+    so crossings CLUSTER on the settlement-side toe collector, are sparse on the interior laterals,
+    and there are NONE on the unsettled feeder, the far toe or the drain. `build_polder` names the
+    +cross collector `e_toe` and the other `w_toe`; which is the settlement side is read off the
+    seat, not assumed."""
+    f = polder_flanks(plan)
+    if f["cluster"] == f["plus"]:
+        return {"feeder": 0, "w_toe": 0, "drain": 0, "e_toe": 3, "lateral": 1}
+    if f["cluster"] == f["minus"]:
+        return {"feeder": 0, "e_toe": 0, "drain": 0, "w_toe": 3, "lateral": 1}
+    # The village at the HEAD (or the foot): neither toe is "far" - people walk down both banks
+    # from the houses, and an uncrossed toe collector is a long ditch with no plank
+    # (`long_ditches_have_a_footbridge`, Kuwabata seed 21, seated N). Two per toe.
+    return {"feeder": 0, "drain": 0, "e_toe": 2, "w_toe": 2, "lateral": 1}
