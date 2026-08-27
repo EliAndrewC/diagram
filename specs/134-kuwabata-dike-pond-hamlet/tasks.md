@@ -4,7 +4,7 @@ Checked off only when verified on Kuwabata (and Inashiro unchanged). T99 is the 
 
 ## Phase 0 - the skeleton
 
-- [ ] T01 `spec-fidelity` review of spec.md against gm-request.md (round 1 running)
+- [x] T01 `spec-fidelity` review of spec.md against gm-request.md: round 1 three changes (FR-008 widened, the knob edge case split, FR-007 carries the FR-002 omissions), round 2 FAITHFUL - recorded in spec.md
       research: procedure
 - [ ] T02 the number claim pushed to main (specs/ alone; the feature otherwise stays in the clone until T99)
       research: procedure

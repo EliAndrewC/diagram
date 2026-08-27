@@ -4,7 +4,7 @@
 
 **Created**: 2026-08-27
 
-**Status**: Draft - `spec-fidelity` round 2 pending (constitution XVI)
+**Status**: APPROVED by `spec-fidelity` - round 2 verdict **FAITHFUL** (2026-08-27), after round 1 returned three changes. Implementation may begin.
 
 **Input**: [`gm-request.md`](gm-request.md), verbatim and unedited. That file is the authority for
 this specification.
@@ -280,4 +280,4 @@ Filled as the work lands; each row is a rendering decision this feature makes, w
   drawn) with willow-vs-mulberry (a plant not on the maps) - split; the second goes to the audit
   list. (3) FR-007's list ran one way only; it now carries every reference-hamlet family omitted
   under FR-002, so the GM sees the omissions the way they saw the missing bamboo.
-- (pending) round 2.
+- Round 2 (2026-08-27): **FAITHFUL**. Two asides recorded: US1 AS3's seed-variation roll is one named map per invocation under the lock (owed at unlock if it cannot be rolled that way); SC-001's 30 lines is the spec's number, not the GM's.
