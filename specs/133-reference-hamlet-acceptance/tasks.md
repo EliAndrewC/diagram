@@ -387,6 +387,14 @@ _(from T46 on, each entry also says `research: rendering` or `research: physical
       measure: the crop at 1.6x - red hall + torii legible beside the sheds; quick green
       verify: `make maps`, `make quick`, `make done`; the GM looks
 
+- [ ] T92 **the unlocked gate must TERMINATE - expected failures and skips, not fixes** - the GM (2026-08-27), after the landing: *"I do want you to be the session which fixes this ... when I say fixing this, I don't mean getting everything working. I just mean getting things to the point where we don't hang. that can be by marking things as expected failures because I will have a different session work on fixing those expected failures. the important thing is for what lands in main to be functional. in order to unblock me from being able to tell other sessions that they should merge their work into main, which I will hold off on doing until I know that this specific issue has been fixed. and that we won't get another twenty five minutes of CPU thrashing for a test that appears to maybe just be going on forever"*; and the widened waiver: *"have any failing tests on the acceptance gate marked as expected failures and documented as something for a future session to take care of ... one of the next things I am going to do is look past the reference hamlet and then make sure that all of the other types of hamlets that we have generated are just as solid as our reference hamlet is, and that seems like a good time for us to ensure that these other tests all pass."*
+      given 2026-08-27T23:06Z | done - | elapsed - | runs: -
+      measured so far: the first unlocked `make done` sat 25 min with ONE xdist worker at 100% and seven idle; py-spy cannot attach in this container (ptrace refused even as root); the six map-rolling files run alone: test_water 104 s, test_rolling 16 s, test_homesteads 32 s, test_sink 20 s, test_gencache 79 s all green, test_driver.py >7 min (killed); cohort seeds rolled alone take 65-101 s each (seed 1: 101 s, `title_clear_of_features`) - NOT a hang, a slow roll; the 133-end perf bookend is FASTER than 129-end (224 s vs 268 s), so the engine did not slow - the cohort tests roll several seeds serially by design and the sum is what the gate waited on. Next: `make durations MARK=rolls_map` names each test's time and verdict.
+      research: procedure
+      scaffold: -
+      measure: every map-rolling test's duration; the gate's total under the unlock
+      verify: an unlocked `make done` that ends, green, with every expected failure pinned and documented; then `make scope-unlock`, push, and the GM releases the other sessions
+
 ## Phase 9 - acceptance
 
 - [x] T90 the would-have-dispatched audit (FR-005): every entry in the period, and for each whether it should have run; each "no" names a tooling change
