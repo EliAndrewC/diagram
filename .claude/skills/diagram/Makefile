@@ -307,7 +307,7 @@ pool-index:     ## rebuild the pool index
 # "stale" costs half a second while a false "fresh" is impossible (a rewrite always bumps a mtime).
 pool-index-if-stale: ## rebuild the pool index only when a manifest, render or notes file is newer
 	@if [ ! -f pool/index.html ] || [ -n "$$(find pool -newer pool/index.html \( -name '*.json' -o -name '*.png' -o -name '*.notes.md' \) -print -quit)" ]; then \
-	  $(MAKE) --no-print-directory pool-index; \
+	  $(MAKE) --no-print-directory pool-index ARGS=; \
 	fi
 # (GUARD_EDIT_OK: adds a derived-artifact refresh, no gate or prompt is touched - GM 2026-08-27)
 

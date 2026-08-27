@@ -231,7 +231,18 @@ class WetGroundMixin:
             local.append((max(near) if near else v_in + pad) - pad)
         edge = [max(local[max(0, k - 1) : k + 2]) for k in range(n)]
         inner = [(u * ux + v * dx, u * uy + v * dy) for u, v in zip(stations, edge, strict=True)]
-        return inner + [(u1 * ux + v_out * dx, u1 * uy + v_out * dy), (u0 * ux + v_out * dx, u0 * uy + v_out * dy)]
+
+        # THE LATERAL ENDS FLARE, they do not run ruled to the frame (settlement-review at the T99
+        # acceptance, 2026-08-27: the west limit was a straight cross-slope line at u0 from the inner edge
+        # to the frame - the same "parallel to the frame" defect T30 fixed on the inner edge, on the side).
+        # Seepage at a fan's toe spreads DOWNSLOPE: the wet ground is narrowest where it leaves the
+        # watered crop and widens toward the valley floor, so each side bows outward on a rising curve
+        # from its inner end to `pad` * 1.5 past the shoulder at the frame. Five stations a side; the
+        # closing edge lies beyond the bleed and is never drawn.
+        def flank(u_end: float, v_end: float, sign: float) -> list[Pt]:
+            return [(uu * ux + vv * dx, uu * uy + vv * dy) for t in (0.2, 0.4, 0.6, 0.8, 1.0) for uu, vv in [(u_end + sign * 1.5 * pad * t**1.6, v_end + (v_out - v_end) * t)]]
+
+        return inner + flank(u1, edge[-1], 1.0) + list(reversed(flank(u0, edge[0], -1.0)))
 
 
 def surface_water_dist(M: Any, x: float, y: float) -> float:

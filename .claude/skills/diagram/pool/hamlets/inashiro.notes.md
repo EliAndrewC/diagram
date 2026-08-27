@@ -1381,7 +1381,7 @@ ordinary village lane; the drawn 3 / 5 / 6 ft are drawing conventions inside the
 privy, woodpile, manure heap, bath shed, chicken coop, household shrine and persimmon from the map
 seed (shares this seed: privy .86, woodpile .86, manure .53, bath .34, coop .69, shrine .05,
 persimmon .82) and seats what fits: privy 12, woodpile 7, coop 7, manure 5, bath 3, shrine 1,
-persimmon 10 on the 15 houses. The one hokora is in the religious red at a plot corner. All at true
+persimmon 8 on the 15 houses (10 on the first roll; the count here is re-measured on the shipped roll). The one hokora is in the religious red at a plot corner. All at true
 size; the research and the guess labels in research/homesteads.md "The farmstead's fixtures". The
 straw rick is deferred with seasonal maps (T60).
 

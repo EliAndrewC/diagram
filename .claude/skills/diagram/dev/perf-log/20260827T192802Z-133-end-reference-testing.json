@@ -1,0 +1,130 @@
+{
+  "clone": "reference-testing",
+  "commit": "ef02a774",
+  "cpus": 22,
+  "environment": "local",
+  "host": "laptop",
+  "hostname": "863bd4879ca8",
+  "image": "laptop",
+  "label": "133-end",
+  "machine": "x86_64",
+  "median_seconds": 56.2,
+  "reference": {
+    "down_deg": 90,
+    "households": 15,
+    "name": "Inashiro",
+    "water_sink": "pond"
+  },
+  "rows": [
+    {
+      "asked": 15,
+      "form": "nucleated",
+      "houses": 15,
+      "seconds": 32.7,
+      "seed": 4,
+      "shape": "crescent",
+      "stages": {
+        "appurtenances": 0.24,
+        "bamboo": 0.0,
+        "crossings": 0.34,
+        "field": 3.53,
+        "frame": 0.01,
+        "hinterland": 6.5,
+        "homesteads": 1.2,
+        "notice": 3.62,
+        "seat": 0.03,
+        "sink": 0.01,
+        "track": 4.06,
+        "water_frame": 0.0,
+        "web": 13.08,
+        "windbreak": 0.1,
+        "woodland": 0.02
+      }
+    },
+    {
+      "asked": 15,
+      "form": "nucleated",
+      "houses": 15,
+      "seconds": 32.2,
+      "seed": 25,
+      "shape": "crescent",
+      "stages": {
+        "appurtenances": 0.15,
+        "bamboo": 0.0,
+        "crossings": 0.32,
+        "field": 4.47,
+        "frame": 0.0,
+        "hinterland": 6.2,
+        "homesteads": 1.16,
+        "notice": 4.11,
+        "seat": 0.03,
+        "sink": 0.01,
+        "track": 3.4,
+        "water_frame": 0.0,
+        "web": 12.24,
+        "windbreak": 0.13,
+        "woodland": 0.01
+      }
+    },
+    {
+      "asked": 15,
+      "form": "nucleated",
+      "houses": 15,
+      "seconds": 79.8,
+      "seed": 39,
+      "shape": "round",
+      "stages": {
+        "appurtenances": 0.62,
+        "bamboo": 0.0,
+        "crossings": 0.39,
+        "field": 2.63,
+        "frame": 0.0,
+        "hinterland": 7.46,
+        "homesteads": 0.61,
+        "notice": 4.95,
+        "seat": 0.04,
+        "sink": 0.01,
+        "track": 6.84,
+        "water_frame": 0.0,
+        "web": 55.97,
+        "windbreak": 0.26,
+        "woodland": 0.02
+      }
+    },
+    {
+      "asked": 15,
+      "form": "nucleated",
+      "houses": 15,
+      "seconds": 79.8,
+      "seed": 47,
+      "shape": "round",
+      "stages": {
+        "appurtenances": 0.1,
+        "bamboo": 0.0,
+        "crossings": 0.38,
+        "field": 26.03,
+        "frame": 0.0,
+        "hinterland": 6.53,
+        "homesteads": 1.0,
+        "notice": 5.64,
+        "seat": 0.04,
+        "sink": 0.0,
+        "track": 12.57,
+        "water_frame": 0.0,
+        "web": 27.38,
+        "windbreak": 0.18,
+        "woodland": 0.0
+      }
+    }
+  ],
+  "seeds": [
+    4,
+    25,
+    39,
+    47
+  ],
+  "subject": "133 T90: the would-have-dispatched audit (empty trail, why); --bamboo on the hamlet CLI for the owed knob maps",
+  "total_seconds": 224.5,
+  "utc": "20260827T192802Z",
+  "worst_seconds": 79.8
+}

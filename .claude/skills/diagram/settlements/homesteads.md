@@ -102,7 +102,7 @@ Generator surface for the shipped knobs: `s.lane_skeleton(kind, cx, cy, ex, ey)`
 
 Each farmstead may carry, at TRUE size and raked with its house: a **privy** (6 x 6 ft) at the back
 door, the gate or the naya (rolled); a **manure heap** (8 x 6) beyond the privy; a **bath shed** (6 x 6)
-at the back or a flank; a **chicken coop** (5 x 5) on the flank by the yard; a **woodpile** (10 x 3.5)
+at the back or a flank; a **chicken coop** (5 x 5) on the flank by the yard, else the back wall (the record says only "in their yard"); a **woodpile** (10 x 3.5)
 against the back wall or the kura's; a **household shrine** (drawn at 6 x 6, the small-shed module - the
 measured stone is ~1.3 ft; vermilion with a torii standing before it - the GM's "red marking" convention, T58/T62) at the plot's NW/NE/SW corner, RARE and capped at the
 share; and a **persimmon** (an 18 ft crown with four fruit dots - the convention that names the tree)

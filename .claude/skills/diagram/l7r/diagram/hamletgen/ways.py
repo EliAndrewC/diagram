@@ -1194,6 +1194,10 @@ _JOG_FT = 6.0  # a vertex this close to the chord that replaces it was a jog, no
 _KNOT_FT = 25.0  # ends of different lanes this close are one junction, not several
 
 
+def _plen(pts: Poly) -> float:
+    return sum(math.dist(pts[k], pts[k + 1]) for k in range(len(pts) - 1))
+
+
 def _smooth_web(s: Settlement, hard: list[Poly], walls: Sequence[Poly], water: list[tuple[Pt, Pt]]) -> int:
     """The LAST pass over the web: take out what feet would never have worn.
 
@@ -1323,11 +1327,33 @@ def _smooth_web(s: Settlement, hard: list[Poly], walls: Sequence[Poly], water: l
             for v in _p:
                 if not _q or v != _q[-1]:
                     _q.append(v)
+            # a way whose every vertex fell inside the knot collapses to ONE point - found at the T99
+            # unlock on a tripwire seed (IndexError on `_q[-2]`); such a way is left as it was
+            if len(_q) < 2:
+                continue
             _nb = _q[1] if f == 0 else _q[-2]
-            if len(_q) >= 2 and _clear_touch(_nb, node, hard, walls, water) and [[round(x, 1), round(y, 1)] for x, y in _q] != lanes[j]["pts"]:
+            if _clear_touch(_nb, node, hard, walls, water) and [[round(x, 1), round(y, 1)] for x, y in _q] != lanes[j]["pts"]:
                 lanes[j]["pts"] = [[round(x, 1), round(y, 1)] for x, y in _q]
                 s.reink_lane(j)
                 changed += 1
+    # 2b. shadows: a lane whose every vertex lies inside another lane's stroke is that lane drawn
+    # twice (settlement-review at the T99 acceptance: lanes[7] lay for its whole 35.7 ft inside
+    # lanes[9], 3.2 ft off its line, both 3 wide - ink-invisible, one way recorded twice). The shorter
+    # one is emptied; `_components` and the checks read an empty way as absent.
+    for i, ln in enumerate(lanes):
+        pts_i = [(float(x), float(y)) for x, y in ln.get("pts") or []]
+        if ln.get("connector") or len(pts_i) < 2:
+            continue
+        for j, other in enumerate(lanes):
+            pts_j = [(float(x), float(y)) for x, y in other.get("pts") or []]
+            if j == i or len(pts_j) < 2 or _plen(pts_j) < _plen(pts_i):
+                continue
+            tol = float(other.get("w", 3)) / 2 + float(ln.get("w", 3)) / 2 + 1.0
+            if all(min(seg_dist(v[0], v[1], pts_j[k], pts_j[k + 1]) for k in range(len(pts_j) - 1)) <= tol for v in pts_i):
+                lanes[i]["pts"] = []
+                s.reink_lane(i)
+                changed += 1
+                break
     # 3. bow-ties: a lane that crosses another mid-run and runs on for less than an arm
     for i, ln in enumerate(lanes):
         if ln.get("connector") or len(ln.get("pts") or []) < 2:

@@ -635,7 +635,7 @@ inside the band from the map seed and declared in meta; per-house presence posit
 house's own frame with the researched first choice rolled where the record gives forms; every seat
 tested against every placed footprint, lane, paddy, marsh and pond, the persimmon's crown against
 the engine's canopy keep-outs. Inashiro seed 4: privy 12, woodpile 7, coop 7, manure 5, bath 3,
-shrine 1, persimmon 10 on 15 houses.
+shrine 1, persimmon 8 on 15 houses (the first roll seated 10; 8 on the shipped roll - the review at T99 caught the stale count).
 
 **Sources (read):** kotobank 便所 (Nipponica); sinyoken.sakura.ne.jp camadori.htm and cayomo016.htm;
 Art Institute of Chicago 37716 (catalog text via api.artic.edu); Chiba Prefectural Museum,

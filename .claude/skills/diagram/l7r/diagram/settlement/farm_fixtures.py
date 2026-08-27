@@ -57,7 +57,10 @@ class FarmFixturesMixin:
             for i in range(n):  # the end grain of the split logs, the thing that makes a stack read as a stack
                 g.append(f'<circle cx="{x0 + (i + 0.5) * w / n:.1f}" cy="0" r="{min(h, 2.6) * 0.34:.1f}" fill="#C9A874"/>')
         elif kind == "manure":
-            g.append(f'<ellipse cx="0" cy="0" rx="{w / 2:.1f}" ry="{h / 2:.1f}" fill="#6B4F2A" opacity="0.9" stroke="#4A3418" stroke-width="0.8" stroke-dasharray="1.5,1.2"/>')
+            # a plain mound with straw hatching - the dashed outline read as a crown's scallop, i.e. a bush (review at T99)
+            g.append(f'<ellipse cx="0" cy="0" rx="{w / 2:.1f}" ry="{h / 2:.1f}" fill="#6B4F2A" stroke="#4A3418" stroke-width="0.7"/>')
+            for k in (-0.5, -0.17, 0.17, 0.5):
+                g.append(f'<line x1="{k * w * 0.8 - 0.9:.1f}" y1="{h * 0.22:.1f}" x2="{k * w * 0.8 + 0.9:.1f}" y2="{-h * 0.22:.1f}" stroke="#C9A874" stroke-width="0.6"/>')
         elif kind == "bath":
             g.append(f'<rect x="{x0:.1f}" y="{y0:.1f}" width="{w:.1f}" height="{h:.1f}" rx="1" fill="#A98C58" stroke="{edge}" stroke-width="1.1"/>')
             g.append(f'<circle cx="0" cy="0" r="{min(w, h) * 0.24:.1f}" fill="#3E3E3E"/>')  # the iron cauldron

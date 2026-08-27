@@ -606,6 +606,21 @@ def _strip_blocked(
     for pts, half in lanes:
         if any(seg_dist(q[0], q[1], pts[k], pts[k + 1]) < half for q in corners for k in range(len(pts) - 1)):
             return True
+    # the dry hem's plots and the watercourses (unlock tripwire seed 47: a fixture on a dry plot and one
+    # on the stream - neither is a paddy, a lane or the pond, so nothing above saw them), and any crown
+    # already drawn (seed 37: a fixture seated under a grove crown drawn two stages earlier)
+    for o in s.M.get("dry_plots", []):
+        poly = [(float(a), float(b)) for a, b in o.get("poly") or []]
+        if len(poly) >= 3 and any(point_in_poly(q[0], q[1], poly) or min(seg_dist(q[0], q[1], poly[k], poly[(k + 1) % len(poly)]) for k in range(len(poly))) < 3.0 for q in corners):
+            return True
+    if any(s._on_watercourse(q[0], q[1], pad=4.0) for q in corners):
+        return True
+    tc = s.M.get("tree_crowns") or []
+    for k in range(0, len(tc) - 2, 3):
+        tx, ty, tr = float(tc[k]), float(tc[k + 1]), float(tc[k + 2])
+        hd = math.hypot(cw, ch) / 2  # the check squares a RAKED footprint on its half-diagonal; mirror it
+        if max(abs(cx - tx) - hd, 0.0) ** 2 + max(abs(cy - ty) - hd, 0.0) ** 2 < (tr + 0.6) ** 2:
+            return True
     return bool(pond) and ((cx - pond[0]) / (pond[2] + 20.0)) ** 2 + ((cy - pond[1]) / (pond[3] + 20.0)) ** 2 <= 1.0
 
 
@@ -645,7 +660,7 @@ FIXTURE_BANDS: dict[str, tuple[float, float]] = {
 _FIXTURE_ORDER = ("privy", "manure", "bath", "coop", "woodpile", "shrine", "persimmon")  # the buildings before the stack, which has the most seats
 _PRIVY_SEATS = (("back", 0.60), ("gate", 0.25), ("naya", 0.15))
 _SHRINE_CORNERS = (("NW", 0.45), ("NE", 0.35), ("SW", 0.20))
-_WALL_GAP_FT = 3.0
+_WALL_GAP_FT = 3.5  # the review measured -0.3 ft at 3.0 against the drawn wall; half a foot of true daylight
 _SALT = {"privy": 101.0, "manure": 102.0, "woodpile": 103.0, "bath": 104.0, "coop": 105.0, "shrine": 106.0, "persimmon": 107.0}
 
 
@@ -787,7 +802,8 @@ def farmstead_fixtures(s: Settlement, plan: SitePlan, houses: Sequence[Mapping[s
                 ext = abs(cw * ca) + abs(ch * sa), abs(cw * sa) + abs(ch * ca)  # the raked rect's bbox
                 if _strip_blocked(s, cx, cy, ext[0], ext[1], hx, hy, fields, marsh, pond, lanes):
                     continue
-                s.farm_fixture(kind, cx, cy, rot=rot, of=(hx, hy))
+                spin = 90.0 if (cw, ch) == (d, w) and w != d else 0.0  # a flank seat turns the glyph to lie ALONG the wall (review at T99: stacks stood end-on)
+                s.farm_fixture(kind, cx, cy, rot=rot + spin, of=(hx, hy))
                 ring = [(cx - ext[0] / 2, cy - ext[1] / 2), (cx + ext[0] / 2, cy - ext[1] / 2), (cx + ext[0] / 2, cy + ext[1] / 2), (cx - ext[0] / 2, cy + ext[1] / 2)]
                 s.placed.append((cx, cy, ext[0], ext[1]))
                 s.block_polys.append(ring)
@@ -818,6 +834,12 @@ def _trunk_blocked(s: Settlement, cx: float, cy: float, t: float, fields: Sequen
     for pts, half in lanes:
         if any(seg_dist(q[0], q[1], pts[k], pts[k + 1]) < half for q in corners for k in range(len(pts) - 1)):
             return True
+    for o in s.M.get("dry_plots", []):
+        poly = [(float(a), float(b)) for a, b in o.get("poly") or []]
+        if len(poly) >= 3 and any(point_in_poly(q[0], q[1], poly) for q in corners):
+            return True
+    if any(s._on_watercourse(q[0], q[1], pad=4.0) for q in corners):
+        return True
     return bool(pond) and ((cx - pond[0]) / (pond[2] + 20.0)) ** 2 + ((cy - pond[1]) / (pond[3] + 20.0)) ** 2 <= 1.0
 
 

@@ -2018,3 +2018,15 @@ read by the field renderer (flooded vs drained vs winter crop), by a `farmstead_
 rick (harvest and winter only, at the yard's edge) and by a hasa pass in the fields; the checks that
 read `meta.farm_fixtures` already carry the declaration shape. Research owed before any of it: the
 off-season crops of a paddy (二毛作) and where the rick stood.
+
+## OPEN 2026-08-27 (settlement-review at the T99 acceptance): the south well stands in the commons, not a dooryard
+
+Inashiro's south well (1211,1305) is 100 ft from its nearest house with scrub on every side; the
+doctrine says shared wells "drop into the courtyards the finished layout left". The minimax placer
+chose open ground because it minimizes the WORST walk, and the courtyards between the ranks were
+taken by the byre, the board and the fixtures. Recorded-only at acceptance: the GM looked at this
+well through thirty tasks and accepted the sheet; a dooryard preference is a placer change (prefer a
+seat inside the house cloud's hull when the worst walk is within ~30 ft of the open-ground optimum)
+that wants the pool re-rolled and reviewed, i.e. its own task. The reviewer also noted the copse
+(`village_groves[1]`) is two clumps - the T10 sun lane consumed it; the record stays because a copse
+role with two trees is the honest output, not a drawing error.
