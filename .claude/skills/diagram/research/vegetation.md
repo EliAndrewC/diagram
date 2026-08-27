@@ -165,10 +165,15 @@ draw patches of trees, we just kind of unthinkingly drew a square."* It was happ
 **What the record says.** The village woods of the period were *iriai* commons - customary
 common-property land held by the village and governed by its own rules on who might cut, when, and
 how much (the usufruct the GM describes): firewood, forage and grass were the products, coppiced on
-a 10-30 year cycle. Their boundaries were customary and were described by natural and worked
-features - a ridge, a stream, a path - and the coppice itself sits on the slope break above the
-paddy. Nothing in the record describes a coppice lot laid out as a surveyed rectangle; the
-management was a matter of RULES over a wood, not of parcel lines on the ground. So a managed wood
+a 10-30 year cycle. READ (IJC, the Yamaguni district study): "each of the 11
+villages in Yamaguni district has its own unique institutions for managing its customary common
+property forests", held by residents' associations with membership limited to qualifying
+residents - the management was a matter of RULES over a wood. UNSOURCED (found by the T46 read):
+the sentence that iriai boundaries were "described by ridge, stream and path", carried since the
+2026-08-18 review pass and repeated in `hinterland.py`, is NOT in that article and no source for it
+has been found; it stands as a summary-only claim of unknown provenance. What the read record does
+give: nothing in it describes a coppice lot laid out as a surveyed rectangle, and the coppice sits
+on the slope break above the paddy (the satoyama entries). So a managed wood
 is not evidence for a square - the GM's instinct was right.
 
 **The one rectilinear form, and why it is not drawn here.** The *shinden* villages of the dry
@@ -192,12 +197,13 @@ outside the reach the keep-outs were tested at. Area comes out ~85% of the ellip
 rule still bounds it from above. Labels: the irregular, feature-bounded outline ACCURATE; the ring's
 harmonic wobble and its 0.80 floor DRAWING conventions; the strip form a recorded knob-in-waiting.
 
-**Sources:** iriai commons and their customary bounds (International Journal of the Commons,
-Yamaguni district case study; the Indiana DLC "Village Commons in Japan"; Totman, *The Green
-Archipelago*); coppice management and cycle (Takeuchi et al., *Satoyama: The Traditional Rural
-Landscape of Japan*, Springer; Wikipedia "Satoyama"); the Musashino strip holdings (Kichijoji
-history, Wikipedia "Kichijōji"; ; the founding year and the 1664 survey are NOT in that article
-and are dropped as unverified).
+**Sources (read):** International Journal of the Commons, "External impacts on traditional commons
+and present-day changes: a case study of iriai forests in Yamaguni district" (management by
+village institutions; NO boundary description); Wikipedia "Satoyama"; Wikipedia "Kichijōji" (the
+1000 m strip grants and dry fields; the founding year and the 1664 survey are NOT in it and are
+dropped). **Pointers, not read:** the Indiana DLC "Village Commons in Japan"; Totman, *The Green
+Archipelago*; Takeuchi et al., *Satoyama* (Springer). **Unsourced:** "described by ridge, stream
+and path" (2026-08-18). Corrected 2026-08-27 under T44/T46.
 
 
 ## Bamboo: how common, where it stood, and how to show it (researched 2026-08-27, feature 133 T42 - a question, not yet a rule)

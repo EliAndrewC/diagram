@@ -24,6 +24,22 @@ description: "Task list template for feature implementation"
   written; `verify: one make quick after the whole diff is re-read for convention misses`. The
   task is where the discipline is read, so it is written there, not remembered.
 
+- **Every task says whether it is about the RENDERING or about the WORLD, and a world task carries
+  three research boxes** (GM 2026-08-27, constitution v2.12.0). When a task is created, classify it:
+  `research: rendering` - a map convention with nothing behind it in physical reality (a caption's
+  wrap, a label's distance from its glyph, a line weight); or `research: physical` - anything about
+  how a place was built, farmed, planted, bounded or lived in (a house's distance from the paddy,
+  what grows under a wood, how a lane bends). A `physical` task is not complete until three
+  sub-boxes under it are ticked, in order:
+  `- [ ] research pass` (a search of the record first; if `research/` already answers it, tick with
+  the pointer and say so - "no new pass" is a legitimate result, "no research" is not);
+  `- [ ] source-reader confirmed` (the `source-reader` agent read what the pass cites and its
+  verdicts are folded in - READ / SUMMARY-ONLY labels on every source);
+  `- [ ] recorded and cited` (the finding in `research/`, the rule where it lives, the labels
+  ACCURATE / DEVIATION / GUESS, the `**Sources:**` line, the SOURCES.md keys). The boxes exist
+  because a documented requirement that relies on memory gets skipped; `tests/test_task_research_boxes.py`
+  turns a ticked `physical` task with an unticked box red at the gate.
+
 ## Path Conventions
 
 - **Single project**: `src/`, `tests/` at repository root

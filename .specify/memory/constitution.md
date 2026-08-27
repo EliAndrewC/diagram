@@ -1,7 +1,12 @@
 <!--
 SYNC IMPACT REPORT
 ==================
-Version change: 2.11.0 → 2.11.1
+Version change: 2.11.1 → 2.12.0
+
+Version 2.12.0 (amended 2026-08-27, feature 133 T46): Principle XII gains "A WORLD TASK CARRIES
+ITS RESEARCH AS CHECKBOXES" - every task classified rendering/physical at creation; a physical
+task's three research sub-boxes (research pass, source-reader confirmed, recorded and cited) must
+be ticked before the task is; enforced by `tests/test_task_research_boxes.py`. MINOR.
 
 Version 2.11.1 (amended 2026-08-27, feature 133 T44, the GM's clarification): a claim from a
 search summary of a paper that cannot be read MAY be asserted and cited - labeled SUMMARY-ONLY;
@@ -1245,6 +1250,17 @@ able to see a search summary of a paywalled paper ... as long as we document whe
 source that we were relying on a search summary of a paywall paper rather than the paper itself"* -
 so the entry says which it was: READ, or SUMMARY-ONLY (not read, with what was seen). The one
 thing forbidden is citing a summary as if the text had been read. The GM's own words on the level of
+
+**A WORLD TASK CARRIES ITS RESEARCH AS CHECKBOXES** (GM 2026-08-27, feature 133 T46). *"anytime
+we have a documented requirement that requires that we remember to do something, then there is
+always a chance that it will be skipped."* So the requirement is not remembered; it is a shape.
+Every spec-kit task is classified at creation as `research: rendering` (a map convention with no
+physical reality behind it) or `research: physical` (how a place was built, farmed, planted,
+bounded or lived in), and a `physical` task carries three sub-boxes that must all be ticked before
+the task is: `research pass` (the record first - an existing finding that answers it is a valid
+result, cited), `source-reader confirmed` (the agent read what is cited), `recorded and cited`
+(the finding, the rule, the labels, the sources). A test at the gate refuses a ticked `physical`
+task with an unticked box.
 rigor: the consequences of a wrong bund width on a hobby map are small and the players have been
 told the level of rigor honestly - but the project still wants as much rigor as its time and
 tokens allow, and reading the source is the cheapest rigor there is.

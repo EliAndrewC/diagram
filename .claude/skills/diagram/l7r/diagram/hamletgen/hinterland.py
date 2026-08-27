@@ -419,8 +419,9 @@ def open_ground_patches(s: Settlement, plan: SitePlan, count: int, size: float =
                 #
                 # The record is decisive rather than two-sided, so this is calibrated liberty and not
                 # a knob between forms: *iriai* commons boundaries were customary and described by
-                # ridge, stream and path, and satoyama coppice sits on the slope break - there is no
-                # attested rectilinear woodlot. Aspect and bearing therefore roll per parcel from its
+                # ridge, stream and path (UNSOURCED - read under T46, 2026-08-27: the cited Yamaguni
+                # study says nothing about boundaries; see research/vegetation.md), and satoyama
+                # coppice sits on the slope break - there is no attested rectilinear woodlot. Aspect and bearing therefore roll per parcel from its
                 # own position, AREA HELD (hw*hh is unchanged, so every size rule above still means
                 # what it says), and the bearing is taken off the fall line because a hillside wood
                 # runs with the contour rather than with the page.

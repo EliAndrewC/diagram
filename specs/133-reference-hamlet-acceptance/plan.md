@@ -36,6 +36,8 @@ Each GM task is a `tasks.md` entry in this shape, written BEFORE work starts:
 ```
 - [ ] T05 <the GM's words, verbatim>
       given 2026-08-26T14:02Z | done - | elapsed - | runs: -
+      research: rendering | physical          (T46: a physical task carries the three boxes below)
+      - [ ] research pass  - [ ] source-reader confirmed  - [ ] recorded and cited
 ```
 
 and completed to:
