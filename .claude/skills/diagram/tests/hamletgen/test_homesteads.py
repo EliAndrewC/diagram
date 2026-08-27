@@ -94,3 +94,25 @@ def test_farmstead_fixtures_roll_a_share_in_each_band_and_seat_one_of_a_kind_per
     assert sum(r["kind"] == "shrine" for r in recs) <= max(1, round(shares["shrine"] * len(houses)))
     assert all(tuple(r["of"]) in {(h["x"], h["y"]) for h in houses} for r in recs)
     assert len(s.placed) == len(houses) + n, "every seated fixture reserves its ground"
+
+
+def test_farmstead_fixtures_honor_the_spec_floor() -> None:
+    """Feature 133 T61 (GM 2026-08-27: "a min number of something which may or may not appear"): a spec'd
+    floor forces the kind onto houses that lack it after the rolled pass, and declares itself in meta."""
+    from l7r.diagram.hamletgen.homesteads import farmstead_fixtures
+    from l7r.diagram.settlement import Settlement
+
+    s = Settlement(W=900, H=700, seed=7)
+    s.meta(name="T", scale="hamlet", ftpx=1)
+    houses = [{"x": 200.0 + 110 * i, "y": 300.0 + 90 * (i % 2), "w": 46.0, "h": 28.0, "rot": 0.0, "shed_side": "N"} for i in range(6)]
+    for h in houses:
+        s.M["houses"].append(dict(h))
+        s.placed.append((h["x"], h["y"], h["w"], h["h"]))
+    plan = a_plan()
+    plan.fixtures_min = {"shrine": 2, "bath": 3}
+    farmstead_fixtures(s, plan, houses)
+    kinds = [r["kind"] for r in s.M["farm_fixtures"]]
+    assert kinds.count("shrine") >= 2 and kinds.count("bath") >= 3
+    assert s.M["meta"]["farm_fixtures_min"] == {"shrine": 2, "bath": 3}
+    owners = {(r["kind"], tuple(r["of"])) for r in s.M["farm_fixtures"]}
+    assert len(owners) == len(s.M["farm_fixtures"]), "the floor never doubles a house"

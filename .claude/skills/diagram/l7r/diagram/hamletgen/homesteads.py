@@ -672,6 +672,9 @@ def farmstead_fixtures(s: Settlement, plan: SitePlan, houses: Sequence[Mapping[s
     rng = knob_rng(s.seed, "farm_fixtures")
     shares = {k: round(lo + rng.random() * (hi - lo), 3) for k, (lo, hi) in FIXTURE_BANDS.items()}
     s.M["meta"]["farm_fixtures"] = dict(shares)
+    mins = {k: int(v) for k, v in plan.fixtures_min.items() if k in FIXTURE_BANDS}
+    if mins:
+        s.M["meta"]["farm_fixtures_min"] = dict(mins)
     px = s.px
     g = px(_WALL_GAP_FT)
     fields = [list(f) for f in s.field_polys]
@@ -679,8 +682,20 @@ def farmstead_fixtures(s: Settlement, plan: SitePlan, houses: Sequence[Mapping[s
     pond = s.M.get("pond")
     lanes = [([(float(a), float(b)) for a, b in ln["pts"]], float(ln.get("w", 3)) / 2 + px(3.0)) for ln in s.M.get("lanes", []) if len(ln.get("pts") or []) >= 2]
     count = 0
-    shrines_left = max(1, round(shares["shrine"] * len(houses)))  # RARE means rare: positional luck cannot exceed the share
-    for h in houses:
+    shrines_left = max(1, round(shares["shrine"] * len(houses)), mins.get("shrine", 0))  # RARE means rare: positional luck cannot exceed the share (a spec floor may)
+    # THE FLOOR (T61, GM 2026-08-27: "a min number of something which may or may not appear"): after the
+    # rolled pass, any kind short of its spec'd minimum is forced onto the houses that lack it, in
+    # positional order, until the floor is met or every house has been tried
+    forced: set[str] = set()
+    for h in list(houses) + [dict(h, _force=True) for h in sorted(houses, key=lambda q: s._hjit(float(q["x"]), float(q["y"]), 108.0))]:
+        if h.get("_force"):
+            have = {k: 0 for k in FIXTURE_BANDS}
+            for rec in s.M.get("farm_fixtures", []):
+                have[rec["kind"]] = have.get(rec["kind"], 0) + 1
+            have["persimmon"] = len(s.M.get("persimmons", []))
+            forced = {k for k, v in mins.items() if have.get(k, 0) < v}
+            if not forced:
+                break
         hx, hy, hw, hh = float(h["x"]), float(h["y"]), float(h["w"]), float(h["h"])
         rot = float(h.get("rot", 0.0))
         th = math.radians(rot)
@@ -689,7 +704,14 @@ def farmstead_fixtures(s: Settlement, plan: SitePlan, houses: Sequence[Mapping[s
         privy_at: tuple[float, float] | None = None
 
         for kind in _FIXTURE_ORDER:
-            if s._hjit(hx, hy, _SALT[kind]) >= shares[kind]:
+            if h.get("_force"):
+                own = (round(hx, 1), round(hy, 1))
+                has = any(r["kind"] == kind and tuple(r.get("of", ())) == own for r in s.M.get("farm_fixtures", [])) or (
+                    kind == "persimmon" and any(tuple(r.get("of", ())) == own for r in s.M.get("persimmons", []))
+                )
+                if kind not in forced or has:
+                    continue
+            elif s._hjit(hx, hy, _SALT[kind]) >= shares[kind]:
                 continue
             if kind == "shrine" and shrines_left <= 0:
                 continue

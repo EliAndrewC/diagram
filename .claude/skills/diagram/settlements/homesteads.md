@@ -109,7 +109,7 @@ share; and a **persimmon** (an 18 ft crown with four fruit dots - the convention
 beside the house. Presence per house is positional against a per-hamlet SHARE rolled once from the
 seed inside a researched band and declared in `meta.farm_fixtures` (`hamletgen/homesteads.py`
 `FIXTURE_BANDS`); every seat is tested against every placed footprint, lane, paddy, marsh and pond,
-the crown against the canopy keep-outs. The straw rick is seasonal and NOT drawn (T60). The
+the crown against the canopy keep-outs. A spec may set a FLOOR per kind (`HamletSpec(fixtures_min={"shrine": 1})`, T61): the rolled pass runs first, then houses lacking the kind are forced until the floor is met, and the check holds it. The straw rick is seasonal and NOT drawn (T60). The
 research, verdict by verdict: `research/homesteads.md` "The farmstead's fixtures". Checks:
 `farm_fixtures_attached` (a fixture stands within its kind's reach of ITS house), `farm_fixtures_as_declared`
 (declared kinds only, one of a kind per house, the shrine as rare as declared, a privy present).

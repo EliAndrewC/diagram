@@ -44,3 +44,13 @@ def test_farm_fixtures_as_declared_fires_on_the_undeclared_the_doubled_and_the_c
     assert "farm_fixtures_as_declared" not in f_only(manifest(meta={"scale": "hamlet", "ftpx": 1, "W": 1000, "H": 1000}, houses=hs), "farm_fixtures_as_declared"), (
         "a map with none declared and none drawn passes"
     )
+
+
+def test_farm_fixtures_as_declared_holds_the_spec_floor():
+    """T61: a floor asked for and not delivered fires; a floor above the rare cap is honored."""
+    hs = [house(x=200 + 90 * i, y=400) for i in range(8)]
+    meta = {**_META, "farm_fixtures_min": {"shrine": 2}}
+    short = manifest(meta=meta, houses=hs, farm_fixtures=[_fix("privy", 214, 380, of=(200, 400)), _fix("shrine", 163, 372, 3, 3, of=(200, 400))])
+    assert "farm_fixtures_as_declared" in f_only(short, "farm_fixtures_as_declared")
+    met = manifest(meta=meta, houses=hs, farm_fixtures=[_fix("privy", 214, 380, of=(200, 400)), _fix("shrine", 163, 372, 3, 3, of=(200, 400)), _fix("shrine", 253, 372, 3, 3, of=(290, 400))])
+    assert "farm_fixtures_as_declared" not in f_only(met, "farm_fixtures_as_declared"), "two shrines on a 0.05 share are allowed when the spec asked for two"

@@ -1384,3 +1384,5 @@ persimmon .82) and seats what fits: privy 12, woodpile 7, coop 7, manure 5, bath
 persimmon 10 on the 15 houses. The one hokora is in the religious red at a plot corner. All at true
 size; the research and the guess labels in research/homesteads.md "The farmstead's fixtures". The
 straw rick is deferred with seasonal maps (T60).
+
+**2026-08-27 (T61).** `fixtures_min={"shrine": 1}` on the spec: the reference hamlet always carries one hokora so its rendering can be judged (seed 4 already rolled one at 1266,1154, on the plot of the house at 1303,1179; the floor is declared and held by the gate).

@@ -66,6 +66,7 @@ class HamletSpec:
     lane_skeleton: str | None = None
     lane_web: str | None = None
     bamboo: str | None = None
+    fixtures_min: dict[str, int] | None = None  # at least N of a farmstead fixture kind, e.g. {"shrine": 1} (feature 133 T61)
     settlement_form: str | None = None
     field_archetype: str | None = None
     plot_size: str | None = None
@@ -134,7 +135,10 @@ class SitePlan:
     woodland_polys: list[Poly] = field(default_factory=list)
     # The bamboo stands (T47), scanned in `stage_hinterland` before the scrub, drawn by `stage_bamboo`.
     bamboo_polys: list[Poly] = field(default_factory=list)
-    bamboo_roles: list[str] = field(default_factory=list)  # "thicket" (communal, one) or "homestead" (per farmstead), parallel to bamboo_polys
+    bamboo_roles: list[str] = field(default_factory=list)
+    fixtures_min: dict[str, int] = field(
+        default_factory=dict
+    )  # the spec's floor per fixture kind (T61); the placer forces presence up to it  # "thicket" (communal, one) or "homestead" (per farmstead), parallel to bamboo_polys
     seat: dict[str, Any] = field(default_factory=dict)
     placed: int = 0
     acres: float = 0.0
@@ -230,6 +234,7 @@ def plan_site(spec: HamletSpec) -> SitePlan:
         lane_skeleton=spec.lane_skeleton or str(_roll(spec.seed, "lane_skeleton", LANE_SKELETONS)),
         lane_web=spec.lane_web or str(_roll(spec.seed, "lane_web", LANE_WEBS)),
         bamboo=spec.bamboo or str(_roll(spec.seed, "bamboo", BAMBOO_FORMS)),
+        fixtures_min={k: int(v) for k, v in (spec.fixtures_min or {}).items()},
         settlement_form=spec.settlement_form or str(_roll(spec.seed, "settlement_form", SETTLEMENT_FORMS)),
         field_archetype=_archetype,
         plot_size=spec.plot_size or str(_roll(spec.seed, "plot_size", PLOT_SIZES)),

@@ -370,6 +370,14 @@ _(from T46 on, each entry also says `research: rendering` or `research: physical
       measure: Inashiro seed 4 counts per kind (above); scatter audit 0 violations; the gate green
       verify: `make maps`, `make quick`, `make done`; the GM looks
 
+- [x] T61 **a per-kind FLOOR on the spec; the reference hamlet always shows one hokora** - the GM (2026-08-27): *"can you add something to the reference hamlet so that there is always at least one of these included? That feels like a useful setting to have. Because when generating a random settlement, I might want to be able to specify this. Therefore, it should probably be supported in the script like a min number of something which may or may not appear. So if you do that and then ensure that it is present, then I can look at the reference hamlet and see what it looks like"* (and: the 3 ft hokora as a glyph convention is liked; "Even three pixels does sound pretty small, though")
+      given 2026-08-27T19:04Z | done 2026-08-27T19:04Z | elapsed 9 min (computed from the message; two patch rounds - the second anchor matched twice, homesteads.py has two identical house loops) | runs: make maps x3, make quick x1, make crop x1, make done x1
+      note: `HamletSpec.fixtures_min: dict[str, int]` -> `SitePlan.fixtures_min` -> `farmstead_fixtures` forces the short kinds onto houses lacking them after the rolled pass (positional order), declares `meta.farm_fixtures_min`; `farm_fixtures_as_declared` fails a floor not met and lifts the rare-shrine cap to the floor; Inashiro's gen asks `{"shrine": 1}` (seed 4 had rolled one already, so the sheet is unchanged and the floor is now guaranteed). The hokora's size stays 3 ft - the GM's "three pixels does sound pretty small" is open: a larger glyph is one number in `FIXTURE_FT["shrine"]`, recorded as a deviation
+      research: rendering
+      scaffold: as built
+      measure: Inashiro: shrine 1 (floor 1 met), other counts unchanged; quick green
+      verify: `make maps`, `make quick`, `make done`; the GM looks at the hokora at 1266,1154
+
 ## Phase 9 - acceptance
 
 - [ ] T90 the would-have-dispatched audit (FR-005): every entry in the period, and for each whether it should have run; each "no" names a tooling change

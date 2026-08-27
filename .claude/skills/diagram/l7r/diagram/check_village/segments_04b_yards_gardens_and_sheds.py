@@ -1042,7 +1042,7 @@ def _seg_0609_502__farm_fixtures_as_declared(
     scale: Any = _UNBOUND,
     farm_fixtures_as_declared_bad: Any = _UNBOUND,
 ) -> dict[str, Any]:
-    """Gate segment 0609_502 (farm_fixtures_as_declared) - the sheet agrees with the shares the hamlet rolled: every drawn kind declared, at most one of a kind per house, the shrine as rare as declared, a privy present where privies were declared near-universal."""
+    """Gate segment 0609_502 (farm_fixtures_as_declared) - the sheet agrees with the shares the hamlet rolled: every drawn kind declared, at most one of a kind per house, the shrine as rare as declared, a privy present where privies were declared near-universal, and every spec floor (meta.farm_fixtures_min) met."""
     if scale in ("hamlet", "village", "town"):
         farm_fixtures_as_declared_bad = []
         shares = meta.get("farm_fixtures") or {}
@@ -1059,7 +1059,11 @@ def _seg_0609_502__farm_fixtures_as_declared(
             if len(owners) != len(set(owners)):
                 farm_fixtures_as_declared_bad.append(f"{kind}: a house has more than one")
         if shares:
-            cap = max(1, round(float(shares.get("shrine", 0.0)) * n))
+            mins = meta.get("farm_fixtures_min") or {}
+            cap = max(1, round(float(shares.get("shrine", 0.0)) * n), int(mins.get("shrine", 0)))
+            for kind, floor in mins.items():  # the spec asked for at least N (T61) and the sheet must deliver
+                if len(drawn.get(kind, [])) < int(floor):
+                    farm_fixtures_as_declared_bad.append(f"{kind}: the spec asks for at least {floor}, {len(drawn.get(kind, []))} drawn")
             if len(drawn.get("shrine", [])) > cap:
                 farm_fixtures_as_declared_bad.append(f"shrine: {len(drawn['shrine'])} drawn, {cap} allowed at share {shares.get('shrine')} - a household shrine is RARE")
             if n >= 8 and float(shares.get("privy", 0.0)) >= 0.8 and not drawn.get("privy"):
