@@ -169,6 +169,13 @@ _(from T11 on, each entry also carries its cycle plan before work starts - `scaf
       measure: the page's stage list vs `STAGES`; the CSS max-width; the dropped section
       verify: the page opened and read; `make quick` if a tool changed
 
+- [x] T38 **labels align with what they label** - the GM (2026-08-27): *"As a general rule, I would also like for labels to be aligned with the thing that they are labeling. So for example, the notice board is at an angle, therefore, the notice board label should be at exactly the same angle. Please make this a general rule for the project ... And, also, apply that rule to the notice board on the reference hamlet."*
+      given 2026-08-27T04:03Z | done 2026-08-27T04:11Z | elapsed 8 min (computed) | runs: make maps x1, make quick x3, make done x1
+      note: the rule already half-existed (label_tilt 2026-08-02 mod-90 fold, linear_tilt 2026-08-08 45-degree clamp); the board went level because its placer captions through the clamp. Now one function `aligned_tilt` (the subject's angle in [-90, 90)), both old names return it, their docstrings carry what they superseded; check `labels_align_with_their_referent` + fixture; presentation.md rule. One interpretation recorded for the GM: square rotations keep a level caption (a horizontal edge is aligned; keeps the pool byte-identical). Three tests that pinned the clamp/fold rewritten. Inashiro: caption rotate(57.2) = the board's -122.8 line.
+      scaffold: the label record (`add_label`, `M['labels']`) and its SVG emission (finish.py), the kosatsuba's label (structures/fixtures.py), a `labels_align_with_their_feature` check
+      measure: the board's `rot` vs its label's rotation on Inashiro, before/after; every rotated labeled feature on the map
+      verify: `make maps`, `make quick`, `make done`; the GM looks
+
 ## Phase 9 - acceptance
 
 - [ ] T90 the would-have-dispatched audit (FR-005): every entry in the period, and for each whether it should have run; each "no" names a tooling change

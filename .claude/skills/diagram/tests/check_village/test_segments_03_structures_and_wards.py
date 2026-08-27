@@ -17,6 +17,8 @@ from tests.check_village._builders import (
     _road_map,
     bldg,
     f_only,
+    house,
+    manifest,
 )
 
 # ---- a feature-footprint overlap check ----------------------------------------------------
@@ -508,3 +510,18 @@ def test_label_hugs_its_referent_measures_the_tilted_quad():
     assert "label_hugs_its_referent" not in f_only({"meta": {}, "labels": [hug]}, "label_hugs_its_referent")
     adrift = [100, 100, 240, 112, 1, "gate market", [600, 600, 700, 650], -30.0]
     assert "label_hugs_its_referent" in f_only({"meta": {}, "labels": [adrift]}, "label_hugs_its_referent")
+
+
+def test_labels_align_with_their_referent_fires_and_passes():
+    """A caption lies at exactly the angle of the rotated feature it names (GM 2026-08-27, T38: "the
+    notice board is at an angle, therefore, the notice board label should be at exactly the same
+    angle"). A level caption on a board at -122.8 fires; one at 57.2 (the same line, right way up)
+    passes; a caption with no referent box is not judged."""
+    board = {"x": 500.0, "y": 500.0, "w": 12.0, "h": 5.0, "vw": 12.0, "vh": 5.0, "rot": -122.8, "z": 1, "label": "notice board"}
+    ref = [494.0, 497.5, 506.0, 502.5]
+    level = manifest(houses=[house(x=400, y=400)], kosatsuba=[board], labels=[[480.0, 512.0, 533.0, 520.0, 2, "notice board", ref]])
+    assert "labels_align_with_their_referent" in f_only(level, "labels_align_with_their_referent"), "a level caption on a tilted board must fire"
+    aligned = manifest(houses=[house(x=400, y=400)], kosatsuba=[board], labels=[[480.0, 512.0, 533.0, 520.0, 2, "notice board", ref, 57.2]])
+    assert "labels_align_with_their_referent" not in f_only(aligned, "labels_align_with_their_referent"), "the board's own angle passes"
+    noref = manifest(houses=[house(x=400, y=400)], kosatsuba=[board], labels=[[480.0, 512.0, 533.0, 520.0, 2, "notice board"]])
+    assert "labels_align_with_their_referent" not in f_only(noref, "labels_align_with_their_referent"), "no referent, no judgment"

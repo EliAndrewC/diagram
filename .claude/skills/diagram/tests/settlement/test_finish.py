@@ -122,15 +122,18 @@ def test_late_water_block_carries_sheens_and_splices_after_plots():
     assert rec["sheenz"] > rec["bedz"]
 
 
-def test_label_takes_the_linear_clamp_only_when_the_subject_is_a_line():
+def test_label_carries_the_subjects_own_angle_for_lines_and_boxes_alike():
+    """GM 2026-08-27 (feature 133 T38): one alignment rule. This test used to pin the 45-degree
+    clamp (a 72-degree road kept a level caption) and the mod-90 fold (a 72-degree box read at -18);
+    both are superseded - the caption lies at exactly the subject's angle."""
     s = _town()
     s.label(500, 500, "Imperial Road", 12, rot=-26.6, linear=True)
-    s.label(500, 600, "Imperial Road", 12, rot=72, linear=True)  # a near north-south road
-    s.label(500, 700, "tanning yard", 9, rot=72)  # ...the same angle on a BOX subject
+    s.label(500, 600, "Imperial Road", 12, rot=72, linear=True)  # a near north-south road tilts with it
+    s.label(500, 700, "tanning yard", 9, rot=72)  # ...and the same angle on a BOX subject is the same caption
     recs = s.M["labels"]
     assert recs[0][7] == -26.6
-    assert len(recs[1]) == 6  # level: no element [7], so the record keeps the exact pre-tilt format
-    assert recs[2][7] == -18.0  # the fold, which is what a rotated building wants and a road does not
+    assert recs[1][7] == 72.0
+    assert recs[2][7] == 72.0
 
 
 def test_label_rot_emits_a_center_rotation_and_appends_the_tilt():

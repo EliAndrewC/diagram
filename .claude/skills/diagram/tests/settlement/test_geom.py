@@ -247,29 +247,30 @@ def test_ward_interior_returns_none_on_a_zero_perimeter_wall():
 
 
 # ---- angled-building captions (GM 2026-08-02): a label tilts with the feature it names ----------
-def test_label_tilt_folds_to_the_nearest_horizontal_edge_family():
-    assert [settlement.label_tilt(r) for r in (0, 90, 180, 270, -90)] == [0.0] * 5
+def test_label_tilt_is_the_subjects_own_angle():
+    """GM 2026-08-27 (feature 133 T38), the general rule: a caption lies at exactly the angle of the
+    thing it names, normalized to [-90, 90) so it never reads upside down. The 2026-08-02 mod-90 fold
+    is superseded - a 102-degree yard's caption ran at 12 degrees, aligned with an edge, not the thing."""
+    assert [settlement.label_tilt(r) for r in (0, 90, 180, 270, -90, 360)] == [0.0] * 6  # a square rotation has a horizontal edge: level IS aligned
     assert settlement.label_tilt(-16) == -16.0
-    assert settlement.label_tilt(150) == -30.0  # the Hoshizora forge: reads along its long side
-    assert settlement.label_tilt(102) == 12.0  # the Ubame tanning yard: the other edge family
-    assert settlement.label_tilt(67.1) == -22.9  # the Tango tanning yard
-    assert settlement.label_tilt(-104) == -14.0
-    assert settlement.label_tilt(90.02) == 0.0  # float noise snaps level
+    assert settlement.label_tilt(150) == -30.0  # the same line of text, read the right way up
+    assert settlement.label_tilt(102) == -78.0  # was 12.0 under the fold
+    assert settlement.label_tilt(67.1) == 67.1
+    assert settlement.label_tilt(-104) == 76.0
+    assert settlement.label_tilt(180.02) == 0.0  # float noise snaps level
+    assert settlement.label_tilt(-122.8) == 57.2  # Inashiro's notice board
 
 
-def test_linear_tilt_clamps_where_label_tilt_folds():
-    # A LINE has one axis, not a box's two edge families (GM 2026-08-08). Past 45deg a linear
-    # caption goes LEVEL - the GM's north-south convention - where the fold would swing it onto a
-    # cross direction nothing is drawn at. The pair below is the whole distinction.
+def test_linear_tilt_is_the_same_rule_as_label_tilt():
+    """The 45-degree clamp (GM 2026-08-08: a north-south road keeps a level caption) is superseded by
+    the general alignment rule (GM 2026-08-27, T38); a line and a box caption follow one function."""
     assert settlement.linear_tilt(0) == 0.0
     assert settlement.linear_tilt(-26.6) == -26.6  # Hoshizora's Imperial Road
     assert settlement.linear_tilt(153.4) == -26.6  # ...the same line stored the other way round
-    assert settlement.linear_tilt(90) == 0.0  # due north-south: the caption still reads left-to-right
-    assert settlement.linear_tilt(72) == 0.0  # Nagahara's approach - too steep to tilt with
-    assert settlement.label_tilt(72) == -18.0  # ...which is exactly what a BOX subject wants, and would be wrong here
-    assert settlement.linear_tilt(45) == 45.0  # the cutoff is inclusive
-    assert settlement.linear_tilt(45.1) == 0.0
+    assert settlement.linear_tilt(72) == 72.0  # Nagahara's approach now tilts with the road
+    assert settlement.linear_tilt(45.1) == 45.1
     assert settlement.linear_tilt(180.02) == 0.0  # float noise snaps level
+    assert settlement.linear_tilt(72) == settlement.label_tilt(72) == settlement.aligned_tilt(72)
 
 
 def test_label_ladder_seats_a_tilted_caption_by_its_THICKNESS_not_its_rotated_aabb():

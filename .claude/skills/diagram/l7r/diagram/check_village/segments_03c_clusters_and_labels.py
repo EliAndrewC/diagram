@@ -673,7 +673,7 @@ def _seg_0265__road_label_tilts_with_the_roadway(
             "road_label_tilts_with_the_roadway",
             got_tilt is not None and abs(got_tilt - want_tilt) <= 1.0,
             f"the road caption is drawn at {got_tilt}deg where the roadway beside it runs at {want_tilt}deg - "
-            f"a caption naming a road runs ALONG the road (a roadway steeper than 45deg keeps a level caption; see settlement.linear_tilt)",
+            f"a caption naming a road runs ALONG the road, at its own angle (GM 2026-08-27: a label is aligned with the thing it names; see settlement.aligned_tilt)",
         )
     return _kept(locals(), ('L', 'got_tilt', 'rl0', 'rl1', 'rrec', 'si', 'want_tilt'))
 
@@ -792,3 +792,52 @@ def _seg_0267__title_clear_of_features(
             "the title block records no placard - the parchment card under the title + scale bar is drawn by s.title(); regenerate the map",
         )
     return _kept(locals(), ('_lb2', '_thit_now', 'fdef', 'ftpx', 'k', 'lb2', 'pcx', 'pcy', 'prx', 'pry', 's', 'sb', 'tb', 'tc', 'thit'))
+
+
+# WHY: <one paragraph - what the research found, the decision it drove, the departure taken>.
+# Declare EVERY input the body reads as a keyword parameter (an undeclared one is a NameError at
+# gate time, not at import), and keep the `_kept` tuple a LITERAL of the names this body binds.
+
+
+def _seg_0267_500__labels_align_with_their_referent(
+    *,
+    M: Any = _UNBOUND,
+    check: Any = _UNBOUND,
+    meta: Any = _UNBOUND,
+    scale: Any = _UNBOUND,
+    labels_align_with_their_referent_bad: Any = _UNBOUND,
+) -> dict[str, Any]:
+    """Gate segment 0267_500 (labels_align_with_their_referent) - a caption lies at exactly the angle of the rotated feature it names (GM 2026-08-27, feature 133 T38: "labels ... aligned with the thing that they are labeling").
+
+    A label record carries its referent's box in element [6] and its tilt in [7] (absent = level).
+    The referent is found by its center: any recorded feature with a `rot` whose (x, y) is within
+    1.5 px of the box's center. Expected tilt is `aligned_tilt(rot)` - the subject's own angle
+    normalized to [-90, 90) - and the caption must match it within 1 degree, mod 180. Inashiro's
+    notice board stood at -122.8 degrees with a level caption for a month; nothing measured it."""
+    if scale in ("hamlet", "village", "town"):
+        labels_align_with_their_referent_bad = []
+        _lar_subjects = [
+            (float(_f["x"]), float(_f["y"]), float(_f.get("rot") or 0.0))
+            for _k, _v in M.items()
+            if isinstance(_v, list) and _k not in ("labels",)
+            for _f in _v
+            if isinstance(_f, dict) and "x" in _f and "y" in _f and _f.get("rot")
+        ]
+        for _L in M.get("labels") or []:
+            if len(_L) < 7 or not _L[6]:
+                continue
+            _rb = _L[6]
+            _cx, _cy = (float(_rb[0]) + float(_rb[2])) / 2.0, (float(_rb[1]) + float(_rb[3])) / 2.0
+            _subj = [t for t in _lar_subjects if abs(t[0] - _cx) <= 1.5 and abs(t[1] - _cy) <= 1.5]
+            if not _subj:
+                continue
+            _want = ((_subj[0][2] + 90.0) % 180.0) - 90.0
+            _got = float(_L[7]) if len(_L) > 7 and _L[7] else 0.0
+            if min(abs(_got - _want) % 180.0, 180.0 - abs(_got - _want) % 180.0) > 1.0:
+                labels_align_with_their_referent_bad.append((round(_cx), round(_cy), str(_L[5]), round(_got, 1), round(_want, 1)))
+        check(
+            "labels_align_with_their_referent",
+            not labels_align_with_their_referent_bad,
+            f"caption(s) {labels_align_with_their_referent_bad[:3]} (x, y, text, drawn deg, subject deg) not aligned with the feature they name - a label carries its subject's own angle (settlement.aligned_tilt); the fix is at the caller: pass rot= to label()",
+        )
+    return _kept(locals(), ("labels_align_with_their_referent_bad",))

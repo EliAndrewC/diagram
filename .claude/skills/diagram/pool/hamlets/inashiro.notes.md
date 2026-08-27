@@ -1285,3 +1285,17 @@ Musashino shinden holding) is a whole settlement form, recorded for a dry-upland
 134x122 ft bboxes, areas 42k / 36k / 12k sq ft (~85% of the ellipse each), every keep-out still
 holding because no vertex leaves the tested reach. Labels: outline ACCURATE, wobble DRAWING. No
 per-task review (scope locked); the GM looks.
+
+
+## 2026-08-27 - the notice board's caption at the board's own angle (feature 133 T38)
+
+The GM's general rule: a label is aligned with the thing it labels, at exactly its angle. The board
+stands at rot -122.8 and its caption was level: `place_kosatsuba` captions through `linear_tilt`,
+whose 45-degree clamp (GM 2026-08-08, for a north-south road) sent anything steeper to horizontal.
+Now one rule, `aligned_tilt`: the subject's angle normalized to [-90, 90) - the board's caption is
+`rotate(57.2)`, the same line as -122.8, read the right way up; the record carries 57.2 in [7]. The
+mod-90 fold (2026-08-02) and the clamp are superseded and described where they lived. One
+interpretation recorded for the GM: a square rotation (0/90/180/270) keeps a level caption - it has
+a horizontal edge, so level is aligned. Held by `labels_align_with_their_referent` (the referent box
+matched to the rotated record at its center); pre-fix manifest frozen as a regression fixture.
+Label: a cartographic convention - DRAWING.

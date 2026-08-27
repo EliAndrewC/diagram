@@ -363,6 +363,7 @@
   "kosatsuba_faces_the_road",
   "kosatsuba_on_a_main_way",
   "label_hugs_its_referent",
+  "labels_align_with_their_referent",
   "labels_clear_of_other_buildings",
   "labels_render_on_top",
   "labels_within_image",

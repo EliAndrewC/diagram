@@ -1,9 +1,11 @@
 """Caption typography: how far a label stands off its subject, how big it is set, and which way it
 tilts.
 
-The two tilt rules are the trap here and the docstrings say so at length: label_tilt FOLDS (a
-building has two edge families) where linear_tilt CLAMPS (a line has one axis), and swapping them
-tilts a caption to match nothing on the map.
+ONE tilt rule since 2026-08-27 (GM, feature 133 T38): a caption lies at exactly the angle of the
+thing it names, normalized so it never reads upside down (`aligned_tilt`). `label_tilt` and
+`linear_tilt` are kept as names for their call sites and both return it; their docstrings carry the
+two earlier rules they superseded (the mod-90 fold of 2026-08-02, the 45-degree clamp of
+2026-08-08) so the history is not lost.
 
 Split from settlement/_geom.py by feature 117 - see settlement/_geom/CLAUDE.md for the index.
 """
@@ -73,9 +75,33 @@ def label_tilt(rot: float) -> float:
     families lies nearer the horizontal, so a caption never tilts past 45 degrees (legibility),
     and a SQUARE-rotated building (0/90/180/270) keeps its level caption EXACTLY as before - the
     fold is what keeps every level caption in the pool byte-stable. Rounded to 0.1 degree (the
-    grain the glyph transforms use); float noise under half that grain snaps level."""
-    t = (rot + 45.0) % 90.0 - 45.0
-    return 0.0 if abs(t) < 0.05 else round(t, 1)
+    grain the glyph transforms use); float noise under half that grain snaps level.
+
+    SUPERSEDED 2026-08-27 (GM, feature 133 T38, the project's general rule): *"I would also like for
+    labels to be aligned with the thing that they are labeling. So for example, the notice board is
+    at an angle, therefore, the notice board label should be at exactly the same angle."* A caption
+    now carries its subject's OWN angle, normalized to [-90, 90) so the text never renders upside
+    down (a rotation and its reverse are the same line of text). No fold to the nearer edge family,
+    no 45-degree clamp: the mod-90 fold sent a 102-degree yard's caption to 12 degrees - aligned with
+    an edge, not with the thing - and `linear_tilt`'s clamp (below) left Inashiro's notice board
+    level beside a glyph at 57 degrees. Level subjects (0/180) still get a level caption, so a map
+    with no rotated feature is byte-identical."""
+    return aligned_tilt(rot)
+
+
+def aligned_tilt(rot: float) -> float:
+    """The one alignment rule (GM 2026-08-27): the subject's angle, normalized to [-90, 90), rounded
+    to the 0.1-degree grain the glyph transforms use; float noise under half that grain snaps level.
+
+    ONE INTERPRETATION, recorded so the GM can reverse it: a subject at a SQUARE rotation (0, 90,
+    180, 270) keeps a level caption. Such a thing has a horizontal edge, so level text is aligned
+    with it - the rule is "aligned with the thing", and a 90-degree box read level is; it is also
+    what keeps every level caption in the pool byte-identical. Everything else - the notice board at
+    -122.8, a 72-degree road, a 102-degree yard - carries its exact angle."""
+    t = (rot + 90.0) % 180.0 - 90.0
+    if abs(t) < 0.05 or abs(abs(t) - 90.0) < 0.05:
+        return 0.0
+    return round(t, 1)
 
 
 def linear_tilt_full(rot: float) -> float:
@@ -85,9 +111,9 @@ def linear_tilt_full(rot: float) -> float:
     runs). Opt-in per call site (label(full_tilt=True)): the clamp stays the default, so every
     existing road caption in the pool - including Hoshizora's level "Imperial Road", the ruling
     that set the clamp - is byte-identical. Normalized to [-90, 90) so a bearing and its reverse
-    caption identically and the text never renders upside down."""
-    t = (rot + 90.0) % 180.0 - 90.0
-    return round(t, 1) if abs(t) >= 0.05 else 0.0
+    caption identically and the text never renders upside down. Since 2026-08-27 this is simply
+    the general rule (`aligned_tilt`); kept as a name so its call sites read as they were written."""
+    return aligned_tilt(rot)
 
 
 def linear_tilt(rot: float) -> float:
@@ -107,9 +133,13 @@ def linear_tilt(rot: float) -> float:
 
     The 45-degree cutoff is therefore a discontinuity by design: a 44-degree road tilts, a
     46-degree one does not. It never shows WITHIN a map (a caption names one stretch of one
-    road), and legibility is the thing being protected at the boundary either way."""
-    t = (rot + 90.0) % 180.0 - 90.0  # (-90, 90]: a line has no direction, only an axis
-    return 0.0 if abs(t) < 0.05 or abs(t) > 45.0 else round(t, 1)
+    road), and legibility is the thing being protected at the boundary either way.
+
+    SUPERSEDED 2026-08-27 (GM, feature 133 T38): a caption is aligned with the thing it names, at
+    exactly its angle - so the clamp is gone and this is `aligned_tilt`. The 2026-08-08 ruling it
+    encoded (a north-south road may keep a level caption) is reversed by the general rule; if the
+    GM wants that exception back it is one line here, and the record says which line."""
+    return aligned_tilt(rot)
 
 
 def label_quad(L: Sequence[Any]) -> Poly:

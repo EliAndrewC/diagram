@@ -29,6 +29,7 @@ from ._geom import PointGrid as PointGrid
 from ._geom import SeatMemo as SeatMemo
 from ._geom import _assert_not_main_tree as _assert_not_main_tree
 from ._geom import _union_area as _union_area
+from ._geom import aligned_tilt as aligned_tilt
 from ._geom import box_gap as box_gap
 from ._geom import boxed_grid as boxed_grid
 from ._geom import boxed_hit as boxed_hit
