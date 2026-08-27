@@ -34,19 +34,36 @@ def test_a_rolled_cohort_passes_the_whole_gate() -> None:
     # it. Leaving it on the default parallel path silently uncovered `hinterland.py`'s
     # no-house-column fringe fallback. The fan-out is a CLI win, not a gate win; the parallel branch
     # is held by `test_the_fan_out_agrees_with_the_serial_path` below.
-    reports = hg.cohort(4, first_seed=41, jobs=1)
+    # PARALLEL AT THE GATE, SERIAL UNDER THE COVERAGE FLOORS (feature 133 T92, GM 2026-08-27). Serial,
+    # four seeds with the re-roll ladder ran 22 minutes on ONE xdist worker while seven idled - the
+    # "hang" the first unlocked gate of the period sat on. The serial reason (in-process coverage of
+    # the seed-dependent branches) matters only where coverage is measured, which is `make done
+    # FULL=1` (COV_FLOORS -> L7R_COV_FLOORS=1); everywhere else the four seeds roll 4-wide.
+    reports = hg.cohort(4, first_seed=41, jobs=1 if os.environ.get("L7R_COV_FLOORS") == "1" else 4)
     assert len(reports) == 4
     for report in reports:
         assert report.plan.placed >= round(0.85 * report.plan.spec.households), f"{report.plan.spec.name} seated {report.plan.placed}/{report.plan.spec.households}"
         assert abs(report.plan.acres - report.plan.target_acres) / report.plan.target_acres < 0.15, (
             f"{report.plan.spec.name}: {report.plan.acres:.1f} acres against a {report.plan.target_acres:.1f} target"
         )
-    # MEASURED 2026-08-12: 24 of 24 over the first two dozen seeds, and 4 of 4 here
-    # (`python3 -m l7r.diagram.tools.cohort_audit --count 24` reproduces the sweep and reports any residue by check).
-    # It was 7 of 12 when the experiment was first reported. Keep this at 4 of 4: a change that drops
-    # a single rolled hamlet now fails here by name, which is the whole point of a ratchet.
-    passed = [r for r in reports if r.ok]
-    assert len(passed) >= 4, f"only {len(passed)}/4 rolled hamlets pass the whole gate: " + "; ".join(f"{r.plan.spec.name}: {r.failures}" for r in reports if not r.ok)
+    # MEASURED 2026-08-12: 24 of 24 over the first two dozen seeds, and 4 of 4 here. It was 7 of 12
+    # when the experiment was first reported. THE RATCHET IS NOW A PIN (feature 133 T92): under the
+    # engine the GM accepted on the reference hamlet, three of these four seeds fail named checks -
+    # WAIVED by the GM as expected failures for a separate session (tasks.md T91/T92, verbatim:
+    # "have any failing tests on the acceptance gate marked as expected failures and documented as
+    # something for a future session to take care of"). `baseline_verdict`'s rule holds the line in
+    # both directions: a check outside a seed's set is a regression, a pinned seed that comes up
+    # clean is a stale pin - the fixing session drops its row.
+    lines, clean = hg.baseline_verdict(reports, GATE_COHORT_EXPECTED)
+    assert clean, "\n".join(lines)
+
+
+# The gate cohort's expected failures (seeds 41-44), measured 2026-08-27 at the T99 unlock - see above.
+GATE_COHORT_EXPECTED: dict[int, frozenset[str]] = {
+    42: frozenset({"farmhouses_reach_a_way"}),
+    43: frozenset({"lanes_bend_like_paths", "lanes_form_one_network", "title_clear_of_features"}),
+    44: frozenset({"houses_clear_of_paddies"}),
+}
 
 
 @pytest.mark.rolls_map
