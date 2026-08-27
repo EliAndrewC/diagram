@@ -1,6 +1,6 @@
 # Feature Specification: The `make done` Tests Are Audited and Accepted by the GM
 
-**Feature Branch**: none - this project does not use feature branches (`SPECIFY_FEATURE=134-done-test-audit`)
+**Feature Branch**: none - this project does not use feature branches (`SPECIFY_FEATURE=135-done-test-audit`)
 
 **Created**: 2026-08-27
 
@@ -245,6 +245,6 @@ the feature-complete condition then permits the gated push.
   a worktree is locked too); the map-rolling tests are measured by name under the lock (FR-001),
   and the end-to-end unlocked figure waits for the GM's unlock.
 - `EXHAUSTIVE=1` remains the name of the full form; the full run is `make done FULL=1` locally
-  and the AWS check remotely, and feature 134's successor (the idle background run) will consume
+  and the AWS check remotely, and feature 135's successor (the idle background run) will consume
   the full tree.
 - "A tiny fraction" is read as the SC-001 target of 25% or less; the GM may tighten it.

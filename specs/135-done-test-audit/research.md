@@ -1,6 +1,6 @@
 # Research: what `make done` actually runs, and what each part costs
 
-Feature 134. Every number here is a stopwatch on the dev container (22 threads, 8 xdist workers,
+Feature 135. Every number here is a stopwatch on the dev container (22 threads, 8 xdist workers,
 scope LOCKED to the reference hamlet, remote OFF), taken 2026-08-27 on unmodified code at
 `6486be5c` unless a row says otherwise. Per-test figures are pytest `--durations` call times;
 wall figures are `time`.
