@@ -155,6 +155,13 @@ _(from T11 on, each entry also carries its cycle plan before work starts - `scaf
       measure: bases by family inside every woodland-commons polygon and every grove polygon on Inashiro, before/after
       verify: `make maps`, `make scatter-audit`, `make quick`, `make done`; the GM looks
 
+- [x] T36 **the shape of the coppice patches** - the GM (2026-08-27): *"those coppice Patches. basically it looked like little squares. and I'm not sure whether that is intentional or not. My guess is that it is not intentional and that you just happen to select little squares for them to grow, whereas in reality, they would be more irregular shapes. However, I might be wrong about this because those are clearly patches of trees that have been cultivated ... maybe the fact that these patches of trees are little squares is basically intentional, but I want to make sure that that is intentional and based on research rather than just happenstance because when we decided to draw patches of trees, we just kind of unthinkingly drew a square without thinking about whether that was realistic."*
+      given 2026-08-27T03:50Z | done 2026-08-27T03:55Z | elapsed 5 min (computed) | runs: make maps x1, make quick x1, make done x1
+      note: happenstance, and the record already said so: the 2026-08-18 review pass had researched it (iriai bounds by ridge, stream and path; no rectilinear woodlot attested) and drawn it as a rotated rectangle with a square fallback - all three Inashiro parcels took the fallback. Research pass (3 queries) confirmed and added the one rectilinear form (Musashino shinden strips) as a settlement form for a future dry-upland archetype, not a knob here. Fix: `_parcel_outline`, 12-vertex ring inside the tested ellipse (0.80-1.00 radius, two harmonics; ~85% area; keep-outs untouched). Unit test on the ring; recorded in research/vegetation.md, settlements/vegetation.md, the notes.
+      scaffold: hamletgen/hinterland.py `open_ground_patches` (the parcel's size, aspect and bearing rolls), settlement/land/cover.py `commons(role="woodland")` (the crown scatter and its feather); research/fields.md + research/vegetation.md on coppice lots
+      measure: each patch's recorded polygon (vertices, aspect, bearing) and how far its drawn crowns fill it, on Inashiro
+      verify: research first (Principle XII); `make maps`, `make quick`, `make done`; the GM looks
+
 ## Phase 9 - acceptance
 
 - [ ] T90 the would-have-dispatched audit (FR-005): every entry in the period, and for each whether it should have run; each "no" names a tooling change

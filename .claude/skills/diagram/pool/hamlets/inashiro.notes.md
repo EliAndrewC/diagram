@@ -1271,3 +1271,17 @@ the marsh and the scrub (the scan keeps off the marsh, the scrub keeps off the p
 commons. After: no dots, no pines; grass only in the fringe (786 / 633 / 321 blades, fading to none
 by 46 units). Audit 0 violations. The lesson recorded in the T34 entry: when the GM's question is
 "should X overlap Y", the fix covers every Y, and the record does not get to carve one out.
+
+
+## 2026-08-27 - the coppice parcels are rings, not squares (feature 133 T36)
+
+The GM asked whether the little squares were intentional and researched. Half: the 2026-08-18
+review pass had researched it (iriai bounds run by ridge, stream and path; nothing rectilinear
+attested) and drawn the answer as a rotated rectangle with a square fallback - and all three of
+Inashiro's parcels took the fallback (`rot 0`, `w == h`). The GM's managed-usufruct point is right
+about the RULES and does not imply a surveyed shape; the one strip-shaped wood in the record (the
+Musashino shinden holding) is a whole settlement form, recorded for a dry-upland archetype. Now
+`_parcel_outline`: 12-vertex rings inside the tested ellipse. Inashiro: 225x250, 256x192 and
+134x122 ft bboxes, areas 42k / 36k / 12k sq ft (~85% of the ellipse each), every keep-out still
+holding because no vertex leaves the tested reach. Labels: outline ACCURATE, wobble DRAWING. No
+per-task review (scope locked); the GM looks.

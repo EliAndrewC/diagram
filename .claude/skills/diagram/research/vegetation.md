@@ -139,3 +139,46 @@ satoyama summaries; the abandoned-coppice shrub-layer succession study, AGRIS); 
 structure (Wikipedia "Woodland edge"; EUNIS "Thermophile woodland fringes"; Springer "Forest Edges,
 Scrub, Hedges and Their Herb Communities"); yashikirin as managed residence woodland (Forests 2025,
 Okinawa homestead windbreaks).
+
+
+## How is a coppice lot bounded? By ridge, stream and path - never by a page axis (researched 2026-08-18, revisited 2026-08-27, feature 133 T36)
+
+The GM: *"those coppice Patches. basically it looked like little squares ... I want to make sure that
+that is intentional and based on research rather than just happenstance because when we decided to
+draw patches of trees, we just kind of unthinkingly drew a square."* It was happenstance, twice over.
+
+**What the record says.** The village woods of the period were *iriai* commons - customary
+common-property land held by the village and governed by its own rules on who might cut, when, and
+how much (the usufruct the GM describes): firewood, forage and grass were the products, coppiced on
+a 10-30 year cycle. Their boundaries were customary and were described by natural and worked
+features - a ridge, a stream, a path - and the coppice itself sits on the slope break above the
+paddy. Nothing in the record describes a coppice lot laid out as a surveyed rectangle; the
+management was a matter of RULES over a wood, not of parcel lines on the ground. So a managed wood
+is not evidence for a square - the GM's instinct was right.
+
+**The one rectilinear form, and why it is not drawn here.** The *shinden* villages of the dry
+Musashino upland (Kichijoji, 1659) were laid out as long strip holdings - a household's house,
+dry fields and fuel wood (*zokibayashi*) in one strip, some over 1,000 m long - so THERE the wood is a
+strip with straight sides. That is a settlement FORM (a planned dry-upland strip village with no
+paddy at all), not a shape knob for a hillside coppice: it would change the houses, the fields and
+the lanes together. Recorded as the second form for the day a dry-upland archetype exists; a
+paddy-fan hamlet like Inashiro draws the hillside form.
+
+**What the generator did.** The 2026-08-18 review pass reached the same finding and wrote it down
+correctly ("there is no attested rectilinear woodlot"), then implemented it as a ROTATED RECTANGLE
+with the plain square as the fallback for a tight seat - still rectilinear, and on Inashiro all
+three parcels took the fallback (`rot 0`, `w == h`; twelve of twelve across the pool before that).
+The ruling was only half drawn.
+
+**Rule** (`hamletgen/hinterland.py` `_parcel_outline`): a parcel is a 12-vertex ring inside the
+rolled ellipse, its radius wandering 0.80-1.00 of the ellipse's on two low harmonics seeded from the
+parcel's own position - smooth, because a wood's edge wanders rather than serrates - and never
+outside the reach the keep-outs were tested at. Area comes out ~85% of the ellipse's, so every size
+rule still bounds it from above. Labels: the irregular, feature-bounded outline ACCURATE; the ring's
+harmonic wobble and its 0.80 floor DRAWING conventions; the strip form a recorded knob-in-waiting.
+
+**Sources:** iriai commons and their customary bounds (International Journal of the Commons,
+Yamaguni district case study; the Indiana DLC "Village Commons in Japan"; Totman, *The Green
+Archipelago*); coppice management and cycle (Takeuchi et al., *Satoyama: The Traditional Rural
+Landscape of Japan*, Springer; Wikipedia "Satoyama"); the Musashino strip holdings (Kichijoji
+history, Grokipedia/Wikipedia; the shogunate's 1664 survey).

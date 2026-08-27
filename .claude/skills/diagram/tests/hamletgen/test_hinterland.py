@@ -75,6 +75,23 @@ def test_a_jittered_woodland_seat_that_leaves_the_scan_window_is_refused() -> No
         assert all(0.0 <= px <= plan.W and 0.0 <= py <= plan.H for px, py in poly), "a seat left the canvas"
 
 
+def test_a_coppice_parcel_is_an_irregular_ring_inside_its_ellipse() -> None:
+    """Feature 133 T36 (GM 2026-08-27: "those coppice Patches. basically it looked like little
+    squares"): the researched ruling (iriai boundaries run by ridge, stream and path - nothing
+    rectilinear) is drawn as a wandering ring, never a 4-corner rectangle, and every vertex stays
+    inside the ellipse the keep-outs were tested at."""
+    import math
+
+    s = Settlement(W=1000, H=1000, seed=3)
+    ring = hg.hinterland._parcel_outline(s, 500.0, 500.0, 120.0, 80.0, 1.0, 0.0)
+    assert len(ring) >= 10
+    radii = [math.hypot(px - 500.0, py - 500.0) for px, py in ring]
+    assert max(radii) <= 120.0 + 1e-6 and min(radii) >= 0.8 * 80.0 - 1e-6
+    assert len({round(r) for r in radii}) > 4, "a ring whose radii repeat is a polygonized rectangle"
+    for px, py in ring:  # inside the ellipse, with the 0.80 floor
+        assert ((px - 500.0) / 120.0) ** 2 + ((py - 500.0) / 80.0) ** 2 <= 1.0 + 1e-6
+
+
 def test_a_belt_vertex_in_the_title_pocket_is_pushed_out_of_it() -> None:
     """`stage_woodland` reserves blank ground for the map's name and keeps the COPPICE out of it, but
     the belt is computed there and drawn later, so `stage_windbreak` has to dent it around the same

@@ -505,9 +505,42 @@ def open_ground_patches(s: Settlement, plan: SitePlan, count: int, size: float =
                     # little size variety on a map that just declined to seat a parcel anyway.
                     continue
                 _hw, _hh = half_used * math.sqrt(_asp), half_used / math.sqrt(_asp)
-                chosen.append([(x + ex * _hw * _bc - ey * _hh * _bs, y + ex * _hw * _bs + ey * _hh * _bc) for ex, ey in ((-1, -1), (1, -1), (1, 1), (-1, 1))])
+                chosen.append(_parcel_outline(s, x, y, _hw, _hh, _bc, _bs))
                 centers.append((x, y, size * (1.15 + 1.35 * s._hjit(x, y, 74.0))))
     return chosen
+
+
+def _parcel_outline(s: Settlement, x: float, y: float, hw: float, hh: float, bc: float, bs: float, n: int = 12) -> Poly:
+    """A coppice parcel's outline: an IRREGULAR ring inside the rolled ellipse, never a rectangle.
+
+    THE RESEARCHED RULING WAS ONLY HALF DRAWN (GM 2026-08-27, feature 133 T36: *"those coppice
+    Patches. basically it looked like little squares ... I want to make sure that that is intentional
+    and based on research rather than just happenstance"*). It was happenstance. The 2026-08-18
+    review pass had already found the record decisive - *iriai* commons boundaries were customary and
+    "described by ridge, stream and path", satoyama coppice sits on the slope break, and there is no
+    attested rectilinear woodlot - and implemented it as a ROTATED RECTANGLE with the plain square as
+    the fallback for a tight seat. A rotated rectangle is still rectilinear, and on Inashiro all three
+    parcels took the fallback: `rot 0`, `w == h`, twelve of twelve across the pool before that. So the
+    outline is now what the ruling says: a ring that follows no page axis, its radius wandering the
+    way a boundary that runs "by ridge, stream and path" does.
+
+    Built INSIDE the tested reach, on purpose. Every keep-out test in `open_ground_patches` was made
+    at the ellipse's circumscribing half, so a vertex that never leaves the ellipse can never buy
+    ground the square could not have had. The radius runs 0.80-1.00 of the ellipse's, on two low
+    harmonics seeded from the parcel's own position (`_hjit`), so the ring is smooth rather than
+    spiky - a wood's edge wanders, it does not serrate - and the AREA comes out at ~85% of the
+    ellipse's: the size rules above still bound it, from above. Recorded in research/vegetation.md
+    "How is a coppice lot bounded?", with the one form deliberately NOT drawn here: the strip
+    holdings of a shinden dry-upland village, which are a settlement form, not a woodlot knob."""
+    p1, p2 = 2 * math.pi * s._hjit(x, y, 79.0), 2 * math.pi * s._hjit(x, y, 80.0)
+    ring: Poly = []
+    for i in range(n):
+        t = 2 * math.pi * (i + 0.35 * (s._hjit(x + i, y, 81.0) - 0.5)) / n
+        re = hw * hh / math.hypot(hh * math.cos(t), hw * math.sin(t))
+        f = 0.80 + 0.20 * (0.5 + 0.25 * math.sin(2 * t + p1) + 0.25 * math.sin(3 * t + p2))
+        lx, ly = re * f * math.cos(t), re * f * math.sin(t)
+        ring.append((x + lx * bc - ly * bs, y + lx * bs + ly * bc))
+    return ring
 
 
 def content_box(s: Settlement, plan: SitePlan, pad: float = 0.0) -> tuple[float, float, float, float]:
