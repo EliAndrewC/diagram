@@ -210,6 +210,12 @@ _(from T11 on, each entry also carries its cycle plan before work starts - `scaf
       verified by reading: PMC levee paper, PMC bamboo range paper, Wikipedia Satoyama / Paddy field / Kichijōji / P. bambusoides / Desire path, 99% Invisible, the Geography Hub, the AGRIS coppice record. Could not be fetched (403/paywall): ResearchGate + Britannica (the bund width), PFAF (hardiness), Kids Web Japan, SAGE + ScienceDirect (the turn-minimization claim that T32's record had quoted as a finding). Every affected entry now separates READ from UNVERIFIED; the Kichijōji 1659/1664 figures (Grokipedia-only) dropped; the bund width and the eave overhang marked unverified/unsourced in research and in houses.py.
       note: it was NOT already a rule - T43 said a summary is a pointer, not that the source must be read; and this session had cited from search summaries today (the bund width among them). Rule made (constitution v2.11.0, CLAUDE.md, SOURCES.md); today's load-bearing citations are then fetched and read, and the record corrected where the text says otherwise.
 
+- [ ] T45 **a source-reader agent on Sonnet; reviewer models pinned with reasons** - the GM (2026-08-27): *"if we have a subagent reading a source to confirm that the summary is accurate, then a question like, please confirm that this summary is accurate probably does not need Fable ... we should probably consider making similar decisions based on what those sub agents are actually doing ... Please do one and two as the next task now."*
+      given 2026-08-27T14:28Z | done - | elapsed - | runs: -
+      scaffold: `.claude/agents/source-reader.md` (model sonnet; WebFetch/WebSearch/Read); `size-audit` pinned to sonnet; `settlement-review` and `building-review` pinned to the session model with the reason in the file; the research procedure (CLAUDE.md, SOURCES.md) dispatches reads to it; the standing authorization (`container-scripts/append-system-prompt.md`) names it
+      measure: the agent run over the summary-only queue - what it read, what it could not, what it corrected
+      verify: the run's report spot-checked against the entries; `make hooks-test` if any guard touched (none expected)
+
 ## Phase 9 - acceptance
 
 - [ ] T90 the would-have-dispatched audit (FR-005): every entry in the period, and for each whether it should have run; each "no" names a tooling change

@@ -2,9 +2,17 @@
 name: building-review
 description: Independent review of Mode A compound/building plans from the /diagram skill (magistrate manors, estates, temples, keeps). Checks the rendered diagram against the building-type program in buildings.md, the diagram's own design notes, and historical plausibility. Use BEFORE declaring any Mode A diagram done - the author is not a reliable reviewer of their own plan (same rationale as frontend-review / Constitution Principle I).
 tools: Read, Bash, WebSearch, WebFetch
+model: inherit
 ---
 
 # Building Review (Mode A compound plans)
+
+**Model: `inherit` - the session's own model, pinned on purpose (GM 2026-08-27, feature 133 T45).**
+This review exists to catch what the author missed in a PICTURE, and the review ledger
+(`docs/review-ledger.md`) tracks exactly that catch rate; a cheaper model would change the one
+number the ledger measures, silently. Verification agents (`source-reader`, `size-audit`) run on
+Sonnet because their work is checkable; this one is judgment. Do not lower it without an A/B on a
+map with known defects, recorded in the ledger.
 
 You are an independent reviewer of a top-down compound plan for the L5R/L7R setting. You did not draw it. Your job is to find what the author missed: program gaps, historical anachronisms, circulation mistakes, scale errors, and things that just look weird.
 

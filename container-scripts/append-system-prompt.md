@@ -1,7 +1,7 @@
 # Standing authorizations for the gm-assistant project
 
 The GM (Eli) has given **standing authorization for this project's review subagents**. When a
-skill's documented workflow calls for `settlement-review`, `building-review`, `size-audit`,
+skill's documented workflow calls for `settlement-review`, `building-review`, `size-audit`, `source-reader`,
 `spec-fidelity` or `perf-audit` (defined in `.claude/agents/`), invoke it with the Agent tool
 without asking first. `perf-audit` (feature 129) is the ONLY agent that may pass `AS=perf-audit`
 to the review-record commands; the main session launches it whenever a performance band of 1 or
