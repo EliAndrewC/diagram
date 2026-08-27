@@ -10,9 +10,11 @@ from ._knobs import skeleton_layout
 
 # HOW FAR A FARMHOUSE WALL STANDS OFF THE PADDY (researched 2026-08-27, feature 133 T41; the record
 # in research/homesteads.md "How close does a farmhouse stand to the paddy?"). The paddy's margin is
-# a bund (aze) 15-150 cm wide, typically 30-50 - about 1.5 ft - that is ALSO the working footpath
-# (azemichi) along which people and tools pass; a thatched farmhouse's eaves overhang its wall by
-# about 3 ft. A wall nearer than bund + path + eave puts the roof over the levee path and the drip
+# a bund (aze) about 1.5 ft wide (a search-summary figure the session could not read - UNVERIFIED;
+# the read source gives ~10 cm high) that is ALSO the working footpath: levees are "constructed and
+# maintained to retain water ... and to allow the passage of people and transportation of tools"
+# (read, PMC 7538448); a thatched farmhouse's eaves overhang its wall by about 3 ft (the figure
+# `FARMHOUSE_EAVE_GAP_FT` already uses; unsourced here). A wall nearer than bund + path + eave puts the roof over the levee path and the drip
 # line in the rice. 6 ft is that sum, rounded down: the floor a wall may never cross. A MINIMUM, not
 # the norm - the seat band's own 12 px standoff puts the front row 10-13 ft off, which is "right up
 # against the edge" as the GM expects. Real feet; `px()` scales it per tier. Held by the gate's

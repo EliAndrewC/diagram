@@ -108,14 +108,20 @@ The GM: *"Should scrubland overlap with forests? It seems like it shouldn't. Lik
 weird. but maybe what is being represented is more accurate than what I am imagining."* It was not
 more accurate. Two findings, one from land use and one from vegetation structure:
 
-- **A satoyama wood's floor was kept clear, on purpose.** The village woodlands of the Edo period
-  were worked ground: fallen branches and leaves were collected and the undergrowth cut, the
-  litter (*ochiba*) and cut shrubs going to the paddies as fertilizer and the wood to the hearth as
-  fuel and charcoal, on a ten-to-twenty-year coppice cycle. A shrub layer under the trees is what
-  an ABANDONED coppice grows (the succession studies date it to the 1960s, when propane replaced
-  firewood) - so brush and young pine under the crowns of an inhabited village's grove is the one
-  form the record rules out. The homestead windbreak (*yashikirin*) is managed as part of the
-  residence, the same way.
+- **A satoyama wood's floor was kept clear, on purpose.** READ (Wikipedia "Satoyama"): "During the
+  Edo era, young and fallen leaves were gathered from community forests to use as fertilizer in wet
+  rice paddy fields"; "succession to dense and dark laurel forest is prevented by farmers that cut
+  down these trees for firewood and charcoal every 15 to 20 years"; satoyama declined with "the
+  drastic shift ... from charcoal and firewood to oil and the change from compost to chemical
+  fertilizer". READ (the Geography Hub): leaf litter (*ochiba*) went to fertilizer, oak and chestnut
+  were cyclically cut, and the cutting let sunlight reach the floor - so the floor's cover was
+  herbs and flowers under a managed canopy, not brush. READ (Uehara et al. 2009, AGRIS): a managed
+  coppice stand held 42 plant species against 23 in a stand left uncared for 50 years, the neglected
+  one poorer in herbs - the abandoned wood is the different one. UNVERIFIED and softened: "the
+  undergrowth was cut" (a search-summary phrase; the read sources say litter was gathered and the
+  trees cut on a cycle). So brush and young pine under the crowns of an inhabited village's grove
+  is the form the read record does not show; the floor is litter-raked ground under a canopy cut
+  every 15-20 years.
 - **The edge is a gradient, and it is grass.** Woodland-edge ecology describes the transition as a
   herb FRINGE outside, a shrub BELT, and the woody MANTLE - canopy closure falling from near-complete
   inside to partial at the boundary, and vegetation height stepping down from crown to shrub to
@@ -134,11 +140,12 @@ shared with the marsh (one ramp for every soft edge, so two edges never read dif
 reason). Not built, recorded: an abandoned-coppice shrub layer is a real second form for a
 DESERTED settlement, never for an inhabited one.
 
-**Sources:** satoyama floor management and the coppice cycle (the Geography Hub, and Wikipedia
-"Satoyama" with its references; the abandoned-coppice shrub-layer succession study, AGRIS); woodland-edge
-structure (Wikipedia "Woodland edge"; EUNIS "Thermophile woodland fringes"; Springer "Forest Edges,
-Scrub, Hedges and Their Herb Communities"); yashikirin as managed residence woodland (Forests 2025,
-Okinawa homestead windbreaks).
+**Sources (read):** Wikipedia "Satoyama"; the Geography Hub, "Japan's Satoyama Landscapes"; Uehara,
+Shigematsu, Fujii, Iwamoto (2009), "Succession of shrub-layer vegetation and situation of wild
+Rhododendron in the abandoned Satoyama coppice forest" (AGRIS record). **Pointers, not read:**
+Wikipedia "Woodland edge"; EUNIS "Thermophile woodland fringes"; Springer "Forest Edges, Scrub,
+Hedges and Their Herb Communities" (the mantle-and-fringe structure came from search summaries);
+Forests 2025 on Okinawa homestead windbreaks. Corrected 2026-08-27 under T44.
 
 
 ## How is a coppice lot bounded? By ridge, stream and path - never by a page axis (researched 2026-08-18, revisited 2026-08-27, feature 133 T36)
@@ -157,7 +164,7 @@ management was a matter of RULES over a wood, not of parcel lines on the ground.
 is not evidence for a square - the GM's instinct was right.
 
 **The one rectilinear form, and why it is not drawn here.** The *shinden* villages of the dry
-Musashino upland (Kichijoji, 1659) were laid out as long strip holdings - a household's house,
+Musashino upland (Kichijōji, settled by migrants after the 1657 Edo fire) were laid out as long strip holdings - a household's house,
 dry fields and fuel wood (*zokibayashi*) in one strip, some over 1,000 m long - so THERE the wood is a
 strip with straight sides. That is a settlement FORM (a planned dry-upland strip village with no
 paddy at all), not a shape knob for a hillside coppice: it would change the houses, the fields and
@@ -181,7 +188,8 @@ harmonic wobble and its 0.80 floor DRAWING conventions; the strip form a recorde
 Yamaguni district case study; the Indiana DLC "Village Commons in Japan"; Totman, *The Green
 Archipelago*); coppice management and cycle (Takeuchi et al., *Satoyama: The Traditional Rural
 Landscape of Japan*, Springer; Wikipedia "Satoyama"); the Musashino strip holdings (Kichijoji
-history, Wikipedia "Kichijōji"; the shogunate's 1664 survey).
+history, Wikipedia "Kichijōji"; ; the founding year and the 1664 survey are NOT in that article
+and are dropped as unverified).
 
 
 ## Bamboo: how common, where it stood, and how to show it (researched 2026-08-27, feature 133 T42 - a question, not yet a rule)
@@ -190,14 +198,22 @@ The GM: *"is there supposed to be bamboo on the reference hamlet? Why or why not
 for there to be bamboo in settlements such as this?"* - and the rendering problem behind it: a culm
 is a few inches across, so at 1 px = 1 ft a bamboo stand has nothing to draw at true scale.
 
-**How common: ubiquitous below the frost line.** The satoyama landscape is defined as the linked
-set of "settlements, rice paddies, agricultural fields, bamboo forests, woodlands, and grassland";
-a typical Edo farmstead stood "near the mountainside covered in trees, as well as a grove where they
-could harvest bamboo". Culms were building material, fencing, tools, baskets, brooms, umbrellas,
-fishing tackle; shoots were a seasonal food. The limit is climate: moso (mōsōchiku) is hardy to
-about -10 to -20 C and madake to about -15 C, and both are ruled out in Hokkaido and the far north
-(Aomori) because early shoots take frost - so a lowland paddy hamlet in a temperate province has
-bamboo as a matter of course, and a cold upland one may have none. THAT is the axis of variance the
+**How common: ubiquitous below the frost line.** READ (Wikipedia "Satoyama"): satoyama "contains a
+mosaic of mixed forests, rice paddy fields, dry rice fields, grasslands, streams, ponds, and
+reservoirs for irrigation", and by the 1960s were used as "rice fields, plowed fields, shifting
+cultivation, grasslands, thatch fields, secondary forests for fuel, and giant bamboo forests". READ
+(Wikipedia "Phyllostachys bambusoides"): madake's "long internodes and equally long fibres ... make
+it ideal for traditional basket-weaving and the production of fans"; its sheaths wrapped food and
+covered geta; it made shakuhachi. READ (PMC 5723622, the moso/madake range study): bamboo
+"distribution remained south of 41°N, in areas that included plains and hilly regions of central
+Honshu, as well as the coasts of northern Honshu"; stands "were not found at study sites where ...
+mean annual minimum temperature was below -16.8°C", and "moso and madake bamboo distribution in
+northern Japan depends primarily on temperature", agreeing with prior work "that moso bamboo cannot
+withstand temperatures around or below -18 to -20°C". UNVERIFIED (403; from search summaries):
+that a typical Edo farmstead kept "a grove where they could harvest bamboo" (Kids Web Japan); the
+madake -15 C hardiness figure (PFAF); the broader list of uses (Highlighting Japan). So: a lowland
+paddy hamlet in a temperate province has bamboo as a matter of course, and a cold upland one may
+have none - that half is read. THAT is the axis of variance the
 project wants: two attested forms, a knob per settlement (Principle XII).
 
 **Where it stood.** Two places, both already in this record: (1) the homestead's own N/W strip -
@@ -229,9 +245,9 @@ bamboo at all (frost line) and where: the damp N/W strip of the cluster, a take-
 margin's shady end, or both; (4) the gate learns `bamboo_stands` in the overlap matrix and a
 legibility check (a stand under ~20 ft across does not read).
 
-**Sources:** satoyama composition and Edo farmstead groves (Wikipedia "Satoyama"; Japanese Wiki
-Corpus "Satoyama"; Web Japan / Kids Web Japan on the Shirakawa farmstead); bamboo uses (Highlighting
-Japan 2022 "The Characteristics and Many Uses of Japanese Bamboo"); hardiness and the northern limit
-(PFAF and Gardenia on *Phyllostachys bambusoides* / *edulis*; the PMC study of moso and madake
-expansion in Japan); the GSI bamboo-grove map symbol (Wikimedia Commons "Japanese Map symbol
-(Bamboo grove)").
+**Sources (read):** Wikipedia "Satoyama"; Wikipedia "Phyllostachys bambusoides"; "Detecting
+latitudinal and altitudinal expansion of invasive bamboo Phyllostachys edulis and Phyllostachys
+bambusoides in Japan", PMC 5723622. **Pointers, not read (403):** Kids Web Japan (the Shirakawa
+farmstead); PFAF and Gardenia (hardiness); Highlighting Japan 2022 (uses); Wikimedia Commons
+"Japanese Map symbol (Bamboo grove)" (not fetched; the symbol's existence is the claim). Corrected
+2026-08-27 under the read-what-you-cite rule (T44).

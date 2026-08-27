@@ -274,13 +274,16 @@ unnatural. There's a place where it looks like a loop-de-loop, which isn't how a
 then there's another place where it zig-zags just below the loop de loop for no apparent reason."*
 Two lines of evidence, one from how paths form and one from how villages are laid out:
 
-- **Desire-line research.** An unpaved path is worn by repeated walking - as few as fifteen
-  traversals will mark one - and walkers choose it on effort. The pedestrian-modeling literature
-  finds that people *"consciously or unconsciously minimize the number and severity of turns"*
-  between origin and destination, taking a slightly longer route to avoid a turn, and that turn
-  angle has a stronger effect on the emergent path pattern than depth of vision. So a switchback
-  within a few paces is a path nobody walks, and a path nobody walks is never worn: the hairpin and
-  the zigzag are not merely ugly, they are shapes a footpath cannot have.
+- **Desire-line research.** READ (Wikipedia "Desire path"; 99% Invisible): "as few as 15 passages
+  over a site can be enough to create a distinct trail, the existence of which then attracts
+  further use"; the path "usually represents the shortest or the most easily navigated route"; and
+  desire paths are not necessarily straight - they follow least resistance, sidestepping slopes and
+  obstacles. UNVERIFIED (the paper is paywalled and its abstract could not be fetched; the phrase
+  came from a search summary of Ma, Brandt, Seipel and Ma 2024): that walkers "consciously or
+  unconsciously minimize the number and severity of turns" and that turning angle outweighs depth
+  of vision. What the read sources DO support is enough for the rule: a worn path is the shortest
+  or easiest route between two points, so a switchback within a few paces - which is neither - is
+  a path nobody walks, and a path nobody walks is never worn.
 - **Village morphology.** The lanes of a nucleated Japanese or Chinese village are the gaps left
   between household plots - the "gridiron of narrow lanes" of the 2026-08-18 entry - so a lane bends
   at a PLOT CORNER and runs straight between corners. A bend has a reason on the ground (a fence, a
@@ -302,11 +305,12 @@ crossing for under 40 ft; and make each junction once. Labels: the principle ACC
 minimizes its turns; a bend sits at a plot corner); 140 degrees / 50 degrees within 40 ft / 25 ft /
 6 ft are DRAWING thresholds chosen at the scale of a dozen paces, not findings.
 
-**Sources:** the desire-path and turn-minimization findings from the pedestrian-movement literature
-(agent-based desire-path modeling, *Environment and Planning B*, 2024; energy-based desire-path
-planning, *Landscape and Urban Planning*, 2025; the 99% Invisible and Geography Realm summaries of
-desire-path formation); the plot-corner geometry from the nucleated-village morphology already
-cited in the 2026-08-18 entry.
+**Sources (read):** Wikipedia "Desire path" (citing Hampton and Cole 1988 for the fifteen-passage
+figure); 99% Invisible, "Least Resistance: How Desire Paths Can Lead to Better Design". **Pointers,
+not read (paywalled/403):** Ma, Brandt, Seipel and Ma (2024), *Environment and Planning B*
+(agent-based desire paths; the turn-minimization claim); the 2025 *Landscape and Urban Planning*
+energy-based desire-path paper. The plot-corner geometry is the 2026-08-18 entry's. Corrected
+2026-08-27 under the read-what-you-cite rule (T44).
 
 ## How close does a farmhouse stand to the paddy? Up against it - but never on the bund (researched 2026-08-27, feature 133 T41)
 
@@ -318,14 +322,17 @@ against the edge, but actually touching looks wrong to me."* Measured first: one
 **What the record gives, and what it does not.** No source states a setback in feet - the
 question is not one anyone measured - so the floor is DERIVED from three attested parts:
 
-- **The bund (aze) is a thing, not a line.** Paddy bunds are at least 20 cm high and 15-150 cm wide,
-  typically 30-50 cm (about 1.5 ft), shaped to the paddy's topography; a paddy is bordered by
-  them to hold 10-15 cm of water most of the season. The MARGIN levee of a paddy block is also its
-  working footpath (the *azemichi*), constructed and maintained "to retain water in the paddies
-  and to allow the passage of people and transportation of tools", and its grass is cut.
+- **The bund (aze) is a thing, not a line.** READ (PMC 7538448, verbatim): rice paddy levees "are
+  constructed and maintained to retain water in the paddies and to allow the passage of people and
+  transportation of tools", and "farmers generally maintain levee grasslands by periodic mowing".
+  READ (Wikipedia "Paddy field"): plots "separated by bunds approximately 10 cm in height" (a Korean
+  example). UNVERIFIED (constitution v2.11.0 - the pages could not be fetched, the figures come
+  from a search summary): a bund 15-150 cm wide, typically 30-50 cm; so "about 1.5 ft" is a
+  working figure, not a finding.
 - **The house's roof reaches past its wall.** A thatched farmhouse's eaves overhang the wall by
-  about 3 ft (this is the same eave the `FARMHOUSE_EAVE_GAP_FT` rule already spends between
-  neighboring houses); its drip line is where the wall's rain lands.
+  about 3 ft - UNSOURCED here: it is the figure the `FARMHOUSE_EAVE_GAP_FT` rule already spends
+  between neighboring houses, carried over rather than re-read; its drip line is where the wall's
+  rain lands.
 - **The plot fronts the paddy.** The nucleated cluster stands on the field margin with its face to
   the water (the *背山面水* seat, research above), so "right up against the edge" is the norm the
   GM expects, and the seat band's own standoff (12 px) draws it.
@@ -340,13 +347,16 @@ seat paths (`settlement/houses.py` `_fits`, `settlement/rolling/fit.py` `_bundle
 and the gate holds it (`houses_clear_of_paddies`, same constant). Inashiro after: 7.1 ft, one house
 moved 6 px, nothing else changed.
 
-Labels: the bund's width and its footpath role ACCURATE (measured ranges); the 6 ft floor a
-DERIVED threshold from attested parts, not a finding in itself; "up against the edge" ACCURATE.
+Labels: the levee's footpath role ACCURATE (read); the bund's width UNVERIFIED (search summary only);
+the 6 ft floor a DERIVED threshold - and a soft one, since two of its three parts are not read;
+"up against the edge" ACCURATE.
 
-**Sources:** bund dimensions (ResearchGate, "Scheme of bund, terrace, and field dimensions";
-Britannica "Paddy"); levees as maintained footpaths (Earthworm species on rice paddy levees in
-Japanese satoyama, PMC 2020; the JStage levee-grassland study); *azemichi* (Jepang.org);
-Wikipedia "Paddy field".
+**Sources (read):** "Earthworm species and density in semi-natural grasslands on rice paddy levees
+in Japanese satoyama", PMC 7538448 (levees built and kept for water retention and passage of people
+and tools; mown); Wikipedia "Paddy field" (bunds ~10 cm high, Korea). **Pointers, not read (403):**
+ResearchGate "Scheme of bund, terrace, and field dimensions" (the 15-150 cm width); Britannica
+"Paddy". Corrected 2026-08-27 under the read-what-you-cite rule (T44): the first record cited the
+unread pages as if read.
 
 ## Does a hamlet have to be NUCLEATED at all? (researched 2026-08-23)
 

@@ -1,7 +1,11 @@
 <!--
 SYNC IMPACT REPORT
 ==================
-Version change: 2.9.0 → 2.10.0
+Version change: 2.10.0 → 2.11.0
+
+Version 2.11.0 (amended 2026-08-27, feature 133 T44): Principle XII gains "READ WHAT YOU CITE" -
+a source is cited only after the session has read the text itself, never from a search summary
+or another page's paraphrase; an unfetchable source is not cited as read. MINOR.
 
 Version 2.10.0 (amended 2026-08-27, feature 133 T43): Principle XII gains "EVERY RESEARCH FINDING
 CITES ITS SOURCES, AND A SOURCE IS SOMETHING A READER CAN CHECK" - the GM's rule that citations are
@@ -1224,6 +1228,18 @@ editorial community and no provenance a reader can follow, so citing it hands th
 end. A web-search summary is a pointer to sources, never a source. Findings recorded before this
 rule without sources are re-sourced when next revisited (`research/SOURCES.md` keeps the queue),
 not rewritten wholesale.
+
+**READ WHAT YOU CITE** (GM 2026-08-27, feature 133 T44). A source is cited only after the session
+has read it - the page or paper itself, fetched and read, not a search engine's summary of it and
+not another page's paraphrase - and the finding written down is what THAT text says, in its own
+context. The failure this guards against is the academic one: a paper cited for the opposite of
+what it found, by someone who skimmed one passage, or who inherited another writer's
+mischaracterization and read the source to confirm it. Where a source cannot be fetched (a
+paywall, a blocked host), it is not cited as read: the entry either finds a source it can read or
+records the claim as unverified with the pointer it came from. The GM's own words on the level of
+rigor: the consequences of a wrong bund width on a hobby map are small and the players have been
+told the level of rigor honestly - but the project still wants as much rigor as its time and
+tokens allow, and reading the source is the cheapest rigor there is.
 
 ### XIII. No Known Regressions (NON-NEGOTIABLE)
 

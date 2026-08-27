@@ -8,6 +8,8 @@ Cite by key in an entry's `**Sources:**` line. Add a key here the first time a s
 
 **Required, not optional** (GM 2026-08-27, constitution v2.10.0): every research finding cites its sources here. **What counts as a source**, in order: primary and scholarly work; a serious reference - museum, ministry, university, standards body, an established encyclopedia such as Wikipedia (and its underlying references over the article itself). **Never an AI-generated encyclopedia or summary** (Grokipedia included): machine-rewritten from other sources, no editorial community, no provenance a reader can follow - citing it hands the interactive map's reader a dead end. A web-search result summary is a pointer to sources, never a source.
 
+**Read what you cite** (GM 2026-08-27, constitution v2.11.0): a key is added here only after the session has read the source itself - fetched and read, not summarized by a search engine or paraphrased by another page - and the finding recorded is what that text says in context. A source that cannot be fetched is not cited as read: find one that can be, or record the claim as unverified with its pointer.
+
 ## Re-sourcing queue
 
 Findings recorded before the rule, or on a source the rule now excludes. Each is re-sourced when its entry is next revisited - not rewritten wholesale - and struck from this list then.
@@ -17,6 +19,7 @@ Findings recorded before the rule, or on a source the rule now excludes. Each is
 - History of agriculture in China (Grokipedia) - research/urban-features.md
 - Nagoya Castle (Grokipedia; site documentation) - the site documentation half stands
 - Jokamachi surveys (Grokipedia; Nakasendo Way, *Castle Towns*) - the Nakasendo Way half stands
+- Unread pointers left by 2026-08-27's entries (T32, T34-T36, T41, T42), each marked "not read" in its entry: the bund-width figure (ResearchGate/Britannica), madake hardiness (PFAF/Gardenia), the Shirakawa farmstead bamboo grove (Kids Web Japan), the turn-minimization claim (Ma et al. 2024, *EPB*), the woodland mantle-and-fringe structure (EUNIS/Springer), the Okinawa windbreak paper (Forests 2025), the GSI bamboo symbol page
 
 
 ## Works cited

@@ -205,6 +205,11 @@ _(from T11 on, each entry also carries its cycle plan before work starts - `scaf
       given 2026-08-27T14:09Z | done 2026-08-27T14:09Z | elapsed 0 min (docs-only: rule + re-sourcing) | runs: none
       note: measured - citations WERE being stored (research/SOURCES.md keyed registry; ~100 `**Sources:**` lines) but the root CLAUDE.md still called them "optional (usually overkill)"; Grokipedia appeared 8 times (3 from this session, 5 older). Rule made: constitution v2.10.0 (Principle XII), root CLAUDE.md, SOURCES.md "what counts as a source" + a re-sourcing queue for the 5 older citations; today's 3 re-sourced to Wikipedia articles.
 
+- [x] T44 **read what you cite** - the GM (2026-08-27): *"We should probably make it a rule that you actually do read the references that you are citing because a summary of that reference might mischaracterize something ... this should be a project rule as well. and I think you have just told me that you have already made this a rule."*
+      given 2026-08-27T14:18Z | done 2026-08-27T14:21Z | elapsed 3 min (computed) | runs: 14 fetches, none of the gate
+      verified by reading: PMC levee paper, PMC bamboo range paper, Wikipedia Satoyama / Paddy field / Kichijōji / P. bambusoides / Desire path, 99% Invisible, the Geography Hub, the AGRIS coppice record. Could not be fetched (403/paywall): ResearchGate + Britannica (the bund width), PFAF (hardiness), Kids Web Japan, SAGE + ScienceDirect (the turn-minimization claim that T32's record had quoted as a finding). Every affected entry now separates READ from UNVERIFIED; the Kichijōji 1659/1664 figures (Grokipedia-only) dropped; the bund width and the eave overhang marked unverified/unsourced in research and in houses.py.
+      note: it was NOT already a rule - T43 said a summary is a pointer, not that the source must be read; and this session had cited from search summaries today (the bund width among them). Rule made (constitution v2.11.0, CLAUDE.md, SOURCES.md); today's load-bearing citations are then fetched and read, and the record corrected where the text says otherwise.
+
 ## Phase 9 - acceptance
 
 - [ ] T90 the would-have-dispatched audit (FR-005): every entry in the period, and for each whether it should have run; each "no" names a tooling change
