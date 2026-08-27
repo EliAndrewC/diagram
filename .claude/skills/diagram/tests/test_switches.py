@@ -5,6 +5,7 @@ a session that the override is routine."""
 from __future__ import annotations
 
 import json
+import os
 import subprocess
 from pathlib import Path
 
@@ -72,7 +73,12 @@ def test_malformed_file_fails_closed(skill: Path, body: str) -> None:
     assert not fixed.error and not fixed.remote_off and not fixed.scope_locked
 
 
-def test_who_falls_back_when_git_has_no_identity(tmp_path: Path) -> None:
+def test_who_falls_back_when_git_has_no_identity(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    # "no identity" must be MADE, not assumed: since 2026-08-27 (feature 133 T51) every container carries
+    # the GM's identity in the shared ~/.claude/gitconfig, included from ~/.gitconfig, so `git config
+    # user.name` answers outside any repo - which is exactly the state this test needs to be absent
+    monkeypatch.setenv("GIT_CONFIG_GLOBAL", os.devnull)
+    monkeypatch.setenv("GIT_CONFIG_NOSYSTEM", "1")
     (tmp_path / "dev").mkdir()
     s = sw.write(tmp_path, "scope", "reference", "x")  # not a git repo at all
     assert s.scope.who == "unknown"
