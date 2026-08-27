@@ -241,8 +241,16 @@ even collected by `make quick`:
 |---|---|---|
 | `tests/` (with its packages) | the unit forms, relevant to the lane tiers or to every tier | quick and the gate |
 | `tests/tier_town/`, `tests/tier_city/` | tests tagged for other tiers only (232 + 451 functions), mirrored package paths | the gate; quick once the scope lock moves to that tier |
-| `tests/gate/` | the bad-map corpus, the coverage carriers, the map-rolling tests | the gate only |
-| `tests/tooling/` | tests that RUN the make/ci/pipeline tooling (+ the whole ci package) | the gate; quick only when the tooling changed (`ci tooling-fresh`) |
+| `tests/gate/` | the bad-map corpus and the map-rolling tests that earn MERGE time - one representative spec each, served from the roll cache while nothing they execute changed | the gate only |
+| `tests/full/` (feature 135, 2026-08-27) | the pool sweep, the seed sweeps, the determinism tests, the coverage carriers, the real-map cache round trip | `make done FULL=1` and the AWS check only |
+| `tests/tooling/` | tests that RUN the make/ci/pipeline tooling (+ the whole ci package) | the gate and FULL; quick only when the tooling changed (`ci tooling-fresh`); skipped at the gate too while unchanged (never in FULL) |
+
+Feature 135 (GM 2026-08-27: *"the directory into which we added is the thing that inherently
+determines When and under what circumstance that test is run"*) added the third tree and deleted the
+Makefile's deselect LIST, which had gone stale within a day of T29 - it still named
+`tests/hamletgen/test_driver.py` after the cohort ratchet moved to `tests/gate/`, so the FULL-only
+"seeds 41-44 ratchet" ran in every unlocked gate. A tree cannot go stale that way. The audit ledger is
+`specs/135-done-test-audit/research.md`.
 
 Moved tests import their helpers from the source module; a fixture they take comes through the
 tree's `conftest.py` (a parameter name is a use pytest sees and ruff does not). The tier and

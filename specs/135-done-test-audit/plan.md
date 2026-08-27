@@ -104,7 +104,8 @@ specs/135-done-test-audit/
 4. **Determinism tests must roll twice for real** - a served second roll would make "same seed,
    same bytes" vacuous - so they belong to the full tree, and the gate keeps one cached
    representative roll of each engine path instead.
-5. **`EXHAUSTIVE=1` and `GATE_NO_CACHE=1` bypass the cache.** The full run is where the coverage
+5. **The FULL run (`L7R_TESTS_FULL=1`, set by `test-full`) and `GATE_NO_CACHE=1` bypass the
+   cache** - not `EXHAUSTIVE`, which the gate always sets. The full run is where the coverage
    floors are enforced, and a hit executes none of the rolled code; bypassing there keeps the
    floors honest without storing coverage per entry (the pool cache stores it because the pool
    sweep IS the floor's main carrier; these rolls are not).
