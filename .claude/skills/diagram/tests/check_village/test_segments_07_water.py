@@ -887,3 +887,12 @@ def test_lanes_bend_like_paths_fires_and_passes():
     assert "lanes_bend_like_paths" in f_only(zigzag, "lanes_bend_like_paths"), "two sharp turns inside 40 ft must fire"
     corner = manifest(houses=[house(x=400, y=400)], lane=[[0, 500], [300, 500]], lanes=[{"pts": [[0, 500], [300, 500], [300, 700], [420, 780]], "w": 3}])
     assert "lanes_bend_like_paths" not in f_only(corner, "lanes_bend_like_paths"), "a corner and a bend are how a lane runs"
+
+
+def test_lanes_clear_of_bamboo_fires_and_passes():
+    """No lane tread through a bamboo stand (GM 2026-08-27, T49: "I would not expect to see bamboo actually growing in the middle of the lane")."""
+    stand = {"x": 500.0, "y": 500.0, "w": 22.0, "h": 16.0, "rot": 0, "role": "homestead", "poly": [[489, 492], [511, 492], [511, 508], [489, 508]]}
+    through = manifest(houses=[house(x=400, y=400)], lane=[[0, 500], [300, 500]], lanes=[{"pts": [[300, 500], [700, 500]], "w": 3}], bamboo_stands=[stand])
+    assert "lanes_clear_of_bamboo" in f_only(through, "lanes_clear_of_bamboo")
+    past = manifest(houses=[house(x=400, y=400)], lane=[[0, 500], [300, 500]], lanes=[{"pts": [[300, 520], [700, 520]], "w": 3}], bamboo_stands=[stand])
+    assert "lanes_clear_of_bamboo" not in f_only(past, "lanes_clear_of_bamboo")

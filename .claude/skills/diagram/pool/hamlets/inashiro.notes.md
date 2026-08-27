@@ -1362,3 +1362,17 @@ The strips' reservations moved the notice board's engine seat outside the cluste
 time, which exposed three latent defects in the roadside re-seat (ghost ink of the popped board and
 caption; a 16 ft offset against the 6 ft verge; alignment to a lane that was not the nearest) -
 all fixed. Gate clean, audit 0, attempt 1.
+
+
+## 2026-08-27 - bamboo off the lanes; the lane width question (feature 133 T49/T50)
+
+T49: two household strips had lanes drawn through them - they were seated with the sheds, before
+the web, and the web reads the manifest's fabric, not the placer's reservations. Putting the
+strips in the fabric re-threaded the whole web and broke it (a 5 ft gap the 4 ft touch refuses, a
+link a garden corner blocks); seating the strips AFTER the web and the board instead - where
+`_strip_blocked` keeps them 6 ft off every lane - restored T48's web exactly and fit all eight
+strips with a second offset per side. `lanes_clear_of_bamboo` holds it. T50: the lane widths were
+re-read (settlements/ways.md): the FORM is read - carts confined by law to three cities, China's
+network built for foot, pole and wheelbarrow - and no source anywhere gives a numeric width for an
+ordinary village lane; the drawn 3 / 5 / 6 ft are drawing conventions inside the read bounds
+(under the 9 ft ox-cart stone route), labeled so.

@@ -264,6 +264,22 @@ _(from T46 on, each entry also says `research: rendering` or `research: physical
       measure: strips per farmhouse on Inashiro, their side, the thicket's size; the checks green
       verify: `make maps`, `make scatter-audit`, `make quick`, `make done`; the GM looks
 
+- [x] T49 **bamboo off the lanes** - the GM (2026-08-27): *"Some of the bamboo groves are overlapping with village lanes. That looks like a mistake. I could imagine a village lane running through a bamboo grove, but even then, I would not expect to see bamboo actually growing in the middle of the lane. so we should probably fix that."*
+      given 2026-08-27T16:19Z | done 2026-08-27T16:29Z | elapsed 10 min (computed; T49 and T50 ran interleaved, the reader 3.3 min of it) | runs: make maps x5, make quick x4, make done x1
+      note: two strips under lanes because they were seated with the sheds, BEFORE the web, and the web reads the manifest's fabric, not `placed`. First cut put the strips in the fabric - the whole web re-threaded and broke (three checks red). The fix that held: seat the strips in stage_hinterland AFTER the web and the board, where `_strip_blocked` keeps them 6 ft off every lane; two offsets per side so all 8 still fit. Check `lanes_clear_of_bamboo` + test. Two cycles were mine: an aborted batch left the strips seated nowhere, and the formatter's rewrap left an orphaned block.
+      research: rendering
+      scaffold: the web's fabric (`_homestead_polys` in hamletgen/ways.py) does not know the household strips seated before it - the strips are reserved in `placed`/`block_polys`, which the web does not read; record them at seat time and add the record to the fabric; a check that no lane tread crosses a stand
+      measure: lane segments crossing bamboo polygons on Inashiro before/after
+      verify: `make maps`, `make quick`, `make done`; the GM looks
+- [x] T50 **is the lane width researched?** - the GM (2026-08-27): *"Is the size of them accurate? ... I also imagine that given the use of these lanes that they probably would be wide enough for two different carts to be pulled in opposite directions and be able to pass one another ... I just want to make sure that we did not set it arbitrarily and that there was a research pass done and that the width was documented based on historical norms."*
+      given 2026-08-27T16:19Z | done 2026-08-27T16:29Z | elapsed 10 min (computed; T49 and T50 ran interleaved, the reader 3.3 min of it) | runs: source-reader x1 (Sonnet, 23 fetches, 3.3 min); no map change
+      note: the 2026-07 entry's FORM is read (daihachiguruma confined to Edo/Owari/Sunpu; China's network for foot, pole and wheelbarrow; the ox-cart stone route 2.7 m as a ceiling; the kaidō 9 m); no source in Japanese, Chinese or English gives a numeric width for an ordinary village lane - a "里道 = 1 ken" figure a search summary offered traces to a page that does not contain it. The drawn widths are recorded as DRAWING conventions inside the read bounds, not findings; the GM's two-carts picture is not the record's. Recorded in settlements/ways.md; the missing measurement queued in SOURCES.md.
+      research: physical
+      - [x] research pass (the 2026-07 form entry re-read; its widths were never sourced)  - [x] source-reader confirmed (the T50 run: form READ, numeric width NOT-FOUND, one search-attributed figure CONTRADICTED by its page)  - [x] recorded and cited (settlements/ways.md, SOURCES.md queue)
+      scaffold: settlements/ways.md "Village lanes and connecting paths - UNPAVED NARROW single track"; the drawn widths (web 3 ft, spine 5, connector 6 at 1 px = 1 ft); research/SOURCES.md keys for lane width
+      measure: the drawn widths vs the read record; the map changes only if the record says the widths are wrong
+      verify: the record; `make maps` if a width changes
+
 ## Phase 9 - acceptance
 
 - [ ] T90 the would-have-dispatched audit (FR-005): every entry in the period, and for each whether it should have run; each "no" names a tooling change

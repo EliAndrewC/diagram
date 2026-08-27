@@ -13,6 +13,7 @@ from l7r.diagram.settlement import Settlement, point_in_poly, seg_dist
 from l7r.diagram.sitegen.geom import crop_polys
 
 from .consts import Poly, Pt
+from .homesteads import household_bamboo
 from .plan import SitePlan
 
 # ---- STAGE 7: the ground between everything ------------------------------------------------------
@@ -38,7 +39,8 @@ def stage_hinterland(s: Settlement, plan: SitePlan) -> None:
     plan.woodland_polys = open_ground_patches(s, plan, plan.woodland_patches)
     # ...and the bamboo stands (T47), seated now for the same reason: a stand is a wood, and the
     # scrub keeps out of it. Drawn by `stage_bamboo`, after the belt.
-    plan.bamboo_polys += bamboo_seats(s, plan)  # the household strips are already in it (stage_appurtenances)
+    plan.bamboo_polys += household_bamboo(s, plan, s.M.get("houses", []))  # T49: after the web and the board, before the scrub
+    plan.bamboo_polys += bamboo_seats(s, plan)
     s.hinterland(marsh=False, soft_extra=[*([plan.belt] if plan.belt else []), *plan.woodland_polys, *plan.bamboo_polys])
 
 
@@ -651,6 +653,7 @@ def stage_bamboo(s: Settlement, plan: SitePlan) -> None:
     stand-level glyph lies over the scrub that already kept out of it; `meta.bamboo` records the roll
     so the gate can hold "declared and drawn"."""
     s.M["meta"]["bamboo"] = plan.bamboo
+    s.M["bamboo_stands"] = []  # the pending seat-time records (T49) are replaced by the drawn ones
     for role, ring in zip(plan.bamboo_roles, plan.bamboo_polys, strict=True):
         s.bamboo_stand(ring, role=role)
 

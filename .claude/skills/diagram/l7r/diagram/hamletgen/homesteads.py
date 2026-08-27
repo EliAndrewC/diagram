@@ -494,7 +494,6 @@ def stage_appurtenances(s: Settlement, plan: SitePlan) -> None:
         return
     place_wells(s, plan, houses)
     s.draft_byres(fraction=0.22, gap=60)
-    household_bamboo(s, plan, houses)
 
 
 # HOUSEHOLD BAMBOO (feature 133 T48, GM 2026-08-27; research/vegetation.md "Bamboo: how common, where it
@@ -510,17 +509,20 @@ HOUSEHOLD_BAMBOO_FT = (22.0, 16.0)
 _HOUSEHOLD_BAMBOO_SIDES = (("back", 0.45), ("shed", 0.30), ("wind", 0.15), ("side", 0.10))
 
 
-def household_bamboo(s: Settlement, plan: SitePlan, houses: Sequence[Mapping[str, Any]]) -> int:
+def household_bamboo(s: Settlement, plan: SitePlan, houses: Sequence[Mapping[str, Any]]) -> list[Poly]:
     """Seat a small bamboo strip beside each farmstead that keeps one, per the `bamboo` knob.
 
-    Seated HERE, with the sheds and the gardens, so the lanes and the wells (which come after) keep off
-    it - the strip is reserved as a placed footprint and a no-build block - and drawn by `stage_bamboo`
-    with the stand glyph. Per house: presence by `HOUSEHOLD_BAMBOO_PREVALENCE`, side by the weighted roll
+    Seated in `stage_hinterland`, AFTER the web and the notice board (T49): seated with the sheds it
+    was in the web's way, and the web threaded through it (two lanes on Inashiro) - and putting it in
+    the web's fabric instead re-threaded the whole web and broke it. Seated after, the strip keeps 6 ft
+    off every lane and clear of every placed footprint, the board and the wells, and the scrub keeps
+    out of it (a soft keep-out, like every wood). Drawn by `stage_bamboo` with the stand glyph. Per house: presence by `HOUSEHOLD_BAMBOO_PREVALENCE`, side by the weighted roll
     above, both from the house's own position (positional randomness). A candidate that lands on a
     footprint, a lane, a paddy, the marsh or the pond is refused and the next side tried; a farmstead
     with no room keeps none. Returns the count seated."""
+    out: list[Poly] = []
     if plan.bamboo not in ("homestead", "both") or not houses:
-        return 0
+        return out
     px = s.px
     sw, sh = px(HOUSEHOLD_BAMBOO_FT[0]), px(HOUSEHOLD_BAMBOO_FT[1])
     wx, wy = plan.wind
@@ -528,7 +530,6 @@ def household_bamboo(s: Settlement, plan: SitePlan, houses: Sequence[Mapping[str
     marsh = [[(float(a), float(b)) for a, b in m["poly"]] for m in s.M.get("marshes", []) if m.get("poly")]
     pond = s.M.get("pond")
     lanes = [([(float(a), float(b)) for a, b in ln["pts"]], float(ln.get("w", 3)) / 2 + px(6.0)) for ln in s.M.get("lanes", []) if len(ln.get("pts") or []) >= 2]
-    n = 0
     for h in houses:
         hx, hy, hw, hh = float(h["x"]), float(h["y"]), float(h["w"]), float(h["h"])
         if s._hjit(hx, hy, 95.0) >= HOUSEHOLD_BAMBOO_PREVALENCE:
@@ -556,19 +557,28 @@ def household_bamboo(s: Settlement, plan: SitePlan, houses: Sequence[Mapping[str
                 first = name
                 break
         order = [first] + [nm for nm, _ in _HOUSEHOLD_BAMBOO_SIDES if nm != first]
+        seated = False
         for name in order:
-            lx, ly, cw, ch = local[name]
-            cx, cy = hx + lx * ca - ly * sa, hy + lx * sa + ly * ca
-            if _strip_blocked(s, cx, cy, cw, ch, hx, hy, fields, marsh, pond, lanes):
-                continue
-            ring = [(cx - cw / 2, cy - ch / 2), (cx + cw / 2, cy - ch / 2), (cx + cw / 2, cy + ch / 2), (cx - cw / 2, cy + ch / 2)]
-            plan.bamboo_polys.append(ring)
-            plan.bamboo_roles.append("homestead")
-            s.placed.append((cx, cy, cw, ch))
-            s.block_polys.append(ring)
-            n += 1
-            break
-    return n
+            if seated:
+                break
+            lx0, ly0, cw, ch = local[name]
+            # two offsets per side (T49): against the house, then a strip's depth further out - the
+            # lanes now stand where the near seat often is, and a strip 16 ft off the wall is still
+            # the household's own
+            for k in (0.0, 1.0):
+                d = math.hypot(lx0, ly0) or 1.0
+                lx, ly = lx0 + lx0 / d * k * sh, ly0 + ly0 / d * k * sh
+                cx, cy = hx + lx * ca - ly * sa, hy + lx * sa + ly * ca
+                if _strip_blocked(s, cx, cy, cw, ch, hx, hy, fields, marsh, pond, lanes):
+                    continue
+                ring = [(cx - cw / 2, cy - ch / 2), (cx + cw / 2, cy - ch / 2), (cx + cw / 2, cy + ch / 2), (cx - cw / 2, cy + ch / 2)]
+                out.append(ring)
+                plan.bamboo_roles.append("homestead")
+                s.placed.append((cx, cy, cw, ch))
+                s.block_polys.append(ring)
+                seated = True
+                break
+    return out
 
 
 def _strip_blocked(
@@ -583,6 +593,11 @@ def _strip_blocked(
             continue
         if abs(cx - px_) < (cw + pw) / 2 + 2 and abs(cy - py_) < (ch + ph) / 2 + 2:
             return True
+    for key in ("wells", "kosatsuba", "byres", "farm_sheds"):  # everything seated between the sheds and this pass (T49)
+        for o in s.M.get(key, []):
+            ow, oh = float(o.get("w", 2 * float(o.get("r", 8)))), float(o.get("h", 2 * float(o.get("r", 8))))
+            if abs(cx - float(o["x"])) < (cw + ow) / 2 + 6 and abs(cy - float(o["y"])) < (ch + oh) / 2 + 6:
+                return True
     for poly in list(fields) + list(marsh):
         if len(poly) >= 3 and any(point_in_poly(q[0], q[1], poly) or min(seg_dist(q[0], q[1], poly[k], poly[(k + 1) % len(poly)]) for k in range(len(poly))) < 6.0 for q in corners):
             return True

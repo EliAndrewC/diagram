@@ -19,6 +19,7 @@ Findings recorded before the rule, or on a source the rule now excludes. Each is
 - History of agriculture in China (Grokipedia) - research/urban-features.md
 - Nagoya Castle (Grokipedia; site documentation) - the site documentation half stands
 - Jokamachi surveys (Grokipedia; Nakasendo Way, *Castle Towns*) - the Nakasendo Way half stands
+- Village lane WIDTH (T50, 2026-08-27): no numeric source found for an ordinary hamlet lane or farm path in Japan or China; the drawn 3 / 5 / 6 ft stand as drawing conventions inside read bounds (Wikipedia "Stone routes" 2.7 m cart road; ja.wikipedia "大八車"; MLIT road history; Low-Tech Magazine on the wheelbarrow). A measured survey of a surviving village lane would settle it.
 - Still summary-only after the `source-reader` run of 2026-08-27 (T45), each labeled in its entry: the bund-width convention (IRRI, unreachable; FAO read and larger); the Shirakawa farmstead bamboo grove (Kids Web Japan, 403 with no corroboration); the turn-minimization sentence (Ma et al. 2024 full text - the abstract's angle finding IS read); EUNIS E5.2 (404). Resolved by that run: madake hardiness (read, three growers), the forest-edge three layers (German Wikipedia "Waldrand"), the Okinawa windbreak (PMC 7898781), the GSI bamboo symbol (ridgelineimages.com).
 
 

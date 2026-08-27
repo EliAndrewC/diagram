@@ -1360,3 +1360,37 @@ def _seg_0619_501__lanes_bend_like_paths(
             f"lane bend(s) at {lanes_bend_like_paths_bad[:3]} that feet would never wear - a hairpin (turn >= 140 deg) or a zigzag (two turns >= 50 deg within 40 ft); the fix is at the way (hamletgen._smooth_web): string-pull the run, cut the arm, meet at one node",
         )
     return _kept(locals(), ("lanes_bend_like_paths_bad",))
+
+
+# WHY: <one paragraph - what the research found, the decision it drove, the departure taken>.
+# Declare EVERY input the body reads as a keyword parameter (an undeclared one is a NameError at
+# gate time, not at import), and keep the `_kept` tuple a LITERAL of the names this body binds.
+
+
+def _seg_0619_502__lanes_clear_of_bamboo(
+    *,
+    M: Any = _UNBOUND,
+    check: Any = _UNBOUND,
+    meta: Any = _UNBOUND,
+    scale: Any = _UNBOUND,
+    lanes_clear_of_bamboo_bad: Any = _UNBOUND,
+) -> dict[str, Any]:
+    """Gate segment (lanes_clear_of_bamboo) - no lane's tread runs through a bamboo stand: a way may pass a stand, but bamboo does not grow in the middle of a trodden lane (GM 2026-08-27, feature 133 T49)."""
+    if scale in ("hamlet", "village", "town"):
+        lanes_clear_of_bamboo_bad = []
+        _lcb_stands = [[(float(a), float(b)) for a, b in st["poly"]] for st in (M.get("bamboo_stands") or []) if st.get("poly")]
+        for _ln in M.get("lanes") or []:
+            _pts = [(float(a), float(b)) for a, b in (_ln.get("pts") or [])]
+            for _k in range(len(_pts) - 1):
+                _a, _c = _pts[_k], _pts[_k + 1]
+                for _t in (0.0, 0.25, 0.5, 0.75, 1.0):
+                    _q = (_a[0] + (_c[0] - _a[0]) * _t, _a[1] + (_c[1] - _a[1]) * _t)
+                    if any(point_in_poly(_q[0], _q[1], sp) for sp in _lcb_stands):
+                        lanes_clear_of_bamboo_bad.append((round(_q[0]), round(_q[1])))
+                        break
+        check(
+            "lanes_clear_of_bamboo",
+            not lanes_clear_of_bamboo_bad,
+            f"lane tread(s) inside a bamboo stand at {lanes_clear_of_bamboo_bad[:3]} - a stand is fabric to the web (hamletgen.ways._homestead_polys) and the strips are recorded when seated; a lane may pass a stand, never through it",
+        )
+    return _kept(locals(), ("lanes_clear_of_bamboo_bad",))
