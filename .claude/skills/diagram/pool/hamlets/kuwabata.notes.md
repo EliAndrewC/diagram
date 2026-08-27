@@ -1,42 +1,68 @@
-# Design notes: Kuwabata (桑畑, "mulberry field"), the CASH-CROP hamlet
+# Design notes: Kuwabata (桑畑, "mulberry field"), the CASH-CROP hamlet - SCRIPTED
 
-*Reconstructed 2026-08-08 from the generator's docstring and comments.*
+*Rewritten 2026-08-27 (feature 134) when the map was converted from a hand-authored script to a
+`hamletgen` declaration. The earlier notes (reconstructed 2026-08-08 from the old generator's
+comments) are in git history with that script; what they recorded that still holds is carried here.*
 
-**Subject**: a hamlet of 16 households on polder geometry carried to the dike-pond system's rare
-**wholesale-conversion end state** - 桑基魚塘, the full `mulberry_dike_fishpond` overlay at
-`eligible="all"`. Almost every former paddy cell has been dug into a fish pond and the spoil piled
-into a mulberry-planted dike around it.
+**Subject**: 16 households on polder geometry carried to the dike-pond system's rare
+**wholesale-conversion end state** - 桑基魚塘, the `mulberry_dike_fishpond` archetype: (almost)
+every former paddy cell dug into a fish pond and the spoil piled into a mulberry-planted dike
+around it. The END STATE is deliberately the exception; the scattered overlay is the norm
+(research/archetypes.md "The three overlay values"). Reading this map as typical would be the
+mistake it is here to make visible.
 
-**Why it exists**: to draw the END STATE, which is deliberately the exception. The **scattered**
-overlay is the norm; see `research.md` D2 of `specs/010-land-use-overlay-grounding` for why. Reading
-this map as typical would be the mistake it is here to make visible.
+## The declaration
+
+`HamletSpec(name="Kuwabata", seed=21, households=16, down_deg=90, field_archetype="mulberry_dike_fishpond", pond_layout="mosaic")`
+
+Seed 21 and 16 households are the hand-authored map's. `pond_layout="mosaic"` pins the form the GM
+saw on it (the Pearl-delta accreted mosaic; the knob also rolls the surveyed grid - one map per
+value is owed, the grid one at `wip/kuwabata-grid`). Everything else is derived: the grid fitted
+to the acreage (`fit_polder`, 160 ft module, merge-heavy parcels - `POLDER_FABRIC`), the header
+reservoir at the ring's head, the perimeter dike gapped at its sluices, the ponds and their banks
+(`apply_land_use(eligible="all")`, `DIKEPOND_CONVERSION` 0.9), the village on the dry flank, the
+reed fringe on the water-facing flanks (`stage_waterward`), the lanes, the fixtures, the bamboo,
+the windbreak, the plank crossings clustered on the settlement side (`polder_crossing_caps`).
+
+## What the conversion changed, and why
+
+- **The village sits at the block's HEAD (north), not on the east flank** as the hand-authored map
+  had it. `seat_cluster` seats a hamlet 背山面水 - back to the wind, tie-broken upslope - and for a
+  south-falling polder under the NW winter wind that is the head. Research/archetypes.md 'Polder
+  siting' attests the village on whichever dry ground the margin polder abuts; the head is dry
+  ground here (the reservoir is beside it, not under it). The east-flank village was a hand
+  decision, not a researched one; the derived seat is recorded as a GUESS between attested options
+  until the audit says otherwise (spec 134, Decisions Recorded).
+- **The waterward flanks are derived** (`waterward_flanks`): the cross flanks the village does not
+  occupy plus the foot - `["W", "E", "S"]` here, where the hand-authored map declared `["W", "S"]`
+  because its village took the east. The head is never a waterward flank (the reservoir stands
+  there as the wild water).
+- **The windward belt** wraps the cluster's NW as the belt stage derives it; the L-shaped belt in a
+  reserved gap that the hand-authored script built by hand is not needed - the derived seat leaves
+  the belt room.
+- **Every reference-hamlet family is on the map** (`make family-census`): the fixtures (privy,
+  woodpile, manure heap, bath shed, coop, hokora, persimmon), the new sheds, the bamboo, the lane
+  web, the wells, the byres, the notice board. Absent by archetype: `dry_plots` (a comb's dry hem;
+  a polder is a solid wet block), `field_ponds` (open water IS this fabric - no obstacle tiles,
+  research D4), `field_ditches:branch` (a comb's deliveries; a polder has laterals).
 
 ## The economy (GM-confirmed 2026-07-24)
 
-Kuwabata is a **cash-crop settlement, not a subsistence one** - the rice-farmer's analog of the
-tobacco or indigo switch. The ponds are stocked artificial fisheries (historically carp polyculture),
-and the household economy closes a loop: mulberry leaves feed silkworms, silkworm waste feeds the
-fish, dredged pond mud fertilizes the mulberries. **Silk is the bigger earner**; fish go to market;
-grain is bought in. Historically, gazetteers found the total absence of rice remarkable enough to
-record - which is the fact this map is drawing.
-
-## Water
-
-Polder water discipline: in at the **high corner**, a perimeter feeder supplies the block, out at the
-**low corner**. The village lines the dry perimeter dike on the east side.
+A **cash-crop settlement, not a subsistence one** - the rice-farmer's analog of the tobacco or
+indigo switch. Stocked carp ponds; the loop is mulberry leaf -> silkworm -> frass -> fish ->
+dredged pond mud -> dike fertility. **Silk is the bigger earner**; fish go to market; grain is
+bought in. Gazetteers found the total absence of rice remarkable enough to record. Placement
+implication: a river or canal link to a substantial market town is implied wherever Kuwabata sits.
+Open flavor hook, NOT canon anywhere wider: L7R land tax is assessed in koku of rice, so
+Kuwabata's tax is presumably commuted to cash or silk.
 
 ## What makes it a hamlet, not a village
 
-A hamlet is a small outlying community belonging to a village district, and the absences are the
-definition: **no headman of its own** (its overseer, the district headman, lives in the main
-village), **no shrine** (`religious_matches_scale`), **no tax-free plots**, and **no graveyard** -
-its dead go to the village district's burial ground. Drawn at 1 ft/px, twice a village's pixel
-scale, which keeps a ~15-household map a sensible size; the to-scale homestead bundle carries its
-dimensions in FEET and draws them at `ftpx`, so the same 46x28 ft minka is 46 px here against 23 px
-on a village sheet.
+No headman of its own, no shrine, no tax-free plots, no graveyard - its dead go to the village
+district's ground. Drawn at 1 ft/px.
 
 ## Known open
 
-- **No `notes.md` existed for this map until 2026-08-08**, so anything settled between its authoring
-  and that date lives only in gen comments and may not be recorded here. Treat gaps as unrecorded
-  rather than as decided.
+- The acreage per household is the PADDY figure (`GROSS_ACRES_PER_HOUSEHOLD`); whether a silk-and-
+  fish household held the same ground is a research question for the feature-134 audit.
+- The pool sweep and the polder cohort are owed at unlock (scope locked at conversion time).

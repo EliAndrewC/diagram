@@ -253,6 +253,23 @@ class _StubSettlement:
     def lane(self, pts, **kw):
         self.M["lanes"].append({"pts": [list(q) for q in pts], "w": kw.get("width", 5)})
 
+    def reink_lane(self, i):
+        pass  # the stub has no ink; the record is what the helpers are tested on
+
+
+def test_touch_junctions_does_not_close_a_short_lane_onto_its_own_start() -> None:
+    """Feature 134, Kuwabata seed 21: a 30 ft lane whose two ends both stood near the same spot on
+    a neighbor was touched there at BOTH ends and became a 28 ft loop - a hairpin to
+    `lanes_bend_like_paths`, invisible to `_smooth_web`, which had already run. A foot within a few
+    feet of the lane's other end is that end's own junction, not a new one."""
+    main = [(0.0, 0.0), (400.0, 0.0)]
+    short = [(200.0, 20.0), (215.0, 32.0), (203.0, 24.0)]
+    s = _StubSettlement(lanes=[main, short])
+    hg.ways._touch_junctions(s, [], [], [])
+    pts = [tuple(q) for q in s.M["lanes"][1]["pts"]]
+    assert math.dist(pts[0], (200.0, 0.0)) <= 1.0, "the start is touched down onto the main lane"
+    assert math.dist(pts[0], pts[-1]) > 6.0, f"the lane closed onto itself: {pts}"
+
 
 def test_a_web_lane_may_not_run_the_length_of_a_shelter_belt() -> None:
     """Crossing a belt costs it a lane's width of wall, which is a fair price for a way with

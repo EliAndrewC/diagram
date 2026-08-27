@@ -44,6 +44,7 @@ sequence one-to-one. Where the two disagree, `STAGES` wins for anything under `h
 | 2 | `stage_field` | the water skeleton AND the paddy - `build_comb` returns canals and plots from one call, so intake, head race and field ditches arrive here, not in stage 1 |
 | 3 | `stage_sink` | tail drain, pond or off-map outfall |
 | 4 | `stage_ways` | the CONNECTOR and the field spur only - the EXOGENOUS ways, which genuinely predate the settlement. The internal skeleton moved to stage 7 in feature 126 |
+| 4b | `stage_waterward` | a polder's WATERWARD reed fringe (feature 134): the strips outside the dike on the flanks that face the water, derived from the seat - laid BEFORE the houses and the track because it reserves wet ground both must avoid (laid in the hinterland it was drawn over an already-routed connector). No ink on a valley hamlet |
 | 5 | `stage_homesteads` | the farmhouses |
 | 6 | `stage_appurtenances` | yards, gardens, byres, wells, sheds |
 | 7 | `stage_web` | ALL the endogenous ways - the internal skeleton AND the lane web, both derived from where the houses actually landed. No-op for a dispersed hamlet, which has no internal network |
@@ -52,7 +53,7 @@ sequence one-to-one. Where the two disagree, `STAGES` wins for anything under `h
 | 10 | `stage_woodland` | woodland commons |
 | 11 | `stage_windbreak` | the shelter belt |
 | 12 | `stage_bamboo` | the bamboo stands, on seats the hinterland stage scanned (feature 133 T47) |
-| 13 | `stage_crossings` | planks and decks over every way that crosses water |
+| 13 | `stage_crossings` | planks and decks over every way that crosses water; on a polder the ring-canal planks cluster on the settlement-side toe collector and skip the feeder, the far toe and the drain (`polder_crossing_caps`, feature 134) |
 | 14 | `stage_frame` | crop to content, title, scalebar |
 
 **WAYS ARE SPLIT BY PROVENANCE, NOT BY TIMING** (feature 126, 2026-08-23). The GM asked whether

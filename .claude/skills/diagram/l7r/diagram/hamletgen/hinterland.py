@@ -15,7 +15,6 @@ from l7r.diagram.sitegen.geom import crop_polys
 from .consts import Poly, Pt
 from .homesteads import farmstead_fixtures, household_bamboo
 from .plan import SitePlan
-from .water import stage_waterward
 
 # ---- STAGE 7: the ground between everything ------------------------------------------------------
 
@@ -36,11 +35,6 @@ def stage_hinterland(s: Settlement, plan: SitePlan) -> None:
     # first, then the patches are found, then the scrub is scattered with every wood as a soft
     # keep-out. `stage_woodland` draws the patches from `plan.woodland_polys`.
     plan.belt = belt_polygon(s, plan)
-    # A POLDER'S WATERWARD FRINGE goes down first (feature 134): the reed strips outside the dike on
-    # the flanks that face the water, derived from where the village was seated. Before the engine's
-    # toe marsh and the scrub, so both keep out of it; after the houses, because which flank is
-    # landward is a fact about the seat. No-op on a valley hamlet.
-    stage_waterward(s, plan)
     s.hinterland(commons=False)
     plan.woodland_polys = open_ground_patches(s, plan, plan.woodland_patches)
     # ...and the bamboo stands (T47), seated now for the same reason: a stand is a wood, and the

@@ -1073,6 +1073,14 @@ def _touch_junctions(s: Settlement, hard: list[Poly], walls: Sequence[Poly], wat
                 d, foot, k, _op = _best
                 if d <= 2.0 or d > reach:
                     continue
+                # NOT BACK ONTO ITSELF (feature 134, Kuwabata seed 21): a 30 ft lane whose two ends
+                # both stood near the same spot on a neighbor had its start touched there, and then
+                # its end touched to the same foot - a lane closed into a 28 ft loop, which
+                # `lanes_bend_like_paths` read as a hairpin and `_smooth_web` never saw (it ran
+                # first). A foot within a few feet of the lane's OTHER end is its own junction, not a
+                # new one; leave that end alone.
+                if math.dist(foot, new[-1 if end == 0 else 0]) <= 6.0:
+                    continue
                 # END MEETS END: two lanes whose ends stand near each other are ONE lane with a
                 # hole in it, and the honest join is to run the other lane's end onto this one -
                 # a link from tread to tread drew an 8 ft jog that read as a loop (T32). The other

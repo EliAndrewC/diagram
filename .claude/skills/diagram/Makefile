@@ -347,6 +347,10 @@ scatter-audit:  ## is drawn ground cover standing where keep-outs should have st
 sun-audit:      ## the sun rules and the belt's page presence, off the manifest   M=pool/hamlets/inashiro.json
 	$(RUN).tools.sun_audit $(or $(M),pool/hamlets/inashiro.json)
 
+family-census:  ## which feature families one manifest records that another does not   A=pool/hamlets/inashiro.json B=pool/hamlets/kuwabata.json
+	$(RUN).tools.family_census --a $(or $(A),pool/hamlets/inashiro.json) --b $(or $(B),pool/hamlets/kuwabata.json)
+	@: "(GUARD_EDIT_OK: feature 134 - a read-only manifest census, the measured answer to 'does the converted map carry every reference-hamlet family')"
+
 new-check:      ## scaffold a gate check: segment stub, sorted fixture entry, test stub   NAME=... FILE=segments_*.py TEST=test_segments_*.py
 	@test -n "$(NAME)" -a -n "$(FILE)" -a -n "$(TEST)" || { printf 'make new-check NAME=<check_name> FILE=l7r/diagram/check_village/segments_XX.py TEST=tests/check_village/test_segments_XX.py\n'; exit 2; }
 	$(RUN).tools.new_check --name $(NAME) --file $(FILE) --test $(TEST)

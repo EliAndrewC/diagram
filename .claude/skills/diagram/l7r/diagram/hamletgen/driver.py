@@ -25,7 +25,7 @@ from .hinterland import stage_bamboo, stage_hinterland, stage_windbreak, stage_w
 from .homesteads import stage_appurtenances, stage_homesteads
 from .plan import HamletSpec, SitePlan, plan_site
 from .sink import stage_sink
-from .water import stage_field, stage_water_frame
+from .water import stage_field, stage_water_frame, stage_waterward
 from .ways import stage_seat, stage_track, stage_web
 
 # THE PIPELINE. Read top to bottom: this is the generator.
@@ -72,6 +72,13 @@ STAGES = (
     stage_field,
     stage_sink,
     stage_seat,  # decides WHERE the settlement sits. Draws nothing.
+    # A POLDER'S WATERWARD FRINGE (feature 134) - the reed strips outside the dike on the flanks that
+    # face the water. It needs the SEAT (which flank is landward is a fact about where the village
+    # stands) and it RESERVES ground, so it goes here and not in the hinterland: laid at stage 9 it
+    # was drawn over a connector already routed at stage 6 (`roads_clear_of_marsh`, the grid knob
+    # map); laid before the houses and the track, both treat it as the wet ground it is. No ink on a
+    # valley hamlet.
+    stage_waterward,
     stage_homesteads,  # the farmhouses, seated with no lane anywhere on the map
     stage_track,  # the connector and the field spur, derived from the placed houses
     stage_appurtenances,
