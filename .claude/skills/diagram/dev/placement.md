@@ -48,7 +48,7 @@ sequence one-to-one. Where the two disagree, `STAGES` wins for anything under `h
 | 6 | `stage_appurtenances` | yards, gardens, byres, wells, sheds |
 | 7 | `stage_web` | ALL the endogenous ways - the internal skeleton AND the lane web, both derived from where the houses actually landed. No-op for a dispersed hamlet, which has no internal network |
 | 8 | `stage_notice` | the kosatsuba, which stands ON a way and so waits for the web |
-| 9 | `stage_hinterland` | scrub and rough grazing |
+| 9 | `stage_hinterland` | marsh, the coppice scan, the farmstead FIXTURES (privy, heap, bath, coop, stack, hokora, persimmon - seated after the web so no lane is re-threaded, before the bamboo and the scrub, which keep off them; feature 133 T53-T59), the household bamboo, then scrub and rough grazing |
 | 10 | `stage_woodland` | woodland commons |
 | 11 | `stage_windbreak` | the shelter belt |
 | 12 | `stage_bamboo` | the bamboo stands, on seats the hinterland stage scanned (feature 133 T47) |

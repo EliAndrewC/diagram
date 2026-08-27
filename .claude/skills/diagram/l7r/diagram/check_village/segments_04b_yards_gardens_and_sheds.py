@@ -981,3 +981,92 @@ def _seg_0609_500__houses_clear_of_paddies(
             f"farmhouse(s) at {houses_clear_of_paddies_bad[:3]} stand nearer than {HOUSE_PADDY_GAP_FT:.0f} ft to a paddy outline (a wall on the bund; the levee is the footpath and the eaves overhang it) - the seat must hold the set-back from the FOOTPRINT, not the center (settlement.houses._fits)",
         )
     return _kept(locals(), ("houses_clear_of_paddies_bad",))
+
+
+# WHY: <one paragraph - what the research found, the decision it drove, the departure taken>.
+# Declare EVERY input the body reads as a keyword parameter (an undeclared one is a NameError at
+# gate time, not at import), and keep the `_kept` tuple a LITERAL of the names this body binds.
+
+
+# FARMSTEAD FIXTURES (feature 133 T53-T59, GM 2026-08-27). The T52 completeness pass listed what a
+# paddy farmstead had that the map did not draw, and the GM chose: the privy, the woodpile, the
+# manure heap, the bath shed, the chicken coop (in imperial China's proportions), the household
+# shrine (rare, in the religious red) and the persimmon. Each is an ANNEX of one farmhouse, seated by
+# `hamletgen/homesteads.py::farmstead_fixtures` against its own wall (or, for the hokora, its plot's
+# corner; the persimmon beside it, one crown out) - so the two rules here are the annex rule and the
+# declaration rule: (1) every fixture stands within a short walk of ITS OWN house - Nipponica: the
+# privy was an independent building "at the back door, by the naya, or at the gate"; the hokora at
+# the plot's corner; the persimmon "shades the house in summer" - a fixture far from every house is a
+# placer fault; (2) the shares the hamlet ROLLED are declared in meta and the sheet agrees: one of a
+# kind per house at most, a rare shrine that stays rare (Sugiura 1973: 3 per 100 households; the
+# GM: "very rare, but notable"), and at least one privy on any hamlet that declared them near-
+# universal. Research: research/homesteads.md "The farmstead's fixtures".
+FIXTURE_REACH_FT = {"privy": 20.0, "manure": 26.0, "bath": 20.0, "coop": 20.0, "woodpile": 20.0, "shrine": 30.0}
+PERSIMMON_REACH_FT = 50.0
+
+
+def _seg_0609_501__farm_fixtures_attached(
+    *,
+    M: Any = _UNBOUND,
+    check: Any = _UNBOUND,
+    meta: Any = _UNBOUND,
+    scale: Any = _UNBOUND,
+    farm_fixtures_attached_bad: Any = _UNBOUND,
+) -> dict[str, Any]:
+    """Gate segment 0609_501 (farm_fixtures_attached) - every farmstead fixture and yard persimmon stands within its kind's reach of the farmhouse it records as its own."""
+    if scale in ("hamlet", "village", "town"):
+        farm_fixtures_attached_bad = []
+        ftpx = float(meta.get("ftpx") or 1.0)
+        houses = M.get("houses") or []
+        for rec in list(M.get("farm_fixtures") or []) + [
+            {"kind": "persimmon", "x": p_["x"], "y": p_["y"], "w": 4.0 / ftpx, "h": 4.0 / ftpx, "rot": 0, "of": p_.get("of")} for p_ in M.get("persimmons") or []
+        ]:
+            of = rec.get("of")
+            parent = next((h for h in houses if of and abs(h["x"] - of[0]) < 0.6 and abs(h["y"] - of[1]) < 0.6), None)
+            reach = (PERSIMMON_REACH_FT if rec["kind"] == "persimmon" else FIXTURE_REACH_FT.get(rec["kind"], 20.0)) / ftpx
+            if parent is None or not within_edge_gap(rec, parent, reach):
+                farm_fixtures_attached_bad.append((rec["kind"], round(rec["x"]), round(rec["y"])))
+        check(
+            "farm_fixtures_attached",
+            not farm_fixtures_attached_bad,
+            f"{len(farm_fixtures_attached_bad)} farmstead fixture(s) {farm_fixtures_attached_bad[:3]} stand away from the farmhouse they belong to (or name none) - a privy, stack, heap, bath, coop, hokora or yard persimmon is that household's, seated at its wall or its plot corner",
+        )
+    return _kept(locals(), ("farm_fixtures_attached_bad",))
+
+
+def _seg_0609_502__farm_fixtures_as_declared(
+    *,
+    M: Any = _UNBOUND,
+    check: Any = _UNBOUND,
+    meta: Any = _UNBOUND,
+    scale: Any = _UNBOUND,
+    farm_fixtures_as_declared_bad: Any = _UNBOUND,
+) -> dict[str, Any]:
+    """Gate segment 0609_502 (farm_fixtures_as_declared) - the sheet agrees with the shares the hamlet rolled: every drawn kind declared, at most one of a kind per house, the shrine as rare as declared, a privy present where privies were declared near-universal."""
+    if scale in ("hamlet", "village", "town"):
+        farm_fixtures_as_declared_bad = []
+        shares = meta.get("farm_fixtures") or {}
+        fixtures = list(M.get("farm_fixtures") or [])
+        n = len(M.get("houses") or [])
+        drawn: dict[str, list[Any]] = {}
+        for rec in fixtures:
+            drawn.setdefault(rec["kind"], []).append(tuple(rec.get("of") or (rec["x"], rec["y"])))
+        if M.get("persimmons"):
+            drawn["persimmon"] = [tuple(p_.get("of") or (p_["x"], p_["y"])) for p_ in M["persimmons"]]
+        for kind, owners in drawn.items():
+            if kind not in shares:
+                farm_fixtures_as_declared_bad.append(f"{kind}: drawn but not declared in meta.farm_fixtures")
+            if len(owners) != len(set(owners)):
+                farm_fixtures_as_declared_bad.append(f"{kind}: a house has more than one")
+        if shares:
+            cap = max(1, round(float(shares.get("shrine", 0.0)) * n))
+            if len(drawn.get("shrine", [])) > cap:
+                farm_fixtures_as_declared_bad.append(f"shrine: {len(drawn['shrine'])} drawn, {cap} allowed at share {shares.get('shrine')} - a household shrine is RARE")
+            if n >= 8 and float(shares.get("privy", 0.0)) >= 0.8 and not drawn.get("privy"):
+                farm_fixtures_as_declared_bad.append(f"privy: declared on {shares.get('privy')} of houses and none drawn - the placer found no seat anywhere")
+        check(
+            "farm_fixtures_as_declared",
+            not farm_fixtures_as_declared_bad,
+            f"the farmstead fixtures disagree with the declared shares: {farm_fixtures_as_declared_bad[:3]}",
+        )
+    return _kept(locals(), ("farm_fixtures_as_declared_bad",))

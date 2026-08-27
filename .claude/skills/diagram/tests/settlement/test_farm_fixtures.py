@@ -1,0 +1,30 @@
+"""The farmstead fixture glyphs and records (settlement/farm_fixtures.py, feature 133 T53-T59)."""
+
+import pytest
+
+from l7r.diagram.settlement import Settlement
+from l7r.diagram.settlement.farm_fixtures import FIXTURE_FT, FIXTURE_KINDS, SHRINE_RED
+
+
+def test_every_fixture_kind_draws_on_top_and_records_its_house():
+    s = Settlement(W=600, H=600, seed=1)
+    s.meta(name="T", scale="hamlet", ftpx=1)
+    for i, kind in enumerate(FIXTURE_KINDS):
+        s.farm_fixture(kind, 100 + 40 * i, 300, rot=12.0, of=(100 + 40 * i, 330))
+    recs = s.M["farm_fixtures"]
+    assert [r["kind"] for r in recs] == list(FIXTURE_KINDS)
+    assert all(r["of"] == [100 + 40 * i, 330] and r["rot"] == 12.0 for i, r in enumerate(recs))
+    assert all((r["w"], r["h"]) == FIXTURE_FT[r["kind"]] for r in recs), "true feet at 1 ft/px - no size inflation"
+    assert len(s.top) >= len(FIXTURE_KINDS) and any(SHRINE_RED in t for t in s.top), "the hokora carries the religious red"
+    with pytest.raises(ValueError):
+        s.farm_fixture("pigsty", 10, 10)
+
+
+def test_persimmon_is_one_crown_with_fruit_and_joins_the_tree_record():
+    s = Settlement(W=600, H=600, seed=1)
+    s.meta(name="T", scale="hamlet", ftpx=1)
+    before = len(s.M["tree_crowns"])
+    s.persimmon(200, 200, of=(180, 200))
+    assert s.M["persimmons"] == [{"x": 200.0, "y": 200.0, "r": 9.0, "of": [180.0, 200.0]}]
+    assert len(s.M["tree_crowns"]) == before + 3, "the crown is a tree: structures_clear_of_trees reads it"
+    assert s.top[-1].count("#E07B22") == 4, "four fruit dots are the persimmon convention"

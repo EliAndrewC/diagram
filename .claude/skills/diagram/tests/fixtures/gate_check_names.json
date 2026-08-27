@@ -273,6 +273,8 @@
   "extramural_features_tethered",
   "extramural_housing_serves_its_work",
   "fallow_has_abandoned",
+  "farm_fixtures_as_declared",
+  "farm_fixtures_attached",
   "farm_sheds_attached",
   "farm_wells_within_reach",
   "farmhouse_aspect_in_range",

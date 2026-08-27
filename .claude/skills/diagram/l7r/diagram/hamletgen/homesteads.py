@@ -11,6 +11,8 @@ from collections.abc import Mapping, Sequence
 from typing import Any
 
 from l7r.diagram.settlement import Settlement, point_in_poly, seg_dist, surface_water_dist
+from l7r.diagram.settlement._knobs import knob_rng
+from l7r.diagram.settlement.farm_fixtures import FIXTURE_FT, PERSIMMON_CROWN_FT
 from l7r.diagram.sitegen.geom import centroid, unit
 
 from .consts import BUNDLE_PITCH, CLUSTER_DRAWN_ASPECT, CLUSTER_ROW_SPAN, CLUSTER_SPAN_FACTOR, LANE_FRONTAGE_STANDOFF, SUN_CORRIDOR_FT, WEST_SUN_FT, Poly, Pt
@@ -598,6 +600,196 @@ def _strip_blocked(
             ow, oh = float(o.get("w", 2 * float(o.get("r", 8)))), float(o.get("h", 2 * float(o.get("r", 8))))
             if abs(cx - float(o["x"])) < (cw + ow) / 2 + 6 and abs(cy - float(o["y"])) < (ch + oh) / 2 + 6:
                 return True
+    for poly in list(fields) + list(marsh):
+        if len(poly) >= 3 and any(point_in_poly(q[0], q[1], poly) or min(seg_dist(q[0], q[1], poly[k], poly[(k + 1) % len(poly)]) for k in range(len(poly))) < 6.0 for q in corners):
+            return True
+    for pts, half in lanes:
+        if any(seg_dist(q[0], q[1], pts[k], pts[k + 1]) < half for q in corners for k in range(len(pts) - 1)):
+            return True
+    return bool(pond) and ((cx - pond[0]) / (pond[2] + 20.0)) ** 2 + ((cy - pond[1]) / (pond[3] + 20.0)) ** 2 <= 1.0
+
+
+# FARMSTEAD FIXTURES (feature 133 T53-T59, GM 2026-08-27; research/homesteads.md "The farmstead's
+# fixtures"). Each row: the kind, the per-hamlet PREVALENCE BAND (rolled once per map from the seed -
+# two hamlets differ honestly where the record gives a range), and the seats tried in the house's
+# local frame (+y = the sunny front where the yard is, -y = the back wall, -x = the kura side). The
+# first seat is rolled where the record shows two forms; the rest are fallbacks. Every number is
+# labeled in the research entry:
+#   privy    READ  an independent outbuilding was "普通" (Nipponica) - near-universal; sited at the back
+#                  door, by the naya, or at the gate (戸口便所) - three attested seats, so rolled
+#   woodpile READ  a woodshed for firewood/charcoal on the reconstructed farmstead (Boso-no-Mura);
+#                  Sugiura counts the SHED on 0.76 - a stack under the eaves is the cheaper, older
+#                  form; its wall is a GUESS (the back wall or the kura's, out of the rain)
+#   manure   READ  in Han China the latrine stood over the pigsty (AIC) - muck and privy are one
+#                  cluster; in Japan the pit stood "near the stable, under the eaves" (SUMMARY-ONLY);
+#                  so the heap is seated beyond the privy; the share is a GUESS (Sugiura: a SHED on 0.24)
+#   bath     READ  the goemon-buro "was used widely in self-sufficient farm villages" (Mizumaki); Sugiura:
+#                  a bath SHED on 0.29, IN the house on 0.53 - two forms, so only the shed share is drawn
+#   coop     READ  "farmers in most regions of China managed to keep a pig and some chickens in their
+#                  yard" (Animals through Chinese History); a ground-level enclosure (Qimin Yaoshu);
+#                  the share is a GUESS bounded by "most regions"
+#   shrine   READ  two patterns - every house, or only certain old families (Tokushima; ja.wikipedia);
+#                  the GM chose the rare pattern (T58); Sugiura 0.03; corner NE (kimon, READ), NW
+#                  (17 of 37, SUMMARY-ONLY), SW (Tokushima, READ) - rolled
+#   persimmon READ "どこの庭先にも柿の木が植えてある" and Miyazaki Yasusada urged planting them round the
+#                  homestead; it shades the house in summer, so it stands beside it (side a GUESS)
+FIXTURE_BANDS: dict[str, tuple[float, float]] = {
+    "privy": (0.85, 0.95),
+    "woodpile": (0.75, 0.95),
+    "manure": (0.40, 0.70),
+    "bath": (0.20, 0.45),
+    "coop": (0.50, 0.80),
+    "shrine": (0.03, 0.08),
+    "persimmon": (0.80, 0.95),
+}
+_FIXTURE_ORDER = ("privy", "manure", "bath", "coop", "woodpile", "shrine", "persimmon")  # the buildings before the stack, which has the most seats
+_PRIVY_SEATS = (("back", 0.60), ("gate", 0.25), ("naya", 0.15))
+_SHRINE_CORNERS = (("NW", 0.45), ("NE", 0.35), ("SW", 0.20))
+_WALL_GAP_FT = 3.0
+_SALT = {"privy": 101.0, "manure": 102.0, "woodpile": 103.0, "bath": 104.0, "coop": 105.0, "shrine": 106.0, "persimmon": 107.0}
+
+
+def _roll(weights: Sequence[tuple[str, float]], u: float) -> str:
+    acc = 0.0
+    for name, w in weights:
+        acc += w
+        if u < acc:
+            return name
+    return weights[-1][0]
+
+
+def farmstead_fixtures(s: Settlement, plan: SitePlan, houses: Sequence[Mapping[str, Any]]) -> int:
+    """Seat and draw the small fixtures of every farmstead. Returns the count placed.
+
+    Seated in `stage_hinterland` after the web and the board, like the household bamboo (T49): a
+    fixture hugs its house and is tested against every placed footprint, lane, paddy, marsh and pond
+    (`_strip_blocked`), so the web is never re-threaded and nothing is drawn on anything. Presence
+    per house is positional (`_hjit`) against the hamlet's own share, which is rolled once per map
+    inside the band above and declared in meta for the gate. Every seated fixture joins `s.placed`
+    and `s.block_polys`, so the bamboo strips and the scrub keep off it."""
+    if not houses:
+        return 0
+    rng = knob_rng(s.seed, "farm_fixtures")
+    shares = {k: round(lo + rng.random() * (hi - lo), 3) for k, (lo, hi) in FIXTURE_BANDS.items()}
+    s.M["meta"]["farm_fixtures"] = dict(shares)
+    px = s.px
+    g = px(_WALL_GAP_FT)
+    fields = [list(f) for f in s.field_polys]
+    marsh = [[(float(a), float(b)) for a, b in m["poly"]] for m in s.M.get("marshes", []) if m.get("poly")]
+    pond = s.M.get("pond")
+    lanes = [([(float(a), float(b)) for a, b in ln["pts"]], float(ln.get("w", 3)) / 2 + px(3.0)) for ln in s.M.get("lanes", []) if len(ln.get("pts") or []) >= 2]
+    count = 0
+    shrines_left = max(1, round(shares["shrine"] * len(houses)))  # RARE means rare: positional luck cannot exceed the share
+    for h in houses:
+        hx, hy, hw, hh = float(h["x"]), float(h["y"]), float(h["w"]), float(h["h"])
+        rot = float(h.get("rot", 0.0))
+        th = math.radians(rot)
+        ca, sa = math.cos(th), math.sin(th)
+        shed_side = h.get("shed_side", "W")
+        privy_at: tuple[float, float] | None = None
+
+        for kind in _FIXTURE_ORDER:
+            if s._hjit(hx, hy, _SALT[kind]) >= shares[kind]:
+                continue
+            if kind == "shrine" and shrines_left <= 0:
+                continue
+            u = s._hjit(hx, hy, _SALT[kind] + 0.5)
+            if kind == "persimmon":
+                r = px(PERSIMMON_CROWN_FT)
+                # a raked house is a circumscribed SQUARE to the canopy keep-out (_canopy_keepouts mirrors
+                # structures_clear_of_trees), so the trunk stands a half-diagonal + the crown out from the center
+                reach = math.hypot(hw / 2, hh / 2) + r + s.CANOPY_PAD + 1.0
+                tseats = [(reach, hh * 0.1), (-reach, hh * 0.1), (reach * 0.75, -reach * 0.75), (-reach * 0.75, -reach * 0.75), (reach * 0.75, reach * 0.75), (-reach * 0.75, reach * 0.75)]
+                if u < 0.5:
+                    tseats[0], tseats[1] = tseats[1], tseats[0]
+                for lx, ly in tseats:
+                    cx, cy = hx + lx * ca - ly * sa, hy + lx * sa + ly * ca
+                    # the TRUNK is tested against drawn footprints, not the plot reservations: a yard tree
+                    # stands at a plot's edge, and in a nucleated cluster the reservations tile the ground
+                    if _trunk_blocked(s, cx, cy, px(4.0), fields, marsh, pond, lanes):
+                        continue
+                    # no tree on a roof: the SAME keep-outs and the same test the grove drawer uses, so
+                    # structures_clear_of_trees (which mirrors them) cannot disagree with this seat
+                    rects, circles = s._canopy_keepouts((cx - r - 40, cy - r - 40, cx + r + 40, cy + r + 40))
+                    if s._crown_covers(cx, cy, r, rects, circles, pad=s.CANOPY_PAD):
+                        continue
+                    s.persimmon(cx, cy, of=(hx, hy))
+                    s.placed.append((cx, cy, px(4.0), px(4.0)))
+                    count += 1
+                    break
+                continue
+            w, d = px(FIXTURE_FT[kind][0]), px(FIXTURE_FT[kind][1])  # along the wall, out from it
+            # candidate seats as (lx, ly, w_local, h_local); the fixture is drawn raked with the house
+            if kind == "privy":
+                seat = {
+                    "back": (hw * 0.3, -(hh / 2 + g + d / 2), w, d),
+                    "gate": (-hw * 0.35, hh / 2 + g + d / 2, w, d),
+                    "naya": ((hw / 2 + g + d / 2), -hh * 0.25, d, w) if shed_side == "N" else (-(hw / 2 + hw * 0.32 + g + d / 2), -hh * 0.25, d, w),
+                }
+                first = _roll(_PRIVY_SEATS, u)
+                seats = [seat[first]] + [seat[k] for k, _ in _PRIVY_SEATS if k != first] + [(hw / 2 + g + d / 2, hh * 0.25, d, w)]
+            elif kind == "manure":
+                if privy_at is not None:
+                    plx, ply = privy_at
+                    out_ = -1.0 if ply < 0 else 1.0
+                    seats = [(plx, ply + out_ * (px(FIXTURE_FT["privy"][1]) / 2 + g + d / 2), w, d), (plx + w * 1.1, ply, w, d), (plx - w * 1.1, ply, w, d)]
+                else:
+                    seats = [(hw * 0.3, -(hh / 2 + g + d / 2), w, d), (hw / 2 + g + d / 2, hh * 0.3, d, w)]
+            elif kind == "woodpile":
+                # a stack stands against whichever wall is free, out of the way: both ends of the back wall
+                # and a second row behind it, the kura's outer wall, either flank at two heights
+                back = -(hh / 2 + g + d / 2)
+                seats = [(-hw * 0.25, back, w, d), (hw * 0.25, back, w, d), (-hw * 0.25, back - d - g, w, d), (hw * 0.25, back - d - g, w, d)]
+                if shed_side != "N":
+                    seats.insert(1, (-(hw / 2 + hw * 0.32 + g + d / 2), hh * 0.1, d, w))  # against the kura's outer wall
+                else:
+                    seats.insert(0, (-(hw * 0.46 / 2 + g + d / 2), -hh * 0.6, d, w))  # beside the back kura
+                seats += [(hw / 2 + g + d / 2, hh * 0.1, d, w), (-(hw / 2 + g + d / 2), hh * 0.1, d, w), (hw / 2 + g + d / 2, -hh * 0.3, d, w), (-(hw / 2 + g + d / 2), -hh * 0.3, d, w)]
+            elif kind == "bath":
+                seats = [
+                    (-hw * 0.3, -(hh / 2 + g + d / 2), w, d),
+                    (-(hw / 2 + g + d / 2), hh * 0.2, d, w),
+                    (hw / 2 + g + d / 2, -hh * 0.3, d, w),
+                    (-hw * 0.3, -(hh / 2 + g + d * 1.5 + g), w, d),
+                    (hw * 0.3, -(hh / 2 + g + d * 1.5 + g), w, d),
+                ]
+            elif kind == "coop":
+                seats = [(hw / 2 + g + d / 2, hh * 0.3, d, w), (0.0, -(hh / 2 + g + d / 2), w, d), (-(hw / 2 + g + d / 2), -hh * 0.3, d, w)]
+            else:  # shrine: a plot corner, world frame
+                off = px(14.0)
+                corner = {"NW": (-(hw / 2 + off), -(hh / 2 + off)), "NE": (hw / 2 + off, -(hh / 2 + off)), "SW": (-(hw / 2 + off), hh / 2 + off)}
+                first = _roll(_SHRINE_CORNERS, u)
+                seats = [(*corner[first], w, d)] + [(*corner[k], w, d) for k, _ in _SHRINE_CORNERS if k != first]
+            for lx, ly, cw, ch in seats:
+                cx, cy = hx + lx * ca - ly * sa, hy + lx * sa + ly * ca
+                ext = abs(cw * ca) + abs(ch * sa), abs(cw * sa) + abs(ch * ca)  # the raked rect's bbox
+                if _strip_blocked(s, cx, cy, ext[0], ext[1], hx, hy, fields, marsh, pond, lanes):
+                    continue
+                s.farm_fixture(kind, cx, cy, rot=rot, of=(hx, hy))
+                ring = [(cx - ext[0] / 2, cy - ext[1] / 2), (cx + ext[0] / 2, cy - ext[1] / 2), (cx + ext[0] / 2, cy + ext[1] / 2), (cx - ext[0] / 2, cy + ext[1] / 2)]
+                s.placed.append((cx, cy, ext[0], ext[1]))
+                s.block_polys.append(ring)
+                if kind == "privy":
+                    privy_at = (lx, ly)
+                elif kind == "shrine":
+                    shrines_left -= 1
+                count += 1
+                break
+    return count
+
+
+def _trunk_blocked(s: Settlement, cx: float, cy: float, t: float, fields: Sequence[Poly], marsh: Sequence[Poly], pond: Any, lanes: Sequence[tuple[Poly, float]]) -> bool:
+    """Would a tree trunk (a t x t box) stand on a drawn footprint, a lane, a paddy, the marsh or the pond?"""
+    if cx - t < 30 or cy - t < 30 or cx + t > s.W - 30 or cy + t > s.H - 30:
+        return True
+    for key in ("houses", "farm_sheds", "gardens", "threshing_yards", "byres", "wells", "kosatsuba", "farm_fixtures", "persimmons", "bamboo_stands"):
+        for o in s.M.get(key, []):
+            if "x" not in o:
+                continue
+            ow, oh = float(o.get("w", 2 * float(o.get("r", 8)))), float(o.get("h", 2 * float(o.get("r", 8))))
+            if abs(cx - float(o["x"])) < (t + ow) / 2 + 2 and abs(cy - float(o["y"])) < (t + oh) / 2 + 2:
+                return True
+    corners = [(cx - t / 2, cy - t / 2), (cx + t / 2, cy - t / 2), (cx + t / 2, cy + t / 2), (cx - t / 2, cy + t / 2)]
     for poly in list(fields) + list(marsh):
         if len(poly) >= 3 and any(point_in_poly(q[0], q[1], poly) or min(seg_dist(q[0], q[1], poly[k], poly[(k + 1) % len(poly)]) for k in range(len(poly))) < 6.0 for q in corners):
             return True

@@ -556,3 +556,99 @@ Shaoxing ancient towpath coverage (CGTN; Shanghai Daily); Grand Canal surveys
 IDE "Japanese Experience" archive on Edo distribution; Nakasendo Way, *River and Sea Transport*; Oi-kawa crossing histories
 
 *Used for:* river transport carrying the tribute rice with a cargo role equivalent to the roads' military/administrative one; Japan's short fast rivers preventing an extensive inland waterway network; and roads NOT following rivers - bridges and ferries prohibited at the Oi-kawa on the Tokaido so the river served as a checkpoint
+
+### `kotobank-benjo`
+
+日本大百科全書(ニッポニカ) 「便所」, via kotobank.jp/word/便所-131200 (READ 2026-08-27, source-reader)
+
+*Used for:* the farm privy as ONE independent outbuilding holding the urinal and the privy, "普通" (T53).
+
+### `sinyoken-madori`
+
+sinyoken.sakura.ne.jp, 「間取りからみたトイレの位置の変遷」 (camadori.htm) and cayomo016.htm (READ 2026-08-27, source-reader)
+
+*Used for:* where the farm privy stood - by the naya, at the back door, toward the 背戸口, the 戸口便所 (T53).
+
+### `artic-pigsty-latrine`
+
+Art Institute of Chicago, "Model of a Pigsty and Latrines", Eastern Han, object 37716 - catalog text read through api.artic.edu (the page itself 403s) (READ 2026-08-27, source-reader)
+
+*Used for:* the Han pigsty-privy as one customary structure - the muck clusters with the privy (T55).
+
+### `boso-no-mura-kigoya`
+
+Chiba Prefectural Museum, Boso-no-Mura, the reconstructed farmstead's 木小屋 page (READ 2026-08-27, source-reader; a second page returned mojibake)
+
+*Used for:* a firewood/charcoal shed on the farmstead (T54). Its PLACEMENT is not on the page.
+
+### `jawiki-koedame`
+
+ja.wikipedia 肥溜め and 下肥 (READ 2026-08-27, source-reader)
+
+*Used for:* night soil fermented in buried jars/plastered pits, 1-1.5 m across, 1-4 weeks (T55). Location not stated.
+
+### `mizumaki-goemonburo`
+
+Mizumaki town historical museum, 五右衛門風呂 (READ 2026-08-27, source-reader)
+
+*Used for:* the goemon-buro "used widely in self-sufficient farm villages" (T56).
+
+### `cambridge-animals-china`
+
+*Animals through Chinese History*, Cambridge, chapter "Where did the animals go" (READ 2026-08-27, source-reader; the chapter leans on 1930s survey data by its own account)
+
+*Used for:* "farmers in most regions of China managed to keep a pig and some chickens in their yard" (T59).
+
+### `qimin-yaoshu-yangji`
+
+齊民要術 卷六 養雞第五十九, wikisource (四庫全書本) (READ 2026-08-27, source-reader)
+
+*Used for:* the chicken roost as a ground-level enclosure with a perch, preferred to the trees (T59).
+
+### `pitt-zhengzhou-coop`
+
+University of Pittsburgh HAA news, "Tao and colleagues publish on a 400-year-old Chinese chicken coop" (READ 2026-08-27, source-reader)
+
+*Used for:* a late-Ming square coop with six niche openings and eggshell (T59). No size given.
+
+### `zhwiki-liuchu`
+
+zh.wikipedia 六畜 (READ 2026-08-27, source-reader; en.wikipedia 403s)
+
+*Used for:* the chicken as one of the six livestock (T59).
+
+### `tokushima-yashikigami`
+
+徳島県立図書館 紀要 50, pp. 131-133, 屋敷神 (PDF READ 2026-08-27, source-reader)
+
+*Used for:* the two patterns (every house / old families only), the SW corner as the local norm, one 40 cm stone hokora, one persimmon 20 m east of a homestead (T58, T57).
+
+### `jawiki-yashikigami`
+
+ja.wikipedia 屋敷神; minka-en.com 屋敷神; satologue.com 屋敷神様 (READ 2026-08-27, source-reader)
+
+*Used for:* the two patterns; a small stone or wooden hokora at the plot's corner, especially the NE 鬼門 (T58).
+
+### `kameyama-yashikigami`
+
+亀山市史 民俗編, 屋敷神 (kameyamarekihaku.jp) - SUMMARY-ONLY: the page would not render on three fetches; a search summary carries 17 of 37 at the NW corner, 11 at the NE (2026-08-27)
+
+*Used for:* the NW/NE corner weights (T58), labeled SUMMARY-ONLY.
+
+### `toyoko-kaki`
+
+「農家の庭先にはなぜ柿の木が植えられているのか？」, ameblo.jp/toyoko-housing (READ 2026-08-27, source-reader)
+
+*Used for:* a persimmon in every dooryard; Miyazaki Yasusada's encouragement; summer shade for the house (T57).
+
+### `uekipedia-kaki`
+
+植木ペディア カキ (READ 2026-08-27, source-reader)
+
+*Used for:* persimmon height 3-20 m (T57). No crown width.
+
+### `326woods-stack`
+
+326-woods.com, 薪の保管方法 (READ 2026-08-27, source-reader) - MODERN stacking practice
+
+*Used for:* a stack to ~1.5 m high (T54), labeled modern.

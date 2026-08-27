@@ -10,6 +10,7 @@ from ._knobs import crop_boxes, resolve_knob, scope_seed
 from .castle_civic import CastleCivicMixin
 from .city import CityMixin
 from .civic_grounds import CivicGroundsMixin
+from .farm_fixtures import FarmFixturesMixin
 from .fields import FieldsMixin
 from .finish import FinishMixin
 from .homestead_parts import HomesteadPartsMixin
@@ -23,7 +24,20 @@ from .water_ways import WaterWaysMixin
 
 
 class Settlement(
-    FieldsMixin, WaterWaysMixin, ShrinesWellsMixin, StructuresMixin, TradesMixin, HomesteadPartsMixin, LandMixin, CivicGroundsMixin, CityMixin, CastleCivicMixin, HousesMixin, RollingMixin, FinishMixin
+    FieldsMixin,
+    WaterWaysMixin,
+    ShrinesWellsMixin,
+    StructuresMixin,
+    TradesMixin,
+    HomesteadPartsMixin,
+    LandMixin,
+    CivicGroundsMixin,
+    CityMixin,
+    CastleCivicMixin,
+    HousesMixin,
+    RollingMixin,
+    FinishMixin,
+    FarmFixturesMixin,
 ):
     def __init__(self: Settlement, W: int = 1820, H: int = 1180, seed: int = 23) -> None:
         random.seed(seed)
@@ -188,6 +202,8 @@ class Settlement(
             "marshes": [],
             "byres": [],
             "farm_sheds": [],
+            "farm_fixtures": [],
+            "persimmons": [],
             "quarters": [],
             "meta": {"W": W, "H": H},
         }

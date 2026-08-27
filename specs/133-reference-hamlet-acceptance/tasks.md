@@ -299,6 +299,77 @@ _(from T46 on, each entry also says `research: rendering` or `research: physical
       measure: the feature families Inashiro records vs the read record's list
       verify: the record; the GM chooses
 
+- [x] T53 **the privy** - a per-farmstead outhouse - the GM (2026-08-27), choosing from the T52 list: *"I do think that privies are something that we want."*
+      given 2026-08-27T18:30Z | done 2026-08-27T18:49Z | elapsed 19 min (computed, the eight tasks together; three source-readers in parallel, ~4.5 min) | runs: source-reader x3 (Sonnet, 101 fetches), make maps x5, make reference x1, make quick x3, make scatter-audit x2, make placement-stages x1, make done x1
+      note: `farm_fixtures.py` (glyphs + records) and `farmstead_fixtures` in hamletgen/homesteads.py: 6 x 6 ft, seat rolled back door .60 / gate .25 / naya .15 (three READ seats), share band .85-.95; Inashiro 12 of 15
+      research: physical
+      - [x] research pass (the T52 inventory + a search pass; the pointers listed in the entry)  - [x] source-reader confirmed (the three T53-T59 runs; verdicts quoted per claim)  - [x] recorded and cited (research/homesteads.md "The farmstead's fixtures"; SOURCES.md 16 new keys)
+      scaffold: `settlement/farm_fixtures.py` mixin + `hamletgen/homesteads.py::farmstead_fixtures` + checks `farm_fixtures_attached` / `farm_fixtures_as_declared` (two frozen fixtures) + `settlements/homesteads.md` "Farmstead fixtures"
+      measure: Inashiro seed 4 counts per kind (above); scatter audit 0 violations; the gate green
+      verify: `make maps`, `make quick`, `make done`; the GM looks
+
+- [x] T54 **the firewood stack** - a per-farmstead woodpile - the GM (2026-08-27), choosing from the T52 list: *"I think that firewood stacks are actually large enough to render on our maps because every firewood stack that I have ever seen has been larger than a foot. Has been, in fact, several feet long. Many of them are wider than I am tall. So I think that it makes sense to include them in places where we would expect them to be."*
+      given 2026-08-27T18:30Z | done 2026-08-27T18:49Z | elapsed 19 min (computed, the eight tasks together; three source-readers in parallel, ~4.5 min) | runs: source-reader x3 (Sonnet, 101 fetches), make maps x5, make reference x1, make quick x3, make scatter-audit x2, make placement-stages x1, make done x1
+      note: 10 x 3.5 ft stack with end-grain dots, seats along the back wall (both ends, two rows), the kura's outer wall, the flanks; band .75-.95; Inashiro 7 (the buildings are seated first and take the flanks)
+      research: physical
+      - [x] research pass (the T52 inventory + a search pass; the pointers listed in the entry)  - [x] source-reader confirmed (the three T53-T59 runs; verdicts quoted per claim)  - [x] recorded and cited (research/homesteads.md "The farmstead's fixtures"; SOURCES.md 16 new keys)
+      scaffold: `settlement/farm_fixtures.py` mixin + `hamletgen/homesteads.py::farmstead_fixtures` + checks `farm_fixtures_attached` / `farm_fixtures_as_declared` (two frozen fixtures) + `settlements/homesteads.md` "Farmstead fixtures"
+      measure: Inashiro seed 4 counts per kind (above); scatter audit 0 violations; the gate green
+      verify: `make maps`, `make quick`, `make done`; the GM looks
+
+- [x] T55 **the manure heap** - the GM (2026-08-27), choosing from the T52 list: *"Same thing with manure heaps"* - in the places where we would expect them to be
+      given 2026-08-27T18:30Z | done 2026-08-27T18:49Z | elapsed 19 min (computed, the eight tasks together; three source-readers in parallel, ~4.5 min) | runs: source-reader x3 (Sonnet, 101 fetches), make maps x5, make reference x1, make quick x3, make scatter-audit x2, make placement-stages x1, make done x1
+      note: 8 x 6 ft dashed mound beyond the privy (Han pigsty-privy READ; Japanese pit-by-the-stable SUMMARY-ONLY); band .40-.70; Inashiro 5
+      research: physical
+      - [x] research pass (the T52 inventory + a search pass; the pointers listed in the entry)  - [x] source-reader confirmed (the three T53-T59 runs; verdicts quoted per claim)  - [x] recorded and cited (research/homesteads.md "The farmstead's fixtures"; SOURCES.md 16 new keys)
+      scaffold: `settlement/farm_fixtures.py` mixin + `hamletgen/homesteads.py::farmstead_fixtures` + checks `farm_fixtures_attached` / `farm_fixtures_as_declared` (two frozen fixtures) + `settlements/homesteads.md` "Farmstead fixtures"
+      measure: Inashiro seed 4 counts per kind (above); scatter audit 0 violations; the gate green
+      verify: `make maps`, `make quick`, `make done`; the GM looks
+
+- [x] T56 **the bath shed** - the GM (2026-08-27), choosing from the T52 list: *"same thing with baths"*
+      given 2026-08-27T18:30Z | done 2026-08-27T18:49Z | elapsed 19 min (computed, the eight tasks together; three source-readers in parallel, ~4.5 min) | runs: source-reader x3 (Sonnet, 101 fetches), make maps x5, make reference x1, make quick x3, make scatter-audit x2, make placement-stages x1, make done x1
+      note: 6 x 6 ft shed with the cauldron dot, back wall or flank; only the SHED share drawn (Sugiura: shed .29 vs in-house .53 - two forms); band .20-.45; Inashiro 3
+      research: physical
+      - [x] research pass (the T52 inventory + a search pass; the pointers listed in the entry)  - [x] source-reader confirmed (the three T53-T59 runs; verdicts quoted per claim)  - [x] recorded and cited (research/homesteads.md "The farmstead's fixtures"; SOURCES.md 16 new keys)
+      scaffold: `settlement/farm_fixtures.py` mixin + `hamletgen/homesteads.py::farmstead_fixtures` + checks `farm_fixtures_attached` / `farm_fixtures_as_declared` (two frozen fixtures) + `settlements/homesteads.md` "Farmstead fixtures"
+      measure: Inashiro seed 4 counts per kind (above); scatter audit 0 violations; the gate green
+      verify: `make maps`, `make quick`, `make done`; the GM looks
+
+- [x] T57 **the persimmon tree** - the GM (2026-08-27), choosing from the T52 list: *"same thing with persimmons"*
+      given 2026-08-27T18:30Z | done 2026-08-27T18:49Z | elapsed 19 min (computed, the eight tasks together; three source-readers in parallel, ~4.5 min) | runs: source-reader x3 (Sonnet, 101 fetches), make maps x5, make reference x1, make quick x3, make scatter-audit x2, make placement-stages x1, make done x1
+      note: an 18 ft crown with four fruit dots beside the house, trunk tested against drawn footprints (not the plot reservations) and the crown against the engine's canopy keep-outs (a raked house is its circumscribed square there - the first roll failed structures_clear_of_trees, then seated 0 until the reach was computed from the half-diagonal); band .80-.95; Inashiro 10
+      research: physical
+      - [x] research pass (the T52 inventory + a search pass; the pointers listed in the entry)  - [x] source-reader confirmed (the three T53-T59 runs; verdicts quoted per claim)  - [x] recorded and cited (research/homesteads.md "The farmstead's fixtures"; SOURCES.md 16 new keys)
+      scaffold: `settlement/farm_fixtures.py` mixin + `hamletgen/homesteads.py::farmstead_fixtures` + checks `farm_fixtures_attached` / `farm_fixtures_as_declared` (two frozen fixtures) + `settlements/homesteads.md` "Farmstead fixtures"
+      measure: Inashiro seed 4 counts per kind (above); scatter audit 0 violations; the gate green
+      verify: `make maps`, `make quick`, `make done`; the GM looks
+
+- [x] T58 **the household shrine - very rare, notable, in the religious red** - the GM (2026-08-27), choosing from the T52 list: *"I do really like the idea of a household shrine being something which is very rare, but which is notable when it does appear So let's do that as well. We can even perhaps give it the red marking that we give to shrines and monasteries and temples on our maps as a glyph rendering convention."*
+      given 2026-08-27T18:30Z | done 2026-08-27T18:49Z | elapsed 19 min (computed, the eight tasks together; three source-readers in parallel, ~4.5 min) | runs: source-reader x3 (Sonnet, 101 fetches), make maps x5, make reference x1, make quick x3, make scatter-audit x2, make placement-stages x1, make done x1
+      note: 3 x 3 ft hokora in `SHRINE_RED` with a torii bar at the plot's NW .45 / NE .35 / SW .20 corner; band .03-.08 and the count CAPPED at round(share x houses) so positional luck cannot make it common (the first roll drew 2 of 15); Inashiro 1. FLAG for the GM: the one measured stone is ~1.3 ft, drawn at 3 (a plinth's footprint) - the red is the marker, not the size
+      research: physical
+      - [x] research pass (the T52 inventory + a search pass; the pointers listed in the entry)  - [x] source-reader confirmed (the three T53-T59 runs; verdicts quoted per claim)  - [x] recorded and cited (research/homesteads.md "The farmstead's fixtures"; SOURCES.md 16 new keys)
+      scaffold: `settlement/farm_fixtures.py` mixin + `hamletgen/homesteads.py::farmstead_fixtures` + checks `farm_fixtures_attached` / `farm_fixtures_as_declared` (two frozen fixtures) + `settlements/homesteads.md` "Farmstead fixtures"
+      measure: Inashiro seed 4 counts per kind (above); scatter audit 0 violations; the gate green
+      verify: `make maps`, `make quick`, `make done`; the GM looks
+
+- [x] T59 **the chicken coop - in imperial China's proportions** - the GM (2026-08-27), choosing from the T52 list: *"as for chicken coops, [the setting] is a mixture of China and Japan. So I think that it probably makes sense because its farms are more based on China than Japan to go with whatever was the case in imperial China. So if we are not sure whether Edo period Japan had chicken coops, but we know for sure that Tang China or Ming China or Han China did, then we should include them in whatever proportions makes sense for premodern China."*
+      given 2026-08-27T18:30Z | done 2026-08-27T18:49Z | elapsed 19 min (computed, the eight tasks together; three source-readers in parallel, ~4.5 min) | runs: source-reader x3 (Sonnet, 101 fetches), make maps x5, make reference x1, make quick x3, make scatter-audit x2, make placement-stages x1, make done x1
+      note: 5 x 5 ft slatted square on the flank by the yard; imperial China READ: 'most regions ... a pig and some chickens in their yard', the Qimin Yaoshu ground enclosure, the Ming square coop; no household proportion exists anywhere, so the band .50-.80 is a GUESS bounded by 'most regions'; Inashiro 7
+      research: physical
+      - [x] research pass (the T52 inventory + a search pass; the pointers listed in the entry)  - [x] source-reader confirmed (the three T53-T59 runs; verdicts quoted per claim)  - [x] recorded and cited (research/homesteads.md "The farmstead's fixtures"; SOURCES.md 16 new keys)
+      scaffold: `settlement/farm_fixtures.py` mixin + `hamletgen/homesteads.py::farmstead_fixtures` + checks `farm_fixtures_attached` / `farm_fixtures_as_declared` (two frozen fixtures) + `settlements/homesteads.md` "Farmstead fixtures"
+      measure: Inashiro seed 4 counts per kind (above); scatter audit 0 violations; the gate green
+      verify: `make maps`, `make quick`, `make done`; the GM looks
+
+- [x] T60 **the straw rick is NOT drawn - seasonal maps go to future work** - the GM (2026-08-27), choosing from the T52 list: *"the straw shed, I think we should omit if it is something that would only appear during the harvest time. That is something that we can put under future work where, in general, we want the ability to have seasonal maps, but I don't think that this is something that we will do during this current phase of development. Seasonal maps will require a number of changes as well because things like rice patties being drained and then used for other crops in the off season are also the kind of thing that we would need to do on some maps, but not others, etcetera."*
+      given 2026-08-27T18:30Z | done 2026-08-27T18:49Z | elapsed 19 min (computed, the eight tasks together; three source-readers in parallel, ~4.5 min) | runs: source-reader x3 (Sonnet, 101 fetches), make maps x5, make reference x1, make quick x3, make scatter-audit x2, make placement-stages x1, make done x1
+      note: future-work/farming-communities.md 'Seasonal maps' carries the GM's words, the rick, the hasa frames, the drained paddies and a knob sketch; nothing drawn
+      research: procedure
+      scaffold: a future-work entry
+      measure: Inashiro seed 4 counts per kind (above); scatter audit 0 violations; the gate green
+      verify: `make maps`, `make quick`, `make done`; the GM looks
+
 ## Phase 9 - acceptance
 
 - [ ] T90 the would-have-dispatched audit (FR-005): every entry in the period, and for each whether it should have run; each "no" names a tooling change

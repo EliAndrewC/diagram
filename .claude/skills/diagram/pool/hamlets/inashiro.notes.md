@@ -1376,3 +1376,11 @@ re-read (settlements/ways.md): the FORM is read - carts confined by law to three
 network built for foot, pole and wheelbarrow - and no source anywhere gives a numeric width for an
 ordinary village lane; the drawn 3 / 5 / 6 ft are drawing conventions inside the read bounds
 (under the 9 ft ox-cart stone route), labeled so.
+
+**2026-08-27 (feature 133 T53-T59, the farmstead fixtures).** Every farmstead now rolls its
+privy, woodpile, manure heap, bath shed, chicken coop, household shrine and persimmon from the map
+seed (shares this seed: privy .86, woodpile .86, manure .53, bath .34, coop .69, shrine .05,
+persimmon .82) and seats what fits: privy 12, woodpile 7, coop 7, manure 5, bath 3, shrine 1,
+persimmon 10 on the 15 houses. The one hokora is in the religious red at a plot corner. All at true
+size; the research and the guess labels in research/homesteads.md "The farmstead's fixtures". The
+straw rick is deferred with seasonal maps (T60).

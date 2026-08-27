@@ -13,7 +13,7 @@ from l7r.diagram.settlement import Settlement, point_in_poly, seg_dist
 from l7r.diagram.sitegen.geom import crop_polys
 
 from .consts import Poly, Pt
-from .homesteads import household_bamboo
+from .homesteads import farmstead_fixtures, household_bamboo
 from .plan import SitePlan
 
 # ---- STAGE 7: the ground between everything ------------------------------------------------------
@@ -39,6 +39,7 @@ def stage_hinterland(s: Settlement, plan: SitePlan) -> None:
     plan.woodland_polys = open_ground_patches(s, plan, plan.woodland_patches)
     # ...and the bamboo stands (T47), seated now for the same reason: a stand is a wood, and the
     # scrub keeps out of it. Drawn by `stage_bamboo`, after the belt.
+    farmstead_fixtures(s, plan, s.M.get("houses", []))  # T53-T59: the privies, woodpiles, heaps, baths, coops, shrines, persimmons - before the bamboo, which keeps off them
     plan.bamboo_polys += household_bamboo(s, plan, s.M.get("houses", []))  # T49: after the web and the board, before the scrub
     plan.bamboo_polys += bamboo_seats(s, plan)
     s.hinterland(marsh=False, soft_extra=[*([plan.belt] if plan.belt else []), *plan.woodland_polys, *plan.bamboo_polys])

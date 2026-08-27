@@ -90,5 +90,6 @@ CROWN_FILLS = (
     '#7C9856',  # land/cover.py woodland commons
     '#87A45C',  # land/cover.py woodland commons
     '#BBD06A',  # homestead_parts.py bamboo top
+    '#7C9A3E',  # farm_fixtures.py the yard persimmon (feature 133 T57)
 )
 RICE_GREENS = ['#A6C398', '#A2C094', '#A9C69C']  # rice at ONE stage - near-identical greens (reads uniform)

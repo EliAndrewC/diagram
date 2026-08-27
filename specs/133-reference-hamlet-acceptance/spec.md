@@ -180,3 +180,17 @@ to get things into main outside the context of features"* the GM suspected.
   `T99` by id; if the task ids change, that sentence goes stale.
 - **FR-006 amendment (2026-08-25): FAITHFUL** at round 1. Reviewer's aside applied: User Story 3
   scenario 1 now names `IN PROGRESS` as the observed refusal, and records the live observation.
+
+## Decisions Recorded (constitution XII - the reader who will click on it)
+
+| feature | class | where |
+|---|---|---|
+| the farm privy as an independent outbuilding at the back door / gate / naya (T53) | ACCURATE (READ) | research/homesteads.md "The farmstead's fixtures"; settlements/homesteads.md "Farmstead fixtures" |
+| the privy's 6 x 6 ft, the heap's 8 x 6, the bath's 6 x 6, the coop's 5 x 5, the stack's 10 x 3.5, the crown's 18 ft, every share band | GUESS (labeled) | same |
+| the manure heap beyond the privy (T55) | ACCURATE in China (the Han pigsty-privy, READ); SUMMARY-ONLY in Japan | same |
+| only the bath SHED share drawn, the in-house baths undrawn (T56) | ACCURATE (Sugiura's two forms) | same |
+| the chicken coop in imperial China's proportions (T59) | ACCURATE that it existed and was widespread (READ); the share a GUESS | same |
+| the household shrine rare (T58) - the GM chose between two attested patterns; the every-house pattern declined | DEVIATION by ruling, recorded with the alternative | same |
+| the hokora drawn 3 ft where the one measured stone is 1.3 ft; the vermilion and the torii bar | DEVIATION (legibility; the GM's red convention) - flagged | same |
+| the persimmon's four fruit dots | DEVIATION (a naming convention, not a season) | same |
+| the straw rick and the hasa frames not drawn (T60) | DEFERRED (seasonal maps) | future-work/farming-communities.md |

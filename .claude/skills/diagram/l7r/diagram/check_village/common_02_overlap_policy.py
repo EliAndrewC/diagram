@@ -330,6 +330,7 @@ FOREST_REVEAL_FT = 110.0  # mirrors settlement.FOREST_REVEAL_FT - how deep the c
 # Mirrors settlement._CANOPY_STRUCT_KEYS (keep in sync): every ROOFED structure a tree may not be drawn on.
 CANOPY_STRUCT_KEYS = (
     "houses",
+    "farm_fixtures",
     "buildings",
     "storehouses",
     "flophouses",

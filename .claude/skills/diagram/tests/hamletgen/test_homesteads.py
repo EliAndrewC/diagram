@@ -9,6 +9,8 @@ import pytest
 
 from l7r.diagram import hamletgen as hg
 
+from ._builders import a_plan
+
 
 def test_place_wells_never_clusters_two_wells_inside_the_spacing_floor():
     """The greedy coverage sort (2026-08-15) pops FAR seats first, so the 170 px spacing guard can
@@ -67,3 +69,28 @@ def test_a_seat_on_forbidden_ground_is_refused() -> None:
     assert hg.homesteads._seat_allowed(s, 100.0, 100.0) is False  # dead on the forbidden seat
     assert hg.homesteads._seat_allowed(s, 140.0, 100.0) is False  # inside half a bundle pitch
     assert hg.homesteads._seat_allowed(s, 400.0, 400.0) is True  # well clear
+
+
+def test_farmstead_fixtures_roll_a_share_in_each_band_and_seat_one_of_a_kind_per_house() -> None:
+    """Feature 133 T53-T59: the shares are rolled once per map inside the researched bands and declared
+    for the gate; each house keeps at most one of a kind, every fixture names its house, and the
+    shrine count never exceeds the share (the GM: "very rare, but notable")."""
+    from l7r.diagram.hamletgen.homesteads import FIXTURE_BANDS, farmstead_fixtures
+    from l7r.diagram.settlement import Settlement
+
+    s = Settlement(W=900, H=700, seed=7)
+    s.meta(name="T", scale="hamlet", ftpx=1)
+    houses = [{"x": 200.0 + 110 * i, "y": 300.0 + 90 * (i % 2), "w": 46.0, "h": 28.0, "rot": 0.0, "shed_side": "N"} for i in range(6)]
+    for h in houses:
+        s.M["houses"].append(dict(h))
+        s.placed.append((h["x"], h["y"], h["w"], h["h"]))
+    n = farmstead_fixtures(s, a_plan(), houses)
+    shares = s.M["meta"]["farm_fixtures"]
+    assert set(shares) == set(FIXTURE_BANDS) and all(lo <= shares[k] <= hi for k, (lo, hi) in FIXTURE_BANDS.items())
+    recs = s.M["farm_fixtures"]
+    assert n == len(recs) + len(s.M["persimmons"]) and n > 0
+    owners = {(r["kind"], tuple(r["of"])) for r in recs}
+    assert len(owners) == len(recs), "one of a kind per house"
+    assert sum(r["kind"] == "shrine" for r in recs) <= max(1, round(shares["shrine"] * len(houses)))
+    assert all(tuple(r["of"]) in {(h["x"], h["y"]) for h in houses} for r in recs)
+    assert len(s.placed) == len(houses) + n, "every seated fixture reserves its ground"

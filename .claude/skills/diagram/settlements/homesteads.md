@@ -97,3 +97,22 @@ Generator surface for the shipped knobs: `s.lane_skeleton(kind, cx, cy, ex, ey)`
   - *One check, both encodings.* `farmhouse_sizes_vary` measures the **effective rendered area = w × h × wealth²**, so it catches a regression that flattens houses under EITHER path (uniform footprint + wealth tiers, OR jittered footprint at wealth 1.0). The **headman** is exempt and stays the largest (`headman_is_largest`). All the jitter is a deterministic sin-hash of position (`_hjit`), so it never draws from the placement RNG and never ripples household counts.
 - **Farmhouses face SOUTH** (drives `houses_face_south`, and the yard's south-front placement). *Minka* were oriented south for sunlight (warmth and drying); we render the long axis E-W with the entrance on the south (+y) side.
 - **A FARMHOUSE WALL STANDS AT LEAST 6 FT OFF THE PADDY - up against it, never on the bund** (GM 2026-08-27, feature 133 T41: *"actually touching looks wrong to me"*). Researched ([`../research/homesteads.md`](../research/homesteads.md) "How close does a farmhouse stand to the paddy?"): the bund is ~1.5 ft wide and doubles as the working footpath, and the eaves overhang the wall by ~3 ft, so 6 ft is the floor below which the roof stands over the levee path. `HOUSE_PADDY_GAP_FT` in `settlement/houses.py`, tested at the four CORNERS (`_wall_on_the_bund`) in both seat paths; held by `houses_clear_of_paddies`. A minimum, not the norm - the seat band's 12 px standoff keeps the front row 10-13 ft off; the defect was one house whose set-back had been measured from its center.
+
+### Farmstead fixtures (feature 133 T53-T59, GM 2026-08-27)
+
+Each farmstead may carry, at TRUE size and raked with its house: a **privy** (6 x 6 ft) at the back
+door, the gate or the naya (rolled); a **manure heap** (8 x 6) beyond the privy; a **bath shed** (6 x 6)
+at the back or a flank; a **chicken coop** (5 x 5) on the flank by the yard; a **woodpile** (10 x 3.5)
+against the back wall or the kura's; a **household shrine** (3 x 3, the religious vermilion with its
+torii bar - the GM's "red marking" convention) at the plot's NW/NE/SW corner, RARE and capped at the
+share; and a **persimmon** (an 18 ft crown with four fruit dots - the convention that names the tree)
+beside the house. Presence per house is positional against a per-hamlet SHARE rolled once from the
+seed inside a researched band and declared in `meta.farm_fixtures` (`hamletgen/homesteads.py`
+`FIXTURE_BANDS`); every seat is tested against every placed footprint, lane, paddy, marsh and pond,
+the crown against the canopy keep-outs. The straw rick is seasonal and NOT drawn (T60). The
+research, verdict by verdict: `research/homesteads.md` "The farmstead's fixtures". Checks:
+`farm_fixtures_attached` (a fixture stands within its kind's reach of ITS house), `farm_fixtures_as_declared`
+(declared kinds only, one of a kind per house, the shrine as rare as declared, a privy present).
+Record classes: the privy's independence, the coop, the two shrine patterns, the persimmon's
+ubiquity are ACCURATE; the vermilion, the fruit dots and the 3 ft hokora footprint are DEVIATIONS
+for legibility (the true stone is ~1.3 ft); every share band and every other size is a GUESS.

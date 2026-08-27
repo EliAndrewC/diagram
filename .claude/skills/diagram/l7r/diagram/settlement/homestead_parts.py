@@ -959,6 +959,7 @@ class HomesteadPartsMixin:
     # with the offending key by name if a new feature is in neither this nor _CANOPY_OPEN_AIR_KEYS.
     # The TEST is the ratchet; the tuple is just the data.
     _CANOPY_ROOFED_KEYS = (
+        "farm_fixtures",  # the privy, bath shed and coop are roofed; the stack, heap and hokora are not, but none takes a tree (feature 133 T53-T59)
         "precinct_halls",  # the sovereign precinct program - roofed halls (021)
         "terraces",  # a retainer terrace is one continuous roof over its household cells
         "granaries",  # the capital's wharf granaries - kura rows, roofed like the town's dict-recorded one

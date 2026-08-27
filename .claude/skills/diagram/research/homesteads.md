@@ -540,3 +540,109 @@ than re-deriving it or re-asking.
 
 Sources: [Visit Toyama on sanson dispersed settlement](https://visit-toyama-japan.com/en/travel-inspiration/sankyoson),
 [Sho River alluvial fan groundwater study](https://www.mdpi.com/2076-3263/11/8/352).
+
+## The farmstead's fixtures - privy, woodpile, manure heap, bath, coop, household shrine, persimmon (researched 2026-08-27, feature 133 T53-T59)
+
+The GM chose from the T52 inventory: *"privies are something that we want ... firewood stacks are
+actually large enough to render ... Same thing with manure heaps, same thing with baths, same thing
+with persimmons ... a household shrine being something which is very rare, but which is notable when
+it does appear ... as for chicken coops ... go with whatever was the case in imperial China."* Three
+`source-reader` passes (Sonnet; 101 fetches) on the pointers a search pass turned up; the verdicts
+are quoted per claim below. Every drawn size is TRUE feet at the map's scale; the sizes are GUESSES
+unless a source is named, because the record describes these things and almost never measures them.
+
+**The privy (便所, kawaya) - READ.** Nipponica (kotobank 便所): *"農家では、小便所一つと大便所一つを、母屋から
+独立した一つの建物として設けるのが普通であった"* - on a farm the urinal and the privy were ONE building
+independent of the main house, and that was the norm. Where it stood (sinyoken 間取り pages, READ):
+*"便所が家の納屋のあたりに見られるようになったり、その前の中心部の裏口あたりに位置したり、背戸口の方に離れたり
+するなど様々"* - by the naya, at the back door, off toward the back entrance; and *"背戸口や脇便所、戸口便所
+として独立した便所"* - a privy at the door (戸口便所) is a named form. Three attested seats, so the seat
+is ROLLED per house (back door .60 / gate .25 / naya .15), each falling back to the others. Size
+NOT-FOUND (the one sizing page is dead) - 6 x 6 ft, the one-ken module, a GUESS. Share: "普通"
+reads as near-universal; Sugiura's 0.87 outbuildings + 0.32 in-house (overlapping) agree; the
+per-hamlet band is 0.85-0.95. In Han China (AIC catalog, READ via the museum API): *"latrines - or
+toilets - were customarily built above a pigsty and connected by pipes to a cesspool"* - the privy
+and the muck were one cluster, which is why the manure heap below is seated BEYOND THE PRIVY.
+
+**The woodpile - READ (the shed), GUESS (the stack's wall).** The Boso-no-Mura reconstructed
+farmstead lists a 木小屋: *"燃料として使う、炭やたきぎなどを収めておく建物です"* (a building holding the
+charcoal and firewood used as fuel) - READ; where the pile stood relative to the house NOT-FOUND
+(the earlier "behind a shed or along the front wall" summary is withdrawn - the page does not say
+it). Sugiura counts a firewood SHED on 0.76 of pre-1944 households; the open stack under the eaves
+is the cheaper and older form and the one drawn: 10 x 3.5 ft in plan, split logs stacked head-high
+- the 1.5 m height is modern stacking practice (326-woods, SUMMARY-ONLY and MODERN; the object has
+not changed). Wall: the back wall or the kura's outer wall, out of the rain - a GUESS; band 0.75-0.95.
+
+**The manure heap - READ (the practice), SUMMARY-ONLY (the place).** ja.wikipedia 肥溜め / 下肥 (READ):
+night soil was fermented in *"地中に埋めた壺や、漆喰をほどこした穴"* (buried jars, plastered pits) of
+*"口径1-1.5メートル程度"*, *"夏の場合1-2週間、冬の場合3-4週間"*; where on the farm the pit stood the pages do
+not say - a search summary put it *"厩（馬小屋）の近くや軒下"* (near the stable, under the eaves; SUMMARY-
+ONLY). Stable litter and grass composted into 厩肥 (note.com, SUMMARY-ONLY). With the Han pigsty-
+privy READ above, the heap is drawn as one 8 x 6 ft mound beyond the privy (size GUESS); share
+band 0.40-0.70 (Sugiura: a compost SHED on 0.24 - the open heap is commoner than its shed; GUESS).
+
+**The bath shed - READ (use), NOT-FOUND (placement).** Mizumaki museum (READ): the goemon-buro
+*"自給自足を中心とした農村で多く使われた"* - used widely in self-sufficient farm villages; that it spread
+into western-Japan homes in the late Edo is SUMMARY-ONLY (japaaan, the sentence not on the fetched
+page). Sugiura: a bath SHED on 0.29 of pre-1944 households and a bath INSIDE the house on 0.53 -
+two forms, so only the shed share is drawn (band 0.20-0.45) and the rest bathe indoors, undrawn.
+Where the shed stood NOT-FOUND: seated at the back wall or a flank (GUESS), 6 x 6 ft (GUESS).
+
+**The chicken coop - imperial China's, READ.** *Animals through Chinese History* (Cambridge, READ):
+*"it seems that farmers in most regions of China managed to keep a pig and some chickens in their
+yard, along with a draught animal or two"* (late imperial; the chapter leans on 1930s survey data,
+its own caveat). The Qimin Yaoshu 養雞第五十九 (wikisource, READ): *"雞棲，宜據地為籠，籠內著棧 ... 若任之
+樹林，一遇風寒，大者損瘦，小者或死"* - build the roost as a ground-level enclosure with a perch inside;
+left to roost in trees the birds sicken - so a COOP, not a tree. A late-Ming coop at Zhengzhou
+(Pitt HAA, READ): *"square-shaped structure had six niche-like openings in the west wall, with some
+eggshell fragments"* - square; no size given. The chicken is one of the 六畜 (zh.wikipedia, READ).
+No source gives a household PROPORTION; the band 0.50-0.80 is a GUESS bounded by "most regions",
+above Sugiura's Japan (0.16-0.28, where pre-Meiji chickens were timekeepers). 5 x 5 ft, square
+after Zhengzhou, size a GUESS; seated on the flank by the yard (GUESS - "in their yard").
+
+**The household shrine (屋敷神) - READ, and the GM chose between two attested forms.** Tokushima
+prefectural library (READ): *"各家にある場合と特定の旧家にだけある場合がある"* - in some places every house
+has one, in others only certain old families; ja.wikipedia 屋敷神 (READ) states the same two
+patterns. Under Principle XII two forms would be a knob; the GM ruled for this map (T58): *"very
+rare, but which is notable when it does appear"* - the old-families pattern, Sugiura's 0.03; band
+0.03-0.08, and the count is CAPPED at the share so positional luck cannot make it common. The
+every-house pattern is the DECLINED alternative, recorded here for the knob a later tier may want.
+Corner: NE (鬼門) - *"屋敷の一隅、特に鬼門（北東隅）に、石や木、わら屋根の祠"* (ja.wikipedia, minka-en, READ);
+NW 17 of 37 and NE 11 of 37 in a Kameyama survey (SUMMARY-ONLY - the page would not render); SW
+*"屋敷の西南隅に祀られているのが普通"* in Tokushima (READ) - three corners attested, rolled NW .45 / NE
+.35 / SW .20. Size: *"石造か木造の小祠"* (READ); one measured example *"幅・奥行き・高さ各40cm位の石の祠"*
+(Tokushima, READ) - about 1.3 ft. DRAWN at 3 x 3 ft, the footprint of a hokora with its plinth and
+offering stones - a GUESS above the one measured stone, flagged to the GM as the one place a true
+size would be invisible (1.3 px); the vermilion and the bold stroke, not the size, are what make it
+notable (the GM's own rendering convention, T58).
+
+**The persimmon - READ.** *"だからどこの庭先にも柿の木が植えてある"* (toyoko-housing, READ) - hence a persimmon
+in every dooryard; and *"江戸時代の農学者 宮崎安貞は、家屋敷の周りに柿の木を植える事を奨励した"* - the Edo
+agronomist Miyazaki Yasusada urged planting them round the homestead; *"夏は家に木陰を作り"* - it shades
+the house in summer, so it stands BESIDE the house (which side, a GUESS: the flank, then a front or
+back corner). The earlier MAFF "without exception" pointer is WITHDRAWN - NOT-FOUND on any MAFF
+page. Height 3-20 m (uekipedia, READ); crown width NOT-FOUND - drawn 18 ft across (GUESS); band
+0.80-0.95. Its fruit dots are a RENDERING convention naming the tree, not a season.
+
+**The straw rick - NOT DRAWN (T60).** Seasonal (waraguro built after the harvest, kept to spring):
+the GM deferred it with every seasonal thing to future work (`future-work/farming-communities.md`,
+"Seasonal maps").
+
+**What this built** (`hamletgen/homesteads.py::farmstead_fixtures`, `settlement/farm_fixtures.py`,
+checks `farm_fixtures_attached` / `farm_fixtures_as_declared`): a per-hamlet share per kind rolled
+inside the band from the map seed and declared in meta; per-house presence positional; seats in the
+house's own frame with the researched first choice rolled where the record gives forms; every seat
+tested against every placed footprint, lane, paddy, marsh and pond, the persimmon's crown against
+the engine's canopy keep-outs. Inashiro seed 4: privy 12, woodpile 7, coop 7, manure 5, bath 3,
+shrine 1, persimmon 10 on 15 houses.
+
+**Sources (read):** kotobank 便所 (Nipponica); sinyoken.sakura.ne.jp camadori.htm and cayomo016.htm;
+Art Institute of Chicago 37716 (catalog text via api.artic.edu); Chiba Prefectural Museum,
+Boso-no-Mura 木小屋; ja.wikipedia 肥溜め, 下肥, 屋敷神, 六畜 (zh); Mizumaki town museum 五右衛門風呂;
+toyoko-housing (ameblo) 農家の庭先の柿; uekipedia カキ; Tokushima prefectural library bulletin 50 pp.
+131-133; minka-en.com 屋敷神; satologue.com 屋敷神様; Cambridge *Animals through Chinese History*,
+"Where did the animals go"; 齊民要術 卷六 養雞第五十九 (wikisource); Pitt HAA, the Zhengzhou coop.
+**SUMMARY-ONLY:** japaaan 五右衛門風呂 (late-Edo spread); 326-woods (stack height, modern); note.com
+厩肥; Kameyama city history 屋敷神 survey (17/37, 11/37); the stable-and-eaves pit placement.
+**Withdrawn:** MAFF persimmon "without exception"; Boso-no-Mura firewood placement; 百姓伝記 on
+night soil (the readable manual saying it is 農業全書, 1696). Keys in `research/SOURCES.md`.
