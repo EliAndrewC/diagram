@@ -582,6 +582,17 @@ def stage_web(s: Settlement, plan: SitePlan) -> None:
     # trim, because the trim is the last pass that changes a record; then touch once more, because
     # cutting a hairpin's arm can move an end.
     _smooth_web(s, hard_built, walls, list(plan.watercourses) + drawn_water)
+    # AND TOUCH AGAIN (T99 unlock, tripwire seed 37): the smoothing cuts knots and hairpins into stubs,
+    # and a stub that ends 3-30 ft short of the run it left is exactly the gap _touch_junctions closes -
+    # but that pass ran BEFORE the smoothing. A way the knot collapse emptied to one point is dropped first.
+    for _i, _ln in enumerate(s.M.get("lanes", [])):
+        _p = _ln.get("pts") or []
+        if not _ln.get("connector") and (len(_p) < 2 or math.dist(_p[0], _p[-1]) < 1.0 and len(_p) == 2):
+            _ln["pts"] = []
+            s.reink_lane(_i)
+    _touch_junctions(
+        s, hard_built, walls, list(plan.watercourses) + drawn_water, reach=_STUB_REACH_FT, only_orphans=True
+    )  # the stubs the smoothing leaves stop 30-35 ft short (seed 37); a connected web is untouched
     _touch_junctions(s, hard_built, walls, list(plan.watercourses) + drawn_water)
     s.M["meta"]["lane_web"] = plan.lane_web
 
@@ -601,6 +612,7 @@ _PATH_DIRECTNESS = 2.0
 # paddy is legitimately indirect, and the thing being bought is the difference between a dozen houses
 # reachable and a dozen houses not.
 _LINK_DIRECTNESS = 4.0
+_STUB_REACH_FT = 48.0  # the post-smoothing touch: a cut stub may stand a little past _LANE_JOIN_FT from the run it left (T99 unlock, seed 37)
 
 # A GAP THIS SHORT BETWEEN TWO NEAR-COLLINEAR ENDS IS ONE WAY DRAWN AS TWO. 150 ft is about a
 # household and a half of frontage - far enough that a real interruption (a wellhead, a bed, a
@@ -1006,7 +1018,7 @@ def _join_orphan_ways(s: Settlement, hard: list[Poly], walls: Sequence[Poly], wa
     return made  # pragma: no cover - six links is far more than any hamlet needs
 
 
-def _touch_junctions(s: Settlement, hard: list[Poly], walls: Sequence[Poly], water: list[tuple[Pt, Pt]]) -> int:
+def _touch_junctions(s: Settlement, hard: list[Poly], walls: Sequence[Poly], water: list[tuple[Pt, Pt]], reach: float = _LANE_JOIN_FT, only_orphans: bool = False) -> int:
     """The LAST pass over the web: every lane end that stands NEAR another way is extended to TOUCH it.
 
     THE NETWORK WAS CONNECTED BY TOLERANCE AND DISCONNECTED IN INK (GM 2026-08-27, feature 133 T31:
@@ -1025,8 +1037,14 @@ def _touch_junctions(s: Settlement, hard: list[Poly], walls: Sequence[Poly], wat
     for _pass in range(3):  # a touch can bring another end into reach; converge
         lanes = s.M.get("lanes") or []
         moved = 0
+        _skip: set[int] = set()
+        if only_orphans:  # the post-smoothing call: a web already in one piece is left exactly as drawn
+            _ways = [[(float(x), float(y)) for x, y in ln.get("pts") or []] for ln in lanes]
+            _comp = _components(_ways, 4.0)
+            _seed = next((k for k, ln in enumerate(lanes) if ln.get("connector")), 0)
+            _skip = {k for k in range(len(lanes)) if _comp and _comp[k] == _comp[_seed]}
         for i, ln in enumerate(lanes):
-            if ln.get("connector") or len(ln.get("pts") or []) < 2:
+            if ln.get("connector") or len(ln.get("pts") or []) < 2 or i in _skip:
                 continue
             pts = [(float(x), float(y)) for x, y in ln["pts"]]
             # ONLY WAYS THIS LANE DOES NOT ALREADY MEET (T32). Linking a free end to a way the lane
@@ -1052,7 +1070,7 @@ def _touch_junctions(s: Settlement, hard: list[Poly], walls: Sequence[Poly], wat
                     ((math.dist(q, z), z, k, _op) for k, _os, _op in _by_way for z in [min((seg_closest(q[0], q[1], a, b) for a, b in _os), key=lambda z: math.dist(q, z))]), key=lambda t: t[0]
                 )
                 d, foot, k, _op = _best
-                if d <= 2.0 or d > _LANE_JOIN_FT:
+                if d <= 2.0 or d > reach:
                     continue
                 # END MEETS END: two lanes whose ends stand near each other are ONE lane with a
                 # hole in it, and the honest join is to run the other lane's end onto this one -

@@ -856,6 +856,13 @@ def belt_polygon(s: Settlement, plan: SitePlan) -> Poly:
     px, py = -wy, wx  # across the wind
     ccx, ccy = sum(h["x"] for h in houses) / len(houses), sum(h["y"] for h in houses) / len(houses)
     uv = [(((h["x"] - ccx) * wx + (h["y"] - ccy) * wy), ((h["x"] - ccx) * px + (h["y"] - ccy) * py)) for h in houses]
+    # A PLOT-EXTENT FACE WAS TRIED AND ROTATED THE FAILURE (T99 unlock, 2026-08-27): tripwire seed 33's
+    # 40-50 ft hole (broken since T10) sits where two garden beds stand 40-55 ft toward the wind from
+    # their house, inside the band; reading every footprint's far edge into the column profile closed
+    # it - and opened the same hole on seed 41, and pushed Inashiro's belt 75 px out until the reach was
+    # cut by the stand-off. Principle XIII names that signature (three closed, one opened) as a knob
+    # that moves the defect, so it is not kept; the hole is a real belt-vs-plot conflict that wants
+    # `village_grove` to thin around a plot rather than the face to dodge it. Open, ledgered below.
     v_lo, v_hi = min(v for _u, v in uv), max(v for _u, v in uv)
     half = (v_hi - v_lo) / 2 + 90.0  # a shoulder past the outermost house at each end
     # SAMPLE THE FRINGE BY LENGTH, NOT BY A FIXED COUNT. `COLS` was 7 whatever the belt measured, so
