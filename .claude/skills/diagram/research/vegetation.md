@@ -182,3 +182,56 @@ Yamaguni district case study; the Indiana DLC "Village Commons in Japan"; Totman
 Archipelago*); coppice management and cycle (Takeuchi et al., *Satoyama: The Traditional Rural
 Landscape of Japan*, Springer; Wikipedia "Satoyama"); the Musashino strip holdings (Kichijoji
 history, Grokipedia/Wikipedia; the shogunate's 1664 survey).
+
+
+## Bamboo: how common, where it stood, and how to show it (researched 2026-08-27, feature 133 T42 - a question, not yet a rule)
+
+The GM: *"is there supposed to be bamboo on the reference hamlet? Why or why not? how common was it
+for there to be bamboo in settlements such as this?"* - and the rendering problem behind it: a culm
+is a few inches across, so at 1 px = 1 ft a bamboo stand has nothing to draw at true scale.
+
+**How common: ubiquitous below the frost line.** The satoyama landscape is defined as the linked
+set of "settlements, rice paddies, agricultural fields, bamboo forests, woodlands, and grassland";
+a typical Edo farmstead stood "near the mountainside covered in trees, as well as a grove where they
+could harvest bamboo". Culms were building material, fencing, tools, baskets, brooms, umbrellas,
+fishing tackle; shoots were a seasonal food. The limit is climate: moso (mōsōchiku) is hardy to
+about -10 to -20 C and madake to about -15 C, and both are ruled out in Hokkaido and the far north
+(Aomori) because early shoots take frost - so a lowland paddy hamlet in a temperate province has
+bamboo as a matter of course, and a cold upland one may have none. THAT is the axis of variance the
+project wants: two attested forms, a knob per settlement (Principle XII).
+
+**Where it stood.** Two places, both already in this record: (1) the homestead's own N/W strip -
+the "shady, always damp" side of the yashiki given to the kitchen drain and service sheds - is
+the bamboo strip (research/homesteads.md); and the dooryard's "persimmon and bamboo" stand IN the
+sunlit yard; (2) the *take-yabu* (bamboo thicket) as its own stand at the village edge, harvested
+like a coppice. Bamboo was NOT scattered one culm at a time through a mixed wood: a stand is a
+clonal thicket, dense and monospecific, with a hard edge.
+
+**What the generator does today (measured on Inashiro).** `_draw_grove` seeds every grove clump
+with a species mix - 20% bamboo in the windbreak, 45% in a dooryard copse - and draws each bamboo
+"tree" as one to-scale culm-and-top glyph about 6 ft across (a 2026-07 legibility decision that
+already replaced a 6-culm clump with one). Inashiro carries 315 of them among 1,239 broadleaf and
+conifer crowns: 311 inside the windbreak belt, 4 in the copse. At fit zoom they read as nothing -
+pale dots in a dark belt - so the map does have bamboo and no reader can tell. Two things are wrong
+with that at once: bamboo mixed at 20% through a cedar windbreak is not how bamboo grows (a stand,
+not a seasoning), and a glyph the size of one culm cannot be seen at the sheet's scale.
+
+**The convention the record suggests (not built; the GM's to name).** Japan's own topographic maps
+solved exactly this: the GSI legend has a distinct bamboo-grove symbol (竹林), separate from the
+broadleaf and conifer symbols, because a reader of a map must be able to tell the three apart at
+map scale. So: (1) bamboo becomes a STAND with its own record (`bamboo_stands`, a polygon), drawn
+with a stand-level glyph at legibility scale - the GSI culm-and-leaf mark or a hatch of paired culm
+strokes with a leafy tick, in bamboo's pale yellow-green - a DEVIATION for legibility recorded like
+the oversized well: the stand's POSITION and EXTENT to scale, the mark inside it symbolic;
+(2) bamboo leaves the species mix of the windbreak and the copse (those become cedar/zelkova and
+fruit stands, which is what they are); (3) a per-settlement knob rolls whether the hamlet has
+bamboo at all (frost line) and where: the damp N/W strip of the cluster, a take-yabu at the field
+margin's shady end, or both; (4) the gate learns `bamboo_stands` in the overlap matrix and a
+legibility check (a stand under ~20 ft across does not read).
+
+**Sources:** satoyama composition and Edo farmstead groves (Grokipedia "Satoyama"; Japanese Wiki
+Corpus "Satoyama"; Web Japan / Kids Web Japan on the Shirakawa farmstead); bamboo uses (Highlighting
+Japan 2022 "The Characteristics and Many Uses of Japanese Bamboo"); hardiness and the northern limit
+(PFAF and Gardenia on *Phyllostachys bambusoides* / *edulis*; the PMC study of moso and madake
+expansion in Japan); the GSI bamboo-grove map symbol (Wikimedia Commons "Japanese Map symbol
+(Bamboo grove)").

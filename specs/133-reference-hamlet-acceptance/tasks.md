@@ -197,6 +197,10 @@ _(from T11 on, each entry also carries its cycle plan before work starts - `scaf
       measure: every farmhouse footprint's distance to the paddy envelope on Inashiro; the closest one
       verify: research first (Principle XII); `make maps`, `make quick`, `make done`; the GM looks
 
+- [x] T42 **bamboo - a question** - the GM (2026-08-27): *"a bamboo shoot is too small to show up on this map ... we could theoretically do the same thing for bamboo [as the oversized well glyph] ... I have no idea whether I'm supposed to think that there is bamboo anywhere on the reference hamlet map ... So what do you suggest for this? is there supposed to be bamboo on the reference hamlet? Why or why not? how common was it for there to be bamboo?"*
+      given 2026-08-27T13:46Z | done 2026-08-27T13:46Z | elapsed 0 min (a question: research pass + measurement + answer, no engine change) | runs: none
+      note: measured - Inashiro draws 315 bamboo glyphs (20% of its 1,554 crown/culm glyphs, 311 of them inside the windbreak belt, 4 in the copse), each a to-scale single culm-and-top ~6 ft across that reads as nothing at fit zoom; research recorded in research/vegetation.md "Bamboo: how common, where, and how to show it"; the recommendation (a stand-level glyph at legibility scale + a per-settlement bamboo knob) is the GM's to name as a task.
+
 ## Phase 9 - acceptance
 
 - [ ] T90 the would-have-dispatched audit (FR-005): every entry in the period, and for each whether it should have run; each "no" names a tooling change
