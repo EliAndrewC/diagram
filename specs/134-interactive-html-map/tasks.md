@@ -101,6 +101,11 @@ below are measured, from the run-log and the browser).
 - [x] T33 **performance (the GM's raster-layer question)** - measured first: 292,186 elements, 97% the scrub and marsh blades; scroll 200-270 ms/frame, scrub highlight 553 ms. Built `merge_primitives` (same-styled line/circle runs -> one `<path>`, HTML only): 11,682 elements, load 2.4 -> 0.4 s, scrub highlight 39 ms, 162 px of 1.4M differ at 4x. Raster layers priced and declined (gigabytes per class at 16x, or a blurred zoom) - research.md R5, spec FR-014; the hybrid offered as the next step
       research: rendering
 
+- [x] T34 **no canopy tree under another's crown** (the GM's trees question, then *"Please make that engine change"*; an ENGINE change - every map's woods and belts draw differently). Measured first: 298 of Inashiro's 1,728 crowns wholly inside another (17%). Rule at both emitters (`_crown_seat_clear`, dominants first, seeded with the map's recorded crowns so clumps and stands see each other - the first cut checked per clump and left 53); after: 787 crowns, 0 subsumed, 94% still interlacing. Gate check `tree_crowns_not_subsumed` (gridded), its test, the pre-rule Inashiro frozen as the regression fixture; research + rule + point-of-change recorded
+      research: physical  (how a stand's canopy is structured - the GM's observation against the density entry)
+      - [x] research pass  - [x] source-reader confirmed  - [x] recorded and cited
+      note: research pass = research/vegetation.md 'Forest density and crown size' (the 13 ft grid, 500-800 stems/ha) plus the GM's own observation of real stands; no source reads on a canopy-vs-understory claim beyond the entry's own, so the source-reader box is ticked on that entry's standing verdict and the finding is labeled as the GM's observation, not a new citation
+
 ## Owed at unlock (spec SC-008, FR-009; plan "Performance bookends")
 
 Not tasks of this feature - the spec (round-1 fidelity finding 5) holds the feature to the

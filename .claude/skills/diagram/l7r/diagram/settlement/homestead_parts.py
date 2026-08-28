@@ -387,6 +387,7 @@ class HomesteadPartsMixin:
             # tree-by-tree rather than pushed back as a whole: it THINS where it would cover a building and
             # keeps its shape everywhere else. Crown centers below are relative to (cx, cy); keep-outs absolute.
             krect, kcirc = self._canopy_keepouts((cx - w / 2 - 9 * bs, cy - h / 2 - 9 * bs, cx + w / 2 + 9 * bs, cy + h / 2 + 9 * bs))
+            _near = self._crowns_near(cx - w / 2 - 9 * bs, cy - h / 2 - 9 * bs, cx + w / 2 + 9 * bs, cy + h / 2 + 9 * bs)  # the crowns of earlier clumps and stands (GM 2026-08-28)
             drawn: list[tuple[float, float, float]] = []
             g = [f'<g transform="translate({cx:.0f},{cy:.0f})">']
             # Draw back-to-front so the stand layers with depth. Each CROWN is one tree at real size (~5-6 m; a few
@@ -408,6 +409,8 @@ class HomesteadPartsMixin:
                 col = "#496733" if kind == "conifer" else random.choice(["#7C9A4E", "#6E8B43"])
                 if self._crown_covers(cx + px, cy + py - 3 * bs, rr, krect, kcirc, self.CANOPY_PAD):
                     continue
+                if not self._crown_seat_clear(cx + px, cy + py - 3 * bs, rr, _near) or not self._crown_seat_clear(cx + px, cy + py - 3 * bs, rr, drawn):
+                    continue  # a crown centered under an already-drawn crown is an understory stem, not canopy (GM 2026-08-28; woods._crown_seat_clear)
                 drawn.append((cx + px, cy + py - 3 * bs, rr))
                 g.append(f'<circle cx="{px:.1f}" cy="{py - 3 * bs:.1f}" r="{rr:.1f}" fill="{col}" stroke="#3C5526" stroke-width="0.8"/>')
                 if kind == "conifer":

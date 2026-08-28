@@ -31,6 +31,35 @@ Every entry: what the research found, the decision it drove, and any deliberate 
 - *Density and crown size - the numbers and the why.* A closed premodern hill wood (the mixed broadleaf/conifer cover of a settled valley's back slope, cut over for fuel and timber on a rotation) carries roughly **500-800 canopy stems per hectare**. 1 ha = 107,639 sq ft, so ~600 stems/ha is one canopy tree per ~180 sq ft: a mean spacing near **13 ft** (`CANOPY_SPACING_FT`). Canopy crowns in such a stand run **~5-8 m across** (16-26 ft) with occasional wider emergents, so `CANOPY_R_FT = 8.5` is the mean radius, jittered 0.75-1.4x. Crowns of ~17 ft mean diameter on 13 ft centers OVERLAP, and that is the point - **closure is what makes a wood a wood**, so the packed look is honest rather than decorative. Same finding as the mulberry rows (`_mulberry_rows`): at a to-scale grain, drawing real planted density honestly IS a dense mass of crowns, not sparse symbols spaced for the eye. Nothing is inflated for legibility - at 1 ft/px a crown is r ~6-12 px and it shrinks with the map at coarser grains, exactly like the buildings.
 
 
+## No canopy tree stands under another's crown (researched 2026-08-28, feature 134)
+
+**Grounds:** `woods._crown_seat_clear` / `_canopy_seats` / `_crowns_near`, the grove clump's seat test in `_draw_grove`; `tree_crowns_not_subsumed`
+
+**Evidence:** observed (the GM's own trees), derived from the density entry above
+
+**Sources:** not recorded - the finding is the GM's observation and the entry above; add a key when the stand structure is re-consulted
+
+The GM, on the interactive map's highlight: *"practically every tree might have a smaller tree
+underneath it ... I understand that real life trees can, in fact, overlap with each other ... but I
+don't see a single tree which is entirely subsumed within the branch structure of a different
+tree."* Measured on Inashiro before the rule: 298 of 1,728 drawn crowns wholly inside another crown
+(17%), 950 with their center more than halfway in. Nobody decided it: the wood lays trees on the
+13 ft grid the density entry gives, jitters each by up to 42% of a step in x and y, and sizes
+crowns 0.75-1.4x the 8.5 ft mean radius - so two grid neighbors could land 2-3 ft apart and a 6 ft
+crown vanished under a 12 ft one; the belt's clumps pack tighter still and overlapped each other,
+and nothing tested a crown against the crowns already drawn.
+
+**The rule.** A crown is seated only if its center is outside every crown already on the map AND
+no seated center lies inside it (`d >= max(r, r_other)`); edge overlap between that and `r +
+r_other` stays, because neighboring canopies do interlace. What is removed is the tree drawn
+wholly under a neighbor - in a real stand a suppressed understory stem, not part of the canopy
+layer the map draws. Dominants seat first (largest crown first within a stand); across stands and
+clumps the map's recorded crowns are the seed, padded by two emergent radii. Measured after:
+Inashiro 787 crowns, 0 subsumed, 737 (94%) still touching a neighbor - the stand reads as closed
+canopy at ~one crown per 13 ft grid cell, which is the density entry's own figure; the belt thins
+where its clumps overlapped, which is where the doubled trees were. Class: **accurate** for the
+rule (a canopy has one tree per crown), the density unchanged from the entry above.
+
 ## The crop margin - scrub stands 6 ft off every field edge
 
 **Evidence:** reconstruction (web research 2026-08-15; searched paddy-levee structure/width and traditional field-margin management)
