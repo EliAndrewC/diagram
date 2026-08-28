@@ -15,6 +15,12 @@ reports ARE the three classes and nothing else, so a green floor is this feature
 rather than a fourth errand. Where a class turns out to need work the floor does not measure, that work
 is a task here too.
 
+**Which floor turns green**: the HAMLET-PATH floor - the one that reports the residue the GM called *"that
+three hundred and seventy four line residue"* (measured 373; the GM's number is recorded verbatim in
+`gm-request.md` and the small discrepancy is arithmetic, not drift). The separate GLOBAL floor's ~30
+pre-existing subprocess-side misses (145 research R3d) stay ledgered, out of scope by constitution XIII,
+and are reported to the GM again at this feature's landing so the distinction is never silent.
+
 ## User Scenarios & Testing
 
 ### US1 - the floor is green (Priority: P1)
@@ -23,7 +29,8 @@ is a task here too.
 100%. Nothing is exempted to achieve it, no `# pragma: no cover` is written, and no engine code is deleted
 merely to make a number - the rules feature 145's FR-002 set, which the GM ruled on then and has not changed.
 
-**Acceptance**: `python3 -m l7r.diagram.tools.hamlet_floor` exits 0 on the FULL run's coverage data.
+**Acceptance**: `make hamlet-floor-check` exits 0 on the FULL run's coverage data (the make-only guard refuses
+the bare module invocation).
 
 ### US2 - a check that can fire is proved to fire (Priority: P1)
 
@@ -53,21 +60,27 @@ asserts the predicate, the way feature 145 closed sixteen of them.
   never exempted, pragma'd, or excluded from the floor's module set to make the floor pass.
 - **FR-002** Class 2's coverage comes from SCRIPTED negative fixtures (`tests/gate/test_scripted_fixtures.py`),
   not from hand-built manifests frozen into a corpus - feature 141's ruling stands.
-- **FR-003** A check whose failure branch cannot be tripped by any legal break of a scripted map is
-  reported by name with the reason, and the GM is told; it is not silently left, and not deleted without
-  the GM's word.
+- **FR-003** A check whose failure branch cannot be tripped by any legal break of a scripted map is named
+  with its reason in this feature's record and DISPOSED OF HERE under FR-001 - covered, or removed with the
+  reason recorded at the point of change - so the floor is green at landing. The census is reported to the
+  GM as information, never as a gate on the landing: the GM ruled this feature needs no acceptance
+  (*"without needing any acceptance from me"*), so it may not invent one.
 - **FR-004** Class 1: the dike-pond check is exercised by a scripted map rolling the archetype where that
   is available; the decision and its date are recorded.
 - **FR-005** Class 3: each refusal branch gets a unit test that trips exactly that reason.
-- **FR-006** No regression: `make done` and `make done FULL=1` green, the pool clean, every gate check that
-  passed at 145's landing still passing; a moved map is settlement-reviewed before it ships.
+- **FR-006** No regression: the HAMLET-PATH floor green, `make done` green, and `make done FULL=1` showing no
+  failure other than the ledgered pre-existing GLOBAL-floor misses (145 research R3d - ~30 subprocess-side
+  lines in `ci/`, `switches.py` and three tools, present in the pre-145 baseline), whose count is unchanged
+  or lower. The pool stays clean, every gate check that passed at 145's landing still passes, and a moved
+  map is settlement-reviewed before it ships.
 - **FR-007** The feature lands on main when it is green, with NO acceptance task - the GM's instruction.
 
 ## Success Criteria
 
 - **SC-001** The hamlet-path coverage floor is GREEN in `make done FULL=1`.
 - **SC-002** Every hamlet-entered check with a reachable failure branch has a scripted fixture proving it fires.
-- **SC-003** `make done` green; no new regression against 145's landing.
+- **SC-003** `make done` green; `make done FULL=1` red on nothing but the ledgered global-floor misses; no new
+  regression against 145's landing.
 - **SC-004** The count of uncovered hamlet-path lines is recorded before and after (373 at 145's landing).
 
 ## Assumptions
