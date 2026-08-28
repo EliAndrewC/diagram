@@ -20,6 +20,7 @@ def test_the_set_is_the_union_of_the_records_engine_files_minus_tests_and_ci() -
         _deps("l7r/diagram/hamletgen/water.py", "l7r/diagram/check_village/driver.py"),
         _deps("tests/hamletgen/test_water.py", "l7r/diagram/ci/delta.py", "l7r/diagram/tools/../tools/perf_bands.py"),
         {"functions": [["/usr/lib/python3/site-packages/shapely/geometry.py", "g"]], "files": []},
+        {"functions": [[str(hf.SKILL / "l7r/diagram/check_village/segments_10b_city_civic_and_commerce.py"), "<module>"]], "files": []},  # imported, never run
     ]
     assert hf.hamlet_path_files(records) == [
         "l7r/diagram/check_village/driver.py",

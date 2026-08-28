@@ -60,6 +60,8 @@ def gate(M: Manifest, verbose: bool = True, only: set[str] | None = None) -> lis
     ns: dict[str, Any] = {k: v for k, v in locals().items()}
     if only is None:
         for _seg in GATE_SEGMENTS:
+            if _seg.scales is not None and scale not in _seg.scales:
+                continue  # feature 145: a segment whose leading guard excludes this scale is never ENTERED (its file stays off the hamlet path)
             ns.update(_seg.fn(**{n: ns[n] for n in _seg.free if n in ns}))
         return fails
     bases = set(only)
@@ -78,6 +80,8 @@ def gate(M: Manifest, verbose: bool = True, only: set[str] | None = None) -> lis
         frontier = deps
     for i in sorted(wanted):
         _seg = GATE_SEGMENTS[i]
+        if _seg.scales is not None and scale not in _seg.scales:
+            continue
         ns.update(_seg.fn(**{n: ns[n] for n in _seg.free if n in ns}))
     return fails
 

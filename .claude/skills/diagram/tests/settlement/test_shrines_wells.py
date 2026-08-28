@@ -210,7 +210,7 @@ _SHRINES_WELLS_SURFACE = frozenset(
         "draft_byres",
         "farm_wells",
         "flush_tree_stands",
-        "forest",
+        # "forest" moved to shrines_wells/forest.py (ForestMixin) under feature 145 - still on Settlement, off the hamlet path module
         "frozen_terrain",
         "hill",
         "open_seat",

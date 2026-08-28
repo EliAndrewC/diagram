@@ -93,7 +93,7 @@ ALIASED_UNDERSCORE = {
     "_MATRIX_OUTSTANDING": "l7r.diagram.check_village.common_01_geometry",
     "_OVERLAP_EXEMPT": "l7r.diagram.check_village.common_01_geometry",
     "_OVERLAP_STRUCTS": "l7r.diagram.check_village.common_01_geometry",
-    "_ward_interior": "l7r.diagram.check_village.common_02_overlap_policy",
+    "_ward_interior": "l7r.diagram.check_village.common_04_urban_policy",  # feature 145: moved with the other town/city policy helpers
 }
 
 

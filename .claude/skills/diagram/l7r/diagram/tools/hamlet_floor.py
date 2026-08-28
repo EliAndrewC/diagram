@@ -64,6 +64,8 @@ def hamlet_path_files(records: Iterable[dict[str, Any]]) -> list[str]:
     out: set[str] = set()
     for deps in records:
         for entry in deps.get("functions", []):
+            if entry[1] == "<module>":
+                continue  # an IMPORT is not execution: the registry imports every segment file, a star import every waterfields module; only a function that RAN puts its file on the path
             path = Path(str(entry[0])).resolve()
             try:
                 rel = path.relative_to(ENGINE)

@@ -11,6 +11,7 @@ from ._geom import LAND, Indexed, Manifest, PointGrid, Poly
 from ._knobs import crop_boxes, resolve_knob, scope_seed
 from .castle_civic import CastleCivicMixin
 from .city import CityMixin
+from .city.crop import CityCropMixin
 from .civic_grounds import CivicGroundsMixin
 from .farm_fixtures import FarmFixturesMixin
 from .fields import FieldsMixin
@@ -20,7 +21,10 @@ from .houses import HousesMixin
 from .land import LandMixin
 from .rolling import RollingMixin
 from .shrines_wells import ShrinesWellsMixin
+from .shrines_wells.forest import ForestMixin
 from .structures import StructuresMixin
+from .structures.urban_fixtures import UrbanFixturesMixin
+from .town_ways import TownWaysMixin
 from .trades import TradesMixin
 from .water_ways import WaterWaysMixin
 
@@ -28,8 +32,12 @@ from .water_ways import WaterWaysMixin
 class Settlement(
     FieldsMixin,
     WaterWaysMixin,
+    TownWaysMixin,  # feature 145: the town-tier ways, out of the hamlet path's module
     ShrinesWellsMixin,
+    ForestMixin,  # feature 145: the town/city forest
     StructuresMixin,
+    UrbanFixturesMixin,  # feature 145: the theater stage and the drum tower
+    CityCropMixin,  # feature 145: crop_city
     TradesMixin,
     HomesteadPartsMixin,
     LandMixin,
@@ -528,30 +536,6 @@ class Settlement(
         # whose whole point is WHERE it stands must not read as.
         "kilns",
     )
-
-    def crop_city(self: Settlement, margin: float = 35, west: float | None = None, north: float | None = None, east: float | None = None, south: float | None = None) -> None:
-        """CITY content crop (GM 2026-07-23, replacing the hand-tuned wide MARGIN frames): frame the map to
-        the moat ring + every KEPT satellite feature (gate markets, flophouses, funerary grounds, wharf
-        stalls - the `_CROP_CITY` keys) + every placed LABEL box (labels_within_image demands containment),
-        plus `margin`. The paddy fans, hems, farmhouses, and estates do NOT set the frame - they clip at
-        the edge, reading as country that continues (the whole point of the wide-frame doctrine is kept by
-        `margin`: ~100px past the moat still shows a working band of every fan that hugs the rim). Call
-        AFTER every feature and label, BEFORE `title()` (the title drops into the framed window).
-        Per-side margin overrides (west/north/east/south) keep a REPRESENTATIVE FARM BAND on a flank
-        with no satellite to anchor the frame - e.g. Tango's west, where nothing but fans lies beyond
-        the moat and the bare `margin` would re-create the pre-2026-07-23 sliver crop.
-        THE AGGRESSIVE 35px MARGIN IS THE DEFAULT FOR ALL CITIES (GM 2026-07-23: "I would like the
-        aggressive crop to be the default for all cities unless I state otherwise") - a new city gen
-        calls `s.crop_city()` bare and adds only the farm-band override for its satellite-less flank
-        (which flank that is varies by city; both current cities happen to use west=100)."""
-        self.flush_stable_yards()  # yards draw HERE, seeing the complete map (GM 2026-07-24); their labels must exist before the frame is computed
-        self.flush_tree_stands()  # ... and so does every wood's canopy, so no crown lands on a building placed after it
-        _cboxes = self._crop_boxes(city=True)
-        hx = [v for b in _cboxes for v in (b[0], b[1])]
-        hy = [v for b in _cboxes for v in (b[2], b[3])]
-        x0, y0 = max(0, min(hx) - (west if west is not None else margin)), max(0, min(hy) - (north if north is not None else margin))
-        x1, y1 = min(self.W, max(hx) + (east if east is not None else margin)), min(self.H, max(hy) + (south if south is not None else margin))
-        self.set_view(round(x0), round(y0), round(x1 - x0), round(y1 - y0))
 
     def _crop_boxes(self: Settlement, city: bool) -> list[tuple[float, float, float, float, str]]:
         """This map's frame-setting boxes - see the module-level `crop_boxes`, which check_village

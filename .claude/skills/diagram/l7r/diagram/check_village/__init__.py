@@ -52,8 +52,9 @@ from .common_01_geometry import (
     _OVERLAP_STRUCTS as _OVERLAP_STRUCTS,
 )
 from .common_02_overlap_policy import *
-from .common_02_overlap_policy import _ward_interior as _ward_interior
 from .common_03_capacity import *
+from .common_04_urban_policy import _ward_interior as _ward_interior
+from .common_04_urban_policy import city_capacity as city_capacity
 from .driver import *
 from .registry import *
 from .segments_01a_city_ring_and_frame import *

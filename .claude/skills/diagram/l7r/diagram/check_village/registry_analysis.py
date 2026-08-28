@@ -45,6 +45,7 @@ class _SegFields(NamedTuple):
     needs: tuple[str, ...]
     meta: bool
     always: bool
+    scales: tuple[str, ...] | None = None  # feature 145: the scales the leading guard admits (None = every scale); the driver skips the rest
 
 
 def _loads(node: ast.AST) -> set[str]:
@@ -240,6 +241,47 @@ def _exposed_reads(stmts: list[ast.stmt], bound: set[str]) -> tuple[set[str], se
     return exposed, bound
 
 
+SCALES = ("hamlet", "village", "town", "city", "capital")
+URBAN_SCALES = ("city", "capital")
+
+
+def _guard_scales(node: ast.FunctionDef) -> tuple[str, ...] | None:
+    """The scales a segment's LEADING GUARD admits, or None when it admits every scale.
+
+    THE HAMLET PATH MUST NOT ENTER A CITY SEGMENT (feature 145, GM 2026-08-28: the module-level coverage floor
+    is derived from what the scripted rolls execute, and a segment that returns at `if scale in ('city',
+    'capital')` still puts its whole file on the hamlet path). The guard is read here, once, from the AST -
+    `scale in (...)`, `scale not in (...)`, `scale == ...`, `URBAN`, `not URBAN`, alone or as the first term
+    of an `and` - and the driver skips the segment for a map whose scale it excludes. Anything else (a
+    data guard, no guard) admits every scale, exactly as before."""
+    body = [st for st in node.body if not (isinstance(st, ast.Expr) and isinstance(st.value, ast.Constant) and isinstance(st.value.value, str))]
+    # THE GUARD MUST BE THE WHOLE BODY: one `if` (no else) followed only by the `return _kept(...)`. A segment whose
+    # leading `if URBAN:` is one part of several, with a hamlet check after it, admits every scale.
+    if len(body) != 2 or not isinstance(body[0], ast.If) or body[0].orelse or not isinstance(body[1], ast.Return):
+        return None
+    test = body[0].test
+    while isinstance(test, ast.BoolOp) and isinstance(test.op, ast.And) and test.values:
+        test = test.values[0]
+    if isinstance(test, ast.Name) and test.id == "URBAN":
+        return URBAN_SCALES
+    if isinstance(test, ast.UnaryOp) and isinstance(test.op, ast.Not) and isinstance(test.operand, ast.Name) and test.operand.id == "URBAN":
+        return tuple(s for s in SCALES if s not in URBAN_SCALES)
+    if isinstance(test, ast.Compare) and isinstance(test.left, ast.Name) and test.left.id == "scale" and len(test.ops) == 1:
+        try:
+            lit = ast.literal_eval(test.comparators[0])
+        except ValueError:
+            return None
+        names = tuple(lit) if isinstance(lit, (tuple, list, set, frozenset)) else (lit,)
+        if not all(isinstance(n, str) for n in names):
+            return None
+        op = test.ops[0]
+        if isinstance(op, (ast.In, ast.Eq)):
+            return tuple(n for n in SCALES if n in names) or tuple(names)
+        if isinstance(op, (ast.NotIn, ast.NotEq)):
+            return tuple(n for n in SCALES if n not in names)
+    return None
+
+
 def _segment_parts(node: ast.FunctionDef) -> tuple[list[ast.stmt], tuple[str, ...]]:
     """(body statements sans docstring and terminal return, the literal writes tuple).
 
@@ -338,5 +380,6 @@ def _derive_fields_uncached(pkg_dir: Path) -> dict[str, _SegFields]:
             needs=needs,
             meta=bool(META_NAMES & loads),
             always=bool(opaque),
+            scales=_guard_scales(segdefs[nm]),
         )
     return out
