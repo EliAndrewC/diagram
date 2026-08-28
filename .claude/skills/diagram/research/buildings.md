@@ -76,13 +76,15 @@ Rural jin'ya genuinely housed their ~30 staff on-grounds in rowhouses; it was th
 
 **Grounds:** drives the structures-abut-walls rule above, the `pack_audit.structures_on_walls` check, and the wall clearance `compound.py`'s placer now leaves
 
-**Evidence:** attested (the wall as a thick roofed structure), liberty (the drawn 3 ft)
+**Evidence:** attested (the wall as a thick roofed structure; the tsuijibei precedent), deviation (the drawn 3 ft - legibility, GM 2026-08-28)
 
 **Sources:** `hei-jokaku-jawiki`, `kojodan-dobei` (READ)
 
 Japanese compound walls of this class - the *neribei* plastered earth wall over a post core, or a *dobei* on a stone plinth - are genuinely 1.5-3 ft thick at the base and carry their own tiled coping, which is why the vocabulary draws them at true 3 ft rather than as a hairline. Thickness is what makes the wall a wall: it is what stops a determined man, what carries the roof tiles that keep the earth core dry, and what the compound spends real money on. So the ground under it is occupied ground. Buildings ringing a jin'ya court back onto that wall - eaves nearly touching, rear wall a foot or two off it so the two roofs shed separately and the wall stays reachable for patching - which is exactly "abut, do not overlap." Note the direction of the departure from literal reality: we do NOT thin the wall to buy a building an extra foot. A drawn overlap is not a small inaccuracy either, because the wall is painted last and eats the structure's outline, so the map actively shows the building dissolving into the masonry. The rule was written after the GM caught a 9 x 3 ft porch inside Ochiba's court divider (2026-07-24); running the new check across the pool immediately found the systematic version - `compound.py` had been seating every wall-hugging building on the wall's centerline, so all 15 buildings of both placer-composed plans stood 1.5 ft inside the masonry.
 
 *Correction to the record (2026-08-28, feature 138) - CONTRADICTED on the thickness figure, rule unchanged, awaiting the GM:* the sources read give a plastered neribei/dobei at **1 shaku (~30 cm, ~1 ft) or more**, frameless neribei "30cm程度", and only the rammed-earth **tsuijibei** reaching ~1 m (~3.3 ft). The entry's "1.5-3 ft at the base" is not supported as the typical range; the drawn 3 ft wall is a tsuijibei-class figure, not the neribei the prose names. What the rule rests on - a wall is a roofed structure with real thickness, so a building abuts it and never overlaps it - stands on either figure. Whether the vocabulary should draw a county wall at ~1-1.5 ft (a dobei) or keep 3 ft (a tsuijibei, which a well-funded seat could have) is a rendering decision for the GM; recorded in the feature 138 ledger, section G.
+
+**GM ruling (2026-08-28, feature 138 T20) - DEVIATION, disclosed:** the 3 ft wall stays as a **rendering convention for legibility**. The precedent for a wall that thick is the *tsuijibei* (築地塀, rammed earth on a plinth, up to ~1 m - `kojodan-dobei`); the ordinary neribei / dobei of a county compound was ~1 shaku (`hei-jokaku-jawiki`). A reader of the interactive map (feature 134) is to be told exactly this: drawn thicker than the typical wall so the stroke reads, with the tsuijibei as the real form it resembles. Class for the HTML modal: **deviation**.
 
 ## The granary is a staging node, not the terminal store
 

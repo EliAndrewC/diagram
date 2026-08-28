@@ -116,7 +116,7 @@ The research upheld the instinct: the surveyed rectilinear chessboard of the Tai
 
 **Grounds:** the drawn bank width; `_mulberry_rows` crown density
 
-**Evidence:** attested
+**Evidence:** attested (the ratio exists in both orders), deviation (the drawn 6 water : 4 dike as a disclosed regional reading - GM 2026-08-28)
 
 **Sources:** `cssn-sangji-yutang` (READ: "基六塘四"), `kuwa-jawiki` (READ: mulberry kept as a low shrub; the height and density SUMMARY-ONLY)
 
@@ -125,6 +125,8 @@ The classic dike-pond prescription was an explicit area ratio of 6 parts water t
 Silkworm mulberry was not grown as trees: it was COPPICED into low bushes (crowns ~4-6 ft) so the leaf could be stripped several times a year, planted in dense rows on the dike at roughly one bush per 10-20 sq ft - i.e. 300-600 bushes per pond, tens of thousands across the map. At 1 px = 1 ft a crown is a 2-4 px dot and adjacent crowns nearly touch, so drawing the actual trees at honest density IS a packed dot band; individually distinguishable tree glyphs would mean 3-5x crown inflation, forbidden on to-scale maps. No berries either: leaf-stripped coppice barely fruits, and a mulberry fruit is sub-pixel at this scale - crown color carries the read.
 
 *Correction to the record (2026-08-28, feature 138) - CONTRADICTED on the ORDER of the ratio, rule unchanged, awaiting the GM:* the one page read writes the classic prescription as **基六塘四 - six parts DIKE to four parts POND**; the entry (and a people.cn page seen only in a search summary, "六分为塘，四分为基") has it the other way, six water to four dike, and Kuwabata is drawn at 76% water per parcel. The literature carries both orders and a 7:3 variant, so this may be a regional split rather than an error - but as the record stands, the drawn ratio rests on the reading the read source inverts. Listed in the feature 138 ledger, section G, with the option of a follow-up read (Ruddle & Zhong 1988 is the authority) before any redraw.
+
+**GM ruling (2026-08-28, feature 138 T20) - DEVIATION, disclosed regional reading:** Kuwabata keeps its 6 water : 4 dike parcels. The record carries the prescription in BOTH orders - 基六塘四 on the page read (`cssn-sangji-yutang`), 六分为塘、四分为基 in the people.cn summary - and a 7:3 variant; the map follows the water-heavy reading. The interactive map is to say so on every pond and bank of Kuwabata: "a regional reading; the classic prescription is also recorded as six parts dike to four parts pond". Class for the HTML modal: **deviation** (a priced trade-off, not an error).
 
 ## A dike-pond is fed and drained through sluice gates
 
