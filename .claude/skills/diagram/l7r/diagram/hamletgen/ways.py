@@ -1178,6 +1178,7 @@ def _touch_junctions(s: Settlement, hard: list[Poly], walls: Sequence[Poly], wat
                 if d > _ORPHAN_REACH:
                     break
                 link = [v, q] if _clear_touch(v, q, hard, walls, water) else _route(v, q, hard, walls, water, gap=WEB_FABRIC_GAP, pad_mult=2.0, cell=10.0)
+                import sys; print('DBG rung1', _PASS, 'orphan', i, 'd', round(d), 'v', tuple(round(c) for c in v), 'q', tuple(round(c) for c in q), 'len', round(polyline_len(link)) if link else None, 'cap', round(_LINK_DIRECTNESS * max(d, 1.0)), file=sys.stderr)
                 if link and polyline_len(link) <= _LINK_DIRECTNESS * max(d, 1.0):
                     _join_piece(s, lanes, i, ways[i], v, link, hard, walls, water, main_segs)
                     joined = True
@@ -1230,6 +1231,7 @@ def _touch_junctions(s: Settlement, hard: list[Poly], walls: Sequence[Poly], wat
                     link = _route(v, q, hard, walls, water, gap=_TOUCH_GAP, pad_mult=2.0, cell=6.0)
                     if not link:  # (3) the DETOUR: around the yard or the house that walls the slot - a wider box, a longer leash
                         link = _route(v, q, hard, walls, water, gap=WEB_FABRIC_GAP, pad_mult=5.0, cell=10.0)
+                    import sys; print('DBG cand', _PASS, 'orphan', i, 'd', round(d), 'v', tuple(round(c) for c in v), 'q', tuple(round(c) for c in q), 'len', round(polyline_len(link)) if link else None, file=sys.stderr)
                     if link and polyline_len(link) <= _DETOUR_DIRECTNESS * max(d, 1.0):
                         found.append((polyline_len(link), v, link))
                         if len(found) >= _SHORTEST_OF:
