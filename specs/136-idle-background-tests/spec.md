@@ -4,7 +4,7 @@
 
 **Created**: 2026-08-28
 
-**Status**: round 1 returned five changes (decisions embedded as requirements; the lock an unrequested addition; `make maps` under the lock; two suspend rules; nothing carried "never interrupts the merge") - applied below; round 2 pending
+**Status**: round 1 returned five changes (decisions embedded as requirements; the lock an unrequested addition; `make maps` under the lock; two suspend rules; nothing carried "never interrupts the merge") - applied below; round 2 returned one change (a run in progress blocked the merge route) - applied as D9; round 3 pending
 
 **Input**: [`gm-request.md`](gm-request.md), verbatim and unedited. That file is the authority for
 this specification.
@@ -78,6 +78,8 @@ the feature's last task is the GM's acceptance of those decisions, in their word
   stops at the first problem, like `make maps`.
 - The laptop resumes DURING a run: the run continues (the detached process survives the suspend);
   the next arming starts from the next Stop.
+- A prompt arrives DURING a run: the run is aborted at once and recorded as `aborted-on-prompt`
+  (FR-006b d) - the GM never waits on a test they did not ask for.
 - The `scope` switch is locked: the idle run rolls what the lock allows (`make maps` under the
   lock is the reference map alone) and says so in its record - it never widens the scope.
 - The session ends (the terminal closes) with a wait armed: the timer notices its session is gone
@@ -124,12 +126,14 @@ the feature's last task is the GM's acceptance of those decisions, in their word
   in the clone (a gate or a sweep the session launched and detached) - it defers like a lock loss;
   (c) the idle run records its verification state under its own target name (`idle-tests`), which
   the push guard never reads as a green `done`, so it neither grants nor revokes a push; (d) a new
-  prompt disarms the timer, and a run already in progress is left to finish - the session's own
-  `make` targets refuse to run beside it exactly as they refuse a second gate (two writers on the
-  pool maps), with the refusal naming the idle run and its log.
+  prompt disarms the timer AND terminates any idle run in progress (the detached process group is
+  killed; an `aborted-on-prompt` record is appended to `dev/idle-log/` and surfaced like any other),
+  so no session-issued `make` target ever waits on an idle run and the ritual and the merge route
+  are never blocked, delayed or refused because of one (D9).
 - **FR-007**: Every rule has a test in `scripts/test-idle-tests-hooks.sh` run by `make hooks-test`
   (constitution XVIII): arm/disarm, the stagger band and its determinism, resume detection, the
-  lock's exclusion and deferral, the record and its surfacing, the never-in-main rule - with the
+  lock's exclusion and deferral, the record and its surfacing, the never-in-main rule, the abort of
+  a run in progress on a prompt - with the
   clocks, the sleeps and the command injected so the tests run in seconds.
 - **FR-008**: The doctrine is recorded: root `CLAUDE.md` (the guard table and the iteration-loop
   section), `docs/iteration-loop.md`, and the skill's `dev/switches.md` (an UNLOCKED scope now has
@@ -168,6 +172,7 @@ the feature's last task is the GM's acceptance of those decisions, in their word
 | D5 | the verdict surfaces as one line at the NEXT prompt (the UserPromptSubmit hook) and as a committed record in `dev/idle-log/` (FR-005) | the session must ACT on a red, and the next prompt is where every guard speaks | a push notification (noisy at night) |
 | D6 | arm at every Stop; never in main; never self re-arming; timer state in `.git/` (FR-001, FR-006) | one idle = at most one run, the GM's shape; main is not a workspace | a nightly cron independent of sessions |
 | D7 | the timer exits when its session is gone (`~/.claude/sessions/<pid>.json` and the process); it defers while a `make` runs in the clone; the idle verification record is its own target, never a `done` (FR-006b) | no orphan runs; the merge route untouched | a SessionEnd hook (not always delivered) |
+| D9 | a prompt aborts an idle run in progress (kill the process group; an `aborted-on-prompt` record) (FR-006b d) | "I do not want to implement this in a way which interrupts the merge back into main" - the session's next `make done` or push must never wait on, or be refused because of, an idle run | let the run finish and refuse the session's makes meanwhile (round-2 finding: that blocks the merge route) |
 | D8 | arming point = the Stop hook (the end of an assistant turn). If a Stop turns out to fire mid-task (a turn that ends awaiting a tool), the arming would be premature - to be MEASURED on this session (T06) before the timer design is fixed | it is the only "finished the round" signal the harness gives | a manual `make idle-arm` |
 
 ## Assumptions
