@@ -109,6 +109,11 @@ below are measured, from the run-log and the browser).
 - [x] T35 **the doubled trees the GM still saw after T34** were the highlight, not the stand: fill-only sub-glyphs (a conifer's apex disc, a coppice crown's sun disc) got the gold stroke and read as inner trees. The highlight now strokes only elements drawn with a stroke; research.md R2
       research: rendering
 
+- [x] T36 **the belt's crowns at the researched size** (the GM: the commons' trees looked bigger than the belt's - *"Is that intentional?"* - then *"Please do that as a task"*). Measured: commons median r 9.0 ft, belt 4.5 ft; cause: `_draw_grove`'s pixel radius calibrated at 2 ft/px, never rescaled by ftpx. Now `CANOPY_R_FT` like the woods; after: belt median r 7.6 ft (~15 ft across), 325 belt crowns, 505 on the map, 0 subsumed. Engine change: every belt and copse redraws; villages within a pixel
+      research: physical  (how big a canopy crown is - the density entry's own figure)
+      - [x] research pass  - [x] source-reader confirmed  - [x] recorded and cited
+      note: research pass = research/vegetation.md 'Forest density and crown size' (5-8 m crowns), already read and cited there; no new claim
+
 ## Owed at unlock (spec SC-008, FR-009; plan "Performance bookends")
 
 Not tasks of this feature - the spec (round-1 fidelity finding 5) holds the feature to the

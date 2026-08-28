@@ -405,7 +405,13 @@ class HomesteadPartsMixin:
                     g.append(f'<line x1="{px:.1f}" y1="{py + 4 * bs:.1f}" x2="{px:.1f}" y2="{py - 4 * bs:.1f}" stroke="#88A646" stroke-width="{1.4 * bs:.2f}"/>')
                     g.append(f'<circle cx="{px:.1f}" cy="{py - 4 * bs:.1f}" r="{3.0 * bs:.1f}" fill="#BBD06A"/>')
                     continue
-                rr = (4.6 if kind == "conifer" else 4.0) * s * bs  # one crown = one tree, sized to a real ~5-6 m canopy
+                # ONE CROWN AT THE RESEARCHED SIZE (GM 2026-08-28, feature 134 T36). This was `(4.6 | 4.0) * s * bs`,
+                # a pixel radius calibrated at the village's 2 ft/px ("a ~5-6 m canopy") and never rescaled by ftpx:
+                # at the hamlet's 1 ft/px the belt drew 9 ft crowns beside the commons' 18 ft ones (measured on
+                # Inashiro: belt median r 4.5 ft, commons 9.0). Now the same CANOPY_R_FT the woods and the commons
+                # use, in real feet (research/vegetation.md 'Forest density and crown size'); a conifer 15% wider,
+                # the old ratio. A village (ftpx 2, bscale 1) gets 4.25 px, within a pixel of what it drew before.
+                rr = self.px(self.CANOPY_R_FT) * s * (1.15 if kind == "conifer" else 1.0)
                 col = "#496733" if kind == "conifer" else random.choice(["#7C9A4E", "#6E8B43"])
                 if self._crown_covers(cx + px, cy + py - 3 * bs, rr, krect, kcirc, self.CANOPY_PAD):
                     continue

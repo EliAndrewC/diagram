@@ -26,3 +26,7 @@ The spec records how each slip was read, and the fidelity review checks that rea
 > [the trees question, 2026-08-28] Great. I have a question about the trees now. I am noticing now that things are highlighted that it looks like practically every tree might have a smaller tree underneath it. ... I understand that real life trees can, in fact, overlap with each other. So we would not want to have a rule saying that no two trees can overlap. ... but I don't see a single tree which is entirely subsumed within the branch structure of a different tree. is that something that we are doing? Is that intentional? Is that just a mistake on our part?
 
 > Yes. Please make that engine change. Thank you. I understand that this will also change the rendering of the maps overall rather than just being something about our HTML version, and that's fine. We may well notice things while working on the HTML version, which need to be corrected on all of the maps such as this. Thanks.
+
+> The trees in the woodland commons look bigger than the trees in the windbreak forest. Is that intentional?
+
+> Yes. Please do that as a task. Thanks.
