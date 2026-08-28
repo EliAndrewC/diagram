@@ -1372,3 +1372,69 @@ ja.wikipedia 後背湿地 and 自然堤防 (with GSI notes; READ 2026-08-12)
 The 1987 survey of Kashima, Tonami plain (kainyo homestead groves) - SUMMARY-ONLY: the pointer was not recorded at the 2026-07 pass and is to be re-found (ja.wikipedia 屋敷林 / カイニョ cite the survey literature)
 
 *Used for:* the real scale of a homestead grove stand
+
+### `cssn-sangji-yutang`
+
+中国社会科学网, 从生态美学视角研究桑基鱼塘 (https://www.cssn.cn/ztzl/jzz/rwln/wh/lnfw1/202209/t20220923_5541481.shtml; READ 2026-08-28, feature 138)
+
+*Used for:* the classic ratio named as "基六塘四" (dike six, pond four - note the order); early dikes planted with mulberry, tea, vegetables and fruit, fruit-dike ponds the commonest; mulberry dominant from the late Ming in Nanhai and Shunde
+
+### `cssn-jiangnan-weitian`
+
+中国社会科学网, 古代江南圩田开发及其社会效应 (https://cssn.cn/lsx/lsx_zgs/202502/t20250217_5844872.shtml; READ 2026-08-28)
+
+*Used for:* "中有河渠，外有门闸。旱则开闸引江水之利，涝则闭闸拒江水之害" - channels inside, gates on the outside, opened in drought and shut in flood; the tangpu spacing "五里七里一横塘、七里十里一纵浦"
+
+### `sdlib-shunde-jitang`
+
+顺德图书馆, 发现顺德·经济篇 - 桑基鱼塘 (https://www.sdlib.com.cn/home/article/detail/id/741.html; READ 2026-08-28)
+
+*Used for:* the dike built from the pond's own spoil ("取泥覆四周为基，中凹下为塘"), planted with mulberry ("基种桑"), hemp, soybeans, peanuts and melon trellises; the Song 桑园围, the Jiajing spread, the Xianfeng-Tongzhi peak
+
+### `usu-windbreak`
+
+Utah State University Extension, Windbreak Benefits and Design (READ 2026-08-28)
+
+*Used for:* "Windbreaks reduce wind speeds up to 30 times their height (H) downwind"
+
+### `miragenews-polders`
+
+Mirage News, "China's Water Heritage: Significance of Polders" (XJTLU; https://www.miragenews.com/chinas-water-heritage-significance-of-polders-955573/; READ 2026-08-28)
+
+*Used for:* "By the early 20th century, they were further compartmented into even smaller islet-like polders, dubbed as fish-scale polders or yulin wei (鱼鳞圩), for their shapes as seen on aerial photos"; after 1949 "the organic forms of polders were replaced by standardised rectangular patterns for industrialised agricultural production"
+
+### `fusekoshi-jawiki`
+
+ja.wikipedia 伏越 (READ 2026-08-28)
+
+*Used for:* the inverted siphon as a method "historically seen in old waterways" - 見沼代用水の柴山伏越, 大垣輪中の鵜森伏越樋
+
+### `suirokyo-jawiki`
+
+ja.wikipedia 水路橋 (READ 2026-08-28)
+
+*Used for:* the aqueduct bridge carrying water over rivers and valleys (通潤橋, 明正井路, 水路閣 - the page does not date them)
+
+### `yashikirin-jawiki`
+
+ja.wikipedia 屋敷林 (居久根 redirects here; READ 2026-08-28)
+
+*Used for:* igune on the north and west of the homestead as windbreak and snowbreak; the species named - スギ, マツ, ヒノキ, ケヤキ (three evergreen conifers and one deciduous broadleaf; the page never says "evergreen-heavy")
+
+### `kuwa-jawiki`
+
+ja.wikipedia クワ (READ 2026-08-28)
+
+*Used for:* cultivated mulberry "低木仕立てが多い" - kept as a low shrub; the height and density figures are SUMMARY-ONLY (search syntheses: low-trunk mulberry under 70 cm, 1.2 m an optimal feeding height; 800-1,000 plants per mu in Jiangsu/Zhejiang, 5,000-6,000 in Guangdong)
+
+### `aburana-jawiki`
+
+ja.wikipedia アブラナ and zh.wikipedia 油菜 (READ 2026-08-28)
+
+*Used for:* rape sown in autumn, overwintering, cut in March-April (the food crop's calendar); rape sown into the harvested paddy and plowed in before the next transplanting (a Taiwan double-crop practice) - neither page gives the rice months
+
+### `wanli-fishpond-summary`
+
+The 1581 (万历九年) fishpond figures for the Pearl delta - SUMMARY-ONLY (2026-08-28): a search synthesis gives ~160,000 mu of taxable fishponds across Shunde, Nanhai and Panyu (Guangzhou prefecture), ~400,000 mu of dike-pond farming; the Shunde county figures (40,084 mu in 1581, 58,094 in 1642) were seen in a search snippet of a Shunde library page and not on a page read; the county percentage and the 1980s 35% survey were found nowhere. baike.baidu.com (403) is the likely carrier
+
+*Used for:* the scale of the sixteenth-century dike-pond zone, with that caveat

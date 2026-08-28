@@ -12,15 +12,15 @@
 
 | # | entry | evidence class | found as | status |
 |---|---|---|---|---|
-| 1 | Why rape (油菜) was tried and removed | reconstruction | not recorded | open |
-| 2 | Overlay extent - a calibrated liberty, disclosed | interpolated, liberty | not recorded | open |
-| 3 | The perimeter dike followed the natural water edge | attested, reconstruction | not recorded | open |
-| 4 | Why dike willows do NOT replace the village windbreak | reconstruction | not recorded | open |
-| 5 | The ring canal runs on the INNER toe - 一河围田 | attested | not recorded | open |
-| 6 | Wet-rice hydrology has no crossings to draw | reconstruction | not recorded | open |
-| 7 | Grid vs mosaic - the arrangement differed by system | attested, corroborated | not recorded | open |
-| 8 | The 6:4 water-to-dike ratio, and coppiced mulberry | attested | not recorded | open |
-| 9 | A dike-pond is fed and drained through sluice gates | attested | not recorded | open |
+| 1 | Why rape (油菜) was tried and removed | reconstruction | not recorded | re-sourced (partial; months SUMMARY-ONLY) |
+| 2 | Overlay extent - a calibrated liberty, disclosed | interpolated, liberty | not recorded | no-source - labeled guess |
+| 3 | The perimeter dike followed the natural water edge | attested, reconstruction | not recorded | re-sourced |
+| 4 | Why dike willows do NOT replace the village windbreak | reconstruction | not recorded | supplemented (igune species corrected) |
+| 5 | The ring canal runs on the INNER toe - 一河围田 | attested | not recorded | re-sourced (gates read); 一河围田 leftover |
+| 6 | Wet-rice hydrology has no crossings to draw | reconstruction | not recorded | re-sourced |
+| 7 | Grid vs mosaic - the arrangement differed by system | attested, corroborated | not recorded | re-sourced (Jiangnan); PRD mosaic leftover |
+| 8 | The 6:4 water-to-dike ratio, and coppiced mulberry | attested | not recorded | contradicted - ratio order; rule unchanged; section G |
+| 9 | A dike-pond is fed and drained through sluice gates | attested | not recorded | re-sourced (SUMMARY-ONLY on the board sluice) |
 
 ### `buildings.md` (23 - the first parse counted 9; re-counted at batch start)
 
@@ -265,6 +265,7 @@ Worked with the batch that owns each entry; struck from `SOURCES.md` when done (
 
 - homesteads: the 1987 Kashima kainyo survey pointer (ja.wikipedia 屋敷林); the kayabuki roof pitch and ridge height; the magariya umaya / doma well (ja.wikipedia 曲家, 民家).
 - fields/religion/vegetation/water: the in-field feature matrix (feng-shui graves, terrace outcrops); azolla-cyanobacteria and renge (open source); tameike m3/ha (Aomori PDF), 1.3 koku/tan, plot sizes, Tedori straightening; the Takeuchi catena paper; 90,000 Edo temples, Shaolin/Daxiangguo; torii distances (Kasuga, Meiji Jingu, the 400 m run); Adashino/Rendaino/大坂七墓; forest stems/ha and crown width (open source); Lake Biwa levee mowing; Forbidden City moat flow; reed beds under iriai, fukada, Suzhou canals; the Song 塘泺 belt (fx361); the FAO offtake manual.
+- archetypes.md: the Shunde county 1581 percentages and the 1980s survey (baike.baidu 403); the board-sluice and inlet/outlet plumbing (Ruddle & Zhong 1988); the lotus area share; the mulberry height/density figures; 一河围田 / 圩内河 and the 月样 / 弓样 forms; the PRD mosaic and dike-width erosion (MDPI 403); the rice-rape calendar months (OCL 403).
 - towns/cities/urban-features: the gate-to-yamen axis; guard-room and gate-tower bay estimates; lijin/chaoguan barriers; Chinese party-wall housing; fragmented gentry parcels; Xiangyang/Pingyao/Okayama/Shanghai moats; the wharf entry (雁木, 河岸, matou); the whole Trade-works shortlist; Kiln works; Kaifeng tower count, Kawagoe base, Dingbian/Xingcheng; merchant-over-shop and wealth spread; communal-well ratio; 町木戸 night closure; yamen offices on an avenue; Song iron output (replace Grokipedia); loess rainfall (replace Grokipedia).
 - buildings.md: Jōge jin'ya plan (230x88 ft; two shrines) - `daikanpanfu2.pdf`, k-yagumo excavation page; tedai origins and Qing clerk counts; rural jin'ya staff rowhouses; Hida staging and hired boats; genkan staged arrival; yamen predecessor veneration; tax shares 30-40% coin and soybean bales (NTA 214.htm); Chinese granary grain mix; Izumo 2x2 ken (primary), 67 tsubo house, 2-4 horse stable; jin'ya coverage 37-42% (上嶋 report); samurai kawaya beside the guest room; south garden / north service strip.
 
@@ -272,4 +273,5 @@ Worked with the batch that owns each entry; struck from `SOURCES.md` when done (
 
 | # | entry | what the record said | what the sources say | rule / checks / maps affected | options |
 |---|---|---|---|---|---|
+| 2 | `research/archetypes.md` "The 6:4 water-to-dike ratio, and coppiced mulberry" | six parts water to four parts dike; Kuwabata drawn at 76% water per parcel | cssn.cn (READ): "基六塘四" - six dike to four pond; a people.cn page (search summary only) says the reverse; a 7:3 variant exists | the drawn bank width in `build_polder` / `_mulberry_rows`; the Kuwabata dike-pond map; `settlements/archetypes.md` | fix now: read Ruddle & Zhong 1988 (or the FAO dike-pond study) and redraw if the order is settled; future work: leave 6:4 water as a disclosed regional reading |
 | 1 | `research/buildings.md` "A compound wall is a building, not a boundary line" | neribei / dobei walls are 1.5-3 ft thick at the base; the vocabulary draws them at 3 ft | ja.wikipedia 塀 (城郭): plastered walls "1尺（約300ミリメートル）以上"; 攻城団: frameless neribei ~30 cm, only tsuijibei up to ~1 m | the Mode A wall stroke (3 ft) in `buildings.md`; `pack_audit.structures_on_walls` and the placer clearance are thickness-agnostic; every Mode A sheet in the pool | fix now: draw a county wall at ~1-1.5 ft (dobei) or keep 3 ft and relabel it a tsuijibei; future work: leave the 3 ft as a disclosed liberty (legibility of the wall stroke) |
