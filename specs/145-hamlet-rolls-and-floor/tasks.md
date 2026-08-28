@@ -13,13 +13,14 @@ Every task is `research: rendering` (nothing physical is decided here).
 - [x] T10 the hamlet floor: derive the module set from the roll cache records, refuse without them; a phase of `test-full` after the two existing reports; the settlement ratchet stays - `research: rendering`
 - [x] T11 guard test: the floor fires on a module in the set, stays quiet on one outside - `research: rendering`
 - [x] T13 the GM's ruling on the other-tier residue: MOVE it (2026-08-28) - eight moves, the scale-derived segment skip, imports are not execution; path 99 -> 89 modules - `research: rendering`
-- [ ] T12 first measurement of the floor at FULL (research R3b, `floor-first.txt`): 932 lines; ~700 are other-tier code inside hamlet-path modules - LISTED FOR THE GM with three options (R3b, recommendation: move them out); ~150 hamlet lines remain untested after the branch tests and the eight-seed cohort (hamletgen/ways.py 37, homesteads 12, small geometry) - OPEN, the GM's call on how far this feature carries them - `research: rendering`
+- [x] T12 the floor measured, the other-tier code MOVED on the GM's ruling, and the hamlet residue described (research R3b/R3c/R3e): the path is 89 modules at **97.68%**, 373 lines - `research: rendering`
 - [x] T09 the four placer defects the moved maps exposed (research R2b): connector wet-band offset, belt crown keep-out, unjog knee, footpath standing place/junction off water - `research: rendering`
 - [x] T20 `make durations` before/after: the settlement-geometry tests over the quick cutoff, each made faster or carrying a written reason - `research: rendering`
-- [ ] T21 unlocked `make done` GREEN (2,281 tests, 2026-08-28); `make test-full`: every test green (2,294), the hamlet floor RED by design until T12's decision; the global floor's `ci/`/`switches`/tools misses are pre-existing (baseline FULL at 514e6cc0, research R2c) - `research: rendering`
+- [x] T21 `make test-full` GREEN on every test (2,300+); all three coverage floors now report together; the hamlet floor is red at 97.68% with its residue classified for the GM; the global floor's tooling misses are pre-existing (R3d) - `research: rendering`
 - [x] T22 perf bookend `144-end`, `make perf-report AGAINST=144-start`; research.md R1-R4 (the billions, the two fixes, the floor's definition, the numbers) - `research: rendering`
 - [x] T23 settlement-review of the reference (maps moved); findings fixed - `research: rendering`
 - [x] T24 doctrine: `dev/performance.md` (the index shape, again), `tests/CLAUDE.md` / settlement CLAUDE.md coverage paragraph (the derived floor) - `research: rendering`
+- [ ] T14 (open, the GM's call) the remaining 373: 56 lines are the dike-pond check waiting on a scripted mulberry map (the peer's feature 139), ~200 are check FAILURE branches no map trips - the scripted-negative-fixture half of feature 141 - and ~120 are placer refusal branches and never-needed fallbacks - `research: rendering`
 - [ ] T99 the GM accepts - verbatim, after the explanation of what changed and what remains (the 8 s / 40% targets: met or reported) - `research: rendering`
 
 Numbering: this feature was claimed as 144 on 2026-08-28 and renumbered to 145 the same day when a peer
