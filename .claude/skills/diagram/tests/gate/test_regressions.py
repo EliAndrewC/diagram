@@ -32,12 +32,15 @@ distinctly from the auto-captured ones.
 """
 
 import glob
+import hashlib
 import json
 import os
+from pathlib import Path
 
 import pytest
 
 from l7r.diagram import check_village
+from l7r.diagram.pipeline import rollcache
 from tests._scope import EXHAUSTIVE
 
 HERE = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))  # the skill root; this file lives two levels down in tests/gate/
@@ -79,6 +82,15 @@ def _replay(M, fires):
     return set(check_village.gate(M, verbose=False, only=bases))
 
 
+def _served_replay(path, M, fires):
+    """The replay through the roll cache (feature 135, second pass): a verdict is a pure function of the
+    frozen manifest and the check code it executed, so while every `check_village` function the replay ran
+    is unchanged the stored verdict set is served and the assertion runs on it - 194 hamlet-tier replays
+    cost 17.5 CPU-s a gate before this. A changed check re-replays; the FULL run replays everything."""
+    subject = f"corpus:{os.path.basename(path)}:{hashlib.sha256(Path(path).read_bytes()).hexdigest()[:16]}:{sorted(fires)}"
+    return rollcache.obtain(subject, lambda: _replay(M, fires))[0]
+
+
 def test_corpus_is_not_empty():
     assert CORPUS, "no regression fixtures found in pool/regressions/"
 
@@ -87,7 +99,7 @@ def test_corpus_is_not_empty():
 @pytest.mark.parametrize("path", _corpus_params())
 def test_regression_fixture_still_fires(path):
     M, fires = _load(path)
-    failed = _replay(M, fires)
+    failed = _served_replay(path, M, fires)
     missing = [c for c in fires if c not in failed]
     assert not missing, f"{os.path.basename(path)} no longer trips: {missing}"
 

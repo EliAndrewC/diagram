@@ -9,7 +9,7 @@ import pytest
 from l7r.diagram import check_village
 from l7r.diagram import hamletgen as hg
 from l7r.diagram.pipeline import rollcache
-from tests._scope import subset
+from tests._scope import FULL
 
 
 @pytest.mark.rolls_map
@@ -33,12 +33,12 @@ def test_a_rolled_cohort_passes_the_whole_gate() -> None:
     # it. Leaving it on the default parallel path silently uncovered `hinterland.py`'s
     # no-house-column fringe fallback. The fan-out is a CLI win, not a gate win; the parallel branch
     # is held by `test_the_fan_out_agrees_with_the_serial_path` below.
-    # ONE REPRESENTATIVE SEED AT THE GATE, FOUR UNDER EXHAUSTIVE (feature 135, GM 2026-08-27: *"running tests
+    # ONE REPRESENTATIVE SEED AT THE GATE, FOUR IN THE FULL RUN (feature 135, GM 2026-08-27: *"running tests
     # against many random seeds on the same map ... is something either more suited to a EXAUSTIVE=1 Test run or
     # better yet best farmed out to the AWS tests"*) - and each member through the roll cache, so an unchanged
     # engine serves the report and a changed one rolls it. The full run (`make done FULL=1`, `L7R_TESTS_FULL=1`)
     # bypasses the cache and rolls all four. Last exhaustive green: 2026-08-27 (this feature's baseline).
-    specs = subset(hg.driver.cohort_specs(4, first_seed=41), 1)
+    specs = hg.driver.cohort_specs(4 if FULL else 1, first_seed=41)  # FULL, not EXHAUSTIVE: the gate is always EXHAUSTIVE, and a seed sweep is the full run's
     reports = [rollcache.report(spec)[0] for spec in specs]
     assert len(reports) == len(specs)
     for report in reports:

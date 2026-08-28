@@ -175,3 +175,31 @@ alone, every test finished and the slowest was 103 s. Under xdist's default `loa
 rollers land on one worker; `make test-file` now passes `--dist worksteal` like `test` does. Whether
 the lock note's hang is contention or a real deadlock is for the session isolating it; the roll cache
 removes both the contention and the repeated rolls from the merge check.
+
+## R10 - THE SECOND PASS (GM 2026-08-28: *"just literally redoing the same audit in order to see whether there are still more performance benefits"*)
+
+Where the 24 s locked gate went, measured before touching anything: `make reference` 2.0 s (HIT - but 1.2 s of
+it re-parsing ~180 engine files for the key, in a fresh interpreter every time), lint 1.24 s (1.04 s the
+whole-repo duplicate-defs scan), format 0.07, typecheck 0.4 (dmypy), test phase 22.6 s wall: 18 s pytest of
+which ~6 s was COVERAGE TRACING (10.5 s with coverage narrowed to one module) plus ~3 s of combine/report,
+on 62 CPU-s of tests - settlement 22.4 s (90 tests), the corpus replay 17.5 s (194 fixtures), tooling 12.8 s
+(176 tests, skipped in steady state), everything else under 4 s - and a ~5 s xdist floor.
+
+| change | before | after | principle |
+|---|---|---|---|
+| the AST memo persists to disk (`.gencache/ast/<content-sha>.json`) | `make reference` 2.0 s; each xdist worker's first key 1.2 s CPU | **0.55 s**; ~10 ms | recomputing what could be cached |
+| the corpus replay served from the roll cache (`_served_replay`: fixture bytes + `fires` -> the verdict set, deps = the check functions executed) | 17.5 CPU-s, 8.7 s wall alone | 3.4 s wall (the assertion still runs on the served set; FULL replays) | the first pass's principle applied where it was not |
+| coverage follows the diff (`ci cov-scope`: the packages changed since the merge base or in the worktree; `--no-cov` when none; FULL traces all) | 6 s tracing + 3 s report at every gate | 0 with no engine change; a few packages otherwise | the reference scope enforces no floor - its coverage feeds `uncovered-in-diff.py`, which reads only the diff |
+| the cohort ratchet's sweep keyed to FULL, not EXHAUSTIVE | 4 seeds at every unlocked gate (the gate is always EXHAUSTIVE - a first-pass slip) | 1 seed; 4 in FULL | a seed sweep is a different test |
+| `COVERAGE_CORE=sysmon` | 18.0 s | 19.6 s - DECLINED, slower here | measured, not assumed |
+| caching the hinterland / draw_comb_field settlement tests (~10 CPU-s over 20 tests) | | DECLINED - ~1.2 s of wall across 8 workers for a cache keyed to each test's source; below the noise of the xdist floor | cost/benefit |
+| the duplicate-defs scan (1.0 s) | | kept - a merge guard, one second | |
+
+Coverage-source names were tried first and hit *"cannot load module more than once per process"* (97 errors):
+coverage resolves a module-name source by importing it, and under the `l7r` namespace-portion layout that
+loaded the engine a second time. Package DIRECTORIES are matched by path and import nothing.
+
+**End to end, locked, after the second pass (the verification record deleted so nothing short-circuits):
+`make done` 0m51.787s (2553 passed in 11.55s, coverage over the three packages this diff touched, tooling tests run
+because the Makefile changed).** Steady state - a one-module engine edit, tooling unchanged - is lower
+still: the test phase alone measured 11.9 s wall with coverage narrowed to one module.

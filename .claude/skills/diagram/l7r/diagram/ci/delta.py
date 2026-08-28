@@ -93,6 +93,35 @@ def compute_delta(root: Path, base_ref: str = "origin/main") -> Delta:
     return Delta(base=base, files=files, engine=tuple(f for f in files if is_engine(f)))
 
 
+SKILL_PY = ".claude/skills/diagram/l7r/"
+
+
+def coverage_scope(root: Path, base_ref: str = "origin/main") -> list[str]:
+    """COVERAGE FOLLOWS THE DIFF at reference scope (feature 135, second pass). Measured 2026-08-28: tracing
+    every engine module cost 6 s of a 16.6 s test phase plus ~3 s of combine/report - 9 s of a 25 s gate -
+    and the reference scope enforces no floor; its coverage exists for `scripts/uncovered-in-diff.py`, which
+    only ever looks at lines the diff touched. So the gate traces exactly the engine modules changed since
+    the merge base with main, or in the working tree (tracked-modified and untracked), and nothing when
+    none changed. The FULL run traces everything, as before. Returns the changed files' PACKAGE DIRECTORIES
+    relative to the skill (a whole small package rather than one module): coverage resolves a module-name
+    source by importing it, which under the `l7r` namespace-portion layout loaded the engine a second time
+    ("cannot load module more than once per process", 97 errors on the first try); a directory source is
+    matched by path and imports nothing."""
+    try:
+        base = _git(root, "merge-base", base_ref, "HEAD").strip()
+        committed = _git(root, "diff", "--name-only", base, "HEAD").splitlines()
+    except subprocess.CalledProcessError:  # no origin/main yet (a fresh fixture, a detached worktree)
+        committed = []
+    worktree = _git(root, "diff", "--name-only", "HEAD").splitlines() + _git(root, "ls-files", "--others", "--exclude-standard").splitlines()
+    mods: set[str] = set()
+    for f in committed + worktree:
+        f = f.strip()
+        if not (f.startswith(SKILL_PY) and f.endswith(".py")) or "/tests/" in f:
+            continue
+        mods.add(f[len(".claude/skills/diagram/") :].rpartition("/")[0])
+    return sorted(mods)
+
+
 def engine_key(root: Path, tree: str) -> str:
     """The VERIFICATION KEY: a hash over the ENGINE paths' blob ids in `tree` (a tree or commit ref).
 

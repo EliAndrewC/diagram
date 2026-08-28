@@ -741,6 +741,11 @@ SETTLEMENT_COV_FLOOR = 94
 # the full run (the tooling tests then never skip - the ci package owes its 100% there).
 FULL_TREE_IGNORE = $(if $(COV_FLOORS),,--ignore=tests/full)
 FULL_ENV = $(if $(COV_FLOORS),L7R_TESTS_FULL=1,)
+# COVERAGE FOLLOWS THE DIFF at reference scope (feature 135, second pass; the why is on `delta.coverage_scope`):
+# the gate traces only the engine modules the diff touched - `uncovered-in-diff.py` needs no more - and nothing
+# when none changed; measured 9 s of a 25 s locked gate. FULL traces everything (the floors). An empty answer
+# (no git, an error) leaves pytest's own addopts in force, i.e. full tracing - the safe direction.
+COV_SCOPE = $(if $(COV_FLOORS),,$(shell python3 -m l7r.diagram.ci cov-scope 2>/dev/null))
 # THE LOCK DEFERS THE MAP-ROLLING TESTS TOO (GM 2026-08-26, feature 133 T11). Measured that day: under
 # `scope reference`, `make done`'s pytest phase took 233 s of a 4.5 min gate, and the time was the
 # `rolls_map` tests - a 48-seed cohort, polder hamlets, the real pool through the gen cache - i.e. maps
@@ -826,7 +831,8 @@ test:
 # --dist worksteal (GM 2026-08-26, the make quick profile): the default `load` scheduler hands each worker a
 # fixed slice up front, so on a suite whose tests range from 5 ms to 4 s the last worker finishes ~5 s after
 # the rest; worksteal lets idle workers take from busy ones. Measured on quick: 27.5 s -> 22.0 s wall.
-	@if python3 -c "import xdist" >/dev/null 2>&1; then $(GATE_EXHAUSTIVE_ENV) $(FULL_ENV) python3 -m pytest -n $(XDIST_WORKERS) --dist worksteal $(FULL_TREE_IGNORE) $(ROLL_DESELECT) $(TIER_SELECT); else $(GATE_EXHAUSTIVE_ENV) $(FULL_ENV) python3 -m pytest $(FULL_TREE_IGNORE) $(ROLL_DESELECT) $(TIER_SELECT); fi; ec=$$?; \
+	@$(if $(COV_SCOPE),printf 'coverage: %s\n' "$(COV_SCOPE)";,)
+	@if python3 -c "import xdist" >/dev/null 2>&1; then $(GATE_EXHAUSTIVE_ENV) $(FULL_ENV) python3 -m pytest -n $(XDIST_WORKERS) --dist worksteal $(COV_SCOPE) $(FULL_TREE_IGNORE) $(ROLL_DESELECT) $(TIER_SELECT); else $(GATE_EXHAUSTIVE_ENV) $(FULL_ENV) python3 -m pytest $(COV_SCOPE) $(FULL_TREE_IGNORE) $(ROLL_DESELECT) $(TIER_SELECT); fi; ec=$$?; \
 	if [ $$ec -ne 0 ]; then python3 ../../../scripts/uncovered-in-diff.py || true; exit $$ec; fi; \
 	python3 -m coverage combine --append >/dev/null 2>&1 || true; \
 	if [ -z "$(COV_FLOORS)" ]; then \

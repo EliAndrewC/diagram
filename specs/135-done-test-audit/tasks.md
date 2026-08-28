@@ -48,6 +48,16 @@ the feature's own evidence.
 
 - [x] T43 defects found while measuring, fixed here (constitution XIV): `state.write` vouched for the tooling on a FAILED gate (now green only, with a test); `make quick`'s `rolls_map` count read `__pycache__`; `make test-file` ran without `worksteal`; `gencache.split_sources` re-parsed ~180 files per key (memoized on content hash)
 
+## Phase 5 - the second pass (GM 2026-08-28: "just literally redoing the same audit")
+
+- [x] T50 re-measure the 24 s locked gate phase by phase, the test phase with and without coverage, the CPU mass by directory (research R10)
+- [x] T51 the AST memo persists to disk: `make reference` 2.0 -> 0.55 s; each worker's first key 1.2 s -> 10 ms
+- [x] T52 the corpus replay served from the roll cache (194 fixtures, 17.5 CPU-s -> a key each); FULL replays
+- [x] T53 coverage follows the diff at reference scope (`ci cov-scope`, `COV_SCOPE` in the Makefile; directories, not module names - the double-import lesson is on `delta.coverage_scope`); FULL traces everything
+- [x] T54 the cohort sweep keyed to FULL rather than EXHAUSTIVE (the gate is always EXHAUSTIVE; a first-pass slip that would have rolled four seeds at every unlocked gate)
+- [x] T55 declined, measured: `COVERAGE_CORE=sysmon` (slower), caching the ~20 settlement fixture tests (~1 s of wall), the duplicate-defs scan (a 1 s merge guard)
+- [x] T56 end to end after the second pass: locked `make done` 0m51.787s with nothing short-circuited (research R10)
+
 ## Phase 9 - acceptance
 
 - [ ] T99 **the GM accepts the current state of the tests** - tickable only on the GM's explicit word, recorded here verbatim

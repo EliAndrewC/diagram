@@ -143,7 +143,22 @@ def split_sources(path: str) -> tuple[str, dict[str, str], set[str]]:
     hit = _SPLIT_MEMO.get(memo)
     if hit is not None:
         return hit
-    result = _split_sources(src)
+    # ...AND ON DISK (feature 135, second pass): the in-process memo saved nothing for `make reference` (a fresh
+    # interpreter each time, 1.2 s of parsing for a 1.7 s hit) or for each of the eight xdist workers' first key.
+    # One small JSON per distinct file content under .gencache/ast/; a stale or unreadable file is simply re-parsed.
+    disk = os.path.join(CACHE_DIR, "ast", memo[1] + ".json")
+    try:
+        mod_hash, funcs, classes = json.loads(Path(disk).read_text(encoding="utf-8"))
+        result = (mod_hash, funcs, set(classes))
+    except OSError, ValueError:
+        result = _split_sources(src)
+        try:
+            os.makedirs(os.path.dirname(disk), exist_ok=True)
+            tmp = f"{disk}.tmp{os.getpid()}"
+            Path(tmp).write_text(json.dumps([result[0], result[1], sorted(result[2])]), encoding="utf-8")
+            os.replace(tmp, disk)
+        except OSError:  # pragma: no cover - a read-only tree loses the memo, never the answer
+            pass
     _SPLIT_MEMO[memo] = result
     return result
 
