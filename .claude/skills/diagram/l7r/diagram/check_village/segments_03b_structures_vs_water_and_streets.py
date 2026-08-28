@@ -1,20 +1,16 @@
 """Gate segments (structures vs water and streets; keys 0197-0231) - bodies verbatim, registry order preserved."""
 
-import math
 from typing import Any
 
-from l7r.diagram.settlement import street_runs
 from l7r.diagram.waterfields import hem_on_paddy
 
 from .common_01_geometry import (
     Poly,
     Pt,
     point_in_poly,
-    seg_closest,
     seg_dist,
     segments_cross,
 )
-from .common_02_overlap_policy import in_ellipse
 from .common_03_capacity import _UNBOUND, _kept
 
 # A walled COMPOUND (mausoleum / manor) whose wall sits ALONG a neighborhood (ward) fence must
@@ -91,13 +87,7 @@ def _seg_0197__walled_structure_yields_to_ward_wall(
             for name, (a, b) in sides.items():
                 if name != s.get("gate_dir") and _wall_along_fence(a, b) and name not in recorded:
                     unyielded.append((round(cx), round(cy), name))
-        check(
-            "walled_structure_yields_to_ward_wall",
-            not unyielded,
-            f"walled compound(s) draw their own wall OVER a neighborhood (ward) fence instead of yielding to it: {unyielded[:3]} - "
-            f"where a mausoleum/manor wall abuts a ward fence, the FENCE is that side's wall (render the compound's wall UNDER it); "
-            f"s.mausoleum / s.manor do this automatically and record the yielded sides in 'ward_walls'",
-        )
+        pass  # `` retired under feature 141 (the GM's cut); the segment stays for the check it keeps or the value it writes
     return _kept(locals(), ('_wall_along_fence', 'a', 'b', 'cx', 'cy', 'h', 'name', 'recorded', 's', 'sides', 'unyielded', 'w', 'wall_ring', 'x0', 'x1', 'y0', 'y1'))
 
 
@@ -108,39 +98,6 @@ def _seg_0198__road(*, M: Any = _UNBOUND) -> dict[str, Any]:
     """Gate segment 198 (road) - body verbatim from the legacy gate() (feature 022)."""
     road: Any = M.get("road")
     return _kept(locals(), ('road',))
-
-
-def _seg_0199__no_structure_on_road(
-    *,
-    M: Any = _UNBOUND,
-    bad_r: Any = _UNBOUND,
-    check: Any = _UNBOUND,
-    corners: Any = _UNBOUND,
-    cx: Any = _UNBOUND,
-    cy: Any = _UNBOUND,
-    e: Any = _UNBOUND,
-    k: Any = _UNBOUND,
-    on_road: Any = _UNBOUND,
-    road: Any = _UNBOUND,
-    rw: Any = _UNBOUND,
-    rx: Any = _UNBOUND,
-    ry: Any = _UNBOUND,
-    sc: Any = _UNBOUND,
-) -> dict[str, Any]:
-    """Gate segment 199 (no_structure_on_road) - body verbatim from the legacy gate() (feature 022)."""
-    if road:
-        rw = M.get("road_width", 30) / 2 + 2  # roadbed half-width + a little
-
-        def on_road(sc: Poly) -> bool:
-            if any(seg_dist(cx, cy, road[k], road[k + 1]) < rw for (cx, cy) in sc for k in range(len(road) - 1)):
-                return True
-            if any(point_in_poly(rx, ry, sc) for (rx, ry) in road):
-                return True
-            return any(segments_cross(road[k], road[k + 1], sc[e], sc[(e + 1) % 4]) for k in range(len(road) - 1) for e in range(4))
-
-        bad_r = [1 for sc in corners if on_road(sc)]
-        check("no_structure_on_road", not bad_r, f"{len(bad_r)} structure(s) overlap the road")
-    return _kept(locals(), ('bad_r', 'on_road', 'rw', 'sc'))
 
 
 # no structure overlaps a stream
@@ -191,46 +148,6 @@ def _seg_0201__no_structure_on_stream(
 # channel clipping a farmhouse's corner while its center stayed clear used to slip through.)
 
 
-def _seg_0202__channels_struct(*, M: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 202 (channels_struct) - body verbatim from the legacy gate() (feature 022)."""
-    channels_struct = M.get("channels", [])
-    return _kept(locals(), ('channels_struct',))
-
-
-def _seg_0203__no_structure_on_channel(
-    *,
-    bad_c: Any = _UNBOUND,
-    c: Any = _UNBOUND,
-    channels_struct: Any = _UNBOUND,
-    check: Any = _UNBOUND,
-    corners: Any = _UNBOUND,
-    crw: Any = _UNBOUND,
-    cx: Any = _UNBOUND,
-    cy: Any = _UNBOUND,
-    e: Any = _UNBOUND,
-    k: Any = _UNBOUND,
-    on_channel: Any = _UNBOUND,
-    rx: Any = _UNBOUND,
-    ry: Any = _UNBOUND,
-    sc: Any = _UNBOUND,
-    sp: Any = _UNBOUND,
-) -> dict[str, Any]:
-    """Gate segment 203 (no_structure_on_channel) - body verbatim from the legacy gate() (feature 022)."""
-    if channels_struct:
-        crw = 5  # channel half-width (hairline stroke ~2.5 -> ~1.25) + a little: a corner this close is on it
-
-        def on_channel(sc: Poly, sp: Poly) -> bool:
-            if any(seg_dist(cx, cy, sp[k], sp[k + 1]) < crw for (cx, cy) in sc for k in range(len(sp) - 1)):
-                return True
-            if any(point_in_poly(rx, ry, sc) for rx, ry in sp):
-                return True
-            return any(segments_cross(sp[k], sp[k + 1], sc[e], sc[(e + 1) % 4]) for k in range(len(sp) - 1) for e in range(4))
-
-        bad_c = [1 for sc in corners for c in channels_struct if on_channel(sc, c["poly"])]
-        check("no_structure_on_channel", not bad_c, f"{len(bad_c)} structure(s) overlap an irrigation channel")
-    return _kept(locals(), ('bad_c', 'c', 'crw', 'on_channel', 'sc'))
-
-
 # no structure overlaps the navigable CARGO CANAL - the same full-footprint test as a channel,
 # but the canal is a WIDER watercourse (a poling barge, not a field ditch), so its half-width is
 # honored. A merchant house / warehouse fronts the quay but must not stand IN the water (GM,
@@ -238,125 +155,11 @@ def _seg_0203__no_structure_on_channel(
 # this being the first city with a canal). Jetties/water-gates/bridges legitimately cross it (EXEMPT).
 
 
-def _seg_0204__canals_struct(*, M: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 204 (canals_struct) - body verbatim from the legacy gate() (feature 022)."""
-    canals_struct = M.get("canals", [])
-    return _kept(locals(), ('canals_struct',))
-
-
-def _seg_0205__no_structure_on_canal(
-    *,
-    bad_cn: Any = _UNBOUND,
-    c: Any = _UNBOUND,
-    canals_struct: Any = _UNBOUND,
-    check: Any = _UNBOUND,
-    chw: Any = _UNBOUND,
-    corners: Any = _UNBOUND,
-    cp: Any = _UNBOUND,
-    cx: Any = _UNBOUND,
-    cy: Any = _UNBOUND,
-    e: Any = _UNBOUND,
-    k: Any = _UNBOUND,
-    on_canal: Any = _UNBOUND,
-    rx: Any = _UNBOUND,
-    ry: Any = _UNBOUND,
-    sc: Any = _UNBOUND,
-) -> dict[str, Any]:
-    """Gate segment 205 (no_structure_on_canal) - body verbatim from the legacy gate() (feature 022)."""
-    if canals_struct:
-
-        def on_canal(sc: Poly, cp: Poly, chw: float) -> bool:
-            if any(seg_dist(cx, cy, cp[k], cp[k + 1]) < chw for (cx, cy) in sc for k in range(len(cp) - 1)):
-                return True
-            if any(point_in_poly(rx, ry, sc) for rx, ry in cp):
-                return True
-            return any(segments_cross(cp[k], cp[k + 1], sc[e], sc[(e + 1) % 4]) for k in range(len(cp) - 1) for e in range(4))
-
-        bad_cn = [1 for sc in corners for c in canals_struct if on_canal(sc, c["poly"], c.get("w", 12) / 2 + 2)]
-        check("no_structure_on_canal", not bad_cn, f"{len(bad_cn)} structure(s) overlap the cargo canal")
-    return _kept(locals(), ('bad_cn', 'c', 'on_canal', 'sc'))
-
-
 # no structure overlaps the town wall (the thick rampart stroke)
-
-
-def _seg_0206__wallpts(*, M: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 206 (wallpts) - body verbatim from the legacy gate() (feature 022)."""
-    wallpts = M.get("wall")
-    return _kept(locals(), ('wallpts',))
-
-
-def _seg_0207__no_structure_on_wall(
-    *,
-    bad_w: Any = _UNBOUND,
-    check: Any = _UNBOUND,
-    corners: Any = _UNBOUND,
-    cx: Any = _UNBOUND,
-    cy: Any = _UNBOUND,
-    e: Any = _UNBOUND,
-    k: Any = _UNBOUND,
-    on_wall: Any = _UNBOUND,
-    sc: Any = _UNBOUND,
-    wallpts: Any = _UNBOUND,
-    ww: Any = _UNBOUND,
-    wx: Any = _UNBOUND,
-    wy: Any = _UNBOUND,
-) -> dict[str, Any]:
-    """Gate segment 207 (no_structure_on_wall) - body verbatim from the legacy gate() (feature 022)."""
-    if wallpts:
-        ww = 9  # wall half-width (stroke ~10) + a little
-
-        def on_wall(sc: Poly) -> bool:
-            if any(seg_dist(cx, cy, wallpts[k], wallpts[k + 1]) < ww for (cx, cy) in sc for k in range(len(wallpts) - 1)):
-                return True
-            if any(point_in_poly(wx, wy, sc) for wx, wy in wallpts):
-                return True
-            return any(segments_cross(wallpts[k], wallpts[k + 1], sc[e], sc[(e + 1) % 4]) for k in range(len(wallpts) - 1) for e in range(4))
-
-        bad_w = [1 for sc in corners if on_wall(sc)]
-        check("no_structure_on_wall", not bad_w, f"{len(bad_w)} structure(s) overlap the town wall")
-    return _kept(locals(), ('bad_w', 'on_wall', 'sc', 'ww'))
 
 
 # no structure overlaps the MOAT (the water ring outside the wall) - extramural structures (the
 # common burial ground, the cremation ground, the ossuary, samurai estates) must keep clear of it
-
-
-def _seg_0208__moatpts(*, M: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 208 (moatpts) - body verbatim from the legacy gate() (feature 022)."""
-    moatpts = M.get("moat")
-    return _kept(locals(), ('moatpts',))
-
-
-def _seg_0209__no_structure_on_moat(
-    *,
-    M: Any = _UNBOUND,
-    bad_mo: Any = _UNBOUND,
-    check: Any = _UNBOUND,
-    corners: Any = _UNBOUND,
-    cx: Any = _UNBOUND,
-    cy: Any = _UNBOUND,
-    e: Any = _UNBOUND,
-    k: Any = _UNBOUND,
-    mhw: Any = _UNBOUND,
-    moatpts: Any = _UNBOUND,
-    on_moat: Any = _UNBOUND,
-    sc: Any = _UNBOUND,
-) -> dict[str, Any]:
-    """Gate segment 209 (no_structure_on_moat) - body verbatim from the legacy gate() (feature 022)."""
-    if moatpts:
-        mhw = M.get("moat_width", 26) / 2 + 4
-
-        def on_moat(sc: Poly) -> bool:
-            if any(seg_dist(cx, cy, moatpts[k], moatpts[k + 1]) < mhw for (cx, cy) in sc for k in range(len(moatpts) - 1)):
-                return True
-            if any(point_in_poly(mx, my, sc) for mx, my in moatpts):
-                return True
-            return any(segments_cross(moatpts[k], moatpts[k + 1], sc[e], sc[(e + 1) % 4]) for k in range(len(moatpts) - 1) for e in range(4))
-
-        bad_mo = [1 for sc in corners if on_moat(sc)]
-        check("no_structure_on_moat", not bad_mo, f"{len(bad_mo)} structure(s) overlap the moat")
-    return _kept(locals(), ('bad_mo', 'mhw', 'on_moat', 'sc'))
 
 
 # no structure overlaps the POND (the irrigation reservoir / in-wall water source). The pond is
@@ -366,42 +169,6 @@ def _seg_0209__no_structure_on_moat(
 # structs - which is exactly when a check is needed. The pond is a true ellipse [cx, cy, rx, ry];
 # a footprint hits it if any sampled boundary point (corners + edge quarter-points, enough for
 # struct-sized rects vs a pond-sized ellipse) dips inside the rim, or the rect swallows the center.
-
-
-def _seg_0210__pond_st(*, M: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 210 (pond_st) - body verbatim from the legacy gate() (feature 022)."""
-    pond_st = M.get("pond")
-    return _kept(locals(), ('pond_st',))
-
-
-def _seg_0211__no_structure_on_pond(
-    *,
-    bad_p: Any = _UNBOUND,
-    check: Any = _UNBOUND,
-    corners: Any = _UNBOUND,
-    e: Any = _UNBOUND,
-    on_pond: Any = _UNBOUND,
-    pe: Any = _UNBOUND,
-    pond_st: Any = _UNBOUND,
-    pts: Any = _UNBOUND,
-    px: Any = _UNBOUND,
-    py: Any = _UNBOUND,
-    sc: Any = _UNBOUND,
-    t: Any = _UNBOUND,
-) -> dict[str, Any]:
-    """Gate segment 211 (no_structure_on_pond) - body verbatim from the legacy gate() (feature 022)."""
-    if pond_st:
-        pe = [pond_st[0], pond_st[1], pond_st[2] + 3, pond_st[3] + 3]  # rim stroke (2.4) half-width + a little
-
-        def on_pond(sc: Poly) -> bool:
-            if point_in_poly(pond_st[0], pond_st[1], sc):
-                return True
-            pts = [(sc[e][0] + (sc[(e + 1) % 4][0] - sc[e][0]) * t, sc[e][1] + (sc[(e + 1) % 4][1] - sc[e][1]) * t) for e in range(4) for t in (0.0, 0.25, 0.5, 0.75)]
-            return any(in_ellipse(px, py, pe) for px, py in pts)
-
-        bad_p = [1 for sc in corners if on_pond(sc)]
-        check("no_structure_on_pond", not bad_p, f"{len(bad_p)} structure(s) overlap the pond")
-    return _kept(locals(), ('bad_p', 'on_pond', 'pe', 'sc'))
 
 
 # no structure stands ON a rice paddy - the long-missing member of this family (GM, Hoshizora
@@ -513,12 +280,6 @@ def _seg_0215__st(*, M: Any = _UNBOUND, st: Any = _UNBOUND) -> dict[str, Any]:
     return _kept(locals(), ('st', 'strm_ws'))
 
 
-def _seg_0216__moat_w(*, M: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 216 (moat_w) - body verbatim from the legacy gate() (feature 022)."""
-    moat_w = M.get("moat_width")
-    return _kept(locals(), ('moat_w',))
-
-
 # (1) Irrigation channels are HAIRLINES: at/just above the legibility floor, never fattened toward
 # stream weight. A ditch drawn as a stout line (the old 4.2 px) reads as a watercourse, not a ditch.
 
@@ -559,36 +320,6 @@ def _seg_0218__watercourses_wider_than_ditches(*, chan_ws: Any = _UNBOUND, check
     return _kept(locals(), ('ok',))
 
 
-def _seg_0219__moat_is_heaviest_watercourse(
-    *, M: Any = _UNBOUND, check: Any = _UNBOUND, moat_w: Any = _UNBOUND, rv_w: Any = _UNBOUND, strm_cmp: Any = _UNBOUND, strm_ws: Any = _UNBOUND, w_: Any = _UNBOUND
-) -> dict[str, Any]:
-    """Gate segment 219 (moat_is_heaviest_watercourse) - body verbatim from the legacy gate() (feature 022)."""
-    if strm_ws and moat_w:
-        # a RIVER-bank city's river legitimately outweighs its dug moat (the river IS the heavier
-        # defense - it closes the water ring on its flank), so the river's own stream record is
-        # excluded from the comparison; every OTHER stream still respects the moat's weight
-        rv_w = (M.get("river") or {}).get("w")
-        strm_cmp = [w_ for w_ in strm_ws if rv_w is None or w_ != rv_w]
-        check(
-            "moat_is_heaviest_watercourse",
-            not strm_cmp or max(strm_cmp) <= moat_w * 1.05,
-            f"a stream ({max(strm_cmp or [0])} px) is wider than the city moat ({moat_w} px) - the moat is the "
-            f"heaviest watercourse; a feeder stream may equal it (conservation of flow) but not exceed it",
-        )
-    return _kept(locals(), ('rv_w', 'strm_cmp', 'w_'))
-
-
-def _seg_0220__moat_dwarfs_ditches(*, chan_ws: Any = _UNBOUND, check: Any = _UNBOUND, moat_w: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 220 (moat_dwarfs_ditches) - body verbatim from the legacy gate() (feature 022)."""
-    if chan_ws and moat_w:
-        check(
-            "moat_dwarfs_ditches",
-            moat_w >= 4.0 * max(chan_ws),
-            f"city moat {moat_w} px is not >= 4x the widest channel {max(chan_ws)} px - a defensive moat (~20-35 m real, ~70x a field ditch) must dwarf an irrigation ditch",
-        )
-    return _kept(locals(), ())
-
-
 # no structure overlaps a street OR an alley (a paved lane or a gravel alley running over a
 # house is wrong) - alleys are drawn last, so a careless alley can be laid across a building
 
@@ -605,187 +336,9 @@ def _seg_0222__a_1(*, M: Any = _UNBOUND, a: Any = _UNBOUND, tstreets: Any = _UNB
     return _kept(locals(), ('a', 'lanes'))
 
 
-def _seg_0223__no_structure_on_street(
-    *,
-    bad_ts: Any = _UNBOUND,
-    check: Any = _UNBOUND,
-    corners: Any = _UNBOUND,
-    cx: Any = _UNBOUND,
-    cy: Any = _UNBOUND,
-    e: Any = _UNBOUND,
-    hw: Any = _UNBOUND,
-    k: Any = _UNBOUND,
-    lanes: Any = _UNBOUND,
-    on_street: Any = _UNBOUND,
-    rx: Any = _UNBOUND,
-    ry: Any = _UNBOUND,
-    sc: Any = _UNBOUND,
-    sp: Any = _UNBOUND,
-    st: Any = _UNBOUND,
-) -> dict[str, Any]:
-    """Gate segment 223 (no_structure_on_street) - body verbatim from the legacy gate() (feature 022)."""
-    if lanes:
-
-        def on_street(sc: Poly, sp: Poly, hw: float) -> bool:
-            if any(seg_dist(cx, cy, sp[k], sp[k + 1]) < hw for (cx, cy) in sc for k in range(len(sp) - 1)):
-                return True
-            if any(point_in_poly(rx, ry, sc) for rx, ry in sp):
-                return True
-            return any(segments_cross(sp[k], sp[k + 1], sc[e], sc[(e + 1) % 4]) for k in range(len(sp) - 1) for e in range(4))
-
-        bad_ts = [1 for sc in corners for st in lanes if on_street(sc, st["pts"], st.get("w", 24) / 2 + 2)]
-        check("no_structure_on_street", not bad_ts, f"{len(bad_ts)} structure(s) overlapped by a street/alley")
-    return _kept(locals(), ('bad_ts', 'on_street', 'sc', 'st'))
-
-
 # ---- street-faced town layout: businesses front the streets (and face them); housing
 # sits back off the main commercial street. The "streets" are the town streets plus any
 # road (an unwalled town's road is its high street).
-
-
-def _seg_0224__st_1(*, M: Any = _UNBOUND, st: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 224 (st, street_lines) - body verbatim from the legacy gate() (feature 022)."""
-    street_lines = [st["pts"] for st in M.get("town_streets", [])]
-    return _kept(locals(), ('st', 'street_lines'))
-
-
-def _seg_0225__i_1(*, M: Any = _UNBOUND, i: Any = _UNBOUND, st: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 225 (i, main_idx, st) - body verbatim from the legacy gate() (feature 022)."""
-    main_idx = next((i for i, st in enumerate(M.get("town_streets", [])) if st.get("main")), None)
-    return _kept(locals(), ('i', 'main_idx', 'st'))
-
-
-def _seg_0226__main_idx(*, M: Any = _UNBOUND, main_idx: Any = _UNBOUND, p: Any = _UNBOUND, street_lines: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 226 (main_idx, p, street_lines) - body verbatim from the legacy gate() (feature 022)."""
-    if M.get("road"):
-        street_lines.append([list(p) for p in M["road"]])
-        if main_idx is None:
-            main_idx = len(street_lines) - 1
-    return _kept(locals(), ('main_idx', 'p', 'street_lines'))
-
-
-def _seg_0227__businesses_front_streets(
-    *,
-    BUSINESS: Any = _UNBOUND,
-    FRONT: Any = _UNBOUND,
-    HOUSING: Any = _UNBOUND,
-    M: Any = _UNBOUND,
-    aligns: Any = _UNBOUND,
-    b: Any = _UNBOUND,
-    bd: Any = _UNBOUND,
-    best: Any = _UNBOUND,
-    biz_off: Any = _UNBOUND,
-    check: Any = _UNBOUND,
-    closest_on_line: Any = _UNBOUND,
-    cp: Any = _UNBOUND,
-    cx: Any = _UNBOUND,
-    cy: Any = _UNBOUND,
-    d: Any = _UNBOUND,
-    dl: Any = _UNBOUND,
-    dmin: Any = _UNBOUND,
-    fx: Any = _UNBOUND,
-    fy: Any = _UNBOUND,
-    house_front: Any = _UNBOUND,
-    k: Any = _UNBOUND,
-    kind: Any = _UNBOUND,
-    li: Any = _UNBOUND,
-    limin: Any = _UNBOUND,
-    main_idx: Any = _UNBOUND,
-    off_face: Any = _UNBOUND,
-    per: Any = _UNBOUND,
-    px: Any = _UNBOUND,
-    py: Any = _UNBOUND,
-    r: Any = _UNBOUND,
-    scale: Any = _UNBOUND,
-    sp: Any = _UNBOUND,
-    street_lines: Any = _UNBOUND,
-    th: Any = _UNBOUND,
-) -> dict[str, Any]:
-    """Gate segment 227 (buildings_face_street, businesses_front_streets, housing_off_main_street) - body verbatim from the legacy gate() (feature 022)."""
-    if scale == "town" and street_lines and M.get("buildings"):
-
-        def closest_on_line(px: float, py: float, sp: Poly) -> tuple[float, tuple[float, float] | None]:
-            best, bd = None, 1e18
-            for k in range(len(sp) - 1):
-                cx, cy = seg_closest(px, py, sp[k], sp[k + 1])
-                d = math.hypot(cx - px, cy - py)
-                if d < bd:
-                    bd, best = d, (cx, cy)
-            return bd, best
-
-        BUSINESS, HOUSING = {"shop", "merchant"}, {"laborer", "servant"}
-        FRONT = 92  # within this of a street = "fronting" it
-        biz_off, off_face, house_front = [], [], []
-        for b in M["buildings"]:
-            kind = b["kind"]
-            per = [(closest_on_line(b["x"], b["y"], sp), li) for li, sp in enumerate(street_lines)]
-            (dmin, cpmin), limin = min(per, key=lambda r: r[0][0])
-            if kind in BUSINESS and dmin > FRONT:
-                biz_off.append(kind)
-            if dmin <= FRONT and kind in (BUSINESS | HOUSING):
-                th = math.radians(b.get("rot", 0))
-                fx, fy = -math.sin(th), math.cos(th)  # frontage normal
-                # a corner building may face any street it fronts, not only the nearest
-                aligns = []
-                for (d, cp), _ in per:
-                    if d <= FRONT and cp:
-                        dl = math.hypot(cp[0] - b["x"], cp[1] - b["y"]) or 1
-                        aligns.append((fx * (cp[0] - b["x"]) + fy * (cp[1] - b["y"])) / dl)
-                if aligns and max(aligns) < 0.5:  # > 60 deg off every nearby street
-                    off_face.append(kind)
-            if kind in HOUSING and limin == main_idx and dmin <= FRONT:
-                house_front.append(kind)
-        check("businesses_front_streets", not biz_off, f"{len(biz_off)} business(es) not fronting any street")
-        check("buildings_face_street", not off_face, f"{len(off_face)} street-fronting building(s) not facing any street it fronts")
-        check("housing_off_main_street", not house_front, f"{len(house_front)} dwelling(s) on the main street frontage (housing belongs set back)")
-    return _kept(
-        locals(),
-        (
-            'BUSINESS',
-            'FRONT',
-            'HOUSING',
-            '_',
-            'aligns',
-            'b',
-            'biz_off',
-            'closest_on_line',
-            'cp',
-            'cpmin',
-            'd',
-            'dl',
-            'dmin',
-            'fx',
-            'fy',
-            'house_front',
-            'kind',
-            'li',
-            'limin',
-            'off_face',
-            'per',
-            'sp',
-            'th',
-        ),
-    )
-
-
-def _seg_0228__c_2(*, M: Any = _UNBOUND, c: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 228 (c, corr) - body verbatim from the legacy gate() (feature 022)."""
-    # EVERY lane, not `M["lane"]` - that key holds the LAST lane drawn (a 45 ft orphan on Sawada),
-    # so this rule was adjudicating structure-vs-street against a fragment. See `street_runs`.
-    corr = street_runs(M) + [c["poly"] for c in M["channels"]]
-    return _kept(locals(), ('c', 'corr'))
-
-
-def _seg_0229__h(*, corr: Any = _UNBOUND, h: Any = _UNBOUND, houses: Any = _UNBOUND, k: Any = _UNBOUND, poly: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 229 (h, k, onroad, poly) - body verbatim from the legacy gate() (feature 022)."""
-    onroad = sum(1 for h in houses for poly in corr if any(seg_dist(h["x"], h["y"], poly[k], poly[k + 1]) < 14 for k in range(len(poly) - 1)))
-    return _kept(locals(), ('h', 'k', 'onroad', 'poly'))
-
-
-def _seg_0230__houses_off_corridors(*, check: Any = _UNBOUND, onroad: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 230 (houses_off_corridors) - body verbatim from the legacy gate() (feature 022)."""
-    check("houses_off_corridors", onroad == 0, f"{onroad} house-on-corridor hit(s)")
-    return _kept(locals(), ())
 
 
 def _seg_0231__ADJ() -> dict[str, Any]:

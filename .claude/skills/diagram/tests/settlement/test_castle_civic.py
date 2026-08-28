@@ -114,17 +114,6 @@ def test_place_caption_refuses_an_empty_subject():
         s.place_caption("market", None, 10)
 
 
-def test_label_hits_measures_a_rotated_neighbor_the_way_the_gate_does():
-    # `labels_clear_of_other_buildings` boxes a victim by its ROTATED corners' AABB, which is wider
-    # than the record's axis-aligned w/h. The probe has to agree, or it waves through exactly what
-    # the gate then catches - which is what put Ubame's "caravan inn" in a rot=-16 stables' corner
-    # slack the moment the caption's own reach became honest.
-    s = _town()
-    s.building(300, 300, 92, 44, "stables", rot=-16)
-    assert s._label_hits(300, 344, "caravan inn", 9, pad=0.0, linepad=0.0) == 0  # clear of the axis-aligned 92x44...
-    assert s._label_hits(300, 344, "caravan inn", 9, pad=0.0, linepad=0.0, tilt=-16) >= 1  # ...inside the rotated AABB the gate reads
-
-
 def test_place_caption_rot_threads_through_finish(tmp_path):
     s = _town()
     s.place_caption("caravan inn", (100, 100, 180, 160), rot=-16)

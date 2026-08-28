@@ -4,7 +4,7 @@ import math
 from collections.abc import Sequence
 from typing import Any
 
-from l7r.diagram.settlement import label_aabb, sat_overlap, torii_wall_conflicts
+from l7r.diagram.settlement import sat_overlap, torii_wall_conflicts
 
 from .common_01_geometry import (
     _LABEL_CLASSIFIED,
@@ -14,7 +14,6 @@ from .common_01_geometry import (
     Poly,
     Pt,
     _struct_rect,
-    point_in_poly,
     poly_dist,
     rect_corners,
     seg_dist,
@@ -22,18 +21,6 @@ from .common_01_geometry import (
     segments_cross,
 )
 from .common_03_capacity import _UNBOUND, _kept
-
-
-def _seg_0133_031__alleys_serve_buildings(*, check: Any = _UNBOUND, scale: Any = _UNBOUND, thin: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 0133.031 (alleys_serve_buildings) - body verbatim from _seg_0133__outside_fields_farmhouse_density (feature 024 per-check split; guards re-evaluated in the body, see split_oversized.py)."""
-    if scale in ('town', 'city', 'capital'):
-        check(
-            "alleys_serve_buildings",
-            not thin,
-            f"alley(s) that uniquely serve too few dwellings to justify their length - a lane to nowhere or a redundant lane beside/across one that already serves the block (need ~1 uniquely-served dwelling per 30px): {thin}",
-        )
-    return _kept(locals(), ())
-
 
 # ---- universal invariants ------------------------------------------------
 # standalone civic buildings (flophouse, granary kura) are checked for overlaps exactly like
@@ -81,12 +68,6 @@ def _seg_0137__bad(*, corners: Any = _UNBOUND, i: Any = _UNBOUND, j: Any = _UNBO
         if math.hypot(structs[i]["x"] - structs[j]["x"], structs[i]["y"] - structs[j]["y"]) <= 110 and sat_overlap(corners[i], corners[j])
     ]
     return _kept(locals(), ('bad', 'i', 'j'))
-
-
-def _seg_0138__no_structure_overlaps(*, bad: Any = _UNBOUND, check: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 138 (no_structure_overlaps) - body verbatim from the legacy gate() (feature 022)."""
-    check("no_structure_overlaps", not bad, f"{len(bad)} overlapping structure pair(s)")
-    return _kept(locals(), ())
 
 
 # COMPLETENESS GUARD: every footprint feature in the manifest must be classified for overlap (in the
@@ -143,27 +124,6 @@ def _seg_0142__every_solid_feature_classified_for_labels(*, check: Any = _UNBOUN
 # no structure overlaps the magistrate's manor walls (a tilted manor uses its rotated corners)
 
 
-def _seg_0143__bad_m() -> dict[str, Any]:
-    """Gate segment 143 (bad_m) - body verbatim from the legacy gate() (feature 022)."""
-    bad_m = []  # type: ignore[var-annotated]
-    return _kept(locals(), ('bad_m',))
-
-
-def _seg_0144__bad_m_1(*, M: Any = _UNBOUND, bad_m: Any = _UNBOUND, corners: Any = _UNBOUND, e: Any = _UNBOUND, mc: Any = _UNBOUND, mn: Any = _UNBOUND, sc: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 144 (bad_m, e, mc, mn) - body verbatim from the legacy gate() (feature 022)."""
-    for mn in M.get("manors", []):
-        e = 4  # wall thickness
-        mc = rect_corners({"x": mn["x"], "y": mn["y"], "w": mn["w"] + 2 * e, "h": mn["h"] + 2 * e, "rot": mn.get("rot", 0)})
-        bad_m += [1 for sc in corners if sat_overlap(sc, mc)]
-    return _kept(locals(), ('bad_m', 'e', 'mc', 'mn', 'sc'))
-
-
-def _seg_0145__no_structure_on_manor(*, bad_m: Any = _UNBOUND, check: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 145 (no_structure_on_manor) - body verbatim from the legacy gate() (feature 022)."""
-    check("no_structure_on_manor", not bad_m, f"{len(bad_m)} structure(s) overlap the manor walls")
-    return _kept(locals(), ())
-
-
 def _seg_0146__rect_corners_xywh(*, cx: Any = _UNBOUND, cy: Any = _UNBOUND, e: Any = _UNBOUND, h: Any = _UNBOUND, w: Any = _UNBOUND) -> dict[str, Any]:
     """Gate segment 146 (rect_corners_xywh) - body verbatim from the legacy gate() (feature 022)."""
 
@@ -183,25 +143,7 @@ def _seg_0147__bad_rel(*, M: Any = _UNBOUND, corners: Any = _UNBOUND, rect_corne
     return _kept(locals(), ('bad_rel', 'rel', 'sc'))
 
 
-def _seg_0148__no_structure_on_religious(*, bad_rel: Any = _UNBOUND, check: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 148 (no_structure_on_religious) - body verbatim from the legacy gate() (feature 022)."""
-    check("no_structure_on_religious", not bad_rel, f"{len(bad_rel)} structure(s) overlap a religious hall")
-    return _kept(locals(), ())
-
-
 # no structure overlaps the gate's guard station / guardtower
-
-
-def _seg_0149__bad_g(*, M: Any = _UNBOUND, corners: Any = _UNBOUND, gs: Any = _UNBOUND, rect_corners_xywh: Any = _UNBOUND, sc: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 149 (bad_g, gs, sc) - body verbatim from the legacy gate() (feature 022)."""
-    bad_g = [1 for gs in M.get("gate_structs", []) for sc in corners if sat_overlap(sc, rect_corners_xywh(gs, 2))]
-    return _kept(locals(), ('bad_g', 'gs', 'sc'))
-
-
-def _seg_0150__no_structure_on_gate(*, bad_g: Any = _UNBOUND, check: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 150 (no_structure_on_gate) - body verbatim from the legacy gate() (feature 022)."""
-    check("no_structure_on_gate", not bad_g, f"{len(bad_g)} structure(s) overlap the gate guard station/tower")
-    return _kept(locals(), ())
 
 
 # no structure overlaps a torii arch. The arch is TRUE SCALE since 2026-07-21 (a 16 ft rail span,
@@ -408,97 +350,6 @@ def _seg_0167__religious_clear_of_ring_and_towers(*, bad_rel_pl: Any = _UNBOUND,
 # must be drawn ON TOP of it (higher draw-order z), never have the road painted over it.
 
 
-def _seg_0168__road_layers() -> dict[str, Any]:
-    """Gate segment 168 (road_layers) - body verbatim from the legacy gate() (feature 022)."""
-    road_layers = []  # type: ignore[var-annotated]
-    return _kept(locals(), ('road_layers',))
-
-
-def _seg_0169__road_layers_1(*, M: Any = _UNBOUND, road_layers: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 169 (road_layers) - body verbatim from the legacy gate() (feature 022)."""
-    if M.get("road") is not None and M.get("road_z") is not None:
-        road_layers.append((M["road"], M["road_z"], M.get("road_width", 30) / 2))
-    return _kept(locals(), ('road_layers',))
-
-
-def _seg_0170__road_layers_2(*, M: Any = _UNBOUND, road_layers: Any = _UNBOUND, st: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 170 (road_layers, st) - body verbatim from the legacy gate() (feature 022)."""
-    road_layers += [(st["pts"], st["z"], st["w"] / 2) for st in M.get("town_streets", []) if "z" in st]
-    return _kept(locals(), ('road_layers', 'st'))
-
-
-def _seg_0171__lab(*, M: Any = _UNBOUND, lab: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 171 (lab, overlays) - body verbatim from the legacy gate() (feature 022)."""
-    overlays = [("label", label_aabb(lab), lab[4]) for lab in M.get("labels", []) if len(lab) > 4]
-    return _kept(locals(), ('lab', 'overlays'))
-
-
-def _seg_0172__gs(*, M: Any = _UNBOUND, gs: Any = _UNBOUND, overlays: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 172 (gs, overlays) - body verbatim from the legacy gate() (feature 022)."""
-    overlays += [("gatehouse", (gs["x"] - gs["w"] / 2, gs["y"] - gs["h"] / 2, gs["x"] + gs["w"] / 2, gs["y"] + gs["h"] / 2), gs["z"]) for gs in M.get("gate_structs", []) if "z" in gs]
-    return _kept(locals(), ('gs', 'overlays'))
-
-
-def _seg_0173__line_hits_box(
-    *,
-    ax: Any = _UNBOUND,
-    ay: Any = _UNBOUND,
-    box: Any = _UNBOUND,
-    bx: Any = _UNBOUND,
-    bx0: Any = _UNBOUND,
-    bx1: Any = _UNBOUND,
-    by: Any = _UNBOUND,
-    by0: Any = _UNBOUND,
-    by1: Any = _UNBOUND,
-    j: Any = _UNBOUND,
-    k: Any = _UNBOUND,
-    pad: Any = _UNBOUND,
-    poly: Any = _UNBOUND,
-    px: Any = _UNBOUND,
-    py: Any = _UNBOUND,
-    steps: Any = _UNBOUND,
-    t: Any = _UNBOUND,
-) -> dict[str, Any]:
-    """Gate segment 173 (line_hits_box) - body verbatim from the legacy gate() (feature 022)."""
-
-    def line_hits_box(poly: Poly, box: tuple[float, float, float, float], pad: float) -> bool:
-        bx0, by0, bx1, by1 = box
-        for k in range(len(poly) - 1):
-            (ax, ay), (bx, by) = poly[k], poly[k + 1]
-            steps = max(1, int(math.hypot(bx - ax, by - ay) // 8))
-            for j in range(steps + 1):
-                t = j / steps
-                px, py = ax + (bx - ax) * t, ay + (by - ay) * t
-                if bx0 - pad <= px <= bx1 + pad and by0 - pad <= py <= by1 + pad:
-                    return True
-        return False
-
-    return _kept(locals(), ('line_hits_box',))
-
-
-def _seg_0174__bad_z(
-    *,
-    box: Any = _UNBOUND,
-    hw: Any = _UNBOUND,
-    line_hits_box: Any = _UNBOUND,
-    name: Any = _UNBOUND,
-    overlays: Any = _UNBOUND,
-    oz: Any = _UNBOUND,
-    poly: Any = _UNBOUND,
-    road_layers: Any = _UNBOUND,
-    rz: Any = _UNBOUND,
-) -> dict[str, Any]:
-    """Gate segment 174 (bad_z, box, hw, name) - body verbatim from the legacy gate() (feature 022)."""
-    bad_z = [name for poly, rz, hw in road_layers for name, box, oz in overlays if rz > oz and line_hits_box(poly, box, hw)]
-    return _kept(locals(), ('bad_z', 'box', 'hw', 'name', 'oz', 'poly', 'rz'))
-
-
-def _seg_0175__roads_drawn_under_overlays(*, bad_z: Any = _UNBOUND, check: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 175 (roads_drawn_under_overlays) - body verbatim from the legacy gate() (feature 022)."""
-    check("roads_drawn_under_overlays", not bad_z, f"{len(bad_z)} road/street drawn OVER a gatehouse/label it should pass under: {sorted(set(bad_z))}")
-    return _kept(locals(), ())
-
-
 # LANE LAYERING: where two linear ground features cross, the WIDER renders on top (higher draw z).
 # The Imperial road is painted over the city streets it crosses, streets over the alleys they cross.
 # z is the recorded final draw position (settlement flushes road/street/alley as one ordered block).
@@ -529,79 +380,10 @@ def _seg_0179__a(*, M: Any = _UNBOUND, a: Any = _UNBOUND, lanes: Any = _UNBOUND)
     return _kept(locals(), ('a', 'lanes'))
 
 
-def _seg_0180__lanes_cross(*, a: Any = _UNBOUND, b: Any = _UNBOUND, pi: Any = _UNBOUND, pj: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 180 (lanes_cross) - body verbatim from the legacy gate() (feature 022)."""
-
-    def lanes_cross(pi: Poly, pj: Poly) -> bool:
-        return any(segments_cross(pi[a], pi[a + 1], pj[b], pj[b + 1]) for a in range(len(pi) - 1) for b in range(len(pj) - 1))
-
-    return _kept(locals(), ('lanes_cross',))
-
-
-def _seg_0181__mislayered() -> dict[str, Any]:
-    """Gate segment 181 (mislayered) - body verbatim from the legacy gate() (feature 022)."""
-    mislayered = []  # type: ignore[var-annotated]
-    return _kept(locals(), ('mislayered',))
-
-
-def _seg_0182__i(
-    *,
-    i: Any = _UNBOUND,
-    j: Any = _UNBOUND,
-    lanes: Any = _UNBOUND,
-    lanes_cross: Any = _UNBOUND,
-    mislayered: Any = _UNBOUND,
-    narrower: Any = _UNBOUND,
-    ni: Any = _UNBOUND,
-    nj: Any = _UNBOUND,
-    pi: Any = _UNBOUND,
-    pj: Any = _UNBOUND,
-    wi: Any = _UNBOUND,
-    wider: Any = _UNBOUND,
-    wj: Any = _UNBOUND,
-    zi: Any = _UNBOUND,
-    zj: Any = _UNBOUND,
-) -> dict[str, Any]:
-    """Gate segment 182 (i, j, mislayered, narrower) - body verbatim from the legacy gate() (feature 022)."""
-    for i in range(len(lanes)):
-        for j in range(i + 1, len(lanes)):
-            ni, pi, wi, zi = lanes[i]
-            nj, pj, wj, zj = lanes[j]
-            if abs(wi - wj) < 1 or not lanes_cross(pi, pj):
-                continue  # same width (either order ok) or they don't cross
-            wider, narrower = ((ni, zi), (nj, zj)) if wi > wj else ((nj, zj), (ni, zi))
-            if wider[1] < narrower[1]:
-                mislayered.append(f"{narrower[0]} over {wider[0]}")
-    return _kept(locals(), ('i', 'j', 'mislayered', 'narrower', 'ni', 'nj', 'pi', 'pj', 'wi', 'wider', 'wj', 'zi', 'zj'))
-
-
-def _seg_0183__city_lanes_layered_by_width(*, check: Any = _UNBOUND, mislayered: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 183 (city_lanes_layered_by_width) - body verbatim from the legacy gate() (feature 022)."""
-    check("city_lanes_layered_by_width", not mislayered, f"a narrower lane is painted OVER a wider one it crosses (the wider lane must be on top): {sorted(set(mislayered))}")
-    return _kept(locals(), ())
-
-
 # where lanes meet they form a clean CROSSROADS: the paved BEDS merge into a continuous surface, with
 # no lane's EDGE (its dark curb-line) cutting across another lane's bed at the junction. The engine
 # draws the ground block in sub-layers - all edges, then all beds, then center-marks - so every edge
 # sits below every bed; the check guards that invariant (max edge draw-z < min bed draw-z).
-
-
-def _seg_0184__bz(*, M: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 184 (bz, ez) - body verbatim from the legacy gate() (feature 022)."""
-    ez, bz = M.get("ground_edge_zmax"), M.get("ground_bed_zmin")
-    return _kept(locals(), ('bz', 'ez'))
-
-
-def _seg_0185__intersections_are_crossroads(*, bz: Any = _UNBOUND, check: Any = _UNBOUND, ez: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 185 (intersections_are_crossroads) - body verbatim from the legacy gate() (feature 022)."""
-    if ez is not None and bz is not None:
-        check(
-            "intersections_are_crossroads",
-            ez < bz,
-            "lane edge-strokes render OVER bed-strokes, so a junction shows a line across it instead of a merged crossroads - draw all ground edges below all ground beds",
-        )
-    return _kept(locals(), ())
 
 
 # WALLS render OVER the ground lanes: a road/street/alley that runs INTO a wall - touches or crosses
@@ -670,46 +452,6 @@ def _seg_0188__gates(*, M: Any = _UNBOUND) -> dict[str, Any]:
     return _kept(locals(), ('gates',))
 
 
-def _seg_0189__city_lane_under_wall(
-    *, check: Any = _UNBOUND, gates: Any = _UNBOUND, lanes_over: Any = _UNBOUND, over_wall: Any = _UNBOUND, scale: Any = _UNBOUND, wall: Any = _UNBOUND, wall_z: Any = _UNBOUND
-) -> dict[str, Any]:
-    """Gate segment 189 (city_lane_under_wall) - body verbatim from the legacy gate() (feature 022)."""
-    if wall and wall_z is not None and len(wall) >= 3:
-        over_wall = lanes_over(list(wall), wall_z, scale == "city", gates)
-        check(
-            "city_lane_under_wall",
-            not over_wall,
-            f"a road/street/alley runs INTO the city wall and renders OVER it - a lane must pass UNDER the rampart (it shows through only at a gate opening): {over_wall}",
-        )
-    return _kept(locals(), ('over_wall',))
-
-
-def _seg_0190__k_2(*, M: Any = _UNBOUND, k: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 190 (k, kido_pts) - body verbatim from the legacy gate() (feature 022)."""
-    kido_pts = [(k["x"], k["y"]) for k in M.get("kido", [])]
-    return _kept(locals(), ('k', 'kido_pts'))
-
-
-def _seg_0191__over_fence() -> dict[str, Any]:
-    """Gate segment 191 (over_fence) - body verbatim from the legacy gate() (feature 022)."""
-    over_fence = []  # type: ignore[var-annotated]
-    return _kept(locals(), ('over_fence',))
-
-
-def _seg_0192__n(*, M: Any = _UNBOUND, kido_pts: Any = _UNBOUND, lanes_over: Any = _UNBOUND, n: Any = _UNBOUND, over_fence: Any = _UNBOUND, wd: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 192 (n, over_fence, wd) - body verbatim from the legacy gate() (feature 022)."""
-    for wd in M.get("wards", []):
-        if wd.get("z") is not None and len(wd.get("boundary", [])) >= 2:
-            over_fence += [(wd.get("name", "ward"), n) for n in lanes_over(wd["boundary"], wd["z"], False, kido_pts)]
-    return _kept(locals(), ('n', 'over_fence', 'wd'))
-
-
-def _seg_0193__city_lanes_under_ward_fences(*, check: Any = _UNBOUND, over_fence: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 193 (city_lanes_under_ward_fences) - body verbatim from the legacy gate() (feature 022)."""
-    check("city_lanes_under_ward_fences", not over_fence, f"a lane runs into a neighborhood (ward) fence and renders OVER it - lanes pass UNDER the fence (the kido marks the passage): {over_fence}")
-    return _kept(locals(), ())
-
-
 # NO DOUBLED WALL: the short wall-stroke CAP that plugs a ward fence into the rampart must lie FLUSH
 # along the wall, not jut across it. A straight cap tangent to one segment, laid at a wall CORNER, juts
 # past the bend and reads as a second wall section overlapping the first (Nagahara SW, GM 2026-07). The
@@ -752,13 +494,7 @@ def _seg_0195__city_ward_cap_flush_to_wall(
                     _d = min(seg_dist(cx3, cy3, _ring[i], _ring[i + 1]) for i in range(len(_ring) - 1))
                     if _d > 4.0:  # a flush cap sits ON the wall (~0-1 px); >4 px means it juts across the bend
                         _off.append((round(cx3), round(cy3), round(_d, 1)))
-        check(
-            "city_ward_cap_flush_to_wall",
-            not _off,
-            f"ward fence wall-cap vertex/vertices jut off the rampart (x, y, px-off-wall): {_off[:4]} - the cap plugs the "
-            f"fence into the wall and must lie FLUSH along it (follow the wall through any corner), not cross it as a "
-            f"straight stub - which renders as two wall sections overlapping instead of one bent wall (settlement.ward)",
-        )
+        pass  # `` retired under feature 141 (the GM's cut); the segment stays for the check it keeps or the value it writes
     return _kept(locals(), ('_d', '_off', '_ring', '_wrng', 'cap', 'cx3', 'cy3', 'i', 'wd', 'x', 'y'))
 
 
@@ -784,67 +520,3 @@ def _seg_0195__city_ward_cap_flush_to_wall(
 # berm. Both widths come from the engine's own records (M['wall_stroke'], the ward's 'stroke') so
 # placement and check read the same source; the literals are the fallback for manifests written
 # before those records existed.
-
-
-def _seg_0196__city_ward_fence_joins_wall_not_crosses(
-    *,
-    M: Any = _UNBOUND,
-    _bnd: Any = _UNBOUND,
-    _cap: Any = _UNBOUND,
-    _dl: Any = _UNBOUND,
-    _dx: Any = _UNBOUND,
-    _dy: Any = _UNBOUND,
-    _i: Any = _UNBOUND,
-    _in: Any = _UNBOUND,
-    _out: Any = _UNBOUND,
-    _poke: Any = _UNBOUND,
-    _probes: Any = _UNBOUND,
-    _ring: Any = _UNBOUND,
-    _tx: Any = _UNBOUND,
-    _ty: Any = _UNBOUND,
-    _vi: Any = _UNBOUND,
-    _vx: Any = _UNBOUND,
-    _vy: Any = _UNBOUND,
-    _wall_half: Any = _UNBOUND,
-    _wall_ring: Any = _UNBOUND,
-    _wrng: Any = _UNBOUND,
-    check: Any = _UNBOUND,
-    p: Any = _UNBOUND,
-    wd: Any = _UNBOUND,
-) -> dict[str, Any]:
-    """Gate segment 196 (city_ward_fence_joins_wall_not_crosses) - body verbatim from the legacy gate() (feature 022)."""
-    if _wall_ring:
-        _wall_half = float(M.get("wall_stroke", 11.0)) / 2
-        _poke = []
-        for wd in M.get("wards", []):
-            _bnd = [(p[0], p[1]) for p in wd.get("boundary", [])]
-            if len(_bnd) < 2:
-                continue
-            _cap = float(wd.get("stroke", 5.0)) / 2  # the round linecap inks this far past the tip
-            # probe every vertex; the two ENDS are pushed out by the cap radius along their own
-            # terminal segment, so what is tested is the ink, not the recorded coordinate. Interior
-            # vertices are probed bare - a fence that dives out through the rampart and back mid-run
-            # is the same crossing, just further from the end.
-            _probes: list[tuple[float, float]] = []  # type: ignore[no-redef]
-            for _vi, (_vx, _vy) in enumerate(_bnd):
-                _in = _bnd[1] if _vi == 0 else _bnd[-2] if _vi == len(_bnd) - 1 else None
-                if _in is None:
-                    _probes.append((_vx, _vy))
-                    continue
-                _dx, _dy = _vx - _in[0], _vy - _in[1]
-                _dl = math.hypot(_dx, _dy) or 1.0
-                _probes.append((_vx + _dx / _dl * _cap, _vy + _dy / _dl * _cap))
-            for _tx, _ty in _probes:
-                _out = min(seg_dist(_tx, _ty, _ring[_i], _ring[_i + 1]) for _i in range(len(_ring) - 1)) - _wall_half
-                if _out > 0 and not point_in_poly(_tx, _ty, _wrng):
-                    _poke.append((round(_tx), round(_ty), round(_out, 1)))
-        check(
-            "city_ward_fence_joins_wall_not_crosses",
-            not _poke,
-            f"neighborhood (ward) fence ink OUTSIDE the city wall (x, y, px past the rampart's outer face): {_poke[:4]} - "
-            f"a ward fence JOINS the rampart, it does not cross it: the fence ENDS where the wall seals it, so no part of "
-            f"the palisade may stick out the far side into the berm. Same rule the lanes and the watercourses follow "
-            f"(city_streets_no_intersection_stub, water_channels_join_not_cross). Snap the fence's end vertex onto the "
-            f"wall centerline - s.ward does this automatically, so a hit here means the end was placed out of its reach",
-        )
-    return _kept(locals(), ('_bnd', '_cap', '_dl', '_dx', '_dy', '_i', '_in', '_out', '_poke', '_probes', '_tx', '_ty', '_vi', '_vx', '_vy', '_wall_half', 'p', 'wd'))

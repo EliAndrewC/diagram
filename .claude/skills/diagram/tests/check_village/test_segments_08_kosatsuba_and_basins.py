@@ -8,11 +8,9 @@ from tests.check_village._builders import (
     _drain_map,
     _field,
     _kosatsuba,
-    exground,
     f,
     f_only,
     manifest,
-    pspot,
 )
 
 
@@ -41,37 +39,6 @@ def test_households_consistent_uses_legacy_band_when_not_to_scale():
 
 
 # ---- defense_marsh_girds_the_walls (the engineered defensive wet belt, GM 2026-07-23) ----------
-def test_defense_marsh_girds_the_walls_needs_a_fortified_perimeter():
-    # a defensive inundation on a map with NO wall or moat defends nothing
-    M = {"meta": {}, "marshes": [{"x": 500, "y": 500, "w": 100, "h": 100, "role": "defense", "poly": [[450, 450], [550, 450], [550, 550], [450, 550]]}]}
-    assert "defense_marsh_girds_the_walls" in f_only(M, "defense_marsh_girds_the_walls")
-
-
-def test_defense_marsh_girds_the_walls_fires_when_detached():
-    # outside the wall but nowhere near it - a bog detached from the fortification defends nothing
-    M = {
-        "meta": {},
-        "wall": [[300, 300], [700, 300], [700, 700], [300, 700]],
-        "marshes": [{"x": 940, "y": 940, "w": 80, "h": 80, "role": "defense", "poly": [[900, 900], [980, 900], [980, 980], [900, 980]]}],
-    }
-    assert "defense_marsh_girds_the_walls" in f_only(M, "defense_marsh_girds_the_walls")
-
-
-def test_defense_marsh_girds_the_walls_passes_hugging_the_moat():
-    # the belt lies just beyond the moat's outer bank, east of the circuit - the historical form
-    M = {
-        "meta": {},
-        "wall": [[300, 300], [700, 300], [700, 700], [300, 700]],
-        "moat": [[280, 280], [720, 280], [720, 720], [280, 720], [280, 280]],
-        "marshes": [{"x": 760, "y": 500, "w": 60, "h": 400, "role": "defense", "poly": [[730, 300], [790, 300], [790, 700], [730, 700]]}],
-    }
-    assert "defense_marsh_girds_the_walls" not in f_only(M, "defense_marsh_girds_the_walls")
-
-
-def test_defense_marsh_girds_the_walls_skips_a_degenerate_poly():
-    # a 2-point sliver carries no area to test - skipped, no crash (and no wall demanded for it)
-    M = {"meta": {}, "marshes": [{"x": 500, "y": 500, "w": 10, "h": 10, "role": "defense", "poly": [[490, 495], [510, 505]]}]}
-    assert "defense_marsh_girds_the_walls" not in f_only(M, "defense_marsh_girds_the_walls")
 
 
 def test_marsh_on_low_ground_exempts_the_waterside_fringe():
@@ -128,13 +95,6 @@ def test_drain_flows_downhill_still_fires_on_a_genuinely_backwards_drain():
         field_ditches=[{"role": "drain", "field": "f1", "poly": [[400, 260], [430, 800]], "w": 1.5}],
     )
     assert "drain_flows_downhill" in f_only(M, "drain_flows_downhill")
-
-
-def test_the_justice_works_are_forbidden_below_a_seat_of_justice():
-    M = manifest(punishment_spots=[pspot(500, 500)], execution_grounds=[exground(900, 900)])
-    bad = f(M)  # manifest() is a VILLAGE - no magistrate, no court
-    assert "punishment_spot_only_at_a_seat_of_justice" in bad
-    assert "execution_ground_only_at_a_seat_of_justice" in bad
 
 
 def test_bund_beans_on_bunds_fires_on_a_bead_buried_by_a_later_plot():
@@ -384,11 +344,6 @@ def test_paddy_seams_passes_a_strip_a_field_pond_sits_in():
 def test_paddy_seams_passes_the_edge_of_the_planted_block():
     # a lone basin's outer wall faces the fan's rim, not another basin - nothing to share with
     assert "paddy_plot_seams_shared" not in _seam_f(_seam_M([_box(10, 10, 110, 110)]))
-
-
-def test_paddy_seams_passes_ground_too_wide_to_be_a_doubled_bund():
-    # 40 px of bare ground is bare GROUND, which is paddy_fan_gapless's rule, not this one
-    assert "paddy_plot_seams_shared" not in _seam_f(_seam_M([_box(10, 10, 110, 110), _box(150, 10, 250, 110)]))
 
 
 def test_paddy_seams_passes_a_bund_running_away_from_a_corner_neighbour():

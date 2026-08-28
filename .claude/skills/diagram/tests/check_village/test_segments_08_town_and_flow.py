@@ -6,14 +6,7 @@ from tests.check_village._builders import (
     _drain,
     _field,
     _hem_M,
-    _kosatsuba,
-    _shrine_avenue,
     _sup_M,
-    _town_align,
-    _town_behind,
-    _town_caravan,
-    _town_manor,
-    f,
     f_only,
 )
 
@@ -37,17 +30,6 @@ def test_marsh_on_low_ground_ignores_a_pond_fringe():
         "meta": {"scale": "village", "down_deg": 45},
         "fields": [_field("p", 1000, 1000, 1600, 1600)],
         "marshes": [{"x": 300, "y": 300, "w": 100, "h": 100, "role": "pond_fringe"}],
-    }  # uphill, but exempt
-    assert "marsh_on_low_ground" not in f_only(M, "marsh_on_low_ground")
-
-
-def test_marsh_on_low_ground_ignores_a_defense_belt():
-    # a defensive wet belt hugs the fortified perimeter wherever the wall runs - here uphill (NW) of the
-    # field; defense_marsh_girds_the_walls owns its placement, so the valley-toe rule leaves it alone
-    M = {
-        "meta": {"scale": "village", "down_deg": 45},
-        "fields": [_field("p", 1000, 1000, 1600, 1600)],
-        "marshes": [{"x": 300, "y": 300, "w": 100, "h": 100, "role": "defense", "poly": [[250, 250], [350, 250], [350, 350], [250, 350]]}],
     }  # uphill, but exempt
     assert "marsh_on_low_ground" not in f_only(M, "marsh_on_low_ground")
 
@@ -253,104 +235,7 @@ def test_pond_clear_of_field_passes_when_the_pond_is_below_the_field():
 # ---- town_has_flophouse: cheap market-day lodging (default-on, opt-in to more) --------------
 
 
-def test_house_count_in_range_target_houses_fires():
-    houses = [{"x": i * 30, "y": 100, "w": 44, "h": 29, "kind": "plain", "rot": 0} for i in range(10)]
-    M = {"meta": {"scale": "village", "target_houses": 60}, "houses": houses}  # 10 vs ~60
-    assert "house_count_in_range" in f_only(M, "house_count_in_range")
-
-
 # ---- torii_spread_out: scale-aware floor of one arch-span (16 ft), so dense senbon avenues are legal --------
-def test_torii_spread_out_fires_when_arches_overlap():
-    # two arches closer than one rail-span (16 ft = 8px at village 2 ft/px) collapse into a blob
-    M = {"meta": {"scale": "village", "ftpx": 2}, "torii": [[400, 440, 1], [400, 445, 2]]}
-    assert "torii_spread_out" in f_only(M, "torii_spread_out")
-
-
-def test_torii_spread_out_passes_a_dense_avenue():
-    # a dense senbon-style avenue (~14px/28ft apart) is fine - denser than the old fixed 25px floor allowed
-    M = {"meta": {"scale": "village", "ftpx": 2}, "torii": [[400, 440 + i * 14, i] for i in range(7)]}
-    assert "torii_spread_out" not in f_only(M, "torii_spread_out")
-
-
-def test_shrine_avenue_fronts_the_hall_fires_when_the_arch_is_set_out():
-    # the innermost arch stands well out from the hall front (96 ft > the 36 ft ceiling)
-    assert "shrine_avenue_fronts_the_hall" in f_only(_shrine_avenue(400, 460), "shrine_avenue_fronts_the_hall")
-
-
-def test_shrine_avenue_fronts_the_hall_passes_at_the_threshold():
-    # innermost arch at the hall's front (24 ft gap)
-    assert "shrine_avenue_fronts_the_hall" not in f_only(_shrine_avenue(400, 424), "shrine_avenue_fronts_the_hall")
-
-
-def test_shrine_avenue_fronts_the_hall_exempts_a_gateway_beside_the_hall():
-    # Hikari pattern: the hall stands aside the entrance track (200 ft off the avenue axis), arches straddle the track
-    assert "shrine_avenue_fronts_the_hall" not in f_only(_shrine_avenue(300, 460), "shrine_avenue_fronts_the_hall")
-
-
-def test_inn_faces_the_road_fires_when_back_to_the_road():
-    # inn at rot 0 (noren faces south) but the road is to its NORTH -> back to the road
-    M = _town_caravan(inn_xy=(500, 560), st_xy=(500, 640))
-    M["road"] = [[100, 500], [900, 500]]
-    assert "inn_faces_the_road" in f_only(M, "inn_faces_the_road")
-
-
-def test_inn_faces_the_road_passes_when_facing():
-    M = _town_caravan(inn_xy=(500, 560), st_xy=(500, 640))
-    M["road"] = [[100, 500], [900, 500]]
-    M["buildings"][0]["rot"] = 180  # the inn (buildings[0]) turns its noren north, toward the road
-    assert "inn_faces_the_road" not in f_only(M, "inn_faces_the_road")
-
-
-def test_merchant_residences_behind_businesses_passes_when_banded():
-    assert "merchant_residences_behind_businesses" not in f_only(_town_behind(res_x=230, lab_x=320), "merchant_residences_behind_businesses")
-
-
-def test_merchant_residences_behind_businesses_fires_when_residence_in_storefront_band():
-    # a merchant home sitting at droad 40 (within the shops' droad ~50 band), not behind it
-    assert "merchant_residences_behind_businesses" in f_only(_town_behind(res_x=140, lab_x=320), "merchant_residences_behind_businesses")
-
-
-def test_merchant_residences_behind_businesses_fires_when_laborers_crowd_the_homes():
-    # laborers at droad 140, only ~10px behind the merchant homes at droad 130 - no gap
-    assert "merchant_residences_behind_businesses" in f_only(_town_behind(res_x=230, lab_x=240), "merchant_residences_behind_businesses")
-
-
-def test_housing_aligned_behind_storefronts_passes_when_parallel():
-    # a home directly behind a shop (droad 100 vs 40 -> depth 60), same orientation -> fine
-    assert "housing_aligned_behind_storefronts" not in f_only(_town_align(home_rot=0), "housing_aligned_behind_storefronts")
-
-
-def test_housing_aligned_behind_storefronts_fires_when_askew():
-    # same spot, but rotated 35deg off the storefront -> askew
-    assert "housing_aligned_behind_storefronts" in f_only(_town_align(home_rot=35), "housing_aligned_behind_storefronts")
-
-
-def test_housing_aligned_behind_storefronts_skips_a_home_far_back():
-    # droad 240 -> depth 200 (> DEPTH_MAX): deep in the warren, not "directly behind" a shop
-    assert "housing_aligned_behind_storefronts" not in f_only(_town_align(home_rot=35, home_x=340), "housing_aligned_behind_storefronts")
-
-
-def test_housing_aligned_behind_storefronts_skips_a_home_beside_a_shop():
-    # droad 50 -> depth 10 (< DEPTH_MIN): level with the shop row, not behind it
-    assert "housing_aligned_behind_storefronts" not in f_only(_town_align(home_rot=35, home_x=150, home_y=310), "housing_aligned_behind_storefronts")
-
-
-def test_housing_aligned_behind_storefronts_skips_a_laterally_offset_home():
-    # proper depth but 240px away ALONG the road (outside any shop's radial shadow)
-    assert "housing_aligned_behind_storefronts" not in f_only(_town_align(home_rot=35, home_y=700), "housing_aligned_behind_storefronts")
-
-
-def test_housing_aligned_behind_storefronts_skips_when_no_storefronts():
-    # homes but no shops at all -> nothing is "behind a storefront"
-    assert "housing_aligned_behind_storefronts" not in f_only(_town_align(home_rot=35, with_shops=False), "housing_aligned_behind_storefronts")
-
-
-def test_manor_gate_faces_town_passes_facing_the_town():
-    assert "manor_gate_faces_town" not in f_only(_town_manor("south"), "manor_gate_faces_town")  # town is SE -> south gate faces it
-
-
-def test_manor_gate_faces_town_fires_facing_away():
-    assert "manor_gate_faces_town" in f_only(_town_manor("north"), "manor_gate_faces_town")  # north gate faces away from the SE town
 
 
 def test_town_has_kosatsuba_fires_when_absent():
@@ -358,13 +243,3 @@ def test_town_has_kosatsuba_fires_when_absent():
     # Edo town and village
     assert "town_has_kosatsuba" in f_only({"meta": {"scale": "town", "walled": False}}, "town_has_kosatsuba")
     assert "town_has_kosatsuba" in f_only({"meta": {"scale": "town", "walled": True}}, "town_has_kosatsuba")
-
-
-def test_kosatsuba_on_a_main_way_exempts_maps_with_no_declared_hierarchy():
-    # a village whose network is all lanes (and a town whose streets are all unflagged) has no
-    # main/side distinction to violate - the check would be unsatisfiable there, so the
-    # busiest-node scoring in place_kosatsuba stands in for "main" instead
-    lanes_only = f({"meta": {"scale": "village", "ftpx": 2}, "kosatsuba": [_kosatsuba(500, 512)], "lanes": [{"pts": [[0, 500], [1000, 500]], "w": 5}]})
-    assert "kosatsuba_on_a_main_way" not in lanes_only
-    unflagged = f({"meta": {"scale": "town"}, "kosatsuba": [_kosatsuba(500, 530)], "town_streets": [{"pts": [[0, 500], [1000, 500]], "w": 28}]})
-    assert "kosatsuba_on_a_main_way" not in unflagged

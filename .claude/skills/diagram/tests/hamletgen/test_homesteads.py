@@ -12,24 +12,6 @@ from l7r.diagram import hamletgen as hg
 from ._builders import a_plan
 
 
-def test_place_wells_never_clusters_two_wells_inside_the_spacing_floor():
-    """The greedy coverage sort (2026-08-15) pops FAR seats first, so the 170 px spacing guard can
-    only fire when every seat the engine will accept sits beside an existing well. Build exactly
-    that: `well_at` accepts only a small disc, so after the first (central) well every acceptable
-    candidate is inside the spacing floor and must be skipped - one well places, never a clustered
-    pair (`wells_not_clustered` is the rule the guard exists for)."""
-    from types import SimpleNamespace
-
-    houses = [{"x": 500, "y": 500}, {"x": 520, "y": 500}, {"x": 500, "y": 520}, {"x": 520, "y": 520}]
-    # M={}: no surface water, so every house is needy (the minimax filter reads s.M).
-    # `_crop_boxes` returning [] is deliberate, not a shrug: the later-well tie-break asks the crop
-    # for the box it will set (see `_outside_cloud`), and an empty answer is what exercises its
-    # house-centers FALLBACK - so this stub covers both the call and the default it degrades to.
-    s = SimpleNamespace(well_at=lambda x, y: math.hypot(x - 510, y - 510) < 60.0, M={}, _crop_boxes=lambda city=False: [])
-    plan = SimpleNamespace(spec=SimpleNamespace(households=12), ftpx=1.0)
-    assert hg.place_wells(s, plan, houses) == 1  # type: ignore[arg-type]
-
-
 @pytest.mark.parametrize(("households", "wells"), [(10, 2), (12, 2), (15, 2), (20, 3)])
 def test_wells_are_one_per_six_households_or_so(households: int, wells: int) -> None:
     """Inside `wells_sized_to_population`'s 2-20 households-per-well band at hamlet scale."""
@@ -116,16 +98,3 @@ def test_farmstead_fixtures_honor_the_spec_floor() -> None:
     assert s.M["meta"]["farm_fixtures_min"] == {"shrine": 2, "bath": 3}
     owners = {(r["kind"], tuple(r["of"])) for r in s.M["farm_fixtures"]}
     assert len(owners) == len(s.M["farm_fixtures"]), "the floor never doubles a house"
-
-
-def test_a_lane_through_the_middle_of_a_bamboo_strip_blocks_the_seat() -> None:
-    """Five sample points on a 22 by 16 ft strip let a lane cross it between them (feature 137,
-    cohort seed 03, `lanes_clear_of_bamboo`); the tread is tested as a segment against the edges."""
-    from l7r.diagram.hamletgen.homesteads import _strip_blocked
-    from l7r.diagram.settlement import Settlement
-
-    s = Settlement(W=900, H=700, seed=7)
-    through = [([(96.0, 40.0), (104.0, 160.0)], 1.5)]  # a near-vertical tread through the strip, 4+ ft from every corner and the center
-    assert _strip_blocked(s, 100.0, 100.0, 22.0, 16.0, 0.0, 0.0, [], [], None, through)
-    beside = [([(140.0, 40.0), (140.0, 160.0)], 1.5)]
-    assert not _strip_blocked(s, 100.0, 100.0, 22.0, 16.0, 0.0, 0.0, [], [], None, beside)

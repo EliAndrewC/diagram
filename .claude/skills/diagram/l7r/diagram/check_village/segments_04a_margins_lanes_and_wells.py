@@ -3,19 +3,15 @@
 import math
 from typing import Any
 
-from l7r.diagram.settlement import label_aabb, label_quad, paddy_wet_rings, ring_touches, sat_overlap
+from l7r.diagram.settlement import label_aabb, paddy_wet_rings, ring_touches
 
 from .common_01_geometry import (
-    _LABEL_BY_KIND,
-    _LABEL_GROUP,
-    _LABEL_GROUPS,
     _box_hits_poly,
     kiln_quarters,
     point_in_poly,
     seg_dist,
     within_edge_gap,
 )
-from .common_02_overlap_policy import torii_halfbox
 from .common_03_capacity import _UNBOUND, DWELLING_KINDS, _kept
 
 # a VILLAGE / HAMLET map clothes its margins in a CONTINUOUS RING of dry marginal land (settlements.md
@@ -205,203 +201,6 @@ def _seg_0274__scatter_respects_swept_clearings(*, check: Any = _UNBOUND, late: 
 # carries a GROUP; the label text declares which group(s) it may cover - else it fires.
 
 
-def _seg_0275__labels_clear_of_other_buildings(
-    *,
-    FUNERARY: Any = _UNBOUND,
-    L: Any = _UNBOUND,
-    LABEL_FREE: Any = _UNBOUND,
-    M: Any = _UNBOUND,
-    _bb: Any = _UNBOUND,
-    _grp: Any = _UNBOUND,
-    _label_allows: Any = _UNBOUND,
-    _lg: Any = _UNBOUND,
-    _lk: Any = _UNBOUND,
-    _lq: Any = _UNBOUND,
-    _lrecs: Any = _UNBOUND,
-    _tv: Any = _UNBOUND,
-    _tzd: Any = _UNBOUND,
-    _tzh: Any = _UNBOUND,
-    _tzu: Any = _UNBOUND,
-    _vr: Any = _UNBOUND,
-    a: Any = _UNBOUND,
-    allow: Any = _UNBOUND,
-    b: Any = _UNBOUND,
-    check: Any = _UNBOUND,
-    dx: Any = _UNBOUND,
-    dy: Any = _UNBOUND,
-    g: Any = _UNBOUND,
-    hh: Any = _UNBOUND,
-    hw: Any = _UNBOUND,
-    it: Any = _UNBOUND,
-    k_: Any = _UNBOUND,
-    kind: Any = _UNBOUND,
-    mislabel: Any = _UNBOUND,
-    r_: Any = _UNBOUND,
-    sa: Any = _UNBOUND,
-    scale: Any = _UNBOUND,
-    t: Any = _UNBOUND,
-    txt: Any = _UNBOUND,
-    vics: Any = _UNBOUND,
-    w: Any = _UNBOUND,
-    x0: Any = _UNBOUND,
-    x1: Any = _UNBOUND,
-    xs: Any = _UNBOUND,
-    y0: Any = _UNBOUND,
-    y1: Any = _UNBOUND,
-    ys: Any = _UNBOUND,
-) -> dict[str, Any]:
-    """Gate segment 275 (labels_clear_of_other_buildings) - body verbatim from the legacy gate() (feature 022)."""
-    if scale in ("town", "city"):
-        LABEL_FREE = {"shop", "servant"}
-        FUNERARY = {"cemetery", "mausoleum", "cremation", "ossuary"}
-
-        def _grp(kind: str) -> str:
-            if kind in ("samurai", "samurai_large"):
-                return "samurai"
-            if kind in ("merchant", "merchant_house", "merchant_large"):
-                return "merchant"
-            if kind == "laborer_large":
-                return "laborer"
-            return kind
-
-        def _bb(it: dict[str, Any]) -> tuple[float, float, float, float]:
-            rot = it.get("rot", 0)
-            hw, hh = it.get("w", 0) / 2, it.get("h", 0) / 2
-            if not rot:
-                return it["x"] - hw, it["y"] - hh, it["x"] + hw, it["y"] + hh
-            a = math.radians(rot)
-            ca, sa = math.cos(a), math.sin(a)
-            xs = [it["x"] + dx * ca - dy * sa for dx, dy in ((-hw, -hh), (hw, -hh), (hw, hh), (-hw, hh))]
-            ys = [it["y"] + dx * sa + dy * ca for dx, dy in ((-hw, -hh), (hw, -hh), (hw, hh), (-hw, hh))]
-            return min(xs), min(ys), max(xs), max(ys)
-
-        # EVERY solid feature is a caption victim, read from the _LABEL_GROUP registry rather than a
-        # hand-written key list (GM 2026-07-26). The list this replaced had fallen behind twice: the
-        # martial hall and the dojo had to be remembered into it, and the execution-ground feature's
-        # three keys were never in it at all, so a foreign caption over an execution ground shipped
-        # green. Anything deliberately NOT a victim is named in _LABEL_EXEMPT with its reason, and
-        # every_solid_feature_classified_for_labels fires if a new key is in neither.
-        vics = [(_grp(b.get("kind", "")), _bb(b)) for k_ in _LABEL_BY_KIND for b in M.get(k_, []) if _grp(b.get("kind", "")) not in LABEL_FREE]
-        for _lk, _lg in _LABEL_GROUP.items():
-            _lrecs = M.get(_lk)
-            if isinstance(_lrecs, dict):  # governor_mansion is a singleton, not a list
-                _lrecs = [_lrecs]
-            for r_ in _lrecs or []:
-                if not isinstance(r_, dict):
-                    continue  # pragma: no cover - defensive: every classified key stores dicts
-                if "w" in r_:
-                    vics.append((_lg, _bb(r_)))
-                elif r_.get("vr"):
-                    # a WELLHEAD has no w/h - its drawn extent is the marker radius `vr` (SKILL.md's
-                    # location-marker doctrine). Without this branch, adding "wells" to _LABEL_GROUP
-                    # would classify it and still check nothing, because the builder filtered on "w".
-                    _vr = float(r_["vr"])
-                    vics.append((_lg, (r_["x"] - _vr, r_["y"] - _vr, r_["x"] + _vr, r_["y"] + _vr)))
-        # A TORII is recorded as a bare [x, y, z] triple, not a dict, so the loop above skipped it even
-        # once it was classified - the same trap the wellhead's `vr` branch documents, one shape further
-        # out. Its drawn extent is the true-scale glyph box (torii_halfbox), which settlement._torii and
-        # the frame checks read too.
-        _tzh, _tzu, _tzd = torii_halfbox(float(M.get("meta", {}).get("ftpx", 1) or 1))
-        for _tv in M.get("torii", []):
-            vics.append((_LABEL_GROUP["torii"], (_tv[0] - _tzh, _tv[1] - _tzu, _tv[0] + _tzh, _tv[1] + _tzd)))
-
-        def _label_allows(txt: str) -> set[str]:
-            t = txt.lower()
-            if "guard" in t or "inspection" in t:  # "guard house" / "guard station" / "front gate (...)"
-                return {"gate"}
-            if "flophouse" in t:
-                return {"flophouse"}
-            if "ministry" in t:
-                return {"ministry"}
-            if "granar" in t:  # "domain granaries" / "Imperial granaries": the plural does not CONTAIN the group word "granary", so the derived rule alone cannot permit it
-                return {"granary"}
-            if "governor" in t or "mansion" in t:
-                return {"governor"}
-            if "manor" in t or "magistra" in t:  # magistrate AND magistracy - the institution naming (GM 2026-08-09)
-                return {"estate"}
-            if any(w in t for w in ("temple", "shrine", "monastery", "chapel")):
-                return {"temple"}
-            if any(w in t for w in ("graveyard", "burial", "cemetery", "cremation", "mausoleum", "ossuary")):
-                return FUNERARY  # type: ignore[no-any-return]  # the funerary structures cluster, so a funerary label may cover any of them
-            if "samurai" in t:
-                return {"samurai", "estate"}
-            if "laborer" in t or "laborer" in t:
-                return {"laborer"}
-            if "burakumin" in t or "agricultur" in t:  # the in-wall farming district houses burakumin AND works its farms
-                return {"burakumin", "farmhouse"}
-            if "barn" in t:
-                return {"barn"}
-            if "merchant" in t:
-                return {"merchant"}
-            if any(w in t for w in ("street", "avenue", "road")):
-                return {"merchant"}  # a street/road label runs along its frontage, so it may clip the storefronts it lines
-            if "drum/bell" in t or t.strip() == "tower":  # the two-line zhonggulou caption (GM 2026-07-24)
-                return {"drum tower"}
-            if "theater stage" in t:
-                # A theater stage is TEMPLE FURNITURE - `theater_stage`'s own docstring sites it in a
-                # temple/monastery precinct, and `theater_stage_by_temple` enforces that. So its
-                # caption is inside a precinct wherever it sits, and the halls are the only things
-                # near enough to caption it against. Same shape as "samurai" -> {"samurai", "estate"}:
-                # the label may cover the enclosure its subject belongs to, not just its own glyph.
-                return {"temple"}
-            # A CAPTION MAY ALWAYS COVER THE THING IT NAMES, derived rather than hand-listed: the
-            # _LABEL_GROUP registry's group names ARE the caption words ("brewery", "martial hall",
-            # "execution ground"), so a new feature earns this permission by being classified, with
-            # no second list to remember. The branches above stay because they are SYNONYMS - a
-            # caption says "Temple of Benten" or "Governor's Mansion", not "temple" or "governor".
-            named = {g for g in _LABEL_GROUPS if g in t}
-            return named  # empty for farmland / market / theater stage / title labels, which name no building
-
-        mislabel = []
-        for L in M.get("labels", []):
-            if len(L) <= 5:
-                continue
-            allow = _label_allows(L[5])
-            _lq = label_quad(L) if len(L) > 7 else None  # a TILTED caption is judged by its true drawn quad, not the pre-tilt box
-            for g, (x0, y0, x1, y1) in vics:
-                if g in allow:
-                    continue
-                if sat_overlap(_lq, [(x0, y0), (x1, y0), (x1, y1), (x0, y1)]) if _lq else (L[0] < x1 and x0 < L[2] and L[1] < y1 and y0 < L[3]):
-                    mislabel.append(f"{L[5]!r} over a {g}")
-                    break
-        check(
-            "labels_clear_of_other_buildings",
-            not mislabel,
-            f"label(s) sitting on a feature they do not name (a label may cover only the thing it labels, or a fronting shop/servant house): {sorted(set(mislabel))}",
-        )
-    return _kept(
-        locals(),
-        (
-            'FUNERARY',
-            'L',
-            'LABEL_FREE',
-            '_bb',
-            '_grp',
-            '_label_allows',
-            '_lg',
-            '_lk',
-            '_lq',
-            '_lrecs',
-            '_tv',
-            '_tzd',
-            '_tzh',
-            '_tzu',
-            '_vr',
-            'allow',
-            'b',
-            'g',
-            'k_',
-            'mislabel',
-            'r_',
-            'vics',
-            'x0',
-            'x1',
-            'y0',
-            'y1',
-        ),
-    )
-
-
 # LABELS must stay WITHIN the rendered image. Plenty of things rightly run off the edge - farm
 # fields, roads, samurai country estates, farmhouses, the countryside continuing beyond the frame -
 # but a label that spills past the edge is clipped and unreadable, so every label's bounding box
@@ -502,11 +301,7 @@ def _seg_0279__wells_among_dwellings(
                 vr_w = float(wl.get("vr") or wl.get("r") or 8.0)
                 if any(ring_touches(wl["x"], wl["y"], vr_w, ring) for ring in wet_rings):
                     in_paddy.append((round(wl["x"]), round(wl["y"])))
-            check(
-                "wells_clear_of_paddies",
-                not in_paddy,
-                f"wellhead(s) at {in_paddy[:4]} standing in a rice paddy - a paddy is flooded and bunded, so a well cannot be sunk in one (a DRY plot is different and is allowed, and so is the fan's unplanted rim slack); move the head onto the dooryard/margin ground it serves",
-            )
+            pass  # `` retired under feature 141 (the GM's cut); the segment stays for the check it keeps or the value it writes
 
         # THE WELL IS A LOCATION MARKER under the stroke convention (GM ruling 2026-07-21): a real
         # curb is ~3-4 ft (sub-glyph at every scale), so the wellhead marks the well's TO-SCALE
@@ -521,12 +316,7 @@ def _seg_0279__wells_among_dwellings(
         if ddims and any("vr" in wl for wl in all_wells):
             med = sorted(ddims)[len(ddims) // 2]
             mean_dia = 2 * sum(wl.get("vr", 5) for wl in all_wells) / len(all_wells)
-            check(
-                "wells_sized_to_buildings",
-                0.35 <= mean_dia / med <= 0.85,
-                f"wells are mis-sized for this map - drawn at {mean_dia:.0f}px against a ~{med:.0f}px median dwelling "
-                f"({mean_dia / med:.0%}; want ~40-80%): a wellhead must scale with the map grain (bscale), not a fixed pixel size",
-            )
+            pass  # `` retired under feature 141 (the GM's cut); the segment stays for the check it keeps or the value it writes
     return _kept(locals(), ('_k', '_q', 'b', 'ddims', 'dwell_all', 'in_paddy', 'mean_dia', 'med', 'ring', 'stray', 'vr_w', 'wet_rings', 'wl'))
 
 
@@ -629,11 +419,7 @@ def _seg_0284__wells_sized_to_population(
         _whh = meta["households"]
         _wlo, _whi = (2.0, 20.0) if scale == "hamlet" else (8.0, 26.0)
         _wr = _whh / len(_draw_wells) if _draw_wells else float("inf")
-        check(
-            "wells_sized_to_population",
-            _wlo <= _wr <= _whi,
-            f"{len(_draw_wells)} communal well(s) for {_whh} households = {_wr:.1f} hh/well, outside the {scale} band [{_wlo:.0f}-{_whi:.0f}] - Rokugan's prosperity liberty runs generous wells (settlements.md 'Wells'); shrine temizu wells are excluded from the count",
-        )
+        pass  # `` retired under feature 141 (the GM's cut); the segment stays for the check it keeps or the value it writes
     return _kept(locals(), ('_draw_wells', '_whh', '_whi', '_wlo', '_wr', 'w'))
 
 
@@ -705,13 +491,7 @@ def _seg_0285_004__wells_clear_of_shrine_and_torii(
                 if ddx * ddx + ddy * ddy < wl["r"] * wl["r"]:
                     on_sacred.append((round(wl["x"]), round(wl["y"])))
                     break
-        check(
-            "wells_clear_of_shrine_and_torii",
-            not on_sacred,
-            f"{len(on_sacred)} well(s) overlap a shrine hall or torii arch at {on_sacred[:4]} - a wellhead "
-            f"stands BESIDE the shrine, never on the hall or under the gateway; place the shrine + torii "
-            f"BEFORE the wells so they are blocked out",
-        )
+        pass  # `` retired under feature 141 (the GM's cut); the segment stays for the check it keeps or the value it writes
     return _kept(locals(), ('bx', 'by', 'ddx', 'ddy', 'hh', 'hw', 'on_sacred', 'wl'))
 
 

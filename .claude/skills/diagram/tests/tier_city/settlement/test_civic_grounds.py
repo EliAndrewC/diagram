@@ -15,20 +15,6 @@ def test_cemetery_organic_false_keeps_the_louzeyuan_rectangle():
     assert 'width="100"' in s.out[-1] and "<path" not in s.out[-1]
 
 
-@pytest.mark.tiers("city")
-def test_animal_ground_records_a_yard_and_optional_label():
-    # the city_no_large_empty_space remedy: a standalone stable-yard scatter claiming a pocket
-    s = _crop_settlement()
-    s.animal_ground(400, 400, r=60)  # no label - the rails and animals read on their own
-    s.flush_stable_yards()
-    yd = s.M["stable_yards"][-1]
-    assert (yd["x"], yd["y"], yd["r"], yd["of"], yd["troughs"]) == (400, 400, 60, [400, 400], 2)
-    assert "troughs_at" in yd  # the cluster anchor stable_troughs_beside_well validates
-    s.animal_ground(700, 700, r=52, label="caravan ground")
-    s.flush_stable_yards()
-    assert s.M["labels"][-1][5] == "caravan ground"  # label boxes are [x0, y0, x1, y1, z, text]
-
-
 @pytest.mark.tiers("capital")
 def test_granary_append_records_a_list_for_a_capital_with_two_granaries():
     """A capital holds its grain in TWO places for two reasons (the domain's working rice at the

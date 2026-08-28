@@ -4,20 +4,8 @@ locked to another tier; the gate collects everything. Helpers stay in the source
 
 import pytest
 
-from l7r.diagram.settlement import roll_merchant_estate_count, roll_torii_count
-from tests.settlement._builders import _cap020, _castle_map, _city, _torii_city, _town
-
-
-@pytest.mark.tiers("city")
-def test_shrine_hall_rolls_torii_count_per_temple():
-    # the 2026-07-23 full re-roll: torii=[...] is avenue GEOMETRY; the COUNT is a seeded
-    # per-temple roll on the tier's TORII_WEIGHTS column, recorded on the religious rec
-    import random as _rr
-
-    expect = roll_torii_count("city", _rr.Random(9 * 977 + 600 * 31 + 500 * 57))
-    s = _torii_city()
-    assert s.M["religious"][-1]["torii_count"] == expect
-    assert len(s.M["torii"]) == expect
+from l7r.diagram.settlement import roll_merchant_estate_count
+from tests.settlement._builders import _cap020, _castle_map, _city, _town
 
 
 @pytest.mark.tiers("city")

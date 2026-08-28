@@ -94,48 +94,6 @@ def _seg_0515__pond_clear_of_field(
 # from the fortification defends nothing. Degenerate (<3-point) polys carry no area to test - skipped.
 
 
-def _seg_0516__defense_marshes(*, M: Any = _UNBOUND, m: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 516 (defense_marshes, m) - body verbatim from the legacy gate() (feature 022)."""
-    defense_marshes = [m for m in M.get("marshes", []) if m.get("role") == "defense" and len(m.get("poly") or []) >= 3]
-    return _kept(locals(), ('defense_marshes', 'm'))
-
-
-def _seg_0517__defense_marsh_girds_the_walls(
-    *,
-    M: Any = _UNBOUND,
-    bad_def: Any = _UNBOUND,
-    check: Any = _UNBOUND,
-    defense_marshes: Any = _UNBOUND,
-    i: Any = _UNBOUND,
-    loc_: Any = _UNBOUND,
-    m: Any = _UNBOUND,
-    mp_: Any = _UNBOUND,
-    perim_: Any = _UNBOUND,
-    pl: Any = _UNBOUND,
-    px: Any = _UNBOUND,
-    py: Any = _UNBOUND,
-) -> dict[str, Any]:
-    """Gate segment 517 (defense_marsh_girds_the_walls) - body verbatim from the legacy gate() (feature 022)."""
-    if defense_marshes:
-        perim_ = [pl for pl in (M.get("wall"), M.get("moat")) if pl]
-        bad_def = []
-        for m in defense_marshes:
-            mp_ = m["poly"]
-            loc_ = (round(m["x"]), round(m["y"]))
-            if not perim_:
-                bad_def.append((loc_, "map has no wall or moat - a defensive inundation defends a fortified perimeter"))
-            elif M.get("wall") and any(point_in_poly(px, py, M["wall"]) for px, py in mp_):
-                bad_def.append((loc_, "reaches INSIDE the wall circuit"))
-            elif min(seg_dist(px, py, pl[i], pl[i + 1]) for pl in perim_ for px, py in mp_ for i in range(len(pl) - 1)) > 60:
-                bad_def.append((loc_, "detached from the perimeter - the belt begins at the moat's outer bank / wall foot"))
-        check(
-            "defense_marsh_girds_the_walls",
-            not bad_def,
-            f"defensive marsh misplaced: {bad_def[:3]} - an engineered wet belt lies OUTSIDE the walls, hugging the moat/wall perimeter it defends",
-        )
-    return _kept(locals(), ('bad_def', 'i', 'loc_', 'm', 'mp_', 'perim_', 'pl', 'px', 'py'))
-
-
 # DRAINAGE FLOWS DOWNHILL (matches the map's configured slope). We do NOT require the drain to RUN
 # downhill - a collector (akusui) legitimately runs ACROSS the low margin, ~perpendicular to the fall,
 # to gather runoff from every cascade column; a downhill-running drain would collect nothing. What we

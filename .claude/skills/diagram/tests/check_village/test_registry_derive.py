@@ -107,11 +107,16 @@ def test_equality_guard_fires_on_missing_segment():
 
 
 def test_order_guard_fires_on_swapped_placement_anchors():
-    a, b = "_seg_0596__dry_plot_seams_shared", "_seg_0595__paddy_bunds_clear_the_supply_channels"
+    a, b = "_seg_0600__comb_floor_ends_at_the_collector", "_seg_0595__paddy_bunds_clear_the_supply_channels"
     swapped = dict(reg._PLACEMENTS)
     swapped[a], swapped[b] = swapped[b], swapped[a]
     names = {r.fn.__name__ for r in reg.GATE_SEGMENTS}
-    assert reg._ordered_names(names, swapped) != [r.fn.__name__ for r in reg.GATE_SEGMENTS]
+    # Since feature 141 retired the one independently-anchored placement (0596), every remaining entry hangs off
+    # 0595's chain, so a swap either reorders the chain or closes it into a cycle - the guard fires either way.
+    try:
+        assert reg._ordered_names(names, swapped) != [r.fn.__name__ for r in reg.GATE_SEGMENTS]
+    except _DerivationError as err:
+        assert "cycle" in str(err) or "resolve" in str(err)
 
 
 def test_order_guard_fires_on_stale_placement_entry():
@@ -123,7 +128,7 @@ def test_order_guard_fires_on_stale_placement_entry():
 
 def test_order_guard_fires_on_missing_anchor():
     broken = dict(reg._PLACEMENTS)
-    broken["_seg_0596__dry_plot_seams_shared"] = "_seg_9999__long_gone"
+    broken["_seg_0600__comb_floor_ends_at_the_collector"] = "_seg_9999__long_gone"
     with pytest.raises(_DerivationError, match="anchor"):
         reg._ordered_names({r.fn.__name__ for r in reg.GATE_SEGMENTS}, broken)
 

@@ -215,23 +215,6 @@ def test_marsh_keeps_reeds_off_a_lane_causeway():
     assert len(s.M["marshes"]) == 1
 
 
-def test_shrine_hall_shortens_an_avenue_that_would_straddle_a_wall():
-    # a run that BRACKETS a wall without any single arch touching it is still wrong: a sando is one
-    # approach and cannot continue on the far side of a barrier, so the walk between the arches is
-    # tested too. Here (at 2 ft/px) the hall's front edge is y544 and the authored 16px stride seats
-    # the run at y560/576/592, so the fence at y585 falls inside the ~7px gap between the glyph boxes
-    # of the arches at y576 and y592 - no arch stands in it - and the whole run is still pulled back to
-    # the near side. A per-arch nudge would have "fixed" it by straddling.
-    s = Settlement(1200, 1200, seed=9)
-    s.meta(name="V", scale="village", ftpx=2, down_deg=90)
-    s.ward("samurai", [(300, 585), (900, 585)], gates=[])
-    s.shrine_hall(600, 532, "Shrine", w=s.px(60), h=s.px(48), torii=[(600, 560), (600, 576)], torii_count=3)
-    ys = [t[1] for t in s.M["torii"]]
-    assert len(ys) == 3
-    assert max(ys) < 582 and settlement.torii_wall_conflicts(s.M) == []  # entirely on the near side of the fence
-    assert ys[0] - 544 == pytest.approx(ys[1] - ys[0], abs=0.2)  # ...and the tightened stride is re-matched at the hall's front
-
-
 def test_bridges_spans_a_lane_where_it_crosses_a_canal():
     s = _crop_settlement()
     s.lane([(100, 300), (500, 300)], width=6, worn=True)  # a lane running E-W
@@ -369,24 +352,6 @@ def test_note_focal_is_idempotent_per_kind():
     s.note_focal("ancestral_hall")  # idempotent
     s.note_focal("secondary_shrine")
     assert s.M["meta"]["focal_features"] == ["ancestral_hall", "secondary_shrine"]
-
-
-def test_focal_catalogue_methods_draw_record_and_note():
-    # the rest of the focal catalog (T020): each draws, records its footprint, and notes the focal feature
-    # so the twin-detector's focal_set axis reads it.
-    s = Settlement(2000, 2000, seed=2)
-    s.meta(name="F", scale="village", ftpx=1)
-    s.ancestral_hall(400, 400)
-    s.water_mouth(700, 700)
-    s.market(1000, 1000)
-    s.secondary_shrine(1300, 500)
-    assert s.M["ancestral_halls"] and s.M["water_mouths"] and s.M["markets"]
-    foc = set(s.M["meta"]["focal_features"])
-    assert {"ancestral_hall", "water_mouth", "market", "secondary_shrine"} <= foc
-    # each reserved a placement keep-out (nothing may later be placed on it)
-    assert not s._fits(400, 400, 40, 30)  # the ancestral hall footprint is blocked
-    # the secondary shrine records as a shrine kind (religious_matches_scale still sees only shrines)
-    assert any(r.get("kind") == "shrine" for r in s.M.get("religious", []) + s.M.get("shrines", []))
 
 
 def test_clip_to_stream_trims_the_confluence_mouth():

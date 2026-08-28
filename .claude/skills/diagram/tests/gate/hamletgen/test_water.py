@@ -8,35 +8,11 @@ import pytest
 
 from l7r.diagram import hamletgen as hg
 from l7r.diagram.pipeline import rollcache
-from l7r.diagram.settlement import point_in_poly, seg_dist
+from l7r.diagram.settlement import point_in_poly
 
 # SERVED FROM THE ROLL CACHE (feature 135): each polder is ~50-100 s to roll and nothing here patches the engine,
 # so `rollcache.hamlet` serves the plan and finished manifest while every function the roll executed is unchanged,
 # and rolls for real the moment one moves. The assertions run on the served map either way.
-
-
-@pytest.mark.rolls_map
-def test_a_polder_inlets_mouth_is_pulled_INSIDE_the_crop() -> None:
-    """THE RATCHET for `draw_comb_field`'s constructed inlet end (2026-08-15).
-
-    That end is not clipped from an anchor - it is BUILT, as the main channel's last point stepped
-    70 px straight downhill, which is a COMB's geometry. On a polder the main is the ring canal
-    running ALONG the high edge, so its last point is a corner and the step skims the boundary:
-    seed 19 landed the mouth 2.6 px inside where `channel_field_anchored` wants 10, and no amount of
-    moving the sluice changed it, because the anchor is not what sets this end.
-
-    Seed 19 is chosen deliberately - it is the case that needed the pull (seed 3 needs it at 6.0 px,
-    seed 8 does not need it at all), so this test exercises the branch rather than merely passing."""
-    _plan, M = rollcache.hamlet(hg.HamletSpec(name="Polder", seed=19, households=16, field_archetype="polder_grid", down_deg=90))
-    env = [(float(a), float(b)) for a, b in M["fields"][0]["outline"]]
-    n = len(env)
-    fed = [c for c in M["channels"] if (c.get("to") or {}).get("kind") == "field"]
-    assert fed, "the polder is fed by a channel from its header reservoir"
-    for c in fed:
-        end = c["poly"][-1]
-        assert point_in_poly(end[0], end[1], env), f"the inlet mouth {end} must finish INSIDE the crop"
-        gap = min(seg_dist(end[0], end[1], env[k], env[(k + 1) % n]) for k in range(n))
-        assert gap >= 10.0, f"the mouth is {gap:.1f} px from the outline; the rule wants 10 so the field paints over it"
 
 
 @pytest.mark.rolls_map

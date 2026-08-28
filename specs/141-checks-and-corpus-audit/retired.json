@@ -1,0 +1,37 @@
+{
+ "retired": [
+  "dry_plot_seams_shared",
+  "gardens_clear_of_groves",
+  "gardens_clear_of_paddies",
+  "gardens_clear_of_sheds",
+  "gardens_clear_of_structures",
+  "gardens_on_sunny_side",
+  "gardens_present",
+  "groves_clear_of_paddies",
+  "groves_clear_of_structures",
+  "harvest_yards_clear_of_paddies",
+  "harvest_yards_clear_of_structures",
+  "harvest_yards_on_sunny_side",
+  "harvest_yards_present",
+  "houses_clear_of_paddies"
+ ],
+ "segments": [
+  "_seg_0285_011__harvest_yards_present",
+  "_seg_0285_016__harvest_yards_on_sunny_side",
+  "_seg_0285_019__harvest_yards_clear_of_paddies",
+  "_seg_0285_023__harvest_yards_clear_of_structures",
+  "_seg_0285_028__gardens_present",
+  "_seg_0285_032__gardens_on_sunny_side",
+  "_seg_0285_035__gardens_clear_of_paddies",
+  "_seg_0285_042__gardens_clear_of_structures",
+  "_seg_0285_046__gardens_clear_of_sheds",
+  "_seg_0285_065__groves_clear_of_paddies",
+  "_seg_0285_068__groves_clear_of_structures",
+  "_seg_0285_080__gardens_clear_of_groves",
+  "_seg_0596__dry_plot_seams_shared",
+  "_seg_0609_500__houses_clear_of_paddies"
+ ],
+ "held": [
+  "structures_clear_of_dry_plots"
+ ]
+}

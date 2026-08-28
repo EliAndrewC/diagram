@@ -4,7 +4,6 @@ import math
 
 import pytest
 
-from l7r.diagram import settlement
 from l7r.diagram.settlement import Settlement
 from tests.settlement._builders import _byre_village, _crop_settlement, _nuc_village, _scatter_base_points, _town, _village, _walled_city
 
@@ -110,43 +109,6 @@ def test_torii_refuses_a_seat_standing_in_a_wall():
     s = _walled_city()
     with pytest.raises(ValueError, match="would stand in the samurai ward fence"):
         s.torii_path([(600, 600), (600, 700), (600, 800)])
-
-
-def test_shrine_hall_shortens_its_avenue_short_of_a_wall():
-    # the avenue is pulled BACK as a whole (uniform stride) so the rolled count still fits on open
-    # ground rather than marching the last arches into the fence. The run is threshold-seated at the
-    # hall's front edge (y514) with a 10px (30 ft, inside the pitch band) stride, so 7 arches would
-    # reach y584 and cross the fence at y570.
-    s = _walled_city(fence=((300, 570), (900, 570)))
-    s.shrine_hall(600, 500, "Temple", w=s.px(130), h=s.px(84), kind="temple", torii=[(600, 560), (600, 570)], torii_count=7)
-    ys = [t[1] for t in s.M["torii"]]
-    assert len(ys) == 7  # every rolled arch is drawn
-    assert ys[-1] < 566 and settlement.torii_wall_conflicts(s.M) == []  # shortened to stop before the fence, all clear
-    strides = [ys[i + 1] - ys[i] for i in range(6)]
-    assert max(strides) - min(strides) <= 0.2  # ... and still evenly spaced (the run is scaled, not re-seated one by one)
-    # ...and the THRESHOLD is re-taken after the shortening: pulling the stride in would otherwise
-    # leave the innermost arch standing at the old, wider gap from the hall (GM 2026-07-27).
-    assert ys[0] - 514 == pytest.approx(strides[0], abs=0.2)
-
-
-def test_shrine_hall_refuses_an_avenue_that_cannot_be_shortened_clear():
-    # if even the first arch stands in the wall, no shortening helps: fail the gen rather than
-    # close the arches up on each other or fudge the geometry
-    # (the message names "a wall" rather than the fence here: no single arch STANDS in it - it is the
-    # walk between them that crosses - so torii_seat_on_wall has no run to name for the first arch)
-    s = _walled_city(fence=((300, 545), (900, 545)))
-    with pytest.raises(ValueError, match="cannot be shortened clear of a wall"):
-        s.shrine_hall(600, 500, "Temple", w=s.px(130), h=s.px(84), kind="temple", torii=[(600, 560), (600, 570)], torii_count=7)
-
-
-def test_shrine_hall_leaves_an_avenue_inside_the_pitch_band_alone():
-    # the village avenues (~30 ft, 1.9 rail-spans) are deliberate and must not be re-pitched: within
-    # the band the gen's own spacing stands, so only the over-wide town/city runs are touched
-    s = Settlement(1200, 1200, seed=9)
-    s.meta(name="V", scale="village", ftpx=2, down_deg=90)
-    s.shrine_hall(600, 500, "Shrine", w=s.px(60), h=s.px(48), torii=[(600, 560), (600, 575), (600, 590)], torii_count=3)
-    # the 15px stride survives untouched; only the run's distance from the hall changes (front edge y512 + 15)
-    assert [t[1] for t in s.M["torii"]] == pytest.approx([527, 542, 557], abs=0.1)
 
 
 def test_draft_byres_scatters_shared_sheds_among_the_houses():

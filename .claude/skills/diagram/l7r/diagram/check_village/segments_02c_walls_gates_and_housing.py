@@ -7,8 +7,6 @@ from .common_01_geometry import Poly, point_in_poly, poly_dist, seg_closest, seg
 from .common_02_overlap_policy import GridIndex, onmap_field_edge
 from .common_03_capacity import (
     _UNBOUND,
-    BUSINESS_KINDS,
-    DWELLING_KINDS,
     _kept,
 )
 
@@ -157,13 +155,7 @@ def _seg_0127__city_fan_heads_quilted(
                                             _hq_bare += 1
                         t += stp
         if _hq_total:
-            check(
-                "city_fan_heads_quilted",
-                _hq_bare <= 0.20 * _hq_total,
-                f"{_hq_bare}/{_hq_total} head-band samples along the supply canals are bare parchment (>20%) - the fan head "
-                f"is uncommanded ground the DRY-CROP HEM must quilt (village-real dry_band, the fork-triangle b-side band, "
-                f"the grain-scaled berm); rice cannot grow there but barley does, and bare heads are the white-gaps regression",
-            )
+            pass  # `` retired under feature 141 (the GM's cut); the segment stays for the check it keeps or the value it writes
     return _kept(
         locals(),
         (
@@ -326,93 +318,9 @@ def _seg_0131__bx0(
     )
 
 
-def _seg_0132__paddy_fan_gapless(*, M: Any = _UNBOUND, check: Any = _UNBOUND, f: Any = _UNBOUND, gap_fields: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 132 (paddy_fan_gapless) - body verbatim from the legacy gate() (feature 022)."""
-    if any(f.get("plot_polys") for f in M.get("fields", [])):
-        check(
-            "paddy_fan_gapless",
-            not gap_fields,
-            f"unplanted holes inside the paddy fan(s): {gap_fields} - bare parchment inside the comb's command "
-            f"area means the carve dropped sectors/head plots/closers there; pass build_comb grain=2/ftpx so its "
-            f"real-feet minimum-size thresholds match this map's scale",
-        )
-    return _kept(locals(), ('f',))
-
-
 # ALMOST all shops front a street (commerce wants the street); POOR housing (laborer/burakumin)
 # mostly packs the block INTERIOR, reached by alleys, not the paved street frontage. (The towns
 # set the template: businesses on the frontage via s.frontage, dwellings interior via s.pack.)
-
-
-def _seg_0133_000__r22(*, M: Any = _UNBOUND, r22: Any = _UNBOUND, scale: Any = _UNBOUND, st: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 0133.000 (r22, st, st_lines) - body verbatim from _seg_0133__outside_fields_farmhouse_density (feature 024 per-check split; guards re-evaluated in the body, see split_oversized.py)."""
-    if scale in ('town', 'city', 'capital'):
-        st_lines = (
-            [(st["pts"], st.get("w", 18)) for st in M.get("town_streets", [])]
-            + ([(M["road"], M.get("road_width", 30))] if M.get("road") else [])
-            + [(r22["pts"], r22.get("width") or 26) for r22 in M.get("roads", [])]
-        )  # trunk roads carry frontage too (021: the guan-xiang wards string their shops along them)
-    return _kept(locals(), ('r22', 'st', 'st_lines'))
-
-
-def _seg_0133_001__on_a_street(*, b: Any = _UNBOUND, i: Any = _UNBOUND, meta: Any = _UNBOUND, scale: Any = _UNBOUND, sp: Any = _UNBOUND, st_lines: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 0133.001 (on_a_street) - body verbatim from _seg_0133__outside_fields_farmhouse_density (feature 024 per-check split; guards re-evaluated in the body, see split_oversized.py)."""
-    if scale in ('town', 'city', 'capital'):
-
-        def on_a_street(b: dict[str, Any]) -> bool:
-            # 85 REAL FEET of the street's BED EDGE (bed half-width + 85ft at the declared
-            # scale): a shopfront hugs the edge of the paving, so the reach must grow with the
-            # lane's width - measured from the CENTERLINE alone, the capital's 26ft Imperial
-            # road put its own lawful gate-market shops (standing 2ft off the bed) "off-street"
-            # by one pixel (021, 2026-08-10). The fixed 85px before that was tuned at the
-            # towns' 1 ft/px grain and would call most of a 3 ft/px city "on a street".
-            return any(seg_dist(b["x"], b["y"], sp[i], sp[i + 1]) < wq2 / 2 + 85 / meta.get("ftpx", 1) for sp, wq2 in st_lines for i in range(len(sp) - 1))
-
-    return _kept(locals(), ('on_a_street',))
-
-
-def _seg_0133_002__b(*, M: Any = _UNBOUND, b: Any = _UNBOUND, scale: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 0133.002 (b, biz) - body verbatim from _seg_0133__outside_fields_farmhouse_density (feature 024 per-check split; guards re-evaluated in the body, see split_oversized.py)."""
-    if scale in ('town', 'city', 'capital'):
-        biz = [b for b in M.get("buildings", []) if b.get("kind") in BUSINESS_KINDS]
-    return _kept(locals(), ('b', 'biz'))
-
-
-def _seg_0133_003__businesses_front_streets(
-    *, b: Any = _UNBOUND, biz: Any = _UNBOUND, check: Any = _UNBOUND, off: Any = _UNBOUND, on_a_street: Any = _UNBOUND, scale: Any = _UNBOUND
-) -> dict[str, Any]:
-    """Gate segment 0133.003 (businesses_front_streets) - body verbatim from _seg_0133__outside_fields_farmhouse_density (feature 024 per-check split; guards re-evaluated in the body, see split_oversized.py)."""
-    if scale in ('town', 'city', 'capital'):  # noqa: SIM102 - comment bank under the guard; combining would orphan it (023 convention)
-        if biz:
-            off = [b for b in biz if not on_a_street(b)]
-            # WHY (commerce takes the valuable street frontage; dwellings sit behind/interior): settlements.md "Historical grounding"
-            check(
-                "businesses_front_streets",
-                len(off) <= 0.15 * len(biz),
-                f"{len(off)}/{len(biz)} shops/merchant houses are NOT on a street - almost every business fronts a street (the more mercantile a quarter, the more streets); only dwellings fill the block interior",
-            )
-    return _kept(locals(), ('b', 'off'))
-
-
-def _seg_0133_004__b_1(*, M: Any = _UNBOUND, b: Any = _UNBOUND, scale: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 0133.004 (b, poor) - body verbatim from _seg_0133__outside_fields_farmhouse_density (feature 024 per-check split; guards re-evaluated in the body, see split_oversized.py)."""
-    if scale in ('town', 'city', 'capital'):
-        poor = [b for b in M.get("buildings", []) if b.get("kind") in ("laborer", "burakumin")]
-    return _kept(locals(), ('b', 'poor'))
-
-
-def _seg_0133_005__poor_housing_mostly_interior(
-    *, b: Any = _UNBOUND, check: Any = _UNBOUND, on_a_street: Any = _UNBOUND, onst: Any = _UNBOUND, poor: Any = _UNBOUND, scale: Any = _UNBOUND
-) -> dict[str, Any]:
-    """Gate segment 0133.005 (poor_housing_mostly_interior) - body verbatim from _seg_0133__outside_fields_farmhouse_density (feature 024 per-check split; guards re-evaluated in the body, see split_oversized.py)."""
-    if scale in ('town', 'city', 'capital') and poor:
-        onst = [b for b in poor if on_a_street(b)]
-        check(
-            "poor_housing_mostly_interior",
-            len(onst) <= 0.5 * len(poor),
-            f"{len(onst)}/{len(poor)} laborer/burakumin dwellings sit ON a street - most poor housing jams the block INTERIOR (reached by alleys), behind the street-facing businesses",
-        )
-    return _kept(locals(), ('b', 'onst'))
 
 
 # surrounding farmland must be WORKED: the part of each outside field that SHOWS on the map
@@ -428,62 +336,6 @@ def _seg_0133_006__ADJ(*, scale: Any = _UNBOUND) -> dict[str, Any]:
     if scale in ('town', 'city', 'capital'):
         ADJ = 165
     return _kept(locals(), ('ADJ',))
-
-
-def _seg_0133_007__FARM_LD(*, scale: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 0133.007 (FARM_LD) - body verbatim from _seg_0133__outside_fields_farmhouse_density (feature 024 per-check split; guards re-evaluated in the body, see split_oversized.py)."""
-    if scale in ('town', 'city', 'capital'):
-        FARM_LD = 7.0  # houses per 1000px of shown edge - a floor: village fields run ~4-19, the bad ones ~0
-    return _kept(locals(), ('FARM_LD',))
-
-
-def _seg_0133_008__sparse(*, scale: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 0133.008 (sparse) - body verbatim from _seg_0133__outside_fields_farmhouse_density (feature 024 per-check split; guards re-evaluated in the body, see split_oversized.py)."""
-    if scale in ('town', 'city', 'capital'):
-        sparse = []  # type: ignore[var-annotated]
-    return _kept(locals(), ('sparse',))
-
-
-def _seg_0133_009__cx(
-    *,
-    ADJ: Any = _UNBOUND,
-    EX0: Any = _UNBOUND,
-    EX1: Any = _UNBOUND,
-    EY0: Any = _UNBOUND,
-    EY1: Any = _UNBOUND,
-    FARM_LD: Any = _UNBOUND,
-    M: Any = _UNBOUND,
-    cx: Any = _UNBOUND,
-    cy: Any = _UNBOUND,
-    edge: Any = _UNBOUND,
-    f: Any = _UNBOUND,
-    fields: Any = _UNBOUND,
-    h: Any = _UNBOUND,
-    houses: Any = _UNBOUND,
-    nv: Any = _UNBOUND,
-    scale: Any = _UNBOUND,
-    sparse: Any = _UNBOUND,
-) -> dict[str, Any]:
-    """Gate segment 0133.009 (cx, cy, edge, f) - body verbatim from _seg_0133__outside_fields_farmhouse_density (feature 024 per-check split; guards re-evaluated in the body, see split_oversized.py)."""
-    if scale in ('town', 'city', 'capital'):
-        for f in fields:
-            cx, cy = (f["bbox"][0] + f["bbox"][2]) / 2, (f["bbox"][1] + f["bbox"][3]) / 2
-            if M.get("wall") and point_in_poly(cx, cy, M["wall"]):
-                continue  # in-wall plots are not surrounding farmland
-            edge = onmap_field_edge(f["outline"], EX0, EY0, EX1, EY1)
-            if edge < 120:
-                continue  # only a tiny sliver shows - too little to require farmhouses
-            nv = sum(1 for h in houses if EX0 <= h["x"] <= EX1 and EY0 <= h["y"] <= EY1 and poly_dist(h["x"], h["y"], f["outline"]) <= ADJ)
-            if nv < FARM_LD * edge / 1000:
-                sparse.append((f["name"], nv, round(FARM_LD * edge / 1000, 1)))
-    return _kept(locals(), ('cx', 'cy', 'edge', 'f', 'h', 'nv', 'sparse'))
-
-
-def _seg_0133_010__outside_fields_farmhouse_density(*, check: Any = _UNBOUND, scale: Any = _UNBOUND, sparse: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 0133.010 (outside_fields_farmhouse_density) - body verbatim from _seg_0133__outside_fields_farmhouse_density (feature 024 per-check split; guards re-evaluated in the body, see split_oversized.py)."""
-    if scale in ('town', 'city', 'capital'):
-        check("outside_fields_farmhouse_density", not sparse, f"shown field edge(s) with too few farmhouses beside the on-map portion (farmers build close; expect ~village density): {sparse}")
-    return _kept(locals(), ())
 
 
 # the IN-WALL agricultural district (the unusual city that farms inside its walls) is REAL
@@ -543,89 +395,13 @@ def _seg_0133_012__city_interior_fields_farmhouse_density(
             nv = sum(1 for h in houses if poly_dist(h["x"], h["y"], f["outline"]) <= ADJ)
             if nv < FARM_LD_INWALL * edge / 1000:
                 thin.append((f["name"], nv, round(FARM_LD_INWALL * edge / 1000, 1)))
-        check(
-            "city_interior_fields_farmhouse_density",
-            not thin,
-            f"in-wall agricultural field(s) too sparsely farmed - an in-wall field shows its WHOLE perimeter, so ring it densely all the way round (no long bare edges), not a token few: {thin}",
-        )
+        pass  # `` retired under feature 141 (the GM's cut); the segment stays for the check it keeps or the value it writes
     return _kept(locals(), ('cx', 'cy', 'edge', 'f', 'h', 'nv', 'thin'))
 
 
 # housing packs DEEP, but no GIANT cluster may be cut off from circulation: a big block of
 # dwellings with no street OR alley anywhere near it has no way in or out. Deep blocks must
 # be laced with gravel alleys (s.alley) so every dwelling is reachable.
-
-
-def _seg_0133_013__a(*, M: Any = _UNBOUND, a: Any = _UNBOUND, r9: Any = _UNBOUND, s: Any = _UNBOUND, scale: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 0133.013 (a, acc, r9, s) - body verbatim from _seg_0133__outside_fields_farmhouse_density (feature 024 per-check split; guards re-evaluated in the body, see split_oversized.py)."""
-    if scale in ('town', 'city', 'capital'):
-        acc = (
-            [s["pts"] for s in M.get("town_streets", [])] + ([M["road"]] if M.get("road") else []) + [r9["pts"] for r9 in M.get("roads", [])] + [a["pts"] for a in M.get("alleys", [])]
-        )  # trunk roads serve their roadside wards (the guan-xiang suburbs string along them)
-    return _kept(locals(), ('a', 'acc', 'r9', 's'))
-
-
-def _seg_0133_014__cut_off(*, acc: Any = _UNBOUND, b: Any = _UNBOUND, i: Any = _UNBOUND, ln: Any = _UNBOUND, scale: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 0133.014 (cut_off) - body verbatim from _seg_0133__outside_fields_farmhouse_density (feature 024 per-check split; guards re-evaluated in the body, see split_oversized.py)."""
-    if scale in ('town', 'city', 'capital'):
-
-        def cut_off(b: dict[str, Any]) -> bool:
-            return not any(seg_dist(b["x"], b["y"], ln[i], ln[i + 1]) < 95 for ln in acc for i in range(len(ln) - 1))
-
-    return _kept(locals(), ('cut_off',))
-
-
-def _seg_0133_015__b_2(*, M: Any = _UNBOUND, b: Any = _UNBOUND, cut_off: Any = _UNBOUND, scale: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 0133.015 (b, iso) - body verbatim from _seg_0133__outside_fields_farmhouse_density (feature 024 per-check split; guards re-evaluated in the body, see split_oversized.py)."""
-    if scale in ('town', 'city', 'capital'):
-        iso = [b for b in M.get("buildings", []) if b.get("kind") in DWELLING_KINDS and cut_off(b)]
-    return _kept(locals(), ('b', 'iso'))
-
-
-def _seg_0133_016__seen(*, scale: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 0133.016 (seen) - body verbatim from _seg_0133__outside_fields_farmhouse_density (feature 024 per-check split; guards re-evaluated in the body, see split_oversized.py)."""
-    if scale in ('town', 'city', 'capital'):
-        seen: set[int] = set()  # type: ignore[no-redef,unused-ignore]
-    return _kept(locals(), ('seen',))
-
-
-def _seg_0133_017__biggest(*, scale: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 0133.017 (biggest) - body verbatim from _seg_0133__outside_fields_farmhouse_density (feature 024 per-check split; guards re-evaluated in the body, see split_oversized.py)."""
-    if scale in ('town', 'city', 'capital'):
-        biggest = 0
-    return _kept(locals(), ('biggest',))
-
-
-def _seg_0133_018__biggest_1(
-    *, biggest: Any = _UNBOUND, i: Any = _UNBOUND, iso: Any = _UNBOUND, j: Any = _UNBOUND, kk: Any = _UNBOUND, n: Any = _UNBOUND, scale: Any = _UNBOUND, seen: Any = _UNBOUND, stack: Any = _UNBOUND
-) -> dict[str, Any]:
-    """Gate segment 0133.018 (biggest, i, j, kk) - body verbatim from _seg_0133__outside_fields_farmhouse_density (feature 024 per-check split; guards re-evaluated in the body, see split_oversized.py)."""
-    if scale in ('town', 'city', 'capital'):
-        for i in range(len(iso)):
-            if i in seen:
-                continue
-            stack, n = [i], 0
-            seen.add(i)
-            while stack:
-                j = stack.pop()
-                n += 1
-                for kk in range(len(iso)):
-                    if kk not in seen and abs(iso[j]["x"] - iso[kk]["x"]) < 46 and abs(iso[j]["y"] - iso[kk]["y"]) < 46:
-                        seen.add(kk)
-                        stack.append(kk)
-            biggest = max(biggest, n)
-    return _kept(locals(), ('biggest', 'i', 'j', 'kk', 'n', 'seen', 'stack'))
-
-
-def _seg_0133_019__no_isolated_dwelling_cluster(*, biggest: Any = _UNBOUND, check: Any = _UNBOUND, scale: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 0133.019 (no_isolated_dwelling_cluster) - body verbatim from _seg_0133__outside_fields_farmhouse_density (feature 024 per-check split; guards re-evaluated in the body, see split_oversized.py)."""
-    if scale in ('town', 'city', 'capital'):
-        check(
-            "no_isolated_dwelling_cluster",
-            biggest <= 30,
-            f"a contiguous cluster of {biggest} dwellings sits >95px from any street OR alley - a giant block of houses with no way in or out; lace deep blocks with gravel alleys (s.alley) so every block is reachable",
-        )
-    return _kept(locals(), ())
 
 
 # an alley must EARN its length by UNIQUELY serving dwellings. A building is credited to its

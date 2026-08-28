@@ -10,7 +10,7 @@ import pytest
 from l7r.diagram.settlement import Settlement, roll_torii_count, surface_water_dist, village_population
 from l7r.diagram.waterfields import dedup_ring, floor_overhang, pointed_ring, polyline_cum, supply_bank_clearance
 from tests._scope import full_or
-from tests.settlement._builders import _cap020, _castle_map, _city, _crop_settlement, _max_turn_deg, _memo_city, _shoelace, _town
+from tests.settlement._builders import _cap020, _castle_map, _crop_settlement, _max_turn_deg, _memo_city, _town
 
 
 def test_png_width_env_overrides_render_resolution(monkeypatch):
@@ -122,21 +122,6 @@ def test_roll_torii_count_distributions():
             return 1.0
 
     assert roll_torii_count("village", _One()) == 7  # exhaustion falls to the last (rarest) bucket
-
-
-def test_farrier_caption_clears_a_ROTATED_footprints_drawn_extent():
-    # a rotated record's drawn vertical extent is its axis-aligned half-height, not h/2, so the
-    # caption must hang off THAT or it lands inside the record's own bbox and
-    # labels_clear_of_other_buildings reports "'farrier' over a farrier" (the rot=150 Hoshizora
-    # forge, GM 2026-07-25). An UNROTATED farrier keeps the plain h/2 anchor.
-    s0, s90 = _city(), _city()
-    s0.farrier(600, 620)
-    s90.farrier(600, 620, rot=90)
-    flat = [L for L in s0.M["labels"] if L[5] == "farrier"][0]
-    turned = [L for L in s90.M["labels"] if L[5] == "farrier"][0]
-    assert flat[1] > 620 + s0.px(38) / 2  # below the unrotated footprint
-    # rotated 90 the drawn half-height is w/2 (< h/2), so its caption rides HIGHER, not lower
-    assert 620 + s90.px(28) / 2 < turned[1] < flat[1]
 
 
 def test_rng_scope_is_isolated_from_before_and_restores_after():
@@ -284,73 +269,6 @@ def test_paddy_grain_hits_the_real_feet_target():
     # a coarser ftpx needs FEWER px per plot for the same real cell; a bigger target -> bigger plot
     assert paddy_grain(1)[0] > paddy_grain(2)[0] > paddy_grain(3)[0]
     assert paddy_grain(2, target_acres=0.036)[0] < paddy_grain(2, target_acres=0.0675)[0]
-
-
-def test_build_polder_parcel_fabric():
-    from l7r.diagram.waterfields import build_polder
-
-    net = build_polder(2200, 2600, (360, 320), 21, down_deg=90, rows=11, cols=6, cell=150)
-    plots = net["plots"]
-    # deterministic per seed
-    assert build_polder(2200, 2600, (360, 320), 21, down_deg=90, rows=11, cols=6, cell=150)["plots"] == plots
-    # splits outnumber merges: more parcels than module bays
-    assert len(plots) > 66
-    # the envelope (the dike's inner-face reference) keeps the full span: it is densified 12 samples/edge
-    # (so the edge-wander curvature is carried into the drawn field/dike), and the corners - at 0, 12, 24, 36 -
-    # are exact grid multiples (edge_wander defaults to 0 here, so no warp)
-    assert net["envelope"][0] == (360, 320) and net["envelope"][24] == (360 + 6 * 150, 320 + 11 * 150)
-    RING = 18.0
-    s_step = (11 * 150 - 2 * RING) / 11
-    # the fabric varies (mirrors the polder_parcels_vary thresholds, with slack): areas spread, oblongs dominate
-    dims = []
-    for p in plots:
-        xs = [v[0] for v in p["poly"]]
-        ys = [v[1] for v in p["poly"]]
-        dims.append((max(xs) - min(xs), max(ys) - min(ys)))
-    areas = [w * h for w, h in dims]
-    mean_a = sum(areas) / len(areas)
-    cv = (sum((a - mean_a) ** 2 for a in areas) / len(areas)) ** 0.5 / mean_a
-    assert cv > 0.25
-    oblong = sum(1 for w, h in dims if max(w, h) / min(w, h) >= 1.45) / len(dims)
-    assert oblong > 0.5
-    # every parcel stays inside the envelope, and the low flag marks the bottom two rows only
-    for p in plots:
-        assert all(360 <= v[0] <= 360 + 900 and 320 <= v[1] <= 320 + 1650 for v in p["poly"])
-        cy = sum(v[1] for v in p["poly"]) / len(p["poly"])
-        assert p["low"] == (cy > 320 + RING + 9 * s_step)  # down_deg=90: low rows (r>=9) sit past ss(9)
-    assert any(p["low"] for p in plots) and not all(p["low"] for p in plots)
-    # the water network is a CLOSED filleted RING (feeder top + 2 toe sides + drain bottom) tagged by `seg`,
-    # plus one lateral per interior column line. The interior laterals run from the feeder inner-toe line to
-    # the drain inner-toe line; the ring sides carry their seg tags.
-    segs = [ch.get("seg") for ch in net["channels"]]
-    assert segs.count("feeder") == 1 and segs.count("e_toe") == 1 and segs.count("w_toe") == 1 and segs.count("drain") == 1
-    assert segs.count("lateral") == 5  # one per interior column line (cols=6 -> 5)
-    roles = {ch.get("seg"): ch["role"] for ch in net["channels"] if ch.get("seg")}
-    assert roles["feeder"] == "main" and roles["drain"] == "drain" and roles["e_toe"] == "lateral"
-
-    # each interior lateral is SNAPPED onto the (gently wavered) feeder + drain centerlines, so its ends lie
-    # ON those ring polylines - a clean T-junction, not an exact di/fi row (the toe lines waver ~3.5 px in s)
-    def _pt_seg(p, a, b):
-        vx, vy = b[0] - a[0], b[1] - a[1]
-        ll = vx * vx + vy * vy or 1.0
-        t = max(0.0, min(1.0, ((p[0] - a[0]) * vx + (p[1] - a[1]) * vy) / ll))
-        return math.hypot(p[0] - a[0] - t * vx, p[1] - a[1] - t * vy)
-
-    def _near(pt, poly):
-        return min(_pt_seg(pt, poly[i], poly[i + 1]) for i in range(len(poly) - 1))
-
-    feeder_pts = next(ch["pts"] for ch in net["channels"] if ch.get("seg") == "feeder")
-    drain_pts = next(ch["pts"] for ch in net["channels"] if ch.get("seg") == "drain")
-    for ch in net["channels"]:
-        if ch.get("seg") != "lateral":  # only the interior column laterals run toe-to-toe
-            continue
-        assert _near(ch["pts"][0], feeder_pts) < 2  # starts ON the feeder inner-toe line
-        assert _near(ch["pts"][-1], drain_pts) < 2  # ends ON the drain inner-toe line
-    # pond-profile mix: merge-heavy, no 3-cuts, wide dike gaps -> fewer, larger, oblong parcels
-    pond_net = build_polder(2200, 2600, (360, 320), 21, down_deg=90, rows=10, cols=6, cell=160, parcel_mix=(0.10, 0.0, 0.60), gap=(11.0, 11.0))
-    assert len(pond_net["plots"]) < len(plots)
-    pond_areas = sorted(abs(_shoelace(p["poly"])) for p in pond_net["plots"])
-    assert pond_areas[-1] > 2.5 * pond_areas[0]  # merged doubles dwarf the split minority
 
 
 def test_archetype_knob_typing_rules():

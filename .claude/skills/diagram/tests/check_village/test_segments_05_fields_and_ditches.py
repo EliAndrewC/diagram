@@ -2,20 +2,13 @@
 
 from tests.check_village._builders import (
     _FORK_MAINS,
-    _MON,
-    _SHR,
-    _city_dead,
     _cross_M,
-    _dead,
     _dryplot,
     _farmhouse,
     _field,
     _nuc_grid,
     _nuc_village_M,
-    _nuc_with_windbreak,
-    _supply_M,
     _tips_M,
-    f,
     f_only,
 )
 
@@ -27,35 +20,6 @@ def test_field_ditches_reach_source_and_sink_fires_when_ungrounded():
     # its full pond->canal->cascade->drain->off-map network; the wip Hoshigaoka likewise).
     M = {"field_ditches": [{"poly": [[300, 300], [500, 300]], "role": "main", "field": "f"}, {"poly": [[300, 600], [500, 600]], "role": "drain", "field": "f"}]}
     assert "field_ditches_reach_source_and_sink" in f_only(M, "field_ditches_reach_source_and_sink")
-
-
-def test_structures_clear_of_dry_plots_fires_when_a_farmstead_stands_on_a_hem_strip():
-    # GM 2026-07: farmsteads (house + threshing yard) stood on Tango's fn1/nw1 dry hems - the
-    # plots were guarded center-only, so a footprint could overlap a strip edge
-    M = {"dry_plots": [{"poly": [[300, 300], [500, 300], [500, 380], [300, 380]], "crop": "barley", "theta": 0.5}], "houses": [{"x": 480, "y": 372, "w": 46, "h": 28, "rot": 0, "kind": "plain"}]}
-    assert "structures_clear_of_dry_plots" in f_only(M, "structures_clear_of_dry_plots")
-
-
-def test_structures_clear_of_dry_plots_passes_when_the_farmstead_abuts_the_strip():
-    # abutting is fine (a hem may run right up to a wall) - only real overlap fires
-    M = {"dry_plots": [{"poly": [[300, 300], [500, 300], [500, 380], [300, 380]], "crop": "barley", "theta": 0.5}], "houses": [{"x": 400, "y": 396, "w": 46, "h": 28, "rot": 0, "kind": "plain"}]}
-    assert "structures_clear_of_dry_plots" not in f_only(M, "structures_clear_of_dry_plots")
-
-
-def test_groves_clear_of_dry_plots_fires_when_a_clump_stands_in_the_crop():
-    M = {
-        "dry_plots": [{"poly": [[300, 300], [500, 300], [500, 380], [300, 380]], "crop": "soy", "theta": 1.2}],
-        "village_groves": [{"role": "belt", "r": 11, "clumps": [[400, 340]], "poly": [[380, 320], [420, 320], [420, 360], [380, 360]]}],
-    }
-    assert "groves_clear_of_dry_plots" in f_only(M, "groves_clear_of_dry_plots")
-
-
-def test_groves_clear_of_dry_plots_passes_when_the_belt_hugs_the_edge():
-    M = {
-        "dry_plots": [{"poly": [[300, 300], [500, 300], [500, 380], [300, 380]], "crop": "soy", "theta": 1.2}],
-        "village_groves": [{"role": "belt", "r": 11, "clumps": [[400, 396]], "poly": [[380, 384], [420, 384], [420, 408], [380, 408]]}],
-    }
-    assert "groves_clear_of_dry_plots" not in f_only(M, "groves_clear_of_dry_plots")
 
 
 def test_delivery_ditches_taper_fires_on_a_blunt_ditch():
@@ -107,53 +71,6 @@ def test_dry_plot_furrows_vary_skipped_for_a_contour_village():
 
 
 # ---- dry_plot_seams_shared (hem seams are single straight lines both quads lie on) -----------
-def test_dry_plot_seams_shared_fires_on_a_lap():
-    # the concave-bend failure: the second column's quad laps 2 px into its neighbor
-    a = {"poly": [[300, 300], [346, 300], [346, 336], [300, 336]], "theta": 0.2}
-    b = {"poly": [[344, 300], [390, 302], [390, 338], [344, 336]], "theta": 0.9}
-    assert "dry_plot_seams_shared" in f_only({"dry_plots": [a, b]}, "dry_plot_seams_shared")
-
-
-def test_dry_plot_seams_shared_fires_on_a_gap_wedge():
-    # the convex-bend failure: both columns share the base corner at (346,300) but the second's
-    # side edge tilts 6 px off the first's over its depth - a bare wedge opens between them
-    a = {"poly": [[300, 300], [346, 300], [346, 380], [300, 380]], "theta": 0.2}
-    b = {"poly": [[346, 300], [392, 300], [398, 380], [352, 380]], "theta": 0.9}
-    assert "dry_plot_seams_shared" in f_only({"dry_plots": [a, b]}, "dry_plot_seams_shared")
-
-
-def test_dry_plot_seams_shared_passes_a_shared_seam_with_a_depth_step():
-    # clean abutment: one straight seam at x=346, the second column shallower - the ragged outer
-    # edge steps ALONG the shared line, which is exactly the raggedness the generator intends
-    a = {"poly": [[300, 300], [346, 300], [346, 380], [300, 380]], "theta": 0.2}
-    b = {"poly": [[346, 300], [392, 300], [392, 350], [346, 350]], "theta": 0.9}
-    assert "dry_plot_seams_shared" not in f_only({"dry_plots": [a, b]}, "dry_plot_seams_shared")
-
-
-def test_dry_plot_seams_shared_skips_singletons_and_separated_plots():
-    # one plot has no seams; two plots a field apart never meet (the bbox prefilter path)
-    a = {"poly": [[300, 300], [346, 300], [346, 380], [300, 380]], "theta": 0.2}
-    c = {"poly": [[900, 300], [946, 300], [946, 380], [900, 380]], "theta": 0.9}
-    assert "dry_plot_seams_shared" not in f_only({"dry_plots": [a]}, "dry_plot_seams_shared")
-    assert "dry_plot_seams_shared" not in f_only({"dry_plots": [a, c]}, "dry_plot_seams_shared")
-
-
-def test_channel_source_anchored_fires_on_bad_anchor():
-    M = {"channels": [{"poly": [[100, 100], [110, 120], [120, 140]], "frm": {"kind": "bogus"}, "to": {"kind": "offmap"}}]}
-    assert "channel_source_anchored[0]" in f(M)
-
-
-def test_field_supply_visibly_sourced_fires_on_a_dangling_comb_origin():
-    # origin (450,250): 150px from the stream, far from every view edge; the only drawn stroke
-    # is nowhere near the origin, so it cannot rescue it
-    assert "field_supply_visibly_sourced[x]" in f(_supply_M([450, 250], drawn_channels=[{"pts": [[900, 900], [950, 950]]}]))
-
-
-def test_field_supply_visibly_sourced_passes_on_a_pond_rim():
-    # a comb origin inside/on the pond ellipse is sourced (Tango's in-wall nw1 comb)
-    M = _supply_M([450, 250])
-    M["pond"] = [455, 255, 30, 20]
-    assert "field_supply_visibly_sourced[x]" not in f(M)
 
 
 def test_field_ditch_tips_land_on_the_trunk_fires_on_a_tip_past_the_canal():
@@ -189,52 +106,6 @@ def test_water_channels_join_not_cross_passes_on_a_shallow_offtake():
         {"pts": [[10, 200], [190, 200]]},
     )
     assert "water_channels_join_not_cross" not in f_only(M, "water_channels_join_not_cross")
-
-
-def test_field_supply_visibly_sourced_passes_on_a_river_bank():
-    # a comb origin sitting directly on a RIVER bed is sourced (Nagahara's far-bank fan pattern)
-    M = _supply_M([450, 110])
-    M["streams"] = []
-    M["river"] = {"pts": [[100, 100], [800, 100]], "w": 40}
-    assert "field_supply_visibly_sourced[x]" not in f(M)
-
-
-def test_field_supply_visibly_sourced_passes_on_a_cascade_ditch():
-    # tail-water reuse: the origin sits on ANOTHER comb's ditch (the standard way a city's
-    # drainage waters the fields below it - Hirameki's e2 pattern)
-    M = _supply_M([450, 250])
-    M["field_ditches"].append({"poly": [[300, 248], [600, 252]], "role": "drain", "field": "other", "w": 4})
-    assert "field_supply_visibly_sourced[x]" not in f(M)
-
-
-def test_field_supply_visibly_sourced_skips_a_field_with_no_mains():
-    # no main ditches recorded for the fed field -> nothing visible starts anywhere; not this check's call
-    M = _supply_M([450, 250])
-    M["field_ditches"] = []
-    assert not any(c.startswith("field_supply_visibly_sourced") for c in f(M))
-
-
-def test_field_supply_visibly_sourced_passes_with_a_drawn_tap():
-    # a drawn tap stroke joins the origin to the stream bed - the visual chain is complete
-    M = _supply_M([450, 250], drawn_channels=[{"pts": [[450, 104], [450, 250]]}])
-    assert "field_supply_visibly_sourced[x]" not in f(M)
-
-
-def test_field_supply_visibly_sourced_ignores_the_combs_own_canal():
-    # the only drawn stroke at the origin is the comb's own main heading INTO the field - it
-    # carries water downstream, not from a source, so the origin still dangles
-    M = _supply_M([450, 250], drawn_channels=[{"pts": [[450, 250], [450, 320], [460, 400]]}])
-    assert "field_supply_visibly_sourced[x]" in f(M)
-
-
-def test_field_supply_visibly_sourced_passes_at_the_view_edge():
-    # an origin at the map edge is presumed to continue off-map (the fn1/fn2 pattern)
-    assert "field_supply_visibly_sourced[x]" not in f(_supply_M([450, 20]))
-
-
-def test_field_supply_visibly_sourced_skips_a_drawn_supply_channel():
-    # a DRAWN supply channel carries its own visual continuity (its ends are anchor-checked)
-    assert "field_supply_visibly_sourced[x]" not in f(_supply_M([450, 250], drawn=True))
 
 
 def test_streams_avoid_fields_fires():
@@ -287,72 +158,6 @@ def test_commons_clear_of_paddies_fires_when_scrub_sits_in_a_field():
     assert "commons_clear_of_paddies" not in f_only(nopoly, "commons_clear_of_paddies")
 
 
-def test_commons_beyond_the_windbreak_fires_when_between_grove_and_village():
-    houses, ccx, ccy, M = _nuc_with_windbreak()
-    M["commons"] = [{"x": ccx - 70, "y": ccy - 70, "w": 80, "h": 200, "rot": 0}]  # NOT past the grove
-    assert "commons_beyond_the_windbreak" in f_only(M, "commons_beyond_the_windbreak")
-
-
-def test_commons_beyond_the_windbreak_passes_when_past_the_grove():
-    houses, ccx, ccy, M = _nuc_with_windbreak()
-    M["commons"] = [{"x": ccx - 280, "y": ccy - 280, "w": 80, "h": 200, "rot": 0}]  # well beyond the belt
-    assert "commons_beyond_the_windbreak" not in f_only(M, "commons_beyond_the_windbreak")
-
-
-def test_commons_beyond_the_windbreak_exempts_general_hinterland_land():
-    # the general marginal hill land types - 'grazing' scrub, open 'pasture', coppice 'woodland' - are the
-    # hinterland catena (any dry flank), NOT the windward fuel commons, so each is exempt even when NOT beyond
-    # the windbreak; only the default fuel/fodder commons follows the toposequence rule.
-    for role in ("grazing", "pasture", "woodland"):
-        houses, ccx, ccy, M = _nuc_with_windbreak()
-        M["commons"] = [{"x": ccx - 70, "y": ccy - 70, "w": 80, "h": 200, "rot": 0, "role": role}]
-        assert "commons_beyond_the_windbreak" not in f_only(M, "commons_beyond_the_windbreak")
-
-
-def test_commons_beyond_check_skipped_without_a_windbreak():
-    # nucleated + commons but NO windbreak grove -> the beyond-the-windbreak check cannot run (wbs empty)
-    M = _nuc_village_M(_nuc_grid())
-    M["commons"] = [{"x": 100, "y": 100, "w": 60, "h": 60, "rot": 0}]
-    assert "commons_beyond_the_windbreak" not in f_only(M, "commons_beyond_the_windbreak")
-
-
-def test_woodland_clear_of_crops_fires_on_overlap_and_shade_passes_when_set_back_north():
-    # a managed-woodland patch must NOT overlap a crop NOR shade it from the sunny SOUTH side (trees cast
-    # shadows north, maps are north-up); a patch set back to the NORTH is fine. Covers paddy + dry_plots.
-    p = _field("p", 400, 400, 700, 600)
-    base = {"meta": {"scale": "village"}, "fields": [p]}
-
-    def wood(poly):
-        cx = sum(v[0] for v in poly) / len(poly)
-        cy = sum(v[1] for v in poly) / len(poly)
-        return {"x": cx, "y": cy, "w": 100, "h": 100, "rot": 0, "role": "woodland", "poly": poly}
-
-    over = {**base, "commons": [wood([[500, 450], [600, 450], [600, 550], [500, 550]])]}  # sits ON the paddy
-    assert "woodland_clear_of_crops" in f_only(over, "woodland_clear_of_crops")
-    shade = {**base, "commons": [wood([[500, 612], [640, 612], [640, 660], [500, 660]])]}  # just SOUTH -> shades it
-    assert "woodland_clear_of_crops" in f_only(shade, "woodland_clear_of_crops")
-    ok = {**base, "commons": [wood([[500, 300], [640, 300], [640, 344], [500, 344]])]}  # well NORTH -> clear
-    assert "woodland_clear_of_crops" not in f_only(ok, "woodland_clear_of_crops")
-    dry = {
-        **base,
-        "dry_plots": [{"poly": [[800, 400], [900, 400], [900, 500], [800, 500]], "crop": "soy", "theta": 0.0}],
-        "commons": [wood([[840, 420], [940, 420], [940, 520], [840, 520]])],
-    }  # overlaps a DRY plot
-    assert "woodland_clear_of_crops" in f_only(dry, "woodland_clear_of_crops")
-
-
-def test_woodland_clear_of_grove_fires_when_on_the_fengshui_grove():
-    # a coppice woodland patch and the protected fengshui grove are DISTINCT woods - a patch sitting on a grove
-    # clump fires; one on its own ground does not.
-    p = _field("p", 400, 400, 700, 600)
-    patch = {"x": 200, "y": 200, "w": 100, "h": 100, "rot": 0, "role": "woodland", "poly": [[150, 150], [250, 150], [250, 250], [150, 250]]}
-    base = {"meta": {"scale": "village"}, "fields": [p], "commons": [patch]}
-    on = {**base, "village_groves": [{"role": "windbreak", "x": 200, "y": 200, "r": 14, "clumps": [[200, 200]]}]}  # clump inside the patch
-    assert "woodland_clear_of_grove" in f_only(on, "woodland_clear_of_grove")
-    off = {**base, "village_groves": [{"role": "windbreak", "x": 900, "y": 900, "r": 14, "clumps": [[900, 900]]}]}  # grove far away
-    assert "woodland_clear_of_grove" not in f_only(off, "woodland_clear_of_grove")
-
-
 def test_farmhouse_sizes_vary_fires_when_flat():
     M = {"meta": {"scale": "village"}, "houses": [_farmhouse(300 + 60 * i, 300) for i in range(12)]}
     assert "farmhouse_sizes_vary" in f_only(M, "farmhouse_sizes_vary")  # _farmhouse has no wealth -> all at the baseline tier
@@ -368,33 +173,6 @@ def test_farmhouse_sizes_vary_passes_with_a_spread():
 
 
 # --- labels_render_on_top (label text is never covered) ---
-def test_labels_render_on_top_fires_when_a_kido_covers_a_label():
-    M = {"labels": [[100, 100, 300, 120, 5, "Ministry of Retainers"]], "kido": [{"x": 200, "y": 110, "z": 1000, "bbox": [150, 90, 250, 130]}]}
-    assert "labels_render_on_top" in f_only(M, "labels_render_on_top")
-
-
-def test_labels_render_on_top_fires_when_a_gate_structure_covers_a_label():
-    M = {"labels": [[150, 100, 250, 120, 5, "gate label"]], "gate_structs": [{"x": 200, "y": 110, "w": 100, "h": 40, "z": 1000}]}
-    assert "labels_render_on_top" in f_only(M, "labels_render_on_top")
-
-
-def test_labels_render_on_top_fires_when_a_torii_covers_a_label():
-    M = {"labels": [[185, 95, 215, 120, 5, "shrine"]], "torii": [[200, 110, 1000]]}
-    assert "labels_render_on_top" in f_only(M, "labels_render_on_top")
-
-
-def test_labels_render_on_top_passes_when_the_label_is_above():
-    # same overlap, but the label's draw-z is higher than the structure's - it renders on top, readable
-    M = {"labels": [[100, 100, 300, 120, 9999, "Ministry of Retainers"]], "kido": [{"x": 200, "y": 110, "z": 1000, "bbox": [150, 90, 250, 130]}]}
-    assert "labels_render_on_top" not in f_only(M, "labels_render_on_top")
-
-
-def test_labels_render_on_top_handles_a_textless_label():
-    M = {
-        "labels": [[150, 100, 250, 120, 5]],  # a field label recorded without text
-        "kido": [{"x": 200, "y": 110, "z": 1000, "bbox": [150, 90, 250, 130]}],
-    }
-    assert "labels_render_on_top" in f_only(M, "labels_render_on_top")
 
 
 def test_funerary_clear_of_fields_fires_when_a_cremation_ground_sits_on_a_field():
@@ -404,80 +182,3 @@ def test_funerary_clear_of_fields_fires_when_a_cremation_ground_sits_on_a_field(
     assert "funerary_clear_of_fields" in f_only(fire, "funerary_clear_of_fields")
     ok = {"fields": field, "cremation_grounds": [{"x": 500, "y": 850, "w": 116, "h": 80, "rot": 0}]}
     assert "funerary_clear_of_fields" not in f_only(ok, "funerary_clear_of_fields")
-
-
-def test_settlement_has_cemetery_fires_when_missing():
-    assert "settlement_has_cemetery" in f_only(_dead("village", []), "settlement_has_cemetery")
-
-
-def test_settlement_has_cemetery_exempts_hamlet():
-    assert "settlement_has_cemetery" not in f_only(_dead("hamlet", []), "settlement_has_cemetery")
-
-
-def test_settlement_has_cemetery_passes_when_present():
-    assert "settlement_has_cemetery" not in f_only(_dead("village", [{"x": 300, "y": 300, "w": 80, "h": 56, "rot": 0}]), "settlement_has_cemetery")
-
-
-def test_cemetery_clear_of_shrine_fires_when_on_the_hall():
-    # graves fill the shrine's YARD but never sit ON the sacred hall itself (this grave overlaps it)
-    assert "cemetery_clear_of_shrine" in f_only(_dead("village", [{"x": 540, "y": 520, "w": 80, "h": 56, "rot": 0}], religious=_SHR), "cemetery_clear_of_shrine")
-
-
-def test_cemetery_clear_of_shrine_passes_when_off_the_hall():
-    assert "cemetery_clear_of_shrine" not in f_only(_dead("village", [{"x": 900, "y": 900, "w": 80, "h": 56, "rot": 0}], religious=_SHR), "cemetery_clear_of_shrine")
-
-
-def test_cemetery_clear_of_shrine_allows_a_grave_in_the_precinct():
-    # NEW (L7R): the shrine is Shinseist and its monk tends the dead, so a grave NEAR the shrine (in the yard,
-    # off the hall) is FINE - the old kegare-distance rule is gone; only the sacred hall + torii stay clear
-    M = {
-        "meta": {"scale": "village"},
-        "cemeteries": [{"x": 615, "y": 500, "w": 80, "h": 56, "rot": 0}],
-        "religious": _SHR,
-    }  # 115px from the shrine center (old rule would fire) but clear of the hall's east edge
-    assert "cemetery_clear_of_shrine" not in f_only(M, "cemetery_clear_of_shrine")
-
-
-def test_cemetery_clear_of_shrine_fires_on_a_grave_under_the_torii():
-    # the sacred GATEWAY stays clear too - a grave on the torii arch fires (hall placed far off, so it is the torii)
-    M = {
-        "meta": {"scale": "village"},
-        "cemeteries": [{"x": 500, "y": 504, "w": 60, "h": 40, "rot": 0}],
-        "religious": [{"kind": "shrine", "x": 500, "y": 760, "w": 30, "h": 24}],
-        "torii": [[500, 500, 1]],
-    }
-    assert "cemetery_clear_of_shrine" in f_only(M, "cemetery_clear_of_shrine")
-
-
-def test_village_graveyard_by_shrine_fires_when_set_apart():
-    # L7R: the village shrine's monk performs the funerary rites, so the graveyard sits in its precinct
-    assert "village_graveyard_by_shrine" in f_only(_dead("village", [{"x": 1200, "y": 1200, "w": 80, "h": 56, "rot": 0}], religious=_SHR), "village_graveyard_by_shrine")
-
-
-def test_village_graveyard_by_shrine_passes_when_in_precinct():
-    assert "village_graveyard_by_shrine" not in f_only(_dead("village", [{"x": 640, "y": 500, "w": 80, "h": 56, "rot": 0}], religious=_SHR), "village_graveyard_by_shrine")
-
-
-def test_village_graveyard_by_shrine_exempts_a_hilltop_shrine():
-    # a hilltop shrine is exempt (graves do not climb the sacred hill); with no flat shrine the ground is by-eye
-    M = _dead("village", [{"x": 1200, "y": 1200, "w": 80, "h": 56, "rot": 0}], religious=[{"kind": "shrine", "x": 500, "y": 500, "w": 100, "h": 68}])
-    M["hill"] = [500, 500, 200, 150]
-    assert "village_graveyard_by_shrine" not in f_only(M, "village_graveyard_by_shrine")
-
-
-def test_cemetery_in_temple_precinct_fires_when_far_from_hall():
-    assert "cemetery_in_temple_precinct" in f_only(_dead("town", [{"x": 1500, "y": 1500, "w": 80, "h": 56, "rot": 0}], religious=_MON), "cemetery_in_temple_precinct")
-
-
-def test_cemetery_in_temple_precinct_passes_when_by_hall():
-    assert "cemetery_in_temple_precinct" not in f_only(_dead("town", [{"x": 560, "y": 520, "w": 80, "h": 56, "rot": 0}], religious=_MON), "cemetery_in_temple_precinct")
-
-
-def test_cemetery_clear_of_shrine_fires_on_a_mausoleum_on_the_hall():
-    # the off-the-hall rule covers MAUSOLEA too, not just graveyards (this one overlaps the shrine hall)
-    M = {"meta": {"scale": "village"}, "mausoleums": [{"x": 540, "y": 520, "w": 74, "h": 58, "rot": 0}], "religious": [{"kind": "shrine", "x": 500, "y": 500, "w": 100, "h": 68}]}
-    assert "cemetery_clear_of_shrine" in f_only(M, "cemetery_clear_of_shrine")
-
-
-def test_walled_graveyards_inside_and_outside_fires_when_all_inside():
-    assert "walled_graveyards_inside_and_outside" in f_only(_city_dead(cems=[(300, 300), (700, 300)]), "walled_graveyards_inside_and_outside")

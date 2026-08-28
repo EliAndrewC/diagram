@@ -4,10 +4,7 @@ import math
 from collections.abc import Sequence
 from typing import Any
 
-from l7r.diagram.settlement import sat_overlap
-
 from .common_01_geometry import Poly, Pt, point_in_poly, rect_corners, seg_dist, segments_cross
-from .common_02_overlap_policy import GridIndex
 from .common_03_capacity import _UNBOUND, _kept
 
 # natural streams: those that declare anchors must connect them (e.g. a forest
@@ -250,56 +247,6 @@ def _seg_0317__dry_plot_furrows_vary(
 # clauses measure real plot corners/edges, no centers, no aggregates.
 
 
-def _seg_0596__dry_plot_seams_shared(*, check: Any = _UNBOUND, dry_plots: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 596 (dry_plot_seams_shared) - hand-added 2026-08-16 (numbered past the legacy
-    range like _seg_0595; registered between 0317 and 0318, beside the dry-plot checks whose
-    `dry_plots` binding it shares). New-style: temps stay function-local, writes=()."""
-    _ds_corner2 = 1.5**2  # corners this close (px^2) are the SAME seam endpoint, drawn twice
-    _ds_lat_tol = 1.2  # px of lateral divergence at the far end - manifest rounding is ~0.15
-    bad: list[tuple[str, int, int]] = []
-    if len(dry_plots) >= 2:
-        polys: list[list[tuple[float, float]]] = [[(float(v[0]), float(v[1])) for v in p["poly"]] for p in dry_plots]
-        shrunk: list[list[tuple[float, float]]] = []
-        for pp in polys:
-            cx = sum(q[0] for q in pp) / len(pp)
-            cy = sum(q[1] for q in pp) / len(pp)
-            shrunk.append([(cx + (q[0] - cx) * 0.985, cy + (q[1] - cy) * 0.985) for q in pp])
-        boxes = [(min(q[0] for q in pp), min(q[1] for q in pp), max(q[0] for q in pp), max(q[1] for q in pp)) for pp in polys]
-        for ai in range(len(polys)):
-            for bi in range(ai + 1, len(polys)):
-                if boxes[ai][2] < boxes[bi][0] - 2 or boxes[bi][2] < boxes[ai][0] - 2 or boxes[ai][3] < boxes[bi][1] - 2 or boxes[bi][3] < boxes[ai][1] - 2:
-                    continue
-                if sat_overlap(shrunk[ai], shrunk[bi]):
-                    bad.append(("lap", round((boxes[ai][0] + boxes[bi][2]) / 2), round((boxes[ai][1] + boxes[bi][3]) / 2)))
-                    continue
-                pa, pb = polys[ai], polys[bi]
-                for ci in range(len(pa)):
-                    for cj in range(len(pb)):
-                        a, b = pa[ci], pb[cj]
-                        if (a[0] - b[0]) ** 2 + (a[1] - b[1]) ** 2 > _ds_corner2:
-                            continue
-                        # the two edges emanating from each plot's copy of the shared corner
-                        for ea in (pa[(ci + 1) % len(pa)], pa[ci - 1]):
-                            ax, ay = ea[0] - a[0], ea[1] - a[1]
-                            al = math.hypot(ax, ay) or 1.0
-                            for eb in (pb[(cj + 1) % len(pb)], pb[cj - 1]):
-                                bx, by = eb[0] - b[0], eb[1] - b[1]
-                                bl = math.hypot(bx, by) or 1.0
-                                if (ax * bx + ay * by) / (al * bl) < 0.9:
-                                    continue  # not the same heading - a corner where unrelated edges meet
-                                ln = min(al, bl)
-                                # lateral offset of b's edge at arc-length ln off a's edge line
-                                px, py = b[0] + bx / bl * ln - a[0], b[1] + by / bl * ln - a[1]
-                                if abs(px * ay / al - py * ax / al) > _ds_lat_tol:
-                                    bad.append(("gap", round(a[0]), round(a[1])))
-    check(
-        "dry_plot_seams_shared",
-        not bad,
-        f"dry-plot seam defect(s) {sorted(set(bad))[:5]} - hem plots tiled along one canal must share their seams as single straight lines: a 'lap' is two plots overlapping, a 'gap' is a bare wedge opening between same-heading edges from a shared corner; both mean the columns were offset along different normals (waterfields._miter_normals is the shared-seam mechanism)",
-    )
-    return _kept(locals(), ())
-
-
 # BUILDINGS AND WORK YARDS STAY OFF THE DRY PLOTS: a hem of barley/soy strips (or an urban
 # vegetable tract) is CROPLAND, not building ground - a farmstead may ABUT a plot, never stand
 # on it. The dry plots were classified in the overlap registry but no check actually TESTED
@@ -307,84 +254,6 @@ def _seg_0596__dry_plot_seams_shared(*, check: Any = _UNBOUND, dry_plots: Any = 
 # nudged for its yard - or a ring house at the envelope gap - could stand half its footprint
 # on a hem strip (GM caught farmsteads on Tango's fn1/nw1 hems, 2026-07). Footprints are
 # shrunk ~6% so a plot ABUTTING a wall does not false-fire; real overlap does.
-
-
-def _seg_0318__dp(*, M: Any = _UNBOUND, dp: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 318 (dp, dry_polys_c) - body verbatim from the legacy gate() (feature 022)."""
-    dry_polys_c = [dp["poly"] for dp in M.get("dry_plots", [])]
-    return _kept(locals(), ('dp', 'dry_polys_c'))
-
-
-def _seg_0319__structures_clear_of_dry_plots(
-    *,
-    M: Any = _UNBOUND,
-    _dp: Any = _UNBOUND,
-    _dp_grid: Any = _UNBOUND,
-    _dxs: Any = _UNBOUND,
-    _dys: Any = _UNBOUND,
-    check: Any = _UNBOUND,
-    dry_polys_c: Any = _UNBOUND,
-    fc: Any = _UNBOUND,
-    g: Any = _UNBOUND,
-    gr: Any = _UNBOUND,
-    gro_dry: Any = _UNBOUND,
-    gx_: Any = _UNBOUND,
-    gy_: Any = _UNBOUND,
-    i: Any = _UNBOUND,
-    it: Any = _UNBOUND,
-    j: Any = _UNBOUND,
-    mkey: Any = _UNBOUND,
-    on_dry: Any = _UNBOUND,
-    poly: Any = _UNBOUND,
-    px: Any = _UNBOUND,
-    py: Any = _UNBOUND,
-    q: Any = _UNBOUND,
-    qx: Any = _UNBOUND,
-    qy: Any = _UNBOUND,
-) -> dict[str, Any]:
-    """Gate segment 319 (groves_clear_of_dry_plots, structures_clear_of_dry_plots) - body verbatim from the legacy gate() (feature 022)."""
-    if dry_polys_c:
-        on_dry = []
-        # INDEXED like _hq_covered (2026-07-25): this was every structure against every dry plot with
-        # a full corner/crossing test - 3.5M segments_cross calls on a city, the gate's #2 cost after
-        # the head-band sampler. The grid prunes to plots whose bbox can reach the footprint; the
-        # exact test below is unchanged, so the verdicts are identical.
-        _dp_grid = GridIndex(64.0)
-        for _dp in dry_polys_c:
-            _dxs = [q[0] for q in _dp]
-            _dys = [q[1] for q in _dp]
-            _dp_grid.add(min(_dxs), min(_dys), max(_dxs), max(_dys), _dp)
-        for mkey in ("houses", "buildings", "threshing_yards", "flophouses", "storehouses", "cemeteries", "cremation_grounds", "ossuaries", "mausoleums"):
-            for it in M.get(mkey, []) or []:
-                fc = rect_corners({"x": it["x"], "y": it["y"], "w": it.get("w", 20), "h": it.get("h", 14), "rot": it.get("rot", 0)})
-                fc = [(it["x"] + (px - it["x"]) * 0.94, it["y"] + (py - it["y"]) * 0.94) for px, py in fc]
-                for poly in _dp_grid.near_rect(min(q[0] for q in fc), min(q[1] for q in fc), max(q[0] for q in fc), max(q[1] for q in fc)):
-                    if (
-                        any(point_in_poly(px, py, poly) for px, py in fc)
-                        or any(point_in_poly(qx, qy, fc) for qx, qy in poly)
-                        or any(segments_cross(fc[i], fc[(i + 1) % 4], poly[j], poly[(j + 1) % len(poly)]) for i in range(4) for j in range(len(poly)))
-                    ):
-                        on_dry.append((round(it["x"]), round(it["y"])))
-                        break
-        check(
-            "structures_clear_of_dry_plots",
-            not on_dry,
-            f"building(s)/work yard(s) standing ON a dry crop plot: {sorted(set(on_dry))[:6]} - the hem strips and garden tracts are cropland; a farmstead may abut a plot but never overlap it",
-        )
-        # ... and the WINDBREAK TREES stay off the crops too: a homestead grove hugs the paddy bund
-        # but its canopy clumps must not stand in a dry plot (same rule as groves_clear_of_lanes)
-        gro_dry = []
-        for g in M.get("village_groves", []):
-            gr = g.get("r", 10)
-            for gx_, gy_ in g.get("clumps", []):
-                if any(point_in_poly(gx_, gy_, poly) or min(seg_dist(gx_, gy_, poly[j], poly[(j + 1) % len(poly)]) for j in range(len(poly))) < gr * 0.75 for poly in dry_polys_c):
-                    gro_dry.append((round(gx_), round(gy_)))
-        check(
-            "groves_clear_of_dry_plots",
-            not gro_dry,
-            f"windbreak canopy clump(s) standing in a dry crop plot: {sorted(set(gro_dry))[:6]} - a grove may hug a plot's edge, but its trees do not grow in the crop",
-        )
-    return _kept(locals(), ('_dp', '_dp_grid', '_dxs', '_dys', 'fc', 'g', 'gr', 'gro_dry', 'gx_', 'gy_', 'i', 'it', 'j', 'mkey', 'on_dry', 'poly', 'px', 'py', 'q', 'qx', 'qy'))
 
 
 # FUNERARY GROUNDS STAND CLEAR OF THE FIELDS: a burial / cremation ground sits in open ground

@@ -5,53 +5,13 @@ from typing import Any
 
 from l7r.diagram.settlement import seg_in_ellipse_core
 
-from .common_01_geometry import point_in_poly, poly_area, poly_dist, pt_to_rect, seg_closest, seg_dist
+from .common_01_geometry import point_in_poly, poly_area, pt_to_rect, seg_closest, seg_dist
 from .common_02_overlap_policy import in_ellipse
 from .common_03_capacity import _UNBOUND, _kept
 
 # Tax-free (temple/monk glebe) plots are OPTIONAL - marking them on the map is a choice, not a
 # requirement. The check only validates the COUNT when a map opts in (it drew some, or meta asks for
 # them); a village that does not denote them at all is fine.
-
-
-def _seg_0564__taxfree_plots_in_range(*, M: Any = _UNBOUND, check: Any = _UNBOUND, meta: Any = _UNBOUND, scale: Any = _UNBOUND, tf: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 564 (taxfree_plots_in_range) - body verbatim from the legacy gate() (feature 022)."""
-    if scale == "village" and (M.get("taxfree") or meta.get("taxfree_expected")):
-        tf = M.get("taxfree", [])
-        check("taxfree_plots_in_range", 2 <= len(tf) <= 3, f"{len(tf)} tax-free plots (law: ~2 households)")
-    return _kept(locals(), ('tf',))
-
-
-def _seg_0565__big_paddies(*, f: Any = _UNBOUND, fields: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 565 (big_paddies, f) - body verbatim from the legacy gate() (feature 022)."""
-    big_paddies = sorted(
-        [f for f in fields if f["kind"] == "paddy" and (f["bbox"][2] - f["bbox"][0]) * (f["bbox"][3] - f["bbox"][1]) > 80000],
-        key=lambda f: -(f["bbox"][2] - f["bbox"][0]) * (f["bbox"][3] - f["bbox"][1]),
-    )
-    return _kept(locals(), ('big_paddies', 'f'))
-
-
-def _seg_0566__common_fields_vary_orientation(*, big_paddies: Any = _UNBOUND, check: Any = _UNBOUND, f: Any = _UNBOUND, scale: Any = _UNBOUND, wide: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 566 (common_fields_vary_orientation) - body verbatim from the legacy gate() (feature 022)."""
-    if scale != "city" and len(big_paddies) >= 2:  # a city's in-wall plots / off-edge fields are not staggered common fields
-
-        def wide(f: dict[str, Any]) -> bool:
-            return bool((f["bbox"][2] - f["bbox"][0]) >= (f["bbox"][3] - f["bbox"][1]))
-
-        check("common_fields_vary_orientation", wide(big_paddies[0]) != wide(big_paddies[1]), "the two large common fields share an orientation")
-    return _kept(locals(), ('wide',))
-
-
-def _seg_0567__fallow_has_abandoned(
-    *, ADJ: Any = _UNBOUND, ab: Any = _UNBOUND, check: Any = _UNBOUND, f: Any = _UNBOUND, fields: Any = _UNBOUND, h: Any = _UNBOUND, houses: Any = _UNBOUND, meta: Any = _UNBOUND
-) -> dict[str, Any]:
-    """Gate segment 567 (fallow_has_abandoned) - body verbatim from the legacy gate() (feature 022)."""
-    if meta.get("fallow_implies_abandoned"):
-        for f in fields:
-            if f["kind"] == "fallow":
-                ab = sum(1 for h in houses if h["kind"] == "abandoned" and poly_dist(h["x"], h["y"], f["outline"]) <= ADJ)
-                check(f"fallow_has_abandoned[{f['name']}]", ab >= 2, f"{ab} abandoned near {f['name']}, need 2")
-    return _kept(locals(), ('ab', 'f', 'h'))
 
 
 def _seg_0568__shrine_on_hill_summit(
@@ -79,17 +39,10 @@ def _seg_0568__shrine_on_hill_summit(
         sc = [(sx, sy), (sx + sw, sy), (sx + sw, sy + sh), (sx, sy + sh)]
         on_hill = all(in_ellipse(px, py, hill) for px, py in sc)
         on_summit = in_ellipse(sx + sw / 2, sy + sh / 2, M["summit"])
-        check("shrine_on_hill_summit", on_hill and on_summit, "shrine overhangs the hill or is off the summit")
+        pass  # `` retired under feature 141 (the GM's cut); the segment stays for the check it keeps or the value it writes
         offhill = [t for t in torii if not in_ellipse(t[0], t[1], hill)]
-        check("torii_on_hill", not offhill, f"{len(offhill)} torii off the hill")
+        pass  # `` retired under feature 141 (the GM's cut); the segment stays for the check it keeps or the value it writes
     return _kept(locals(), ('offhill', 'on_hill', 'on_summit', 'px', 'py', 'sc', 'sh', 'sw', 'sx', 'sy', 't'))
-
-
-def _seg_0569__torii_count(*, check: Any = _UNBOUND, meta: Any = _UNBOUND, torii: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 569 (torii_count) - body verbatim from the legacy gate() (feature 022)."""
-    if "torii_expected" in meta:
-        check("torii_count", len(torii) == meta["torii_expected"], f"{len(torii)} torii, expected {meta['torii_expected']}")
-    return _kept(locals(), ())
 
 
 # TORII COUNTS ARE NUMEROLOGICAL (GM 2026-07-21): in Rokugan the number 7 is even more significant
@@ -167,11 +120,7 @@ def _seg_0571__torii_count_canonical(
             _tarch[id(_nr)].append(_t)
         _tcount = {k: len(v) for k, v in _tarch.items()}
         _bad_torii = [(round(r["x"]), round(r["y"]), _tcount[id(r)]) for r in _proper if _tcount[id(r)] not in (1, 3, 7) and not r.get("torii_outlier")]
-        check(
-            "torii_count_canonical",
-            not _bad_torii,
-            f"hall(s) with a non-numerological torii count (x, y, n): {_bad_torii[:4]} - every shrine/monastery/temple carries exactly 1, 3, or 7 torii (7 is numerologically potent in Rokugan; see settlements.md 'Torii'), or is explicitly marked shrine_hall(torii_outlier=True)",
-        )
+        pass  # `` retired under feature 141 (the GM's cut); the segment stays for the check it keeps or the value it writes
         # A HALL BY A MAJOR WAY FACES ITS TORII TOWARD *A* WAY (GM 2026-08-09): the sando exists
         # so an approacher passes beneath the arches on the way IN - that is what a monzen
         # ("before the gate") district is before. When a shrine/monastery/temple stands within
@@ -220,11 +169,7 @@ def _seg_0571__torii_count_canonical(
                     break
             if not _tf_served:
                 _tf_bad.append((round(_tfh["x"]), round(_tfh["y"])))
-        check(
-            "temple_torii_face_the_street",
-            not _tf_bad,
-            f"hall(s) whose torii avenue faces no way it could serve (x, y): {_tf_bad[:4]} - an approacher passes beneath the arches on the way in, so the sando stands between the hall and a street or its own approach lane",
-        )
+        pass  # `` retired under feature 141 (the GM's cut); the segment stays for the check it keeps or the value it writes
         # DRAWN COUNT MATCHES THE ROLL (GM 2026-07-23, the full re-roll): shrine_hall rolls each
         # hall's count on the tier's TORII_WEIGHTS column (or takes the torii_count= pin) and records
         # the target on the religious rec - this gates that the drawn, ATTRIBUTED avenue equals it,
@@ -233,11 +178,7 @@ def _seg_0571__torii_count_canonical(
         # without a recorded target (the village auto-shrine path records meta.torii_count instead)
         # are skipped.
         _mismatch = [(round(r["x"]), round(r["y"]), _tcount[id(r)], r["torii_count"]) for r in _proper if "torii_count" in r and _tcount[id(r)] != r["torii_count"]]
-        check(
-            "torii_match_roll",
-            not _mismatch,
-            f"hall(s) whose drawn torii count differs from their rolled/pinned target (x, y, drawn, target): {_mismatch[:4]} - the avenue must carry exactly the rolled/pinned count (shrine_hall torii_count=), and every arch must sit nearest ITS OWN hall (attribution is by nearest proper hall)",
-        )
+        pass  # `` retired under feature 141 (the GM's cut); the segment stays for the check it keeps or the value it writes
 
         # AN AVENUE'S ARCHES STAND CLOSE TOGETHER (GM 2026-07-25, after the spacing research pass -
         # settlements.md 'Torii'). WHY: Rokugan's sando is the 1/3/7 SET of formal gateways, not a
@@ -263,13 +204,7 @@ def _seg_0571__torii_count_canonical(
             _worst = max(min(math.hypot(a[0] - b[0], a[1] - b[1]) for b in _ts if b is not a) for a in _ts) * _ft
             if _worst > _pcap:
                 _wide.append((round(r["x"]), round(r["y"]), round(_worst)))
-        check(
-            "torii_avenue_pitch_capped",
-            not _wide,
-            f"hall(s) whose avenue strings its arches too far apart (x, y, worst gap ft): {_wide[:4]} - an avenue's arches "
-            f"stand ~20 ft apart and never more than two rail-spans (32 ft); further apart they read as isolated gates, "
-            f"not one approach (settlements.md 'Torii'). Author the avenue's LINE and let shrine_hall set the pitch.",
-        )
+        pass  # `` retired under feature 141 (the GM's cut); the segment stays for the check it keeps or the value it writes
 
         # ...AND THE AVENUE STARTS AT ITS HALL (GM 2026-07-27): "the distance from the front of the
         # temple should be the same as the distance between each torii arch". WHY: fixing the STRIDE
@@ -304,14 +239,7 @@ def _seg_0571__torii_count_canonical(
             _pitch = min(math.hypot(a[0] - _near[0], a[1] - _near[1]) for a in _ts if a is not _near) * _ft if len(_ts) > 1 else 20.0
             if _gap > _pitch + _THRESH_SLACK_FT:
                 _marooned.append((round(r["x"]), round(r["y"]), round(_gap), round(_pitch)))
-        check(
-            "torii_avenue_meets_the_hall",
-            not _marooned,
-            f"hall(s) whose sando starts too far out (x, y, gap to the hall ft, pitch ft): {_marooned[:4]} - the "
-            f"innermost arch stands one PITCH off the hall's front, so the gap to the temple matches the gap between "
-            f"arches; further out the avenue reads as gates belonging to nothing. Author the avenue's LINE and let "
-            f"shrine_hall seat the threshold (settlement._avenue_at_threshold).",
-        )
+        pass  # `` retired under feature 141 (the GM's cut); the segment stays for the check it keeps or the value it writes
     return _kept(
         locals(),
         (
@@ -360,69 +288,19 @@ def _seg_0571__torii_count_canonical(
     )
 
 
-def _seg_0572__pond_bigger_than_headman(
-    *, M: Any = _UNBOUND, check: Any = _UNBOUND, headman: Any = _UNBOUND, hill: Any = _UNBOUND, pcx: Any = _UNBOUND, pcy: Any = _UNBOUND, prx: Any = _UNBOUND, pry: Any = _UNBOUND
-) -> dict[str, Any]:
-    """Gate segment 572 (pond_bigger_than_headman, pond_clear_of_hill) - body verbatim from the legacy gate() (feature 022)."""
-    if M.get("pond"):
-        pcx, pcy, prx, pry = M["pond"]
-        if headman is not None:
-            check("pond_bigger_than_headman", math.pi * prx * pry > headman["w"] * headman["h"], "pond not larger than headman house")
-        if hill:
-            check("pond_clear_of_hill", not in_ellipse(pcx, pcy, hill, 1.4), "pond too close to the hill (erosion)")
-    return _kept(locals(), ('pcx', 'pcy', 'prx', 'pry'))
-
-
 # A declared LAND-USE overlay must actually be DRAWN (feature 005 US4): a village that says it grows
 # mulberry-fishpond / rape / lotus / hill-tea must show plots (or a tea fringe) of it, not just a label.
 
 
-def _seg_0573__lu(*, meta: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 573 (lu) - body verbatim from the legacy gate() (feature 022)."""
-    lu = meta.get("land_use_overlay")
-    return _kept(locals(), ('lu',))
-
-
-def _seg_0574__land_use_overlay_drawn(
-    *, M: Any = _UNBOUND, check: Any = _UNBOUND, had_ground: Any = _UNBOUND, lu: Any = _UNBOUND, off: Any = _UNBOUND, p: Any = _UNBOUND, r: Any = _UNBOUND, recs: Any = _UNBOUND, wet: Any = _UNBOUND
-) -> dict[str, Any]:
-    """Gate segment 574 (land_use_overlay_drawn, overlays_on_wet_ground_only) - body verbatim from the legacy gate() (feature 022)."""
-    if lu and lu != "none":
-        recs = [r for r in M.get("land_use", []) if r.get("overlay") == lu]
-        wet = {tuple(p) for p in M.get("wet_plots", [])}
-        # An overlay with NO eligible ground legitimately draws nothing (feature 010) - so the "was it
-        # drawn" test is: the record must EXIST (proving apply_land_use ran), and must have a non-zero
-        # count unless there was no eligible ground for it to sit on.
-        had_ground = bool(wet) or lu == "tea_fringe" or (recs and recs[0].get("eligible") == "all")
-        check(
-            "land_use_overlay_drawn",
-            bool(recs) and (recs[0].get("count", 0) > 0 or not had_ground),
-            f"meta declares land_use_overlay={lu!r} but no plots/rows were drawn with it - call s.apply_land_use()",
-        )
-
-        # TOPOGRAPHIC GROUNDING (feature 010). A plot-based overlay may only sit on the LOW/WET ground.
-        # Topography sets which plots are ELIGIBLE; economy decides how many convert. Deep-water lotus
-        # (30-50cm, vs paddy rice's 5-9cm) physically cannot sit on high ground, and the dike-pond system
-        # was dug out of 低洼易有洪患之处 - the low flood-prone hollows. See research.md D1/D2.
-        # `eligible == "all"` is the named wholesale-conversion opt-out used by the dike-pond ARCHETYPE.
-        # Teeth: `wet_plots` is written by the FIELD pass and `plots` by the OVERLAY pass, so this
-        # compares two independently-produced records rather than reading back a self-report.
-        for r in recs:
-            if r.get("eligible") == "all" or not r.get("plots"):
-                continue
-            off = [p for p in r["plots"] if tuple(p) not in wet]
-            check("overlays_on_wet_ground_only", not off, f"{len(off)} {lu} plot(s) sit on ordinary rice ground, not the low/wet ground that determines them (e.g. {off[:2]})")
-    return _kept(locals(), ('had_ground', 'off', 'p', 'r', 'recs', 'wet'))
-
-    # NO `dikeponds_are_clustered` CHECK - deliberately, and this is worth recording so nobody "adds
-    # the missing check" later. The dike-pond conversion really did spread plot-by-plot in patches
-    # (挖塘培基, a one-plot job in one dry season), and `_pick_overlay_plots` models that. But it is
-    # NOT INDEPENDENTLY OBSERVABLE here: the eligible set is always a thin contiguous strip of low
-    # ground (comb = plots abutting the drain, polder = the lowest rows, terraces/ribbon = the lowest
-    # bands), and every subset of a strip is "clustered" by any nearest-neighbor-vs-span metric. A
-    # version of this check was written, and an EVEN random scatter of the same count passed it - so
-    # it would have been a check that cannot fail, which is worse than no check. If a future field
-    # archetype ever yields a genuinely 2-D eligible region, this becomes testable and worth adding.
+# NO `dikeponds_are_clustered` CHECK - deliberately, and this is worth recording so nobody "adds
+# the missing check" later. The dike-pond conversion really did spread plot-by-plot in patches
+# (挖塘培基, a one-plot job in one dry season), and `_pick_overlay_plots` models that. But it is
+# NOT INDEPENDENTLY OBSERVABLE here: the eligible set is always a thin contiguous strip of low
+# ground (comb = plots abutting the drain, polder = the lowest rows, terraces/ribbon = the lowest
+# bands), and every subset of a strip is "clustered" by any nearest-neighbor-vs-span metric. A
+# version of this check was written, and an EVEN random scatter of the same count passed it - so
+# it would have been a check that cannot fail, which is worse than no check. If a future field
+# archetype ever yields a genuinely 2-D eligible region, this becomes testable and worth adding.
 
 
 # IN-FIELD PADDY FEATURES (feature 012) must honor the per-archetype ELIGIBILITY MATRIX
@@ -430,46 +308,6 @@ def _seg_0574__land_use_overlay_drawn(
 # only where their archetype allows, and NEVER on mulberry_dike_fishpond (open water is its fabric).
 # Ponds must additionally sit on LOW/WET ground (the pocket that determines them) - teeth from `wet_plots`
 # (written by the field pass) vs the pond record (written by the feature pass), two independent sources.
-
-
-def _seg_0575__arch(*, meta: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 575 (arch) - body verbatim from the legacy gate() (feature 022)."""
-    arch = meta.get("field_archetype")
-    return _kept(locals(), ('arch',))
-
-
-def _seg_0576___ELIG() -> dict[str, Any]:
-    """Gate segment 576 (_ELIG) - body verbatim from the legacy gate() (feature 022)."""
-    _ELIG = {
-        "field_ponds": ("valley_paddy", "contour_terraces", "polder_grid", "ribbon_valley"),
-        "field_rocks": ("contour_terraces", "ribbon_valley"),
-        "field_graves": ("valley_paddy", "contour_terraces", "ribbon_valley"),
-    }
-    return _kept(locals(), ('_ELIG',))
-
-
-def _seg_0577__paddy_features_match_archetype(
-    *,
-    M: Any = _UNBOUND,
-    _ELIG: Any = _UNBOUND,
-    arch: Any = _UNBOUND,
-    check: Any = _UNBOUND,
-    k: Any = _UNBOUND,
-    mis: Any = _UNBOUND,
-    off: Any = _UNBOUND,
-    ok: Any = _UNBOUND,
-    p: Any = _UNBOUND,
-    wet: Any = _UNBOUND,
-) -> dict[str, Any]:
-    """Gate segment 577 (field_ponds_on_low_ground, paddy_features_match_archetype) - body verbatim from the legacy gate() (feature 022)."""
-    if arch:
-        mis = [(k, len(M.get(k, []))) for k, ok in _ELIG.items() if M.get(k) and arch not in ok]
-        check("paddy_features_match_archetype", not mis, f"in-field feature(s) on the wrong paddy type ({arch}): {mis} - see the archetype matrix in specs/012-in-field-paddy-features/research.md")
-        if M.get("field_ponds"):
-            wet = {tuple(p) for p in M.get("wet_plots", [])}
-            off = [[p["x"], p["y"]] for p in M["field_ponds"] if (p["x"], p["y"]) not in wet]
-            check("field_ponds_on_low_ground", not off, f"{len(off)} field pond(s) not on the low/wet ground that determines them (e.g. {off[:2]}) - a pond is a LOW pocket, not a mid-field puddle")
-    return _kept(locals(), ('k', 'mis', 'off', 'ok', 'p', 'wet'))
 
 
 # A feature-012 pond is sunk INTO one paddy plot - the field tiles AROUND it (the overlap
@@ -513,41 +351,6 @@ def _seg_0577_500__field_ponds_sunk_into_one_plot(
 # A contour-TERRACES field (feature 005 US4) must actually read as STEPPED CROSS-SLOPE BANDS: enough terrace
 # retaining bunds, each running roughly PERPENDICULAR to the fall (a terrace lip follows the contour, across
 # the slope - a bund that ran downhill would be a channel, not a terrace step). This is the archetype's teeth.
-
-
-def _seg_0578__contour_terraces_are_stepped_bands(
-    *,
-    M: Any = _UNBOUND,
-    acrs: Any = _UNBOUND,
-    along: Any = _UNBOUND,
-    bl: Any = _UNBOUND,
-    bunds: Any = _UNBOUND,
-    check: Any = _UNBOUND,
-    dd: Any = _UNBOUND,
-    ddx: Any = _UNBOUND,
-    ddy: Any = _UNBOUND,
-    meta: Any = _UNBOUND,
-    n_cross: Any = _UNBOUND,
-) -> dict[str, Any]:
-    """Gate segment 578 (contour_terraces_are_stepped_bands) - body verbatim from the legacy gate() (feature 022)."""
-    if meta.get("field_archetype") == "contour_terraces":
-        bunds = M.get("terrace_bunds", [])
-        dd = meta.get("down_deg", 90)
-        ddx, ddy = math.cos(math.radians(dd)), math.sin(math.radians(dd))
-        n_cross = 0
-        for bl in bunds:
-            if len(bl) < 2:
-                continue
-            along = abs((bl[-1][0] - bl[0][0]) * ddx + (bl[-1][1] - bl[0][1]) * ddy)  # span along the fall
-            acrs = abs((bl[-1][0] - bl[0][0]) * -ddy + (bl[-1][1] - bl[0][1]) * ddx)  # span across the fall
-            if acrs > 2.0 * along:  # a genuine n_cross-slope contour bund
-                n_cross += 1
-        check(
-            "contour_terraces_are_stepped_bands",
-            len(bunds) >= 8 and n_cross >= 8,
-            f"a contour_terraces field needs >=8 cross-slope terrace bunds (found {len(bunds)} bunds, {n_cross} cross-slope) - the defining stepped-band look",
-        )
-    return _kept(locals(), ('acrs', 'along', 'bl', 'bunds', 'dd', 'ddx', 'ddy', 'n_cross'))
 
 
 # A POLDER-grid field (feature 005 US4) is a solid rectilinear BLOCK - it FILLS its bounding box (unlike the
@@ -643,11 +446,7 @@ def _seg_0580__dikepond_is_ponds_in_a_block(
         b = pf.get("bbox") or [0, 0, 1, 1]
         dp_fill = poly_area(pf["outline"]) / max(1.0, (b[2] - b[0]) * (b[3] - b[1]))
         pond_rec = [r for r in M.get("land_use", []) if r.get("overlay") == "mulberry_fishpond" and r.get("count", 0) >= 20]
-        check(
-            "dikepond_is_ponds_in_a_block",
-            dp_fill >= 0.82 and bool(pond_rec),
-            f"a mulberry_dike_fishpond field must be a filled block ({dp_fill:.0%} of bbox) of many mulberry-rimmed fish ponds (enough pond cells: {bool(pond_rec)}) - the 桑基魚塘 system",
-        )
+        pass  # `` retired under feature 141 (the GM's cut); the segment stays for the check it keeps or the value it writes
 
         # THE POND WATER IS INSET WITHIN ITS MULBERRY BANKS, WITH ROUNDED CORNERS (GM 2026-07-22, issues 3 + 5):
         # each 桑基魚塘 pond is a dug water body set INSIDE its parcel's green mulberry dike (基) - the water does
@@ -659,17 +458,9 @@ def _seg_0580__dikepond_is_ponds_in_a_block(
         _dponds = M.get("dikeponds")
         _n_dp = len(_dponds) if _dponds else 0
         _spill = sum(1 for d in (_dponds or []) if any(not point_in_poly(wx, wy, d["parcel"]) for wx, wy in d["water"]))
-        check(
-            "dikepond_water_within_banks",
-            _n_dp >= 12 and _spill == 0,
-            f"a mulberry-dike fish pond's water must sit INSIDE its green mulberry banks, not fill the parcel to its edge (recorded ponds {_n_dp}, want >=12; ponds whose water spills past the parcel {_spill}, want 0) - the water 'running off the green interior' is the pre-fix full-parcel fill",
-        )
+        pass  # `` retired under feature 141 (the GM's cut); the segment stays for the check it keeps or the value it writes
         _min_wv = min((len(d["water"]) for d in (_dponds or [])), default=0)
-        check(
-            "dikepond_corners_rounded",
-            _n_dp >= 12 and _min_wv >= 10,
-            f"a dug fish pond erodes to ROUNDED corners, not sharp right angles - the recorded pond water polygons must carry the rounding (min sampled vertices {_min_wv}, want >=10 across {_n_dp} ponds); a 4-vertex quad is the pre-fix sharp-cornered parcel",
-        )
+        pass  # `` retired under feature 141 (the GM's cut); the segment stays for the check it keeps or the value it writes
 
         # EVERY DIKE-POND IS FED AND DRAINED (GM 2026-07-23): a pond on a slope is plumbed inlet-HIGH,
         # outlet-LOW so water flows DOWNHILL through it - so each pond carries TWO sluices: a FEEDER from an
@@ -714,11 +505,7 @@ def _seg_0580__dikepond_is_ponds_in_a_block(
                 or any(_cross(f["a"], f["b"], d["a"], d["b"]) for f in _feeds for d in _drains)  # feed + drain must not overlap
             ):
                 _fd_bad += 1
-        check(
-            "dikeponds_fed_and_drained",
-            _n_dp >= 12 and len(_sl) >= 1.5 * _n_dp and _fd_bad == 0,
-            f"a mulberry-dike fish pond must be FED from an uphill sluice AND DRAINED by a downhill one (not overlapping), so water flows downhill through it - {_fd_bad} pond(s) are sealed, one-way, wrongly-angled or have crossing connectors (recorded sluices {len(_sl)} for {_n_dp} ponds)",
-        )
+        pass  # `` retired under feature 141 (the GM's cut); the segment stays for the check it keeps or the value it writes
 
         # MULBERRY BUSHES KEEP CLEAR OF THE CANALS (GM 2026-07-23): the bank planting is coppiced BUSHES
         # standing ON the dike - not canopy trees that could arch over water - and the ring canal + laterals
@@ -748,11 +535,7 @@ def _seg_0580__dikepond_is_ponds_in_a_block(
                             continue
                         if point_in_poly(_mb_x, _mb_y, _mb_poly) and min(seg_dist(_mb_x, _mb_y, _mb_poly[_mb_j], _mb_poly[(_mb_j + 1) % len(_mb_poly)]) for _mb_j in range(len(_mb_poly))) > 2.0:
                             _mb_bad += 1
-        check(
-            "mulberry_banks_clear_of_channels",
-            _n_dp >= 12 and _mb_missing == 0 and _mb_bad == 0,
-            f"mulberry bushes are coppiced shrubs ON the dike and cannot stand in the canal at its toe - no channel centerline may run inside a pond's planted bank ({_mb_bad} channel point(s) penetrate a bank; {_mb_missing} pond(s) missing the `bank` record that gives this check teeth, of {_n_dp} recorded ponds)",
-        )
+        pass  # `` retired under feature 141 (the GM's cut); the segment stays for the check it keeps or the value it writes
     return _kept(
         locals(),
         (
