@@ -875,3 +875,151 @@ def test_web_rejoinable_says_whether_the_touch_pass_will_close_a_new_piece() -> 
     wall = [[(150.0, 2.0), (350.0, 2.0), (350.0, 8.0), (150.0, 8.0)]]  # between the stub and the spine
     assert web_rejoinable([spine, near], wall, [], []) is False, "in reach, but no clear link"
     assert web_rejoinable([spine], [], [], []) is True, "one piece has nothing to rejoin"
+
+
+# ---------------------------------------------------------------------------------------------
+# THE WEB PASSES, ASKED WITH PLAIN DICTS (feature 146, GM 2026-08-28 on testability). `_touch_junctions`
+# and `_join_piece` take a Settlement, but between them they touch only `M` and `reink_lane` - so a
+# four-line stub reaches arms that a rolled map only enters on the seeds where the geometry conspires.
+# ---------------------------------------------------------------------------------------------
+
+
+class _StubWeb:
+    """The two members of `Settlement` the web passes actually use."""
+
+    def __init__(self, **M: object) -> None:
+        self.M: dict = {"meta": {}, "lanes": [], "houses": [], **M}
+        self.reinked: list[int] = []
+
+    def reink_lane(self, i: int) -> None:
+        self.reinked.append(i)
+
+
+def test_touch_junctions_records_an_orphan_it_can_neither_link_nor_drop() -> None:
+    """The LAST rung of the orphan ladder, and the one a rolled map almost never reaches.
+
+    A piece too far to link (past `_ORPHAN_REACH` = 150 ft) is normally DROPPED - unless dropping it
+    would strand a farmhouse, and then it is kept, visibly broken, with the count in `meta`. The
+    comment at that line says why: deleting it once stranded a house, `farmhouses_reach_a_way` failed,
+    and the driver silently re-rolled the whole map. So the arm has to keep working."""
+    from l7r.diagram.hamletgen.ways import _touch_junctions
+
+    s = _StubWeb(
+        lanes=[
+            {"pts": [[0.0, 0.0], [200.0, 0.0]], "w": 3, "connector": True},
+            {"pts": [[0.0, 900.0], [120.0, 900.0]], "w": 3},  # far past _ORPHAN_REACH from the spine
+        ],
+        houses=[{"x": 60.0, "y": 905.0}],  # served by the orphan alone: 5 ft from it, 900 from the spine
+    )
+    _touch_junctions(s, [], [], [], only_orphans=False)  # type: ignore[arg-type]
+    assert s.M["meta"].get("lane_orphans") == 1, "the piece is KEPT and counted, not deleted under the house"
+    assert len(s.M["lanes"]) == 2, "nothing was dropped"
+
+
+def test_touch_junctions_drops_an_unreachable_piece_that_strands_nobody() -> None:
+    """The rung above: same geometry, no house depending on the fragment, so it goes - record and ink
+    together (`lane_fragments_dropped`), because a lane record nothing draws is the defect."""
+    from l7r.diagram.hamletgen.ways import _touch_junctions
+
+    s = _StubWeb(
+        lanes=[
+            {"pts": [[0.0, 0.0], [200.0, 0.0]], "w": 3, "connector": True},
+            {"pts": [[0.0, 900.0], [120.0, 900.0]], "w": 3},
+        ],
+        houses=[{"x": 60.0, "y": 5.0}],  # on the spine, not the fragment
+    )
+    _touch_junctions(s, [], [], [], only_orphans=False)  # type: ignore[arg-type]
+    assert s.M["meta"].get("lane_fragments_dropped") == 1
+    assert len(s.M["lanes"]) == 1, "the husk goes with the ink"
+
+
+def test_join_piece_prepends_a_link_that_meets_the_piece_at_its_HEAD() -> None:
+    """`_join_piece` appends when the link starts at the piece's tail and PREPENDS, reversed, when it
+    starts at the head. Only the append arm is exercised by the live hamlets - which arm a roll takes
+    is an accident of which end of a stranded stub happened to face the spine."""
+    from l7r.diagram.hamletgen.ways import _join_piece
+
+    piece = [(100.0, 100.0), (160.0, 100.0)]
+    s = _StubWeb(lanes=[{"pts": [[100.0, 100.0], [160.0, 100.0]], "w": 3}])
+    _join_piece(s, s.M["lanes"], 0, piece, (100.0, 100.0), [(100.0, 100.0), (40.0, 100.0)], [], [], [], [])  # type: ignore[arg-type]
+    pts = s.M["lanes"][0]["pts"]
+    assert s.reinked == [0]
+    assert pts[0] == [40.0, 100.0], "the link is reversed onto the FRONT, so the lane still reads end to end"
+    assert pts[-1] == [160.0, 100.0]
+
+
+def test_commit_lane_puts_a_rewrite_back_when_it_breaks_the_web_beyond_repair() -> None:
+    """The revert arm - the reason `commit_lane` exists (feature 137 T03) and the one a clean roll never
+    enters. A cut that splits the web is allowed ONLY while the touch pass could close it again."""
+    from l7r.diagram.hamletgen.ways import commit_lane
+
+    lanes: list = [
+        {"pts": [[0.0, 0.0], [400.0, 0.0]], "w": 3, "connector": True},
+        {"pts": [[200.0, 0.0], [200.0, 60.0], [400.0, 60.0]], "w": 3},  # meets the spine at its head
+    ]
+    reinked: list[int] = []
+    # cutting the second lane back to its far half strands it 200 ft from anything: one more piece,
+    # and no end within the stub reach of another tread, so the touch pass could not mend it
+    assert not commit_lane(lanes, 1, [[900.0, 900.0], [980.0, 900.0]], [], [], [], reinked.append)
+    assert lanes[1]["pts"] == [[200.0, 0.0], [200.0, 60.0], [400.0, 60.0]], "put back exactly as it was"
+    assert reinked == [], "and never re-inked"
+
+
+def test_commit_lane_accepts_a_rewrite_that_keeps_the_web_whole() -> None:
+    from l7r.diagram.hamletgen.ways import commit_lane
+
+    lanes: list = [
+        {"pts": [[0.0, 0.0], [400.0, 0.0]], "w": 3, "connector": True},
+        {"pts": [[200.0, 0.0], [200.0, 60.0], [400.0, 60.0]], "w": 3},
+    ]
+    reinked: list[int] = []
+    assert commit_lane(lanes, 1, [[200.0, 0.0], [200.0, 40.0]], [], [], [], reinked.append)
+    assert reinked == [1]
+
+
+def test_bowtie_cut_takes_the_short_tail_the_short_head_or_neither() -> None:
+    """Which arm a roll takes is an accident of the direction the lane was recorded in, so both are asked
+    directly. `_ARM_FT` is 40 ft: a stray tail past a crossing is cut back TO the crossing."""
+    from l7r.diagram.hamletgen.ways import bowtie_cut
+
+    pts = [(0.0, 0.0), (100.0, 0.0), (120.0, 0.0)]  # crossing inside segment 1, near its far end
+    assert bowtie_cut(pts, 1, (95.0, 0.0)) == [(0.0, 0.0), (100.0, 0.0), (95.0, 0.0)][:2] + [(95.0, 0.0)]
+
+    head = [(0.0, 0.0), (20.0, 0.0), (400.0, 0.0)]  # the crossing sits 5 ft into a 380 ft second leg
+    assert bowtie_cut(head, 1, (25.0, 0.0)) == [(25.0, 0.0), (400.0, 0.0)], "the short HEAD is the stray"
+
+    long_both = [(0.0, 0.0), (300.0, 0.0), (600.0, 0.0)]
+    assert bowtie_cut(long_both, 1, (450.0, 0.0)) is None, "neither side is a stray tail; leave the lane alone"
+
+
+def test_push_clear_of_fabric_returns_the_last_point_tried_when_the_cluster_rings_it_round() -> None:
+    """The bound is what makes the last line a real branch: a gateway that cannot get clear is still
+    drawn from, because a track has to start somewhere. No live hamlet is that crowded."""
+    from l7r.diagram.hamletgen.ways import push_clear_of_fabric
+
+    # a corridor the whole walk stays inside: every point tried is within 5 px of its long edges,
+    # under the 16 px the track keeps, so all 24 steps are refused
+    corridor = [(-100.0, -5.0), (5000.0, -5.0), (5000.0, 5.0), (-100.0, 5.0)]
+    got = push_clear_of_fabric((0.0, 0.0), (1.0, 0.0), 10.0, [corridor])
+    assert got == pytest.approx((10.0 + 24 * 6.0, 0.0)), "24 steps of 6 px, then hand back where it stopped"
+
+    clear = push_clear_of_fabric((0.0, 0.0), (1.0, 0.0), 10.0, [])
+    assert clear == pytest.approx((10.0, 0.0)), "nothing in the way: the first point tried"
+
+
+def test_pull_back_to_service_leaves_an_end_that_already_reaches_a_way() -> None:
+    """`serves` - the tread's own reach test. Whether it is ever ASKED depends on where the connector
+    stops, so on the live hamlets it never was."""
+    run = [(0.0, 0.0), (100.0, 0.0), (200.0, 0.0)]
+    segs = [((200.0, -10.0), (200.0, 10.0))]  # a lane crossing the tread's far end
+    out = _pull_back_to_service(run, segs, [], lambda _q: True)
+    assert out[-1] == pytest.approx((200.0, 0.0)), "the end stands ON a way; nothing is pulled back"
+
+
+def test_crosses_fabric_sees_a_corner_that_stands_beside_a_segment_without_crossing_it() -> None:
+    """The measure is BOTH shapes: a steading beside the MIDDLE of a long segment crosses nothing and is
+    near no vertex, which is the commonest case there is and the one the first version was blind to."""
+    run = [(0.0, 0.0), (400.0, 0.0)]
+    beside = [(200.0, 3.0), (210.0, 3.0), (210.0, 13.0), (200.0, 13.0)]  # 3 px off the middle of the run
+    assert _crosses_fabric(run, [beside], 8.0), "inside the gap, though nothing crosses and no vertex is near"
+    assert not _crosses_fabric(run, [[(200.0, 60.0), (210.0, 60.0), (210.0, 70.0), (200.0, 70.0)]], 8.0)

@@ -22,3 +22,19 @@ Every task is `research: rendering` unless it says otherwise. No acceptance task
 - [x] T40 re-measured and REPORTED: the floor is **128 lines / 99.13%**, from 373. SC-001 (a green floor) is NOT met, and the spec's status line says so; research R3 classifies every remaining line and `floor-at-close.txt` is the table. The remainder is carried in `future-work/cross-cutting.md` rather than left as an open task here, because an open task blocks every later push and this feature is closed - `research: rendering`
 - [x] T41 `make done` green; `make test-full` green on every test, red only on the hamlet floor (T40) and the ledgered pre-existing global-floor misses; the pool clean and unchanged - `research: rendering`
 - [x] T42 landed on main with no acceptance task (the GM's instruction), and the GM told - before the landing - that the floor is 99.13% rather than green, with what remains and why - `research: rendering`
+
+## Re-opened by the GM, 2026-08-28 - the floor goes GREEN
+
+T40 closed at 99.13% and reported that. The GM read the report and re-opened the remainder in their own
+words: *"anything that is a real test that you think is actually testing a real case, then please add the
+test coverage for it ... as always, you can refactor things in order to make things more testable. For
+example, if something is only available as an inner function in a closure, then you can move it out into
+its own function to make it more unit testable ... please proceed until we are actually back up to
+everything passing and full coverage. at one hundred percent in the place that you currently report as
+99.13%"*. So SC-001 is live again, and the method is named: EXTRACT, then test.
+
+- [x] T50 the paradigm written into the project guidelines - the GM asked *"Is that not something you were already doing? If not, then we might want to update the project guidelines"*, and the honest answer was no: this repository's own commits say *"dropped (nested closure)"*. Root `CLAUDE.md`, above the human-scale clause - `research: rendering`
+- [x] T51 the first three extractions, as the worked examples the guideline cites: `hamletgen/ways.py` `web_pieces` and `web_rejoinable`, `settlement/water_ways.py` `fan_rival`, each with a unit test taking plain dicts and tuples - `research: rendering`
+- [ ] T52 the rest of the extractions and their tests, module by module, against a FRESH measurement (the close-out worklist's line numbers are stale the moment a function is lifted) - `research: rendering`
+- [ ] T53 `make test-full` green on the hamlet floor - SC-001 met at 100%, not reported at 99 - `research: rendering`
+- [ ] T54 landed on main, with the reference map and the pool unchanged by any extraction (a lift that moves a map is a refactor that failed) - `research: rendering`

@@ -582,3 +582,41 @@ def test_fan_rival_spots_a_second_stub_fanning_to_the_same_house() -> None:
     assert fan_rival(rival, (900.0, 900.0), bearing, house, mine, me=1, fan_spread=40.0, fan_bearing=25.0) is False, "too far to be the same fan"
     assert fan_rival(rival, q, bearing, house, mine=10.0, me=1, fan_spread=40.0, fan_bearing=25.0) is False, "the rival is farther from the house than I am"
     assert fan_rival(rival, q, bearing, house, mine, me=0, fan_spread=40.0, fan_bearing=25.0) is False, "a lane is not its own rival"
+
+
+# ---- THE TOWN AND WARD ARMS NO HAMLET ROLLS (feature 146: the hamlet floor covers the whole
+# module, and these three are the branches the scripted hamlets never enter) -------------------
+
+
+def test_a_labeled_town_street_carries_its_caption_beside_the_midpoint():
+    """`street(label=...)` is the only way an avenue gets a name on the sheet; every scripted map
+    calls it without one, so the caption arm went unentered."""
+    s = _town()
+    s.street([(100, 500), (500, 500), (900, 500)], label="Gate Road")
+    assert any("Gate Road" in frag for frag in s.toplabels), "the street's name is inked"
+    assert s.M["town_streets"][-1]["pts"][0] == [100, 500]
+
+
+def test_a_ward_fence_end_far_from_the_wall_is_left_exactly_as_placed():
+    """The end is snapped to the rampart only when it is already ABUTTING it. An end 200 px out is a
+    fence that fails to reach the wall - `city_ward_fence_meets_wall`'s defect to report - and
+    dragging it there silently would hide exactly that."""
+    s = Settlement(1200, 1200, seed=9)
+    s.meta(name="T", scale="city", ftpx=3, down_deg=90)
+    s.M["wall"] = [(100, 100), (1100, 100), (1100, 1100), (100, 1100)]
+    boundary = [(600.0, 400.0), (600.0, 800.0)]  # both ends hundreds of px inside the ring
+    assert s._ward_ends_on_wall(list(boundary)) == boundary, "left exactly as placed"
+
+
+def test_a_ward_cap_at_a_wall_corner_bends_with_the_rampart():
+    """The cap over a fence end FOLLOWS the wall for +/-16 px of arc, folding in any wall VERTEX inside
+    that span. A straight tangent at a corner juts past the bend and reads as a second wall section
+    (Nagahara SW, GM 2026-07) - so an end seated near a corner must produce a cap with a bend in it."""
+    s = Settlement(1200, 1200, seed=9)
+    s.meta(name="T", scale="city", ftpx=3, down_deg=90)
+    s.M["wall"] = [(100, 100), (1100, 100), (1100, 1100), (100, 1100)]
+    s.ward("samurai", [(1098.0, 104.0), (600.0, 400.0)], gates=[])  # first end 4 px off the NE corner
+    caps = s.M["wards"][-1].get("wall_caps") or []
+    assert caps, "an abutting end is capped"
+    bent = [c for c in caps if len(c["pts"]) >= 3 and any(abs(p[0] - 1100) < 2 and abs(p[1] - 100) < 2 for p in c["pts"])]
+    assert bent, "the cap span folded in the wall's own corner vertex, so the cap turns where the rampart turns"

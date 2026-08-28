@@ -255,3 +255,35 @@ def test_no_two_city_submixins_define_the_same_name():
         for b in subs[i + 1 :]:
             overlap = _own_callables(a) & _own_callables(b)
             assert not overlap, f"{a.__name__} and {b.__name__} both define {sorted(overlap)} - MRO would orphan one"
+
+
+# ---- SIDE-AWARE plank caps: `seg_caps` (feature 146 - the arm no live map takes) ------------
+
+
+def test_channel_footbridges_honors_a_per_side_plank_cap():
+    """`seg_caps` maps a ring-canal's `seg` tag to how many planks that side may carry (research
+    2026-07-22: crossings cluster on the settled toe and are absent on the feeder and the drain,
+    because workers cross to the fields they live beside). A cap of 0 means NO plank on that side -
+    the polder gens set it, but no map in the pool rolls a ditch tagged with a zero-capped seg, so
+    both the cap lookup and its refusal went unentered."""
+    s = _crop_settlement()
+    s.M["fields"] = [{"outline": [[50, 120], [850, 120], [850, 280], [50, 280]]}]
+    s.M["field_ditches"] = [
+        {"poly": [[100, 200], [800, 200]], "w": 5, "role": "main", "seg": "drain"},
+        {"poly": [[100, 240], [800, 240]], "w": 5, "role": "main", "seg": "toe"},
+    ]
+    n = s.channel_footbridges(spacing=320, seg_caps={"drain": 0, "toe": 1})
+    assert n == 1, "the drain side is capped to nothing; the toe side takes its single plank"
+    assert all(230 < b["y"] < 250 for b in s.M["bridges"]), "the surviving plank is on the toe"
+
+
+def test_channel_footbridges_refuses_a_plank_whose_deck_would_not_clear_its_water():
+    """The last of the three siting guards. `_plank_reaches_useful_ground` and the house-slide both
+    have live maps behind them; this one only fires where a ditch bends back under its own deck, so
+    the guard is asked directly."""
+    s = _crop_settlement()
+    s.M["fields"] = [{"outline": [[50, 120], [850, 120], [850, 280], [50, 280]]}]
+    s.M["field_ditches"] = [{"poly": [[100, 200], [800, 200]], "w": 5, "role": "main"}]
+    s._deck_clears_its_water = lambda *_a, **_k: False  # type: ignore[method-assign]
+    assert s.channel_footbridges(spacing=320) == 0
+    assert not s.M["bridges"], "a deck that stands in its own water is not drawn at all"

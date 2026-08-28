@@ -448,3 +448,42 @@ def test_every_structures_member_resolves_on_settlement_itself():
     # what consumers actually rely on: the name reaching Settlement, not merely StructuresMixin
     unreachable = sorted(n for n in _STRUCTURES_SURFACE if not hasattr(Settlement, n))
     assert not unreachable, f"not resolvable on Settlement: {unreachable}"
+
+
+# ---------------------------------------------------------------------------------------------
+# EXTRACTED FROM A CLOSURE SO IT COULD BE TESTED (feature 146, GM 2026-08-28). `pick_caption_seat`
+# was `_pick` inside `place_kosatsuba`: reaching its two branches through the placer meant building
+# a settlement whose every caption seat is blocked by a lane, which is why neither branch had a test.
+# Lifted, it takes two callables and two numbers.
+# ---------------------------------------------------------------------------------------------
+
+
+def test_pick_caption_seat_takes_the_nearest_seat_that_clears_the_ways() -> None:
+    from l7r.diagram.settlement.structures.fixtures import pick_caption_seat
+
+    seats = [(100.0, 0.0), (20.0, 0.0), (5.0, 0.0)]
+    # every seat is legal; the two far ones clear the lane bar, the nearest one does not
+    clearance = {(100.0, 0.0): 9.0, (20.0, 0.0): 9.0, (5.0, 0.0): 0.5}
+    got = pick_caption_seat(seats, (0.0, 0.0), lambda _q: 1.0, 99.0, lambda q: clearance[q], 2.0)
+    assert got == (20.0, 0.0), "nearest of the seats that CLEAR, not nearest overall"
+
+
+def test_pick_caption_seat_falls_back_to_the_best_clearance_when_nothing_clears() -> None:
+    """The board is placed even when its caption is hemmed - `labels_clear_of_other_buildings` reports
+    that rather than the siter hiding it - so the fallback arm has to choose, and it chooses the
+    roomiest legal seat regardless of distance."""
+    from l7r.diagram.settlement.structures.fixtures import pick_caption_seat
+
+    seats = [(5.0, 0.0), (200.0, 0.0)]
+    clearance = {(5.0, 0.0): 0.4, (200.0, 0.0): 1.9}
+    got = pick_caption_seat(seats, (0.0, 0.0), lambda _q: 1.0, 99.0, lambda q: clearance[q], 2.0)
+    assert got == (200.0, 0.0), "nothing clears the 2 ft bar, so the roomiest seat wins on clearance alone"
+
+
+def test_pick_caption_seat_keeps_every_seat_when_the_hug_cap_would_leave_none() -> None:
+    """`_legal ... or _seats`: a caption that hugs nothing within the cap still needs a seat."""
+    from l7r.diagram.settlement.structures.fixtures import pick_caption_seat
+
+    seats = [(5.0, 0.0), (9.0, 0.0)]
+    got = pick_caption_seat(seats, (0.0, 0.0), lambda _q: 500.0, 10.0, lambda _q: 8.0, 2.0)
+    assert got in seats

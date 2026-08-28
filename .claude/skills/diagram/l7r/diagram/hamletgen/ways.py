@@ -1478,9 +1478,11 @@ def web_rejoinable(lanes: Sequence[Mapping[str, Any]], hard: list[Poly], walls: 
     seed = next((m for m in live if lanes[m].get("connector")), live[0] if live else 0)
     for c in {comp[m] for m in live} - {comp[seed]}:  # every piece OTHER than the connector's must reach one
         mine = [m for m in live if comp[m] == c]
+        # `segs` is NEVER empty here, and the `if not segs: continue` that stood on these lines was
+        # therefore dead: `seed` is itself live and `comp[seed]` is excluded from `c`, so every other
+        # component always has at least the seed's own tread to reach for. Removed with its reasoning
+        # rather than left in place reading as a case that can happen (feature 146).
         segs = [sg for m in live if comp[m] != c for sg in zip(ways[m], ways[m][1:], strict=False)]
-        if not segs:
-            continue
         ok = False
         for m in mine:
             for e in (ways[m][0], ways[m][-1]):
@@ -1493,6 +1495,67 @@ def web_rejoinable(lanes: Sequence[Mapping[str, Any]], hard: list[Poly], walls: 
         if not ok:
             return False
     return True
+
+
+def commit_lane(
+    lanes: list[dict[str, Any]],
+    m: int,
+    new_pts: list[list[float]],
+    hard: list[Poly],
+    walls: Sequence[Poly],
+    water: list[tuple[Pt, Pt]],
+    reink: Callable[[int], None],
+) -> bool:
+    """Rewrite lane `m` - and put it back if the rewrite BREAKS the web and the touch pass cannot mend it.
+
+    LIFTED OUT OF `_smooth_web` (feature 146, GM 2026-08-28 on inner functions and testability). The
+    revert arm is the whole reason the function exists (feature 137 T03: a hairpin cut took the short
+    arm that was a piece's only link to the spine, and tripwire seed 37, gate seed 43, Kashikawa and
+    Sawada all came out failing `lanes_form_one_network`), and it is the arm a clean roll never enters -
+    so it had no test until it could be called with four plain lists.
+    """
+    before, old = web_pieces(lanes), lanes[m]["pts"]
+    lanes[m]["pts"] = new_pts
+    if web_pieces(lanes) > before and not web_rejoinable(lanes, hard, walls, water):
+        lanes[m]["pts"] = old
+        return False
+    reink(m)
+    return True
+
+
+def bowtie_cut(pts: Poly, k: int, x: Pt, arm_ft: float = _ARM_FT) -> Poly | None:
+    """A lane crosses another at `x` inside its segment `k`; cut back the SHORT tail past the crossing,
+    which then becomes the junction. `None` when neither side is short enough to be a stray tail.
+
+    LIFTED OUT OF `_smooth_web` (feature 146). The head arm - the crossing near the lane's START, so the
+    beginning is the stray - never ran on a live map; which arm a roll takes is an accident of which
+    direction the lane happened to be recorded in, so the two want asking directly.
+    """
+    head = polyline_len(pts[: k + 1]) + math.dist(pts[k], x)
+    tail = math.dist(x, pts[k + 1]) + polyline_len(pts[k + 1 :])
+    if tail < arm_ft and tail <= head:
+        return [*pts[: k + 1], x]
+    if head < arm_ft and head < tail:
+        return [x, *pts[k + 1 :]]
+    return None
+
+
+def push_clear_of_fabric(base: Pt, unit: Pt, edge: float, fabric: Sequence[Poly], gap: float = TRACK_FABRIC_GAP) -> Pt:
+    """Walk out from `base` along the unit vector `unit`, starting `edge` out, until the point clears every
+    standing thing by `gap`. Twenty-four steps of 6 px, then the last point tried.
+
+    LIFTED OUT OF `_cluster_gateway` AND `_cluster_edge_toward` (feature 146), which carried the same loop
+    twice. Stepping rather than solving is deliberate - the fabric is an arbitrary set of polygons, the step
+    is cheap, and a bounded walk cannot fail to terminate the way a solve can. The bound is what makes the
+    LAST line a real branch: a cluster ringed all the way round returns a point that does not clear, and the
+    caller draws from it anyway rather than returning nothing. No live hamlet is that crowded.
+    """
+    for _ in range(24):
+        gx, gy = base[0] + unit[0] * edge, base[1] + unit[1] * edge
+        if all(edge_dist(gx, gy, poly) >= gap for poly in fabric):
+            return (gx, gy)
+        edge += 6.0
+    return (base[0] + unit[0] * edge, base[1] + unit[1] * edge)
 
 
 def _smooth_web(s: Settlement, hard: list[Poly], walls: Sequence[Poly], water: list[tuple[Pt, Pt]]) -> int:
@@ -1534,13 +1597,7 @@ def _smooth_web(s: Settlement, hard: list[Poly], walls: Sequence[Poly], water: l
         return web_pieces(lanes)
 
     def _commit(m: int, new_pts: list[list[float]]) -> bool:
-        _before, _old = _pieces(), lanes[m]["pts"]
-        lanes[m]["pts"] = new_pts
-        if _pieces() > _before and not web_rejoinable(lanes, hard, walls, water):
-            lanes[m]["pts"] = _old
-            return False
-        s.reink_lane(m)
-        return True
+        return commit_lane(lanes, m, new_pts, hard, walls, water, s.reink_lane)
 
     def _others_segs(skip: int) -> list[tuple[Pt, Pt]]:
         return [
@@ -1685,13 +1742,10 @@ def _smooth_web(s: Settlement, hard: list[Poly], walls: Sequence[Poly], water: l
                     x = _seg_cross(pts[k], pts[k + 1], opts[m], opts[m + 1])
                     if x is None:
                         continue
-                    head, tail = polyline_len(pts[: k + 1]) + math.dist(pts[k], x), math.dist(x, pts[k + 1]) + polyline_len(pts[k + 1 :])
-                    if tail < _ARM_FT and tail <= head:
-                        pts = [*pts[: k + 1], x]
-                    elif head < _ARM_FT and head < tail:
-                        pts = [x, *pts[k + 1 :]]
-                    else:
+                    _cut = bowtie_cut(pts, k, x)
+                    if _cut is None:
                         continue
+                    pts = _cut
                     if _commit(i, [[round(px, 1), round(py, 1)] for px, py in pts]):
                         changed += 1
                     break
@@ -2315,13 +2369,7 @@ def _cluster_gateway(s: Settlement, seat: Mapping[str, object], fallback: Pt) ->
     # rather than solving: the fabric is an arbitrary set of polygons, the step is cheap, and a
     # bounded walk cannot fail to terminate the way a solve can.
     fabric = [poly for poly, _owner, _kind in _homestead_polys(s)]
-    edge = out_reach + TRACK_FABRIC_GAP + 8.0
-    for _ in range(24):
-        gx, gy = cx + ax * along_mid + ox * edge, cy + ay * along_mid + oy * edge
-        if all(edge_dist(gx, gy, poly) >= TRACK_FABRIC_GAP for poly in fabric):
-            return (gx, gy)
-        edge += 6.0
-    return (cx + ax * along_mid + ox * edge, cy + ay * along_mid + oy * edge)
+    return push_clear_of_fabric((cx + ax * along_mid, cy + ay * along_mid), (ox, oy), out_reach + TRACK_FABRIC_GAP + 8.0, fabric)
 
 
 def _cluster_edge_toward(s: Settlement, target: Pt, fallback: Pt) -> Pt:
@@ -2352,13 +2400,7 @@ def _cluster_edge_toward(s: Settlement, target: Pt, fallback: Pt) -> Pt:
     ux, uy = ux / n, uy / n
     reach = max(((x - cx) * ux + (y - cy) * uy for x, y in zip(xs, ys, strict=False)), default=0.0)
     fabric = [poly for poly, _owner, _kind in _homestead_polys(s)]
-    edge = reach + TRACK_FABRIC_GAP + 8.0
-    for _ in range(24):
-        gx, gy = cx + ux * edge, cy + uy * edge
-        if all(edge_dist(gx, gy, poly) >= TRACK_FABRIC_GAP for poly in fabric):
-            return (gx, gy)
-        edge += 6.0
-    return (cx + ux * edge, cy + uy * edge)
+    return push_clear_of_fabric((cx, cy), (ux, uy), reach + TRACK_FABRIC_GAP + 8.0, fabric)
 
 
 def _thread_the_fabric(s: Settlement, plan: SitePlan, run: Poly, gap: float = TRACK_FABRIC_GAP) -> Poly:

@@ -4,6 +4,7 @@ Split from settlement/structures.py by feature 114 - see settlement/structures/C
 """
 
 import math
+from collections.abc import Callable, Sequence
 from typing import TYPE_CHECKING
 
 from .._geom import (
@@ -39,6 +40,30 @@ KOSATSUBA_VERGE_FT = 6.0
 
 if TYPE_CHECKING:
     from ..core import Settlement
+
+
+def pick_caption_seat(
+    seats: Sequence[Pt],
+    at: Pt,
+    hug: Callable[[Pt], float],
+    hug_cap: float,
+    box_clearance: Callable[[Pt], float],
+    lane_target: float,
+) -> Pt:
+    """The board's caption seat: the NEAREST seat that clears the ways by `lane_target`, and if none does,
+    the legal seat that clears them best.
+
+    LIFTED OUT OF `place_kosatsuba` (feature 146, GM 2026-08-28 on inner functions and testability). It took
+    two closures and two numbers, all of which a test can hand it directly; reaching it through the placer
+    meant building a settlement whose every seat was blocked. The tie-break is (distance, then ORDER), which
+    is what keeps an unblocked board on its historical seat when a diagonal ties with it.
+    """
+    legal = [q for q in seats if hug(q) <= hug_cap] or list(seats)
+    clear = [q for q in legal if box_clearance(q) >= lane_target]
+    if clear:
+        ix = {id(q): i for i, q in enumerate(seats)}
+        return min(clear, key=lambda q: (round((q[0] - at[0]) ** 2 + (q[1] - at[1]) ** 2, 3), ix[id(q)]))
+    return max(legal, key=box_clearance)
 
 
 class PublicFixturesMixin:
@@ -278,15 +303,7 @@ class PublicFixturesMixin:
                 return poly_gap(_quad, [(_board_box[0], _board_box[1]), (_board_box[2], _board_box[1]), (_board_box[2], _board_box[3]), (_board_box[0], _board_box[3])])
 
             def _pick(_seats: list[Pt]) -> Pt:
-                _legal = [_q for _q in _seats if _hug(_q) <= _hug_cap] or _seats
-                _clear = [_q for _q in _legal if _box_clearance(_q) >= _lane_target]
-                if _clear:
-                    # (distance, then ORDER) - the order term is what keeps an unblocked board on its
-                    # historical seat when a diagonal ties with it, so adding the annulus above churns
-                    # no manifest that was already correct.
-                    _ix = {id(_q): _i for _i, _q in enumerate(_seats)}
-                    return min(_clear, key=lambda _q: (round((_q[0] - x) ** 2 + (_q[1] - y) ** 2, 3), _ix[id(_q)]))
-                return max(_legal, key=_box_clearance)
+                return pick_caption_seat(_seats, (x, y), _hug, _hug_cap, _box_clearance, _lane_target)
 
             if label_xy:
                 _lx, _ly = label_xy
