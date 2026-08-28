@@ -882,9 +882,14 @@ test:
 	  exit 0; \
 	fi; \
 	python3 -m coverage combine --append >/dev/null 2>&1 || true; \
-	python3 -m coverage report -m --omit='*/settlement/*,*/waterfields/*,*/interactive/*,*/check_village/*' --fail-under=100 || { echo "COVERAGE: a module other than settlement/, waterfields/, interactive/ and check_village/ is under 100% - the table above names it and its missing lines (those four are judged by the settlement ratchet and the hamlet-path floor below; check_village joined them under feature 145 - its city and capital segments lost their coverage carriers with feature 141 s corpus cut, and the GM ruled on 2026-08-28 that other tiers owe no floor while nothing exercises them)"; exit 1; }; \
-	python3 -m coverage report --include='*/settlement/*' --fail-under=$(SETTLEMENT_COV_FLOOR) || { echo "COVERAGE: settlement/ (package combined) fell below its $(SETTLEMENT_COV_FLOOR)% ratchet floor (see the comment above SETTLEMENT_COV_FLOOR in this Makefile; 'python3 -m coverage report -m --include=*/settlement/*' shows the missing lines)"; exit 1; }; \
-	python3 -m l7r.diagram.tools.hamlet_floor || exit 1
+	cov_ec=0; \
+	python3 -m coverage report -m --omit='*/settlement/*,*/waterfields/*,*/interactive/*,*/check_village/*' --fail-under=100 || { echo "COVERAGE: a module other than settlement/, waterfields/, interactive/ and check_village/ is under 100% - the table above names it and its missing lines (those four are judged by the settlement ratchet and the hamlet-path floor below; check_village joined them under feature 145 - its city and capital segments lost their coverage carriers with feature 141 s corpus cut, and the GM ruled on 2026-08-28 that other tiers owe no floor while nothing exercises them)"; cov_ec=1; }; \
+	python3 -m coverage report --include='*/settlement/*' --fail-under=$(SETTLEMENT_COV_FLOOR) || { echo "COVERAGE: settlement/ (package combined) fell below its $(SETTLEMENT_COV_FLOOR)% ratchet floor (see the comment above SETTLEMENT_COV_FLOOR in this Makefile; 'python3 -m coverage report -m --include=*/settlement/*' shows the missing lines)"; cov_ec=1; }; \
+	python3 -m l7r.diagram.tools.hamlet_floor || cov_ec=1; \
+	exit $$cov_ec
+# ALL THREE FLOORS REPORT TOGETHER (GUARD_EDIT_OK: feature 145) - the same rule as the test phase: a first floor that
+# `exit 1`s hides every floor after it, and on 2026-08-28 that made the hamlet floor UNREACHABLE while the global one was
+# red on pre-existing tooling misses. Each records its own failure; the phase exits non-zero once, at the end.
 # THE HAMLET-PATH FLOOR (GUARD_EDIT_OK: feature 145 adds a new gate phase - GM 2026-08-28: "one hundred percent code
 # coverage on the scripted procedure and anything related to it ... automatic rather than something that we just
 # remember to maintain"): every module the scripted rolls execute - derived from the roll cache's records of the
