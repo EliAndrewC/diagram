@@ -12,16 +12,16 @@ Cite by key in an entry's `**Sources:**` line. Add a key here the first time a s
 
 ## Re-sourcing queue
 
-Findings recorded before the rule, or on a source the rule now excludes. Each is re-sourced when its entry is next revisited - not rewritten wholesale - and struck from this list then.
+Findings recorded before the rule, or on a source the rule now excludes. Each is re-sourced when its entry is next revisited - not rewritten wholesale - and struck from this list then. **Feature 143 (2026-08-28) worked the whole queue and every `not recorded` entry**; what remains is what a page could not be read for, each labeled in its entry.
 
-- `zhengyi-householder-priests` (Grokipedia, *Zhengyi Dao*) - specs/016-minami-provincial-city/research.md; the Patheos half of the key stands
-- Economy of the Song dynasty (Grokipedia) - specs/107-ubame-town/research.md and research/urban-features.md, charcoal-driven demand
-- History of agriculture in China (Grokipedia) - research/urban-features.md
-- Nagoya Castle (Grokipedia; site documentation) - the site documentation half stands
-- Jokamachi surveys (Grokipedia; Nakasendo Way, *Castle Towns*) - the Nakasendo Way half stands
+- `zhengyi-householder-priests` - the Grokipedia half DROPPED (2026-08-28); the Patheos half stands.
+- Economy of the Song dynasty (Grokipedia) - RESOLVED 2026-08-28: `economy-song-enwiki` (Hartwell's figure, read).
+- History of agriculture in China (Grokipedia) - RESOLVED 2026-08-28: `loess-plateau-enwiki` (the summer concentration read; the mm range dropped as unsourced).
+- Nagoya Castle (Grokipedia; site documentation) - the site-documentation half stands; the Grokipedia half is to be replaced by ja.wikipedia 名古屋城 (feature 143 leftover).
+- Jokamachi surveys - RESOLVED 2026-08-28: `jokamachi-jawiki` read; the Grokipedia half dropped from the key.
 - Village lane WIDTH (T50, 2026-08-27): no numeric source found for an ordinary hamlet lane or farm path in Japan or China; the drawn 3 / 5 / 6 ft stand as drawing conventions inside read bounds (Wikipedia "Stone routes" 2.7 m cart road; ja.wikipedia "大八車"; MLIT road history; Low-Tech Magazine on the wheelbarrow). A measured survey of a surviving village lane would settle it.
-- Still summary-only after the `source-reader` run of 2026-08-27 (T45), each labeled in its entry: the bund-width convention (IRRI, unreachable; FAO read and larger); the Shirakawa farmstead bamboo grove (Kids Web Japan, 403 with no corroboration); the turn-minimization sentence (Ma et al. 2024 full text - the abstract's angle finding IS read); EUNIS E5.2 (404). Resolved by that run: madake hardiness (read, three growers), the forest-edge three layers (German Wikipedia "Waldrand"), the Okinawa windbreak (PMC 7898781), the GSI bamboo symbol (ridgelineimages.com).
-
+- Still summary-only after the `source-reader` run of 2026-08-27 (T45), each labeled in its entry: the bund-width convention (IRRI, unreachable; FAO read and larger); the Shirakawa farmstead bamboo grove (Kids Web Japan, 403 with no corroboration); the turn-minimization sentence (Ma et al. 2024 full text - the abstract's angle finding IS read); EUNIS E5.2 (404).
+- Summary-only or not found after feature 143's passes (2026-08-28), each labeled in its entry and listed by file in `specs/143-research-citations/ledger.md` section F2: the Jōge daikansho plan; the daikan-debt figure; the jin'ya coverage ratio; the Song monk census year; the Shunde 1581 percentages; the dike-pond board sluice (Ruddle & Zhong 1988); the lotus area share; the tameike m3/ha ratio; the forest stems/ha band; the Kaifeng tower count; the communal-well ratio; the Sado fire count.
 
 ## Works cited
 
@@ -511,7 +511,7 @@ Qing Beijing street-fence coverage (Dashilan street history; Beijing city fortif
 
 ### `jokamachi-zoning`
 
-Jokamachi surveys (Grokipedia; Nakasendo Way, *Castle Towns*)
+Jokamachi surveys (Nakasendo Way, *Castle Towns*; the Grokipedia half dropped 2026-08-28, feature 143 - the zoning claims now also rest on `jokamachi-jawiki`, READ)
 
 *Used for:* chonin wards forming narrow strips that SEPARATE different groups of samurai, sited along the major thoroughfares; separation within the buke-chi being per-compound ("larger compounds separated by walls and gates") rather than a district palisade; chonin plots smaller per family and tightly aligned along the streets
 
@@ -652,3 +652,1077 @@ ja.wikipedia 屋敷神; minka-en.com 屋敷神; satologue.com 屋敷神様 (READ
 326-woods.com, 薪の保管方法 (READ 2026-08-27, source-reader) - MODERN stacking practice
 
 *Used for:* a stack to ~1.5 m high (T54), labeled modern.
+
+### `tenmacho-jawiki`
+
+ja.wikipedia 伝馬町牢屋敷 (READ 2026-08-28, feature 143)
+
+*Used for:* the Edo remand jail's size (2,677坪 ≈ 8,850 m2), its neribei wall and outer moat; that it held 未決囚 pending judgment AND, exceptionally, 永牢・過怠牢 prison-as-sentence cases
+
+### `chuo-royashiki`
+
+Chuo City, 伝馬町牢屋敷跡 (https://www.city.chuo.lg.jp/a0052/bunkakankou/rekishi/tokyobunkazai/royashiki.html; READ 2026-08-28)
+
+*Used for:* corroborating figure "2,600坪（8,595㎡）以上", moat and embankment on three sides, 300-400 inmates at a time, execution ground in the SE corner
+
+### `takayama-jinya-city`
+
+Takayama City, 高山陣屋跡 (https://www.city.takayama.lg.jp/kurashi/1000021/1000119/1000847/1000954/1000956.html; READ 2026-08-28)
+
+*Used for:* the 吟味所 standing with the 白州 ("吟味所、白州はグリ石敷で屋根のあることが特徴的である"); the 御蔵 moved from the castle's third bailey in 1695; the designated site figure "員数 11,219.05平方メートル" (the label reads oddly - recheck against the 史跡 register before relying on it)
+
+### `takayama-jinya-jawiki`
+
+ja.wikipedia 高山陣屋 (READ 2026-08-28)
+
+*Used for:* the 1816 rebuild of the office block as one range - 玄関・吟味所・御役所・大広間; the numbered storehouse rows (一～四番蔵・九～十二番蔵・書物蔵); 25 daikan/gundai over 177 years
+
+### `neixiang-yamen-zhwiki`
+
+zh.wikipedia 内乡县衙 (READ 2026-08-28)
+
+*Used for:* "前衙后邸" as an instance of the 前朝后寝 system; the jail in the yamen's southwest ("坐北朝南的监狱位于内乡县衙的西南部"); the jail-god shrine to 皋陶 inside the jail (READ); the 衙神庙 and 土地祠 on the east line (SUMMARY-ONLY - seen in a search synthesis of the same page, not quoted)
+
+### `henan-neixiang`
+
+Henan provincial government, "China's best-preserved county-level magistrate office in Neixiang" (https://english.henan.gov.cn/2023/11-23/2853070.html; READ 2026-08-28)
+
+*Used for:* the prison southwest of the Major Court, "usually called South Prison"
+
+### `hatakata-men-jawiki`
+
+ja.wikipedia 畑方免 (READ 2026-08-28)
+
+*Used for:* dry-field tax commonly paid in coin, the 関東畑永法 as the type case ("金納で納税が行われることが多かった" - coin, not specifically copper); the rate fixed and not reduced in bad years
+
+### `tfd-hongou-fire-history`
+
+Tokyo Fire Department, 防火対策の歴史 (Hongo station; https://www.tfd.metro.tokyo.lg.jp/fs/hongou/page_00029.html; READ 2026-08-28)
+
+*Used for:* commoners keeping fire-water routinely at the doorway and on the roof ("用水桶、天水桶、鎮火水と名称はいろいろあるが、庶民は平素から水を用意して、玄関先や、屋根上に設置した")
+
+### `gujianchina-taipinggang`
+
+古建中国, 古代故宫的防火器材 - "太平缸" (https://www.gujianchina.cn/news/show-5949.html; READ 2026-08-28)
+
+*Used for:* 308 vats in the Forbidden City; vats placed on the axis and before buildings far from the Inner Golden Water River and wells
+
+### `thepaper-taipinggang`
+
+澎湃新闻, 这口大缸能防火？！ (https://www.thepaper.cn/newsDetail_forward_23268207; READ 2026-08-28)
+
+*Used for:* 308 originally, 231 surviving; Qing regulation fixing which vat type and how many per courtyard
+
+### `guernica-night-soil`
+
+Guernica, "Raising a Stink" (https://www.guernicamag.com/raising-a-stink/; READ 2026-08-28; the Howell OSU paper it draws on could not be parsed)
+
+*Used for:* farmers supplying daimyo estates with firewood and seedlings for the privilege of emptying their privies; the tsuke-tsubo annual contract paid in rice
+
+### `hatchobori-jawiki`
+
+ja.wikipedia 八丁堀 (東京都中央区) (READ 2026-08-28)
+
+*Used for:* the yoriki/doshin 組屋敷 district of the Edo town magistracy standing apart from the office after the 1635 temple relocation
+
+### `jinya-jawiki`
+
+ja.wikipedia 陣屋 (READ 2026-08-28)
+
+*Used for:* a small DOMAIN's jin'ya program - residence, office, retainers' houses, storehouses and a 調練場 drill ground ("小藩の陣屋では…居館・役所・家臣の役宅や土蔵、調練場などを配置する構成がみられる"); scope: a domain seat, not a bakufu daikansho
+
+### `hanko-jawiki`
+
+ja.wikipedia 藩校 (READ 2026-08-28)
+
+*Used for:* 255 domain schools at the peak, in nearly every domain; martial arts encouraged and 演武場 among their facilities
+
+### `edo-three-dojos-jawiki`
+
+ja.wikipedia 幕末江戸三大道場 (READ 2026-08-28)
+
+*Used for:* the three great late-Edo fencing halls and their metropolitan addresses (Nihonbashi, Kanda Otamagaike, Kudan); no date range for the "boom" is given there
+
+### `hei-jokaku-jawiki`
+
+ja.wikipedia 塀 (城郭) (READ 2026-08-28)
+
+*Used for:* plastered castle-class earthen walls "壁の厚さは1尺（約300ミリメートル）以上ある", with medieval walls as thin as 3-7 sun
+
+### `kojodan-dobei`
+
+攻城団, お城の基礎講座 40. 土塀の種類 (https://blog.kojodan.jp/entry/2020/08/26/180000; READ 2026-08-28)
+
+*Used for:* frameless neribei "築地塀に比べて…30cm程度"; tsuijibei up to about 1 m thick
+
+### `sado-bugyosho-fires`
+
+Sado magistracy fire history - SUMMARY-ONLY (2026-08-28): search snippets across Sado tourism pages state the 奉行所, built 1603, "焼失と再建を5回繰り返しました"; the three pages fetched (ja.wikipedia 佐渡奉行, visitsado.com, city.sado.niigata.jp museum) describe only the 2000 reconstruction and say nothing about fires
+
+*Used for:* administrative halls as ordinary wooden buildings that burned and were rebuilt repeatedly
+
+### `fuchu-kosatsuba`
+
+Tokyo Jinjacho, 府中高札場 (http://www.tokyo-jinjacho.or.jp/goshahou/fuchukousatsuba/; READ 2026-08-26, feature 133 T13)
+
+*Used for:* kosatsuba set "at points of heavy passage: barriers and ports, the foot of large bridges, and the entrances and centers of towns and villages"
+
+### `ogose-kosatsuba`
+
+Ogose town, cultural property H26-04 高札場 (https://www.town.ogose.saitama.jp/kamei/shogaigakushu/bunkazai/kaisetsu/explanation_cultural/H26_04.html; READ 2026-08-26, T13)
+
+*Used for:* village kosatsuba at the village center, the shrine precinct or the assembly place; before the village officials' houses
+
+### `kosatsu-jawiki`
+
+ja.wikipedia 高札 (READ 2026-08-26, T13)
+
+*Used for:* the edict board institution - standing law, rate tables, ban edicts; Nihonbashi as Edo's principal board
+
+### `adachi-kosatsu`
+
+Adachi City museum, 高札 (https://www.city.adachi.tokyo.jp/hakubutsukan/chiikibunka/hakubutsukan/shiryo-kosatsu.html; READ 2026-08-26, T13)
+
+*Used for:* the board read aloud by officials; the headman relaying circulars
+
+### `caishikou-enwiki`
+
+en.wikipedia Caishikou Execution Grounds (READ 2026-08-28, feature 143)
+
+*Used for:* the Qing execution ground at the crossroads of Xuanwumen Outer Street and Luomashi Street, "Vegetable Market Execution Ground"; the term 棄市 is not on the page
+
+### `qiushen-zhwiki`
+
+zh.wikipedia 秋审 (READ 2026-08-28)
+
+*Used for:* the Qing autumn review of death sentences through 刑部, 大理寺, 都察院 and the emperor - the capital case climbs and the confirmed sentence comes back down
+
+### `suzugamori-jawiki`
+
+ja.wikipedia 鈴ヶ森刑場 (READ 2026-08-28)
+
+*Used for:* Suzugamori at Edo's southern entrance on the Tokaido, paired with Kozukappara at the northern entrance on the Nikko kaido ("江戸の北の入口（日光街道）沿いに設置されていた小塚原刑場とともに、南の入口（東海道）沿いに設置されていた刑場であった")
+
+### `kozukappara-jawiki`
+
+ja.wikipedia 小塚原刑場 (READ 2026-08-28)
+
+*Used for:* the two as Edo's 二大刑場 - the page names two major grounds, not three
+
+### `shiniuba-jawiki`
+
+ja.wikipedia 死牛馬取得権 (READ 2026-08-28)
+
+*Used for:* the kawata's right to fallen cattle and horses over a defined territory ("死牛馬を集める特定の地域を「草場」ないしは「旦那場」といった"), abolished 1871
+
+### `himeji-shironameshi-jawiki`
+
+ja.wikipedia 姫路白なめし革細工 (READ 2026-08-28)
+
+*Used for:* the white-tawing process - salted hides soaked in the river "数日間" (several days) to loosen the hair, then salt and rapeseed oil under the sun; NOT the "one week summer, two weeks winter" figure the entry carried
+
+### `northampton-tannery-1996`
+
+Shaw, "The excavation of a late 15th- to 17th-century tanning complex at The Green, Northampton", Post-Medieval Archaeology 30(1), 1996 (https://www.tandfonline.com/doi/abs/10.1179/pma.1996.002; SUMMARY-ONLY 2026-08-28 - abstract page 403; the 36-37 pit figure seen in search snippets of the abstract)
+
+*Used for:* the largest excavated urban tannery (the Western Tannery, 36-37 pits) as an upper comparison
+
+### `pingyao-shilou-zhwiki`
+
+zh.wikipedia 平遥市楼 (READ 2026-08-28)
+
+*Used for:* "底层面阔、进深各三间，占地133.4平方米，平面呈方形", 18.5 m high, rebuilt 1688
+
+### `dongjing-menghualu-rujia`
+
+吴钩, 大宋消防队 (儒家网, https://www.rujiazg.com/article/11577; READ 2026-08-28), quoting 東京夢華錄
+
+*Used for:* "每坊三百步有军巡铺，又于高处有望火楼，上有人探望，下屯军百人及水桶、洒帚、钩锯、斧权、梯索之类" - the Song fire-watch tower as a separate institution; no citywide tower count
+
+### `kyomachiya-jawiki`
+
+ja.wikipedia 京町家 (READ 2026-08-28)
+
+*Used for:* the narrow-front deep-lot machiya, and its own rebuttal of the frontage-tax story ("江戸時代の京都の税制は、間口幅に関係なく、まず町に対し総額が賦課され")
+
+### `kyototuu-unagi`
+
+京都通百科事典, 鰻の寝床 (https://www.kyototuu.jp/Life/ProverbUnaginoNedoko.html; READ 2026-08-28)
+
+*Used for:* "間口２間（約３.６m）前後、奥行１０〜１２間（約１８〜２２m）"; carries the popular frontage-tax explanation that `kyomachiya-jawiki` disputes
+
+### `nagaya-jawiki`
+
+ja.wikipedia 長屋 (READ 2026-08-28)
+
+*Used for:* the nagaya as one building divided into units sharing walls ("1棟の建物を水平方向に区分し、それぞれ独立した住戸とした物")
+
+### `hiyokechi-jawiki`
+
+ja.wikipedia 火除地 (READ 2026-08-28)
+
+*Used for:* firebreak lots cut through Edo after the 1657 Meireki fire - breaks at block scale, not between houses
+
+### `song-architecture-enwiki`
+
+en.wikipedia Architecture of the Song dynasty (READ 2026-08-28)
+
+*Used for:* Tang cities "strictly divided into distinct residential and commercial wards divided by city walls"; under the Song "shops could now line streets in residential areas and did not have to be situated behind precinct walls"
+
+### `guanxiang-zdic`
+
+漢典 zdic.net, 关厢 (READ 2026-08-28)
+
+*Used for:* the bare definition - "城门外的街道及附近区域"; that commerce clustered there is SUMMARY-ONLY (Baidu Baike, 403)
+
+### `jokamachi-jawiki`
+
+ja.wikipedia 城下町 (READ 2026-08-28)
+
+*Used for:* samurai quarters ranked by distance from the castle, merchant and artisan quarters outside them, the temple district on the perimeter as part of the defense, and streets kinked and dead-ended to lengthen the approach ("道を鍵形に曲げたり袋小路を設けるなどすることで、城への到達距離を延長した")
+
+### `kichinyado-jawiki`
+
+ja.wikipedia 木賃宿 (READ 2026-08-28)
+
+*Used for:* the firewood-fee inn - a common room, bedding at the guest's own expense, guests pooling rice and paying the firewood cost to have it cooked
+
+### `kichinyado-kotobank`
+
+コトバンク 木賃宿 (https://kotobank.jp/word/木賃宿-51029; READ 2026-08-28)
+
+*Used for:* prices - 3 mon a person (1611 ordinance), 6 mon firewood fee (1658), 24 mon roof fee plus 16-24 mon for a futon (1843)
+
+### `hutong-enwiki`
+
+en.wikipedia Hutong (READ 2026-08-28)
+
+*Used for:* alleys "formed by lines of siheyuan", neighborhoods "formed by joining one siheyuan to another to form a hutong" - the entry's "access routes lined by contiguous courtyard residences" is a paraphrase of this
+
+### `chinese-city-wall-enwiki`
+
+en.wikipedia Chinese city wall (READ 2026-08-28)
+
+*Used for:* "In areas of rugged relief, however, a square form was usually replaced by one of irregular shape, determined in many cases by topographic conditions"
+
+### `thepaper-city-walls`
+
+澎湃新闻, on the plan forms of Chinese city walls (https://m.thepaper.cn/newsDetail_forward_1270378; READ 2026-08-28)
+
+*Used for:* hill cities taking the surrounding high points inside the wall and so producing irregular outlines (荆州's oval, 北京's 凸 plan)
+
+### `xian-wall-zhwiki`
+
+zh.wikipedia 西安城墙 (READ 2026-08-28)
+
+*Used for:* "城垣高12米，底宽15-18米，顶宽12-14米"; "城墙的外壁筑98座敌台，延伸出墙12米，宽20米，高与城齐"
+
+### `hakone-seki-jawiki`
+
+ja.wikipedia 箱根関 (READ 2026-08-28)
+
+*Used for:* the facility list - 面番所 (上御番所・番士詰所・休息所・風呂場) and 向番所 (所詰半番・休息所・牢屋), stables, 辻番, 高札場, all inside a fence; that the two stations face each other across the road is SUMMARY-ONLY (search synthesis of hakonesekisyo.jp)
+
+### `wengcheng-zhwiki`
+
+zh.wikipedia 瓮城 (READ 2026-08-28)
+
+*Used for:* the barbican definition - a half-round or square outwork before a gate (Nanjing's 中华门 the inside-the-gate exception)
+
+### `genbukan-jawiki`
+
+ja.wikipedia 玄武館 (READ 2026-08-28 - the page gives no aggregate disciple count; search syntheses split between ~3,000 from 清河八郎's roster and "over 6,000")
+
+*Used for:* the Genbukan as a metropolitan commercial dojo (1822, Nihonbashi then Kanda); the disciple count is SUMMARY-ONLY and contested
+
+### `cdlib-local-elites`
+
+Esherick & Rankin (eds.), *Chinese Local Elites and Patterns of Dominance*, introduction (UC Press e-book, https://publishing.cdlib.org/ucpressebooks/public/book/chinese-local-elites-and-patterns-of-dominance.html; READ 2026-08-28)
+
+*Used for:* "By Qing times, the substantially urbanized gentry were living the leisured life of absentee landlords in administrative centers or the many small towns that lined the canals"; absentee landlords acting through agents and rent bursaries
+
+### `kaifeng-flood-1642-enwiki`
+
+en.wikipedia 1642 Yellow River flood (READ 2026-08-28)
+
+*Used for:* "300,000 of the 378,000 residents were killed by the flood and ensuing peripheral disasters"; the levee breached by the Ming governor during the siege
+
+### `kaifeng-pmc7048742`
+
+Storozum et al., "Geoarchaeological evidence of the AD 1642 Yellow River flood that destroyed Kaifeng", Scientific Reports 2020 (PMC 7048742; READ 2026-08-28)
+
+*Used for:* the Yellow River flooding Kaifeng "around 40 times over the past 3000 years" - the entry's "seven times" is found nowhere
+
+### `pan-gate-enwiki`
+
+en.wikipedia Pan Gate (READ 2026-08-28)
+
+*Used for:* "two separate gates, one opening to a road ... and another opening to a canal", Suzhou's Land and Water Gate; the sluiced arch is SUMMARY-ONLY (chinahighlights)
+
+### `tetsu-to-hagane-91`
+
+History of Iron and Steel Making Technology in Japan, Tetsu-to-Hagané 91(1), JStage (READ at the 2026-08 pass, feature 107; not re-read 2026-08-28)
+
+*Used for:* the two-stage refining of tatara iron
+
+### `ohitayama-tatara-enwiki`
+
+en.wikipedia Ohitayama Tatara Iron Works (READ 2026-08)
+
+*Used for:* dōba, ōkajiba, wari-tetsu; the Chugoku mountains' 80% share
+
+### `wagner-ming-iron`
+
+Donald Wagner, *Iron production in three Ming texts* (https://donwagner.dk/MingFe/MingFe.html; READ 2026-08)
+
+*Used for:* the chao fining hearth as Song Yingxing describes it; the 200 charcoal producers / 200 furnace tenders / 300 miners
+
+### `wagner-fining-puddling`
+
+Donald Wagner, *Traditional Chinese fining and puddling* (http://donwagner.dk/arch-iron/eu/fining-puddling-china-eu.html; READ 2026-08)
+
+*Used for:* fining as stir-frying pig iron under blast
+
+### `xuxiebian-han-fining`
+
+*Cast Iron Smelting and Fining: an Eastern Han site at Xuxiebian, Sichuan* (Project MUSE 725769; READ 2026-08)
+
+*Used for:* the practice running back to the Eastern Han
+
+### `fao-charcoal-safety`
+
+FAO, *Simple technologies for charcoal making*, ch. 5 safety precautions (https://www.fao.org/4/X5555E/x5555e06.htm; READ 2026-08)
+
+*Used for:* self-heating of fresh charcoal, fines as the worst case, the 24-hour open-air rule and the 8-day threshold
+
+### `tonya-enwiki`
+
+en.wikipedia Ton'ya (READ 2026-08)
+
+*Used for:* the wholesaler-warehouseman of the Edo economy
+
+### `fires-in-edo-enwiki`
+
+en.wikipedia Fires in Edo (READ 2026-08)
+
+*Used for:* the winter clustering of serious fires
+
+### `sizes-koku`
+
+Sizes.com, "What is the unit called a koku?" (https://www.sizes.com/units/koku.htm; READ 2026-08)
+
+*Used for:* the charcoal hyō as a bale of indeterminate size
+
+### `nanbu-date-mounds-enwiki`
+
+en.wikipedia Nanbu-Date border mounds (READ 2026-08)
+
+*Used for:* the earth-mound boundary between Morioka and Sendai, reconfirmed 1642
+
+### `kuniezu-enwiki`
+
+en.wikipedia Kuniezu (READ 2026-08)
+
+*Used for:* the shogunate's provincial maps with boundaries drawn
+
+### `mukoyama-linear-borders`
+
+Mukoyama, "Linear borders in early modern Japan", European Journal of International Relations (https://journals.sagepub.com/doi/full/10.1177/13540661221133206; READ 2026-08)
+
+*Used for:* domains building a territorial order of agreed boundaries and mutual exclusion
+
+### `irripro-jiegao-lulu`
+
+History of Irrigation - irrigation tools (http://www.irripro.net/en/nd.jsp?id=113; READ 2026-08) with Baidu Baike *Lulu* (a weaker reference)
+
+*Used for:* the shadoof and the windlass; the Ming-Qing upgrade to animal power and deeper wells
+
+### `ide-japanese-experience`
+
+IDE, *Passing on "The Japanese Experience"*, rural society (https://d-arch.ide.go.jp/je_archive/english/society/wp_je_unu4.html; READ 2026-08)
+
+*Used for:* hatake vs suiden; small farmers on "rainfall or natural underground sources"; the defeated late-Tokugawa hata irrigation schemes
+
+### `harie-kabata`
+
+Harie Shozu no Sato, the kabata wells (https://ihcsacafe-en.ihcsa.or.jp/news/harie/; READ 2026-08)
+
+*Used for:* the domestic and social character of the village well
+
+### `kabu-ido-commons`
+
+Groundwater commons and the kabu-ido rules, *Water History* (https://link.springer.com/article/10.1007/s12685-022-00302-1; READ 2026-08 - abstract)
+
+*Used for:* villages regulating the NUMBER of wells
+
+### `kochi-seiri-jawiki`
+
+ja.wikipedia 耕地整理 (READ 2026-08-28, feature 143)
+
+*Used for:* rectangular plot consolidation as a Meiji institution - the Shizuoka method of 1872, the 耕地整理法 of 1899/1900, "区画の整形化と正方位化"
+
+### `nougyoudoboku-keihan`
+
+のうぎょうとぼく, 水田圃場における畦畔について (https://nougyoudoboku.com/a-ridge-between-rice-fields/; READ 2026-08-28)
+
+*Used for:* the standard bund - "法面勾配1:1・高さ30cm・上幅30cmの台形が標準" (so ~3 ft at the base), cold regions ~50 cm top / ~40 cm high
+
+### `seijoue-kotobank`
+
+コトバンク 正条植 (https://kotobank.jp/word/正条植-85971; READ 2026-08-28)
+
+*Used for:* straight-row planting rare before Meiji, promoted nationally in the 1890s-1900s together with the hand-pushed inter-row weeder (田打車), planting ropes and rulers
+
+### `seijoue-seika`
+
+精華町 せいか舎, 正条植え (https://seikasya.town.seika.kyoto.jp/essays/seijoue; READ 2026-08-28)
+
+*Used for:* seijoue spreading in Meiji and bringing weeder-based weeding and mid-season cultivation with it
+
+### `kubota-transplanting`
+
+Kubota, 稲作の歴史 - 田植え (https://www.kubota.co.jp/kubotatanbo/history/tools/transplanting.html; READ 2026-08-28)
+
+*Used for:* the 1890s adoption, ropes and rolled frames marking the lines
+
+### `kokudaka-jawiki`
+
+ja.wikipedia 石高 (READ 2026-08-28)
+
+*Used for:* one koku as an adult's annual rice ("一石は大人一人が一年に食べる米の量に相当する"), with the page's own hedge that real stipends ran ~1.8 koku of brown rice
+
+### `gokogomin-kotobank`
+
+コトバンク 五公五民 (https://kotobank.jp/word/五公五民-64520; READ 2026-08-28)
+
+*Used for:* the tax rate - 四公六民 in early Edo, 五公五民 after the Kyōhō era (1716-36)
+
+### `satoyama-enwiki`
+
+en.wikipedia Satoyama (READ 2026-08-27 T34/T42 and 2026-08-28)
+
+*Used for:* the border zone between foothills and arable flat land; the mosaic of forest, paddy, dry field, grassland and ponds; Edo-era leaf gathering for paddy fertilizer; cutting every 15-20 years
+
+### `louzeyuan-zhwiki`
+
+zh.wikipedia 漏澤園 (READ 2026-08-28)
+
+*Used for:* Cai Jing's 1104 proposal; siting "高曠不毛之地，四周建有圍欄"; plots numbered by the 千字文 with name, origin and dates; continued through Yuan and Ming
+
+### `toribeno-jawiki`
+
+ja.wikipedia 鳥辺野 (READ 2026-08-28)
+
+*Used for:* the great Kyoto burial ground with "範囲について、明確な定義はない" - an unbounded hillside field
+
+### `fushimi-inari-senbon`
+
+伏見稲荷大社, 千本鳥居 (https://inari.jp/sp/map/spot_07/; READ 2026-08-28)
+
+*Used for:* "稲荷山全体で約1万基、そのうち千本鳥居は約800基"; donated by worshippers from the Edo through Meiji periods
+
+### `meiji-jingu-jawiki`
+
+ja.wikipedia 明治神宮 (READ 2026-08-28)
+
+*Used for:* the shrine's torii - the page counts 8, not 3; no spacing figures
+
+### `religion-song-enwiki`
+
+en.wikipedia Religion in the Song dynasty (READ 2026-08-28)
+
+*Used for:* "In 1221, records counted the existence of 400,000 monks and 61,000 nuns in the dynasty" - the one census figure actually read
+
+### `chang-jiang-jawiki`
+
+ja.wikipedia 長江 (READ 2026-08-28)
+
+*Used for:* the reach names - 沱沱河 -> 通天河 -> 金沙江 -> 川江 (宜賓-宜昌) -> 荊江 -> 揚子江 (from the 揚子津 ferry)
+
+### `shinano-gawa-jawiki`
+
+ja.wikipedia 信濃川 (READ 2026-08-28)
+
+*Used for:* "信濃川と呼ばれているのは新潟県域で、長野県に遡ると「千曲川」と呼称が変わる"
+
+### `sumida-gawa-jawiki`
+
+ja.wikipedia 隅田川 (READ 2026-08-28)
+
+*Used for:* 大川, 浅草川, 宮戸川 as names of the same river; 両国川 not confirmed there
+
+### `yato-jawiki`
+
+ja.wikipedia 谷戸 (READ 2026-08-28)
+
+*Used for:* yatsu as easily-worked paddy land given drainage; iriai rights over the adjacent woods (firewood - the reed-bed application is the entry's extension)
+
+### `shitsuden-kotobank`
+
+コトバンク 湿田 (https://kotobank.jp/word/湿田-74168; READ 2026-08-28)
+
+*Used for:* the poorly drained paddy that never dries; wet-to-dry conversion beginning in late Yayoi western Japan
+
+### `hibiya-irie-jawiki`
+
+ja.wikipedia 日比谷入江 (READ 2026-08-28)
+
+*Used for:* infill from 1592 with the spoil of the Nishinomaru works, in earnest from 1603, complete in early Edo
+
+### `sotobori-jawiki`
+
+ja.wikipedia 外濠 (東京都) (READ 2026-08-28)
+
+*Used for:* "外濠川は、日比谷入江へ注ぐ平川の流路を移設した開削で作られた" - the Hirakawa turned into the moat
+
+### `bitchu-takamatsu-jawiki`
+
+ja.wikipedia 備中高松城 and 備中高松城の戦い (READ 2026-08-28)
+
+*Used for:* "低湿地にある沼城", "低湿地帯でこれらが天然の堀を形成していた"; the 1582 water siege raising a 200 ha lake
+
+### `kagawa-tameike-structure`
+
+香川県, ため池の構造 (https://www.pref.kagawa.lg.jp/tochikai/about_tameike/repair/structure.html; READ 2026-08-28 - the page behind the older `kagawa-tameike` key)
+
+*Used for:* the intake as one facility - 斜樋/堅樋 into the 底樋 discharging to the canal, plus a sediment drain
+
+### `offtake-angle-studies`
+
+Diversion-angle hydraulics (SUMMARY-ONLY 2026-08-28: search syntheses of several ResearchGate / ScienceDirect papers - "maximum water discharge and minimum sediment discharge when its diversion angle was 30° or 45° among 90°, 75°, 60°, 45°, and 30°"; a 30° angle cutting sediment entry by up to 64%; no paper read)
+
+*Used for:* the acute downstream-pointing offtake, 30-45° over 90°
+
+### `fao-pond-water`
+
+FAO, *Water for animals* ch. 6 surface reservoirs (https://www.fao.org/4/r7488e/r7488e06.htm; READ 2026-08-28)
+
+*Used for:* evaporation (up to 2 m/yr) and seepage as the losses of a standing reservoir; the page states the losses in prose, not as the balance equation
+
+### `desire-path-enwiki`
+
+en.wikipedia Desire path (READ 2026-08-27, feature 133 T32; cites Hampton and Cole 1988 for the fifteen-passage figure)
+
+*Used for:* "as few as 15 passages over a site can be enough to create a distinct trail"; a desire path "usually represents the shortest or the most easily navigated route", sidestepping slopes and obstacles
+
+### `ninety-nine-pi-desire`
+
+99% Invisible on desire paths (READ 2026-08-27, T32)
+
+*Used for:* corroborating the desire-line reading
+
+### `ma-2024-desire-paths`
+
+Ma, Brandt, Seipel and Ma (2024), *Environment and Planning B* - agent-based desire paths (SUMMARY-ONLY: paywalled/403; abstract READ via ideas.repec.org, T45, and found to be about a field-of-view angle, NOT turn minimization)
+
+*Used for:* nothing load-bearing - recorded as the case where a search summary recast a parameter as a finding
+
+### `pmc7538448-levee`
+
+"Earthworm species and density in semi-natural grasslands on rice paddy levees in Japanese satoyama", PMC 7538448 (READ 2026-08-27, T41)
+
+*Used for:* levees "constructed and maintained to retain water in the paddies and to allow the passage of people and transportation of tools"; "farmers generally maintain levee grasslands by periodic mowing"
+
+### `paddy-field-enwiki`
+
+en.wikipedia Paddy field (READ 2026-08-27, T41)
+
+*Used for:* plots "separated by bunds approximately 10 cm in height" (a Korean example)
+
+### `irri-bund-summary`
+
+IRRI Rice Knowledge Bank on bund height (SUMMARY-ONLY 2026-08-27, T45 - unreachable; the "15-150 cm" range seen nowhere)
+
+*Used for:* bunds built ~20 cm to avoid overflow - summary only
+
+### `visit-toyama-sankyoson`
+
+Visit Toyama, the Tonami dispersed settlement (https://visit-toyama-japan.com/en/travel-inspiration/sankyoson; READ 2026-08-24)
+
+*Used for:* farmers building "in the middle of their cultivated rice fields so that they could easily manage the water for their own rice fields"; ~7,000 farmsteads over ~220 km2 with their kainyo groves
+
+### `mdpi-sho-fan-groundwater`
+
+Sho River alluvial-fan groundwater study, *Geosciences* 11(8):352 (https://www.mdpi.com/2076-3263/11/8/352; READ 2026-08-24)
+
+*Used for:* shallow groundwater on the fan as a mix of river water and paddy recharge - a well anywhere on the fan finds water
+
+### `geography-hub-satoyama`
+
+The Geography Hub, "Japan's Satoyama Landscapes" (READ 2026-08-27, T34)
+
+*Used for:* leaf litter to fertilizer, oak and chestnut cut cyclically, sunlight reaching the floor
+
+### `uehara-2009-agris`
+
+Uehara et al. 2009, on Rhododendron in the abandoned satoyama coppice forest (AGRIS record; READ 2026-08-27, T34)
+
+*Used for:* a managed coppice floor under a cut canopy
+
+### `waldrand-dewiki`
+
+de.wikipedia Waldrand (READ 2026-08-27, T45 - found when the English "Woodland edge" page did not carry the terms)
+
+*Used for:* the three-layer edge: herb fringe, shrub belt, forest mantle
+
+### `pmc7898781-fukugi`
+
+"Distribution and utilization of homestead windbreak Fukugi trees", PMC 7898781 (READ 2026-08-27, T45)
+
+*Used for:* Okinawan homestead windbreaks planted around 300 years ago
+
+### `ijc-yamaguni`
+
+International Journal of the Commons, "External impacts on traditional commons ..." - the Yamaguni district study (READ 2026-08-27, T36)
+
+*Used for:* "each of the 11 villages in Yamaguni district has its own unique institutions for managing its customary common property forests"; no boundary description
+
+### `kichijoji-enwiki`
+
+en.wikipedia Kichijōji (READ 2026-08-27, T36)
+
+*Used for:* a village laid out on strip lots from a road - dropped from the coppice argument
+
+### `phyllostachys-enwiki`
+
+en.wikipedia Phyllostachys bambusoides (READ 2026-08-27, T42)
+
+*Used for:* madake's uses - baskets, fans, sheaths for food and geta, shakuhachi
+
+### `pmc5723622-bamboo-range`
+
+The moso/madake range study, PMC 5723622 (READ 2026-08-27, T42)
+
+*Used for:* bamboo's distribution and cold tolerance (around -18 to -20 C)
+
+### `bamboo-growers-hardiness`
+
+Grower pages on madake hardiness - completebamboo.com and two others (READ 2026-08-27, T45)
+
+*Used for:* "-15 C, zone 7" and -18 to -23 C - a spread, not a number
+
+### `tsuijimatsu`
+
+tsuijimatsu.com (READ 2026-08-27, T42)
+
+*Used for:* bamboo in the homestead setting
+
+### `packer-2017-phragmites`
+
+Packer et al. 2017, Biological Flora of *Phragmites australis*, J. Ecology (https://besjournals.onlinelibrary.wiley.com/doi/full/10.1111/1365-2745.12797; READ 2026-08-26)
+
+*Used for:* the hydrosere - open water, littoral, reed swamp, sedge meadow, swamp woodland, dry ground
+
+### `kushiro-mire-2014`
+
+Kushiro Mire alder invasion, *Ecohydrology & Hydrobiology* 2014 (https://www.sciencedirect.com/science/article/abs/pii/S1642359314000706; READ 2026-08-26 - abstract)
+
+*Used for:* reed marsh invaded by alder where it dries
+
+### `otanoshike-2004`
+
+Otanoshike wetland, *Ecological Research* 2004 (https://link.springer.com/article/10.1111/j.1440-1703.2004.00644.x; READ 2026-08-26 - abstract)
+
+*Used for:* grassland with *Spiraea* shrubs at the marsh margin
+
+### `mlit-vegetation-classes`
+
+MLIT/NILIM river-environment vegetation classes (https://www.nilim.go.jp/lab/fbg/ksnkankyo/mizukokuweb/system/maegaki.files/shiryo2.pdf; READ 2026-08-26)
+
+*Used for:* the willow (タチヤナギ) and alder (ハンノキ) communities of Japanese wet margins
+
+### `hotes-wetland-diversity`
+
+Hotes, wetland ecosystem diversity, *Global Environmental Research* 12(1) (https://www.airies.or.jp/attach.php/6a6f75726e616c5f31322d316a706e/save/0/0/12_1-04.pdf; READ 2026-08-26)
+
+*Used for:* Japanese wetland zonation
+
+### `plos-2016-pine`
+
+PLOS One 2016 (https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0153972; READ 2026-08-26)
+
+*Used for:* pine's intolerance of waterlogged ground
+
+### `gymnosperm-densiflora`
+
+The Gymnosperm Database, *Pinus densiflora* (https://www.conifers.org/pi/Pinus_densiflora.php; READ 2026-08-26) with the Mt. Takao museum page
+
+*Used for:* red pine as a tree of dry, well-drained slopes - never a reed edge
+
+### `maff-drain-shape`
+
+MAFF, 排水路の形状・構造と適用条件 (技術書 20-23; https://www.maff.go.jp/j/nousin/noukan/tyotei/kizyun/pdf/04_hojou_hata_gijutsusho20-23.pdf; READ 2026-08-12)
+
+*Used for:* drain gradients and sections
+
+### `senjochi-jawiki`
+
+ja.wikipedia 扇状地, with MLIT land-classification notes (READ 2026-08-12)
+
+*Used for:* the three fan zones 扇頂 / 扇央 / 扇端 and the 扇端 spring line where the wet toe begins
+
+### `kohai-shicchi-jawiki`
+
+ja.wikipedia 後背湿地 and 自然堤防 (with GSI notes; READ 2026-08-12)
+
+*Used for:* backswamp formation behind the natural levee and its land use
+
+### `kashima-kainyo-1987`
+
+The 1987 survey of Kashima, Tonami plain (kainyo homestead groves) - SUMMARY-ONLY: the pointer was not recorded at the 2026-07 pass and is to be re-found (ja.wikipedia 屋敷林 / カイニョ cite the survey literature)
+
+*Used for:* the real scale of a homestead grove stand
+
+### `cssn-sangji-yutang`
+
+中国社会科学网, 从生态美学视角研究桑基鱼塘 (https://www.cssn.cn/ztzl/jzz/rwln/wh/lnfw1/202209/t20220923_5541481.shtml; READ 2026-08-28, feature 143)
+
+*Used for:* the classic ratio named as "基六塘四" (dike six, pond four - note the order); early dikes planted with mulberry, tea, vegetables and fruit, fruit-dike ponds the commonest; mulberry dominant from the late Ming in Nanhai and Shunde
+
+### `cssn-jiangnan-weitian`
+
+中国社会科学网, 古代江南圩田开发及其社会效应 (https://cssn.cn/lsx/lsx_zgs/202502/t20250217_5844872.shtml; READ 2026-08-28)
+
+*Used for:* "中有河渠，外有门闸。旱则开闸引江水之利，涝则闭闸拒江水之害" - channels inside, gates on the outside, opened in drought and shut in flood; the tangpu spacing "五里七里一横塘、七里十里一纵浦"
+
+### `sdlib-shunde-jitang`
+
+顺德图书馆, 发现顺德·经济篇 - 桑基鱼塘 (https://www.sdlib.com.cn/home/article/detail/id/741.html; READ 2026-08-28)
+
+*Used for:* the dike built from the pond's own spoil ("取泥覆四周为基，中凹下为塘"), planted with mulberry ("基种桑"), hemp, soybeans, peanuts and melon trellises; the Song 桑园围, the Jiajing spread, the Xianfeng-Tongzhi peak
+
+### `usu-windbreak`
+
+Utah State University Extension, Windbreak Benefits and Design (READ 2026-08-28)
+
+*Used for:* "Windbreaks reduce wind speeds up to 30 times their height (H) downwind"
+
+### `miragenews-polders`
+
+Mirage News, "China's Water Heritage: Significance of Polders" (XJTLU; https://www.miragenews.com/chinas-water-heritage-significance-of-polders-955573/; READ 2026-08-28)
+
+*Used for:* "By the early 20th century, they were further compartmented into even smaller islet-like polders, dubbed as fish-scale polders or yulin wei (鱼鳞圩), for their shapes as seen on aerial photos"; after 1949 "the organic forms of polders were replaced by standardised rectangular patterns for industrialised agricultural production"
+
+### `fusekoshi-jawiki`
+
+ja.wikipedia 伏越 (READ 2026-08-28)
+
+*Used for:* the inverted siphon as a method "historically seen in old waterways" - 見沼代用水の柴山伏越, 大垣輪中の鵜森伏越樋
+
+### `suirokyo-jawiki`
+
+ja.wikipedia 水路橋 (READ 2026-08-28)
+
+*Used for:* the aqueduct bridge carrying water over rivers and valleys (通潤橋, 明正井路, 水路閣 - the page does not date them)
+
+### `yashikirin-jawiki`
+
+ja.wikipedia 屋敷林 (居久根 redirects here; READ 2026-08-28)
+
+*Used for:* igune on the north and west of the homestead as windbreak and snowbreak; the species named - スギ, マツ, ヒノキ, ケヤキ (three evergreen conifers and one deciduous broadleaf; the page never says "evergreen-heavy")
+
+### `kuwa-jawiki`
+
+ja.wikipedia クワ (READ 2026-08-28)
+
+*Used for:* cultivated mulberry "低木仕立てが多い" - kept as a low shrub; the height and density figures are SUMMARY-ONLY (search syntheses: low-trunk mulberry under 70 cm, 1.2 m an optimal feeding height; 800-1,000 plants per mu in Jiangsu/Zhejiang, 5,000-6,000 in Guangdong)
+
+### `aburana-jawiki`
+
+ja.wikipedia アブラナ and zh.wikipedia 油菜 (READ 2026-08-28)
+
+*Used for:* rape sown in autumn, overwintering, cut in March-April (the food crop's calendar); rape sown into the harvested paddy and plowed in before the next transplanting (a Taiwan double-crop practice) - neither page gives the rice months
+
+### `wanli-fishpond-summary`
+
+The 1581 (万历九年) fishpond figures for the Pearl delta - SUMMARY-ONLY (2026-08-28): a search synthesis gives ~160,000 mu of taxable fishponds across Shunde, Nanhai and Panyu (Guangzhou prefecture), ~400,000 mu of dike-pond farming; the Shunde county figures (40,084 mu in 1581, 58,094 in 1642) were seen in a search snippet of a Shunde library page and not on a page read; the county percentage and the 1980s 35% survey were found nowhere. baike.baidu.com (403) is the likely carrier
+
+*Used for:* the scale of the sixteenth-century dike-pond zone, with that caveat
+
+### `chang-morphology-walled-capitals`
+
+Sen-dou Chang, "The Morphology of Walled Capitals", in Skinner (ed.), *The City in Late Imperial China* (http://web.stanford.edu/~mel1000/sen.pdf; cited by the feature 009 pass, 2026-07, as its strongest source; not re-read 2026-08-28)
+
+*Used for:* the sparse street net of a Chinese county seat, the deliberately unbuilt intramural reserve, the civic share - with 009's own caveat that the circulation percentage is triangulated, not measured
+
+### `tedai-jawiki`
+
+ja.wikipedia 手代 (READ 2026-08-28, feature 143 leftovers)
+
+*Used for:* "手代の多くは、村役人・町役人の子弟である" - most tedai were children of village and town officials, hired from peasants and townsmen who knew the district; nothing about birth order
+
+### `mingguanci-zhwiki`
+
+zh.wikipedia 名宦祠 (READ 2026-08-28)
+
+*Used for:* "名宦祠用以祭祀有政績的地方官" - the hall venerating local officials of merit, standing at the Confucian temple (east of the Dacheng gate), Ming Hongwu onward - a state institution, not a yamen's own predecessor shrine
+
+### `shoinzukuri-jawiki`
+
+ja.wikipedia 書院造 (READ 2026-08-28)
+
+*Used for:* "これら連続した室の南側には、入り側を介して庭が広がっていた" - the garden on the south of the formal rooms; nothing on the north service side
+
+### `economy-song-enwiki`
+
+en.wikipedia Economy of the Song dynasty (READ 2026-08-28; replaces the Grokipedia page of the same title)
+
+*Used for:* "Historian Robert Hartwell estimates that per capita iron output rose sixfold between 806 and 1078, such that, by 1078 China was producing 127,000,000 kg (125,000 t) in weight of iron per year"; Bao Qingtian on iron households given "government support, such as charcoal supplies and skilled craftsmen"
+
+### `loess-plateau-enwiki`
+
+en.wikipedia Loess Plateau (READ 2026-08-28; replaces the Grokipedia *History of agriculture in China*)
+
+*Used for:* "40-60% of the precipitation concentrate in June to August" - the summer concentration; the 400-800 mm range is not on the page
+
+### `kawara-jawiki`
+
+ja.wikipedia 瓦 (READ 2026-08-28)
+
+*Used for:* "江戸時代になっても一般庶民の家屋は板葺きが一般的で瓦葺きが普及したのは江戸時代末期のこと" - commoners' houses board-roofed; tile widespread only at the end of Edo
+
+### `kashi-jawiki`
+
+ja.wikipedia 河岸 and 雁木 (港湾) (READ 2026-08-28)
+
+*Used for:* the kashi as a river port and landing that grew into a warehouse and merchant district; gangi as the stairs at a landing used to load and unload cargo
+
+### `chaoguan-zhwiki`
+
+zh.wikipedia 鈔關 (READ 2026-08-28)
+
+*Used for:* "税关是中國明清兩代，政府在货物集散地和水陆要冲设立的关卡" - Ming-Qing customs barriers at commodity centers and strategic water and land routes (the eight great chaoguan on the Grand Canal), not at a county seat's gates
+
+### `takayama-coverage-summary`
+
+Takayama Jin'ya site and building areas - SUMMARY-ONLY (2026-08-28): a search synthesis gives "敷地面積は3,000坪、建物面積は1,000坪" (~33% coverage); the 御蔵 "年代、規模共に全国有数の穀物土蔵"
+
+*Used for:* the jin'ya's built coverage and the granary's standing, both unread
+
+### `fukagawa-kiba-summary`
+
+Fukagawa kiba, the Edo lumber yards - SUMMARY-ONLY (2026-08-28): fifteen timber wholesalers bought ~300,000 m2 in 1701; the yards were ordered out of the city after the 1657 Meireki fire because in-town timber yards spread fire
+
+*Used for:* the lumber yard as a waterfront works far larger than a shophouse, sited out of the built core
+
+### `nanjing-wall-enwiki`
+
+en.wikipedia City Wall of Nanjing (READ 2026-08-28)
+
+*Used for:* the Ming circuit built "in a winding, free style, based on the city's complicated topography" with the river as its moat; the 35.267 km length is SUMMARY-ONLY (aggregator sites)
+
+### `shanghai-xiancheng-zhwiki`
+
+zh.wikipedia 上海县城 (READ 2026-08-28)
+
+*Used for:* "1553年为抵御溯江而上的倭寇第一次修建了环城的城墙" and its 圆形轮廓; "one season" not stated
+
+### `hyojosho-jawiki`
+
+ja.wikipedia 評定所 (READ 2026-08-28)
+
+*Used for:* the Hyōjōsho standing "江戸城外の辰ノ口" - OUTSIDE Edo castle at Tatsunokuchi (present Marunouchi 1-chome)
+
+### `tamagawa-josui-jawiki`
+
+ja.wikipedia 玉川上水 (READ 2026-08-28)
+
+*Used for:* "高低差92.3メートルの間に全長42.74キロメートル"; distribution into the city from the 水番所 at Yotsuya Ōkido; wooden and stone pipes underground below it (no total km given)
+
+### `suidobashi-jawiki`
+
+ja.wikipedia 水道橋 (READ 2026-08-28)
+
+*Used for:* the bridge renamed for the Kanda josui's 御茶ノ水懸樋 crossing after the Meireki fire
+
+### `edo-36-mitsuke-jawiki`
+
+ja.wikipedia 江戸城三十六見附 (READ 2026-08-28)
+
+*Used for:* "俗に江戸城には36の見付があったといわれ" - and the page's own hedge that the real count was higher ("66、90など諸説あり")
+
+### `karamete-jawiki`
+
+ja.wikipedia 搦手 and 大手門 (READ 2026-08-28)
+
+*Used for:* the karamete-mon as the rear gate opposite the ōte-mon (generic; Edo not named; no divination reasoning)
+
+### `xian-moat-zhwiki`
+
+zh.wikipedia 西安城墙 (moat section; READ 2026-08-28)
+
+*Used for:* "城墙的外侧有护城河，宽20米，深10米，终年积水，和城墙共同构成完整的防御体系"
+
+### `osaka-castle-jawiki`
+
+ja.wikipedia 大坂城 (READ 2026-08-28)
+
+*Used for:* the Yodo and its tributaries below the northern plateau "天然の堀の機能を果たすとともに、城内の堀へと水を引き込むのに利用された"
+
+### `suzaku-oji-jawiki`
+
+ja.wikipedia 朱雀大路 (READ 2026-08-28)
+
+*Used for:* Heian-kyō's avenue "幅82メートル（延喜式）"; Chang'an's "幅147メートル"
+
+### `tokaido-jawiki`
+
+ja.wikipedia 東海道 (READ 2026-08-28)
+
+*Used for:* "慶長9年2月に大久保長安その他に命じて街道の幅員を5間とし" - 5 ken (~9 m, ~29.5 ft) in 1604
+
+### `changan-enwiki`
+
+en.wikipedia Chang'an (READ 2026-08-28)
+
+*Used for:* walled wards and the market drum; the Tang ward count is SUMMARY-ONLY (109-110 usually; "108" the popular figure)
+
+### `kuramae-jawiki`
+
+ja.wikipedia 蔵前 (READ 2026-08-28; 浅草御蔵 404)
+
+*Used for:* "浅草御蔵は、隅田川の右岸に上流から一番、二番と数える8本の堀を作り" - eight numbered channels into the storehouse ground
+
+### `horikawa-nagoya-jawiki`
+
+ja.wikipedia 堀川 (名古屋市) (READ 2026-08-28)
+
+*Used for:* dug in 1610 under Fukushima Masanori for the castle's construction materials; the 舟入堀 count of nine in Edo is SUMMARY-ONLY (ja.wikipedia 舟入 is a disambiguation page)
+
+### `sento-jawiki`
+
+ja.wikipedia 銭湯 (READ 2026-08-28)
+
+*Used for:* "文化年間（1804〜1818年）には、人口約100万〜120万人の江戸全体で600軒以上の銭湯があった" - the record's "523 in 1810" is a search-summary figure
+
+### `shichiya-jawiki`
+
+ja.wikipedia 質屋 (READ 2026-08-28 - no Edo count on the page; the "2,700+" is SUMMARY-ONLY, also in `town-deep-audit.md`'s darumapedia pointer)
+
+*Used for:* pawnbroking as the commoner's bank
+
+### `edo-sanza-jawiki`
+
+ja.wikipedia 江戸三座 (READ 2026-08-28)
+
+*Used for:* the three playhouses licensed by the town magistracy after consolidation from many, to four, to three
+
+### `kasoba-jawiki`
+
+ja.wikipedia 火葬場 (READ 2026-08-28)
+
+*Used for:* by ~1650 almost every temple in Asakusa and Shitaya cremating in its precinct; ~20 temple crematoria moved to the Kozukappara area in 1667 after smoke troubled a shogunal visit; the 1873 proposal to ban cremation over smoke and odor (rescinded ~1875)
+
+### `bernstein-fire-and-earth`
+
+Andrew Bernstein, "Fire and Earth: The Forging of Modern Cremation in Meiji Japan", JJRS 27/3-4 (2000) - the Nanzan copy returned only a stub; READ via the secondary account at unseen-japan.com/meiji-japan-cremation-ban-attempt/ (2026-08-28): "In May 1873, they suggested relocating crematoriums, notably the Senju temple ones, outside the city's 'red line' (shubiki, 朱引)"; "the severe stench injures people's health"
+
+*Used for:* the May 1873 shubiki proposal and the stench rationale - SUMMARY-ONLY as to Bernstein's own text
+
+### `changmen-zhwiki`
+
+zh.wikipedia 阊门 (READ 2026-08-28)
+
+*Used for:* the Ming-Qing Changmen district "全中国最繁盛的商业街区", its radial streets outside the wall and tens of thousands of shops
+
+### `nisshinkan-jawiki`
+
+ja.wikipedia 日新館 (READ 2026-08-28)
+
+*Used for:* the reconstructed school's 弓道場・武道場; the lecture-hall pairing as doctrine is not stated
+
+### `bodaiji-jawiki`
+
+ja.wikipedia 菩提寺 (READ 2026-08-28)
+
+*Used for:* the lineage temple "一家が代々その寺の宗旨に帰依して、先祖の菩提を弔う寺院"; 檀那寺 under the danka system
+
+### `sando-jawiki`
+
+ja.wikipedia 参道 (READ 2026-08-28)
+
+*Used for:* the approach "街道筋など人通りの多いところから社寺に至る道"; highways sometimes bent to bring them nearer a shrine
+
+### `azolla-enwiki`
+
+en.wikipedia Azolla (READ 2026-08-28, leftovers pass)
+
+*Used for:* Azolla planted on flooded paddies, "the rotting plant material ... releases nitrogen into the water for the rice plants"; the Anabaena symbiont is in the page's biology section, not in the passage read
+
+### `daxiangguo-enwiki`
+
+en.wikipedia Daxiangguo Temple (READ 2026-08-28)
+
+*Used for:* the Kaifeng monastery managing "64 departments ... with several thousand of monks" - more than the record's "1,000+"
+
+### `adashino-jawiki`
+
+ja.wikipedia 化野 (READ 2026-08-28)
+
+*Used for:* "かつては風葬の地", later a cremation ground with Toribeyama; one of Kyoto's three great burial grounds (西の化野・東の鳥辺野・北の蓮台野)
+
+### `fukada-kotobank`
+
+コトバンク 深田 and ja.wikipedia ヨシ (READ 2026-08-28)
+
+*Used for:* 深田 "どろの深い田。沼田" - the deep-mud paddy; reed cutting after the rice harvest as a seasonal custom; the Meiji-drainage persistence and the iriai framing not on either page
+
+### `magariya-jawiki`
+
+ja.wikipedia 曲屋 (READ 2026-08-28)
+
+*Used for:* "南側に厩が母屋の下手に接続して突出し" - the stable projecting on the south, joined to the house, warmed by the kitchen hearth; nothing on the well
+
+### `kayabuki-jawiki`
+
+ja.wikipedia 茅葺 (READ 2026-08-28)
+
+*Used for:* thicker thatch "より急勾配が要求される" - the steep pitch as a material requirement; no degree figure
+
+### `weinei-he-summary`
+
+圩内河 canal forms - SUMMARY-ONLY (2026-08-28): a 中国国家地理 feature seen in search: "河道有十字、丁字、月状、弓状等多种形状 ... 河道两端直达圩田堤岸，并建闸控制蓄水和滞洪"
+
+*Used for:* the crescent and bow canal forms and the gated ends of the polder's internal channels
+
+### `dikepond-erosion-summary`
+
+Dike-pond landscape 1949-2020 (Shunde) - SUMMARY-ONLY (2026-08-28): "size of ponds increased while that of dikes decreased between 1967 and 2016"; the 20 m -> <4 m magnitude not seen
+
+*Used for:* the direction of consolidation - ponds growing, dikes shrinking
+
+### `rice-rape-calendar-summary`
+
+Yangtze rice-rape rotation calendar - SUMMARY-ONLY (2026-08-28, agricultural-extension pages in search): rape sown late September to mid-October, harvested early April (southern Jiangxi) to early May (Jiujiang); rice transplanted mid-April to early May
+
+*Used for:* the two halves of one plot's year - with the sowing window a little earlier than the record's Oct-Nov
+
+### `hancho-jawiki`
+
+ja.wikipedia 藩庁 (READ 2026-08-28, T20)
+
+*Used for:* "城持大名以上の藩は城に、城主格以下の城主格と無城大名の藩は城を構えることが許されなかったことから、領内に屋敷を置いて藩庁とした" - a castle-holding han's seat was AT the castle; a castle-less han's was its jin'ya
+
+### `honmaru-jawiki`
+
+ja.wikipedia 本丸 (READ 2026-08-28)
+
+*Used for:* "近世における本丸は、城主とその家族が暮らす奥御殿と政庁である表御殿を置き" - the goten's public half named as the 政庁
+
+### `kakegawa-castle-jawiki`
+
+ja.wikipedia 掛川城 (READ 2026-08-28)
+
+*Used for:* "政務所である二ノ丸御殿" at a ~51,000-59,000 koku domain - the administration office in the ninomaru goten; ja.wikipedia 川越城 (170,000 koku) likewise puts the lord's residence and a 武具方役所 in the ninomaru
+
+### `karo-jawiki`
+
+ja.wikipedia 家老 (READ 2026-08-28)
+
+*Used for:* the karō deciding in council ("評定所などに集合して合議の上で決裁する") and keeping their mansions "城の近く" - near the castle; no ring named
+
+### `goyobeya-kotobank`
+
+コトバンク 御用部屋 (READ 2026-08-28 - the SHOGUNATE's executive room inside Edo castle, near the shogun's quarters; analogy only, not han evidence)
+
+*Used for:* the executive council room inside the seat of government

@@ -16,7 +16,9 @@
   }
 
   var current = null;
+  var pinned = null;  // the class whose modal is open keeps its highlight until the modal closes (GM 2026-08-28)
   function highlight(key) {
+    if (pinned !== null && key !== pinned) return;
     if (key === current) return;
     var gs, j;
     if (current !== null) {
@@ -36,6 +38,7 @@
   }
   svg.addEventListener("pointerover", function (e) { highlight(keyAt(e.target)); });
   svg.addEventListener("pointerleave", function () { highlight(null); });
+  function unpin() { pinned = null; highlight(null); }
 
   function setText(id, s) { document.getElementById(id).textContent = s || ""; }
   function cap(s) { return s.charAt(0).toUpperCase() + s.slice(1); }
@@ -65,10 +68,12 @@
     // all ~175,000 elements of the map on every open and close - measured ~1 s and ~50 MB per cycle
     // on Inashiro, enough to crash the tab in the browser test on a tight machine. A non-modal
     // dialog with our own shade behind it costs nothing; Escape and the shade close it below.
+    pinned = key;
+    highlight(key);
     shade.hidden = false;
     dialog.show();
   }
-  function closeDialog() { dialog.close(); shade.hidden = true; }
+  function closeDialog() { dialog.close(); shade.hidden = true; unpin(); }
   svg.addEventListener("click", function (e) {
     var key = keyAt(e.target);
     if (key !== null) open(key);
@@ -76,7 +81,7 @@
   var shade = document.getElementById("shade");
   document.getElementById("x-close").addEventListener("click", closeDialog);
   shade.addEventListener("click", closeDialog);  // a click outside the modal closes it
-  dialog.addEventListener("close", function () { shade.hidden = true; });
+  dialog.addEventListener("close", function () { shade.hidden = true; unpin(); });
 
   // ---- ZOOM AND PAN (spec FR-013, GM 2026-08-28: "zoom in significantly more ... zoom out ... to a
   // degree that the entire settlement is visible all within the browser viewport"). The map is
@@ -184,6 +189,7 @@
     highlight: highlight,
     open: open,
     current: function () { return current; },
+    pinned: function () { return pinned; },
     classes: Object.keys(groups),
     count: function (key) { return (groups[key] || []).length; },
     zoom: function () { return view.s / view.fit; },
