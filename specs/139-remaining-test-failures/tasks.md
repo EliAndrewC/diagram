@@ -10,5 +10,6 @@ Checked off only when verified on the whole tripwire, the gate cohort and the 24
 - [ ] T06 the tail: `kosatsuba_by_the_road` (seeds 05, 26), `paddy_bunds_do_not_stagger` (12, 39), `houses_clear_of_paddies` (16; gate 44), `title_clear_of_features` (19; gate 43), `features_do_not_overlap` (26), `long_ditches_have_a_footbridge` (47) (research: physical for the bund and footbridge rows - research pass [ ], source-reader confirmed [ ], recorded and cited [ ])
 - [ ] T07 cohort seeds 22 (`field_ringed`) and 24 (`paddy_bunds_clear_the_supply_channels`) (research: physical - cite the field rule each check encodes; research pass [ ], source-reader confirmed [ ], recorded and cited [ ])
 - [ ] T08 the pool hamlets (FULL-only): Kashikawa, Mizuguchi, Sawada - re-measured, then fixed by the same mechanisms
+- [ ] T08b the reference's review notes (settlement-review 2026-08-28, PASS WITH NOTES, in `pool/hamlets/inashiro.notes.md`): the notice board's caption seated across the lane from its glyph (score the seat on the glyph's side of any way between them); lane 5's terminal fading out short of the plot; two nitpicks (a 5 ft tail past a junction, a 12 ft jog)
 - [ ] T09 every pin table empty; the unlocked gate, the tripwire and the 24-seed cohort green; handoff to the efficiency session recorded
 - [ ] T10 the result reported to the GM
