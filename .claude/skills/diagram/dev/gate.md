@@ -359,3 +359,23 @@ numbers equal and say in a comment that they are meant to be.
 ## A SEGMENT IS NOT ENTERED FOR A SCALE ITS GUARD EXCLUDES (feature 145)
 
 Write a tier-specific segment with its guard as the WHOLE body - `if scale in ('city', 'capital'):` (or `URBAN`) wrapping everything before `return _kept(...)` - and the driver will not call it on a hamlet; the registry derives that from the AST (`check_village/CLAUDE.md`, "Scales"). A mixed segment runs everywhere. This is what keeps a city check's file off the hamlet coverage path, so it is the shape to keep when adding one.
+
+## THE BATTERY IS A THIRD SMALLER, AND WHY (feature 146, 2026-08-28)
+
+Feature 141 retired ~385 check names by stubbing each `check(...)` call, and left every segment body that
+computed the retired check's inputs in place, on the comment "the segment stays for the check it keeps or
+the value it writes". For a third of the battery neither was true. Feature 146 removed **210 segments and
+29 helpers - about 5,300 lines** whose chains reach no live check; all 153 live checks survive and the
+frozen registry rows went 595 -> 385.
+
+Two things to carry forward when you next cut checks:
+
+- **A retired check leaves a body behind.** Stubbing the call is not removing the check; the computation
+  above it usually has no other consumer. Check `registry`'s own `needs` before assuming it does.
+- **Reachability by shared NAMES is useless here.** Segment locals are single letters (`q`, `k`, `b`, `s`),
+  so "does any later segment need a name this one writes" says everything reaches everything. The honest
+  test is "does this segment keep a live check, and does anything need a value only IT writes".
+
+And the town/city half of the battery had not been RUN since the 2026-08-16 freeze - the only maps at those
+scales are frozen and nothing gated them. `tests/tier_city/test_frozen_pool_gate.py` now gates each exhibit
+read-only with its post-freeze failures pinned. If you add a city check, that file is what exercises it.
