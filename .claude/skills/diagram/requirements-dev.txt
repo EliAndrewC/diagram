@@ -51,6 +51,8 @@ pyproject-hooks==1.2.0
     # via
     #   build
     #   pip-tools
+pyrefly==1.2.0
+    # via -r requirements-dev.in
 pytest==9.1.1
     # via
     #   -r requirements-dev.in

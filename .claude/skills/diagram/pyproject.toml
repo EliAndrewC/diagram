@@ -77,6 +77,32 @@ ignore_missing_imports = true
 # ~2,470 pre-existing strict errors; they were cleared module-by-module in focused behavior-preserving
 # passes, each verified by byte-identical map output + the full gate still passing on every pool map.)
 
+# ---- pyrefly (the type checker the gate runs - feature 142) ------------------------------
+# pyrefly (Meta, Rust) replaced mypy as the CHECKER on 2026-08-28: a full cold check of the engine
+# is ~0.6 s with nothing resident, where mypy needed 12.7 s cold or a 400-600 MB daemon per clone to
+# reach 0.13 s (specs/142-rust-type-checker/research.md R2). ty (Astral) was measured too and is as
+# fast, but has no rule for a missing annotation - the property the project's strict discipline
+# rests on (R3) - so pyrefly. The [tool.mypy] block above STAYS: mypy remains installed as the
+# cross-check (`python3 -m mypy` still passes) until the GM rules on removing it (spec FR-007b).
+# `project-includes` is the SAME list as [tool.mypy].files - tests/test_typecheck.py asserts it.
+[tool.pyrefly]
+python-version = "3.14"
+search-path = ["."]                      # = mypy_path: `l7r` is a namespace portion, roots start here
+project-includes = ["l7r/diagram/settlement", "l7r/diagram/check_village", "l7r/diagram/waterfields", "l7r/diagram/hamletgen", "l7r/diagram/sitegen", "l7r/diagram/ci", "l7r/diagram/switches.py", "l7r/diagram/compound.py", "l7r/diagram/citybudget.py", "l7r/diagram/tools/pack_audit.py", "l7r/diagram/tools/why_placed.py", "l7r/diagram/tools/scatter_audit.py", "l7r/diagram/tools/timings.py", "l7r/diagram/tools/perf_bands.py", "l7r/diagram/tools/perf_review.py", "l7r/diagram/tools/perf_profile.py", "l7r/diagram/pipeline/pool_index.py", "l7r/diagram/pipeline/poolmaps.py"]
+# boto3/botocore: absent from the build image on purpose (see the mypy override above)
+replace-imports-with-any = ["boto3", "boto3.*", "botocore", "botocore.*"]
+
+# The mypy --strict equivalents, enabled by NAME rather than pyrefly's `strict` preset: that preset
+# also turns on implicit-any-lambda (167 hits) and implicit-any-empty-container (163) which mypy
+# strict never asked for (research R3). Each rule here maps to a mypy strict flag:
+[tool.pyrefly.errors]
+unannotated-parameter = true      # disallow_untyped_defs / disallow_incomplete_defs
+unannotated-return = true         # disallow_untyped_defs
+unannotated-attribute = true      # (class attributes; mypy infers these - stricter, 0 hits)
+implicit-any-type-argument = true # disallow_any_generics
+no-any-return-implicit = true     # warn_return_any
+unused-ignore = true              # warn_unused_ignores
+
 # ---- pytest + coverage -------------------------------------------------------------------
 [tool.pytest.ini_options]
 # testpaths pins collection to tests/ - without it pytest walks the whole skill dir (and, from

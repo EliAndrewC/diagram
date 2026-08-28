@@ -465,7 +465,7 @@ class FinishMixin:
             box = (px_ - half, py_ - half, px_ + half, py_ + half)
             self.label(lx, ly, text, 12, italic=True, weight="bold", color="#5A4326", ref=box, rot=tilt_, linear=True)
             self.M["road_label"] = [lx, ly]
-            self._road_label = None
+            self._road_label: Any = None  # declared Any at structures/ground.py; re-declared for the checker (the attribute is conditional)
         # Every block below is built as TWO aligned lists - the strings, and their feature classes
         # (feature 134): the string block is spliced into `self.out` exactly as before, the class
         # block into `self.out_cls` at the same index, so the side-list stays index-aligned with the

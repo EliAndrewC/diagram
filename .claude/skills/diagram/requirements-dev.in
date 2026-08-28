@@ -1,7 +1,8 @@
 # The quality gate (`make done`): lint, format, types, tests, coverage, parallel runner.
 # Re-lock: pip-compile --output-file=requirements-dev.txt requirements-dev.in
 ruff
-mypy
+mypy         # kept installed as the cross-check for pyrefly until the GM rules on removing it (feature 142 FR-007b)
+pyrefly      # THE type checker (feature 142) - Rust, one-shot, no daemon
 pytest
 pytest-cov
 pytest-xdist

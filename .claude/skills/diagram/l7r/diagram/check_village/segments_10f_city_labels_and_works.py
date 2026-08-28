@@ -352,7 +352,7 @@ def _seg_0563_274___tw_on_water(
             r_ = max(o_["w"], o_["h"]) / 2  # family: ASSOCIATION/REACH, as _ty_on_water above
             if any(seg_dist(o_["x"], o_["y"], _pl[i], _pl[i + 1]) < _hw + r_ + reach for _pl, _hw in _tw_water for i in range(len(_pl) - 1)):
                 return True
-            return _tw_pond is not None and math.hypot(o_["x"] - _tw_pond[0], o_["y"] - _tw_pond[1]) < max(_tw_pond[2], _tw_pond[3]) + r_ + reach
+            return _tw_pond is not None and bool(math.hypot(o_["x"] - _tw_pond[0], o_["y"] - _tw_pond[1]) < max(_tw_pond[2], _tw_pond[3]) + r_ + reach)
 
     return _kept(locals(), ('_tw_on_water',))
 

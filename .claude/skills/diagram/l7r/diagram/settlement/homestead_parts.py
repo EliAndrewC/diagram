@@ -1015,7 +1015,7 @@ class HomesteadPartsMixin:
                 # the DRAWN box (a location marker like the kosatsuba draws at a legibility floor
                 # above its true footprint, and overlap here is about drawn pixels - same reason the
                 # wells use vr over r)
-                hw, hh = o.get("vw", o["w"]) / 2, o.get("vh", o["h"]) / 2
+                hw, hh = o.get("vw", o["w"]) / 2, o.get("vh", o["h"]) / 2  # pyrefly: ignore[unsupported-operation]  # dict.get(k, Any-default) typed Any|None by pyrefly, Any by mypy - research 142 R5
                 if o.get("rot"):
                     hw = hh = math.hypot(hw, hh)
                 if o["x"] + hw >= bx0 and o["x"] - hw <= bx1 and o["y"] + hh >= by0 and o["y"] - hh <= by1:
