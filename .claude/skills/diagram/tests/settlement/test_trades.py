@@ -1,8 +1,6 @@
 """Split from test_settlement.py by feature 025 - see tests/settlement/CLAUDE.md for the index."""
 
-import pytest
-
-from tests.settlement._builders import _city, _crop_settlement, _town
+from tests.settlement._builders import _crop_settlement, _town
 
 
 def test_trade_works_caption_hand_seat_moves_the_label_and_its_band():
@@ -19,22 +17,6 @@ def test_trade_works_caption_hand_seat_moves_the_label_and_its_band():
     assert abs((lab2[0] + lab2[2]) / 2 - 400) < 1.0 and lab2[1] > 300
 
 
-def test_farrier_draws_a_forge_shed_with_a_working_apron_and_records_it():
-    # the shoeing forge (GM 2026-07-25, settlements.md "TRADE WORKS" -> FARRIERY): an open-sided
-    # shed plus the apron the animal is actually stood on, recorded as a first-class trade work so
-    # farrier_serves_a_stables / farrier_keeps_fire_gap can gate its siting. Sizes are TRUE feet -
-    # a 20x18 ft shed on a 28x20 ft apron - so the record is the full 28x38 ft footprint.
-    s = _city()
-    before = len(s.out)
-    s.farrier(600, 620)
-    assert len(s.out) > before
-    fr = s.M["farriers"][-1]
-    assert (fr["x"], fr["y"]) == (600, 620)
-    assert fr["w"] == round(s.px(28), 1) and fr["h"] == round(s.px(38), 1)
-    assert fr["label"] == "farrier"
-    assert "#8FA6B0" in s.out[-1]  # the quench tub - a forge always has water at hand
-
-
 def test_tanning_yard_two_row_layout_and_ditch_intake():
     # The pool covers 4 pits on a ditch (Hoshizora) and 12 on live water (Tango/Nagahara); this
     # reaches the branches between - an ODD pit count over one row, where the last row is short
@@ -46,20 +28,6 @@ def test_tanning_yard_two_row_layout_and_ditch_intake():
     svg = "".join(s.out)
     assert svg.count('fill="#8E8A6A"') == 7  # exactly 7 pits drawn, not the 8 the grid would hold
     assert '#9CB4C8' in svg  # the gated intake cut (ditch variant), not staking frames
-
-
-def test_intake_cut_is_lengthened_to_REACH_the_drawn_bank():
-    # settlement-review 2026-08-08: the cut was a flat px(11), so a yard seated a little off its
-    # ditch (Hoshizora, re-rotated onto the drain) drew a stub that stopped 4 ft short of the water
-    # and read as a tab pinned to the yard. Nothing in the gate sees this - tanning_yard_on_water
-    # asks whether the YARD is near a bank, never whether the CUT arrives - so the rule lives here.
-    s = _town()
-    s.field_channel([(340, 340), (460, 340)], "#9CB4C8", 2.0, 2.0)  # a drawn ditch 40px out from the yard's water edge
-    s.tanning_yard(400, 400, rot=0, pits=4, water="ditch")
-    svg = "".join(s.out)
-    # yard is 41 tall, so its water edge sits at y=-20.5 local; the ditch centerline is 39.5 further
-    assert 'height="39.5"' in svg and 'y="-60.0"' in svg  # the cut spans edge -> centerline, not a fixed 11
-    assert s._intake_reach(400, 400, 0.0, 20.5) == pytest.approx(39.5)
 
 
 def test_intake_cut_falls_back_to_its_stock_length_with_no_water_ahead():
@@ -91,25 +59,6 @@ def test_charcoal_yard_records_its_sheds_and_its_cooling_apron():
     assert a["sheds"] == 2 and b["sheds"] == 1
     assert len(a["apron"]) == 4 and a["w"] == 88 and a["h"] == 58
     assert a["label"] == "charcoal yard" and a["rot"] == -17.0
-
-
-def test_kiln_draws_a_works_and_records_its_body_and_its_quarters():
-    """A kiln is a WORKS, not a lone glyph (GM 2026-07-27): the kiln itself, the throwing shed, the
-    clay pit, the fuel stack, its own private well, and the cottages of the households that work
-    it. `body` and `quarters` are part of the record's contract - kiln_keeps_fire_gap measures from
-    the body, and a record with neither is a rule nobody can apply."""
-    s = _town()
-    s.kiln(400, 400)
-    k = s.M["kilns"][0]
-    # The caption says "kiln works", not "tile kiln" and not a bare "kiln" (GM 2026-07-27): the
-    # feature is the kiln PLUS its drying shed, clay pit, fuel stack, well and its workers' cottages,
-    # so naming it after one building inside it under-describes what the reader is looking at.
-    assert (k["w"], k["h"]) == (140.0, 120.0) and k["label"] == "kiln works"
-    assert len(k["body"]) == 5 and (k["body"][2], k["body"][3]) == (46.0, 16.0)
-    assert len(k["quarters"]) == 2  # the default works houses two households
-    # the cottages stand a clear fire gap BELOW the kiln body, which is the whole point of the
-    # works' otherwise empty middle
-    assert min(q[1] for q in k["quarters"]) - (k["body"][1] + 8) >= 60
 
 
 def test_kiln_cottage_count_is_clamped_to_the_one_to_three_band():

@@ -4,13 +4,12 @@ locked to another tier; the gate collects everything. Helpers stay in the source
 
 import json
 import math
-import os
 
 import pytest
 
-from l7r.diagram import check_village, citybudget
+from l7r.diagram import citybudget
 from l7r.diagram.citybudget import BudgetLine, budget_to_manifest, plan_capital, plan_city
-from tests.test_citybudget import HERE, _cap, _line, _prog
+from tests.test_citybudget import _cap, _line, _prog
 
 
 @pytest.mark.parametrize("pop", [1999, 4001, 0, 12000])
@@ -56,17 +55,6 @@ def test_agri_toggle_adds_exactly_its_itemized_line_and_grows_the_wall(pop):
 def test_canvas_with_room_is_accepted():
     b = plan_city(_prog(), canvas=(3200.0, 2700.0))
     assert 2 * (b.wall.rx + citybudget.WALL_MARGIN_PX) <= 3200
-
-
-@pytest.mark.tiers("city")
-def test_pre_feature_nagahara_is_priced_as_over_enclosed():
-    # The pinned GM-rejected map: its program (pop 3000, river city, NO agricultural district)
-    # must price a required interior that its actual wall over-encloses beyond the check tolerance.
-    with open(os.path.join(HERE, "pool", "regressions", "city_budget_fires_on_the_too_empty_nagahara.json")) as fh:
-        M = json.load(fh)
-    measured = check_village.poly_area(M["wall"])
-    b = plan_city(_prog(river=True, aspect=460 / 494, nring=20))
-    assert measured > b.required_interior_px2 * (1 + check_village.BUDGET_TOL_OVER)
 
 
 @pytest.mark.tiers("city")

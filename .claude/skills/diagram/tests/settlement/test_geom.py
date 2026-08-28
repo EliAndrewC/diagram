@@ -10,7 +10,7 @@ import pytest
 
 from l7r.diagram import settlement
 from l7r.diagram.settlement import Settlement, seg_dist
-from tests.settlement._builders import _IDX_POLY, _cap020, _ladder_map, _max_turn_deg, _memo_city, _torii_city, _ward_city_with_samurai
+from tests.settlement._builders import _IDX_POLY, _cap020, _ladder_map, _max_turn_deg, _memo_city, _ward_city_with_samurai
 
 
 def test_stroke_quads_makes_one_quad_per_segment():
@@ -40,17 +40,6 @@ def test_way_beds_carries_the_lane_network_lane_runs_does_not():
 
 def test_seg_closest_degenerate_segment():
     assert settlement.seg_closest(0, 0, (5, 5), (5, 5)) == (5, 5)
-
-
-def test_shrine_hall_torii_count_pin_extends_a_single_point_avenue():
-    # the per-temple pin (the per-hall analog of the village 'torii_count' knob): a pinned 7
-    # marches the avenue away from the hall at the HOUSE PITCH (TORII_PITCH_FT, 20 real ft) from
-    # the single given point - it was a fixed 44px until 2026-07-25, which is 132 ft at city scale
-    s = _torii_city(torii_count=7)
-    step = s.px(settlement.TORII_PITCH_FT)
-    y0 = 500 + s.px(84) / 2 + step  # the hall's front edge + one pitch - _avenue_at_threshold owns the seat now
-    assert s.M["religious"][-1]["torii_count"] == 7
-    assert sorted(t[1] for t in s.M["torii"]) == pytest.approx([y0 + step * i for i in range(7)], abs=0.1)
 
 
 def test_indexed_overrides_every_mutating_list_method():

@@ -6,67 +6,11 @@ from typing import Any
 from l7r.diagram.settlement import crop_boxes, forest_frame_span
 from l7r.diagram.settlement._knobs import windbreak_face
 
-from .common_01_geometry import (
-    seg_dist,
-    segments_cross,
-)
 from .common_02_overlap_policy import CANOPY_STRUCT_KEYS, FOREST_REVEAL_FT, GridIndex, forest_reveal_x, matrix_extents, torii_halfbox
 from .common_03_capacity import (
     _UNBOUND,
     _kept,
 )
-
-
-def _seg_0000__city_is_ringed_by_farmland(
-    *,
-    M: Any = _UNBOUND,
-    _cf: Any = _UNBOUND,
-    _cfa: Any = _UNBOUND,
-    _cfh: Any = _UNBOUND,
-    _cshare: Any = _UNBOUND,
-    _f: Any = _UNBOUND,
-    _flanks: Any = _UNBOUND,
-    _fx: Any = _UNBOUND,
-    _fy: Any = _UNBOUND,
-    _i: Any = _UNBOUND,
-    _o: Any = _UNBOUND,
-    _wcx: Any = _UNBOUND,
-    _wcy: Any = _UNBOUND,
-    check: Any = _UNBOUND,
-    f: Any = _UNBOUND,
-    meta: Any = _UNBOUND,
-    q: Any = _UNBOUND,
-) -> dict[str, Any]:
-    """Gate segment 0 (city_is_ringed_by_farmland) - body verbatim from the legacy gate() (feature 022)."""
-    if str(meta.get("scale")) in ("city", "capital") and M.get("wall"):
-        _cf = [f for f in (M.get("fields") or []) if f.get("outline")]
-        _wcx = sum(q[0] for q in M["wall"]) / len(M["wall"])
-        _wcy = sum(q[1] for q in M["wall"]) / len(M["wall"])
-        _flanks = set()
-        for _f in _cf:
-            _fx = sum(q[0] for q in _f["outline"]) / len(_f["outline"])
-            _fy = sum(q[1] for q in _f["outline"]) / len(_f["outline"])
-            _flanks.add(("e" if _fx > _wcx else "w") if abs(_fx - _wcx) > abs(_fy - _wcy) else ("s" if _fy > _wcy else "n"))
-        # COUNT IS NOT ENOUGH - the first cut of this rule passed a capital carrying four token
-        # fields on 1.3% of its sheet (GM 2026-08-11: "look at how much empty space there is! The
-        # entire southwest of the city is an open field with no land... only one rice field between
-        # the entire north gate and southwest gate?!"). What separates a ringed city from a
-        # decorated one is AREA: Tango farms 3.8% of its sheet, Minami 3.0%, Nagahara 2.3%. 2.0% is
-        # the floor, with 6+ fields across 3+ flanks, and the farmhouses that work them counted too
-        # - fields without households are scenery, not agriculture.
-        _cfa = 0.0
-        for _f in _cf:
-            _o = _f["outline"]
-            _cfa += abs(sum(_o[_i][0] * _o[(_i + 1) % len(_o)][1] - _o[(_i + 1) % len(_o)][0] * _o[_i][1] for _i in range(len(_o)))) / 2
-        _cshare = 100.0 * _cfa / max(1.0, float(meta.get("W", 1)) * float(meta.get("H", 1)))
-        _cfh = len(M.get("houses") or [])
-        check(
-            "city_is_ringed_by_farmland",
-            len(_cf) >= 6 and len(_flanks) >= 3 and _cshare >= 2.0 and _cfh >= 8 * len(_cf),
-            f"a city must be RINGED by its farmland, and this is a token ring: {len(_cf)} field(s) on {len(_flanks)} flank(s) ({sorted(_flanks)}), farming {_cshare:.1f}% of the sheet with {_cfh} farmhouse(s) - want 6+ fields across 3+ flanks, 2.0%+ of the sheet, and 8+ farmhouses per field. The pool is the standard: Tango farms 3.8% over 11 fields with 266 farmhouses, Minami 3.0% over 6 with 149, Nagahara 2.3% over 7 with 141. Cities grow up around fertile land - keep adding paddies and the households that work them until the ground genuinely runs out",
-        )
-    return _kept(locals(), ('_cf', '_cfa', '_cfh', '_cshare', '_f', '_flanks', '_fx', '_fy', '_i', '_o', '_wcx', '_wcy', 'f', 'q'))
-
 
 # NO SINGLE CAPTION MAY HOLD THE FRAME OPEN (GM 2026-08-11: "I am surprised that our cropping
 # algorithm has not more aggressively cropped along the southern side... there should only be
@@ -180,83 +124,6 @@ def _seg_0008__no_caption_holds_the_frame_open(*, _cf_bad: Any = _UNBOUND, check
 # two kiln works should be aligned with the road"), not proximity. None means angle-only.
 
 
-def _seg_0009___rw_reg() -> dict[str, Any]:
-    """Gate segment 9 (_rw_reg) - body verbatim from the legacy gate() (feature 022)."""
-    _rw_reg: dict[str, Any] = {"flophouses": 200.0, "kilns": None}
-    return _kept(locals(), ('_rw_reg',))
-
-
-def _seg_0010___k(*, M: Any = _UNBOUND, _k: Any = _UNBOUND, r: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 10 (_k, _rw_polys, r) - body verbatim from the legacy gate() (feature 022)."""
-    _rw_polys = [r["pts"] for _k in ("roads", "streets", "town_streets", "lanes", "alleys") for r in (M.get(_k) or []) if isinstance(r, dict) and r.get("pts")]
-    return _kept(locals(), ('_k', '_rw_polys', 'r'))
-
-
-def _seg_0011___rw_polys(*, M: Any = _UNBOUND, _rw_polys: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 11 (_rw_polys) - body verbatim from the legacy gate() (feature 022)."""
-    if M.get("road"):
-        _rw_polys.append(M["road"])
-    return _kept(locals(), ('_rw_polys',))
-
-
-def _seg_0012___rw_bad() -> dict[str, Any]:
-    """Gate segment 12 (_rw_bad) - body verbatim from the legacy gate() (feature 022)."""
-    _rw_bad = []  # type: ignore[var-annotated]
-    return _kept(locals(), ('_rw_bad',))
-
-
-def _seg_0013___d(
-    *,
-    M: Any = _UNBOUND,
-    _d: Any = _UNBOUND,
-    _i: Any = _UNBOUND,
-    _pp: Any = _UNBOUND,
-    _r: Any = _UNBOUND,
-    _rbear: Any = _UNBOUND,
-    _rbest: Any = _UNBOUND,
-    _rerr: Any = _UNBOUND,
-    _rgap: Any = _UNBOUND,
-    _rk: Any = _UNBOUND,
-    _rmax: Any = _UNBOUND,
-    _rw_bad: Any = _UNBOUND,
-    _rw_polys: Any = _UNBOUND,
-    _rw_reg: Any = _UNBOUND,
-    _rwf: Any = _UNBOUND,
-    meta: Any = _UNBOUND,
-) -> dict[str, Any]:
-    """Gate segment 13 (_d, _i, _pp, _r) - body verbatim from the legacy gate() (feature 022)."""
-    if _rw_polys:
-        _rwf = float(meta.get("ftpx") or 1.0)
-        for _rk, _rmax in _rw_reg.items():
-            for _r in M.get(_rk) or []:
-                # no coordinate guard: both keys are in _OVERLAP_STRUCTS, so _struct_rect has
-                # already demanded x/y of every record long before this check runs
-                _rbest, _rbear = float("inf"), 0.0
-                for _pp in _rw_polys:
-                    for _i in range(len(_pp) - 1):
-                        _d = seg_dist(_r["x"], _r["y"], _pp[_i], _pp[_i + 1])
-                        if _d < _rbest:
-                            _rbest, _rbear = _d, math.degrees(math.atan2(_pp[_i + 1][1] - _pp[_i][1], _pp[_i + 1][0] - _pp[_i][0])) % 180.0
-                _rgap = (_rbest - max(_r.get("w", 0), _r.get("h", 0)) / 2.0) * _rwf
-                _rerr = abs((float(_r.get("rot", 0.0)) % 180.0) - _rbear)
-                _rerr = min(_rerr, 180.0 - _rerr)
-                if _rmax is not None and _rgap > _rmax:
-                    _rw_bad.append((_rk, round(_r["x"]), round(_r["y"]), f"{round(_rgap)}ft"))
-                elif _rerr > 12.0 and _rgap < 400.0:
-                    _rw_bad.append((_rk, round(_r["x"]), round(_r["y"]), f"{round(_rerr)}deg"))
-    return _kept(locals(), ('_d', '_i', '_pp', '_r', '_rbear', '_rbest', '_rerr', '_rgap', '_rk', '_rmax', '_rw_bad', '_rwf'))
-
-
-def _seg_0014__roadside_works_stand_on_their_road(*, _rw_bad: Any = _UNBOUND, check: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 14 (roadside_works_stand_on_their_road) - body verbatim from the legacy gate() (feature 022)."""
-    check(
-        "roadside_works_stand_on_their_road",
-        not _rw_bad,
-        f"roadside work(s) adrift from the way they serve, or square to it while it runs at an angle: {sorted(_rw_bad)[:5]} - a doss-house catches travelers off that road and a kiln carts its fuel along it; derive the seat and the angle from the way (settlement._way_bearing_near) instead of pinning them",
-    )
-    return _kept(locals(), ())
-
-
 # A CAPTION NAMING A POINT ON A WATERCOURSE MUST STAND AT THAT POINT (GM 2026-08-11: "the
 # aqueduct labels are still really far away from the things that they are labeling... look at
 # how much empty space exists between the intake weir and the label that labels it"). The
@@ -265,76 +132,6 @@ def _seg_0014__roadside_works_stand_on_their_road(*, _rw_bad: Any = _UNBOUND, ch
 # by hand with no referent, so they escaped the pair of them. Here the subject is not declared,
 # it is DERIVED: the manifest records where the intake and the terminus are, so the check reads
 # the current geometry and a re-routed duct drags its words along instead of stranding them.
-
-
-def _seg_0015___wwsub() -> dict[str, Any]:
-    """Gate segment 15 (_wwsub) - body verbatim from the legacy gate() (feature 022)."""
-    _wwsub: list[tuple[str, tuple[float, float]]] = []
-    return _kept(locals(), ('_wwsub',))
-
-
-def _seg_0016___aq(*, M: Any = _UNBOUND, _aq: Any = _UNBOUND, _term: Any = _UNBOUND, _wwsub: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 16 (_aq, _term, _wwsub) - body verbatim from the legacy gate() (feature 022)."""
-    for _aq in M.get("aqueducts") or []:
-        if _aq.get("intake"):
-            _wwsub.append(("intake weir", (float(_aq["intake"][0]), float(_aq["intake"][1]))))
-        _term = _aq.get("to") or ((_aq.get("poly") or [[None, None]]) or [[None, None]])[-1]
-        if _term and len(_term) >= 2 and _term[0] is not None:
-            _wwsub.append(("settling basin", (float(_term[0]), float(_term[1]))))
-    return _kept(locals(), ('_aq', '_term', '_wwsub'))
-
-
-def _seg_0017___sg(*, M: Any = _UNBOUND, _sg: Any = _UNBOUND, _wwsub: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 17 (_sg, _wwsub) - body verbatim from the legacy gate() (feature 022)."""
-    for _sg in M.get("sluice_gates") or []:
-        if isinstance(_sg, dict) and "x" in _sg and "y" in _sg:
-            _wwsub.append(("sluice gate", (float(_sg["x"]), float(_sg["y"]))))
-    return _kept(locals(), ('_sg', '_wwsub'))
-
-
-def _seg_0018___ww_bad() -> dict[str, Any]:
-    """Gate segment 18 (_ww_bad) - body verbatim from the legacy gate() (feature 022)."""
-    _ww_bad = []  # type: ignore[var-annotated]
-    return _kept(locals(), ('_ww_bad',))
-
-
-def _seg_0019___g(
-    *,
-    M: Any = _UNBOUND,
-    _g: Any = _UNBOUND,
-    _lb: Any = _UNBOUND,
-    _txt: Any = _UNBOUND,
-    _ww_bad: Any = _UNBOUND,
-    _wwf: Any = _UNBOUND,
-    _wwnear: Any = _UNBOUND,
-    _wwsub: Any = _UNBOUND,
-    meta: Any = _UNBOUND,
-    nm: Any = _UNBOUND,
-    pt: Any = _UNBOUND,
-) -> dict[str, Any]:
-    """Gate segment 19 (_g, _lb, _txt, _ww_bad) - body verbatim from the legacy gate() (feature 022)."""
-    for _lb in M["labels"]:
-        if len(_lb) < 6:  # a degenerate record carries no text, so it names nothing
-            continue
-        _txt = str(_lb[5]).lower()
-        _wwnear = [pt for nm, pt in _wwsub if nm in _txt]
-        if not _wwnear:
-            continue
-        _g = min(math.hypot(max(0.0, max(pt[0] - _lb[2], _lb[0] - pt[0])), max(0.0, max(pt[1] - _lb[3], _lb[1] - pt[1]))) for pt in _wwnear)
-        _wwf = float(meta.get("ftpx") or 1.0)
-        if _g * _wwf > 90.0:
-            _ww_bad.append((_lb[5], round(_g * _wwf)))
-    return _kept(locals(), ('_g', '_lb', '_txt', '_ww_bad', '_wwf', '_wwnear', 'nm', 'pt'))
-
-
-def _seg_0020__waterworks_captions_stand_at_their_point(*, _ww_bad: Any = _UNBOUND, check: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 20 (waterworks_captions_stand_at_their_point) - body verbatim from the legacy gate() (feature 022)."""
-    check(
-        "waterworks_captions_stand_at_their_point",
-        not _ww_bad,
-        f"caption(s) naming a point on a watercourse, drawn far from it with open ground between (name, ft): {sorted(_ww_bad)} - derive the seat from the point the manifest records (a hand-placed label carries no referent, so neither the standoff ladder nor label_hugs_its_referent governs it)",
-    )
-    return _kept(locals(), ())
 
 
 # A placement run that lands far under its ask is authored-vs-landed DRIFT, and _shortfall
@@ -348,26 +145,6 @@ def _seg_0020__waterworks_captions_stand_at_their_point(*, _ww_bad: Any = _UNBOU
 # seat of rounding in a pocket, and chasing it just oscillates: trim to two, the neighbor's
 # trim frees a hair, it seats three, and round it goes. Under eight the rule is simply that
 # SOMETHING landed - a run that draws nothing at all is a real hole in the map either way.
-
-
-def _seg_0021___ask_bad(*, M: Any = _UNBOUND, s: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 21 (_ask_bad, s) - body verbatim from the legacy gate() (feature 022)."""
-    _ask_bad = [
-        f"{s.get('by')}@{s.get('at')} {s.get('placed')}/{s.get('wanted')}"
-        for s in (M.get("shortfalls") or [])
-        if s.get("wanted") and (s.get("placed", 0) == 0 if s["wanted"] < 8 else s.get("placed", 0) < 0.6 * s["wanted"])
-    ]
-    return _kept(locals(), ('_ask_bad', 's'))
-
-
-def _seg_0022__placement_runs_meet_their_ask(*, _ask_bad: Any = _UNBOUND, check: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 22 (placement_runs_meet_their_ask) - body verbatim from the legacy gate() (feature 022)."""
-    check(
-        "placement_runs_meet_their_ask",
-        not _ask_bad,
-        f"{len(_ask_bad)} placement run(s) landed under 60% of the gen's ask: {_ask_bad[:6]} - make room for them, TRIM the ask to what the ground really holds, or pass fill=True where the number is a capacity budget ('place up to N') rather than an authored count",
-    )
-    return _kept(locals(), ())
 
 
 # EVERY canopy crown the map draws, as (x, y, r) - forest/copse stands, their fringes, the fengshui
@@ -463,12 +240,6 @@ def _seg_0028__structures_clear_of_trees(
     return _kept(locals(), ('dx', 'dy', 'hh', 'hw', 'k', 'o', 'tr', 'tx', 'ty', 'under'))
 
 
-def _seg_0029___fanft(*, meta: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 29 (_fanft) - body verbatim from the legacy gate() (feature 022)."""
-    _fanft = float(meta.get("ftpx") or 1)
-    return _kept(locals(), ('_fanft',))
-
-
 # FARMS REACH THEIR FIELDS (GM 2026-08-02: hoshizora's lone farmhouse across the Imperial Road,
 # alone inside the merchant block). Every farmstead with cultivated ground in reach must be able to
 # walk to SOME of it without crossing a ROAD: if every reachable field/dry plot lies across a road,
@@ -477,59 +248,6 @@ def _seg_0029___fanft(*, meta: Any = _UNBOUND) -> dict[str, Any]:
 # reach, deliberately center-based (the question is which side of the highway the steading lives
 # on, not a clearance); reach = 500 real ft, generous enough that the pool's true farm belts all
 # qualify (calibrated pool-wide 2026-08-03: exactly one house fires, the motivating defect).
-
-
-def _seg_0030___rdpls(*, M: Any = _UNBOUND, r: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 30 (_rdpls, r) - body verbatim from the legacy gate() (feature 022)."""
-    _rdpls = [r.get("pts") or [] for r in (M.get("roads") or [])]
-    return _kept(locals(), ('_rdpls', 'r'))
-
-
-def _seg_0031___rdpls_1(*, _rdpls: Any = _UNBOUND, r: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 31 (_rdpls, r) - body verbatim from the legacy gate() (feature 022)."""
-    _rdpls = [r for r in _rdpls if len(r) >= 2]
-    return _kept(locals(), ('_rdpls', 'r'))
-
-
-def _seg_0032__farmsteads_reach_their_fields_unsevered(
-    *,
-    M: Any = _UNBOUND,
-    _cverts: Any = _UNBOUND,
-    _dp: Any = _UNBOUND,
-    _fanft: Any = _UNBOUND,
-    _ff: Any = _UNBOUND,
-    _hh: Any = _UNBOUND,
-    _rdpls: Any = _UNBOUND,
-    _reach: Any = _UNBOUND,
-    _rp: Any = _UNBOUND,
-    _sever: Any = _UNBOUND,
-    _svnear: Any = _UNBOUND,
-    _vv: Any = _UNBOUND,
-    check: Any = _UNBOUND,
-    i: Any = _UNBOUND,
-    p: Any = _UNBOUND,
-    vx: Any = _UNBOUND,
-    vy: Any = _UNBOUND,
-) -> dict[str, Any]:
-    """Gate segment 32 (farmsteads_reach_their_fields_unsevered) - body verbatim from the legacy gate() (feature 022)."""
-    if _rdpls and M.get("houses"):
-        _cverts = [(p[0], p[1]) for _ff in M.get("fields", []) if _ff.get("kind") == "paddy" for p in _ff["outline"]]
-        _cverts += [(p[0], p[1]) for _dp in M.get("dry_plots", []) for p in _dp["poly"]]
-        _reach = 500.0 / _fanft
-        _sever = []
-        for _hh in M["houses"]:
-            # _svnear, not _near: gate() is one huge scope and `_near` is already bound (tuple) far below - the documented mypy name-collision gotcha
-            _svnear = [(vx, vy) for vx, vy in _cverts if (vx - _hh["x"]) ** 2 + (vy - _hh["y"]) ** 2 <= _reach * _reach]
-            if _svnear and all(any(segments_cross((_hh["x"], _hh["y"]), _vv, _rp[i], _rp[i + 1]) for _rp in _rdpls for i in range(len(_rp) - 1)) for _vv in _svnear):
-                _sever.append((round(_hh["x"]), round(_hh["y"])))
-        check(
-            "farmsteads_reach_their_fields_unsevered",
-            not _sever,
-            f"farmstead(s) severed from every reachable field by a road: {_sever} - a farmhouse lives on "
-            f"its fields' side of the highway (settlement.ring drops severed candidates; hand seats must "
-            f"honor the same rule)",
-        )
-    return _kept(locals(), ('_cverts', '_dp', '_ff', '_hh', '_reach', '_rp', '_sever', '_svnear', '_vv', 'i', 'p', 'vx', 'vy'))
 
 
 # Every HARD feature the frame is meant to CONTAIN must actually lie INSIDE the rendered window. A deferred

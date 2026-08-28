@@ -5,7 +5,7 @@ locked to another tier; the gate collects everything. Helpers stay in the source
 import pytest
 
 from l7r.diagram import check_village
-from tests.check_village._builders import _gate_parts, bldg, house, manifest
+from tests.check_village._builders import _gate_parts, bldg
 
 
 @pytest.mark.tiers("city")
@@ -34,34 +34,6 @@ def test_matrix_sees_the_multi_road_list_and_a_flower_beds_outline():
     }
     bed = {"meta": {"scale": "city"}, "flower_fields": [{"kind": "chrysanthemum", "outline": [[400, 400], [600, 400], [600, 600], [400, 600]]}], "buildings": [bldg(500, 500, kind="merchant_house")]}
     assert [v for v in check_village.matrix_violations(bed) if "flower_fields" in (v[0], v[1])]
-
-
-@pytest.mark.tiers("city")
-def test_matrix_survives_geometry_far_off_the_canvas():
-    """A stray vertex must not make the overlap matrix allocate the world.
-
-    `GridIndex.add` inserts under every cell an item's bbox touches, so ONE feature reaching far
-    off-map costs a dict entry per 120 px in BOTH axes. The `city_geometry_within_canvas` fixture
-    plants a wall vertex at 9,000,000 on a 3,200 px canvas - once `wall` was classified as a solid,
-    that became ~5.6 BILLION cells and gigabytes of RAM, and the run had to be killed by hand
-    (2026-07-26). The index box is now clamped to the canvas on BOTH insert and query - clamping
-    only the insert leaves the query walking exactly the same cells.
-
-    Timed rather than asserted structurally on purpose: the failure mode is unbounded work, and the
-    margin here is enormous (well under a second when correct, effectively forever when not), so it
-    is not a flaky threshold.
-    """
-    import time
-
-    M = manifest(meta={"scale": "city", "ftpx": 3, "W": 3200, "H": 2700, "name": "Nowhere"})
-    M["wall"] = [[100, 100], [3000, 100], [9000000, 9000000], [100, 2600], [100, 100]]
-    # The stray wall vertex still yields quads that REACH the canvas, so it only exercises the
-    # clamp. The second house is wholly off-map and exercises the skip on both the insert and the
-    # query side - a feature nothing on the canvas can meet is not the overlap matrix's business.
-    M["houses"] = [house(500, 500), house(50000, 50000)]
-    t0 = time.time()
-    check_village.matrix_violations(M)
-    assert time.time() - t0 < 5.0, "the overlap matrix is walking cells for off-canvas geometry again - clamp the index box on BOTH insert and query"
 
 
 @pytest.mark.tiers("capital")

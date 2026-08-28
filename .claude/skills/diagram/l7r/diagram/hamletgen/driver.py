@@ -305,7 +305,7 @@ def cohort(count: int, first_seed: int = 1, households: int | None = None, jobs:
 # feature ids and is not part of the identity). Keep this pinned to the FITTED cohort only - the
 # held-out range is measured, never tuned, so pinning it would defeat its purpose.
 COHORT_BASELINE: dict[int, frozenset[str]] = {
-    22: frozenset({"field_ringed"}),
+    # seed 22 pinned `field_ringed` until feature 141 retired that check (the GM's cut); the pin describes only live checks
     24: frozenset({"paddy_bunds_clear_the_supply_channels"}),
 }
 COHORT_BASELINE_SIZE = 24  # the pin describes exactly `--batch 24` from seed 1

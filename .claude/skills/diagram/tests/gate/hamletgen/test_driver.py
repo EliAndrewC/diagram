@@ -64,7 +64,7 @@ def test_a_rolled_cohort_passes_the_whole_gate() -> None:
 GATE_COHORT_EXPECTED: dict[int, frozenset[str]] = {
     42: frozenset({"farmhouses_reach_a_way"}),
     43: frozenset({"lanes_bend_like_paths", "lanes_form_one_network", "title_clear_of_features"}),
-    44: frozenset({"houses_clear_of_paddies"}),
+    # seed 44 pinned `houses_clear_of_paddies` until feature 141 retired that check (the placer's chains are the guarantee)
 }
 
 

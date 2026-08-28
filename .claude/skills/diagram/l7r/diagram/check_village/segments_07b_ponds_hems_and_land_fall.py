@@ -5,7 +5,7 @@ from typing import Any
 
 from l7r.diagram.settlement._geom import boxed_grid, boxed_seg_hit, boxed_segs
 
-from .common_01_geometry import Poly, point_in_poly, poly_dist, seg_dist, segments_cross, unit_dir
+from .common_01_geometry import Poly, point_in_poly, poly_dist, seg_dist, unit_dir
 from .common_02_overlap_policy import in_ellipse
 from .common_03_capacity import _UNBOUND, _kept
 
@@ -203,27 +203,6 @@ def _seg_0438_024__bx0(
     return _kept(locals(), ('bx0', 'bx1', 'by0', 'by1', 'committed', 'gx', 'gy', 'nr_cultc', 'nr_elig', 'p_'))
 
 
-def _seg_0438_025__nr_frac(*, nr_cultc: Any = _UNBOUND, nr_elig: Any = _UNBOUND, scale: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 0438.025 (nr_frac) - body verbatim from _seg_0438__near_ring_cultivated_fraction (feature 024 per-check split; guards re-evaluated in the body, see split_oversized.py)."""
-    if scale in ('town', 'city'):
-        nr_frac = nr_cultc / nr_elig if nr_elig else 1.0
-    return _kept(locals(), ('nr_frac',))
-
-
-def _seg_0438_026__near_ring_cultivated_fraction(*, check: Any = _UNBOUND, nr_frac: Any = _UNBOUND, nr_thr: Any = _UNBOUND, nrd_tier: Any = _UNBOUND, scale: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 0438.026 (near_ring_cultivated_fraction) - body verbatim from _seg_0438__near_ring_cultivated_fraction (feature 024 per-check split; guards re-evaluated in the body, see split_oversized.py)."""
-    if scale in ('town', 'city'):
-        check(
-            "near_ring_cultivated_fraction",
-            nr_frac >= nr_thr,
-            f"only {nr_frac:.0%} of the flat near-ring ground is cultivated (below the {nr_thr:.0%} floor for near_ring_density='{nrd_tier}') - "
-            "a well-sited town/city sits in packed farmland: fill the flat clear ground with s.near_ring_cropland(...) "
-            "(dry/garden cropland needs no water source) and keep scrub commons to the frame margins; or, for a genuinely "
-            "dry/marginal locale, declare meta(near_ring_density='medium'|'thin')",
-        )
-    return _kept(locals(), ())
-
-
 # NEAR-RING PADDY DOMINANCE (feature 014). Feature 013 packed the near ring but filled it with
 # DRY grain (dry cropland needs no plumbed water, the cheap fill) - historically backwards: a town
 # sits in the fertile basin BECAUSE of the wet rice, so its flat waterable near ring is PADDY-
@@ -243,20 +222,6 @@ def _seg_0438_026__near_ring_cultivated_fraction(*, check: Any = _UNBOUND, nr_fr
 # extramural is an open GLACIS - moat-fed paddy + a thin garden fringe, the rest kept clear for defense
 # (Tango) - passes as long as its paddy out-covers the FREE-STANDING dry grain (of which a glacis has
 # little). That is the honest read: the immediate glacis is not packed dry farmland.
-
-
-def _seg_0438_027__NRPD_RATIO(*, scale: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 0438.027 (NRPD_RATIO) - body verbatim from _seg_0438__near_ring_cultivated_fraction (feature 024 per-check split; guards re-evaluated in the body, see split_oversized.py)."""
-    if scale in ('town', 'city'):
-        NRPD_RATIO = {"dense": 1.2, "medium": 1.1, "thin": 1.0}
-    return _kept(locals(), ('NRPD_RATIO',))
-
-
-def _seg_0438_028__nrpd_ratio(*, NRPD_RATIO: Any = _UNBOUND, nrd_tier: Any = _UNBOUND, scale: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 0438.028 (nrpd_ratio) - body verbatim from _seg_0438__near_ring_cultivated_fraction (feature 024 per-check split; guards re-evaluated in the body, see split_oversized.py)."""
-    if scale in ('town', 'city'):
-        nrpd_ratio = NRPD_RATIO.get(nrd_tier, NRPD_RATIO["dense"])
-    return _kept(locals(), ('nrpd_ratio',))
 
 
 def _seg_0438_029__f__1(*, M: Any = _UNBOUND, f_: Any = _UNBOUND, scale: Any = _UNBOUND) -> dict[str, Any]:
@@ -388,23 +353,6 @@ def _seg_0438_036__bx0_1(
     return _kept(locals(), ('bx0', 'bx1', 'by0', 'by1', 'committed', 'gx', 'gy', 'nrp_dc', 'nrp_pc', 'p_'))
 
 
-def _seg_0438_037__near_ring_paddy_dominant(
-    *, check: Any = _UNBOUND, nrd_tier: Any = _UNBOUND, nrp_dc: Any = _UNBOUND, nrp_pc: Any = _UNBOUND, nrpd_ratio: Any = _UNBOUND, scale: Any = _UNBOUND
-) -> dict[str, Any]:
-    """Gate segment 0438.037 (near_ring_paddy_dominant) - body verbatim from _seg_0438__near_ring_cultivated_fraction (feature 024 per-check split; guards re-evaluated in the body, see split_oversized.py)."""
-    if scale in ('town', 'city'):
-        check(
-            "near_ring_paddy_dominant",
-            nrp_pc >= nrpd_ratio * nrp_dc,
-            f"near-ring paddy does not dominate: {nrp_pc} paddy cells vs {nrp_dc} dry-grain cells "
-            f"(need paddy >= {nrpd_ratio:g}x dry-grain for near_ring_density='{nrd_tier}') - a wet-rice county seat's "
-            "flat near ring is PADDY, not dryland grain: add near-ring paddy where water reaches (s.near_ring_paddy(...), "
-            "or enlarge the combs), demote the dry grain to the drier/higher margins + a garden band by the town, or - "
-            "where the near ring genuinely lacks water - draw it at a lower near_ring_density tier",
-        )
-    return _kept(locals(), ())
-
-
 # NO CANOPY STANDS OVER OPEN WATER (GM audit 2026-07): a village-grove clump drawn across a
 # stream / channel / moat reads as trees growing in the current. The fengshui-pond rule
 # (trees_clear_of_fengshui_ponds) covered only ponds; this closes the running-water half.
@@ -487,37 +435,6 @@ def _seg_0447__wall_1(*, M: Any = _UNBOUND) -> dict[str, Any]:
     """Gate segment 447 (wall) - body verbatim from the legacy gate() (feature 022)."""
     wall = M.get("wall")
     return _kept(locals(), ('wall',))
-
-
-def _seg_0448__fields_clear_of_wall(
-    *,
-    M: Any = _UNBOUND,
-    bad_fw: Any = _UNBOUND,
-    check: Any = _UNBOUND,
-    e: Any = _UNBOUND,
-    f: Any = _UNBOUND,
-    ff: Any = _UNBOUND,
-    fields: Any = _UNBOUND,
-    i: Any = _UNBOUND,
-    k: Any = _UNBOUND,
-    n: Any = _UNBOUND,
-    nm: Any = _UNBOUND,
-    ol: Any = _UNBOUND,
-    wall: Any = _UNBOUND,
-    walled_fields: Any = _UNBOUND,
-    wx: Any = _UNBOUND,
-    wy: Any = _UNBOUND,
-) -> dict[str, Any]:
-    """Gate segment 448 (fields_clear_of_wall) - body verbatim from the legacy gate() (feature 022)."""
-    if wall:
-        walled_fields = [(f["name"], f["outline"]) for f in fields] + [(f"flower[{i}]", ff["outline"]) for i, ff in enumerate(M.get("flower_fields", []))]
-        bad_fw = []
-        for nm, ol in walled_fields:
-            n = len(ol)
-            if any(segments_cross(wall[k], wall[k + 1], ol[e], ol[(e + 1) % n]) for k in range(len(wall) - 1) for e in range(n)) or any(point_in_poly(wx, wy, ol) for wx, wy in wall):
-                bad_fw.append(nm)
-        check("fields_clear_of_wall", not bad_fw, f"field(s) overlap the wall: {sorted(set(bad_fw))}")
-    return _kept(locals(), ('bad_fw', 'e', 'f', 'ff', 'i', 'k', 'n', 'nm', 'ol', 'walled_fields', 'wx', 'wy'))
 
 
 # EVERY fully-on-map paddy field must SHOW a source of water: a channel feeding it, or
@@ -626,13 +543,6 @@ def _seg_0458___dh_map(*, _dh_dd: Any = _UNBOUND, _dh_vec: Any = _UNBOUND, downh
     """Gate segment 458 (_dh_map) - body verbatim from the legacy gate() (feature 022)."""
     _dh_map = unit_dir(downhill) if downhill else (_dh_vec(_dh_dd) if _dh_dd is not None else None)
     return _kept(locals(), ('_dh_map',))
-
-
-def _seg_0459__downhill_direction_valid(*, check: Any = _UNBOUND, downhill: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 459 (downhill_direction_valid) - body verbatim from the legacy gate() (feature 022)."""
-    if downhill:
-        check("downhill_direction_valid", bool(unit_dir(downhill)), f"meta(downhill={downhill!r}) is not a cardinal name or [dx,dy] vector")
-    return _kept(locals(), ())
 
 
 def _seg_0460__channels_flow_downhill(
@@ -788,9 +698,3 @@ def _seg_0463__moat_channels_flow_with_current(
 # because the offtake tee was drawn as mirrored geometry whose along-rim step was never oriented to
 # the local flow; plus Tango's fn2 drain culvert doubling back to enter at 138 deg and Nagahara's
 # fnn1 at 115 deg. Fixtures: the pre-fix Tango and Nagahara manifests in pool/regressions/.
-
-
-def _seg_0464___mjr(*, M: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 464 (_mjr) - body verbatim from the legacy gate() (feature 022)."""
-    _mjr: Any = M.get("moat")
-    return _kept(locals(), ('_mjr',))

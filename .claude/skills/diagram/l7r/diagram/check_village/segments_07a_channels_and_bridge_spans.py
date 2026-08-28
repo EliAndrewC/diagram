@@ -4,10 +4,9 @@ import math
 from typing import Any
 
 from l7r.diagram.settlement import sat_overlap
-from l7r.diagram.settlement._geom import boxed_grid, boxed_seg_hit, boxed_segs
 
 from .common_01_geometry import Poly, Pt, _struct_rect, point_in_poly, poly_dist, rect_corners, seg_dist, seg_intersect, segments_cross
-from .common_02_overlap_policy import FOOT_BANK_REACH, _ditch_plankable, _footbridge_useful_ground, in_ellipse
+from .common_02_overlap_policy import FOOT_BANK_REACH, _ditch_plankable, _footbridge_useful_ground
 from .common_03_capacity import _UNBOUND, _kept
 
 # WATER-SERVICE FURNITURE SITS ON ITS WATER (GM 2026-08-10, four features caught beached
@@ -476,143 +475,6 @@ def _seg_0433__dd(
 # around a county seat are real. Sampled on a 25px grid like the village check.
 
 
-def _seg_0434__town_margins_clothed(
-    *,
-    EX0: Any = _UNBOUND,
-    EX1: Any = _UNBOUND,
-    EY0: Any = _UNBOUND,
-    EY1: Any = _UNBOUND,
-    M: Any = _UNBOUND,
-    bx0: Any = _UNBOUND,
-    bx1: Any = _UNBOUND,
-    by0: Any = _UNBOUND,
-    by1: Any = _UNBOUND,
-    c2_: Any = _UNBOUND,
-    c_: Any = _UNBOUND,
-    check: Any = _UNBOUND,
-    covered: Any = _UNBOUND,
-    d_: Any = _UNBOUND,
-    f_: Any = _UNBOUND,
-    g_: Any = _UNBOUND,
-    k_: Any = _UNBOUND,
-    ln_: Any = _UNBOUND,
-    meta: Any = _UNBOUND,
-    o_: Any = _UNBOUND,
-    p_: Any = _UNBOUND,
-    road: Any = _UNBOUND,
-    s_: Any = _UNBOUND,
-    scale: Any = _UNBOUND,
-    st_: Any = _UNBOUND,
-    tm_bare: Any = _UNBOUND,
-    tm_boxes: Any = _UNBOUND,
-    tm_frac: Any = _UNBOUND,
-    tm_halo: Any = _UNBOUND,
-    tm_hill: Any = _UNBOUND,
-    tm_lines: Any = _UNBOUND,
-    tm_polys: Any = _UNBOUND,
-    tm_pond: Any = _UNBOUND,
-    tm_total: Any = _UNBOUND,
-    tm_wall: Any = _UNBOUND,
-    tx: Any = _UNBOUND,
-    ty: Any = _UNBOUND,
-    v_: Any = _UNBOUND,
-) -> dict[str, Any]:
-    """Gate segment 434 (town_margins_clothed) - body verbatim from the legacy gate() (feature 022)."""
-    if scale == "town":
-        tm_polys = [f_["outline"] for f_ in M.get("fields", [])] + [f_["outline"] for f_ in M.get("flower_fields", [])]
-        for k_ in ("commons", "marshes", "village_groves", "dry_plots", "pastures", "forest_patches"):
-            for o_ in M.get(k_, []) or []:
-                p_ = o_.get("poly") if isinstance(o_, dict) else o_
-                if p_ is not None and len(p_) >= 3:
-                    tm_polys.append(p_)
-        tm_boxes = []
-        # structure boxes grow by the URBAN-CLEARANCE halo (30 ft, converted at the map's grain), not a
-        # token 8px: the swept/trodden ground around every occupied structure - dooryards, alleys, drying
-        # ground - is URBAN FLOOR, the unwalled-town equivalent of the walled case's inside-the-rampart
-        # exemption. Without this, forbidding scrub over the built-up area (scrub_clear_of_urban_fabric
-        # below) would re-count all that working ground as "bare" and the two checks would fight.
-        tm_halo = 30.0 / (meta.get("ftpx") or 1)
-        for v_ in M.values():
-            if isinstance(v_, list) and v_ and isinstance(v_[0], dict) and "x" in v_[0] and "w" in v_[0] and "h" in v_[0]:
-                for o_ in v_:
-                    tm_boxes.append((o_["x"] - o_["w"] / 2 - tm_halo, o_["y"] - o_["h"] / 2 - tm_halo, o_["x"] + o_["w"] / 2 + tm_halo, o_["y"] + o_["h"] / 2 + tm_halo))
-        for g_ in M.get("village_groves", []):
-            for c_ in g_.get("clumps", []):
-                tm_boxes.append((c_[0] - 16, c_[1] - 16, c_[0] + 16, c_[1] + 16))
-        tm_lines = []
-        if road:
-            tm_lines.append((road, 60.0))
-        tm_lines += [(st_["pts"], st_["w"] / 2 + 40) for st_ in M.get("town_streets", [])]
-        tm_lines += [(ln_["pts"], 30.0) for ln_ in M.get("lanes", [])]
-        tm_lines += [(s_["poly"], 30.0) for s_ in M.get("streams", [])] + [(c2_["poly"], 24.0) for c2_ in M.get("channels", [])] + [(d_["poly"], 20.0) for d_ in M.get("field_ditches", [])]
-        tm_wall = M.get("wall")
-        if tm_wall:
-            tm_lines.append((tm_wall, 40.0))
-        tm_lines_b = boxed_grid(boxed_segs(tm_lines))  # INDEXED, NOT COARSENED (T15, GM 2026-08-26) - see segment 0438.016 for the why; same strict test, pruned candidates
-        tm_boxes_b = boxed_grid(tm_boxes)  # the halo boxes too (a 4-tuple is its own box)
-        tm_hill = M.get("hill")
-        tm_pond = M.get("pond")
-        tm_bare = tm_total = 0
-        ty = EY0 + 12.5
-        while ty < EY1:
-            tx = EX0 + 12.5
-            while tx < EX1:
-                tm_total += 1
-                covered = (
-                    any(bx0 <= tx <= bx1 and by0 <= ty <= by1 for bx0, by0, bx1, by1 in tm_boxes_b.near(tx, ty))
-                    or (tm_wall is not None and len(tm_wall) >= 3 and point_in_poly(tx, ty, tm_wall))
-                    or any(point_in_poly(tx, ty, p_) for p_ in tm_polys)
-                    or boxed_seg_hit(tx, ty, tm_lines_b.near(tx, ty))
-                    or (tm_hill is not None and in_ellipse(tx, ty, tm_hill, 1.45))
-                    or (tm_pond is not None and in_ellipse(tx, ty, [tm_pond[0], tm_pond[1], tm_pond[2] + 30, tm_pond[3] + 30]))
-                )
-                if not covered:
-                    tm_bare += 1
-                tx += 25
-            ty += 25
-        tm_frac = tm_bare / tm_total if tm_total else 1.0
-        check(
-            "town_margins_clothed",
-            tm_frac <= 0.20,
-            f"{tm_frac:.0%} of the town sheet is bare open ground (over the 20% allowance) - a county seat's margins are worked land: clothe the aprons in grazing commons scrub / pasture / marsh / coppice (s.commons(..., role='grazing') bands; the ground inside the rampart counts as urban floor)",
-        )
-    return _kept(
-        locals(),
-        (
-            'bx0',
-            'bx1',
-            'by0',
-            'by1',
-            'c2_',
-            'c_',
-            'covered',
-            'd_',
-            'f_',
-            'g_',
-            'i_',
-            'k_',
-            'ln_',
-            'o_',
-            'p_',
-            's_',
-            'st_',
-            'tm_bare',
-            'tm_boxes',
-            'tm_frac',
-            'tm_halo',
-            'tm_hill',
-            'tm_lines',
-            'tm_polys',
-            'tm_pond',
-            'tm_total',
-            'tm_wall',
-            'tx',
-            'ty',
-            'v_',
-        ),
-    )
-
-
 # SCRUB STAYS OUT OF THE BUILT-UP FABRIC (GM 2026-07-21, Hoshizora). The old doctrine let a gen
 # draw GENEROUS scrub polys over the town and trust the scatter's per-point skips - but those
 # skips only cleared building FOOTPRINTS, so scrub speckled the streets, dooryards, and gaps
@@ -685,31 +547,6 @@ def _seg_0437__scrub_clear_of_urban_fabric(*, check: Any = _UNBOUND, scrub_urban
 # declared dense - so the dense floor is set well above them to have teeth. Grounded in budgets.md
 # "Rice and arable-land math" (the ~4% figure is a domain-wide average, the wrong number for the
 # immediate hinterland). Town + city only; villages/hamlets keep the satoyama scrub-interleave rule.
-
-
-def _seg_0438_000__NRD_THRESHOLD(*, scale: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 0438.000 (NRD_THRESHOLD) - body verbatim from _seg_0438__near_ring_cultivated_fraction (feature 024 per-check split; guards re-evaluated in the body, see split_oversized.py)."""
-    if scale in ('town', 'city'):
-        NRD_THRESHOLD = {
-            "dense": {"town": 0.28, "city": 0.12},
-            "medium": {"town": 0.18, "city": 0.08},
-            "thin": {"town": 0.12, "city": 0.05},
-        }
-    return _kept(locals(), ('NRD_THRESHOLD',))
-
-
-def _seg_0438_001__nrd_tier(*, meta: Any = _UNBOUND, scale: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 0438.001 (nrd_tier) - body verbatim from _seg_0438__near_ring_cultivated_fraction (feature 024 per-check split; guards re-evaluated in the body, see split_oversized.py)."""
-    if scale in ('town', 'city'):
-        nrd_tier = meta.get("near_ring_density", "dense")
-    return _kept(locals(), ('nrd_tier',))
-
-
-def _seg_0438_002__nr_thr(*, NRD_THRESHOLD: Any = _UNBOUND, nrd_tier: Any = _UNBOUND, scale: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 0438.002 (nr_thr) - body verbatim from _seg_0438__near_ring_cultivated_fraction (feature 024 per-check split; guards re-evaluated in the body, see split_oversized.py)."""
-    if scale in ('town', 'city'):
-        nr_thr = NRD_THRESHOLD.get(nrd_tier, NRD_THRESHOLD["dense"])[scale]
-    return _kept(locals(), ('nr_thr',))
 
 
 def _seg_0438_003__nr_halo(*, meta: Any = _UNBOUND, scale: Any = _UNBOUND) -> dict[str, Any]:

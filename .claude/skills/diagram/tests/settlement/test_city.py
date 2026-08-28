@@ -174,21 +174,6 @@ def test_aqueduct_records_intake_channel_and_terminus():
     assert rec["w"] > 0
 
 
-def test_a_footplank_is_never_laid_across_the_hem_crop():
-    """THE RATCHET for the 2026-08-11 slide condition. A plank slides clear of houses and of banks
-    that open onto marsh; it must also slide clear of the DRY hem, because a deck laid on a hatake
-    strip is a board lying on the barley - the same rule `groves_clear_of_dry_plots` states for trees
-    and `structures_clear_of_dry_plots` for buildings."""
-    s = _plank_bed()
-    hem = [(560.0, 660.0), (840.0, 660.0), (840.0, 740.0), (560.0, 740.0)]  # straddles the ditch mid-run
-    s.M["dry_plots"].append({"poly": [list(p) for p in hem], "crop": "barley", "theta": 0.0})
-    s.dry_polys.append(hem)
-    s.channel_footbridges(spacing=300)
-    assert s.M["bridges"], "the fixture must actually place planks, or it proves nothing"
-    for b in s.M["bridges"]:
-        assert not (560.0 <= b["x"] <= 840.0 and 660.0 <= b["y"] <= 740.0), f"a plank was laid on the hem at {(round(b['x']), round(b['y']))}"
-
-
 def test_a_footplank_is_never_laid_on_a_bend_its_deck_cannot_clear():
     """THE RATCHET for the corner test. `bridges_span_their_water` requires every deck CORNER to
     stand clear of the crossed water; a deck perpendicular to a STRAIGHT ditch clears by

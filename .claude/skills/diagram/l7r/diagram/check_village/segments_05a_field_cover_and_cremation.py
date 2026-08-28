@@ -3,10 +3,8 @@
 import math
 from typing import Any
 
-from l7r.diagram.settlement import sat_overlap
-
-from .common_01_geometry import _struct_rect, point_in_poly, poly_dist, rect_corners, seg_dist
-from .common_02_overlap_policy import in_ellipse, poly_gap, water_setback
+from .common_01_geometry import point_in_poly, poly_dist, seg_dist
+from .common_02_overlap_policy import poly_gap
 from .common_03_capacity import _UNBOUND, _kept
 
 
@@ -179,49 +177,6 @@ def _seg_0285_096__woodland_clear_of_crops(
     )
 
 
-def _seg_0285_097__commons_beyond_the_windbreak(
-    *,
-    c: Any = _UNBOUND,
-    ccx: Any = _UNBOUND,
-    ccy: Any = _UNBOUND,
-    check: Any = _UNBOUND,
-    commons: Any = _UNBOUND,
-    g: Any = _UNBOUND,
-    h: Any = _UNBOUND,
-    houses: Any = _UNBOUND,
-    meta: Any = _UNBOUND,
-    near: Any = _UNBOUND,
-    scale: Any = _UNBOUND,
-    vgroves: Any = _UNBOUND,
-    wb_proj: Any = _UNBOUND,
-    wbs: Any = _UNBOUND,
-    wvx: Any = _UNBOUND,
-    wvy: Any = _UNBOUND,
-) -> dict[str, Any]:
-    """Gate segment 0285.097 (commons_beyond_the_windbreak) - body verbatim from _seg_0285__wells_clear_of_shrine_and_torii (feature 024 per-check split; guards re-evaluated in the body, see split_oversized.py)."""
-    if scale in ('town', 'village', 'hamlet') and scale in ('town', 'village', 'hamlet', 'city') and meta.get("nucleated") and commons and len(houses) >= 10:
-        wbs = [g for g in vgroves if g.get("role") == "windbreak"]
-        if wbs:
-            ccx = sum(h["x"] for h in houses) / len(houses)
-            ccy = sum(h["y"] for h in houses) / len(houses)
-            wb_proj = max((g["x"] - ccx) * wvx + (g["y"] - ccy) * wvy for g in wbs)
-            # only the fuel/fodder COMMONS proper (role 'commons') must lie on the windward back-slope;
-            # the general marginal hill land types - 'grazing' scrub, open 'pasture', coppice 'woodland' -
-            # can sit on ANY dry flank (the NE upland, the SW corner, the uphill head) and are exempt from
-            # the beyond-the-windbreak toposequence rule (they are the hinterland catena, not the fuel commons)
-            near = [
-                (round(c["x"]), round(c["y"])) for c in commons if c.get("role", "commons") not in ("grazing", "pasture", "woodland") and (c["x"] - ccx) * wvx + (c["y"] - ccy) * wvy <= wb_proj + 5
-            ]
-            check(
-                "commons_beyond_the_windbreak",
-                not near,
-                f"fuel/fodder commons {near[:2]} sit between the village and its back-grove (or on the field "
-                f"side), not BEYOND the windbreak - the toposequence is village -> back-grove -> commons, so the "
-                f"degraded grazing lies on the far windward side, past the protected wood",
-            )
-    return _kept(locals(), ('c', 'ccx', 'ccy', 'g', 'h', 'near', 'wb_proj', 'wbs'))
-
-
 # WEALTH VARIATION: farmhouses are not one uniform size - a modest wealth tier (recorded as `wealth`)
 # scales the rendered house and, with it, the grove, so holdings read as ranging from the landless
 # mizunomi to a honbyakushO landholder. Verify the tiers are ACTIVE so a regression that flattens
@@ -353,20 +308,6 @@ def _seg_0286_008___inside(*, px: Any = _UNBOUND, py: Any = _UNBOUND, scale: Any
 # consolidated over the centuries - not one, not a dozen)
 
 
-def _seg_0286_009__city_graveyard_count(*, cems: Any = _UNBOUND, check: Any = _UNBOUND, scale: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 0286.009 (city_graveyard_count, settlement_has_cemetery) - body verbatim from _seg_0286__cemetery_clear_of_shrine (feature 024 per-check split; guards re-evaluated in the body, see split_oversized.py)."""
-    if scale in ('village', 'town', 'city', 'capital'):
-        if scale == "city":
-            check("city_graveyard_count", 2 <= len(cems) <= 4, f"a provincial city should show 2-4 temple graveyards; found {len(cems)}")
-        else:
-            check(
-                "settlement_has_cemetery",
-                len(cems) >= 1,
-                f"a {scale} buries its dead but has no graveyard - add s.cemetery(...) (a hamlet is exempt; its dead go to the village district's burial ground)",
-            )
-    return _kept(locals(), ())
-
-
 # CHURCHYARD (L7R): a village SHRINE is officially Shinseist and its monk performs the funerary rites, so
 # the graveyard sits IN the shrine's precinct - like a Buddhist-temple parish ground - NOT held away from
 # it (real-Japan Shinto kegare does NOT apply: the shrine IS the death-handling institution). Only the
@@ -374,84 +315,9 @@ def _seg_0286_009__city_graveyard_count(*, cems: Any = _UNBOUND, check: Any = _U
 # settlements.md "Historical grounding" (Brotherhood of Shinsei monks tend the country shrines and the dead).
 
 
-def _seg_0286_010___on_shrine_building(
-    *, M: Any = _UNBOUND, r: Any = _UNBOUND, sc: Any = _UNBOUND, scale: Any = _UNBOUND, shrines: Any = _UNBOUND, site: Any = _UNBOUND, t: Any = _UNBOUND
-) -> dict[str, Any]:
-    """Gate segment 0286.010 (_on_shrine_building) - body verbatim from _seg_0286__cemetery_clear_of_shrine (feature 024 per-check split; guards re-evaluated in the body, see split_oversized.py)."""
-    if scale in ('village', 'town', 'city', 'capital'):
-
-        def _on_shrine_building(site: dict[str, Any]) -> bool:
-            sc = rect_corners(_struct_rect(site))
-            for r in shrines:
-                if sat_overlap(sc, rect_corners({"x": r["x"], "y": r["y"], "w": r["w"] + 20, "h": r["h"] + 20, "rot": 0})):
-                    return True
-            return any(sat_overlap(sc, rect_corners({"x": t[0], "y": t[1] + 4, "w": 58, "h": 48, "rot": 0})) for t in M.get("torii", []))
-
-    return _kept(locals(), ('_on_shrine_building',))
-
-
-def _seg_0286_011__on_bldg(*, _on_shrine_building: Any = _UNBOUND, cems: Any = _UNBOUND, maus: Any = _UNBOUND, s: Any = _UNBOUND, scale: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 0286.011 (on_bldg, s) - body verbatim from _seg_0286__cemetery_clear_of_shrine (feature 024 per-check split; guards re-evaluated in the body, see split_oversized.py)."""
-    if scale in ('village', 'town', 'city', 'capital'):
-        on_bldg = [(round(s["x"]), round(s["y"])) for s in cems + maus if _on_shrine_building(s)]
-    return _kept(locals(), ('on_bldg', 's'))
-
-
-def _seg_0286_012__cemetery_clear_of_shrine(*, check: Any = _UNBOUND, on_bldg: Any = _UNBOUND, scale: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 0286.012 (cemetery_clear_of_shrine) - body verbatim from _seg_0286__cemetery_clear_of_shrine (feature 024 per-check split; guards re-evaluated in the body, see split_oversized.py)."""
-    if scale in ('village', 'town', 'city', 'capital'):
-        check(
-            "cemetery_clear_of_shrine",
-            not on_bldg,
-            f"grave site(s) sit ON the shrine hall or its torii gateway: {on_bldg[:3]} - the monk tends the graves "
-            f"so they fill the shrine's yard, but the sacred hall + gateway themselves stay clear of burials",
-        )
-    return _kept(locals(), ())
-
-
 # MARSH is unbuildable wet ground: no SACRED hall and no BURIAL ground sits on a reed marsh - you would
 # never raise a shrine or dig graves in a bog (they belong on DRY ground, the spur / high ground). The
 # `toe` marsh is the wet valley floor; a `pond_fringe` (a thin decorative shore ring) is exempt. GM 2026-07.
-
-
-def _seg_0286_013__bog(*, M: Any = _UNBOUND, m: Any = _UNBOUND, scale: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 0286.013 (bog, m) - body verbatim from _seg_0286__cemetery_clear_of_shrine (feature 024 per-check split; guards re-evaluated in the body, see split_oversized.py)."""
-    if scale in ('village', 'town', 'city', 'capital'):
-        bog = [m["poly"] for m in M.get("marshes", []) if m.get("role") != "pond_fringe" and m.get("poly")]
-    return _kept(locals(), ('bog', 'm'))
-
-
-def _seg_0286_014__sacred_and_graves_off_marsh(
-    *,
-    _on_marsh: Any = _UNBOUND,
-    bog: Any = _UNBOUND,
-    cems: Any = _UNBOUND,
-    check: Any = _UNBOUND,
-    crem: Any = _UNBOUND,
-    cx: Any = _UNBOUND,
-    cy: Any = _UNBOUND,
-    marshy: Any = _UNBOUND,
-    maus: Any = _UNBOUND,
-    oss: Any = _UNBOUND,
-    relig: Any = _UNBOUND,
-    s: Any = _UNBOUND,
-    scale: Any = _UNBOUND,
-    site: Any = _UNBOUND,
-) -> dict[str, Any]:
-    """Gate segment 0286.014 (sacred_and_graves_off_marsh) - body verbatim from _seg_0286__cemetery_clear_of_shrine (feature 024 per-check split; guards re-evaluated in the body, see split_oversized.py)."""
-    if scale in ('village', 'town', 'city', 'capital') and bog:
-
-        def _on_marsh(site: dict[str, Any]) -> bool:
-            return any(point_in_poly(site["x"], site["y"], mp) for mp in bog) or any(point_in_poly(cx, cy, mp) for cx, cy in rect_corners(_struct_rect(site)) for mp in bog)
-
-        marshy = [(round(s["x"]), round(s["y"])) for s in relig + cems + maus + crem + oss if _on_marsh(s)]
-        check(
-            "sacred_and_graves_off_marsh",
-            not marshy,
-            f"shrine/temple or grave site(s) {sorted(set(marshy))[:3]} sit on a reed MARSH - a hall is not "
-            f"raised and graves are not dug in a bog; site them on DRY ground (the spur / high ground), off the marsh",
-        )
-    return _kept(locals(), ('_on_marsh', 'marshy', 's'))
 
 
 # PRECINCT (village): the village graveyard sits BY the shrine (the Shinsei monk's funerary ground),
@@ -459,27 +325,6 @@ def _seg_0286_014__sacred_and_graves_off_marsh(
 # sacred hill, and a prominent hill-shrine is not the humble earth-god monk's funerary base - as with
 # remote_shrine_has_own_well); if every shrine is hilltop, the ground is placed by eye. A hamlet has no
 # shrine at all (its dead go to the village district's ground).
-
-
-def _seg_0286_015__flat_shrines(*, M: Any = _UNBOUND, r: Any = _UNBOUND, scale: Any = _UNBOUND, shrines: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 0286.015 (flat_shrines, r) - body verbatim from _seg_0286__cemetery_clear_of_shrine (feature 024 per-check split; guards re-evaluated in the body, see split_oversized.py)."""
-    if scale in ('village', 'town', 'city', 'capital'):
-        flat_shrines = [r for r in shrines if not (M.get("hill") and in_ellipse(r["x"], r["y"], M["hill"]))]
-    return _kept(locals(), ('flat_shrines', 'r'))
-
-
-def _seg_0286_016__village_graveyard_by_shrine(
-    *, c: Any = _UNBOUND, cems: Any = _UNBOUND, check: Any = _UNBOUND, far: Any = _UNBOUND, flat_shrines: Any = _UNBOUND, r: Any = _UNBOUND, scale: Any = _UNBOUND
-) -> dict[str, Any]:
-    """Gate segment 0286.016 (village_graveyard_by_shrine) - body verbatim from _seg_0286__cemetery_clear_of_shrine (feature 024 per-check split; guards re-evaluated in the body, see split_oversized.py)."""
-    if scale in ('village', 'town', 'city', 'capital') and scale == "village" and cems and flat_shrines:
-        far = [(round(c["x"]), round(c["y"])) for c in cems if not any(math.hypot(c["x"] - r["x"], c["y"] - r["y"]) < 250 for r in flat_shrines)]
-        check(
-            "village_graveyard_by_shrine",
-            not far,
-            f"village graveyard(s) set apart from the shrine: {far[:3]} - the village shrine is Shinseist and its monk performs the funerary rites, so the graveyard sits IN the shrine's precinct",
-        )
-    return _kept(locals(), ('c', 'far', 'r'))
 
 
 # WATER SET-BACK: burial grounds keep a clear margin from OPEN WATER (the moat, a stream, or a
@@ -491,13 +336,6 @@ def _seg_0286_016__village_graveyard_by_shrine(
 # exempt from the moat term (streams/ponds apply regardless of which side they sit on).
 
 
-def _seg_0286_017__line_waters(*, M: Any = _UNBOUND, s: Any = _UNBOUND, scale: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 0286.017 (line_waters, s) - body verbatim from _seg_0286__cemetery_clear_of_shrine (feature 024 per-check split; guards re-evaluated in the body, see split_oversized.py)."""
-    if scale in ('village', 'town', 'city', 'capital'):
-        line_waters = ([(M["moat"], M.get("moat_width", 22), True)] if M.get("moat") else []) + [(s["poly"], s.get("w", 9), False) for s in M.get("streams", [])]
-    return _kept(locals(), ('line_waters', 's'))
-
-
 def _seg_0286_018__pond(*, M: Any = _UNBOUND, scale: Any = _UNBOUND) -> dict[str, Any]:
     """Gate segment 0286.018 (pond) - body verbatim from _seg_0286__cemetery_clear_of_shrine (feature 024 per-check split; guards re-evaluated in the body, see split_oversized.py)."""
     if scale in ('village', 'town', 'city', 'capital'):
@@ -505,99 +343,7 @@ def _seg_0286_018__pond(*, M: Any = _UNBOUND, scale: Any = _UNBOUND) -> dict[str
     return _kept(locals(), ('pond',))
 
 
-def _seg_0286_019__f(*, M: Any = _UNBOUND, f: Any = _UNBOUND, scale: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 0286.019 (f, field_outlines) - body verbatim from _seg_0286__cemetery_clear_of_shrine (feature 024 per-check split; guards re-evaluated in the body, see split_oversized.py)."""
-    if scale in ('village', 'town', 'city', 'capital'):
-        field_outlines = [f["outline"] for f in M.get("fields", [])] + [f["outline"] for f in M.get("flower_fields", [])]
-    return _kept(locals(), ('f', 'field_outlines'))
-
-
-def _seg_0286_020__FIELD_SETBACK(*, scale: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 0286.020 (FIELD_SETBACK) - body verbatim from _seg_0286__cemetery_clear_of_shrine (feature 024 per-check split; guards re-evaluated in the body, see split_oversized.py)."""
-    if scale in ('village', 'town', 'city', 'capital'):
-        FIELD_SETBACK = 50  # a RICE PADDY is standing water when flooded - a real flood hazard, not a
-    return _kept(locals(), ('FIELD_SETBACK',))
-
-
 #                      trickle - so a burial ground keeps a clear margin from its edge (more than a creek)
-
-
-def _seg_0286_021__crowded(*, scale: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 0286.021 (crowded) - body verbatim from _seg_0286__cemetery_clear_of_shrine (feature 024 per-check split; guards re-evaluated in the body, see split_oversized.py)."""
-    if scale in ('village', 'town', 'city', 'capital'):
-        crowded = []  # type: ignore[var-annotated]
-    return _kept(locals(), ('crowded',))
-
-
-def _seg_0286_022__c(
-    *,
-    FIELD_SETBACK: Any = _UNBOUND,
-    c: Any = _UNBOUND,
-    cems: Any = _UNBOUND,
-    cor: Any = _UNBOUND,
-    cr: Any = _UNBOUND,
-    crem: Any = _UNBOUND,
-    crowded: Any = _UNBOUND,
-    cx: Any = _UNBOUND,
-    cy: Any = _UNBOUND,
-    field_outlines: Any = _UNBOUND,
-    inside_wall: Any = _UNBOUND,
-    is_crem: Any = _UNBOUND,
-    is_moat: Any = _UNBOUND,
-    k: Any = _UNBOUND,
-    line_waters: Any = _UNBOUND,
-    near_water: Any = _UNBOUND,
-    o: Any = _UNBOUND,
-    ol: Any = _UNBOUND,
-    oss: Any = _UNBOUND,
-    poly: Any = _UNBOUND,
-    pond: Any = _UNBOUND,
-    sb: Any = _UNBOUND,
-    scale: Any = _UNBOUND,
-    site: Any = _UNBOUND,
-    wall: Any = _UNBOUND,
-    width: Any = _UNBOUND,
-) -> dict[str, Any]:
-    """Gate segment 0286.022 (c, cor, cr, crowded) - body verbatim from _seg_0286__cemetery_clear_of_shrine (feature 024 per-check split; guards re-evaluated in the body, see split_oversized.py)."""
-    if scale in ('village', 'town', 'city', 'capital'):
-        for site, is_crem in [(c, False) for c in cems] + [(o, False) for o in oss] + [(cr, True) for cr in crem]:
-            cor = rect_corners(site)
-            inside_wall = bool(wall) and point_in_poly(site["x"], site["y"], wall)
-            near_water = False
-            for poly, width, is_moat in line_waters:
-                if is_moat and inside_wall:
-                    continue
-                sb = 30 if is_crem else water_setback(width)  # cremation may sit near water; burials scale
-                if min(seg_dist(cx, cy, poly[k], poly[k + 1]) for cx, cy in cor for k in range(len(poly) - 1)) < width / 2 + sb:
-                    near_water = True
-                    break
-            if not near_water and pond:
-                sb = 30 if is_crem else 55
-                if min(math.hypot(cx - pond[0], cy - pond[1]) for cx, cy in cor) < max(pond[2], pond[3]) + sb:
-                    near_water = True
-            # RICE PADDIES flood, so a BURIAL ground keeps a creek-level set-back from any field edge too
-            # (treat the field boundary like a small watercourse). The cremation ground is exempt (a fire
-            # site, not flood-sensitive graves).
-            if not near_water and not is_crem:
-                for ol in field_outlines:
-                    if min(poly_dist(cx, cy, ol) for cx, cy in cor) < FIELD_SETBACK:
-                        near_water = True
-                        break
-            if near_water:
-                crowded.append((round(site["x"]), round(site["y"])))
-    return _kept(locals(), ('c', 'cor', 'cr', 'crowded', 'cx', 'cy', 'inside_wall', 'is_crem', 'is_moat', 'k', 'near_water', 'o', 'ol', 'poly', 'sb', 'site', 'width'))
-
-
-def _seg_0286_023__funerary_set_back_from_water(*, check: Any = _UNBOUND, crowded: Any = _UNBOUND, scale: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 0286.023 (funerary_set_back_from_water) - body verbatim from _seg_0286__cemetery_clear_of_shrine (feature 024 per-check split; guards re-evaluated in the body, see split_oversized.py)."""
-    if scale in ('village', 'town', 'city', 'capital'):
-        check(
-            "funerary_set_back_from_water",
-            not crowded,
-            f"grave site(s) crowd open water OR a flood-prone rice paddy - a burial ground's set-back scales with "
-            f"the waterway (a moat/river needs far more room than a creek; field edges count as creeks): {crowded[:3]}",
-        )
-    return _kept(locals(), ())
 
 
 # THE CREMATORY ADJOINS AN EXTERNAL BURIAL GROUND: the body is burned and its cremated bones

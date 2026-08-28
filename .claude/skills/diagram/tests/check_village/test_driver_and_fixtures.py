@@ -8,26 +8,19 @@ import pytest
 from l7r.diagram import check_village, settlement
 from tests.check_village._builders import (
     _CAP_GOV_CHECKS,
-    _GAP_RATCHET,
-    _HAZARDS,
     _POND_OUTLIER,
-    _SHRINE_GRAVEYARD_GROUP,
     _cap_gov,
-    _capital_manifest,
     _feature_022_manifest,
-    _haz_base,
     _tv,
     bldg,
     bstone,
     exground,
     f,
-    f_only,
     garden,
     grove,
     house,
     manifest,
     pspot,
-    solid,
     vgrove,
     well,
     yard,
@@ -54,32 +47,6 @@ def test_fixture_builders_survive_every_check():
     f(M)  # must not raise; which checks FAIL is irrelevant here - only that they all ran
 
 
-def test_brook_from_drain_outfall_runs_off_edge():
-    # a natural BROOK that STARTS at the field drain's outfall (frm=drain) and runs off the map edge is
-    # valid - exercises the "drain" anchor kind (the akusui empties into a valley brook, water OUT).
-    M = {
-        "field_ditches": [{"poly": [[300, 600], [700, 600]], "role": "drain", "field": "f"}],
-        "streams": [{"poly": [[700, 600], [1200, 850], [1815, 1120]], "frm": {"kind": "drain"}, "to": {"kind": "offmap"}, "w": 9}],
-    }
-    fails = f(M)
-    assert "stream_source_anchored[0]" not in fails and "stream_runs_off_edge[0]" not in fails
-
-
-def test_stream_diverted_into_a_channel_passes_and_open_ended_brook_fires():
-    # a BROOK flowing in from the top edge and artificially DIVERTED into the head-race at the field head
-    # (frm=offmap, no `to`) is valid: it hands off to the irrigation net rather than running on over the
-    # paddies. Exercises the at_ditch allowance - one end at the edge, the other ON an irrigation ditch.
-    diverted = {
-        "meta": {"W": 1000, "H": 1000},
-        "field_ditches": [{"poly": [[500, 300], [500, 700]], "role": "main", "field": "f"}],
-        "streams": [{"poly": [[500, 8], [500, 160], [500, 300]], "frm": {"kind": "offmap"}}],
-    }
-    assert "stream_runs_off_edge[0]" not in f(diverted)
-    # TEETH: the same brook ending in OPEN ground (no edge/ditch/field/pond/moat/drain at its foot) must FIRE.
-    open_ended = {"meta": {"W": 1000, "H": 1000}, "streams": [{"poly": [[500, 8], [500, 160], [500, 500]], "frm": {"kind": "offmap"}}]}
-    assert "stream_runs_off_edge[0]" in f(open_ended)
-
-
 # ---- module-level helper branches (direct calls) ------------------------------------------
 def test_helper_edge_branches():
     cv = check_village
@@ -95,19 +62,6 @@ def test_helper_edge_branches():
 def test_gate_crop_advisory_is_soft_not_a_failure():
     fails = check_village.gate(_POND_OUTLIER, verbose=True)  # prints the ADVISORY line but must NOT gate the map
     assert "crop_could_tighten" not in fails
-
-
-def test_gate_prints_the_group_advisory_phrasing():
-    # the verbose gate line phrases a GROUP differently from a lone feature ("a N-feature group, moved as one unit")
-    import contextlib
-    import io
-
-    buf = io.StringIO()
-    with contextlib.redirect_stdout(buf):
-        fails = check_village.gate(_SHRINE_GRAVEYARD_GROUP, verbose=True)
-    out = buf.getvalue()
-    assert "shrine+churchyard" in out and "group, moved as one unit" in out
-    assert "crop_could_tighten" not in fails  # still a SOFT advisory, never a gate failure
 
 
 def test_seg_intersect_returns_point_for_a_crossing_and_none_for_parallel():
@@ -235,50 +189,6 @@ def test_convex_hull_degenerate_point_clouds():
     assert cv.poly_area(cv.convex_hull([(0.0, 0.0), (1.0, 1.0)])) == 0.0
 
 
-@pytest.mark.parametrize("hazard,expect,where,build,exempt", _HAZARDS, ids=[h[0].replace(" ", "_").replace("'", "") for h in _HAZARDS])
-def test_every_solid_struct_is_gated_off_every_hazard(hazard, expect, where, build, exempt):
-    """TWO AXES IN THE QUICK FORM, THE FULL MATRIX UNDER EXHAUSTIVE (GM 2026-08-26, T19). The property
-    is that every check reads `solid_structs(M)` rather than a hand list of keys, and a hand list
-    fails on a MISSING KEY, not on a missing (key, hazard) pair - so each hazard is proven against
-    the first struct kind here, and every struct kind is proven against one hazard in
-    `test_every_solid_struct_is_gated_off_one_hazard`. That is ~35 targeted gates instead of ~300
-    (25.8 s of quick, the single largest item). Full matrix last run green: 2026-08-26
-    (`make quick EXHAUSTIVE=1`)."""
-    from tests._scope import EXHAUSTIVE
-
-    missed = []
-    keys = check_village._OVERLAP_STRUCTS if EXHAUSTIVE else tuple(k for k in check_village._OVERLAP_STRUCTS if k not in exempt)[:1]
-    for key in keys:
-        if key in exempt:
-            continue
-        M = _haz_base()
-        M.update(build())
-        M.setdefault(key, []).append(solid(key, *where))
-        if expect not in f_only(M, expect):  # targeted: the question is about ONE check
-            missed.append(key)
-    assert not missed, (
-        f"{missed} sit on {hazard} without tripping {expect} - every _OVERLAP_STRUCTS key must be gated off every "
-        f"hazard. The check is probably reading a hand-written list of manifest keys instead of solid_structs(M)."
-    )
-
-
-def test_every_solid_struct_is_gated_off_one_hazard():
-    """The other axis of the matrix above: every `_OVERLAP_STRUCTS` key against one hazard (the
-    moat - a linear feature every solid must clear), so a key missing from a hand-written list is
-    caught here even though the quick form of the matrix tests one key per hazard."""
-    hazard, expect, where, build, exempt = _HAZARDS[1]
-    missed = []
-    for key in check_village._OVERLAP_STRUCTS:
-        if key in exempt:
-            continue
-        M = _haz_base()
-        M.update(build())
-        M.setdefault(key, []).append(solid(key, *where))
-        if expect not in f_only(M, expect):  # targeted: the question is about ONE check
-            missed.append(key)
-    assert not missed, f"{missed} sit on {hazard} without tripping {expect}"
-
-
 def test_the_new_trade_works_are_classified_in_both_registries():
     """The KEEP-CLEAR CONTRACT: registry membership alone gates a feature off every hazard and
     protects it from foreign captions. The border LINE is the deliberate exception - it is a line
@@ -299,38 +209,10 @@ def test_a_border_line_under_a_compound_wall_trips_nothing():
     assert not [c for c in f(M) if "border" in c]
 
 
-@pytest.mark.parametrize(("name", "build", "offset", "must_fire", "why"), _GAP_RATCHET, ids=[r[0] for r in _GAP_RATCHET])
-def test_gap_verdicts_read_footprints_not_centers(name, build, offset, must_fire, why):
-    fired = name in f_only(build(offset), name)
-    assert fired == must_fire, f"{name}: expected {'a failure' if must_fire else 'no failure'} at the disagreement offset ({why}) - this check is measuring centers or circumscribed radii again"
-
-
 def test_capital_government_ward_checks_pass_on_the_full_fixture():
     fails = f(_cap_gov())
     for c in _CAP_GOV_CHECKS:
         assert c not in fails, c
-
-
-def test_capital_packed_overflow_names_the_wall_resize_cure(capsys):
-    """The in-wall-short + suburb-over combination must say, in so many words, that the wall
-    must be resized - not merely that a band is off (the error message is the institutional
-    memory here)."""
-    M = _capital_manifest()
-    M["meta"]["budget"]["dwelling_target"] = {"packed": 100, "packed_suburb": 30, "samurai_yashiki": 0, "samurai_detached": 0, "samurai_terrace": 0}
-    M["districts"] = [
-        {"name": "in machi", "kind": "machi", "poly": [[100, 100], [900, 100], [900, 900], [100, 900]]},
-        {"name": "out ward", "kind": "machi", "poly": [[1200, 100], [1600, 100], [1600, 900], [1200, 900]]},
-    ]
-
-    def _pk(n, x0):
-        return [{"kind": "laborer", "x": x0 + 14 * (i % 20), "y": 120 + 14 * (i // 20), "w": 10, "h": 7} for i in range(n)]
-
-    M["buildings"] = _pk(40, 120) + _pk(60, 1220)
-    from l7r.diagram import check_village
-
-    check_village.gate(M, verbose=True)
-    out = capsys.readouterr().out
-    assert "CANNOT WORK WITHOUT RESIZING THE WALL" in out
 
 
 def test_feature_022_gate_refuses_an_unknown_check_name():

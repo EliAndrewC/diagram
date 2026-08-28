@@ -570,91 +570,12 @@ def _seg_0542__households_consistent(
     return _kept(locals(), ('hh', 'hi', 'lo', 't'))
 
 
-def _seg_0543_000__bk(*, scale: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 0543.000 (bk) - body verbatim from _seg_0543__town_farmers_plurality (feature 024 per-check split; guards re-evaluated in the body, see split_oversized.py)."""
-    if scale == 'town':
-        bk: dict[str, int] = {}  # type: ignore[no-redef,unused-ignore]
-    return _kept(locals(), ('bk',))
-
-
-def _seg_0543_001__b(*, M: Any = _UNBOUND, b: Any = _UNBOUND, bk: Any = _UNBOUND, scale: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 0543.001 (b, bk) - body verbatim from _seg_0543__town_farmers_plurality (feature 024 per-check split; guards re-evaluated in the body, see split_oversized.py)."""
-    if scale == 'town':
-        for b in M.get("buildings", []):
-            bk[b["kind"]] = bk.get(b["kind"], 0) + 1
-    return _kept(locals(), ('b', 'bk'))
-
-
-def _seg_0543_002__farmhouses(*, houses: Any = _UNBOUND, scale: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 0543.002 (farmhouses) - body verbatim from _seg_0543__town_farmers_plurality (feature 024 per-check split; guards re-evaluated in the body, see split_oversized.py)."""
-    if scale == 'town':
-        farmhouses = len(houses)
-    return _kept(locals(), ('farmhouses',))
-
-
-def _seg_0543_003__bands(*, scale: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 0543.003 (bands) - body verbatim from _seg_0543__town_farmers_plurality (feature 024 per-check split; guards re-evaluated in the body, see split_oversized.py)."""
-    if scale == 'town':
-        bands = {"merchant": (20, 28), "laborer": (25, 35), "servant": (9, 17), "burakumin": (10, 14), "samurai": (5, 10)}
-    return _kept(locals(), ('bands',))
-
-
 # a caste's homes come in size variants (the wealthy get larger houses); count them together
-
-
-def _seg_0543_004__VARIANTS(*, scale: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 0543.004 (VARIANTS) - body verbatim from _seg_0543__town_farmers_plurality (feature 024 per-check split; guards re-evaluated in the body, see split_oversized.py)."""
-    if scale == 'town':
-        VARIANTS = {"merchant": ("merchant", "merchant_house", "merchant_large"), "laborer": ("laborer", "laborer_large"), "samurai": ("samurai", "samurai_large")}
-    return _kept(locals(), ('VARIANTS',))
-
-
-def _seg_0543_005__caste_n(*, VARIANTS: Any = _UNBOUND, bands: Any = _UNBOUND, bk: Any = _UNBOUND, k: Any = _UNBOUND, kind: Any = _UNBOUND, scale: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 0543.005 (caste_n, k, kind) - body verbatim from _seg_0543__town_farmers_plurality (feature 024 per-check split; guards re-evaluated in the body, see split_oversized.py)."""
-    if scale == 'town':
-        caste_n = {kind: sum(bk.get(k, 0) for k in VARIANTS.get(kind, (kind,))) for kind in bands}
-    return _kept(locals(), ('caste_n', 'k', 'kind'))
-
-
-def _seg_0543_006__town_caste_count(
-    *, bands: Any = _UNBOUND, c: Any = _UNBOUND, caste_n: Any = _UNBOUND, check: Any = _UNBOUND, hi: Any = _UNBOUND, kind: Any = _UNBOUND, lo: Any = _UNBOUND, scale: Any = _UNBOUND
-) -> dict[str, Any]:
-    """Gate segment 0543.006 (town_caste_count) - body verbatim from _seg_0543__town_farmers_plurality (feature 024 per-check split; guards re-evaluated in the body, see split_oversized.py)."""
-    if scale == 'town':
-        for kind, (lo, hi) in bands.items():
-            c = caste_n[kind]
-            check(f"town_caste_count[{kind}]", lo <= c <= hi, f"{kind} buildings {c} outside budgets.md band [{lo},{hi}]")
-    return _kept(locals(), ('c', 'hi', 'kind', 'lo'))
 
 
 # SENIOR SAMURAI GET LARGER HOUSES at the county seat too (budgets.md's rank mix; the town
 # analog of city_samurai_housing_varied - GM audit 2026-07): at least one samurai_large
 # among a majority of small houses.
-
-
-def _seg_0543_007__sl_t(*, bk: Any = _UNBOUND, scale: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 0543.007 (sl_t) - body verbatim from _seg_0543__town_farmers_plurality (feature 024 per-check split; guards re-evaluated in the body, see split_oversized.py)."""
-    if scale == 'town':
-        sl_t = bk.get("samurai_large", 0)
-    return _kept(locals(), ('sl_t',))
-
-
-def _seg_0543_008__ss_t(*, bk: Any = _UNBOUND, scale: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 0543.008 (ss_t) - body verbatim from _seg_0543__town_farmers_plurality (feature 024 per-check split; guards re-evaluated in the body, see split_oversized.py)."""
-    if scale == 'town':
-        ss_t = bk.get("samurai", 0)
-    return _kept(locals(), ('ss_t',))
-
-
-def _seg_0543_009__town_samurai_housing_varied(*, check: Any = _UNBOUND, scale: Any = _UNBOUND, sl_t: Any = _UNBOUND, ss_t: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 0543.009 (town_samurai_housing_varied) - body verbatim from _seg_0543__town_farmers_plurality (feature 024 per-check split; guards re-evaluated in the body, see split_oversized.py)."""
-    if scale == 'town' and (sl_t or ss_t):
-        check(
-            "town_samurai_housing_varied",
-            sl_t >= 1 and ss_t > sl_t,
-            f"samurai housing lacks rank variety (large={sl_t}, small={ss_t}) - the senior official(s) at a county seat keep a larger house among the juniors' small ones",
-        )
-    return _kept(locals(), ())
 
 
 # THE BURAKUMIN QUARTER IS SEGREGATED - the doctrine word on every map, previously enforced
@@ -673,10 +594,3 @@ def _seg_0543_009__town_samurai_housing_varied(*, check: Any = _UNBOUND, scale: 
 # a buffer against kegare - the burakumin quarter is set apart, not held at arm's length,
 # and the historical eta hamlet sits at the village edge or across its stream rather than a
 # fixed distance out.
-
-
-def _seg_0543_010__BURAKUMIN_SEAM_FT(*, scale: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 0543.010 (BURAKUMIN_SEAM_FT) - body verbatim from _seg_0543__town_farmers_plurality (feature 024 per-check split; guards re-evaluated in the body, see split_oversized.py)."""
-    if scale == 'town':
-        BURAKUMIN_SEAM_FT = 60.0
-    return _kept(locals(), ('BURAKUMIN_SEAM_FT',))

@@ -4,7 +4,7 @@ locked to another tier; the gate collects everything. Helpers stay in the source
 
 import pytest
 
-from tests.check_village._builders import WALL, _dw, _justice_town, _tower, _ty_map, _wf_map, bldg, bstone, exground, f_only, house
+from tests.check_village._builders import WALL, _dw, _tower, bldg, f_only
 
 
 @pytest.mark.tiers("town")
@@ -81,85 +81,3 @@ def test_walled_town_commoners_inside_walls_allows_burakumin_and_gate_merchants(
         "fire_towers": [_tower(500, 500)],
     }
     assert "walled_town_commoners_inside_walls" not in f_only(M, "walled_town_commoners_inside_walls")
-
-
-@pytest.mark.tiers("town")
-def test_water_flow_declared_fires_when_a_watered_map_declares_no_bearing():
-    M = _wf_map(meta={"scale": "town", "walled": False, "ftpx": 1, "down_deg": 90})
-    assert "water_flow_declared" in f_only(M, "water_flow_declared")
-
-
-@pytest.mark.tiers("town")
-def test_water_flow_consistent_with_slope_fires_when_water_would_run_uphill():
-    # 90 deg or more off the fall = a net uphill component, which gravity forbids
-    M = _wf_map(meta={"scale": "town", "walled": False, "ftpx": 1, "down_deg": 90, "water_flow": 270})
-    assert "water_flow_consistent_with_slope" in f_only(M, "water_flow_consistent_with_slope")
-
-
-@pytest.mark.tiers("town")
-def test_water_flow_consistent_with_slope_passes_a_near_contour_divergence():
-    # 85 deg off the fall is a CONTOUR work (a canal is built near-parallel to the contours),
-    # realistic and must not be flagged - only crossing 90 is impossible
-    M = _wf_map(meta={"scale": "town", "walled": False, "ftpx": 1, "down_deg": 90, "water_flow": 5})
-    assert "water_flow_consistent_with_slope" not in f_only(M, "water_flow_consistent_with_slope")
-
-
-@pytest.mark.tiers("town")
-def test_tanning_yard_below_every_intake_ignores_an_intake_on_a_DIFFERENT_course():
-    # Hoshizora's real situation: the town's intakes are on a watercourse the yard's water never
-    # reaches, so they must not be charged against it
-    M = _ty_map(channels=[{"poly": [[100, 700], [180, 720]], "frm": {"kind": "stream"}, "to": {"kind": "field", "name": "f1"}, "w": 2.5}])
-    assert "tanning_yard_below_every_intake" not in f_only(M, "tanning_yard_below_every_intake")
-
-
-@pytest.mark.tiers("town")
-def test_town_has_punishment_spot_fires_when_the_seat_keeps_none():
-    assert "town_has_punishment_spot" in f_only(_justice_town(punishment_spots=[]), "town_has_punishment_spot")
-
-
-@pytest.mark.tiers("town")
-def test_town_has_punishment_spot_can_be_opted_out():
-    M = _justice_town(punishment_spots=[])
-    M["meta"] = {**M["meta"], "punishment_spot": False}
-    assert "town_has_punishment_spot" not in f_only(M, "town_has_punishment_spot")
-
-
-@pytest.mark.tiers("town")
-def test_town_has_execution_ground_fires_when_the_seat_keeps_none():
-    assert "town_has_execution_ground" in f_only(_justice_town(execution_grounds=[]), "town_has_execution_ground")
-
-
-@pytest.mark.tiers("town")
-def test_town_has_execution_ground_can_be_opted_out():
-    M = _justice_town(execution_grounds=[])
-    M["meta"] = {**M["meta"], "execution_ground": False}
-    assert "town_has_execution_ground" not in f_only(M, "town_has_execution_ground")
-
-
-@pytest.mark.tiers("town")
-def test_execution_ground_on_the_outcast_side_fires_on_the_opposite_side():
-    # West of the core while the burakumin quarter lies east - pollution runs ONE way out of a town.
-    M = _justice_town(execution_grounds=[exground(-600, 1060)], boundary_markers=[bstone(0, 1020)])
-    assert "execution_ground_on_the_outcast_side" in f_only(M, "execution_ground_on_the_outcast_side")
-
-
-@pytest.mark.tiers("town")
-def test_execution_ground_no_nearer_the_houses_than_its_stone_fires_when_the_ground_is_further_in():
-    """The GM's formulation, 2026-07-27: the stone should be closer to the town's edge than the
-    ground. The between-ness test above cannot see this - it compares two distances to the core
-    CENTROID, which orders the pair radially about one point while a settlement is not a disc. Here
-    the ground keeps its 126 px of kegare clearance and is still 10 px further IN than the stone that
-    is supposed to bound it, so both of the older rules are satisfied and the map is still wrong."""
-    M = _justice_town(boundary_markers=[bstone(1160, 1010)], execution_grounds=[exground(1500, 1060)], houses=[house(440 + 30 * i, 940) for i in range(6)] + [house(1500, 1230)])
-    assert "execution_ground_past_the_boundary_marker" not in f_only(M, "execution_ground_past_the_boundary_marker")  # the centroid arithmetic is satisfied...
-    assert "execution_ground_no_nearer_the_houses_than_its_stone" in f_only(M, "execution_ground_no_nearer_the_houses_than_its_stone")  # ...and the ground is still inside the line
-
-
-@pytest.mark.tiers("city", "town")
-def test_execution_ground_no_nearer_the_houses_than_its_stone_measures_a_walled_seat_to_its_RAMPART():
-    """And the settlement edge is the WALL where there is one. Measuring a walled city to its
-    nearest dwelling lets an isolated farmstead in the hinterland stand for the town - Tango's
-    ground sits in the extramural fields with a farmhouse further out than itself, which read as
-    'nearer the town' than a stone plainly between the city and it."""
-    M = _justice_town(wall=WALL, boundary_markers=[bstone(1000, 1010)], execution_grounds=[exground(1500, 1060)], houses=[house(440 + 30 * i, 940) for i in range(6)] + [house(1620, 1060)])
-    assert "execution_ground_no_nearer_the_houses_than_its_stone" not in f_only(M, "execution_ground_no_nearer_the_houses_than_its_stone")

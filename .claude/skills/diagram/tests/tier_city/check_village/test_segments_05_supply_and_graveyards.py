@@ -5,25 +5,9 @@ locked to another tier; the gate collects everything. Helpers stay in the source
 import pytest
 
 from tests.check_village._builders import (
-    _MOAT,
     _city_dead,
     f_only,
 )
-
-
-@pytest.mark.tiers("city")
-def test_funerary_set_back_inside_wall_grave_exempt_from_moat():
-    # a graveyard just inside the wall is shielded from the (outside) moat by the rampart -> exempt
-    WALLSQ = [[200, 200], [800, 200], [800, 800], [200, 800]]
-    M = {"meta": {"scale": "city"}, "wall": WALLSQ, "moat": _MOAT, "moat_width": 22, "cemeteries": [{"x": 230, "y": 500, "w": 50, "h": 36, "rot": 0, "parish": True}]}
-    assert "funerary_set_back_from_water" not in f_only(M, "funerary_set_back_from_water")
-
-
-@pytest.mark.tiers("city")
-def test_funerary_set_back_outside_wall_grave_subject_to_moat():
-    WALLSQ = [[200, 200], [800, 200], [800, 800], [200, 800]]
-    M = {"meta": {"scale": "city"}, "wall": WALLSQ, "moat": _MOAT, "moat_width": 22, "cemeteries": [{"x": 120, "y": 500, "w": 50, "h": 36, "rot": 0, "parish": True}]}
-    assert "funerary_set_back_from_water" in f_only(M, "funerary_set_back_from_water")
 
 
 @pytest.mark.tiers("city")

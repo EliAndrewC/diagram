@@ -1,0 +1,7424 @@
+{
+ "stages": [
+  "water_frame",
+  "field",
+  "sink",
+  "seat",
+  "homesteads",
+  "track",
+  "appurtenances",
+  "web",
+  "notice",
+  "hinterland",
+  "woodland",
+  "windbreak",
+  "bamboo",
+  "crossings",
+  "frame",
+  "finish"
+ ],
+ "rows": [
+  {
+   "check": "all_houses_field_adjacent",
+   "keys": [],
+   "stages": {},
+   "readers": [
+    "tests/check_village/test_segments_03_structures_and_wards.py (test)"
+   ],
+   "fixtures": {},
+   "verdict": "NO-SCRIPTED-EXECUTOR",
+   "why": "no scripted map exercises it (a legacy-tier check: town / city / capital / village hand-authored maps only); no measured verdict is possible - the GM's choice at acceptance",
+   "on": []
+  },
+  {
+   "check": "all_ink_is_ruled_on",
+   "keys": [
+    "unclassed_ink",
+    "unregistered_classes"
+   ],
+   "stages": {
+    "reference": [
+     "water_frame",
+     "water_frame"
+    ],
+    "polder19": [
+     "finish",
+     "finish"
+    ]
+   },
+   "readers": [
+    "tests/check_village/test_segments_08_kosatsuba_and_basins.py (test)"
+   ],
+   "fixtures": {
+    "?": 1
+   },
+   "verdict": "RETIRE-CANDIDATE",
+   "why": "inputs settle at their placer on both maps: reference: water_frame, polder19: finish",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "aqueduct_taps_water_lands_dry",
+   "keys": [
+    "aqueducts",
+    "canals",
+    "channels",
+    "moat",
+    "moat_width",
+    "sluice_gates",
+    "streams",
+    "tanning_yards",
+    "towpaths"
+   ],
+   "stages": {
+    "reference": [
+     "field",
+     "finish"
+    ],
+    "polder19": [
+     "field",
+     "finish"
+    ]
+   },
+   "readers": [
+    "tests/tier_city/check_village/test_segments_07_water.py (test)"
+   ],
+   "fixtures": {},
+   "verdict": "KEEP",
+   "why": "an input changes after its placer: reference: placed at field, last changed at finish, polder19: placed at field, last changed at finish",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "bamboo_stands_clear_of_paddies",
+   "keys": [
+    "bamboo_stands",
+    "fields"
+   ],
+   "stages": {
+    "reference": [
+     "bamboo",
+     "finish"
+    ],
+    "polder19": [
+     "bamboo",
+     "finish"
+    ]
+   },
+   "readers": [
+    "tests/check_village/test_segments_04_homesteads.py (test)"
+   ],
+   "fixtures": {},
+   "verdict": "KEEP",
+   "why": "an input changes after its placer: reference: placed at bamboo, last changed at finish, polder19: placed at bamboo, last changed at finish",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "bridges_align_with_their_way",
+   "keys": [
+    "alleys",
+    "bridges",
+    "buildings",
+    "cemeteries",
+    "channels",
+    "comb_floors",
+    "commons",
+    "cremation_grounds",
+    "crescent_ponds",
+    "dikes",
+    "districts",
+    "dry_plots",
+    "field_ditches",
+    "fields",
+    "fire_towers",
+    "flophouses",
+    "flower_fields",
+    "forest",
+    "forest_edge",
+    "gate_structs",
+    "gates",
+    "governor_mansion",
+    "granary",
+    "hill",
+    "houses",
+    "inspection_stations",
+    "kido",
+    "kilns",
+    "lanes",
+    "manors",
+    "marshes",
+    "mausoleums",
+    "merchant_estates",
+    "meta",
+    "ministries",
+    "moat",
+    "moat_width",
+    "ossuaries",
+    "pond",
+    "quarters",
+    "religious",
+    "ring_road",
+    "ring_road_width",
+    "road",
+    "road_width",
+    "roads",
+    "shrine",
+    "stable_yards",
+    "storehouses",
+    "streams",
+    "summit",
+    "tanning_yards",
+    "terraces",
+    "theater_stage",
+    "threshing_yards",
+    "torii",
+    "town_streets",
+    "village_groves",
+    "wall",
+    "wall_tower_keepclears",
+    "wall_towers",
+    "wall_z",
+    "wards",
+    "water_gates",
+    "wells"
+   ],
+   "stages": {
+    "reference": [
+     "crossings",
+     "finish"
+    ],
+    "polder19": [
+     "crossings",
+     "finish"
+    ]
+   },
+   "readers": [
+    "tests/check_village/test_segments_06_ways_and_bridges.py (test)"
+   ],
+   "fixtures": {
+    "?": 2
+   },
+   "verdict": "KEEP",
+   "why": "an input changes after its placer: reference: placed at crossings, last changed at finish, polder19: placed at crossings, last changed at finish",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "bridges_clear_of_houses",
+   "keys": [
+    "bridges",
+    "houses"
+   ],
+   "stages": {
+    "reference": [
+     "crossings",
+     "crossings"
+    ],
+    "polder19": [
+     "crossings",
+     "crossings"
+    ]
+   },
+   "readers": [
+    "tests/check_village/test_segments_07_water.py (test)"
+   ],
+   "fixtures": {},
+   "verdict": "RETIRE-CANDIDATE",
+   "why": "inputs settle at their placer on both maps: reference: crossings, polder19: crossings",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "bridges_seat_on_water",
+   "keys": [
+    "bridges"
+   ],
+   "stages": {
+    "reference": [
+     "crossings",
+     "crossings"
+    ],
+    "polder19": [
+     "crossings",
+     "crossings"
+    ]
+   },
+   "readers": [
+    "tests/check_village/test_segments_07_water.py (test)"
+   ],
+   "fixtures": {
+    "?": 1
+   },
+   "verdict": "RETIRE-CANDIDATE",
+   "why": "inputs settle at their placer on both maps: reference: crossings, polder19: crossings",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "bridges_span_their_water",
+   "keys": [
+    "bridges"
+   ],
+   "stages": {
+    "reference": [
+     "crossings",
+     "crossings"
+    ],
+    "polder19": [
+     "crossings",
+     "crossings"
+    ]
+   },
+   "readers": [
+    "tests/check_village/test_segments_07_water.py (test)",
+    "tests/settlement/test_city.py (test)"
+   ],
+   "fixtures": {
+    "?": 1
+   },
+   "verdict": "RETIRE-CANDIDATE",
+   "why": "inputs settle at their placer on both maps: reference: crossings, polder19: crossings",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "bund_beans_on_bunds",
+   "keys": [
+    "drawn_channels",
+    "field_ponds",
+    "pond"
+   ],
+   "stages": {
+    "reference": [
+     "sink",
+     "finish"
+    ],
+    "polder19": [
+     "field",
+     "finish"
+    ]
+   },
+   "readers": [
+    "tests/check_village/_builders.py (test)",
+    "tests/check_village/test_segments_08_kosatsuba_and_basins.py (test)",
+    "tests/settlement/test_fields.py (test)"
+   ],
+   "fixtures": {
+    "?": 2
+   },
+   "verdict": "KEEP",
+   "why": "an input changes after its placer: reference: placed at sink, last changed at finish, polder19: placed at field, last changed at finish",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "byre_form_declared",
+   "keys": [
+    "byres",
+    "houses",
+    "meta"
+   ],
+   "stages": {
+    "reference": [
+     "appurtenances",
+     "frame"
+    ],
+    "polder19": [
+     "appurtenances",
+     "frame"
+    ]
+   },
+   "readers": [],
+   "fixtures": {
+    "?": 1
+   },
+   "verdict": "KEEP",
+   "why": "an input changes after its placer: reference: placed at appurtenances, last changed at frame, polder19: placed at appurtenances, last changed at frame",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "byres_meet_their_target",
+   "keys": [
+    "byres",
+    "houses",
+    "meta"
+   ],
+   "stages": {
+    "reference": [
+     "appurtenances",
+     "frame"
+    ],
+    "polder19": [
+     "appurtenances",
+     "frame"
+    ]
+   },
+   "readers": [],
+   "fixtures": {},
+   "verdict": "KEEP",
+   "why": "an input changes after its placer: reference: placed at appurtenances, last changed at frame, polder19: placed at appurtenances, last changed at frame",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "canopy_clear_of_watercourses",
+   "keys": [
+    "channels",
+    "moat",
+    "moat_width",
+    "streams",
+    "village_groves"
+   ],
+   "stages": {
+    "reference": [
+     "windbreak",
+     "finish"
+    ],
+    "polder19": [
+     "windbreak",
+     "finish"
+    ]
+   },
+   "readers": [
+    "tests/check_village/test_segments_07_water.py (test)"
+   ],
+   "fixtures": {
+    "?": 1
+   },
+   "verdict": "KEEP",
+   "why": "an input changes after its placer: reference: placed at windbreak, last changed at finish, polder19: placed at windbreak, last changed at finish",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "capital_has_kosatsuba",
+   "keys": [
+    "gates",
+    "kosatsuba",
+    "lane",
+    "lanes",
+    "road",
+    "roads",
+    "town_streets"
+   ],
+   "stages": {},
+   "readers": [],
+   "fixtures": {},
+   "verdict": "NO-SCRIPTED-EXECUTOR",
+   "why": "no scripted map exercises it (a legacy-tier check: town / city / capital / village hand-authored maps only); no measured verdict is possible - the GM's choice at acceptance",
+   "on": []
+  },
+  {
+   "check": "capital_has_no_headman",
+   "keys": [],
+   "stages": {},
+   "readers": [],
+   "fixtures": {},
+   "verdict": "NO-SCRIPTED-EXECUTOR",
+   "why": "no scripted map exercises it (a legacy-tier check: town / city / capital / village hand-authored maps only); no measured verdict is possible - the GM's choice at acceptance",
+   "on": []
+  },
+  {
+   "check": "captions_clear_the_ways_they_stand_on",
+   "keys": [
+    "labels",
+    "lanes",
+    "meta"
+   ],
+   "stages": {
+    "reference": [
+     "notice",
+     "frame"
+    ],
+    "polder19": [
+     "notice",
+     "frame"
+    ]
+   },
+   "readers": [
+    "tests/check_village/test_segments_04_homesteads.py (test)"
+   ],
+   "fixtures": {
+    "?": 1
+   },
+   "verdict": "KEEP",
+   "why": "an input changes after its placer: reference: placed at notice, last changed at frame, polder19: placed at notice, last changed at frame",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "channel_gates_at_water_junctions",
+   "keys": [
+    "channels",
+    "sluice_gates"
+   ],
+   "stages": {
+    "reference": [
+     "field",
+     "sink"
+    ],
+    "polder19": [
+     "field",
+     "field"
+    ]
+   },
+   "readers": [
+    "tests/check_village/test_segments_07_water.py (test)"
+   ],
+   "fixtures": {},
+   "verdict": "KEEP",
+   "why": "an input changes after its placer: reference: placed at field, last changed at sink",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "channels_flow_downhill",
+   "keys": [
+    "cemeteries",
+    "channels",
+    "clearings",
+    "comb_floors",
+    "commons",
+    "dikes",
+    "field_ditches",
+    "fields",
+    "flower_fields",
+    "hill",
+    "houses",
+    "marshes",
+    "meta",
+    "religious",
+    "shrine",
+    "streams",
+    "summit",
+    "torii",
+    "village_groves",
+    "wall",
+    "wall_z"
+   ],
+   "stages": {
+    "reference": [
+     "windbreak",
+     "finish"
+    ],
+    "polder19": [
+     "windbreak",
+     "finish"
+    ]
+   },
+   "readers": [
+    "tests/check_village/_builders.py (test)",
+    "tests/check_village/test_segments_07_water.py (test)"
+   ],
+   "fixtures": {
+    "?": 1
+   },
+   "verdict": "KEEP",
+   "why": "an input changes after its placer: reference: placed at windbreak, last changed at finish, polder19: placed at windbreak, last changed at finish",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "channels_join_not_cross_at_fork",
+   "keys": [
+    "channels",
+    "field_ditches",
+    "road",
+    "road_width",
+    "streams",
+    "town_streets",
+    "wall"
+   ],
+   "stages": {
+    "reference": [
+     "field",
+     "finish"
+    ],
+    "polder19": [
+     "field",
+     "finish"
+    ]
+   },
+   "readers": [
+    "tests/check_village/test_segments_05_fields_and_ditches.py (test)"
+   ],
+   "fixtures": {
+    "?": 1
+   },
+   "verdict": "KEEP",
+   "why": "an input changes after its placer: reference: placed at field, last changed at finish, polder19: placed at field, last changed at finish",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "channels_join_streams_at_confluence",
+   "keys": [
+    "channels",
+    "streams"
+   ],
+   "stages": {
+    "reference": [
+     "field",
+     "finish"
+    ],
+    "polder19": [
+     "field",
+     "finish"
+    ]
+   },
+   "readers": [
+    "tests/check_village/_builders.py (test)",
+    "tests/check_village/test_segments_07_water.py (test)"
+   ],
+   "fixtures": {
+    "?": 2
+   },
+   "verdict": "KEEP",
+   "why": "an input changes after its placer: reference: placed at field, last changed at finish, polder19: placed at field, last changed at finish",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "channels_join_water_not_cross",
+   "keys": [
+    "channels",
+    "field_ditches",
+    "moat",
+    "river"
+   ],
+   "stages": {
+    "reference": [
+     "field",
+     "sink"
+    ],
+    "polder19": [
+     "field",
+     "field"
+    ]
+   },
+   "readers": [
+    "tests/check_village/test_segments_07_water.py (test)",
+    "tests/tier_town/check_village/test_segments_07_water.py (test)"
+   ],
+   "fixtures": {},
+   "verdict": "KEEP",
+   "why": "an input changes after its placer: reference: placed at field, last changed at sink",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "city_fan_heads_quilted",
+   "keys": [
+    "alleys",
+    "buildings",
+    "cemeteries",
+    "channels",
+    "comb_floors",
+    "commons",
+    "cremation_grounds",
+    "crescent_ponds",
+    "dikes",
+    "districts",
+    "dry_plots",
+    "field_ditches",
+    "fields",
+    "fire_towers",
+    "flophouses",
+    "flower_fields",
+    "forest",
+    "forest_edge",
+    "gate_structs",
+    "gates",
+    "governor_mansion",
+    "granary",
+    "hill",
+    "houses",
+    "inspection_stations",
+    "kido",
+    "kilns",
+    "lanes",
+    "manors",
+    "marshes",
+    "mausoleums",
+    "merchant_estates",
+    "meta",
+    "ministries",
+    "moat",
+    "moat_width",
+    "ossuaries",
+    "pond",
+    "quarters",
+    "religious",
+    "ring_road",
+    "ring_road_width",
+    "road",
+    "road_width",
+    "roads",
+    "shrine",
+    "stable_yards",
+    "storehouses",
+    "streams",
+    "summit",
+    "tanning_yards",
+    "terraces",
+    "theater_stage",
+    "threshing_yards",
+    "torii",
+    "town_streets",
+    "village_groves",
+    "wall",
+    "wall_tower_keepclears",
+    "wall_towers",
+    "wall_z",
+    "wards",
+    "water_gates",
+    "wells"
+   ],
+   "stages": {},
+   "readers": [
+    "tests/check_village/test_segments_02_capital_and_walls.py (test)"
+   ],
+   "fixtures": {
+    "?": 1
+   },
+   "verdict": "NO-SCRIPTED-EXECUTOR",
+   "why": "no scripted map exercises it (a legacy-tier check: town / city / capital / village hand-authored maps only); no measured verdict is possible - the GM's choice at acceptance",
+   "on": []
+  },
+  {
+   "check": "city_has_cremation_ground",
+   "keys": [
+    "alleys",
+    "buildings",
+    "cemeteries",
+    "cremation_grounds",
+    "governor_mansion",
+    "granary",
+    "houses",
+    "mausoleums",
+    "ossuaries",
+    "religious",
+    "road",
+    "road_width",
+    "town_streets",
+    "wall",
+    "wall_z",
+    "wells"
+   ],
+   "stages": {},
+   "readers": [
+    "tests/tier_city/check_village/test_segments_05_supply_and_graveyards.py (test)"
+   ],
+   "fixtures": {
+    "?": 1
+   },
+   "verdict": "NO-SCRIPTED-EXECUTOR",
+   "why": "no scripted map exercises it (a legacy-tier check: town / city / capital / village hand-authored maps only); no measured verdict is possible - the GM's choice at acceptance",
+   "on": []
+  },
+  {
+   "check": "city_has_kosatsuba",
+   "keys": [
+    "gates",
+    "kosatsuba",
+    "lane",
+    "lanes",
+    "road",
+    "roads",
+    "town_streets"
+   ],
+   "stages": {},
+   "readers": [
+    "tests/tier_city/check_village/test_segments_08_kosatsuba_and_basins.py (test)",
+    "tests/tier_town/check_village/test_segments_08_kosatsuba_and_basins.py (test)"
+   ],
+   "fixtures": {},
+   "verdict": "NO-SCRIPTED-EXECUTOR",
+   "why": "no scripted map exercises it (a legacy-tier check: town / city / capital / village hand-authored maps only); no measured verdict is possible - the GM's choice at acceptance",
+   "on": []
+  },
+  {
+   "check": "city_has_mausoleum",
+   "keys": [
+    "alleys",
+    "buildings",
+    "cemeteries",
+    "cremation_grounds",
+    "governor_mansion",
+    "granary",
+    "houses",
+    "mausoleums",
+    "ossuaries",
+    "religious",
+    "road",
+    "road_width",
+    "town_streets",
+    "wall",
+    "wall_z",
+    "wells"
+   ],
+   "stages": {},
+   "readers": [
+    "tests/tier_city/check_village/test_segments_05_supply_and_graveyards.py (test)"
+   ],
+   "fixtures": {
+    "?": 1
+   },
+   "verdict": "NO-SCRIPTED-EXECUTOR",
+   "why": "no scripted map exercises it (a legacy-tier check: town / city / capital / village hand-authored maps only); no measured verdict is possible - the GM's choice at acceptance",
+   "on": []
+  },
+  {
+   "check": "city_has_no_headman",
+   "keys": [],
+   "stages": {},
+   "readers": [],
+   "fixtures": {},
+   "verdict": "NO-SCRIPTED-EXECUTOR",
+   "why": "no scripted map exercises it (a legacy-tier check: town / city / capital / village hand-authored maps only); no measured verdict is possible - the GM's choice at acceptance",
+   "on": []
+  },
+  {
+   "check": "city_has_ossuary",
+   "keys": [
+    "alleys",
+    "buildings",
+    "cemeteries",
+    "cremation_grounds",
+    "governor_mansion",
+    "granary",
+    "houses",
+    "mausoleums",
+    "ossuaries",
+    "religious",
+    "road",
+    "road_width",
+    "town_streets",
+    "wall",
+    "wall_z",
+    "wells"
+   ],
+   "stages": {},
+   "readers": [
+    "tests/tier_city/check_village/test_segments_05_supply_and_graveyards.py (test)"
+   ],
+   "fixtures": {
+    "?": 1
+   },
+   "verdict": "NO-SCRIPTED-EXECUTOR",
+   "why": "no scripted map exercises it (a legacy-tier check: town / city / capital / village hand-authored maps only); no measured verdict is possible - the GM's choice at acceptance",
+   "on": []
+  },
+  {
+   "check": "city_imperial_road_has_commerce",
+   "keys": [
+    "buildings",
+    "road",
+    "roads",
+    "wall"
+   ],
+   "stages": {},
+   "readers": [
+    "tests/tier_city/check_village/test_segments_10_city_battery_a.py (test)"
+   ],
+   "fixtures": {
+    "?": 1
+   },
+   "verdict": "NO-SCRIPTED-EXECUTOR",
+   "why": "no scripted map exercises it (a legacy-tier check: town / city / capital / village hand-authored maps only); no measured verdict is possible - the GM's choice at acceptance",
+   "on": []
+  },
+  {
+   "check": "city_imperial_road_through",
+   "keys": [
+    "road",
+    "roads"
+   ],
+   "stages": {},
+   "readers": [
+    "tests/tier_city/check_village/test_segments_10_city_battery_c.py (test)"
+   ],
+   "fixtures": {},
+   "verdict": "NO-SCRIPTED-EXECUTOR",
+   "why": "no scripted map exercises it (a legacy-tier check: town / city / capital / village hand-authored maps only); no measured verdict is possible - the GM's choice at acceptance",
+   "on": []
+  },
+  {
+   "check": "city_interior_fields_farmhouse_density",
+   "keys": [
+    "wall"
+   ],
+   "stages": {},
+   "readers": [
+    "tests/check_village/test_segments_02_capital_and_walls.py (test)",
+    "tests/tier_city/check_village/test_segments_02_capital_and_walls.py (test)"
+   ],
+   "fixtures": {
+    "?": 1
+   },
+   "verdict": "NO-SCRIPTED-EXECUTOR",
+   "why": "no scripted map exercises it (a legacy-tier check: town / city / capital / village hand-authored maps only); no measured verdict is possible - the GM's choice at acceptance",
+   "on": []
+  },
+  {
+   "check": "city_kosatsuba_per_gate",
+   "keys": [
+    "gates",
+    "kosatsuba",
+    "lane",
+    "lanes",
+    "road",
+    "roads",
+    "town_streets"
+   ],
+   "stages": {},
+   "readers": [
+    "tests/tier_city/check_village/test_segments_08_kosatsuba_and_basins.py (test)"
+   ],
+   "fixtures": {},
+   "verdict": "NO-SCRIPTED-EXECUTOR",
+   "why": "no scripted map exercises it (a legacy-tier check: town / city / capital / village hand-authored maps only); no measured verdict is possible - the GM's choice at acceptance",
+   "on": []
+  },
+  {
+   "check": "city_neighborhoods_have_wells",
+   "keys": [
+    "alleys",
+    "buildings",
+    "governor_mansion",
+    "houses",
+    "road",
+    "road_width",
+    "town_streets",
+    "wall",
+    "wells"
+   ],
+   "stages": {},
+   "readers": [
+    "tests/tier_city/check_village/test_segments_10_city_battery_a.py (test)"
+   ],
+   "fixtures": {
+    "?": 1
+   },
+   "verdict": "NO-SCRIPTED-EXECUTOR",
+   "why": "no scripted map exercises it (a legacy-tier check: town / city / capital / village hand-authored maps only); no measured verdict is possible - the GM's choice at acceptance",
+   "on": []
+  },
+  {
+   "check": "city_roads_run_offmap",
+   "keys": [
+    "road",
+    "roads"
+   ],
+   "stages": {},
+   "readers": [],
+   "fixtures": {},
+   "verdict": "NO-SCRIPTED-EXECUTOR",
+   "why": "no scripted map exercises it (a legacy-tier check: town / city / capital / village hand-authored maps only); no measured verdict is possible - the GM's choice at acceptance",
+   "on": []
+  },
+  {
+   "check": "city_samurai_housing_varied",
+   "keys": [
+    "buildings",
+    "manors",
+    "wall"
+   ],
+   "stages": {},
+   "readers": [
+    "tests/tier_city/check_village/test_segments_10_city_battery_a.py (test)"
+   ],
+   "fixtures": {
+    "?": 1
+   },
+   "verdict": "NO-SCRIPTED-EXECUTOR",
+   "why": "no scripted map exercises it (a legacy-tier check: town / city / capital / village hand-authored maps only); no measured verdict is possible - the GM's choice at acceptance",
+   "on": []
+  },
+  {
+   "check": "city_samurai_quarter_has_no_public_wells",
+   "keys": [
+    "alleys",
+    "buildings",
+    "governor_mansion",
+    "houses",
+    "road",
+    "road_width",
+    "town_streets",
+    "wall",
+    "wells"
+   ],
+   "stages": {},
+   "readers": [
+    "tests/tier_city/check_village/test_segments_10_city_battery_a.py (test)"
+   ],
+   "fixtures": {
+    "?": 1
+   },
+   "verdict": "NO-SCRIPTED-EXECUTOR",
+   "why": "no scripted map exercises it (a legacy-tier check: town / city / capital / village hand-authored maps only); no measured verdict is possible - the GM's choice at acceptance",
+   "on": []
+  },
+  {
+   "check": "city_streets_clear_of_moat",
+   "keys": [
+    "alleys",
+    "moat",
+    "town_streets"
+   ],
+   "stages": {},
+   "readers": [
+    "tests/tier_town/check_village/test_segments_10_city_battery_b.py (test)"
+   ],
+   "fixtures": {},
+   "verdict": "NO-SCRIPTED-EXECUTOR",
+   "why": "no scripted map exercises it (a legacy-tier check: town / city / capital / village hand-authored maps only); no measured verdict is possible - the GM's choice at acceptance",
+   "on": []
+  },
+  {
+   "check": "city_streets_connected",
+   "keys": [
+    "road",
+    "road_width",
+    "town_streets",
+    "wall"
+   ],
+   "stages": {},
+   "readers": [
+    "tests/tier_town/check_village/test_segments_10_city_battery_c.py (test)"
+   ],
+   "fixtures": {
+    "?": 1
+   },
+   "verdict": "NO-SCRIPTED-EXECUTOR",
+   "why": "no scripted map exercises it (a legacy-tier check: town / city / capital / village hand-authored maps only); no measured verdict is possible - the GM's choice at acceptance",
+   "on": []
+  },
+  {
+   "check": "city_streets_no_intersection_stub",
+   "keys": [
+    "road",
+    "road_width",
+    "town_streets",
+    "wall"
+   ],
+   "stages": {},
+   "readers": [
+    "tests/tier_town/check_village/test_segments_10_city_battery_c.py (test)"
+   ],
+   "fixtures": {},
+   "verdict": "NO-SCRIPTED-EXECUTOR",
+   "why": "no scripted map exercises it (a legacy-tier check: town / city / capital / village hand-authored maps only); no measured verdict is possible - the GM's choice at acceptance",
+   "on": []
+  },
+  {
+   "check": "city_streets_no_near_miss",
+   "keys": [
+    "road",
+    "road_width",
+    "town_streets",
+    "wall"
+   ],
+   "stages": {},
+   "readers": [
+    "tests/tier_town/check_village/test_segments_10_city_battery_c.py (test)"
+   ],
+   "fixtures": {},
+   "verdict": "NO-SCRIPTED-EXECUTOR",
+   "why": "no scripted map exercises it (a legacy-tier check: town / city / capital / village hand-authored maps only); no measured verdict is possible - the GM's choice at acceptance",
+   "on": []
+  },
+  {
+   "check": "city_streets_reach_their_neighbors",
+   "keys": [
+    "alleys",
+    "lanes",
+    "town_streets"
+   ],
+   "stages": {
+    "reference": [
+     "track",
+     "web"
+    ],
+    "polder19": [
+     "track",
+     "web"
+    ]
+   },
+   "readers": [
+    "tests/tier_town/check_village/test_segments_06_ways_and_bridges.py (test)"
+   ],
+   "fixtures": {
+    "?": 1
+   },
+   "verdict": "KEEP",
+   "why": "an input changes after its placer: reference: placed at track, last changed at web, polder19: placed at track, last changed at web",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "city_temple_neighborhood_has_shrines",
+   "keys": [
+    "alleys",
+    "buildings",
+    "governor_mansion",
+    "granary",
+    "houses",
+    "religious",
+    "road",
+    "road_width",
+    "town_streets",
+    "wall",
+    "wells"
+   ],
+   "stages": {},
+   "readers": [
+    "tests/tier_city/check_village/test_segments_10_city_battery_b.py (test)"
+   ],
+   "fixtures": {
+    "?": 1
+   },
+   "verdict": "NO-SCRIPTED-EXECUTOR",
+   "why": "no scripted map exercises it (a legacy-tier check: town / city / capital / village hand-authored maps only); no measured verdict is possible - the GM's choice at acceptance",
+   "on": []
+  },
+  {
+   "check": "city_temples_have_graveyards",
+   "keys": [
+    "alleys",
+    "buildings",
+    "cemeteries",
+    "cremation_grounds",
+    "governor_mansion",
+    "granary",
+    "houses",
+    "mausoleums",
+    "ossuaries",
+    "religious",
+    "road",
+    "road_width",
+    "town_streets",
+    "wall",
+    "wall_z",
+    "wells"
+   ],
+   "stages": {},
+   "readers": [
+    "tests/tier_city/check_village/test_segments_05_supply_and_graveyards.py (test)"
+   ],
+   "fixtures": {
+    "?": 1
+   },
+   "verdict": "NO-SCRIPTED-EXECUTOR",
+   "why": "no scripted map exercises it (a legacy-tier check: town / city / capital / village hand-authored maps only); no measured verdict is possible - the GM's choice at acceptance",
+   "on": []
+  },
+  {
+   "check": "city_wall_tower_coverage",
+   "keys": [
+    "gate_structs",
+    "gates",
+    "wall",
+    "wall_tower_keepclears",
+    "wall_towers",
+    "water_gates"
+   ],
+   "stages": {},
+   "readers": [
+    "tests/tier_city/check_village/test_segments_02_capital_and_walls.py (test)"
+   ],
+   "fixtures": {},
+   "verdict": "NO-SCRIPTED-EXECUTOR",
+   "why": "no scripted map exercises it (a legacy-tier check: town / city / capital / village hand-authored maps only); no measured verdict is possible - the GM's choice at acceptance",
+   "on": []
+  },
+  {
+   "check": "city_ward_cap_flush_to_wall",
+   "keys": [
+    "wall",
+    "wards"
+   ],
+   "stages": {},
+   "readers": [
+    "tests/tier_city/check_village/test_segments_03_structures_and_wards.py (test)"
+   ],
+   "fixtures": {
+    "?": 1
+   },
+   "verdict": "NO-SCRIPTED-EXECUTOR",
+   "why": "no scripted map exercises it (a legacy-tier check: town / city / capital / village hand-authored maps only); no measured verdict is possible - the GM's choice at acceptance",
+   "on": []
+  },
+  {
+   "check": "city_well_density_sufficient",
+   "keys": [
+    "alleys",
+    "buildings",
+    "governor_mansion",
+    "houses",
+    "road",
+    "road_width",
+    "town_streets",
+    "wall",
+    "wells"
+   ],
+   "stages": {},
+   "readers": [
+    "tests/tier_city/check_village/test_segments_10_city_battery_a.py (test)"
+   ],
+   "fixtures": {
+    "?": 1
+   },
+   "verdict": "NO-SCRIPTED-EXECUTOR",
+   "why": "no scripted map exercises it (a legacy-tier check: town / city / capital / village hand-authored maps only); no measured verdict is possible - the GM's choice at acceptance",
+   "on": []
+  },
+  {
+   "check": "city_wells_in_block_interiors",
+   "keys": [
+    "alleys",
+    "buildings",
+    "governor_mansion",
+    "houses",
+    "road",
+    "road_width",
+    "town_streets",
+    "wall",
+    "wells"
+   ],
+   "stages": {},
+   "readers": [
+    "tests/tier_city/check_village/test_segments_10_city_battery_a.py (test)",
+    "tests/tier_town/check_village/test_segments_10_city_battery_a.py (test)"
+   ],
+   "fixtures": {
+    "?": 1
+   },
+   "verdict": "NO-SCRIPTED-EXECUTOR",
+   "why": "no scripted map exercises it (a legacy-tier check: town / city / capital / village hand-authored maps only); no measured verdict is possible - the GM's choice at acceptance",
+   "on": []
+  },
+  {
+   "check": "cluster_abuts_fields",
+   "keys": [],
+   "stages": {
+    "reference": [
+     "-",
+     "-"
+    ],
+    "polder19": [
+     "-",
+     "-"
+    ]
+   },
+   "readers": [
+    "tests/check_village/test_segments_03_structures_and_wards.py (test)"
+   ],
+   "fixtures": {},
+   "verdict": "KEEP",
+   "why": "reads no manifest key the census can see (derived entirely) - judge by hand",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "cluster_shape_matches_the_drawing",
+   "keys": [
+    "houses",
+    "meta"
+   ],
+   "stages": {
+    "reference": [
+     "homesteads",
+     "frame"
+    ],
+    "polder19": [
+     "homesteads",
+     "frame"
+    ]
+   },
+   "readers": [
+    "tests/hamletgen/test_cluster_shape.py (test)"
+   ],
+   "fixtures": {
+    "?": 2
+   },
+   "verdict": "KEEP",
+   "why": "an input changes after its placer: reference: placed at homesteads, last changed at frame, polder19: placed at homesteads, last changed at frame",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "comb_floor_ends_at_the_collector",
+   "keys": [
+    "field_ditches",
+    "meta"
+   ],
+   "stages": {
+    "reference": [
+     "field",
+     "frame"
+    ],
+    "polder19": [
+     "field",
+     "frame"
+    ]
+   },
+   "readers": [
+    "tests/check_village/test_registry_derive.py (test)",
+    "tests/check_village/test_segments_08_kosatsuba_and_basins.py (test)"
+   ],
+   "fixtures": {
+    "?": 1
+   },
+   "verdict": "KEEP",
+   "why": "an input changes after its placer: reference: placed at field, last changed at frame, polder19: placed at field, last changed at frame",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "comb_supply_commands_both_flanks",
+   "keys": [
+    "field_ditches",
+    "fields"
+   ],
+   "stages": {
+    "reference": [
+     "field",
+     "finish"
+    ],
+    "polder19": [
+     "field",
+     "finish"
+    ]
+   },
+   "readers": [
+    "tests/check_village/test_registry_derive.py (test)",
+    "tests/check_village/test_segments_05_supply_and_graveyards.py (test)"
+   ],
+   "fixtures": {
+    "?": 1
+   },
+   "verdict": "KEEP",
+   "why": "an input changes after its placer: reference: placed at field, last changed at finish, polder19: placed at field, last changed at finish",
+   "on": [
+    "reference"
+   ]
+  },
+  {
+   "check": "commons_clear_of_paddies",
+   "keys": [
+    "buildings",
+    "byres",
+    "cemeteries",
+    "channels",
+    "clearings",
+    "comb_floors",
+    "commons",
+    "dikes",
+    "dry_plots",
+    "farm_sheds",
+    "field_ditches",
+    "fields",
+    "flower_fields",
+    "forest",
+    "gardens",
+    "groves",
+    "hill",
+    "houses",
+    "lanes",
+    "marshes",
+    "meta",
+    "moat",
+    "moat_flow",
+    "moat_width",
+    "pond",
+    "quarters",
+    "religious",
+    "road",
+    "shrine",
+    "streams",
+    "summit",
+    "threshing_yards",
+    "torii",
+    "town_streets",
+    "tree_crowns",
+    "village_groves",
+    "wall",
+    "wall_z",
+    "wells"
+   ],
+   "stages": {
+    "reference": [
+     "windbreak",
+     "finish"
+    ],
+    "polder19": [
+     "windbreak",
+     "finish"
+    ]
+   },
+   "readers": [
+    "tests/check_village/test_segments_05_fields_and_ditches.py (test)"
+   ],
+   "fixtures": {},
+   "verdict": "KEEP",
+   "why": "an input changes after its placer: reference: placed at windbreak, last changed at finish, polder19: placed at windbreak, last changed at finish",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "copse_stands_clear_of_the_belt",
+   "keys": [
+    "meta",
+    "village_groves"
+   ],
+   "stages": {
+    "reference": [
+     "windbreak",
+     "frame"
+    ],
+    "polder19": [
+     "windbreak",
+     "frame"
+    ]
+   },
+   "readers": [],
+   "fixtures": {
+    "?": 1
+   },
+   "verdict": "KEEP",
+   "why": "an input changes after its placer: reference: placed at windbreak, last changed at frame, polder19: placed at windbreak, last changed at frame",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "courtyard_byres_annex_their_homestead",
+   "keys": [
+    "byres",
+    "houses",
+    "meta"
+   ],
+   "stages": {},
+   "readers": [],
+   "fixtures": {
+    "?": 1
+   },
+   "verdict": "NO-SCRIPTED-EXECUTOR",
+   "why": "no scripted map exercises it (a legacy-tier check: town / city / capital / village hand-authored maps only); no measured verdict is possible - the GM's choice at acceptance",
+   "on": []
+  },
+  {
+   "check": "cremation_ground_by_external_cemetery",
+   "keys": [
+    "cemeteries",
+    "cremation_grounds",
+    "religious",
+    "road",
+    "wall",
+    "wall_z"
+   ],
+   "stages": {},
+   "readers": [
+    "tests/check_village/test_segments_05_supply_and_graveyards.py (test)"
+   ],
+   "fixtures": {
+    "?": 1
+   },
+   "verdict": "NO-SCRIPTED-EXECUTOR",
+   "why": "no scripted map exercises it (a legacy-tier check: town / city / capital / village hand-authored maps only); no measured verdict is possible - the GM's choice at acceptance",
+   "on": []
+  },
+  {
+   "check": "cremation_ground_not_between_temple_and_road",
+   "keys": [
+    "cemeteries",
+    "cremation_grounds",
+    "religious",
+    "road",
+    "wall",
+    "wall_z"
+   ],
+   "stages": {},
+   "readers": [
+    "tests/check_village/test_segments_05_supply_and_graveyards.py (test)"
+   ],
+   "fixtures": {
+    "?": 1
+   },
+   "verdict": "NO-SCRIPTED-EXECUTOR",
+   "why": "no scripted map exercises it (a legacy-tier check: town / city / capital / village hand-authored maps only); no measured verdict is possible - the GM's choice at acceptance",
+   "on": []
+  },
+  {
+   "check": "cremation_ground_set_back_from_main_road",
+   "keys": [
+    "cemeteries",
+    "cremation_grounds",
+    "religious",
+    "road",
+    "wall",
+    "wall_z"
+   ],
+   "stages": {},
+   "readers": [
+    "tests/check_village/test_segments_05_supply_and_graveyards.py (test)"
+   ],
+   "fixtures": {
+    "?": 1
+   },
+   "verdict": "NO-SCRIPTED-EXECUTOR",
+   "why": "no scripted map exercises it (a legacy-tier check: town / city / capital / village hand-authored maps only); no measured verdict is possible - the GM's choice at acceptance",
+   "on": []
+  },
+  {
+   "check": "crop_hugs_content",
+   "keys": [
+    "forest",
+    "forest_edge",
+    "houses",
+    "pond",
+    "torii",
+    "village_groves"
+   ],
+   "stages": {
+    "reference": [
+     "windbreak",
+     "windbreak"
+    ],
+    "polder19": [
+     "windbreak",
+     "windbreak"
+    ]
+   },
+   "readers": [
+    "tests/check_village/test_segments_01_city_frame_and_yards.py (test)"
+   ],
+   "fixtures": {
+    "?": 2,
+    "hamlet": 2
+   },
+   "verdict": "RETIRE-CANDIDATE",
+   "why": "inputs settle at their placer on both maps: reference: windbreak, polder19: windbreak",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "crop_not_held_open_by_one_feature",
+   "keys": [],
+   "stages": {
+    "reference": [
+     "-",
+     "-"
+    ],
+    "polder19": [
+     "-",
+     "-"
+    ]
+   },
+   "readers": [
+    "tests/check_village/_builders.py (test)",
+    "tests/check_village/test_segments_01_city_frame_and_yards.py (test)"
+   ],
+   "fixtures": {
+    "?": 1
+   },
+   "verdict": "KEEP",
+   "why": "reads no manifest key the census can see (derived entirely) - judge by hand",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "delivery_ditches_taper",
+   "keys": [
+    "channels",
+    "field_ditches",
+    "road",
+    "road_width",
+    "streams",
+    "town_streets",
+    "wall"
+   ],
+   "stages": {
+    "reference": [
+     "field",
+     "finish"
+    ],
+    "polder19": [
+     "field",
+     "finish"
+    ]
+   },
+   "readers": [
+    "tests/check_village/test_segments_05_fields_and_ditches.py (test)"
+   ],
+   "fixtures": {
+    "?": 1
+   },
+   "verdict": "KEEP",
+   "why": "an input changes after its placer: reference: placed at field, last changed at finish, polder19: placed at field, last changed at finish",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "dikepond_corners_rounded",
+   "keys": [
+    "dikepond_sluices",
+    "dikeponds",
+    "field_ditches",
+    "land_use"
+   ],
+   "stages": {},
+   "readers": [
+    "tests/check_village/test_segments_11_polders_and_edges.py (test)"
+   ],
+   "fixtures": {
+    "hamlet": 1,
+    "?": 1
+   },
+   "verdict": "NO-SCRIPTED-EXECUTOR",
+   "why": "no scripted map exercises it (a legacy-tier check: town / city / capital / village hand-authored maps only); no measured verdict is possible - the GM's choice at acceptance",
+   "on": []
+  },
+  {
+   "check": "dikepond_is_ponds_in_a_block",
+   "keys": [
+    "dikepond_sluices",
+    "dikeponds",
+    "field_ditches",
+    "land_use"
+   ],
+   "stages": {},
+   "readers": [
+    "tests/check_village/test_segments_11_polders_and_edges.py (test)"
+   ],
+   "fixtures": {
+    "hamlet": 1
+   },
+   "verdict": "NO-SCRIPTED-EXECUTOR",
+   "why": "no scripted map exercises it (a legacy-tier check: town / city / capital / village hand-authored maps only); no measured verdict is possible - the GM's choice at acceptance",
+   "on": []
+  },
+  {
+   "check": "dikepond_water_within_banks",
+   "keys": [
+    "dikepond_sluices",
+    "dikeponds",
+    "field_ditches",
+    "land_use"
+   ],
+   "stages": {},
+   "readers": [
+    "tests/check_village/test_segments_11_polders_and_edges.py (test)"
+   ],
+   "fixtures": {
+    "hamlet": 1,
+    "?": 1
+   },
+   "verdict": "NO-SCRIPTED-EXECUTOR",
+   "why": "no scripted map exercises it (a legacy-tier check: town / city / capital / village hand-authored maps only); no measured verdict is possible - the GM's choice at acceptance",
+   "on": []
+  },
+  {
+   "check": "dikeponds_fed_and_drained",
+   "keys": [
+    "dikepond_sluices",
+    "dikeponds",
+    "field_ditches",
+    "land_use"
+   ],
+   "stages": {},
+   "readers": [
+    "tests/check_village/test_segments_11_polders_and_edges.py (test)"
+   ],
+   "fixtures": {
+    "hamlet": 1,
+    "?": 1
+   },
+   "verdict": "NO-SCRIPTED-EXECUTOR",
+   "why": "no scripted map exercises it (a legacy-tier check: town / city / capital / village hand-authored maps only); no measured verdict is possible - the GM's choice at acceptance",
+   "on": []
+  },
+  {
+   "check": "drain_flows_downhill",
+   "keys": [
+    "channels",
+    "field_ditches",
+    "fields",
+    "meta",
+    "streams"
+   ],
+   "stages": {
+    "reference": [
+     "field",
+     "finish"
+    ],
+    "polder19": [
+     "field",
+     "finish"
+    ]
+   },
+   "readers": [
+    "tests/check_village/test_segments_08_kosatsuba_and_basins.py (test)",
+    "tests/check_village/test_segments_08_town_and_flow.py (test)",
+    "tests/tier_city/check_village/test_segments_08_kosatsuba_and_basins.py (test)"
+   ],
+   "fixtures": {
+    "?": 1
+   },
+   "verdict": "KEEP",
+   "why": "an input changes after its placer: reference: placed at field, last changed at finish, polder19: placed at field, last changed at finish",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "drain_runs_cross_slope",
+   "keys": [
+    "field_ditches",
+    "fields",
+    "meta"
+   ],
+   "stages": {
+    "reference": [
+     "field",
+     "finish"
+    ],
+    "polder19": [
+     "field",
+     "finish"
+    ]
+   },
+   "readers": [
+    "tests/check_village/test_segments_08_kosatsuba_and_basins.py (test)",
+    "tests/check_village/test_segments_08_town_and_flow.py (test)",
+    "tests/tier_city/check_village/test_segments_08_kosatsuba_and_basins.py (test)"
+   ],
+   "fixtures": {
+    "?": 1
+   },
+   "verdict": "KEEP",
+   "why": "an input changes after its placer: reference: placed at field, last changed at finish, polder19: placed at field, last changed at finish",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "drainage_discharges_downhill",
+   "keys": [
+    "fields",
+    "meta",
+    "streams"
+   ],
+   "stages": {
+    "reference": [
+     "field",
+     "finish"
+    ],
+    "polder19": [
+     "field",
+     "finish"
+    ]
+   },
+   "readers": [
+    "tests/check_village/test_segments_08_town_and_flow.py (test)"
+   ],
+   "fixtures": {
+    "?": 2
+   },
+   "verdict": "KEEP",
+   "why": "an input changes after its placer: reference: placed at field, last changed at finish, polder19: placed at field, last changed at finish",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "drainage_junction_smooth",
+   "keys": [
+    "dikepond_sluices",
+    "dikeponds",
+    "field_ditches",
+    "land_use",
+    "streams"
+   ],
+   "stages": {
+    "reference": [
+     "field",
+     "finish"
+    ],
+    "polder19": [
+     "field",
+     "finish"
+    ]
+   },
+   "readers": [
+    "tests/check_village/test_segments_08_town_and_flow.py (test)",
+    "tests/hamletgen/test_sink.py (test)"
+   ],
+   "fixtures": {
+    "?": 2
+   },
+   "verdict": "KEEP",
+   "why": "an input changes after its placer: reference: placed at field, last changed at finish, polder19: placed at field, last changed at finish",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "dry_plot_furrows_vary",
+   "keys": [
+    "dry_plots",
+    "meta"
+   ],
+   "stages": {
+    "reference": [
+     "field",
+     "frame"
+    ],
+    "polder19": [
+     "water_frame",
+     "frame"
+    ]
+   },
+   "readers": [
+    "tests/check_village/test_registry_derive.py (test)",
+    "tests/check_village/test_segments_05_fields_and_ditches.py (test)"
+   ],
+   "fixtures": {
+    "?": 1
+   },
+   "verdict": "KEEP",
+   "why": "an input changes after its placer: reference: placed at field, last changed at frame, polder19: placed at water_frame, last changed at frame",
+   "on": [
+    "reference"
+   ]
+  },
+  {
+   "check": "dry_plots_clear_of_paddies",
+   "keys": [
+    "alleys",
+    "buildings",
+    "dry_plots",
+    "fields",
+    "governor_mansion",
+    "granary",
+    "houses",
+    "road",
+    "road_width",
+    "town_streets",
+    "wall",
+    "wells"
+   ],
+   "stages": {
+    "reference": [
+     "appurtenances",
+     "finish"
+    ],
+    "polder19": [
+     "appurtenances",
+     "finish"
+    ]
+   },
+   "readers": [
+    "tests/check_village/test_segments_03_structures_and_wards.py (test)",
+    "tests/settlement/test_fields.py (test)"
+   ],
+   "fixtures": {
+    "?": 2
+   },
+   "verdict": "KEEP",
+   "why": "an input changes after its placer: reference: placed at appurtenances, last changed at finish, polder19: placed at appurtenances, last changed at finish",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "dwellings_above_field_drain",
+   "keys": [
+    "buildings",
+    "field_ditches",
+    "fields"
+   ],
+   "stages": {},
+   "readers": [
+    "tests/check_village/test_segments_03_structures_and_wards.py (test)"
+   ],
+   "fixtures": {
+    "hamlet": 1
+   },
+   "verdict": "NO-SCRIPTED-EXECUTOR",
+   "why": "no scripted map exercises it (a legacy-tier check: town / city / capital / village hand-authored maps only); no measured verdict is possible - the GM's choice at acceptance",
+   "on": []
+  },
+  {
+   "check": "every_feature_classified_for_matrix",
+   "keys": [],
+   "stages": {
+    "reference": [
+     "-",
+     "-"
+    ],
+    "polder19": [
+     "-",
+     "-"
+    ]
+   },
+   "readers": [
+    "tests/check_village/test_segments_01_city_frame_and_yards.py (test)"
+   ],
+   "fixtures": {},
+   "verdict": "KEEP",
+   "why": "reads no manifest key the census can see (derived entirely) - judge by hand",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "every_feature_classified_for_overlap",
+   "keys": [],
+   "stages": {
+    "reference": [
+     "-",
+     "-"
+    ],
+    "polder19": [
+     "-",
+     "-"
+    ]
+   },
+   "readers": [
+    "tests/check_village/test_segments_03_structures_and_wards.py (test)"
+   ],
+   "fixtures": {
+    "?": 1
+   },
+   "verdict": "KEEP",
+   "why": "reads no manifest key the census can see (derived entirely) - judge by hand",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "every_solid_feature_classified_for_labels",
+   "keys": [],
+   "stages": {
+    "reference": [
+     "-",
+     "-"
+    ],
+    "polder19": [
+     "-",
+     "-"
+    ]
+   },
+   "readers": [
+    "tests/check_village/test_segments_03_structures_and_wards.py (test)"
+   ],
+   "fixtures": {},
+   "verdict": "KEEP",
+   "why": "reads no manifest key the census can see (derived entirely) - judge by hand",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "farm_sheds_attached",
+   "keys": [
+    "farm_sheds",
+    "gate",
+    "gate_structs",
+    "gates",
+    "houses",
+    "wall_towers"
+   ],
+   "stages": {
+    "reference": [
+     "homesteads",
+     "homesteads"
+    ],
+    "polder19": [
+     "homesteads",
+     "homesteads"
+    ]
+   },
+   "readers": [
+    "tests/check_village/_builders.py (test)",
+    "tests/check_village/test_segments_04_homesteads.py (test)"
+   ],
+   "fixtures": {},
+   "verdict": "RETIRE-CANDIDATE",
+   "why": "inputs settle at their placer on both maps: reference: homesteads, polder19: homesteads",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "farmhouse_aspect_in_range",
+   "keys": [],
+   "stages": {
+    "reference": [
+     "-",
+     "-"
+    ],
+    "polder19": [
+     "-",
+     "-"
+    ]
+   },
+   "readers": [],
+   "fixtures": {},
+   "verdict": "KEEP",
+   "why": "reads no manifest key the census can see (derived entirely) - judge by hand",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "farmhouse_sizes_vary",
+   "keys": [],
+   "stages": {
+    "reference": [
+     "-",
+     "-"
+    ],
+    "polder19": [
+     "-",
+     "-"
+    ]
+   },
+   "readers": [
+    "tests/check_village/test_segments_05_fields_and_ditches.py (test)"
+   ],
+   "fixtures": {},
+   "verdict": "KEEP",
+   "why": "reads no manifest key the census can see (derived entirely) - judge by hand",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "farmhouses_reach_a_way",
+   "keys": [
+    "houses",
+    "lanes",
+    "meta"
+   ],
+   "stages": {
+    "reference": [
+     "track",
+     "frame"
+    ],
+    "polder19": [
+     "track",
+     "frame"
+    ]
+   },
+   "readers": [
+    "l7r/diagram/hamletgen/driver.py",
+    "tests/check_village/test_segments_07_water.py (test)",
+    "tests/gate/hamletgen/test_driver.py (test)",
+    "tests/hamletgen/test_consts.py (test)",
+    "tests/hamletgen/test_driver.py (test)",
+    "tests/hamletgen/test_ways.py (test)"
+   ],
+   "fixtures": {
+    "?": 4
+   },
+   "verdict": "KEEP",
+   "why": "a consumer branches on the verdict: l7r/diagram/hamletgen/driver.py",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "farmhouses_shed_separately",
+   "keys": [
+    "houses",
+    "meta"
+   ],
+   "stages": {
+    "reference": [
+     "homesteads",
+     "frame"
+    ],
+    "polder19": [
+     "homesteads",
+     "frame"
+    ]
+   },
+   "readers": [
+    "tests/check_village/test_segments_04_homesteads.py (test)"
+   ],
+   "fixtures": {
+    "?": 1
+   },
+   "verdict": "KEEP",
+   "why": "an input changes after its placer: reference: placed at homesteads, last changed at frame, polder19: placed at homesteads, last changed at frame",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "features_do_not_overlap",
+   "keys": [],
+   "stages": {
+    "reference": [
+     "-",
+     "-"
+    ],
+    "polder19": [
+     "-",
+     "-"
+    ]
+   },
+   "readers": [
+    "tests/check_village/test_segments_01_city_frame_and_yards.py (test)",
+    "tests/tier_city/check_village/test_segments_01_city_frame_and_yards.py (test)"
+   ],
+   "fixtures": {
+    "?": 4
+   },
+   "verdict": "KEEP",
+   "why": "reads no manifest key the census can see (derived entirely) - judge by hand",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "field_ditch_tips_land_on_the_trunk",
+   "keys": [
+    "channels",
+    "field_ditches",
+    "road",
+    "road_width",
+    "streams",
+    "town_streets",
+    "wall"
+   ],
+   "stages": {
+    "reference": [
+     "field",
+     "finish"
+    ],
+    "polder19": [
+     "field",
+     "finish"
+    ]
+   },
+   "readers": [
+    "tests/check_village/test_segments_05_fields_and_ditches.py (test)"
+   ],
+   "fixtures": {
+    "?": 1,
+    "hamlet": 1
+   },
+   "verdict": "KEEP",
+   "why": "an input changes after its placer: reference: placed at field, last changed at finish, polder19: placed at field, last changed at finish",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "field_ditches_reach_source_and_sink",
+   "keys": [
+    "channels",
+    "field_ditches",
+    "road",
+    "road_width",
+    "streams",
+    "town_streets",
+    "wall"
+   ],
+   "stages": {
+    "reference": [
+     "field",
+     "finish"
+    ],
+    "polder19": [
+     "field",
+     "finish"
+    ]
+   },
+   "readers": [
+    "tests/check_village/test_segments_05_fields_and_ditches.py (test)",
+    "tests/check_village/test_segments_05_supply_and_graveyards.py (test)"
+   ],
+   "fixtures": {
+    "?": 1
+   },
+   "verdict": "KEEP",
+   "why": "an input changes after its placer: reference: placed at field, last changed at finish, polder19: placed at field, last changed at finish",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "field_ditches_terminate",
+   "keys": [
+    "channels",
+    "field_ditches",
+    "road",
+    "road_width",
+    "streams",
+    "town_streets",
+    "wall"
+   ],
+   "stages": {
+    "reference": [
+     "field",
+     "finish"
+    ],
+    "polder19": [
+     "field",
+     "finish"
+    ]
+   },
+   "readers": [
+    "tests/check_village/test_segments_05_fields_and_ditches.py (test)"
+   ],
+   "fixtures": {
+    "?": 2
+   },
+   "verdict": "KEEP",
+   "why": "an input changes after its placer: reference: placed at field, last changed at finish, polder19: placed at field, last changed at finish",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "field_outline_matches_planting",
+   "keys": [],
+   "stages": {},
+   "readers": [
+    "tests/check_village/test_segments_03_structures_and_wards.py (test)"
+   ],
+   "fixtures": {
+    "hamlet": 1,
+    "?": 1
+   },
+   "verdict": "NO-SCRIPTED-EXECUTOR",
+   "why": "no scripted map exercises it (a legacy-tier check: town / city / capital / village hand-authored maps only); no measured verdict is possible - the GM's choice at acceptance",
+   "on": []
+  },
+  {
+   "check": "field_ponds_sunk_into_one_plot",
+   "keys": [
+    "field_ponds",
+    "fields"
+   ],
+   "stages": {
+    "reference": [
+     "field",
+     "finish"
+    ],
+    "polder19": [
+     "field",
+     "finish"
+    ]
+   },
+   "readers": [],
+   "fixtures": {
+    "?": 1
+   },
+   "verdict": "KEEP",
+   "why": "an input changes after its placer: reference: placed at field, last changed at finish, polder19: placed at field, last changed at finish",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "fields_clear_of_road",
+   "keys": [
+    "alleys",
+    "lanes",
+    "marshes",
+    "road",
+    "road_width",
+    "town_streets"
+   ],
+   "stages": {
+    "reference": [
+     "track",
+     "hinterland"
+    ],
+    "polder19": [
+     "track",
+     "hinterland"
+    ]
+   },
+   "readers": [
+    "tests/check_village/test_segments_05_fields_and_ditches.py (test)"
+   ],
+   "fixtures": {
+    "?": 2
+   },
+   "verdict": "KEEP",
+   "why": "an input changes after its placer: reference: placed at track, last changed at hinterland, polder19: placed at track, last changed at hinterland",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "fields_show_water_source",
+   "keys": [
+    "alleys",
+    "buildings",
+    "channels",
+    "governor_mansion",
+    "hill",
+    "houses",
+    "moat",
+    "pond",
+    "religious",
+    "road",
+    "road_width",
+    "streams",
+    "town_streets",
+    "wall",
+    "wells"
+   ],
+   "stages": {
+    "reference": [
+     "appurtenances",
+     "finish"
+    ],
+    "polder19": [
+     "appurtenances",
+     "finish"
+    ]
+   },
+   "readers": [
+    "tests/check_village/test_segments_07_water.py (test)"
+   ],
+   "fixtures": {
+    "?": 1
+   },
+   "verdict": "KEEP",
+   "why": "an input changes after its placer: reference: placed at appurtenances, last changed at finish, polder19: placed at appurtenances, last changed at finish",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "flooded_plots_read_as_basins",
+   "keys": [
+    "flooded_plots",
+    "meta"
+   ],
+   "stages": {
+    "reference": [
+     "water_frame",
+     "frame"
+    ],
+    "polder19": [
+     "field",
+     "frame"
+    ]
+   },
+   "readers": [
+    "tests/check_village/test_segments_08_kosatsuba_and_basins.py (test)"
+   ],
+   "fixtures": {
+    "?": 1
+   },
+   "verdict": "KEEP",
+   "why": "an input changes after its placer: reference: placed at water_frame, last changed at frame, polder19: placed at field, last changed at frame",
+   "on": [
+    "polder19"
+   ]
+  },
+  {
+   "check": "footbridges_reach_useful_ground",
+   "keys": [
+    "bridges",
+    "farm_sheds",
+    "field_ditches",
+    "gate",
+    "gate_structs",
+    "gates",
+    "houses",
+    "wall_towers"
+   ],
+   "stages": {
+    "reference": [
+     "crossings",
+     "crossings"
+    ],
+    "polder19": [
+     "crossings",
+     "crossings"
+    ]
+   },
+   "readers": [
+    "tests/check_village/test_segments_06_ways_and_bridges.py (test)",
+    "tests/check_village/test_segments_07_water.py (test)"
+   ],
+   "fixtures": {},
+   "verdict": "RETIRE-CANDIDATE",
+   "why": "inputs settle at their placer on both maps: reference: crossings, polder19: crossings",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "funerary_clear_of_fields",
+   "keys": [
+    "field_ditches",
+    "fields"
+   ],
+   "stages": {
+    "reference": [
+     "field",
+     "finish"
+    ],
+    "polder19": [
+     "field",
+     "finish"
+    ]
+   },
+   "readers": [
+    "tests/check_village/test_segments_05_fields_and_ditches.py (test)"
+   ],
+   "fixtures": {
+    "?": 1
+   },
+   "verdict": "KEEP",
+   "why": "an input changes after its placer: reference: placed at field, last changed at finish, polder19: placed at field, last changed at finish",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "gardens_clear_of_channels",
+   "keys": [
+    "channels",
+    "field_ditches",
+    "gardens",
+    "streams"
+   ],
+   "stages": {
+    "reference": [
+     "homesteads",
+     "finish"
+    ],
+    "polder19": [
+     "homesteads",
+     "finish"
+    ]
+   },
+   "readers": [
+    "tests/check_village/test_segments_04_homesteads.py (test)"
+   ],
+   "fixtures": {},
+   "verdict": "KEEP",
+   "why": "an input changes after its placer: reference: placed at homesteads, last changed at finish, polder19: placed at homesteads, last changed at finish",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "gardens_unshaded_from_east",
+   "keys": [
+    "buildings",
+    "byres",
+    "cemeteries",
+    "channels",
+    "clearings",
+    "comb_floors",
+    "commons",
+    "dikes",
+    "farm_sheds",
+    "field_ditches",
+    "fields",
+    "flower_fields",
+    "gardens",
+    "groves",
+    "hill",
+    "houses",
+    "lanes",
+    "marshes",
+    "meta",
+    "moat",
+    "moat_flow",
+    "pond",
+    "religious",
+    "road",
+    "shrine",
+    "streams",
+    "summit",
+    "threshing_yards",
+    "torii",
+    "town_streets",
+    "tree_crowns",
+    "village_groves",
+    "wall",
+    "wall_z"
+   ],
+   "stages": {},
+   "readers": [
+    "tests/check_village/_builders.py (test)",
+    "tests/check_village/test_segments_04_homesteads.py (test)"
+   ],
+   "fixtures": {},
+   "verdict": "NO-SCRIPTED-EXECUTOR",
+   "why": "no scripted map exercises it (a legacy-tier check: town / city / capital / village hand-authored maps only); no measured verdict is possible - the GM's choice at acceptance",
+   "on": []
+  },
+  {
+   "check": "groves_clear_of_lanes",
+   "keys": [
+    "buildings",
+    "channels",
+    "dry_plots",
+    "gardens",
+    "groves",
+    "lane",
+    "lanes",
+    "manors",
+    "merchant_estates",
+    "religious",
+    "road",
+    "road_width",
+    "storehouses",
+    "streams",
+    "threshing_yards",
+    "town_streets",
+    "village_groves",
+    "wall"
+   ],
+   "stages": {
+    "reference": [
+     "windbreak",
+     "finish"
+    ],
+    "polder19": [
+     "windbreak",
+     "finish"
+    ]
+   },
+   "readers": [
+    "tests/check_village/test_segments_07_water.py (test)"
+   ],
+   "fixtures": {
+    "?": 2
+   },
+   "verdict": "KEEP",
+   "why": "an input changes after its placer: reference: placed at windbreak, last changed at finish, polder19: placed at windbreak, last changed at finish",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "groves_where_possible",
+   "keys": [
+    "buildings",
+    "channels",
+    "dry_plots",
+    "gardens",
+    "groves",
+    "lane",
+    "lanes",
+    "manors",
+    "merchant_estates",
+    "religious",
+    "road",
+    "road_width",
+    "storehouses",
+    "streams",
+    "threshing_yards",
+    "town_streets",
+    "wall"
+   ],
+   "stages": {},
+   "readers": [
+    "tests/check_village/test_segments_04_homesteads.py (test)"
+   ],
+   "fixtures": {},
+   "verdict": "NO-SCRIPTED-EXECUTOR",
+   "why": "no scripted map exercises it (a legacy-tier check: town / city / capital / village hand-authored maps only); no measured verdict is possible - the GM's choice at acceptance",
+   "on": []
+  },
+  {
+   "check": "hamlet_has_kosatsuba",
+   "keys": [
+    "gates",
+    "kosatsuba",
+    "lane",
+    "lanes",
+    "road",
+    "roads",
+    "town_streets"
+   ],
+   "stages": {
+    "reference": [
+     "notice",
+     "notice"
+    ],
+    "polder19": [
+     "notice",
+     "notice"
+    ]
+   },
+   "readers": [
+    "tests/check_village/test_segments_08_kosatsuba_and_basins.py (test)",
+    "tests/gate/test_scripted_fixtures.py (test)"
+   ],
+   "fixtures": {
+    "hamlet": 1
+   },
+   "verdict": "RETIRE-CANDIDATE",
+   "why": "inputs settle at their placer on both maps: reference: notice, polder19: notice",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "hamlet_has_no_headman",
+   "keys": [],
+   "stages": {
+    "reference": [
+     "-",
+     "-"
+    ],
+    "polder19": [
+     "-",
+     "-"
+    ]
+   },
+   "readers": [
+    "tests/check_village/test_segments_03_structures_and_wards.py (test)"
+   ],
+   "fixtures": {
+    "hamlet": 1
+   },
+   "verdict": "KEEP",
+   "why": "reads no manifest key the census can see (derived entirely) - judge by hand",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "hard_features_within_frame",
+   "keys": [
+    "forest",
+    "forest_edge",
+    "houses",
+    "pond",
+    "torii",
+    "village_groves"
+   ],
+   "stages": {
+    "reference": [
+     "windbreak",
+     "windbreak"
+    ],
+    "polder19": [
+     "windbreak",
+     "windbreak"
+    ]
+   },
+   "readers": [
+    "tests/check_village/test_segments_01_city_frame_and_yards.py (test)",
+    "tests/settlement/test_core.py (test)"
+   ],
+   "fixtures": {},
+   "verdict": "RETIRE-CANDIDATE",
+   "why": "inputs settle at their placer on both maps: reference: windbreak, polder19: windbreak",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "house_count_in_range",
+   "keys": [],
+   "stages": {},
+   "readers": [
+    "tests/check_village/test_segments_08_town_and_flow.py (test)"
+   ],
+   "fixtures": {},
+   "verdict": "NO-SCRIPTED-EXECUTOR",
+   "why": "no scripted map exercises it (a legacy-tier check: town / city / capital / village hand-authored maps only); no measured verdict is possible - the GM's choice at acceptance",
+   "on": []
+  },
+  {
+   "check": "households_consistent",
+   "keys": [],
+   "stages": {
+    "reference": [
+     "-",
+     "-"
+    ],
+    "polder19": [
+     "-",
+     "-"
+    ]
+   },
+   "readers": [
+    "tests/check_village/test_segments_08_kosatsuba_and_basins.py (test)"
+   ],
+   "fixtures": {},
+   "verdict": "KEEP",
+   "why": "reads no manifest key the census can see (derived entirely) - judge by hand",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "houses_clear_of_lanes",
+   "keys": [
+    "houses",
+    "lanes"
+   ],
+   "stages": {
+    "reference": [
+     "track",
+     "web"
+    ],
+    "polder19": [
+     "track",
+     "web"
+    ]
+   },
+   "readers": [
+    "tests/check_village/test_segments_07_water.py (test)",
+    "tests/settlement/test_houses.py (test)"
+   ],
+   "fixtures": {
+    "?": 1
+   },
+   "verdict": "KEEP",
+   "why": "an input changes after its placer: reference: placed at track, last changed at web, polder19: placed at track, last changed at web",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "houses_face_south",
+   "keys": [],
+   "stages": {
+    "reference": [
+     "-",
+     "-"
+    ],
+    "polder19": [
+     "-",
+     "-"
+    ]
+   },
+   "readers": [],
+   "fixtures": {},
+   "verdict": "KEEP",
+   "why": "reads no manifest key the census can see (derived entirely) - judge by hand",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "inwall_drains_gated_at_cutoff",
+   "keys": [
+    "channels",
+    "drawn_channels",
+    "ring_road",
+    "ring_road_width",
+    "sluice_gates",
+    "wall"
+   ],
+   "stages": {
+    "reference": [
+     "field",
+     "finish"
+    ],
+    "polder19": [
+     "field",
+     "finish"
+    ]
+   },
+   "readers": [
+    "tests/check_village/_builders.py (test)",
+    "tests/check_village/test_segments_07_water.py (test)",
+    "tests/settlement/test_city.py (test)"
+   ],
+   "fixtures": {
+    "?": 1
+   },
+   "verdict": "KEEP",
+   "why": "an input changes after its placer: reference: placed at field, last changed at finish, polder19: placed at field, last changed at finish",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "irrigation_channels_hairline",
+   "keys": [
+    "channels"
+   ],
+   "stages": {
+    "reference": [
+     "field",
+     "sink"
+    ],
+    "polder19": [
+     "field",
+     "field"
+    ]
+   },
+   "readers": [
+    "tests/check_village/test_segments_03_structures_and_wards.py (test)",
+    "tests/tier_city/check_village/test_segments_03_structures_and_wards.py (test)"
+   ],
+   "fixtures": {
+    "?": 2
+   },
+   "verdict": "KEEP",
+   "why": "an input changes after its placer: reference: placed at field, last changed at sink",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "kido_aligned_with_ward_fence",
+   "keys": [
+    "kido",
+    "wards"
+   ],
+   "stages": {},
+   "readers": [
+    "tests/check_village/test_segments_10_city_battery_a.py (test)",
+    "tests/tier_town/check_village/test_segments_10_city_battery_a.py (test)"
+   ],
+   "fixtures": {
+    "?": 4
+   },
+   "verdict": "NO-SCRIPTED-EXECUTOR",
+   "why": "no scripted map exercises it (a legacy-tier check: town / city / capital / village hand-authored maps only); no measured verdict is possible - the GM's choice at acceptance",
+   "on": []
+  },
+  {
+   "check": "kido_guard_box_clear_of_lanes",
+   "keys": [
+    "kido",
+    "wards"
+   ],
+   "stages": {},
+   "readers": [
+    "tests/check_village/test_segments_10_city_battery_a.py (test)"
+   ],
+   "fixtures": {
+    "?": 1
+   },
+   "verdict": "NO-SCRIPTED-EXECUTOR",
+   "why": "no scripted map exercises it (a legacy-tier check: town / city / capital / village hand-authored maps only); no measured verdict is possible - the GM's choice at acceptance",
+   "on": []
+  },
+  {
+   "check": "kosatsuba_by_the_road",
+   "keys": [
+    "gates",
+    "kosatsuba",
+    "lane",
+    "lanes",
+    "road",
+    "roads",
+    "town_streets"
+   ],
+   "stages": {
+    "reference": [
+     "notice",
+     "notice"
+    ],
+    "polder19": [
+     "notice",
+     "notice"
+    ]
+   },
+   "readers": [
+    "tests/check_village/test_segments_08_kosatsuba_and_basins.py (test)",
+    "tests/gate/test_scripted_fixtures.py (test)",
+    "tests/settlement/test_water_ways.py (test)",
+    "tests/tier_town/check_village/test_segments_08_kosatsuba_and_basins.py (test)",
+    "tests/tier_town/check_village/test_segments_08_town_and_flow.py (test)"
+   ],
+   "fixtures": {
+    "?": 1,
+    "hamlet": 1
+   },
+   "verdict": "RETIRE-CANDIDATE",
+   "why": "inputs settle at their placer on both maps: reference: notice, polder19: notice",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "kosatsuba_faces_the_road",
+   "keys": [
+    "gates",
+    "kosatsuba",
+    "lane",
+    "lanes",
+    "road",
+    "roads",
+    "town_streets"
+   ],
+   "stages": {
+    "reference": [
+     "notice",
+     "notice"
+    ],
+    "polder19": [
+     "notice",
+     "notice"
+    ]
+   },
+   "readers": [
+    "tests/tier_town/check_village/test_segments_08_kosatsuba_and_basins.py (test)",
+    "tests/tier_town/check_village/test_segments_08_town_and_flow.py (test)"
+   ],
+   "fixtures": {
+    "?": 1
+   },
+   "verdict": "RETIRE-CANDIDATE",
+   "why": "inputs settle at their placer on both maps: reference: notice, polder19: notice",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "kosatsuba_on_a_main_way",
+   "keys": [
+    "gates",
+    "kosatsuba",
+    "lane",
+    "lanes",
+    "road",
+    "roads",
+    "town_streets"
+   ],
+   "stages": {},
+   "readers": [
+    "tests/check_village/test_segments_08_town_and_flow.py (test)",
+    "tests/tier_town/check_village/test_segments_08_town_and_flow.py (test)"
+   ],
+   "fixtures": {
+    "?": 1
+   },
+   "verdict": "NO-SCRIPTED-EXECUTOR",
+   "why": "no scripted map exercises it (a legacy-tier check: town / city / capital / village hand-authored maps only); no measured verdict is possible - the GM's choice at acceptance",
+   "on": []
+  },
+  {
+   "check": "label_hugs_its_referent",
+   "keys": [
+    "labels"
+   ],
+   "stages": {
+    "reference": [
+     "notice",
+     "notice"
+    ],
+    "polder19": [
+     "notice",
+     "notice"
+    ]
+   },
+   "readers": [
+    "tests/check_village/test_segments_03_structures_and_wards.py (test)"
+   ],
+   "fixtures": {
+    "?": 2
+   },
+   "verdict": "RETIRE-CANDIDATE",
+   "why": "inputs settle at their placer on both maps: reference: notice, polder19: notice",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "labels_align_with_their_referent",
+   "keys": [
+    "labels"
+   ],
+   "stages": {
+    "reference": [
+     "notice",
+     "notice"
+    ],
+    "polder19": [
+     "notice",
+     "notice"
+    ]
+   },
+   "readers": [
+    "tests/check_village/test_segments_03_structures_and_wards.py (test)"
+   ],
+   "fixtures": {
+    "?": 1
+   },
+   "verdict": "RETIRE-CANDIDATE",
+   "why": "inputs settle at their placer on both maps: reference: notice, polder19: notice",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "labels_within_image",
+   "keys": [
+    "labels"
+   ],
+   "stages": {
+    "reference": [
+     "notice",
+     "notice"
+    ],
+    "polder19": [
+     "notice",
+     "notice"
+    ]
+   },
+   "readers": [
+    "tests/check_village/test_segments_04_homesteads.py (test)",
+    "tests/settlement/test_castle_civic.py (test)"
+   ],
+   "fixtures": {
+    "?": 3
+   },
+   "verdict": "RETIRE-CANDIDATE",
+   "why": "inputs settle at their placer on both maps: reference: notice, polder19: notice",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "lane_ends_front_different_houses",
+   "keys": [
+    "houses",
+    "lanes"
+   ],
+   "stages": {
+    "reference": [
+     "track",
+     "web"
+    ],
+    "polder19": [
+     "track",
+     "web"
+    ]
+   },
+   "readers": [
+    "tests/check_village/test_segments_07_water.py (test)"
+   ],
+   "fixtures": {
+    "?": 2
+   },
+   "verdict": "KEEP",
+   "why": "an input changes after its placer: reference: placed at track, last changed at web, polder19: placed at track, last changed at web",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "lanes_bend_like_paths",
+   "keys": [
+    "lanes"
+   ],
+   "stages": {
+    "reference": [
+     "track",
+     "web"
+    ],
+    "polder19": [
+     "track",
+     "web"
+    ]
+   },
+   "readers": [
+    "tests/check_village/test_segments_07_water.py (test)",
+    "tests/gate/hamletgen/test_driver.py (test)"
+   ],
+   "fixtures": {
+    "?": 1
+   },
+   "verdict": "KEEP",
+   "why": "an input changes after its placer: reference: placed at track, last changed at web, polder19: placed at track, last changed at web",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "lanes_clear_of_dry_plots",
+   "keys": [
+    "dry_plots",
+    "fields",
+    "flower_fields",
+    "lanes",
+    "religious",
+    "shrine",
+    "stable_yards",
+    "torii",
+    "wells"
+   ],
+   "stages": {
+    "reference": [
+     "appurtenances",
+     "finish"
+    ],
+    "polder19": [
+     "appurtenances",
+     "finish"
+    ]
+   },
+   "readers": [
+    "tests/check_village/test_segments_04_homesteads.py (test)"
+   ],
+   "fixtures": {
+    "?": 1
+   },
+   "verdict": "KEEP",
+   "why": "an input changes after its placer: reference: placed at appurtenances, last changed at finish, polder19: placed at appurtenances, last changed at finish",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "lanes_do_not_break_mid_run",
+   "keys": [
+    "dry_plots",
+    "fields",
+    "lanes",
+    "wells"
+   ],
+   "stages": {
+    "reference": [
+     "appurtenances",
+     "finish"
+    ],
+    "polder19": [
+     "appurtenances",
+     "finish"
+    ]
+   },
+   "readers": [
+    "tests/check_village/test_segments_07_water.py (test)"
+   ],
+   "fixtures": {
+    "?": 1
+   },
+   "verdict": "KEEP",
+   "why": "an input changes after its placer: reference: placed at appurtenances, last changed at finish, polder19: placed at appurtenances, last changed at finish",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "lanes_form_one_network",
+   "keys": [
+    "lanes"
+   ],
+   "stages": {
+    "reference": [
+     "track",
+     "web"
+    ],
+    "polder19": [
+     "track",
+     "web"
+    ]
+   },
+   "readers": [
+    "tests/check_village/test_segments_07_water.py (test)",
+    "tests/gate/hamletgen/test_driver.py (test)",
+    "tests/tools/test_mapcheck.py (test)"
+   ],
+   "fixtures": {
+    "?": 1
+   },
+   "verdict": "KEEP",
+   "why": "an input changes after its placer: reference: placed at track, last changed at web, polder19: placed at track, last changed at web",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "lanes_reach_something",
+   "keys": [
+    "fields",
+    "houses",
+    "lanes",
+    "meta"
+   ],
+   "stages": {
+    "reference": [
+     "track",
+     "finish"
+    ],
+    "polder19": [
+     "track",
+     "finish"
+    ]
+   },
+   "readers": [
+    "tests/check_village/test_segments_07_water.py (test)",
+    "tests/hamletgen/test_ways.py (test)"
+   ],
+   "fixtures": {},
+   "verdict": "KEEP",
+   "why": "an input changes after its placer: reference: placed at track, last changed at finish, polder19: placed at track, last changed at finish",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "long_ditches_have_a_footbridge",
+   "keys": [
+    "bridges",
+    "farm_sheds",
+    "field_ditches",
+    "gate",
+    "gate_structs",
+    "gates",
+    "houses",
+    "wall_towers"
+   ],
+   "stages": {
+    "reference": [
+     "crossings",
+     "crossings"
+    ],
+    "polder19": [
+     "crossings",
+     "crossings"
+    ]
+   },
+   "readers": [
+    "tests/check_village/test_segments_07_water.py (test)"
+   ],
+   "fixtures": {},
+   "verdict": "RETIRE-CANDIDATE",
+   "why": "inputs settle at their placer on both maps: reference: crossings, polder19: crossings",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "map_frame_hugs_its_content",
+   "keys": [],
+   "stages": {
+    "reference": [
+     "-",
+     "-"
+    ],
+    "polder19": [
+     "-",
+     "-"
+    ]
+   },
+   "readers": [
+    "tests/tier_city/check_village/test_segments_06_ways_and_bridges.py (test)"
+   ],
+   "fixtures": {},
+   "verdict": "KEEP",
+   "why": "reads no manifest key the census can see (derived entirely) - judge by hand",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "margins_form_continuous_ring",
+   "keys": [
+    "buildings",
+    "byres",
+    "cemeteries",
+    "channels",
+    "clearings",
+    "comb_floors",
+    "commons",
+    "dikes",
+    "dry_plots",
+    "farm_sheds",
+    "field_ditches",
+    "fields",
+    "flower_fields",
+    "forest",
+    "gardens",
+    "groves",
+    "hill",
+    "houses",
+    "lanes",
+    "marshes",
+    "meta",
+    "moat",
+    "moat_flow",
+    "moat_width",
+    "pond",
+    "quarters",
+    "religious",
+    "road",
+    "shrine",
+    "streams",
+    "summit",
+    "threshing_yards",
+    "torii",
+    "town_streets",
+    "tree_crowns",
+    "village_groves",
+    "wall",
+    "wall_z",
+    "wells"
+   ],
+   "stages": {
+    "reference": [
+     "windbreak",
+     "finish"
+    ],
+    "polder19": [
+     "windbreak",
+     "finish"
+    ]
+   },
+   "readers": [
+    "tests/check_village/test_segments_04_homesteads.py (test)"
+   ],
+   "fixtures": {
+    "?": 1
+   },
+   "verdict": "KEEP",
+   "why": "an input changes after its placer: reference: placed at windbreak, last changed at finish, polder19: placed at windbreak, last changed at finish",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "marsh_on_low_ground",
+   "keys": [
+    "fields",
+    "marshes",
+    "meta"
+   ],
+   "stages": {
+    "reference": [
+     "sink",
+     "finish"
+    ],
+    "polder19": [
+     "field",
+     "finish"
+    ]
+   },
+   "readers": [
+    "tests/check_village/test_segments_08_kosatsuba_and_basins.py (test)",
+    "tests/check_village/test_segments_08_town_and_flow.py (test)"
+   ],
+   "fixtures": {
+    "hamlet": 1
+   },
+   "verdict": "KEEP",
+   "why": "an input changes after its placer: reference: placed at sink, last changed at finish, polder19: placed at field, last changed at finish",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "matrix_debts_still_owed",
+   "keys": [],
+   "stages": {
+    "reference": [
+     "-",
+     "-"
+    ],
+    "polder19": [
+     "-",
+     "-"
+    ]
+   },
+   "readers": [
+    "tests/check_village/test_segments_01_city_frame_and_yards.py (test)"
+   ],
+   "fixtures": {},
+   "verdict": "KEEP",
+   "why": "reads no manifest key the census can see (derived entirely) - judge by hand",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "merchant_estate_wall_clear_of_fire_towers",
+   "keys": [
+    "alleys",
+    "bridges",
+    "buildings",
+    "canals",
+    "cemeteries",
+    "channels",
+    "comb_floors",
+    "commons",
+    "cremation_grounds",
+    "crescent_ponds",
+    "dikes",
+    "districts",
+    "docks",
+    "dry_plots",
+    "farm_sheds",
+    "field_ditches",
+    "fields",
+    "fire_towers",
+    "flophouses",
+    "flower_fields",
+    "forest",
+    "forest_edge",
+    "gate",
+    "gate_structs",
+    "gates",
+    "governor_mansion",
+    "granary",
+    "hill",
+    "houses",
+    "inspection_stations",
+    "kido",
+    "kilns",
+    "labels",
+    "lanes",
+    "manors",
+    "marshes",
+    "mausoleums",
+    "merchant_estates",
+    "meta",
+    "ministries",
+    "moat",
+    "moat_width",
+    "ossuaries",
+    "pond",
+    "quarters",
+    "religious",
+    "ring_road",
+    "ring_road_width",
+    "river",
+    "road",
+    "road_width",
+    "roads",
+    "shrine",
+    "stable_yards",
+    "storehouses",
+    "streams",
+    "summit",
+    "tanning_yards",
+    "terraces",
+    "theater_stage",
+    "threshing_yards",
+    "torii",
+    "town_streets",
+    "village_groves",
+    "wall",
+    "wall_tower_keepclears",
+    "wall_towers",
+    "wall_z",
+    "wards",
+    "water_gates",
+    "wells"
+   ],
+   "stages": {},
+   "readers": [
+    "tests/check_village/test_segments_02_capital_and_walls.py (test)"
+   ],
+   "fixtures": {
+    "?": 1
+   },
+   "verdict": "NO-SCRIPTED-EXECUTOR",
+   "why": "no scripted map exercises it (a legacy-tier check: town / city / capital / village hand-authored maps only); no measured verdict is possible - the GM's choice at acceptance",
+   "on": []
+  },
+  {
+   "check": "merchant_estate_wall_clear_of_streets",
+   "keys": [
+    "alleys",
+    "bridges",
+    "buildings",
+    "canals",
+    "cemeteries",
+    "channels",
+    "comb_floors",
+    "commons",
+    "cremation_grounds",
+    "crescent_ponds",
+    "dikes",
+    "districts",
+    "docks",
+    "dry_plots",
+    "farm_sheds",
+    "field_ditches",
+    "fields",
+    "fire_towers",
+    "flophouses",
+    "flower_fields",
+    "forest",
+    "forest_edge",
+    "gate",
+    "gate_structs",
+    "gates",
+    "governor_mansion",
+    "granary",
+    "hill",
+    "houses",
+    "inspection_stations",
+    "kido",
+    "kilns",
+    "labels",
+    "lanes",
+    "manors",
+    "marshes",
+    "mausoleums",
+    "merchant_estates",
+    "meta",
+    "ministries",
+    "moat",
+    "moat_width",
+    "ossuaries",
+    "pond",
+    "quarters",
+    "religious",
+    "ring_road",
+    "ring_road_width",
+    "river",
+    "road",
+    "road_width",
+    "roads",
+    "shrine",
+    "stable_yards",
+    "storehouses",
+    "streams",
+    "summit",
+    "tanning_yards",
+    "terraces",
+    "theater_stage",
+    "threshing_yards",
+    "torii",
+    "town_streets",
+    "village_groves",
+    "wall",
+    "wall_tower_keepclears",
+    "wall_towers",
+    "wall_z",
+    "wards",
+    "water_gates",
+    "wells"
+   ],
+   "stages": {},
+   "readers": [
+    "tests/tier_town/check_village/test_segments_02_capital_and_walls.py (test)"
+   ],
+   "fixtures": {
+    "?": 1
+   },
+   "verdict": "NO-SCRIPTED-EXECUTOR",
+   "why": "no scripted map exercises it (a legacy-tier check: town / city / capital / village hand-authored maps only); no measured verdict is possible - the GM's choice at acceptance",
+   "on": []
+  },
+  {
+   "check": "merchant_estate_wall_clear_of_water",
+   "keys": [
+    "alleys",
+    "bridges",
+    "buildings",
+    "canals",
+    "cemeteries",
+    "channels",
+    "comb_floors",
+    "commons",
+    "cremation_grounds",
+    "crescent_ponds",
+    "dikes",
+    "districts",
+    "docks",
+    "dry_plots",
+    "farm_sheds",
+    "field_ditches",
+    "fields",
+    "fire_towers",
+    "flophouses",
+    "flower_fields",
+    "forest",
+    "forest_edge",
+    "gate",
+    "gate_structs",
+    "gates",
+    "governor_mansion",
+    "granary",
+    "hill",
+    "houses",
+    "inspection_stations",
+    "kido",
+    "kilns",
+    "labels",
+    "lanes",
+    "manors",
+    "marshes",
+    "mausoleums",
+    "merchant_estates",
+    "meta",
+    "ministries",
+    "moat",
+    "moat_width",
+    "ossuaries",
+    "pond",
+    "quarters",
+    "religious",
+    "ring_road",
+    "ring_road_width",
+    "river",
+    "road",
+    "road_width",
+    "roads",
+    "shrine",
+    "stable_yards",
+    "storehouses",
+    "streams",
+    "summit",
+    "tanning_yards",
+    "terraces",
+    "theater_stage",
+    "threshing_yards",
+    "torii",
+    "town_streets",
+    "village_groves",
+    "wall",
+    "wall_tower_keepclears",
+    "wall_towers",
+    "wall_z",
+    "wards",
+    "water_gates",
+    "wells"
+   ],
+   "stages": {},
+   "readers": [
+    "tests/check_village/test_segments_02_capital_and_walls.py (test)",
+    "tests/tier_city/check_village/test_segments_02_capital_and_walls.py (test)"
+   ],
+   "fixtures": {
+    "?": 1
+   },
+   "verdict": "NO-SCRIPTED-EXECUTOR",
+   "why": "no scripted map exercises it (a legacy-tier check: town / city / capital / village hand-authored maps only); no measured verdict is possible - the GM's choice at acceptance",
+   "on": []
+  },
+  {
+   "check": "moat_channels_flow_with_current",
+   "keys": [
+    "cemeteries",
+    "channels",
+    "clearings",
+    "comb_floors",
+    "commons",
+    "dikes",
+    "field_ditches",
+    "fields",
+    "flower_fields",
+    "hill",
+    "houses",
+    "marshes",
+    "meta",
+    "moat",
+    "moat_flow",
+    "religious",
+    "shrine",
+    "streams",
+    "summit",
+    "torii",
+    "village_groves",
+    "wall",
+    "wall_z"
+   ],
+   "stages": {},
+   "readers": [
+    "tests/check_village/test_segments_07_water.py (test)"
+   ],
+   "fixtures": {
+    "?": 1
+   },
+   "verdict": "NO-SCRIPTED-EXECUTOR",
+   "why": "no scripted map exercises it (a legacy-tier check: town / city / capital / village hand-authored maps only); no measured verdict is possible - the GM's choice at acceptance",
+   "on": []
+  },
+  {
+   "check": "mulberry_banks_clear_of_channels",
+   "keys": [
+    "dikepond_sluices",
+    "dikeponds",
+    "field_ditches",
+    "land_use"
+   ],
+   "stages": {},
+   "readers": [
+    "tests/check_village/test_segments_11_polders_and_edges.py (test)",
+    "tests/settlement/test_fields.py (test)"
+   ],
+   "fixtures": {
+    "?": 1,
+    "hamlet": 1
+   },
+   "verdict": "NO-SCRIPTED-EXECUTOR",
+   "why": "no scripted map exercises it (a legacy-tier check: town / city / capital / village hand-authored maps only); no measured verdict is possible - the GM's choice at acceptance",
+   "on": []
+  },
+  {
+   "check": "no_caption_holds_the_frame_open",
+   "keys": [
+    "labels",
+    "tree_crowns"
+   ],
+   "stages": {
+    "reference": [
+     "hinterland",
+     "windbreak"
+    ],
+    "polder19": [
+     "hinterland",
+     "windbreak"
+    ]
+   },
+   "readers": [],
+   "fixtures": {},
+   "verdict": "KEEP",
+   "why": "an input changes after its placer: reference: placed at hinterland, last changed at windbreak, polder19: placed at hinterland, last changed at windbreak",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "no_farmhouse_stands_on_a_lane",
+   "keys": [
+    "houses",
+    "lanes"
+   ],
+   "stages": {
+    "reference": [
+     "track",
+     "web"
+    ],
+    "polder19": [
+     "track",
+     "web"
+    ]
+   },
+   "readers": [
+    "tests/check_village/test_segments_07_water.py (test)"
+   ],
+   "fixtures": {},
+   "verdict": "KEEP",
+   "why": "an input changes after its placer: reference: placed at track, last changed at web, polder19: placed at track, last changed at web",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "no_label_overlaps",
+   "keys": [
+    "labels"
+   ],
+   "stages": {
+    "reference": [
+     "notice",
+     "notice"
+    ],
+    "polder19": [
+     "notice",
+     "notice"
+    ]
+   },
+   "readers": [
+    "tests/check_village/test_segments_03_structures_and_wards.py (test)"
+   ],
+   "fixtures": {
+    "?": 3
+   },
+   "verdict": "RETIRE-CANDIDATE",
+   "why": "inputs settle at their placer on both maps: reference: notice, polder19: notice",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "no_structure_on_paddy",
+   "keys": [
+    "alleys",
+    "buildings",
+    "dry_plots",
+    "fields",
+    "governor_mansion",
+    "granary",
+    "houses",
+    "road",
+    "road_width",
+    "town_streets",
+    "wall",
+    "wells"
+   ],
+   "stages": {
+    "reference": [
+     "appurtenances",
+     "finish"
+    ],
+    "polder19": [
+     "appurtenances",
+     "finish"
+    ]
+   },
+   "readers": [
+    "tests/check_village/test_segments_03_structures_and_wards.py (test)",
+    "tests/check_village/test_segments_05_supply_and_graveyards.py (test)"
+   ],
+   "fixtures": {
+    "?": 1
+   },
+   "verdict": "KEEP",
+   "why": "an input changes after its placer: reference: placed at appurtenances, last changed at finish, polder19: placed at appurtenances, last changed at finish",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "no_structure_on_stream",
+   "keys": [
+    "alleys",
+    "buildings",
+    "governor_mansion",
+    "granary",
+    "houses",
+    "road",
+    "road_width",
+    "streams",
+    "town_streets",
+    "wall",
+    "wells"
+   ],
+   "stages": {
+    "reference": [
+     "appurtenances",
+     "finish"
+    ],
+    "polder19": [
+     "appurtenances",
+     "finish"
+    ]
+   },
+   "readers": [
+    "tests/check_village/_builders.py (test)",
+    "tests/check_village/test_segments_03_structures_and_wards.py (test)"
+   ],
+   "fixtures": {},
+   "verdict": "KEEP",
+   "why": "an input changes after its placer: reference: placed at appurtenances, last changed at finish, polder19: placed at appurtenances, last changed at finish",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "no_structure_on_torii",
+   "keys": [
+    "alleys",
+    "buildings",
+    "governor_mansion",
+    "granary",
+    "houses",
+    "meta",
+    "road",
+    "road_width",
+    "torii",
+    "town_streets",
+    "wall",
+    "wells"
+   ],
+   "stages": {
+    "reference": [
+     "appurtenances",
+     "frame"
+    ],
+    "polder19": [
+     "appurtenances",
+     "frame"
+    ]
+   },
+   "readers": [
+    "tests/check_village/_builders.py (test)"
+   ],
+   "fixtures": {},
+   "verdict": "KEEP",
+   "why": "an input changes after its placer: reference: placed at appurtenances, last changed at frame, polder19: placed at appurtenances, last changed at frame",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "paddy_basins_are_worth_their_bund",
+   "keys": [
+    "meta"
+   ],
+   "stages": {
+    "reference": [
+     "water_frame",
+     "frame"
+    ],
+    "polder19": [
+     "water_frame",
+     "frame"
+    ]
+   },
+   "readers": [
+    "tests/check_village/test_segments_08_kosatsuba_and_basins.py (test)",
+    "tests/test_villages.py (test)"
+   ],
+   "fixtures": {
+    "?": 2
+   },
+   "verdict": "KEEP",
+   "why": "an input changes after its placer: reference: placed at water_frame, last changed at frame, polder19: placed at water_frame, last changed at frame",
+   "on": [
+    "reference"
+   ]
+  },
+  {
+   "check": "paddy_bunds_clear_the_collector",
+   "keys": [
+    "field_ditches",
+    "fields",
+    "meta"
+   ],
+   "stages": {
+    "reference": [
+     "field",
+     "finish"
+    ],
+    "polder19": [
+     "field",
+     "finish"
+    ]
+   },
+   "readers": [
+    "tests/check_village/_builders.py (test)",
+    "tests/check_village/test_segments_08_town_and_flow.py (test)"
+   ],
+   "fixtures": {
+    "?": 1
+   },
+   "verdict": "KEEP",
+   "why": "an input changes after its placer: reference: placed at field, last changed at finish, polder19: placed at field, last changed at finish",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "paddy_bunds_clear_the_supply_channels",
+   "keys": [
+    "field_ditches",
+    "meta"
+   ],
+   "stages": {
+    "reference": [
+     "field",
+     "frame"
+    ],
+    "polder19": [
+     "field",
+     "frame"
+    ]
+   },
+   "readers": [
+    "l7r/diagram/hamletgen/driver.py",
+    "tests/check_village/_builders.py (test)",
+    "tests/check_village/test_registry_derive.py (test)",
+    "tests/check_village/test_segments_08_town_and_flow.py (test)",
+    "tests/hamletgen/test_driver.py (test)"
+   ],
+   "fixtures": {
+    "?": 2
+   },
+   "verdict": "KEEP",
+   "why": "a consumer branches on the verdict: l7r/diagram/hamletgen/driver.py",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "paddy_bunds_do_not_stagger",
+   "keys": [
+    "meta"
+   ],
+   "stages": {
+    "reference": [
+     "water_frame",
+     "frame"
+    ],
+    "polder19": [
+     "water_frame",
+     "frame"
+    ]
+   },
+   "readers": [
+    "tests/check_village/test_segments_08_kosatsuba_and_basins.py (test)"
+   ],
+   "fixtures": {
+    "?": 1
+   },
+   "verdict": "KEEP",
+   "why": "an input changes after its placer: reference: placed at water_frame, last changed at frame, polder19: placed at water_frame, last changed at frame",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "paddy_fan_has_floor",
+   "keys": [
+    "comb_floors",
+    "field_ditches",
+    "fields"
+   ],
+   "stages": {
+    "reference": [
+     "field",
+     "finish"
+    ],
+    "polder19": [
+     "field",
+     "finish"
+    ]
+   },
+   "readers": [],
+   "fixtures": {
+    "?": 2
+   },
+   "verdict": "KEEP",
+   "why": "an input changes after its placer: reference: placed at field, last changed at finish, polder19: placed at field, last changed at finish",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "paddy_plot_rings_overcount_stays_marginal",
+   "keys": [
+    "meta"
+   ],
+   "stages": {
+    "reference": [
+     "water_frame",
+     "frame"
+    ],
+    "polder19": [
+     "water_frame",
+     "frame"
+    ]
+   },
+   "readers": [
+    "tests/check_village/test_segments_08_kosatsuba_and_basins.py (test)"
+   ],
+   "fixtures": {},
+   "verdict": "KEEP",
+   "why": "an input changes after its placer: reference: placed at water_frame, last changed at frame, polder19: placed at water_frame, last changed at frame",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "paddy_plot_seams_shared",
+   "keys": [
+    "channels",
+    "drawn_channels",
+    "field_ditches",
+    "field_ponds",
+    "meta"
+   ],
+   "stages": {
+    "reference": [
+     "field",
+     "finish"
+    ],
+    "polder19": [
+     "field",
+     "finish"
+    ]
+   },
+   "readers": [
+    "tests/check_village/test_segments_08_kosatsuba_and_basins.py (test)"
+   ],
+   "fixtures": {
+    "?": 4
+   },
+   "verdict": "KEEP",
+   "why": "an input changes after its placer: reference: placed at field, last changed at finish, polder19: placed at field, last changed at finish",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "paddy_plots_are_workable_basins",
+   "keys": [
+    "meta"
+   ],
+   "stages": {
+    "reference": [
+     "water_frame",
+     "frame"
+    ],
+    "polder19": [
+     "water_frame",
+     "frame"
+    ]
+   },
+   "readers": [],
+   "fixtures": {
+    "?": 4
+   },
+   "verdict": "KEEP",
+   "why": "an input changes after its placer: reference: placed at water_frame, last changed at frame, polder19: placed at water_frame, last changed at frame",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "polder_channels_clear_of_dike",
+   "keys": [
+    "cemeteries",
+    "channels",
+    "comb_floors",
+    "dikes",
+    "field_ditches",
+    "fields",
+    "houses",
+    "meta",
+    "streams",
+    "village_groves",
+    "wall",
+    "wall_z"
+   ],
+   "stages": {
+    "reference": [
+     "windbreak",
+     "finish"
+    ],
+    "polder19": [
+     "windbreak",
+     "finish"
+    ]
+   },
+   "readers": [
+    "tests/check_village/test_segments_11_polders_and_edges.py (test)"
+   ],
+   "fixtures": {
+    "?": 1,
+    "hamlet": 1
+   },
+   "verdict": "KEEP",
+   "why": "an input changes after its placer: reference: placed at windbreak, last changed at finish, polder19: placed at windbreak, last changed at finish",
+   "on": [
+    "polder19"
+   ]
+  },
+  {
+   "check": "polder_dike_gapped_at_sluices",
+   "keys": [
+    "cemeteries",
+    "channels",
+    "comb_floors",
+    "dikes",
+    "field_ditches",
+    "fields",
+    "houses",
+    "meta",
+    "streams",
+    "village_groves",
+    "wall",
+    "wall_z"
+   ],
+   "stages": {
+    "reference": [
+     "windbreak",
+     "finish"
+    ],
+    "polder19": [
+     "windbreak",
+     "finish"
+    ]
+   },
+   "readers": [
+    "tests/check_village/test_segments_11_polders_and_edges.py (test)",
+    "tests/gate/test_scripted_fixtures.py (test)"
+   ],
+   "fixtures": {
+    "?": 2,
+    "hamlet": 1
+   },
+   "verdict": "KEEP",
+   "why": "an input changes after its placer: reference: placed at windbreak, last changed at finish, polder19: placed at windbreak, last changed at finish",
+   "on": [
+    "polder19"
+   ]
+  },
+  {
+   "check": "polder_dike_is_earthwork",
+   "keys": [
+    "cemeteries",
+    "channels",
+    "comb_floors",
+    "dikes",
+    "field_ditches",
+    "fields",
+    "houses",
+    "meta",
+    "streams",
+    "village_groves",
+    "wall",
+    "wall_z"
+   ],
+   "stages": {
+    "reference": [
+     "windbreak",
+     "finish"
+    ],
+    "polder19": [
+     "windbreak",
+     "finish"
+    ]
+   },
+   "readers": [
+    "tests/check_village/test_segments_11_polders_and_edges.py (test)"
+   ],
+   "fixtures": {
+    "hamlet": 1,
+    "?": 1
+   },
+   "verdict": "KEEP",
+   "why": "an input changes after its placer: reference: placed at windbreak, last changed at finish, polder19: placed at windbreak, last changed at finish",
+   "on": [
+    "polder19"
+   ]
+  },
+  {
+   "check": "polder_edges_wander",
+   "keys": [
+    "cemeteries",
+    "channels",
+    "comb_floors",
+    "dikes",
+    "field_ditches",
+    "fields",
+    "houses",
+    "meta",
+    "streams",
+    "village_groves",
+    "wall",
+    "wall_z"
+   ],
+   "stages": {
+    "reference": [
+     "windbreak",
+     "finish"
+    ],
+    "polder19": [
+     "windbreak",
+     "finish"
+    ]
+   },
+   "readers": [
+    "tests/check_village/test_segments_11_polders_and_edges.py (test)"
+   ],
+   "fixtures": {
+    "?": 2,
+    "hamlet": 1
+   },
+   "verdict": "KEEP",
+   "why": "an input changes after its placer: reference: placed at windbreak, last changed at finish, polder19: placed at windbreak, last changed at finish",
+   "on": [
+    "polder19"
+   ]
+  },
+  {
+   "check": "polder_fills_its_bbox",
+   "keys": [],
+   "stages": {
+    "reference": [
+     "-",
+     "-"
+    ],
+    "polder19": [
+     "-",
+     "-"
+    ]
+   },
+   "readers": [
+    "tests/check_village/test_segments_11_polders_and_edges.py (test)"
+   ],
+   "fixtures": {
+    "hamlet": 1
+   },
+   "verdict": "KEEP",
+   "why": "reads no manifest key the census can see (derived entirely) - judge by hand",
+   "on": [
+    "polder19"
+   ]
+  },
+  {
+   "check": "polder_floor_is_ring_interior",
+   "keys": [
+    "cemeteries",
+    "channels",
+    "comb_floors",
+    "dikes",
+    "field_ditches",
+    "fields",
+    "houses",
+    "meta",
+    "streams",
+    "village_groves",
+    "wall",
+    "wall_z"
+   ],
+   "stages": {
+    "reference": [
+     "windbreak",
+     "finish"
+    ],
+    "polder19": [
+     "windbreak",
+     "finish"
+    ]
+   },
+   "readers": [
+    "tests/check_village/test_segments_11_polders_and_edges.py (test)"
+   ],
+   "fixtures": {
+    "?": 1,
+    "hamlet": 1
+   },
+   "verdict": "KEEP",
+   "why": "an input changes after its placer: reference: placed at windbreak, last changed at finish, polder19: placed at windbreak, last changed at finish",
+   "on": [
+    "polder19"
+   ]
+  },
+  {
+   "check": "pond_clear_of_field",
+   "keys": [
+    "alleys",
+    "buildings",
+    "channels",
+    "governor_mansion",
+    "hill",
+    "houses",
+    "moat",
+    "pond",
+    "religious",
+    "road",
+    "road_width",
+    "streams",
+    "town_streets",
+    "wall",
+    "wells"
+   ],
+   "stages": {
+    "reference": [
+     "appurtenances",
+     "finish"
+    ],
+    "polder19": [
+     "appurtenances",
+     "finish"
+    ]
+   },
+   "readers": [
+    "tests/check_village/test_segments_08_town_and_flow.py (test)",
+    "tests/hamletgen/test_sink.py (test)",
+    "tests/tier_city/check_village/test_segments_08_town_and_flow.py (test)"
+   ],
+   "fixtures": {
+    "?": 1
+   },
+   "verdict": "KEEP",
+   "why": "an input changes after its placer: reference: placed at appurtenances, last changed at finish, polder19: placed at appurtenances, last changed at finish",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "pond_clear_of_paddies",
+   "keys": [
+    "alleys",
+    "buildings",
+    "channels",
+    "governor_mansion",
+    "hill",
+    "houses",
+    "moat",
+    "pond",
+    "religious",
+    "road",
+    "road_width",
+    "streams",
+    "town_streets",
+    "wall",
+    "wells"
+   ],
+   "stages": {
+    "reference": [
+     "appurtenances",
+     "finish"
+    ],
+    "polder19": [
+     "appurtenances",
+     "finish"
+    ]
+   },
+   "readers": [
+    "tests/check_village/test_segments_05_supply_and_graveyards.py (test)"
+   ],
+   "fixtures": {
+    "?": 1
+   },
+   "verdict": "KEEP",
+   "why": "an input changes after its placer: reference: placed at appurtenances, last changed at finish, polder19: placed at appurtenances, last changed at finish",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "pond_connected_to_field",
+   "keys": [
+    "alleys",
+    "buildings",
+    "channels",
+    "field_ditches",
+    "governor_mansion",
+    "hill",
+    "houses",
+    "moat",
+    "pond",
+    "religious",
+    "road",
+    "road_width",
+    "streams",
+    "town_streets",
+    "wall",
+    "wells"
+   ],
+   "stages": {
+    "reference": [
+     "appurtenances",
+     "finish"
+    ],
+    "polder19": [
+     "appurtenances",
+     "finish"
+    ]
+   },
+   "readers": [
+    "tests/check_village/test_segments_08_town_and_flow.py (test)"
+   ],
+   "fixtures": {
+    "hamlet": 1
+   },
+   "verdict": "KEEP",
+   "why": "an input changes after its placer: reference: placed at appurtenances, last changed at finish, polder19: placed at appurtenances, last changed at finish",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "pond_fed_from_edge",
+   "keys": [
+    "alleys",
+    "buildings",
+    "channels",
+    "governor_mansion",
+    "hill",
+    "houses",
+    "moat",
+    "pond",
+    "religious",
+    "road",
+    "road_width",
+    "streams",
+    "town_streets",
+    "wall",
+    "wells"
+   ],
+   "stages": {
+    "reference": [
+     "appurtenances",
+     "finish"
+    ],
+    "polder19": [
+     "appurtenances",
+     "finish"
+    ]
+   },
+   "readers": [
+    "tests/check_village/test_segments_07_water.py (test)"
+   ],
+   "fixtures": {
+    "?": 1
+   },
+   "verdict": "KEEP",
+   "why": "an input changes after its placer: reference: placed at appurtenances, last changed at finish, polder19: placed at appurtenances, last changed at finish",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "pond_fill_covers_channel_mouths",
+   "keys": [
+    "channels",
+    "drawn_channels",
+    "field_ditches",
+    "pond",
+    "pond_layer",
+    "streams"
+   ],
+   "stages": {
+    "reference": [
+     "sink",
+     "finish"
+    ],
+    "polder19": [
+     "field",
+     "finish"
+    ]
+   },
+   "readers": [
+    "tests/check_village/test_segments_07_water.py (test)",
+    "tests/settlement/test_fields.py (test)"
+   ],
+   "fixtures": {
+    "?": 1
+   },
+   "verdict": "KEEP",
+   "why": "an input changes after its placer: reference: placed at sink, last changed at finish, polder19: placed at field, last changed at finish",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "religious_clear_of_ring_and_towers",
+   "keys": [
+    "cemeteries",
+    "channels",
+    "comb_floors",
+    "dikes",
+    "field_ditches",
+    "fields",
+    "fire_towers",
+    "gate_structs",
+    "houses",
+    "meta",
+    "religious",
+    "ring_road",
+    "ring_road_width",
+    "streams",
+    "village_groves",
+    "wall",
+    "wall_towers",
+    "wall_z",
+    "wards"
+   ],
+   "stages": {
+    "reference": [
+     "windbreak",
+     "finish"
+    ],
+    "polder19": [
+     "windbreak",
+     "finish"
+    ]
+   },
+   "readers": [
+    "tests/tier_city/check_village/test_segments_03_structures_and_wards.py (test)"
+   ],
+   "fixtures": {
+    "?": 1
+   },
+   "verdict": "KEEP",
+   "why": "an input changes after its placer: reference: placed at windbreak, last changed at finish, polder19: placed at windbreak, last changed at finish",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "remote_shrine_has_own_well",
+   "keys": [
+    "alleys",
+    "buildings",
+    "channels",
+    "governor_mansion",
+    "hill",
+    "houses",
+    "moat",
+    "pond",
+    "religious",
+    "road",
+    "road_width",
+    "streams",
+    "town_streets",
+    "wall",
+    "wells"
+   ],
+   "stages": {
+    "reference": [
+     "appurtenances",
+     "finish"
+    ],
+    "polder19": [
+     "appurtenances",
+     "finish"
+    ]
+   },
+   "readers": [
+    "tests/check_village/test_segments_04_homesteads.py (test)"
+   ],
+   "fixtures": {},
+   "verdict": "KEEP",
+   "why": "an input changes after its placer: reference: placed at appurtenances, last changed at finish, polder19: placed at appurtenances, last changed at finish",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "roads_clear_of_marsh",
+   "keys": [
+    "alleys",
+    "lanes",
+    "marshes",
+    "road",
+    "road_width",
+    "town_streets"
+   ],
+   "stages": {
+    "reference": [
+     "track",
+     "hinterland"
+    ],
+    "polder19": [
+     "track",
+     "hinterland"
+    ]
+   },
+   "readers": [
+    "tests/check_village/test_segments_05_supply_and_graveyards.py (test)"
+   ],
+   "fixtures": {
+    "?": 2
+   },
+   "verdict": "KEEP",
+   "why": "an input changes after its placer: reference: placed at track, last changed at hinterland, polder19: placed at track, last changed at hinterland",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "scalebar_matches_declared_scale",
+   "keys": [
+    "fields",
+    "labels",
+    "meta",
+    "pond",
+    "scalebar",
+    "title"
+   ],
+   "stages": {
+    "reference": [
+     "frame",
+     "finish"
+    ],
+    "polder19": [
+     "frame",
+     "finish"
+    ]
+   },
+   "readers": [
+    "tests/check_village/test_segments_03_structures_and_wards.py (test)"
+   ],
+   "fixtures": {},
+   "verdict": "KEEP",
+   "why": "an input changes after its placer: reference: placed at frame, last changed at finish, polder19: placed at frame, last changed at finish",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "scatter_respects_swept_clearings",
+   "keys": [
+    "cemeteries",
+    "channels",
+    "clearings",
+    "comb_floors",
+    "commons",
+    "dikes",
+    "field_ditches",
+    "fields",
+    "flower_fields",
+    "hill",
+    "houses",
+    "marshes",
+    "meta",
+    "religious",
+    "shrine",
+    "streams",
+    "summit",
+    "torii",
+    "village_groves",
+    "wall",
+    "wall_z"
+   ],
+   "stages": {
+    "reference": [
+     "windbreak",
+     "finish"
+    ],
+    "polder19": [
+     "windbreak",
+     "finish"
+    ]
+   },
+   "readers": [
+    "tests/check_village/test_segments_04_homesteads.py (test)"
+   ],
+   "fixtures": {
+    "?": 1
+   },
+   "verdict": "KEEP",
+   "why": "an input changes after its placer: reference: placed at windbreak, last changed at finish, polder19: placed at windbreak, last changed at finish",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "scrub_clear_of_urban_fabric",
+   "keys": [
+    "commons"
+   ],
+   "stages": {
+    "reference": [
+     "hinterland",
+     "woodland"
+    ],
+    "polder19": [
+     "hinterland",
+     "woodland"
+    ]
+   },
+   "readers": [
+    "tests/check_village/test_segments_07_water.py (test)",
+    "tests/tier_town/check_village/test_segments_07_water.py (test)"
+   ],
+   "fixtures": {
+    "?": 1
+   },
+   "verdict": "KEEP",
+   "why": "an input changes after its placer: reference: placed at hinterland, last changed at woodland, polder19: placed at hinterland, last changed at woodland",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "settlement_declares_a_land_fall",
+   "keys": [
+    "field_ditches",
+    "fields"
+   ],
+   "stages": {
+    "reference": [
+     "field",
+     "finish"
+    ],
+    "polder19": [
+     "field",
+     "finish"
+    ]
+   },
+   "readers": [
+    "tests/check_village/_builders.py (test)",
+    "tests/check_village/test_segments_08_town_and_flow.py (test)",
+    "tests/check_village/test_segments_09_justice_and_tanning.py (test)",
+    "tests/tier_city/check_village/test_segments_09_justice_and_tanning.py (test)"
+   ],
+   "fixtures": {},
+   "verdict": "KEEP",
+   "why": "an input changes after its placer: reference: placed at field, last changed at finish, polder19: placed at field, last changed at finish",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "settlement_dwellings_watered",
+   "keys": [
+    "alleys",
+    "buildings",
+    "channels",
+    "governor_mansion",
+    "hill",
+    "houses",
+    "moat",
+    "pond",
+    "religious",
+    "road",
+    "road_width",
+    "streams",
+    "town_streets",
+    "wall",
+    "wells"
+   ],
+   "stages": {
+    "reference": [
+     "appurtenances",
+     "finish"
+    ],
+    "polder19": [
+     "appurtenances",
+     "finish"
+    ]
+   },
+   "readers": [
+    "tests/check_village/test_segments_04_homesteads.py (test)"
+   ],
+   "fixtures": {
+    "?": 1
+   },
+   "verdict": "KEEP",
+   "why": "an input changes after its placer: reference: placed at appurtenances, last changed at finish, polder19: placed at appurtenances, last changed at finish",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "settlement_has_wells",
+   "keys": [
+    "alleys",
+    "buildings",
+    "channels",
+    "governor_mansion",
+    "hill",
+    "houses",
+    "moat",
+    "pond",
+    "religious",
+    "road",
+    "road_width",
+    "streams",
+    "town_streets",
+    "wall",
+    "wells"
+   ],
+   "stages": {
+    "reference": [
+     "appurtenances",
+     "finish"
+    ],
+    "polder19": [
+     "appurtenances",
+     "finish"
+    ]
+   },
+   "readers": [
+    "tests/check_village/test_segments_04_homesteads.py (test)"
+   ],
+   "fixtures": {
+    "?": 1
+   },
+   "verdict": "KEEP",
+   "why": "an input changes after its placer: reference: placed at appurtenances, last changed at finish, polder19: placed at appurtenances, last changed at finish",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "settlement_records_cluster_seeding",
+   "keys": [
+    "meta"
+   ],
+   "stages": {
+    "reference": [
+     "water_frame",
+     "frame"
+    ],
+    "polder19": [
+     "water_frame",
+     "frame"
+    ]
+   },
+   "readers": [
+    "tests/check_village/test_segments_04_homesteads.py (test)"
+   ],
+   "fixtures": {
+    "?": 1
+   },
+   "verdict": "KEEP",
+   "why": "an input changes after its placer: reference: placed at water_frame, last changed at frame, polder19: placed at water_frame, last changed at frame",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "shrine_avenue_fronts_the_hall",
+   "keys": [
+    "fields",
+    "flower_fields",
+    "religious",
+    "shrine",
+    "torii"
+   ],
+   "stages": {},
+   "readers": [
+    "tests/check_village/_builders.py (test)",
+    "tests/check_village/test_segments_08_town_and_flow.py (test)"
+   ],
+   "fixtures": {},
+   "verdict": "NO-SCRIPTED-EXECUTOR",
+   "why": "no scripted map exercises it (a legacy-tier check: town / city / capital / village hand-authored maps only); no measured verdict is possible - the GM's choice at acceptance",
+   "on": []
+  },
+  {
+   "check": "shrine_clear_of_grove_trees",
+   "keys": [
+    "crescent_ponds",
+    "religious",
+    "torii"
+   ],
+   "stages": {
+    "reference": [
+     "water_frame",
+     "water_frame"
+    ],
+    "polder19": [
+     "water_frame",
+     "water_frame"
+    ]
+   },
+   "readers": [
+    "tests/check_village/test_segments_03_structures_and_wards.py (test)"
+   ],
+   "fixtures": {},
+   "verdict": "VACUOUS-ON-SCRIPTED",
+   "why": "every input is absent on both scripted maps (crescent_ponds, religious, torii) - a legacy-tier feature; passes with nothing to judge; the GM's choice with the legacy set",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "shrine_halls_clear_of_lanes",
+   "keys": [
+    "lanes",
+    "religious",
+    "road",
+    "road_width",
+    "town_streets"
+   ],
+   "stages": {
+    "reference": [
+     "track",
+     "web"
+    ],
+    "polder19": [
+     "track",
+     "web"
+    ]
+   },
+   "readers": [
+    "tests/check_village/test_segments_07_water.py (test)"
+   ],
+   "fixtures": {},
+   "verdict": "KEEP",
+   "why": "an input changes after its placer: reference: placed at track, last changed at web, polder19: placed at track, last changed at web",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "shrine_on_hill_summit",
+   "keys": [
+    "hill",
+    "shrine",
+    "summit",
+    "torii"
+   ],
+   "stages": {},
+   "readers": [],
+   "fixtures": {},
+   "verdict": "NO-SCRIPTED-EXECUTOR",
+   "why": "no scripted map exercises it (a legacy-tier check: town / city / capital / village hand-authored maps only); no measured verdict is possible - the GM's choice at acceptance",
+   "on": []
+  },
+  {
+   "check": "sluice_gates_on_water",
+   "keys": [
+    "aqueducts",
+    "canals",
+    "channels",
+    "moat",
+    "moat_width",
+    "sluice_gates",
+    "streams",
+    "tanning_yards",
+    "towpaths"
+   ],
+   "stages": {
+    "reference": [
+     "field",
+     "finish"
+    ],
+    "polder19": [
+     "field",
+     "finish"
+    ]
+   },
+   "readers": [
+    "tests/check_village/test_segments_07_water.py (test)"
+   ],
+   "fixtures": {},
+   "verdict": "KEEP",
+   "why": "an input changes after its placer: reference: placed at field, last changed at finish, polder19: placed at field, last changed at finish",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "stream_end_anchored",
+   "keys": [
+    "alleys",
+    "buildings",
+    "channels",
+    "field_ditches",
+    "forest",
+    "governor_mansion",
+    "hill",
+    "houses",
+    "moat",
+    "pond",
+    "religious",
+    "ring_road",
+    "ring_road_width",
+    "river",
+    "road",
+    "road_width",
+    "streams",
+    "town_streets",
+    "wall",
+    "wells"
+   ],
+   "stages": {},
+   "readers": [],
+   "fixtures": {},
+   "verdict": "NO-SCRIPTED-EXECUTOR",
+   "why": "no scripted map exercises it (a legacy-tier check: town / city / capital / village hand-authored maps only); no measured verdict is possible - the GM's choice at acceptance",
+   "on": []
+  },
+  {
+   "check": "stream_source_anchored",
+   "keys": [
+    "alleys",
+    "buildings",
+    "channels",
+    "field_ditches",
+    "forest",
+    "governor_mansion",
+    "hill",
+    "houses",
+    "moat",
+    "pond",
+    "religious",
+    "ring_road",
+    "ring_road_width",
+    "river",
+    "road",
+    "road_width",
+    "streams",
+    "town_streets",
+    "wall",
+    "wells"
+   ],
+   "stages": {},
+   "readers": [],
+   "fixtures": {},
+   "verdict": "NO-SCRIPTED-EXECUTOR",
+   "why": "no scripted map exercises it (a legacy-tier check: town / city / capital / village hand-authored maps only); no measured verdict is possible - the GM's choice at acceptance",
+   "on": []
+  },
+  {
+   "check": "streams_avoid_fields",
+   "keys": [
+    "alleys",
+    "buildings",
+    "channels",
+    "field_ditches",
+    "forest",
+    "governor_mansion",
+    "hill",
+    "houses",
+    "moat",
+    "pond",
+    "religious",
+    "ring_road",
+    "ring_road_width",
+    "river",
+    "road",
+    "road_width",
+    "streams",
+    "town_streets",
+    "wall",
+    "wells"
+   ],
+   "stages": {
+    "reference": [
+     "appurtenances",
+     "finish"
+    ],
+    "polder19": [
+     "appurtenances",
+     "finish"
+    ]
+   },
+   "readers": [
+    "tests/check_village/test_segments_05_fields_and_ditches.py (test)"
+   ],
+   "fixtures": {
+    "?": 2
+   },
+   "verdict": "KEEP",
+   "why": "an input changes after its placer: reference: placed at appurtenances, last changed at finish, polder19: placed at appurtenances, last changed at finish",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "streets_have_buildings",
+   "keys": [
+    "alleys",
+    "buildings",
+    "cemeteries",
+    "channels",
+    "comb_floors",
+    "commons",
+    "cremation_grounds",
+    "crescent_ponds",
+    "dikes",
+    "districts",
+    "dry_plots",
+    "field_ditches",
+    "fields",
+    "fire_towers",
+    "flophouses",
+    "flower_fields",
+    "forest",
+    "forest_edge",
+    "gate",
+    "gate_structs",
+    "gates",
+    "governor_mansion",
+    "granary",
+    "hill",
+    "houses",
+    "inspection_stations",
+    "kido",
+    "kilns",
+    "lanes",
+    "manors",
+    "marshes",
+    "mausoleums",
+    "merchant_estates",
+    "meta",
+    "ministries",
+    "moat",
+    "moat_width",
+    "ossuaries",
+    "pond",
+    "quarters",
+    "religious",
+    "ring_road",
+    "ring_road_width",
+    "road",
+    "road_width",
+    "roads",
+    "shrine",
+    "stable_yards",
+    "storehouses",
+    "streams",
+    "summit",
+    "tanning_yards",
+    "terraces",
+    "theater_stage",
+    "threshing_yards",
+    "torii",
+    "town_streets",
+    "village_groves",
+    "wall",
+    "wall_tower_keepclears",
+    "wall_towers",
+    "wall_z",
+    "wards",
+    "water_gates",
+    "wells"
+   ],
+   "stages": {},
+   "readers": [
+    "tests/check_village/test_segments_09_justice_and_tanning.py (test)",
+    "tests/tier_town/check_village/test_segments_09_justice_and_tanning.py (test)"
+   ],
+   "fixtures": {},
+   "verdict": "NO-SCRIPTED-EXECUTOR",
+   "why": "no scripted map exercises it (a legacy-tier check: town / city / capital / village hand-authored maps only); no measured verdict is possible - the GM's choice at acceptance",
+   "on": []
+  },
+  {
+   "check": "structures_clear_of_dike",
+   "keys": [
+    "cemeteries",
+    "channels",
+    "comb_floors",
+    "dikes",
+    "field_ditches",
+    "fields",
+    "houses",
+    "meta",
+    "streams",
+    "village_groves",
+    "wall",
+    "wall_z"
+   ],
+   "stages": {
+    "reference": [
+     "windbreak",
+     "finish"
+    ],
+    "polder19": [
+     "windbreak",
+     "finish"
+    ]
+   },
+   "readers": [
+    "tests/check_village/test_segments_11_polders_and_edges.py (test)",
+    "tests/gate/test_scripted_fixtures.py (test)"
+   ],
+   "fixtures": {
+    "hamlet": 1,
+    "?": 1
+   },
+   "verdict": "KEEP",
+   "why": "an input changes after its placer: reference: placed at windbreak, last changed at finish, polder19: placed at windbreak, last changed at finish",
+   "on": [
+    "polder19"
+   ]
+  },
+  {
+   "check": "structures_clear_of_trees",
+   "keys": [
+    "channels",
+    "fields",
+    "flower_fields",
+    "meta",
+    "religious",
+    "shrine",
+    "torii",
+    "tree_crowns"
+   ],
+   "stages": {
+    "reference": [
+     "hinterland",
+     "finish"
+    ],
+    "polder19": [
+     "hinterland",
+     "finish"
+    ]
+   },
+   "readers": [
+    "tests/settlement/test_farm_fixtures.py (test)",
+    "tests/settlement/test_shrines_wells.py (test)",
+    "tests/tier_town/check_village/test_segments_01_city_frame_and_yards.py (test)"
+   ],
+   "fixtures": {},
+   "verdict": "KEEP",
+   "why": "an input changes after its placer: reference: placed at hinterland, last changed at finish, polder19: placed at hinterland, last changed at finish",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "tanning_yards_on_water",
+   "keys": [
+    "aqueducts",
+    "canals",
+    "channels",
+    "moat",
+    "moat_width",
+    "sluice_gates",
+    "streams",
+    "tanning_yards",
+    "towpaths"
+   ],
+   "stages": {
+    "reference": [
+     "field",
+     "finish"
+    ],
+    "polder19": [
+     "field",
+     "finish"
+    ]
+   },
+   "readers": [
+    "tests/check_village/test_segments_07_water.py (test)"
+   ],
+   "fixtures": {},
+   "verdict": "KEEP",
+   "why": "an input changes after its placer: reference: placed at field, last changed at finish, polder19: placed at field, last changed at finish",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "temple_torii_face_the_street",
+   "keys": [
+    "lanes",
+    "religious",
+    "road",
+    "roads",
+    "torii",
+    "town_streets"
+   ],
+   "stages": {},
+   "readers": [],
+   "fixtures": {},
+   "verdict": "NO-SCRIPTED-EXECUTOR",
+   "why": "no scripted map exercises it (a legacy-tier check: town / city / capital / village hand-authored maps only); no measured verdict is possible - the GM's choice at acceptance",
+   "on": []
+  },
+  {
+   "check": "theater_stage_inside_wall",
+   "keys": [
+    "theater_stage",
+    "wall"
+   ],
+   "stages": {},
+   "readers": [],
+   "fixtures": {},
+   "verdict": "NO-SCRIPTED-EXECUTOR",
+   "why": "no scripted map exercises it (a legacy-tier check: town / city / capital / village hand-authored maps only); no measured verdict is possible - the GM's choice at acceptance",
+   "on": []
+  },
+  {
+   "check": "title_clear_of_features",
+   "keys": [
+    "fields",
+    "labels",
+    "meta",
+    "pond",
+    "scalebar",
+    "title"
+   ],
+   "stages": {
+    "reference": [
+     "frame",
+     "finish"
+    ],
+    "polder19": [
+     "frame",
+     "finish"
+    ]
+   },
+   "readers": [
+    "tests/check_village/test_segments_03_structures_and_wards.py (test)",
+    "tests/gate/hamletgen/test_driver.py (test)"
+   ],
+   "fixtures": {},
+   "verdict": "KEEP",
+   "why": "an input changes after its placer: reference: placed at frame, last changed at finish, polder19: placed at frame, last changed at finish",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "title_has_placard",
+   "keys": [
+    "fields",
+    "labels",
+    "meta",
+    "pond",
+    "scalebar",
+    "title"
+   ],
+   "stages": {
+    "reference": [
+     "frame",
+     "finish"
+    ],
+    "polder19": [
+     "frame",
+     "finish"
+    ]
+   },
+   "readers": [
+    "tests/check_village/test_segments_03_structures_and_wards.py (test)"
+   ],
+   "fixtures": {},
+   "verdict": "KEEP",
+   "why": "an input changes after its placer: reference: placed at frame, last changed at finish, polder19: placed at frame, last changed at finish",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "torii_avenue_meets_the_hall",
+   "keys": [
+    "lanes",
+    "religious",
+    "road",
+    "roads",
+    "torii",
+    "town_streets"
+   ],
+   "stages": {},
+   "readers": [],
+   "fixtures": {
+    "?": 2
+   },
+   "verdict": "NO-SCRIPTED-EXECUTOR",
+   "why": "no scripted map exercises it (a legacy-tier check: town / city / capital / village hand-authored maps only); no measured verdict is possible - the GM's choice at acceptance",
+   "on": []
+  },
+  {
+   "check": "torii_avenue_pitch_capped",
+   "keys": [
+    "lanes",
+    "religious",
+    "road",
+    "roads",
+    "torii",
+    "town_streets"
+   ],
+   "stages": {},
+   "readers": [
+    "tests/check_village/test_segments_11_polders_and_edges.py (test)"
+   ],
+   "fixtures": {
+    "?": 2
+   },
+   "verdict": "NO-SCRIPTED-EXECUTOR",
+   "why": "no scripted map exercises it (a legacy-tier check: town / city / capital / village hand-authored maps only); no measured verdict is possible - the GM's choice at acceptance",
+   "on": []
+  },
+  {
+   "check": "torii_clear_of_fields",
+   "keys": [
+    "fields",
+    "flower_fields",
+    "religious",
+    "shrine",
+    "torii"
+   ],
+   "stages": {},
+   "readers": [],
+   "fixtures": {
+    "?": 1
+   },
+   "verdict": "NO-SCRIPTED-EXECUTOR",
+   "why": "no scripted map exercises it (a legacy-tier check: town / city / capital / village hand-authored maps only); no measured verdict is possible - the GM's choice at acceptance",
+   "on": []
+  },
+  {
+   "check": "torii_clear_of_grove_trees",
+   "keys": [
+    "crescent_ponds",
+    "religious",
+    "torii"
+   ],
+   "stages": {
+    "reference": [
+     "water_frame",
+     "water_frame"
+    ],
+    "polder19": [
+     "water_frame",
+     "water_frame"
+    ]
+   },
+   "readers": [
+    "tests/check_village/test_segments_03_structures_and_wards.py (test)"
+   ],
+   "fixtures": {},
+   "verdict": "VACUOUS-ON-SCRIPTED",
+   "why": "every input is absent on both scripted maps (crescent_ponds, religious, torii) - a legacy-tier feature; passes with nothing to judge; the GM's choice with the legacy set",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "torii_clear_of_halls_towers_ring",
+   "keys": [
+    "cemeteries",
+    "channels",
+    "comb_floors",
+    "dikes",
+    "field_ditches",
+    "fields",
+    "fire_towers",
+    "gate_structs",
+    "houses",
+    "meta",
+    "religious",
+    "ring_road",
+    "ring_road_width",
+    "streams",
+    "torii",
+    "village_groves",
+    "wall",
+    "wall_towers",
+    "wall_z",
+    "wards"
+   ],
+   "stages": {
+    "reference": [
+     "windbreak",
+     "finish"
+    ],
+    "polder19": [
+     "windbreak",
+     "finish"
+    ]
+   },
+   "readers": [
+    "tests/tier_city/check_village/test_segments_03_structures_and_wards.py (test)"
+   ],
+   "fixtures": {},
+   "verdict": "KEEP",
+   "why": "an input changes after its placer: reference: placed at windbreak, last changed at finish, polder19: placed at windbreak, last changed at finish",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "torii_clear_of_shrine",
+   "keys": [
+    "fields",
+    "flower_fields",
+    "religious",
+    "shrine",
+    "torii"
+   ],
+   "stages": {},
+   "readers": [
+    "tests/tier_city/settlement/test_shrines_wells.py (test)"
+   ],
+   "fixtures": {},
+   "verdict": "NO-SCRIPTED-EXECUTOR",
+   "why": "no scripted map exercises it (a legacy-tier check: town / city / capital / village hand-authored maps only); no measured verdict is possible - the GM's choice at acceptance",
+   "on": []
+  },
+  {
+   "check": "torii_clear_of_walls",
+   "keys": [],
+   "stages": {
+    "reference": [
+     "-",
+     "-"
+    ],
+    "polder19": [
+     "-",
+     "-"
+    ]
+   },
+   "readers": [
+    "tests/tier_city/check_village/test_segments_03_structures_and_wards.py (test)"
+   ],
+   "fixtures": {
+    "?": 1
+   },
+   "verdict": "KEEP",
+   "why": "reads no manifest key the census can see (derived entirely) - judge by hand",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "torii_count_canonical",
+   "keys": [
+    "lanes",
+    "religious",
+    "road",
+    "roads",
+    "torii",
+    "town_streets"
+   ],
+   "stages": {},
+   "readers": [
+    "tests/check_village/test_segments_11_polders_and_edges.py (test)"
+   ],
+   "fixtures": {
+    "?": 3
+   },
+   "verdict": "NO-SCRIPTED-EXECUTOR",
+   "why": "no scripted map exercises it (a legacy-tier check: town / city / capital / village hand-authored maps only); no measured verdict is possible - the GM's choice at acceptance",
+   "on": []
+  },
+  {
+   "check": "torii_match_roll",
+   "keys": [
+    "lanes",
+    "religious",
+    "road",
+    "roads",
+    "torii",
+    "town_streets"
+   ],
+   "stages": {},
+   "readers": [],
+   "fixtures": {},
+   "verdict": "NO-SCRIPTED-EXECUTOR",
+   "why": "no scripted map exercises it (a legacy-tier check: town / city / capital / village hand-authored maps only); no measured verdict is possible - the GM's choice at acceptance",
+   "on": []
+  },
+  {
+   "check": "torii_on_hill",
+   "keys": [
+    "hill",
+    "shrine",
+    "summit",
+    "torii"
+   ],
+   "stages": {},
+   "readers": [],
+   "fixtures": {},
+   "verdict": "NO-SCRIPTED-EXECUTOR",
+   "why": "no scripted map exercises it (a legacy-tier check: town / city / capital / village hand-authored maps only); no measured verdict is possible - the GM's choice at acceptance",
+   "on": []
+  },
+  {
+   "check": "torii_spread_out",
+   "keys": [
+    "fields",
+    "flower_fields",
+    "religious",
+    "shrine",
+    "torii"
+   ],
+   "stages": {},
+   "readers": [
+    "tests/check_village/test_segments_08_town_and_flow.py (test)"
+   ],
+   "fixtures": {},
+   "verdict": "NO-SCRIPTED-EXECUTOR",
+   "why": "no scripted map exercises it (a legacy-tier check: town / city / capital / village hand-authored maps only); no measured verdict is possible - the GM's choice at acceptance",
+   "on": []
+  },
+  {
+   "check": "town_has_kosatsuba",
+   "keys": [
+    "gates",
+    "kosatsuba",
+    "lane",
+    "lanes",
+    "road",
+    "roads",
+    "town_streets"
+   ],
+   "stages": {},
+   "readers": [
+    "tests/check_village/test_segments_08_town_and_flow.py (test)",
+    "tests/tier_town/check_village/test_segments_08_town_and_flow.py (test)"
+   ],
+   "fixtures": {},
+   "verdict": "NO-SCRIPTED-EXECUTOR",
+   "why": "no scripted map exercises it (a legacy-tier check: town / city / capital / village hand-authored maps only); no measured verdict is possible - the GM's choice at acceptance",
+   "on": []
+  },
+  {
+   "check": "town_has_no_headman",
+   "keys": [],
+   "stages": {},
+   "readers": [],
+   "fixtures": {},
+   "verdict": "NO-SCRIPTED-EXECUTOR",
+   "why": "no scripted map exercises it (a legacy-tier check: town / city / capital / village hand-authored maps only); no measured verdict is possible - the GM's choice at acceptance",
+   "on": []
+  },
+  {
+   "check": "towpath_hugs_the_bank",
+   "keys": [
+    "aqueducts",
+    "canals",
+    "channels",
+    "moat",
+    "moat_width",
+    "sluice_gates",
+    "streams",
+    "tanning_yards",
+    "towpaths"
+   ],
+   "stages": {
+    "reference": [
+     "field",
+     "finish"
+    ],
+    "polder19": [
+     "field",
+     "finish"
+    ]
+   },
+   "readers": [
+    "tests/check_village/test_segments_07_water.py (test)"
+   ],
+   "fixtures": {},
+   "verdict": "KEEP",
+   "why": "an input changes after its placer: reference: placed at field, last changed at finish, polder19: placed at field, last changed at finish",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "tree_crowns_not_subsumed",
+   "keys": [
+    "tree_crowns"
+   ],
+   "stages": {
+    "reference": [
+     "hinterland",
+     "windbreak"
+    ],
+    "polder19": [
+     "hinterland",
+     "windbreak"
+    ]
+   },
+   "readers": [
+    "tests/check_village/test_segments_04_farm_fixtures.py (test)"
+   ],
+   "fixtures": {
+    "?": 1
+   },
+   "verdict": "KEEP",
+   "why": "an input changes after its placer: reference: placed at hinterland, last changed at windbreak, polder19: placed at hinterland, last changed at windbreak",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "trees_clear_of_fengshui_ponds",
+   "keys": [
+    "crescent_ponds",
+    "religious",
+    "torii"
+   ],
+   "stages": {
+    "reference": [
+     "water_frame",
+     "water_frame"
+    ],
+    "polder19": [
+     "water_frame",
+     "water_frame"
+    ]
+   },
+   "readers": [
+    "tests/check_village/test_segments_03_structures_and_wards.py (test)"
+   ],
+   "fixtures": {
+    "?": 1
+   },
+   "verdict": "VACUOUS-ON-SCRIPTED",
+   "why": "every input is absent on both scripted maps (crescent_ponds, religious, torii) - a legacy-tier feature; passes with nothing to judge; the GM's choice with the legacy set",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "village_cluster_compact",
+   "keys": [],
+   "stages": {},
+   "readers": [
+    "tests/check_village/test_segments_03_structures_and_wards.py (test)"
+   ],
+   "fixtures": {
+    "?": 1
+   },
+   "verdict": "NO-SCRIPTED-EXECUTOR",
+   "why": "no scripted map exercises it (a legacy-tier check: town / city / capital / village hand-authored maps only); no measured verdict is possible - the GM's choice at acceptance",
+   "on": []
+  },
+  {
+   "check": "village_groves_visibly_stocked",
+   "keys": [
+    "meta",
+    "village_groves"
+   ],
+   "stages": {
+    "reference": [
+     "windbreak",
+     "frame"
+    ],
+    "polder19": [
+     "windbreak",
+     "frame"
+    ]
+   },
+   "readers": [
+    "tests/check_village/test_segments_04_homesteads.py (test)"
+   ],
+   "fixtures": {},
+   "verdict": "KEEP",
+   "why": "an input changes after its placer: reference: placed at windbreak, last changed at frame, polder19: placed at windbreak, last changed at frame",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "village_has_headman",
+   "keys": [],
+   "stages": {},
+   "readers": [],
+   "fixtures": {},
+   "verdict": "NO-SCRIPTED-EXECUTOR",
+   "why": "no scripted map exercises it (a legacy-tier check: town / city / capital / village hand-authored maps only); no measured verdict is possible - the GM's choice at acceptance",
+   "on": []
+  },
+  {
+   "check": "village_has_kosatsuba",
+   "keys": [
+    "gates",
+    "kosatsuba",
+    "lane",
+    "lanes",
+    "road",
+    "roads",
+    "town_streets"
+   ],
+   "stages": {},
+   "readers": [
+    "tests/check_village/test_segments_08_kosatsuba_and_basins.py (test)"
+   ],
+   "fixtures": {},
+   "verdict": "NO-SCRIPTED-EXECUTOR",
+   "why": "no scripted map exercises it (a legacy-tier check: town / city / capital / village hand-authored maps only); no measured verdict is possible - the GM's choice at acceptance",
+   "on": []
+  },
+  {
+   "check": "village_has_no_headman",
+   "keys": [],
+   "stages": {},
+   "readers": [],
+   "fixtures": {},
+   "verdict": "NO-SCRIPTED-EXECUTOR",
+   "why": "no scripted map exercises it (a legacy-tier check: town / city / capital / village hand-authored maps only); no measured verdict is possible - the GM's choice at acceptance",
+   "on": []
+  },
+  {
+   "check": "village_trees_unshade_from_west",
+   "keys": [
+    "gardens",
+    "threshing_yards",
+    "village_groves"
+   ],
+   "stages": {
+    "reference": [
+     "windbreak",
+     "windbreak"
+    ],
+    "polder19": [
+     "windbreak",
+     "windbreak"
+    ]
+   },
+   "readers": [
+    "tests/check_village/test_segments_04_homesteads.py (test)"
+   ],
+   "fixtures": {},
+   "verdict": "RETIRE-CANDIDATE",
+   "why": "inputs settle at their placer on both maps: reference: windbreak, polder19: windbreak",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "village_windbreak_embraces_cluster",
+   "keys": [
+    "forest",
+    "groves",
+    "village_groves"
+   ],
+   "stages": {
+    "reference": [
+     "windbreak",
+     "windbreak"
+    ],
+    "polder19": [
+     "windbreak",
+     "windbreak"
+    ]
+   },
+   "readers": [
+    "tests/check_village/test_segments_04_homesteads.py (test)"
+   ],
+   "fixtures": {
+    "?": 1
+   },
+   "verdict": "RETIRE-CANDIDATE",
+   "why": "inputs settle at their placer on both maps: reference: windbreak, polder19: windbreak",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "village_windbreak_is_continuous",
+   "keys": [
+    "meta",
+    "village_groves"
+   ],
+   "stages": {
+    "reference": [
+     "windbreak",
+     "frame"
+    ],
+    "polder19": [
+     "windbreak",
+     "frame"
+    ]
+   },
+   "readers": [
+    "tests/tools/test_mapcheck.py (test)"
+   ],
+   "fixtures": {
+    "?": 1
+   },
+   "verdict": "KEEP",
+   "why": "an input changes after its placer: reference: placed at windbreak, last changed at frame, polder19: placed at windbreak, last changed at frame",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "village_windbreak_on_windward_side",
+   "keys": [
+    "forest",
+    "groves",
+    "village_groves"
+   ],
+   "stages": {
+    "reference": [
+     "windbreak",
+     "windbreak"
+    ],
+    "polder19": [
+     "windbreak",
+     "windbreak"
+    ]
+   },
+   "readers": [
+    "tests/check_village/test_segments_04_homesteads.py (test)"
+   ],
+   "fixtures": {},
+   "verdict": "RETIRE-CANDIDATE",
+   "why": "inputs settle at their placer on both maps: reference: windbreak, polder19: windbreak",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "village_windbreak_present",
+   "keys": [
+    "forest",
+    "groves",
+    "village_groves"
+   ],
+   "stages": {
+    "reference": [
+     "windbreak",
+     "windbreak"
+    ],
+    "polder19": [
+     "windbreak",
+     "windbreak"
+    ]
+   },
+   "readers": [
+    "tests/check_village/test_segments_04_homesteads.py (test)"
+   ],
+   "fixtures": {},
+   "verdict": "RETIRE-CANDIDATE",
+   "why": "inputs settle at their placer on both maps: reference: windbreak, polder19: windbreak",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "village_windbreak_scales_with_cluster",
+   "keys": [
+    "forest",
+    "groves",
+    "village_groves"
+   ],
+   "stages": {
+    "reference": [
+     "windbreak",
+     "windbreak"
+    ],
+    "polder19": [
+     "windbreak",
+     "windbreak"
+    ]
+   },
+   "readers": [
+    "tests/check_village/test_segments_04_homesteads.py (test)"
+   ],
+   "fixtures": {
+    "?": 1
+   },
+   "verdict": "RETIRE-CANDIDATE",
+   "why": "inputs settle at their placer on both maps: reference: windbreak, polder19: windbreak",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "waivers_are_documented",
+   "keys": [],
+   "stages": {
+    "reference": [
+     "-",
+     "-"
+    ],
+    "polder19": [
+     "-",
+     "-"
+    ]
+   },
+   "readers": [
+    "tests/check_village/test_segments_11_polders_and_edges.py (test)"
+   ],
+   "fixtures": {},
+   "verdict": "KEEP",
+   "why": "reads no manifest key the census can see (derived entirely) - judge by hand",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "waivers_are_live",
+   "keys": [],
+   "stages": {
+    "reference": [
+     "-",
+     "-"
+    ],
+    "polder19": [
+     "-",
+     "-"
+    ]
+   },
+   "readers": [
+    "tests/check_village/_builders.py (test)",
+    "tests/check_village/test_segments_11_polders_and_edges.py (test)",
+    "tests/gate/test_regressions.py (test)",
+    "tests/hamletgen/test_driver.py (test)"
+   ],
+   "fixtures": {},
+   "verdict": "KEEP",
+   "why": "reads no manifest key the census can see (derived entirely) - judge by hand",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "wall_hugs_the_town",
+   "keys": [
+    "alleys",
+    "buildings",
+    "cemeteries",
+    "channels",
+    "comb_floors",
+    "commons",
+    "cremation_grounds",
+    "crescent_ponds",
+    "dikes",
+    "districts",
+    "dry_plots",
+    "field_ditches",
+    "fields",
+    "fire_towers",
+    "flophouses",
+    "flower_fields",
+    "forest",
+    "forest_edge",
+    "gate",
+    "gate_structs",
+    "gates",
+    "governor_mansion",
+    "granary",
+    "hill",
+    "houses",
+    "inspection_stations",
+    "kido",
+    "kilns",
+    "lanes",
+    "manors",
+    "marshes",
+    "mausoleums",
+    "merchant_estates",
+    "meta",
+    "ministries",
+    "moat",
+    "moat_width",
+    "ossuaries",
+    "pond",
+    "quarters",
+    "religious",
+    "ring_road",
+    "ring_road_width",
+    "road",
+    "road_width",
+    "roads",
+    "shrine",
+    "stable_yards",
+    "storehouses",
+    "streams",
+    "summit",
+    "tanning_yards",
+    "terraces",
+    "theater_stage",
+    "threshing_yards",
+    "torii",
+    "town_streets",
+    "village_groves",
+    "wall",
+    "wall_tower_keepclears",
+    "wall_towers",
+    "wall_z",
+    "wards",
+    "water_gates",
+    "wells"
+   ],
+   "stages": {},
+   "readers": [
+    "tests/check_village/test_segments_09_justice_and_tanning.py (test)",
+    "tests/tier_town/check_village/test_segments_09_justice_and_tanning.py (test)"
+   ],
+   "fixtures": {},
+   "verdict": "NO-SCRIPTED-EXECUTOR",
+   "why": "no scripted map exercises it (a legacy-tier check: town / city / capital / village hand-authored maps only); no measured verdict is possible - the GM's choice at acceptance",
+   "on": []
+  },
+  {
+   "check": "wall_sections_irregular",
+   "keys": [
+    "alleys",
+    "buildings",
+    "cemeteries",
+    "channels",
+    "comb_floors",
+    "commons",
+    "cremation_grounds",
+    "crescent_ponds",
+    "dikes",
+    "districts",
+    "dry_plots",
+    "field_ditches",
+    "fields",
+    "fire_towers",
+    "flophouses",
+    "flower_fields",
+    "forest",
+    "forest_edge",
+    "gate",
+    "gate_structs",
+    "gates",
+    "governor_mansion",
+    "granary",
+    "hill",
+    "houses",
+    "inspection_stations",
+    "kido",
+    "kilns",
+    "lanes",
+    "manors",
+    "marshes",
+    "mausoleums",
+    "merchant_estates",
+    "meta",
+    "ministries",
+    "moat",
+    "moat_width",
+    "ossuaries",
+    "pond",
+    "quarters",
+    "religious",
+    "ring_road",
+    "ring_road_width",
+    "road",
+    "road_width",
+    "roads",
+    "shrine",
+    "stable_yards",
+    "storehouses",
+    "streams",
+    "summit",
+    "tanning_yards",
+    "terraces",
+    "theater_stage",
+    "threshing_yards",
+    "torii",
+    "town_streets",
+    "village_groves",
+    "wall",
+    "wall_tower_keepclears",
+    "wall_towers",
+    "wall_z",
+    "wards",
+    "water_gates",
+    "wells"
+   ],
+   "stages": {},
+   "readers": [],
+   "fixtures": {},
+   "verdict": "NO-SCRIPTED-EXECUTOR",
+   "why": "no scripted map exercises it (a legacy-tier check: town / city / capital / village hand-authored maps only); no measured verdict is possible - the GM's choice at acceptance",
+   "on": []
+  },
+  {
+   "check": "wall_towers_evenly_spaced",
+   "keys": [
+    "gate_structs",
+    "gates",
+    "wall",
+    "wall_tower_keepclears",
+    "wall_towers",
+    "water_gates"
+   ],
+   "stages": {},
+   "readers": [
+    "tests/check_village/test_segments_02_capital_and_walls.py (test)"
+   ],
+   "fixtures": {
+    "?": 1
+   },
+   "verdict": "NO-SCRIPTED-EXECUTOR",
+   "why": "no scripted map exercises it (a legacy-tier check: town / city / capital / village hand-authored maps only); no measured verdict is possible - the GM's choice at acceptance",
+   "on": []
+  },
+  {
+   "check": "walled_exterior_cemetery_larger",
+   "keys": [
+    "cemeteries",
+    "wall",
+    "wall_z"
+   ],
+   "stages": {},
+   "readers": [
+    "tests/check_village/test_segments_05_supply_and_graveyards.py (test)"
+   ],
+   "fixtures": {
+    "?": 1
+   },
+   "verdict": "NO-SCRIPTED-EXECUTOR",
+   "why": "no scripted map exercises it (a legacy-tier check: town / city / capital / village hand-authored maps only); no measured verdict is possible - the GM's choice at acceptance",
+   "on": []
+  },
+  {
+   "check": "walled_graveyards_inside_and_outside",
+   "keys": [
+    "cemeteries",
+    "wall",
+    "wall_z"
+   ],
+   "stages": {},
+   "readers": [
+    "tests/check_village/test_segments_05_fields_and_ditches.py (test)",
+    "tests/check_village/test_segments_05_supply_and_graveyards.py (test)"
+   ],
+   "fixtures": {
+    "?": 2
+   },
+   "verdict": "NO-SCRIPTED-EXECUTOR",
+   "why": "no scripted map exercises it (a legacy-tier check: town / city / capital / village hand-authored maps only); no measured verdict is possible - the GM's choice at acceptance",
+   "on": []
+  },
+  {
+   "check": "walled_settlement_has_drum_tower",
+   "keys": [
+    "alleys",
+    "buildings",
+    "cemeteries",
+    "channels",
+    "districts",
+    "drum_towers",
+    "dry_plots",
+    "field_ditches",
+    "fields",
+    "gate_structs",
+    "gates",
+    "governor_mansion",
+    "houses",
+    "manors",
+    "marshes",
+    "mausoleums",
+    "meta",
+    "ministries",
+    "quarters",
+    "religious",
+    "road",
+    "road_width",
+    "stable_yards",
+    "storehouses",
+    "streams",
+    "terraces",
+    "theater_stage",
+    "town_streets",
+    "wall",
+    "wall_tower_keepclears",
+    "wall_towers",
+    "wall_z",
+    "wards",
+    "water_gates",
+    "wells"
+   ],
+   "stages": {},
+   "readers": [],
+   "fixtures": {
+    "?": 2
+   },
+   "verdict": "NO-SCRIPTED-EXECUTOR",
+   "why": "no scripted map exercises it (a legacy-tier check: town / city / capital / village hand-authored maps only); no measured verdict is possible - the GM's choice at acceptance",
+   "on": []
+  },
+  {
+   "check": "walled_structure_yields_to_ward_wall",
+   "keys": [
+    "manors",
+    "mausoleums",
+    "wall",
+    "wards"
+   ],
+   "stages": {},
+   "readers": [
+    "tests/check_village/test_segments_03_structures_and_wards.py (test)",
+    "tests/tier_city/check_village/test_segments_03_structures_and_wards.py (test)"
+   ],
+   "fixtures": {
+    "?": 1
+   },
+   "verdict": "NO-SCRIPTED-EXECUTOR",
+   "why": "no scripted map exercises it (a legacy-tier check: town / city / capital / village hand-authored maps only); no measured verdict is possible - the GM's choice at acceptance",
+   "on": []
+  },
+  {
+   "check": "walled_town_commoners_inside_walls",
+   "keys": [
+    "alleys",
+    "buildings",
+    "cemeteries",
+    "channels",
+    "comb_floors",
+    "commons",
+    "cremation_grounds",
+    "crescent_ponds",
+    "dikes",
+    "districts",
+    "dry_plots",
+    "field_ditches",
+    "fields",
+    "fire_towers",
+    "flophouses",
+    "flower_fields",
+    "forest",
+    "forest_edge",
+    "gate",
+    "gate_structs",
+    "gates",
+    "governor_mansion",
+    "granary",
+    "hill",
+    "houses",
+    "inspection_stations",
+    "kido",
+    "kilns",
+    "lanes",
+    "manors",
+    "marshes",
+    "mausoleums",
+    "merchant_estates",
+    "meta",
+    "ministries",
+    "moat",
+    "moat_width",
+    "ossuaries",
+    "pond",
+    "quarters",
+    "religious",
+    "ring_road",
+    "ring_road_width",
+    "road",
+    "road_width",
+    "roads",
+    "shrine",
+    "stable_yards",
+    "storehouses",
+    "streams",
+    "summit",
+    "tanning_yards",
+    "terraces",
+    "theater_stage",
+    "threshing_yards",
+    "torii",
+    "town_streets",
+    "village_groves",
+    "wall",
+    "wall_tower_keepclears",
+    "wall_towers",
+    "wall_z",
+    "wards",
+    "water_gates",
+    "wells"
+   ],
+   "stages": {},
+   "readers": [
+    "tests/tier_town/check_village/test_segments_09_justice_and_tanning.py (test)"
+   ],
+   "fixtures": {},
+   "verdict": "NO-SCRIPTED-EXECUTOR",
+   "why": "no scripted map exercises it (a legacy-tier check: town / city / capital / village hand-authored maps only); no measured verdict is possible - the GM's choice at acceptance",
+   "on": []
+  },
+  {
+   "check": "walled_town_has_gate_market",
+   "keys": [
+    "alleys",
+    "buildings",
+    "cemeteries",
+    "channels",
+    "comb_floors",
+    "commons",
+    "cremation_grounds",
+    "crescent_ponds",
+    "dikes",
+    "districts",
+    "dry_plots",
+    "field_ditches",
+    "fields",
+    "fire_towers",
+    "flophouses",
+    "flower_fields",
+    "forest",
+    "forest_edge",
+    "gate",
+    "gate_structs",
+    "gates",
+    "governor_mansion",
+    "granary",
+    "hill",
+    "houses",
+    "inspection_stations",
+    "kido",
+    "kilns",
+    "lanes",
+    "manors",
+    "marshes",
+    "mausoleums",
+    "merchant_estates",
+    "meta",
+    "ministries",
+    "moat",
+    "moat_width",
+    "ossuaries",
+    "pond",
+    "quarters",
+    "religious",
+    "ring_road",
+    "ring_road_width",
+    "road",
+    "road_width",
+    "roads",
+    "shrine",
+    "stable_yards",
+    "storehouses",
+    "streams",
+    "summit",
+    "tanning_yards",
+    "terraces",
+    "theater_stage",
+    "threshing_yards",
+    "torii",
+    "town_streets",
+    "village_groves",
+    "wall",
+    "wall_tower_keepclears",
+    "wall_towers",
+    "wall_z",
+    "wards",
+    "water_gates",
+    "wells"
+   ],
+   "stages": {},
+   "readers": [
+    "tests/tier_town/check_village/test_segments_09_justice_and_tanning.py (test)"
+   ],
+   "fixtures": {},
+   "verdict": "NO-SCRIPTED-EXECUTOR",
+   "why": "no scripted map exercises it (a legacy-tier check: town / city / capital / village hand-authored maps only); no measured verdict is possible - the GM's choice at acceptance",
+   "on": []
+  },
+  {
+   "check": "walled_town_has_main_street",
+   "keys": [
+    "alleys",
+    "buildings",
+    "cemeteries",
+    "channels",
+    "comb_floors",
+    "commons",
+    "cremation_grounds",
+    "crescent_ponds",
+    "dikes",
+    "districts",
+    "dry_plots",
+    "field_ditches",
+    "fields",
+    "fire_towers",
+    "flophouses",
+    "flower_fields",
+    "forest",
+    "forest_edge",
+    "gate",
+    "gate_structs",
+    "gates",
+    "governor_mansion",
+    "granary",
+    "hill",
+    "houses",
+    "inspection_stations",
+    "kido",
+    "kilns",
+    "lanes",
+    "manors",
+    "marshes",
+    "mausoleums",
+    "merchant_estates",
+    "meta",
+    "ministries",
+    "moat",
+    "moat_width",
+    "ossuaries",
+    "pond",
+    "quarters",
+    "religious",
+    "ring_road",
+    "ring_road_width",
+    "road",
+    "road_width",
+    "roads",
+    "shrine",
+    "stable_yards",
+    "storehouses",
+    "streams",
+    "summit",
+    "tanning_yards",
+    "terraces",
+    "theater_stage",
+    "threshing_yards",
+    "torii",
+    "town_streets",
+    "village_groves",
+    "wall",
+    "wall_tower_keepclears",
+    "wall_towers",
+    "wall_z",
+    "wards",
+    "water_gates",
+    "wells"
+   ],
+   "stages": {},
+   "readers": [],
+   "fixtures": {},
+   "verdict": "NO-SCRIPTED-EXECUTOR",
+   "why": "no scripted map exercises it (a legacy-tier check: town / city / capital / village hand-authored maps only); no measured verdict is possible - the GM's choice at acceptance",
+   "on": []
+  },
+  {
+   "check": "walled_town_has_wall",
+   "keys": [
+    "alleys",
+    "buildings",
+    "cemeteries",
+    "channels",
+    "comb_floors",
+    "commons",
+    "cremation_grounds",
+    "crescent_ponds",
+    "dikes",
+    "districts",
+    "dry_plots",
+    "field_ditches",
+    "fields",
+    "fire_towers",
+    "flophouses",
+    "flower_fields",
+    "forest",
+    "forest_edge",
+    "gate",
+    "gate_structs",
+    "gates",
+    "governor_mansion",
+    "granary",
+    "hill",
+    "houses",
+    "inspection_stations",
+    "kido",
+    "kilns",
+    "lanes",
+    "manors",
+    "marshes",
+    "mausoleums",
+    "merchant_estates",
+    "meta",
+    "ministries",
+    "moat",
+    "moat_width",
+    "ossuaries",
+    "pond",
+    "quarters",
+    "religious",
+    "ring_road",
+    "ring_road_width",
+    "road",
+    "road_width",
+    "roads",
+    "shrine",
+    "stable_yards",
+    "storehouses",
+    "streams",
+    "summit",
+    "tanning_yards",
+    "terraces",
+    "theater_stage",
+    "threshing_yards",
+    "torii",
+    "town_streets",
+    "village_groves",
+    "wall",
+    "wall_tower_keepclears",
+    "wall_towers",
+    "wall_z",
+    "wards",
+    "water_gates",
+    "wells"
+   ],
+   "stages": {},
+   "readers": [],
+   "fixtures": {},
+   "verdict": "NO-SCRIPTED-EXECUTOR",
+   "why": "no scripted map exercises it (a legacy-tier check: town / city / capital / village hand-authored maps only); no measured verdict is possible - the GM's choice at acceptance",
+   "on": []
+  },
+  {
+   "check": "water_channels_join_not_cross",
+   "keys": [
+    "drawn_channels"
+   ],
+   "stages": {
+    "reference": [
+     "field",
+     "finish"
+    ],
+    "polder19": [
+     "field",
+     "finish"
+    ]
+   },
+   "readers": [
+    "tests/check_village/test_segments_05_fields_and_ditches.py (test)"
+   ],
+   "fixtures": {
+    "?": 1,
+    "hamlet": 1
+   },
+   "verdict": "KEEP",
+   "why": "an input changes after its placer: reference: placed at field, last changed at finish, polder19: placed at field, last changed at finish",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "water_channels_obtuse_turns",
+   "keys": [
+    "alleys",
+    "buildings",
+    "channels",
+    "field_ditches",
+    "governor_mansion",
+    "granary",
+    "houses",
+    "road",
+    "road_width",
+    "road_z",
+    "streams",
+    "town_streets",
+    "wall",
+    "wells"
+   ],
+   "stages": {
+    "reference": [
+     "appurtenances",
+     "finish"
+    ],
+    "polder19": [
+     "appurtenances",
+     "finish"
+    ]
+   },
+   "readers": [],
+   "fixtures": {
+    "?": 1
+   },
+   "verdict": "KEEP",
+   "why": "an input changes after its placer: reference: placed at appurtenances, last changed at finish, polder19: placed at appurtenances, last changed at finish",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "watercourse_ends_reach_water",
+   "keys": [
+    "channels",
+    "field_ditches",
+    "fields",
+    "moat",
+    "streams"
+   ],
+   "stages": {
+    "reference": [
+     "field",
+     "finish"
+    ],
+    "polder19": [
+     "field",
+     "finish"
+    ]
+   },
+   "readers": [
+    "tests/check_village/test_segments_07_water.py (test)"
+   ],
+   "fixtures": {
+    "?": 2
+   },
+   "verdict": "KEEP",
+   "why": "an input changes after its placer: reference: placed at field, last changed at finish, polder19: placed at field, last changed at finish",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "watercourses_wider_than_ditches",
+   "keys": [
+    "channels",
+    "streams"
+   ],
+   "stages": {
+    "reference": [
+     "field",
+     "finish"
+    ],
+    "polder19": [
+     "field",
+     "finish"
+    ]
+   },
+   "readers": [
+    "tests/check_village/test_segments_03_structures_and_wards.py (test)"
+   ],
+   "fixtures": {
+    "?": 1
+   },
+   "verdict": "KEEP",
+   "why": "an input changes after its placer: reference: placed at field, last changed at finish, polder19: placed at field, last changed at finish",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "waterside_works_follow_the_bank",
+   "keys": [
+    "canals",
+    "streams"
+   ],
+   "stages": {
+    "reference": [
+     "field",
+     "finish"
+    ],
+    "polder19": [
+     "field",
+     "finish"
+    ]
+   },
+   "readers": [],
+   "fixtures": {},
+   "verdict": "KEEP",
+   "why": "an input changes after its placer: reference: placed at field, last changed at finish, polder19: placed at field, last changed at finish",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "waterways_merge_at_crossings",
+   "keys": [
+    "alleys",
+    "buildings",
+    "cemeteries",
+    "channels",
+    "districts",
+    "drum_towers",
+    "dry_plots",
+    "field_ditches",
+    "fields",
+    "gate_structs",
+    "gates",
+    "governor_mansion",
+    "houses",
+    "manors",
+    "marshes",
+    "mausoleums",
+    "meta",
+    "ministries",
+    "moat",
+    "moat_layer",
+    "quarters",
+    "religious",
+    "road",
+    "road_width",
+    "stable_yards",
+    "storehouses",
+    "streams",
+    "terraces",
+    "theater_stage",
+    "town_streets",
+    "wall",
+    "wall_tower_keepclears",
+    "wall_towers",
+    "wall_z",
+    "wards",
+    "water_gates",
+    "wells"
+   ],
+   "stages": {
+    "reference": [
+     "appurtenances",
+     "finish"
+    ],
+    "polder19": [
+     "appurtenances",
+     "finish"
+    ]
+   },
+   "readers": [
+    "tests/check_village/test_segments_07_water.py (test)"
+   ],
+   "fixtures": {
+    "?": 1
+   },
+   "verdict": "KEEP",
+   "why": "an input changes after its placer: reference: placed at appurtenances, last changed at finish, polder19: placed at appurtenances, last changed at finish",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "ways_clear_of_castle_moat",
+   "keys": [
+    "alleys",
+    "castles",
+    "lanes",
+    "town_streets"
+   ],
+   "stages": {
+    "reference": [
+     "track",
+     "web"
+    ],
+    "polder19": [
+     "track",
+     "web"
+    ]
+   },
+   "readers": [],
+   "fixtures": {},
+   "verdict": "KEEP",
+   "why": "an input changes after its placer: reference: placed at track, last changed at web, polder19: placed at track, last changed at web",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "ways_cross_water_on_a_deck",
+   "keys": [
+    "alleys",
+    "bridges",
+    "canals",
+    "castles",
+    "lanes",
+    "moat",
+    "moat_width",
+    "ring_road",
+    "ring_road_width",
+    "road",
+    "road_width",
+    "roads",
+    "streams",
+    "town_streets"
+   ],
+   "stages": {
+    "reference": [
+     "crossings",
+     "finish"
+    ],
+    "polder19": [
+     "crossings",
+     "finish"
+    ]
+   },
+   "readers": [],
+   "fixtures": {},
+   "verdict": "KEEP",
+   "why": "an input changes after its placer: reference: placed at crossings, last changed at finish, polder19: placed at crossings, last changed at finish",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "ways_not_inside_road_beds",
+   "keys": [
+    "alleys",
+    "lanes",
+    "road",
+    "road_width",
+    "roads",
+    "town_streets"
+   ],
+   "stages": {
+    "reference": [
+     "track",
+     "web"
+    ],
+    "polder19": [
+     "track",
+     "web"
+    ]
+   },
+   "readers": [],
+   "fixtures": {},
+   "verdict": "KEEP",
+   "why": "an input changes after its placer: reference: placed at track, last changed at web, polder19: placed at track, last changed at web",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "wells_among_dwellings",
+   "keys": [
+    "buildings",
+    "houses",
+    "kilns",
+    "religious",
+    "wells"
+   ],
+   "stages": {
+    "reference": [
+     "appurtenances",
+     "appurtenances"
+    ],
+    "polder19": [
+     "appurtenances",
+     "appurtenances"
+    ]
+   },
+   "readers": [
+    "tests/check_village/_builders.py (test)",
+    "tests/check_village/test_segments_04_homesteads.py (test)"
+   ],
+   "fixtures": {},
+   "verdict": "RETIRE-CANDIDATE",
+   "why": "inputs settle at their placer on both maps: reference: appurtenances, polder19: appurtenances",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "wells_clear_of_paddies",
+   "keys": [
+    "buildings",
+    "houses",
+    "kilns",
+    "religious",
+    "wells"
+   ],
+   "stages": {
+    "reference": [
+     "appurtenances",
+     "appurtenances"
+    ],
+    "polder19": [
+     "appurtenances",
+     "appurtenances"
+    ]
+   },
+   "readers": [
+    "tests/check_village/test_segments_04_homesteads.py (test)",
+    "tests/settlement/test_shrines_wells.py (test)"
+   ],
+   "fixtures": {
+    "?": 1
+   },
+   "verdict": "RETIRE-CANDIDATE",
+   "why": "inputs settle at their placer on both maps: reference: appurtenances, polder19: appurtenances",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "wells_clear_of_shrine_and_torii",
+   "keys": [
+    "religious",
+    "torii",
+    "wells"
+   ],
+   "stages": {},
+   "readers": [
+    "tests/check_village/test_segments_04_homesteads.py (test)"
+   ],
+   "fixtures": {},
+   "verdict": "NO-SCRIPTED-EXECUTOR",
+   "why": "no scripted map exercises it (a legacy-tier check: town / city / capital / village hand-authored maps only); no measured verdict is possible - the GM's choice at acceptance",
+   "on": []
+  },
+  {
+   "check": "wells_clear_of_trees",
+   "keys": [
+    "channels",
+    "commons",
+    "fields",
+    "forest",
+    "groves",
+    "meta",
+    "tree_crowns",
+    "village_groves",
+    "wells"
+   ],
+   "stages": {
+    "reference": [
+     "windbreak",
+     "finish"
+    ],
+    "polder19": [
+     "windbreak",
+     "finish"
+    ]
+   },
+   "readers": [
+    "tests/check_village/test_segments_04_homesteads.py (test)"
+   ],
+   "fixtures": {},
+   "verdict": "KEEP",
+   "why": "an input changes after its placer: reference: placed at windbreak, last changed at finish, polder19: placed at windbreak, last changed at finish",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "wells_off_the_wet_toe",
+   "keys": [
+    "dry_plots",
+    "fields",
+    "marshes",
+    "meta",
+    "wells"
+   ],
+   "stages": {
+    "reference": [
+     "appurtenances",
+     "finish"
+    ],
+    "polder19": [
+     "appurtenances",
+     "finish"
+    ]
+   },
+   "readers": [],
+   "fixtures": {
+    "?": 1
+   },
+   "verdict": "KEEP",
+   "why": "an input changes after its placer: reference: placed at appurtenances, last changed at finish, polder19: placed at appurtenances, last changed at finish",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "wells_sized_to_buildings",
+   "keys": [
+    "buildings",
+    "houses",
+    "kilns",
+    "religious",
+    "wells"
+   ],
+   "stages": {
+    "reference": [
+     "appurtenances",
+     "appurtenances"
+    ],
+    "polder19": [
+     "appurtenances",
+     "appurtenances"
+    ]
+   },
+   "readers": [
+    "tests/check_village/test_segments_04_homesteads.py (test)"
+   ],
+   "fixtures": {
+    "?": 1
+   },
+   "verdict": "RETIRE-CANDIDATE",
+   "why": "inputs settle at their placer on both maps: reference: appurtenances, polder19: appurtenances",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "wells_sized_to_population",
+   "keys": [
+    "wells"
+   ],
+   "stages": {
+    "reference": [
+     "appurtenances",
+     "appurtenances"
+    ],
+    "polder19": [
+     "appurtenances",
+     "appurtenances"
+    ]
+   },
+   "readers": [
+    "tests/check_village/test_segments_04_homesteads.py (test)",
+    "tests/hamletgen/test_homesteads.py (test)"
+   ],
+   "fixtures": {},
+   "verdict": "RETIRE-CANDIDATE",
+   "why": "inputs settle at their placer on both maps: reference: appurtenances, polder19: appurtenances",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "woodland_clear_of_crops",
+   "keys": [
+    "commons",
+    "dry_plots",
+    "gardens",
+    "threshing_yards",
+    "village_groves"
+   ],
+   "stages": {
+    "reference": [
+     "windbreak",
+     "windbreak"
+    ],
+    "polder19": [
+     "windbreak",
+     "windbreak"
+    ]
+   },
+   "readers": [
+    "tests/check_village/test_segments_05_fields_and_ditches.py (test)"
+   ],
+   "fixtures": {},
+   "verdict": "RETIRE-CANDIDATE",
+   "why": "inputs settle at their placer on both maps: reference: windbreak, polder19: windbreak",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "woodland_clear_of_grove",
+   "keys": [
+    "commons",
+    "dry_plots",
+    "gardens",
+    "threshing_yards",
+    "village_groves"
+   ],
+   "stages": {
+    "reference": [
+     "windbreak",
+     "windbreak"
+    ],
+    "polder19": [
+     "windbreak",
+     "windbreak"
+    ]
+   },
+   "readers": [
+    "tests/check_village/test_segments_05_fields_and_ditches.py (test)"
+   ],
+   "fixtures": {},
+   "verdict": "RETIRE-CANDIDATE",
+   "why": "inputs settle at their placer on both maps: reference: windbreak, polder19: windbreak",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "woodland_commons_on_dry_ground",
+   "keys": [
+    "commons",
+    "marshes",
+    "meta"
+   ],
+   "stages": {
+    "reference": [
+     "hinterland",
+     "frame"
+    ],
+    "polder19": [
+     "hinterland",
+     "frame"
+    ]
+   },
+   "readers": [
+    "tests/check_village/test_segments_05_supply_and_graveyards.py (test)"
+   ],
+   "fixtures": {
+    "?": 2
+   },
+   "verdict": "KEEP",
+   "why": "an input changes after its placer: reference: placed at hinterland, last changed at frame, polder19: placed at hinterland, last changed at frame",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "woodland_commons_visibly_stocked",
+   "keys": [
+    "commons",
+    "meta"
+   ],
+   "stages": {
+    "reference": [
+     "hinterland",
+     "frame"
+    ],
+    "polder19": [
+     "hinterland",
+     "frame"
+    ]
+   },
+   "readers": [
+    "tests/check_village/test_segments_05_supply_and_graveyards.py (test)"
+   ],
+   "fixtures": {
+    "?": 1
+   },
+   "verdict": "KEEP",
+   "why": "an input changes after its placer: reference: placed at hinterland, last changed at frame, polder19: placed at hinterland, last changed at frame",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "woodland_commons_within_the_frame",
+   "keys": [
+    "commons",
+    "meta"
+   ],
+   "stages": {
+    "reference": [
+     "hinterland",
+     "frame"
+    ],
+    "polder19": [
+     "hinterland",
+     "frame"
+    ]
+   },
+   "readers": [
+    "tests/check_village/test_segments_05_supply_and_graveyards.py (test)"
+   ],
+   "fixtures": {
+    "?": 1
+   },
+   "verdict": "KEEP",
+   "why": "an input changes after its placer: reference: placed at hinterland, last changed at frame, polder19: placed at hinterland, last changed at frame",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  }
+ ]
+}

@@ -2,15 +2,12 @@
 
 from l7r.diagram import check_village
 from tests.check_village._builders import (
-    _PADDY,
     WALL,
     _city_dead,
     _crem_cem,
     _crem_road,
     _crem_temple,
     _paddy_field_rec,
-    _water_grave,
-    bldg,
     f,
     f_only,
     manifest,
@@ -29,72 +26,6 @@ def test_walled_exterior_cemetery_larger_fires_when_not_larger():
 
 def test_walled_exterior_cemetery_larger_passes_when_larger():
     assert "walled_exterior_cemetery_larger" not in f_only(_city_dead(), "walled_exterior_cemetery_larger")
-
-
-def test_cemetery_in_temple_precinct_exempts_a_nonparish_grave():
-    # an inside graveyard far from any temple is exempt when parish=False (a non-parish plot)
-    assert "cemetery_in_temple_precinct" not in f_only(_city_dead(cems=[(300, 300), (700, 300), (100, 100), (500, 500, 60, 44, False)]), "cemetery_in_temple_precinct")
-
-
-def test_cemetery_in_temple_precinct_fires_on_an_inside_parish_grave_off_temple():
-    assert "cemetery_in_temple_precinct" in f_only(_city_dead(cems=[(300, 300), (700, 300), (100, 100), (500, 500, 60, 44, True)]), "cemetery_in_temple_precinct")
-
-
-def test_funerary_set_back_from_water_fires_near_a_stream():
-    assert "funerary_set_back_from_water" in f_only(_water_grave({"streams": [{"poly": [[300, 340], [600, 340]], "frm": None, "to": None, "w": 9}]}), "funerary_set_back_from_water")
-
-
-def test_funerary_set_back_from_water_fires_near_a_pond():
-    assert "funerary_set_back_from_water" in f_only(_water_grave({"pond": [400, 300, 60, 40]}), "funerary_set_back_from_water")
-
-
-def test_funerary_set_back_from_water_passes_when_clear_of_water():
-    assert "funerary_set_back_from_water" not in f_only(
-        _water_grave({"streams": [{"poly": [[300, 600], [600, 600]], "frm": None, "to": None, "w": 9}], "pond": [900, 900, 60, 40]}), "funerary_set_back_from_water"
-    )
-
-
-def test_funerary_set_back_scales_grave_ok_by_a_stream_fails_by_a_moat():
-    # a graveyard whose nearest corner is 90px from the watercourse: fine by a narrow stream (floor 75),
-    # too close to a moat (set-back 110)
-    def M(width):
-        return {
-            "meta": {"scale": "village"},
-            "cemeteries": [{"x": 300, "y": 270, "w": 50, "h": 36, "rot": 0, "parish": True}],
-            "streams": [{"poly": [[200, 378], [600, 378]], "frm": None, "to": None, "w": width}],
-        }
-
-    assert "funerary_set_back_from_water" not in f_only(M(6), "funerary_set_back_from_water")  # narrow stream: floor 75, corner 90px away -> ok
-    assert "funerary_set_back_from_water" in f_only(M(22), "funerary_set_back_from_water")  # moat-width: set-back 110 -> 90px too close
-
-
-def test_funerary_set_back_cremation_may_sit_nearer_than_a_grave():
-    # at the SAME 50px corner distance from a wide watercourse: the cremation ground passes, a graveyard fires
-    base = {"meta": {"scale": "village"}, "streams": [{"poly": [[200, 378], [600, 378]], "frm": None, "to": None, "w": 22}]}
-    grave = {**base, "cemeteries": [{"x": 300, "y": 310, "w": 50, "h": 36, "rot": 0, "parish": True}]}
-    crem = {**base, "cremation_grounds": [{"x": 300, "y": 288, "w": 116, "h": 80, "rot": 0}]}
-    assert "funerary_set_back_from_water" in f_only(grave, "funerary_set_back_from_water")
-    assert "funerary_set_back_from_water" not in f_only(crem, "funerary_set_back_from_water")
-
-
-def test_funerary_set_back_fires_near_a_rice_paddy():
-    # a burial ground hard against a flood-prone paddy edge
-    M = {"meta": {"scale": "village"}, "fields": [_PADDY], "cemeteries": [{"x": 300, "y": 300, "w": 50, "h": 36, "rot": 0, "parish": True}]}
-    assert "funerary_set_back_from_water" in f_only(M, "funerary_set_back_from_water")
-
-
-def test_funerary_set_back_paddy_needs_more_than_creek_distance():
-    # ~35px from a paddy edge: fine for a creek, but a flooded paddy needs a real margin -> still fires
-    near = {"meta": {"scale": "village"}, "fields": [_PADDY], "cemeteries": [{"x": 300, "y": 277, "w": 50, "h": 36, "rot": 0, "parish": True}]}  # corner ~35px from the paddy
-    assert "funerary_set_back_from_water" in f_only(near, "funerary_set_back_from_water")
-    far = {"meta": {"scale": "village"}, "fields": [_PADDY], "cemeteries": [{"x": 300, "y": 255, "w": 50, "h": 36, "rot": 0, "parish": True}]}  # corner ~57px -> clear
-    assert "funerary_set_back_from_water" not in f_only(far, "funerary_set_back_from_water")
-
-
-def test_funerary_set_back_cremation_may_sit_by_a_paddy():
-    # the cremation ground is exempt from the paddy set-back (a fire site, not flood-sensitive graves)
-    M = {"meta": {"scale": "village"}, "fields": [_PADDY], "cremation_grounds": [{"x": 300, "y": 280, "w": 116, "h": 80, "rot": 0}]}
-    assert "funerary_set_back_from_water" not in f_only(M, "funerary_set_back_from_water")
 
 
 def test_cremation_ground_by_external_cemetery_passes_when_adjacent():
@@ -146,31 +77,10 @@ def test_cremation_not_between_temple_and_road_passes_when_no_temple_nearby():
     assert "cremation_ground_not_between_temple_and_road" not in f_only(_crem_temple((300, 360), mon_xy=(300, 1500)), "cremation_ground_not_between_temple_and_road")
 
 
-def test_sacred_and_graves_off_marsh_fires_and_passes_on_dry_ground():
-    # a shrine hall or a graveyard must NOT sit on a reed marsh (the wet valley toe) - only on dry ground.
-    marsh = [[400, 400], [700, 400], [700, 700], [400, 700]]  # a toe marsh
-    base = {"meta": {"scale": "village"}, "houses": [bldg(200, 200, "laborer")], "marshes": [{"x": 550, "y": 550, "w": 300, "h": 300, "role": "toe", "poly": marsh}]}
-    on_shrine = {**base, "religious": [{"x": 550, "y": 550, "w": 96, "h": 64, "kind": "shrine"}]}
-    assert "sacred_and_graves_off_marsh" in f_only(on_shrine, "sacred_and_graves_off_marsh")
-    on_grave = {**base, "cemeteries": [{"x": 560, "y": 560, "w": 82, "h": 58, "rot": 0}]}
-    assert "sacred_and_graves_off_marsh" in f_only(on_grave, "sacred_and_graves_off_marsh")
-    dry = {**base, "religious": [{"x": 900, "y": 900, "w": 96, "h": 64, "kind": "shrine"}], "cemeteries": [{"x": 1000, "y": 1000, "w": 82, "h": 58, "rot": 0}]}
-    assert "sacred_and_graves_off_marsh" not in f_only(dry, "sacred_and_graves_off_marsh")
-    # a pond_fringe (thin decorative shore ring) is exempt - a shrine may sit beside a pond
-    fringe = {**base, "marshes": [{"x": 550, "y": 550, "w": 300, "h": 300, "role": "pond_fringe", "poly": marsh}], "religious": [{"x": 550, "y": 550, "w": 96, "h": 64, "kind": "shrine"}]}
-    assert "sacred_and_graves_off_marsh" not in f_only(fringe, "sacred_and_graves_off_marsh")
-
-
 # ---- channel_source_anchored: a channel that claims a FOREST source ------------------------
 # A watercourse anchor of kind "forest" is grounded iff a forest polygon exists AND the anchor
 # point lies inside it. A channel declaring a forest source whose tap sits OUTSIDE the drawn
 # forest is ungrounded and must fire (exercises the forest branch of anchored()).
-def test_channel_source_anchored_fires_when_forest_tap_is_outside_the_forest():
-    M = {
-        "forest": [[100, 100], [300, 100], [300, 300], [100, 300]],
-        "channels": [{"poly": [[500, 500], [510, 400], [520, 300]], "frm": {"kind": "forest"}, "to": {"kind": "offmap"}}],
-    }
-    assert "channel_source_anchored[0]" in f(M)
 
 
 # ---- roads_clear_of_marsh / pond_clear_of_paddies / no_structure_on_paddy (GM, Hoshizora 2026-07) ----

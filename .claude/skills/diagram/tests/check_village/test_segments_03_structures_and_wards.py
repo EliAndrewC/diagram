@@ -14,8 +14,6 @@ from tests.check_village._builders import (
     _label_map,
     _maus_ward,
     _paddy_field_rec,
-    _road_map,
-    bldg,
     f_only,
     house,
     manifest,
@@ -30,23 +28,8 @@ def test_hamlet_has_no_headman_fires_when_a_hamlet_has_one():
     assert "hamlet_has_no_headman" in f_only(M, "hamlet_has_no_headman")
 
 
-def test_no_structure_on_road_branches():
-    assert "no_structure_on_road" in _feature_overlap({}, "road", FEAT, {"road_width": 26})
-
-
 def test_no_structure_on_stream_branches():
     assert "no_structure_on_stream" in _feature_overlap({}, "streams", [{"poly": FEAT}])
-
-
-def test_no_structure_on_wall_branches():
-    assert "no_structure_on_wall" in _feature_overlap({"walled": True}, "wall", FEAT)
-
-
-def test_no_structure_on_channel_branches():
-    # an irrigation channel got the same footprint test as streams (a corner clipping it must
-    # fire, not just a center on it) - the old houses_off_corridors center-test missed corners.
-    ch = {"poly": FEAT, "frm": {"kind": "stream"}, "to": {"kind": "field", "name": "x"}}
-    assert "no_structure_on_channel" in _feature_overlap({}, "channels", [ch])
 
 
 # ---- town street-layout FAIL branches -----------------------------------------------------
@@ -102,26 +85,6 @@ def test_watercourses_wider_than_ditches_fires_when_a_creek_reads_like_a_ditch()
 def test_watercourses_wider_than_ditches_passes_for_a_proper_creek():
     M = {"channels": [{"poly": _CHAN, "frm": {"kind": "offmap"}, "to": {"kind": "field", "name": "f"}, "w": 2.5}], "streams": [{"poly": _STRM, "frm": None, "to": None, "w": 9}]}  # 9 >= 6.25
     assert "watercourses_wider_than_ditches" not in f_only(M, "watercourses_wider_than_ditches")
-
-
-def test_moat_is_heaviest_watercourse_fires_when_a_stream_out_widths_it():
-    M = {"streams": [{"poly": _STRM, "frm": None, "to": None, "w": 30}], "moat_width": 26}  # stream > moat
-    assert "moat_is_heaviest_watercourse" in f_only(M, "moat_is_heaviest_watercourse")
-
-
-def test_moat_is_heaviest_watercourse_passes_when_a_feeder_equals_it():
-    M = {"streams": [{"poly": _STRM, "frm": None, "to": None, "w": 26}], "moat_width": 26}  # equal is allowed
-    assert "moat_is_heaviest_watercourse" not in f_only(M, "moat_is_heaviest_watercourse")
-
-
-def test_moat_dwarfs_ditches_fires_on_a_skimpy_moat():
-    M = {"channels": [{"poly": _CHAN, "frm": {"kind": "offmap"}, "to": {"kind": "field", "name": "f"}, "w": 2.5}], "moat_width": 8}  # 8 < 4x2.5
-    assert "moat_dwarfs_ditches" in f_only(M, "moat_dwarfs_ditches")
-
-
-def test_moat_dwarfs_ditches_passes_for_a_real_city_moat():
-    M = {"channels": [{"poly": _CHAN, "frm": {"kind": "offmap"}, "to": {"kind": "field", "name": "f"}, "w": 2.5}], "moat_width": 26}  # 26 >= 10
-    assert "moat_dwarfs_ditches" not in f_only(M, "moat_dwarfs_ditches")
 
 
 def test_shrine_clear_of_grove_trees_fires_when_a_clump_covers_the_hall():
@@ -201,31 +164,6 @@ def test_label_hugs_its_referent_passes_a_caption_tucked_against_its_subject():
     assert "label_hugs_its_referent" not in f_only(M, "label_hugs_its_referent")
 
 
-def test_road_label_tilts_with_the_roadway_fires_on_level_text_beside_a_diagonal_road():
-    # the motivating map: Hoshizora's "Imperial Road" set square to the page beside a -26.6deg roadbed
-    assert "road_label_tilts_with_the_roadway" in f_only(_road_map([[1000, 1000], [1400, 800]]), "road_label_tilts_with_the_roadway")
-
-
-def test_road_label_tilts_with_the_roadway_passes_a_caption_running_along_the_road():
-    assert "road_label_tilts_with_the_roadway" not in f_only(_road_map([[1000, 1000], [1400, 800]], tilt=-26.6), "road_label_tilts_with_the_roadway")
-
-
-def test_road_label_stays_LEVEL_on_a_north_south_road():
-    # the GM's own convention, and the reason linear_tilt clamps rather than folds: past 45deg the
-    # caption reads left-to-right, so LEVEL is what passes here and a tilt is what fires
-    assert "road_label_tilts_with_the_roadway" not in f_only(_road_map([[1200, 800], [1200, 1200]]), "road_label_tilts_with_the_roadway")
-    assert "road_label_tilts_with_the_roadway" in f_only(_road_map([[1200, 800], [1200, 1200]], tilt=-26.6), "road_label_tilts_with_the_roadway")
-
-
-def test_road_label_tilts_with_the_roadway_fires_when_no_caption_was_drawn():
-    # a recorded road_label with no label record behind it is a caption that never reached the
-    # sheet - the check reports rather than silently skipping (a check that never runs looks
-    # exactly like a check that passes)
-    M = _road_map([[1000, 1000], [1400, 800]])
-    M["labels"] = []
-    assert "road_label_tilts_with_the_roadway" in f_only(M, "road_label_tilts_with_the_roadway")
-
-
 def test_title_clear_of_features_passes_over_blank_space():
     M = {"meta": {"scale": "village"}, "houses": [{"x": 300, "y": 300, "w": 60, "h": 40, "rot": 0, "kind": "plain"}], "title": {"name": "V", "bbox": [800, 50, 900, 90]}}
     assert "title_clear_of_features" not in f_only(M, "title_clear_of_features")
@@ -281,24 +219,6 @@ def test_scalebar_matches_declared_scale_fires_on_a_wrong_distance():
     assert "scalebar_matches_declared_scale" in f_only(M, "scalebar_matches_declared_scale")
 
 
-def test_headman_has_kura_fires_on_a_bare_headman_and_passes_with_one():
-    # the shoya always has a fireproof kura (GM 2026-07-21): prosperity by definition, plus the office's
-    # ledgers and tax rice need fireproof storage - the ~30% wealth dice are for ordinary plains only
-    M = {"meta": {"scale": "village"}, "houses": [{"x": 500, "y": 500, "w": 46, "h": 28, "rot": 0, "kind": "plain", "role": "headman", "shed": False}]}
-    assert "headman_has_kura" in f_only(M, "headman_has_kura")
-    M["houses"][0]["shed"] = True
-    assert "headman_has_kura" not in f_only(M, "headman_has_kura")
-
-
-def test_village_shrine_footprint_within_norms_fires_on_a_monastery_sized_hall():
-    # Hikari's defect in miniature: a 236x164 ft hall is a small monastery, not a village kami shrine
-    M = {"meta": {"scale": "village", "ftpx": 2}, "religious": [{"x": 500, "y": 500, "w": 118, "h": 82, "kind": "shrine"}]}
-    assert "village_shrine_footprint_within_norms" in f_only(M, "village_shrine_footprint_within_norms")
-    # ... while the showcase Benten class (~490 m^2) passes with headroom under the 600 m^2 ceiling
-    M2 = {"meta": {"scale": "village", "ftpx": 2}, "religious": [{"x": 500, "y": 500, "w": 44, "h": 30, "kind": "shrine"}]}
-    assert "village_shrine_footprint_within_norms" not in f_only(M2, "village_shrine_footprint_within_norms")
-
-
 def test_trees_clear_of_fengshui_ponds_fires_on_an_overhanging_clump():
     # Hoshigaoka's defect in miniature: a grove clump's canopy (1.7x nominal r) crossing the half-moon
     # pond's water fires; a clump standing clear passes. Pond poly = a simple half-disk stand-in.
@@ -314,15 +234,6 @@ def test_trees_clear_of_fengshui_ponds_fires_on_an_overhanging_clump():
     assert "trees_clear_of_fengshui_ponds" not in f_only(M, "trees_clear_of_fengshui_ponds")
 
 
-def test_crescent_pond_labeled_fires_when_the_label_is_missing():
-    # the banyuetang is culturally specific and does not read by itself (the GM asked "what is that?")
-    pond = {"cx": 300, "cy": 300, "r": 40, "facing": 270, "poly": [[340, 300], [300, 340], [260, 300]]}
-    M = {"meta": {"scale": "village"}, "crescent_ponds": [pond]}
-    assert "crescent_pond_labeled" in f_only(M, "crescent_pond_labeled")
-    M["labels"] = [[270, 350, 340, 362, 1, "geomantic pond"]]
-    assert "crescent_pond_labeled" not in f_only(M, "crescent_pond_labeled")
-
-
 def test_title_has_placard_fires_on_a_pre_placard_manifest():
     # the parchment card under the title + scale bar (GM 2026-07-21, legibility over scrub) is drawn
     # by s.title() - a manifest without the record predates the card and needs regeneration
@@ -333,12 +244,6 @@ def test_title_has_placard_fires_on_a_pre_placard_manifest():
 
 
 # --- intersections_are_crossroads (lane beds merge, no edge line across a junction) ---
-def test_intersections_are_crossroads_fires_when_edges_over_beds():
-    assert "intersections_are_crossroads" in f_only({"ground_edge_zmax": 50, "ground_bed_zmin": 20}, "intersections_are_crossroads")
-
-
-def test_intersections_are_crossroads_passes_when_edges_under_beds():
-    assert "intersections_are_crossroads" not in f_only({"ground_edge_zmax": 19, "ground_bed_zmin": 20}, "intersections_are_crossroads")
 
 
 def test_every_feature_classified_for_overlap_fires_on_unknown_feature():
@@ -373,33 +278,10 @@ def test_walled_structure_yields_to_ward_wall_skips_tilted_compounds():
     assert "walled_structure_yields_to_ward_wall" not in f_only(M, "walled_structure_yields_to_ward_wall")
 
 
-def test_no_structure_on_pond_fires_when_a_structure_stands_in_it():
-    # the Tango west-tower case: a struct corner dipping into the pond ellipse; and the engulfment
-    # branch: a footprint swallowing the pond center outright
-    M = {
-        "meta": {"scale": "village"},
-        "pond": [500, 500, 74, 46],
-        "houses": [{"x": 545, "y": 530, "w": 30, "h": 22, "rot": 0, "kind": "plain"}],
-        "buildings": [{"x": 500, "y": 500, "w": 200, "h": 140, "rot": 0, "kind": "laborer"}],
-    }
-    assert "no_structure_on_pond" in f_only(M, "no_structure_on_pond")
-
-
-def test_no_structure_on_pond_passes_when_clear():
-    M = {"meta": {"scale": "village"}, "pond": [500, 500, 74, 46], "houses": [{"x": 640, "y": 620, "w": 30, "h": 22, "rot": 0, "kind": "plain"}]}
-    assert "no_structure_on_pond" not in f_only(M, "no_structure_on_pond")
-
-
 # ---- no_structure_on_canal: a canal VERTEX sitting inside a building footprint --------------
 # The canal-vs-structure test catches not only a footprint corner near the water but also a
 # canal polyline vertex landing INSIDE a (large) footprint while every corner stays clear of the
 # thin canal segments. A merchant house straddling the canal's bend must fire.
-def test_no_structure_on_canal_fires_when_canal_vertex_inside_footprint():
-    M = {
-        "buildings": [bldg(500, 500, "merchant_large", w=200, h=200)],
-        "canals": [{"poly": [[500, 500], [490, 300]], "w": 4}],  # the [500,500] vertex sits inside the footprint
-    }
-    assert "no_structure_on_canal" in f_only(M, "no_structure_on_canal")
 
 
 def test_field_outline_matches_planting_fires_on_a_phantom_tail():

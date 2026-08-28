@@ -1,10 +1,9 @@
 """Gate segments (decks yards and moat clearances; keys 0387-0409) - bodies verbatim, registry order preserved."""
 
-import collections
 import math
 from typing import Any
 
-from .common_01_geometry import Pt, point_in_poly, seg_closest, seg_dist, segments_cross
+from .common_01_geometry import Pt, seg_closest, seg_dist, segments_cross
 from .common_03_capacity import _UNBOUND, _kept
 
 
@@ -87,51 +86,6 @@ def _seg_0387__ways_cross_water_on_a_deck(
 #   FIXED (one per SEAT): the pauper's ossuary, by Song edict of 1104 (a louzeyuan in every
 #     prefecture and county, regardless of size), and the primary mausoleum.
 # INFERENCE, flagged: the kiln count of 2, the dyers'-row lot count, the oil-press band.
-
-
-def _seg_0388__capital_trade_counts_scaled(
-    *,
-    M: Any = _UNBOUND,
-    b: Any = _UNBOUND,
-    check: Any = _UNBOUND,
-    k: Any = _UNBOUND,
-    meta: Any = _UNBOUND,
-    scale: Any = _UNBOUND,
-    tc_bad: Any = _UNBOUND,
-    tc_bldg: Any = _UNBOUND,
-    tc_have: Any = _UNBOUND,
-    tc_pop: Any = _UNBOUND,
-    tc_want: Any = _UNBOUND,
-    v: Any = _UNBOUND,
-) -> dict[str, Any]:
-    """Gate segment 388 (capital_trade_counts_scaled) - body verbatim from the legacy gate() (feature 022)."""
-    if scale == "capital" and meta.get("population"):
-        tc_pop = float(meta["population"])
-        tc_bldg = collections.Counter(b.get("kind") for b in M.get("buildings", []))
-        tc_have = {
-            "bathhouses": len(M.get("bathhouses", [])) + tc_bldg.get("bathhouse", 0),
-            "pawnshops": len(M.get("pawnshops", [])) + tc_bldg.get("pawnshop", 0),
-            "breweries": len(M.get("breweries", [])) + tc_bldg.get("brewery", 0),
-            "kilns": len(M.get("kilns", [])),
-            "dye_yards": len(M.get("dye_yards", [])),
-            "fire_towers": len(M.get("fire_towers", [])),
-        }
-        tc_want = {
-            "bathhouses": (max(3, round(tc_pop / 2400)), "Edo's 523 sento per 1.1M - LINEAR, same size, more of them"),
-            "pawnshops": (2, "Edo's 1-per-400 drawn representatively: 2-3 with pledge-kura courts, the rest implied in the rows"),
-            "breweries": (2, "capacity is linear but brewing scaled by adding houses, not by doubling the hall (Takayama's 56 licensed brewers were mostly shopfronts)"),
-            "kilns": (2, "a kiln is a QUARTER - the capital's second works stands beside the first, sharing the clay pit and fuel road (INFERENCE: the count of 2; the cluster form is attested)"),
-            "dye_yards": (3, "a castle town lays out a Konya-machi: 3-5 contiguous dyer lots on one downstream bank, not one bigger yard (INFERENCE: the lot count)"),
-            "fire_towers": (max(6, round(tc_pop / 1200)), "a fixed watch radius over a bigger built area (Kaifeng: a tower every 300 paces)"),
-        }
-        tc_bad = [f"{k}: {tc_have[k]} vs >= {v[0]} ({v[1]})" for k, v in tc_want.items() if tc_have[k] < v[0]]
-        check(
-            "capital_trade_counts_scaled",
-            not tc_bad,
-            f"capital trade counts below the researched floor: {tc_bad[:3]} - a capital is not a provincial city with a bigger wall; "
-            f"see research/cities/capitals.md for which trades multiply, which consolidate, and which are capital-only",
-        )
-    return _kept(locals(), ('b', 'k', 'tc_bad', 'tc_bldg', 'tc_have', 'tc_pop', 'tc_want', 'v'))
 
 
 # THE FRAME HUGS THE CONTENT (GM 2026-08-10: "it doesn't look like we're doing [cropping] on
@@ -223,65 +177,6 @@ def _seg_0390__map_frame_hugs_its_content(
 # its relay stables - which is where every other yard on this map already sits.
 
 
-def _seg_0391__ay_bad() -> dict[str, Any]:
-    """Gate segment 391 (ay_bad) - body verbatim from the legacy gate() (feature 022)."""
-    ay_bad = []  # type: ignore[var-annotated]
-    return _kept(locals(), ('ay_bad',))
-
-
-def _seg_0392__ay_reach(*, meta: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 392 (ay_reach) - body verbatim from the legacy gate() (feature 022)."""
-    ay_reach = 240.0 / float(meta.get("ftpx", 1) or 1)  # 240 real ft of clear approach
-    return _kept(locals(), ('ay_reach',))
-
-
-def _seg_0393__ay_bad_1(
-    *,
-    M: Any = _UNBOUND,
-    ay_bad: Any = _UNBOUND,
-    ay_c: Any = _UNBOUND,
-    ay_g: Any = _UNBOUND,
-    ay_gd: Any = _UNBOUND,
-    ay_h: Any = _UNBOUND,
-    ay_key: Any = _UNBOUND,
-    ay_r: Any = _UNBOUND,
-    ay_reach: Any = _UNBOUND,
-    ay_w: Any = _UNBOUND,
-    ay_y: Any = _UNBOUND,
-) -> dict[str, Any]:
-    """Gate segment 393 (ay_bad, ay_c, ay_g, ay_gd) - body verbatim from the legacy gate() (feature 022)."""
-    for ay_c in M.get("manors", []) + M.get("merchant_estates", []):
-        ay_gd = ay_c.get("gate_dir")
-        if not ay_gd:
-            continue
-        ay_w, ay_h = ay_c.get("w", 0), ay_c.get("h", 0)
-        ay_g = {
-            "west": (ay_c["x"] - ay_w / 2, ay_c["y"]),
-            "east": (ay_c["x"] + ay_w / 2, ay_c["y"]),
-            "north": (ay_c["x"], ay_c["y"] - ay_h / 2),
-            "south": (ay_c["x"], ay_c["y"] + ay_h / 2),
-        }.get(ay_gd)
-        if ay_g is None:
-            continue
-        for ay_key in ("stable_yards", "byres", "animal_grounds"):
-            for ay_y in M.get(ay_key, []):  # every yard key holds records, never raw polygons
-                ay_r = float(ay_y.get("r", 0) or max(ay_y.get("w", 0), ay_y.get("h", 0)) / 2)
-                if math.hypot(ay_y["x"] - ay_g[0], ay_y["y"] - ay_g[1]) - ay_r < ay_reach:
-                    ay_bad.append((ay_key, round(ay_y["x"]), round(ay_y["y"]), ay_c.get("label") or "a walled compound"))
-    return _kept(locals(), ('ay_bad', 'ay_c', 'ay_g', 'ay_gd', 'ay_h', 'ay_key', 'ay_r', 'ay_w', 'ay_y'))
-
-
-def _seg_0394__animal_yards_clear_of_compound_gates(*, ay_bad: Any = _UNBOUND, check: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 394 (animal_yards_clear_of_compound_gates) - body verbatim from the legacy gate() (feature 022)."""
-    check(
-        "animal_yards_clear_of_compound_gates",
-        not ay_bad,
-        f"animal yard(s) standing on a walled compound's gate approach: {sorted(set(ay_bad))[:4]} - straw, dung and flies do not "
-        f"belong at a samurai's front door; move the yard to the caravan inn and relay stables it serves, or behind the compound's back wall",
-    )
-    return _kept(locals(), ())
-
-
 # EXTRAMURAL FEATURES STAY TETHERED TO THE CITY (GM 2026-08-10: "the kiln works is wayyyyy
 # out in the middle of nowhere... the gate markets look pretty far from the actual gates").
 # Everything outside a wall belongs to something: a gate's market strings along its
@@ -289,130 +184,6 @@ def _seg_0394__animal_yards_clear_of_compound_gates(*, ay_bad: Any = _UNBOUND, c
 # police and reach, and the wharf trades belong to the landing. So an outside feature must
 # be within reach of a GATE, of the WHARF works, or of a road it stands on - a feature that
 # is near none of the three is floating, whatever its bearing from the city.
-
-
-def _seg_0395__extramural_features_tethered(
-    *,
-    M: Any = _UNBOUND,
-    b: Any = _UNBOUND,
-    check: Any = _UNBOUND,
-    g: Any = _UNBOUND,
-    gm_allow: Any = _UNBOUND,
-    gm_bad: Any = _UNBOUND,
-    gm_g: Any = _UNBOUND,
-    gm_near: Any = _UNBOUND,
-    gm_shops: Any = _UNBOUND,
-    i9: Any = _UNBOUND,
-    j: Any = _UNBOUND,
-    meta: Any = _UNBOUND,
-    r: Any = _UNBOUND,
-    rp: Any = _UNBOUND,
-    wx: Any = _UNBOUND,
-    wy: Any = _UNBOUND,
-    xm_bad: Any = _UNBOUND,
-    xm_f: Any = _UNBOUND,
-    xm_ftpx: Any = _UNBOUND,
-    xm_gate_reach: Any = _UNBOUND,
-    xm_key: Any = _UNBOUND,
-    xm_road_reach: Any = _UNBOUND,
-    xm_roads: Any = _UNBOUND,
-    xm_wall: Any = _UNBOUND,
-    xm_wharf: Any = _UNBOUND,
-) -> dict[str, Any]:
-    """Gate segment 395 (extramural_features_tethered, gate_markets_start_at_their_gate) - body verbatim from the legacy gate() (feature 022)."""
-    if len(M.get("wall") or []) >= 3 and M.get("gates"):
-        xm_wall = M["wall"]
-        xm_ftpx = float(meta.get("ftpx", 1) or 1)
-        xm_gate_reach = 900.0 / xm_ftpx  # 900 real ft: the gate market's own strip
-        xm_road_reach = 150.0 / xm_ftpx  # a works ON its haul road, not adrift beside it
-        xm_wharf = [(j["x"], j["y"]) if isinstance(j, dict) else (j[0], j[1]) for j in M.get("jetties", [])]
-        xm_wharf += [(g["x"], g["y"]) for g in M.get("granaries", []) if isinstance(g, dict) and "x" in g]
-        xm_roads = ([M["road"]] if M.get("road") else []) + [r["pts"] if isinstance(r, dict) else r for r in M.get("roads", [])]
-        xm_bad = []
-        for xm_key in ("kilns", "dye_yards", "tanning_yards", "lumber_yards", "shops", "inns", "stables", "flophouses"):
-            for xm_f in M.get(xm_key, []):
-                if not isinstance(xm_f, dict) or "x" not in xm_f or point_in_poly(xm_f["x"], xm_f["y"], xm_wall):
-                    continue
-                if min(math.hypot(xm_f["x"] - g[0], xm_f["y"] - g[1]) for g in M["gates"]) <= xm_gate_reach:
-                    continue
-                if xm_wharf and min(math.hypot(xm_f["x"] - wx, xm_f["y"] - wy) for wx, wy in xm_wharf) <= 300:
-                    continue
-                if xm_roads and min(min(seg_dist(xm_f["x"], xm_f["y"], rp[i9], rp[i9 + 1]) for i9 in range(len(rp) - 1)) for rp in xm_roads if len(rp) >= 2) <= xm_road_reach:
-                    continue
-                # ...or simply CLOSE TO THE WALL it serves. A works on the near farm ground is
-                # tethered by the city's own edge even with no road under it - which is where
-                # every shipped map's nuisance works actually sits: 225-1,382 ft from the wall
-                # across Tango, Minami, Nagahara and the capital (measured 2026-08-10). The kiln
-                # that prompted this rule stood at 1,563 ft with nothing around it, so the band
-                # is drawn from the attested spread rather than picked.
-                if min(seg_dist(xm_f["x"], xm_f["y"], xm_wall[i9], xm_wall[(i9 + 1) % len(xm_wall)]) for i9 in range(len(xm_wall))) <= 1450.0 / xm_ftpx:
-                    continue
-                xm_bad.append((xm_key, round(xm_f["x"]), round(xm_f["y"])))
-        check(
-            "extramural_features_tethered",
-            not xm_bad,
-            f"outside feature(s) adrift - not within 900 ft of a gate, on a road, or at the wharf: {sorted(set(xm_bad))[:4]} - "
-            f"every extramural feature belongs to something; pull it onto its approach road (a works hauls on the road it uses), "
-            f"into the gate's market strip, or to the landing",
-        )
-        # ...and a GATE MARKET starts AT its gate. A market strip that begins hundreds of feet
-        # down the road reads as an unrelated hamlet: the stalls crowd the gate mouth because
-        # that is where the toll, the inspection and the traffic are.
-        gm_bad = []
-        for gm_g in M["gates"]:
-            gm_shops = [
-                b
-                for b in M.get("buildings", []) + M.get("shops", [])
-                if isinstance(b, dict) and b.get("kind") in ("shop", "merchant") and not point_in_poly(b["x"], b["y"], xm_wall) and math.hypot(b["x"] - gm_g[0], b["y"] - gm_g[1]) <= xm_gate_reach
-            ]
-            if len(gm_shops) >= 3:
-                gm_near = min(math.hypot(b["x"] - gm_g[0], b["y"] - gm_g[1]) for b in gm_shops)
-                # a MOAT pushes the head of the strip out by its own width plus the bridge's
-                # landing - stalls cannot stand on the crossing - so the allowance grows by the
-                # moat band where one runs past this gate (the capital's N gate, 2026-08-10)
-                # THE POOL'S OWN SPREAD IS THE WHOLE ANSWER (GM 2026-08-10, twice): the nearest
-                # stall sits 157-273 ft from the gate at Tango, Minami and Nagahara - and those
-                # are walled, moated cities with the same gate program, bridge and guard works.
-                # So the moat and the furniture are ALREADY inside that figure, and the first
-                # cut's mistake was adding them again on top: a 260 ft blocked band plus a
-                # 280 ft market allowance let the capital's markets start 540 ft out, which is
-                # exactly the 300-ish feet the GM was still seeing. One flat band, no addition.
-                gm_allow = 300.0 / xm_ftpx
-                if gm_near > gm_allow:
-                    gm_bad.append((round(gm_g[0]), round(gm_g[1]), round(gm_near)))
-        check(
-            "gate_markets_start_at_their_gate",
-            not gm_bad,
-            f"gate market(s) whose nearest stall is far down the road (gate x, y, px): {gm_bad[:4]} - a gate market crowds the "
-            f"gate mouth where the toll and the traffic are, then strings outward; move the head of the strip up to the gate",
-        )
-    return _kept(
-        locals(),
-        (
-            'b',
-            'g',
-            'gm_allow',
-            'gm_bad',
-            'gm_g',
-            'gm_near',
-            'gm_shops',
-            'i9',
-            'j',
-            'r',
-            'rp',
-            'wx',
-            'wy',
-            'xm_bad',
-            'xm_f',
-            'xm_ftpx',
-            'xm_gate_reach',
-            'xm_key',
-            'xm_road_reach',
-            'xm_roads',
-            'xm_wall',
-            'xm_wharf',
-        ),
-    )
 
 
 # PUBLIC WELLS DO NOT KNOT UP (GM 2026-08-10: "several places with 4-6 wells clustered
@@ -423,31 +194,6 @@ def _seg_0395__extramural_features_tethered(
 # piled up NINE. The failure mode is accretion - each new well is added to fix a local
 # household count, none is added against the wells already there - so the rule is a
 # neighborhood CAP, not a pairwise spacing floor (a tight PAIR at a big junction is fine).
-
-
-def _seg_0396__w9(*, M: Any = _UNBOUND, w9: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 396 (w9, wk_ws) - body verbatim from the legacy gate() (feature 022)."""
-    wk_ws = [w9 for w9 in M.get("wells", []) if isinstance(w9, dict)]
-    return _kept(locals(), ('w9', 'wk_ws'))
-
-
-def _seg_0397__wells_not_clustered(
-    *, check: Any = _UNBOUND, meta: Any = _UNBOUND, o9: Any = _UNBOUND, w9: Any = _UNBOUND, wk_bad: Any = _UNBOUND, wk_n: Any = _UNBOUND, wk_r: Any = _UNBOUND, wk_ws: Any = _UNBOUND
-) -> dict[str, Any]:
-    """Gate segment 397 (wells_not_clustered) - body verbatim from the legacy gate() (feature 022)."""
-    if len(wk_ws) >= 5:
-        wk_r = 150.0 / float(meta.get("ftpx", 1) or 1)
-        wk_bad = []
-        for w9 in wk_ws:
-            wk_n = sum(1 for o9 in wk_ws if (w9["x"] - o9["x"]) ** 2 + (w9["y"] - o9["y"]) ** 2 <= wk_r * wk_r)
-            if wk_n > 4:
-                wk_bad.append((round(w9["x"]), round(w9["y"]), wk_n))
-        check(
-            "wells_not_clustered",
-            not wk_bad,
-            f"well knot(s) - more than 4 public wells inside a 150 ft radius (x, y, count): {sorted(set(wk_bad))[:4]} - a wellhead serves a NEIGHBORHOOD, so they spread; this is accretion from chasing a local household count. Widen the grid spacing over that quarter instead of stacking wells, and gate any top-up on there being no well already within the radius",
-        )
-    return _kept(locals(), ('o9', 'w9', 'wk_bad', 'wk_n', 'wk_r'))
 
 
 # A WAY DOES NOT RUN INSIDE A ROAD'S BED (GM 2026-08-10: a service lane sat fully inside

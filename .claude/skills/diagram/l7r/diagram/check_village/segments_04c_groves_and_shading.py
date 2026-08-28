@@ -3,13 +3,11 @@
 import math
 from typing import Any
 
-from l7r.diagram.settlement import sat_overlap, street_runs
+from l7r.diagram.settlement import street_runs
 
 from .common_01_geometry import (
     _box_hits_poly,
-    _struct_rect,
     point_in_poly,
-    pt_to_rect,
     rect_corners,
     seg_dist,
     segments_cross,
@@ -17,67 +15,9 @@ from .common_01_geometry import (
 from .common_02_overlap_policy import edge_dist, in_ellipse
 from .common_03_capacity import _UNBOUND, _kept
 
-
-def _seg_0285_066__gr_fouled(*, scale: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 0285.066 (gr_fouled) - body verbatim from _seg_0285__wells_clear_of_shrine_and_torii (feature 024 per-check split; guards re-evaluated in the body, see split_oversized.py)."""
-    if scale in ('town', 'village', 'hamlet') and scale in ('town', 'village', 'hamlet', 'city'):
-        gr_fouled = []  # type: ignore[var-annotated]
-    return _kept(locals(), ('gr_fouled',))
-
-
-def _seg_0285_067__gc(
-    *,
-    gc: Any = _UNBOUND,
-    gci: Any = _UNBOUND,
-    gr_fouled: Any = _UNBOUND,
-    groves: Any = _UNBOUND,
-    gv: Any = _UNBOUND,
-    others: Any = _UNBOUND,
-    par: Any = _UNBOUND,
-    s: Any = _UNBOUND,
-    scale: Any = _UNBOUND,
-) -> dict[str, Any]:
-    """Gate segment 0285.067 (gc, gci, gr_fouled, gv) - body verbatim from _seg_0285__wells_clear_of_shrine_and_torii (feature 024 per-check split; guards re-evaluated in the body, see split_oversized.py)."""
-    if scale in ('town', 'village', 'hamlet') and scale in ('town', 'village', 'hamlet', 'city'):
-        for gv in groves:
-            gci = dict(gv)
-            gci["w"] = gv["w"] * 0.7
-            gci["h"] = gv["h"] * 0.7  # inset: tolerate abutting
-            gc = rect_corners(_struct_rect(gci))
-            par = (round(gv["of"][0]), round(gv["of"][1]))
-            for s in others:
-                if (round(s["x"]), round(s["y"])) == par:
-                    continue
-                if abs(s["x"] - gv["x"]) + abs(s["y"] - gv["y"]) > 140:
-                    continue
-                if sat_overlap(gc, rect_corners(_struct_rect(s))):
-                    gr_fouled.append((round(gv["x"]), round(gv["y"])))
-                    break
-    return _kept(locals(), ('gc', 'gci', 'gr_fouled', 'gv', 'par', 's'))
-
-
 # SUN: a threshing yard dries rice in the SOUTHERN sun, so no grove may sit in the strip directly
 # SOUTH of a yard (a neighbor's grove there would shade it). A grove is N/W of its OWN house, far
 # from its own yard's southern corridor, so this only catches a grove shading a NEIGHBOR's yard.
-
-
-def _seg_0285_069__shaded(*, scale: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 0285.069 (shaded) - body verbatim from _seg_0285__wells_clear_of_shrine_and_torii (feature 024 per-check split; guards re-evaluated in the body, see split_oversized.py)."""
-    if scale in ('town', 'village', 'hamlet') and scale in ('town', 'village', 'hamlet', 'city'):
-        shaded = []  # type: ignore[var-annotated]
-    return _kept(locals(), ('shaded',))
-
-
-def _seg_0285_070__cyx(
-    *, cyx: Any = _UNBOUND, cyy: Any = _UNBOUND, groves: Any = _UNBOUND, gv: Any = _UNBOUND, scale: Any = _UNBOUND, shaded: Any = _UNBOUND, yards: Any = _UNBOUND, yd: Any = _UNBOUND
-) -> dict[str, Any]:
-    """Gate segment 0285.070 (cyx, cyy, gv, shaded) - body verbatim from _seg_0285__wells_clear_of_shrine_and_torii (feature 024 per-check split; guards re-evaluated in the body, see split_oversized.py)."""
-    if scale in ('town', 'village', 'hamlet') and scale in ('town', 'village', 'hamlet', 'city'):
-        for yd in yards:
-            cyx, cyy = yd["x"], yd["y"] + yd["h"] / 2 + 11  # the ~22px sun-corridor just south of the yard
-            if any(abs(gv["x"] - cyx) < (gv["w"] + yd["w"]) / 2 and abs(gv["y"] - cyy) < (gv["h"] + 22) / 2 for gv in groves):
-                shaded.append((round(yd["x"]), round(yd["y"])))
-    return _kept(locals(), ('cyx', 'cyy', 'gv', 'shaded', 'yd'))
 
 
 # ...AND NOT BY A NEIGHBOR'S FARMHOUSE, which is the taller obstacle and was never
@@ -101,48 +41,6 @@ def _seg_0285_070__cyx(
 # 25 ft south of a yard is not a finding (settlement-review, Inashiro 2026-08-26, measured one).
 
 
-def _seg_0285_071__yards_unshaded_by_neighbors(
-    *,
-    check: Any = _UNBOUND,
-    gap: Any = _UNBOUND,
-    hh_: Any = _UNBOUND,
-    houses: Any = _UNBOUND,
-    meta: Any = _UNBOUND,
-    nshade: Any = _UNBOUND,
-    par: Any = _UNBOUND,
-    scale: Any = _UNBOUND,
-    sun_ft: Any = _UNBOUND,
-    sun_ftpx: Any = _UNBOUND,
-    yards: Any = _UNBOUND,
-    yd: Any = _UNBOUND,
-) -> dict[str, Any]:
-    """Gate segment 0285.071 (yards_unshaded_by_neighbors) - body verbatim from _seg_0285__wells_clear_of_shrine_and_torii (feature 024 per-check split; guards re-evaluated in the body, see split_oversized.py)."""
-    if scale in ('town', 'village', 'hamlet') and scale in ('town', 'village', 'hamlet', 'city') and meta.get("generated_by"):
-        sun_ft = 39.0
-        sun_ftpx = float(meta.get("ftpx") or 1)  # derived locally: `ftpx` is bound conditionally in this scope
-        nshade = []
-        for yd in yards:
-            par = yd.get("of")
-            for hh_ in houses:
-                if par and abs(hh_["x"] - par[0]) < 1 and abs(hh_["y"] - par[1]) < 1:
-                    continue  # its own house is NORTH of it by construction
-                if abs(hh_["x"] - yd["x"]) >= (hh_["w"] + yd["w"]) / 2:
-                    continue  # not in the yard's sun corridor
-                gap = ((hh_["y"] - hh_["h"] / 2) - (yd["y"] + yd["h"] / 2)) * sun_ftpx
-                if 0 < gap < sun_ft:
-                    nshade.append((round(yd["x"]), round(yd["y"])))
-                    break
-        check(
-            "yards_unshaded_by_neighbors",
-            not nshade,
-            f"threshing yard(s) {nshade[:3]} stand within {sun_ft:.0f} ft of a NEIGHBOR's farmhouse to their "
-            f"SOUTH - a minka's ~20 ft ridge throws 21 ft of shadow at noon in the threshing month and 39 ft by "
-            f"9am, so that yard loses the drying day. Keep the sun corridor south of every yard clear of houses "
-            f"(the placer does it with s.sun_corridor(39)); a yard may also stagger east or west out of the shadow",
-        )
-    return _kept(locals(), ('gap', 'hh_', 'nshade', 'par', 'sun_ft', 'sun_ftpx', 'yd'))
-
-
 # ...AND THE KITCHEN GARDEN GETS THE SAME CORRIDOR (feature 133 T10, GM 2026-08-25: "there is not
 # enough space for sunlight to hit the gardens and thrashing yards"). The rule above was stated for
 # the yard and never for the garden - the one-obstacle shape the yard rule itself was missed by -
@@ -152,48 +50,6 @@ def _seg_0285_071__yards_unshaded_by_neighbors(
 # ft, not a second constant; the derivation is in research/homesteads.md, "The garden's sun".
 # Gated on `meta.generated_by` for the reason 071 gives. A bed's own house is exempt by position
 # (a bed is never placed north of its house - `gardens_on_sunny_side`), so only NEIGHBORS count.
-
-
-def _seg_0285_990__gardens_unshaded_by_neighbors(
-    *,
-    check: Any = _UNBOUND,
-    g_gap: Any = _UNBOUND,
-    g_hh: Any = _UNBOUND,
-    g_par: Any = _UNBOUND,
-    g_shade: Any = _UNBOUND,
-    gardens: Any = _UNBOUND,
-    gd: Any = _UNBOUND,
-    houses: Any = _UNBOUND,
-    meta: Any = _UNBOUND,
-    scale: Any = _UNBOUND,
-    sun_ft: Any = _UNBOUND,
-    sun_ftpx: Any = _UNBOUND,
-) -> dict[str, Any]:
-    """Gate segment 0285.990 (gardens_unshaded_by_neighbors) - feature 133 T10."""
-    if scale in ('town', 'village', 'hamlet') and meta.get("generated_by"):
-        sun_ft = 39.0
-        sun_ftpx = float(meta.get("ftpx") or 1)
-        g_shade = []
-        for gd in gardens:
-            g_par = gd.get("of")
-            for g_hh in houses:
-                if g_par and abs(g_hh["x"] - g_par[0]) < 1 and abs(g_hh["y"] - g_par[1]) < 1:
-                    continue  # its own house: a bed is never north of it
-                if abs(g_hh["x"] - gd["x"]) >= (g_hh["w"] + gd["w"]) / 2:
-                    continue  # not in the bed's sun corridor
-                g_gap = ((g_hh["y"] - g_hh["h"] / 2) - (gd["y"] + gd["h"] / 2)) * sun_ftpx
-                if 0 < g_gap < sun_ft:
-                    g_shade.append((round(gd["x"]), round(gd["y"])))
-                    break
-        check(
-            "gardens_unshaded_by_neighbors",
-            not g_shade,
-            f"garden bed(s) {g_shade[:3]} stand within {sun_ft:.0f} ft of a NEIGHBOR's farmhouse to their SOUTH - "
-            f"a minka's ~20 ft ridge throws 39 ft of shadow by 9am in the shoulder months, so the bed loses its "
-            f"growing sun. The placer keeps the same corridor south of every bed it keeps south of every yard "
-            f"(s.sun_corridor(39)); a bed may also stand on the house's other flank, out of the shadow",
-        )
-    return _kept(locals(), ('g_gap', 'g_hh', 'g_par', 'g_shade', 'gd', 'sun_ft', 'sun_ftpx'))
 
 
 # THE WINDBREAK KEEPS OUT OF THE AFTERNOON SUN (feature 133 T10, GM 2026-08-25: "the windbreak
@@ -250,17 +106,6 @@ def _seg_0285_991__village_trees_unshade_from_west(
     return _kept(locals(), ('w_cx', 'w_cy', 'w_f', 'w_ft', 'w_ftpx', 'w_g', 'w_lane', 'w_r', 'w_shade', 'w_wb', 'w_x0', 'w_y0', 'w_y1'))
 
 
-def _seg_0285_072__yards_unshaded_by_groves(*, check: Any = _UNBOUND, scale: Any = _UNBOUND, shaded: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 0285.072 (yards_unshaded_by_groves) - body verbatim from _seg_0285__wells_clear_of_shrine_and_torii (feature 024 per-check split; guards re-evaluated in the body, see split_oversized.py)."""
-    if scale in ('town', 'village', 'hamlet') and scale in ('town', 'village', 'hamlet', 'city'):
-        check(
-            "yards_unshaded_by_groves",
-            not shaded,
-            f"threshing yard(s) {shaded[:3]} have a grove in the sun-corridor just to their SOUTH - it would shade the drying ground; keep groves out of the strip south of any yard",
-        )
-    return _kept(locals(), ())
-
-
 # SAME sun rule for the COMMUNAL fengshui trees: no village-grove CLUMP may sit in the southern sun-
 # corridor of a threshing yard OR a kitchen garden (both need the drying/growing sun from the south).
 # The scatter records its real clumps, so test those, not the bounding poly. WHY: settlements.md 'Village windbreak'.
@@ -271,47 +116,6 @@ def _seg_0285_073__cx_1(*, M: Any = _UNBOUND, cx: Any = _UNBOUND, cy: Any = _UNB
     if scale in ('town', 'village', 'hamlet') and scale in ('town', 'village', 'hamlet', 'city'):
         vg_clumps = [(cx, cy, g.get("r", 6)) for g in M.get("village_groves", []) for cx, cy in g.get("clumps", [])]
     return _kept(locals(), ('cx', 'cy', 'g', 'vg_clumps'))
-
-
-def _seg_0285_074__vg_shaded(*, scale: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 0285.074 (vg_shaded) - body verbatim from _seg_0285__wells_clear_of_shrine_and_torii (feature 024 per-check split; guards re-evaluated in the body, see split_oversized.py)."""
-    if scale in ('town', 'village', 'hamlet') and scale in ('town', 'village', 'hamlet', 'city'):
-        vg_shaded = []  # type: ignore[var-annotated]
-    return _kept(locals(), ('vg_shaded',))
-
-
-def _seg_0285_075__cx_2(
-    *,
-    cx: Any = _UNBOUND,
-    cy: Any = _UNBOUND,
-    f: Any = _UNBOUND,
-    gardens: Any = _UNBOUND,
-    r: Any = _UNBOUND,
-    scale: Any = _UNBOUND,
-    se: Any = _UNBOUND,
-    vg_clumps: Any = _UNBOUND,
-    vg_shaded: Any = _UNBOUND,
-    yards: Any = _UNBOUND,
-) -> dict[str, Any]:
-    """Gate segment 0285.075 (cx, cy, f, r) - body verbatim from _seg_0285__wells_clear_of_shrine_and_torii (feature 024 per-check split; guards re-evaluated in the body, see split_oversized.py)."""
-    if scale in ('town', 'village', 'hamlet') and scale in ('town', 'village', 'hamlet', 'city'):
-        for f in yards + gardens:
-            se = f["y"] + f["h"] / 2
-            if any(abs(cx - f["x"]) < f["w"] / 2 + r and se - r < cy < se + 22 + r for cx, cy, r in vg_clumps):
-                vg_shaded.append((round(f["x"]), round(f["y"])))
-    return _kept(locals(), ('cx', 'cy', 'f', 'r', 'se', 'vg_shaded'))
-
-
-def _seg_0285_076__village_trees_unshade_yards_and_gardens(*, check: Any = _UNBOUND, scale: Any = _UNBOUND, vg_shaded: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 0285.076 (village_trees_unshade_yards_and_gardens) - body verbatim from _seg_0285__wells_clear_of_shrine_and_torii (feature 024 per-check split; guards re-evaluated in the body, see split_oversized.py)."""
-    if scale in ('town', 'village', 'hamlet') and scale in ('town', 'village', 'hamlet', 'city'):
-        check(
-            "village_trees_unshade_yards_and_gardens",
-            not vg_shaded,
-            f"a village-grove tree sits in the southern sun-corridor of yard/garden(s) {vg_shaded[:3]} - it would "
-            f"shade the drying/growing ground; keep the scatter + belts out of the strip south of any yard or garden",
-        )
-    return _kept(locals(), ())
 
 
 # EAST SUN (option): a kitchen garden on a house's lee/EAST side loses its MORNING sun if a neighbor's
@@ -477,53 +281,9 @@ def _seg_0285_077__gardens_unshaded_from_east(
 # median but stays substantial). This catches a regression that shrinks groves back to a few trees.
 
 
-def _seg_0285_078__groves_are_substantial(
-    *,
-    a: Any = _UNBOUND,
-    check: Any = _UNBOUND,
-    gk: Any = _UNBOUND,
-    grove_of: Any = _UNBOUND,
-    groves: Any = _UNBOUND,
-    gsz: Any = _UNBOUND,
-    gv: Any = _UNBOUND,
-    h: Any = _UNBOUND,
-    houses: Any = _UNBOUND,
-    hsz: Any = _UNBOUND,
-    med: Any = _UNBOUND,
-    ratios: Any = _UNBOUND,
-    scale: Any = _UNBOUND,
-) -> dict[str, Any]:
-    """Gate segment 0285.078 (groves_are_substantial) - body verbatim from _seg_0285__wells_clear_of_shrine_and_torii (feature 024 per-check split; guards re-evaluated in the body, see split_oversized.py)."""
-    if scale in ('town', 'village', 'hamlet') and scale in ('town', 'village', 'hamlet', 'city') and len(grove_of) >= 6:
-        hsz = {(round(h["x"]), round(h["y"])): h["w"] * h["h"] for h in houses}
-        gsz: dict[tuple[int, int], float] = {}  # type: ignore[no-redef]
-        for gv in groves:
-            gk = (round(gv["of"][0]), round(gv["of"][1]))
-            gsz[gk] = gsz.get(gk, 0) + gv["w"] * gv["h"]
-        ratios = sorted(a / hsz[gk] for gk, a in gsz.items() if gk in hsz and hsz[gk])
-        med = ratios[len(ratios) // 2]
-        check(
-            "groves_are_substantial",
-            med >= 0.5,
-            f"the typical homestead grove is too small (median {med:.2f}x its house) - the spacious farms must "
-            f"carry a real stand (a yashikirin is the LARGEST homestead feature); small clumps on cramped farms "
-            f"are fine, but a median below half the house means groves shrank back to a few trees everywhere",
-        )
-    return _kept(locals(), ('a', 'gk', 'gsz', 'gv', 'h', 'hsz', 'med', 'ratios'))
-
-
 # VISIBLE: the dooryard garden must not be buried under a grove (the homestead solver spaces the
 # garden to the LEE side and the grove to the windward, so they never stack). A garden substantially
 # overlapped by a grove arm is a regression. WHY: settlements.md "Homestead groves".
-
-
-def _seg_0285_079__g_buried(*, gardens: Any = _UNBOUND, gd: Any = _UNBOUND, groves: Any = _UNBOUND, gv: Any = _UNBOUND, scale: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 0285.079 (g_buried, gd, gv) - body verbatim from _seg_0285__wells_clear_of_shrine_and_torii (feature 024 per-check split; guards re-evaluated in the body, see split_oversized.py)."""
-    if scale in ('town', 'village', 'hamlet') and scale in ('town', 'village', 'hamlet', 'city'):
-        g_buried = [
-            (round(gd["x"]), round(gd["y"])) for gd in gardens if any(abs(gd["x"] - gv["x"]) < (gd["w"] + gv["w"]) / 2 - 3 and abs(gd["y"] - gv["y"]) < (gd["h"] + gv["h"]) / 2 - 3 for gv in groves)
-        ]
-    return _kept(locals(), ('g_buried', 'gd', 'gv'))
 
 
 # WHERE POSSIBLE: a grove is drawn on EVERY farmhouse that has windward room - the yashikirin ringed
@@ -791,89 +551,12 @@ def _seg_0285_083__village_windbreak_present(
 # neither (a bare poly, as some check fixtures carry) contributes no test point rather than raising.
 
 
-def _seg_0285_084__c_1(*, c: Any = _UNBOUND, g: Any = _UNBOUND, scale: Any = _UNBOUND, vgroves: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 0285.084 (c, g, vg_pts) - body verbatim from _seg_0285__wells_clear_of_shrine_and_torii (feature 024 per-check split; guards re-evaluated in the body, see split_oversized.py)."""
-    if scale in ('town', 'village', 'hamlet') and scale in ('town', 'village', 'hamlet', 'city'):
-        vg_pts = [c for g in vgroves for c in (g.get("clumps") or ([[g["x"], g["y"]]] if "x" in g and "y" in g else []))]
-    return _kept(locals(), ('c', 'g', 'vg_pts'))
-
-
-def _seg_0285_085__c_2(*, c: Any = _UNBOUND, fields_ol: Any = _UNBOUND, ol: Any = _UNBOUND, scale: Any = _UNBOUND, vg_pts: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 0285.085 (c, ol, vg_in_paddy) - body verbatim from _seg_0285__wells_clear_of_shrine_and_torii (feature 024 per-check split; guards re-evaluated in the body, see split_oversized.py)."""
-    if scale in ('town', 'village', 'hamlet') and scale in ('town', 'village', 'hamlet', 'city'):
-        vg_in_paddy = [(round(c[0]), round(c[1])) for c in vg_pts if any(point_in_poly(c[0], c[1], ol) for ol in fields_ol)]
-    return _kept(locals(), ('c', 'ol', 'vg_in_paddy'))
-
-
-def _seg_0285_086__village_groves_clear_of_paddies(*, check: Any = _UNBOUND, scale: Any = _UNBOUND, vg_in_paddy: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 0285.086 (village_groves_clear_of_paddies) - body verbatim from _seg_0285__wells_clear_of_shrine_and_torii (feature 024 per-check split; guards re-evaluated in the body, see split_oversized.py)."""
-    if scale in ('town', 'village', 'hamlet') and scale in ('town', 'village', 'hamlet', 'city'):
-        check(
-            "village_groves_clear_of_paddies",
-            not vg_in_paddy,
-            f"village grove tree(s) stand IN a flooded paddy: {vg_in_paddy[:3]} - the fengshui windbreak stands on dry ground at the cluster's back and entrance, never out in the paddy",
-        )
-    return _kept(locals(), ())
-
-
 # A grove clump (a tree blob, radius r) may abut a farmstead - trees stand right up against a house
 # wall - but it must NOT OVERLAP a building/yard/garden footprint (a tree drawn ON the roof reads
 # wrong). Both the placement (the village_grove keep-out uses the clump's FULL radius) and this check
 # enforce it. The nominal blob radius is the measure; canopy leaves spilling a few px onto the eaves
 # are "adjacent," which is fine. Covers the whole homestead: house, threshing yard, kitchen garden,
 # draft byre, farm shed. WHY (trees beside, not on, the buildings): settlements.md 'Village windbreak'.
-
-
-def _seg_0285_087___clm(*, cx: Any = _UNBOUND, cy: Any = _UNBOUND, g: Any = _UNBOUND, scale: Any = _UNBOUND, vgroves: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 0285.087 (_clm, cx, cy, g) - body verbatim from _seg_0285__wells_clear_of_shrine_and_torii (feature 024 per-check split; guards re-evaluated in the body, see split_oversized.py)."""
-    if scale in ('town', 'village', 'hamlet') and scale in ('town', 'village', 'hamlet', 'city'):
-        _clm = [(cx, cy, g.get("r", 6)) for g in vgroves for cx, cy in g.get("clumps", [])]
-    return _kept(locals(), ('_clm', 'cx', 'cy', 'g'))
-
-
-def _seg_0285_088__on_struct(*, scale: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 0285.088 (on_struct) - body verbatim from _seg_0285__wells_clear_of_shrine_and_torii (feature 024 per-check split; guards re-evaluated in the body, see split_oversized.py)."""
-    if scale in ('town', 'village', 'hamlet') and scale in ('town', 'village', 'hamlet', 'city'):
-        on_struct = []  # type: ignore[var-annotated]
-    return _kept(locals(), ('on_struct',))
-
-
-def _seg_0285_089__cx_3(
-    *,
-    M: Any = _UNBOUND,
-    _clm: Any = _UNBOUND,
-    cx: Any = _UNBOUND,
-    cy: Any = _UNBOUND,
-    k: Any = _UNBOUND,
-    o: Any = _UNBOUND,
-    on_struct: Any = _UNBOUND,
-    r: Any = _UNBOUND,
-    rect: Any = _UNBOUND,
-    scale: Any = _UNBOUND,
-) -> dict[str, Any]:
-    """Gate segment 0285.089 (cx, cy, k, o) - body verbatim from _seg_0285__wells_clear_of_shrine_and_torii (feature 024 per-check split; guards re-evaluated in the body, see split_oversized.py)."""
-    if scale in ('town', 'village', 'hamlet') and scale in ('town', 'village', 'hamlet', 'city'):
-        for k in ("houses", "threshing_yards", "gardens", "byres", "farm_sheds"):
-            for o in M.get(k, []):
-                rect = _struct_rect(o)
-                for cx, cy, r in _clm:
-                    if pt_to_rect(cx, cy, rect) < r - 1:  # real penetration (just-touching is allowed)
-                        on_struct.append((k, round(o["x"]), round(o["y"])))
-                        break
-    return _kept(locals(), ('cx', 'cy', 'k', 'o', 'on_struct', 'r', 'rect'))
-
-
-def _seg_0285_090__grove_clumps_clear_of_structures(*, check: Any = _UNBOUND, on_struct: Any = _UNBOUND, scale: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 0285.090 (grove_clumps_clear_of_structures) - body verbatim from _seg_0285__wells_clear_of_shrine_and_torii (feature 024 per-check split; guards re-evaluated in the body, see split_oversized.py)."""
-    if scale in ('town', 'village', 'hamlet') and scale in ('town', 'village', 'hamlet', 'city'):
-        check(
-            "grove_clumps_clear_of_structures",
-            not on_struct,
-            f"{len(on_struct)} farmstead footprint(s) have a grove-clump tree drawn OVER them: {on_struct[:4]} - "
-            f"a copse/windbreak clump may stand right beside a house but never ON it; widen the village_grove "
-            f"keep-out to the clump's full radius so the blob settles into the open ground beside the buildings",
-        )
-    return _kept(locals(), ())
 
 
 # FUEL-AND-FODDER COMMONS - the degraded open grazing/scrub on the far side, BEYOND the back-grove.
@@ -1199,60 +882,9 @@ def _seg_0617__captions_clear_the_ways_they_stand_on(*, M: Any = _UNBOUND, check
 # gate time, not at import), and keep the `_kept` tuple a LITERAL of the names this body binds.
 
 
-def _seg_0618_500__bamboo_declared_and_drawn(
-    *,
-    M: Any = _UNBOUND,
-    check: Any = _UNBOUND,
-    meta: Any = _UNBOUND,
-    scale: Any = _UNBOUND,
-    bamboo_declared_and_drawn_bad: Any = _UNBOUND,
-) -> dict[str, Any]:
-    """Gate segment (bamboo_declared_and_drawn) - the `bamboo` knob a map declares in meta is what it drew: "none" draws no stand, any other value at least one (feature 133 T47). A check on a declaration that never runs looks exactly like a check that passes, so the declaration itself is required on a scripted hamlet."""
-    if scale in ("hamlet", "village", "town"):
-        bamboo_declared_and_drawn_bad = []
-        _bdd_knob = meta.get("bamboo")
-        _bdd_n = len(M.get("bamboo_stands") or [])
-        if meta.get("generated_by") or _bdd_knob is not None:
-            if _bdd_knob is None:
-                bamboo_declared_and_drawn_bad.append(("meta.bamboo", "undeclared"))
-            elif _bdd_knob == "none" and _bdd_n:
-                bamboo_declared_and_drawn_bad.append(("meta.bamboo", f"none but {_bdd_n} drawn"))
-            elif _bdd_knob != "none" and _bdd_n == 0:
-                bamboo_declared_and_drawn_bad.append(("meta.bamboo", f"{_bdd_knob} but nothing drawn"))
-        check(
-            "bamboo_declared_and_drawn",
-            not bamboo_declared_and_drawn_bad,
-            f"bamboo declaration vs drawing: {bamboo_declared_and_drawn_bad[:3]} - meta.bamboo (the knob) and M['bamboo_stands'] must agree; a hamlet with no room for its stand draws none AND says none (hamletgen.bamboo_seats / stage_bamboo)",
-        )
-    return _kept(locals(), ("bamboo_declared_and_drawn_bad",))
-
-
 # WHY: <one paragraph - what the research found, the decision it drove, the departure taken>.
 # Declare EVERY input the body reads as a keyword parameter (an undeclared one is a NameError at
 # gate time, not at import), and keep the `_kept` tuple a LITERAL of the names this body binds.
-
-
-def _seg_0618_501__bamboo_stands_legible(
-    *,
-    M: Any = _UNBOUND,
-    check: Any = _UNBOUND,
-    meta: Any = _UNBOUND,
-    scale: Any = _UNBOUND,
-    bamboo_stands_legible_bad: Any = _UNBOUND,
-) -> dict[str, Any]:
-    """Gate segment (bamboo_stands_legible) - a drawn bamboo stand is at least BAMBOO_LEGIBLE_FT (14 ft) across on its short axis: a culm cannot be drawn at this scale, so the stand-level glyph is the only thing a reader sees, and a sliver reads as nothing (feature 133 T47)."""
-    if scale in ("hamlet", "village", "town"):
-        bamboo_stands_legible_bad = []
-        _bsl_floor = 14.0 / float(meta.get("ftpx") or 1.0)  # the SHORT axis (hamletgen.BAMBOO_LEGIBLE_FT): a 22 x 16 household strip reads
-        for _b in M.get("bamboo_stands") or []:
-            if min(float(_b.get("w", 0)), float(_b.get("h", 0))) < _bsl_floor:
-                bamboo_stands_legible_bad.append((round(float(_b["x"])), round(float(_b["y"]))))
-        check(
-            "bamboo_stands_legible",
-            not bamboo_stands_legible_bad,
-            f"bamboo stand(s) at {bamboo_stands_legible_bad[:3]} narrower than 14 ft on its short axis - a stand that small does not read at fit zoom; seat a whole stand or none (hamletgen.bamboo_seats drops one that fits nowhere at 70%)",
-        )
-    return _kept(locals(), ("bamboo_stands_legible_bad",))
 
 
 # WHY: <one paragraph - what the research found, the decision it drove, the departure taken>.

@@ -60,3 +60,37 @@ feature 140 the gate read the placer's own chains - pure same measure; `test_kee
    is the guard: a key that changes after its placer shows up in the ledger.
 5. **A held-back segment** (`_seg_0319`) bundles a retired check with a kept one; splitting it is a hand
    edit of the segment body - cheap, but not done blind.
+
+## R5 - the GM's cut (2026-08-28): *"I think we should cut all of the things you described in (1) and (2)"*
+
+Applied in one pass (`cut-plan.json`, `cut-done.json`): the 39 checks of (1) - the "plausible but untested"
+keeps and the held-back one - and the 442 of (2) - every check no scripted map exercises, plus the 25 vacuous
+on hamlets and the 12 legacy-feature ones. A segment went when every check it carried was cut; a segment that
+also WRITES a value a kept check needs stayed as a writer (36 such - their checks still evaluate, vacuously
+on a hamlet; the list is in `cut-done.json`); the 7 segments that bundle a kept hamlet check with cut ones
+(the headman, the kosatsuba family, the windbreak family, `households_consistent`, `cluster_abuts_fields`,
+`wells_among_dwellings`, the byre form) stayed whole - the GM's (5) resolved: `_seg_0319` went entirely
+because `groves_clear_of_dry_plots` was in (1). Every derivation only those segments needed went with them
+(479). The legacy tiers' fixtures went in full (village, town, city, capital); the hamlet-tier and unscaled
+fixtures were trimmed of cut names and deleted when nothing was left to fire.
+
+| | opened | after T03 | after the GM's cut |
+|---|---|---|---|
+| segment functions | 1,405 | 1,391 | **595** (20,837 lines of `check_village`) |
+| check names | 636 | 622 | **237** |
+| checks the reference hamlet runs | 232 | 218 | **149** |
+| fixtures in `pool/regressions/` | 843 | 822 | **190** |
+| tests the unlocked gate runs | 3,898 | 3,860 | **2,455** |
+| unlocked `make done`, cold | 1 m 45 s | 1 m 41 s | **48 s** (test phase 16 s) |
+
+What the sweep touched beyond the segments: 736 + 4 check tests and three legacy-structure tests removed
+(the `tier_town` / `tier_city` check trees are nearly empty now); the ratchet table in the check-village
+builders lost 7 rows; the cohort pin lost seed 22 (`field_ringed`, cut) and the gate pin seed 44
+(`houses_clear_of_paddies`, retired in T03); the tripwire pin is unchanged; two placement entries in the
+registry retired; the frozen registry rows and check-name fixture rewritten. Live code that still names a
+cut check as a string: the overlap policy's fire-tower rows in `common_02` (kept as writers), and the frozen
+legacy pool gens' waivers (never run).
+
+The census after the cut (`ledger-after.md`): every remaining check either keeps because a later stage
+changes an input, or is read by the generator, or is a best-effort placer's guarantee - none is a
+same-measure candidate with a placer test to its name.

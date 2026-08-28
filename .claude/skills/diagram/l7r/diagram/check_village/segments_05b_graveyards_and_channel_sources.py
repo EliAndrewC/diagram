@@ -3,42 +3,12 @@
 import math
 from typing import Any
 
-from .common_01_geometry import Poly, Pt, point_in_poly, seg_dist, within_edge_gap
-from .common_02_overlap_policy import edge_dist, in_ellipse, polyline_len
-from .common_03_capacity import _UNBOUND, DWELLING_KINDS, _kept
+from .common_01_geometry import Pt, point_in_poly, seg_dist
+from .common_02_overlap_policy import edge_dist, in_ellipse
+from .common_03_capacity import _UNBOUND, _kept
 
 # PRECINCT: a graveyard is a temple parish ground - it sits by a temple. (At CITY scale only an
 # INSIDE-wall graveyard must; an OUTSIDE-wall one is the extramural common burial ground, exempt.)
-
-
-def _seg_0286_025__cemetery_in_temple_precinct(
-    *,
-    _inside: Any = _UNBOUND,
-    c: Any = _UNBOUND,
-    cems: Any = _UNBOUND,
-    check: Any = _UNBOUND,
-    r: Any = _UNBOUND,
-    scale: Any = _UNBOUND,
-    stray: Any = _UNBOUND,
-    temples: Any = _UNBOUND,
-    wall: Any = _UNBOUND,
-) -> dict[str, Any]:
-    """Gate segment 0286.025 (cemetery_in_temple_precinct) - body verbatim from _seg_0286__cemetery_clear_of_shrine (feature 024 per-check split; guards re-evaluated in the body, see split_oversized.py)."""
-    if scale in ('village', 'town', 'city', 'capital') and scale in ("town", "city") and cems and temples:
-        # a graveyard must be by a temple UNLESS it is outside a walled settlement's wall (then it
-        # is the extramural common burial ground - exempt). An unwalled town has no outside, so all
-        # its graveyards are parish grounds and must sit by a monastery.
-        stray = [
-            (round(c["x"]), round(c["y"]))
-            for c in cems
-            if c.get("parish", True) and (not wall or _inside(c["x"], c["y"])) and not any(math.hypot(c["x"] - r["x"], c["y"] - r["y"]) < 230 for r in temples)
-        ]
-        check(
-            "cemetery_in_temple_precinct",
-            not stray,
-            f"graveyard(s) not in any temple precinct: {stray[:3]} - a parish ground sits by its temple (a walled settlement's extramural common ground, and any parish=False plot, are exempt)",
-        )
-    return _kept(locals(), ('c', 'r', 'stray'))
 
 
 # SPLIT: any WALLED settlement (town or city) keeps a graveyard both inside AND outside the
@@ -140,24 +110,6 @@ def _seg_0286_027__walled_settlement_has_drum_tower(
     return _kept(locals(), ('_dt_at_crossing', 'angs', 'dts', 'ok_dt', 'st', 'ways'))
 
 
-def _seg_0286_028__town_monasteries_have_graveyards(
-    *, c: Any = _UNBOUND, cems: Any = _UNBOUND, check: Any = _UNBOUND, needy_t: Any = _UNBOUND, r: Any = _UNBOUND, scale: Any = _UNBOUND, temples: Any = _UNBOUND, unserved_t: Any = _UNBOUND
-) -> dict[str, Any]:
-    """Gate segment 0286.028 (town_monasteries_have_graveyards) - body verbatim from _seg_0286__cemetery_clear_of_shrine (feature 024 per-check split; guards re-evaluated in the body, see split_oversized.py)."""
-    if scale in ('village', 'town', 'city', 'capital') and scale == "town":
-        # every monastery that CAN host a graveyard keeps one in its precinct (the town analog
-        # of city_temples_have_graveyards - GM audit 2026-07; graveyard=False opts out, e.g. a
-        # small relic monastery whose dead go to the parish ground)
-        needy_t = [r for r in temples if r.get("graveyard", True)]
-        unserved_t = [r.get("label", (round(r["x"]), round(r["y"]))) for r in needy_t if not any(math.hypot(c["x"] - r["x"], c["y"] - r["y"]) < 230 for c in cems)]
-        check(
-            "town_monasteries_have_graveyards",
-            not unserved_t,
-            f"monastery(ies) with no graveyard in their precinct: {unserved_t[:3]} - a town monastery keeps the parish (danka) burial ground unless it opts out (graveyard=False)",
-        )
-    return _kept(locals(), ('c', 'needy_t', 'r', 'unserved_t'))
-
-
 def _seg_0286_029__city_temples_have_graveyards(
     *,
     M: Any = _UNBOUND,
@@ -226,81 +178,8 @@ def _seg_0286_029__city_temples_have_graveyards(
     return _kept(locals(), ('anchor', 'b', 'c', 'crem_out', 'gov', 'm2', 'maus_ok', 'needy', 'o', 'oss_ok', 'r', 'sam', 'unserved'))
 
 
-def _seg_0286_030__town_has_cremation_ground(
-    *,
-    M: Any = _UNBOUND,
-    _crem_lim: Any = _UNBOUND,
-    b: Any = _UNBOUND,
-    c: Any = _UNBOUND,
-    check: Any = _UNBOUND,
-    crem: Any = _UNBOUND,
-    dwell_t: Any = _UNBOUND,
-    far_crem: Any = _UNBOUND,
-    h: Any = _UNBOUND,
-    meta: Any = _UNBOUND,
-    o: Any = _UNBOUND,
-    oss: Any = _UNBOUND,
-    oss_t: Any = _UNBOUND,
-    scale: Any = _UNBOUND,
-    wall_oss: Any = _UNBOUND,
-) -> dict[str, Any]:
-    """Gate segment 0286.030 (town_has_cremation_ground, town_has_ossuary) - body verbatim from _seg_0286__cemetery_clear_of_shrine (feature 024 per-check split; guards re-evaluated in the body, see split_oversized.py)."""
-    if scale in ('village', 'town', 'city', 'capital') and scale == "town":
-        # a county town cremates too - a cremation ground at the edge, clear of the dwellings
-        dwell_t = M.get("houses", []) + [b for b in M.get("buildings", []) if b.get("kind") in DWELLING_KINDS]
-        # 120 real ft to the DWELLING'S EDGE, not to its center - the standing pollution
-        # separation, measured the way it would be paced out. (Converted 2026-07-27: this was
-        # the third instance of the center-distance defect, and the one nobody had noticed,
-        # since a cremation ground is drawn large enough that the two forms differ by ~50 ft.)
-        _crem_lim = 120.0 / float(meta.get("ftpx") or 1)
-        far_crem = [c for c in crem if not any(within_edge_gap(c, h, _crem_lim) for h in dwell_t)] if dwell_t else crem
-        check(
-            "town_has_cremation_ground",
-            bool(far_crem),
-            "a county town cremates its dead at a CREMATION GROUND (s.cremation_ground) at the edge, clear of the dwellings - monk-run with burakumin assistants",
-        )
-        # PAUPER OSSUARY: the county town's muenzuka stands by its cremation ground (the town
-        # analog of city_has_ossuary - GM audit 2026-07); outside the rampart when walled
-        wall_oss = M.get("wall")
-        oss_t = [o for o in oss if not (wall_oss and len(wall_oss) >= 3 and point_in_poly(o["x"], o["y"], wall_oss))]
-        check(
-            "town_has_ossuary",
-            any(any(math.hypot(o["x"] - c["x"], o["y"] - c["y"]) < 320 for c in crem) for o in oss_t),
-            "a county town needs a pauper OSSUARY mound (s.ossuary) beside its cremation ground - the communal bones of the poor and the unconnected dead (muenbotoke)",
-        )
-    return _kept(locals(), ('_crem_lim', 'b', 'c', 'dwell_t', 'far_crem', 'h', 'o', 'oss_t', 'wall_oss'))
-
-
 # GEOMETRY SANITY AT EVERY SCALE (GM audit 2026-07: this only ran for cities): a wall vertex
 # millions of px off the canvas is malformed input at any scale - towns have walls too.
-
-
-def _seg_0287__geometry_within_canvas(
-    *,
-    M: Any = _UNBOUND,
-    _Hg: Any = _UNBOUND,
-    _Wg: Any = _UNBOUND,
-    _oobg: Any = _UNBOUND,
-    _wallg: Any = _UNBOUND,
-    check: Any = _UNBOUND,
-    meta: Any = _UNBOUND,
-    p: Any = _UNBOUND,
-    scale: Any = _UNBOUND,
-    vx: Any = _UNBOUND,
-    vy: Any = _UNBOUND,
-) -> dict[str, Any]:
-    """Gate segment 287 (geometry_within_canvas) - body verbatim from the legacy gate() (feature 022)."""
-    if scale != "city":
-        _Wg = meta.get("W") or 3200
-        _Hg = meta.get("H") or 2700
-        _wallg = M.get("wall") or []
-        _oobg = [(round(vx), round(vy)) for vx, vy in [tuple(p) for p in _wallg] if not (-_Wg <= vx <= 2 * _Wg and -_Hg <= vy <= 2 * _Hg)]
-        check(
-            "geometry_within_canvas",
-            not _oobg,
-            f"wall vertex(es) far outside the canvas ({_Wg}x{_Hg}): {sorted(set(_oobg))[:4]} - malformed input; a valid settlement's geometry lies near the drawn canvas",
-        )
-    return _kept(locals(), ('_Hg', '_Wg', '_oobg', '_wallg', 'p', 'vx', 'vy'))
 
 
 # LABEL TEXT renders ON TOP of everything: no part of a label may be covered. Labels live in the
@@ -338,81 +217,10 @@ def _seg_0291__occluders_1(*, M: Any = _UNBOUND, occluders: Any = _UNBOUND, t: A
     return _kept(locals(), ('occluders', 't'))
 
 
-def _seg_0292__covered_labels() -> dict[str, Any]:
-    """Gate segment 292 (covered_labels) - body verbatim from the legacy gate() (feature 022)."""
-    covered_labels = []  # type: ignore[var-annotated]
-    return _kept(locals(), ('covered_labels',))
-
-
-def _seg_0293__L_2(
-    *,
-    L: Any = _UNBOUND,
-    covered_labels: Any = _UNBOUND,
-    labels: Any = _UNBOUND,
-    lx0: Any = _UNBOUND,
-    lx1: Any = _UNBOUND,
-    ly0: Any = _UNBOUND,
-    ly1: Any = _UNBOUND,
-    lz: Any = _UNBOUND,
-    occluders: Any = _UNBOUND,
-    ox0: Any = _UNBOUND,
-    ox1: Any = _UNBOUND,
-    oy0: Any = _UNBOUND,
-    oy1: Any = _UNBOUND,
-    oz: Any = _UNBOUND,
-) -> dict[str, Any]:
-    """Gate segment 293 (L, covered_labels, lx0, lx1) - body verbatim from the legacy gate() (feature 022)."""
-    for L in labels:
-        lx0, ly0, lx1, ly1, lz = L[0], L[1], L[2], L[3], L[4]
-        for ox0, oy0, ox1, oy1, oz in occluders:
-            if oz > lz and lx0 < ox1 and ox0 < lx1 and ly0 < oy1 and oy0 < ly1:
-                covered_labels.append(L[5] if len(L) > 5 else "label")
-                break
-    return _kept(locals(), ('L', 'covered_labels', 'lx0', 'lx1', 'ly0', 'ly1', 'lz', 'ox0', 'ox1', 'oy0', 'oy1', 'oz'))
-
-
-def _seg_0294__labels_render_on_top(*, check: Any = _UNBOUND, covered_labels: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 294 (labels_render_on_top) - body verbatim from the legacy gate() (feature 022)."""
-    check("labels_render_on_top", not covered_labels, f"label text covered by a structure drawn over it (a label must render on top of everything, fully readable): {sorted(set(covered_labels))}")
-    return _kept(locals(), ())
-
-
 def _seg_0295__hill(*, M: Any = _UNBOUND) -> dict[str, Any]:
     """Gate segment 295 (hill) - body verbatim from the legacy gate() (feature 022)."""
     hill = M.get("hill")
     return _kept(locals(), ('hill',))
-
-
-def _seg_0296__no_field_on_hill(
-    *,
-    M: Any = _UNBOUND,
-    check: Any = _UNBOUND,
-    dp: Any = _UNBOUND,
-    dp_onhill: Any = _UNBOUND,
-    f: Any = _UNBOUND,
-    fields: Any = _UNBOUND,
-    hill: Any = _UNBOUND,
-    onhill: Any = _UNBOUND,
-    px: Any = _UNBOUND,
-    py: Any = _UNBOUND,
-    v: Any = _UNBOUND,
-) -> dict[str, Any]:
-    """Gate segment 296 (dry_plots_off_hill, no_field_on_hill) - body verbatim from the legacy gate() (feature 022)."""
-    if hill:
-        onhill = [f["name"] for f in fields if any(in_ellipse(px, py, hill) for px, py in f["outline"])]
-        check("no_field_on_hill", not onhill, f"on hill: {onhill}")
-        # DRY PLOTS OBEY THE SAME RULE (feature 013): a hill slope carries dry crops / tea / woodland /
-        # scrub, never flooded paddy - but a near-ring dry-field tiler (near_ring_cropland) could stray
-        # onto the slope. no_field_on_hill reads only M["fields"] (paddy/veg envelopes), so this closes
-        # the dry-plot half. A plot may TOUCH the toe; only a plot whose CENTROID sits on the hill fires
-        # (the tiler's own guard keeps plots off the slope, so a centroid on the hill means the guard broke).
-        dp_onhill = [
-            [round(sum(v[0] for v in dp["poly"]) / len(dp["poly"])), round(sum(v[1] for v in dp["poly"]) / len(dp["poly"]))]
-            for dp in M.get("dry_plots", [])
-            if dp.get("poly") and len(dp["poly"]) >= 3 and in_ellipse(sum(v[0] for v in dp["poly"]) / len(dp["poly"]), sum(v[1] for v in dp["poly"]) / len(dp["poly"]), hill)
-        ]
-        check("dry_plots_off_hill", not dp_onhill, f"dry crop plot(s) centered on the hill (paddy/field needs flat ground; a slope carries dry hill-crops/tea/woodland/scrub only): {dp_onhill[:5]}")
-    return _kept(locals(), ('dp', 'dp_onhill', 'f', 'onhill', 'px', 'py', 'v'))
 
 
 # every watercourse - irrigation channel OR natural stream - must connect what it
@@ -483,37 +291,6 @@ def _seg_0299__anchored(
     return _kept(locals(), ('anchored',))
 
 
-def _seg_0300__channel_source_anchored(
-    *,
-    M: Any = _UNBOUND,
-    anchored: Any = _UNBOUND,
-    c: Any = _UNBOUND,
-    check: Any = _UNBOUND,
-    dev: Any = _UNBOUND,
-    end: Any = _UNBOUND,
-    frm: Any = _UNBOUND,
-    idx: Any = _UNBOUND,
-    p: Any = _UNBOUND,
-    poly: Any = _UNBOUND,
-    start: Any = _UNBOUND,
-    straight: Any = _UNBOUND,
-    tag: Any = _UNBOUND,
-    to: Any = _UNBOUND,
-) -> dict[str, Any]:
-    """Gate segment 300 (channel_directness, channel_field_anchored, channel_source_anchored, channel_winds_gently) - body verbatim from the legacy gate() (feature 022)."""
-    for idx, c in enumerate(M["channels"]):
-        poly, frm, to = c["poly"], c["frm"], c["to"]
-        start, end = poly[0], poly[-1]
-        tag = to.get("name", idx)
-        check(f"channel_source_anchored[{tag}]", anchored(start, frm), f"start {start} not anchored to {frm}")
-        check(f"channel_field_anchored[{tag}]", anchored(end, to), f"end {end} not anchored to {to}")
-        dev = max((seg_dist(p[0], p[1], start, end) for p in poly[1:-1]), default=0)
-        check(f"channel_winds_gently[{tag}]", 5 <= dev <= 50, f"deviation {dev:.0f}px (want 5-50)")
-        straight = math.hypot(end[0] - start[0], end[1] - start[1])
-        check(f"channel_directness[{tag}]", straight == 0 or polyline_len(poly) <= 1.6 * straight, f"len {polyline_len(poly):.0f} vs straight {straight:.0f}")
-    return _kept(locals(), ('c', 'dev', 'end', 'frm', 'idx', 'p', 'poly', 'start', 'straight', 'tag', 'to'))
-
-
 # A SUPPLY CONDUIT FEEDING A PADDY MUST BE VISIBLY SOURCED (GM 2026-07-24, Tango fs3): an
 # irrigation canal can never just START in the middle of nowhere - it must tap on-map water
 # or come in from the view edge (presumed to continue off-map). channel_source_anchored
@@ -529,107 +306,3 @@ def _seg_0300__channel_source_anchored(
 # M['drawn_channels'] (post-clip geometry - the check reads what was actually drawn, per the
 # same-manifest rule in the dev-loop doc); a drawn stroke whose far end lies in or along the
 # fed field's own outline is the comb's own canal heading downstream, not a tap.
-
-
-def _seg_0301___on_source_water(
-    *, M: Any = _UNBOUND, cp: Any = _UNBOUND, dp: Any = _UNBOUND, i: Any = _UNBOUND, own: Any = _UNBOUND, pond: Any = _UNBOUND, pt: Any = _UNBOUND, sp: Any = _UNBOUND, st: Any = _UNBOUND
-) -> dict[str, Any]:
-    """Gate segment 301 (_on_source_water) - body verbatim from the legacy gate() (feature 022)."""
-
-    def _on_source_water(pt: Pt, own: Any) -> bool:
-        if any(seg_dist(pt[0], pt[1], sp[i], sp[i + 1]) <= st.get("w", 9) / 2 + 4 for st in M.get("streams", []) for sp in [st["poly"]] for i in range(len(sp) - 1)):
-            return True
-        mo3: Any = M.get("moat")
-        if mo3 and any(seg_dist(pt[0], pt[1], mo3[i], mo3[(i + 1) % len(mo3)]) <= M.get("moat_width", 26) / 2 + 4 for i in range(len(mo3))):
-            return True
-        if pond and in_ellipse(pt[0], pt[1], pond, 1.05):
-            return True
-        rv3: Any = M.get("river")
-        if rv3 and any(seg_dist(pt[0], pt[1], rv3["pts"][i], rv3["pts"][i + 1]) <= rv3.get("w", 40) / 2 + 4 for i in range(len(rv3["pts"]) - 1)):
-            return True
-        if any(seg_dist(pt[0], pt[1], cp[i], cp[i + 1]) <= cn.get("w", 12) / 2 + 4 for cn in M.get("canals", []) for cp in [cn["poly"]] for i in range(len(cp) - 1)):
-            return True
-        return any(
-            seg_dist(pt[0], pt[1], dp[i], dp[i + 1]) <= fd2.get("w", 4) / 2 + 4 for fd2 in M.get("field_ditches", []) if fd2.get("field") != own for dp in [fd2["poly"]] for i in range(len(dp) - 1)
-        )
-
-    return _kept(locals(), ('_on_source_water',))
-
-
-def _seg_0302___at_view_edge(*, EX0: Any = _UNBOUND, EX1: Any = _UNBOUND, EY0: Any = _UNBOUND, EY1: Any = _UNBOUND, pt: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 302 (_at_view_edge) - body verbatim from the legacy gate() (feature 022)."""
-
-    def _at_view_edge(pt: Pt) -> bool:
-        return bool(min(pt[0] - EX0, EX1 - pt[0], pt[1] - EY0, EY1 - pt[1]) <= 32)
-
-    return _kept(locals(), ('_at_view_edge',))
-
-
-def _seg_0303__supply_mains() -> dict[str, Any]:
-    """Gate segment 303 (supply_mains) - body verbatim from the legacy gate() (feature 022)."""
-    supply_mains: dict[Any, list[Poly]] = {}
-    return _kept(locals(), ('supply_mains',))
-
-
-def _seg_0304__fd3(*, M: Any = _UNBOUND, fd3: Any = _UNBOUND, supply_mains: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 304 (fd3, supply_mains) - body verbatim from the legacy gate() (feature 022)."""
-    for fd3 in M.get("field_ditches", []):
-        if fd3.get("role") == "main":
-            supply_mains.setdefault(fd3.get("field"), []).append(fd3["poly"])
-    return _kept(locals(), ('fd3', 'supply_mains'))
-
-
-def _seg_0305__field_supply_visibly_sourced(
-    *,
-    M: Any = _UNBOUND,
-    _at_view_edge: Any = _UNBOUND,
-    _on_source_water: Any = _UNBOUND,
-    c: Any = _UNBOUND,
-    check: Any = _UNBOUND,
-    csrc: Any = _UNBOUND,
-    cto: Any = _UNBOUND,
-    dcr: Any = _UNBOUND,
-    dpts: Any = _UNBOUND,
-    e: Any = _UNBOUND,
-    far: Any = _UNBOUND,
-    field_by: Any = _UNBOUND,
-    fld: Any = _UNBOUND,
-    fmains: Any = _UNBOUND,
-    fo3: Any = _UNBOUND,
-    h: Any = _UNBOUND,
-    i: Any = _UNBOUND,
-    m: Any = _UNBOUND,
-    ok: Any = _UNBOUND,
-    origin: Any = _UNBOUND,
-    supply_mains: Any = _UNBOUND,
-) -> dict[str, Any]:
-    """Gate segment 305 (field_supply_visibly_sourced) - body verbatim from the legacy gate() (feature 022)."""
-    for c in M["channels"]:
-        cto = c.get("to") or {}
-        if cto.get("kind") != "field" or c.get("drawn", True) is not False:
-            continue  # a DRAWN supply channel carries its own visual continuity (ends anchor-checked above)
-        fld = cto.get("name")
-        fmains = supply_mains.get(fld)
-        if not fmains:
-            continue
-        csrc = c["poly"][0]
-        origin = min((m[0] for m in fmains), key=lambda h: math.hypot(h[0] - csrc[0], h[1] - csrc[1]))
-        ok = _at_view_edge(origin) or _on_source_water(origin, fld)
-        fo3: Any = field_by.get(fld)  # type: ignore[no-redef]
-        if not ok and fo3:
-            for dcr in M.get("drawn_channels", []):
-                dpts = dcr["pts"]
-                if len(dpts) < 2 or min(seg_dist(origin[0], origin[1], dpts[i], dpts[i + 1]) for i in range(len(dpts) - 1)) > 4:
-                    continue
-                far = max((dpts[0], dpts[-1]), key=lambda e: math.hypot(e[0] - origin[0], e[1] - origin[1]))
-                if point_in_poly(far[0], far[1], fo3["outline"]) or edge_dist(far[0], far[1], fo3["outline"]) <= 8:
-                    continue  # the comb's own canal heading INTO the field, not a tap
-                if _on_source_water(far, fld) or _at_view_edge(far):
-                    ok = True
-                    break
-        check(
-            f"field_supply_visibly_sourced[{fld}]",
-            ok,
-            f"comb origin {origin} hangs in open ground: no on-map water source, no view-edge entry, no drawn tap stroke (an irrigation canal cannot start in the middle of nowhere)",
-        )
-    return _kept(locals(), ('c', 'csrc', 'cto', 'dcr', 'dpts', 'far', 'fld', 'fmains', 'fo3', 'i', 'm', 'ok', 'origin'))

@@ -9,7 +9,6 @@ from .common_01_geometry import (
     _OVERLAP_STRUCTS,
     _struct_rect,
     point_in_poly,
-    poly_area,
     rect_corners,
     seg_dist,
     segments_cross,
@@ -154,13 +153,6 @@ def _seg_0285_013__oversize(*, hmap: Any = _UNBOUND, scale: Any = _UNBOUND, t: A
     return _kept(locals(), ('oversize', 't'))
 
 
-def _seg_0285_014__harvest_yards_smaller_than_farmhouse(*, check: Any = _UNBOUND, oversize: Any = _UNBOUND, scale: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 0285.014 (harvest_yards_smaller_than_farmhouse) - body verbatim from _seg_0285__wells_clear_of_shrine_and_torii (feature 024 per-check split; guards re-evaluated in the body, see split_oversized.py)."""
-    if scale in ('town', 'village', 'hamlet') and scale in ('town', 'village', 'hamlet', 'city'):
-        check("harvest_yards_smaller_than_farmhouse", not oversize, f"threshing yard(s) are not smaller than their farmhouse: {oversize[:3]} - the niwa is a small dry apron beside the house")
-    return _kept(locals(), ())
-
-
 # the yard is the maeniwa - the SOUTH-facing front work yard. Rice must dry in the SUN and
 # minka face south, so the yard sits on the house's south/front side (or, if the paddy blocks
 # that, a side), but NEVER the shady NORTH back. +y is south here, so a yard must not sit
@@ -298,71 +290,6 @@ def _seg_0285_026__gardens(*, M: Any = _UNBOUND, scale: Any = _UNBOUND) -> dict[
     return _kept(locals(), ('gardens',))
 
 
-def _seg_0285_027__g_without(*, gardens: Any = _UNBOUND, gd: Any = _UNBOUND, h: Any = _UNBOUND, occ_h: Any = _UNBOUND, scale: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 0285.027 (g_without, gd, h) - body verbatim from _seg_0285__wells_clear_of_shrine_and_torii (feature 024 per-check split; guards re-evaluated in the body, see split_oversized.py)."""
-    if scale in ('town', 'village', 'hamlet') and scale in ('town', 'village', 'hamlet', 'city'):
-        g_without = [(round(h["x"]), round(h["y"])) for h in occ_h if not any(gd["of"][0] == h["x"] and gd["of"][1] == h["y"] for gd in gardens)]
-    return _kept(locals(), ('g_without', 'gd', 'h'))
-
-
-def _seg_0285_029__g_oversize(*, gardens: Any = _UNBOUND, gd: Any = _UNBOUND, hmap: Any = _UNBOUND, scale: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 0285.029 (g_oversize, gd) - body verbatim from _seg_0285__wells_clear_of_shrine_and_torii (feature 024 per-check split; guards re-evaluated in the body, see split_oversized.py)."""
-    if scale in ('town', 'village', 'hamlet') and scale in ('town', 'village', 'hamlet', 'city'):
-        g_oversize = [(round(gd["x"]), round(gd["y"])) for gd in gardens if gd["w"] * gd["h"] >= hmap.get((round(gd["of"][0]), round(gd["of"][1])), 0)]
-    return _kept(locals(), ('g_oversize', 'gd'))
-
-
-def _seg_0285_030__gardens_smaller_than_farmhouse(*, check: Any = _UNBOUND, g_oversize: Any = _UNBOUND, scale: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 0285.030 (gardens_smaller_than_farmhouse) - body verbatim from _seg_0285__wells_clear_of_shrine_and_torii (feature 024 per-check split; guards re-evaluated in the body, see split_oversized.py)."""
-    if scale in ('town', 'village', 'hamlet') and scale in ('town', 'village', 'hamlet', 'city'):
-        check("gardens_smaller_than_farmhouse", not g_oversize, f"kitchen garden(s) are not smaller than their farmhouse: {g_oversize[:3]} - the saien is a small dooryard plot, not a field")
-    return _kept(locals(), ())
-
-
-def _seg_0285_031__g_shady(*, gardens: Any = _UNBOUND, gd: Any = _UNBOUND, scale: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 0285.031 (g_shady, gd) - body verbatim from _seg_0285__wells_clear_of_shrine_and_torii (feature 024 per-check split; guards re-evaluated in the body, see split_oversized.py)."""
-    if scale in ('town', 'village', 'hamlet') and scale in ('town', 'village', 'hamlet', 'city'):
-        g_shady = [(round(gd["x"]), round(gd["y"])) for gd in gardens if gd["y"] < gd["of"][1] - 5]
-    return _kept(locals(), ('g_shady', 'gd'))
-
-
-def _seg_0285_033__g_in_paddy(*, scale: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 0285.033 (g_in_paddy) - body verbatim from _seg_0285__wells_clear_of_shrine_and_torii (feature 024 per-check split; guards re-evaluated in the body, see split_oversized.py)."""
-    if scale in ('town', 'village', 'hamlet') and scale in ('town', 'village', 'hamlet', 'city'):
-        g_in_paddy = []  # type: ignore[var-annotated]
-    return _kept(locals(), ('g_in_paddy',))
-
-
-def _seg_0285_034__e_1(
-    *,
-    e: Any = _UNBOUND,
-    fc: Any = _UNBOUND,
-    fields_ol: Any = _UNBOUND,
-    g_in_paddy: Any = _UNBOUND,
-    gardens: Any = _UNBOUND,
-    gd: Any = _UNBOUND,
-    k: Any = _UNBOUND,
-    ol: Any = _UNBOUND,
-    px: Any = _UNBOUND,
-    py: Any = _UNBOUND,
-    scale: Any = _UNBOUND,
-    vx: Any = _UNBOUND,
-    vy: Any = _UNBOUND,
-) -> dict[str, Any]:
-    """Gate segment 0285.034 (e, fc, g_in_paddy, gd) - body verbatim from _seg_0285__wells_clear_of_shrine_and_torii (feature 024 per-check split; guards re-evaluated in the body, see split_oversized.py)."""
-    if scale in ('town', 'village', 'hamlet') and scale in ('town', 'village', 'hamlet', 'city'):
-        for gd in gardens:
-            fc = rect_corners(_struct_rect(gd))
-            if any(
-                any(point_in_poly(px, py, ol) for px, py in fc)
-                or any(point_in_poly(vx, vy, fc) for vx, vy in ol)
-                or any(segments_cross(fc[e], fc[(e + 1) % 4], ol[k], ol[(k + 1) % len(ol)]) for e in range(4) for k in range(len(ol)))
-                for ol in fields_ol
-            ):
-                g_in_paddy.append((round(gd["x"]), round(gd["y"])))
-    return _kept(locals(), ('e', 'fc', 'g_in_paddy', 'gd', 'k', 'ol', 'px', 'py', 'vx', 'vy'))
-
-
 # ... and off the IRRIGATION LINES too: the feeder CHANNELS, the in-field/drain DITCHES, and any
 # STREAM. A raised-bed vegetable plot cannot sit in a running ditch; `gardens_clear_of_paddies`
 # covers the flooded basin, but a feeder channel or the drain ditch threads the DRY village margin
@@ -431,32 +358,6 @@ def _seg_0285_039__gardens_clear_of_channels(*, check: Any = _UNBOUND, g_on_wate
     return _kept(locals(), ())
 
 
-def _seg_0285_040__g_fouled(*, scale: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 0285.040 (g_fouled) - body verbatim from _seg_0285__wells_clear_of_shrine_and_torii (feature 024 per-check split; guards re-evaluated in the body, see split_oversized.py)."""
-    if scale in ('town', 'village', 'hamlet') and scale in ('town', 'village', 'hamlet', 'city'):
-        g_fouled = []  # type: ignore[var-annotated]
-    return _kept(locals(), ('g_fouled',))
-
-
-def _seg_0285_041__g_fouled_1(
-    *, g_fouled: Any = _UNBOUND, gardens: Any = _UNBOUND, gc: Any = _UNBOUND, gd: Any = _UNBOUND, others: Any = _UNBOUND, par: Any = _UNBOUND, s: Any = _UNBOUND, scale: Any = _UNBOUND
-) -> dict[str, Any]:
-    """Gate segment 0285.041 (g_fouled, gc, gd, par) - body verbatim from _seg_0285__wells_clear_of_shrine_and_torii (feature 024 per-check split; guards re-evaluated in the body, see split_oversized.py)."""
-    if scale in ('town', 'village', 'hamlet') and scale in ('town', 'village', 'hamlet', 'city'):
-        for gd in gardens:
-            gc = rect_corners(_struct_rect(gd))
-            par = (round(gd["of"][0]), round(gd["of"][1]))
-            for s in others:
-                if (round(s["x"]), round(s["y"])) == par:
-                    continue
-                if abs(s["x"] - gd["x"]) + abs(s["y"] - gd["y"]) > 140:
-                    continue
-                if sat_overlap(gc, rect_corners(_struct_rect(s))):
-                    g_fouled.append((round(gd["x"]), round(gd["y"])))
-                    break
-    return _kept(locals(), ('g_fouled', 'gc', 'gd', 'par', 's'))
-
-
 # the garden and the farmhouse's STOREHOUSE/shed must never overlap - the shed sits on a wall the
 # garden does not use (west for a dispersed farm, the shaded north for a nucleated one). The shed is
 # a recorded annex (M['farm_sheds']), so read its actual footprint straight from there.
@@ -469,29 +370,6 @@ def _seg_0285_043__sheds_1(*, M: Any = _UNBOUND, scale: Any = _UNBOUND) -> dict[
     return _kept(locals(), ('sheds',))
 
 
-def _seg_0285_044__g_on_shed(*, scale: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 0285.044 (g_on_shed) - body verbatim from _seg_0285__wells_clear_of_shrine_and_torii (feature 024 per-check split; guards re-evaluated in the body, see split_oversized.py)."""
-    if scale in ('town', 'village', 'hamlet') and scale in ('town', 'village', 'hamlet', 'city'):
-        g_on_shed = []  # type: ignore[var-annotated]
-    return _kept(locals(), ('g_on_shed',))
-
-
-def _seg_0285_045__g_on_shed_1(
-    *, g_on_shed: Any = _UNBOUND, gardens: Any = _UNBOUND, gc: Any = _UNBOUND, gd: Any = _UNBOUND, scale: Any = _UNBOUND, sd: Any = _UNBOUND, sheds: Any = _UNBOUND
-) -> dict[str, Any]:
-    """Gate segment 0285.045 (g_on_shed, gc, gd, sd) - body verbatim from _seg_0285__wells_clear_of_shrine_and_torii (feature 024 per-check split; guards re-evaluated in the body, see split_oversized.py)."""
-    if scale in ('town', 'village', 'hamlet') and scale in ('town', 'village', 'hamlet', 'city'):
-        for gd in gardens:
-            gc = rect_corners(_struct_rect(gd))
-            for sd in sheds:
-                if abs(sd["x"] - gd["x"]) + abs(sd["y"] - gd["y"]) > 120:
-                    continue
-                if sat_overlap(gc, rect_corners(sd)):
-                    g_on_shed.append((round(gd["x"]), round(gd["y"])))
-                    break
-    return _kept(locals(), ('g_on_shed', 'gc', 'gd', 'sd'))
-
-
 # A dooryard bed and a threshing yard were HAND-worked plots bent to paths and soil, not surveyed
 # rectangles - the generator draws each as a slightly-irregular 4-sided quad (a garden more irregular,
 # a swept work yard near-square). Validate the SHAPE it records: every garden/yard with a `poly` must
@@ -499,51 +377,6 @@ def _seg_0285_045__g_on_shed_1(
 # bounds (the jitter only pulls corners INWARD, so a poly poking outside its rect means the overlap
 # checks - which use that rect - were cleared against the wrong footprint). WHY quads: settlements.md
 # "Dooryard kitchen gardens" / "Threshing yards" (irregular-plot grounding).
-
-
-def _seg_0285_047__bad_quad(*, scale: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 0285.047 (bad_quad) - body verbatim from _seg_0285__wells_clear_of_shrine_and_torii (feature 024 per-check split; guards re-evaluated in the body, see split_oversized.py)."""
-    if scale in ('town', 'village', 'hamlet') and scale in ('town', 'village', 'hamlet', 'city'):
-        bad_quad = []  # type: ignore[var-annotated]
-    return _kept(locals(), ('bad_quad',))
-
-
-def _seg_0285_048__bad_quad_1(
-    *,
-    bad_quad: Any = _UNBOUND,
-    gardens: Any = _UNBOUND,
-    hh: Any = _UNBOUND,
-    hw: Any = _UNBOUND,
-    inside: Any = _UNBOUND,
-    pg: Any = _UNBOUND,
-    pl: Any = _UNBOUND,
-    px: Any = _UNBOUND,
-    py: Any = _UNBOUND,
-    scale: Any = _UNBOUND,
-    yards: Any = _UNBOUND,
-) -> dict[str, Any]:
-    """Gate segment 0285.048 (bad_quad, hh, hw, inside) - body verbatim from _seg_0285__wells_clear_of_shrine_and_torii (feature 024 per-check split; guards re-evaluated in the body, see split_oversized.py)."""
-    if scale in ('town', 'village', 'hamlet') and scale in ('town', 'village', 'hamlet', 'city'):
-        for pl in gardens + yards:
-            pg = pl.get("poly")
-            if pg is None:
-                continue  # legacy rect-only record (dispersed maps predate poly)
-            hw, hh = pl["w"] / 2 + 0.6, pl["h"] / 2 + 0.6  # small tolerance for rounding
-            inside = all(abs(px - pl["x"]) <= hw and abs(py - pl["y"]) <= hh for px, py in pg)
-            if len(pg) != 4 or poly_area(pg) < 0.20 * pl["w"] * pl["h"] or not inside:
-                bad_quad.append((round(pl["x"]), round(pl["y"])))
-    return _kept(locals(), ('bad_quad', 'hh', 'hw', 'inside', 'pg', 'pl', 'px', 'py'))
-
-
-def _seg_0285_049__garden_plots_are_quads(*, bad_quad: Any = _UNBOUND, check: Any = _UNBOUND, scale: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 0285.049 (garden_plots_are_quads) - body verbatim from _seg_0285__wells_clear_of_shrine_and_torii (feature 024 per-check split; guards re-evaluated in the body, see split_oversized.py)."""
-    if scale in ('town', 'village', 'hamlet') and scale in ('town', 'village', 'hamlet', 'city'):
-        check(
-            "garden_plots_are_quads",
-            not bad_quad,
-            f"garden/yard footprint(s) are not valid inscribed 4-gons: {bad_quad[:3]} - each is a slightly-irregular quadrilateral (4 vertices, real area) that stays within its reserved w x h rect",
-        )
-    return _kept(locals(), ())
 
 
 # GARDEN AREA is held to a HISTORICAL band. Unlike the house/yard (drawn oversized against the
@@ -554,80 +387,6 @@ def _seg_0285_049__garden_plots_are_quads(*, bad_quad: Any = _UNBOUND, check: An
 # m^2; 1 se = 30 tsubo ~ 99 m^2). We sum ALL of a household's garden beds (a fragmented plot is still
 # one household's garden) and require the TOTAL in that band. WHY the numbers: settlements.md "Dooryard
 # kitchen gardens" (area grounding). Scale override via meta.ft_per_px for any non-standard map.
-
-
-def _seg_0285_050__ft_per_px(*, meta: Any = _UNBOUND, scale: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 0285.050 (ft_per_px) - body verbatim from _seg_0285__wells_clear_of_shrine_and_torii (feature 024 per-check split; guards re-evaluated in the body, see split_oversized.py)."""
-    if scale in ('town', 'village', 'hamlet') and scale in ('town', 'village', 'hamlet', 'city'):
-        ft_per_px = float(meta.get("ftpx") or meta.get("ft_per_px") or 2.0)  # the map's real scale (village 2, hamlet 1)
-    return _kept(locals(), ('ft_per_px',))
-
-
-def _seg_0285_051__m2_per_px2(*, ft_per_px: Any = _UNBOUND, scale: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 0285.051 (m2_per_px2) - body verbatim from _seg_0285__wells_clear_of_shrine_and_torii (feature 024 per-check split; guards re-evaluated in the body, see split_oversized.py)."""
-    if scale in ('town', 'village', 'hamlet') and scale in ('town', 'village', 'hamlet', 'city'):
-        m2_per_px2 = (ft_per_px * 0.3048) ** 2  # ft/px -> m per px, squared -> m^2 per px^2
-    return _kept(locals(), ('m2_per_px2',))
-
-
-def _seg_0285_052__GARDEN_M2_MAX(*, scale: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 0285.052 (GARDEN_M2_MAX, GARDEN_M2_MIN) - body verbatim from _seg_0285__wells_clear_of_shrine_and_torii (feature 024 per-check split; guards re-evaluated in the body, see split_oversized.py)."""
-    if scale in ('town', 'village', 'hamlet') and scale in ('town', 'village', 'hamlet', 'city'):
-        GARDEN_M2_MIN, GARDEN_M2_MAX = 10.0, 140.0
-    return _kept(locals(), ('GARDEN_M2_MAX', 'GARDEN_M2_MIN'))
-
-
-def _seg_0285_053__by_house(*, scale: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 0285.053 (by_house) - body verbatim from _seg_0285__wells_clear_of_shrine_and_torii (feature 024 per-check split; guards re-evaluated in the body, see split_oversized.py)."""
-    if scale in ('town', 'village', 'hamlet') and scale in ('town', 'village', 'hamlet', 'city'):
-        by_house: dict[tuple[int, int], float] = {}  # type: ignore[no-redef,unused-ignore]
-    return _kept(locals(), ('by_house',))
-
-
-def _seg_0285_054__a_px(
-    *, a_px: Any = _UNBOUND, by_house: Any = _UNBOUND, gardens: Any = _UNBOUND, gd: Any = _UNBOUND, key: Any = _UNBOUND, pg: Any = _UNBOUND, scale: Any = _UNBOUND
-) -> dict[str, Any]:
-    """Gate segment 0285.054 (a_px, by_house, gd, key) - body verbatim from _seg_0285__wells_clear_of_shrine_and_torii (feature 024 per-check split; guards re-evaluated in the body, see split_oversized.py)."""
-    if scale in ('town', 'village', 'hamlet') and scale in ('town', 'village', 'hamlet', 'city'):
-        for gd in gardens:
-            pg = gd.get("poly")
-            a_px = poly_area(pg) if pg else gd["w"] * gd["h"]
-            key = (round(gd["of"][0]), round(gd["of"][1]))
-            by_house[key] = by_house.get(key, 0.0) + a_px
-    return _kept(locals(), ('a_px', 'by_house', 'gd', 'key', 'pg'))
-
-
-def _seg_0285_055__a_px_1(
-    *,
-    GARDEN_M2_MAX: Any = _UNBOUND,
-    GARDEN_M2_MIN: Any = _UNBOUND,
-    a_px: Any = _UNBOUND,
-    by_house: Any = _UNBOUND,
-    hx: Any = _UNBOUND,
-    hy: Any = _UNBOUND,
-    m2_per_px2: Any = _UNBOUND,
-    scale: Any = _UNBOUND,
-) -> dict[str, Any]:
-    """Gate segment 0285.055 (a_px, g_area_bad, hx, hy) - body verbatim from _seg_0285__wells_clear_of_shrine_and_torii (feature 024 per-check split; guards re-evaluated in the body, see split_oversized.py)."""
-    if scale in ('town', 'village', 'hamlet') and scale in ('town', 'village', 'hamlet', 'city'):
-        g_area_bad = [(hx, hy, round(a_px * m2_per_px2)) for (hx, hy), a_px in by_house.items() if not (GARDEN_M2_MIN <= a_px * m2_per_px2 <= GARDEN_M2_MAX)]
-    return _kept(locals(), ('a_px', 'g_area_bad', 'hx', 'hy'))
-
-
-def _seg_0285_056__garden_area_within_norms(
-    *, GARDEN_M2_MAX: Any = _UNBOUND, GARDEN_M2_MIN: Any = _UNBOUND, check: Any = _UNBOUND, g_area_bad: Any = _UNBOUND, scale: Any = _UNBOUND
-) -> dict[str, Any]:
-    """Gate segment 0285.056 (garden_area_within_norms) - body verbatim from _seg_0285__wells_clear_of_shrine_and_torii (feature 024 per-check split; guards re-evaluated in the body, see split_oversized.py)."""
-    if scale in ('town', 'village', 'hamlet') and scale in ('town', 'village', 'hamlet', 'city'):
-        check(
-            "garden_area_within_norms",
-            not g_area_bad,
-            f"household kitchen-garden total area out of the historical band "
-            f"[{GARDEN_M2_MIN:.0f}-{GARDEN_M2_MAX:.0f} m^2]: {g_area_bad[:3]} (x, y, m^2) - a saien is the small "
-            f"intensive daily-greens bed by the kitchen, ~a few tsubo up to ~1.4 se; bigger reads as a field, "
-            f"tinier as no garden at all",
-        )
-    return _kept(locals(), ())
 
 
 # HOMESTEAD GROVE (yashikirin) - the farmhouse windbreak. A dense L-BELT of shelter trees on the
@@ -674,32 +433,6 @@ def _seg_0285_061__wvx(*, WINDV: Any = _UNBOUND, scale: Any = _UNBOUND, windward
     if scale in ('town', 'village', 'hamlet') and scale in ('town', 'village', 'hamlet', 'city'):
         wvx, wvy = WINDV.get(windward, (-1, -1))
     return _kept(locals(), ('wvx', 'wvy'))
-
-
-def _seg_0285_062__g_lee(*, groves: Any = _UNBOUND, gv: Any = _UNBOUND, scale: Any = _UNBOUND, wvx: Any = _UNBOUND, wvy: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 0285.062 (g_lee, gv) - body verbatim from _seg_0285__wells_clear_of_shrine_and_torii (feature 024 per-check split; guards re-evaluated in the body, see split_oversized.py)."""
-    if scale in ('town', 'village', 'hamlet') and scale in ('town', 'village', 'hamlet', 'city'):
-        g_lee = [(round(gv["x"]), round(gv["y"])) for gv in groves if (gv["x"] - gv["of"][0]) * wvx + (gv["y"] - gv["of"][1]) * wvy <= 0]
-    return _kept(locals(), ('g_lee', 'gv'))
-
-
-def _seg_0285_063__groves_on_windward_side(*, check: Any = _UNBOUND, g_lee: Any = _UNBOUND, scale: Any = _UNBOUND, windward: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 0285.063 (groves_on_windward_side) - body verbatim from _seg_0285__wells_clear_of_shrine_and_torii (feature 024 per-check split; guards re-evaluated in the body, see split_oversized.py)."""
-    if scale in ('town', 'village', 'hamlet') and scale in ('town', 'village', 'hamlet', 'city'):
-        check(
-            "groves_on_windward_side",
-            not g_lee,
-            f"homestead grove(s) sit on the LEE/sunny side of their farmhouse, not the windward {windward}: "
-            f"{g_lee[:3]} - a yashikirin shelters the windward wall (default N/W) and leaves the sunny lee open",
-        )
-    return _kept(locals(), ())
-
-
-def _seg_0285_064__g_in_paddy_1(*, fields_ol: Any = _UNBOUND, groves: Any = _UNBOUND, gv: Any = _UNBOUND, ol: Any = _UNBOUND, scale: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 0285.064 (g_in_paddy, gv, ol) - body verbatim from _seg_0285__wells_clear_of_shrine_and_torii (feature 024 per-check split; guards re-evaluated in the body, see split_oversized.py)."""
-    if scale in ('town', 'village', 'hamlet') and scale in ('town', 'village', 'hamlet', 'city'):
-        g_in_paddy = [(round(gv["x"]), round(gv["y"])) for gv in groves if any(point_in_poly(gv["x"], gv["y"], ol) for ol in fields_ol)]
-    return _kept(locals(), ('g_in_paddy', 'gv', 'ol'))
 
 
 # TWO FARMHOUSES MUST SHED SEPARATELY. A minka carries a steep kayabuki thatch (45 deg or steeper -
@@ -863,74 +596,3 @@ def _seg_0609__byres_stand_in_their_declared_form(*, M: Any = _UNBOUND, check: A
 # universal. Research: research/homesteads.md "The farmstead's fixtures".
 FIXTURE_REACH_FT = {"privy": 20.0, "manure": 26.0, "bath": 20.0, "coop": 20.0, "woodpile": 20.0, "shrine": 30.0}
 PERSIMMON_REACH_FT = 50.0
-
-
-def _seg_0609_501__farm_fixtures_attached(
-    *,
-    M: Any = _UNBOUND,
-    check: Any = _UNBOUND,
-    meta: Any = _UNBOUND,
-    scale: Any = _UNBOUND,
-    farm_fixtures_attached_bad: Any = _UNBOUND,
-) -> dict[str, Any]:
-    """Gate segment 0609_501 (farm_fixtures_attached) - every farmstead fixture and yard persimmon stands within its kind's reach of the farmhouse it records as its own."""
-    if scale in ("hamlet", "village", "town"):
-        farm_fixtures_attached_bad = []
-        ftpx = float(meta.get("ftpx") or 1.0)
-        houses = M.get("houses") or []
-        for rec in list(M.get("farm_fixtures") or []) + [
-            {"kind": "persimmon", "x": p_["x"], "y": p_["y"], "w": 4.0 / ftpx, "h": 4.0 / ftpx, "rot": 0, "of": p_.get("of")} for p_ in M.get("persimmons") or []
-        ]:
-            of = rec.get("of")
-            parent = next((h for h in houses if of and abs(h["x"] - of[0]) < 0.6 and abs(h["y"] - of[1]) < 0.6), None)
-            reach = (PERSIMMON_REACH_FT if rec["kind"] == "persimmon" else FIXTURE_REACH_FT.get(rec["kind"], 20.0)) / ftpx
-            if parent is None or not within_edge_gap(rec, parent, reach):
-                farm_fixtures_attached_bad.append((rec["kind"], round(rec["x"]), round(rec["y"])))
-        check(
-            "farm_fixtures_attached",
-            not farm_fixtures_attached_bad,
-            f"{len(farm_fixtures_attached_bad)} farmstead fixture(s) {farm_fixtures_attached_bad[:3]} stand away from the farmhouse they belong to (or name none) - a privy, stack, heap, bath, coop, hokora or yard persimmon is that household's, seated at its wall or its plot corner",
-        )
-    return _kept(locals(), ("farm_fixtures_attached_bad",))
-
-
-def _seg_0609_502__farm_fixtures_as_declared(
-    *,
-    M: Any = _UNBOUND,
-    check: Any = _UNBOUND,
-    meta: Any = _UNBOUND,
-    scale: Any = _UNBOUND,
-    farm_fixtures_as_declared_bad: Any = _UNBOUND,
-) -> dict[str, Any]:
-    """Gate segment 0609_502 (farm_fixtures_as_declared) - the sheet agrees with the shares the hamlet rolled: every drawn kind declared, at most one of a kind per house, the shrine as rare as declared, a privy present where privies were declared near-universal, and every spec floor (meta.farm_fixtures_min) met."""
-    if scale in ("hamlet", "village", "town"):
-        farm_fixtures_as_declared_bad = []
-        shares = meta.get("farm_fixtures") or {}
-        fixtures = list(M.get("farm_fixtures") or [])
-        n = len(M.get("houses") or [])
-        drawn: dict[str, list[Any]] = {}
-        for rec in fixtures:
-            drawn.setdefault(rec["kind"], []).append(tuple(rec.get("of") or (rec["x"], rec["y"])))
-        if M.get("persimmons"):
-            drawn["persimmon"] = [tuple(p_.get("of") or (p_["x"], p_["y"])) for p_ in M["persimmons"]]
-        for kind, owners in drawn.items():
-            if kind not in shares:
-                farm_fixtures_as_declared_bad.append(f"{kind}: drawn but not declared in meta.farm_fixtures")
-            if len(owners) != len(set(owners)):
-                farm_fixtures_as_declared_bad.append(f"{kind}: a house has more than one")
-        if shares:
-            mins = meta.get("farm_fixtures_min") or {}
-            cap = max(1, round(float(shares.get("shrine", 0.0)) * n), int(mins.get("shrine", 0)))
-            for kind, floor in mins.items():  # the spec asked for at least N (T61) and the sheet must deliver
-                if len(drawn.get(kind, [])) < int(floor):
-                    farm_fixtures_as_declared_bad.append(f"{kind}: the spec asks for at least {floor}, {len(drawn.get(kind, []))} drawn")
-            if len(drawn.get("shrine", [])) > cap:
-                farm_fixtures_as_declared_bad.append(f"shrine: {len(drawn['shrine'])} drawn, {cap} allowed at share {shares.get('shrine')} - a household shrine is RARE")
-            if n >= 8 and float(shares.get("privy", 0.0)) >= 0.8 and not drawn.get("privy"):
-                farm_fixtures_as_declared_bad.append(f"privy: declared on {shares.get('privy')} of houses and none drawn - the placer found no seat anywhere")
-        check(
-            "farm_fixtures_as_declared",
-            not farm_fixtures_as_declared_bad,
-            f"the farmstead fixtures disagree with the declared shares: {farm_fixtures_as_declared_bad[:3]}",
-        )
-    return _kept(locals(), ("farm_fixtures_as_declared_bad",))

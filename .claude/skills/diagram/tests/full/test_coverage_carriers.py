@@ -18,12 +18,7 @@ from tests.gate.test_regressions import HERE, _load
 # line-coverage search, specs/022-gate-check-registry/) to cover them; they also keep full-mode
 # gate() integration-tested inside the suite. If coverage drops here again, re-run the greedy
 # search rather than guessing fixtures.
-_FULL_GATE_SENTINELS = [
-    "stable_troughs_clip_the_well_house_roof_tango.json",
-    "capital_fullness_deferral_fires_on_the_first_pass_shiro_daika.json",
-    "city_samurai_estates_fire_on_a_tight_wall_cluster.json",
-    "settlement_wells_fire_on_a_village_with_no_wells.json",
-]
+_FULL_GATE_SENTINELS = ["settlement_wells_fire_on_a_village_with_no_wells.json"]
 
 
 @pytest.mark.parametrize("name", _FULL_GATE_SENTINELS)
