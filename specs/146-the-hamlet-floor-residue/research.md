@@ -64,6 +64,28 @@ over, because it is the argument for replacing incidental coverage with purposef
 
 Scripted negative fixtures: 4 at the start, **26** now - each a cached roll plus one deliberate break.
 
+## R2d - the last 169 lines, and the trade that was declined
+
+The floor stands at **169 lines over 89 functions, 98.86%** (from 373). What is left is not the residue the
+spec described: it is a LONG TAIL. 60 of the 89 functions hold one or two lines each, and almost all of them
+are a single `return True` / `return False` / `continue` - one refusal reason in a placement predicate, or a
+fallback the placer has never needed (`_thread_the_fabric`'s detour 13, `_smooth_web`'s rollback 11, the
+city bridge's rotation search 12). A roll takes whichever reasons its own geometry hits; these are the ones
+no roll has hit.
+
+**The cheap lever was priced and DECLINED.** Widening the FULL cohort from 8 seeds to 24 is the project's own
+doctrine (rolls are the test bed, seed sweeps live in the FULL/AWS tier) and would reach many of these at
+once. Measured: it costs **6-9 minutes** of the FULL run, and it surfaces **four seeds that draw defective
+maps** - 56 and 58 bend a lane like no foot would and leave the web in two pieces, 57 leaves it in two
+pieces, 59 puts a caption on the way it stands on and staggers a bund. Taking the coverage would mean
+PINNING four known-bad maps as expected failures, which buys a number by ledgering defects. That is the
+wrong direction for this project, so the sweep stays at 8 and the four seeds are recorded here instead -
+they are real generator defects, found by this feature, and worth their own work.
+
+**What closing the tail honestly costs**: roughly 89 small unit tests, each building the manifest that trips
+exactly one refusal reason - the shape this feature already used for ~20 of them. It is mechanical and
+finishable; it is simply not finished, and no number here is rounded up to pretend otherwise.
+
 ## R3 - the numbers at the end
 
 (filled in at the closing task)
