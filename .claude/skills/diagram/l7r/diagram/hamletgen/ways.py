@@ -1127,6 +1127,53 @@ def _touch_junctions(s: Settlement, hard: list[Poly], walls: Sequence[Poly], wat
             if joined:
                 break
         if not joined:
+            # THE LADDER'S LAST TWO RUNGS (feature 137 T03, 2026-08-28). Tripwire seed 37 and 26 of 48
+            # cohort seeds carried a piece the two rungs above could not link: a stub whose only way to
+            # the spine is a slot between a house and a yard that the 7 ft fabric pad closes on both
+            # sides. (1) Route again at the JUNCTION standard - `_TOUCH_GAP`, the margin a link into a
+            # junction is already allowed to brush a fence at (see the note under `_ORPHAN_REACH`): a
+            # lane and a plot fence share a line in a real village. (2) Failing that, DROP the piece -
+            # but only when no farmhouse would be stranded by it: every house the piece serves (within
+            # `_SERVE_FT` of its tread) must still stand within `_SERVE_FT` of some other way. A fragment
+            # that serves no house nobody else reaches is a drawing, not a lane, and the network check
+            # is right to want it gone; a fragment that IS a house's only way stays, visibly broken.
+            for i in sorted(orphans, key=lambda k: -polyline_len(ways[k])):
+                cands = sorted(((math.dist(v, q), v, q) for v in ways[i] for q in [min((seg_closest(v[0], v[1], a, b) for a, b in main_segs), key=lambda z: math.dist(v, z))]), key=lambda c: c[0])
+                for d, v, q in cands[:12]:
+                    if d > _ORPHAN_REACH:
+                        break
+                    link = _route(v, q, hard, walls, water, gap=_TOUCH_GAP, pad_mult=2.0, cell=6.0)
+                    if not link:  # (3) the DETOUR: around the yard or the house that walls the slot - a wider box, a longer leash
+                        link = _route(v, q, hard, walls, water, gap=WEB_FABRIC_GAP, pad_mult=5.0, cell=10.0)
+                        if link and polyline_len(link) > _DETOUR_DIRECTNESS * max(d, 1.0):
+                            link = []
+                    if link and polyline_len(link) <= _DETOUR_DIRECTNESS * max(d, 1.0):
+                        _draw_web(s, link, int(float(lanes[i].get("w", 3))))
+                        joined = True
+                        break
+                if joined:
+                    break
+        if not joined:
+            _others = [sg for j in range(len(ways)) if j not in orphans and len(ways[j]) >= 2 for sg in zip(ways[j], ways[j][1:], strict=False)]
+            _houses = [(float(h["x"]), float(h["y"])) for h in s.M.get("houses", [])]
+
+            def _near(pt: Pt, segs: list[tuple[Pt, Pt]]) -> float:
+                return min((seg_dist(pt[0], pt[1], a, b) for a, b in segs), default=float("inf"))
+
+            _dropped = 0
+            for i in orphans:
+                _mine = list(zip(ways[i], ways[i][1:], strict=False))
+                _served = [h for h in _houses if _near(h, _mine) <= _SERVE_FT]
+                if all(_near(h, _others) <= _SERVE_FT for h in _served):
+                    lanes[i]["pts"] = []
+                    s.reink_lane(i)
+                    _dropped += 1
+            if _dropped:
+                s.M["meta"]["lane_fragments_dropped"] = s.M["meta"].get("lane_fragments_dropped", 0) + _dropped
+                joined = _dropped == len(orphans)
+                if joined:
+                    continue
+        if not joined:
             # KEPT, not dropped. The first cut of this pass DELETED a piece it could not link, and
             # on Inashiro that stranded a farmhouse the piece was serving: `farmhouses_reach_a_way`
             # failed, the driver's re-roll loop (`driver.py`) took over, and the map that came out
@@ -1139,6 +1186,8 @@ def _touch_junctions(s: Settlement, hard: list[Poly], walls: Sequence[Poly], wat
 
 
 _ORPHAN_REACH = 150.0  # ft: how far a stranded piece may be linked back to the network before it is left as it is
+_DETOUR_DIRECTNESS = 8.0  # the last rung may walk round a yard: up to 8x the straight gap (a 29 ft gap -> a 230 ft way round)
+_SERVE_FT = 100.0  # ft: a way serves a house within this - `farmhouses_reach_a_way`'s own figure, so a dropped fragment never strands one
 
 # A JUNCTION LINK CROSSES NOTHING, BUT IT MAY BRUSH A FENCE. The 29 ft gaps this pass closes are
 # made by the fabric margin itself: `clear_runs` clips a lane wherever it passes within
