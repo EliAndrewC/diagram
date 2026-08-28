@@ -149,3 +149,17 @@ def test_a_seat_whose_rotated_parcel_cannot_fit_the_window_is_dropped(monkeypatc
     assert _scan(), "the control scan seated nothing, so a later empty result would prove nothing"
     monkeypatch.setattr(hinterland, "WOODLAND_BBOX_FLOOR", 1.01)
     assert _scan() == [], "an unsatisfiable window floor must drop every parcel, not draw one the crop will cut off"
+
+
+def test_bamboo_seats_refuse_the_canvas_edge_and_the_title_pocket() -> None:
+    """Feature 146: two of the bamboo scan's refusal reasons - a candidate hanging off the canvas, and one
+    inside the pocket the title placard will occupy (the title is drawn later, so its ground is reserved)."""
+    from l7r.diagram.settlement import Settlement
+
+    from ._builders import a_plan
+
+    s = Settlement(600, 600, seed=1)  # small, so the 30 px margin is a large share of the sheet
+    s.meta(name="B", scale="hamlet", ftpx=1, down_deg=90)
+    plan = a_plan()
+    seats = hg.hinterland.bamboo_seats(s, plan)
+    assert all(30 <= sum(q[0] for q in poly) / len(poly) <= 570 for poly in seats), "no seat hangs off the canvas"
