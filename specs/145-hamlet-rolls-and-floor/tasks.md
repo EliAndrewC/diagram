@@ -13,6 +13,7 @@ Every task is `research: rendering` (nothing physical is decided here).
 - [x] T10 the hamlet floor: derive the module set from the roll cache records, refuse without them; a phase of `test-full` after the two existing reports; the settlement ratchet stays - `research: rendering`
 - [x] T11 guard test: the floor fires on a module in the set, stays quiet on one outside - `research: rendering`
 - [ ] T12 first measurement of the floor at FULL; every hamlet-path module under 100% brought up BY TESTS; any code only a non-hamlet tier reaches listed for the GM - `research: rendering`
+- [x] T09 the four placer defects the moved maps exposed (research R2b): connector wet-band offset, belt crown keep-out, unjog knee, footpath standing place/junction off water - `research: rendering`
 - [ ] T20 `make durations` before/after: the settlement-geometry tests over the quick cutoff, each made faster or carrying a written reason - `research: rendering`
 - [ ] T21 unlocked `make done` green; `make done FULL=1` green with the floor; corpus fires as before - `research: rendering`
 - [ ] T22 perf bookend `144-end`, `make perf-report AGAINST=144-start`; research.md R1-R4 (the billions, the two fixes, the floor's definition, the numbers) - `research: rendering`

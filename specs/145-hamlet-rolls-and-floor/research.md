@@ -45,6 +45,21 @@ reference roll alone (`GATE_NO_CACHE=1 make reference`, gate included, process s
 17.6 -> 12.2 s wall; its remaining stages are the web (~1.5 s), the field (~1.5 s), hinterland
 (~3 s), homesteads, the notice board, and ~2 s of gate.
 
+## R2b - what the moved maps exposed (constitution XIV: fixed here, not filed)
+
+The first FULL run after the solver change found four checks firing on three maps that were green
+before the move. Each was diagnosed to a PLACER defect the old field geometry had happened to hide:
+
+| map | check | cause | fix |
+|---|---|---|---|
+| Sawada | `roads_clear_of_marsh` | the connector grazed the toe band's corner by 4.5 px off-page: `connector_track` grew the wet band by scaling about its CENTROID, which barely moves the corners of a 2,900 px contour strip | `_inflated` now offsets along the ring's normals (`ring_offset`, feature 140) |
+| Kashikawa | `wells_clear_of_trees` | the windbreak's clump keep-out for a well was vr + 0.90 x clump, but a drawn crown runs to ~1.03 x clump (14.4 on a 14 clump, 25.4 px from a well of vr 12.4) | vr + 1.05 x clump + 1 |
+| Kashikawa | `lanes_bend_like_paths` | a straggler footpath kept a 7 px lattice step: `_unjog` replaces a zigzag only by its full chord, and the chord brushed a garden | a knee at the step's midpoint is tried when the chord is blocked |
+| Cohort-41 | `ways_cross_water_on_a_deck` | the footpath's standing place at the door was tested with `_clear_link(q, q, ...)`, which returns True for any span under 1 px - never tested at all; it stood 1.3 px off the drain brook. Its network junction had no water test either | the standing place is judged as a POINT by the router's own index (14 px off water); a junction within 14 px of water is skipped |
+
+After the fixes all three roll clean; cohort seeds 42 and 43, pinned failing since 2026-08-27, also
+come up clean and their pins are removed (gate/hamletgen/test_driver.py).
+
 ## R3 - the floor's definition (the GM's ruling, and what it means in practice)
 
 Three definitions were priced (the GM was told the second and third; the ruling was module level):
