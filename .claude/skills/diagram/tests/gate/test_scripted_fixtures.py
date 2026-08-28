@@ -290,3 +290,41 @@ def test_no_structure_on_torii_fires_when_a_shed_is_set_under_the_arch() -> None
         M["torii"] = [[float(M["houses"][1]["x"]), float(M["houses"][1]["y"]), 0.0]]
 
     _fires(REFERENCE, "no_structure_on_torii", under_the_arch)
+
+
+@pytest.mark.rolls_map
+def test_wells_among_dwellings_fires_when_a_wellhead_stands_in_the_paddy() -> None:
+    """The other arm of the well check: not merely far from the houses, but standing in the rice."""
+
+    def into_the_rice(M: dict[str, Any]) -> None:
+        fx0, fy0, fx1, fy1 = M["fields"][0]["bbox"]
+        M["wells"][0]["x"], M["wells"][0]["y"] = (fx0 + fx1) / 2, (fy0 + fy1) / 2
+
+    _fires(REFERENCE, "wells_among_dwellings", into_the_rice)
+
+
+@pytest.mark.rolls_map
+def test_byres_meet_their_target_fires_when_the_byres_are_taken_away() -> None:
+    _fires(REFERENCE, "byres_meet_their_target", lambda M: M.__setitem__("byres", []))
+
+
+@pytest.mark.rolls_map
+def test_byre_form_declared_fires_when_the_declaration_is_missing() -> None:
+    """The declaration itself, not its truth: a map that draws byres must SAY which form they are, so the
+    form check has something to measure against."""
+    _fires(REFERENCE, "byre_form_declared", lambda M: M["meta"].pop("byre_form", None))
+
+
+@pytest.mark.rolls_map
+def test_title_clear_of_features_fires_when_the_placard_is_dropped_on_a_farmhouse() -> None:
+    def onto_a_house(M: dict[str, Any]) -> None:
+        h = M["houses"][0]
+        box = [float(h["x"]) - 90, float(h["y"]) - 34, float(h["x"]) + 90, float(h["y"]) + 34]
+        M["title"] = {**M["title"], "bbox": box, "placard": list(box)}
+
+    _fires(REFERENCE, "title_clear_of_features", onto_a_house)
+
+
+@pytest.mark.rolls_map
+def test_title_has_placard_fires_when_the_placard_is_dropped() -> None:
+    _fires(REFERENCE, "title_has_placard", lambda M: M["title"].pop("placard", None))
