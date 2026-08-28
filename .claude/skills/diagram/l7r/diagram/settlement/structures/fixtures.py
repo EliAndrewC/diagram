@@ -165,7 +165,7 @@ class PublicFixturesMixin:
         g.append(f'<rect x="{-hw:.1f}" y="{-hh:.1f}" width="{vw:.1f}" height="{vh:.1f}" rx="1" fill="#7A5A30" stroke="#5A3F1E" stroke-width="0.8"/>')  # the little tiled roof, seen from above
         g.append(f'<line x1="{-hw:.1f}" y1="0" x2="{hw:.1f}" y2="0" stroke="#EFE6CC" stroke-width="0.9"/>')  # the ridge
         g.append('</g>')
-        z = self.add_top(''.join(g))
+        z = self.add_top(''.join(g), cls="notice board")
         self.M["kosatsuba"].append({"x": round(x, 1), "y": round(y, 1), "w": w, "h": h, "vw": round(vw, 1), "vh": round(vh, 1), "rot": round(rot, 1), "z": z, "label": label})
         self.placed.append((x, y, vw, vh))
         bm = 6
@@ -243,7 +243,17 @@ class PublicFixturesMixin:
                 # five failing seeds. The placer and its check must read one source; that is the
                 # oldest rule in this engine's CLAUDE.md and I broke it in code written to enforce it.
                 _best = 1e9
-                _box = ((_q[0] - _chw, _q[1] - 5), (_q[0] + _chw, _q[1] - 5), (_q[0] - _chw, _q[1] + 5), (_q[0] + _chw, _q[1] + 5), _q)
+                # THE BOX THE RECORD WILL CARRY, not a one-line guess (feature 137, tripwire seed 33 and
+                # cohort seed 03): "notice board" WRAPS to two lines at 8 pt, so the recorded box is 26
+                # by 18, centered 2.2 px above the anchor - while this probe scored a 54 by 10 box on
+                # the anchor and called 0.2 px of overlap a 2 ft clearance. Same lines, same arithmetic
+                # as `label()` / `_record_label`, so what the seat search scores is what gate 0617 reads.
+                _lines = self._caption_lines(label, _q[0], _q[1], 8.0, "middle", _t)
+                _n, _lh = len(_lines), 8.0 * 1.15
+                _bw = max(len(_ln) for _ln in _lines) * 8.0 * 0.55 / 2.0
+                _bh = (8.0 * 1.05 + (_n - 1) * _lh) / 2.0
+                _cy = _q[1] - 8.0 * 0.275
+                _box = ((_q[0] - _bw, _cy - _bh), (_q[0] + _bw, _cy - _bh), (_q[0] - _bw, _cy + _bh), (_q[0] + _bw, _cy + _bh), (_q[0], _cy))
                 for _lane in self.M.get("lanes") or []:
                     _pts = _lane.get("pts") or []
                     _lhalf = float(_lane.get("w") or 3) / 2.0
@@ -434,7 +444,7 @@ class PublicFixturesMixin:
             ]
             if not label_xy:  # a HAND seat is a decision and is honored exactly; only the derived seat is pulled (T40; the town-tier hand-seat test found the pull moving it 13.9 px, 2026-08-28)
                 _lx, _ly = self.pull_caption_toward((_lx, _ly), label, 8, "middle", _t, _bq)
-            self.label(_lx, _ly, label, 8, italic=True, color="#7A5A30", rot=_t, ref=(x - hw, y - hh, x + hw, y + hh))
+            self.label(_lx, _ly, label, 8, italic=True, color="#7A5A30", rot=_t, ref=(x - hw, y - hh, x + hw, y + hh), cls="notice board")  # the caption shares the board's class (feature 134 FR-006)
         return z
 
     def fixture_clear_of_water(self: Settlement, x: float, y: float, half: float) -> bool:  # type: ignore[misc]
@@ -454,15 +464,15 @@ class PublicFixturesMixin:
         happened to fail would have left the other seating boards in water on the next re-roll.
 
         Reads the DRAWN courses (`drawn_channels`) as well as the recorded ones, because the filleted
-        stroke is what a reader sees and what the overlap matrix measures."""
-        for key, default in (("streams", 9.0), ("channels", 2.5), ("field_ditches", 4.2), ("drawn_channels", 2.5)):
-            for rec in self.M.get(key) or []:
-                pts = rec.get("poly") or rec.get("pts") or []
-                need = float(rec.get("w") or default) / 2 + half
-                for i in range(len(pts) - 1):
-                    if seg_dist(x, y, (pts[i][0], pts[i][1]), (pts[i + 1][0], pts[i + 1][1])) < need:
-                        return False
-        return True
+        stroke is what a reader sees and what the overlap matrix measures.
+
+        INDEXED (feature 138): `place_kosatsuba` asked this 17,407 times on one polder, each call walking
+        all ~720 water segments - 12.5 million `seg_dist`. The segments are filed once in a grid (rebuilt
+        when any of the four lists changes length, the same rule `_water_obstacles` uses) with each
+        segment's own half-width; a probe measures only its cell's segments. Same predicate, same answer."""
+        from l7r.diagram.settlement._geom.water_index import water_index
+
+        return water_index(self).clear(x, y, half)
 
     def caption_lane_clearance(self: Settlement, qx: float, qy: float, chw: float, size: float = 8.0) -> float:  # type: ignore[misc]
         """Least distance from a caption's BOX to any lane's tread EDGE (negative = standing on it).
@@ -563,6 +573,10 @@ class PublicFixturesMixin:
             # `web` is exactly the hierarchy flag the hamlet tier lacked. Web lanes are used only if
             # there is nothing else to stand beside.
             _ways = self.M.get("lanes") or []
+            # TRIED AND REVERTED (feature 140, 2026-08-28): admitting every web lane as a route on a hamlet, to let the
+            # board reach the frontage. It moved nothing on Inashiro - the frontage has no verge seat that `_fits` a
+            # board after the re-seat (4 of 60 probes around the houses fit), so the choice of routes was never the
+            # constraint; the room is. Recorded so the lever is not pulled again (`research.md` R6).
             _main = [ln for ln in _ways if not ln.get("web")] or _ways
             routes.extend(([(p[0], p[1]) for p in ln["pts"]], float(ln.get("w", 8))) for ln in _main)
             routes.extend(([(p[0], p[1]) for p in st["pts"]], float(st.get("w", 18))) for st in self.M.get("town_streets") or [])
@@ -600,7 +614,10 @@ class PublicFixturesMixin:
                         while off <= lim:
                             x, y = mx + ux * off * side, my + uy * off * side
                             if off_every_bed(x, y) and self.fixture_clear_of_water(x, y, math.hypot(w, h) / 2) and self._fits(x, y, w, h, corridors=False):
-                                busy = sum(1 for sx, sy in spots if math.hypot(x - sx, y - sy) < 260)
+                                # BUSY IS WHERE THE FEET ARE (feature 140's Inashiro review, 2026-08-28): counting dwellings within 260 px
+                                # could not tell the frontage (11 within 150 ft) from the exit throat (5 within 150 ft) - both had ~16-21
+                                # within 260 - and a re-roll sat the board at the throat. The near count is weighted double.
+                                busy = sum(1 for sx, sy in spots if math.hypot(x - sx, y - sy) < 260) + 2 * sum(1 for sx, sy in spots if math.hypot(x - sx, y - sy) < 150)
                                 # THE CAPTION IS PART OF THE SEAT (GM 2026-07-27). The glyph is 11 px
                                 # and fits almost anywhere; its caption does not, and the busiest
                                 # frontage is exactly where there is least room for one - so a siter

@@ -33,7 +33,9 @@ def _roots() -> tuple[Path, Path]:
 
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(prog="l7r.diagram.ci", description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("command", choices=["status", "check", "merge", "image", "state", "door", "remote-spend", "engine-key", "verified-done", "remote-ok", "tooling-green", "tooling-fresh"])
+    ap.add_argument(
+        "command", choices=["status", "check", "merge", "image", "state", "door", "remote-spend", "engine-key", "verified-done", "remote-ok", "tooling-green", "tooling-fresh", "cov-scope"]
+    )
     ap.add_argument("args", nargs="*")
     ap.add_argument("--full", action="store_true", help="the full sweep (the Makefile has already run the local prompt)")
     ap.add_argument("--target", default=None, help="ci-check only: an expensive operation to run remotely instead of the gate")
@@ -59,6 +61,12 @@ def main(argv: list[str] | None = None) -> int:
         runlog.write_would_have(skill, what, "operation" if what != "ci-check" else "reference", est.minutes, f"remote off: `make {what}` attempted and refused")
         print(f"(recorded as would-have-dispatched, ~{est.minutes:.0f} build-min ~${est.cost_usd:.2f} - `make ci-status` lists these; the period's audit reads them)", file=sys.stderr)
         return 1
+    if a.command == "cov-scope":  # the pytest words that trace only the changed engine modules (delta.coverage_scope); nothing changed -> no tracing
+        from l7r.diagram.ci.delta import coverage_scope
+
+        mods = coverage_scope(root)
+        print(" ".join(["-o", "addopts=--cov=" + mods[0], *[f"--cov={m}" for m in mods[1:]]]) if mods else "-o addopts= --no-cov")
+        return 0
     if a.command == "tooling-fresh":  # exit 0 when the tooling is unchanged since the last record - the Makefile then skips collecting tests/tooling
         rec = state.read(root)
         return 0 if rec is not None and rec.tooling and rec.tooling == state.tooling_hash(root) else 1
@@ -106,7 +114,7 @@ def main(argv: list[str] | None = None) -> int:
     # REMOTE OFF (feature 132): read BEFORE any credential is loaded or any client is built, so that
     # with the switch thrown no AWS call is even possible. `status` still answers (without a
     # lookup); `check` and `image` refuse outright; `merge` becomes LOCAL-GATED - it writes the
-    # verdict the push ritual reads, and that verdict is SKIP-VERIFIED only when a green local
+    # verdict the push procedure reads, and that verdict is SKIP-VERIFIED only when a green local
     # `make done` vouches for exactly the engine content the merge would produce.
     remote_off = switches.read(skill).remote_off
     if a.command == "status":

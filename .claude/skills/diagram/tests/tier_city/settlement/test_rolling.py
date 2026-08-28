@@ -16,7 +16,7 @@ def test_farmsteads_legacy_skips_grove_for_a_city_intramural_farm():
     s.meta(name="C", scale="city")  # city + not toscale -> legacy path
     fld = (300, 300, 620, 560)
     s.paddy_field(fld, "", "f", amp=20)
-    s.ring(fld, 8, 16, ["plain"])
+    s.ring(fld, 8, 24, ["plain"])
     s.M["wall"] = [(120, 120), (760, 120), (760, 720), (120, 720)]  # encloses the whole ring of farms
     n = s.farmsteads()
     assert n > 0 and not s.M["groves"]  # every intramural farm skipped its grove

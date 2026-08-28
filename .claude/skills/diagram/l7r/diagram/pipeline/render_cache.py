@@ -1,6 +1,6 @@
 """Content-hash short-circuit for regenerating the diagram pool renders in main.
 
-WHY (GM 2026-07-22): the stop-work ritual used to BUILD the map renders in a session clone and
+WHY (GM 2026-07-22): the stop-work procedure used to BUILD the map renders in a session clone and
 COPY them into main (rsync + byte-verify). That was fragile: whether a clone had touched a given
 render was situational, so a stale copy could linger in main. The new rule is simpler and cannot
 go stale - after the push, main REGENERATES its own renders from its own tip. Renders become a
@@ -137,7 +137,8 @@ def is_cacheable(gen_path: str, main_repo: str) -> bool:
 def _is_fresh(gen_path: str, fingerprint: str) -> bool:
     svg = _predicted_svg(gen_path)
     png = svg[: -len(".svg")] + ".png"
-    if not (os.path.exists(svg) and os.path.exists(png)):
+    page = svg[: -len(".svg")] + ".html"  # the interactive page is a derived render like the png (feature 134)
+    if not (os.path.exists(svg) and os.path.exists(png) and os.path.exists(page)):
         return False
     return read_stamp(svg) == input_hash(gen_path, fingerprint)
 
@@ -222,7 +223,7 @@ def main(argv: list[str] | None = None) -> int:
         print(f"  regen  {os.path.relpath(gen, args.pool)}")
     for gen in frozen:
         svg = _predicted_svg(gen)
-        missing = [p for p in (svg, svg[: -len(".svg")] + ".png") if not os.path.exists(p)]
+        missing = [p for p in (svg, svg[: -len(".svg")] + ".png") if not os.path.exists(p)]  # frozen exhibits predate the .html and never owe one
         if missing:
             print(
                 f"  WARNING: frozen map {os.path.relpath(gen, args.pool)} is MISSING {', '.join(os.path.basename(p) for p in missing)} - "

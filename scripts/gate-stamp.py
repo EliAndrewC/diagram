@@ -2,7 +2,7 @@
 """Prove that a green gate ran against exactly the Python being pushed.
 
 WHY THIS EXISTS. Constitution Principle XIII says work is not done while a known regression exists
-and nothing merges carrying one, and its enforcement clause says the stop-work ritual "does not run
+and nothing merges carrying one, and its enforcement clause says the stop-work procedure "does not run
 to completion on a red or regressed state". That sentence was ASPIRATIONAL: `sync-with-main.sh`
 refuses a dirty tree and screens for duplicate defs, but it never knew whether a gate had run at
 all, let alone whether it passed. Compliance was a session choosing to comply - which is the exact
@@ -23,7 +23,7 @@ blocked by a gate that never covers it, and vice versa.
 Areas with no gate of their own (specs/) are deliberately NOT gated: inventing a requirement
 nobody can satisfy is how a guard gets disabled. `scripts/` USED to be in that list, and that went
 stale the day feature 127 made `make hooks-test` a gate phase: the guards had a gate, and a change
-to them still never needed a stamp. Measured 2026-08-25 - a session chained `commit; ritual` behind
+to them still never needed a stamp. Measured 2026-08-25 - a session chained `commit; procedure` behind
 a RED hooks-test and the push went through, because the only Python that changed was under
 `scripts/`. So `scripts/*.sh` and `scripts/*.py` are the `hooks` area, stamped by a green
 `make hooks-test` alone (seconds, and the gate that actually covers them) and by `make done`,

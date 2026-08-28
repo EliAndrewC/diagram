@@ -306,6 +306,14 @@ keep-out and footprint-test. That re-tunes margins pool-wide, so it is a separat
 
 ## Adding a new map feature: the KEEP-CLEAR CONTRACT (read this before writing the glyph)
 
+**And its FEATURE CLASS (feature 134).** Every `add*()` at the glyph's emit site carries the class
+the interactive page highlights it under - `cls="<key>"` or `with self.feature("<key>"):` - and
+the key is a row of `l7r/diagram/interactive/classes.py` with its explanation and label; ink the
+GM has ruled NOT highlighted is tagged `"-"` with a row in `NOT_HIGHLIGHTED_RULINGS`. The gate
+check `all_ink_is_ruled_on` fails a scripted hamlet on ink with no class and on a key the
+registry does not know, so a new glyph without its class shows up at the next `make reference`.
+Index: [`../l7r/diagram/interactive/CLAUDE.md`](../l7r/diagram/interactive/CLAUDE.md).
+
 The GM's observation, 2026-07-25, after the martial hall shipped sitting on Tango's ring road:
 *"every time we add a new type of thing, I end up looking at the map and saying 'oh, this new thing
 should not overlap with X'."* That is now a solved problem, and this is the whole of what you have

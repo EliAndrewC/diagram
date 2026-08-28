@@ -706,7 +706,7 @@ def _seg_0033__hard_features_within_frame(
             ALLOW = 56
             _edge_slack = {
                 "west": min(fsx) - EX0,
-                "north": min(fsy) - EY0,
+                "north": min(fsy) - EY0 - float(meta.get("title_band") or 0.0),  # a declared title band above the map is not wasted image (feature 137 T06)
                 "east": EX1 - max(fsx),
                 "south": EY1 - max(fsy),
             }

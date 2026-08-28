@@ -10,6 +10,9 @@ import sys
 from collections.abc import Sequence
 from typing import TYPE_CHECKING, Any
 
+from l7r.diagram.interactive.page import ink_census, unregistered_classes, write_html
+from l7r.diagram.interactive.tags import ClsTag
+
 from ._geom import LAND, Poly, Pt, label_quad, label_tilt, linear_tilt, linear_tilt_full, point_in_poly, rects_overlap, seg_closest, seg_dist, segments_cross
 
 if TYPE_CHECKING:
@@ -59,7 +62,11 @@ class FinishMixin:
         linear: bool = False,
         full_tilt: bool = False,
         wrap: bool = True,
+        cls: ClsTag = None,
     ) -> None:
+        # `cls` is the class of the FEATURE the caption names (feature 134 FR-006): the label and its
+        # subject share one class, so hovering either highlights both and a click on either opens the
+        # subject's explanation. A caption with no subject class inherits the enclosing feature() scope.
         esc = text.replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;')
         st = ' font-style="italic"' if italic else ''
         # `rot` is the SUBJECT's rotation; the fold turns it into the caption's tilt (0 for any
@@ -98,7 +105,8 @@ class FinishMixin:
             y_first = y - (n - 1) * lh / 2
             body = "".join(f'<tspan x="{x:.0f}" dy="{0 if i == 0 else lh:.1f}">{ln.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")}</tspan>' for i, ln in enumerate(lines))
         z = self.add_label(
-            f'<text x="{x:.0f}" y="{y_first:.0f}" text-anchor="{anchor}" font-size="{size}" font-weight="{weight}"{st}{tr} fill="{color}" paint-order="stroke" stroke="{LAND}" stroke-width="3">{body}</text>'
+            f'<text x="{x:.0f}" y="{y_first:.0f}" text-anchor="{anchor}" font-size="{size}" font-weight="{weight}"{st}{tr} fill="{color}" paint-order="stroke" stroke="{LAND}" stroke-width="3">{body}</text>',
+            cls=cls,
         )
         self._record_label(x, y, text, size, anchor, z, ref, tilt, box=box if n > 1 else None)
 
@@ -206,11 +214,31 @@ class FinishMixin:
         PAD = 12  # placard padding around the text block
         bw, bh = max(tw, bar_px) + 2 * PAD, th + 46 + 2 * PAD  # the searched box: the whole placard
         vx0, vy0, vw, vh = self.view if self.view else (0, 0, self.W, self.H)
-        spot = self._blank_label_spot(vx0, vy0, vw, vh, bw, bh)
+        spot = self._blank_label_spot(vx0, vy0, vw, vh, bw, bh) or self._blank_label_spot(
+            vx0, vy0, vw, vh, bw, bh, cover_ok=True
+        )  # blank first; cover (a belt, a wood) as the last resort before the corner (feature 137 T06)
         if spot:
             px0, py0 = spot
-        elif self.view:  # map too full - fall back to the top-left corner
-            px0, py0 = vx0 + 30, vy0 + 16
+        elif self.view:
+            # MAP TOO FULL: the four corners, first one that hides nothing but cover, else the top-left
+            # (feature 137 T06 - seed 13's top-left corner was a dry plot while its bottom-right was scrub)
+            obs = self._title_obstacles(cover_ok=True)
+            corners = [(vx0 + 30, vy0 + 16), (vx0 + vw - bw - 30, vy0 + 16), (vx0 + 30, vy0 + vh - bh - 16), (vx0 + vw - bw - 30, vy0 + vh - bh - 16)]
+            clean = next(((cx, cy) for cx, cy in corners if self._box_clear(cx, cy, cx + bw, cy + bh, obs)), None)
+            if clean is not None:
+                px0, py0 = clean
+            else:
+                # THE TITLE BAND, the last rung (feature 137 T06): every corner hides a plot (seed 13's dry hem
+                # rings the whole view). The title is not a feature of the place and owes it no ground, so
+                # the sheet grows a band above the map sized to the placard, declared in meta so
+                # `crop_hugs_content` allows exactly that much on the north edge, and the placard sits in
+                # it - over nothing, unless a feature runs off the frame there, which the check still reports.
+                band = bh + 32
+                vy0 -= band
+                vh += band
+                self.set_view(vx0, vy0, vw, vh)
+                self.M["meta"]["title_band"] = round(band, 1)
+                px0, py0 = vx0 + 30, vy0 + 16
         else:
             px0, py0 = self.W / 2 - bw / 2, 22
         y = py0 + PAD  # the text block's top, inside the card
@@ -220,11 +248,14 @@ class FinishMixin:
             "bbox": [round(px0, 1), round(py0, 1), round(px0 + bw, 1), round(py0 + bh, 1)],
             "placard": [round(px0, 1), round(py0, 1), round(px0 + bw, 1), round(py0 + bh, 1)],
         }
+        # The placard, the name, the bar and its captions are MAP FURNITURE - ruled not highlighted
+        # (feature 134 FR-002, `interactive/classes.py` NOT_HIGHLIGHTED_RULINGS), hence cls="-".
         self.add_label(  # the card FIRST, so every text draws over it (add_label draws in call order)
             f'<g><rect x="{px0:.0f}" y="{py0:.0f}" width="{bw:.0f}" height="{bh:.0f}" rx="7" fill="#F7F0DC" fill-opacity="0.94" stroke="#8C7A55" stroke-width="1.6"/>'
-            f'<rect x="{px0 + 3.5:.0f}" y="{py0 + 3.5:.0f}" width="{bw - 7:.0f}" height="{bh - 7:.0f}" rx="5" fill="none" stroke="#BCAA7E" stroke-width="0.8"/></g>'
+            f'<rect x="{px0 + 3.5:.0f}" y="{py0 + 3.5:.0f}" width="{bw - 7:.0f}" height="{bh - 7:.0f}" rx="5" fill="none" stroke="#BCAA7E" stroke-width="0.8"/></g>',
+            cls="-",
         )
-        self.add_label(f'<text x="{pcx:.0f}" y="{y + fs:.0f}" text-anchor="middle" font-size="{fs}" font-weight="bold" fill="#2D2A24">{name}</text>')
+        self.add_label(f'<text x="{pcx:.0f}" y="{y + fs:.0f}" text-anchor="middle" font-size="{fs}" font-weight="bold" fill="#2D2A24">{name}</text>', cls="-")
         bx0, bx1, by = pcx - bar_px / 2, pcx + bar_px / 2, y + th + 12  # bar CENTERED under the name, on the placard's axis
         self.M["scalebar"] = {"ft": bar_ft, "ftpx": self.ftpx, "bbox": [round(bx0, 1), round(by - 5, 1), round(bx1, 1), round(y + bh, 1)]}
         self.add_label(
@@ -233,12 +264,13 @@ class FinishMixin:
             f'<line x1="{bx0:.0f}" y1="{by - 5:.0f}" x2="{bx0:.0f}" y2="{by + 5:.0f}"/>'
             f'<line x1="{bx1:.0f}" y1="{by - 5:.0f}" x2="{bx1:.0f}" y2="{by + 5:.0f}"/>'
             f'<line x1="{(bx0 + bx1) / 2:.0f}" y1="{by - 3:.0f}" x2="{(bx0 + bx1) / 2:.0f}" y2="{by + 3:.0f}" stroke-width="1"/>'
-            f'</g>'
+            f'</g>',
+            cls="-",
         )
-        self.add_label(f'<text x="{(bx0 + bx1) / 2:.0f}" y="{by + 17:.0f}" text-anchor="middle" font-size="12" fill="#3A2E1C">{bar_ft} ft</text>')
-        self.add_label(f'<text x="{(bx0 + bx1) / 2:.0f}" y="{by + 31:.0f}" text-anchor="middle" font-size="10" font-style="italic" fill="#5C4830">(1 px = {self.ftpx:g} ft)</text>')
+        self.add_label(f'<text x="{(bx0 + bx1) / 2:.0f}" y="{by + 17:.0f}" text-anchor="middle" font-size="12" fill="#3A2E1C">{bar_ft} ft</text>', cls="-")
+        self.add_label(f'<text x="{(bx0 + bx1) / 2:.0f}" y="{by + 31:.0f}" text-anchor="middle" font-size="10" font-style="italic" fill="#5C4830">(1 px = {self.ftpx:g} ft)</text>', cls="-")
 
-    def _title_obstacles(self: Settlement) -> tuple[list[Any], list[Any], list[Any]]:  # type: ignore[misc]
+    def _title_obstacles(self: Settlement, cover_ok: bool = False) -> tuple[list[Any], list[Any], list[Any]]:  # type: ignore[misc]
         """Feature footprints a title must clear, as (rects, polys, lines). Solid buildings/plots -> rects;
         the fields, groves, and commons -> polygons (so the title can sit in the empty corners around a diagonal
         field); the pond -> a rect; water lines + lanes -> polylines (a title must not cross a road or stream)."""
@@ -288,7 +320,8 @@ class FinishMixin:
         # two woods two-thirds invisible, and the title reading as smudged. The grazing parcels stay
         # excluded, which is what keeps a title from having nowhere to sit.
         _woodland = [c for c in self.M.get("commons", []) if c.get("role") == "woodland" and c.get("poly")]
-        for o in self.M.get("village_groves", []) + self.M.get("bamboo_stands", []) + self.M.get("marshes", []) + _woodland:
+        _cover = [] if cover_ok else self.M.get("village_groves", []) + self.M.get("bamboo_stands", []) + _woodland
+        for o in _cover + self.M.get("marshes", []):
             polys.append([tuple(p) for p in o["poly"]])
         for fd in self.M.get("fields", []):
             polys.append([tuple(p) for p in fd["outline"]])
@@ -331,10 +364,12 @@ class FinishMixin:
                 return False
         return True
 
-    def _blank_label_spot(self: Settlement, vx0: float, vy0: float, vw: float, vh: float, tw: float, th: float, margin: float = 22, step: float = 24) -> Pt | None:  # type: ignore[misc]
+    def _blank_label_spot(self: Settlement, vx0: float, vy0: float, vw: float, vh: float, tw: float, th: float, margin: float = 22, step: float = 24, cover_ok: bool = False) -> Pt | None:  # type: ignore[misc]
         """Scan the window (top-to-bottom, left-to-right) for the first box of size (tw, th) that clears every
-        feature; returns its (x, y) top-left, or None if the map is too full."""
-        obs = self._title_obstacles()
+        feature; returns its (x, y) top-left, or None if the map is too full. With `cover_ok` the belt, the
+        bamboo and the woodland commons are not obstacles (the placard may sit on cover, never on a
+        building, a plot, a field, water, a lane or a label - `title_clear_of_features`, feature 137)."""
+        obs = self._title_obstacles(cover_ok=cover_ok)
         y = vy0 + margin
         while y + th <= vy0 + vh - margin:
             x = vx0 + margin
@@ -350,6 +385,28 @@ class FinishMixin:
         # that frames to the bare canvas never calls either (Hoshizora), and a queued stand that is
         # never flushed is a wood with no trees. Idempotent, so the usual crop-time flush still wins.
         self.flush_tree_stands()
+        # THE FIELD'S CHORDS FOR THE GATE (feature 140): `houses_clear_of_paddies` measures the same few chords the
+        # placer measured (`rolling/fit.py::_field_chains`) - open chains facing the planned seat when there is one
+        # (`keepout_chains`, each chord with its outward normal), a closed simplified ring (`keepout`) when not.
+        from l7r.diagram.settlement._geom.primitives import FIELD_KEEPOUT_EPS, facing_chains, keepout_ring  # noqa: PLC0415 - finish-time only
+
+        _face = getattr(self, "field_face", None)
+        if _face is not None and self.field_polys:
+            # THE PLACER'S OWN CHAINS, recorded flat: `houses_clear_of_paddies` must measure the very chords placement
+            # measured, or a seat can pass one and fail the other (Mizuguchi did, 2026-08-28, when the gate rebuilt
+            # chains from the manifest's rounded outline instead).
+            _chains, _rings = self._field_chains()
+            self.M["field_chains"] = [[[[round(_a[0], 1), round(_a[1], 1)], [round(_b[0], 1), round(_b[1], 1)], [round(_n[0], 4), round(_n[1], 4)]] for _a, _b, _n in _ch] for _ch in _chains]
+        for _fld in self.M.get("fields") or []:
+            _ol = [(float(_x), float(_y)) for _x, _y in (_fld.get("outline") or [])]
+            if len(_ol) < 4 or "keepout" in _fld or "keepout_chords" in _fld:
+                continue
+            if _face is not None:
+                _fld["keepout_chords"] = sum(len(_ch) for _ch in facing_chains(_ol, _face, FIELD_KEEPOUT_EPS))  # the count the record reports; the gate reads M["field_chains"]
+            else:
+                _keep, _chords = keepout_ring(_ol, _ol, FIELD_KEEPOUT_EPS, filled=True)
+                _fld["keepout"] = [[round(_p[0], 1), round(_p[1], 1)] for _p in _keep]
+                _fld["keepout_chords"] = len(_chords)
         # Deferred place_caption() seats, in call order, against the FINISHED map - and BEFORE the
         # road caption, which goes last because it has by far the most room to move: its subject is
         # a whole road segment with a wide slide set, where a market row's caption has one short
@@ -409,29 +466,37 @@ class FinishMixin:
             self.label(lx, ly, text, 12, italic=True, weight="bold", color="#5A4326", ref=box, rot=tilt_, linear=True)
             self.M["road_label"] = [lx, ly]
             self._road_label = None
-        splices: list[Any] = []  # (placeholder_idx, block) - spliced high-index-first below
+        # Every block below is built as TWO aligned lists - the strings, and their feature classes
+        # (feature 134): the string block is spliced into `self.out` exactly as before, the class
+        # block into `self.out_cls` at the same index, so the side-list stays index-aligned with the
+        # SVG through every splice. The `<g opacity>` wrappers carry no class (they draw no ink).
+        splices: list[Any] = []  # (placeholder_idx, block, block_cls) - spliced high-index-first below
         if self._ground_idx is not None:  # the ordered linear-ground block (alley<street<road)
             feats = sorted(self.ground, key=lambda g: (g["zpri"], g["seq"]))
             block: list[Any] = []
+            bcls: list[ClsTag] = []
             edge_zs: list[Any] = []
             bed_zs: list[Any] = []
             for g in feats:  # EDGES first (the dark borders), bottom of the block
                 if g["edge"] is not None:
                     edge_zs.append(self._ground_idx + len(block))
                     block.append(g["edge"])
+                    bcls.append(g["cls"])
             for g in feats:  # then BEDS (paved surfaces) - they merge at crossings
                 if g["bed"] is not None:
                     g["rec"][g["zkey"]] = self._ground_idx + len(block)  # recorded z = the bed's draw position
                     bed_zs.append(self._ground_idx + len(block))
                     block.append(g["bed"])
+                    bcls.append(g["cls"])
             for g in feats:  # then TOP marks (center dashes / gravel speckle)
                 if g["top"] is not None:
                     block.append(g["top"])
+                    bcls.append(g["cls"])
             if edge_zs:  # every edge sits below every bed -> clean crossroads
                 self.M["ground_edge_zmax"] = max(edge_zs)
             if bed_zs:
                 self.M["ground_bed_zmin"] = min(bed_zs)
-            splices.append((self._ground_idx, block))
+            splices.append((self._ground_idx, block, bcls))
         # Does a LATE-block channel JOIN the pond? Then the pond's FILL + SHEEN must RELOCATE into
         # the late block (GM 2026-07-23, Tango's in-wall tank): the late block draws after the whole
         # shared block, so an early fill can never cover a late mouth's inside-the-rim overshoot -
@@ -445,11 +510,13 @@ class FinishMixin:
             _pond_late = any(ch["late"] and ((q[0] - _pex) / _perx) ** 2 + ((q[1] - _pey) / _pery) ** 2 <= 1.12 for ch in self.M.get("drawn_channels", []) for q in (ch["pts"][0], ch["pts"][-1]))
         if self._water_idx is not None:  # the watercourse block: all EDGES (pond rims), then all
             wblock: list[Any] = []  # BEDS (one opacity group), then all SHEENS - crossings MERGE
+            wcls: list[ClsTag] = []
             bedzs: list[Any] = []
             sheenzs: list[Any] = []
             for w in self.water:  # rims below every bed -> a feeder's bed covers the rim at its mouth
                 if w.get("edge") is not None:
                     wblock.append(w["edge"])
+                    wcls.append(w["cls"])
             for w in self.water:  # a pond-anchored feeder is snapped to the rim now that the
                 w["_bed"], w["_sheen"] = w["bed"], w["sheen"]  # pond is known (deferred - it may predate the pond)
                 if w["clip"] is not None and self.M.get("pond"):
@@ -459,14 +526,18 @@ class FinishMixin:
                     if w["clip"]["sheen_t"] is not None:
                         w["_sheen"] = w["clip"]["sheen_t"].format(dd=dd)
             wblock.append('<g opacity="0.85">')
+            wcls.append(None)
             for w in sorted(self.water, key=lambda w: w["pond_fill"]):  # pond FILL drawn LAST (stable sort) so it
                 if _pond_late and w is self._pond_entry:
                     continue  # fill relocates to the late block (see above) - the rim edge already emitted
                 w["rec"]["bedz"] = self._water_idx + len(wblock)  # covers any feeder's inside-the-rim overshoot
                 bedzs.append(self._water_idx + len(wblock))
                 wblock.append(w["_bed"])
+                wcls.append(w["cls"])
             wblock.append('</g>')
+            wcls.append(None)
             wblock.append('<g opacity="0.55">')
+            wcls.append(None)
             for w in self.water:
                 if w["_sheen"] is not None:
                     if _pond_late and w is self._pond_entry:
@@ -474,42 +545,63 @@ class FinishMixin:
                     w["rec"]["sheenz"] = self._water_idx + len(wblock)
                     sheenzs.append(self._water_idx + len(wblock))
                     wblock.append(w["_sheen"])
+                    wcls.append(w["cls"])
             wblock.append('</g>')
+            wcls.append(None)
             if bedzs:  # every bed sits below every sheen -> clean confluence
                 self.M["water_bed_zmax"] = max(bedzs)
             if sheenzs:
                 self.M["water_sheen_zmin"] = min(sheenzs)
-            splices.append((self._water_idx, wblock))
+            splices.append((self._water_idx, wblock, wcls))
         if self._late_water_idx is not None:  # the LATE block (comb-field channels; see __init__): same
             lblock: list[Any] = ['<g opacity="0.85">']  # shared-opacity compositing, spliced at ITS OWN
+            lcls: list[ClsTag] = [None]
             for w in self.late_water:  # first-call position so the ditch net draws OVER the field's plots
                 w["rec"]["bedz"] = self._late_water_idx + len(lblock)
                 lblock.append(w["bed"])
+                lcls.append(w["cls"])
             if _pond_late:  # the relocated pond FILL: topmost late bed, covering every joining mouth's overshoot
                 pe = self._pond_entry
                 assert pe is not None
                 pe["rec"]["late"] = True  # the fill now lives in the late block (z pairs: see pond())
                 pe["rec"]["bedz"] = self._late_water_idx + len(lblock)
                 lblock.append(pe["_bed"])
+                lcls.append(pe["cls"])
             lblock.append('</g>')
+            lcls.append(None)
             lblock.append('<g opacity="0.55">')
+            lcls.append(None)
             for w in self.late_water:
                 if w["sheen"] is not None:
                     w["rec"]["sheenz"] = self._late_water_idx + len(lblock)
                     lblock.append(w["sheen"])
+                    lcls.append(w["cls"])
             if _pond_late and self._pond_entry is not None and self._pond_entry["_sheen"] is not None:  # the pond sheen rides above the late beds too
                 self._pond_entry["rec"]["sheenz"] = self._late_water_idx + len(lblock)
                 lblock.append(self._pond_entry["_sheen"])
+                lcls.append(self._pond_entry["cls"])
             lblock.append('</g>')
-            splices.append((self._late_water_idx, lblock))
-        for idx, block in sorted(splices, key=lambda s: -s[0]):  # high index first so the lower stays valid
+            lcls.append(None)
+            splices.append((self._late_water_idx, lblock, lcls))
+        for idx, block, bcls_ in sorted(splices, key=lambda s: -s[0]):  # high index first so the lower stays valid
             self.out[idx : idx + 1] = block
+            self.out_cls[idx : idx + 1] = bcls_
         if self.view:  # crop the viewBox to the requested window
             ox, oy, vw, vh = self.view
             self.out[0] = self.out[0].replace(f'viewBox="0 0 {self.W} {self.H}"', f'viewBox="{ox} {oy} {vw} {vh}"')
         body = self.out + self.walls + self.top + self.toplabels + ['</svg>']  # WALLS over lanes; TOP furniture; LABEL text topmost
+        body_cls: list[ClsTag] = self.out_cls + self.walls_cls + self.top_cls + self.toplabels_cls + [None]
+        if len(body_cls) != len(body):  # the side-list drifted from the stream - a stream write that bypassed add()
+            raise RuntimeError(f"feature-class side list out of step with the record streams: {len(body_cls)} tags for {len(body)} strings")
         with open(basepath + '.svg', 'w') as f:
             f.write('\n'.join(body))
+        # THE INTERACTIVE PAGE (feature 134): the same primitives, each wrapped by its class, with the
+        # explanations of the classes present. Written beside the SVG whenever the SVG is - a string
+        # pass, so DIAGRAM_SKIP_RENDER (which spares only the raster) does not skip it. The census
+        # goes into the manifest FIRST so the gate can read it (`all_ink_is_ruled_on`, FR-009).
+        self.M["ink_classes"], self.M["unclassed_ink"] = ink_census(body, body_cls)
+        self.M["unregistered_classes"] = unregistered_classes(self.M["ink_classes"])
+        write_html(basepath + '.html', body, body_cls, name=str(self.M["meta"].get("name") or os.path.basename(basepath)), meta=self.M["meta"], manifest=self.M)
         with open(basepath + '.json', 'w') as f:
             json.dump(self.M, f)
         # Two env knobs make iteration cheap without changing committed output (see SKILL.md

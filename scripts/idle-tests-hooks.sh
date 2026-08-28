@@ -33,7 +33,7 @@
 # of the session's ever waits on an idle run.
 #
 # SEAMS ONLY IN A FIXTURE: the IDLE_* overrides are honored only with IDLE_FIXTURE=1 AND a git root
-# outside this repository's own tree (the rule test-sync-with-main.sh proves for the ritual); set
+# outside this repository's own tree (the rule test-sync-with-main.sh proves for the procedure); set
 # outside a fixture they are ignored and said so. Companion: test-idle-tests-hooks.sh.
 set -u
 MODE=${1:-}

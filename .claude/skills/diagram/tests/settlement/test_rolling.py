@@ -161,7 +161,7 @@ def test_legacy_dispersed_farmstead_path_still_covered():
     s.meta(name="L", scale="hamlet")
     fld = (300, 300, 620, 560)
     s.paddy_field(fld, "", "f", amp=20)
-    s.ring(fld, 8, 16, ["plain"])
+    s.ring(fld, 12, 24, ["plain"])  # 8-16 px seated houses inside the paddy set-back once the field edge became chords pushed out by 3 px (feature 140)
     n = s.farmsteads()
     assert n > 0
 

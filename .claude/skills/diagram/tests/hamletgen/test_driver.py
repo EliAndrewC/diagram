@@ -76,3 +76,71 @@ def _as_pinned() -> list[hg.Report]:
         hg.Report(plan=hg.plan_site(hg.HamletSpec(name="T", seed=seed, households=12, down_deg=90.0, windward="N")), failures=sorted(checks))
         for seed, checks in sorted(hg.driver.COHORT_BASELINE.items())
     ]
+
+
+# THE STUBBED CLI TESTS (feature 135 T11, GM 2026-08-27). These carried `rolls_map` and lived in the gate tree
+# because the marker guard matches the CALL (`hg.main`, `hg.cohort`) - but every one of them stubs `cohort` or
+# `generate` first and rolls nothing; measured at milliseconds. The guard now reads the stub, so they are quick.
+
+
+def test_the_cli_batch_mode_returns_nonzero_when_a_member_fails(monkeypatch, capsys) -> None:  # type: ignore[no-untyped-def]
+    """The batch exit code is the experiment's pass/fail signal, so it has to be real."""
+    monkeypatch.setattr(hg.driver, "cohort", lambda n, first_seed=1, jobs=None: [hg.Report(plan=a_plan(), failures=["boom"])])
+    assert hg.main(["--batch", "1"]) == 1
+    assert "0/1 passed" in capsys.readouterr().out
+
+
+def test_the_cli_batch_mode_returns_zero_when_every_member_passes(monkeypatch, capsys) -> None:  # type: ignore[no-untyped-def]
+    monkeypatch.setattr(hg.driver, "cohort", lambda n, first_seed=1, jobs=None: [hg.Report(plan=a_plan(), failures=[])])
+    assert hg.main(["--batch", "1"]) == 0
+    assert "1/1 passed" in capsys.readouterr().out
+
+
+def test_the_canonical_cohort_is_judged_against_the_pin_not_the_rate(monkeypatch, capsys) -> None:  # type: ignore[no-untyped-def]
+    """`--batch 24` from seed 1 exits ZERO on its known failures - the steady state is success, and
+    only a change from it is a failure. Before the pin this exact run exited 1, which meant the
+    signal everyone read was a rate that cannot distinguish two expected failures from two new ones."""
+    monkeypatch.setattr(hg.driver, "cohort", lambda n, first_seed=1, jobs=None: _as_pinned())
+    assert hg.main(["--batch", str(hg.driver.COHORT_BASELINE_SIZE)]) == 0
+    assert "NO NEW REGRESSIONS" in capsys.readouterr().out
+
+
+def test_the_canonical_cohort_fails_on_a_seed_the_pin_does_not_cover(monkeypatch, capsys) -> None:  # type: ignore[no-untyped-def]
+    extra = hg.Report(plan=hg.plan_site(hg.HamletSpec(name="T", seed=999, households=12, down_deg=90.0, windward="N")), failures=["something_new"])
+    monkeypatch.setattr(hg.driver, "cohort", lambda n, first_seed=1, jobs=None: [*_as_pinned(), extra])
+    assert hg.main(["--batch", str(hg.driver.COHORT_BASELINE_SIZE)]) == 1
+    assert "REGRESSION seed 999" in capsys.readouterr().out
+
+
+def test_a_non_canonical_range_says_it_has_no_pin(monkeypatch, capsys) -> None:  # type: ignore[no-untyped-def]
+    """A held-out or ad-hoc range must NOT be judged against the fitted cohort's baseline, and must
+    say so rather than implying it was checked."""
+    monkeypatch.setattr(hg.driver, "cohort", lambda n, first_seed=1, jobs=None: [hg.Report(plan=a_plan(), failures=[])])
+    assert hg.main(["--batch", "1"]) == 0
+    assert "no pinned baseline for this range" in capsys.readouterr().out
+
+
+def test_the_cli_returns_nonzero_for_a_failing_single_map(monkeypatch, capsys) -> None:
+    monkeypatch.setattr(hg.driver, "generate", lambda spec, out_base=None, render=True: hg.Report(plan=a_plan(), failures=["boom"]))
+    assert hg.main(["--name", "X"]) == 1
+    assert "boom" in capsys.readouterr().out
+
+
+def test_cohort_derives_each_spec_and_can_be_forced_serial(monkeypatch) -> None:  # type: ignore[no-untyped-def]
+    """`jobs=1` is the path an in-gate caller wants (a pytest worker that spawns its own pool
+    competes with the other 21), and the spec derivation is the same on either path: consecutive
+    seeds, zero-padded names, and the household ladder unless a count is given."""
+    seen: list[hg.HamletSpec] = []
+
+    def fake(spec, out_base=None, render=True):  # type: ignore[no-untyped-def]
+        seen.append(spec)
+        return hg.Report(plan=a_plan(), failures=[])
+
+    monkeypatch.setattr(hg.driver, "generate", fake)
+    assert len(hg.cohort(3, first_seed=5, jobs=1)) == 3
+    assert [s.seed for s in seen] == [5, 6, 7]
+    assert [s.name for s in seen] == ["Cohort-05", "Cohort-06", "Cohort-07"]
+    assert [s.households for s in seen] == [10 + (n * 7) % 11 for n in (5, 6, 7)]
+    seen.clear()
+    hg.cohort(2, first_seed=9, households=14, jobs=1)  # an explicit count overrides the ladder
+    assert [s.households for s in seen] == [14, 14]

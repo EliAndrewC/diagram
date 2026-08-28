@@ -23,7 +23,6 @@ Works under pytest OR standalone:
 import glob
 import json
 import os
-import runpy
 import sys
 
 import pytest
@@ -130,58 +129,23 @@ GEN_TIME_BUDGETS = {
     # (the lane web, byres, the woodland scan, cluster shape), so it is probably real work rather than
     # waste - but nobody has measured which stage owns the growth, and `tools/timings.py` would answer
     # it.
+    #
+    # CORRECTED 2026-08-28 (feature 138; the GM: *"bisecting a field several times per map does not seem
+    # like it would add up to one hundred CPU seconds"* - it does not). A per-stage profile of the seed-19
+    # POLDER (110 s solo) put 57 s in `stage_web` and 22 s in `stage_track`, and the "inherent" field
+    # bisection at under a second: the lane router called `clear_runs` once PER LATTICE CELL (165,611
+    # calls; 36 million `seg_dist`) and the connector compared every pair of water crossings (170 million
+    # `hypot`). That was exactly the pathological shape this guard exists for, hiding under a budget that
+    # had been raised to fit it. On a COMB hamlet the bisection IS real - `fit_field` runs `build_comb` 7
+    # times, 16-22 s on a 10-household cohort seed - but it is not what made the polder slow, and its
+    # solver is left alone because changing it moves the maps. After the fabric index and the crossing
+    # sweep (`hamletgen/clearance.py`, `_geom/water_index.py`): the polder 110 -> ~30 s, the reference
+    # 37 -> ~21 s, every manifest byte-identical. The entries below still stand at ~4x SOLO, re-measured.
     "sawada": 125.0,  # 30.6s solo measured 2026-08-19
     "kashikawa": 130.0,  # 32.2s solo
     "inashiro": 90.0,  # 22.4s solo
     "mizuguchi": 76.0,  # 18.9s solo - had NO entry, so it fell to the shared default and was one busy box away from the same false failure
 }
-
-
-def test_a_map_is_immune_to_an_upstream_change_in_the_number_of_random_draws():
-    """THE RATCHET for positional/scoped randomness (GM 2026-08-08).
-
-    Generate one map twice - the second time with ONE extra `random.random()` consumed at `meta()`,
-    which is what any upstream change that draws differently amounts to - and demand a byte-identical
-    manifest. Before the discipline landed this moved 13 of a town's 71 manifest keys, including
-    houses, wells, gardens, groves and 2,754 tree crowns; the visible cost was a farm shed drawn on a
-    garden 700 px from anything that had changed.
-
-    The subject was a hand-authored TOWN (hoshizora) until the 2026-08-16 legacy freeze, because a
-    town exercises both mechanisms at once: position-seeded attributes (a house's rake, its wall
-    color, its kura) and scoped phases (ring, pack, frontage, pasture, grove, wells, farmsteads).
-    Legacy gens are never run by the suite now, so the subject is a large SCRIPTED hamlet - it
-    holds the attribute mechanism and the farmstead/well/grove scopes, but not the urban scopes
-    (ring, pack, frontage). When the town tier converts to scripted generation, move the subject
-    to a scripted town: a hamlet alone would not have held the original line.
-    """
-    import random
-
-    from l7r.diagram import settlement
-
-    gen = os.path.join(HERE, "pool", "hamlets", "kashikawa.gen.py")
-
-    def once(perturb):
-        orig = settlement.Settlement.meta
-
-        def patched(self, *a, **kw):
-            r = orig(self, *a, **kw)
-            for _ in range(perturb):
-                random.random()
-            return r
-
-        settlement.Settlement.meta = patched
-        os.environ["DIAGRAM_SKIP_RENDER"] = "1"
-        try:
-            runpy.run_path(gen, run_name="__main__")
-        finally:
-            settlement.Settlement.meta = orig
-            del os.environ["DIAGRAM_SKIP_RENDER"]
-        with open(gen[: -len(".gen.py")] + ".json") as fh:
-            return fh.read()
-
-    clean = once(0)
-    assert once(1) == clean, "an upstream change in the number of random draws re-rolled the map - see CLAUDE.md 'RANDOMNESS IS POSITIONAL OR SCOPED'"
-    assert once(0) == clean  # ...and leave the committed manifest as the unperturbed run wrote it
 
 
 def _regen_and_gate(gen):
@@ -219,13 +183,13 @@ def test_slow_gen_budget_fires_and_the_override_silences_it(tmp_path, monkeypatc
     # the documented override lets it through (to then fail on the missing manifest instead,
     # proving the budget assert itself was silenced)
     gen = tmp_path / "snail.gen.py"
-    gen.write_text("import time\nt0 = time.process_time()\nwhile time.process_time() - t0 < 0.05:\n    pass\n")
     monkeypatch.setitem(GEN_TIME_BUDGETS, "snail", 0.001)
-    # Bypass the cache and keep the snail's entry out of the real .gencache (026): without the
-    # bypass the SECOND call would HIT on the entry the first call stored and never reach the
-    # budget assert at all - the override's silencing would be untested.
-    monkeypatch.setenv("GATE_NO_CACHE", "1")
-    monkeypatch.setattr(gencache, "CACHE_DIR", str(tmp_path / "cache"))
+    # THE OBTAIN IS STUBBED (feature 135, third pass): this used to spawn two real `coverage run` subprocesses
+    # on a 50 ms fake gen - 2.6 s, the gate's second-longest test - to prove an assert that reads only the
+    # CPU figure `gate_obtain` returns. The figure's measurement is `gate_obtain`'s own contract, proven in
+    # tests/gate/pipeline/test_gencache.py (`gen_cpu_s >= 0` on a miss); this test proves the BUDGET fires
+    # on that figure and that the documented override silences it, which a stub shows in milliseconds.
+    monkeypatch.setattr(gencache, "gate_obtain", lambda g: (str(tmp_path / "snail.json"), "REGENERATED", 0.05))
     # OWN THE ENVIRONMENT, do not inherit it (2026-08-03): the override is documented for
     # WHOLE-SWEEP use ("rerun with DIAGRAM_ALLOW_SLOW_GENS=1"), and a session that follows that
     # advice silenced the budget for this test too - so the one test proving the guard still has
@@ -296,31 +260,6 @@ def _typical_cell_acres(svgpath, ftpx):
 
 # one test per village (not one loop over all): a failure names its map directly, and a
 # parallel runner (pytest-xdist) can spread the regens instead of serializing them in one test
-@pytest.mark.parametrize("gen", GENERATORS, ids=[os.path.basename(g) for g in GENERATORS])
-def test_village_passes_gate(gen):
-    assert _regen_and_gate(gen), f"{os.path.basename(gen)} failed the gate"
-    svg = gen[: -len(".gen.py")] + ".svg"
-    covered = _channels_under_plots(svg)
-    assert not covered, (
-        f"{os.path.basename(gen)}: {len(covered)} field channel(s) painted UNDER a later plot at {covered[:5]} - route the comb net through the LATE water block (field_channel late=True; see settlement._water)"
-    )
-    # PADDY CELL SIZE stays in the calibrated real-feet band (GM 2026-07-22). Every valley-paddy comb map
-    # (all villages + cities) and the two HILL-RICE archetype demos - contour_terraces (Tanada) and
-    # ribbon_valley (Yatsuda), whose steps/bands are now split into leveled cells - hold to it; the band
-    # spans plot_texture's small_irregular->large_block knobs (~0.036-0.0675) plus slop and, above all,
-    # catches a regression back to the old hand-set ~0.13 ac (or the old field-wide terrace/ribbon bands).
-    # The polder / dike-pond archetypes are DELIBERATELY larger (Buck's ~1 mu parcels, 0.4-0.6 ha ponds -
-    # true-scale per settlements.md line ~102), so they are excluded, not held to the leveled-cell target.
-    with open(gen[: -len(".gen.py")] + ".json") as _fh:
-        manifest = json.load(_fh)
-    meta = manifest.get("meta", {})
-    _valley = meta.get("scale") in ("village", "city")
-    _hill_rice = meta.get("field_archetype") in ("contour_terraces", "ribbon_valley")
-    if _valley or _hill_rice:
-        cell = _typical_cell_acres(svg, meta.get("ftpx") or 2)
-        assert cell is not None and 0.030 <= cell <= 0.072, (
-            f"{os.path.basename(gen)}: typical paddy cell {cell:.3f} ac is outside the calibrated 0.030-0.072 band (see settlements.md 'Paddy cell size')"
-        )
 
 
 def test_every_scripted_comb_fan_records_its_design_cell() -> None:

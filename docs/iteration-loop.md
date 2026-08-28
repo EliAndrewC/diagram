@@ -23,7 +23,7 @@
 - **Background the final gate - and NEVER poll it** (GM 2026-07-25, now ENFORCED by [`scripts/no-poll-hooks.sh`](../scripts/no-poll-hooks.sh), tested by [`scripts/test-no-poll-hooks.sh`](../scripts/test-no-poll-hooks.sh)). Start the stop-work gate with `run_in_background`, write the docs/commit message while it runs, and act on the COMPLETION NOTIFICATION the harness sends; report done only after it comes back green. Watching a backgrounded command is worse than running it in the foreground, and a transcript profile proved how much worse: **10.9 minutes - 35% of a 31-minute feature - went to polling two gates that had already finished** (they took 97s and 98s; the waits took 351s and 401s). The wait loop used `pgrep -f "make done"`, which **matches its own shell** - the pattern is an argument of the very command line being searched - so its `break` could never fire, and `command sleep` was quietly evading the harness's own foreground-`sleep` block. The hook now refuses all of it at PreToolUse: `pgrep -f`/`pkill -f` on a literal pattern, any loop containing a `sleep`, and the `command sleep` / `/bin/sleep` / `env sleep` bypass forms. A real wait on EXTERNAL state the harness cannot see (a dev-server port, a remote queue) passes by putting `POLL_OK` in the command with a note saying what it waits for. This is the third control of the same kind, for the same reason: the "background the final gate" instruction was already written here, and the session followed it and then blocked on the gate anyway.
 - **A review agent is the most expensive thing you wait on - SCOPE it, SPLIT it, launch it EARLY** (GM 2026-08-08). Profiled on the caption-resize session: one `settlement-review` agent, handed two maps with no scope, ran a full audit - **12.3 minutes, 22% of the task's whole wall clock**, with the session idle for 11.4 of them, and two of its five findings were pre-existing defects unrelated to the change. The agents now take **`DELTA: <what changed>`** and review the change, whatever the re-pack moved, and whatever the change made incoherent with its neighbors, naming the sweeps they skipped; `FULL` stays the default for a new or heavily-rewritten artifact. Run **one artifact per agent, in parallel** - the sweeps share no work across artifacts, so bundling them just serializes two audits behind one notification. And launch the moment the artifact is final, before the visual pass and the commit: everything you do while it runs is free, everything after it is added on. This does NOT weaken Principle I - the review still happens, it is just asked the question you actually have.
 - **Resolve the session's clone NAME in turn 1, not after the recon** (GM 2026-08-08). The clone-name check is now announced by [`scripts/clone-sync-hooks.sh`](../scripts/clone-sync-hooks.sh) on the FIRST prompt of any session with no claimed clone, because the pretool backstop only speaks at the first EDIT and that is far too late: a session spent 4.7 minutes on recon and planning, discovered only then that its name did not resolve, and the GM's `/rename` became **4.6 minutes of dead wall-clock** instead of something that could have overlapped the analysis. A blocking question you can see coming should be asked while you still have other work to do.
-- **Do NOT cut the ritual steps** (regression-fixture freeze, overlap-registry classification, record-the-why docs, the stop-work ritual). GM-confirmed 2026-07-20: they cost ~2 minutes per feature and are why the regression rate stays near zero. The savings come from turn structure, never from skipping guardrails.
+- **Do NOT cut the procedure steps** (regression-fixture freeze, overlap-registry classification, record-the-why docs, the stop-work procedure). GM-confirmed 2026-07-20: they cost ~2 minutes per feature and are why the regression rate stays near zero. The savings come from turn structure, never from skipping guardrails.
 
 ## The 5% threshold: a whole-process speedup is never "only N seconds" (GM 2026-08-16)
 
@@ -102,7 +102,7 @@ Why a "simple" fix ran long, and what each finding bought:
   maps, ~1 min of it the actual resolution). Concurrent sessions colliding is inherent; nothing here
   suggests a process change.
 - **Projected shape after the fan-out: ~28-30 min for this task, ~20 of it model latency.** Past
-  that point the remaining cost is reasoning and the verification rituals, which is where it should
+  that point the remaining cost is reasoning and the verification procedures, which is where it should
   be.
 
 
@@ -241,8 +241,16 @@ even collected by `make quick`:
 |---|---|---|
 | `tests/` (with its packages) | the unit forms, relevant to the lane tiers or to every tier | quick and the gate |
 | `tests/tier_town/`, `tests/tier_city/` | tests tagged for other tiers only (232 + 451 functions), mirrored package paths | the gate; quick once the scope lock moves to that tier |
-| `tests/gate/` | the bad-map corpus, the coverage carriers, the map-rolling tests | the gate only |
-| `tests/tooling/` | tests that RUN the make/ci/pipeline tooling (+ the whole ci package) | the gate; quick only when the tooling changed (`ci tooling-fresh`) |
+| `tests/gate/` | the bad-map corpus and the map-rolling tests that earn MERGE time - one representative spec each, served from the roll cache while nothing they execute changed | the gate only |
+| `tests/full/` (feature 135, 2026-08-27) | the pool sweep, the seed sweeps, the determinism tests, the coverage carriers, the real-map cache round trip | `make done FULL=1` and the AWS check only |
+| `tests/tooling/` | tests that RUN the make/ci/pipeline tooling (+ the whole ci package) | the gate and FULL; quick only when the tooling changed (`ci tooling-fresh`); skipped at the gate too while unchanged (never in FULL) |
+
+Feature 135 (GM 2026-08-27: *"the directory into which we added is the thing that inherently
+determines When and under what circumstance that test is run"*) added the third tree and deleted the
+Makefile's deselect LIST, which had gone stale within a day of T29 - it still named
+`tests/hamletgen/test_driver.py` after the cohort ratchet moved to `tests/gate/`, so the FULL-only
+"seeds 41-44 ratchet" ran in every unlocked gate. A tree cannot go stale that way. The audit ledger is
+`specs/135-done-test-audit/research.md`.
 
 Moved tests import their helpers from the source module; a fixture they take comes through the
 tree's `conftest.py` (a parameter name is a use pytest sees and ruff does not). The tier and
@@ -251,6 +259,17 @@ Measured: the zero-test floor on the quick tree 3.5 -> 3.1 s; `make quick ALL=1`
 runs) 8.7 -> ~7.0 s wall for 1,971 tests; with testmon, an unchanged tree answers in ~3.5 s and a
 one-file edit in ~4-7 s. `dmypy run` replaces one-shot mypy in quick (~0.25 -> ~0.1 s after the
 first run; one-shot on CodeBuild).
+
+**The daemon holds ~400-600 MB of RSS per clone for as long as it lives, and nothing in mypy stops it**
+(GM 2026-08-28: five daemons, one per session clone, ~2.3 GB, one of them for a session that had
+ended). The cleanup is `scripts/dmypy-hooks.sh`: the `SessionEnd` hook stops the ending session's
+own daemon, and `make quick` sweeps every daemon whose clone no live session owns - never `make done`,
+so a slip stopping something unrelated cannot block a merge. What the RAM buys, measured the same day: on a
+comment-only edit the daemon answers in 0.13 s and warm one-shot mypy in 0.21-0.31 s - but on an
+interface change to a central module (a function added to `settlement/__init__.py`) it is 0.15 s
+against 2.9 s, because one-shot mypy re-checks every dependent and the daemon's fine-grained graph
+does not. ~2.7 s per engine-editing quick. Either ~12 s cold; `--timeout` priced and declined (a
+12 s cold start after every break).
 
 
 ## DECLINED, by the GM (2026-08-26): a persistent test runner

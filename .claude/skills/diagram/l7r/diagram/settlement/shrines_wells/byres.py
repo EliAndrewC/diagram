@@ -159,7 +159,7 @@ class DraftByresMixin:
             g.append(f'<line x1="{_pxq:.1f}" y1="{h * 0.02:.1f}" x2="{_pxq:.1f}" y2="{h * 0.42:.1f}" stroke="#8A7350" stroke-width="0.9"/>')
         g.append(f'<line x1="{-w / 2 + 2:.1f}" y1="{-h * 0.08:.1f}" x2="{w / 2 - 2:.1f}" y2="{-h * 0.08:.1f}" stroke="#59431F" stroke-width="0.8" opacity="0.6"/>')  # roof ridge
         g.append('</g>')
-        self.add(''.join(g))
+        self.add(''.join(g), cls="byre")
 
     def draft_byres(self: Settlement, fraction: float = 0.2, gap: float = 64) -> list[Pt]:  # type: ignore[misc]
         """DRAFT-ANIMAL BYRES (ox / water-buffalo sheds) standing in the courtyards among the homesteads.

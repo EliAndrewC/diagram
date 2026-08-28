@@ -103,7 +103,7 @@ files alone.
 - [x] T032 Record in `specs/114-structures-package/research.md` anything the implementation learned that the plan got wrong - especially any member whose assignment moved from data-model.md's table, with the reason
 - [x] T033 Add the three intended follow-up relocations (`road` -> `water_ways.py`, `pasture` -> `land.py`, the possible `captions.py` -> `castle_civic.py` fold) to `.claude/skills/diagram/future-work.md` as named follow-ups with their reasoning, so they do not live only in this spec
 - [x] T034 Set this spec's Status to Implemented with the date, and note the final per-file line counts
-- [ ] T035 Final `make done` green (skip if everything since the last green gate is markdown - root CLAUDE.md, "Docs-only diffs skip the gate"), then the stop-work ritual: commit in the clone and run `scripts/sync-with-main.sh done`
+- [ ] T035 Final `make done` green (skip if everything since the last green gate is markdown - root CLAUDE.md, "Docs-only diffs skip the gate"), then the stop-work procedure: commit in the clone and run `scripts/sync-with-main.sh done`
 
 ---
 

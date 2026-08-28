@@ -103,7 +103,7 @@ make targets; confirm zero prompts, zero overrides, no measurable slowdown.
    target, **Then** it runs immediately with no prompt. Reading a recorded artifact is the CHEAP
    alternative to re-running a generator; prompting on it would push a session toward the expensive
    thing.
-3. **Given** the stop-work ritual, **When** `sync-with-main.sh` regenerates main's renders through the
+3. **Given** the stop-work procedure, **When** `sync-with-main.sh` regenerates main's renders through the
    render-sync make target, **Then** it completes with no refusal and no prompt.
 
 ### User Story 3 - Weakening a guard is visible and breaks the build (Priority: P3)
@@ -163,7 +163,7 @@ scratch copy and confirm a test fails.
 - **FR-008**: The determination MUST apply to IN-PROCESS invocation of an operation, not only to
   command-line entry points, so that importing the engine and calling it directly is refused on the
   same terms.
-- **FR-009**: Render-sync MUST continue to regenerate main's renders during the stop-work ritual, and
+- **FR-009**: Render-sync MUST continue to regenerate main's renders during the stop-work procedure, and
   MUST do so THROUGH ITS OWN MAKE TARGET, satisfying FR-002 and FR-006 like every other operation.
   `sync-with-main.sh` invokes that target instead of the bare `python3 -m` it uses today
   (`sync-with-main.sh:138`). There is no exemption from the make requirement.
@@ -233,7 +233,7 @@ Recorded here so the question is not reopened from scratch.
   row.
 - **SC-002**: The reference check runs with zero prompts and zero overrides, at its current speed.
 - **SC-003**: Removing any single guard causes at least one test to fail, naming that guard.
-- **SC-004**: The stop-work ritual completes a render-sync with no refusal, invoking it through a make
+- **SC-004**: The stop-work procedure completes a render-sync with no refusal, invoking it through a make
   target rather than a bare interpreter call.
 - **SC-005**: A session wanting an expensive run reaches it in one step from the refusal message.
 - **SC-006**: Every bypass that remains possible is either an action that appears in a git diff, or one
@@ -263,10 +263,10 @@ Recorded here so the question is not reopened from scratch.
   from the make requirement, on the strength of its being a LEGITIMATE caller. Those are two different
   claims joined by one word: legitimate work does not imply legitimate invocation route. The reviewer
   established that compliance costs one make target and one edited line, that the GM asked only for the
-  ritual to keep WORKING and never for it to run outside make, and that "runs outside make by design"
+  procedure to keep WORKING and never for it to run outside make, and that "runs outside make by design"
   was the spec author's phrase rather than anything in CLAUDE.md. Worst of all it left standing exactly
   one ungated sibling command that regenerates maps - tier 1 of this spec's own threat model - reachable
-  by performing the mandated stop-work ritual, an action that is not merely mistakable for diligence but
+  by performing the mandated stop-work procedure, an action that is not merely mistakable for diligence but
   IS the required diligence. Accepted and applied; the reference-first question it raised is settled at
   FR-009a rather than deferred. FR-008 also widened from "expensive operation" to "operation" per the
   reviewer's drafting note.

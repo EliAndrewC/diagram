@@ -254,7 +254,7 @@ hover/click checks for the classes it contains.
   | storage shed | the lean-to shed drawn against a farmhouse (`houses[].shed`) and the detached farm sheds of the same household (`farm_sheds`) - storage either way; the GM's distinction is storage vs. animals | farmhouse; byre |
   | byre | the draft-animal sheds (`byres`) | farmhouse; storage shed; hen coop |
   | threshing yard | the work yard of each household | garden |
-  | garden | the kitchen garden of each household | threshing yard; millet; buckwheat; barley |
+  | garden | the kitchen garden of each household | threshing yard; millet; buckwheat; barley; soy |
   | privy | the household privy | manure heap |
   | woodpile | the fuel stack | - |
   | manure heap | the muck heap | privy |
@@ -269,16 +269,20 @@ hover/click checks for the classes it contains.
   | woodland commons | the woodland of the commons (`commons[role=woodland]`) | windbreak; copse |
   | scrub and rough grazing | the grazing commons (`commons[role=grazing]`) | marsh |
   | marsh | every marsh patch, whatever its role (`marshes`) - the GM: *"all of the marshland"* | scrub and rough grazing; pond |
-  | paddy | every wet plot | millet; buckwheat; barley; fallow |
+  | paddy | every wet plot | millet; buckwheat; barley; soy; fallow; field pond; field rock; grave island |
   | bund | the earthen bunds between and around the paddies | bund beans |
-  | bund beans | the soybeans on the bunds | bund |
-  | millet | dry plots under millet | buckwheat; barley; paddy; fallow; garden |
-  | buckwheat | dry plots under buckwheat | millet; barley; paddy; fallow; garden |
-  | barley | dry plots under barley | millet; buckwheat; paddy; fallow; garden |
-  | fallow | the fallow patches (when present) | paddy; millet; buckwheat; barley |
+  | bund beans | the soybeans on the bunds | bund; soy |
+  | millet | dry plots under millet | buckwheat; barley; paddy; fallow; garden; soy |
+  | buckwheat | dry plots under buckwheat | millet; barley; paddy; fallow; garden; soy |
+  | barley | dry plots under barley | millet; buckwheat; paddy; fallow; garden; soy |
+  | soy | dry plots under soybean as a field crop (`dry_plots[crop=soy]`) - added at implementation: the palette rolls four dry crops and the reference hamlet happened to draw three; cohort seeds 41-44 all draw it | millet; buckwheat; barley; paddy; fallow; garden; bund beans |
+  | fallow | the fallow patches (when present) | paddy; millet; buckwheat; barley; soy |
   | stream | the brook | field ditch; pond |
   | field ditch | the intake, head race, branches and drain (`field_ditches`, `channels`) | stream; pond |
-  | pond | the tameike | stream; field ditch; marsh |
+  | pond | the tameike | stream; field ditch; marsh; field pond |
+  | field pond | the small open-water pocket sunk into one low paddy (`field_ponds`) - added at implementation: the reference hamlet draws one and the table did not name it, so it is listed here for the GM to overrule by name | pond; paddy |
+  | field rock | a bedrock outcrop inside a plot (`field_rocks`) - added at implementation from cohort seed 42; the reference hamlet draws none | paddy; grave island |
+  | grave island | the rare in-field grave mound (`field_graves`) - added at implementation from cohort seed 42; a calibrated liberty the record discloses | paddy; field rock |
   | village lane | EVERY lane on the map - the web, the internal skeleton, the connector to the off-map road and the field spur - one class whether or not they meet; the text may say the connector predates the settlement | - |
   | footbridge | every plank and deck over water | - |
   | well | the wellheads | - |
@@ -303,6 +307,56 @@ hover/click checks for the classes it contains.
 - **FR-011 (the pipeline carries it)**: the regen driver, the render cache and render-sync MUST
   treat `<base>.html` as a derived render like the PNG - written with it, refreshed with it,
   gitignored with it, present in main where the renders are browsed. The pool index links to it.
+- **FR-013 (no page header; zoom) - the GM's follow-ups of 2026-08-28, verbatim in `gm-request.md`**:
+  (a) the page carries NO header - no name line, no hint line, no scale line above the map (*"we can
+  get rid of the entire header"*); the map's own placard and scale bar are the title. (b) The page
+  MUST zoom in and out: zoomed OUT to the point where *"the entire settlement is visible all within
+  the browser viewport"* - that is the minimum zoom - and zoomed IN *"significantly more than we
+  are zoomed in now"*. The page OPENS at the view the GM called "now" - the map fitted to the
+  viewport's width, as FR-001 already states - so the GM's baseline is unmoved; fit-the-whole-map
+  is reached by control. The GM did not fix the maximum (*"I'm not sure precisely how much"*), so
+  it is a judgment recorded in Decisions Recorded: 16x the whole-map fit, which on Inashiro in a
+  1400 x 1000 viewport is about 11x the opening view (one foot at ~9 screen px, a bund bean ~25 px
+  across, every fixture glyph legible), for the GM to reset by name. Zoom by the `+` / `-` / `fit`
+  buttons and keys ONLY; the mouse wheel SCROLLS the map and never zooms (the GM, on the first
+  cut: *"I don't want scrolling to zoom - I still want scrolling to scroll"*); NO drag-to-pan and
+  the cursor is the normal pointer (the GM, on the second cut: *"I don't need to click and drag so
+  we can get rid of that and make the mouse a normal pointer"*). Scrolling is BOUNDED by the map (the GM:
+  *"We should be able to scroll to the edge of the map, but not beyond it"*): along an axis where the
+  map is larger than the viewport its edge reaches the viewport's edge and no further; where it is
+  smaller it sits centered. The highlight and the modal work at every zoom. While a modal is open the clicked class STAYS highlighted, whatever the pointer does,
+  and the highlight clears when the modal closes (the GM, 2026-08-28).
+- **FR-014 (performance) - the GM's question of 2026-08-28, verbatim in `gm-request.md`**: the page
+  MUST NOT draw every blade and crown as its own element (*"many, many thousands ... a real impact
+  on performance"*). The GM proposed prerendered raster layers per class, swapped on hover, and
+  asked for the session's view (*"If this seems like a good idea, then go ahead and do it.
+  Otherwise, we can talk more"*). Measured first (research.md R5): 292,186 elements, 97% of them the
+  scrub and marsh scatter. The page now MERGES same-styled runs of lines and circles into one `<path>`
+  per run in the HTML target only - vector, so the 16x zoom stays crisp and the class groups keep their
+  hit-testing; the SVG and PNG are untouched (FR-010). The look is unchanged (162 of 1.4M pixels at 4x).
+  Raster layers were priced and NOT built: at 16x a full-map layer is ~46,000 px square (gigabytes per
+  class), and at any smaller size the zoom the GM asked for blurs; recorded in Decisions Recorded and
+  offered to the GM as the next step if the merged page is still not responsive enough.
+- **FR-015 (hit regions; one zoom) - the GM's follow-up of 2026-08-28, verbatim in `gm-request.md`**:
+  (a) a scatter feature MUST take the pointer over its whole footprint, not only over its marks
+  (*"if my mouse is just over the scrub land generally, then all of the scrub land is lit up"*) - the
+  scrub, the marsh, the woodland commons, the windbreak, the copse and the bamboo stands (*"some sort
+  of box where my mouse just has to be inside the box"*) each get an invisible polygon of their
+  RECORDED footprint at the bottom of the stack, so anything drawn above it (a house, a lane, a
+  paddy) still wins the pointer; the region never paints and never lights up itself; the background
+  is not changed (*"I don't think we should do that"*). (b) Ctrl/Cmd + `+`, `-`, `0` and Ctrl+wheel
+  drive the page's own zoom (*"only one way of zooming"*); the browser's menu zoom cannot be
+  intercepted by a page and is left as it is.
+- **FR-016 (thin marks; the scrub's real extent) - the GM's follow-up of 2026-08-28, verbatim in
+  `gm-request.md`**: (a) the bunds, the bund beans, the field ditches and the village lanes each
+  take the pointer over a hit shape *"three or four times the width"* of the drawn mark - an
+  invisible copy of the mark's own geometry - tuned by the GM on the first cut: bunds and beans at 8x
+  (floor 12 px; a bead at 6x its radius), ditches at 6x (floor 9 px), the stream at 1.5x (floor 12 px),
+  lanes at 4x (floor 6 px, *"seem fine"*) -
+  placed right above the mark so it wins over the paddy beneath a bund and loses to anything drawn
+  later; (b) the scrub lights up only where its marks are: its hit region is a grid of cells that
+  hold a blade or a brush dot, never the recorded hinterland polygon, so ground the scatter
+  deliberately keeps clear (*"the middle of the village"*) lights nothing.
 - **FR-012 (verified in a browser)**: the hover, highlight, click and modal behaviors MUST be
   proven by an automated headless-browser test in the suite (constitution VI - a page that was
   never opened has not been verified), running on the reference hamlet's page.
@@ -350,7 +404,46 @@ against the explanations shipped.
 | Decision | Class (accurate / deviation / guess) | Why | Recorded at |
 |---|---|---|---|
 | the class vocabulary itself (FR-007) - which kinds are distinguished | judgment, not history - the GM's, delegated to this spec | the GM: *"we have a lot of different judgment calls to make about what things get highlighted"* | this spec; the class registry the plan names |
-| one row per class explanation | (filled at implementation, from the research entry each cites) | | the class registry; the `research/` entry it cites |
+| the zoom range: the page opens at the GM's "now" (fit to the viewport's width); fit-the-whole-map is the minimum; 16x that fit is the maximum | judgment - the GM fixed the minimum in words and left the maximum open | 16x fit is ~11x the opening view on Inashiro (1400 x 1000 viewport): a foot at ~9 screen px, the smallest glyph (a bund bean, r = 1.4 ft) ~25 px - "significantly more" by any reading | `interactive/assets/page.js` `MAX_ZOOM`; the GM may reset it by name |
+| the performance mechanism: same-styled primitive runs merged into one `<path>` on the page, not prerendered raster layers per class | judgment - the GM proposed rasters and asked for the session's view; measured and priced in research.md R5 | 292k -> 11.7k elements, load 2.4 -> 0.4 s, scrub highlight 553 -> 39 ms, look unchanged; rasters would be gigabytes per class at 16x or blur the zoom | `interactive/page.py` `merge_primitives`; research.md R5 |
+| no canopy tree's center under another crown (`woods._crown_seat_clear`; edge overlap kept) - the map draws differently: Inashiro 1,728 -> 787 crowns, 298 -> 0 subsumed | accurate - the canopy layer has one tree per crown; an understory stem is not canopy | the GM, on the highlighted belt (2026-08-28): no real tree is wholly inside another's; measured 17% were | `research/vegetation.md` 'No canopy tree stands under another's crown'; `settlements/vegetation.md`; `tree_crowns_not_subsumed` + its fixture |
+| the belt's and copse's crowns sized from `CANOPY_R_FT` like the woods and the commons (the map draws differently: Inashiro's belt crowns ~9 -> ~15 ft across) | accurate - one researched crown size for every stand; the old value was a village-scale pixel radius never rescaled by ftpx | the GM (2026-08-28): the commons' trees looked bigger than the belt's; measured 18 ft vs 9 ft | `research/vegetation.md` 'The belt's crowns are the same real size as the woods''; `homestead_parts._draw_grove` |
+| the highlight color (gold `#FFC83D` fill, dark-goldenrod `#B8860B` stroke) | deviation - a UI affordance, not a claim about the world | legible against every fill on the map (FR-003) | `research.md` R2; `interactive/assets/page.css` |
+| a dropped lane draws nothing (`reink_lane` blanks the ink of an empty record) | rendering fix - it drew a malformed `d="M"` path the browser reported on every open | found by the browser test (constitution XIV) | `settlement/water_ways.py` `reink_lane` |
+| the `farmhouse` explanation | accurate - Placement and form follow the read record; the setback from the paddy is DERIVED (no source states it in feet) and is a drawing convention inside read bounds. | what the modal says, written FROM the entry | research/homesteads.md - 'What stood on a farmstead', 'How close does a farmhouse stand to the paddy', 'Is every farmhouse reached by a lane'; `interactive/classes.py` |
+| the `storage shed` explanation | accurate - Presence and prevalence read (Sugiura 1973); the drawn count per household is calibrated below the source's Tohoku figure, as the entry itself advises. | what the modal says, written FROM the entry | research/homesteads.md - 'What stood on a farmstead - the inventory, with numbers'; `interactive/classes.py` |
+| the `byre` explanation | accurate - The separate byre is the temperate reading of the record; the attached stable wing (magariya) is a cold-country form and is deliberately not drawn. | what the modal says, written FROM the entry | research/homesteads.md - 'May a byre stand beside a wellhead?', 'What stood on a farmstead'; `interactive/classes.py` |
+| the `threshing yard` explanation | accurate - The sun corridor is derived from the read roof pitch and house height; the yard's size is a drawing convention. | what the modal says, written FROM the entry | research/homesteads.md - 'The threshing yard's sun, and how far a farmhouse shades'; `interactive/classes.py` |
+| the `garden` explanation | accurate - Presence and the sun rule are read; the bed's size and row count are drawing conventions. | what the modal says, written FROM the entry | research/homesteads.md - 'The garden's sun, and how far the windbreak shades'; `interactive/classes.py` |
+| the `privy` explanation | accurate - Presence and the three seats are read (kotobank, sinyoken); the 6 x 6 ft footprint is a GUESS - the one sizing page is dead. | what the modal says, written FROM the entry | research/homesteads.md - 'The farmstead's fixtures'; `interactive/classes.py` |
+| the `woodpile` explanation | guess - The firewood SHED is read (Boso-no-Mura); where the open STACK stood relative to the house was found nowhere - the back wall or the shed's outer wall is a guess, and the stack's height is modern practice. | what the modal says, written FROM the entry | research/homesteads.md - 'The farmstead's fixtures'; `interactive/classes.py` |
+| the `manure heap` explanation | guess - The practice is read (jawiki, the Art Institute's Han model); the heap's PLACE on the farm and its size are guesses - the pages describe the pit, not where it stood. | what the modal says, written FROM the entry | research/homesteads.md - 'The farmstead's fixtures'; `interactive/classes.py` |
+| the `bathhouse` explanation | guess - Use is read (Mizumaki museum); where the shed stood was found nowhere - the back wall or a flank is a guess, and so is the 6 x 6 ft size. | what the modal says, written FROM the entry | research/homesteads.md - 'The farmstead's fixtures'; `interactive/classes.py` |
+| the `hen coop` explanation | guess - The coop's existence and ground form are read (Cambridge, the Qimin Yaoshu, the Zhengzhou coop); the household proportion, the 5 x 5 ft size and the seat are guesses bounded by 'most regions'. | what the modal says, written FROM the entry | research/homesteads.md - 'The farmstead's fixtures'; `interactive/classes.py` |
+| the `household shrine` explanation | deviation - Presence, rarity and corner are read; the glyph is drawn at 6 x 6 ft against a measured stone shrine of about 1.3 ft - a deliberate deviation for legibility, ruled by the GM, like the oversized well. | what the modal says, written FROM the entry | research/homesteads.md - 'The farmstead's fixtures'; `interactive/classes.py` |
+| the `persimmon` explanation | guess - Presence and the beside-the-house placement are read (toyoko, uekipedia); WHICH side and the 18 ft crown are guesses - the crown width was found nowhere. | what the modal says, written FROM the entry | research/homesteads.md - 'The farmstead's fixtures'; `interactive/classes.py` |
+| the `homestead bamboo` explanation | deviation - Presence and place are read; a culm is inches across and cannot be drawn at one foot per pixel, so the stand's extent is to scale and the marks inside it are symbolic - the convention Japan's own topographic legend uses. | what the modal says, written FROM the entry | research/vegetation.md - 'Bamboo: how common, where it stood, and how to show it'; `interactive/classes.py` |
+| the `shared bamboo grove` explanation | deviation - Presence is read; the stand-level glyph is a deviation for legibility, exactly as for the homestead stand. | what the modal says, written FROM the entry | research/vegetation.md - 'Bamboo: how common, where it stood, and how to show it'; `interactive/classes.py` |
+| the `windbreak` explanation | accurate - Scale, density and placement follow the surveyed figures (forests-2020); the belt's shape follows the terrain and the cluster. | what the modal says, written FROM the entry | research/vegetation.md - 'The fengshui forest - real scale, and why ours is honest'; research/homesteads.md - 'The garden's sun, and how far the windbreak shades'; `interactive/classes.py` |
+| the `copse` explanation | accurate - The role is attested with the fengshui-grove system; its extent on any one map is a drawing decision. | what the modal says, written FROM the entry | research/vegetation.md - 'The fengshui forest'; settlements/vegetation.md 'Village windbreak' (the three roles); `interactive/classes.py` |
+| the `woodland commons` explanation | accurate - The commons regime and the raked floor are read (the Yamaguni study, the satoyama entries); a lot's boundary was NOT laid out as a surveyed square, so the patches are irregular. | what the modal says, written FROM the entry | research/vegetation.md - 'How is a coppice lot bounded?', 'Does scrub stand under a village wood?', 'Forest density and crown size'; `interactive/classes.py` |
+| the `scrub and rough grazing` explanation | accurate - The margins are read; what the scatter looks like at any one point is a drawing convention. | what the modal says, written FROM the entry | research/vegetation.md - 'The crop margin', 'Scrub stays off open water', 'The cut bank'; `interactive/classes.py` |
+| the `marsh` explanation | accurate - The reclaimed-from-marsh finding and the margin gradient are read. | what the modal says, written FROM the entry | research/water.md - 'Marsh - wet rice is reclaimed FROM wetland', 'The wet toe is as wide as the FAN'; research/vegetation.md - 'The marsh margin'; `interactive/classes.py` |
+| the `paddy` explanation | accurate - Plot form and the irregular patchwork are read; plot sizes are calibrated from the record. | what the modal says, written FROM the entry | research/fields.md - 'Paddy plots - irregular patchwork', 'Nitrogen - a flooded paddy makes its own', 'Plot sizes'; `interactive/classes.py` |
+| the `bund` explanation | accurate - Construction, width and the shared-wall finding are read; the drawn stroke is at true size. | what the modal says, written FROM the entry | research/fields.md - 'Bunds are SHARED, and the fabric is continuous', 'A bund runs on, or it turns for a reason'; research/water.md - 'The bund runs along the channel bank'; `interactive/classes.py` |
+| the `bund beans` explanation | deviation - The practice is attested; the bead color is a deliberate deviation - real soybean foliage is lighter, and the deep pine green was chosen so the beads read against the pale rice. | what the modal says, written FROM the entry | research/fields.md - the bund entries; waterfields/palette.py BEAN_GREEN (the color decision); `interactive/classes.py` |
+| the `millet` explanation | accurate - Placement on the catena is read; the crop MIX on any one map (how much millet against buckwheat and barley) is rolled from the seed and is a GUESS at the proportions. | what the modal says, written FROM the entry | research/fields.md - 'Where dry (hatake) crops go - the topographic catena', 'Why ruled rows waited for Meiji'; `interactive/classes.py` |
+| the `buckwheat` explanation | accurate - Placement on the catena is read; the crop mix per map is rolled from the seed and is a GUESS at the proportions. | what the modal says, written FROM the entry | research/fields.md - 'Where dry (hatake) crops go - the topographic catena'; `interactive/classes.py` |
+| the `barley` explanation | accurate - Placement on the catena is read; the crop mix per map is rolled from the seed and is a GUESS at the proportions. | what the modal says, written FROM the entry | research/fields.md - 'Where dry (hatake) crops go - the topographic catena'; `interactive/classes.py` |
+| the `fallow` explanation | guess - The record is thin on fallow in this tier's fields; the patch is drawn where the field builder leaves ground unplanted, and that is a guess. | what the modal says, written FROM the entry | research/fields.md (no dedicated entry - recorded as silent); `interactive/classes.py` |
+| the `stream` explanation | deviation - The stream's type and place are read; its DRAWN width is rank, not discharge - the GM's ruling - so junctions do not conserve width. | what the modal says, written FROM the entry | research/water.md - 'Water-width ladder - the real-world tiers', 'Drawn width is RANK, not discharge'; `interactive/classes.py` |
+| the `field ditch` explanation | accurate - Topology, taper and true-size width are read (Tabayashi, the Minuma-dai record, GB 50288). | what the modal says, written FROM the entry | research/water.md - 'The comb net is drawn at TRUE SIZE', 'Where the drawn net STOPS', 'The head-race forks'; research/fields.md - 'Water-first v2'; `interactive/classes.py` |
+| the `pond` explanation | accurate - Form, siting and the single outlet are read (Tabayashi 1986, the Kagawa tameike documents). | what the modal says, written FROM the entry | research/fields.md - 'Water-first v2 - pond, distribution and the three layout modes'; `interactive/classes.py` |
+| the `field pond` explanation | accurate - The kind of obstacle a flooded paddy hosts is read (corroborated in both traditions); how often one appears on a map is a calibrated liberty the entry discloses. | what the modal says, written FROM the entry | research/fields.md - 'In-field features - flat flooded paddy hosts obstacles least'; `interactive/classes.py` |
+| the `village lane` explanation | accurate - Access and form are read; the drawn WIDTHS (3, 5 and 6 ft) have no numeric source for an ordinary hamlet lane and stand as drawing conventions inside read bounds - a GUESS at the number. | what the modal says, written FROM the entry | research/homesteads.md - 'Is every farmhouse reached by a lane, and in what FORM?', 'How does a village lane bend?'; research/SOURCES.md re-sourcing queue (lane width); `interactive/classes.py` |
+| the `footbridge` explanation | guess - That ditches were planked is reasoned, not read: the record consulted says nothing about a plank over a two-foot ditch, and the spacing is a drawing convention. A guess, as the spec template's own worked example records. | what the modal says, written FROM the entry | research/water.md - 'What drawing at TRUE SIZE left open' (channel_footbridges); `interactive/classes.py` |
+| the `well` explanation | deviation - Count and sharing are read (the Sphere/UNICEF figures, jawiki); the wellhead is DRAWN larger than true size so it can be seen at map scale - the project's canonical example of a legibility deviation. | what the modal says, written FROM the entry | research/urban-features.md - 'Wells - the research, and the deliberate liberty', 'Communal wells and the samurai exception'; research/homesteads.md - 'Does a DISPERSED hamlet's outlying farm have its own well?'; `interactive/classes.py` |
+| the `notice board` explanation | accurate - Presence and siting are read; at hamlet grain the glyph is drawn at its true 12 x 5 ft. | what the modal says, written FROM the entry | research/urban-features.md - 'The notice board (kosatsuba) - siting is a TRAFFIC decision'; `interactive/classes.py` |
 
 ## Review history
 
@@ -364,6 +457,11 @@ against the explanations shipped.
 - **Round 2** (2026-08-27): CHANGES REQUIRED - one item: "attached storage shed" survived in
   FR-004 and four user-story lines, contradicting FR-007's `storage shed`; FR-004 now names
   FR-007's classes verbatim. Applied.
+- **Addendum, FR-013** (2026-08-28, the GM's two follow-ups): round 1 CHANGES REQUIRED - (1) "fit
+  as the initial view" was unrequested and moved the GM's own baseline ("zoomed in now"); struck -
+  the page opens at the fit-to-width view FR-001 describes; (2) the 16x maximum was justified only
+  against fit, not against "now" - the ratio to the opening view is stated now. Pan-by-drag and
+  the buttons were judged the delivery mechanism, not additions. Both applied.
 - **Round 3** (2026-08-27): **FAITHFUL**. Aside recorded: FR-004 abbreviates `scrub and rough grazing` to "scrub"; the registry is written from FR-007, never from FR-004.
 
 ## Assumptions

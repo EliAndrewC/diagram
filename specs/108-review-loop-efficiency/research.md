@@ -1,10 +1,10 @@
 # Research: Review-Loop Efficiency (108)
 
-## R1. Does the pre-gate pool-regen sweep produce anything the stop-work ritual needs? NO - verified
+## R1. Does the pre-gate pool-regen sweep produce anything the stop-work procedure needs? NO - verified
 
 - **Decision**: The FR-009 rule can be unconditional: regenerate only the MOTIVATING map in the foreground (a session needs its render for its own crop inspection); never run a foreground whole-pool regen sweep before the gate. The gate verifies the pool; main's renders never come from the clone.
 - **Rationale**: `scripts/sync-with-main.sh` (RENDER MODEL, GM 2026-07-22): "renders no longer flow clone -> main by copy. render-sync REGENERATES main's diagram renders in place from main's own committed tip (via render_cache.py), so a render in main is a pure function of main's code and can never be a stale copy." Clone-side renders of non-motivating maps are therefore write-only work. The 2026-08-16 cut-bank fix ran a 38s foreground `regen.py pool/*/*.gen.py` sweep whose only durable effect was warming the clone's gencache with rendered entries - the gate would have regenerated on miss anyway (in its coverage subprocess, `DIAGRAM_SKIP_RENDER=1` - `test_villages.py:141`), and render-sync then re-derived main's renders from main's tip regardless.
-- **Alternatives considered**: Making the rule conditional on the gate's cache path restoring renders (`gencache.OUTPUT_SUFFIXES` includes .svg/.png, so entries built by a rendering run do carry them; entries built by the gate's own miss subprocess do not). Rejected: irrelevant once R1's finding stands - no ritual step reads clone renders of non-motivating maps, so the conditional would encode a dependency that does not exist.
+- **Alternatives considered**: Making the rule conditional on the gate's cache path restoring renders (`gencache.OUTPUT_SUFFIXES` includes .svg/.png, so entries built by a rendering run do carry them; entries built by the gate's own miss subprocess do not). Rejected: irrelevant once R1's finding stands - no procedure step reads clone renders of non-motivating maps, so the conditional would encode a dependency that does not exist.
 - **Interaction preserved**: the existing "run the WHOLE affected test file before the gate" rule is untouched; this narrows only what ELSE runs.
 
 ## R2. SVG scatter parse anchors - verified against `settlement/land.py` (lines 362-397, 473-489)

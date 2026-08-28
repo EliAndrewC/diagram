@@ -93,7 +93,7 @@ the main RNG stream itself.
 - [x] T038 Record the "why" of the partition where the rule lives, not only in `specs/` - the package `CLAUDE.md` must say WHY the axis is the chain's links and why real tasks stay inside one link (root CLAUDE.md, "Record the why of every research-driven rule")
 - [x] T039 Re-run `git diff --stat` against the merge-base and confirm the final blast radius is exactly: `settlement/rolling*`, `settlement/CLAUDE.md`, `settlement/civic_grounds/CLAUDE.md`, `future-work.md`, `tests/settlement/test_rolling.py`, `specs/118-*`
 - [x] T040 Delete nothing from `specs/118-rolling-package/split_rolling.py` - the one-shot transformer stays as the record of the partition, exactly as 112-116's do
-- [ ] T041 Stop-work ritual: commit in the clone, then `scripts/sync-with-main.sh done` from inside it. **Only** with the gate green and the sweep IDENTICAL - a moved byte is a Principle XIII regression whose only exits are fix, revert, or an explicit GM waiver
+- [ ] T041 Stop-work procedure: commit in the clone, then `scripts/sync-with-main.sh done` from inside it. **Only** with the gate green and the sweep IDENTICAL - a moved byte is a Principle XIII regression whose only exits are fix, revert, or an explicit GM waiver
 
 ---
 

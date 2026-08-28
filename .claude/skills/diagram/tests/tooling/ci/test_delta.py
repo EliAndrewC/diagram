@@ -92,6 +92,21 @@ def test_delta_sees_our_engine_change(repo: Path) -> None:
     assert d.engine == (S + "l7r/diagram/m.py",) and d.route == "GATED"
 
 
+def test_a_comment_only_engine_edit_routes_direct(repo: Path) -> None:
+    """GM 2026-08-28: a comment, docstring or formatting edit to engine Python is not engine content -
+    the gate's key has ignored it since 2026-08-26, and the router must agree (it used to send a wording
+    sweep down the gated route, which then demanded a spec-kit feature the sweep did not have)."""
+    commit(repo, S + "l7r/diagram/m.py", 'x = 3  # the stop-work ritual\n')
+    git(repo, "update-ref", "refs/remotes/origin/main", "HEAD")
+    commit(repo, S + "l7r/diagram/m.py", '"""doc."""\n\nx = 3  # the stop-work procedure\n')
+    d = compute_delta(repo)
+    assert d.files == (S + "l7r/diagram/m.py",) and d.engine == () and d.route == "DIRECT", d
+    commit(repo, S + "l7r/diagram/m.py", '"""doc."""\n\nx = 4\n')  # a token that runs re-opens the route
+    assert compute_delta(repo).route == "GATED"
+    commit(repo, S + "pool/hamlets/inashiro.json", "{}\n")  # a non-.py engine file has no semantic form: always engine
+    assert S + "pool/hamlets/inashiro.json" in compute_delta(repo).engine
+
+
 def test_a_clone_at_main_has_an_empty_delta(repo: Path) -> None:
     assert compute_delta(repo).files == ()
 
@@ -161,3 +176,23 @@ def test_the_worktree_key_ignores_the_makefile_and_docs(repo: Path) -> None:
     (repo / S / "pool").mkdir(exist_ok=True)
     (repo / S / "pool" / "x.json").write_text("{}\n")
     assert engine_key_worktree(repo) != k0, "a pool manifest is"
+
+
+def test_coverage_scope_names_only_the_changed_engine_modules(repo: Path, monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]) -> None:
+    """Feature 135, second pass: the gate traces the packages the diff touched - committed since the merge
+    base, modified in the worktree, or untracked - and nothing else; tests and docs never count."""
+    from l7r.diagram.ci.__main__ import main
+    from l7r.diagram.ci.delta import coverage_scope
+
+    assert coverage_scope(repo) == []
+    monkeypatch.chdir(repo)
+    assert main(["cov-scope"]) == 0 and capsys.readouterr().out.strip() == "-o addopts= --no-cov"
+    commit(repo, S + "l7r/diagram/settlement/land.py", "y = 1\n")  # committed since the merge base
+    (repo / S / "l7r" / "diagram" / "m.py").write_text("x = 9\n", encoding="utf-8")  # modified, uncommitted
+    (repo / S / "l7r" / "diagram" / "sitegen" / "__init__.py").parent.mkdir(parents=True)
+    (repo / S / "l7r" / "diagram" / "sitegen" / "__init__.py").write_text("", encoding="utf-8")  # untracked package
+    commit(repo, S + "tests/settlement/test_land.py", "def test_x(): pass\n")
+    commit(repo, "docs/x.md", "prose\n")
+    assert coverage_scope(repo) == ["l7r/diagram", "l7r/diagram/settlement", "l7r/diagram/sitegen"]
+    assert main(["cov-scope"]) == 0
+    assert capsys.readouterr().out.strip() == "-o addopts=--cov=l7r/diagram --cov=l7r/diagram/settlement --cov=l7r/diagram/sitegen"

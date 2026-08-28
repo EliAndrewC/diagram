@@ -62,6 +62,7 @@ import shutil
 import subprocess
 import sys
 import tempfile
+from collections.abc import Callable
 from pathlib import Path
 from typing import Any
 
@@ -99,8 +100,8 @@ FORMAT_VERSION = "1"  # bump to invalidate every entry when this file's key sche
 # next thing to read kernel state will not remember this.
 _KERNEL_FS = ("/proc/", "/sys/", "/dev/")
 
-_NOT_ENGINE = {"gencache.py", "regen.py"}
-OUTPUT_SUFFIXES = (".json", ".svg", ".png")
+_NOT_ENGINE = {"gencache.py", "regen.py", "rollcache.py"}  # rollcache (feature 135) serves rolls and draws nothing
+OUTPUT_SUFFIXES = (".json", ".svg", ".png", ".html")  # .html: the interactive page, written beside the svg (feature 134)
 GATE_BYPASS = "GATE_NO_CACHE"  # =1 forces the gate to regenerate everything (feature 026)
 COVERAGE_NAME = "coverage.data"  # per-entry generation coverage, stored by the gate's miss path
 
@@ -131,8 +132,41 @@ def split_sources(path: str) -> tuple[str, dict[str, str], set[str]]:
 
     "Module level" is everything that is not inside a function body - so a changed constant, class
     attribute, decorator or import invalidates every map, which is the conservative direction. A
-    file that will not parse hashes whole, likewise conservatively."""
+    file that will not parse hashes whole, likewise conservatively.
+
+    MEMOIZED ON THE FILE'S CONTENT HASH (feature 135): every key computation parses all ~180 engine
+    files - 1.2 s - and the gate's roll cache asks for a key on every served roll, as does every pool
+    map in a sweep. Reading and hashing the bytes is milliseconds; the AST walk is the cost, and it
+    only depends on those bytes, so the walk is done once per distinct content per process."""
     src = Path(path).read_bytes()
+    memo = (path, _sha(src))
+    hit = _SPLIT_MEMO.get(memo)
+    if hit is not None:
+        return hit
+    # ...AND ON DISK (feature 135, second pass): the in-process memo saved nothing for `make reference` (a fresh
+    # interpreter each time, 1.2 s of parsing for a 1.7 s hit) or for each of the eight xdist workers' first key.
+    # One small JSON per distinct file content under .gencache/ast/; a stale or unreadable file is simply re-parsed.
+    disk = os.path.join(CACHE_DIR, "ast", memo[1] + ".json")
+    try:
+        mod_hash, funcs, classes = json.loads(Path(disk).read_text(encoding="utf-8"))
+        result = (mod_hash, funcs, set(classes))
+    except OSError, ValueError:
+        result = _split_sources(src)
+        try:
+            os.makedirs(os.path.dirname(disk), exist_ok=True)
+            tmp = f"{disk}.tmp{os.getpid()}"
+            Path(tmp).write_text(json.dumps([result[0], result[1], sorted(result[2])]), encoding="utf-8")
+            os.replace(tmp, disk)
+        except OSError:  # pragma: no cover - a read-only tree loses the memo, never the answer
+            pass
+    _SPLIT_MEMO[memo] = result
+    return result
+
+
+_SPLIT_MEMO: dict[tuple[str, str], tuple[str, dict[str, str], set[str]]] = {}
+
+
+def _split_sources(src: bytes) -> tuple[str, dict[str, str], set[str]]:
     try:
         tree = ast.parse(src)
     except SyntaxError:  # pragma: no cover - defensive: a broken file regenerates everything
@@ -195,7 +229,14 @@ def _deps_state() -> str:
 def compute_key(gen: str, deps: dict[str, Any] | None) -> str:
     """The cache key for `gen`. With no recorded deps this is the COARSE key - every engine file
     hashed whole - which is what a first run and any unrecorded map get."""
-    parts = [FORMAT_VERSION, sys.version, _renderer_version(), _deps_state(), _sha(Path(gen).read_bytes())]
+    return key_for(Path(gen).read_bytes(), deps)
+
+
+def key_for(subject: bytes, deps: dict[str, Any] | None) -> str:
+    """The key for any SUBJECT - a gen file's bytes, or a rolled spec's repr (`rollcache`, feature 135) -
+    over the same engine inputs: module-level hashes, the source of every recorded function, every
+    recorded data file, the interpreter/renderer/dependency state and this format's version."""
+    parts = [FORMAT_VERSION, sys.version, _renderer_version(), _deps_state(), _sha(subject)]
     funcs_wanted: dict[str, set[str]] = {}
     if deps is not None:
         for filename, qual in deps.get("functions", []):
@@ -229,7 +270,31 @@ def compute_key(gen: str, deps: dict[str, Any] | None) -> str:
 
 
 def run_and_record(gen: str) -> dict[str, Any]:
-    """Run a gen, recording which functions executed and which files it read.
+    """Run a gen, recording which functions executed and which files it read."""
+
+    def run_gen() -> None:
+        try:
+            runpy.run_path(gen, run_name="__main__")
+        except SystemExit as ex:
+            # A GEN MAY FINISH BY EXITING, and in-process that would take the whole sweep with
+            # it. Every Mode A gen ends `raise SystemExit(main())`, which is a normal successful
+            # return for a script - but `runpy` runs it in THIS interpreter, so the exception
+            # propagated out of regen.py and the batch stopped, silently, reporting exit 0. On
+            # 2026-08-08 `python3 -m l7r.diagram.pipeline.regen pool/*/*.gen.py` - the whole-pool invocation this
+            # file's docstring recommends - therefore rebuilt the nine hamlets, hit the first
+            # magistracy, and quit before a single town, village or city, looking for all the
+            # world like it had done the lot. A non-zero code is a real failure and still
+            # raises; zero (or None) is just how a script says it is done.
+            if ex.code:
+                raise
+
+    return record(run_gen)
+
+
+def record(run: Callable[[], object]) -> dict[str, Any]:
+    """Run `run()`, recording which engine functions executed and which files it read - the dependency
+    set a key is computed over. Generalized from the gen runner for `rollcache` (feature 135): a test's
+    in-process roll is recorded exactly the way a pool gen is.
 
     `sys.monitoring` with a DISABLE return reports each code object once, so this is free (measured:
     within noise on 800k calls). Nested-function qualnames carry `.<locals>.`, which the AST walk
@@ -257,7 +322,7 @@ def run_and_record(gen: str) -> dict[str, Any]:
             functions.add((path, code.co_qualname.replace(".<locals>", "")))
         return mon.DISABLE
 
-    builtins.open = spy_open  # type: ignore[assignment]
+    builtins.open = spy_open
     mon.use_tool_id(tool, "gencache")
     try:
         mon.register_callback(tool, mon.events.PY_START, on_start)
@@ -273,26 +338,13 @@ def run_and_record(gen: str) -> dict[str, Any]:
         # traces a fresh module whose code objects had never been disabled.
         mon.restart_events()
         try:
-            try:
-                runpy.run_path(gen, run_name="__main__")
-            except SystemExit as ex:
-                # A GEN MAY FINISH BY EXITING, and in-process that would take the whole sweep with
-                # it. Every Mode A gen ends `raise SystemExit(main())`, which is a normal successful
-                # return for a script - but `runpy` runs it in THIS interpreter, so the exception
-                # propagated out of regen.py and the batch stopped, silently, reporting exit 0. On
-                # 2026-08-08 `python3 -m l7r.diagram.pipeline.regen pool/*/*.gen.py` - the whole-pool invocation this
-                # file's docstring recommends - therefore rebuilt the nine hamlets, hit the first
-                # magistracy, and quit before a single town, village or city, looking for all the
-                # world like it had done the lot. A non-zero code is a real failure and still
-                # raises; zero (or None) is just how a script says it is done.
-                if ex.code:
-                    raise
+            run()
         finally:
             mon.set_events(tool, 0)
             mon.register_callback(tool, mon.events.PY_START, None)
     finally:
         mon.free_tool_id(tool)
-        builtins.open = real_open  # type: ignore[assignment]
+        builtins.open = real_open
     return {"functions": sorted(functions), "files": sorted(files - engine)}
 
 

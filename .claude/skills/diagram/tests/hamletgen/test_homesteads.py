@@ -116,3 +116,16 @@ def test_farmstead_fixtures_honor_the_spec_floor() -> None:
     assert s.M["meta"]["farm_fixtures_min"] == {"shrine": 2, "bath": 3}
     owners = {(r["kind"], tuple(r["of"])) for r in s.M["farm_fixtures"]}
     assert len(owners) == len(s.M["farm_fixtures"]), "the floor never doubles a house"
+
+
+def test_a_lane_through_the_middle_of_a_bamboo_strip_blocks_the_seat() -> None:
+    """Five sample points on a 22 by 16 ft strip let a lane cross it between them (feature 137,
+    cohort seed 03, `lanes_clear_of_bamboo`); the tread is tested as a segment against the edges."""
+    from l7r.diagram.hamletgen.homesteads import _strip_blocked
+    from l7r.diagram.settlement import Settlement
+
+    s = Settlement(W=900, H=700, seed=7)
+    through = [([(96.0, 40.0), (104.0, 160.0)], 1.5)]  # a near-vertical tread through the strip, 4+ ft from every corner and the center
+    assert _strip_blocked(s, 100.0, 100.0, 22.0, 16.0, 0.0, 0.0, [], [], None, through)
+    beside = [([(140.0, 40.0), (140.0, 160.0)], 1.5)]
+    assert not _strip_blocked(s, 100.0, 100.0, 22.0, 16.0, 0.0, 0.0, [], [], None, beside)

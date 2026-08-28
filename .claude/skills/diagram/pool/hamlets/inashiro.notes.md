@@ -1388,3 +1388,35 @@ straw rick is deferred with seasonal maps (T60).
 **2026-08-27 (T61).** `fixtures_min={"shrine": 1}` on the spec: the reference hamlet always carries one hokora so its rendering can be judged (seed 4 already rolled one at 1266,1154, on the plot of the house at 1303,1179; the floor is declared and held by the gate).
 
 **2026-08-27 (T62).** The hokora is drawn at the 6 ft small-shed module in vermilion with a torii before it - at 3 ft the GM could not tell what it was; a glyph convention, recorded as a deviation.
+
+- 2026-08-28 (feature 134, interactive HTML map): NO visual change - the manifest gained the ink census keys (`ink_classes`, `unclassed_ink`, `unregistered_classes`) and the SVG/PNG are byte-identical to the accepted T99 state (PNG sha256 09e8d5ab... unchanged, SVG whitespace-normalized identical). No settlement-review owed; pushed with REVIEW_GATE_OK stating this.
+
+### 2026-08-28 - feature 137: the lane web's splices, reviewed
+
+`settlement-review` (delta scope: the lane web, the board's caption seat, the title-as-cover rule), verdict **PASS WITH NOTES**. Confirmed in the ink: no join link retraces its own piece; lane 1's end at the connector (1089,954) is not linked onward; every farmstead 24-63 ft from a lane; the board still at the busiest node; the title placard on the commons north of the belt, piercing no crown. Caught, carried to feature 139 (not fixed here - the GM stopped the work to land it):
+
+1. **The board's caption stands across the way from its glyph** (caption 1262-1315 x 916-924, board at 1307,918): the new seat scoring proves the wrapped box FITS, it never asks which side of the lane it landed on, so at fit zoom the text reads as naming the house or the lane. Fix direction: score a seat on the glyph's side of any way between them, or drop the caption below the board on the east verge (open ground x 1315-1330, y 895-945).
+2. **Lane 5's terminal (1274,746) fades out** 12 ft short of the (1337,743) bed and 30 ft from that house's wall - a lane end off the network should land on a plot edge or a yard.
+
+Nitpicks: a 5 ft tail of lane 2 past the lane-4 junction at (1280,1035); the 12 ft jog at (1246,1013)-(1243,1025) before the east leg. The review's catch line: the caption-across-the-way defect and the fading terminal; nothing else new.
+
+### 2026-08-28 - manifest re-recorded under the landed feature-137 engine
+
+The committed manifest was rolled by an earlier engine state; this commit records what the landed engine (GitHub main f4456a72) draws, byte-identical to the mirror's render-sync, so main is clean. Not a review pass: the review of this map is the entry above (PASS WITH NOTES).
+## 2026-08-28 - feature 140: seats measured against a few chords of the field edge (the map moved)
+
+Placement now judges a farmhouse seat against the field outline's chords facing the cluster (an open chain
+of 8-9 chords, pushed out 3 px; `M["field_chains"]`) instead of the 73-vertex outline, and
+`houses_clear_of_paddies` reads the same chords. The GM ruled the maps may move, and the whole cluster
+re-rolled: 14 of 15 seats, both wells, the byres, the notice board, the lane web. `settlement-review` DELTA
+pass: **NOT ACCEPTABLE on one error, the set-backs themselves confirmed** - measured front-row corner-to-
+outline gaps 10.4 -> 12.3, 11.9 -> 9.5, 13.3 -> 18.6, 22.6 -> 29.9, 34.0 -> 34.9 ft (the row re-rolled
+rather than translated; minimum corner-to-chord 7.7 ft, `HOUSE_PADDY_GAP_FT` honored); nothing crosses
+the chord or the bund; the row follows the edge's curve. The error: the notice board left the frontage
+for the exit throat (1108, 907; 3 dwellings within 150 ft vs 11) - the busy count is now weighted toward
+150 ft, and the remaining cause is ROOM (no verge seat on the frontage fits a board after the re-seat),
+deferred with its sketch in `specs/140-placement-segments/research.md` R6. Questionable, recorded: lane 0's
+field spur fades in the scrub at (1318, 1306); the south well (1232, 1283) stands outside the lane loop.
+Catch line: the pass caught the board's drift (a second-order effect of the re-roll), the fading spur, and
+that the stated "uniform +3-6 px" did not match the measured -2.4..+7.4 - the record above carries the
+measurement.

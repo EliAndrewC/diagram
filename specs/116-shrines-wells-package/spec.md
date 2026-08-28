@@ -179,7 +179,7 @@ file to open from the index alone, without grepping.
 - **A concurrent sibling split.** Feature 115 (`civic_grounds.py`) is running in another session and
   touches the same two shared files - `settlement/CLAUDE.md`'s table and
   `tests/settlement/CLAUDE.md`. Each edits its own row, so the merge is line-disjoint; the sync-in
-  before each stop-work ritual is what keeps it that way.
+  before each stop-work procedure is what keeps it that way.
 
 ## Requirements *(mandatory)*
 

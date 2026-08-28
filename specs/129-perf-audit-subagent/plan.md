@@ -38,7 +38,7 @@ locally; the CodeBuild pair arrives with this feature's FULL merge build (featur
 - **I / II**: N/A - no UI in this repository. **III / VII / VIII / IX**: N/A - no pool content, no prose, no setting.
 - **IV / V**: N/A - no SOURCE blocks touched.
 - **VI**: verification per task: `make done` for Python; the band evaluator proven on the recorded
-  feature-128 pair; the push refusal proven in the ritual's test suite; delegated work (the subagent
+  feature-128 pair; the push refusal proven in the procedure's test suite; delegated work (the subagent
   definition) exercised once for real on this feature's own bookends.
 - **X**: `perf_bands.py` and `perf_review.py` are `mypy --strict` and 100% covered (added to
   pyproject's `files` and coverage `source`); `perf_snapshot.py` stays a by-hand tool but its new

@@ -50,4 +50,4 @@ Record the review outcome in each map's review log (the maps carry a review-log 
 - SC-005: village/hamlet maps unchanged.
 - SC-006: the "why" is in `settlements.md` (Historical grounding) and beside the threshold constant.
 
-Then run the stop-work ritual: commit in the clone, `bash scripts/sync-with-main.sh done` (push + render-sync). Do NOT re-run the gate for docs-only follow-ups.
+Then run the stop-work procedure: commit in the clone, `bash scripts/sync-with-main.sh done` (push + render-sync). Do NOT re-run the gate for docs-only follow-ups.

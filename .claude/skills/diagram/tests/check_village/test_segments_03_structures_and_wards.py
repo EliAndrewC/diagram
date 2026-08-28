@@ -249,10 +249,14 @@ def test_title_clear_of_features_tolerates_scrub_but_not_grove_or_marsh():
     # `Settlement._title_obstacles`.
     scrub = {"meta": {"scale": "village"}, "commons": [{"poly": [[200, 200], [400, 200], [400, 400], [200, 400]]}], "title": {"name": "V", "bbox": [250, 250, 350, 300]}}
     assert "title_clear_of_features" not in f_only(scrub, "title_clear_of_features")
-    # the GROVE (dense closed canopy) and the MARSH (a distinct wetland) DO still block it
-    for k in ("village_groves", "marshes"):
-        M = {"meta": {"scale": "village"}, k: [{"poly": [[200, 200], [400, 200], [400, 400], [200, 400]]}], "title": {"name": "V", "bbox": [250, 250, 350, 300]}}
-        assert "title_clear_of_features" in f_only(M, "title_clear_of_features"), k
+    # the MARSH (a distinct wetland) still blocks it; the GROVE no longer does (feature 137 T06, 2026-08-28):
+    # the placard is an opaque card and a strip of belt under it hides nothing a reader needs, while a tall
+    # hamlet framed tight to its content often has no blank placard-sized ground at all (10 of 48 seeds).
+    # The generator still takes blank ground first and cover only as the last resort before the corner.
+    marsh = {"meta": {"scale": "village"}, "marshes": [{"poly": [[200, 200], [400, 200], [400, 400], [200, 400]]}], "title": {"name": "V", "bbox": [250, 250, 350, 300]}}
+    assert "title_clear_of_features" in f_only(marsh, "title_clear_of_features")
+    grove = {"meta": {"scale": "village"}, "village_groves": [{"poly": [[200, 200], [400, 200], [400, 400], [200, 400]]}], "title": {"name": "V", "bbox": [250, 250, 350, 300]}}
+    assert "title_clear_of_features" not in f_only(grove, "title_clear_of_features")
 
 
 def test_title_clear_of_features_fires_over_the_pond():

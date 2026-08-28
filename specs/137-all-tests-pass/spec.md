@@ -1,0 +1,122 @@
+# Feature Specification: One Hundred Percent of the Tests Pass
+
+**Feature Branch**: none - this project does not use feature branches (`SPECIFY_FEATURE=137-all-tests-pass`)
+
+**Created**: 2026-08-28
+
+**Status**: RE-CUT 2026-08-28 at the GM's instruction (*"recut the spec ... a new feature for the residue"*, verbatim in `../139-remaining-test-failures/gm-request.md`): this feature closes at what it landed - the fixes below - and the remaining failures are feature 139's inventory. Original approval: `spec-fidelity` round 2 verdict **FAITHFUL** (2026-08-28), after round 1 returned three changes (the opening message to the tests session unrecorded; completion narrower than 100%; GM acceptance as a completion condition unrequested).
+
+**Input**: [`gm-request.md`](gm-request.md), verbatim and unedited. That file is the authority for
+this specification.
+
+## The feature, in one sentence
+
+**As re-cut (2026-08-28)**: the first half of the GM's goal - the reference hamlet, tripwire seeds 27/33/37, the belt, the title seat and the lane web's splices fixed and landed on main with a green gate (48-cohort 2 -> 25 of 48) - while the rest of *"one hundred percent"* is feature 139, open. The original sentence follows.
+
+Every expected failure pinned in the diagram test suite during the reference-hamlet period is
+FIXED - the pins removed, the seeds green - so that the whole suite passes with no waiver, while
+this session and the "Diagram tests" session (test efficiency) pull each other's work only at the
+points each declares safe.
+
+## Why this exists (the GM's words)
+
+- *"Your goal ... is to get one hundred percent of those tests passing."*
+- *"faster tests will make quicker iteration, which means that you will have an easier time"* -
+  hence the pull of the efficiency session's safe work before the correctness work starts.
+- *"you should pull in the changes which they communicate to you are safe ... I do not want that
+  session to pull in fixes which you have made, which are not fully tested."*
+
+## The inventory (what "those tests" are, measured 2026-08-27/28)
+
+| pin | where | seeds and checks | when it broke (feature 133 bisect) |
+|---|---|---|---|
+| `TRIPWIRE_EXPECTED` | `tools/mapcheck.py` | 27: `lanes_bend_like_paths`, `lanes_clear_of_bamboo`; 33: `village_windbreak_is_continuous`; 37: `lanes_bend_like_paths`, `lanes_form_one_network`; 47: `fields_clear_of_road`, `lanes_form_one_network`, `lanes_reach_something`, `long_ditches_have_a_footbridge` | 27: two checks added in the period (T32, T49); 33: T10 (the belt's face); 37: T41's re-roll under T32's smoothing; 47: red since before the lock |
+| `GATE_COHORT_EXPECTED` | `tests/gate/hamletgen/test_driver.py` | 42: `farmhouses_reach_a_way`; 43: `lanes_bend_like_paths`, `lanes_form_one_network`, `title_clear_of_features`; 44: `houses_clear_of_paddies` | measured at the T92 unlock |
+| `COHORT_BASELINE` | `hamletgen/driver.py` (the 24-seed canonical cohort, the `cohort` target) | 22: `field_ringed`; 24: `paddy_bunds_clear_the_supply_channels` | pre-133 |
+
+Anything else the first full measurement turns up (a FULL-only failure, a polder seed, a seed of
+the 48-cohort audit) joins the inventory by a task, never silently.
+
+## User Scenarios & Testing
+
+### User Story 1 - the pins come out (Priority: P1)
+
+**Acceptance**: **Given** the inventory above, **When** the feature is complete, **Then** every
+row's checks pass on its seed under the current engine, the pin rows are DELETED (a pinned seed
+that passes is a stale pin and fails the gate by design), and the unlocked gate, the tripwire
+(`maps`) and the 24-seed `cohort` are green with no expected failure anywhere.
+
+### User Story 2 - the two sessions pull each other safely (Priority: P1)
+
+**Acceptance**: **Given** the "Diagram tests" session's clone, **When** it names a commit as safe,
+**Then** this clone merges exactly up to that commit (after main), and never anything past it;
+**Given** this session has a tested set of fixes (a green gate on them), **Then** it names that
+commit to the other session, and never an untested one. Every handoff in both directions is a
+line in this feature's `handoffs.md` (who, sha, what it was tested with).
+
+### User Story 3 - no fix is a rotation (Priority: P1)
+
+**Acceptance**: a fix that closes one seed and opens another is not a fix (constitution XIII, the
+belt-face lesson of 133 T91): each fix is measured on the full tripwire, the gate cohort and the
+24-seed cohort before it is kept.
+
+### Edge Cases
+
+- A pinned check turns out to be a WRONG RULE (the check, not the map, is the defect): the fix is
+  to the check, with its research recorded, and the seed goes green that way - the pin still comes
+  out.
+- The efficiency session changes what a test rolls (subsets, markers): the inventory is re-measured
+  after each safe pull, and a seed that disappears from the gate's roll is still fixed (the
+  inventory is about the maps, not the test selection).
+- A seed that cannot be fixed without an architectural change: deferred as constitution XIV
+  requires (measurement, mechanism, sketch) and put before the GM - never re-pinned quietly.
+
+## Requirements
+
+- **FR-000** (the request's first sentence): before any pull, message the "Diagram tests" session
+  that this session is merging its changes into this clone and is taking on fixing the expected
+  failures, and ask it to name a commit it considers safe (or expects to be safe); record the
+  message in `handoffs.md`. SENT 2026-08-28 04:05Z (msg 7b11f701), before this spec was reviewed.
+- **FR-001**: Before any correctness work, pull main and then the efficiency session's clone up to
+  the commit it names as safe; record it in `handoffs.md`.
+- **FR-002**: Each inventory row is a task with its own measurement (the failing check's message on
+  that seed, the mechanism, the fix), fixed in the engine or in the check with the research
+  recorded where the rule lives, and verified on the whole tripwire + gate cohort + 24-seed cohort
+  (no rotation).
+- **FR-003**: A pin row is removed in the same commit as the fix that makes it stale.
+- **FR-004**: Handoffs to the efficiency session are made only on a commit with a green gate and
+  are recorded; pulls from it are made only on commits it names, and are recorded.
+- **FR-005** (as re-cut: completion is what landed; the 100% condition is 139's FR-004): The feature was to be complete when ONE HUNDRED PERCENT of the diagram tests pass with no
+  expected-failure pin and no waiver of a failing check remaining anywhere: the three tables above
+  empty (today's measured instance), plus every row the first full measurement adds under the
+  inventory note - including a FULL-sweep-only failure or a 48-cohort-audit seed, should either
+  carry one - each proven by the run that owns it (the unlocked gate; the tripwire; the 24-seed
+  cohort; the FULL sweep and the 48-cohort audit if they hold a row). The result is REPORTED to the
+  GM on completion; acceptance is not a condition of it (the GM: "a specific background session").
+
+## Success Criteria
+
+- **SC-001** (as re-cut 2026-08-28: measured against what LANDED - tripwire 27/33/37 clean and 47 shrunk to three checks, the 48-cohort 2 -> 25 of 48, the reference clean; the remaining pins - tripwire 47, gate cohort 42/43/44, cohort baseline 22/24 - are feature 139's SC-001. The original criterion follows): no expected-failure pin or waiver of a failing check remains anywhere in the suite
+  or its tooling - the three tables empty and any row the measurement added - and the runs prove
+  it (a pinned-but-passing seed would fail; an unpinned failing seed would fail).
+- **SC-002** (as re-cut 2026-08-28: measured against what LANDED - tripwire 27/33/37 clean and 47 shrunk to three checks, the 48-cohort 2 -> 25 of 48, the reference clean; the remaining pins - tripwire 47, gate cohort 42/43/44, cohort baseline 22/24 - are feature 139's SC-002. The original criterion follows): the tripwire reports every seed `ok`; the cohort reports 24 of 24.
+- **SC-003**: `handoffs.md` has a line per pull and per handoff, each naming a sha and its test.
+
+## Decisions Recorded
+
+| decision | class | where |
+|---|---|---|
+| the title placard may sit on COVER (a belt, a wood, the bamboo) when no blank ground holds it - never on a building, a plot, a field, water, a lane or a label; blank ground is still taken first (T06) | DEVIATION (a rendering convention: the card is opaque and hides nothing a reader needs) | `settlement/finish.py` `title()`, the check's comment, this row |
+| when every corner hides a plot, the sheet grows a TITLE BAND above the map, declared in `meta.title_band` and allowed by `crop_hugs_content` (T06) | DEVIATION (the title is not a feature of the place) | same |
+| a caption's subject angle in the alignment check is `aligned_tilt` itself (square rotations read level) (T06) | ACCURATE to the T38 rule as recorded | `check_village/segments_03c` |
+| the orphan joiner's ladder: a junction-margin route, a detour round a yard up to 8x the gap, a house-safe drop (T03) | DEVIATION (a drawing rule; the research says 'interconnected', not how) | `hamletgen/ways.py` |
+| the smoothing never disconnects the web unless the touch pass can rejoin it (T03) | ACCURATE (the research: paths connect) | same |
+| the 4 ft junction brush stays; 7, 6 and a 4/6 split measured and declined (T03) | DEVIATION kept, alternatives recorded | same, `_clear_touch` |
+
+## Assumptions
+
+- The "Diagram tests" session was messaged first (FR-000). If it does not reply, this session
+  pulls nothing from it and works the inventory from main alone, re-asking at each handoff; a
+  named safe commit is merged whenever it arrives.
+- The GM's waivers of 2026-08-27 stay in force for the pins until each is fixed here; no other
+  session touches them (the GM: "a specific background session").

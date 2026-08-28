@@ -19,7 +19,7 @@ if TYPE_CHECKING:
 
 
 class TreeStandsMixin:
-    def _tree_stand(self: Settlement, poly: Poly, seed: int, floor: Poly | None = None, outliers: bool = True) -> None:  # type: ignore[misc]
+    def _tree_stand(self: Settlement, poly: Poly, seed: int, floor: Poly | None = None, outliers: bool = True, cls: str | None = None) -> None:  # type: ignore[misc]
         """Fill `poly` with INDIVIDUAL TREES - the ONE way this engine draws a wood (GM 2026-07-25).
 
         A forest is NOT a terrain type here. It used to be drawn as a flat pale wash under a widely-
@@ -61,8 +61,8 @@ class TreeStandsMixin:
         # wash - under a closed canopy hardly any of it shows, and its outline is buried under the
         # trees whose centers stand inside it.
         d = 'M' + ' L'.join(f'{x:.0f},{y:.0f}' for x, y in (floor or poly)) + ' Z'
-        self.add(f'<path d="{d}" fill="{self.FOREST_FLOOR}"/>')
-        self._pending_stands.append((list(poly), seed, outliers))
+        self.add(f'<path d="{d}" fill="{self.FOREST_FLOOR}"/>', cls=cls)
+        self._pending_stands.append((list(poly), seed, outliers, cls))  # the class rides to the deferred canopy (feature 134)
 
     def flush_tree_stands(self: Settlement) -> None:  # type: ignore[misc]
         """Draw the canopy of every queued tree stand (see _tree_stand). Runs at CROP time, so each
@@ -72,11 +72,11 @@ class TreeStandsMixin:
         stand re-seeds its own RNG, state saved/restored), so deferring ripples nothing. Idempotent;
         unit tests call it directly after forest()/forest_patch()."""
         pending = self._pending_stands
-        self._pending_stands: list[tuple[Poly, int, bool]] = []
-        for poly, seed, outliers in pending:
-            self._draw_stand(poly, seed, outliers)
+        self._pending_stands: list[tuple[Poly, int, bool, str | None]] = []
+        for poly, seed, outliers, cls in pending:
+            self._draw_stand(poly, seed, outliers, cls)
 
-    def _draw_stand(self: Settlement, poly: Poly, seed: int, outliers: bool) -> None:  # type: ignore[misc]
+    def _draw_stand(self: Settlement, poly: Poly, seed: int, outliers: bool, cls: str | None = None) -> None:  # type: ignore[misc]
         """One queued stand's canopy: the crowns inside `poly` plus (optionally) its fringe outside,
         each filtered so no tree is drawn on a roof or a wellhead."""
         xs = [p[0] for p in poly]
@@ -101,10 +101,50 @@ class TreeStandsMixin:
         # no crown is drawn on a roof or a wellhead - and by flush time that means EVERY one of them
         reach = rad * 1.4
         krect, kcirc = self._canopy_keepouts((min(xs) - reach, min(ys) - reach, max(xs) + reach, max(ys) + reach))
-        self.add(''.join(self._crowns([t for t in trees if not self._crown_covers(t[0], t[1], t[2], krect, kcirc, self.CANOPY_PAD)])))
+        seated = self._crowns_near(
+            min(xs) - reach, min(ys) - reach, max(xs) + reach, max(ys) + reach
+        )  # no crown's center under another's canopy, this stand's or any earlier one's - see _crown_seat_clear
+        self.add(''.join(self._crowns(self._canopy_seats([t for t in trees if not self._crown_covers(t[0], t[1], t[2], krect, kcirc, self.CANOPY_PAD)], seated))), cls=cls)
         if outliers:
-            self.add(''.join(self._crowns(self._stand_fringe(poly, step, rad, krect, kcirc))))
+            self.add(''.join(self._crowns(self._canopy_seats(self._stand_fringe(poly, step, rad, krect, kcirc), seated))), cls=cls)
         random.setstate(st)
+
+    @staticmethod
+    def _crown_seat_clear(x: float, y: float, r: float, crowns: Sequence[tuple[float, float, float]]) -> bool:
+        """NO CANOPY TREE STANDS UNDER ANOTHER'S CROWN (GM 2026-08-28, found on the interactive map):
+        a crown is refused when its center lies inside an already-seated crown, or an already-seated
+        center lies inside it - `d < max(r, r_other)`. Edge overlap (`d` between that and `r + r_other`)
+        stays: neighboring canopies do interlace. What this removes is the tree drawn wholly inside
+        another's circle - a suppressed understory stem, which the canopy layer this map draws does not
+        show. Measured before the rule on Inashiro: 298 of 1,728 crowns entirely inside another
+        (17%), 950 with their center more than halfway in; the 13 ft grid's +-42% jitter put two grid
+        neighbors 2-3 ft apart and a 6 ft crown vanished under a 12 ft one. research/vegetation.md
+        "Forest density and crown size"; gated by `tree_crowns_not_subsumed`."""
+        return all((x - cx) ** 2 + (y - cy) ** 2 >= max(r, cr) ** 2 for cx, cy, cr in crowns)
+
+    def _crowns_near(self: Settlement, x0: float, y0: float, x1: float, y1: float) -> list[tuple[float, float, float]]:  # type: ignore[misc]
+        """Every crown ALREADY RECORDED on the map (M['tree_crowns'], any stand or clump) that reaches into
+        the box - the seed for a new stand's seating, so neighboring stands and the belt's overlapping
+        clumps see each other's crowns. Checked per stand only, 53 of Inashiro's crowns still sat wholly
+        inside a crown of the NEXT clump (measured 2026-08-28)."""
+        tc = self.M.get("tree_crowns") or []
+        out: list[tuple[float, float, float]] = []
+        pad = 2.0 * self.px(self.CANOPY_R_FT) * 1.4  # the largest crown either side of the box's edge (a 12 ft emergent just outside it was missed at the clump's own 9 px reach: 73 seats, 2026-08-28)
+        for i in range(0, len(tc), 3):
+            cx, cy, cr = tc[i], tc[i + 1], tc[i + 2]
+            if x0 - cr - pad <= cx <= x1 + cr + pad and y0 - cr - pad <= cy <= y1 + cr + pad:
+                out.append((cx, cy, cr))
+        return out
+
+    def _canopy_seats(self: Settlement, trees: Sequence[tuple[float, float, float, str]], seated: list[tuple[float, float, float]]) -> list[tuple[float, float, float, str]]:  # type: ignore[misc]
+        """The trees of `trees` that keep their seat under `_crown_seat_clear`, biggest first (the
+        dominants hold the canopy; a smaller crown yields), appended to `seated` as they are kept."""
+        kept: list[tuple[float, float, float, str]] = []
+        for t in sorted(trees, key=lambda t: -t[2]):
+            if self._crown_seat_clear(t[0], t[1], t[2], seated):
+                seated.append((t[0], t[1], t[2]))
+                kept.append(t)
+        return kept
 
     def _stand_fringe(self: Settlement, poly: Poly, step: float, rad: float, krect: Any, kcirc: Any) -> list[tuple[float, float, float, str]]:  # type: ignore[misc]
         """The cut-over FRINGE of a wood: scattered advance growth thinning out past the tree line,

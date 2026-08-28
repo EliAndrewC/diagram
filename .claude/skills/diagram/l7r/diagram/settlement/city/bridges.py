@@ -112,7 +112,7 @@ class BridgesMixin:
         g.append(f'<rect x="{-hl:.1f}" y="{-hw - 2.4:.1f}" width="{span:.1f}" height="2.6" fill="#5A3F1E"/>')  # the two side rails
         g.append(f'<rect x="{-hl:.1f}" y="{hw - 0.2:.1f}" width="{span:.1f}" height="2.6" fill="#5A3F1E"/>')
         g.append('</g>')
-        z = self.add_top(''.join(g))
+        z = self.add_top(''.join(g), cls="footbridge")  # every plank and deck over water is one class (feature 134)
         self.M.setdefault("bridges", []).append({"x": round(x, 1), "y": round(y, 1), "rot": round(rot, 1), "span": round(span, 1), "w": round(deck_w, 1), "z": z})
         return z
 

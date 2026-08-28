@@ -105,6 +105,9 @@ def test_village_grove_face_margin_drops_only_clumps_no_frame_could_show():
     assert (_axis, _sign) == (0, 1)
     assert 0 < n_trim < n_full, "the deep side of a 300 px band is beyond any 48 px margin"
     assert all(cx - inner >= -(48 + 2 * g["r"] * 0.9) for cx, _cy in g["clumps"]), "every kept clump can show ink inside face + margin"
+    # feature 137 T05 (2026-08-28): the trimmed clumps still STAND, off the page - recorded apart, so the
+    # continuity check sees the belt wrap a plot there while the page-bound checks read only the ink
+    assert len(g["clumps_offpage"]) == n_full - n_trim and all(cx - inner < -(48 + 2 * g["r"] * 0.9) for cx, _cy in g["clumps_offpage"])
     assert inner == windbreak_face(full.M["village_groves"][0]["clumps"], 14.0, full.M["houses"])[2], "the trim never moves the face"
 
 

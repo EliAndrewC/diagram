@@ -67,7 +67,11 @@ class HousesMixin:
         else:
             g.append(f'<rect x="-3.5" y="{h / 2 - 2:.1f}" width="7" height="3.3" fill="{edge}" opacity="0.85"/>')
         g.append('</g>')
-        self.add(''.join(g))
+        # ONE string, TWO feature classes (feature 134): the shed rect (g[1] when drawn) is the
+        # "storage shed", everything else the "farmhouse"; the shared <g transform> wrapper's opening
+        # and closing tags carry no class. Joined byte-for-byte as before - see Settlement.add_parts.
+        _shed_drawn = shed and kind == "plain"
+        self.add_parts([(None, g[0])] + ([("storage shed", g[1])] if _shed_drawn else []) + [("farmhouse", "".join(g[2 if _shed_drawn else 1 : -1])), (None, g[-1])])
         if shed and kind == "plain":  # record the attached kura so it is first-class + checkable
             th = math.radians(rot)
             self.M.setdefault("farm_sheds", []).append(
@@ -91,12 +95,11 @@ class HousesMixin:
         its wall on the bund - Inashiro had one corner 0.9 ft from the outline while every other
         house stood 10-13 ft off. This tests the rotated corners against the field outlines at the
         wall's own floor (`dev/placement.md`, "gap verdicts read footprints, never centers")."""
-        gap = self.px(HOUSE_PADDY_GAP_FT)
-        for cx, cy in rot_rect(x, y, w, h, rot):
-            for poly, *_ in self._keepout_index(self.field_polys, "field_keepout", 14.0).near(cx, cy):
-                if point_in_poly(cx, cy, poly) or edge_dist(cx, cy, poly) < gap:
-                    return True
-        return False
+        # THE PLACER HOLDS THE GATE'S FIGURE PLUS THE ROUNDING (feature 137 T06, 2026-08-28): the check tests the
+        # corners of the RECORDED footprint, whose center and rake are rounded to 0.1 (see `house()`), so a
+        # seat held at exactly 6.0 ft came out at 5.6-5.9 on five of 48 cohort seeds. One foot of slack.
+        gap = self.px(HOUSE_PADDY_GAP_FT + 1.0)
+        return any(self._field_blocks_point(cx, cy, gap) for cx, cy in rot_rect(x, y, w, h, rot))  # the outline's chords on the house side (feature 140)
 
     def _in_blocked(self: Settlement, x: float, y: float) -> bool:  # type: ignore[misc]
         # bbox pre-filter (cached, same idea as _rect_hits): a point outside a polygon's bbox - expanded by
@@ -106,9 +109,8 @@ class HousesMixin:
         # calls and 12.9s of self time on Minami, whose block_polys accretes one entry per placed
         # homestead. Each grid's boxes carry that registry's own pad, so a zero-pad query is exact
         # and the tests below are the same ones, in the same order.
-        for poly, *_ in self._keepout_index(self.field_polys, "field_keepout", 14.0).near(x, y):
-            if point_in_poly(x, y, poly) or edge_dist(x, y, poly) < 14:
-                return True
+        if self._field_blocks_point(x, y, 14.0):  # the outline's chords on the house side, not the outline (feature 140)
+            return True
         for poly, *_ in self._keepout_index(self.block_polys, "block_keepout", 0.0).near(x, y):
             if point_in_poly(x, y, poly):
                 return True
