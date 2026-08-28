@@ -26,7 +26,7 @@
 
 **accurate** (the record says so - cite the finding), **deviation** (drawn other than the record
 says, and why: legibility, showing the feature type, L5R canon, a priced trade-off), or **guess**
-(the record is silent or has no firm number; this is our reasoning). The interactive HTML map the
+(the record is silent or has no firm number; this is our reasoning). The interactive HTML map exists since feature 134 (`pool/<tier>/<map>.html`; the class explanations in `l7r/diagram/interactive/classes.py` are written FROM these entries and carry their labels) - and the map the
 project is building toward will show a reader exactly this: a player clicks a feature and is told
 which of the three it is. An entry that presents reasoning as a finding is the one failure.
 

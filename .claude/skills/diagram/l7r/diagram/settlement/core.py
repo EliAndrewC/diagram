@@ -2,8 +2,10 @@
 
 import contextlib
 import random
-from collections.abc import Iterator
+from collections.abc import Iterator, Sequence
 from typing import Any
+
+from l7r.diagram.interactive.tags import ClsTag, Parts
 
 from ._geom import LAND, Indexed, Manifest, PointGrid, Poly
 from ._knobs import crop_boxes, resolve_knob, scope_seed
@@ -46,12 +48,25 @@ class Settlement(
         self.knob_pins: dict[str, Any] = {}  # knobs the spec pinned explicitly (bypass the roll)
         self._resolved_knobs: dict[str, Any] = {}  # knobs resolved so far, fed into later knobs' typing context
         self.out: list[str] = []
+        # THE FEATURE CLASS OF EVERY PRIMITIVE RIDES BESIDE IT, NEVER IN IT (feature 134, GM
+        # 2026-08-27). Each record stream has a parallel `*_cls` list, index-aligned with the string
+        # list: `add(s, cls=...)` appends to both, the deferred ground/water blocks carry `cls` on
+        # their entries and finish() splices a class block beside each string block. The SVG is
+        # written from the string lists exactly as before - the class never enters the SVG text, so
+        # the PNG is byte-identical by construction (spec FR-010) - and the HTML target wraps each
+        # classed string in a `<g class="f f-<class>">` for the hover/click page. `None` means no one
+        # has ruled on that ink (the FR-009 census reports it); `"-"` is the not-highlighted ruling.
+        self.out_cls: list[ClsTag] = []
+        self.top_cls: list[ClsTag] = []
+        self.toplabels_cls: list[ClsTag] = []
+        self.walls_cls: list[ClsTag] = []
+        self._cls: str | None = None  # the default class inside a `with self.feature(...)` block
         self._pending_yards: list[
             tuple[float, float, float, float, float, Any]
         ] = []  # stable-yard scatters queued at stables()/animal_ground() time, DRAWN at crop time when every way/footprint exists (GM 2026-07-24: a yard drawn at stables-time could not see later-drawn streets, so its furniture landed on them)
         # DEFERRED: drawn at crop time, not where it is called. See "DRAW ORDER" in CLAUDE.md.
         self._pending_stands: list[
-            tuple[Poly, int, bool]
+            tuple[Poly, int, bool, str | None]
         ] = []  # tree-stand canopies queued at forest()/forest_patch() time, DRAWN at crop time when every building + well exists (see flush_tree_stands)
         self.top: list[str] = []  # deferred TOP layer (gate furniture, torii, kido) - over roads/buildings
         self.toplabels: list[str] = []  # deferred LABEL layer - the very last thing drawn, so TEXT is never
@@ -217,27 +232,58 @@ class Settlement(
     WALLZ = 1_000_000  # the WALL layer renders above every ground lane and building (which sit in
     #                          self.out, z < len(out)), below the TOP layer - so lanes pass UNDER walls
 
-    def add(self: Settlement, s: str) -> int:
+    def _tag(self: Settlement, cls: ClsTag) -> ClsTag:
+        """The class an emit carries: an explicit `cls` wins, else the enclosing `feature()` scope's."""
+        return cls if cls is not None else self._cls
+
+    def add(self: Settlement, s: str, cls: ClsTag = None) -> int:
         z = len(self.out)
         self.out.append(s)
+        self.out_cls.append(self._tag(cls))
         return z
 
-    def add_wall(self: Settlement, s: str) -> int:
+    def add_parts(self: Settlement, parts: Sequence[tuple[str | None, str]]) -> int:
+        """One string joined from pieces of MORE than one class - the farmhouse and its attached shed
+        share one `<g transform>` - written to the SVG exactly as `add(''.join(pieces))` would be, with
+        each piece's class kept for the HTML target (feature 134 `Parts`). A piece tagged None stays
+        UNWRAPPED - it never inherits the enclosing `feature()` class - because the None pieces are the
+        shared wrapper's opening and closing tags, and wrapping those would nest the groups wrong."""
+        tagged: Parts = tuple(parts)
+        z = len(self.out)
+        self.out.append("".join(s for _c, s in tagged))
+        self.out_cls.append(tagged)
+        return z
+
+    def add_wall(self: Settlement, s: str, cls: ClsTag = None) -> int:
         z = self.WALLZ + len(self.walls)
         self.walls.append(s)
+        self.walls_cls.append(self._tag(cls))
         return z
 
-    def add_label(self: Settlement, s: str) -> int:
+    def add_label(self: Settlement, s: str, cls: ClsTag = None) -> int:
         z = self.LABELZ + len(self.toplabels)
         self.toplabels.append(s)
+        self.toplabels_cls.append(self._tag(cls))
         return z
 
-    def add_top(self: Settlement, s: str) -> int:
+    def add_top(self: Settlement, s: str, cls: ClsTag = None) -> int:
         z = self.TOPZ + len(self.top)
         self.top.append(s)
+        self.top_cls.append(self._tag(cls))
         return z
 
-    def _ground(self: Settlement, zpri: float, rec: Any, zkey: str, edge: Any = None, bed: Any = None, top: Any = None) -> None:
+    @contextlib.contextmanager
+    def feature(self: Settlement, cls: str) -> Iterator[None]:
+        """Every `add*()` inside the block carries `cls` unless it names its own - one line tags a whole
+        drawing method. Nests: the inner scope wins while it is open, the outer resumes after."""
+        prev = self._cls
+        self._cls = cls
+        try:
+            yield
+        finally:
+            self._cls = prev
+
+    def _ground(self: Settlement, zpri: float, rec: Any, zkey: str, edge: Any = None, bed: Any = None, top: Any = None, cls: ClsTag = None) -> None:
         """Defer a linear ground feature (alley/street/road/ring road). The whole set renders as ONE
         block, in THREE sub-layers so crossings read as clean CROSSROADS: all EDGE strokes (the dark
         borders) at the bottom, then all BED strokes (the paved surfaces), then all TOP marks (center
@@ -249,9 +295,10 @@ class Settlement(
         if self._ground_idx is None:
             self._ground_idx = len(self.out)
             self.out.append("")  # placeholder, replaced by the sorted block at finish()
-        self.ground.append({"zpri": zpri, "seq": len(self.ground), "edge": edge, "bed": bed, "top": top, "rec": rec, "zkey": zkey})
+            self.out_cls.append(None)
+        self.ground.append({"zpri": zpri, "seq": len(self.ground), "edge": edge, "bed": bed, "top": top, "rec": rec, "zkey": zkey, "cls": self._tag(cls)})
 
-    def _water(self: Settlement, bed: Any, rec: Any, sheen: Any = None, edge: Any = None, clip: Any = None, pond_fill: bool = False, late: bool = False) -> None:
+    def _water(self: Settlement, bed: Any, rec: Any, sheen: Any = None, edge: Any = None, clip: Any = None, pond_fill: bool = False, late: bool = False, cls: ClsTag = None) -> None:
         """Defer a watercourse (stream / channel / moat / POND) so the whole set renders as ONE block, in
         THREE sub-layers: all EDGES (pond rims - the only water feature with a border) at the bottom, then
         all BEDS (the blue water bodies, same color) inside one shared-opacity group, then all SHEENS (the
@@ -276,12 +323,14 @@ class Settlement(
             # strings, inert in the final SVG.
             self._late_water_idx = len(self.out)
             self.out.append("")  # placeholder for the LATE block (see __init__)
-            self.late_water.append({"bed": bed, "sheen": sheen, "edge": edge, "rec": rec, "clip": clip, "pond_fill": pond_fill})
+            self.out_cls.append(None)
+            self.late_water.append({"bed": bed, "sheen": sheen, "edge": edge, "rec": rec, "clip": clip, "pond_fill": pond_fill, "cls": self._tag(cls)})
             return
         if self._water_idx is None:
             self._water_idx = len(self.out)
             self.out.append("")  # placeholder, replaced by the three-group block at finish()
-        self.water.append({"bed": bed, "sheen": sheen, "edge": edge, "rec": rec, "clip": clip, "pond_fill": pond_fill})
+            self.out_cls.append(None)
+        self.water.append({"bed": bed, "sheen": sheen, "edge": edge, "rec": rec, "clip": clip, "pond_fill": pond_fill, "cls": self._tag(cls)})
 
     def _cid(self: Settlement, prefix: str) -> str:
         self._clip += 1
@@ -304,7 +353,7 @@ class Settlement(
             '<circle cx="11" cy="3" r="0.7" fill="#B7A06C"/></pattern>'
         )
         self.add('</defs>')
-        self.add(f'<rect width="{self.W}" height="{self.H}" fill="{LAND}"/>')
+        self.add(f'<rect width="{self.W}" height="{self.H}" fill="{LAND}"/>', cls="-")  # the sheet: ruled NOT highlighted (feature 134 FR-002)
 
     def meta(self: Settlement, **kw: Any) -> None:
         if "ftpx" in kw:

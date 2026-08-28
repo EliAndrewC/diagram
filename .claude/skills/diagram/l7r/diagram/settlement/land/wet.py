@@ -108,8 +108,8 @@ class WetGroundMixin:
                 for _ in range(4):
                     a, bl = random.uniform(-0.2, 0.2), random.uniform(4.0, 7.0) * bs
                     blades.append(f'<line x1="{gx:.1f}" y1="{gy:.1f}" x2="{gx + math.sin(a) * bl:.1f}" y2="{gy - math.cos(a) * bl:.1f}"/>')
-        self.add(f'<g stroke="#6E9377" stroke-width="0.8">{"".join(blades)}</g>')  # bucketed blades (empty group when none - harmless)
-        self.add(''.join(g))
+        self.add(f'<g stroke="#6E9377" stroke-width="0.8">{"".join(blades)}</g>', cls="marsh")  # bucketed blades (empty group when none - harmless)
+        self.add(''.join(g), cls="marsh")
         random.setstate(st)
         self._cover_n += 1
         self.M["marshes"].append(

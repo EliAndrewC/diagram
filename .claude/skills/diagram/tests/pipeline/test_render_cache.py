@@ -170,7 +170,10 @@ def test_is_fresh_all_paths(repo):
     rc.stamp_svg(svg, "0" * 64)
     assert rc._is_fresh(gen, fp) is False  # stamped, but wrong hash
     rc.stamp_svg(svg, rc.input_hash(gen, fp))
-    assert rc._is_fresh(gen, fp) is True  # stamped with the right hash
+    assert rc._is_fresh(gen, fp) is False  # right hash, but the interactive page is missing (feature 134)
+    with open(svg[:-4] + ".html", "w") as fh:
+        fh.write("<!DOCTYPE html>")
+    assert rc._is_fresh(gen, fp) is True  # stamped with the right hash, all three renders present
 
 
 def test_regen_pool_runs_stale_skips_fresh_and_exempts_mode_a(repo):
@@ -185,6 +188,8 @@ def test_regen_pool_runs_stale_skips_fresh_and_exempts_mode_a(repo):
         fh.write('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10"><SENTINEL/></svg>')
     with open(fsvg[:-4] + ".png", "wb") as fh:
         fh.write(b"OLD")
+    with open(fsvg[:-4] + ".html", "w") as fh:
+        fh.write("<!DOCTYPE html>")  # the interactive page is the third derived render (feature 134)
     rc.stamp_svg(fsvg, rc.input_hash(fresh, fp))
 
     skipped, ran, frozen = rc.regen_pool(pool, repo_dir, skill_dir=skill, jobs=2)

@@ -9,6 +9,8 @@ import random
 from collections.abc import Mapping, Sequence
 from typing import TYPE_CHECKING, Any, cast
 
+from l7r.diagram.interactive.tags import Split
+
 from .._geom import (
     Poly,
     Pt,
@@ -50,17 +52,17 @@ class CombMixin:
         floor = net.get("floor")
         if floor:
             fpts = " ".join(f"{x:.1f},{y:.1f}" for x, y in floor)
-            self.add(f'<polygon points="{fpts}" fill="{col}" stroke="none"/>')
+            self.add(f'<polygon points="{fpts}" fill="{col}" stroke="none"/>', cls="paddy")
             self.M.setdefault("comb_floors", {})[name] = [[round(x, 1), round(y, 1)] for x, y in floor]
             return
         if full_envelope:
-            self.add(f'<polygon points="{epts}" fill="{col}" stroke="none"/>')
+            self.add(f'<polygon points="{epts}" fill="{col}" stroke="none"/>', cls="paddy")
         else:
             cid = self._cid("padbase")
             px0, px1 = min(v[0] for v in pv), max(v[0] for v in pv)
             py0, py1 = min(v[1] for v in pv), max(v[1] for v in pv)
             self.add(f'<clipPath id="{cid}"><rect x="{px0:.1f}" y="{py0:.1f}" width="{px1 - px0:.1f}" height="{py1 - py0:.1f}"/></clipPath>')
-            self.add(f'<polygon points="{epts}" fill="{col}" clip-path="url(#{cid})"/>')
+            self.add(f'<polygon points="{epts}" fill="{col}" clip-path="url(#{cid})"/>', cls="paddy")  # the field floor reads as paddy (feature 134)
         self.M.setdefault("comb_floors", {})[name] = [[round(x, 1), round(y, 1)] for x, y in env]
 
     def bund_junctions(self: Settlement, plots: Sequence[Mapping[str, Any]], name: str) -> None:  # type: ignore[misc]
@@ -140,7 +142,7 @@ class CombMixin:
                     )
                     out.append(f'<polygon points="{arc} {v[0]:.1f},{v[1]:.1f}"/>')
         if out:
-            self.add(f'<g fill="{AZE}" stroke="none">{"".join(out)}</g>')
+            self.add(f'<g fill="{AZE}" stroke="none">{"".join(out)}</g>', cls="bund")
 
     def draw_comb_field(self: Settlement, net: dict[str, Any], name: str, source: dict[str, Any], inwall_drain_moat_bias: Pt | None = None, join_head: bool = False) -> list[Pt]:  # type: ignore[misc]
         """Draw a `build_comb` net (dry hem + flooded paddies + bunds + channels) AND register the field's
@@ -224,8 +226,8 @@ class CombMixin:
             if _hem_on_water(p["poly"]):
                 continue  # standing water was here first - the crop stops at the bank
             pts = " ".join(f"{x:.1f},{y:.1f}" for x, y in p["poly"])
-            self.add(f'<polygon points="{pts}" fill="{p["fill"]}" stroke="#A98C58" stroke-width="1.4" stroke-linejoin="round"/>')
-            self._draw_furrows(p["poly"], p["furrow"], p["theta"])
+            self.add(f'<polygon points="{pts}" fill="{p["fill"]}" stroke="#A98C58" stroke-width="1.4" stroke-linejoin="round"/>', cls=p["crop"])  # each dry crop is its own class (feature 134)
+            self._draw_furrows(p["poly"], p["furrow"], p["theta"], cls=p["crop"])
             self.M["dry_plots"].append({"poly": [[round(x, 1), round(y, 1)] for x, y in p["poly"]], "crop": p["crop"], "theta": round(p["theta"], 3)})
             # A HEM PLOT GOES IN BOTH REGISTRIES, and the second one is the fix (2026-08-11).
             # `block_polys` is the no-build list, which keeps a farmstead off the crop. `dry_polys`
@@ -250,7 +252,9 @@ class CombMixin:
 
         for p in net["plots"]:  # the flooded paddies
             pts = " ".join(f"{x:.1f},{y:.1f}" for x, y in p["poly"])
-            self.add(f'<polygon points="{pts}" fill="{p["fill"]}" stroke="{AZE}" stroke-width="{aze_w(self.ftpx):.2f}" stroke-linejoin="round"/>')
+            # ONE polygon, TWO classes (feature 134 `Split`): the fill is the flooded paddy, the stroke is
+            # the bund - the HTML target emits a fill-only and a stroke-only copy so they highlight apart
+            self.add(f'<polygon points="{pts}" fill="{p["fill"]}" stroke="{AZE}" stroke-width="{aze_w(self.ftpx):.2f}" stroke-linejoin="round"/>', cls=Split("paddy", "bund"))
             # Record the LOW/WET plots (feature 010). This is the topographic ELIGIBILITY set the
             # plot-based land-use overlays draw from. It is written HERE, by the field pass, so that
             # `overlays_on_wet_ground_only` compares two INDEPENDENTLY-produced records rather than
@@ -276,7 +280,7 @@ class CombMixin:
         if _bw:
             net["bund_beans"] = [q for q in net["bund_beans"] if all(((q[0] - _wx) / _wrx) ** 2 + ((q[1] - _wy) / _wry) ** 2 > 1.0 for _wx, _wy, _wrx, _wry in _bw)]
         beads = "".join(f'<circle cx="{x}" cy="{y}" r="1.4" fill="{BEAN_GREEN}"/>' for x, y in net["bund_beans"])
-        self.add(f'<g opacity="0.85">{beads}</g>')
+        self.add(f'<g opacity="0.85">{beads}</g>', cls="bund beans")
 
     def _comb_draw_source(self: Settlement, net: dict[str, Any], source: dict[str, Any], sluice: Any) -> Any:  # type: ignore[misc]
         """Draw the water SOURCE - a tameike with its fringe and no-build block, or a feeder stream.
@@ -533,7 +537,7 @@ class CombMixin:
                 }
             )
 
-    def _draw_furrows(self: Settlement, poly: Any, color: str, theta: float) -> None:  # type: ignore[misc]
+    def _draw_furrows(self: Settlement, poly: Any, color: str, theta: float, cls: str | None = None) -> None:  # type: ignore[misc]
         """Stylised ridge/furrow lines within a dry-field plot (dry crops are row-cultivated)."""
         xs = [p[0] for p in poly]
         ys = [p[1] for p in poly]
@@ -552,4 +556,4 @@ class CombMixin:
             )
             t += 5
         g.append("</g>")
-        self.add("".join(g))
+        self.add("".join(g), cls=cls)

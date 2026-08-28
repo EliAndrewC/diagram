@@ -7,4 +7,5 @@ pytest-cov
 pytest-xdist
 pytest-testmon
 types-shapely
+playwright    # the browser test of the interactive map page (feature 134); `python3 -m playwright install --with-deps chromium` fetches the browser
 pip-tools    # re-locks these files

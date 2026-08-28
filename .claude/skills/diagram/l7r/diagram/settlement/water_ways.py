@@ -219,7 +219,7 @@ class WaterWaysMixin:
         # upstream -> downstream is (downstream - upstream); we built (upstream - downstream) above
         rec["flow_deg"] = round(math.degrees(math.atan2(-vy, -vx)) % 360, 1)
 
-    def stream(self: Settlement, pts: Any, frm: Any = None, to: Any = None, width: float = 9, flow: str = "forward") -> None:  # type: ignore[misc]
+    def stream(self: Settlement, pts: Any, frm: Any = None, to: Any = None, width: float = 9, flow: str = "forward", cls: str = "stream") -> None:  # type: ignore[misc]
         """A natural watercourse. If frm/to anchors are given (e.g. a forest brook
         feeding a pond), it is recorded and the gate checks it actually connects
         them - just like an irrigation channel. `width` is the water's drawn width
@@ -244,7 +244,7 @@ class WaterWaysMixin:
         sheen_t = f'<path d="{{dd}}" fill="none" stroke="#B6CAD8" stroke-width="{max(2, width * 0.35):.0f}" stroke-linejoin="round" stroke-linecap="round"/>'
         clip = {"pts": [(x, y) for x, y in pts], "bed_t": bed_t, "sheen_t": sheen_t} if self._pond_anchored(frm, to) else None
         self._water(  # opacity comes from the shared bed/sheen groups, so crossings don't stack into a dark seam
-            bed_t.format(dd=dd), rec, sheen=sheen_t.format(dd=dd), clip=clip
+            bed_t.format(dd=dd), rec, sheen=sheen_t.format(dd=dd), clip=clip, cls=cls
         )
         self.corridors.append(([(x, y) for x, y in pts], max(30, width / 2 + 20)))  # no-build: keep houses off the stream
 
@@ -277,7 +277,7 @@ class WaterWaysMixin:
         self.M["channels"].append(rec)
         bed_t = f'<path d="{{dd}}" fill="none" stroke="#9CB4C8" stroke-width="{width}"/>'  # a channel is a thin bed, no sheen
         clip = {"pts": [(x, y) for x, y in poly], "bed_t": bed_t, "sheen_t": None} if self._pond_anchored(frm, to) else None
-        self._water(bed_t.format(dd=dd), rec, clip=clip)
+        self._water(bed_t.format(dd=dd), rec, clip=clip, cls="field ditch")
         # 33 px keeps even a plain farmhouse's FOOTPRINT (half-diagonal ~26) clear of the
         # channel, not just its center - 22 left corners clipping the channel (see
         # no_structure_on_channel). Matches the stream corridor's footprint-aware spacing.
@@ -500,7 +500,7 @@ class WaterWaysMixin:
         self.M.setdefault("drawn_channels", []).append(rec)  # ONE rec per call: flush writes bedz per piece, so the last (topmost) piece's z sticks
         if abs(w1 - w0) < 0.2:
             dd = 'M' + ' L'.join(f'{x:.1f},{y:.1f}' for x, y in pts)
-            self._water(f'<path d="{dd}" fill="none" stroke="{col}" stroke-width="{w0:.1f}" stroke-linejoin="round" stroke-linecap="round"/>', rec, late=late)
+            self._water(f'<path d="{dd}" fill="none" stroke="{col}" stroke-width="{w0:.1f}" stroke-linejoin="round" stroke-linecap="round"/>', rec, late=late, cls="field ditch")
             return
         from l7r.diagram.waterfields import taper_pieces  # local: the engine packages are peers, imported lazily
 
@@ -509,7 +509,7 @@ class WaterWaysMixin:
         # with `_watercourse_segs`, so the drawn stroke and the corridor protecting it cannot drift.
         for piece, wk in taper_pieces(pts, w0, w1):
             dd = 'M' + ' L'.join(f'{x:.1f},{y:.1f}' for x, y in piece)
-            self._water(f'<path d="{dd}" fill="none" stroke="{col}" stroke-width="{wk:.1f}" stroke-linejoin="round" stroke-linecap="round"/>', rec, late=late)
+            self._water(f'<path d="{dd}" fill="none" stroke="{col}" stroke-width="{wk:.1f}" stroke-linejoin="round" stroke-linecap="round"/>', rec, late=late, cls="field ditch")
 
     def lane(self: Settlement, pts: Any, width: float = 16, clearance: float = 22, worn: bool = False, connector: bool = False) -> None:  # type: ignore[misc]
         """A village lane or connecting path. `worn=True` draws it as UNPAVED TRODDEN EARTH: a NARROW
@@ -554,11 +554,18 @@ class WaterWaysMixin:
         """Emit a lane's two strokes and return the stream slots they landed in."""
         dd = 'M' + ' L'.join(f'{x},{y}' for x, y in pts)
         if worn:
-            z0 = self.add(f'<path d="{dd}" fill="none" stroke="#A98C58" stroke-width="{width + 2.5:.1f}" opacity="0.4" stroke-linejoin="round" stroke-linecap="round"/>')  # soft worn-earth shoulder
-            z1 = self.add(f'<path d="{dd}" fill="none" stroke="#C9AE79" stroke-width="{width:.1f}" opacity="0.9" stroke-linejoin="round" stroke-linecap="round"/>')  # packed-earth tread, no centerline
+            # EVERY lane is one highlight class, the connector and the field spur included (feature 134,
+            # the GM: "all of the village lanes ... treated as a single feature"; the fidelity review
+            # struck a connector carve-out from the spec)
+            z0 = self.add(
+                f'<path d="{dd}" fill="none" stroke="#A98C58" stroke-width="{width + 2.5:.1f}" opacity="0.4" stroke-linejoin="round" stroke-linecap="round"/>', cls="village lane"
+            )  # soft worn-earth shoulder
+            z1 = self.add(
+                f'<path d="{dd}" fill="none" stroke="#C9AE79" stroke-width="{width:.1f}" opacity="0.9" stroke-linejoin="round" stroke-linecap="round"/>', cls="village lane"
+            )  # packed-earth tread, no centerline
         else:
-            z0 = self.add(f'<path d="{dd}" fill="none" stroke="#CBB178" stroke-width="{width}" opacity="0.65"/>')
-            z1 = self.add(f'<path d="{dd}" fill="none" stroke="#6B4F2A" stroke-width="1.4" stroke-dasharray="8,8" opacity="0.7"/>')
+            z0 = self.add(f'<path d="{dd}" fill="none" stroke="#CBB178" stroke-width="{width}" opacity="0.65"/>', cls="village lane")
+            z1 = self.add(f'<path d="{dd}" fill="none" stroke="#6B4F2A" stroke-width="1.4" stroke-dasharray="8,8" opacity="0.7"/>', cls="village lane")
         return (z0, z1)
 
     def reink_lane(self: Settlement, i: int) -> None:  # type: ignore[misc]
@@ -576,6 +583,15 @@ class WaterWaysMixin:
         Extracted here rather than copied so there is one way to do it and the next shortening pass
         cannot get it half right."""
         pts = self.M["lanes"][i]["pts"]
+        if len(pts) < 2:
+            # A DROPPED LANE DRAWS NOTHING (feature 134, found by the browser: Chromium logged
+            # `<path> attribute d: Unexpected end of attribute` twice on Inashiro). `hamletgen.ways`
+            # retires a lane by emptying its record and re-inking it, and this wrote `d="M"` - a
+            # path with no points, which resvg ignores silently and a browser reports as an error
+            # on every open. Blank the ink instead, exactly as `trim_lane_stubs` does for a stub.
+            for z in self._lane_ink[i]:
+                self.out[z] = ""
+            return
         dd = "M" + " L".join(f"{x},{y}" for x, y in pts)
         for z in self._lane_ink[i]:
             self.out[z] = re.sub(r'd="M[^"]*"', f'd="{dd}"', self.out[z], count=1)
