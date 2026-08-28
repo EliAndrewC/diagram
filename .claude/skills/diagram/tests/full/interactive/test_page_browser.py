@@ -1,4 +1,6 @@
-"""The page in a real browser (feature 134, spec FR-012 - a page that was never opened has not been
+"""THE FULL TREE (the GM, 2026-08-28: a 15 s browser test belongs with the lengthy tests - *"I agree that that is where it belongs"*; feature 135's three-tree rule): collected by the FULL run and the AWS check, never by quick or the gate.
+
+The page in a real browser (feature 134, spec FR-012 - a page that was never opened has not been
 verified). Playwright drives headless Chromium over a plain `file://` open.
 
 Two tiers. The SYNTHETIC page (quick) is a hand-built map of a dozen classed primitives: it proves
