@@ -154,7 +154,7 @@ document is deliberately NOT a spec-kit feature: it outlives all of them.
    `SETTLEMENT_COV_FLOOR` to cover the tier's newly re-exercised engine wing. And when a legacy
    MAP is itself converted (superseded by a scripted version), remove its committed renders from
    git (`git rm` the svg/png, delete its `!` lines in `.gitignore`) - see section 2.
-5. **`make done` is green** - ruff, format, mypy --strict, pytest, 100% coverage.
+5. **`make done` is green** - ruff, format, pyrefly (mypy-strict rules), pytest, 100% coverage.
 6. **A `settlement-review` pass on at least one generated map.** The gate cannot see glyph
    legibility, feature FORM, or whether the map reads as a distinct place. The author is not a
    reliable reviewer of their own output (Constitution Principle I).

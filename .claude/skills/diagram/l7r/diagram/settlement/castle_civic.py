@@ -261,7 +261,7 @@ class CastleCivicMixin:
             "wall_w": round(ww, 2),
             "gate_w": round(2 * gg, 2),
         }
-        if karamete is not None:
+        if karamete is not None and karamete_dir:  # karamete exists only when karamete_dir was given (above); the second test is the narrowing a checker can see
             rec["karamete"] = [round(karamete[0], 1), round(karamete[1], 1)]
             rec["karamete_dir"] = karamete_dir
         # BOTH registries - see the docstring. The reservation covers the MOAT too: nothing builds

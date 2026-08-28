@@ -534,8 +534,8 @@ def round_channel_joints(channels: list[dict[str, Any]], min_turn_deg: float = 8
         cosang = max(-1.0, min(1.0, (v0[0] * v1[0] + v0[1] * v1[1]) / (l0 * l1)))
         if 180.0 - math.degrees(math.acos(cosang)) < min_turn_deg:
             continue  # no visible elbow to round
-        w = max(A.get("w_tail", A["w"]), B["w"])
-        d = min(2.5 * w, 0.35 * l0, 0.35 * l1)
+        w = max(A.get("w_tail", A["w"]), B["w"])  # pyrefly: ignore[bad-specialization]  # dict.get(k, Any-default) typed Any|None by pyrefly, Any by mypy - research 142 R5
+        d = min(2.5 * w, 0.35 * l0, 0.35 * l1)  # pyrefly: ignore[unsupported-operation]  # dict.get(k, Any-default) typed Any|None by pyrefly, Any by mypy - research 142 R5
         a = (P[0] + v0[0] / l0 * d, P[1] + v0[1] / l0 * d)
         b = (P[0] + v1[0] / l1 * d, P[1] + v1[1] / l1 * d)
         arc = []

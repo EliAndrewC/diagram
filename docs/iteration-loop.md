@@ -257,19 +257,14 @@ tree's `conftest.py` (a parameter name is a use pytest sees and ruff does not). 
 tooling MARKERS stay on the moved tests as the exact filter; the trees are the collection scope.
 Measured: the zero-test floor on the quick tree 3.5 -> 3.1 s; `make quick ALL=1` (everything quick
 runs) 8.7 -> ~7.0 s wall for 1,971 tests; with testmon, an unchanged tree answers in ~3.5 s and a
-one-file edit in ~4-7 s. `dmypy run` replaces one-shot mypy in quick (~0.25 -> ~0.1 s after the
-first run; one-shot on CodeBuild).
-
-**The daemon holds ~400-600 MB of RSS per clone for as long as it lives, and nothing in mypy stops it**
-(GM 2026-08-28: five daemons, one per session clone, ~2.3 GB, one of them for a session that had
-ended). The cleanup is `scripts/dmypy-hooks.sh`: the `SessionEnd` hook stops the ending session's
-own daemon, and `make quick` sweeps every daemon whose clone no live session owns - never `make done`,
-so a slip stopping something unrelated cannot block a merge. What the RAM buys, measured the same day: on a
-comment-only edit the daemon answers in 0.13 s and warm one-shot mypy in 0.21-0.31 s - but on an
-interface change to a central module (a function added to `settlement/__init__.py`) it is 0.15 s
-against 2.9 s, because one-shot mypy re-checks every dependent and the daemon's fine-grained graph
-does not. ~2.7 s per engine-editing quick. Either ~12 s cold; `--timeout` priced and declined (a
-12 s cold start after every break).
+one-file edit in ~4-7 s. The type check in quick is one-shot **pyrefly** (feature 142, GM 2026-08-28): the whole engine
+cold in ~0.6 s with nothing resident. HISTORY, kept so the daemon is not re-added: mypy needed
+12.7 s cold, so from feature 135 it ran through `dmypy` (0.13 s warm) - which held 400-600 MB of
+RSS per clone for as long as it lived, could not be shared across clones, and nothing in mypy ever
+stopped (five daemons, ~2.3 GB, one for a session that had ended). A `SessionEnd` hook and a
+`make quick` sweep (`scripts/dmypy-hooks.sh`) managed that for one day; the Rust checker made
+both unnecessary. Measurements and the pick (ty was as fast but has no rule for a missing
+annotation): `specs/142-rust-type-checker/research.md`.
 
 
 ## DECLINED, by the GM (2026-08-26): a persistent test runner

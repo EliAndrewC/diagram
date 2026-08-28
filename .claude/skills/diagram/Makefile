@@ -1,8 +1,8 @@
 # The diagram-skill quality gate (Constitution Principle X). Run `make done` before declaring
 # any Python change complete. Runs, in order: lint, format-check, type-check, tests+100% coverage.
 #
-# mypy uses a per-module ratchet (see pyproject.toml): the legacy engine modules are relaxed until
-# each is migrated to --strict in its own pass; new modules are strict immediately.
+# The type checker is pyrefly (feature 142, 2026-08-28): a Rust one-shot, ~0.6 s cold for the whole engine
+# with nothing resident - it replaced mypy + the dmypy daemon (400-600 MB per clone). Rules in pyproject.toml.
 
 # (GUARD_EDIT_OK: feature 132 adds the iteration switches - a new guard and five new operations)
 .PHONY: done lint format typecheck test test-full guard perf perf-report maps reference bypass-audit quick durations test-file audit perf-gate hooks-test explain \
@@ -605,8 +605,7 @@ durations:
 # (FULL=1 profiles the full tree too; the coverage carriers live there now, so `coverage_only` no longer needs deselecting - feature 135)
 
 quick:
-	$(DMYPY_SWEEP)
-	@python3 -m ruff check --fix l7r/ tests/ && python3 -m ruff format l7r/ tests/ && $(MYPY)
+	@python3 -m ruff check --fix l7r/ tests/ && python3 -m ruff format l7r/ tests/ && $(TYPECHECK)
 	@start=$$(date +%s); $(EXHAUSTIVE_ENV) python3 -m pytest -n $(XDIST_WORKERS) --dist worksteal $(TESTMON) -q --no-cov -x --ff -m "not rolls_map" $(TIER_SELECT) $(QUICK_TREE); ec=$$?; \
 	  el=$$(( $$(date +%s) - start )); \
 	  if [ $$ec -ne 0 ]; then exit $$ec; fi; \
@@ -736,7 +735,7 @@ format:
 	python3 -m ruff format .
 
 typecheck:
-	python3 -m mypy
+	$(TYPECHECK)
 
 # parallel across cores when pytest-xdist is installed (~1 min vs ~5 min serial, measured
 # 2026-07-20 on 22 cores), plain serial pytest otherwise - xdist is a speedup, not a requirement.
@@ -816,17 +815,12 @@ TESTMON = $(if $(ALL),--no-testmon,--testmon-forceselect)
 # tooling changed since the last record, `ci tooling-fresh`). The gate collects all of `tests/`. Collection is
 # paid per worker, so ~1,000 fewer items is ~0.4 s of a 3.3 s floor - and the layout says what each test is.
 QUICK_TREE = tests --ignore=tests/tier_town --ignore=tests/tier_city --ignore=tests/gate --ignore=tests/full $(shell python3 -m l7r.diagram.ci tooling-fresh >/dev/null 2>&1 && echo --ignore=tests/tooling)
-# mypy through its daemon (dmypy): the warm daemon re-checks only what changed, ~0.25 s -> ~0.1 s per quick; one-shot on CodeBuild
-MYPY = $(if $(CODEBUILD_BUILD_ID),python3 -m mypy,python3 -m mypy.dmypy run --)
-# THE DAEMON COSTS 380-600 MB OF RSS PER CLONE (GM 2026-08-28) and nothing in mypy ever stops it - five of them, 2.3 GB, one
-# for a session that had ended. So `quick` also sweeps: scripts/dmypy-hooks.sh stops every daemon whose clone no LIVE session
-# owns (the SessionEnd hook stops the session's own; this catches a miss). Never in `done` - a slip stopping something
-# unrelated must not block a merge. Never fails, prints only what it stopped. Measured the same day: on a comment-only edit
-# warm daemon 0.13 s vs warm one-shot mypy 0.21-0.31 s, but on an INTERFACE change to a central module (a function added to
-# settlement/__init__.py) 0.15 s vs 2.9 s - one-shot re-checks every dependent, the daemon's fine-grained graph does not; that
-# ~2.7 s per engine-editing quick is what the RAM buys. Either one ~12 s cold; `--timeout` priced and declined (a 12 s cold
-# start after every break). (GUARD_EDIT_OK: the sweep is a side effect of quick, GM 2026-08-28)
-DMYPY_SWEEP = -@root=$$(git rev-parse --show-toplevel 2>/dev/null) && [ -x "$$root/scripts/dmypy-hooks.sh" ] && "$$root/scripts/dmypy-hooks.sh" sweep || true
+# THE TYPE CHECK IS ONE-SHOT pyrefly (feature 142, GM 2026-08-28). History, so nobody re-adds a daemon: mypy needed
+# 12.7 s cold, so it ran through dmypy - which held 380-600 MB of RSS per clone, could not be shared across clones,
+# and nothing ever stopped (five daemons, 2.3 GB, one for a session that had ended). pyrefly checks the whole engine
+# cold in ~0.6 s (ty: ~0.5 s, but it has no rule for a missing annotation, research 142 R3), so there is nothing to
+# keep warm and no sweep to run. Same command on CodeBuild. Measurements: specs/142-rust-type-checker/research.md R2.
+TYPECHECK = pyrefly check
 # THE GATE IS ALWAYS EXHAUSTIVE (constitution v2.9.0, GM 2026-08-26): `make quick` runs each test's quick form,
 # `make done` its full form - the corpus, the full matrices, the full-size canvases, the tooling tests.
 GATE_EXHAUSTIVE_ENV = L7R_TESTS_EXHAUSTIVE=1 $(if $(COV_FLOORS),L7R_COV_FLOORS=1,)  # GUARD_EDIT_OK: feature 133 T92's env, kept for any test that reads it; feature 135's own full-run signal is L7R_TESTS_FULL

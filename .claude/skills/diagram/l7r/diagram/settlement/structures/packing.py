@@ -222,6 +222,7 @@ class PackingMixin:
                 gx = x0 + step / 2
                 while gx < x1 and items:
                     jx, jy = random.uniform(-step * 0.28, step * 0.28), random.uniform(-step * 0.28, step * 0.28)
+                    fr, fd = None, 0.0  # read below under the same `face_streets` test, which a checker cannot correlate
                     if face_streets:
                         fr, fd = self._face_street_rot(gx + jx, gy + jy)
                         if face_streets == "core":

@@ -101,7 +101,7 @@ def _seg_0127__city_fan_heads_quilted(
             if _hq_moat and min(seg_dist(qx, qy, _hq_moat[i2], _hq_moat[i2 + 1]) for i2 in range(len(_hq_moat) - 1)) < float(M.get("moat_width", 20)) / 2 + 12 / _hq_ftpx:
                 return True
             rr_ = _hq_ring
-            return rr_ is not None and min(seg_dist(qx, qy, rr_[i2], rr_[i2 + 1]) for i2 in range(len(rr_) - 1)) < _hq_ringw / 2 + 12 / _hq_ftpx
+            return rr_ is not None and bool(min(seg_dist(qx, qy, rr_[i2], rr_[i2 + 1]) for i2 in range(len(rr_) - 1)) < _hq_ringw / 2 + 12 / _hq_ftpx)
 
         # INDEXED (2026-07-25): this ran ~3,000 sample points against every plot polygon and every
         # ditch on the map - 14M seg_dist calls, ~58% of a city gate. Same test, pruned to the local

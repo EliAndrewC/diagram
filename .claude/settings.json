@@ -165,17 +165,6 @@
           }
         ]
       }
-    ],
-    "SessionEnd": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "/diagram/scripts/dmypy-hooks.sh session-end",
-            "timeout": 30
-          }
-        ]
-      }
     ]
   }
 }
