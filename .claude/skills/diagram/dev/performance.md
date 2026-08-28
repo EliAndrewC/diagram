@@ -105,6 +105,32 @@ The resolution, and one dead end worth not re-walking:
   guaranteed red gate. The test now clears the variable for itself. Any future env-driven escape
   hatch needs the same treatment.
 
+## Shape one, found again in the lane router (feature 138, 2026-08-28)
+
+The GM asked why a 16-household polder cost ~100 s when *"even with an n squared or an n cubed
+algorithm, I wouldn't expect that to matter"*, and the profile agreed with the GM: not NP-hard, not
+the field bisection the budget file blamed, but shape one - `ways._route` built its free lattice by
+calling `clear_runs` once per cell (165,611 calls on seed 19), and each call re-derived every
+polygon's bounds from its vertices and then measured the sample against every edge of every polygon
+that survived (36 million `seg_dist`, 106 million `max`). `path_violations` compared every pair of
+water crossings for the deck-length rule - on a polder whose parallel ditches give a connector
+hundreds of crossings, 170 million `hypot`. Three other stages had the same disease at smaller size:
+`fixture_clear_of_water` walked every watercourse segment for each of 17,407 notice-board probes;
+`_clear_link` / `_clear_touch` rebuilt their prefilter 4,969 times on identical fabric.
+
+The fix is the doctrine below applied literally: `hamletgen/clearance.py` files every polygon and line
+by grid cell once (memoized on the inputs' identity while the same lists are passed around; entries
+spanning more than 256 cells are tested by bounds rather than filed), `_route` derives its whole
+lattice from one index, `pairs_within` buckets crossings by cells of the deck length, and
+`_geom/water_index.py` files the watercourses once per settlement. All of it returns the SAME
+verdicts - a superset of candidates measured with the same predicate - so every gate roll and every
+live pool map came out byte-identical (the feature's sweep). Measured solo: the seed-19 polder
+110 -> ~30 s, the reference hamlet 37 -> ~21 s. What remains is spread over `stage_homesteads`
+(the bundle fit's `point_in_poly` on large polygons), `stage_hinterland` (scatter samples against
+the commons outline) and, on comb hamlets, `fit_field`'s seven `build_comb` rounds - each a few
+seconds, none of them the router's shape, and the solver is left alone because a different
+convergence draws a different map.
+
 ## When a check is slow, INDEX it - do not coarsen it
 
 The gate's cost is dominated by a handful of checks that ask a local question with a global scan.
