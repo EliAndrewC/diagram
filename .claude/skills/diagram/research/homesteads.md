@@ -20,7 +20,7 @@ Every entry: what the research found, the decision it drove, and any deliberate 
 
 **Evidence:** reconstruction (derived from geometry)
 
-**Sources:** derived - solar geometry at 38N for the 10th month, and the minka's 46 x 28 ft footprint; the thatched-roof pitch (45 degrees or steeper) and the 6-7 m ridge of surviving farmhouses were not cited when written - leftover (ja.wikipedia 茅葺 / 民家)
+**Sources:** derived - solar geometry at 38N for the 10th month, and the minka's 46 x 28 ft footprint; the thatched-roof pitch (45 degrees or steeper) and the 6-7 m ridge of surviving farmhouses were not cited when written - leftover (ja.wikipedia 茅葺 / 民家) `kayabuki-jawiki` (READ: the steep pitch as a material requirement; the 45-degree figure and the 6-7 m ridge not on the pages read)
 
 **Grounds:** the sun-corridor keep-out in the nucleated bundle placer; `yards_unshaded_by_neighbors`
 
@@ -167,9 +167,9 @@ fukugi; solar elevations computed for 38N.
 
 ## May a byre stand beside a wellhead? (researched 2026-08-18)
 
-**Evidence:** attested
+**Evidence:** attested (the stable wing), researched (the in-house well - not re-found)
 
-**Sources:** the magariya umaya on the south face and the well inside the doma (2026-08-18) - pointers not recorded at the time; ja.wikipedia 曲家 / 南部曲り家 and 民家 are the pages to re-read - leftover
+**Sources:** `magariya-jawiki` (READ 2026-08-28: the stable projecting on the south face, joined to the house and warmed from its hearth); the well inside the doma or a rear projection was NOT found on the page - that half stays as the 2026-08-18 reading, unsourced
 
 **Answer: yes, and the vernacular puts them far closer than our maps do. No GM ruling wanted.**
 

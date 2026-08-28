@@ -54,26 +54,26 @@
 
 | # | entry | evidence class | found as | status |
 |---|---|---|---|---|
-| 1 | Wall geometry: rectangles and terrain loops - the circle is the form BOTH anchors decline | - | no sources line | open |
-| 2 | The chancellery meets IN the castle - executive out, council in | - | no sources line | open |
-| 3 | Moat water: drawn connections outside, standing water inside - and yes, it scums | - | no sources line | open |
-| 4 | The aqueduct supplies the CITY - the moat spill was a drawing artifact | - | no sources line | open |
-| 5 | The domain school is the hanko: a school of letters WITH the martial wing | - | no sources line | open |
-| 6 | Why the temples belt the wall instead of clustering in a temple quarter | - | no sources line | open |
-| 7 | Street widths: the ote-suji is a grand street, not an imperial boulevard | - | no sources line | open |
-| 8 | Dimensional audit of the drawn capital (GM-prompted, 2026-08-09) | - | no sources line | open |
-| 9 | How a josui actually ran (GM 2026-08-09: intake, route, terminus, and what it fed) | - | no sources line | open |
-| 10 | A castle has TWO gates (GM 2026-08-09: the ote-mon / karamete-mon pair) | - | no sources line | open |
-| 11 | The moat RING and the river-flank moat are both real - and the wall's distance to the bank decides | - | no sources line | open |
-| 12 | Temple approaches face their street, and the modest temples have PATRONS | - | no sources line | open |
-| 13 | Which districts get INTERNAL walls - and the fang ward as the Lion variant | - | no sources line | open |
-| 14 | The sluice's lifting frame, the quay-side kura, and the boat-length jetty (GM battery, 2026-08-09) | - | no sources line | open |
-| 15 | Ministry offices: six equal compounds, the SAME size the province builds - on purpose | - | no sources line | open |
-| 16 | The internal dock and the bank quay: the WATER decides which a city gets | - | no sources line | open |
-| 17 | How often is a sluice OPEN? The duty cycle, and why one glyph suffices | - | no sources line | open |
-| 18 | How much of a capital lives OUTSIDE the walls (SETTLED, GM ruling 2026-08-10) | - | no sources line | open |
-| 19 | Do a capital's trades and funerary program scale from a provincial city's? (research, GM question 2026-08-10) | - | no sources line | open |
-| 20 | How far outside the wall does the funerary ground sit? (research, GM question 2026-08-10) | - | no sources line | open |
+| 1 | Wall geometry: rectangles and terrain loops - the circle is the form BOTH anchors decline | - | no sources line | re-sourced (2026-08-28) |
+| 2 | The chancellery meets IN the castle - executive out, council in | - | no sources line | contradicted - Hyōjōsho outside the castle; rule unchanged; section G |
+| 3 | Moat water: drawn connections outside, standing water inside - and yes, it scums | - | no sources line | re-sourced; moat scum leftover |
+| 4 | The aqueduct supplies the CITY - the moat spill was a drawing artifact | - | no sources line | re-sourced (2026-08-28) |
+| 5 | The domain school is the hanko: a school of letters WITH the martial wing | - | no sources line | re-sourced (2026-08-28) |
+| 6 | Why the temples belt the wall instead of clustering in a temple quarter | - | no sources line | re-sourced (2026-08-28) |
+| 7 | Street widths: the ote-suji is a grand street, not an imperial boulevard | - | no sources line | contradicted - Tōkaidō 5 ken vs the 26 ft default; section G |
+| 8 | Dimensional audit of the drawn capital (GM-prompted, 2026-08-09) | - | no sources line | n/a - rendering |
+| 9 | How a josui actually ran (GM 2026-08-09: intake, route, terminus, and what it fed) | - | no sources line | re-sourced (2026-08-28) |
+| 10 | A castle has TWO gates (GM 2026-08-09: the ote-mon / karamete-mon pair) | - | no sources line | re-sourced (2026-08-28) |
+| 11 | The moat RING and the river-flank moat are both real - and the wall's distance to the bank decides | - | no sources line | re-sourced (2026-08-28) |
+| 12 | Temple approaches face their street, and the modest temples have PATRONS | - | no sources line | re-sourced (2026-08-28) |
+| 13 | Which districts get INTERNAL walls - and the fang ward as the Lion variant | - | no sources line | re-sourced (2026-08-28) |
+| 14 | The sluice's lifting frame, the quay-side kura, and the boat-length jetty (GM battery, 2026-08-09) | - | no sources line | re-sourced (2026-08-28) |
+| 15 | Ministry offices: six equal compounds, the SAME size the province builds - on purpose | - | no sources line | n/a - setting-canon |
+| 16 | The internal dock and the bank quay: the WATER decides which a city gets | - | no sources line | re-sourced (2026-08-28) |
+| 17 | How often is a sluice OPEN? The duty cycle, and why one glyph suffices | - | no sources line | re-sourced (labeled guess) |
+| 18 | How much of a capital lives OUTSIDE the walls (SETTLED, GM ruling 2026-08-10) | - | no sources line | re-sourced (2026-08-28) |
+| 19 | Do a capital's trades and funerary program scale from a provincial city's? (research, GM question 2026-08-10) | - | no sources line | supplemented (600+ sento; counts SUMMARY-ONLY) |
+| 20 | How far outside the wall does the funerary ground sit? (research, GM question 2026-08-10) | - | no sources line | re-sourced (2026-08-28) |
 
 ### `cities/defenses.md` (2)
 
@@ -273,5 +273,7 @@ Worked with the batch that owns each entry; struck from `SOURCES.md` when done (
 
 | # | entry | what the record said | what the sources say | rule / checks / maps affected | options |
 |---|---|---|---|---|---|
+| 3 | `research/cities/capitals.md` "The chancellery meets IN the castle" | Edo's Hyōjōsho sat within Edo castle, so the capital's chancellery meets in the castle (feature 020 drew no chancellery compound on the avenue) | ja.wikipedia 評定所 (READ): "江戸城外の辰ノ口" - outside the castle, across the moat from the Ōte gate | the capital's government avenue / castle program in `settlements/capitals.md`; the Shiro Daika gen | fix now: seat a chancellery compound on the avenue beside the castle (the Edo form); future work: keep the in-castle council as the GM's ruling with the anchor corrected in the record |
+| 4 | `research/cities/capitals.md` "Street widths" (and `s.road`'s 26 ft default) | 26 ft is "the Tōkaidō's own width" | ja.wikipedia 東海道 (READ): the 1604 standard was 5 ken ≈ 9 m ≈ 29.5 ft; the 13.8 m Honchō-dōri peg not found (9.9-11.8 m seen) | `s.road` default `lw(26)` on every Mode B map; the 45 ft ōte-suji as "half again the highway" | fix now: raise the highway default to ~30 ft (every road on every map widens ~15%); future work: keep 26 ft as a disclosed rounding and relabel its gloss |
 | 2 | `research/archetypes.md` "The 6:4 water-to-dike ratio, and coppiced mulberry" | six parts water to four parts dike; Kuwabata drawn at 76% water per parcel | cssn.cn (READ): "基六塘四" - six dike to four pond; a people.cn page (search summary only) says the reverse; a 7:3 variant exists | the drawn bank width in `build_polder` / `_mulberry_rows`; the Kuwabata dike-pond map; `settlements/archetypes.md` | fix now: read Ruddle & Zhong 1988 (or the FAO dike-pond study) and redraw if the order is settled; future work: leave 6:4 water as a disclosed regional reading |
 | 1 | `research/buildings.md` "A compound wall is a building, not a boundary line" | neribei / dobei walls are 1.5-3 ft thick at the base; the vocabulary draws them at 3 ft | ja.wikipedia 塀 (城郭): plastered walls "1尺（約300ミリメートル）以上"; 攻城団: frameless neribei ~30 cm, only tsuijibei up to ~1 m | the Mode A wall stroke (3 ft) in `buildings.md`; `pack_audit.structures_on_walls` and the placer clearance are thickness-agnostic; every Mode A sheet in the pool | fix now: draw a county wall at ~1-1.5 ft (dobei) or keep 3 ft and relabel it a tsuijibei; future work: leave the 3 ft as a disclosed liberty (legibility of the wall stroke) |

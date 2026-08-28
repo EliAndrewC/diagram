@@ -18,9 +18,9 @@ _Method per batch is plan.md "Method, per batch": (1) diff the operative doc's i
 - [x] T03 [US2][US3] **`research/buildings.md`** - 9 open rows; grounds `buildings.md + buildings/programs.md (Mode A)`; inline grounding in that operative doc inventoried first (ledger C).
       research: physical
       - [x] research pass  - [x] source-reader confirmed  - [x] recorded and cited
-- [ ] T04 [US2][US3] **`research/cities/capitals.md`** - 20 open rows; grounds `settlements/capitals.md`; inline grounding in that operative doc inventoried first (ledger C).
+- [x] T04 [US2][US3] **`research/cities/capitals.md`** - 20 open rows; grounds `settlements/capitals.md`; inline grounding in that operative doc inventoried first (ledger C).
       research: physical
-      - [ ] research pass  - [ ] source-reader confirmed  - [ ] recorded and cited
+      - [x] research pass  - [x] source-reader confirmed  - [x] recorded and cited
 - [x] T05 [US2][US3] **`research/cities/defenses.md`** - 2 open rows; grounds `settlements/cities/defenses.md`; inline grounding in that operative doc inventoried first (ledger C).
       research: physical
       - [x] research pass  - [x] source-reader confirmed  - [x] recorded and cited

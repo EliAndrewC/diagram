@@ -1504,3 +1504,195 @@ Takayama Jin'ya site and building areas - SUMMARY-ONLY (2026-08-28): a search sy
 Fukagawa kiba, the Edo lumber yards - SUMMARY-ONLY (2026-08-28): fifteen timber wholesalers bought ~300,000 m2 in 1701; the yards were ordered out of the city after the 1657 Meireki fire because in-town timber yards spread fire
 
 *Used for:* the lumber yard as a waterfront works far larger than a shophouse, sited out of the built core
+
+### `nanjing-wall-enwiki`
+
+en.wikipedia City Wall of Nanjing (READ 2026-08-28)
+
+*Used for:* the Ming circuit built "in a winding, free style, based on the city's complicated topography" with the river as its moat; the 35.267 km length is SUMMARY-ONLY (aggregator sites)
+
+### `shanghai-xiancheng-zhwiki`
+
+zh.wikipedia 上海县城 (READ 2026-08-28)
+
+*Used for:* "1553年为抵御溯江而上的倭寇第一次修建了环城的城墙" and its 圆形轮廓; "one season" not stated
+
+### `hyojosho-jawiki`
+
+ja.wikipedia 評定所 (READ 2026-08-28)
+
+*Used for:* the Hyōjōsho standing "江戸城外の辰ノ口" - OUTSIDE Edo castle at Tatsunokuchi (present Marunouchi 1-chome)
+
+### `tamagawa-josui-jawiki`
+
+ja.wikipedia 玉川上水 (READ 2026-08-28)
+
+*Used for:* "高低差92.3メートルの間に全長42.74キロメートル"; distribution into the city from the 水番所 at Yotsuya Ōkido; wooden and stone pipes underground below it (no total km given)
+
+### `suidobashi-jawiki`
+
+ja.wikipedia 水道橋 (READ 2026-08-28)
+
+*Used for:* the bridge renamed for the Kanda josui's 御茶ノ水懸樋 crossing after the Meireki fire
+
+### `edo-36-mitsuke-jawiki`
+
+ja.wikipedia 江戸城三十六見附 (READ 2026-08-28)
+
+*Used for:* "俗に江戸城には36の見付があったといわれ" - and the page's own hedge that the real count was higher ("66、90など諸説あり")
+
+### `karamete-jawiki`
+
+ja.wikipedia 搦手 and 大手門 (READ 2026-08-28)
+
+*Used for:* the karamete-mon as the rear gate opposite the ōte-mon (generic; Edo not named; no divination reasoning)
+
+### `xian-moat-zhwiki`
+
+zh.wikipedia 西安城墙 (moat section; READ 2026-08-28)
+
+*Used for:* "城墙的外侧有护城河，宽20米，深10米，终年积水，和城墙共同构成完整的防御体系"
+
+### `osaka-castle-jawiki`
+
+ja.wikipedia 大坂城 (READ 2026-08-28)
+
+*Used for:* the Yodo and its tributaries below the northern plateau "天然の堀の機能を果たすとともに、城内の堀へと水を引き込むのに利用された"
+
+### `suzaku-oji-jawiki`
+
+ja.wikipedia 朱雀大路 (READ 2026-08-28)
+
+*Used for:* Heian-kyō's avenue "幅82メートル（延喜式）"; Chang'an's "幅147メートル"
+
+### `tokaido-jawiki`
+
+ja.wikipedia 東海道 (READ 2026-08-28)
+
+*Used for:* "慶長9年2月に大久保長安その他に命じて街道の幅員を5間とし" - 5 ken (~9 m, ~29.5 ft) in 1604
+
+### `changan-enwiki`
+
+en.wikipedia Chang'an (READ 2026-08-28)
+
+*Used for:* walled wards and the market drum; the Tang ward count is SUMMARY-ONLY (109-110 usually; "108" the popular figure)
+
+### `kuramae-jawiki`
+
+ja.wikipedia 蔵前 (READ 2026-08-28; 浅草御蔵 404)
+
+*Used for:* "浅草御蔵は、隅田川の右岸に上流から一番、二番と数える8本の堀を作り" - eight numbered channels into the storehouse ground
+
+### `horikawa-nagoya-jawiki`
+
+ja.wikipedia 堀川 (名古屋市) (READ 2026-08-28)
+
+*Used for:* dug in 1610 under Fukushima Masanori for the castle's construction materials; the 舟入堀 count of nine in Edo is SUMMARY-ONLY (ja.wikipedia 舟入 is a disambiguation page)
+
+### `sento-jawiki`
+
+ja.wikipedia 銭湯 (READ 2026-08-28)
+
+*Used for:* "文化年間（1804〜1818年）には、人口約100万〜120万人の江戸全体で600軒以上の銭湯があった" - the record's "523 in 1810" is a search-summary figure
+
+### `shichiya-jawiki`
+
+ja.wikipedia 質屋 (READ 2026-08-28 - no Edo count on the page; the "2,700+" is SUMMARY-ONLY, also in `town-deep-audit.md`'s darumapedia pointer)
+
+*Used for:* pawnbroking as the commoner's bank
+
+### `edo-sanza-jawiki`
+
+ja.wikipedia 江戸三座 (READ 2026-08-28)
+
+*Used for:* the three playhouses licensed by the town magistracy after consolidation from many, to four, to three
+
+### `kasoba-jawiki`
+
+ja.wikipedia 火葬場 (READ 2026-08-28)
+
+*Used for:* by ~1650 almost every temple in Asakusa and Shitaya cremating in its precinct; ~20 temple crematoria moved to the Kozukappara area in 1667 after smoke troubled a shogunal visit; the 1873 proposal to ban cremation over smoke and odor (rescinded ~1875)
+
+### `bernstein-fire-and-earth`
+
+Andrew Bernstein, "Fire and Earth: The Forging of Modern Cremation in Meiji Japan", JJRS 27/3-4 (2000) - the Nanzan copy returned only a stub; READ via the secondary account at unseen-japan.com/meiji-japan-cremation-ban-attempt/ (2026-08-28): "In May 1873, they suggested relocating crematoriums, notably the Senju temple ones, outside the city's 'red line' (shubiki, 朱引)"; "the severe stench injures people's health"
+
+*Used for:* the May 1873 shubiki proposal and the stench rationale - SUMMARY-ONLY as to Bernstein's own text
+
+### `changmen-zhwiki`
+
+zh.wikipedia 阊门 (READ 2026-08-28)
+
+*Used for:* the Ming-Qing Changmen district "全中国最繁盛的商业街区", its radial streets outside the wall and tens of thousands of shops
+
+### `nisshinkan-jawiki`
+
+ja.wikipedia 日新館 (READ 2026-08-28)
+
+*Used for:* the reconstructed school's 弓道場・武道場; the lecture-hall pairing as doctrine is not stated
+
+### `bodaiji-jawiki`
+
+ja.wikipedia 菩提寺 (READ 2026-08-28)
+
+*Used for:* the lineage temple "一家が代々その寺の宗旨に帰依して、先祖の菩提を弔う寺院"; 檀那寺 under the danka system
+
+### `sando-jawiki`
+
+ja.wikipedia 参道 (READ 2026-08-28)
+
+*Used for:* the approach "街道筋など人通りの多いところから社寺に至る道"; highways sometimes bent to bring them nearer a shrine
+
+### `azolla-enwiki`
+
+en.wikipedia Azolla (READ 2026-08-28, leftovers pass)
+
+*Used for:* Azolla planted on flooded paddies, "the rotting plant material ... releases nitrogen into the water for the rice plants"; the Anabaena symbiont is in the page's biology section, not in the passage read
+
+### `daxiangguo-enwiki`
+
+en.wikipedia Daxiangguo Temple (READ 2026-08-28)
+
+*Used for:* the Kaifeng monastery managing "64 departments ... with several thousand of monks" - more than the record's "1,000+"
+
+### `adashino-jawiki`
+
+ja.wikipedia 化野 (READ 2026-08-28)
+
+*Used for:* "かつては風葬の地", later a cremation ground with Toribeyama; one of Kyoto's three great burial grounds (西の化野・東の鳥辺野・北の蓮台野)
+
+### `fukada-kotobank`
+
+コトバンク 深田 and ja.wikipedia ヨシ (READ 2026-08-28)
+
+*Used for:* 深田 "どろの深い田。沼田" - the deep-mud paddy; reed cutting after the rice harvest as a seasonal custom; the Meiji-drainage persistence and the iriai framing not on either page
+
+### `magariya-jawiki`
+
+ja.wikipedia 曲屋 (READ 2026-08-28)
+
+*Used for:* "南側に厩が母屋の下手に接続して突出し" - the stable projecting on the south, joined to the house, warmed by the kitchen hearth; nothing on the well
+
+### `kayabuki-jawiki`
+
+ja.wikipedia 茅葺 (READ 2026-08-28)
+
+*Used for:* thicker thatch "より急勾配が要求される" - the steep pitch as a material requirement; no degree figure
+
+### `weinei-he-summary`
+
+圩内河 canal forms - SUMMARY-ONLY (2026-08-28): a 中国国家地理 feature seen in search: "河道有十字、丁字、月状、弓状等多种形状 ... 河道两端直达圩田堤岸，并建闸控制蓄水和滞洪"
+
+*Used for:* the crescent and bow canal forms and the gated ends of the polder's internal channels
+
+### `dikepond-erosion-summary`
+
+Dike-pond landscape 1949-2020 (Shunde) - SUMMARY-ONLY (2026-08-28): "size of ponds increased while that of dikes decreased between 1967 and 2016"; the 20 m -> <4 m magnitude not seen
+
+*Used for:* the direction of consolidation - ponds growing, dikes shrinking
+
+### `rice-rape-calendar-summary`
+
+Yangtze rice-rape rotation calendar - SUMMARY-ONLY (2026-08-28, agricultural-extension pages in search): rape sown late September to mid-October, harvested early April (southern Jiangxi) to early May (Jiujiang); rice transplanted mid-April to early May
+
+*Used for:* the two halves of one plot's year - with the sowing window a little earlier than the record's Oct-Nov

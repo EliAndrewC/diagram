@@ -373,7 +373,7 @@ plot lattice at the fan's boundary is the shape a fragment naturally takes.
 
 **Evidence:** attested (the mechanism is textbook), researched (not re-read this pass)
 
-**Sources:** searched 2026-08-28: the IntechOpen chapter (intechopen.com/chapters/69541) reads only a general "biological nitrogen fixation" clause; Springer 978-3-662-10385-2_22 paywalled; MDPI agriculture9020029 403. Azolla-cyanobacteria fixation and renge green manure want an open source (IRRI / FAO azolla pages) - leftover
+**Sources:** searched 2026-08-28: the IntechOpen chapter (intechopen.com/chapters/69541) reads only a general "biological nitrogen fixation" clause; Springer 978-3-662-10385-2_22 paywalled; MDPI agriculture9020029 403. Azolla-cyanobacteria fixation and renge green manure want an open source (IRRI / FAO azolla pages) - leftover `azolla-enwiki` (READ, leftovers pass: Azolla on the flooded paddy releasing nitrogen; the cyanobacterial symbiont and renge - ja.wikipedia ゲンゲ - still to read)
 
 - *Nitrogen - the paddy makes its OWN, so soy is food not fertiliser.* A flooded paddy is near self-sustaining for nitrogen: the standing water hosts N-fixing **cyanobacteria + *azolla*** and the **irrigation water carries in silt/nutrients** from upstream - which is why paddies crop continuously for centuries where dry-field monoculture exhausts the soil. Legumes entered as **winter green manure grown IN the drained paddy** (*renge* / Chinese milk vetch, plowed under before spring flooding) + applied night soil / ash / fish-and-oilseed cake - NOT soy on the margins washing in. So the ~6% soy is a **food crop** (dry fields, and characteristically on the paddy bunds - *aze-mame*, "ridge beans"), NOT the paddy's nitrogen supply.
 

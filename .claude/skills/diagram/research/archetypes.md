@@ -14,7 +14,7 @@ Every entry: what the research found, the decision it drove, and any deliberate 
 
 **Evidence:** reconstruction
 
-**Sources:** `aburana-jawiki` (READ: autumn sowing, March-April cutting; rape into the harvested paddy) - the rice months and the Jiangnan rotation calendar were not found on a read page; the rice-rape rotation as one plot's two halves is the OCL *Rapeseed in China* review (403 to the fetcher) - SUMMARY-ONLY
+**Sources:** `aburana-jawiki` (READ: autumn sowing, March-April cutting; rape into the harvested paddy) - the rice months and the Jiangnan rotation calendar were not found on a read page; the rice-rape rotation as one plot's two halves is the OCL *Rapeseed in China* review (403 to the fetcher) - SUMMARY-ONLY `rice-rape-calendar-summary` (SUMMARY-ONLY: sown late Sept-mid Oct, harvested Apr-May; rice transplanted Apr-May)
 
 **RAPE (油菜) was tried and removed**: rice and rape are the two halves of one rotation in the SAME plot (rice May-Oct; rape sown into the drained stubble Oct-Nov, flowering Mar-Apr), so they are never both standing - mixing them at any fraction depicts two seasons at once, and the real spring picture is yellow rape against BARE stubble, not against green rice. Rape belongs on a future SEASONAL axis (a whole-field state), not this per-plot one.
 
@@ -88,7 +88,7 @@ The research upheld the instinct: the surveyed rectilinear chessboard of the Tai
 
 **Evidence:** attested (gated crossings, inner channels), researched (the toe placement and the named forms - not re-found)
 
-**Sources:** `cssn-jiangnan-weitian` (READ: "中有河渠，外有门闸" - channels inside the dike, gates through it, opened in drought and shut in flood). The 一河围田 shorthand, the inside-toe placement and the 月样 / 弓样 forms were not found on any page read (zh.wikipedia 圩田 silent) - leftover
+**Sources:** `cssn-jiangnan-weitian` (READ: "中有河渠，外有门闸" - channels inside the dike, gates through it, opened in drought and shut in flood). The 一河围田 shorthand, the inside-toe placement and the 月样 / 弓样 forms were not found on any page read (zh.wikipedia 圩田 silent) - leftover `weinei-he-summary` (SUMMARY-ONLY: the 月状 / 弓状 forms and gated ends)
 
 *What the research found:* the polder's trunk distribution+collection canal rings the block on the INSIDE toe of the perimeter dike, on the FIELD side (Jiangnan shorthand **一河围田, "one river surrounds the field"**; cross-section outside->in: wild water -> dike -> inner ring canal 圩内河 -> field ditches 浜 -> paddies). Outside the dike is the wild lake/creek the dike holds back, so NO irrigation channel runs out there; water crosses the dike ONLY through gated **sluices** (斗门/水閘/涵洞) cut at discrete points (the inlet + outfall), never as an open cut over the dike body. And the trunk line is *organized-but-organic*: long runs that read straight-ish but GENTLY WAVY (a surveyed dug canal wavers with terrain and repair; crescent 月样 / bow 弓样 trunk forms are attested named options), with rounded corners rather than hard 90-degree turns - the finer laterals are visibly crookeder.
 
@@ -108,7 +108,7 @@ The research upheld the instinct: the surveyed rectilinear chessboard of the Tai
 
 **Evidence:** attested, corroborated
 
-**Sources:** `cssn-jiangnan-weitian` (READ: the tangpu lattice at five-to-seven and seven-to-ten li), `miragenews-polders` (READ). The Pearl-delta "mosaic-like ... boundary blurred" description and the dikes eroded from ~20 m to under 4 m: MDPI *Forests* 13(8):1241 and *Aquaculture* 2022 (both 403) - SUMMARY-ONLY, leftover
+**Sources:** `cssn-jiangnan-weitian` (READ: the tangpu lattice at five-to-seven and seven-to-ten li), `miragenews-polders` (READ). The Pearl-delta "mosaic-like ... boundary blurred" description and the dikes eroded from ~20 m to under 4 m: MDPI *Forests* 13(8):1241 and *Aquaculture* 2022 (both 403) - SUMMARY-ONLY, leftover `dikepond-erosion-summary` (SUMMARY-ONLY: ponds grew, dikes shrank 1967-2016)
 
 *What the research found (web-sourced, cited in the session):* the answer is BOTH, and it splits by system. The individual ponds genuinely WERE rectangular oblongs - hand-dug from marsh (挖塘培基: dig the pond, pile the spoil into the dike), the recurring descriptor a "chessboard" of "rectangular-shaped dikes... with water in between" - because you dig a pond in whatever packs the space and straight dikes are easiest to pile, walk, and plant mulberry on. So all-rectangular ponds are correct; this is the rare farm landscape that does NOT grow organically around the terrain, because the farmers MADE the terrain. BUT the *arrangement* differed by system. The lower-Yangtze **圩田 (wei-tian)** was a SURVEYED rectilinear grid - the Song-era 塘浦 *tangpu* lattice, deliberately engineered - so a clean grid is historically right for it. The Pearl-delta **桑基魚塘 (dike-pond)** instead accreted household-by-household into a MOSAIC; the landscape-ecology literature describes the historical delta not as a uniform chessboard but as "mosaic-like constructed ponds with meandering natural river systems, [with] the boundary between constructed and natural blurred" - rectangles, yes, but of varied sizes at varied local orientations fitted around winding interior creeks (the perfectly-uniform grid is closer to the MODERN consolidated look, which the same sources note eroded the ~20 m dikes to under 4 m).
 
