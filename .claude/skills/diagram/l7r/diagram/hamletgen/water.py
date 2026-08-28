@@ -101,10 +101,11 @@ def fit_field(plan: SitePlan, sluice: Pt, seed: int, plot_across: float, row_ste
     # as its size, and a roll can land on an aspect at which no size is legal. So the rolled aspect
     # is tried first and the rest follow in order; the first legal fan wins, and if none is legal the
     # closest-on-acreage is kept so the failure is a gate message rather than an exception.
+    best_aspect = plan.fan_aspect
     for aspect in [plan.fan_aspect] + [a for a in FAN_ASPECTS if a != plan.fan_aspect]:
         found = _fit_at_aspect(plan, sluice, seed, plot_across, row_step, aspect, tolerance, rounds)
         if best is None or found[0] < best[0]:
-            best = found
+            best, best_aspect = found, aspect
         # a legal fan alone is not enough to stop the search: the supply-bank hem (2026-08-15)
         # drops the quads wedged between near-parallel channels, and on some seeds the first
         # LEGAL aspect leaves the acreage well short of the household target (cohort seed 44:
@@ -115,11 +116,29 @@ def fit_field(plan: SitePlan, sluice: Pt, seed: int, plot_across: float, row_ste
         if not found[0][0] and found[0][1] <= tolerance:
             break
     assert best is not None
+    if best[0][0] or best[0][1] > tolerance:
+        # NO ASPECT LANDED THE TARGET, so the probe that ended each saturated aspect after two carves
+        # (see `_fit_at_aspect`) has left the best aspect less refined than the full search would - and
+        # this is the map whose acreage the household ratchet will judge. Give that one aspect the full
+        # search now; the cost is paid only on the maps that need it.
+        again = _fit_at_aspect(plan, sluice, seed, plot_across, row_step, best_aspect, tolerance, rounds, probe=False)
+        if again[0] < best[0]:
+            best = again
     return best[1]
 
 
-def _fit_at_aspect(plan: SitePlan, sluice: Pt, seed: int, plot_across: float, row_step: tuple[float, float], aspect: float, tolerance: float, rounds: int) -> tuple[tuple[bool, float], dict[str, Any]]:
-    """`fit_field`'s bisection at ONE fan aspect. Returns ((illegal, acreage error), net)."""
+def _fit_at_aspect(
+    plan: SitePlan, sluice: Pt, seed: int, plot_across: float, row_step: tuple[float, float], aspect: float, tolerance: float, rounds: int, probe: bool = True
+) -> tuple[tuple[bool, float], dict[str, Any]]:
+    """`fit_field`'s search at ONE fan aspect. Returns ((illegal, acreage error), net).
+
+    `probe`: when the first carve (k = 1) falls short, the second goes straight to the bracket's END
+    - the largest fan this aspect can draw. If even that is short of the target by more than the
+    tolerance, the aspect SATURATES (the envelope clamps the fan; cohort seed 47 sat at 16-17 acres
+    against 19.5 at four of its five aspects, and burned nine carves at each proving it) and the
+    search stops after those two carves, keeping the better. `fit_field` re-runs the best aspect
+    with `probe=False` when no aspect lands the target, so the refinement is never lost on the map
+    that needs it."""
     lo, hi = 0.35, 2.2
     best: tuple[tuple[bool, float], dict[str, Any]] | None = None
     # PREDICT THE MULTIPLIER, THEN BRACKET IT (feature 145, GM 2026-08-28: "maps are now allowed to
@@ -179,6 +198,11 @@ def _fit_at_aspect(plan: SitePlan, sluice: Pt, seed: int, plot_across: float, ro
         # cannot change the fan; stop, keep the best, and let the next aspect have the time.
         if hi - lo < 0.03:
             break
+        if probe and len(pts) == 1 and acres < plan.target_acres:
+            k = hi - 1e-3  # the probe: the largest fan this aspect can draw
+            continue
+        if probe and len(pts) == 2 and pts[0][1] < plan.target_acres and acres < plan.target_acres * (1.0 - tolerance):
+            break  # saturated: neither k = 1 nor the largest fan reaches the target - keep the better, move on
         k = _predict_k(pts, plan.target_acres, lo, hi)
     assert best is not None
     return best
