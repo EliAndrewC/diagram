@@ -204,7 +204,7 @@ def _seg_0563_072__city_neighborhoods_have_wells(
             # and a wellhead must not overlap a building or compound. Placement guarantees both (well_at /
             # place_wells use the same clearance test the houses do), so this is the backstop.
             wlanes = [st["pts"] for st in M.get("town_streets", [])] + ([M["road"]] if M.get("road") else []) + [a["pts"] for a in M.get("alleys", [])]
-            lane_w = [st.get("w", 24) for st in M.get("town_streets", [])] + ([M.get("road_width", 26)] if M.get("road") else []) + [10 for _ in M.get("alleys", [])]
+            lane_w = [st.get("w", 24) for st in M.get("town_streets", [])] + ([M.get("road_width", 30)] if M.get("road") else []) + [10 for _ in M.get("alleys", [])]
             _gov = M.get("governor_mansion")
             structs = solid_structs(M, "religious", "merchant_estates")  # registry-driven, so a new feature cannot silently host a wellhead
             bad_well = []

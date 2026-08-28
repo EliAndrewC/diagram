@@ -629,7 +629,7 @@ def city_capacity(M: Manifest, step: float = 8, grid_step: float | None = None) 
     field_polys = [f["outline"] for f in M.get("fields", []) if point_in_poly((f["bbox"][0] + f["bbox"][2]) / 2, (f["bbox"][1] + f["bbox"][3]) / 2, wall)]
     field_polys += [dp["poly"] for dp in M.get("dry_plots", []) if point_in_poly(dp["poly"][0][0], dp["poly"][0][1], wall)]
     water = ([(M["moat"], M.get("moat_width", 22) / 2)] if M.get("moat") else []) + [(cc["poly"], cc.get("w", 12) / 2) for cc in M.get("canals", [])]
-    trunk = [(M["road"], M.get("road_width", 26) / 2)] if M.get("road") else []
+    trunk = [(M["road"], M.get("road_width", 30) / 2)] if M.get("road") else []
     trunk += [(r["pts"], r["w"] / 2) for r in M.get("roads", [])]
     if M.get("ring_road"):
         trunk.append((M["ring_road"], M.get("ring_road_width", 15) / 2 + 24))

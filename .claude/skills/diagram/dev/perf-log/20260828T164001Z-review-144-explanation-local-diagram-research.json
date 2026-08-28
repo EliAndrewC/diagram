@@ -1,0 +1,284 @@
+{
+  "band": 1,
+  "base": {
+    "commit": "a6632e86",
+    "label": "144-start",
+    "utc": "20260828T162618Z"
+  },
+  "binding": "b0a2740c4a0fb0621debef48e86f28b9f75dc787ee7270d4a1350dc1587e90c0",
+  "end": {
+    "commit": "cc40133e",
+    "label": "144-end",
+    "utc": "20260828T163942Z"
+  },
+  "environment": "local",
+  "explanation": "feature 144 changes one constant - the trunk road default 26 -> 30 ft and its manifest fallbacks; no algorithm or stage changed, and the hamlet tier draws no trunk road, so the +0.4% total (seeds +1.7% / +2.0%, hinterland +0.2-0.4 s) is run-to-run noise at the 1.7% floor measured 2026-08",
+  "feature": "144-road-width-thirty",
+  "granted_by": {
+    "declared": "main",
+    "session_id": "5a8fec1c-3acd-48b5-ad7f-d6e1989e59a4",
+    "utc": "20260828T164001Z"
+  },
+  "kind": "explanation",
+  "measurements": {
+    "seeds": {
+      "25": -0.6,
+      "39": -1.5,
+      "4": 1.7,
+      "47": 2.0
+    },
+    "total_pct": 0.4
+  },
+  "render": "perf bands [local]: 144-end vs 144-start -> band 1\n  seed   4    +1.7%; grew: hinterland +0.2s, homesteads +0.1s\n  seed  25    -0.6%\n  seed  39    -1.5%\n  seed  47    +2.0%; grew: hinterland +0.4s, field +0.3s\n  TOTAL       +0.4%\n  owes: a written explanation (make perf-explain WHY=...) AND a perf-audit confirmation (make perf-confirm ... AS=perf-audit)",
+  "stage_delta": {
+    "25": {
+      "appurtenances": [
+        0.73,
+        0.78
+      ],
+      "bamboo": [
+        0.0,
+        0.0
+      ],
+      "crossings": [
+        0.23,
+        0.22
+      ],
+      "field": [
+        4.62,
+        4.47
+      ],
+      "frame": [
+        0.0,
+        0.0
+      ],
+      "hinterland": [
+        6.59,
+        6.49
+      ],
+      "homesteads": [
+        0.99,
+        0.99
+      ],
+      "notice": [
+        0.76,
+        0.76
+      ],
+      "seat": [
+        0.03,
+        0.03
+      ],
+      "sink": [
+        0.01,
+        0.01
+      ],
+      "track": [
+        0.94,
+        0.95
+      ],
+      "water_frame": [
+        0.0,
+        0.0
+      ],
+      "web": [
+        34.78,
+        34.68
+      ],
+      "windbreak": [
+        0.09,
+        0.09
+      ],
+      "woodland": [
+        0.01,
+        0.01
+      ]
+    },
+    "39": {
+      "appurtenances": [
+        0.54,
+        0.53
+      ],
+      "bamboo": [
+        0.0,
+        0.0
+      ],
+      "crossings": [
+        0.39,
+        0.39
+      ],
+      "field": [
+        2.76,
+        2.66
+      ],
+      "frame": [
+        0.0,
+        0.0
+      ],
+      "hinterland": [
+        8.08,
+        7.93
+      ],
+      "homesteads": [
+        0.54,
+        0.53
+      ],
+      "notice": [
+        0.56,
+        0.56
+      ],
+      "seat": [
+        0.04,
+        0.04
+      ],
+      "sink": [
+        0.01,
+        0.01
+      ],
+      "track": [
+        1.31,
+        1.28
+      ],
+      "water_frame": [
+        0.0,
+        0.0
+      ],
+      "web": [
+        5.14,
+        5.05
+      ],
+      "windbreak": [
+        0.25,
+        0.25
+      ],
+      "woodland": [
+        0.03,
+        0.03
+      ]
+    },
+    "4": {
+      "appurtenances": [
+        0.18,
+        0.17
+      ],
+      "bamboo": [
+        0.0,
+        0.0
+      ],
+      "crossings": [
+        0.35,
+        0.35
+      ],
+      "field": [
+        3.58,
+        3.61
+      ],
+      "frame": [
+        0.02,
+        0.02
+      ],
+      "hinterland": [
+        7.13,
+        7.33
+      ],
+      "homesteads": [
+        0.97,
+        1.05
+      ],
+      "notice": [
+        0.65,
+        0.66
+      ],
+      "seat": [
+        0.03,
+        0.03
+      ],
+      "sink": [
+        0.01,
+        0.01
+      ],
+      "track": [
+        0.9,
+        0.89
+      ],
+      "water_frame": [
+        0.0,
+        0.0
+      ],
+      "web": [
+        3.62,
+        3.63
+      ],
+      "windbreak": [
+        0.14,
+        0.13
+      ],
+      "woodland": [
+        0.03,
+        0.03
+      ]
+    },
+    "47": {
+      "appurtenances": [
+        0.07,
+        0.08
+      ],
+      "bamboo": [
+        0.0,
+        0.0
+      ],
+      "crossings": [
+        0.39,
+        0.39
+      ],
+      "field": [
+        26.42,
+        26.71
+      ],
+      "frame": [
+        0.0,
+        0.0
+      ],
+      "hinterland": [
+        7.05,
+        7.47
+      ],
+      "homesteads": [
+        0.55,
+        0.56
+      ],
+      "notice": [
+        0.59,
+        0.61
+      ],
+      "seat": [
+        0.04,
+        0.04
+      ],
+      "sink": [
+        0.0,
+        0.0
+      ],
+      "track": [
+        1.55,
+        1.55
+      ],
+      "water_frame": [
+        0.0,
+        0.0
+      ],
+      "web": [
+        2.84,
+        2.88
+      ],
+      "windbreak": [
+        0.19,
+        0.19
+      ],
+      "woodland": [
+        0.0,
+        0.0
+      ]
+    }
+  },
+  "verdict": "pending"
+}

@@ -196,7 +196,7 @@ s.road([(636, 1772), (664, 1844), (SWGATE[0], SWGATE[1]), (300, 2120), (0, 2200)
 # feet through lw() (the road default is lw(26), the Tokaido's width). The honest ceremonial
 # band is Edo's own grand avenues: Honcho-dori 13.8 m (~45 ft), Nihonbashi-dori 18.2 m (~60 ft)
 # - and that is the SHOGUN'S capital, so a domain capital's ote-suji takes the Honcho class:
-# 45 ft, still half again the 26 ft highway it meets. research/cities/capitals.md, "Street widths".
+# 45 ft, exactly half again the 30 ft highway it meets (26 ft until feature 144). research/cities/capitals.md, "Street widths".
 OTE_X = 1400
 s.road([(OTE_X, 1240), (OTE_X, KAGI_Y)], width=s.lw(45))  # starts just south of the ote-mon's gate tower
 

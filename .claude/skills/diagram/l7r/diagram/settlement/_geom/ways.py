@@ -49,7 +49,7 @@ def lane_runs(M: Manifest) -> list[tuple[Poly, float]]:
     runs: list[tuple[Poly, float]] = []
     roads: Any = M.get("roads")
     if not roads and M.get("road"):
-        roads = [{"pts": M["road"], "w": M.get("road_width", 26)}]
+        roads = [{"pts": M["road"], "w": M.get("road_width", 30)}]
     for rd in roads or []:
         runs.append(([(float(p[0]), float(p[1])) for p in rd["pts"]], float(rd.get("w", 26)) / 2))
     for st in M.get("town_streets") or []:

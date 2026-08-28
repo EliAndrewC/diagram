@@ -839,7 +839,7 @@ class HomesteadPartsMixin:
         if self.M.get("ring_road"):
             corr.append(([tuple(p) for p in self.M["ring_road"]], self.M.get("ring_road_width", 20) / 2 + extra))
         if self.M.get("road"):
-            corr.append(([tuple(p) for p in self.M["road"]], self.M.get("road_width", 26) / 2 + extra))
+            corr.append(([tuple(p) for p in self.M["road"]], self.M.get("road_width", 30) / 2 + extra))
         return corr
 
     def _watercourse_segs(self: Settlement, pad: float = 2.0, channel_margin: float = 0.0) -> list[tuple[Any, float]]:  # type: ignore[misc]

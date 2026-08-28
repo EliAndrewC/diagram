@@ -68,7 +68,7 @@ def _seg_0563_335__city_streets_connected(
                 # short of the next one is a SEPARATE network (you cannot step from one to the other),
                 # which is exactly the laborer grid that ended 40px shy of the Imperial road. (Kido ward
                 # gates do NOT break this: the street centerline runs on under the gate, uninterrupted.)
-                widths = [st.get("w", 18) for st in streets] + ([M.get("road_width", 26)] if M.get("road") else [])
+                widths = [st.get("w", 18) for st in streets] + ([M.get("road_width", 30)] if M.get("road") else [])
                 parent = list(range(len(sseg)))
 
                 def find2(a: int) -> int:
