@@ -354,3 +354,19 @@ def test_fringe_blocked_refuses_the_crop_and_the_open_water() -> None:
     s.M["streams"] = [{"pts": [[100, 900], [900, 900]], "w": 8, "poly": [[100, 896], [900, 896], [900, 904], [100, 904]]}]
     assert s._fringe_blocked(500, 900, 8.0) is True, "standing in the brook"
     assert s._fringe_blocked(150, 150, 8.0) is False
+
+
+def test_stand_fringe_skips_a_seat_a_crown_already_covers() -> None:
+    """Feature 146: the wood's fringe skips a seat whose ground is spoken for OR that an existing canopy
+    already covers - the no-double-ink rule, the same one the grove clumps follow."""
+    poly = [(200.0, 200.0), (900.0, 200.0), (900.0, 900.0), (200.0, 900.0)]
+
+    def fringe(preload: bool) -> list:  # a FRESH settlement each time - the scatter draws from the RNG
+        s = Settlement(1200, 1200, seed=3)
+        s.meta(name="W", scale="town", ftpx=1)
+        krect = [(150.0, 150.0, 950.0, 400.0)] if preload else []  # a canopy keep-out over the north band
+        return s._stand_fringe(poly, 18.0, 6.0, krect, [])
+
+    bare = fringe(False)
+    assert bare, "the fixture must offer seats, or the skip proves nothing"
+    assert len(fringe(True)) < len(bare), "seats an existing canopy already covers are skipped"
