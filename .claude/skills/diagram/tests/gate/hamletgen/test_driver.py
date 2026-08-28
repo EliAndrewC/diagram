@@ -50,8 +50,21 @@ def test_a_rolled_cohort_passes_the_whole_gate() -> None:
     # (`python3 -m l7r.diagram.tools.cohort_audit --count 24` reproduces the sweep and reports any residue by check).
     # It was 7 of 12 when the experiment was first reported. Keep this at 4 of 4: a change that drops
     # a single rolled hamlet now fails here by name, which is the whole point of a ratchet.
-    passed = [r for r in reports if r.ok]
-    assert len(passed) == len(reports), f"only {len(passed)}/{len(reports)} rolled hamlets pass the whole gate: " + "; ".join(f"{r.plan.spec.name}: {r.failures}" for r in reports if not r.ok)
+    # THE RATCHET IS A PIN (feature 133 T92, merged 2026-08-28): three of the four seeds fail named checks under
+    # the engine the GM accepted on the reference hamlet - WAIVED as expected failures for a separate session
+    # (133 tasks.md T91/T92). `baseline_verdict` holds the line both ways: a check outside a seed's set is a
+    # regression, a pinned seed that comes up clean is a stale pin. At the gate only seed 41 rolls (clean); the
+    # FULL run judges all four against the pin.
+    lines, clean = hg.baseline_verdict(reports, GATE_COHORT_EXPECTED)
+    assert clean, "\n".join(lines)
+
+
+# The gate cohort's expected failures (seeds 41-44), measured 2026-08-27 at the T99 unlock - see above.
+GATE_COHORT_EXPECTED: dict[int, frozenset[str]] = {
+    42: frozenset({"farmhouses_reach_a_way"}),
+    43: frozenset({"lanes_bend_like_paths", "lanes_form_one_network", "title_clear_of_features"}),
+    44: frozenset({"houses_clear_of_paddies"}),
+}
 
 
 @pytest.mark.rolls_map

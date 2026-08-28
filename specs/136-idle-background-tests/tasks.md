@@ -1,0 +1,28 @@
+# Tasks: Idle Sessions Run the Expensive Tests in the Background (136)
+
+Checked off only when verified (the hooks-test and quick targets). Every task classified per
+constitution v2.12.0; all are `research: procedure` (no physical claim is made).
+
+- [x] T01 spec written from the GM's verbatim request; `spec-fidelity` review (constitution XVI) - verdict recorded in spec.md Status
+- [x] T02 the guard script `scripts/idle-tests-hooks.sh`: `stop` arms (state file + detached timer, no-op if armed), `prompt` disarms and prints the last verdict, `timer` waits (stagger, suspend restart, lock + deferral, give-up), runs the idle-tests target, records `dev/idle-log/`; never in main; seams only in a fixture
+- [x] T03 the companion `scripts/test-idle-tests-hooks.sh` (FR-007): arm/disarm, stagger band + determinism, suspend restart, lock exclusion + deferral, record + surfacing, never-in-main, seams refused outside a fixture, session-gone exit; proven to FIRE by breaking each rule once
+- [x] T04 wiring: `.claude/settings.json` Stop + UserPromptSubmit; Makefile `idle-tests` target (= the maps target); `dev/idle-log/CLAUDE.md`
+- [x] T05 doctrine: root CLAUDE.md guard-table row + iteration bullet; `docs/iteration-loop.md`; skill `dev/switches.md` (the lock's cost now has a nightly look); the constitution unchanged
+- [x] T06 hooks-test green (16 suites; 30 companion cases) and quick green; the real arming on this session cannot be observed before the landing (the harness reads the hook wiring from main's `.claude/settings.json` and `/diagram/scripts/`), so it is recorded in the closing note below on the first turn after the push, not held as a task
+- [x] T07 push - GATED route (switches.py is engine Python): a green unlocked `make done` on this content, then `scripts/sync-with-main.sh done`; performed at the commit that carries this tick
+- [x] T08 the GM's rulings applied (2026-08-28): D1 the idle run is the whole `done` gate (never FULL); D1b the scope lock relaxes ONLY for the timer's process tree (`switches.idle_context`, `make idle-tests`, records as `idle-done`); D4 and D9 approved as built; D10 one run per idle and none on unchanged content - `tests/test_switches.py` proves the context is not forgeable, the companion proves the skip
+- [x] T99 **the GM accepts the decisions** (plan.md D1-D10 with the rulings above) - the GM's word, 2026-08-28: the GM (2026-08-28): *"the host wide lock that you are describing is indeed a good thing and something that I approve of if it only applies to the tests which run during periods of inactivity. I agree that a prompt becoming active should indeed abort the idle tests kicked off during periods of inactivity, so I completely agree with that decision. With regards to which tests are run while we are idle, then I do want it to be more than just the reference map tests. I do not want to run the full test suite, which is to say the one that we reserve for AWS. However, I would like to run the lengthier test suite. So please make whatever adjustment you need to relax that lock when the tests are being run in the idle context. After you make that change, then I fully approve, and you can merge this back into the main checkout Once you are done."* And: *"once we have run the tests once during the idle period, we don't keep running them every hour or anything silly like that. Right? ... if they fail during that period, then I assume that the action is to fix them. and then to keep rerunning them After each round of attempted fixes until they are fixed ... if we make a run that is successful, then we don't keep running them every hour"*
+
+## Closing note
+
+Landed 2026-08-28T03:04Z (the gate run detached, its verdict in `dev/run-log/`). The first real arming on this
+session is observed on the next turn after the landing and appended here by that turn.
+
+**The first real arming, observed (2026-08-28 03:45Z, this session `reference-testing`):** the Stop
+after the landing turn armed the timer at 03:29:07Z (`.git/idle-tests.log` written; stagger 71 min
+for this name); the next prompt at 03:45Z disarmed it - `.git/idle-tests.json` gone, no run, no
+record, as designed (the wait had 55 minutes to go). One defect found by the observation: the
+arming hands `IDLE_ROOT` to its own timer and the seam detector counted it as a seam, so the log
+carried a false "seams ignored" warning - fixed in the same commit (IDLE_ROOT excluded from the
+detection; no seam was honored). D8's measurement: the Stop fired at the end of an assistant turn
+that was genuinely finished (the landing report), not mid-task - the arming point holds.

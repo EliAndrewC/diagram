@@ -6,9 +6,9 @@
     "utc": "2026-08-25T20:50:09Z"
   },
   "scope": {
-    "state": "reference",
-    "why": "GM 2026-08-27: land feature 133 now for the other sessions - the unlocked gate hangs in one 24-seed cohort roll (isolation running, T92); the map-rolling tests stay deferred until the session that fixes the hang unlocks; no other session runs make done until the GM says so",
+    "state": "unlocked",
+    "why": "GM 2026-08-27 (T92): the gate must terminate - the cohort test rolls 4-wide and pins its expected failures; the unlocked gate runs now to prove it ends",
     "who": "Eli Courtwright",
-    "utc": "2026-08-27T23:00:14Z"
+    "utc": "2026-08-27T23:50:47Z"
   }
 }

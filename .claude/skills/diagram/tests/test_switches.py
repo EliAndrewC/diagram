@@ -180,3 +180,46 @@ def test_make_test_defers_the_map_rolling_tests_under_the_lock(fixture_skill: Pa
 
 
 # ---- THE LOCAL SHORT-CIRCUIT of `make done` (feature 132 amendment, FR-019..FR-023) ----------------
+
+
+# ---- the idle context (feature 136): the scope lock relaxes ONLY for the timer's descendants ------
+
+
+def _marker(skill: Path, pid: int) -> None:
+    (skill / ".git").mkdir(exist_ok=True)
+    (skill / ".git" / "idle-tests.running").write_text(f"{pid}\n")
+
+
+def test_idle_context_needs_the_marker_an_ancestor_and_the_timers_command_line(skill: Path) -> None:
+    """The GM (2026-08-28): relax the lock "when the tests are being run in the idle context" - and
+    ONLY then. Four ways to not be that context, one way to be it."""
+    timer_cmd = "/bin/bash /diagram/scripts/idle-tests-hooks.sh timer /diagram/.clones/x x sid"
+    assert not sw.idle_context(skill, ancestors=lambda _p: [4242, 1], cmdline=lambda _p: timer_cmd, pid=99), "no marker file"
+    _marker(skill, 4242)
+    assert sw.idle_context(skill, ancestors=lambda _p: [4242, 1], cmdline=lambda _p: timer_cmd, pid=99)
+    assert not sw.idle_context(skill, ancestors=lambda _p: [7, 1], cmdline=lambda _p: timer_cmd, pid=99), "the timer is not an ancestor"
+    assert not sw.idle_context(skill, ancestors=lambda _p: [4242, 1], cmdline=lambda _p: "/bin/bash -c make done", pid=99), "the marker names a process that is not the timer"
+    assert not sw.idle_context(skill, ancestors=lambda _p: [4242, 1], cmdline=lambda _p: "idle-tests-hooks.sh prompt", pid=99), "a hook mode other than timer"
+    (skill / ".git" / "idle-tests.running").write_text("not-a-pid\n")
+    assert not sw.idle_context(skill, ancestors=lambda _p: [4242, 1], cmdline=lambda _p: timer_cmd, pid=99), "a malformed marker"
+
+
+def test_read_relaxes_a_locked_scope_only_in_the_idle_context(skill: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    sw.write(skill, "scope", "reference", "the period")
+    assert sw.read(skill).scope_locked
+    monkeypatch.setattr(sw, "idle_context", lambda _s: True)
+    relaxed = sw.read(skill)
+    assert not relaxed.scope_locked and "RELAXED" in relaxed.scope.why and relaxed.remote.state == sw.read(skill).remote.state
+    assert sw.refusal(relaxed, "scope", "cohort") is None
+    monkeypatch.setattr(sw, "idle_context", lambda _s: False)
+    assert sw.read(skill).scope_locked, "outside the idle context the lock is exactly what the file says"
+
+
+def test_the_real_process_tree_is_not_the_idle_context(skill: Path) -> None:
+    """This test process descends from pytest, never from the timer: even with a marker naming a
+    live ancestor, the command-line check refuses it - a session cannot forge the context by writing
+    the file."""
+    import os
+
+    _marker(skill, os.getppid())
+    assert not sw.idle_context(skill)

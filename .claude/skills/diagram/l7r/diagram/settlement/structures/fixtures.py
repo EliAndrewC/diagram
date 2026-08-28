@@ -432,7 +432,8 @@ class PublicFixturesMixin:
                 (x + dx * _m.cos(_m.radians(rot)) - dy * _m.sin(_m.radians(rot)), y + dx * _m.sin(_m.radians(rot)) + dy * _m.cos(_m.radians(rot)))
                 for dx, dy in ((-hw, -hh), (hw, -hh), (hw, hh), (-hw, hh))
             ]
-            _lx, _ly = self.pull_caption_toward((_lx, _ly), label, 8, "middle", _t, _bq)
+            if not label_xy:  # a HAND seat is a decision and is honored exactly; only the derived seat is pulled (T40; the town-tier hand-seat test found the pull moving it 13.9 px, 2026-08-28)
+                _lx, _ly = self.pull_caption_toward((_lx, _ly), label, 8, "middle", _t, _bq)
             self.label(_lx, _ly, label, 8, italic=True, color="#7A5A30", rot=_t, ref=(x - hw, y - hh, x + hw, y + hh))
         return z
 
