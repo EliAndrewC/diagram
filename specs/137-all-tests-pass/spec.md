@@ -4,7 +4,7 @@
 
 **Created**: 2026-08-28
 
-**Status**: DRAFT - awaiting `spec-fidelity` (constitution XVI)
+**Status**: round 1 returned three changes (the opening message to the tests session unrecorded; completion narrower than 100%; GM acceptance as a completion condition unrequested) - applied; round 2 pending
 
 **Input**: [`gm-request.md`](gm-request.md), verbatim and unedited. That file is the authority for
 this specification.
@@ -71,6 +71,10 @@ belt-face lesson of 133 T91): each fix is measured on the full tripwire, the gat
 
 ## Requirements
 
+- **FR-000** (the request's first sentence): before any pull, message the "Diagram tests" session
+  that this session is merging its changes into this clone and is taking on fixing the expected
+  failures, and ask it to name a commit it considers safe (or expects to be safe); record the
+  message in `handoffs.md`. SENT 2026-08-28 04:0xZ (msg 7b11f701), before this spec was reviewed.
 - **FR-001**: Before any correctness work, pull main and then the efficiency session's clone up to
   the commit it names as safe; record it in `handoffs.md`.
 - **FR-002**: Each inventory row is a task with its own measurement (the failing check's message on
@@ -80,14 +84,19 @@ belt-face lesson of 133 T91): each fix is measured on the full tripwire, the gat
 - **FR-003**: A pin row is removed in the same commit as the fix that makes it stale.
 - **FR-004**: Handoffs to the efficiency session are made only on a commit with a green gate and
   are recorded; pulls from it are made only on commits it names, and are recorded.
-- **FR-005**: The feature is complete when the unlocked gate, the tripwire and the 24-seed cohort
-  are green with `TRIPWIRE_EXPECTED`, `GATE_COHORT_EXPECTED` and `COHORT_BASELINE` all empty, and
-  the tasks file carries the GM's acceptance.
+- **FR-005**: The feature is complete when ONE HUNDRED PERCENT of the diagram tests pass with no
+  expected-failure pin and no waiver of a failing check remaining anywhere: the three tables above
+  empty (today's measured instance), plus every row the first full measurement adds under the
+  inventory note - including a FULL-sweep-only failure or a 48-cohort-audit seed, should either
+  carry one - each proven by the run that owns it (the unlocked gate; the tripwire; the 24-seed
+  cohort; the FULL sweep and the 48-cohort audit if they hold a row). The result is REPORTED to the
+  GM on completion; acceptance is not a condition of it (the GM: "a specific background session").
 
 ## Success Criteria
 
-- **SC-001**: the three pin tables are empty and the gate proves it (a pinned-but-passing seed
-  would fail; an unpinned failing seed would fail).
+- **SC-001**: no expected-failure pin or waiver of a failing check remains anywhere in the suite
+  or its tooling - the three tables empty and any row the measurement added - and the runs prove
+  it (a pinned-but-passing seed would fail; an unpinned failing seed would fail).
 - **SC-002**: the tripwire reports every seed `ok`; the cohort reports 24 of 24.
 - **SC-003**: `handoffs.md` has a line per pull and per handoff, each naming a sha and its test.
 
@@ -98,7 +107,8 @@ in its task and in the research entry it cites, per constitution XII.
 
 ## Assumptions
 
-- The "Diagram tests" session is reachable by message and will name safe commits; until it does,
-  this session pulls nothing from it and starts on the inventory from main alone.
+- The "Diagram tests" session was messaged first (FR-000). If it does not reply, this session
+  pulls nothing from it and works the inventory from main alone, re-asking at each handoff; a
+  named safe commit is merged whenever it arrives.
 - The GM's waivers of 2026-08-27 stay in force for the pins until each is fixed here; no other
   session touches them (the GM: "a specific background session").
