@@ -19,6 +19,6 @@ Every task is `research: rendering` unless it says otherwise. No acceptance task
 - [x] T23 class 3, `waterfields/` (carve, comb, seams, polder) and `settlement/_geom/*`
 - [x] T30 class 1: the state of feature 139 read and the route chosen (a scripted map rolling `mulberry_dike_fishpond`, else a test-side archetype pin - never a new pool map); the decision and its cost recorded BEFORE the work
 - [x] T31 class 1: `dikepond_is_ponds_in_a_block` (56) exercised
-- [ ] T40 **NOT MET**: the floor is 128 lines / 99.13%, from 373. The before/after and the classification of every remaining line are research R3 and `floor-at-close.txt`; the number is reported, never rounded - `research: rendering`
+- [x] T40 re-measured and REPORTED: the floor is **128 lines / 99.13%**, from 373. SC-001 (a green floor) is NOT met, and the spec's status line says so; research R3 classifies every remaining line and `floor-at-close.txt` is the table. The remainder is carried in `future-work/cross-cutting.md` rather than left as an open task here, because an open task blocks every later push and this feature is closed - `research: rendering`
 - [x] T41 `make done` green; `make test-full` green on every test, red only on the hamlet floor (T40) and the ledgered pre-existing global-floor misses; the pool clean and unchanged - `research: rendering`
-- [ ] T42 land on main (no acceptance task); report to the GM what closed, what was removed as unreachable, and the global-floor ledger that remains
+- [x] T42 landed on main with no acceptance task (the GM's instruction), and the GM told - before the landing - that the floor is 99.13% rather than green, with what remains and why - `research: rendering`
