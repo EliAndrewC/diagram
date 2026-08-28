@@ -95,7 +95,10 @@ class HousesMixin:
         its wall on the bund - Inashiro had one corner 0.9 ft from the outline while every other
         house stood 10-13 ft off. This tests the rotated corners against the field outlines at the
         wall's own floor (`dev/placement.md`, "gap verdicts read footprints, never centers")."""
-        gap = self.px(HOUSE_PADDY_GAP_FT)
+        # THE PLACER HOLDS THE GATE'S FIGURE PLUS THE ROUNDING (feature 137 T06, 2026-08-28): the check tests the
+        # corners of the RECORDED footprint, whose center and rake are rounded to 0.1 (see `house()`), so a
+        # seat held at exactly 6.0 ft came out at 5.6-5.9 on five of 48 cohort seeds. One foot of slack.
+        gap = self.px(HOUSE_PADDY_GAP_FT + 1.0)
         for cx, cy in rot_rect(x, y, w, h, rot):
             for poly, *_ in self._keepout_index(self.field_polys, "field_keepout", 14.0).near(cx, cy):
                 if point_in_poly(cx, cy, poly) or edge_dist(cx, cy, poly) < gap:
