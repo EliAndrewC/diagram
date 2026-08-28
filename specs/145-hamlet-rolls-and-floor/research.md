@@ -133,6 +133,27 @@ alone could not fix - the gate now derives each segment's SCALES and never enter
 `<module>` entries (an import is not execution; the registry imports every segment file). The path went
 99 -> 89 modules.
 
+## R3c - what the ~150 remaining hamlet-path lines ARE (the GM's question, 2026-08-28)
+
+Not modules and not 150 of anything large: **~150 LINES in about eleven modules**, and nothing tests them -
+not the gate, not `make done`, not the FULL/AWS run. They are a COVERAGE matter only; none of them costs
+test time. Three kinds:
+
+1. **Refusal branches in placement predicates** (the bulk). `_strip_blocked`, `_trunk_blocked`,
+   `_yard_fits`, `_garden_fits`, `_grove_fits`, `_bundle_common_fits`, `_blocked`, `bamboo_seats`,
+   `_comb_draw_hem` each list a dozen reasons to refuse a seat, one `return True` per reason. A roll takes
+   whichever reasons its geometry happens to hit; eight cohort seeds plus the reference and three polders
+   hit most, and the rest are simply reasons no seed needed. A unit test hits one directly (build the
+   manifest that trips it, assert the predicate) - eleven were closed that way under this feature.
+2. **Fallbacks nothing has needed yet**: `_thread_the_fabric`'s "no gap exists, so shorten the track"
+   (15 lines), `_smooth_web`'s rollback when a smoothed lane fails its re-test (11), `pull_caption_toward`'s
+   three early returns, `_dry_fields`' degenerate-canal guard (its own comment says "unreachable for a real
+   canal; satisfies the type").
+3. **Exception handlers**: the shapely `GEOSException` arms in `seams.py`.
+
+Kinds 1 and 3 are cheap unit tests. Kind 2 is the honest question: a fallback the placer has never needed
+is either dead (delete it, and the code says so) or a real path (write the geometry that forces it), and
+telling those apart is a per-case reading, not a sweep.
 ## R4 - the numbers at the end
 
 **The rolls** (`make perf`, seeds 4/25/39/47, this container): `144-start` 126.7 s -> `145-end`
