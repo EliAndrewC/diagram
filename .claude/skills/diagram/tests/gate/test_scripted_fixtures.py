@@ -164,3 +164,58 @@ def test_farmhouses_reach_a_way_fires_when_the_lanes_are_taken_away() -> None:
 @pytest.mark.rolls_map
 def test_labels_within_image_fires_when_a_caption_is_flung_off_the_sheet() -> None:
     _fires(REFERENCE, "labels_within_image", lambda M: M["labels"][0].__setitem__(0, -5000.0))
+
+
+@pytest.mark.rolls_map
+def test_farmhouse_sizes_vary_fires_when_every_house_is_the_same_size() -> None:
+    def all_alike(M: dict[str, Any]) -> None:
+        w, h = M["houses"][0]["w"], M["houses"][0]["h"]
+        for house in M["houses"]:
+            house["w"], house["h"] = w, h
+
+    _fires(REFERENCE, "farmhouse_sizes_vary", all_alike)
+
+
+@pytest.mark.rolls_map
+def test_houses_face_south_fires_when_a_farmhouse_is_turned_around() -> None:
+    _fires(REFERENCE, "houses_face_south", lambda M: [h.__setitem__("rot", 180.0) for h in M["houses"]])
+
+
+@pytest.mark.rolls_map
+def test_no_label_overlaps_fires_when_a_caption_is_stacked_on_another() -> None:
+    def stack_them(M: dict[str, Any]) -> None:
+        first = list(M["labels"][0])
+        M["labels"].append(first)
+
+    _fires(REFERENCE, "no_label_overlaps", stack_them)
+
+
+@pytest.mark.rolls_map
+def test_features_do_not_overlap_fires_when_a_shed_is_moved_onto_its_house() -> None:
+    def onto_the_house(M: dict[str, Any]) -> None:
+        h = M["houses"][0]
+        M["farm_sheds"][0]["x"], M["farm_sheds"][0]["y"] = float(h["x"]), float(h["y"])
+
+    _fires(REFERENCE, "features_do_not_overlap", onto_the_house)
+
+
+@pytest.mark.rolls_map
+def test_commons_clear_of_paddies_fires_when_grazing_is_recorded_over_the_field() -> None:
+    def onto_the_field(M: dict[str, Any]) -> None:
+        fx0, fy0, fx1, fy1 = M["fields"][0]["bbox"]
+        cx, cy = (fx0 + fx1) / 2, (fy0 + fy1) / 2
+        for c in M["commons"]:  # every parcel, so a check reading the WHOLE list cannot find a clean one
+            dx, dy = cx - float(c["x"]), cy - float(c["y"])
+            c["x"], c["y"] = cx, cy
+            if c.get("poly"):
+                c["poly"] = [[float(a_) + dx, float(b_) + dy] for a_, b_ in c["poly"]]
+
+    _fires(REFERENCE, "commons_clear_of_paddies", onto_the_field)
+
+
+@pytest.mark.rolls_map
+def test_lanes_form_one_network_fires_when_a_lane_is_set_adrift() -> None:
+    def adrift(M: dict[str, Any]) -> None:
+        M["lanes"].append({"pts": [[60.0, 60.0], [220.0, 60.0]], "w": 5, "worn": True, "connector": False})  # a lane in the far corner, touching nothing
+
+    _fires(REFERENCE, "lanes_form_one_network", adrift)
