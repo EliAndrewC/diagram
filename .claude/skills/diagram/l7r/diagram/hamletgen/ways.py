@@ -2139,19 +2139,6 @@ def _serve_stragglers(s: Settlement, plan: SitePlan, hard: list[Poly], fabric: l
                 # So the lattice is not what strands these houses, and 4x the generation time buys
                 # nothing. What does strand them is recorded with the reach residue.
                 routed = _route(door, tgt, hard, passable, [], gap=FOOTPATH_FABRIC_GAP)
-                if abs(c[0] - 1222) < 2 and abs(c[1] - 1347) < 2 and _pass == 0 and abs(math.dist(c, tgt) - 126) < 2:
-                    import sys
-                    _rh = _route(door, tgt, hard, [], [], gap=2.0)
-                    _rp = _route(door, tgt, [], passable, [], gap=2.0)
-                    def _bb(poly): return (round(min(q[0] for q in poly)), round(min(q[1] for q in poly)), round(max(q[0] for q in poly)), round(max(q[1] for q in poly)))
-                    _kind = {id(poly): kind for poly, _o, kind in fabric}
-                    _nearh = [_bb(poly) for poly in hard if min(seg_dist(door[0], door[1], poly[k], poly[(k + 1) % len(poly)]) for k in range(len(poly))) < 40]
-                    _nearp = [(_kind.get(id(poly)), _bb(poly)) for poly in passable if min(seg_dist(door[0], door[1], poly[k], poly[(k + 1) % len(poly)]) for k in range(len(poly))) < 40]
-                    _cross = [(_kind.get(id(poly)), _bb(poly)) for poly in passable if any(segments_cross(door, tgt, poly[k], poly[(k + 1) % len(poly)]) for k in range(len(poly)))]
-                    _crossh = [_bb(poly) for poly in hard if any(segments_cross(door, tgt, poly[k], poly[(k + 1) % len(poly)]) for k in range(len(poly)))]
-                    print('DBG door', tuple(round(v) for v in door), 'tgt', tuple(round(v) for v in tgt), 'hard-only', bool(_rh), 'passable-only', bool(_rp), file=sys.stderr)
-                    print('DBG near hard', _nearh, file=sys.stderr); print('DBG near passable', _nearp, file=sys.stderr)
-                    print('DBG line crosses passable', _cross, 'hard', _crossh, file=sys.stderr)
                 if routed:
                     cands.append(routed)
                 # THE BEND IS A FRACTION OF THE RUN, not a fixed number of feet. Offsets of 40, 80
