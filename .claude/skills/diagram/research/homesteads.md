@@ -552,7 +552,7 @@ fan, where shallow groundwater is a mixture of river water and precipitation - a
 water table, which is what makes a per-farmstead well cheap.
 
 **The answer, and why it needed no ruling.** A shared well with a reach radius is a NUCLEATED
-settlement's arrangement: it presupposes a centre to be near. A dispersed farmstead has no centre to
+settlement's arrangement: it presupposes a center to be near. A dispersed farmstead has no center to
 share with - that is what dispersed MEANS - so it carries its own water. The 500 ft reach rule is not
 "unenforced at hamlet scale"; it is the wrong rule for this form.
 

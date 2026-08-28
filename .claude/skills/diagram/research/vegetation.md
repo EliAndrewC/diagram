@@ -105,7 +105,7 @@ woodland the engine has no glyph for. **Two supportable forms, so a KNOB, not a 
 XII):** a managed toe (reeds and sedge cut for thatch and fodder, the margin kept open - the current
 form) versus an alder-willow carr along the toe (a distinct wet-woodland glyph, deliberately unlike
 the dry scrub and the fengshui grove). Recorded as future work, not built here; when built, it is a
-per-settlement roll like every other knob. *Unsourced, and labelled so:* that Edo-period reed beds
+per-settlement roll like every other knob. *Unsourced, and labeled so:* that Edo-period reed beds
 were mown (ヨシ刈り, 茅場) and that mowing is what kept the margin open - plausible, searched, not found.
 **Grounds:** `settlements/vegetation.md` "Scrub NEVER scatters into a marsh"; `cover.py` `_in_soft`.
 
