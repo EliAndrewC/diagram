@@ -521,7 +521,9 @@ class HomesteadPartsMixin:
         # wrong - wells_clear_of_trees gates it). Keep-out = the well's DRAWN half-size (vr) + the canopy reach
         # (~0.9*clump, as for a shrine), NOT the tight 0.35*clump a homestead eave gets. (o["r"] is the recorded
         # clearance radius; the DRAWN wellhead is vr, which is what a crown must not overhang.)
-        occ += [(o["x"], o["y"], o.get("vr", o["r"]) + clump * 0.90) for o in self.M.get("wells", [])]
+        occ += [
+            (o["x"], o["y"], o.get("vr", o["r"]) + clump * 1.05 + 1.0) for o in self.M.get("wells", [])
+        ]  # 1.05, not 0.90 (feature 145): a DRAWN crown runs to ~1.03 x clump (Kashikawa: 14.4 on a 14 clump reached a well 25.4 px away, vr 12.4), and the check measures the drawn crown
         # ...and the NOTICE BOARD with its caption band (settlement-review, Sawada 2026-08-16: a
         # copse clump seated 10 px from the kosatsuba swallowed the board outright and pierced its
         # caption mid-word - the board is a 12x5 point fixture nothing in this list covered). 30 ft

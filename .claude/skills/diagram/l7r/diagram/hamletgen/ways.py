@@ -11,6 +11,7 @@ from collections.abc import Callable, Mapping, Sequence
 from typing import Any, cast
 
 from l7r.diagram.settlement import Settlement, edge_dist, point_in_poly, rot_rect, seg_closest, seg_dist, seg_intersect, segments_cross, skeleton_layout, web_cuts
+from l7r.diagram.settlement._geom import ring_offset
 from l7r.diagram.sitegen.geom import centroid, crop_polys, crosses_disc, crosses_poly, pull_clear, unit
 
 from .clearance import fabric_index, pairs_within
@@ -842,16 +843,19 @@ def _unjog(path: Poly, hard: list[Poly], walls: Sequence[Poly], water: list[tupl
             del out[k]
             k = max(1, k - 1)
             continue
-        if (
-            k < len(out) - 2
-            and _turn_deg(out[k - 1], out[k], out[k + 1]) >= 50.0
-            and _turn_deg(out[k], out[k + 1], out[k + 2]) >= 50.0
-            and math.dist(out[k], out[k + 1]) <= 40.0
-            and _clear_touch(out[k - 1], out[k + 2], hard, walls, water)
-        ):
-            del out[k : k + 2]
-            k = max(1, k - 1)
-            continue
+        if k < len(out) - 2 and _turn_deg(out[k - 1], out[k], out[k + 1]) >= 50.0 and _turn_deg(out[k], out[k + 1], out[k + 2]) >= 50.0 and math.dist(out[k], out[k + 1]) <= 40.0:
+            if _clear_touch(out[k - 1], out[k + 2], hard, walls, water):
+                del out[k : k + 2]
+                k = max(1, k - 1)
+                continue
+            # THE CHORD IS BLOCKED BUT THE KNEE MAY NOT BE (feature 145, Kashikawa after the field moved): a
+            # 7 px lattice step round a garden corner survived because the straight chord over both turns
+            # brushed the garden; one vertex at the step's midpoint keeps the corner and takes the zigzag out.
+            knee = ((out[k][0] + out[k + 1][0]) / 2.0, (out[k][1] + out[k + 1][1]) / 2.0)
+            if _clear_touch(out[k - 1], knee, hard, walls, water) and _clear_touch(knee, out[k + 2], hard, walls, water):
+                out[k : k + 2] = [knee]
+                k = max(1, k - 1)
+                continue
         k += 1
     return out
 
@@ -2065,6 +2069,13 @@ def _serve_stragglers(s: Settlement, plan: SitePlan, hard: list[Poly], fabric: l
             if _exhausted.get(id(h)) == _key:
                 continue  # same house, same candidate ways, same obstacles - a replay of a pass that already failed
             for tgt in targets[:60]:
+                # A FOOTPATH CANNOT START IN THE WATER (feature 145, cohort seed 41 after the field moved): the
+                # nearest point of the network was where a lane skirts the drain brook, so the path's junction
+                # sat 1.3 px off the brook's centerline - a crossing gets a plank from `stage_crossings`, an
+                # ENDPOINT on the water gets nothing, and `ways_cross_water_on_a_deck` fired on the first sample.
+                # The router keeps 14 px off every watercourse (`_route`'s line margin); the junction owes the same.
+                if water and min(seg_dist(tgt[0], tgt[1], a, b) for a, b in water) < 14.0:
+                    continue
                 # The radius is generous on purpose. A steading the web could not reach is by
                 # definition one whose nearest way is already beyond the reach, so a search bounded
                 # at twice the reach gave up on exactly the houses that needed it - two of seed 3's,
@@ -2098,7 +2109,10 @@ def _serve_stragglers(s: Settlement, plan: SitePlan, hard: list[Poly], fabric: l
                             ((c[0] + math.cos(math.tau * k / 16) * (step + out), c[1] + math.sin(math.tau * k / 16) * (step + out)) for out in (0.0, 12.0, 24.0, 40.0, 60.0, 85.0) for k in range(16)),
                             key=lambda q: (math.dist(q, c), -((q[0] - c[0]) * dx + (q[1] - c[1]) * dy)),
                         )
-                        if _clear_link(q, q, hard, passable, water, gap=FOOTPATH_FABRIC_GAP)
+                        # A POINT, NOT A LINK (feature 145): `_clear_link(q, q, ...)` returns True for any span
+                        # under 1 px, so the standing place was never tested at all - cohort seed 41's footpath
+                        # began 1.3 px from the drain brook. The same index the router uses judges the point.
+                        if not fabric_index(hard, WEB_HARD_GAP, passable, FOOTPATH_FABRIC_GAP, water, 14.0).fouled(q)
                     ),
                     (c[0] + dx * step, c[1] + dy * step),
                 )
@@ -2872,14 +2886,14 @@ def connector_track(plan: SitePlan, start: Pt, avoid: Sequence[Poly] = (), reach
     # connector lane + the gate's 2 px pad + 3 px slack) makes the router score the tread the gate
     # will measure, the same probe-measures-what-the-check-measures rule the bow comment below
     # states for the crop.
+    # ...AND GROWN ALONG ITS NORMALS, NOT SCALED ABOUT ITS CENTROID (feature 145, Sawada after the field
+    # moved). The toe band is a contour strip 2,900 px long and ~200 wide; pushing each vertex 8 px AWAY
+    # FROM THE CENTROID moves the vertices near the band's middle almost entirely along its length and
+    # its far corners not at all in the direction that matters, so the connector routed "clean" past a
+    # corner it then grazed by 4.5 px. `ring_offset` (feature 140) pushes every vertex 8 px along the
+    # ring's own outward normal; its first n vertices are that outer ring.
     def _inflated(w: Poly) -> Poly:
-        wcx = sum(p[0] for p in w) / len(w)
-        wcy = sum(p[1] for p in w) / len(w)
-        out: Poly = []
-        for wx, wy in w:
-            wl = math.hypot(wx - wcx, wy - wcy) or 1.0
-            out.append((wx + (wx - wcx) / wl * 8.0, wy + (wy - wcy) / wl * 8.0))
-        return out
+        return list(ring_offset(w, 8.0, 0.0)[: len(w)])
 
     wet_grown = [_inflated(w) for w in wet if len(w) >= 3]
     best: tuple[tuple[int, int, int], Poly] | None = None
