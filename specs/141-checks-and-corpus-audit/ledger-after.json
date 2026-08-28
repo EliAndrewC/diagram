@@ -28,7 +28,9 @@
    "fixtures": {},
    "verdict": "NO-SCRIPTED-EXECUTOR",
    "why": "no scripted map exercises it (a legacy-tier check: town / city / capital / village hand-authored maps only); no measured verdict is possible - the GM's choice at acceptance",
-   "on": []
+   "on": [],
+   "hand": "",
+   "placer_test": ""
   },
   {
    "check": "all_ink_is_ruled_on",
@@ -57,7 +59,9 @@
    "on": [
     "reference",
     "polder19"
-   ]
+   ],
+   "hand": "KEEP - best-effort placer",
+   "placer_test": "a guard on the CODE (every emit site tagged), not on the map"
   },
   {
    "check": "aqueduct_taps_water_lands_dry",
@@ -91,7 +95,9 @@
    "on": [
     "reference",
     "polder19"
-   ]
+   ],
+   "hand": "",
+   "placer_test": ""
   },
   {
    "check": "bamboo_stands_clear_of_paddies",
@@ -118,7 +124,9 @@
    "on": [
     "reference",
     "polder19"
-   ]
+   ],
+   "hand": "",
+   "placer_test": ""
   },
   {
    "check": "bridges_align_with_their_way",
@@ -210,7 +218,9 @@
    "on": [
     "reference",
     "polder19"
-   ]
+   ],
+   "hand": "",
+   "placer_test": ""
   },
   {
    "check": "bridges_clear_of_houses",
@@ -237,7 +247,9 @@
    "on": [
     "reference",
     "polder19"
-   ]
+   ],
+   "hand": "KEEP - best-effort placer",
+   "placer_test": "settlement/city/bridges.py: 'expect the alignment check to test it'"
   },
   {
    "check": "bridges_seat_on_water",
@@ -265,7 +277,9 @@
    "on": [
     "reference",
     "polder19"
-   ]
+   ],
+   "hand": "KEEP - best-effort placer",
+   "placer_test": "same"
   },
   {
    "check": "bridges_span_their_water",
@@ -294,7 +308,9 @@
    "on": [
     "reference",
     "polder19"
-   ]
+   ],
+   "hand": "KEEP - best-effort placer",
+   "placer_test": "same"
   },
   {
    "check": "bund_beans_on_bunds",
@@ -326,7 +342,9 @@
    "on": [
     "reference",
     "polder19"
-   ]
+   ],
+   "hand": "",
+   "placer_test": ""
   },
   {
    "check": "byre_form_declared",
@@ -354,7 +372,9 @@
    "on": [
     "reference",
     "polder19"
-   ]
+   ],
+   "hand": "",
+   "placer_test": ""
   },
   {
    "check": "byres_meet_their_target",
@@ -380,7 +400,9 @@
    "on": [
     "reference",
     "polder19"
-   ]
+   ],
+   "hand": "",
+   "placer_test": ""
   },
   {
    "check": "canopy_clear_of_watercourses",
@@ -412,7 +434,9 @@
    "on": [
     "reference",
     "polder19"
-   ]
+   ],
+   "hand": "",
+   "placer_test": ""
   },
   {
    "check": "capital_has_kosatsuba",
@@ -430,7 +454,9 @@
    "fixtures": {},
    "verdict": "NO-SCRIPTED-EXECUTOR",
    "why": "no scripted map exercises it (a legacy-tier check: town / city / capital / village hand-authored maps only); no measured verdict is possible - the GM's choice at acceptance",
-   "on": []
+   "on": [],
+   "hand": "",
+   "placer_test": ""
   },
   {
    "check": "capital_has_no_headman",
@@ -440,7 +466,9 @@
    "fixtures": {},
    "verdict": "NO-SCRIPTED-EXECUTOR",
    "why": "no scripted map exercises it (a legacy-tier check: town / city / capital / village hand-authored maps only); no measured verdict is possible - the GM's choice at acceptance",
-   "on": []
+   "on": [],
+   "hand": "",
+   "placer_test": ""
   },
   {
    "check": "captions_clear_the_ways_they_stand_on",
@@ -470,7 +498,9 @@
    "on": [
     "reference",
     "polder19"
-   ]
+   ],
+   "hand": "",
+   "placer_test": ""
   },
   {
    "check": "channel_gates_at_water_junctions",
@@ -497,7 +527,9 @@
    "on": [
     "reference",
     "polder19"
-   ]
+   ],
+   "hand": "",
+   "placer_test": ""
   },
   {
    "check": "channels_flow_downhill",
@@ -546,7 +578,9 @@
    "on": [
     "reference",
     "polder19"
-   ]
+   ],
+   "hand": "",
+   "placer_test": ""
   },
   {
    "check": "channels_join_not_cross_at_fork",
@@ -580,7 +614,9 @@
    "on": [
     "reference",
     "polder19"
-   ]
+   ],
+   "hand": "",
+   "placer_test": ""
   },
   {
    "check": "channels_join_streams_at_confluence",
@@ -610,7 +646,9 @@
    "on": [
     "reference",
     "polder19"
-   ]
+   ],
+   "hand": "",
+   "placer_test": ""
   },
   {
    "check": "channels_join_water_not_cross",
@@ -640,7 +678,9 @@
    "on": [
     "reference",
     "polder19"
-   ]
+   ],
+   "hand": "",
+   "placer_test": ""
   },
   {
    "check": "city_fan_heads_quilted",
@@ -719,7 +759,9 @@
    },
    "verdict": "NO-SCRIPTED-EXECUTOR",
    "why": "no scripted map exercises it (a legacy-tier check: town / city / capital / village hand-authored maps only); no measured verdict is possible - the GM's choice at acceptance",
-   "on": []
+   "on": [],
+   "hand": "",
+   "placer_test": ""
   },
   {
    "check": "city_has_cremation_ground",
@@ -750,7 +792,9 @@
    },
    "verdict": "NO-SCRIPTED-EXECUTOR",
    "why": "no scripted map exercises it (a legacy-tier check: town / city / capital / village hand-authored maps only); no measured verdict is possible - the GM's choice at acceptance",
-   "on": []
+   "on": [],
+   "hand": "",
+   "placer_test": ""
   },
   {
    "check": "city_has_kosatsuba",
@@ -771,7 +815,9 @@
    "fixtures": {},
    "verdict": "NO-SCRIPTED-EXECUTOR",
    "why": "no scripted map exercises it (a legacy-tier check: town / city / capital / village hand-authored maps only); no measured verdict is possible - the GM's choice at acceptance",
-   "on": []
+   "on": [],
+   "hand": "",
+   "placer_test": ""
   },
   {
    "check": "city_has_mausoleum",
@@ -802,7 +848,9 @@
    },
    "verdict": "NO-SCRIPTED-EXECUTOR",
    "why": "no scripted map exercises it (a legacy-tier check: town / city / capital / village hand-authored maps only); no measured verdict is possible - the GM's choice at acceptance",
-   "on": []
+   "on": [],
+   "hand": "",
+   "placer_test": ""
   },
   {
    "check": "city_has_no_headman",
@@ -812,7 +860,9 @@
    "fixtures": {},
    "verdict": "NO-SCRIPTED-EXECUTOR",
    "why": "no scripted map exercises it (a legacy-tier check: town / city / capital / village hand-authored maps only); no measured verdict is possible - the GM's choice at acceptance",
-   "on": []
+   "on": [],
+   "hand": "",
+   "placer_test": ""
   },
   {
    "check": "city_has_ossuary",
@@ -843,7 +893,9 @@
    },
    "verdict": "NO-SCRIPTED-EXECUTOR",
    "why": "no scripted map exercises it (a legacy-tier check: town / city / capital / village hand-authored maps only); no measured verdict is possible - the GM's choice at acceptance",
-   "on": []
+   "on": [],
+   "hand": "",
+   "placer_test": ""
   },
   {
    "check": "city_imperial_road_has_commerce",
@@ -862,7 +914,9 @@
    },
    "verdict": "NO-SCRIPTED-EXECUTOR",
    "why": "no scripted map exercises it (a legacy-tier check: town / city / capital / village hand-authored maps only); no measured verdict is possible - the GM's choice at acceptance",
-   "on": []
+   "on": [],
+   "hand": "",
+   "placer_test": ""
   },
   {
    "check": "city_imperial_road_through",
@@ -877,7 +931,9 @@
    "fixtures": {},
    "verdict": "NO-SCRIPTED-EXECUTOR",
    "why": "no scripted map exercises it (a legacy-tier check: town / city / capital / village hand-authored maps only); no measured verdict is possible - the GM's choice at acceptance",
-   "on": []
+   "on": [],
+   "hand": "",
+   "placer_test": ""
   },
   {
    "check": "city_interior_fields_farmhouse_density",
@@ -894,7 +950,9 @@
    },
    "verdict": "NO-SCRIPTED-EXECUTOR",
    "why": "no scripted map exercises it (a legacy-tier check: town / city / capital / village hand-authored maps only); no measured verdict is possible - the GM's choice at acceptance",
-   "on": []
+   "on": [],
+   "hand": "",
+   "placer_test": ""
   },
   {
    "check": "city_kosatsuba_per_gate",
@@ -914,7 +972,9 @@
    "fixtures": {},
    "verdict": "NO-SCRIPTED-EXECUTOR",
    "why": "no scripted map exercises it (a legacy-tier check: town / city / capital / village hand-authored maps only); no measured verdict is possible - the GM's choice at acceptance",
-   "on": []
+   "on": [],
+   "hand": "",
+   "placer_test": ""
   },
   {
    "check": "city_neighborhoods_have_wells",
@@ -938,7 +998,9 @@
    },
    "verdict": "NO-SCRIPTED-EXECUTOR",
    "why": "no scripted map exercises it (a legacy-tier check: town / city / capital / village hand-authored maps only); no measured verdict is possible - the GM's choice at acceptance",
-   "on": []
+   "on": [],
+   "hand": "",
+   "placer_test": ""
   },
   {
    "check": "city_roads_run_offmap",
@@ -951,7 +1013,9 @@
    "fixtures": {},
    "verdict": "NO-SCRIPTED-EXECUTOR",
    "why": "no scripted map exercises it (a legacy-tier check: town / city / capital / village hand-authored maps only); no measured verdict is possible - the GM's choice at acceptance",
-   "on": []
+   "on": [],
+   "hand": "",
+   "placer_test": ""
   },
   {
    "check": "city_samurai_housing_varied",
@@ -969,7 +1033,9 @@
    },
    "verdict": "NO-SCRIPTED-EXECUTOR",
    "why": "no scripted map exercises it (a legacy-tier check: town / city / capital / village hand-authored maps only); no measured verdict is possible - the GM's choice at acceptance",
-   "on": []
+   "on": [],
+   "hand": "",
+   "placer_test": ""
   },
   {
    "check": "city_samurai_quarter_has_no_public_wells",
@@ -993,7 +1059,9 @@
    },
    "verdict": "NO-SCRIPTED-EXECUTOR",
    "why": "no scripted map exercises it (a legacy-tier check: town / city / capital / village hand-authored maps only); no measured verdict is possible - the GM's choice at acceptance",
-   "on": []
+   "on": [],
+   "hand": "",
+   "placer_test": ""
   },
   {
    "check": "city_streets_clear_of_moat",
@@ -1009,7 +1077,9 @@
    "fixtures": {},
    "verdict": "NO-SCRIPTED-EXECUTOR",
    "why": "no scripted map exercises it (a legacy-tier check: town / city / capital / village hand-authored maps only); no measured verdict is possible - the GM's choice at acceptance",
-   "on": []
+   "on": [],
+   "hand": "",
+   "placer_test": ""
   },
   {
    "check": "city_streets_connected",
@@ -1028,7 +1098,9 @@
    },
    "verdict": "NO-SCRIPTED-EXECUTOR",
    "why": "no scripted map exercises it (a legacy-tier check: town / city / capital / village hand-authored maps only); no measured verdict is possible - the GM's choice at acceptance",
-   "on": []
+   "on": [],
+   "hand": "",
+   "placer_test": ""
   },
   {
    "check": "city_streets_no_intersection_stub",
@@ -1045,7 +1117,9 @@
    "fixtures": {},
    "verdict": "NO-SCRIPTED-EXECUTOR",
    "why": "no scripted map exercises it (a legacy-tier check: town / city / capital / village hand-authored maps only); no measured verdict is possible - the GM's choice at acceptance",
-   "on": []
+   "on": [],
+   "hand": "",
+   "placer_test": ""
   },
   {
    "check": "city_streets_no_near_miss",
@@ -1062,7 +1136,9 @@
    "fixtures": {},
    "verdict": "NO-SCRIPTED-EXECUTOR",
    "why": "no scripted map exercises it (a legacy-tier check: town / city / capital / village hand-authored maps only); no measured verdict is possible - the GM's choice at acceptance",
-   "on": []
+   "on": [],
+   "hand": "",
+   "placer_test": ""
   },
   {
    "check": "city_streets_reach_their_neighbors",
@@ -1092,7 +1168,9 @@
    "on": [
     "reference",
     "polder19"
-   ]
+   ],
+   "hand": "",
+   "placer_test": ""
   },
   {
    "check": "city_temple_neighborhood_has_shrines",
@@ -1118,7 +1196,9 @@
    },
    "verdict": "NO-SCRIPTED-EXECUTOR",
    "why": "no scripted map exercises it (a legacy-tier check: town / city / capital / village hand-authored maps only); no measured verdict is possible - the GM's choice at acceptance",
-   "on": []
+   "on": [],
+   "hand": "",
+   "placer_test": ""
   },
   {
    "check": "city_temples_have_graveyards",
@@ -1149,7 +1229,9 @@
    },
    "verdict": "NO-SCRIPTED-EXECUTOR",
    "why": "no scripted map exercises it (a legacy-tier check: town / city / capital / village hand-authored maps only); no measured verdict is possible - the GM's choice at acceptance",
-   "on": []
+   "on": [],
+   "hand": "",
+   "placer_test": ""
   },
   {
    "check": "city_wall_tower_coverage",
@@ -1168,7 +1250,9 @@
    "fixtures": {},
    "verdict": "NO-SCRIPTED-EXECUTOR",
    "why": "no scripted map exercises it (a legacy-tier check: town / city / capital / village hand-authored maps only); no measured verdict is possible - the GM's choice at acceptance",
-   "on": []
+   "on": [],
+   "hand": "",
+   "placer_test": ""
   },
   {
    "check": "city_ward_cap_flush_to_wall",
@@ -1185,7 +1269,9 @@
    },
    "verdict": "NO-SCRIPTED-EXECUTOR",
    "why": "no scripted map exercises it (a legacy-tier check: town / city / capital / village hand-authored maps only); no measured verdict is possible - the GM's choice at acceptance",
-   "on": []
+   "on": [],
+   "hand": "",
+   "placer_test": ""
   },
   {
    "check": "city_well_density_sufficient",
@@ -1209,7 +1295,9 @@
    },
    "verdict": "NO-SCRIPTED-EXECUTOR",
    "why": "no scripted map exercises it (a legacy-tier check: town / city / capital / village hand-authored maps only); no measured verdict is possible - the GM's choice at acceptance",
-   "on": []
+   "on": [],
+   "hand": "",
+   "placer_test": ""
   },
   {
    "check": "city_wells_in_block_interiors",
@@ -1234,7 +1322,9 @@
    },
    "verdict": "NO-SCRIPTED-EXECUTOR",
    "why": "no scripted map exercises it (a legacy-tier check: town / city / capital / village hand-authored maps only); no measured verdict is possible - the GM's choice at acceptance",
-   "on": []
+   "on": [],
+   "hand": "",
+   "placer_test": ""
   },
   {
    "check": "cluster_abuts_fields",
@@ -1258,7 +1348,9 @@
    "on": [
     "reference",
     "polder19"
-   ]
+   ],
+   "hand": "",
+   "placer_test": ""
   },
   {
    "check": "cluster_shape_matches_the_drawing",
@@ -1287,7 +1379,9 @@
    "on": [
     "reference",
     "polder19"
-   ]
+   ],
+   "hand": "",
+   "placer_test": ""
   },
   {
    "check": "comb_floor_ends_at_the_collector",
@@ -1317,7 +1411,9 @@
    "on": [
     "reference",
     "polder19"
-   ]
+   ],
+   "hand": "",
+   "placer_test": ""
   },
   {
    "check": "comb_supply_commands_both_flanks",
@@ -1346,7 +1442,9 @@
    "why": "an input changes after its placer: reference: placed at field, last changed at finish, polder19: placed at field, last changed at finish",
    "on": [
     "reference"
-   ]
+   ],
+   "hand": "",
+   "placer_test": ""
   },
   {
    "check": "commons_clear_of_paddies",
@@ -1410,7 +1508,9 @@
    "on": [
     "reference",
     "polder19"
-   ]
+   ],
+   "hand": "",
+   "placer_test": ""
   },
   {
    "check": "copse_stands_clear_of_the_belt",
@@ -1437,7 +1537,9 @@
    "on": [
     "reference",
     "polder19"
-   ]
+   ],
+   "hand": "",
+   "placer_test": ""
   },
   {
    "check": "courtyard_byres_annex_their_homestead",
@@ -1453,7 +1555,9 @@
    },
    "verdict": "NO-SCRIPTED-EXECUTOR",
    "why": "no scripted map exercises it (a legacy-tier check: town / city / capital / village hand-authored maps only); no measured verdict is possible - the GM's choice at acceptance",
-   "on": []
+   "on": [],
+   "hand": "",
+   "placer_test": ""
   },
   {
    "check": "cremation_ground_by_external_cemetery",
@@ -1474,7 +1578,9 @@
    },
    "verdict": "NO-SCRIPTED-EXECUTOR",
    "why": "no scripted map exercises it (a legacy-tier check: town / city / capital / village hand-authored maps only); no measured verdict is possible - the GM's choice at acceptance",
-   "on": []
+   "on": [],
+   "hand": "",
+   "placer_test": ""
   },
   {
    "check": "cremation_ground_not_between_temple_and_road",
@@ -1495,7 +1601,9 @@
    },
    "verdict": "NO-SCRIPTED-EXECUTOR",
    "why": "no scripted map exercises it (a legacy-tier check: town / city / capital / village hand-authored maps only); no measured verdict is possible - the GM's choice at acceptance",
-   "on": []
+   "on": [],
+   "hand": "",
+   "placer_test": ""
   },
   {
    "check": "cremation_ground_set_back_from_main_road",
@@ -1516,7 +1624,9 @@
    },
    "verdict": "NO-SCRIPTED-EXECUTOR",
    "why": "no scripted map exercises it (a legacy-tier check: town / city / capital / village hand-authored maps only); no measured verdict is possible - the GM's choice at acceptance",
-   "on": []
+   "on": [],
+   "hand": "",
+   "placer_test": ""
   },
   {
    "check": "crop_hugs_content",
@@ -1550,7 +1660,9 @@
    "on": [
     "reference",
     "polder19"
-   ]
+   ],
+   "hand": "KEEP - guarantee plausible, no placer test names it (the GM may cut)",
+   "placer_test": "frame stage"
   },
   {
    "check": "crop_not_held_open_by_one_feature",
@@ -1577,7 +1689,9 @@
    "on": [
     "reference",
     "polder19"
-   ]
+   ],
+   "hand": "",
+   "placer_test": ""
   },
   {
    "check": "delivery_ditches_taper",
@@ -1611,7 +1725,9 @@
    "on": [
     "reference",
     "polder19"
-   ]
+   ],
+   "hand": "",
+   "placer_test": ""
   },
   {
    "check": "dikepond_corners_rounded",
@@ -1631,7 +1747,9 @@
    },
    "verdict": "NO-SCRIPTED-EXECUTOR",
    "why": "no scripted map exercises it (a legacy-tier check: town / city / capital / village hand-authored maps only); no measured verdict is possible - the GM's choice at acceptance",
-   "on": []
+   "on": [],
+   "hand": "",
+   "placer_test": ""
   },
   {
    "check": "dikepond_is_ponds_in_a_block",
@@ -1650,7 +1768,9 @@
    },
    "verdict": "NO-SCRIPTED-EXECUTOR",
    "why": "no scripted map exercises it (a legacy-tier check: town / city / capital / village hand-authored maps only); no measured verdict is possible - the GM's choice at acceptance",
-   "on": []
+   "on": [],
+   "hand": "",
+   "placer_test": ""
   },
   {
    "check": "dikepond_water_within_banks",
@@ -1670,7 +1790,9 @@
    },
    "verdict": "NO-SCRIPTED-EXECUTOR",
    "why": "no scripted map exercises it (a legacy-tier check: town / city / capital / village hand-authored maps only); no measured verdict is possible - the GM's choice at acceptance",
-   "on": []
+   "on": [],
+   "hand": "",
+   "placer_test": ""
   },
   {
    "check": "dikeponds_fed_and_drained",
@@ -1690,7 +1812,9 @@
    },
    "verdict": "NO-SCRIPTED-EXECUTOR",
    "why": "no scripted map exercises it (a legacy-tier check: town / city / capital / village hand-authored maps only); no measured verdict is possible - the GM's choice at acceptance",
-   "on": []
+   "on": [],
+   "hand": "",
+   "placer_test": ""
   },
   {
    "check": "drain_flows_downhill",
@@ -1724,7 +1848,9 @@
    "on": [
     "reference",
     "polder19"
-   ]
+   ],
+   "hand": "",
+   "placer_test": ""
   },
   {
    "check": "drain_runs_cross_slope",
@@ -1756,7 +1882,9 @@
    "on": [
     "reference",
     "polder19"
-   ]
+   ],
+   "hand": "",
+   "placer_test": ""
   },
   {
    "check": "drainage_discharges_downhill",
@@ -1786,7 +1914,9 @@
    "on": [
     "reference",
     "polder19"
-   ]
+   ],
+   "hand": "",
+   "placer_test": ""
   },
   {
    "check": "drainage_junction_smooth",
@@ -1819,7 +1949,9 @@
    "on": [
     "reference",
     "polder19"
-   ]
+   ],
+   "hand": "",
+   "placer_test": ""
   },
   {
    "check": "dry_plot_furrows_vary",
@@ -1848,7 +1980,9 @@
    "why": "an input changes after its placer: reference: placed at field, last changed at frame, polder19: placed at water_frame, last changed at frame",
    "on": [
     "reference"
-   ]
+   ],
+   "hand": "",
+   "placer_test": ""
   },
   {
    "check": "dry_plots_clear_of_paddies",
@@ -1888,7 +2022,9 @@
    "on": [
     "reference",
     "polder19"
-   ]
+   ],
+   "hand": "",
+   "placer_test": ""
   },
   {
    "check": "dwellings_above_field_drain",
@@ -1906,7 +2042,9 @@
    },
    "verdict": "NO-SCRIPTED-EXECUTOR",
    "why": "no scripted map exercises it (a legacy-tier check: town / city / capital / village hand-authored maps only); no measured verdict is possible - the GM's choice at acceptance",
-   "on": []
+   "on": [],
+   "hand": "",
+   "placer_test": ""
   },
   {
    "check": "every_feature_classified_for_matrix",
@@ -1930,7 +2068,9 @@
    "on": [
     "reference",
     "polder19"
-   ]
+   ],
+   "hand": "",
+   "placer_test": ""
   },
   {
    "check": "every_feature_classified_for_overlap",
@@ -1956,7 +2096,9 @@
    "on": [
     "reference",
     "polder19"
-   ]
+   ],
+   "hand": "",
+   "placer_test": ""
   },
   {
    "check": "every_solid_feature_classified_for_labels",
@@ -1980,7 +2122,9 @@
    "on": [
     "reference",
     "polder19"
-   ]
+   ],
+   "hand": "",
+   "placer_test": ""
   },
   {
    "check": "farm_sheds_attached",
@@ -2012,7 +2156,9 @@
    "on": [
     "reference",
     "polder19"
-   ]
+   ],
+   "hand": "RETIRE",
+   "placer_test": "drawn as a sub-glyph of its house by construction (homestead_parts kura)"
   },
   {
    "check": "farmhouse_aspect_in_range",
@@ -2034,7 +2180,9 @@
    "on": [
     "reference",
     "polder19"
-   ]
+   ],
+   "hand": "",
+   "placer_test": ""
   },
   {
    "check": "farmhouse_sizes_vary",
@@ -2058,7 +2206,9 @@
    "on": [
     "reference",
     "polder19"
-   ]
+   ],
+   "hand": "",
+   "placer_test": ""
   },
   {
    "check": "farmhouses_reach_a_way",
@@ -2093,7 +2243,9 @@
    "on": [
     "reference",
     "polder19"
-   ]
+   ],
+   "hand": "",
+   "placer_test": ""
   },
   {
    "check": "farmhouses_shed_separately",
@@ -2122,7 +2274,9 @@
    "on": [
     "reference",
     "polder19"
-   ]
+   ],
+   "hand": "",
+   "placer_test": ""
   },
   {
    "check": "features_do_not_overlap",
@@ -2149,7 +2303,9 @@
    "on": [
     "reference",
     "polder19"
-   ]
+   ],
+   "hand": "",
+   "placer_test": ""
   },
   {
    "check": "field_ditch_tips_land_on_the_trunk",
@@ -2184,7 +2340,9 @@
    "on": [
     "reference",
     "polder19"
-   ]
+   ],
+   "hand": "",
+   "placer_test": ""
   },
   {
    "check": "field_ditches_reach_source_and_sink",
@@ -2219,7 +2377,9 @@
    "on": [
     "reference",
     "polder19"
-   ]
+   ],
+   "hand": "",
+   "placer_test": ""
   },
   {
    "check": "field_ditches_terminate",
@@ -2253,7 +2413,9 @@
    "on": [
     "reference",
     "polder19"
-   ]
+   ],
+   "hand": "",
+   "placer_test": ""
   },
   {
    "check": "field_outline_matches_planting",
@@ -2268,7 +2430,9 @@
    },
    "verdict": "NO-SCRIPTED-EXECUTOR",
    "why": "no scripted map exercises it (a legacy-tier check: town / city / capital / village hand-authored maps only); no measured verdict is possible - the GM's choice at acceptance",
-   "on": []
+   "on": [],
+   "hand": "",
+   "placer_test": ""
   },
   {
    "check": "field_ponds_sunk_into_one_plot",
@@ -2295,7 +2459,9 @@
    "on": [
     "reference",
     "polder19"
-   ]
+   ],
+   "hand": "",
+   "placer_test": ""
   },
   {
    "check": "fields_clear_of_road",
@@ -2328,7 +2494,9 @@
    "on": [
     "reference",
     "polder19"
-   ]
+   ],
+   "hand": "",
+   "placer_test": ""
   },
   {
    "check": "fields_show_water_source",
@@ -2370,7 +2538,9 @@
    "on": [
     "reference",
     "polder19"
-   ]
+   ],
+   "hand": "",
+   "placer_test": ""
   },
   {
    "check": "flooded_plots_read_as_basins",
@@ -2398,7 +2568,9 @@
    "why": "an input changes after its placer: reference: placed at water_frame, last changed at frame, polder19: placed at field, last changed at frame",
    "on": [
     "polder19"
-   ]
+   ],
+   "hand": "",
+   "placer_test": ""
   },
   {
    "check": "footbridges_reach_useful_ground",
@@ -2432,7 +2604,9 @@
    "on": [
     "reference",
     "polder19"
-   ]
+   ],
+   "hand": "KEEP - best-effort placer",
+   "placer_test": "footbridge placer places what it can"
   },
   {
    "check": "funerary_clear_of_fields",
@@ -2461,7 +2635,9 @@
    "on": [
     "reference",
     "polder19"
-   ]
+   ],
+   "hand": "",
+   "placer_test": ""
   },
   {
    "check": "gardens_clear_of_channels",
@@ -2490,7 +2666,9 @@
    "on": [
     "reference",
     "polder19"
-   ]
+   ],
+   "hand": "",
+   "placer_test": ""
   },
   {
    "check": "gardens_unshaded_from_east",
@@ -2538,7 +2716,9 @@
    "fixtures": {},
    "verdict": "NO-SCRIPTED-EXECUTOR",
    "why": "no scripted map exercises it (a legacy-tier check: town / city / capital / village hand-authored maps only); no measured verdict is possible - the GM's choice at acceptance",
-   "on": []
+   "on": [],
+   "hand": "",
+   "placer_test": ""
   },
   {
    "check": "groves_clear_of_lanes",
@@ -2583,7 +2763,9 @@
    "on": [
     "reference",
     "polder19"
-   ]
+   ],
+   "hand": "",
+   "placer_test": ""
   },
   {
    "check": "groves_where_possible",
@@ -2613,7 +2795,9 @@
    "fixtures": {},
    "verdict": "NO-SCRIPTED-EXECUTOR",
    "why": "no scripted map exercises it (a legacy-tier check: town / city / capital / village hand-authored maps only); no measured verdict is possible - the GM's choice at acceptance",
-   "on": []
+   "on": [],
+   "hand": "",
+   "placer_test": ""
   },
   {
    "check": "hamlet_has_kosatsuba",
@@ -2648,7 +2832,9 @@
    "on": [
     "reference",
     "polder19"
-   ]
+   ],
+   "hand": "KEEP - best-effort placer",
+   "placer_test": "hamletgen.stage_notice keeps the engine's seat rather than none"
   },
   {
    "check": "hamlet_has_no_headman",
@@ -2674,7 +2860,9 @@
    "on": [
     "reference",
     "polder19"
-   ]
+   ],
+   "hand": "",
+   "placer_test": ""
   },
   {
    "check": "hard_features_within_frame",
@@ -2706,7 +2894,9 @@
    "on": [
     "reference",
     "polder19"
-   ]
+   ],
+   "hand": "KEEP - guarantee plausible, no placer test names it (the GM may cut)",
+   "placer_test": "frame stage"
   },
   {
    "check": "house_count_in_range",
@@ -2718,7 +2908,9 @@
    "fixtures": {},
    "verdict": "NO-SCRIPTED-EXECUTOR",
    "why": "no scripted map exercises it (a legacy-tier check: town / city / capital / village hand-authored maps only); no measured verdict is possible - the GM's choice at acceptance",
-   "on": []
+   "on": [],
+   "hand": "",
+   "placer_test": ""
   },
   {
    "check": "households_consistent",
@@ -2742,7 +2934,9 @@
    "on": [
     "reference",
     "polder19"
-   ]
+   ],
+   "hand": "",
+   "placer_test": ""
   },
   {
    "check": "houses_clear_of_lanes",
@@ -2772,7 +2966,9 @@
    "on": [
     "reference",
     "polder19"
-   ]
+   ],
+   "hand": "",
+   "placer_test": ""
   },
   {
    "check": "houses_face_south",
@@ -2794,7 +2990,9 @@
    "on": [
     "reference",
     "polder19"
-   ]
+   ],
+   "hand": "",
+   "placer_test": ""
   },
   {
    "check": "inwall_drains_gated_at_cutoff",
@@ -2829,7 +3027,9 @@
    "on": [
     "reference",
     "polder19"
-   ]
+   ],
+   "hand": "",
+   "placer_test": ""
   },
   {
    "check": "irrigation_channels_hairline",
@@ -2858,7 +3058,9 @@
    "on": [
     "reference",
     "polder19"
-   ]
+   ],
+   "hand": "",
+   "placer_test": ""
   },
   {
    "check": "kido_aligned_with_ward_fence",
@@ -2876,7 +3078,9 @@
    },
    "verdict": "NO-SCRIPTED-EXECUTOR",
    "why": "no scripted map exercises it (a legacy-tier check: town / city / capital / village hand-authored maps only); no measured verdict is possible - the GM's choice at acceptance",
-   "on": []
+   "on": [],
+   "hand": "",
+   "placer_test": ""
   },
   {
    "check": "kido_guard_box_clear_of_lanes",
@@ -2893,7 +3097,9 @@
    },
    "verdict": "NO-SCRIPTED-EXECUTOR",
    "why": "no scripted map exercises it (a legacy-tier check: town / city / capital / village hand-authored maps only); no measured verdict is possible - the GM's choice at acceptance",
-   "on": []
+   "on": [],
+   "hand": "",
+   "placer_test": ""
   },
   {
    "check": "kosatsuba_by_the_road",
@@ -2932,7 +3138,9 @@
    "on": [
     "reference",
     "polder19"
-   ]
+   ],
+   "hand": "KEEP - best-effort placer",
+   "placer_test": "same"
   },
   {
    "check": "kosatsuba_faces_the_road",
@@ -2967,7 +3175,9 @@
    "on": [
     "reference",
     "polder19"
-   ]
+   ],
+   "hand": "KEEP - best-effort placer",
+   "placer_test": "same"
   },
   {
    "check": "kosatsuba_on_a_main_way",
@@ -2990,7 +3200,9 @@
    },
    "verdict": "NO-SCRIPTED-EXECUTOR",
    "why": "no scripted map exercises it (a legacy-tier check: town / city / capital / village hand-authored maps only); no measured verdict is possible - the GM's choice at acceptance",
-   "on": []
+   "on": [],
+   "hand": "",
+   "placer_test": ""
   },
   {
    "check": "label_hugs_its_referent",
@@ -3018,7 +3230,9 @@
    "on": [
     "reference",
     "polder19"
-   ]
+   ],
+   "hand": "KEEP - best-effort placer",
+   "placer_test": "_best_label_spot seats the NEAREST spot, 'empty ground wins' fallback - the GM's own example of a useful check"
   },
   {
    "check": "labels_align_with_their_referent",
@@ -3046,7 +3260,9 @@
    "on": [
     "reference",
     "polder19"
-   ]
+   ],
+   "hand": "KEEP - best-effort placer",
+   "placer_test": "same"
   },
   {
    "check": "labels_within_image",
@@ -3075,7 +3291,9 @@
    "on": [
     "reference",
     "polder19"
-   ]
+   ],
+   "hand": "KEEP - best-effort placer",
+   "placer_test": "same"
   },
   {
    "check": "lane_ends_front_different_houses",
@@ -3104,7 +3322,9 @@
    "on": [
     "reference",
     "polder19"
-   ]
+   ],
+   "hand": "",
+   "placer_test": ""
   },
   {
    "check": "lanes_bend_like_paths",
@@ -3133,7 +3353,9 @@
    "on": [
     "reference",
     "polder19"
-   ]
+   ],
+   "hand": "",
+   "placer_test": ""
   },
   {
    "check": "lanes_clear_of_dry_plots",
@@ -3169,7 +3391,9 @@
    "on": [
     "reference",
     "polder19"
-   ]
+   ],
+   "hand": "",
+   "placer_test": ""
   },
   {
    "check": "lanes_do_not_break_mid_run",
@@ -3200,7 +3424,9 @@
    "on": [
     "reference",
     "polder19"
-   ]
+   ],
+   "hand": "",
+   "placer_test": ""
   },
   {
    "check": "lanes_form_one_network",
@@ -3230,7 +3456,9 @@
    "on": [
     "reference",
     "polder19"
-   ]
+   ],
+   "hand": "",
+   "placer_test": ""
   },
   {
    "check": "lanes_reach_something",
@@ -3260,7 +3488,9 @@
    "on": [
     "reference",
     "polder19"
-   ]
+   ],
+   "hand": "",
+   "placer_test": ""
   },
   {
    "check": "long_ditches_have_a_footbridge",
@@ -3293,7 +3523,9 @@
    "on": [
     "reference",
     "polder19"
-   ]
+   ],
+   "hand": "KEEP - best-effort placer",
+   "placer_test": "same"
   },
   {
    "check": "map_frame_hugs_its_content",
@@ -3317,7 +3549,9 @@
    "on": [
     "reference",
     "polder19"
-   ]
+   ],
+   "hand": "",
+   "placer_test": ""
   },
   {
    "check": "margins_form_continuous_ring",
@@ -3383,7 +3617,9 @@
    "on": [
     "reference",
     "polder19"
-   ]
+   ],
+   "hand": "",
+   "placer_test": ""
   },
   {
    "check": "marsh_on_low_ground",
@@ -3414,7 +3650,9 @@
    "on": [
     "reference",
     "polder19"
-   ]
+   ],
+   "hand": "",
+   "placer_test": ""
   },
   {
    "check": "matrix_debts_still_owed",
@@ -3438,7 +3676,9 @@
    "on": [
     "reference",
     "polder19"
-   ]
+   ],
+   "hand": "",
+   "placer_test": ""
   },
   {
    "check": "merchant_estate_wall_clear_of_fire_towers",
@@ -3524,7 +3764,9 @@
    },
    "verdict": "NO-SCRIPTED-EXECUTOR",
    "why": "no scripted map exercises it (a legacy-tier check: town / city / capital / village hand-authored maps only); no measured verdict is possible - the GM's choice at acceptance",
-   "on": []
+   "on": [],
+   "hand": "",
+   "placer_test": ""
   },
   {
    "check": "merchant_estate_wall_clear_of_streets",
@@ -3610,7 +3852,9 @@
    },
    "verdict": "NO-SCRIPTED-EXECUTOR",
    "why": "no scripted map exercises it (a legacy-tier check: town / city / capital / village hand-authored maps only); no measured verdict is possible - the GM's choice at acceptance",
-   "on": []
+   "on": [],
+   "hand": "",
+   "placer_test": ""
   },
   {
    "check": "merchant_estate_wall_clear_of_water",
@@ -3697,7 +3941,9 @@
    },
    "verdict": "NO-SCRIPTED-EXECUTOR",
    "why": "no scripted map exercises it (a legacy-tier check: town / city / capital / village hand-authored maps only); no measured verdict is possible - the GM's choice at acceptance",
-   "on": []
+   "on": [],
+   "hand": "",
+   "placer_test": ""
   },
   {
    "check": "moat_channels_flow_with_current",
@@ -3735,7 +3981,9 @@
    },
    "verdict": "NO-SCRIPTED-EXECUTOR",
    "why": "no scripted map exercises it (a legacy-tier check: town / city / capital / village hand-authored maps only); no measured verdict is possible - the GM's choice at acceptance",
-   "on": []
+   "on": [],
+   "hand": "",
+   "placer_test": ""
   },
   {
    "check": "mulberry_banks_clear_of_channels",
@@ -3756,7 +4004,9 @@
    },
    "verdict": "NO-SCRIPTED-EXECUTOR",
    "why": "no scripted map exercises it (a legacy-tier check: town / city / capital / village hand-authored maps only); no measured verdict is possible - the GM's choice at acceptance",
-   "on": []
+   "on": [],
+   "hand": "",
+   "placer_test": ""
   },
   {
    "check": "no_caption_holds_the_frame_open",
@@ -3781,7 +4031,9 @@
    "on": [
     "reference",
     "polder19"
-   ]
+   ],
+   "hand": "",
+   "placer_test": ""
   },
   {
    "check": "no_farmhouse_stands_on_a_lane",
@@ -3808,7 +4060,9 @@
    "on": [
     "reference",
     "polder19"
-   ]
+   ],
+   "hand": "",
+   "placer_test": ""
   },
   {
    "check": "no_label_overlaps",
@@ -3836,7 +4090,9 @@
    "on": [
     "reference",
     "polder19"
-   ]
+   ],
+   "hand": "KEEP - best-effort placer",
+   "placer_test": "same"
   },
   {
    "check": "no_structure_on_paddy",
@@ -3876,7 +4132,9 @@
    "on": [
     "reference",
     "polder19"
-   ]
+   ],
+   "hand": "",
+   "placer_test": ""
   },
   {
    "check": "no_structure_on_stream",
@@ -3913,7 +4171,9 @@
    "on": [
     "reference",
     "polder19"
-   ]
+   ],
+   "hand": "",
+   "placer_test": ""
   },
   {
    "check": "no_structure_on_torii",
@@ -3950,7 +4210,9 @@
    "on": [
     "reference",
     "polder19"
-   ]
+   ],
+   "hand": "",
+   "placer_test": ""
   },
   {
    "check": "paddy_basins_are_worth_their_bund",
@@ -3978,7 +4240,9 @@
    "why": "an input changes after its placer: reference: placed at water_frame, last changed at frame, polder19: placed at water_frame, last changed at frame",
    "on": [
     "reference"
-   ]
+   ],
+   "hand": "",
+   "placer_test": ""
   },
   {
    "check": "paddy_bunds_clear_the_collector",
@@ -4009,7 +4273,9 @@
    "on": [
     "reference",
     "polder19"
-   ]
+   ],
+   "hand": "",
+   "placer_test": ""
   },
   {
    "check": "paddy_bunds_clear_the_supply_channels",
@@ -4042,7 +4308,9 @@
    "on": [
     "reference",
     "polder19"
-   ]
+   ],
+   "hand": "",
+   "placer_test": ""
   },
   {
    "check": "paddy_bunds_do_not_stagger",
@@ -4070,7 +4338,9 @@
    "on": [
     "reference",
     "polder19"
-   ]
+   ],
+   "hand": "",
+   "placer_test": ""
   },
   {
    "check": "paddy_fan_has_floor",
@@ -4098,7 +4368,9 @@
    "on": [
     "reference",
     "polder19"
-   ]
+   ],
+   "hand": "",
+   "placer_test": ""
   },
   {
    "check": "paddy_plot_rings_overcount_stays_marginal",
@@ -4124,7 +4396,9 @@
    "on": [
     "reference",
     "polder19"
-   ]
+   ],
+   "hand": "",
+   "placer_test": ""
   },
   {
    "check": "paddy_plot_seams_shared",
@@ -4156,7 +4430,9 @@
    "on": [
     "reference",
     "polder19"
-   ]
+   ],
+   "hand": "",
+   "placer_test": ""
   },
   {
    "check": "paddy_plots_are_workable_basins",
@@ -4182,7 +4458,9 @@
    "on": [
     "reference",
     "polder19"
-   ]
+   ],
+   "hand": "",
+   "placer_test": ""
   },
   {
    "check": "polder_channels_clear_of_dike",
@@ -4221,7 +4499,9 @@
    "why": "an input changes after its placer: reference: placed at windbreak, last changed at finish, polder19: placed at windbreak, last changed at finish",
    "on": [
     "polder19"
-   ]
+   ],
+   "hand": "",
+   "placer_test": ""
   },
   {
    "check": "polder_dike_gapped_at_sluices",
@@ -4261,7 +4541,9 @@
    "why": "an input changes after its placer: reference: placed at windbreak, last changed at finish, polder19: placed at windbreak, last changed at finish",
    "on": [
     "polder19"
-   ]
+   ],
+   "hand": "",
+   "placer_test": ""
   },
   {
    "check": "polder_dike_is_earthwork",
@@ -4300,7 +4582,9 @@
    "why": "an input changes after its placer: reference: placed at windbreak, last changed at finish, polder19: placed at windbreak, last changed at finish",
    "on": [
     "polder19"
-   ]
+   ],
+   "hand": "",
+   "placer_test": ""
   },
   {
    "check": "polder_edges_wander",
@@ -4339,7 +4623,9 @@
    "why": "an input changes after its placer: reference: placed at windbreak, last changed at finish, polder19: placed at windbreak, last changed at finish",
    "on": [
     "polder19"
-   ]
+   ],
+   "hand": "",
+   "placer_test": ""
   },
   {
    "check": "polder_fills_its_bbox",
@@ -4364,7 +4650,9 @@
    "why": "reads no manifest key the census can see (derived entirely) - judge by hand",
    "on": [
     "polder19"
-   ]
+   ],
+   "hand": "",
+   "placer_test": ""
   },
   {
    "check": "polder_floor_is_ring_interior",
@@ -4403,7 +4691,9 @@
    "why": "an input changes after its placer: reference: placed at windbreak, last changed at finish, polder19: placed at windbreak, last changed at finish",
    "on": [
     "polder19"
-   ]
+   ],
+   "hand": "",
+   "placer_test": ""
   },
   {
    "check": "pond_clear_of_field",
@@ -4447,7 +4737,9 @@
    "on": [
     "reference",
     "polder19"
-   ]
+   ],
+   "hand": "",
+   "placer_test": ""
   },
   {
    "check": "pond_clear_of_paddies",
@@ -4489,7 +4781,9 @@
    "on": [
     "reference",
     "polder19"
-   ]
+   ],
+   "hand": "",
+   "placer_test": ""
   },
   {
    "check": "pond_connected_to_field",
@@ -4532,7 +4826,9 @@
    "on": [
     "reference",
     "polder19"
-   ]
+   ],
+   "hand": "",
+   "placer_test": ""
   },
   {
    "check": "pond_fed_from_edge",
@@ -4574,7 +4870,9 @@
    "on": [
     "reference",
     "polder19"
-   ]
+   ],
+   "hand": "",
+   "placer_test": ""
   },
   {
    "check": "pond_fill_covers_channel_mouths",
@@ -4608,7 +4906,9 @@
    "on": [
     "reference",
     "polder19"
-   ]
+   ],
+   "hand": "",
+   "placer_test": ""
   },
   {
    "check": "religious_clear_of_ring_and_towers",
@@ -4654,7 +4954,9 @@
    "on": [
     "reference",
     "polder19"
-   ]
+   ],
+   "hand": "",
+   "placer_test": ""
   },
   {
    "check": "remote_shrine_has_own_well",
@@ -4694,7 +4996,9 @@
    "on": [
     "reference",
     "polder19"
-   ]
+   ],
+   "hand": "",
+   "placer_test": ""
   },
   {
    "check": "roads_clear_of_marsh",
@@ -4727,7 +5031,9 @@
    "on": [
     "reference",
     "polder19"
-   ]
+   ],
+   "hand": "",
+   "placer_test": ""
   },
   {
    "check": "scalebar_matches_declared_scale",
@@ -4758,7 +5064,9 @@
    "on": [
     "reference",
     "polder19"
-   ]
+   ],
+   "hand": "",
+   "placer_test": ""
   },
   {
    "check": "scatter_respects_swept_clearings",
@@ -4806,7 +5114,9 @@
    "on": [
     "reference",
     "polder19"
-   ]
+   ],
+   "hand": "",
+   "placer_test": ""
   },
   {
    "check": "scrub_clear_of_urban_fabric",
@@ -4835,7 +5145,9 @@
    "on": [
     "reference",
     "polder19"
-   ]
+   ],
+   "hand": "",
+   "placer_test": ""
   },
   {
    "check": "settlement_declares_a_land_fall",
@@ -4865,7 +5177,9 @@
    "on": [
     "reference",
     "polder19"
-   ]
+   ],
+   "hand": "",
+   "placer_test": ""
   },
   {
    "check": "settlement_dwellings_watered",
@@ -4907,7 +5221,9 @@
    "on": [
     "reference",
     "polder19"
-   ]
+   ],
+   "hand": "",
+   "placer_test": ""
   },
   {
    "check": "settlement_has_wells",
@@ -4949,7 +5265,9 @@
    "on": [
     "reference",
     "polder19"
-   ]
+   ],
+   "hand": "",
+   "placer_test": ""
   },
   {
    "check": "settlement_records_cluster_seeding",
@@ -4977,7 +5295,9 @@
    "on": [
     "reference",
     "polder19"
-   ]
+   ],
+   "hand": "",
+   "placer_test": ""
   },
   {
    "check": "shrine_avenue_fronts_the_hall",
@@ -4996,7 +5316,9 @@
    "fixtures": {},
    "verdict": "NO-SCRIPTED-EXECUTOR",
    "why": "no scripted map exercises it (a legacy-tier check: town / city / capital / village hand-authored maps only); no measured verdict is possible - the GM's choice at acceptance",
-   "on": []
+   "on": [],
+   "hand": "",
+   "placer_test": ""
   },
   {
    "check": "shrine_clear_of_grove_trees",
@@ -5024,7 +5346,9 @@
    "on": [
     "reference",
     "polder19"
-   ]
+   ],
+   "hand": "",
+   "placer_test": ""
   },
   {
    "check": "shrine_halls_clear_of_lanes",
@@ -5054,7 +5378,9 @@
    "on": [
     "reference",
     "polder19"
-   ]
+   ],
+   "hand": "",
+   "placer_test": ""
   },
   {
    "check": "shrine_on_hill_summit",
@@ -5069,7 +5395,9 @@
    "fixtures": {},
    "verdict": "NO-SCRIPTED-EXECUTOR",
    "why": "no scripted map exercises it (a legacy-tier check: town / city / capital / village hand-authored maps only); no measured verdict is possible - the GM's choice at acceptance",
-   "on": []
+   "on": [],
+   "hand": "",
+   "placer_test": ""
   },
   {
    "check": "sluice_gates_on_water",
@@ -5103,7 +5431,9 @@
    "on": [
     "reference",
     "polder19"
-   ]
+   ],
+   "hand": "",
+   "placer_test": ""
   },
   {
    "check": "stream_end_anchored",
@@ -5134,7 +5464,9 @@
    "fixtures": {},
    "verdict": "NO-SCRIPTED-EXECUTOR",
    "why": "no scripted map exercises it (a legacy-tier check: town / city / capital / village hand-authored maps only); no measured verdict is possible - the GM's choice at acceptance",
-   "on": []
+   "on": [],
+   "hand": "",
+   "placer_test": ""
   },
   {
    "check": "stream_source_anchored",
@@ -5165,7 +5497,9 @@
    "fixtures": {},
    "verdict": "NO-SCRIPTED-EXECUTOR",
    "why": "no scripted map exercises it (a legacy-tier check: town / city / capital / village hand-authored maps only); no measured verdict is possible - the GM's choice at acceptance",
-   "on": []
+   "on": [],
+   "hand": "",
+   "placer_test": ""
   },
   {
    "check": "streams_avoid_fields",
@@ -5212,7 +5546,9 @@
    "on": [
     "reference",
     "polder19"
-   ]
+   ],
+   "hand": "",
+   "placer_test": ""
   },
   {
    "check": "streets_have_buildings",
@@ -5291,7 +5627,9 @@
    "fixtures": {},
    "verdict": "NO-SCRIPTED-EXECUTOR",
    "why": "no scripted map exercises it (a legacy-tier check: town / city / capital / village hand-authored maps only); no measured verdict is possible - the GM's choice at acceptance",
-   "on": []
+   "on": [],
+   "hand": "",
+   "placer_test": ""
   },
   {
    "check": "structures_clear_of_dike",
@@ -5331,7 +5669,9 @@
    "why": "an input changes after its placer: reference: placed at windbreak, last changed at finish, polder19: placed at windbreak, last changed at finish",
    "on": [
     "polder19"
-   ]
+   ],
+   "hand": "",
+   "placer_test": ""
   },
   {
    "check": "structures_clear_of_trees",
@@ -5366,7 +5706,9 @@
    "on": [
     "reference",
     "polder19"
-   ]
+   ],
+   "hand": "",
+   "placer_test": ""
   },
   {
    "check": "tanning_yards_on_water",
@@ -5400,7 +5742,9 @@
    "on": [
     "reference",
     "polder19"
-   ]
+   ],
+   "hand": "",
+   "placer_test": ""
   },
   {
    "check": "temple_torii_face_the_street",
@@ -5417,7 +5761,9 @@
    "fixtures": {},
    "verdict": "NO-SCRIPTED-EXECUTOR",
    "why": "no scripted map exercises it (a legacy-tier check: town / city / capital / village hand-authored maps only); no measured verdict is possible - the GM's choice at acceptance",
-   "on": []
+   "on": [],
+   "hand": "",
+   "placer_test": ""
   },
   {
    "check": "theater_stage_inside_wall",
@@ -5430,7 +5776,9 @@
    "fixtures": {},
    "verdict": "NO-SCRIPTED-EXECUTOR",
    "why": "no scripted map exercises it (a legacy-tier check: town / city / capital / village hand-authored maps only); no measured verdict is possible - the GM's choice at acceptance",
-   "on": []
+   "on": [],
+   "hand": "",
+   "placer_test": ""
   },
   {
    "check": "title_clear_of_features",
@@ -5462,7 +5810,9 @@
    "on": [
     "reference",
     "polder19"
-   ]
+   ],
+   "hand": "",
+   "placer_test": ""
   },
   {
    "check": "title_has_placard",
@@ -5493,7 +5843,9 @@
    "on": [
     "reference",
     "polder19"
-   ]
+   ],
+   "hand": "",
+   "placer_test": ""
   },
   {
    "check": "torii_avenue_meets_the_hall",
@@ -5512,7 +5864,9 @@
    },
    "verdict": "NO-SCRIPTED-EXECUTOR",
    "why": "no scripted map exercises it (a legacy-tier check: town / city / capital / village hand-authored maps only); no measured verdict is possible - the GM's choice at acceptance",
-   "on": []
+   "on": [],
+   "hand": "",
+   "placer_test": ""
   },
   {
    "check": "torii_avenue_pitch_capped",
@@ -5533,7 +5887,9 @@
    },
    "verdict": "NO-SCRIPTED-EXECUTOR",
    "why": "no scripted map exercises it (a legacy-tier check: town / city / capital / village hand-authored maps only); no measured verdict is possible - the GM's choice at acceptance",
-   "on": []
+   "on": [],
+   "hand": "",
+   "placer_test": ""
   },
   {
    "check": "torii_clear_of_fields",
@@ -5551,7 +5907,9 @@
    },
    "verdict": "NO-SCRIPTED-EXECUTOR",
    "why": "no scripted map exercises it (a legacy-tier check: town / city / capital / village hand-authored maps only); no measured verdict is possible - the GM's choice at acceptance",
-   "on": []
+   "on": [],
+   "hand": "",
+   "placer_test": ""
   },
   {
    "check": "torii_clear_of_grove_trees",
@@ -5579,7 +5937,9 @@
    "on": [
     "reference",
     "polder19"
-   ]
+   ],
+   "hand": "",
+   "placer_test": ""
   },
   {
    "check": "torii_clear_of_halls_towers_ring",
@@ -5624,7 +5984,9 @@
    "on": [
     "reference",
     "polder19"
-   ]
+   ],
+   "hand": "",
+   "placer_test": ""
   },
   {
    "check": "torii_clear_of_shrine",
@@ -5642,7 +6004,9 @@
    "fixtures": {},
    "verdict": "NO-SCRIPTED-EXECUTOR",
    "why": "no scripted map exercises it (a legacy-tier check: town / city / capital / village hand-authored maps only); no measured verdict is possible - the GM's choice at acceptance",
-   "on": []
+   "on": [],
+   "hand": "",
+   "placer_test": ""
   },
   {
    "check": "torii_clear_of_walls",
@@ -5668,7 +6032,9 @@
    "on": [
     "reference",
     "polder19"
-   ]
+   ],
+   "hand": "",
+   "placer_test": ""
   },
   {
    "check": "torii_count_canonical",
@@ -5689,7 +6055,9 @@
    },
    "verdict": "NO-SCRIPTED-EXECUTOR",
    "why": "no scripted map exercises it (a legacy-tier check: town / city / capital / village hand-authored maps only); no measured verdict is possible - the GM's choice at acceptance",
-   "on": []
+   "on": [],
+   "hand": "",
+   "placer_test": ""
   },
   {
    "check": "torii_match_roll",
@@ -5706,7 +6074,9 @@
    "fixtures": {},
    "verdict": "NO-SCRIPTED-EXECUTOR",
    "why": "no scripted map exercises it (a legacy-tier check: town / city / capital / village hand-authored maps only); no measured verdict is possible - the GM's choice at acceptance",
-   "on": []
+   "on": [],
+   "hand": "",
+   "placer_test": ""
   },
   {
    "check": "torii_on_hill",
@@ -5721,7 +6091,9 @@
    "fixtures": {},
    "verdict": "NO-SCRIPTED-EXECUTOR",
    "why": "no scripted map exercises it (a legacy-tier check: town / city / capital / village hand-authored maps only); no measured verdict is possible - the GM's choice at acceptance",
-   "on": []
+   "on": [],
+   "hand": "",
+   "placer_test": ""
   },
   {
    "check": "torii_spread_out",
@@ -5739,7 +6111,9 @@
    "fixtures": {},
    "verdict": "NO-SCRIPTED-EXECUTOR",
    "why": "no scripted map exercises it (a legacy-tier check: town / city / capital / village hand-authored maps only); no measured verdict is possible - the GM's choice at acceptance",
-   "on": []
+   "on": [],
+   "hand": "",
+   "placer_test": ""
   },
   {
    "check": "town_has_kosatsuba",
@@ -5760,7 +6134,9 @@
    "fixtures": {},
    "verdict": "NO-SCRIPTED-EXECUTOR",
    "why": "no scripted map exercises it (a legacy-tier check: town / city / capital / village hand-authored maps only); no measured verdict is possible - the GM's choice at acceptance",
-   "on": []
+   "on": [],
+   "hand": "",
+   "placer_test": ""
   },
   {
    "check": "town_has_no_headman",
@@ -5770,7 +6146,9 @@
    "fixtures": {},
    "verdict": "NO-SCRIPTED-EXECUTOR",
    "why": "no scripted map exercises it (a legacy-tier check: town / city / capital / village hand-authored maps only); no measured verdict is possible - the GM's choice at acceptance",
-   "on": []
+   "on": [],
+   "hand": "",
+   "placer_test": ""
   },
   {
    "check": "towpath_hugs_the_bank",
@@ -5804,7 +6182,9 @@
    "on": [
     "reference",
     "polder19"
-   ]
+   ],
+   "hand": "",
+   "placer_test": ""
   },
   {
    "check": "tree_crowns_not_subsumed",
@@ -5832,7 +6212,9 @@
    "on": [
     "reference",
     "polder19"
-   ]
+   ],
+   "hand": "",
+   "placer_test": ""
   },
   {
    "check": "trees_clear_of_fengshui_ponds",
@@ -5862,7 +6244,9 @@
    "on": [
     "reference",
     "polder19"
-   ]
+   ],
+   "hand": "",
+   "placer_test": ""
   },
   {
    "check": "village_cluster_compact",
@@ -5876,7 +6260,9 @@
    },
    "verdict": "NO-SCRIPTED-EXECUTOR",
    "why": "no scripted map exercises it (a legacy-tier check: town / city / capital / village hand-authored maps only); no measured verdict is possible - the GM's choice at acceptance",
-   "on": []
+   "on": [],
+   "hand": "",
+   "placer_test": ""
   },
   {
    "check": "village_groves_visibly_stocked",
@@ -5903,7 +6289,9 @@
    "on": [
     "reference",
     "polder19"
-   ]
+   ],
+   "hand": "",
+   "placer_test": ""
   },
   {
    "check": "village_has_headman",
@@ -5913,7 +6301,9 @@
    "fixtures": {},
    "verdict": "NO-SCRIPTED-EXECUTOR",
    "why": "no scripted map exercises it (a legacy-tier check: town / city / capital / village hand-authored maps only); no measured verdict is possible - the GM's choice at acceptance",
-   "on": []
+   "on": [],
+   "hand": "",
+   "placer_test": ""
   },
   {
    "check": "village_has_kosatsuba",
@@ -5933,7 +6323,9 @@
    "fixtures": {},
    "verdict": "NO-SCRIPTED-EXECUTOR",
    "why": "no scripted map exercises it (a legacy-tier check: town / city / capital / village hand-authored maps only); no measured verdict is possible - the GM's choice at acceptance",
-   "on": []
+   "on": [],
+   "hand": "",
+   "placer_test": ""
   },
   {
    "check": "village_has_no_headman",
@@ -5943,7 +6335,9 @@
    "fixtures": {},
    "verdict": "NO-SCRIPTED-EXECUTOR",
    "why": "no scripted map exercises it (a legacy-tier check: town / city / capital / village hand-authored maps only); no measured verdict is possible - the GM's choice at acceptance",
-   "on": []
+   "on": [],
+   "hand": "",
+   "placer_test": ""
   },
   {
    "check": "village_trees_unshade_from_west",
@@ -5971,7 +6365,9 @@
    "on": [
     "reference",
     "polder19"
-   ]
+   ],
+   "hand": "KEEP - guarantee plausible, no placer test names it (the GM may cut)",
+   "placer_test": "same"
   },
   {
    "check": "village_windbreak_embraces_cluster",
@@ -6001,7 +6397,9 @@
    "on": [
     "reference",
     "polder19"
-   ]
+   ],
+   "hand": "KEEP - best-effort placer",
+   "placer_test": "same"
   },
   {
    "check": "village_windbreak_is_continuous",
@@ -6030,7 +6428,9 @@
    "on": [
     "reference",
     "polder19"
-   ]
+   ],
+   "hand": "",
+   "placer_test": ""
   },
   {
    "check": "village_windbreak_on_windward_side",
@@ -6058,7 +6458,9 @@
    "on": [
     "reference",
     "polder19"
-   ]
+   ],
+   "hand": "RETIRE",
+   "placer_test": "the belt is laid on the windward face by construction; tests/settlement windbreak tests (3)"
   },
   {
    "check": "village_windbreak_present",
@@ -6086,7 +6488,9 @@
    "on": [
     "reference",
     "polder19"
-   ]
+   ],
+   "hand": "KEEP - best-effort placer",
+   "placer_test": "the belt places the clumps it can"
   },
   {
    "check": "village_windbreak_scales_with_cluster",
@@ -6116,7 +6520,9 @@
    "on": [
     "reference",
     "polder19"
-   ]
+   ],
+   "hand": "KEEP - best-effort placer",
+   "placer_test": "same"
   },
   {
    "check": "waivers_are_documented",
@@ -6140,7 +6546,9 @@
    "on": [
     "reference",
     "polder19"
-   ]
+   ],
+   "hand": "",
+   "placer_test": ""
   },
   {
    "check": "waivers_are_live",
@@ -6167,7 +6575,9 @@
    "on": [
     "reference",
     "polder19"
-   ]
+   ],
+   "hand": "",
+   "placer_test": ""
   },
   {
    "check": "wall_hugs_the_town",
@@ -6246,7 +6656,9 @@
    "fixtures": {},
    "verdict": "NO-SCRIPTED-EXECUTOR",
    "why": "no scripted map exercises it (a legacy-tier check: town / city / capital / village hand-authored maps only); no measured verdict is possible - the GM's choice at acceptance",
-   "on": []
+   "on": [],
+   "hand": "",
+   "placer_test": ""
   },
   {
    "check": "wall_sections_irregular",
@@ -6322,7 +6734,9 @@
    "fixtures": {},
    "verdict": "NO-SCRIPTED-EXECUTOR",
    "why": "no scripted map exercises it (a legacy-tier check: town / city / capital / village hand-authored maps only); no measured verdict is possible - the GM's choice at acceptance",
-   "on": []
+   "on": [],
+   "hand": "",
+   "placer_test": ""
   },
   {
    "check": "wall_towers_evenly_spaced",
@@ -6343,7 +6757,9 @@
    },
    "verdict": "NO-SCRIPTED-EXECUTOR",
    "why": "no scripted map exercises it (a legacy-tier check: town / city / capital / village hand-authored maps only); no measured verdict is possible - the GM's choice at acceptance",
-   "on": []
+   "on": [],
+   "hand": "",
+   "placer_test": ""
   },
   {
    "check": "walled_exterior_cemetery_larger",
@@ -6361,7 +6777,9 @@
    },
    "verdict": "NO-SCRIPTED-EXECUTOR",
    "why": "no scripted map exercises it (a legacy-tier check: town / city / capital / village hand-authored maps only); no measured verdict is possible - the GM's choice at acceptance",
-   "on": []
+   "on": [],
+   "hand": "",
+   "placer_test": ""
   },
   {
    "check": "walled_graveyards_inside_and_outside",
@@ -6380,7 +6798,9 @@
    },
    "verdict": "NO-SCRIPTED-EXECUTOR",
    "why": "no scripted map exercises it (a legacy-tier check: town / city / capital / village hand-authored maps only); no measured verdict is possible - the GM's choice at acceptance",
-   "on": []
+   "on": [],
+   "hand": "",
+   "placer_test": ""
   },
   {
    "check": "walled_settlement_has_drum_tower",
@@ -6428,7 +6848,9 @@
    },
    "verdict": "NO-SCRIPTED-EXECUTOR",
    "why": "no scripted map exercises it (a legacy-tier check: town / city / capital / village hand-authored maps only); no measured verdict is possible - the GM's choice at acceptance",
-   "on": []
+   "on": [],
+   "hand": "",
+   "placer_test": ""
   },
   {
    "check": "walled_structure_yields_to_ward_wall",
@@ -6448,7 +6870,9 @@
    },
    "verdict": "NO-SCRIPTED-EXECUTOR",
    "why": "no scripted map exercises it (a legacy-tier check: town / city / capital / village hand-authored maps only); no measured verdict is possible - the GM's choice at acceptance",
-   "on": []
+   "on": [],
+   "hand": "",
+   "placer_test": ""
   },
   {
    "check": "walled_town_commoners_inside_walls",
@@ -6526,7 +6950,9 @@
    "fixtures": {},
    "verdict": "NO-SCRIPTED-EXECUTOR",
    "why": "no scripted map exercises it (a legacy-tier check: town / city / capital / village hand-authored maps only); no measured verdict is possible - the GM's choice at acceptance",
-   "on": []
+   "on": [],
+   "hand": "",
+   "placer_test": ""
   },
   {
    "check": "walled_town_has_gate_market",
@@ -6604,7 +7030,9 @@
    "fixtures": {},
    "verdict": "NO-SCRIPTED-EXECUTOR",
    "why": "no scripted map exercises it (a legacy-tier check: town / city / capital / village hand-authored maps only); no measured verdict is possible - the GM's choice at acceptance",
-   "on": []
+   "on": [],
+   "hand": "",
+   "placer_test": ""
   },
   {
    "check": "walled_town_has_main_street",
@@ -6680,7 +7108,9 @@
    "fixtures": {},
    "verdict": "NO-SCRIPTED-EXECUTOR",
    "why": "no scripted map exercises it (a legacy-tier check: town / city / capital / village hand-authored maps only); no measured verdict is possible - the GM's choice at acceptance",
-   "on": []
+   "on": [],
+   "hand": "",
+   "placer_test": ""
   },
   {
    "check": "walled_town_has_wall",
@@ -6756,7 +7186,9 @@
    "fixtures": {},
    "verdict": "NO-SCRIPTED-EXECUTOR",
    "why": "no scripted map exercises it (a legacy-tier check: town / city / capital / village hand-authored maps only); no measured verdict is possible - the GM's choice at acceptance",
-   "on": []
+   "on": [],
+   "hand": "",
+   "placer_test": ""
   },
   {
    "check": "water_channels_join_not_cross",
@@ -6785,7 +7217,9 @@
    "on": [
     "reference",
     "polder19"
-   ]
+   ],
+   "hand": "",
+   "placer_test": ""
   },
   {
    "check": "water_channels_obtuse_turns",
@@ -6824,7 +7258,9 @@
    "on": [
     "reference",
     "polder19"
-   ]
+   ],
+   "hand": "",
+   "placer_test": ""
   },
   {
    "check": "watercourse_ends_reach_water",
@@ -6856,7 +7292,9 @@
    "on": [
     "reference",
     "polder19"
-   ]
+   ],
+   "hand": "",
+   "placer_test": ""
   },
   {
    "check": "watercourses_wider_than_ditches",
@@ -6885,7 +7323,9 @@
    "on": [
     "reference",
     "polder19"
-   ]
+   ],
+   "hand": "",
+   "placer_test": ""
   },
   {
    "check": "waterside_works_follow_the_bank",
@@ -6910,7 +7350,9 @@
    "on": [
     "reference",
     "polder19"
-   ]
+   ],
+   "hand": "",
+   "placer_test": ""
   },
   {
    "check": "waterways_merge_at_crossings",
@@ -6974,7 +7416,9 @@
    "on": [
     "reference",
     "polder19"
-   ]
+   ],
+   "hand": "",
+   "placer_test": ""
   },
   {
    "check": "ways_clear_of_castle_moat",
@@ -7001,7 +7445,9 @@
    "on": [
     "reference",
     "polder19"
-   ]
+   ],
+   "hand": "",
+   "placer_test": ""
   },
   {
    "check": "ways_cross_water_on_a_deck",
@@ -7038,7 +7484,9 @@
    "on": [
     "reference",
     "polder19"
-   ]
+   ],
+   "hand": "",
+   "placer_test": ""
   },
   {
    "check": "ways_not_inside_road_beds",
@@ -7067,7 +7515,9 @@
    "on": [
     "reference",
     "polder19"
-   ]
+   ],
+   "hand": "",
+   "placer_test": ""
   },
   {
    "check": "wells_among_dwellings",
@@ -7098,7 +7548,9 @@
    "on": [
     "reference",
     "polder19"
-   ]
+   ],
+   "hand": "KEEP - best-effort placer",
+   "placer_test": "the minimax placer optimizes walks; nothing refuses a lonely well"
   },
   {
    "check": "wells_clear_of_paddies",
@@ -7131,7 +7583,9 @@
    "on": [
     "reference",
     "polder19"
-   ]
+   ],
+   "hand": "RETIRE",
+   "placer_test": "shrines_wells/wells.py::place_wells drops a candidate on a paddy by construction; tests/settlement well tests"
   },
   {
    "check": "wells_clear_of_shrine_and_torii",
@@ -7147,7 +7601,9 @@
    "fixtures": {},
    "verdict": "NO-SCRIPTED-EXECUTOR",
    "why": "no scripted map exercises it (a legacy-tier check: town / city / capital / village hand-authored maps only); no measured verdict is possible - the GM's choice at acceptance",
-   "on": []
+   "on": [],
+   "hand": "",
+   "placer_test": ""
   },
   {
    "check": "wells_clear_of_trees",
@@ -7181,7 +7637,9 @@
    "on": [
     "reference",
     "polder19"
-   ]
+   ],
+   "hand": "",
+   "placer_test": ""
   },
   {
    "check": "wells_off_the_wet_toe",
@@ -7211,7 +7669,9 @@
    "on": [
     "reference",
     "polder19"
-   ]
+   ],
+   "hand": "",
+   "placer_test": ""
   },
   {
    "check": "wells_sized_to_buildings",
@@ -7243,7 +7703,9 @@
    "on": [
     "reference",
     "polder19"
-   ]
+   ],
+   "hand": "RETIRE",
+   "placer_test": "sized by construction from the map's scale"
   },
   {
    "check": "wells_sized_to_population",
@@ -7270,7 +7732,9 @@
    "on": [
     "reference",
     "polder19"
-   ]
+   ],
+   "hand": "RETIRE",
+   "placer_test": "the count is derived from the households by construction"
   },
   {
    "check": "woodland_clear_of_crops",
@@ -7300,7 +7764,9 @@
    "on": [
     "reference",
     "polder19"
-   ]
+   ],
+   "hand": "KEEP - guarantee plausible, no placer test names it (the GM may cut)",
+   "placer_test": "scatter keep-outs; 1 woodland test"
   },
   {
    "check": "woodland_clear_of_grove",
@@ -7330,7 +7796,9 @@
    "on": [
     "reference",
     "polder19"
-   ]
+   ],
+   "hand": "KEEP - guarantee plausible, no placer test names it (the GM may cut)",
+   "placer_test": "same"
   },
   {
    "check": "woodland_commons_on_dry_ground",
@@ -7360,7 +7828,9 @@
    "on": [
     "reference",
     "polder19"
-   ]
+   ],
+   "hand": "",
+   "placer_test": ""
   },
   {
    "check": "woodland_commons_visibly_stocked",
@@ -7389,7 +7859,9 @@
    "on": [
     "reference",
     "polder19"
-   ]
+   ],
+   "hand": "",
+   "placer_test": ""
   },
   {
    "check": "woodland_commons_within_the_frame",
@@ -7418,7 +7890,9 @@
    "on": [
     "reference",
     "polder19"
-   ]
+   ],
+   "hand": "",
+   "placer_test": ""
   }
  ]
 }

@@ -91,6 +91,9 @@ registry retired; the frozen registry rows and check-name fixture rewritten. Liv
 cut check as a string: the overlap policy's fire-tower rows in `common_02` (kept as writers), and the frozen
 legacy pool gens' waivers (never run).
 
-The census after the cut (`ledger-after.md`): every remaining check either keeps because a later stage
-changes an input, or is read by the generator, or is a best-effort placer's guarantee - none is a
-same-measure candidate with a placer test to its name.
+The census after the cut (`ledger-after.md`, 237 names): 126 keep on the measured test (a later stage changes
+an input, or the generator reads it); 27 are mechanical candidates that the hand pass keeps as best-effort
+placers' guarantees (captions, the board, the bridges, the belt's count, the lonely well, the ink guard) or
+that ride in a kept segment; and 84 cut-class checks are STILL EVALUATED because they ride in the 36
+writer segments and 7 mixed segments (they pass vacuously on a hamlet - a manor no hamlet has). Splitting
+those is the hand edit (5) named before, now 84 check calls across 43 segments; the ledger names each.
