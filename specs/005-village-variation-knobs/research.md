@@ -1,5 +1,8 @@
 # Phase 0 Research: Village Visual Variation Knobs
 
+**Sources (feature 138, 2026-08-28):** the historical halves of D1-D5 are re-recorded and cited in `research/archetypes.md` (the overlay values, the polder patchwork, grid vs mosaic) and `research/fields.md` (plot sizes, the catena); the knob mechanics need no source.
+
+
 China-first (Song/Ming rice south, per the skill's core principle), Japan corroborating. This file resolves the design unknowns and records the historical grounding that FR-003 requires before any knob ships. The per-knob "why" recorded here is the source that will be copied into `settlements.md` as each knob lands (project policy: every research-driven rule carries its reasoning where the rule lives).
 
 ## D1. How different did real same-region rice villages actually look?

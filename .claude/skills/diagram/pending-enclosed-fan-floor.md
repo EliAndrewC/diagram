@@ -1,5 +1,8 @@
 # PENDING: the enclosed-fan tract floor check (GM decision 2026-08-03)
 
+**Sources (feature 138, 2026-08-28):** a pending engine decision; the tract-floor finding it rests on is `research/fields.md` "Tract sizes - no settlement-class cap" (`buck-survey`, `li-bozhong-jiangnan`, `skinner-marketing`, `aric-land-history`, `mdpi-kunisaki`).
+
+
 **Why pending:** the rule is DECIDED (settlements/fields.md "Paddy TRACT size") and the check below
 is written and was unit-tested, but it fires on the three town maps (hoshizora-west 1.8 ac,
 ubame-west 2.1 ac, hirameki w1/e1/e2 1.1-2.5 ac), each of which needs a QUARTER-SCALE recomposition
