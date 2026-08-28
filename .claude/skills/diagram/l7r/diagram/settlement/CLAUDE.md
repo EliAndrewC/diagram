@@ -58,6 +58,11 @@ test in the suite patches a settlement module-level name (census in
 
 ## Coverage
 
+**Two floors since feature 145 (GM 2026-08-28).** Every module of this package that a scripted hamlet
+roll executes owes 100% - the set is DERIVED from the roll cache's records (`make hamlet-floor` lists it;
+`tools/hamlet_floor.py` carries the why) and enforced by `make done FULL=1`; a town/city-only module owes
+nothing there. The package-wide ratchet below still applies to everything.
+
 The package holds the 94% RATCHET floor from the 2026-08-16 legacy freeze (see
 `SETTLEMENT_COV_FLOOR` in the Makefile): the uncovered town/city/capital wings live mostly in
 `city/`, `castle_civic.py`, and parts of `structures/`/`civic_grounds/`, and re-cover as

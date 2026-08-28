@@ -214,3 +214,22 @@ CodeBuild PAT through `scripts/git-askpass-token.sh`; a failed push degrades to 
 gets "Agent type 'perf-audit' not found"): launch a `general-purpose` agent and tell it to read and
 follow `.claude/agents/perf-audit.md` as the `perf-audit` role. That is how feature 129's own
 confirmation was produced on 2026-08-25. The record still says `declared: perf-audit`.
+
+## The same shape, a third time: the ring itself (feature 145, 2026-08-28)
+
+The rule at the top of this file - a per-candidate scan of geometry that does not change during the
+scan - had been applied to WHICH polygons a lookup tests (the boxed prefilters, `PointGrid`,
+`FabricIndex`) and not to the polygon once chosen: `point_in_poly` and `edge_dist` still walked every
+edge of a 40-60-vertex outline for every one of ~135k scatter throws, and `FabricIndex.fouled`
+walked every edge of the field envelope (a `big` entry, tested on every lookup) for each of 1.2M
+router cells. That was 60% of the reference's hinterland stage and 70% of seed 25's whole roll. The
+answer is `RingIndex` (`settlement/_geom/indexes.py`): the ring's own edges in a grid, so inside and
+distance-to-edge touch only the edges near the point, with verdicts identical to the linear scan.
+When you find a `point_in_poly(...)` or `edge_dist(...)` inside a loop over candidates, that is the
+next one. Measured: seed 25's web 35.6 -> ~4 s; the cohort's four-seed total 128 -> 48 s.
+
+A solver has the same shape in a different coat: `fit_field` carved the whole comb nine times per
+aspect to bisect a multiplier whose first carve already predicted the answer, and kept carving at
+aspects where the fan had saturated. Predict from the curve's own shape (acres ~ k^2), probe the
+bracket's end once to detect saturation, and stop when the bracket is narrower than a plot row.
+Seed 47's field: 39 carves -> 8.
