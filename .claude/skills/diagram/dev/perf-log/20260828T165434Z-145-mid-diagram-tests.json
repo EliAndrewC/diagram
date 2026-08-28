@@ -1,0 +1,130 @@
+{
+  "clone": "diagram-tests",
+  "commit": "977121ba",
+  "cpus": 22,
+  "environment": "local",
+  "host": "laptop",
+  "hostname": "863bd4879ca8",
+  "image": "laptop",
+  "label": "145-mid",
+  "machine": "x86_64",
+  "median_seconds": 11.9,
+  "reference": {
+    "down_deg": 90,
+    "households": 15,
+    "name": "Inashiro",
+    "water_sink": "pond"
+  },
+  "rows": [
+    {
+      "asked": 15,
+      "form": "nucleated",
+      "houses": 15,
+      "seconds": 11.8,
+      "seed": 4,
+      "shape": "crescent",
+      "stages": {
+        "appurtenances": 0.23,
+        "bamboo": 0.0,
+        "crossings": 0.33,
+        "field": 4.08,
+        "frame": 0.02,
+        "hinterland": 2.59,
+        "homesteads": 0.87,
+        "notice": 0.57,
+        "seat": 0.03,
+        "sink": 0.01,
+        "track": 0.87,
+        "water_frame": 0.0,
+        "web": 2.1,
+        "windbreak": 0.12,
+        "woodland": 0.01
+      }
+    },
+    {
+      "asked": 15,
+      "form": "nucleated",
+      "houses": 15,
+      "seconds": 12.1,
+      "seed": 25,
+      "shape": "crescent",
+      "stages": {
+        "appurtenances": 0.2,
+        "bamboo": 0.0,
+        "crossings": 0.24,
+        "field": 3.66,
+        "frame": 0.0,
+        "hinterland": 2.59,
+        "homesteads": 1.64,
+        "notice": 0.68,
+        "seat": 0.04,
+        "sink": 0.01,
+        "track": 1.11,
+        "water_frame": 0.0,
+        "web": 1.82,
+        "windbreak": 0.13,
+        "woodland": 0.01
+      }
+    },
+    {
+      "asked": 15,
+      "form": "nucleated",
+      "houses": 15,
+      "seconds": 10.3,
+      "seed": 39,
+      "shape": "round",
+      "stages": {
+        "appurtenances": 0.53,
+        "bamboo": 0.0,
+        "crossings": 0.39,
+        "field": 3.1,
+        "frame": 0.0,
+        "hinterland": 2.5,
+        "homesteads": 0.53,
+        "notice": 0.55,
+        "seat": 0.04,
+        "sink": 0.01,
+        "track": 1.08,
+        "water_frame": 0.0,
+        "web": 1.3,
+        "windbreak": 0.25,
+        "woodland": 0.02
+      }
+    },
+    {
+      "asked": 15,
+      "form": "nucleated",
+      "houses": 15,
+      "seconds": 13.8,
+      "seed": 47,
+      "shape": "round",
+      "stages": {
+        "appurtenances": 0.14,
+        "bamboo": 0.0,
+        "crossings": 0.4,
+        "field": 5.97,
+        "frame": 0.0,
+        "hinterland": 3.65,
+        "homesteads": 0.82,
+        "notice": 0.62,
+        "seat": 0.04,
+        "sink": 0.0,
+        "track": 1.02,
+        "water_frame": 0.0,
+        "web": 0.91,
+        "windbreak": 0.23,
+        "woodland": 0.0
+      }
+    }
+  ],
+  "seeds": [
+    4,
+    25,
+    39,
+    47
+  ],
+  "subject": "145 WIP: fit_field probes the largest fan and drops a saturated aspect after two carves (seed 47: 39 carves -> 8)",
+  "total_seconds": 48.0,
+  "utc": "20260828T165434Z",
+  "worst_seconds": 13.8
+}

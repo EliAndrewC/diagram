@@ -36,6 +36,9 @@ check-census:   ## feature 141: which checks re-measure a placer's guarantee (th
 perf-profile:   ## tier 2 evidence: cProfile ONE stage of ONE seed   SEED=25 STAGE=web
 	$(RUN).tools.perf_profile --seed "$(SEED)" --stage "$(STAGE)"
 
+hamlet-floor:   ## the modules under the 100% hamlet-path floor (feature 145; derived from the scripted rolls' records; GUARD_EDIT_OK: a new operation)
+	$(RUN).tools.hamlet_floor --list
+
 # THE VERIFICATION STATE (feature 130, FR-012 - GUARD_EDIT_OK: adding the CodeBuild gate). Every
 # local target that proves something records it in .git/verification-state.json with the content
 # hash of the engine's Python at that moment; the dispatcher refuses a paid run unless the most
@@ -877,4 +880,11 @@ test:
 	fi; \
 	python3 -m coverage combine --append >/dev/null 2>&1 || true; \
 	python3 -m coverage report -m --omit='*/settlement/*' --fail-under=100 || { echo "COVERAGE: a module other than settlement.py is under 100% - the table above names it and its missing lines"; exit 1; }; \
-	python3 -m coverage report --include='*/settlement/*' --fail-under=$(SETTLEMENT_COV_FLOOR) || { echo "COVERAGE: settlement/ (package combined) fell below its $(SETTLEMENT_COV_FLOOR)% ratchet floor (see the comment above SETTLEMENT_COV_FLOOR in this Makefile; 'python3 -m coverage report -m --include=*/settlement/*' shows the missing lines)"; exit 1; }
+	python3 -m coverage report --include='*/settlement/*' --fail-under=$(SETTLEMENT_COV_FLOOR) || { echo "COVERAGE: settlement/ (package combined) fell below its $(SETTLEMENT_COV_FLOOR)% ratchet floor (see the comment above SETTLEMENT_COV_FLOOR in this Makefile; 'python3 -m coverage report -m --include=*/settlement/*' shows the missing lines)"; exit 1; }; \
+	python3 -m l7r.diagram.tools.hamlet_floor || exit 1
+# THE HAMLET-PATH FLOOR (GUARD_EDIT_OK: feature 145 adds a new gate phase - GM 2026-08-28: "one hundred percent code
+# coverage on the scripted procedure and anything related to it ... automatic rather than something that we just
+# remember to maintain"): every module the scripted rolls execute - derived from the roll cache's records of the
+# reference, the three gate polders and the cohort's ratchet seeds, never a hand list - must be at 100%; town/city-only
+# modules owe nothing here, and the settlement ratchet above stays. The module set: `make hamlet-floor`. The why:
+# tools/hamlet_floor.py.

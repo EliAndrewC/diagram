@@ -116,3 +116,29 @@ def report(spec: HamletSpec) -> tuple[Report, str]:
     from l7r.diagram import hamletgen as hg
 
     return obtain(f"report:{spec!r}", lambda: hg.generate(spec, out_base=None, render=False))
+
+
+def report_deps(spec: HamletSpec) -> dict[str, Any]:
+    """The DEPENDENCY RECORD of `report(spec)` - every engine function and file the roll executed - from
+    the cache when a valid record exists, else by rolling and recording now. Never bypassed: the FULL
+    run bypasses SERVING (a served roll executes nothing the coverage floors could see), but the floor
+    that derives the hamlet path from these records (feature 145, `tools/hamlet_floor.py`) needs the
+    record itself, and on a fresh clone or CodeBuild there is none until something rolls."""
+    from l7r.diagram import hamletgen as hg
+
+    subject = f"report:{spec!r}"
+    entry = _entry(subject)
+    meta_path, payload_path = os.path.join(entry, "meta.json"), os.path.join(entry, "payload.pickle")
+    try:
+        meta = json.loads(Path(meta_path).read_text(encoding="utf-8"))
+        if meta.get("subject") == subject and gencache.key_for(subject.encode(), meta.get("deps")) == meta.get("key"):
+            deps: dict[str, Any] = meta["deps"]
+            return deps
+    except OSError, ValueError, KeyError:
+        pass
+    holder: list[Report] = []
+    fresh = gencache.record(lambda: holder.append(hg.generate(spec, out_base=None, render=False)))
+    os.makedirs(entry, exist_ok=True)
+    _place(pickle.dumps(holder[0]), payload_path)
+    _place(json.dumps({"key": gencache.key_for(subject.encode(), fresh), "deps": fresh, "subject": subject}).encode(), meta_path)
+    return fresh
