@@ -93,7 +93,18 @@
   var stage = document.getElementById("stage");
   var vb = svg.viewBox.baseVal;
   var view = { s: 1, tx: 0, ty: 0, fit: 1 };
+  // SCROLLING STOPS AT THE MAP'S EDGE (GM 2026-08-28: "We should be able to scroll to the edge of the
+  // map, but not beyond it"): along an axis where the map is larger than the viewport its edge may
+  // reach the viewport's edge and no further; where it is smaller it sits centered. Applied to every
+  // move - wheel, drag, zoom - so no path can leave the map behind.
+  function clamp() {
+    var W = stage.clientWidth, H = stage.clientHeight;
+    var mw = vb.width * view.s, mh = vb.height * view.s;
+    view.tx = mw <= W ? (W - mw) / 2 : Math.min(0, Math.max(W - mw, view.tx));
+    view.ty = mh <= H ? (H - mh) / 2 : Math.min(0, Math.max(H - mh, view.ty));
+  }
   function apply() {
+    clamp();
     svg.style.width = (vb.width * view.s) + "px";
     svg.style.height = (vb.height * view.s) + "px";
     svg.style.left = view.tx + "px";

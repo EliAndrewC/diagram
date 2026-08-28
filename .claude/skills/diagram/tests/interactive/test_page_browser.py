@@ -221,28 +221,57 @@ def test_the_map_fits_the_viewport_at_load_and_zooms_between_fit_and_the_ceiling
 
 def test_the_wheel_scrolls_and_a_drag_pans_without_opening_a_modal(synthetic: Page) -> None:
     """The wheel SCROLLS the map and never zooms (GM 2026-08-28: "I still want scrolling to scroll")."""
-    synthetic.js("() => window.l7rMap.fit()")  # at fit every synthetic feature is on screen, so the wheel lands on the stage
+    synthetic.js("() => window.l7rMap.fit()")
+    synthetic.js("() => document.querySelector('#zoom [data-z=in]').click()")  # at 2x the map overflows the viewport, so there is room to scroll
     zoom_before = synthetic.js("() => window.l7rMap.zoom()")
-    x, y = synthetic.center("farmhouse", 0)
-    synthetic.page.mouse.move(x, y)
+    ty_before = synthetic.js("() => window.l7rMap.view().ty")
+    synthetic.page.mouse.move(700, 500)
     synthetic.page.mouse.wheel(0, 120)
     synthetic.page.wait_for_timeout(30)
     assert synthetic.js("() => window.l7rMap.zoom()") == zoom_before, "the wheel does not zoom"
+    assert abs((ty_before - synthetic.js("() => window.l7rMap.view().ty")) - 120) < 2, "the wheel scrolled the map by its own travel"
+    for _ in range(3):  # scroll to the map's top-left corner (bounded), where the first farmhouse is on screen
+        synthetic.page.mouse.wheel(-2000, -2000)
+    synthetic.page.wait_for_timeout(30)
     x2, y2 = synthetic.center("farmhouse", 0)
-    assert abs(x2 - x) < 1 and abs((y - y2) - 120) < 2, "the wheel scrolled the map by its own travel"
     before = synthetic.js("() => window.l7rMap.view()")
     synthetic.page.mouse.move(x2, y2)
     synthetic.page.mouse.down()
-    synthetic.page.mouse.move(x2 + 60, y2 + 40, steps=5)
+    synthetic.page.mouse.move(x2 - 60, y2 - 40, steps=5)  # inward - outward would be clamped at the edge
     synthetic.page.mouse.up()
     synthetic.page.wait_for_timeout(50)
     after = synthetic.js("() => window.l7rMap.view()")
-    assert abs(after["tx"] - before["tx"] - 60) < 2 and abs(after["ty"] - before["ty"] - 40) < 2, "the drag panned by the pointer's travel"
+    assert abs(before["tx"] - after["tx"] - 60) < 2 and abs(before["ty"] - after["ty"] - 40) < 2, "the drag panned by the pointer's travel"
     assert not synthetic.dialog()["open"], "a drag is not a click"
-    synthetic.page.mouse.click(x2 + 60, y2 + 40)
+    synthetic.page.mouse.click(x2 - 60, y2 - 40)
     synthetic.page.wait_for_timeout(50)
     assert synthetic.dialog()["k"] == "farmhouse", "a click at the dragged-to spot still opens the modal"
     synthetic.page.keyboard.press("Escape")
+    synthetic.js("() => window.l7rMap.fitWidth()")
+
+
+def test_scrolling_stops_at_the_edge_of_the_map(synthetic: Page) -> None:
+    """The GM (2026-08-28): scroll to the edge of the map, but not beyond it."""
+    synthetic.js("() => window.l7rMap.fit()")
+    for _ in range(3):
+        synthetic.js("() => document.querySelector('#zoom [data-z=in]').click()")
+    synthetic.page.mouse.move(700, 500)
+    for _ in range(40):
+        synthetic.page.mouse.wheel(-2000, -2000)
+    synthetic.page.wait_for_timeout(50)
+    v = synthetic.js("() => window.l7rMap.view()")
+    assert v["tx"] == 0 and v["ty"] == 0, "the map's top-left corner stops at the viewport's corner"
+    for _ in range(40):
+        synthetic.page.mouse.wheel(2000, 2000)
+    synthetic.page.wait_for_timeout(50)
+    r = synthetic.js("() => { const r = document.getElementById('map').getBoundingClientRect(); return [r.right, r.bottom, innerWidth, innerHeight]; }")
+    assert abs(r[0] - r[2]) < 0.5 and abs(r[1] - r[3]) < 0.5, "the map's bottom-right corner stops at the viewport's corner"
+    synthetic.js("() => window.l7rMap.fit()")
+    synthetic.page.mouse.wheel(0, 500)
+    synthetic.page.wait_for_timeout(30)
+    assert abs(synthetic.js("() => window.l7rMap.zoom()") - 1.0) < 1e-9 and synthetic.js(
+        "() => { const r = document.getElementById('map').getBoundingClientRect(); return r.top >= -0.5 && r.bottom <= innerHeight + 0.5; }"
+    ), "at fit the whole map stays in view"
     synthetic.js("() => window.l7rMap.fitWidth()")
 
 

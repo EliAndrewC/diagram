@@ -160,6 +160,28 @@ _PAIRS: dict[tuple[str, str], str] = {
         "field ditch",
         "pond",
     ): "The ditches distribute the water; the pond stores it. One outlet leaves the pond and branches into the head race and the laterals - the smallest ditches were often counted as part of the paddy they serve.",
+    (
+        "soy",
+        "millet",
+    ): "Soybean and millet are both summer crops of the dry hem; the bean fixes its own nitrogen and was as often grown along the bunds (azemame) as in a plot of its own. Both sit on the dry hem; the crop differs.",
+    ("soy", "buckwheat"): "Soybean is a summer crop that fixes its own nitrogen; buckwheat is the short-season late crop for thin soil. Both sit on the dry hem; the crop differs.",
+    ("soy", "barley"): "Soybean is the summer crop; barley the winter grain of the same hem, sown in autumn and taken before the rice is transplanted. The crop differs, the ground is the same.",
+    ("soy", "paddy"): "A paddy is a flooded basin holding four to six inches of water for wet rice; soybean is a dry crop on the higher, well-drained hem the water cannot command.",
+    ("soy", "fallow"): "The soybean plot is in crop; a fallow patch rests out of crop for the season.",
+    ("soy", "garden"): "The dooryard garden grows the household's vegetables beside the house; the soybean plot is a field crop on the dry hem above the paddy, worked in rows.",
+    (
+        "soy",
+        "bund beans",
+    ): "The same plant in two places: a soybean PLOT is a field crop of its own on the dry hem; the bund beans are soybeans planted along the tops of the paddy bunds, taking a second crop from ground that would otherwise grow weeds.",
+    (
+        "grave island",
+        "paddy",
+    ): "The paddy is the flooded basin; the grave island is a small raised earthen mound with a few stone markers standing in it, the paddy tiling around. Graves in the wet middle are the north-China and Japanese look; in the rice south the dead went to the slope - so this one is drawn rarely, on purpose.",
+    (
+        "field rock",
+        "paddy",
+    ): "The paddy is the flooded basin; the rock is a bedrock outcrop the field could not clear, a cluster of boulders the plots wrap around - a terrace feature, absent on alluvial ground.",
+    ("grave island", "field rock"): "The grave island is made ground - a mound raised for the dead; the rock is ground that was never made - bedrock the terrace risers had to wrap around.",
 }
 
 
@@ -440,6 +462,17 @@ _DEFS: tuple[FeatureClass, ...] = (
         entry="research/fields.md - 'Where dry (hatake) crops go - the topographic catena'",
     ),
     _c(
+        key="soy",
+        name="soy",
+        covers="`dry_plots[crop=soy]` and their furrows",
+        what="A dry-field plot under soybean (daizu) grown as a field crop of its own, worked in ridged rows - drawn a soybean green against the tan and ochre grains.",
+        why="Dry crops take the higher, well-drained hem above the paddy, where the water cannot command the ground; the bean fixes its own nitrogen, which is why it also went along the bunds.",
+        label="accurate",
+        label_note="Placement on the catena is read; the crop mix per map is rolled from the seed and is a GUESS at the proportions.",
+        sources=("not recorded",),
+        entry="research/fields.md - 'Where dry (hatake) crops go - the topographic catena'",
+    ),
+    _c(
         key="fallow",
         name="fallow",
         covers="`fallow_patches`",
@@ -493,6 +526,28 @@ _DEFS: tuple[FeatureClass, ...] = (
         label_note="The kind of obstacle a flooded paddy hosts is read (corroborated in both traditions); how often one appears on a map is a calibrated liberty the entry discloses.",
         sources=("not recorded",),
         entry="research/fields.md - 'In-field features - flat flooded paddy hosts obstacles least'",
+    ),
+    _c(
+        key="field rock",
+        name="field rock",
+        covers="`field_rocks` - a bedrock outcrop inside a plot",
+        what="A cluster of gray boulders inside a field plot - a bedrock outcrop the terrace risers wrap around, too big to clear.",
+        why="Rock outcrops are a TERRACE feature, bedrock the risers wrap around, and are absent on alluvial valley, polder and delta ground; where the archetype allows one it stands off-center in its plot so it reads as a natural obstacle.",
+        label="accurate",
+        label_note="Which archetypes host an outcrop is read (corroborated); how often one appears is a calibrated liberty the entry discloses.",
+        sources=("not recorded",),
+        entry="research/fields.md - 'In-field features - flat flooded paddy hosts obstacles least'",
+    ),
+    _c(
+        key="grave island",
+        name="grave island",
+        covers="`field_graves` - the rare in-field grave mound",
+        what="A small raised earthen mound with two or three stone markers standing inside a paddy plot, the flat paddy tiling around it.",
+        why="Graves among the paddy are a north-China dry-plain signature, corroborated in Japan - NOT the rice-south default, where feng-shui puts the dead on the slope with a backing hill and a downslope water view. The GM approved both looks, so the island is drawn rarely (about three valley, terrace or ribbon maps in ten) as a deliberate departure.",
+        label="deviation",
+        label_note="A calibrated liberty, disclosed: the in-field grave is drawn where the rice-south record would put the dead on the slope, at a rate the GM approved.",
+        sources=("not recorded",),
+        entry="research/fields.md - 'In-field features - flat flooded paddy hosts obstacles least' (the CALIBRATED LIBERTY paragraph, GM 2026-07-20)",
     ),
     _c(
         key="village lane",

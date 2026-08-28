@@ -254,7 +254,7 @@ hover/click checks for the classes it contains.
   | storage shed | the lean-to shed drawn against a farmhouse (`houses[].shed`) and the detached farm sheds of the same household (`farm_sheds`) - storage either way; the GM's distinction is storage vs. animals | farmhouse; byre |
   | byre | the draft-animal sheds (`byres`) | farmhouse; storage shed; hen coop |
   | threshing yard | the work yard of each household | garden |
-  | garden | the kitchen garden of each household | threshing yard; millet; buckwheat; barley |
+  | garden | the kitchen garden of each household | threshing yard; millet; buckwheat; barley; soy |
   | privy | the household privy | manure heap |
   | woodpile | the fuel stack | - |
   | manure heap | the muck heap | privy |
@@ -269,17 +269,20 @@ hover/click checks for the classes it contains.
   | woodland commons | the woodland of the commons (`commons[role=woodland]`) | windbreak; copse |
   | scrub and rough grazing | the grazing commons (`commons[role=grazing]`) | marsh |
   | marsh | every marsh patch, whatever its role (`marshes`) - the GM: *"all of the marshland"* | scrub and rough grazing; pond |
-  | paddy | every wet plot | millet; buckwheat; barley; fallow; field pond |
+  | paddy | every wet plot | millet; buckwheat; barley; soy; fallow; field pond; field rock; grave island |
   | bund | the earthen bunds between and around the paddies | bund beans |
-  | bund beans | the soybeans on the bunds | bund |
-  | millet | dry plots under millet | buckwheat; barley; paddy; fallow; garden |
-  | buckwheat | dry plots under buckwheat | millet; barley; paddy; fallow; garden |
-  | barley | dry plots under barley | millet; buckwheat; paddy; fallow; garden |
-  | fallow | the fallow patches (when present) | paddy; millet; buckwheat; barley |
+  | bund beans | the soybeans on the bunds | bund; soy |
+  | millet | dry plots under millet | buckwheat; barley; paddy; fallow; garden; soy |
+  | buckwheat | dry plots under buckwheat | millet; barley; paddy; fallow; garden; soy |
+  | barley | dry plots under barley | millet; buckwheat; paddy; fallow; garden; soy |
+  | soy | dry plots under soybean as a field crop (`dry_plots[crop=soy]`) - added at implementation: the palette rolls four dry crops and the reference hamlet happened to draw three; cohort seeds 41-44 all draw it | millet; buckwheat; barley; paddy; fallow; garden; bund beans |
+  | fallow | the fallow patches (when present) | paddy; millet; buckwheat; barley; soy |
   | stream | the brook | field ditch; pond |
   | field ditch | the intake, head race, branches and drain (`field_ditches`, `channels`) | stream; pond |
   | pond | the tameike | stream; field ditch; marsh; field pond |
   | field pond | the small open-water pocket sunk into one low paddy (`field_ponds`) - added at implementation: the reference hamlet draws one and the table did not name it, so it is listed here for the GM to overrule by name | pond; paddy |
+  | field rock | a bedrock outcrop inside a plot (`field_rocks`) - added at implementation from cohort seed 42; the reference hamlet draws none | paddy; grave island |
+  | grave island | the rare in-field grave mound (`field_graves`) - added at implementation from cohort seed 42; a calibrated liberty the record discloses | paddy; field rock |
   | village lane | EVERY lane on the map - the web, the internal skeleton, the connector to the off-map road and the field spur - one class whether or not they meet; the text may say the connector predates the settlement | - |
   | footbridge | every plank and deck over water | - |
   | well | the wellheads | - |
@@ -317,8 +320,10 @@ hover/click checks for the classes it contains.
   across, every fixture glyph legible), for the GM to reset by name. Zoom by the `+` / `-` / `fit`
   buttons and keys ONLY; the mouse wheel SCROLLS the map and never zooms (the GM, on the first
   cut: *"I don't want scrolling to zoom - I still want scrolling to scroll"*); pan by dragging or
-  by the wheel; a drag is never a click (it opens no modal). The highlight and the modal work at
-  every zoom.
+  by the wheel; a drag is never a click (it opens no modal). Scrolling is BOUNDED by the map (the GM:
+  *"We should be able to scroll to the edge of the map, but not beyond it"*): along an axis where the
+  map is larger than the viewport its edge reaches the viewport's edge and no further; where it is
+  smaller it sits centered. The highlight and the modal work at every zoom.
 - **FR-012 (verified in a browser)**: the hover, highlight, click and modal behaviors MUST be
   proven by an automated headless-browser test in the suite (constitution VI - a page that was
   never opened has not been verified), running on the reference hamlet's page.

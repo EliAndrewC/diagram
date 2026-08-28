@@ -182,7 +182,7 @@ class FieldFeaturesMixin:
             r = rng.uniform(3.5, 6.5)
             boulders += f'<circle cx="{bx:.1f}" cy="{by:.1f}" r="{r:.1f}" fill="#9C948A" stroke="#5C544A" stroke-width="1"/>'
             boulders += f'<path d="M{bx - r * 0.5:.1f},{by - r * 0.2:.1f} q{r * 0.4:.1f},{-r * 0.5:.1f} {r:.1f},{-r * 0.1:.1f}" fill="none" stroke="#C6BEB2" stroke-width="0.8"/>'  # a lit crown
-        self.add(f'<g>{boulders}</g>')
+        self.add(f'<g>{boulders}</g>', cls="field rock")  # feature 134
         self.M.setdefault("field_rocks", []).append({"x": round(cx, 1), "y": round(cy, 1)})
 
     def _plot_grave_island(self: Settlement, plot: dict[str, Any], rng: random.Random) -> None:  # type: ignore[misc]
@@ -190,12 +190,12 @@ class FieldFeaturesMixin:
         stone markers, the flat paddy tiling around it. Recorded in M['field_graves']."""
         cx, cy, hx, hy = self._plot_center_span(plot["poly"])
         rx, ry = max(9.0, hx * 0.55), max(6.0, hy * 0.55)
-        self.add(f'<ellipse cx="{cx:.1f}" cy="{cy:.1f}" rx="{rx:.1f}" ry="{ry:.1f}" fill="#CFC6B4" stroke="#8C8470" stroke-width="1.2" opacity="0.9"/>')
+        self.add(f'<ellipse cx="{cx:.1f}" cy="{cy:.1f}" rx="{rx:.1f}" ry="{ry:.1f}" fill="#CFC6B4" stroke="#8C8470" stroke-width="1.2" opacity="0.9"/>', cls="grave island")  # feature 134
         markers = ""
         for i in range(rng.randint(2, 3)):
             mx = cx + (i - 1) * 6
             markers += f'<rect x="{mx - 1.3:.1f}" y="{cy - 7:.1f}" width="2.6" height="7" rx="1" fill="#9AA1A4" stroke="#5A584F" stroke-width="0.5"/>'
-        self.add(f'<g>{markers}</g>')
+        self.add(f'<g>{markers}</g>', cls="grave island")
         self.M.setdefault("field_graves", []).append({"x": round(cx, 1), "y": round(cy, 1)})
 
     @staticmethod

@@ -89,6 +89,12 @@ below are measured, from the run-log and the browser).
 - [x] T29 **the wheel scrolls, it does not zoom** - the GM: *"I don't want scrolling to zoom - I still want scrolling to scroll."* A wheel turn pans the map by its own travel; zoom is the buttons and keys only; the browser test asserts the wheel leaves the zoom unchanged and moves the map by the delta
       research: rendering
 
+- [x] T30 **scrolling stops at the map's edge** - the GM: *"We should be able to scroll to the edge of the map, but not beyond it."* Every move (wheel, drag, zoom) is clamped: a map larger than the viewport on an axis stops with its edge at the viewport's edge; a smaller one is centered. Browser test: forty wheel turns each way land the corners exactly on the viewport's corners
+      research: rendering
+
+- [x] T31 **the unlock sweep arrived with main's own unlock (133 T92, merged 2026-08-28)**: the unlocked gate ran the 4-seed cohort and `all_ink_is_ruled_on` fired on seeds 41-44 - exactly the FR-009 sweep the spec owed at unlock. Rolled each seed and read its census: `soy` (the palette's fourth dry crop, never rolled on Inashiro), and on seed 42 the in-field `field rock` and `grave island` glyphs. Three classes added to the registry, the spec table and the test, from the existing `research/fields.md` entries (the grave island labeled DEVIATION - the entry's own calibrated liberty); seeds 41-44 re-rolled: 0 unclassed, 0 unregistered. The unlocked gate: 3,854 passed in 20:51 before the fix, 1 failure (this)
+      research: rendering
+
 ## Owed at unlock (spec SC-008, FR-009; plan "Performance bookends")
 
 Not tasks of this feature - the spec (round-1 fidelity finding 5) holds the feature to the

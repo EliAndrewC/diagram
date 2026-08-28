@@ -16,3 +16,5 @@ The spec records how each slip was read, and the fidelity review checks that rea
 > Thanks. something else that I think I want is a feature that allows us to zoom in and out. I would like to be able to zoom in significantly more than we are zoomed in now, though I'm not sure precisely how much. And then I would like to be able to zoom out, I suppose, to a degree that the entire settlement is visible all within the browser viewport.
 
 > Thanks, that's great.  That said: I don't want scrolling to zoom - I still want scrolling to scroll.
+
+> I would like to set a bound on how much we can scroll so that we don't scroll off the edge of the map. We should be able to scroll to the edge of the map, but not beyond it. Thanks.
