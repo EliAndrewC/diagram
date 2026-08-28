@@ -274,6 +274,8 @@ def test_every_scripted_comb_fan_records_its_design_cell() -> None:
         with open(path) as fh:
             M = json.load(fh)
         irrigated = {c.get("field") for c in M.get("field_ditches") or []}
+        if M.get("meta", {}).get("field_archetype") in ("polder_grid", "mulberry_dike_fishpond"):
+            continue  # a POLDER is not a comb fan: build_polder carves no design cell and the floor is a comb rule (the check's own note: a field with no `cell` is a terrace, ribbon or polder); Kuwabata was the first scripted polder in the pool (feature 134)
         for fld in M.get("fields") or []:
             if fld.get("kind") != "paddy" or fld.get("name") not in irrigated:
                 continue
