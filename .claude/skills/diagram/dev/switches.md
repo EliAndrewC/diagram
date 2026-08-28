@@ -177,6 +177,18 @@ not to roll - declined by the GM); deselect only the non-reference rollers (no m
 apart, and the reference map is already rolled by `make reference` in the same gate - declined as a
 distinction without a saving).
 
+## The lock's cost, since feature 136
+
+An idle session (feature 136) runs `make idle-tests` - the whole `done` gate - after its staggered
+wait, so a regression is named on the night it is made instead of at the unlock. **The lock is
+RELAXED for that run, and only for it** (the GM, 2026-08-28: "relax that lock when the tests are
+being run in the idle context"): `switches.read` reports the scope unlocked solely when the calling
+process descends from the idle timer that wrote `.git/idle-tests.running` (`switches.idle_context`
+checks the pid is a live ancestor whose command line is the timer). No variable, flag, file or
+environment a session sets produces that context, so the doctrine above - no override - still holds
+for everything a session runs. The idle gate records as `idle-done`, never as a `done` a push could
+reuse.
+
 ## When the lock is released
 
 `make scope-unlock` prints the reminder: nothing swept the pool, ran the map-rolling tests or took a
