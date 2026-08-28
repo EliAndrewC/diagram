@@ -98,6 +98,9 @@ below are measured, from the run-log and the browser).
 - [x] T32 **no drag-to-pan, a normal pointer** - the GM: *"I don't need to click and drag so we can get rid of that and make the mouse a normal pointer."* The drag handlers and the grab / hand cursors are gone; the browser test asserts a drag moves nothing, the cursor is `auto` over the stage and over a feature, and a click still opens the modal
       research: rendering
 
+- [x] T33 **performance (the GM's raster-layer question)** - measured first: 292,186 elements, 97% the scrub and marsh blades; scroll 200-270 ms/frame, scrub highlight 553 ms. Built `merge_primitives` (same-styled line/circle runs -> one `<path>`, HTML only): 11,682 elements, load 2.4 -> 0.4 s, scrub highlight 39 ms, 162 px of 1.4M differ at 4x. Raster layers priced and declined (gigabytes per class at 16x, or a blurred zoom) - research.md R5, spec FR-014; the hybrid offered as the next step
+      research: rendering
+
 ## Owed at unlock (spec SC-008, FR-009; plan "Performance bookends")
 
 Not tasks of this feature - the spec (round-1 fidelity finding 5) holds the feature to the

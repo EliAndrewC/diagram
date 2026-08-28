@@ -132,3 +132,38 @@ is a finding for the record, listed in `tasks.md` at the closing bookend).
 | ~~no pan/zoom of our own~~ SUPERSEDED 2026-08-28: the GM asked for zoom (spec FR-013) - fit as the minimum and initial view, 16x fit as the maximum (the GM's own words leave the maximum open; recorded as a judgment) | - | - | the GM |
 | one explanation per class, not per map | a map with an unusual instance of a class gets the general text | per-map text - not asked for; the request asks that the text reference the distinction between kinds, which the sibling paragraphs do | the spec (Assumptions), confirmed by the fidelity review |
 | the hamlet vocabulary only | a town's page would report its unclassed ink through FR-009 until the town vocabulary is written | writing every tier's vocabulary now - the GM said "start with the reference hamlet" | the spec |
+
+## R5. Performance: where the elements are, and why the fix is a merge, not raster layers (GM 2026-08-28)
+
+**The GM's question**: every blade and crown is its own element - *"many, many thousands"* - and
+the GM proposed prerendered raster layers per class (a normal and a highlighted image each, swapped
+on hover, every layer the full map's size with transparency), asking whether that was the best way.
+
+**Measured first (headless Chromium, 1400 x 1000, the real Inashiro page)**: 292,186 elements, of
+which the scrub scatter is 225,163 and the marsh 57,089 - 97% in two classes, one `<line>` per
+blade. Costs: load 2.4 s; a scroll frame 200-270 ms until Chromium's tiles were cached, then 32 ms;
+a zoom step 100-300 ms; highlighting the scrub 553 ms (a restyle of 225k elements) and the marsh
+566 ms.
+
+**Raster layers, priced**: 37 classes x 2 images. A layer must be drawn at the resolution the zoom
+reaches or the zoom blurs: at 16x the map is ~46,000 px square - 8 GB of RGBA per layer; at 4x
+~540 MB per layer decoded, x 74 layers. At any size that fits in memory the 16x zoom the GM asked
+for two hours earlier turns to mush, and hit-testing (which class is under the pointer) has to be
+rebuilt from per-layer alpha reads instead of the SVG's own. The idea is the right one for a game
+engine drawing at one scale; it fights the zoom here.
+
+**What was built instead**: `page.merge_primitives` - a run of consecutive `<line>`s (or
+`<circle>`s) whose attributes other than their coordinates are identical becomes ONE `<path>` with
+those attributes and a `d` of M/L (or arc) segments. Same ink, one element per run instead of
+thousands, vector, crisp at 16x, hit-tested by the class group as before. HTML target only - the
+SVG and PNG never see it (FR-010).
+
+**Measured after**: 11,682 elements (25x fewer); page 16.4 -> 8.9 MB; load 0.4 s; first scroll
+frame 58 ms then 29; zoom step 46-113 ms; the scrub highlight 39 ms (14x). Look: 162 of 1,400,000
+pixels differ by more than 8/255 at 4x zoom - anti-aliasing at path joins, nothing a reader sees.
+
+**Left on the table, if the GM wants more**: the remaining ~11k elements are the crowns of the
+woods and belt (different radii and two-tone conifers, so a run breaks every crown) and the plots;
+a next step would merge circles with differing radii into one path (arcs carry their own radius)
+and, only if still needed, rasterize the two ground-cover classes at the PNG's resolution as a
+background with the vector glyphs above - the hybrid form of the GM's proposal.
