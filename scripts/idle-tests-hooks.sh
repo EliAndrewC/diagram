@@ -69,7 +69,7 @@ configure() {
     IDLE_HOME_DIR=${IDLE_HOME:-${HOME:-/home/agent}/.claude}; SESSIONS_DIR=${IDLE_SESSIONS_DIR:-${HOME:-/home/agent}/.claude/sessions}
     WAIT_S_OVERRIDE=${IDLE_WAIT_S:-}; DEFER_S_OVERRIDE=${IDLE_DEFER_S:-}; BUSY_CMD=${IDLE_BUSY_CMD:-}
   else
-    if env | grep -q '^IDLE_[A-Z]' ; then echo "idle-tests: IDLE_* seams are honored only inside a fixture (IDLE_FIXTURE=1, outside $OWN_ROOT) - ignored" >&2; fi
+    if env | grep '^IDLE_[A-Z]' | grep -qv '^IDLE_ROOT=' ; then echo "idle-tests: IDLE_* seams are honored only inside a fixture (IDLE_FIXTURE=1, outside $OWN_ROOT) - ignored" >&2; fi  # GUARD_EDIT_OK: IDLE_ROOT is the arming's own handoff to its timer, not a seam - the first real arming (2026-08-28 03:29Z) logged a false warning; feature 136
     TICK=$DEF_TICK; WAIT_MIN=$DEF_WAIT_MIN; WAIT_SPAN=$DEF_WAIT_SPAN; SUSPEND_S=$DEF_SUSPEND_S; DEFER_MIN=$DEF_DEFER_MIN; DEFER_SPAN=$DEF_DEFER_SPAN
     GIVE_UP_S=$DEF_GIVE_UP_S; CLOCK="date +%s"; RUN=""; IDLE_HOME_DIR=${HOME:-/home/agent}/.claude; SESSIONS_DIR=${HOME:-/home/agent}/.claude/sessions
     WAIT_S_OVERRIDE=""; DEFER_S_OVERRIDE=""; BUSY_CMD=""
