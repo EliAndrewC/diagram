@@ -297,7 +297,7 @@ the obvious cut, and the guard block travels with whichever file keeps the packa
 this same lineage, so it edits the same two shared files: `settlement/CLAUDE.md`'s "look here when"
 table (its own row) and, if it adds one, `tests/settlement/CLAUDE.md`'s subsystem list. Each feature
 edits its own row of a markdown table, so a textual merge resolves cleanly; the sync-in before each
-stop-work ritual is what keeps the window small. Both features also share `SETTLEMENT_COV_FLOOR`,
+stop-work procedure is what keeps the window small. Both features also share `SETTLEMENT_COV_FLOOR`,
 which neither may lower.
 
 **What NOT to do** (CLAUDE.md, concurrent sessions): do not coordinate by messaging the peer session.

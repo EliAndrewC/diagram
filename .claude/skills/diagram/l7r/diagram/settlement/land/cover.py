@@ -196,6 +196,9 @@ class GroundCoverMixin:
                 # every parcel. The draws stay inside this function's `random.setstate` scope, so the
                 # extra throws cannot ripple into anything drawn later.
                 _wd_target = int(area / (540 * bs * bs))
+                _wd_seated = self._crowns_near(
+                    min(q[0] for q in poly), min(q[1] for q in poly), max(q[0] for q in poly), max(q[1] for q in poly)
+                )  # no crown under another's, this wood's or a neighbor's (GM 2026-08-28; woods._crown_seat_clear)
                 for _ in range(_wd_target * 6):
                     if _wd_crowns >= _wd_target:
                         break
@@ -208,6 +211,9 @@ class GroundCoverMixin:
                     # independently): these used to be SVG ink only, so no manifest check could
                     # count a stand's canopy - which is how a zero-crown "woodland" parcel could
                     # ship green. Same flat [x, y, r] run the homestead groves use.
+                    if not self._crown_seat_clear(cx, cy, r, _wd_seated):
+                        continue  # centered under an already-seated crown: an understory stem, not canopy
+                    _wd_seated.append((cx, cy, r))
                     self.M["tree_crowns"] += [round(cx, 1), round(cy, 1), round(r, 1)]
                     _wd_crowns += 1
                     g.append(f'<ellipse cx="{cx:.1f}" cy="{cy + 2 * bs:.1f}" rx="{r:.1f}" ry="{r * 0.72:.1f}" fill="#59703E" fill-opacity="0.30"/>')  # soft ground shadow

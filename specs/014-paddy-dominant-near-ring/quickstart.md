@@ -47,4 +47,4 @@ If a picture still reads dry-grain-heavy, fix the MAP (more near-ring paddy wher
 - SC-006: villages/hamlets unchanged.
 - SC-007: corrected "why" + recorded rejection present in `settlements.md` and by the check.
 
-Then the stop-work ritual: commit; `bash scripts/sync-with-main.sh done`.
+Then the stop-work procedure: commit; `bash scripts/sync-with-main.sh done`.

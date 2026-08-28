@@ -63,7 +63,7 @@ with both axes CLOSED and `error` set (FR-004). `remote.state in {"on","off"}`,
   conditional on `TARGET` in `ci-check`; on `SCOPE=all` in `maps`.
 - `REMOTE_OK = @python3 -m l7r.diagram.switches check remote $@` first in `ci-check`, `ci-image`.
   `ci-merge` does NOT get it - the dispatcher handles remote-off itself because it must still
-  produce the LOCAL-GATED verdict for the ritual (FR-008).
+  produce the LOCAL-GATED verdict for the procedure (FR-008).
 
 ### The dispatcher (FR-006..009)
 
@@ -77,7 +77,7 @@ with both axes CLOSED and `error` set (FR-004). `remote.state in {"on","off"}`,
   SKIP-VERIFIED. `ci-status --route` prints `GATED-LOCAL` when the route is GATED and remote is off.
 - `dispatch.status_text` passes the switch through. No AWS call can occur: the client is None.
 
-### The ritual (FR-008, FR-009)
+### The procedure (FR-008, FR-009)
 
 `sync-with-main.sh`: accept `GATED-LOCAL` from `ci-status ROUTE=1`; print
 `route GATED (local - remote off)`; take the GATED branch (ci-merge -> verdict -> push on

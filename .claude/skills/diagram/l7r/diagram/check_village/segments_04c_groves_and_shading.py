@@ -1300,3 +1300,53 @@ def _seg_0618_502__bamboo_stands_clear_of_paddies(
             f"bamboo stand(s) at {bamboo_stands_clear_of_paddies_bad[:3]} stand in a flooded paddy - a take-yabu grows on the dry margin; the seat scan keeps 12 ft off the outline (hamletgen.bamboo_seats)",
         )
     return _kept(locals(), ("bamboo_stands_clear_of_paddies_bad",))
+
+
+# WHY: <one paragraph - what the research found, the decision it drove, the departure taken>.
+# Declare EVERY input the body reads as a keyword parameter (an undeclared one is a NameError at
+# gate time, not at import), and keep the `_kept` tuple a LITERAL of the names this body binds.
+
+
+def _seg_0618_503__tree_crowns_not_subsumed(
+    *,
+    M: Any = _UNBOUND,
+    check: Any = _UNBOUND,
+    meta: Any = _UNBOUND,
+    scale: Any = _UNBOUND,
+    tree_crowns_not_subsumed_bad: Any = _UNBOUND,
+) -> dict[str, Any]:
+    """Gate segment 0618_503 (tree_crowns_not_subsumed) - no canopy tree's center lies under another
+    crown. Edge overlap is allowed (neighboring canopies interlace); a crown centered inside another
+    is a tree drawn wholly under a neighbor - a suppressed understory stem, which the canopy layer
+    this map draws does not show.
+
+    WHY (GM 2026-08-28, on the interactive map's highlight): *"practically every tree might have a
+    smaller tree underneath it ... I don't see a single tree which is entirely subsumed within the
+    branch structure of a different tree"*. Measured before the rule on Inashiro: 298 of 1,728
+    crowns wholly inside another (17%). The rule at the emitters is `woods._crown_seat_clear`; this
+    reads M['tree_crowns'] (flat x, y, r runs) with a grid so 2,000 crowns cost a few ms. Tolerance
+    0.15 px: the record rounds to 0.1. research/vegetation.md 'Forest density and crown size'."""
+    _tc = M.get("tree_crowns") or []
+    _crowns = [(_tc[i], _tc[i + 1], _tc[i + 2]) for i in range(0, len(_tc) - 2, 3)]
+    if _crowns:
+        _cell = 2.0 * max(c[2] for c in _crowns) + 1.0
+        _grid: dict[tuple[int, int], list[int]] = {}
+        for _i, (_x, _y, _r) in enumerate(_crowns):
+            _grid.setdefault((int(_x // _cell), int(_y // _cell)), []).append(_i)
+        tree_crowns_not_subsumed_bad = []
+        for _i, (_x, _y, _r) in enumerate(_crowns):
+            _gx, _gy = int(_x // _cell), int(_y // _cell)
+            for _dx in (-1, 0, 1):
+                for _dy in (-1, 0, 1):
+                    for _j in _grid.get((_gx + _dx, _gy + _dy), ()):
+                        if _j <= _i:
+                            continue
+                        _x2, _y2, _r2 = _crowns[_j]
+                        if (_x - _x2) ** 2 + (_y - _y2) ** 2 < (max(_r, _r2) - 0.15) ** 2:
+                            tree_crowns_not_subsumed_bad.append((round(_x), round(_y)))
+        check(
+            "tree_crowns_not_subsumed",
+            not tree_crowns_not_subsumed_bad,
+            f"{len(tree_crowns_not_subsumed_bad)} tree crown(s) centered under another crown, e.g. {tree_crowns_not_subsumed_bad[:3]} - a canopy tree never stands wholly under a neighbor (woods._crown_seat_clear); the stand or clump that drew it did not see the crowns already on the map",
+        )
+    return _kept(locals(), ("tree_crowns_not_subsumed_bad",))

@@ -78,6 +78,13 @@ layer at its scaled size, which at 16x on Inashiro is a ~28,000 px square textur
 SVG's width and height instead paints it per visible tile like any document; pan and zoom stay
 composites of the viewport.
 
+**The highlight strokes only what is drawn with a stroke (2026-08-28).** The GM still saw "doubled
+trees" after the crown rule: under the first highlight rule every element took the gold stroke, so
+a conifer's centered dark apex disc and a coppice crown's off-center sun disc - decorative parts
+of ONE tree glyph, fill-only - each acquired a ring and read as a smaller tree inside the crown.
+The rule is now `[stroke]:not([stroke="none"])`: a fill-only mark simply turns gold and vanishes
+into its crown. (The crown rule itself stands: 298 genuinely subsumed crowns were real and are gone.)
+
 ## R3. Where each explanation comes from - the opening bookend (constitution XII, FR-008)
 
 This feature draws nothing; it states. Each class explanation is written FROM the entry below and

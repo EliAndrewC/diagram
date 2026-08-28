@@ -513,7 +513,7 @@ The four options as they stood, kept so a later reader knows what was weighed:
   it should be prunable without anyone losing the findings, precisely because the findings live here.
 
 **Costs accepted with the choice, stated so nobody rediscovers them as surprises**: authentication for
-a second remote; another clone or fetch inside the container; another step in the stop-work ritual; and
+a second remote; another clone or fetch inside the container; another step in the stop-work procedure; and
 a new way for two repositories to drift. The drift risk is the one to design against - the derived
 evidence in this repository must be readable on its own, so that a missing or stale profile archive
 degrades the audit trail rather than breaking it.

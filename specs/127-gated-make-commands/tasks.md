@@ -71,7 +71,7 @@ habitual in the first place.
 - [x] T025 [US2] Add `outcome` (`permitted`/`cancelled`/`refused`) to `dev/bypass-log.jsonl` writes per [data-model.md](data-model.md) - without it a session that backed out is indistinguishable from one that never tried (FR-012)
 - [x] T026 [US2] Add a make target for render-sync, refusal-only and NOT subject to reference-first ordering (FR-009, FR-009a - CLAUDE.md:282 forbids a second generator run in main's tree)
 - [x] T027 [US2] Change `scripts/sync-with-main.sh` line 138 from the bare `python3 -m l7r.diagram.pipeline.render_cache` to the T026 make target
-- [x] T028 [US2] **STAYS QUIET**: run the full stop-work ritual and confirm render-sync completes with no refusal and no prompt (SC-004, [quickstart.md](quickstart.md) §7)
+- [x] T028 [US2] **STAYS QUIET**: run the full stop-work procedure and confirm render-sync completes with no refusal and no prompt (SC-004, [quickstart.md](quickstart.md) §7)
 - [x] T029 [US2] Apply FR-014 - every expensive target verifies the reference settlement first and refuses to proceed when it fails - and confirm the render-sync target is exempt per FR-009a
 
 ## Phase 5: User Story 3 - Weakening a guard is visible and breaks the build (P3)

@@ -141,7 +141,7 @@ BASHRC_BLOCK
 echo "    installed - takes effect in NEW shells (or run: source ~/.bashrc)"
 
 # ---- main's repo-local git config ---------------------------------------------------------------
-# A fresh checkout has neither setting and the ritual's first push is refused for both (measured
+# A fresh checkout has neither setting and the procedure's first push is refused for both (measured
 # 2026-08-25, the split repository's first session). scripts/sync-with-main.sh also establishes
 # them on every run; doing it here too means a brand-new container is ready before any clone exists.
 echo "==> main's repo-local git config"

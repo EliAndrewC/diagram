@@ -84,7 +84,7 @@ specs/014-paddy-dominant-near-ring/
 └── pool/provincial-cities/nagahara.gen.py
 ```
 
-**Structure Decision**: single self-contained change inside the `/diagram` skill; no webapp impact. Work in the session clone; full-pool render + gate via `make done` before the stop-work ritual.
+**Structure Decision**: single self-contained change inside the `/diagram` skill; no webapp impact. Work in the session clone; full-pool render + gate via `make done` before the stop-work procedure.
 
 ## Design details (feeds /speckit-tasks)
 
@@ -109,7 +109,7 @@ Clone the `near_ring_cultivated_fraction` 25px band + `committed` mask. Tally **
 5. **Remaining maps**: Tango, Nagahara (cities - moat/wall/farmhouse constraints), Hoshizora (thin but paddy-led).
 6. **Full-pool sweep (MANDATORY)**: `make done`; villages/hamlets unchanged; fix any downstream disturbance.
 7. **Principle XII closing gate**: review all four PNGs - paddy dominates, grain on margins, gardens by town, no waterless paddy, thin map paddy-led.
-8. **Stop-work ritual**: commit; `sync-with-main.sh done`.
+8. **Stop-work procedure**: commit; `sync-with-main.sh done`.
 
 ## Complexity Tracking
 

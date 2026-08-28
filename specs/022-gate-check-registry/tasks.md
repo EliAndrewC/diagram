@@ -77,7 +77,7 @@ All engine paths relative to `.claude/skills/diagram/`; feature paths relative t
 
 ## Final Phase: Polish & Cross-Cutting
 
-- [x] T010 Run the pre-gate ritual then `make done` (backgrounded, log tailed): ruff format/check,
+- [x] T010 Run the pre-gate procedure then `make done` (backgrounded, log tailed): ruff format/check,
       mypy, whole test files touched (`test_checks.py test_regressions.py test_villages.py`), then
       the full gate ONCE. Verify: gate green including 100% coverage.
 - [x] T011 Re-measure and append the ledger block: `python3 timings.py --note "regression replay

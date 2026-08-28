@@ -579,7 +579,7 @@ class FinishMixin:
         # goes into the manifest FIRST so the gate can read it (`all_ink_is_ruled_on`, FR-009).
         self.M["ink_classes"], self.M["unclassed_ink"] = ink_census(body, body_cls)
         self.M["unregistered_classes"] = unregistered_classes(self.M["ink_classes"])
-        write_html(basepath + '.html', body, body_cls, name=str(self.M["meta"].get("name") or os.path.basename(basepath)), meta=self.M["meta"])
+        write_html(basepath + '.html', body, body_cls, name=str(self.M["meta"].get("name") or os.path.basename(basepath)), meta=self.M["meta"], manifest=self.M)
         with open(basepath + '.json', 'w') as f:
             json.dump(self.M, f)
         # Two env knobs make iteration cheap without changing committed output (see SKILL.md

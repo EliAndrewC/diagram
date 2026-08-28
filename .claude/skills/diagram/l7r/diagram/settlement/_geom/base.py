@@ -36,10 +36,10 @@ def _is_main_tree(p: str) -> bool:
 def _assert_not_main_tree(path: str | None = None) -> None:
     """Refuse to run from the MAIN checkout (the tree that holds .clones/). Main is the integration point,
     never a workspace (CLAUDE.md "Session clones"): a generator/gate/test writing into main's
-    tree races with another session's mid-ritual push-to-checkout (the 2026-07-20 double-push
+    tree races with another session's mid-procedure push-to-checkout (the 2026-07-20 double-push
     post-mortem). Import-time enforcement here covers every Mode B gen, check_village.py, and
     the pytest suites, since they all import this module. GM_ASSISTANT_ALLOW_MAIN=1 overrides
-    the guard: the GM sets it for a deliberate main-tree run, and the stop-work ritual's
+    the guard: the GM sets it for a deliberate main-tree run, and the stop-work procedure's
     render-sync sets it (scoped to its one locked regen-in-main); a session never sets it by
     hand for anything else."""
     # MAIN IS THE TREE THAT CONTAINS `.clones/` (feature 131, 2026-08-25). A session clone or a

@@ -209,11 +209,50 @@ def _asset(name: str) -> str:
         return fh.read()
 
 
-def render_page(strings: Sequence[str], tags: Sequence[ClsTag], name: str, meta: dict[str, Any] | None = None) -> str:
+#: Which recorded footprints become HIT REGIONS, by class: (manifest key, role -> class). A scatter
+#: feature is mostly empty ground between its marks - the GM (2026-08-28): "moving my mouse over the
+#: scrublands is surprisingly difficult because I need my mouse to be over one of these specific trees
+#: or little lines" - so the page adds an invisible polygon of the feature's recorded footprint that
+#: takes the pointer wherever nothing drawn above it does.
+HIT_REGIONS: tuple[tuple[str, dict[str, str]], ...] = (
+    ("commons", {"grazing": "scrub and rough grazing", "commons": "scrub and rough grazing", "woodland": "woodland commons"}),
+    ("marshes", {"*": "marsh"}),
+    ("village_groves", {"windbreak": "windbreak", "copse": "copse"}),
+    ("bamboo_stands", {"homestead": "homestead bamboo", "*": "shared bamboo grove"}),
+)
+
+
+def hit_regions(manifest: dict[str, Any] | None, present: set[str]) -> str:
+    """Invisible footprint polygons for the scatter classes present on this map. `fill="none"` with
+    `pointer-events: fill` hit-tests the area without painting it, and the highlight rules skip a
+    fill-less, stroke-less element, so a region never lights up itself. Placed at the BOTTOM of the
+    stack (just above the sheet): everything drawn later - a house, a lane, a paddy - is above it and
+    keeps the pointer; only bare ground inside the footprint falls through to the class."""
+    if not manifest:
+        return ""
+    out: list[str] = []
+    for key, roles in HIT_REGIONS:
+        for rec in manifest.get(key) or []:
+            if not isinstance(rec, dict) or not rec.get("poly"):
+                continue
+            cls = roles.get(str(rec.get("role", "*")), roles.get("*"))
+            if cls is None or cls not in present:
+                continue
+            pts = " ".join(f"{float(x):.1f},{float(y):.1f}" for x, y in rec["poly"])
+            out.append(_open(cls) + f'<polygon class="hit" points="{pts}" fill="none" style="pointer-events: fill"/></g>')
+    return "".join(out)
+
+
+def render_page(strings: Sequence[str], tags: Sequence[ClsTag], name: str, meta: dict[str, Any] | None = None, manifest: dict[str, Any] | None = None) -> str:
     """The whole page as one string - `write_html` writes it; tests read it."""
-    svg = "\n".join(wrap(s, t) for s, t in zip(strings, tags, strict=True))
+    present = present_classes(tags)
+    wrapped = [wrap(s, t) for s, t in zip(strings, tags, strict=True)]
+    # the hit regions go right after the SHEET (the first "-"-tagged string), under everything drawn
+    sheet = next((i for i, t in enumerate(tags) if t == NOT_HIGHLIGHTED), 0)
+    wrapped.insert(sheet + 1, hit_regions(manifest, present))
+    svg = "\n".join(wrapped)
     svg = svg.replace("<svg ", '<svg id="map" ', 1)
-    data = explanations(present_classes(tags))
+    data = explanations(present)
     blob = json.dumps(data, ensure_ascii=False).replace("</", "<\\/")
     title = html.escape(name)
     # NO HEADER ON THE PAGE (GM 2026-08-28: "we can get rid of the entire header") - the map already
@@ -239,6 +278,6 @@ def render_page(strings: Sequence[str], tags: Sequence[ClsTag], name: str, meta:
     )
 
 
-def write_html(path: str, strings: Sequence[str], tags: Sequence[ClsTag], name: str, meta: dict[str, Any] | None = None) -> None:
+def write_html(path: str, strings: Sequence[str], tags: Sequence[ClsTag], name: str, meta: dict[str, Any] | None = None, manifest: dict[str, Any] | None = None) -> None:
     with open(path, "w", encoding="utf-8") as fh:
-        fh.write(render_page(strings, tags, name, meta))
+        fh.write(render_page(strings, tags, name, meta, manifest))

@@ -59,7 +59,7 @@ targeted clean; only registry.py exceeds ~1,000 lines and says why.
 
 - [X] T017 Verify coverage config still reaches the package (diagram pyproject: if coverage/mypy config names `check_village.py`, update to the package) and run the diagram skill's FULL gate in the background: `make done > <scratchpad>/gate024.log 2>&1` with nothing appended after; act on the completion notification and tail the log before believing green
 - [X] T018 Record the "why" trail: mark research.md dispositions final (R9 waterfields exemption, R10 settlement.py deferral), update `specs/024-human-scale-files/` with actual file names chosen by the census, and mark all tasks checked
-- [X] T019 Stop-work ritual: final commit in the clone, then `scripts/sync-with-main.sh done` from inside it
+- [X] T019 Stop-work procedure: final commit in the clone, then `scripts/sync-with-main.sh done` from inside it
 
 ## Dependencies
 

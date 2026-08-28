@@ -1,16 +1,17 @@
 #!/usr/bin/env bash
 # sync-with-main.sh - keep a session clone and main in sync: pull main's tip into the clone
 # (sync-in), push the clone's committed work back (push), and refresh main's diagram renders
-# (render-sync). Encodes the stop-work ritual from CLAUDE.md as a script. (Renamed from ritual.sh,
-# GM 2026-07-21: name the purpose, not the culture.)
+# (render-sync). Encodes the stop-work procedure from CLAUDE.md as a script. (Renamed from its original name,
+# GM 2026-07-21: name the purpose, not the culture. "Procedure", never "ritual", GM 2026-08-28: a
+# ritual has religious meaning and the setting has real ones; this is a real-world process.)
 #
 # WHY (GM 2026-07-21): "if you're having to just remember to run the right commands in the right
 # order then that seems error prone" - it was. Incidents that shaped this script, all from sessions
-# hand-typing the ritual: a push raced another session because the flock was skipped; a render
+# hand-typing the procedure: a push raced another session because the flock was skipped; a render
 # rsync ran from the wrong cwd and copied nothing; a cp with 2>/dev/null swallowed its own failure
 # and the GM saw stale maps; a Mode A generator run from the skill dir wrote its cwd-relative
 # outputs to the wrong path, which then got committed. The DOCTRINE lives in CLAUDE.md ("Session
-# clones" / "Stop-work ritual") - this script is that doctrine made mechanical; if the two ever
+# clones" / "Stop-work procedure") - this script is that doctrine made mechanical; if the two ever
 # disagree, CLAUDE.md wins and this script has a bug.
 #
 # RENDER MODEL (GM 2026-07-22): renders no longer flow clone -> main by copy. render-sync
@@ -41,22 +42,22 @@ ROOT=$(git rev-parse --show-toplevel 2>/dev/null) || die "not inside a git check
 if [ -n "${CLONE_MAIN:-}" ]; then MAIN=$CLONE_MAIN
 elif [ "$(basename "$(dirname "$ROOT")")" = ".clones" ]; then MAIN=$(dirname "$(dirname "$ROOT")")
 else MAIN=$ROOT; fi
-LOCK=$MAIN/.clones/.ritual.lock   # keep this NAME: it is the cross-session lock convention in CLAUDE.md - renaming it would stop serializing against other sessions
+LOCK=$MAIN/.clones/.sync.lock   # keep this NAME: it is the cross-session lock convention in CLAUDE.md - renaming it stops serializing against sessions still on the old name (renamed ONCE, 2026-08-28, from the "ritual" name the GM retired; a clone syncs in every turn, so the window was minutes)
 POOL=.claude/skills/diagram/pool
 SKILL_DIR=.claude/skills/diagram
 RENDER_CACHE_MOD=l7r.diagram.pipeline.render_cache   # run as a MODULE from SKILL_DIR: it imports its package siblings relatively
 
 case "$ROOT" in
-  "$MAIN") die "this is MAIN, not a clone - the ritual runs from a session clone (CLAUDE.md 'Session clones')" ;;
+  "$MAIN") die "this is MAIN, not a clone - the procedure runs from a session clone (CLAUDE.md 'Session clones')" ;;
   "$MAIN"/.clones/*) ;;
   *) die "$ROOT is not a session clone under $MAIN/.clones/" ;;
 esac
 # The repository's OWN NAME is a FORBIDDEN clone name (GM 2026-07-22, generalized 2026-08-25): it is
 # the repository, not a session, and being the old unnamed-default is what let two sessions collide
-# in one working tree. 'gm-assistant' stays forbidden everywhere for the same reason. The ritual
+# in one working tree. 'gm-assistant' stays forbidden everywhere for the same reason. The procedure
 # refuses to run from such a clone so no work can be pushed out of it - rename the session distinctly.
 case "$(basename "$ROOT")" in
-  gm-assistant|"$(basename "$MAIN")") die "'.clones/$(basename "$ROOT")' is a FORBIDDEN clone name - it is the repository, not a session. Ask the GM to /rename this session to something distinct, then run the ritual from .clones/<that-name>. (CLAUDE.md 'Session clones')" ;;
+  gm-assistant|"$(basename "$MAIN")") die "'.clones/$(basename "$ROOT")' is a FORBIDDEN clone name - it is the repository, not a session. Ask the GM to /rename this session to something distinct, then run the procedure from .clones/<that-name>. (CLAUDE.md 'Session clones')" ;;
 esac
 cd "$ROOT"
 
@@ -65,7 +66,7 @@ cd "$ROOT"
 # lacked - the split repository's first push was refused for both: main needs
 # receive.denyCurrentBranch=updateInstead (the push-to-checkout this script relies on), and a fresh
 # clone copies no user.name/user.email, so its first commit fails with "Author identity unknown".
-# Neither is a write to main's TREE, so the ritual may set them; the identity is derived from the
+# Neither is a write to main's TREE, so the procedure may set them; the identity is derived from the
 # author of main's tip commit, which in this project is always the GM. Idempotent, and it says what
 # it set so a surprising identity is visible rather than silent.
 ensure_git_config() {
@@ -125,7 +126,7 @@ ensure_github_origin() {
 ensure_github_origin
 
 # THE MIRROR IS REFRESHED FROM GITHUB MAIN, UNDER THE LOCK, FAST-FORWARD ONLY (FR-030). It is
-# nobody's workspace, so a refusal here means someone committed in main by hand - the ritual stops
+# nobody's workspace, so a refusal here means someone committed in main by hand - the procedure stops
 # and says so rather than merging in the mirror. Render-sync follows, cache-short-circuited.
 mirror_refresh() {
   flock "$LOCK" git -C "$MAIN" pull -q --ff-only origin main \
@@ -163,7 +164,7 @@ clone_index_refresh() {
 }
 
 push_cmd() {
-  [ -z "$(git status --porcelain)" ] || die "uncommitted changes - commit first (the ritual never writes your commit for you)"
+  [ -z "$(git status --porcelain)" ] || die "uncommitted changes - commit first (the procedure never writes your commit for you)"
   # DUPLICATE-DEF GUARD (GM 2026-07-24): a cross-session merge gave test_settlement.py two
   # _city() helpers - the later silently shadowed the earlier and broke a seeded test - and ruff
   # F811 cannot see this class (pyflakes only flags UNUSED redefinitions; an early helper is
@@ -173,7 +174,7 @@ push_cmd() {
   python3 "$ROOT/scripts/check-duplicate-defs.py" --selftest >/dev/null || die "check-duplicate-defs selftest failed - the guard itself is broken; fix scripts/check-duplicate-defs.py before pushing"
   python3 "$ROOT/scripts/check-duplicate-defs.py" "$ROOT" || die "duplicate top-level definitions (above) - a later def silently shadows the earlier; fix before pushing"
   # GREEN-GATE GUARD (constitution Principle XIII, GM 2026-08-17). The principle's enforcement
-  # clause says this ritual "does not run to completion on a red or regressed state" - which was
+  # clause says this procedure "does not run to completion on a red or regressed state" - which was
   # ASPIRATIONAL until now: nothing here knew whether a gate had run, so compliance was a session
   # remembering to comply, the very shape the principle abolishes. Python-only and per-area, so a
   # docs-only push still skips the gate (CLAUDE.md) and a webapp change is not blocked by the
@@ -311,7 +312,7 @@ render_sync() {
   # post-push regen is therefore cheap - only maps whose source actually changed re-run, so a push
   # that touched no map's inputs costs ~0.3s while still self-healing every render from tip.
   #
-  # Under the ritual LOCK for the whole regen: main is a push-to-checkout target (updateInstead),
+  # Under the procedure LOCK for the whole regen: main is a push-to-checkout target (updateInstead),
   # so another session's push mid-regen would rewrite the engine under us and mix tips across maps.
   # GM_ASSISTANT_ALLOW_MAIN=1 stands the engine's main-tree guard down for this ONE sanctioned
   # regen-in-main. No tip-guard is needed - regenerating whatever tip main currently holds is

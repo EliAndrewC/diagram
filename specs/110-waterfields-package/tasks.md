@@ -59,7 +59,7 @@ at the package.
 ## Phase 6: Polish & close-out
 
 - [x] T017 Final full verification: `make done` backgrounded from the clone (docs-only diffs since the last green gate may skip it per the docs-only rule - re-run only if T015/T016 landed after any code change); confirm every SC: manifests identical (SC-001), consumer diff scope (SC-002), file/function sizes (SC-003), index maps concerns to files (SC-004), suite + gate + corpus green (SC-005)
-- [x] T018 Mark tasks complete, update this file's checkboxes, commit; stop-work ritual: `scripts/sync-with-main.sh done` from the clone (locked pull+push + render-sync); report the outcome to the GM with concrete verify steps
+- [x] T018 Mark tasks complete, update this file's checkboxes, commit; stop-work procedure: `scripts/sync-with-main.sh done` from the clone (locked pull+push + render-sync); report the outcome to the GM with concrete verify steps
 
 ## Dependencies
 

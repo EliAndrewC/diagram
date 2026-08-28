@@ -54,7 +54,7 @@ if re.search(POS + r"git\b[^\n;|&]*(?:--force(?:-with-lease)?)[^\n;|&]*\bpush\b"
 # records, the review records and the perf bookends are keyed by the commits and content that were
 # actually tested, and a rewrite silently throws a paid verification away.
 # `git rebase` the SUBCOMMAND, and `--rebase` the FLAG - never `--no-rebase`, which is what the
-# pull in the ritual says (the first cut blocked it: the eighth mention-versus-invocation slip in
+# pull in the procedure says (the first cut blocked it: the eighth mention-versus-invocation slip in
 # this repo). NO APOSTROPHES IN THESE COMMENTS: this Python sits inside a single-quoted bash string.
 # (GUARD_EDIT_OK: the pattern refuses only the rewrite, not the flag that forbids it)
 if re.search(POS + r"git\b(?:\s+-C\s+\S+|\s+-\S+)*\s+rebase\b", c) or re.search(POS + r"git\b[^\n;|&]*\bpull\b[^\n;|&]*(?<![\w-])--rebase\b", c):

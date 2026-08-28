@@ -27,7 +27,7 @@ staggered 60-120 minutes of AWAKE time (a suspend restarts it), takes the host-w
   `IDLE_CLOCK` (a command printing the wall clock), `IDLE_RUN` (the command run in place of the
   idle-tests target), `IDLE_HOME` (the lock's directory). Only the test companion sets them, and
   the hook refuses them outside a fixture (the same seams-only-in-a-fixture rule
-  `test-sync-with-main.sh` proves for the ritual).
+  `test-sync-with-main.sh` proves for the procedure).
 - Never in main: the script exits at once when the cwd's git root is `/diagram` (or has no
   `.clones/` parent) - the same test `clone-sync-hooks.sh` makes.
 

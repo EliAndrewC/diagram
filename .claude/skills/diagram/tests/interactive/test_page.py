@@ -15,7 +15,7 @@ import re
 import pytest
 
 from l7r.diagram.interactive.classes import CLASSES
-from l7r.diagram.interactive.page import explanations, ink_census, merge_primitives, present_classes, render_page, unregistered_classes, wrap
+from l7r.diagram.interactive.page import explanations, hit_regions, ink_census, merge_primitives, present_classes, render_page, unregistered_classes, wrap
 from l7r.diagram.interactive.tags import Split
 
 RECT = '<rect x="1" y="2" width="3" height="4" fill="#abc" stroke="#123"/>'
@@ -155,3 +155,25 @@ def test_the_merge_applies_to_classed_strings_only() -> None:
     lines = '<line x1="1" y1="2" x2="3" y2="4"/><line x1="5" y1="6" x2="7" y2="8"/>'
     assert "<path" in wrap(lines, "marsh")
     assert wrap(lines, None) == lines and wrap(lines, "-") == lines
+
+
+def test_hit_regions_come_from_the_recorded_footprints_of_present_classes_only() -> None:
+    m = {
+        "commons": [{"role": "grazing", "poly": [[0, 0], [10, 0], [10, 10]]}, {"role": "woodland", "poly": [[20, 0], [30, 0], [30, 10]]}],
+        "bamboo_stands": [{"role": "homestead", "poly": [[0, 20], [5, 20], [5, 25]]}],
+        "marshes": [{"role": "toe", "poly": [[40, 40], [50, 40], [50, 50]]}],
+    }
+    out = hit_regions(m, {"scrub and rough grazing", "homestead bamboo", "marsh"})
+    assert out.count("<polygon") == 3 and 'data-k="woodland commons"' not in out, "the absent class gets no region"
+    assert 'fill="none" style="pointer-events: fill"' in out and 'class="hit"' in out
+    assert hit_regions(None, {"marsh"}) == "" and hit_regions({"marshes": [{"role": "toe"}]}, {"marsh"}) == ""
+
+
+def test_the_page_puts_the_hit_regions_right_above_the_sheet() -> None:
+    strings = ['<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10">', '<rect width="10" height="10" fill="#EFE3C2"/>', RECT, "</svg>"]
+    tags = [None, "-", "marsh", None]
+    page = render_page(strings, tags, "T", {"ftpx": 1.0}, {"marshes": [{"role": "toe", "poly": [[0, 0], [9, 0], [9, 9]]}]})
+    sheet = page.index('fill="#EFE3C2"')
+    hit = page.index('class="hit"')
+    ink = page.index(RECT)
+    assert sheet < hit < ink

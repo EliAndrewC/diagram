@@ -118,5 +118,5 @@ proved nothing about the cache, and a run where every trial moved nothing means 
 - **A miss REBUILDS the entry against whatever the sources say at that moment**, so if you revert an
   edit and re-run, the next run is a legitimate miss. Re-establish `CACHED` before testing any cache
   question.
-- **Leave `pool/` clean**: check `git status --short pool` before the stop-work ritual. If a stray
+- **Leave `pool/` clean**: check `git status --short pool` before the stop-work procedure. If a stray
   local run dirtied it, restore the bytes (`git checkout -- pool`) rather than re-running a generator.
