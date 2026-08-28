@@ -241,6 +241,19 @@ def generate(spec: HamletSpec, out_base: str | None = None, render: bool = True)
     return Report(plan=plan, failures=failures, path=out_base, fail_lines=lines, attempt=kept_attempt, rerolled_after=after[: kept_attempt - 1])
 
 
+def cohort_specs(count: int, first_seed: int = 1, households: int | None = None) -> list[HamletSpec]:
+    """The specs a cohort rolls: consecutive seeds, zero-padded names, the household ladder unless a count
+    is given. Public so the gate can roll a cohort member through the roll cache one at a time (feature 135)."""
+    return [
+        HamletSpec(
+            name=f"Cohort-{first_seed + i:02d}",
+            seed=first_seed + i,
+            households=households if households is not None else 10 + ((first_seed + i) * 7) % 11,
+        )
+        for i in range(count)
+    ]
+
+
 def cohort(count: int, first_seed: int = 1, households: int | None = None, jobs: int | None = None) -> list[Report]:
     """Roll `count` hamlets from consecutive seeds and gate every one.
 
@@ -262,14 +275,7 @@ def cohort(count: int, first_seed: int = 1, households: int | None = None, jobs:
     `jobs=1` forces the serial path, which is what the in-gate callers want: a pytest worker that
     spawns its own pool is competing with the other 21 (the "CPU inflates 2-4x inside the gate"
     entry in the skill CLAUDE.md)."""
-    specs = [
-        HamletSpec(
-            name=f"Cohort-{first_seed + i:02d}",
-            seed=first_seed + i,
-            households=households if households is not None else 10 + ((first_seed + i) * 7) % 11,
-        )
-        for i in range(count)
-    ]
+    specs = cohort_specs(count, first_seed, households)
     jobs = default_jobs(count) if jobs is None else max(1, jobs)
     if jobs == 1:
         return [generate(spec, out_base=None) for spec in specs]

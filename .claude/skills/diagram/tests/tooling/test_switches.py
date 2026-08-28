@@ -112,6 +112,23 @@ def test_quick_collects_only_the_quick_tree(fixture_skill: Path, monkeypatch: py
     without an ignore, or an ignore dropped, fails here rather than silently re-collecting a thousand items."""
     monkeypatch.delenv("CODEBUILD_BUILD_ID", raising=False)
     cmd = make(fixture_skill, "-n", "quick").stdout
-    for tree in ("tests/tier_town", "tests/tier_city", "tests/gate"):
+    for tree in ("tests/tier_town", "tests/tier_city", "tests/gate", "tests/full"):
         assert f"--ignore={tree}" in cmd, f"{tree} would be collected by make quick"
     assert "--ignore=tests/tooling" in make(fixture_skill, "-n", "quick").stdout or True  # present only while the tooling is unchanged - not pinned
+
+
+@pytest.mark.tooling
+def test_the_directory_decides_when_a_test_runs(fixture_skill: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    """THE THREE TREES (feature 135, GM 2026-08-27: "the directory into which we added is the thing that inherently
+    determines When and under what circumstance that test is run"). Quick collects `tests/` minus the tier, gate,
+    tooling and full trees; the gate collects everything but `tests/full`; the full run collects everything and says
+    so with `L7R_TESTS_FULL=1`. Pinned on the commands make would run, one per target, so a tree added without its
+    ignore - or an ignore dropped - fails here by name."""
+    monkeypatch.delenv("CODEBUILD_BUILD_ID", raising=False)
+    quick = make(fixture_skill, "-n", "quick").stdout
+    gate = make(fixture_skill, "-n", "test").stdout
+    full = make(fixture_skill, "-n", "test-full").stdout
+    assert "--ignore=tests/gate" in quick and "--ignore=tests/full" in quick
+    assert "--ignore=tests/full" in gate and "--ignore=tests/gate" not in gate and "L7R_TESTS_FULL=1" not in gate
+    assert "--ignore=tests/full" not in full and "--ignore=tests/gate" not in full and "L7R_TESTS_FULL=1" in full and "COV_FLOORS=1" in full
+    assert "--deselect" not in gate and "--deselect" not in full  # no file list can go stale again (research R6)

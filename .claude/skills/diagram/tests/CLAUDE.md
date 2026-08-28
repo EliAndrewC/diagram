@@ -1,5 +1,29 @@
 # `tests/` - the diagram skill's test bed
 
+## THE DIRECTORY DECIDES WHEN A TEST RUNS (feature 135, GM 2026-08-27)
+
+*"if we have one directory for our quick tests, one directory for our done tests, and one directory
+for our lengthy AWS tests, then that is probably both a useful efficiency improvement and also
+something that helps from an organizational perspective because when we are deciding whether a new
+test should be added, then the directory into which we added is the thing that inherently determines
+When and under what circumstance that test is run"*. So there is no deselect list and no file roster:
+the Makefile collects TREES, and where you put a test is the whole decision.
+
+| tree | runs under | put a test here when |
+|---|---|---|
+| `tests/` (with its mirrored packages) | `make quick`, `make done`, the full run | it is a UNIT form: milliseconds to ~0.5 s, no map rolled, no tooling run. The quick suite's 60 s budget is the bar |
+| `tests/gate/` | `make done` and the full run - never quick | it earns MERGE time: a real roll of one representative spec (served from the roll cache while nothing it executes changed - `l7r/diagram/pipeline/rollcache.py`), the bad-map corpus, a proof of tooling |
+| `tests/full/` | `make done FULL=1` and the AWS check only | it is a SWEEP or a CARRIER: every pool map, every seed of a cohort, a determinism test that must roll twice for real, a fixture replayed only to carry coverage, a real-map cache round trip. The full run is where the coverage floors are enforced and where no cache serves a roll |
+| `tests/tooling/` | the gate and the full run; quick ONLY when the tooling changed since the last green gate; skipped at the gate too while it is unchanged (never in FULL) | it RUNS the make/ci/pipeline tooling (make in a fixture, git repos in tmp, coverage subprocesses) |
+| `tests/tier_town/`, `tests/tier_city/` | the gate and the full run; quick once the scope lock moves to that tier | it is relevant to that tier only |
+
+The marker on a test (`rolls_map`, `tooling`, `tiers`) is the exact filter within a tree; the tree
+is the collection scope. `make quick` announces how many `rolls_map` tests it did not run; the gate
+short-circuits when nothing it exercises changed. A test with a quick FORM and a full FORM
+(`tests/_scope.py`: `subset`, `full_or`) stays in one tree and reads `EXHAUSTIVE`; a test whose
+whole value is the sweep goes to `tests/full/`. The audit that drew these lines, with the cost of every
+test the gate ran on 2026-08-27, is `specs/135-done-test-audit/research.md`.
+
 **The layout mirrors the source.** A test for `settlement/houses.py` is in
 `tests/settlement/test_houses.py`; a test for `pipeline/gencache.py` is in
 `tests/pipeline/test_gencache.py`. That is the whole navigation rule - if you know which module you
@@ -19,11 +43,12 @@ changed, you know which directory to open.
 
 At the root of `tests/` sit the suites that are not about one module:
 
-- **`test_villages.py`** - the pool sweep. Generates every LIVE map (via `gencache.gate_obtain`, so
-  a verified hit skips generation but never checking) and runs the full check battery on each.
-  Also enforces the per-gen CPU budgets in `GEN_TIME_BUDGETS`.
-- **`test_regressions.py`** - replays the frozen negative-fixture corpus in `pool/regressions/`,
-  demanding each manifest still fires the checks it was frozen to fire.
+- **`test_villages.py`** - the pool's cheap ratchets (every gen classified, the CPU-budget guard) and the
+  helpers; the sweep itself - every LIVE map through `gencache.gate_obtain` and the full check battery,
+  plus the `GEN_TIME_BUDGETS` - is `full/test_villages.py`.
+- **`gate/test_regressions.py`** - replays the frozen negative-fixture corpus in `pool/regressions/`,
+  demanding each manifest still fires the checks it was frozen to fire; its coverage carriers are
+  `full/test_coverage_carriers.py`.
 - **`test_compound.py` / `test_citybudget.py`** - the two engine modules that are still single
   top-level files.
 

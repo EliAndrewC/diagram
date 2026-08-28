@@ -161,3 +161,23 @@ def test_the_worktree_key_ignores_the_makefile_and_docs(repo: Path) -> None:
     (repo / S / "pool").mkdir(exist_ok=True)
     (repo / S / "pool" / "x.json").write_text("{}\n")
     assert engine_key_worktree(repo) != k0, "a pool manifest is"
+
+
+def test_coverage_scope_names_only_the_changed_engine_modules(repo: Path, monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]) -> None:
+    """Feature 135, second pass: the gate traces the packages the diff touched - committed since the merge
+    base, modified in the worktree, or untracked - and nothing else; tests and docs never count."""
+    from l7r.diagram.ci.__main__ import main
+    from l7r.diagram.ci.delta import coverage_scope
+
+    assert coverage_scope(repo) == []
+    monkeypatch.chdir(repo)
+    assert main(["cov-scope"]) == 0 and capsys.readouterr().out.strip() == "-o addopts= --no-cov"
+    commit(repo, S + "l7r/diagram/settlement/land.py", "y = 1\n")  # committed since the merge base
+    (repo / S / "l7r" / "diagram" / "m.py").write_text("x = 9\n", encoding="utf-8")  # modified, uncommitted
+    (repo / S / "l7r" / "diagram" / "sitegen" / "__init__.py").parent.mkdir(parents=True)
+    (repo / S / "l7r" / "diagram" / "sitegen" / "__init__.py").write_text("", encoding="utf-8")  # untracked package
+    commit(repo, S + "tests/settlement/test_land.py", "def test_x(): pass\n")
+    commit(repo, "docs/x.md", "prose\n")
+    assert coverage_scope(repo) == ["l7r/diagram", "l7r/diagram/settlement", "l7r/diagram/sitegen"]
+    assert main(["cov-scope"]) == 0
+    assert capsys.readouterr().out.strip() == "-o addopts=--cov=l7r/diagram --cov=l7r/diagram/settlement --cov=l7r/diagram/sitegen"

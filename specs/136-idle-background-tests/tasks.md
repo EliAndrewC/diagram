@@ -17,3 +17,12 @@ constitution v2.12.0; all are `research: procedure` (no physical claim is made).
 
 Landed 2026-08-28T03:04Z (the gate run detached, its verdict in `dev/run-log/`). The first real arming on this
 session is observed on the next turn after the landing and appended here by that turn.
+
+**The first real arming, observed (2026-08-28 03:45Z, this session `reference-testing`):** the Stop
+after the landing turn armed the timer at 03:29:07Z (`.git/idle-tests.log` written; stagger 71 min
+for this name); the next prompt at 03:45Z disarmed it - `.git/idle-tests.json` gone, no run, no
+record, as designed (the wait had 55 minutes to go). One defect found by the observation: the
+arming hands `IDLE_ROOT` to its own timer and the seam detector counted it as a seam, so the log
+carried a false "seams ignored" warning - fixed in the same commit (IDLE_ROOT excluded from the
+detection; no seam was honored). D8's measurement: the Stop fired at the end of an assistant turn
+that was genuinely finished (the landing report), not mid-task - the arming point holds.

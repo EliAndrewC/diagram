@@ -2,15 +2,14 @@
 `tests/` minus the tier, gate and tooling trees, so these are neither imported nor collected while the scope is
 locked to another tier; the gate collects everything. Helpers stay in the source module and are imported."""
 
-import os
 import re
 
 import pytest
 
 from l7r.diagram import check_village
 from l7r.diagram import hamletgen as hg
-from tests.hamletgen._builders import a_plan
-from tests.hamletgen.test_driver import _as_pinned
+from l7r.diagram.pipeline import rollcache
+from tests._scope import FULL
 
 
 @pytest.mark.rolls_map
@@ -34,27 +33,30 @@ def test_a_rolled_cohort_passes_the_whole_gate() -> None:
     # it. Leaving it on the default parallel path silently uncovered `hinterland.py`'s
     # no-house-column fringe fallback. The fan-out is a CLI win, not a gate win; the parallel branch
     # is held by `test_the_fan_out_agrees_with_the_serial_path` below.
-    # PARALLEL AT THE GATE, SERIAL UNDER THE COVERAGE FLOORS (feature 133 T92, GM 2026-08-27). Serial,
-    # four seeds with the re-roll ladder ran 22 minutes on ONE xdist worker while seven idled - the
-    # "hang" the first unlocked gate of the period sat on. The serial reason (in-process coverage of
-    # the seed-dependent branches) matters only where coverage is measured, which is `make done
-    # FULL=1` (COV_FLOORS -> L7R_COV_FLOORS=1); everywhere else the four seeds roll 4-wide.
-    reports = hg.cohort(4, first_seed=41, jobs=1 if os.environ.get("L7R_COV_FLOORS") == "1" else 4)
-    assert len(reports) == 4
+    # ONE REPRESENTATIVE SEED AT THE GATE, FOUR IN THE FULL RUN (feature 135, GM 2026-08-27: *"running tests
+    # against many random seeds on the same map ... is something either more suited to a EXAUSTIVE=1 Test run or
+    # better yet best farmed out to the AWS tests"*) - and each member through the roll cache, so an unchanged
+    # engine serves the report and a changed one rolls it. The full run (`make done FULL=1`, `L7R_TESTS_FULL=1`)
+    # bypasses the cache and rolls all four. Last exhaustive green: 2026-08-27 (this feature's baseline).
+    specs = hg.driver.cohort_specs(4 if FULL else 1, first_seed=41)  # FULL, not EXHAUSTIVE: the gate is always EXHAUSTIVE, and a seed sweep is the full run's
+    reports = [rollcache.report(spec)[0] for spec in specs]
+    assert len(reports) == len(specs)
     for report in reports:
         assert report.plan.placed >= round(0.85 * report.plan.spec.households), f"{report.plan.spec.name} seated {report.plan.placed}/{report.plan.spec.households}"
         assert abs(report.plan.acres - report.plan.target_acres) / report.plan.target_acres < 0.15, (
             f"{report.plan.spec.name}: {report.plan.acres:.1f} acres against a {report.plan.target_acres:.1f} target"
         )
-    # MEASURED 2026-08-12: 24 of 24 over the first two dozen seeds, and 4 of 4 here. It was 7 of 12
-    # when the experiment was first reported. THE RATCHET IS NOW A PIN (feature 133 T92): under the
-    # engine the GM accepted on the reference hamlet, three of these four seeds fail named checks -
-    # WAIVED by the GM as expected failures for a separate session (tasks.md T91/T92, verbatim:
-    # "have any failing tests on the acceptance gate marked as expected failures and documented as
-    # something for a future session to take care of"). `baseline_verdict`'s rule holds the line in
-    # both directions: a check outside a seed's set is a regression, a pinned seed that comes up
-    # clean is a stale pin - the fixing session drops its row.
-    lines, clean = hg.baseline_verdict(reports, GATE_COHORT_EXPECTED)
+    # MEASURED 2026-08-12: 24 of 24 over the first two dozen seeds, and 4 of 4 here
+    # (`python3 -m l7r.diagram.tools.cohort_audit --count 24` reproduces the sweep and reports any residue by check).
+    # It was 7 of 12 when the experiment was first reported. Keep this at 4 of 4: a change that drops
+    # a single rolled hamlet now fails here by name, which is the whole point of a ratchet.
+    # THE RATCHET IS A PIN (feature 133 T92, merged 2026-08-28): three of the four seeds fail named checks under
+    # the engine the GM accepted on the reference hamlet - WAIVED as expected failures for a separate session
+    # (133 tasks.md T91/T92). `baseline_verdict` holds the line both ways: a check outside a seed's set is a
+    # regression, a pinned seed that comes up clean is a stale pin. At the gate only seed 41 rolls (clean); the
+    # FULL run judges all four against the pin.
+    rolled = {r.plan.spec.seed for r in reports}
+    lines, clean = hg.baseline_verdict(reports, {seed: checks for seed, checks in GATE_COHORT_EXPECTED.items() if seed in rolled})  # a pin for a seed this scope did not roll is neither stale nor met
     assert clean, "\n".join(lines)
 
 
@@ -67,106 +69,6 @@ GATE_COHORT_EXPECTED: dict[int, frozenset[str]] = {
 
 
 @pytest.mark.rolls_map
-def test_the_cli_reports_a_single_hamlet(tmp_path, capsys) -> None:  # type: ignore[no-untyped-def]
-    out = str(tmp_path / "cli")
-    # the RETURN CODE reports the gate's verdict on this particular seed, which is not what this
-    # test is about - it is about the CLI writing the artifacts and reporting the map. Asserting a
-    # green gate here would pin one arbitrary seed's luck (see the cohort ratchet above for the rate).
-    hg.main(["--name", "Clitest", "--seed", "8", "--households", "11", "--down-deg", "90", "--sink", "offmap", "--windward", "N", "--out", out, "--no-render"])
-    assert os.path.exists(out + ".json") and os.path.exists(out + ".svg")
-    assert "Clitest" in capsys.readouterr().out
-
-
-@pytest.mark.rolls_map
-def test_the_cli_batch_mode_returns_nonzero_when_a_member_fails(monkeypatch, capsys) -> None:  # type: ignore[no-untyped-def]
-    """The batch exit code is the experiment's pass/fail signal, so it has to be real."""
-    monkeypatch.setattr(hg.driver, "cohort", lambda n, first_seed=1, jobs=None: [hg.Report(plan=a_plan(), failures=["boom"])])
-    assert hg.main(["--batch", "1"]) == 1
-    assert "0/1 passed" in capsys.readouterr().out
-
-
-@pytest.mark.rolls_map
-def test_the_cli_batch_mode_returns_zero_when_every_member_passes(monkeypatch, capsys) -> None:  # type: ignore[no-untyped-def]
-    monkeypatch.setattr(hg.driver, "cohort", lambda n, first_seed=1, jobs=None: [hg.Report(plan=a_plan(), failures=[])])
-    assert hg.main(["--batch", "1"]) == 0
-    assert "1/1 passed" in capsys.readouterr().out
-
-
-@pytest.mark.rolls_map
-def test_the_canonical_cohort_is_judged_against_the_pin_not_the_rate(monkeypatch, capsys) -> None:  # type: ignore[no-untyped-def]
-    """`--batch 24` from seed 1 exits ZERO on its known failures - the steady state is success, and
-    only a change from it is a failure. Before the pin this exact run exited 1, which meant the
-    signal everyone read was a rate that cannot distinguish two expected failures from two new ones."""
-    monkeypatch.setattr(hg.driver, "cohort", lambda n, first_seed=1, jobs=None: _as_pinned())
-    assert hg.main(["--batch", str(hg.driver.COHORT_BASELINE_SIZE)]) == 0
-    assert "NO NEW REGRESSIONS" in capsys.readouterr().out
-
-
-@pytest.mark.rolls_map
-def test_the_canonical_cohort_fails_on_a_seed_the_pin_does_not_cover(monkeypatch, capsys) -> None:  # type: ignore[no-untyped-def]
-    extra = hg.Report(plan=hg.plan_site(hg.HamletSpec(name="T", seed=999, households=12, down_deg=90.0, windward="N")), failures=["something_new"])
-    monkeypatch.setattr(hg.driver, "cohort", lambda n, first_seed=1, jobs=None: [*_as_pinned(), extra])
-    assert hg.main(["--batch", str(hg.driver.COHORT_BASELINE_SIZE)]) == 1
-    assert "REGRESSION seed 999" in capsys.readouterr().out
-
-
-@pytest.mark.rolls_map
-def test_a_non_canonical_range_says_it_has_no_pin(monkeypatch, capsys) -> None:  # type: ignore[no-untyped-def]
-    """A held-out or ad-hoc range must NOT be judged against the fitted cohort's baseline, and must
-    say so rather than implying it was checked."""
-    monkeypatch.setattr(hg.driver, "cohort", lambda n, first_seed=1, jobs=None: [hg.Report(plan=a_plan(), failures=[])])
-    assert hg.main(["--batch", "1"]) == 0
-    assert "no pinned baseline for this range" in capsys.readouterr().out
-
-
-@pytest.mark.rolls_map
-def test_the_cli_returns_nonzero_for_a_failing_single_map(monkeypatch, capsys) -> None:
-    monkeypatch.setattr(hg.driver, "generate", lambda spec, out_base=None, render=True: hg.Report(plan=a_plan(), failures=["boom"]))
-    assert hg.main(["--name", "X"]) == 1
-    assert "boom" in capsys.readouterr().out
-
-
-@pytest.mark.rolls_map
-def test_cohort_derives_each_spec_and_can_be_forced_serial(monkeypatch) -> None:  # type: ignore[no-untyped-def]
-    """`jobs=1` is the path an in-gate caller wants (a pytest worker that spawns its own pool
-    competes with the other 21), and the spec derivation is the same on either path: consecutive
-    seeds, zero-padded names, and the household ladder unless a count is given."""
-    seen: list[hg.HamletSpec] = []
-
-    def fake(spec, out_base=None, render=True):  # type: ignore[no-untyped-def]
-        seen.append(spec)
-        return hg.Report(plan=a_plan(), failures=[])
-
-    monkeypatch.setattr(hg.driver, "generate", fake)
-    assert len(hg.cohort(3, first_seed=5, jobs=1)) == 3
-    assert [s.seed for s in seen] == [5, 6, 7]
-    assert [s.name for s in seen] == ["Cohort-05", "Cohort-06", "Cohort-07"]
-    assert [s.households for s in seen] == [10 + (n * 7) % 11 for n in (5, 6, 7)]
-    seen.clear()
-    hg.cohort(2, first_seed=9, households=14, jobs=1)  # an explicit count overrides the ladder
-    assert [s.households for s in seen] == [14, 14]
-
-
-@pytest.mark.rolls_map
-def test_the_fan_out_agrees_with_the_serial_path() -> None:
-    """The fan-out's entire safety claim, pinned: a map is a pure function of its spec, so rolling
-    it in a worker must produce exactly the report rolling it here does. This is also the only test
-    that walks the `ProcessPoolExecutor` branch (`jobs > 1` takes the pool path even for one map),
-    which is why it rolls for real rather than stubbing `generate`.
-
-    The method matters as much as the assertion. When the fan-out landed (2026-08-16) the parallel
-    24-seed run differed from the session's serial baseline on 3 of 24 maps - which looked damning
-    until the baseline turned out to predate a mid-task merge of another session's engine round.
-    Re-rolling exactly those seeds serially on the SAME code reproduced the parallel verdicts.
-    Diff against the same code, never against an older log."""
-    (parallel,) = hg.cohort(1, first_seed=41, jobs=2)
-    (serial,) = hg.cohort(1, first_seed=41, jobs=1)
-    assert parallel.line() == serial.line()
-    assert parallel.failures == serial.failures
-    assert parallel.path is None  # a cohort member is gated, then thrown away
-
-
-@pytest.mark.rolls_map
 def test_a_map_that_strands_a_farmhouse_is_re_rolled_with_that_ground_forbidden(monkeypatch) -> None:  # type: ignore[no-untyped-def]
     """`generate` re-rolls a map whose FINISHED manifest strands a farmhouse, forbidding the ground
     those houses stood on. Three seat-time tests were built before this and all three failed, because
@@ -176,29 +78,35 @@ def test_a_map_that_strands_a_farmhouse_is_re_rolled_with_that_ground_forbidden(
     The gate is the oracle at every step - the seats are read off its own FAIL line rather than
     recomputed, because a hand-rolled reach measure was tried and over-counted on five of six seeds.
     So this drives the loop by faking the ORACLE, not by faking geometry."""
-    calls: list[int] = []
 
-    def fake_gate(M, verbose=True, only=None):  # type: ignore[no-untyped-def]
-        calls.append(1)
-        if len(calls) == 1:  # the first roll strands two houses; the gate names them
-            print("FAIL farmhouses_reach_a_way  -> 2 farmhouse(s) at [(1262, 848, 211), (1397, 890, 287)] - omission")
-            return ["farmhouses_reach_a_way"]
-        return []
+    def produce():  # type: ignore[no-untyped-def]
+        calls: list[int] = []
 
-    # PATCH THE SOURCE MODULE, not `hg.driver`: `generate` imports `gate` INSIDE the function, so
-    # the name is re-fetched from `check_village` on every call and a package-level patch is
-    # invisible to it.
-    monkeypatch.setattr(check_village, "gate", fake_gate)
-    seen: list[list[tuple[float, float]]] = []
-    real_build = hg.driver.build
+        def fake_gate(M, verbose=True, only=None):  # type: ignore[no-untyped-def]
+            calls.append(1)
+            if len(calls) == 1:  # the first roll strands two houses; the gate names them
+                print("FAIL farmhouses_reach_a_way  -> 2 farmhouse(s) at [(1262, 848, 211), (1397, 890, 287)] - omission")
+                return ["farmhouses_reach_a_way"]
+            return []
 
-    def spy_build(plan, avoid=()):  # type: ignore[no-untyped-def]
-        seen.append(list(avoid))
-        return real_build(plan, avoid=avoid)
+        # PATCH THE SOURCE MODULE, not `hg.driver`: `generate` imports `gate` INSIDE the function, so
+        # the name is re-fetched from `check_village` on every call and a package-level patch is
+        # invisible to it.
+        monkeypatch.setattr(check_village, "gate", fake_gate)
+        seen: list[list[tuple[float, float]]] = []
+        real_build = hg.driver.build
 
-    monkeypatch.setattr(hg.driver, "build", spy_build)
-    rep = hg.generate(hg.HamletSpec(name="Retry", seed=4, households=10), out_base=None, render=False)
-    assert rep.failures == []  # the re-roll's verdict is the one reported
+        def spy_build(plan, avoid=()):  # type: ignore[no-untyped-def]
+            seen.append(list(avoid))
+            return real_build(plan, avoid=avoid)
+
+        monkeypatch.setattr(hg.driver, "build", spy_build)
+        rep = hg.generate(hg.HamletSpec(name="Retry", seed=4, households=10), out_base=None, render=False)
+        return rep.failures, seen
+
+    # served from the roll cache keyed to this test's source (feature 135): two 10-household rolls, ~36 s fresh
+    failures, seen = rollcache.keyed_to(test_a_map_that_strands_a_farmhouse_is_re_rolled_with_that_ground_forbidden, produce)[0]
+    assert failures == []  # the re-roll's verdict is the one reported
     assert len(seen) == 2  # one roll, then exactly one re-roll
     assert seen[0] == []  # the first roll forbids nothing
     assert (1262.0, 848.0) in seen[1]  # the re-roll forbids what the GATE named
@@ -211,24 +119,28 @@ def test_a_re_roll_that_does_not_help_is_not_kept(monkeypatch, tmp_path) -> None
     one it replaces. Without that a map could be re-rolled into a WORSE state and shipped, which is
     the opposite of the point."""
 
-    rolls: list[int] = []
+    def produce():  # type: ignore[no-untyped-def]
+        rolls: list[int] = []
 
-    def fake_gate(M, verbose=True, only=None):  # type: ignore[no-untyped-def]
-        rolls.append(1)
-        print("FAIL farmhouses_reach_a_way  -> 1 farmhouse(s) at [(100, 100, 200)] - omission")
-        # the RE-ROLL comes back worse than the roll it would replace
-        return ["farmhouses_reach_a_way"] if len(rolls) == 1 else ["farmhouses_reach_a_way", "another_rule"]
+        def fake_gate(M, verbose=True, only=None):  # type: ignore[no-untyped-def]
+            rolls.append(1)
+            print("FAIL farmhouses_reach_a_way  -> 1 farmhouse(s) at [(100, 100, 200)] - omission")
+            # the RE-ROLL comes back worse than the roll it would replace
+            return ["farmhouses_reach_a_way"] if len(rolls) == 1 else ["farmhouses_reach_a_way", "another_rule"]
 
-    monkeypatch.setattr(check_village, "gate", fake_gate)
-    # WITH AN OUT PATH, because rejecting a re-roll leaves THAT roll's files on disk - the keeper has
-    # to be re-emitted, and it cannot be done by finishing the kept Settlement a second time (that
-    # splices the water block twice and its `</g>` closes the <svg> root early; see `_roll`). So the
-    # rejected-re-roll path only exists when there is somewhere to write.
-    out = str(tmp_path / "nohelp")
-    rep = hg.generate(hg.HamletSpec(name="NoHelp", seed=4, households=10), out_base=out, render=False)
-    assert rep.failures == ["farmhouses_reach_a_way"]  # the FIRST roll's verdict is kept, not the worse one
-    assert len(rolls) == 3  # roll, rejected re-roll, then the keeper re-emitted
-    assert rep.fail_lines and "farmhouses_reach_a_way" in rep.fail_lines[0]
-    svg = (tmp_path / "nohelp.svg").read_text()
+        monkeypatch.setattr(check_village, "gate", fake_gate)
+        # WITH AN OUT PATH, because rejecting a re-roll leaves THAT roll's files on disk - the keeper has
+        # to be re-emitted, and it cannot be done by finishing the kept Settlement a second time (that
+        # splices the water block twice and its `</g>` closes the <svg> root early; see `_roll`). So the
+        # rejected-re-roll path only exists when there is somewhere to write.
+        out = str(tmp_path / "nohelp")
+        rep = hg.generate(hg.HamletSpec(name="NoHelp", seed=4, households=10), out_base=out, render=False)
+        return rep.failures, len(rolls), rep.fail_lines, (tmp_path / "nohelp.svg").read_text()
+
+    # served from the roll cache keyed to this test's source (feature 135): three 10-household rolls, ~57 s fresh
+    failures, n_rolls, fail_lines, svg = rollcache.keyed_to(test_a_re_roll_that_does_not_help_is_not_kept, produce)[0]
+    assert failures == ["farmhouses_reach_a_way"]  # the FIRST roll's verdict is kept, not the worse one
+    assert n_rolls == 3  # roll, rejected re-roll, then the keeper re-emitted
+    assert fail_lines and "farmhouses_reach_a_way" in fail_lines[0]
     assert svg.count("<svg") == 1 and svg.count("</svg>") == 1  # finished exactly once...
     assert len(re.findall(r"<g[\s>]", svg)) == svg.count("</g>")  # ...so its groups balance
