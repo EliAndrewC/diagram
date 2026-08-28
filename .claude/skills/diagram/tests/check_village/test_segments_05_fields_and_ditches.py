@@ -2,7 +2,6 @@
 
 from tests.check_village._builders import (
     _FORK_MAINS,
-    _city_dead,
     _cross_M,
     _dryplot,
     _farmhouse,
@@ -159,43 +158,6 @@ def test_commons_clear_of_paddies_fires_when_scrub_sits_in_a_field():
     assert "commons_clear_of_paddies" not in f_only(nopoly, "commons_clear_of_paddies")
 
 
-def test_woodland_clear_of_crops_fires_on_overlap_and_shade_passes_when_set_back_north():
-    # a managed-woodland patch must NOT overlap a crop NOR shade it from the sunny SOUTH side (trees cast
-    # shadows north, maps are north-up); a patch set back to the NORTH is fine. Covers paddy + dry_plots.
-    p = _field("p", 400, 400, 700, 600)
-    base = {"meta": {"scale": "village"}, "fields": [p]}
-
-    def wood(poly):
-        cx = sum(v[0] for v in poly) / len(poly)
-        cy = sum(v[1] for v in poly) / len(poly)
-        return {"x": cx, "y": cy, "w": 100, "h": 100, "rot": 0, "role": "woodland", "poly": poly}
-
-    over = {**base, "commons": [wood([[500, 450], [600, 450], [600, 550], [500, 550]])]}  # sits ON the paddy
-    assert "woodland_clear_of_crops" in f_only(over, "woodland_clear_of_crops")
-    shade = {**base, "commons": [wood([[500, 612], [640, 612], [640, 660], [500, 660]])]}  # just SOUTH -> shades it
-    assert "woodland_clear_of_crops" in f_only(shade, "woodland_clear_of_crops")
-    ok = {**base, "commons": [wood([[500, 300], [640, 300], [640, 344], [500, 344]])]}  # well NORTH -> clear
-    assert "woodland_clear_of_crops" not in f_only(ok, "woodland_clear_of_crops")
-    dry = {
-        **base,
-        "dry_plots": [{"poly": [[800, 400], [900, 400], [900, 500], [800, 500]], "crop": "soy", "theta": 0.0}],
-        "commons": [wood([[840, 420], [940, 420], [940, 520], [840, 520]])],
-    }  # overlaps a DRY plot
-    assert "woodland_clear_of_crops" in f_only(dry, "woodland_clear_of_crops")
-
-
-def test_woodland_clear_of_grove_fires_when_on_the_fengshui_grove():
-    # a coppice woodland patch and the protected fengshui grove are DISTINCT woods - a patch sitting on a grove
-    # clump fires; one on its own ground does not.
-    p = _field("p", 400, 400, 700, 600)
-    patch = {"x": 200, "y": 200, "w": 100, "h": 100, "rot": 0, "role": "woodland", "poly": [[150, 150], [250, 150], [250, 250], [150, 250]]}
-    base = {"meta": {"scale": "village"}, "fields": [p], "commons": [patch]}
-    on = {**base, "village_groves": [{"role": "windbreak", "x": 200, "y": 200, "r": 14, "clumps": [[200, 200]]}]}  # clump inside the patch
-    assert "woodland_clear_of_grove" in f_only(on, "woodland_clear_of_grove")
-    off = {**base, "village_groves": [{"role": "windbreak", "x": 900, "y": 900, "r": 14, "clumps": [[900, 900]]}]}  # grove far away
-    assert "woodland_clear_of_grove" not in f_only(off, "woodland_clear_of_grove")
-
-
 def test_farmhouse_sizes_vary_fires_when_flat():
     M = {"meta": {"scale": "village"}, "houses": [_farmhouse(300 + 60 * i, 300) for i in range(12)]}
     assert "farmhouse_sizes_vary" in f_only(M, "farmhouse_sizes_vary")  # _farmhouse has no wealth -> all at the baseline tier
@@ -220,7 +182,3 @@ def test_funerary_clear_of_fields_fires_when_a_cremation_ground_sits_on_a_field(
     assert "funerary_clear_of_fields" in f_only(fire, "funerary_clear_of_fields")
     ok = {"fields": field, "cremation_grounds": [{"x": 500, "y": 850, "w": 116, "h": 80, "rot": 0}]}
     assert "funerary_clear_of_fields" not in f_only(ok, "funerary_clear_of_fields")
-
-
-def test_walled_graveyards_inside_and_outside_fires_when_all_inside():
-    assert "walled_graveyards_inside_and_outside" in f_only(_city_dead(cems=[(300, 300), (700, 300)]), "walled_graveyards_inside_and_outside")

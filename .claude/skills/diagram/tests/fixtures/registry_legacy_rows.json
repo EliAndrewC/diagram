@@ -373,10 +373,7 @@
     "xs",
     "ys"
    ],
-   "checks": [
-    "crop_hugs_content",
-    "hard_features_within_frame"
-   ],
+   "checks": [],
    "needs": [
     "EX0",
     "EX1",
@@ -386,7 +383,6 @@
     "M",
     "Wd",
     "_vw",
-    "check",
     "clipped",
     "fields",
     "fsx",
@@ -1381,17 +1377,13 @@
     "t",
     "w"
    ],
-   "checks": [
-    "city_wall_tower_coverage",
-    "wall_towers_evenly_spaced"
-   ],
+   "checks": [],
    "needs": [
     "M",
     "URBAN",
     "_cum",
     "_tgaps",
     "_thin",
-    "check",
     "meta"
    ],
    "meta": false,
@@ -1469,14 +1461,9 @@
     "t",
     "towered"
    ],
-   "checks": [
-    "merchant_estate_wall_clear_of_fire_towers",
-    "merchant_estate_wall_clear_of_streets",
-    "merchant_estate_wall_clear_of_water"
-   ],
+   "checks": [],
    "needs": [
     "M",
-    "check",
     "est_streets",
     "est_waters",
     "pts",
@@ -1676,9 +1663,7 @@
     "ux",
     "uy"
    ],
-   "checks": [
-    "city_fan_heads_quilted"
-   ],
+   "checks": [],
    "needs": [
     "M",
     "_hq_bare",
@@ -1689,7 +1674,6 @@
     "_hq_lines",
     "_hq_tol",
     "_hq_total",
-    "check",
     "t"
    ],
    "meta": false,
@@ -1878,9 +1862,7 @@
     "nv",
     "thin"
    ],
-   "checks": [
-    "city_interior_fields_farmhouse_density"
-   ],
+   "checks": [],
    "needs": [
     "ADJ",
     "EX0",
@@ -1890,7 +1872,6 @@
     "FARM_LD_INWALL",
     "M",
     "URBAN",
-    "check",
     "fields",
     "houses",
     "meta",
@@ -2807,14 +2788,11 @@
     "x",
     "y"
    ],
-   "checks": [
-    "city_ward_cap_flush_to_wall"
-   ],
+   "checks": [],
    "needs": [
     "M",
     "_off",
-    "_wall_ring",
-    "check"
+    "_wall_ring"
    ],
    "meta": false,
    "always": false
@@ -2873,12 +2851,9 @@
     "y0",
     "y1"
    ],
-   "checks": [
-    "walled_structure_yields_to_ward_wall"
-   ],
+   "checks": [],
    "needs": [
     "M",
-    "check",
     "unyielded"
    ],
    "meta": false,
@@ -3214,10 +3189,7 @@
     "v"
    ],
    "checks": [
-    "all_houses_field_adjacent",
-    "cluster_abuts_fields",
-    "field_outline_matches_planting",
-    "village_cluster_compact"
+    "cluster_abuts_fields"
    ],
    "needs": [
     "ADJ",
@@ -3360,12 +3332,9 @@
     "vx",
     "vy"
    ],
-   "checks": [
-    "dwellings_above_field_drain"
-   ],
+   "checks": [],
    "needs": [
     "M",
-    "check",
     "drains",
     "houses",
     "in_toe",
@@ -3462,7 +3431,6 @@
     "city_has_no_headman",
     "hamlet_has_no_headman",
     "town_has_no_headman",
-    "village_has_headman",
     "village_has_no_headman"
    ],
    "needs": [
@@ -3544,14 +3512,9 @@
     "torii_under",
     "under_trees"
    ],
-   "checks": [
-    "shrine_clear_of_grove_trees",
-    "torii_clear_of_grove_trees",
-    "trees_clear_of_fengshui_ponds"
-   ],
+   "checks": [],
    "needs": [
     "M",
-    "check",
     "grove_clumps",
     "pond_trees"
    ],
@@ -3757,6 +3720,30 @@
     "check",
     "thit",
     "ttl"
+   ],
+   "meta": false,
+   "always": false
+  },
+  {
+   "name": "_seg_0267_500__labels_align_with_their_referent",
+   "free": [
+    "M",
+    "check",
+    "meta",
+    "scale",
+    "labels_align_with_their_referent_bad"
+   ],
+   "writes": [
+    "labels_align_with_their_referent_bad"
+   ],
+   "checks": [
+    "labels_align_with_their_referent"
+   ],
+   "needs": [
+    "M",
+    "check",
+    "labels_align_with_their_referent_bad",
+    "scale"
    ],
    "meta": false,
    "always": false
@@ -4059,9 +4046,7 @@
     "wl"
    ],
    "checks": [
-    "wells_among_dwellings",
-    "wells_clear_of_paddies",
-    "wells_sized_to_buildings"
+    "wells_among_dwellings"
    ],
    "needs": [
     "M",
@@ -4188,12 +4173,9 @@
     "_wr",
     "w"
    ],
-   "checks": [
-    "wells_sized_to_population"
-   ],
+   "checks": [],
    "needs": [
     "M",
-    "check",
     "meta",
     "scale"
    ],
@@ -4302,11 +4284,8 @@
     "on_sacred",
     "wl"
    ],
-   "checks": [
-    "wells_clear_of_shrine_and_torii"
-   ],
+   "checks": [],
    "needs": [
-    "check",
     "on_sacred",
     "sacred",
     "scale",
@@ -4739,12 +4718,9 @@
     "sd",
     "stranded"
    ],
-   "checks": [
-    "farm_sheds_attached"
-   ],
+   "checks": [],
    "needs": [
     "M",
-    "check",
     "scale",
     "sheds",
     "stranded"
@@ -5079,12 +5055,9 @@
     "own",
     "st"
    ],
-   "checks": [
-    "gardens_unshaded_from_east"
-   ],
+   "checks": [],
    "needs": [
     "M",
-    "check",
     "dy",
     "east_bad",
     "gardens",
@@ -5168,12 +5141,9 @@
     "perp",
     "s"
    ],
-   "checks": [
-    "groves_where_possible"
-   ],
+   "checks": [],
    "needs": [
     "M",
-    "check",
     "corridors",
     "fields_ol",
     "gardens",
@@ -5253,7 +5223,6 @@
    ],
    "checks": [
     "village_windbreak_embraces_cluster",
-    "village_windbreak_on_windward_side",
     "village_windbreak_present",
     "village_windbreak_scales_with_cluster"
    ],
@@ -5265,7 +5234,6 @@
     "meta",
     "scale",
     "vgroves",
-    "windward",
     "wvx",
     "wvy"
    ],
@@ -5451,13 +5419,9 @@
     "wx1",
     "wy0"
    ],
-   "checks": [
-    "woodland_clear_of_crops",
-    "woodland_clear_of_grove"
-   ],
+   "checks": [],
    "needs": [
     "M",
-    "check",
     "crops",
     "fields",
     "meta",
@@ -5520,6 +5484,56 @@
     "houses",
     "plain",
     "scale"
+   ],
+   "meta": false,
+   "always": false
+  },
+  {
+   "name": "_seg_0285_991__village_trees_unshade_from_west",
+   "free": [
+    "M",
+    "check",
+    "gardens",
+    "meta",
+    "scale",
+    "w_cx",
+    "w_cy",
+    "w_f",
+    "w_ft",
+    "w_ftpx",
+    "w_g",
+    "w_lane",
+    "w_r",
+    "w_shade",
+    "w_wb",
+    "w_x0",
+    "w_y0",
+    "w_y1",
+    "yards"
+   ],
+   "writes": [
+    "w_cx",
+    "w_cy",
+    "w_f",
+    "w_ft",
+    "w_ftpx",
+    "w_g",
+    "w_lane",
+    "w_r",
+    "w_shade",
+    "w_wb",
+    "w_x0",
+    "w_y0",
+    "w_y1"
+   ],
+   "checks": [],
+   "needs": [
+    "M",
+    "gardens",
+    "meta",
+    "scale",
+    "w_shade",
+    "yards"
    ],
    "meta": false,
    "always": false
@@ -5745,16 +5759,11 @@
     "t",
     "temples_r"
    ],
-   "checks": [
-    "cremation_ground_by_external_cemetery",
-    "cremation_ground_not_between_temple_and_road",
-    "cremation_ground_set_back_from_main_road"
-   ],
+   "checks": [],
    "needs": [
     "M",
     "between",
     "cems",
-    "check",
     "crem",
     "scale",
     "wall"
@@ -5783,14 +5792,10 @@
     "ins",
     "out"
    ],
-   "checks": [
-    "walled_exterior_cemetery_larger",
-    "walled_graveyards_inside_and_outside"
-   ],
+   "checks": [],
    "needs": [
     "_inside",
     "cems",
-    "check",
     "scale",
     "wall"
    ],
@@ -5825,14 +5830,11 @@
     "st",
     "ways"
    ],
-   "checks": [
-    "walled_settlement_has_drum_tower"
-   ],
+   "checks": [],
    "needs": [
     "M",
     "_inside",
     "angs",
-    "check",
     "scale",
     "wall"
    ],
@@ -5881,18 +5883,12 @@
     "sam",
     "unserved"
    ],
-   "checks": [
-    "city_has_cremation_ground",
-    "city_has_mausoleum",
-    "city_has_ossuary",
-    "city_temples_have_graveyards"
-   ],
+   "checks": [],
    "needs": [
     "M",
     "URBAN",
     "_inside",
     "cems",
-    "check",
     "crem",
     "maus",
     "oss",
@@ -9506,13 +9502,10 @@
     "sx",
     "sy"
    ],
-   "checks": [
-    "moat_channels_flow_with_current"
-   ],
+   "checks": [],
    "needs": [
     "M",
     "against",
-    "check",
     "ex",
     "ey",
     "mfed",
@@ -11459,16 +11452,10 @@
     "t",
     "under"
    ],
-   "checks": [
-    "shrine_avenue_fronts_the_hall",
-    "torii_clear_of_fields",
-    "torii_clear_of_shrine",
-    "torii_spread_out"
-   ],
+   "checks": [],
    "needs": [
     "M",
     "_set_out",
-    "check",
     "meta",
     "torii"
    ],
@@ -11530,13 +11517,11 @@
     "t"
    ],
    "checks": [
-    "house_count_in_range",
     "households_consistent"
    ],
    "needs": [
     "abandoned",
     "check",
-    "houses",
     "meta",
     "occupied",
     "scale"
@@ -11744,13 +11729,10 @@
    "writes": [
     "w"
    ],
-   "checks": [
-    "theater_stage_inside_wall"
-   ],
+   "checks": [],
    "needs": [
     "M",
     "amph",
-    "check",
     "meta",
     "scale",
     "ts_meta"
@@ -11810,11 +11792,9 @@
    "checks": [
     "capital_has_kosatsuba",
     "city_has_kosatsuba",
-    "city_kosatsuba_per_gate",
     "hamlet_has_kosatsuba",
     "kosatsuba_by_the_road",
     "kosatsuba_faces_the_road",
-    "kosatsuba_on_a_main_way",
     "town_has_kosatsuba",
     "village_has_kosatsuba"
    ],
@@ -11926,22 +11906,13 @@
     "wallp_t",
     "worst"
    ],
-   "checks": [
-    "streets_have_buildings",
-    "wall_hugs_the_town",
-    "wall_sections_irregular",
-    "walled_town_commoners_inside_walls",
-    "walled_town_has_gate_market",
-    "walled_town_has_main_street",
-    "walled_town_has_wall"
-   ],
+   "checks": [],
    "needs": [
     "M",
     "ax",
     "ay",
     "bx",
     "by",
-    "check",
     "houses",
     "meta",
     "occ",
@@ -12097,12 +12068,9 @@
     "m",
     "w"
    ],
-   "checks": [
-    "city_samurai_housing_varied"
-   ],
+   "checks": [],
    "needs": [
     "M",
-    "check",
     "scale",
     "slarge",
     "ssmall"
@@ -12291,16 +12259,10 @@
     "wx",
     "wy"
    ],
-   "checks": [
-    "city_neighborhoods_have_wells",
-    "city_samurai_quarter_has_no_public_wells",
-    "city_well_density_sufficient",
-    "city_wells_in_block_interiors"
-   ],
+   "checks": [],
    "needs": [
     "M",
     "bad_well",
-    "check",
     "dwl",
     "meta",
     "sam_wells",
@@ -12407,16 +12369,13 @@
     "y0",
     "y1"
    ],
-   "checks": [
-    "city_imperial_road_has_commerce"
-   ],
+   "checks": [],
    "needs": [
     "EX0",
     "EX1",
     "EY0",
     "EY1",
     "M",
-    "check",
     "il",
     "road",
     "road_through",
@@ -12488,14 +12447,10 @@
     "want8",
     "wd2"
    ],
-   "checks": [
-    "kido_aligned_with_ward_fence",
-    "kido_guard_box_clear_of_lanes"
-   ],
+   "checks": [],
    "needs": [
     "M",
     "box_on_lane",
-    "check",
     "kido_off",
     "scale",
     "wards_k"
@@ -13245,11 +13200,8 @@
     "sh",
     "t"
    ],
-   "checks": [
-    "city_temple_neighborhood_has_shrines"
-   ],
+   "checks": [],
    "needs": [
-    "check",
     "clustered",
     "meta",
     "scale",
@@ -13475,11 +13427,8 @@
     "moat_hit",
     "pts"
    ],
-   "checks": [
-    "city_streets_clear_of_moat"
-   ],
+   "checks": [],
    "needs": [
-    "check",
     "crosses_ring",
     "lanes_pts",
     "meta",
@@ -13813,17 +13762,13 @@
     "rds",
     "road_through"
    ],
-   "checks": [
-    "city_imperial_road_through",
-    "city_roads_run_offmap"
-   ],
+   "checks": [],
    "needs": [
     "EX0",
     "EX1",
     "EY0",
     "EY1",
     "M",
-    "check",
     "meta",
     "road",
     "scale"
@@ -13930,14 +13875,9 @@
     "stub",
     "widths"
    ],
-   "checks": [
-    "city_streets_connected",
-    "city_streets_no_intersection_stub",
-    "city_streets_no_near_miss"
-   ],
+   "checks": [],
    "needs": [
     "M",
-    "check",
     "meta",
     "near_miss",
     "parent",
@@ -14124,13 +14064,9 @@
     "sy",
     "t"
    ],
-   "checks": [
-    "shrine_on_hill_summit",
-    "torii_on_hill"
-   ],
+   "checks": [],
    "needs": [
     "M",
-    "check",
     "hill",
     "meta",
     "torii"
@@ -14248,22 +14184,40 @@
     "t",
     "v"
    ],
-   "checks": [
-    "temple_torii_face_the_street",
-    "torii_avenue_meets_the_hall",
-    "torii_avenue_pitch_capped",
-    "torii_count_canonical",
-    "torii_match_roll"
-   ],
+   "checks": [],
    "needs": [
     "M",
     "_marooned",
     "_proper",
     "_tf_bad",
     "_wide",
-    "check",
     "meta",
     "torii"
+   ],
+   "meta": false,
+   "always": false
+  },
+  {
+   "name": "_seg_0577_500__field_ponds_sunk_into_one_plot",
+   "free": [
+    "M",
+    "check",
+    "fld",
+    "fp",
+    "spilled"
+   ],
+   "writes": [
+    "fld",
+    "fp",
+    "spilled"
+   ],
+   "checks": [
+    "field_ponds_sunk_into_one_plot"
+   ],
+   "needs": [
+    "M",
+    "check",
+    "spilled"
    ],
    "meta": false,
    "always": false
@@ -14406,18 +14360,11 @@
     "wx",
     "wy"
    ],
-   "checks": [
-    "dikepond_corners_rounded",
-    "dikepond_is_ponds_in_a_block",
-    "dikepond_water_within_banks",
-    "dikeponds_fed_and_drained",
-    "mulberry_banks_clear_of_channels"
-   ],
+   "checks": [],
    "needs": [
     "M",
     "_fd_bad",
     "_mb_bad",
-    "check",
     "fields",
     "meta"
    ],
@@ -14645,6 +14592,463 @@
     "check"
    ],
    "meta": true,
+   "always": false
+  },
+  {
+   "name": "_seg_0601__flooded_plots_read_as_basins",
+   "free": [
+    "M",
+    "check",
+    "fields"
+   ],
+   "writes": [],
+   "checks": [
+    "flooded_plots_read_as_basins"
+   ],
+   "needs": [
+    "M",
+    "check",
+    "fields"
+   ],
+   "meta": false,
+   "always": false
+  },
+  {
+   "name": "_seg_0602__woodland_commons_visibly_stocked",
+   "free": [
+    "M",
+    "check"
+   ],
+   "writes": [],
+   "checks": [
+    "woodland_commons_visibly_stocked"
+   ],
+   "needs": [
+    "M",
+    "check"
+   ],
+   "meta": false,
+   "always": false
+  },
+  {
+   "name": "_seg_0603__paddy_plot_seams_shared",
+   "free": [
+    "M",
+    "check",
+    "fields"
+   ],
+   "writes": [],
+   "checks": [
+    "paddy_plot_seams_shared"
+   ],
+   "needs": [
+    "M",
+    "check",
+    "fields"
+   ],
+   "meta": false,
+   "always": false
+  },
+  {
+   "name": "_seg_0604__paddy_plots_are_workable_basins",
+   "free": [
+    "M",
+    "check",
+    "fields"
+   ],
+   "writes": [],
+   "checks": [
+    "paddy_plots_are_workable_basins"
+   ],
+   "needs": [
+    "M",
+    "check",
+    "fields"
+   ],
+   "meta": false,
+   "always": false
+  },
+  {
+   "name": "_seg_0605__paddy_plot_rings_overcount_stays_marginal",
+   "free": [
+    "M",
+    "check",
+    "fields"
+   ],
+   "writes": [],
+   "checks": [
+    "paddy_plot_rings_overcount_stays_marginal"
+   ],
+   "needs": [
+    "M",
+    "check",
+    "fields"
+   ],
+   "meta": false,
+   "always": false
+  },
+  {
+   "name": "_seg_0606__farmhouses_shed_separately",
+   "free": [
+    "M",
+    "check",
+    "scale"
+   ],
+   "writes": [],
+   "checks": [
+    "farmhouses_shed_separately"
+   ],
+   "needs": [
+    "M",
+    "check",
+    "scale"
+   ],
+   "meta": false,
+   "always": false
+  },
+  {
+   "name": "_seg_0607__lanes_reach_something",
+   "free": [
+    "M",
+    "check"
+   ],
+   "writes": [],
+   "checks": [
+    "lanes_reach_something"
+   ],
+   "needs": [
+    "M",
+    "check"
+   ],
+   "meta": false,
+   "always": false
+  },
+  {
+   "name": "_seg_0608__paddy_basins_are_worth_their_bund",
+   "free": [
+    "M",
+    "check",
+    "fields"
+   ],
+   "writes": [],
+   "checks": [
+    "paddy_basins_are_worth_their_bund"
+   ],
+   "needs": [
+    "M",
+    "check",
+    "fields"
+   ],
+   "meta": false,
+   "always": false
+  },
+  {
+   "name": "_seg_0609__byres_stand_in_their_declared_form",
+   "free": [
+    "M",
+    "check"
+   ],
+   "writes": [],
+   "checks": [
+    "byre_form_declared",
+    "byres_meet_their_target"
+   ],
+   "needs": [
+    "M",
+    "check"
+   ],
+   "meta": false,
+   "always": false
+  },
+  {
+   "name": "_seg_0610__farmhouses_reach_a_way",
+   "free": [
+    "M",
+    "check"
+   ],
+   "writes": [],
+   "checks": [
+    "farmhouses_reach_a_way"
+   ],
+   "needs": [
+    "M",
+    "check"
+   ],
+   "meta": false,
+   "always": false
+  },
+  {
+   "name": "_seg_0611__lane_ends_front_different_houses",
+   "free": [
+    "M",
+    "check"
+   ],
+   "writes": [],
+   "checks": [
+    "lane_ends_front_different_houses"
+   ],
+   "needs": [
+    "M",
+    "check"
+   ],
+   "meta": false,
+   "always": false
+  },
+  {
+   "name": "_seg_0612__lanes_do_not_break_mid_run",
+   "free": [
+    "M",
+    "check"
+   ],
+   "writes": [],
+   "checks": [
+    "lanes_do_not_break_mid_run"
+   ],
+   "needs": [
+    "M",
+    "check"
+   ],
+   "meta": false,
+   "always": false
+  },
+  {
+   "name": "_seg_0613__village_windbreak_is_continuous",
+   "free": [
+    "M",
+    "check"
+   ],
+   "writes": [],
+   "checks": [
+    "village_windbreak_is_continuous"
+   ],
+   "needs": [
+    "M",
+    "check"
+   ],
+   "meta": false,
+   "always": false
+  },
+  {
+   "name": "_seg_0614__paddy_bunds_do_not_stagger",
+   "free": [
+    "M",
+    "check",
+    "fields"
+   ],
+   "writes": [],
+   "checks": [
+    "paddy_bunds_do_not_stagger"
+   ],
+   "needs": [
+    "M",
+    "check",
+    "fields"
+   ],
+   "meta": false,
+   "always": false
+  },
+  {
+   "name": "_seg_0614_500__all_ink_is_ruled_on",
+   "free": [
+    "M",
+    "check",
+    "meta",
+    "scale",
+    "all_ink_is_ruled_on_bad"
+   ],
+   "writes": [
+    "all_ink_is_ruled_on_bad"
+   ],
+   "checks": [
+    "all_ink_is_ruled_on"
+   ],
+   "needs": [
+    "M",
+    "check",
+    "meta"
+   ],
+   "meta": false,
+   "always": false
+  },
+  {
+   "name": "_seg_0615__cluster_shape_matches_the_drawing",
+   "free": [
+    "M",
+    "check"
+   ],
+   "writes": [],
+   "checks": [
+    "cluster_shape_matches_the_drawing"
+   ],
+   "needs": [
+    "M",
+    "check"
+   ],
+   "meta": false,
+   "always": false
+  },
+  {
+   "name": "_seg_0616__copse_stands_clear_of_the_belt",
+   "free": [
+    "M",
+    "check"
+   ],
+   "writes": [],
+   "checks": [
+    "copse_stands_clear_of_the_belt"
+   ],
+   "needs": [
+    "M",
+    "check"
+   ],
+   "meta": false,
+   "always": false
+  },
+  {
+   "name": "_seg_0617__captions_clear_the_ways_they_stand_on",
+   "free": [
+    "M",
+    "check"
+   ],
+   "writes": [],
+   "checks": [
+    "captions_clear_the_ways_they_stand_on"
+   ],
+   "needs": [
+    "M",
+    "check"
+   ],
+   "meta": false,
+   "always": false
+  },
+  {
+   "name": "_seg_0618__village_groves_visibly_stocked",
+   "free": [
+    "M",
+    "check"
+   ],
+   "writes": [],
+   "checks": [
+    "village_groves_visibly_stocked"
+   ],
+   "needs": [
+    "M",
+    "check"
+   ],
+   "meta": false,
+   "always": false
+  },
+  {
+   "name": "_seg_0618_502__bamboo_stands_clear_of_paddies",
+   "free": [
+    "M",
+    "check",
+    "meta",
+    "scale",
+    "bamboo_stands_clear_of_paddies_bad"
+   ],
+   "writes": [
+    "bamboo_stands_clear_of_paddies_bad"
+   ],
+   "checks": [
+    "bamboo_stands_clear_of_paddies"
+   ],
+   "needs": [
+    "M",
+    "bamboo_stands_clear_of_paddies_bad",
+    "check",
+    "scale"
+   ],
+   "meta": false,
+   "always": false
+  },
+  {
+   "name": "_seg_0618_503__tree_crowns_not_subsumed",
+   "free": [
+    "M",
+    "check",
+    "meta",
+    "scale",
+    "tree_crowns_not_subsumed_bad"
+   ],
+   "writes": [
+    "tree_crowns_not_subsumed_bad"
+   ],
+   "checks": [
+    "tree_crowns_not_subsumed"
+   ],
+   "needs": [
+    "M",
+    "check",
+    "tree_crowns_not_subsumed_bad"
+   ],
+   "meta": false,
+   "always": false
+  },
+  {
+   "name": "_seg_0619__no_farmhouse_stands_on_a_lane",
+   "free": [
+    "M",
+    "check"
+   ],
+   "writes": [
+    "on_a_lane"
+   ],
+   "checks": [
+    "no_farmhouse_stands_on_a_lane"
+   ],
+   "needs": [
+    "M",
+    "check"
+   ],
+   "meta": false,
+   "always": false
+  },
+  {
+   "name": "_seg_0619_500__lanes_form_one_network",
+   "free": [
+    "M",
+    "check",
+    "meta",
+    "scale",
+    "lanes_form_one_network_bad"
+   ],
+   "writes": [
+    "lanes_form_one_network_bad"
+   ],
+   "checks": [
+    "lanes_form_one_network"
+   ],
+   "needs": [
+    "M",
+    "check",
+    "scale"
+   ],
+   "meta": false,
+   "always": false
+  },
+  {
+   "name": "_seg_0619_501__lanes_bend_like_paths",
+   "free": [
+    "M",
+    "check",
+    "meta",
+    "scale",
+    "lanes_bend_like_paths_bad"
+   ],
+   "writes": [
+    "lanes_bend_like_paths_bad"
+   ],
+   "checks": [
+    "lanes_bend_like_paths"
+   ],
+   "needs": [
+    "M",
+    "check",
+    "lanes_bend_like_paths_bad",
+    "scale"
+   ],
+   "meta": false,
    "always": false
   }
  ]

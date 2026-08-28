@@ -7,8 +7,6 @@ import pytest
 from tests.check_village._builders import (
     _CHAN,
     WALL,
-    _fort_city,
-    _maus_ward,
     f_only,
 )
 
@@ -19,40 +17,6 @@ def test_irrigation_channels_hairline_allows_a_drain_outfall_culvert_at_four():
     # (4.0 at the city grain) - it is not a field ditch, so its ceiling is 4.5 (GM 2026-07-23)
     M = {"channels": [{"poly": _CHAN, "frm": {"kind": "drain"}, "to": {"kind": "moat"}, "w": 4.0}]}
     assert "irrigation_channels_hairline" not in f_only(M, "irrigation_channels_hairline")
-
-
-@pytest.mark.tiers("city")
-def test_city_ward_cap_flush_to_wall_fires_when_a_cap_juts():
-    # a straight cap whose far vertex juts 30px off the wall face (the corner-stub artifact)
-    ward = {"name": "samurai", "boundary": [[200, 500], [500, 500]], "wall_caps": [{"x": 200, "y": 500, "pts": [[200, 500], [230, 500]]}]}
-    assert "city_ward_cap_flush_to_wall" in f_only(_fort_city(wards=[ward]), "city_ward_cap_flush_to_wall")
-
-
-@pytest.mark.tiers("city")
-def test_city_ward_cap_flush_to_wall_passes_when_flush():
-    # a cap that lies ALONG the west wall face (x=200): both vertices sit on the wall
-    ward = {"name": "samurai", "boundary": [[200, 500], [500, 500]], "wall_caps": [{"x": 200, "y": 500, "pts": [[200, 484], [200, 516]]}]}
-    assert "city_ward_cap_flush_to_wall" not in f_only(_fort_city(wards=[ward]), "city_ward_cap_flush_to_wall")
-
-
-@pytest.mark.tiers("city")
-def test_walled_structure_yields_to_ward_wall_fires_on_a_vertical_fence():
-    # the mausoleum's EAST wall (x = cx+27 = 1535) runs along a VERTICAL ward fence at x=1535
-    M = {
-        "meta": {"scale": "city", "walled": True},
-        "wall": [[100, 100], [3000, 100], [3000, 2500], [100, 2500]],
-        "wards": [{"name": "samurai", "boundary": [[1535, 1200], [1535, 1900]], "z": 5}],
-        "mausoleums": [{"x": 1508, "y": 1556, "w": 54, "h": 40, "rot": 0, "gate_dir": "west", "ward_walls": []}],
-    }
-    assert "walled_structure_yields_to_ward_wall" in f_only(M, "walled_structure_yields_to_ward_wall")
-
-
-@pytest.mark.tiers("city")
-def test_walled_structure_yields_to_ward_wall_skips_compounds_outside_the_wall():
-    # a compound OUTSIDE the city wall is not held to the rule (wards are an intramural feature)
-    M = _maus_ward([])
-    M["mausoleums"][0]["x"], M["mausoleums"][0]["y"] = 50, 50  # west of the wall (x >= 100): outside
-    assert "walled_structure_yields_to_ward_wall" not in f_only(M, "walled_structure_yields_to_ward_wall")
 
 
 @pytest.mark.tiers("city")

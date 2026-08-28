@@ -9,8 +9,6 @@ from tests.check_village._builders import (
     _field,
     _footbridge_map,
     _iw_manifest,
-    _moat_city,
-    _moat_map,
     _sink_channel,
     _water_map,
     f_only,
@@ -107,17 +105,6 @@ def test_fields_show_water_source_branches():
     dry = _field("d", 100, 600, 300, 800)  # no channel/stream/pond -> dry, fires
     M = {"fields": [abut, ponded, dry], "streams": [{"poly": [[95, 90], [95, 310]]}], "pond": [700, 200, 80, 60]}
     assert "fields_show_water_source" in f_only(M, "fields_show_water_source")
-
-
-def test_moat_channels_flow_with_current_fires_when_against():
-    # moat flows south; this channel taps the moat at (350,300) and runs NORTH to a field at (350,150)
-    # - the field is upstream of the tap, so water would run field->moat (backwards)
-    assert "moat_channels_flow_with_current" in f_only(_moat_city([[350, 300], [350, 150]]), "moat_channels_flow_with_current")
-
-
-def test_moat_channels_flow_with_current_passes_when_downstream():
-    # same moat, but the channel runs SOUTH (with the current) to a field below its tap
-    assert "moat_channels_flow_with_current" not in f_only(_moat_city([[350, 700], [350, 850]]), "moat_channels_flow_with_current")
 
 
 def test_bridges_span_their_water_fires_on_an_oblique_underspan():
@@ -508,20 +495,6 @@ def test_channels_flow_downhill_judges_a_channel_by_the_FIELD_it_feeds():
         "channels": [{"poly": [[300, 600], [300, 300]], "frm": {"kind": "stream"}, "to": {"kind": "field", "name": "f1"}, "w": 2.5}],
     }
     assert "channels_flow_downhill" not in f_only(M, "channels_flow_downhill")
-
-
-def test_moat_channels_flow_with_current_takes_the_current_from_moat_flow():
-    # a southward-heading offtake agrees with an inlet-NW/outlet-SE circulation
-    assert "moat_channels_flow_with_current" not in f_only(_moat_map(), "moat_channels_flow_with_current")
-
-
-def test_moat_channels_flow_with_current_fires_on_an_offtake_back_upstream():
-    # the same moat, but the field lies NORTH of the tap - water would run from the field INTO the moat
-    M = _moat_map(
-        fields=[{"name": "fn", "kind": "paddy", "outline": [[300, 60], [600, 60], [600, 200], [300, 200]], "bbox": [300, 60, 600, 200], "vis_bbox": [300, 60, 600, 200]}],
-        channels=[{"poly": [[500, 300], [480, 100]], "frm": {"kind": "moat"}, "to": {"kind": "field", "name": "fn"}, "w": 2.5}],
-    )
-    assert "moat_channels_flow_with_current" in f_only(M, "moat_channels_flow_with_current")
 
 
 def test_bridges_seat_on_water_fires_on_a_dry_deck():

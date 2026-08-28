@@ -1,6 +1,5 @@
 """Split from test_checks.py by feature 025 - see tests/check_village/CLAUDE.md for the index."""
 
-import math
 import sys
 
 from l7r.diagram import check_village
@@ -12,7 +11,6 @@ from tests.check_village._builders import (
     _feature_overlap,
     _field,
     _label_map,
-    _maus_ward,
     _paddy_field_rec,
     f_only,
     house,
@@ -33,24 +31,6 @@ def test_no_structure_on_stream_branches():
 
 
 # ---- town street-layout FAIL branches -----------------------------------------------------
-
-
-def test_all_houses_field_adjacent_dispersed_fires_on_a_remote_house():
-    M = {"meta": {"scale": "village"}, "fields": [_field("f", 100, 100, 400, 400)], "houses": [_farmhouse(430, 250), _farmhouse(1200, 250)]}
-    assert "all_houses_field_adjacent" in f_only(M, "all_houses_field_adjacent")  # the x=1200 house is way off its fields
-
-
-def test_all_houses_field_adjacent_dispersed_passes_when_close():
-    M = {"meta": {"scale": "village"}, "fields": [_field("f", 100, 100, 400, 400)], "houses": [_farmhouse(430, 250), _farmhouse(60, 250)]}
-    assert "all_houses_field_adjacent" not in f_only(M, "all_houses_field_adjacent")  # both within 165px of the field
-
-
-def test_nucleated_cluster_abuts_fields_passes_with_interior_houses_set_back():
-    # a tight cluster whose EAST edge touches the field; interior houses sit a cluster-span back (fine)
-    houses = [_farmhouse(x, 250) for x in (60, 130, 200, 270, 340, 410)]
-    M = {"meta": {"scale": "village", "nucleated": True}, "fields": [_field("f", 430, 150, 700, 400)], "houses": houses}
-    assert "cluster_abuts_fields" not in f_only(M, "cluster_abuts_fields")
-    assert "all_houses_field_adjacent" not in f_only(M, "all_houses_field_adjacent")  # the per-house check does NOT run for nucleated
 
 
 def test_nucleated_cluster_abuts_fields_fires_when_the_village_floats_off_its_land():
@@ -85,33 +65,6 @@ def test_watercourses_wider_than_ditches_fires_when_a_creek_reads_like_a_ditch()
 def test_watercourses_wider_than_ditches_passes_for_a_proper_creek():
     M = {"channels": [{"poly": _CHAN, "frm": {"kind": "offmap"}, "to": {"kind": "field", "name": "f"}, "w": 2.5}], "streams": [{"poly": _STRM, "frm": None, "to": None, "w": 9}]}  # 9 >= 6.25
     assert "watercourses_wider_than_ditches" not in f_only(M, "watercourses_wider_than_ditches")
-
-
-def test_shrine_clear_of_grove_trees_fires_when_a_clump_covers_the_hall():
-    # a fengshui-grove tree clump whose center sits on the shrine hall's footprint reads as buried in the wood
-    M = {
-        "meta": {"scale": "village"},
-        "religious": [{"kind": "shrine", "x": 500, "y": 500, "w": 30, "h": 24, "label": "Shrine"}],
-        "village_groves": [{"role": "water_mouth", "r": 14, "clumps": [[502, 498]]}],
-    }
-    assert "shrine_clear_of_grove_trees" in f_only(M, "shrine_clear_of_grove_trees")
-
-
-def test_shrine_clear_of_grove_trees_uses_the_canopy_radius_not_the_nominal_clump():
-    # a clump 18px off the hall's east edge: its NOMINAL r=14 does not reach, but the drawn CANOPY (~1.7x = 24)
-    # does - the check uses the canopy radius, so it fires (the crown overhang is what the eye sees overlapping)
-    M = {
-        "meta": {"scale": "village"},
-        "religious": [{"kind": "shrine", "x": 500, "y": 500, "w": 30, "h": 24, "label": "Shrine"}],  # east edge x=515
-        "village_groves": [{"role": "water_mouth", "r": 14, "clumps": [[533, 500]]}],
-    }  # 18px off -> canopy overlaps
-    assert "shrine_clear_of_grove_trees" in f_only(M, "shrine_clear_of_grove_trees")
-
-
-def test_torii_clear_of_grove_trees_fires_when_a_clump_covers_the_arch():
-    # a fengshui-grove tree clump sitting on a torii arch reads as the arch buried in the wood
-    M = {"meta": {"scale": "village"}, "torii": [[500, 500, 1]], "village_groves": [{"role": "water_mouth", "r": 14, "clumps": [[505, 504]]}]}
-    assert "torii_clear_of_grove_trees" in f_only(M, "torii_clear_of_grove_trees")
 
 
 def test_dry_plots_clear_of_paddies_fires_on_a_hem_plot_in_the_rice():
@@ -219,21 +172,6 @@ def test_scalebar_matches_declared_scale_fires_on_a_wrong_distance():
     assert "scalebar_matches_declared_scale" in f_only(M, "scalebar_matches_declared_scale")
 
 
-def test_trees_clear_of_fengshui_ponds_fires_on_an_overhanging_clump():
-    # Hoshigaoka's defect in miniature: a grove clump's canopy (1.7x nominal r) crossing the half-moon
-    # pond's water fires; a clump standing clear passes. Pond poly = a simple half-disk stand-in.
-    pond = {"cx": 300, "cy": 300, "r": 40, "facing": 270, "poly": [[340, 300], [300, 340], [260, 300]]}
-    M = {
-        "meta": {"scale": "village"},
-        "crescent_ponds": [pond],
-        "village_groves": [{"poly": [[200, 200], [400, 200], [400, 400], [200, 400]], "role": "windbreak", "r": 10, "clumps": [[310, 315]]}],
-        "labels": [[270, 350, 340, 362, 1, "geomantic pond"]],
-    }
-    assert "trees_clear_of_fengshui_ponds" in f_only(M, "trees_clear_of_fengshui_ponds")
-    M["village_groves"][0]["clumps"] = [[500, 500]]
-    assert "trees_clear_of_fengshui_ponds" not in f_only(M, "trees_clear_of_fengshui_ponds")
-
-
 def test_title_has_placard_fires_on_a_pre_placard_manifest():
     # the parchment card under the title + scale bar (GM 2026-07-21, legibility over scrub) is drawn
     # by s.title() - a manifest without the record predates the card and needs regeneration
@@ -257,98 +195,10 @@ def test_every_feature_classified_for_overlap_passes_for_known_features():
     assert "every_feature_classified_for_overlap" not in f_only(M, "every_feature_classified_for_overlap")
 
 
-def test_walled_structure_yields_to_ward_wall_fires_when_unyielded():
-    # north wall abuts the fence but the compound drew its own wall there (not recorded)
-    assert "walled_structure_yields_to_ward_wall" in f_only(_maus_ward([]), "walled_structure_yields_to_ward_wall")
-
-
-def test_walled_structure_yields_to_ward_wall_passes_when_yielded():
-    assert "walled_structure_yields_to_ward_wall" not in f_only(_maus_ward(["north"]), "walled_structure_yields_to_ward_wall")
-
-
-def test_walled_structure_yields_to_ward_wall_passes_when_not_abutting():
-    # the mausoleum sits well clear of the fence - nothing to yield
-    assert "walled_structure_yields_to_ward_wall" not in f_only(_maus_ward([], maus_cy=2000), "walled_structure_yields_to_ward_wall")
-
-
-def test_walled_structure_yields_to_ward_wall_skips_tilted_compounds():
-    # a tilted compound is not axis-aligned to a fence, so the rule does not apply
-    M = _maus_ward([])
-    M["mausoleums"][0]["rot"] = 30
-    assert "walled_structure_yields_to_ward_wall" not in f_only(M, "walled_structure_yields_to_ward_wall")
-
-
 # ---- no_structure_on_canal: a canal VERTEX sitting inside a building footprint --------------
 # The canal-vs-structure test catches not only a footprint corner near the water but also a
 # canal polyline vertex landing INSIDE a (large) footprint while every corner stays clear of the
 # thin canal segments. A merchant house straddling the canal's bend must fire.
-
-
-def test_field_outline_matches_planting_fires_on_a_phantom_tail():
-    # A DISPERSED map whose field OUTLINE runs 200px past the planted crop (`vis_bbox`) - the over-declared
-    # `field_fall` defect. The point of the fixture: `all_houses_field_adjacent` PASSES on this manifest (the
-    # farm hugs the phantom tail, so it measures as adjacent) while the farm sits out beyond the last rice.
-    # That is the blindness the check exists to cover, so assert BOTH facts.
-    base = {
-        "meta": {"scale": "hamlet", "down_deg": 90},
-        "fields": [{"name": "tail-test", "kind": "paddy", "outline": [[400, 400], [800, 400], [800, 800], [400, 800]], "bbox": [400, 400, 800, 800], "vis_bbox": [400, 400, 800, 600]}],
-        "houses": [{"x": 600, "y": 760, "w": 46, "h": 28, "rot": 0, "kind": "plain"}],
-    }
-    assert "field_outline_matches_planting" in f_only(base, "field_outline_matches_planting")
-    assert "all_houses_field_adjacent" not in f_only(base, "all_houses_field_adjacent")  # the old gate is blind here - that is the whole point
-    # outline == planting: the honest field, no tail -> does NOT fire
-    good = {**base, "fields": [{**base["fields"][0], "vis_bbox": [400, 400, 800, 800]}]}
-    assert "field_outline_matches_planting" not in f_only(good, "field_outline_matches_planting")
-    # a rounding-scale rim (smoothing over irregular plots) is tolerated -> does NOT fire
-    rim = {**base, "fields": [{**base["fields"][0], "vis_bbox": [410, 420, 790, 760]}]}
-    assert "field_outline_matches_planting" not in f_only(rim, "field_outline_matches_planting")
-    # NUCLEATED is scoped OUT: the cluster never rides the envelope, so a tail is inert there
-    nuc = {**base, "meta": {**base["meta"], "nucleated": True}}
-    assert "field_outline_matches_planting" not in f_only(nuc, "field_outline_matches_planting")
-    # a field with no vis_bbox recorded is skipped rather than crashing
-    novis = {**base, "fields": [{k: v for k, v in base["fields"][0].items() if k != "vis_bbox"}]}
-    assert "field_outline_matches_planting" not in f_only(novis, "field_outline_matches_planting")
-
-
-def test_dwellings_above_field_drain_fires_on_a_toe_farm():
-    # a DISPERSED map (no meta.nucleated), downhill = due S (down_deg=90); a drain runs cross-slope (E-W) at
-    # the field's low edge. The first drain segment is DEGENERATE (a repeated point) to exercise that branch.
-    base = {
-        "meta": {"scale": "hamlet", "down_deg": 90},
-        "field_ditches": [{"role": "drain", "field": "toe-test", "poly": [[400, 600], [400, 600], [800, 600]], "w": 4}],
-        "fields": [{"name": "toe-test", "kind": "paddy", "outline": [[380, 560], [820, 560], [820, 640], [380, 640]], "bbox": [380, 560, 820, 640]}],
-    }
-    # a farm 110px DOWNSLOPE (S) of the drain, projecting onto the drain's interior -> in the wet toe -> FIRES
-    bad = {**base, "houses": [{"x": 600, "y": 710, "w": 46, "h": 28, "rot": 0, "kind": "plain"}]}
-    assert "dwellings_above_field_drain" in f_only(bad, "dwellings_above_field_drain")
-    # the same farm UPSLOPE (N) of the drain is on dry ground -> does NOT fire
-    good = {**base, "houses": [{"x": 600, "y": 490, "w": 46, "h": 28, "rot": 0, "kind": "plain"}]}
-    assert "dwellings_above_field_drain" not in f_only(good, "dwellings_above_field_drain")
-    # a flank farm off the drain's END (W of its start) is a legit homestead beside the field -> does NOT fire
-    flank = {**base, "houses": [{"x": 250, "y": 710, "w": 46, "h": 28, "rot": 0, "kind": "plain"}]}
-    assert "dwellings_above_field_drain" not in f_only(flank, "dwellings_above_field_drain")
-    # a NUCLEATED cluster is scoped OUT (governed by cluster_abuts_fields), even sitting downslope
-    nuc = {**base, "meta": {**base["meta"], "nucleated": True}, "houses": [{"x": 600, "y": 710, "w": 46, "h": 28, "rot": 0, "kind": "plain"}]}
-    assert "dwellings_above_field_drain" not in f_only(nuc, "dwellings_above_field_drain")
-
-
-def test_village_cluster_compact_fires_on_a_hollow_cluster():
-    """A nucleated village whose houses ring a big HOLLOW hull (an over-wide cluster stranding houses far
-    from the fields) must fire; the same houses packed into a compact blob must not. The teeth: it measures
-    built COVERAGE of the house convex hull, which `cluster_abuts_fields` (a per-house span allowance) misses.
-    Village scale + >=12 houses only."""
-
-    base = {
-        "meta": {"scale": "village", "nucleated": True},
-        "fields": [{"name": "p", "kind": "paddy", "outline": [[0, 400], [800, 400], [800, 900], [0, 900]], "bbox": [0, 400, 800, 900]}],
-    }
-    ring = [{"x": 400 + 300 * math.cos(t), "y": 200 + 300 * math.sin(t), "w": 24, "h": 18, "rot": 0, "kind": "plain"} for t in [i * 2 * math.pi / 16 for i in range(16)]]
-    assert "village_cluster_compact" in f_only({**base, "houses": ring}, "village_cluster_compact")
-    grid = [{"x": 360 + 26 * (i % 4), "y": 160 + 26 * (i // 4), "w": 24, "h": 18, "rot": 0, "kind": "plain"} for i in range(16)]
-    assert "village_cluster_compact" not in f_only({**base, "houses": grid}, "village_cluster_compact")
-    # a HAMLET (or a small cluster) is legitimately loose - the check is village-scale + >=12 houses only
-    assert "village_cluster_compact" not in f_only({**base, "meta": {"scale": "hamlet", "nucleated": True}, "houses": ring}, "village_cluster_compact")
-    assert "village_cluster_compact" not in f_only({**base, "houses": ring[:8]}, "village_cluster_compact")
 
 
 def test_no_structure_on_paddy_fires_when_a_farmhouse_sinks_a_corner_into_the_crop():

@@ -31,30 +31,6 @@ def test_city_kosatsuba_floor_is_gates_plus_central():
 
 
 @pytest.mark.tiers("city")
-def test_city_kosatsuba_per_gate_fires_on_an_uncovered_gate():
-    # draw the SET: every main gate's approach corridor carries a board (~800 real ft);
-    # one gate covered, the other bare -> fires and names the bare gate's coordinates
-    M = {
-        "meta": {"scale": "city", "ftpx": 3},
-        "kosatsuba": [_kosatsuba(500, 520)],
-        "road": [[0, 500], [2000, 500]],
-        "gates": [[520, 500], [1900, 500]],
-    }
-    assert "city_kosatsuba_per_gate" in f_only(M, "city_kosatsuba_per_gate")
-
-
-@pytest.mark.tiers("city")
-def test_city_kosatsuba_per_gate_passes_when_every_gate_is_covered():
-    M = {
-        "meta": {"scale": "city", "ftpx": 3},
-        "kosatsuba": [_kosatsuba(500, 520), _kosatsuba(1880, 520)],
-        "road": [[0, 500], [2000, 500]],
-        "gates": [[520, 500], [1900, 500]],
-    }
-    assert "city_kosatsuba_per_gate" not in f_only(M, "city_kosatsuba_per_gate")
-
-
-@pytest.mark.tiers("city")
 def test_drain_runs_cross_slope_uses_the_FIELD_s_own_fall_not_the_map_s():
     # same drain, but this field falls EAST (0 deg) - so the drain now runs across its own contour
     # and is correct. A city ringed by farmland drains several ways at once; one map-level constant

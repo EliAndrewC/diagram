@@ -104,3 +104,8 @@ at run time (`f"{scale}_has_kosatsuba"`, the headman family) and the two stream 
 The reference hamlet now runs **136 checks** (232 at the feature's opening); the registry names 153, of which 126
 keep on the measured test, 17 are best-effort placers' guarantees, 10 are the run-time-named residue. The
 frozen check-name roster is regenerated from the live registry; the corpus stands at what those checks can fire.
+
+**Final numbers after (5) (2026-08-28):** 595 segments, 153 check names, the reference runs 136 checks; 134 fixtures;
+2,251 tests at the unlocked gate, `make done` **28 s** end to end (17 s test phase) - from 3,898 tests and 1 m 45 s
+when this feature opened, and ~4.5 min when feature 135 did. A further 148 check tests went with the stubbed
+calls (ten files emptied); the frozen registry rows were re-derived from the live registry.

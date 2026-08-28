@@ -3,78 +3,12 @@
 from l7r.diagram import check_village
 from tests.check_village._builders import (
     WALL,
-    _city_dead,
-    _crem_cem,
-    _crem_road,
-    _crem_temple,
     _paddy_field_rec,
-    f,
     f_only,
     manifest,
 )
 
-
 # ---- field_ditches_reach_source_and_sink (role-aware: supply->source, drain->sink) ----------
-def test_walled_graveyards_inside_and_outside_passes_when_mixed():
-    assert "walled_graveyards_inside_and_outside" not in f_only(_city_dead(), "walled_graveyards_inside_and_outside")
-
-
-def test_walled_exterior_cemetery_larger_fires_when_not_larger():
-    # the outside common ground is no bigger than the cramped intramural one
-    assert "walled_exterior_cemetery_larger" in f_only(_city_dead(cems=[(300, 300), (700, 300), (100, 100, 60, 40)]), "walled_exterior_cemetery_larger")
-
-
-def test_walled_exterior_cemetery_larger_passes_when_larger():
-    assert "walled_exterior_cemetery_larger" not in f_only(_city_dead(), "walled_exterior_cemetery_larger")
-
-
-def test_cremation_ground_by_external_cemetery_passes_when_adjacent():
-    assert "cremation_ground_by_external_cemetery" not in f_only(_crem_cem((300, 300), (300, 420)), "cremation_ground_by_external_cemetery")
-
-
-def test_cremation_ground_by_external_cemetery_fires_when_far():
-    assert "cremation_ground_by_external_cemetery" in f_only(_crem_cem((300, 300), (900, 900)), "cremation_ground_by_external_cemetery")
-
-
-def test_cremation_ground_by_external_cemetery_fires_when_only_internal_cemetery():
-    # walled: cremation outside, but the only cemetery is INSIDE the wall (even adjacent) -> not external -> fires
-    assert "cremation_ground_by_external_cemetery" in f_only(_crem_cem((150, 500), (250, 500), walled=True), "cremation_ground_by_external_cemetery")
-
-
-def test_cremation_ground_by_external_cemetery_passes_walled_with_external():
-    # walled: cremation + cemetery both outside the wall, adjacent -> ok
-    assert "cremation_ground_by_external_cemetery" not in f_only(_crem_cem((150, 500), (150, 620), walled=True), "cremation_ground_by_external_cemetery")
-
-
-def test_cremation_set_back_from_road_fires_when_on_the_road():
-    assert "cremation_ground_set_back_from_main_road" in f_only(_crem_road((300, 260), (300, 360)), "cremation_ground_set_back_from_main_road")  # 60px off the road
-
-
-def test_cremation_set_back_from_road_passes_when_far():
-    assert "cremation_ground_set_back_from_main_road" not in f_only(_crem_road((300, 500), (300, 600)), "cremation_ground_set_back_from_main_road")
-
-
-def test_cremation_set_back_from_road_passes_when_no_main_road():
-    M = _crem_road((300, 260), (300, 360))
-    del M["road"]  # a settlement on minor streets only - nothing to be set back from
-    assert "cremation_ground_set_back_from_main_road" not in f_only(M, "cremation_ground_set_back_from_main_road")
-
-
-def test_cremation_not_between_temple_and_road_fires_when_between():
-    # cremation on the road side of its monastery (closer to the road than the temple), yet still
-    # clear of the road's own set-back floor - only the between-temple-and-road rule should object
-    fails = f(_crem_temple((300, 360)))
-    assert "cremation_ground_not_between_temple_and_road" in fails
-    assert "cremation_ground_set_back_from_main_road" not in fails  # isolates the new rule
-
-
-def test_cremation_not_between_temple_and_road_passes_when_behind():
-    assert "cremation_ground_not_between_temple_and_road" not in f_only(_crem_temple((300, 640)), "cremation_ground_not_between_temple_and_road")
-
-
-def test_cremation_not_between_temple_and_road_passes_when_no_temple_nearby():
-    # no temple within association range -> nothing to be "in front of"
-    assert "cremation_ground_not_between_temple_and_road" not in f_only(_crem_temple((300, 360), mon_xy=(300, 1500)), "cremation_ground_not_between_temple_and_road")
 
 
 # ---- channel_source_anchored: a channel that claims a FOREST source ------------------------
