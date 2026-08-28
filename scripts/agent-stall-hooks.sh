@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 # agent-stall-hooks.sh - a background subagent that has silently stalled is REPORTED, never assumed running.
-# (GUARD_EDIT_OK: a NEW guard, feature 138 - the GM 2026-08-28: "build that so that future sessions,
+# (GUARD_EDIT_OK: a NEW guard, feature 143 - the GM 2026-08-28: "build that so that future sessions,
 # including yourself and anyone else that might run into this, will not get stuck in the way that you
 # have repeatedly gotten stuck")
 #
-# THE FAILURE (2026-08-28, feature 138): a `source-reader` agent launched at 02:31Z hit a bad TLS
+# THE FAILURE (2026-08-28, feature 143): a `source-reader` agent launched at 02:31Z hit a bad TLS
 # certificate on a Chinese host at 02:35Z and never produced another record - and the harness sent NO
 # completion notification. Its sibling agents finished in ~7 minutes each. The parent session assumed
 # it was still running for TEN HOURS, until the GM asked. A relaunch stalled the same way 13 minutes in.
@@ -14,7 +14,7 @@
 # THE SHAPE OF A STALL: a subagent transcript (~/.claude/projects/<proj>/<session>/subagents/agent-<id>.jsonl)
 # whose LAST record is a `user` record (a tool_result waiting for the assistant's next turn) and whose
 # mtime has not moved for STALE seconds. A finished agent ends on an `assistant` record. Nothing else
-# distinguishes the two - the harness gives no liveness signal (research note in specs/138 ledger).
+# distinguishes the two - the harness gives no liveness signal (research note in specs/143 ledger).
 #
 # Modes:
 #   prompt                  (UserPromptSubmit hook) one-shot: list the session's stalled agents on stdout

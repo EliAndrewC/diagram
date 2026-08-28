@@ -1,6 +1,6 @@
 # Town deep audit - Hoshizora + Hirameki (2026-07-24)
 
-**Sources (feature 138, 2026-08-28):** a dated audit; its external research is listed in section 8 below (Izumida on machiya, JAANUS on hinomi-yagura, the hatago counts, the Edo pawnshop count, Takayama Jin'ya) and the findings it fed are now cited in `research/urban-features.md` and `research/cities/fabric.md`.
+**Sources (feature 143, 2026-08-28):** a dated audit; its external research is listed in section 8 below (Izumida on machiya, JAANUS on hinomi-yagura, the hatago counts, the Edo pawnshop count, Takayama Jin'ya) and the findings it fed are now cited in `research/urban-features.md` and `research/cities/fabric.md`.
 
 
 A granular audit of the two town-scale pool maps against (a) the project's own documented

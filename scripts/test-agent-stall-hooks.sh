@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # test-agent-stall-hooks.sh - prove agent-stall-hooks.sh reports a stalled subagent and stays quiet otherwise.
-# (GUARD_EDIT_OK: the companion of a NEW guard, feature 138)
+# (GUARD_EDIT_OK: the companion of a NEW guard, feature 143)
 set -u
 HOOK="$(cd "$(dirname "$0")" && pwd)/agent-stall-hooks.sh"
 pass=0 fail=0

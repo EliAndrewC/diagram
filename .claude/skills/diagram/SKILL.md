@@ -190,7 +190,7 @@ Mode A diagrams are cropped tight - set the `viewBox` to hug the drawn content w
 
 ## Rokugan historical reference framework
 
-**Sources (feature 138, 2026-08-28):** the Edo and Sengoku defaults are the GM's setting decisions (setting-canon); the one historical claim here - Edo detention as a holding function, not imprisonment-as-punishment - is cited in `research/buildings.md` "Cells are remand, not punishment" (`tenmacho-jawiki`, with the 永牢/過怠牢 exception noted); the caste assignments cite `/host-l7r-repo/gm-assistant/setting/castes.md`.
+**Sources (feature 143, 2026-08-28):** the Edo and Sengoku defaults are the GM's setting decisions (setting-canon); the one historical claim here - Edo detention as a holding function, not imprisonment-as-punishment - is cited in `research/buildings.md` "Cells are remand, not punishment" (`tenmacho-jawiki`, with the 永牢/過怠牢 exception noted); the caste assignments cite `/host-l7r-repo/gm-assistant/setting/castes.md`.
 
 L5R/L7R blends historical periods. When uncertain about authenticity:
 

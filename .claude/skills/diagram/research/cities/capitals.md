@@ -412,9 +412,9 @@ the castle's implied goten (never drawn, per the blank-castle doctrine). The che
 it: `capital_chancellery_meets_in_the_castle` now fires if a chancellery compound is drawn
 outside. The inventory table in `settlements/capitals.md` moves the chancellery inside.
 
-*Correction to the record (2026-08-28, feature 138) - CONTRADICTED on the anchor, rule unchanged, awaiting the GM:* ja.wikipedia 評定所 places the Hyōjōsho **outside Edo castle, at Tatsunokuchi** (present Marunouchi) - across the moat from the Ōte gate, in the daimyo-mansion belt, not within the castle. The entry's "sat WITHIN Edo castle" is wrong as written; whether the capital's chancellery should therefore stand in the castle (the GM's ruling, which feature 020 implemented) or on the government avenue beside the castle (the Edo form) is the GM's call. Listed in the feature 138 ledger, section G.
+*Correction to the record (2026-08-28, feature 143) - CONTRADICTED on the anchor, rule unchanged, awaiting the GM:* ja.wikipedia 評定所 places the Hyōjōsho **outside Edo castle, at Tatsunokuchi** (present Marunouchi) - across the moat from the Ōte gate, in the daimyo-mansion belt, not within the castle. The entry's "sat WITHIN Edo castle" is wrong as written; whether the capital's chancellery should therefore stand in the castle (the GM's ruling, which feature 020 implemented) or on the government avenue beside the castle (the Edo form) is the GM's call. Listed in the feature 143 ledger, section G.
 
-**Resolved (GM question 2026-08-28, feature 138 T20) - ACCURATE for a median domain; the Edo anchor replaced.** The GM asked whether a TYPICAL domain's council met inside or outside its castle, Edo being an unusual capital. The record read: a castle-holding han's 藩庁 stood "城に" - at the castle - and a castle-less han's at its jin'ya (`hancho-jawiki`); the goten's public half is the 政庁 (`honmaru-jawiki`); at Kakegawa, ~51-59,000 koku - a median domain - the "政務所である二ノ丸御殿" sat in the ninomaru (`kakegawa-castle-jawiki`), and Kawagoe likewise used its ninomaru; the karō decided in council and lived near the castle (`karo-jawiki`); a small domain's jin'ya held 居館 and 役所 in one compound (`jinya-jawiki`). No page read puts a domain's administration in the town. So the capital's chancellery meeting IN the castle is the attested median form - in the ninomaru or honmaru goten, which ring varying by castle - and the earlier prose about Edo's Hyōjōsho (a bakufu judicial council at Tatsunokuchi, outside the castle) is struck as the wrong anchor. Class for the HTML modal: **accurate**.
+**Resolved (GM question 2026-08-28, feature 143 T20) - ACCURATE for a median domain; the Edo anchor replaced.** The GM asked whether a TYPICAL domain's council met inside or outside its castle, Edo being an unusual capital. The record read: a castle-holding han's 藩庁 stood "城に" - at the castle - and a castle-less han's at its jin'ya (`hancho-jawiki`); the goten's public half is the 政庁 (`honmaru-jawiki`); at Kakegawa, ~51-59,000 koku - a median domain - the "政務所である二ノ丸御殿" sat in the ninomaru (`kakegawa-castle-jawiki`), and Kawagoe likewise used its ninomaru; the karō decided in council and lived near the castle (`karo-jawiki`); a small domain's jin'ya held 居館 and 役所 in one compound (`jinya-jawiki`). No page read puts a domain's administration in the town. So the capital's chancellery meeting IN the castle is the attested median form - in the ninomaru or honmaru goten, which ring varying by castle - and the earlier prose about Edo's Hyōjōsho (a bakufu judicial council at Tatsunokuchi, outside the castle) is struck as the wrong anchor. Class for the HTML modal: **accurate**.
 
 ## Moat water: drawn connections outside, standing water inside - and yes, it scums
 
@@ -554,7 +554,7 @@ they front the avenue like a corridor instead of floating beside a runway.
 **The transferable rule:** pass `s.lw(real_ft)` to every way's width, never raw pixels - the
 default's docstring already cites its source, and any hand width should be able to as well.
 
-*Correction to the record (2026-08-28, feature 138) - CONTRADICTED on a drawn default, rule unchanged, awaiting the GM:* the engine's `s.road` default of 26 ft is glossed as "the Tōkaidō's own width"; ja.wikipedia 東海道 gives the 1604 standard as **5 ken ≈ 9 m ≈ 29.5 ft**. The 45 ft ōte-suji stands as a proportion (half again the highway); the 13.8 m Honchō figure it was pegged to was not found (9.9-11.8 m are the figures seen). Ledger section G.
+*Correction to the record (2026-08-28, feature 143) - CONTRADICTED on a drawn default, rule unchanged, awaiting the GM:* the engine's `s.road` default of 26 ft is glossed as "the Tōkaidō's own width"; ja.wikipedia 東海道 gives the 1604 standard as **5 ken ≈ 9 m ≈ 29.5 ft**. The 45 ft ōte-suji stands as a proportion (half again the highway); the 13.8 m Honchō figure it was pegged to was not found (9.9-11.8 m are the figures seen). Ledger section G.
 
 ## Dimensional audit of the drawn capital (GM-prompted, 2026-08-09)
 
@@ -1077,7 +1077,7 @@ grounds (parish + extramural common), while our cemeteries key also holds each t
 precinct plot. A capital therefore shows more cemetery records than the band, legitimately, and
 the band is not applied at capital scale.
 
-*Re-sourcing note (2026-08-28, feature 138):* the bathhouse count reads as "over 600" in the Bunka era on the page read, not 523; the per-capita conclusion (one per ~2,000) is unchanged in magnitude.
+*Re-sourcing note (2026-08-28, feature 143):* the bathhouse count reads as "over 600" in the Bunka era on the page read, not 523; the per-capita conclusion (one per ~2,000) is unchanged in magnitude.
 
 ## How far outside the wall does the funerary ground sit? (research, GM question 2026-08-10)
 

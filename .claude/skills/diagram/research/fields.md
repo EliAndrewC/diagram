@@ -365,7 +365,7 @@ T-junctions. A triangular basin is legitimate; several survive on every map. Wha
 the number of sides but the SIZE, with triangularity as its symptom, because a clipped corner of the
 plot lattice at the fan's boundary is the shape a fragment naturally takes.
 
-*Re-sourcing note (2026-08-28, feature 138):* the bund page read gives a standard trapezoid of 30 cm height and 30 cm TOP width on 1:1 slopes, i.e. about 1 ft high and ~3 ft at the base - the entry's "1-2 ft wide, ~1 ft high" reads as a top-to-base span and is consistent; cold regions run ~50 cm top / ~40 cm high. Nothing read supports a bund a meter high.
+*Re-sourcing note (2026-08-28, feature 143):* the bund page read gives a standard trapezoid of 30 cm height and 30 cm TOP width on 1:1 slopes, i.e. about 1 ft high and ~3 ft at the base - the entry's "1-2 ft wide, ~1 ft high" reads as a top-to-base span and is consistent; cold regions run ~50 cm top / ~40 cm high. Nothing read supports a bund a meter high.
 
 ## Nitrogen - a flooded paddy makes its own
 

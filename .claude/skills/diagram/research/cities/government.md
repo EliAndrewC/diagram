@@ -65,4 +65,4 @@ The count is NOT the problem and must not be "fixed" by deleting servants: budge
 
 **Sources:** `jokamachi-jawiki` (READ 2026-08-28: 侍町 by rank around the castle, 町人地 outside it, 寺町 at the rim), `jokamachi-zoning` (chonin strips separating samurai groups; the Grokipedia half of that key is dropped, the Nakasendo Way half stands)
 
-*Recorded here on 2026-08-28 (feature 138) because the finding was stated only in an engine comment.* An Edo-period jokamachi assigned samurai ground (武家地) and townsman ground (町人地) as separate districts, and a Chinese provincial seat kept commerce off the yamen quarter; a laborer terrace between two samurai houses inside the palisade is not variety, it contradicts the fence around it.
+*Recorded here on 2026-08-28 (feature 143) because the finding was stated only in an engine comment.* An Edo-period jokamachi assigned samurai ground (武家地) and townsman ground (町人地) as separate districts, and a Chinese provincial seat kept commerce off the yamen quarter; a laborer terrace between two samurai houses inside the palisade is not variety, it contradicts the fence around it.

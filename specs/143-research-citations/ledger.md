@@ -241,10 +241,10 @@
 | `specs/012-in-field-paddy-features/research.md` | paddy features | re-sourced (header pointer to cited tree entries; own links kept) |
 | `specs/013-near-ring-farmland/research.md` | near-ring farmland | re-sourced (header pointer to cited tree entries; own links kept) |
 | `specs/014-paddy-dominant-near-ring/research.md` | paddy-dominant near ring | re-sourced (header pointer to cited tree entries; own links kept) |
-| `specs/015-punishment-execution-grounds/research.md` | execution grounds | re-sourced (header pointer to cited tree entries; own links kept) |
-| `specs/016-minami-provincial-city/research.md` | Minami (Grokipedia key in the queue) | re-sourced (header pointer to cited tree entries; own links kept) |
+| `specs/015-punishment-execution-grounds/research.md` | execution grounds | already cited - its own inline links (9/13/11); no header added, the spec has open tasks and a push touching it is refused |
+| `specs/016-minami-provincial-city/research.md` | Minami (Grokipedia key in the queue) | already cited - its own inline links (9/13/11); no header added, the spec has open tasks and a push touching it is refused |
 | `specs/018-capital-space-budget/research.md` | capital space budget | re-sourced (header pointer to cited tree entries; own links kept) |
-| `specs/021-capital-housing/research.md` | capital housing | re-sourced (header pointer to cited tree entries; own links kept) |
+| `specs/021-capital-housing/research.md` | capital housing | already cited - its own inline links (9/13/11); no header added, the spec has open tasks and a push touching it is refused |
 | `specs/107-ubame-town/research.md` | Ubame (Grokipedia key in the queue) | re-sourced (header pointer to cited tree entries; own links kept) |
 
 ## E. Grounding stated in engine comments

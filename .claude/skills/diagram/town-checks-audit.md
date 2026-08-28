@@ -1,6 +1,6 @@
 # Town-scale check audit (GM-requested, 2026-07-21)
 
-**Sources (feature 138, 2026-08-28):** a check audit - rendering and gate coverage, nothing physical asserted; the doctrine holes it names are grounded where each rule lives (`research/towns.md`, `research/urban-features.md`).
+**Sources (feature 143, 2026-08-28):** a check audit - rendering and gate coverage, nothing physical asserted; the doctrine holes it names are grounded where each rule lives (`research/towns.md`, `research/urban-features.md`).
 
 
 Prompted by the water/farmstead/windbreak fix rounds on Hoshizora + Hirameki: every one of

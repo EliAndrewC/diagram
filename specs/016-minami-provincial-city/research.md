@@ -1,8 +1,5 @@
 # Phase 0 research: Minami, the Fox Clan provincial city
 
-**Sources (feature 138, 2026-08-28):** Findings 1-4 carry inline links (13) and are re-recorded with keys in `research/religion-and-death.md`; the Grokipedia half of `zhengyi-householder-priests` is dropped (the Patheos half stands - see `research/SOURCES.md`).
-
-
 *Principle XII opening bookend. For each element this feature adds or changes: what the historical reality was (China first, Japan corroborating), whether the proposed design matches it, and what DETERMINES the element in reality. Findings that led to rejecting or revising a design are recorded too. The closing bookend - re-examining the rendered PNG against these findings - is the last task in `tasks.md`.*
 
 Entries below follow the `research/README.md` four-field format and are destined for `research/religion-and-death.md` (temple program) and `research/urban-features.md` (timber works) once implemented.

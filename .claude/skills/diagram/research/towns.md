@@ -14,7 +14,7 @@ Every entry: what the research found, the decision it drove, and any deliberate 
 
 **Evidence:** attested (the ward-to-street shift; jokamachi zoning), researched (the gate-to-yamen axis - not re-read)
 
-**Sources:** `song-architecture-enwiki` (READ: Tang walled wards -> Song shop-lined streets; "curfew" is the entry's gloss), `guanxiang-zdic` (the term; commerce outside the gates SUMMARY-ONLY), `jokamachi-jawiki` (READ: zoning and kinked streets). The gate-to-yamen axis for an ordinary county seat: SUMMARY-ONLY - re-sourced 2026-08-28, feature 138
+**Sources:** `song-architecture-enwiki` (READ: Tang walled wards -> Song shop-lined streets; "curfew" is the entry's gloss), `guanxiang-zdic` (the term; commerce outside the gates SUMMARY-ONLY), `jokamachi-jawiki` (READ: zoning and kinked streets). The gate-to-yamen axis for an ordinary county seat: SUMMARY-ONLY - re-sourced 2026-08-28, feature 143
 
 Chinese towns - Rokugan's geographic model - were *planned*, not organic: a main avenue ran from the principal (usually south) gate straight to the **government office (yamen)**, which sat on that axis facing south, with the grid divided into blocks by cross streets. Early (Tang) cities walled those blocks into curfew *wards*; by the Song the wards opened into **shop-lined streets** (merchant shophouses fronting the roadbed), and commerce spilled **outside the gates** along the approach road (the *guan-xiang* suburb). Japan copied the Tang grid for its imperial capitals (Nara/Kyoto) but laid out castle towns (*jokamachi*) as zoned districts - samurai by the castle, merchants in trade-blocks, temples at the edge - with deliberately kinked, defensive streets.
 

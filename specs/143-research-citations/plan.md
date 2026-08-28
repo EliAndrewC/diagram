@@ -1,6 +1,6 @@
 # Implementation Plan: Every Research Finding Cites Its Sources
 
-**Branch**: none (`SPECIFY_FEATURE=138-research-citations`) | **Date**: 2026-08-28 | **Spec**: [spec.md](spec.md)
+**Branch**: none (`SPECIFY_FEATURE=143-research-citations`) | **Date**: 2026-08-28 | **Spec**: [spec.md](spec.md)
 
 **Input**: [spec.md](spec.md), authority [gm-request.md](gm-request.md)
 
@@ -21,7 +21,7 @@ queued for the GM.
 **Language/Version**: Markdown records; no code
 **Primary Dependencies**: the `source-reader` agent (Sonnet; WebFetch/WebSearch) for every reading;
 `WebSearch` in the session for the search pass
-**Storage**: `research/*.md`, `research/SOURCES.md`, `specs/138-research-citations/ledger.md`
+**Storage**: `research/*.md`, `research/SOURCES.md`, `specs/143-research-citations/ledger.md`
 **Testing**: the existing gate (the task-boxes test); the ledger's open-row count as the measure
 **Target Platform**: n/a
 **Project Type**: docs only
@@ -91,7 +91,7 @@ generator and rolls no map; a docs-only delta takes the DIRECT route and owes no
 ## Project Structure
 
 ```text
-specs/138-research-citations/
+specs/143-research-citations/
 ├── gm-request.md        # verbatim
 ├── spec.md
 ├── plan.md              # this file

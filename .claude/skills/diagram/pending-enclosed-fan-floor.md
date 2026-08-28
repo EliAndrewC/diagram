@@ -1,6 +1,6 @@
 # PENDING: the enclosed-fan tract floor check (GM decision 2026-08-03)
 
-**Sources (feature 138, 2026-08-28):** a pending engine decision; the tract-floor finding it rests on is `research/fields.md` "Tract sizes - no settlement-class cap" (`buck-survey`, `li-bozhong-jiangnan`, `skinner-marketing`, `aric-land-history`, `mdpi-kunisaki`).
+**Sources (feature 143, 2026-08-28):** a pending engine decision; the tract-floor finding it rests on is `research/fields.md` "Tract sizes - no settlement-class cap" (`buck-survey`, `li-bozhong-jiangnan`, `skinner-marketing`, `aric-land-history`, `mdpi-kunisaki`).
 
 
 **Why pending:** the rule is DECIDED (settlements/fields.md "Paddy TRACT size") and the check below

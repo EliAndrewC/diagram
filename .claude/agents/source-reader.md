@@ -32,7 +32,7 @@ A list of items, each: **the claim as written in the entry** (verbatim), **the s
 1. **Fetch the source itself** with `WebFetch`. Follow a redirect by calling again with the new
    URL. On a 403 or a paywall, try the obvious alternates once each: the publisher's abstract page,
    a PMC or arXiv copy, the Wikipedia article the summary was echoing. Do not try more than three
-   URLs per item. **ONE attempt per host, ever** (GM 2026-08-28, feature 138): on a TLS/certificate
+   URLs per item. **ONE attempt per host, ever** (GM 2026-08-28, feature 143): on a TLS/certificate
    error, a 403, a 404, a refused connection or a redirect to a login page, record the verdict
    (NOT-FOUND, or SUMMARY-ONLY if a search snippet showed the passage) and MOVE ON - never retry that
    host, never wait on it. Two runs of this agent stalled for good on Chinese hosts with bad

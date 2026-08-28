@@ -1,8 +1,5 @@
 # Phase 0 Research: Punishment Spots and Execution Grounds
 
-**Sources (feature 138, 2026-08-28):** sections 0-4 carry their own inline links (9); the settled findings are cited in `research/urban-features.md` "The justice works" (`caishikou-enwiki`, `qiushen-zhwiki`, `suzugamori-jawiki`, `kozukappara-jawiki`).
-
-
 **Feature**: 015-punishment-execution-grounds | **Date**: 2026-07-25
 
 This is the **opening gate** required by Constitution Principle XII. For each element the feature adds, it states what the historical reality was (China-first, Japan corroborating, per the `/diagram` doctrine), whether the proposed design matches it, and **what determines the element in reality** - the governing variable, which is the thing a generator most often gets wrong.

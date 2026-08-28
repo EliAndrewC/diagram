@@ -12,16 +12,16 @@ Cite by key in an entry's `**Sources:**` line. Add a key here the first time a s
 
 ## Re-sourcing queue
 
-Findings recorded before the rule, or on a source the rule now excludes. Each is re-sourced when its entry is next revisited - not rewritten wholesale - and struck from this list then. **Feature 138 (2026-08-28) worked the whole queue and every `not recorded` entry**; what remains is what a page could not be read for, each labeled in its entry.
+Findings recorded before the rule, or on a source the rule now excludes. Each is re-sourced when its entry is next revisited - not rewritten wholesale - and struck from this list then. **Feature 143 (2026-08-28) worked the whole queue and every `not recorded` entry**; what remains is what a page could not be read for, each labeled in its entry.
 
 - `zhengyi-householder-priests` - the Grokipedia half DROPPED (2026-08-28); the Patheos half stands.
 - Economy of the Song dynasty (Grokipedia) - RESOLVED 2026-08-28: `economy-song-enwiki` (Hartwell's figure, read).
 - History of agriculture in China (Grokipedia) - RESOLVED 2026-08-28: `loess-plateau-enwiki` (the summer concentration read; the mm range dropped as unsourced).
-- Nagoya Castle (Grokipedia; site documentation) - the site-documentation half stands; the Grokipedia half is to be replaced by ja.wikipedia 名古屋城 (feature 138 leftover).
+- Nagoya Castle (Grokipedia; site documentation) - the site-documentation half stands; the Grokipedia half is to be replaced by ja.wikipedia 名古屋城 (feature 143 leftover).
 - Jokamachi surveys - RESOLVED 2026-08-28: `jokamachi-jawiki` read; the Grokipedia half dropped from the key.
 - Village lane WIDTH (T50, 2026-08-27): no numeric source found for an ordinary hamlet lane or farm path in Japan or China; the drawn 3 / 5 / 6 ft stand as drawing conventions inside read bounds (Wikipedia "Stone routes" 2.7 m cart road; ja.wikipedia "大八車"; MLIT road history; Low-Tech Magazine on the wheelbarrow). A measured survey of a surviving village lane would settle it.
 - Still summary-only after the `source-reader` run of 2026-08-27 (T45), each labeled in its entry: the bund-width convention (IRRI, unreachable; FAO read and larger); the Shirakawa farmstead bamboo grove (Kids Web Japan, 403 with no corroboration); the turn-minimization sentence (Ma et al. 2024 full text - the abstract's angle finding IS read); EUNIS E5.2 (404).
-- Summary-only or not found after feature 138's passes (2026-08-28), each labeled in its entry and listed by file in `specs/138-research-citations/ledger.md` section F2: the Jōge daikansho plan; the daikan-debt figure; the jin'ya coverage ratio; the Song monk census year; the Shunde 1581 percentages; the dike-pond board sluice (Ruddle & Zhong 1988); the lotus area share; the tameike m3/ha ratio; the forest stems/ha band; the Kaifeng tower count; the communal-well ratio; the Sado fire count.
+- Summary-only or not found after feature 143's passes (2026-08-28), each labeled in its entry and listed by file in `specs/143-research-citations/ledger.md` section F2: the Jōge daikansho plan; the daikan-debt figure; the jin'ya coverage ratio; the Song monk census year; the Shunde 1581 percentages; the dike-pond board sluice (Ruddle & Zhong 1988); the lotus area share; the tameike m3/ha ratio; the forest stems/ha band; the Kaifeng tower count; the communal-well ratio; the Sado fire count.
 
 ## Works cited
 
@@ -511,7 +511,7 @@ Qing Beijing street-fence coverage (Dashilan street history; Beijing city fortif
 
 ### `jokamachi-zoning`
 
-Jokamachi surveys (Nakasendo Way, *Castle Towns*; the Grokipedia half dropped 2026-08-28, feature 138 - the zoning claims now also rest on `jokamachi-jawiki`, READ)
+Jokamachi surveys (Nakasendo Way, *Castle Towns*; the Grokipedia half dropped 2026-08-28, feature 143 - the zoning claims now also rest on `jokamachi-jawiki`, READ)
 
 *Used for:* chonin wards forming narrow strips that SEPARATE different groups of samurai, sited along the major thoroughfares; separation within the buke-chi being per-compound ("larger compounds separated by walls and gates") rather than a district palisade; chonin plots smaller per family and tightly aligned along the streets
 
@@ -655,7 +655,7 @@ ja.wikipedia 屋敷神; minka-en.com 屋敷神; satologue.com 屋敷神様 (READ
 
 ### `tenmacho-jawiki`
 
-ja.wikipedia 伝馬町牢屋敷 (READ 2026-08-28, feature 138)
+ja.wikipedia 伝馬町牢屋敷 (READ 2026-08-28, feature 143)
 
 *Used for:* the Edo remand jail's size (2,677坪 ≈ 8,850 m2), its neribei wall and outer moat; that it held 未決囚 pending judgment AND, exceptionally, 永牢・過怠牢 prison-as-sentence cases
 
@@ -787,7 +787,7 @@ Adachi City museum, 高札 (https://www.city.adachi.tokyo.jp/hakubutsukan/chiiki
 
 ### `caishikou-enwiki`
 
-en.wikipedia Caishikou Execution Grounds (READ 2026-08-28, feature 138)
+en.wikipedia Caishikou Execution Grounds (READ 2026-08-28, feature 143)
 
 *Used for:* the Qing execution ground at the crossroads of Xuanwumen Outer Street and Luomashi Street, "Vegetable Market Execution Ground"; the term 棄市 is not on the page
 
@@ -1057,7 +1057,7 @@ Groundwater commons and the kabu-ido rules, *Water History* (https://link.spring
 
 ### `kochi-seiri-jawiki`
 
-ja.wikipedia 耕地整理 (READ 2026-08-28, feature 138)
+ja.wikipedia 耕地整理 (READ 2026-08-28, feature 143)
 
 *Used for:* rectangular plot consolidation as a Meiji institution - the Shizuoka method of 1872, the 耕地整理法 of 1899/1900, "区画の整形化と正方位化"
 
@@ -1375,7 +1375,7 @@ The 1987 survey of Kashima, Tonami plain (kainyo homestead groves) - SUMMARY-ONL
 
 ### `cssn-sangji-yutang`
 
-中国社会科学网, 从生态美学视角研究桑基鱼塘 (https://www.cssn.cn/ztzl/jzz/rwln/wh/lnfw1/202209/t20220923_5541481.shtml; READ 2026-08-28, feature 138)
+中国社会科学网, 从生态美学视角研究桑基鱼塘 (https://www.cssn.cn/ztzl/jzz/rwln/wh/lnfw1/202209/t20220923_5541481.shtml; READ 2026-08-28, feature 143)
 
 *Used for:* the classic ratio named as "基六塘四" (dike six, pond four - note the order); early dikes planted with mulberry, tea, vegetables and fruit, fruit-dike ponds the commonest; mulberry dominant from the late Ming in Nanhai and Shunde
 
@@ -1447,7 +1447,7 @@ Sen-dou Chang, "The Morphology of Walled Capitals", in Skinner (ed.), *The City 
 
 ### `tedai-jawiki`
 
-ja.wikipedia 手代 (READ 2026-08-28, feature 138 leftovers)
+ja.wikipedia 手代 (READ 2026-08-28, feature 143 leftovers)
 
 *Used for:* "手代の多くは、村役人・町役人の子弟である" - most tedai were children of village and town officials, hired from peasants and townsmen who knew the district; nothing about birth order
 

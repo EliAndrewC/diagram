@@ -1,4 +1,4 @@
-# Tasks: Every Research Finding Cites Its Sources (138)
+# Tasks: Every Research Finding Cites Its Sources (143)
 
 **Input**: [spec.md](spec.md), [plan.md](plan.md), [research.md](research.md), [ledger.md](ledger.md); authority [gm-request.md](gm-request.md)
 
@@ -6,7 +6,7 @@ Every task below is `research: physical` (each is about how a place was built, f
 
 ## Phase 1 - Setup
 
-- [x] T01 [US1] **The inventory ledger** - `specs/138-research-citations/ledger.md`: 117 research-tree candidate rows (73 `not recorded` + 44 with no sources line), the standalone research documents, the inline-grounding rows (top-level `settlements.md` and pool notes included), 12 spec-research rows, the engine-comment findings, the `SOURCES.md` queue, an empty contradictions section. Taken 2026-08-28 by an entry parser over `research/**/*.md` plus a grep of the other homes; the batch tasks refine it.
+- [x] T01 [US1] **The inventory ledger** - `specs/143-research-citations/ledger.md`: 117 research-tree candidate rows (73 `not recorded` + 44 with no sources line), the standalone research documents, the inline-grounding rows (top-level `settlements.md` and pool notes included), 12 spec-research rows, the engine-comment findings, the `SOURCES.md` queue, an empty contradictions section. Taken 2026-08-28 by an entry parser over `research/**/*.md` plus a grep of the other homes; the batch tasks refine it.
       research: procedure
 ## Phase 2 - The passes (US2 + US3), one research file per task
 

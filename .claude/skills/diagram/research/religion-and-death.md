@@ -18,7 +18,7 @@ Every entry: what the research found, the decision it drove, and any deliberate 
 
 Historically the median temple was **tiny**: Edo Japan ran 90,000+ parish temples at 1-2 priests each, and small hereditary Chinese temples held a handful of monks; only the famous pilgrimage complexes ran large (the great Song public monasteries several hundred, Daxiangguo and Shaolin 1,000+). **L7R deliberately over-sizes - every city temple is a major complex** in a way history would usually lack. A **provincial city** (~3,000 inhabitants) has **~15-30 monks per complex** (a serious Ming urban monastery's scale); a **domain capital** (~12,000) has **~50+ monks per complex**. That puts clergy at ~1-2% of city population against the historical ~0.2-0.4% (Song China) - a deliberate **2-5x density**, softened in-world by the temples serving the whole province's worship, not just the walled city.
 
-*Correction to the record (2026-08-28, feature 138):* the census the entry cited as "458,855 monks and nuns in 1021" exists only in search echoes; the page actually read gives **1221: ~461,000** (400,000 monks + 61,000 nuns). The ratio the liberty is priced against (~0.2-0.4% of population) is unchanged in magnitude either way; the year and figure in the prose are superseded by the read one.
+*Correction to the record (2026-08-28, feature 143):* the census the entry cited as "458,855 monks and nuns in 1021" exists only in search echoes; the page actually read gives **1221: ~461,000** (400,000 monks + 61,000 nuns). The ratio the liberty is priced against (~0.2-0.4% of population) is unchanged in magnitude either way; the year and figure in the prose are superseded by the read one.
 
 ## Many modest temples per walled city is the historical norm
 

@@ -1,8 +1,5 @@
 # Phase 0 Research: Capital Housing Layer (021)
 
-**Sources (feature 138, 2026-08-28):** sections 1-6 carry inline links (11) and are re-recorded in `research/cities/government.md` "Servant housing" (`jta-nagayamon`, `jta-ashigaru-kaga`, `fukui-bushi-jutaku`, `matsue-bukeyashiki`, `hikone-ashigaru`, `shibata-ashigaru-nagaya`) and `research/cities/capitals.md`.
-
-
 The Principle XII **opening bookend**. For each element: what the historical reality was
 (China first, Japan corroborating), whether the design matches it, and what DETERMINES the
 element in reality. Items marked **[standing]** cite research already recorded for features
