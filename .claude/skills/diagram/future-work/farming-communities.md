@@ -2077,3 +2077,19 @@ every map - an appearance change that belongs to a feature that owns the look, w
 `research: physical` when picked up: whether a yashikirin's mixed stand carried *take* at all, and in
 what share, is a question the record can answer. The bamboo the maps DO draw is the separate
 `bamboo_stand` take-yabu, which is unaffected.
+
+## Two checks that pass VACUOUSLY (feature 146, from the 145 settlement-reviews)
+
+- **`woodland_commons_within_the_frame` / `..._on_dry_ground` / `..._visibly_stocked`**: two of the four
+  scripted hamlets (Sawada, Kashikawa) roll ZERO woodland parcels, so all three pass on nothing. The
+  research is decisive that a farming village held worked woodland (*iriai*), so the question is not whether
+  the feature belongs but whether a tight composition has a legal seat - the Sawada reviewer's read is that
+  the scan finds none rather than declining one, and that the honest answer is either a smaller legibility
+  floor for a tight sheet or a companion check that the DECLARATION was attempted.
+- **`village_windbreak_is_continuous`** counts the RECORD, not the ink, by deliberate design (feature 137
+  T05's own comment). So a belt drawn 57 px short of the page - 37 recorded clumps standing inside the
+  visible frame undrawn, measured on Sawada - passes by construction. The trim-versus-final-crop mechanism
+  is written up in `pool/hamlets/sawada.notes.md`.
+
+Both are the shape this project has written down twice: *a check that never RUNS looks exactly like a check
+that passes*. `research: rendering` for the companion checks; the woodland seat question is `physical`.
