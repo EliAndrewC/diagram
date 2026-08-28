@@ -85,14 +85,11 @@ def test_a_dike_pond_hamlet_is_ponds_in_a_diked_block_with_wet_flanks() -> None:
     dike-pond conversion. Asserts what the archetype is responsible for beyond the polder: the
     overlay record, the dike-pond parcels, the declared arrangement, and the waterward fringe
     (declared AND wet, so `polder_waterward_flanks_wet` has teeth rather than skipping)."""
-    plan = hg.plan_site(hg.HamletSpec(name="Dikepond", seed=21, households=16, down_deg=90, field_archetype="mulberry_dike_fishpond", pond_layout="mosaic"))
-    s = hg.build(plan)
-    with tempfile.TemporaryDirectory() as tmp:
-        s.finish(os.path.join(tmp, "scratch"), render=False)
-    m = s.M["meta"]
+    plan, M = rollcache.hamlet(hg.HamletSpec(name="Dikepond", seed=21, households=16, down_deg=90, field_archetype="mulberry_dike_fishpond", pond_layout="mosaic"))
+    m = M["meta"]
     assert m["field_archetype"] == "mulberry_dike_fishpond" and m["pond_layout"] == "mosaic"
-    assert any(r["overlay"] == "mulberry_fishpond" and r["count"] >= 20 for r in s.M["land_use"])
-    assert s.M.get("dikeponds"), "the ponds are recorded as dike-ponds"
+    assert any(r["overlay"] == "mulberry_fishpond" and r["count"] >= 20 for r in M["land_use"])
+    assert M.get("dikeponds"), "the ponds are recorded as dike-ponds"
     assert plan.placed == plan.spec.households
     assert set(m["waterward"]) and set(m["waterward"]) <= {"N", "E", "S", "W"}
-    assert sum(1 for q in s.M["marshes"] if q.get("role") == "waterside") == len(m["waterward"])
+    assert sum(1 for q in M["marshes"] if q.get("role") == "waterside") == len(m["waterward"])
