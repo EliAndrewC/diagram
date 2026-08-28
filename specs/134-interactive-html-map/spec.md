@@ -324,7 +324,8 @@ hover/click checks for the classes it contains.
   we can get rid of that and make the mouse a normal pointer"*). Scrolling is BOUNDED by the map (the GM:
   *"We should be able to scroll to the edge of the map, but not beyond it"*): along an axis where the
   map is larger than the viewport its edge reaches the viewport's edge and no further; where it is
-  smaller it sits centered. The highlight and the modal work at every zoom.
+  smaller it sits centered. The highlight and the modal work at every zoom. While a modal is open the clicked class STAYS highlighted, whatever the pointer does,
+  and the highlight clears when the modal closes (the GM, 2026-08-28).
 - **FR-014 (performance) - the GM's question of 2026-08-28, verbatim in `gm-request.md`**: the page
   MUST NOT draw every blade and crown as its own element (*"many, many thousands ... a real impact
   on performance"*). The GM proposed prerendered raster layers per class, swapped on hover, and
