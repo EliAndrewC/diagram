@@ -90,7 +90,7 @@ rm -f "$TMP/ticking"; wait $TK 2>/dev/null
 # --- 5. a suspend restarts the full wait: the clock jumps past the threshold mid-wait
 export IDLE_WAIT_S=4; : > "$RUNLOG"; rm -f "$CA"/.claude/skills/diagram/dev/idle-log/*.json
 touch "$TMP/ticking"; ticker & TK=$!
-hook stop "$CA"; sleep 0.6; tick_clock 500   # a 500 s jump = a suspend
+hook stop "$CA"; sleep 1.5; tick_clock 500   # a 500 s jump = a suspend (1.5 s: under hooks-test's load the timer's first reading can take longer than 0.6 s, and a jump before it is invisible)
 t_jump=$(date +%s.%N)
 check "record after the restart" 'wait_for "$CA/.claude/skills/diagram/dev/idle-log/*-sess-a.json" 10'
 rec=$(ls "$CA"/.claude/skills/diagram/dev/idle-log/*-sess-a.json | head -1)
