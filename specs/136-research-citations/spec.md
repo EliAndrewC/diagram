@@ -4,7 +4,7 @@
 
 **Created**: 2026-08-28
 
-**Status**: Round 2 - `spec-fidelity` round 1 (2026-08-28) returned five changes (inventory under-inclusive; the gate check was unasked scope; FR-004 over-tightened; FR-006/FR-008 conflict; the count), all applied; awaiting round 2
+**Status**: Round 3 - `spec-fidelity` round 1 (2026-08-28) returned five changes (inventory under-inclusive; the gate check was unasked scope; FR-004 over-tightened; FR-006/FR-008 conflict; the count); round 2 four residues (US1 wording; the proposed check surviving as SC-006; FR-008 mandating migration; the count's arithmetic), all applied; awaiting round 3
 
 **Input**: [`gm-request.md`](gm-request.md), verbatim and unedited. That file is the authority for
 this specification.
@@ -45,10 +45,12 @@ file. The homes known at the start:
 1. **The research tree** (`.claude/skills/diagram/research/`) - the canonical home. Counting
    rule: an entry is a `## ` heading in any file there other than `README.md` and `SOURCES.md`.
    At the start of this feature **73** entries carry a `**Sources:**` line saying `not recorded`
-   and **44** more carry no `**Sources:**` line at all (most are recent entries that name their
-   sources in the prose; the pass normalizes each to a sources line or finds its sources) -
-   117 candidate rows out of 167 headings, some of which will prove to be section headers
-   rather than findings and are struck from the ledger with that note.
+   and about **44** more carry no `**Sources:**` line at all (most are recent entries that name
+   their sources in the prose; the pass normalizes each to a sources line or finds its sources)
+   - roughly 117 candidate rows out of ~156-167 headings depending on how a heading that only
+   contains a section title is counted; the ledger is the authoritative row list, and a row that
+   proves to be a section header rather than a finding is struck with that note. The 73 is the
+   firm number; the rest is resolved row by row.
 2. **Standalone research documents** under the skill root - `flophouse-research.md`,
    `town-deep-audit.md`, `town-checks-audit.md`, `pending-enclosed-fan-floor.md` and any other
    file there that states a historical finding.
@@ -77,20 +79,21 @@ already kept in `research/SOURCES.md` is part of the inventory, not a separate l
 
 ### User Story 1 - The uncited research is found and counted (Priority: P1)
 
-A session produces the complete inventory of uncited findings across the three homes above, as a
+A session produces the complete inventory of uncited findings across every home above - the research tree, the standalone research documents, the inline grounding in operative and pool documents, the historical spec research and the engine comments - as a
 ledger the feature's later tasks work through and tick off - so "are we done" is a count, not an
 impression.
 
 **Why this priority**: the GM's first verb is "find all of"; without the inventory nothing else
 can be shown complete.
 
-**Independent Test**: the ledger exists; a fresh scan of the three homes for uncited findings
+**Independent Test**: the ledger exists; a fresh scan of all five homes for uncited findings
 returns exactly the ledger's open rows.
 
 **Acceptance Scenarios**:
 
-1. **Given** the research tree, the operative docs and the spec research files, **When** the
-   inventory is taken, **Then** every uncited finding appears in the ledger once, with where it
+1. **Given** the research tree, the standalone research documents, the inline grounding in
+   operative and pool documents, the historical spec research and the engine comments, **When**
+   the inventory is taken, **Then** every uncited finding appears in the ledger once, with where it
    lives, the rule it grounds, and its status (open / re-sourced / contradicted).
 2. **Given** a finding that lives inline in an operative doc with no entry in the research tree,
    **When** it is inventoried, **Then** it is listed as needing BOTH a research-tree entry and
@@ -203,14 +206,14 @@ operative rule text; every contradiction is listed in one place for the GM with 
 - **FR-007**: The feature's report to the GM MUST list every contradicted finding with the rule
   and maps it affects and the two options (fix now / document as future work), or state that
   there were none.
-- **FR-008**: An inline grounding finding with no research-tree entry MUST gain one (four fields,
-  sources) and a pointer from its rule, per the record-the-why rule; the rule text itself stays.
+- **FR-008**: An inline grounding finding that cites no source MUST gain citations - either a
+  `**Sources:**` line in place, or a research-tree entry (four fields, sources) with a pointer
+  from the rule. The rule text itself stays. A finding that lives in engine code or a pool
+  artifact MUST take the research-tree route, since the code and the pool text are not touched.
 - **FR-009**: The existing re-sourcing queue in `SOURCES.md` MUST be worked as part of the
   inventory and each row struck when re-sourced.
-- **FR-010**: The feature MUST NOT add a guard or gate check. A mechanical check that every
-  entry cites a registered key is a reasonable idea and is LISTED for the GM in the FR-007
-  report as proposed future work - the GM did not ask for it, and the project's standing
-  decision is that Principle XII is not enforced by a guard.
+- **FR-010**: The feature MUST NOT add a guard or gate check; the GM did not ask for one, and
+  the project's standing decision is that Principle XII is not enforced by a guard.
 - **FR-011**: Every task of the feature is classified `research: physical` and carries the three
   research boxes (constitution v2.12.0); the gate's task-research test applies.
 - **FR-012**: The feature MUST run its review subagents where the project requires them:
@@ -245,8 +248,6 @@ operative rule text; every contradiction is listed in one place for the GM with 
   decide each without reopening the research.
 - **SC-005**: The re-sourcing queue in `SOURCES.md` is empty (or lists only items the pass
   documented as unresolvable, each with what was searched).
-- **SC-006**: The GM report lists the proposed sources-registration check as future work for the
-  GM to accept or decline.
 
 ## Decisions Recorded
 
