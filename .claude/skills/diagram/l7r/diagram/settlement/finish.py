@@ -224,7 +224,21 @@ class FinishMixin:
             # (feature 137 T06 - seed 13's top-left corner was a dry plot while its bottom-right was scrub)
             obs = self._title_obstacles(cover_ok=True)
             corners = [(vx0 + 30, vy0 + 16), (vx0 + vw - bw - 30, vy0 + 16), (vx0 + 30, vy0 + vh - bh - 16), (vx0 + vw - bw - 30, vy0 + vh - bh - 16)]
-            px0, py0 = next(((cx, cy) for cx, cy in corners if self._box_clear(cx, cy, cx + bw, cy + bh, obs)), corners[0])
+            clean = next(((cx, cy) for cx, cy in corners if self._box_clear(cx, cy, cx + bw, cy + bh, obs)), None)
+            if clean is not None:
+                px0, py0 = clean
+            else:
+                # THE TITLE BAND, the last rung (feature 137 T06): every corner hides a plot (seed 13's dry hem
+                # rings the whole view). The title is not a feature of the place and owes it no ground, so
+                # the sheet grows a band above the map sized to the placard, declared in meta so
+                # `crop_hugs_content` allows exactly that much on the north edge, and the placard sits in
+                # it - over nothing, unless a feature runs off the frame there, which the check still reports.
+                band = bh + 32
+                vy0 -= band
+                vh += band
+                self.set_view(vx0, vy0, vw, vh)
+                self.M["meta"]["title_band"] = round(band, 1)
+                px0, py0 = vx0 + 30, vy0 + 16
         else:
             px0, py0 = self.W / 2 - bw / 2, 22
         y = py0 + PAD  # the text block's top, inside the card

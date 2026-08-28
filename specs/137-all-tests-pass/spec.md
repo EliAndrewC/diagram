@@ -102,8 +102,14 @@ belt-face lesson of 133 T91): each fix is measured on the full tripwire, the gat
 
 ## Decisions Recorded
 
-None yet - a fix that changes what a map draws records its class (accurate / deviation / guess)
-in its task and in the research entry it cites, per constitution XII.
+| decision | class | where |
+|---|---|---|
+| the title placard may sit on COVER (a belt, a wood, the bamboo) when no blank ground holds it - never on a building, a plot, a field, water, a lane or a label; blank ground is still taken first (T06) | DEVIATION (a rendering convention: the card is opaque and hides nothing a reader needs) | `settlement/finish.py` `title()`, the check's comment, this row |
+| when every corner hides a plot, the sheet grows a TITLE BAND above the map, declared in `meta.title_band` and allowed by `crop_hugs_content` (T06) | DEVIATION (the title is not a feature of the place) | same |
+| a caption's subject angle in the alignment check is `aligned_tilt` itself (square rotations read level) (T06) | ACCURATE to the T38 rule as recorded | `check_village/segments_03c` |
+| the orphan joiner's ladder: a junction-margin route, a detour round a yard up to 8x the gap, a house-safe drop (T03) | DEVIATION (a drawing rule; the research says 'interconnected', not how) | `hamletgen/ways.py` |
+| the smoothing never disconnects the web unless the touch pass can rejoin it (T03) | ACCURATE (the research: paths connect) | same |
+| the 4 ft junction brush stays; 7, 6 and a 4/6 split measured and declined (T03) | DEVIATION kept, alternatives recorded | same, `_clear_touch` |
 
 ## Assumptions
 
