@@ -60,6 +60,19 @@ before the move. Each was diagnosed to a PLACER defect the old field geometry ha
 After the fixes all three roll clean; cohort seeds 42 and 43, pinned failing since 2026-08-27, also
 come up clean and their pins are removed (gate/hamletgen/test_driver.py).
 
+## R2c - what the wider FULL cohort found, and what the baseline says
+
+Widening the FULL cohort from four seeds to eight (41-48) to let the floor see the seed-dependent placer
+branches found seed 45 short of its acreage (18.6 of 22.1, past the cohort test's 15% bar). Rolled on
+the pre-145 worktree (514e6cc0) the same seed gives 18.1 - the bisection was shorter still - so the
+fan saturates at every aspect for 17 households at that fall: an envelope/canvas sizing limit, not the
+solver. Ledgered in `ACREAGE_SHORT` with both numbers (constitution XIII: pre-existing, measured).
+
+The baseline FULL run on that worktree also failed the switches tests under MAKEFLAGS, the Sawada and
+Kashikawa gates and the four-seed cohort ratchet, and carried the same `ci/`, `switches.py`,
+`perf_review`, `scatter_audit` and `site_justice` lines under 100% - so every one of those is
+pre-existing, and the three map failures were FIXED here (R2b) rather than inherited.
+
 ## R3 - the floor's definition (the GM's ruling, and what it means in practice)
 
 Three definitions were priced (the GM was told the second and third; the ruling was module level):
