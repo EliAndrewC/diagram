@@ -67,7 +67,7 @@ The classes were seeded from each entry's own language and hand-set for the entr
 
 ## Citing
 
-Sources live in [`SOURCES.md`](SOURCES.md) with stable keys; an entry cites by key. **Never add a citation that has not actually been consulted** - if a finding's source was not written down at the time, its `**Sources:**` line says `not recorded` and that is the correct, honest state. 72 of the 83 entries currently say exactly that: the research was done, the citation was not captured. Filling those in is ordinary future work, done by re-consulting, never by attributing a plausible-looking source after the fact.
+Sources live in [`SOURCES.md`](SOURCES.md) with stable keys; an entry cites by key. **Never add a citation that has not actually been consulted** - if a finding's source was not written down at the time, its `**Sources:**` line says `not recorded` and that is the correct, honest state. Feature 138 (2026-08-28) re-sourced every entry that said so - 73 of them, plus 44 that had no sources line - so no entry says `not recorded` any more; where a page could not be read the line says what was searched and labels the claim SUMMARY-ONLY or a guess, and `SOURCES.md`'s queue lists those. A new entry never says `not recorded`: it cites, or it says what was searched and not found.
 
 Named real-world measurements (Suzugamori, Pingyao, Himeji, Fushimi...) are *anchors* rather than works - they are listed in a separate table in `SOURCES.md` and cited inline by name.
 

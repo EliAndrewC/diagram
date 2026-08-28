@@ -56,3 +56,13 @@ The count is NOT the problem and must not be "fixed" by deleting servants: budge
 
 - **Our in-city samurai houses are UNWALLED** (`city_samurai_housing_varied` forbids `s.manor` inside the rampart; the walled estates are extramural). Both traditions above put the servants inside a compound WALL that our city plans do not draw. The *nagaya* range is what resolves this without reversing the GM's settled doctrine: historically the range IS the wall, so drawing the range alone - a long thin building hard on the street line - carries the same read at 3 ft/px without introducing walled compounds into the ward.
 - **Ashigaru blocks are not drawn** as a distinct texture at this tier. The edge-of-town *kumi-yashiki* is a real and attested pattern and would be the correct home for any genuinely ranked small housing; if a future map wants ranks of uniform small dwellings, they belong OUTSIDE the ward on the town fringe, not inside the fence.
+
+## Samurai and commoner ground were zoned apart by law
+
+**Grounds:** `check_village/segments_10e_city_governor_and_quarters.py` (`city_samurai_ward_residents_only` - the comment at its head), `settlements/cities/government.md` "the sealed ward holds ONLY its own residents"
+
+**Evidence:** attested
+
+**Sources:** `jokamachi-jawiki` (READ 2026-08-28: 侍町 by rank around the castle, 町人地 outside it, 寺町 at the rim), `jokamachi-zoning` (chonin strips separating samurai groups; the Grokipedia half of that key is dropped, the Nakasendo Way half stands)
+
+*Recorded here on 2026-08-28 (feature 138) because the finding was stated only in an engine comment.* An Edo-period jokamachi assigned samurai ground (武家地) and townsman ground (町人地) as separate districts, and a Chinese provincial seat kept commerce off the yamen quarter; a laborer terrace between two samurai houses inside the palisade is not variety, it contradicts the fence around it.

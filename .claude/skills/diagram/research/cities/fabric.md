@@ -65,3 +65,13 @@ crowded southwest strip, 48 ft on the loose roadside market at the east gate, wh
 different thing and should stay loose). At 3 ft/px an 18 ft gap is 6 px: enough that a reader can
 still count individual shops and see which way each one faces, which is the whole job of the
 drawing. The relative sizes stay honest; only the mortar joint is drawn wider than life.
+
+## A county seat's street share, open reserve and civic share
+
+**Grounds:** `citybudget.py` (module docstring: streets ~10-20% of ground, 25-30% deliberately unbuilt), `check_village/common_03_capacity.py` (civic buildings ~3-6% of a county seat; the ~20% reserve cap); `settlements/cities/sizing.md`
+
+**Evidence:** interpolated (the circulation figure is triangulated - specs/009 research B says so), attested (the named open-ground anchors)
+
+**Sources:** `chang-morphology-walled-capitals`; specs/009-city-area-budget/research.md section B (Quanzhou a quarter vacant in 1945, Suzhou's intramural farmland, Jinan's lake, Pingyao's "4 big streets, 8 small streets, 72 lanes") - recorded at the 2026-07 pass, not re-read 2026-08-28
+
+*Recorded here on 2026-08-28 (feature 138) because the finding was stated only in engine comments.* A Chinese county seat ran a sparse street net - one or two gate-to-gate trunks in a cross or T with the drum tower at the crossing, everything else lanes - at roughly 10-20% of the walled ground, and normally enclosed 25-30% deliberately unbuilt ground: walls were sized to administrative rank and growth, and intramural fields, gardens and ponds were siege insurance and flood refuge. Civic buildings alone took only a few percent; the big open consumer was the drill ground and the under-built remainder. The maps draw streets at ~7% (deep blocks, alley warrens) and admit open ground only as a declared, drawn line (agricultural district, drill ground, gardens), never as ambient slack - the engine's budget constant is map-calibrated, the historical band its plausibility envelope.

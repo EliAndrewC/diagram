@@ -12,16 +12,16 @@ Cite by key in an entry's `**Sources:**` line. Add a key here the first time a s
 
 ## Re-sourcing queue
 
-Findings recorded before the rule, or on a source the rule now excludes. Each is re-sourced when its entry is next revisited - not rewritten wholesale - and struck from this list then.
+Findings recorded before the rule, or on a source the rule now excludes. Each is re-sourced when its entry is next revisited - not rewritten wholesale - and struck from this list then. **Feature 138 (2026-08-28) worked the whole queue and every `not recorded` entry**; what remains is what a page could not be read for, each labeled in its entry.
 
-- `zhengyi-householder-priests` (Grokipedia, *Zhengyi Dao*) - specs/016-minami-provincial-city/research.md; the Patheos half of the key stands
-- Economy of the Song dynasty (Grokipedia) - specs/107-ubame-town/research.md and research/urban-features.md, charcoal-driven demand
-- History of agriculture in China (Grokipedia) - research/urban-features.md
-- Nagoya Castle (Grokipedia; site documentation) - the site documentation half stands
-- Jokamachi surveys (Grokipedia; Nakasendo Way, *Castle Towns*) - the Nakasendo Way half stands
+- `zhengyi-householder-priests` - the Grokipedia half DROPPED (2026-08-28); the Patheos half stands.
+- Economy of the Song dynasty (Grokipedia) - being replaced by the en.wikipedia article and its references (feature 138 leftover reader); `research/urban-features.md` "Charcoal yards" says so.
+- History of agriculture in China (Grokipedia) - being replaced by en.wikipedia *Loess Plateau* (feature 138 leftover reader); "Wells in crop fields" says so.
+- Nagoya Castle (Grokipedia; site documentation) - the site-documentation half stands; the Grokipedia half is to be replaced by ja.wikipedia 名古屋城 (feature 138 leftover).
+- Jokamachi surveys - RESOLVED 2026-08-28: `jokamachi-jawiki` read; the Grokipedia half dropped from the key.
 - Village lane WIDTH (T50, 2026-08-27): no numeric source found for an ordinary hamlet lane or farm path in Japan or China; the drawn 3 / 5 / 6 ft stand as drawing conventions inside read bounds (Wikipedia "Stone routes" 2.7 m cart road; ja.wikipedia "大八車"; MLIT road history; Low-Tech Magazine on the wheelbarrow). A measured survey of a surviving village lane would settle it.
-- Still summary-only after the `source-reader` run of 2026-08-27 (T45), each labeled in its entry: the bund-width convention (IRRI, unreachable; FAO read and larger); the Shirakawa farmstead bamboo grove (Kids Web Japan, 403 with no corroboration); the turn-minimization sentence (Ma et al. 2024 full text - the abstract's angle finding IS read); EUNIS E5.2 (404). Resolved by that run: madake hardiness (read, three growers), the forest-edge three layers (German Wikipedia "Waldrand"), the Okinawa windbreak (PMC 7898781), the GSI bamboo symbol (ridgelineimages.com).
-
+- Still summary-only after the `source-reader` run of 2026-08-27 (T45), each labeled in its entry: the bund-width convention (IRRI, unreachable; FAO read and larger); the Shirakawa farmstead bamboo grove (Kids Web Japan, 403 with no corroboration); the turn-minimization sentence (Ma et al. 2024 full text - the abstract's angle finding IS read); EUNIS E5.2 (404).
+- Summary-only or not found after feature 138's passes (2026-08-28), each labeled in its entry and listed by file in `specs/138-research-citations/ledger.md` section F2: the Jōge daikansho plan; the daikan-debt figure; the jin'ya coverage ratio; the Song monk census year; the Shunde 1581 percentages; the dike-pond board sluice (Ruddle & Zhong 1988); the lotus area share; the tameike m3/ha ratio; the forest stems/ha band; the Kaifeng tower count; the communal-well ratio; the Sado fire count.
 
 ## Works cited
 
@@ -511,7 +511,7 @@ Qing Beijing street-fence coverage (Dashilan street history; Beijing city fortif
 
 ### `jokamachi-zoning`
 
-Jokamachi surveys (Grokipedia; Nakasendo Way, *Castle Towns*)
+Jokamachi surveys (Nakasendo Way, *Castle Towns*; the Grokipedia half dropped 2026-08-28, feature 138 - the zoning claims now also rest on `jokamachi-jawiki`, READ)
 
 *Used for:* chonin wards forming narrow strips that SEPARATE different groups of samurai, sited along the major thoroughfares; separation within the buke-chi being per-compound ("larger compounds separated by walls and gates") rather than a district palisade; chonin plots smaller per family and tightly aligned along the streets
 
@@ -1438,3 +1438,9 @@ ja.wikipedia アブラナ and zh.wikipedia 油菜 (READ 2026-08-28)
 The 1581 (万历九年) fishpond figures for the Pearl delta - SUMMARY-ONLY (2026-08-28): a search synthesis gives ~160,000 mu of taxable fishponds across Shunde, Nanhai and Panyu (Guangzhou prefecture), ~400,000 mu of dike-pond farming; the Shunde county figures (40,084 mu in 1581, 58,094 in 1642) were seen in a search snippet of a Shunde library page and not on a page read; the county percentage and the 1980s 35% survey were found nowhere. baike.baidu.com (403) is the likely carrier
 
 *Used for:* the scale of the sixteenth-century dike-pond zone, with that caveat
+
+### `chang-morphology-walled-capitals`
+
+Sen-dou Chang, "The Morphology of Walled Capitals", in Skinner (ed.), *The City in Late Imperial China* (http://web.stanford.edu/~mel1000/sen.pdf; cited by the feature 009 pass, 2026-07, as its strongest source; not re-read 2026-08-28)
+
+*Used for:* the sparse street net of a Chinese county seat, the deliberately unbuilt intramural reserve, the civic share - with 009's own caveat that the circulation percentage is triangulated, not measured
