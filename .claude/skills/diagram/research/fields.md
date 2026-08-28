@@ -14,7 +14,7 @@ Every entry: what the research found, the decision it drove, and any deliberate 
 
 **Evidence:** corroborated, liberty
 
-**Sources:** not recorded - the finding is in the prose below; add a key to `SOURCES.md` when it is re-consulted
+**Sources:** the per-archetype matrix rests on the 2026-07 pass (feng-shui grave siting, terrace outcrops) - not re-sourced on 2026-08-28; the grave-island liberty is the GM's (2026-07-20) - leftover
 
 - *What the research found.* Flat, flooded valley-bottom paddy is the archetype that hosts non-rice obstacles LEAST - it is the most valuable, most intensively worked, and wet. Grave mounds and feng-shui knolls are MARGIN/slope features in the rice south (feng-shui wants a backing hill + downslope water view, so the dead go on the slope, not the wet center); rock outcrops are a TERRACE feature (bedrock the risers wrap around) and are absent on alluvial valley/polder and delta dike-pond; small OPEN-WATER ponds (a low pocket / header tameike / half-moon by a hall) are the one thing that genuinely belongs in the wet middle. The per-archetype matrix (research.md) is encoded in `_PADDY_POND_KINDS` / `_PADDY_ROCK_KINDS` / `_PADDY_GRAVE_KINDS` and enforced by `paddy_features_match_archetype`.
 
@@ -26,7 +26,7 @@ Every entry: what the research found, the decision it drove, and any deliberate 
 
 **Evidence:** attested
 
-**Sources:** not recorded - the finding is in the prose below; add a key to `SOURCES.md` when it is re-consulted
+**Sources:** `kochi-seiri-jawiki` (READ: the grid is Meiji consolidation), `nougyoudoboku-keihan` (READ: the standard bund), `aze-standard` (the earlier key). Azenuri timing and the 2-5 ft azemichi not re-read - leftover
 
 Pre-modern paddies were fitted to the land and water by piecemeal reclamation and inheritance, so plots are odd-sized and odd-shaped with bunds meeting at **T-junctions**; the tidy rectangular grid is a **modern (Meiji/Showa) land-consolidation (*kochi seiri*) artifact** and reads as anachronistic.
 
@@ -365,13 +365,15 @@ T-junctions. A triangular basin is legitimate; several survive on every map. Wha
 the number of sides but the SIZE, with triangularity as its symptom, because a clipped corner of the
 plot lattice at the fan's boundary is the shape a fragment naturally takes.
 
+*Re-sourcing note (2026-08-28, feature 138):* the bund page read gives a standard trapezoid of 30 cm height and 30 cm TOP width on 1:1 slopes, i.e. about 1 ft high and ~3 ft at the base - the entry's "1-2 ft wide, ~1 ft high" reads as a top-to-base span and is consistent; cold regions run ~50 cm top / ~40 cm high. Nothing read supports a bund a meter high.
+
 ## Nitrogen - a flooded paddy makes its own
 
 **Grounds:** the ~6% soy share; azemame as a food crop
 
-**Evidence:** attested
+**Evidence:** attested (the mechanism is textbook), researched (not re-read this pass)
 
-**Sources:** not recorded - the finding is in the prose below; add a key to `SOURCES.md` when it is re-consulted
+**Sources:** searched 2026-08-28: the IntechOpen chapter (intechopen.com/chapters/69541) reads only a general "biological nitrogen fixation" clause; Springer 978-3-662-10385-2_22 paywalled; MDPI agriculture9020029 403. Azolla-cyanobacteria fixation and renge green manure want an open source (IRRI / FAO azolla pages) - leftover
 
 - *Nitrogen - the paddy makes its OWN, so soy is food not fertiliser.* A flooded paddy is near self-sustaining for nitrogen: the standing water hosts N-fixing **cyanobacteria + *azolla*** and the **irrigation water carries in silt/nutrients** from upstream - which is why paddies crop continuously for centuries where dry-field monoculture exhausts the soil. Legumes entered as **winter green manure grown IN the drained paddy** (*renge* / Chinese milk vetch, plowed under before spring flooding) + applied night soil / ash / fish-and-oilseed cake - NOT soy on the margins washing in. So the ~6% soy is a **food crop** (dry fields, and characteristically on the paddy bunds - *aze-mame*, "ridge beans"), NOT the paddy's nitrogen supply.
 
@@ -379,9 +381,9 @@ plot lattice at the fan's boundary is the shape a fragment naturally takes.
 
 **Grounds:** `_paddy_surface` (no ruled rows on a wet paddy)
 
-**Evidence:** attested
+**Evidence:** attested (the package), researched (the police enforcement - SUMMARY-ONLY)
 
-**Sources:** not recorded - the finding is in the prose below; add a key to `SOURCES.md` when it is re-consulted
+**Sources:** `seijoue-kotobank`, `seijoue-seika`, `kubota-transplanting` (READ: seijoue rare before Meiji, promoted nationally in the 1890s-1900s with the 田打車 weeder, ropes and rulers). The police standing over the planting and the 1903 order: SUMMARY-ONLY (search syntheses of agri.hakase-jyuku.com "サーベル農政"; not read)
 
 - *WHY rows waited for Meiji when row planting is ancient (GM 2026-07-23 - the idea was never the bottleneck, the economics were).* Dry-crop rows are FREE: the seed goes into a plowed furrow, and the furrow IS the row. Wet rice is TRANSPLANTED into a puddled flooded sheet with no furrows and no guide lines, so rows must be PURCHASED - marked ropes or a rolled gridding frame, plus every planter aligning to them - and the bill lands in the year's tightest labor window (the whole village transplants in days, on a shared water schedule). And for centuries the purchase bought nothing: rows pay when a tool travels BETWEEN them (the ancient dry-field hoe/cultivator), but nothing could travel between rows in a flooded paddy - weeding was by hand and foot either way. What changed in Meiji was the arrival of the between-rows tool for mud: the hand-pushed ROTARY PADDY WEEDER, which only works on plants ruled in both directions - so *seijoue* + marking frame + rotary weeder spread as ONE package, pushed by state extension hard enough that police sometimes stood over farmers to enforce straight lines ("saber farming"), itself evidence the private payoff was marginal before the full package. Traditional transplanting was NOT chaos though: clump spacing was roughly even (a practiced hand keeps density consistent - density drives yield), just never ruled - which is exactly what the sparse unruled shoot-mottle renders.
 
@@ -404,9 +406,9 @@ plot lattice at the fan's boundary is the shape a fragment naturally takes.
 
 **Grounds:** the v2 carve targets
 
-**Evidence:** researched
+**Evidence:** interpolated
 
-**Sources:** not recorded - the finding is in the prose below; add a key to `SOURCES.md` when it is re-consulted
+**Sources:** `kokudaka-jawiki` (READ: one koku a year; real stipends ~1.8), `gokogomin-kotobank` (READ: 40% then 50% - the "~45%" is an undisclosed midpoint, now disclosed). Not read: the 2,000-2,500 m3/ha tameike ratio (the Aomori 21nn_17ike.pdf is unreadable to the fetcher), the 1.3 koku/tan yield, the 0.02-0.25 acre plots and the Tedori straightening - leftover
 
 - **Plots**: pre-modern 0.02-0.25 acre, irregular; v2 carves ~0.1-0.15 acre, ~9 scattered plots per household (fragmented holdings were normal). STRAIGHT rectangular channels/plots are post-1900 consolidation (the Tedori fan's ditches were only straightened in the early 1900s) - the organic waver is period-correct, do not "clean it up".
 
@@ -440,7 +442,7 @@ The PLOT question (one leveled cell, ~0.05 ac) is settled above; this entry is t
 
 **Evidence:** researched
 
-**Sources:** not recorded - the finding is in the prose below; add a key to `SOURCES.md` when it is re-consulted
+**Sources:** `satoyama-enwiki` (READ: the mosaic and the foothill-to-flat border zone). The Takeuchi-school catena sentence ("large middle river terraces... large areas of crop fields and small areas of paddy") is SUMMARY-ONLY - the mekongwatch PDF is unreadable to the fetcher; find the paper itself - leftover
 
 WHERE dry crops go: wet-rice villages sort by a topographic CATENA - irrigated paddy holds the flat valley bottom / plain; DRY fields (hatake) take the HIGHER, well-drained ground the water cannot command (river terraces, natural levees / micro-highs threading the plain, alluvial-fan edges, lower slopes, AND the slightly-raised ground the homesteads sit on); coppice woodland (satoyama) crowns the hills above. Sources: satoyama land-use literature ("wet-rice in the plains and valley bottoms... satoyama woodlands/grasslands for dry-field crops"; "large middle river terraces... large areas of crop fields and small areas of paddy"); Kanto-plain historical-GIS land-use studies. So dry fields are NOT one neat strip - historically they sit in SEVERAL positions, above all AROUND the houses ("each family has some paddy and some hatake", the household's dry plots near its home).
 

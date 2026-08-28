@@ -1054,3 +1054,147 @@ Harie Shozu no Sato, the kabata wells (https://ihcsacafe-en.ihcsa.or.jp/news/har
 Groundwater commons and the kabu-ido rules, *Water History* (https://link.springer.com/article/10.1007/s12685-022-00302-1; READ 2026-08 - abstract)
 
 *Used for:* villages regulating the NUMBER of wells
+
+### `kochi-seiri-jawiki`
+
+ja.wikipedia 耕地整理 (READ 2026-08-28, feature 138)
+
+*Used for:* rectangular plot consolidation as a Meiji institution - the Shizuoka method of 1872, the 耕地整理法 of 1899/1900, "区画の整形化と正方位化"
+
+### `nougyoudoboku-keihan`
+
+のうぎょうとぼく, 水田圃場における畦畔について (https://nougyoudoboku.com/a-ridge-between-rice-fields/; READ 2026-08-28)
+
+*Used for:* the standard bund - "法面勾配1:1・高さ30cm・上幅30cmの台形が標準" (so ~3 ft at the base), cold regions ~50 cm top / ~40 cm high
+
+### `seijoue-kotobank`
+
+コトバンク 正条植 (https://kotobank.jp/word/正条植-85971; READ 2026-08-28)
+
+*Used for:* straight-row planting rare before Meiji, promoted nationally in the 1890s-1900s together with the hand-pushed inter-row weeder (田打車), planting ropes and rulers
+
+### `seijoue-seika`
+
+精華町 せいか舎, 正条植え (https://seikasya.town.seika.kyoto.jp/essays/seijoue; READ 2026-08-28)
+
+*Used for:* seijoue spreading in Meiji and bringing weeder-based weeding and mid-season cultivation with it
+
+### `kubota-transplanting`
+
+Kubota, 稲作の歴史 - 田植え (https://www.kubota.co.jp/kubotatanbo/history/tools/transplanting.html; READ 2026-08-28)
+
+*Used for:* the 1890s adoption, ropes and rolled frames marking the lines
+
+### `kokudaka-jawiki`
+
+ja.wikipedia 石高 (READ 2026-08-28)
+
+*Used for:* one koku as an adult's annual rice ("一石は大人一人が一年に食べる米の量に相当する"), with the page's own hedge that real stipends ran ~1.8 koku of brown rice
+
+### `gokogomin-kotobank`
+
+コトバンク 五公五民 (https://kotobank.jp/word/五公五民-64520; READ 2026-08-28)
+
+*Used for:* the tax rate - 四公六民 in early Edo, 五公五民 after the Kyōhō era (1716-36)
+
+### `satoyama-enwiki`
+
+en.wikipedia Satoyama (READ 2026-08-27 T34/T42 and 2026-08-28)
+
+*Used for:* the border zone between foothills and arable flat land; the mosaic of forest, paddy, dry field, grassland and ponds; Edo-era leaf gathering for paddy fertilizer; cutting every 15-20 years
+
+### `louzeyuan-zhwiki`
+
+zh.wikipedia 漏澤園 (READ 2026-08-28)
+
+*Used for:* Cai Jing's 1104 proposal; siting "高曠不毛之地，四周建有圍欄"; plots numbered by the 千字文 with name, origin and dates; continued through Yuan and Ming
+
+### `toribeno-jawiki`
+
+ja.wikipedia 鳥辺野 (READ 2026-08-28)
+
+*Used for:* the great Kyoto burial ground with "範囲について、明確な定義はない" - an unbounded hillside field
+
+### `fushimi-inari-senbon`
+
+伏見稲荷大社, 千本鳥居 (https://inari.jp/sp/map/spot_07/; READ 2026-08-28)
+
+*Used for:* "稲荷山全体で約1万基、そのうち千本鳥居は約800基"; donated by worshippers from the Edo through Meiji periods
+
+### `meiji-jingu-jawiki`
+
+ja.wikipedia 明治神宮 (READ 2026-08-28)
+
+*Used for:* the shrine's torii - the page counts 8, not 3; no spacing figures
+
+### `religion-song-enwiki`
+
+en.wikipedia Religion in the Song dynasty (READ 2026-08-28)
+
+*Used for:* "In 1221, records counted the existence of 400,000 monks and 61,000 nuns in the dynasty" - the one census figure actually read
+
+### `chang-jiang-jawiki`
+
+ja.wikipedia 長江 (READ 2026-08-28)
+
+*Used for:* the reach names - 沱沱河 -> 通天河 -> 金沙江 -> 川江 (宜賓-宜昌) -> 荊江 -> 揚子江 (from the 揚子津 ferry)
+
+### `shinano-gawa-jawiki`
+
+ja.wikipedia 信濃川 (READ 2026-08-28)
+
+*Used for:* "信濃川と呼ばれているのは新潟県域で、長野県に遡ると「千曲川」と呼称が変わる"
+
+### `sumida-gawa-jawiki`
+
+ja.wikipedia 隅田川 (READ 2026-08-28)
+
+*Used for:* 大川, 浅草川, 宮戸川 as names of the same river; 両国川 not confirmed there
+
+### `yato-jawiki`
+
+ja.wikipedia 谷戸 (READ 2026-08-28)
+
+*Used for:* yatsu as easily-worked paddy land given drainage; iriai rights over the adjacent woods (firewood - the reed-bed application is the entry's extension)
+
+### `shitsuden-kotobank`
+
+コトバンク 湿田 (https://kotobank.jp/word/湿田-74168; READ 2026-08-28)
+
+*Used for:* the poorly drained paddy that never dries; wet-to-dry conversion beginning in late Yayoi western Japan
+
+### `hibiya-irie-jawiki`
+
+ja.wikipedia 日比谷入江 (READ 2026-08-28)
+
+*Used for:* infill from 1592 with the spoil of the Nishinomaru works, in earnest from 1603, complete in early Edo
+
+### `sotobori-jawiki`
+
+ja.wikipedia 外濠 (東京都) (READ 2026-08-28)
+
+*Used for:* "外濠川は、日比谷入江へ注ぐ平川の流路を移設した開削で作られた" - the Hirakawa turned into the moat
+
+### `bitchu-takamatsu-jawiki`
+
+ja.wikipedia 備中高松城 and 備中高松城の戦い (READ 2026-08-28)
+
+*Used for:* "低湿地にある沼城", "低湿地帯でこれらが天然の堀を形成していた"; the 1582 water siege raising a 200 ha lake
+
+### `kagawa-tameike-structure`
+
+香川県, ため池の構造 (https://www.pref.kagawa.lg.jp/tochikai/about_tameike/repair/structure.html; READ 2026-08-28 - the page behind the older `kagawa-tameike` key)
+
+*Used for:* the intake as one facility - 斜樋/堅樋 into the 底樋 discharging to the canal, plus a sediment drain
+
+### `offtake-angle-studies`
+
+Diversion-angle hydraulics (SUMMARY-ONLY 2026-08-28: search syntheses of several ResearchGate / ScienceDirect papers - "maximum water discharge and minimum sediment discharge when its diversion angle was 30° or 45° among 90°, 75°, 60°, 45°, and 30°"; a 30° angle cutting sediment entry by up to 64%; no paper read)
+
+*Used for:* the acute downstream-pointing offtake, 30-45° over 90°
+
+### `fao-pond-water`
+
+FAO, *Water for animals* ch. 6 surface reservoirs (https://www.fao.org/4/r7488e/r7488e06.htm; READ 2026-08-28)
+
+*Used for:* evaporation (up to 2 m/yr) and seepage as the losses of a standing reservoir; the page states the losses in prose, not as the balance equation

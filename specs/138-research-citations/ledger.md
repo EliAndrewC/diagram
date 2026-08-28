@@ -112,12 +112,12 @@
 
 | # | entry | evidence class | found as | status |
 |---|---|---|---|---|
-| 1 | In-field features - flat flooded paddy hosts obstacles least | corroborated, liberty | not recorded | open |
-| 2 | Paddy plots - irregular patchwork, and why the grid is anachronistic | attested | not recorded | open |
-| 3 | Nitrogen - a flooded paddy makes its own | attested | not recorded | open |
-| 4 | Why ruled rows waited for Meiji | attested | not recorded | open |
-| 5 | Plot sizes, pond sizing and acreage from population | researched | not recorded | open |
-| 6 | Where dry (hatake) crops go - the topographic catena | researched | not recorded | open |
+| 1 | In-field features - flat flooded paddy hosts obstacles least | corroborated, liberty | not recorded | open - leftover (2026-07 matrix) |
+| 2 | Paddy plots - irregular patchwork, and why the grid is anachronistic | attested | not recorded | supplemented (bund figures) |
+| 3 | Nitrogen - a flooded paddy makes its own | attested | not recorded | open - leftover (open azolla source) |
+| 4 | Why ruled rows waited for Meiji | attested | not recorded | re-sourced (police SUMMARY-ONLY) |
+| 5 | Plot sizes, pond sizing and acreage from population | researched | not recorded | supplemented (45% disclosed as midpoint); pond ratio, yield leftover |
+| 6 | Where dry (hatake) crops go - the topographic catena | researched | not recorded | re-sourced (catena SUMMARY-ONLY) |
 
 ### `homesteads.md` (9)
 
@@ -137,11 +137,11 @@
 
 | # | entry | evidence class | found as | status |
 |---|---|---|---|---|
-| 1 | City temple size - the deliberate L7R liberty | attested, liberty | not recorded | open |
-| 2 | The graveyard ceiling does not scale with temple count | reconstruction, setting-canon | not recorded | open |
-| 3 | Torii are VOTIVE DONATIONS - the count records patronage | attested, reconstruction, liberty | not recorded | open |
-| 4 | Torii spacing - two regimes and nothing in between | attested, reconstruction | not recorded | open |
-| 5 | Burial-ground shape - Japan organic, China surveyed | attested, corroborated, liberty | not recorded | open |
+| 1 | City temple size - the deliberate L7R liberty | attested, liberty | not recorded | contradicted-in-record (1221/461k vs 1021/458,855); liberty unchanged |
+| 2 | The graveyard ceiling does not scale with temple count | reconstruction, setting-canon | not recorded | n/a - rendering decision |
+| 3 | Torii are VOTIVE DONATIONS - the count records patronage | attested, reconstruction, liberty | not recorded | re-sourced |
+| 4 | Torii spacing - two regimes and nothing in between | attested, reconstruction | not recorded | re-sourced (distances SUMMARY-ONLY) |
+| 5 | Burial-ground shape - Japan organic, China surveyed | attested, corroborated, liberty | not recorded | re-sourced |
 
 ### `towns.md` (5)
 
@@ -177,8 +177,8 @@
 
 | # | entry | evidence class | found as | status |
 |---|---|---|---|---|
-| 1 | Forest density and crown size | reconstruction | not recorded | open |
-| 2 | The crop margin - scrub stands 6 ft off every field edge | reconstruction (web research 2026-08-15; searched paddy-levee structure/width and traditional field-margin management) | not recorded | open |
+| 1 | Forest density and crown size | reconstruction | not recorded | no-source (403s) - SUMMARY-ONLY abstracts |
+| 2 | The crop margin - scrub stands 6 ft off every field edge | reconstruction (web research 2026-08-15; searched paddy-levee structure/width and traditional field-margin management) | not recorded | re-sourced (bund); Biwa mowing leftover |
 | 3 | Scrub stays off open water - including the comb laterals' drawn width | defect fix (GM 2026-08-16, Inashiro), not new research | no sources line | open |
 | 4 | The cut bank - scrub stands 6 ft off every irrigation channel's drawn edge | GM decision (2026-08-16, Inashiro second pass), extending the crop-margin reconstruction above; no new sources consulted | no sources line | open |
 | 5 | The marsh margin: reed -> sedge/grass -> dry ground; woody at a reed edge is alder or willow, never pine - ACCURATE (researched 2026-08-26) | - | no sources line | open |
@@ -190,14 +190,14 @@
 
 | # | entry | evidence class | found as | status |
 |---|---|---|---|---|
-| 1 | A fed closed moat must drain - the physics and the precedent | attested, corroborated | not recorded | open |
-| 2 | The diverted-stream moat is a historical type | attested, corroborated | not recorded | open |
-| 3 | One name per river - and why that is anti-historical | attested, corroborated, liberty | not recorded | open |
+| 1 | A fed closed moat must drain - the physics and the precedent | attested, corroborated | not recorded | re-sourced |
+| 2 | The diverted-stream moat is a historical type | attested, corroborated | not recorded | re-sourced (Edo); Forbidden City SUMMARY-ONLY |
+| 3 | One name per river - and why that is anti-historical | attested, corroborated, liberty | not recorded | re-sourced |
 | 4 | The wet toe is as wide as the FAN, not as wide as the valley | - | no sources line | open |
-| 5 | No toe marsh at town/city scale - the drainage-investment gradient | attested, corroborated | not recorded | open |
-| 6 | Defensive marshland - the engineered wet belt | attested, corroborated | not recorded | open |
-| 7 | Canal junction angles - an offtake leaves pointing downstream | attested | not recorded | open |
-| 8 | Irrigation topology - one pond outlet that branches | attested | not recorded | open |
+| 5 | No toe marsh at town/city scale - the drainage-investment gradient | attested, corroborated | not recorded | re-sourced |
+| 6 | Defensive marshland - the engineered wet belt | attested, corroborated | not recorded | re-sourced (Japan); Song belt leftover |
+| 7 | Canal junction angles - an offtake leaves pointing downstream | attested | not recorded | re-sourced (SUMMARY-ONLY) |
+| 8 | Irrigation topology - one pond outlet that branches | attested | not recorded | re-sourced |
 | 9 | Drawn width is RANK, not discharge - junctions do not conserve it (GM ruling 2026-08-16) | - | no sources line | open |
 
 ## B. Standalone research documents under the skill root
@@ -263,6 +263,7 @@ Worked with the batch that owns each entry; struck from `SOURCES.md` when done (
 
 ## F2. Batch leftovers - claims searched and not read this pass (one follow-up reader at the end)
 
+- fields/religion/vegetation/water: the in-field feature matrix (feng-shui graves, terrace outcrops); azolla-cyanobacteria and renge (open source); tameike m3/ha (Aomori PDF), 1.3 koku/tan, plot sizes, Tedori straightening; the Takeuchi catena paper; 90,000 Edo temples, Shaolin/Daxiangguo; torii distances (Kasuga, Meiji Jingu, the 400 m run); Adashino/Rendaino/大坂七墓; forest stems/ha and crown width (open source); Lake Biwa levee mowing; Forbidden City moat flow; reed beds under iriai, fukada, Suzhou canals; the Song 塘泺 belt (fx361); the FAO offtake manual.
 - towns/cities/urban-features: the gate-to-yamen axis; guard-room and gate-tower bay estimates; lijin/chaoguan barriers; Chinese party-wall housing; fragmented gentry parcels; Xiangyang/Pingyao/Okayama/Shanghai moats; the wharf entry (雁木, 河岸, matou); the whole Trade-works shortlist; Kiln works; Kaifeng tower count, Kawagoe base, Dingbian/Xingcheng; merchant-over-shop and wealth spread; communal-well ratio; 町木戸 night closure; yamen offices on an avenue; Song iron output (replace Grokipedia); loess rainfall (replace Grokipedia).
 - buildings.md: Jōge jin'ya plan (230x88 ft; two shrines) - `daikanpanfu2.pdf`, k-yagumo excavation page; tedai origins and Qing clerk counts; rural jin'ya staff rowhouses; Hida staging and hired boats; genkan staged arrival; yamen predecessor veneration; tax shares 30-40% coin and soybean bales (NTA 214.htm); Chinese granary grain mix; Izumo 2x2 ken (primary), 67 tsubo house, 2-4 horse stable; jin'ya coverage 37-42% (上嶋 report); samurai kawaya beside the guest room; south garden / north service strip.
 
