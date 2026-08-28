@@ -1,6 +1,6 @@
 # Feature Specification: Every Research Finding in the Diagram Skill Cites Its Sources
 
-**Feature Branch**: none - this project does not use feature branches (`SPECIFY_FEATURE=136-research-citations`)
+**Feature Branch**: none - this project does not use feature branches (`SPECIFY_FEATURE=138-research-citations`)
 
 **Created**: 2026-08-28
 
