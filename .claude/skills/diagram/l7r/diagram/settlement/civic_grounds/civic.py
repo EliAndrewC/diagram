@@ -180,7 +180,7 @@ class CivicWorksMixin:
             beds = [(st["pts"], st.get("w", 18) / 2) for st in self.M.get("town_streets", [])]
             beds += [(al["pts"], al.get("w", 10) / 2) for al in self.M.get("alleys", [])]
             if self.M.get("road"):
-                beds.append((self.M["road"], self.M.get("road_width", 26) / 2))
+                beds.append((self.M["road"], self.M.get("road_width", 30) / 2))
             if any(seg_dist(ox, oy, pts[k], pts[k + 1]) < half + max(kw, kh) / 2 + 3 for pts, half in beds for k in range(len(pts) - 1)):
                 continue
             # ...and never ACROSS A NEIGHBOR. The kura is an annex of its OWN shop - that is what

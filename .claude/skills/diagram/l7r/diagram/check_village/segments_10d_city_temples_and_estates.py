@@ -65,7 +65,7 @@ def _seg_0563_133__through(*, meta: Any = _UNBOUND, scale: Any = _UNBOUND) -> di
 def _seg_0563_134__through_1(*, M: Any = _UNBOUND, meta: Any = _UNBOUND, scale: Any = _UNBOUND, through: Any = _UNBOUND) -> dict[str, Any]:
     """Gate segment 563.134 (through) - body verbatim from the city mega-segment (feature 023; guards preserved, see research.md R2/R3)."""
     if scale in ('city', 'capital') and meta.get('walled') and M.get("road"):
-        through.append((M["road"], (M.get("road_width", 26) - 8) / 2))
+        through.append((M["road"], (M.get("road_width", 30) - 8) / 2))
     return _kept(locals(), ('through',))
 
 

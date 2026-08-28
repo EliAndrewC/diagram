@@ -279,7 +279,7 @@ def _seg_0327__roadways() -> dict[str, Any]:
 def _seg_0328__roadways_1(*, M: Any = _UNBOUND, road: Any = _UNBOUND, roadways: Any = _UNBOUND) -> dict[str, Any]:
     """Gate segment 328 (roadways) - body verbatim from the legacy gate() (feature 022)."""
     if road:
-        roadways.append((road, M.get("road_width", 26) / 2 + 2))
+        roadways.append((road, M.get("road_width", 30) / 2 + 2))
     return _kept(locals(), ('roadways',))
 
 

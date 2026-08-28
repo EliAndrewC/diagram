@@ -152,7 +152,7 @@ def _seg_0108__merchant_estate_wall_clear_of_water(
         est_streets += [("alley", _near_line(al["pts"], al.get("w", 8) / 2 + WMARG)) for al in M.get("alleys", [])]
         est_streets += [("road", _near_line(rd["pts"], rd["w"] / 2 + WMARG)) for rd in M.get("roads", [])]
         if M.get("road"):
-            est_streets.append(("road", _near_line(M["road"], M.get("road_width", 26) / 2 + WMARG)))
+            est_streets.append(("road", _near_line(M["road"], M.get("road_width", 30) / 2 + WMARG)))
         if M.get("ring_road"):
             est_streets.append(("ring road", _near_line(M["ring_road"], M.get("ring_road_width", 7) / 2 + WMARG)))
         est_on_st = [(round(e["x"]), round(e["y"]), _wall_hits(e, est_streets)) for e in M["merchant_estates"]]

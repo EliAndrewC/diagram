@@ -54,7 +54,7 @@ class PackingMixin:
             lines = [(al["pts"], al.get("w", 10) / 2 + max(self.px(3), 2.5)) for al in self.M.get("alleys", [])]  # 2.5 >= the overlap gate's +2 margin
             lines += [(st["pts"], st.get("w", 18) / 2 + self.px(28)) for st in self.M.get("town_streets", [])]
             if self.M.get("road"):
-                lines.append((self.M["road"], self.M.get("road_width", 26) / 2 + self.px(28)))
+                lines.append((self.M["road"], self.M.get("road_width", 30) / 2 + self.px(28)))
             if self.M.get("ring_road"):
                 lines.append((self.M["ring_road"], self.M.get("ring_road_width", 7) / 2 + max(self.px(3), 2.5)))
 

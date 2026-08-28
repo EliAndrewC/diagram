@@ -1,0 +1,130 @@
+{
+  "clone": "diagram-research",
+  "commit": "a6632e86",
+  "cpus": 22,
+  "environment": "local",
+  "host": "laptop",
+  "hostname": "863bd4879ca8",
+  "image": "laptop",
+  "label": "144-start",
+  "machine": "x86_64",
+  "median_seconds": 29.7,
+  "reference": {
+    "down_deg": 90,
+    "households": 15,
+    "name": "Inashiro",
+    "water_sink": "pond"
+  },
+  "rows": [
+    {
+      "asked": 15,
+      "form": "nucleated",
+      "houses": 15,
+      "seconds": 17.6,
+      "seed": 4,
+      "shape": "crescent",
+      "stages": {
+        "appurtenances": 0.18,
+        "bamboo": 0.0,
+        "crossings": 0.35,
+        "field": 3.58,
+        "frame": 0.02,
+        "hinterland": 7.13,
+        "homesteads": 0.97,
+        "notice": 0.65,
+        "seat": 0.03,
+        "sink": 0.01,
+        "track": 0.9,
+        "water_frame": 0.0,
+        "web": 3.62,
+        "windbreak": 0.14,
+        "woodland": 0.03
+      }
+    },
+    {
+      "asked": 15,
+      "form": "nucleated",
+      "houses": 15,
+      "seconds": 49.8,
+      "seed": 25,
+      "shape": "crescent",
+      "stages": {
+        "appurtenances": 0.73,
+        "bamboo": 0.0,
+        "crossings": 0.23,
+        "field": 4.62,
+        "frame": 0.0,
+        "hinterland": 6.59,
+        "homesteads": 0.99,
+        "notice": 0.76,
+        "seat": 0.03,
+        "sink": 0.01,
+        "track": 0.94,
+        "water_frame": 0.0,
+        "web": 34.78,
+        "windbreak": 0.09,
+        "woodland": 0.01
+      }
+    },
+    {
+      "asked": 15,
+      "form": "nucleated",
+      "houses": 15,
+      "seconds": 19.6,
+      "seed": 39,
+      "shape": "round",
+      "stages": {
+        "appurtenances": 0.54,
+        "bamboo": 0.0,
+        "crossings": 0.39,
+        "field": 2.76,
+        "frame": 0.0,
+        "hinterland": 8.08,
+        "homesteads": 0.54,
+        "notice": 0.56,
+        "seat": 0.04,
+        "sink": 0.01,
+        "track": 1.31,
+        "water_frame": 0.0,
+        "web": 5.14,
+        "windbreak": 0.25,
+        "woodland": 0.03
+      }
+    },
+    {
+      "asked": 15,
+      "form": "nucleated",
+      "houses": 15,
+      "seconds": 39.7,
+      "seed": 47,
+      "shape": "round",
+      "stages": {
+        "appurtenances": 0.07,
+        "bamboo": 0.0,
+        "crossings": 0.39,
+        "field": 26.42,
+        "frame": 0.0,
+        "hinterland": 7.05,
+        "homesteads": 0.55,
+        "notice": 0.59,
+        "seat": 0.04,
+        "sink": 0.0,
+        "track": 1.55,
+        "water_frame": 0.0,
+        "web": 2.84,
+        "windbreak": 0.19,
+        "woodland": 0.0
+      }
+    }
+  ],
+  "seeds": [
+    4,
+    25,
+    39,
+    47
+  ],
+  "subject": "144: spec FAITHFUL (round 1); lock premise corrected (released 2026-08-27 - the pool sweep is in this feature); plan; tasks",
+  "total_seconds": 126.7,
+  "utc": "20260828T162618Z",
+  "worst_seconds": 49.8
+}
