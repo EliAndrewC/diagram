@@ -15,7 +15,7 @@ import re
 import pytest
 
 from l7r.diagram.interactive.classes import CLASSES
-from l7r.diagram.interactive.page import explanations, ink_census, present_classes, render_page, unregistered_classes, wrap
+from l7r.diagram.interactive.page import explanations, ink_census, merge_primitives, present_classes, render_page, unregistered_classes, wrap
 from l7r.diagram.interactive.tags import Split
 
 RECT = '<rect x="1" y="2" width="3" height="4" fill="#abc" stroke="#123"/>'
@@ -131,3 +131,27 @@ def test_the_page_embeds_only_the_present_classes() -> None:
 
 def test_the_page_escapes_a_closing_script_tag_inside_the_json() -> None:
     assert "</script>" not in json.dumps({"x": "</script>"}).replace("</", "<\\/")
+
+
+def test_same_styled_lines_merge_into_one_path_and_keep_their_group_style() -> None:
+    """The scrub's 225,000 blades are one <path> on the page (GM 2026-08-28, performance)."""
+    g = '<g stroke="#A7A860" stroke-width="0.8"><line x1="1" y1="2" x2="3" y2="4"/><line x1="5" y1="6" x2="7" y2="8"/><line x1="9" y1="9" x2="9" y2="10"/></g>'
+    assert merge_primitives(g) == '<g stroke="#A7A860" stroke-width="0.8"><path d="M1,2L3,4M5,6L7,8M9,9L9,10" fill="none"/></g>'
+
+
+def test_same_styled_circles_merge_into_one_path_of_arcs() -> None:
+    out = merge_primitives('<circle cx="10" cy="20" r="1.4" fill="#2F6B35"/><circle cx="30" cy="40" r="1.4" fill="#2F6B35"/>')
+    assert out.startswith('<path d="M8.6,20a1.4,1.4 0 1 0 2.8,0a1.4,1.4 0 1 0 -2.8,0M28.6,40a') and out.endswith('fill="#2F6B35"/>')
+
+
+def test_differently_styled_primitives_are_left_alone() -> None:
+    lines = '<line x1="1" y1="2" x2="3" y2="4" stroke="#a" stroke-width="0.8"/><line x1="5" y1="6" x2="7" y2="8" stroke="#b" stroke-width="0.8"/>'
+    assert merge_primitives(lines) == lines
+    crowns = '<circle cx="1" cy="2" r="3" fill="#496733" stroke="#3C5526" stroke-width="0.8"/><circle cx="1" cy="2" r="1.2" fill="#364D22" opacity="0.55"/>'
+    assert merge_primitives(crowns) == crowns
+
+
+def test_the_merge_applies_to_classed_strings_only() -> None:
+    lines = '<line x1="1" y1="2" x2="3" y2="4"/><line x1="5" y1="6" x2="7" y2="8"/>'
+    assert "<path" in wrap(lines, "marsh")
+    assert wrap(lines, None) == lines and wrap(lines, "-") == lines

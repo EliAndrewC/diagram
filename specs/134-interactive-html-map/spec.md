@@ -325,6 +325,17 @@ hover/click checks for the classes it contains.
   *"We should be able to scroll to the edge of the map, but not beyond it"*): along an axis where the
   map is larger than the viewport its edge reaches the viewport's edge and no further; where it is
   smaller it sits centered. The highlight and the modal work at every zoom.
+- **FR-014 (performance) - the GM's question of 2026-08-28, verbatim in `gm-request.md`**: the page
+  MUST NOT draw every blade and crown as its own element (*"many, many thousands ... a real impact
+  on performance"*). The GM proposed prerendered raster layers per class, swapped on hover, and
+  asked for the session's view (*"If this seems like a good idea, then go ahead and do it.
+  Otherwise, we can talk more"*). Measured first (research.md R5): 292,186 elements, 97% of them the
+  scrub and marsh scatter. The page now MERGES same-styled runs of lines and circles into one `<path>`
+  per run in the HTML target only - vector, so the 16x zoom stays crisp and the class groups keep their
+  hit-testing; the SVG and PNG are untouched (FR-010). The look is unchanged (162 of 1.4M pixels at 4x).
+  Raster layers were priced and NOT built: at 16x a full-map layer is ~46,000 px square (gigabytes per
+  class), and at any smaller size the zoom the GM asked for blurs; recorded in Decisions Recorded and
+  offered to the GM as the next step if the merged page is still not responsive enough.
 - **FR-012 (verified in a browser)**: the hover, highlight, click and modal behaviors MUST be
   proven by an automated headless-browser test in the suite (constitution VI - a page that was
   never opened has not been verified), running on the reference hamlet's page.
@@ -373,6 +384,7 @@ against the explanations shipped.
 |---|---|---|---|
 | the class vocabulary itself (FR-007) - which kinds are distinguished | judgment, not history - the GM's, delegated to this spec | the GM: *"we have a lot of different judgment calls to make about what things get highlighted"* | this spec; the class registry the plan names |
 | the zoom range: the page opens at the GM's "now" (fit to the viewport's width); fit-the-whole-map is the minimum; 16x that fit is the maximum | judgment - the GM fixed the minimum in words and left the maximum open | 16x fit is ~11x the opening view on Inashiro (1400 x 1000 viewport): a foot at ~9 screen px, the smallest glyph (a bund bean, r = 1.4 ft) ~25 px - "significantly more" by any reading | `interactive/assets/page.js` `MAX_ZOOM`; the GM may reset it by name |
+| the performance mechanism: same-styled primitive runs merged into one `<path>` on the page, not prerendered raster layers per class | judgment - the GM proposed rasters and asked for the session's view; measured and priced in research.md R5 | 292k -> 11.7k elements, load 2.4 -> 0.4 s, scrub highlight 553 -> 39 ms, look unchanged; rasters would be gigabytes per class at 16x or blur the zoom | `interactive/page.py` `merge_primitives`; research.md R5 |
 | the highlight color (gold `#FFC83D` fill, dark-goldenrod `#B8860B` stroke) | deviation - a UI affordance, not a claim about the world | legible against every fill on the map (FR-003) | `research.md` R2; `interactive/assets/page.css` |
 | a dropped lane draws nothing (`reink_lane` blanks the ink of an empty record) | rendering fix - it drew a malformed `d="M"` path the browser reported on every open | found by the browser test (constitution XIV) | `settlement/water_ways.py` `reink_lane` |
 | the `farmhouse` explanation | accurate - Placement and form follow the read record; the setback from the paddy is DERIVED (no source states it in feet) and is a drawing convention inside read bounds. | what the modal says, written FROM the entry | research/homesteads.md - 'What stood on a farmstead', 'How close does a farmhouse stand to the paddy', 'Is every farmhouse reached by a lane'; `interactive/classes.py` |
