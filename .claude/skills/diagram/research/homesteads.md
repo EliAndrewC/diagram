@@ -14,7 +14,7 @@ Every entry: what the research found, the decision it drove, and any deliberate 
 
 **Evidence:** attested
 
-**Sources:** `kashima-kainyo-1987` (SUMMARY-ONLY - the 1987 Kashima survey is named in the prose; its pointer was never recorded); ja.wikipedia 屋敷林 is the page to re-read - leftover
+**Sources:** `kashima-kainyo-1987` (READ 2026-08-28 via Tonami City's archive page, which quotes the 1987 survey's figures verbatim - 1,542 trees over 46 households, 48% sugi; the pointer was summary-only from 2026-07 until the GM asked whether it was hallucinated); ja.wikipedia 屋敷林
 
 ## The threshing yard's sun, and how far a farmhouse shades
 
