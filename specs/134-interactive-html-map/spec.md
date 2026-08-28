@@ -346,6 +346,14 @@ hover/click checks for the classes it contains.
   is not changed (*"I don't think we should do that"*). (b) Ctrl/Cmd + `+`, `-`, `0` and Ctrl+wheel
   drive the page's own zoom (*"only one way of zooming"*); the browser's menu zoom cannot be
   intercepted by a page and is left as it is.
+- **FR-016 (thin marks; the scrub's real extent) - the GM's follow-up of 2026-08-28, verbatim in
+  `gm-request.md`**: (a) the bunds, the bund beans, the field ditches and the village lanes each
+  take the pointer over a hit shape *"three or four times the width"* of the drawn mark - an
+  invisible copy of the mark's own geometry at 4x its width (floor 6 px; a bead at 3x its radius),
+  placed right above the mark so it wins over the paddy beneath a bund and loses to anything drawn
+  later; (b) the scrub lights up only where its marks are: its hit region is a grid of cells that
+  hold a blade or a brush dot, never the recorded hinterland polygon, so ground the scatter
+  deliberately keeps clear (*"the middle of the village"*) lights nothing.
 - **FR-012 (verified in a browser)**: the hover, highlight, click and modal behaviors MUST be
   proven by an automated headless-browser test in the suite (constitution VI - a page that was
   never opened has not been verified), running on the reference hamlet's page.
