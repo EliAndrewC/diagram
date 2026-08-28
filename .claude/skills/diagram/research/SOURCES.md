@@ -20,6 +20,7 @@ Findings recorded before the rule, or on a source the rule now excludes. Each is
 - Nagoya Castle (Grokipedia; site documentation) - the site documentation half stands
 - Jokamachi surveys (Grokipedia; Nakasendo Way, *Castle Towns*) - the Nakasendo Way half stands
 - Village lane WIDTH (T50, 2026-08-27): no numeric source found for an ordinary hamlet lane or farm path in Japan or China; the drawn 3 / 5 / 6 ft stand as drawing conventions inside read bounds (Wikipedia "Stone routes" 2.7 m cart road; ja.wikipedia "大八車"; MLIT road history; Low-Tech Magazine on the wheelbarrow). A measured survey of a surviving village lane would settle it.
+- The coppiced-mulberry density and crown height (research/archetypes.md 'The 6:4 water-to-dike ratio, and coppiced mulberry'): not re-found in the feature-134 pass (2026-08-28); the ratio itself was re-sourced
 - Still summary-only after the `source-reader` run of 2026-08-27 (T45), each labeled in its entry: the bund-width convention (IRRI, unreachable; FAO read and larger); the Shirakawa farmstead bamboo grove (Kids Web Japan, 403 with no corroboration); the turn-minimization sentence (Ma et al. 2024 full text - the abstract's angle finding IS read); EUNIS E5.2 (404). Resolved by that run: madake hardiness (read, three growers), the forest-edge three layers (German Wikipedia "Waldrand"), the Okinawa windbreak (PMC 7898781), the GSI bamboo symbol (ridgelineimages.com).
 
 
@@ -652,3 +653,75 @@ ja.wikipedia 屋敷神; minka-en.com 屋敷神; satologue.com 屋敷神様 (READ
 326-woods.com, 薪の保管方法 (READ 2026-08-27, source-reader) - MODERN stacking practice
 
 *Used for:* a stack to ~1.5 m high (T54), labeled modern.
+
+### `fei-1939`
+
+Fei Hsiao-tung, *Peasant Life in China: A Field Study of Country Life in the Yangtze Valley* (Routledge, 1939) - archive.org in.ernet.dli.2015.76327, full text READ 2026-08-28 (the djvu text, grepped)
+
+*Used for:* silkworms reared inside the dwelling on tray stands (five stands of eight 1.5 x 1 m trays per house; every room but the kitchen at the peak); home reeling; nearly every household owning one or more boats and the village laid out along its streams; the village agent boat; manure kept in half-buried earthenware pits behind the house and along the road; mulberry on the 10-30 m raised margin that is also the dyke, houses on it, vegetables beneath it; sheep huts as a 1920s innovation; rice threshed in the open space before the house or the front room
+
+### `fao-ac264e`
+
+FAO/NACA, *Integrated Fish Farming in China*, ch. 7 "Introduction of Chinese integrated fish farming and some major models" (fao.org/4/ac264e/ac264e09.htm) - READ 2026-08-28
+
+*Used for:* the pig shed "constructed on the pond dyke or over the water surface" (ponds under 8 mu), 1-5 pigs per mu; fish-cum-duck ponds with a fenced dry run on the dike and a wet run in a corner of the water. Modern practice (1980s), cited as the FORM, not as premodern prevalence
+
+### `fao-ac241e`
+
+FAO/NACA, *The Integration of Mulberry Cultivation, Sericulture and Fish Farming* (fao.org/4/ac241e/ac241e00.htm) - READ 2026-08-28
+
+*Used for:* the dike:water ratio - "each mu of mulberry plants can yield worm dregs, pupae and waste water to provide feeds and fertilizers sufficient for 1 mu of fish ponds. Hence, the ratio of areas of dike and water surface is 1:1", and "the water/dike ratio is 6:4" where other feed is added; pond depth 3.5 m falling to 2.5 m in summer with a 1.5 m slope to the dike top
+
+### `fao-x6708e`
+
+FAO Training Series, *Simple methods for aquaculture: Pond construction*, ch. 10 "Pond outlet structures" (fao.org/fishery/docs/CDrom/FAO_Training/FAO_Training/General/x6708e/x6708e10.htm) - READ 2026-08-28
+
+*Used for:* the sluice gate, verbatim: "a protected opening in the pond dike that can be easily closed with wooden boards to regulate water level and can be screened to avoid fish losses" (inside width up to 0.8 m); the monk outlet as the older draining structure
+
+### `gd-gazetteer-sangji`
+
+Guangdong Provincial Gazetteer Office (广东省人民政府地方志办公室), 【粤故事】中国第一个机器缫丝厂与桑基鱼塘有何渊源, 2023-08-16 (dfz.gd.gov.cn post_4237091) - READ 2026-08-28
+
+*Used for:* the water-to-dike ratio stated as 水基比 "三七至四六开" (3:7 to 4:6); dikes planted 桑、蔗、蕉; Chen Qiyuan's 1873 filature as the point where household reeling met the factory
+
+### `gmrb-2024-sangji`
+
+Guangming Daily, 【这些文化遗存现今的模样87】二千多岁的桑基鱼塘仍未老 (赵玙, 侯楠楠), 2024-03-19 - READ 2026-08-28
+
+*Used for:* the form in one line - 将地势低洼处深挖为鱼塘，塘泥堆在鱼塘四周形成塘基; dredging in the seventh and eighth months to rebuild the dikes (七八月清淤，培固塘基); the Huzhou dating (Spring and Autumn origin, Ming-Qing peak)
+
+### `dili360-2005-sangji`
+
+邓芬, "桑基鱼塘 最常见的美景风光不再", 中国国家地理 2005(02) (dili360.com p5350c3d7e437f08) - READ 2026-08-28
+
+*Used for:* the lost traditional landscape's elements - 塘里养鱼，基上种桑树、种果树; 蕉林蔗海; the 河涌 creek net. No dimensions
+
+### `cssn-sangyuanwei`
+
+中国社会科学网, 水乡农谚见证桑园围发展, 2022-09-23 (cssn.cn t20220923_5541513) - READ 2026-08-27 by the feature-134 search agent (its transcript carries the quotes; the page was not re-fetched by the session)
+
+*Used for:* the Sangyuanwei proverbs - 男贩鱼花，妇女喂爱蚕 (men trade fish fry, women feed the worms), 一船蚕丝出，一船白银归 (a boat of silk out, a boat of silver back), 又以塘泥肥桑; the polder's 窦 sluice named in a place-name saying
+
+### `isis-dykepond`
+
+Mae-Wan Ho, "The Circular Economy of the Dyke-Pond System", ISIS, 2006-10-09 (i-sis.org.uk/DykePondSystem.php) - READ 2026-08-28; a secondary summary of Ruddle & Zhong 1988, Zhong et al. 1997 and Deng 1987/1993
+
+*Used for:* the numbers it carries from Ruddle & Zhong - "most ponds are rectangular, 0.4 to 0.6 ha in area and 2 to 3 m deep. The dykes are usually 6 to 10 m wide"; the late-1980s land use (fishponds 35%, mulberry 12%, sugar cane 18%); "pigs, chickens and ducks are reared on the dykes"; "ponds are drained two or three times a year, and the mud at the bottom is dredged up to put on the dykes"; dike construction from the mid-fourteenth century
+
+### `ruddle-zhong-1988`
+
+Kenneth Ruddle and Gongfu Zhong, *Integrated Agriculture-Aquaculture in South China: The Dike-Pond System of the Zhujiang Delta* (Cambridge University Press, 1988) - SUMMARY-ONLY: the monograph, its Cambridge Core review (Leeds-Harrison 1989) and the Ruddle et al. 1983 *Agricultural Systems* paper all returned 403; the numbers are taken through `isis-dykepond` and the search summaries, labeled so wherever quoted
+
+*Used for:* pond size/depth, dike width, the dike livestock, the dredging cycle (as above)
+
+### `miles-2003`
+
+Steven B. Miles, "From Small Fry to Big Fish: Representing the Rise of Jiujiang Township, Nanhai County, 1395-1657", *Ming Studies* 48 (2003) - SUMMARY-ONLY (paywalled; the search summary gives the subject: the township's rise on the fish-fry trade in Ming Nanhai)
+
+*Used for:* fish fry as a Ming-era Pearl-delta trade with its own center
+
+### `mdpi-3860`
+
+*Sustainability* 10(11):3860 (2018), on the Pearl-delta dike-pond landscape - SUMMARY-ONLY: 403 on both hosts in the feature-134 pass; the "mosaic-like constructed ponds with meandering natural river systems" description in 'Grid vs mosaic' was read in the 2026-07 session that wrote that entry and could not be re-verified
+
+*Used for:* the historical mosaic form versus the modern consolidated grid; ~20 m dikes eroded to under 4 m
