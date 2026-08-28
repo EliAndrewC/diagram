@@ -105,3 +105,11 @@ def test_clip_to_convex_takes_a_concave_subject():
     ell = [(0.0, 0.0), (100.0, 0.0), (100.0, 40.0), (40.0, 40.0), (40.0, 100.0), (0.0, 100.0)]
     assert check_village.poly_area(check_village.clip_to_convex(ell, _sq(-10, -10, 110, 110))) == pytest.approx(check_village.poly_area(ell))
     assert check_village.poly_area(check_village.clip_to_convex(ell, _sq(50, 50, 110, 110))) == pytest.approx(0)
+
+
+def test_solid_structs_counts_the_granary_stores() -> None:
+    from l7r.diagram.check_village.common_01_geometry import solid_structs
+
+    M = {"granary": {"stores": [{"x": 1, "y": 2, "w": 10, "h": 10}]}}
+    assert solid_structs(M) == [{"x": 1, "y": 2, "w": 10, "h": 10}]
+    assert solid_structs(M, exclude=("granary",)) == []

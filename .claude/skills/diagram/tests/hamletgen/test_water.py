@@ -101,3 +101,33 @@ def test_predict_k_steps_by_the_power_law_and_falls_back_to_the_midpoint() -> No
     assert _predict_k([(1.0, 9.0)], 16.0, 0.5, 1.2) == 0.85
     # the same k twice cannot give a slope: square-root step
     assert abs(_predict_k([(1.0, 9.0), (1.0, 9.5)], 16.0, 0.35, 2.2) - (16.0 / 9.5) ** 0.5) < 1e-9
+
+
+def test_fit_field_probes_saturation_and_rerolls_the_best_aspect_in_full(monkeypatch: object) -> None:
+    """Feature 145: an aspect whose largest fan is still short is dropped after two carves, and when no
+    aspect lands the target the best one is searched again without the probe."""
+    from types import SimpleNamespace
+
+    from l7r.diagram.hamletgen import water as w
+
+    carves: list[tuple[float, float]] = []
+
+    def fake_comb(W: float, H: float, sluice: object, seed: int, **kw: object) -> dict[str, object]:
+        k = float(kw["field_fall"]) / w.REF_FIELD_FALL  # type: ignore[arg-type]
+        aspect = float(kw["canal_a_len"][0]) / (w.REF_CANAL_A[0] * k)  # type: ignore[index]
+        carves.append((round(aspect, 2), round(k, 3)))
+        return {"k": k, "aspect": aspect}
+
+    monkeypatch.setattr(w, "build_comb", fake_comb)  # type: ignore[attr-defined]
+    monkeypatch.setattr(w, "net_acres", lambda net, ftpx: min(9.0 * net["k"] ** 2, 10.0))  # type: ignore[attr-defined]  # saturates at 10 acres
+    monkeypatch.setattr(w, "tail_dangles", lambda net: False)  # type: ignore[attr-defined]
+    monkeypatch.setattr(w, "net_bends_acutely", lambda net: False)  # type: ignore[attr-defined]
+    plan = SimpleNamespace(W=1000.0, H=1000.0, down_deg=90.0, offtakes_a=(), offtakes_b=(), grain_drift=0.0, fan_aspect=w.FAN_ASPECTS[0], target_acres=16.0, ftpx=1.0)
+    net = w.fit_field(plan, (0.0, 0.0), 1, 20.0, (30.0, 40.0))  # type: ignore[arg-type]
+    per_aspect = {}
+    for a, _k in carves:
+        per_aspect[a] = per_aspect.get(a, 0) + 1
+    first = max(per_aspect, key=lambda a: per_aspect[a])  # the rolled aspect, searched again in full when nothing landed
+    assert max(n for a, n in per_aspect.items() if a != first) <= 3, per_aspect  # every other aspect: k = 1, the probe, dropped
+    assert per_aspect[first] > 3  # the rolled aspect was searched again in full
+    assert net["k"] > 0

@@ -67,3 +67,13 @@ def test_derive_rows_guards_import_vs_ast_disagreement():
     names = {r.fn.__name__ for r in reg.GATE_SEGMENTS}
     with pytest.raises(_DerivationError, match="disagree"):
         reg._derive_rows(names | {"_seg_9999__ghost"})
+
+
+def test_check_names_follow_a_helper_that_emits() -> None:
+    import ast
+
+    from l7r.diagram.check_village.registry_analysis import _check_names
+
+    node = ast.parse('def seg():\n    check("a", True)\n    helper(M)\n').body[0]
+    names, _n = _check_names(node, {"helper": ["b"]})
+    assert set(names) >= {"a", "b"}

@@ -91,3 +91,10 @@ def test_main_lists_and_checks(tmp_path: Path, monkeypatch: object) -> None:
     assert hf.main(["--data", str(tmp_path / "x")]) == 7
     monkeypatch.setattr(hf, "module_set", lambda deps_for=None: [])  # type: ignore[attr-defined]
     assert hf.main(["--list"]) == 2
+
+
+def test_module_set_defaults_to_the_roll_cache_records(monkeypatch: object) -> None:
+    from l7r.diagram.pipeline import rollcache
+
+    monkeypatch.setattr(rollcache, "report_deps", lambda spec: _deps("l7r/diagram/hamletgen/sink.py"))  # type: ignore[attr-defined]
+    assert hf.module_set() == ["l7r/diagram/hamletgen/sink.py"]

@@ -494,3 +494,49 @@ def test_boxed_rings_match_boxed_polys() -> None:
         for _ in range(4000):
             px, py = rng.uniform(-50, 600), rng.uniform(-50, 600)
             assert boxed_ring_hit(px, py, b, pad) == boxed_hit(px, py, a, pad), (px, py, pad)
+
+
+# ---- feature 145: the branches the hamlet-path floor found no test reaching ---------------------------------
+
+
+def test_keepout_ring_and_facing_chains_degenerate_and_all_facing() -> None:
+    from l7r.diagram.settlement._geom.primitives import chain_distance, chain_violated, facing_chains, keepout_ring
+
+    line = [(0.0, 0.0), (100.0, 0.0)]  # two points simplify to fewer than three chords
+    assert keepout_ring(line, line, 3.0) == (line, line)
+    assert facing_chains(line, (50.0, 50.0), 3.0) == []
+    square = [(0.0, 0.0), (100.0, 0.0), (100.0, 100.0), (0.0, 100.0)]
+    assert facing_chains(square, (50.0, 50.0), 1.0) == []  # a seat INSIDE the ring faces no outward normal
+    # a seat far outside faces two edges; every chord faces it only when the ring is a sliver seen end-on
+    sliver = [(0.0, 0.0), (100.0, 0.0), (100.0, 1.0), (0.0, 1.0)]
+    chains = facing_chains(sliver, (50.0, -500.0), 0.1)
+    assert chains and all(len(ch) >= 1 for ch in chains)
+    # a zero-length chord is skipped by both walkers
+    zero = [[((0.0, 0.0), (0.0, 0.0), (0.0, -1.0)), ((0.0, 0.0), (10.0, 0.0), (0.0, -1.0))]]
+    assert chain_violated(5.0, 3.0, zero, 2.0) is True  # on the field side of the live chord
+    assert chain_distance(5.0, -4.0, zero) == 4.0
+
+
+def test_aabb_gap_forest_reveal_organic_bbox_flat_edge() -> None:
+    from l7r.diagram.settlement._geom.curves import organic_bbox
+    from l7r.diagram.settlement._geom.extents import forest_reveal_x
+    from l7r.diagram.settlement._geom.overlap import _aabb_gap
+
+    assert _aabb_gap([(0, 0), (10, 0), (10, 10), (0, 10)], [(13, 14), (20, 14), (20, 20), (13, 20)]) == 5.0
+    assert forest_reveal_x([(0, 0), (500, 0)], w=400, edge=[(-5, 0), (380, 0)], reveal=30) == [0, 380, 30, 400]
+    pts = organic_bbox((0.0, 0.0, 100.0, 50.0), 6.0, flat_edges=(0,))
+    assert [p for p in pts[:4]] == [(0.0, 0.0), (25.0, 0.0), (50.0, 0.0), (75.0, 0.0)]  # the flat top edge is exact
+
+
+def test_water_index_wide_fixture_wall_runs_skip_and_lane_alongside_a_fence() -> None:
+    from l7r.diagram.settlement._geom.walls import wall_runs
+    from l7r.diagram.settlement._geom.water_index import SLACK, WaterIndex
+    from l7r.diagram.settlement._geom.ways import lane_through_gate
+
+    M = {"streams": [{"pts": [[0, 100], [400, 100]], "w": 8}]}
+    idx = WaterIndex(M)
+    assert idx.clear(200.0, 300.0, SLACK + 10.0) is True and idx.clear(200.0, 110.0, SLACK + 10.0) is False
+    runs = wall_runs({"manors": [{"name": "a fixture compound with no footprint"}]})
+    assert runs == []
+    alongside = {"lanes": [{"pts": [[0, 0], [100, 0]], "w": 6}]}
+    assert lane_through_gate(alongside, 50.0, 2.0, fence_deg=0.0) is None  # parallel to the fence, not through it

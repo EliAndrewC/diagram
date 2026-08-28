@@ -236,3 +236,11 @@ def test_the_hit_widths_are_per_class_as_the_gm_tuned_them() -> None:
     assert "stroke-width: 12.0px" in wrap(stream, "stream")
     lane = '<path d="M1,1 L9,9" fill="none" stroke="#C9AE79" stroke-width="5.0"/>'
     assert "stroke-width: 20.0px" in wrap(lane, "village lane")
+
+
+def test_merge_primitives_folds_a_run_of_unfilled_circles() -> None:
+    from l7r.diagram.interactive.page import merge_primitives
+
+    run = '<circle cx="1" cy="1" r="2" stroke="#000"/><circle cx="5" cy="5" r="2" stroke="#000"/>'
+    out = merge_primitives(run)
+    assert out.count("<circle") == 0 and "<path" in out
