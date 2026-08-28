@@ -4,7 +4,7 @@ import math
 from collections.abc import Sequence
 from typing import Any
 
-from l7r.diagram.settlement import LABEL_AIR_CAP, box_gap, label_aabb, label_quad, linear_tilt, sat_overlap
+from l7r.diagram.settlement import LABEL_AIR_CAP, aligned_tilt, box_gap, label_aabb, label_quad, linear_tilt, sat_overlap
 
 from .common_01_geometry import (
     Poly,
@@ -727,7 +727,12 @@ def _seg_0267__title_clear_of_features(
             "storehouses",
             "merchant_estates",
             "ministries",
-            "village_groves",
+            # NOT "village_groves" since feature 137 T06 (2026-08-28): the placard is an opaque card, so the
+            # name reads over anything; what it must not HIDE is a building, a plot, a field, water, a lane
+            # or a label. A strip of belt or wood under the card hides nothing a reader needs, and a tall
+            # hamlet framed tight to its content often has no blank 200 x 106 px at all (10 of 48 cohort
+            # seeds; seed 2's strips beside the field are 106 and 183 px wide). The generator still seats
+            # the title on blank ground first and takes cover only as the last resort before the corner.
             # NOT "commons": the scrub is sparse GROUND COVER (a feathered grass scatter on open ground), not a
             # feature with a footprint, and a bold place name reads fine over it. Kept in step with
             # `_title_obstacles` in settlement.py - once the commons clothes the field's interior voids too it
@@ -831,7 +836,7 @@ def _seg_0267_500__labels_align_with_their_referent(
             _subj = [t for t in _lar_subjects if abs(t[0] - _cx) <= 1.5 and abs(t[1] - _cy) <= 1.5]
             if not _subj:
                 continue
-            _want = ((_subj[0][2] + 90.0) % 180.0) - 90.0
+            _want = aligned_tilt(_subj[0][2])  # the ONE rule, including its square-rotation snap (feature 137 T06: a 90-degree board read -90 here and 0 in label())
             _got = float(_L[7]) if len(_L) > 7 and _L[7] else 0.0
             if min(abs(_got - _want) % 180.0, 180.0 - abs(_got - _want) % 180.0) > 1.0:
                 labels_align_with_their_referent_bad.append((round(_cx), round(_cy), str(_L[5]), round(_got, 1), round(_want, 1)))

@@ -224,10 +224,22 @@ class WetGroundMixin:
         step = max(24.0, pad / 3)
         n = max(2, int((u1 - u0) / step) + 1)
         stations = [u0 + (u1 - u0) * k / (n - 1) for k in range(n)]
-        vs = [p[0] * dx + p[1] * dy for p in cult]
+        # THE STATIONS READ THE FAN ONLY, never a dry plot (feature 137, cohort seed 14 at 20
+        # households). The hem's dry plots are in `cult` so the band's WIDTH and its global floor
+        # count them, but a station whose window held only a dry plot - one standing upslope of the
+        # settlement, with no paddy within `pad` of that station - took that plot's foot as "the
+        # crop's lowest point" and declared every foot of ground below it wet: a 30 ft column of
+        # marsh from the plot, straight through two ranks of farmhouses, to the real toe 1,800 ft
+        # further down. Nothing drew it (the marsh is inked from the field's foot), but the router
+        # walls a path off wet ground, so eight steadings east of the column could not be reached.
+        # The research this band encodes (research/water.md, "the wet toe is as wide as the fan")
+        # is about the FAN's spring line; a dry plot is not a fan and has no toe.
+        fan = [p for poly in polys for p in poly]
+        us_fan = [p[0] * ux + p[1] * uy for p in fan]
+        vs = [p[0] * dx + p[1] * dy for p in fan]
         local: list[float] = []
         for u in stations:
-            near = [v for v, uu in zip(vs, us, strict=True) if abs(uu - u) <= pad]
+            near = [v for v, uu in zip(vs, us_fan, strict=True) if abs(uu - u) <= pad]
             local.append((max(near) if near else v_in + pad) - pad)
         edge = [max(local[max(0, k - 1) : k + 2]) for k in range(n)]
         inner = [(u * ux + v * dx, u * uy + v * dy) for u, v in zip(stations, edge, strict=True)]

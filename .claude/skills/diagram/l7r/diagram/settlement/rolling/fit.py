@@ -40,14 +40,14 @@ class BundleFitMixin:
         return cast(list[Any], cached[1])
 
     def _field_chains(self: Settlement) -> Any:  # type: ignore[misc]
-        """THE FIELD EDGE AS A FEW OPEN CHORDS ON THE HOUSE SIDE (feature 139, GM 2026-08-28: *"49-73 verticies still
+        """THE FIELD EDGE AS A FEW OPEN CHORDS ON THE HOUSE SIDE (feature 140, GM 2026-08-28: *"49-73 verticies still
         sounds like a lot ... just a few line segments on one side of the field that you are checking that you are
         on the correct side of ... not forming a closed shape"*). When the engine has planned the cluster's seat
         (`field_face`, set by hamletgen's `stage_seat`), each field outline becomes the open chain(s) of its
         chords facing that seat - the reference hamlet's 73-vertex outline gives 5 chords - each pushed out by
         the tolerance so no drawn outline lies on the house side of it; a seat is judged by SIDE and by the
         rule's own gap (`chain_violated`). Where no seat is planned (the legacy village roll) a closed ring of
-        the simplified outline stands in (`keepout` polygons, as before feature 139 but with a handful of
+        the simplified outline stands in (`keepout` polygons, as before feature 140 but with a handful of
         vertices). Returns `(chains, rings)`: one of them empty. Cached by the registry's identity and length."""
         polys = self.field_polys
         face = getattr(self, "field_face", None)

@@ -114,7 +114,7 @@ def main(argv: list[str] | None = None) -> int:
     # REMOTE OFF (feature 132): read BEFORE any credential is loaded or any client is built, so that
     # with the switch thrown no AWS call is even possible. `status` still answers (without a
     # lookup); `check` and `image` refuse outright; `merge` becomes LOCAL-GATED - it writes the
-    # verdict the push ritual reads, and that verdict is SKIP-VERIFIED only when a green local
+    # verdict the push procedure reads, and that verdict is SKIP-VERIFIED only when a green local
     # `make done` vouches for exactly the engine content the merge would produce.
     remote_off = switches.read(skill).remote_off
     if a.command == "status":

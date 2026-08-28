@@ -11,7 +11,7 @@ with `specs/` or `scripts/`.
 **Doctrine constraints honored in the ordering**: budget reconciliation before packing;
 staged build on the ONE map (`wip/shiro-daika`) with the full sweep exactly once at the end;
 perf A/B before the `GEN_TIME_BUDGETS` entry; settlement-review launched the moment the map
-is final; XII closing bookend + stop-work ritual last.
+is final; XII closing bookend + stop-work procedure last.
 
 ## Phase 1: Setup
 
@@ -196,7 +196,7 @@ verdicts unchanged.
       `ward_style`, `wind_from`, cistern band; the "Open, still to settle" list pruned),
       and the feature log in `wip/shiro-daika.notes.md`; verify every new check name
       appears in contracts/checks.md with its final semantics.
-- [ ] T030 Stop-work ritual: commit in the clone, `scripts/sync-with-main.sh done`
+- [ ] T030 Stop-work procedure: commit in the clone, `scripts/sync-with-main.sh done`
       (render-sync carries the new capital render to main), and report to the GM with the
       map path, the crops reviewed, and concrete test steps (regen + gate commands).
 
@@ -223,5 +223,5 @@ verdicts unchanged.
 
 MVP = Phase 1-3 (US1): a housed capital is reviewable on its own. Then US2 -> US3 -> US4 in
 priority order, each leaving the one map gate-green for its implemented scope; US5 ships.
-Commit at each phase boundary (the stop-work ritual runs at natural milestones, not only at
+Commit at each phase boundary (the stop-work procedure runs at natural milestones, not only at
 the end); the full sweep runs once, at T026, per the iteration doctrine.

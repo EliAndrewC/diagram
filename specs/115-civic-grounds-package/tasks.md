@@ -145,7 +145,7 @@ files alone.
 - [ ] T043 Record in `specs/115-civic-grounds-package/research.md` anything the implementation learned that the plan got wrong - especially any member whose assignment moved from data-model.md's tables, or any stage boundary that had to move to preserve RNG order, with the reason
 - [ ] T044 Add to `.claude/skills/diagram/future-work.md`: the two intended follow-up relocations (`_ward_fence_cap` -> `water_ways.py`, `precinct_interior` -> `shrines_wells.py`) and the next clause-12 candidate now that this one is closed - `rolling.py::roll_village` at 256 lines - so they do not live only in this spec. Check first whether feature 116 (`shrines-wells-package`, claimed by a peer session mid-chain) has already moved `shrines_wells.py` into a package, and name the right destination file if so
 - [ ] T045 Set this spec's Status to Implemented with the date, and note the final per-file line counts and the new longest-function figure
-- [ ] T046 Final `make done` green (skip if everything since the last green gate is markdown - root CLAUDE.md, "Docs-only diffs skip the gate"), then the stop-work ritual: commit in the clone and run `scripts/sync-with-main.sh done`
+- [ ] T046 Final `make done` green (skip if everything since the last green gate is markdown - root CLAUDE.md, "Docs-only diffs skip the gate"), then the stop-work procedure: commit in the clone and run `scripts/sync-with-main.sh done`
 
 ---
 

@@ -6,7 +6,7 @@ from collections.abc import Callable, Mapping, Sequence
 from typing import Any
 
 from l7r.diagram.settlement import _assert_not_main_tree, sat_overlap
-from l7r.diagram.settlement._geom.primitives import convex_hull as convex_hull  # re-exported: the hull lives in the geometry package since feature 139
+from l7r.diagram.settlement._geom.primitives import convex_hull as convex_hull  # re-exported: the hull lives in the geometry package since feature 140
 
 _assert_not_main_tree(__file__)  # standalone gate runs must also happen in a session clone, never in main (CLAUDE.md "Session clones"; settlement's own import-time guard backstops this)
 

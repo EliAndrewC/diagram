@@ -23,7 +23,7 @@ from l7r.diagram.settlement._geom.primitives import keepout_ring
 
 from .._geom import Poly, Pt, point_in_poly, smooth_closed, smooth_points
 
-DIKE_KEEPOUT_EPS = 8.0  # px: a chord may stray this far from the crest; the keep-out is pushed out by it (feature 139)
+DIKE_KEEPOUT_EPS = 8.0  # px: a chord may stray this far from the crest; the keep-out is pushed out by it (feature 140)
 
 if TYPE_CHECKING:
     from ..core import Settlement
@@ -178,7 +178,7 @@ class DikeMixin:
         # the dike is a raised earthwork bank - NO-BUILD ground: houses and the windbreak grove keep OFF it
         # (GM 2026-07-22). Register the band as a placement keep-out so try_place / farmsteads / village_grove
         # flow around it (validated by structures_clear_of_dike).
-        # THE KEEP-OUT IS A FEW CHORDS ALONG THE CREST, NOT THE DRAWN BAND (feature 139, GM 2026-08-28:
+        # THE KEEP-OUT IS A FEW CHORDS ALONG THE CREST, NOT THE DRAWN BAND (feature 140, GM 2026-08-28:
         # *"thousands of vertices is obviously bad ... draw a single line segement along the edge of the actual
         # polder boundaries and then put the houses on one side of it"*). The smoothed band has 2,880 vertices
         # on the seed-19 polder and every homestead seat test walked all of them (8 s of a roll). The crest is

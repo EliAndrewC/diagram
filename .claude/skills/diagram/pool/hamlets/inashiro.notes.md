@@ -1390,3 +1390,12 @@ straw rick is deferred with seasonal maps (T60).
 **2026-08-27 (T62).** The hokora is drawn at the 6 ft small-shed module in vermilion with a torii before it - at 3 ft the GM could not tell what it was; a glyph convention, recorded as a deviation.
 
 - 2026-08-28 (feature 134, interactive HTML map): NO visual change - the manifest gained the ink census keys (`ink_classes`, `unclassed_ink`, `unregistered_classes`) and the SVG/PNG are byte-identical to the accepted T99 state (PNG sha256 09e8d5ab... unchanged, SVG whitespace-normalized identical). No settlement-review owed; pushed with REVIEW_GATE_OK stating this.
+
+### 2026-08-28 - feature 137: the lane web's splices, reviewed
+
+`settlement-review` (delta scope: the lane web, the board's caption seat, the title-as-cover rule), verdict **PASS WITH NOTES**. Confirmed in the ink: no join link retraces its own piece; lane 1's end at the connector (1089,954) is not linked onward; every farmstead 24-63 ft from a lane; the board still at the busiest node; the title placard on the commons north of the belt, piercing no crown. Caught, carried to feature 139 (not fixed here - the GM stopped the work to land it):
+
+1. **The board's caption stands across the way from its glyph** (caption 1262-1315 x 916-924, board at 1307,918): the new seat scoring proves the wrapped box FITS, it never asks which side of the lane it landed on, so at fit zoom the text reads as naming the house or the lane. Fix direction: score a seat on the glyph's side of any way between them, or drop the caption below the board on the east verge (open ground x 1315-1330, y 895-945).
+2. **Lane 5's terminal (1274,746) fades out** 12 ft short of the (1337,743) bed and 30 ft from that house's wall - a lane end off the network should land on a plot edge or a yard.
+
+Nitpicks: a 5 ft tail of lane 2 past the lane-4 junction at (1280,1035); the 12 ft jog at (1246,1013)-(1243,1025) before the east leg. The review's catch line: the caption-across-the-way defect and the fading terminal; nothing else new.

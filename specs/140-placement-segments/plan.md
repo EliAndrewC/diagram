@@ -1,6 +1,6 @@
 # Implementation Plan: Placement Measures Against a Few Segments
 
-**Branch**: none (`SPECIFY_FEATURE=139-placement-segments`) | **Date**: 2026-08-28 | **Spec**: [spec.md](spec.md) (FAITHFUL, round 3)
+**Branch**: none (`SPECIFY_FEATURE=140-placement-segments`) | **Date**: 2026-08-28 | **Spec**: [spec.md](spec.md) (FAITHFUL, round 3)
 
 ## Summary
 
@@ -29,6 +29,6 @@ regenerated and reviewed.
 
 1. Tolerance 3 px for fields (research R3: at 4-8 px the reference's re-seated houses broke its lane web -
    `lanes_bend_like_paths` / `lanes_form_one_network` - which is a lane-web fragility, recorded for
-   feature 140's audit, not a chord problem; 3 px passes and still gives under ten vertices).
+   feature 141's audit, not a chord problem; 3 px passes and still gives under ten vertices).
 2. The dike keeps a closed ring (round-2 adjudication: a ring dike's houses stand inside it).
 3. The far sides of a field are carried by `_hard_clear` (crop plots), as the spec says.

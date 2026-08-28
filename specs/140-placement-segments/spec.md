@@ -1,6 +1,6 @@
 # Feature Specification: Placement Measures Against a Few Segments, Not Thousands of Vertices
 
-**Feature Branch**: none (`SPECIFY_FEATURE=139-placement-segments`)
+**Feature Branch**: none (`SPECIFY_FEATURE=140-placement-segments`)
 
 **Created**: 2026-08-28
 
@@ -31,7 +31,7 @@ these maps to maintain bite identity now or at any time"*), and every pool map t
 - *"our automated checks need to fundamentally be testing the same kind of thing as our placement
   algorithm"*
 - *"do the vertices improvement as a task and then open a new feature for this"* - the checks-and-corpus
-  audit is feature 140, not this one.
+  audit is feature 141, not this one.
 
 ## User Scenarios & Testing
 
@@ -100,7 +100,7 @@ its reason).
   outline on the house side: no part of the drawn outline lies on the house side of its chord, so a seat
   the outline would refuse in the chain's reach is never accepted (a test proves both on random outlines
   and on a drawn dike).
-- **FR-006**: This feature MUST open feature 140 - the checks-and-corpus audit - with the GM's words on it
+- **FR-006**: This feature MUST open feature 141 - the checks-and-corpus audit - with the GM's words on it
   captured verbatim in its own `gm-request.md`, and MUST do none of that audit here.
 - **FR-004**: The maps MAY move; every changed pool map and the reference MUST be reviewed by
   `settlement-review` before the push, and the seed-19 polder's stage timing recorded before/after.
@@ -125,4 +125,4 @@ its reason).
   and cheap), which a house cannot pass on a plot; the chain is the setback rule on the side houses
   stand.
 - The scatter's cost (sample volume against small outlines) is not this feature's; the comb solver is not
-  this feature's; the checks-and-corpus audit is feature 140.
+  this feature's; the checks-and-corpus audit is feature 141.

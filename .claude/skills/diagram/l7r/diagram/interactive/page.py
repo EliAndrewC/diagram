@@ -91,6 +91,75 @@ def merge_primitives(s: str) -> str:
     return _RUN.sub(_merge_run, s)
 
 
+#: Thin classes whose marks get a FAT INVISIBLE HIT COPY (GM 2026-08-28: "very thin and hard for me to
+#: move my mouse over very precisely" - the bunds, the beans on them, the ditches, the lanes). The
+#: copy repeats the mark's geometry with `pointer-events: stroke` (a line, path or outline) or a
+#: tripled radius with `pointer-events: fill` (a bead), no paint, HIT_WIDEN_FACTOR times the drawn
+#: width with a floor of HIT_WIDEN_MIN px - the GM's "three or four times the width". It sits right
+#: after the mark inside its class group: above the paddy fill beneath a bund, below anything drawn
+#: later.
+HIT_WIDEN: frozenset[str] = frozenset({"bund", "bund beans", "field ditch", "village lane"})
+HIT_WIDEN_FACTOR = 4.0
+HIT_WIDEN_MIN = 6.0
+#: The scrub's hit region is where its MARKS are, not its recorded polygon (the polygon is the whole
+#: hinterland, including the ground the scatter deliberately keeps clear - the GM: "if my mouse is just
+#: in the middle of the village, over blank space where there is deliberately no scrubland, then I
+#: don't think that the scrubland should be highlighted"). A grid of HIT_CELL px cells; a cell with a
+#: mark in it is part of the region; runs of cells become one rect each.
+HIT_FROM_MARKS: frozenset[str] = frozenset({"scrub and rough grazing"})
+HIT_CELL = 24.0
+
+_STROKE_W = re.compile(r'stroke-width="([\d.]+)"')
+_GROUP_W = re.compile(r'<g [^>]*stroke-width="([\d.]+)"')
+_MARK_XY = re.compile(r'(?:x1|cx)="([-\d.]+)" (?:y1|cy)="([-\d.]+)"|[Mm]([-\d.]+),([-\d.]+)')
+
+
+def _hit_width(w: float) -> float:
+    return max(HIT_WIDEN_FACTOR * w, HIT_WIDEN_MIN)
+
+
+def hit_copies(s: str) -> str:
+    """The fat invisible copies of every stroked mark and every bead in one classed string."""
+    out: list[str] = []
+    gm = _GROUP_W.search(s)
+    default_w = float(gm.group(1)) if gm else 1.0
+    for m in re.finditer(r'<(line|path|polygon|polyline) ([^>]*?)/>', s):
+        tag, attrs = m.group(1), m.group(2)
+        if tag in ("polygon", "polyline", "path") and 'fill="none"' not in attrs and tag != "path":
+            continue  # a filled shape already takes the pointer over its whole body
+        if tag == "path" and 'fill="none"' not in attrs and "stroke" not in attrs:
+            continue
+        wm = _STROKE_W.search(attrs)
+        w = float(wm.group(1)) if wm else default_w
+        geom = " ".join(a for a in re.findall(r'(?:points|d|x1|y1|x2|y2)="[^"]*"', attrs))
+        out.append(f'<{tag} {geom} fill="none" class="hit" style="pointer-events: stroke; stroke-width: {_hit_width(w):.1f}px"/>')
+    for m in re.finditer(r'<circle cx="([-\d.]+)" cy="([-\d.]+)" r="([-\d.]+)"[^>]*/>', s):
+        r = float(m.group(3))
+        out.append(f'<circle cx="{m.group(1)}" cy="{m.group(2)}" r="{max(3 * r, HIT_WIDEN_MIN / 2):.1f}" fill="none" class="hit" style="pointer-events: fill"/>')
+    return "".join(out)
+
+
+def marks_region(strings: Sequence[str], cell: float = HIT_CELL) -> str:
+    """Rects over the grid cells that hold a mark of the given strings - the scrub's real extent."""
+    cells: set[tuple[int, int]] = set()
+    for s in strings:
+        for m in _MARK_XY.finditer(s):
+            x, y = (m.group(1), m.group(2)) if m.group(1) is not None else (m.group(3), m.group(4))
+            cells.add((int(float(x) // cell), int(float(y) // cell)))
+    out: list[str] = []
+    for gy in sorted({c[1] for c in cells}):
+        xs = sorted(c[0] for c in cells if c[1] == gy)
+        start = prev = xs[0]
+        for gx in xs[1:]:
+            if gx == prev + 1:
+                prev = gx
+                continue
+            out.append(f'<rect x="{start * cell:.0f}" y="{gy * cell:.0f}" width="{(prev - start + 1) * cell:.0f}" height="{cell:.0f}"/>')
+            start = prev = gx
+        out.append(f'<rect x="{start * cell:.0f}" y="{gy * cell:.0f}" width="{(prev - start + 1) * cell:.0f}" height="{cell:.0f}"/>')
+    return "".join(out)
+
+
 def _open(key: str) -> str:
     return f'<g class="f f-{slug(key)}" data-k="{html.escape(key, quote=True)}">'
 
@@ -102,11 +171,11 @@ def wrap(s: str, tag: ClsTag) -> str:
     if tag is None or tag == NOT_HIGHLIGHTED or not s:
         return s
     if isinstance(tag, str):
-        return _open(tag) + merge_primitives(s) + "</g>"
+        return _open(tag) + merge_primitives(s) + (hit_copies(s) if tag in HIT_WIDEN else "") + "</g>"
     if isinstance(tag, Split):
         fill_copy = _ATTR_STROKE.sub(' stroke="none"', s)
         stroke_copy = _ATTR_FILL.sub(' fill="none"', s)
-        return _open(tag.fill) + fill_copy + "</g>" + _open(tag.stroke) + stroke_copy + "</g>"
+        return _open(tag.fill) + fill_copy + "</g>" + _open(tag.stroke) + stroke_copy + (hit_copies(stroke_copy) if tag.stroke in HIT_WIDEN else "") + "</g>"
     return "".join(wrap(piece, c) for c, piece in tag)
 
 
@@ -209,11 +278,55 @@ def _asset(name: str) -> str:
         return fh.read()
 
 
-def render_page(strings: Sequence[str], tags: Sequence[ClsTag], name: str, meta: dict[str, Any] | None = None) -> str:
+#: Which recorded footprints become HIT REGIONS, by class: (manifest key, role -> class). A scatter
+#: feature is mostly empty ground between its marks - the GM (2026-08-28): "moving my mouse over the
+#: scrublands is surprisingly difficult because I need my mouse to be over one of these specific trees
+#: or little lines" - so the page adds an invisible polygon of the feature's recorded footprint that
+#: takes the pointer wherever nothing drawn above it does.
+HIT_REGIONS: tuple[tuple[str, dict[str, str]], ...] = (
+    ("commons", {"grazing": "scrub and rough grazing", "commons": "scrub and rough grazing", "woodland": "woodland commons"}),
+    ("marshes", {"*": "marsh"}),
+    ("village_groves", {"windbreak": "windbreak", "copse": "copse"}),
+    ("bamboo_stands", {"homestead": "homestead bamboo", "*": "shared bamboo grove"}),
+)
+
+
+def hit_regions(manifest: dict[str, Any] | None, present: set[str]) -> str:
+    """Invisible footprint polygons for the scatter classes present on this map. `fill="none"` with
+    `pointer-events: fill` hit-tests the area without painting it, and the highlight rules skip a
+    fill-less, stroke-less element, so a region never lights up itself. Placed at the BOTTOM of the
+    stack (just above the sheet): everything drawn later - a house, a lane, a paddy - is above it and
+    keeps the pointer; only bare ground inside the footprint falls through to the class."""
+    if not manifest:
+        return ""
+    out: list[str] = []
+    for key, roles in HIT_REGIONS:
+        for rec in manifest.get(key) or []:
+            if not isinstance(rec, dict) or not rec.get("poly"):
+                continue
+            cls = roles.get(str(rec.get("role", "*")), roles.get("*"))
+            if cls is None or cls not in present:
+                continue
+            pts = " ".join(f"{float(x):.1f},{float(y):.1f}" for x, y in rec["poly"])
+            out.append(_open(cls) + f'<polygon class="hit" points="{pts}" fill="none" style="pointer-events: fill"/></g>')
+    return "".join(out)
+
+
+def render_page(strings: Sequence[str], tags: Sequence[ClsTag], name: str, meta: dict[str, Any] | None = None, manifest: dict[str, Any] | None = None) -> str:
     """The whole page as one string - `write_html` writes it; tests read it."""
-    svg = "\n".join(wrap(s, t) for s, t in zip(strings, tags, strict=True))
+    present = present_classes(tags)
+    wrapped = [wrap(s, t) for s, t in zip(strings, tags, strict=True)]
+    # the hit regions go right after the SHEET (the first "-"-tagged string), under everything drawn
+    sheet = next((i for i, t in enumerate(tags) if t == NOT_HIGHLIGHTED), 0)
+    regions = hit_regions(manifest, present - HIT_FROM_MARKS)
+    for key in sorted(HIT_FROM_MARKS & present):
+        rects = marks_region([s for s, t in zip(strings, tags, strict=True) if t == key])
+        if rects:
+            regions += _open(key) + f'<g class="hit" fill="none" style="pointer-events: fill">{rects}</g></g>'
+    wrapped.insert(sheet + 1, regions)
+    svg = "\n".join(wrapped)
     svg = svg.replace("<svg ", '<svg id="map" ', 1)
-    data = explanations(present_classes(tags))
+    data = explanations(present)
     blob = json.dumps(data, ensure_ascii=False).replace("</", "<\\/")
     title = html.escape(name)
     # NO HEADER ON THE PAGE (GM 2026-08-28: "we can get rid of the entire header") - the map already
@@ -239,6 +352,6 @@ def render_page(strings: Sequence[str], tags: Sequence[ClsTag], name: str, meta:
     )
 
 
-def write_html(path: str, strings: Sequence[str], tags: Sequence[ClsTag], name: str, meta: dict[str, Any] | None = None) -> None:
+def write_html(path: str, strings: Sequence[str], tags: Sequence[ClsTag], name: str, meta: dict[str, Any] | None = None, manifest: dict[str, Any] | None = None) -> None:
     with open(path, "w", encoding="utf-8") as fh:
-        fh.write(render_page(strings, tags, name, meta))
+        fh.write(render_page(strings, tags, name, meta, manifest))

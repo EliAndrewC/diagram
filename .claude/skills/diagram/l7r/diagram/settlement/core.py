@@ -117,7 +117,7 @@ class Settlement(
         self.bound: Any = None  # optional bounding polygon: placement stays inside it (city wall)
         self.view: Any = None  # optional (ox,oy,w,h) viewBox crop - render/checks treat it as the map edge
         self.field_polys: Indexed = Indexed()  # smoothed outlines used for blocking (Indexed: _in_blocked keeps a spatial index on it)
-        self.field_face: tuple[float, float] | None = None  # the planned cluster seat, once known: the field chains face it (feature 139)
+        self.field_face: tuple[float, float] | None = None  # the planned cluster seat, once known: the field chains face it (feature 140)
         self.ellipses: list[Any] = []  # (cx, cy, rx, ry) hill/pond/manor - block houses
         self.block_polys: list[Any] = Indexed()  # arbitrary no-build polygons (e.g. forest) (Indexed: _in_blocked keeps a spatial index on it)
         self.marsh_blocks: list[

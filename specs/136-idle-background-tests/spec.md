@@ -124,14 +124,14 @@ the feature's last task is the GM's acceptance of those decisions, in their word
   and never runs more than once per arming.
 - **FR-006b** (the GM: "I do not want to implement this in a way which interrupts the merge back
   into main"): an armed or running idle test never blocks, delays or invalidates the stop-work
-  ritual or the merge route. Concretely: (a) the timer's state lives in `.git/`, outside the tree
-  the ritual commits and the gate keys; (b) the timer does not START while any `make` is running
+  procedure or the merge route. Concretely: (a) the timer's state lives in `.git/`, outside the tree
+  the procedure commits and the gate keys; (b) the timer does not START while any `make` is running
   in the clone (a gate or a sweep the session launched and detached) - it defers like a lock loss;
   (c) the idle run records its verification state under its own target name (`idle-tests`), which
   the push guard never reads as a green `done`, so it neither grants nor revokes a push; (d) a new
   prompt disarms the timer AND terminates any idle run in progress (the detached process group is
   killed; an `aborted-on-prompt` record is appended to `dev/idle-log/` and surfaced like any other),
-  so no session-issued `make` target ever waits on an idle run and the ritual and the merge route
+  so no session-issued `make` target ever waits on an idle run and the procedure and the merge route
   are never blocked, delayed or refused because of one (D9).
 - **FR-007**: Every rule has a test in `scripts/test-idle-tests-hooks.sh` run by `make hooks-test`
   (constitution XVIII): arm/disarm, the stagger band and its determinism, resume detection, the

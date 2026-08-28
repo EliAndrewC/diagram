@@ -700,3 +700,55 @@ def test_trim_to_service_counts_ARRIVING_AT_THE_FIELD_as_service() -> None:
     run = [(0.0, 100.0), (200.0, 100.0), (395.0, 100.0)]
     assert _trim_to_service(run, [], [(0.0, 100.0)], [field]) == run
     assert len(_trim_to_service(run, [], [(0.0, 100.0)], [])) == 2
+
+
+# ---- the splice helpers (feature 137 T04) ---------------------------------------------------------
+
+
+def test_unretrace_collapses_an_out_and_back_spur() -> None:
+    """A join link prepended whole doubled back along the piece's own first segment (cohort seed 07):
+    A -> B -> A' -> B -> C is A -> B -> C."""
+    pts = [(0.0, 0.0), (20.0, 0.0), (0.5, 0.0), (20.0, 0.0), (60.0, 0.0)]
+    assert hg.ways._unretrace(pts) == [(0.0, 0.0), (20.0, 0.0), (60.0, 0.0)]
+
+
+def test_unretrace_keeps_a_polyline_that_would_fold_away_entirely() -> None:
+    """A door path whose link ran back past the door is an ugly lane, not an empty one (seed 03)."""
+    pts = [(0.0, 0.0), (20.0, 0.0), (0.0, 0.0)]
+    assert hg.ways._unretrace(pts) == pts
+
+
+def test_unjog_takes_the_lattice_step_out_when_the_chord_is_clear() -> None:
+    """Two turns past 50 degrees within 40 ft is the check's zigzag (seed 14: 7 ft up, 13 ft back)."""
+    path = [(0.0, 0.0), (60.0, 0.0), (60.0, 7.0), (47.0, 7.0), (47.0, 60.0)]
+    out = hg.ways._unjog(path, [], [], [])
+    assert out == [(0.0, 0.0), (60.0, 0.0), (47.0, 60.0)] or out == [(0.0, 0.0), (47.0, 7.0), (47.0, 60.0)]
+    assert all(hg.ways._turn_deg(out[k - 1], out[k], out[k + 1]) < 140.0 for k in range(1, len(out) - 1))
+
+
+def test_unjog_keeps_the_jog_the_ground_forces() -> None:
+    """A wall across the chord: the steps stay, because the chord would cross it."""
+    wall = [(50.0, 2.0), (58.0, 2.0), (58.0, 5.0), (50.0, 5.0)]
+    path = [(0.0, 0.0), (60.0, 0.0), (60.0, 7.0), (47.0, 7.0), (47.0, 60.0)]
+    assert hg.ways._unjog(path, [wall], [], []) == path
+
+
+def test_stop_at_network_cuts_a_link_where_it_crosses_the_way_it_was_sent_to() -> None:
+    """Tripwire seed 27: the link touched a way at 20 ft and carried on to a `q` a trim later removed."""
+    link = [(0.0, 0.0), (0.0, 30.0), (0.0, 60.0)]
+    way = [((-20.0, 20.0), (20.0, 20.0))]
+    assert hg.ways._stop_at_network(link, way) == [(0.0, 0.0), (0.0, 20.0)]
+
+
+def test_stop_at_network_lands_on_the_way_it_stops_beside() -> None:
+    """A vertex 3 ft off a way is a piece to the web's 4 ft join tolerance once rounded - the cut
+    ends on the way's foot point, not beside it."""
+    link = [(0.0, 0.0), (30.0, 3.0), (60.0, 3.0)]
+    way = [((20.0, 0.0), (40.0, 0.0))]
+    assert hg.ways._stop_at_network(link, way) == [(0.0, 0.0), (30.0, 3.0), (30.0, 0.0)]
+
+
+def test_stop_at_network_leaves_a_link_that_meets_nothing_on_the_way() -> None:
+    link = [(0.0, 0.0), (30.0, 0.0), (60.0, 0.0)]
+    assert hg.ways._stop_at_network(link, []) == link
+    assert hg.ways._stop_at_network(link, [((0.0, 50.0), (60.0, 50.0))]) == link

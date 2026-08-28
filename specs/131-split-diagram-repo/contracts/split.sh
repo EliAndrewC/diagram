@@ -53,7 +53,7 @@ Extracted from EliAndrewC/gm-assistant with git filter-repo, history preserved f
 that moved. The internal layout is unchanged (.claude/skills/diagram/ at the same depth) so the
 engine, the pool generators and the feature-127 guards did not move. Repository-level machinery
 the two projects both need was copied; only the diagram-scoped guards and review agents moved.
-Roots are derived from git in the ritual, the hooks and the Makefile guards, so nothing here
+Roots are derived from git in the procedure, the hooks and the Makefile guards, so nothing here
 hardcodes /diagram except .claude/settings.json's hook paths."
   ;;
 gm)

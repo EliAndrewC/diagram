@@ -88,7 +88,7 @@ Built ahead of US1's other features because it is the decision the feature exist
 - [x] T034 Run the WHOLE affected test files: `python3 -m pytest test_settlement.py test_checks.py test_villages.py -q -n auto --no-cov` - never a `-k` subset
 - [ ] T035 Run `make done` ONCE, backgrounded, as `cd <dir> && make done > /tmp/gate019.log 2>&1` and nothing more; act on the notification, never poll, and tail the log before believing green
 - [x] T036 Update `settlements/capitals.md` so the STATUS banner reflects what now ships and what is still 020's
-- [ ] T037 Commit and run the stop-work ritual from the clone root; render-sync publishes the PNG into main where the GM browses renders
+- [ ] T037 Commit and run the stop-work procedure from the clone root; render-sync publishes the PNG into main where the GM browses renders
 
 ---
 

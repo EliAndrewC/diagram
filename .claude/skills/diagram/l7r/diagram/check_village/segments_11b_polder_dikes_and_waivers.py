@@ -196,7 +196,7 @@ def _seg_0581__polder_dike_is_earthwork(
             # bank carries only its own soil-binding trees). perimeter_dike registers the band as a placement
             # keep-out; this verifies it. A house corner or a grove clump center inside the dike band fires.
             on_dike = []
-            _keep = dk.get("keepout") or band  # the crest's few chords the placer kept off (feature 139); the band for an older manifest
+            _keep = dk.get("keepout") or band  # the crest's few chords the placer kept off (feature 140); the band for an older manifest
             for h in M.get("houses", []):
                 if h.get("on_dike"):
                     continue  # a dike_top_houses house LIVES on the bank (settlement_form 'dike_top') - dike_top_houses_on_the_dike verifies it instead

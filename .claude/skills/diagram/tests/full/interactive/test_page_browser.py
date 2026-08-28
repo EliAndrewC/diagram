@@ -139,6 +139,10 @@ def _synthetic() -> tuple[list[str], list[Any]]:
     tags.append("notice board")
     strings.append(T.format(x=60, y=95, t="notice board"))
     tags.append("notice board")
+    strings.append('<path d="M20,150 L120,150" fill="none" stroke="#C9AE79" stroke-width="1.0"/>')  # a thin lane
+    tags.append("village lane")
+    strings.append('<g stroke="#A7A860" stroke-width="0.8"><line x1="20" y1="180" x2="21" y2="184"/><line x1="30" y1="182" x2="31" y2="186"/></g>')  # two scrub blades in one corner
+    tags.append("scrub and rough grazing")
     strings.append("</svg>")
     tags.append(None)
     return strings, tags
@@ -150,14 +154,22 @@ def synthetic(browser: Any) -> Iterator[Page]:
     with tempfile.TemporaryDirectory() as d:
         path = os.path.join(d, "synthetic.html")
         with open(path, "w", encoding="utf-8") as fh:
-            fh.write(render_page(strings, tags, "Synthetic", {"ftpx": 1.0}))
+            fh.write(
+                render_page(
+                    strings,
+                    tags,
+                    "Synthetic",
+                    {"ftpx": 1.0},
+                    {"marshes": [{"role": "toe", "poly": [[220, 100], [290, 100], [290, 190], [220, 190]]}], "commons": [{"role": "grazing", "poly": [[0, 120], [300, 120], [300, 200], [0, 200]]}]},
+                )
+            )
         page = Page(browser, path)
         yield page
         page.close()
 
 
 def test_synthetic_page_mechanics(synthetic: Page) -> None:
-    present = ["farmhouse", "storage shed", "byre", "windbreak", "copse", "marsh", "paddy", "bund", "notice board"]
+    present = ["farmhouse", "storage shed", "byre", "windbreak", "copse", "marsh", "paddy", "bund", "notice board", "village lane", "scrub and rough grazing"]
     _mechanics(synthetic, present)
 
 
@@ -251,6 +263,61 @@ def test_the_wheel_scrolls_and_a_press_is_only_a_click(synthetic: Page) -> None:
     assert synthetic.dialog()["k"] == "farmhouse"
     synthetic.page.keyboard.press("Escape")
     synthetic.js("() => window.l7rMap.fitWidth()")
+
+
+def test_bare_ground_inside_a_footprint_lights_its_class_and_drawn_ink_above_it_still_wins(synthetic: Page) -> None:
+    """The GM (2026-08-28): hovering the scrub only worked over a blade; now the footprint takes the pointer."""
+    synthetic.js("() => window.l7rMap.fit()")
+    x, y = synthetic.js("() => { const r = document.querySelector('polygon.hit').getBoundingClientRect(); return [r.x + r.width * 0.5, r.y + r.height * 0.9]; }")
+    synthetic.page.mouse.move(x, y)
+    synthetic.page.wait_for_timeout(30)
+    assert synthetic.on() == {"marsh": 3}, "bare ground inside the marsh footprint lights the marsh - both patches and the region's own group"
+    assert synthetic.js("() => getComputedStyle(document.querySelector('g.f.on polygon.hit')).fill") == "none", "the region itself paints nothing when highlighted"
+    synthetic.page.mouse.move(1, 199)
+    synthetic.page.wait_for_timeout(30)
+    assert synthetic.on() == {}
+
+
+def test_ctrl_zoom_keys_and_ctrl_wheel_drive_the_page_zoom(synthetic: Page) -> None:
+    """The GM (2026-08-28): one way of zooming - Ctrl + / - / 0 and Ctrl+wheel are ours."""
+    synthetic.js("() => window.l7rMap.fit()")
+    synthetic.page.keyboard.press("Control+=")
+    assert abs(synthetic.js("() => window.l7rMap.zoom()") - 2.0) < 1e-9
+    synthetic.page.keyboard.press("Control+-")
+    assert abs(synthetic.js("() => window.l7rMap.zoom()") - 1.0) < 1e-9
+    synthetic.page.mouse.move(700, 500)
+    synthetic.page.keyboard.down("Control")
+    synthetic.page.mouse.wheel(0, -300)
+    synthetic.page.keyboard.up("Control")
+    synthetic.page.wait_for_timeout(30)
+    assert synthetic.js("() => window.l7rMap.zoom()") > 1.5, "Ctrl+wheel zooms (a plain wheel scrolls)"
+    synthetic.page.keyboard.press("Control+0")
+    assert abs(synthetic.js("() => window.l7rMap.zoom()") - 1.0) < 1e-9
+    assert synthetic.js("() => window.devicePixelRatio") == 1, "the browser's own zoom did not change"
+    synthetic.js("() => window.l7rMap.fitWidth()")
+
+
+def test_a_thin_mark_is_hit_from_a_few_pixels_away(synthetic: Page) -> None:
+    """The GM (2026-08-28): the bunds, beans, ditches and lanes are too thin to hover; a fat invisible copy takes the pointer."""
+    synthetic.js("() => window.l7rMap.fit()")
+    x, y = synthetic.js("() => { const r = document.querySelector('g.f[data-k=\"village lane\"] path.hit').getBoundingClientRect(); return [r.x + r.width / 2, r.y + r.height / 2]; }")
+    synthetic.page.mouse.move(x, y + 8)  # 8 screen px off the 1 px line, inside its hit stroke
+    synthetic.page.wait_for_timeout(30)
+    assert synthetic.on() == {"village lane": 1}
+    synthetic.page.mouse.move(1, 199)
+    synthetic.page.wait_for_timeout(30)
+    assert synthetic.on() == {}
+
+
+def test_cleared_ground_inside_the_scrub_polygon_lights_nothing(synthetic: Page) -> None:
+    synthetic.js("() => window.l7rMap.fit()")
+    x, y = synthetic.js("() => { const r = document.querySelector('g.f[data-k=\"scrub and rough grazing\"] rect').getBoundingClientRect(); return [r.x + r.width / 2, r.y + r.height / 2]; }")
+    synthetic.page.mouse.move(x, y)
+    synthetic.page.wait_for_timeout(30)
+    assert synthetic.on() == {"scrub and rough grazing": 2}, "a cell with a blade in it lights the scrub"
+    synthetic.page.mouse.move(x + 200, y)  # inside the recorded polygon, no blade anywhere near
+    synthetic.page.wait_for_timeout(30)
+    assert synthetic.on() == {}, "cleared ground inside the scrub's polygon lights nothing"
 
 
 def test_scrolling_stops_at_the_edge_of_the_map(synthetic: Page) -> None:

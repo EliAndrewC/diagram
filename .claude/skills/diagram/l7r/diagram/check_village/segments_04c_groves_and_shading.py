@@ -982,7 +982,9 @@ def _seg_0613__village_windbreak_is_continuous(*, M: Any = _UNBOUND, check: Any 
         _thin: list[tuple[int, int, int]] = []
         for _g in _wb:
             _r = float(_g.get("r", 6))
-            _pr = [(c[0] * _px + c[1] * _py, c[0] * _wx + c[1] * _wy, c[0], c[1]) for c in _g["clumps"]]
+            _pr = [
+                (c[0] * _px + c[1] * _py, c[0] * _wx + c[1] * _wy, c[0], c[1]) for c in _g["clumps"] + (_g.get("clumps_offpage") or [])
+            ]  # a clump the page trim cut still stands off the page (feature 137 T05): the belt wraps a plot there, it is not holed
             # AN EMPTY COLUMN IS THE WORST CASE, NOT A SKIPPED ONE. The first cut of this check wrote
             # `if _spans:` and so scored a column with NO canopy as nothing at all - it passed a
             # sabotaged Inashiro with a 60 ft band cut clean out of its belt, which is the exact

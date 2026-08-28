@@ -31,6 +31,24 @@ Every entry: what the research found, the decision it drove, and any deliberate 
 - *Density and crown size - the numbers and the why.* A closed premodern hill wood (the mixed broadleaf/conifer cover of a settled valley's back slope, cut over for fuel and timber on a rotation) carries roughly **500-800 canopy stems per hectare**. 1 ha = 107,639 sq ft, so ~600 stems/ha is one canopy tree per ~180 sq ft: a mean spacing near **13 ft** (`CANOPY_SPACING_FT`). Canopy crowns in such a stand run **~5-8 m across** (16-26 ft) with occasional wider emergents, so `CANOPY_R_FT = 8.5` is the mean radius, jittered 0.75-1.4x. Crowns of ~17 ft mean diameter on 13 ft centers OVERLAP, and that is the point - **closure is what makes a wood a wood**, so the packed look is honest rather than decorative. Same finding as the mulberry rows (`_mulberry_rows`): at a to-scale grain, drawing real planted density honestly IS a dense mass of crowns, not sparse symbols spaced for the eye. Nothing is inflated for legibility - at 1 ft/px a crown is r ~6-12 px and it shrinks with the map at coarser grains, exactly like the buildings.
 
 
+## The belt's crowns are the same real size as the woods' (2026-08-28, feature 134 T36)
+
+**Grounds:** `_draw_grove`'s crown radius (`CANOPY_R_FT`); `village_windbreak_scales_with_cluster`
+
+**Evidence:** derived from the density entry above (a canopy crown ~5-8 m across)
+
+**Sources:** the entry above
+
+The GM: *"The trees in the woodland commons look bigger than the trees in the windbreak forest. Is
+that intentional?"* It was not. Measured on Inashiro: the commons' crowns had a median radius of
+9.0 ft (~18 ft across, inside the 16-26 ft the density entry gives), the belt's 4.5 ft (~9 ft
+across) - because `_draw_grove` sized crowns as a PIXEL radius calibrated when every village drew
+at 2 ft/px and never rescaled it by the map's feet-per-pixel, while the woods and the commons take
+`CANOPY_R_FT` in real feet. Fixed at the source: the grove uses the same constant, so the belt's
+cedars are real-sized on every tier; a village at 2 ft/px draws within a pixel of what it did.
+Measured after on Inashiro: belt median radius 7.6 ft (~15 ft across; 325 crowns in the belt, 505 on the map, none subsumed). Class: **accurate** - one
+crown constant, the researched one, for every stand on the map.
+
 ## No canopy tree stands under another's crown (researched 2026-08-28, feature 134)
 
 **Grounds:** `woods._crown_seat_clear` / `_canopy_seats` / `_crowns_near`, the grove clump's seat test in `_draw_grove`; `tree_crowns_not_subsumed`

@@ -255,7 +255,7 @@ implementation sketch, and under this principle still NOT mergeable.
 
 Sections updated:
   - Core Principles: Principle XIII added.
-  - Governance/Compliance: the stop-work ritual may commit in-clone but
+  - Governance/Compliance: the stop-work procedure may commit in-clone but
     MUST NOT push a regressed state.
 
 Templates requiring review/update:
@@ -264,7 +264,7 @@ Templates requiring review/update:
                               zero new regressions at merge).
   ✅ CLAUDE.md - "Verification before reporting done" gains the
                               no-regressions merge gate; the session-clone
-                              stop-work ritual now states the push bar.
+                              stop-work procedure now states the push bar.
   ✅ .claude/skills/diagram/CLAUDE.md - the cohort-baseline rule now says
                               a rotated residue is not a defense.
 
@@ -880,7 +880,7 @@ any single rule is reason enough to refuse "done" status.
 11. **Configuration over hardcoding**: Magic strings and
     environment-dependent constants MUST NOT be hardcoded in production
     paths - the repository root, in particular, is derived from git
-    (`gate-stamp`, the hooks, the ritual all do), never written as a
+    (`gate-stamp`, the hooks, the procedure all do), never written as a
     literal, because it was `/gm-assistant` and is now `/diagram`.
 
 12. **Functions stay at human scale** (added v1.5.0, GM-directed
@@ -1351,7 +1351,7 @@ impossibility investigation attached. But see Principle XV: stopping is
 expensive, and the bar for it is high.
 
 **Enforcement.** `/speckit-plan` records this in its Constitution Check. The
-stop-work ritual does not run to completion on a red or regressed state: a
+stop-work procedure does not run to completion on a red or regressed state: a
 session may commit inside its own clone (mid-task work is sacred) but MUST
 NOT push to main. Where a domain has a cohort or sweep, its measured
 before/after numbers are the evidence, and they belong in the commit message

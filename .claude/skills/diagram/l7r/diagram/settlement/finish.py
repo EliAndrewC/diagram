@@ -214,11 +214,31 @@ class FinishMixin:
         PAD = 12  # placard padding around the text block
         bw, bh = max(tw, bar_px) + 2 * PAD, th + 46 + 2 * PAD  # the searched box: the whole placard
         vx0, vy0, vw, vh = self.view if self.view else (0, 0, self.W, self.H)
-        spot = self._blank_label_spot(vx0, vy0, vw, vh, bw, bh)
+        spot = self._blank_label_spot(vx0, vy0, vw, vh, bw, bh) or self._blank_label_spot(
+            vx0, vy0, vw, vh, bw, bh, cover_ok=True
+        )  # blank first; cover (a belt, a wood) as the last resort before the corner (feature 137 T06)
         if spot:
             px0, py0 = spot
-        elif self.view:  # map too full - fall back to the top-left corner
-            px0, py0 = vx0 + 30, vy0 + 16
+        elif self.view:
+            # MAP TOO FULL: the four corners, first one that hides nothing but cover, else the top-left
+            # (feature 137 T06 - seed 13's top-left corner was a dry plot while its bottom-right was scrub)
+            obs = self._title_obstacles(cover_ok=True)
+            corners = [(vx0 + 30, vy0 + 16), (vx0 + vw - bw - 30, vy0 + 16), (vx0 + 30, vy0 + vh - bh - 16), (vx0 + vw - bw - 30, vy0 + vh - bh - 16)]
+            clean = next(((cx, cy) for cx, cy in corners if self._box_clear(cx, cy, cx + bw, cy + bh, obs)), None)
+            if clean is not None:
+                px0, py0 = clean
+            else:
+                # THE TITLE BAND, the last rung (feature 137 T06): every corner hides a plot (seed 13's dry hem
+                # rings the whole view). The title is not a feature of the place and owes it no ground, so
+                # the sheet grows a band above the map sized to the placard, declared in meta so
+                # `crop_hugs_content` allows exactly that much on the north edge, and the placard sits in
+                # it - over nothing, unless a feature runs off the frame there, which the check still reports.
+                band = bh + 32
+                vy0 -= band
+                vh += band
+                self.set_view(vx0, vy0, vw, vh)
+                self.M["meta"]["title_band"] = round(band, 1)
+                px0, py0 = vx0 + 30, vy0 + 16
         else:
             px0, py0 = self.W / 2 - bw / 2, 22
         y = py0 + PAD  # the text block's top, inside the card
@@ -250,7 +270,7 @@ class FinishMixin:
         self.add_label(f'<text x="{(bx0 + bx1) / 2:.0f}" y="{by + 17:.0f}" text-anchor="middle" font-size="12" fill="#3A2E1C">{bar_ft} ft</text>', cls="-")
         self.add_label(f'<text x="{(bx0 + bx1) / 2:.0f}" y="{by + 31:.0f}" text-anchor="middle" font-size="10" font-style="italic" fill="#5C4830">(1 px = {self.ftpx:g} ft)</text>', cls="-")
 
-    def _title_obstacles(self: Settlement) -> tuple[list[Any], list[Any], list[Any]]:  # type: ignore[misc]
+    def _title_obstacles(self: Settlement, cover_ok: bool = False) -> tuple[list[Any], list[Any], list[Any]]:  # type: ignore[misc]
         """Feature footprints a title must clear, as (rects, polys, lines). Solid buildings/plots -> rects;
         the fields, groves, and commons -> polygons (so the title can sit in the empty corners around a diagonal
         field); the pond -> a rect; water lines + lanes -> polylines (a title must not cross a road or stream)."""
@@ -300,7 +320,8 @@ class FinishMixin:
         # two woods two-thirds invisible, and the title reading as smudged. The grazing parcels stay
         # excluded, which is what keeps a title from having nowhere to sit.
         _woodland = [c for c in self.M.get("commons", []) if c.get("role") == "woodland" and c.get("poly")]
-        for o in self.M.get("village_groves", []) + self.M.get("bamboo_stands", []) + self.M.get("marshes", []) + _woodland:
+        _cover = [] if cover_ok else self.M.get("village_groves", []) + self.M.get("bamboo_stands", []) + _woodland
+        for o in _cover + self.M.get("marshes", []):
             polys.append([tuple(p) for p in o["poly"]])
         for fd in self.M.get("fields", []):
             polys.append([tuple(p) for p in fd["outline"]])
@@ -343,10 +364,12 @@ class FinishMixin:
                 return False
         return True
 
-    def _blank_label_spot(self: Settlement, vx0: float, vy0: float, vw: float, vh: float, tw: float, th: float, margin: float = 22, step: float = 24) -> Pt | None:  # type: ignore[misc]
+    def _blank_label_spot(self: Settlement, vx0: float, vy0: float, vw: float, vh: float, tw: float, th: float, margin: float = 22, step: float = 24, cover_ok: bool = False) -> Pt | None:  # type: ignore[misc]
         """Scan the window (top-to-bottom, left-to-right) for the first box of size (tw, th) that clears every
-        feature; returns its (x, y) top-left, or None if the map is too full."""
-        obs = self._title_obstacles()
+        feature; returns its (x, y) top-left, or None if the map is too full. With `cover_ok` the belt, the
+        bamboo and the woodland commons are not obstacles (the placard may sit on cover, never on a
+        building, a plot, a field, water, a lane or a label - `title_clear_of_features`, feature 137)."""
+        obs = self._title_obstacles(cover_ok=cover_ok)
         y = vy0 + margin
         while y + th <= vy0 + vh - margin:
             x = vx0 + margin
@@ -362,7 +385,7 @@ class FinishMixin:
         # that frames to the bare canvas never calls either (Hoshizora), and a queued stand that is
         # never flushed is a wood with no trees. Idempotent, so the usual crop-time flush still wins.
         self.flush_tree_stands()
-        # THE FIELD'S CHORDS FOR THE GATE (feature 139): `houses_clear_of_paddies` measures the same few chords the
+        # THE FIELD'S CHORDS FOR THE GATE (feature 140): `houses_clear_of_paddies` measures the same few chords the
         # placer measured (`rolling/fit.py::_field_chains`) - open chains facing the planned seat when there is one
         # (`keepout_chains`, each chord with its outward normal), a closed simplified ring (`keepout`) when not.
         from l7r.diagram.settlement._geom.primitives import FIELD_KEEPOUT_EPS, facing_chains, keepout_ring  # noqa: PLC0415 - finish-time only
@@ -578,7 +601,7 @@ class FinishMixin:
         # goes into the manifest FIRST so the gate can read it (`all_ink_is_ruled_on`, FR-009).
         self.M["ink_classes"], self.M["unclassed_ink"] = ink_census(body, body_cls)
         self.M["unregistered_classes"] = unregistered_classes(self.M["ink_classes"])
-        write_html(basepath + '.html', body, body_cls, name=str(self.M["meta"].get("name") or os.path.basename(basepath)), meta=self.M["meta"])
+        write_html(basepath + '.html', body, body_cls, name=str(self.M["meta"].get("name") or os.path.basename(basepath)), meta=self.M["meta"], manifest=self.M)
         with open(basepath + '.json', 'w') as f:
             json.dump(self.M, f)
         # Two env knobs make iteration cheap without changing committed output (see SKILL.md

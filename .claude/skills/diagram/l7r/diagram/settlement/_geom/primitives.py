@@ -12,7 +12,7 @@ from collections.abc import Sequence
 from .base import Poly, Pt
 
 FIELD_KEEPOUT_EPS = (
-    3.0  # px: a field outline's chords may stray this far from it; the keep-out is pushed out by it (feature 139; 3 keeps the reference's lane web whole where 4-8 broke it - research R3)
+    3.0  # px: a field outline's chords may stray this far from it; the keep-out is pushed out by it (feature 140; 3 keeps the reference's lane web whole where 4-8 broke it - research R3)
 )
 
 
@@ -127,7 +127,7 @@ def convex_hull(pts: Sequence[Pt]) -> Poly:
 
 def ring_offset(ring: Sequence[Pt], out: float, inward: float) -> Poly:
     """A coarse keep-out around a closed centerline: each vertex pushed `out` along the outward normal (away
-    from the centroid) and `inward` the other way, joined as one ring of 2n vertices (feature 139: the polder
+    from the centroid) and `inward` the other way, joined as one ring of 2n vertices (feature 140: the polder
     dike's 2,880-vertex smoothed band is replaced, for PLACEMENT only, by this ring around its crest)."""
     n = len(ring)
     # OUTWARD BY WINDING, never by a centroid test: in a concave pocket the edge that faces the centroid is the one
@@ -164,7 +164,7 @@ def ring_offset(ring: Sequence[Pt], out: float, inward: float) -> Poly:
 def simplify_ring(pts: Sequence[Pt], eps: float) -> Poly:
     """Douglas-Peucker on a CLOSED ring: the ring split at its two farthest-apart vertices, each half
     simplified so no dropped vertex lies farther than `eps` from the chord that replaces it. A 49-73-vertex
-    field outline comes back as eight to sixteen chords that follow its bays (feature 139, GM 2026-08-28:
+    field outline comes back as eight to sixteen chords that follow its bays (feature 140, GM 2026-08-28:
     *"three connected line segments ... maybe five or six ... just a few line segments running along the
     edge of the fields"*)."""
     ring = [(float(x), float(y)) for x, y in pts]
@@ -221,7 +221,7 @@ Chord = tuple[Pt, Pt, Pt]  # (a, b, outward normal): a pushed-out chord of a fie
 
 
 def facing_chains(outline: Sequence[Pt], seat: Pt, eps: float) -> list[list[Chord]]:
-    """THE OPEN CHAINS ON THE HOUSE SIDE (feature 139, GM 2026-08-28: *"just a few line segments on one side of
+    """THE OPEN CHAINS ON THE HOUSE SIDE (feature 140, GM 2026-08-28: *"just a few line segments on one side of
     the field that you are checking that you are on the correct side of ... not forming a closed shape"*):
     the outline simplified to chords, keeping only the runs of chords whose outward normal points toward
     `seat` (the planned cluster), each chord pushed out by `eps` along that normal so no part of the drawn

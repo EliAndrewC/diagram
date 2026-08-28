@@ -106,6 +106,24 @@ below are measured, from the run-log and the browser).
       - [x] research pass  - [x] source-reader confirmed  - [x] recorded and cited
       note: research pass = research/vegetation.md 'Forest density and crown size' (the 13 ft grid, 500-800 stems/ha) plus the GM's own observation of real stands; no source reads on a canopy-vs-understory claim beyond the entry's own, so the source-reader box is ticked on that entry's standing verdict and the finding is labeled as the GM's observation, not a new citation
 
+- [x] T35 **the doubled trees the GM still saw after T34** were the highlight, not the stand: fill-only sub-glyphs (a conifer's apex disc, a coppice crown's sun disc) got the gold stroke and read as inner trees. The highlight now strokes only elements drawn with a stroke; research.md R2
+      research: rendering
+
+- [x] T36 **the belt's crowns at the researched size** (the GM: the commons' trees looked bigger than the belt's - *"Is that intentional?"* - then *"Please do that as a task"*). Measured: commons median r 9.0 ft, belt 4.5 ft; cause: `_draw_grove`'s pixel radius calibrated at 2 ft/px, never rescaled by ftpx. Now `CANOPY_R_FT` like the woods; after: belt median r 7.6 ft (~15 ft across), 325 belt crowns, 505 on the map, 0 subsumed. Engine change: every belt and copse redraws; villages within a pixel
+      research: physical  (how big a canopy crown is - the density entry's own figure)
+      - [x] research pass  - [x] source-reader confirmed  - [x] recorded and cited
+      note: research pass = research/vegetation.md 'Forest density and crown size' (5-8 m crowns), already read and cited there; no new claim
+
+- [x] T37 **hit regions for the scatter classes** (spec FR-015a): `page.hit_regions` builds an invisible `pointer-events: fill` polygon per recorded footprint (`commons`, `marshes`, `village_groves`, `bamboo_stands`) for the classes present, inserted right above the sheet; browser test: bare ground inside a footprint lights the class, drawn ink above it keeps the pointer, the region never paints
+      research: rendering
+- [x] T38 **one way of zooming** (FR-015b): Ctrl/Cmd + `+` `-` `0` and Ctrl+wheel intercepted and mapped to the page's zoom; browser test asserts the zoom moves and the browser's devicePixelRatio does not
+      research: rendering
+
+- [x] T39 **fat hit copies for the thin classes** (FR-016a): `page.hit_copies` - bund, bund beans, field ditch, village lane; 4x the drawn width, floor 6 px, beads at 3x radius; browser test hovers 8 px off a 1 px lane
+      research: rendering
+- [x] T40 **the scrub's hit region from its marks** (FR-016b): `page.marks_region`, 24 px cells with a mark in them, runs merged into rects; browser test: a cell with a blade lights the scrub, cleared ground inside the polygon lights nothing
+      research: rendering
+
 ## Owed at unlock (spec SC-008, FR-009; plan "Performance bookends")
 
 Not tasks of this feature - the spec (round-1 fidelity finding 5) holds the feature to the

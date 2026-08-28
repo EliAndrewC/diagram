@@ -82,7 +82,7 @@ exists to prevent.
 
 ## Phase 5 - the base moved the file (unplanned; see research.md R9)
 
-The stop-work ritual's pull brought in feature 119's second half, which relocated the whole engine
+The stop-work procedure's pull brought in feature 119's second half, which relocated the whole engine
 to `l7r/diagram/`. `land.py` was therefore RENAMED on main and DELETED here, which git correctly
 refused to auto-resolve.
 

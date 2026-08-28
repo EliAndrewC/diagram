@@ -112,7 +112,7 @@ Nothing in Phase 3+ is safe without both.
 - [x] T039 Record in `specs/113-city-package/research.md` anything the implementation learned that the plan got wrong - especially any method whose assignment moved from data-model.md's table, with the reason
 - [x] T040 Add the `civic.py` -> `castle_civic.py` relocation to `.claude/skills/diagram/future-work.md` as a named follow-up with its reasoning, so it does not live only in this spec
 - [x] T041 Set this spec's Status to Implemented with the date, and note the final per-file line counts
-- [x] T042 Final `make done` green, then the stop-work ritual: commit in the clone and run `scripts/sync-with-main.sh done`
+- [x] T042 Final `make done` green, then the stop-work procedure: commit in the clone and run `scripts/sync-with-main.sh done`
 
 ---
 
@@ -312,7 +312,7 @@ What the split DID buy here: the 95 is no longer one opaque number. Per file it 
 bridges 97%, canals 99%, moat / waterfront / civic 100% - so the uncovered city wing is localized
 to two files instead of hiding inside a 1,582-line one.
 
-### T042 - final gate and the stop-work ritual
+### T042 - final gate and the stop-work procedure
 
 `make done` green: 3,179 passed, ruff and mypy clean, `settlement/` 95% against its 94 floor.
 Committed and pushed to main (`67040c3`), render-sync run.

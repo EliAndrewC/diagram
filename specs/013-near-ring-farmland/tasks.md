@@ -99,7 +99,7 @@ description: "Task list for Near-Ring Farmland Density"
 - [X] T022 Verify scope isolation (SC-005): confirm village + hamlet maps are behavior-unchanged (they never call the new method and are out of scope) - their tracked `.json` manifests must not move. Spot-check Hoshizora (2nd town) and Nagahara (2nd city) either stayed clean or were intentionally adjusted, and fix any downstream map the engine change disturbed.
 - [X] T023 Principle XII CLOSING gate (full pass, before "done"): review the rendered PNGs of Hirameki, Tango, the thin map, Hoshizora, and Nagahara against research.md Elements 1-5 (this is separate from the automated gate - a map can pass every check and still depict something ahistorical). If any picture contradicts an element, fix the MAP, do not rationalize the code. Record each review outcome in the map review logs.
 - [X] T024 Confirm SC-006: the "why" is present in `settlements.md` (Historical grounding) AND beside the threshold constant / knob default in code; verify with a grep.
-- [X] T025 Stop-work ritual: commit all clone work with a descriptive message; run `bash scripts/sync-with-main.sh done` from the clone root (locked pull+push back to main + render-sync). Do NOT re-run the gate for any docs-only follow-up.
+- [X] T025 Stop-work procedure: commit all clone work with a descriptive message; run `bash scripts/sync-with-main.sh done` from the clone root (locked pull+push back to main + render-sync). Do NOT re-run the gate for any docs-only follow-up.
 
 ---
 

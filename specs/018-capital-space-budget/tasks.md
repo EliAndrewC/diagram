@@ -98,7 +98,7 @@
 - [x] T035 Confirm `test_tango_program_back_predicts_the_shipped_wall` and `test_shipped_city_programs_price_exactly_as_they_did_before_the_temple_knobs` pass UNMODIFIED - if either is red, stop and fix the code, never the expectation
 - [x] T036 Run `make done` ONCE from `.claude/skills/diagram/`, backgrounded, as `cd <dir> && make done > /tmp/gate.log 2>&1` and nothing more - do not append `; echo EXIT=$?`, which makes a failed gate report exit 0. Act on the completion notification; never poll
 - [x] T037 Verify the feature's CENTRAL CLAIM rather than asserting it: `git status --porcelain -- .claude/skills/diagram/pool/` MUST be EMPTY. Any dirty tracked manifest means a shipped map moved and the byte-identity claim is false
-- [x] T038 Commit in the session clone and run the stop-work ritual: `scripts/sync-with-main.sh done` from the clone root
+- [x] T038 Commit in the session clone and run the stop-work procedure: `scripts/sync-with-main.sh done` from the clone root
 
 ---
 

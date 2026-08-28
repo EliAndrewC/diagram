@@ -966,13 +966,11 @@ def _seg_0609_500__houses_clear_of_paddies(
     if scale in ("hamlet", "village", "town"):
         houses_clear_of_paddies_bad = []
         _hcp_gap = HOUSE_PADDY_GAP_FT / float(meta.get("ftpx") or 1.0)
-        # THE SAME FEW CHORDS THE PLACER MEASURED (feature 139, GM 2026-08-28: "our automated checks need to fundamentally be
-        # testing the same kind of thing as our placement algorithm"): a field's recorded `keepout` (its outline as a handful of
-        # chords, pushed out by the tolerance); a manifest from before the record falls back to the outline.
+        # THE SAME FEW CHORDS THE PLACER MEASURED (feature 140, GM 2026-08-28: "our automated checks need to fundamentally be
+        # testing the same kind of thing as our placement algorithm"): the placer's own open chains on the house side, recorded
+        # flat as M["field_chains"] at finish; an older manifest falls back to a field's `keepout` ring, then to its outline.
         _hcp_chains = [[((float(a[0]), float(a[1])), (float(b[0]), float(b[1])), (float(nv[0]), float(nv[1]))) for a, b, nv in ch] for ch in (M.get("field_chains") or [])]
         _hcp_fields = [] if _hcp_chains else [[(float(a), float(b)) for a, b in (f.get("keepout") or f["outline"])] for f in (M.get("fields") or []) if f.get("outline")]
-            [((float(a[0]), float(a[1])), (float(b[0]), float(b[1])), (float(nv[0]), float(nv[1]))) for a, b, nv in ch] for f in (M.get("fields") or []) for ch in (f.get("keepout_chains") or [])
-        ]
         for _h in M.get("houses") or []:
             _a = math.radians(float(_h.get("rot") or 0.0))
             _ca, _sa = math.cos(_a), math.sin(_a)

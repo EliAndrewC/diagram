@@ -405,7 +405,13 @@ class HomesteadPartsMixin:
                     g.append(f'<line x1="{px:.1f}" y1="{py + 4 * bs:.1f}" x2="{px:.1f}" y2="{py - 4 * bs:.1f}" stroke="#88A646" stroke-width="{1.4 * bs:.2f}"/>')
                     g.append(f'<circle cx="{px:.1f}" cy="{py - 4 * bs:.1f}" r="{3.0 * bs:.1f}" fill="#BBD06A"/>')
                     continue
-                rr = (4.6 if kind == "conifer" else 4.0) * s * bs  # one crown = one tree, sized to a real ~5-6 m canopy
+                # ONE CROWN AT THE RESEARCHED SIZE (GM 2026-08-28, feature 134 T36). This was `(4.6 | 4.0) * s * bs`,
+                # a pixel radius calibrated at the village's 2 ft/px ("a ~5-6 m canopy") and never rescaled by ftpx:
+                # at the hamlet's 1 ft/px the belt drew 9 ft crowns beside the commons' 18 ft ones (measured on
+                # Inashiro: belt median r 4.5 ft, commons 9.0). Now the same CANOPY_R_FT the woods and the commons
+                # use, in real feet (research/vegetation.md 'Forest density and crown size'); a conifer 15% wider,
+                # the old ratio. A village (ftpx 2, bscale 1) gets 4.25 px, within a pixel of what it drew before.
+                rr = self.px(self.CANOPY_R_FT) * s * (1.15 if kind == "conifer" else 1.0)
                 col = "#496733" if kind == "conifer" else random.choice(["#7C9A4E", "#6E8B43"])
                 if self._crown_covers(cx + px, cy + py - 3 * bs, rr, krect, kcirc, self.CANOPY_PAD):
                     continue
@@ -607,7 +613,9 @@ class HomesteadPartsMixin:
                 any((qx - ox) ** 2 + (qy - oy) ** 2 < rr * rr for ox, oy, rr in occ)
                 or any(abs(qx - sx) < shw and se - cr - 2 < qy < se + 24 + cr for sx, se, shw in sun)
                 or any(ex - cr - 2 < qx < ex + 24 + cr and abs(qy - ey) < ehh for ex, ey, ehh in east)
-                or any(wx0 - wl - cr - 2 < qx < wx0 + cr and wy0 - cr < qy < wy1 + wl + cr for wx0, wy0, wy1 in west)
+                # +1 ft of slack on the west sun-lane: the check reads clumps rounded to 0.1 with a strict `<`, and a
+                # clump seated exactly on the window's edge (cohort seed 16: 1793.9 against 1794) read as shading
+                or any(wx0 - wl - cr - 3 < qx < wx0 + cr + 1 and wy0 - cr - 1 < qy < wy1 + wl + cr + 1 for wx0, wy0, wy1 in west)
             )
 
         def _reseat(qx: float, qy: float, placed: list[Any], require_interior: bool) -> tuple[float, float] | None:
@@ -761,11 +769,19 @@ class HomesteadPartsMixin:
         # page" rule the `within` window applies on the other edges. Seating first and drawing
         # after is what makes this possible: the face is known only once every clump is down.
         # Draw order and positions are those of the seating loop, so nothing else moves.
+        _offpage: list[Any] = []
         if face_margin is not None and clumps:
             _face = windbreak_face(clumps, cr, self.M.get("houses", []))
             if _face is not None:
                 _axis, _sign, _inner = _face
                 _keep = [k for k, (px_, py_) in enumerate(seated) if _sign * ((px_, py_)[_axis] - _inner) >= -(face_margin + clump * 0.9)]
+                # THE TRIMMED CLUMPS STAY IN THE RECORD (feature 137 T05, 2026-08-28): they are trees that stand,
+                # only off the page. Tripwire seed 33's 40-50 ft belt hole was this trim: two garden beds at the
+                # belt's edge pushed the re-seated clumps into the outer strip, the page's edge (inner face +
+                # margin) fell inside that strip, and the trim dropped them from `clumps` - so the belt read as
+                # holed where it had in fact wrapped round the plot. The ink is still cut at the page; the
+                # record says the belt continues, and `village_windbreak_is_continuous` counts canopy where it is.
+                _offpage = [clumps[k] for k in range(len(clumps)) if k not in set(_keep)]
                 seated = [seated[k] for k in _keep]
                 clumps = [clumps[k] for k in _keep]
         for jx, jy in seated:
@@ -805,7 +821,8 @@ class HomesteadPartsMixin:
                     "rot": 0,
                     "role": role,
                     "r": round(clump / 2, 1),
-                    "clumps": clumps,  # actual drawn clump centers + radius, for groves_clear_of_lanes
+                    "clumps": clumps,
+                    "clumps_offpage": (_offpage if face_margin is not None and clumps else []),  # actual drawn clump centers + radius, for groves_clear_of_lanes
                     "poly": [[round(px, 1), round(py, 1)] for px, py in poly],
                 }
             )
