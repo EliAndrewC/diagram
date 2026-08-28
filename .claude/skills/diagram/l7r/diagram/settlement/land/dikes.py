@@ -292,9 +292,14 @@ class DikeMixin:
                 a, b = crest[(k - 2) % n], crest[(k + 2) % n]
                 rot = math.degrees(math.atan2(b[1] - a[1], b[0] - a[0]))
                 sx, sy, sd = gx, gy, 1e9
-                for key in ("streams", "canals", "channels"):  # the checks' own set (segments_06b sc_waters: streams + canals + channels + moat)
+                for key in (
+                    "drawn_channels",
+                    "streams",
+                    "canals",
+                    "channels",
+                ):  # the checks' own set (segments_06b sc_waters) - the DRAWN strokes first: the reader sees ink, and the recorded inlet ran 7 ft off its stroke at the cut (settlement-review)
                     for ch in self.M.get(key, []):
-                        pp = ch.get("poly") or []
+                        pp = (ch.get("pts") if key == "drawn_channels" else ch.get("poly")) or []
                         for q0, q1 in zip(pp, pp[1:], strict=False):
                             ax, ay, bx, by = float(q0[0]), float(q0[1]), float(q1[0]), float(q1[1])
                             ll = (bx - ax) ** 2 + (by - ay) ** 2

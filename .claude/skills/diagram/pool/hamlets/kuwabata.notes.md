@@ -41,10 +41,27 @@ the windbreak, the plank crossings clustered on the settlement side (`polder_cro
   reserved gap that the hand-authored script built by hand is not needed - the derived seat leaves
   the belt room.
 - **Every reference-hamlet family is on the map** (`make family-census`): the fixtures (privy,
-  woodpile, manure heap, bath shed, coop, hokora, persimmon), the new sheds, the bamboo, the lane
+  woodpile, manure - here in its PIT form, rolled, bath shed, coop, hokora, persimmon), the new sheds, the bamboo, the lane
   web, the wells, the byres, the notice board. Absent by archetype: `dry_plots` (a comb's dry hem;
   a polder is a solid wet block), `field_ponds` (open water IS this fabric - no obstacle tiles,
   research D4), `field_ditches:branch` (a comb's deliveries; a polder has laterals).
+
+## What the GM's audit added (feature 139 T40-T48, 2026-08-28)
+
+See `settlements/archetypes.md` "The scripted dike-pond hamlet - the rules" and
+`specs/139-kuwabata-dike-pond-hamlet/audit.md`. On THIS map, seed 21: no threshing floors
+(forecourts recorded, no ink); manure form rolled PIT; three fry ponds (the smallest parcels,
+same ink); a sluice gate at each of the two dike cuts; duck pens and pig sties on the ponds
+nearest the houses (pens first); the dike crop pinned MULBERRY (the name), the leftover form
+rolled VEGETABLES (the three unconverted parcels draw as tilled rows). The knob maps for the
+other values are under `wip/kuwabata-*`.
+
+## Review log
+
+- 2026-08-28 settlement-review FULL: needs-work -> fixed (crossings, title, caption). DELTA after
+  the audit items: needs-work -> fixed (the north gate on the drawn stroke; banana as stools; cane
+  in rows; pens before sties). Open: 3 pits of 16 against a 0.465 share (the manure placer seats
+  by the privy and fails silently where the privy took the wall) - pre-existing for heaps too.
 
 ## The economy (GM-confirmed 2026-07-24)
 

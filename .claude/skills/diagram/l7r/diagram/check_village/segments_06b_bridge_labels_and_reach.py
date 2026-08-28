@@ -635,6 +635,11 @@ def _seg_0379__cn9(*, M: Any = _UNBOUND, cn9: Any = _UNBOUND, w9: Any = _UNBOUND
 def _seg_0380__ch9(*, M: Any = _UNBOUND, ch9: Any = _UNBOUND, sc_waters: Any = _UNBOUND) -> dict[str, Any]:
     """Gate segment 380 (ch9, sc_waters) - body verbatim from the legacy gate() (feature 022)."""
     sc_waters += [(ch9["poly"], float(ch9.get("w", 2.5))) for ch9 in M.get("channels", []) if ch9.get("poly")]
+    # ...AND THE DRAWN STROKES (feature 139, settlement-review of Kuwabata): the recorded inlet poly and the
+    # drawn channel diverged 7 ft at the dike cut, and a gate snapped to the record stood beside the ink.
+    # The reader sees the stroke; a gate on the stroke is on the water. Adding candidates can only lower a
+    # gate's nearest distance, so no gate that passed against the records fails against these.
+    sc_waters += [(ch9["pts"], max(float(ch9.get("w0", 2.5)), float(ch9.get("w1", 2.5)))) for ch9 in M.get("drawn_channels", []) if len(ch9.get("pts") or []) >= 2]
     return _kept(locals(), ('ch9', 'sc_waters'))
 
 

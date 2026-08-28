@@ -67,7 +67,10 @@ def stage_pond_stock(s: Settlement, plan: SitePlan) -> None:
     # grow-out ponds only, nearest the houses first; each pond takes at most one fixture
     order = sorted((i for i, p in enumerate(ponds) if p.get("kind") != "fry"), key=lambda i: math.dist(_centroid(ponds[i]["parcel"]), hc))
     taken: set[int] = set()
-    for kind, want in (("sty", n_sty), ("pen", n_pen)):
+    # PENS FIRST: ducks are driven out to the water and penned back every day, pigs are fed where they stand -
+    # so the pens take the nearest ponds and the sties the next (settlement-review: sties on the seven nearest,
+    # pens on the ninth and tenth read as a placement order, not a household's walk). The record ranks neither.
+    for kind, want in (("pen", n_pen), ("sty", n_sty)):
         done = 0
         for i in order:
             if done >= want:

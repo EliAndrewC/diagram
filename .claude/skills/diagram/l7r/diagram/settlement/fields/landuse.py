@@ -468,24 +468,28 @@ class LandUseMixin:
                         continue
                     g.append(f'<circle cx="{jx:.1f}" cy="{jy:.1f}" r="{r:.1f}" fill="{ccol}" opacity="0.85"/>')
         elif crop == "sugarcane":
+            # ROWS ALONG THE DIKE: cane is sett-planted in furrows down the bank's length, so the texture is
+            # ruled rows running with the dike, not a scatter (settlement-review: a scatter read as rough
+            # grass). Three rows of near-continuous dashes, each dash the loop's own direction.
             for t in (0.22, 0.5, 0.78):
-                for x, y in walk(s_w + t * (s_b - s_w), 3.0):
-                    if near and chan_dist(x, y) < 3.0:
+                pts_ = walk(s_w + t * (s_b - s_w), 3.0)
+                for (x, y), (x2, y2) in zip(pts_, pts_[1:] + pts_[:1], strict=True):
+                    if math.hypot(x2 - x, y2 - y) > 4.5 or (near and chan_dist(x, y) < 3.0):
                         continue
-                    ang = rng.uniform(0, math.pi)
-                    dx, dy = math.cos(ang) * 1.6, math.sin(ang) * 1.6
-                    g.append(
-                        f'<line x1="{x - dx:.1f}" y1="{y - dy:.1f}" x2="{x + dx:.1f}" y2="{y + dy:.1f}" stroke="{rng.choice(("#9BB35A", "#8AA24C", "#A8BF66"))}" stroke-width="1.1" opacity="0.9"/>'
-                    )
+                    g.append(f'<line x1="{x:.1f}" y1="{y:.1f}" x2="{x2:.1f}" y2="{y2:.1f}" stroke="{rng.choice(("#8FA84A", "#7E9A3E"))}" stroke-width="1.4" opacity="0.9"/>')
         elif crop == "banana":
-            for x, y in walk(s_w + 0.5 * (s_b - s_w), 14.0):
+            # STOOLS IN CLUMPS: a banana mat is a clump of three to five pseudostems with gaps between mats,
+            # not an orchard's single crowns at a regular pitch - the form that tells it from the fruit dike
+            # at fit zoom (settlement-review).
+            for x, y in walk(s_w + 0.5 * (s_b - s_w), 13.0):
                 if near and chan_dist(x, y) < 5.0:
                     continue
-                r = rng.uniform(3.0, 4.0)
-                g.append(f'<circle cx="{x:.1f}" cy="{y:.1f}" r="{r:.1f}" fill="#7FA33F" stroke="#4F6E22" stroke-width="0.8" opacity="0.9"/>')
-                for _k in range(5):  # the leaf fan
+                for _k in range(rng.randint(3, 5)):
+                    ox, oy = rng.uniform(-3.2, 3.2), rng.uniform(-3.2, 3.2)
+                    g.append(f'<circle cx="{x + ox:.1f}" cy="{y + oy:.1f}" r="{rng.uniform(1.6, 2.3):.1f}" fill="#9CBF4E" stroke="#4F6E22" stroke-width="0.6" opacity="0.92"/>')
+                for _k in range(4):  # the leaf fan of the mat
                     a2 = rng.uniform(0, math.tau)
-                    g.append(f'<line x1="{x:.1f}" y1="{y:.1f}" x2="{x + math.cos(a2) * r * 1.5:.1f}" y2="{y + math.sin(a2) * r * 1.5:.1f}" stroke="#5E8630" stroke-width="0.9" opacity="0.8"/>')
+                    g.append(f'<line x1="{x:.1f}" y1="{y:.1f}" x2="{x + math.cos(a2) * 5.5:.1f}" y2="{y + math.sin(a2) * 5.5:.1f}" stroke="#5E8630" stroke-width="0.8" opacity="0.7"/>')
         else:  # fruit
             for x, y in walk(s_w + 0.5 * (s_b - s_w), 18.0):
                 if near and chan_dist(x, y) < 5.5:
