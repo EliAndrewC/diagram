@@ -118,7 +118,7 @@ None.
 
 Feature 133's rule refuses a push whose delta touches a spec with an open task, except that
 feature's `specs/` directory alone. This feature's batches each change `research/` docs, which the
-sync script's active-feature derivation may tie to the open 136 tasks. The batches are therefore
+sync script's active-feature derivation may tie to the open 138 tasks. The batches are therefore
 committed in the clone as milestones, and the push is attempted after each; if refused, the work
 stays in the clone until the feature's tasks are all ticked (the GM's contradiction review is a
 task the GM closes, as in 133/135). The ledger in the clone is the progress record either way.
