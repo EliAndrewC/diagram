@@ -116,4 +116,17 @@ the floor, and it leaves nothing for a future session to remember.
 
 ## R4 - the numbers at the end
 
-(filled in at T22)
+**The rolls** (`make perf`, seeds 4/25/39/47, this container): `144-start` 126.7 s -> `145-end`
+**49.2 s** (-61.2%; per seed -30.7 / -72.9 / -50.5 / -65.2%; worst seed 51.0 -> 13.8 s; band 0,
+nothing owed). The reference alone rolls in ~12 s wall including its gate - the session's own 8 s
+target was NOT met (reported, per SC-001): what remains is the hinterland's scatter volume (~3 s),
+the field's two carves (~1.5 s), the web (~1.5 s), homesteads, the notice board, and ~2 s of gate.
+
+**The unit tests** (`make durations`, quick set, 2,116 tests): pytest **10.9 s** wall on 8 workers.
+The settlement-geometry tests that led the profile on 2026-08-28 morning are gone from its top:
+the slowest ten are now tooling fixtures (2.96 s, `make` in a fixture) and comb builds (~2 s); the
+fabric-index brute-force comparison is 0.79 s. Nothing over the quick cutoff was left deliberately.
+
+**The floor**: 99 modules derived; the FULL run judges them (and now rolls eight cohort seeds in
+process so the seed-dependent placer branches count). The residue and the other-tier decision are
+in R3b and at T12.
