@@ -160,19 +160,6 @@ def _seg_0285_024__sheds(*, M: Any = _UNBOUND, scale: Any = _UNBOUND) -> dict[st
     return _kept(locals(), ('sheds',))
 
 
-def _seg_0285_025__farm_sheds_attached(
-    *, M: Any = _UNBOUND, check: Any = _UNBOUND, h: Any = _UNBOUND, scale: Any = _UNBOUND, sd: Any = _UNBOUND, sheds: Any = _UNBOUND, stranded: Any = _UNBOUND
-) -> dict[str, Any]:
-    """Gate segment 0285.025 (farm_sheds_attached) - body verbatim from _seg_0285__wells_clear_of_shrine_and_torii (feature 024 per-check split; guards re-evaluated in the body, see split_oversized.py)."""
-    if scale in ('town', 'village', 'hamlet') and scale in ('town', 'village', 'hamlet', 'city') and sheds and M.get("houses"):
-        stranded = []
-        for sd in sheds:
-            if not any(within_edge_gap(sd, h, 10) for h in M["houses"]):  # 10 px of true daylight; two half-diagonals used to stand in for the two extents
-                stranded.append((round(sd["x"]), round(sd["y"])))
-        pass  # `` retired under feature 141 (the GM's cut); the segment stays for the check it keeps or the value it writes
-    return _kept(locals(), ('h', 'sd', 'stranded'))
-
-
 # DOORYARD KITCHEN GARDEN (saien). Every farmstead kept a small intensive vegetable plot for
 # the household's daily greens - as universal as the work yard, so EVERY farmhouse must have one
 # (a firm 100%, guaranteed by making the garden integral to farmstead placement). It sits on a
