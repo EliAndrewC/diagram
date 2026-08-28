@@ -1388,3 +1388,5 @@ straw rick is deferred with seasonal maps (T60).
 **2026-08-27 (T61).** `fixtures_min={"shrine": 1}` on the spec: the reference hamlet always carries one hokora so its rendering can be judged (seed 4 already rolled one at 1266,1154, on the plot of the house at 1303,1179; the floor is declared and held by the gate).
 
 **2026-08-27 (T62).** The hokora is drawn at the 6 ft small-shed module in vermilion with a torii before it - at 3 ft the GM could not tell what it was; a glyph convention, recorded as a deviation.
+
+- 2026-08-28 (feature 134, interactive HTML map): NO visual change - the manifest gained the ink census keys (`ink_classes`, `unclassed_ink`, `unregistered_classes`) and the SVG/PNG are byte-identical to the accepted T99 state (PNG sha256 09e8d5ab... unchanged, SVG whitespace-normalized identical). No settlement-review owed; pushed with REVIEW_GATE_OK stating this.
