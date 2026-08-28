@@ -70,7 +70,10 @@ def test_a_rolled_cohort_passes_the_whole_gate() -> None:
 # reached 18.1 with the bisection it replaced (measured on the pre-145 worktree, 2026-08-28) - the envelope clamps the
 # fan at every aspect, so this is the canvas/envelope sizing for a large household count at that fall, not the solver.
 # Pre-existing, ledgered here with its measurement (constitution XIII); the gate itself is green on the map.
-ACREAGE_SHORT: dict[int, str] = {45: "18.6 of 22.1 acres (18.1 before feature 145)"}
+ACREAGE_SHORT: dict[int, str] = {
+    45: "18.6 of 22.1 acres (18.1 before feature 145)",
+    47: "21.9 of 26.0 acres (21.9 before feature 145, whose gate on this seed was red besides) - 20 households at fall 90: the largest fan at every aspect stops at 21.9",
+}
 
 GATE_COHORT_EXPECTED: dict[int, frozenset[str]] = {
     # seed 42 (farmhouses_reach_a_way) and two of seed 43's three (lanes_form_one_network, title_clear_of_features)
