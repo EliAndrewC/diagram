@@ -1,4 +1,4 @@
-"""The trunk road's default width is 30 ft everywhere - the drawn default and every manifest fallback agree (feature 145).
+"""The trunk road's default width is 30 ft everywhere - the drawn default and every manifest fallback agree (feature 144).
 
 WHY: the GM (2026-08-28) raised the default from 26 ft after feature 143 read the Tokaido's 1604 standard as
 5 ken (~29.5 ft). A fallback that disagrees with the default is a second, silent width, so this test scans

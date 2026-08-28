@@ -18,7 +18,7 @@ if TYPE_CHECKING:
     from ..core import Settlement
 
 
-#: the trunk road's default real width, feet - 5 ken (the 1604 Tokaido standard) drawn at 30 (feature 145)
+#: the trunk road's default real width, feet - 5 ken (the 1604 Tokaido standard) drawn at 30 (feature 144)
 ROAD_W_FT = 30.0
 
 
@@ -26,7 +26,7 @@ class GroundMixin:
     def road(self: Settlement, pts: Any, label: Any = None, width: float | None = None, label_xy: Any = None) -> None:  # type: ignore[misc]
         """A major road (e.g. an Imperial road) - a bordered roadbed. No-build corridor.
         Default real width ROAD_W_FT = 30 ft (an Imperial trunk highway), converted at the
-        map's ftpx and linework-floored. WHY 30 (GM 2026-08-28, feature 145): the Tokaido's
+        map's ftpx and linework-floored. WHY 30 (GM 2026-08-28, feature 144): the Tokaido's
         width was standardized at 5 ken in 1604 ("街道の幅員を5間とし", ja.wikipedia 東海道 -
         `tokaido-jawiki` in research/SOURCES.md), 5 ken = 29.5 ft; drawn at the round 30 the
         GM asked for. The earlier 26 ft ("the Tokaido's own width") and the "~18-24 ft" this

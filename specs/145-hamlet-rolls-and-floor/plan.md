@@ -1,6 +1,6 @@
 # Implementation Plan: the hamlet coverage floor, and the sixteen-second roll
 
-**Feature**: 144 | **Spec**: [spec.md](spec.md) (FAITHFUL, round 2) | **Date**: 2026-08-28
+**Feature**: 145 | **Spec**: [spec.md](spec.md) (FAITHFUL, round 2) | **Date**: 2026-08-28
 
 ## Constitution Check
 
