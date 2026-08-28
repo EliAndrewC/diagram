@@ -386,7 +386,9 @@ def test_a_sibling_link_lights_the_other_class_on_hover_and_replaces_the_modal_o
     """GM 2026-08-28: "Not to be confused with the X" - hover lights X, click opens X's modal in place."""
     synthetic.js("() => window.l7rMap.fit()")
     x, y = synthetic.center("windbreak", 0)
-    synthetic.page.mouse.click(x, y)
+    # CLICK THE ELEMENT, not its bounding-box centre (feature 146): a windbreak group is a scatter of clumps
+    # and its bbox centre can fall on bare ground between them, which is why this flaked under a loaded run.
+    synthetic.page.locator('g.f[data-k="windbreak"]').first.click(force=True)
     synthetic.page.wait_for_timeout(50)
     assert synthetic.dialog()["k"] == "windbreak" and synthetic.settles({"windbreak": 1}, synthetic.on) == {"windbreak": 1}
     assert "Not to be confused with the copse" in synthetic.dialog()["siblings"]
