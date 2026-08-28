@@ -299,7 +299,9 @@ named each culprit while it was still the last commit. The GM: *"a test which is
 expensive in terms of me having to wait for it time becomes very cheap because it is largely going
 to run unattended."* So a session that finishes a turn and hears nothing for its staggered wait
 (60-120 min of awake time, restarted on a laptop resume, one runner at a time across sessions) runs
-`make idle-tests` in its clone, and the next prompt opens with the verdict (`dev/idle-log/`). What
-it never does: run in main, run twice per idle, or make the GM wait - a prompt aborts a run in
-progress. Under the scope lock it rolls the reference map alone (the lock admits no override; that
-limitation is D1b in the feature's spec, put before the GM).
+`make idle-tests` - the whole `done` gate, never the AWS-reserved FULL sweep (the GM's ruling) - in
+its clone, and the next prompt opens with the verdict (`dev/idle-log/`). What it never does: run in
+main, run twice per idle, run again on a clone unchanged since its last green idle run, or make the
+GM wait - a prompt aborts a run in progress. The scope lock is relaxed for that run and only for
+it: `switches.read` unlocks the scope solely for a process that descends from the idle timer, which
+a session's shell never does (the GM's ruling, D1b).

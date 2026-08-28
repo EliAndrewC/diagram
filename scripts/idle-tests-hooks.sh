@@ -89,7 +89,7 @@ locate() { # sets CLONE MAIN SESSION, or returns 1 when the cwd is not a session
   CLONE=$top; MAIN=${top%%/.clones/*}; SESSION=$(basename "$top")
   return 0
 }
-state_of() { python3 -c "import json;print(json.load(open('$1')).get('$2','') or '')" 2>/dev/null; }
+state_of() { python3 -c "import json;v=json.load(open('$1')).get('$2');print('' if v is None else v)" 2>/dev/null; }  # GUARD_EDIT_OK: a 0 (a green rc) must read as 0, not as empty (D10's skip never matched; feature 136)
 sid_is_live() { # a live process backs this session_id (the sessions-json FILENAME is its PID)
   local sid="$1" pid
   [ -n "$sid" ] || return 0  # no id known: assume live (a hand-driven hook)
@@ -165,7 +165,7 @@ PY
     python3 - "$latest" <<'PY'
 import json, sys
 d = json.load(open(sys.argv[1]))
-tail = "aborted on your prompt (D9) - nothing waited on it" if d.get("aborted") else ("clean" if d.get("rc") == 0 else f"FAILED (rc {d.get('rc')}): {', '.join(d.get('failures') or [])[:200] or 'see ' + str(d.get('log', ''))}")
+tail = "aborted on your prompt (D9) - nothing waited on it" if d.get("aborted") else (f"skipped - {d.get('skipped')} (D10)" if d.get("skipped") else ("clean" if d.get("rc") == 0 else f"FAILED (rc {d.get('rc')}): {', '.join(d.get('failures') or [])[:200] or 'see ' + str(d.get('log', ''))}"))  # GUARD_EDIT_OK: D10's skip surfaces like any verdict (feature 136)
 print(f"idle-tests: ran {d.get('utc')} in {d.get('wall_s')}s on {d.get('commit')} ({d.get('target')}; suspends {d.get('suspends')}, deferrals {d.get('deferrals')}): {tail}")
 PY
   fi
@@ -211,6 +211,23 @@ do_timer() {
   target=${RUN:-make idle-tests}
   log="$CLONE/.git/idle-tests.run.log"
   utc=$(date -u +%Y%m%dT%H%M%SZ); commit=$(git -C "$CLONE" rev-parse --short HEAD 2>/dev/null)
+  # ONE RUN PER IDLE, NONE ON UNCHANGED CONTENT (D10, the GM 2026-08-28: "once we've gotten a single set
+  # of results, then our expectation is that that is good enough"; GUARD_EDIT_OK: a new rule of this new
+  # guard, feature 136): the arming is consumed below whatever happens, and a clone unchanged since its
+  # last GREEN idle run - same commit, no tracked change - is recorded as skipped rather than rolled
+  # again. A red is rolled again as soon as something changed.
+  last=$(ls -t "$CLONE"/.claude/skills/diagram/dev/idle-log/*-"$SESSION".json 2>/dev/null | head -1)
+  if [ -n "$last" ] && [ "$(state_of "$last" rc)" = "0" ] && [ "$(state_of "$last" commit)" = "$commit" ] && [ -z "$(git -C "$CLONE" status --porcelain --untracked-files=no 2>/dev/null)" ]; then
+    mkdir -p "$CLONE/.claude/skills/diagram/dev/idle-log"
+    python3 - "$CLONE/.claude/skills/diagram/dev/idle-log/$utc-$SESSION.json" "$utc" "$SESSION" "$commit" "$target" "$(basename "$last")" <<'PY'
+import json, sys
+rec, utc, session, commit, target, prev = sys.argv[1:]
+json.dump({"utc": utc, "session": session, "commit": commit, "target": target, "rc": 0, "skipped": f"unchanged since the green run {prev}", "wall_s": 0, "suspends": 0, "deferrals": 0, "failures": [], "log": ""}, open(rec, "w"), indent=1)
+PY
+    rm -f "$sf"
+    echo "idle-tests: skipped - unchanged since the green run $(basename "$last")"
+    exit 0
+  fi
   echo "$$" > "$running"
   t0=$(now)
   ( cd "$CLONE/.claude/skills/diagram" 2>/dev/null || cd "$CLONE"; $target ) > "$log" 2>&1; rc=$?

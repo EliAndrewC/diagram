@@ -47,9 +47,11 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import subprocess
 import sys
 import time
+from collections.abc import Callable
 from dataclasses import asdict, dataclass
 from pathlib import Path
 
@@ -115,17 +117,71 @@ def locked_out(what: str) -> bool:
 
 
 def read(skill: Path) -> Switches:
-    """Absent -> defaults. Malformed -> CLOSED (remote off, scope locked) with `error` set."""
+    """Absent -> defaults. Malformed -> CLOSED (remote off, scope locked) with `error` set.
+
+    THE IDLE CONTEXT RELAXES THE SCOPE LOCK (feature 136, the GM 2026-08-28: "I do want it to be more
+    than just the reference map tests ... please make whatever adjustment you need to relax that
+    lock when the tests are being run in the idle context"). The lock's own doctrine says no
+    variable, flag or environment overrides it, and that stands: the relaxation is not a thing a
+    session can pass. It holds only while the calling process DESCENDS from the idle timer
+    (`scripts/idle-tests-hooks.sh timer`), which writes `<clone>/.git/idle-tests.running` with its
+    pid before it runs `make idle-tests`; `idle_context` checks that the file names a live pid, that
+    the pid is an ancestor of this process, and that its command line is the timer. A session's shell
+    is never a child of the timer, so nothing it runs is relaxed. `remote` is never relaxed."""
     path = skill / FILE
     if not path.is_file():
-        return DEFAULTS
+        sw = DEFAULTS
+    else:
+        try:
+            data = json.loads(path.read_text(encoding="utf-8"))
+            if not isinstance(data, dict):
+                raise ValueError("top level is not an object")
+            sw = Switches(_axis(data.get("remote", {"state": DEFAULT_REMOTE}), "remote", REMOTE_STATES), _axis(data.get("scope", {"state": DEFAULT_SCOPE}), "scope", SCOPE_STATES))
+        except (ValueError, OSError) as e:
+            return _closed(str(e))
+    if sw.scope_locked and idle_context(skill):
+        return Switches(sw.remote, Axis("unlocked", sw.scope.why + " [RELAXED: the idle run, feature 136]", sw.scope.utc, sw.scope.who), sw.error)
+    return sw
+
+
+IDLE_TIMER_MARK = "idle-tests-hooks.sh"
+
+
+def _ancestors(pid: int) -> list[int]:
+    """The pid chain from `pid` up to init, read from /proc."""
+    out: list[int] = []
+    while pid > 1 and len(out) < 64:
+        try:
+            status = Path(f"/proc/{pid}/status").read_text()
+        except OSError:
+            break
+        ppid = next((int(line.split()[1]) for line in status.splitlines() if line.startswith("PPid:")), 0)
+        if ppid <= 0:
+            break
+        out.append(ppid)
+        pid = ppid
+    return out
+
+
+def _cmdline(pid: int) -> str:
     try:
-        data = json.loads(path.read_text(encoding="utf-8"))
-        if not isinstance(data, dict):
-            raise ValueError("top level is not an object")
-        return Switches(_axis(data.get("remote", {"state": DEFAULT_REMOTE}), "remote", REMOTE_STATES), _axis(data.get("scope", {"state": DEFAULT_SCOPE}), "scope", SCOPE_STATES))
-    except (ValueError, OSError) as e:
-        return _closed(str(e))
+        return Path(f"/proc/{pid}/cmdline").read_bytes().replace(b"\0", b" ").decode(errors="replace")
+    except OSError:
+        return ""
+
+
+def idle_context(skill: Path, ancestors: Callable[[int], list[int]] = _ancestors, cmdline: Callable[[int], str] = _cmdline, pid: int | None = None) -> bool:
+    """True iff this process descends from the idle timer that wrote `.git/idle-tests.running`."""
+    top = subprocess.run(["git", "-C", str(skill), "rev-parse", "--show-toplevel"], capture_output=True, text=True).stdout.strip()
+    if not top:
+        return False
+    marker = Path(top) / ".git" / "idle-tests.running"
+    try:
+        timer = int(marker.read_text().strip())
+    except OSError, ValueError:
+        return False
+    me = os.getpid() if pid is None else pid
+    return timer in ancestors(me) and IDLE_TIMER_MARK in cmdline(timer) and " timer " in cmdline(timer)
 
 
 def _who(skill: Path) -> str:
@@ -216,6 +272,7 @@ def main(argv: list[str] | None = None) -> int:
     c.add_argument("what")
     q = sub.add_parser("state", help="print one axis's bare state - what the Makefile reads to shape a target")
     q.add_argument("axis", choices=("remote", "scope"))
+    sub.add_parser("idle", help="print 1 when this process descends from the idle timer (feature 136), else 0")
     a = ap.parse_args(argv)
     skill = Path.cwd()
     if a.cmd == "show":
@@ -223,6 +280,9 @@ def main(argv: list[str] | None = None) -> int:
         return 0
     if a.cmd == "state":
         print(getattr(read(skill), a.axis).state)
+        return 0
+    if a.cmd == "idle":
+        print("1" if idle_context(skill) else "0")
         return 0
     if a.cmd == "set":
         try:

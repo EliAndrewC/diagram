@@ -34,6 +34,12 @@ hook() { # hook <mode> <clone> [sid] -> RC, OUT
 wait_for() { # wait_for <file-glob> <seconds>
   local i=0; while [ $i -lt $(( ${2:-5} * 10 )) ]; do ls $1 >/dev/null 2>&1 && return 0; sleep 0.1; i=$((i+1)); done; return 1
 }
+wait_count() { # wait_count <file-glob> <n> <seconds> - until at least n files match
+  local i=0; while [ $i -lt $(( ${3:-5} * 10 )) ]; do [ "$(ls $1 2>/dev/null | wc -l)" -ge "$2" ] && return 0; sleep 0.1; i=$((i+1)); done; return 1
+}
+wait_grep_n() { # wait_grep_n <pattern> <file> <n> <seconds> - until the pattern matches at least n lines
+  local i=0; while [ $i -lt $(( ${4:-5} * 10 )) ]; do [ "$(grep -c "$1" "$2" 2>/dev/null)" -ge "$3" ] && return 0; sleep 0.1; i=$((i+1)); done; return 1
+}
 wait_grep() { # wait_grep <pattern> <file> <seconds>
   local i=0; while [ $i -lt $(( ${3:-5} * 10 )) ]; do grep -q "$1" "$2" 2>/dev/null && return 0; sleep 0.1; i=$((i+1)); done; return 1
 }
@@ -69,6 +75,16 @@ check "arming consumed" '[ ! -f "$CA/.git/idle-tests.json" ]'
 check "the run happened once, in the clone" '[ "$(grep -c "^start" "$RUNLOG")" = 1 ] && grep -q "$CA" "$RUNLOG"'
 hook prompt "$CA"; check "verdict surfaced at the next prompt" 'printf "%s" "$OUT" | grep -q "idle-tests: ran .* clean"'
 hook prompt "$CA"; check "surfaced once only" '! printf "%s" "$OUT" | grep -q "idle-tests: ran"'
+# --- 4b. D10: a new arming on a clone unchanged since that green run rolls nothing and records the skip
+hook stop "$CA"
+check "second record (the skip)" 'wait_count "$CA/.claude/skills/diagram/dev/idle-log/*-sess-a.json" 2 10'
+check "no second run on unchanged content" '[ "$(grep -c "^start" "$RUNLOG")" = 1 ] && grep -q "skipped" "$(ls -t "$CA"/.claude/skills/diagram/dev/idle-log/*-sess-a.json | head -1)"'
+hook prompt "$CA"; check "the skip surfaces" 'printf "%s" "$OUT" | grep -q "skipped - unchanged"'
+# a change to the clone makes the next arming roll again
+git -C "$CA" -c user.email=t@t -c user.name=t commit -q --allow-empty -m change
+hook stop "$CA"; sleep 0.2
+check "changed content rolls again" 'wait_grep_n "^end" "$RUNLOG" 2 10 && [ "$(grep -c "^start" "$RUNLOG")" = 2 ]'
+hook prompt "$CA"
 rm -f "$TMP/ticking"; wait $TK 2>/dev/null
 
 # --- 5. a suspend restarts the full wait: the clock jumps past the threshold mid-wait

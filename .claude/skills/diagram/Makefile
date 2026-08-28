@@ -84,7 +84,7 @@ done:
 #  ends the target before the reference step. Re-stamping is safe because the key includes the stamp's own hash.)
 	@if [ -z "$(FULL)" ] && python3 -m l7r.diagram.ci verified-done; then \
 	  root=$$(git rev-parse --show-toplevel 2>/dev/null) && [ -n "$$root" ] && python3 "$$root/scripts/gate-stamp.py" --write diagram || true; \
-	  $(LOGRUN) done reference 0 already-verified; $(STATE) green-local done reused; \
+	  $(LOGRUN) $(DONE_NAME) reference 0 already-verified; $(STATE) green-local $(DONE_NAME) reused; \
 	  printf '\n\033[1mgate green\033[0m (already verified - nothing the gate exercises has changed since the last green run)\n'; exit 0; \
 	fi; \
 	$(if $(FULL),$(MAKE) --no-print-directory bypass-audit REF_WHY="$(REF_WHY)" || exit 1;,) \
@@ -96,10 +96,10 @@ done:
 	    printf 'hooks-test: already green against exactly these guard scripts - skipped (gate-stamp --fresh hooks; 84 s measured 2026-08-26)\n'; continue; fi; \
 	  $(MAKE) --no-print-directory $$phase || fail="$$fail $$phase"; \
 	done; \
-	if [ -n "$$fail" ]; then $(LOGRUN) done "$(if $(FULL),full,reference)" "$$(( $$(date +%s) - $$T0 ))" "failed:$$fail"; $(STATE) failed-gate done; printf '\n\033[1mGATE FAILED:%s\033[0m (every phase ran - fix them together, then re-run once)\n' "$$fail"; exit 1; fi; \
+	if [ -n "$$fail" ]; then $(LOGRUN) $(DONE_NAME) "$(if $(FULL),full,reference)" "$$(( $$(date +%s) - $$T0 ))" "failed:$$fail"; $(STATE) failed-gate $(DONE_NAME); printf '\n\033[1mGATE FAILED:%s\033[0m (every phase ran - fix them together, then re-run once)\n' "$$fail"; exit 1; fi; \
 	root=$$(git rev-parse --show-toplevel 2>/dev/null) && [ -n "$$root" ] && python3 "$$root/scripts/gate-stamp.py" --write diagram || true; \
-	$(LOGRUN) done "$(if $(FULL),full,reference)" "$$(( $$(date +%s) - $$T0 ))" green; \
-	$(STATE) green-local done; \
+	$(LOGRUN) $(DONE_NAME) "$(if $(FULL),full,reference)" "$$(( $$(date +%s) - $$T0 ))" green; \
+	$(STATE) green-local $(DONE_NAME); \
 	$(if $(FULL),printf '\n\033[1mgate green (FULL - every pool map re-gated, seeds 41-44 rolled)\033[0m\n',printf '\n\033[1mgate green\033[0m (reference settlement + non-map tests; `make done FULL=1` also rolls the other pool maps)\n')
 
 # THE REFERENCE-HAMLET PERFORMANCE BOOKENDS (constitution VI, GM 2026-08-23).
@@ -665,9 +665,15 @@ reference:
 # because it is largely going to run unattended"). One target so the GM can change WHAT an idle session
 # runs in one place. It is `maps`: the reference map, the tripwire seeds, the tier sweep - under an
 # unlocked scope; under the lock, the reference alone (the lock admits no override, D1b). It writes no
-# `done` stamp, so it neither grants nor revokes a push (FR-006b c). Never run it by hand beside a gate.
-idle-tests:     ## what an idle session runs unattended (feature 136): the maps sweep
-	@$(MAKE) --no-print-directory maps
+# `done` stamp under the idle run's own name (`idle-done`, DONE_NAME below), so it neither grants nor revokes a
+# push (FR-006b c). The GM (2026-08-28): "I do want it to be more than just the reference map tests. I do not
+# want to run the full test suite, which is to say the one that we reserve for AWS. However, I would like to
+# run the lengthier test suite" - so it is `done` (the 21-minute unlocked gate), never `done FULL=1`, and the
+# scope lock is RELAXED for it by `switches.read` when the caller descends from the timer. Never by hand.
+IDLE_CTX = $(shell $(SWITCH) idle 2>/dev/null)
+DONE_NAME = $(if $(filter 1,$(IDLE_CTX)),idle-done,done)
+idle-tests:     ## what an idle session runs unattended (feature 136): the whole gate, scope relaxed, never FULL
+	@$(MAKE) --no-print-directory done
 
 maps:
 	@$(if $(filter all,$(SCOPE)),$(SWITCH) check scope "maps SCOPE=all",true)

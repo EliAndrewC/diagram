@@ -179,11 +179,15 @@ distinction without a saving).
 
 ## The lock's cost, since feature 136
 
-An UNLOCKED scope now gets a nightly look at the tier: an idle session (feature 136) runs
-`make idle-tests` (= `maps`) after its staggered wait, so a tripwire regression is named on the
-night it is made instead of at the unlock. A LOCKED scope still gets nothing beyond the reference
-map - the lock admits no override by any variable, flag or environment (the GM's ruling), and the
-idle run honors it like every other invocation. That is D1b of feature 136, before the GM.
+An idle session (feature 136) runs `make idle-tests` - the whole `done` gate - after its staggered
+wait, so a regression is named on the night it is made instead of at the unlock. **The lock is
+RELAXED for that run, and only for it** (the GM, 2026-08-28: "relax that lock when the tests are
+being run in the idle context"): `switches.read` reports the scope unlocked solely when the calling
+process descends from the idle timer that wrote `.git/idle-tests.running` (`switches.idle_context`
+checks the pid is a live ancestor whose command line is the timer). No variable, flag, file or
+environment a session sets produces that context, so the doctrine above - no override - still holds
+for everything a session runs. The idle gate records as `idle-done`, never as a `done` a push could
+reuse.
 
 ## When the lock is released
 
