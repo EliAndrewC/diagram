@@ -86,7 +86,6 @@ TRIPWIRE_SEEDS = (27, 33, 37, 41, 47)
 TRIPWIRE_EXPECTED: dict[int, frozenset[str]] = {
     # feature 137 (2026-08-28): rows come OUT as the fixes land - 37 fixed and 27/47 shrunk by the orphan joiner's ladder (T03)
     27: frozenset({"lanes_bend_like_paths"}),
-    33: frozenset({"village_windbreak_is_continuous"}),
     47: frozenset({"lanes_form_one_network", "lanes_reach_something", "long_ditches_have_a_footbridge"}),
 }
 
