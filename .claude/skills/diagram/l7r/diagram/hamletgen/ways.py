@@ -1242,6 +1242,56 @@ def _smooth_web(s: Settlement, hard: list[Poly], walls: Sequence[Poly], water: l
     changed = 0
     lanes = s.M.get("lanes") or []
 
+    # THE SMOOTHING NEVER DISCONNECTS THE WEB (feature 137 T03, 2026-08-28). Tripwire seed 37 (and
+    # the gate cohort's 43, the pool's Kashikawa and Sawada) failed `lanes_form_one_network` after T32:
+    # a hairpin cut took the short arm that was the piece's only link to the spine, and the orphan
+    # joiner could not put it back - the spine's end and the stub's end stood 29 ft apart in a 12 ft
+    # slot between a house and a threshing yard that the 7 ft fabric pad closes on both sides. The
+    # repair that made the picture nicer had made the map wrong, and no later pass could undo it.
+    # So every rewrite below goes through `_commit`: the web's piece count is taken before and after,
+    # and a rewrite that adds a piece is refused and the lane left as it was. The bends check may
+    # then fire on the kept hairpin - that is the honest verdict, and its own task (T04).
+    def _pieces() -> int:
+        _ways = [[(float(x), float(y)) for x, y in ln.get("pts") or []] for ln in lanes]
+        _comp = _components(_ways, 4.0)
+        return len({_comp[m] for m in range(len(_ways)) if len(_ways[m]) >= 2})
+
+    def _rejoinable() -> bool:
+        """After a rewrite that added a piece: will the post-smoothing touch pass close it again? Yes
+        iff some end of the new piece stands within `_STUB_REACH_FT` of another piece's tread with a
+        clear straight link (the touch pass draws exactly that). Inashiro's own smoothing makes such
+        cuts and the touch repairs them; seed 37's stub sat 29 ft off in a 12 ft slot no link clears."""
+        _ways = [[(float(x), float(y)) for x, y in ln.get("pts") or []] for ln in lanes]
+        _comp = _components(_ways, 4.0)
+        _live = [m for m in range(len(_ways)) if len(_ways[m]) >= 2]
+        _seed = next((m for m in _live if lanes[m].get("connector")), _live[0] if _live else 0)
+        for _c in {_comp[m] for m in _live} - {_comp[_seed]}:  # every piece OTHER than the connector's must reach one
+            _mine = [m for m in _live if _comp[m] == _c]
+            _segs = [sg for m in _live if _comp[m] != _c for sg in zip(_ways[m], _ways[m][1:], strict=False)]
+            if not _segs:
+                continue
+            _ok = False
+            for m in _mine:
+                for _e in (_ways[m][0], _ways[m][-1]):
+                    _foot = min((seg_closest(_e[0], _e[1], a, b) for a, b in _segs), key=lambda z: math.dist(_e, z))
+                    if math.dist(_e, _foot) <= _STUB_REACH_FT and _clear_touch(_e, _foot, hard, walls, water):
+                        _ok = True
+                        break
+                if _ok:
+                    break
+            if not _ok:
+                return False
+        return True
+
+    def _commit(m: int, new_pts: list[list[float]]) -> bool:
+        _before, _old = _pieces(), lanes[m]["pts"]
+        lanes[m]["pts"] = new_pts
+        if _pieces() > _before and not _rejoinable():
+            lanes[m]["pts"] = _old
+            return False
+        s.reink_lane(m)
+        return True
+
     def _others_segs(skip: int) -> list[tuple[Pt, Pt]]:
         return [
             (a, b)
@@ -1298,9 +1348,7 @@ def _smooth_web(s: Settlement, hard: list[Poly], walls: Sequence[Poly], water: l
             out.append(pts[b])
             a = b
         pts = out
-        if [[round(x, 1), round(y, 1)] for x, y in pts] != ln["pts"]:
-            ln["pts"] = [[round(x, 1), round(y, 1)] for x, y in pts]
-            s.reink_lane(i)
+        if [[round(x, 1), round(y, 1)] for x, y in pts] != ln["pts"] and _commit(i, [[round(x, 1), round(y, 1)] for x, y in pts]):
             changed += 1
     # 4. KNOTS: ends of different lanes that stand within `_KNOT_FT` of one another meet at ONE
     # node. Three lanes arriving at three points a few feet apart drew a closed triangle on
@@ -1350,9 +1398,7 @@ def _smooth_web(s: Settlement, hard: list[Poly], walls: Sequence[Poly], water: l
             if len(_q) < 2:
                 continue
             _nb = _q[1] if f == 0 else _q[-2]
-            if _clear_touch(_nb, node, hard, walls, water) and [[round(x, 1), round(y, 1)] for x, y in _q] != lanes[j]["pts"]:
-                lanes[j]["pts"] = [[round(x, 1), round(y, 1)] for x, y in _q]
-                s.reink_lane(j)
+            if _clear_touch(_nb, node, hard, walls, water) and [[round(x, 1), round(y, 1)] for x, y in _q] != lanes[j]["pts"] and _commit(j, [[round(x, 1), round(y, 1)] for x, y in _q]):
                 changed += 1
     # 2b. shadows: a lane whose every vertex lies inside another lane's stroke is that lane drawn
     # twice (settlement-review at the T99 acceptance: lanes[7] lay for its whole 35.7 ft inside
@@ -1368,9 +1414,8 @@ def _smooth_web(s: Settlement, hard: list[Poly], walls: Sequence[Poly], water: l
                 continue
             tol = float(other.get("w", 3)) / 2 + float(ln.get("w", 3)) / 2 + 1.0
             if all(min(seg_dist(v[0], v[1], pts_j[k], pts_j[k + 1]) for k in range(len(pts_j) - 1)) <= tol for v in pts_i):
-                lanes[i]["pts"] = []
-                s.reink_lane(i)
-                changed += 1
+                if _commit(i, []):
+                    changed += 1
                 break
     # 3. bow-ties: a lane that crosses another mid-run and runs on for less than an arm
     for i, ln in enumerate(lanes):
@@ -1393,9 +1438,8 @@ def _smooth_web(s: Settlement, hard: list[Poly], walls: Sequence[Poly], water: l
                         pts = [x, *pts[k + 1 :]]
                     else:
                         continue
-                    ln["pts"] = [[round(px, 1), round(py, 1)] for px, py in pts]
-                    s.reink_lane(i)
-                    changed += 1
+                    if _commit(i, [[round(px, 1), round(py, 1)] for px, py in pts]):
+                        changed += 1
                     break
                 else:
                     continue
