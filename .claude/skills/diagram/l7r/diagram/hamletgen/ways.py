@@ -2236,6 +2236,11 @@ def _serve_stragglers(s: Settlement, plan: SitePlan, hard: list[Poly], fabric: l
                     # reach of the way it was aimed at, or it is a mark in the grass.
                     if len(path) < 2 or min(math.dist(path[-1], tgt), math.dist(path[0], tgt)) > _LANE_JOIN_FT:
                         continue
+                    # THE LATTICE'S JOGS COME OUT OF A FOOTPATH TOO (feature 145, cohort seed 43 after the field
+                    # moved): a routed candidate is string-pulled inside `_route`, but the trim and the join above
+                    # can leave a step the pull could not take at the fabric margin; the junction-margin pass that
+                    # every web lane gets (`_unjog`) is what `lanes_bend_like_paths` measures against.
+                    path = _unjog(path, hard, others, water)
                     _draw_web(s, path, 3, houses=[c])
                     added += 1
                     _served = True

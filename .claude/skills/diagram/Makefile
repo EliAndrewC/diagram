@@ -39,6 +39,9 @@ perf-profile:   ## tier 2 evidence: cProfile ONE stage of ONE seed   SEED=25 STA
 hamlet-floor:   ## the modules under the 100% hamlet-path floor (feature 145; derived from the scripted rolls' records; GUARD_EDIT_OK: a new operation)
 	$(RUN).tools.hamlet_floor --list
 
+hamlet-floor-check:   ## judge the last coverage data against the hamlet-path floor (what test-full's last phase does; GUARD_EDIT_OK: a new operation)
+	$(RUN).tools.hamlet_floor
+
 # THE VERIFICATION STATE (feature 130, FR-012 - GUARD_EDIT_OK: adding the CodeBuild gate). Every
 # local target that proves something records it in .git/verification-state.json with the content
 # hash of the engine's Python at that moment; the dispatcher refuses a paid run unless the most

@@ -159,7 +159,9 @@ def fixture_skill(tmp_path: Path) -> Path:
 
 
 def make(skill: Path, *args: str) -> subprocess.CompletedProcess[str]:
-    return subprocess.run(["make", "--no-print-directory", "-C", str(skill), *args], capture_output=True, text=True, stdin=subprocess.DEVNULL)
+    # MAKEFLAGS IS STRIPPED (feature 145): under `make test-full` the parent make exports `COV_FLOORS=1` through MAKEFLAGS, and the fixture's make then
+    # inherited it - no `-m "not rolls_map"`, no `--ignore=tests/full` - so these two tests failed in every FULL run and passed everywhere else.
+    return subprocess.run(["make", "--no-print-directory", "-C", str(skill), *args], capture_output=True, text=True, stdin=subprocess.DEVNULL, env={**os.environ, "MAKEFLAGS": "", "MFLAGS": ""})
 
 
 LOCKED_TARGETS = ("cohort", "tripwire", "test-full", "cache-audit", "regressions", "perf", "perf-gate", "done FULL=1", "ci-check FULL=1", "ci-check TARGET=cohort", "ci-merge FULL=1", "maps SCOPE=all")
