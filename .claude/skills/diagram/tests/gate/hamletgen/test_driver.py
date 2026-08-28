@@ -62,8 +62,10 @@ def test_a_rolled_cohort_passes_the_whole_gate() -> None:
 
 # The gate cohort's expected failures (seeds 41-44), measured 2026-08-27 at the T99 unlock - see above.
 GATE_COHORT_EXPECTED: dict[int, frozenset[str]] = {
-    # seeds 42 and 43 were pinned (farmhouses_reach_a_way; lanes_bend_like_paths, lanes_form_one_network,
-    # title_clear_of_features) until feature 145 moved the maps (the field solver) and both came up clean
+    # seed 42 (farmhouses_reach_a_way) and two of seed 43's three (lanes_form_one_network, title_clear_of_features)
+    # came up clean when feature 145 moved the maps (the field solver); 43's routed footpath still keeps a 36 px
+    # lattice step round a house corner that neither the chord nor the knee can take (research R2b) - the one pin left
+    43: frozenset({"lanes_bend_like_paths"}),
     # seed 44 pinned `houses_clear_of_paddies` until feature 141 retired that check (the placer's chains are the guarantee)
 }
 
