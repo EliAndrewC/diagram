@@ -389,9 +389,9 @@ loop, not a rounder ring.
 
 ## The chancellery meets IN the castle - executive out, council in
 
-**Evidence:** setting-canon (the GM's ruling), contradicted on the Edo anchor
+**Evidence:** attested (a median domain's administration inside the castle enclosure), setting-canon (the House Chancellery as an L7R institution)
 
-**Sources:** `hyojosho-jawiki` (READ - see the correction)
+**Sources:** `hancho-jawiki`, `honmaru-jawiki`, `kakegawa-castle-jawiki`, `jinya-jawiki`, `karo-jawiki` (READ 2026-08-28, the GM's question); `goyobeya-kotobank` (analogy only); `hyojosho-jawiki` (the Edo anchor, corrected)
 
 **The question** (GM 2026-08-09): would the House Chancellery actually have its own meeting
 building outside the castle? The GM's working assumption was that chancellery meetings happen in
@@ -413,6 +413,8 @@ it: `capital_chancellery_meets_in_the_castle` now fires if a chancellery compoun
 outside. The inventory table in `settlements/capitals.md` moves the chancellery inside.
 
 *Correction to the record (2026-08-28, feature 138) - CONTRADICTED on the anchor, rule unchanged, awaiting the GM:* ja.wikipedia 評定所 places the Hyōjōsho **outside Edo castle, at Tatsunokuchi** (present Marunouchi) - across the moat from the Ōte gate, in the daimyo-mansion belt, not within the castle. The entry's "sat WITHIN Edo castle" is wrong as written; whether the capital's chancellery should therefore stand in the castle (the GM's ruling, which feature 020 implemented) or on the government avenue beside the castle (the Edo form) is the GM's call. Listed in the feature 138 ledger, section G.
+
+**Resolved (GM question 2026-08-28, feature 138 T20) - ACCURATE for a median domain; the Edo anchor replaced.** The GM asked whether a TYPICAL domain's council met inside or outside its castle, Edo being an unusual capital. The record read: a castle-holding han's 藩庁 stood "城に" - at the castle - and a castle-less han's at its jin'ya (`hancho-jawiki`); the goten's public half is the 政庁 (`honmaru-jawiki`); at Kakegawa, ~51-59,000 koku - a median domain - the "政務所である二ノ丸御殿" sat in the ninomaru (`kakegawa-castle-jawiki`), and Kawagoe likewise used its ninomaru; the karō decided in council and lived near the castle (`karo-jawiki`); a small domain's jin'ya held 居館 and 役所 in one compound (`jinya-jawiki`). No page read puts a domain's administration in the town. So the capital's chancellery meeting IN the castle is the attested median form - in the ninomaru or honmaru goten, which ring varying by castle - and the earlier prose about Edo's Hyōjōsho (a bakufu judicial council at Tatsunokuchi, outside the castle) is struck as the wrong anchor. Class for the HTML modal: **accurate**.
 
 ## Moat water: drawn connections outside, standing water inside - and yes, it scums
 

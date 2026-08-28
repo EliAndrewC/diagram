@@ -1696,3 +1696,33 @@ Dike-pond landscape 1949-2020 (Shunde) - SUMMARY-ONLY (2026-08-28): "size of pon
 Yangtze rice-rape rotation calendar - SUMMARY-ONLY (2026-08-28, agricultural-extension pages in search): rape sown late September to mid-October, harvested early April (southern Jiangxi) to early May (Jiujiang); rice transplanted mid-April to early May
 
 *Used for:* the two halves of one plot's year - with the sowing window a little earlier than the record's Oct-Nov
+
+### `hancho-jawiki`
+
+ja.wikipedia 藩庁 (READ 2026-08-28, T20)
+
+*Used for:* "城持大名以上の藩は城に、城主格以下の城主格と無城大名の藩は城を構えることが許されなかったことから、領内に屋敷を置いて藩庁とした" - a castle-holding han's seat was AT the castle; a castle-less han's was its jin'ya
+
+### `honmaru-jawiki`
+
+ja.wikipedia 本丸 (READ 2026-08-28)
+
+*Used for:* "近世における本丸は、城主とその家族が暮らす奥御殿と政庁である表御殿を置き" - the goten's public half named as the 政庁
+
+### `kakegawa-castle-jawiki`
+
+ja.wikipedia 掛川城 (READ 2026-08-28)
+
+*Used for:* "政務所である二ノ丸御殿" at a ~51,000-59,000 koku domain - the administration office in the ninomaru goten; ja.wikipedia 川越城 (170,000 koku) likewise puts the lord's residence and a 武具方役所 in the ninomaru
+
+### `karo-jawiki`
+
+ja.wikipedia 家老 (READ 2026-08-28)
+
+*Used for:* the karō deciding in council ("評定所などに集合して合議の上で決裁する") and keeping their mansions "城の近く" - near the castle; no ring named
+
+### `goyobeya-kotobank`
+
+コトバンク 御用部屋 (READ 2026-08-28 - the SHOGUNATE's executive room inside Edo castle, near the shogun's quarters; analogy only, not han evidence)
+
+*Used for:* the executive council room inside the seat of government
