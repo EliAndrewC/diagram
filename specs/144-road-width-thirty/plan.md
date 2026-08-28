@@ -19,3 +19,10 @@ Python 3.14; pyrefly (mypy-strict rules) since feature 142; pytest -n auto; the 
 - **30 ft, not 29.5** - the GM said "about thirty feet"; recorded as a rounding (deviation, half a foot).
 - **Fallbacks follow the default** - a fallback that disagrees with the default is a second, silent width; after the sweep no manifest lacks the key.
 - **Gate throat unchanged at 30 ft clear** - the doctrine (a gate narrows its road) is satisfied at equality; only the gloss changes. If the sweep shows a city gate check failing on the wider road, that is fixed forward here and recorded.
+
+## Closing notes (2026-08-28)
+
+- **XIII, measured**: the tripwire after the change fails seeds 33 (`lanes_bend_like_paths`), 37 (`lanes_form_one_network`) and 47 (`bridges_span_their_water` outside its pinned set). A detached worktree at main's tip (514e6cc0, road 26 ft) fails **the same three seeds on the same checks** - pre-existing, feature 137's territory (its pins are moving as its fixes land). Zero new failures from this feature. Seeds 27 and 41 clean on both.
+- **The reference map did not change**: Inashiro has no trunk road (`road_width` None), so its regeneration is byte-identical and the closing bookend (re-examine the PNG) has nothing to examine; `settlement-review` is not run on an unchanged render - recorded rather than performed.
+- **The pool**: every town, city and capital gen is in `LEGACY_FROZEN_GENS` (frozen since the reference-hamlet period; nothing rolls them). Their manifests keep `road_width` at 26 ft until each is rebuilt, when the new default applies. The one live tier (hamlets) draws no trunk road. So "every Mode B map" is satisfied at the DEFAULT, and the frozen artifacts follow on rebuild - noted in the migration plan's terms, not hidden.
+- **The 29 fallbacks** now read 30; the pin test `tests/test_road_default.py` scans the engine for a stale 26.
