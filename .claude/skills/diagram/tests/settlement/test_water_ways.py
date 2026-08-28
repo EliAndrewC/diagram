@@ -534,3 +534,16 @@ def test_the_lane_key_is_the_spine_not_the_last_way_drawn():
     # ...and the road OUT is not the street, however long it runs
     s.lane([(900.0, 100.0), (1900.0, 900.0)], connector=True)
     assert s.M["lane"] == [[100.0, 100.0], [900.0, 100.0]]
+
+
+def test_angle_between_calls_a_degenerate_vector_square() -> None:
+    """Feature 146: a zero-length vector has no bearing, so the helper answers 90 rather than dividing by it."""
+    from l7r.diagram.settlement.water_ways import _angle_between
+
+    point = ((0.0, 0.0), (0.0, 0.0))  # a segment of zero length: no bearing at all
+    run = ((0.0, 0.0), (10.0, 0.0))
+    across = ((0.0, 0.0), (0.0, 10.0))
+    assert _angle_between(point, run) == 90.0
+    assert _angle_between(run, point) == 90.0
+    assert abs(_angle_between(run, run)) < 1e-9
+    assert abs(_angle_between(run, across) - 90.0) < 1e-9

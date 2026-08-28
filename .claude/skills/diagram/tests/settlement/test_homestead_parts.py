@@ -370,3 +370,13 @@ def test_watercourse_segs_reads_a_uniform_width_channel() -> None:
     s.M["drawn_channels"] = [{"pts": [[100, 100], [400, 100]], "w0": 6.0, "w1": 6.0}, {"pts": [[500, 500]], "w0": 6.0, "w1": 6.0}]
     segs = s._watercourse_segs()
     assert any(abs(hw - (6.0 / 2 + 0.0)) < 3.0 for _pl, hw in segs), segs  # the uniform stroke, its half-width plus pad
+
+
+def test_corridor_buffers_reads_the_alleys_the_ring_road_and_the_road() -> None:
+    """Feature 146: every trodden tread is a keep-out for cover, not only the lanes."""
+    s = Settlement(1000, 1000, seed=1)
+    s.M["alleys"] = [{"pts": [[10, 10], [90, 10]], "w": 8}]
+    s.M["ring_road"] = [[100, 100], [300, 100]]
+    s.M["road"] = [[400, 400], [600, 400]]
+    got = {round(half) for _pts, half in s._corridor_buffers(4.0)}
+    assert {round(8 / 2 + 4), round(20 / 2 + 4), round(30 / 2 + 4)} <= got, got
