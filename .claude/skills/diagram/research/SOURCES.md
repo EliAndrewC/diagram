@@ -652,3 +652,111 @@ ja.wikipedia 屋敷神; minka-en.com 屋敷神; satologue.com 屋敷神様 (READ
 326-woods.com, 薪の保管方法 (READ 2026-08-27, source-reader) - MODERN stacking practice
 
 *Used for:* a stack to ~1.5 m high (T54), labeled modern.
+
+### `tenmacho-jawiki`
+
+ja.wikipedia 伝馬町牢屋敷 (READ 2026-08-28, feature 138)
+
+*Used for:* the Edo remand jail's size (2,677坪 ≈ 8,850 m2), its neribei wall and outer moat; that it held 未決囚 pending judgment AND, exceptionally, 永牢・過怠牢 prison-as-sentence cases
+
+### `chuo-royashiki`
+
+Chuo City, 伝馬町牢屋敷跡 (https://www.city.chuo.lg.jp/a0052/bunkakankou/rekishi/tokyobunkazai/royashiki.html; READ 2026-08-28)
+
+*Used for:* corroborating figure "2,600坪（8,595㎡）以上", moat and embankment on three sides, 300-400 inmates at a time, execution ground in the SE corner
+
+### `takayama-jinya-city`
+
+Takayama City, 高山陣屋跡 (https://www.city.takayama.lg.jp/kurashi/1000021/1000119/1000847/1000954/1000956.html; READ 2026-08-28)
+
+*Used for:* the 吟味所 standing with the 白州 ("吟味所、白州はグリ石敷で屋根のあることが特徴的である"); the 御蔵 moved from the castle's third bailey in 1695; the designated site figure "員数 11,219.05平方メートル" (the label reads oddly - recheck against the 史跡 register before relying on it)
+
+### `takayama-jinya-jawiki`
+
+ja.wikipedia 高山陣屋 (READ 2026-08-28)
+
+*Used for:* the 1816 rebuild of the office block as one range - 玄関・吟味所・御役所・大広間; the numbered storehouse rows (一～四番蔵・九～十二番蔵・書物蔵); 25 daikan/gundai over 177 years
+
+### `neixiang-yamen-zhwiki`
+
+zh.wikipedia 内乡县衙 (READ 2026-08-28)
+
+*Used for:* "前衙后邸" as an instance of the 前朝后寝 system; the jail in the yamen's southwest ("坐北朝南的监狱位于内乡县衙的西南部"); the jail-god shrine to 皋陶 inside the jail (READ); the 衙神庙 and 土地祠 on the east line (SUMMARY-ONLY - seen in a search synthesis of the same page, not quoted)
+
+### `henan-neixiang`
+
+Henan provincial government, "China's best-preserved county-level magistrate office in Neixiang" (https://english.henan.gov.cn/2023/11-23/2853070.html; READ 2026-08-28)
+
+*Used for:* the prison southwest of the Major Court, "usually called South Prison"
+
+### `hatakata-men-jawiki`
+
+ja.wikipedia 畑方免 (READ 2026-08-28)
+
+*Used for:* dry-field tax commonly paid in coin, the 関東畑永法 as the type case ("金納で納税が行われることが多かった" - coin, not specifically copper); the rate fixed and not reduced in bad years
+
+### `tfd-hongou-fire-history`
+
+Tokyo Fire Department, 防火対策の歴史 (Hongo station; https://www.tfd.metro.tokyo.lg.jp/fs/hongou/page_00029.html; READ 2026-08-28)
+
+*Used for:* commoners keeping fire-water routinely at the doorway and on the roof ("用水桶、天水桶、鎮火水と名称はいろいろあるが、庶民は平素から水を用意して、玄関先や、屋根上に設置した")
+
+### `gujianchina-taipinggang`
+
+古建中国, 古代故宫的防火器材——"太平缸" (https://www.gujianchina.cn/news/show-5949.html; READ 2026-08-28)
+
+*Used for:* 308 vats in the Forbidden City; vats placed on the axis and before buildings far from the Inner Golden Water River and wells
+
+### `thepaper-taipinggang`
+
+澎湃新闻, 这口大缸能防火？！ (https://www.thepaper.cn/newsDetail_forward_23268207; READ 2026-08-28)
+
+*Used for:* 308 originally, 231 surviving; Qing regulation fixing which vat type and how many per courtyard
+
+### `guernica-night-soil`
+
+Guernica, "Raising a Stink" (https://www.guernicamag.com/raising-a-stink/; READ 2026-08-28; the Howell OSU paper it draws on could not be parsed)
+
+*Used for:* farmers supplying daimyo estates with firewood and seedlings for the privilege of emptying their privies; the tsuke-tsubo annual contract paid in rice
+
+### `hatchobori-jawiki`
+
+ja.wikipedia 八丁堀 (東京都中央区) (READ 2026-08-28)
+
+*Used for:* the yoriki/doshin 組屋敷 district of the Edo town magistracy standing apart from the office after the 1635 temple relocation
+
+### `jinya-jawiki`
+
+ja.wikipedia 陣屋 (READ 2026-08-28)
+
+*Used for:* a small DOMAIN's jin'ya program - residence, office, retainers' houses, storehouses and a 調練場 drill ground ("小藩の陣屋では…居館・役所・家臣の役宅や土蔵、調練場などを配置する構成がみられる"); scope: a domain seat, not a bakufu daikansho
+
+### `hanko-jawiki`
+
+ja.wikipedia 藩校 (READ 2026-08-28)
+
+*Used for:* 255 domain schools at the peak, in nearly every domain; martial arts encouraged and 演武場 among their facilities
+
+### `edo-three-dojos-jawiki`
+
+ja.wikipedia 幕末江戸三大道場 (READ 2026-08-28)
+
+*Used for:* the three great late-Edo fencing halls and their metropolitan addresses (Nihonbashi, Kanda Otamagaike, Kudan); no date range for the "boom" is given there
+
+### `hei-jokaku-jawiki`
+
+ja.wikipedia 塀 (城郭) (READ 2026-08-28)
+
+*Used for:* plastered castle-class earthen walls "壁の厚さは1尺（約300ミリメートル）以上ある", with medieval walls as thin as 3-7 sun
+
+### `kojodan-dobei`
+
+攻城団, お城の基礎講座 40. 土塀の種類 (https://blog.kojodan.jp/entry/2020/08/26/180000; READ 2026-08-28)
+
+*Used for:* frameless neribei "築地塀に比べて…30cm程度"; tsuijibei up to about 1 m thick
+
+### `sado-bugyosho-fires`
+
+Sado magistracy fire history - SUMMARY-ONLY (2026-08-28): search snippets across Sado tourism pages state the 奉行所, built 1603, "焼失と再建を5回繰り返しました"; the three pages fetched (ja.wikipedia 佐渡奉行, visitsado.com, city.sado.niigata.jp museum) describe only the 2000 reconstruction and say nothing about fires
+
+*Used for:* administrative halls as ordinary wooden buildings that burned and were rebuilt repeatedly

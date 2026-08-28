@@ -22,33 +22,33 @@
 | 8 | The 6:4 water-to-dike ratio, and coppiced mulberry | attested | not recorded | open |
 | 9 | A dike-pond is fed and drained through sluice gates | attested | not recorded | open |
 
-### `buildings.md` (23)
+### `buildings.md` (23 - the first parse counted 9; re-counted at batch start)
 
 | # | entry | evidence class | found as | status |
 |---|---|---|---|---|
-| 1 | Administrative culture is JAPAN-first for compound interiors | corroborated | not recorded | open |
-| 2 | Office in front, residence behind - the two-court split is universal | researched | not recorded | open |
-| 3 | Every administrative compound keeps a shrine | researched | not recorded | open |
-| 4 | Cells are remand, not punishment | researched | not recorded | open |
-| 5 | Clerks are few, local, and heimen | setting-canon | not recorded | open |
-| 6 | Staff housing spans a real spectrum | researched | not recorded | open |
-| 7 | A compound wall is a building, not a boundary line | researched | not recorded | open |
-| 8 | The granary is a staging node, not the terminal store | researched | not recorded | open |
-| 9 | The courtroom is a room of the office hall, not a freestanding stage | researched | not recorded | open |
-| 10 | No interrogation room | researched | not recorded | open |
-| 11 | Poverty texture is historically genuine | researched | not recorded | open |
-| 12 | Guest doors feed courts, not flanks | researched | not recorded | open |
-| 13 | An ancestral alcove holding office-predecessor tablets is proper only at a LINEAGE-HELD posting | researched | not recorded | open |
-| 14 | The Mode A scale is 3 px = 1 ft | researched | not recorded | open |
-| 15 | The granary holds grain, not just rice | researched | not recorded | open |
-| 16 | Fire discipline: halls burn, kura endure | researched | not recorded | open |
-| 17 | Fire-water is distributed to the halls, not the kura | corroborated | not recorded | open |
-| 18 | The compound has a size HIERARCHY, not just individual sizes | liberty | not recorded | open |
-| 19 | Packing: a jin'ya is mostly open, and the fix for "too much empty space" is consolidation, NOT a smaller envelope | liberty | not recorded | open |
-| 20 | Rendering / layout is checked automatically, because it is geometry not judgment | researched | not recorded | open |
-| 21 | A dojo is a city institution; county training is courtyard keiko | setting-canon | not recorded | open |
-| 22 | Privies attach to the house; night-soil drives their placement | attested | not recorded | open |
-| 23 | The shady rear is the service strip | researched | not recorded | open |
+| 1 | Administrative culture is JAPAN-first for compound interiors | - | not recorded | re-sourced |
+| 2 | Office in front, residence behind - the two-court split is universal | - | not recorded | re-sourced |
+| 3 | Every administrative compound keeps a shrine | - | not recorded | re-sourced (China read; the Joge instance a leftover) |
+| 4 | Cells are remand, not punishment | - | not recorded | supplemented (永牢/過怠牢 noted; ghost-gate gloss marked unsourced) |
+| 5 | Clerks are few, local, and heimen | - | not recorded | re-sourced (canon); historical halves leftover |
+| 6 | Staff housing spans a real spectrum | - | not recorded | re-sourced (Edo half read; rural half leftover) |
+| 7 | A compound wall is a building, not a boundary line | - | not recorded | contradicted - thickness figure; rule unchanged; section G |
+| 8 | The granary is a staging node, not the terminal store | - | not recorded | re-sourced; Hida staging leftover |
+| 9 | The courtroom is a room of the office hall, not a freestanding stage | - | not recorded | re-sourced |
+| 10 | No interrogation room | - | not recorded | re-sourced |
+| 11 | Poverty texture is historically genuine | - | not recorded | no-source (90% figure, anecdote) - class downgraded |
+| 12 | Guest doors feed courts, not flanks | - | not recorded | re-sourced (GM rule); staging leftover |
+| 13 | An ancestral alcove holding office-predecessor tablets is proper only at a LINEAGE-HELD posting | - | not recorded | re-sourced (canon); yamen practice leftover |
+| 14 | The Mode A scale is 3 px = 1 ft | - | not recorded | supplemented (Takayama 11,219 m2; decision unaffected) |
+| 15 | The granary holds grain, not just rice | - | not recorded | re-sourced (coin read); shares/soybean/China leftover |
+| 16 | Fire discipline: halls burn, kura endure | - | not recorded | re-sourced (SUMMARY-ONLY) |
+| 17 | Fire-water is distributed to the halls, not the kura | - | not recorded | re-sourced |
+| 18 | The compound has a size HIERARCHY, not just individual sizes | - | not recorded | no-source on the anchors (Izumo SUMMARY-ONLY; 67 tsubo, stable leftover) |
+| 19 | Packing: a jin'ya is mostly open... | - | not recorded | no-source - labeled guess pending the Gifu survey report |
+| 20 | Rendering / layout is checked automatically | - | not recorded | n/a - rendering |
+| 21 | A dojo is a city institution; county training is courtyard keiko | - | not recorded | supplemented (jin'ya scope narrowed; 調練場 confirms the practice ground) |
+| 22 | Privies attach to the house; night-soil drives their placement | - | not recorded | re-sourced (night-soil read); samurai kawaya leftover |
+| 23 | The shady rear is the service strip | - | not recorded | no-source - class downgraded; leftover |
 
 ### `cities/capitals.md` (20)
 
@@ -261,6 +261,12 @@
 
 Worked with the batch that owns each entry; struck from `SOURCES.md` when done (FR-009).
 
+## F2. Batch leftovers - claims searched and not read this pass (one follow-up reader at the end)
+
+- buildings.md: Jōge jin'ya plan (230x88 ft; two shrines) - `daikanpanfu2.pdf`, k-yagumo excavation page; tedai origins and Qing clerk counts; rural jin'ya staff rowhouses; Hida staging and hired boats; genkan staged arrival; yamen predecessor veneration; tax shares 30-40% coin and soybean bales (NTA 214.htm); Chinese granary grain mix; Izumo 2x2 ken (primary), 67 tsubo house, 2-4 horse stable; jin'ya coverage 37-42% (上嶋 report); samurai kawaya beside the guest room; south garden / north service strip.
+
 ## G. Contradictions found (for the GM report, FR-007)
 
-*None yet.*
+| # | entry | what the record said | what the sources say | rule / checks / maps affected | options |
+|---|---|---|---|---|---|
+| 1 | `research/buildings.md` "A compound wall is a building, not a boundary line" | neribei / dobei walls are 1.5-3 ft thick at the base; the vocabulary draws them at 3 ft | ja.wikipedia 塀 (城郭): plastered walls "1尺（約300ミリメートル）以上"; 攻城団: frameless neribei ~30 cm, only tsuijibei up to ~1 m | the Mode A wall stroke (3 ft) in `buildings.md`; `pack_audit.structures_on_walls` and the placer clearance are thickness-agnostic; every Mode A sheet in the pool | fix now: draw a county wall at ~1-1.5 ft (dobei) or keep 3 ft and relabel it a tsuijibei; future work: leave the 3 ft as a disclosed liberty (legibility of the wall stroke) |
