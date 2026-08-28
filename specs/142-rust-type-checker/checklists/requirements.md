@@ -31,4 +31,4 @@
 
 ## Notes
 
-- Validated 2026-08-28 in one pass; no failures.
+- Validated 2026-08-28; spec-fidelity round 1 returned four changes (the switch made contingent; mypy package removal and the constitution wording reserved to the GM; the six-class bar and the 2 s threshold removed as unrequested) - applied, round 2 requested.
