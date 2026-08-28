@@ -63,7 +63,7 @@ A session that records a deliberately-not-decided rule (an "open decision") also
 
 ### User Story 4 - No redundant pre-gate sweep, and the profile recorded (Priority: P4)
 
-A session about to background the full gate runs only the whole affected test file first - it does not also run a separate foreground pool-regen sweep that the gate re-covers. The rule's wording must first be verified against how the gate actually obtains renders (the stop-work ritual's render-sync needs renders present in the clone); if the gate's cache path does not produce them, the rule must say exactly where the regen still belongs. The 2026-08-16 profile itself is recorded as a dated block in the iteration-loop evidence doc.
+A session about to background the full gate runs only the whole affected test file first - it does not also run a separate foreground pool-regen sweep that the gate re-covers. The rule's wording must first be verified against how the gate actually obtains renders (the stop-work procedure's render-sync needs renders present in the clone); if the gate's cache path does not produce them, the rule must say exactly where the regen still belongs. The 2026-08-16 profile itself is recorded as a dated block in the iteration-loop evidence doc.
 
 **Why this priority**: ~38s of tool time per engine change, but only reaches the task's end time once Stories 1-2 shrink the review tail; recording the profile is what keeps the next efficiency pass honest.
 

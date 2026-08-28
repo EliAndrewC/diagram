@@ -90,7 +90,32 @@ def compute_delta(root: Path, base_ref: str = "origin/main") -> Delta:
     """The files our own commits changed since we diverged from `base_ref` (R1)."""
     base = _git(root, "merge-base", base_ref, "HEAD").strip()
     files = tuple(sorted(f for f in _git(root, "diff", "--name-only", base, "HEAD").splitlines() if f.strip()))
-    return Delta(base=base, files=files, engine=tuple(f for f in files if is_engine(f)))
+    return Delta(base=base, files=files, engine=tuple(f for f in files if is_engine(f) and _semantically_changed(root, base, f)))
+
+
+def _semantically_changed(root: Path, base: str, path: str) -> bool:
+    """Did `path` change in what a gate EXECUTES between `base` and HEAD? A comment-only, docstring-only
+    or formatting edit to engine Python answers no.
+
+    WHY (GM 2026-08-28, "Diagram merging"): the route used to be decided by PATH alone, so a comment
+    edit in `render_cache.py` routed a wording sweep GATED - and the gated route insists on a named,
+    complete spec-kit feature, which a wording sweep does not have. The engine KEY had already been
+    blind to comments since 2026-08-26 (`gate-stamp.py semantic_bytes`), so the gate would have
+    answered `already verified` in seconds; only the router still counted the edit. Same definition,
+    same code path (`content_id`), so the route and the key cannot disagree about what "changed" is.
+    A non-`.py` engine file (a generator's manifest) and a file added or removed on either side stay
+    engine: git already said they differ, and there is no semantic form to compare."""
+    if not path.endswith(".py"):
+        return True
+    from l7r.diagram.ci.state import _gate_stamp  # local: state imports nothing from here
+
+    gs = _gate_stamp(root)
+    try:
+        before = subprocess.run(["git", "-C", str(root), "show", f"{base}:{path}"], capture_output=True, check=True).stdout
+        after = subprocess.run(["git", "-C", str(root), "show", f"HEAD:{path}"], capture_output=True, check=True).stdout
+    except subprocess.CalledProcessError:  # added or deleted
+        return True
+    return bool(gs.content_id(before, path, root) != gs.content_id(after, path, root))
 
 
 SKILL_PY = ".claude/skills/diagram/l7r/"

@@ -89,7 +89,7 @@ docs point at the package.
 ## Phase 7: Polish & close-out
 
 - [x] T028 Final full verification: `make done` backgrounded from the clone (skip only if everything since the last green gate is docs-only), then confirm every success criterion - manifests byte-identical (SC-001), consumer diff scope (SC-002), file and function sizes (SC-003), the index maps every concern to one file (SC-004), suite + gate + regression corpus green with the same test count (SC-005), guard proven to fire (SC-006)
-- [x] T029 Update `spec.md` status Draft -> Implemented, check off this file's boxes with notes on anything that deviated, commit; stop-work ritual: `scripts/sync-with-main.sh done` from the clone (locked pull+push + render-sync); report to the GM with concrete verify steps
+- [x] T029 Update `spec.md` status Draft -> Implemented, check off this file's boxes with notes on anything that deviated, commit; stop-work procedure: `scripts/sync-with-main.sh done` from the clone (locked pull+push + render-sync); report to the GM with concrete verify steps
 
 ## Dependencies
 

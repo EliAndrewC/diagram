@@ -66,7 +66,7 @@ make done                                                                # once,
 regenerates every pool map - which is what proves no existing map regressed. It takes ~80 s. Do not
 re-run anything it just ran, and never invoke pytest serially (~7x slower here).
 
-## Stop-work ritual
+## Stop-work procedure
 
 From inside the clone, every time work stops:
 

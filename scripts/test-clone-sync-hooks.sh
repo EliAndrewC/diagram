@@ -10,7 +10,7 @@ set -uo pipefail
 
 HERE=$(cd "$(dirname "$0")" && pwd)
 HOOK=$HERE/clone-sync-hooks.sh
-RITUAL=$HERE/sync-with-main.sh
+SYNC=$HERE/sync-with-main.sh
 TMP=$(mktemp -d)
 # NB: cleanup is done EXPLICITLY at the end, NOT via a `trap ... EXIT` - an EXIT trap also fires in
 # the forked subshells that `&` background jobs and pipelines create, which would rm the fixtures
@@ -134,13 +134,13 @@ OUT=$(printf '{"session_id":"sid-me","tool_input":{"file_path":"%s/.clones/misce
       | CLONE_MAIN="$FMAIN3" CLONE_SESSIONS_DIR="$SESS" "$HOOK" pretool 2>&1); check "canonical clone diverged from main -> sync-in block" 2 $?
 
 # ---- sync-with-main.sh gm-assistant refusal ---------------------------------------------------
-OUT=$(cd "$FMAIN/.clones/gm-assistant" && CLONE_MAIN="$FMAIN" "$RITUAL" sync-in 2>&1); RC=$?
-check "ritual refuses to run from .clones/gm-assistant" 1 "$RC"
-case $OUT in *"FORBIDDEN"*) : ;; *) echo "FAIL  ritual refusal message missing 'FORBIDDEN': $OUT"; FAILED=1 ;; esac
+OUT=$(cd "$FMAIN/.clones/gm-assistant" && CLONE_MAIN="$FMAIN" "$SYNC" sync-in 2>&1); RC=$?
+check "procedure refuses to run from .clones/gm-assistant" 1 "$RC"
+case $OUT in *"FORBIDDEN"*) : ;; *) echo "FAIL  procedure refusal message missing 'FORBIDDEN': $OUT"; FAILED=1 ;; esac
 
 # ---- sync-with-main.sh establishes repo-local git config itself (GUARD_EDIT_OK: new test case) --
 # A fresh checkout of main lacks receive.denyCurrentBranch=updateInstead and a fresh clone copies
-# no committer identity; both refused the split repository's first push (2026-08-25). The ritual
+# no committer identity; both refused the split repository's first push (2026-08-25). The procedure
 # now sets them, so a bare fixture must push cleanly and end up configured.
 FMAIN5=$TMP/main5
 git init -q -b main "$FMAIN5"   # the push-time guards check against origin/main, so the fixture's branch must be main
@@ -154,10 +154,10 @@ mkdir -p "$FMAIN5/.clones/bare/.claude/skills/x" && echo 'def a(): return 1' > "
   echo c1 > "$FMAIN5/.clones/bare/g"; git -C "$FMAIN5/.clones/bare" add g scripts .claude; git -C "$FMAIN5/.clones/bare" commit -qm c1 )
 ( cd "$FMAIN5/.clones/bare" && python3 scripts/gate-stamp.py --write hooks )   # the commit changes scripts/, and a scripts/ change pushes only behind a green hooks-test stamp (GUARD_EDIT_OK: fixture follows the new gate)
 [ -z "$(git -C "$FMAIN5" config --get receive.denyCurrentBranch || true)" ] || { echo "FAIL  fixture: main5 already had denyCurrentBranch"; FAILED=1; }
-OUT=$(cd "$FMAIN5/.clones/bare" && HOME=$TMP CLONE_MAIN="$FMAIN5" CLONE_GITHUB="$FMAIN5" "$RITUAL" push 2>&1); RC=$?   # CLONE_GITHUB: the fixture main stands in for GitHub (GUARD_EDIT_OK: feature 130 made origin = GitHub)
-check "ritual push from a bare fixture (no updateInstead, no identity) succeeds" 0 "$RC"
-[ "$(git -C "$FMAIN5" config --get receive.denyCurrentBranch)" = updateInstead ] || { echo "FAIL  ritual did not set updateInstead on main: $OUT"; FAILED=1; }
-[ "$(git -C "$FMAIN5/.clones/bare" config --get user.email)" = eli@t ] || { echo "FAIL  ritual did not set the clone's identity from main's tip author: $OUT"; FAILED=1; }
+OUT=$(cd "$FMAIN5/.clones/bare" && HOME=$TMP CLONE_MAIN="$FMAIN5" CLONE_GITHUB="$FMAIN5" "$SYNC" push 2>&1); RC=$?   # CLONE_GITHUB: the fixture main stands in for GitHub (GUARD_EDIT_OK: feature 130 made origin = GitHub)
+check "procedure push from a bare fixture (no updateInstead, no identity) succeeds" 0 "$RC"
+[ "$(git -C "$FMAIN5" config --get receive.denyCurrentBranch)" = updateInstead ] || { echo "FAIL  procedure did not set updateInstead on main: $OUT"; FAILED=1; }
+[ "$(git -C "$FMAIN5/.clones/bare" config --get user.email)" = eli@t ] || { echo "FAIL  procedure did not set the clone's identity from main's tip author: $OUT"; FAILED=1; }
 [ "$(git -C "$FMAIN5" log -1 --format=%s)" = c1 ] || { echo "FAIL  push-to-checkout did not land on main5: $OUT"; FAILED=1; }
 
 # ---- prompt-mode: the .specify/feature.json re-track guard -------------------------------------

@@ -61,7 +61,7 @@ specs/013-near-ring-farmland/
 ├── plan.md              # this file
 ├── research.md          # done - Principle XII opening gate + mechanism decision
 ├── data-model.md        # this phase - entities: the knob, the near-ring band, cover sets, contracts
-├── quickstart.md        # this phase - how to iterate + the closing-gate ritual
+├── quickstart.md        # this phase - how to iterate + the closing-gate procedure
 └── tasks.md             # next (/speckit-tasks)
 ```
 
@@ -88,7 +88,7 @@ specs/013-near-ring-farmland/
 └── pool/provincial-cities/nagahara.gen.py # verify/adjust (second city)
 ```
 
-**Structure Decision**: single self-contained change inside the `/diagram` skill directory; no cross-package or webapp impact. Work happens in the session clone; the full-pool render + gate sweep runs via `make done` before the stop-work ritual.
+**Structure Decision**: single self-contained change inside the `/diagram` skill directory; no cross-package or webapp impact. Work happens in the session clone; the full-pool render + gate sweep runs via `make done` before the stop-work procedure.
 
 ## Design details (feeds /speckit-tasks)
 
@@ -121,7 +121,7 @@ Added near-ring **dry fields and gardens** house no one - they do not touch popu
 5. **Tunability proof**: add/adjust one dialed-down map (or a knob-down variant) proving the thin ring passes and reads visibly thinner.
 6. **Full-pool sweep (MANDATORY)**: `make done` - regenerate every pool map and run the whole gate; fix any downstream map the shared-engine change disturbed (Hoshizora, Nagahara, villages/hamlets must stay behavior-unchanged).
 7. **Principle XII closing gate**: review the rendered PNGs against Elements 1-5; record the outcome in the maps' review logs.
-8. **Stop-work ritual**: commit; `sync-with-main.sh done` (push + render-sync).
+8. **Stop-work procedure**: commit; `sync-with-main.sh done` (push + render-sync).
 
 ## Complexity Tracking
 

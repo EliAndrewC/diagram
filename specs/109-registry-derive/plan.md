@@ -129,4 +129,4 @@ the gencache precedent (exact path decided at implementation against `gencache.p
 4. **Docs + budget**: package CLAUDE.md registry entry + add-a-segment workflow; measure import
    times; record everything.
 5. **Full sweep once, at the end**: whole diagram test bed + ruff + mypy + coverage; docs and
-   memory-note closeout (FR-010); stop-work ritual.
+   memory-note closeout (FR-010); stop-work procedure.

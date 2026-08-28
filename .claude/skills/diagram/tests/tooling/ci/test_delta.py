@@ -92,6 +92,21 @@ def test_delta_sees_our_engine_change(repo: Path) -> None:
     assert d.engine == (S + "l7r/diagram/m.py",) and d.route == "GATED"
 
 
+def test_a_comment_only_engine_edit_routes_direct(repo: Path) -> None:
+    """GM 2026-08-28: a comment, docstring or formatting edit to engine Python is not engine content -
+    the gate's key has ignored it since 2026-08-26, and the router must agree (it used to send a wording
+    sweep down the gated route, which then demanded a spec-kit feature the sweep did not have)."""
+    commit(repo, S + "l7r/diagram/m.py", 'x = 3  # the stop-work ritual\n')
+    git(repo, "update-ref", "refs/remotes/origin/main", "HEAD")
+    commit(repo, S + "l7r/diagram/m.py", '"""doc."""\n\nx = 3  # the stop-work procedure\n')
+    d = compute_delta(repo)
+    assert d.files == (S + "l7r/diagram/m.py",) and d.engine == () and d.route == "DIRECT", d
+    commit(repo, S + "l7r/diagram/m.py", '"""doc."""\n\nx = 4\n')  # a token that runs re-opens the route
+    assert compute_delta(repo).route == "GATED"
+    commit(repo, S + "pool/hamlets/inashiro.json", "{}\n")  # a non-.py engine file has no semantic form: always engine
+    assert S + "pool/hamlets/inashiro.json" in compute_delta(repo).engine
+
+
 def test_a_clone_at_main_has_an_empty_delta(repo: Path) -> None:
     assert compute_delta(repo).files == ()
 

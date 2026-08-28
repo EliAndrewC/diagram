@@ -34,7 +34,7 @@ script already has a `test-` companion, and the two new ones get theirs.**
 process and cached; the per-operation cost is one dict lookup. See research R4.
 
 **Constraints**: must not slow the reference check measurably (SC-002); must not break the stop-work
-ritual (SC-004).
+procedure (SC-004).
 
 **Scale/Scope**: 18 CLI entry points, 13 existing make targets, 5 existing hook scripts, 1 script line
 in `sync-with-main.sh`.

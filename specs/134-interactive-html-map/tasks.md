@@ -98,6 +98,27 @@ below are measured, from the run-log and the browser).
 - [x] T32 **no drag-to-pan, a normal pointer** - the GM: *"I don't need to click and drag so we can get rid of that and make the mouse a normal pointer."* The drag handlers and the grab / hand cursors are gone; the browser test asserts a drag moves nothing, the cursor is `auto` over the stage and over a feature, and a click still opens the modal
       research: rendering
 
+- [x] T33 **performance (the GM's raster-layer question)** - measured first: 292,186 elements, 97% the scrub and marsh blades; scroll 200-270 ms/frame, scrub highlight 553 ms. Built `merge_primitives` (same-styled line/circle runs -> one `<path>`, HTML only): 11,682 elements, load 2.4 -> 0.4 s, scrub highlight 39 ms, 162 px of 1.4M differ at 4x. Raster layers priced and declined (gigabytes per class at 16x, or a blurred zoom) - research.md R5, spec FR-014; the hybrid offered as the next step
+      research: rendering
+
+- [x] T34 **no canopy tree under another's crown** (the GM's trees question, then *"Please make that engine change"*; an ENGINE change - every map's woods and belts draw differently). Measured first: 298 of Inashiro's 1,728 crowns wholly inside another (17%). Rule at both emitters (`_crown_seat_clear`, dominants first, seeded with the map's recorded crowns so clumps and stands see each other - the first cut checked per clump and left 53); after: 787 crowns, 0 subsumed, 94% still interlacing. Gate check `tree_crowns_not_subsumed` (gridded), its test, the pre-rule Inashiro frozen as the regression fixture; research + rule + point-of-change recorded
+      research: physical  (how a stand's canopy is structured - the GM's observation against the density entry)
+      - [x] research pass  - [x] source-reader confirmed  - [x] recorded and cited
+      note: research pass = research/vegetation.md 'Forest density and crown size' (the 13 ft grid, 500-800 stems/ha) plus the GM's own observation of real stands; no source reads on a canopy-vs-understory claim beyond the entry's own, so the source-reader box is ticked on that entry's standing verdict and the finding is labeled as the GM's observation, not a new citation
+
+- [x] T35 **the doubled trees the GM still saw after T34** were the highlight, not the stand: fill-only sub-glyphs (a conifer's apex disc, a coppice crown's sun disc) got the gold stroke and read as inner trees. The highlight now strokes only elements drawn with a stroke; research.md R2
+      research: rendering
+
+- [x] T36 **the belt's crowns at the researched size** (the GM: the commons' trees looked bigger than the belt's - *"Is that intentional?"* - then *"Please do that as a task"*). Measured: commons median r 9.0 ft, belt 4.5 ft; cause: `_draw_grove`'s pixel radius calibrated at 2 ft/px, never rescaled by ftpx. Now `CANOPY_R_FT` like the woods; after: belt median r 7.6 ft (~15 ft across), 325 belt crowns, 505 on the map, 0 subsumed. Engine change: every belt and copse redraws; villages within a pixel
+      research: physical  (how big a canopy crown is - the density entry's own figure)
+      - [x] research pass  - [x] source-reader confirmed  - [x] recorded and cited
+      note: research pass = research/vegetation.md 'Forest density and crown size' (5-8 m crowns), already read and cited there; no new claim
+
+- [x] T37 **hit regions for the scatter classes** (spec FR-015a): `page.hit_regions` builds an invisible `pointer-events: fill` polygon per recorded footprint (`commons`, `marshes`, `village_groves`, `bamboo_stands`) for the classes present, inserted right above the sheet; browser test: bare ground inside a footprint lights the class, drawn ink above it keeps the pointer, the region never paints
+      research: rendering
+- [x] T38 **one way of zooming** (FR-015b): Ctrl/Cmd + `+` `-` `0` and Ctrl+wheel intercepted and mapped to the page's zoom; browser test asserts the zoom moves and the browser's devicePixelRatio does not
+      research: rendering
+
 ## Owed at unlock (spec SC-008, FR-009; plan "Performance bookends")
 
 Not tasks of this feature - the spec (round-1 fidelity finding 5) holds the feature to the

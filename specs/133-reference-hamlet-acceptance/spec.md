@@ -106,10 +106,10 @@ to get things into main outside the context of features"* the GM suspected.
 
 **Acceptance Scenarios**:
 
-1. **Given** 133 has an open task and the clone's delta touches engine code, **When** the ritual
+1. **Given** 133 has an open task and the clone's delta touches engine code, **When** the procedure
    runs, **Then** the push is refused - since FR-006 the in-progress check fires first and names
    `IN PROGRESS` (the gated route's `feature-complete` condition sits behind it). OBSERVED on this
-   feature on 2026-08-25: the ritual refused this clone's own T05 push, naming
+   feature on 2026-08-25: the procedure refused this clone's own T05 push, naming
    `scripts/sync-with-main.sh` as outside the spec directory.
 2. **Given** a feature has an open task, **When** any push is attempted from a clone whose delta
    touches its spec directory or whose pointer names it, **Then** the push is refused on BOTH

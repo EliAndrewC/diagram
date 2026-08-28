@@ -18,7 +18,7 @@ shell guards.
 - [x] T05 `SWEEP_OK` first in `cohort`, `tripwire`, `test-full`; conditional in `done`/`ci-check`/`ci-merge` (FULL), `ci-check` (TARGET), `maps` (SCOPE=all); `REMOTE_OK` first in `ci-check`, `ci-image`; `audit` shows switches
 - [x] T06 fixture test proving each Makefile refusal fires under the lock / remote off and that `reference`, `quick`, `done` are untouched
 
-## Phase 3 - the dispatcher and the ritual
+## Phase 3 - the dispatcher and the procedure
 
 - [x] T07 `decision.decide` gains `remote_off`; verdict table; tests
 - [x] T08 `ci/__main__.py`: remote off -> no client constructed; check/image refuse; merge -> LOCAL-GATED verdict; `--route` prints GATED-LOCAL; tests
@@ -56,4 +56,4 @@ shell guards.
 ## Phase 6 - throw the switches for feature 133
 
 - [x] T16 `make ci-off` and `make scope-lock` thrown on the GM's instruction of 2026-08-25 (the two commits before this feature's landing)
-- [x] T17 stop-work ritual: `sync-with-main.sh done` lands 132 through the new GATED-LOCAL route (remote already off) on the local-done rule
+- [x] T17 stop-work procedure: `sync-with-main.sh done` lands 132 through the new GATED-LOCAL route (remote already off) on the local-done rule

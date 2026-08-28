@@ -315,7 +315,7 @@ compound:       ## draw a Mode A compound plan                ARGS=<out.svg>
 	$(RUN).compound $(ARGS)
 
 # RENDER-SYNC IS REFUSAL-ONLY AND NOT SUBJECT TO REFERENCE-FIRST (FR-009a, adjudicated at spec round
-# 3). It runs in MAIN's tree during the stop-work ritual, and CLAUDE.md is explicit that render-sync
+# 3). It runs in MAIN's tree during the stop-work procedure, and CLAUDE.md is explicit that render-sync
 # is the ONLY thing a session runs there - "no generators, no tests". A reference check ahead of it
 # would be a second generator run in main, which that rule forbids. It also re-renders from main's
 # committed tip, which is already gate-verified, so the check would re-prove what the clone proved.
@@ -386,7 +386,7 @@ citybudget:     ## the city/capital space-budget planner
 # A GREEN RUN STAMPS THE `hooks` AREA (gate-stamp.py, 2026-08-25 - GUARD_EDIT_OK: adding a gate).
 # scripts/*.sh and scripts/*.py are gated code, and this is the gate that covers them; the push-time
 # guard refuses a scripts/ change whose stamp is missing or stale, exactly as it refuses engine
-# Python without a green `make done`. Motivating case: a RED hooks-test followed by `commit; ritual`
+# Python without a green `make done`. Motivating case: a RED hooks-test followed by `commit; procedure`
 # landed on main, because nothing at push time knew the guards had been edited.
 hooks-test:     ## run every scripts/test-*-hooks.sh, and prove each guard still has a companion
 	@root=$$(git rev-parse --show-toplevel); fail=""; n=0; skipped=0; \
@@ -504,7 +504,7 @@ ci-merge:       ## the merge action's gated route (PAID) - called by sync-with-m
 	@$(if $(FULL),$(SWITCH) check scope "ci-merge FULL=1",true)
 	@$(if $(FULL),$(MAKE) --no-print-directory bypass-audit REF_WHY="$(REF_WHY)" && $(MAKE) --no-print-directory commit-permitted,true)
 # (GUARD_EDIT_OK: feature 132 - FULL is a sweep under the scope lock. Remote-off is NOT checked here: the dispatcher
-#  handles it itself, because with remote off it must still produce the LOCAL-GATED verdict the push ritual reads)
+#  handles it itself, because with remote off it must still produce the LOCAL-GATED verdict the push procedure reads)
 	$(RUN).ci merge $(if $(FULL),--full,)
 
 # the operator's `permitted` answer becomes a commit, so the build finds it in the tree it tests (FR-025)

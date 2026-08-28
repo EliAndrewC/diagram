@@ -172,7 +172,7 @@ Two things went wrong while taking the baseline, both cheap and both worth recor
 
 The most expensive thing that happened in this feature, and a sharper instance of R8.
 
-Between this work going green at `56f6dfb` and its stop-work ritual, a peer session landed feature
+Between this work going green at `56f6dfb` and its stop-work procedure, a peer session landed feature
 119's second half: the entire engine moved from `.claude/skills/diagram/<pkg>/` to
 `.claude/skills/diagram/l7r/diagram/<pkg>/`, making `l7r` a PEP 420 namespace portion shared with
 the L7R Toolkit webapp. So the pull produced exactly the conflict it should have:

@@ -27,7 +27,10 @@ svg#map { position: absolute; left: 0; top: 0; display: block; }
    subtrees - never the whole 175,000-element tree (research.md R2). Filled things go gold; things
    drawn with fill="none" (a bund's stroke copy, an outline) keep their empty body and take the
    stroke color only, so hovering the bund never floods the paddies. */
-g.f.on, g.f.on * { stroke: var(--hl-stroke) !important; }
+/* Only what is DRAWN with a stroke takes the highlight stroke (GM 2026-08-28: a conifer's centered
+   apex disc and a coppice crown's off-center sun disc are parts of ONE tree glyph; ringed by the
+   highlight they read as a smaller tree inside the crown). A fill-only mark just turns gold. */
+g.f.on[stroke]:not([stroke="none"]), g.f.on *[stroke]:not([stroke="none"]) { stroke: var(--hl-stroke) !important; }
 g.f.on:not([fill="none"]), g.f.on *:not([fill="none"]) { fill: var(--hl) !important; }
 /* The explanation is a NON-modal dialog over our own shade (see page.js `open`): a modal one makes
    the whole map inert and costs a full restyle of the 175,000-element tree per open and close. */

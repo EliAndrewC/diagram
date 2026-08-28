@@ -104,7 +104,7 @@ regenerates on a warm cache; grep finds no stale doctrine.
       (warm_gate >= 5% faster than full_gate) and SC-004 (green cold + warm); ledger block
       appended. Recorded 2026-08-16 (remeasured after the key-poisoning fix; the first measurement's warm gate had no working hits): cold 190.1 s, warm 171.2 s - 9.9% faster (SC-001 MET)
 - [x] T017 Final gate: satisfied by the remeasured timings run (full_gate cold green 3:10.1 + warm_gate green 2:51.2 on the final tree; only markdown changed after). Then the
-      stop-work ritual: commit, `scripts/sync-with-main.sh done`.
+      stop-work procedure: commit, `scripts/sync-with-main.sh done`.
 
 ## Dependencies
 

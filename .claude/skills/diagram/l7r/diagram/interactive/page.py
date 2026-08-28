@@ -39,6 +39,58 @@ _ATTR_FILL = re.compile(r'\sfill="[^"]*"')
 UNCLASSED_CAP = 20
 
 
+_LINE = re.compile(r'<line ((?:[a-z0-9-]+="[^"]*"\s*)+)/>')
+_CIRCLE = re.compile(r'<circle ((?:[a-z0-9-]+="[^"]*"\s*)+)/>')
+_ATTR = re.compile(r'([a-z0-9-]+)="([^"]*)"')
+_RUN = re.compile(r"(?:<(?:line|circle) (?:[a-z0-9-]+=\"[^\"]*\"\s*)+/>){2,}")
+
+
+def _attrs(body: str) -> dict[str, str]:
+    return dict(_ATTR.findall(body))
+
+
+def merge_primitives(s: str) -> str:
+    """MANY SAME-STYLED LINES OR CIRCLES BECOME ONE <path> (feature 134, GM 2026-08-28 on performance).
+    The scrub scatter and the marsh alone are 282,000 of Inashiro's 289,000 drawn elements - one <line>
+    per blade - and every one is a DOM node the browser styles, lays out and hit-tests: measured
+    200-270 ms per scroll frame, 100-300 ms per zoom step, ~550 ms to highlight the scrub. A run of
+    consecutive <line>s (or <circle>s) whose attributes other than their coordinates are identical
+    draws the same ink as one <path> carrying those attributes and a `d` of M/L (or arc) segments.
+    Applied to the HTML target only; the SVG and PNG never see it (FR-010). Vector, so the 16x zoom
+    stays crisp and the class groups keep their hit-testing - which is what a raster layer per class
+    would have cost (at 16x a full-map raster is ~46,000 px square; see research.md R5)."""
+
+    def _merge_run(m: re.Match[str]) -> str:
+        items = [(t, _attrs(a)) for t, a in re.findall(r'<(line|circle) ((?:[a-z0-9-]+="[^"]*"\s*)+)/>', m.group(0))]
+        out: list[str] = []
+        i = 0
+        while i < len(items):
+            tag, at = items[i]
+            coord = ("x1", "y1", "x2", "y2") if tag == "line" else ("cx", "cy", "r")
+            style = {k: v for k, v in at.items() if k not in coord}
+            j = i
+            d: list[str] = []
+            while j < len(items) and items[j][0] == tag and {k: v for k, v in items[j][1].items() if k not in coord} == style:
+                a = items[j][1]
+                if tag == "line":
+                    d.append(f"M{a['x1']},{a['y1']}L{a['x2']},{a['y2']}")
+                else:
+                    r = float(a["r"])
+                    d.append(f"M{float(a['cx']) - r:g},{a['cy']}a{r:g},{r:g} 0 1 0 {2 * r:g},0a{r:g},{r:g} 0 1 0 {-2 * r:g},0")
+                j += 1
+            if j - i == 1:
+                out.append(m.group(0)[0:0] + (f"<{tag} " + " ".join(f'{k}="{v}"' for k, v in at.items()) + "/>"))
+            else:
+                if tag == "circle" and "fill" not in style:
+                    style = {**style}  # a circle's default fill is black; an arc path's is too - nothing to add
+                attrs = " ".join(f'{k}="{v}"' for k, v in style.items())
+                out.append(f'<path d="{"".join(d)}"' + (" " + attrs if attrs else "") + ("" if tag == "circle" else ' fill="none"' if "fill" not in style else "") + "/>")
+            i = j
+        return "".join(out)
+
+    return _RUN.sub(_merge_run, s)
+
+
 def _open(key: str) -> str:
     return f'<g class="f f-{slug(key)}" data-k="{html.escape(key, quote=True)}">'
 
@@ -50,7 +102,7 @@ def wrap(s: str, tag: ClsTag) -> str:
     if tag is None or tag == NOT_HIGHLIGHTED or not s:
         return s
     if isinstance(tag, str):
-        return _open(tag) + s + "</g>"
+        return _open(tag) + merge_primitives(s) + "</g>"
     if isinstance(tag, Split):
         fill_copy = _ATTR_STROKE.sub(' stroke="none"', s)
         stroke_copy = _ATTR_FILL.sub(' fill="none"', s)
@@ -157,11 +209,50 @@ def _asset(name: str) -> str:
         return fh.read()
 
 
-def render_page(strings: Sequence[str], tags: Sequence[ClsTag], name: str, meta: dict[str, Any] | None = None) -> str:
+#: Which recorded footprints become HIT REGIONS, by class: (manifest key, role -> class). A scatter
+#: feature is mostly empty ground between its marks - the GM (2026-08-28): "moving my mouse over the
+#: scrublands is surprisingly difficult because I need my mouse to be over one of these specific trees
+#: or little lines" - so the page adds an invisible polygon of the feature's recorded footprint that
+#: takes the pointer wherever nothing drawn above it does.
+HIT_REGIONS: tuple[tuple[str, dict[str, str]], ...] = (
+    ("commons", {"grazing": "scrub and rough grazing", "commons": "scrub and rough grazing", "woodland": "woodland commons"}),
+    ("marshes", {"*": "marsh"}),
+    ("village_groves", {"windbreak": "windbreak", "copse": "copse"}),
+    ("bamboo_stands", {"homestead": "homestead bamboo", "*": "shared bamboo grove"}),
+)
+
+
+def hit_regions(manifest: dict[str, Any] | None, present: set[str]) -> str:
+    """Invisible footprint polygons for the scatter classes present on this map. `fill="none"` with
+    `pointer-events: fill` hit-tests the area without painting it, and the highlight rules skip a
+    fill-less, stroke-less element, so a region never lights up itself. Placed at the BOTTOM of the
+    stack (just above the sheet): everything drawn later - a house, a lane, a paddy - is above it and
+    keeps the pointer; only bare ground inside the footprint falls through to the class."""
+    if not manifest:
+        return ""
+    out: list[str] = []
+    for key, roles in HIT_REGIONS:
+        for rec in manifest.get(key) or []:
+            if not isinstance(rec, dict) or not rec.get("poly"):
+                continue
+            cls = roles.get(str(rec.get("role", "*")), roles.get("*"))
+            if cls is None or cls not in present:
+                continue
+            pts = " ".join(f"{float(x):.1f},{float(y):.1f}" for x, y in rec["poly"])
+            out.append(_open(cls) + f'<polygon class="hit" points="{pts}" fill="none" style="pointer-events: fill"/></g>')
+    return "".join(out)
+
+
+def render_page(strings: Sequence[str], tags: Sequence[ClsTag], name: str, meta: dict[str, Any] | None = None, manifest: dict[str, Any] | None = None) -> str:
     """The whole page as one string - `write_html` writes it; tests read it."""
-    svg = "\n".join(wrap(s, t) for s, t in zip(strings, tags, strict=True))
+    present = present_classes(tags)
+    wrapped = [wrap(s, t) for s, t in zip(strings, tags, strict=True)]
+    # the hit regions go right after the SHEET (the first "-"-tagged string), under everything drawn
+    sheet = next((i for i, t in enumerate(tags) if t == NOT_HIGHLIGHTED), 0)
+    wrapped.insert(sheet + 1, hit_regions(manifest, present))
+    svg = "\n".join(wrapped)
     svg = svg.replace("<svg ", '<svg id="map" ', 1)
-    data = explanations(present_classes(tags))
+    data = explanations(present)
     blob = json.dumps(data, ensure_ascii=False).replace("</", "<\\/")
     title = html.escape(name)
     # NO HEADER ON THE PAGE (GM 2026-08-28: "we can get rid of the entire header") - the map already
@@ -187,6 +278,6 @@ def render_page(strings: Sequence[str], tags: Sequence[ClsTag], name: str, meta:
     )
 
 
-def write_html(path: str, strings: Sequence[str], tags: Sequence[ClsTag], name: str, meta: dict[str, Any] | None = None) -> None:
+def write_html(path: str, strings: Sequence[str], tags: Sequence[ClsTag], name: str, meta: dict[str, Any] | None = None, manifest: dict[str, Any] | None = None) -> None:
     with open(path, "w", encoding="utf-8") as fh:
-        fh.write(render_page(strings, tags, name, meta))
+        fh.write(render_page(strings, tags, name, meta, manifest))

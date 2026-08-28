@@ -7,7 +7,7 @@ actually automate it yet."* Implementation starts on a separate go from the GM.
 
 ## Summary
 
-The stop-work ritual's push gains a second route. A delta with diagram engine code in it goes to
+The stop-work procedure's push gains a second route. A delta with diagram engine code in it goes to
 CodeBuild: the clone's HEAD is pushed to a GitHub mailbox branch, a build on the concurrency-1
 merge project merges the latest GitHub `main` into it, runs the same reference-scope `make done`
 the laptop runs, and on green fast-forward-pushes the merge to `main` and records the tree as
@@ -207,7 +207,7 @@ way it already reaches render-sync: `make --no-print-directory ci-merge`.
    overwritten by the next push (mailbox branches are the one place a force push is fine, and the
    ruleset does not cover them).
 5. **The mirror pull uses `--ff-only`.** If it ever fails, someone committed in `/diagram`
-   directly, which the existing guards forbid; the ritual stops and says so.
+   directly, which the existing guards forbid; the procedure stops and says so.
 6. **The FULL door on the build side** (R11): `bypass-audit` gains one more branch, evaluated only
    when `CODEBUILD_BUILD_ID` is set AND a `permitted` entry exists in `dev/bypass-log/` whose
    `target` is `done FULL` and whose `commit` is an ancestor of `HEAD` and not an ancestor of

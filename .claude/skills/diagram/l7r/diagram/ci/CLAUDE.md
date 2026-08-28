@@ -68,7 +68,7 @@ do not want to run anything on AWS"* come first, and the speedup second.
 The build parks for at most `PARK_TIMEOUT_S` (120 s, ~$0.16) if the dispatcher dies (FR-036). A
 started build that is stopped costs its partial minute; a queued one costs nothing. Only the id
 this dispatcher got back is ever stopped - nothing on the AWS side is shared between sessions;
-the merge project's single slot serializes merges, and the local ritual lock is the only shared
+the merge project's single slot serializes merges, and the local sync lock is the only shared
 local state.
 
 ## What travels to the build, and how

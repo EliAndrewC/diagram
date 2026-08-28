@@ -54,7 +54,7 @@ In a scratch copy, delete each guard in turn and run the tests. Each removal mus
 failure naming that guard. **A guard whose test still passes when the guard is gone is not
 implemented** - it is decoration, and this is the check that says so.
 
-## 7. The stop-work ritual still works (SC-004)
+## 7. The stop-work procedure still works (SC-004)
 
 ```
 scripts/sync-with-main.sh done
