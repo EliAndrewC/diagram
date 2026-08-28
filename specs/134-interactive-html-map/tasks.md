@@ -114,6 +114,11 @@ below are measured, from the run-log and the browser).
       - [x] research pass  - [x] source-reader confirmed  - [x] recorded and cited
       note: research pass = research/vegetation.md 'Forest density and crown size' (5-8 m crowns), already read and cited there; no new claim
 
+- [x] T37 **hit regions for the scatter classes** (spec FR-015a): `page.hit_regions` builds an invisible `pointer-events: fill` polygon per recorded footprint (`commons`, `marshes`, `village_groves`, `bamboo_stands`) for the classes present, inserted right above the sheet; browser test: bare ground inside a footprint lights the class, drawn ink above it keeps the pointer, the region never paints
+      research: rendering
+- [x] T38 **one way of zooming** (FR-015b): Ctrl/Cmd + `+` `-` `0` and Ctrl+wheel intercepted and mapped to the page's zoom; browser test asserts the zoom moves and the browser's devicePixelRatio does not
+      research: rendering
+
 ## Owed at unlock (spec SC-008, FR-009; plan "Performance bookends")
 
 Not tasks of this feature - the spec (round-1 fidelity finding 5) holds the feature to the

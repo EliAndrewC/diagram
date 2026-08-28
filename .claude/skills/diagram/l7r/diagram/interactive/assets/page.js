@@ -143,6 +143,11 @@
   // document scrolls. Zoom is the buttons and the keys only.
   stage.addEventListener("wheel", function (e) {
     e.preventDefault();
+    if (e.ctrlKey || e.metaKey) {  // the browser's pinch / Ctrl+wheel zoom gesture becomes OUR zoom, about the pointer (GM 2026-08-28: one way of zooming)
+      var r = stage.getBoundingClientRect();
+      zoomAt(Math.exp(-e.deltaY * 0.01), e.clientX - r.left, e.clientY - r.top);
+      return;
+    }
     view.tx -= e.deltaX;
     view.ty -= e.deltaY;
     apply();
@@ -154,13 +159,15 @@
     else if (b.dataset.z === "out") zoomAt(0.5, c[0], c[1]);
     else fit();
   });
+  // Ctrl/Cmd + / - / 0 are INTERCEPTED and drive our zoom instead of the browser's (GM 2026-08-28:
+  // "it would be better if there was only one way of zooming"). The browser's menu zoom cannot be
+  // intercepted from a page; the keyboard and Ctrl+wheel can.
   document.addEventListener("keydown", function (e) {
     if (dialog.open) { if (e.key === "Escape") closeDialog(); return; }
-    if (e.ctrlKey || e.metaKey) return;
     var c = center();
-    if (e.key === "+" || e.key === "=") zoomAt(2, c[0], c[1]);
-    else if (e.key === "-") zoomAt(0.5, c[0], c[1]);
-    else if (e.key === "0") fit();
+    if (e.key === "+" || e.key === "=") { e.preventDefault(); zoomAt(2, c[0], c[1]); }
+    else if (e.key === "-" || e.key === "_") { e.preventDefault(); zoomAt(0.5, c[0], c[1]); }
+    else if (e.key === "0") { e.preventDefault(); fit(); }
   });
   // NO DRAG-TO-PAN (GM 2026-08-28: "I don't need to click and drag so we can get rid of that and
   // make the mouse a normal pointer"): the wheel scrolls, the buttons and keys zoom, and a press is

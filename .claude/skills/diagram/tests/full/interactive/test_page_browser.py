@@ -150,7 +150,7 @@ def synthetic(browser: Any) -> Iterator[Page]:
     with tempfile.TemporaryDirectory() as d:
         path = os.path.join(d, "synthetic.html")
         with open(path, "w", encoding="utf-8") as fh:
-            fh.write(render_page(strings, tags, "Synthetic", {"ftpx": 1.0}))
+            fh.write(render_page(strings, tags, "Synthetic", {"ftpx": 1.0}, {"marshes": [{"role": "toe", "poly": [[220, 100], [290, 100], [290, 190], [220, 190]]}]}))
         page = Page(browser, path)
         yield page
         page.close()
@@ -250,6 +250,38 @@ def test_the_wheel_scrolls_and_a_press_is_only_a_click(synthetic: Page) -> None:
     synthetic.page.wait_for_timeout(50)
     assert synthetic.dialog()["k"] == "farmhouse"
     synthetic.page.keyboard.press("Escape")
+    synthetic.js("() => window.l7rMap.fitWidth()")
+
+
+def test_bare_ground_inside_a_footprint_lights_its_class_and_drawn_ink_above_it_still_wins(synthetic: Page) -> None:
+    """The GM (2026-08-28): hovering the scrub only worked over a blade; now the footprint takes the pointer."""
+    synthetic.js("() => window.l7rMap.fit()")
+    x, y = synthetic.js("() => { const r = document.querySelector('polygon.hit').getBoundingClientRect(); return [r.x + r.width * 0.5, r.y + r.height * 0.9]; }")
+    synthetic.page.mouse.move(x, y)
+    synthetic.page.wait_for_timeout(30)
+    assert synthetic.on() == {"marsh": 3}, "bare ground inside the marsh footprint lights the marsh - both patches and the region's own group"
+    assert synthetic.js("() => getComputedStyle(document.querySelector('g.f.on polygon.hit')).fill") == "none", "the region itself paints nothing when highlighted"
+    synthetic.page.mouse.move(1, 199)
+    synthetic.page.wait_for_timeout(30)
+    assert synthetic.on() == {}
+
+
+def test_ctrl_zoom_keys_and_ctrl_wheel_drive_the_page_zoom(synthetic: Page) -> None:
+    """The GM (2026-08-28): one way of zooming - Ctrl + / - / 0 and Ctrl+wheel are ours."""
+    synthetic.js("() => window.l7rMap.fit()")
+    synthetic.page.keyboard.press("Control+=")
+    assert abs(synthetic.js("() => window.l7rMap.zoom()") - 2.0) < 1e-9
+    synthetic.page.keyboard.press("Control+-")
+    assert abs(synthetic.js("() => window.l7rMap.zoom()") - 1.0) < 1e-9
+    synthetic.page.mouse.move(700, 500)
+    synthetic.page.keyboard.down("Control")
+    synthetic.page.mouse.wheel(0, -300)
+    synthetic.page.keyboard.up("Control")
+    synthetic.page.wait_for_timeout(30)
+    assert synthetic.js("() => window.l7rMap.zoom()") > 1.5, "Ctrl+wheel zooms (a plain wheel scrolls)"
+    synthetic.page.keyboard.press("Control+0")
+    assert abs(synthetic.js("() => window.l7rMap.zoom()") - 1.0) < 1e-9
+    assert synthetic.js("() => window.devicePixelRatio") == 1, "the browser's own zoom did not change"
     synthetic.js("() => window.l7rMap.fitWidth()")
 
 

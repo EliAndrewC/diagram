@@ -336,6 +336,16 @@ hover/click checks for the classes it contains.
   Raster layers were priced and NOT built: at 16x a full-map layer is ~46,000 px square (gigabytes per
   class), and at any smaller size the zoom the GM asked for blurs; recorded in Decisions Recorded and
   offered to the GM as the next step if the merged page is still not responsive enough.
+- **FR-015 (hit regions; one zoom) - the GM's follow-up of 2026-08-28, verbatim in `gm-request.md`**:
+  (a) a scatter feature MUST take the pointer over its whole footprint, not only over its marks
+  (*"if my mouse is just over the scrub land generally, then all of the scrub land is lit up"*) - the
+  scrub, the marsh, the woodland commons, the windbreak, the copse and the bamboo stands (*"some sort
+  of box where my mouse just has to be inside the box"*) each get an invisible polygon of their
+  RECORDED footprint at the bottom of the stack, so anything drawn above it (a house, a lane, a
+  paddy) still wins the pointer; the region never paints and never lights up itself; the background
+  is not changed (*"I don't think we should do that"*). (b) Ctrl/Cmd + `+`, `-`, `0` and Ctrl+wheel
+  drive the page's own zoom (*"only one way of zooming"*); the browser's menu zoom cannot be
+  intercepted by a page and is left as it is.
 - **FR-012 (verified in a browser)**: the hover, highlight, click and modal behaviors MUST be
   proven by an automated headless-browser test in the suite (constitution VI - a page that was
   never opened has not been verified), running on the reference hamlet's page.
