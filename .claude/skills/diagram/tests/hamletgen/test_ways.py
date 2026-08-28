@@ -752,3 +752,48 @@ def test_stop_at_network_leaves_a_link_that_meets_nothing_on_the_way() -> None:
     link = [(0.0, 0.0), (30.0, 0.0), (60.0, 0.0)]
     assert hg.ways._stop_at_network(link, []) == link
     assert hg.ways._stop_at_network(link, [((0.0, 50.0), (60.0, 50.0))]) == link
+
+
+# ---- feature 146: the track's fallbacks, which no cohort seed has needed --------------------------------
+
+
+def _walled_settlement() -> tuple[object, object]:
+    """A Settlement whose homesteads form a WALL across the middle of the canvas, so a run from north to
+    south cannot go straight and cannot be clipped clear - the case `_thread_the_fabric`'s detour exists for."""
+    from l7r.diagram.settlement import Settlement
+
+    from ._builders import a_plan
+
+    s = Settlement(1400, 1400, seed=1)
+    s.meta(name="W", scale="hamlet", ftpx=1, down_deg=90)
+    for i in range(9):
+        x = 200.0 + i * 120.0
+        s.M["houses"].append({"x": x, "y": 700.0, "w": 110.0, "h": 90.0, "rot": 0})
+    plan = a_plan()
+    plan.envelope = [(50.0, 50.0), (1350.0, 50.0), (1350.0, 1350.0), (50.0, 1350.0)]
+    return s, plan
+
+
+def test_thread_the_fabric_takes_a_detour_when_neither_the_route_nor_the_clip_clears() -> None:
+    from l7r.diagram.hamletgen.ways import _crosses_fabric, _homestead_polys, _thread_the_fabric
+
+    s, plan = _walled_settlement()
+    run = [(700.0, 200.0), (700.0, 1200.0)]  # straight through the middle house
+    fabric = [poly for poly, _o, _k in _homestead_polys(s)]
+    assert _crosses_fabric(run, fabric, 8.0), "the fixture must actually be blocked, or the fallback proves nothing"
+    out = _thread_the_fabric(s, plan, run, gap=8.0)
+    assert len(out) >= 2
+    assert out != run, "the straight run was kept - the detour never ran"
+
+
+def test_thread_the_fabric_returns_the_run_untouched_when_there_is_no_fabric() -> None:
+    from l7r.diagram.hamletgen.ways import _thread_the_fabric
+    from l7r.diagram.settlement import Settlement
+
+    from ._builders import a_plan
+
+    s = Settlement(800, 800, seed=1)
+    s.meta(name="E", scale="hamlet", ftpx=1, down_deg=90)
+    run = [(100.0, 100.0), (700.0, 700.0)]
+    assert _thread_the_fabric(s, a_plan(), run) == run  # nothing standing: nothing to thread
+    assert _thread_the_fabric(s, a_plan(), [(1.0, 1.0)]) == [(1.0, 1.0)]  # a one-point run is not a run
