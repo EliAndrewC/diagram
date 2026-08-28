@@ -11,7 +11,6 @@ from tests.check_village._builders import (
     _POND_OUTLIER,
     _cap_gov,
     _feature_022_manifest,
-    _tv,
     bldg,
     bstone,
     exground,
@@ -80,67 +79,6 @@ def test_mausoleum_draws_with_either_gate_orientation():
     s.mausoleum(900, 900, 120, 90, label="Mausoleum", gate_dir="south")
     s.mausoleum(600, 600, 120, 90, gate_dir="west")
     assert len(s.M["mausoleums"]) == 2
-
-
-def test_twin_axes_geometric_fallbacks_no_meta_knobs():
-    ax = check_village.twin_axes(_tv(meta={"name": "G"}))
-    assert ax["cluster_region"] == "W"  # cluster sits W of the field center
-    assert ax["cluster_shape"] == "tall"  # bbox 60 wide x 140 tall -> r < 0.7
-    assert ax["headman_side"] == "N"  # headman N of the cluster centroid
-    assert ax["water_source"] == "NW"  # pond NW of the field center
-    assert ax["lane_skeleton"] is None  # no declared knob, no geometric fallback
-    assert ax["focal_set"] == frozenset()
-    assert isinstance(ax["grain_orient"], int)
-
-
-def test_twin_axes_round_cluster_center_headman_and_dir8_deadzone():
-    # a square cluster CENTERED on the field center: round shape, headman AT the centroid (center),
-    # and cluster_region hits _dir8's zero-vector dead zone -> None
-    houses = [
-        {"x": 300, "y": 300, "role": "plain"},
-        {"x": 400, "y": 300, "role": "plain"},
-        {"x": 300, "y": 400, "role": "plain"},
-        {"x": 400, "y": 400, "role": "plain"},
-        {"x": 350, "y": 350, "role": "headman"},
-    ]
-    ax = check_village.twin_axes({"meta": {"name": "R", "down_deg": 45}, "houses": houses, "fields": [{"bbox": [0, 0, 700, 700]}]})
-    assert ax["cluster_shape"] == "round"  # w == h
-    assert ax["headman_side"] == "center"  # headman at the cluster center
-    assert ax["cluster_region"] is None  # centroid == field center -> dead zone
-    assert ax["water_source"] is None and ax["grain_orient"] is None  # no pond, no dry_plots
-
-
-def test_twin_axes_wide_cluster_and_bare_manifest():
-    wide = [{"x": 100, "y": 300, "role": "plain"}, {"x": 500, "y": 300, "role": "plain"}, {"x": 300, "y": 320, "role": "plain"}]
-    axw = check_village.twin_axes({"meta": {"name": "W", "down_deg": 45}, "houses": wide, "fields": [{"bbox": [0, 0, 700, 700]}]})
-    assert axw["cluster_shape"] == "wide"  # 400 wide x 20 tall -> r > 1.4
-    # a bare manifest: every geometric axis is 'no evidence'
-    ax = check_village.twin_axes({"meta": {"name": "bare", "down_deg": 45}})
-    assert ax["cluster_region"] is None and ax["cluster_shape"] is None and ax["headman_side"] is None
-    assert ax["water_source"] is None and ax["grain_orient"] is None and ax["focal_set"] == frozenset()
-
-
-def test_twin_axes_pond_layout_distinguishes_mosaic_from_grid():
-    # GM 2026-07-22: a mosaic dike-pond (桑基魚塘) and a surveyed grid polder (圩田) of the same water
-    # direction are different KINDS of place; pond_layout is a twin axis so the detector counts the difference.
-    assert "pond_layout" in check_village.TWIN_AXES
-    assert check_village.twin_axes({"meta": {"name": "G", "down_deg": 45}})["pond_layout"] == "grid"  # default
-    assert check_village.twin_axes({"meta": {"name": "M", "down_deg": 45, "pond_layout": "mosaic"}})["pond_layout"] == "mosaic"
-    grid = check_village.twin_axes({"meta": {"name": "G", "down_deg": 45, "field_archetype": "polder_grid"}})
-    mosaic = check_village.twin_axes({"meta": {"name": "M", "down_deg": 45, "pond_layout": "mosaic"}})
-    assert check_village.twin_diff_count(grid, mosaic) >= 1  # they differ on at least the pond_layout axis
-
-
-def test_twin_settlement_form_is_an_axis():
-    # nucleated blob vs linear ribbon - the biggest structural read - is a twin-detector axis; it defaults
-    # to 'nucleated' when a map does not declare it (so an undeclared map is not spuriously "different")
-    assert "settlement_form" in check_village.TWIN_AXES
-    a = _tv(meta={"name": "A", "settlement_form": "nucleated"})
-    b = _tv(meta={"name": "B", "settlement_form": "linear"})
-    ax, bx = check_village.twin_axes(a), check_village.twin_axes(b)
-    assert ax["settlement_form"] == "nucleated" and bx["settlement_form"] == "linear"
-    assert check_village.twin_axes(_tv(meta={"name": "C"}))["settlement_form"] == "nucleated"  # default
-    assert check_village.twin_diff_count(ax, bx) == 1  # differ on settlement_form alone (otherwise identical)
 
 
 def test_convex_hull_degenerate_point_clouds():

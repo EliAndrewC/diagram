@@ -1,6 +1,5 @@
 """gate() - the registry driver - plus the twin-detector helpers and the CLI main() (feature 024 package split; bodies verbatim)."""
 
-import math
 from typing import Any
 
 from .common_01_geometry import Manifest, load
@@ -98,109 +97,6 @@ def gate(M: Manifest, verbose: bool = True, only: set[str] | None = None) -> lis
 #     few px?". The 4-of-7 threshold is the tuning target; recorded with its reasoning in settlements.md.
 TWIN_AXES = ("cluster_region", "cluster_shape", "headman_side", "lane_skeleton", "water_source", "focal_set", "grain_orient", "settlement_form", "pond_layout")
 TWIN_MIN_DIFF = 4  # a same-down_deg pair must differ on >= this many of the 8 axes to read as distinct
-
-
-def _dir8(dx: float, dy: float, dead: float = 1e-9) -> str | None:
-    """Bucket a vector into one of 8 compass labels (N/NE/E/SE/S/SW/W/NW), y DOWN = south. Returns None
-    for a ~zero vector (no meaningful direction). Coarse on purpose: a village on the W margin reads the
-    same whether it is a few px higher or lower."""
-    if dx * dx + dy * dy < dead:
-        return None
-    ang = math.degrees(math.atan2(dy, dx)) % 360  # 0=E, 90=S (y down), 180=W, 270=N
-    return ("E", "SE", "S", "SW", "W", "NW", "N", "NE")[int((ang + 22.5) % 360 // 45)]
-
-
-def _cluster_centroid(M: Manifest) -> tuple[float, float] | None:
-    hs = M.get("houses", [])
-    if not hs:
-        return None
-    return (sum(h["x"] for h in hs) / len(hs), sum(h["y"] for h in hs) / len(hs))
-
-
-def twin_axes(M: Manifest) -> dict[str, Any]:
-    """Extract the coarse structural axes a viewer reads a village by, for twin comparison. Each axis is
-    a small hashable label (or None when the map lacks the data); two maps 'differ' on an axis only when
-    both are present and their labels are unequal (a missing datum never manufactures a difference)."""
-    meta = M.get("meta", {})
-    hs = M.get("houses", [])
-    cen = _cluster_centroid(M)
-    fields = M.get("fields", [])
-    fb = fields[0]["bbox"] if fields else None
-    fc = ((fb[0] + fb[2]) / 2, (fb[1] + fb[3]) / 2) if fb else None
-    ax: dict[str, Any] = {}
-
-    # 1. cluster_region: which side of the field the village sits on (the 背山面水 "background" octant)
-    ax["cluster_region"] = _dir8(cen[0] - fc[0], cen[1] - fc[1]) if (cen and fc) else None
-
-    # 2. cluster_shape: the declared knob if present, else the cluster-bbox aspect (round vs elongated + axis)
-    if meta.get("cluster_shape"):
-        ax["cluster_shape"] = meta["cluster_shape"]
-    elif hs:
-        xs = [h["x"] for h in hs]
-        ys = [h["y"] for h in hs]
-        w, h = max(xs) - min(xs), max(ys) - min(ys)
-        r = w / h if h else 1.0
-        ax["cluster_shape"] = "round" if 0.7 <= r <= 1.4 else ("wide" if r > 1.4 else "tall")
-    else:
-        ax["cluster_shape"] = None
-
-    # 3. headman_side: where the headman compound sits WITHIN the cluster (octant off the centroid, or
-    #    'center' when near the middle) - the GM's specific twinning symptom
-    headman = next((h for h in hs if h.get("role") == "headman"), None)
-    if headman and cen:
-        span = 0.0
-        if hs:
-            span = max(max(h["x"] for h in hs) - min(h["x"] for h in hs), max(h["y"] for h in hs) - min(h["y"] for h in hs))
-        d = math.hypot(headman["x"] - cen[0], headman["y"] - cen[1])
-        ax["headman_side"] = "center" if d < 0.15 * span else _dir8(headman["x"] - cen[0], headman["y"] - cen[1])
-    else:
-        ax["headman_side"] = None
-
-    # 4. lane_skeleton: the declared knob (spine / T / Y / cross / waterside); no reliable geometric fallback
-    ax["lane_skeleton"] = meta.get("lane_skeleton")
-
-    # 5. water_source: pond octant off the field center (which corner), else the stream entry edge, else None
-    pond = M.get("pond")
-    if meta.get("water_source_position"):
-        ax["water_source"] = meta["water_source_position"]
-    elif pond and fc:
-        ax["water_source"] = _dir8(pond[0] - fc[0], pond[1] - fc[1])
-    else:
-        ax["water_source"] = None
-
-    # 6. focal_set: the set of OPTIONAL focal features present (a frozenset so order does not matter)
-    ax["focal_set"] = frozenset(meta.get("focal_features", []))
-
-    # 7. grain_orient: median paddy/dry-plot grain angle, bucketed to 15-degree bands (mod 180, a bund has
-    #    no head/tail) - the "uniform 45deg" residual becomes a real differentiator once it drifts per map
-    thetas = [d["theta"] for d in M.get("dry_plots", []) if "theta" in d]
-    if thetas:
-        med = sorted(thetas)[len(thetas) // 2]
-        ax["grain_orient"] = round((math.degrees(med) % 180) / 15)
-    else:
-        ax["grain_orient"] = None
-
-    # 8. settlement_form: nucleated blob vs linear ribbon vs dispersed vs water-town - the biggest structural
-    #    read of all. Defaults to 'nucleated' (the base form) when a map does not declare it.
-    ax["settlement_form"] = meta.get("settlement_form", "nucleated")
-    # 9. pond_layout: a POLDER's parcel geometry - the surveyed rectilinear 'grid' (圩田 lower-Yangtze) vs the
-    #    accreted, creek-fitted 'mosaic' (桑基魚塘 Pearl-delta dike-pond); `build_polder`'s `mosaic` knob. So two
-    #    same-water polders read as different KINDS of place. Defaults to 'grid' (the base surveyed form).
-    ax["pond_layout"] = meta.get("pond_layout", "grid")
-    return ax
-
-
-def twin_diff_count(a: dict[str, Any], b: dict[str, Any]) -> int:
-    """How many axes two extracted axis-dicts differ on (both present and unequal). A None on either side
-    is 'no evidence', not a difference, so a data gap never inflates distinctiveness."""
-    n = 0
-    for k in TWIN_AXES:
-        av, bv = a.get(k), b.get(k)
-        if av is None or bv is None:
-            continue
-        if av != bv:
-            n += 1
-    return n
 
 
 def main(path: str) -> int:

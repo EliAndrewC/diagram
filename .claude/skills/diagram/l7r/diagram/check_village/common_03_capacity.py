@@ -1,7 +1,5 @@
 """Shared gate helpers (capacity): empty_street_runs, DEFAULT_MANIFEST, DWELLING_KINDS, BUSINESS_KINDS, HOUSEHOLD, COMMONER_KINDS, EXTRAMURAL_COMMONER_MAX, lane_near_misses, ... - bodies verbatim from check_village.py (feature 024 package split; SCC-packed, see split_package.py)."""
 
-import math
-from collections.abc import Sequence
 from typing import Any
 
 from .common_01_geometry import Manifest
@@ -98,98 +96,6 @@ _CROP_DRIVERS = ("houses", "gardens", "threshing_yards", "village_groves", "grov
 # The outlying irrigation POND is the archetype; the rest are included so the detector is general and filtered
 # by the conditions (terrain-anchor, threshold, empty-landing), not hard-coded away.
 _RELOCATABLE = ("pond", "cemeteries", "religious", "shrines", "manors")
-
-
-def _adv_bbox(o: Any) -> tuple[float, float, float, float]:
-    """(x0,y0,x1,y1) of a feature: a torii list [x,y,z], a poly dict, a w/h dict, or a well radius dict."""
-    if isinstance(o, (list, tuple)):
-        # torii arch box: the glyph is TRUE SCALE since 2026-07-21 (16 ft rail = 16px at 1 ft/px, less at
-        # coarser scales). This advisory helper has no meta access, so it uses the 1 ft/px worst case.
-        return (o[0] - 8, o[1] - 3, o[0] + 8, o[1] + 8)
-    if o.get("poly"):
-        xs = [p[0] for p in o["poly"]]
-        ys = [p[1] for p in o["poly"]]
-        return (min(xs), min(ys), max(xs), max(ys))
-    if "w" in o and "h" in o:
-        return (o["x"] - o["w"] / 2, o["y"] - o["h"] / 2, o["x"] + o["w"] / 2, o["y"] + o["h"] / 2)
-    return (o["x"] - o["r"], o["y"] - o["r"], o["x"] + o["r"], o["y"] + o["r"])  # a well
-
-
-def _pond_bbox(M: Manifest) -> tuple[float, float, float, float]:
-    c = M["pond"]
-    return (c[0] - c[2], c[1] - c[3], c[0] + c[2], c[1] + c[3])
-
-
-def _norm_skip(skip: Any) -> frozenset[tuple[str, int]]:
-    """Normalize `skip` to a SET of (kind, i) members: None -> {}, else the given iterable of members (so a
-    whole GROUP - a shrine + its churchyard + well - can be skipped at once, not just a single feature)."""
-    return frozenset(skip) if skip else frozenset()
-
-
-def _member_bbox(M: Manifest, member: tuple[str, int]) -> tuple[float, float, float, float]:
-    """The bbox of one crop-driver member (kind, i) - the pond, a torii list, or a w/h / poly / well dict."""
-    k, i = member
-    return _pond_bbox(M) if k == "pond" else _adv_bbox(M[k][i])
-
-
-def _crop_frame_boxes(M: Manifest, skip: Any = None) -> list[tuple[float, ...]]:
-    """The bboxes that DRIVE the crop frame (crop-hard kinds + fields' visible extent + pond), minus `skip`
-    (a single member OR a set of them - a whole relocatable GROUP)."""
-    skip = _norm_skip(skip)
-    B: list[tuple[float, ...]] = []
-    for k in _CROP_DRIVERS:
-        for i, o in enumerate(M.get(k) or []):
-            if (k, i) not in skip:
-                B.append(_adv_bbox(o))
-    for fd in M.get("fields") or []:
-        vb = fd.get("vis_bbox")
-        B.append(tuple(vb) if vb else _adv_bbox({"poly": fd["outline"]}))
-    if M.get("pond") and ("pond", 0) not in skip:
-        B.append(_pond_bbox(M))
-    return B
-
-
-def _solid_occupancy(M: Manifest, skip: Any = None) -> list[tuple[float, ...]]:
-    """Everything a relocated feature must AVOID: the frame drivers + fields + forest + marsh + hill. The
-    COMMONS scrub is deliberately excluded - it is sparse grazing waste a pond/feature can simply replace.
-    (Marsh IS included: a shrine/graveyard landing must be DRY.) `skip` may be a single member or a group."""
-    B = _crop_frame_boxes(M, skip)
-    for k in ("forest", "marshes"):
-        for o in M.get(k) or []:
-            B.append(_adv_bbox(o))
-    if M.get("hill"):
-        h = M["hill"]
-        B.append((h[0] - h[2], h[1] - h[3], h[0] + h[2], h[1] + h[3]))
-    return B
-
-
-def _bbox_frame(B: Sequence[Sequence[float]], m: float = 30) -> tuple[float, float, float, float]:
-    return (min(b[0] for b in B) - m, min(b[1] for b in B) - m, max(b[2] for b in B) + m, max(b[3] for b in B) + m)
-
-
-def _shrine_group(M: Manifest, i: int) -> set[tuple[str, int]]:
-    """The set of members that move AS ONE with the shrine at religious[i]: the shrine itself, the graveyard
-    it is responsible for (a cemetery within ~300px), its ablution well (~150px), and its torii (~140px). A
-    village shrine and its churchyard are a single sacred precinct - you relocate the whole precinct, not the
-    altar alone - so the crop advisory must weigh them together, not one at a time. See settlements.md."""
-    sh = M["religious"][i]
-    sx, sy = sh["x"], sh["y"]
-    members = {("religious", i)}
-    # the SAME shrine is mirrored into the geometric `shrines` list (parallel footprint records); the mirror
-    # is also a crop-driver, so the group must carry it too or the copy left behind still pins the crop edge.
-    for j, s in enumerate(M.get("shrines") or []):
-        if abs(s["x"] - sx) <= 1 and abs(s["y"] - sy) <= 1:
-            members.add(("shrines", j))
-    for j, cm in enumerate(M.get("cemeteries") or []):
-        if math.hypot(cm["x"] - sx, cm["y"] - sy) <= 300:
-            members.add(("cemeteries", j))
-    for j, wl in enumerate(M.get("wells") or []):
-        if math.hypot(wl["x"] - sx, wl["y"] - sy) <= 150:
-            members.add(("wells", j))
-    for j, t in enumerate(M.get("torii") or []):
-        if math.hypot(t[0] - sx, t[1] - sy) <= 140:
-            members.add(("torii", j))
-    return members
 
 
 # canonical residential DENSITY: dwellings per px^2 of residential-capable ground (interior minus

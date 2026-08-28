@@ -57,7 +57,6 @@ CONSUMED_PUBLIC = [
     "RESERVE_CAP_FRAC",
     "TWIN_AXES",
     "city_capacity",
-    "clip_poly_rect",
     "edge_gap",
     "forest_reveal_x",
     "gate",
@@ -75,8 +74,6 @@ CONSUMED_PUBLIC = [
     "seg_intersect",
     "seg_to_rect_dist",
     "sweep_hi",
-    "twin_axes",
-    "twin_diff_count",
 ]
 
 # The six underscore names with external consumers, and the submodule that owns each.

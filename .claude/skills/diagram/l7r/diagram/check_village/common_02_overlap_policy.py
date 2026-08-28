@@ -1,7 +1,7 @@
 """Shared gate helpers (overlap policy): matrix_violations, check_ring_road_clear, matrix_extents, GridIndex, forest_reveal_x, torii_halfbox, FOREST_REVEAL_FT, CANOPY_STRUCT_KEYS, ... - bodies verbatim from check_village.py (feature 024 package split; SCC-packed, see split_package.py)."""
 
 import math
-from collections.abc import Callable, Mapping
+from collections.abc import Mapping
 from typing import Any
 
 from l7r.diagram.settlement import sat_overlap
@@ -400,43 +400,3 @@ def in_ellipse(px: float, py: float, e: Any, scale: float = 1.0) -> bool:
 
 def polyline_len(poly: Poly) -> float:
     return sum(math.hypot(poly[i + 1][0] - poly[i][0], poly[i + 1][1] - poly[i][1]) for i in range(len(poly) - 1))
-
-
-def clip_poly_rect(poly: Poly, x0: float, y0: float, x1: float, y1: float) -> list[Any]:
-    """Sutherland-Hodgman clip of a polygon to an axis rect; returns the clipped polygon (may be []).
-    Used to find how much of an off-edge field actually shows inside the rendered map window."""
-
-    def cl(pts: list[Any], ins: Callable[[Any], bool], isc: Callable[[Any, Any], tuple[float, float]]) -> list[Any]:
-        out = []
-        for i in range(len(pts)):
-            a, b = pts[i], pts[(i + 1) % len(pts)]
-            ia, ib = ins(a), ins(b)
-            if ia:
-                out.append(a)
-            if ia != ib:
-                out.append(isc(a, b))
-        return out
-
-    p: list[Any] = list(poly)
-    for ins, isc in (
-        (lambda q: q[0] >= x0, lambda a, b: (x0, a[1] + (b[1] - a[1]) * (x0 - a[0]) / ((b[0] - a[0]) or 1e-9))),
-        (lambda q: q[0] <= x1, lambda a, b: (x1, a[1] + (b[1] - a[1]) * (x1 - a[0]) / ((b[0] - a[0]) or 1e-9))),
-        (lambda q: q[1] >= y0, lambda a, b: (a[0] + (b[0] - a[0]) * (y0 - a[1]) / ((b[1] - a[1]) or 1e-9), y0)),
-        (lambda q: q[1] <= y1, lambda a, b: (a[0] + (b[0] - a[0]) * (y1 - a[1]) / ((b[1] - a[1]) or 1e-9), y1)),
-    ):
-        if not p:
-            return []
-        p = cl(p, ins, isc)
-    return p
-
-
-def footprint_on_line(sc: Poly, sp: Poly, hw: float) -> bool:
-    """True if closed polygon sc overlaps polyline sp within half-width hw - a corner near a
-    segment, a polyline vertex inside the polygon, or an edge crossing. sc may be a 4-corner
-    building footprint OR a field outline. Used to test a footprint/field against a barrier
-    (city wall stroke, moat)."""
-    if any(seg_dist(cx, cy, sp[k], sp[k + 1]) < hw for (cx, cy) in sc for k in range(len(sp) - 1)):
-        return True
-    if any(point_in_poly(rx, ry, sc) for rx, ry in sp):
-        return True
-    return any(segments_cross(sp[k], sp[k + 1], sc[e], sc[(e + 1) % len(sc)]) for k in range(len(sp) - 1) for e in range(len(sc)))
