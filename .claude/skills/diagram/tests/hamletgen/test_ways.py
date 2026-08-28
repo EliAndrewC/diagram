@@ -829,3 +829,21 @@ def test_smooth_web_cuts_the_SHORT_arm_off_a_hairpin() -> None:
     _smooth_web(s2, block, [], [])
     kept2 = s2.M["lanes"][0]["pts"]
     assert len(kept2) == 2 and abs(kept2[-1][1] - 200.0) < 1e-6, kept2
+
+
+def test_the_cluster_gateway_and_edge_fall_back_when_no_house_is_placed_yet() -> None:
+    """Feature 146: both helpers take the cloud's own extent, and both keep a fallback for a caller that
+    asks before any house is seated - which the shipped order does not do, and which this file's own comment
+    says is the failure mode it has met repeatedly."""
+    from l7r.diagram.hamletgen.ways import _cluster_edge_toward, _cluster_gateway
+    from l7r.diagram.settlement import Settlement
+
+    s = Settlement(1000, 1000, seed=1)
+    s.meta(name="G", scale="hamlet", ftpx=1, down_deg=90)
+    seat = {"cx": 500.0, "cy": 500.0, "along": (1.0, 0.0), "out": (0.0, 1.0), "half": 200.0, "depth": 80.0}
+    fallback = (123.0, 456.0)
+    assert _cluster_gateway(s, seat, fallback) == fallback
+    assert _cluster_edge_toward(s, (900.0, 500.0), fallback) == fallback
+    s.M["houses"].append({"x": 500.0, "y": 500.0, "w": 50.0, "h": 30.0})
+    assert _cluster_gateway(s, seat, fallback) != fallback, "with a house placed it measures the cloud"
+    assert _cluster_edge_toward(s, (900.0, 500.0), fallback) != fallback
