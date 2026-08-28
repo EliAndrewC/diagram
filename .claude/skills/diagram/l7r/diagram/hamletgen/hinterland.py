@@ -594,6 +594,12 @@ def bamboo_seats(s: Settlement, plan: SitePlan) -> list[Poly]:
                 rects.append((float(o["x"]), float(o["y"]), float(o["w"]), float(o["h"]), px(pad)))
     lanes = [([(float(a), float(b)) for a, b in ln["pts"]], float(ln.get("w", 3)) / 2 + px(10.0)) for ln in s.M.get("lanes", []) if len(ln.get("pts") or []) >= 2]
     polys: list[tuple[Poly, float]] = [(list(f), px(12.0)) for f in s.field_polys]
+    # A TAKE-YABU MAY NOT STAND IN THE CROP - the DRY crop included (settlement-review, Mizuguchi, feature 145).
+    # `field_polys` holds the paddy; the dry hem's plots are crop too, and nothing here refused them, so seed 23's
+    # stand put 14 of its 66 culms up to 12.2 ft inside a soybean plot. A clonal bamboo rhizome in a bean field is
+    # the one thing a farmer digs a trench to stop, so this is a placement error rather than a legibility one. The
+    # gate could not catch it either: `bamboo_stands_clear_of_paddies` reads paddy outlines only (widened with this).
+    polys += [([(float(a_), float(b_)) for a_, b_ in (o.get("poly") or [])], px(12.0)) for o in s.M.get("dry_plots", []) if len(o.get("poly") or []) >= 3]
     polys += [([(float(a), float(b)) for a, b in m["poly"]], px(6.0)) for m in s.M.get("marshes", []) if m.get("poly")]
     polys += [(list(plan.belt), px(10.0))] if plan.belt else []
     polys += [(list(w), px(20.0)) for w in plan.woodland_polys]
