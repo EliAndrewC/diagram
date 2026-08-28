@@ -2,7 +2,7 @@
 
 **Feature Branch**: none - `specs/146-the-hamlet-floor-residue` (`SPECIFY_FEATURE=146-the-hamlet-floor-residue`)
 **Created**: 2026-08-28
-**Status**: DRAFT - awaiting `spec-fidelity`
+**Status**: APPROVED by `spec-fidelity` - round 1 required two changes (FR-003 had re-inserted a GM gate the GM removed and permitted a red floor at landing; FR-006/SC-003 demanded a green FULL run the spec's own Assumptions said could not be green), both applied; round 2 verdict FAITHFUL. Implementation proceeds.
 **Input**: [`gm-request.md`](gm-request.md), the GM's words verbatim (2026-08-28, accepting feature 145)
 
 ## What the GM asked for
