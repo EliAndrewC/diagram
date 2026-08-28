@@ -79,34 +79,34 @@
 
 | # | entry | evidence class | found as | status |
 |---|---|---|---|---|
-| 1 | Gate structures - real footprints | attested, corroborated | not recorded | open |
-| 2 | Gate furniture at the throat - barbican and tax-barrier practice | attested, corroborated | not recorded | open |
+| 1 | Gate structures - real footprints | attested, corroborated | not recorded | supplemented (Xi'an top width 12-14 m); bay estimates leftover |
+| 2 | Gate furniture at the throat - barbican and tax-barrier practice | attested, corroborated | not recorded | re-sourced (facing SUMMARY-ONLY); lijin leftover |
 
 ### `cities/fabric.md` (2)
 
 | # | entry | evidence class | found as | status |
 |---|---|---|---|---|
-| 1 | Urban commoners built in continuous street walls | attested, corroborated | not recorded | open |
-| 2 | Machiya row density: a commercial street is a continuous built edge | - | no sources line | open |
+| 1 | Urban commoners built in continuous street walls | attested, corroborated | not recorded | supplemented (frontage-tax story disputed) |
+| 2 | Machiya row density: a commercial street is a continuous built edge | - | no sources line | re-sourced |
 
 ### `cities/government.md` (1)
 
 | # | entry | evidence class | found as | status |
 |---|---|---|---|---|
-| 1 | Martial training is an URBAN institution | attested, corroborated, setting-canon - **plus one `reconstruction` that used to be mis-classed as a finding; see "What the research did NOT find" below** | not recorded | open |
+| 1 | Martial training is an URBAN institution | attested, corroborated, setting-canon - **plus one `reconstruction` that used to be mis-classed as a finding; see "What the research did NOT find" below** | not recorded | re-sourced (Genbukan count SUMMARY-ONLY, contested) |
 
 ### `cities/hinterland.md` (1)
 
 | # | entry | evidence class | found as | status |
 |---|---|---|---|---|
-| 1 | Gentry estates are DISPERSED, not clustered at the wall | attested, corroborated | not recorded | open |
+| 1 | Gentry estates are DISPERSED, not clustered at the wall | attested, corroborated | not recorded | re-sourced |
 
 ### `cities/river-cities.md` (2)
 
 | # | entry | evidence class | found as | status |
 |---|---|---|---|---|
-| 1 | Most provincial cities sit on a river | attested, corroborated | not recorded | open |
-| 2 | The wharf's working face: piers, quays and stepped landings | - | no sources line | open |
+| 1 | Most provincial cities sit on a river | attested, corroborated | not recorded | supplemented ('seven floods' struck) |
+| 2 | The wharf's working face: piers, quays and stepped landings | - | no sources line | open - leftover (雁木/河岸) |
 
 ### `fields.md` (6)
 
@@ -147,31 +147,31 @@
 
 | # | entry | evidence class | found as | status |
 |---|---|---|---|---|
-| 1 | Chinese towns were PLANNED - the gate-to-yamen axis | attested, corroborated | not recorded | open |
-| 2 | The market-day flophouse - who actually stays over | attested | not recorded | open |
-| 3 | The gate market exists for TRAFFIC, not taxes | reconstruction, setting-canon | not recorded | open |
-| 4 | A street is access infrastructure for the buildings it serves | attested | not recorded | open |
-| 5 | A rampart's cost scales with its LENGTH | attested | not recorded | open |
+| 1 | Chinese towns were PLANNED - the gate-to-yamen axis | attested, corroborated | not recorded | re-sourced (axis SUMMARY-ONLY) |
+| 2 | The market-day flophouse - who actually stays over | attested | not recorded | re-sourced |
+| 3 | The gate market exists for TRAFFIC, not taxes | reconstruction, setting-canon | not recorded | re-sourced (canon) |
+| 4 | A street is access infrastructure for the buildings it serves | attested | not recorded | re-sourced |
+| 5 | A rampart's cost scales with its LENGTH | attested | not recorded | re-sourced |
 
 ### `urban-features.md` (15)
 
 | # | entry | evidence class | found as | status |
 |---|---|---|---|---|
-| 1 | The notice board (kosatsuba) - siting is a TRAFFIC decision | attested | not recorded | open |
-| 2 | The justice works - why a county seat executes, and why the ground is outside | attested, corroborated, setting-canon, liberty | not recorded | open |
-| 3 | Trade works - which trades outgrow the shop glyph, and why | attested, corroborated, setting-canon | not recorded | open |
-| 4 | The log boom - a shore-fast holding pen, not sticks in the stream | - | no sources line | open |
-| 5 | Kiln works - a kiln is not a tile kiln, and the potters live at it | - | no sources line | open |
-| 6 | Tanning yards - hides come from fallen draft stock, and water is the gate | attested, setting-canon | not recorded | open |
-| 7 | The bell-and-drum tower - one per walled seat | attested, corroborated | not recorded | open |
-| 8 | Commercial frontage and wealth-stratified housing | researched | not recorded | open |
-| 9 | Communal wells and the samurai exception | researched | not recorded | open |
-| 10 | Caste geography and status zoning | researched | not recorded | open |
-| 11 | Government and commerce of a seat of administration | researched | not recorded | open |
-| 12 | Charcoal yards: a tallied depot, a cooling ground, and a weighing floor | - | no sources line | open |
-| 13 | Refining forges: smelting goes to the fuel, refining comes to the town | - | no sources line | open |
-| 14 | Drawing a clan border | - | no sources line | open |
-| 15 | Wells in crop fields: two different objects, and only one of them is ours | - | no sources line | open |
+| 1 | The notice board (kosatsuba) - siting is a TRAFFIC decision | attested | not recorded | re-sourced |
+| 2 | The justice works - why a county seat executes, and why the ground is outside | attested, corroborated, setting-canon, liberty | not recorded | supplemented (two grounds, not three) |
+| 3 | Trade works - which trades outgrow the shop glyph, and why | attested, corroborated, setting-canon | not recorded | open - leftover (own reader) |
+| 4 | The log boom - a shore-fast holding pen, not sticks in the stream | - | no sources line | re-sourced (inline keys) |
+| 5 | Kiln works - a kiln is not a tile kiln, and the potters live at it | - | no sources line | open - leftover |
+| 6 | Tanning yards - hides come from fallen draft stock, and water is the gate | attested, setting-canon | not recorded | supplemented (soak 'several days') |
+| 7 | The bell-and-drum tower - one per walled seat | attested, corroborated | not recorded | re-sourced; 20+ towers, Kawagoe base leftover |
+| 8 | Commercial frontage and wealth-stratified housing | researched | not recorded | re-sourced (partial) |
+| 9 | Communal wells and the samurai exception | researched | not recorded | no-source - labeled guess |
+| 10 | Caste geography and status zoning | researched | not recorded | re-sourced (SUMMARY-ONLY); kido leftover |
+| 11 | Government and commerce of a seat of administration | researched | not recorded | re-sourced (canon); clustering leftover |
+| 12 | Charcoal yards: a tallied depot, a cooling ground, and a weighing floor | - | no sources line | re-sourced (inline keys); Grokipedia figures leftover |
+| 13 | Refining forges: smelting goes to the fuel, refining comes to the town | - | no sources line | re-sourced (inline keys) |
+| 14 | Drawing a clan border | - | no sources line | re-sourced (inline keys) |
+| 15 | Wells in crop fields: two different objects, and only one of them is ours | - | no sources line | re-sourced (inline keys); Grokipedia rainfall leftover |
 
 ### `vegetation.md` (8)
 
@@ -263,6 +263,7 @@ Worked with the batch that owns each entry; struck from `SOURCES.md` when done (
 
 ## F2. Batch leftovers - claims searched and not read this pass (one follow-up reader at the end)
 
+- towns/cities/urban-features: the gate-to-yamen axis; guard-room and gate-tower bay estimates; lijin/chaoguan barriers; Chinese party-wall housing; fragmented gentry parcels; Xiangyang/Pingyao/Okayama/Shanghai moats; the wharf entry (雁木, 河岸, matou); the whole Trade-works shortlist; Kiln works; Kaifeng tower count, Kawagoe base, Dingbian/Xingcheng; merchant-over-shop and wealth spread; communal-well ratio; 町木戸 night closure; yamen offices on an avenue; Song iron output (replace Grokipedia); loess rainfall (replace Grokipedia).
 - buildings.md: Jōge jin'ya plan (230x88 ft; two shrines) - `daikanpanfu2.pdf`, k-yagumo excavation page; tedai origins and Qing clerk counts; rural jin'ya staff rowhouses; Hida staging and hired boats; genkan staged arrival; yamen predecessor veneration; tax shares 30-40% coin and soybean bales (NTA 214.htm); Chinese granary grain mix; Izumo 2x2 ken (primary), 67 tsubo house, 2-4 horse stable; jin'ya coverage 37-42% (上嶋 report); samurai kawaya beside the guest room; south garden / north service strip.
 
 ## G. Contradictions found (for the GM report, FR-007)

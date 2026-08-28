@@ -703,7 +703,7 @@ Tokyo Fire Department, 防火対策の歴史 (Hongo station; https://www.tfd.met
 
 ### `gujianchina-taipinggang`
 
-古建中国, 古代故宫的防火器材——"太平缸" (https://www.gujianchina.cn/news/show-5949.html; READ 2026-08-28)
+古建中国, 古代故宫的防火器材 - "太平缸" (https://www.gujianchina.cn/news/show-5949.html; READ 2026-08-28)
 
 *Used for:* 308 vats in the Forbidden City; vats placed on the axis and before buildings far from the Inner Golden Water River and wells
 
@@ -760,3 +760,297 @@ ja.wikipedia 塀 (城郭) (READ 2026-08-28)
 Sado magistracy fire history - SUMMARY-ONLY (2026-08-28): search snippets across Sado tourism pages state the 奉行所, built 1603, "焼失と再建を5回繰り返しました"; the three pages fetched (ja.wikipedia 佐渡奉行, visitsado.com, city.sado.niigata.jp museum) describe only the 2000 reconstruction and say nothing about fires
 
 *Used for:* administrative halls as ordinary wooden buildings that burned and were rebuilt repeatedly
+
+### `fuchu-kosatsuba`
+
+Tokyo Jinjacho, 府中高札場 (http://www.tokyo-jinjacho.or.jp/goshahou/fuchukousatsuba/; READ 2026-08-26, feature 133 T13)
+
+*Used for:* kosatsuba set "at points of heavy passage: barriers and ports, the foot of large bridges, and the entrances and centers of towns and villages"
+
+### `ogose-kosatsuba`
+
+Ogose town, cultural property H26-04 高札場 (https://www.town.ogose.saitama.jp/kamei/shogaigakushu/bunkazai/kaisetsu/explanation_cultural/H26_04.html; READ 2026-08-26, T13)
+
+*Used for:* village kosatsuba at the village center, the shrine precinct or the assembly place; before the village officials' houses
+
+### `kosatsu-jawiki`
+
+ja.wikipedia 高札 (READ 2026-08-26, T13)
+
+*Used for:* the edict board institution - standing law, rate tables, ban edicts; Nihonbashi as Edo's principal board
+
+### `adachi-kosatsu`
+
+Adachi City museum, 高札 (https://www.city.adachi.tokyo.jp/hakubutsukan/chiikibunka/hakubutsukan/shiryo-kosatsu.html; READ 2026-08-26, T13)
+
+*Used for:* the board read aloud by officials; the headman relaying circulars
+
+### `caishikou-enwiki`
+
+en.wikipedia Caishikou Execution Grounds (READ 2026-08-28, feature 138)
+
+*Used for:* the Qing execution ground at the crossroads of Xuanwumen Outer Street and Luomashi Street, "Vegetable Market Execution Ground"; the term 棄市 is not on the page
+
+### `qiushen-zhwiki`
+
+zh.wikipedia 秋审 (READ 2026-08-28)
+
+*Used for:* the Qing autumn review of death sentences through 刑部, 大理寺, 都察院 and the emperor - the capital case climbs and the confirmed sentence comes back down
+
+### `suzugamori-jawiki`
+
+ja.wikipedia 鈴ヶ森刑場 (READ 2026-08-28)
+
+*Used for:* Suzugamori at Edo's southern entrance on the Tokaido, paired with Kozukappara at the northern entrance on the Nikko kaido ("江戸の北の入口（日光街道）沿いに設置されていた小塚原刑場とともに、南の入口（東海道）沿いに設置されていた刑場であった")
+
+### `kozukappara-jawiki`
+
+ja.wikipedia 小塚原刑場 (READ 2026-08-28)
+
+*Used for:* the two as Edo's 二大刑場 - the page names two major grounds, not three
+
+### `shiniuba-jawiki`
+
+ja.wikipedia 死牛馬取得権 (READ 2026-08-28)
+
+*Used for:* the kawata's right to fallen cattle and horses over a defined territory ("死牛馬を集める特定の地域を「草場」ないしは「旦那場」といった"), abolished 1871
+
+### `himeji-shironameshi-jawiki`
+
+ja.wikipedia 姫路白なめし革細工 (READ 2026-08-28)
+
+*Used for:* the white-tawing process - salted hides soaked in the river "数日間" (several days) to loosen the hair, then salt and rapeseed oil under the sun; NOT the "one week summer, two weeks winter" figure the entry carried
+
+### `northampton-tannery-1996`
+
+Shaw, "The excavation of a late 15th- to 17th-century tanning complex at The Green, Northampton", Post-Medieval Archaeology 30(1), 1996 (https://www.tandfonline.com/doi/abs/10.1179/pma.1996.002; SUMMARY-ONLY 2026-08-28 - abstract page 403; the 36-37 pit figure seen in search snippets of the abstract)
+
+*Used for:* the largest excavated urban tannery (the Western Tannery, 36-37 pits) as an upper comparison
+
+### `pingyao-shilou-zhwiki`
+
+zh.wikipedia 平遥市楼 (READ 2026-08-28)
+
+*Used for:* "底层面阔、进深各三间，占地133.4平方米，平面呈方形", 18.5 m high, rebuilt 1688
+
+### `dongjing-menghualu-rujia`
+
+吴钩, 大宋消防队 (儒家网, https://www.rujiazg.com/article/11577; READ 2026-08-28), quoting 東京夢華錄
+
+*Used for:* "每坊三百步有军巡铺，又于高处有望火楼，上有人探望，下屯军百人及水桶、洒帚、钩锯、斧权、梯索之类" - the Song fire-watch tower as a separate institution; no citywide tower count
+
+### `kyomachiya-jawiki`
+
+ja.wikipedia 京町家 (READ 2026-08-28)
+
+*Used for:* the narrow-front deep-lot machiya, and its own rebuttal of the frontage-tax story ("江戸時代の京都の税制は、間口幅に関係なく、まず町に対し総額が賦課され")
+
+### `kyototuu-unagi`
+
+京都通百科事典, 鰻の寝床 (https://www.kyototuu.jp/Life/ProverbUnaginoNedoko.html; READ 2026-08-28)
+
+*Used for:* "間口２間（約３.６m）前後、奥行１０〜１２間（約１８〜２２m）"; carries the popular frontage-tax explanation that `kyomachiya-jawiki` disputes
+
+### `nagaya-jawiki`
+
+ja.wikipedia 長屋 (READ 2026-08-28)
+
+*Used for:* the nagaya as one building divided into units sharing walls ("1棟の建物を水平方向に区分し、それぞれ独立した住戸とした物")
+
+### `hiyokechi-jawiki`
+
+ja.wikipedia 火除地 (READ 2026-08-28)
+
+*Used for:* firebreak lots cut through Edo after the 1657 Meireki fire - breaks at block scale, not between houses
+
+### `song-architecture-enwiki`
+
+en.wikipedia Architecture of the Song dynasty (READ 2026-08-28)
+
+*Used for:* Tang cities "strictly divided into distinct residential and commercial wards divided by city walls"; under the Song "shops could now line streets in residential areas and did not have to be situated behind precinct walls"
+
+### `guanxiang-zdic`
+
+漢典 zdic.net, 关厢 (READ 2026-08-28)
+
+*Used for:* the bare definition - "城门外的街道及附近区域"; that commerce clustered there is SUMMARY-ONLY (Baidu Baike, 403)
+
+### `jokamachi-jawiki`
+
+ja.wikipedia 城下町 (READ 2026-08-28)
+
+*Used for:* samurai quarters ranked by distance from the castle, merchant and artisan quarters outside them, the temple district on the perimeter as part of the defense, and streets kinked and dead-ended to lengthen the approach ("道を鍵形に曲げたり袋小路を設けるなどすることで、城への到達距離を延長した")
+
+### `kichinyado-jawiki`
+
+ja.wikipedia 木賃宿 (READ 2026-08-28)
+
+*Used for:* the firewood-fee inn - a common room, bedding at the guest's own expense, guests pooling rice and paying the firewood cost to have it cooked
+
+### `kichinyado-kotobank`
+
+コトバンク 木賃宿 (https://kotobank.jp/word/木賃宿-51029; READ 2026-08-28)
+
+*Used for:* prices - 3 mon a person (1611 ordinance), 6 mon firewood fee (1658), 24 mon roof fee plus 16-24 mon for a futon (1843)
+
+### `hutong-enwiki`
+
+en.wikipedia Hutong (READ 2026-08-28)
+
+*Used for:* alleys "formed by lines of siheyuan", neighborhoods "formed by joining one siheyuan to another to form a hutong" - the entry's "access routes lined by contiguous courtyard residences" is a paraphrase of this
+
+### `chinese-city-wall-enwiki`
+
+en.wikipedia Chinese city wall (READ 2026-08-28)
+
+*Used for:* "In areas of rugged relief, however, a square form was usually replaced by one of irregular shape, determined in many cases by topographic conditions"
+
+### `thepaper-city-walls`
+
+澎湃新闻, on the plan forms of Chinese city walls (https://m.thepaper.cn/newsDetail_forward_1270378; READ 2026-08-28)
+
+*Used for:* hill cities taking the surrounding high points inside the wall and so producing irregular outlines (荆州's oval, 北京's 凸 plan)
+
+### `xian-wall-zhwiki`
+
+zh.wikipedia 西安城墙 (READ 2026-08-28)
+
+*Used for:* "城垣高12米，底宽15-18米，顶宽12-14米"; "城墙的外壁筑98座敌台，延伸出墙12米，宽20米，高与城齐"
+
+### `hakone-seki-jawiki`
+
+ja.wikipedia 箱根関 (READ 2026-08-28)
+
+*Used for:* the facility list - 面番所 (上御番所・番士詰所・休息所・風呂場) and 向番所 (所詰半番・休息所・牢屋), stables, 辻番, 高札場, all inside a fence; that the two stations face each other across the road is SUMMARY-ONLY (search synthesis of hakonesekisyo.jp)
+
+### `wengcheng-zhwiki`
+
+zh.wikipedia 瓮城 (READ 2026-08-28)
+
+*Used for:* the barbican definition - a half-round or square outwork before a gate (Nanjing's 中华门 the inside-the-gate exception)
+
+### `genbukan-jawiki`
+
+ja.wikipedia 玄武館 (READ 2026-08-28 - the page gives no aggregate disciple count; search syntheses split between ~3,000 from 清河八郎's roster and "over 6,000")
+
+*Used for:* the Genbukan as a metropolitan commercial dojo (1822, Nihonbashi then Kanda); the disciple count is SUMMARY-ONLY and contested
+
+### `cdlib-local-elites`
+
+Esherick & Rankin (eds.), *Chinese Local Elites and Patterns of Dominance*, introduction (UC Press e-book, https://publishing.cdlib.org/ucpressebooks/public/book/chinese-local-elites-and-patterns-of-dominance.html; READ 2026-08-28)
+
+*Used for:* "By Qing times, the substantially urbanized gentry were living the leisured life of absentee landlords in administrative centers or the many small towns that lined the canals"; absentee landlords acting through agents and rent bursaries
+
+### `kaifeng-flood-1642-enwiki`
+
+en.wikipedia 1642 Yellow River flood (READ 2026-08-28)
+
+*Used for:* "300,000 of the 378,000 residents were killed by the flood and ensuing peripheral disasters"; the levee breached by the Ming governor during the siege
+
+### `kaifeng-pmc7048742`
+
+Storozum et al., "Geoarchaeological evidence of the AD 1642 Yellow River flood that destroyed Kaifeng", Scientific Reports 2020 (PMC 7048742; READ 2026-08-28)
+
+*Used for:* the Yellow River flooding Kaifeng "around 40 times over the past 3000 years" - the entry's "seven times" is found nowhere
+
+### `pan-gate-enwiki`
+
+en.wikipedia Pan Gate (READ 2026-08-28)
+
+*Used for:* "two separate gates, one opening to a road ... and another opening to a canal", Suzhou's Land and Water Gate; the sluiced arch is SUMMARY-ONLY (chinahighlights)
+
+### `tetsu-to-hagane-91`
+
+History of Iron and Steel Making Technology in Japan, Tetsu-to-Hagané 91(1), JStage (READ at the 2026-08 pass, feature 107; not re-read 2026-08-28)
+
+*Used for:* the two-stage refining of tatara iron
+
+### `ohitayama-tatara-enwiki`
+
+en.wikipedia Ohitayama Tatara Iron Works (READ 2026-08)
+
+*Used for:* dōba, ōkajiba, wari-tetsu; the Chugoku mountains' 80% share
+
+### `wagner-ming-iron`
+
+Donald Wagner, *Iron production in three Ming texts* (https://donwagner.dk/MingFe/MingFe.html; READ 2026-08)
+
+*Used for:* the chao fining hearth as Song Yingxing describes it; the 200 charcoal producers / 200 furnace tenders / 300 miners
+
+### `wagner-fining-puddling`
+
+Donald Wagner, *Traditional Chinese fining and puddling* (http://donwagner.dk/arch-iron/eu/fining-puddling-china-eu.html; READ 2026-08)
+
+*Used for:* fining as stir-frying pig iron under blast
+
+### `xuxiebian-han-fining`
+
+*Cast Iron Smelting and Fining: an Eastern Han site at Xuxiebian, Sichuan* (Project MUSE 725769; READ 2026-08)
+
+*Used for:* the practice running back to the Eastern Han
+
+### `fao-charcoal-safety`
+
+FAO, *Simple technologies for charcoal making*, ch. 5 safety precautions (https://www.fao.org/4/X5555E/x5555e06.htm; READ 2026-08)
+
+*Used for:* self-heating of fresh charcoal, fines as the worst case, the 24-hour open-air rule and the 8-day threshold
+
+### `tonya-enwiki`
+
+en.wikipedia Ton'ya (READ 2026-08)
+
+*Used for:* the wholesaler-warehouseman of the Edo economy
+
+### `fires-in-edo-enwiki`
+
+en.wikipedia Fires in Edo (READ 2026-08)
+
+*Used for:* the winter clustering of serious fires
+
+### `sizes-koku`
+
+Sizes.com, "What is the unit called a koku?" (https://www.sizes.com/units/koku.htm; READ 2026-08)
+
+*Used for:* the charcoal hyō as a bale of indeterminate size
+
+### `nanbu-date-mounds-enwiki`
+
+en.wikipedia Nanbu-Date border mounds (READ 2026-08)
+
+*Used for:* the earth-mound boundary between Morioka and Sendai, reconfirmed 1642
+
+### `kuniezu-enwiki`
+
+en.wikipedia Kuniezu (READ 2026-08)
+
+*Used for:* the shogunate's provincial maps with boundaries drawn
+
+### `mukoyama-linear-borders`
+
+Mukoyama, "Linear borders in early modern Japan", European Journal of International Relations (https://journals.sagepub.com/doi/full/10.1177/13540661221133206; READ 2026-08)
+
+*Used for:* domains building a territorial order of agreed boundaries and mutual exclusion
+
+### `irripro-jiegao-lulu`
+
+History of Irrigation - irrigation tools (http://www.irripro.net/en/nd.jsp?id=113; READ 2026-08) with Baidu Baike *Lulu* (a weaker reference)
+
+*Used for:* the shadoof and the windlass; the Ming-Qing upgrade to animal power and deeper wells
+
+### `ide-japanese-experience`
+
+IDE, *Passing on "The Japanese Experience"*, rural society (https://d-arch.ide.go.jp/je_archive/english/society/wp_je_unu4.html; READ 2026-08)
+
+*Used for:* hatake vs suiden; small farmers on "rainfall or natural underground sources"; the defeated late-Tokugawa hata irrigation schemes
+
+### `harie-kabata`
+
+Harie Shozu no Sato, the kabata wells (https://ihcsacafe-en.ihcsa.or.jp/news/harie/; READ 2026-08)
+
+*Used for:* the domestic and social character of the village well
+
+### `kabu-ido-commons`
+
+Groundwater commons and the kabu-ido rules, *Water History* (https://link.springer.com/article/10.1007/s12685-022-00302-1; READ 2026-08 - abstract)
+
+*Used for:* villages regulating the NUMBER of wells

@@ -12,13 +12,19 @@ Every entry: what the research found, the decision it drove, and any deliberate 
 
 **Grounds:** `s.rowpack`, `city_row_housing_touches`
 
-**Evidence:** attested, corroborated
+**Evidence:** attested (Japan), researched (China - not re-read)
 
-**Sources:** not recorded - the finding is in the prose below; add a key to `SOURCES.md` when it is re-consulted
+**Sources:** `kyomachiya-jawiki`, `kyototuu-unagi`, `nagaya-jawiki` (READ). Chinese county-seat party-wall housing not re-sourced - leftover
 
 - *What the history says.* Urban commoners in both reference cultures did not build detached-with-yard. Machiya street frontage was continuous - party walls or touching eaves, because street frontage was taxed and precious; back-lot *nagaya* were literally ONE ROOF over a row of family units; Chinese county-seat courtyard housing shared rammed-earth or brick party walls in continuous street walls. Detached-with-yard was a samurai (and rural) form.
 
+*Correction to the record (2026-08-28, feature 138):* "street frontage was taxed" is the popular explanation of the narrow lot (`kyototuu-unagi` carries it), and ja.wikipedia 京町家 disputes it outright - Edo-period Kyoto assessed a lump sum per town, not per frontage. The continuous built edge is read either way; the tax is not the reason to cite.
+
 ## Machiya row density: a commercial street is a continuous built edge
+
+**Evidence:** attested
+
+**Sources:** `kyototuu-unagi` (READ: frontage ~2 ken, depth 10-12 ken), `kyomachiya-jawiki`, `hiyokechi-jawiki` (READ: breaks at block scale after 1657). See the frontage-tax correction in the entry above
 
 **The question (GM, 2026-08-11), looking at Shiro Daika's north gate market:** *"Is that the
 correct amount of space between gate market buildings? No objection, they just look more spaced

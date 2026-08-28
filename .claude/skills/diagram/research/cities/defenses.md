@@ -14,7 +14,7 @@ Every entry: what the research found, the decision it drove, and any deliberate 
 
 **Evidence:** attested, corroborated
 
-**Sources:** not recorded - the finding is in the prose below; add a key to `SOURCES.md` when it is re-consulted
+**Sources:** `xian-wall-zhwiki` (READ: 98 mamian, 20 m wide, projecting 12 m; the wall 12 m high, base 15-18 m, TOP 12-14 m - the "top 15 m" some prose carries is not this source's figure). The guard-room and gate-tower bay estimates were not re-sourced - leftover
 
 - *What the research found (China first: Xi'an / Pingyao / Beijing walls; Edo sekisho secondary).* A gate guard duty room is a small 1-3 bay building (~15-35 ft); a gate inspection hall (sekisho/lijin bansho) ~25-45 ft; the wall's MAMIAN bastion (马面 - the projecting spur that carries the enemy-tower) is ~65x40 ft (Xi'an's are ~20 m wide projecting ~12 m), the tower building on it ~30-40 ft; a provincial GATE tower (城楼) ~52x30 ft (reserve the 120-130 ft towers for a capital); a corner tower ~50-66 ft. Well-attested: the mamian and the provincial gate-tower footprints; approximate (bay-count estimates): the guard/inspection buildings.
 
@@ -24,7 +24,7 @@ Every entry: what the research found, the decision it drove, and any deliberate 
 
 **Evidence:** attested, corroborated
 
-**Sources:** not recorded - the finding is in the prose below; add a key to `SOURCES.md` when it is re-consulted
+**Sources:** `hakone-seki-jawiki` (READ: the 面番所 and 向番所 lists; that they stand opposite each other across the road is SUMMARY-ONLY), `wengcheng-zhwiki` (READ: the barbican). Lijin / chaoguan barrier practice not re-sourced - leftover
 
 - *What the research found (China first: wengcheng 甕城 barbican + lijin 厘金 / chaoguan 鈔關 tax barriers; Japan's Hakone/Arai sekisho as the best-preserved architectural proof).* An inspection/tax barrier only works where traffic is forced single-file, and a walled city's gate passage is the ONE such chokepoint in the whole wall - set the station back and arrivals disperse into the street grid before ever reaching it, defeating its purpose. So guard + inspection cluster AT the gate opening, ~20-100 ft inside, flanking the road as it enters. Hakone is decisive: just inside each gomon the *Obansho* (papers/goods inspection office) and the *ashigaru* guardhouse stand OPPOSITE each other across the road, and nobody reaches the town beyond without passing between them. In a wengcheng the whole cluster reads most authentically inside the urn-courtyard between the two misaligned gates. "Set back a few hundred feet along the wall" is historically wrong.
 

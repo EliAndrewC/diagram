@@ -14,7 +14,7 @@ Every entry: what the research found, the decision it drove, and any deliberate 
 
 **Evidence:** attested, corroborated, setting-canon - **plus one `reconstruction` that used to be mis-classed as a finding; see "What the research did NOT find" below**
 
-**Sources:** not recorded - the finding is in the prose below; add a key to `SOURCES.md` when it is re-consulted
+**Sources:** `hanko-jawiki` (READ: 255 schools, 武芸 and 演武場), `edo-three-dojos-jawiki` (READ), `genbukan-jawiki` (the disciple count is SUMMARY-ONLY and contested: ~3,000 vs 6,000+; the entry's 3,600 is neither). The "boom of 1830-1860" range: not found in any page read - it is the entry's summary of the three dojos' founding dates (1773/1822/1826) and late-Edo growth
 
 **What the research found.** The standalone dojo with a resident sensei and enrolled students is an urban institution in both anchor cultures. In Edo Japan formal martial instruction lived in the **castle town**: the domain school (*hanko*) and its martial hall (*bugeijo*) were built in castle towns for the domain's own retainers, and by late Edo nearly every one of the ~260 domains had one. Private commercial halls - *machi-dojo*, run by low-income bushi and eventually by commoners teaching for a living - are a **late phenomenon and a metropolitan one**: the boom runs roughly 1830-1860 and its famous examples (the Three Great Dojo of Edo; Chiba Shusaku's Genbukan claimed ~3,600 disciples over its life) sit in a city of a million. The Chinese anchor is starker: military examinations were held at county and prefectural level and candidates prepared at schools, but there was no dense network of private martial academies at a county seat - drill happened at garrison grounds.
 
