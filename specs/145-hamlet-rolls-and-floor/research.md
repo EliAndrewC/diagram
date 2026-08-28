@@ -76,6 +76,44 @@ once. First derivation: **99 modules** - `check_village` (45), `settlement` (~30
 (10), `waterfields` (7), `interactive` (2), `sitegen`, `_invocation`. `waterfields` and
 `interactive` were not in the measured `source` list at all before this feature.
 
+## R3b - the floor's first measurement, and what it is made of (T12)
+
+`floor-first.txt` is the table. 932 uncovered lines on the 99 hamlet-path modules, mapped to the
+functions holding them. Two kinds, and the spec treats them differently (FR-002):
+
+**Hamlet code no roll or test reached (~200 lines)** - covered in this feature by tests where a unit
+can reach the branch (the geometry predicates, the solver's probe and re-run, the registry cache, the
+sibling guard, the SVG merger, the waive printout), and otherwise by the cohort the FULL run rolls
+(seed-dependent placer branches: `_thread_the_fabric`, `_smooth_web`, `_strip_blocked`, the well and
+byre fits, the carve's sector edge cases). The residue after the next FULL run is listed at T12.
+
+**Code only another tier reaches, inside a module the hamlet path executes (~700 lines)** - the case
+the spec sends to the GM, not to tests and not to deletion. By function:
+
+| module | lines | what it is |
+|---|---|---|
+| `check_village/common_02_overlap_policy.py` | 223 | `check_fire_features` (143), `_theater_one_stage` (75), `_ward_interior` (48), `check_ring_road_clear`, `check_theater_stage` - town/city fire towers, theaters, wards, the ring road |
+| `check_village/segments_11a_taxfree_terraces_and_dikeponds.py` | 56 | `dikepond_is_ponds_in_a_block` (94 lines of it) - the mulberry dike-pond form, which no scripted map draws yet |
+| `check_village/segments_01*, 02*, 03a/b, 10*` (city, capital, wards) | ~150 | the city/capital branches of segments the hamlet gate still enters and leaves at their scale guard |
+| `check_village/common_03_capacity.py` | 32 | `_fronts_route`, `city_capacity` |
+| `waterfields/polder.py` | 100 | `build_terraces` (85), `build_ribbon` (66) - the contour-terrace and ribbon-valley field engines; `FIELD_ARCHETYPES` deliberately holds two of the five (`consts.py`), so hamletgen never calls them; the two pool maps that did are frozen legacy |
+| `settlement/water_ways.py` | 44 | `market`, `ancestral_hall`, `water_mouth`, `alley` - town features |
+| `settlement/structures/fixtures.py` | 32 | `drum_tower` (30) - a city fixture; the kosatsuba branches are hamlet's and get tests |
+| `settlement/city/bridges.py` | 18 | `bridges`, `channel_footbridges` - the city's spans; the hamlet path enters the module for the footbridge helper |
+| `settlement/finish.py` | 22 | `finish`'s city crop / legend branch (lines 419-468) |
+| `settlement/core.py` | 8 | `crop_city` |
+| `settlement/_knobs.py` | 7 | `machi_mouths`, `moat_swept_tap` |
+| `settlement/shrines_wells/woods.py` | 14 | `forest` (13) - the town-scale canvas-filling wood |
+
+Three ways to make the floor honest about these, for the GM to choose between (none taken here):
+
+1. **Write the tests** - contradicts the GM's own reason for the exemption ("they might be deleted entirely"), ~700 lines of city/town test-writing.
+2. **Move the other-tier code out of the shared modules** into modules the hamlet path never executes (a `city/` segment file, a `polder_hill.py`, `water_ways_town.py`) - mechanical, no behavior change, and it makes the module-level floor mean exactly what the GM said; the cost is a file move per function and the frozen-registry re-derivation for the check segments.
+3. **A recorded, per-function exemption list** read by the floor - the "something we just remember to maintain" the GM asked to avoid; listed only for completeness.
+
+The session's recommendation is 2: it is the module-level ruling applied to the code rather than to
+the floor, and it leaves nothing for a future session to remember.
+
 ## R4 - the numbers at the end
 
 (filled in at T22)
