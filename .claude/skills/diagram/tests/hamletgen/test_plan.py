@@ -151,6 +151,15 @@ def test_a_dike_pond_rolls_its_arrangement_and_a_rice_polder_is_the_grid() -> No
     assert hg.plan_site(hg.HamletSpec(name="X", seed=3, households=16, field_archetype="mulberry_dike_fishpond", pond_layout="grid")).pond_layout == "grid"
 
 
+def test_the_manure_form_rolls_both_ways_and_pins() -> None:
+    """Two attested forms (feature 139 A2): heap (Tohoku) and pit (Lake Tai), rolled per hamlet."""
+    rolled = {hg.plan_site(hg.HamletSpec(name="X", seed=s, households=15)).manure_form for s in range(1, 30)}
+    assert rolled == {"heap", "pit"}
+    assert hg.plan_site(hg.HamletSpec(name="X", seed=3, households=15, manure_form="pit")).manure_form == "pit"
+    with pytest.raises(ValueError, match="manure_form"):
+        hg.HamletSpec(name="X", seed=1, manure_form="lagoon")
+
+
 def test_a_nonsense_pond_layout_is_refused() -> None:
     with pytest.raises(ValueError, match="pond_layout"):
         hg.HamletSpec(name="X", seed=1, pond_layout="chessboard")

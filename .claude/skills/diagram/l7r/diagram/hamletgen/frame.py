@@ -33,6 +33,7 @@ def stage_crossings(s: Settlement, plan: SitePlan) -> None:
             # settlement-side toe collector, one per interior lateral, none on the feeder, the far
             # toe or the drain. Spacing as the hand-authored maps had it.
             s.channel_footbridges(spacing=320, seg_caps=polder_crossing_caps(plan))
+            s.dike_gates()  # a sluice gate at every cut of the perimeter dike, snapped to the recorded water (feature 139 A7)
         else:
             s.channel_footbridges(spacing=300)
 

@@ -24,6 +24,7 @@ from .consts import (
     HOUSEHOLD_BAND,
     LANE_SKELETONS,
     LANE_WEBS,
+    MANURE_FORMS,
     OFFTAKE_LADDER,
     PLOT_SIZES,
     POLDER_ARCHETYPES,
@@ -72,6 +73,7 @@ class HamletSpec:
     settlement_form: str | None = None
     field_archetype: str | None = None
     pond_layout: str | None = None  # a dike-pond's arrangement, grid | mosaic (feature 139; `POND_LAYOUTS`)
+    manure_form: str | None = None  # the manure fixture's form, heap | pit (feature 139; `MANURE_FORMS`)
     plot_size: str | None = None
     grain_drift: int | None = None
     woodland_patches: int | None = None
@@ -81,6 +83,8 @@ class HamletSpec:
     def __post_init__(self) -> None:
         if self.field_archetype is not None and self.field_archetype not in FIELD_ARCHETYPES:
             raise ValueError(f"field_archetype {self.field_archetype!r} is not one this generator draws: {sorted(FIELD_ARCHETYPES)}")
+        if self.manure_form is not None and self.manure_form not in MANURE_FORMS:
+            raise ValueError(f"manure_form {self.manure_form!r} must be one of {sorted(set(MANURE_FORMS))}")
         if self.pond_layout is not None and self.pond_layout not in POND_LAYOUTS:
             raise ValueError(f"pond_layout {self.pond_layout!r} must be one of {sorted(set(POND_LAYOUTS))} (research/archetypes.md 'Grid vs mosaic')")
         lo, hi = HOUSEHOLD_BAND
@@ -120,6 +124,7 @@ class SitePlan:
     # THE DIKE-POND'S ARRANGEMENT (feature 139): "grid" or "mosaic", rolled for a dike-pond hamlet
     # and pinned to "grid" for a rice polder (see `POND_LAYOUTS`). Read by `stage_polder`.
     pond_layout: str
+    manure_form: str  # heap | pit (feature 139, `MANURE_FORMS`), read by `farmstead_fixtures`
     plot_size: str
     grain_drift: int
     woodland_patches: int
@@ -249,6 +254,7 @@ def plan_site(spec: HamletSpec) -> SitePlan:
         settlement_form=spec.settlement_form or str(_roll(spec.seed, "settlement_form", SETTLEMENT_FORMS)),
         field_archetype=_archetype,
         pond_layout=_pond_layout,
+        manure_form=spec.manure_form or str(_roll(spec.seed, "manure_form", MANURE_FORMS)),
         plot_size=spec.plot_size or str(_roll(spec.seed, "plot_size", PLOT_SIZES)),
         grain_drift=spec.grain_drift if spec.grain_drift is not None else int(_roll(spec.seed, "grain_drift", GRAIN_DRIFTS)),
         woodland_patches=spec.woodland_patches if spec.woodland_patches is not None else int(_roll(spec.seed, "woodland_patches", (2, 3, 3, 4))),

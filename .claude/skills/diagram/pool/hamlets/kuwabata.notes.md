@@ -51,10 +51,19 @@ the windbreak, the plank crossings clustered on the settlement side (`polder_cro
 A **cash-crop settlement, not a subsistence one** - the rice-farmer's analog of the tobacco or
 indigo switch. Stocked carp ponds; the loop is mulberry leaf -> silkworm -> frass -> fish ->
 dredged pond mud -> dike fertility. **Silk is the bigger earner**; fish go to market; grain is
-bought in. Gazetteers found the total absence of rice remarkable enough to record. Placement
-implication: a river or canal link to a substantial market town is implied wherever Kuwabata sits.
+bought in. Gazetteers found the total absence of rice remarkable enough to record. The market link is
+the **connector lane** - to the market town, or to the river or canal that carries the goods there;
+the map draws no creek or boats of its own. The GM (2026-08-28, feature 139 audit A1): a hamlet of
+this kind need not sit on navigable water, and the lane is presumed to lead to whatever does.
 Open flavor hook, NOT canon anywhere wider: L7R land tax is assessed in koku of rice, so
 Kuwabata's tax is presumably commuted to cash or silk.
+
+## No threshing floors (feature 139 T41, GM 2026-08-28)
+
+A hamlet that grows no rice threshes none: the farmsteads draw no threshing/drying floor. The open
+ground before each house is still RECORDED (`threshing_yards[].kind = "forecourt"`, no ink) because
+the lane web threads around it and the trees, scrub and wells keep out of it - a silk-and-fish
+household works its leaf, cocoons and nets on that ground. `meta.work_yards: false` declares it.
 
 ## What makes it a hamlet, not a village
 

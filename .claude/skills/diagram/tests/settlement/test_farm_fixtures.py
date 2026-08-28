@@ -20,6 +20,19 @@ def test_every_fixture_kind_draws_on_top_and_records_its_house():
         s.farm_fixture("pigsty", 10, 10)
 
 
+def test_the_manure_pit_form_draws_a_jar_mouth_and_records_its_form():
+    # feature 139 A2: the pit is the same KIND (one share, one seat table) in another form and class
+    from l7r.diagram.settlement import Settlement
+
+    s = Settlement(W=400, H=400, seed=1)
+    s.farm_fixture("manure", 100.0, 100.0, rot=5.0, of=(80.0, 90.0), form="pit")
+    rec = s.M["farm_fixtures"][-1]
+    assert rec["kind"] == "manure" and rec["form"] == "pit" and abs(rec["w"] - rec["h"]) < 0.01
+    assert s.top_cls[-1] == "manure pit" and "<circle" in s.top[-1]
+    with pytest.raises(ValueError, match="form"):
+        s.farm_fixture("privy", 100.0, 100.0, form="pit")
+
+
 def test_persimmon_is_one_crown_with_fruit_and_joins_the_tree_record():
     s = Settlement(W=600, H=600, seed=1)
     s.meta(name="T", scale="hamlet", ftpx=1)

@@ -19,8 +19,9 @@ ECONOMY (GM-confirmed 2026-07-24): a cash-crop settlement, not a subsistence one
 analog of the tobacco/indigo switch. Stocked carp ponds; the loop is mulberry leaf -> silkworm ->
 frass -> fish -> dredged pond mud -> dike fertility; silk is the bigger earner, fish go to market,
 grain is bought in. Gazetteers found the total absence of rice remarkable enough to record.
-Placement implication: a river or canal link to a substantial market town is implied wherever
-Kuwabata sits. Open flavor hook, NOT canon anywhere wider: L7R land tax is assessed in koku of
+Its market is reached by the connector lane, which leads either to the market town itself or to the
+river or canal that carries the silk and fish there; the map draws no creek of its own (GM 2026-08-28,
+feature 139: a dike-pond hamlet need not sit on navigable water, the lane is the link). Open flavor hook, NOT canon anywhere wider: L7R land tax is assessed in koku of
 rice, so Kuwabata's tax is presumably commuted to cash or silk.
 """
 

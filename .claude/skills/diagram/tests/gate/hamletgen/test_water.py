@@ -74,6 +74,7 @@ def test_a_polder_hamlet_draws_its_grid_dike_and_reservoir() -> None:
     assert abs(plan.acres - plan.target_acres) / plan.target_acres < 0.12, f"{plan.acres:.1f} acres against a {plan.target_acres:.1f} target"
     assert plan.placed == plan.spec.households
     assert M.get("dikes"), "a polder without its perimeter dike is not a polder"
+    assert len(M.get("sluice_gates") or []) == len(M["dikes"][0]["gaps"]) >= 2, "a gate at every cut of the dike (feature 139 A7)"
     pond = M.get("pond")
     assert pond, "the header reservoir is the polder's water source"
     assert not point_in_poly(pond[0], pond[1], list(plan.envelope)), "the reservoir sits BESIDE the crop, never in it"
@@ -90,6 +91,7 @@ def test_a_dike_pond_hamlet_is_ponds_in_a_diked_block_with_wet_flanks() -> None:
     assert m["field_archetype"] == "mulberry_dike_fishpond" and m["pond_layout"] == "mosaic"
     assert any(r["overlay"] == "mulberry_fishpond" and r["count"] >= 20 for r in M["land_use"])
     assert M.get("dikeponds"), "the ponds are recorded as dike-ponds"
+    assert 1 <= sum(1 for d in M["dikeponds"] if d.get("kind") == "fry") <= 3, "a few of the smallest parcels are fry nursery ponds (feature 139 A5)"
     assert plan.placed == plan.spec.households
     assert set(m["waterward"]) and set(m["waterward"]) <= {"N", "E", "S", "W"}
     assert sum(1 for q in M["marshes"] if q.get("role") == "waterside") == len(m["waterward"])

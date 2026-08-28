@@ -302,6 +302,7 @@ _OVERLAP_EXEMPT = {
 # NAME to be allowed to cover the feature - and because the group name is the caption word, that
 # permission is derived rather than hand-listed too (see _label_allows).
 _LABEL_GROUP = {
+    "sluice_gates": "sluice",
     "quays": "quay",
     "theater_stage": "theater",
     "granaries": "granary",

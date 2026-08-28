@@ -112,11 +112,25 @@ class LandUseMixin:
         for ch in net.get("channels", []):
             cpp = ch["pts"]
             chansegs += [((float(a[0]), float(a[1])), (float(b[0]), float(b[1]))) for a, b in zip(cpp, cpp[1:], strict=False)]
+
+        # FRY NURSERY PONDS (feature 139, GM 2026-08-28 choosing audit A5): fry are reared in small ponds before
+        # stocking the grow-out ponds - the delta's fry trade had its own Ming-era center (Miles 2003; the
+        # Sangyuanwei proverb 男贩鱼花). On the WHOLESALE archetype the smallest parcels of the block are
+        # designated fry ponds: no new ink, a record and a class of their own for the interactive map. The
+        # share (about one parcel in ten, one to three per hamlet) is a GUESS - nothing read gives a fry-pond
+        # count per household - and is labeled so in the class entry.
+        def _area(poly: Any) -> float:
+            return float(abs(sum(poly[i][0] * poly[(i + 1) % len(poly)][1] - poly[(i + 1) % len(poly)][0] * poly[i][1] for i in range(len(poly))))) / 2
+
+        fry_ids: set[int] = set()
+        if overlay == "mulberry_fishpond" and eligible == "all" and len(chosen) >= 4:
+            _n_fry = min(3, max(1, round(0.1 * len(chosen))))
+            fry_ids = {id(p) for p in sorted(chosen, key=lambda q: _area(q["poly"]))[:_n_fry]}
         for p in chosen:
             pts = " ".join(f"{x:.1f},{y:.1f}" for x, y in p["poly"])
             cx = sum(v[0] for v in p["poly"]) / len(p["poly"])
             cy = sum(v[1] for v in p["poly"]) / len(p["poly"])
-            self._landuse_draw_plot(p, pts, cx, cy, overlay, colors, chansegs, rng, dikeponds, crown_q)
+            self._landuse_draw_plot(p, pts, cx, cy, overlay, colors, chansegs, rng, dikeponds, crown_q, fry=id(p) in fry_ids)
             n += 1
         if dikeponds:
             self.M["dikeponds"] = dikeponds
@@ -215,8 +229,10 @@ class LandUseMixin:
         rng: random.Random,
         dikeponds: list[dict[str, Any]],
         crown_q: list[tuple[Poly, str, float, float]],
+        fry: bool = False,
     ) -> None:
         """Draw ONE converted plot: a dike-pond unit (bank, water, deferred crowns, record) or a lotus field.
+        `fry` marks a fry nursery pond (feature 139): same ink, its own class and record kind.
 
         `dikeponds` and `crown_q` are appended to in place - the caller needs both after the loop."""
         if overlay == "mulberry_fishpond":
@@ -265,12 +281,13 @@ class LandUseMixin:
             bd, bpoly = self._rounded_pond(qpoly, inset=0.0, reach=8.0, rng=rng)
             self.add(f'<path d="{bd}" fill="#C2A772" stroke="#9C8558" stroke-width="1.2" stroke-linejoin="round" opacity="0.95"/>', cls="mulberry dike")
             wd, wpoly = self._rounded_pond(qpoly, inset=11.0, reach=16.0, rng=rng)
-            self.add(f'<path d="{wd}" fill="{colors[overlay]}" stroke="#6C9CBE" stroke-width="1.4"/>', cls="fish pond")
+            self.add(f'<path d="{wd}" fill="{colors[overlay]}" stroke="#6C9CBE" stroke-width="1.4"/>', cls="fry pond" if fry else "fish pond")
             crown_q.append((qpoly, bd, cx, cy))  # crowns drawn after the late-water anchor (see below)
             # `bank` = the planted band's outer edge, recorded so mulberry_banks_clear_of_channels has
             # manifest teeth: the crowns fill the bank, so "no canal runs inside a bank" bounds the bushes
             dikeponds.append(
                 {
+                    "kind": "fry" if fry else "grow-out",
                     "parcel": [[round(x, 1), round(y, 1)] for x, y in qpoly],
                     "water": [[round(x, 1), round(y, 1)] for x, y in wpoly],
                     "bank": [[round(x, 1), round(y, 1)] for x, y in bpoly],

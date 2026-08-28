@@ -311,6 +311,13 @@ POLDER_FABRIC: dict[str, dict[str, Any]] = {
 # is why the mosaic is the more common roll. `build_polder(mosaic=)` is the engine's dial: 0.0 is
 # the grid, 0.5 the mosaic Kuwabata was drawn with (the GM saw and accepted that map's ponds).
 POND_LAYOUTS = ("mosaic", "mosaic", "grid")
+
+# THE MANURE FIXTURE'S FORM - heap or pit, two attested forms so a knob (constitution XII; feature 139, GM
+# 2026-08-28 choosing audit A2). Sugiura 1973 counts the manure shed/heap on Tohoku farmsteads; Fei 1939 has
+# the Lake Tai silk village keeping its manure "in the pits made of earthenware, half buried in the ground at
+# the back of the building", lined along the road. Neither source gives a share of villages using each, so
+# the roll is even. research/archetypes.md "What stands on a dike-pond hamlet that a paddy hamlet lacks".
+MANURE_FORMS = ("heap", "pit")
 POND_LAYOUT_MOSAIC = 0.5
 
 # THE SHARE OF THE BLOCK THAT CONVERTED in the end state. `apply_land_use(fraction=)` is the ECONOMIC

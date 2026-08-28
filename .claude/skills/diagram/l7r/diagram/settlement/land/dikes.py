@@ -269,3 +269,42 @@ class DikeMixin:
         random.setstate(st)
         self.M["meta"].setdefault("settlement_form", "dike_top")
         return n_placed
+
+    def dike_gates(self: Settlement, span_ft: float = 6.0) -> int:  # type: ignore[misc]
+        """A sluice gate at every cut of every perimeter dike (feature 139, GM 2026-08-28 choosing audit A7).
+
+        Water crosses a polder dike only through a gated sluice - "a protected opening in the pond dike that
+        can be easily closed with wooden boards" (FAO; research/archetypes.md 'A dike-pond is fed and drained
+        through sluice gates'). Drawn with the engine's own gate glyph (posts + lifted board, `city/moat.py`),
+        turned to lie along the crest, i.e. across the water, and SNAPPED onto the recorded watercourse the
+        gate checks measure against (streams + canals, `segments_06b` `sc_waters`) when one runs within 20 ft
+        of the cut - which is why this is a separate step, called from the crossings stage after every
+        watercourse is recorded, and not part of `perimeter_dike` (drawn before the inlet stream exists;
+        measured: the inlet gate landed 8.9 px off its stream). Returns the number of gates drawn."""
+        n_gates = 0
+        for dk in self.M.get("dikes", []):
+            crest = [(float(c[0]), float(c[1])) for c in dk.get("crest") or []]
+            if len(crest) < 4:  # pragma: no cover - a recorded dike always carries its crest
+                continue
+            n = len(crest)
+            for gx, gy in [(float(g[0]), float(g[1])) for g in dk.get("gaps") or []]:
+                k = min(range(n), key=lambda i: math.hypot(crest[i][0] - gx, crest[i][1] - gy))
+                a, b = crest[(k - 2) % n], crest[(k + 2) % n]
+                rot = math.degrees(math.atan2(b[1] - a[1], b[0] - a[0]))
+                sx, sy, sd = gx, gy, 1e9
+                for key in ("streams", "canals", "channels"):  # the checks' own set (segments_06b sc_waters: streams + canals + channels + moat)
+                    for ch in self.M.get(key, []):
+                        pp = ch.get("poly") or []
+                        for q0, q1 in zip(pp, pp[1:], strict=False):
+                            ax, ay, bx, by = float(q0[0]), float(q0[1]), float(q1[0]), float(q1[1])
+                            ll = (bx - ax) ** 2 + (by - ay) ** 2
+                            tt = 0.0 if ll == 0 else max(0.0, min(1.0, ((gx - ax) * (bx - ax) + (gy - ay) * (by - ay)) / ll))
+                            cx, cy = ax + tt * (bx - ax), ay + tt * (by - ay)
+                            dd = math.hypot(cx - gx, cy - gy)
+                            if dd < sd:
+                                sx, sy, sd = cx, cy, dd
+                if sd > self.px(20.0):  # no recorded course within reach: the cut itself is the seat
+                    sx, sy = gx, gy
+                self.sluice_gate(sx, sy, rot=rot, span=self.px(span_ft))
+                n_gates += 1
+        return n_gates

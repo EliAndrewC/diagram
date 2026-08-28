@@ -57,6 +57,7 @@ def stage_water_frame(s: Settlement, plan: SitePlan) -> None:
         # feature; the dike-pond archetype sells silk and fish and buys grain in. Declared here so the
         # bundle omits the yard (`_bundle_geom`) and `harvest_yards_present` stands aside.
         work_yards=plan.field_archetype != "mulberry_dike_fishpond",
+        manure_form=plan.manure_form,  # the rolled manure form (feature 139 A2), read by farmstead_fixtures
     )
     s._work_yards = plan.field_archetype != "mulberry_dike_fishpond"
     # `_nucleated` IS NOT THE FORM - it is the engine's flag for a COMPACT BUNDLE (house + lee

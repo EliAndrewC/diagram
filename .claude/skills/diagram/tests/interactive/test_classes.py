@@ -61,6 +61,9 @@ SPEC_CLASSES = [
     "mulberry dike",
     "pond sluice",
     "perimeter dike",
+    "fry pond",
+    "manure pit",
+    "sluice gate",
 ]
 
 

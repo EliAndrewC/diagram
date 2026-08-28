@@ -29,6 +29,13 @@ if TYPE_CHECKING:
 # The interactive map's feature class per fixture kind (feature 134, spec FR-007) - the vocabulary
 # is `interactive/classes.py`; a kind missing here is a KeyError at draw time, never silent ink.
 FIXTURE_CLASS = {"privy": "privy", "woodpile": "woodpile", "manure": "manure heap", "bath": "bathhouse", "coop": "hen coop", "shrine": "household shrine"}
+# THE MANURE FIXTURE HAS TWO ATTESTED FORMS (feature 139, GM 2026-08-28 choosing audit A2): the HEAP by the
+# privy or stable (Tohoku, Sugiura 1973) and the PIT - "pits made of earthenware, half buried in the ground at
+# the back of the building" and lined along the road (Fei 1939, Lake Tai). Two forms -> a knob, rolled per
+# hamlet (`MANURE_FORMS`); the record keeps `kind: manure` (one share, one seat table, every check unchanged)
+# and carries `form: pit` when the pit is drawn. The pit is a ~3.5 ft jar mouth: a dark disc with a pale rim.
+PIT_FT = 3.5
+FIXTURE_CLASS_BY_FORM = {"pit": "manure pit"}
 
 FIXTURE_FT: dict[str, tuple[float, float]] = {
     "privy": (6.0, 6.0),
@@ -44,11 +51,14 @@ SHRINE_RED = "#A03020"  # the same vermilion as small_shrine's roof - the GM's "
 
 
 class FarmFixturesMixin:
-    def farm_fixture(self: Settlement, kind: str, cx: float, cy: float, rot: float = 0.0, of: Any = None) -> None:  # type: ignore[misc]
-        """Draw and record one farmstead fixture of `kind` centered at (cx, cy), raked with its house."""
+    def farm_fixture(self: Settlement, kind: str, cx: float, cy: float, rot: float = 0.0, of: Any = None, form: str | None = None) -> None:  # type: ignore[misc]
+        """Draw and record one farmstead fixture of `kind` centered at (cx, cy), raked with its house. `form`
+        picks an attested alternative glyph of the same kind (`manure` -> `pit`, feature 139)."""
         if kind not in FIXTURE_FT:
             raise ValueError(f"unknown farm fixture kind {kind!r}")
-        w, h = self.px(FIXTURE_FT[kind][0]), self.px(FIXTURE_FT[kind][1])
+        if form is not None and (kind, form) != ("manure", "pit"):
+            raise ValueError(f"no form {form!r} for fixture kind {kind!r}")
+        w, h = (self.px(PIT_FT), self.px(PIT_FT)) if form == "pit" else (self.px(FIXTURE_FT[kind][0]), self.px(FIXTURE_FT[kind][1]))
         x0, y0 = -w / 2, -h / 2
         edge = "#5A4326"
         g = [f'<g transform="translate({cx:.1f},{cy:.1f}) rotate({rot:.2f})">']
@@ -60,6 +70,9 @@ class FarmFixturesMixin:
             n = max(3, int(w / 2.6))
             for i in range(n):  # the end grain of the split logs, the thing that makes a stack read as a stack
                 g.append(f'<circle cx="{x0 + (i + 0.5) * w / n:.1f}" cy="0" r="{min(h, 2.6) * 0.34:.1f}" fill="#C9A874"/>')
+        elif kind == "manure" and form == "pit":
+            g.append(f'<circle cx="0" cy="0" r="{w / 2:.1f}" fill="#C9B384" stroke="#7A5A30" stroke-width="0.9"/>')  # the jar's rim, flush with the ground
+            g.append(f'<circle cx="0" cy="0" r="{w / 2 - 1.1:.1f}" fill="#4A3418"/>')  # the dark mouth
         elif kind == "manure":
             # a plain mound with straw hatching - the dashed outline read as a crown's scallop, i.e. a bush (review at T99)
             g.append(f'<ellipse cx="0" cy="0" rx="{w / 2:.1f}" ry="{h / 2:.1f}" fill="#6B4F2A" stroke="#4A3418" stroke-width="0.7"/>')
@@ -80,8 +93,10 @@ class FarmFixturesMixin:
             g.append(f'<line x1="{x0 + 0.6:.1f}" y1="{ty - 0.4:.1f}" x2="{x0 + 0.6:.1f}" y2="{ty + 2.2:.1f}" stroke="{SHRINE_RED}" stroke-width="1.1"/>')
             g.append(f'<line x1="{-x0 - 0.6:.1f}" y1="{ty - 0.4:.1f}" x2="{-x0 - 0.6:.1f}" y2="{ty + 2.2:.1f}" stroke="{SHRINE_RED}" stroke-width="1.1"/>')
         g.append("</g>")
-        self.add_top("".join(g), cls=FIXTURE_CLASS[kind])  # feature 134: each kind is its own highlight class
+        self.add_top("".join(g), cls=FIXTURE_CLASS_BY_FORM.get(form or "", FIXTURE_CLASS[kind]))  # feature 134: each kind (and form) is its own highlight class
         rec: dict[str, Any] = {"kind": kind, "x": round(cx, 1), "y": round(cy, 1), "w": round(w, 1), "h": round(h, 1), "rot": round(rot, 1)}
+        if form is not None:
+            rec["form"] = form
         if of is not None:
             rec["of"] = [round(float(of[0]), 1), round(float(of[1]), 1)]
         self.M.setdefault("farm_fixtures", []).append(rec)
