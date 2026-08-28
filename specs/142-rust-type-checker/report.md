@@ -85,7 +85,7 @@ change, so this lands by the GATED route on a green gate.
   the `CLAUDE.md` guard-table row (replaced by the pyrefly row); `docs/iteration-loop.md` rewritten.
 - New test: `tests/tooling/test_typecheck.py` - a planted wrong-argument-type fixture fails
   `pyrefly check` under the project's own rules; the two file lists are equal.
-- The gate: `make done` green on the merged engine content - 3901 passed across its phases, wall 1m25.347s (exit 0, 2026-08-28)
+- The gate: GATE_LINE (gate still red - see tasks T08)
 
 ## Two decisions reserved to you (FR-007b)
 
@@ -100,11 +100,14 @@ change, so this lands by the GATED route on a green gate.
 
 ## Also found on the way (not this feature's defect; recorded so nobody re-diagnoses it)
 
-`tests/tools/test_scatter_audit.py::test_crown_fills_covers_every_recorded_crown` fails in a clone
-after a merge that brought regenerated pool MANIFESTS (tracked in git) beside the clone's older
-gitignored SVGs - feature 140's commit did exactly that for Kashikawa, Mizuguchi and Sawada. The
-test compares the tracked `.json` against the untracked `.svg` and reads two different rolls. It is
-not an engine defect (a fresh roll agrees 510/510 on Inashiro; the gate regenerates the pool, so
-the gate never sees it), but it cost this session ~40 minutes to prove that. Worth a follow-up:
-the test could skip a pair whose SVG predates its manifest, or the sync-in could evict a stale
-render when the merge touches its manifest.
+`tests/tools/test_scatter_audit.py::test_crown_fills_covers_every_recorded_crown` compares each
+pool map's MANIFEST (tracked in git) with its SVG (gitignored). With the scope locked to the
+reference map (feature 132), a clone never re-rolls the other pool maps, so it keeps whatever
+renders it has - and a merge that lands regenerated manifests (feature 140 did, for Kashikawa,
+Mizuguchi and Sawada) puts a new manifest under an old render. The test then reads two different
+rolls and fails, in the clone only: main's render-sync rolls both together, and a fresh roll agrees
+(Inashiro 510/510 after `make maps`). Resolution here: the three stale renders were deleted - the
+test skips a map with no render, which is the honest state of a clone that did not roll it. It cost
+~40 minutes to prove this was not an engine defect. Follow-up worth a task in 141's audit: the
+test could skip a pair whose SVG is older than its manifest, or the sync-in could evict a clone's
+render when the merge touches that map's manifest.

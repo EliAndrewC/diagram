@@ -20,6 +20,6 @@ All tasks `research: rendering` - nothing here is about the world; tooling only.
 
 ## Phase 4 - gate, report, acceptance
 
-- [x] T08 the gate once (engine tokens changed in T04 -> it re-keys): green, 3901 passed across its phases, wall 1m25.347s (exit 0, 2026-08-28); the one failure seen before it (`test_crown_fills_covers_every_recorded_crown`) was a stale-render pair in the clone, not a regression - report.md, last section
+- [ ] T08 the gate once (engine tokens changed in T04 -> it re-keys); first run 2026-08-28: 1 failed / 3901 passed (the stale-render pair, report.md last section); second run after removing the three stale renders: GATE_LINE (gate still red - see tasks T08)
 - [x] T09 `report.md`: the one-sentence answer, the R2 table, the per-quick delta, the pick, the enforced/not-enforced list (FR-005), the residual split (FR-006), the two questions reserved to the GM (mypy in the lockfiles; the constitution's `mypy --strict` wording, with the proposed replacement text) - FR-007b, FR-009
 - [ ] T10 **the GM's acceptance** (FR-010) - stays open until the GM accepts the report and the pick in their own words; nothing pushes before (the lands-nothing guard enforces it). On acceptance: their rulings on the two reserved questions are applied as follow-up edits under this feature, then the gate and the stop-work procedure
