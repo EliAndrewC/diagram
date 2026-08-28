@@ -4,12 +4,14 @@
 
 **Created**: 2026-08-28
 
-**Status**: APPROVED by `spec-fidelity` - round 2 verdict **FAITHFUL** (2026-08-28), after round 1 returned three changes (the opening message to the tests session unrecorded; completion narrower than 100%; GM acceptance as a completion condition unrequested).
+**Status**: RE-CUT 2026-08-28 at the GM's instruction (*"recut the spec ... a new feature for the residue"*, verbatim in `../139-remaining-test-failures/gm-request.md`): this feature closes at what it landed - the fixes below - and the remaining failures are feature 139's inventory. Original approval: `spec-fidelity` round 2 verdict **FAITHFUL** (2026-08-28), after round 1 returned three changes (the opening message to the tests session unrecorded; completion narrower than 100%; GM acceptance as a completion condition unrequested).
 
 **Input**: [`gm-request.md`](gm-request.md), verbatim and unedited. That file is the authority for
 this specification.
 
 ## The feature, in one sentence
+
+**As re-cut (2026-08-28)**: the first half of the GM's goal - the reference hamlet, tripwire seeds 27/33/37, the belt, the title seat and the lane web's splices fixed and landed on main with a green gate (48-cohort 2 -> 25 of 48) - while the rest of *"one hundred percent"* is feature 139, open. The original sentence follows.
 
 Every expected failure pinned in the diagram test suite during the reference-hamlet period is
 FIXED - the pins removed, the seeds green - so that the whole suite passes with no waiver, while
@@ -84,7 +86,7 @@ belt-face lesson of 133 T91): each fix is measured on the full tripwire, the gat
 - **FR-003**: A pin row is removed in the same commit as the fix that makes it stale.
 - **FR-004**: Handoffs to the efficiency session are made only on a commit with a green gate and
   are recorded; pulls from it are made only on commits it names, and are recorded.
-- **FR-005**: The feature is complete when ONE HUNDRED PERCENT of the diagram tests pass with no
+- **FR-005** (as re-cut: completion is what landed; the 100% condition is 139's FR-004): The feature was to be complete when ONE HUNDRED PERCENT of the diagram tests pass with no
   expected-failure pin and no waiver of a failing check remaining anywhere: the three tables above
   empty (today's measured instance), plus every row the first full measurement adds under the
   inventory note - including a FULL-sweep-only failure or a 48-cohort-audit seed, should either
