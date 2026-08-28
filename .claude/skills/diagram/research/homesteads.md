@@ -16,6 +16,67 @@ Every entry: what the research found, the decision it drove, and any deliberate 
 
 **Sources:** `kashima-kainyo-1987` (READ 2026-08-28 via Tonami City's archive page, which quotes the 1987 survey's figures verbatim - 1,542 trees over 46 households, 48% sugi; the pointer was summary-only from 2026-07 until the GM asked whether it was hallucinated); ja.wikipedia 屋敷林
 
+## How big was the work yard, and how did the sizes spread? (researched 2026-08-28, feature 134 T49)
+
+**Grounds:** `homestead_parts.YARD_MEDIAN_TSUBO` / `YARD_SIGMA_LN` / `YARD_HOUSE_BETA` / `YARD_MIN_TSUBO` / `YARD_MEDIAN_TSUBO_DRYFIELD`, `_yard_area_ft2`; the yard rect `rolling/bundle.py` reserves
+
+**Evidence:** attested (the size band and the shape), interpolated (the wet-rice median, derived from the crop)
+
+**Sources:** [`kitamoto-mushiro-niwa`](SOURCES.md#kitamoto-mushiro-niwa), [`kamikanai-1771-houses`](SOURCES.md#kamikanai-1771-houses), [`kikoba-kenchi`](SOURCES.md#kikoba-kenchi), [`santome-shinden-allotment`](SOURCES.md#santome-shinden-allotment), [`kodaira-niwa`](SOURCES.md#kodaira-niwa), [`yonekura-mushiro`](SOURCES.md#yonekura-mushiro), [`tobunken-mushiro`](SOURCES.md#tobunken-mushiro), [`irri-drying-floor`](SOURCES.md#irri-drying-floor), [`ndl-kokumori`](SOURCES.md#ndl-kokumori)
+
+The GM, on the map's own modal: *"I see the threshing yard size is listed as a rendering convention.
+How large WERE these yards?"* The doc had carried ~100-300 sq m as the yard - which turns out to be
+the **homestead LOT** figure (Akishima city history: farms need a wide front yard, so lots run
+100-300 tsubo = 330-992 sq m), a real number attached to the wrong thing.
+
+**The size, as households themselves stated it.** Kitamoto (Saitama) city history, folk volume:
+「収穫期には庭一面にムシロが敷かれ、しばしば庭の広さはこのムシロの枚数で表現された。麦の耕作面積と関係
+していて、普通四〇〜六〇枚、中には百枚を越す家もあった。ちなみに、ムシロ二枚が一坪にあたる。」 - the yard
+was measured in straw mats, 40-60 usually and past 100 for a few, two mats to the tsubo: **20-30
+tsubo (66-99 sq m) ordinarily, past 50 tsubo (165 sq m) at the top**, and explicitly sized by the
+household's cropped acreage. Two independent lines agree: an Okayama museum records ~50 mats per
+farm, and the measured mat is 90 x 180 cm, so ~80 sq m; a directly measured yard at Kodaira is 70
+tsubo (231 sq m) - a large Musashino holding, the upper end. No survey found tabulates yards as
+areas; these are the readable figures.
+
+**But Kitamoto is a BARLEY district, and this generator draws wet rice.** Its yard is sized by the
+mugi crop, which the household spreads whole. Rice is field-dried on *hazakake* racks for 10-14
+days before it reaches the yard and is threshed in batches over days, so a paddy household needs
+less standing floor. Deriving it from the crop instead - 1.3 koku/tan (中田 石盛) -> 247 kg momi at a
+79% hulling yield -> mats at IRRI's 2.5 cm spread, batched - gives **55-100 sq m for a full cho and
+35-65 for five tan**. The generator therefore centers a rice hamlet's yards at **18 tsubo (59.5 sq
+m)** and keeps Kitamoto's 25 tsubo as the dry-field figure (`yard_sizes="dryfield"`), for the barley
+village no map draws yet. The GM ruled between the two readings on 2026-08-28: *"I agree with option
+two"* - the sourced SHAPE everywhere, the sourced SCALE appropriate to what the household dries.
+
+**The spread is lognormal, and it is right-skewed.** No survey gives a histogram of yards, so the
+shape comes from what the cadastres do tabulate, and every one is right-skewed: Kamikanai (1771)
+gives a complete main-house histogram whose 31 commoner houses fit a lognormal of median 22.5 tsubo
+and **sigma_ln 0.46**, with the headman detached at 3.1x; Kikoba's Genroku 検地帳 puts homestead lots
+at 15-100 bu about a mode of 30, great holders at 2x the ordinary class. Kitamoto's own
+band-and-tail implies **sigma 0.35-0.45** - that convergence is what the drawn sigma of 0.40 rests
+on. A floor exists but is not zero: early registers carry a no-homestead class (無屋敷登録人), but by
+Genroku *"田畑を保有しない百姓も含め全百姓が屋敷を持つようになり"* - the landless simply occupy the small
+end, so the roll is floored at 8 tsubo rather than allowed to vanish.
+
+**The yard follows the household, but not proportionally.** Kamikanai measures the coupling as
+ADDITIVE - 「持高が5石ほど増加すれば坪数が10坪ほど増加する」 - so a 20x holder does not get a 20x yard,
+even though holdings inside one village span 5 sho to 355 koku. The generator gives the yard the
+household's own deviation in log space, amplified by `YARD_HOUSE_BETA` and then perturbed by an
+independent positional draw: a large household is overwhelmingly likely to have a large yard, a
+mismatch is possible and rare - the GM's own reading of what the record implies.
+
+**One attested form is NOT skewed, and is a knob.** A planned *shinden* colony issued every settler
+an identical homestead - Santome 1696, *"屋敷の規模はまったくの均等配分"* - so `yard_sizes="allotted"`
+draws uniform yards. Principle XII's ladder: two attested forms become a per-settlement knob.
+
+**What this changed on the map.** Yards were a fixed fraction of the house (~0.8 x 0.92 of its
+footprint, jittered down), which produced a narrow 50-92 sq m band with no relation to the
+household beyond the house's own size. They are now rolled per household from the distribution
+above, which is an ENGINE change: the yard is part of the homestead bundle the placer reserves, so
+every hamlet that dries rice re-solves its farmstead spacing (GM 2026-08-28: *"I completely
+understand that"*).
+
 ## The threshing yard's sun, and how far a farmhouse shades
 
 **Evidence:** reconstruction (derived from geometry)
