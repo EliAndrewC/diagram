@@ -4,7 +4,7 @@
 
 **Created**: 2026-08-28
 
-**Status**: DRAFT - awaiting `spec-fidelity` (constitution XVI)
+**Status**: round 1 returned five changes (decisions embedded as requirements; the lock an unrequested addition; `make maps` under the lock; two suspend rules; nothing carried "never interrupts the merge") - applied below; round 2 pending
 
 **Input**: [`gm-request.md`](gm-request.md), verbatim and unedited. That file is the authority for
 this specification.
@@ -50,10 +50,10 @@ cancelled (it re-arms at the end of that turn).
 
 The GM closes the laptop for the night. Every session has been idle far longer than its wait.
 
-**Acceptance**: **Given** the container was suspended for longer than the session's wait,
-**When** it resumes, **Then** no session starts the tests immediately; each waits its own full
-wait again from the resume. **Given** a suspend shorter than the wait, **Then** the wait is simply
-extended by the time suspended (no test starts within the wait's span of awake time).
+**Acceptance**: **Given** the container was suspended (a wall-clock jump past the timer's own
+awake count, threshold D2), **When** it resumes, **Then** no session starts the tests
+immediately; each waits its own FULL wait again from the resume - the one rule, whatever the
+suspend's length (the GM: "we wait an additional hour"; "long" is the detection threshold, D2).
 
 ### User Story 3 - many sessions, one runner (Priority: P1)
 
@@ -94,28 +94,49 @@ the feature's last task is the GM's acceptance of those decisions, in their word
   (the same source the clone name derives from), so a session's wait is fixed and two sessions
   differ unless their names hash alike. The band is a constant in one place.
 - **FR-003**: Resume detection: the timer counts its own awake time (a loop of short sleeps) and
-  compares it with the wall clock; a wall-clock jump of more than 5 minutes beyond the awake time
-  is a suspend. On a suspend the wait RESTARTS in full from the resume (the GM: "we wait an
-  additional hour"). The threshold is a constant in one place.
-- **FR-004**: At most one idle run at a time across every session on the host: a lock in a
-  location every session shares (`~/.claude/`); a session that finds it held defers by a further
-  stagger (5-15 minutes, from the same hash) and retries, up to the end of the day's window.
-- **FR-005**: The run is `make maps` in the session's clone - the tripwire and the tier sweep the
-  scope lock defers - launched fully detached (`setsid`), its output logged, its verdict appended to
-  the clone's `dev/idle-log/` (an append-only directory of records, like `dev/run-log/`), and the
-  last verdict printed to the session by the next UserPromptSubmit hook ("idle tests ran at HH:MM:
-  clean" / "FAILED: ...") so the session acts on it next turn. What is run is a single Makefile
-  target the GM can change.
-- **FR-006**: The mechanism never runs in main's tree, never runs while the session's own Bash is
-  mid-command (a Stop marks the end of a turn, which is the only arming point), and never runs
-  more than once per arming.
+  compares it with the wall clock; a wall-clock jump beyond the awake time larger than the
+  threshold (D2: 5 minutes) is a suspend, and on a suspend the wait RESTARTS in full from the
+  resume, whatever the suspend's length (the GM: "we wait an additional hour"). The threshold is a
+  constant in one place.
+- **FR-004** (a session DECISION beyond the request, D4 - the GM named the stagger as the herd
+  fix; this adds a backstop): at most one idle run at a time across every session on the host - a
+  lock in a location every session shares (`~/.claude/`); a session that finds it held defers by a
+  further stagger (5-15 minutes, from the same hash) and retries until the GIVE-UP (6 hours after
+  the arming, D4), after which that arming lapses without a run.
+- **FR-005**: "This kind of test" is taken to be the tests the scope lock deferred and that
+  surfaced at the unlock - the tripwire seeds and the tier sweep - and, by the GM's second quote,
+  the other hamlet types' gates. The run is one Makefile target, `make idle-tests` (D1: `maps`,
+  which under an UNLOCKED scope rolls the reference map, the tripwire seeds and every tier map),
+  in the session's clone, launched fully detached (`setsid`), its output logged, its verdict
+  appended to the clone's `dev/idle-log/` (an append-only directory of records, like
+  `dev/run-log/`), and the last verdict printed to the session by the next UserPromptSubmit hook
+  ("idle-tests: ran ... clean" / "FAILED: ...") so the session acts on it next turn. UNDER THE
+  SCOPE LOCK the target rolls the reference map alone, because the lock admits no override by any
+  variable, flag or environment (feature 132, the GM's own ruling) - so a locked period gets no
+  nightly look at the tier, and that limitation is put before the GM as D1b rather than worked
+  around.
+- **FR-006**: The mechanism never runs in main's tree, arms only at a Stop (the end of a turn),
+  and never runs more than once per arming.
+- **FR-006b** (the GM: "I do not want to implement this in a way which interrupts the merge back
+  into main"): an armed or running idle test never blocks, delays or invalidates the stop-work
+  ritual or the merge route. Concretely: (a) the timer's state lives in `.git/`, outside the tree
+  the ritual commits and the gate keys; (b) the timer does not START while any `make` is running
+  in the clone (a gate or a sweep the session launched and detached) - it defers like a lock loss;
+  (c) the idle run records its verification state under its own target name (`idle-tests`), which
+  the push guard never reads as a green `done`, so it neither grants nor revokes a push; (d) a new
+  prompt disarms the timer, and a run already in progress is left to finish - the session's own
+  `make` targets refuse to run beside it exactly as they refuse a second gate (two writers on the
+  pool maps), with the refusal naming the idle run and its log.
 - **FR-007**: Every rule has a test in `scripts/test-idle-tests-hooks.sh` run by `make hooks-test`
   (constitution XVIII): arm/disarm, the stagger band and its determinism, resume detection, the
   lock's exclusion and deferral, the record and its surfacing, the never-in-main rule - with the
   clocks, the sleeps and the command injected so the tests run in seconds.
 - **FR-008**: The doctrine is recorded: root `CLAUDE.md` (the guard table and the iteration-loop
-  section), `docs/iteration-loop.md`, and the skill's `dev/switches.md` (the lock's accepted cost
-  now has a nightly look).
+  section), `docs/iteration-loop.md`, and the skill's `dev/switches.md` (an UNLOCKED scope now has
+  a nightly look at the tier; a locked one still does not - D1b).
+- **FR-009** (the GM: "the final task of the feature is me taking acceptance of those decisions"):
+  the feature's last task is the GM's acceptance of the decisions listed below, tickable only on
+  the GM's explicit word, recorded verbatim.
 
 ### Key Entities
 
@@ -135,9 +156,19 @@ the feature's last task is the GM's acceptance of those decisions, in their word
   concurrent runs (the test proves it with the lock).
 - **SC-004**: `make hooks-test` green with the new guard and its companion; `make quick` green.
 
-## Decisions for the GM (User Story 4)
+## Decisions for the GM (User Story 4, FR-009) - every choice made in the GM's place
 
-Listed in `plan.md` "Decisions made in the GM's place" as they are made; copied here at the end.
+| # | decision (where it binds) | why | alternative declined |
+|---|---|---|---|
+| D1 | "this kind of test" = `make idle-tests` = the `maps` target: the reference map, the tripwire seeds, the tier sweep (FR-005) | exactly what the lock deferred and what surfaced at the unlock; ~5-10 min unlocked; the full gate (21 min) also writes the verification stamp, which an idle run must not | the full gate; the 48-seed cohort (no pool sweep) |
+| D1b | under a LOCKED scope the idle run rolls the reference map alone - the mechanism is silent about the tier during a locked period (FR-005) | the lock admits no override (feature 132, the GM's ruling: "we literally cannot"); an exemption for the idle run would be a flag the lock forbids | a lock exemption for idle runs (would need the GM to amend the lock's doctrine) |
+| D2 | wait = 60 + (cksum(session name) mod 61) minutes of AWAKE time (FR-002); suspend = a wall-clock jump > 5 minutes beyond the ticks (FR-003) | the GM's band; tick-vs-wall needs no OS resume signal; 5 minutes is far above scheduler jitter and far below a nap | a random draw per arming (two sessions can collide) |
+| D3 | any detected suspend restarts the FULL wait (FR-003) | "we wait an additional hour" read as the whole wait, since the stagger is the point | credit the awake time before the suspend |
+| D4 | one runner at a time host-wide via `~/.claude/idle-tests.lock`; a loser defers 5-15 min (same hash) and retries; an arming lapses 6 h after it was set (FR-004) - an ADDITION beyond the stagger the GM named | the stagger makes collisions unlikely, not impossible; a lock makes "never two at once" true rather than probable; a loser still runs later that night | the stagger alone; a queue |
+| D5 | the verdict surfaces as one line at the NEXT prompt (the UserPromptSubmit hook) and as a committed record in `dev/idle-log/` (FR-005) | the session must ACT on a red, and the next prompt is where every guard speaks | a push notification (noisy at night) |
+| D6 | arm at every Stop; never in main; never self re-arming; timer state in `.git/` (FR-001, FR-006) | one idle = at most one run, the GM's shape; main is not a workspace | a nightly cron independent of sessions |
+| D7 | the timer exits when its session is gone (`~/.claude/sessions/<pid>.json` and the process); it defers while a `make` runs in the clone; the idle verification record is its own target, never a `done` (FR-006b) | no orphan runs; the merge route untouched | a SessionEnd hook (not always delivered) |
+| D8 | arming point = the Stop hook (the end of an assistant turn). If a Stop turns out to fire mid-task (a turn that ends awaiting a tool), the arming would be premature - to be MEASURED on this session (T06) before the timer design is fixed | it is the only "finished the round" signal the harness gives | a manual `make idle-arm` |
 
 ## Assumptions
 
