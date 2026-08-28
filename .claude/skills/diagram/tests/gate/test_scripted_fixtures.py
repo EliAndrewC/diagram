@@ -258,3 +258,35 @@ def test_lanes_reach_something_fires_on_a_lane_that_serves_nothing() -> None:
         M["lanes"].append({"pts": [[float(a[0]), float(a[1])], [float(a[0]) + 300.0, float(a[1]) - 300.0]], "w": 5, "worn": True, "connector": False})
 
     _fires(REFERENCE, "lanes_reach_something", to_nowhere)
+
+
+@pytest.mark.rolls_map
+def test_village_windbreak_present_fires_when_the_belt_is_taken_away() -> None:
+    _fires(REFERENCE, "village_windbreak_present", lambda M: M.__setitem__("village_groves", [g for g in M["village_groves"] if g.get("role") != "windbreak"]))
+
+
+@pytest.mark.rolls_map
+def test_village_windbreak_embraces_cluster_fires_when_the_belt_is_carried_off() -> None:
+    def carry_it_off(M: dict[str, Any]) -> None:
+        belt = next(g for g in M["village_groves"] if g.get("role") == "windbreak")
+        belt["clumps"] = [[float(x) + 2200.0, float(y)] for x, y in belt["clumps"]]
+        belt["x"] = float(belt["x"]) + 2200.0
+
+    _fires(REFERENCE, "village_windbreak_embraces_cluster", carry_it_off)
+
+
+@pytest.mark.rolls_map
+def test_village_windbreak_scales_with_cluster_fires_when_the_belt_is_cut_to_a_stub() -> None:
+    def cut_to_a_stub(M: dict[str, Any]) -> None:
+        belt = next(g for g in M["village_groves"] if g.get("role") == "windbreak")
+        belt["clumps"] = belt["clumps"][:2]
+
+    _fires(REFERENCE, "village_windbreak_scales_with_cluster", cut_to_a_stub)
+
+
+@pytest.mark.rolls_map
+def test_no_structure_on_torii_fires_when_a_shed_is_set_under_the_arch() -> None:
+    def under_the_arch(M: dict[str, Any]) -> None:
+        M["torii"] = [[float(M["houses"][1]["x"]), float(M["houses"][1]["y"]), 0.0]]
+
+    _fires(REFERENCE, "no_structure_on_torii", under_the_arch)
