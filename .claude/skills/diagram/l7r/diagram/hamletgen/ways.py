@@ -358,6 +358,7 @@ def _lay_skeleton(s: Settlement, plan: SitePlan, frame: _margin_frame, arcs: Seq
 
 
 def stage_web(s: Settlement, plan: SitePlan) -> None:
+    _pass("cut")
     """STAGE 5b: the LANE WEB - the lanes that make every farmhouse reachable.
 
     WHY IT EXISTS. The record is decisive that a house in a nucleated cluster is reached by a way:
@@ -417,6 +418,7 @@ def stage_web(s: Settlement, plan: SitePlan) -> None:
     # two stages earlier, before any house existed; now it is derived from where they actually went.
     # It runs before the web cuts so the web sees it as existing network to thread around and join,
     # which is what `_net_segs` reads.
+    _pass("skeleton")
     _lay_skeleton(s, plan, frame, arcs, stands)
 
     pad = 30.0  # a lane runs a little past the last steading it serves, not up to its wall
@@ -520,12 +522,16 @@ def stage_web(s: Settlement, plan: SitePlan) -> None:
     # unreached houses stayed exactly eight. A door path is short on purpose; it is not a stub.
     # ONE NETWORK FIRST, then the houses that it still does not reach. Order matters: a footpath
     # that joins an orphaned component is worth nothing while the component itself is an island.
+    _pass("join-orphans")
     _join_orphan_ways(s, hard_built, walls, list(plan.watercourses) + drawn_water)
     # ...and close any break where one way was drawn as two. Before the stragglers: a house beside
     # the hole is served by the bridged street, and drawing it a footpath of its own first would be
     # curing the symptom.
+    _pass("bridge-breaks")
     _bridge_collinear_breaks(s, hard_built, walls, list(plan.watercourses) + drawn_water)
+    _pass("straggler")
     _serve_stragglers(s, plan, hard, fabric, list(plan.watercourses) + drawn_water)
+    _pass("touch")
     _touch_junctions(s, hard_built, walls, list(plan.watercourses) + drawn_water)
     # ...AND JOIN ORPHANS AGAIN, LAST. The first pass runs before the bridges and the footpaths, so
     # it can only see the lanes that exist then - on cohort seed 39 that was FOUR of the twelve the
@@ -537,7 +543,9 @@ def stage_web(s: Settlement, plan: SitePlan) -> None:
     # footpath pass draws lanes, and a lane drawn after the bridge pass can leave a hole the bridge
     # pass never saw. On cohort seed 48 the bridge found ZERO candidates and the finished map still
     # had a 78 ft hole in a street, because the hole did not exist yet when it looked.
+    _pass("bridge-breaks")
     _bridge_collinear_breaks(s, hard_built, walls, list(plan.watercourses) + drawn_water)
+    _pass("join-orphans")
     _join_orphan_ways(s, hard_built, walls, list(plan.watercourses) + drawn_water)
     # ...AND TRIM AGAINST THE FINAL NETWORK, ONCE, LAST.
     #
@@ -581,6 +589,7 @@ def stage_web(s: Settlement, plan: SitePlan) -> None:
     # LAST: read every lane as a shape and take out what feet would never wear (T32) - after the
     # trim, because the trim is the last pass that changes a record; then touch once more, because
     # cutting a hairpin's arm can move an end.
+    _pass("smooth")
     _smooth_web(s, hard_built, walls, list(plan.watercourses) + drawn_water)
     # AND TOUCH AGAIN (T99 unlock, tripwire seed 37): the smoothing cuts knots and hairpins into stubs,
     # and a stub that ends 3-30 ft short of the run it left is exactly the gap _touch_junctions closes -
@@ -593,6 +602,7 @@ def stage_web(s: Settlement, plan: SitePlan) -> None:
     _touch_junctions(
         s, hard_built, walls, list(plan.watercourses) + drawn_water, reach=_STUB_REACH_FT, only_orphans=True
     )  # the stubs the smoothing leaves stop 30-35 ft short (seed 37); a connected web is untouched
+    _pass("touch")
     _touch_junctions(s, hard_built, walls, list(plan.watercourses) + drawn_water)
     s.M["meta"]["lane_web"] = plan.lane_web
 
@@ -1384,6 +1394,10 @@ def _smooth_web(s: Settlement, hard: list[Poly], walls: Sequence[Poly], water: l
         def _shortcut_ok(a: int, b: int, pts: Poly = pts) -> bool:
             if _clear_link(pts[a], pts[b], hard, walls, water):
                 return True
+            # A FOOTPATH CHORDED AT ITS OWN 4 ft MARGIN WAS TRIED AND ROTATED A BEND ONTO INASHIRO (feature 137
+            # T04, 2026-08-28): letting a straggler lane take any chord `_clear_touch` allows straightened seed
+            # 43's fold and put a new sharp bend on the reference hamlet's web. Not kept; the fold's real
+            # cause is the straggler router folding inside a pocket, and that is where the fix belongs.
             if not _clear_touch(pts[a], pts[b], hard, walls, water):
                 return False
             return all(seg_dist(v[0], v[1], pts[a], pts[b]) <= _JOG_FT for v in pts[a + 1 : b])
@@ -1528,6 +1542,15 @@ def _net_segs(s: Settlement) -> list[tuple[Pt, Pt]]:
     return [((float(p[0]), float(p[1])), (float(q[0]), float(q[1]))) for ln in s.M.get("lanes", []) for p, q in zip(ln["pts"], ln["pts"][1:], strict=False)]
 
 
+_PASS = "web"  # the web pass drawing right now, recorded on every lane it makes (feature 137 T04: provenance)
+
+
+def _pass(name: str) -> None:
+    """Name the pass about to draw, so a lane on the sheet can say who made it (`role`)."""
+    global _PASS  # noqa: PLW0603 - one module-level tag, set by stage_web between its passes
+    _PASS = name
+
+
 def _draw_web(s: Settlement, pts: Poly, width: int = 3, houses: Sequence[Pt] = ()) -> bool:
     """Draw a web lane, unless it is debris. See `_WEB_MIN_FT`.
 
@@ -1544,6 +1567,8 @@ def _draw_web(s: Settlement, pts: Poly, width: int = 3, houses: Sequence[Pt] = (
         if not earns:
             return False
     s.lane(pts, width=width, clearance=WEB_CLEARANCE, worn=True)
+    if s.M.get("lanes"):
+        s.M["lanes"][-1]["role"] = _PASS  # provenance: which pass drew it (feature 137 T04)
     # Flagged so `lane_frontage` does not offer seats along it. A web lane is SERVICE - it threads
     # behind and between the steadings - and inviting new houses onto the way that exists to reach
     # the old ones is how the cluster starts sprawling again.
