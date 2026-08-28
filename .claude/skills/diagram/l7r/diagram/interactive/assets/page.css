@@ -18,13 +18,11 @@ html, body { height: 100%; overflow: hidden; }
 /* The stage is the viewport; the map is positioned inside it by a CSS transform (translate +
    scale) that page.js drives - a transform never re-lays-out the 175,000-element tree, so zoom
    and pan cost a composite, not a restyle (FR-013). */
-#stage { position: relative; width: 100vw; height: 100vh; overflow: hidden; cursor: grab; touch-action: none; }
-#stage.panning { cursor: grabbing; }
+#stage { position: relative; width: 100vw; height: 100vh; overflow: hidden; }  /* the mouse stays a normal pointer (GM 2026-08-28) */
 svg#map { position: absolute; left: 0; top: 0; display: block; }
 #zoom { position: fixed; right: 0.8rem; top: 0.8rem; display: flex; flex-direction: column; gap: 0.25rem; z-index: 5; }
 #zoom button { font: inherit; font-size: 1rem; width: 2.4rem; height: 2rem; border: 1.5px solid var(--rule); border-radius: 5px; background: var(--card); color: var(--ink); cursor: pointer; }
 #zoom button[data-z="fit"] { font-size: 0.8rem; }
-g.f { cursor: pointer; }
 /* Highlight = a class token on each group of the hovered class (page.js), restyling only those
    subtrees - never the whole 175,000-element tree (research.md R2). Filled things go gold; things
    drawn with fill="none" (a bund's stroke copy, an outline) keep their empty body and take the

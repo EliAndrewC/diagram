@@ -95,6 +95,9 @@ below are measured, from the run-log and the browser).
 - [x] T31 **the unlock sweep arrived with main's own unlock (133 T92, merged 2026-08-28)**: the unlocked gate ran the 4-seed cohort and `all_ink_is_ruled_on` fired on seeds 41-44 - exactly the FR-009 sweep the spec owed at unlock. Rolled each seed and read its census: `soy` (the palette's fourth dry crop, never rolled on Inashiro), and on seed 42 the in-field `field rock` and `grave island` glyphs. Three classes added to the registry, the spec table and the test, from the existing `research/fields.md` entries (the grave island labeled DEVIATION - the entry's own calibrated liberty); seeds 41-44 re-rolled: 0 unclassed, 0 unregistered. The unlocked gate: 3,854 passed in 20:51 before the fix, 1 failure (this)
       research: rendering
 
+- [x] T32 **no drag-to-pan, a normal pointer** - the GM: *"I don't need to click and drag so we can get rid of that and make the mouse a normal pointer."* The drag handlers and the grab / hand cursors are gone; the browser test asserts a drag moves nothing, the cursor is `auto` over the stage and over a feature, and a click still opens the modal
+      research: rendering
+
 ## Owed at unlock (spec SC-008, FR-009; plan "Performance bookends")
 
 Not tasks of this feature - the spec (round-1 fidelity finding 5) holds the feature to the

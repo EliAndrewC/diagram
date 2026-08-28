@@ -18,3 +18,5 @@ The spec records how each slip was read, and the fidelity review checks that rea
 > Thanks, that's great.  That said: I don't want scrolling to zoom - I still want scrolling to scroll.
 
 > I would like to set a bound on how much we can scroll so that we don't scroll off the edge of the map. We should be able to scroll to the edge of the map, but not beyond it. Thanks.
+
+> Thanks, much better.  I don't need to click and drag so we can get rid of that and make the mouse a normal pointer.
