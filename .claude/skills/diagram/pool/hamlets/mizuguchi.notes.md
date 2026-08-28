@@ -426,6 +426,9 @@ and left EAST - straight back across the settlement it had just come out of.
 **The ordering that came out of it**: wet ground, then steadings, then crops. A marsh cannot be
 nudged and neither can somebody's house; a crop clip can, and `route_around` is the call that does it.
 
+### 2026-08-28 - manifest re-recorded under the landed feature-137 engine
+
+The committed manifest was rolled by an earlier engine state; this commit records what the landed engine (GitHub main f4456a72) draws, byte-identical to the mirror's render-sync, so main is clean. Not a review pass: this map is red on the gate and is feature 139 T08 (the review comes with its fix).
 ## 2026-08-28 - feature 140: seats measured against a few chords of the field edge (the map moved)
 
 Placement now judges a farmhouse seat against the field outline's chords facing the cluster (open chain,
