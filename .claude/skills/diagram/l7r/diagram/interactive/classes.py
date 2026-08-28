@@ -74,8 +74,10 @@ def _c(**kw: object) -> FeatureClass:
 
 
 # The sibling texts, written once per PAIR and installed in both directions below. Each is how the
-# FIRST-named class differs from the second; the reverse direction reads the same text from the
-# other side, which is what "distinguished from one another" asks for.
+# FIRST-named class differs from the second. SINCE 2026-08-28 THE PAGE DOES NOT SHOW THEM: the GM
+# asked for the linkage as "Not to be confused with the X" LINKS (hover lights X, click opens X's
+# modal) so each modal's text stays its own; the texts remain here as the record of what
+# distinguishes each pair, to be folded into the classes' own explanations as those lengthen.
 _PAIRS: dict[tuple[str, str], str] = {
     (
         "farmhouse",
@@ -239,7 +241,7 @@ _DEFS: tuple[FeatureClass, ...] = (
         label="accurate",
         label_note="Presence and the sun rule are read; the bed's size and row count are drawing conventions.",
         sources=("not recorded",),
-        entry="research/homesteads.md - 'The garden's sun, and how far the windbreak shades'",
+        entry="research/homesteads.md - 'The garden's sun, and how far the windbreak shades'; 'The threshing yard's sun, and how far a farmhouse shades' (the garden rule is derived from it)",
     ),
     _c(
         key="privy",
@@ -426,7 +428,7 @@ _DEFS: tuple[FeatureClass, ...] = (
         label="deviation",
         label_note="The practice is attested; the bead color is a deliberate deviation - real soybean foliage is lighter, and the deep pine green was chosen so the beads read against the pale rice.",
         sources=("not recorded",),
-        entry="research/fields.md - the bund entries; waterfields/palette.py BEAN_GREEN (the color decision)",
+        entry="research/fields.md - 'Paddy plots - irregular patchwork'; 'Bunds are SHARED, and the fabric is continuous'; waterfields/palette.py BEAN_GREEN (the color decision)",
     ),
     _c(
         key="millet",

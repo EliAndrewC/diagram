@@ -15,7 +15,9 @@ import re
 import pytest
 
 from l7r.diagram.interactive.classes import CLASSES
-from l7r.diagram.interactive.page import explanations, hit_copies, hit_regions, ink_census, marks_region, merge_primitives, present_classes, render_page, unregistered_classes, wrap
+from l7r.diagram.interactive.glossary import GLOSSARY
+from l7r.diagram.interactive.page import explanations, glossary_for, hit_copies, hit_regions, ink_census, marks_region, merge_primitives, present_classes, render_page, unregistered_classes, wrap
+from l7r.diagram.interactive.sources import citations, registry, research_sources, section_sources
 from l7r.diagram.interactive.tags import Split
 
 RECT = '<rect x="1" y="2" width="3" height="4" fill="#abc" stroke="#123"/>'
@@ -95,10 +97,11 @@ def test_present_classes_reads_every_tag_shape() -> None:
 def test_explanations_hold_only_present_classes_and_present_siblings() -> None:
     data = explanations({"windbreak", "copse", "farmhouse"})
     assert set(data) == {"windbreak", "copse", "farmhouse"}
-    assert set(data["windbreak"]["siblings"]) == {"copse"}, "woodland commons is absent from this map, so it is not claimed"
-    assert data["farmhouse"]["siblings"] == {}, "storage shed and byre are absent"
+    assert data["windbreak"]["siblings"] == ["copse"], "woodland commons is absent from this map, so it is not claimed; siblings are link keys now"
+    assert data["farmhouse"]["siblings"] == [], "storage shed and byre are absent"
     assert data["windbreak"]["label_phrase"] == "historically accurate"
-    assert data["windbreak"]["sources"] == list(CLASSES["windbreak"].sources)
+    assert data["windbreak"]["sources"] == research_sources(CLASSES["windbreak"].entry) and "forests-2020" in data["windbreak"]["sources"]
+    assert data["windbreak"]["refs"]["forests-2020"].startswith(("Chen", "Hu", "Fengshui", "forests", "Village")) or len(data["windbreak"]["refs"]["forests-2020"]) > 20
 
 
 def test_explanations_stub_an_unregistered_class_rather_than_dropping_it() -> None:
@@ -124,9 +127,11 @@ def test_the_page_embeds_only_the_present_classes() -> None:
     page = _page()
     blob = re.search(r'<script id="classes" type="application/json">(.*?)</script>', page, re.S)
     assert blob
-    data = json.loads(blob.group(1).replace("<\\/", "</"))
+    payload = json.loads(blob.group(1).replace("<\\/", "</"))
+    data = payload["classes"]
     assert set(data) == {"farmhouse", "paddy", "bund"}
-    assert set(data["paddy"]["siblings"]) == set() and set(data["bund"]["siblings"]) == set(), "bund beans are not on this page"
+    assert data["paddy"]["siblings"] == [] and data["bund"]["siblings"] == [], "bund beans are not on this page"
+    assert any(g["term"] == "bund" for g in payload["glossary"]), "the glossary carries the terms the present explanations use"
 
 
 def test_the_page_escapes_a_closing_script_tag_inside_the_json() -> None:
@@ -236,3 +241,31 @@ def test_the_hit_widths_are_per_class_as_the_gm_tuned_them() -> None:
     assert "stroke-width: 12.0px" in wrap(stream, "stream")
     lane = '<path d="M1,1 L9,9" fill="none" stroke="#C9AE79" stroke-width="5.0"/>'
     assert "stroke-width: 20.0px" in wrap(lane, "village lane")
+
+
+def test_the_citations_come_from_the_research_entries() -> None:
+    """GM 2026-08-28: the references behind a modal are the entry's own Sources line, read from the record."""
+    keys = research_sources("research/vegetation.md - 'The fengshui forest - real scale, and why ours is honest'")
+    assert "forests-2020" in keys
+    reg = registry()
+    assert len(reg) > 200 and "sugiura-1973-fuzoku" in reg and "Used for:" in reg["sugiura-1973-fuzoku"]
+    assert citations(["forests-2020", "no-such-key"])["no-such-key"] == "(not in research/SOURCES.md)"
+    assert section_sources("**Sources:** `a-1`, [`b-2`](SOURCES.md#b-2) and `a-1` again") == ["a-1", "b-2"]
+    assert research_sources("nothing here") == []
+
+
+def test_every_class_cites_what_its_entry_cites_and_the_uncited_are_the_known_five() -> None:
+    uncited = sorted(k for k, fc in CLASSES.items() if not research_sources(fc.entry))
+    assert uncited == ["fallow", "field pond", "field rock", "footbridge", "grave island"], "an entry the citation pass left without keys (report.md lists them)"
+    for k, fc in CLASSES.items():
+        for key in research_sources(fc.entry):
+            assert key in registry(), f"{k} cites {key}, which SOURCES.md does not register"
+
+
+def test_the_glossary_is_well_formed_and_used() -> None:
+    for term, (variants, definition) in GLOSSARY.items():
+        assert variants and len(definition) > 30 and "\u2014" not in definition, term
+    used = {g["term"] for g in glossary_for(explanations(set(CLASSES)))}
+    assert {"bund", "coppice", "iriai", "tameike", "yashikirin", "kosatsuba", "hokora"} <= used
+    unused = set(GLOSSARY) - used
+    assert not unused, f"glossary terms no explanation uses: {sorted(unused)}"

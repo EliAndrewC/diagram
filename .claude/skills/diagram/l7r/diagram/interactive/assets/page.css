@@ -43,3 +43,14 @@ dialog section p { margin: 0 0 0.5rem; }
 dialog footer { font-size: 0.85rem; color: var(--muted); border-top: 1px solid #BCAA7E; padding-top: 0.5rem; }
 dialog footer p { margin: 0 0 0.3rem; }
 dialog button { margin-top: 0.4rem; font: inherit; padding: 0.3rem 0.9rem; cursor: pointer; }
+/* the glossary (GM 2026-08-28): a dotted underline marks a defined term; hovering it shows the definition */
+.gl { border-bottom: 1px dotted var(--rule); cursor: help; position: relative; }
+.gl:hover::after { content: attr(data-def); position: absolute; left: 0; top: 1.4em; z-index: 20; width: 22rem; max-width: 60vw; padding: 0.5rem 0.7rem; background: var(--ink); color: var(--card); font-size: 0.85rem; line-height: 1.35; border-radius: 5px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.35); white-space: normal; font-style: normal; }
+/* a sibling link: hover lights that class on the map, click opens its modal in place of this one */
+a.sib { color: #5A3F1E; text-decoration: underline dotted; }
+a.sib:hover { color: var(--hl-stroke); }
+#x-refs { color: #5A3F1E; }
+#x-refs[hidden] { display: none; }
+/* the references modal sits ABOVE the explanation */
+dialog#references { z-index: 11; max-width: 46rem; }
+dialog#references p { margin: 0 0 0.6rem; font-size: 0.9rem; line-height: 1.4; }
