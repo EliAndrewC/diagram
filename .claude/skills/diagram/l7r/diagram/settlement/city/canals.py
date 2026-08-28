@@ -9,7 +9,8 @@ from typing import TYPE_CHECKING, Any
 from .._geom import (
     Pt,
 )
-from .._knobs import _below_drain, _poly_centroid, _seg_point, moat_swept_tap
+from .._knobs import _below_drain, _poly_centroid, _seg_point
+from .knobs import moat_swept_tap
 
 if TYPE_CHECKING:
     from ..core import Settlement

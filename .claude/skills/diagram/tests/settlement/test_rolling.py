@@ -381,3 +381,21 @@ def test_no_rolling_member_is_defined_in_two_sub_mixins():
                 dupes.append(f"{name} in both {seen[name]} and {cls.__name__}")
             seen[name] = cls.__name__
     assert not dupes, f"defined twice: {sorted(dupes)}"
+
+
+def test_bundle_common_fits_refuses_a_grove_on_a_tread_and_a_shaded_bundle() -> None:
+    """Feature 146: two of the bundle's refusal reasons - a yashikirin planted across a lane's drawn tread
+    (feature 126's finding: `_rect_blocked` tests keep-out polygons and says nothing about a tread), and a
+    bundle whose sun corridor is closed."""
+    from l7r.diagram.settlement import Settlement
+
+    s = Settlement(1200, 1200, seed=1)
+    s.meta(name="B", scale="hamlet", ftpx=1, down_deg=90, windward="N")
+    geom = {
+        "house": (600.0, 600.0, 56.0, 30.0),
+        "yard": (600.0, 640.0, 34.0, 22.0),
+        "grove_n": (600.0, 520.0, 90.0, 26.0),
+        "grove_w": (540.0, 600.0, 26.0, 90.0),
+    }
+    s.lane([(300.0, 520.0), (900.0, 520.0)], width=6, worn=True)  # drawn, so it has a tread
+    assert s._bundle_common_fits(geom) is False, "the north grove sits on the lane's tread"

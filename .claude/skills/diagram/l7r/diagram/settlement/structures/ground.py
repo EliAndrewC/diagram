@@ -3,13 +3,18 @@
 Split from settlement/structures.py by feature 114 - see settlement/structures/CLAUDE.md for the index.
 """
 
+import math
 import random
 from typing import TYPE_CHECKING, Any
 
 from .._geom import (
+    label_quad,
+    linear_tilt,
     organic_bbox,
     organic_poly,
     point_in_poly,
+    seg_closest,
+    seg_dist,
     smooth_closed,
     smooth_points,
 )
@@ -99,3 +104,55 @@ class GroundMixin:
             if label:
                 lx, ly = label_xy if label_xy else ((min(xs) + max(xs)) / 2, (min(ys) + max(ys)) / 2)
                 self.label(lx, ly, label, 12, italic=True, color="#5C6B3A")
+
+    def _finish_road_label(self: Settlement) -> None:  # type: ignore[misc]
+        """Seat and draw the Imperial road's caption at finish time (feature 145: extracted from `finish()`, which every map executes, so the module-level floor sees this town/city branch where it belongs)."""
+        text, lx, ly = self._road_label
+        rd = self.M.get("road") or []
+        # The caption names the ROAD, so its subject is the nearest STRETCH of roadway: box
+        # that segment out to the corridor half-width and run the standard standoff ladder
+        # against it. The authored label_xy stays a HINT - which flank, and where along the
+        # road - and no longer sets the distance. That was the defect the GM caught on Tango
+        # (2026-07-26): the old candidates were generated at the anchor's own perpendicular
+        # offset, mirrored across the roadline and slid along it, so a hand anchor 102px out
+        # produced a label 55px clear of the roadway with nothing but bare ground between.
+        half = float(self.M.get("road_width") or 26) / 2
+        i_ = min(range(len(rd) - 1), key=lambda i: seg_dist(lx, ly, rd[i], rd[i + 1]))
+        (ax_, ay_), (bx_, by_) = (rd[i_][0], rd[i_][1]), (rd[i_ + 1][0], rd[i_ + 1][1])
+        # The subject is the roadway's CROSS-SECTION at the point the anchor pointed at, plus
+        # the tangent there - NOT the segment's bounding box, which for a diagonal road is a
+        # huge square whose edges are hundreds of px from the roadway (Hoshizora: a 486x256 box
+        # for a road running through it at 27 degrees). Cross-section + axis is right at any angle.
+        px_, py_ = seg_closest(lx, ly, (ax_, ay_), (bx_, by_))
+        seg_ = math.hypot(bx_ - ax_, by_ - ay_) or 1.0
+        axis_ = ((bx_ - ax_) / seg_, (by_ - ay_) / seg_)
+        # ...and the caption RUNS ALONG that tangent (GM 2026-08-08): "Imperial Road" set level
+        # beside Hoshizora's -27deg roadbed named the road the way a caption beside a diagonal
+        # building named the building - which is the defect the 2026-08-02 tilt fixed for
+        # glyphs and stopped short of fixing for the linear features. A road is a LINE, so this
+        # takes linear_tilt's clamp, NOT label_tilt's fold: past 45deg the caption goes level
+        # (the GM's own north-south convention), where the fold would tilt it to the road's
+        # cross direction, which is an axis of nothing. Tango (due N-S) and Nagahara (72deg)
+        # therefore stay exactly as they were; only genuinely diagonal roads move.
+        tilt_ = linear_tilt(math.degrees(math.atan2(axis_[1], axis_[0])))
+        box = (px_ - half, py_ - half, px_ + half, py_ + half)
+        lx, ly = self._best_label_spot(box, text, 12, hint=(lx, ly), slides=(-45.0, 45.0, 90.0, -90.0), axis=axis_, tilt=tilt_)
+        # RE-SEAT the recorded subject on the roadway beside where the caption actually landed.
+        # `label_hugs_its_referent` measures an axis-aligned gap between two recorded boxes, so a
+        # cross-section pinned at the ANCHOR reads the along-road distance as drift once the
+        # ladder slides the caption - Tango measured 45px for a caption sitting 29px off the
+        # roadway. Boxing the roadway nearest the caption's own box makes the recorded gap the
+        # clearance a reader sees, at any road angle.
+        # A TILTED caption re-seats on the quad it actually DRAWS, not its pre-tilt box - the
+        # recorded gap has to be the clearance a reader sees. At tilt 0 label_quad returns that
+        # box corner-for-corner in the same order, so every level road's referent is unchanged.
+        lb_ = self._label_box(lx, ly, text, 12)
+        qs_ = label_quad([*lb_, 0, text, None, tilt_])
+        cq_ = ((qs_[0][0] + qs_[2][0]) / 2, (qs_[0][1] + qs_[2][1]) / 2)
+        px_, py_ = min(
+            (seg_closest(qx, qy, (ax_, ay_), (bx_, by_)) for qx, qy in (*qs_, cq_)),
+            key=lambda c: min(math.hypot(c[0] - qx, c[1] - qy) for qx, qy in qs_),
+        )
+        box = (px_ - half, py_ - half, px_ + half, py_ + half)
+        self.label(lx, ly, text, 12, italic=True, weight="bold", color="#5A4326", ref=box, rot=tilt_, linear=True)
+        self.M["road_label"] = [lx, ly]

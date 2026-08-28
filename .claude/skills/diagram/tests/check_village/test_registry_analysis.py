@@ -67,3 +67,39 @@ def test_derive_rows_guards_import_vs_ast_disagreement():
     names = {r.fn.__name__ for r in reg.GATE_SEGMENTS}
     with pytest.raises(_DerivationError, match="disagree"):
         reg._derive_rows(names | {"_seg_9999__ghost"})
+
+
+def test_check_names_follow_a_helper_that_emits() -> None:
+    import ast
+
+    from l7r.diagram.check_village.registry_analysis import _check_names
+
+    node = ast.parse('def seg():\n    check("a", True)\n    helper(M)\n').body[0]
+    names, _n = _check_names(node, {"helper": ["b"]})
+    assert set(names) >= {"a", "b"}
+
+
+def test_guard_scales_reads_every_shape_of_leading_guard() -> None:
+    """Feature 145's scale derivation, feature 146's proof: each guard shape the reader can write, and the
+    shapes that admit every scale (a data guard, a mixed body, a non-literal comparand)."""
+    import ast
+
+    from l7r.diagram.check_village.registry_analysis import SCALES, URBAN_SCALES, _guard_scales
+
+    def seg(guard: str, body: str = "        pass\n") -> ast.FunctionDef:
+        src = f"def _seg_x(*, M=None):\n    if {guard}:\n{body}    return _kept(locals(), ())\n"
+        return ast.parse(src).body[0]  # type: ignore[return-value]
+
+    assert _guard_scales(seg("URBAN")) == URBAN_SCALES
+    assert _guard_scales(seg("not URBAN")) == tuple(s for s in SCALES if s not in URBAN_SCALES)
+    assert _guard_scales(seg("scale in ('city', 'capital')")) == ("city", "capital")
+    assert _guard_scales(seg("scale == 'hamlet'")) == ("hamlet",)
+    assert _guard_scales(seg("scale not in ('city', 'capital')")) == tuple(s for s in SCALES if s not in URBAN_SCALES)
+    assert _guard_scales(seg("scale != 'hamlet'")) == tuple(s for s in SCALES if s != "hamlet")
+    assert _guard_scales(seg("URBAN and M")) == URBAN_SCALES  # the first term of an `and`
+    assert _guard_scales(seg("scale in ('atlantis',)")) == ("atlantis",)  # an unknown name is taken at its word
+    assert _guard_scales(seg("scale in (1, 2)")) is None  # not strings
+    assert _guard_scales(seg("scale in M")) is None  # not a literal
+    assert _guard_scales(seg("M.get('houses')")) is None  # a data guard admits every scale
+    src = "def _seg_y(*, M=None):\n    if URBAN:\n        pass\n    check('x', True)\n    return _kept(locals(), ())\n"
+    assert _guard_scales(ast.parse(src).body[0]) is None, "a MIXED body (a guard then a hamlet check) admits every scale"  # type: ignore[arg-type]

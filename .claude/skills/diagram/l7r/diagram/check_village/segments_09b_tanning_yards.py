@@ -1,10 +1,5 @@
 """Gate segments (tanning yards; keys 0562_000-0562_042) - bodies verbatim, registry order preserved."""
 
-import math
-from typing import Any
-
-from .common_01_geometry import seg_dist
-from .common_03_capacity import _UNBOUND, _kept
 
 # TANNING YARDS (GM 2026-07-24; the "why" lives in settlements.md "TANNING YARDS"). Unlike the
 # other trade works these are NOT a city-only feature: a county town's burakumin hold the whole
@@ -12,13 +7,6 @@ from .common_03_capacity import _UNBOUND, _kept
 # WATER, not settlement size, is the gate: tanning is a water process (shironameshi stakes hides
 # in the river for 1-2 weeks before de-hairing) and every attested tannery sits on a watercourse
 # at the settlement's edge - the caste's own name for itself was kawaramono, "riverbed people".
-
-
-def _seg_0562_005___ty_yards(*, M: Any = _UNBOUND, scale: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 0562.005 (_ty_yards) - body verbatim from _seg_0562__settlement_has_tanning_yard (feature 024 per-check split; guards re-evaluated in the body, see split_oversized.py)."""
-    if scale in ('town', 'city'):
-        _ty_yards = M.get("tanning_yards") or []
-    return _kept(locals(), ('_ty_yards',))
 
 
 # A settlement with BOTH a burakumin quarter and running water tans its own hides; one with
@@ -44,42 +32,6 @@ def _seg_0562_005___ty_yards(*, M: Any = _UNBOUND, scale: Any = _UNBOUND) -> dic
 #       topology alone cannot see this - a channel tapping the river 200 ft below the
 #       yard and one tapping it 200 ft above are the same edge - so this clause
 #       compares ARC POSITION along the course, oriented by the recorded flow.
-
-
-def _seg_0562_010___ty_arc(
-    *,
-    _ty_yards: Any = _UNBOUND,
-    at: Any = _UNBOUND,
-    ax: Any = _UNBOUND,
-    ay: Any = _UNBOUND,
-    best: Any = _UNBOUND,
-    bx: Any = _UNBOUND,
-    by: Any = _UNBOUND,
-    d: Any = _UNBOUND,
-    i: Any = _UNBOUND,
-    poly: Any = _UNBOUND,
-    run: Any = _UNBOUND,
-    scale: Any = _UNBOUND,
-    x: Any = _UNBOUND,
-    y: Any = _UNBOUND,
-) -> dict[str, Any]:
-    """Gate segment 0562.010 (_ty_arc, run) - body verbatim from _seg_0562__settlement_has_tanning_yard (feature 024 per-check split; guards re-evaluated in the body, see split_oversized.py)."""
-    if scale in ('town', 'city') and _ty_yards:
-
-        def _ty_arc(poly: Any, x: float, y: float) -> tuple[float, float]:
-            """(arc length to the closest point on `poly`, total length)."""
-            best, run, at = None, 0.0, 0.0
-            for i in range(len(poly) - 1):
-                ax, ay, bx, by = poly[i][0], poly[i][1], poly[i + 1][0], poly[i + 1][1]
-                seg = math.hypot(bx - ax, by - ay)
-                d = seg_dist(x, y, poly[i], poly[i + 1])
-                if best is None or d < best:
-                    t_par = 0.0 if seg == 0 else max(0.0, min(1.0, ((x - ax) * (bx - ax) + (y - ay) * (by - ay)) / (seg * seg)))
-                    best, at = d, run + t_par * seg
-                run += seg
-            return at, run
-
-    return _kept(locals(), ('_ty_arc', 'run'))
 
 
 # Stench separation from ordinary dwellings. The burakumin's OWN houses are exempt by

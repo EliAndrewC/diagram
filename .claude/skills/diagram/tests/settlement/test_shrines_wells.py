@@ -210,7 +210,7 @@ _SHRINES_WELLS_SURFACE = frozenset(
         "draft_byres",
         "farm_wells",
         "flush_tree_stands",
-        "forest",
+        # "forest" moved to shrines_wells/forest.py (ForestMixin) under feature 145 - still on Settlement, off the hamlet path module
         "frozen_terrain",
         "hill",
         "open_seat",
@@ -315,3 +315,58 @@ def test_frozen_terrain_is_still_a_context_manager():
     with s.frozen_terrain():
         assert s._frozen_wells is not None, "the freeze must actually build the index inside the scope"
     assert s._frozen_wells is None, "and release it on the way out"
+
+
+def test_farm_wells_seats_a_wellhead_in_a_steading_dooryard() -> None:
+    """Feature 146: the ring seating in `_farm_wells` - the fallback path for a farm belt, where the
+    cluster's open ground is mostly crop and the wellhead goes in a dooryard rather than at the centroid."""
+    s = Settlement(1200, 1200, seed=1)
+    s.meta(name="F", scale="hamlet", ftpx=1)
+    for i in range(4):  # a tight cluster of steadings on open ground, nothing else placed
+        s.M["houses"].append({"x": 500.0 + i * 70.0, "y": 600.0, "w": 50.0, "h": 30.0, "rot": 0})
+        s.placed.append((500.0 + i * 70.0, 600.0, 50.0, 30.0))
+    seated = s._farm_wells(220.0, 40.0)
+    assert seated >= 1, "a wellhead must seat in one of the dooryards"
+    assert s.M["wells"], "and be recorded"
+    assert any(min(abs(w["x"] - h["x"]) + abs(w["y"] - h["y"]) for h in s.M["houses"]) < 200 for w in s.M["wells"])
+
+
+def test_byre_clear_of_all_but_refuses_the_paddy_and_a_neighbour_s_yard() -> None:
+    """Feature 146: two of the byre arm's refusal reasons - it stands on dry ground off the basins, and it
+    clears every recorded appurtenance except its OWN homestead's."""
+    s = Settlement(1000, 1000, seed=1)
+    house = {"x": 300.0, "y": 300.0, "w": 50.0, "h": 30.0}
+    s.M["houses"].append(house)
+    s.field_polys.append([(500, 500), (800, 500), (800, 800), (500, 800)])
+    assert s._byre_clear_of_all_but(650, 650, 40, 24, house) is False, "in the basin"
+    s.M["threshing_yards"].append({"x": 200.0, "y": 200.0, "w": 40.0, "h": 30.0})
+    assert s._byre_clear_of_all_but(200, 200, 40, 24, house) is False, "on a neighbour's yard"
+    assert s._byre_clear_of_all_but(120, 600, 40, 24, house) is True
+
+
+def test_fringe_blocked_refuses_the_crop_and_the_open_water() -> None:
+    """Feature 146: the wood's fringe grows on WASTE ground. Two of its refusal reasons - a fringe tree
+    inside (or within its own radius of) a crop polygon, and one standing on a watercourse."""
+    s = Settlement(1000, 1000, seed=1)
+    s.field_polys.append([(400, 400), (700, 400), (700, 700), (400, 700)])
+    assert s._fringe_blocked(550, 550, 8.0) is True, "in the basin"
+    assert s._fringe_blocked(396, 550, 8.0) is True, "off it, but inside the tree's own radius"
+    s.M["streams"] = [{"pts": [[100, 900], [900, 900]], "w": 8, "poly": [[100, 896], [900, 896], [900, 904], [100, 904]]}]
+    assert s._fringe_blocked(500, 900, 8.0) is True, "standing in the brook"
+    assert s._fringe_blocked(150, 150, 8.0) is False
+
+
+def test_stand_fringe_skips_a_seat_a_crown_already_covers() -> None:
+    """Feature 146: the wood's fringe skips a seat whose ground is spoken for OR that an existing canopy
+    already covers - the no-double-ink rule, the same one the grove clumps follow."""
+    poly = [(200.0, 200.0), (900.0, 200.0), (900.0, 900.0), (200.0, 900.0)]
+
+    def fringe(preload: bool) -> list:  # a FRESH settlement each time - the scatter draws from the RNG
+        s = Settlement(1200, 1200, seed=3)
+        s.meta(name="W", scale="town", ftpx=1)
+        krect = [(150.0, 150.0, 950.0, 400.0)] if preload else []  # a canopy keep-out over the north band
+        return s._stand_fringe(poly, 18.0, 6.0, krect, [])
+
+    bare = fringe(False)
+    assert bare, "the fixture must offer seats, or the skip proves nothing"
+    assert len(fringe(True)) < len(bare), "seats an existing canopy already covers are skipped"

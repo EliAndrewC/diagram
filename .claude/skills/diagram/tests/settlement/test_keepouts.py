@@ -127,3 +127,14 @@ def test_a_field_is_measured_by_chains_when_the_seat_is_known_and_by_a_ring_when
     assert s._field_blocks_point(450.0, 450.0, 14.0)  # the middle of the field
     assert s._field_blocks_point(450.0, 120.0, 14.0) is False  # well north of it
     assert s._field_blocks_rect((450.0, 450.0, 40.0, 26.0)) and not s._field_blocks_rect((450.0, 100.0, 40.0, 26.0))
+
+
+def test_field_within_measures_by_the_chains_when_the_seat_is_known() -> None:
+    """`_field_within` (feature 145): with a planned seat the reach is measured to the CHORDS, not to a ring."""
+    s = Settlement(900, 900, seed=1)
+    s.meta(name="F", scale="hamlet")
+    s.field_polys.append([(300.0, 300.0), (600.0, 300.0), (600.0, 600.0), (300.0, 600.0)])
+    s.field_face = (450.0, 60.0)  # the cluster stands north of the field
+    assert s._field_chains()[0], "the fixture must give chains, not a ring"
+    assert s._field_within(450.0, 280.0, 40.0) is True  # 20 px north of the facing chord, inside the reach
+    assert s._field_within(450.0, 100.0, 40.0) is False  # 200 px north of it

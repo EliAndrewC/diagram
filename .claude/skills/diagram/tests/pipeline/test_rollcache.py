@@ -118,3 +118,27 @@ def test_the_bypasses_produce_and_store_nothing(tmp_path, monkeypatch, var):
     assert not Path(rollcache._entry("toy")).exists()
     monkeypatch.delenv(var)
     assert rollcache.obtain("toy", produce)[1] == "MISS", "a bypassed roll left nothing behind to serve"
+
+
+def test_report_deps_records_once_and_then_reads_the_record(tmp_path, monkeypatch) -> None:  # type: ignore[no-untyped-def]
+    """`report_deps` (feature 145, the hamlet-path floor): the first call rolls and records, the second returns the
+    record without rolling - and it is never bypassed, unlike `obtain`."""
+    import os
+
+    from l7r.diagram import hamletgen as hg
+    from l7r.diagram.pipeline import rollcache
+
+    calls: list[int] = []
+
+    def fake_generate(spec, out_base=None, render=False):  # type: ignore[no-untyped-def]
+        calls.append(1)
+        return {"ok": True}
+
+    monkeypatch.setattr(hg, "generate", fake_generate)
+    monkeypatch.setattr(rollcache, "_entry", lambda subject: str(tmp_path / "entry"))
+    monkeypatch.setenv("L7R_TESTS_FULL", "1")  # bypass is for SERVING; recording still happens
+    spec = hg.HamletSpec(name="Probe", seed=1, households=10)
+    first = rollcache.report_deps(spec)
+    assert calls == [1] and "functions" in first and os.path.isfile(tmp_path / "entry" / "meta.json")
+    again = rollcache.report_deps(spec)
+    assert calls == [1] and again == first

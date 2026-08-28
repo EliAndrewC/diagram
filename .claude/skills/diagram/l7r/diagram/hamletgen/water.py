@@ -101,10 +101,11 @@ def fit_field(plan: SitePlan, sluice: Pt, seed: int, plot_across: float, row_ste
     # as its size, and a roll can land on an aspect at which no size is legal. So the rolled aspect
     # is tried first and the rest follow in order; the first legal fan wins, and if none is legal the
     # closest-on-acreage is kept so the failure is a gate message rather than an exception.
+    best_aspect = plan.fan_aspect
     for aspect in [plan.fan_aspect] + [a for a in FAN_ASPECTS if a != plan.fan_aspect]:
         found = _fit_at_aspect(plan, sluice, seed, plot_across, row_step, aspect, tolerance, rounds)
         if best is None or found[0] < best[0]:
-            best = found
+            best, best_aspect = found, aspect
         # a legal fan alone is not enough to stop the search: the supply-bank hem (2026-08-15)
         # drops the quads wedged between near-parallel channels, and on some seeds the first
         # LEGAL aspect leaves the acreage well short of the household target (cohort seed 44:
@@ -115,15 +116,45 @@ def fit_field(plan: SitePlan, sluice: Pt, seed: int, plot_across: float, row_ste
         if not found[0][0] and found[0][1] <= tolerance:
             break
     assert best is not None
+    if best[0][0] or best[0][1] > tolerance:
+        # NO ASPECT LANDED THE TARGET, so the probe that ended each saturated aspect after two carves
+        # (see `_fit_at_aspect`) has left the best aspect less refined than the full search would - and
+        # this is the map whose acreage the household ratchet will judge. Give that one aspect the full
+        # search now; the cost is paid only on the maps that need it.
+        again = _fit_at_aspect(plan, sluice, seed, plot_across, row_step, best_aspect, tolerance, rounds, probe=False)
+        if again[0] < best[0]:
+            best = again
     return best[1]
 
 
-def _fit_at_aspect(plan: SitePlan, sluice: Pt, seed: int, plot_across: float, row_step: tuple[float, float], aspect: float, tolerance: float, rounds: int) -> tuple[tuple[bool, float], dict[str, Any]]:
-    """`fit_field`'s bisection at ONE fan aspect. Returns ((illegal, acreage error), net)."""
+def _fit_at_aspect(
+    plan: SitePlan, sluice: Pt, seed: int, plot_across: float, row_step: tuple[float, float], aspect: float, tolerance: float, rounds: int, probe: bool = True
+) -> tuple[tuple[bool, float], dict[str, Any]]:
+    """`fit_field`'s search at ONE fan aspect. Returns ((illegal, acreage error), net).
+
+    `probe`: when the first carve (k = 1) falls short, the second goes straight to the bracket's END
+    - the largest fan this aspect can draw. If even that is short of the target by more than the
+    tolerance, the aspect SATURATES (the envelope clamps the fan; cohort seed 47 sat at 16-17 acres
+    against 19.5 at four of its five aspects, and burned nine carves at each proving it) and the
+    search stops after those two carves, keeping the better. `fit_field` re-runs the best aspect
+    with `probe=False` when no aspect lands the target, so the refinement is never lost on the map
+    that needs it."""
     lo, hi = 0.35, 2.2
     best: tuple[tuple[bool, float], dict[str, Any]] | None = None
+    # PREDICT THE MULTIPLIER, THEN BRACKET IT (feature 145, GM 2026-08-28: "maps are now allowed to
+    # move ... we should just go ahead and fix it"). The fan scales in both dimensions with k, so
+    # its acreage goes roughly as k^2: from one carve the size that lands the target is
+    # k * sqrt(target / acres), and from two carves a power law through both points is better
+    # still. The bisection ignored that and halved the bracket blindly - seven carves of ~0.9 s to
+    # find what the first carve already predicted to within a plot row. The bracket is kept and the
+    # prediction is clamped INTO it (and falls back to the midpoint when it lands on a bracket end,
+    # which is how a lumpy acreage curve is stopped from re-proposing the same k), so every guarantee
+    # of the old loop holds: monotone narrowing, termination at `rounds`, the best legal net kept.
+    # Measured on the reference (seed 4): 4 carves -> 2; the cohort's worst field seeds 7 -> 2-3.
+    pts: list[tuple[float, float]] = []  # (k, acres) of every carve so far, for the power-law step
+    k = 1.0
     for _ in range(rounds):
-        k = (lo + hi) / 2.0
+        k = min(max(k, lo + 1e-3), hi - 1e-3)
         net = build_comb(
             plan.W,
             plan.H,
@@ -143,6 +174,7 @@ def _fit_at_aspect(plan: SitePlan, sluice: Pt, seed: int, plot_across: float, ro
         )
         acres = net_acres(net, plan.ftpx)
         err = abs(acres - plan.target_acres) / plan.target_acres
+
         # A DANGLING CANAL TAIL disqualifies a fan before its acreage is even considered. Whatever
         # supply canal runs on past its last delivery ditch has to die among the plots it waters;
         # ending outside the planted extent is runoff dying in bare ground
@@ -158,8 +190,41 @@ def _fit_at_aspect(plan: SitePlan, sluice: Pt, seed: int, plot_across: float, ro
             lo = k
         else:
             hi = k
+        pts.append((k, acres))
+        # A COLLAPSED BRACKET IS AN ANSWER. Cohort seed 47 (2026-08-28): at four of its five aspects the fan
+        # SATURATES - the envelope clamps it and the acreage sits at 16-17 against a 19.5 target however
+        # large k gets - and the old loop spent its last four carves at k = 2.16, 2.18, 2.19, 2.195 drawing
+        # the same 16.35 acres each time. A plot row is worth ~0.03 of k, so a bracket narrower than that
+        # cannot change the fan; stop, keep the best, and let the next aspect have the time.
+        if hi - lo < 0.03:
+            break
+        if probe and len(pts) == 1 and acres < plan.target_acres:
+            k = hi - 1e-3  # the probe: the largest fan this aspect can draw
+            continue
+        if probe and len(pts) == 2 and pts[0][1] < plan.target_acres and acres < plan.target_acres * (1.0 - tolerance):
+            break  # saturated: neither k = 1 nor the largest fan reaches the target - keep the better, move on
+        k = _predict_k(pts, plan.target_acres, lo, hi)
     assert best is not None
     return best
+
+
+def _predict_k(pts: list[tuple[float, float]], target: float, lo: float, hi: float) -> float:
+    """The next size multiplier to carve at: a power-law step through the last two (k, acres)
+    points, a square-root step from one, the bracket's midpoint when the prediction is useless.
+
+    Useless means: the two acreages coincide (a flat in the lumpy curve - no slope to follow), an
+    acreage of zero (nothing carved), or a prediction outside the open bracket (the curve is not
+    the power law where it matters, so the bracket's own halving takes over, exactly as before)."""
+    (k1, a1) = pts[-1]
+    if a1 <= 0:
+        return (lo + hi) / 2.0
+    if len(pts) >= 2 and pts[-2][1] > 0 and pts[-2][1] != a1 and pts[-2][0] != k1:
+        (k0, a0) = pts[-2]
+        p = math.log(a1 / a0) / math.log(k1 / k0)  # the local exponent; ~2 for a fan scaling in both dimensions
+        k = k1 * (target / a1) ** (1.0 / p) if 0.2 < p < 6.0 else k1 * math.sqrt(target / a1)
+    else:
+        k = k1 * math.sqrt(target / a1)
+    return k if lo < k < hi else (lo + hi) / 2.0
 
 
 HEAD_OFFSETS: tuple[tuple[str, float], ...] = (("head_left", -0.24), ("head_center", -0.05), ("head_center", 0.05), ("head_right", 0.24))

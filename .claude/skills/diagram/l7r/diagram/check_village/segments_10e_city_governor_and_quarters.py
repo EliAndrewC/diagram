@@ -1,24 +1,10 @@
 """Gate segments (city governor and quarters; keys 0563_195-0563_251) - bodies verbatim, registry order preserved."""
 
-from typing import Any
-
-from .common_01_geometry import (
-    Poly,
-    segments_cross,
-)
-from .common_03_capacity import _UNBOUND, _kept
 
 # the government compounds (governor's mansion + ministry offices) sit inside, clear of the
 # barriers. (The governor's YAMEN is legitimately a large walled compound - a whole city block,
 # dozens of buildings inside, drawn here as walls-only - so its size is fine; it must just not
 # cross the rampart.)
-
-
-def _seg_0563_197__gov(*, M: Any = _UNBOUND, meta: Any = _UNBOUND, scale: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 563.197 (gov) - body verbatim from the city mega-segment (feature 023; guards preserved, see research.md R2/R3)."""
-    if scale in ('city', 'capital') and meta.get('walled'):
-        gov = M.get("governor_mansion")
-    return _kept(locals(), ('gov',))
 
 
 # the governor's mansion is the GRANDEST compound - a city-block yamen, at least as large
@@ -44,13 +30,6 @@ def _seg_0563_197__gov(*, M: Any = _UNBOUND, meta: Any = _UNBOUND, scale: Any = 
 # ...and that ward must be SEALED: a continuous fence whose ends abut the city wall, that
 # a street pierces ONLY at a kido gate. Otherwise the gates can just be walked around, and
 # the road network connects samurai to commoner with no gate between them.
-
-
-def _seg_0563_209__kido(*, M: Any = _UNBOUND, meta: Any = _UNBOUND, scale: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 563.209 (kido) - body verbatim from the city mega-segment (feature 023; guards preserved, see research.md R2/R3)."""
-    if scale in ('city', 'capital') and meta.get('walled'):
-        kido = M.get("kido", [])
-    return _kept(locals(), ('kido',))
 
 
 # ...same mesh doctrine, same knob
@@ -126,53 +105,9 @@ def _seg_0563_209__kido(*, M: Any = _UNBOUND, meta: Any = _UNBOUND, scale: Any =
 # lane run to the block edge can spill outside even with its vertices nominally interior)
 
 
-def _seg_0563_242__a_2(*, M: Any = _UNBOUND, a: Any = _UNBOUND, meta: Any = _UNBOUND, scale: Any = _UNBOUND, st: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 563.242 (a, lanes_pts, st) - body verbatim from the city mega-segment (feature 023; guards preserved, see research.md R2/R3)."""
-    if scale in ('city', 'capital') and meta.get('walled'):
-        lanes_pts = [st["pts"] for st in M.get("town_streets", [])] + [a["pts"] for a in M.get("alleys", [])]
-    return _kept(locals(), ('a', 'lanes_pts', 'st'))
-
-
-def _seg_0563_243__crosses_ring(*, i: Any = _UNBOUND, k: Any = _UNBOUND, meta: Any = _UNBOUND, pts: Any = _UNBOUND, ring: Any = _UNBOUND, scale: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 563.243 (crosses_ring) - body verbatim from the city mega-segment (feature 023; guards preserved, see research.md R2/R3)."""
-    if scale in ('city', 'capital') and meta.get('walled'):
-
-        def crosses_ring(pts: Poly, ring: Poly, closed: bool) -> bool:
-            rng = range(len(ring)) if closed else range(len(ring) - 1)
-            return any(segments_cross(pts[k], pts[k + 1], ring[i], ring[(i + 1) % len(ring)]) for k in range(len(pts) - 1) for i in rng)
-
-    return _kept(locals(), ('crosses_ring',))
-
-
 # a way WHOLLY outside the rampart is the SUBURB's own circulation (021: the kashi
 # belt and guan-xiang wards keep streets and roji like any machi) - only a way that
 # CROSSES the wall, or an inside way poking out, is the defect
-
-
-def _seg_0563_244__p_2(
-    *, crosses_ring: Any = _UNBOUND, inwall: Any = _UNBOUND, lanes_pts: Any = _UNBOUND, meta: Any = _UNBOUND, p: Any = _UNBOUND, pts: Any = _UNBOUND, scale: Any = _UNBOUND, w: Any = _UNBOUND
-) -> dict[str, Any]:
-    """Gate segment 563.244 (p, pts, wall_hit) - body verbatim from the city mega-segment (feature 023; guards preserved, see research.md R2/R3)."""
-    if scale in ('city', 'capital') and meta.get('walled'):
-        wall_hit = [pts[0] for pts in lanes_pts if crosses_ring(pts, w, True) or (any(not inwall(p[0], p[1]) for p in pts) and any(inwall(p[0], p[1]) for p in pts))]
-    return _kept(locals(), ('p', 'pts', 'wall_hit'))
-
-
-def _seg_0563_246__moat_1(*, M: Any = _UNBOUND, meta: Any = _UNBOUND, scale: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 563.246 (moat) - body verbatim from the city mega-segment (feature 023; guards preserved, see research.md R2/R3)."""
-    if scale in ('city', 'capital') and meta.get('walled'):
-        moat = M.get("moat")
-    return _kept(locals(), ('moat',))
-
-
-def _seg_0563_247__city_streets_clear_of_moat(
-    *, check: Any = _UNBOUND, crosses_ring: Any = _UNBOUND, lanes_pts: Any = _UNBOUND, meta: Any = _UNBOUND, moat: Any = _UNBOUND, moat_hit: Any = _UNBOUND, pts: Any = _UNBOUND, scale: Any = _UNBOUND
-) -> dict[str, Any]:
-    """Gate segment 563.247 (city_streets_clear_of_moat) - body verbatim from the city mega-segment (feature 023; guards preserved, see research.md R2/R3)."""
-    if scale in ('city', 'capital') and meta.get('walled') and moat:
-        moat_hit = [pts[0] for pts in lanes_pts if crosses_ring(pts, moat, False)]
-        pass  # `` retired under feature 141 (the GM's cut); the segment stays for the check it keeps or the value it writes
-    return _kept(locals(), ('moat_hit', 'pts'))
 
 
 # farm fields (in-wall plots OR the surrounding farmland) must not cut across the wall stroke

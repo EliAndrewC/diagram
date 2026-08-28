@@ -465,3 +465,15 @@ def test_a_house_is_refused_a_seat_whose_DRAWN_corner_lands_on_a_lane():
     cx, cy = 700.0, 734.0  # 34 px off the centerline: clear of the 22 px clearance by its center
     assert s._fits(cx, cy, 46.0, 28.0), "the base footprint stands clear of the lane and must be allowed"
     assert not s._fits(cx, cy, 62.0, 56.0), "the DRAWN footprint puts a corner on the tread and must be refused"
+
+
+def test_fits_measures_drawn_extents_when_both_are_known() -> None:
+    """Feature 146: `_fits` prefers the DRAWN extents of the candidate and its neighbour when both are
+    recorded (a raked roof's real reach), and falls back to the half-diagonal circle when they are not."""
+    s = Settlement(1000, 1000, seed=1)
+    s.meta(name="F", scale="hamlet", ftpx=1)
+    s.placed.append((500.0, 500.0, 60.0, 30.0, None, None, 60.0, 30.0))
+    near = s._fits(548.0, 500.0, 60.0, 30.0)
+    far = s._fits(700.0, 500.0, 60.0, 30.0)
+    assert near is False, "overlapping drawn extents"
+    assert far is True

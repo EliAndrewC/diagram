@@ -98,3 +98,60 @@ def test_farmstead_fixtures_honor_the_spec_floor() -> None:
     assert s.M["meta"]["farm_fixtures_min"] == {"shrine": 2, "bath": 3}
     owners = {(r["kind"], tuple(r["of"])) for r in s.M["farm_fixtures"]}
     assert len(owners) == len(s.M["farm_fixtures"]), "the floor never doubles a house"
+
+
+# ---- feature 145: the refusal branches of the fixture placer that no cohort seed took --------------
+
+
+def _strip_settlement() -> tuple[object, object]:
+    from l7r.diagram.settlement import Settlement
+
+    s = Settlement(1000, 1000, seed=1)
+    s.meta(name="S", scale="hamlet", ftpx=1, down_deg=90)
+    return s, a_plan()
+
+
+def test_strip_blocked_refuses_the_canvas_edge_a_crossing_lane_and_a_drawn_crown() -> None:
+    s, _plan = _strip_settlement()
+    blocked = hg.homesteads._strip_blocked
+    assert blocked(s, 20, 500, 30, 20, 0, 0, [], [], None, []) is True, "over the canvas edge"
+    assert blocked(s, 500, 500, 30, 20, 0, 0, [], [], None, []) is False, "open ground"
+    lane = [([(500, 400), (500, 600)], 3.0)]  # a lane running THROUGH the strip, both ends outside it
+    assert blocked(s, 500, 500, 30, 20, 0, 0, [], [], None, lane) is True
+    s.M["tree_crowns"] = [500.0, 500.0, 12.0]
+    assert blocked(s, 500, 500, 30, 20, 0, 0, [], [], None, []) is True, "a crown drawn two stages earlier"
+
+
+def test_farmstead_fixtures_on_a_houseless_map_place_nothing() -> None:
+    s, plan = _strip_settlement()
+    assert hg.homesteads.farmstead_fixtures(s, plan, []) == 0
+
+
+def test_roll_falls_through_to_the_last_weight() -> None:
+    """A u past the weights' sum (floating-point slack) takes the last row rather than raising."""
+    assert hg.homesteads._roll([("a", 0.3), ("b", 0.3)], 0.99) == "b"
+    assert hg.homesteads._roll([("a", 0.3), ("b", 0.3)], 0.1) == "a"
+
+
+def test_strip_blocked_refuses_a_lane_that_only_crosses_the_strip() -> None:
+    """Feature 146: the crossing arm of `_strip_blocked` - a lane whose ENDS are both outside the strip but
+    whose segment passes through it (the corner test above cannot see that one)."""
+    s, _plan = _strip_settlement()
+    blocked = hg.homesteads._strip_blocked
+    across = [([(440.0, 500.0), (560.0, 500.0)], 1.0)]  # a hairline lane straight through, ends well clear
+    assert blocked(s, 500, 500, 30, 20, 0, 0, [], [], None, across) is True
+    beside = [([(440.0, 300.0), (560.0, 300.0)], 1.0)]
+    assert blocked(s, 500, 500, 30, 20, 0, 0, [], [], None, beside) is False
+
+
+def test_trunk_blocked_refuses_the_canvas_edge_and_a_record_without_a_footprint() -> None:
+    """Feature 146: two arms of the trunk test - a trunk hanging off the canvas, and a record in one of the
+    scanned lists that carries no `x` at all (a synthetic entry another check keeps), which is skipped
+    rather than raising."""
+    s, _plan = _strip_settlement()
+    blocked = hg.homesteads._trunk_blocked
+    assert blocked(s, 20, 500, 10, [], [], None, []) is True, "over the canvas edge"
+    s.M["persimmons"] = [{"note": "a record with no footprint at all"}]
+    assert blocked(s, 500, 500, 10, [], [], None, []) is False, "the footprint-less record is skipped"
+    s.M["persimmons"].append({"x": 500.0, "y": 500.0, "w": 20.0, "h": 20.0})
+    assert blocked(s, 500, 500, 10, [], [], None, []) is True, "and a real one blocks"

@@ -11,6 +11,7 @@ from collections.abc import Callable, Mapping, Sequence
 from typing import Any, cast
 
 from l7r.diagram.settlement import Settlement, edge_dist, point_in_poly, rot_rect, seg_closest, seg_dist, seg_intersect, segments_cross, skeleton_layout, web_cuts
+from l7r.diagram.settlement._geom import ring_offset
 from l7r.diagram.sitegen.geom import centroid, crop_polys, crosses_disc, crosses_poly, pull_clear, unit
 
 from .clearance import fabric_index, pairs_within
@@ -856,6 +857,18 @@ def _unjog(path: Poly, hard: list[Poly], walls: Sequence[Poly], water: list[tupl
                 del out[k : k + 2]
                 k = max(1, k - 1)
                 continue
+            # THE CHORD IS BLOCKED BUT THE KNEE MAY NOT BE (feature 145, Kashikawa after the field moved): a
+            # 7 px lattice step round a garden corner survived because the straight chord over both turns
+            # brushed the garden; one vertex at the step's midpoint keeps the corner and takes the zigzag out.
+            knee = ((out[k][0] + out[k + 1][0]) / 2.0, (out[k][1] + out[k + 1][1]) / 2.0)
+            if _clear_touch(out[k - 1], knee, hard, walls, water) and _clear_touch(knee, out[k + 2], hard, walls, water):
+                out[k : k + 2] = [knee]
+                k = max(1, k - 1)
+                continue
+            # ...AND WHEN EVEN THE KNEE IS BLOCKED, WALK THE CORNER OFF ITS APEX (feature 134 T50). The knee
+            # is one candidate on the step's own midline; `_ease_corner` searches perpendicular to the chord,
+            # so it clears an obstacle the midpoint still sits inside. Ordered second because it is the
+            # broader, costlier search and the knee answers the common case.
             eased = _ease_corner(out[k - 1], out[k], out[k + 2], hard, walls, water)
             if eased is not None:
                 out[k : k + 2] = eased
@@ -1146,7 +1159,7 @@ def _sweep_debris(s: Settlement) -> int:
     def _near(pt: Pt, segs: Sequence[tuple[Pt, Pt]]) -> float:
         return min((seg_dist(pt[0], pt[1], a, b) for a, b in segs), default=float("inf"))
 
-    swept = 0
+    swept: list[int] = []
     for i in live:
         if lanes[i].get("connector") or comp[i] not in alone or polyline_len(ways[i]) >= _WEB_MIN_FT:
             continue
@@ -1156,10 +1169,15 @@ def _sweep_debris(s: Settlement) -> int:
             continue
         lanes[i]["pts"] = []
         s.reink_lane(i)
-        swept += 1
+        swept.append(i)
+    # AND THE HUSK GOES WITH THE INK, the rule feature 145 set on the orphan joiner's own drop: an
+    # emptied `pts` leaves a record declaring a lane nothing draws, which every consumer then has to
+    # special-case. Removed back-to-front so the earlier indices stay valid.
+    for i in sorted(swept, reverse=True):
+        del lanes[i]
     if swept:
-        s.M["meta"]["lane_fragments_dropped"] = s.M["meta"].get("lane_fragments_dropped", 0) + swept
-    return swept
+        s.M["meta"]["lane_fragments_dropped"] = s.M["meta"].get("lane_fragments_dropped", 0) + len(swept)
+    return len(swept)
 
 
 def _touch_junctions(s: Settlement, hard: list[Poly], walls: Sequence[Poly], water: list[tuple[Pt, Pt]], reach: float = _LANE_JOIN_FT, only_orphans: bool = False) -> int:
@@ -1371,14 +1389,23 @@ def _touch_junctions(s: Settlement, hard: list[Poly], walls: Sequence[Poly], wat
                 return min((seg_dist(pt[0], pt[1], a, b) for a, b in segs), default=float("inf"))
 
             _dropped = 0
+            _dropped_idx: list[int] = []
             for i in orphans:
                 _mine = list(zip(ways[i], ways[i][1:], strict=False))
                 _served = [h for h in _houses if _near(h, _mine) <= _SERVE_FT]
                 if all(_near(h, _others) <= _SERVE_FT for h in _served):
                     lanes[i]["pts"] = []
                     s.reink_lane(i)
+                    _dropped_idx.append(i)
                     _dropped += 1
             if _dropped:
+                # AND THE HUSK GOES WITH THE INK (settlement-review, Sawada, feature 145). Emptying `pts` left a
+                # lane record declaring a lane nothing draws - `lanes` counted 18 where 17 existed, and every
+                # consumer that iterates them had to special-case it (a `pts[0]` would raise). This engine's own
+                # rule for the copse says it plainly: a map that declares a feature it did not draw is the defect.
+                # Removed back-to-front so the earlier indices stay valid; the count still goes to meta.
+                for _i in sorted(_dropped_idx, reverse=True):
+                    del lanes[_i]
                 s.M["meta"]["lane_fragments_dropped"] = s.M["meta"].get("lane_fragments_dropped", 0) + _dropped
                 joined = _dropped == len(orphans)
                 if joined:
@@ -2246,6 +2273,13 @@ def _serve_stragglers(s: Settlement, plan: SitePlan, hard: list[Poly], fabric: l
             if _exhausted.get(id(h)) == _key:
                 continue  # same house, same candidate ways, same obstacles - a replay of a pass that already failed
             for tgt in targets[:60]:
+                # A FOOTPATH CANNOT START IN THE WATER (feature 145, cohort seed 41 after the field moved): the
+                # nearest point of the network was where a lane skirts the drain brook, so the path's junction
+                # sat 1.3 px off the brook's centerline - a crossing gets a plank from `stage_crossings`, an
+                # ENDPOINT on the water gets nothing, and `ways_cross_water_on_a_deck` fired on the first sample.
+                # The router keeps 14 px off every watercourse (`_route`'s line margin); the junction owes the same.
+                if water and min(seg_dist(tgt[0], tgt[1], a, b) for a, b in water) < 14.0:
+                    continue
                 # The radius is generous on purpose. A steading the web could not reach is by
                 # definition one whose nearest way is already beyond the reach, so a search bounded
                 # at twice the reach gave up on exactly the houses that needed it - two of seed 3's,
@@ -2279,7 +2313,10 @@ def _serve_stragglers(s: Settlement, plan: SitePlan, hard: list[Poly], fabric: l
                             ((c[0] + math.cos(math.tau * k / 16) * (step + out), c[1] + math.sin(math.tau * k / 16) * (step + out)) for out in (0.0, 12.0, 24.0, 40.0, 60.0, 85.0) for k in range(16)),
                             key=lambda q: (math.dist(q, c), -((q[0] - c[0]) * dx + (q[1] - c[1]) * dy)),
                         )
-                        if _clear_link(q, q, hard, passable, water, gap=FOOTPATH_FABRIC_GAP)
+                        # A POINT, NOT A LINK (feature 145): `_clear_link(q, q, ...)` returns True for any span
+                        # under 1 px, so the standing place was never tested at all - cohort seed 41's footpath
+                        # began 1.3 px from the drain brook. The same index the router uses judges the point.
+                        if not fabric_index(hard, WEB_HARD_GAP, passable, FOOTPATH_FABRIC_GAP, water, 14.0).fouled(q)
                     ),
                     (c[0] + dx * step, c[1] + dy * step),
                 )
@@ -2403,6 +2440,11 @@ def _serve_stragglers(s: Settlement, plan: SitePlan, hard: list[Poly], fabric: l
                     # reach of the way it was aimed at, or it is a mark in the grass.
                     if len(path) < 2 or min(math.dist(path[-1], tgt), math.dist(path[0], tgt)) > _LANE_JOIN_FT:
                         continue
+                    # THE LATTICE'S JOGS COME OUT OF A FOOTPATH TOO (feature 145, cohort seed 43 after the field
+                    # moved): a routed candidate is string-pulled inside `_route`, but the trim and the join above
+                    # can leave a step the pull could not take at the fabric margin; the junction-margin pass that
+                    # every web lane gets (`_unjog`) is what `lanes_bend_like_paths` measures against.
+                    path = _unjog(path, hard, others, water)
                     _draw_web(s, path, 3, houses=[c])
                     added += 1
                     _served = True
@@ -3053,14 +3095,14 @@ def connector_track(plan: SitePlan, start: Pt, avoid: Sequence[Poly] = (), reach
     # connector lane + the gate's 2 px pad + 3 px slack) makes the router score the tread the gate
     # will measure, the same probe-measures-what-the-check-measures rule the bow comment below
     # states for the crop.
+    # ...AND GROWN ALONG ITS NORMALS, NOT SCALED ABOUT ITS CENTROID (feature 145, Sawada after the field
+    # moved). The toe band is a contour strip 2,900 px long and ~200 wide; pushing each vertex 8 px AWAY
+    # FROM THE CENTROID moves the vertices near the band's middle almost entirely along its length and
+    # its far corners not at all in the direction that matters, so the connector routed "clean" past a
+    # corner it then grazed by 4.5 px. `ring_offset` (feature 140) pushes every vertex 8 px along the
+    # ring's own outward normal; its first n vertices are that outer ring.
     def _inflated(w: Poly) -> Poly:
-        wcx = sum(p[0] for p in w) / len(w)
-        wcy = sum(p[1] for p in w) / len(w)
-        out: Poly = []
-        for wx, wy in w:
-            wl = math.hypot(wx - wcx, wy - wcy) or 1.0
-            out.append((wx + (wx - wcx) / wl * 8.0, wy + (wy - wcy) / wl * 8.0))
-        return out
+        return list(ring_offset(w, 8.0, 0.0)[: len(w)])
 
     wet_grown = [_inflated(w) for w in wet if len(w) >= 3]
     best: tuple[tuple[int, int, int], Poly] | None = None

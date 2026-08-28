@@ -277,3 +277,19 @@ def test_every_registered_source_carries_a_link_or_says_why_not() -> None:
     read, or an explicit `URL: none - <why>`; the references modal links to it."""
     bare = sorted(k for k, text in registry().items() if not urls_of(text) and "URL: none" not in text)
     assert bare == [], f"sources with neither a link nor a stated reason: {bare}"
+
+
+def test_merge_primitives_folds_a_run_of_unfilled_circles() -> None:
+    from l7r.diagram.interactive.page import merge_primitives
+
+    run = '<circle cx="1" cy="1" r="2" stroke="#000"/><circle cx="5" cy="5" r="2" stroke="#000"/>'
+    out = merge_primitives(run)
+    assert out.count("<circle") == 0 and "<path" in out
+
+
+def test_research_sections_of_a_missing_file_are_empty_not_an_error() -> None:
+    """Feature 146: a research pointer naming a file that is not there yields no sections - the interactive
+    page loses that entry's citations rather than failing to build."""
+    from l7r.diagram.interactive.sources import _sections
+
+    assert _sections("research/no-such-file-at-all.md") == []

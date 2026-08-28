@@ -1,0 +1,36 @@
+perf-profile seed 4 stage hinterland: 7.0s under cProfile (the stages before it took 5.5s unprofiled; cProfile itself is ~+225%, research R2)
+raw: dev/perf-raw/20260828T164309Z-seed4-hinterland.prof (gitignored; archive: configured (https://github.com/EliAndrewC/mapgen-perflogs))
+
+         14175992 function calls (13988614 primitive calls) in 6.961 seconds
+
+   Ordered by: cumulative time
+   List reduced from 172 to 25 due to restriction <25>
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+        1    0.000    0.000    6.987    6.987 /diagram/.clones/diagram-tests/.claude/skills/diagram/l7r/diagram/hamletgen/hinterland.py:22(stage_hinterland)
+        2    0.007    0.003    6.029    3.015 /diagram/.clones/diagram-tests/.claude/skills/diagram/l7r/diagram/settlement/land/cover.py:281(hinterland)
+        5    0.754    0.151    5.269    1.054 /diagram/.clones/diagram-tests/.claude/skills/diagram/l7r/diagram/settlement/land/cover.py:34(commons)
+   134877    1.226    0.000    3.901    0.000 /diagram/.clones/diagram-tests/.claude/skills/diagram/l7r/diagram/settlement/land/cover.py:134(_sparse)
+  1007922    1.161    0.000    1.475    0.000 /diagram/.clones/diagram-tests/.claude/skills/diagram/l7r/diagram/settlement/_geom/indexes.py:232(near)
+   141201    0.273    0.000    0.847    0.000 /diagram/.clones/diagram-tests/.claude/skills/diagram/l7r/diagram/settlement/homestead_parts.py:873(_on_watercourse)
+   155625    0.120    0.000    0.825    0.000 /diagram/.clones/diagram-tests/.claude/skills/diagram/l7r/diagram/settlement/_geom/indexes.py:297(edge_within)
+        1    0.160    0.160    0.751    0.751 /diagram/.clones/diagram-tests/.claude/skills/diagram/l7r/diagram/settlement/land/wet.py:36(marsh)
+   329488    0.183    0.000    0.578    0.000 /diagram/.clones/diagram-tests/.claude/skills/diagram/l7r/diagram/settlement/_geom/primitives.py:51(seg_dist)
+        1    0.002    0.002    0.519    0.519 /diagram/.clones/diagram-tests/.claude/skills/diagram/l7r/diagram/hamletgen/homesteads.py:685(farmstead_fixtures)
+    27265    0.119    0.000    0.493    0.000 /diagram/.clones/diagram-tests/.claude/skills/diagram/l7r/diagram/settlement/land/wet.py:75(_sparse)
+386015/198637    0.096    0.000    0.491    0.000 {built-in method builtins.min}
+      172    0.015    0.000    0.483    0.003 /diagram/.clones/diagram-tests/.claude/skills/diagram/l7r/diagram/hamletgen/homesteads.py:586(_strip_blocked)
+  1601243    0.399    0.000    0.438    0.000 /diagram/.clones/diagram-tests/.claude/skills/diagram/l7r/diagram/settlement/_geom/indexes.py:287(inside)
+   865411    0.281    0.000    0.401    0.000 /usr/lib/python3.14/random.py:500(uniform)
+        1    0.002    0.002    0.361    0.361 /diagram/.clones/diagram-tests/.claude/skills/diagram/l7r/diagram/hamletgen/hinterland.py:84(open_ground_patches)
+  2037460    0.359    0.000    0.359    0.000 {method 'get' of 'dict' objects}
+     1295    0.006    0.000    0.356    0.000 /diagram/.clones/diagram-tests/.claude/skills/diagram/l7r/diagram/hamletgen/hinterland.py:259(_ok)
+   329488    0.243    0.000    0.340    0.000 /diagram/.clones/diagram-tests/.claude/skills/diagram/l7r/diagram/settlement/_geom/primitives.py:42(seg_closest)
+      963    0.022    0.000    0.322    0.000 /diagram/.clones/diagram-tests/.claude/skills/diagram/l7r/diagram/hamletgen/hinterland.py:710(_clear_gap)
+   282159    0.189    0.000    0.256    0.000 /diagram/.clones/diagram-tests/.claude/skills/diagram/l7r/diagram/settlement/_geom/indexes.py:59(boxed_seg_hit)
+      300    0.000    0.000    0.253    0.001 /diagram/.clones/diagram-tests/.claude/skills/diagram/l7r/diagram/hamletgen/homesteads.py:625(<genexpr>)
+   114010    0.053    0.000    0.230    0.000 /diagram/.clones/diagram-tests/.claude/skills/diagram/l7r/diagram/hamletgen/hinterland.py:720(<genexpr>)
+  1690170    0.224    0.000    0.224    0.000 /diagram/.clones/diagram-tests/.claude/skills/diagram/l7r/diagram/settlement/land/cover.py:143(<genexpr>)
+   570138    0.106    0.000    0.200    0.000 /diagram/.clones/diagram-tests/.claude/skills/diagram/l7r/diagram/settlement/_geom/indexes.py:322(boxed_ring_hit)
+
+

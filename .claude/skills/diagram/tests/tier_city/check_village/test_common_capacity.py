@@ -5,12 +5,7 @@ locked to another tier; the gate collects everything. Helpers stay in the source
 import pytest
 
 from l7r.diagram import check_village
-from tests.check_village._builders import _CITY_WALL_SMALL, _FULL_Q, _POND_OUTLIER, _diamond_city, _dwell_grid, _pop_city, bldg
-
-
-@pytest.mark.tiers("city")
-def test_crop_advisory_skips_a_city():
-    assert check_village.crop_relocatable_singletons({**_POND_OUTLIER, "meta": {"scale": "city", "view": [0, 0, 1400, 1000]}}) == []
+from tests.check_village._builders import _CITY_WALL_SMALL, _FULL_Q, _diamond_city, _dwell_grid, _pop_city, bldg
 
 
 @pytest.mark.tiers("city")

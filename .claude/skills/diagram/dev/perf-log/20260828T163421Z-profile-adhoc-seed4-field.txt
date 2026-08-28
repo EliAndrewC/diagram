@@ -1,0 +1,36 @@
+perf-profile seed 4 stage field: 7.1s under cProfile (the stages before it took 0.0s unprofiled; cProfile itself is ~+225%, research R2)
+raw: dev/perf-raw/20260828T163421Z-seed4-field.prof (gitignored; archive: configured (https://github.com/EliAndrewC/mapgen-perflogs))
+
+         11017226 function calls (10980116 primitive calls) in 7.070 seconds
+
+   Ordered by: cumulative time
+   List reduced from 426 to 25 due to restriction <25>
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+        1    0.000    0.000    7.127    7.127 /diagram/.clones/diagram-tests/.claude/skills/diagram/l7r/diagram/hamletgen/water.py:440(stage_field)
+        1    0.000    0.000    7.027    7.027 /diagram/.clones/diagram-tests/.claude/skills/diagram/l7r/diagram/hamletgen/water.py:80(fit_field)
+        1    0.001    0.001    7.027    7.027 /diagram/.clones/diagram-tests/.claude/skills/diagram/l7r/diagram/hamletgen/water.py:121(_fit_at_aspect)
+        4    0.002    0.001    7.016    1.754 /diagram/.clones/diagram-tests/.claude/skills/diagram/l7r/diagram/waterfields/comb.py:37(build_comb)
+        4    0.065    0.016    4.212    1.053 /diagram/.clones/diagram-tests/.claude/skills/diagram/l7r/diagram/waterfields/seams.py:793(close_seams)
+   355218    0.609    0.000    2.696    0.000 /home/agent/.local/lib/python3.14/site-packages/shapely/decorators.py:73(wrapped)
+        4    0.000    0.000    2.262    0.565 /diagram/.clones/diagram-tests/.claude/skills/diagram/l7r/diagram/waterfields/carve.py:575(_carve)
+       24    0.001    0.000    2.027    0.084 /diagram/.clones/diagram-tests/.claude/skills/diagram/l7r/diagram/waterfields/carve.py:386(_carve_sector)
+       20    0.025    0.001    1.828    0.091 /diagram/.clones/diagram-tests/.claude/skills/diagram/l7r/diagram/waterfields/carve.py:201(_sector_body_rows)
+      415    0.092    0.000    1.696    0.004 /diagram/.clones/diagram-tests/.claude/skills/diagram/l7r/diagram/waterfields/seams.py:292(_absorb)
+78885/55365    0.087    0.000    1.679    0.000 /home/agent/.local/lib/python3.14/site-packages/shapely/decorators.py:171(wrapper)
+    74091    0.904    0.000    1.419    0.000 /diagram/.clones/diagram-tests/.claude/skills/diagram/l7r/diagram/waterfields/banks.py:103(supply_bank_clearance)
+     2089    0.074    0.000    1.134    0.001 /diagram/.clones/diagram-tests/.claude/skills/diagram/l7r/diagram/waterfields/carve.py:100(_quad_in_supply)
+     2034    0.001    0.000    1.131    0.001 /diagram/.clones/diagram-tests/.claude/skills/diagram/l7r/diagram/waterfields/carve.py:486(in_supply)
+   239979    0.182    0.000    1.041    0.000 /home/agent/.local/lib/python3.14/site-packages/shapely/geometry/base.py:374(bounds)
+    15865    0.056    0.000    0.683    0.000 /home/agent/.local/lib/python3.14/site-packages/shapely/geometry/base.py:462(buffer)
+    11775    0.046    0.000    0.637    0.000 /diagram/.clones/diagram-tests/.claude/skills/diagram/l7r/diagram/waterfields/carve.py:442(edge)
+        4    0.013    0.003    0.545    0.136 /diagram/.clones/diagram-tests/.claude/skills/diagram/l7r/diagram/waterfields/seams.py:586(_unjog)
+      261    0.058    0.000    0.481    0.002 /diagram/.clones/diagram-tests/.claude/skills/diagram/l7r/diagram/waterfields/seams.py:676(_trade)
+    11209    0.022    0.000    0.464    0.000 /home/agent/.local/lib/python3.14/site-packages/shapely/geometry/polygon.py:227(__new__)
+    15865    0.361    0.000    0.456    0.000 /home/agent/.local/lib/python3.14/site-packages/shapely/constructive.py:136(buffer)
+   239979    0.400    0.000    0.400    0.000 /home/agent/.local/lib/python3.14/site-packages/shapely/measurement.py:84(bounds)
+      100    0.011    0.000    0.382    0.004 /diagram/.clones/diagram-tests/.claude/skills/diagram/l7r/diagram/waterfields/seams.py:514(_plant)
+    26286    0.023    0.000    0.315    0.000 /diagram/.clones/diagram-tests/.claude/skills/diagram/l7r/diagram/waterfields/carve.py:128(_bnd)
+     2509    0.006    0.000    0.305    0.000 /diagram/.clones/diagram-tests/.claude/skills/diagram/l7r/diagram/waterfields/seams.py:103(_despike)
+
+

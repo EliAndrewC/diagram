@@ -357,3 +357,33 @@ def test_jog_steps_ignores_a_gently_curving_bund():
     curve.append((curve[-1][0], curve[-1][1] + 200.0))
     curve.append((0.0, 200.0))
     assert jog_steps(curve, GRAIN) == 0
+
+
+def test_the_shapely_arms_fall_back_instead_of_raising(monkeypatch) -> None:  # type: ignore[no-untyped-def]
+    """Feature 145: `_open_to` and `_trade` guard every buffer against a GEOSException (a self-touching
+    ring shapely refuses to offset). The handler is the map's escape - it drops the pocket rather than
+    killing the roll - so it is asserted here rather than waited for on some future seed."""
+    from shapely.errors import GEOSException
+    from shapely.geometry import Polygon
+
+    from l7r.diagram.waterfields import seams
+
+    def boom(self, *a, **k):  # type: ignore[no-untyped-def]
+        raise GEOSException("synthetic")
+
+    square = Polygon([(0, 0), (100, 0), (100, 100), (0, 100)])
+    assert seams._open_to(square, 10.0) is not None  # the real path still works
+    monkeypatch.setattr(Polygon, "buffer", boom)
+    assert seams._open_to(square, 10.0) is None
+
+
+def test_water_skips_a_channel_with_a_single_point() -> None:
+    """Feature 146: a channel record with fewer than two points has no stroke to build - it is skipped,
+    not offset (which would raise). A one-point channel is what a trimmed lateral leaves behind."""
+    from l7r.diagram.waterfields.seams import _water
+
+    real = {"pts": [[0.0, 0.0], [100.0, 0.0]], "w": 6.0}
+    stub = {"pts": [[50.0, 50.0]], "w": 6.0}
+    empty: dict[str, object] = {"pts": [], "w": 6.0}
+    assert _water([real, stub, empty], 1.0).equals(_water([real], 1.0)), "the stubs contribute no ink"
+    assert _water([stub, empty], 1.0).is_empty, "stubs alone make no water at all"

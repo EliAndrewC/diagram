@@ -2043,3 +2043,53 @@ dodging it (the face-dodge rotated the hole to seed 41 - recorded in hinterland.
 the orphan joiner in `_touch_junctions` to accept the 30-35 ft links the smoothing leaves (see why it
 refuses them first); seed 27 wants the two new checks (T32 bends, T49 bamboo-off-lanes) satisfied on
 a layout other than Inashiro's; seed 47 is the old set. Then drop each pin row and run the 48-cohort.
+
+## Where does a field path END? (settlement-review, Inashiro, 2026-08-27 and 2026-08-28)
+
+Lane 0's field spur has ended short of the field outline on two consecutive rolls of the reference
+(1318,1306 under feature 140; 1333,1216 under 145, 17 ft from the outline, in open scrub) - so it is
+a property of `stage_ways`' spur, not of a roll. `research: physical`, and open: does a hamlet's
+path to its field end at a bund head, at a gap in the outer bund (a gate), or simply where the
+worked ground begins? Sketch once the record answers: the spur's terminal is snapped to the nearest
+bund end or outline vertex within ~30 ft (`field_face` chords give the candidates), and
+`field_spur_reaches_the_field` becomes a placer unit test rather than a check. Deferred under 145
+(a performance feature) with this measurement; not a regression of it.
+
+## Carve the paddy around an in-field grave island (settlement-review, Kashikawa, 2026-08-28)
+
+`_plot_grave_island` draws the mound OVER an intact lattice: on Kashikawa three plot rings and nine bund
+junctions lie inside the 22 x 68 ft mound at (2092, 1645), and at 0.9 opacity they ghosted through, so the
+mound read as a decal rather than raised ground. Feature 145 made it opaque, which fixes what the eye sees
+and leaves the manifest saying tiled-through where the ink says tiled-around. The real fix is to carve the
+plots around the grave where the toe pass builds them - the same shape as the pond's own plot carve - and
+then the registry's "the flat paddy tiling around it" becomes true again. `research: rendering`; deferred
+under 145 as a field-engine change rather than half-done. Kashikawa is the only pool map with a field grave,
+so it is the whole test bed.
+
+## The grove's bamboo species is declared and never drawn (feature 146, 2026-08-28)
+
+`_draw_grove` describes a mixed stand of conifer, broadleaf and bamboo, and its item loop had a
+`kind == "bamboo"` arm drawing one compact culm with a leafy top. It was unreachable: `b_th` - the
+threshold that selects bamboo - is `0.0` for BOTH mixes (`windbreak` and the dooryard blend), so
+`roll < b_th` never held. Feature 146 removed the six-line arm (dead code cannot be tested and should
+not be) and left the threshold alone, because raising it would put culms into every grove clump on
+every map - an appearance change that belongs to a feature that owns the look, with a settlement-review.
+`research: physical` when picked up: whether a yashikirin's mixed stand carried *take* at all, and in
+what share, is a question the record can answer. The bamboo the maps DO draw is the separate
+`bamboo_stand` take-yabu, which is unaffected.
+
+## Two checks that pass VACUOUSLY (feature 146, from the 145 settlement-reviews)
+
+- **`woodland_commons_within_the_frame` / `..._on_dry_ground` / `..._visibly_stocked`**: two of the four
+  scripted hamlets (Sawada, Kashikawa) roll ZERO woodland parcels, so all three pass on nothing. The
+  research is decisive that a farming village held worked woodland (*iriai*), so the question is not whether
+  the feature belongs but whether a tight composition has a legal seat - the Sawada reviewer's read is that
+  the scan finds none rather than declining one, and that the honest answer is either a smaller legibility
+  floor for a tight sheet or a companion check that the DECLARATION was attempted.
+- **`village_windbreak_is_continuous`** counts the RECORD, not the ink, by deliberate design (feature 137
+  T05's own comment). So a belt drawn 57 px short of the page - 37 recorded clumps standing inside the
+  visible frame undrawn, measured on Sawada - passes by construction. The trim-versus-final-crop mechanism
+  is written up in `pool/hamlets/sawada.notes.md`.
+
+Both are the shape this project has written down twice: *a check that never RUNS looks exactly like a check
+that passes*. `research: rendering` for the companion checks; the woodland seat question is `physical`.

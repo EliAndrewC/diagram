@@ -3,16 +3,10 @@
 import math
 from typing import Any
 
-from l7r.diagram.settlement import street_runs
-
 from .common_01_geometry import (
-    _box_hits_poly,
     point_in_poly,
-    rect_corners,
     seg_dist,
-    segments_cross,
 )
-from .common_02_overlap_policy import edge_dist, in_ellipse
 from .common_03_capacity import _UNBOUND, _kept
 
 # SUN: a threshing yard dries rice in the SOUTHERN sun, so no grove may sit in the strip directly
@@ -63,43 +57,6 @@ from .common_03_capacity import _UNBOUND, _kept
 # `meta.generated_by` like 071 (the frozen pool never opted in). research/homesteads.md.
 
 
-def _seg_0285_991__village_trees_unshade_from_west(
-    *,
-    M: Any = _UNBOUND,
-    check: Any = _UNBOUND,
-    gardens: Any = _UNBOUND,
-    meta: Any = _UNBOUND,
-    scale: Any = _UNBOUND,
-    w_cx: Any = _UNBOUND,
-    w_cy: Any = _UNBOUND,
-    w_f: Any = _UNBOUND,
-    w_ft: Any = _UNBOUND,
-    w_ftpx: Any = _UNBOUND,
-    w_g: Any = _UNBOUND,
-    w_lane: Any = _UNBOUND,
-    w_r: Any = _UNBOUND,
-    w_shade: Any = _UNBOUND,
-    w_wb: Any = _UNBOUND,
-    w_x0: Any = _UNBOUND,
-    w_y0: Any = _UNBOUND,
-    w_y1: Any = _UNBOUND,
-    yards: Any = _UNBOUND,
-) -> dict[str, Any]:
-    """Gate segment 0285.991 (village_trees_unshade_from_west) - feature 133 T10."""
-    if scale in ('town', 'village', 'hamlet') and meta.get("generated_by"):
-        w_ft = 50.0
-        w_ftpx = float(meta.get("ftpx") or 1)
-        w_lane = w_ft / w_ftpx
-        w_wb = [(w_cx, w_cy, float(w_g.get("r") or 0.0)) for w_g in M.get("village_groves", []) if w_g.get("role") == "windbreak" for w_cx, w_cy in (w_g.get("clumps") or [])]
-        w_shade = []
-        for w_f in yards + gardens:
-            w_x0, w_y0, w_y1 = w_f["x"] - w_f["w"] / 2, w_f["y"] - w_f["h"] / 2, w_f["y"] + w_f["h"] / 2
-            if any(w_x0 - w_lane - w_r < w_cx < w_x0 + w_r and w_y0 - w_r < w_cy < w_y1 + w_lane + w_r for w_cx, w_cy, w_r in w_wb):
-                w_shade.append((round(w_f["x"]), round(w_f["y"])))
-        pass  # `` retired under feature 141 (the GM's cut); the segment stays for the check it keeps or the value it writes
-    return _kept(locals(), ('w_cx', 'w_cy', 'w_f', 'w_ft', 'w_ftpx', 'w_g', 'w_lane', 'w_r', 'w_shade', 'w_wb', 'w_x0', 'w_y0', 'w_y1'))
-
-
 # SAME sun rule for the COMMUNAL fengshui trees: no village-grove CLUMP may sit in the southern sun-
 # corridor of a threshing yard OR a kitchen garden (both need the drying/growing sun from the south).
 # The scatter records its real clumps, so test those, not the bounding poly. WHY: settlements.md 'Village windbreak'.
@@ -121,148 +78,6 @@ def _seg_0285_073__cx_1(*, M: Any = _UNBOUND, cx: Any = _UNBOUND, cy: Any = _UNB
 # a town/city places its outside farms on the legacy path (no south-nudge), so the rule does not apply.
 
 
-def _seg_0285_077__gardens_unshaded_from_east(
-    *,
-    M: Any = _UNBOUND,
-    _band: Any = _UNBOUND,
-    _bed_clear: Any = _UNBOUND,
-    _bog: Any = _UNBOUND,
-    _e_iv: Any = _UNBOUND,
-    _fol: Any = _UNBOUND,
-    _hh: Any = _UNBOUND,
-    _hill: Any = _UNBOUND,
-    _lanes: Any = _UNBOUND,
-    _pond: Any = _UNBOUND,
-    _shaded: Any = _UNBOUND,
-    _water: Any = _UNBOUND,
-    a: Any = _UNBOUND,
-    b: Any = _UNBOUND,
-    box: Any = _UNBOUND,
-    bx: Any = _UNBOUND,
-    by: Any = _UNBOUND,
-    c: Any = _UNBOUND,
-    check: Any = _UNBOUND,
-    cx: Any = _UNBOUND,
-    cy: Any = _UNBOUND,
-    dy: Any = _UNBOUND,
-    east_bad: Any = _UNBOUND,
-    f: Any = _UNBOUND,
-    gardens: Any = _UNBOUND,
-    gd: Any = _UNBOUND,
-    gh: Any = _UNBOUND,
-    groves: Any = _UNBOUND,
-    gv: Any = _UNBOUND,
-    gw: Any = _UNBOUND,
-    gx: Any = _UNBOUND,
-    gy: Any = _UNBOUND,
-    h: Any = _UNBOUND,
-    hh: Any = _UNBOUND,
-    houses: Any = _UNBOUND,
-    iv: Any = _UNBOUND,
-    k: Any = _UNBOUND,
-    ln: Any = _UNBOUND,
-    m: Any = _UNBOUND,
-    maxshift: Any = _UNBOUND,
-    meta: Any = _UNBOUND,
-    ol: Any = _UNBOUND,
-    own: Any = _UNBOUND,
-    p: Any = _UNBOUND,
-    r: Any = _UNBOUND,
-    s: Any = _UNBOUND,
-    scale: Any = _UNBOUND,
-    st: Any = _UNBOUND,
-    vg_clumps: Any = _UNBOUND,
-    wp: Any = _UNBOUND,
-    yards: Any = _UNBOUND,
-) -> dict[str, Any]:
-    """Gate segment 0285.077 (gardens_unshaded_from_east) - body verbatim from _seg_0285__wells_clear_of_shrine_and_torii (feature 024 per-check split; guards re-evaluated in the body, see split_oversized.py)."""
-    if scale in ('town', 'village', 'hamlet') and scale in ('town', 'village', 'hamlet', 'city') and groves and meta.get("toscale", scale == "village"):
-        _band = 22
-        _hh = {(round(h["x"]), round(h["y"])): h["h"] for h in houses}
-        _lanes = M.get("lanes", [])
-        _bog = [m["poly"] for m in M.get("marshes", []) if m.get("role") != "pond_fringe" and m.get("poly")]
-        _water = [c["poly"] for c in M.get("channels", [])] + [st["poly"] for st in M.get("streams", [])]
-        _fol = [f["outline"] for f in M.get("fields", []) if f.get("outline")]
-        _hill, _pond = M.get("hill"), M.get("pond")
-
-        def _e_iv(ge: float, own: tuple[float, ...]) -> list[tuple[float, float]]:
-            iv = [(gv["y"] - gv["h"] / 2, gv["y"] + gv["h"] / 2) for gv in groves if tuple(gv.get("of", [])) != own and ge - 2 <= gv["x"] - gv["w"] / 2 < ge + _band]
-            iv += [(cy - r, cy + r) for cx, cy, r in vg_clumps if ge - 2 <= cx - r < ge + _band]
-            return iv
-
-        def _shaded(lane: tuple[float, float], iv: list[tuple[float, float]]) -> bool:
-            return any(a < lane[1] and lane[0] < b for a, b in iv)
-
-        def _bed_clear(bx: float, by: float, bw: float, bh: float, own: tuple[float, ...]) -> bool:
-            box = (bx - bw / 2, by - bh / 2, bx + bw / 2, by + bh / 2)
-            for h in houses:
-                if (round(h["x"]), round(h["y"])) != (round(own[0]), round(own[1])) and abs(bx - h["x"]) < (bw + h["w"]) / 2 and abs(by - h["y"]) < (bh + h["h"]) / 2:
-                    return False
-            for s in yards + groves + gardens + M.get("farm_sheds", []) + M.get("byres", []):
-                if tuple(s.get("of", [])) == own:  # skip the garden's OWN yard/grove/beds/shed
-                    continue
-                if abs(bx - s["x"]) < (bw + s["w"]) / 2 and abs(by - s["y"]) < (bh + s["h"]) / 2:
-                    return False
-            if any(_box_hits_poly(box, ol) for ol in _fol) or any(_box_hits_poly(box, p) for p in _bog):
-                return False
-            for ln in _lanes:
-                p = ln["pts"]
-                if any(seg_dist(bx, by, p[k], p[k + 1]) < ln.get("w", 6) / 2 + 2 for k in range(len(p) - 1)):
-                    return False
-            for wp in _water:
-                if any(seg_dist(bx, by, wp[k], wp[k + 1]) < 6 for k in range(len(wp) - 1)):
-                    return False
-            return not ((_hill and in_ellipse(bx, by, _hill)) or (_pond and in_ellipse(bx, by, _pond)))
-
-        east_bad = []
-        for gd in gardens:
-            gx, gy, gw, gh = gd["x"], gd["y"], gd["w"], gd["h"]
-            own = tuple(gd.get("of", []))
-            iv = _e_iv(gx + gw / 2, own)
-            if not _shaded((gy - gh / 2, gy + gh / 2), iv):
-                continue  # not currently east-shaded
-            hh = _hh.get((round(own[0]), round(own[1])), gh) if own else gh
-            maxshift, dy = gh + hh + 6, 4
-            while dy <= maxshift:
-                if not _shaded((gy + dy - gh / 2, gy + dy + gh / 2), iv) and _bed_clear(gx, gy + dy, gw, gh, own):
-                    east_bad.append((round(gx), round(gy)))  # a clear south-shift existed -> avoidable
-                    break
-                dy += 4
-        pass  # `` retired under feature 141 (the GM's cut); the segment stays for the check it keeps or the value it writes
-    return _kept(
-        locals(),
-        (
-            '_band',
-            '_bed_clear',
-            '_bog',
-            '_e_iv',
-            '_fol',
-            '_hh',
-            '_hill',
-            '_lanes',
-            '_pond',
-            '_shaded',
-            '_water',
-            'c',
-            'dy',
-            'east_bad',
-            'f',
-            'gd',
-            'gh',
-            'gw',
-            'gx',
-            'gy',
-            'h',
-            'hh',
-            'iv',
-            'm',
-            'maxshift',
-            'own',
-            'st',
-        ),
-    )
-
-
 # SCALE: the typical grove must read as the LARGEST homestead appurtenance - a real stand of dozens
 # of trees, not a clump. The median grove's total footprint (its arms) must be >= ~0.75x the house
 # it shelters (the spacious farms run well above; a single-arm grove on a cramped farm pulls the
@@ -278,132 +93,6 @@ def _seg_0285_077__gardens_unshaded_from_east(
 # every dispersed farmstead - so a grove-LESS farm must be one whose windward side is genuinely blocked
 # (a paddy, a neighbor, or the sun-corridor south of a yard). If a grove-less farm has CLEAR windward
 # room, the generator omitted a grove it could have placed. Replaces the old blunt presence floor.
-
-
-def _seg_0285_081__groves_where_possible(
-    *,
-    B: Any = _UNBOUND,
-    Hm: Any = _UNBOUND,
-    M: Any = _UNBOUND,
-    WF: Any = _UNBOUND,
-    Wm: Any = _UNBOUND,
-    avoid: Any = _UNBOUND,
-    c: Any = _UNBOUND,
-    ch: Any = _UNBOUND,
-    check: Any = _UNBOUND,
-    clump_clear: Any = _UNBOUND,
-    corridors: Any = _UNBOUND,
-    crop_ol: Any = _UNBOUND,
-    cx: Any = _UNBOUND,
-    cy: Any = _UNBOUND,
-    dpl: Any = _UNBOUND,
-    e: Any = _UNBOUND,
-    fdx: Any = _UNBOUND,
-    fdy: Any = _UNBOUND,
-    fields_ol: Any = _UNBOUND,
-    gardens: Any = _UNBOUND,
-    grove_of: Any = _UNBOUND,
-    hh_: Any = _UNBOUND,
-    houses: Any = _UNBOUND,
-    hw: Any = _UNBOUND,
-    hx: Any = _UNBOUND,
-    hy: Any = _UNBOUND,
-    k: Any = _UNBOUND,
-    meta: Any = _UNBOUND,
-    min_clump: Any = _UNBOUND,
-    n: Any = _UNBOUND,
-    ol: Any = _UNBOUND,
-    omitted: Any = _UNBOUND,
-    others: Any = _UNBOUND,
-    par: Any = _UNBOUND,
-    perp: Any = _UNBOUND,
-    poly: Any = _UNBOUND,
-    px: Any = _UNBOUND,
-    py: Any = _UNBOUND,
-    s: Any = _UNBOUND,
-    scale: Any = _UNBOUND,
-    vx: Any = _UNBOUND,
-    vy: Any = _UNBOUND,
-    windward: Any = _UNBOUND,
-    yards: Any = _UNBOUND,
-    yd: Any = _UNBOUND,
-) -> dict[str, Any]:
-    """Gate segment 0285.081 (groves_where_possible) - body verbatim from _seg_0285__wells_clear_of_shrine_and_torii (feature 024 per-check split; guards re-evaluated in the body, see split_oversized.py)."""
-    if scale in ('town', 'village', 'hamlet') and scale in ('town', 'village', 'hamlet', 'city') and scale in ("town", "village", "hamlet") and len(houses) >= 10 and not meta.get("nucleated"):
-        WF = {
-            "N": [((0, -1), 0)],
-            "S": [((0, 1), 0)],
-            "E": [((1, 0), 0)],
-            "W": [((-1, 0), 0)],
-            "NW": [((0, -1), -1), ((-1, 0), 0)],
-            "NE": [((0, -1), 1), ((1, 0), 0)],
-            "SW": [((0, 1), -1), ((-1, 0), 0)],
-            "SE": [((0, 1), 1), ((1, 0), 0)],
-        }
-        avoid = others + gardens + yards + M.get("manors", []) + M.get("religious", [])
-        # EVERY lane, not `M["lane"]` - see `street_runs`: that key is the last lane drawn, so grove
-        # shading was being judged against a fragment rather than against the ways.
-        corridors = street_runs(M) + [c for c in [M.get("road")] if c]
-        corridors += [(c.get("poly", c) if isinstance(c, dict) else c) for c in M.get("channels", [])]
-        corridors += [(s.get("poly", s) if isinstance(s, dict) else s) for s in M.get("streams", [])]
-        # a town RAMPART blocks a grove belt exactly like a road: a farm hugging the wall has a
-        # wall-shaded windward side (the placement side refuses via the wall's no-build corridor)
-        corridors += [M["wall"]] if M.get("wall") else []
-        Wm, Hm = meta.get("W", 1820), meta.get("H", 1180)
-
-        def min_clump(hh_: dict[str, Any], fdx: float, fdy: float, perp: float) -> tuple[float, float, float, float]:
-            hx, hy, hw, hz = hh_["x"], hh_["y"], hh_["w"], hh_["h"]
-            dm = 13 * hw / 44.0  # minimal-clump depth (44 = base house width / bscale)
-            if fdy:
-                return hx + perp * dm / 2, hy + fdy * (hz / 2 + dm / 2 + 1.5), (hw + dm) * 0.5, dm
-            return hx + fdx * (hw / 2 + dm / 2 + 1.5), hy, dm, hz * 0.5
-
-        # B is a CONSERVATIVE margin: the check only claims "room" when the windward side is CLEARLY
-        # open (room + B px), so it fires on a gross omission (a farm with plenty of space and no grove)
-        # but tolerates the borderline cases where this check can't perfectly mirror the placement test.
-        B = 7
-        # ALL cropland blocks a grove clump, not just the flooded paddy: the dry hem strips /
-        # garden tracts are barley, and trees do not grow in the barley either (the placement
-        # side refuses them via dry_polys in _grove_fits) - so a hem-shadowed windward side
-        # legitimately leaves a farm grove-less, same as a paddy-shadowed one. LOCAL to this
-        # check: the shared fields_ol stays paddy-only (its other uses mean "in the rice").
-        crop_ol = fields_ol + [dpl["poly"] for dpl in M.get("dry_plots", [])]
-
-        def clump_clear(cx: float, cy: float, cw: float, ch: float, par: tuple[int, int]) -> bool:
-            if cx < 55 or cx > Wm - 55 or cy < 88 or cy > Hm - 26:
-                return False
-            rc = rect_corners({"x": cx, "y": cy, "w": cw, "h": ch, "rot": 0})
-            for ol in crop_ol:
-                n = len(ol)
-                if (
-                    point_in_poly(cx, cy, ol)
-                    or edge_dist(cx, cy, ol) < 14 + B  # mirror settlement._in_blocked
-                    or any(point_in_poly(px, py, ol) for px, py in rc)
-                    or any(point_in_poly(vx, vy, rc) for vx, vy in ol)
-                    or any(segments_cross(rc[e], rc[(e + 1) % 4], ol[k], ol[(k + 1) % n]) for e in range(4) for k in range(n))
-                ):
-                    return False
-            for s in avoid:
-                if (round(s["x"]), round(s["y"])) == par:
-                    continue
-                if abs(cx - s["x"]) < (cw + s["w"]) / 2 + B and abs(cy - s["y"]) < (ch + s["h"]) / 2 + B:
-                    return False
-            for yd in yards:
-                if abs(cx - yd["x"]) < (cw + yd["w"]) / 2 + B and abs(cy - (yd["y"] + yd["h"] / 2 + 11)) < (ch + 22) / 2 + B:
-                    return False
-            return all(not (len(poly) >= 2 and any(seg_dist(cx, cy, poly[k], poly[k + 1]) < 20 + B for k in range(len(poly) - 1))) for poly in corridors)
-
-        omitted = []
-        for hh_ in houses:
-            if hh_.get("role") == "headman" or hh_.get("kind") == "abandoned":
-                continue
-            par = (round(hh_["x"]), round(hh_["y"]))
-            if par in grove_of:
-                continue
-            if any(clump_clear(*min_clump(hh_, fdx, fdy, perp), par) for (fdx, fdy), perp in WF.get(windward, WF["NW"])):
-                omitted.append(par)
-        pass  # `` retired under feature 141 (the GM's cut); the segment stays for the check it keeps or the value it writes
-    return _kept(locals(), ('B', 'Hm', 'WF', 'Wm', 'avoid', 'c', 'clump_clear', 'corridors', 'crop_ol', 'dpl', 'fdx', 'fdy', 'hh_', 'min_clump', 'omitted', 'par', 'perp', 's'))
 
 
 # NUCLEATED villages shelter behind a COMMUNAL fengshui WINDBREAK (风水林), NOT per-house groves: a
@@ -882,6 +571,10 @@ def _seg_0618_502__bamboo_stands_clear_of_paddies(
     if scale in ("hamlet", "village", "town"):
         bamboo_stands_clear_of_paddies_bad = []
         _bcp_fields = [[(float(a), float(b)) for a, b in f["outline"]] for f in (M.get("fields") or []) if f.get("outline")]
+        # THE DRY CROP IS CROP TOO (settlement-review, Mizuguchi, feature 145): this read paddy outlines alone, so a
+        # take-yabu standing 12.2 ft inside a soybean plot passed the gate green. The placer refuses both now
+        # (hamletgen.bamboo_seats); the check measures both, so placement and its check read the same ground.
+        _bcp_fields += [[(float(a), float(b)) for a, b in (o.get("poly") or [])] for o in (M.get("dry_plots") or []) if len(o.get("poly") or []) >= 3]
         for _b in M.get("bamboo_stands") or []:
             _bp = [(float(a), float(c)) for a, c in (_b.get("poly") or [])]
             if any(point_in_poly(q[0], q[1], fp) for fp in _bcp_fields for q in _bp):
@@ -889,7 +582,7 @@ def _seg_0618_502__bamboo_stands_clear_of_paddies(
         check(
             "bamboo_stands_clear_of_paddies",
             not bamboo_stands_clear_of_paddies_bad,
-            f"bamboo stand(s) at {bamboo_stands_clear_of_paddies_bad[:3]} stand in a flooded paddy - a take-yabu grows on the dry margin; the seat scan keeps 12 ft off the outline (hamletgen.bamboo_seats)",
+            f"bamboo stand(s) at {bamboo_stands_clear_of_paddies_bad[:3]} stand in the crop (a flooded paddy or a dry plot) - a take-yabu grows on the margin, not among the beans; the seat scan keeps 12 ft off the outline (hamletgen.bamboo_seats)",
         )
     return _kept(locals(), ("bamboo_stands_clear_of_paddies_bad",))
 

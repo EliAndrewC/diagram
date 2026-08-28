@@ -1,10 +1,8 @@
 """Gate segments (field cover and cremation; keys 0285_092-0286_024) - bodies verbatim, registry order preserved."""
 
-import math
 from typing import Any
 
-from .common_01_geometry import point_in_poly, poly_dist, seg_dist
-from .common_02_overlap_policy import poly_gap
+from .common_01_geometry import point_in_poly
 from .common_03_capacity import _UNBOUND, _kept
 
 
@@ -79,93 +77,6 @@ def _seg_0285_094__commons_clear_of_paddies(*, barren: Any = _UNBOUND, check: An
 # no-overhang CLEAR, plus a real-world shadow reach on the south side (feet -> px at the map's ftpx).
 
 
-def _seg_0285_095__c_3(*, c: Any = _UNBOUND, commons: Any = _UNBOUND, scale: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 0285.095 (c, woodland) - body verbatim from _seg_0285__wells_clear_of_shrine_and_torii (feature 024 per-check split; guards re-evaluated in the body, see split_oversized.py)."""
-    if scale in ('town', 'village', 'hamlet') and scale in ('town', 'village', 'hamlet', 'city'):
-        woodland = [c for c in commons if c.get("role") == "woodland"]
-    return _kept(locals(), ('c', 'woodland'))
-
-
-def _seg_0285_096__woodland_clear_of_crops(
-    *,
-    CLEAR: Any = _UNBOUND,
-    M: Any = _UNBOUND,
-    SHADE: Any = _UNBOUND,
-    _fp: Any = _UNBOUND,
-    c: Any = _UNBOUND,
-    check: Any = _UNBOUND,
-    crop: Any = _UNBOUND,
-    crops: Any = _UNBOUND,
-    cx0: Any = _UNBOUND,
-    cx1: Any = _UNBOUND,
-    cy1: Any = _UNBOUND,
-    dp: Any = _UNBOUND,
-    f: Any = _UNBOUND,
-    fields: Any = _UNBOUND,
-    g: Any = _UNBOUND,
-    gap: Any = _UNBOUND,
-    gx: Any = _UNBOUND,
-    gy: Any = _UNBOUND,
-    meta: Any = _UNBOUND,
-    p: Any = _UNBOUND,
-    scale: Any = _UNBOUND,
-    south: Any = _UNBOUND,
-    tag: Any = _UNBOUND,
-    w_on_grove: Any = _UNBOUND,
-    w_over: Any = _UNBOUND,
-    w_shade: Any = _UNBOUND,
-    woodland: Any = _UNBOUND,
-    wp: Any = _UNBOUND,
-    wx0: Any = _UNBOUND,
-    wx1: Any = _UNBOUND,
-    wy0: Any = _UNBOUND,
-) -> dict[str, Any]:
-    """Gate segment 0285.096 (woodland_clear_of_crops, woodland_clear_of_grove) - body verbatim from _seg_0285__wells_clear_of_shrine_and_torii (feature 024 per-check split; guards re-evaluated in the body, see split_oversized.py)."""
-    if scale in ('town', 'village', 'hamlet') and scale in ('town', 'village', 'hamlet', 'city') and woodland:
-        _fp = float(meta.get("ftpx") or meta.get("ft_per_px") or 2.0)
-        CLEAR = 14  # ~a crown radius: the canopy must not overhang the crop
-        SHADE = 14 + round(55 / _fp)  # ... plus a shadow reach (~55 ft) on the crop's SUNNY south side
-        crops = [f["outline"] for f in fields if f.get("kind") == "paddy"]
-        crops += [dp["poly"] for dp in M.get("dry_plots", [])]
-        w_over, w_shade = [], []
-        for c in woodland:
-            wp = c.get("poly")
-            if not wp:
-                continue
-            tag = (round(c["x"]), round(c["y"]))
-            wy0 = min(p[1] for p in wp)
-            wx0 = min(p[0] for p in wp)
-            wx1 = max(p[0] for p in wp)
-            for crop in crops:
-                gap = poly_gap(wp, crop)
-                if gap <= 0:
-                    w_over.append(tag)
-                    break
-                cx0 = min(p[0] for p in crop)
-                cx1 = max(p[0] for p in crop)
-                cy1 = max(p[1] for p in crop)
-                south = wy0 >= cy1 - CLEAR and wx0 < cx1 and cx0 < wx1  # patch sits south of the crop, in its shadow column
-                if gap < (SHADE if south else CLEAR):
-                    w_shade.append(tag)
-                    break
-        pass  # `` retired under feature 141 (the GM's cut); the segment stays for the check it keeps or the value it writes
-        # a coppice WOODLAND patch is a DISTINCT wood from the protected fengshui GROVE (village_groves) -
-        # the two must not overlap, or they merge into one indistinct green mass (GM). Keep each patch off
-        # every grove clump (its drawn radius). Place the coppice on its OWN stretch of the high ground.
-        w_on_grove = []
-        for c in woodland:
-            wp = c.get("poly")
-            if not wp:
-                continue
-            if any(point_in_poly(gx, gy, wp) or poly_dist(gx, gy, wp) < g.get("r", 6) for g in M.get("village_groves", []) for gx, gy in g.get("clumps", [])):
-                w_on_grove.append((round(c["x"]), round(c["y"])))
-        pass  # `` retired under feature 141 (the GM's cut); the segment stays for the check it keeps or the value it writes
-    return _kept(
-        locals(),
-        ('CLEAR', 'SHADE', '_fp', 'c', 'crop', 'crops', 'cx0', 'cx1', 'cy1', 'dp', 'f', 'g', 'gap', 'gx', 'gy', 'p', 'south', 'tag', 'w_on_grove', 'w_over', 'w_shade', 'wp', 'wx0', 'wx1', 'wy0'),
-    )
-
-
 # WEALTH VARIATION: farmhouses are not one uniform size - a modest wealth tier (recorded as `wealth`)
 # scales the rendered house and, with it, the grove, so holdings read as ranging from the landless
 # mizunomi to a honbyakushO landholder. Verify the tiers are ACTIVE so a regression that flattens
@@ -227,72 +138,6 @@ def _seg_0285_099__farmhouse_sizes_vary(
 # MAUSOLEUM by the samurai quarter, an extramural CREMATION GROUND, and a pauper OSSUARY beside it.
 
 
-def _seg_0286_000__cems(*, M: Any = _UNBOUND, scale: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 0286.000 (cems) - body verbatim from _seg_0286__cemetery_clear_of_shrine (feature 024 per-check split; guards re-evaluated in the body, see split_oversized.py)."""
-    if scale in ('village', 'town', 'city', 'capital'):
-        cems = M.get("cemeteries", [])
-    return _kept(locals(), ('cems',))
-
-
-def _seg_0286_001__maus(*, M: Any = _UNBOUND, scale: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 0286.001 (maus) - body verbatim from _seg_0286__cemetery_clear_of_shrine (feature 024 per-check split; guards re-evaluated in the body, see split_oversized.py)."""
-    if scale in ('village', 'town', 'city', 'capital'):
-        maus = M.get("mausoleums", [])
-    return _kept(locals(), ('maus',))
-
-
-def _seg_0286_002__crem(*, M: Any = _UNBOUND, scale: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 0286.002 (crem) - body verbatim from _seg_0286__cemetery_clear_of_shrine (feature 024 per-check split; guards re-evaluated in the body, see split_oversized.py)."""
-    if scale in ('village', 'town', 'city', 'capital'):
-        crem = M.get("cremation_grounds", [])
-    return _kept(locals(), ('crem',))
-
-
-def _seg_0286_003__oss(*, M: Any = _UNBOUND, scale: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 0286.003 (oss) - body verbatim from _seg_0286__cemetery_clear_of_shrine (feature 024 per-check split; guards re-evaluated in the body, see split_oversized.py)."""
-    if scale in ('village', 'town', 'city', 'capital'):
-        oss = M.get("ossuaries", [])
-    return _kept(locals(), ('oss',))
-
-
-def _seg_0286_004__relig(*, M: Any = _UNBOUND, scale: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 0286.004 (relig) - body verbatim from _seg_0286__cemetery_clear_of_shrine (feature 024 per-check split; guards re-evaluated in the body, see split_oversized.py)."""
-    if scale in ('village', 'town', 'city', 'capital'):
-        relig = M.get("religious", [])
-    return _kept(locals(), ('relig',))
-
-
-def _seg_0286_005__r(*, r: Any = _UNBOUND, relig: Any = _UNBOUND, scale: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 0286.005 (r, shrines) - body verbatim from _seg_0286__cemetery_clear_of_shrine (feature 024 per-check split; guards re-evaluated in the body, see split_oversized.py)."""
-    if scale in ('village', 'town', 'city', 'capital'):
-        shrines = [r for r in relig if r.get("kind") in ("shrine", "small_shrine")]
-    return _kept(locals(), ('r', 'shrines'))
-
-
-def _seg_0286_006__r_1(*, r: Any = _UNBOUND, relig: Any = _UNBOUND, scale: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 0286.006 (r, temples) - body verbatim from _seg_0286__cemetery_clear_of_shrine (feature 024 per-check split; guards re-evaluated in the body, see split_oversized.py)."""
-    if scale in ('village', 'town', 'city', 'capital'):
-        temples = [r for r in relig if r.get("kind") in ("monastery", "temple")]
-    return _kept(locals(), ('r', 'temples'))
-
-
-def _seg_0286_007__wall(*, M: Any = _UNBOUND, scale: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 0286.007 (wall) - body verbatim from _seg_0286__cemetery_clear_of_shrine (feature 024 per-check split; guards re-evaluated in the body, see split_oversized.py)."""
-    if scale in ('village', 'town', 'city', 'capital'):
-        wall = M.get("wall")
-    return _kept(locals(), ('wall',))
-
-
-def _seg_0286_008___inside(*, px: Any = _UNBOUND, py: Any = _UNBOUND, scale: Any = _UNBOUND, wall: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 0286.008 (_inside) - body verbatim from _seg_0286__cemetery_clear_of_shrine (feature 024 per-check split; guards re-evaluated in the body, see split_oversized.py)."""
-    if scale in ('village', 'town', 'city', 'capital'):
-
-        def _inside(px: float, py: float) -> bool:
-            return bool(wall) and point_in_poly(px, py, wall)
-
-    return _kept(locals(), ('_inside',))
-
-
 # PRESENCE: a village/town has >=1 graveyard; a city shows 2-4 (a few parish grounds,
 # consolidated over the centuries - not one, not a dozen)
 
@@ -325,13 +170,6 @@ def _seg_0286_008___inside(*, px: Any = _UNBOUND, py: Any = _UNBOUND, scale: Any
 # exempt from the moat term (streams/ponds apply regardless of which side they sit on).
 
 
-def _seg_0286_018__pond(*, M: Any = _UNBOUND, scale: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 0286.018 (pond) - body verbatim from _seg_0286__cemetery_clear_of_shrine (feature 024 per-check split; guards re-evaluated in the body, see split_oversized.py)."""
-    if scale in ('village', 'town', 'city', 'capital'):
-        pond = M.get("pond")
-    return _kept(locals(), ('pond',))
-
-
 #                      trickle - so a burial ground keeps a clear margin from its edge (more than a creek)
 
 
@@ -339,73 +177,3 @@ def _seg_0286_018__pond(*, M: Any = _UNBOUND, scale: Any = _UNBOUND) -> dict[str
 # interred next door, so a cremation ground sits ADJACENT to an EXTERNAL (outside-the-walls)
 # cemetery - together they form the extramural funerary complex beyond a gate. (An unwalled
 # settlement has no walls, so any of its cemeteries counts as external.)
-
-
-def _seg_0286_024__cremation_ground_by_external_cemetery(
-    *,
-    M: Any = _UNBOUND,
-    ROAD_SETBACK: Any = _UNBOUND,
-    _edge_gap: Any = _UNBOUND,
-    _rdist: Any = _UNBOUND,
-    a: Any = _UNBOUND,
-    b: Any = _UNBOUND,
-    between: Any = _UNBOUND,
-    c: Any = _UNBOUND,
-    cems: Any = _UNBOUND,
-    check: Any = _UNBOUND,
-    cr: Any = _UNBOUND,
-    crem: Any = _UNBOUND,
-    crem_on_road: Any = _UNBOUND,
-    ext_cems: Any = _UNBOUND,
-    gx: Any = _UNBOUND,
-    gy: Any = _UNBOUND,
-    k: Any = _UNBOUND,
-    lonely: Any = _UNBOUND,
-    mainroad: Any = _UNBOUND,
-    near_t: Any = _UNBOUND,
-    scale: Any = _UNBOUND,
-    t: Any = _UNBOUND,
-    temples_r: Any = _UNBOUND,
-    wall: Any = _UNBOUND,
-    x: Any = _UNBOUND,
-    y: Any = _UNBOUND,
-) -> dict[str, Any]:
-    """Gate segment 0286.024 (cremation_ground_by_external_cemetery, cremation_ground_not_between_temple_and_road, cremation_ground_set_back_from_main_road) - body verbatim from _seg_0286__cemetery_clear_of_shrine (feature 024 per-check split; guards re-evaluated in the body, see split_oversized.py)."""
-    if scale in ('village', 'town', 'city', 'capital') and crem:
-        ext_cems = [c for c in cems if not (wall and point_in_poly(c["x"], c["y"], wall))]
-
-        def _edge_gap(a: dict[str, Any], b: dict[str, Any]) -> float:
-            gx = max(0.0, abs(a["x"] - b["x"]) - (a["w"] + b["w"]) / 2)
-            gy = max(0.0, abs(a["y"] - b["y"]) - (a["h"] + b["h"]) / 2)
-            return math.hypot(gx, gy)
-
-        lonely = [(round(cr["x"]), round(cr["y"])) for cr in crem if not any(_edge_gap(cr, c) <= 70 for c in ext_cems)]
-        pass  # `` retired under feature 141 (the GM's cut); the segment stays for the check it keeps or the value it writes
-
-        # SET BACK FROM THE MAIN ROAD: the crematory is marginal, polluting land reached by a minor
-        # funeral path, NOT the high street - so it keeps clear of the Imperial / trunk road (town
-        # streets and minor lanes don't count; only the main road). The temple's own parish graveyard
-        # may sit by the temple wherever it is, but the smoking pyre stays off the main thoroughfare.
-        ROAD_SETBACK = 130
-        mainroad = M.get("road")
-        if mainroad:
-
-            def _rdist(x: float, y: float) -> float:
-                return min(seg_dist(x, y, mainroad[k], mainroad[k + 1]) for k in range(len(mainroad) - 1))
-
-            crem_on_road = [(round(cr["x"]), round(cr["y"])) for cr in crem if _rdist(cr["x"], cr["y"]) < ROAD_SETBACK]
-            pass  # `` retired under feature 141 (the GM's cut); the segment stays for the check it keeps or the value it writes
-            # NOT BETWEEN its temple and the road: you should not walk past the pyre to reach the
-            # monastery. The crematory sits BEHIND or beside its nearest temple (at least as far from
-            # the road as that temple, less a small tolerance), never on the road-side approach to it.
-            # (The temple's own graveyard may still sit road-side by the temple - this is the pyre only.)
-            temples_r = [t for t in M.get("religious", []) if t.get("kind") in ("monastery", "temple")]
-            between = []
-            for cr in crem:
-                near_t = [t for t in temples_r if math.hypot(t["x"] - cr["x"], t["y"] - cr["y"]) <= 400]
-                if near_t:
-                    t = min(near_t, key=lambda t: math.hypot(t["x"] - cr["x"], t["y"] - cr["y"]))
-                    if _rdist(cr["x"], cr["y"]) < _rdist(t["x"], t["y"]) - 40:
-                        between.append((round(cr["x"]), round(cr["y"])))
-            pass  # `` retired under feature 141 (the GM's cut); the segment stays for the check it keeps or the value it writes
-    return _kept(locals(), ('ROAD_SETBACK', '_edge_gap', '_rdist', 'between', 'c', 'cr', 'crem_on_road', 'ext_cems', 'lonely', 'mainroad', 'near_t', 't', 'temples_r'))

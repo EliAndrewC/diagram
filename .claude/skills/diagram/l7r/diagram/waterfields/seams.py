@@ -977,7 +977,12 @@ def close_seams(
         _psol = (_pg.area / (_pg.convex_hull.area or 1.0)) if isinstance(_pg, Polygon) and not _pg.is_empty else 1.0
         _pcx = sum(_q[0] for _q in p["poly"]) / len(p["poly"])
         _pcy = sum(_q[1] for _q in p["poly"]) / len(p["poly"])
-        _at_outfall = bool(dpts) and math.hypot(_pcx - dpts[-1][0], _pcy - dpts[-1][1]) < 1.5 * plot_across
+        # TO THE PLOT'S NEAREST CORNER, NOT ITS CENTROID (settlement-review, Sawada, feature 145). The
+        # centroid put Sawada's brook-mouth plot 88.1 px from the terminus - outside the radius - while its
+        # nearest corner was 43.6 px, well inside it, and at fit zoom the 72 x 68 ft blue square fused with
+        # the stream head exactly as this rule exists to prevent. The engine's own doctrine is that a gap
+        # verdict reads footprints and never centers; this one read a center. The radius is unchanged.
+        _at_outfall = bool(dpts) and min(math.hypot(_q[0] - dpts[-1][0], _q[1] - dpts[-1][1]) for _q in [*p["poly"], (_pcx, _pcy)]) < 1.5 * plot_across
         # AND A FIFTH CLAUSE, WHICH MEASURES PROPORTION - the blind spot the four above share. Apex,
         # end width, solidity and siting all pass a long parallel-sided WEDGE, and a wedge in blue
         # reads as a channel of water rather than as a basin holding it (see `_TINT_MAX_ASPECT`).

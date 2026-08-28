@@ -358,7 +358,7 @@ _STRUCTURES_SURFACE = frozenset(
         # public entry points, called from pool gens, wip/, other engine modules and tests
         "building",
         "clear_label_seat",
-        "drum_tower",
+        # "drum_tower" moved to structures/urban_fixtures.py (UrbanFixturesMixin) under feature 145 - still on Settlement
         "fire_tower",
         "kosatsuba",
         "label_blockers",
@@ -375,7 +375,7 @@ _STRUCTURES_SURFACE = frozenset(
         "road",
         "rowpack",
         "servant_ranges",
-        "theater_stage",
+        # "theater_stage" moved to structures/urban_fixtures.py (UrbanFixturesMixin) under feature 145 - still on Settlement
         "try_building",
         # private helpers, reached through self. Several have no consumer outside the class at
         # all - they stay in the surface precisely because a name nothing else calls is the kind a

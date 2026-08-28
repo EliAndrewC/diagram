@@ -264,3 +264,15 @@ def test_assemble_derives_on_cache_miss_and_loads_on_hit(tmp_path, monkeypatch):
     warm = reg._assemble(names)  # hit: load
     assert cold == warm
     assert (tmp_path / "cache.json").exists()
+
+
+def test_cached_fields_is_failure_soft(tmp_path, monkeypatch) -> None:  # type: ignore[no-untyped-def]
+    import json
+
+    from l7r.diagram.check_village import registry as r
+
+    missing = tmp_path / "rows.json"
+    monkeypatch.setattr(r, "_CACHE_PATH", missing)
+    assert r._cached_fields("k") is None  # OSError
+    missing.write_text(json.dumps({"key": "other", "rows": []}))
+    assert r._cached_fields("k") is None  # a stale key

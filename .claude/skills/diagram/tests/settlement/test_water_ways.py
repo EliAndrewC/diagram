@@ -534,3 +534,34 @@ def test_the_lane_key_is_the_spine_not_the_last_way_drawn():
     # ...and the road OUT is not the street, however long it runs
     s.lane([(900.0, 100.0), (1900.0, 900.0)], connector=True)
     assert s.M["lane"] == [[100.0, 100.0], [900.0, 100.0]]
+
+
+def test_angle_between_calls_a_degenerate_vector_square() -> None:
+    """Feature 146: a zero-length vector has no bearing, so the helper answers 90 rather than dividing by it."""
+    from l7r.diagram.settlement.water_ways import _angle_between
+
+    point = ((0.0, 0.0), (0.0, 0.0))  # a segment of zero length: no bearing at all
+    run = ((0.0, 0.0), (10.0, 0.0))
+    across = ((0.0, 0.0), (0.0, 10.0))
+    assert _angle_between(point, run) == 90.0
+    assert _angle_between(run, point) == 90.0
+    assert abs(_angle_between(run, run)) < 1e-9
+    assert abs(_angle_between(run, across) - 90.0) < 1e-9
+
+
+def test_focal_block_reserves_a_footprint_and_secondary_shrine_records_both() -> None:
+    """Feature 146: a focal feature reserves its ground for later placers, and the secondary shrine records
+    BOTH a shrine (so `religious_matches_scale` still sees only shrines) and the focal note."""
+    from l7r.diagram.settlement import Settlement
+
+    s = Settlement(1000, 1000, seed=1)
+    s.meta(name="F", scale="village", ftpx=1)
+    s._focal_block(500.0, 500.0, 60.0, 40.0)
+    assert (500.0, 500.0, 60.0, 40.0) in s.placed
+    assert s.block_polys and len(s.block_polys[-1]) == 4
+
+    s2 = Settlement(1000, 1000, seed=1)
+    s2.meta(name="S", scale="village", ftpx=1)
+    s2.secondary_shrine(300.0, 300.0)
+    assert any(r.get("kind") == "shrine" for r in s2.M.get("religious", []) + s2.M.get("shrines", []))
+    assert "secondary_shrine" in str(s2.M)  # ...and the focal note, wherever note_focal keeps it

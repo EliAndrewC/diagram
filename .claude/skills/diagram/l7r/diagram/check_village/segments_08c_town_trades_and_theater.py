@@ -1,10 +1,5 @@
 """Gate segments (town trades and theater; keys 0543_011-0543_057) - bodies verbatim, registry order preserved."""
 
-import math
-from typing import Any
-
-from .common_01_geometry import seg_closest
-from .common_03_capacity import _UNBOUND, _kept
 
 # WHY (farmers are the overwhelming majority caste): settlements.md "Historical grounding"
 
@@ -53,118 +48,13 @@ from .common_03_capacity import _UNBOUND, _kept
 # NOT buried behind the shop rows. A WALLED town keeps it INSIDE the rampart (caravans enter the gate).
 
 
-def _seg_0543_031__b_3(*, M: Any = _UNBOUND, b: Any = _UNBOUND, scale: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 0543.031 (b, inns) - body verbatim from _seg_0543__town_farmers_plurality (feature 024 per-check split; guards re-evaluated in the body, see split_oversized.py)."""
-    if scale == 'town':
-        inns = [b for b in M.get("buildings", []) if b.get("kind") == "inn"]
-    return _kept(locals(), ('b', 'inns'))
-
-
-def _seg_0543_034__routes(*, M: Any = _UNBOUND, s: Any = _UNBOUND, scale: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 0543.034 (routes, s) - body verbatim from _seg_0543__town_farmers_plurality (feature 024 per-check split; guards re-evaluated in the body, see split_oversized.py)."""
-    if scale == 'town':
-        routes = ([M["road"]] if M.get("road") else []) + [s["pts"] for s in M.get("town_streets", [])]
-    return _kept(locals(), ('routes', 's'))
-
-
-def _seg_0543_035__b_5(*, M: Any = _UNBOUND, b: Any = _UNBOUND, scale: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 0543.035 (b, others) - body verbatim from _seg_0543__town_farmers_plurality (feature 024 per-check split; guards re-evaluated in the body, see split_oversized.py)."""
-    if scale == 'town':
-        others = [b for b in M.get("buildings", []) if b.get("kind") not in ("inn", "stables")]
-    return _kept(locals(), ('b', 'others'))
-
-
 # the inn FACES the road and lies PARALLEL to it - the caravans pull straight up to it - so its
 # noren front (the +y edge after the inn's `rot`) must point at the nearest route point, which also
 # makes its long frontage edge run along the road. A diagonal road needs a tilted inn.
 
 
-def _seg_0543_040__unaligned(*, scale: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 0543.040 (unaligned) - body verbatim from _seg_0543__town_farmers_plurality (feature 024 per-check split; guards re-evaluated in the body, see split_oversized.py)."""
-    if scale == 'town':
-        unaligned = []  # type: ignore[var-annotated]
-    return _kept(locals(), ('unaligned',))
-
-
-def _seg_0543_041__bd(
-    *,
-    bd: Any = _UNBOUND,
-    cx: Any = _UNBOUND,
-    cy: Any = _UNBOUND,
-    d: Any = _UNBOUND,
-    dx: Any = _UNBOUND,
-    dy: Any = _UNBOUND,
-    fn: Any = _UNBOUND,
-    inn: Any = _UNBOUND,
-    inns: Any = _UNBOUND,
-    ki: Any = _UNBOUND,
-    npt: Any = _UNBOUND,
-    r: Any = _UNBOUND,
-    routes: Any = _UNBOUND,
-    scale: Any = _UNBOUND,
-    th: Any = _UNBOUND,
-    unaligned: Any = _UNBOUND,
-) -> dict[str, Any]:
-    """Gate segment 0543.041 (bd, cx, cy, d) - body verbatim from _seg_0543__town_farmers_plurality (feature 024 per-check split; guards re-evaluated in the body, see split_oversized.py)."""
-    if scale == 'town':
-        for inn in inns:
-            npt, bd = None, 1e18
-            for r in routes:
-                for ki in range(len(r) - 1):
-                    cx, cy = seg_closest(inn["x"], inn["y"], r[ki], r[ki + 1])
-                    d = math.hypot(cx - inn["x"], cy - inn["y"])
-                    if d < bd:
-                        bd, npt = d, (cx, cy)
-            if npt is None or bd < 1:
-                continue
-            dx, dy = (npt[0] - inn["x"]) / bd, (npt[1] - inn["y"]) / bd
-            th = math.radians(inn.get("rot", 0))
-            fn = (-math.sin(th), math.cos(th))  # the +y front's outward normal after rot
-            if fn[0] * dx + fn[1] * dy < 0.88:  # within ~28deg of facing the nearest road point
-                unaligned.append((round(inn["x"]), round(inn["y"])))
-    return _kept(locals(), ('bd', 'cx', 'cy', 'd', 'dx', 'dy', 'fn', 'inn', 'ki', 'npt', 'r', 'th', 'unaligned'))
-
-
 # every town has a THEATER STAGE unless meta(theater_stage=False); for a walled town
 # it sits INSIDE the walls unless meta(theater_stage="outside")
-
-
-def _seg_0543_043__ts_meta(*, meta: Any = _UNBOUND, scale: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 0543.043 (ts_meta) - body verbatim from _seg_0543__town_farmers_plurality (feature 024 per-check split; guards re-evaluated in the body, see split_oversized.py)."""
-    if scale == 'town':
-        ts_meta = meta.get("theater_stage", True)
-    return _kept(locals(), ('ts_meta',))
-
-
-def _seg_0543_044__amph_raw(*, M: Any = _UNBOUND, scale: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 0543.044 (amph_raw) - body verbatim from _seg_0543__town_farmers_plurality (feature 024 per-check split; guards re-evaluated in the body, see split_oversized.py)."""
-    if scale == 'town':
-        amph_raw = M.get("theater_stage")
-    return _kept(locals(), ('amph_raw',))
-
-
-def _seg_0543_045__amph_all(*, amph_raw: Any = _UNBOUND, scale: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 0543.045 (amph_all) - body verbatim from _seg_0543__town_farmers_plurality (feature 024 per-check split; guards re-evaluated in the body, see split_oversized.py)."""
-    if scale == 'town':
-        amph_all = amph_raw if isinstance(amph_raw, list) else ([amph_raw] if amph_raw else [])
-    return _kept(locals(), ('amph_all',))
-
-
-def _seg_0543_046__amph(*, a9: Any = _UNBOUND, amph_all: Any = _UNBOUND, scale: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 0543.046 (amph) - body verbatim from _seg_0543__town_farmers_plurality (feature 024 per-check split; guards re-evaluated in the body, see split_oversized.py)."""
-    if scale == 'town':
-        amph = max(amph_all, key=lambda a9: a9.get("w", 0)) if amph_all else None
-    return _kept(locals(), ('amph',))
-
-
-def _seg_0543_048__theater_stage_inside_wall(
-    *, M: Any = _UNBOUND, amph: Any = _UNBOUND, check: Any = _UNBOUND, meta: Any = _UNBOUND, scale: Any = _UNBOUND, ts_meta: Any = _UNBOUND, w: Any = _UNBOUND
-) -> dict[str, Any]:
-    """Gate segment 0543.048 (theater_stage_inside_wall) - body verbatim from _seg_0543__town_farmers_plurality (feature 024 per-check split; guards re-evaluated in the body, see split_oversized.py)."""
-    if scale == 'town' and amph and meta.get("walled") and ts_meta != "outside":
-        w = M.get("wall") or []
-        pass  # `` retired under feature 141 (the GM's cut); the segment stays for the check it keeps or the value it writes
-    return _kept(locals(), ('w',))
 
 
 # a town's monasteries: by default 2, dedicated to the patron fortunes of the clan

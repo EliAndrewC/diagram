@@ -27,8 +27,6 @@ def test_seg_to_rect_dist_zero_on_corner_touch_and_positive_when_apart():
 
 
 # ---- feature 006: defensive-branch coverage (empty pts, degenerate quarter) ----------------
-def test_largest_empty_gap_is_infinite_with_no_points():
-    assert check_village.largest_empty_gap([[0, 0], [10, 0], [10, 10], [0, 10]], []) == float("inf")
 
 
 # ---- robustness: bounded sweeps + geometry sanity (2026-07-14, hang on malformed input) ----

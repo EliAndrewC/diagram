@@ -1,0 +1,130 @@
+{
+  "clone": "diagram-tests",
+  "commit": "c241ed7f",
+  "cpus": 22,
+  "environment": "local",
+  "host": "laptop",
+  "hostname": "863bd4879ca8",
+  "image": "laptop",
+  "label": "144-mid",
+  "machine": "x86_64",
+  "median_seconds": 11.0,
+  "reference": {
+    "down_deg": 90,
+    "households": 15,
+    "name": "Inashiro",
+    "water_sink": "pond"
+  },
+  "rows": [
+    {
+      "asked": 15,
+      "form": "nucleated",
+      "houses": 15,
+      "seconds": 8.4,
+      "seed": 4,
+      "shape": "crescent",
+      "stages": {
+        "appurtenances": 0.26,
+        "bamboo": 0.0,
+        "crossings": 0.34,
+        "field": 1.55,
+        "frame": 0.02,
+        "hinterland": 2.48,
+        "homesteads": 1.69,
+        "notice": 0.67,
+        "seat": 0.03,
+        "sink": 0.01,
+        "track": 0.89,
+        "water_frame": 0.0,
+        "web": 0.31,
+        "windbreak": 0.13,
+        "woodland": 0.02
+      }
+    },
+    {
+      "asked": 15,
+      "form": "nucleated",
+      "houses": 15,
+      "seconds": 12.8,
+      "seed": 25,
+      "shape": "crescent",
+      "stages": {
+        "appurtenances": 1.04,
+        "bamboo": 0.0,
+        "crossings": 0.21,
+        "field": 1.52,
+        "frame": 0.0,
+        "hinterland": 2.54,
+        "homesteads": 2.37,
+        "notice": 0.67,
+        "seat": 0.03,
+        "sink": 0.01,
+        "track": 0.98,
+        "water_frame": 0.0,
+        "web": 3.35,
+        "windbreak": 0.08,
+        "woodland": 0.01
+      }
+    },
+    {
+      "asked": 15,
+      "form": "nucleated",
+      "houses": 15,
+      "seconds": 9.2,
+      "seed": 39,
+      "shape": "round",
+      "stages": {
+        "appurtenances": 0.1,
+        "bamboo": 0.0,
+        "crossings": 0.4,
+        "field": 2.04,
+        "frame": 0.0,
+        "hinterland": 2.49,
+        "homesteads": 0.78,
+        "notice": 0.6,
+        "seat": 0.04,
+        "sink": 0.01,
+        "track": 1.21,
+        "water_frame": 0.0,
+        "web": 1.38,
+        "windbreak": 0.17,
+        "woodland": 0.02
+      }
+    },
+    {
+      "asked": 15,
+      "form": "nucleated",
+      "houses": 15,
+      "seconds": 35.2,
+      "seed": 47,
+      "shape": "round",
+      "stages": {
+        "appurtenances": 0.14,
+        "bamboo": 0.0,
+        "crossings": 0.39,
+        "field": 28.73,
+        "frame": 0.0,
+        "hinterland": 3.4,
+        "homesteads": 0.33,
+        "notice": 0.51,
+        "seat": 0.06,
+        "sink": 0.0,
+        "track": 0.98,
+        "water_frame": 0.0,
+        "web": 0.49,
+        "windbreak": 0.16,
+        "woodland": 0.0
+      }
+    }
+  ],
+  "seeds": [
+    4,
+    25,
+    39,
+    47
+  ],
+  "subject": "Merge branch 'main' of https://github.com/EliAndrewC/diagram",
+  "total_seconds": 65.6,
+  "utc": "20260828T165206Z",
+  "worst_seconds": 35.2
+}

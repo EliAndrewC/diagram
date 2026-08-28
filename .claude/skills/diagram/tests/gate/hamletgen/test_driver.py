@@ -38,11 +38,16 @@ def test_a_rolled_cohort_passes_the_whole_gate() -> None:
     # better yet best farmed out to the AWS tests"*) - and each member through the roll cache, so an unchanged
     # engine serves the report and a changed one rolls it. The full run (`make done FULL=1`, `L7R_TESTS_FULL=1`)
     # bypasses the cache and rolls all four. Last exhaustive green: 2026-08-27 (this feature's baseline).
-    specs = hg.driver.cohort_specs(4 if FULL else 1, first_seed=41)  # FULL, not EXHAUSTIVE: the gate is always EXHAUSTIVE, and a seed sweep is the full run's
+    # EIGHT IN THE FULL RUN since feature 145: the hamlet-path floor counts what these in-process rolls execute, and the
+    # seed-dependent placer branches (the fabric threader, the web smoother, the strip and trunk guards) are reached by
+    # rolls, not by a fixture; four more seeds (~50 s in FULL) reach what four did not. Their verdicts are pinned below.
+    specs = hg.driver.cohort_specs(8 if FULL else 1, first_seed=41)  # FULL, not EXHAUSTIVE: the gate is always EXHAUSTIVE, and a seed sweep is the full run's
     reports = [rollcache.report(spec)[0] for spec in specs]
     assert len(reports) == len(specs)
     for report in reports:
         assert report.plan.placed >= round(0.85 * report.plan.spec.households), f"{report.plan.spec.name} seated {report.plan.placed}/{report.plan.spec.households}"
+        if report.plan.spec.seed in ACREAGE_SHORT:
+            continue  # a ledgered fan that cannot reach its acreage (below); measured on the pre-145 solver too
         assert abs(report.plan.acres - report.plan.target_acres) / report.plan.target_acres < 0.15, (
             f"{report.plan.spec.name}: {report.plan.acres:.1f} acres against a {report.plan.target_acres:.1f} target"
         )
@@ -61,9 +66,23 @@ def test_a_rolled_cohort_passes_the_whole_gate() -> None:
 
 
 # The gate cohort's expected failures (seeds 41-44), measured 2026-08-27 at the T99 unlock - see above.
+# A FAN THAT SATURATES: seed 45 (17 households, 22.1 acres asked) reaches 18.6 acres with the feature-145 solver and
+# reached 18.1 with the bisection it replaced (measured on the pre-145 worktree, 2026-08-28) - the envelope clamps the
+# fan at every aspect, so this is the canvas/envelope sizing for a large household count at that fall, not the solver.
+# Pre-existing, ledgered here with its measurement (constitution XIII); the gate itself is green on the map.
+ACREAGE_SHORT: dict[int, str] = {
+    45: "18.6 of 22.1 acres (18.1 before feature 145)",
+    47: "21.9 of 26.0 acres (21.9 before feature 145, whose gate on this seed was red besides) - 20 households at fall 90: the largest fan at every aspect stops at 21.9",
+}
+
 GATE_COHORT_EXPECTED: dict[int, frozenset[str]] = {
-    42: frozenset({"farmhouses_reach_a_way"}),
-    43: frozenset({"lanes_bend_like_paths", "lanes_form_one_network", "title_clear_of_features"}),
+    # seed 42 (farmhouses_reach_a_way) and two of seed 43's three (lanes_form_one_network, title_clear_of_features)
+    # came up clean when feature 145 moved the maps (the field solver); 43's routed footpath still keeps a 36 px
+    # lattice step round a house corner that neither the chord nor the knee can take (research R2b) - the one pin left
+    43: frozenset({"lanes_bend_like_paths"}),
+    45: frozenset(
+        {"lanes_do_not_break_mid_run", "village_windbreak_is_continuous"}
+    ),  # measured 2026-08-28 when the FULL cohort grew to eight (feature 145); 46 re-rolls once and is clean, 47 and 48 are clean
     # seed 44 pinned `houses_clear_of_paddies` until feature 141 retired that check (the placer's chains are the guarantee)
 }
 

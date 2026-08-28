@@ -423,3 +423,35 @@ pass: **ACCEPTABLE WITH NOTES** - nothing attributable to 140; the lane-ink resi
 (`lanes_bend_like_paths` on Kashikawa and Sawada) is feature 139's open class, now with coordinates in the
 review record (`specs/140-placement-segments/research.md` R5). Set-backs read as a rank; the measured
 corner-to-chord profile is in R5 too.
+
+## 2026-08-28 - feature 145 (the solver moved the fan; the whole map re-rolled)
+
+settlement-review, NEEDS-WORK: three errors. Two were NEW in this delta and are FIXED here; the third is
+pre-existing, was improved by this roll, and is deferred with its measurement.
+
+**FIXED - a flooded plot reading as a pond at the brook mouth.** The rule that demotes a blue plot fused to
+the collector's terminus measured the plot's CENTROID (88.1 px away, outside the 1.5-plot-width radius)
+while its nearest corner was 43.6 px, well inside it - so a 72 x 68 ft blue square sat at the head of the
+outgoing brook on the one map whose brief is that it has no pond. It measures the nearest corner now, which
+is what this engine's own doctrine says a gap verdict does. Sawada's flooded plots: 2 -> 1.
+
+**FIXED - an empty lane record.** Dropping a lane fragment emptied its `pts` and left the husk, so `lanes`
+counted 18 where 17 existed. The record is removed with the ink.
+
+**DEFERRED - the windbreak's ink stops 57 px inside the page** (constitution XIV's architectural clause,
+with the measurement it owes). 37 recorded clumps stand wholly inside the visible frame undrawn and 13 more
+clip its edge; canopy per 100 ft band falls 113 / 25 / 4 / 3 down the belt's south half. **Pre-existing and
+improved by this roll**: feature 140 left 57 wholly-in-frame clumps undrawn, this one leaves 37.
+**Mechanism**: `village_grove`'s face trim is given `within` = the belt's own predicted face + `CROP_MARGIN`
+(x approximately 1978 here), but the FINAL frame is set by `crop_to_content` from whatever reaches furthest -
+here `gardens[21]` at x 2037 + 48 = 2085 - so any feature that pushes the crop past the belt's predicted
+edge opens a bare strip the trim already threw away. **Why the gate cannot see it**:
+`village_windbreak_is_continuous` counts the RECORD, not the ink, by deliberate design (feature 137 T05).
+**Sketch**: the trim must run against the final crop box, which means either deferring the belt's ink to
+after `crop_to_content` (a draw-order change - the belt is drawn early on purpose) or re-inking the trimmed
+clumps once the frame settles. Both are ordering changes in the stage that this feature explicitly did not
+touch, which is why it is deferred rather than half-done here.
+
+Also recorded, not raised: the midden-beside-the-wellhead class is settled research (`research/homesteads.md`,
+2026-08-18); two of four scripted hamlets now roll ZERO woodland commons, so three woodland checks pass
+vacuously - a question for feature 146's check census.

@@ -1,6 +1,5 @@
 """Gate segments (graveyards and channel sources; keys 0286_025-0305) - bodies verbatim, registry order preserved."""
 
-import math
 from typing import Any
 
 from .common_01_geometry import Pt, point_in_poly, seg_dist
@@ -14,31 +13,6 @@ from .common_03_capacity import _UNBOUND, _kept
 # SPLIT: any WALLED settlement (town or city) keeps a graveyard both inside AND outside the
 # walls - and the EXTERIOR common ground is noticeably larger than the cramped intramural one
 # (there is room beyond the walls; inside, the temple grounds are hemmed in by the city).
-
-
-def _seg_0286_026__walled_graveyards_inside_and_outside(
-    *,
-    _inside: Any = _UNBOUND,
-    bi: Any = _UNBOUND,
-    bo: Any = _UNBOUND,
-    c: Any = _UNBOUND,
-    cems: Any = _UNBOUND,
-    check: Any = _UNBOUND,
-    ins: Any = _UNBOUND,
-    out: Any = _UNBOUND,
-    scale: Any = _UNBOUND,
-    wall: Any = _UNBOUND,
-) -> dict[str, Any]:
-    """Gate segment 0286.026 (walled_exterior_cemetery_larger, walled_graveyards_inside_and_outside) - body verbatim from _seg_0286__cemetery_clear_of_shrine (feature 024 per-check split; guards re-evaluated in the body, see split_oversized.py)."""
-    if scale in ('village', 'town', 'city', 'capital') and wall and cems:
-        ins = [c for c in cems if _inside(c["x"], c["y"])]
-        out = [c for c in cems if not _inside(c["x"], c["y"])]
-        pass  # `` retired under feature 141 (the GM's cut); the segment stays for the check it keeps or the value it writes
-        if ins and out:
-            bi = max(c["w"] * c["h"] for c in ins)
-            bo = max(c["w"] * c["h"] for c in out)
-            pass  # `` retired under feature 141 (the GM's cut); the segment stays for the check it keeps or the value it writes
-    return _kept(locals(), ('bi', 'bo', 'c', 'ins', 'out'))
 
 
 # BELL-AND-DRUM TOWER (GM 2026-07-24; settlements.md "The bell-and-drum tower"). The
@@ -56,95 +30,6 @@ def _seg_0286_026__walled_graveyards_inside_and_outside(
 # segments (a corner of the central crossroads).
 
 
-def _seg_0286_027__walled_settlement_has_drum_tower(
-    *,
-    M: Any = _UNBOUND,
-    _dt_at_crossing: Any = _UNBOUND,
-    _inside: Any = _UNBOUND,
-    a: Any = _UNBOUND,
-    angs: Any = _UNBOUND,
-    b: Any = _UNBOUND,
-    check: Any = _UNBOUND,
-    dts: Any = _UNBOUND,
-    i: Any = _UNBOUND,
-    ok_dt: Any = _UNBOUND,
-    scale: Any = _UNBOUND,
-    st: Any = _UNBOUND,
-    t: Any = _UNBOUND,
-    wall: Any = _UNBOUND,
-    ways: Any = _UNBOUND,
-    wy: Any = _UNBOUND,
-) -> dict[str, Any]:
-    """Gate segment 0286.027 (walled_settlement_has_drum_tower) - body verbatim from _seg_0286__cemetery_clear_of_shrine (feature 024 per-check split; guards re-evaluated in the body, see split_oversized.py)."""
-    if scale in ('village', 'town', 'city', 'capital') and wall and scale in ("town", "city"):
-        dts = M.get("drum_towers", [])
-        ways = ([M["road"]] if M.get("road") else []) + [st.get("pts", []) for st in M.get("town_streets", [])]
-
-        def _dt_at_crossing(t: dict[str, Any]) -> bool:
-            angs = []
-            for wy in ways:
-                for i in range(len(wy) - 1):
-                    if seg_dist(t["x"], t["y"], wy[i], wy[i + 1]) < 80:
-                        angs.append(math.atan2(wy[i + 1][1] - wy[i][1], wy[i + 1][0] - wy[i][0]) % math.pi)
-            return any(min(abs(a - b), math.pi - abs(a - b)) > 0.5 for a in angs for b in angs)
-
-        ok_dt = len(dts) == 1 and _inside(dts[0]["x"], dts[0]["y"]) and _dt_at_crossing(dts[0])
-        pass  # `` retired under feature 141 (the GM's cut); the segment stays for the check it keeps or the value it writes
-    return _kept(locals(), ('_dt_at_crossing', 'angs', 'dts', 'ok_dt', 'st', 'ways'))
-
-
-def _seg_0286_029__city_temples_have_graveyards(
-    *,
-    M: Any = _UNBOUND,
-    URBAN: Any = _UNBOUND,
-    _inside: Any = _UNBOUND,
-    anchor: Any = _UNBOUND,
-    b: Any = _UNBOUND,
-    c: Any = _UNBOUND,
-    cems: Any = _UNBOUND,
-    check: Any = _UNBOUND,
-    crem: Any = _UNBOUND,
-    crem_out: Any = _UNBOUND,
-    gov: Any = _UNBOUND,
-    m2: Any = _UNBOUND,
-    maus: Any = _UNBOUND,
-    maus_ok: Any = _UNBOUND,
-    needy: Any = _UNBOUND,
-    o: Any = _UNBOUND,
-    oss: Any = _UNBOUND,
-    oss_ok: Any = _UNBOUND,
-    r: Any = _UNBOUND,
-    sam: Any = _UNBOUND,
-    scale: Any = _UNBOUND,
-    temples: Any = _UNBOUND,
-    unserved: Any = _UNBOUND,
-) -> dict[str, Any]:
-    """Gate segment 0286.029 (city_has_cremation_ground, city_has_mausoleum, city_has_ossuary, city_temples_have_graveyards) - body verbatim from _seg_0286__cemetery_clear_of_shrine (feature 024 per-check split; guards re-evaluated in the body, see split_oversized.py)."""
-    if scale in ('village', 'town', 'city', 'capital') and URBAN:
-        # every temple that CAN host a graveyard has one in its precinct (graveyard=False opts out)
-        needy = [r for r in temples if r.get("graveyard", True)]
-        unserved = [r.get("label", (round(r["x"]), round(r["y"]))) for r in needy if not any(math.hypot(c["x"] - r["x"], c["y"] - r["y"]) < 230 for c in cems)]
-        pass  # `` retired under feature 141 (the GM's cut); the segment stays for the check it keeps or the value it writes
-        # CLAN MAUSOLEUM: a walled crypt precinct inside the walls, by the samurai/government quarter
-        gov = M.get("governor_mansion")
-        sam = [b for b in M.get("buildings", []) if b.get("kind") in ("samurai", "samurai_large")]
-        if gov:
-            anchor = (gov["x"], gov["y"])
-        elif sam:
-            anchor = (sum(b["x"] for b in sam) / len(sam), sum(b["y"] for b in sam) / len(sam))
-        else:
-            anchor = None
-        maus_ok = bool(maus) and any(_inside(m2["x"], m2["y"]) for m2 in maus) and (anchor is None or any(math.hypot(m2["x"] - anchor[0], m2["y"] - anchor[1]) < 640 for m2 in maus))
-        pass  # `` retired under feature 141 (the GM's cut); the segment stays for the check it keeps or the value it writes
-        # CREMATION GROUND: smoke, fire, and pollution push the crematory OUTSIDE the walls
-        crem_out = [c for c in crem if not _inside(c["x"], c["y"])]
-        pass  # `` retired under feature 141 (the GM's cut); the segment stays for the check it keeps or the value it writes
-        # PAUPER OSSUARY: outside the walls, beside the cremation ground
-        oss_ok = any(not _inside(o["x"], o["y"]) and any(math.hypot(o["x"] - c["x"], o["y"] - c["y"]) < 320 for c in crem) for o in oss)
-        pass  # `` retired under feature 141 (the GM's cut); the segment stays for the check it keeps or the value it writes
-    return _kept(locals(), ('anchor', 'b', 'c', 'crem_out', 'gov', 'm2', 'maus_ok', 'needy', 'o', 'oss_ok', 'r', 'sam', 'unserved'))
-
-
 # GEOMETRY SANITY AT EVERY SCALE (GM audit 2026-07: this only ran for cities): a wall vertex
 # millions of px off the canvas is malformed input at any scale - towns have walls too.
 
@@ -152,42 +37,6 @@ def _seg_0286_029__city_temples_have_graveyards(
 # LABEL TEXT renders ON TOP of everything: no part of a label may be covered. Labels live in the
 # topmost layer (s.add_label), above the TOP-layer structures (gate furniture, kido, torii); the
 # check guards it - a label overlapped by any structure drawn OVER it (higher draw-z) is covered.
-
-
-def _seg_0288__occluders() -> dict[str, Any]:
-    """Gate segment 288 (occluders) - body verbatim from the legacy gate() (feature 022)."""
-    occluders = []  # type: ignore[var-annotated]
-    return _kept(locals(), ('occluders',))
-
-
-def _seg_0289__gs_1(*, M: Any = _UNBOUND, gs: Any = _UNBOUND, occluders: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 289 (gs, occluders) - body verbatim from the legacy gate() (feature 022)."""
-    for gs in M.get("gate_structs", []):
-        if gs.get("z") is not None:
-            occluders.append((gs["x"] - gs["w"] / 2, gs["y"] - gs["h"] / 2, gs["x"] + gs["w"] / 2, gs["y"] + gs["h"] / 2, gs["z"]))
-    return _kept(locals(), ('gs', 'occluders'))
-
-
-def _seg_0290__kd(*, M: Any = _UNBOUND, kd: Any = _UNBOUND, occluders: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 290 (kd, occluders) - body verbatim from the legacy gate() (feature 022)."""
-    for kd in M.get("kido", []):
-        if kd.get("z") is not None and kd.get("bbox"):
-            occluders.append((kd["bbox"][0], kd["bbox"][1], kd["bbox"][2], kd["bbox"][3], kd["z"]))
-    return _kept(locals(), ('kd', 'occluders'))
-
-
-def _seg_0291__occluders_1(*, M: Any = _UNBOUND, occluders: Any = _UNBOUND, t: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 291 (occluders, t) - body verbatim from the legacy gate() (feature 022)."""
-    for t in M.get("torii", []):
-        if len(t) >= 3:
-            occluders.append((t[0] - 22, t[1] - 28, t[0] + 22, t[1] + 12, t[2]))  # the arch's drawn extent
-    return _kept(locals(), ('occluders', 't'))
-
-
-def _seg_0295__hill(*, M: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 295 (hill) - body verbatim from the legacy gate() (feature 022)."""
-    hill = M.get("hill")
-    return _kept(locals(), ('hill',))
 
 
 # every watercourse - irrigation channel OR natural stream - must connect what it

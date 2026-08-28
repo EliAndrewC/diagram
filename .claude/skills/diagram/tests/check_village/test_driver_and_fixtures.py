@@ -11,7 +11,6 @@ from tests.check_village._builders import (
     _POND_OUTLIER,
     _cap_gov,
     _feature_022_manifest,
-    _tv,
     bldg,
     bstone,
     exground,
@@ -82,102 +81,6 @@ def test_mausoleum_draws_with_either_gate_orientation():
     assert len(s.M["mausoleums"]) == 2
 
 
-def test_twin_detector_fires_on_twinned_pair():
-    # two structurally-identical villages (the Kikuta/Hoshigaoka situation) -> zero axes differ -> TWINNED
-    rep = check_village.twin_report([_tv(meta={"name": "A"}), _tv(meta={"name": "B"})])
-    assert len(rep) == 1
-    assert rep[0]["verdict"] == "TWINNED" and rep[0]["diffs"] == 0 and rep[0]["pair"] == ("A", "B")
-
-
-def test_twin_detector_passes_distinct_pair():
-    a = _tv(meta={"name": "A", "cluster_shape": "round", "lane_skeleton": "spine", "water_source_position": "corner_NW", "focal_features": []})
-    b = _tv(meta={"name": "B", "cluster_shape": "crescent", "lane_skeleton": "cross", "water_source_position": "chain", "focal_features": ["mill"]})
-    rep = check_village.twin_report([a, b])
-    assert len(rep) == 1 and rep[0]["verdict"] == "PASS" and rep[0]["diffs"] >= 4
-
-
-def test_twin_detector_skips_different_or_missing_down_deg():
-    a = _tv(meta={"name": "A", "down_deg": 45})
-    b = _tv(meta={"name": "B", "down_deg": 135})
-    c = _tv(meta={"name": "C"})
-    c["meta"].pop("down_deg")
-    assert check_village.twin_report([a, b]) == []  # different water direction -> not compared
-    assert check_village.twin_report([a, c]) == []  # one map lacks down_deg -> not compared
-
-
-def test_twin_axes_geometric_fallbacks_no_meta_knobs():
-    ax = check_village.twin_axes(_tv(meta={"name": "G"}))
-    assert ax["cluster_region"] == "W"  # cluster sits W of the field center
-    assert ax["cluster_shape"] == "tall"  # bbox 60 wide x 140 tall -> r < 0.7
-    assert ax["headman_side"] == "N"  # headman N of the cluster centroid
-    assert ax["water_source"] == "NW"  # pond NW of the field center
-    assert ax["lane_skeleton"] is None  # no declared knob, no geometric fallback
-    assert ax["focal_set"] == frozenset()
-    assert isinstance(ax["grain_orient"], int)
-
-
-def test_twin_axes_round_cluster_center_headman_and_dir8_deadzone():
-    # a square cluster CENTERED on the field center: round shape, headman AT the centroid (center),
-    # and cluster_region hits _dir8's zero-vector dead zone -> None
-    houses = [
-        {"x": 300, "y": 300, "role": "plain"},
-        {"x": 400, "y": 300, "role": "plain"},
-        {"x": 300, "y": 400, "role": "plain"},
-        {"x": 400, "y": 400, "role": "plain"},
-        {"x": 350, "y": 350, "role": "headman"},
-    ]
-    ax = check_village.twin_axes({"meta": {"name": "R", "down_deg": 45}, "houses": houses, "fields": [{"bbox": [0, 0, 700, 700]}]})
-    assert ax["cluster_shape"] == "round"  # w == h
-    assert ax["headman_side"] == "center"  # headman at the cluster center
-    assert ax["cluster_region"] is None  # centroid == field center -> dead zone
-    assert ax["water_source"] is None and ax["grain_orient"] is None  # no pond, no dry_plots
-
-
-def test_twin_axes_wide_cluster_and_bare_manifest():
-    wide = [{"x": 100, "y": 300, "role": "plain"}, {"x": 500, "y": 300, "role": "plain"}, {"x": 300, "y": 320, "role": "plain"}]
-    axw = check_village.twin_axes({"meta": {"name": "W", "down_deg": 45}, "houses": wide, "fields": [{"bbox": [0, 0, 700, 700]}]})
-    assert axw["cluster_shape"] == "wide"  # 400 wide x 20 tall -> r > 1.4
-    # a bare manifest: every geometric axis is 'no evidence'
-    ax = check_village.twin_axes({"meta": {"name": "bare", "down_deg": 45}})
-    assert ax["cluster_region"] is None and ax["cluster_shape"] is None and ax["headman_side"] is None
-    assert ax["water_source"] is None and ax["grain_orient"] is None and ax["focal_set"] == frozenset()
-
-
-def test_twin_axes_pond_layout_distinguishes_mosaic_from_grid():
-    # GM 2026-07-22: a mosaic dike-pond (桑基魚塘) and a surveyed grid polder (圩田) of the same water
-    # direction are different KINDS of place; pond_layout is a twin axis so the detector counts the difference.
-    assert "pond_layout" in check_village.TWIN_AXES
-    assert check_village.twin_axes({"meta": {"name": "G", "down_deg": 45}})["pond_layout"] == "grid"  # default
-    assert check_village.twin_axes({"meta": {"name": "M", "down_deg": 45, "pond_layout": "mosaic"}})["pond_layout"] == "mosaic"
-    grid = check_village.twin_axes({"meta": {"name": "G", "down_deg": 45, "field_archetype": "polder_grid"}})
-    mosaic = check_village.twin_axes({"meta": {"name": "M", "down_deg": 45, "pond_layout": "mosaic"}})
-    assert check_village.twin_diff_count(grid, mosaic) >= 1  # they differ on at least the pond_layout axis
-
-
-def test_twin_report_none_axes_are_no_evidence_not_a_diff():
-    # a fully-featured map vs a bare one: the bare map's None axes must NOT count as differences (a data
-    # gap cannot manufacture distinctiveness) -> the pair stays TWINNED, not spuriously PASS
-    rep = check_village.twin_report([_tv(meta={"name": "A"}), {"meta": {"name": "B", "down_deg": 45}}])
-    assert len(rep) == 1 and rep[0]["verdict"] == "TWINNED"
-
-
-def test_twin_report_uses_index_when_unnamed():
-    rep = check_village.twin_report([{"meta": {"down_deg": 45}}, {"meta": {"down_deg": 45}}])
-    assert rep and rep[0]["pair"] == ("0", "1")
-
-
-def test_twin_settlement_form_is_an_axis():
-    # nucleated blob vs linear ribbon - the biggest structural read - is a twin-detector axis; it defaults
-    # to 'nucleated' when a map does not declare it (so an undeclared map is not spuriously "different")
-    assert "settlement_form" in check_village.TWIN_AXES
-    a = _tv(meta={"name": "A", "settlement_form": "nucleated"})
-    b = _tv(meta={"name": "B", "settlement_form": "linear"})
-    ax, bx = check_village.twin_axes(a), check_village.twin_axes(b)
-    assert ax["settlement_form"] == "nucleated" and bx["settlement_form"] == "linear"
-    assert check_village.twin_axes(_tv(meta={"name": "C"}))["settlement_form"] == "nucleated"  # default
-    assert check_village.twin_diff_count(ax, bx) == 1  # differ on settlement_form alone (otherwise identical)
-
-
 def test_convex_hull_degenerate_point_clouds():
     """The hull helper returns <3 unique points as-is (a degenerate, zero-area hull) - the guard the pool
     maps never reach (the compactness check needs >=12 houses) but that must not crash on a stray call."""
@@ -224,3 +127,14 @@ def test_feature_022_registry_base_names_match_the_frozen_legacy_set():
     frozen = json.loads((pathlib.Path(__file__).parent.parent / "fixtures" / "gate_check_names.json").read_text())
     registry = sorted({c for seg in check_village.GATE_SEGMENTS for c in seg.checks})
     assert registry == frozen
+
+
+def test_a_waiver_excuses_its_check_and_is_recorded_as_used() -> None:
+    """Feature 146: the WAIVE arm of `driver.check` - a map may break a rule in writing, and the driver
+    records what was actually excused so a waiver whose defect is fixed can be reported stale."""
+    from l7r.diagram import check_village
+
+    M = manifest(meta={"scale": "hamlet", "households": 15, "toscale": True}, houses=[])
+    M["meta"]["waivers"] = {"households_consistent": "a deliberate break, with a reason long enough to satisfy the minimum the gate demands of one"}
+    fails = check_village.gate(M, verbose=False, only={"households_consistent"})
+    assert "households_consistent" not in fails, "the waiver must excuse the check"

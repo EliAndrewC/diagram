@@ -752,3 +752,98 @@ def test_stop_at_network_leaves_a_link_that_meets_nothing_on_the_way() -> None:
     link = [(0.0, 0.0), (30.0, 0.0), (60.0, 0.0)]
     assert hg.ways._stop_at_network(link, []) == link
     assert hg.ways._stop_at_network(link, [((0.0, 50.0), (60.0, 50.0))]) == link
+
+
+# ---- feature 146: the track's fallbacks, which no cohort seed has needed --------------------------------
+
+
+def _walled_settlement() -> tuple[object, object]:
+    """A Settlement whose homesteads form a WALL across the middle of the canvas, so a run from north to
+    south cannot go straight and cannot be clipped clear - the case `_thread_the_fabric`'s detour exists for."""
+    from l7r.diagram.settlement import Settlement
+
+    from ._builders import a_plan
+
+    s = Settlement(1400, 1400, seed=1)
+    s.meta(name="W", scale="hamlet", ftpx=1, down_deg=90)
+    for i in range(14):  # SOLID: the footprints overlap, so no gap exists for the router to thread
+        x = 60.0 + i * 100.0
+        s.M["houses"].append({"x": x, "y": 700.0, "w": 140.0, "h": 90.0, "rot": 0})
+    plan = a_plan()
+    plan.envelope = [(50.0, 50.0), (1350.0, 50.0), (1350.0, 1350.0), (50.0, 1350.0)]
+    return s, plan
+
+
+def test_thread_the_fabric_takes_a_detour_when_neither_the_route_nor_the_clip_clears() -> None:
+    from l7r.diagram.hamletgen.ways import _crosses_fabric, _homestead_polys, _thread_the_fabric
+
+    s, plan = _walled_settlement()
+    run = [(700.0, 200.0), (700.0, 1200.0)]  # straight through the middle house
+    fabric = [poly for poly, _o, _k in _homestead_polys(s)]
+    assert _crosses_fabric(run, fabric, 8.0), "the fixture must actually be blocked, or the fallback proves nothing"
+    out = _thread_the_fabric(s, plan, run, gap=8.0)
+    assert len(out) >= 2
+    assert out != run, "the straight run was kept - the detour never ran"
+
+
+def test_thread_the_fabric_returns_the_run_untouched_when_there_is_no_fabric() -> None:
+    from l7r.diagram.hamletgen.ways import _thread_the_fabric
+    from l7r.diagram.settlement import Settlement
+
+    from ._builders import a_plan
+
+    s = Settlement(800, 800, seed=1)
+    s.meta(name="E", scale="hamlet", ftpx=1, down_deg=90)
+    run = [(100.0, 100.0), (700.0, 700.0)]
+    assert _thread_the_fabric(s, a_plan(), run) == run  # nothing standing: nothing to thread
+    assert _thread_the_fabric(s, a_plan(), [(1.0, 1.0)]) == [(1.0, 1.0)]  # a one-point run is not a run
+
+
+def _webbed(lanes: list[dict[str, object]]) -> object:
+    """A Settlement carrying `lanes` and their ink, ready for the smoothing pass."""
+    from l7r.diagram.settlement import Settlement
+
+    s = Settlement(1400, 1400, seed=1)
+    s.meta(name="S", scale="hamlet", ftpx=1, down_deg=90)
+    for ln in lanes:
+        s.lane(list(ln["pts"]), width=int(ln.get("w", 5)))  # type: ignore[arg-type]
+    return s
+
+
+def test_smooth_web_cuts_the_SHORT_arm_off_a_hairpin() -> None:
+    """Feature 146: `_smooth_web`'s hairpin ARM cut, both directions. A lane that doubles back is not a way
+    feet wore. The un-jog pass gets first refusal and replaces the hairpin with its chord where the chord is
+    clear; where it is BLOCKED (a steading in the way, as here) the short arm is cut off instead."""
+    from l7r.diagram.hamletgen.ways import _smooth_web
+
+    block = [[(690.0, 220.0), (790.0, 220.0), (790.0, 250.0), (690.0, 250.0)]]  # across every chord below
+
+    # a short head (30 ft) doubling back into a longer tail: the HEAD goes
+    s1 = _webbed([{"pts": [[700.0, 230.0], [700.0, 200.0], [704.0, 232.0]], "w": 5}])
+    _smooth_web(s1, block, [], [])
+    kept = s1.M["lanes"][0]["pts"]
+    assert len(kept) == 2 and abs(kept[0][1] - 200.0) < 1e-6, kept
+
+    # the mirror: a short TAIL doubling back off a longer head
+    s2 = _webbed([{"pts": [[704.0, 232.0], [700.0, 200.0], [700.0, 230.0]], "w": 5}])
+    _smooth_web(s2, block, [], [])
+    kept2 = s2.M["lanes"][0]["pts"]
+    assert len(kept2) == 2 and abs(kept2[-1][1] - 200.0) < 1e-6, kept2
+
+
+def test_the_cluster_gateway_and_edge_fall_back_when_no_house_is_placed_yet() -> None:
+    """Feature 146: both helpers take the cloud's own extent, and both keep a fallback for a caller that
+    asks before any house is seated - which the shipped order does not do, and which this file's own comment
+    says is the failure mode it has met repeatedly."""
+    from l7r.diagram.hamletgen.ways import _cluster_edge_toward, _cluster_gateway
+    from l7r.diagram.settlement import Settlement
+
+    s = Settlement(1000, 1000, seed=1)
+    s.meta(name="G", scale="hamlet", ftpx=1, down_deg=90)
+    seat = {"cx": 500.0, "cy": 500.0, "along": (1.0, 0.0), "out": (0.0, 1.0), "half": 200.0, "depth": 80.0}
+    fallback = (123.0, 456.0)
+    assert _cluster_gateway(s, seat, fallback) == fallback
+    assert _cluster_edge_toward(s, (900.0, 500.0), fallback) == fallback
+    s.M["houses"].append({"x": 500.0, "y": 500.0, "w": 50.0, "h": 30.0})
+    assert _cluster_gateway(s, seat, fallback) != fallback, "with a house placed it measures the cloud"
+    assert _cluster_edge_toward(s, (900.0, 500.0), fallback) != fallback

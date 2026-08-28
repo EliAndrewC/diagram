@@ -141,6 +141,16 @@
             "command": "/diagram/scripts/source-block-hooks.sh pretool"
           }
         ]
+      },
+      {
+        "matcher": "Bash|Edit|Write|NotebookEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/diagram/scripts/measure-hooks.sh pretool",
+            "timeout": 10
+          }
+        ]
       }
     ],
     "PostToolUse": [

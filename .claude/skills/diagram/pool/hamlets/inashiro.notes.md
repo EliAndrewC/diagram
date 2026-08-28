@@ -1420,3 +1420,15 @@ field spur fades in the scrub at (1318, 1306); the south well (1232, 1283) stand
 Catch line: the pass caught the board's drift (a second-order effect of the re-roll), the fading spur, and
 that the stated "uniform +3-6 px" did not match the measured -2.4..+7.4 - the record above carries the
 measurement.
+
+## 2026-08-28 - feature 145 (the solver moved the fan; the whole map re-rolled)
+
+settlement-review, DELTA scope, PASS. The fan is fitted by a predicted multiplier now (19.3 of 19.5
+acres, aspect 0.91, 12 ditches, 8 footbridges); the cluster shifted ~150 ft north, both wells moved
+(1075,785 / 1339,565), the belt stands 16.5 ft off the west wellhead's rim. Questionable, recorded:
+lane 0's field spur fades in the scrub AGAIN (terminal 1333,1216, 17 ft from the outline) - the 140
+review saw it at (1318,1306); two rolls, same form, so it is the placer, not the roll. Deferred with
+its question in `future-work/farming-communities.md` ("Where does a field path END?") - a research
+question (bund head, gate, or the margin), not a ruling. Pre-existing: twin branch canals ~25 ft
+apart at (2201,1276), legal topology that reads as one canal drawn twice. Catch line: the pass caught
+the whole-map re-roll, the recurring spur, and the twin branches; nothing in the ink of the change.

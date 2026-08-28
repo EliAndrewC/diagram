@@ -95,9 +95,7 @@ from ._knobs import bridge_crossed_waters as bridge_crossed_waters
 from ._knobs import crop_boxes as crop_boxes
 from ._knobs import execution_ground_ft as execution_ground_ft
 from ._knobs import knob_rng as knob_rng
-from ._knobs import machi_mouths as machi_mouths
 from ._knobs import moat_current_at as moat_current_at
-from ._knobs import moat_swept_tap as moat_swept_tap
 from ._knobs import register_knob as register_knob
 from ._knobs import resolve_knob as resolve_knob
 from ._knobs import roll_merchant_estate_count as roll_merchant_estate_count
@@ -106,6 +104,8 @@ from ._knobs import scope_seed as scope_seed
 from ._knobs import skeleton_layout as skeleton_layout
 from ._knobs import wall_tower_spacing_px as wall_tower_spacing_px
 from ._knobs import web_cuts as web_cuts
+from .city.knobs import machi_mouths as machi_mouths
+from .city.knobs import moat_swept_tap as moat_swept_tap
 from .core import Settlement as Settlement
 from .houses import HOUSE_PADDY_GAP_FT as HOUSE_PADDY_GAP_FT
 from .land import surface_water_dist as surface_water_dist

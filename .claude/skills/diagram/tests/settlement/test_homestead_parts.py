@@ -330,3 +330,95 @@ def test_reclist_reads_a_singleton_record_as_well_as_a_list():
     s.M["houses"] = [{"x": 1, "y": 2, "w": 3, "h": 4}, {"x": 5, "y": 6, "w": 7, "h": 8}]
     assert len(s._reclist("houses")) == 2
     assert s._reclist("no_such_key") == []
+
+
+# ---- feature 145: the refusal branches on the hamlet path that no roll happened to take -----------
+
+
+def test_yard_fits_rejects_a_basin_VERTEX_inside_the_yard() -> None:
+    """The other direction of the two-source paddy test (`_yard_fits`, 2026-08-18): no yard CORNER is
+    inside the basin, but a basin vertex is inside the yard - which is what the check tests too."""
+    s = Settlement(1000, 1000, seed=1)
+    s.M["fields"] = [{"kind": "paddy", "outline": [[495, 495], [505, 495], [505, 505], [495, 505]]}]  # wholly inside the yard
+    assert s._yard_fits(500, 500, 60, 40, 500, 440) is False
+    s.M["fields"] = [{"kind": "paddy", "outline": [[900, 900], [960, 900], [960, 960], [900, 960]]}]  # far away
+    assert s._yard_fits(500, 500, 60, 40, 500, 440) is True
+
+
+def test_garden_fits_rejects_a_spot_on_its_own_threshing_yard() -> None:
+    s = Settlement(1000, 1000, seed=1)
+    yard = (500, 560, 32, 20)
+    assert s._garden_fits(500, 560, 24, 16, 500, 500, yard) is False  # centered ON the yard
+
+
+def test_grove_fits_rejects_a_belt_over_the_flooded_paddy() -> None:
+    s = Settlement(1000, 1000, seed=1)
+    s.field_polys.append([(300, 300), (700, 300), (700, 700), (300, 700)])
+    assert s._grove_fits(500, 500, 60, 30, own=[]) is False  # the whole grove inside the basin
+    assert s._grove_fits(120, 120, 60, 30, own=[]) is True
+
+
+def test_bamboo_stand_that_draws_nothing_records_nothing() -> None:
+    s = Settlement(1000, 1000, seed=1)
+    assert s.bamboo_stand([(500, 500), (500, 500), (500, 500)]) == 0  # zero area: no culm lands, so nothing is drawn
+    assert s.M.get("bamboo_stands", []) == []  # (the key is pre-initialized on the manifest; nothing was appended)
+
+
+def test_watercourse_segs_reads_a_uniform_width_channel() -> None:
+    """`field_channel`'s uniform branch records w0 == w1; the segs helper takes the single stroke."""
+    s = Settlement(1000, 1000, seed=1)
+    s.M["drawn_channels"] = [{"pts": [[100, 100], [400, 100]], "w0": 6.0, "w1": 6.0}, {"pts": [[500, 500]], "w0": 6.0, "w1": 6.0}]
+    segs = s._watercourse_segs()
+    assert any(abs(hw - (6.0 / 2 + 0.0)) < 3.0 for _pl, hw in segs), segs  # the uniform stroke, its half-width plus pad
+
+
+def test_corridor_buffers_reads_the_alleys_the_ring_road_and_the_road() -> None:
+    """Feature 146: every trodden tread is a keep-out for cover, not only the lanes."""
+    s = Settlement(1000, 1000, seed=1)
+    s.M["alleys"] = [{"pts": [[10, 10], [90, 10]], "w": 8}]
+    s.M["ring_road"] = [[100, 100], [300, 100]]
+    s.M["road"] = [[400, 400], [600, 400]]
+    got = {round(half) for _pts, half in s._corridor_buffers(4.0)}
+    assert {round(8 / 2 + 4), round(20 / 2 + 4), round(30 / 2 + 4)} <= got, got
+
+
+# ---- feature 146: one test per refusal reason the rolls have not happened to hit ----------------------
+
+
+def test_yard_fits_rejects_a_yard_whose_corner_is_inside_a_basin() -> None:
+    """The FIRST direction of the two-source paddy test (the second is covered above): a yard CORNER inside a
+    drawn basin outline, which is what `harvest_yards_clear_of_paddies` measures."""
+    s = Settlement(1000, 1000, seed=1)
+    s.M["fields"] = [{"kind": "paddy", "outline": [[520, 480], [900, 480], [900, 900], [520, 900]]}]
+    assert s._yard_fits(500, 500, 60, 40, 500, 440) is False  # the yard's east corners reach into the basin
+    assert s._yard_fits(200, 200, 60, 40, 200, 140) is True
+
+
+def test_garden_fits_rejects_a_bed_on_the_paddy_and_near_its_edge() -> None:
+    """A kitchen garden is DRY ground: inside a paddy, or within its own radius of one's edge, is refused."""
+    s = Settlement(1000, 1000, seed=1)
+    s.field_polys.append([(400, 400), (700, 400), (700, 700), (400, 700)])
+    yard = (200, 260, 32, 20)
+    assert s._garden_fits(550, 550, 24, 16, 200, 200, yard) is False  # in the basin
+    assert s._garden_fits(390, 550, 24, 16, 200, 200, yard) is False  # off it, but inside the radius + 4
+    assert s._garden_fits(200, 200, 24, 16, 200, 200, yard) is True
+
+
+def test_grove_fits_rejects_a_belt_on_a_lane_tread() -> None:
+    """A grove may stand at the paddy's edge (the field set-back is for buildings) but never on a trodden way."""
+    s = Settlement(1000, 1000, seed=1)
+    s.corridors.append(([(100.0, 500.0), (900.0, 500.0)], 20.0))  # a lane's cleared band, as the placer registers it
+    assert s._grove_fits(500, 500, 60, 30, own=[]) is False  # centered on the tread
+    assert s._grove_fits(500, 300, 60, 30, own=[]) is True
+
+
+def test_draw_grove_draws_a_mixed_stand_at_its_seat() -> None:
+    """Feature 146: the clump draws conifer and broadleaf crowns at its own seat. It does NOT draw bamboo -
+    the threshold that would select it is 0.0 in both mixes, so that arm was unreachable and is gone."""
+    s = Settlement(1000, 1000, seed=1)
+    s.meta(name="G", scale="hamlet", ftpx=1)
+    before = len(s.out)
+    s._draw_grove(300.0, 300.0, 120.0, 80.0, face=(0, -1), mix="windbreak")
+    ink = "".join(str(o) for o in s.out[before:])
+    assert "<circle" in ink and "translate(300,300)" in ink
+    assert "#BBD06A" not in ink, "no culm: the bamboo arm was unreachable and was removed"

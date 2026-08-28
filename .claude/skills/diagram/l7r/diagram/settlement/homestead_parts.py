@@ -416,7 +416,8 @@ class HomesteadPartsMixin:
         """Draw one windbreak/grove clump as a DENSE MIXED STAND - overlapping canopies packed into a real
         grove (not a few scattered trees), of three species: tall EVERGREEN conifer (dark, dense apex - the
         windbreak backbone, cedar/pine), DECIDUOUS broadleaf (mid green - timber and fruit, zelkova/persimmon),
-        and a BAMBOO clump (take - fine culms with leafy tops). `mix` picks the species blend: 'windbreak' is
+        and (nominally) a BAMBOO clump - see the note at the item loop: `b_th` is 0.0 in both mixes, so no
+        clump has ever drawn one. `mix` picks the species blend: 'windbreak' is
         conifer-backed (the sheltering wall - the yashikirin and the fengshui back belt); 'dooryard' is bamboo
         + fruit broadleaf with NO conifer (the leafy bamboo/fruit greenery scattered among village houses).
         Distinct from the big s.forest area feature and the striped kitchen-garden bed. Species and placement
@@ -462,13 +463,12 @@ class HomesteadPartsMixin:
             # comparison (the 'to scale, compact bamboo' option) for the before/after; groves stay to scale, the
             # SVG + rsvg raster roughly halve.
             for px, py, kind, s in sorted(items, key=lambda t: t[1]):
-                if kind == "bamboo":  # one compact culm + leafy top (symbolic, was 6)
-                    if self._crown_covers(cx + px, cy + py - 4 * bs, 3.0 * bs, krect, kcirc, self.CANOPY_PAD):
-                        continue
-                    drawn.append((cx + px, cy + py - 4 * bs, 3.0 * bs))
-                    g.append(f'<line x1="{px:.1f}" y1="{py + 4 * bs:.1f}" x2="{px:.1f}" y2="{py - 4 * bs:.1f}" stroke="#88A646" stroke-width="{1.4 * bs:.2f}"/>')
-                    g.append(f'<circle cx="{px:.1f}" cy="{py - 4 * bs:.1f}" r="{3.0 * bs:.1f}" fill="#BBD06A"/>')
-                    continue
+                # THE BAMBOO ITEM WAS UNREACHABLE (feature 146). `b_th` is 0.0 for BOTH mixes above, so
+                # `roll < b_th` never held and no grove clump has ever drawn a culm - while the comment above
+                # still described bamboo as one of the stand's three species. Six lines of code the maps could
+                # not reach, removed rather than tested. If the bamboo IS wanted in the blend the fix is a
+                # non-zero `b_th`, which moves every grove on every map and belongs to a feature that owns the
+                # look; recorded in future-work/farming-communities.md so the intent is not lost with the code.
                 # ONE CROWN AT THE RESEARCHED SIZE (GM 2026-08-28, feature 134 T36). This was `(4.6 | 4.0) * s * bs`,
                 # a pixel radius calibrated at the village's 2 ft/px ("a ~5-6 m canopy") and never rescaled by ftpx:
                 # at the hamlet's 1 ft/px the belt drew 9 ft crowns beside the commons' 18 ft ones (measured on
@@ -585,7 +585,9 @@ class HomesteadPartsMixin:
         # wrong - wells_clear_of_trees gates it). Keep-out = the well's DRAWN half-size (vr) + the canopy reach
         # (~0.9*clump, as for a shrine), NOT the tight 0.35*clump a homestead eave gets. (o["r"] is the recorded
         # clearance radius; the DRAWN wellhead is vr, which is what a crown must not overhang.)
-        occ += [(o["x"], o["y"], o.get("vr", o["r"]) + clump * 0.90) for o in self.M.get("wells", [])]
+        occ += [
+            (o["x"], o["y"], o.get("vr", o["r"]) + clump * 1.05 + 1.0) for o in self.M.get("wells", [])
+        ]  # 1.05, not 0.90 (feature 145): a DRAWN crown runs to ~1.03 x clump (Kashikawa: 14.4 on a 14 clump reached a well 25.4 px away, vr 12.4), and the check measures the drawn crown
         # ...and the NOTICE BOARD with its caption band (settlement-review, Sawada 2026-08-16: a
         # copse clump seated 10 px from the kosatsuba swallowed the board outright and pierced its
         # caption mid-word - the board is a 12x5 point fixture nothing in this list covered). 30 ft

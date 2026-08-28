@@ -59,6 +59,19 @@ class Page:
         """How many groups of each class carry the highlighted state right now."""
         return self.js("() => { const o = {}; for (const g of document.querySelectorAll('g.f.on')) { const k = g.getAttribute('data-k'); o[k] = (o[k] || 0) + 1; } return o; }")
 
+    def settles(self, want: Any, read: Any, ms: int = 2000) -> Any:
+        """Poll `read()` until it equals `want`, up to `ms` (feature 145). A fixed `wait_for_timeout(30)`
+        after a mouse move is enough on an idle box and not enough under a loaded FULL run - these two
+        assertions (the sibling-link hover, the scroll clamp) failed there on 2026-08-28 and passed alone
+        in two trees a minute later. Waiting for the STATE, bounded, keeps the assertion exactly as strict."""
+        got = read()
+        for _ in range(max(1, ms // 25)):
+            if got == want:
+                return got
+            self.page.wait_for_timeout(25)
+            got = read()
+        return got
+
     def groups(self, key: str) -> int:
         return self.js("k => window.l7rMap.count(k)", key)
 
@@ -68,6 +81,16 @@ class Page:
                 "([k, n]) => { const g = document.querySelectorAll('g.f[data-k=\"' + k + '\"]')[n]; const r = g.getBoundingClientRect(); return [r.x + r.width / 2, r.y + r.height / 2]; }", [key, nth]
             )
         )
+
+    def point_at(self, key: str, nth: int = 0) -> None:
+        """Put a REAL pointer on the nth group of `key` - on the element, not on its bounding-box center.
+
+        `center` returns the middle of the group's bbox, and a group is not its bbox: a farmhouse's ink is a
+        roof block and a ridge line, so the bbox center can land on bare parchment between them and light
+        nothing. That is intermittent by construction (it depends on the drawn geometry), and it failed a
+        parallel FULL run on 2026-08-28 and again alone a few minutes later on identical code. Playwright's
+        own hover picks a point INSIDE the element, which is what "a real pointer on the farmhouse" means."""
+        self.page.locator(f'g.f[data-k="{key}"]').nth(nth).hover(force=True)
 
     def hover_class(self, key: str) -> dict[str, int]:
         self.js("k => window.l7rMap.highlight(k)", key)
@@ -174,7 +197,7 @@ def test_synthetic_page_mechanics(synthetic: Page) -> None:
 
 def test_a_real_pointer_lights_the_kind_and_clicking_opens_its_modal(synthetic: Page) -> None:
     x, y = synthetic.center("farmhouse", 1)
-    synthetic.page.mouse.move(x, y)
+    synthetic.point_at("farmhouse", 1)
     synthetic.page.wait_for_timeout(30)
     assert synthetic.on() == {"farmhouse": 2}, "both farmhouses, disconnected, light as one kind (US1)"
     synthetic.page.mouse.click(x, y)
@@ -363,17 +386,19 @@ def test_a_sibling_link_lights_the_other_class_on_hover_and_replaces_the_modal_o
     """GM 2026-08-28: "Not to be confused with the X" - hover lights X, click opens X's modal in place."""
     synthetic.js("() => window.l7rMap.fit()")
     x, y = synthetic.center("windbreak", 0)
-    synthetic.page.mouse.click(x, y)
+    # CLICK THE ELEMENT, not its bounding-box centre (feature 146): a windbreak group is a scatter of clumps
+    # and its bbox centre can fall on bare ground between them, which is why this flaked under a loaded run.
+    synthetic.page.locator('g.f[data-k="windbreak"]').first.click(force=True)
     synthetic.page.wait_for_timeout(50)
-    assert synthetic.dialog()["k"] == "windbreak" and synthetic.on() == {"windbreak": 1}
+    assert synthetic.dialog()["k"] == "windbreak" and synthetic.settles({"windbreak": 1}, synthetic.on) == {"windbreak": 1}
     assert "Not to be confused with the copse" in synthetic.dialog()["siblings"]
     lx, ly = synthetic.js("() => { const r = document.querySelector('#explain a.sib[data-k=\"copse\"]').getBoundingClientRect(); return [r.x + r.width / 2, r.y + r.height / 2]; }")
     synthetic.page.mouse.move(lx, ly)
     synthetic.page.wait_for_timeout(30)
-    assert synthetic.on() == {"copse": 1}, "hovering the link lights the copse instead of the windbreak"
+    assert synthetic.settles({"copse": 1}, synthetic.on) == {"copse": 1}, "hovering the link lights the copse instead of the windbreak"
     synthetic.page.mouse.move(lx, ly + 200)
     synthetic.page.wait_for_timeout(30)
-    assert synthetic.on() == {"windbreak": 1}, "leaving the link restores the pinned windbreak"
+    assert synthetic.settles({"windbreak": 1}, synthetic.on) == {"windbreak": 1}, "leaving the link restores the pinned windbreak"
     synthetic.page.mouse.click(lx, ly)
     synthetic.page.wait_for_timeout(50)
     synthetic.page.mouse.move(lx, ly + 200)  # off the new modal's own link, which the pointer would otherwise be peeking
@@ -396,8 +421,8 @@ def test_scrolling_stops_at_the_edge_of_the_map(synthetic: Page) -> None:
     for _ in range(40):
         synthetic.page.mouse.wheel(-2000, -2000)
     synthetic.page.wait_for_timeout(50)
-    v = synthetic.js("() => window.l7rMap.view()")
-    assert v["tx"] == 0 and v["ty"] == 0, "the map's top-left corner stops at the viewport's corner"
+    v = synthetic.settles((0, 0), lambda: tuple(round(c) for c in (synthetic.js("() => window.l7rMap.view()")["tx"], synthetic.js("() => window.l7rMap.view()")["ty"])))
+    assert v == (0, 0), "the map's top-left corner stops at the viewport's corner"
     for _ in range(40):
         synthetic.page.mouse.wheel(2000, 2000)
     synthetic.page.wait_for_timeout(50)
