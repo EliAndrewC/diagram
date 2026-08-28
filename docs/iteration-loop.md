@@ -313,3 +313,26 @@ main, run twice per idle, run again on a clone unchanged since its last green id
 GM wait - a prompt aborts a run in progress. The scope lock is relaxed for that run and only for
 it: `switches.read` unlocks the scope solely for a process that descends from the idle timer, which
 a session's shell never does (the GM's ruling, D1b).
+
+## A hung agent is silent (feature 139, GM 2026-08-28)
+
+The session launched a general-purpose research agent with a ~40-fetch budget at 23:09Z, ended its
+turn "waiting on the notification", and waited. The agent made ~50 fetches, stopped answering in
+the middle of a WebSearch, and never returned; the harness sends a completion notification only
+when a background task COMPLETES, so nothing arrived, and nothing else wakes a session but the user.
+The GM came back 8 hours later to a session that had done no work: 13 hours of wall clock, almost
+all of it idle. The pass was then redone in-session in ~25 minutes (four turns of parallel
+WebFetch/WebSearch) and verified by `source-reader` in 2 minutes.
+
+The transcript says which it is: a finished agent's `subagents/agent-<id>.jsonl` ends on an
+`assistant` record with `stop_reason: end_turn`; a hung one ends on a `user` tool_result that never
+got its next turn, and its mtime is when it last did anything. `scripts/agent-watch-hooks.sh`
+reads that: the Stop hook refuses to end a turn (once per agent) while an agent is pending and
+hands over the watchdog command; the watchdog is a background command that exits when the agent
+finishes or has been idle past the limit - and a background command exiting is exactly the wake
+signal that exists; the prompt hook flags anything idle past 20 minutes. Measured on the live
+session: the dead agent scanned as `stale 46670 s`, every other agent as `finished`.
+
+The other half is the budget: an agent given "25-40 fetches" ran 50 and hung. Give a research agent
+10-15 fetches, or do the search pass in the session with parallel fetch calls and dispatch only the
+reading to `source-reader`, which is cheap and returns in minutes.

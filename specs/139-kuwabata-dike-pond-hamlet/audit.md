@@ -15,11 +15,15 @@ paddy hamlet lacks" with its sources; the verdict column says how well the recor
 | A5 | **Fry (鱼花) nursery ponds** - a few of the smallest parcels designated as fry ponds | Miles 2003 (SUMMARY-ONLY): the Ming fry trade of Jiujiang; the proverb 男贩鱼花 (READ) | a district trade, not every hamlet | no new ink - a manifest record on parcels that already exist (for the interactive map's reader) | no |
 | A6 | **Other dike crops - sugar cane, banana, fruit** (蔗基 / 蕉基 / 果基) as a rolled `dike_crop` form | i-sis (READ) carrying the 1980s survey: cane 18%, mulberry 12%; 中国国家地理 2005 (READ): 蕉林蔗海 | attested forms of the SAME landscape; Kuwabata is the mulberry case by name | yes | YES (each a plant not on any map) |
 
+| A7 | **A sluice-gate glyph at the two perimeter dike cuts** (and, at most, at each pond's cut) | the record (FAO, READ): a gate is boards in a protected opening; the Sangyuanwei 窦 | every polder crossing was gated | a 6 x 3 ft bar across the gap - legible; the boards themselves are inches wide | YES (a new glyph; raised by the settlement-review) |
+
 ## B. Should-be-absent - rice features Kuwabata carries because the homestead bundle does
 
 | # | Feature | Why it is in question | Options |
 |---|---|---|---|
 | B1 | **The threshing yard on every farmstead** | Fei: rice is threshed "in the open space in front of the house, or in the front room" - a rice use; Kuwabata grows no rice | keep as a work yard (cocoons, leaves, nets) and say so in the record; or omit on this archetype; or shrink it - the GM's call |
+
+| B2 | **The three unconverted cells draw as dry stubble** (the leftover repaint) | at wholesale conversion the leftovers were vegetables under mulberry or more pond, not paddy (Fei; the gazetteers' "no rice") - two attested forms | keep as standing rice; or a `leftover` knob rolling paddy \| vegetable ground (a new crop glyph); or convert them too - the GM's call (raised by the settlement-review) |
 
 ## C. Not owed / not supported - so the question is not reopened
 
