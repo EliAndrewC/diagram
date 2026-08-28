@@ -114,7 +114,9 @@ def write(root: Path, event: str, target: str, reused: bool = False) -> Verifica
         # only a gate that RAN vouches for the tooling; a short-circuited `done` (`reused`) carries the
         # last real gate's record forward - the first cut re-hashed on the short-circuit and quick then
         # skipped tooling tests no gate had run on a changed Makefile (caught 2026-08-26, T22)
-        tooling=tooling_hash(root) if (target == "done" and not reused) else (prior.tooling if prior is not None else ""),
+        # ...and only a GREEN one (feature 135): since the gate itself skips the tooling tests while the hash
+        # matches, a failed gate that vouched would let the next gate skip tooling tests that never went green
+        tooling=tooling_hash(root) if (target == "done" and not reused and event == GREEN) else (prior.tooling if prior is not None else ""),
     )
     (root / STATE_FILE).write_text(json.dumps(asdict(st), indent=2) + "\n", encoding="utf-8")
     return st

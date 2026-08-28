@@ -20,6 +20,9 @@ import os
 from collections.abc import Sequence
 
 EXHAUSTIVE = os.environ.get("L7R_TESTS_EXHAUSTIVE") == "1"
+# THE FULL RUN (feature 135): `make done FULL=1` / the AWS check - the coverage floors are enforced, the full tree is
+# collected, and nothing that carries coverage may be skipped or served from a cache.
+FULL = os.environ.get("L7R_TESTS_FULL") == "1"
 
 
 def subset[T](items: Sequence[T], quick: int) -> Sequence[T]:

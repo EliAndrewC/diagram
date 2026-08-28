@@ -166,3 +166,14 @@ def test_the_short_circuit_key_contains_everything_the_stamp_hashes(repo: Path) 
     gs = state._gate_stamp(REPO_ROOT)
     area_path, patterns = gs.AREAS["diagram"]
     assert state.current_hash(REPO_ROOT) == str(gs.hash_files(gs._area_files(REPO_ROOT, area_path, patterns), REPO_ROOT))  # with the root, so the semantic cache serves it (2.7 s -> ms without)
+
+
+def test_a_failed_done_does_not_vouch_for_the_tooling(repo: Path) -> None:
+    """Feature 135: the gate skips the tooling tests while the recorded hash matches, so the record must
+    come from a gate that ran them GREEN - a red gate carries the prior record forward, as a quick does."""
+    build = repo / S / "Makefile"
+    build.write_text("quick:\n\techo v1\n", encoding="utf-8")
+    green = state.write(repo, state.GREEN, "done")
+    build.write_text("quick:\n\techo v2\n", encoding="utf-8")
+    red = state.write(repo, state.FAILED, "done")
+    assert red.tooling == green.tooling != state.tooling_hash(repo), "a failed gate must not vouch for tooling it did not prove"

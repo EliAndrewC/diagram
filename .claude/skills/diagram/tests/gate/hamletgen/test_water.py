@@ -3,13 +3,16 @@
 locked to another tier; the gate collects everything. Helpers stay in the source module and are imported."""
 
 import math
-import os
-import tempfile
 
 import pytest
 
 from l7r.diagram import hamletgen as hg
+from l7r.diagram.pipeline import rollcache
 from l7r.diagram.settlement import point_in_poly, seg_dist
+
+# SERVED FROM THE ROLL CACHE (feature 135): each polder is ~50-100 s to roll and nothing here patches the engine,
+# so `rollcache.hamlet` serves the plan and finished manifest while every function the roll executed is unchanged,
+# and rolls for real the moment one moves. The assertions run on the served map either way.
 
 
 @pytest.mark.rolls_map
@@ -24,13 +27,10 @@ def test_a_polder_inlets_mouth_is_pulled_INSIDE_the_crop() -> None:
 
     Seed 19 is chosen deliberately - it is the case that needed the pull (seed 3 needs it at 6.0 px,
     seed 8 does not need it at all), so this test exercises the branch rather than merely passing."""
-    plan = hg.plan_site(hg.HamletSpec(name="Polder", seed=19, households=16, field_archetype="polder_grid", down_deg=90))
-    s = hg.build(plan)
-    with tempfile.TemporaryDirectory() as tmp:
-        s.finish(os.path.join(tmp, "scratch"), render=False)
-    env = [(float(a), float(b)) for a, b in s.M["fields"][0]["outline"]]
+    _plan, M = rollcache.hamlet(hg.HamletSpec(name="Polder", seed=19, households=16, field_archetype="polder_grid", down_deg=90))
+    env = [(float(a), float(b)) for a, b in M["fields"][0]["outline"]]
     n = len(env)
-    fed = [c for c in s.M["channels"] if (c.get("to") or {}).get("kind") == "field"]
+    fed = [c for c in M["channels"] if (c.get("to") or {}).get("kind") == "field"]
     assert fed, "the polder is fed by a channel from its header reservoir"
     for c in fed:
         end = c["poly"][-1]
@@ -48,11 +48,8 @@ def test_a_polder_reservoir_backs_off_until_its_rim_clears_the_crop() -> None:
 
     Seed 12 is chosen because it NEEDS the walk (one step at falls 0 and 180); seeds 3, 8, 19 and 22
     clear on the first try, so testing one of those would exercise nothing."""
-    plan = hg.plan_site(hg.HamletSpec(name="Polder", seed=12, households=16, field_archetype="polder_grid", down_deg=0))
-    s = hg.build(plan)
-    with tempfile.TemporaryDirectory() as tmp:
-        s.finish(os.path.join(tmp, "scratch"), render=False)
-    pond = s.M.get("pond")
+    plan, M = rollcache.hamlet(hg.HamletSpec(name="Polder", seed=12, households=16, field_archetype="polder_grid", down_deg=0))
+    pond = M.get("pond")
     assert pond, "the polder's water source is its header reservoir"
     rim = [(pond[0] + pond[2] * math.cos(a), pond[1] + pond[3] * math.sin(a)) for a in (k * math.pi / 8 for k in range(16))]
     assert not any(point_in_poly(q[0], q[1], list(plan.envelope)) for q in rim), "no part of the rim may lie on the crop"
@@ -71,15 +68,12 @@ def test_a_polder_hamlet_draws_its_grid_dike_and_reservoir() -> None:
     solved to the acreage the households imply, that every household is seated, that the defining
     perimeter dike exists, and that the header reservoir sits OUTSIDE the crop rather than in it,
     which two earlier versions of the siting got wrong in two different ways."""
-    plan = hg.plan_site(hg.HamletSpec(name="Polder", seed=8, households=16, field_archetype="polder_grid"))
+    plan, M = rollcache.hamlet(hg.HamletSpec(name="Polder", seed=8, households=16, field_archetype="polder_grid"))
     assert plan.field_archetype == "polder_grid"
-    s = hg.build(plan)
-    with tempfile.TemporaryDirectory() as tmp:
-        s.finish(os.path.join(tmp, "scratch"), render=False)
-    assert s.M["meta"]["field_archetype"] == "polder_grid"
+    assert M["meta"]["field_archetype"] == "polder_grid"
     assert abs(plan.acres - plan.target_acres) / plan.target_acres < 0.12, f"{plan.acres:.1f} acres against a {plan.target_acres:.1f} target"
     assert plan.placed == plan.spec.households
-    assert s.M.get("dikes"), "a polder without its perimeter dike is not a polder"
-    pond = s.M.get("pond")
+    assert M.get("dikes"), "a polder without its perimeter dike is not a polder"
+    pond = M.get("pond")
     assert pond, "the header reservoir is the polder's water source"
     assert not point_in_poly(pond[0], pond[1], list(plan.envelope)), "the reservoir sits BESIDE the crop, never in it"

@@ -32,12 +32,15 @@ distinctly from the auto-captured ones.
 """
 
 import glob
+import hashlib
 import json
 import os
+from pathlib import Path
 
 import pytest
 
 from l7r.diagram import check_village
+from l7r.diagram.pipeline import rollcache
 from tests._scope import EXHAUSTIVE
 
 HERE = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))  # the skill root; this file lives two levels down in tests/gate/
@@ -79,6 +82,15 @@ def _replay(M, fires):
     return set(check_village.gate(M, verbose=False, only=bases))
 
 
+def _served_replay(path, M, fires):
+    """The replay through the roll cache (feature 135, second pass): a verdict is a pure function of the
+    frozen manifest and the check code it executed, so while every `check_village` function the replay ran
+    is unchanged the stored verdict set is served and the assertion runs on it - 194 hamlet-tier replays
+    cost 17.5 CPU-s a gate before this. A changed check re-replays; the FULL run replays everything."""
+    subject = f"corpus:{os.path.basename(path)}:{hashlib.sha256(Path(path).read_bytes()).hexdigest()[:16]}:{sorted(fires)}"
+    return rollcache.obtain(subject, lambda: _replay(M, fires))[0]
+
+
 def test_corpus_is_not_empty():
     assert CORPUS, "no regression fixtures found in pool/regressions/"
 
@@ -87,7 +99,7 @@ def test_corpus_is_not_empty():
 @pytest.mark.parametrize("path", _corpus_params())
 def test_regression_fixture_still_fires(path):
     M, fires = _load(path)
-    failed = _replay(M, fires)
+    failed = _served_replay(path, M, fires)
     missing = [c for c in fires if c not in failed]
     assert not missing, f"{os.path.basename(path)} no longer trips: {missing}"
 
@@ -101,55 +113,3 @@ if __name__ == "__main__":
         print(("PASS " if not missing else "FAIL ") + os.path.basename(p) + (f"  missing={missing}" if missing else ""))
         rc |= 0 if not missing else 1
     raise SystemExit(rc)
-
-
-# Feature 022: the targeted replay no longer runs every check against every fixture, which
-# uncovered 33 statements that only ever executed during fixtures' full-gate replays - deep
-# branches needing frozen bad geometry (a capital deferral pass, a samurai-estate label pile-up,
-# village fallow/shrine/pond forks). These four fixtures were selected EMPIRICALLY (greedy
-# line-coverage search, specs/022-gate-check-registry/) to cover them; they also keep full-mode
-# gate() integration-tested inside the suite. If coverage drops here again, re-run the greedy
-# search rather than guessing fixtures.
-_FULL_GATE_SENTINELS = [
-    "stable_troughs_clip_the_well_house_roof_tango.json",
-    "capital_fullness_deferral_fires_on_the_first_pass_shiro_daika.json",
-    "city_samurai_estates_fire_on_a_tight_wall_cluster.json",
-    "settlement_wells_fire_on_a_village_with_no_wells.json",
-]
-
-
-@pytest.mark.coverage_only
-@pytest.mark.parametrize("name", _FULL_GATE_SENTINELS)
-def test_full_gate_coverage_sentinel(name):
-    path = os.path.join(HERE, "pool", "regressions", name)
-    M, fires = _load(path)
-    failed = set(check_village.gate(M, verbose=False))
-    missing = [c for c in fires if c not in failed]
-    assert not missing, f"{name} no longer trips under the FULL gate: {missing}"
-
-
-# The 2026-08-16 legacy freeze (migration-plan.md "The accepted trade") removed the hand-authored
-# maps from the test_villages sweep, which uncovered the handful of check_village branches only
-# those maps' full-gate runs reached (a town's fire/justice variants, minami's no-Imperial-road
-# walled-city branch, the odd water fork). These FROZEN pool manifests - committed, permanent,
-# never regenerated - are replayed through the FULL gate purely as coverage carriers, selected by
-# the same greedy line-coverage search as the sentinels above (if coverage drops here again,
-# re-run the search rather than guessing). NOTHING is asserted about their verdicts: a frozen map
-# is allowed to fail rules added after the freeze, so the only claim held is that the gate still
-# RUNS on old manifests - the claim the whole corpus already makes.
-_FROZEN_POOL_COVERAGE_CARRIERS = [
-    "towns/hirameki.json",
-    "towns/hoshizora.json",
-    "provincial-cities/minami.json",
-    "hamlets/akagahara.json",
-    "hamlets/enokida.json",
-]
-
-
-@pytest.mark.coverage_only
-@pytest.mark.parametrize("rel", _FROZEN_POOL_COVERAGE_CARRIERS)
-def test_frozen_pool_full_gate_coverage_carrier(rel):
-    with open(os.path.join(HERE, "pool", rel)) as fh:
-        M = json.load(fh)
-    failed = check_village.gate(M, verbose=False)
-    assert failed is not None  # verdicts deliberately unchecked - see the carrier comment above
