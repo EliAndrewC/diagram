@@ -103,8 +103,11 @@ def test_village_grove_face_margin_drops_only_clumps_no_frame_could_show():
     g = trimmed.M["village_groves"][0]
     _axis, _sign, inner = windbreak_face(g["clumps"], g["r"], trimmed.M["houses"])
     assert (_axis, _sign) == (0, 1)
-    assert 0 < n_trim < n_full, "the deep side of a 300 px band is beyond any 48 px margin"
-    assert all(cx - inner >= -(48 + 2 * g["r"] * 0.9) for cx, _cy in g["clumps"]), "every kept clump can show ink inside face + margin"
+    # feature 137 T05 (2026-08-28): the trim cuts the INK, not the record - a clump beyond the page still
+    # stands (tripwire seed 33's belt read as holed where it had wrapped round a plot off the page)
+    assert n_trim == n_full, "the record keeps every seated clump"
+    assert len(trimmed.M["tree_crowns"]) < len(full.M["tree_crowns"]), "the deep side of a 300 px band is beyond any 48 px margin - not inked"
+    assert any(cx - inner < -(48 + 2 * g["r"] * 0.9) for cx, _cy in g["clumps"]), "the record includes clumps the page cannot show"
     assert inner == windbreak_face(full.M["village_groves"][0]["clumps"], 14.0, full.M["houses"])[2], "the trim never moves the face"
 
 

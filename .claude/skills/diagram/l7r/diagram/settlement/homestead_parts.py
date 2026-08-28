@@ -763,8 +763,13 @@ class HomesteadPartsMixin:
             if _face is not None:
                 _axis, _sign, _inner = _face
                 _keep = [k for k, (px_, py_) in enumerate(seated) if _sign * ((px_, py_)[_axis] - _inner) >= -(face_margin + clump * 0.9)]
+                # THE TRIMMED CLUMPS STAY IN THE RECORD (feature 137 T05, 2026-08-28): they are trees that stand,
+                # only off the page. Tripwire seed 33's 40-50 ft belt hole was this trim: two garden beds at the
+                # belt's edge pushed the re-seated clumps into the outer strip, the page's edge (inner face +
+                # margin) fell inside that strip, and the trim dropped them from `clumps` - so the belt read as
+                # holed where it had in fact wrapped round the plot. The ink is still cut at the page; the
+                # record says the belt continues, and `village_windbreak_is_continuous` counts canopy where it is.
                 seated = [seated[k] for k in _keep]
-                clumps = [clumps[k] for k in _keep]
         for jx, jy in seated:
             # feature 134: the belt and the copse are two highlight classes; a water_mouth grove has no
             # class in the vocabulary yet and stays unclassed so the census reports it
