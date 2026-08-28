@@ -58,3 +58,46 @@ def test_structures_clear_of_dike_fires_when_a_house_stands_on_the_dike() -> Non
 @pytest.mark.rolls_map
 def test_polder_dike_gapped_at_sluices_fires_when_the_gaps_are_forgotten() -> None:
     _fires(POLDER, "polder_dike_gapped_at_sluices", lambda M: M["dikes"][0].__setitem__("gaps", []))
+
+
+# ---- feature 146: a check nobody has proved fires is a check nobody has proved ------------------------------
+# One deliberate, targeted break per check, on a cached roll. Each `mutate` is the smallest edit that makes the
+# map wrong in exactly the way the check names - so a reader can see what the check is for, and the check's own
+# failure branch is exercised (which is what the hamlet-path coverage floor was reporting, feature 146 class 2).
+
+
+@pytest.mark.rolls_map
+def test_households_consistent_fires_when_half_the_houses_vanish() -> None:
+    _fires(REFERENCE, "households_consistent", lambda M: M.__setitem__("houses", M["houses"][: len(M["houses"]) // 3]))
+
+
+@pytest.mark.rolls_map
+def test_cluster_abuts_fields_fires_when_a_house_is_flung_far_from_the_field() -> None:
+    def far_away(M: dict[str, Any]) -> None:
+        fx0, fy0, fx1, fy1 = M["fields"][0]["bbox"]
+        span = max(fx1 - fx0, fy1 - fy0)
+        for h in M["houses"]:  # the whole cluster, so the check's cluster-radius term cannot absorb it
+            h["x"], h["y"] = h["x"] - 4 * span, h["y"]
+
+    _fires(REFERENCE, "cluster_abuts_fields", far_away)
+
+
+@pytest.mark.rolls_map
+def test_wells_among_dwellings_fires_when_a_well_stands_out_in_the_country() -> None:
+    def out_in_the_open(M: dict[str, Any]) -> None:
+        M["wells"][0]["x"] = M["wells"][0]["x"] + 4000.0
+
+    _fires(REFERENCE, "wells_among_dwellings", out_in_the_open)
+
+
+@pytest.mark.rolls_map
+def test_ways_cross_water_on_a_deck_fires_when_a_lane_is_laid_down_the_channel() -> None:
+    """Emptying `bridges` does NOT fire it on the reference - the hamlet's ways do not cross water at all, its
+    footbridges plank the field channels. So the break is a lane laid ALONG a drawn channel, with no deck."""
+
+    def down_the_channel(M: dict[str, Any]) -> None:
+        pts = M["drawn_channels"][0]["pts"]
+        M["lanes"].append({"pts": [list(p) for p in pts], "w": 5, "worn": True, "connector": False})
+        M["bridges"] = []
+
+    _fires(REFERENCE, "ways_cross_water_on_a_deck", down_the_channel)
