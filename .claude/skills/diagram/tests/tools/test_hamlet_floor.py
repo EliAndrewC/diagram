@@ -41,17 +41,19 @@ def test_module_set_asks_the_records_for_every_fixed_subject() -> None:
 
 
 def _measure(tmp_path: Path, body: str, call: str) -> tuple[str, str]:
-    """A module in tmp_path measured by coverage: returns (module path, data file)."""
+    """A module in tmp_path with a coverage DATA FILE saying which of its lines ran: returns (module path, data file).
+
+    NEVER A SECOND TRACER (feature 145, the fourth FULL run): `coverage.Coverage().start()` inside a pytest-cov
+    worker replaces the worker's tracer and `stop()` does not put it back, so every line the worker executed
+    after this test - other tests' modules included - went unrecorded and the global floor turned red on
+    modules whose tests had run. The data file is written directly; the report parses the module itself."""
     mod = tmp_path / "floor_probe.py"
     mod.write_text(body, encoding="utf-8")
     data = str(tmp_path / ".cov")
-    cov = coverage.Coverage(data_file=data, config_file=False, source=[str(tmp_path)])  # not the skill's pyproject source list - the probe lives in tmp_path
-    cov.start()
-    ns: dict[str, object] = {}
-    exec(compile(mod.read_text(encoding="utf-8"), str(mod), "exec"), ns)  # noqa: S102 - a fixture module of two lines
-    exec(call, ns)  # noqa: S102
-    cov.stop()
-    cov.save()
+    ran = {"f(True)": [1, 2, 3], "f(True); f(False)": [1, 2, 3, 4]}[call]
+    cd = coverage.CoverageData(basename=data)
+    cd.add_lines({str(mod): ran})
+    cd.write()
     return str(mod), data
 
 
