@@ -58,19 +58,14 @@ CONSUMED_PUBLIC = [
     "TWIN_AXES",
     "city_capacity",
     "clip_poly_rect",
-    "crop_relocatable_singletons",
     "edge_gap",
     "forest_reveal_x",
     "gate",
     "kiln_quarters",
-    "lane_near_misses",
-    "lane_ward_shortfalls",
-    "largest_empty_gap",
     "main",
     "matrix_extents",
     "matrix_policy",
     "matrix_violations",
-    "onmap_field_edge",
     "point_in_poly",
     "poly_area",
     "poly_dist",
@@ -82,8 +77,6 @@ CONSUMED_PUBLIC = [
     "sweep_hi",
     "twin_axes",
     "twin_diff_count",
-    "twin_report",
-    "water_setback",
 ]
 
 # The six underscore names with external consumers, and the submodule that owns each.

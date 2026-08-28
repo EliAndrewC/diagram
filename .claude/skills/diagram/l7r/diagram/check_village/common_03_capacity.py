@@ -4,8 +4,7 @@ import math
 from collections.abc import Sequence
 from typing import Any
 
-from .common_01_geometry import Manifest, Poly, Pt, seg_closest, seg_dist, segments_cross
-from .common_02_overlap_policy import in_ellipse
+from .common_01_geometry import Manifest
 
 DEFAULT_MANIFEST: Manifest = {
     "houses": [],
@@ -88,120 +87,6 @@ HOUSEHOLD = 5
 COMMONER_KINDS = {"laborer", "laborer_large", "servant", "burakumin", "merchant", "merchant_house", "merchant_large", "monk_house"}
 
 EXTRAMURAL_COMMONER_MAX = 0  # GM decision (FR-002): hard zero, no allowance the generator can drift into
-
-
-def lane_near_misses(M: Manifest, maxgap: float = 80.0, eps: float = 4.0, align: float = 0.80, block: float = 18.0) -> list[tuple[int, int, int]]:
-    """Endpoints of one lane (street/alley) that HEAD STRAIGHT TOWARD another lane and stop just short
-    with a CLEAR path between - two lanes pointing at each other that don't meet, which should simply
-    connect. Returns [(x, y, gap), ...], one entry per offending endpoint. Filters out: an endpoint that
-    already meets a lane or the (wide) road (a junction/corner, not a dangling end); an end that does not
-    point toward the other lane (within ~37 deg); and a gap something genuinely BLOCKS - a building, a
-    ward fence, or the city wall - since then stopping short is intentional (the lane routes around it)."""
-    lanes = [st["pts"] for st in M.get("town_streets", [])] + [(al["pts"] if isinstance(al, dict) else al) for al in M.get("alleys", [])]
-    rd = M.get("road")
-    bld = [(b["x"], b["y"]) for b in M.get("buildings", [])] + [(h["x"], h["y"]) for h in M.get("houses", [])]
-    fences = [wd["boundary"] for wd in M.get("wards", [])]
-    wall = M.get("wall") or []
-
-    def to_lane(p: Pt, pts: Poly) -> tuple[tuple[float, float], float]:
-        best, bd = (0.0, 0.0), 1e9
-        for k in range(len(pts) - 1):
-            cx, cy = seg_closest(p[0], p[1], pts[k], pts[k + 1])
-            dd = math.hypot(p[0] - cx, p[1] - cy)
-            if dd < bd:
-                bd, best = dd, (cx, cy)
-        return best, bd
-
-    def blocked(a: Pt, b: Pt) -> bool:
-        if any(seg_dist(bx, by, a, b) < block for bx, by in bld):
-            return True
-        if any(segments_cross(a, b, fb[k], fb[k + 1]) for fb in fences for k in range(len(fb) - 1)):
-            return True
-        return len(wall) >= 3 and any(segments_cross(a, b, wall[k], wall[(k + 1) % len(wall)]) for k in range(len(wall)))
-
-    hits = []
-    for i, pi in enumerate(lanes):
-        if len(pi) < 2:
-            continue  # a one-vertex way has no direction of travel (degenerate input, 2026-08-10)
-        for E, nb in ((pi[0], pi[1]), (pi[-1], pi[-2])):
-            if rd and to_lane(E, rd)[1] < 30:  # bed-overlaps the wide road
-                continue
-            if any(to_lane(E, c)[1] < eps for c in lanes if c is not pi):  # already a junction/corner
-                continue
-            for j, pj in enumerate(lanes):
-                if j == i:
-                    continue
-                cp, g = to_lane(E, pj)
-                if not (eps < g < maxgap):
-                    continue
-                dl = math.hypot(E[0] - nb[0], E[1] - nb[1]) or 1.0
-                if (((E[0] - nb[0]) / dl) * (cp[0] - E[0]) + ((E[1] - nb[1]) / dl) * (cp[1] - E[1])) / g < align:
-                    continue  # E is not heading toward pj
-                if blocked(E, cp):
-                    continue
-                hits.append((round(E[0]), round(E[1]), round(g)))
-                break
-    return hits
-
-
-def lane_ward_shortfalls(M: Manifest, maxgap: float = 60.0, eps: float = 6.0, align: float = 0.80, block: float = 18.0, gate_dist: float = 34.0) -> list[tuple[int, int, str]]:
-    """Lane (street/alley) endpoints that head toward a NEIGHBORHOOD wall (a ward fence) but either
-    stop short of it or reach it without a gate. Such a lane should extend to the fence and END AT A
-    KIDO GATE (so e.g. laborers can pass through to work in the samurai quarter). Returns
-    [(x, y, reason), ...]. The MAIN city wall is NOT a target - a lane may stop short of the outer
-    rampart (the city's own boundary); only INTERNAL neighborhood fences pull a lane in to a gate."""
-    fences = [wd["boundary"] for wd in M.get("wards", [])]
-    if not fences:
-        return []
-    lanes = [st["pts"] for st in M.get("town_streets", [])] + [(al["pts"] if isinstance(al, dict) else al) for al in M.get("alleys", [])]
-    kido = M.get("kido", [])
-    wall = M.get("wall") or []
-    bld = [(b["x"], b["y"]) for b in M.get("buildings", [])] + [(h["x"], h["y"]) for h in M.get("houses", [])]
-    # an INTERIOR anchor (the governor's yamen, else the fences' centroid): a lane endpoint on the same
-    # side of the fence as the anchor is INSIDE the ward (an internal government/samurai lane), which
-    # needs no entry gate - only the COMMONER lanes approaching from OUTSIDE the fence are pulled in.
-    gov = M.get("governor_mansion")
-    if gov:
-        anchor = (gov["x"], gov["y"])
-    else:
-        fpts = [p for fb in fences for p in fb]
-        anchor = (sum(p[0] for p in fpts) / len(fpts), sum(p[1] for p in fpts) / len(fpts))
-
-    def to_fence(p: Pt, pts: Poly) -> tuple[tuple[float, float], float, tuple[Any, Any]]:
-        best, bd, bseg = (0.0, 0.0), 1e9, (pts[0], pts[1])
-        for k in range(len(pts) - 1):
-            cx, cy = seg_closest(p[0], p[1], pts[k], pts[k + 1])
-            dd = math.hypot(p[0] - cx, p[1] - cy)
-            if dd < bd:
-                bd, best, bseg = dd, (cx, cy), (pts[k], pts[k + 1])
-        return best, bd, bseg
-
-    def side(p: Pt, a: Pt, b: Pt) -> float:
-        return (b[0] - a[0]) * (p[1] - a[1]) - (b[1] - a[1]) * (p[0] - a[0])
-
-    hits = []
-    for pi in lanes:
-        for E, nb in ((pi[0], pi[1]), (pi[-1], pi[-2])):
-            for fb in fences:
-                cp, g, seg = to_fence(E, fb)
-                if g >= maxgap:
-                    continue
-                if side(E, *seg) * side(anchor, *seg) > 0:  # E is INSIDE the ward (an internal lane)
-                    continue
-                dl = math.hypot(E[0] - nb[0], E[1] - nb[1]) or 1.0
-                toward = (((E[0] - nb[0]) / dl) * (cp[0] - E[0]) + ((E[1] - nb[1]) / dl) * (cp[1] - E[1])) / max(g, 1e-6)
-                if g > eps and toward < align:  # not heading at the fence -> a passer-by, not an entry
-                    continue
-                if any(seg_dist(bx, by, E, cp) < block for bx, by in bld):
-                    continue  # a building blocks the way -> the stop is intentional
-                if len(wall) >= 3 and any(segments_cross(E, cp, wall[k], wall[(k + 1) % len(wall)]) for k in range(len(wall))):
-                    continue  # the main rampart is between them
-                if g > eps:
-                    hits.append((round(E[0]), round(E[1]), "stops short of the neighborhood wall - extend it to the fence and end at a kido gate"))
-                elif not any(math.hypot(E[0] - gt["x"], E[1] - gt["y"]) < gate_dist for gt in kido):
-                    hits.append((round(E[0]), round(E[1]), "meets the neighborhood wall but has no kido gate there"))
-                break
-    return hits
 
 
 # ---- SOFT ADVISORY: crop-limiting relocatable singleton ------------------------------------------------
@@ -305,85 +190,6 @@ def _shrine_group(M: Manifest, i: int) -> set[tuple[str, int]]:
         if math.hypot(t[0] - sx, t[1] - sy) <= 140:
             members.add(("torii", j))
     return members
-
-
-def crop_relocatable_singletons(M: Manifest, min_shrink: float = 150, clear: float = 20) -> list[dict[str, Any]]:
-    """SOFT ADVISORY (never a gate failure): find a relocatable CANDIDATE that ALONE holds a crop_to_content
-    edge out by >= `min_shrink` px, AND for which an EMPTY landing (clear of all SOLID occupancy) exists INSIDE
-    the tighter frame - so moving it would let the image crop significantly smaller without disturbing anything
-    else. A candidate is either (a) a single freely-relocatable feature (the archetype: an outlying irrigation
-    POND), or (b) a GROUP that moves as one unit - a village SHRINE together with its churchyard GRAVEYARD (and
-    its ablution well + torii). The group case matters because removing the shrine ALONE leaves the graveyard
-    holding the same crop corner (and vice versa), so neither reads as relocatable singly - only weighed
-    together does the precinct free the corner. Only applies to a village/hamlet that crops to content
-    (`meta.view`). Returns a list of {kind, at, edge, shrink, landing, members}; empty when nothing qualifies.
-    See settlements.md 'Crop advisory'."""
-    meta = M.get("meta", {})
-    if meta.get("scale") not in ("village", "hamlet") or not meta.get("view"):
-        return []
-    full_boxes = _crop_frame_boxes(M)
-    if not full_boxes:
-        return []
-    full = _bbox_frame(full_boxes)
-    hill = M.get("hill")
-    out: list[dict[str, Any]] = []
-    # a pond WIRED TO THE FIELD's water is hydrologically anchored (like a hill-shrine), NOT relocatable: a
-    # SOURCE pond (a channel frm=pond -> to=field) belongs UPHILL of the field, so moving it "into the frame"
-    # would drop it below the water-entry (backwards for a gravity feed); a DRAINAGE pond (frm=drain -> to=pond)
-    # belongs at the low foot BELOW the field, so it must poke past the low crop corner. Either way its poke is
-    # intrinsic - the fix is to NUDGE it flush, not move it. (A standalone/decorative pond with no field wiring
-    # stays a candidate.) See settlements.md 'Crop advisory'.
-    pond_wired = any(
-        (c.get("frm", {}).get("kind") == "pond" and c.get("to", {}).get("kind") == "field") or (c.get("frm", {}).get("kind") == "drain" and c.get("to", {}).get("kind") == "pond")
-        for c in M.get("channels", [])
-    )
-    # cands: each entry is (label, members-frozenset, (ox, oy) primary anchor).
-    cands: list[tuple[str, frozenset[tuple[str, int]], tuple[float, float]]] = []
-    if M.get("pond") and not pond_wired:
-        cands.append(("pond", frozenset({("pond", 0)}), (M["pond"][0], M["pond"][1])))
-    for k in _RELOCATABLE:
-        if k == "pond":
-            continue
-        for i, o in enumerate(M.get(k) or []):
-            cands.append((k, frozenset({(k, i)}), (o["x"], o["y"])))
-    # GROUP candidates: a shrine + its churchyard graveyard (+ well + torii) as one movable precinct. Only a
-    # shrine with a real COMPANION (a graveyard/well/torii) is a group - a bare shrine (plus its own `shrines`
-    # mirror record, which always pairs) is just the singleton already considered above.
-    for i, sh in enumerate(M.get("religious") or []):
-        gmem = _shrine_group(M, i)
-        if any(m[0] in ("cemeteries", "wells", "torii") for m in gmem):
-            cands.append(("shrine+churchyard", frozenset(gmem), (sh["x"], sh["y"])))
-    for kind, members, (ox, oy) in cands:
-        without = _crop_frame_boxes(M, members)
-        if not without:
-            continue
-        f2 = _bbox_frame(without)
-        edges = {"W": f2[0] - full[0], "N": f2[1] - full[1], "E": full[2] - f2[2], "S": full[3] - f2[3]}
-        shrink = max(edges.values())
-        if shrink < min_shrink:
-            continue
-        is_pond = ("pond", 0) in members
-        if hill and not is_pond and in_ellipse(ox, oy, hill):
-            continue  # terrain-anchored (a hill-shrine can't move to flat ground)
-        mb = [_member_bbox(M, m) for m in members]  # the group's COMBINED footprint moves as one rigid unit
-        w = max(b[2] for b in mb) - min(b[0] for b in mb)
-        h = max(b[3] for b in mb) - min(b[1] for b in mb)
-        occ = _solid_occupancy(M, members)
-        tb = _bbox_frame(without, 0)  # the TIGHTER content bbox - land here and the crop tightens
-        landing = None  # (a feature wider/taller than tb never enters the loops -> stays None)
-        gy = tb[1] + h / 2
-        while gy <= tb[3] - h / 2 and landing is None:
-            gx = tb[0] + w / 2
-            while gx <= tb[2] - w / 2:
-                if not any(gx - w / 2 < b[2] + clear and b[0] < gx + w / 2 + clear and gy - h / 2 < b[3] + clear and b[1] < gy + h / 2 + clear for b in occ):
-                    landing = (round(gx), round(gy))
-                    break
-                gx += 25
-            gy += 25
-        if landing is None:
-            continue
-        out.append({"kind": kind, "at": (round(ox), round(oy)), "edge": max(edges, key=lambda e: edges[e]), "shrink": round(shrink), "landing": landing, "members": len(members)})
-    return out
 
 
 # canonical residential DENSITY: dwellings per px^2 of residential-capable ground (interior minus

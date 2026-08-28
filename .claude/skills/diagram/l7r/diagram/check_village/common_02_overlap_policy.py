@@ -389,15 +389,6 @@ def poly_gap(a: Poly, b: Poly) -> float:
     return min(min(poly_dist(x, y, b) for x, y in a), min(poly_dist(x, y, a) for x, y in b))
 
 
-def water_setback(width: float) -> float:
-    """The set-back a BURIAL ground keeps from the EDGE of open water, scaling with the waterway's
-    width: even a narrow STREAM floods graves out, so the floor is a solid ~75px; a moat (the heaviest
-    watercourse, ~26px wide -> ~130px) more still, a river or canal most. A burial ground by big water
-    floods out, so the bigger the watercourse the further back the dead must lie. (Thin irrigation
-    channels are not open water and are not checked at all.)"""
-    return max(75, min(140, 5.0 * width))
-
-
 def edge_dist(px: float, py: float, poly: Poly) -> float:
     return min(seg_dist(px, py, poly[i], poly[(i + 1) % len(poly)]) for i in range(len(poly)))
 
@@ -437,27 +428,6 @@ def clip_poly_rect(poly: Poly, x0: float, y0: float, x1: float, y1: float) -> li
             return []
         p = cl(p, ins, isc)
     return p
-
-
-def onmap_field_edge(poly: Poly, x0: float, y0: float, x1: float, y1: float, eps: float = 8) -> float:
-    """Length of a field's REAL boundary lying inside the map rect - EXCLUDING the segments that run
-    along the rect edge (those are the off-map cut, where the field's farmhouses are off-screen).
-    This is the on-map field frontage that ought to carry farmhouses."""
-    cp = clip_poly_rect(poly, x0, y0, x1, y1)
-    if len(cp) < 2:
-        return 0.0
-    total = 0.0
-    for i in range(len(cp)):
-        a, b = cp[i], cp[(i + 1) % len(cp)]
-        on_rect = (
-            (abs(a[0] - x0) < eps and abs(b[0] - x0) < eps)
-            or (abs(a[0] - x1) < eps and abs(b[0] - x1) < eps)
-            or (abs(a[1] - y0) < eps and abs(b[1] - y0) < eps)
-            or (abs(a[1] - y1) < eps and abs(b[1] - y1) < eps)
-        )
-        if not on_rect:
-            total += math.hypot(b[0] - a[0], b[1] - a[1])
-    return total
 
 
 def footprint_on_line(sc: Poly, sp: Poly, hw: float) -> bool:

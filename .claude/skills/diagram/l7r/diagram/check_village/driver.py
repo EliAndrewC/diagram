@@ -1,7 +1,6 @@
 """gate() - the registry driver - plus the twin-detector helpers and the CLI main() (feature 024 package split; bodies verbatim)."""
 
 import math
-from collections.abc import Sequence
 from typing import Any
 
 from .common_01_geometry import Manifest, load
@@ -202,26 +201,6 @@ def twin_diff_count(a: dict[str, Any], b: dict[str, Any]) -> int:
         if av != bv:
             n += 1
     return n
-
-
-def twin_report(manifests: Sequence[Manifest]) -> list[dict[str, Any]]:
-    """For every pair of villages that SHARE a water direction, report how many structural axes differ and
-    whether the pair reads as distinct. Verdict 'TWINNED' (too similar) when fewer than TWIN_MIN_DIFF axes
-    differ, else 'PASS'. Non-village manifests (no down_deg) are skipped. This is a pool-level tool run
-    alongside - not inside - the per-map gate()."""
-    named = [(str(M.get("meta", {}).get("name", i)), M) for i, M in enumerate(manifests)]
-    axes = {name: twin_axes(M) for name, M in named}
-    out: list[dict[str, Any]] = []
-    for i in range(len(named)):
-        for j in range(i + 1, len(named)):
-            na, Ma = named[i]
-            nb, Mb = named[j]
-            da, db = Ma.get("meta", {}).get("down_deg"), Mb.get("meta", {}).get("down_deg")
-            if da is None or db is None or da != db:
-                continue  # only same-water-direction pairs are compared
-            diff = twin_diff_count(axes[na], axes[nb])
-            out.append({"pair": (na, nb), "down_deg": da, "diffs": diff, "verdict": "PASS" if diff >= TWIN_MIN_DIFF else "TWINNED"})
-    return out
 
 
 def main(path: str) -> int:

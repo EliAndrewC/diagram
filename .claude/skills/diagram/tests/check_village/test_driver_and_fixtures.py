@@ -82,29 +82,6 @@ def test_mausoleum_draws_with_either_gate_orientation():
     assert len(s.M["mausoleums"]) == 2
 
 
-def test_twin_detector_fires_on_twinned_pair():
-    # two structurally-identical villages (the Kikuta/Hoshigaoka situation) -> zero axes differ -> TWINNED
-    rep = check_village.twin_report([_tv(meta={"name": "A"}), _tv(meta={"name": "B"})])
-    assert len(rep) == 1
-    assert rep[0]["verdict"] == "TWINNED" and rep[0]["diffs"] == 0 and rep[0]["pair"] == ("A", "B")
-
-
-def test_twin_detector_passes_distinct_pair():
-    a = _tv(meta={"name": "A", "cluster_shape": "round", "lane_skeleton": "spine", "water_source_position": "corner_NW", "focal_features": []})
-    b = _tv(meta={"name": "B", "cluster_shape": "crescent", "lane_skeleton": "cross", "water_source_position": "chain", "focal_features": ["mill"]})
-    rep = check_village.twin_report([a, b])
-    assert len(rep) == 1 and rep[0]["verdict"] == "PASS" and rep[0]["diffs"] >= 4
-
-
-def test_twin_detector_skips_different_or_missing_down_deg():
-    a = _tv(meta={"name": "A", "down_deg": 45})
-    b = _tv(meta={"name": "B", "down_deg": 135})
-    c = _tv(meta={"name": "C"})
-    c["meta"].pop("down_deg")
-    assert check_village.twin_report([a, b]) == []  # different water direction -> not compared
-    assert check_village.twin_report([a, c]) == []  # one map lacks down_deg -> not compared
-
-
 def test_twin_axes_geometric_fallbacks_no_meta_knobs():
     ax = check_village.twin_axes(_tv(meta={"name": "G"}))
     assert ax["cluster_region"] == "W"  # cluster sits W of the field center
@@ -152,18 +129,6 @@ def test_twin_axes_pond_layout_distinguishes_mosaic_from_grid():
     grid = check_village.twin_axes({"meta": {"name": "G", "down_deg": 45, "field_archetype": "polder_grid"}})
     mosaic = check_village.twin_axes({"meta": {"name": "M", "down_deg": 45, "pond_layout": "mosaic"}})
     assert check_village.twin_diff_count(grid, mosaic) >= 1  # they differ on at least the pond_layout axis
-
-
-def test_twin_report_none_axes_are_no_evidence_not_a_diff():
-    # a fully-featured map vs a bare one: the bare map's None axes must NOT count as differences (a data
-    # gap cannot manufacture distinctiveness) -> the pair stays TWINNED, not spuriously PASS
-    rep = check_village.twin_report([_tv(meta={"name": "A"}), {"meta": {"name": "B", "down_deg": 45}}])
-    assert len(rep) == 1 and rep[0]["verdict"] == "TWINNED"
-
-
-def test_twin_report_uses_index_when_unnamed():
-    rep = check_village.twin_report([{"meta": {"down_deg": 45}}, {"meta": {"down_deg": 45}}])
-    assert rep and rep[0]["pair"] == ("0", "1")
 
 
 def test_twin_settlement_form_is_an_axis():

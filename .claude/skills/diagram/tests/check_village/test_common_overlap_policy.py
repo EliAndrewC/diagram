@@ -11,18 +11,3 @@ def test_poly_gap_overlap_containment_edgecross_and_separated():
     bar2 = [[4, 0], [6, 0], [6, 10], [4, 10]]  # no vertex inside the other
     assert check_village.poly_gap(bar1, bar2) == 0.0
     assert check_village.poly_gap(sq, [[20, 0], [30, 0], [30, 10], [20, 10]]) == 10.0  # separated by 10
-
-
-def test_clip_and_onmap_edge_handle_a_fully_offmap_field():
-    # a field lying entirely outside the map rect clips to nothing and contributes no on-map edge
-    poly = [[-500, -500], [-300, -500], [-300, -300], [-500, -300]]
-    assert check_village.clip_poly_rect(poly, 0, 0, 1000, 1000) == []
-    assert check_village.onmap_field_edge(poly, 0, 0, 1000, 1000) == 0.0
-
-
-def test_water_setback_scales_with_waterway_width():
-    assert check_village.water_setback(4) == 75  # any small open water -> the floor (graves flood out)
-    assert check_village.water_setback(9) == 75  # a narrow stream still gets the full floor
-    assert check_village.water_setback(22) == 110  # moat -> moderate/large
-    assert check_village.water_setback(40) == 140  # river / canal -> capped
-    assert check_village.water_setback(9) < check_village.water_setback(22)  # wider water, more set-back

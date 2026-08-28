@@ -4,10 +4,7 @@ import math
 from collections.abc import Sequence
 from typing import Any
 
-from l7r.diagram.settlement import sat_overlap
-
 from .common_01_geometry import (
-    _OVERLAP_STRUCTS,
     Manifest,
     Poly,
     Pt,
@@ -18,90 +15,8 @@ from .common_01_geometry import (
     seg_dist,
     sweep_hi,
 )
-from .common_02_overlap_policy import footprint_on_line, in_ellipse
+from .common_02_overlap_policy import in_ellipse
 from .common_03_capacity import DWELLING_KINDS, RESERVE_CAP_FRAC, RHO_CANONICAL
-
-
-def _theater_one_stage(M: Manifest, ts: dict[str, Any], ts_hits: list[str], ts_far: list[str], ts_back: list[str]) -> None:
-    """One stage's share of check_theater_stage: clear-ground hits for every stage; the temple
-    adjacency/facing verdicts only for a MONZEN (temple) stage - kind='machi' is the commercial
-    quarter theater and sits in the fabric, not at a hall."""
-    # (1) CLEAR: build the full footprint (the viewing ground PLUS the roofed stage straddling its north edge)
-    w, h = ts["w"], ts["h"]
-    sh = h * 0.26
-    cyl, fh = -sh * 0.25, h + sh * 0.5
-    thr = math.radians(ts.get("rot", 0))
-    ca, sa = math.cos(thr), math.sin(thr)
-    sc = [(ts["x"] + dx * ca - dy * sa, ts["y"] + dx * sa + dy * ca) for dx, dy in ((-w / 2, cyl - fh / 2), (w / 2, cyl - fh / 2), (w / 2, cyl + fh / 2), (-w / 2, cyl + fh / 2))]
-    hits = []
-    lines = []  # linear barriers (name, polyline, half-width)
-    if M.get("wall"):
-        lines.append(("the wall", M["wall"], 9))
-    if M.get("moat"):
-        lines.append(("the moat", M["moat"], M.get("moat_width", 26) / 2 + 4))
-    if M.get("road"):
-        lines.append(("a road", M["road"], M.get("road_width", 30) / 2))
-    if M.get("ring_road"):
-        lines.append(("the ring road", M["ring_road"], M.get("ring_road_width", 15) / 2))
-    lines += [("a street", st["pts"], st.get("w", 18) / 2) for st in M.get("town_streets", [])]
-    lines += [("an alley", a["pts"], a.get("w", 10) / 2) for a in M.get("alleys", [])]
-    lines += [("a stream", s["poly"], s.get("w", 9) / 2) for s in M.get("streams", [])]
-    lines += [("a channel", c["poly"], c.get("w", 2.5) / 2 + 2) for c in M.get("channels", [])]
-    lines += [("the canal", c["poly"], c.get("w", 12) / 2 + 2) for c in M.get("canals", [])]
-    for nm, pts, hw in lines:
-        if len(pts) >= 2 and footprint_on_line(sc, pts, hw):
-            hits.append(nm)
-    granary = M.get("granary")  # solid features (buildings, compounds, graves)
-    solids = (
-        [s for k in _OVERLAP_STRUCTS if k != "theater_stage" for s in M.get(k, [])]  # a stage is not its own obstacle; stage-vs-stage is the generic matrix's business now
-        + M.get("manors", [])
-        + M.get("religious", [])
-        + M.get("shrines", [])
-        + M.get("gate_structs", [])
-        + M.get("storehouses", [])
-        + M.get("merchant_estates", [])
-        + M.get("threshing_yards", [])
-        + M.get("gardens", [])
-        + M.get("inspection_stations", [])
-        + (granary["stores"] if granary else [])
-    )
-    if M.get("governor_mansion"):
-        solids.append(M["governor_mansion"])
-    for r in solids:
-        if abs(r["x"] - ts["x"]) + abs(r["y"] - ts["y"]) <= 440 and sat_overlap(sc, rect_corners(_struct_rect(r))):
-            hits.append(f"a {r.get('kind', 'building')}")
-    for fkey in ("fields", "fallow_patches", "flower_fields"):  # areas: paddies/fields and the pond
-        for fld in M.get(fkey, []):
-            ol = fld["outline"]
-            if any(point_in_poly(px, py, ol) for px, py in sc) or any(point_in_poly(vx, vy, sc) for vx, vy in ol):
-                hits.append("a field")
-                break
-    pond = M.get("pond")
-    if pond and (
-        point_in_poly(pond[0], pond[1], sc)  # pond engulfed by the stage, OR a stage corner in the pond
-        or any(((px - pond[0]) / (pond[2] + 6)) ** 2 + ((py - pond[1]) / (pond[3] + 6)) ** 2 <= 1.0 for px, py in sc)
-    ):
-        hits.append("the pond")
-    ts_hits += hits
-    halls = M.get("religious", [])
-    if not halls:
-        return
-    # EVERY stage faces a temple (GM 2026-08-10). A `machi` kind was briefly exempted here on
-    # the research finding that a capital's entertainment district is commercial - but the
-    # SETTING rule is older and governs: a Rokugani stage belongs to a hall and opens toward it,
-    # whoever pays for the troupe. The kind still records which doctrine sited the stage; it no
-    # longer excuses the facing.
-    nearest = min(halls, key=lambda h: math.hypot(ts["x"] - h["x"], ts["y"] - h["y"]))
-    near = math.hypot(ts["x"] - nearest["x"], ts["y"] - nearest["y"])
-    if near > 260:
-        ts_far.append(f"({round(ts['x'])},{round(ts['y'])}) {round(near)}px out")
-    th = math.radians(ts.get("rot", 0))
-    ox, oy = -math.sin(th), math.cos(th)  # the viewing ground's open direction (toward the audience/temple)
-    dx, dy = nearest["x"] - ts["x"], nearest["y"] - ts["y"]
-    d = math.hypot(dx, dy) or 1.0
-    facing = (ox * dx + oy * dy) / d
-    if facing < 0.5:
-        ts_back.append(f"({round(ts['x'])},{round(ts['y'])}) alignment {facing:.2f}")
 
 
 def _ward_interior(fence: Any, wall: Any) -> Any:
