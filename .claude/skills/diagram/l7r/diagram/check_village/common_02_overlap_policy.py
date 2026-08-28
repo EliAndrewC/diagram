@@ -460,21 +460,6 @@ def onmap_field_edge(poly: Poly, x0: float, y0: float, x1: float, y1: float, eps
     return total
 
 
-def kido_quads(kd: Mapping[str, Any]) -> list[Poly]:
-    """A ward gate's drawn footprint as its TRUE (rotated) parts - the roofed bar, its two posts and
-    the guard box. Falls back to the axis-aligned `bbox` for a legacy manifest that never recorded
-    the parts. Use this, not `bbox`, for any keep-clear rule: once a kido turns onto the lane it
-    bars, its AABB can be half again the size of the glyph and reads as overlapping neighbors the
-    gate plainly clears (Nagahara's SW gate at 115 degrees, GM 2026-07-26)."""
-    parts = kd.get("parts")
-    if parts:
-        return [[(float(c[0]), float(c[1])) for c in q] for q in parts]
-    bb = kd.get("bbox")
-    if not bb:
-        return []
-    return [[(bb[0], bb[1]), (bb[2], bb[1]), (bb[2], bb[3]), (bb[0], bb[3])]]
-
-
 def footprint_on_line(sc: Poly, sp: Poly, hw: float) -> bool:
     """True if closed polygon sc overlaps polyline sp within half-width hw - a corner near a
     segment, a polyline vertex inside the polygon, or an edge crossing. sc may be a 4-corner

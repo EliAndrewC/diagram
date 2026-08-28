@@ -1,14 +1,13 @@
 """Town and city policy helpers - fire features, the theater stage, ward interiors, the ring road (feature 145: moved out of common_02 so the hamlet path, which never calls them, never executes the module that holds them; the module-level floor then means what the GM said)."""
 
 import math
-from collections.abc import Mapping, Sequence
+from collections.abc import Sequence
 from typing import Any
 
 from l7r.diagram.settlement import sat_overlap
 
 from .common_01_geometry import (
     _OVERLAP_STRUCTS,
-    Check,
     Manifest,
     Poly,
     Pt,
@@ -16,103 +15,11 @@ from .common_01_geometry import (
     point_in_poly,
     poly_area,
     rect_corners,
-    seg_closest,
     seg_dist,
-    segments_cross,
-    solid_structs,
     sweep_hi,
 )
 from .common_02_overlap_policy import footprint_on_line, in_ellipse
 from .common_03_capacity import DWELLING_KINDS, RESERVE_CAP_FRAC, RHO_CANONICAL
-
-
-def check_ring_road_clear(M: Mapping[str, Any], check: Any) -> None:
-    """THE RING ROAD IS A CLEAR PATROL ROAD - it must run clear of EVERY solid footprint and of
-    fields. The gate guard houses / inspection stations / towers DO sit along it (wall furniture -
-    `gate_structs` and `wall_towers` are overlap TARGETS and EXEMPT respectively, so the registry
-    leaves them out), and a ward fence may cross it only at a gated kido. Overlap = the ring's BED
-    passes through a footprint. Reads the REGISTRY, never a hand list (GM 2026-07-25).
-
-    FACTORED OUT of the scale=="city" block (GM 2026-08-09, 'estates should not overlap with the
-    ring-road'): a CAPITAL has a ring road too, and this check living only under scale=="city"
-    meant four lineage estates could stand on the capital's patrol road with a green gate - the
-    check never RAN there, which looks exactly like passing. Two gaps stacked: the scope, and the
-    victim list - `manors` and `religious` are overlap TARGETS (protected FROM structs by the
-    matrix), but nothing about being a target keeps a compound off the patrol road, so both ride
-    along here explicitly."""
-    ring_rd = M.get("ring_road")
-    if not ring_rd:
-        return
-    rbed = (M.get("ring_road_width", 15) - 6) / 2
-
-    def _rfoot(it: dict[str, Any]) -> list[tuple[float, float]]:
-        if "rot" in it:
-            return rect_corners(it)
-        rhw, rhh = it["w"] / 2, it["h"] / 2
-        return [(it["x"] - rhw, it["y"] - rhh), (it["x"] + rhw, it["y"] - rhh), (it["x"] + rhw, it["y"] + rhh), (it["x"] - rhw, it["y"] + rhh)]
-
-    # ...except an official NOTICE BOARD inside a GATE PRECINCT. A kosatsuba is street furniture,
-    # not a compound: a ~12x5 ft post-and-roof board that must stand within ~60 real ft of a road
-    # where people pass (kosatsuba_by_the_road), which at a gate means the same crowded verge the
-    # guard house, inspection station and towers already line. Scoped to the precinct on purpose -
-    # a board out on an open stretch of patrol lane is still a defect.
-    rr_gates = [g for g in (M.get("gates") or [])] + ([M["gate"]] if M.get("gate") else [])
-
-    def _rr_exempt(it: dict[str, Any]) -> bool:
-        return it.get("label") in (None, "notice board") and "vw" in it and any(math.hypot(it["x"] - g[0], it["y"] - g[1]) < 130 for g in rr_gates)
-
-    on_ring = [
-        it.get("name") or it.get("label") or it.get("kind") or "compound" for it in solid_structs(M, "religious", "manors") if footprint_on_line(_rfoot(it), ring_rd, rbed) and not _rr_exempt(it)
-    ]
-    on_ring += ["field:" + f["name"] for f in M.get("fields", []) if footprint_on_line(f["outline"], ring_rd, rbed)]
-    check(
-        "ring_road_kept_clear",
-        not on_ring,
-        f"the ring road must run CLEAR of buildings/civic compounds/fields (only the gate guard houses, inspection stations, towers and gated ward fences may sit on it): {sorted(set(on_ring))}",
-    )
-
-
-def check_theater_stage(M: Manifest, check: Check) -> None:
-    """The theater stage's siting. It BELONGS to a temple/monastery precinct (a temple OPERA STAGE / shrine
-    NOH stage), the audience gathering in the open ground between stage and hall, the stage FACING the hall:
-    (1) `theater_stage_clear` - the stage + its viewing ground sit in CLEAR ground, overlapping NOTHING (no
-        wall, moat, road, street/alley, watercourse, building, compound, grave, field, or pond). Unlike a
-        packed dwelling it is not auto-checked by the generic overlap pass, so this is its dedicated guard.
-    (2) `theater_stage_by_temple` - ADJACENT to a religious hall (center within ~260px of the nearest one).
-    (3) `theater_stage_faces_temple` - its viewing ground OPENS TOWARD that hall (the stage faces it). The
-        glyph's open side is local +y, so after `rot` it points (-sin, cos); that aligns with the hall."""
-    ts_raw = M.get("theater_stage")
-    # LIST since 2026-08-10 (the singleton write clobbered a second stage); old manifests carry a dict
-    ts_all = ts_raw if isinstance(ts_raw, list) else ([ts_raw] if ts_raw else [])
-    if not ts_all:
-        return
-    ts_hits: list[str] = []
-    ts_far: list[str] = []
-    ts_back: list[str] = []
-    for ts in ts_all:
-        _theater_one_stage(M, ts, ts_hits, ts_far, ts_back)
-    check(
-        "theater_stage_clear",
-        not ts_hits,
-        f"theater stage footprint(s) overlap {sorted(set(ts_hits))[:6]} - the stage and its viewing ground "
-        f"must sit in CLEAR ground, touching nothing (no wall, moat, road, street/alley, watercourse, "
-        f"building, compound, grave, field, or pond)",
-    )
-    if M.get("religious"):
-        check(
-            "theater_stage_by_temple",
-            not ts_far,
-            f"monzen theater stage(s) far from every temple/monastery: {ts_far[:3]} (want <= 260px) - a temple/shrine "
-            f"performance stage sits ADJACENT to a religious hall with the viewing ground between them "
-            f"(a commercial quarter theater takes kind='machi' and owes no hall)",
-        )
-        check(
-            "theater_stage_faces_temple",
-            not ts_back,
-            f"monzen theater stage(s) whose viewing ground does not OPEN toward the temple: {ts_back[:3]} (alignment "
-            f"want >= 0.5) - the stage faces the hall with the audience between; set `rot` so the ground opens "
-            f"toward the temple (the stage's back is the side AWAY from the audience)",
-        )
 
 
 def _theater_one_stage(M: Manifest, ts: dict[str, Any], ts_hits: list[str], ts_far: list[str], ts_back: list[str]) -> None:
@@ -197,156 +104,6 @@ def _theater_one_stage(M: Manifest, ts: dict[str, Any], ts_hits: list[str], ts_f
         ts_back.append(f"({round(ts['x'])},{round(ts['y'])}) alignment {facing:.2f}")
 
 
-def check_fire_features(M: Manifest, check: Check) -> None:
-    """Geometry of the fire-watch towers (hinomi-yagura) a walled town or a city draws. Scale-agnostic:
-    the PRESENCE/count checks live in the scale blocks; this validates whatever is drawn, so it is a
-    no-op for a settlement that has none. WHY (a dense, enclosed wooden core needs a fire-watch over
-    its rooftops, manned by the magistrate's watch): settlements.md 'Fire towers'."""
-    towers = M.get("fire_towers", [])
-    # A tower's WATCH RADIUS: the visual neighborhood of rooftops one hinomi-yagura usefully covers.
-    # Both clauses below share it - a tower more than one radius from any dwelling watches nothing,
-    # and two towers within one radius of EACH OTHER watch the same rooftops twice.
-    WATCH = 230
-    COMMON = {"laborer", "laborer_large", "servant", "merchant", "merchant_house", "merchant_large", "shop"}
-    SAM = {"samurai", "samurai_large"}
-    dwell = [(b["x"], b["y"], b.get("kind")) for b in M.get("buildings", []) if b.get("kind") in COMMON | SAM]
-    if towers and dwell:
-        misplaced = []
-        for t in towers:
-            near = sorted(dwell, key=lambda d: math.hypot(d[0] - t["x"], d[1] - t["y"]))[:3]
-            nearest = math.hypot(near[0][0] - t["x"], near[0][1] - t["y"])
-            sam = sum(1 for d in near if d[2] in SAM)
-            if nearest > WATCH or sam * 2 > len(near):  # isolated, or sitting in the samurai quarter
-                misplaced.append((round(t["x"]), round(t["y"])))
-        check("fire_tower_in_commoner_quarter", not misplaced, f"fire tower(s) {misplaced} sit isolated or in the samurai quarter - a hinomi-yagura watches the dense COMMONER rooftops")
-    # a fire tower stands in the dense built-up core, never ON cultivated ground: a hinomi-yagura on a
-    # paddy (or the in-wall chrysanthemum field / a fallow patch) is nonsense, and an in-wall agricultural
-    # district puts a real field right where a tower might land. (There is no blanket no_structure_on_field
-    # - farmhouses legitimately ring the fields - so the towers carry their own field-clearance check.)
-    fields = [f["outline"] for f in M.get("fields", [])] + [f["outline"] for f in M.get("fallow_patches", [])] + [f["outline"] for f in M.get("flower_fields", [])]
-    if towers and fields:
-        on_field = []
-        for t in towers:
-            rc = rect_corners(_struct_rect(t))
-            for ol in fields:
-                n = len(ol)
-                if any(point_in_poly(cx, cy, ol) for cx, cy in rc) or any(segments_cross(rc[i], rc[(i + 1) % 4], ol[e], ol[(e + 1) % n]) for i in range(4) for e in range(n)):
-                    on_field.append((round(t["x"]), round(t["y"])))
-                    break
-        check("fire_tower_clear_of_fields", not on_field, f"fire tower(s) {on_field} sit on a field - a hinomi-yagura stands in the dense urban core, never on a paddy or planting")
-    # MULTIPLE TOWERS DISPERSE. A settlement dense/populous enough to warrant a second tower gets it
-    # to watch a DIFFERENT quarter's rooftops: historically the fire-watch was parcelled out per
-    # neighborhood (in Edo each machi block-group kept its own hinomi-yagura, and the shogunate's
-    # official watch stations were likewise distributed one to a district), so towers were spread
-    # across the city, never bunched. Two towers inside one watch radius of each other duplicate
-    # coverage while some other dense quarter goes unwatched - the second tower accomplishes nothing.
-    # WHY: settlements.md "Fire towers".
-    if len(towers) >= 2:
-        bunched = [((round(a["x"]), round(a["y"])), (round(b["x"]), round(b["y"]))) for i, a in enumerate(towers) for b in towers[i + 1 :] if math.hypot(a["x"] - b["x"], a["y"] - b["y"]) < WATCH]
-        check(
-            "fire_towers_dispersed",
-            not bunched,
-            f"fire tower pair(s) {bunched} stand within one watch radius ({WATCH} px) of each other - a second "
-            f"hinomi-yagura exists to watch a DIFFERENT quarter's rooftops; spread them across the settlement",
-        )
-    # EACH TOWER STANDS AMID THE DISTRICT IT WATCHES. Dispersal alone is not enough: two towers a
-    # comfortable distance apart can still both sit in the SAME QUADRANT, leaving the dense commoner
-    # quarter across the city unwatched (Tango's original pair both stood NW of center while the NE
-    # laborer warren - the city's biggest rooftop mass - had no watch). Historically the watch was
-    # parcelled by district, every commoner roof belonging to SOME tower's watch, and the tower stood
-    # amid its blocks (it watched outward over rooftops on all sides, not a district it sat at the far
-    # edge of). So: assign every commoner dwelling to its NEAREST tower - that partition IS the de
-    # facto watch districting the drawn towers imply - and each tower must stand near its district's
-    # center of mass: offset <= max(0.9 x the district's RMS radius, one WATCH radius). A tower parked
-    # in the wrong quadrant inherits the whole far side of the city as its "district" and lands far
-    # off that centroid, which is exactly the failure. Inside the walls only, when walled - the
-    # extramural gate-market rows are not part of the enclosed core the towers exist for.
-    # WHY: settlements.md "Fire towers".
-    wallp = M.get("wall")
-    core = [d for d in dwell if d[2] not in SAM and (not wallp or point_in_poly(d[0], d[1], wallp))]
-    if len(towers) >= 2 and core:
-        offside = []
-        for ti, t in enumerate(towers):
-            g = [d for d in core if ti == min(range(len(towers)), key=lambda j: math.hypot(d[0] - towers[j]["x"], d[1] - towers[j]["y"]))]
-            if not g:
-                continue
-            gx, gy = sum(d[0] for d in g) / len(g), sum(d[1] for d in g) / len(g)
-            rms = math.sqrt(sum((d[0] - gx) ** 2 + (d[1] - gy) ** 2 for d in g) / len(g))
-            off = math.hypot(t["x"] - gx, t["y"] - gy)
-            if off > max(0.9 * rms, WATCH):
-                offside.append((round(t["x"]), round(t["y"]), round(off), round(rms)))
-        check(
-            "fire_tower_amid_its_district",
-            not offside,
-            f"fire tower(s) {offside} (x, y, offset, district rms) stand far off the center of the rooftop "
-            f"district they are nearest to - the towers are bunched in one part of the city while a dense "
-            f"commoner quarter goes unwatched; put one tower AMID each major commoner quarter",
-        )
-    # A TOWER KEEPS A SMALL STANDOFF FROM ITS NEIGHBORS (>= 5 px of daylight). The blanket
-    # no_structure_overlaps SAT test only catches true footprint intersection, so a tower butted
-    # flush against a house passes it while READING as a collision: the drawn glyph's roof cap
-    # overhangs the recorded frame by ~2px a side, and an open braced-timber tower needs its
-    # footing and ladder clear of the neighboring eaves anyway (it stands on a seam, not in a
-    # party-wall row). GM rule: at least 5 px between a fire tower and any neighboring building.
-    STANDOFF = 5
-    if towers:
-        neigh = [s for k in _OVERLAP_STRUCTS if k != "fire_towers" for s in M.get(k, [])]
-        crowded = []
-        for t in towers:
-            tc = rect_corners(_struct_rect(t))
-            for s in neigh:
-                sc = rect_corners(_struct_rect(s))
-                if math.hypot(t["x"] - s["x"], t["y"] - s["y"]) > 160:  # cheap prefilter
-                    continue
-                gap = min(min(seg_dist(px, py, sc[i], sc[(i + 1) % 4]) for px, py in tc for i in range(4)), min(seg_dist(px, py, tc[i], tc[(i + 1) % 4]) for px, py in sc for i in range(4)))
-                if sat_overlap(tc, sc) or gap < STANDOFF:
-                    crowded.append((round(t["x"]), round(t["y"]), round(gap, 1)))
-                    break
-        check(
-            "fire_tower_standoff",
-            not crowded,
-            f"fire tower(s) {crowded} (x, y, gap px) stand within {STANDOFF} px of a neighboring building - "
-            f"the open braced frame (and its overhanging roof cap) needs a little daylight around its footing; "
-            f"nudge the tower onto clearer ground",
-        )
-    # A TOWER NEVER STANDS ON A WELLHEAD. Wells are overlap-EXEMPT (a wellhead's nominal footprint
-    # may kiss a dense-city building - see _OVERLAP_EXEMPT), so neither the blanket
-    # no_structure_overlaps pass nor fire_tower_standoff above (which walks _OVERLAP_STRUCTS only)
-    # guards a tower dropped onto a well. But that exemption is about houses ringing a tenement
-    # court closely - a fire tower must not ride it: its braced footing would stand in the well
-    # court blocking the shared draw-point, and the two glyphs read as a plain collision. Same
-    # 5 px daylight rule as fire_tower_standoff; circle (the well's clearance disc, radius r,
-    # as in wells_clear_of_shrine_and_torii) vs the tower's rect.
-    wells = M.get("wells", [])
-    if towers and wells:
-        on_well = []
-        for t in towers:
-            hw, hh = t["w"] / 2, t["h"] / 2
-            for wl in wells:
-                ddx = wl["x"] - t["x"] - max(-hw, min(hw, wl["x"] - t["x"]))
-                ddy = wl["y"] - t["y"] - max(-hh, min(hh, wl["y"] - t["y"]))
-                if math.hypot(ddx, ddy) < wl["r"] + STANDOFF:
-                    on_well.append((round(t["x"]), round(t["y"])))
-                    break
-        check(
-            "fire_tower_clear_of_wells",
-            not on_well,
-            f"fire tower(s) {on_well} stand on (or within {STANDOFF} px of) a wellhead - a hinomi-yagura's footing must not block a quarter's shared draw-point; nudge the tower off the well court",
-        )
-    # ... and clear of GRAVEYARDS (GM, 2026-07): a watch-tower's braced footing planted among
-    # the graves reads as a plain collision - the dead get the same daylight as the living
-    cems = M.get("cemeteries", [])
-    if towers and cems:
-        on_grave = []
-        for t in towers:
-            tc = rect_corners({"x": t["x"], "y": t["y"], "w": t["w"] + 2 * STANDOFF, "h": t["h"] + 2 * STANDOFF, "rot": 0})
-            for cm in cems:
-                if sat_overlap(tc, rect_corners({"x": cm["x"], "y": cm["y"], "w": cm["w"], "h": cm["h"], "rot": 0})):
-                    on_grave.append((round(t["x"]), round(t["y"])))
-                    break
-        check("fire_tower_clear_of_graveyards", not on_grave, f"fire tower(s) {on_grave} stand on (or within {STANDOFF} px of) a graveyard - move the watch-tower off the burial ground")
-
-
 def _ward_interior(fence: Any, wall: Any) -> Any:
     """Close a samurai-ward FENCE polyline against the city wall ring: the ward's interior polygon.
 
@@ -404,26 +161,6 @@ def _ward_interior(fence: Any, wall: Any) -> Any:
     pa = list(fence) + arc_fwd
     pb = list(fence) + arc_back
     return pa if area(pa) <= area(pb) else pb
-
-
-def _fronts_route(bx: float, by: float, routes: Sequence[Poly], others: Sequence[dict[str, Any]], road_d: float = 115) -> bool:
-    """True if (bx, by) is within road_d of a trade route (the Imperial road or a town street) AND no
-    `others` building lies between it and the nearest route point - i.e. it FRONTS the road, not hides
-    behind the shop rows. Used to keep the caravan inn on the road, not buried in the back blocks."""
-    npt, bd = None, 1e18
-    for r in routes:
-        for k in range(len(r) - 1):
-            cx, cy = seg_closest(bx, by, r[k], r[k + 1])
-            d = math.hypot(cx - bx, cy - by)
-            if d < bd:
-                bd, npt = d, (cx, cy)
-    if npt is None or bd > road_d:
-        return False
-    for o in others:
-        oc = rect_corners(_struct_rect(o))
-        if any(segments_cross((bx, by), npt, oc[e], oc[(e + 1) % 4]) for e in range(4)):
-            return False
-    return True
 
 
 def city_capacity(M: Manifest, step: float = 8, grid_step: float | None = None) -> dict[str, Any] | None:

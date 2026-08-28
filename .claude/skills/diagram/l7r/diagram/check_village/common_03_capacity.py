@@ -4,74 +4,8 @@ import math
 from collections.abc import Sequence
 from typing import Any
 
-from .common_01_geometry import Manifest, Poly, Pt, point_in_poly, seg_closest, seg_dist, segments_cross
+from .common_01_geometry import Manifest, Poly, Pt, seg_closest, seg_dist, segments_cross
 from .common_02_overlap_policy import in_ellipse
-
-
-def empty_street_runs(M: Manifest, w: Poly, maxgap: float = 130) -> list[tuple[str, int]]:
-    """Stretches of town/city street INSIDE the wall `w` longer than `maxgap` with no building
-    FRONTING them. A building serves only the street it actually fronts (its nearest, within the
-    frontage band), so one beside a perpendicular cross-street can't paper over an empty stub on
-    the lane. Returns [(label, run_px), ...] - a street earns its length from what it serves."""
-    streets = M.get("town_streets", [])
-    if not (streets and len(w) >= 3):
-        return []
-    # houses and shops front streets, but so do the CIVIC buildings - a government avenue lined
-    # with ministries (or the governor's yamen, a temple) is serving those, not running empty
-    blds = M.get("buildings", []) + M.get("houses", []) + M.get("ministries", []) + M.get("religious", []) + M.get("flophouses", [])
-    if M.get("governor_mansion"):
-        blds = blds + [M["governor_mansion"]]
-    lines = [st["pts"] for st in streets]
-    # a building cannot FRONT a street it is walled off from: if a ward fence or the city wall lies
-    # between the building and the point it would front, it serves some OTHER side, not this street.
-    # (Without this, the gap-band housing across a ward fence papered over a bare government avenue -
-    # the avenue read as "served by houses" that were actually on the far side of the fence.)
-    barriers = [wd["boundary"] for wd in M.get("wards", [])] + [list(w)]
-
-    def walled_off(bx: float, by: float, fx: float, fy: float) -> bool:
-        return any(segments_cross((bx, by), (fx, fy), tuple(bar[i]), tuple(bar[i + 1])) for bar in barriers for i in range(len(bar) - 1))
-
-    FRONT, COVER, STEP = 95.0, 105.0, 25
-    fronts: dict[int, list[dict[str, Any]]] = {}
-    for b in blds:
-        best, bi, bfoot = FRONT, None, None
-        for i, sp in enumerate(lines):
-            for k in range(len(sp) - 1):
-                dd = seg_dist(b["x"], b["y"], sp[k], sp[k + 1])
-                if dd < best:
-                    best, bi = dd, i
-                    bfoot = seg_closest(b["x"], b["y"], sp[k], sp[k + 1])
-        if bi is not None and bfoot is not None and not walled_off(b["x"], b["y"], bfoot[0], bfoot[1]):
-            fronts.setdefault(bi, []).append(b)
-    # a street may front deliberate OPEN GROUND instead of buildings (021, the capital's
-    # castle ring): the lane along a commons / pasture / festival or muster ground SERVES that
-    # ground - the hirokoji beside the citadel's cleared band is the textbook case - so a
-    # stretch within reach of a commons poly is not "bare".
-    open_grounds = [cg["poly"] for cg in M.get("commons", []) if cg.get("poly")]
-
-    def _serves_open(x9: float, y9: float) -> bool:
-        return any(point_in_poly(x9, y9, gp9) or min(seg_dist(x9, y9, gp9[i9], gp9[(i9 + 1) % len(gp9)]) for i9 in range(len(gp9))) < 70 for gp9 in open_grounds)
-
-    empty = []
-    for si, st in enumerate(streets):
-        pts = st["pts"]
-        servers = fronts.get(si, [])
-        run = worst = 0
-        for k in range(len(pts) - 1):
-            (ax, ay), (bx, by) = pts[k], pts[k + 1]
-            steps = max(1, int(math.hypot(bx - ax, by - ay) // STEP))
-            for j in range(steps):
-                t = j / steps
-                x, y = ax + (bx - ax) * t, ay + (by - ay) * t
-                if not point_in_poly(x, y, w) or any((b["x"] - x) ** 2 + (b["y"] - y) ** 2 < COVER * COVER for b in servers) or _serves_open(x, y):
-                    run = 0
-                else:
-                    run += STEP
-                    worst = max(worst, run)
-        if worst > maxgap:
-            empty.append(("main" if st.get("main") else f"@{pts[0]}", worst))
-    return empty
-
 
 DEFAULT_MANIFEST: Manifest = {
     "houses": [],
