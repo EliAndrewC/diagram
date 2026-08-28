@@ -604,7 +604,9 @@ class HomesteadPartsMixin:
                 any((qx - ox) ** 2 + (qy - oy) ** 2 < rr * rr for ox, oy, rr in occ)
                 or any(abs(qx - sx) < shw and se - cr - 2 < qy < se + 24 + cr for sx, se, shw in sun)
                 or any(ex - cr - 2 < qx < ex + 24 + cr and abs(qy - ey) < ehh for ex, ey, ehh in east)
-                or any(wx0 - wl - cr - 2 < qx < wx0 + cr and wy0 - cr < qy < wy1 + wl + cr for wx0, wy0, wy1 in west)
+                # +1 ft of slack on the west sun-lane: the check reads clumps rounded to 0.1 with a strict `<`, and a
+                # clump seated exactly on the window's edge (cohort seed 16: 1793.9 against 1794) read as shading
+                or any(wx0 - wl - cr - 3 < qx < wx0 + cr + 1 and wy0 - cr - 1 < qy < wy1 + wl + cr + 1 for wx0, wy0, wy1 in west)
             )
 
         def _reseat(qx: float, qy: float, placed: list[Any], require_interior: bool) -> tuple[float, float] | None:

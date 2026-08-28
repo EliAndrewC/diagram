@@ -8,7 +8,7 @@ from __future__ import annotations
 import heapq
 import math
 from collections.abc import Callable, Mapping, Sequence
-from typing import cast
+from typing import Any, cast
 
 from l7r.diagram.settlement import Settlement, edge_dist, point_in_poly, rot_rect, seg_closest, seg_dist, seg_intersect, segments_cross, skeleton_layout, web_cuts
 from l7r.diagram.sitegen.geom import centroid, crop_polys, crosses_disc, crosses_poly, pull_clear, unit
@@ -1131,7 +1131,7 @@ def _touch_junctions(s: Settlement, hard: list[Poly], walls: Sequence[Poly], wat
                     break
                 link = [v, q] if _clear_touch(v, q, hard, walls, water) else _route(v, q, hard, walls, water, gap=WEB_FABRIC_GAP, pad_mult=2.0, cell=10.0)
                 if link and polyline_len(link) <= _LINK_DIRECTNESS * max(d, 1.0):
-                    _draw_web(s, link, int(float(lanes[i].get("w", 3))))
+                    _join_piece(s, lanes, i, ways[i], v, link)
                     joined = True
                     break
             if joined:
@@ -1158,7 +1158,7 @@ def _touch_junctions(s: Settlement, hard: list[Poly], walls: Sequence[Poly], wat
                         if link and polyline_len(link) > _DETOUR_DIRECTNESS * max(d, 1.0):
                             link = []
                     if link and polyline_len(link) <= _DETOUR_DIRECTNESS * max(d, 1.0):
-                        _draw_web(s, link, int(float(lanes[i].get("w", 3))))
+                        _join_piece(s, lanes, i, ways[i], v, link)
                         joined = True
                         break
                 if joined:
@@ -1193,6 +1193,23 @@ def _touch_junctions(s: Settlement, hard: list[Poly], walls: Sequence[Poly], wat
             s.M["meta"]["lane_orphans"] = len(orphans)
             break
     return closed
+
+
+def _join_piece(s: Settlement, lanes: list[dict[str, Any]], i: int, way: Poly, v: Pt, link: Poly) -> None:
+    """Join an orphan piece to the network: EXTEND the piece when the link leaves one of its ends, else
+    draw the link as its own lane (the link left an interior vertex). A link drawn as a separate lane
+    from a door path's end put TWO lane ends beside the same farmhouse - the door path's and the
+    link's - and `lane_ends_front_different_houses` counted them (cohort seed 16, feature 137 T03).
+    One way that reaches the network is one lane."""
+    pts = [(float(x), float(y)) for x, y in way]
+    if pts and math.dist(v, pts[-1]) < 0.5:
+        lanes[i]["pts"] = [[round(x, 1), round(y, 1)] for x, y in pts + list(link[1:])]
+        s.reink_lane(i)
+    elif pts and math.dist(v, pts[0]) < 0.5:
+        lanes[i]["pts"] = [[round(x, 1), round(y, 1)] for x, y in list(reversed(link[1:])) + pts]
+        s.reink_lane(i)
+    else:
+        _draw_web(s, link, int(float(lanes[i].get("w", 3))))
 
 
 _ORPHAN_REACH = 150.0  # ft: how far a stranded piece may be linked back to the network before it is left as it is
