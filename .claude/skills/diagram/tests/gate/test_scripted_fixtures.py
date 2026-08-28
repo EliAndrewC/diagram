@@ -343,3 +343,27 @@ def test_structures_clear_of_dike_fires_when_a_house_corner_reaches_the_bank() -
         h.pop("on_dike", None)
 
     _fires(POLDER, "structures_clear_of_dike", corner_onto_the_bank)
+
+
+@pytest.mark.rolls_map
+def test_the_gate_prints_a_waiver_it_honours() -> None:
+    """Feature 146: the driver's WAIVE arm. A map may break a rule IN WRITING, and a verbose run says which
+    rule was excused - which is what makes a stale waiver visible later."""
+    _plan, M = rollcache.hamlet(REFERENCE)
+    M = copy.deepcopy(M)
+    M["houses"] = M["houses"][: len(M["houses"]) // 3]
+    assert "households_consistent" in check_village.gate(M, verbose=False, only={"households_consistent"})
+    M["meta"]["waivers"] = {"households_consistent": "a deliberate break with a reason long enough to satisfy the minimum the gate asks of one"}
+    assert "households_consistent" not in check_village.gate(M, verbose=True, only={"households_consistent"})
+
+
+@pytest.mark.rolls_map
+def test_pond_fill_covers_channel_mouths_fires_when_a_stream_mouth_is_left_dry() -> None:
+    """A watercourse ending inside the pond's rim must meet drawn fill, or the map shows a channel stopping
+    in bare ground where the water should be."""
+
+    def strand_a_mouth(M: dict[str, Any]) -> None:
+        pond = M["pond"]
+        M["streams"].append({"poly": [[float(pond[0]), float(pond[1])], [float(pond[0]) + 400.0, float(pond[1])]], "w": 7, "frm": {"kind": "pond"}, "to": None, "bedz": 99999})
+
+    _fires(REFERENCE, "pond_fill_covers_channel_mouths", strand_a_mouth)

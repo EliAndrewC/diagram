@@ -565,3 +565,18 @@ def test_lane_through_gate_skips_a_far_lane_and_one_running_alongside_the_fence(
     across = {"town_streets": [{"pts": [[100, -60], [100, 60]], "w": 6}]}
     assert lane_through_gate(across, 100.0, 0.0, fence_deg=0.0) is not None, "square through the gate"
     assert lane_through_gate({"lanes": [{"pts": [[100, -60], [100, 60]], "w": 6}]}, 100.0, 0.0, fence_deg=0.0) is None
+
+
+def test_facing_chains_returns_one_run_when_every_chord_faces_the_seat() -> None:
+    """Feature 146: the two run-splitting arms. A seat far off one side of a long sliver faces EVERY chord,
+    which is the single-run case; a seat beside a wide ring faces only some, which splits into runs."""
+    from l7r.diagram.settlement._geom import facing_chains
+
+    sliver = [(0.0, 0.0), (400.0, 0.0), (400.0, 2.0), (0.0, 2.0)]
+    one = facing_chains(sliver, (200.0, -4000.0), 0.5)
+    assert len(one) == 1, one
+
+    square = [(0.0, 0.0), (400.0, 0.0), (400.0, 400.0), (0.0, 400.0)]
+    some = facing_chains(square, (200.0, -600.0), 1.0)
+    assert some and len(some) >= 1
+    assert sum(len(c) for c in some) < 4, "not every chord of a square faces a seat off one side"

@@ -2065,3 +2065,15 @@ plots around the grave where the toe pass builds them - the same shape as the po
 then the registry's "the flat paddy tiling around it" becomes true again. `research: rendering`; deferred
 under 145 as a field-engine change rather than half-done. Kashikawa is the only pool map with a field grave,
 so it is the whole test bed.
+
+## The grove's bamboo species is declared and never drawn (feature 146, 2026-08-28)
+
+`_draw_grove` describes a mixed stand of conifer, broadleaf and bamboo, and its item loop had a
+`kind == "bamboo"` arm drawing one compact culm with a leafy top. It was unreachable: `b_th` - the
+threshold that selects bamboo - is `0.0` for BOTH mixes (`windbreak` and the dooryard blend), so
+`roll < b_th` never held. Feature 146 removed the six-line arm (dead code cannot be tested and should
+not be) and left the threshold alone, because raising it would put culms into every grove clump on
+every map - an appearance change that belongs to a feature that owns the look, with a settlement-review.
+`research: physical` when picked up: whether a yashikirin's mixed stand carried *take* at all, and in
+what share, is a question the record can answer. The bamboo the maps DO draw is the separate
+`bamboo_stand` take-yabu, which is unaffected.

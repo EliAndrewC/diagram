@@ -208,3 +208,12 @@ def test_title_obstacles_gather_the_long_lines_a_placard_must_miss() -> None:
     s.M["moat"] = [[100, 100], [900, 100]]
     _rects, _polys, lines = s._title_obstacles()
     assert len(lines) >= 2, lines
+
+
+def test_pull_caption_toward_keeps_its_seat_when_the_two_centres_coincide() -> None:
+    """Feature 146: the degenerate arm - the caption's block and its subject share a centre, so there is no
+    direction to pull along and the seat stands."""
+    s = Settlement(W=1000, H=1000, seed=1)
+    subject = [(400.0, 400.0), (600.0, 400.0), (600.0, 600.0), (400.0, 600.0)]
+    seat = (500.0, 500.0 + 8 * 0.275)  # the block's own centre lands on the subject's
+    assert s.pull_caption_toward(seat, "notice board", 8, "middle", 0.0, subject) == seat

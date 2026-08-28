@@ -410,3 +410,15 @@ def test_grove_fits_rejects_a_belt_on_a_lane_tread() -> None:
     s.corridors.append(([(100.0, 500.0), (900.0, 500.0)], 20.0))  # a lane's cleared band, as the placer registers it
     assert s._grove_fits(500, 500, 60, 30, own=[]) is False  # centered on the tread
     assert s._grove_fits(500, 300, 60, 30, own=[]) is True
+
+
+def test_draw_grove_draws_a_mixed_stand_at_its_seat() -> None:
+    """Feature 146: the clump draws conifer and broadleaf crowns at its own seat. It does NOT draw bamboo -
+    the threshold that would select it is 0.0 in both mixes, so that arm was unreachable and is gone."""
+    s = Settlement(1000, 1000, seed=1)
+    s.meta(name="G", scale="hamlet", ftpx=1)
+    before = len(s.out)
+    s._draw_grove(300.0, 300.0, 120.0, 80.0, face=(0, -1), mix="windbreak")
+    ink = "".join(str(o) for o in s.out[before:])
+    assert "<circle" in ink and "translate(300,300)" in ink
+    assert "#BBD06A" not in ink, "no culm: the bamboo arm was unreachable and was removed"
