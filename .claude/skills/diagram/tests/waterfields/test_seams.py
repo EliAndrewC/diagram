@@ -375,3 +375,15 @@ def test_the_shapely_arms_fall_back_instead_of_raising(monkeypatch) -> None:  # 
     assert seams._open_to(square, 10.0) is not None  # the real path still works
     monkeypatch.setattr(Polygon, "buffer", boom)
     assert seams._open_to(square, 10.0) is None
+
+
+def test_water_skips_a_channel_with_a_single_point() -> None:
+    """Feature 146: a channel record with fewer than two points has no stroke to build - it is skipped,
+    not offset (which would raise). A one-point channel is what a trimmed lateral leaves behind."""
+    from l7r.diagram.waterfields.seams import _water
+
+    real = {"pts": [[0.0, 0.0], [100.0, 0.0]], "w": 6.0}
+    stub = {"pts": [[50.0, 50.0]], "w": 6.0}
+    empty: dict[str, object] = {"pts": [], "w": 6.0}
+    assert _water([real, stub, empty], 1.0).equals(_water([real], 1.0)), "the stubs contribute no ink"
+    assert _water([stub, empty], 1.0).is_empty, "stubs alone make no water at all"
