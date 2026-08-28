@@ -24,9 +24,11 @@ Every entry: what the research found, the decision it drove, and any deliberate 
 
 **Evidence:** attested, corroborated
 
-**Sources:** `hakone-seki-jawiki` (READ: the 面番所 and 向番所 lists; that they stand opposite each other across the road is SUMMARY-ONLY), `wengcheng-zhwiki` (READ: the barbican). Lijin / chaoguan barrier practice not re-sourced - leftover
+**Sources:** `hakone-seki-jawiki` (READ: the 面番所 and 向番所 lists; that they stand opposite each other across the road is SUMMARY-ONLY), `wengcheng-zhwiki` (READ: the barbican). Lijin / chaoguan barrier practice not re-sourced - leftover `chaoguan-zhwiki` (READ - scope correction below)
 
 - *What the research found (China first: wengcheng 甕城 barbican + lijin 厘金 / chaoguan 鈔關 tax barriers; Japan's Hakone/Arai sekisho as the best-preserved architectural proof).* An inspection/tax barrier only works where traffic is forced single-file, and a walled city's gate passage is the ONE such chokepoint in the whole wall - set the station back and arrivals disperse into the street grid before ever reaching it, defeating its purpose. So guard + inspection cluster AT the gate opening, ~20-100 ft inside, flanking the road as it enters. Hakone is decisive: just inside each gomon the *Obansho* (papers/goods inspection office) and the *ashigaru* guardhouse stand OPPOSITE each other across the road, and nobody reaches the town beyond without passing between them. In a wengcheng the whole cluster reads most authentically inside the urn-courtyard between the two misaligned gates. "Set back a few hundred feet along the wall" is historically wrong.
+
+*Correction to the record (2026-08-28, feature 138):* the Ming-Qing 鈔關 customs barriers stood at commodity centers and on the Grand Canal and strategic routes, not at a county seat's gates; lijin is a separate, later Qing tax. The gate-throat cluster rests on the Hakone sekisho arrangement (SUMMARY-ONLY) and the chokepoint reasoning, not on Chinese customs practice.
 
 ## Wall towers - the mamian system and bowshot ranges
 

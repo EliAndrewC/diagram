@@ -15,8 +15,8 @@ Cite by key in an entry's `**Sources:**` line. Add a key here the first time a s
 Findings recorded before the rule, or on a source the rule now excludes. Each is re-sourced when its entry is next revisited - not rewritten wholesale - and struck from this list then. **Feature 138 (2026-08-28) worked the whole queue and every `not recorded` entry**; what remains is what a page could not be read for, each labeled in its entry.
 
 - `zhengyi-householder-priests` - the Grokipedia half DROPPED (2026-08-28); the Patheos half stands.
-- Economy of the Song dynasty (Grokipedia) - being replaced by the en.wikipedia article and its references (feature 138 leftover reader); `research/urban-features.md` "Charcoal yards" says so.
-- History of agriculture in China (Grokipedia) - being replaced by en.wikipedia *Loess Plateau* (feature 138 leftover reader); "Wells in crop fields" says so.
+- Economy of the Song dynasty (Grokipedia) - RESOLVED 2026-08-28: `economy-song-enwiki` (Hartwell's figure, read).
+- History of agriculture in China (Grokipedia) - RESOLVED 2026-08-28: `loess-plateau-enwiki` (the summer concentration read; the mm range dropped as unsourced).
 - Nagoya Castle (Grokipedia; site documentation) - the site-documentation half stands; the Grokipedia half is to be replaced by ja.wikipedia 名古屋城 (feature 138 leftover).
 - Jokamachi surveys - RESOLVED 2026-08-28: `jokamachi-jawiki` read; the Grokipedia half dropped from the key.
 - Village lane WIDTH (T50, 2026-08-27): no numeric source found for an ordinary hamlet lane or farm path in Japan or China; the drawn 3 / 5 / 6 ft stand as drawing conventions inside read bounds (Wikipedia "Stone routes" 2.7 m cart road; ja.wikipedia "大八車"; MLIT road history; Low-Tech Magazine on the wheelbarrow). A measured survey of a surviving village lane would settle it.
@@ -1444,3 +1444,63 @@ The 1581 (万历九年) fishpond figures for the Pearl delta - SUMMARY-ONLY (202
 Sen-dou Chang, "The Morphology of Walled Capitals", in Skinner (ed.), *The City in Late Imperial China* (http://web.stanford.edu/~mel1000/sen.pdf; cited by the feature 009 pass, 2026-07, as its strongest source; not re-read 2026-08-28)
 
 *Used for:* the sparse street net of a Chinese county seat, the deliberately unbuilt intramural reserve, the civic share - with 009's own caveat that the circulation percentage is triangulated, not measured
+
+### `tedai-jawiki`
+
+ja.wikipedia 手代 (READ 2026-08-28, feature 138 leftovers)
+
+*Used for:* "手代の多くは、村役人・町役人の子弟である" - most tedai were children of village and town officials, hired from peasants and townsmen who knew the district; nothing about birth order
+
+### `mingguanci-zhwiki`
+
+zh.wikipedia 名宦祠 (READ 2026-08-28)
+
+*Used for:* "名宦祠用以祭祀有政績的地方官" - the hall venerating local officials of merit, standing at the Confucian temple (east of the Dacheng gate), Ming Hongwu onward - a state institution, not a yamen's own predecessor shrine
+
+### `shoinzukuri-jawiki`
+
+ja.wikipedia 書院造 (READ 2026-08-28)
+
+*Used for:* "これら連続した室の南側には、入り側を介して庭が広がっていた" - the garden on the south of the formal rooms; nothing on the north service side
+
+### `economy-song-enwiki`
+
+en.wikipedia Economy of the Song dynasty (READ 2026-08-28; replaces the Grokipedia page of the same title)
+
+*Used for:* "Historian Robert Hartwell estimates that per capita iron output rose sixfold between 806 and 1078, such that, by 1078 China was producing 127,000,000 kg (125,000 t) in weight of iron per year"; Bao Qingtian on iron households given "government support, such as charcoal supplies and skilled craftsmen"
+
+### `loess-plateau-enwiki`
+
+en.wikipedia Loess Plateau (READ 2026-08-28; replaces the Grokipedia *History of agriculture in China*)
+
+*Used for:* "40-60% of the precipitation concentrate in June to August" - the summer concentration; the 400-800 mm range is not on the page
+
+### `kawara-jawiki`
+
+ja.wikipedia 瓦 (READ 2026-08-28)
+
+*Used for:* "江戸時代になっても一般庶民の家屋は板葺きが一般的で瓦葺きが普及したのは江戸時代末期のこと" - commoners' houses board-roofed; tile widespread only at the end of Edo
+
+### `kashi-jawiki`
+
+ja.wikipedia 河岸 and 雁木 (港湾) (READ 2026-08-28)
+
+*Used for:* the kashi as a river port and landing that grew into a warehouse and merchant district; gangi as the stairs at a landing used to load and unload cargo
+
+### `chaoguan-zhwiki`
+
+zh.wikipedia 鈔關 (READ 2026-08-28)
+
+*Used for:* "税关是中國明清兩代，政府在货物集散地和水陆要冲设立的关卡" - Ming-Qing customs barriers at commodity centers and strategic water and land routes (the eight great chaoguan on the Grand Canal), not at a county seat's gates
+
+### `takayama-coverage-summary`
+
+Takayama Jin'ya site and building areas - SUMMARY-ONLY (2026-08-28): a search synthesis gives "敷地面積は3,000坪、建物面積は1,000坪" (~33% coverage); the 御蔵 "年代、規模共に全国有数の穀物土蔵"
+
+*Used for:* the jin'ya's built coverage and the granary's standing, both unread
+
+### `fukagawa-kiba-summary`
+
+Fukagawa kiba, the Edo lumber yards - SUMMARY-ONLY (2026-08-28): fifteen timber wholesalers bought ~300,000 m2 in 1701; the yards were ordered out of the city after the 1657 Meireki fire because in-town timber yards spread fire
+
+*Used for:* the lumber yard as a waterfront works far larger than a shophouse, sited out of the built core

@@ -22,9 +22,9 @@ Every entry: what the research found, the decision it drove, and any deliberate 
 
 ## The wharf's working face: piers, quays and stepped landings
 
-**Evidence:** researched
+**Evidence:** attested (kashi, gangi), researched (the matou form)
 
-**Sources:** not re-sourced in the 2026-08-28 pass - the matou stepped landing, the kashi/gangi and the river-stage argument want ja.wikipedia 雁木 (港湾) and 河岸 read - leftover
+**Sources:** `kashi-jawiki` (READ: the river-port kashi with its warehouses; gangi as landing stairs); the Chinese matou stepped landing and the river-stage argument not re-read - leftover
 
 **The GM's question (2026-08-11):** is three piers the right number for six granaries and three
 warehouses, and is there something between a pier and a boardwalk - a *dock* - that the map should

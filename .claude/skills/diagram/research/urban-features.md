@@ -61,7 +61,7 @@ the ofuregaki circulars reached the peasantry through exactly this board, posted
 
 **Evidence:** attested, corroborated, setting-canon
 
-**Sources:** the 2026-07-24 pass recorded no pointers; not re-sourced on 2026-08-28 - the shortlist (brewery, dye yard, lumber yard, oil press, bathhouse, farrier) is the largest leftover of feature 138 and gets its own reader; the pawnshop and kiln rest on their own entries (`pawnbroking-history`, `tontine-monastery-lending`; "Kiln works")
+**Sources:** the 2026-07-24 pass recorded no pointers; not re-sourced on 2026-08-28 - the shortlist (brewery, dye yard, lumber yard, oil press, bathhouse, farrier) is the largest leftover of feature 138 and gets its own reader; the pawnshop and kiln rest on their own entries (`pawnbroking-history`, `tontine-monastery-lending`; "Kiln works") `fukagawa-kiba-summary` (SUMMARY-ONLY: the lumber yard as a 300,000 m2 waterfront works ordered out of Edo after 1657); the brewery, dye works, oil press, bathhouse and farrier premises were searched on ja.wikipedia (酒蔵, 紺屋, 絞油 404, 銭湯, 馬沓) and none gives a footprint - they stay as reasoning
 
 - **TRADE WORKS - which trades outgrow the generic shop glyph, and why** (drives `s.brewery`, `s.dye_yard`, `s.lumber_yard`, `s.oil_press`, `s.pawnshop`, `s.bathhouse`/`s.bathhouses`, `s.kiln`, `s.farrier` and their checks; the DRAWN rules live under "Provincial cities" above. Research pass 2026-07-24, from the GM's question during the provincial-city audit - "are there trades whose real premises, with their attached works, yards, and outbuildings, are materially bigger than a shophouse, i.e. significant space our maps are not representing?" - plus the farriery reversal of 2026-07-25.)
   - *Where this entry came from.* It absorbs the former `trade-footprint-research.md`, a separate per-question research file. That file had already duplicated its own conclusions into the rules paragraph above, and the duplication is exactly what bit: when the GM reversed the horseshoe finding, the stale claim "there are NO FARRIERS" was living in THREE places (the research file, the rules paragraph, and a `settlement.py` comment) and every one had to be found and fixed. The standing convention that follows: **the rule and its why belong in this file, stated once**; a standalone research file is for a derivation too long to inline (`flophouse-research.md`) or a dated point-in-time audit (`town-deep-audit.md`), and it must never restate a rule the operative doc also states.
@@ -91,7 +91,7 @@ the ofuregaki circulars reached the peasantry through exactly this board, posted
 
 **Evidence:** researched
 
-**Sources:** the 2026-07-27 pass recorded no pointers; not re-sourced on 2026-08-28 - leftover (kawara demand, the noborigama and its potters' housing, the fire-gap)
+**Sources:** the 2026-07-27 pass recorded no pointers; not re-sourced on 2026-08-28 - leftover (kawara demand, the noborigama and its potters' housing, the fire-gap) `kawara-jawiki` (READ: commoners board-roofed, tile general only at the end of Edo - tile demand confined to the few); the potters living at the noborigama and the fire gap remain unsourced
 
 - **KILN WORKS - why the glyph is a WORKS with housing, and why the caption stopped saying "tile"** (drives `s.kiln`, `kiln_works_houses_its_workers`, `kiln_keeps_fire_gap`, and the wording of `city_kiln_outside_walls`; the DRAWN rules live under "Provincial cities" in [`../settlements/urban-features.md`](../settlements/urban-features.md). Research pass 2026-07-27, from two GM questions: *"would the tile kiln have housing close to it, i.e. would whoever works the kiln also live next to it?"* and *"why is it specifically a 'tile kiln' and not just a kiln? Are there potters in the city with their own non-tile kilns? Or are we not accounting for them as well?"*)
   - *What was there before, and why it was thin.* The kiln was drawn as a lone 28 x 18 ft earthen mound captioned "tile kiln", governed by exactly one rule (`city_kiln_outside_walls`) whose whole justification was "fire law + smoke". It appears in the 2026-07-24 trade-works pass only as a clause in the list of banished nuisance trades - it never got an entry of its own, and the "tile" in the caption was never argued for anywhere. Both GM questions land on that gap. This entry is the argument that was missing.
@@ -205,7 +205,7 @@ Following imperial Chinese *yamen* and Japanese *jokamachi* practice, government
 
 **Evidence:** attested, corroborated
 
-**Sources:** `wagner-ming-iron`, `fao-charcoal-safety`, `tonya-enwiki`, `fires-in-edo-enwiki`, `sizes-koku` (the inline list below). The Song output figures (125,000 tons by 1078; regulated smelting households) came from Grokipedia and are in the re-sourcing queue - to be re-read from en.wikipedia *Economy of the Song dynasty* and its references - leftover
+**Sources:** `wagner-ming-iron`, `fao-charcoal-safety`, `tonya-enwiki`, `fires-in-edo-enwiki`, `sizes-koku` (the inline list below). The Song output figures (125,000 tons by 1078; regulated smelting households) came from Grokipedia and are in the re-sourcing queue - to be re-read from en.wikipedia *Economy of the Song dynasty* and its references - leftover `economy-song-enwiki` (READ 2026-08-28: Hartwell's 125,000 t by 1078; state charcoal supplies to iron households) - the Grokipedia citation is replaced
 
 **China first.** Charcoal was an industrial input at state scale. Song iron-smelting households were
 government-regulated, with state support that explicitly included **charcoal supplies**, and a large
@@ -327,7 +327,7 @@ same fact this drawn line is the cartographic expression of.
 - [Donald Wagner, Traditional Chinese fining and puddling](http://donwagner.dk/arch-iron/eu/fining-puddling-china-eu.html)
 - [Cast Iron Smelting and Fining: an Eastern Han site at Xuxiebian, Sichuan](https://muse.jhu.edu/article/725769)
 - [FAO, Charcoal safety precautions (ch. 5)](https://www.fao.org/4/X5555E/x5555e06.htm) - self-heating, fines, the 24-hour and 8-day rule
-- [Economy of the Song dynasty](https://grokipedia.com/page/Economy_of_the_Song_dynasty) - charcoal-driven output, regulated smelting households
+- Economy of the Song dynasty - now `economy-song-enwiki` (en.wikipedia, read 2026-08-28); the Grokipedia link is withdrawn
 - [Ton'ya](https://en.wikipedia.org/wiki/Ton%27ya) / [Fires in Edo](https://en.wikipedia.org/wiki/Fires_in_Edo)
 - [What is the unit called a koku? (Sizes)](https://www.sizes.com/units/koku.htm) - the charcoal *hyō* is of indeterminate size
 - [Nanbu-Date border mounds](https://en.wikipedia.org/wiki/Nanbu-Date_border_mounds) / [Kuniezu](https://en.wikipedia.org/wiki/Kuniezu) / [Mukoyama, linear borders in early modern Japan](https://journals.sagepub.com/doi/full/10.1177/13540661221133206)
@@ -336,7 +336,7 @@ same fact this drawn line is the cartographic expression of.
 
 **Evidence:** attested, corroborated
 
-**Sources:** `irripro-jiegao-lulu`, `ide-japanese-experience`, `harie-kabata`, `kabu-ido-commons` (the inline list below). The loess-plain rainfall and drought exposure came from Grokipedia (re-sourcing queue) - re-read from en.wikipedia *Loess Plateau* / *Agriculture in China* - leftover
+**Sources:** `irripro-jiegao-lulu`, `ide-japanese-experience`, `harie-kabata`, `kabu-ido-commons` (the inline list below). The loess-plain rainfall and drought exposure came from Grokipedia (re-sourcing queue) - re-read from en.wikipedia *Loess Plateau* / *Agriculture in China* - leftover `loess-plateau-enwiki` (READ: 40-60% of rain in June-August; the 400-800 mm figure not on the page - labeled unsourced) - the Grokipedia citation is replaced
 
 **The question** (GM, 2026-07-26): the overlap matrix forbids a well overlapping a dry crop plot.
 "Should dry plots have wells? I could see a wheat field having a well in the middle of it if that's
@@ -398,7 +398,7 @@ historical direction of travel was restriction, not generosity.
 ### Sources
 
 - [History of Irrigation - irrigation tools (jiegao, lulu)](http://www.irripro.net/en/nd.jsp?id=113) and [Lulu](https://baike.baidu.com/en/item/L%C3%B9lu/1467455) - the shadoof and windlass, and the Ming-Qing upgrade to animal power and deeper wells
-- [History of agriculture in China](https://grokipedia.com/page/History_of_agriculture_in_China) - loess dryland farming, 400-800 mm rainfall, drought exposure
+- Loess dryland farming - now `loess-plateau-enwiki` (en.wikipedia, read 2026-08-28); the Grokipedia link is withdrawn
 - [Passing on "The Japanese Experience" (IDE)](https://d-arch.ide.go.jp/je_archive/english/society/wp_je_unu4.html) - hatake vs suiden; small farmers on "rainfall or natural underground sources"; the defeated late-Tokugawa hata irrigation schemes
 - [Harie Shozu no Sato, the kabata wells](https://ihcsacafe-en.ihcsa.or.jp/news/harie/) - the domestic/social character of the village well
 - [Groundwater commons and the kabu-ido rules](https://link.springer.com/article/10.1007/s12685-022-00302-1) - community regulation of the NUMBER of wells per village
