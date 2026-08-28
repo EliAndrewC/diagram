@@ -727,7 +727,12 @@ def _seg_0267__title_clear_of_features(
             "storehouses",
             "merchant_estates",
             "ministries",
-            "village_groves",
+            # NOT "village_groves" since feature 137 T06 (2026-08-28): the placard is an opaque card, so the
+            # name reads over anything; what it must not HIDE is a building, a plot, a field, water, a lane
+            # or a label. A strip of belt or wood under the card hides nothing a reader needs, and a tall
+            # hamlet framed tight to its content often has no blank 200 x 106 px at all (10 of 48 cohort
+            # seeds; seed 2's strips beside the field are 106 and 183 px wide). The generator still seats
+            # the title on blank ground first and takes cover only as the last resort before the corner.
             # NOT "commons": the scrub is sparse GROUND COVER (a feathered grass scatter on open ground), not a
             # feature with a footprint, and a bold place name reads fine over it. Kept in step with
             # `_title_obstacles` in settlement.py - once the commons clothes the field's interior voids too it
