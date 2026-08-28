@@ -54,6 +54,12 @@ class WetGroundMixin:
         settlements.md 'Marsh' + 'Defensive marshland' + 'Polder siting Q&A'. Recorded M['marshes']."""
         if role not in ("toe", "pond_fringe", "defense", "waterside"):
             raise ValueError(f"unknown marsh role {role!r}; expected 'toe', 'pond_fringe', 'defense', or 'waterside'")
+        # MARSH IS NO-BUILD GROUND (feature 139 T50, GM 2026-08-28: "multiple farmhouses ... overlap with marshland
+        # ... one of the gardens also ... we need to update our placement algorithms to make that impossible").
+        # Registered BEFORE the reeds are scattered, whatever the role: a farmhouse, a garden bed, a fixture or a
+        # well tested by `_hard_clear` from here on can no longer sit on it. (The reference hamlet draws its toe
+        # marsh after its houses; this map draws its pond fringe and its waterward strips before them.)
+        self.wet_polys.append([(float(px), float(py)) for px, py in poly])
         xs = [p[0] for p in poly]
         ys = [p[1] for p in poly]
         x0, x1, y0, y1 = min(xs), max(xs), min(ys), max(ys)

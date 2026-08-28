@@ -593,9 +593,9 @@ def stage_web(s: Settlement, plan: SitePlan) -> None:
             _ln["pts"] = []
             s.reink_lane(_i)
     _touch_junctions(
-        s, hard_built, walls, list(plan.watercourses) + drawn_water, reach=_STUB_REACH_FT, only_orphans=True
+        s, hard_built, walls, list(plan.watercourses) + drawn_water, reach=_STUB_REACH_FT, only_orphans=True, final=True
     )  # the stubs the smoothing leaves stop 30-35 ft short (seed 37); a connected web is untouched
-    _touch_junctions(s, hard_built, walls, list(plan.watercourses) + drawn_water)
+    _touch_junctions(s, hard_built, walls, list(plan.watercourses) + drawn_water, final=True)  # `final`: nothing smooths a link laid here
     s.M["meta"]["lane_web"] = plan.lane_web
 
 
@@ -1024,7 +1024,7 @@ def _join_orphan_ways(s: Settlement, hard: list[Poly], walls: Sequence[Poly], wa
     return made  # pragma: no cover - six links is far more than any hamlet needs
 
 
-def _touch_junctions(s: Settlement, hard: list[Poly], walls: Sequence[Poly], water: list[tuple[Pt, Pt]], reach: float = _LANE_JOIN_FT, only_orphans: bool = False) -> int:
+def _touch_junctions(s: Settlement, hard: list[Poly], walls: Sequence[Poly], water: list[tuple[Pt, Pt]], reach: float = _LANE_JOIN_FT, only_orphans: bool = False, final: bool = False) -> int:
     """The LAST pass over the web: every lane end that stands NEAR another way is extended to TOUCH it.
 
     THE NETWORK WAS CONNECTED BY TOLERANCE AND DISCONNECTED IN INK (GM 2026-08-27, feature 133 T31:
@@ -1076,6 +1076,7 @@ def _touch_junctions(s: Settlement, hard: list[Poly], walls: Sequence[Poly], wat
                     ((math.dist(q, z), z, k, _op) for k, _os, _op in _by_way for z in [min((seg_closest(q[0], q[1], a, b) for a, b in _os), key=lambda z: math.dist(q, z))]), key=lambda t: t[0]
                 )
                 d, foot, k, _op = _best
+                _os_k = list(zip(_op, _op[1:], strict=False))
                 if d <= 2.0 or d > reach:
                     continue
                 # NOT BACK ONTO ITSELF (feature 139, Kuwabata seed 21): a 30 ft lane whose two ends
@@ -1104,7 +1105,25 @@ def _touch_junctions(s: Settlement, hard: list[Poly], walls: Sequence[Poly], wat
                 link = [q, foot] if _clear_touch(q, foot, hard, walls, water) else _route(q, foot, hard, walls, water, gap=WEB_FABRIC_GAP, pad_mult=2.0, cell=10.0)
                 if not link or polyline_len(link) > _LINK_DIRECTNESS * d:
                     continue
-                new = (list(reversed(link[1:])) + new) if end == 0 else (new + link[1:])
+                _cand = (list(reversed(link[1:])) + new) if end == 0 else (new + link[1:])
+                if final and len(new) >= 3 and _zigzags(_cand):
+                    # A HAIRPIN AT THE DOOR (feature 139, Kuwabata seed 21): after the smoothing, a lane whose
+                    # last 13 ft turned down toward a farmhouse door was joined back UP to the way it had
+                    # just left - the sheet showed a hairpin the bend rule flags. Nothing smooths a final-pass
+                    # link, so it is repaired here: when the joined run would zigzag and the joining end is a
+                    # short spur (16 ft or less), the spur is dropped and the junction made from the vertex
+                    # before it. Only where today's link would already fail the gate - a clean join, and every
+                    # join on a map that passes, is laid exactly as before.
+                    _prev = new[1] if end == 0 else new[-2]
+                    if math.dist(q, _prev) <= 16.0:
+                        _foot2 = min((seg_closest(_prev[0], _prev[1], a, b) for a, b in _os_k), key=lambda z: math.dist(_prev, z))
+                        _d2 = math.dist(_prev, _foot2)
+                        if 2.0 < _d2 <= reach and _clear_touch(_prev, _foot2, hard, walls, water):
+                            _base = new[1:] if end == 0 else new[:-1]
+                            _cand2 = ([_foot2] + _base) if end == 0 else (_base + [_foot2])
+                            if not _zigzags(_cand2):
+                                _cand = _cand2
+                new = _cand
                 closed += 1
                 moved += 1
             if new != pts:
@@ -1167,6 +1186,26 @@ _ORPHAN_REACH = 150.0  # ft: how far a stranded piece may be linked back to the 
 # corner - clear of the footprint, inside the tread's ink (`features_do_not_overlap`, lanes vs
 # gardens, feature 133 T41). A junction link may still brush a fence; it may not paint on it.
 _TOUCH_GAP = 4.0
+
+
+def _zigzags(pts: Sequence[Pt]) -> bool:
+    """The gate's `lanes_bend_like_paths` measure, applied to a run before it is laid: a hairpin (a turn of
+    140 deg or more) or a zigzag (two turns of 50 deg or more within 40 ft of path)."""
+    turns: list[float] = []  # path position of each turn past 50 deg
+    run = 0.0
+    for k in range(1, len(pts) - 1):
+        run += math.dist(pts[k - 1], pts[k])
+        ax, ay = pts[k][0] - pts[k - 1][0], pts[k][1] - pts[k - 1][1]
+        bx, by = pts[k + 1][0] - pts[k][0], pts[k + 1][1] - pts[k][1]
+        la, lb = math.hypot(ax, ay), math.hypot(bx, by)
+        if la < 1e-9 or lb < 1e-9:
+            continue
+        turn = math.degrees(math.acos(max(-1.0, min(1.0, (ax * bx + ay * by) / (la * lb)))))
+        if turn >= 140.0:
+            return True
+        if turn >= 50.0:
+            turns.append(run)
+    return any(b - a <= 40.0 for a, b in zip(turns, turns[1:], strict=False))
 
 
 def _clear_touch(a: Pt, b: Pt, hard: list[Poly], walls: Sequence[Poly], water: list[tuple[Pt, Pt]]) -> bool:
@@ -2187,7 +2226,9 @@ def stage_seat(s: Settlement, plan: SitePlan) -> None:
         for rec in list(s.M.get("field_ditches", [])) + list(s.M.get("channels", [])) + list(s.M.get("streams", []))
         for a, b in zip(rec["poly"], rec["poly"][1:], strict=False)
     ] + [((float(a[0]), float(a[1])), (float(b[0]), float(b[1]))) for rec in s.M.get("drawn_channels", []) for a, b in zip(rec["pts"], rec["pts"][1:], strict=False)]
-    seat = seat_cluster(plan, dry_plots=crop_polys(s), drain=drain, toe=s.toe_band() or None)
+    seat = seat_cluster(
+        plan, dry_plots=crop_polys(s), drain=drain, toe=s.toe_band() or None, wet=[[(float(a), float(b)) for a, b in m["poly"]] for m in s.M.get("marshes", []) if m.get("role") == "pond_fringe"]
+    )  # the reservoir's reed fringe (T50)
     plan.seat = seat
     # THE SITE'S BACK IS THE WINDWARD SIDE, and where the two disagree the site wins.
     #

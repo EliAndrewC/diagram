@@ -377,3 +377,15 @@ def test_waterworks_caption_beside_its_point_is_fine():
     M["aqueducts"] = [{"poly": [[100, 100], [300, 300]], "w": 3.0, "intake": [100, 100], "to": [300, 300]}]
     M["labels"] = [[104, 88, 170, 98, 5, "intake weir"]]
     assert "waterworks_captions_stand_at_their_point" not in check_village.gate(M, verbose=False)
+
+
+def test_crop_hugs_content_counts_the_title_placard_as_frame_setting():
+    """Feature 139: a sheet with no blank box for its name reserves one just outside the content and crops
+    to it, so the placard is content the frame may hold open for - and a frame opened past nothing else
+    still fires."""
+    house = {"x": 200, "y": 100, "w": 40, "h": 30, "rot": 0, "kind": "plain"}
+    placard = [150, -140, 344, -34]
+    held = {"meta": {"scale": "village", "view": [100, -188, 250, 351]}, "houses": [house], "title": {"name": "T", "bbox": placard, "placard": placard}}
+    assert "crop_hugs_content" not in f_only(held, "crop_hugs_content")
+    bare = {"meta": {"scale": "village", "view": [100, -188, 250, 351]}, "houses": [house]}
+    assert "crop_hugs_content" in f_only(bare, "crop_hugs_content")

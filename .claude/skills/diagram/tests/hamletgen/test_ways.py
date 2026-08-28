@@ -717,3 +717,28 @@ def test_trim_to_service_counts_ARRIVING_AT_THE_FIELD_as_service() -> None:
     run = [(0.0, 100.0), (200.0, 100.0), (395.0, 100.0)]
     assert _trim_to_service(run, [], [(0.0, 100.0)], [field]) == run
     assert len(_trim_to_service(run, [], [(0.0, 100.0)], [])) == 2
+
+
+def test_a_final_pass_junction_that_would_hairpin_at_a_door_spur_joins_from_the_vertex_before_it() -> None:
+    """Feature 139, Kuwabata seed 21: after the smoothing, a lane whose last 13 ft turned down toward a
+    farmhouse door was joined back UP to the way it had just left - a hairpin on the sheet. Nothing
+    smooths a final-pass link, so the toucher repairs it there: the short spur is dropped and the
+    junction made from the vertex before it. The first pass (`final=False`) lays what it always laid."""
+    main = [(0.0, 0.0), (400.0, 0.0)]
+    spur = [(300.0, 80.0), (200.0, 20.0), (212.0, 28.0)]  # ends 28 ft off the main lane, on a 14 ft tail
+    s = _StubSettlement(lanes=[main, spur])
+    hg.ways._touch_junctions(s, [], [], [], final=True)
+    pts = [tuple(q) for q in s.M["lanes"][1]["pts"]]
+    assert pts[:2] == [(300.0, 80.0), (200.0, 20.0)] and math.dist(pts[-1], (200.0, 0.0)) <= 1.0, pts
+    assert not hg.ways._zigzags(pts)
+    s2 = _StubSettlement(lanes=[main, spur])
+    hg.ways._touch_junctions(s2, [], [], [])
+    assert hg.ways._zigzags([tuple(q) for q in s2.M["lanes"][1]["pts"]]), "the first pass still lays the raw link - the smoothing that follows it owns the shape"
+
+
+def test_zigzags_mirrors_the_gates_bend_rule() -> None:
+    assert hg.ways._zigzags([(0.0, 0.0), (100.0, 0.0), (0.0, 5.0)])  # a hairpin
+    assert hg.ways._zigzags([(0.0, 0.0), (20.0, 0.0), (20.0, 20.0), (40.0, 20.0)])  # two right angles within 40 ft
+    assert not hg.ways._zigzags([(0.0, 0.0), (20.0, 0.0), (20.0, 60.0), (40.0, 60.0)])  # the same turns 60 ft apart
+    assert not hg.ways._zigzags([(0.0, 0.0), (100.0, 10.0), (200.0, 0.0)])  # a gentle wobble
+    assert not hg.ways._zigzags([(0.0, 0.0), (0.0, 0.0), (10.0, 0.0)])  # a zero-length step is skipped

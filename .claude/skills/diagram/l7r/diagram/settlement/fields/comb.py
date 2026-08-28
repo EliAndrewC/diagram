@@ -461,26 +461,30 @@ class CombMixin:
             # nothing moves (every comb map is byte-identical); otherwise the end is pulled in along
             # the nearest edge's inward normal until it clears.
             _env_in = net.get("envelope") or []
-            if len(_env_in) >= 3:
+            # ...and near a CORNER the pull runs again (feature 139 T51): pulled 14 px off the top edge, the
+            # polder's mouth stood 9 px from the west edge. Up to three rounds, each on the now-nearest edge;
+            # a comb's first round does not fire, so every comb map is still byte-identical.
+            for _pull_round in range(3 if len(_env_in) >= 3 else 0):
                 _n_in = len(_env_in)
                 _din_d = min(seg_dist(din[0], din[1], _env_in[_k], _env_in[(_k + 1) % _n_in]) for _k in range(_n_in))
-                if not point_in_poly(din[0], din[1], _env_in) or _din_d < 12.0:
-                    _best_in = min(
-                        ((seg_closest(din[0], din[1], _env_in[_k], _env_in[(_k + 1) % _n_in]), _env_in[_k], _env_in[(_k + 1) % _n_in]) for _k in range(_n_in)),
-                        key=lambda t: math.hypot(t[0][0] - din[0], t[0][1] - din[1]),
-                    )
-                    _q_in, _a_in, _b_in = _best_in
-                    _ex_in, _ey_in = -(_b_in[1] - _a_in[1]), _b_in[0] - _a_in[0]
-                    _el_in = math.hypot(_ex_in, _ey_in) or 1.0
-                    _nx_in, _ny_in = _ex_in / _el_in, _ey_in / _el_in
-                    _cx_in = sum(q[0] for q in _env_in) / _n_in
-                    _cy_in = sum(q[1] for q in _env_in) / _n_in
-                    if _nx_in * (_q_in[0] - _cx_in) + _ny_in * (_q_in[1] - _cy_in) > 0:  # point it INWARD
-                        _nx_in, _ny_in = (
-                            -_nx_in,
-                            -_ny_in,
-                        )  # pragma: no cover - the winding-order guard. `build_polder` winds its envelope so the raw edge normal already points inward (measured: dot -324 and -355 on the two seeds that need the pull), but a ring wound the other way would send the mouth OUT of the field, so the orientation is asserted rather than assumed
-                    din = (_q_in[0] + _nx_in * 14.0, _q_in[1] + _ny_in * 14.0)
+                if point_in_poly(din[0], din[1], _env_in) and _din_d >= 12.0:
+                    break
+                _best_in = min(
+                    ((seg_closest(din[0], din[1], _env_in[_k], _env_in[(_k + 1) % _n_in]), _env_in[_k], _env_in[(_k + 1) % _n_in]) for _k in range(_n_in)),
+                    key=lambda t: math.hypot(t[0][0] - din[0], t[0][1] - din[1]),
+                )
+                _q_in, _a_in, _b_in = _best_in
+                _ex_in, _ey_in = -(_b_in[1] - _a_in[1]), _b_in[0] - _a_in[0]
+                _el_in = math.hypot(_ex_in, _ey_in) or 1.0
+                _nx_in, _ny_in = _ex_in / _el_in, _ey_in / _el_in
+                _cx_in = sum(q[0] for q in _env_in) / _n_in
+                _cy_in = sum(q[1] for q in _env_in) / _n_in
+                if _nx_in * (_q_in[0] - _cx_in) + _ny_in * (_q_in[1] - _cy_in) > 0:  # point it INWARD
+                    _nx_in, _ny_in = (
+                        -_nx_in,
+                        -_ny_in,
+                    )  # pragma: no cover - the winding-order guard. `build_polder` winds its envelope so the raw edge normal already points inward (measured: dot -324 and -355 on the two seeds that need the pull), but a ring wound the other way would send the mouth OUT of the field, so the orientation is asserted rather than assumed
+                din = (_q_in[0] + _nx_in * 14.0, _q_in[1] + _ny_in * 14.0)
             start = pond_rec if pond_rec else (sluice[0], sluice[1])
             frm = {"kind": "pond"} if pond_rec else {"kind": "stream"}
             if not pond_rec:
@@ -527,7 +531,13 @@ class CombMixin:
             # check inside the code it governs is the trap this skill's notes name repeatedly; an
             # explicit flag from the one caller that needs it cannot drift.
             if join_head and _fk_d > 10.0:
-                _ch_poly.insert(len(_ch_poly) - 1, [round(_fk[0], 1), round(_fk[1], 1)])
+                # ...AT ITS PLACE ALONG THE RUN (feature 139 T51): the head used to go in just before the mouth,
+                # which is right while it lies past the bow's midpoint. Once the feeder stub reaches the reservoir
+                # rim the head sits in the run's upper half, and inserting it after the midpoint folded the run
+                # back on itself (an acute hairpin, `water_channels_obtuse_turns`). Its slot is chosen by its
+                # projection along the source -> mouth chord.
+                _fk_t = ((_fk[0] - start[0]) * vx + (_fk[1] - start[1]) * vy) / (vl * vl)
+                _ch_poly.insert(1 if _fk_t < 0.5 else len(_ch_poly) - 1, [round(_fk[0], 1), round(_fk[1], 1)])
             self.M["channels"].append(
                 {
                     "poly": _ch_poly,

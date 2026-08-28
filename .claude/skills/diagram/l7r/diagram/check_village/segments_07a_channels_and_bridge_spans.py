@@ -29,6 +29,10 @@ def _seg_0410__ch9_1(*, M: Any = _UNBOUND, ch9: Any = _UNBOUND, cn9: Any = _UNBO
         [(w9["poly"], float(w9.get("w", 9))) for w9 in M.get("streams", [])]
         + [(cn9["poly"], float(cn9.get("w", 12))) for cn9 in M.get("canals", [])]
         + [(ch9["poly"], float(ch9.get("w", 2.5))) for ch9 in M.get("channels", []) if ch9.get("poly")]
+        # ...AND THE DRAWN STROKES (feature 139 T51): the inlet sluice sits on the ring feeder's drawn bend, and
+        # once the feeder stub reaches the reservoir rim the hairline record no longer passes within reach of it.
+        # Same rule as `segments_06b` `sc_waters` - the reader sees the stroke; a gate on the stroke is on the water.
+        + [(ch9["pts"], max(float(ch9.get("w0", 2.5)), float(ch9.get("w1", 2.5)))) for ch9 in M.get("drawn_channels", []) if len(ch9.get("pts") or []) >= 2]
     )
     return _kept(locals(), ('ch9', 'cn9', 'w9', 'wsf_waters'))
 

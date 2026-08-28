@@ -479,85 +479,65 @@ class FinishMixin:
         # pond. The rim EDGE stays early (below every bed, so the mouth still covers it); only the
         # fill and sheen move, re-emitted LAST among the late beds - restoring exactly the covering
         # order the shared block gives an early feeder. Gated by pond_fill_covers_channel_mouths.
-        _pond_late = False
-        if self.M.get("pond") and self._pond_entry is not None and self._late_water_idx is not None:
-            _pex, _pey, _perx, _pery = self.M["pond"]
-            _pond_late = any(ch["late"] and ((q[0] - _pex) / _perx) ** 2 + ((q[1] - _pey) / _pery) ** 2 <= 1.12 for ch in self.M.get("drawn_channels", []) for q in (ch["pts"][0], ch["pts"][-1]))
-        if self._water_idx is not None:  # the watercourse block: all EDGES (pond rims), then all
-            wblock: list[Any] = []  # BEDS (one opacity group), then all SHEENS - crossings MERGE
-            wcls: list[ClsTag] = []
-            bedzs: list[Any] = []
-            sheenzs: list[Any] = []
-            for w in self.water:  # rims below every bed -> a feeder's bed covers the rim at its mouth
-                if w.get("edge") is not None:
-                    wblock.append(w["edge"])
-                    wcls.append(w["cls"])
-            for w in self.water:  # a pond-anchored feeder is snapped to the rim now that the
-                w["_bed"], w["_sheen"] = w["bed"], w["sheen"]  # pond is known (deferred - it may predate the pond)
-                if w["clip"] is not None and self.M.get("pond"):
+        # ONE WATER BLOCK (feature 139 T53, GM 2026-08-28: "when a stream meets a irrigated channel or where an
+        # irrigated channel or a ditch meets a pond ... it clearly looks like one is rendered on top of the
+        # other ... water just flows"). There were TWO blocks - the early one (streams, the pond, a moat) at
+        # the first water call and the LATE one (a comb's ditch net) after the field's plots - each its own
+        # opacity group, so where a ditch met a brook the two 0.85 groups stacked into a darker seam, and a
+        # sheen in one block rode over a bed in the other. Every watercourse now composites in ONE block at
+        # the late position when a late block exists (else the early one): all RIMS first, then every bed in
+        # one shared-opacity group with the pond's fill last (so a feeder's overshoot inside the rim is
+        # painted over), then every sheen. A pond's rim is therefore under every bed that reaches it - the
+        # dark outline stops where the channel enters, which is the GM's "continuous flow of water".
+        _entries = list(self.water) + list(self.late_water)
+        _widx = self._late_water_idx if self._late_water_idx is not None else self._water_idx
+        if _entries and _widx is not None:
+            for w in self.water:  # a pond-anchored feeder is snapped to the rim now that the pond is known
+                w["_bed"], w["_sheen"] = w["bed"], w["sheen"]
+                if w.get("clip") is not None and self.M.get("pond"):
                     cp = self._clip_to_pond(w["clip"]["pts"])
                     dd = 'M' + ' L'.join(f'{x:.1f},{y:.1f}' for x, y in cp)
                     w["_bed"] = w["clip"]["bed_t"].format(dd=dd)
                     if w["clip"]["sheen_t"] is not None:
                         w["_sheen"] = w["clip"]["sheen_t"].format(dd=dd)
+            for w in self.late_water:
+                w["_bed"], w["_sheen"] = w["bed"], w["sheen"]
+            wblock: list[Any] = []
+            wcls: list[ClsTag] = []
+            bedzs: list[Any] = []
+            sheenzs: list[Any] = []
+            for w in _entries:  # rims below every bed
+                if w.get("edge") is not None:
+                    wblock.append(w["edge"])
+                    wcls.append(w["cls"])
             wblock.append('<g opacity="0.85">')
             wcls.append(None)
-            for w in sorted(self.water, key=lambda w: w["pond_fill"]):  # pond FILL drawn LAST (stable sort) so it
-                if _pond_late and w is self._pond_entry:
-                    continue  # fill relocates to the late block (see above) - the rim edge already emitted
-                w["rec"]["bedz"] = self._water_idx + len(wblock)  # covers any feeder's inside-the-rim overshoot
-                bedzs.append(self._water_idx + len(wblock))
+            for w in sorted(_entries, key=lambda w: bool(w.get("pond_fill"))):  # the pond FILL last (stable)
+                w["rec"]["bedz"] = _widx + len(wblock)
+                bedzs.append(_widx + len(wblock))
                 wblock.append(w["_bed"])
                 wcls.append(w["cls"])
             wblock.append('</g>')
             wcls.append(None)
             wblock.append('<g opacity="0.55">')
             wcls.append(None)
-            for w in self.water:
+            for w in _entries:
                 if w["_sheen"] is not None:
-                    if _pond_late and w is self._pond_entry:
-                        continue  # the pond sheen moves with its fill
-                    w["rec"]["sheenz"] = self._water_idx + len(wblock)
-                    sheenzs.append(self._water_idx + len(wblock))
+                    w["rec"]["sheenz"] = _widx + len(wblock)
+                    sheenzs.append(_widx + len(wblock))
                     wblock.append(w["_sheen"])
                     wcls.append(w["cls"])
             wblock.append('</g>')
             wcls.append(None)
-            if bedzs:  # every bed sits below every sheen -> clean confluence
+            if bedzs:
                 self.M["water_bed_zmax"] = max(bedzs)
             if sheenzs:
                 self.M["water_sheen_zmin"] = min(sheenzs)
-            splices.append((self._water_idx, wblock, wcls))
-        if self._late_water_idx is not None:  # the LATE block (comb-field channels; see __init__): same
-            lblock: list[Any] = ['<g opacity="0.85">']  # shared-opacity compositing, spliced at ITS OWN
-            lcls: list[ClsTag] = [None]
-            for w in self.late_water:  # first-call position so the ditch net draws OVER the field's plots
-                w["rec"]["bedz"] = self._late_water_idx + len(lblock)
-                lblock.append(w["bed"])
-                lcls.append(w["cls"])
-            if _pond_late:  # the relocated pond FILL: topmost late bed, covering every joining mouth's overshoot
-                pe = self._pond_entry
-                assert pe is not None
-                pe["rec"]["late"] = True  # the fill now lives in the late block (z pairs: see pond())
-                pe["rec"]["bedz"] = self._late_water_idx + len(lblock)
-                lblock.append(pe["_bed"])
-                lcls.append(pe["cls"])
-            lblock.append('</g>')
-            lcls.append(None)
-            lblock.append('<g opacity="0.55">')
-            lcls.append(None)
-            for w in self.late_water:
-                if w["sheen"] is not None:
-                    w["rec"]["sheenz"] = self._late_water_idx + len(lblock)
-                    lblock.append(w["sheen"])
-                    lcls.append(w["cls"])
-            if _pond_late and self._pond_entry is not None and self._pond_entry["_sheen"] is not None:  # the pond sheen rides above the late beds too
-                self._pond_entry["rec"]["sheenz"] = self._late_water_idx + len(lblock)
-                lblock.append(self._pond_entry["_sheen"])
-                lcls.append(self._pond_entry["cls"])
-            lblock.append('</g>')
-            lcls.append(None)
-            splices.append((self._late_water_idx, lblock, lcls))
+            if self._pond_entry is not None:
+                self._pond_entry["rec"]["late"] = self._late_water_idx is not None  # the fill lives in the late block when one exists
+            splices.append((_widx, wblock, wcls))
+            if self._late_water_idx is not None and self._water_idx is not None:
+                splices.append((self._water_idx, [""], [None]))  # the early placeholder empties; nothing renders there
         for idx, block, bcls_ in sorted(splices, key=lambda s: -s[0]):  # high index first so the lower stays valid
             self.out[idx : idx + 1] = block
             self.out_cls[idx : idx + 1] = bcls_

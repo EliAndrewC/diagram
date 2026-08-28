@@ -149,3 +149,34 @@ def test_a_seat_whose_rotated_parcel_cannot_fit_the_window_is_dropped(monkeypatc
     assert _scan(), "the control scan seated nothing, so a later empty result would prove nothing"
     monkeypatch.setattr(hinterland, "WOODLAND_BBOX_FLOOR", 1.01)
     assert _scan() == [], "an unsatisfiable window floor must drop every parcel, not draw one the crop will cut off"
+
+
+def test_the_title_pocket_is_reserved_once_and_shrinks_before_it_gives_up() -> None:
+    """Feature 139 (Kuwabata seed 21): four callers ask for the pocket at four stages and each ask used to
+    re-run the search against ITS moment's obstacles, so the belt was dented around one answer and the
+    frame got another. The first answer is the reservation. And a sheet with no 300 x 190 blank still
+    reserves a 210 x 120 one (the placard is ~195 x 106) before reserving nothing."""
+    plan = a_plan()
+    s = Settlement(W=plan.W, H=plan.H, seed=plan.spec.seed)
+    # columns 270 apart (224 ft clear), rows 160 apart (132 ft clear) down the whole square: a 210 x 120 box fits, a 300 x 190 does not
+    s.M["houses"] = [{"x": x, "y": y, "w": 46.0, "h": 28.0} for x in (400.0, 670.0, 940.0) for y in (400.0, 560.0, 720.0, 880.0)]
+    tp = hinterland.title_pocket(s, plan)
+    assert (tp[2] - tp[0], tp[3] - tp[1]) == (210.0, 120.0)
+    assert plan.title_pocket == tp and plan.title_pocket_outside is False
+    s.M["houses"].append({"x": tp[0] + 100.0, "y": tp[1] + 60.0, "w": 46.0, "h": 28.0})  # a house INTO the pocket...
+    assert hinterland.title_pocket(s, plan) == tp  # ...changes nothing: the reservation stands
+
+
+def test_a_sheet_with_no_blank_box_reserves_a_pocket_outside_its_content() -> None:
+    """Feature 139 (Kuwabata seed 21): with the cluster seated clear of the reed fringe nothing on the sheet
+    was blank enough for the placard, and `title()` fell back to a corner ON the windbreak. The pocket is
+    then reserved just outside the content, at the first ask, so the belt dents around it and the crop can
+    take it in as content; every candidate tried is recorded in the manifest."""
+    plan = a_plan()
+    s = Settlement(W=plan.W, H=plan.H, seed=plan.spec.seed)
+    s.M["houses"] = [{"x": x, "y": y, "w": 46.0, "h": 28.0} for x in range(400, 1001, 80) for y in range(400, 1001, 60)]  # a solid grid
+    tp = hinterland.title_pocket(s, plan)
+    assert plan.title_pocket_outside is True, (tp, s.M["meta"].get("title_pocket_tries"), hinterland.content_box(s, plan, pad=0.0))
+    assert tp[3] <= 400.0 - 14.0  # above the houses' top edge (14 px past the envelope the content box reports), not over it
+    tries = s.M["meta"]["title_pocket_tries"]
+    assert tries and tries[-1][4] == 1.0 and all(t[4] == 0.0 for t in tries[:-1])

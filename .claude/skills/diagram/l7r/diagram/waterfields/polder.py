@@ -213,6 +213,24 @@ def build_polder(
     _drn = _polder_close(plots, channels, sides_st, grid, down_deg)
     acres = sum(_poly_area(p["poly"]) for p in plots) * 4 / 43560
     round_channel_joints(channels)  # earthen water turns on a swept bend, not a mitred corner
+    # THE RING CLOSES (feature 139 T52, GM 2026-08-28: "a spot close to the top left of the rectangular boundary
+    # of irrigated channels ... does not plate connect. It stops just short"). The corner rounding above sweeps
+    # each trunk's corner INSIDE the lattice node the collectors were laid to, so a toe's end stood 9 ft off the
+    # feeder's swept bend. Every collector end is snapped onto the trunk it meets, AFTER the rounding.
+    # Each END goes onto the NEARER trunk: the east toe runs feeder -> drain but the west toe is the block's
+    # fourth side and runs drain -> feeder, so "start onto the feeder" threw the west toe across the block.
+    _trunks = [c["pts"] for c in channels if c.get("seg") in ("feeder", "drain")]
+    for c in channels:
+        if c.get("seg") in ("e_toe", "w_toe") and len(c["pts"]) >= 2 and _trunks:
+            for _k in (0, -1):
+                _end = c["pts"][_k]
+                _best: Pt | None = None
+                for _tr in _trunks:
+                    _q = _onto_poly(_end, _tr)
+                    if _best is None or math.hypot(_q[0] - _end[0], _q[1] - _end[1]) < math.hypot(_best[0] - _end[0], _best[1] - _end[1]):
+                        _best = _q
+                if _best is not None:
+                    c["pts"][_k] = _best
     return {
         "channels": channels,
         "plots": plots,
@@ -629,6 +647,21 @@ def _polder_channels(
     # inner-toe loop, so the green is bounded exactly by the ring and the canal draws on top of it.
     floor = [grid(s, t) for s, t in (sides_st[0] + sides_st[1] + sides_st[2] + sides_st[3])]
     return channels, brook, dike_sluices, floor, out_t
+
+
+def _onto_poly(pt: Pt, poly: list[Pt]) -> Pt:
+    """The closest point on a polyline to `pt` (feature 139 T52: a collector's end onto its trunk)."""
+    best, bd = pt, float("inf")
+    for i in range(len(poly) - 1):
+        (ax, ay), (bx, by) = poly[i], poly[i + 1]
+        dx, dy = bx - ax, by - ay
+        ln = dx * dx + dy * dy
+        k = 0.0 if ln == 0 else max(0.0, min(1.0, ((pt[0] - ax) * dx + (pt[1] - ay) * dy) / ln))
+        cand = (ax + k * dx, ay + k * dy)
+        dist = math.hypot(pt[0] - cand[0], pt[1] - cand[1])
+        if dist < bd:
+            best, bd = (round(cand[0], 1), round(cand[1], 1)), dist
+    return best
 
 
 def _polder_close(plots: list[dict[str, Any]], channels: list[dict[str, Any]], sides_st: list[list[tuple[float, float]]], grid: _GridFn, down_deg: float) -> Poly:

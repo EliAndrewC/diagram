@@ -163,6 +163,8 @@ class SitePlan:
         default_factory=dict
     )  # the spec's floor per fixture kind (T61); the placer forces presence up to it  # "thicket" (communal, one) or "homestead" (per farmstead), parallel to bamboo_polys
     seat: dict[str, Any] = field(default_factory=dict)
+    title_pocket: tuple[float, float, float, float] | None = None  # reserved ONCE, at the first ask (feature 139 T50 fallout - see hinterland.title_pocket)
+    title_pocket_outside: bool = False  # the reservation lies OUTSIDE the content and the crop must take it in (hamletgen.stage_frame)
     placed: int = 0
     acres: float = 0.0
 

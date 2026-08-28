@@ -896,3 +896,12 @@ def test_lanes_clear_of_bamboo_fires_and_passes():
     assert "lanes_clear_of_bamboo" in f_only(through, "lanes_clear_of_bamboo")
     past = manifest(houses=[house(x=400, y=400)], lane=[[0, 500], [300, 500]], lanes=[{"pts": [[300, 520], [700, 520]], "w": 3}], bamboo_stands=[stand])
     assert "lanes_clear_of_bamboo" not in f_only(past, "lanes_clear_of_bamboo")
+
+
+def test_a_sluice_gate_on_a_drawn_channel_stroke_stands_in_water():
+    """Feature 139 T51: the inlet sluice sits on the ring feeder's DRAWN bend; once the feeder stub reaches
+    the reservoir rim the recorded hairline no longer passes within reach of it, so the drawn strokes
+    count here as they do for `sluice_gates_centered_on_their_channel`."""
+    drawn = [{"pts": [[400, 700], [600, 700]], "w0": 5.0, "w1": 4.0}]
+    assert "sluice_gates_on_water" not in f_only(_water_map(sluice_gates=[{"x": 500, "y": 701, "rot": 0}], drawn_channels=drawn), "sluice_gates_on_water")
+    assert "sluice_gates_on_water" in f_only(_water_map(sluice_gates=[{"x": 500, "y": 701, "rot": 0}]), "sluice_gates_on_water")

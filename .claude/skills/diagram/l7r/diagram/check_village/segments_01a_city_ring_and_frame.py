@@ -674,6 +674,14 @@ def _seg_0033__hard_features_within_frame(
                     fsx += [o["x"] - o["w"] / 2, o["x"] + o["w"] / 2]
                     fsy += [o["y"] - o["h"] / 2, o["y"] + o["h"] / 2]
         _txh, _tyu, _tyd = torii_halfbox(meta.get("ftpx", 1))
+        # THE PLACARD IS FRAME-SETTING CONTENT (feature 139): a sheet with no blank box for its name reserves
+        # one just outside the content and crops to it (hamletgen.stage_frame); the reader needs the name as
+        # much as a house, so the placard counts here. Adding content only lowers slack - no map that passed
+        # this check fails it for this line.
+        _plc = (M.get("title") or {}).get("placard")
+        if _plc and len(_plc) == 4:
+            fsx += [float(_plc[0]), float(_plc[2])]
+            fsy += [float(_plc[1]), float(_plc[3])]
         for t in M.get("torii", []):
             fsx += [t[0] - _txh, t[0] + _txh]
             fsy += [t[1] - _tyu, t[1] + _tyd]

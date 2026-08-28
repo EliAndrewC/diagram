@@ -63,6 +63,19 @@ other values are under `wip/kuwabata-*`.
   in rows; pens before sties). Open: 3 pits of 16 against a 0.465 share (the manure placer seats
   by the privy and fails silently where the privy took the wall) - pre-existing for heaps too.
 
+- 2026-08-28 the GM's review of the map (T50-T53): two farmhouses and a garden in the reed
+  fringe -> the fringe is hard ground (`wet_polys`) AND the cluster seat scores wet ground, so the
+  cluster stands east of the reeds instead of losing two houses to far seats; the inlet stub reaches
+  the reservoir rim (a 30 ft gap); the ring's toe collectors end ON their trunks (a 9 ft gap at the
+  NW corner); lanes and water each composite in one block (junctions read as one tread / one flow,
+  the pond's rim under the feeder's bed). Fallout the re-seated cluster exposed and fixed in the
+  same work: the title pocket is reserved ONCE and, on a sheet with no blank box, OUTSIDE the
+  content (the crop takes it in; the hug check counts the placard); the final junction pass repairs
+  a hairpin at a door spur. Priced and declined: a 36 ft tread reach, a 2 ft forecourt allowance,
+  rejecting zigzag links in the first pass, retiring short orphan pieces, re-rolling on a web in
+  pieces - each re-solved Inashiro's web or regressed tripwire seeds 27/33. Inashiro's manifest
+  differs from the HEAD roll in z-index fields only.
+
 ## The economy (GM-confirmed 2026-07-24)
 
 A **cash-crop settlement, not a subsistence one** - the rice-farmer's analog of the tobacco or

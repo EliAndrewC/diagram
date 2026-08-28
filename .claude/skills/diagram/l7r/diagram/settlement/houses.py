@@ -216,10 +216,11 @@ class HousesMixin:
         placement-and-check-read-the-same-source doctrine the footbridges taught us. Cached on the
         record counts, since this is called once per placement candidate."""
         dp, fd = self.M.get("dry_plots", []) or [], self.M.get("field_ditches", []) or []
-        key = (len(dp), len(fd), len(self.hard_polys))
+        key = (len(dp), len(fd), len(self.hard_polys), len(self.wet_polys))
         if self._hard_cache_key == key:
             return self._hard_cache
         out: list[Any] = [list(self.hard_polys)[i] for i in range(len(self.hard_polys))]
+        out += [list(wp) for wp in self.wet_polys if len(wp) >= 3]  # every drawn marsh (feature 139 T50)
         out += [[(q[0], q[1]) for q in d["poly"]] for d in dp if d.get("poly") and len(d["poly"]) >= 3]
         for ch in fd:
             pts = ch.get("poly") or ch.get("pts")
@@ -232,7 +233,7 @@ class HousesMixin:
                 ln = math.hypot(bx - ax, by - ay) or 1.0
                 nx, ny = -(by - ay) / ln * hw, (bx - ax) / ln * hw
                 out.append([(ax + nx, ay + ny), (bx + nx, by + ny), (bx - nx, by - ny), (ax - nx, ay - ny)])
-        self._hard_cache_key: tuple[int, int, int] | None = key
+        self._hard_cache_key: tuple[int, ...] | None = key
         self._hard_cache = out
         return out
 

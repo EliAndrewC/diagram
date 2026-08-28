@@ -520,14 +520,9 @@ class WaterWaysMixin:
         half-width (keep houses off the tread). `connector=True` marks the trodden path that LEAVES the
         village for the wider world - it MUST run off the map edge (checked), never stop mid-landscape.
         See settlements.md 'Village lanes and connecting paths'."""
-        _z = self._lane_ink_at(pts, width, worn)
-        self.M.setdefault("lanes", []).append({"pts": [[x, y] for x, y in pts], "worn": worn, "w": width, "connector": connector})
-        # THE INK'S OWN STREAM SLOTS, remembered so a later pass can TRIM this lane without moving it
-        # in z (see `trim_lane_stubs`). `add` returns the index it wrote, and rewriting that index in
-        # place is what lets the trim happen after the houses are down - which is the only moment the
-        # engine knows what a lane actually serves - while the lane keeps the exact draw position it
-        # has always had. Kept engine-side rather than on the record so no manifest byte moves.
-        self._lane_ink.append(_z)
+        rec = {"pts": [[x, y] for x, y in pts], "worn": worn, "w": width, "connector": connector}
+        self.M.setdefault("lanes", []).append(rec)
+        self._lane_ink.append(self._lane_ink_at(pts, width, worn, rec))
         # `M["lane"]` IS THE SPINE - the longest ordinary way on the map - not whichever lane was
         # drawn last. It used to be assigned unconditionally here, so it held the final `lane()` call
         # of the whole build, and five consumers read it as "the village street": two gate checks
@@ -550,23 +545,27 @@ class WaterWaysMixin:
         self.corridors.append((pts, clearance))
         self._record_tread(pts, width / 2)
 
-    def _lane_ink_at(self: Settlement, pts: Any, width: float, worn: bool) -> tuple[int, int]:  # type: ignore[misc]
-        """Emit a lane's two strokes and return the stream slots they landed in."""
+    def _lane_ink_at(self: Settlement, pts: Any, width: float, worn: bool, rec: Any) -> tuple[int]:  # type: ignore[misc]
+        """Emit a lane's two strokes INTO THE GROUND BLOCK and return the ground entry's index.
+
+        JUNCTIONS RENDER AS ONE STRUCTURE (feature 139 T53, GM 2026-08-28: "When two village lane segments
+        intersect ... it looks like one of them is literally just rendered on top of the other ... It should
+        look as if they are all essentially one contiguous structure"). Drawn inline, a later lane's soft
+        shoulder lay across an earlier lane's tread at every junction. The town streets never had the
+        problem because they go through `_ground`: every SHOULDER (edge) in one sub-layer at the bottom,
+        every TREAD (bed) above - so treads merge into one continuous surface and no shoulder crosses a
+        tread. Lanes now take the same path; `zpri` is the width, so a wider way still wins where two
+        treads overlap. `reink_lane` and the stub trimmer rewrite the ground entry, not stream slots."""
         dd = 'M' + ' L'.join(f'{x},{y}' for x, y in pts)
         if worn:
-            # EVERY lane is one highlight class, the connector and the field spur included (feature 134,
-            # the GM: "all of the village lanes ... treated as a single feature"; the fidelity review
-            # struck a connector carve-out from the spec)
-            z0 = self.add(
-                f'<path d="{dd}" fill="none" stroke="#A98C58" stroke-width="{width + 2.5:.1f}" opacity="0.4" stroke-linejoin="round" stroke-linecap="round"/>', cls="village lane"
-            )  # soft worn-earth shoulder
-            z1 = self.add(
-                f'<path d="{dd}" fill="none" stroke="#C9AE79" stroke-width="{width:.1f}" opacity="0.9" stroke-linejoin="round" stroke-linecap="round"/>', cls="village lane"
-            )  # packed-earth tread, no centerline
+            edge = f'<path d="{dd}" fill="none" stroke="#A98C58" stroke-width="{width + 2.5:.1f}" opacity="0.4" stroke-linejoin="round" stroke-linecap="round"/>'  # soft worn-earth shoulder
+            bed = f'<path d="{dd}" fill="none" stroke="#C9AE79" stroke-width="{width:.1f}" opacity="0.9" stroke-linejoin="round" stroke-linecap="round"/>'  # packed-earth tread, no centerline
+            self._ground(float(width), rec, "z", edge=edge, bed=bed, cls="village lane")
         else:
-            z0 = self.add(f'<path d="{dd}" fill="none" stroke="#CBB178" stroke-width="{width}" opacity="0.65"/>', cls="village lane")
-            z1 = self.add(f'<path d="{dd}" fill="none" stroke="#6B4F2A" stroke-width="1.4" stroke-dasharray="8,8" opacity="0.7"/>', cls="village lane")
-        return (z0, z1)
+            bed = f'<path d="{dd}" fill="none" stroke="#CBB178" stroke-width="{width}" opacity="0.65"/>'
+            top = f'<path d="{dd}" fill="none" stroke="#6B4F2A" stroke-width="1.4" stroke-dasharray="8,8" opacity="0.7"/>'
+            self._ground(float(width), rec, "z", bed=bed, top=top, cls="village lane")
+        return (len(self.ground) - 1,)
 
     def reink_lane(self: Settlement, i: int) -> None:  # type: ignore[misc]
         """Rewrite lane `i`'s DRAWN path from its record, so the two cannot disagree.
@@ -590,11 +589,15 @@ class WaterWaysMixin:
             # path with no points, which resvg ignores silently and a browser reports as an error
             # on every open. Blank the ink instead, exactly as `trim_lane_stubs` does for a stub.
             for z in self._lane_ink[i]:
-                self.out[z] = ""
+                for part in ("edge", "bed", "top"):
+                    if self.ground[z].get(part):
+                        self.ground[z][part] = ""
             return
         dd = "M" + " L".join(f"{x},{y}" for x, y in pts)
         for z in self._lane_ink[i]:
-            self.out[z] = re.sub(r'd="M[^"]*"', f'd="{dd}"', self.out[z], count=1)
+            for part in ("edge", "bed", "top"):
+                if self.ground[z].get(part):
+                    self.ground[z][part] = re.sub(r'd="M[^"]*"', f'd="{dd}"', self.ground[z][part], count=1)
 
     def trim_lane_stubs(self: Settlement, way_reach: float = 40.0, house_reach: float = 90.0, fan_spread: float = 60.0, fan_bearing: float = 25.0) -> int:  # type: ignore[misc]
         """Pull back any internal lane end that REACHES NOTHING. Returns how many ends were trimmed.
@@ -736,7 +739,9 @@ class WaterWaysMixin:
             if _lane_len(pts) < _LANE_MIN_FT / max(float(self.M["meta"].get("ftpx", 1) or 1), 0.01):
                 _drop.add(i)
                 for _z in self._lane_ink[i]:
-                    self.out[_z] = ""
+                    for _part in ("edge", "bed", "top"):
+                        if self.ground[_z].get(_part):
+                            self.ground[_z][_part] = ""
                 trimmed += 1
                 continue
             if [list(p) for p in pts] == ln["pts"]:

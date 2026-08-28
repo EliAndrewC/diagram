@@ -104,7 +104,7 @@ against `STAGES` on 2026-08-20 rather than by a failure - which is the point of 
 1. **terrain + water** - fields, channels, streams, pond, marsh
 2. **big terrain features** - `forest()` / `forest_patch()`. EARLY, because the settlement is sited
    against them; their FLOOR draws here but their CANOPY is deferred (see 7)
-3. **ways** - road, lanes, streets. This is the ground-RESERVING half: the skeleton and the
+3. **ways** - road, lanes, streets (since feature 139 T53 village lanes draw through the GROUND block like streets: shoulders in the bottom sub-layer, treads above, so junctions read as one tread - `_lane_ink_at`; `reink_lane` and the stub trimmer rewrite the ground entry). This is the ground-RESERVING half: the skeleton and the
    connector, laid so the homesteads front them
 4. **structures** - `manor()`, `farmsteads()`, urban packs, `place_wells()`, `draft_byres()`,
    `place_kosatsuba()`. Inside `farmsteads()` the bundle path records grove rects first (the garden

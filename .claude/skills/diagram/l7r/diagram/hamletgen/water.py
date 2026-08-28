@@ -330,6 +330,25 @@ def stage_polder(s: Settlement, plan: SitePlan) -> None:
         if not any(point_in_poly(q[0], q[1], plan.envelope) for q in rim):
             break
         pond = (pond[0] + ux * 12.0, pond[1] + uy * 12.0, pond[2], pond[3])
+    # THE STUB REACHES THE RIM (feature 139 T51, GM 2026-08-28: "the irrigated channel which feeds into the water
+    # for everything stops short of actually being connected to the feeder pond"). `build_polder` ends the
+    # feeder's inlet stub a fixed 52 ft past the ring's corner, and the reservoir is walked uphill until its
+    # rim clears the crop - so the stub stopped a measured 30 ft short of the water. The stub's last point is
+    # moved onto the rim, 2 ft inside it, so `_clip_to_pond` snaps the drawn bed onto the rim and its bed
+    # covers the rim stroke at the mouth: one continuous water.
+    if main is not None:
+        _sx, _sy = float(main["pts"][-1][0]), float(main["pts"][-1][1])
+        _vx, _vy = pond[0] - _sx, pond[1] - _sy
+        _lo, _hi = 0.0, 1.0
+        for _ in range(30):
+            _m = (_lo + _hi) / 2
+            _qx, _qy = _sx + _vx * _m, _sy + _vy * _m
+            if ((_qx - pond[0]) / pond[2]) ** 2 + ((_qy - pond[1]) / pond[3]) ** 2 > 1.0:
+                _lo = _m
+            else:
+                _hi = _m
+        _vl = math.hypot(_vx, _vy) or 1.0
+        main["pts"][-1] = (round(_sx + _vx * _hi + _vx / _vl * 2.0, 1), round(_sy + _vy * _hi + _vy / _vl * 2.0, 1))
     # `join_head=True`: a polder's ring canal ENDS on the block's corner, outside the planted
     # extent, so the inlet must visibly meet it or the ring reads as dangling
     # (`watercourse_ends_reach_water`). A comb's head-race ends among its own plots and needs no

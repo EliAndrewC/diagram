@@ -108,7 +108,7 @@ class Settlement(
         self.placed: list[Any] = Indexed()  # (x, y, w, h) - Indexed: _fits keeps a reach index on it, and the two filter-rebinds below stay Indexed so the index cannot go stale
         self.grove_rects: list[Any] = Indexed()  # (x, y, w, h) homestead-grove arms - kept OUT of `placed` so adjacent groves
         #                           may MERGE (abut) where houses cluster; `_fits` still steers wells off them
-        self._lane_ink: list[tuple[int, int]] = []  # each lane's two ink slots in `out`, so `trim_lane_stubs` can rewrite them in place
+        self._lane_ink: list[tuple[int]] = []  # each lane's GROUND entry (feature 139 T53: lanes render through the ground block), so `reink_lane` / `trim_lane_stubs` can rewrite it in place
         self._pending_farmsteads: list[Any] = []  # farmhouses awaiting their threshing yard (drawn by farmsteads())
         self._rng_scope_n: dict[tuple[Any, ...], int] = {}  # per-key call counter for rng_scope (see its docstring)
         self.corridors: list[Any] = Indexed()  # polylines houses must avoid (Indexed: _near_corridor keeps a spatial index on it)
@@ -135,7 +135,10 @@ class Settlement(
         # center test they were tuned for. GM 2026-07-26: "if placement is only testing the house's
         # center while the matrix tests its footprint, then maybe the placement test is wrong?"
         self.hard_polys: list[Any] = []
-        self._hard_cache_key: tuple[int, int, int] | None = None
+        # WET GROUND (feature 139 T50, GM 2026-08-28: houses and a garden stood on marsh): every drawn marsh
+        # polygon, read by `_hard_ground` so no footprint the placer tests can land on reed or bog.
+        self.wet_polys: list[Any] = []
+        self._hard_cache_key: tuple[int, ...] | None = None
         self._hard_cache: list[Any] = []
         # SWEPT/TENDED GROUND around sacred + funerary features - a keep-out for the LOOSE HINTERLAND
         # SCATTER (commons scrub + marsh reeds) ONLY, not for building placement and not for the grove.
@@ -561,7 +564,7 @@ class Settlement(
         reads too so the crop and the check that gates it cannot drift apart."""
         return crop_boxes(self.M, city, self.ftpx, self.W, self.H)
 
-    def crop_to_content(self: Settlement, margin: float = 30) -> None:
+    def crop_to_content(self: Settlement, margin: float = 30, extra: Sequence[tuple[float, float, float, float]] = ()) -> None:
         """Frame the map to its CONTENT: set the render viewBox to the bounding box of the HARD features placed
         SO FAR plus `margin`, so the image is exactly as large as the settlement + its fields, tight to `margin`
         on every side (nonstandard sizes are fine, and the checks already treat the crop - not the canvas - as
@@ -577,6 +580,10 @@ class Settlement(
         now clips like the marsh instead of dragging the frame out.)"""
         self.flush_tree_stands()  # the woods' canopy draws HERE, seeing the complete map (see flush_tree_stands)
         _boxes = self._crop_boxes(city=False)
+        _boxes = [
+            *_boxes,
+            *[(b[0], b[2], b[1], b[3], "title-pocket") for b in extra],
+        ]  # `extra` (x0, y0, x1, y1): ground reserved as content - the title pocket a full sheet had to make room for (feature 139; `_crop_boxes` keys x0, x1, y0, y1)
         hx = [v for b in _boxes for v in (b[0], b[1])]
         hy = [v for b in _boxes for v in (b[2], b[3])]
         if not hx:  # pragma: no cover - crop is called only after the hard features are placed

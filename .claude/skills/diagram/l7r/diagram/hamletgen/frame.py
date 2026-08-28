@@ -159,5 +159,8 @@ def stage_frame(s: Settlement, plan: SitePlan) -> None:
     # content` allows at most 56 px of view past the frame-setting content, because a band whose
     # only extra is open ground is wasted image. 64 was tried and fails all twelve. 48 is the most
     # air the frame will give the title.
-    s.crop_to_content(margin=CROP_MARGIN)
-    s.title(plan.spec.name, prefer=title_pocket(s, plan))  # the pocket the belt was dented around (feature 139)
+    _pocket = title_pocket(s, plan)  # the pocket the belt was dented around (feature 139) - reserved once, see hinterland.title_pocket
+    _extra = [_pocket] if plan.title_pocket_outside else []  # an OUTSIDE reservation is content the crop must take in; an inside one changes nothing
+    s.crop_to_content(margin=CROP_MARGIN, extra=_extra)
+    s.M["meta"]["title_pocket"] = [round(v, 1) for v in _pocket]  # recorded so a placard that fell back can be read against the reservation
+    s.title(plan.spec.name, prefer=_pocket)
