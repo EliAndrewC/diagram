@@ -280,6 +280,13 @@ _OVERLAP_EXEMPT = {
 # NAME to be allowed to cover the feature - and because the group name is the caption word, that
 # permission is derived rather than hand-listed too (see _label_allows).
 _LABEL_GROUP = {
+    # A BYRE IS EXEMPT FROM ITS OWN HOMESTEAD'S CAPTION, NOT FROM EVERY CAPTION (settlement-review, Kashikawa,
+    # feature 145). It sat in _LABEL_EXEMPT on the premise that "a caption cleared for the house is cleared for
+    # it" - true where a farmhouse carries a caption, and false at hamlet tier, which captions no farmhouse at
+    # all: Kashikawa's ONE caption belongs to a notice board 20 ft away and was drawn through a byre's roof,
+    # with the gate green by construction. Under the "farmhouse" group a farmhouse caption may still cover it
+    # and nothing else may.
+    "byres": "farmhouse",
     "quays": "quay",
     "theater_stage": "theater",
     "granaries": "granary",
@@ -366,7 +373,6 @@ _LABEL_EXEMPT = {
     # the property that holds in EITHER - the byre stands in the homestead ground among the houses,
     # near enough that a caption cleared for the house is cleared for it - and the form-specific
     # geometry is gated by `byres_stand_in_their_declared_form` instead of asserted here.
-    "byres": "a draft-ox byre stands in the homestead ground - its owner's own yard in the courtyard form, the shared courtyards between houses in the detached form - so it shares that ground and any caption cleared for the house is cleared for it",
 }
 
 _LABEL_CLASSIFIED = set(_LABEL_GROUP) | set(_LABEL_BY_KIND) | set(_LABEL_EXEMPT)

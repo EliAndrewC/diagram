@@ -2054,3 +2054,14 @@ worked ground begins? Sketch once the record answers: the spur's terminal is sna
 bund end or outline vertex within ~30 ft (`field_face` chords give the candidates), and
 `field_spur_reaches_the_field` becomes a placer unit test rather than a check. Deferred under 145
 (a performance feature) with this measurement; not a regression of it.
+
+## Carve the paddy around an in-field grave island (settlement-review, Kashikawa, 2026-08-28)
+
+`_plot_grave_island` draws the mound OVER an intact lattice: on Kashikawa three plot rings and nine bund
+junctions lie inside the 22 x 68 ft mound at (2092, 1645), and at 0.9 opacity they ghosted through, so the
+mound read as a decal rather than raised ground. Feature 145 made it opaque, which fixes what the eye sees
+and leaves the manifest saying tiled-through where the ink says tiled-around. The real fix is to carve the
+plots around the grave where the toe pass builds them - the same shape as the pond's own plot carve - and
+then the registry's "the flat paddy tiling around it" becomes true again. `research: rendering`; deferred
+under 145 as a field-engine change rather than half-done. Kashikawa is the only pool map with a field grave,
+so it is the whole test bed.

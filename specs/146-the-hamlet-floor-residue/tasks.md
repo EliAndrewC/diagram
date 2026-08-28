@@ -10,6 +10,7 @@ Every task is `research: rendering` unless it says otherwise. No acceptance task
 - [ ] T12 class 2, `segments_03a_overlaps_and_ward_fences` (18) and `segments_06c_decks_yards_and_moat_clearances` (14)
 - [ ] T13 class 2, `segments_01a_city_ring_and_frame` (13) and `segments_03c_clusters_and_labels` (12)
 - [ ] T14 class 2, the tail (`segments_04a/04b/05a/05b/06a/06b/07b/07c/08b/11b`, `driver`, `registry_analysis`)
+- [ ] T16 RESTORE `labels_clear_of_other_buildings` (found by the Kashikawa settlement-review under 145): feature 141's cut retired it, so the `_LABEL_GROUP` / `_LABEL_EXEMPT` registry - live doctrine, maintained in comments to this day - has no consumer at all, and a caption drawn through a byre passes green. Re-derive the check from the registry, prove it fires with a scripted break, and settle what the reference and pool maps then owe (Kashikawa's board caption clips a byre roof by 15.4 x 4.8 ft, accepted under 145 with its alternatives priced in the map's notes) - `research: rendering`
 - [ ] T15 class 2 census: every hamlet-entered check with a reachable failure branch has a scripted fixture; any that cannot be tripped is named with its reason and disposed of under FR-001
 - [ ] T20 class 3, `hamletgen/ways.py` (37) - the fallbacks; each either forced by a test or removed with its reason at the point of change
 - [ ] T21 class 3, `settlement/city/bridges.py` (17) and `settlement/water_ways.py` (14)
