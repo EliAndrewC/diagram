@@ -585,7 +585,7 @@ No agent or skill may report a task complete without verifying the actual
 artifacts. Specifically:
 
 - **Python**: the gate is `make done` in `.claude/skills/diagram/` (lint,
-  format, `mypy --strict`, the hook suites, pytest with the coverage floors -
+  format, the strict type check, the hook suites, pytest with the coverage floors -
   nothing runs outside make, per feature 127). Target 100% line coverage on
   pure logic. External boundaries are tested via saved fixtures, not via
   transport-layer mocks.
@@ -831,7 +831,7 @@ any single rule is reason enough to refuse "done" status.
    is the single formatter (replaces black / autopep8); do not run
    alternatives alongside it.
 
-3. **Type checking is strict**: `mypy --strict` MUST pass on production
+3. **Type checking is strict**: strict static typing on production modules (pyrefly with the mypy-strict rule set, feature 142; `mypy --strict` before it, GM 2026-08-28) - it MUST pass on production
    modules. Public functions and methods carry full type annotations.
    The per-module ratchet that once relaxed the legacy engine modules is
    fully retired (all of `settlement/`, `check_village/`, `waterfields/`
@@ -1605,7 +1605,7 @@ shell command that writes one. It carries no silent escape - a genuine exception
 **Python tooling (per Principle X)**
 - **Lint + format**: `ruff` (lint + formatter, single tool). Config lives
   in `.claude/skills/diagram/pyproject.toml`.
-- **Type checking**: `mypy --strict` on production modules, configured in
+- **Type checking**: strict static typing on production modules (pyrefly with the mypy-strict rule set, feature 142; `mypy --strict` before it), configured in
   the same `pyproject.toml`; `l7r/` is a PEP 420 namespace portion and
   never gains an `__init__.py`.
 - **Testing**: `pytest` + `pytest-cov` + `pytest-xdist`, always under a
@@ -1615,7 +1615,7 @@ shell command that writes one. It carries no silent escape - a genuine exception
 - **Dependency management**: source-of-truth in
   `.claude/skills/diagram/requirements.in` / `requirements-dev.in`, compiled
   to the `.txt` lockfiles with `pip-compile`, pinned; a re-lock that bumps
-  ruff or mypy is a reviewed change, since it can change what the gate says.
+  ruff or the type checker is a reviewed change, since it can change what the gate says.
 - **Logging**: stdlib `logging` with `logging.getLogger(__name__)`.
 
 **Test layout**
@@ -1662,7 +1662,7 @@ at once:
 
 1. `ruff check`
 2. `ruff format --check`
-3. `mypy --strict` (on production modules)
+3. the strict type check - pyrefly with the mypy-strict rule set (on production modules)
 4. `make hooks-test` (every guard's test companion, Principle XVIII)
 5. `pytest -n auto` with the Makefile's coverage floors
    (`make done FULL=1` also re-gates every pool map and runs the

@@ -23,4 +23,4 @@ RUN curl -LsSf https://astral.sh/uv/install.sh | sh \
     && uv venv -q --python 3.14 /opt/venv \
     && uv pip install -q --python /opt/venv/bin/python -r /tmp/req/requirements.txt -r /tmp/req/requirements-dev.txt \
     && rm -rf /tmp/req
-RUN resvg --version && python3 --version && python3 -c "import shapely, PIL, pytest, mypy, xdist" && pyrefly --version && git --version && aws --version
+RUN resvg --version && python3 --version && python3 -c "import shapely, PIL, pytest, xdist" && pyrefly --version && git --version && aws --version

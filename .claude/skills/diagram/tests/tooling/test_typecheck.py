@@ -1,9 +1,7 @@
-"""The type checker is pyrefly, one-shot (feature 142, GM 2026-08-28). Two facts the gate must keep true:
-the checker can actually fail a target (a tool that silently passes everything is worse than none), and
-its file list is the SAME list `[tool.mypy]` checks - mypy stays installed as the cross-check until the
-GM rules on removing it (spec FR-007b), and two lists that drift would check two different engines.
-The spec asks for exactly one planted-error test, not a per-rule harness: the report records what each
-rule enforces (research 142 R3)."""
+"""The type checker is pyrefly, one-shot (feature 142, GM 2026-08-28; mypy removed entirely at the GM's
+ruling the same day). The one fact the gate must keep true: the checker can actually FAIL a target - a
+tool that silently passes everything is worse than none. The spec asks for exactly one planted-error
+test, not a per-rule harness: the report records what each rule enforces (research 142 R3)."""
 
 from __future__ import annotations
 
@@ -18,12 +16,6 @@ SKILL = Path(__file__).resolve().parents[2]
 
 def _pyproject() -> dict[str, object]:
     return tomllib.loads((SKILL / "pyproject.toml").read_text())["tool"]  # type: ignore[no-any-return]
-
-
-@pytest.mark.tooling
-def test_pyrefly_checks_the_same_files_mypy_does() -> None:
-    tool = _pyproject()
-    assert tool["pyrefly"]["project-includes"] == tool["mypy"]["files"]  # type: ignore[index]
 
 
 @pytest.mark.tooling

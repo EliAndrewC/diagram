@@ -87,16 +87,22 @@ change, so this lands by the GATED route on a green gate.
   `pyrefly check` under the project's own rules; the two file lists are equal.
 - The gate: `make done` GREEN - 3902 passed, 0 failed, 21.6 s test phase (2026-08-28, scope locked, after the three stale renders were removed); `green-local (done)` recorded
 
-## Two decisions reserved to you (FR-007b)
+## The two reserved decisions - RULED by the GM, 2026-08-28, and applied
 
-1. **Does mypy leave the lockfiles?** It costs no RAM uninvoked; it is the cross-check this report
-   used; it is also the fallback if pyrefly disappoints. Keeping it means a future session can run
-   both; removing it is one line in `requirements-dev.in` and a re-lock. My recommendation: keep it
-   for now, drop it once pyrefly has held through a few features.
-2. **The constitution names `mypy --strict`** (Principle X, and the plan template's Constitution
-   Check). Only you amend it. If you accept the switch, the wording I would propose:
-   *"strict static typing on production modules (pyrefly with the mypy-strict rule set, feature 142;
-   `mypy --strict` before it)"* - so the principle names the property, and the tool is a footnote.
+> *"That's really good news. I say we get rid of mypy now completely. Remove it from the lock files. Do not even keep it for a few features as a cross check. update the Speckie kit constitution as per your proposed wording. So, yes, go ahead and apply the rulings, rerun the gate, and then push via the procedure so that the main checkout gets this new change."*
+
+1. **mypy removed completely**: out of `requirements-dev.in` and the lockfile (`mypy-extensions`,
+   `pathspec`, `librt` went with it; `types-shapely` stays - pyrefly reads the same stubs); the
+   `[tool.mypy]` block and its override deleted from `pyproject.toml`; the CodeBuild probe and
+   `setup-dev-env.sh --check` no longer name it; the file-list-equality test retired (one list now).
+2. **The constitution amended** with the proposed wording at Principle X clause 3, the gate summary
+   and the tooling section: *strict static typing on production modules (pyrefly with the
+   mypy-strict rule set, feature 142; `mypy --strict` before it)* - and the plan template's
+   Constitution Check to match.
+
+Sites that describe how mypy BEHAVED as a matter of history (`# type: ignore[misc]` comments the
+mixin pattern needs, docstrings about what `mypy --strict` once caught, the retired ratchet) were
+left as written: they are records, not instructions.
 
 ## Also found on the way (not this feature's defect; recorded so nobody re-diagnoses it)
 
