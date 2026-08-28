@@ -1106,6 +1106,30 @@ def _touch_junctions(s: Settlement, hard: list[Poly], walls: Sequence[Poly], wat
                 if not link or polyline_len(link) > _LINK_DIRECTNESS * d:
                     continue
                 _cand = (list(reversed(link[1:])) + new) if end == 0 else (new + link[1:])
+                if final:
+                    # THE LANE ALREADY RUNS ONTO THE WAY (settlement-review 2026-08-28, Kuwabata lane 9): a lane
+                    # that comes within the touch gap of the way it is being joined to PART-WAY along its last
+                    # stretch, then runs on beside it, is ended where it first meets the way - not linked back
+                    # from beyond it, which left two treads 5-9 ft apart enclosing a sliver of ground.
+                    # Not conditioned on the bend rule: the V it left was 113 deg, legal to the gate and wrong on the sheet.
+                    _run = list(reversed(new)) if end == 0 else list(new)  # oriented so the joining end is LAST
+                    _cut_at: tuple[int, Pt] | None = None
+                    for _si in range(len(_run) - 1):  # walk the whole lane toward the joining end; first contact wins
+                        _a0, _b0 = _run[_si], _run[_si + 1]
+                        _span0 = math.dist(_a0, _b0)
+                        for _t in range(1, max(1, int(_span0 / 3.0))):
+                            _sx, _sy = _a0[0] + (_b0[0] - _a0[0]) * _t * 3.0 / _span0, _a0[1] + (_b0[1] - _a0[1]) * _t * 3.0 / _span0
+                            _f = min((seg_closest(_sx, _sy, a, b) for a, b in _os_k), key=lambda z: math.dist((_sx, _sy), z))
+                            if (
+                                math.dist((_sx, _sy), _f) <= _TOUCH_GAP and 6.0 < polyline_len([(_sx, _sy), *_run[_si + 1 :]]) <= 40.0
+                            ):  # only a SHORT overrun is cut (Kuwabata's was 32 ft); a long run past a way it grazes is a route, not a hook
+                                _cut_at = (_si, _f)
+                                break
+                        if _cut_at is not None:
+                            break
+                    if _cut_at is not None:
+                        _run = _run[: _cut_at[0] + 1] + [_cut_at[1]]
+                        _cand = list(reversed(_run)) if end == 0 else _run
                 if final and len(new) >= 3 and _zigzags(_cand):
                     # A HAIRPIN AT THE DOOR (feature 139, Kuwabata seed 21): after the smoothing, a lane whose
                     # last 13 ft turned down toward a farmhouse door was joined back UP to the way it had

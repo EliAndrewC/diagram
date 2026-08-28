@@ -230,7 +230,14 @@ def build_polder(
                     if _best is None or math.hypot(_q[0] - _end[0], _q[1] - _end[1]) < math.hypot(_best[0] - _end[0], _best[1] - _end[1]):
                         _best = _q
                 if _best is not None:
-                    c["pts"][_k] = _best
+                    # ...and 3 ft PAST it, along the toe's own heading: two round-capped strokes whose ends meet
+                    # at a centerline only TOUCH, and the review (2026-08-28) found a 1 ft column of ground
+                    # between the west toe's cap and the trunk at the NW corner. Overlapping beds in the one
+                    # water block do not darken, so the overshoot hides under the trunk.
+                    _nb = c["pts"][1] if _k == 0 else c["pts"][-2]
+                    _hx, _hy = _best[0] - _nb[0], _best[1] - _nb[1]
+                    _hl = math.hypot(_hx, _hy) or 1.0
+                    c["pts"][_k] = (round(_best[0] + _hx / _hl * 3.0, 1), round(_best[1] + _hy / _hl * 3.0, 1))
     return {
         "channels": channels,
         "plots": plots,

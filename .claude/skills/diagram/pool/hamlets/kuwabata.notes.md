@@ -63,6 +63,9 @@ other values are under `wip/kuwabata-*`.
   in rows; pens before sties). Open: 3 pits of 16 against a 0.465 share (the manure placer seats
   by the privy and fails silently where the privy took the wall) - pre-existing for heaps too.
 
+- 2026-08-28 settlement-review DELTA of T50-T53: needs-work -> fixed (the NW ring corner's 1 ft
+  seam - toes now overshoot 3 ft into their trunk; lane 9's hook - the final junction pass ends a
+  lane where it first meets the way). See docs/review-ledger.md.
 - 2026-08-28 the GM's review of the map (T50-T53): two farmhouses and a garden in the reed
   fringe -> the fringe is hard ground (`wet_polys`) AND the cluster seat scores wet ground, so the
   cluster stands east of the reeds instead of losing two houses to far seats; the inlet stub reaches
@@ -101,6 +104,18 @@ No headman of its own, no shrine, no tax-free plots, no graveyard - its dead go 
 district's ground. Drawn at 1 ft/px.
 
 ## Known open
+
+- `scatter_audit` has no dike-pond mode: 2,242 of its 3,439 hits on this map are dike CROWNS on
+  the dikes (the audit's crop keep-out predates the archetype), 474 are the west dike's crowns
+  where the rectangular waterside marsh laps the dike outline, 105 are crowns lapping a pond feed
+  by 1-2 ft. A clean bill cannot be earned here until the audit knows the archetype (review
+  2026-08-28).
+- Three windbreak crowns stand ~1 radius onto the pond fringe's east edge (2022,612), (2028,618),
+  (2034,660) - invisible at fit; the belt is laid after the fringe and does not read `wet_polys`.
+- The drain trunk is the engine's gray-blue drain palette (`#7C9EB0`) while the head canal and
+  laterals are the bright canal blue: a standing convention (drains vs supply), not the water
+  block's layering; the reviewer read it as a tonal change at the ring's corners.
+
 
 - The acreage per household is the PADDY figure (`GROSS_ACRES_PER_HOUSEHOLD`); whether a silk-and-
   fish household held the same ground is a research question for the feature-139 audit.

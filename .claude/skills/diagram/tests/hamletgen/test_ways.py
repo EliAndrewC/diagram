@@ -742,3 +742,21 @@ def test_zigzags_mirrors_the_gates_bend_rule() -> None:
     assert not hg.ways._zigzags([(0.0, 0.0), (20.0, 0.0), (20.0, 60.0), (40.0, 60.0)])  # the same turns 60 ft apart
     assert not hg.ways._zigzags([(0.0, 0.0), (100.0, 10.0), (200.0, 0.0)])  # a gentle wobble
     assert not hg.ways._zigzags([(0.0, 0.0), (0.0, 0.0), (10.0, 0.0)])  # a zero-length step is skipped
+
+
+def test_a_final_pass_junction_ends_the_lane_where_it_first_meets_the_way() -> None:
+    """settlement-review 2026-08-28 (Kuwabata lane 9): a lane that came within the touch gap of the way
+    it was being joined to part-way along, then ran on beside it and hooked back, left two treads 5-9 ft
+    apart enclosing a sliver of ground - a 113 deg V, legal to the bend rule and wrong on the sheet. In
+    the final pass the lane is ended where it first meets the way."""
+    main = [(0.0, 0.0), (400.0, 0.0)]
+    lane = [
+        (300.0, 60.0),
+        (150.0, -5.0),
+        (142.0, 15.0),
+    ]  # crosses the main lane near x=161 mid-segment (no vertex within the 4 ft "already met" test), runs 33 ft on and turns back; its far end is out of reach
+    s = _StubSettlement(lanes=[main, lane])
+    hg.ways._touch_junctions(s, [], [], [], final=True)
+    pts = [tuple(q) for q in s.M["lanes"][1]["pts"]]
+    assert len(pts) == 2 and pts[0] == (300.0, 60.0), pts
+    assert abs(pts[-1][1]) < 0.01 and 155.0 <= pts[-1][0] <= 170.0, pts
