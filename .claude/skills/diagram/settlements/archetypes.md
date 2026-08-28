@@ -1,5 +1,26 @@
 # Field archetypes: land-use overlays and the polder build
 
+## The scripted dike-pond hamlet (feature 139, 2026-08-28) - the rules
+
+`hamletgen` draws `mulberry_dike_fishpond` as the polder carried to the wholesale overlay
+(`POLDER_ARCHETYPES`, `POLDER_FABRIC`); the research is in `research/archetypes.md`, the audit that
+added the rest in `specs/139-kuwabata-dike-pond-hamlet/audit.md` (the GM chose every item but the creek).
+
+- **No threshing floor** - the farmstead's forecourt is recorded (`threshing_yards[].kind = forecourt`)
+  and reserved but not drawn; `meta.work_yards: false`.
+- **Knobs, rolled per hamlet** (constitution XII, two attested forms each): `pond_layout` grid | mosaic;
+  `manure_form` heap | pit; `dike_crop` mulberry | sugarcane | banana | fruit (one hamlet is ONE type -
+  the gazetteers describe a succession of types, not a mix on a dike); `leftover` rice | vegetables |
+  pond (what an unconverted parcel reads as; `pond` converts the whole block).
+- **Fry ponds**: the block's smallest parcels (one in ten, one to three) are `dikeponds[].kind = fry` -
+  a record and a class, no new ink (GUESS share).
+- **Sluice gates** at every cut of the perimeter dike (`dike_gates`, the crossings stage), snapped
+  onto the recorded water the gate checks read.
+- **Pond stock**: pig sties on the dikes and duck pens with a fenced wet run, on the ponds nearest the
+  houses (`stage_pond_stock`; GUESS share bands).
+- **Not drawn, by the GM's ruling**: a creek, boats and a landing - the connector lane is the market link.
+
+
 *Part of the Mode B settlement docs. The index, the `meta()` knobs, the workflow and the validator contract live in [`../settlements.md`](../settlements.md).*
 
 **Load this file when:** the map uses a non-default `field_archetype` (contour_terraces, polder_grid, ribbon_valley, mulberry_dike) or a land-use overlay (mulberry_fishpond, lotus, tea_fringe). A plain valley_paddy village does NOT need this file.

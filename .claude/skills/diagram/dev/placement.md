@@ -46,6 +46,7 @@ sequence one-to-one. Where the two disagree, `STAGES` wins for anything under `h
 | 4 | `stage_ways` | the CONNECTOR and the field spur only - the EXOGENOUS ways, which genuinely predate the settlement. The internal skeleton moved to stage 7 in feature 126 |
 | 4b | `stage_waterward` | a polder's WATERWARD reed fringe (feature 139): the strips outside the dike on the flanks that face the water, derived from the seat - laid BEFORE the houses and the track because it reserves wet ground both must avoid (laid in the hinterland it was drawn over an already-routed connector). No ink on a valley hamlet |
 | 5 | `stage_homesteads` | the farmhouses |
+| 6b | `stage_pond_stock` | a dike-pond hamlet's pig sties and duck pens, seated on the banks of the ponds nearest the houses after the appurtenances (they are structures on field ground the registries hold nothing off, so they are placed before the web and the scrub; feature 139 A3/A4) |
 | 6 | `stage_appurtenances` | yards, gardens, byres, wells, sheds |
 | 7 | `stage_web` | ALL the endogenous ways - the internal skeleton AND the lane web, both derived from where the houses actually landed. No-op for a dispersed hamlet, which has no internal network |
 | 8 | `stage_notice` | the kosatsuba, which stands ON a way and so waits for the web |

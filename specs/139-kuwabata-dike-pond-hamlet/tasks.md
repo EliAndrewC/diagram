@@ -68,49 +68,49 @@ Checked off only when verified on Kuwabata (and Inashiro unchanged). T99 is the 
 
 ## Phase 4 - the GM
 
-- [ ] T40 **A1 DECLINED - the creek and boats are not drawn; the documentation stops implying Kuwabata has one (the connector lane is its market link, to the market or to the water that carries it)** - the GM (2026-08-28), on audit.md: *"With regards to the creek along the landward flank, I understand that the real world place that this is based on had one, but would it necessarily be the case that any settlement of this sort would have one. I wouldn't think so. As such, I don't think that we should push to include it, and I think we can update the documentation for the specific settlement to not imply that it will have one. In particular, because there is a lane leading away from the settlement, then we can presume that that is either connected to the market itself or that is what leads to the stream or river that is the water market or is connected to the water market. I do like all of the other options, though. In particular, thrashing yards on a no-rice hamlet seem bad and should be eliminated. That seems like the most egregious thing on the map, which is wrong. But I think I do like literally every other option there Even if one or more of them is a tunable knob, which would not necessarily be enabled on this specific map. I would therefore like for you to proceed with all of the items you listed from your audit. Thanks."*
-      given 2026-08-28T12:56Z | done - | elapsed - | runs: -
+- [x] T40 **A1 DECLINED - the creek and boats are not drawn; the documentation stops implying Kuwabata has one (the connector lane is its market link, to the market or to the water that carries it)** - the GM (2026-08-28), on audit.md: *"With regards to the creek along the landward flank, I understand that the real world place that this is based on had one, but would it necessarily be the case that any settlement of this sort would have one. I wouldn't think so. As such, I don't think that we should push to include it, and I think we can update the documentation for the specific settlement to not imply that it will have one. In particular, because there is a lane leading away from the settlement, then we can presume that that is either connected to the market itself or that is what leads to the stream or river that is the water market or is connected to the water market. I do like all of the other options, though. In particular, thrashing yards on a no-rice hamlet seem bad and should be eliminated. That seems like the most egregious thing on the map, which is wrong. But I think I do like literally every other option there Even if one or more of them is a tunable knob, which would not necessarily be enabled on this specific map. I would therefore like for you to proceed with all of the items you listed from your audit. Thanks."*
+      given 2026-08-28T12:56Z | done 2026-08-28 (T40-T48 in one sitting, ~3.5 h; the yards took most of it - two web experiments were reverted after they moved the reference hamlet) | runs: quick x14, map x18, hamlet x6, gate-manifest x8
       research: rendering
 
-- [ ] T41 **B1 - no threshing yards on a no-rice hamlet: the dike-pond archetype's farmsteads carry no threshing yard** - same instruction (T40)
-      given 2026-08-28T12:56Z | done - | elapsed - | runs: -
+- [x] T41 **B1 - no threshing yards on a no-rice hamlet: the dike-pond archetype's farmsteads carry no threshing yard** - same instruction (T40)
+      given 2026-08-28T12:56Z | done 2026-08-28 (T40-T48 in one sitting, ~3.5 h; the yards took most of it - two web experiments were reverted after they moved the reference hamlet) | runs: quick x14, map x18, hamlet x6, gate-manifest x8
       research: physical
-      - [ ] research pass  - [ ] source-reader confirmed  - [ ] recorded and cited
+      - [x] research pass (the T30 pass; research/archetypes.md audit section)  - [x] source-reader confirmed (the T30 run)  - [x] recorded and cited (the class entries name their sources; settlements/archetypes.md carries the rules)
 
-- [ ] T42 **A2 - the manure fixture rolls `heap | pit` per hamlet; the pit is a half-buried earthenware jar behind the house (and along the road), a new glyph and class** - same instruction (T40)
-      given 2026-08-28T12:56Z | done - | elapsed - | runs: -
+- [x] T42 **A2 - the manure fixture rolls `heap | pit` per hamlet; the pit is a half-buried earthenware jar behind the house (and along the road), a new glyph and class** - same instruction (T40)
+      given 2026-08-28T12:56Z | done 2026-08-28 (T40-T48 in one sitting, ~3.5 h; the yards took most of it - two web experiments were reverted after they moved the reference hamlet) | runs: quick x14, map x18, hamlet x6, gate-manifest x8
       research: physical
-      - [ ] research pass  - [ ] source-reader confirmed  - [ ] recorded and cited
+      - [x] research pass (the T30 pass; research/archetypes.md audit section)  - [x] source-reader confirmed (the T30 run)  - [x] recorded and cited (the class entries name their sources; settlements/archetypes.md carries the rules)
 
-- [ ] T43 **A5 - fry ponds: a few of the block's smallest parcels are designated fry nursery ponds in the manifest, with a class of their own for the interactive map** - same instruction (T40)
-      given 2026-08-28T12:56Z | done - | elapsed - | runs: -
+- [x] T43 **A5 - fry ponds: a few of the block's smallest parcels are designated fry nursery ponds in the manifest, with a class of their own for the interactive map** - same instruction (T40)
+      given 2026-08-28T12:56Z | done 2026-08-28 (T40-T48 in one sitting, ~3.5 h; the yards took most of it - two web experiments were reverted after they moved the reference hamlet) | runs: quick x14, map x18, hamlet x6, gate-manifest x8
       research: physical
-      - [ ] research pass  - [ ] source-reader confirmed  - [ ] recorded and cited
+      - [x] research pass (the T30 pass; research/archetypes.md audit section)  - [x] source-reader confirmed (the T30 run)  - [x] recorded and cited (the class entries name their sources; settlements/archetypes.md carries the rules)
 
-- [ ] T44 **A7 - a sluice-gate glyph at the two perimeter dike cuts (boards across the gap), a new glyph and class** - same instruction (T40)
-      given 2026-08-28T12:56Z | done - | elapsed - | runs: -
+- [x] T44 **A7 - a sluice-gate glyph at the two perimeter dike cuts (boards across the gap), a new glyph and class** - same instruction (T40)
+      given 2026-08-28T12:56Z | done 2026-08-28 (T40-T48 in one sitting, ~3.5 h; the yards took most of it - two web experiments were reverted after they moved the reference hamlet) | runs: quick x14, map x18, hamlet x6, gate-manifest x8
       research: physical
-      - [ ] research pass  - [ ] source-reader confirmed  - [ ] recorded and cited
+      - [x] research pass (the T30 pass; research/archetypes.md audit section)  - [x] source-reader confirmed (the T30 run)  - [x] recorded and cited (the class entries name their sources; settlements/archetypes.md carries the rules)
 
-- [ ] T45 **A3 - a pig sty on a pond dike (or over the water) beside the village, a new fixture kind, position and class; a per-hamlet share** - same instruction (T40)
-      given 2026-08-28T12:56Z | done - | elapsed - | runs: -
+- [x] T45 **A3 - a pig sty on a pond dike (or over the water) beside the village, a new fixture kind, position and class; a per-hamlet share** - same instruction (T40)
+      given 2026-08-28T12:56Z | done 2026-08-28 (T40-T48 in one sitting, ~3.5 h; the yards took most of it - two web experiments were reverted after they moved the reference hamlet) | runs: quick x14, map x18, hamlet x6, gate-manifest x8
       research: physical
-      - [ ] research pass  - [ ] source-reader confirmed  - [ ] recorded and cited
+      - [x] research pass (the T30 pass; research/archetypes.md audit section)  - [x] source-reader confirmed (the T30 run)  - [x] recorded and cited (the class entries name their sources; settlements/archetypes.md carries the rules)
 
-- [ ] T46 **A4 - a duck pen at a pond corner: a fenced dry run on the dike and a wet run in the water, a new fixture and class; a per-hamlet share** - same instruction (T40)
-      given 2026-08-28T12:56Z | done - | elapsed - | runs: -
+- [x] T46 **A4 - a duck pen at a pond corner: a fenced dry run on the dike and a wet run in the water, a new fixture and class; a per-hamlet share** - same instruction (T40)
+      given 2026-08-28T12:56Z | done 2026-08-28 (T40-T48 in one sitting, ~3.5 h; the yards took most of it - two web experiments were reverted after they moved the reference hamlet) | runs: quick x14, map x18, hamlet x6, gate-manifest x8
       research: physical
-      - [ ] research pass  - [ ] source-reader confirmed  - [ ] recorded and cited
+      - [x] research pass (the T30 pass; research/archetypes.md audit section)  - [x] source-reader confirmed (the T30 run)  - [x] recorded and cited (the class entries name their sources; settlements/archetypes.md carries the rules)
 
-- [ ] T47 **A6 - the dike crop as a rolled knob `mulberry | sugarcane | banana | fruit` (a hamlet TYPE, not a mix); Kuwabata pinned to mulberry; three new plant glyphs and classes** - same instruction (T40)
-      given 2026-08-28T12:56Z | done - | elapsed - | runs: -
+- [x] T47 **A6 - the dike crop as a rolled knob `mulberry | sugarcane | banana | fruit` (a hamlet TYPE, not a mix); Kuwabata pinned to mulberry; three new plant glyphs and classes** - same instruction (T40)
+      given 2026-08-28T12:56Z | done 2026-08-28 (T40-T48 in one sitting, ~3.5 h; the yards took most of it - two web experiments were reverted after they moved the reference hamlet) | runs: quick x14, map x18, hamlet x6, gate-manifest x8
       research: physical
-      - [ ] research pass  - [ ] source-reader confirmed  - [ ] recorded and cited
+      - [x] research pass (the T30 pass; research/archetypes.md audit section)  - [x] source-reader confirmed (the T30 run)  - [x] recorded and cited (the class entries name their sources; settlements/archetypes.md carries the rules)
 
-- [ ] T48 **B2 - the leftover cells as a rolled knob `rice | vegetables | pond` (residual paddy, vegetable ground, or full conversion); Kuwabata's value rolled** - same instruction (T40)
-      given 2026-08-28T12:56Z | done - | elapsed - | runs: -
+- [x] T48 **B2 - the leftover cells as a rolled knob `rice | vegetables | pond` (residual paddy, vegetable ground, or full conversion); Kuwabata's value rolled** - same instruction (T40)
+      given 2026-08-28T12:56Z | done 2026-08-28 (T40-T48 in one sitting, ~3.5 h; the yards took most of it - two web experiments were reverted after they moved the reference hamlet) | runs: quick x14, map x18, hamlet x6, gate-manifest x8
       research: physical
-      - [ ] research pass  - [ ] source-reader confirmed  - [ ] recorded and cited
+      - [x] research pass (the T30 pass; research/archetypes.md audit section)  - [x] source-reader confirmed (the T30 run)  - [x] recorded and cited (the class entries name their sources; settlements/archetypes.md carries the rules)
 
 - [ ] T49 knob maps for every new knob value (one map per value, `make hamlet ... --out wip/...`), `make done`, `settlement-review` at the hand-back; a green gate on the final tree (folds T35)
       research: procedure
