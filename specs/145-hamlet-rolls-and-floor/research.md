@@ -154,6 +154,29 @@ test time. Three kinds:
 Kinds 1 and 3 are cheap unit tests. Kind 2 is the honest question: a fallback the placer has never needed
 is either dead (delete it, and the code says so) or a real path (write the geometry that forces it), and
 telling those apart is a per-case reading, not a sweep.
+## R3d - the GLOBAL floor is red on tooling, and it predates this feature (ledgered, not fixed here)
+
+`make test-full`'s existing 100% floor (everything outside `settlement/`, `waterfields/`, `interactive/`
+and now `check_village/`) fails on ~30 lines in five tooling modules: `ci/__main__.py` (4), `ci/delta.py`
+(5), `ci/state.py` (6), `ci/dispatch.py` (1), `switches.py` (8), `tools/perf_review.py` (3),
+`tools/scatter_audit.py` (2), `tools/site_justice.py` (1). Every one is a path a CHILD process takes -
+the fixtures run `python3 -m l7r.diagram.ci` and `make` in a subprocess whose coverage this run does not
+collect - or an OS-error arm (`/proc` reads in `switches.idle_context`, an unreadable record).
+
+**Pre-existing**: the pre-145 baseline worktree (514e6cc0) prints the same modules with the same or
+larger miss counts (switches 10 against 8 now, scatter_audit 5 against 2). It is invisible in ordinary
+work because `make done FULL=1` needs a prompt and the remote switch, so the FULL floors have not been
+evaluated in a while; the baseline run does not even reach them (its test phase fails first).
+
+Not fixed under this feature (constitution XIII: a pre-existing failure stays ledgered and is not fixed
+under someone else's feature) - and it is a real follow-up: either the tooling tests collect their
+subprocesses' coverage (`coverage run --parallel` in the fixture, combined after), or the tooling modules
+join the packages judged by their own floor. The GM's call.
+
+**One thing this feature DID fix about it**: the floors used to `exit 1` one at a time, so the first red
+floor hid every floor after it - which made the new hamlet floor unreachable while the tooling floor was
+red. All three now report together and the phase exits once, at the end (the same rule the test phase has).
+
 ## R4 - the numbers at the end
 
 **The rolls** (`make perf`, seeds 4/25/39/47, this container): `144-start` 126.7 s -> `145-end`
