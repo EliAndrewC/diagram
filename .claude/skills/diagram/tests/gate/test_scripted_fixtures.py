@@ -328,3 +328,18 @@ def test_title_clear_of_features_fires_when_the_placard_is_dropped_on_a_farmhous
 @pytest.mark.rolls_map
 def test_title_has_placard_fires_when_the_placard_is_dropped() -> None:
     _fires(REFERENCE, "title_has_placard", lambda M: M["title"].pop("placard", None))
+
+
+@pytest.mark.rolls_map
+def test_structures_clear_of_dike_fires_when_a_house_corner_reaches_the_bank() -> None:
+    """The polder dike's keep-out is measured at the house's CORNERS, not its centre: a house whose corner
+    reaches the bank fires even when its middle is clear. (A `dike_top` house is exempt and stays so.)"""
+
+    def corner_onto_the_bank(M: dict[str, Any]) -> None:
+        keep = M["dikes"][0].get("keepout") or M["dikes"][0]["crest"]
+        cx, cy = keep[len(keep) // 2]
+        h = M["houses"][0]
+        h["x"], h["y"] = float(cx) + float(h["w"]) / 2 - 2.0, float(cy)
+        h.pop("on_dike", None)
+
+    _fires(POLDER, "structures_clear_of_dike", corner_onto_the_bank)
