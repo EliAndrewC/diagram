@@ -38,4 +38,6 @@ out=$(AGENT_STALE_S=60 "$HOOK" check "$D"); grep -q stall2 <<<"$out" && ok || ba
 # 9. watch mode reports once, then goes quiet (two ticks)
 out=$(AGENT_STALE_S=60 AGENT_TICK_S=0.2 timeout 1 "$HOOK" watch "$D"); n=$(grep -c "STALLED stall2" <<<"$out")
 [ "$n" -eq 1 ] && ok || bad "watch reports a stall exactly once (got $n)"
+# 10. an acknowledged stall is never reported again
+"$HOOK" ack "$D" stall2; out=$(AGENT_STALE_S=60 "$HOOK" check "$D"); grep -q stall2 <<<"$out" && bad "an acked stall is silent" || ok
 echo "agent-stall-hooks: $pass passed, $fail failed"; [ $fail -eq 0 ]

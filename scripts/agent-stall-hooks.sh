@@ -22,6 +22,8 @@
 #   check <subagents-dir>   one-shot report for any directory (the test uses this).
 #   watch <subagents-dir>   the loop for a `Monitor`: one line per stall, once per stall (POLL_OK - the
 #                           harness does not notify on a stall; this watches EXTERNAL state).
+#   ack <subagents-dir> <id> the session has handled this stall (TaskStop + relaunch): never report it
+#                           again (a stopped agent's transcript still ends on a tool_result).
 # Env: AGENT_STALE_S (default 300); AGENT_RECENT_S (default 172800 - older transcripts are ignored).
 set -u
 MODE=${1:-}
@@ -44,12 +46,13 @@ report() { # report <dir> [seen-file] -> prints "STALLED <id> <age>s" per stalle
     age=$(( now - $(stat -c %Y "$f") ))
     [ "$age" -gt "$RECENT" ] && continue
     id=$(basename "$f" .jsonl); id=${id#agent-}
+    [ -e "$dir/../stall-ack/$id" ] && continue
     if [ "$age" -ge "$STALE" ]; then
       t=$(last_type "$f")
       if [ "$t" = "user" ]; then
         if [ -n "$seen" ] && grep -qx "$id" "$seen" 2>/dev/null; then continue; fi
         [ -n "$seen" ] && echo "$id" >> "$seen"
-        printf 'STALLED %s: transcript unchanged for %ss, last record a tool_result with no reply - stop it (TaskStop) and relaunch its batch, or read the rest yourself in a NEW background agent; never in a foreground WebFetch batch\n' "$id" "$age"
+        printf 'STALLED %s: transcript unchanged for %ss, last record a tool_result with no reply - stop it (TaskStop) and relaunch its batch, or read the rest yourself in a NEW background agent; never in a foreground WebFetch batch; then `agent-stall-hooks.sh ack <dir> <id>`\n' "$id" "$age"
       fi
     elif [ -n "$seen" ]; then
       grep -qx "$id" "$seen" 2>/dev/null && sed -i "/^$id\$/d" "$seen"
@@ -73,6 +76,8 @@ except Exception: print("")')
     exit 0 ;;
   check)
     report "${2:?subagents dir}"; exit 0 ;;
+  ack)
+    mkdir -p "${2:?subagents dir}/../stall-ack" && touch "$2/../stall-ack/${3:?agent id}"; exit 0 ;;
   watch)
     DIR=${2:?subagents dir}; SEEN=$(mktemp); trap 'rm -f "$SEEN"' EXIT
     while true; do report "$DIR" "$SEEN"; sleep "${AGENT_TICK_S:-30}"; done ;;
