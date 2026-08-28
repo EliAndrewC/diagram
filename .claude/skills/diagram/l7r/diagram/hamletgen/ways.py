@@ -1251,14 +1251,23 @@ def _touch_junctions(s: Settlement, hard: list[Poly], walls: Sequence[Poly], wat
                 return min((seg_dist(pt[0], pt[1], a, b) for a, b in segs), default=float("inf"))
 
             _dropped = 0
+            _dropped_idx: list[int] = []
             for i in orphans:
                 _mine = list(zip(ways[i], ways[i][1:], strict=False))
                 _served = [h for h in _houses if _near(h, _mine) <= _SERVE_FT]
                 if all(_near(h, _others) <= _SERVE_FT for h in _served):
                     lanes[i]["pts"] = []
                     s.reink_lane(i)
+                    _dropped_idx.append(i)
                     _dropped += 1
             if _dropped:
+                # AND THE HUSK GOES WITH THE INK (settlement-review, Sawada, feature 145). Emptying `pts` left a
+                # lane record declaring a lane nothing draws - `lanes` counted 18 where 17 existed, and every
+                # consumer that iterates them had to special-case it (a `pts[0]` would raise). This engine's own
+                # rule for the copse says it plainly: a map that declares a feature it did not draw is the defect.
+                # Removed back-to-front so the earlier indices stay valid; the count still goes to meta.
+                for _i in sorted(_dropped_idx, reverse=True):
+                    del lanes[_i]
                 s.M["meta"]["lane_fragments_dropped"] = s.M["meta"].get("lane_fragments_dropped", 0) + _dropped
                 joined = _dropped == len(orphans)
                 if joined:
