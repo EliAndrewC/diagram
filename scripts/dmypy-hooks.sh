@@ -3,7 +3,7 @@
 # (GM 2026-08-28; GUARD_EDIT_OK: a new guard, born with its companion test-dmypy-hooks.sh).
 #
 # WHY. `make quick` type-checks through the mypy daemon (`dmypy run`, Makefile MYPY) so a warm
-# re-check costs ~0.1 s instead of ~0.2-0.3 s. The daemon is started by the first quick in a clone
+# re-check costs ~0.15 s instead of up to ~3 s (below). The daemon is started by the first quick in a clone
 # and then simply stays: nothing in mypy stops it, and nothing here did either. Measured 2026-08-28
 # in the claude-diagram container: five daemons, one per session clone, 380-600 MB RSS EACH
 # (~2.3 GB), one of them for a session that had ended half an hour earlier. The RSS is the daemon's
@@ -27,9 +27,13 @@
 # is never a workspace. Stopping is `dmypy stop` through the daemon's own status file, then TERM,
 # then KILL - a fake daemon (the test's) falls through to the signals.
 #
-# DECLINED: `dmypy run --timeout N` (the daemon exits after N idle seconds). Priced 2026-08-28: a
-# cold daemon start is ~12 s, a warm one-shot mypy ~0.2-0.3 s - so a timeout would charge the first
-# quick after every break 12 s to save 0.1 s on the quicks in between. A daemon that is owned stays
+# WHAT THE RAM BUYS (measured 2026-08-28): on a comment-only edit the daemon answers in 0.13 s and a
+# warm one-shot mypy in 0.21-0.31 s, but on an INTERFACE change to a central module (a function added
+# to settlement/__init__.py) it is 0.15 s against 2.9 s - one-shot re-checks every dependent, the
+# daemon's fine-grained graph does not. ~2.7 s per engine-editing quick; the daemon stays.
+#
+# DECLINED: `dmypy run --timeout N` (the daemon exits after N idle seconds). A cold daemon start is
+# ~12 s, so a timeout would charge the first quick after every break 12 s. A daemon that is owned stays
 # until its session ends; that is the trade the GM asked for.
 #
 # Seams (DMYPY_MAIN, DMYPY_SESSIONS_DIR) are honored only inside a fixture (DMYPY_FIXTURE=1, outside
