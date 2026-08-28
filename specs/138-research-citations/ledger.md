@@ -215,18 +215,18 @@
 
 | operative doc | grounding prose | status |
 |---|---|---|
-| `buildings.md` "Historical grounding" (line ~164) | the Mode A section; mostly migrated to `research/buildings.md` - confirm nothing is left behind | open |
-| `settlements/cities/government.md` "Historical grounding: martial training in a provincial city" | inline research paragraph | open |
-| `settlements/cities/fabric.md` row-packing and the ura-nagaya door paragraph | inline | open |
-| `settlements/cities/defenses.md` "wall-tower coverage" | inline | open |
-| `settlements/cities/sizing.md` "the why behind each constant" (points at specs/009 research) | inline + spec research | open |
-| `settlements/towns.md` "Fire towers" grounding | inline | open |
-| `settlements/fields.md` "Water-first v2 historical grounding" | inline, marked "do not re-research" - re-sourced, not re-decided | open |
-| `settlements/vegetation.md` crop-margin paragraph | inline (has a research pointer - check the entry is cited) | open |
-| `settlements/urban-features.md` bell-and-drum tower | inline (has a research entry - check cited) | open |
-| `SKILL.md` "Rokugan historical reference framework" (Edo-vs-Sengoku defaults) | inline | open |
-| `settlements.md` (top level) "Historical grounding: the why behind the realism checks" (line ~185, the scale ladder and others) | inline | open |
-| `pool/**/*.notes.md` (e.g. `pool/magistracies/ubame-magistracy.notes.md`: the domain-boundary pillar's height, charcoal fines self-heating) | findings stated in map notes - recorded and cited in the tree, the notes pointed | open |
+| `buildings.md` "Historical grounding" (line ~164) | the Mode A section; mostly migrated to `research/buildings.md` - confirm nothing is left behind | closed - pointer or cited entry (2026-08-28) |
+| `settlements/cities/government.md` "Historical grounding: martial training in a provincial city" | inline research paragraph | closed - pointer or cited entry (2026-08-28) |
+| `settlements/cities/fabric.md` row-packing and the ura-nagaya door paragraph | inline | closed - pointer or cited entry (2026-08-28) |
+| `settlements/cities/defenses.md` "wall-tower coverage" | inline | closed - pointer or cited entry (2026-08-28) |
+| `settlements/cities/sizing.md` "the why behind each constant" (points at specs/009 research) | inline + spec research | closed - pointer or cited entry (2026-08-28) |
+| `settlements/towns.md` "Fire towers" grounding | inline | closed - pointer or cited entry (2026-08-28) |
+| `settlements/fields.md` "Water-first v2 historical grounding" | inline, marked "do not re-research" - re-sourced, not re-decided | closed - pointer or cited entry (2026-08-28) |
+| `settlements/vegetation.md` crop-margin paragraph | inline (has a research pointer - check the entry is cited) | closed - pointer or cited entry (2026-08-28) |
+| `settlements/urban-features.md` bell-and-drum tower | inline (has a research entry - check cited) | closed - pointer or cited entry (2026-08-28) |
+| `SKILL.md` "Rokugan historical reference framework" (Edo-vs-Sengoku defaults) | inline | closed - pointer or cited entry (2026-08-28) |
+| `settlements.md` (top level) "Historical grounding: the why behind the realism checks" (line ~185, the scale ladder and others) | inline | closed - pointer or cited entry (2026-08-28) |
+| `pool/**/*.notes.md` (e.g. `pool/magistracies/ubame-magistracy.notes.md`: the domain-boundary pillar's height, charcoal fines self-heating) | findings stated in map notes - recorded and cited in the tree, the notes pointed | closed - pointer or cited entry (2026-08-28) |
 
 ## D. Historical research in spec directories
 

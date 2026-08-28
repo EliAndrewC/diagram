@@ -304,6 +304,8 @@ by the shogunate in **1642**; such markers were common under the Tokugawa. Separ
 ordered every province to produce **kuniezu** 国絵図, provincial land maps with the boundaries drawn
 on them - so **putting the line on a map is itself the authentic act**.
 
+*Pool-notes finding recorded here (feature 138, 2026-08-28):* `pool/magistracies/ubame-magistracy.notes.md` sizes its boundary pillars at ~1-1.5 ft shaft height (up to ~3 ft with a plinth) - a size-audit estimate, not a read figure; labeled GUESS. The notes are left as they are.
+
 **The decision.** Draw the LINE, not the mound. The Mode A `ubame-magistracy.notes.md` had already
 reserved against the mound ("the physically large period border markers were earthen *mounds*, which
 is a different thing and not what is drawn") and used ~3 ft boundary pillars as location markers; the
