@@ -232,6 +232,16 @@ proof about the engine that existed that day. `pytest tests/test_regressions.py`
 corpus in about 14 seconds and is the cheapest guard in the tree; run it after an engine change, not
 merely after a check change.
 
+**WHICH CHECKS EARN THEIR KEEP (feature 141, GM 2026-08-28).** Before a check is written or kept, ask
+whether any stage AFTER the placer changes what it reads. If none does, the check re-measures what a
+correct placer guaranteed - *"if our placement algorithm makes overlaps impossible, then checking for
+overlaps later in an automated check wastes time with no benefit"* - and the guarantee belongs in a unit
+test of the placer, not in the gate. If a later stage can undo the placer (a caption seated then crowded
+by the scatter, the lane web clipped after the houses, the board after the yards), the placer only does
+its best and the check IS the guarantee. `make check-census` measures this per check on per-stage
+snapshots (the ledger in `specs/141-checks-and-corpus-audit/`); a kept check proves it fires on a
+scripted negative fixture (`tests/gate/test_scripted_fixtures.py`), not on a frozen manifest.
+
 **The shape both sessions kept hitting: an EXCUSE clause keyed on PRESENCE cannot fire on ABSENCE.**
 Four instances in one day between two sessions - this check excusing a hole whenever anything stood
 in it; `village_windbreak_is_continuous` scoring a total gap as nothing because it skipped empty

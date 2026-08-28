@@ -1621,9 +1621,16 @@ shell command that writes one. It carries no silent escape - a genuine exception
 **Test layout**
 - Tests live under `.claude/skills/diagram/tests/`, mirroring the source
   layout (`tests/CLAUDE.md` indexes them).
-- Frozen negative fixtures - manifests of maps that were once wrong - live
-  in `pool/regressions/`; saved fixtures for external boundaries live in a
-  `fixtures/` subdirectory next to the tests that consume them.
+- A found defect becomes a unit test of the PLACER first, and a gate check
+  only where a later stage can undo the placer (feature 141, GM 2026-08-28:
+  a check that re-measures what a correct placer guaranteed "wastes time
+  with no benefit"; a label re-checked after later additions "is an example
+  of a useful automated check"). A kept check proves it fires on a SCRIPTED
+  negative fixture - a cached roll plus one deliberate break - not on a
+  frozen manifest; what remains of the hand-era corpus in `pool/regressions/`
+  awaits the GM's ruling on the legacy tiers. Saved fixtures for external
+  boundaries live in a `fixtures/` subdirectory next to the tests that
+  consume them.
 - Test names describe behavior (not implementation); parametrize
   variant inputs. A map-rolling test carries `@pytest.mark.rolls_map`.
 

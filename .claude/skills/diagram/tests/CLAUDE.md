@@ -78,9 +78,18 @@ not read `.gitignore`.
   guard: it censuses what the rest of the skill actually reaches through the package and proves the
   `__init__.py` re-export still resolves it. Feature 027 replaced hand-maintained rosters with star
   imports plus these guards, so the surface is derived and the guard is what makes that safe.
-- **Every found defect becomes a check, and the check gets a negative fixture.** Mode B fixtures
-  are frozen manifests in `pool/regressions/`; Mode A fixtures are frozen bad SVGs in
-  `fixtures/`. Coverage alone does not prove a check has teeth - a red fixture does.
+- **A found defect becomes a UNIT TEST OF THE PLACER first, and a check only where a later stage can
+  undo the placer** (feature 141, GM 2026-08-28: *"If the thing which fixes the wrongness of the map is
+  an update to our placement algorithm, then I don't think that saving off that past map actually has
+  value ... we can have one hundred percent unit test coverage and have a unit test which asserts that
+  things are now correct without saving off the old map."*). The test per check is SAME MEASURE vs SAME
+  FACT: a check that re-measures what a correct placer guaranteed is retired, its guarantee carried by
+  the placer's test (`make check-census`; the ledger in `specs/141-checks-and-corpus-audit/`); a check
+  that measures a LATER fact - a caption after the scatter, the lane web after clipping, the board after
+  the yards - stays, because its placer only does its best. A kept check proves it fires on a SCRIPTED
+  negative fixture (`gate/test_scripted_fixtures.py`: a cached roll plus one deliberate break, targeted),
+  not on a frozen manifest from the hand-placement era; `pool/regressions/` holds what remains of that
+  corpus until the GM's ruling on the legacy tiers. Mode A fixtures are frozen bad SVGs in `fixtures/`.
 
 ## `tests/` is invisible to the generation cache, on purpose
 

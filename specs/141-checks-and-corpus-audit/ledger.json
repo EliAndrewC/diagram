@@ -8572,7 +8572,7 @@
     "reference",
     "polder19"
    ],
-   "hand": "RETIRE",
+   "hand": "RETIRED (T03)",
    "placer_test": "tests/waterfields seam tests (6): the carve shares seams by construction"
   },
   {
@@ -10244,7 +10244,7 @@
     "reference",
     "polder19"
    ],
-   "hand": "RETIRE",
+   "hand": "RETIRED (T03)",
    "placer_test": "tests/settlement/test_homestead_parts.py::test_fits_steers_off_a_grove"
   },
   {
@@ -10275,7 +10275,7 @@
     "reference",
     "polder19"
    ],
-   "hand": "RETIRE",
+   "hand": "RETIRED (T03)",
    "placer_test": "tests/settlement/test_homestead_parts.py::test_garden_fits_rejects_a_spot_outside_the_bound (+ _rect_blocked's field test)"
   },
   {
@@ -10306,7 +10306,7 @@
     "reference",
     "polder19"
    ],
-   "hand": "RETIRE",
+   "hand": "RETIRED (T03)",
    "placer_test": "tests/settlement/test_homestead_parts.py::test_garden_fits_skips_own_house_and_rejects_a_neighbor"
   },
   {
@@ -10339,7 +10339,7 @@
     "reference",
     "polder19"
    ],
-   "hand": "RETIRE",
+   "hand": "RETIRED (T03)",
    "placer_test": "tests/settlement/test_homestead_parts.py::test_garden_fits_skips_own_house_and_rejects_a_neighbor"
   },
   {
@@ -10369,7 +10369,7 @@
     "reference",
     "polder19"
    ],
-   "hand": "RETIRE",
+   "hand": "RETIRED (T03)",
    "placer_test": "tests/settlement/test_houses.py::test_farmsteads_garden_on_a_sunny_side"
   },
   {
@@ -10400,7 +10400,7 @@
     "reference",
     "polder19"
    ],
-   "hand": "RETIRE",
+   "hand": "RETIRED (T03)",
    "placer_test": "tests/settlement/test_houses.py::test_farmsteads_drops_a_farmhouse_with_no_garden_room"
   },
   {
@@ -10775,7 +10775,7 @@
     "reference",
     "polder19"
    ],
-   "hand": "RETIRE",
+   "hand": "RETIRED (T03)",
    "placer_test": "tests/settlement/test_homestead_parts.py::test_grove_fits_rejects_a_belt_over_a_dry_strip (+ _rect_blocked fields=False keeps the paddy)"
   },
   {
@@ -10808,7 +10808,7 @@
     "reference",
     "polder19"
    ],
-   "hand": "RETIRE",
+   "hand": "RETIRED (T03)",
    "placer_test": "tests/settlement/test_homestead_parts.py::test_grove_fits_rejects_a_spot_outside_the_bound"
   },
   {
@@ -11027,7 +11027,7 @@
     "reference",
     "polder19"
    ],
-   "hand": "RETIRE",
+   "hand": "RETIRED (T03)",
    "placer_test": "tests/settlement/test_homestead_parts.py::test_yard_fits_rejects_dry_crop_plots (+ _rect_blocked's field test)"
   },
   {
@@ -11061,7 +11061,7 @@
     "reference",
     "polder19"
    ],
-   "hand": "RETIRE",
+   "hand": "RETIRED (T03)",
    "placer_test": "tests/settlement/test_homestead_parts.py::test_yard_fits_skips_own_house_and_rejects_a_neighbor"
   },
   {
@@ -11092,7 +11092,7 @@
     "reference",
     "polder19"
    ],
-   "hand": "RETIRE",
+   "hand": "RETIRED (T03)",
    "placer_test": "tests/settlement/test_houses.py::test_farmsteads_yard_on_the_sunny_south_front"
   },
   {
@@ -11123,7 +11123,7 @@
     "reference",
     "polder19"
    ],
-   "hand": "RETIRE",
+   "hand": "RETIRED (T03)",
    "placer_test": "tests/settlement/test_houses.py::test_farmsteads_drops_a_farmhouse_with_no_yard_room"
   },
   {
@@ -11281,7 +11281,7 @@
     "reference",
     "polder19"
    ],
-   "hand": "RETIRE",
+   "hand": "RETIRED (T03)",
    "placer_test": "tests/settlement/test_keepouts.py (the chains) + tests/settlement/test_houses.py (_wall_on_the_bund) - the gate read the placer's own chains since feature 140: pure same measure"
   },
   {
@@ -16712,7 +16712,7 @@
    "on": [
     "reference"
    ],
-   "hand": "RETIRE",
+   "hand": "RETIRE - held back: its segment also carries a kept check (RETIRE)",
    "placer_test": "tests/settlement/test_homestead_parts.py::test_yard_fits_rejects_dry_crop_plots; houses via _hard_clear"
   },
   {
