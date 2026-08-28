@@ -127,3 +127,10 @@ mixed segment (a city part then a hamlet check) or no guard admits every scale, 
 row carries `scales` (None = all), cached with the others (`_DERIVATION_VERSION` 2). The town/city policy
 helpers nothing on the hamlet path calls - fire features, the theater stage, ward interiors, the ring road,
 `city_capacity` - live in `common_04_urban_policy.py` for the same reason.
+
+**And a segment goes in a file of its own tier.** The floor is MODULE level, so one city segment sharing a
+file with one hamlet segment puts its whole body under the hamlet floor: 66 of them moved out of seven
+mixed files into `segments_01d`, `02d`, `02e`, `05e` and `07d` (feature 145). That move is FREE - execution
+order is the numeric key in the segment's name (`_ordered_names`), never the file - so a new tier-specific
+file needs no placement row and no fixture edit; add its star import to `__init__.py` and the registry finds
+it. When you add a segment, put it with its tier.

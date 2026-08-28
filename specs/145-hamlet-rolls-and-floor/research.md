@@ -177,6 +177,25 @@ join the packages judged by their own floor. The GM's call.
 floor hid every floor after it - which made the new hamlet floor unreachable while the tooling floor was
 red. All three now report together and the phase exits once, at the end (the same rule the test phase has).
 
+## R3e - the second move: 66 segments out of the mixed files (the GM's ruling, applied one level finer)
+
+After the first pass the hamlet floor still listed 21 `check_village` segment files. The scale skip had
+taken the pure-city files off the path; what remained were files holding BOTH - a hamlet segment and a
+dozen city ones - and the floor is module level, so every city body in them counted. 66 segments moved:
+
+| out of | count | into |
+|---|---|---|
+| `segments_01b_quarters_and_civic_reserve` | 15 | `segments_01d_city_quarters_and_civic_reserve` |
+| `segments_02c_walls_gates_and_housing` | 14 | `segments_02e_city_walls_gates_and_housing` |
+| `segments_07b_ponds_hems_and_land_fall` | 21 | `segments_07d_city_ponds_and_hems` |
+| `segments_05a_field_cover_and_cremation`, `05b_graveyards_and_channel_sources` | 11 + 3 | `segments_05e_city_field_cover_and_cremation` |
+| `segments_02a_capital_budget_and_ministries`, `02b_capital_ways_and_burial` | 1 + 1 | `segments_02d_capital_ministries_only` |
+
+**The move costs nothing**, which is worth knowing before the next one: execution order is the numeric key
+parsed from the segment's NAME (`registry._ordered_names`), never the file it sits in, so no placement row,
+no frozen-fixture edit (the rows and the check roster key on names), and the registry's own glob finds the
+new file. 595 segments before and after; the frozen order test is a subsequence check and stays green.
+
 ## R4 - the numbers at the end
 
 **The rolls** (`make perf`, seeds 4/25/39/47, this container): `144-start` 126.7 s -> `145-end`
