@@ -243,7 +243,17 @@ class PublicFixturesMixin:
                 # five failing seeds. The placer and its check must read one source; that is the
                 # oldest rule in this engine's CLAUDE.md and I broke it in code written to enforce it.
                 _best = 1e9
-                _box = ((_q[0] - _chw, _q[1] - 5), (_q[0] + _chw, _q[1] - 5), (_q[0] - _chw, _q[1] + 5), (_q[0] + _chw, _q[1] + 5), _q)
+                # THE BOX THE RECORD WILL CARRY, not a one-line guess (feature 137, tripwire seed 33 and
+                # cohort seed 03): "notice board" WRAPS to two lines at 8 pt, so the recorded box is 26
+                # by 18, centered 2.2 px above the anchor - while this probe scored a 54 by 10 box on
+                # the anchor and called 0.2 px of overlap a 2 ft clearance. Same lines, same arithmetic
+                # as `label()` / `_record_label`, so what the seat search scores is what gate 0617 reads.
+                _lines = self._caption_lines(label, _q[0], _q[1], 8.0, "middle", _t)
+                _n, _lh = len(_lines), 8.0 * 1.15
+                _bw = max(len(_ln) for _ln in _lines) * 8.0 * 0.55 / 2.0
+                _bh = (8.0 * 1.05 + (_n - 1) * _lh) / 2.0
+                _cy = _q[1] - 8.0 * 0.275
+                _box = ((_q[0] - _bw, _cy - _bh), (_q[0] + _bw, _cy - _bh), (_q[0] - _bw, _cy + _bh), (_q[0] + _bw, _cy + _bh), (_q[0], _cy))
                 for _lane in self.M.get("lanes") or []:
                     _pts = _lane.get("pts") or []
                     _lhalf = float(_lane.get("w") or 3) / 2.0

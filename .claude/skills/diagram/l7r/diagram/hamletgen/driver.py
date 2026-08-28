@@ -170,6 +170,7 @@ def generate(spec: HamletSpec, out_base: str | None = None, render: bool = True)
     from l7r.diagram.check_village import gate
 
     plan = plan_site(spec)
+    rolled: dict[str, SitePlan] = {}  # the plan the LAST roll built on - the kept attempt rolls last, so the report reads it
 
     def _roll(avoid: Sequence[tuple[float, float]], out: str | None = None, attempt: int = 1, after: Sequence[str] = ()) -> tuple[Settlement, list[str], list[tuple[float, float]], list[str]]:
         """Build, finish and gate once. Returns the settlement, the gate's verdict, and the seats the
@@ -183,7 +184,16 @@ def generate(spec: HamletSpec, out_base: str | None = None, render: bool = True)
         # resvg refuses outright ("expected 'svg' tag, not 'g'"), so render-sync could not draw the
         # map at all. Introduced when this retry loop began finishing a copy to gate it and then
         # finishing the same object again for real.
-        s2 = build(plan, avoid=avoid)
+        # EACH ATTEMPT ROLLS ITS OWN PLAN (feature 137, cohort seed 03). The stages ACCUMULATE onto the
+        # plan - `plan.bamboo_polys += household_bamboo(...)`, `plan.bamboo_roles.append(...)` - so a
+        # second attempt on the shared plan inherited the first attempt's stands and drew them again
+        # over a different web: a homestead strip seated clear of attempt 1's lanes stood on attempt
+        # 2's, and `lanes_clear_of_bamboo` was right. A deep copy per roll; the outer plan stays as
+        # `plan_site` derived it, which is all the report reads.
+        import copy
+
+        rolled["plan"] = copy.deepcopy(plan)
+        s2 = build(rolled["plan"], avoid=avoid)
         # ATTRIBUTION (T33): the manifest says which roll drew it, and why the earlier ones were
         # rejected, so a changed connector or web is never mistaken for the effect of an edit.
         s2.M["meta"]["roll_attempt"] = attempt
@@ -238,7 +248,7 @@ def generate(spec: HamletSpec, out_base: str | None = None, render: bool = True)
         # is the same map with the same failures; taking the re-gate's answer instead would let a
         # second opinion overwrite the one that was actually chosen.
         _roll(kept, out_base, kept_attempt, after[: kept_attempt - 1])
-    return Report(plan=plan, failures=failures, path=out_base, fail_lines=lines, attempt=kept_attempt, rerolled_after=after[: kept_attempt - 1])
+    return Report(plan=rolled.get("plan", plan), failures=failures, path=out_base, fail_lines=lines, attempt=kept_attempt, rerolled_after=after[: kept_attempt - 1])
 
 
 def cohort_specs(count: int, first_seed: int = 1, households: int | None = None) -> list[HamletSpec]:

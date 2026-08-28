@@ -817,6 +817,38 @@ def _route(start: Pt, goal: Pt, hard: list[Poly], walls: Sequence[Poly], water: 
             j -= 1
         out.append(path[j])
         i = j
+    return _unjog(out, hard, walls, water)
+
+
+def _turn_deg(a: Pt, b: Pt, c: Pt) -> float:
+    """The change of heading at b, in degrees: 0 straight on, 180 straight back."""
+    v1, v2 = (b[0] - a[0], b[1] - a[1]), (c[0] - b[0], c[1] - b[1])
+    n1, n2 = math.hypot(*v1) or 1.0, math.hypot(*v2) or 1.0
+    return math.degrees(math.acos(max(-1.0, min(1.0, (v1[0] * v2[0] + v1[1] * v2[1]) / (n1 * n2)))))
+
+
+def _unjog(path: Poly, hard: list[Poly], walls: Sequence[Poly], water: list[tuple[Pt, Pt]]) -> Poly:
+    """Take the lattice's jogs out of a routed path where the chord clears at the JUNCTION margin.
+
+    The string-pull above tests every shortcut at the margin the route was planned with, so a route
+    that hugs a garden's corner at the fabric margin keeps a 7 ft step and a 13 ft step back where
+    the lattice turned the corner - `lanes_bend_like_paths` reads two turns past 50 degrees within
+    40 ft as a zigzag (cohort seed 14, feature 137 T03), and a turn past 140 as a hairpin. Both are
+    the lattice showing through, not the ground; a path that may brush a fence at a junction may
+    brush it at a corner, so each such jog is replaced by its chord when `_clear_touch` allows it.
+    The thresholds are the check's own, so this undoes exactly what the check would refuse."""
+    out = list(path)
+    k = 1
+    while k < len(out) - 1:
+        if _turn_deg(out[k - 1], out[k], out[k + 1]) >= 140.0 and _clear_touch(out[k - 1], out[k + 1], hard, walls, water):
+            del out[k]
+            k = max(1, k - 1)
+            continue
+        if k < len(out) - 2 and _turn_deg(out[k - 1], out[k], out[k + 1]) >= 50.0 and _turn_deg(out[k], out[k + 1], out[k + 2]) >= 50.0 and math.dist(out[k], out[k + 1]) <= 40.0 and _clear_touch(out[k - 1], out[k + 2], hard, walls, water):
+            del out[k : k + 2]
+            k = max(1, k - 1)
+            continue
+        k += 1
     return out
 
 
@@ -1082,6 +1114,12 @@ def _touch_junctions(s: Settlement, hard: list[Poly], walls: Sequence[Poly], wat
                 d, foot, k, _op = _best
                 if d <= 2.0 or d > reach:
                     continue
+                # AN END THAT ALREADY STANDS ON THE NETWORK IS A JUNCTION, NOT A FREE END (feature 137
+                # T03, cohort seed 07): a door path whose end sat on another lane was linked onward to a
+                # SECOND way, and the link ran back over the first lane's tread - a 9 ft zigzag at the
+                # junction. `_by_way` excludes the ways this lane meets, so the test above cannot see it.
+                if any(seg_dist(q[0], q[1], a, b) <= _TOUCH_GAP for _k, o in enumerate(lanes) if _k != i and len(o.get("pts") or []) >= 2 for a, b in zip([(float(x), float(y)) for x, y in o["pts"]], [(float(x), float(y)) for x, y in o["pts"]][1:], strict=False)):
+                    continue
                 # END MEETS END: two lanes whose ends stand near each other are ONE lane with a
                 # hole in it, and the honest join is to run the other lane's end onto this one -
                 # a link from tread to tread drew an 8 ft jog that read as a loop (T32). The other
@@ -1100,7 +1138,8 @@ def _touch_junctions(s: Settlement, hard: list[Poly], walls: Sequence[Poly], wat
                 link = [q, foot] if _clear_touch(q, foot, hard, walls, water) else _route(q, foot, hard, walls, water, gap=WEB_FABRIC_GAP, pad_mult=2.0, cell=10.0)
                 if not link or polyline_len(link) > _LINK_DIRECTNESS * d:
                     continue
-                new = (list(reversed(link[1:])) + new) if end == 0 else (new + link[1:])
+                link = _stop_at_network(link, [sg for _k, _os, _op in _by_way for sg in _os])
+                new = _unjog(_unretrace((list(reversed(link[1:])) + new) if end == 0 else (new + link[1:])), hard, walls, water)
                 closed += 1
                 moved += 1
             if new != pts:
@@ -1131,7 +1170,7 @@ def _touch_junctions(s: Settlement, hard: list[Poly], walls: Sequence[Poly], wat
                     break
                 link = [v, q] if _clear_touch(v, q, hard, walls, water) else _route(v, q, hard, walls, water, gap=WEB_FABRIC_GAP, pad_mult=2.0, cell=10.0)
                 if link and polyline_len(link) <= _LINK_DIRECTNESS * max(d, 1.0):
-                    _join_piece(s, lanes, i, ways[i], v, link)
+                    _join_piece(s, lanes, i, ways[i], v, link, hard, walls, water, main_segs)
                     joined = True
                     break
             if joined:
@@ -1148,20 +1187,42 @@ def _touch_junctions(s: Settlement, hard: list[Poly], walls: Sequence[Poly], wat
             # that serves no house nobody else reaches is a drawing, not a lane, and the network check
             # is right to want it gone; a fragment that IS a house's only way stays, visibly broken.
             for i in sorted(orphans, key=lambda k: -polyline_len(ways[k])):
-                cands = sorted(((math.dist(v, q), v, q) for v in ways[i] for q in [min((seg_closest(v[0], v[1], a, b) for a, b in main_segs), key=lambda z: math.dist(v, z))]), key=lambda c: c[0])
+                # ONE TARGET PER WAY, not one per vertex: the nearest point on the whole network is the
+                # one the garden blocks; the L to the next way over is only ever found if it is offered.
+                # ... dealt ROUND-ROBIN across the ways: sorting every (vertex, foot) pair by air
+                # distance put the twelve nearest all on the way the garden blocks (measured on seed
+                # 03: five vertices, one `q`, five refusals), and one pair per way lost the vertex
+                # whose route round the garden did exist. So the four nearest ways each offer their
+                # three best pairs, dealt best-first across the ways - twelve routes at most, and
+                # the way the garden blocks still gets its second and third vertex (seed 03's U
+                # routed from the second vertex, not the first).
+                _main_ways = [ways[j] for j in range(len(ways)) if comp[j] == main and len(ways[j]) >= 2]
+                _per_way = sorted(
+                    (sorted(((math.dist(v, q), v, q) for v in ways[i] for q in [min((seg_closest(v[0], v[1], a, b) for a, b in zip(w, w[1:], strict=False)), key=lambda z: math.dist(v, z))]), key=lambda c: c[0])[:3] for w in _main_ways),
+                    key=lambda g: g[0][0],
+                )[:4]
+                cands = [g[r] for r in range(3) for g in _per_way if r < len(g)]
+                # THE SHORTEST ROUTE WINS, NOT THE NEAREST TARGET (feature 137 T03, cohort seed 03): the
+                # nearest vertex by air was 44 ft off across a garden, and the only route to it walked
+                # round the garden AND a shed - a U of 66 + 36 + 54 ft enclosing the shed, which
+                # `lanes_bend_like_paths` reads as a zigzag. The next candidate, 60 ft off, was an L
+                # through the 17 ft slot between the two. So the first `_SHORTEST_OF` candidates that
+                # route at all are compared by the length of their ROUTE, and the shortest is drawn.
+                found: list[tuple[float, Pt, Poly]] = []
                 for d, v, q in cands[:12]:
                     if d > _ORPHAN_REACH:
                         break
                     link = _route(v, q, hard, walls, water, gap=_TOUCH_GAP, pad_mult=2.0, cell=6.0)
                     if not link:  # (3) the DETOUR: around the yard or the house that walls the slot - a wider box, a longer leash
                         link = _route(v, q, hard, walls, water, gap=WEB_FABRIC_GAP, pad_mult=5.0, cell=10.0)
-                        if link and polyline_len(link) > _DETOUR_DIRECTNESS * max(d, 1.0):
-                            link = []
                     if link and polyline_len(link) <= _DETOUR_DIRECTNESS * max(d, 1.0):
-                        _join_piece(s, lanes, i, ways[i], v, link)
-                        joined = True
-                        break
-                if joined:
+                        found.append((polyline_len(link), v, link))
+                        if len(found) >= _SHORTEST_OF:
+                            break
+                if found:
+                    _len, v, link = min(found, key=lambda t: t[0])
+                    _join_piece(s, lanes, i, ways[i], v, link, hard, walls, water, main_segs)
+                    joined = True
                     break
         if not joined:
             _others = [sg for j in range(len(ways)) if j not in orphans and len(ways[j]) >= 2 for sg in zip(ways[j], ways[j][1:], strict=False)]
@@ -1195,24 +1256,84 @@ def _touch_junctions(s: Settlement, hard: list[Poly], walls: Sequence[Poly], wat
     return closed
 
 
-def _join_piece(s: Settlement, lanes: list[dict[str, Any]], i: int, way: Poly, v: Pt, link: Poly) -> None:
+def _join_piece(s: Settlement, lanes: list[dict[str, Any]], i: int, way: Poly, v: Pt, link: Poly, hard: list[Poly], walls: Sequence[Poly], water: list[tuple[Pt, Pt]], net: list[tuple[Pt, Pt]]) -> None:
     """Join an orphan piece to the network: EXTEND the piece when the link leaves one of its ends, else
     draw the link as its own lane (the link left an interior vertex). A link drawn as a separate lane
     from a door path's end put TWO lane ends beside the same farmhouse - the door path's and the
     link's - and `lane_ends_front_different_houses` counted them (cohort seed 16, feature 137 T03).
-    One way that reaches the network is one lane."""
+    One way that reaches the network is one lane. The splice is passed through `_unretrace` and
+    `_unjog`: a link leaving a piece's END may double back along the piece before it turns (cohort
+    seed 14 - 13 ft out, 7 ft up, 13 ft back), and the piece's own vertex is the right start."""
     pts = [(float(x), float(y)) for x, y in way]
+    link = _stop_at_network(link, net)
     if pts and math.dist(v, pts[-1]) < 0.5:
-        lanes[i]["pts"] = [[round(x, 1), round(y, 1)] for x, y in pts + list(link[1:])]
+        lanes[i]["pts"] = [[round(x, 1), round(y, 1)] for x, y in _unjog(_unretrace(pts + list(link[1:])), hard, walls, water)]
         s.reink_lane(i)
     elif pts and math.dist(v, pts[0]) < 0.5:
-        lanes[i]["pts"] = [[round(x, 1), round(y, 1)] for x, y in list(reversed(link[1:])) + pts]
+        lanes[i]["pts"] = [[round(x, 1), round(y, 1)] for x, y in _unjog(_unretrace(list(reversed(link[1:])) + pts), hard, walls, water)]
         s.reink_lane(i)
     else:
         _draw_web(s, link, int(float(lanes[i].get("w", 3))))
 
 
+def _stop_at_network(link: Poly, others: list[tuple[Pt, Pt]]) -> Poly:
+    """Cut a join link at the FIRST place it meets one of the ways it was sent to reach.
+
+    A link is routed to a point `q` on the network, and the router is free to run it along or
+    across another way on the road there - tripwire seed 27's link touched lane 8 at 20 ft and
+    carried on for 20 ft more to a `q` on a way that a later trim removed, leaving a hook to
+    nothing beside a shed (feature 137 T03). A link exists to reach the network; the moment it
+    does, the rest is a stub. Cut at a vertex within `_TOUCH_GAP` of one of `others`, or at a
+    crossing. `others` is the TARGET set only - the main component in the orphan ladder, the unmet
+    ways in the touch pass - never the piece's own component: a piece is often several lanes, and
+    cutting at one of them left the reference hamlet's web in pieces on the first try."""
+    if not others or len(link) < 2:
+        return list(link)
+    out = [link[0]]
+    for t in range(1, len(link)):
+        a, b = link[t - 1], link[t]
+        # `seg_intersect` meets LINES - guard it with `segments_cross`, as every other caller here does,
+        # or the cut lands on the link's own backward extension (the reference hamlet, first try).
+        hits = [x for c, d in others if segments_cross(a, b, c, d) for x in [seg_intersect(a, b, c, d)] if x is not None and math.dist(a, x) > 0.5]
+        if hits:
+            out.append(min(hits, key=lambda x: math.dist(a, x)))
+            return out
+        out.append(b)
+        if t < len(link) - 1:
+            _near = min(((seg_dist(b[0], b[1], c, d), c, d) for c, d in others), key=lambda z: z[0])
+            if _near[0] <= _TOUCH_GAP:
+                # LAND ON THE WAY, not beside it: the web counts two lanes as joined at 4 ft, and a
+                # link cut at a vertex 3.9 ft off rounds to a piece - the first cut of this pass
+                # took the reference hamlet's web apart that way.
+                foot = seg_closest(b[0], b[1], _near[1], _near[2])
+                if math.dist(b, foot) > 0.5:
+                    out.append(foot)
+                return out
+    return out
+
+
+def _unretrace(pts: Poly) -> Poly:
+    """Collapse an out-and-back in a polyline: a vertex whose two neighbors coincide is a spur to
+    nowhere, and both it and the return vertex go. A join link is routed from a piece's END, and the
+    router's first hop is free to land on the piece's own next vertex - so prepending the whole link
+    drew `A -> B -> A' -> B -> ...`, a 180-degree hairpin the eye reads as a loop (cohort seed 07,
+    feature 137 T03: lane 1 went 20 ft out to its old end and 20 ft back). Splicing is the one place
+    this shape is made, so it is undone here rather than by a general smoothing pass."""
+    out = [p for k, p in enumerate(pts) if k == 0 or math.dist(p, pts[k - 1]) > 0.5]
+    k = 1
+    while k < len(out) - 1:
+        if math.dist(out[k - 1], out[k + 1]) <= 2.0:
+            del out[k : k + 2]
+            k = max(1, k - 1)
+        else:
+            k += 1
+    # A polyline that folds away entirely (a door path whose link ran back past the door) is left
+    # as it was drawn: an ugly lane is a lane, an empty one is a hole in the web (cohort seed 03).
+    return out if len(out) >= 2 else list(pts)
+
+
 _ORPHAN_REACH = 150.0  # ft: how far a stranded piece may be linked back to the network before it is left as it is
+_SHORTEST_OF = 3  # the detour rung compares this many routable targets by route length before drawing one
 _DETOUR_DIRECTNESS = 8.0  # the last rung may walk round a yard: up to 8x the straight gap (a 29 ft gap -> a 230 ft way round)
 _SERVE_FT = 100.0  # ft: a way serves a house within this - `farmhouses_reach_a_way`'s own figure, so a dropped fragment never strands one
 

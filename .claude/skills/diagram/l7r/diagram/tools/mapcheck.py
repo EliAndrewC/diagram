@@ -84,8 +84,8 @@ TRIPWIRE_SEEDS = (27, 33, 37, 41, 47)
 # too, so the fix that lands must also drop its row here. ONE session fixes these - see the
 # future-work entry "the tier under the T99 engine".
 TRIPWIRE_EXPECTED: dict[int, frozenset[str]] = {
-    # feature 137 (2026-08-28): rows come OUT as the fixes land - 37 fixed and 27/47 shrunk by the orphan joiner's ladder (T03)
-    27: frozenset({"lanes_bend_like_paths"}),
+    # feature 137 (2026-08-28): rows come OUT as the fixes land - 37 fixed and 27/47 shrunk by the orphan joiner's ladder (T03);
+    # 27 fixed by the splice fixes (a join link stops at the first way it meets; no retrace, no lattice jog)
     47: frozenset({"lanes_form_one_network", "lanes_reach_something", "long_ditches_have_a_footbridge"}),
 }
 
