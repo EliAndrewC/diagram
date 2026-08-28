@@ -82,6 +82,16 @@ class Page:
             )
         )
 
+    def point_at(self, key: str, nth: int = 0) -> None:
+        """Put a REAL pointer on the nth group of `key` - on the element, not on its bounding-box center.
+
+        `center` returns the middle of the group's bbox, and a group is not its bbox: a farmhouse's ink is a
+        roof block and a ridge line, so the bbox center can land on bare parchment between them and light
+        nothing. That is intermittent by construction (it depends on the drawn geometry), and it failed a
+        parallel FULL run on 2026-08-28 and again alone a few minutes later on identical code. Playwright's
+        own hover picks a point INSIDE the element, which is what "a real pointer on the farmhouse" means."""
+        self.page.locator(f'g.f[data-k="{key}"]').nth(nth).hover(force=True)
+
     def hover_class(self, key: str) -> dict[str, int]:
         self.js("k => window.l7rMap.highlight(k)", key)
         return self.on()
@@ -187,7 +197,7 @@ def test_synthetic_page_mechanics(synthetic: Page) -> None:
 
 def test_a_real_pointer_lights_the_kind_and_clicking_opens_its_modal(synthetic: Page) -> None:
     x, y = synthetic.center("farmhouse", 1)
-    synthetic.page.mouse.move(x, y)
+    synthetic.point_at("farmhouse", 1)
     synthetic.page.wait_for_timeout(30)
     assert synthetic.on() == {"farmhouse": 2}, "both farmhouses, disconnected, light as one kind (US1)"
     synthetic.page.mouse.click(x, y)
