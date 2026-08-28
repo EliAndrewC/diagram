@@ -319,8 +319,9 @@ hover/click checks for the classes it contains.
   1400 x 1000 viewport is about 11x the opening view (one foot at ~9 screen px, a bund bean ~25 px
   across, every fixture glyph legible), for the GM to reset by name. Zoom by the `+` / `-` / `fit`
   buttons and keys ONLY; the mouse wheel SCROLLS the map and never zooms (the GM, on the first
-  cut: *"I don't want scrolling to zoom - I still want scrolling to scroll"*); pan by dragging or
-  by the wheel; a drag is never a click (it opens no modal). Scrolling is BOUNDED by the map (the GM:
+  cut: *"I don't want scrolling to zoom - I still want scrolling to scroll"*); NO drag-to-pan and
+  the cursor is the normal pointer (the GM, on the second cut: *"I don't need to click and drag so
+  we can get rid of that and make the mouse a normal pointer"*). Scrolling is BOUNDED by the map (the GM:
   *"We should be able to scroll to the edge of the map, but not beyond it"*): along an axis where the
   map is larger than the viewport its edge reaches the viewport's edge and no further; where it is
   smaller it sits centered. The highlight and the modal work at every zoom.
