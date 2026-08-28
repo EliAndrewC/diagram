@@ -63,6 +63,9 @@ Checked off only when verified on Kuwabata (and Inashiro unchanged). T99 is the 
 - [x] T34 renumbered 134 -> 139: a peer session landed `134-interactive-html-map` on main after this feature's number claim (827bd8d6) without renumbering; every reference in this feature's files moved to 139 (138 is a peer's unpushed claim)
       research: procedure
 
+- [ ] T35 **a green locked gate on the FINAL tree** - OWED. The last two `make done` runs (2026-08-28) went red only on tests/interactive/test_page_browser.py (main's feature-134 page): run 1 `load took 6596 ms` against a 5 s budget, run 2 `Page.evaluate: Target crashed` twice - the headless Chromium renderer killed under 22 xdist workers on a box with 4.6 GB free (other sessions running). Both tests pass alone in this clone (9 passed, 60 s) and the CI tooling test that also flaked in run 1 passes alone here and on unmodified main. Not a regression of this delta (nothing here touches the page); it is the environment. Re-run `make done` when the box is quiet; if the crash recurs on a quiet box, the fix belongs with the browser fixture (a relaunch on "Target crashed", or a memory-aware worker count for that file). The green run that DID cover this feature's engine content is the third run (make-done-3, 3,768 tests, before main's browser tests were merged in)
+      research: procedure
+
 ## Phase 4 - the GM
 
 - [ ] T40 (open slot) tasks the GM names from the audit or the map, each in their words, timed, classified
