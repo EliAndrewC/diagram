@@ -1089,7 +1089,7 @@ def _touch_junctions(s: Settlement, hard: list[Poly], walls: Sequence[Poly], wat
                 _oe = 0 if math.dist(foot, _op[0]) <= 4.0 else (-1 if math.dist(foot, _op[-1]) <= 4.0 else None)
                 if _oe is not None and len(_op) >= 2 and not lanes[k].get("connector"):
                     _nb = _op[1] if _oe == 0 else _op[-2]
-                    if _clear_link(_nb, q, hard, walls, water) and math.dist(_nb, q) <= 2.0 * math.dist(_nb, _op[_oe]) + 4.0:
+                    if _clear_touch(_nb, q, hard, walls, water) and math.dist(_nb, q) <= 2.0 * math.dist(_nb, _op[_oe]) + 4.0:
                         _np = list(_op)
                         _np[_oe] = q
                         lanes[k]["pts"] = [[round(x, 1), round(y, 1)] for x, y in _np]
@@ -1097,7 +1097,7 @@ def _touch_junctions(s: Settlement, hard: list[Poly], walls: Sequence[Poly], wat
                         closed += 1
                         moved += 1
                         continue
-                link = [q, foot] if _clear_link(q, foot, hard, walls, water) else _route(q, foot, hard, walls, water, gap=WEB_FABRIC_GAP, pad_mult=2.0, cell=10.0)
+                link = [q, foot] if _clear_touch(q, foot, hard, walls, water) else _route(q, foot, hard, walls, water, gap=WEB_FABRIC_GAP, pad_mult=2.0, cell=10.0)
                 if not link or polyline_len(link) > _LINK_DIRECTNESS * d:
                     continue
                 new = (list(reversed(link[1:])) + new) if end == 0 else (new + link[1:])
@@ -1129,7 +1129,7 @@ def _touch_junctions(s: Settlement, hard: list[Poly], walls: Sequence[Poly], wat
             for d, v, q in cands[:12]:
                 if d > _ORPHAN_REACH:
                     break
-                link = [v, q] if _clear_link(v, q, hard, walls, water) else _route(v, q, hard, walls, water, gap=WEB_FABRIC_GAP, pad_mult=2.0, cell=10.0)
+                link = [v, q] if _clear_touch(v, q, hard, walls, water) else _route(v, q, hard, walls, water, gap=WEB_FABRIC_GAP, pad_mult=2.0, cell=10.0)
                 if link and polyline_len(link) <= _LINK_DIRECTNESS * max(d, 1.0):
                     _draw_web(s, link, int(float(lanes[i].get("w", 3))))
                     joined = True
@@ -1214,9 +1214,7 @@ _SERVE_FT = 100.0  # ft: a way serves a house within this - `farmhouses_reach_a_
 _TOUCH_GAP = 4.0
 
 
-def _clear_touch(
-    a: Pt, b: Pt, hard: list[Poly], walls: Sequence[Poly], water: list[tuple[Pt, Pt]]
-) -> bool:  # VARIANT A (feature 137 T03, 2026-08-28): no longer used by the junction passes - the 4 ft footprints-only brush drew lanes the gate refuses (houses_clear_of_lanes on 13 of 24 seeds, features_do_not_overlap on 10 - the T32 bisect); links now hold the web's own fabric margin (_clear_link)
+def _clear_touch(a: Pt, b: Pt, hard: list[Poly], walls: Sequence[Poly], water: list[tuple[Pt, Pt]]) -> bool:
     """`_clear_link` at footprint margins - for the short link that closes a junction (see `_TOUCH_GAP`)."""
     span = math.dist(a, b)
     if span < 1.0:
@@ -1335,7 +1333,7 @@ def _smooth_web(s: Settlement, hard: list[Poly], walls: Sequence[Poly], water: l
             for m in _mine:
                 for _e in (_ways[m][0], _ways[m][-1]):
                     _foot = min((seg_closest(_e[0], _e[1], a, b) for a, b in _segs), key=lambda z: math.dist(_e, z))
-                    if math.dist(_e, _foot) <= _STUB_REACH_FT and _clear_link(_e, _foot, hard, walls, water):
+                    if math.dist(_e, _foot) <= _STUB_REACH_FT and _clear_touch(_e, _foot, hard, walls, water):
                         _ok = True
                         break
                 if _ok:
@@ -1400,7 +1398,7 @@ def _smooth_web(s: Settlement, hard: list[Poly], walls: Sequence[Poly], water: l
             # T04, 2026-08-28): letting a straggler lane take any chord `_clear_touch` allows straightened seed
             # 43's fold and put a new sharp bend on the reference hamlet's web. Not kept; the fold's real
             # cause is the straggler router folding inside a pocket, and that is where the fix belongs.
-            if not _clear_link(pts[a], pts[b], hard, walls, water):
+            if not _clear_touch(pts[a], pts[b], hard, walls, water):
                 return False
             return all(seg_dist(v[0], v[1], pts[a], pts[b]) <= _JOG_FT for v in pts[a + 1 : b])
 
@@ -1463,7 +1461,7 @@ def _smooth_web(s: Settlement, hard: list[Poly], walls: Sequence[Poly], water: l
             if len(_q) < 2:
                 continue
             _nb = _q[1] if f == 0 else _q[-2]
-            if _clear_link(_nb, node, hard, walls, water) and [[round(x, 1), round(y, 1)] for x, y in _q] != lanes[j]["pts"] and _commit(j, [[round(x, 1), round(y, 1)] for x, y in _q]):
+            if _clear_touch(_nb, node, hard, walls, water) and [[round(x, 1), round(y, 1)] for x, y in _q] != lanes[j]["pts"] and _commit(j, [[round(x, 1), round(y, 1)] for x, y in _q]):
                 changed += 1
     # 2b. shadows: a lane whose every vertex lies inside another lane's stroke is that lane drawn
     # twice (settlement-review at the T99 acceptance: lanes[7] lay for its whole 35.7 ft inside
