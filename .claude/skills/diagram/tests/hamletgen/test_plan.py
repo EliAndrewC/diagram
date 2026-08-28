@@ -160,6 +160,23 @@ def test_the_manure_form_rolls_both_ways_and_pins() -> None:
         hg.HamletSpec(name="X", seed=1, manure_form="lagoon")
 
 
+def test_the_dike_crop_and_leftover_roll_on_the_dike_pond_and_pin_elsewhere() -> None:
+    """Feature 139 A6/B2: a dike-pond hamlet rolls its dike type and its leftover form; every other archetype is
+    mulberry/rice by definition (the knobs have no meaning there and must not re-roll anything)."""
+    crops = {hg.plan_site(hg.HamletSpec(name="X", seed=s, households=16, field_archetype="mulberry_dike_fishpond")).dike_crop for s in range(1, 60)}
+    assert crops == {"mulberry", "sugarcane", "banana", "fruit"}
+    lefts = {hg.plan_site(hg.HamletSpec(name="X", seed=s, households=16, field_archetype="mulberry_dike_fishpond")).leftover for s in range(1, 40)}
+    assert lefts == {"rice", "vegetables", "pond"}
+    p = hg.plan_site(hg.HamletSpec(name="X", seed=3, households=15))
+    assert (p.dike_crop, p.leftover) == ("mulberry", "rice")
+    p = hg.plan_site(hg.HamletSpec(name="X", seed=3, households=16, field_archetype="mulberry_dike_fishpond", dike_crop="banana", leftover="pond"))
+    assert (p.dike_crop, p.leftover) == ("banana", "pond")
+    with pytest.raises(ValueError, match="dike_crop"):
+        hg.HamletSpec(name="X", seed=1, dike_crop="tea")
+    with pytest.raises(ValueError, match="leftover"):
+        hg.HamletSpec(name="X", seed=1, leftover="wheat")
+
+
 def test_a_nonsense_pond_layout_is_refused() -> None:
     with pytest.raises(ValueError, match="pond_layout"):
         hg.HamletSpec(name="X", seed=1, pond_layout="chessboard")

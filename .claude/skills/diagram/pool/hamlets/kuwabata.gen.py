@@ -34,6 +34,9 @@ sys.path.insert(0, SKILL)
 from l7r.diagram.hamletgen import HamletSpec, generate  # noqa: E402
 
 # seed 21 and 16 households are the hand-authored map's; `pond_layout="mosaic"` pins the form the
-# GM accepted on it (the Pearl-delta accreted mosaic; the knob also rolls the surveyed grid).
-report = generate(HamletSpec(name="Kuwabata", seed=21, households=16, down_deg=90, field_archetype="mulberry_dike_fishpond", pond_layout="mosaic"), out_base=os.path.join(HERE, "kuwabata"))
+# GM accepted on it (the Pearl-delta accreted mosaic; the knob also rolls the surveyed grid), and
+# `dike_crop="mulberry"` pins the silk case the name 桑畑 states (the knob also rolls cane, banana,
+# fruit). The manure form and the leftover form roll (GM 2026-08-28: "which would not necessarily be
+# enabled on this specific map").
+report = generate(HamletSpec(name="Kuwabata", seed=21, households=16, down_deg=90, field_archetype="mulberry_dike_fishpond", pond_layout="mosaic", dike_crop="mulberry"), out_base=os.path.join(HERE, "kuwabata"))
 print(report.line())

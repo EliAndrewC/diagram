@@ -351,6 +351,9 @@ def main(argv: Sequence[str] | None = None) -> int:
     ap.add_argument("--bamboo", choices=("none", "homestead", "thicket", "both"), default=None, help="pin the bamboo knob (feature 133 T47: one map per knob value is owed at unlock)")
     ap.add_argument("--archetype", choices=FIELD_ARCHETYPES, default=None, help="pin the field archetype (feature 139: the dike-pond is opt-in, like the polder)")
     ap.add_argument("--pond-layout", choices=("grid", "mosaic"), default=None, help="pin a dike-pond's arrangement (feature 139: one map per knob value is owed)")
+    ap.add_argument("--manure-form", choices=("heap", "pit"), default=None, help="pin the manure fixture's form (feature 139 A2)")
+    ap.add_argument("--dike-crop", choices=("mulberry", "sugarcane", "banana", "fruit"), default=None, help="pin a dike-pond's dike planting (feature 139 A6)")
+    ap.add_argument("--leftover", choices=("rice", "vegetables", "pond"), default=None, help="pin a dike-pond's leftover parcels (feature 139 B2)")
     ap.add_argument("--out", default=None, help="write <out>.svg/.png/.json")
     ap.add_argument("--no-render", action="store_true")
     ap.add_argument("--batch", type=int, default=0, help="roll N hamlets from consecutive seeds and gate them all")
@@ -384,6 +387,9 @@ def main(argv: Sequence[str] | None = None) -> int:
             bamboo=args.bamboo,
             field_archetype=args.archetype,
             pond_layout=args.pond_layout,
+            manure_form=args.manure_form,
+            dike_crop=args.dike_crop,
+            leftover=args.leftover,
         ),
         out_base=args.out,
         render=not args.no_render,

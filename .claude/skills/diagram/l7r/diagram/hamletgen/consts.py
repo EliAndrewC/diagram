@@ -318,6 +318,19 @@ POND_LAYOUTS = ("mosaic", "mosaic", "grid")
 # the back of the building", lined along the road. Neither source gives a share of villages using each, so
 # the roll is even. research/archetypes.md "What stands on a dike-pond hamlet that a paddy hamlet lacks".
 MANURE_FORMS = ("heap", "pit")
+
+# THE DIKE CROP - which of the dike-pond TYPES a hamlet is (feature 139, GM 2026-08-28 choosing audit A6).
+# The gazetteer office frames 桑基 (mulberry), 果基 (fruit), 蔗基 (sugar cane) and 蕉基 (banana) as a
+# succession of types across the region's history, not crops mixed on one dike; the late-1980s survey
+# carried by Ruddle & Zhong had cane dikes at 18% of the district against mulberry at 12%, while the
+# Ming-Qing heartland of Nanhai and Shunde was the silk case. Mulberry is weighted as the premodern norm
+# (a DEGREE, constitution XII); the others roll so two dike-pond hamlets can honestly differ.
+DIKE_CROPS = ("mulberry", "mulberry", "mulberry", "sugarcane", "banana", "fruit")
+
+# WHAT THE LEFTOVER PARCELS OF A WHOLESALE CONVERSION READ AS (feature 139 B2): standing rice, vegetable
+# ground (Fei: vegetables under the mulberry; the gazetteers: no rice inside a converted district), or no
+# leftover at all (every parcel a pond). Three attested states; the roll is even.
+LEFTOVER_FORMS = ("rice", "vegetables", "pond")
 POND_LAYOUT_MOSAIC = 0.5
 
 # THE SHARE OF THE BLOCK THAT CONVERTED in the end state. `apply_land_use(fraction=)` is the ECONOMIC

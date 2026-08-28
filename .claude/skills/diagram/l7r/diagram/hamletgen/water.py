@@ -344,7 +344,17 @@ def stage_polder(s: Settlement, plan: SitePlan) -> None:
     # the repainted leftovers are field ground the dike band and the houses draw over. Its RNG is
     # positional (`knob_rng`), so adding it re-rolls nothing else on the map.
     if plan.field_archetype == "mulberry_dike_fishpond":
-        s.apply_land_use(net, "mulberry_fishpond", knob_rng(plan.spec.seed, "mulberry_fishpond"), fraction=DIKEPOND_CONVERSION, eligible="all")
+        # ...with the hamlet's dike crop and its leftover form (feature 139 A6/B2): a `pond` leftover means the
+        # whole block converted, so the fraction goes to 1.0 and no parcel is left to repaint.
+        s.apply_land_use(
+            net,
+            "mulberry_fishpond",
+            knob_rng(plan.spec.seed, "mulberry_fishpond"),
+            fraction=1.0 if plan.leftover == "pond" else DIKEPOND_CONVERSION,
+            eligible="all",
+            dike_crop=plan.dike_crop,
+            leftover=plan.leftover,
+        )
     # THE PERIMETER DIKE - the defining polder feature, and the reason a polder is a polder: an
     # irregular hand-piled earthwork band following the water edge in organic bends (fish-scale
     # polder, 鱼鳞圩). Drawn HERE, before the village, so it sits UNDER the houses that line it.
