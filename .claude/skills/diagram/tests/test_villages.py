@@ -171,13 +171,13 @@ def test_slow_gen_budget_fires_and_the_override_silences_it(tmp_path, monkeypatc
     # the documented override lets it through (to then fail on the missing manifest instead,
     # proving the budget assert itself was silenced)
     gen = tmp_path / "snail.gen.py"
-    gen.write_text("import time\nt0 = time.process_time()\nwhile time.process_time() - t0 < 0.05:\n    pass\n")
     monkeypatch.setitem(GEN_TIME_BUDGETS, "snail", 0.001)
-    # Bypass the cache and keep the snail's entry out of the real .gencache (026): without the
-    # bypass the SECOND call would HIT on the entry the first call stored and never reach the
-    # budget assert at all - the override's silencing would be untested.
-    monkeypatch.setenv("GATE_NO_CACHE", "1")
-    monkeypatch.setattr(gencache, "CACHE_DIR", str(tmp_path / "cache"))
+    # THE OBTAIN IS STUBBED (feature 135, third pass): this used to spawn two real `coverage run` subprocesses
+    # on a 50 ms fake gen - 2.6 s, the gate's second-longest test - to prove an assert that reads only the
+    # CPU figure `gate_obtain` returns. The figure's measurement is `gate_obtain`'s own contract, proven in
+    # tests/gate/pipeline/test_gencache.py (`gen_cpu_s >= 0` on a miss); this test proves the BUDGET fires
+    # on that figure and that the documented override silences it, which a stub shows in milliseconds.
+    monkeypatch.setattr(gencache, "gate_obtain", lambda g: (str(tmp_path / "snail.json"), "REGENERATED", 0.05))
     # OWN THE ENVIRONMENT, do not inherit it (2026-08-03): the override is documented for
     # WHOLE-SWEEP use ("rerun with DIAGRAM_ALLOW_SLOW_GENS=1"), and a session that follows that
     # advice silenced the budget for this test too - so the one test proving the guard still has

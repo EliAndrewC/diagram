@@ -385,7 +385,7 @@ citybudget:     ## the city/capital space-budget planner
 # Python without a green `make done`. Motivating case: a RED hooks-test followed by `commit; ritual`
 # landed on main, because nothing at push time knew the guards had been edited.
 hooks-test:     ## run every scripts/test-*-hooks.sh, and prove each guard still has a companion
-	@root=$$(git rev-parse --show-toplevel); fail=""; n=0; \
+	@root=$$(git rev-parse --show-toplevel); fail=""; n=0; skipped=0; \
 	for h in $$root/scripts/*-hooks.sh $$root/scripts/review-gate.sh $$root/scripts/gate-stamp.py $$root/scripts/sync-with-main.sh; do \
 	  : "(GUARD_EDIT_OK: sync-with-main.sh joins the roster - its route decision is a guard, feature 130 T031)"; \
 	  b=$$(basename $$h); case $$b in test-*) continue ;; esac; \
@@ -396,13 +396,23 @@ hooks-test:     ## run every scripts/test-*-hooks.sh, and prove each guard still
 	    printf 'fires - or whether it fires on correct work, which is the more expensive failure.\n\n'; \
 	    fail="$$fail $$b"; continue; \
 	  fi; \
+	  deps="$$h $$root/scripts/$$t $$root/scripts/_hookmatch.py $$root/scripts/test_hooks_cases.py"; \
+	  case $$b in sync-with-main.sh|review-gate.sh|gate-stamp.py) deps="$$root/scripts/*.sh $$root/scripts/*.py";; esac; \
+	  sha=$$(cat $$deps 2>/dev/null | sha256sum | cut -c1-16); mkdir -p "$$root/.git/hooks-test"; \
+	  if [ -z "$(HOOKS_ALL)" ] && [ "$$(cat "$$root/.git/hooks-test/$$b" 2>/dev/null)" = "$$sha" ]; then skipped=$$((skipped+1)); continue; fi; \
 	  n=$$((n+1)); \
-	  "$$root/scripts/$$t" >/tmp/ht.$$$$ 2>&1 || { printf '\n\033[1mHOOK TESTS FAILED: %s\033[0m\n' "$$b"; sed 's/^/  /' /tmp/ht.$$$$; fail="$$fail $$b"; }; \
+	  "$$root/scripts/$$t" >/tmp/ht.$$$$ 2>&1 && printf '%s' "$$sha" > "$$root/.git/hooks-test/$$b" || { printf '\n\033[1mHOOK TESTS FAILED: %s\033[0m\n' "$$b"; sed 's/^/  /' /tmp/ht.$$$$; fail="$$fail $$b"; }; \
 	  rm -f /tmp/ht.$$$$; \
 	done; \
 	if [ -n "$$fail" ]; then printf '\n\033[1mhooks-test FAILED:%s\033[0m\n\n' "$$fail"; exit 1; fi; \
 	python3 "$$root/scripts/gate-stamp.py" --write hooks; \
-	printf 'hooks-test: %s guard suites green (hooks area stamped)\n' "$$n"
+	printf 'hooks-test: %s guard suites green, %s unchanged since they last went green (hooks area stamped)\n' "$$n" "$$skipped"
+# PER-SUITE FRESHNESS (feature 135, third pass; GUARD_EDIT_OK: the roster and the failure path are unchanged - a suite
+# is SKIPPED only when its guard, its test and the shared helpers (`_hookmatch.py`, `test_hooks_cases.py`; for the
+# three suites that drive other scripts, all of scripts/) hash to what they hashed when the suite last went GREEN in
+# this clone (.git/hooks-test/<guard>). Measured: 90 s to re-run all 13 suites for a one-line edit to one guard;
+# `HOOKS_ALL=1` runs every suite regardless. The whole-area stamp (`gate-stamp --write hooks`) is written only when
+# every suite is green, exactly as before.
 # (GUARD_EDIT_OK: adds gate-stamp.py to the guard roster with a .sh companion, and stamps the hooks area on green)
 
 perf-gate:      ## require the feature's -start bookend, take -end, and FAIL on a regression
@@ -795,7 +805,10 @@ MYPY = $(if $(CODEBUILD_BUILD_ID),python3 -m mypy,python3 -m mypy.dmypy run --)
 # THE GATE IS ALWAYS EXHAUSTIVE (constitution v2.9.0, GM 2026-08-26): `make quick` runs each test's quick form,
 # `make done` its full form - the corpus, the full matrices, the full-size canvases, the tooling tests.
 GATE_EXHAUSTIVE_ENV = L7R_TESTS_EXHAUSTIVE=1
-TIER_SELECT = $(if $(COV_FLOORS),,$(if $(filter reference,$(SCOPE_STATE)),--tier $(REFERENCE_TIER),))
+# ...and the other tiers' TREES are not even collected under the lock (feature 135, third pass): every xdist
+# worker collected ~700 town/city items to deselect them a moment later; the ignore is the same decision made
+# before collection instead of after it.
+TIER_SELECT = $(if $(COV_FLOORS),,$(if $(filter reference,$(SCOPE_STATE)),--tier $(REFERENCE_TIER) --ignore=tests/tier_town --ignore=tests/tier_city,))
 
 # (GUARD_EDIT_OK: feature 132 - test-full rolls every pool map, so the scope lock refuses it before `test` starts)
 test-full:
@@ -833,12 +846,13 @@ test:
 # the rest; worksteal lets idle workers take from busy ones. Measured on quick: 27.5 s -> 22.0 s wall.
 	@$(if $(COV_SCOPE),printf 'coverage: %s\n' "$(COV_SCOPE)";,)
 	@if python3 -c "import xdist" >/dev/null 2>&1; then $(GATE_EXHAUSTIVE_ENV) $(FULL_ENV) python3 -m pytest -n $(XDIST_WORKERS) --dist worksteal $(COV_SCOPE) $(FULL_TREE_IGNORE) $(ROLL_DESELECT) $(TIER_SELECT); else $(GATE_EXHAUSTIVE_ENV) $(FULL_ENV) python3 -m pytest $(COV_SCOPE) $(FULL_TREE_IGNORE) $(ROLL_DESELECT) $(TIER_SELECT); fi; ec=$$?; \
-	if [ $$ec -ne 0 ]; then python3 ../../../scripts/uncovered-in-diff.py || true; exit $$ec; fi; \
-	python3 -m coverage combine --append >/dev/null 2>&1 || true; \
+	traced=$(if $(filter --no-cov,$(COV_SCOPE)),,1); \
+	if [ $$ec -ne 0 ]; then [ -n "$$traced" ] && { python3 ../../../scripts/uncovered-in-diff.py || true; }; exit $$ec; fi; \
 	if [ -z "$(COV_FLOORS)" ]; then \
 	  printf '\033[1mcoverage floors: deferred to `make done FULL=1`\033[0m (a deselected test takes its coverage with it - see the Makefile comment)\n'; \
-	  python3 ../../../scripts/uncovered-in-diff.py || true; \
+	  [ -n "$$traced" ] && { python3 -m coverage combine --append >/dev/null 2>&1 || true; python3 ../../../scripts/uncovered-in-diff.py || true; }; \
 	  exit 0; \
 	fi; \
+	python3 -m coverage combine --append >/dev/null 2>&1 || true; \
 	python3 -m coverage report -m --omit='*/settlement/*' --fail-under=100 || { echo "COVERAGE: a module other than settlement.py is under 100% - the table above names it and its missing lines"; exit 1; }; \
 	python3 -m coverage report --include='*/settlement/*' --fail-under=$(SETTLEMENT_COV_FLOOR) || { echo "COVERAGE: settlement/ (package combined) fell below its $(SETTLEMENT_COV_FLOOR)% ratchet floor (see the comment above SETTLEMENT_COV_FLOOR in this Makefile; 'python3 -m coverage report -m --include=*/settlement/*' shows the missing lines)"; exit 1; }
