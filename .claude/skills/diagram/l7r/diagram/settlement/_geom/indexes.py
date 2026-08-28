@@ -245,3 +245,83 @@ class PointGrid:
                 if bucket:
                     out.extend(bucket)
         return out
+
+
+class RingIndex:
+    """Point queries against ONE static ring - inside/outside and distance-to-edge - built once.
+
+    WHY IT EXISTS (feature 144, GM 2026-08-28: *"What are we doing billions of computations on
+    exactly?"*). The ground-cover scatters (`commons`, `marsh`) throw ~100k+ candidate points per
+    hamlet and asked the outline two questions per point, each by walking EVERY edge: `point_in_poly`
+    and `edge_dist` - 1.3M ray tests and 156k full-ring distance scans on the reference, ~60M segment
+    operations, 13 of the stage's 20 profiled seconds, to place grass. Both answers only ever depend
+    on the few edges near the point, so the edges are filed in a `PointGrid` once per ring and each
+    query touches its own cell. Exact, like every index here: `inside` counts the same crossings
+    against the same edges (only the edges whose y-span can contain the ray are visited, which is
+    every edge the crossing formula could count), and `edge_within` returns the true distance when it
+    is under the limit and None when it is not - the callers only use the distance INSIDE a feather
+    band, so a point farther than the band from every edge needs no number at all. Verdicts match
+    the linear scan; a map that moves under this index moved for another reason."""
+
+    __slots__ = ("cell", "grid", "ring", "rows", "x0", "x1", "y0", "y1")
+
+    def __init__(self, ring: Any, cell: float = 64.0) -> None:
+        self.ring: Poly = [(float(p[0]), float(p[1])) for p in ring]
+        self.cell = cell
+        n = len(self.ring)
+        edges = []
+        self.rows: dict[int, list[tuple[float, float, float, float]]] = {}
+        for i in range(n):
+            (xi, yi), (xj, yj) = self.ring[i], self.ring[(i + 1) % n]
+            edges.append(((xi, yi), (xj, yj), min(xi, xj), min(yi, yj), max(xi, xj), max(yi, yj)))
+            # the ray test's own condition is `(yi > py) != (yj > py)`, so an edge can only count for
+            # the rows its y-span covers; file it there and the crossing count is exact per row
+            for r in range(int(min(yi, yj) // cell), int(max(yi, yj) // cell) + 1):
+                self.rows.setdefault(r, []).append((xi, yi, xj, yj))
+        self.grid = PointGrid(cell)
+        self.grid.extend(edges)
+        xs = [p[0] for p in self.ring]
+        ys = [p[1] for p in self.ring]
+        self.x0, self.x1, self.y0, self.y1 = min(xs), max(xs), min(ys), max(ys)
+
+    def inside(self, px: float, py: float) -> bool:
+        """`point_in_poly`, restricted to the edges whose y-span can cross the ray."""
+        if not (self.x0 <= px <= self.x1 and self.y0 <= py <= self.y1):
+            return False
+        inside = False
+        for xi, yi, xj, yj in self.rows.get(int(py // self.cell), ()):
+            if ((yi > py) != (yj > py)) and (px < (xj - xi) * (py - yi) / (yj - yi + 1e-9) + xi):
+                inside = not inside
+        return inside
+
+    def edge_within(self, px: float, py: float, limit: float) -> float | None:
+        """The distance from (px, py) to the nearest edge if it is under `limit`, else None."""
+        best = limit
+        for a, b, bx0, by0, bx1, by1 in self.grid.near(px, py, limit):
+            if bx0 - limit <= px <= bx1 + limit and by0 - limit <= py <= by1 + limit:
+                d = seg_dist(px, py, a, b)
+                if d < best:
+                    best = d
+        return best if best < limit else None
+
+
+def boxed_rings(polys: Any, pad: float = 0.0) -> list[tuple[RingIndex, float, float, float, float]]:
+    """`boxed_polys` with each ring INDEXED (feature 144): the same `(payload, x0, y0, x1, y1)` shape
+    `boxed_grid` files, but the payload is a `RingIndex`, so `boxed_ring_hit` answers the inside
+    and edge-margin questions from the edges near the point instead of walking every vertex. The
+    scatters' crop-margin test was the last whole-ring scan per candidate: `boxed_hit(..., edge_pad)`
+    ran `edge_dist` over the full paddy ring for every point whose box it could not reject - 18k
+    calls, 2.4 of the hinterland stage's 10 profiled seconds after the outline itself was indexed."""
+    out: list[tuple[RingIndex, float, float, float, float]] = []
+    for poly in polys:
+        idx = RingIndex(poly)
+        out.append((idx, idx.x0 - pad, idx.y0 - pad, idx.x1 + pad, idx.y1 + pad))
+    return out
+
+
+def boxed_ring_hit(px: float, py: float, boxed: Any, edge_pad: float = 0.0) -> bool:
+    """`boxed_hit` over `boxed_rings` items - identical verdicts, indexed edges."""
+    for idx, bx0, by0, bx1, by1 in boxed:
+        if bx0 <= px <= bx1 and by0 <= py <= by1 and (idx.inside(px, py) or (edge_pad > 0 and idx.edge_within(px, py, edge_pad) is not None)):
+            return True
+    return False

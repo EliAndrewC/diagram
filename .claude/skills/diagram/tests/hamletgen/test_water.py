@@ -80,3 +80,24 @@ def test_miter_normals_caps_the_scale_on_a_hairpin() -> None:
     # 1/cos(80 deg) = 5.8x, spiking the seam far upslope - capped at 2x (max(0.5, dot))
     bn = wf._miter_normals([(0.0, 0.0), (-8.7, 49.2), (-17.4, 0.2)], wf._Frame(90.0))
     assert math.hypot(*bn[1]) == pytest.approx(2.0)
+
+
+def test_predict_k_steps_by_the_power_law_and_falls_back_to_the_midpoint() -> None:
+    """The field solver's step (feature 144): a square-root step from one carve, a power-law step
+    from two, and the bracket midpoint whenever the prediction is useless."""
+    from l7r.diagram.hamletgen.water import _predict_k
+
+    # one carve at k=1 gave 9 acres against a 16-acre target: k^2 scaling predicts 4/3
+    assert abs(_predict_k([(1.0, 9.0)], 16.0, 0.35, 2.2) - 4.0 / 3.0) < 1e-9
+    # two carves on an exact k^2 curve predict the exact answer
+    assert abs(_predict_k([(1.0, 4.0), (1.5, 9.0)], 16.0, 0.35, 2.2) - 2.0) < 1e-9
+    # a flat (same acreage twice) has no slope - square-root step from the last point
+    assert abs(_predict_k([(1.0, 9.0), (1.2, 9.0)], 16.0, 0.35, 2.2) - 1.2 * (16.0 / 9.0) ** 0.5) < 1e-9
+    # an exponent outside (0.2, 6) is not a fan - square-root step
+    assert abs(_predict_k([(1.0, 1.0), (1.1, 100.0)], 200.0, 0.35, 2.2) - 1.1 * 2.0**0.5) < 1e-9
+    # nothing carved: midpoint
+    assert _predict_k([(1.0, 0.0)], 16.0, 0.5, 1.5) == 1.0
+    # a prediction outside the open bracket: midpoint
+    assert _predict_k([(1.0, 9.0)], 16.0, 0.5, 1.2) == 0.85
+    # the same k twice cannot give a slope: square-root step
+    assert abs(_predict_k([(1.0, 9.0), (1.0, 9.5)], 16.0, 0.35, 2.2) - (16.0 / 9.5) ** 0.5) < 1e-9

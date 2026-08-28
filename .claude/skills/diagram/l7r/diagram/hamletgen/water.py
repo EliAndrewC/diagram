@@ -122,8 +122,20 @@ def _fit_at_aspect(plan: SitePlan, sluice: Pt, seed: int, plot_across: float, ro
     """`fit_field`'s bisection at ONE fan aspect. Returns ((illegal, acreage error), net)."""
     lo, hi = 0.35, 2.2
     best: tuple[tuple[bool, float], dict[str, Any]] | None = None
+    # PREDICT THE MULTIPLIER, THEN BRACKET IT (feature 144, GM 2026-08-28: "maps are now allowed to
+    # move ... we should just go ahead and fix it"). The fan scales in both dimensions with k, so
+    # its acreage goes roughly as k^2: from one carve the size that lands the target is
+    # k * sqrt(target / acres), and from two carves a power law through both points is better
+    # still. The bisection ignored that and halved the bracket blindly - seven carves of ~0.9 s to
+    # find what the first carve already predicted to within a plot row. The bracket is kept and the
+    # prediction is clamped INTO it (and falls back to the midpoint when it lands on a bracket end,
+    # which is how a lumpy acreage curve is stopped from re-proposing the same k), so every guarantee
+    # of the old loop holds: monotone narrowing, termination at `rounds`, the best legal net kept.
+    # Measured on the reference (seed 4): 4 carves -> 2; the cohort's worst field seeds 7 -> 2-3.
+    pts: list[tuple[float, float]] = []  # (k, acres) of every carve so far, for the power-law step
+    k = 1.0
     for _ in range(rounds):
-        k = (lo + hi) / 2.0
+        k = min(max(k, lo + 1e-3), hi - 1e-3)
         net = build_comb(
             plan.W,
             plan.H,
@@ -158,8 +170,29 @@ def _fit_at_aspect(plan: SitePlan, sluice: Pt, seed: int, plot_across: float, ro
             lo = k
         else:
             hi = k
+        pts.append((k, acres))
+        k = _predict_k(pts, plan.target_acres, lo, hi)
     assert best is not None
     return best
+
+
+def _predict_k(pts: list[tuple[float, float]], target: float, lo: float, hi: float) -> float:
+    """The next size multiplier to carve at: a power-law step through the last two (k, acres)
+    points, a square-root step from one, the bracket's midpoint when the prediction is useless.
+
+    Useless means: the two acreages coincide (a flat in the lumpy curve - no slope to follow), an
+    acreage of zero (nothing carved), or a prediction outside the open bracket (the curve is not
+    the power law where it matters, so the bracket's own halving takes over, exactly as before)."""
+    (k1, a1) = pts[-1]
+    if a1 <= 0:
+        return (lo + hi) / 2.0
+    if len(pts) >= 2 and pts[-2][1] > 0 and pts[-2][1] != a1 and pts[-2][0] != k1:
+        (k0, a0) = pts[-2]
+        p = math.log(a1 / a0) / math.log(k1 / k0)  # the local exponent; ~2 for a fan scaling in both dimensions
+        k = k1 * (target / a1) ** (1.0 / p) if 0.2 < p < 6.0 else k1 * math.sqrt(target / a1)
+    else:
+        k = k1 * math.sqrt(target / a1)
+    return k if lo < k < hi else (lo + hi) / 2.0
 
 
 HEAD_OFFSETS: tuple[tuple[str, float], ...] = (("head_left", -0.24), ("head_center", -0.05), ("head_center", 0.05), ("head_right", 0.24))

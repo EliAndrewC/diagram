@@ -450,3 +450,47 @@ def test_the_import_time_main_tree_guard_survived_the_split():
     base = pathlib.Path(settlement._geom.__path__[0]) / "base.py"
     assert "\n_assert_not_main_tree()\n" in base.read_text()
     assert settlement._assert_not_main_tree is settlement._geom.base._assert_not_main_tree
+
+
+def test_ring_index_matches_the_linear_scan_exactly() -> None:
+    """RingIndex (feature 144) is a prefilter: inside/outside and the feather-band distance must
+    equal point_in_poly / edge_dist on every point - concave rings, points on the bbox edge, points
+    outside, points far from every edge (None) and points inside the band (the true distance)."""
+    import random as _r
+
+    from l7r.diagram.settlement._geom import RingIndex, edge_dist, point_in_poly
+
+    rng = _r.Random(144)
+    rings = [
+        [(0, 0), (300, 0), (300, 200), (150, 80), (0, 200)],  # a concave notch
+        [(50, 50), (400, 60), (420, 300), (200, 350), (180, 180), (40, 320)],  # irregular, six edges
+        [(0, 0), (1000, 0), (1000, 1000), (0, 1000)],  # spans many cells
+    ]
+    for ring in rings:
+        idx = RingIndex(ring, cell=64.0)
+        for _ in range(3000):
+            px, py = rng.uniform(-100, 1100), rng.uniform(-100, 1100)
+            assert idx.inside(px, py) == point_in_poly(px, py, ring), (ring, px, py)
+            for limit in (10.0, 42.0, 200.0):
+                exact = edge_dist(px, py, ring)
+                got = idx.edge_within(px, py, limit)
+                if exact < limit:
+                    assert got is not None and abs(got - exact) < 1e-9, (ring, px, py, limit)
+                else:
+                    assert got is None, (ring, px, py, limit)
+
+
+def test_boxed_rings_match_boxed_polys() -> None:
+    """`boxed_ring_hit` over `boxed_rings` (feature 144) gives `boxed_hit`'s verdict on every point,
+    with and without an edge pad - the box pad is the edge pad, as the contract requires."""
+    import random as _r
+
+    from l7r.diagram.settlement._geom import boxed_hit, boxed_polys, boxed_ring_hit, boxed_rings
+
+    rng = _r.Random(1440)
+    polys = [[(0, 0), (120, 0), (120, 90), (60, 40), (0, 90)], [(300, 300), (500, 320), (480, 520), (320, 480)]]
+    for pad in (0.0, 12.0):
+        a, b = boxed_polys(polys, pad), boxed_rings(polys, pad)
+        for _ in range(4000):
+            px, py = rng.uniform(-50, 600), rng.uniform(-50, 600)
+            assert boxed_ring_hit(px, py, b, pad) == boxed_hit(px, py, a, pad), (px, py, pad)

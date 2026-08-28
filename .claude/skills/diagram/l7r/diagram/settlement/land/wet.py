@@ -24,7 +24,7 @@ import math
 import random
 from typing import TYPE_CHECKING, Any
 
-from .._geom import Pt, boxed_grid, boxed_hit, boxed_polys, boxed_seg_hit, boxed_segs, edge_dist, point_in_poly, seg_dist
+from .._geom import Pt, RingIndex, boxed_grid, boxed_ring_hit, boxed_rings, boxed_seg_hit, boxed_segs, point_in_poly, seg_dist
 
 MARSH_FEATHER_BS = 46  # the reeds thin to nothing over this band (x bscale) inside the polygon; `commons` thins its scrub INTO the marsh over the same band
 
@@ -67,29 +67,30 @@ class WetGroundMixin:
         corridors = self._corridor_buffers(3 * bs)  # every trodden tread (lane/street/road), not just lanes
         # PRE-BOX every static keep-out ONCE (see boxed_hit) - the field boxes carry the SAME 10px
         # pad as the edge test below, so the prefilter can never reject a point that test wanted
-        fld_b, blk_b = boxed_grid(boxed_polys(self.field_polys, 10.0)), boxed_grid(boxed_polys(self.block_polys))
-        clr_b, avd_b, cor_b = boxed_grid(boxed_polys(self.clearings)), boxed_grid(boxed_polys(avoid)), boxed_grid(boxed_segs(corridors))
+        fld_b, blk_b = boxed_grid(boxed_rings(self.field_polys, 10.0)), boxed_grid(boxed_rings(self.block_polys))
+        clr_b, avd_b, cor_b = boxed_grid(boxed_rings(self.clearings)), boxed_grid(boxed_rings(avoid)), boxed_grid(boxed_segs(corridors))
         wat_b = boxed_grid(boxed_segs(self._watercourse_segs()))  # drawn water (streams/channels/comb laterals), pre-boxed once - see _watercourse_segs
+        ring = RingIndex(poly)  # the outline, indexed once per marsh (feature 144; the why is on RingIndex)
 
         def _sparse(
             px: float, py: float, drop: float
         ) -> bool:  # skip a point outside the poly, IN a paddy / ON the pond / on a corridor/building / in the urban halo / in a keep-out, or (probabilistically) near the edge
             if (
-                not point_in_poly(px, py, poly)
-                or boxed_hit(px, py, fld_b.near(px, py), 10.0)
+                not ring.inside(px, py)
+                or boxed_ring_hit(px, py, fld_b.near(px, py), 10.0)
                 or boxed_seg_hit(px, py, cor_b.near(px, py))  # a causeway/path/road through the marsh stays bare, not reeded over
                 or self._on_watercourse(px, py, near=wat_b.near)  # ... and OFF a stream/channel bed (reeds fringe water, they do not float on it)
                 or any(x0r <= px <= x1r and y0r <= py <= y1r for x0r, y0r, x1r, y1r in halo_rects)  # ... and OUT of the urban-clearance halo (the swept/trodden ground around every structure)
                 or any((px - hx) ** 2 + (py - hy) ** 2 <= hr * hr for hx, hy, hr in halo_circles)  # ... and clear of every wellhead's trodden apron
-                or boxed_hit(px, py, blk_b.near(px, py))  # ... and OFF any building/shrine/torii footprint
-                or boxed_hit(px, py, clr_b.near(px, py))  # ... and off the swept sacred/funerary verge
-                or boxed_hit(px, py, avd_b.near(px, py))
+                or boxed_ring_hit(px, py, blk_b.near(px, py))  # ... and OFF any building/shrine/torii footprint
+                or boxed_ring_hit(px, py, clr_b.near(px, py))  # ... and off the swept sacred/funerary verge
+                or boxed_ring_hit(px, py, avd_b.near(px, py))
             ):  # ... and OUT of any keep-out
                 return True
             if pond and ((px - pond[0]) / pond[2]) ** 2 + ((py - pond[1]) / pond[3]) ** 2 < 1.0:
                 return True  # reeds fringe the shore, they do not float on open water
-            ed = edge_dist(px, py, poly)
-            return ed < feather and random.random() > (ed / feather) ** drop
+            ed = ring.edge_within(px, py, feather)
+            return ed is not None and random.random() > (ed / feather) ** drop
 
         g: list[str] = []
         blades: list[str] = []  # SVG-size lever 2: bucket the constant-styled reed blades (see the note in cover.py's `commons`)

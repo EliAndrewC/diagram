@@ -23,7 +23,7 @@ import math
 import random
 from typing import TYPE_CHECKING, Any
 
-from .._geom import Poly, boxed_grid, boxed_hit, boxed_polys, boxed_seg_hit, boxed_segs, edge_dist, point_in_poly
+from .._geom import Poly, RingIndex, boxed_grid, boxed_ring_hit, boxed_rings, boxed_seg_hit, boxed_segs
 from ..land.wet import MARSH_FEATHER_BS
 
 if TYPE_CHECKING:
@@ -113,13 +113,19 @@ class GroundCoverMixin:
             # drawn reach, a pine tip at 14*bs - because the bbox prefilter must never reject a point
             # the exact edge test wants (boxed_hit's contract); the exact test gets the per-glyph lean.
             crop_pad = self.px(self._CROP_MARGIN_FT)
-            fld_b = boxed_grid(boxed_polys(list(self.field_polys) + list(self.dry_polys), pad=crop_pad + 14 * bs))
+            fld_b = boxed_grid(boxed_rings(list(self.field_polys) + list(self.dry_polys), pad=crop_pad + 14 * bs))
             # a marsh recorded BEFORE this pass sits in block_polys as a no-build bog; it is a SOFT keep-out
             # here (below), so it must not also be a hard one - or the feathered edge never happens
-            blk_b = boxed_grid(boxed_polys([bp for bp in self.block_polys if not any(bp is mb for mb in self.marsh_blocks)]))
-            clr_b, avd_b, cor_b = boxed_grid(boxed_polys(self.clearings)), boxed_grid(boxed_polys(avoid)), boxed_grid(boxed_segs(corridors))
+            blk_b = boxed_grid(boxed_rings([bp for bp in self.block_polys if not any(bp is mb for mb in self.marsh_blocks)]))
+            clr_b, avd_b, cor_b = boxed_grid(boxed_rings(self.clearings)), boxed_grid(boxed_rings(avoid)), boxed_grid(boxed_segs(corridors))
             soft_polys = [[tuple(q) for q in sp] for sp in soft]
             soft_feather = MARSH_FEATHER_BS * bs  # the marsh's own reed feather (wet.py), so the two ramps are complements
+            # THE RING IS INDEXED ONCE (feature 144): every throw below asked `point_in_poly` and
+            # `edge_dist` to walk the whole outline - 1.3M ray tests and 156k full-ring scans per
+            # reference roll, two thirds of the stage. `RingIndex` answers both from the edges near
+            # the point, exactly (its docstring carries the argument).
+            ring = RingIndex(poly)
+            soft_idx = [RingIndex(sp) for sp in soft_polys]
             # drawn water pre-boxed once (see _watercourse_segs); irrigation channels additionally
             # carry the CUT-BANK margin (_BANK_MARGIN_FT - a maintained bank is scythed like a field
             # margin), streams stay at drawn width so the brook's natural bank keeps its grass
@@ -129,8 +135,8 @@ class GroundCoverMixin:
                 px: float, py: float, drop: float, lean: float = 0.0
             ) -> bool:  # skip a scatter point outside the poly, on/near a crop, on a corridor/water, in the urban halo, in a keep-out, or (probabilistically) near the edge; `lean` = the glyph's drawn reach, so a tall glyph stands its own height back from the crop margin
                 if (
-                    not point_in_poly(px, py, poly)
-                    or boxed_hit(px, py, fld_b.near(px, py), edge_pad=crop_pad + lean)
+                    not ring.inside(px, py)
+                    or boxed_ring_hit(px, py, fld_b.near(px, py), edge_pad=crop_pad + lean)
                     or boxed_seg_hit(px, py, cor_b.near(px, py))  # keep scrub off every trodden tread (lane/street/road) so no path reads overgrown
                     or self._on_watercourse(px, py, near=wat_b.near)  # ... and OFF the pond + streams/channels (scrub never draws over open water)
                     or (pond and ((px - pond[0]) / pond[2]) ** 2 + ((py - pond[1]) / pond[3]) ** 2 <= 1.0)
@@ -138,16 +144,17 @@ class GroundCoverMixin:
                         x0r <= px <= x1r and y0r <= py <= y1r for x0r, y0r, x1r, y1r in halo_rects
                     )  # ... and OUT of the urban-clearance halo: the swept/trodden ground around every structure, not just its footprint
                     or any((px - hx) ** 2 + (py - hy) ** 2 <= hr * hr for hx, hy, hr in halo_circles)  # ... and clear of every wellhead's trodden apron
-                    or boxed_hit(px, py, blk_b.near(px, py))  # ... and OFF any building/shrine/torii footprint (a commons that OVERLAPS the shrine must not scatter scrub over the hall + arch)
-                    or boxed_hit(px, py, clr_b.near(px, py))  # ... and off the swept sacred/funerary verge (tended precinct, sando, grave collar)
-                    or boxed_hit(px, py, avd_b.near(px, py))
+                    or boxed_ring_hit(px, py, blk_b.near(px, py))  # ... and OFF any building/shrine/torii footprint (a commons that OVERLAPS the shrine must not scatter scrub over the hall + arch)
+                    or boxed_ring_hit(px, py, clr_b.near(px, py))  # ... and off the swept sacred/funerary verge (tended precinct, sando, grave collar)
+                    or boxed_ring_hit(px, py, avd_b.near(px, py))
                 ):  # ... and OUT of any keep-out (the hamlet cluster stays clear of cover)
                     return True
-                for sp in soft_polys:  # ...and GRASS thins INTO a soft keep-out (a marsh) over its own feather
-                    if point_in_poly(px, py, sp):
-                        return random.random() < min(1.0, edge_dist(px, py, sp) / soft_feather)
-                ed = edge_dist(px, py, poly)
-                return ed < feather and random.random() > (ed / feather) ** drop
+                for si in soft_idx:  # ...and GRASS thins INTO a soft keep-out (a marsh) over its own feather
+                    if si.inside(px, py):
+                        sd = si.edge_within(px, py, soft_feather)
+                        return random.random() < (1.0 if sd is None else sd / soft_feather)
+                ed = ring.edge_within(px, py, feather)
+                return ed is not None and random.random() > (ed / feather) ** drop
 
             def _in_soft(px: float, py: float) -> bool:
                 """WOODY glyphs (brush dots, pines) are HARD-excluded from a marsh; only GRASS grades into it.
@@ -157,7 +164,7 @@ class GroundCoverMixin:
                 agrees: a bog's margin is sedge and grass grading into reeds; pine and brush stand on the
                 dry ground above it. So blades keep the soft ramp (a wild edge, no ruled line) and the
                 woody families stop dead at the polygon."""
-                return any(point_in_poly(px, py, sp) for sp in soft_polys)
+                return any(si.inside(px, py) for si in soft_idx)
 
             # NO solid fill: a filled polygon always has a crisp geometric EDGE (that read as a rhombus). Each land
             # type is defined PURELY by its feathered scatter, which thins to nothing at the margin - so the ground
