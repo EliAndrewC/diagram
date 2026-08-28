@@ -13,6 +13,7 @@ from typing import Any, cast
 from l7r.diagram.settlement import Settlement, edge_dist, point_in_poly, rot_rect, seg_closest, seg_dist, seg_intersect, segments_cross, skeleton_layout, web_cuts
 from l7r.diagram.sitegen.geom import centroid, crop_polys, crosses_disc, crosses_poly, pull_clear, unit
 
+from .clearance import fabric_index, pairs_within
 from .cluster import _arm_crossing_accidental, _fork_spur, seat_cluster
 from .consts import (
     BUNDLE_PITCH,
@@ -766,7 +767,11 @@ def _route(start: Pt, goal: Pt, hard: list[Poly], walls: Sequence[Poly], water: 
     # the cell's diagonal makes "this cell is free" mean "every point in this cell is clear", which is
     # what the rest of the router assumes it means.
     _plan_gap = gap + cell * 0.71
-    free = [[bool(clear_runs([to_pt(ix, iy), to_pt(ix, iy)], hard, WEB_HARD_GAP, step=cell, lines=water, tight=walls, tight_margin=_plan_gap, floor=0.0)) for ix in range(nx)] for iy in range(ny)]
+    # ONE INDEX FOR THE WHOLE BOX (feature 138): this was a `clear_runs` call per cell - a degenerate
+    # two-point polyline whose truth value is exactly "the cell center is not fouled" - so every cell
+    # re-derived every polygon's bounds and measured every edge; 57 of a polder's 110 s.
+    _index = fabric_index(hard, WEB_HARD_GAP, walls, _plan_gap, water, 14.0)
+    free = [[not _index.fouled(to_pt(ix, iy)) for ix in range(nx)] for iy in range(ny)]
     sx, sy = min(nx - 1, max(0, round((start[0] - x0) / cell))), min(ny - 1, max(0, round((start[1] - y0) / cell)))
     gx, gy = min(nx - 1, max(0, round((goal[0] - x0) / cell))), min(ny - 1, max(0, round((goal[1] - y0) / cell)))
     free[sy][sx] = free[gy][gx] = True  # the two given endpoints are the caller's, not the lattice's to refuse
@@ -2753,36 +2758,14 @@ def clear_runs(
     if not obstacles and not lines and not tight:
         return [list(pts)]
 
-    # PREFILTER BY BOUNDING BOX BEFORE MEASURING ANYTHING. The web calls this hundreds of times per
-    # map - once per candidate line, and again per dog-leg per target inside `_serve_stragglers` -
-    # and each call was scanning every polygon in the settlement's whole fabric against every 4 ft
-    # sample. That is the shape the skill's performance doctrine names outright: a per-candidate scan
-    # of geometry that does not change during the scan. Unprefiltered it took a hamlet from ~15 s to
-    # 45 s and broke a cohort worker outright. The box prunes; it never decides - a polygon whose
-    # bounds cannot come within the margin cannot foul a sample, so dropping it changes no verdict.
-    _lo_x = min(q[0] for q in pts)
-    _hi_x = max(q[0] for q in pts)
-    _lo_y = min(q[1] for q in pts)
-    _hi_y = max(q[1] for q in pts)
-
-    def _in_reach(o: Poly, m: float) -> bool:
-        return not (max(q[0] for q in o) < _lo_x - m or min(q[0] for q in o) > _hi_x + m or max(q[1] for q in o) < _lo_y - m or min(q[1] for q in o) > _hi_y + m)
-
-    obstacles = [o for o in obstacles if o and _in_reach(o, margin)]
-    tight = [o for o in tight if o and _in_reach(o, tight_margin)]
-    lines = [
-        (a, b)
-        for a, b in lines
-        if not (max(a[0], b[0]) < _lo_x - line_margin or min(a[0], b[0]) > _hi_x + line_margin or max(a[1], b[1]) < _lo_y - line_margin or min(a[1], b[1]) > _hi_y + line_margin)
-    ]
-
-    def near(q: Pt, o: Poly, m: float) -> bool:
-        return point_in_poly(q[0], q[1], list(o)) or min(seg_dist(q[0], q[1], o[j], o[(j + 1) % len(o)]) for j in range(len(o))) < m
-
-    def fouled(q: Pt) -> bool:
-        if any(seg_dist(q[0], q[1], a, b) < line_margin for a, b in lines):
-            return True
-        return any(near(q, o, margin) for o in obstacles) or any(near(q, o, tight_margin) for o in tight)
+    # THE FABRIC INDEX (feature 138) replaces the per-call bounding-box prefilter and the per-sample
+    # scan of every surviving polygon's every edge: built once here (or once per routing box by
+    # `_route`, which used to call this function once PER LATTICE CELL - 165,611 times on one polder),
+    # it files each polygon and line by grid cell so a sample measures only its cell's candidates.
+    # Same verdicts by construction - the candidates are a superset of what the box prefilter kept,
+    # measured with the same predicate; `clearance.py` carries the argument and the oracle test.
+    index = fabric_index(obstacles, margin, tight, tight_margin, lines, line_margin)
+    fouled = index.fouled
 
     samples: Poly = [pts[0]]
     for i in range(len(pts) - 1):
@@ -3034,7 +3017,7 @@ def path_violations(path: Poly, avoid: Sequence[Poly], pond: tuple[float, float,
     # is a drawing error rather than a siting one. Crossing further along, where the ditches have
     # separated, is what a track does anyway.
     hits = [x for i in range(len(path) - 1) for p, q in waters if (x := seg_intersect(path[i], path[i + 1], p, q)) is not None]
-    bad += sum(1 for i, u in enumerate(hits) for v in hits[i + 1 :] if math.hypot(u[0] - v[0], u[1] - v[1]) < 46.0)
+    bad += pairs_within(hits, 46.0)  # the same pairs the every-pair form counted (170 million `hypot` on a polder - feature 138), by a sweep
     return bad
 
 

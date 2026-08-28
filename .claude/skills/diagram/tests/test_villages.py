@@ -129,6 +129,18 @@ GEN_TIME_BUDGETS = {
     # (the lane web, byres, the woodland scan, cluster shape), so it is probably real work rather than
     # waste - but nobody has measured which stage owns the growth, and `tools/timings.py` would answer
     # it.
+    #
+    # CORRECTED 2026-08-28 (feature 138; the GM: *"bisecting a field several times per map does not seem
+    # like it would add up to one hundred CPU seconds"* - it does not). A per-stage profile of the seed-19
+    # POLDER (110 s solo) put 57 s in `stage_web` and 22 s in `stage_track`, and the "inherent" field
+    # bisection at under a second: the lane router called `clear_runs` once PER LATTICE CELL (165,611
+    # calls; 36 million `seg_dist`) and the connector compared every pair of water crossings (170 million
+    # `hypot`). That was exactly the pathological shape this guard exists for, hiding under a budget that
+    # had been raised to fit it. On a COMB hamlet the bisection IS real - `fit_field` runs `build_comb` 7
+    # times, 16-22 s on a 10-household cohort seed - but it is not what made the polder slow, and its
+    # solver is left alone because changing it moves the maps. After the fabric index and the crossing
+    # sweep (`hamletgen/clearance.py`, `_geom/water_index.py`): the polder 110 -> ~30 s, the reference
+    # 37 -> ~21 s, every manifest byte-identical. The entries below still stand at ~4x SOLO, re-measured.
     "sawada": 125.0,  # 30.6s solo measured 2026-08-19
     "kashikawa": 130.0,  # 32.2s solo
     "inashiro": 90.0,  # 22.4s solo

@@ -1,0 +1,12 @@
+{
+ "utc": "20260828T063014Z",
+ "session": "diagram-tests",
+ "commit": "1433d457",
+ "target": "make idle-tests",
+ "rc": 0,
+ "wall_s": 2,
+ "suspends": 0,
+ "deferrals": 4,
+ "failures": [],
+ "log": "/diagram/.clones/diagram-tests/.git/idle-tests.run.log"
+}
