@@ -356,7 +356,12 @@ def render_page(strings: Sequence[str], tags: Sequence[ClsTag], name: str, meta:
     sheet = next((i for i, t in enumerate(tags) if t == NOT_HIGHLIGHTED), 0)
     regions = hit_regions(manifest, present - HIT_FROM_MARKS)
     for key in sorted(HIT_FROM_MARKS & present):
-        polys = [rec["poly"] for mk, roles in HIT_REGIONS for rec in (manifest or {}).get(mk) or [] if isinstance(rec, dict) and rec.get("poly") and roles.get(str(rec.get("role", "*")), roles.get("*")) == key]
+        polys = [
+            rec["poly"]
+            for mk, roles in HIT_REGIONS
+            for rec in (manifest or {}).get(mk) or []
+            if isinstance(rec, dict) and rec.get("poly") and roles.get(str(rec.get("role", "*")), roles.get("*")) == key
+        ]
         rects = marks_region([s for s, t in zip(strings, tags, strict=True) if t == key], within=polys)
         if rects:
             regions += _open(key) + f'<g class="hit" fill="none" style="pointer-events: fill">{rects}</g></g>'
