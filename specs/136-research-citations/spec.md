@@ -4,7 +4,7 @@
 
 **Created**: 2026-08-28
 
-**Status**: Round 3 - `spec-fidelity` round 1 (2026-08-28) returned five changes (inventory under-inclusive; the gate check was unasked scope; FR-004 over-tightened; FR-006/FR-008 conflict; the count); round 2 four residues (US1 wording; the proposed check surviving as SC-006; FR-008 mandating migration; the count's arithmetic), all applied; awaiting round 3
+**Status**: ESCALATED to the GM after round 3 (constitution XVI). `spec-fidelity` rounds: 1 = five changes (inventory under-inclusive; the gate check was unasked scope; FR-004 over-tightened; FR-006/FR-008 conflict; the count); 2 = four residues (US1 wording; the check surviving as SC-006; FR-008 mandating migration; the count's arithmetic); 3 = one residue (US1 Acceptance Scenario 2 still mandated migration, contradicting FR-008) - applied, and the reviewer's own note: "a mechanical miss rather than a persistent misunderstanding ... the rest of the spec is faithful". Implementation waits for the GM's word.
 
 **Input**: [`gm-request.md`](gm-request.md), verbatim and unedited. That file is the authority for
 this specification.
@@ -96,8 +96,9 @@ returns exactly the ledger's open rows.
    the inventory is taken, **Then** every uncited finding appears in the ledger once, with where it
    lives, the rule it grounds, and its status (open / re-sourced / contradicted).
 2. **Given** a finding that lives inline in an operative doc with no entry in the research tree,
-   **When** it is inventoried, **Then** it is listed as needing BOTH a research-tree entry and
-   sources (the project's record-the-why rule puts the finding in `research/`).
+   **When** it is inventoried, **Then** it is listed as needing citations by either route of
+   FR-008 - a `**Sources:**` line in place, or a cited research-tree entry with a pointer from
+   the rule.
 
 ---
 

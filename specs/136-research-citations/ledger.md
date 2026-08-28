@@ -209,9 +209,9 @@
 | `town-checks-audit.md` | same | open |
 | `pending-enclosed-fan-floor.md` | same | open |
 
-## C. Inline grounding in the operative and pool docs (no research-tree entry of their own)
+## C. Inline grounding in the operative and pool docs that cites nothing
 
-*Listed by the batch that owns the file; each is inventoried in detail when its batch task starts (the batch's first step is to diff the inline prose against the research tree and list what is not yet migrated). Known at the start:*
+*Listed by the batch that owns the file; each is inventoried in detail when its batch task starts (the batch's first step is to diff the inline prose against the research tree and list what cites nothing - each such finding takes either FR-008 route: a sources line in place, or a cited tree entry with a pointer). Known at the start:*
 
 | operative doc | grounding prose | status |
 |---|---|---|
