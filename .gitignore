@@ -123,3 +123,4 @@ top_up-improvement.md
 development-secrets.ini
 # feature 129: raw cProfile output stays out of this repository (FR-011a); the derived table is committed
 .claude/skills/diagram/dev/perf-raw/
+.claude/skills/diagram/wip/*.html
