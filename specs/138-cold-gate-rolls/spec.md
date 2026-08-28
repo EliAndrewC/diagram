@@ -4,7 +4,7 @@
 
 **Created**: 2026-08-28
 
-**Status**: Draft - awaiting the `spec-fidelity` review (constitution XVI)
+**Status**: APPROVED by `spec-fidelity` - round 1 verdict **FAITHFUL** (2026-08-28). Reviewer asides for the GM: "next inactive gate" read as INTERACTIVE; the 25% / 50% bars are the spec's own numbers; "the cash" read as every cache the gate reads. Implementation may begin.
 
 **Input**: [`gm-request.md`](gm-request.md), verbatim. That file is the authority for this specification.
 
