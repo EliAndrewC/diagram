@@ -369,6 +369,11 @@ hover/click checks for the classes it contains.
   distinguishing paragraphs, a modal ends with *"Not to be confused with the X"* where X is a link -
   hovering it lights X on the map in place of the pinned class, clicking it opens X's modal in
   place of the current one; the pair texts stay in the registry as the record of each distinction.
+  (d) EVERY REFERENCE LINKS to where the source can be read (the GM, 2026-08-28): `SOURCES.md` records
+  a URL per key (constitution v2.13.0, `URL: none - <why>` when there is none), the modal shows a
+  `[read]` link per URL, and a test refuses a key with neither. The 228 keys without a link on
+  2026-08-28 were found in one six-agent pass: 203 verified by fetch, 23 with the page found but the
+  fetch blocked (marked `unfetched`), 2 not found and recorded as such.
 - **FR-012 (verified in a browser)**: the hover, highlight, click and modal behaviors MUST be
   proven by an automated headless-browser test in the suite (constitution VI - a page that was
   never opened has not been verified), running on the reference hamlet's page.

@@ -93,6 +93,21 @@ def registry(research_dir: str = RESEARCH_DIR) -> dict[str, str]:
     return out
 
 
-def citations(keys: list[str], research_dir: str = RESEARCH_DIR) -> dict[str, str]:
+_URL = re.compile(r"https?://[^\s)\]>]+")
+
+
+def urls_of(text: str) -> list[str]:
+    """Every URL a SOURCES.md entry carries (GM 2026-08-28: the references link to where the source
+    can be read); the trailing punctuation a sentence leaves on a URL is trimmed."""
+    out: list[str] = []
+    for u in _URL.findall(text):
+        u = u.rstrip(".,;:")
+        if u not in out:
+            out.append(u)
+    return out
+
+
+def citations(keys: list[str], research_dir: str = RESEARCH_DIR) -> dict[str, dict[str, object]]:
+    """key -> {"text": the registry entry, "urls": its URLs} for the references modal."""
     reg = registry(research_dir)
-    return {k: reg.get(k, "(not in research/SOURCES.md)") for k in keys}
+    return {k: {"text": reg.get(k, "(not in research/SOURCES.md)"), "urls": urls_of(reg.get(k, ""))} for k in keys}

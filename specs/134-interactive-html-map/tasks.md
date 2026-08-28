@@ -140,6 +140,9 @@ below are measured, from the run-log and the browser).
 - [x] T46 **siblings as links** (FR-017c): "Not to be confused with the X" - hover lights X (the pin yields while the pointer is on the link), click opens X's modal in place; the pair texts stay in `classes.py` as the record
       research: rendering
 
+- [x] T47 **every reference links to where it can be read** (FR-017d; constitution v2.13.0 "A SOURCE CARRIES ITS LINK"): measured first - 52 of 280 SOURCES.md keys carried a URL. Six general-purpose agents (the GM's explicit request for a large pass) searched and fetched the 228 others: 203 verified, 23 unfetched (page found, fetch blocked - marked in the entry), 2 not found (`kashima-kainyo-1987`, `wanli-fishpond-summary`, recorded `URL: none - not found 2026-08-28: <why>`). `sources.urls_of` reads the URLs; the references modal shows a `[read]` link per URL or "(no link on record)"; `test_every_registered_source_carries_a_link_or_says_why_not` holds the rule from now on. Guidelines amended: the constitution (v2.13.0), `research/README.md`, `SOURCES.md` Citing, the root `CLAUDE.md`
+      research: rendering
+
 ## Owed at unlock (spec SC-008, FR-009; plan "Performance bookends")
 
 Not tasks of this feature - the spec (round-1 fidelity finding 5) holds the feature to the
