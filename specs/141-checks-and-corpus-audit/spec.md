@@ -4,7 +4,7 @@
 
 **Created**: 2026-08-28
 
-**Status**: round 2 of `spec-fidelity` returned one change (the fixture counts by tier were wrong; measured and corrected, the unscaled class named) - applied; round 3 pending
+**Status**: APPROVED - `spec-fidelity` round 3 (2026-08-28) found the requirement set faithful in both directions and only two stale headline figures (648 -> 636 names; 250 -> 231 measured), corrected; "the failure is a stale measured figure, not a misunderstanding of the request". Implementation proceeds.
 
 **Input**: [`gm-request.md`](gm-request.md), verbatim. That file is the authority.
 
@@ -43,8 +43,9 @@ and what trade-offs remain - the GM may cut more.
 
 ## The numbers the audit starts from (2026-08-28)
 
-1,405 segment functions in `check_village` (checks and the derivations they share), 636 check names;
-250 checks run on the reference hamlet or the seed-19 polder; 841 frozen fixtures in `pool/regressions/`
+1,405 segment functions in `check_village` (checks and the derivations they share), 636 check names, of which
+231 get a measured verdict from the reference hamlet and the seed-19 polder (126 keep, 80 retire-candidates,
+25 vacuous on the scripted tier) and 405 a class verdict (no scripted executor); 841 frozen fixtures in `pool/regressions/`
 by their own `meta.scale` - 96 hamlet, 139 village, 192 town, 352 city, 9 capital, and 53 that declare no
 tier (synthetic manifests captured from unit tests, judged with the check they pin) - of which everything
 but the hamlet tier pins checks on maps the FROZEN legacy pool drew by hand and no generator draws today.
@@ -59,7 +60,7 @@ every check that runs on a scripted hamlet carries: the stage at which its input
 any later stage changes those inputs, whether any consumer's BEHAVIOR branches on its verdict (today
 one does: `hg.generate`'s re-roll ladder on `farmhouses_reach_a_way` - a tool that merely runs and
 reports a check, the cohort audit, the tripwire, a test asserting it passes, is not a reader), and how
-many fixtures pin it - a LEDGER, one row per check NAME in the registry (648), written before the first
+many fixtures pin it - a LEDGER, one row per check NAME in the registry (636), written before the first
 retirement; a check with no scripted executor (the legacy tiers' town, city, capital and village
 checks) carries a class-level verdict with its count - "no scripted placer exists for this tier; no
 measured verdict is possible; the GM's choice at acceptance" - so the acceptance conversation sees the
@@ -119,7 +120,7 @@ before it.
 ## Requirements
 
 - **FR-001**: A census MUST be produced before any retirement, one row per check NAME in the registry
-  (648): its input keys (from the registry's dataflow), the first stage at which they exist and whether
+  (636): its input keys (from the registry's dataflow), the first stage at which they exist and whether
   any later stage changes them (from per-stage manifest snapshots of the reference and one polder), its
   BRANCHING readers (consumers whose behavior depends on the verdict - the re-roll ladder; never a tool
   that only runs and reports it), its fixtures by tier; a check no scripted map exercises carries the
@@ -144,8 +145,8 @@ before it.
 
 ## Success Criteria
 
-- **SC-001**: the ledger covers every check name in the registry (648): a measured verdict for the 250
-  the scripted tier exercises, a class verdict with counts for the rest; no retirement without its placer
+- **SC-001**: the ledger covers every check name in the registry (636): a measured verdict for the 231
+  the scripted tier exercises, a class verdict with counts for the other 405; no retirement without its placer
   test named.
 - **SC-002**: the gate's check count and corpus size before/after are reported, with the gate's
   test-phase seconds; every retired check's guarantee is named in a placer test.
