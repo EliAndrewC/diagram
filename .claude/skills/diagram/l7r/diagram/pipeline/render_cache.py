@@ -1,6 +1,6 @@
 """Content-hash short-circuit for regenerating the diagram pool renders in main.
 
-WHY (GM 2026-07-22): the stop-work ritual used to BUILD the map renders in a session clone and
+WHY (GM 2026-07-22): the stop-work procedure used to BUILD the map renders in a session clone and
 COPY them into main (rsync + byte-verify). That was fragile: whether a clone had touched a given
 render was situational, so a stale copy could linger in main. The new rule is simpler and cannot
 go stale - after the push, main REGENERATES its own renders from its own tip. Renders become a
