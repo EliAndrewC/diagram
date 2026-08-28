@@ -25,9 +25,9 @@ DIKE_CROP_CLASS = {"mulberry": "mulberry dike", "sugarcane": "sugarcane dike", "
 
 
 class LandUseMixin:
-    def apply_land_use(
+    def apply_land_use(  # type: ignore[misc]
         self: Settlement, net: dict[str, Any], overlay: str, rng: random.Random, fraction: float = 0.55, eligible: str = "wet", dike_crop: str = "mulberry", leftover: str = "rice"
-    ) -> int:  # type: ignore[misc]
+    ) -> int:
         """Overlay a LAND-USE archetype (feature 005 US4 `land_use_overlay`) onto an already-drawn comb field:
         recolor a FRACTION of the paddy plots (or, for tea, a hill-margin fringe) as the overlay crop, so a
         village growing mulberry-and-fishpond, lotus, or hill-tea reads distinctly from a plain-rice one.
