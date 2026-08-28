@@ -69,4 +69,4 @@ the feature's own evidence.
 
 ## Phase 9 - acceptance
 
-- [ ] T99 **the GM accepts the current state of the tests** - tickable only on the GM's explicit word, recorded here verbatim
+- [x] T99 **the GM accepts the current state of the tests** - the GM, 2026-08-28, after the third pass: *"Thanks. I approve of these changes and believe that I am able to sign off with acceptance of this. So you can indeed merge this into Maine. However, after you do so, I think there are other performance improvements that I do want to talk about, but they can be part of a separate feature that we discussed at that time after this has made its way into Maine for the benefit of other sessions besides yours and the one that you are in communication with. Thanks."* Accepted state: `ebbf29ef` - three trees, the roll cache, coverage following the diff, per-suite hooks-test; unlocked `make done` 21.7 s warm (research R11). Further performance work is a NEW feature, after this lands.
