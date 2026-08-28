@@ -13,14 +13,23 @@ from __future__ import annotations
 
 #: term -> (variants matched in the prose, the definition)
 GLOSSARY: dict[str, tuple[tuple[str, ...], str]] = {
-    "bund": (("bund", "bunds", "aze"), "The low earthen ridge between two paddy basins, a foot or two wide and about a foot high, re-plastered each spring so each basin holds its water; farmers walk the bunds to reach the plots."),
+    "bund": (
+        ("bund", "bunds", "aze"),
+        "The low earthen ridge between two paddy basins, a foot or two wide and about a foot high, re-plastered each spring so each basin holds its water; farmers walk the bunds to reach the plots.",
+    ),
     "azemame": (("azemame",), "Bund beans: soybeans planted along the top of a paddy bund, a second crop from ground that would otherwise grow weeds."),
-    "coppice": (("coppice", "coppiced", "coppicing"), "A wood cut on a cycle - every 10 to 30 years the stems are cut to the stump and regrow - for firewood, poles and fodder; the floor stays open and the canopy young."),
+    "coppice": (
+        ("coppice", "coppiced", "coppicing"),
+        "A wood cut on a cycle - every 10 to 30 years the stems are cut to the stump and regrow - for firewood, poles and fodder; the floor stays open and the canopy young.",
+    ),
     "iriai": (("iriai",), "The customary common land of a Japanese village - woods, grass and scrub held by the village and governed by its own rules on who may cut, when, and how much."),
     "satoyama": (("satoyama",), "The managed country between the village and the mountain: the coppice woods, grasslands, paddies and ponds a farming community worked and drew on."),
     "tameike": (("tameike",), "An irrigation reservoir - a pond made by damming a valley head with an earthen dike, sitting above the fields it waters, with a single outlet."),
     "yashikirin": (("yashikirin",), "A homestead grove: the belt of trees planted around a farmhouse plot as its own shelter from wind and sun."),
-    "fengshui grove": (("fengshui forest", "fengshui back grove", "fengshui grove", "fengshui"), "The grove a village keeps on its windward, high side - the back grove of Chinese village planning - as its wall against the winter wind."),
+    "fengshui grove": (
+        ("fengshui forest", "fengshui back grove", "fengshui grove", "fengshui"),
+        "The grove a village keeps on its windward, high side - the back grove of Chinese village planning - as its wall against the winter wind.",
+    ),
     "hokora": (("hokora",), "A small roadside or household shrine, a knee-high shelter of stone or wood for a local spirit."),
     "kosatsuba": (("kosatsuba",), "The notice board: a small roofed frame where the authorities posted the standing law, rate tables and ban lists, sited where everyone passes."),
     "minka": (("minka",), "A traditional Japanese farmhouse - a timber-framed dwelling under a steep thatched roof, its ridge on the long axis."),

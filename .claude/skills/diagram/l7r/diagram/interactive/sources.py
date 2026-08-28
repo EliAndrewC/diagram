@@ -14,7 +14,7 @@ from __future__ import annotations
 
 import os
 import re
-from functools import lru_cache
+from functools import cache
 
 _HERE = os.path.dirname(os.path.abspath(__file__))
 RESEARCH_DIR = os.path.normpath(os.path.join(_HERE, "..", "..", "..", "research"))
@@ -24,7 +24,7 @@ _ENTRY_FILE = re.compile(r"research/([a-z-]+\.md)")
 _ENTRY_HEADING = re.compile(r"'((?:[^']|'(?=[A-Za-z]))+)'")
 
 
-@lru_cache(maxsize=None)
+@cache
 def _sections(path: str) -> list[tuple[str, str]]:
     """(heading, body) for every `##`/`###` section of a research file."""
     try:
@@ -79,7 +79,7 @@ def research_sources(entry: str, research_dir: str = RESEARCH_DIR) -> list[str]:
     return keys
 
 
-@lru_cache(maxsize=None)
+@cache
 def registry(research_dir: str = RESEARCH_DIR) -> dict[str, str]:
     """key -> the SOURCES.md entry text (citation and its 'Used for' line), markdown stripped lightly."""
     out: dict[str, str] = {}
