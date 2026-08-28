@@ -24,8 +24,10 @@ from __future__ import annotations
 
 import math
 from collections.abc import Sequence
+from typing import Any
 
 from l7r.diagram.settlement import point_in_poly, seg_dist
+from l7r.diagram.settlement._geom import RingIndex
 
 from .consts import Pt
 
@@ -90,15 +92,21 @@ class FabricIndex:
         line_margin: float = 0.0,
         cell: float | None = None,
     ) -> None:
-        # each entry: (kind, points, margin, inflated bounds); kind 0 = polygon, 1 = line
-        entries: list[tuple[int, list[Pt], float, tuple[float, float, float, float]]] = []
+        # each entry: (kind, shape, margin, inflated bounds); kind 0 = polygon (a RingIndex), 1 = line (its two points)
+        # THE POLYGON IS INDEXED TOO (feature 144). Filing polygons by cell only narrowed WHICH polygons a
+        # lookup tests; each one it did test was still walked edge by edge for the margin - and the field
+        # envelope, the crop rings and the marsh are `big`, tested on EVERY lookup, with rings of 40-60
+        # vertices. Seed 25's web stage: 1.19M `fouled` calls, 30.8M `seg_dist`, 35 of the roll's 51 s.
+        # A RingIndex per polygon answers inside/margin from the edges near the point; verdicts are
+        # unchanged (its docstring), `fouled_brute` remains the oracle.
+        entries: list[tuple[int, Any, float, tuple[float, float, float, float]]] = []
         for group, m in ((obstacles, margin), (tight, tight_margin)):
             for o in group:
                 if not o:
                     continue
                 pts = list(o)
                 bx0, by0, bx1, by1 = bounds(pts)
-                entries.append((0, pts, m, (bx0 - m, by0 - m, bx1 + m, by1 + m)))
+                entries.append((0, RingIndex(pts), m, (bx0 - m, by0 - m, bx1 + m, by1 + m)))
         for a, b in lines:
             bx0, by0, bx1, by1 = min(a[0], b[0]), min(a[1], b[1]), max(a[0], b[0]), max(a[1], b[1])
             entries.append((1, [a, b], line_margin, (bx0 - line_margin, by0 - line_margin, bx1 + line_margin, by1 + line_margin)))
@@ -146,12 +154,8 @@ class FabricIndex:
                 if seg_dist(x, y, pts[0], pts[1]) < m:
                     return True
                 continue
-            if point_in_poly(x, y, pts):
+            if pts.inside(x, y) or pts.edge_within(x, y, m) is not None:
                 return True
-            n = len(pts)
-            for j in range(n):
-                if seg_dist(x, y, pts[j], pts[(j + 1) % n]) < m:
-                    return True
         return False
 
 

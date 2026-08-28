@@ -155,6 +155,7 @@ def _fit_at_aspect(plan: SitePlan, sluice: Pt, seed: int, plot_across: float, ro
         )
         acres = net_acres(net, plan.ftpx)
         err = abs(acres - plan.target_acres) / plan.target_acres
+
         # A DANGLING CANAL TAIL disqualifies a fan before its acreage is even considered. Whatever
         # supply canal runs on past its last delivery ditch has to die among the plots it waters;
         # ending outside the planted extent is runoff dying in bare ground
@@ -171,6 +172,13 @@ def _fit_at_aspect(plan: SitePlan, sluice: Pt, seed: int, plot_across: float, ro
         else:
             hi = k
         pts.append((k, acres))
+        # A COLLAPSED BRACKET IS AN ANSWER. Cohort seed 47 (2026-08-28): at four of its five aspects the fan
+        # SATURATES - the envelope clamps it and the acreage sits at 16-17 against a 19.5 target however
+        # large k gets - and the old loop spent its last four carves at k = 2.16, 2.18, 2.19, 2.195 drawing
+        # the same 16.35 acres each time. A plot row is worth ~0.03 of k, so a bracket narrower than that
+        # cannot change the fan; stop, keep the best, and let the next aspect have the time.
+        if hi - lo < 0.03:
+            break
         k = _predict_k(pts, plan.target_acres, lo, hi)
     assert best is not None
     return best

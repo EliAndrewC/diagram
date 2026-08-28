@@ -321,7 +321,4 @@ def boxed_rings(polys: Any, pad: float = 0.0) -> list[tuple[RingIndex, float, fl
 
 def boxed_ring_hit(px: float, py: float, boxed: Any, edge_pad: float = 0.0) -> bool:
     """`boxed_hit` over `boxed_rings` items - identical verdicts, indexed edges."""
-    for idx, bx0, by0, bx1, by1 in boxed:
-        if bx0 <= px <= bx1 and by0 <= py <= by1 and (idx.inside(px, py) or (edge_pad > 0 and idx.edge_within(px, py, edge_pad) is not None)):
-            return True
-    return False
+    return any(bx0 <= px <= bx1 and by0 <= py <= by1 and (idx.inside(px, py) or (edge_pad > 0 and idx.edge_within(px, py, edge_pad) is not None)) for idx, bx0, by0, bx1, by1 in boxed)

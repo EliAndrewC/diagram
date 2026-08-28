@@ -1,0 +1,36 @@
+perf-profile seed 25 stage web: 62.4s under cProfile (the stages before it took 6.0s unprofiled; cProfile itself is ~+225%, research R2)
+raw: dev/perf-raw/20260828T164608Z-seed25-web.prof (gitignored; archive: configured (https://github.com/EliAndrewC/mapgen-perflogs))
+
+         166033329 function calls (165688316 primitive calls) in 62.384 seconds
+
+   Ordered by: cumulative time
+   List reduced from 225 to 25 due to restriction <25>
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+        1    0.001    0.001   62.404   62.404 /diagram/.clones/diagram-tests/.claude/skills/diagram/l7r/diagram/hamletgen/ways.py:361(stage_web)
+  1193663    8.860    0.000   59.478    0.000 /diagram/.clones/diagram-tests/.claude/skills/diagram/l7r/diagram/hamletgen/clearance.py:138(fouled)
+      401    0.619    0.002   53.257    0.133 /diagram/.clones/diagram-tests/.claude/skills/diagram/l7r/diagram/hamletgen/ways.py:717(_route)
+        1    0.024    0.024   52.730   52.730 /diagram/.clones/diagram-tests/.claude/skills/diagram/l7r/diagram/hamletgen/ways.py:1980(_serve_stragglers)
+ 30773702   14.519    0.000   45.214    0.000 /diagram/.clones/diagram-tests/.claude/skills/diagram/l7r/diagram/settlement/_geom/primitives.py:51(seg_dist)
+ 30811837   18.900    0.000   26.291    0.000 /diagram/.clones/diagram-tests/.claude/skills/diagram/l7r/diagram/settlement/_geom/primitives.py:42(seg_closest)
+     3022    0.145    0.000   10.819    0.004 /diagram/.clones/diagram-tests/.claude/skills/diagram/l7r/diagram/hamletgen/ways.py:2725(clear_runs)
+        3    0.011    0.004    8.704    2.901 /diagram/.clones/diagram-tests/.claude/skills/diagram/l7r/diagram/hamletgen/ways.py:1067(_touch_junctions)
+  1339916    4.738    0.000    4.899    0.000 /diagram/.clones/diagram-tests/.claude/skills/diagram/l7r/diagram/settlement/_geom/primitives.py:29(point_in_poly)
+ 30933972    4.467    0.000    4.467    0.000 {built-in method math.hypot}
+30838355/30493352    3.844    0.000    4.426    0.000 {built-in method builtins.min}
+ 30845071    3.609    0.000    3.609    0.000 {built-in method builtins.max}
+      891    0.003    0.000    3.017    0.003 /diagram/.clones/diagram-tests/.claude/skills/diagram/l7r/diagram/hamletgen/ways.py:859(_clear_link)
+  1193663    0.838    0.000    1.055    0.000 /diagram/.clones/diagram-tests/.claude/skills/diagram/l7r/diagram/hamletgen/clearance.py:131(candidates)
+     3423    0.005    0.000    0.737    0.000 /diagram/.clones/diagram-tests/.claude/skills/diagram/l7r/diagram/hamletgen/clearance.py:63(fabric_index)
+     3423    0.163    0.000    0.629    0.000 /diagram/.clones/diagram-tests/.claude/skills/diagram/l7r/diagram/hamletgen/clearance.py:56(_key)
+        1    0.001    0.001    0.505    0.505 /diagram/.clones/diagram-tests/.claude/skills/diagram/l7r/diagram/hamletgen/ways.py:1441(_smooth_web)
+      378    0.000    0.000    0.478    0.001 /diagram/.clones/diagram-tests/.claude/skills/diagram/l7r/diagram/hamletgen/ways.py:1975(_net_reach)
+       55    0.000    0.000    0.465    0.008 /diagram/.clones/diagram-tests/.claude/skills/diagram/l7r/diagram/hamletgen/ways.py:1557(_shortcut_ok)
+   246355    0.075    0.000    0.444    0.000 /diagram/.clones/diagram-tests/.claude/skills/diagram/l7r/diagram/hamletgen/ways.py:1977(<genexpr>)
+        1    0.000    0.000    0.420    0.420 /diagram/.clones/diagram-tests/.claude/skills/diagram/l7r/diagram/hamletgen/ways.py:208(_lay_skeleton)
+     6846    0.068    0.000    0.328    0.000 /diagram/.clones/diagram-tests/.claude/skills/diagram/l7r/diagram/hamletgen/clearance.py:57(polys)
+2593955/2593953    0.307    0.000    0.307    0.000 {built-in method builtins.len}
+  1300044    0.284    0.000    0.284    0.000 {method 'get' of 'dict' objects}
+       76    0.000    0.000    0.280    0.004 /diagram/.clones/diagram-tests/.claude/skills/diagram/l7r/diagram/hamletgen/ways.py:1372(_clear_touch)
+
+
