@@ -55,7 +55,7 @@ class _GateSeg(NamedTuple):
 # immediately after; a value may itself be a placed segment (chains splice in dict order). Each
 # segment's own docstring records the same decision.
 _PLACEMENTS: dict[str, str] = {
-    "_seg_0596__dry_plot_seams_shared": "_seg_0317__dry_plot_furrows_vary",  # beside the dry-plot checks whose dry_plots binding it shares
+    # (_seg_0596__dry_plot_seams_shared retired under feature 141: the carve shares seams by construction, tests/waterfields)
     "_seg_0595__paddy_bunds_clear_the_supply_channels": "_seg_0532__bund_beans_on_bunds",  # beside the bund checks whose fields binding it shares
     "_seg_0600__comb_floor_ends_at_the_collector": "_seg_0595__paddy_bunds_clear_the_supply_channels",  # registered beside 0595, whose fields binding it shares
     "_seg_0597__woodland_commons_within_the_frame": "_seg_0600__comb_floor_ends_at_the_collector",  # the 2026-08-16 hand-added cluster runs consecutively here

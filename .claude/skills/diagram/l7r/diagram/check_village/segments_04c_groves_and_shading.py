@@ -56,13 +56,6 @@ def _seg_0285_067__gc(
     return _kept(locals(), ('gc', 'gci', 'gr_fouled', 'gv', 'par', 's'))
 
 
-def _seg_0285_068__groves_clear_of_structures(*, check: Any = _UNBOUND, gr_fouled: Any = _UNBOUND, scale: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 0285.068 (groves_clear_of_structures) - body verbatim from _seg_0285__wells_clear_of_shrine_and_torii (feature 024 per-check split; guards re-evaluated in the body, see split_oversized.py)."""
-    if scale in ('town', 'village', 'hamlet') and scale in ('town', 'village', 'hamlet', 'city'):
-        check("groves_clear_of_structures", not gr_fouled, f"homestead grove(s) overlap a building other than their own farmhouse: {gr_fouled[:3]} - a grove abuts only its own house")
-    return _kept(locals(), ())
-
-
 # SUN: a threshing yard dries rice in the SOUTHERN sun, so no grove may sit in the strip directly
 # SOUTH of a yard (a neighbor's grove there would shade it). A grove is N/W of its OWN house, far
 # from its own yard's southern corridor, so this only catches a grove shading a NEIGHBOR's yard.
@@ -531,17 +524,6 @@ def _seg_0285_079__g_buried(*, gardens: Any = _UNBOUND, gd: Any = _UNBOUND, grov
             (round(gd["x"]), round(gd["y"])) for gd in gardens if any(abs(gd["x"] - gv["x"]) < (gd["w"] + gv["w"]) / 2 - 3 and abs(gd["y"] - gv["y"]) < (gd["h"] + gv["h"]) / 2 - 3 for gv in groves)
         ]
     return _kept(locals(), ('g_buried', 'gd', 'gv'))
-
-
-def _seg_0285_080__gardens_clear_of_groves(*, check: Any = _UNBOUND, g_buried: Any = _UNBOUND, scale: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 0285.080 (gardens_clear_of_groves) - body verbatim from _seg_0285__wells_clear_of_shrine_and_torii (feature 024 per-check split; guards re-evaluated in the body, see split_oversized.py)."""
-    if scale in ('town', 'village', 'hamlet') and scale in ('town', 'village', 'hamlet', 'city'):
-        check(
-            "gardens_clear_of_groves",
-            not g_buried,
-            f"kitchen garden(s) {g_buried[:3]} sit under a homestead grove - the solver spaces the garden to the LEE side and the grove to the windward; they must not overlap",
-        )
-    return _kept(locals(), ())
 
 
 # WHERE POSSIBLE: a grove is drawn on EVERY farmhouse that has windward room - the yashikirin ringed

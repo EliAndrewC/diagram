@@ -3,8 +3,6 @@
 from l7r.diagram import check_village
 from tests.check_village._builders import (
     _EAST_SHADE,
-    _PADDY_SQ,
-    _SIX,
     _big_grove,
     _bldg,
     _farmhouse,
@@ -25,7 +23,6 @@ from tests.check_village._builders import (
     bldg,
     f,
     f_only,
-    garden,
     house,
     manifest,
     well,
@@ -57,74 +54,9 @@ def test_yards_unshaded_by_neighbors_fires_only_on_a_scripted_map():
     assert "yards_unshaded_by_neighbors" not in f_only(clear, "yards_unshaded_by_neighbors"), "a yard with its sun must pass"
 
 
-def test_gardens_unshaded_by_neighbors_fires_only_on_a_scripted_map():
-    """Feature 133 T10: the garden takes the yard's 39 ft corridor, under the same migration gate."""
-    shaded = manifest(
-        houses=[house(x=400, y=400), house(x=440, y=440)],  # the neighbor's wall 14 ft south of the bed (bed bottom 412, wall 426)
-        gardens=[garden(x=440, y=400, of=(400, 400))],  # a bed on the E flank
-    )
-    shaded["meta"]["ftpx"] = 1
-    assert "gardens_unshaded_by_neighbors" not in f_only(shaded, "gardens_unshaded_by_neighbors"), "an UNTAGGED (hand-authored) map is exempt by decision"
-    shaded["meta"]["generated_by"] = "hamletgen"
-    assert "gardens_unshaded_by_neighbors" in f_only(shaded, "gardens_unshaded_by_neighbors"), "a scripted map must be held to it"
-    clear = manifest(
-        houses=[house(x=400, y=400), house(x=440, y=480)],  # 54 ft: past the corridor
-        gardens=[garden(x=440, y=400, of=(400, 400))],
-    )
-    clear["meta"].update(ftpx=1, generated_by="hamletgen")
-    assert "gardens_unshaded_by_neighbors" not in f_only(clear, "gardens_unshaded_by_neighbors"), "a bed with its sun must pass"
-    own = manifest(
-        houses=[house(x=400, y=400)],
-        gardens=[garden(x=400, y=380, of=(400, 400))],  # its own house south of it: exempt (gardens_on_sunny_side owns that)
-    )
-    own["meta"].update(ftpx=1, generated_by="hamletgen")
-    assert "gardens_unshaded_by_neighbors" not in f_only(own, "gardens_unshaded_by_neighbors"), "only a NEIGHBOR's house counts"
-
-
-def test_gardens_present_fires_when_a_farmhouse_has_none():
-    M = {"meta": {"scale": "village"}, "houses": [_farmhouse(500, 500)], "gardens": []}
-    assert "gardens_present" in f_only(M, "gardens_present")
-
-
-def test_gardens_on_sunny_side_fires_on_a_north_garden():
-    M = {"meta": {"scale": "village"}, "houses": [_farmhouse(500, 500)], "gardens": [{"x": 520, "y": 455, "w": 24, "h": 16, "rot": 0, "of": [500, 500]}]}  # y=455 is north of 500
-    assert "gardens_on_sunny_side" in f_only(M, "gardens_on_sunny_side")
-
-
 def test_gardens_smaller_than_farmhouse_fires_on_an_oversize_garden():
     M = {"meta": {"scale": "village"}, "houses": [_farmhouse(500, 500)], "gardens": [{"x": 545, "y": 500, "w": 60, "h": 40, "rot": 0, "of": [500, 500]}]}  # bigger than the house
     assert "gardens_smaller_than_farmhouse" in f_only(M, "gardens_smaller_than_farmhouse")
-
-
-def test_gardens_clear_of_paddies_fires_on_a_garden_in_a_field():
-    M = {
-        "meta": {"scale": "village"},
-        "houses": [_farmhouse(500, 500)],
-        "fields": [_field("p", 480, 480, 600, 600)],
-        "gardens": [{"x": 530, "y": 530, "w": 24, "h": 16, "rot": 0, "of": [500, 500]}],
-    }  # sits inside the paddy
-    assert "gardens_clear_of_paddies" in f_only(M, "gardens_clear_of_paddies")
-
-
-def test_gardens_clear_of_structures_fires_when_a_garden_covers_another_building():
-    M = {
-        "meta": {"scale": "village"},
-        "houses": [_farmhouse(500, 500)],
-        "buildings": [bldg(545, 500, "shop")],
-        "gardens": [{"x": 545, "y": 500, "w": 24, "h": 16, "rot": 0, "of": [500, 500]}],
-    }  # on the shop, not its own house
-    assert "gardens_clear_of_structures" in f_only(M, "gardens_clear_of_structures")
-
-
-def test_gardens_clear_of_sheds_fires_when_a_garden_covers_the_shed():
-    # a farm's kura is a recorded annex in M['farm_sheds']; a garden placed on top of it overlaps it.
-    M = {
-        "meta": {"scale": "village"},
-        "houses": [{"x": 500, "y": 500, "w": 44, "h": 29, "kind": "plain", "rot": 0}],
-        "farm_sheds": [{"x": 500, "y": 476, "w": 20, "h": 9, "rot": 0, "of": [500, 500]}],  # kura on the north wall
-        "gardens": [{"x": 500, "y": 478, "w": 24, "h": 16, "rot": 0, "of": [500, 500]}],
-    }  # on the shed
-    assert "gardens_clear_of_sheds" in f_only(M, "gardens_clear_of_sheds")
 
 
 def test_gardens_clear_of_channels_fires_when_a_garden_sits_on_a_ditch():
@@ -264,16 +196,6 @@ def test_groves_on_windward_side_passes_on_a_nw_grove():
     assert "groves_on_windward_side" not in f_only(M, "groves_on_windward_side")
 
 
-def test_groves_clear_of_paddies_fires_on_a_grove_in_a_field():
-    M = {"meta": {"scale": "village"}, "houses": [_farmhouse(500, 500)], "fields": [_field("p", 440, 440, 600, 600)], "groves": [_grove(465, 470, 500, 500)]}  # NW corner sits inside the paddy
-    assert "groves_clear_of_paddies" in f_only(M, "groves_clear_of_paddies")
-
-
-def test_groves_clear_of_structures_fires_when_a_grove_covers_another_building():
-    M = {"meta": {"scale": "village"}, "houses": [_farmhouse(500, 500)], "buildings": [bldg(460, 470, "shop")], "groves": [_grove(460, 470, 500, 500)]}  # on the shop, not its own house
-    assert "groves_clear_of_structures" in f_only(M, "groves_clear_of_structures")
-
-
 def test_groves_where_possible_fires_when_a_clear_windward_farm_has_none():
     # 12 farmhouses with open windward sides (no fields/structs/corridors) and no groves -> the generator
     # would have placed groves; a grove-less farm with clear windward room is flagged
@@ -349,16 +271,6 @@ def test_village_groves_clear_of_paddies_tests_the_trees_not_the_bounding_box():
     # ... while a single tree actually standing in the paddy fires, even with the box center on dry ground
     intruder = {"x": 300, "y": 300, "w": 200, "h": 200, "rot": 0, "role": "copse", "r": 11, "clumps": [[260, 260], [600, 600]]}
     assert "village_groves_clear_of_paddies" in f_only(_nuc_village_M(_nuc_grid(), [intruder], fields=field), "village_groves_clear_of_paddies")
-
-
-def test_gardens_clear_of_groves_fires_when_a_garden_is_buried():
-    M = {
-        "meta": {"scale": "village"},
-        "houses": [_farmhouse(500, 500)],
-        "gardens": [{"x": 540, "y": 500, "w": 24, "h": 16, "rot": 0, "of": [500, 500]}],
-        "groves": [_grove(540, 500, 700, 700)],
-    }  # grove sits squarely on the garden
-    assert "gardens_clear_of_groves" in f_only(M, "gardens_clear_of_groves")
 
 
 def test_groves_are_substantial_fires_on_tiny_groves():
@@ -513,20 +425,6 @@ def test_scatter_respects_swept_clearings_passes_when_the_cover_draws_after():
         "clearings": [{"poly": [[100, 100], [200, 100], [200, 200], [100, 200]], "seq": 0}],
     }
     assert "scatter_respects_swept_clearings" not in f_only(M, "scatter_respects_swept_clearings")
-
-
-def test_harvest_and_garden_checks_cover_the_headman():
-    # the headman is a FARMSTEAD, not an exception to farmstead anatomy (GM 2026-07-21, caught on
-    # Hikari no Sato): the old role=="headman" carve-out in occ_h existed only because the dispersed
-    # headman() predated the homestead bundle and drew a lone house - a headman with no yard and no
-    # garden now fires BOTH universal checks
-    M = {
-        "meta": {"scale": "village"},
-        "houses": [{"x": 500, "y": 500, "w": 46, "h": 28, "rot": 0, "kind": "plain", "role": "headman"}],
-    }
-    fails = f(M)
-    assert "harvest_yards_present" in fails
-    assert "gardens_present" in fails
 
 
 def test_wells_sized_to_population_bands():
@@ -712,58 +610,12 @@ def test_wells_sized_to_buildings_passes_when_proportional():
     assert "wells_sized_to_buildings" not in f_only(_well_size_city(11.9), "wells_sized_to_buildings")
 
 
-def test_harvest_yards_present_fires_when_any_farmhouse_lacks_one():
-    # 5 of 6 yards - even one farmhouse without a yard fails (the work yard was universal)
-    assert "harvest_yards_present" in f_only(_harvest(_SIX, [_yard(h) for h in _SIX[:5]]), "harvest_yards_present")
-
-
-def test_harvest_yards_present_passes_when_every_farmhouse_has_one():
-    assert "harvest_yards_present" not in f_only(_harvest(_SIX, [_yard(h) for h in _SIX]), "harvest_yards_present")
-
-
 def test_harvest_yards_smaller_than_farmhouse_fires_when_oversize():
     assert "harvest_yards_smaller_than_farmhouse" in f_only(_harvest([(300, 300)], [_yard((300, 300), w=60, h=44)]), "harvest_yards_smaller_than_farmhouse")
 
 
 def test_harvest_yards_smaller_than_farmhouse_passes_when_small():
     assert "harvest_yards_smaller_than_farmhouse" not in f_only(_harvest([(300, 300)], [_yard((300, 300))]), "harvest_yards_smaller_than_farmhouse")
-
-
-def test_harvest_yards_on_sunny_side_fires_when_north_of_house():
-    # +y is south; a yard ABOVE its house center sits on the shady north/back side
-    y = {"x": 300, "y": 260, "w": 32, "h": 20, "rot": 0, "of": [300, 300]}
-    assert "harvest_yards_on_sunny_side" in f_only(_harvest([(300, 300)], [y]), "harvest_yards_on_sunny_side")
-
-
-def test_harvest_yards_on_sunny_side_passes_when_south_of_house():
-    y = {"x": 300, "y": 340, "w": 32, "h": 20, "rot": 0, "of": [300, 300]}
-    assert "harvest_yards_on_sunny_side" not in f_only(_harvest([(300, 300)], [y]), "harvest_yards_on_sunny_side")
-
-
-def test_harvest_yards_clear_of_paddies_fires_when_in_a_paddy():
-    # the yard footprint sits inside the field (400,400)-(600,600) - a dry floor in the flooded paddy
-    y = {"x": 500, "y": 500, "w": 32, "h": 20, "rot": 0, "of": [460, 460]}
-    M = _harvest([(460, 460)], [y], fields=[{"name": "a", "kind": "paddy", "bbox": [400, 400, 600, 600], "outline": _PADDY_SQ}])
-    assert "harvest_yards_clear_of_paddies" in f_only(M, "harvest_yards_clear_of_paddies")
-
-
-def test_harvest_yards_clear_of_paddies_passes_when_clear():
-    y = {"x": 720, "y": 300, "w": 32, "h": 20, "rot": 0, "of": [676, 300]}
-    M = _harvest([(676, 300)], [y], fields=[{"name": "a", "kind": "paddy", "bbox": [400, 400, 600, 600], "outline": _PADDY_SQ}])
-    assert "harvest_yards_clear_of_paddies" not in f_only(M, "harvest_yards_clear_of_paddies")
-
-
-def test_harvest_yards_clear_of_structures_fires_on_another_building():
-    # the yard (344,300) overlaps a shop - only its OWN farmhouse (300,300) may underlie it
-    M = _harvest([(300, 300)], [_yard((300, 300))])
-    M["buildings"] = [{"x": 352, "y": 300, "w": 44, "h": 30, "rot": 0, "kind": "shop"}]
-    assert "harvest_yards_clear_of_structures" in f_only(M, "harvest_yards_clear_of_structures")
-
-
-def test_harvest_yards_clear_of_structures_passes_when_only_on_its_own_house():
-    M = _harvest([(300, 300)], [_yard((300, 300))])
-    M["buildings"] = [{"x": 700, "y": 700, "w": 44, "h": 30, "rot": 0, "kind": "shop"}]  # far away
-    assert "harvest_yards_clear_of_structures" not in f_only(M, "harvest_yards_clear_of_structures")
 
 
 # ---- grove_clumps_clear_of_structures: a tree blob may abut but not overlap a farmstead ----
@@ -1038,19 +890,6 @@ def test_village_groves_visibly_stocked_fires_on_a_grove_that_was_never_drawn():
     # a zero-area record is SKIPPED, not divided by (coverage: the `_area <= 0` branch)
     degenerate = manifest(meta=meta, village_groves=[{"role": "copse", "w": 0.0, "h": 0.0, "r": 11.0, "clumps": []}])
     assert "village_groves_visibly_stocked" not in check_village.gate(degenerate, verbose=False, only=only)
-
-
-def test_houses_clear_of_paddies_fires_and_passes():
-    """A farmhouse WALL stands at least 6 ft off every paddy outline (GM 2026-08-27, T41: "actually
-    touching looks wrong to me"). A 40x30 house whose east wall is 1 ft from the paddy fires; the same
-    house 10 ft off passes; a rotated house is judged by its rotated corners."""
-    paddy = [_field("f", 500, 100, 900, 700)]
-    touching = manifest(houses=[house(x=479, y=400)], fields=paddy)  # a 40-wide house: its east wall at x=499
-    assert "houses_clear_of_paddies" in f_only(touching, "houses_clear_of_paddies"), "a wall on the bund must fire"
-    clear = manifest(houses=[house(x=470, y=400)], fields=paddy)  # east wall at x=490: 10 ft off
-    assert "houses_clear_of_paddies" not in f_only(clear, "houses_clear_of_paddies")
-    turned = manifest(houses=[dict(house(x=470, y=400), rot=45)], fields=paddy)  # the rotated corner reaches x=494.7
-    assert "houses_clear_of_paddies" in f_only(turned, "houses_clear_of_paddies"), "a rotated corner counts"
 
 
 def test_bamboo_declared_and_drawn_fires_and_passes():

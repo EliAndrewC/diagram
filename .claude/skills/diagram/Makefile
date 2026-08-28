@@ -10,7 +10,7 @@
 	 map cohort tripwire hamlet cache-audit regressions placement-stages pool-index pool-index-if-stale compound render-sync idle-tests \
 	 gate-manifest why-placed site-justice crop jogs pack-audit scatter-audit sun-audit new-check timings citybudget help \
 	 ci-status ci-check ci-merge ci-image commit-permitted \
-	 perf-explain perf-confirm perf-audit perf-signoff perf-review perf-profile
+	 perf-explain perf-confirm perf-audit perf-signoff perf-review perf-profile check-census
 
 # ---- THE PERFORMANCE BANDS (feature 129 - GUARD_EDIT_OK: adding the review-record operations) ----
 # Any increase (total OR any seed, per ENVIRONMENT) owes a written explanation and a perf-audit
@@ -30,6 +30,9 @@ perf-signoff:   ## band 3 - the GM, at a terminal   WHY="..."
 	@$(PERF_REVIEW) signoff --why "$(WHY)" --as GM --environment "$(or $(ENV),local)"
 perf-review:    ## does every environment's newest bookend pair carry the records its band owes? (the push runs this)
 	@$(PERF_REVIEW) check
+check-census:   ## feature 141: which checks re-measure a placer's guarantee (the ledger)   OUT=specs/141-checks-and-corpus-audit/ledger
+	$(RUN).tools.check_census --out "$(or $(OUT),specs/141-checks-and-corpus-audit/ledger)"
+
 perf-profile:   ## tier 2 evidence: cProfile ONE stage of ONE seed   SEED=25 STAGE=web
 	$(RUN).tools.perf_profile --seed "$(SEED)" --stage "$(STAGE)"
 

@@ -107,35 +107,6 @@ def test_dry_plot_furrows_vary_skipped_for_a_contour_village():
 
 
 # ---- dry_plot_seams_shared (hem seams are single straight lines both quads lie on) -----------
-def test_dry_plot_seams_shared_fires_on_a_lap():
-    # the concave-bend failure: the second column's quad laps 2 px into its neighbor
-    a = {"poly": [[300, 300], [346, 300], [346, 336], [300, 336]], "theta": 0.2}
-    b = {"poly": [[344, 300], [390, 302], [390, 338], [344, 336]], "theta": 0.9}
-    assert "dry_plot_seams_shared" in f_only({"dry_plots": [a, b]}, "dry_plot_seams_shared")
-
-
-def test_dry_plot_seams_shared_fires_on_a_gap_wedge():
-    # the convex-bend failure: both columns share the base corner at (346,300) but the second's
-    # side edge tilts 6 px off the first's over its depth - a bare wedge opens between them
-    a = {"poly": [[300, 300], [346, 300], [346, 380], [300, 380]], "theta": 0.2}
-    b = {"poly": [[346, 300], [392, 300], [398, 380], [352, 380]], "theta": 0.9}
-    assert "dry_plot_seams_shared" in f_only({"dry_plots": [a, b]}, "dry_plot_seams_shared")
-
-
-def test_dry_plot_seams_shared_passes_a_shared_seam_with_a_depth_step():
-    # clean abutment: one straight seam at x=346, the second column shallower - the ragged outer
-    # edge steps ALONG the shared line, which is exactly the raggedness the generator intends
-    a = {"poly": [[300, 300], [346, 300], [346, 380], [300, 380]], "theta": 0.2}
-    b = {"poly": [[346, 300], [392, 300], [392, 350], [346, 350]], "theta": 0.9}
-    assert "dry_plot_seams_shared" not in f_only({"dry_plots": [a, b]}, "dry_plot_seams_shared")
-
-
-def test_dry_plot_seams_shared_skips_singletons_and_separated_plots():
-    # one plot has no seams; two plots a field apart never meet (the bbox prefilter path)
-    a = {"poly": [[300, 300], [346, 300], [346, 380], [300, 380]], "theta": 0.2}
-    c = {"poly": [[900, 300], [946, 300], [946, 380], [900, 380]], "theta": 0.9}
-    assert "dry_plot_seams_shared" not in f_only({"dry_plots": [a]}, "dry_plot_seams_shared")
-    assert "dry_plot_seams_shared" not in f_only({"dry_plots": [a, c]}, "dry_plot_seams_shared")
 
 
 def test_channel_source_anchored_fires_on_bad_anchor():

@@ -9604,27 +9604,6 @@
    "always": false
   },
   {
-   "name": "_seg_0285_011__harvest_yards_present",
-   "free": [
-    "check",
-    "occ_h",
-    "scale",
-    "without"
-   ],
-   "writes": [],
-   "checks": [
-    "harvest_yards_present"
-   ],
-   "needs": [
-    "check",
-    "occ_h",
-    "scale",
-    "without"
-   ],
-   "meta": false,
-   "always": false
-  },
-  {
    "name": "_seg_0285_012__h_2",
    "free": [
     "h",
@@ -9703,25 +9682,6 @@
    "always": false
   },
   {
-   "name": "_seg_0285_016__harvest_yards_on_sunny_side",
-   "free": [
-    "check",
-    "scale",
-    "shady"
-   ],
-   "writes": [],
-   "checks": [
-    "harvest_yards_on_sunny_side"
-   ],
-   "needs": [
-    "check",
-    "scale",
-    "shady"
-   ],
-   "meta": false,
-   "always": false
-  },
-  {
    "name": "_seg_0285_017__in_paddy",
    "free": [
     "scale"
@@ -9771,25 +9731,6 @@
     "in_paddy",
     "scale",
     "yards"
-   ],
-   "meta": false,
-   "always": false
-  },
-  {
-   "name": "_seg_0285_019__harvest_yards_clear_of_paddies",
-   "free": [
-    "check",
-    "in_paddy",
-    "scale"
-   ],
-   "writes": [],
-   "checks": [
-    "harvest_yards_clear_of_paddies"
-   ],
-   "needs": [
-    "check",
-    "in_paddy",
-    "scale"
    ],
    "meta": false,
    "always": false
@@ -9855,25 +9796,6 @@
     "others",
     "scale",
     "yards"
-   ],
-   "meta": false,
-   "always": false
-  },
-  {
-   "name": "_seg_0285_023__harvest_yards_clear_of_structures",
-   "free": [
-    "check",
-    "fouled",
-    "scale"
-   ],
-   "writes": [],
-   "checks": [
-    "harvest_yards_clear_of_structures"
-   ],
-   "needs": [
-    "check",
-    "fouled",
-    "scale"
    ],
    "meta": false,
    "always": false
@@ -9965,27 +9887,6 @@
    "always": false
   },
   {
-   "name": "_seg_0285_028__gardens_present",
-   "free": [
-    "check",
-    "g_without",
-    "occ_h",
-    "scale"
-   ],
-   "writes": [],
-   "checks": [
-    "gardens_present"
-   ],
-   "needs": [
-    "check",
-    "g_without",
-    "occ_h",
-    "scale"
-   ],
-   "meta": false,
-   "always": false
-  },
-  {
    "name": "_seg_0285_029__g_oversize",
    "free": [
     "gardens",
@@ -10045,25 +9946,6 @@
    "always": false
   },
   {
-   "name": "_seg_0285_032__gardens_on_sunny_side",
-   "free": [
-    "check",
-    "g_shady",
-    "scale"
-   ],
-   "writes": [],
-   "checks": [
-    "gardens_on_sunny_side"
-   ],
-   "needs": [
-    "check",
-    "g_shady",
-    "scale"
-   ],
-   "meta": false,
-   "always": false
-  },
-  {
    "name": "_seg_0285_033__g_in_paddy",
    "free": [
     "scale"
@@ -10112,25 +9994,6 @@
     "fields_ol",
     "g_in_paddy",
     "gardens",
-    "scale"
-   ],
-   "meta": false,
-   "always": false
-  },
-  {
-   "name": "_seg_0285_035__gardens_clear_of_paddies",
-   "free": [
-    "check",
-    "g_in_paddy",
-    "scale"
-   ],
-   "writes": [],
-   "checks": [
-    "gardens_clear_of_paddies"
-   ],
-   "needs": [
-    "check",
-    "g_in_paddy",
     "scale"
    ],
    "meta": false,
@@ -10279,25 +10142,6 @@
    "always": false
   },
   {
-   "name": "_seg_0285_042__gardens_clear_of_structures",
-   "free": [
-    "check",
-    "g_fouled",
-    "scale"
-   ],
-   "writes": [],
-   "checks": [
-    "gardens_clear_of_structures"
-   ],
-   "needs": [
-    "check",
-    "g_fouled",
-    "scale"
-   ],
-   "meta": false,
-   "always": false
-  },
-  {
    "name": "_seg_0285_043__sheds_1",
    "free": [
     "M",
@@ -10352,25 +10196,6 @@
     "gardens",
     "scale",
     "sheds"
-   ],
-   "meta": false,
-   "always": false
-  },
-  {
-   "name": "_seg_0285_046__gardens_clear_of_sheds",
-   "free": [
-    "check",
-    "g_on_shed",
-    "scale"
-   ],
-   "writes": [],
-   "checks": [
-    "gardens_clear_of_sheds"
-   ],
-   "needs": [
-    "check",
-    "g_on_shed",
-    "scale"
    ],
    "meta": false,
    "always": false
@@ -10744,25 +10569,6 @@
    "always": false
   },
   {
-   "name": "_seg_0285_065__groves_clear_of_paddies",
-   "free": [
-    "check",
-    "g_in_paddy",
-    "scale"
-   ],
-   "writes": [],
-   "checks": [
-    "groves_clear_of_paddies"
-   ],
-   "needs": [
-    "check",
-    "g_in_paddy",
-    "scale"
-   ],
-   "meta": false,
-   "always": false
-  },
-  {
    "name": "_seg_0285_066__gr_fouled",
    "free": [
     "scale"
@@ -10804,25 +10610,6 @@
     "gr_fouled",
     "groves",
     "others",
-    "scale"
-   ],
-   "meta": false,
-   "always": false
-  },
-  {
-   "name": "_seg_0285_068__groves_clear_of_structures",
-   "free": [
-    "check",
-    "gr_fouled",
-    "scale"
-   ],
-   "writes": [],
-   "checks": [
-    "groves_clear_of_structures"
-   ],
-   "needs": [
-    "check",
-    "gr_fouled",
     "scale"
    ],
    "meta": false,
@@ -11183,25 +10970,6 @@
    "needs": [
     "gardens",
     "groves",
-    "scale"
-   ],
-   "meta": false,
-   "always": false
-  },
-  {
-   "name": "_seg_0285_080__gardens_clear_of_groves",
-   "free": [
-    "check",
-    "g_buried",
-    "scale"
-   ],
-   "writes": [],
-   "checks": [
-    "gardens_clear_of_groves"
-   ],
-   "needs": [
-    "check",
-    "g_buried",
     "scale"
    ],
    "meta": false,
@@ -13391,23 +13159,6 @@
     "check",
     "dry_plots",
     "same"
-   ],
-   "meta": false,
-   "always": false
-  },
-  {
-   "name": "_seg_0596__dry_plot_seams_shared",
-   "free": [
-    "check",
-    "dry_plots"
-   ],
-   "writes": [],
-   "checks": [
-    "dry_plot_seams_shared"
-   ],
-   "needs": [
-    "check",
-    "dry_plots"
    ],
    "meta": false,
    "always": false
