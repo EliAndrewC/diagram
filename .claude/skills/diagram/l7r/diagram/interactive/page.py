@@ -150,13 +150,13 @@ def marks_region(strings: Sequence[str], cell: float = HIT_CELL) -> str:
     for gy in sorted({c[1] for c in cells}):
         xs = sorted(c[0] for c in cells if c[1] == gy)
         start = prev = xs[0]
-        for gx in xs[1:] + [None]:  # type: ignore[list-item]
-            if gx is not None and gx == prev + 1:
+        for gx in xs[1:]:
+            if gx == prev + 1:
                 prev = gx
                 continue
             out.append(f'<rect x="{start * cell:.0f}" y="{gy * cell:.0f}" width="{(prev - start + 1) * cell:.0f}" height="{cell:.0f}"/>')
-            if gx is not None:
-                start = prev = gx
+            start = prev = gx
+        out.append(f'<rect x="{start * cell:.0f}" y="{gy * cell:.0f}" width="{(prev - start + 1) * cell:.0f}" height="{cell:.0f}"/>')
     return "".join(out)
 
 

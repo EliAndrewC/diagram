@@ -154,7 +154,15 @@ def synthetic(browser: Any) -> Iterator[Page]:
     with tempfile.TemporaryDirectory() as d:
         path = os.path.join(d, "synthetic.html")
         with open(path, "w", encoding="utf-8") as fh:
-            fh.write(render_page(strings, tags, "Synthetic", {"ftpx": 1.0}, {"marshes": [{"role": "toe", "poly": [[220, 100], [290, 100], [290, 190], [220, 190]]}], "commons": [{"role": "grazing", "poly": [[0, 120], [300, 120], [300, 200], [0, 200]]}]}))
+            fh.write(
+                render_page(
+                    strings,
+                    tags,
+                    "Synthetic",
+                    {"ftpx": 1.0},
+                    {"marshes": [{"role": "toe", "poly": [[220, 100], [290, 100], [290, 190], [220, 190]]}], "commons": [{"role": "grazing", "poly": [[0, 120], [300, 120], [300, 200], [0, 200]]}]},
+                )
+            )
         page = Page(browser, path)
         yield page
         page.close()

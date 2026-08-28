@@ -205,7 +205,12 @@ def test_the_marks_region_covers_only_cells_that_hold_a_mark() -> None:
 
 
 def test_the_scrub_region_comes_from_its_marks_not_its_polygon() -> None:
-    strings = ['<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300">', '<rect width="300" height="300" fill="#EFE3C2"/>', '<g stroke="#A7A860" stroke-width="0.8"><line x1="5" y1="5" x2="6" y2="9"/></g>', "</svg>"]
+    strings = [
+        '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300">',
+        '<rect width="300" height="300" fill="#EFE3C2"/>',
+        '<g stroke="#A7A860" stroke-width="0.8"><line x1="5" y1="5" x2="6" y2="9"/></g>',
+        "</svg>",
+    ]
     tags = [None, "-", "scrub and rough grazing", None]
     page = render_page(strings, tags, "T", {"ftpx": 1.0}, {"commons": [{"role": "grazing", "poly": [[0, 0], [300, 0], [300, 300], [0, 300]]}]})
     assert "<rect x=\"0\" y=\"0\" width=\"24\" height=\"24\"/>" in page and 'polygon class="hit"' not in page
