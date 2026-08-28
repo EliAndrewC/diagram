@@ -2043,3 +2043,14 @@ dodging it (the face-dodge rotated the hole to seed 41 - recorded in hinterland.
 the orphan joiner in `_touch_junctions` to accept the 30-35 ft links the smoothing leaves (see why it
 refuses them first); seed 27 wants the two new checks (T32 bends, T49 bamboo-off-lanes) satisfied on
 a layout other than Inashiro's; seed 47 is the old set. Then drop each pin row and run the 48-cohort.
+
+## Where does a field path END? (settlement-review, Inashiro, 2026-08-27 and 2026-08-28)
+
+Lane 0's field spur has ended short of the field outline on two consecutive rolls of the reference
+(1318,1306 under feature 140; 1333,1216 under 145, 17 ft from the outline, in open scrub) - so it is
+a property of `stage_ways`' spur, not of a roll. `research: physical`, and open: does a hamlet's
+path to its field end at a bund head, at a gap in the outer bund (a gate), or simply where the
+worked ground begins? Sketch once the record answers: the spur's terminal is snapped to the nearest
+bund end or outline vertex within ~30 ft (`field_face` chords give the candidates), and
+`field_spur_reaches_the_field` becomes a placer unit test rather than a check. Deferred under 145
+(a performance feature) with this measurement; not a regression of it.
