@@ -766,9 +766,9 @@ def _walled_settlement() -> tuple[object, object]:
 
     s = Settlement(1400, 1400, seed=1)
     s.meta(name="W", scale="hamlet", ftpx=1, down_deg=90)
-    for i in range(9):
-        x = 200.0 + i * 120.0
-        s.M["houses"].append({"x": x, "y": 700.0, "w": 110.0, "h": 90.0, "rot": 0})
+    for i in range(14):  # SOLID: the footprints overlap, so no gap exists for the router to thread
+        x = 60.0 + i * 100.0
+        s.M["houses"].append({"x": x, "y": 700.0, "w": 140.0, "h": 90.0, "rot": 0})
     plan = a_plan()
     plan.envelope = [(50.0, 50.0), (1350.0, 50.0), (1350.0, 1350.0), (50.0, 1350.0)]
     return s, plan
