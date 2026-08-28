@@ -380,3 +380,33 @@ def test_corridor_buffers_reads_the_alleys_the_ring_road_and_the_road() -> None:
     s.M["road"] = [[400, 400], [600, 400]]
     got = {round(half) for _pts, half in s._corridor_buffers(4.0)}
     assert {round(8 / 2 + 4), round(20 / 2 + 4), round(30 / 2 + 4)} <= got, got
+
+
+# ---- feature 146: one test per refusal reason the rolls have not happened to hit ----------------------
+
+
+def test_yard_fits_rejects_a_yard_whose_corner_is_inside_a_basin() -> None:
+    """The FIRST direction of the two-source paddy test (the second is covered above): a yard CORNER inside a
+    drawn basin outline, which is what `harvest_yards_clear_of_paddies` measures."""
+    s = Settlement(1000, 1000, seed=1)
+    s.M["fields"] = [{"kind": "paddy", "outline": [[520, 480], [900, 480], [900, 900], [520, 900]]}]
+    assert s._yard_fits(500, 500, 60, 40, 500, 440) is False  # the yard's east corners reach into the basin
+    assert s._yard_fits(200, 200, 60, 40, 200, 140) is True
+
+
+def test_garden_fits_rejects_a_bed_on_the_paddy_and_near_its_edge() -> None:
+    """A kitchen garden is DRY ground: inside a paddy, or within its own radius of one's edge, is refused."""
+    s = Settlement(1000, 1000, seed=1)
+    s.field_polys.append([(400, 400), (700, 400), (700, 700), (400, 700)])
+    yard = (200, 260, 32, 20)
+    assert s._garden_fits(550, 550, 24, 16, 200, 200, yard) is False  # in the basin
+    assert s._garden_fits(390, 550, 24, 16, 200, 200, yard) is False  # off it, but inside the radius + 4
+    assert s._garden_fits(200, 200, 24, 16, 200, 200, yard) is True
+
+
+def test_grove_fits_rejects_a_belt_on_a_lane_tread() -> None:
+    """A grove may stand at the paddy's edge (the field set-back is for buildings) but never on a trodden way."""
+    s = Settlement(1000, 1000, seed=1)
+    s.corridors.append(([(100.0, 500.0), (900.0, 500.0)], 20.0))  # a lane's cleared band, as the placer registers it
+    assert s._grove_fits(500, 500, 60, 30, own=[]) is False  # centered on the tread
+    assert s._grove_fits(500, 300, 60, 30, own=[]) is True

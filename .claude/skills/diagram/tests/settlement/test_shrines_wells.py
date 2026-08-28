@@ -329,3 +329,16 @@ def test_farm_wells_seats_a_wellhead_in_a_steading_dooryard() -> None:
     assert seated >= 1, "a wellhead must seat in one of the dooryards"
     assert s.M["wells"], "and be recorded"
     assert any(min(abs(w["x"] - h["x"]) + abs(w["y"] - h["y"]) for h in s.M["houses"]) < 200 for w in s.M["wells"])
+
+
+def test_byre_clear_of_all_but_refuses_the_paddy_and_a_neighbour_s_yard() -> None:
+    """Feature 146: two of the byre arm's refusal reasons - it stands on dry ground off the basins, and it
+    clears every recorded appurtenance except its OWN homestead's."""
+    s = Settlement(1000, 1000, seed=1)
+    house = {"x": 300.0, "y": 300.0, "w": 50.0, "h": 30.0}
+    s.M["houses"].append(house)
+    s.field_polys.append([(500, 500), (800, 500), (800, 800), (500, 800)])
+    assert s._byre_clear_of_all_but(650, 650, 40, 24, house) is False, "in the basin"
+    s.M["threshing_yards"].append({"x": 200.0, "y": 200.0, "w": 40.0, "h": 30.0})
+    assert s._byre_clear_of_all_but(200, 200, 40, 24, house) is False, "on a neighbour's yard"
+    assert s._byre_clear_of_all_but(120, 600, 40, 24, house) is True
