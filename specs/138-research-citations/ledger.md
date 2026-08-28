@@ -204,10 +204,10 @@
 
 | file | what it holds | status |
 |---|---|---|
-| `flophouse-research.md` | a 19-source, 63-claim flophouse study with one `Sources:` line - per-claim citations owed or a pointer to a cited tree entry | open |
-| `town-deep-audit.md` | audit prose that states findings - each cited or pointed | open |
-| `town-checks-audit.md` | same | open |
-| `pending-enclosed-fan-floor.md` | same | open |
+| `flophouse-research.md` | a 19-source, 63-claim flophouse study with one `Sources:` line - per-claim citations owed or a pointer to a cited tree entry | re-sourced (own Sources section; header pointer added) |
+| `town-deep-audit.md` | audit prose that states findings - each cited or pointed | re-sourced (section 8; header) |
+| `town-checks-audit.md` | same | n/a - rendering audit (header) |
+| `pending-enclosed-fan-floor.md` | same | re-sourced (pointer to fields.md Tract sizes) |
 
 ## C. Inline grounding in the operative and pool docs that cites nothing
 
@@ -234,18 +234,18 @@
 
 | spec research file | subject | status |
 |---|---|---|
-| `specs/005-village-variation-knobs/research.md` | village knobs (historical halves) | open |
-| `specs/006-city-quarter-density/research.md` | city quarter density | open |
-| `specs/009-city-area-budget/research.md` | city area budget constants | open |
-| `specs/010-land-use-overlay-grounding/research.md` | land-use overlay | open |
-| `specs/012-in-field-paddy-features/research.md` | paddy features | open |
-| `specs/013-near-ring-farmland/research.md` | near-ring farmland | open |
-| `specs/014-paddy-dominant-near-ring/research.md` | paddy-dominant near ring | open |
-| `specs/015-punishment-execution-grounds/research.md` | execution grounds | open |
-| `specs/016-minami-provincial-city/research.md` | Minami (Grokipedia key in the queue) | open |
-| `specs/018-capital-space-budget/research.md` | capital space budget | open |
-| `specs/021-capital-housing/research.md` | capital housing | open |
-| `specs/107-ubame-town/research.md` | Ubame (Grokipedia key in the queue) | open |
+| `specs/005-village-variation-knobs/research.md` | village knobs (historical halves) | re-sourced (header pointer to cited tree entries; own links kept) |
+| `specs/006-city-quarter-density/research.md` | city quarter density | re-sourced (header pointer to cited tree entries; own links kept) |
+| `specs/009-city-area-budget/research.md` | city area budget constants | re-sourced (header pointer to cited tree entries; own links kept) |
+| `specs/010-land-use-overlay-grounding/research.md` | land-use overlay | re-sourced (header pointer to cited tree entries; own links kept) |
+| `specs/012-in-field-paddy-features/research.md` | paddy features | re-sourced (header pointer to cited tree entries; own links kept) |
+| `specs/013-near-ring-farmland/research.md` | near-ring farmland | re-sourced (header pointer to cited tree entries; own links kept) |
+| `specs/014-paddy-dominant-near-ring/research.md` | paddy-dominant near ring | re-sourced (header pointer to cited tree entries; own links kept) |
+| `specs/015-punishment-execution-grounds/research.md` | execution grounds | re-sourced (header pointer to cited tree entries; own links kept) |
+| `specs/016-minami-provincial-city/research.md` | Minami (Grokipedia key in the queue) | re-sourced (header pointer to cited tree entries; own links kept) |
+| `specs/018-capital-space-budget/research.md` | capital space budget | re-sourced (header pointer to cited tree entries; own links kept) |
+| `specs/021-capital-housing/research.md` | capital housing | re-sourced (header pointer to cited tree entries; own links kept) |
+| `specs/107-ubame-town/research.md` | Ubame (Grokipedia key in the queue) | re-sourced (header pointer to cited tree entries; own links kept) |
 
 ## E. Grounding stated in engine comments
 
@@ -253,9 +253,9 @@
 
 | file | finding | status |
 |---|---|---|
-| `l7r/diagram/citybudget.py` (~line 17) | a Chinese county seat's street net ~10-20% of ground; 25-30% deliberately unbuilt | open |
-| `l7r/diagram/check_village/segments_10e_city_governor_and_quarters.py` (~line 368) | Edo jokamachi zoned samurai and chonin ground apart by law (bukechi / choninchi) | open |
-| the other 7 files the grep hits | inventoried by T19 | open |
+| `l7r/diagram/citybudget.py` (~line 17) | a Chinese county seat's street net ~10-20% of ground; 25-30% deliberately unbuilt | recorded in research/cities/fabric.md (new entry); code untouched |
+| `l7r/diagram/check_village/segments_10e_city_governor_and_quarters.py` (~line 368) | Edo jokamachi zoned samurai and chonin ground apart by law (bukechi / choninchi) | recorded in research/cities/government.md (new entry); code untouched |
+| the other files the grep hits | inventoried 2026-08-28: `common_03_capacity.py:514` (civic 3-6% - the fabric.md entry); `citybudget.py:243/346` (ministries outside the castle; the guan-xiang spill - capitals.md entries); `segments_08c:57` and the rest are pointers to settlements.md, not findings | closed |
 
 ## F. The re-sourcing queue already in `research/SOURCES.md`
 
