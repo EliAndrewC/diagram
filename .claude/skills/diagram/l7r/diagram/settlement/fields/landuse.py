@@ -128,6 +128,7 @@ class LandUseMixin:
         if n and self._late_water_idx is not None:
             self._late_water_idx: int | None = len(self.out)
             self.out.append("")  # PLACEHOLDER - the flush splice REPLACES the element at the anchor index
+            self.out_cls.append(None)  # the class side-list stays aligned with the placeholder (feature 134)
             # (self.out[idx:idx+1] = block), so a re-anchor without a placeholder makes the splice EAT
             # whatever element lands there next. This one was missing from the start; it went unnoticed
             # while the next element was inert, until the deferred crown pass below put a pond's entire

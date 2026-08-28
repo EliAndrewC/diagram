@@ -199,6 +199,9 @@ def _row(dirname: str, dirpath: str, stem: str) -> dict[str, str]:
         thumb = "<span>render not synced</span>"
     notes = f"{dirname}/{stem}.notes.md"
     notes_cell = f'<a href="{html.escape(notes)}">notes</a>' if os.path.exists(os.path.join(dirpath, stem + ".notes.md")) else ""
+    page = f"{dirname}/{stem}.html"  # the interactive page (feature 134), linked beside the notes when the render is synced
+    if os.path.exists(os.path.join(dirpath, stem + ".html")):
+        notes_cell = (notes_cell + " | " if notes_cell else "") + f'<a href="{html.escape(page)}">interactive</a>'
     return {
         "Map": thumb,
         "Name": html.escape(name),

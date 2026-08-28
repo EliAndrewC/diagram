@@ -1,5 +1,6 @@
 [
   "all_houses_field_adjacent",
+  "all_ink_is_ruled_on",
   "alleys_serve_buildings",
   "animal_yards_clear_of_compound_gates",
   "aqueduct_taps_water_lands_dry",

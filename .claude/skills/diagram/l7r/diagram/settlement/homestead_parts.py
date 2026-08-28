@@ -29,7 +29,7 @@ class HomesteadPartsMixin:
         for px in (x0 + 4, 0.0, -x0 - 4):  # posts + a few hung sheaves
             g.append(f'<line x1="{px:.1f}" y1="{ry - 5:.1f}" x2="{px:.1f}" y2="{ry + 3:.1f}" stroke="#5A3F1E" stroke-width="1.2"/>')
         g.append('</g>')
-        self.add(''.join(g))
+        self.add(''.join(g), cls="threshing yard")
 
     def _yard_fits(self: Settlement, x: float, y: float, w: float, h: float, hx: float, hy: float) -> bool:  # type: ignore[misc]
         """A threshing yard fits where it is in-bounds, on DRY ground (clear of paddies / blocks),
@@ -113,7 +113,7 @@ class HomesteadPartsMixin:
                 px = x0 + 4 + (w - 8) * (k + 0.5) / 3
                 g.append(f'<circle cx="{px:.1f}" cy="{ry:.1f}" r="1.7" fill="#83B255"/>')
         g.append('</g>')
-        self.add(''.join(g))
+        self.add(''.join(g), cls="garden")
 
     def _garden_dims(self: Settlement, hw: float, hh: float) -> tuple[float, float]:  # type: ignore[misc]
         """PREVIEW: garden scaled to the (now smaller) house, capped."""
@@ -348,7 +348,7 @@ class HomesteadPartsMixin:
                 return True
         return False
 
-    def _draw_grove(self: Settlement, cx: float, cy: float, w: float, h: float, face: Any, mix: str = "windbreak") -> None:  # type: ignore[misc]
+    def _draw_grove(self: Settlement, cx: float, cy: float, w: float, h: float, face: Any, mix: str = "windbreak", cls: str | None = None) -> None:  # type: ignore[misc]
         """Draw one windbreak/grove clump as a DENSE MIXED STAND - overlapping canopies packed into a real
         grove (not a few scattered trees), of three species: tall EVERGREEN conifer (dark, dense apex - the
         windbreak backbone, cedar/pine), DECIDUOUS broadleaf (mid green - timber and fruit, zelkova/persimmon),
@@ -413,7 +413,7 @@ class HomesteadPartsMixin:
                 if kind == "conifer":
                     g.append(f'<circle cx="{px:.1f}" cy="{py - 3 * bs:.1f}" r="{rr * 0.4:.1f}" fill="#364D22" opacity="0.55"/>')  # dense dark apex
             g.append('</g>')
-            self.add(''.join(g))
+            self.add(''.join(g), cls=cls)
             self._record_crowns(drawn)
             random.setstate(st)
 
@@ -462,7 +462,7 @@ class HomesteadPartsMixin:
         g.append("</g>")
         if n == 0:
             return 0
-        z = self.add("".join(g))
+        z = self.add("".join(g), cls="homestead bamboo" if role == "homestead" else "shared bamboo grove")  # feature 134
         self.M.setdefault("bamboo_stands", []).append(
             {
                 "x": round((x0 + x1) / 2, 1),
@@ -774,7 +774,9 @@ class HomesteadPartsMixin:
                 seated = [seated[k] for k in _keep]
                 clumps = [clumps[k] for k in _keep]
         for jx, jy in seated:
-            self._draw_grove(jx, jy, clump, clump, face=(0, -1), mix=mix)
+            # feature 134: the belt and the copse are two highlight classes; a water_mouth grove has no
+            # class in the vocabulary yet and stays unclassed so the census reports it
+            self._draw_grove(jx, jy, clump, clump, face=(0, -1), mix=mix, cls={"windbreak": "windbreak", "copse": "copse"}.get(role))
         if clumps:
             # A COPSE IS RECORDED AT THE SIZE IT WAS DRAWN, not at the size it was asked for.
             #

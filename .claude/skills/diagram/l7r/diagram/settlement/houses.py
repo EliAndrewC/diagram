@@ -67,7 +67,11 @@ class HousesMixin:
         else:
             g.append(f'<rect x="-3.5" y="{h / 2 - 2:.1f}" width="7" height="3.3" fill="{edge}" opacity="0.85"/>')
         g.append('</g>')
-        self.add(''.join(g))
+        # ONE string, TWO feature classes (feature 134): the shed rect (g[1] when drawn) is the
+        # "storage shed", everything else the "farmhouse"; the shared <g transform> wrapper's opening
+        # and closing tags carry no class. Joined byte-for-byte as before - see Settlement.add_parts.
+        _shed_drawn = shed and kind == "plain"
+        self.add_parts([(None, g[0])] + ([("storage shed", g[1])] if _shed_drawn else []) + [("farmhouse", "".join(g[2 if _shed_drawn else 1 : -1])), (None, g[-1])])
         if shed and kind == "plain":  # record the attached kura so it is first-class + checkable
             th = math.radians(rot)
             self.M.setdefault("farm_sheds", []).append(

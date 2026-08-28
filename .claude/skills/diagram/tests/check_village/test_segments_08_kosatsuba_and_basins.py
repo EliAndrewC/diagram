@@ -578,3 +578,27 @@ def test_hamlet_and_village_boards_must_be_roadside():
     assert "kosatsuba_by_the_road" in f_only({"meta": {"scale": "hamlet", "ftpx": 1}, "kosatsuba": [_kosatsuba(500, 524)], "lane": lane}, "kosatsuba_by_the_road")
     assert "kosatsuba_by_the_road" not in f_only({"meta": {"scale": "village", "ftpx": 2}, "kosatsuba": [_kosatsuba(500, 505)], "lane": lane}, "kosatsuba_by_the_road")
     assert "kosatsuba_by_the_road" not in f_only({"meta": {"scale": "town"}, "kosatsuba": [_kosatsuba(500, 524)], "road": lane}, "kosatsuba_by_the_road")
+
+
+def _scripted(**over):
+    """A hamletgen-shaped manifest: the census keys `finish()` writes (feature 134)."""
+    m = manifest(**over)
+    m["meta"]["generated_by"] = "hamletgen"
+    m.setdefault("ink_classes", {"-": 3, "farmhouse": 2})
+    m.setdefault("unclassed_ink", [])
+    m.setdefault("unregistered_classes", [])
+    return m
+
+
+def test_all_ink_is_ruled_on_fires_and_passes():
+    """On a scripted hamlet every drawn element is in a feature class or ruled not highlighted, and
+    every class used is registered (feature 134 FR-009; the GM: "judgment calls to make about what
+    things get highlighted and which things do not" - unclassed ink is an unmade decision)."""
+    bad = _scripted(unclassed_ink=['<rect> <rect x="1" y="1" width="2" height="2"/>'])
+    assert "all_ink_is_ruled_on" in f_only(bad, "all_ink_is_ruled_on"), "ink nobody ruled on must fire"
+    unregistered = _scripted(unregistered_classes=["flying castle"])
+    assert "all_ink_is_ruled_on" in f_only(unregistered, "all_ink_is_ruled_on"), "a class the registry does not know must fire"
+    good = _scripted(ink_classes={"-": 3, "farmhouse": 2, "paddy": 40})
+    assert "all_ink_is_ruled_on" not in f_only(good, "all_ink_is_ruled_on"), "ruled-out ink (the `-` class) never fires"
+    hand = manifest(unclassed_ink=["<rect> x"])  # no generated_by: a hand-authored tier, its vocabulary is later work
+    assert "all_ink_is_ruled_on" not in f_only(hand, "all_ink_is_ruled_on")

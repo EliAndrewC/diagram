@@ -104,6 +104,9 @@ pip install --quiet --break-system-packages \
     -r "$SKILL/requirements.txt" \
     -r "$SKILL/requirements-dev.txt"
 pip install --quiet --break-system-packages -r "$SKILL/requirements-ci.txt"
+# The headless browser the interactive-map test drives (feature 134): Playwright's own Chromium,
+# fetched into ~/.cache/ms-playwright. Idempotent; the test skips with a reason when it is absent.
+python3 -m playwright install --with-deps chromium >/dev/null
 
 # ---- the claude() wrapper ----------------------------------------------------------------------
 # WHY a system-prompt append and not a CLAUDE.md line: CLAUDE.md sits BELOW the system prompt in the

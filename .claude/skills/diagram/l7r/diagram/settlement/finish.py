@@ -10,6 +10,9 @@ import sys
 from collections.abc import Sequence
 from typing import TYPE_CHECKING, Any
 
+from l7r.diagram.interactive.page import ink_census, unregistered_classes, write_html
+from l7r.diagram.interactive.tags import ClsTag
+
 from ._geom import LAND, Poly, Pt, label_quad, label_tilt, linear_tilt, linear_tilt_full, point_in_poly, rects_overlap, seg_closest, seg_dist, segments_cross
 
 if TYPE_CHECKING:
@@ -59,7 +62,11 @@ class FinishMixin:
         linear: bool = False,
         full_tilt: bool = False,
         wrap: bool = True,
+        cls: ClsTag = None,
     ) -> None:
+        # `cls` is the class of the FEATURE the caption names (feature 134 FR-006): the label and its
+        # subject share one class, so hovering either highlights both and a click on either opens the
+        # subject's explanation. A caption with no subject class inherits the enclosing feature() scope.
         esc = text.replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;')
         st = ' font-style="italic"' if italic else ''
         # `rot` is the SUBJECT's rotation; the fold turns it into the caption's tilt (0 for any
@@ -98,7 +105,8 @@ class FinishMixin:
             y_first = y - (n - 1) * lh / 2
             body = "".join(f'<tspan x="{x:.0f}" dy="{0 if i == 0 else lh:.1f}">{ln.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")}</tspan>' for i, ln in enumerate(lines))
         z = self.add_label(
-            f'<text x="{x:.0f}" y="{y_first:.0f}" text-anchor="{anchor}" font-size="{size}" font-weight="{weight}"{st}{tr} fill="{color}" paint-order="stroke" stroke="{LAND}" stroke-width="3">{body}</text>'
+            f'<text x="{x:.0f}" y="{y_first:.0f}" text-anchor="{anchor}" font-size="{size}" font-weight="{weight}"{st}{tr} fill="{color}" paint-order="stroke" stroke="{LAND}" stroke-width="3">{body}</text>',
+            cls=cls,
         )
         self._record_label(x, y, text, size, anchor, z, ref, tilt, box=box if n > 1 else None)
 
@@ -220,11 +228,14 @@ class FinishMixin:
             "bbox": [round(px0, 1), round(py0, 1), round(px0 + bw, 1), round(py0 + bh, 1)],
             "placard": [round(px0, 1), round(py0, 1), round(px0 + bw, 1), round(py0 + bh, 1)],
         }
+        # The placard, the name, the bar and its captions are MAP FURNITURE - ruled not highlighted
+        # (feature 134 FR-002, `interactive/classes.py` NOT_HIGHLIGHTED_RULINGS), hence cls="-".
         self.add_label(  # the card FIRST, so every text draws over it (add_label draws in call order)
             f'<g><rect x="{px0:.0f}" y="{py0:.0f}" width="{bw:.0f}" height="{bh:.0f}" rx="7" fill="#F7F0DC" fill-opacity="0.94" stroke="#8C7A55" stroke-width="1.6"/>'
-            f'<rect x="{px0 + 3.5:.0f}" y="{py0 + 3.5:.0f}" width="{bw - 7:.0f}" height="{bh - 7:.0f}" rx="5" fill="none" stroke="#BCAA7E" stroke-width="0.8"/></g>'
+            f'<rect x="{px0 + 3.5:.0f}" y="{py0 + 3.5:.0f}" width="{bw - 7:.0f}" height="{bh - 7:.0f}" rx="5" fill="none" stroke="#BCAA7E" stroke-width="0.8"/></g>',
+            cls="-",
         )
-        self.add_label(f'<text x="{pcx:.0f}" y="{y + fs:.0f}" text-anchor="middle" font-size="{fs}" font-weight="bold" fill="#2D2A24">{name}</text>')
+        self.add_label(f'<text x="{pcx:.0f}" y="{y + fs:.0f}" text-anchor="middle" font-size="{fs}" font-weight="bold" fill="#2D2A24">{name}</text>', cls="-")
         bx0, bx1, by = pcx - bar_px / 2, pcx + bar_px / 2, y + th + 12  # bar CENTERED under the name, on the placard's axis
         self.M["scalebar"] = {"ft": bar_ft, "ftpx": self.ftpx, "bbox": [round(bx0, 1), round(by - 5, 1), round(bx1, 1), round(y + bh, 1)]}
         self.add_label(
@@ -233,10 +244,11 @@ class FinishMixin:
             f'<line x1="{bx0:.0f}" y1="{by - 5:.0f}" x2="{bx0:.0f}" y2="{by + 5:.0f}"/>'
             f'<line x1="{bx1:.0f}" y1="{by - 5:.0f}" x2="{bx1:.0f}" y2="{by + 5:.0f}"/>'
             f'<line x1="{(bx0 + bx1) / 2:.0f}" y1="{by - 3:.0f}" x2="{(bx0 + bx1) / 2:.0f}" y2="{by + 3:.0f}" stroke-width="1"/>'
-            f'</g>'
+            f'</g>',
+            cls="-",
         )
-        self.add_label(f'<text x="{(bx0 + bx1) / 2:.0f}" y="{by + 17:.0f}" text-anchor="middle" font-size="12" fill="#3A2E1C">{bar_ft} ft</text>')
-        self.add_label(f'<text x="{(bx0 + bx1) / 2:.0f}" y="{by + 31:.0f}" text-anchor="middle" font-size="10" font-style="italic" fill="#5C4830">(1 px = {self.ftpx:g} ft)</text>')
+        self.add_label(f'<text x="{(bx0 + bx1) / 2:.0f}" y="{by + 17:.0f}" text-anchor="middle" font-size="12" fill="#3A2E1C">{bar_ft} ft</text>', cls="-")
+        self.add_label(f'<text x="{(bx0 + bx1) / 2:.0f}" y="{by + 31:.0f}" text-anchor="middle" font-size="10" font-style="italic" fill="#5C4830">(1 px = {self.ftpx:g} ft)</text>', cls="-")
 
     def _title_obstacles(self: Settlement) -> tuple[list[Any], list[Any], list[Any]]:  # type: ignore[misc]
         """Feature footprints a title must clear, as (rects, polys, lines). Solid buildings/plots -> rects;
@@ -409,29 +421,37 @@ class FinishMixin:
             self.label(lx, ly, text, 12, italic=True, weight="bold", color="#5A4326", ref=box, rot=tilt_, linear=True)
             self.M["road_label"] = [lx, ly]
             self._road_label = None
-        splices: list[Any] = []  # (placeholder_idx, block) - spliced high-index-first below
+        # Every block below is built as TWO aligned lists - the strings, and their feature classes
+        # (feature 134): the string block is spliced into `self.out` exactly as before, the class
+        # block into `self.out_cls` at the same index, so the side-list stays index-aligned with the
+        # SVG through every splice. The `<g opacity>` wrappers carry no class (they draw no ink).
+        splices: list[Any] = []  # (placeholder_idx, block, block_cls) - spliced high-index-first below
         if self._ground_idx is not None:  # the ordered linear-ground block (alley<street<road)
             feats = sorted(self.ground, key=lambda g: (g["zpri"], g["seq"]))
             block: list[Any] = []
+            bcls: list[ClsTag] = []
             edge_zs: list[Any] = []
             bed_zs: list[Any] = []
             for g in feats:  # EDGES first (the dark borders), bottom of the block
                 if g["edge"] is not None:
                     edge_zs.append(self._ground_idx + len(block))
                     block.append(g["edge"])
+                    bcls.append(g["cls"])
             for g in feats:  # then BEDS (paved surfaces) - they merge at crossings
                 if g["bed"] is not None:
                     g["rec"][g["zkey"]] = self._ground_idx + len(block)  # recorded z = the bed's draw position
                     bed_zs.append(self._ground_idx + len(block))
                     block.append(g["bed"])
+                    bcls.append(g["cls"])
             for g in feats:  # then TOP marks (center dashes / gravel speckle)
                 if g["top"] is not None:
                     block.append(g["top"])
+                    bcls.append(g["cls"])
             if edge_zs:  # every edge sits below every bed -> clean crossroads
                 self.M["ground_edge_zmax"] = max(edge_zs)
             if bed_zs:
                 self.M["ground_bed_zmin"] = min(bed_zs)
-            splices.append((self._ground_idx, block))
+            splices.append((self._ground_idx, block, bcls))
         # Does a LATE-block channel JOIN the pond? Then the pond's FILL + SHEEN must RELOCATE into
         # the late block (GM 2026-07-23, Tango's in-wall tank): the late block draws after the whole
         # shared block, so an early fill can never cover a late mouth's inside-the-rim overshoot -
@@ -445,11 +465,13 @@ class FinishMixin:
             _pond_late = any(ch["late"] and ((q[0] - _pex) / _perx) ** 2 + ((q[1] - _pey) / _pery) ** 2 <= 1.12 for ch in self.M.get("drawn_channels", []) for q in (ch["pts"][0], ch["pts"][-1]))
         if self._water_idx is not None:  # the watercourse block: all EDGES (pond rims), then all
             wblock: list[Any] = []  # BEDS (one opacity group), then all SHEENS - crossings MERGE
+            wcls: list[ClsTag] = []
             bedzs: list[Any] = []
             sheenzs: list[Any] = []
             for w in self.water:  # rims below every bed -> a feeder's bed covers the rim at its mouth
                 if w.get("edge") is not None:
                     wblock.append(w["edge"])
+                    wcls.append(w["cls"])
             for w in self.water:  # a pond-anchored feeder is snapped to the rim now that the
                 w["_bed"], w["_sheen"] = w["bed"], w["sheen"]  # pond is known (deferred - it may predate the pond)
                 if w["clip"] is not None and self.M.get("pond"):
@@ -459,14 +481,18 @@ class FinishMixin:
                     if w["clip"]["sheen_t"] is not None:
                         w["_sheen"] = w["clip"]["sheen_t"].format(dd=dd)
             wblock.append('<g opacity="0.85">')
+            wcls.append(None)
             for w in sorted(self.water, key=lambda w: w["pond_fill"]):  # pond FILL drawn LAST (stable sort) so it
                 if _pond_late and w is self._pond_entry:
                     continue  # fill relocates to the late block (see above) - the rim edge already emitted
                 w["rec"]["bedz"] = self._water_idx + len(wblock)  # covers any feeder's inside-the-rim overshoot
                 bedzs.append(self._water_idx + len(wblock))
                 wblock.append(w["_bed"])
+                wcls.append(w["cls"])
             wblock.append('</g>')
+            wcls.append(None)
             wblock.append('<g opacity="0.55">')
+            wcls.append(None)
             for w in self.water:
                 if w["_sheen"] is not None:
                     if _pond_late and w is self._pond_entry:
@@ -474,42 +500,63 @@ class FinishMixin:
                     w["rec"]["sheenz"] = self._water_idx + len(wblock)
                     sheenzs.append(self._water_idx + len(wblock))
                     wblock.append(w["_sheen"])
+                    wcls.append(w["cls"])
             wblock.append('</g>')
+            wcls.append(None)
             if bedzs:  # every bed sits below every sheen -> clean confluence
                 self.M["water_bed_zmax"] = max(bedzs)
             if sheenzs:
                 self.M["water_sheen_zmin"] = min(sheenzs)
-            splices.append((self._water_idx, wblock))
+            splices.append((self._water_idx, wblock, wcls))
         if self._late_water_idx is not None:  # the LATE block (comb-field channels; see __init__): same
             lblock: list[Any] = ['<g opacity="0.85">']  # shared-opacity compositing, spliced at ITS OWN
+            lcls: list[ClsTag] = [None]
             for w in self.late_water:  # first-call position so the ditch net draws OVER the field's plots
                 w["rec"]["bedz"] = self._late_water_idx + len(lblock)
                 lblock.append(w["bed"])
+                lcls.append(w["cls"])
             if _pond_late:  # the relocated pond FILL: topmost late bed, covering every joining mouth's overshoot
                 pe = self._pond_entry
                 assert pe is not None
                 pe["rec"]["late"] = True  # the fill now lives in the late block (z pairs: see pond())
                 pe["rec"]["bedz"] = self._late_water_idx + len(lblock)
                 lblock.append(pe["_bed"])
+                lcls.append(pe["cls"])
             lblock.append('</g>')
+            lcls.append(None)
             lblock.append('<g opacity="0.55">')
+            lcls.append(None)
             for w in self.late_water:
                 if w["sheen"] is not None:
                     w["rec"]["sheenz"] = self._late_water_idx + len(lblock)
                     lblock.append(w["sheen"])
+                    lcls.append(w["cls"])
             if _pond_late and self._pond_entry is not None and self._pond_entry["_sheen"] is not None:  # the pond sheen rides above the late beds too
                 self._pond_entry["rec"]["sheenz"] = self._late_water_idx + len(lblock)
                 lblock.append(self._pond_entry["_sheen"])
+                lcls.append(self._pond_entry["cls"])
             lblock.append('</g>')
-            splices.append((self._late_water_idx, lblock))
-        for idx, block in sorted(splices, key=lambda s: -s[0]):  # high index first so the lower stays valid
+            lcls.append(None)
+            splices.append((self._late_water_idx, lblock, lcls))
+        for idx, block, bcls_ in sorted(splices, key=lambda s: -s[0]):  # high index first so the lower stays valid
             self.out[idx : idx + 1] = block
+            self.out_cls[idx : idx + 1] = bcls_
         if self.view:  # crop the viewBox to the requested window
             ox, oy, vw, vh = self.view
             self.out[0] = self.out[0].replace(f'viewBox="0 0 {self.W} {self.H}"', f'viewBox="{ox} {oy} {vw} {vh}"')
         body = self.out + self.walls + self.top + self.toplabels + ['</svg>']  # WALLS over lanes; TOP furniture; LABEL text topmost
+        body_cls: list[ClsTag] = self.out_cls + self.walls_cls + self.top_cls + self.toplabels_cls + [None]
+        if len(body_cls) != len(body):  # the side-list drifted from the stream - a stream write that bypassed add()
+            raise RuntimeError(f"feature-class side list out of step with the record streams: {len(body_cls)} tags for {len(body)} strings")
         with open(basepath + '.svg', 'w') as f:
             f.write('\n'.join(body))
+        # THE INTERACTIVE PAGE (feature 134): the same primitives, each wrapped by its class, with the
+        # explanations of the classes present. Written beside the SVG whenever the SVG is - a string
+        # pass, so DIAGRAM_SKIP_RENDER (which spares only the raster) does not skip it. The census
+        # goes into the manifest FIRST so the gate can read it (`all_ink_is_ruled_on`, FR-009).
+        self.M["ink_classes"], self.M["unclassed_ink"] = ink_census(body, body_cls)
+        self.M["unregistered_classes"] = unregistered_classes(self.M["ink_classes"])
+        write_html(basepath + '.html', body, body_cls, name=str(self.M["meta"].get("name") or os.path.basename(basepath)), meta=self.M["meta"])
         with open(basepath + '.json', 'w') as f:
             json.dump(self.M, f)
         # Two env knobs make iteration cheap without changing committed output (see SKILL.md

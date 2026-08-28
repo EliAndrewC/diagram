@@ -29,14 +29,20 @@ __pycache__
 #    KB-sized - so it stays tracked; only its .png render is ignored.
 #  - regressions/ holds tracked fixture .svgs (no ignore line -> tracked).
 # A NEW settlement type would add its two lines here; a new magistracy .svg is auto-tracked.
+#  - the interactive .html (feature 134) is a third derived render, written beside the .svg by every
+#    Mode B run and refreshed by render-sync exactly like the .png.
 .claude/skills/diagram/pool/villages/*.svg
 .claude/skills/diagram/pool/villages/*.png
+.claude/skills/diagram/pool/villages/*.html
 .claude/skills/diagram/pool/hamlets/*.svg
 .claude/skills/diagram/pool/hamlets/*.png
+.claude/skills/diagram/pool/hamlets/*.html
 .claude/skills/diagram/pool/towns/*.svg
 .claude/skills/diagram/pool/towns/*.png
+.claude/skills/diagram/pool/towns/*.html
 .claude/skills/diagram/pool/provincial-cities/*.svg
 .claude/skills/diagram/pool/provincial-cities/*.png
+.claude/skills/diagram/pool/provincial-cities/*.html
 .claude/skills/diagram/pool/magistracies/*.png
 # EXCEPTION - the FROZEN legacy exhibits (GM 2026-08-16). The 19 hand-authored Mode B maps froze
 # when scripted generation became the method (migration-plan.md "The accepted trade"): their gens

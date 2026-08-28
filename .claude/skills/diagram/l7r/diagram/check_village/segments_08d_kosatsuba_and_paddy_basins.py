@@ -863,3 +863,38 @@ def _seg_0614__paddy_bunds_do_not_stagger(*, M: Any = _UNBOUND, check: Any = _UN
             f"{len(_jg_bad)} paddy basin(s) whose bund steps sideways more than once at {_jg_bad[:4]} (x, y, steps) - an aze is puddled mud re-plastered every spring and its bill is its length, so a wall runs on, or it turns for a reason that is drawn on the map; a flight of steps is a weld pitch out of register with the fabric, not a parcel boundary. Fix it in close_seams (_seam_cuts cuts a pocket where the fabric already breaks; _unjog repairs what survives), not by raising the 3 ft floor",
         )
     return _kept(locals(), ())
+
+
+# WHY: <one paragraph - what the research found, the decision it drove, the departure taken>.
+# Declare EVERY input the body reads as a keyword parameter (an undeclared one is a NameError at
+# gate time, not at import), and keep the `_kept` tuple a LITERAL of the names this body binds.
+
+
+def _seg_0614_500__all_ink_is_ruled_on(
+    *,
+    M: Any = _UNBOUND,
+    check: Any = _UNBOUND,
+    meta: Any = _UNBOUND,
+    scale: Any = _UNBOUND,
+    all_ink_is_ruled_on_bad: Any = _UNBOUND,
+) -> dict[str, Any]:
+    """Gate segment 0614_500 (all_ink_is_ruled_on) - on a SCRIPTED hamlet, every drawn element is either
+    in a feature class of the interactive map or ruled not highlighted, and every class the engine
+    tagged is one the registry knows (feature 134, spec FR-009 / SC-006).
+
+    WHY: the interactive page highlights and explains features BY CLASS (`interactive/classes.py`);
+    ink with no class is dead ground a reader can hover and learn nothing from, and the GM's own
+    sentence - "judgment calls to make about what things get highlighted AND WHICH THINGS DO NOT" -
+    means an unclassed element is an unmade decision, not a choice. A deliberate ruling is `cls="-"`
+    plus a row in NOT_HIGHLIGHTED_RULINGS and never fires this. Reads the census `finish()` writes
+    into the manifest (`unclassed_ink`, `unregistered_classes`), never the SVG. Scoped to
+    `generated_by == "hamletgen"`: the hand-authored tiers get their vocabulary later (the spec's
+    Assumptions) and would fire on every street until then."""
+    if meta.get("generated_by") == "hamletgen":
+        all_ink_is_ruled_on_bad = list(M.get("unclassed_ink") or []) + [f"unregistered class {k!r}" for k in M.get("unregistered_classes") or []]
+        check(
+            "all_ink_is_ruled_on",
+            not all_ink_is_ruled_on_bad,
+            f"ink nobody ruled on {all_ink_is_ruled_on_bad[:3]} - tag it at its emit site (`cls=`, or `with self.feature(...)`), rule it out (`cls=\"-\"` + a NOT_HIGHLIGHTED_RULINGS row), or give an unregistered class its interactive/classes.py entry",
+        )
+    return _kept(locals(), ("all_ink_is_ruled_on_bad",))
