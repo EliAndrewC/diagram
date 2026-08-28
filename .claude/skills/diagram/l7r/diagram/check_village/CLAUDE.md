@@ -114,3 +114,16 @@ FUNCTION NAME plus `_PLACEMENTS`. That is why 122 could move 24,354 lines across
 pass and prove it: `GATE_SEGMENTS` serialized before and after is identical on all 1,377 rows.
 **So a further split needs no registry work at all** - move whole functions, keep their order, add
 the star-import line in `__init__.py`, and add the row here.
+
+
+## Scales: a segment the map's scale excludes is never ENTERED (feature 145, GM 2026-08-28)
+
+`registry_analysis._guard_scales` reads each segment's leading guard from the AST - `if scale in (...)`,
+`scale not in`, `scale ==`, `URBAN`, `not URBAN`, alone or as the first term of an `and`, and ONLY when
+that `if` (with no `else`) is the whole body before `return _kept(...)` - and `driver.gate` skips a segment
+whose scales exclude the map's. Before this every segment ran and returned at its guard, which put every
+city segment FILE on the hamlet path for the derived coverage floor (`make hamlet-floor`). A data guard, a
+mixed segment (a city part then a hamlet check) or no guard admits every scale, exactly as before; the
+row carries `scales` (None = all), cached with the others (`_DERIVATION_VERSION` 2). The town/city policy
+helpers nothing on the hamlet path calls - fire features, the theater stage, ward interiors, the ring road,
+`city_capacity` - live in `common_04_urban_policy.py` for the same reason.

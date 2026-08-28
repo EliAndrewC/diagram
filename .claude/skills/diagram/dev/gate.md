@@ -354,3 +354,8 @@ read as a broom stood **21.6 and 24.3 ft** from another way and near-parallel to
 they are close; only the angle says whether one arrived at the other or is running alongside it. The
 gate does not import the generator, so the constant is restated on the gate side - keep the two
 numbers equal and say in a comment that they are meant to be.
+
+
+## A SEGMENT IS NOT ENTERED FOR A SCALE ITS GUARD EXCLUDES (feature 145)
+
+Write a tier-specific segment with its guard as the WHOLE body - `if scale in ('city', 'capital'):` (or `URBAN`) wrapping everything before `return _kept(...)` - and the driver will not call it on a hamlet; the registry derives that from the AST (`check_village/CLAUDE.md`, "Scales"). A mixed segment runs everywhere. This is what keeps a city check's file off the hamlet coverage path, so it is the shape to keep when adding one.

@@ -29,3 +29,6 @@ Import DAG (leaf-first: frame, palette, banks, carve, comb, polder; no cycles). 
 former mega-functions (`build_comb`, `build_polder`, `_carve`) are decomposed into named
 sequential stage functions in their own files - each stage takes its state as parameters and
 returns what the next stage needs, so the pipeline reads top-down in the builder body.
+
+
+`hill.py` (feature 145) holds `build_terraces` and `build_ribbon`, the hill-rice engines: moved out of `polder.py`, whose `build_polder` every polder hamlet executes, because `FIELD_ARCHETYPES` deliberately holds neither (`hamletgen/consts.py`) and a module the hamlet path executes owes 100% coverage (`make hamlet-floor`). The star import in `__init__.py` keeps every name where it was.

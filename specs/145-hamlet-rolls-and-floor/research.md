@@ -124,8 +124,14 @@ Three ways to make the floor honest about these, for the GM to choose between (n
 2. **Move the other-tier code out of the shared modules** into modules the hamlet path never executes (a `city/` segment file, a `polder_hill.py`, `water_ways_town.py`) - mechanical, no behavior change, and it makes the module-level floor mean exactly what the GM said; the cost is a file move per function and the frozen-registry re-derivation for the check segments.
 3. **A recorded, per-function exemption list** read by the floor - the "something we just remember to maintain" the GM asked to avoid; listed only for completeness.
 
-The session's recommendation is 2: it is the module-level ruling applied to the code rather than to
-the floor, and it leaves nothing for a future session to remember.
+The session's recommendation was 2, and the GM chose it (2026-08-28: *"Moving that code into modules the
+Hamlet path never executes seems like the correct thing to do here."*). Done as: `common_04_urban_policy.py`,
+`settlement/town_ways.py`, `structures/urban_fixtures.py`, `city/crop.py`, `city/knobs.py`,
+`shrines_wells/forest.py`, `waterfields/hill.py`, `GroundMixin._finish_road_label`; plus two things the moves
+alone could not fix - the gate now derives each segment's SCALES and never enters a city segment on a hamlet
+(the file used to land on the path by being entered and returning at its guard), and the floor ignores
+`<module>` entries (an import is not execution; the registry imports every segment file). The path went
+99 -> 89 modules.
 
 ## R4 - the numbers at the end
 

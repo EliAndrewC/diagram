@@ -12,6 +12,7 @@ Every task is `research: rendering` (nothing physical is decided here).
 - [x] T08 the other slow stages on the cohort's worst seeds (25: 51 s, 47: 40 s): profile the top stage of each and apply the same shape - `research: rendering`
 - [x] T10 the hamlet floor: derive the module set from the roll cache records, refuse without them; a phase of `test-full` after the two existing reports; the settlement ratchet stays - `research: rendering`
 - [x] T11 guard test: the floor fires on a module in the set, stays quiet on one outside - `research: rendering`
+- [x] T13 the GM's ruling on the other-tier residue: MOVE it (2026-08-28) - eight moves, the scale-derived segment skip, imports are not execution; path 99 -> 89 modules - `research: rendering`
 - [ ] T12 first measurement of the floor at FULL (research R3b, `floor-first.txt`): 932 lines; ~700 are other-tier code inside hamlet-path modules - LISTED FOR THE GM with three options (R3b, recommendation: move them out); ~150 hamlet lines remain untested after the branch tests and the eight-seed cohort (hamletgen/ways.py 37, homesteads 12, small geometry) - OPEN, the GM's call on how far this feature carries them - `research: rendering`
 - [x] T09 the four placer defects the moved maps exposed (research R2b): connector wet-band offset, belt crown keep-out, unjog knee, footpath standing place/junction off water - `research: rendering`
 - [x] T20 `make durations` before/after: the settlement-geometry tests over the quick cutoff, each made faster or carrying a written reason - `research: rendering`
