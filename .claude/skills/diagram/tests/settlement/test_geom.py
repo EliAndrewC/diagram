@@ -549,3 +549,19 @@ def test_lane_runs_includes_the_ring_road_and_the_alleys() -> None:
     M = {"lanes": [{"pts": [[0, 0], [10, 0]], "w": 5}], "alleys": [{"pts": [[0, 20], [10, 20]], "w": 6}], "ring_road": [[0, 40], [10, 40]], "ring_road_width": 20}
     halves = sorted(round(h, 1) for _pts, h in lane_runs(M))
     assert 3.0 in halves and 10.0 in halves, halves  # the alley at w 6 and the ring road at w 20
+
+
+def test_lane_through_gate_skips_a_far_lane_and_one_running_alongside_the_fence() -> None:
+    """Feature 146: two of the gate probe's skips - a lane too far to be the crossing, and one running ALONG
+    the fence, which the gate deliberately does not bar (only a lane THROUGH the gate counts)."""
+    from l7r.diagram.settlement._geom.ways import lane_through_gate
+
+    # `lane_runs` gathers the TRAVELED ways - roads, town streets, alleys, the ring road - so the probe is
+    # fed a street here; a hamlet's `lanes` are not among them, which is itself worth pinning.
+    far = {"town_streets": [{"pts": [[0, 400], [200, 400]], "w": 6}]}
+    assert lane_through_gate(far, 100.0, 0.0, fence_deg=0.0) is None, "400 px away is not this gate's way"
+    alongside = {"town_streets": [{"pts": [[0, 2], [200, 2]], "w": 6}]}
+    assert lane_through_gate(alongside, 100.0, 0.0, fence_deg=0.0) is None, "parallel to the fence"
+    across = {"town_streets": [{"pts": [[100, -60], [100, 60]], "w": 6}]}
+    assert lane_through_gate(across, 100.0, 0.0, fence_deg=0.0) is not None, "square through the gate"
+    assert lane_through_gate({"lanes": [{"pts": [[100, -60], [100, 60]], "w": 6}]}, 100.0, 0.0, fence_deg=0.0) is None
