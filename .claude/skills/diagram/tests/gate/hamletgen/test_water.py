@@ -94,9 +94,7 @@ def test_the_polders_keep_outs_contain_what_they_stand_for() -> None:
     fld = M["fields"][0]
     chains = [[((a[0], a[1]), (b[0], b[1]), (nv[0], nv[1])) for a, b, nv in ch] for ch in M["field_chains"]]
     assert 1 <= fld["keepout_chords"] <= 12 and chains
-    from l7r.diagram.settlement._geom.primitives import FIELD_KEEPOUT_EPS
-
-    from l7r.diagram.settlement._geom.primitives import chain_distance
+    from l7r.diagram.settlement._geom.primitives import FIELD_KEEPOUT_EPS, chain_distance
 
     assert all(
         chain_violated(x, y, chains, FIELD_KEEPOUT_EPS + 1e-6) for x, y in fld["outline"] if chain_distance(x, y, chains) <= FIELD_KEEPOUT_EPS + 1e-6
