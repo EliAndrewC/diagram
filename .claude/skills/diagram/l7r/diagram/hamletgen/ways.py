@@ -820,13 +820,6 @@ def _route(start: Pt, goal: Pt, hard: list[Poly], walls: Sequence[Poly], water: 
     return _unjog(out, hard, walls, water)
 
 
-def _turn_deg(a: Pt, b: Pt, c: Pt) -> float:
-    """The change of heading at b, in degrees: 0 straight on, 180 straight back."""
-    v1, v2 = (b[0] - a[0], b[1] - a[1]), (c[0] - b[0], c[1] - b[1])
-    n1, n2 = math.hypot(*v1) or 1.0, math.hypot(*v2) or 1.0
-    return math.degrees(math.acos(max(-1.0, min(1.0, (v1[0] * v2[0] + v1[1] * v2[1]) / (n1 * n2)))))
-
-
 def _unjog(path: Poly, hard: list[Poly], walls: Sequence[Poly], water: list[tuple[Pt, Pt]]) -> Poly:
     """Take the lattice's jogs out of a routed path where the chord clears at the JUNCTION margin.
 
@@ -844,7 +837,13 @@ def _unjog(path: Poly, hard: list[Poly], walls: Sequence[Poly], water: list[tupl
             del out[k]
             k = max(1, k - 1)
             continue
-        if k < len(out) - 2 and _turn_deg(out[k - 1], out[k], out[k + 1]) >= 50.0 and _turn_deg(out[k], out[k + 1], out[k + 2]) >= 50.0 and math.dist(out[k], out[k + 1]) <= 40.0 and _clear_touch(out[k - 1], out[k + 2], hard, walls, water):
+        if (
+            k < len(out) - 2
+            and _turn_deg(out[k - 1], out[k], out[k + 1]) >= 50.0
+            and _turn_deg(out[k], out[k + 1], out[k + 2]) >= 50.0
+            and math.dist(out[k], out[k + 1]) <= 40.0
+            and _clear_touch(out[k - 1], out[k + 2], hard, walls, water)
+        ):
             del out[k : k + 2]
             k = max(1, k - 1)
             continue
@@ -1118,7 +1117,12 @@ def _touch_junctions(s: Settlement, hard: list[Poly], walls: Sequence[Poly], wat
                 # T03, cohort seed 07): a door path whose end sat on another lane was linked onward to a
                 # SECOND way, and the link ran back over the first lane's tread - a 9 ft zigzag at the
                 # junction. `_by_way` excludes the ways this lane meets, so the test above cannot see it.
-                if any(seg_dist(q[0], q[1], a, b) <= _TOUCH_GAP for _k, o in enumerate(lanes) if _k != i and len(o.get("pts") or []) >= 2 for a, b in zip([(float(x), float(y)) for x, y in o["pts"]], [(float(x), float(y)) for x, y in o["pts"]][1:], strict=False)):
+                if any(
+                    seg_dist(q[0], q[1], a, b) <= _TOUCH_GAP
+                    for _k, o in enumerate(lanes)
+                    if _k != i and len(o.get("pts") or []) >= 2
+                    for a, b in zip([(float(x), float(y)) for x, y in o["pts"]], [(float(x), float(y)) for x, y in o["pts"]][1:], strict=False)
+                ):
                     continue
                 # END MEETS END: two lanes whose ends stand near each other are ONE lane with a
                 # hole in it, and the honest join is to run the other lane's end onto this one -
@@ -1198,7 +1202,13 @@ def _touch_junctions(s: Settlement, hard: list[Poly], walls: Sequence[Poly], wat
                 # routed from the second vertex, not the first).
                 _main_ways = [ways[j] for j in range(len(ways)) if comp[j] == main and len(ways[j]) >= 2]
                 _per_way = sorted(
-                    (sorted(((math.dist(v, q), v, q) for v in ways[i] for q in [min((seg_closest(v[0], v[1], a, b) for a, b in zip(w, w[1:], strict=False)), key=lambda z: math.dist(v, z))]), key=lambda c: c[0])[:3] for w in _main_ways),
+                    (
+                        sorted(
+                            ((math.dist(v, q), v, q) for v in ways[i] for q in [min((seg_closest(v[0], v[1], a, b) for a, b in zip(w, w[1:], strict=False)), key=lambda z: math.dist(v, z))]),
+                            key=lambda c: c[0],
+                        )[:3]
+                        for w in _main_ways
+                    ),
                     key=lambda g: g[0][0],
                 )[:4]
                 cands = [g[r] for r in range(3) for g in _per_way if r < len(g)]
@@ -1256,7 +1266,9 @@ def _touch_junctions(s: Settlement, hard: list[Poly], walls: Sequence[Poly], wat
     return closed
 
 
-def _join_piece(s: Settlement, lanes: list[dict[str, Any]], i: int, way: Poly, v: Pt, link: Poly, hard: list[Poly], walls: Sequence[Poly], water: list[tuple[Pt, Pt]], net: list[tuple[Pt, Pt]]) -> None:
+def _join_piece(
+    s: Settlement, lanes: list[dict[str, Any]], i: int, way: Poly, v: Pt, link: Poly, hard: list[Poly], walls: Sequence[Poly], water: list[tuple[Pt, Pt]], net: list[tuple[Pt, Pt]]
+) -> None:
     """Join an orphan piece to the network: EXTEND the piece when the link leaves one of its ends, else
     draw the link as its own lane (the link left an interior vertex). A link drawn as a separate lane
     from a door path's end put TWO lane ends beside the same farmhouse - the door path's and the
