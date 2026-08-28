@@ -4,7 +4,7 @@
 
 **Created**: 2026-08-28
 
-**Status**: Draft - awaiting `spec-fidelity` review (constitution XVI)
+**Status**: **FAITHFUL** - `spec-fidelity` round 1 (2026-08-28), no changes; three asides carried into the plan (the ~30 fallback `26`s, the gate throat sized against the road, the stale 26 ft statements). CORRECTION after the review: the scope lock the spec assumed was released on 2026-08-27 (`dev/switches.json`), so the pool sweep is owed NOW, in this feature, not at unlock - US2 / FR-004 / SC-003 read accordingly.
 
 **Input**: [`gm-request.md`](gm-request.md), verbatim. That file is the authority for this specification.
 
@@ -34,17 +34,17 @@ The reference hamlet (Inashiro) regenerates with its road drawn at the new defau
 
 ---
 
-### User Story 2 - Every other Mode B map takes the new default at unlock (Priority: P2)
+### User Story 2 - Every other Mode B map takes the new default (Priority: P2)
 
-The scope is locked to the reference hamlet (feature 132); the pool sweep that widens every other map's road is owed at unlock and recorded as owed, not skipped.
+The scope is UNLOCKED (released 2026-08-27, T92), so the pool sweep that widens every other map's road runs in this feature: the map target after the reference is clean rolls the whole tier and reports every failure together.
 
-**Why this priority**: "every mode B map" is the instruction; the lock decides when, not whether.
+**Why this priority**: "every mode B map" is the instruction.
 
-**Independent Test**: at unlock, `make maps` rolls the whole tier clean with the wider roads; the pool review passes.
+**Independent Test**: the map target rolls the whole tier clean with the wider roads; the unlocked gate is green; `settlement-review` passes on the reference map.
 
 **Acceptance Scenarios**:
 
-1. **Given** the lock is released, **When** the pool regenerates, **Then** every Mode B map's trunk road is at the new default and every gate check passes or is fixed forward.
+1. **Given** the new default, **When** the pool regenerates, **Then** every Mode B map's trunk road is at the new default and every gate check passes or is fixed forward.
 
 ---
 
@@ -59,7 +59,7 @@ The scope is locked to the reference hamlet (feature 132); the pool sweep that w
 - **FR-001**: The `s.road` default real width MUST become ~30 ft (5 ken = 29.5 ft; the drawn value is the plan's to fix at 30 ft as a round figure or 29.5 as the exact one - recorded).
 - **FR-002**: An explicit width passed by a gen MUST still be honored.
 - **FR-003**: The road's docstring, the research entry ("Street widths") and the interactive map's road text MUST cite the read source (`tokaido-jawiki`) and MUST NOT call 26 ft "the Tōkaidō's own width".
-- **FR-004**: The reference settlement MUST be regenerated and gate-green before the feature closes; the pool sweep is a task owed at unlock, listed as such.
+- **FR-004**: The reference settlement MUST be regenerated and gate-green first, then the whole pool (the map target widens to the tier once the reference is clean); both are tasks.
 - **FR-005**: No other width (ring road, street, lane, roji, ōte-suji) changes in this feature.
 - **FR-006**: The feature follows the engine route: a spec-kit feature, `make done` green, `settlement-review` on the reference map at acceptance/unlock per the period's doctrine.
 
@@ -67,7 +67,7 @@ The scope is locked to the reference hamlet (feature 132); the pool sweep that w
 
 - **SC-001**: Inashiro's manifest carries the new default; `make maps` and the locked `make done` are green.
 - **SC-002**: No document in the skill glosses 26 ft as the Tōkaidō's width; the record cites 5 ken.
-- **SC-003**: The unlock task list names the pool sweep for this default.
+- **SC-003**: Every pool manifest with a road carries the new `road_width`.
 
 ## Decisions Recorded
 
@@ -79,4 +79,4 @@ The scope is locked to the reference hamlet (feature 132); the pool sweep that w
 ## Assumptions
 
 - "Mode B map" = every settlement map drawn by the generator (hamlet, village, town, city, capital); Mode A sheets are hand-drawn and out of scope.
-- The scope lock (feature 132) stays: this feature rolls Inashiro now and owes the pool at unlock.
+- The scope is unlocked: this feature rolls Inashiro, then the pool.
