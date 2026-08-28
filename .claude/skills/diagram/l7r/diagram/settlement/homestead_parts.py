@@ -758,6 +758,7 @@ class HomesteadPartsMixin:
         # page" rule the `within` window applies on the other edges. Seating first and drawing
         # after is what makes this possible: the face is known only once every clump is down.
         # Draw order and positions are those of the seating loop, so nothing else moves.
+        _offpage: list[Any] = []
         if face_margin is not None and clumps:
             _face = windbreak_face(clumps, cr, self.M.get("houses", []))
             if _face is not None:
@@ -769,7 +770,9 @@ class HomesteadPartsMixin:
                 # margin) fell inside that strip, and the trim dropped them from `clumps` - so the belt read as
                 # holed where it had in fact wrapped round the plot. The ink is still cut at the page; the
                 # record says the belt continues, and `village_windbreak_is_continuous` counts canopy where it is.
+                _offpage = [clumps[k] for k in range(len(clumps)) if k not in set(_keep)]
                 seated = [seated[k] for k in _keep]
+                clumps = [clumps[k] for k in _keep]
         for jx, jy in seated:
             # feature 134: the belt and the copse are two highlight classes; a water_mouth grove has no
             # class in the vocabulary yet and stays unclassed so the census reports it
@@ -807,7 +810,8 @@ class HomesteadPartsMixin:
                     "rot": 0,
                     "role": role,
                     "r": round(clump / 2, 1),
-                    "clumps": clumps,  # actual drawn clump centers + radius, for groves_clear_of_lanes
+                    "clumps": clumps,
+                    "clumps_offpage": (_offpage if face_margin is not None and clumps else []),  # actual drawn clump centers + radius, for groves_clear_of_lanes
                     "poly": [[round(px, 1), round(py, 1)] for px, py in poly],
                 }
             )

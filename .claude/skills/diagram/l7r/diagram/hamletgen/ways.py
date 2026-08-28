@@ -2060,6 +2060,13 @@ def _serve_stragglers(s: Settlement, plan: SitePlan, hard: list[Poly], fabric: l
                     # same end-trim every web lane gets - a footpath that begins in bare grass is a
                     # dangling tread whatever drew it.
                     path = _trim_to_service(path, segs, [(float(q["x"]), float(q["y"])) for q in s.M.get("houses", [])])
+                    # A DOOR PATH THAT REACHES NO WAY IS NOT DRAWN (feature 137 T03, 2026-08-28): cohort seed 22
+                    # shipped a 4 ft straggler stub - the clip and the trim had eaten everything but the doorstep,
+                    # and the orphan joiner could neither link it nor drop it (its house had no other way). A
+                    # footpath is a run from a door TO a way; what survives must still end within a junction's
+                    # reach of the way it was aimed at, or it is a mark in the grass.
+                    if len(path) < 2 or min(math.dist(path[-1], tgt), math.dist(path[0], tgt)) > _LANE_JOIN_FT:
+                        continue
                     _draw_web(s, path, 3, houses=[c])
                     added += 1
                     _served = True
