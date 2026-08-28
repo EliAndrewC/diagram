@@ -101,6 +101,27 @@ def _pull_back(pts: list[Pt], reaches: Any, step: float = 8.0, keep_frac: float 
     return best if best is not None else list(pts)
 
 
+def fan_rival(lanes: Any, q: Pt, bearing: float, house: Pt, mine: float, me: int, fan_spread: float, fan_bearing: float) -> bool:
+    """Is another lane's end already fanning to this house on this bearing? A second stub arriving beside the
+    first, within `fan_spread` of it and within `fan_bearing` degrees of the same heading, is the same
+    approach drawn twice rather than two ways.
+
+    LIFTED OUT OF `trim_lane_stubs` (feature 146, GM 2026-08-28 on making inner functions testable): it took
+    only these values from the closure, and a test can now hand it two lane dicts instead of building a
+    settlement whose web happens to fan."""
+    for k, other in enumerate(lanes):
+        if k == me or len(other.get("pts") or []) < 2:
+            continue
+        op = [(float(x), float(y)) for x, y in other["pts"]]
+        for tip, prev in ((op[0], op[1]), (op[-1], op[-2])):
+            if math.dist(tip, q) > fan_spread or math.hypot(tip[0] - house[0], tip[1] - house[1]) >= mine:
+                continue
+            b = math.degrees(math.atan2(tip[1] - prev[1], tip[0] - prev[0]))
+            if abs((bearing - b + 180.0) % 360.0 - 180.0) <= fan_bearing:
+                return True
+    return False
+
+
 class WaterWaysMixin:
     def note_focal(self: Settlement, kind: str) -> None:  # type: ignore[misc]
         """Record an optional FOCAL feature (feature 005 catalog) on the manifest so the twin-detector reads
@@ -577,19 +598,7 @@ class WaterWaysMixin:
         _drop: set[int] = set()
 
         def _fan_rival(q: Pt, bearing: float, house: Pt, mine: float, me: int) -> bool:
-            """Is another lane's end standing beside this one, pointing the same way, and NEARER the
-            same house? If so this end is the spare tine of a fan and the house is not its to claim."""
-            for k, other in enumerate(lanes):
-                if k == me or k in _drop or other.get("connector") or len(other.get("pts") or []) < 2:
-                    continue
-                op = [(float(x), float(y)) for x, y in other["pts"]]
-                for tip, prev in ((op[0], op[1]), (op[-1], op[-2])):
-                    if math.dist(tip, q) > fan_spread or math.hypot(tip[0] - house[0], tip[1] - house[1]) >= mine:
-                        continue
-                    _b = math.degrees(math.atan2(tip[1] - prev[1], tip[0] - prev[0]))
-                    if abs((bearing - _b + 180.0) % 360.0 - 180.0) <= fan_bearing:
-                        return True
-            return False
+            return fan_rival(lanes, q, bearing, house, mine, me, fan_spread, fan_bearing)
 
         for i, ln in enumerate(lanes):
             if ln.get("connector") or i >= len(self._lane_ink):

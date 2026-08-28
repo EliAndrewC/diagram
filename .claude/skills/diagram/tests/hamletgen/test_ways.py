@@ -847,3 +847,31 @@ def test_the_cluster_gateway_and_edge_fall_back_when_no_house_is_placed_yet() ->
     s.M["houses"].append({"x": 500.0, "y": 500.0, "w": 50.0, "h": 30.0})
     assert _cluster_gateway(s, seat, fallback) != fallback, "with a house placed it measures the cloud"
     assert _cluster_edge_toward(s, (900.0, 500.0), fallback) != fallback
+
+
+def test_web_pieces_counts_connected_lanes_and_ignores_stubs() -> None:
+    """Feature 146: `web_pieces` lifted out of `_smooth_web` so it can be asked directly. A lane of fewer
+    than two points is not a piece; lanes that touch are one."""
+    from l7r.diagram.hamletgen.ways import web_pieces
+
+    touching = [{"pts": [[0.0, 0.0], [100.0, 0.0]]}, {"pts": [[100.0, 0.0], [100.0, 100.0]]}]
+    apart = [{"pts": [[0.0, 0.0], [100.0, 0.0]]}, {"pts": [[900.0, 900.0], [999.0, 900.0]]}]
+    assert web_pieces(touching) == 1
+    assert web_pieces(apart) == 2
+    assert web_pieces([*apart, {"pts": []}, {"pts": [[5.0, 5.0]]}]) == 2, "an empty or one-point lane is no piece"
+
+
+def test_web_rejoinable_says_whether_the_touch_pass_will_close_a_new_piece() -> None:
+    """Feature 146: `web_rejoinable` lifted out of the same closure. A stub whose end stands within the
+    touch pass's reach of another piece, with a clear straight link, will be closed again - so a rewrite
+    that made it is allowed. A stub out of reach will not, so the rewrite is refused."""
+    from l7r.diagram.hamletgen.ways import _STUB_REACH_FT, web_rejoinable
+
+    spine = {"pts": [[0.0, 0.0], [400.0, 0.0]], "connector": True}
+    near = {"pts": [[200.0, _STUB_REACH_FT - 2.0], [300.0, _STUB_REACH_FT - 2.0]]}
+    far = {"pts": [[200.0, 900.0], [300.0, 900.0]]}
+    assert web_rejoinable([spine, near], [], [], []) is True
+    assert web_rejoinable([spine, far], [], [], []) is False
+    wall = [[(150.0, 2.0), (350.0, 2.0), (350.0, 8.0), (150.0, 8.0)]]  # between the stub and the spine
+    assert web_rejoinable([spine, near], wall, [], []) is False, "in reach, but no clear link"
+    assert web_rejoinable([spine], [], [], []) is True, "one piece has nothing to rejoin"

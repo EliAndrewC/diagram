@@ -565,3 +565,20 @@ def test_focal_block_reserves_a_footprint_and_secondary_shrine_records_both() ->
     s2.secondary_shrine(300.0, 300.0)
     assert any(r.get("kind") == "shrine" for r in s2.M.get("religious", []) + s2.M.get("shrines", []))
     assert "secondary_shrine" in str(s2.M)  # ...and the focal note, wherever note_focal keeps it
+
+
+def test_fan_rival_spots_a_second_stub_fanning_to_the_same_house() -> None:
+    """Feature 146: `fan_rival` lifted out of `trim_lane_stubs`. Two lane ends arriving beside each other on
+    nearly the same heading, both reaching for the same house, are one approach drawn twice."""
+    from l7r.diagram.settlement.water_ways import fan_rival
+
+    house = (500.0, 500.0)
+    mine = 200.0
+    rival = [{"pts": [[420.0, 470.0], [300.0, 400.0]]}]  # its tip at (420,470), heading back out NW
+    q = (426.0, 474.0)  # my own stub's tip, right beside it
+    bearing = math.degrees(math.atan2(470.0 - 400.0, 420.0 - 300.0))
+    assert fan_rival(rival, q, bearing, house, mine, me=1, fan_spread=40.0, fan_bearing=25.0) is True
+    assert fan_rival(rival, q, bearing + 90.0, house, mine, me=1, fan_spread=40.0, fan_bearing=25.0) is False, "a different heading is a different way"
+    assert fan_rival(rival, (900.0, 900.0), bearing, house, mine, me=1, fan_spread=40.0, fan_bearing=25.0) is False, "too far to be the same fan"
+    assert fan_rival(rival, q, bearing, house, mine=10.0, me=1, fan_spread=40.0, fan_bearing=25.0) is False, "the rival is farther from the house than I am"
+    assert fan_rival(rival, q, bearing, house, mine, me=0, fan_spread=40.0, fan_bearing=25.0) is False, "a lane is not its own rival"

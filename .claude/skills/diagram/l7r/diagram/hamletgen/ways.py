@@ -1451,6 +1451,50 @@ def _plen(pts: Poly) -> float:
     return sum(math.dist(pts[k], pts[k + 1]) for k in range(len(pts) - 1))
 
 
+def web_pieces(lanes: Sequence[Mapping[str, Any]]) -> int:
+    """How many connected pieces the lane web is in - a lane of fewer than two points is not a piece.
+
+    LIFTED OUT OF `_smooth_web` (feature 146, GM 2026-08-28: *"if something is only available as an inner
+    function in a closure, then you can move it out into its own function to make it more unit testable"*).
+    It closed over `lanes` alone and is a pure count, so a test can hand it three dicts instead of building
+    a settlement, a fabric and a water list to reach it."""
+    ways = [[(float(x), float(y)) for x, y in ln.get("pts") or []] for ln in lanes]
+    comp = _components(ways, 4.0)
+    return len({comp[m] for m in range(len(ways)) if len(ways[m]) >= 2})
+
+
+def web_rejoinable(lanes: Sequence[Mapping[str, Any]], hard: list[Poly], walls: Sequence[Poly], water: list[tuple[Pt, Pt]]) -> bool:
+    """After a rewrite that added a piece: will the post-smoothing touch pass close it again? Yes iff some
+    end of the new piece stands within `_STUB_REACH_FT` of another piece's tread with a clear straight link
+    (the touch pass draws exactly that). Inashiro's own smoothing makes such cuts and the touch repairs them;
+    seed 37's stub sat 29 ft off in a 12 ft slot no link clears.
+
+    LIFTED OUT OF `_smooth_web` for the same reason as `web_pieces`: it took nothing from the closure but
+    these four values, and a caller that must build a whole web to ask it a yes/no question is a test nobody
+    writes."""
+    ways = [[(float(x), float(y)) for x, y in ln.get("pts") or []] for ln in lanes]
+    comp = _components(ways, 4.0)
+    live = [m for m in range(len(ways)) if len(ways[m]) >= 2]
+    seed = next((m for m in live if lanes[m].get("connector")), live[0] if live else 0)
+    for c in {comp[m] for m in live} - {comp[seed]}:  # every piece OTHER than the connector's must reach one
+        mine = [m for m in live if comp[m] == c]
+        segs = [sg for m in live if comp[m] != c for sg in zip(ways[m], ways[m][1:], strict=False)]
+        if not segs:
+            continue
+        ok = False
+        for m in mine:
+            for e in (ways[m][0], ways[m][-1]):
+                foot = min((seg_closest(e[0], e[1], a, b) for a, b in segs), key=lambda z: math.dist(e, z))
+                if math.dist(e, foot) <= _STUB_REACH_FT and _clear_touch(e, foot, hard, walls, water):
+                    ok = True
+                    break
+            if ok:
+                break
+        if not ok:
+            return False
+    return True
+
+
 def _smooth_web(s: Settlement, hard: list[Poly], walls: Sequence[Poly], water: list[tuple[Pt, Pt]]) -> int:
     """The LAST pass over the web: take out what feet would never have worn.
 
@@ -1487,41 +1531,12 @@ def _smooth_web(s: Settlement, hard: list[Poly], walls: Sequence[Poly], water: l
     # and a rewrite that adds a piece is refused and the lane left as it was. The bends check may
     # then fire on the kept hairpin - that is the honest verdict, and its own task (T04).
     def _pieces() -> int:
-        _ways = [[(float(x), float(y)) for x, y in ln.get("pts") or []] for ln in lanes]
-        _comp = _components(_ways, 4.0)
-        return len({_comp[m] for m in range(len(_ways)) if len(_ways[m]) >= 2})
-
-    def _rejoinable() -> bool:
-        """After a rewrite that added a piece: will the post-smoothing touch pass close it again? Yes
-        iff some end of the new piece stands within `_STUB_REACH_FT` of another piece's tread with a
-        clear straight link (the touch pass draws exactly that). Inashiro's own smoothing makes such
-        cuts and the touch repairs them; seed 37's stub sat 29 ft off in a 12 ft slot no link clears."""
-        _ways = [[(float(x), float(y)) for x, y in ln.get("pts") or []] for ln in lanes]
-        _comp = _components(_ways, 4.0)
-        _live = [m for m in range(len(_ways)) if len(_ways[m]) >= 2]
-        _seed = next((m for m in _live if lanes[m].get("connector")), _live[0] if _live else 0)
-        for _c in {_comp[m] for m in _live} - {_comp[_seed]}:  # every piece OTHER than the connector's must reach one
-            _mine = [m for m in _live if _comp[m] == _c]
-            _segs = [sg for m in _live if _comp[m] != _c for sg in zip(_ways[m], _ways[m][1:], strict=False)]
-            if not _segs:
-                continue
-            _ok = False
-            for m in _mine:
-                for _e in (_ways[m][0], _ways[m][-1]):
-                    _foot = min((seg_closest(_e[0], _e[1], a, b) for a, b in _segs), key=lambda z: math.dist(_e, z))
-                    if math.dist(_e, _foot) <= _STUB_REACH_FT and _clear_touch(_e, _foot, hard, walls, water):
-                        _ok = True
-                        break
-                if _ok:
-                    break
-            if not _ok:
-                return False
-        return True
+        return web_pieces(lanes)
 
     def _commit(m: int, new_pts: list[list[float]]) -> bool:
         _before, _old = _pieces(), lanes[m]["pts"]
         lanes[m]["pts"] = new_pts
-        if _pieces() > _before and not _rejoinable():
+        if _pieces() > _before and not web_rejoinable(lanes, hard, walls, water):
             lanes[m]["pts"] = _old
             return False
         s.reink_lane(m)
