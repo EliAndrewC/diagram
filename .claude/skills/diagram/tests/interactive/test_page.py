@@ -214,3 +214,17 @@ def test_the_scrub_region_comes_from_its_marks_not_its_polygon() -> None:
     tags = [None, "-", "scrub and rough grazing", None]
     page = render_page(strings, tags, "T", {"ftpx": 1.0}, {"commons": [{"role": "grazing", "poly": [[0, 0], [300, 0], [300, 300], [0, 300]]}]})
     assert "<rect x=\"0\" y=\"0\" width=\"24\" height=\"24\"/>" in page and 'polygon class="hit"' not in page
+
+
+def test_the_hit_widths_are_per_class_as_the_gm_tuned_them() -> None:
+    """Bunds and beans twice the first cut, channels and the stream widened, lanes unchanged (GM 2026-08-28)."""
+    bund = '<polygon points="0,0 9,0 9,9" fill="none" stroke="#7A5A30" stroke-width="1.4"/>'
+    assert "stroke-width: 12.0px" in wrap(bund, Split("paddy", "bund")), "1.4 * 8 = 11.2 -> the 12 px floor"
+    bead = '<circle cx="10" cy="20" r="1.4" fill="#2F6B35"/>'
+    assert 'r="8.4"' in wrap(bead, "bund beans")
+    ditch = '<path d="M1,1 L9,9" fill="none" stroke="#6C9CBE" stroke-width="2.5"/>'
+    assert "stroke-width: 15.0px" in wrap(ditch, "field ditch")
+    stream = '<path d="M1,1 L9,9" fill="none" stroke="#9CB4C8" stroke-width="7"/>'
+    assert "stroke-width: 12.0px" in wrap(stream, "stream")
+    lane = '<path d="M1,1 L9,9" fill="none" stroke="#C9AE79" stroke-width="5.0"/>'
+    assert "stroke-width: 20.0px" in wrap(lane, "village lane")

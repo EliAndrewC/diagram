@@ -98,7 +98,16 @@ def merge_primitives(s: str) -> str:
 #: width with a floor of HIT_WIDEN_MIN px - the GM's "three or four times the width". It sits right
 #: after the mark inside its class group: above the paddy fill beneath a bund, below anything drawn
 #: later.
-HIT_WIDEN: frozenset[str] = frozenset({"bund", "bund beans", "field ditch", "village lane"})
+#: Per class: (stroke factor, stroke floor px, bead radius factor). The GM, testing the first cut
+#: (2026-08-28): the bund and bean boxes "about twice as wide"; the channels and the stream could
+#: "stand to widen"; the lanes "seem fine".
+HIT_WIDEN: dict[str, tuple[float, float, float]] = {
+    "bund": (8.0, 12.0, 6.0),
+    "bund beans": (8.0, 12.0, 6.0),
+    "field ditch": (6.0, 9.0, 4.5),
+    "stream": (1.5, 12.0, 4.5),
+    "village lane": (4.0, 6.0, 3.0),
+}
 HIT_WIDEN_FACTOR = 4.0
 HIT_WIDEN_MIN = 6.0
 #: The scrub's hit region is where its MARKS are, not its recorded polygon (the polygon is the whole
@@ -114,12 +123,12 @@ _GROUP_W = re.compile(r'<g [^>]*stroke-width="([\d.]+)"')
 _MARK_XY = re.compile(r'(?:x1|cx)="([-\d.]+)" (?:y1|cy)="([-\d.]+)"|[Mm]([-\d.]+),([-\d.]+)')
 
 
-def _hit_width(w: float) -> float:
-    return max(HIT_WIDEN_FACTOR * w, HIT_WIDEN_MIN)
-
-
-def hit_copies(s: str) -> str:
+def hit_copies(s: str, factor: float = HIT_WIDEN_FACTOR, floor: float = HIT_WIDEN_MIN, bead: float = 3.0) -> str:
     """The fat invisible copies of every stroked mark and every bead in one classed string."""
+
+    def _hit_width(w: float) -> float:
+        return max(factor * w, floor)
+
     out: list[str] = []
     gm = _GROUP_W.search(s)
     default_w = float(gm.group(1)) if gm else 1.0
@@ -135,7 +144,7 @@ def hit_copies(s: str) -> str:
         out.append(f'<{tag} {geom} fill="none" class="hit" style="pointer-events: stroke; stroke-width: {_hit_width(w):.1f}px"/>')
     for m in re.finditer(r'<circle cx="([-\d.]+)" cy="([-\d.]+)" r="([-\d.]+)"[^>]*/>', s):
         r = float(m.group(3))
-        out.append(f'<circle cx="{m.group(1)}" cy="{m.group(2)}" r="{max(3 * r, HIT_WIDEN_MIN / 2):.1f}" fill="none" class="hit" style="pointer-events: fill"/>')
+        out.append(f'<circle cx="{m.group(1)}" cy="{m.group(2)}" r="{max(bead * r, floor / 2):.1f}" fill="none" class="hit" style="pointer-events: fill"/>')
     return "".join(out)
 
 
@@ -171,11 +180,11 @@ def wrap(s: str, tag: ClsTag) -> str:
     if tag is None or tag == NOT_HIGHLIGHTED or not s:
         return s
     if isinstance(tag, str):
-        return _open(tag) + merge_primitives(s) + (hit_copies(s) if tag in HIT_WIDEN else "") + "</g>"
+        return _open(tag) + merge_primitives(s) + (hit_copies(s, *HIT_WIDEN[tag]) if tag in HIT_WIDEN else "") + "</g>"
     if isinstance(tag, Split):
         fill_copy = _ATTR_STROKE.sub(' stroke="none"', s)
         stroke_copy = _ATTR_FILL.sub(' fill="none"', s)
-        return _open(tag.fill) + fill_copy + "</g>" + _open(tag.stroke) + stroke_copy + (hit_copies(stroke_copy) if tag.stroke in HIT_WIDEN else "") + "</g>"
+        return _open(tag.fill) + fill_copy + "</g>" + _open(tag.stroke) + stroke_copy + (hit_copies(stroke_copy, *HIT_WIDEN[tag.stroke]) if tag.stroke in HIT_WIDEN else "") + "</g>"
     return "".join(wrap(piece, c) for c, piece in tag)
 
 

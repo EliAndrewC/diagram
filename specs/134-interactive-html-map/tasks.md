@@ -124,6 +124,9 @@ below are measured, from the run-log and the browser).
 - [x] T40 **the scrub's hit region from its marks** (FR-016b): `page.marks_region`, 24 px cells with a mark in them, runs merged into rects; browser test: a cell with a blade lights the scrub, cleared ground inside the polygon lights nothing
       research: rendering
 
+- [x] T41 **hit widths per class, as the GM tuned them on the first cut**: bund and beans doubled (8x, floor 12 px; beads 6x radius), field ditch 6x / 9 px, the stream added at 1.5x / 12 px, lanes unchanged
+      research: rendering
+
 ## Owed at unlock (spec SC-008, FR-009; plan "Performance bookends")
 
 Not tasks of this feature - the spec (round-1 fidelity finding 5) holds the feature to the
