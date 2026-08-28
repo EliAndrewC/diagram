@@ -219,3 +219,42 @@ def test_lanes_form_one_network_fires_when_a_lane_is_set_adrift() -> None:
         M["lanes"].append({"pts": [[60.0, 60.0], [220.0, 60.0]], "w": 5, "worn": True, "connector": False})  # a lane in the far corner, touching nothing
 
     _fires(REFERENCE, "lanes_form_one_network", adrift)
+
+
+@pytest.mark.rolls_map
+def test_dry_plots_clear_of_paddies_fires_when_a_dry_plot_is_laid_on_the_rice() -> None:
+    def onto_the_rice(M: dict[str, Any]) -> None:
+        fx0, fy0, fx1, fy1 = M["fields"][0]["bbox"]
+        cx, cy = (fx0 + fx1) / 2, (fy0 + fy1) / 2
+        M["dry_plots"][0]["poly"] = [[cx - 40, cy - 40], [cx + 40, cy - 40], [cx + 40, cy + 40], [cx - 40, cy + 40]]
+
+    _fires(REFERENCE, "dry_plots_clear_of_paddies", onto_the_rice)
+
+
+@pytest.mark.rolls_map
+def test_groves_clear_of_lanes_fires_when_a_belt_clump_is_dropped_on_a_lane() -> None:
+    def onto_the_lane(M: dict[str, Any]) -> None:
+        pts = next(ln["pts"] for ln in M["lanes"] if len(ln.get("pts") or []) >= 2)
+        mid = pts[len(pts) // 2]
+        M["village_groves"][0]["clumps"].append([float(mid[0]), float(mid[1])])
+
+    _fires(REFERENCE, "groves_clear_of_lanes", onto_the_lane)
+
+
+@pytest.mark.rolls_map
+def test_houses_clear_of_lanes_fires_when_a_lane_is_run_through_a_farmhouse() -> None:
+    def through_the_house(M: dict[str, Any]) -> None:
+        h = M["houses"][0]
+        M["lanes"].append({"pts": [[float(h["x"]) - 120, float(h["y"])], [float(h["x"]) + 120, float(h["y"])]], "w": 5, "worn": True, "connector": False})
+
+    _fires(REFERENCE, "houses_clear_of_lanes", through_the_house)
+
+
+@pytest.mark.rolls_map
+def test_lanes_reach_something_fires_on_a_lane_that_serves_nothing() -> None:
+    def to_nowhere(M: dict[str, Any]) -> None:
+        pts = next(ln["pts"] for ln in M["lanes"] if len(ln.get("pts") or []) >= 2)
+        a = pts[0]
+        M["lanes"].append({"pts": [[float(a[0]), float(a[1])], [float(a[0]) + 300.0, float(a[1]) - 300.0]], "w": 5, "worn": True, "connector": False})
+
+    _fires(REFERENCE, "lanes_reach_something", to_nowhere)
