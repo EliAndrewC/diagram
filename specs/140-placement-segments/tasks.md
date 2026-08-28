@@ -7,5 +7,5 @@
 - [x] T05 `finish()` records `fields[].keepout_chains` / `keepout`; `houses_clear_of_paddies` measures the chains
 - [x] T06 the tolerance chosen by measurement on the reference (3 px passes the gate; 4, 6, 8 break the lane web - research R3)
 - [x] T07 the reference and the four live pool hamlets regenerated on the finished engine, gated, rendered; `settlement-review` on each (Sawada / Mizuguchi / Kashikawa ACCEPTABLE WITH NOTES, Inashiro NOT ACCEPTABLE on the notice board's drift - research R5/R6); verdicts and measured set-backs recorded in each map's notes
-- [ ] T08 `make done` green (the merged engine, the board scorer weighted; two fixtures widened for the 3 px push-out); research R4 (timings: polder `stage_homesteads` ~9 -> ~2 s, the reference field tests, the two checks); the stop-work ritual
+- [x] T08 `make done` green - 3,898 passed, 1 m 45 s cold on the merged engine (the board scorer weighted; two legacy fixtures widened for the 3 px push-out); research R4 holds the timings (polder `stage_homesteads` 9.2 -> 1.9 s; the reference clean at 8-9 chords); research R4 (timings: polder `stage_homesteads` ~9 -> ~2 s, the reference field tests, the two checks); the stop-work ritual
 - [x] T09 feature 141 claimed (`specs/141-checks-and-corpus-audit/gm-request.md`, the GM's words verbatim; the spec waits on the session's feedback and the GM's go)
