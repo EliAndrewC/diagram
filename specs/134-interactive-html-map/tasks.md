@@ -119,6 +119,11 @@ below are measured, from the run-log and the browser).
 - [x] T38 **one way of zooming** (FR-015b): Ctrl/Cmd + `+` `-` `0` and Ctrl+wheel intercepted and mapped to the page's zoom; browser test asserts the zoom moves and the browser's devicePixelRatio does not
       research: rendering
 
+- [x] T39 **fat hit copies for the thin classes** (FR-016a): `page.hit_copies` - bund, bund beans, field ditch, village lane; 4x the drawn width, floor 6 px, beads at 3x radius; browser test hovers 8 px off a 1 px lane
+      research: rendering
+- [x] T40 **the scrub's hit region from its marks** (FR-016b): `page.marks_region`, 24 px cells with a mark in them, runs merged into rects; browser test: a cell with a blade lights the scrub, cleared ground inside the polygon lights nothing
+      research: rendering
+
 ## Owed at unlock (spec SC-008, FR-009; plan "Performance bookends")
 
 Not tasks of this feature - the spec (round-1 fidelity finding 5) holds the feature to the
