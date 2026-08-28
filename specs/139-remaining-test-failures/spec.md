@@ -4,7 +4,7 @@
 
 **Created**: 2026-08-28
 
-**Status**: awaiting `spec-fidelity` review (constitution XVI) - no implementation until the verdict is FAITHFUL.
+**Status**: APPROVED by `spec-fidelity` - round 1 verdict **FAITHFUL** (2026-08-28). Reviewer's aside for the GM: SC-002's "48-seed audit 48 of 48" is the widest reading of "all of the tests which we do have" (a tool run, not a suite test; carried from 137's approved FR-005) - the GM may narrow it.
 
 **Input**: [`gm-request.md`](gm-request.md), verbatim. The goal is feature 137's - *"one hundred percent of those tests passing"* - re-cut on 2026-08-28 at the GM's instruction so that 137 could land what it had fixed while the residue stays an OPEN feature, *"to reflect the fact that we know that there are still failing tests"*.
 

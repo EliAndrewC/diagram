@@ -96,10 +96,10 @@ belt-face lesson of 133 T91): each fix is measured on the full tripwire, the gat
 
 ## Success Criteria
 
-- **SC-001**: no expected-failure pin or waiver of a failing check remains anywhere in the suite
+- **SC-001** (as re-cut 2026-08-28: measured against what LANDED - tripwire 27/33/37 clean and 47 shrunk to three checks, the 48-cohort 2 -> 25 of 48, the reference clean; the remaining pins - tripwire 47, gate cohort 42/43/44, cohort baseline 22/24 - are feature 139's SC-001. The original criterion follows): no expected-failure pin or waiver of a failing check remains anywhere in the suite
   or its tooling - the three tables empty and any row the measurement added - and the runs prove
   it (a pinned-but-passing seed would fail; an unpinned failing seed would fail).
-- **SC-002**: the tripwire reports every seed `ok`; the cohort reports 24 of 24.
+- **SC-002** (as re-cut 2026-08-28: measured against what LANDED - tripwire 27/33/37 clean and 47 shrunk to three checks, the 48-cohort 2 -> 25 of 48, the reference clean; the remaining pins - tripwire 47, gate cohort 42/43/44, cohort baseline 22/24 - are feature 139's SC-002. The original criterion follows): the tripwire reports every seed `ok`; the cohort reports 24 of 24.
 - **SC-003**: `handoffs.md` has a line per pull and per handoff, each naming a sha and its test.
 
 ## Decisions Recorded

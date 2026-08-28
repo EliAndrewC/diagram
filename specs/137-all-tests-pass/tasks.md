@@ -1,7 +1,7 @@
 # Tasks: One Hundred Percent of the Tests Pass (137)
 
 Checked off only when verified on the whole tripwire, the gate cohort and the 24-seed cohort (no
-rotation). Every task classified per constitution v2.12.0.
+rotation). **Closure convention (re-cut 2026-08-28, GM)**: a tick carrying the note "RE-CUT ... the residue moves to feature 139" means CLOSED AT WHAT LANDED, not verified - the verification of that residue is feature 139's. Every task classified per constitution v2.12.0.
 
 - [x] T01 spec from the GM's verbatim request; `spec-fidelity` review - verdict in spec.md Status
 - [x] T00 the opening message to the "Diagram tests" session (FR-000): sent 2026-08-28 (msg 7b11f701) - the division of labor and the request for a safe sha; recorded in handoffs.md

@@ -2,7 +2,7 @@
 
 Checked off only when verified on the whole tripwire, the gate cohort and the 24-seed cohort (no rotation). Every task classified per constitution v2.12.0 (research: rendering unless marked).
 
-- [ ] T01 `spec-fidelity` review of spec.md against gm-request.md (and 137's) - verdict recorded in spec.md Status
+- [x] T01 `spec-fidelity` review of spec.md against gm-request.md (and 137's) - verdict recorded in spec.md Status
 - [ ] T02 re-measure the inventory on 137's landing commit: the tripwire, the gate cohort (42/43/44), the 24-seed cohort, the 48-seed audit at the batch's household counts, the pool hamlets; stale pins out first (FR-002)
 - [ ] T03 `farmhouses_reach_a_way` (7 of 48; gate seed 42): the straggler pass finds no route for a rank behind a rank (seed 14 at 20 households, eight steadings, sixty targets each, `_route` empty at every box size) - measure what walls the box (the middle rank's plots, the fabric pad, the door seat), then fix at the pass; the wide-box-only attempt is a recorded dead end in `ways.py`
 - [ ] T04 `lanes_form_one_network` (8 of 48; tripwire 47; gate 43) and `lanes_reach_something` (2; 47): the pieces that the orphan ladder still cannot join - per seed, which rung refuses and why
