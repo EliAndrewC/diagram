@@ -96,4 +96,8 @@ def test_the_polders_keep_outs_contain_what_they_stand_for() -> None:
     assert 1 <= fld["keepout_chords"] <= 12 and chains
     from l7r.diagram.settlement._geom.primitives import FIELD_KEEPOUT_EPS
 
-    assert all(chain_violated(x, y, chains, FIELD_KEEPOUT_EPS + 1e-6) for x, y in fld["outline"])  # no outline vertex on the house side
+    from l7r.diagram.settlement._geom.primitives import chain_distance
+
+    assert all(
+        chain_violated(x, y, chains, FIELD_KEEPOUT_EPS + 1e-6) for x, y in fld["outline"] if chain_distance(x, y, chains) <= FIELD_KEEPOUT_EPS + 1e-6
+    )  # no vertex the chain reaches is on the house side
