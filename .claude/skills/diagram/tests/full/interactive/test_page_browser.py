@@ -315,7 +315,8 @@ def test_cleared_ground_inside_the_scrub_polygon_lights_nothing(synthetic: Page)
     synthetic.page.mouse.move(x, y)
     synthetic.page.wait_for_timeout(30)
     assert synthetic.on() == {"scrub and rough grazing": 2}, "a cell with a blade in it lights the scrub"
-    synthetic.page.mouse.move(x + 200, y)  # inside the recorded polygon, no blade anywhere near
+    assert synthetic.js("() => getComputedStyle(document.querySelector('g.f.on rect')).fill") == "none", "the region never paints, highlighted or not"
+    synthetic.page.mouse.move(x + 200, y)  # inside the recorded polygon, no blade within two cells
     synthetic.page.wait_for_timeout(30)
     assert synthetic.on() == {}, "cleared ground inside the scrub's polygon lights nothing"
 

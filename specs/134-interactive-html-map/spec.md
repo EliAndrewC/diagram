@@ -349,7 +349,9 @@ hover/click checks for the classes it contains.
 - **FR-016 (thin marks; the scrub's real extent) - the GM's follow-up of 2026-08-28, verbatim in
   `gm-request.md`**: (a) the bunds, the bund beans, the field ditches and the village lanes each
   take the pointer over a hit shape *"three or four times the width"* of the drawn mark - an
-  invisible copy of the mark's own geometry at 4x its width (floor 6 px; a bead at 3x its radius),
+  invisible copy of the mark's own geometry - tuned by the GM on the first cut: bunds and beans at 8x
+  (floor 12 px; a bead at 6x its radius), ditches at 6x (floor 9 px), the stream at 1.5x (floor 12 px),
+  lanes at 4x (floor 6 px, *"seem fine"*) -
   placed right above the mark so it wins over the paddy beneath a bund and loses to anything drawn
   later; (b) the scrub lights up only where its marks are: its hit region is a grid of cells that
   hold a blade or a brush dot, never the recorded hinterland polygon, so ground the scatter
