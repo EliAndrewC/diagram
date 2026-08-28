@@ -198,3 +198,13 @@ def test_pull_caption_toward_keeps_its_seat_when_the_block_already_touches_or_ov
     assert s.pull_caption_toward(on_it, "notice board", 8, "middle", 0.0, board) == on_it
     touching = (500.0, 510.0 + 8 * 0.8 + 0.2)  # the block's top edge a fifth of a pixel under the board
     assert s.pull_caption_toward(touching, "notice board", 8, "middle", 0.0, board) == touching
+
+
+def test_title_obstacles_gather_the_long_lines_a_placard_must_miss() -> None:
+    """Feature 146: the title's obstacle set includes the map's long POLYLINES - the wall, the moat, the ring
+    road and the road - not only its rectangles and polygons."""
+    s = Settlement(W=1000, H=1000, seed=1)
+    s.M["road"] = [[0, 500], [1000, 500]]
+    s.M["moat"] = [[100, 100], [900, 100]]
+    _rects, _polys, lines = s._title_obstacles()
+    assert len(lines) >= 2, lines
