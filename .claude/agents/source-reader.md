@@ -32,7 +32,13 @@ A list of items, each: **the claim as written in the entry** (verbatim), **the s
 1. **Fetch the source itself** with `WebFetch`. Follow a redirect by calling again with the new
    URL. On a 403 or a paywall, try the obvious alternates once each: the publisher's abstract page,
    a PMC or arXiv copy, the Wikipedia article the summary was echoing. Do not try more than three
-   URLs per item.
+   URLs per item. **ONE attempt per host, ever** (GM 2026-08-28, feature 138): on a TLS/certificate
+   error, a 403, a 404, a refused connection or a redirect to a login page, record the verdict
+   (NOT-FOUND, or SUMMARY-ONLY if a search snippet showed the passage) and MOVE ON - never retry that
+   host, never wait on it. Two runs of this agent stalled for good on Chinese hosts with bad
+   certificates (`historychina.net`, `zj.people.com.cn`) and the harness sent no completion
+   notification; the parent session waited ten hours. Hosts that have behaved: zh/ja/en Wikipedia,
+   JStage, kotobank, PMC, FAO, the prefectural and municipal `.lg.jp` pages.
 2. **Ask the page for the passage, not for agreement.** Prompt the fetch for the verbatim sentences
    about the subject - never "does this page support X?" A page asked whether it agrees will agree.
 3. **Judge the claim against the quoted text, in context.** Numbers must match; scope must match
