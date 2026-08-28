@@ -46,7 +46,7 @@ green with the swapped registry, then the full bed in the Polish phase.
 ## Phase 6: Polish & Cross-Cutting
 
 - [x] T010 Full sweep once, at the end (MANDATORY - shared code changed): `ruff check` + `ruff format --check` + `mypy --strict` on `DIAG/check_village` and the new test modules; whole diagram test bed `pytest DIAG -n auto` with coverage 100% on `registry_analysis.py` and the new `registry.py`; background the final run, act on the notification, tail the log before believing green
-- [x] T011 Close out: update the `registry_refactor_deferred` memory note (superseded by 109, FR-010); update `specs/109-registry-derive/` artifacts with final numbers; commit; run `scripts/sync-with-main.sh done` from the clone (stop-work ritual)
+- [x] T011 Close out: update the `registry_refactor_deferred` memory note (superseded by 109, FR-010); update `specs/109-registry-derive/` artifacts with final numbers; commit; run `scripts/sync-with-main.sh done` from the clone (stop-work procedure)
 
 ## Guard fire-proof evidence (T007)
 
@@ -77,4 +77,4 @@ cannot place a segment beside a PLACED segment (0595-0600) - that takes a `_PLAC
 
 MVP = US1 (T001-T006): the collapse itself, fixture-proven. US2 hardens, US3 documents - both
 same-session. Single implementer; [P] marks the one genuinely parallel authoring opportunity
-(T004 vs T003). Commit at each phase boundary; the stop-work ritual runs only at T011.
+(T004 vs T003). Commit at each phase boundary; the stop-work procedure runs only at T011.

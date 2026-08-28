@@ -27,7 +27,7 @@
 
 - [x] T007 [P] Update `check_village/CLAUDE.md`'s index entry for `__init__.py` (it currently describes the verbatim-restore roster; describe the star-import surface, the aliased block, and point at `specs/027-init-star-imports/` + the guard test). Cross-check `.claude/skills/diagram/CLAUDE.md` for any stale mention of the 3,148-line `__init__`.
 - [x] T008 Run the full gate: `make done > /tmp/.../gate.log 2>&1` backgrounded, bare (no trailing echo - exit codes lie if wrapped), act on the completion notification, tail the log before believing green. Whole affected test files, no `-k`.
-- [x] T009 Mark tasks complete, update `spec.md` Status to Implemented, commit, run `scripts/sync-with-main.sh done` (stop-work ritual; render-sync expected to restamp Mode B maps since `check_village` is engine-adjacent - verify it short-circuits or completes cleanly).
+- [x] T009 Mark tasks complete, update `spec.md` Status to Implemented, commit, run `scripts/sync-with-main.sh done` (stop-work procedure; render-sync expected to restamp Mode B maps since `check_village` is engine-adjacent - verify it short-circuits or completes cleanly).
 
 ## Dependencies
 
@@ -35,4 +35,4 @@
 
 ## Implementation strategy
 
-Single increment - the file IS the feature. MVP = T001-T006 (surface rewritten, locally green); T007-T009 are the project's mandatory polish/ritual, not optional extras.
+Single increment - the file IS the feature. MVP = T001-T006 (surface rewritten, locally green); T007-T009 are the project's mandatory polish/procedure, not optional extras.

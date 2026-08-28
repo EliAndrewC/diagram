@@ -215,7 +215,7 @@ render check, re-run FULL settlement-review (the old review's findings partially
 N-market/flop caption cuts + review errors (kosatsuba/punishment/execution + capital-tier
 check gap, bell-drum tower, precinct walls, cistern kind/glyph, mirror precincts), perf
 T024, captions T025, T026 pool move + full sweep, T028 XII, T029 record-the-why docs
-(the THREE wall derivations + the slack law + extramural ruling), T030 ritual. Keep
+(the THREE wall derivations + the slack law + extramural ruling), T030 procedure. Keep
 appending pain points to future-work/ per the GM's standing instruction.
 
 ## FIRST PASS SHIPPED GREEN (2026-08-10, session diagram-city)

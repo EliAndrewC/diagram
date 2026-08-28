@@ -116,7 +116,7 @@ old uniform pitch.
 - [ ] T038 Run the full cohort and compare against the 44/48 baseline: pass rate must not drop, and every newly-failing check must be individually diagnosed. Compare WITHIN a form where the seed's form is unchanged
 - [ ] T039 Record the closing bookend: `make perf LABEL=126-end`, then `make perf-report AGAINST=126-start`, and diagnose IN WRITING every seed more than 5% slower - especially seed 25, which is known to be ~2.5x the baseline
 - [ ] T040 `make done` green, backgrounded, not polled
-- [ ] T041 Stop-work ritual: commit in the clone, then `scripts/sync-with-main.sh done`
+- [ ] T041 Stop-work procedure: commit in the clone, then `scripts/sync-with-main.sh done`
 
 ---
 

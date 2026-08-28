@@ -93,7 +93,7 @@ Done first because this layer ADDS water crossings, and adding them over a known
 - [x] T036 Whole affected test files: `python3 -m pytest test_settlement.py test_checks.py test_villages.py -q -n auto --no-cov` - never `-k`
 - [x] T037 `make done` ONCE, backgrounded, `cd <dir> && make done > /tmp/gate020.log 2>&1` and nothing more; read the log tail before believing green
 - [x] T038 Update `settlements/capitals.md`'s STATUS banner and `wip/README.md` (what now ships; what 021 still owes; which review findings are cleared)
-- [x] T039 Commit and run the stop-work ritual from the clone root
+- [x] T039 Commit and run the stop-work procedure from the clone root
 
 ---
 

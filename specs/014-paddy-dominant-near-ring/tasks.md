@@ -88,7 +88,7 @@ description: "Task list for Paddy-Dominant Near-Ring Farmland"
 - [X] T021 Verify scope isolation (SC-006): village + hamlet tracked `.json` manifests unchanged; fix any downstream disturbance.
 - [X] T022 Principle XII CLOSING gate (full pass): review all four PNGs against research.md Part A - paddy dominates the flat near ring, grain on margins, gardens by town, no waterless paddy, thin map paddy-led. Fix the MAP if any picture still reads dry-grain-heavy; never relax the check. Record each outcome.
 - [X] T023 Confirm SC-007: the corrected "why" + the recorded rejection are present in `settlements.md` and by the check; grep to verify. Confirm 013's research.md is left as historical record.
-- [X] T024 Stop-work ritual: commit; `bash scripts/sync-with-main.sh done` (locked push + render-sync). Fix-forward on any auto-merge with the concurrent session; never force-push.
+- [X] T024 Stop-work procedure: commit; `bash scripts/sync-with-main.sh done` (locked push + render-sync). Fix-forward on any auto-merge with the concurrent session; never force-push.
 
 ---
 

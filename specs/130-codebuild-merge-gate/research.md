@@ -100,7 +100,7 @@ the words only in prose.
 exactly what `/diagram`'s own `origin` is today). Every `origin/main` reference then means
 "GitHub main" with no edit, and sync-in pulls the latest main directly rather than through the
 mirror. `/diagram` keeps its remote and gains nothing: it is updated by `git -C /diagram
-pull --ff-only origin main` under the ritual lock after every landing, and render-sync runs there as
+pull --ff-only origin main` under the sync lock after every landing, and render-sync runs there as
 now. Existing clones need a one-time `git remote set-url origin <github>`; the clone-creation step
 in CLAUDE.md changes from `git clone /diagram` to a clone of GitHub (or a local clone followed by
 the set-url, which is faster and keeps the objects local).
@@ -202,7 +202,7 @@ is under ~10 s the parking step is dropped and the sequence stays lint -> refere
 **Cross-session coordination**: none needed on the AWS side - a build id is private to the
 dispatcher that got it from `start_build`, and `stop_build` takes an id. A parked MERGE build holds
 the merge project's single slot for at most the local reference time (~26 s), during which another
-session's merge queues unbilled. The ritual lock stays the only shared local state.
+session's merge queues unbilled. The sync lock stays the only shared local state.
 
 ## R15 - `make done FULL=1` does not check the reference map first today (defect; third request)
 

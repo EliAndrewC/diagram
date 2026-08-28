@@ -7,7 +7,7 @@ auto-loads whenever a session edits files in this directory - which is exactly w
 The project-wide iteration doctrine lives in the root [`CLAUDE.md`](../../../CLAUDE.md)
 "Iteration-loop efficiency" section (batch recon into fewer bigger turns; iterate on the ONE
 motivating artifact, then run the full test bed once at the end; background the final gate; never
-cut the ritual/guardrail steps). Read that first; this file carries the concrete diagram numbers
+cut the procedure/guardrail steps). Read that first; this file carries the concrete diagram numbers
 and the DIAGRAM-SPECIFIC lessons that section does not cover - each earned by costing real
 round-trips.
 

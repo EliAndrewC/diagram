@@ -118,7 +118,7 @@ one gate cycle; building on it silently would have cost the feature's whole safe
 | a comment bank is lost in the slice | slice from the previous member's end; comment lines counted (158 = 158) | none known |
 | a stale `.pyc` shadows the new package | `__pycache__` cleared as part of the transform step | none known |
 | the gencache does not see the new submodules, so a green sweep proves nothing | sweep run with `--no-cache` (28 REGENERATED, 0 CACHED); plus an explicit invalidation probe after the gate | none known |
-| main moves under the clone again | re-sync and re-verify before the stop-work ritual | low - handled once already |
+| main moves under the clone again | re-sync and re-verify before the stop-work procedure | low - handled once already |
 
 ## Complexity Tracking
 

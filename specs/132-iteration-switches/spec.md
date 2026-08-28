@@ -54,7 +54,7 @@ separately, and neither implies the other.
 ### User Story 1 - Disable AWS for the iteration period (Priority: P1)
 
 The GM (or a session, on the GM's instruction) runs `make ci-off REASON="..."` once. From that
-commit on, in every clone that carries it, no target starts a build, and the push ritual lands
+commit on, in every clone that carries it, no target starts a build, and the push procedure lands
 engine work through a local gate instead of refusing.
 
 **Why this priority**: this is the money. The GM's words: *"the first thing that we do"*.
@@ -69,10 +69,10 @@ the switch as the first condition; `sync-with-main.sh done` on an engine delta w
 1. **Given** remote is `off`, **When** `make ci-check` / `make ci-merge` / `make ci-image` runs,
    **Then** it refuses with the reason and the date the switch was thrown, names `make ci-on`, and
    **no AWS API call is made** (the recorded-response test double records zero calls).
-2. **Given** remote is `off` and this clone's delta is GATED, **When** the push ritual runs,
+2. **Given** remote is `off` and this clone's delta is GATED, **When** the push procedure runs,
    **Then** the route reports `GATED (local - remote off)`: if a green local `make done` vouches
    for exactly the engine content the merge with the latest main would produce, the clone pushes
-   directly; otherwise the ritual refuses and says exactly what to do (`git pull --no-rebase
+   directly; otherwise the procedure refuses and says exactly what to do (`git pull --no-rebase
    origin main`, then `make done`, then push again). Nothing is dispatched either way.
 3. **Given** remote is `off`, **When** `make ci-on` runs, **Then** the default behavior returns
    unchanged and the release is recorded (who, when, why) like the throw was.
@@ -192,12 +192,12 @@ clause as unrequested.)
   client is constructed, and MUST name `make ci-on` and the local route that does the job.
 - **FR-007**: With remote off, `ci-status` MUST show the switch as the first condition, and the
   dispatch decision MUST carry a `remote-enabled` condition that fails with the reason and date.
-- **FR-008**: With remote off, the push ritual's GATED route MUST become LOCAL-GATED: it pushes
+- **FR-008**: With remote off, the push procedure's GATED route MUST become LOCAL-GATED: it pushes
   directly when a green local `make done` vouches for exactly the engine content the merge with
   the latest main would produce (the existing local-verified rule of 2026-08-25), and REFUSES
   otherwise with the merge-and-rerun instruction. It MUST NOT fall through to the DIRECT route
   and MUST NOT dispatch.
-- **FR-009**: The ritual's route line MUST say which of the three it took: DIRECT, GATED (remote),
+- **FR-009**: The procedure's route line MUST say which of the three it took: DIRECT, GATED (remote),
   or GATED (local - remote off).
 
 **Scope locked**
@@ -314,7 +314,7 @@ to short circuit and skip AWS tests to these 5 minute tests as well for the make
   four make targets (`ci-off`, `ci-on`, `scope-lock`, `scope-unlock`).
 - **Condition `remote-enabled`**: the new first row of the dispatch decision (feature 130's five
   become six).
-- **Route `GATED (local - remote off)`**: the push ritual's third route, which exists only while
+- **Route `GATED (local - remote off)`**: the push procedure's third route, which exists only while
   remote is off.
 
 ## Success Criteria
@@ -324,7 +324,7 @@ to short circuit and skip AWS tests to these 5 minute tests as well for the make
 - **SC-002**: With scope locked, a session that attempts every sweep target rolls zero maps other
   than the reference settlement - proven by the fixture test counting generator invocations.
 - **SC-003**: With both thrown, an engine change covered by a green local `make done` lands on main
-  through the ritual with no build, in one push.
+  through the procedure with no build, in one push.
 - **SC-004**: Every refusal message names the release target and the local route that does the job.
 - **SC-005**: `make done` (reference scope), `make quick` and `make reference` are unchanged in
   behavior and timing (within noise) whether the switches are thrown or not.
@@ -363,7 +363,7 @@ to short circuit and skip AWS tests to these 5 minute tests as well for the make
   of what runs; FR-018 records only the decision. Story 2's scenarios renumbered.
 - **Round 3 (2026-08-25): FAITHFUL.** Nothing missing, nothing added; the round-2 changes applied
   without new scope. Reviewer's aside recorded: under remote-off, when main has moved on engine
-  paths the ritual refuses with the merge instruction rather than merging itself - the same
+  paths the procedure refuses with the merge instruction rather than merging itself - the same
   sequence with the session as the driver.
 - **Amendment round 1 (2026-08-25): CHANGES REQUIRED.** (1) FR-020 was an enumeration that left
   `.explain.py` and `wip/*.gen.py` - linted by the gate - outside the key; now a rule. (2) FR-019's
