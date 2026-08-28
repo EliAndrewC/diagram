@@ -131,3 +131,14 @@ def test_roll_falls_through_to_the_last_weight() -> None:
     """A u past the weights' sum (floating-point slack) takes the last row rather than raising."""
     assert hg.homesteads._roll([("a", 0.3), ("b", 0.3)], 0.99) == "b"
     assert hg.homesteads._roll([("a", 0.3), ("b", 0.3)], 0.1) == "a"
+
+
+def test_strip_blocked_refuses_a_lane_that_only_crosses_the_strip() -> None:
+    """Feature 146: the crossing arm of `_strip_blocked` - a lane whose ENDS are both outside the strip but
+    whose segment passes through it (the corner test above cannot see that one)."""
+    s, _plan = _strip_settlement()
+    blocked = hg.homesteads._strip_blocked
+    across = [([(440.0, 500.0), (560.0, 500.0)], 1.0)]  # a hairline lane straight through, ends well clear
+    assert blocked(s, 500, 500, 30, 20, 0, 0, [], [], None, across) is True
+    beside = [([(440.0, 300.0), (560.0, 300.0)], 1.0)]
+    assert blocked(s, 500, 500, 30, 20, 0, 0, [], [], None, beside) is False

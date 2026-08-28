@@ -315,3 +315,17 @@ def test_frozen_terrain_is_still_a_context_manager():
     with s.frozen_terrain():
         assert s._frozen_wells is not None, "the freeze must actually build the index inside the scope"
     assert s._frozen_wells is None, "and release it on the way out"
+
+
+def test_farm_wells_seats_a_wellhead_in_a_steading_dooryard() -> None:
+    """Feature 146: the ring seating in `_farm_wells` - the fallback path for a farm belt, where the
+    cluster's open ground is mostly crop and the wellhead goes in a dooryard rather than at the centroid."""
+    s = Settlement(1200, 1200, seed=1)
+    s.meta(name="F", scale="hamlet", ftpx=1)
+    for i in range(4):  # a tight cluster of steadings on open ground, nothing else placed
+        s.M["houses"].append({"x": 500.0 + i * 70.0, "y": 600.0, "w": 50.0, "h": 30.0, "rot": 0})
+        s.placed.append((500.0 + i * 70.0, 600.0, 50.0, 30.0))
+    seated = s._farm_wells(220.0, 40.0)
+    assert seated >= 1, "a wellhead must seat in one of the dooryards"
+    assert s.M["wells"], "and be recorded"
+    assert any(min(abs(w["x"] - h["x"]) + abs(w["y"] - h["y"]) for h in s.M["houses"]) < 200 for w in s.M["wells"])
