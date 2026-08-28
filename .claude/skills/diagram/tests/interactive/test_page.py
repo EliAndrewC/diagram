@@ -192,7 +192,7 @@ def test_thin_marks_get_a_fat_invisible_hit_copy() -> None:
 
 def test_widened_classes_carry_their_hit_copies_and_others_do_not() -> None:
     lane = '<path d="M1,1 L9,9" fill="none" stroke="#C9AE79" stroke-width="5.0"/>'
-    assert 'class="hit"' in wrap(lane, "village lane") and 'class="hit"' not in wrap(lane, "stream")
+    assert 'class="hit"' in wrap(lane, "village lane") and 'class="hit"' not in wrap(lane, "pond")
     paddy = '<polygon points="0,0 9,0 9,9" fill="#A6C398" stroke="#7A5A30" stroke-width="1.4"/>'
     out = wrap(paddy, Split("paddy", "bund"))
     assert out.count('class="hit"') == 1 and out.index('class="hit"') > out.index('data-k="bund"'), "the bund's hit copy rides in the bund group, above the paddy fill"
