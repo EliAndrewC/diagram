@@ -98,7 +98,16 @@ def merge_primitives(s: str) -> str:
 #: width with a floor of HIT_WIDEN_MIN px - the GM's "three or four times the width". It sits right
 #: after the mark inside its class group: above the paddy fill beneath a bund, below anything drawn
 #: later.
-HIT_WIDEN: frozenset[str] = frozenset({"bund", "bund beans", "field ditch", "village lane"})
+#: Per class: (stroke factor, stroke floor px, bead radius factor). The GM, testing the first cut
+#: (2026-08-28): the bund and bean boxes "about twice as wide"; the channels and the stream could
+#: "stand to widen"; the lanes "seem fine".
+HIT_WIDEN: dict[str, tuple[float, float, float]] = {
+    "bund": (8.0, 12.0, 6.0),
+    "bund beans": (8.0, 12.0, 6.0),
+    "field ditch": (6.0, 9.0, 4.5),
+    "stream": (1.5, 12.0, 4.5),
+    "village lane": (4.0, 6.0, 3.0),
+}
 HIT_WIDEN_FACTOR = 4.0
 HIT_WIDEN_MIN = 6.0
 #: The scrub's hit region is where its MARKS are, not its recorded polygon (the polygon is the whole
@@ -114,12 +123,12 @@ _GROUP_W = re.compile(r'<g [^>]*stroke-width="([\d.]+)"')
 _MARK_XY = re.compile(r'(?:x1|cx)="([-\d.]+)" (?:y1|cy)="([-\d.]+)"|[Mm]([-\d.]+),([-\d.]+)')
 
 
-def _hit_width(w: float) -> float:
-    return max(HIT_WIDEN_FACTOR * w, HIT_WIDEN_MIN)
-
-
-def hit_copies(s: str) -> str:
+def hit_copies(s: str, factor: float = HIT_WIDEN_FACTOR, floor: float = HIT_WIDEN_MIN, bead: float = 3.0) -> str:
     """The fat invisible copies of every stroked mark and every bead in one classed string."""
+
+    def _hit_width(w: float) -> float:
+        return max(factor * w, floor)
+
     out: list[str] = []
     gm = _GROUP_W.search(s)
     default_w = float(gm.group(1)) if gm else 1.0
@@ -135,17 +144,44 @@ def hit_copies(s: str) -> str:
         out.append(f'<{tag} {geom} fill="none" class="hit" style="pointer-events: stroke; stroke-width: {_hit_width(w):.1f}px"/>')
     for m in re.finditer(r'<circle cx="([-\d.]+)" cy="([-\d.]+)" r="([-\d.]+)"[^>]*/>', s):
         r = float(m.group(3))
-        out.append(f'<circle cx="{m.group(1)}" cy="{m.group(2)}" r="{max(3 * r, HIT_WIDEN_MIN / 2):.1f}" fill="none" class="hit" style="pointer-events: fill"/>')
+        out.append(f'<circle cx="{m.group(1)}" cy="{m.group(2)}" r="{max(bead * r, floor / 2):.1f}" fill="none" class="hit" style="pointer-events: fill"/>')
     return "".join(out)
 
 
-def marks_region(strings: Sequence[str], cell: float = HIT_CELL) -> str:
-    """Rects over the grid cells that hold a mark of the given strings - the scrub's real extent."""
-    cells: set[tuple[int, int]] = set()
+def _in_any(x: float, y: float, polys: Sequence[Sequence[Sequence[float]]]) -> bool:
+    for poly in polys:
+        n = len(poly)
+        inside = False
+        for i in range(n):
+            x1, y1 = poly[i][0], poly[i][1]
+            x2, y2 = poly[(i + 1) % n][0], poly[(i + 1) % n][1]
+            if (y1 > y) != (y2 > y) and x < (x2 - x1) * (y - y1) / (y2 - y1) + x1:
+                inside = not inside
+        if inside:
+            return True
+    return False
+
+
+def marks_region(strings: Sequence[str], cell: float = HIT_CELL, grow: int = 1, within: Sequence[Sequence[Sequence[float]]] = ()) -> str:
+    """Rects over the grid cells that hold a mark of the given strings - the scrub's real extent -
+    GROWN by `grow` cells around every mark and kept inside the recorded footprints `within`. The
+    growth is what makes a bare patch INSIDE the scrub count as scrub (the GM, 2026-08-28: "patches
+    of dirt with nothing growing there ... should still be counted as part of the scrub land") while
+    the village's deliberate clearing, wider than two cells, stays clear; the footprint stops the
+    growth spilling past the scrub's own edge. The rects carry fill="none" so the highlight never
+    paints them - the first cut left the attribute off and the grid showed as gold steps."""
+    marked: set[tuple[int, int]] = set()
     for s in strings:
         for m in _MARK_XY.finditer(s):
             x, y = (m.group(1), m.group(2)) if m.group(1) is not None else (m.group(3), m.group(4))
-            cells.add((int(float(x) // cell), int(float(y) // cell)))
+            marked.add((int(float(x) // cell), int(float(y) // cell)))
+    cells: set[tuple[int, int]] = set()
+    for gx, gy in marked:
+        for dx in range(-grow, grow + 1):
+            for dy in range(-grow, grow + 1):
+                c = (gx + dx, gy + dy)
+                if (dx == 0 and dy == 0) or not within or _in_any((c[0] + 0.5) * cell, (c[1] + 0.5) * cell, within):
+                    cells.add(c)
     out: list[str] = []
     for gy in sorted({c[1] for c in cells}):
         xs = sorted(c[0] for c in cells if c[1] == gy)
@@ -154,9 +190,9 @@ def marks_region(strings: Sequence[str], cell: float = HIT_CELL) -> str:
             if gx == prev + 1:
                 prev = gx
                 continue
-            out.append(f'<rect x="{start * cell:.0f}" y="{gy * cell:.0f}" width="{(prev - start + 1) * cell:.0f}" height="{cell:.0f}"/>')
+            out.append(f'<rect x="{start * cell:.0f}" y="{gy * cell:.0f}" width="{(prev - start + 1) * cell:.0f}" height="{cell:.0f}" fill="none"/>')
             start = prev = gx
-        out.append(f'<rect x="{start * cell:.0f}" y="{gy * cell:.0f}" width="{(prev - start + 1) * cell:.0f}" height="{cell:.0f}"/>')
+        out.append(f'<rect x="{start * cell:.0f}" y="{gy * cell:.0f}" width="{(prev - start + 1) * cell:.0f}" height="{cell:.0f}" fill="none"/>')
     return "".join(out)
 
 
@@ -171,11 +207,11 @@ def wrap(s: str, tag: ClsTag) -> str:
     if tag is None or tag == NOT_HIGHLIGHTED or not s:
         return s
     if isinstance(tag, str):
-        return _open(tag) + merge_primitives(s) + (hit_copies(s) if tag in HIT_WIDEN else "") + "</g>"
+        return _open(tag) + merge_primitives(s) + (hit_copies(s, *HIT_WIDEN[tag]) if tag in HIT_WIDEN else "") + "</g>"
     if isinstance(tag, Split):
         fill_copy = _ATTR_STROKE.sub(' stroke="none"', s)
         stroke_copy = _ATTR_FILL.sub(' fill="none"', s)
-        return _open(tag.fill) + fill_copy + "</g>" + _open(tag.stroke) + stroke_copy + (hit_copies(stroke_copy) if tag.stroke in HIT_WIDEN else "") + "</g>"
+        return _open(tag.fill) + fill_copy + "</g>" + _open(tag.stroke) + stroke_copy + (hit_copies(stroke_copy, *HIT_WIDEN[tag.stroke]) if tag.stroke in HIT_WIDEN else "") + "</g>"
     return "".join(wrap(piece, c) for c, piece in tag)
 
 
@@ -320,7 +356,13 @@ def render_page(strings: Sequence[str], tags: Sequence[ClsTag], name: str, meta:
     sheet = next((i for i, t in enumerate(tags) if t == NOT_HIGHLIGHTED), 0)
     regions = hit_regions(manifest, present - HIT_FROM_MARKS)
     for key in sorted(HIT_FROM_MARKS & present):
-        rects = marks_region([s for s, t in zip(strings, tags, strict=True) if t == key])
+        polys = [
+            rec["poly"]
+            for mk, roles in HIT_REGIONS
+            for rec in (manifest or {}).get(mk) or []
+            if isinstance(rec, dict) and rec.get("poly") and roles.get(str(rec.get("role", "*")), roles.get("*")) == key
+        ]
+        rects = marks_region([s for s, t in zip(strings, tags, strict=True) if t == key], within=polys)
         if rects:
             regions += _open(key) + f'<g class="hit" fill="none" style="pointer-events: fill">{rects}</g></g>'
     wrapped.insert(sheet + 1, regions)

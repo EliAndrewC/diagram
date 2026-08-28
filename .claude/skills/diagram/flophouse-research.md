@@ -1,5 +1,8 @@
 # Flophouse / cheap-lodging research findings (2026-07-22)
 
+**Sources (feature 143, 2026-08-28):** this study cites its own sources in "Sources & reliability" below and inline (SCMP, encyclopedia.com, zh.wikipedia, ryokan.or.jp, japanesewiki; Baidu Baike as a weak reference); its settled findings are re-recorded with keys in `research/towns.md` ("The market-day flophouse", `kichinyado-jawiki`, `kichinyado-kotobank`) and `research/urban-features.md` ("Caste geography"). The re-sourcing queue in `research/SOURCES.md` tracks what still rests on a summary.
+
+
 Research pass evaluating the map convention for cheap traveler/peasant lodging ("flophouses")
 against premodern East-Asian historical norms, per the GM's request to sanity-check a handwaved
 rule. **China-first** (Song/Ming rice-south, the physical/economic layer), Japan corroborating

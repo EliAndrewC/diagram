@@ -15,127 +15,147 @@ Same project rule as the Mode B grounding section in [`settlements.md`](../settl
 
 **Evidence:** corroborated
 
-**Sources:** not recorded - the finding is in the prose below; add a key to `SOURCES.md` when it is re-consulted
+**Sources:** `takayama-jinya-city`, `takayama-jinya-jawiki` (Japan); `neixiang-yamen-zhwiki`, `henan-neixiang` (China) - re-sourced 2026-08-28, feature 143
 
 The primary models for a magistrate's manor are the Edo-period *daikansho*/*jin'ya* (rural intendant's office; Takayama Jin'ya is the surviving anchor) and *machi-bugyōsho* (urban magistracy). The Chinese county yamen corroborates the same compound grammar - walled enclosure, office-front/residence-rear, raised hall over kneeling litigants, in-compound shrines, granary + archive + jail - and is drawn on for enrichment, but where the two traditions differ (jail scale, clerk counts, codified axial symmetry) the Japanese civilian form leads, scaled to L7R demographics.
 ## Office in front, residence behind - the two-court split is universal
 
 **Grounds:** drives the required two-court zoning
 
-**Evidence:** researched
+**Evidence:** attested, corroborated
 
-**Sources:** not recorded - the finding is in the prose below; add a key to `SOURCES.md` when it is re-consulted
+**Sources:** `neixiang-yamen-zhwiki` (READ: "前衙后邸…前朝后寝制度"); `takayama-jinya-jawiki` (the office block rebuilt as one range in 1816)
 
 Chinese regulation mandated it outright ("front yamen, rear residence"); Japanese compounds did the same without codification (Takayama's office wing vs residence wing; the Edo south magistracy's street-side office half and rear private half). The chief's household living inside the working compound is the institution's point: the office IS a household, and the guarded internal gate between the courts is the hinge between state and home.
 ## Every administrative compound keeps a shrine
 
 **Grounds:** drives the required modest shrine, Inari default
 
-**Evidence:** researched
+**Evidence:** attested (China), reconstruction (Japan - the Joge plan not re-found)
 
-**Sources:** not recorded - the finding is in the prose below; add a key to `SOURCES.md` when it is re-consulted
+**Sources:** `neixiang-yamen-zhwiki` (jail-god shrine READ; the yamen-god and earth-god shrines SUMMARY-ONLY). Joge jin'ya: searched 2026-08-28 (府中市 上下代官所 pages, k-yagumo.sakura.ne.jp/web5/daik.htm, daikanpanfu2.pdf) - the excavation plan with its two shrines was not re-found; the pdf and the excavation page are the leads
 
 Even a 3-man Japanese branch office (Jōge jin'ya, excavated plan) had two small shrines inside its walls, one of them an Inari-sha; a full Chinese yamen had three (yamen-god, earth-god, jail-god). So the shrine is generic equipment, not a particular; what varies is scale and dedication. Ochiba's two-altar hall is the deliberate exception, justified by its priest-magistrate.
+
+*Re-sourcing note (2026-08-28, feature 143):* the Chinese half is read; the Japanese instance (the Jōge branch office with an Inari-sha inside its walls) rests on a 2026-07 reading that could not be re-fetched - the Fuchū city pamphlet `daikanpanfu2.pdf` and the k-yagumo excavation page are the places to look. The rule (a modest shrine, Inari default) does not depend on the count.
+
 ## Cells are remand, not punishment
 
 **Grounds:** drives the small 1-2 occupant cell and the no-prison-blocks rule
 
-**Evidence:** researched
+**Evidence:** attested
 
-**Sources:** not recorded - the finding is in the prose below; add a key to `SOURCES.md` when it is re-consulted
+**Sources:** `tenmacho-jawiki`, `chuo-royashiki` (READ); `neixiang-yamen-zhwiki`, `henan-neixiang` (the southwest jail, READ). The "west is the death direction / western ghost gate" gloss: searched 2026-08-28, NOT FOUND - unsourced
 
 Edo jails held the accused pending judgment; sentences were exile, flogging, fines, or execution - not prison time - and light offenders were consigned to their home village. Purpose-built prisons existed only as separate metropolitan compounds (Edo's Tenmachō, ~8,850 m2, its own moated block). Cell PLACEMENT is deliberately a free variable: Chinese regulation put the jail in the southwest corner (west being the death direction; the condemned left by the western "ghost gate"), but Rokugan has no equivalent directional rule, so no placement check exists (GM decision, 2026-07).
+
+*Correction to the record (2026-08-28, feature 143):* "not prison time" is too absolute - ja.wikipedia 伝馬町牢屋敷 names 永牢 and 過怠牢 as real, if exceptional, prison-as-sentence categories held there alongside the 未決囚. The rule (small remand cells, no prison blocks) is unaffected: the ordinary sentence was still not confinement. The directional-symbolism gloss (west = death, the ghost gate) was not found in any page read and stands as unsourced; the southwest placement itself is read (Neixiang; Pingyao "west side").
+
 ## Clerks are few, local, and heimen
 
 **Grounds:** drives the clerks' duty room, the no-clerk-housing rule, and the "Heimen clerks" line item added to the budgets.md Harima example, 2026-07
 
 **Evidence:** setting-canon
 
-**Sources:** not recorded - the finding is in the prose below; add a key to `SOURCES.md` when it is re-consulted
+**Sources:** setting-canon - `/host-l7r-repo/gm-assistant/setting/castes.md` (scribes are heimen artisans), `budgets.md`; the historical halves (tedai as farmers' and merchants' second sons; Qing county clerk and runner counts) were not re-sourced in the 2026-08-28 pass - see the batch leftovers in specs/143 ledger `tedai-jawiki` (READ, leftovers pass)
 
 Both traditions ran the paperwork on locally-hired commoners under a tiny elite staff: Japanese *tedai* were farmers' and merchants' second sons; Chinese counties ran on dozens of statutory (hundreds of actual) local clerks and runners. Scaled to an L7R county (~6,800 inhabitants, vs ~100,000-200,000 for a Chinese county), that becomes ~3-4 clerks at ~4-5 koku/yr. They are scribes by caste (heimen artisans per `/host-l7r-repo/gm-assistant/setting/castes.md`), live in town, commute to the manor, and as permanent locals are the office's institutional memory under successive magistrates - and its natural tax-farming pressure point.
+
+*Correction to the record (2026-08-28, feature 143):* "tedai were farmers' and merchants' second sons" - the page read says most were the **children of village and town officials**, hired from peasants and townsmen who knew the district; birth order appears nowhere. The setting decision (heimen clerks, local, few) stands; the "second sons" gloss is struck.
+
 ## Staff housing spans a real spectrum
 
 **Grounds:** drives the staff-housing knob; this SOFTENED the older note that on-grounds barracks were an L5R divergence from Edo practice
 
-**Evidence:** researched
+**Evidence:** attested (Edo externalized), reconstruction (rural on-grounds)
 
-**Sources:** not recorded - the finding is in the prose below; add a key to `SOURCES.md` when it is re-consulted
+**Sources:** `hatchobori-jawiki` (READ: the yoriki/doshin 組屋敷 apart from the office). The rural half - ~30 staff in on-grounds rowhouses at a jin'ya - searched 2026-08-28, not found for Takayama; `takayama-jinya-jawiki` gives the staff (地役人, 手代) but not their housing
 
 Rural jin'ya genuinely housed their ~30 staff on-grounds in rowhouses; it was the big urban magistracies that externalized the workforce to a separate constables' district (Edo's Hatchōbori), keeping only the magistrate's household inside the walls. Both ends are historical; the county-manor default is on-grounds, per the mostly-dependent-free working platoon in demographics.md.
 ## A compound wall is a building, not a boundary line
 
 **Grounds:** drives the structures-abut-walls rule above, the `pack_audit.structures_on_walls` check, and the wall clearance `compound.py`'s placer now leaves
 
-**Evidence:** researched
+**Evidence:** attested (the wall as a thick roofed structure; the tsuijibei precedent), deviation (the drawn 3 ft - legibility, GM 2026-08-28)
 
-**Sources:** not recorded - the finding is in the prose below; add a key to `SOURCES.md` when it is re-consulted
+**Sources:** `hei-jokaku-jawiki`, `kojodan-dobei` (READ)
 
 Japanese compound walls of this class - the *neribei* plastered earth wall over a post core, or a *dobei* on a stone plinth - are genuinely 1.5-3 ft thick at the base and carry their own tiled coping, which is why the vocabulary draws them at true 3 ft rather than as a hairline. Thickness is what makes the wall a wall: it is what stops a determined man, what carries the roof tiles that keep the earth core dry, and what the compound spends real money on. So the ground under it is occupied ground. Buildings ringing a jin'ya court back onto that wall - eaves nearly touching, rear wall a foot or two off it so the two roofs shed separately and the wall stays reachable for patching - which is exactly "abut, do not overlap." Note the direction of the departure from literal reality: we do NOT thin the wall to buy a building an extra foot. A drawn overlap is not a small inaccuracy either, because the wall is painted last and eats the structure's outline, so the map actively shows the building dissolving into the masonry. The rule was written after the GM caught a 9 x 3 ft porch inside Ochiba's court divider (2026-07-24); running the new check across the pool immediately found the systematic version - `compound.py` had been seating every wall-hugging building on the wall's centerline, so all 15 buildings of both placer-composed plans stood 1.5 ft inside the masonry.
+
+*Correction to the record (2026-08-28, feature 143) - CONTRADICTED on the thickness figure, rule unchanged, awaiting the GM:* the sources read give a plastered neribei/dobei at **1 shaku (~30 cm, ~1 ft) or more**, frameless neribei "30cm程度", and only the rammed-earth **tsuijibei** reaching ~1 m (~3.3 ft). The entry's "1.5-3 ft at the base" is not supported as the typical range; the drawn 3 ft wall is a tsuijibei-class figure, not the neribei the prose names. What the rule rests on - a wall is a roofed structure with real thickness, so a building abuts it and never overlaps it - stands on either figure. Whether the vocabulary should draw a county wall at ~1-1.5 ft (a dobei) or keep 3 ft (a tsuijibei, which a well-funded seat could have) is a rendering decision for the GM; recorded in the feature 143 ledger, section G.
+
+**GM ruling (2026-08-28, feature 143 T20) - DEVIATION, disclosed:** the 3 ft wall stays as a **rendering convention for legibility**. The precedent for a wall that thick is the *tsuijibei* (築地塀, rammed earth on a plinth, up to ~1 m - `kojodan-dobei`); the ordinary neribei / dobei of a county compound was ~1 shaku (`hei-jokaku-jawiki`). A reader of the interactive map (feature 134) is to be told exactly this: drawn thicker than the typical wall so the stroke reads, with the tsuijibei as the real form it resembles. Class for the HTML modal: **deviation**.
+
 ## The granary is a staging node, not the terminal store
 
 **Grounds:** drives the granary-weight knob
 
-**Evidence:** researched
+**Evidence:** attested (the relocated castle kura), reconstruction (the Hida staging reading)
 
-**Sources:** not recorded - the finding is in the prose below; add a key to `SOURCES.md` when it is re-consulted
+**Sources:** `takayama-jinya-city` (READ: the 御蔵 moved from the castle third bailey in 1695), `takayama-jinya-jawiki` (the numbered kura rows). "Staged for all of Hida" and the hired-boat transport: searched 2026-08-28, not found in the pages read - leftover `takayama-coverage-summary` (SUMMARY-ONLY: the 御蔵 among the largest grain kura in the country)
 
 Tax rice flowed from village granaries through the administrative compound toward central stores; the office kura held rice in transit plus a local reserve. Remote, high-transport-cost territory kept large on-site granary rows instead (Takayama's onkura, staged for all of Hida). Which end a county sits on is readable from its Mode B geography - water access means through-flow, isolation means storage. The rice moved on HIRED commoner boats under the office's seals - the magistracy owns no hulls; its control is documentary (a tally office at a river landing models this, per Hayakawa).
 ## The courtroom is a room of the office hall, not a freestanding stage
 
 **Grounds:** drives the office-hall program item; found in the 2026-07 accuracy review
 
-**Evidence:** researched
+**Evidence:** attested
 
-**Sources:** not recorded - the finding is in the prose below; add a key to `SOURCES.md` when it is re-consulted
+**Sources:** `takayama-jinya-jawiki` (READ: the 1816 rebuild lists 玄関・吟味所・御役所・大広間 as one block), `takayama-jinya-city` (the 吟味所 and 白州 as one paired feature)
 
 At Takayama Jin'ya the office wing - reception rooms, day office (*goyōba*), official study - is the dominant public building, and the hearing court is one room of that block. A magistracy drawn with only a narrow ceremonial dais-pavilion has nowhere for the magistrate and samurai staff to do the daily paperwork that is most of the job; the residence's private study is the wrong side of the state/home hinge for official business. So the dais band is the FRONT of a deeper office hall (day office + official study behind it).
 ## No interrogation room
 
 **Grounds:** a deliberate omission - do not re-add; GM decision 2026-07
 
-**Evidence:** researched
+**Evidence:** attested (Takayama), setting-canon (the omission)
 
-**Sources:** not recorded - the finding is in the prose below; add a key to `SOURCES.md` when it is re-consulted
+**Sources:** `takayama-jinya-city` (READ: "吟味所、白州はグリ石敷で屋根のあることが特徴的である"); the Rokugan decision is the GM's (2026-07)
 
 Edo justice used codified judicial torture, and Takayama preserves its interrogation room (*ginmisho*) beside the hearing court. In Rokugan torture is unusual though not strictly forbidden, so magistracies keep no room purpose-built for it - questioning happens in the day office or the hearing court like any other business.
 ## Poverty texture is historically genuine
 
 **Grounds:** drives the posting-wealth knob's shabby end
 
-**Evidence:** researched
+**Evidence:** reconstruction
 
-**Sources:** not recorded - the finding is in the prose below; add a key to `SOURCES.md` when it is re-consulted
+**Sources:** searched 2026-08-28 (代官 借財 役所経費 不足; daikan debt) - NOT FOUND: neither the "roughly 90% of intendants carried personal debt" figure nor the snow-on-the-verandas complaint was located in any page read; search syntheses agree only that daikan offices were chronically under-resourced
 
 Office funding chronically undershot real costs - the Edo office surcharge never covered expenses, roughly 90% of intendants carried personal debt, and one administrator complained in writing of snow drifting onto his verandas. A poor magistracy should LOOK underfunded: patched walls, weathered timber, a hall too small for its ceremonies.
+
+*Re-sourcing note (2026-08-28, feature 143):* the two specifics are unsourced and the class is downgraded to `reconstruction` until a page carrying them is read. The knob they ground (a shabby end to posting wealth) is qualitative and does not rest on the 90%.
+
 ## Guest doors feed courts, not flanks
 
-**Evidence:** researched
+**Evidence:** setting-canon (GM rule), reconstruction (the staged-arrival reading)
 
-**Sources:** not recorded - the finding is in the prose below; add a key to `SOURCES.md` when it is re-consulted
+**Sources:** GM rule 2026-07; the historical staging (gate -> court/garden -> genkan) was not re-sourced in the 2026-08-28 pass - leftover
 (GM rule 2026-07; drives the guest-door program bullet and checklist item). Historical arrival was STAGED: gate, then court or garden, then the formal stepped entrance (genkan) - a visitor of rank never stepped from the street into a room or against a building's side. Service circulation is the deliberate inverse (the kitchen postern opens into work space). Caught in practice on Hayakawa's first draft, where the guests' river door opened into the sliver beside the guest house's flank; it now opens into the guest garden. Mode A has no automated validator (hand-authored SVG, no manifest), so this lives as a checklist item; if Mode A ever grows a manifest + gate like Mode B, this is a natural `guest_doors_feed_courts` check.
 ## An ancestral alcove holding office-predecessor tablets is proper only at a LINEAGE-HELD posting
 
 **Grounds:** resolves the 2026-07 accuracy-review flag; Japan-first: the family alcove holds FAMILY dead, and venerating predecessors-in-office is otherwise a Chinese yamen pattern
 
-**Evidence:** researched
+**Evidence:** setting-canon
 
-**Sources:** not recorded - the finding is in the prose below; add a key to `SOURCES.md` when it is re-consulted
+**Sources:** GM canon 2026-07 (the Nagahara Reiji as a provincial lineage); the Chinese yamen practice of venerating predecessors in office was not re-sourced in the 2026-08-28 pass - leftover `mingguanci-zhwiki` (READ: the 名宦祠 at the Confucian temple - a STATE hall for meritorious local officials, not a shrine inside the yamen)
 
 Where a lineage holds the magistracy across generations, the past magistrates ARE the current one's forebears and the alcove is literally ancestral - Hayakawa is such a posting (the Nagahara Reiji are a provincial lineage; GM canon 2026-07), which its guest-wing "9th magistrate" accretion also reflects. At an exam-appointed magistracy, predecessor veneration belongs in the office hall if anywhere, and the residence alcove holds the magistrate's own family tablets.
 ## The Mode A scale is 3 px = 1 ft
 
-**Evidence:** researched
+**Evidence:** liberty (a rendering decision), interpolated (the anchors)
 
-**Sources:** not recorded - the finding is in the prose below; add a key to `SOURCES.md` when it is re-consulted
+**Sources:** `takayama-jinya-city` (the designated site "員数 11,219.05平方メートル" - not the ~9,900 m2 the prose cites; recheck the register); the Jōge ~1,900 m2 figure not re-found (see "Every administrative compound keeps a shrine")
 (GM decision 2026-07; drives the Scale section, the scale bar, and the checklist item). WHY this number: the real anchors bracket a county magistracy neatly - the excavated 3-man Jōge branch office was ~230×88 ft (~1,900 m2) and Takayama Jin'ya's site ~9,900 m2, so a 15-samurai county seat belongs between them; at 3 px/ft both pool manors land there (Hayakawa 247×200 ft ≈ 4,600 m2, Ochiba 267×200 ft ≈ 4,950 m2) and the feature sizes come out real (office hall 113×28 ft, hearing court 113×38 ft, cell 23×17 ft, walls 3 ft thick). At 2 px/ft the same drawing claims Takayama-gross area for a mere county post; at 4 px/ft it pinches below what the drawn program occupies. The scale also extends the settlement ladder cleanly: compound 1/3 ft/px, hamlet/town 1, village 2, city 3.
+
+*Re-sourcing note (2026-08-28, feature 143):* the Takayama anchor reads larger than recorded (11,219 vs ~9,900 m2) and the Jōge anchor could not be re-read; both pool manors (~4,600-4,950 m2) still sit inside the bracket either way, so the scale decision is unaffected.
+
 ## The granary holds grain, not just rice
 
 **Grounds:** drives the `granary` label - never `rice granary` - and the contents clause of the granary-weight knob; researched + source-verified 2026-07
 
-**Evidence:** researched
+**Evidence:** attested (coin for dry fields), researched (the shares and soybeans - not re-read), setting-canon (the Rokugan decision)
 
-**Sources:** not recorded - the finding is in the prose below; add a key to `SOURCES.md` when it is re-consulted
+**Sources:** `hatakata-men-jawiki` (READ: dry-field tax commonly in coin, 関東畑永法). The "~30-40% of tax value as coin" share, the soybean-bale regions and the Chinese mixed-grain regulation: searched 2026-08-28, not read - the NTA 租税史料 page (nta.go.jp/.../network/214.htm) returned unreadable text and zh.wikipedia 常平仓 is silent on grain composition - leftover
 
 What the research found: Edo paddy tax arrived as hulled brown rice in straw bales and dominated a wet-rice county's kura - but the DRY-FIELD share of the tax usually arrived as CASH (Kanto dry-field tax paid in copper outright; ~30-40% of tax value empire-wide came as coin), with SOYBEANS as the recurring in-kind exception (several regions collected the dry-field tax in soybean bales - the state wanted horse fodder); a corner of unhulled rice was kept as famine reserve (stores longer than hulled); and in mountain districts the tax arrived as cash and local goods, the granary shrinking toward a strongroom. Chinese county granaries were mixed-grain by regulation (rice south, millet north, plus wheat and soybeans). The Rokugan-specific decision (GM canon 2026-07): Rokugan is **wealth-rich but coin-poor** (government.md), so cash commutation is LESS common than in Edo Japan - the dry-field share of a Rokugani county's tax arrives IN KIND (soybean and barley bales beside the rice) more often than its Japanese model, and an upland county's tax arrives as goods rather than coin, making its granary part warehouse-of-goods, part strongbox. So: a wet-rice county's granary is rice-dominant with a visible minority of other grain; the label is `granary`.
 ## Fire discipline: halls burn, kura endure
@@ -144,7 +164,7 @@ What the research found: Edo paddy tax arrived as hulled brown rice in straw bal
 
 **Evidence:** researched
 
-**Sources:** not recorded - the finding is in the prose below; add a key to `SOURCES.md` when it is re-consulted
+**Sources:** `sado-bugyosho-fires` (SUMMARY-ONLY: "焼失と再建を5回繰り返しました" seen only in search snippets; the three pages fetched are silent)
 
 Administrative halls were ordinary wooden buildings and burned repeatedly (the Sado magistracy burned and was rebuilt over and over); only thick-walled earthen kura were fireproof, which is exactly why tax grain and documents got dedicated storehouse buildings instead of rooms in the hall.
 ## Fire-water is distributed to the halls, not the kura
@@ -153,7 +173,7 @@ Administrative halls were ordinary wooden buildings and burned repeatedly (the S
 
 **Evidence:** corroborated
 
-**Sources:** not recorded - the finding is in the prose below; add a key to `SOURCES.md` when it is re-consulted
+**Sources:** `tfd-hongou-fire-history` (READ: tubs at the doorway and on the roof as routine practice); `gujianchina-taipinggang`, `thepaper-taipinggang` (READ: 308 vats, placed where water was far, per-courtyard by regulation). Not confirmed in the pages read: hand-bucket stacks and the iroha-gumi brigades as part of the same regime, and "EVERY building" as a rule rather than a custom
 
 What the research found: Edo fire precaution kept standing water at EVERY building - *tensuioke* (rain-fed "heaven-water" tubs) at the doorway and on the roof of each wooden structure, plus hand-bucket stacks, a mandated-plus-customary regime ("keep water ready at each frontage," reinforced by the *iroha-gumi* town-brigade system). The placement logic is distribution to the point of RISK: priority to the flammable wooden buildings, weighted hardest to the kitchen (open kamado, live flame all day). Ming/Qing China corroborates exactly - the Forbidden City's 308 *taiping-gang* / *men-hai* ("gate-sea") water vats sat per-hall / per-courtyard / per-gate, graded by importance and deliberately placed to fill coverage gaps away from the wells. The decision: draw ~8-12 fire-water tubs distributed one per major wooden building, 2 at the kitchen, and the fireproof plaster kura carries none - a token pair clustered at one storehouse is both too few (below the per-building custom) and, if placed at the fireproof kura, backwards (defending the one building engineered not to burn). The tubs are drawn r3.8 glyphs (~2.5 ft - TRUE tensuioke scale; the earlier r5 "slightly legibility-sized" bump was retired with the glyph doctrine, 2026-07-21), and one may sit at the vented WOODEN granary as yard coverage since - unlike the plaster kura - it is flammable. **These tubs are a Mode A (compound-plan) feature only.** At Mode B (settlement) scale a town/city map draws buildings as footprints and renders NO per-building fixture - no per-house well, privy, hearth, or fire-tub (settlement.py keeps even "rain barrels feeding the shaft" off the map, showing only the shared wellhead) - so per-building fire-water is PRESUMED present, not a rendering gap. Fire defense still appears on those maps at the right grain: the communal **fire-watch tower** (*hinomi-yagura*), which walled towns and cities carry by default (`s.fire_tower(...)`; see settlements.md "Fire towers"). Same concern, two scales: the tubs fight the fire at the building, the tower spots it for the town - do NOT scatter tub glyphs onto a settlement map (they would be 1-3 px noise across hundreds of buildings).
 ## The compound has a size HIERARCHY, not just individual sizes
@@ -162,7 +182,7 @@ What the research found: Edo fire precaution kept standing water at EVERY buildi
 
 **Evidence:** liberty
 
-**Sources:** not recorded - the finding is in the prose below; add a key to `SOURCES.md` when it is re-consulted
+**Sources:** Izumo 二間四方 SUMMARY-ONLY (search synthesis; genbu.net unreadable, ja.wikipedia 出雲大社 gives only the 24 m height); the ~67 tsubo mid-rank house and the 2-4 horse county stable: searched 2026-08-28, not found (a yoriki house at 20-30 tsubo is the nearest figure seen) - leftover - the leftovers pass found none of the three (ja.wikipedia 大社造 gives height only; a 13-class Edo residence scheme runs 70-2,300 tsubo; the stable page gives a European 3.5 x 3.5 m stall) - the anchors stay labeled unsourced
 
 What the research found: in a lord's walled compound the domestic footprints rank in a fixed order - the residence is the dominant DOMESTIC building (the administrative office hall may exceed it, being the institution's working core, but no service/utility/storage/sacred building should). Anchors: an elite daidokoro is large but a fraction of the living quarters, not their equal (a whole mid-rank house ≈ 67 tsubo, and a kitchen that size is a tell); a county stable held ~2-4 horses (~55-70 sq ft/stall) so it is a fraction of a ~10-20-man barracks; a Shinto worship hall is small even when grand (Izumo, the national outlier, is ~2×2 ken; a provincial haiden is 3-5 ken), so a shrine hall out-footing the residence is impossible at county tier. The decision: each absolute size gets a ceiling AND the ordering gets its own sweep, because "each building is individually within tolerance" silently permits an impossible ranking (kitchen ≥ living block, stable > barracks, shrine > residence all shipped that way). The deliberate departure: the office hall is allowed to be the largest building - it is not domestic, and a magistracy's public working block genuinely dominated (Takayama).
 ## Packing: a jin'ya is mostly open, and the fix for "too much empty space" is consolidation, NOT a smaller envelope
@@ -171,7 +191,7 @@ What the research found: in a lord's walled compound the domestic footprints ran
 
 **Evidence:** liberty
 
-**Sources:** not recorded - the finding is in the prose below; add a key to `SOURCES.md` when it is re-consulted
+**Sources:** the 37-42% coverage and the 12.6% plaza were measured on plans in 2026-07 and never cited; searched 2026-08-28, not found on the web - the primary is 上嶋善治「史跡高山陣屋跡」岐阜県文化財保護センター調査報告書1 (cited by ja.wikipedia). Label: guess pending that report `takayama-coverage-summary` (SUMMARY-ONLY: 3,000 tsubo site, 1,000 tsubo built - ~33%, just under the 37-42% band the sheets were audited to; the band came from plan measurement, the 33% from a search synthesis - neither read)
 
 ; researched 2026-07 after a GM question about the space between buildings). What the research found: courtyard compounds (Edo jin'ya/daikansho, buke-yashiki, Chinese yamen/siheyuan) were organized AROUND open courtyards - building footprint covered only ~**37-42%** of the walled site for a jin'ya (Takayama's front plaza alone is ~12.6% of its site), and a large open forecourt + the sanded oshirasu (~12-18% of the site) is a load-bearing FEATURE, not slack. So a compound that "feels" empty at ~37% coverage is NOT oversized: the envelope is right (the size-audited Joge<->Takayama band) and **shrinking the walls is the wrong fix**. The real defect, when there is one, is FRAGMENTATION - real jin'ya CONSOLIDATED functions into a few connected ranges (Takayama's main building is one mass: entrance + offices + official rooms + residence + kitchen under continuous roofs; the storehouses are an abutting ROW), whereas a schematic plan tends to scatter a dozen free-standing labeled pavilions with loose slack between them. The decision: keep the envelope and coverage; measure packing with `tools/pack_audit.py` (coverage %, largest vacant rectangle + H/V, aligned building gaps); tighten only GENUINE loose slack - two ordinary wooden SERVICE buildings on a shared edge should abut into a range or sit at a ~6-8 ft fire-gap, not 12-16 ft apart; a plaster KURA keeps a ~6-10 ft fire-gap; and the forecourt / oshirasu / garden / court-divider spaces are features to preserve, not fill. Deliberate departure: our sheets keep buildings somewhat MORE separated than a real consolidated jin'ya (each stays a distinct labeled footprint for legibility), but the gaps are held to fire-gap width, not ahistorical slack - a documented legibility divergence, not an accident. Applied 2026-07: Hayakawa's loose west service column (archive/clerks/stables at 12-16 ft) tightened to fire-gaps (9 ft / 6.7 ft); both manors confirmed at 37-38% coverage, in-band, envelope kept. **Follow-up (feature 007):** the GM then caught that Ochiba's SE granary "cart apron" was actually a ~24 ft void (~1,760 sqft) the check had waved through - three failure modes: (i) `tools/pack_audit.py` reported only the SINGLE largest vacant rectangle, which landed on the legitimate forecourt and hid the SE void behind it; (ii) the GLOBAL coverage average (38%) masked the locally-sparse SE quadrant; (iii) the subagent cleared the void on the unquantified label "cart apron" without deriving how big an apron should be (the laundering-via-plausible-name pattern, one level up from a building cleared by a tolerance). Fixes: `tools/pack_audit.py` now reports the **TOP-N vacant rectangles** (not one) + a **PER-REGION density grid** (a locally-sparse tile shows even when global coverage is in-band - but a tile that reads low because it holds the oshirasu/garden/forecourt is a FEATURE, cross-check the vacant list), and the size-audit PACKING sweep now requires a **QUANTIFIED justification** for any empty region kept as a feature (a cart-and-draft-animal loading apron is ~15-20 ft, not 24). Ochiba's SE cell+barracks were consolidated into an abutting guard range under the granary, leaving a real 16 ft loading apron; the SE now contributes zero large vacant rectangles and its local density rose to ~33%. `tools/pack_audit.py` is now under full Python Discipline (ruff + mypy --strict + `tests/tools/test_pack_audit.py` at 100% coverage).
 
@@ -181,7 +201,7 @@ What the research found: in a lord's walled compound the domestic footprints ran
 
 **Evidence:** researched
 
-**Sources:** not recorded - the finding is in the prose below; add a key to `SOURCES.md` when it is re-consulted
+**Sources:** not applicable - a rendering and tooling decision with nothing physical behind it (research: rendering)
 
 Five defects that a reader spots instantly but the author's eye skips are now hard checks - the KEY LESSON being *which* checks belong in the tool vs the review subagent: a rule with an objective geometric answer (draw order, adjacency, overlap) is cheaper and surer as automated code; a rule needing a feature-vs-slack judgment (is this open ground a courtyard or a void?) belongs in the size-audit subagent. The five:
   1. **Foreground on the TOP LAYER** - anything painted over by a shape drawn LATER in the file reads as buried (the "R" of RESIDENCE was under the servants' quarters; the guest-room tub was under the inner garden). Convention: draw labels, point glyphs and furniture-scale features near the end of the SVG so their ink sits above every fill. **Both sides of this check are deliberately broad** (widened 2026-07-25 after two real defects shipped): the OCCLUDER side is **fill-blind** - any later rect or glyph counts, not just the fills the tool classifies as building or garden - and the OCCLUDED side spans labels, tubs, wells and every sub-building rect. Each defect had slipped a narrow enumeration: a **note box** painted over Ubame's bounty bill (a note box is not a "building or garden", so it was not an occluder at all), and a **new pattern**, `url(#cart-gravel)`, painted over a privy (unknown to `OPEN_PATTERNS`, and a privy is not a "label or tub"). The lesson generalizes past this check: a palette grows, so enumerating occluders by fill silently rots, whereas "drawn later and covering it" cannot. One exemption is needed and only one - a shape drawn wholly INSIDE the item it overlaps is that item's own detailing (a well-mouth circle in its curb, a hearth's fire in its hearth), not burial. Frozen as `tests/fixtures/ubame-occlusion-red.svg`.
@@ -196,26 +216,29 @@ Five defects that a reader spots instantly but the author's eye skips are now ha
 
 **Grounds:** drives the dojo's placement in the Resident-particulars knob rather than the default program; researched 2026-07-24, prompted by a GM question
 
-**Evidence:** setting-canon
+**Evidence:** attested (urban dojo, hanko halls), setting-canon (the L7R numbers)
 
-**Sources:** not recorded - the finding is in the prose below; add a key to `SOURCES.md` when it is re-consulted
+**Sources:** `hanko-jawiki`, `edo-three-dojos-jawiki` (READ); `jinya-jawiki` (READ - scope flag below)
 
 **Followed up 2026-07-25**: the GM asked what the city tier should then carry, and Mode B now draws it - every provincial city gets exactly one state **martial hall** plus a samurai-cohort-rolled count of private **dojos**, with the sizes and the per-capita reasoning in [`settlements.md`](../settlements.md) under "Historical grounding: martial training in a provincial city". The county finding below is unchanged and is the *floor* of that same ladder. What the research found: the standalone dojo with a resident sensei and enrolled students is an URBAN institution in both anchor cultures. In Edo Japan, formal martial instruction lived in castle towns and cities - the domain (*han*) school's martial hall, and the famous commercial fencing dojos of late-Edo metropolitan life; a rural *daikansho*/*jin'ya* (the county magistracy's direct model) had NO *bugeijo* in its program, and rural samurai trained at home in an earthen yard, a hall cleared for practice, or on shrine grounds. The Chinese county yamen is starker still: no training hall at all - military drill happened at separate garrison grounds. The L7R numbers force the same conclusion from inside the setting: a county town holds ~15 samurai total (median-domain.md) - no student body, no living for a sensei - while the provincial city (~225 samurai) and capital (~800) are where l7r.md's own dojo references all sit (Toshi Ranbo's "many dojos", the train-at-a-dojo-in-every-clan pilgrimage vow). A county samurai's FORMAL schooling happened in their youth at a clan school in a city; the county posting only maintains that edge with daily keiko, and ambition rides to the provincial city. The decision: no magistracy draws a dojo by default. Every magistracy still TRAINS - the working platoon and the duty watch keep daily practice - but the venue is multi-use open ground in the compound, not a dedicated building. A magistracy WITH a true dojo is an Ochiba-slot particular that characterizes the resident (a noted swordsman, a retired sensei) and should read as a local distinction, the kind that draws young samurai from neighboring counties. The MARKING convention (GM 2026-07-24): every magistracy draws a `practice ground` - the swept patch + weapon rack + striking-post markers of the vocabulary entry - beside the watch's lodging, sized at ~90-135 sqft per samurai actually drilling (a solo kata footprint runs ~8-10 ft square; paired work roughly doubles it). Marking the GROUND and its GEAR rather than labeling a building is the honest form of the finding - rural practice left equipment, not architecture - and it gives outer-court open ground a quantified packing justification.
+
+*Re-sourcing note (2026-08-28, feature 143):* ja.wikipedia 陣屋 lists a **調練場 drill ground** in a small DOMAIN's jin'ya program. That is a domain seat, not the bakufu daikansho this entry models, and it is ground rather than a hall - so it CONFIRMS the practice-ground convention drawn here and NARROWS the prose: "a rural daikansho had no bugeijo" is read; "a jin'ya had none" is not, because the word covers both institutions. The "boom of 1830-1860" date range was found in no page read.
+
 ## Privies attach to the house; night-soil drives their placement
 
 **Grounds:** drives the Latrines rules and the sanitation sweep; Japan-first, researched 2026-07
 
-**Evidence:** attested
+**Evidence:** attested (night-soil economy), researched (the in-house kawaya - not re-read)
 
-**Sources:** not recorded - the finding is in the prose below; add a key to `SOURCES.md` when it is re-consulted
+**Sources:** `guernica-night-soil` (READ: tsuke-tsubo; farmers paying estates); the farm-privy record at `kotobank-benjo`, `sinyoken-madori` (homesteads.md) covers the FARM case. The samurai-house kawaya "next to the guest room, with a sand box for inspection": searched 2026-08-28 (matsue-bukeyashiki.jp lists 雪隠 only by name; 房総のむら silent) - leftover
 
 What the research found: the samurai-residence *kawaya*/*setchin* was built INTO the house (attested "next to the guest room," off the engawa, with a pull-out sand box under the master's for health inspection), not a free-standing block in the yard; and a well-appointed house had more than one (a guest privy by the reception suite, a family privy toward the back). Night-soil was a contracted, premium commodity - farmers PAID daimyo estates for the right to empty their privies - so collection was by outside carters emptying cesspits, which means pits sit toward a service edge/wall/gate for cart access, never so deep that a collector crosses the inner court. The decision: privy count scales with occupancy (~1 per functional zone, ~3-4 at a county manor), the residence privy attaches to the house with its cesspit to the rear/service wall, and servants'/outer privies line service walls near a gate. The prior "at least one inner, one outer" guidance under-provisioned a 40-60-person compound and let the residence privy float as a detached block - both corrected.
 ## The shady rear is the service strip
 
 **Grounds:** drives the rear-service-strip program item and the internal-dead-space sweep; researched 2026-07
 
-**Evidence:** researched
+**Evidence:** attested (the south garden), reconstruction (the north service strip)
 
-**Sources:** not recorded - the finding is in the prose below; add a key to `SOURCES.md` when it is re-consulted
+**Sources:** searched 2026-08-28 (ja.wikipedia 武家屋敷, 房総のむら 武家屋敷, matsue-bukeyashiki.jp) - none discusses garden orientation or a south-formal / north-service split; the finding stands as reasoning from the sun rule until a source is read - leftover `shoinzukuri-jawiki` (READ: the garden south of the formal rooms; the north side unaddressed)
 
 What the research found: a buke property's prized formal garden sat on the sunny SOUTH side facing the reception rooms, so the shady NORTH rear carried the household's service economy - a vegetable/kitchen garden "in the back," storehouses, a well, the family privy, and the servants'/retainers' quarters (often in the nagayamon range, but service functions filled the back yard). The decision: the north band behind the residence is drawn as a service strip (servants' nagaya + utility + attached privy) or narrowed to a ~6-10 ft cart/servant alley; a wide empty band there is internal dead space (the interior counterpart of an over-loose crop) and also leaves the ~10 on-grounds servants - who exist in the staffing anchors - drawn nowhere. Both pool manors were carrying that empty band and both got a servants' quarters + attached family privy in it.

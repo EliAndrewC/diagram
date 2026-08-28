@@ -113,7 +113,7 @@ approval before /speckit-tasks may run.
 
 - **X. Python Discipline (NON-NEGOTIABLE)**: If the feature ships Python
   code, the plan MUST commit to: `ruff check` + `ruff format --check`
-  passing, `mypy --strict` passing on production modules, red-green TDD
+  passing, the strict type check (pyrefly with the mypy-strict rule set, feature 142) passing on production modules, red-green TDD
   for new non-trivial behavior (test exists and fails before
   implementation lands), `pytest` passing with
   `--cov-fail-under=100` on pure-logic packages, external boundaries

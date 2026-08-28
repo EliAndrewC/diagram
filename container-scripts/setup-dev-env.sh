@@ -61,7 +61,7 @@ check_all() {
     _t "python: pillow (render_cache, crop_map)" "python3 -c 'import PIL'"
     # dev deps - the quality gate itself
     _t "python: pytest + cov + xdist + testmon"  "python3 -c 'import pytest, pytest_cov, xdist, testmon'"
-    _t "python: ruff mypy"                       "python3 -m ruff --version; python3 -m mypy --version"
+    _t "python: ruff pyrefly"                    "python3 -m ruff --version; pyrefly --version"
     # feature 130: the CodeBuild dispatcher's AWS boundary (laptop side only)
     _t "python: boto3 (CodeBuild dispatcher)"    "python3 -c 'import boto3'"
     # the claude() wrapper that appends this repo's standing authorizations to the system prompt.

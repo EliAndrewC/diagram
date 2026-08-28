@@ -467,9 +467,9 @@ carries the sketch its fix would follow.
 
 **Grounds:** `city_moat_has_outfall`; Tango's SE outfall stream
 
-**Evidence:** attested, corroborated
+**Evidence:** reconstruction (physics)
 
-**Sources:** not recorded - the finding is in the prose below; add a key to `SOURCES.md` when it is re-consulted
+**Sources:** `fao-pond-water` (READ: evaporation and seepage as a reservoir's losses); the balance equation itself is textbook hydrology stated from principle, not quoted
 
 - *The physics (the load-bearing "why").* Water balance at a stable level: `outflow = inflow + rain - evaporation - seepage`. With NO outlet, `outflow = 0` forces `inflow = evaporation + seepage`; a real perennial stream delivers far more than a moat's surface can evaporate or its bed can seep, so storage climbs and the moat **overtops its banks** - "the level just keeps rising" is not a steady state, it is flooding. (A stream's upstream profile is set by its own bed slope, not the pond it enters - raising the moat only backs water up a short distance at the mouth, it cannot lift the whole feeder, so you cannot absorb continuous inflow by "raising the stream too.") The terminal-pond regime is real but belongs to a **spring/rain-fed** moat in an **arid** climate where small diffuse input is balanced by evaporation; a wet rice climate (modest evaporation; a high water table and puddled paddies that seal seepage) cannot absorb a live stream, so a stream-fed moat there MUST shed the surplus through a channel.
 
@@ -479,9 +479,9 @@ carries the sketch its fix would follow.
 
 **Grounds:** Tango's stream-fed ring
 
-**Evidence:** attested, corroborated
+**Evidence:** attested (Edo), researched (the Forbidden City flush - SUMMARY-ONLY)
 
-**Sources:** not recorded - the finding is in the prose below; add a key to `SOURCES.md` when it is re-consulted
+**Sources:** `sotobori-jawiki` (READ: the Hirakawa relocated to make the moat; "spiral" is the entry's word); the Forbidden City NW-in / SE-out: zh.wikipedia 筒子河 read and silent on direction; SUMMARY-ONLY from heritage pages - leftover
 
 - *The diverted-stream moat is itself a historical type (GM asked whether Tango's arrangement - a stream seemingly turned into the moat, then resuming its course - was real, 2026-07-23).* It is, and commonly so: a dry-site Chinese seat dug its *hucheng he* by turning a nearby stream through the ring (the Forbidden City's NW-in / SE-out flush is the model Tango already encodes), and Japanese castle towns fed moats by the same river diversions (Edo turned the Hirakawa into its moat spiral). Two honesty notes, both deliberate: (1) **no relic of the stream's pre-diversion bed is drawn through the city** - after centuries of urban buildup the abandoned course is built over, so its absence is realistic, not an omission (do not "fix" this by threading an old channel through the blocks); (2) the ring splits the feeder's flow into two live arcs (west-about and east-about) that rejoin at the outfall, which is why irrigation taps on BOTH flanks can legitimately draw "with the current" (`moat_channels_flow_with_current`).
 
@@ -489,9 +489,9 @@ carries the sketch its fix would follow.
 
 **Grounds:** prose, titles and notes wherever a river is named
 
-**Evidence:** attested, corroborated, liberty
+**Evidence:** attested, corroborated
 
-**Sources:** not recorded - the finding is in the prose below; add a key to `SOURCES.md` when it is re-consulted
+**Sources:** `chang-jiang-jawiki`, `shinano-gawa-jawiki`, `sumida-gawa-jawiki` (READ; 両国川 not confirmed)
 
 *What the research found:* one-river-many-names was the NORM in the pre-modern world, in both reference cultures. China: the Yangtze never had a single pre-modern name - its course ran Tuotuo He / Tongtian He / Jinsha Jiang, then regionally Chuan Jiang (Sichuan) / Jing Jiang (Hubei) / Xunyang Jiang / Yangzi Jiang (originally only the Nanjing-Shanghai reach; modern standardization settled on Chang Jiang). Japan: per-stretch renaming was standard practice - the Chikuma-gawa becomes the Shinano-gawa at the Shinano/Echigo provincial border, the Seta/Uji/Yodo system renames at each confluence, and within Edo itself one river carried different names neighborhood by neighborhood (Asakusa-gawa / Ryogoku-gawa / Okawa / Sumida-gawa, all the same water). The mechanism: pre-modern river names were LOCAL - people named the reach they lived on and used, and nobody needed a whole-course name because nobody administered or traveled the whole course; names broke at both political borders and confluences. One-name-per-river is a modern bureaucratic artifact (national mapping agencies, Japan's 1896/1964 River Laws, the PRC settling on Chang Jiang).
 
@@ -508,6 +508,10 @@ This is grounded in the fact that **wet rice is reclaimed FROM marsh**: the lowe
 Sources: rice domesticated in "naturally marshy areas" + paddy-as-reclaimed-marsh (AAS "Rice, Technology, and History"); Tai-Lake polders diked from marsh/lake; abandoned paddies revert to wetland.
 
 ## The wet toe is as wide as the FAN, not as wide as the valley
+
+**Evidence:** attested (the fan zones, the backswamp), deviation (the drain gradient, disclosed)
+
+**Sources:** `senjochi-jawiki`, `kohai-shicchi-jawiki`, `maff-drain-shape` (READ 2026-08-12 - the entry's own sources paragraph)
 
 **Grounds:** `Settlement.toe_band` (the cross-slope extent of `hinterland()`'s reed marsh)
 
@@ -594,9 +598,9 @@ recharge source; 後背湿地 / 自然堤防 (Japanese Wikipedia, GSI) on backsw
 
 **Grounds:** village/hamlet gens draw a toe marsh; town/city gens draw none
 
-**Evidence:** attested, corroborated
+**Evidence:** attested (yatsu, shitsuden, Hibiya), reconstruction (the investment gradient)
 
-**Sources:** not recorded - the finding is in the prose below; add a key to `SOURCES.md` when it is re-consulted
+**Sources:** `yato-jawiki`, `shitsuden-kotobank`, `hibiya-irie-jawiki` (READ). Reed beds under iriai specifically, fukada persisting to Meiji, Suzhou's canal grid and the night-soil vegetable belt not re-read - leftover `fukada-kotobank` (READ: 深田 defined; reed cutting after harvest)
 
 *What the research found:* the real pattern is a **gradient of drainage investment and land value**. VILLAGES had neither the capital nor the incentive to eliminate every wet margin: residual wet ground at the low edge of village land is very well attested (Japanese *yatsuda* valley-bottom paddies were essentially managed marsh; reed beds were harvested village commons under *iriai* tenure - thatch, screens, annual burning; poorly drained *fukada* "deep fields" persisted until Meiji-and-later drainage projects), and crucially it was USED wet ground - reed bed, wet meadow, more paddy at the reclamation frontier - which is exactly what our sparse harvestable-reed rendering reads as. TOWNS/CITIES commanded corvee-scale hydraulic engineering and premium peri-urban land: ditch discharge went into an engineered moat/canal/river network (Suzhou's canal grid; Edo's canals and the immediate infill of the Hibiya inlet after 1590), and the outskirts were intensively worked (suburban vegetable belts fed by urban night soil; Edo-period reclamation waves around Osaka and Edo). Where wetness DID persist near a city it was **bounded and purposed** - a moat, a lotus/fish pond, a flood basin, a deliberate defensive inundation - never a diffuse seepage marsh below a ditch.
 
@@ -604,9 +608,9 @@ recharge source; 後背湿地 / 自然堤防 (Japanese Wikipedia, GSI) on backsw
 
 **Grounds:** `marsh(poly, role="defense")`, `defense_marsh_girds_the_walls`
 
-**Evidence:** attested, corroborated
+**Evidence:** attested
 
-**Sources:** not recorded - the finding is in the prose below; add a key to `SOURCES.md` when it is re-consulted
+**Sources:** `bitchu-takamatsu-jawiki` (READ). The Song Hebei 塘泺 belt (He Chengju, 988-989) was located (fx361.com 北宋前期河北路塘泺探析; 163.com) but not read this pass - leftover
 
 *What the research found:* the Northern Song built an artificial marsh-and-pond belt across the northern Hebei frontier (from 989, He Chengju's lake chain) specifically as anti-cavalry terrain; Japanese *numajiro* "marsh castles" (Bitchu Takamatsu, besieged by water 1582) used surrounding marsh as their primary defense; and flooded paddies around castle towns functioned as a de facto glacis. The constant: peri-urban wetness that survives is PURPOSED - so a defensive belt is military ground, not waste.
 
@@ -614,9 +618,9 @@ recharge source; 後背湿地 / 自然堤防 (Japanese Wikipedia, GSI) on backsw
 
 **Grounds:** `moat_junctions_swept_with_the_current`, `settlement.moat_swept_tap`, `city_moat_junction_angles`
 
-**Evidence:** attested
+**Evidence:** attested (engineering), researched
 
-**Sources:** not recorded - the finding is in the prose below; add a key to `SOURCES.md` when it is re-consulted
+**Sources:** `offtake-angle-studies` (SUMMARY-ONLY); the FAO structures manual (fao.org/docrep/pdf/010/ai586e/ai586e02.pdf) not fetched - leftover
 
 Canal practice: an offtake leaves its parent at an ACUTE angle pointing downstream - best alignment 0 deg separating out in transition, studied optimum 15-45 deg, explicitly "30 or 45 **instead of 90**"
 
@@ -626,11 +630,15 @@ Canal practice: an offtake leaves its parent at an ACUTE angle pointing downstre
 
 **Evidence:** attested
 
-**Sources:** not recorded - the finding is in the prose below; add a key to `SOURCES.md` when it is re-consulted
+**Sources:** `kagawa-tameike-structure` (READ: one intake facility, 斜樋 into 底樋); "occasionally two" not addressed there
 
 A *tameike* reservoir has a SINGLE outlet sluice (*hi*) - occasionally two - so all its irrigation leaves by one main channel (*yosui*) that then FORKS downstream to the fields, dividing at junctions; it is NOT several independent pipes drilled into the pond.
 
 ## Drawn width is RANK, not discharge - junctions do not conserve it (GM ruling 2026-08-16)
+
+**Evidence:** liberty (GM ruling 2026-08-16)
+
+**Sources:** a rendering convention ruled by the GM; the one physical clause (a sluice-fed head-race is wider and slower than its feeder) is reasoning - research: rendering
 
 *The question.* All four reviewers of the fork re-roll independently flagged the head junction:
 the brook arrives at 7 px, becomes a 14 px head-race below the sluice, and forks into arms

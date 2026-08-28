@@ -1,5 +1,8 @@
 # Phase 0 Research: Paddy-Dominant Near-Ring Farmland
 
+**Sources (feature 138, 2026-08-28):** Part A names its sources in prose without links (recorded 2026-07); cited from `research/fields.md` "Tract sizes" and "Where dry (hatake) crops go".
+
+
 **Feature**: 014-paddy-dominant-near-ring | **Date**: 2026-07-22
 
 This is the Principle XII **opening gate** for the composition correction, plus the mechanism decision. It supersedes exactly one decision in [feature 013's research.md](../013-near-ring-farmland/research.md) - the near-ring land-use *composition* - and references (does not repeat) 013's still-valid grounding: site selection, the von Thünen intensity gradient, the tunable `near_ring_density` knob, and the frame math. The closing gate (re-examine the rendered PNGs, confirming paddy now dominates) is carried in `plan.md` / `tasks.md`.

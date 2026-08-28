@@ -17,6 +17,12 @@
             "command": "/diagram/scripts/idle-tests-hooks.sh prompt",
             "timeout": 30,
             "statusMessage": "Disarming the idle-tests timer; surfacing its last verdict..."
+          },
+          {
+            "type": "command",
+            "command": "/diagram/scripts/agent-stall-hooks.sh prompt",
+            "timeout": 15,
+            "statusMessage": "Checking for stalled background agents..."
           }
         ]
       }
@@ -155,17 +161,6 @@
           {
             "type": "command",
             "command": "/diagram/scripts/idle-tests-hooks.sh stop",
-            "timeout": 30
-          }
-        ]
-      }
-    ],
-    "SessionEnd": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "/diagram/scripts/dmypy-hooks.sh session-end",
             "timeout": 30
           }
         ]

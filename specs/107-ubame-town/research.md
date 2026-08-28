@@ -1,5 +1,8 @@
 # Phase 0 Research: Ubame County Town
 
+**Sources (feature 138, 2026-08-28):** sections 1-4 carry inline links (13) and are re-recorded with keys in `research/urban-features.md` ("Charcoal yards", "Refining forges", "Drawing a clan border"); the Grokipedia *Economy of the Song dynasty* citation is replaced by the en.wikipedia read (see `research/SOURCES.md` queue).
+
+
 **Feature**: [spec.md](./spec.md) | **Date**: 2026-07-26
 
 This is the **opening bookend** required by Constitution Principle XII (NON-NEGOTIABLE). For every

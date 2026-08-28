@@ -56,7 +56,7 @@ At the root of `tests/` sit the suites that are not about one module:
 
     python3 -m pytest -q -n auto                      # everything (from the skill root)
     python3 -m pytest tests/settlement/ -q -n auto    # one mirrored package, WHOLE
-    make done                                          # the real gate: lint + format + mypy + tests + coverage
+    make done                                          # the real gate: lint + format + pyrefly + tests + coverage
 
 **Always `-n auto`.** Serial pytest is about 7x slower here; the 695-manifest regression replay is
 ~2 minutes under the gate and 13.4 minutes serial. And before the gate, run the WHOLE affected file

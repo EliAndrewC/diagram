@@ -1,5 +1,8 @@
 # Phase 0 Research: In-Field & Field-Margin Paddy Features
 
+**Sources (feature 138, 2026-08-28):** D1-D4 carry their own inline links (11); the per-archetype matrix is cited from `research/fields.md` "In-field features".
+
+
 **This is the Principle XII OPENING BOOKEND.** Grave mounds, feng-shui knolls, rock outcrops, and small
 ponds - deliberate non-rice features a paddy tiles around or that sit at its margin. Each element states
 the historical reality (China rice-south first, Japan corroborating), whether the proposed design matches,

@@ -1,5 +1,8 @@
 # Research: Budget-First City Wall Sizing
 
+**Sources (feature 138, 2026-08-28):** section B's grounding is re-recorded in `research/cities/fabric.md` "A county seat's street share, open reserve and civic share" (`chang-morphology-walled-capitals`), and section B's own source-strength caveat (a triangulated figure, not a measured one) carries over.
+
+
 Two research streams: (A) empirical calibration measured from the shipped pool manifests (known-good Tango, known-bad Nagahara); (B) historical grounding for the circulation fraction and open-ground allowances (China first, jokamachi tiebreaker).
 
 ## A. Calibration measurements (from pool/tango.json + pool/nagahara.json)

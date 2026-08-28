@@ -315,9 +315,31 @@ def test_cleared_ground_inside_the_scrub_polygon_lights_nothing(synthetic: Page)
     synthetic.page.mouse.move(x, y)
     synthetic.page.wait_for_timeout(30)
     assert synthetic.on() == {"scrub and rough grazing": 2}, "a cell with a blade in it lights the scrub"
-    synthetic.page.mouse.move(x + 200, y)  # inside the recorded polygon, no blade anywhere near
+    assert synthetic.js("() => getComputedStyle(document.querySelector('g.f.on rect')).fill") == "none", "the region never paints, highlighted or not"
+    synthetic.page.mouse.move(x + 200, y)  # inside the recorded polygon, no blade within two cells
     synthetic.page.wait_for_timeout(30)
     assert synthetic.on() == {}, "cleared ground inside the scrub's polygon lights nothing"
+
+
+def test_the_clicked_class_stays_highlighted_while_its_modal_is_open(synthetic: Page) -> None:
+    """The GM (2026-08-28): while the modal explaining the highlighted thing is active, it stays highlighted."""
+    synthetic.js("() => window.l7rMap.fit()")
+    x, y = synthetic.center("farmhouse", 1)
+    synthetic.page.mouse.move(x, y)
+    synthetic.page.mouse.click(x, y)
+    synthetic.page.wait_for_timeout(50)
+    assert synthetic.dialog()["k"] == "farmhouse" and synthetic.on() == {"farmhouse": 2}
+    bx, by = synthetic.center("byre", 0)
+    synthetic.page.mouse.move(bx, by)
+    synthetic.page.wait_for_timeout(30)
+    assert synthetic.on() == {"farmhouse": 2}, "the pointer does not move the highlight while the modal is open"
+    synthetic.page.mouse.move(1, 199)
+    synthetic.page.wait_for_timeout(30)
+    assert synthetic.on() == {"farmhouse": 2}
+    synthetic.page.keyboard.press("Escape")
+    synthetic.page.wait_for_timeout(30)
+    assert not synthetic.dialog()["open"] and synthetic.on() == {}, "closing the modal releases the highlight"
+    synthetic.js("() => window.l7rMap.fitWidth()")
 
 
 def test_scrolling_stops_at_the_edge_of_the_map(synthetic: Page) -> None:

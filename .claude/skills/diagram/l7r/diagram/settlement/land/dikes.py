@@ -94,9 +94,9 @@ class DikeMixin:
         # byte-identical to before. Keep-out, label, width and the recorded outline still use the FULL band.
         gap_pts = [(float(gx), float(gy)) for gx, gy in gaps]
         gap_hw = 15.0
+        runs: list[list[int]] = []  # declared ahead of the branch: read below under the same `gap_pts` test, which a checker cannot correlate
         if gap_pts:
             keep = [all(math.hypot(x - gx, y - gy) > gap_hw for gx, gy in gap_pts) for x, y, _ei in dense]
-            runs: list[list[int]] = []
             if all(keep):
                 runs = [list(range(n))]
             else:

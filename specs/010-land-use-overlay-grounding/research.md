@@ -1,5 +1,8 @@
 # Phase 0 Research: Land-Use Overlay Historical Grounding
 
+**Sources (feature 138, 2026-08-28):** D1-D5 carry their own inline links (17); the settled findings are cited in `research/archetypes.md` "The three overlay values" (`fortune-1843`) and "Overlay extent".
+
+
 **This is the Principle XII OPENING BOOKEND.** Each element states what the historical reality was
 (China-first, Japan corroborating), whether the proposed design matches it, and what DETERMINES the
 element in reality. Designs that do not match are changed or dropped HERE.

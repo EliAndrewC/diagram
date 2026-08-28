@@ -221,7 +221,7 @@ class CivicWorksMixin:
             return 0
 
         def droad(x: float, y: float) -> float:
-            return min(seg_dist(x, y, rd[k], rd[k + 1]) for k in range(len(rd) - 1))
+            return min(seg_dist(x, y, rd[k], rd[k + 1]) for k in range(len(rd) - 1))  # pyrefly: ignore[unsupported-operation, bad-argument-type]  # dict.get(k, Any-default) typed Any|None by pyrefly, Any by mypy - research 142 R5
 
         def corners(cx: float, cy: float, rw: float, rh: float, rot: float = 0.0) -> list[Pt]:
             th = math.radians(rot)

@@ -124,6 +124,15 @@ below are measured, from the run-log and the browser).
 - [x] T40 **the scrub's hit region from its marks** (FR-016b): `page.marks_region`, 24 px cells with a mark in them, runs merged into rects; browser test: a cell with a blade lights the scrub, cleared ground inside the polygon lights nothing
       research: rendering
 
+- [x] T41 **hit widths per class, as the GM tuned them on the first cut**: bund and beans doubled (8x, floor 12 px; beads 6x radius), field ditch 6x / 9 px, the stream added at 1.5x / 12 px, lanes unchanged
+      research: rendering
+
+- [x] T42 **the scrub's region never paints, and bare patches inside it count**: the grid's rects lacked `fill="none"`, so the highlight rule painted them gold - the "stepped zigzag" edges and the unselected squares the GM saw were the hit grid itself. Now `fill="none"` (invisible under highlight; the visible highlight is the marks, whose edge follows the crop at whatever angle), and the region grows one cell around every mark inside the recorded footprint (a 48 ft closing), so a random bare patch is scrub and the village's clearing is not
+      research: rendering
+
+- [x] T43 **the clicked class stays highlighted while its modal is open** (GM 2026-08-28): `pinned` in page.js; the pointer cannot change the highlight until the modal closes (Escape, the shade, the close button), then it clears; browser test
+      research: rendering
+
 ## Owed at unlock (spec SC-008, FR-009; plan "Performance bookends")
 
 Not tasks of this feature - the spec (round-1 fidelity finding 5) holds the feature to the

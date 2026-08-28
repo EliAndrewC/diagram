@@ -14,7 +14,7 @@ Every entry: what the research found, the decision it drove, and any deliberate 
 
 **Evidence:** reconstruction
 
-**Sources:** not recorded - the finding is in the prose below; add a key to `SOURCES.md` when it is re-consulted
+**Sources:** `aburana-jawiki` (READ: autumn sowing, March-April cutting; rape into the harvested paddy) - the rice months and the Jiangnan rotation calendar were not found on a read page; the rice-rape rotation as one plot's two halves is the OCL *Rapeseed in China* review (403 to the fetcher) - SUMMARY-ONLY `rice-rape-calendar-summary` (SUMMARY-ONLY: sown late Sept-mid Oct, harvested Apr-May; rice transplanted Apr-May)
 
 **RAPE (油菜) was tried and removed**: rice and rape are the two halves of one rotation in the SAME plot (rice May-Oct; rape sown into the drained stubble Oct-Nov, flowering Mar-Apr), so they are never both standing - mixing them at any fraction depicts two seasons at once, and the real spring picture is yellow rape against BARE stubble, not against green rice. Rape belongs on a future SEASONAL axis (a whole-field state), not this per-plot one.
 
@@ -24,7 +24,7 @@ Every entry: what the research found, the decision it drove, and any deliberate 
 
 **Evidence:** interpolated, liberty
 
-**Sources:** not recorded - the finding is in the prose below; add a key to `SOURCES.md` when it is re-consulted
+**Sources:** the lotus area share (a few percent to 10-15%) was found nowhere on 2026-08-28 (zh.wikipedia 莲藕 silent; a provincial share of aquatic-vegetable OUTPUT is the nearest figure) - the interpolation stands as a guess and is labeled one; the liberty is the GM's (2026-07-19)
 
 **A CALIBRATED LIBERTY is recorded here** (constitution XII, GM 2026-07-19): the low band is the bottom TWO levels rather than the single hem on the drain. How wide a valley bottom's wet backswamp ran is unrecorded, and the researched extent for a lotus-growing village (a few percent to ~10-15% of field area) is itself interpolated from a national average that includes regions growing none. The single-hem reading put lotus at ~2% - inside the range, but so sparse the knob stopped making villages look distinct, which is the reason it exists. We chose the upper part of a plausible range for a stated non-historical reason (legibility) and disclosed it.
 
@@ -56,7 +56,7 @@ The research upheld the instinct: the surveyed rectilinear chessboard of the Tai
 
 **Evidence:** attested, reconstruction
 
-**Sources:** not recorded - the finding is in the prose below; add a key to `SOURCES.md` when it is re-consulted
+**Sources:** `sdlib-shunde-jitang` (READ: the dike as pond spoil, planted), `miragenews-polders` (READ: fish-scale polders named for their aerial outlines; organic forms replaced by standardized rectangles after 1949)
 
 *What the research found:* a wei-tian 圩田 / dike-pond dike was dredged pond-mud heaped and packed (the 挖塘培基 dig-and-pile cycle that also formed the ponds), trapezoidal in section, PLANTED with mulberry/willow/crops that bind the soil, walked and lived on, and constantly breached-and-repaired - so it read as a mottled, vegetated green-brown band of VARYING width, not a uniform stroke. Crucially, the *plan form splits*: the surveyed interior ditch/paddy grid was genuinely rectilinear, but the OUTER perimeter dike **followed the natural water edge** (lake / creek / marsh) in gentle curves and non-square bends - the "fish-scale polder" (鱼鳞圩) form named for exactly those irregular overlapping outlines. The dead-straight right-angled rectangle is a **post-1949 industrial** shape (heritage scholars: "the organic forms of polders were replaced by standardized rectangular patterns"), so it is the one genuinely anachronistic thing on the old render.
 
@@ -76,17 +76,19 @@ The research upheld the instinct: the surveyed rectilinear chessboard of the Tai
 
 **Evidence:** reconstruction
 
-**Sources:** not recorded - the finding is in the prose below; add a key to `SOURCES.md` when it is re-consulted
+**Sources:** `usu-windbreak` (READ: shelter up to 30 H - the entry's 10-20 H is inside it), `yashikirin-jawiki` (READ: igune on the north and west; species スギ・マツ・ヒノキ・ケヤキ)
 
 *Why the dike willows do NOT replace the village windbreak* (GM 2026-07-24, asked and answered - do not "simplify" one away): a windbreak's sheltered zone runs ~10-20x barrier HEIGHT, and the homestead belt is full-height dense planting for exactly that reason, while dike willows are POLLARDED low because the withies are the harvest - a single porous row at rooftop height shelters almost nothing at the houses' distance. Worse, willow and mulberry are DECIDUOUS: bare sticks during the NW winter monsoon, the one season shelter matters, which is why homestead windbreaks ran dense/multi-row/evergreen-heavy (the igune of the flat Sendai plain persisted amid abundant field-edge trees for the same reason). And an east-dike village sits downwind of the whole pond sheet - open water is the smoothest fetch there is, so the wind reaches the dike at full strength. Utility rows on the dike and a dense grove at the homestead are DIFFERENT plants doing DIFFERENT jobs; real polder landscapes carried both.
+
+*Correction to the record (2026-08-28, feature 143):* "the igune ... ran dense/multi-row/evergreen-heavy" - the page read names three evergreen conifers and one deciduous broadleaf (keyaki) and never characterizes the mix; the north-and-west placement against the winter wind is read. Softened to "conifer-dominated, with keyaki"; the rule (a dense full-height belt, distinct from pollarded dike willows) is unaffected.
 
 ## The ring canal runs on the INNER toe - 一河围田
 
 **Grounds:** `polder_channels_clear_of_dike`
 
-**Evidence:** attested
+**Evidence:** attested (gated crossings, inner channels), researched (the toe placement and the named forms - not re-found)
 
-**Sources:** not recorded - the finding is in the prose below; add a key to `SOURCES.md` when it is re-consulted
+**Sources:** `cssn-jiangnan-weitian` (READ: "中有河渠，外有门闸" - channels inside the dike, gates through it, opened in drought and shut in flood). The 一河围田 shorthand, the inside-toe placement and the 月样 / 弓样 forms were not found on any page read (zh.wikipedia 圩田 silent) - leftover `weinei-he-summary` (SUMMARY-ONLY: the 月状 / 弓状 forms and gated ends)
 
 *What the research found:* the polder's trunk distribution+collection canal rings the block on the INSIDE toe of the perimeter dike, on the FIELD side (Jiangnan shorthand **一河围田, "one river surrounds the field"**; cross-section outside->in: wild water -> dike -> inner ring canal 圩内河 -> field ditches 浜 -> paddies). Outside the dike is the wild lake/creek the dike holds back, so NO irrigation channel runs out there; water crosses the dike ONLY through gated **sluices** (斗门/水閘/涵洞) cut at discrete points (the inlet + outfall), never as an open cut over the dike body. And the trunk line is *organized-but-organic*: long runs that read straight-ish but GENTLY WAVY (a surveyed dug canal wavers with terrain and repair; crescent 月样 / bow 弓样 trunk forms are attested named options), with rounded corners rather than hard 90-degree turns - the finer laterals are visibly crookeder.
 
@@ -94,9 +96,9 @@ The research upheld the instinct: the surveyed rectilinear chessboard of the Tai
 
 **Grounds:** `water_channels_join_not_cross`, `field_ditch_tips_land_on_the_trunk`
 
-**Evidence:** reconstruction
+**Evidence:** attested
 
-**Sources:** not recorded - the finding is in the prose below; add a key to `SOURCES.md` when it is re-consulted
+**Sources:** `fusekoshi-jawiki` (READ: the inverted siphon under a watercourse, with historical examples), `suirokyo-jawiki` (READ: the aqueduct bridge)
 
 *Why any crossing is wrong here:* wet-rice hydrology has no crossings to draw - a ditch either feeds another or is fed by it, and where two courses genuinely had to pass at different levels the builders put in an aqueduct or an inverted siphon, a distinct structure this vocabulary does not contain.
 
@@ -106,7 +108,7 @@ The research upheld the instinct: the surveyed rectilinear chessboard of the Tai
 
 **Evidence:** attested, corroborated
 
-**Sources:** not recorded - the finding is in the prose below; add a key to `SOURCES.md` when it is re-consulted
+**Sources:** `cssn-jiangnan-weitian` (READ: the tangpu lattice at five-to-seven and seven-to-ten li), `miragenews-polders` (READ). The Pearl-delta "mosaic-like ... boundary blurred" description and the dikes eroded from ~20 m to under 4 m: MDPI *Forests* 13(8):1241 and *Aquaculture* 2022 (both 403) - SUMMARY-ONLY, leftover `dikepond-erosion-summary` (SUMMARY-ONLY: ponds grew, dikes shrank 1967-2016)
 
 *What the research found (web-sourced, cited in the session):* the answer is BOTH, and it splits by system. The individual ponds genuinely WERE rectangular oblongs - hand-dug from marsh (挖塘培基: dig the pond, pile the spoil into the dike), the recurring descriptor a "chessboard" of "rectangular-shaped dikes... with water in between" - because you dig a pond in whatever packs the space and straight dikes are easiest to pile, walk, and plant mulberry on. So all-rectangular ponds are correct; this is the rare farm landscape that does NOT grow organically around the terrain, because the farmers MADE the terrain. BUT the *arrangement* differed by system. The lower-Yangtze **圩田 (wei-tian)** was a SURVEYED rectilinear grid - the Song-era 塘浦 *tangpu* lattice, deliberately engineered - so a clean grid is historically right for it. The Pearl-delta **桑基魚塘 (dike-pond)** instead accreted household-by-household into a MOSAIC; the landscape-ecology literature describes the historical delta not as a uniform chessboard but as "mosaic-like constructed ponds with meandering natural river systems, [with] the boundary between constructed and natural blurred" - rectangles, yes, but of varied sizes at varied local orientations fitted around winding interior creeks (the perfectly-uniform grid is closer to the MODERN consolidated look, which the same sources note eroded the ~20 m dikes to under 4 m).
 
@@ -114,21 +116,25 @@ The research upheld the instinct: the surveyed rectilinear chessboard of the Tai
 
 **Grounds:** the drawn bank width; `_mulberry_rows` crown density
 
-**Evidence:** attested
+**Evidence:** attested (the ratio exists in both orders), deviation (the drawn 6 water : 4 dike as a disclosed regional reading - GM 2026-08-28)
 
-**Sources:** not recorded - the finding is in the prose below; add a key to `SOURCES.md` when it is re-consulted
+**Sources:** `cssn-sangji-yutang` (READ: "基六塘四"), `kuwa-jawiki` (READ: mulberry kept as a low shrub; the height and density SUMMARY-ONLY)
 
 The classic dike-pond prescription was an explicit area ratio of 6 parts water to 4 parts dike (some districts 7:3); measured from the Kuwabata manifest, water is 76% of each parcel (bank 24%) and 50% of the whole block once the shared 22 ft dikes and canal corridors count - bracketing 6:4. The band is not marginal ground: each pond's ~6,300 sq ft (~0.14 ac) bank was the SILK side of the loop (leaf -> silkworm -> frass -> fish -> dredged pond mud -> dike fertility), and the ratio existed because too much water starves the silkworms and too much dike starves the fish.
 
 Silkworm mulberry was not grown as trees: it was COPPICED into low bushes (crowns ~4-6 ft) so the leaf could be stripped several times a year, planted in dense rows on the dike at roughly one bush per 10-20 sq ft - i.e. 300-600 bushes per pond, tens of thousands across the map. At 1 px = 1 ft a crown is a 2-4 px dot and adjacent crowns nearly touch, so drawing the actual trees at honest density IS a packed dot band; individually distinguishable tree glyphs would mean 3-5x crown inflation, forbidden on to-scale maps. No berries either: leaf-stripped coppice barely fruits, and a mulberry fruit is sub-pixel at this scale - crown color carries the read.
 
+*Correction to the record (2026-08-28, feature 143) - CONTRADICTED on the ORDER of the ratio, rule unchanged, awaiting the GM:* the one page read writes the classic prescription as **基六塘四 - six parts DIKE to four parts POND**; the entry (and a people.cn page seen only in a search summary, "六分为塘，四分为基") has it the other way, six water to four dike, and Kuwabata is drawn at 76% water per parcel. The literature carries both orders and a 7:3 variant, so this may be a regional split rather than an error - but as the record stands, the drawn ratio rests on the reading the read source inverts. Listed in the feature 143 ledger, section G, with the option of a follow-up read (Ruddle & Zhong 1988 is the authority) before any redraw.
+
+**GM ruling (2026-08-28, feature 143 T20) - DEVIATION, disclosed regional reading:** Kuwabata keeps its 6 water : 4 dike parcels. The record carries the prescription in BOTH orders - 基六塘四 on the page read (`cssn-sangji-yutang`), 六分为塘、四分为基 in the people.cn summary - and a 7:3 variant; the map follows the water-heavy reading. The interactive map is to say so on every pond and bank of Kuwabata: "a regional reading; the classic prescription is also recorded as six parts dike to four parts pond". Class for the HTML modal: **deviation** (a priced trade-off, not an error).
+
 ## A dike-pond is fed and drained through sluice gates
 
 **Grounds:** `dikeponds_fed_and_drained`, `M['dikepond_sluices']`
 
-**Evidence:** attested
+**Evidence:** attested (gated crossings), researched (the board-sluice detail - SUMMARY-ONLY)
 
-**Sources:** not recorded - the finding is in the prose below; add a key to `SOURCES.md` when it is re-consulted
+**Sources:** `cssn-jiangnan-weitian` (READ: gates through the dike, worked by season - the polder case); the pond sluice "closed with wooden boards" and the inlet-high / outlet-low plumbing come from Ruddle & Zhong (Cambridge 1988; GeoJournal BF00645312 login-walled) and were not re-read: SUMMARY-ONLY - leftover
 
 *What the research found:* a 桑基魚塘 pond is NOT a sealed basin - each connects to the creek/canal network through a SLUICE GATE, "a protected opening in the pond dike that can be easily closed with wooden boards to regulate water level" and, by pulling the boards, drain the pond at harvest. And a pond on a slope is plumbed INLET-HIGH, OUTLET-LOW so water flows downhill through it (the whole dike-pond net runs in series from a high intake to a low outfall). So the channels do not "irrigate" the ponds paddy-style; they are the conveyance-and-drainage network the ponds exchange water with.
 
