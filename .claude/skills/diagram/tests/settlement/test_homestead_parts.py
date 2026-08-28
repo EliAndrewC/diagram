@@ -330,3 +330,43 @@ def test_reclist_reads_a_singleton_record_as_well_as_a_list():
     s.M["houses"] = [{"x": 1, "y": 2, "w": 3, "h": 4}, {"x": 5, "y": 6, "w": 7, "h": 8}]
     assert len(s._reclist("houses")) == 2
     assert s._reclist("no_such_key") == []
+
+
+# ---- feature 145: the refusal branches on the hamlet path that no roll happened to take -----------
+
+
+def test_yard_fits_rejects_a_basin_VERTEX_inside_the_yard() -> None:
+    """The other direction of the two-source paddy test (`_yard_fits`, 2026-08-18): no yard CORNER is
+    inside the basin, but a basin vertex is inside the yard - which is what the check tests too."""
+    s = Settlement(1000, 1000, seed=1)
+    s.M["fields"] = [{"kind": "paddy", "outline": [[495, 495], [505, 495], [505, 505], [495, 505]]}]  # wholly inside the yard
+    assert s._yard_fits(500, 500, 60, 40, 500, 440) is False
+    s.M["fields"] = [{"kind": "paddy", "outline": [[900, 900], [960, 900], [960, 960], [900, 960]]}]  # far away
+    assert s._yard_fits(500, 500, 60, 40, 500, 440) is True
+
+
+def test_garden_fits_rejects_a_spot_on_its_own_threshing_yard() -> None:
+    s = Settlement(1000, 1000, seed=1)
+    yard = (500, 560, 32, 20)
+    assert s._garden_fits(500, 560, 24, 16, 500, 500, yard) is False  # centered ON the yard
+
+
+def test_grove_fits_rejects_a_belt_over_the_flooded_paddy() -> None:
+    s = Settlement(1000, 1000, seed=1)
+    s.field_polys.append([(300, 300), (700, 300), (700, 700), (300, 700)])
+    assert s._grove_fits(500, 500, 60, 30, own=[]) is False  # the whole grove inside the basin
+    assert s._grove_fits(120, 120, 60, 30, own=[]) is True
+
+
+def test_bamboo_stand_that_draws_nothing_records_nothing() -> None:
+    s = Settlement(1000, 1000, seed=1)
+    assert s.bamboo_stand([(500, 500), (500, 500), (500, 500)]) == 0  # zero area: no culm lands, so nothing is drawn
+    assert s.M.get("bamboo_stands", []) == []  # (the key is pre-initialized on the manifest; nothing was appended)
+
+
+def test_watercourse_segs_reads_a_uniform_width_channel() -> None:
+    """`field_channel`'s uniform branch records w0 == w1; the segs helper takes the single stroke."""
+    s = Settlement(1000, 1000, seed=1)
+    s.M["drawn_channels"] = [{"pts": [[100, 100], [400, 100]], "w0": 6.0, "w1": 6.0}, {"pts": [[500, 500]], "w0": 6.0, "w1": 6.0}]
+    segs = s._watercourse_segs()
+    assert any(abs(hw - (6.0 / 2 + 0.0)) < 3.0 for _pl, hw in segs), segs  # the uniform stroke, its half-width plus pad
