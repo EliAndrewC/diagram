@@ -128,3 +128,8 @@ suite is green without its test; mypy is still installed and still runnable by h
 - The whole-engine check is what the quick target runs (no incremental selection); at Rust speeds the tool's own caching, if any, is a bonus and never a requirement.
 - Test files are not type-checked today and are not added to the file set by this feature (scope unchanged).
 - The Decisions Recorded table is omitted: this feature draws and states nothing on a map.
+
+## Review history
+
+- **2026-08-28, spec-fidelity round 1**: four changes - the switch was mandated unconditionally where the GM asked for an experiment (made contingent; "no candidate qualified" a valid completion); FR-007 removed the mypy PACKAGE under the daemon's justification (narrowed to the daemon machinery; the package and the constitution's `mypy --strict` wording reserved to the GM at acceptance, FR-007b); FR-005 set a six-class capability bar and FR-002 attributed it to the GM, who set one bar - "isn't actively crashing" (replaced by measure-and-report with a single can-fail test); SC-002 set a 2 s threshold the GM reserved to themselves (replaced by measurement). All applied.
+- **2026-08-28, spec-fidelity round 2**: **FAITHFUL** - every clause of the request carried, nothing unrequested, no fix introduced a new departure. Aside for the GM: a light screen of the runners-up with a deep measurement of the pick would equally satisfy "pick one of those and then test it out" if full measurement of every candidate proved expensive (it did not - each candidate runs in under a second).
