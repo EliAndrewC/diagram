@@ -1,0 +1,130 @@
+{
+  "clone": "diagram-research",
+  "commit": "cc40133e",
+  "cpus": 22,
+  "environment": "local",
+  "host": "laptop",
+  "hostname": "863bd4879ca8",
+  "image": "laptop",
+  "label": "144-end",
+  "machine": "x86_64",
+  "median_seconds": 29.9,
+  "reference": {
+    "down_deg": 90,
+    "households": 15,
+    "name": "Inashiro",
+    "water_sink": "pond"
+  },
+  "rows": [
+    {
+      "asked": 15,
+      "form": "nucleated",
+      "houses": 15,
+      "seconds": 17.9,
+      "seed": 4,
+      "shape": "crescent",
+      "stages": {
+        "appurtenances": 0.17,
+        "bamboo": 0.0,
+        "crossings": 0.35,
+        "field": 3.61,
+        "frame": 0.02,
+        "hinterland": 7.33,
+        "homesteads": 1.05,
+        "notice": 0.66,
+        "seat": 0.03,
+        "sink": 0.01,
+        "track": 0.89,
+        "water_frame": 0.0,
+        "web": 3.63,
+        "windbreak": 0.13,
+        "woodland": 0.03
+      }
+    },
+    {
+      "asked": 15,
+      "form": "nucleated",
+      "houses": 15,
+      "seconds": 49.5,
+      "seed": 25,
+      "shape": "crescent",
+      "stages": {
+        "appurtenances": 0.78,
+        "bamboo": 0.0,
+        "crossings": 0.22,
+        "field": 4.47,
+        "frame": 0.0,
+        "hinterland": 6.49,
+        "homesteads": 0.99,
+        "notice": 0.76,
+        "seat": 0.03,
+        "sink": 0.01,
+        "track": 0.95,
+        "water_frame": 0.0,
+        "web": 34.68,
+        "windbreak": 0.09,
+        "woodland": 0.01
+      }
+    },
+    {
+      "asked": 15,
+      "form": "nucleated",
+      "houses": 15,
+      "seconds": 19.3,
+      "seed": 39,
+      "shape": "round",
+      "stages": {
+        "appurtenances": 0.53,
+        "bamboo": 0.0,
+        "crossings": 0.39,
+        "field": 2.66,
+        "frame": 0.0,
+        "hinterland": 7.93,
+        "homesteads": 0.53,
+        "notice": 0.56,
+        "seat": 0.04,
+        "sink": 0.01,
+        "track": 1.28,
+        "water_frame": 0.0,
+        "web": 5.05,
+        "windbreak": 0.25,
+        "woodland": 0.03
+      }
+    },
+    {
+      "asked": 15,
+      "form": "nucleated",
+      "houses": 15,
+      "seconds": 40.5,
+      "seed": 47,
+      "shape": "round",
+      "stages": {
+        "appurtenances": 0.08,
+        "bamboo": 0.0,
+        "crossings": 0.39,
+        "field": 26.71,
+        "frame": 0.0,
+        "hinterland": 7.47,
+        "homesteads": 0.56,
+        "notice": 0.61,
+        "seat": 0.04,
+        "sink": 0.0,
+        "track": 1.55,
+        "water_frame": 0.0,
+        "web": 2.88,
+        "windbreak": 0.19,
+        "woodland": 0.0
+      }
+    }
+  ],
+  "seeds": [
+    4,
+    25,
+    39,
+    47
+  ],
+  "subject": "144 T01-T05: measured - the tripwire failures are pre-existing on main's tip (same seeds, same checks); Inashiro unchanged (no trunk road); frozen legacy gens take the default on rebuild",
+  "total_seconds": 127.2,
+  "utc": "20260828T163942Z",
+  "worst_seconds": 49.5
+}

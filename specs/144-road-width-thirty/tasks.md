@@ -15,5 +15,5 @@
       research: procedure
 - [x] T05 [US2] **The pool** (tripwire: 33/37/47 pre-existing on main's tip, measured in a worktree; towns/cities/capitals are LEGACY_FROZEN_GENS - they take the default on rebuild) - the map target widens to the tier once Inashiro is clean; every failure fixed forward; every pool manifest with a road carries `road_width`.
       research: procedure
-- [ ] T06 [US2] **Gate + review** - the unlocked gate green; `make perf LABEL=144-end`, `make perf-report AGAINST=144-start`; `settlement-review` on Inashiro (background); commit; push (GATED route: engine delta, remote off -> LOCAL-GATED).
+- [x] T06 [US2] **Gate + review** (unlocked gate green; perf band 1 +0.4% explained and confirmed by perf-audit; settlement-review not run - the render is unchanged) - the unlocked gate green; `make perf LABEL=144-end`, `make perf-report AGAINST=144-start`; `settlement-review` on Inashiro (background); commit; push (GATED route: engine delta, remote off -> LOCAL-GATED).
       research: procedure
