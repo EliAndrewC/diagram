@@ -357,6 +357,18 @@ hover/click checks for the classes it contains.
   later; (b) the scrub lights up only where its marks are: its hit region is a grid of cells that
   hold a blade or a brush dot, never the recorded hinterland polygon, so ground the scatter
   deliberately keeps clear (*"the middle of the village"*) lights nothing.
+- **FR-017 (glossary; references; sibling links) - the GM's follow-up of 2026-08-28, verbatim in
+  `gm-request.md`**: (a) a GLOSSARY (`interactive/glossary.py`): every occurrence of a defined term
+  in a modal's text - *"bund"*, *"coppiced"*, the uncommon Japanese words (*"iriai"*, satoyama,
+  tameike, yashikirin ...) - shows its definition on hover. (b) REFERENCES: a modal's citations are
+  the keys its research entry's `**Sources:**` line names, read from the record at page-write time
+  (`interactive/sources.py`), with each key's `research/SOURCES.md` text; a "See references (N)"
+  link at the modal's foot opens a second modal ON TOP of the explanation listing them; Escape
+  closes the top one. A class whose entry still names no key says so (*"the research entry records
+  no citation yet"*) rather than showing nothing. (c) SIBLINGS ARE LINKS: instead of the shared
+  distinguishing paragraphs, a modal ends with *"Not to be confused with the X"* where X is a link -
+  hovering it lights X on the map in place of the pinned class, clicking it opens X's modal in
+  place of the current one; the pair texts stay in the registry as the record of each distinction.
 - **FR-012 (verified in a browser)**: the hover, highlight, click and modal behaviors MUST be
   proven by an automated headless-browser test in the suite (constitution VI - a page that was
   never opened has not been verified), running on the reference hamlet's page.

@@ -82,7 +82,7 @@ class Page:
 
     def dialog(self) -> dict[str, Any]:
         return self.js(
-            "() => { const d = document.getElementById('explain'); return { open: d.open, k: d.getAttribute('data-k'), label: d.getAttribute('data-label'), name: document.getElementById('x-name').textContent, labeltext: document.getElementById('x-label').textContent, siblings: document.getElementById('x-siblings').textContent, sources: document.getElementById('x-sources').textContent }; }"
+            "() => { const d = document.getElementById('explain'); return { open: d.open, k: d.getAttribute('data-k'), label: d.getAttribute('data-label'), name: document.getElementById('x-name').textContent, labeltext: document.getElementById('x-label').textContent, siblings: document.getElementById('x-siblings').textContent, sources: document.getElementById('x-refs').textContent }; }"
         )
 
     def close(self) -> None:
@@ -113,8 +113,7 @@ def _mechanics(page: Page, present: list[str]) -> None:
         assert CLASSES[key].label_note[:30] in d["labeltext"]
         assert any(w in d["labeltext"] for w in ("historically accurate", "deliberate deviation", "a guess"))
         for other in CLASSES[key].siblings:
-            assert (CLASSES[other].name in d["siblings"]) == (other in present), (key, other)
-        assert d["sources"].startswith("Sources: ")
+            assert (("the " + CLASSES[other].name) in d["siblings"]) == (other in present), (key, other)
         page.page.keyboard.press("Escape")
         assert not page.dialog()["open"]
     assert page.errors == [], page.errors
@@ -339,6 +338,52 @@ def test_the_clicked_class_stays_highlighted_while_its_modal_is_open(synthetic: 
     synthetic.page.keyboard.press("Escape")
     synthetic.page.wait_for_timeout(30)
     assert not synthetic.dialog()["open"] and synthetic.on() == {}, "closing the modal releases the highlight"
+    synthetic.js("() => window.l7rMap.fitWidth()")
+
+
+def test_glossary_terms_carry_their_definition_and_the_references_open_on_top(synthetic: Page) -> None:
+    """GM 2026-08-28: hover a term for its definition; "See references" opens a second modal above the first."""
+    synthetic.js("() => window.l7rMap.fit()")
+    synthetic.open("bund")
+    spans = synthetic.js("() => Array.from(document.querySelectorAll('#explain .gl')).map(s => [s.textContent, s.getAttribute('data-def').slice(0, 30)])")
+    assert any(t.lower() in ("bund", "bunds", "aze", "azenuri") and d for t, d in spans), spans
+    assert synthetic.js("() => !document.getElementById('x-refs').hidden")
+    synthetic.js("() => document.getElementById('x-refs').click()")
+    synthetic.page.wait_for_timeout(30)
+    assert synthetic.js("() => document.getElementById('references').open && document.getElementById('explain').open"), "the references modal opens ON TOP of the explanation, which stays open"
+    assert synthetic.js("() => document.getElementById('r-list').children.length") >= 1
+    synthetic.page.keyboard.press("Escape")
+    synthetic.page.wait_for_timeout(30)
+    assert synthetic.js("() => !document.getElementById('references').open && document.getElementById('explain').open"), "Escape closes only the top modal"
+    synthetic.page.keyboard.press("Escape")
+    assert not synthetic.dialog()["open"]
+
+
+def test_a_sibling_link_lights_the_other_class_on_hover_and_replaces_the_modal_on_click(synthetic: Page) -> None:
+    """GM 2026-08-28: "Not to be confused with the X" - hover lights X, click opens X's modal in place."""
+    synthetic.js("() => window.l7rMap.fit()")
+    x, y = synthetic.center("windbreak", 0)
+    synthetic.page.mouse.click(x, y)
+    synthetic.page.wait_for_timeout(50)
+    assert synthetic.dialog()["k"] == "windbreak" and synthetic.on() == {"windbreak": 1}
+    assert "Not to be confused with the copse" in synthetic.dialog()["siblings"]
+    lx, ly = synthetic.js("() => { const r = document.querySelector('#explain a.sib[data-k=\"copse\"]').getBoundingClientRect(); return [r.x + r.width / 2, r.y + r.height / 2]; }")
+    synthetic.page.mouse.move(lx, ly)
+    synthetic.page.wait_for_timeout(30)
+    assert synthetic.on() == {"copse": 1}, "hovering the link lights the copse instead of the windbreak"
+    synthetic.page.mouse.move(lx, ly + 200)
+    synthetic.page.wait_for_timeout(30)
+    assert synthetic.on() == {"windbreak": 1}, "leaving the link restores the pinned windbreak"
+    synthetic.page.mouse.click(lx, ly)
+    synthetic.page.wait_for_timeout(50)
+    synthetic.page.mouse.move(lx, ly + 200)  # off the new modal's own link, which the pointer would otherwise be peeking
+    synthetic.page.wait_for_timeout(30)
+    d = synthetic.dialog()
+    assert d["open"] and d["k"] == "copse" and synthetic.on() == {"copse": 1}, "clicking the link opens the copse's modal in place of the windbreak's"
+    assert "Not to be confused with the windbreak" in d["siblings"]
+    synthetic.page.keyboard.press("Escape")
+    synthetic.page.wait_for_timeout(30)
+    assert synthetic.on() == {}
     synthetic.js("() => window.l7rMap.fitWidth()")
 
 

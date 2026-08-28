@@ -133,6 +133,13 @@ below are measured, from the run-log and the browser).
 - [x] T43 **the clicked class stays highlighted while its modal is open** (GM 2026-08-28): `pinned` in page.js; the pointer cannot change the highlight until the modal closes (Escape, the shade, the close button), then it clears; browser test
       research: rendering
 
+- [x] T44 **the glossary** (FR-017a): `interactive/glossary.py`, 30 terms with variants, wrapped by page.js as hover tooltips; a test proves every term is used by some explanation and every explanation's terms are defined
+      research: rendering
+- [x] T45 **references from the record** (FR-017b): `interactive/sources.py` parses each class's research entry for its `**Sources:**` keys and `SOURCES.md` for the citations; a "See references (N)" link opens a second modal on top; 32 of 37 classes now cite (from 30 keys hand-copied before); the five whose entries still name no key - `fallow`, `field pond`, `field rock`, `grave island` (one entry, "not re-sourced on 2026-08-28"), `footbridge` ("none") - are pinned by a test and reported to the GM
+      research: rendering
+- [x] T46 **siblings as links** (FR-017c): "Not to be confused with the X" - hover lights X (the pin yields while the pointer is on the link), click opens X's modal in place; the pair texts stay in `classes.py` as the record
+      research: rendering
+
 ## Owed at unlock (spec SC-008, FR-009; plan "Performance bookends")
 
 Not tasks of this feature - the spec (round-1 fidelity finding 5) holds the feature to the

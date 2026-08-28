@@ -23,6 +23,8 @@ from collections.abc import Iterator, Sequence
 from typing import Any
 
 from .classes import CLASSES, NOT_HIGHLIGHTED, label_phrase, slug
+from .glossary import GLOSSARY
+from .sources import citations, research_sources
 from .tags import ClsTag, Split
 
 _HERE = os.path.dirname(os.path.abspath(__file__))
@@ -283,6 +285,10 @@ def explanations(present: set[str]) -> dict[str, dict[str, Any]]:
     for key, fc in CLASSES.items():
         if key not in present:
             continue
+        # THE CITATIONS COME FROM THE RECORD (GM 2026-08-28): the keys the class's research entry
+        # cites, with each key's SOURCES.md text for the references modal; the registry's own tuple
+        # is the fallback only when the entry cannot be found or names no key.
+        keys = research_sources(fc.entry) or [k for k in fc.sources if k != "not recorded"]
         out[key] = {
             "name": fc.name,
             "what": fc.what,
@@ -290,9 +296,12 @@ def explanations(present: set[str]) -> dict[str, dict[str, Any]]:
             "label": fc.label,
             "label_phrase": label_phrase(fc.label),
             "label_note": fc.label_note,
-            "sources": list(fc.sources),
+            "sources": keys,
+            "refs": citations(keys),
             "entry": fc.entry,
-            "siblings": {other: text for other, text in fc.siblings.items() if other in present},
+            # siblings are LINKS now (hover lights the other class, click opens its modal); the
+            # distinguishing texts stay in the registry as the record, not on the page
+            "siblings": [other for other in fc.siblings if other in present],
         }
     for key in sorted(present - CLASSES.keys()):
         out[key] = {
@@ -302,10 +311,22 @@ def explanations(present: set[str]) -> dict[str, dict[str, Any]]:
             "label": "guess",
             "label_phrase": label_phrase("guess"),
             "label_note": "unregistered class - the gate reports it",
-            "sources": ["not recorded"],
+            "sources": [],
+            "refs": {},
             "entry": "",
-            "siblings": {},
+            "siblings": [],
         }
+    return out
+
+
+def glossary_for(data: dict[str, dict[str, Any]]) -> list[dict[str, Any]]:
+    """The glossary entries whose terms occur in the present explanations - variants and definition,
+    longest variants first so "head race" wins over "head". The page wraps each occurrence."""
+    text = " ".join(str(d.get("what", "")) + " " + str(d.get("why", "")) + " " + str(d.get("label_note", "")) for d in data.values()).lower()
+    out: list[dict[str, Any]] = []
+    for term, (variants, definition) in GLOSSARY.items():
+        if any(re.search(r"\b" + re.escape(v.lower()) + r"\b", text) for v in variants):
+            out.append({"term": term, "variants": sorted(variants, key=len, reverse=True), "def": definition})
     return out
 
 
@@ -369,7 +390,7 @@ def render_page(strings: Sequence[str], tags: Sequence[ClsTag], name: str, meta:
     svg = "\n".join(wrapped)
     svg = svg.replace("<svg ", '<svg id="map" ', 1)
     data = explanations(present)
-    blob = json.dumps(data, ensure_ascii=False).replace("</", "<\\/")
+    blob = json.dumps({"classes": data, "glossary": glossary_for(data)}, ensure_ascii=False).replace("</", "<\\/")
     title = html.escape(name)
     # NO HEADER ON THE PAGE (GM 2026-08-28: "we can get rid of the entire header") - the map already
     # carries its own title placard and scale bar; the page is the map and nothing else.
@@ -387,8 +408,10 @@ def render_page(strings: Sequence[str], tags: Sequence[ClsTag], name: str, meta:
         '<dialog id="explain" aria-labelledby="x-name"><article>'
         '<header><h2 id="x-name"></h2><p id="x-label" class="label"></p></header>'
         '<section id="x-what"></section><section id="x-why"></section><section id="x-siblings"></section>'
-        '<footer><p id="x-sources"></p><p id="x-entry"></p><button id="x-close" type="button">Close</button></footer>'
+        '<footer><p id="x-entry"></p><p><a id="x-refs" href="#references">See references</a></p><button id="x-close" type="button">Close</button></footer>'
         "</article></dialog>\n"
+        '<dialog id="references" aria-labelledby="r-name"><article><header><h2 id="r-name"></h2></header><section id="r-list"></section>'
+        '<footer><button id="r-close" type="button">Close</button></footer></article></dialog>\n'
         f'<script id="classes" type="application/json">{blob}</script>\n'
         f"<script>\n{_asset('page.js')}</script>\n</body>\n</html>\n"
     )
