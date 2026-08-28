@@ -142,3 +142,16 @@ def test_strip_blocked_refuses_a_lane_that_only_crosses_the_strip() -> None:
     assert blocked(s, 500, 500, 30, 20, 0, 0, [], [], None, across) is True
     beside = [([(440.0, 300.0), (560.0, 300.0)], 1.0)]
     assert blocked(s, 500, 500, 30, 20, 0, 0, [], [], None, beside) is False
+
+
+def test_trunk_blocked_refuses_the_canvas_edge_and_a_record_without_a_footprint() -> None:
+    """Feature 146: two arms of the trunk test - a trunk hanging off the canvas, and a record in one of the
+    scanned lists that carries no `x` at all (a synthetic entry another check keeps), which is skipped
+    rather than raising."""
+    s, _plan = _strip_settlement()
+    blocked = hg.homesteads._trunk_blocked
+    assert blocked(s, 20, 500, 10, [], [], None, []) is True, "over the canvas edge"
+    s.M["persimmons"] = [{"note": "a record with no footprint at all"}]
+    assert blocked(s, 500, 500, 10, [], [], None, []) is False, "the footprint-less record is skipped"
+    s.M["persimmons"].append({"x": 500.0, "y": 500.0, "w": 20.0, "h": 20.0})
+    assert blocked(s, 500, 500, 10, [], [], None, []) is True, "and a real one blocks"

@@ -11,3 +11,15 @@ def test_poly_gap_overlap_containment_edgecross_and_separated():
     bar2 = [[4, 0], [6, 0], [6, 10], [4, 10]]  # no vertex inside the other
     assert check_village.poly_gap(bar1, bar2) == 0.0
     assert check_village.poly_gap(sq, [[20, 0], [30, 0], [30, 10], [20, 10]]) == 10.0  # separated by 10
+
+
+def test_polyline_len_and_in_ellipse() -> None:
+    """Feature 146: the two small shared measures - a polyline's run, and a point inside a scaled ellipse."""
+    from l7r.diagram.check_village.common_02_overlap_policy import in_ellipse, polyline_len
+
+    assert abs(polyline_len([(0.0, 0.0), (3.0, 4.0), (3.0, 14.0)]) - 15.0) < 1e-9
+    assert polyline_len([(1.0, 1.0)]) == 0.0
+    e = (100.0, 100.0, 40.0, 20.0)
+    assert in_ellipse(100.0, 100.0, e) is True
+    assert in_ellipse(145.0, 100.0, e) is False
+    assert in_ellipse(145.0, 100.0, e, scale=1.2) is True  # the scaled rim admits it
