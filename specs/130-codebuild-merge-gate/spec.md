@@ -133,7 +133,7 @@ one main, and it is the one every other CodeBuild user has.
 ### User Story 1 - A finished diagram feature merges through CodeBuild, and nothing else does (Priority: P1)
 
 A session has finished a feature that changed diagram engine code, has committed in its clone, and
-runs the merge action - the stop-work procedure's push, which is the `make done` *"that pushes back to
+runs the merge action - the stop-work ritual's push, which is the `make done` *"that pushes back to
 main"*. The merge action decides whether a remote run is warranted; if it is, the run happens on
 CodeBuild against the merge of this work with the latest main, and on green the result lands on
 main. If it is not warranted, it says exactly which condition failed and nothing is spent. A
@@ -335,7 +335,7 @@ does not hold.
 
 1. **Given** GitHub `main` has advanced and the clone is CLEAN, **When** a session turn starts,
    **Then** the prompt hook fetches GitHub `main`, fast-forwards `/diagram` to it under the
-   sync lock, runs render-sync there, and merges it into the clone - in that order.
+   ritual lock, runs render-sync there, and merges it into the clone - in that order.
 2. **Given** GitHub `main` has advanced and the clone is DIRTY (mid-task), **When** a session turn
    starts, **Then** the fetch, the mirror fast-forward and render-sync still run; only the clone
    merge is skipped, with today's "mid-task, sync-in skipped" message. Mid-task work is sacred;
@@ -502,7 +502,7 @@ AWS call, and a refusal names the condition
 **Which `make done` goes remote**
 
 - **FR-017**: The `make done` that runs remotely is the one that is merging work back into main: the
-  stop-work procedure's push, on the gated route. A `make done` invoked on its own, not as part of a
+  stop-work ritual's push, on the gated route. A `make done` invoked on its own, not as part of a
   push, runs locally as it does today, free and unprompted, and its green result counts as a local
   verification under FR-012.
 - **FR-018**: There is NO local override of the gated route. A gated-route delta that cannot be
@@ -556,7 +556,7 @@ AWS call, and a refusal names the condition
 **Sync at the tooling level** (second request)
 
 - **FR-030**: At the start of EVERY session turn, regardless of the clone's working-tree state, the
-  tooling MUST fetch GitHub `main`, fast-forward `/diagram` to it under the sync lock
+  tooling MUST fetch GitHub `main`, fast-forward `/diagram` to it under the ritual lock
   (stopping with a message if it cannot), and run render-sync there - so the mirror and the GM's
   browsed renders never lag GitHub `main` by more than one turn. The clone-side merge keeps today's
   behavior: it runs on a clean clone and is skipped, with the existing message, on a dirty one. The
@@ -591,7 +591,7 @@ remote target
   sessions on the AWS side: each build is its own; the merge project's single slot serializes merges
   and a parked merge build holds it for at most the local reference time - or FR-036's park timeout
   if its dispatcher dies, during which another session's merge queues unbilled. The only
-  cross-session coordination remains the local sync lock, unchanged.
+  cross-session coordination remains the local ritual lock, unchanged.
 
 ### Scope Boundaries
 

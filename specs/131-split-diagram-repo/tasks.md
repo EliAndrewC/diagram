@@ -41,7 +41,7 @@
 - [x] T020 Clone the new repository into the container at the new mount; run T013-T015 for real; record the numbers
 - [x] T021 Repoint CodeBuild: `GITHUB_REPO` on both projects (session's key suffices, R7); the GM pastes the new PAT into the existing secret (revoking the old one is optional housekeeping)
 - [x] T022 Copy the 32 diagram memory notes and their index lines into the new path's memory directory (R6); add a note in gm-assistant's memory saying where the diagram went
-- [x] T023 gm-assistant removal commit: delete ONLY the MOVE items of FR-001's table (the skill, the 47 spec directories, `make-only-hooks.sh`, `_hookmatch.py` and their companion, the three diagram review agents), keep every COPY and STAY item, apply T006/T008/T009; `webapp/make done` green; push through the procedure
+- [x] T023 gm-assistant removal commit: delete ONLY the MOVE items of FR-001's table (the skill, the 47 spec directories, `make-only-hooks.sh`, `_hookmatch.py` and their companion, the three diagram review agents), keep every COPY and STAY item, apply T006/T008/T009; `webapp/make done` green; push through the ritual
 - [x] T024 The `Blocked by` lines and `T000` tasks (T011) land in the NEW repository, where 129 and 130 now live
 - [x] T025 Reference sweep grep across both real repositories and both memory directories: zero LIVE hits (SC-004)
 

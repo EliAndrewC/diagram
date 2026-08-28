@@ -16,4 +16,4 @@
 - [x] **T010** Document the contract in `settlements.md` where authors will read it: "classify the key, get every rule."
 - [x] **T011** Cheap linters, whole affected test files, then `make done` ONCE, backgrounded.
 - [x] **T012** Confirm no map's DEPICTION changed except the fixed defect (the scoped Principle XII close).
-- [x] **T013** Stop-work procedure: commit in the clone, then `sync-with-main.sh done`.
+- [x] **T013** Stop-work ritual: commit in the clone, then `sync-with-main.sh done`.

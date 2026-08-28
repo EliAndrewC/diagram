@@ -75,7 +75,7 @@ gate - are rules for a repository, and the content skills and the webapp should 
 ### User Story 1 - A session works on the diagram project in its own repository (Priority: P1)
 
 A session opens the new repository, creates its clone under `.clones/`, syncs in, edits the engine,
-runs `make reference`, `make quick`, `make done`, and ships through the stop-work procedure - exactly
+runs `make reference`, `make quick`, `make done`, and ships through the stop-work ritual - exactly
 as it did in gm-assistant, with every guard, hook, log and gate behaving identically.
 
 **Why this priority**: This is the split. If the working loop is not identical, the split cost
@@ -91,8 +91,8 @@ quickstart: refused, same messages.
    it is green with the same test count and the same wall-clock as the last gm-assistant gate.
 2. **Given** the new repository, **When** `git log --follow` is run on any engine file, **Then** its
    full history from gm-assistant is present.
-3. **Given** a session in the new repository, **When** it runs the stop-work procedure, **Then** the
-   procedure, the clone-sync hooks, gate-stamp, review-gate and render-sync all work unchanged.
+3. **Given** a session in the new repository, **When** it runs the stop-work ritual, **Then** the
+   ritual, the clone-sync hooks, gate-stamp, review-gate and render-sync all work unchanged.
 4. **Given** the new repository, **When** the GM opens its `main`, **Then** the renders are there
    and `render-sync` regenerates them.
 5. **Given** a `/diagram` invocation in a session on the new repository, **When** it runs, **Then**
@@ -103,7 +103,7 @@ quickstart: refused, same messages.
 ### User Story 2 - gm-assistant keeps working for everything that is not the diagram (Priority: P1)
 
 A session in gm-assistant generates an NPC, edits a wiki page, runs the webapp's `make done`, and
-ships through the procedure. Nothing it uses has gone; nothing diagram-specific fires.
+ships through the ritual. Nothing it uses has gone; nothing diagram-specific fires.
 
 **Acceptance Scenarios**:
 
@@ -206,7 +206,7 @@ gm-assistant.
   as it does the diagram's.
 - **FR-003**: The working loop in the new repository MUST be identical: the same make targets, the
   same guards, the same hooks wired in `.claude/settings.json`, the same `make done` count, the same
-  stop-work procedure, the same render-sync into the repository's `main`.
+  stop-work ritual, the same render-sync into the repository's `main`.
 - **FR-004**: The five non-diagram spec-kit features MUST stay in gm-assistant; the 46 diagram ones
   and this feature's own directory MUST move, keeping their numbers. How numbering continues is the
   session's call, flagged in Assumptions.
@@ -222,7 +222,7 @@ gm-assistant.
 - **FR-007**: The CodeBuild projects MUST be repointed at the new repository; the GitHub token and
   `main` ruleset MUST be created for it (GM actions, listed as such). Feature 130's whole flow -
   GitHub `main` as the integration point, the mirror, the routes - then belongs to the new
-  repository; gm-assistant keeps its current local-main procedure unchanged. Revoking the old token is
+  repository; gm-assistant keeps its current local-main ritual unchanged. Revoking the old token is
   housekeeping the GM may do; it is not required here.
 - **FR-008**: Both repositories MUST start from the constitution AS IT STANDS at extraction,
   unchanged in either (it is already past 1.15.0 in a peer feature's citation; the number is not
@@ -306,7 +306,7 @@ feature 129's or 130's content beyond the `Blocked by` line and the T000 task; m
   unflagged addition; flagged, with its narrower rationale. Also on the reviewer's aside: FR-007
   says feature 130's flow belongs to the new repository and drops the token-revoke requirement.
 - **Round 2** - `CHANGES REQUIRED` (2 findings, both in the disposition table). (1) Four of the six
-  "diagram-only" guards are repository-wide (`gate-stamp.py` has a webapp area and the procedure dies
+  "diagram-only" guards are repository-wide (`gate-stamp.py` has a webapp area and the ritual dies
   without it; `review-gate.sh`'s FAITHFUL clause covers every spec; `gate-hooks.sh` guards the
   webapp's `make done` too; `guard-file-hooks.sh` guards `scripts/` and `settings.json`) - now COPY
   TO BOTH, each trimmed to its repository's areas, with only `make-only-hooks.sh`/`_hookmatch.py`

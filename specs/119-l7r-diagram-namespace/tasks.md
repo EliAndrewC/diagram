@@ -204,7 +204,7 @@ anywhere in `sitegen`.
 - [x] T031 Update `specs/119-l7r-diagram-namespace/spec.md` Status to Implemented with the measured
       closing numbers (artifacts compared, gate results, lines extracted), the way features 111-118
       record theirs.
-- [ ] T032 Stop-work procedure: commit in the clone and run `scripts/sync-with-main.sh done` from
+- [ ] T032 Stop-work ritual: commit in the clone and run `scripts/sync-with-main.sh done` from
       inside it. Remove the `/tmp/119-base` worktree (`git worktree remove`).
 
 ---

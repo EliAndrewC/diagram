@@ -104,7 +104,7 @@ byte-identity harness is the feature's oracle.
 - [x] T030 [P] Grep the skill for prose naming the FILE `settlement/fields.py` and update to the package; leave importable-path references and prior `specs/NNN` artifacts verbatim as historical record (FR-014)
 - [ ] T031 Record in `specs/112-fields-package/research.md` anything the implementation learned that the plan got wrong - especially any method whose assignment moved from data-model.md's table, with the reason
 - [ ] T032 Set this spec's Status to Implemented with the date, and note the final per-file line counts
-- [ ] T033 Final `make done` green, then the stop-work procedure: commit in the clone and run `scripts/sync-with-main.sh done`
+- [ ] T033 Final `make done` green, then the stop-work ritual: commit in the clone and run `scripts/sync-with-main.sh done`
 
 ---
 

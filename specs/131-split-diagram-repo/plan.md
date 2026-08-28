@@ -88,7 +88,7 @@ NEW  l7r-diagram/                        (name: session's assumption)
 ├── .claude/skills/diagram/              identical, with history
 ├── .claude/settings.json                hooks repointed to the new root
 ├── .specify/                            COPY (constitution as it stands)
-├── scripts/                             the diagram-only guards MOVE; the content hooks + procedure COPY
+├── scripts/                             the diagram-only guards MOVE; the content hooks + ritual COPY
 ├── container-scripts/                   COPY + the new mount
 ├── docs/                                COPY, each trimmed to this repository's loop
 ├── specs/0NN..131                       the 46 diagram features + this one
@@ -96,7 +96,7 @@ NEW  l7r-diagram/                        (name: session's assumption)
 
 gm-assistant/                            after the removal commit
 ├── .claude/skills/                      diagram/ gone; /diagram listed as moved
-├── scripts/                             content-skill hooks + procedure + companions kept; diagram-only guards removed
+├── scripts/                             content-skill hooks + ritual + companions kept; diagram-only guards removed
 ├── .specify/                            kept (constitution as it stands)
 ├── docs/                                all kept; iteration-loop.md / session-clones.md / container.md trimmed of the diagram loop
 ├── ruff.toml, container-scripts/        kept

@@ -30,4 +30,4 @@ DIAGRAM_SKIP_RENDER=1 python3 -c "import time,runpy; t=time.process_time(); runp
 
 Ship sequence (last tasks): move gen+json to `pool/capitals/`, add the `GEN_TIME_BUDGETS`
 entry (~4x solo), full sweep, FULL settlement-review (launched the moment the map is final,
-one map per agent), the XII closing bookend against the PNG, then the stop-work procedure.
+one map per agent), the XII closing bookend against the PNG, then the stop-work ritual.

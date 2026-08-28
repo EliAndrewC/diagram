@@ -111,7 +111,7 @@ description: "Task list for feature 121 - the placer tests the footprint it draw
 - [x] T030 Correct the stale reasoning everywhere it appears (FR-013): the deferral in `l7r/diagram/hamletgen/consts.py` naming Ikegami/Kuwabata/Tanada/Hoshigaoka, `hamletgen.md` finding 2 and its "If this is continued" item 2, and the "CENTER vs FOOTPRINT" items 2-3 plus "The collision circle is now blocking FEATURES" sections in `dev/placement.md` / `dev/pool.md` / `CLAUDE.md`. Each becomes DONE with the new measurement, never a fresh deferral.
 - [x] T031 Update `migration-plan.md`'s status table if the village-tier row's prerequisites changed, and record in `dev/placement.md` that the density available from **staggering** homesteads east-west (research.md D2, out of scope here) is the honest way to get what shrinking the pitch would only appear to give.
 - [ ] T032 Final gate: `make done` backgrounded, acting on the completion notification - never polling. Read the log before believing green.
-- [ ] T033 Stop-work procedure: commit in the clone and run `scripts/sync-with-main.sh done`. **Not to be run on a regressed state** - if a regression survives, the work stays in the clone, unpushed, and the GM is told.
+- [ ] T033 Stop-work ritual: commit in the clone and run `scripts/sync-with-main.sh done`. **Not to be run on a regressed state** - if a regression survives, the work stays in the clone, unpushed, and the GM is told.
 
 ---
 
