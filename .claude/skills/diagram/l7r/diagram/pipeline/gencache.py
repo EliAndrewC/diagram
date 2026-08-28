@@ -132,8 +132,26 @@ def split_sources(path: str) -> tuple[str, dict[str, str], set[str]]:
 
     "Module level" is everything that is not inside a function body - so a changed constant, class
     attribute, decorator or import invalidates every map, which is the conservative direction. A
-    file that will not parse hashes whole, likewise conservatively."""
+    file that will not parse hashes whole, likewise conservatively.
+
+    MEMOIZED ON THE FILE'S CONTENT HASH (feature 135): every key computation parses all ~180 engine
+    files - 1.2 s - and the gate's roll cache asks for a key on every served roll, as does every pool
+    map in a sweep. Reading and hashing the bytes is milliseconds; the AST walk is the cost, and it
+    only depends on those bytes, so the walk is done once per distinct content per process."""
     src = Path(path).read_bytes()
+    memo = (path, _sha(src))
+    hit = _SPLIT_MEMO.get(memo)
+    if hit is not None:
+        return hit
+    result = _split_sources(src)
+    _SPLIT_MEMO[memo] = result
+    return result
+
+
+_SPLIT_MEMO: dict[tuple[str, str], tuple[str, dict[str, str], set[str]]] = {}
+
+
+def _split_sources(src: bytes) -> tuple[str, dict[str, str], set[str]]:
     try:
         tree = ast.parse(src)
     except SyntaxError:  # pragma: no cover - defensive: a broken file regenerates everything

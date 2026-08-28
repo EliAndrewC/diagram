@@ -64,29 +64,35 @@ def test_a_map_that_strands_a_farmhouse_is_re_rolled_with_that_ground_forbidden(
     The gate is the oracle at every step - the seats are read off its own FAIL line rather than
     recomputed, because a hand-rolled reach measure was tried and over-counted on five of six seeds.
     So this drives the loop by faking the ORACLE, not by faking geometry."""
-    calls: list[int] = []
 
-    def fake_gate(M, verbose=True, only=None):  # type: ignore[no-untyped-def]
-        calls.append(1)
-        if len(calls) == 1:  # the first roll strands two houses; the gate names them
-            print("FAIL farmhouses_reach_a_way  -> 2 farmhouse(s) at [(1262, 848, 211), (1397, 890, 287)] - omission")
-            return ["farmhouses_reach_a_way"]
-        return []
+    def produce():  # type: ignore[no-untyped-def]
+        calls: list[int] = []
 
-    # PATCH THE SOURCE MODULE, not `hg.driver`: `generate` imports `gate` INSIDE the function, so
-    # the name is re-fetched from `check_village` on every call and a package-level patch is
-    # invisible to it.
-    monkeypatch.setattr(check_village, "gate", fake_gate)
-    seen: list[list[tuple[float, float]]] = []
-    real_build = hg.driver.build
+        def fake_gate(M, verbose=True, only=None):  # type: ignore[no-untyped-def]
+            calls.append(1)
+            if len(calls) == 1:  # the first roll strands two houses; the gate names them
+                print("FAIL farmhouses_reach_a_way  -> 2 farmhouse(s) at [(1262, 848, 211), (1397, 890, 287)] - omission")
+                return ["farmhouses_reach_a_way"]
+            return []
 
-    def spy_build(plan, avoid=()):  # type: ignore[no-untyped-def]
-        seen.append(list(avoid))
-        return real_build(plan, avoid=avoid)
+        # PATCH THE SOURCE MODULE, not `hg.driver`: `generate` imports `gate` INSIDE the function, so
+        # the name is re-fetched from `check_village` on every call and a package-level patch is
+        # invisible to it.
+        monkeypatch.setattr(check_village, "gate", fake_gate)
+        seen: list[list[tuple[float, float]]] = []
+        real_build = hg.driver.build
 
-    monkeypatch.setattr(hg.driver, "build", spy_build)
-    rep = hg.generate(hg.HamletSpec(name="Retry", seed=4, households=10), out_base=None, render=False)
-    assert rep.failures == []  # the re-roll's verdict is the one reported
+        def spy_build(plan, avoid=()):  # type: ignore[no-untyped-def]
+            seen.append(list(avoid))
+            return real_build(plan, avoid=avoid)
+
+        monkeypatch.setattr(hg.driver, "build", spy_build)
+        rep = hg.generate(hg.HamletSpec(name="Retry", seed=4, households=10), out_base=None, render=False)
+        return rep.failures, seen
+
+    # served from the roll cache keyed to this test's source (feature 135): two 10-household rolls, ~36 s fresh
+    failures, seen = rollcache.keyed_to(test_a_map_that_strands_a_farmhouse_is_re_rolled_with_that_ground_forbidden, produce)[0]
+    assert failures == []  # the re-roll's verdict is the one reported
     assert len(seen) == 2  # one roll, then exactly one re-roll
     assert seen[0] == []  # the first roll forbids nothing
     assert (1262.0, 848.0) in seen[1]  # the re-roll forbids what the GATE named
@@ -99,24 +105,28 @@ def test_a_re_roll_that_does_not_help_is_not_kept(monkeypatch, tmp_path) -> None
     one it replaces. Without that a map could be re-rolled into a WORSE state and shipped, which is
     the opposite of the point."""
 
-    rolls: list[int] = []
+    def produce():  # type: ignore[no-untyped-def]
+        rolls: list[int] = []
 
-    def fake_gate(M, verbose=True, only=None):  # type: ignore[no-untyped-def]
-        rolls.append(1)
-        print("FAIL farmhouses_reach_a_way  -> 1 farmhouse(s) at [(100, 100, 200)] - omission")
-        # the RE-ROLL comes back worse than the roll it would replace
-        return ["farmhouses_reach_a_way"] if len(rolls) == 1 else ["farmhouses_reach_a_way", "another_rule"]
+        def fake_gate(M, verbose=True, only=None):  # type: ignore[no-untyped-def]
+            rolls.append(1)
+            print("FAIL farmhouses_reach_a_way  -> 1 farmhouse(s) at [(100, 100, 200)] - omission")
+            # the RE-ROLL comes back worse than the roll it would replace
+            return ["farmhouses_reach_a_way"] if len(rolls) == 1 else ["farmhouses_reach_a_way", "another_rule"]
 
-    monkeypatch.setattr(check_village, "gate", fake_gate)
-    # WITH AN OUT PATH, because rejecting a re-roll leaves THAT roll's files on disk - the keeper has
-    # to be re-emitted, and it cannot be done by finishing the kept Settlement a second time (that
-    # splices the water block twice and its `</g>` closes the <svg> root early; see `_roll`). So the
-    # rejected-re-roll path only exists when there is somewhere to write.
-    out = str(tmp_path / "nohelp")
-    rep = hg.generate(hg.HamletSpec(name="NoHelp", seed=4, households=10), out_base=out, render=False)
-    assert rep.failures == ["farmhouses_reach_a_way"]  # the FIRST roll's verdict is kept, not the worse one
-    assert len(rolls) == 3  # roll, rejected re-roll, then the keeper re-emitted
-    assert rep.fail_lines and "farmhouses_reach_a_way" in rep.fail_lines[0]
-    svg = (tmp_path / "nohelp.svg").read_text()
+        monkeypatch.setattr(check_village, "gate", fake_gate)
+        # WITH AN OUT PATH, because rejecting a re-roll leaves THAT roll's files on disk - the keeper has
+        # to be re-emitted, and it cannot be done by finishing the kept Settlement a second time (that
+        # splices the water block twice and its `</g>` closes the <svg> root early; see `_roll`). So the
+        # rejected-re-roll path only exists when there is somewhere to write.
+        out = str(tmp_path / "nohelp")
+        rep = hg.generate(hg.HamletSpec(name="NoHelp", seed=4, households=10), out_base=out, render=False)
+        return rep.failures, len(rolls), rep.fail_lines, (tmp_path / "nohelp.svg").read_text()
+
+    # served from the roll cache keyed to this test's source (feature 135): three 10-household rolls, ~57 s fresh
+    failures, n_rolls, fail_lines, svg = rollcache.keyed_to(test_a_re_roll_that_does_not_help_is_not_kept, produce)[0]
+    assert failures == ["farmhouses_reach_a_way"]  # the FIRST roll's verdict is kept, not the worse one
+    assert n_rolls == 3  # roll, rejected re-roll, then the keeper re-emitted
+    assert fail_lines and "farmhouses_reach_a_way" in fail_lines[0]
     assert svg.count("<svg") == 1 and svg.count("</svg>") == 1  # finished exactly once...
     assert len(re.findall(r"<g[\s>]", svg)) == svg.count("</g>")  # ...so its groups balance

@@ -17,9 +17,13 @@ roll executed changed - rolls for real, which is exactly when the test has somet
 WHAT IT NEVER SERVES. Any doubt at all - a missing or unreadable entry, a payload that will not
 unpickle, a vanished data file - regenerates. Under `GATE_NO_CACHE=1` and under the FULL run
 (`L7R_TESTS_FULL=1`, where the coverage floors are enforced and a served roll would execute none of the
-rolled code) every call produces. A test that MONKEYPATCHES the engine must not use this: a patched
-function changes what the roll does without changing any hashed source, so the key cannot see it - those
-tests roll for real (tests/gate/hamletgen/test_homesteads.py says so at each one).
+rolled code) every call produces.
+
+A TEST THAT MONKEYPATCHES THE ENGINE goes through `keyed_to(test, ...)`, never bare `obtain`: a patched
+function changes what the roll does without changing any hashed engine source, so the engine key alone
+cannot see it. What CAN change the patch is the test's own code - the lambdas live there - so the test
+function's source joins the key. The roll is then a function of (the engine functions it executed, the
+files it read, the test's source), all three hashed, which is exactly the unpatched argument again.
 
 Excluded from the engine file set (`gencache._NOT_ENGINE`): this module serves rolls and draws nothing.
 """
@@ -27,6 +31,7 @@ Excluded from the engine file set (`gencache._NOT_ENGINE`): this module serves r
 from __future__ import annotations
 
 import hashlib
+import inspect
 import json
 import os
 import pickle
@@ -81,6 +86,15 @@ def obtain[T](subject: str, produce: Callable[[], T]) -> tuple[T, str]:
     _place(pickle.dumps(payload), payload_path)
     _place(json.dumps({"key": gencache.key_for(subject.encode(), deps), "deps": deps, "subject": subject}).encode(), meta_path)
     return payload, "MISS"
+
+
+def keyed_to[T](test: Callable[..., object], produce: Callable[[], T], label: str = "") -> tuple[T, str]:
+    """`obtain` for a roll whose behavior depends on the TEST's own code - its monkeypatches - so the
+    test function's source joins the key: edit the patch and the roll is re-made; leave it and the
+    engine key decides, as for any roll. `produce` must return plain data (what the assertions read),
+    never the Settlement itself."""
+    src = inspect.getsource(test)
+    return obtain(f"test:{test.__module__}.{test.__qualname__}:{label}:{hashlib.sha256(src.encode()).hexdigest()[:16]}", produce)
 
 
 def hamlet(spec: HamletSpec) -> tuple[SitePlan, dict[str, Any]]:

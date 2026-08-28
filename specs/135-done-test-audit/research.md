@@ -88,3 +88,90 @@ Read from the source before measuring (the measurement is R5):
    run at every `make done` although the reference scope enforces no floor; the largest is 10.6 s.
 5. **`make test-file FILE=--collect-only ...` records a green `test-file` verification** (seen
    while measuring R2): a collection is not a test run. Minor; noted for the ledger.
+
+## R5 - the `rolls_map` measurement (per file, alone, 8 workers; 2026-08-27)
+
+The whole-set profile (`make durations MARK=rolls_map`) was killed at 1,000 s twice - a second session's
+identical profile was running on the same box, and two eight-worker sweeps of 100 s rolls contend past
+the cap. Per FILE, alone, every test finishes; no test hangs (each of the six driver tests was also run
+in isolation: 3, 37, 60, 58, 35 s and the cohort's cache hit).
+
+| test | s | rolls |
+|---|---|---|
+| `test_water.py::..inlets_mouth..` (seed 19) | 102.7 | one 16-household polder |
+| `test_water.py::..grid_dike_and_reservoir` (seed 8) | 97.2 | one polder |
+| `test_water.py::..reservoir_backs_off..` (seed 12) | 48.8 | one polder |
+| `test_driver.py::test_a_re_roll_that_does_not_help_is_not_kept` | 59.6 | three 10-household rolls |
+| `test_driver.py::test_the_fan_out_agrees_with_the_serial_path` | 57.6 | seed 41 twice (one in a pool) |
+| `test_driver.py::test_a_map_that_strands_a_farmhouse..` | 37.2 | two 10-household rolls |
+| `test_driver.py::test_the_cli_reports_a_single_hamlet` | 34.9 | one 11-household roll via the CLI |
+| `test_homesteads.py::..lane_frontage..` | 31.4 | one 10-household roll (patched) |
+| `test_homesteads.py::..cluster_seeds_cloud..` | 27.0 | one (patched) |
+| `test_sink.py::..OFF_MAP` | 17.8 | one 12-household roll (patched) |
+| `test_homesteads.py::..linear_frontage_pass_stops..` | 15.6 | one (patched) |
+| `test_rolling.py::..deterministic..` | 15.6 | `roll_village` x3 |
+| `test_rolling.py::..byte_identical..` | 10.0 | a 40-household village x2 |
+| `test_rolling.py::..stream_fed..` | 8.1 | one |
+| `test_rolling.py::..honors_a_pinned_knob` | 3.8 | one |
+| `test_driver.py::test_a_rolled_cohort_passes_the_whole_gate` | (not measured alone at baseline; seeds 41-44 serial: 11, 18, 14, 10 households) | four |
+| `test_gencache.py` (7 toy tests) | 0.2-0.8 | a 3-line gen |
+| the seven stubbed CLI tests | ms | none |
+| `test_the_real_pool_round_trips_through_the_cache` | 58 (marker comment) | Inashiro via subprocess |
+
+## R7 - THE LEDGER: every test the baseline gate ran, its verdict
+
+Phases first, then the pytest set. "after" is measured on the finished work (R8).
+
+| what | before | verdict | after | what changed |
+|---|---|---|---|---|
+| `make reference` (Inashiro seed 4) | 26-37 s, every run | **cheapen** - through the roll cache | 1.7 s HIT; 37 s on a MISS | `rollcache.report`; `GATE_NO_CACHE=1` rolls |
+| lint / format / typecheck | seconds | keep | seconds | - |
+| `hooks-test` (13 guard suites) | 84 s, skipped while the stamp is fresh | keep - already stamp-skipped | same | - |
+| pool sweep `test_village_passes_gate[4]` (FULL-only via a file deselect) | 24-77 s each | **move to full** | `tests/full/test_villages.py` | the deselect list is gone |
+| `test_a_map_is_immune_to_an_upstream_change..` (FULL-only, un-marked) | 214 s | move to full; marked | `tests/full/` | - |
+| `test_every_pool_gen_is_classified`, `test_poolmaps_classifies_each_kind`, `test_slow_gen_budget_fires..`, `test_at_least_one_village_exists`, `test_every_scripted_comb_fan_records_its_design_cell` | silenced by the file deselect | **re-home** to quick (defect R6.1) | ms - 3 s, run again | - |
+| the cohort ratchet (seeds 41-44, serial) | ~3-4 min, ran in every UNLOCKED gate (defect R6.1) | **cheapen** - one seed (41) at the gate through the cache, four under EXHAUSTIVE / FULL | 1.3-2 s HIT | `subset`, `rollcache.report`, `driver.cohort_specs` |
+| fan-out agrees with serial | 57.6 s | move to full (the pool child cannot be cached; the pool path is walked by every regen) | `tests/full/hamletgen/` | - |
+| CLI single hamlet | 34.9 s | move to full (the CLI's writing is exercised by every `make map`) | `tests/full/hamletgen/` | - |
+| seven stubbed CLI tests (`rolls_map`, gate tree) | ms, deselected from quick | **re-home** to quick (defect R6.2) | ms in quick | the marker guard reads the stub |
+| strand-retry (2 rolls) / re-roll-not-kept (3 rolls) | 37 / 60 s | cheapen - `rollcache.keyed_to` (the test's source joins the key) | 1.4 s HIT; 40 / 68 s MISS | plain-data `produce` |
+| three polders | 103 / 97 / 49 s | cheapen - `rollcache.hamlet` | 1.3-2.4 s HIT | - |
+| homesteads x3, sink (patched) | 31 / 27 / 16 / 18 s | cheapen - `keyed_to` | 1.4-2.1 s HIT | - |
+| `roll_village` determinism x2 | 15.6 / 10.0 s | move to full (must roll twice for real) | `tests/full/settlement/` | - |
+| `roll_village` stream-fed / pinned-knob | 8.1 / 3.8 s | cheapen - `rollcache.obtain` | 0.02-1.7 s HIT | - |
+| 7 toy gencache tests | 0.2-0.8 s | keep | same | - |
+| real-pool cache round trip | 58 s | move to full | `tests/full/pipeline/` | - |
+| 4 full-gate coverage sentinels + 5 frozen carriers (`coverage_only`) | 10.6, 3.1, 2.6, 2.3 s ... | move to full (no floor at the gate; defect R6.4) | `tests/full/test_coverage_carriers.py` | - |
+| the bad-map corpus (targeted replay) | 0.2-1.6 s per fixture, hamlet+village under `--tier hamlet` | keep - the merge check's core | same | - |
+| tooling tests (`tests/tooling/`, ~168) | ran at every gate (5.1 s the largest) | cheapen - skipped at the gate while the tooling hash is unchanged since a GREEN gate; never in FULL | 0 when unchanged | `tests/conftest.py`; `state.py` vouches only on green (defect found here) |
+| `test_hinterland..each_cardinal` (3.4 s), `test_build_comb_supply_banks` (2.1 s), `test_propose_rejects_a_seat` (4.2 s), the rest under 2 s | | keep - exhaustive forms, parallel, under 5 s | same | - |
+| every other collected test (~2,300) | < 0.5 s | keep | same | - |
+
+Every key computation parses the ~180 engine files (1.2 s); memoized on content hash in
+`gencache.split_sources` (2.4 s -> ~1.4 s per served roll, and every pool-sweep key benefits).
+
+## R8 - after (2026-08-28, same box, same 8 workers)
+
+| figure | baseline | after |
+|---|---|---|
+| locked `make done`, end to end | 33-39 s (run-log, twenty runs) | **24 s** (`hooks-test` stamp-skipped both times; test phase 16 s, 2,382 tests) |
+| `make reference` | 26-37 s | 1.7 s (HIT) |
+| the map-rolling gate set (`make durations MARK=rolls_map`) | 233 s (T11's measurement; killed at 1,000 s here) | **5.4 s warm** (13 tests); 72 s cold after an engine change reaching every hamlet roll |
+| gate tree whole (`tests/gate`, corpus skipped) | - | 7 s warm / 61-72 s cold |
+| unlocked gate, phase sum (SC-001) | ~270 s (4.5 min) | ~35 s warm (24 + ~10); ~130 s cold after a hamletgen-wide change (24 + 37 + 72) |
+| collection, gate scope | 3,755 tests in 1.28 s | 3,736 tests (the full tree is 19) - unchanged floor |
+| quick tree | 2,010 tests, ~20 s wall | 2,177 tests (+7 CLI tests, +5 pool ratchets, +6 rollcache), 10.3 s pytest |
+
+SC-001 holds warm (13% of baseline) and after a change that re-rolls everything (48%): the second
+figure is the honest cost of "re-roll only when the code the roll executes changed", and it is the
+figure the GM should judge - a hamletgen-wide edit is exactly when the rolls have something to say.
+SC-004 holds (24 s vs 33-39 s). SC-005 holds (collection unchanged).
+
+## R9 - what the whole-set profile taught (the "hang")
+
+Feature 133's lock note says the unlocked gate "hangs in one 24-seed cohort roll". Two whole-set
+`rolls_map` profiles here ran past 1,000 s while a sibling session's profile shared the box; per file,
+alone, every test finished and the slowest was 103 s. Under xdist's default `load` scheduler two 50-100 s
+rollers land on one worker; `make test-file` now passes `--dist worksteal` like `test` does. Whether
+the lock note's hang is contention or a real deadlock is for the session isolating it; the roll cache
+removes both the contention and the repeated rolls from the merge check.

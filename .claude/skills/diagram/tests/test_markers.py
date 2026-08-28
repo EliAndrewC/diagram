@@ -30,7 +30,7 @@ from tests._scope import EXHAUSTIVE
 # gate tests as un-marked map-rollers. They roll nothing.
 #
 # So a dotted call must come off the generator module, and only the distinctive bare names count.
-ROLLING_ATTRS = frozenset({"build", "generate", "main", "roll_village", "cohort", "gate_obtain", "hamlet", "report"})
+ROLLING_ATTRS = frozenset({"build", "generate", "main", "roll_village", "cohort", "gate_obtain", "hamlet", "report", "keyed_to"})
 ROLLING_RECEIVERS = frozenset({"hg", "hamletgen", "driver", "rollcache"})  # rollcache.hamlet / .report roll on a miss (feature 135)
 ROLLING_BARE = frozenset({"roll_village", "cohort", "gate_obtain"})
 

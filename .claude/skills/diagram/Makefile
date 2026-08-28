@@ -569,7 +569,8 @@ tooling:        ## run every `tooling` test (make/ci/pipeline, exhaustive) and r
 	@$(GATE_EXHAUSTIVE_ENV) python3 -m pytest -n $(XDIST_WORKERS) -q --no-cov -m tooling && python3 -m l7r.diagram.ci tooling-green
 
 test-file:      ## run ONE test file, whole              FILE=tests/pipeline/test_gencache.py
-	@python3 -m pytest -n $(XDIST_WORKERS) -q --no-cov $(FILE) && $(STATE) green-local test-file
+	@python3 -m pytest -n $(XDIST_WORKERS) --dist worksteal -q --no-cov $(FILE) && $(STATE) green-local test-file
+# (worksteal, feature 135: two 50 s rollers landing on one worker under the default scheduler doubled a file's wall clock)
 
 # WHY EVERY CHECK FAILED ON THE REFERENCE MAP, in detail rather than by name.
 #

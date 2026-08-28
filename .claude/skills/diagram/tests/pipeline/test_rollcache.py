@@ -14,6 +14,10 @@ import pytest
 
 from l7r.diagram.pipeline import gencache, rollcache
 
+# `keyed_to` through an alias: the marker guard (tests/test_markers.py) reads `rollcache.keyed_to` as a map roll, which
+# it is everywhere but here - this file rolls a TOY engine in milliseconds and belongs to the quick tree.
+keyed_to_toy = rollcache.keyed_to
+
 _ENGINE = """
 CONSTANT = 3
 
@@ -87,6 +91,23 @@ def test_a_half_written_or_foreign_entry_is_doubt(tmp_path, monkeypatch):
     assert rollcache.obtain("toy", produce)[1] == "MISS", "a subject collision under one hash is never served"
     (entry / "meta.json").write_text("{")
     assert rollcache.obtain("toy", produce)[1] == "MISS"
+
+
+def test_a_roll_keyed_to_a_test_is_remade_when_that_test_changes(tmp_path, monkeypatch):
+    """`keyed_to` puts the test function's SOURCE in the key - the only place a monkeypatch can change."""
+    _, _, produce = _toy(tmp_path, monkeypatch)
+
+    def a_test():
+        return 1
+
+    def a_test_edited():
+        return 2
+
+    first = keyed_to_toy(a_test, produce)
+    assert first == ({"value": 7}, "MISS")
+    assert keyed_to_toy(a_test, produce) == ({"value": 7}, "HIT")
+    assert keyed_to_toy(a_test, produce, label="other")[1] == "MISS", "a label is a different roll"
+    assert keyed_to_toy(a_test_edited, produce)[1] == "MISS", "a different source is a different key"
 
 
 @pytest.mark.parametrize("var", [gencache.GATE_BYPASS, rollcache.FULL_ENV])
