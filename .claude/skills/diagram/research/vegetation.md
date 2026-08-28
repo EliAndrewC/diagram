@@ -55,7 +55,7 @@ crown constant, the researched one, for every stand on the map.
 
 **Evidence:** observed (the GM's own trees), derived from the density entry above
 
-**Sources:** not recorded - the finding is the GM's observation and the entry above; add a key when the stand structure is re-consulted
+**Sources:** the GM's observation (2026-08) and the density entry above (`satoyama-enwiki`; the stems/ha band SUMMARY-ONLY, see "Forest density and crown size") - re-sourced 2026-08-28, feature 143; the stand structure itself is not separately asserted
 
 The GM, on the interactive map's highlight: *"practically every tree might have a smaller tree
 underneath it ... I understand that real life trees can, in fact, overlap with each other ... but I
