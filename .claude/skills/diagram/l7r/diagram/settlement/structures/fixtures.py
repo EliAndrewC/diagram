@@ -454,15 +454,15 @@ class PublicFixturesMixin:
         happened to fail would have left the other seating boards in water on the next re-roll.
 
         Reads the DRAWN courses (`drawn_channels`) as well as the recorded ones, because the filleted
-        stroke is what a reader sees and what the overlap matrix measures."""
-        for key, default in (("streams", 9.0), ("channels", 2.5), ("field_ditches", 4.2), ("drawn_channels", 2.5)):
-            for rec in self.M.get(key) or []:
-                pts = rec.get("poly") or rec.get("pts") or []
-                need = float(rec.get("w") or default) / 2 + half
-                for i in range(len(pts) - 1):
-                    if seg_dist(x, y, (pts[i][0], pts[i][1]), (pts[i + 1][0], pts[i + 1][1])) < need:
-                        return False
-        return True
+        stroke is what a reader sees and what the overlap matrix measures.
+
+        INDEXED (feature 138): `place_kosatsuba` asked this 17,407 times on one polder, each call walking
+        all ~720 water segments - 12.5 million `seg_dist`. The segments are filed once in a grid (rebuilt
+        when any of the four lists changes length, the same rule `_water_obstacles` uses) with each
+        segment's own half-width; a probe measures only its cell's segments. Same predicate, same answer."""
+        from l7r.diagram.settlement._geom.water_index import water_index
+
+        return water_index(self).clear(x, y, half)
 
     def caption_lane_clearance(self: Settlement, qx: float, qy: float, chw: float, size: float = 8.0) -> float:  # type: ignore[misc]
         """Least distance from a caption's BOX to any lane's tread EDGE (negative = standing on it).
