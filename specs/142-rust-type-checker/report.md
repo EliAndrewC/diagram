@@ -85,7 +85,7 @@ change, so this lands by the GATED route on a green gate.
   the `CLAUDE.md` guard-table row (replaced by the pyrefly row); `docs/iteration-loop.md` rewritten.
 - New test: `tests/tooling/test_typecheck.py` - a planted wrong-argument-type fixture fails
   `pyrefly check` under the project's own rules; the two file lists are equal.
-- The gate: GATE_LINE (gate still red - see tasks T08)
+- The gate: `make done` GREEN - 3902 passed, 0 failed, 21.6 s test phase (2026-08-28, scope locked, after the three stale renders were removed); `green-local (done)` recorded
 
 ## Two decisions reserved to you (FR-007b)
 

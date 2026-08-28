@@ -20,6 +20,6 @@ All tasks `research: rendering` - nothing here is about the world; tooling only.
 
 ## Phase 4 - gate, report, acceptance
 
-- [ ] T08 the gate once (engine tokens changed in T04 -> it re-keys); first run 2026-08-28: 1 failed / 3901 passed (the stale-render pair, report.md last section); second run after removing the three stale renders: GATE_LINE (gate still red - see tasks T08)
+- [x] T08 the gate once (engine tokens changed in T04 -> it re-keys); first run 2026-08-28: 1 failed / 3901 passed (the stale-render pair, report.md last section); second run after removing the three stale renders: `make done` GREEN - 3902 passed, 0 failed, 21.6 s test phase (2026-08-28, scope locked, after the three stale renders were removed); `green-local (done)` recorded
 - [x] T09 `report.md`: the one-sentence answer, the R2 table, the per-quick delta, the pick, the enforced/not-enforced list (FR-005), the residual split (FR-006), the two questions reserved to the GM (mypy in the lockfiles; the constitution's `mypy --strict` wording, with the proposed replacement text) - FR-007b, FR-009
 - [ ] T10 **the GM's acceptance** (FR-010) - stays open until the GM accepts the report and the pick in their own words; nothing pushes before (the lands-nothing guard enforces it). On acceptance: their rulings on the two reserved questions are applied as follow-up edits under this feature, then the gate and the stop-work procedure
