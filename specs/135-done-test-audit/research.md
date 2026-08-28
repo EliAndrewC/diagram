@@ -200,8 +200,8 @@ coverage resolves a module-name source by importing it, and under the `l7r` name
 loaded the engine a second time. Package DIRECTORIES are matched by path and import nothing.
 
 **End to end, locked, after the second pass (the verification record deleted so nothing short-circuits):
-`make done` 0m17.333s (2553 passed in 12.50s, coverage over the three packages this diff touched, tooling tests skipped - unchanged
-since the previous green gate).** The run before it took 51.8 s because the reference roll MISSED: a new
+`make done` 0m17.333s (2553 passed in 12.50s, coverage over the three packages this diff touched, the 176 tooling tests RUN because the
+measurement deleted the record that lets them skip - steady state is ~1.5 s lower still).** The run before it took 51.8 s because the reference roll MISSED: a new
 module-level constant in `ci/delta.py` moved every roll's key, by design (the pool cache hashes every
 engine module's top level, conservatively) - the honest cost of any module-level edit anywhere in the engine. Steady state - a one-module engine edit, tooling unchanged - is lower
 still: the test phase alone measured 11.9 s wall with coverage narrowed to one module.
