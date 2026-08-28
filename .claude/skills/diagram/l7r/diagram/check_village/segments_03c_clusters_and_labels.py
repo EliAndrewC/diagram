@@ -10,7 +10,6 @@ from .common_01_geometry import (
     Poly,
     _box_hits_poly,
     convex_hull,
-    point_in_poly,
     poly_area,
     poly_dist,
 )
@@ -148,30 +147,6 @@ def _seg_0232__cluster_abuts_fields(
 # which meant it silently skipped both cities even after the other two were converted.
 
 
-def _seg_0233__down_deg(*, meta: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 233 (down_deg) - body verbatim from the legacy gate() (feature 022)."""
-    down_deg = meta.get("down_deg")
-    return _kept(locals(), ('down_deg',))
-
-
-def _seg_0234___fdd_here(*, M: Any = _UNBOUND, f: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 234 (_fdd_here, f) - body verbatim from the legacy gate() (feature 022)."""
-    _fdd_here = {f.get("name"): f["down_deg"] for f in M.get("fields", []) if f.get("down_deg") is not None}
-    return _kept(locals(), ('_fdd_here', 'f'))
-
-
-def _seg_0235__drains(*, M: Any = _UNBOUND, _fdd_here: Any = _UNBOUND, down_deg: Any = _UNBOUND, fd: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 235 (drains, fd) - body verbatim from the legacy gate() (feature 022)."""
-    drains = [(fd["poly"], _fdd_here.get(fd.get("field"), down_deg)) for fd in M.get("field_ditches", []) if fd.get("role") == "drain" and len(fd.get("poly", [])) >= 2]
-    return _kept(locals(), ('drains', 'fd'))
-
-
-def _seg_0236__dd_(*, dd_: Any = _UNBOUND, drains: Any = _UNBOUND, pl_: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 236 (dd_, drains, pl_) - body verbatim from the legacy gate() (feature 022)."""
-    drains = [(pl_, dd_) for pl_, dd_ in drains if dd_ is not None]
-    return _kept(locals(), ('dd_', 'drains', 'pl_'))
-
-
 # NOT APPLIED AT CITY SCALE (GM decision 2026-07-25). City farms are RING-placed - s.ring lays
 # them around the whole field envelope as a unit, so the low-side arc necessarily lands below the
 # collector; by this check's own rationale that belongs with the NUCLEATED exemption ("a cluster is
@@ -180,69 +155,6 @@ def _seg_0236__dd_(*, dd_: Any = _UNBOUND, drains: Any = _UNBOUND, pl_: Any = _U
 # have their paddies FED BY it - and expecting every one of them to sit above its field's collector
 # imposes a uniformity the ground does not have. (For the record, turning it on flags 25% of Tango's
 # farmhouses and 42% of Nagahara's: the ring algorithm, not stray misplacements.)
-
-
-def _seg_0237__dwellings_above_field_drain(
-    *,
-    M: Any = _UNBOUND,
-    _d: Any = _UNBOUND,
-    _ddd: Any = _UNBOUND,
-    at_end: Any = _UNBOUND,
-    ax: Any = _UNBOUND,
-    ay: Any = _UNBOUND,
-    best: Any = _UNBOUND,
-    bx: Any = _UNBOUND,
-    by: Any = _UNBOUND,
-    check: Any = _UNBOUND,
-    d: Any = _UNBOUND,
-    dp: Any = _UNBOUND,
-    drains: Any = _UNBOUND,
-    dux: Any = _UNBOUND,
-    duy: Any = _UNBOUND,
-    h: Any = _UNBOUND,
-    houses: Any = _UNBOUND,
-    in_toe: Any = _UNBOUND,
-    ll: Any = _UNBOUND,
-    meta: Any = _UNBOUND,
-    px: Any = _UNBOUND,
-    py: Any = _UNBOUND,
-    scale: Any = _UNBOUND,
-    si: Any = _UNBOUND,
-    toe_px: Any = _UNBOUND,
-    tt: Any = _UNBOUND,
-    vx: Any = _UNBOUND,
-    vy: Any = _UNBOUND,
-) -> dict[str, Any]:
-    """Gate segment 237 (dwellings_above_field_drain) - body verbatim from the legacy gate() (feature 022)."""
-    if houses and drains and not meta.get("nucleated") and scale != "city":
-        # the WET TOE is a BAND below the collector (~240 real ft - the marsh/reclaimed strip the
-        # runoff keeps soggy), not an infinite downslope slab: without this cap the first town
-        # with drains (Hirameki) had tenements flagged 780px away, across the town wall, merely
-        # for being south of a field's collector. Distance converts at the map's ft/px.
-        toe_px = 240.0 / float(meta.get("ftpx", 1) or 1)
-        in_toe = []
-        for h in houses + M.get("buildings", []):
-            for dp, _ddd in drains:
-                dux, duy = math.cos(math.radians(_ddd)), math.sin(math.radians(_ddd))
-                best = None
-                for si in range(len(dp) - 1):
-                    ax, ay = dp[si]
-                    bx, by = dp[si + 1]
-                    vx, vy = bx - ax, by - ay
-                    ll = vx * vx + vy * vy
-                    tt = 0.0 if ll == 0 else max(0.0, min(1.0, ((h["x"] - ax) * vx + (h["y"] - ay) * vy) / ll))
-                    px, py = ax + vx * tt, ay + vy * tt
-                    d = math.hypot(h["x"] - px, h["y"] - py)
-                    at_end = (si == 0 and tt <= 0.001) or (si == len(dp) - 2 and tt >= 0.999)  # clamped to the polyline's absolute end -> off the side
-                    if best is None or d < best[0]:
-                        best = (d, px, py, at_end)
-                assert best is not None
-                _d, px, py, at_end = best
-                if not at_end and _d <= toe_px and (h["x"] - px) * dux + (h["y"] - py) * duy > 18:  # center clearly on the wet (downslope) side, within the toe band
-                    in_toe.append((round(h["x"]), round(h["y"])))
-                    break
-        pass  # `` retired under feature 141 (the GM's cut); the segment stays for the check it keeps or the value it writes
-    return _kept(locals(), ('_d', '_ddd', 'at_end', 'ax', 'ay', 'best', 'bx', 'by', 'd', 'dp', 'dux', 'duy', 'h', 'in_toe', 'll', 'px', 'py', 'si', 'toe_px', 'tt', 'vx', 'vy'))
 
 
 def _seg_0238__runs_off_edge(*, EX0: Any = _UNBOUND, EX1: Any = _UNBOUND, EY0: Any = _UNBOUND, EY1: Any = _UNBOUND, ol: Any = _UNBOUND, p: Any = _UNBOUND) -> dict[str, Any]:
@@ -316,66 +228,6 @@ def _seg_0243__village_has_headman(*, check: Any = _UNBOUND, headman: Any = _UNB
 # matches what the eye sees. (The grove is drawn to SKIP the shrine + torii clearing; place them BEFORE it.)
 
 
-def _seg_0248__CANOPY() -> dict[str, Any]:
-    """Gate segment 248 (CANOPY) - body verbatim from the legacy gate() (feature 022)."""
-    CANOPY = 1.7
-    return _kept(locals(), ('CANOPY',))
-
-
-def _seg_0249__c_3(*, CANOPY: Any = _UNBOUND, M: Any = _UNBOUND, c: Any = _UNBOUND, gv: Any = _UNBOUND, k: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 249 (c, grove_clumps, gv, k) - body verbatim from the legacy gate() (feature 022)."""
-    grove_clumps = [(c[0], c[1], gv.get("r", 10) * CANOPY) for k in ("village_groves", "groves") for gv in M.get(k, []) for c in gv.get("clumps", [])]
-    return _kept(locals(), ('c', 'grove_clumps', 'gv', 'k'))
-
-
-def _seg_0250__shrine_clear_of_grove_trees(
-    *,
-    M: Any = _UNBOUND,
-    _under_trees: Any = _UNBOUND,
-    check: Any = _UNBOUND,
-    cpd: Any = _UNBOUND,
-    cr: Any = _UNBOUND,
-    cx: Any = _UNBOUND,
-    cx0: Any = _UNBOUND,
-    cy: Any = _UNBOUND,
-    gcr: Any = _UNBOUND,
-    gcx: Any = _UNBOUND,
-    gcy: Any = _UNBOUND,
-    grove_clumps: Any = _UNBOUND,
-    hh: Any = _UNBOUND,
-    hw: Any = _UNBOUND,
-    p: Any = _UNBOUND,
-    pond_trees: Any = _UNBOUND,
-    r: Any = _UNBOUND,
-    t: Any = _UNBOUND,
-    torii_under: Any = _UNBOUND,
-    under_trees: Any = _UNBOUND,
-) -> dict[str, Any]:
-    """Gate segment 250 (shrine_clear_of_grove_trees, torii_clear_of_grove_trees, trees_clear_of_fengshui_ponds) - body verbatim from the legacy gate() (feature 022)."""
-    if grove_clumps:
-
-        def _under_trees(cx0: float, cy0: float, hw: float, hh: float) -> bool:  # any canopy circle overlaps the rect (center cx0,cy0; half hw,hh)?
-            return any((cx - cx0 - max(-hw, min(hw, cx - cx0))) ** 2 + (cy - cy0 - max(-hh, min(hh, cy - cy0))) ** 2 < cr * cr for cx, cy, cr in grove_clumps)
-
-        under_trees = [(round(r["x"]), round(r["y"])) for r in M.get("religious", []) if _under_trees(r["x"], r["y"], r["w"] / 2, r["h"] / 2)]
-        pass  # `` retired under feature 141 (the GM's cut); the segment stays for the check it keeps or the value it writes
-        # a torii is recorded [x, y, z]; its arch spans x +/-19, y -10..+18 (center ~y+4, half-height 14)
-        torii_under = [(round(t[0]), round(t[1])) for t in M.get("torii", []) if _under_trees(t[0], t[1] + 4, 19, 14)]
-        pass  # `` retired under feature 141 (the GM's cut); the segment stays for the check it keeps or the value it writes
-        # ... and no tree canopy crosses a fengshui CRESCENT POND's water (GM 2026-07-21, caught on
-        # Hoshigaoka, where a windbreak clump overhung the half-moon pond): the banyuetang is an OPEN water
-        # mirror at the settlement's front - reflecting sky is its fengshui job - and its flat-side forecourt
-        # was the village's open ceremony/work ground, so trees neither overhang the water nor crowd it.
-        # Same canopy doctrine as the shrine/torii checks (drawn crowns reach ~1.7x the clump's nominal r).
-        pond_trees = []
-        for cpd in M.get("crescent_ponds", []):
-            for gcx, gcy, gcr in grove_clumps:
-                if point_in_poly(gcx, gcy, cpd["poly"]) or poly_dist(gcx, gcy, [tuple(p) for p in cpd["poly"]]) < gcr:
-                    pond_trees.append((round(gcx), round(gcy)))
-        pass  # `` retired under feature 141 (the GM's cut); the segment stays for the check it keeps or the value it writes
-    return _kept(locals(), ('_under_trees', 'cpd', 'gcr', 'gcx', 'gcy', 'p', 'pond_trees', 'r', 't', 'torii_under', 'under_trees'))
-
-
 # every fengshui crescent pond carries its "geomantic pond" label (GM 2026-07-21): a culturally specific
 # feature that does not read by itself - the GM asked "what is that?" of an unlabeled one, so the
 # don't-label-the-obvious rule cuts the OTHER way here. crescent_pond() draws the label; this gates it.
@@ -383,12 +235,6 @@ def _seg_0250__shrine_clear_of_grove_trees(
 
 # a religious building's subtitle must not RESTATE its type (the label already names it,
 # e.g. "Monastery of Tengen" needs no "(town monastery)" note)
-
-
-def _seg_0254__r_1(*, M: Any = _UNBOUND, r: Any = _UNBOUND, t: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 254 (r, redundant_sub, t) - body verbatim from the legacy gate() (feature 022)."""
-    redundant_sub = [r.get("label") for r in M.get("religious", []) if r.get("sublabel") and any(t in r["sublabel"].lower() for t in ("shrine", "monastery", "temple"))]
-    return _kept(locals(), ('r', 'redundant_sub', 't'))
 
 
 # no two body labels overlap (the title block is excluded by the generator)

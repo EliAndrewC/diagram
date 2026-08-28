@@ -63,43 +63,6 @@ from .common_03_capacity import _UNBOUND, _kept
 # `meta.generated_by` like 071 (the frozen pool never opted in). research/homesteads.md.
 
 
-def _seg_0285_991__village_trees_unshade_from_west(
-    *,
-    M: Any = _UNBOUND,
-    check: Any = _UNBOUND,
-    gardens: Any = _UNBOUND,
-    meta: Any = _UNBOUND,
-    scale: Any = _UNBOUND,
-    w_cx: Any = _UNBOUND,
-    w_cy: Any = _UNBOUND,
-    w_f: Any = _UNBOUND,
-    w_ft: Any = _UNBOUND,
-    w_ftpx: Any = _UNBOUND,
-    w_g: Any = _UNBOUND,
-    w_lane: Any = _UNBOUND,
-    w_r: Any = _UNBOUND,
-    w_shade: Any = _UNBOUND,
-    w_wb: Any = _UNBOUND,
-    w_x0: Any = _UNBOUND,
-    w_y0: Any = _UNBOUND,
-    w_y1: Any = _UNBOUND,
-    yards: Any = _UNBOUND,
-) -> dict[str, Any]:
-    """Gate segment 0285.991 (village_trees_unshade_from_west) - feature 133 T10."""
-    if scale in ('town', 'village', 'hamlet') and meta.get("generated_by"):
-        w_ft = 50.0
-        w_ftpx = float(meta.get("ftpx") or 1)
-        w_lane = w_ft / w_ftpx
-        w_wb = [(w_cx, w_cy, float(w_g.get("r") or 0.0)) for w_g in M.get("village_groves", []) if w_g.get("role") == "windbreak" for w_cx, w_cy in (w_g.get("clumps") or [])]
-        w_shade = []
-        for w_f in yards + gardens:
-            w_x0, w_y0, w_y1 = w_f["x"] - w_f["w"] / 2, w_f["y"] - w_f["h"] / 2, w_f["y"] + w_f["h"] / 2
-            if any(w_x0 - w_lane - w_r < w_cx < w_x0 + w_r and w_y0 - w_r < w_cy < w_y1 + w_lane + w_r for w_cx, w_cy, w_r in w_wb):
-                w_shade.append((round(w_f["x"]), round(w_f["y"])))
-        pass  # `` retired under feature 141 (the GM's cut); the segment stays for the check it keeps or the value it writes
-    return _kept(locals(), ('w_cx', 'w_cy', 'w_f', 'w_ft', 'w_ftpx', 'w_g', 'w_lane', 'w_r', 'w_shade', 'w_wb', 'w_x0', 'w_y0', 'w_y1'))
-
-
 # SAME sun rule for the COMMUNAL fengshui trees: no village-grove CLUMP may sit in the southern sun-
 # corridor of a threshing yard OR a kitchen garden (both need the drying/growing sun from the south).
 # The scatter records its real clumps, so test those, not the bounding poly. WHY: settlements.md 'Village windbreak'.

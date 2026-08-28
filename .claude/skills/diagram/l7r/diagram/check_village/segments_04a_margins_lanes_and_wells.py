@@ -400,29 +400,6 @@ def _seg_0283__lanes_clear_of_dry_plots(*, _lane_on_crop: Any = _UNBOUND, check:
 # Shrine (temizu) ablution wells are tagged shrine=True by the engine and excluded from the count.
 
 
-def _seg_0284__wells_sized_to_population(
-    *,
-    M: Any = _UNBOUND,
-    _draw_wells: Any = _UNBOUND,
-    _whh: Any = _UNBOUND,
-    _whi: Any = _UNBOUND,
-    _wlo: Any = _UNBOUND,
-    _wr: Any = _UNBOUND,
-    check: Any = _UNBOUND,
-    meta: Any = _UNBOUND,
-    scale: Any = _UNBOUND,
-    w: Any = _UNBOUND,
-) -> dict[str, Any]:
-    """Gate segment 284 (wells_sized_to_population) - body verbatim from the legacy gate() (feature 022)."""
-    if scale in ("village", "hamlet") and meta.get("households"):
-        _draw_wells = [w for w in M.get("wells", []) if not w.get("shrine")]
-        _whh = meta["households"]
-        _wlo, _whi = (2.0, 20.0) if scale == "hamlet" else (8.0, 26.0)
-        _wr = _whh / len(_draw_wells) if _draw_wells else float("inf")
-        pass  # `` retired under feature 141 (the GM's cut); the segment stays for the check it keeps or the value it writes
-    return _kept(locals(), ('_draw_wells', '_whh', '_whi', '_wlo', '_wr', 'w'))
-
-
 # WATER ACCESS for the rural tiers (town/village/hamlet): every settlement needs communal WELLS, and
 # every household must be able to reach water. Wells dot the dwellings (one per ~20-25 households),
 # but a farm household may instead draw from the irrigation network it sits beside - a channel, the
@@ -450,49 +427,6 @@ def _seg_0285_001__b(*, M: Any = _UNBOUND, b: Any = _UNBOUND, scale: Any = _UNBO
 # of the footprints. Circle (well disc) vs rect (hall / the torii arch's x +/-19, y -10..+18 box). Root
 # cause when it fires: wells were scattered BEFORE the shrine/torii were placed, so their block-outs did
 # not yet exist - place the shrine_hall (with its torii) BEFORE place_wells / shrine_well.
-
-
-def _seg_0285_002__r(*, M: Any = _UNBOUND, r: Any = _UNBOUND, scale: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 0285.002 (r, sacred) - body verbatim from _seg_0285__wells_clear_of_shrine_and_torii (feature 024 per-check split; guards re-evaluated in the body, see split_oversized.py)."""
-    if scale in ('town', 'village', 'hamlet'):
-        sacred = [(r["x"], r["y"], r["w"] / 2, r["h"] / 2) for r in M.get("religious", [])]
-    return _kept(locals(), ('r', 'sacred'))
-
-
-def _seg_0285_003__sacred(*, M: Any = _UNBOUND, sacred: Any = _UNBOUND, scale: Any = _UNBOUND, t: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 0285.003 (sacred, t) - body verbatim from _seg_0285__wells_clear_of_shrine_and_torii (feature 024 per-check split; guards re-evaluated in the body, see split_oversized.py)."""
-    if scale in ('town', 'village', 'hamlet'):
-        sacred += [(t[0], t[1] + 4, 19, 14) for t in M.get("torii", [])]
-    return _kept(locals(), ('sacred', 't'))
-
-
-def _seg_0285_004__wells_clear_of_shrine_and_torii(
-    *,
-    bx: Any = _UNBOUND,
-    by: Any = _UNBOUND,
-    check: Any = _UNBOUND,
-    ddx: Any = _UNBOUND,
-    ddy: Any = _UNBOUND,
-    hh: Any = _UNBOUND,
-    hw: Any = _UNBOUND,
-    on_sacred: Any = _UNBOUND,
-    sacred: Any = _UNBOUND,
-    scale: Any = _UNBOUND,
-    wells: Any = _UNBOUND,
-    wl: Any = _UNBOUND,
-) -> dict[str, Any]:
-    """Gate segment 0285.004 (wells_clear_of_shrine_and_torii) - body verbatim from _seg_0285__wells_clear_of_shrine_and_torii (feature 024 per-check split; guards re-evaluated in the body, see split_oversized.py)."""
-    if scale in ('town', 'village', 'hamlet') and wells and sacred:
-        on_sacred = []
-        for wl in wells:
-            for bx, by, hw, hh in sacred:
-                ddx = wl["x"] - bx - max(-hw, min(hw, wl["x"] - bx))
-                ddy = wl["y"] - by - max(-hh, min(hh, wl["y"] - by))
-                if ddx * ddx + ddy * ddy < wl["r"] * wl["r"]:
-                    on_sacred.append((round(wl["x"]), round(wl["y"])))
-                    break
-        pass  # `` retired under feature 141 (the GM's cut); the segment stays for the check it keeps or the value it writes
-    return _kept(locals(), ('bx', 'by', 'ddx', 'ddy', 'hh', 'hw', 'on_sacred', 'wl'))
 
 
 def _seg_0285_005__wells_clear_of_trees(

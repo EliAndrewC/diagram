@@ -1,9 +1,5 @@
 """Gate segments (city castes and dojos; keys 0563_000-0563_044) - bodies verbatim, registry order preserved."""
 
-from typing import Any
-
-from .common_01_geometry import point_in_poly
-from .common_03_capacity import _UNBOUND, _kept
 
 # every provincial city's interior carries the provincial government:
 
@@ -23,36 +19,6 @@ from .common_03_capacity import _UNBOUND, _kept
 # in-city neighborhood mixes a MINORITY of large houses (senior) among many small ones (junior).
 # Crucially, samurai walled ESTATES are OUTSIDE the walls (rural goshi) - the only walled samurai
 # compound inside the city is the governor's mansion - so NO manor may sit inside the wall ring.
-
-
-def _seg_0563_013__b_2(*, M: Any = _UNBOUND, b: Any = _UNBOUND, scale: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 563.013 (b, slarge) - body verbatim from the city mega-segment (feature 023; guards preserved, see research.md R2/R3)."""
-    if scale in ('city', 'capital'):
-        slarge = [b for b in M.get("buildings", []) if b.get("kind") == "samurai_large"]
-    return _kept(locals(), ('b', 'slarge'))
-
-
-def _seg_0563_014__b_3(*, M: Any = _UNBOUND, b: Any = _UNBOUND, scale: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 563.014 (b, ssmall) - body verbatim from the city mega-segment (feature 023; guards preserved, see research.md R2/R3)."""
-    if scale in ('city', 'capital'):
-        ssmall = [b for b in M.get("buildings", []) if b.get("kind") == "samurai"]
-    return _kept(locals(), ('b', 'ssmall'))
-
-
-def _seg_0563_015__city_samurai_housing_varied(
-    *, M: Any = _UNBOUND, check: Any = _UNBOUND, in_est: Any = _UNBOUND, m: Any = _UNBOUND, scale: Any = _UNBOUND, slarge: Any = _UNBOUND, ssmall: Any = _UNBOUND, w: Any = _UNBOUND
-) -> dict[str, Any]:
-    """Gate segment 563.015 (city_samurai_housing_varied) - body verbatim from the city mega-segment (feature 023; guards preserved, see research.md R2/R3)."""
-    if scale in ('city', 'capital') and (slarge or ssmall):
-        w = M.get("wall") or []
-        in_est = [m for m in M.get("manors", []) if len(w) >= 3 and point_in_poly(m["x"], m["y"], w)]
-        if scale == "capital":
-            # INVERTED at the capital (020 doctrine): karo and chancellors live in walled
-            # yashiki INSIDE the wall - that is the defining jokamachi texture - and the
-            # senior-heavy mix is policed by capital_housing_matches_band_targets instead
-            in_est = []
-        pass  # `` retired under feature 141 (the GM's cut); the segment stays for the check it keeps or the value it writes
-    return _kept(locals(), ('in_est', 'm', 'w'))
 
 
 # MARTIAL TRAINING (GM 2026-07-25; settlements.md "Historical grounding: martial training in

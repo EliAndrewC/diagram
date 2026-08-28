@@ -536,12 +536,6 @@ def _seg_0509__groves_clear_of_lanes(*, check: Any = _UNBOUND, tree_on_path: Any
     return _kept(locals(), ())
 
 
-def _seg_0510__moat_ring_1(*, M: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 510 (moat_ring) - body verbatim from the legacy gate() (feature 022)."""
-    moat_ring = M.get("moat")
-    return _kept(locals(), ('moat_ring',))
-
-
 # WATER SOURCES COME FROM THE MAP EDGE: a pond does not generate water, so any brook FEEDING it (a
 # stream with one end in the pond) must ORIGINATE off-map - it flows in from the edge, not out of
 # nowhere. (A sole-storage / rain-fed pond with no feeder stream is exempt - no inflow to check.)

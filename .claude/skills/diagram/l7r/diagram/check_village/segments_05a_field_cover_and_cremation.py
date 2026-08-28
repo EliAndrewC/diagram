@@ -2,8 +2,7 @@
 
 from typing import Any
 
-from .common_01_geometry import point_in_poly, poly_dist
-from .common_02_overlap_policy import poly_gap
+from .common_01_geometry import point_in_poly
 from .common_03_capacity import _UNBOUND, _kept
 
 
@@ -76,93 +75,6 @@ def _seg_0285_094__commons_clear_of_paddies(*, barren: Any = _UNBOUND, check: An
 # crop, but on the crop's SOUTH (sunny) side it must stand well back (a canopy's shadow reach) or it
 # shades the field. Covers BOTH the paddy and the dry hatake plots. Distances: a fixed crown-radius
 # no-overhang CLEAR, plus a real-world shadow reach on the south side (feet -> px at the map's ftpx).
-
-
-def _seg_0285_095__c_3(*, c: Any = _UNBOUND, commons: Any = _UNBOUND, scale: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 0285.095 (c, woodland) - body verbatim from _seg_0285__wells_clear_of_shrine_and_torii (feature 024 per-check split; guards re-evaluated in the body, see split_oversized.py)."""
-    if scale in ('town', 'village', 'hamlet') and scale in ('town', 'village', 'hamlet', 'city'):
-        woodland = [c for c in commons if c.get("role") == "woodland"]
-    return _kept(locals(), ('c', 'woodland'))
-
-
-def _seg_0285_096__woodland_clear_of_crops(
-    *,
-    CLEAR: Any = _UNBOUND,
-    M: Any = _UNBOUND,
-    SHADE: Any = _UNBOUND,
-    _fp: Any = _UNBOUND,
-    c: Any = _UNBOUND,
-    check: Any = _UNBOUND,
-    crop: Any = _UNBOUND,
-    crops: Any = _UNBOUND,
-    cx0: Any = _UNBOUND,
-    cx1: Any = _UNBOUND,
-    cy1: Any = _UNBOUND,
-    dp: Any = _UNBOUND,
-    f: Any = _UNBOUND,
-    fields: Any = _UNBOUND,
-    g: Any = _UNBOUND,
-    gap: Any = _UNBOUND,
-    gx: Any = _UNBOUND,
-    gy: Any = _UNBOUND,
-    meta: Any = _UNBOUND,
-    p: Any = _UNBOUND,
-    scale: Any = _UNBOUND,
-    south: Any = _UNBOUND,
-    tag: Any = _UNBOUND,
-    w_on_grove: Any = _UNBOUND,
-    w_over: Any = _UNBOUND,
-    w_shade: Any = _UNBOUND,
-    woodland: Any = _UNBOUND,
-    wp: Any = _UNBOUND,
-    wx0: Any = _UNBOUND,
-    wx1: Any = _UNBOUND,
-    wy0: Any = _UNBOUND,
-) -> dict[str, Any]:
-    """Gate segment 0285.096 (woodland_clear_of_crops, woodland_clear_of_grove) - body verbatim from _seg_0285__wells_clear_of_shrine_and_torii (feature 024 per-check split; guards re-evaluated in the body, see split_oversized.py)."""
-    if scale in ('town', 'village', 'hamlet') and scale in ('town', 'village', 'hamlet', 'city') and woodland:
-        _fp = float(meta.get("ftpx") or meta.get("ft_per_px") or 2.0)
-        CLEAR = 14  # ~a crown radius: the canopy must not overhang the crop
-        SHADE = 14 + round(55 / _fp)  # ... plus a shadow reach (~55 ft) on the crop's SUNNY south side
-        crops = [f["outline"] for f in fields if f.get("kind") == "paddy"]
-        crops += [dp["poly"] for dp in M.get("dry_plots", [])]
-        w_over, w_shade = [], []
-        for c in woodland:
-            wp = c.get("poly")
-            if not wp:
-                continue
-            tag = (round(c["x"]), round(c["y"]))
-            wy0 = min(p[1] for p in wp)
-            wx0 = min(p[0] for p in wp)
-            wx1 = max(p[0] for p in wp)
-            for crop in crops:
-                gap = poly_gap(wp, crop)
-                if gap <= 0:
-                    w_over.append(tag)
-                    break
-                cx0 = min(p[0] for p in crop)
-                cx1 = max(p[0] for p in crop)
-                cy1 = max(p[1] for p in crop)
-                south = wy0 >= cy1 - CLEAR and wx0 < cx1 and cx0 < wx1  # patch sits south of the crop, in its shadow column
-                if gap < (SHADE if south else CLEAR):
-                    w_shade.append(tag)
-                    break
-        pass  # `` retired under feature 141 (the GM's cut); the segment stays for the check it keeps or the value it writes
-        # a coppice WOODLAND patch is a DISTINCT wood from the protected fengshui GROVE (village_groves) -
-        # the two must not overlap, or they merge into one indistinct green mass (GM). Keep each patch off
-        # every grove clump (its drawn radius). Place the coppice on its OWN stretch of the high ground.
-        w_on_grove = []
-        for c in woodland:
-            wp = c.get("poly")
-            if not wp:
-                continue
-            if any(point_in_poly(gx, gy, wp) or poly_dist(gx, gy, wp) < g.get("r", 6) for g in M.get("village_groves", []) for gx, gy in g.get("clumps", [])):
-                w_on_grove.append((round(c["x"]), round(c["y"])))
-        pass  # `` retired under feature 141 (the GM's cut); the segment stays for the check it keeps or the value it writes
-    return _kept(
-        locals(),
-        ('CLEAR', 'SHADE', '_fp', 'c', 'crop', 'crops', 'cx0', 'cx1', 'cy1', 'dp', 'f', 'g', 'gap', 'gx', 'gy', 'p', 'south', 'tag', 'w_on_grove', 'w_over', 'w_shade', 'wp', 'wx0', 'wx1', 'wy0'),
-    )
 
 
 # WEALTH VARIATION: farmhouses are not one uniform size - a modest wealth tier (recorded as `wealth`)

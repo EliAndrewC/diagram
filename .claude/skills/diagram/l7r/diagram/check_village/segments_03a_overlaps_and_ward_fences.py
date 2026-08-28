@@ -124,23 +124,7 @@ def _seg_0142__every_solid_feature_classified_for_labels(*, check: Any = _UNBOUN
 # no structure overlaps the magistrate's manor walls (a tilted manor uses its rotated corners)
 
 
-def _seg_0146__rect_corners_xywh(*, cx: Any = _UNBOUND, cy: Any = _UNBOUND, e: Any = _UNBOUND, h: Any = _UNBOUND, w: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 146 (rect_corners_xywh) - body verbatim from the legacy gate() (feature 022)."""
-
-    def rect_corners_xywh(item: dict[str, Any], e: float) -> list[tuple[float, float]]:
-        cx, cy, w, h = item["x"], item["y"], item["w"], item["h"]
-        return [(cx - w / 2 - e, cy - h / 2 - e), (cx + w / 2 + e, cy - h / 2 - e), (cx + w / 2 + e, cy + h / 2 + e), (cx - w / 2 - e, cy + h / 2 + e)]
-
-    return _kept(locals(), ('rect_corners_xywh',))
-
-
 # no structure overlaps a religious hall (an ellipse block undershot its corners)
-
-
-def _seg_0147__bad_rel(*, M: Any = _UNBOUND, corners: Any = _UNBOUND, rect_corners_xywh: Any = _UNBOUND, rel: Any = _UNBOUND, sc: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 147 (bad_rel, rel, sc) - body verbatim from the legacy gate() (feature 022)."""
-    bad_rel = [1 for rel in M.get("religious", []) for sc in corners if sat_overlap(sc, rect_corners_xywh(rel, 4))]
-    return _kept(locals(), ('bad_rel', 'rel', 'sc'))
 
 
 # no structure overlaps the gate's guard station / guardtower
@@ -446,56 +430,12 @@ def _seg_0187__wall(*, M: Any = _UNBOUND) -> dict[str, Any]:
     return _kept(locals(), ('wall', 'wall_z'))
 
 
-def _seg_0188__gates(*, M: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 188 (gates) - body verbatim from the legacy gate() (feature 022)."""
-    gates = M.get("gates") or ([M["gate"]] if M.get("gate") else [])
-    return _kept(locals(), ('gates',))
-
-
 # NO DOUBLED WALL: the short wall-stroke CAP that plugs a ward fence into the rampart must lie FLUSH
 # along the wall, not jut across it. A straight cap tangent to one segment, laid at a wall CORNER, juts
 # past the bend and reads as a second wall section overlapping the first (Nagahara SW, GM 2026-07). The
 # cap is now drawn to FOLLOW the wall (arc +/-16 px through any vertex in the span); this guards the
 # invariant so a regression to a straight-tangent cap is caught. Every cap vertex must sit within
 # tolerance of the wall polyline.
-
-
-def _seg_0194___wall_ring(*, M: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 194 (_wall_ring) - body verbatim from the legacy gate() (feature 022)."""
-    _wall_ring = M.get("wall")
-    return _kept(locals(), ('_wall_ring',))
-
-
-def _seg_0195__city_ward_cap_flush_to_wall(
-    *,
-    M: Any = _UNBOUND,
-    _d: Any = _UNBOUND,
-    _off: Any = _UNBOUND,
-    _ring: Any = _UNBOUND,
-    _wall_ring: Any = _UNBOUND,
-    _wrng: Any = _UNBOUND,
-    cap: Any = _UNBOUND,
-    check: Any = _UNBOUND,
-    cx3: Any = _UNBOUND,
-    cy3: Any = _UNBOUND,
-    i: Any = _UNBOUND,
-    wd: Any = _UNBOUND,
-    x: Any = _UNBOUND,
-    y: Any = _UNBOUND,
-) -> dict[str, Any]:
-    """Gate segment 195 (city_ward_cap_flush_to_wall) - body verbatim from the legacy gate() (feature 022)."""
-    if _wall_ring:
-        _wrng = [(x, y) for x, y in _wall_ring]
-        _ring = _wrng + [_wrng[0]]
-        _off = []
-        for wd in M.get("wards", []):
-            for cap in wd.get("wall_caps", []):
-                for cx3, cy3 in cap.get("pts", []):
-                    _d = min(seg_dist(cx3, cy3, _ring[i], _ring[i + 1]) for i in range(len(_ring) - 1))
-                    if _d > 4.0:  # a flush cap sits ON the wall (~0-1 px); >4 px means it juts across the bend
-                        _off.append((round(cx3), round(cy3), round(_d, 1)))
-        pass  # `` retired under feature 141 (the GM's cut); the segment stays for the check it keeps or the value it writes
-    return _kept(locals(), ('_d', '_off', '_ring', '_wrng', 'cap', 'cx3', 'cy3', 'i', 'wd', 'x', 'y'))
 
 
 # JOIN, DON'T INTERSECT - the WALL member of a family the ways and the watercourses already had

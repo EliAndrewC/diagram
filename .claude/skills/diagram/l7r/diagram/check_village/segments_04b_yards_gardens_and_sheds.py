@@ -3,7 +3,7 @@
 import math
 from typing import Any
 
-from l7r.diagram.settlement import FARMHOUSE_EAVE_GAP_FT, courtyard_annex_span, sat_overlap, surface_water_dist
+from l7r.diagram.settlement import FARMHOUSE_EAVE_GAP_FT, courtyard_annex_span, surface_water_dist
 
 from .common_01_geometry import (
     _OVERLAP_STRUCTS,
@@ -115,42 +115,14 @@ def _seg_0285_008__yards(*, M: Any = _UNBOUND, scale: Any = _UNBOUND) -> dict[st
 # LARGEST farmstead in the village and threshes its own rice like every other household.
 
 
-def _seg_0285_009__h(*, h: Any = _UNBOUND, houses: Any = _UNBOUND, scale: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 0285.009 (h, occ_h) - body verbatim from _seg_0285__wells_clear_of_shrine_and_torii (feature 024 per-check split; guards re-evaluated in the body, see split_oversized.py)."""
-    if scale in ('town', 'village', 'hamlet') and scale in ('town', 'village', 'hamlet', 'city'):
-        occ_h = [h for h in houses if h.get("kind") != "abandoned"]
-    return _kept(locals(), ('h', 'occ_h'))
-
-
 # the work yard (niwa) was UNIVERSAL: EVERY farmhouse threshed and dried its own rice on its own
 # yard, so EVERY farmhouse must have one (a firm 100%). The generator guarantees this by making
 # the yard integral to farmstead placement - a house is only sited where its yard also fits
 # (nudging it as needed) - so a farmhouse without a yard is a generator bug, not a density limit.
 
 
-def _seg_0285_010__h_1(*, h: Any = _UNBOUND, occ_h: Any = _UNBOUND, scale: Any = _UNBOUND, t: Any = _UNBOUND, yards: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 0285.010 (h, t, without) - body verbatim from _seg_0285__wells_clear_of_shrine_and_torii (feature 024 per-check split; guards re-evaluated in the body, see split_oversized.py)."""
-    if scale in ('town', 'village', 'hamlet') and scale in ('town', 'village', 'hamlet', 'city'):
-        without = [(round(h["x"]), round(h["y"])) for h in occ_h if not any(t["of"][0] == h["x"] and t["of"][1] == h["y"] for t in yards)]
-    return _kept(locals(), ('h', 't', 'without'))
-
-
 # the yard is the farmstead's own dry work apron, SMALLER than the house it serves (not a
 # second dwelling). Each yard records `of` = its parent farmhouse center.
-
-
-def _seg_0285_012__h_2(*, h: Any = _UNBOUND, houses: Any = _UNBOUND, scale: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 0285.012 (h, hmap) - body verbatim from _seg_0285__wells_clear_of_shrine_and_torii (feature 024 per-check split; guards re-evaluated in the body, see split_oversized.py)."""
-    if scale in ('town', 'village', 'hamlet') and scale in ('town', 'village', 'hamlet', 'city'):
-        hmap = {(round(h["x"]), round(h["y"])): h["w"] * h["h"] for h in houses}
-    return _kept(locals(), ('h', 'hmap'))
-
-
-def _seg_0285_013__oversize(*, hmap: Any = _UNBOUND, scale: Any = _UNBOUND, t: Any = _UNBOUND, yards: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 0285.013 (oversize, t) - body verbatim from _seg_0285__wells_clear_of_shrine_and_torii (feature 024 per-check split; guards re-evaluated in the body, see split_oversized.py)."""
-    if scale in ('town', 'village', 'hamlet') and scale in ('town', 'village', 'hamlet', 'city'):
-        oversize = [(round(t["x"]), round(t["y"])) for t in yards if t["w"] * t["h"] >= hmap.get((round(t["of"][0]), round(t["of"][1])), 0)]
-    return _kept(locals(), ('oversize', 't'))
 
 
 # the yard is the maeniwa - the SOUTH-facing front work yard. Rice must dry in the SUN and
@@ -159,51 +131,7 @@ def _seg_0285_013__oversize(*, hmap: Any = _UNBOUND, scale: Any = _UNBOUND, t: A
 # meaningfully north of (above) its own farmhouse center (`of[1]`).
 
 
-def _seg_0285_015__shady(*, scale: Any = _UNBOUND, t: Any = _UNBOUND, yards: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 0285.015 (shady, t) - body verbatim from _seg_0285__wells_clear_of_shrine_and_torii (feature 024 per-check split; guards re-evaluated in the body, see split_oversized.py)."""
-    if scale in ('town', 'village', 'hamlet') and scale in ('town', 'village', 'hamlet', 'city'):
-        shady = [(round(t["x"]), round(t["y"])) for t in yards if t["y"] < t["of"][1] - 5]
-    return _kept(locals(), ('shady', 't'))
-
-
 # the yard is a DRY tamped floor: its whole footprint must stay out of the flooded paddies.
-
-
-def _seg_0285_017__in_paddy(*, scale: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 0285.017 (in_paddy) - body verbatim from _seg_0285__wells_clear_of_shrine_and_torii (feature 024 per-check split; guards re-evaluated in the body, see split_oversized.py)."""
-    if scale in ('town', 'village', 'hamlet') and scale in ('town', 'village', 'hamlet', 'city'):
-        in_paddy = []  # type: ignore[var-annotated]
-    return _kept(locals(), ('in_paddy',))
-
-
-def _seg_0285_018__e(
-    *,
-    e: Any = _UNBOUND,
-    fc: Any = _UNBOUND,
-    fields_ol: Any = _UNBOUND,
-    in_paddy: Any = _UNBOUND,
-    k: Any = _UNBOUND,
-    ol: Any = _UNBOUND,
-    px: Any = _UNBOUND,
-    py: Any = _UNBOUND,
-    scale: Any = _UNBOUND,
-    t: Any = _UNBOUND,
-    vx: Any = _UNBOUND,
-    vy: Any = _UNBOUND,
-    yards: Any = _UNBOUND,
-) -> dict[str, Any]:
-    """Gate segment 0285.018 (e, fc, in_paddy, k) - body verbatim from _seg_0285__wells_clear_of_shrine_and_torii (feature 024 per-check split; guards re-evaluated in the body, see split_oversized.py)."""
-    if scale in ('town', 'village', 'hamlet') and scale in ('town', 'village', 'hamlet', 'city'):
-        for t in yards:
-            fc = rect_corners(_struct_rect(t))
-            if any(
-                any(point_in_poly(px, py, ol) for px, py in fc)
-                or any(point_in_poly(vx, vy, fc) for vx, vy in ol)
-                or any(segments_cross(fc[e], fc[(e + 1) % 4], ol[k], ol[(k + 1) % len(ol)]) for e in range(4) for k in range(len(ol)))
-                for ol in fields_ol
-            ):
-                in_paddy.append((round(t["x"]), round(t["y"])))
-    return _kept(locals(), ('e', 'fc', 'in_paddy', 'k', 'ol', 'px', 'py', 't', 'vx', 'vy'))
 
 
 # the yard abuts its OWN farmhouse (intentional, overlap-exempt) but must touch NOTHING else -
@@ -217,32 +145,6 @@ def _seg_0285_020__k(*, M: Any = _UNBOUND, k: Any = _UNBOUND, s: Any = _UNBOUND,
     if scale in ('town', 'village', 'hamlet') and scale in ('town', 'village', 'hamlet', 'city'):
         others = [s for k in _OVERLAP_STRUCTS for s in M.get(k, [])] + M.get("storehouses", []) + M.get("merchant_estates", [])
     return _kept(locals(), ('k', 'others', 's'))
-
-
-def _seg_0285_021__fouled(*, scale: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 0285.021 (fouled) - body verbatim from _seg_0285__wells_clear_of_shrine_and_torii (feature 024 per-check split; guards re-evaluated in the body, see split_oversized.py)."""
-    if scale in ('town', 'village', 'hamlet') and scale in ('town', 'village', 'hamlet', 'city'):
-        fouled = []  # type: ignore[var-annotated]
-    return _kept(locals(), ('fouled',))
-
-
-def _seg_0285_022__fouled_1(
-    *, fouled: Any = _UNBOUND, others: Any = _UNBOUND, par: Any = _UNBOUND, s: Any = _UNBOUND, scale: Any = _UNBOUND, t: Any = _UNBOUND, tc: Any = _UNBOUND, yards: Any = _UNBOUND
-) -> dict[str, Any]:
-    """Gate segment 0285.022 (fouled, par, s, t) - body verbatim from _seg_0285__wells_clear_of_shrine_and_torii (feature 024 per-check split; guards re-evaluated in the body, see split_oversized.py)."""
-    if scale in ('town', 'village', 'hamlet') and scale in ('town', 'village', 'hamlet', 'city'):
-        for t in yards:
-            tc = rect_corners(_struct_rect(t))
-            par = (round(t["of"][0]), round(t["of"][1]))
-            for s in others:
-                if (round(s["x"]), round(s["y"])) == par:
-                    continue
-                if abs(s["x"] - t["x"]) + abs(s["y"] - t["y"]) > 140:
-                    continue
-                if sat_overlap(tc, rect_corners(_struct_rect(s))):
-                    fouled.append((round(t["x"]), round(t["y"])))
-                    break
-    return _kept(locals(), ('fouled', 'par', 's', 't', 'tc'))
 
 
 # ATTACHED KURA STOREHOUSE: a farm's fireproof grain store is drawn as an annex on the house's back
@@ -357,13 +259,6 @@ def _seg_0285_039__gardens_clear_of_channels(*, check: Any = _UNBOUND, g_on_wate
 # the garden and the farmhouse's STOREHOUSE/shed must never overlap - the shed sits on a wall the
 # garden does not use (west for a dispersed farm, the shaded north for a nucleated one). The shed is
 # a recorded annex (M['farm_sheds']), so read its actual footprint straight from there.
-
-
-def _seg_0285_043__sheds_1(*, M: Any = _UNBOUND, scale: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 0285.043 (sheds) - body verbatim from _seg_0285__wells_clear_of_shrine_and_torii (feature 024 per-check split; guards re-evaluated in the body, see split_oversized.py)."""
-    if scale in ('town', 'village', 'hamlet') and scale in ('town', 'village', 'hamlet', 'city'):
-        sheds = M.get("farm_sheds", [])
-    return _kept(locals(), ('sheds',))
 
 
 # A dooryard bed and a threshing yard were HAND-worked plots bent to paths and soil, not surveyed

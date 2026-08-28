@@ -3,31 +3,9 @@
 import math
 from typing import Any
 
-from l7r.diagram.settlement._geom import boxed_grid, boxed_segs
-
-from .common_01_geometry import Poly, point_in_poly, poly_dist, seg_dist, unit_dir
+from .common_01_geometry import Poly, point_in_poly, seg_dist, unit_dir
 from .common_02_overlap_policy import in_ellipse
 from .common_03_capacity import _UNBOUND, _kept
-
-
-def _seg_0438_016__nr_lines_3(*, M: Any = _UNBOUND, nr_boxes: Any = _UNBOUND, nr_lines: Any = _UNBOUND, nr_moat: Any = _UNBOUND, scale: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 0438.016 (nr_lines, nr_lines_b, nr_boxes_b) - body verbatim from _seg_0438__near_ring_cultivated_fraction (feature 024 per-check split; guards re-evaluated in the body, see split_oversized.py)."""
-    if scale in ('town', 'city') and nr_moat:
-        nr_lines.append((nr_moat, M.get("moat_width", 22) / 2 + 8))
-    # INDEXED, NOT COARSENED (GM 2026-08-26, feature 133 T15; this package's CLAUDE.md "when a check is
-    # slow, INDEX it"). The two near-ring samplers below (024, 036) walk a 25 px grid and, at every
-    # point, ran `seg_dist` against EVERY segment of EVERY line here - ~756k pairs per check per gate,
-    # ~90% of a gate's cost with `town_margins_clothed`. `boxed_seg_hit` over a `PointGrid` is the same
-    # strict `seg_dist < hw` test on a pruned candidate list, so every verdict is identical (proven on
-    # every pool manifest and regression fixture when this landed). Built ONCE here, after the last
-    # append, and handed to both samplers.
-    nr_lines_b = boxed_grid(boxed_segs(nr_lines)) if scale in ('town', 'city') else None
-    # ...and the structure halo boxes the same way: a 4-tuple (x0, y0, x1, y1) IS its own box, which is
-    # the shape PointGrid files (the last four fields), so the scan below becomes a bucket lookup
-    # followed by the identical `<=` test. 4.6M box comparisons per check across one 50-gate probe.
-    nr_boxes_b = boxed_grid(nr_boxes) if scale in ('town', 'city') else None
-    return _kept(locals(), ('nr_lines', 'nr_lines_b', 'nr_boxes_b'))
-
 
 # NEAR-RING BAND CAP (2026-07-23): on a WALLED CITY the near ring is the ground within ~800 real ft
 # of the rampart (a few minutes' walk out the gates - wide enough to take in the moat-fed fans' plot mass, since the first ~500 ft is structurally moat + farmstead rings + gate suburbs) - NOT
@@ -152,12 +130,6 @@ def _seg_0446__channels_join_streams_at_confluence(*, check: Any = _UNBOUND, dry
 
 # no field overlaps the town wall: a field may ABUT the wall but must stay on one
 # side of it (the chrysanthemum field inside the walls touches but never crosses)
-
-
-def _seg_0447__wall_1(*, M: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 447 (wall) - body verbatim from the legacy gate() (feature 022)."""
-    wall = M.get("wall")
-    return _kept(locals(), ('wall',))
 
 
 # EVERY fully-on-map paddy field must SHOW a source of water: a channel feeding it, or
@@ -311,94 +283,6 @@ def _seg_0460__channels_flow_downhill(
 # feeder enters from the north, so the moat water heads SOUTH). A moat-fed irrigation channel
 # must run WITH that current - its field-end downstream of its moat-tap. A channel whose field
 # is UPSTREAM of the tap reads as water flowing from the field INTO the moat (backwards).
-
-
-def _seg_0461__moat_ring(*, M: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 461 (moat_ring) - body verbatim from the legacy gate() (feature 022)."""
-    moat_ring: Any = M.get("moat")
-    return _kept(locals(), ('moat_ring',))
-
-
-def _seg_0462__c_5(*, c: Any = _UNBOUND, channels: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 462 (c, mfed) - body verbatim from the legacy gate() (feature 022)."""
-    mfed = [c for c in channels if (c.get("frm") or {}).get("kind") == "moat"]
-    return _kept(locals(), ('c', 'mfed'))
-
-
-def _seg_0463__moat_channels_flow_with_current(
-    *,
-    M: Any = _UNBOUND,
-    _mdx: Any = _UNBOUND,
-    _mdy: Any = _UNBOUND,
-    _mfl: Any = _UNBOUND,
-    _mi: Any = _UNBOUND,
-    _mo: Any = _UNBOUND,
-    against: Any = _UNBOUND,
-    c: Any = _UNBOUND,
-    check: Any = _UNBOUND,
-    dx: Any = _UNBOUND,
-    dy: Any = _UNBOUND,
-    e: Any = _UNBOUND,
-    ends: Any = _UNBOUND,
-    ends_on_moat: Any = _UNBOUND,
-    entry: Any = _UNBOUND,
-    ex: Any = _UNBOUND,
-    ey: Any = _UNBOUND,
-    feeder: Any = _UNBOUND,
-    flow: Any = _UNBOUND,
-    mfed: Any = _UNBOUND,
-    moat_ring: Any = _UNBOUND,
-    origin: Any = _UNBOUND,
-    st: Any = _UNBOUND,
-    streams_m: Any = _UNBOUND,
-    sx: Any = _UNBOUND,
-    sy: Any = _UNBOUND,
-) -> dict[str, Any]:
-    """Gate segment 463 (moat_channels_flow_with_current) - body verbatim from the legacy gate() (feature 022)."""
-    if moat_ring and len(moat_ring) >= 3 and mfed:
-        # READ THE RECORDED CIRCULATION (GM 2026-07-25). This used to re-derive the moat's current by
-        # taking the FIRST stream whose end touches the ring and snapping its entry heading to a
-        # cardinal - fragile twice over: on a river-cut city BOTH the feeder and the outfall touch the
-        # ring, so the answer depended on which the gen happened to draw first, and the cardinal snap
-        # threw away up to 45 degrees. s.moat_flow / s.moat now record the inlet and outlet outright,
-        # so the current is simply inlet -> outlet. Falls back to the old derivation for a moat with
-        # no recorded circulation (moat_declares_circulation is what stops that being silent).
-        # THE CURRENT COMES FROM THE RECORDED CIRCULATION (GM 2026-07-25), snapped to a cardinal as
-        # this check has always done. Two fragilities in the old derivation are gone: it took the
-        # FIRST stream whose end touched the ring, so on a river-cut city the answer depended on
-        # draw order; and it required a stream END within 35px of the ring, which Nagahara's river
-        # (ends off-map, the MOAT's ends meeting IT) never satisfies - so the check silently never
-        # ran there at all. inlet -> outlet is the moat's net travel and needs no guessing.
-        # The cardinal snap is deliberate and load-bearing: an irrigation offtake leaves the ring
-        # roughly PERPENDICULAR, so its component along a precisely-measured tangent is near
-        # arbitrary. The coarse hemisphere is what makes the test mean "the field is not back
-        # upstream", rather than a coin flip on the along-ring component.
-        flow = None
-        _mfl = M.get("moat_flow") or {}
-        if _mfl.get("inlet") and _mfl.get("outlet"):
-            _mi, _mo = _mfl["inlet"], _mfl["outlet"]
-            _mdx, _mdy = _mo[0] - _mi[0], _mo[1] - _mi[1]
-            flow = (0, 1 if _mdy > 0 else -1) if abs(_mdy) >= abs(_mdx) else (1 if _mdx > 0 else -1, 0)
-        feeder = None
-        for st in streams_m:
-            ends = (st["poly"][0], st["poly"][-1])
-            ends_on_moat = [e for e in ends if poly_dist(e[0], e[1], moat_ring) <= 35]
-            if ends_on_moat:
-                entry = ends_on_moat[0]
-                feeder = (entry, ends[1] if ends[0] == entry else ends[0])
-                break
-        if flow is None and feeder:
-            entry, origin = feeder
-            dx, dy = entry[0] - origin[0], entry[1] - origin[1]  # the heading the feeder water enters on
-            flow = (0, 1 if dy > 0 else -1) if abs(dy) >= abs(dx) else (1 if dx > 0 else -1, 0)  # snapped to a cardinal
-        if flow is not None:
-            against = []
-            for c in mfed:
-                (sx, sy), (ex, ey) = c["poly"][0], c["poly"][-1]  # frm=moat, so poly[0] is the moat tap
-                if (ex - sx) * flow[0] + (ey - sy) * flow[1] < -8:  # field clearly upstream of the tap
-                    against.append(c["to"].get("name", "?"))
-            pass  # `` retired under feature 141 (the GM's cut); the segment stays for the check it keeps or the value it writes
-    return _kept(locals(), ('_mdx', '_mdy', '_mfl', '_mi', '_mo', 'against', 'c', 'dx', 'dy', 'e', 'ends', 'ends_on_moat', 'entry', 'ex', 'ey', 'feeder', 'flow', 'origin', 'st', 'sx', 'sy'))
 
 
 # A MOAT JUNCTION IS SWEPT WITH THE CURRENT (GM 2026-07-25). Where a channel meets the moat, its

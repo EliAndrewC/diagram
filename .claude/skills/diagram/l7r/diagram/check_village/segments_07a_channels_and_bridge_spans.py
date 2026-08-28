@@ -549,75 +549,8 @@ def _seg_0437__scrub_clear_of_urban_fabric(*, check: Any = _UNBOUND, scrub_urban
 # immediate hinterland). Town + city only; villages/hamlets keep the satoyama scrub-interleave rule.
 
 
-def _seg_0438_003__nr_halo(*, meta: Any = _UNBOUND, scale: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 0438.003 (nr_halo) - body verbatim from _seg_0438__near_ring_cultivated_fraction (feature 024 per-check split; guards re-evaluated in the body, see split_oversized.py)."""
-    if scale in ('town', 'city'):
-        nr_halo = 30.0 / (meta.get("ftpx") or 1)
-    return _kept(locals(), ('nr_halo',))
-
-
 # cultivated cover: paddy + vegetable fields, the chrysanthemum flower field, dry plots, gardens
-
-
-def _seg_0438_004__f_(*, M: Any = _UNBOUND, f_: Any = _UNBOUND, scale: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 0438.004 (f_, nr_cult) - body verbatim from _seg_0438__near_ring_cultivated_fraction (feature 024 per-check split; guards re-evaluated in the body, see split_oversized.py)."""
-    if scale in ('town', 'city'):
-        nr_cult = [f_["outline"] for f_ in M.get("fields", [])] + [f_["outline"] for f_ in M.get("flower_fields", [])]
-    return _kept(locals(), ('f_', 'nr_cult'))
-
-
-def _seg_0438_005__k_(*, M: Any = _UNBOUND, k_: Any = _UNBOUND, nr_cult: Any = _UNBOUND, o_: Any = _UNBOUND, p_: Any = _UNBOUND, scale: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 0438.005 (k_, nr_cult, o_, p_) - body verbatim from _seg_0438__near_ring_cultivated_fraction (feature 024 per-check split; guards re-evaluated in the body, see split_oversized.py)."""
-    if scale in ('town', 'city'):
-        for k_ in ("dry_plots", "gardens"):
-            for o_ in M.get(k_, []) or []:
-                p_ = o_.get("poly") if isinstance(o_, dict) else o_
-                if p_ is not None and len(p_) >= 3:
-                    nr_cult.append(p_)
-    return _kept(locals(), ('k_', 'nr_cult', 'o_', 'p_'))
 
 
 # committed non-arable cover -> a cell here is NOT eligible near-ring ground (excluded from the
 # denominator entirely, so a graveyard / pasture / coppice is neither cultivated nor counted as bare)
-
-
-def _seg_0438_006__nr_skip(*, scale: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 0438.006 (nr_skip) - body verbatim from _seg_0438__near_ring_cultivated_fraction (feature 024 per-check split; guards re-evaluated in the body, see split_oversized.py)."""
-    if scale in ('town', 'city'):
-        nr_skip = []  # type: ignore[var-annotated]
-    return _kept(locals(), ('nr_skip',))
-
-
-def _seg_0438_007__k__1(*, M: Any = _UNBOUND, k_: Any = _UNBOUND, nr_skip: Any = _UNBOUND, o_: Any = _UNBOUND, p_: Any = _UNBOUND, scale: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 0438.007 (k_, nr_skip, o_, p_) - body verbatim from _seg_0438__near_ring_cultivated_fraction (feature 024 per-check split; guards re-evaluated in the body, see split_oversized.py)."""
-    if scale in ('town', 'city'):
-        for k_ in ("marshes", "pastures", "forest_patches", "cemeteries", "cremation_grounds", "ossuaries", "village_groves", "groves"):
-            for o_ in M.get(k_, []) or []:
-                p_ = o_.get("poly") if isinstance(o_, dict) else o_
-                if p_ is not None and len(p_) >= 3:
-                    nr_skip.append(p_)
-    return _kept(locals(), ('k_', 'nr_skip', 'o_', 'p_'))
-
-
-def _seg_0438_008__nr_boxes(*, scale: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 0438.008 (nr_boxes) - body verbatim from _seg_0438__near_ring_cultivated_fraction (feature 024 per-check split; guards re-evaluated in the body, see split_oversized.py)."""
-    if scale in ('town', 'city'):
-        nr_boxes = []  # type: ignore[var-annotated]
-    return _kept(locals(), ('nr_boxes',))
-
-
-def _seg_0438_009__nr_boxes_1(*, M: Any = _UNBOUND, nr_boxes: Any = _UNBOUND, nr_halo: Any = _UNBOUND, o_: Any = _UNBOUND, scale: Any = _UNBOUND, v_: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 0438.009 (nr_boxes, o_, v_) - body verbatim from _seg_0438__near_ring_cultivated_fraction (feature 024 per-check split; guards re-evaluated in the body, see split_oversized.py)."""
-    if scale in ('town', 'city'):
-        for v_ in M.values():
-            if isinstance(v_, list) and v_ and isinstance(v_[0], dict) and "x" in v_[0] and "w" in v_[0] and "h" in v_[0]:
-                for o_ in v_:
-                    nr_boxes.append((o_["x"] - o_["w"] / 2 - nr_halo, o_["y"] - o_["h"] / 2 - nr_halo, o_["x"] + o_["w"] / 2 + nr_halo, o_["y"] + o_["h"] / 2 + nr_halo))
-    return _kept(locals(), ('nr_boxes', 'o_', 'v_'))
-
-
-def _seg_0438_010__nr_lines(*, scale: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 0438.010 (nr_lines) - body verbatim from _seg_0438__near_ring_cultivated_fraction (feature 024 per-check split; guards re-evaluated in the body, see split_oversized.py)."""
-    if scale in ('town', 'city'):
-        nr_lines = []  # type: ignore[var-annotated]
-    return _kept(locals(), ('nr_lines',))

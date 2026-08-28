@@ -39,42 +39,6 @@ from .common_03_capacity import _UNBOUND, _kept
 # check guards it - a label overlapped by any structure drawn OVER it (higher draw-z) is covered.
 
 
-def _seg_0288__occluders() -> dict[str, Any]:
-    """Gate segment 288 (occluders) - body verbatim from the legacy gate() (feature 022)."""
-    occluders = []  # type: ignore[var-annotated]
-    return _kept(locals(), ('occluders',))
-
-
-def _seg_0289__gs_1(*, M: Any = _UNBOUND, gs: Any = _UNBOUND, occluders: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 289 (gs, occluders) - body verbatim from the legacy gate() (feature 022)."""
-    for gs in M.get("gate_structs", []):
-        if gs.get("z") is not None:
-            occluders.append((gs["x"] - gs["w"] / 2, gs["y"] - gs["h"] / 2, gs["x"] + gs["w"] / 2, gs["y"] + gs["h"] / 2, gs["z"]))
-    return _kept(locals(), ('gs', 'occluders'))
-
-
-def _seg_0290__kd(*, M: Any = _UNBOUND, kd: Any = _UNBOUND, occluders: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 290 (kd, occluders) - body verbatim from the legacy gate() (feature 022)."""
-    for kd in M.get("kido", []):
-        if kd.get("z") is not None and kd.get("bbox"):
-            occluders.append((kd["bbox"][0], kd["bbox"][1], kd["bbox"][2], kd["bbox"][3], kd["z"]))
-    return _kept(locals(), ('kd', 'occluders'))
-
-
-def _seg_0291__occluders_1(*, M: Any = _UNBOUND, occluders: Any = _UNBOUND, t: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 291 (occluders, t) - body verbatim from the legacy gate() (feature 022)."""
-    for t in M.get("torii", []):
-        if len(t) >= 3:
-            occluders.append((t[0] - 22, t[1] - 28, t[0] + 22, t[1] + 12, t[2]))  # the arch's drawn extent
-    return _kept(locals(), ('occluders', 't'))
-
-
-def _seg_0295__hill(*, M: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 295 (hill) - body verbatim from the legacy gate() (feature 022)."""
-    hill = M.get("hill")
-    return _kept(locals(), ('hill',))
-
-
 # every watercourse - irrigation channel OR natural stream - must connect what it
 # claims to: each end anchored to its pond / off-map edge / field / forest
 

@@ -1,6 +1,5 @@
 """Gate segments (quarters and civic reserve; keys 0038-0051) - bodies verbatim, registry order preserved."""
 
-import math
 from typing import Any
 
 from .common_03_capacity import (
@@ -114,37 +113,6 @@ def _seg_0038__crop_not_held_open_by_one_feature(*, _lone: Any = _UNBOUND, check
 # "no well nearby" is never a valid layout; a yard whose trough cluster went unrecorded
 # (troughs > 0 without troughs_at) fails too - the anchor is part of the contract. Not
 # scale-gated: wherever a stable yard records troughs, its water is drawn at a well.
-
-
-def _seg_0043___tr_ftpx(*, meta: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 43 (_tr_ftpx) - body verbatim from the legacy gate() (feature 022)."""
-    _tr_ftpx = float(meta.get("ftpx") or 3.0)
-    return _kept(locals(), ('_tr_ftpx',))
-
-
-def _seg_0044___tr_wells(*, M: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 44 (_tr_wells) - body verbatim from the legacy gate() (feature 022)."""
-    _tr_wells = M.get("wells", [])
-    return _kept(locals(), ('_tr_wells',))
-
-
-def _seg_0045___tr_far() -> dict[str, Any]:
-    """Gate segment 45 (_tr_far) - body verbatim from the legacy gate() (feature 022)."""
-    _tr_far = []  # type: ignore[var-annotated]
-    return _kept(locals(), ('_tr_far',))
-
-
-def _seg_0046___tr_at(
-    *, M: Any = _UNBOUND, _tr_at: Any = _UNBOUND, _tr_far: Any = _UNBOUND, _tr_ftpx: Any = _UNBOUND, _tr_wells: Any = _UNBOUND, _tr_yd: Any = _UNBOUND, w: Any = _UNBOUND
-) -> dict[str, Any]:
-    """Gate segment 46 (_tr_at, _tr_far, _tr_yd, w) - body verbatim from the legacy gate() (feature 022)."""
-    for _tr_yd in M.get("stable_yards", []):
-        if not _tr_yd.get("troughs"):
-            continue
-        _tr_at = _tr_yd.get("troughs_at")
-        if not _tr_at or not _tr_wells or min(math.hypot(w["x"] - _tr_at[0], w["y"] - _tr_at[1]) for w in _tr_wells) > 40.0 / _tr_ftpx:
-            _tr_far.append((round(_tr_yd["x"]), round(_tr_yd["y"])))
-    return _kept(locals(), ('_tr_at', '_tr_far', '_tr_yd', 'w'))
 
 
 # THE FARRIER'S FORGE STANDS BESIDE A STABLES, AND KEEPS ITS FIRE GAP (GM 2026-07-25, the

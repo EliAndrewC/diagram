@@ -6,7 +6,6 @@ from l7r.diagram.waterfields import hem_on_paddy
 
 from .common_01_geometry import (
     Poly,
-    Pt,
     point_in_poly,
     seg_dist,
     segments_cross,
@@ -17,78 +16,6 @@ from .common_03_capacity import _UNBOUND, _kept
 # YIELD that wall to the fence: the fence is re-stamped on top and IS that side of the compound,
 # so there is no doubled, clashing parallel wall (s.mausoleum / s.manor do this automatically and
 # record the yielded sides in "ward_walls"). Verify every geometric abutment is recorded.
-
-
-def _seg_0197__walled_structure_yields_to_ward_wall(
-    *,
-    M: Any = _UNBOUND,
-    _wall_along_fence: Any = _UNBOUND,
-    a: Any = _UNBOUND,
-    ax: Any = _UNBOUND,
-    ay: Any = _UNBOUND,
-    b: Any = _UNBOUND,
-    bnd: Any = _UNBOUND,
-    bx: Any = _UNBOUND,
-    by: Any = _UNBOUND,
-    check: Any = _UNBOUND,
-    cx: Any = _UNBOUND,
-    cy: Any = _UNBOUND,
-    h: Any = _UNBOUND,
-    k: Any = _UNBOUND,
-    name: Any = _UNBOUND,
-    px: Any = _UNBOUND,
-    py: Any = _UNBOUND,
-    qx: Any = _UNBOUND,
-    qy: Any = _UNBOUND,
-    recorded: Any = _UNBOUND,
-    s: Any = _UNBOUND,
-    sides: Any = _UNBOUND,
-    tol: Any = _UNBOUND,
-    unyielded: Any = _UNBOUND,
-    w: Any = _UNBOUND,
-    wall_ring: Any = _UNBOUND,
-    wd: Any = _UNBOUND,
-    x0: Any = _UNBOUND,
-    x1: Any = _UNBOUND,
-    y0: Any = _UNBOUND,
-    y1: Any = _UNBOUND,
-) -> dict[str, Any]:
-    """Gate segment 197 (walled_structure_yields_to_ward_wall) - body verbatim from the legacy gate() (feature 022)."""
-    if M.get("wards"):
-
-        def _wall_along_fence(a: Pt, b: Pt, tol: float = 16) -> bool:
-            ax, ay = a
-            bx, by = b
-            horiz = abs(ax - bx) >= abs(ay - by)
-            for wd in M["wards"]:
-                bnd = wd.get("boundary", [])
-                for k in range(len(bnd) - 1):
-                    px, py = bnd[k]
-                    qx, qy = bnd[k + 1]
-                    if (abs(px - qx) >= abs(py - qy)) != horiz:  # fence segment must run the same way
-                        continue
-                    if horiz and abs(py - ay) <= tol and min(max(ax, bx), max(px, qx)) - max(min(ax, bx), min(px, qx)) >= 10:
-                        return True
-                    if not horiz and abs(px - ax) <= tol and min(max(ay, by), max(py, qy)) - max(min(ay, by), min(py, qy)) >= 10:
-                        return True
-            return False
-
-        wall_ring = M.get("wall")
-        unyielded = []
-        for s in M.get("mausoleums", []) + M.get("manors", []):
-            if s.get("rot", 0):
-                continue  # tilted compound: not axis-aligned to a fence
-            if wall_ring and not point_in_poly(s["x"], s["y"], wall_ring):
-                continue  # only compounds INSIDE the city
-            cx, cy, w, h = s["x"], s["y"], s["w"], s["h"]
-            x0, y0, x1, y1 = cx - w / 2, cy - h / 2, cx + w / 2, cy + h / 2
-            sides = {"north": ((x0, y0), (x1, y0)), "south": ((x0, y1), (x1, y1)), "west": ((x0, y0), (x0, y1)), "east": ((x1, y0), (x1, y1))}
-            recorded = set(s.get("ward_walls", []))
-            for name, (a, b) in sides.items():
-                if name != s.get("gate_dir") and _wall_along_fence(a, b) and name not in recorded:
-                    unyielded.append((round(cx), round(cy), name))
-        pass  # `` retired under feature 141 (the GM's cut); the segment stays for the check it keeps or the value it writes
-    return _kept(locals(), ('_wall_along_fence', 'a', 'b', 'cx', 'cy', 'h', 'name', 'recorded', 's', 'sides', 'unyielded', 'w', 'wall_ring', 'x0', 'x1', 'y0', 'y1'))
 
 
 # no structure overlaps the (wide) road
@@ -322,18 +249,6 @@ def _seg_0218__watercourses_wider_than_ditches(*, chan_ws: Any = _UNBOUND, check
 
 # no structure overlaps a street OR an alley (a paved lane or a gravel alley running over a
 # house is wrong) - alleys are drawn last, so a careless alley can be laid across a building
-
-
-def _seg_0221__tstreets(*, M: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 221 (tstreets) - body verbatim from the legacy gate() (feature 022)."""
-    tstreets = M.get("town_streets", [])
-    return _kept(locals(), ('tstreets',))
-
-
-def _seg_0222__a_1(*, M: Any = _UNBOUND, a: Any = _UNBOUND, tstreets: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 222 (a, lanes) - body verbatim from the legacy gate() (feature 022)."""
-    lanes = tstreets + [{"pts": a["pts"], "w": a.get("w", 10)} for a in M.get("alleys", [])]
-    return _kept(locals(), ('a', 'lanes'))
 
 
 # ---- street-faced town layout: businesses front the streets (and face them); housing
