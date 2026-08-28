@@ -148,13 +148,40 @@ def hit_copies(s: str, factor: float = HIT_WIDEN_FACTOR, floor: float = HIT_WIDE
     return "".join(out)
 
 
-def marks_region(strings: Sequence[str], cell: float = HIT_CELL) -> str:
-    """Rects over the grid cells that hold a mark of the given strings - the scrub's real extent."""
-    cells: set[tuple[int, int]] = set()
+def _in_any(x: float, y: float, polys: Sequence[Sequence[Sequence[float]]]) -> bool:
+    for poly in polys:
+        n = len(poly)
+        inside = False
+        for i in range(n):
+            x1, y1 = poly[i][0], poly[i][1]
+            x2, y2 = poly[(i + 1) % n][0], poly[(i + 1) % n][1]
+            if (y1 > y) != (y2 > y) and x < (x2 - x1) * (y - y1) / (y2 - y1) + x1:
+                inside = not inside
+        if inside:
+            return True
+    return False
+
+
+def marks_region(strings: Sequence[str], cell: float = HIT_CELL, grow: int = 1, within: Sequence[Sequence[Sequence[float]]] = ()) -> str:
+    """Rects over the grid cells that hold a mark of the given strings - the scrub's real extent -
+    GROWN by `grow` cells around every mark and kept inside the recorded footprints `within`. The
+    growth is what makes a bare patch INSIDE the scrub count as scrub (the GM, 2026-08-28: "patches
+    of dirt with nothing growing there ... should still be counted as part of the scrub land") while
+    the village's deliberate clearing, wider than two cells, stays clear; the footprint stops the
+    growth spilling past the scrub's own edge. The rects carry fill="none" so the highlight never
+    paints them - the first cut left the attribute off and the grid showed as gold steps."""
+    marked: set[tuple[int, int]] = set()
     for s in strings:
         for m in _MARK_XY.finditer(s):
             x, y = (m.group(1), m.group(2)) if m.group(1) is not None else (m.group(3), m.group(4))
-            cells.add((int(float(x) // cell), int(float(y) // cell)))
+            marked.add((int(float(x) // cell), int(float(y) // cell)))
+    cells: set[tuple[int, int]] = set()
+    for gx, gy in marked:
+        for dx in range(-grow, grow + 1):
+            for dy in range(-grow, grow + 1):
+                c = (gx + dx, gy + dy)
+                if (dx == 0 and dy == 0) or not within or _in_any((c[0] + 0.5) * cell, (c[1] + 0.5) * cell, within):
+                    cells.add(c)
     out: list[str] = []
     for gy in sorted({c[1] for c in cells}):
         xs = sorted(c[0] for c in cells if c[1] == gy)
@@ -163,9 +190,9 @@ def marks_region(strings: Sequence[str], cell: float = HIT_CELL) -> str:
             if gx == prev + 1:
                 prev = gx
                 continue
-            out.append(f'<rect x="{start * cell:.0f}" y="{gy * cell:.0f}" width="{(prev - start + 1) * cell:.0f}" height="{cell:.0f}"/>')
+            out.append(f'<rect x="{start * cell:.0f}" y="{gy * cell:.0f}" width="{(prev - start + 1) * cell:.0f}" height="{cell:.0f}" fill="none"/>')
             start = prev = gx
-        out.append(f'<rect x="{start * cell:.0f}" y="{gy * cell:.0f}" width="{(prev - start + 1) * cell:.0f}" height="{cell:.0f}"/>')
+        out.append(f'<rect x="{start * cell:.0f}" y="{gy * cell:.0f}" width="{(prev - start + 1) * cell:.0f}" height="{cell:.0f}" fill="none"/>')
     return "".join(out)
 
 
@@ -329,7 +356,8 @@ def render_page(strings: Sequence[str], tags: Sequence[ClsTag], name: str, meta:
     sheet = next((i for i, t in enumerate(tags) if t == NOT_HIGHLIGHTED), 0)
     regions = hit_regions(manifest, present - HIT_FROM_MARKS)
     for key in sorted(HIT_FROM_MARKS & present):
-        rects = marks_region([s for s, t in zip(strings, tags, strict=True) if t == key])
+        polys = [rec["poly"] for mk, roles in HIT_REGIONS for rec in (manifest or {}).get(mk) or [] if isinstance(rec, dict) and rec.get("poly") and roles.get(str(rec.get("role", "*")), roles.get("*")) == key]
+        rects = marks_region([s for s, t in zip(strings, tags, strict=True) if t == key], within=polys)
         if rects:
             regions += _open(key) + f'<g class="hit" fill="none" style="pointer-events: fill">{rects}</g></g>'
     wrapped.insert(sheet + 1, regions)

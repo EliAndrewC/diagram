@@ -199,9 +199,17 @@ def test_widened_classes_carry_their_hit_copies_and_others_do_not() -> None:
 
 
 def test_the_marks_region_covers_only_cells_that_hold_a_mark() -> None:
-    rects = marks_region(['<g><line x1="5" y1="5" x2="6" y2="6"/><line x1="30" y1="5" x2="31" y2="6"/><circle cx="100" cy="100" r="2"/></g>'], cell=24.0)
-    assert rects == '<rect x="0" y="0" width="48" height="24"/><rect x="96" y="96" width="24" height="24"/>'
+    rects = marks_region(['<g><line x1="5" y1="5" x2="6" y2="6"/><line x1="30" y1="5" x2="31" y2="6"/><circle cx="100" cy="100" r="2"/></g>'], cell=24.0, grow=0)
+    assert rects == '<rect x="0" y="0" width="48" height="24" fill="none"/><rect x="96" y="96" width="24" height="24" fill="none"/>'
     assert marks_region([]) == ""
+
+
+def test_the_region_grows_a_cell_around_each_mark_but_stays_inside_the_footprint() -> None:
+    one = ['<line x1="36" y1="36" x2="37" y2="37"/>']  # the cell (1, 1)
+    grown = marks_region(one, cell=24.0, grow=1)
+    assert grown.count("<rect") == 3 and 'x="0" y="0" width="72"' in grown, "the eight neighbors are in: three rows of three"
+    clipped = marks_region(one, cell=24.0, grow=1, within=[[[0, 0], [48, 0], [48, 48], [0, 48]]])
+    assert clipped.count("<rect") == 2 and 'width="48"' in clipped and 'y="48"' not in clipped, "the growth stops at the footprint; the marked cell itself always counts"
 
 
 def test_the_scrub_region_comes_from_its_marks_not_its_polygon() -> None:
@@ -213,7 +221,7 @@ def test_the_scrub_region_comes_from_its_marks_not_its_polygon() -> None:
     ]
     tags = [None, "-", "scrub and rough grazing", None]
     page = render_page(strings, tags, "T", {"ftpx": 1.0}, {"commons": [{"role": "grazing", "poly": [[0, 0], [300, 0], [300, 300], [0, 300]]}]})
-    assert "<rect x=\"0\" y=\"0\" width=\"24\" height=\"24\"/>" in page and 'polygon class="hit"' not in page
+    assert "<rect x=\"0\" y=\"0\" width=\"48\" height=\"24\" fill=\"none\"/>" in page and 'polygon class="hit"' not in page
 
 
 def test_the_hit_widths_are_per_class_as_the_gm_tuned_them() -> None:
