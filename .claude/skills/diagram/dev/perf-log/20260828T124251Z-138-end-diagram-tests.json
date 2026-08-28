@@ -1,0 +1,130 @@
+{
+  "clone": "diagram-tests",
+  "commit": "82637dd4",
+  "cpus": 22,
+  "environment": "local",
+  "host": "laptop",
+  "hostname": "863bd4879ca8",
+  "image": "laptop",
+  "label": "138-end",
+  "machine": "x86_64",
+  "median_seconds": 18.0,
+  "reference": {
+    "down_deg": 90,
+    "households": 15,
+    "name": "Inashiro",
+    "water_sink": "pond"
+  },
+  "rows": [
+    {
+      "asked": 15,
+      "form": "nucleated",
+      "houses": 15,
+      "seconds": 15.5,
+      "seed": 4,
+      "shape": "crescent",
+      "stages": {
+        "appurtenances": 0.24,
+        "bamboo": 0.0,
+        "crossings": 0.36,
+        "field": 3.53,
+        "frame": 0.01,
+        "hinterland": 7.42,
+        "homesteads": 1.2,
+        "notice": 0.61,
+        "seat": 0.03,
+        "sink": 0.01,
+        "track": 0.89,
+        "water_frame": 0.0,
+        "web": 1.01,
+        "windbreak": 0.14,
+        "woodland": 0.02
+      }
+    },
+    {
+      "asked": 15,
+      "form": "nucleated",
+      "houses": 15,
+      "seconds": 16.0,
+      "seed": 25,
+      "shape": "crescent",
+      "stages": {
+        "appurtenances": 0.15,
+        "bamboo": 0.0,
+        "crossings": 0.32,
+        "field": 4.86,
+        "frame": 0.0,
+        "hinterland": 6.85,
+        "homesteads": 1.16,
+        "notice": 0.86,
+        "seat": 0.03,
+        "sink": 0.01,
+        "track": 0.81,
+        "water_frame": 0.0,
+        "web": 0.83,
+        "windbreak": 0.13,
+        "woodland": 0.01
+      }
+    },
+    {
+      "asked": 15,
+      "form": "nucleated",
+      "houses": 15,
+      "seconds": 20.0,
+      "seed": 39,
+      "shape": "round",
+      "stages": {
+        "appurtenances": 0.63,
+        "bamboo": 0.0,
+        "crossings": 0.39,
+        "field": 2.62,
+        "frame": 0.0,
+        "hinterland": 7.92,
+        "homesteads": 0.62,
+        "notice": 1.76,
+        "seat": 0.04,
+        "sink": 0.01,
+        "track": 1.39,
+        "water_frame": 0.0,
+        "web": 4.33,
+        "windbreak": 0.27,
+        "woodland": 0.02
+      }
+    },
+    {
+      "asked": 15,
+      "form": "nucleated",
+      "houses": 15,
+      "seconds": 45.7,
+      "seed": 47,
+      "shape": "round",
+      "stages": {
+        "appurtenances": 0.1,
+        "bamboo": 0.0,
+        "crossings": 0.38,
+        "field": 28.26,
+        "frame": 0.0,
+        "hinterland": 8.75,
+        "homesteads": 1.15,
+        "notice": 1.74,
+        "seat": 0.05,
+        "sink": 0.0,
+        "track": 1.58,
+        "water_frame": 0.0,
+        "web": 3.53,
+        "windbreak": 0.17,
+        "woodland": 0.0
+      }
+    }
+  ],
+  "seeds": [
+    4,
+    25,
+    39,
+    47
+  ],
+  "subject": "138: the fabric index wired (clear_runs, _route), the crossing sweep, the water index, the memo; every gate roll and live pool map byte-identical; research R1-R3; the budget comment and performance doctrine corrected",
+  "total_seconds": 97.2,
+  "utc": "20260828T124251Z",
+  "worst_seconds": 45.7
+}

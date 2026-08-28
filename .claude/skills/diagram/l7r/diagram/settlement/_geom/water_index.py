@@ -13,9 +13,9 @@ from __future__ import annotations
 
 from typing import Any
 
+from l7r.diagram.settlement._geom.base import Pt
 from l7r.diagram.settlement._geom.primitives import seg_dist
 
-Pt = tuple[float, float]
 SLACK = 64.0
 _SOURCES = (("streams", 9.0), ("channels", 2.5), ("field_ditches", 4.2), ("drawn_channels", 2.5))
 

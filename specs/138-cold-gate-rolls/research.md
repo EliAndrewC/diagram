@@ -54,3 +54,23 @@ geometry, spread thin.
 
 Declined: coarser sampling in `clear_runs` (moves verdicts); a persistent index across stages (the fabric
 changes between stages; the memo already serves the within-stage reuse).
+
+## R4 - the numbers (2026-08-28, quiet box)
+
+| figure | baseline | after | bar |
+|---|---|---|---|
+| seed-19 polder, solo roll | 110.4 s | **24.3 s** (22%) | SC-001: <= 25% - met |
+| reference hamlet, solo roll | 37.2 s | **15.2 s** | |
+| cold unlocked `make done` (every cached roll re-made, the reference included) | 5 m 42 s | **1 m 50 s** (32%; 79 s of it the test phase) | SC-002: <= 50% - met |
+| `make perf-report AGAINST=138-start` (4 reference seeds) | total 320.8 s | **97.2 s, -69.7%**; seeds -73 / -73 / -82 / -51%; band 0 | SC-004: no seed slower - met |
+| byte identity: 9 gate specs + 4 live pool hamlets | | all IDENTICAL (manifests; pool md5 equal to the worktree's and the committed files) | SC-003 - met |
+| idle run then interactive gate (T31) | | `make idle-tests` re-rolled and stored everything; the next `make done` served the reference and every roll (HIT) | SC-005 - met |
+| live pool regeneration | inashiro 54 / kashikawa 100 / mizuguchi 44 / sawada 120 s | 21 / 34 / 15 / 32 s | |
+
+Two guard tests caught the new modules defining their own `Pt` / `Poly` aliases (the package's star-import
+guards forbid a public name bound in two submodules); they now import the shared definitions.
+
+**A note for the GM, outside this feature**: the WARM unlocked gate is 45-50 s now, up from 21.7 s at
+feature 135's landing - not from this feature but from main's merge: `tests/interactive/test_page_browser.py`
+(feature 134's browser tests, 14.9 s and 2.9 s) and ~130 new tests. That is feature 134's to weigh
+against the three-tree rule (a 15 s browser test is `tests/gate/` or `tests/full/` material).

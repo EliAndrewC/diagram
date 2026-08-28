@@ -27,8 +27,8 @@ from collections.abc import Sequence
 
 from l7r.diagram.settlement import point_in_poly, seg_dist
 
-Pt = tuple[float, float]
-Poly = list[Pt]
+from .consts import Pt
+
 Line = tuple[Pt, Pt]
 
 
