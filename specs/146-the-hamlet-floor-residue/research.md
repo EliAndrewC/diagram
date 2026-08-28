@@ -28,6 +28,42 @@ The full table as it stood is `floor-at-145.txt` beside this file.
 - **Class 3** is one unit test per refusal reason - the shape feature 145 used for sixteen of them.
 - **Class 1** turns on whether a scripted map rolls the archetype by the time the task is reached.
 
+## R2b - what the residue turned out to BE (the finding that reshaped this feature)
+
+Class 2 was specified as "check failure branches no map trips". Most of it was not that at all: it was
+**dead code feature 141's cut left behind**. 141 retired ~385 check names by replacing each `check(...)`
+call with a `pass  # ... retired ...` stub, and left every segment body that computed the retired check's
+inputs in place, on the comment "the segment stays for the check it keeps or the value it writes". For a
+third of the battery neither was true.
+
+| removed | count | lines |
+|---|---|---|
+| segments whose chain reaches NO live check | 201 | 3,457 |
+| segments keeping a retired stub and no live check (a second pass - see the caveat) | 9 | 1,041 |
+| helpers with no production caller, to fixpoint (each round orphans the next) | 6 + 9 + 14 | ~700 |
+| **total** | | **~5,200** |
+
+All 153 live checks survive; the reference and the pool are unchanged; frozen registry rows 595 -> 385.
+
+**The caveat, recorded because it cost a round**: the first reachability pass used "does any later segment
+NEED a name this segment WRITES", and segment locals are single letters (`q`, `k`, `b`, `s`), so almost
+everything reached a live check spuriously and the pass was far too conservative. The second pass keyed on
+"keeps a retired stub AND keeps no live check", which is the honest test.
+
+**And a mistake worth recording**: sweeping the TEST tree for references to removed helpers with a regex
+matched module names (`py`, `_builders`) and deleted ~300 unrelated tests. It was caught immediately and
+reverted whole (the suite was back to 1,737 passing in one command), and the removal was redone by naming
+each test through the AST. No broad automated test deletion; name every victim.
+
+## R2c - the floor's path down
+
+373 (145's landing) -> 347 (dead segments) -> 297 (orphaned helpers) -> 260 (nine more segments) -> 301
+(a REGRESSION: the 39 tests deleted with those helpers were also giving incidental gate coverage) -> 227
+(the fixpoint helper removal). Every step is a FULL run; the regression is recorded rather than smoothed
+over, because it is the argument for replacing incidental coverage with purposeful fixtures.
+
+Scripted negative fixtures: 4 at the start, **26** now - each a cached roll plus one deliberate break.
+
 ## R3 - the numbers at the end
 
 (filled in at the closing task)
