@@ -137,3 +137,30 @@ def test_map_frame_hugs_its_content_fires_when_the_frame_is_blown_out() -> None:
         M["meta"]["view"] = [v[0] - 900, v[1] - 900, v[2] + 1800, v[3] + 1800]
 
     _fires(REFERENCE, "map_frame_hugs_its_content", blow_out_the_frame)
+
+
+@pytest.mark.rolls_map
+def test_no_structure_on_paddy_fires_when_a_farmhouse_is_dropped_in_the_basins() -> None:
+    def into_the_paddy(M: dict[str, Any]) -> None:
+        fx0, fy0, fx1, fy1 = M["fields"][0]["bbox"]
+        M["houses"][0]["x"], M["houses"][0]["y"] = (fx0 + fx1) / 2, (fy0 + fy1) / 2
+
+    _fires(REFERENCE, "no_structure_on_paddy", into_the_paddy)
+
+
+@pytest.mark.rolls_map
+def test_hamlet_has_no_headman_fires_when_a_headman_house_appears() -> None:
+    _fires(REFERENCE, "hamlet_has_no_headman", lambda M: M["houses"][0].__setitem__("role", "headman"))
+
+
+@pytest.mark.rolls_map
+def test_farmhouses_reach_a_way_fires_when_the_lanes_are_taken_away() -> None:
+    def strand_them(M: dict[str, Any]) -> None:
+        M["lanes"] = [ln for ln in M["lanes"] if ln.get("connector")]
+
+    _fires(REFERENCE, "farmhouses_reach_a_way", strand_them)
+
+
+@pytest.mark.rolls_map
+def test_labels_within_image_fires_when_a_caption_is_flung_off_the_sheet() -> None:
+    _fires(REFERENCE, "labels_within_image", lambda M: M["labels"][0].__setitem__(0, -5000.0))
