@@ -258,7 +258,7 @@ class _StubSettlement:
 
 
 def test_touch_junctions_does_not_close_a_short_lane_onto_its_own_start() -> None:
-    """Feature 134, Kuwabata seed 21: a 30 ft lane whose two ends both stood near the same spot on
+    """Feature 139, Kuwabata seed 21: a 30 ft lane whose two ends both stood near the same spot on
     a neighbor was touched there at BOTH ends and became a 28 ft loop - a hairpin to
     `lanes_bend_like_paths`, invisible to `_smooth_web`, which had already run. A foot within a few
     feet of the lane's other end is that end's own junction, not a new one."""

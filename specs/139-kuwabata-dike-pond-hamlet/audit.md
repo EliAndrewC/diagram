@@ -1,4 +1,4 @@
-# The audit: what Kuwabata, a dike-pond hamlet, is still missing (feature 134, T31)
+# The audit: what Kuwabata, a dike-pond hamlet, is still missing (feature 139, T31)
 
 For the GM. Nothing here is drawn; every item is a decision the GM makes (FR-007, FR-008). The
 research behind each row is in `research/archetypes.md` "What stands on a dike-pond hamlet that a

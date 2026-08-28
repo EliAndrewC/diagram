@@ -71,7 +71,7 @@ class HamletSpec:
     fixtures_min: dict[str, int] | None = None  # at least N of a farmstead fixture kind, e.g. {"shrine": 1} (feature 133 T61)
     settlement_form: str | None = None
     field_archetype: str | None = None
-    pond_layout: str | None = None  # a dike-pond's arrangement, grid | mosaic (feature 134; `POND_LAYOUTS`)
+    pond_layout: str | None = None  # a dike-pond's arrangement, grid | mosaic (feature 139; `POND_LAYOUTS`)
     plot_size: str | None = None
     grain_drift: int | None = None
     woodland_patches: int | None = None
@@ -117,7 +117,7 @@ class SitePlan:
     # `settlement_form_asked` preserves the ROLL when a site cannot take that form; see `stage_track`.
     settlement_form: str
     field_archetype: str
-    # THE DIKE-POND'S ARRANGEMENT (feature 134): "grid" or "mosaic", rolled for a dike-pond hamlet
+    # THE DIKE-POND'S ARRANGEMENT (feature 139): "grid" or "mosaic", rolled for a dike-pond hamlet
     # and pinned to "grid" for a rice polder (see `POND_LAYOUTS`). Read by `stage_polder`.
     pond_layout: str
     plot_size: str

@@ -407,7 +407,11 @@ class PublicFixturesMixin:
                 # narrows the pool rather than naming a point, so the lane score still chooses within
                 # the allowed side.
                 _pool = [_q for _q in _cands if _q[1] < y] if label_above else _cands
-                _ok = [_q for _q in _pool if self.label_seat_clear(_q[0], _q[1], _tw_lab, 8.0, _boxes)]
+                # ...PROBED AT THE CAPTION'S OWN TILT (feature 139, settlement-review of Kuwabata): the seat
+                # search cleared the UNROTATED box while the caption is drawn tilted along its lane, so a
+                # -32 degree caption's far end reached a threshing yard the level box had cleared.
+                # `label_seat_clear` already knows how to probe the rotated AABB; it was not being asked.
+                _ok = [_q for _q in _pool if self.label_seat_clear(_q[0], _q[1], _tw_lab, 8.0, _boxes, tilt=_t)]
                 if _ok:
                     _lx, _ly = _pick(_ok)
                 else:

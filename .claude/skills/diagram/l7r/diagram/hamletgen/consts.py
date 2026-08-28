@@ -271,7 +271,7 @@ WEST_SUN_FT = 50.0
 # keys) and almost nothing else: different water entry, different drainage, a perimeter dike, and a
 # village that must sit on the LANDWARD side rather than the upslope one.
 #
-# `mulberry_dike_fishpond` IS declared as a third archetype (feature 134, Kuwabata) because a pool
+# `mulberry_dike_fishpond` IS declared as a third archetype (feature 139, Kuwabata) because a pool
 # entry names it and the gate reads it (`dikepond_is_ponds_in_a_block` keys off
 # `meta.field_archetype`) - but it is BUILT as the polder carried to the wholesale-conversion
 # overlay, which is what it is historically too (research/archetypes.md "The three overlay values":

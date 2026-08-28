@@ -112,8 +112,8 @@ STARTED = partial. NOT STARTED = hand-authored only.
 | `polder_grid` | **FITTED** | 29/32 (8 seeds x 4 falls). Blocker: title lands on the windbreak belt when framing is tight | Enokida |
 | `contour_terraces` | NOT STARTED | engine builder exists | Tanada |
 | `ribbon_valley` | NOT STARTED | engine builder exists | Yatsuda |
-| `mulberry_dike_fishpond` | **FITTED** (feature 134, 2026-08-27) | Kuwabata (seed 21, 16 hh) generates from a declaration and passes the gate; built as the polder carried to the wholesale `mulberry_fishpond` overlay, with the `pond_layout` grid/mosaic knob. Cohort OWED at unlock (scope locked) | Kuwabata (CONVERTED - the hand-authored script is in git history before 2026-08-27) |
-| overlays (`mulberry_fishpond`, `lotus`, `tea_fringe`) | STARTED | the generator drives `apply_land_use` for the dike-pond's wholesale case (feature 134); the SCATTERED overlays a paddy hamlet may carry are not yet rolled | Honda, Shimizu |
+| `mulberry_dike_fishpond` | **FITTED** (feature 139, 2026-08-27) | Kuwabata (seed 21, 16 hh) generates from a declaration and passes the gate; built as the polder carried to the wholesale `mulberry_fishpond` overlay, with the `pond_layout` grid/mosaic knob. Cohort OWED at unlock (scope locked) | Kuwabata (CONVERTED - the hand-authored script is in git history before 2026-08-27) |
+| overlays (`mulberry_fishpond`, `lotus`, `tea_fringe`) | STARTED | the generator drives `apply_land_use` for the dike-pond's wholesale case (feature 139); the SCATTERED overlays a paddy hamlet may carry are not yet rolled | Honda, Shimizu |
 
 Generated so far: Inashiro, Kashikawa, Mizuguchi, Sawada, Kuwabata (`pool/hamlets/`, beside the hand-authored hamlets - the pool is foldered by tier, and `meta.generated_by` marks the scripted maps).
 

@@ -188,14 +188,18 @@ class LandUseMixin:
                     # same _rounded_pond the dug ponds use - smaller inset, and NO water-edge stroke, so a
                     # flooded field never reads as dug infrastructure). The thin green rim left showing is
                     # the bund top the water cannot overtop.
-                    self.add(f'<polygon points="{pts}" fill="#A6C398" stroke="#A6C398" stroke-width="3" stroke-linejoin="round"/>')
+                    self.add(
+                        f'<polygon points="{pts}" fill="#A6C398" stroke="#A6C398" stroke-width="3" stroke-linejoin="round"/>', cls="paddy"
+                    )  # a leftover parcel is standing rice (feature 139: every dike-pond ink is ruled on)
                     fd, fpoly = self._rounded_pond(p["poly"], inset=2.5, reach=12.0, rng=rng)
-                    self.add(f'<path d="{fd}" fill="{lfill}"/>')
+                    self.add(f'<path d="{fd}" fill="{lfill}"/>', cls="paddy")
                     fpts = " ".join(f"{x:.1f},{y:.1f}" for x, y in fpoly)
-                    self._paddy_surface(fpoly, fpts, flooded=True, pitch=4.5)
+                    with self.feature("paddy"):  # a repainted leftover is paddy ground (feature 139: every dike-pond ink is ruled on)
+                        self._paddy_surface(fpoly, fpts, flooded=True, pitch=4.5)
                 else:
-                    self.add(f'<polygon points="{pts}" fill="{lfill}" stroke="{lfill}" stroke-width="3" stroke-linejoin="round"/>')
-                    self._paddy_surface(p["poly"], pts, flooded=False, pitch=4.5)  # jittered-grid mottle, ~3-6 px between shoots (GM 2026-07-23)
+                    self.add(f'<polygon points="{pts}" fill="{lfill}" stroke="{lfill}" stroke-width="3" stroke-linejoin="round"/>', cls="paddy")
+                    with self.feature("paddy"):  # a repainted leftover is paddy ground (feature 139: every dike-pond ink is ruled on)
+                        self._paddy_surface(p["poly"], pts, flooded=False, pitch=4.5)  # jittered-grid mottle, ~3-6 px between shoots (GM 2026-07-23)
             random.setstate(_lst)
         return leftover_plots
 
@@ -234,7 +238,7 @@ class LandUseMixin:
             )
             _sc = 1.0 + 2.5 / max(1.0, _dm)
             cover = " ".join(f"{cx + (x - cx) * _sc:.1f},{cy + (y - cy) * _sc:.1f}" for x, y in p["poly"])
-            self.add(f'<polygon points="{cover}" fill="#A6C398"/>')
+            self.add(f'<polygon points="{cover}" fill="#A6C398"/>', cls="paddy")  # the bund-erasing cover is field floor
             # THE CANAL AT THE TOE BOUNDS THE BANK (settlements.md 'Mulberry bushes keep clear of the
             # canals'): where a mosaic-bent lateral rides INSIDE the parcel line (Kuwabata: two west-edge
             # ponds, up to 3.6 px), the whole pond unit is DUG BACK - shrunk about its centroid until the
@@ -259,9 +263,9 @@ class LandUseMixin:
                 _s2 = max(0.7, 1.0 - (pen + 1.0) / max(1.0, _dm))
                 qpoly = [(cx + (qx - cx) * _s2, cy + (qy - cy) * _s2) for qx, qy in qpoly]
             bd, bpoly = self._rounded_pond(qpoly, inset=0.0, reach=8.0, rng=rng)
-            self.add(f'<path d="{bd}" fill="#C2A772" stroke="#9C8558" stroke-width="1.2" stroke-linejoin="round" opacity="0.95"/>')
+            self.add(f'<path d="{bd}" fill="#C2A772" stroke="#9C8558" stroke-width="1.2" stroke-linejoin="round" opacity="0.95"/>', cls="mulberry dike")
             wd, wpoly = self._rounded_pond(qpoly, inset=11.0, reach=16.0, rng=rng)
-            self.add(f'<path d="{wd}" fill="{colors[overlay]}" stroke="#6C9CBE" stroke-width="1.4"/>')
+            self.add(f'<path d="{wd}" fill="{colors[overlay]}" stroke="#6C9CBE" stroke-width="1.4"/>', cls="fish pond")
             crown_q.append((qpoly, bd, cx, cy))  # crowns drawn after the late-water anchor (see below)
             # `bank` = the planted band's outer edge, recorded so mulberry_banks_clear_of_channels has
             # manifest teeth: the crowns fill the bank, so "no canal runs inside a bank" bounds the bushes
@@ -338,7 +342,10 @@ class LandUseMixin:
             for anchor, uphill, kind in ((top, True, "feed"), (bot, False, "drain")):
                 tp = _target((anchor[0], anchor[1]), i, uphill)
                 if tp is not None:
-                    self.add(f'<line x1="{anchor[0]:.1f}" y1="{anchor[1]:.1f}" x2="{tp[0]:.1f}" y2="{tp[1]:.1f}" stroke="#6C9CBE" stroke-width="2.4" stroke-linecap="round" opacity="0.95"/>')
+                    self.add(
+                        f'<line x1="{anchor[0]:.1f}" y1="{anchor[1]:.1f}" x2="{tp[0]:.1f}" y2="{tp[1]:.1f}" stroke="#6C9CBE" stroke-width="2.4" stroke-linecap="round" opacity="0.95"/>',
+                        cls="pond sluice",
+                    )
                     sluices.append({"a": [round(anchor[0], 1), round(anchor[1], 1)], "b": [round(tp[0], 1), round(tp[1], 1)], "kind": kind})
         self.M["dikepond_sluices"] = sluices
 
@@ -412,7 +419,7 @@ class LandUseMixin:
                     continue
                 g.append(f'<circle cx="{jx:.1f}" cy="{jy:.1f}" r="{r:.1f}" fill="{ccol}" opacity="0.85"/>')
         g.append("</g>")
-        self.add("".join(g))
+        self.add("".join(g), cls="mulberry dike")  # the coppiced crowns are the dike's planting
 
     @staticmethod
     def _pick_overlay_plots(eligible: list[Any], take: int, clustered: bool, rng: random.Random) -> list[Any]:

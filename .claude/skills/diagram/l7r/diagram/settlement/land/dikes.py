@@ -111,7 +111,7 @@ class DikeMixin:
         else:
             run_paths = [d]
         for rp in run_paths:
-            self.add(f'<path d="{rp}" fill="{BUND}" stroke="#9C8558" stroke-width="1.2" stroke-linejoin="round" opacity="0.95"/>')
+            self.add(f'<path d="{rp}" fill="{BUND}" stroke="#9C8558" stroke-width="1.2" stroke-linejoin="round" opacity="0.95"/>', cls="perimeter dike")
         # MOTTLE + PLANTED ROWS (reworked GM 2026-07-24 - accuracy pass; settlements.md 'Perimeter dike'):
         # the old render scattered crowns at random over the band, but dike planting was ROW planting along
         # the alignment - a WILLOW row on the water face (wave-wash armor + withy supply; the Qing Willow
@@ -157,7 +157,7 @@ class DikeMixin:
             mcol2 = random.choice(("#6E8B4A", "#7C9A54", "#5E7C40"))
             g.append(f'<circle cx="{mx2 + random.uniform(-1.2, 1.2):.1f}" cy="{my2 + random.uniform(-1.2, 1.2):.1f}" r="{random.uniform(2.2, 3.6):.1f}" fill="{mcol2}" opacity="0.85"/>')
         g.append("</g>")
-        self.add("".join(g))
+        self.add("".join(g), cls="perimeter dike")
         random.setstate(st)
         self.M.setdefault("dikes", []).append(
             {
@@ -244,7 +244,7 @@ class DikeMixin:
                 mcol = random.choice(["#A8895A", "#B79B68", "#D2BC8C"])
                 g.append(f'<ellipse cx="{mx:.1f}" cy="{my:.1f}" rx="{random.uniform(4, 8):.1f}" ry="{random.uniform(3, 5):.1f}" fill="{mcol}" opacity="0.4"/>')
             g.append("</g>")
-            self.add("".join(g))
+            self.add("".join(g), cls="perimeter dike")
             self.house(x, y, hw, hh, "plain", rot=ang)
             corners = [(x + cs * dx_ - sn * dy_, y + sn * dx_ + cs * dy_) for dx_, dy_ in ((-pw / 2, -ph / 2), (pw / 2, -ph / 2), (pw / 2, ph / 2), (-pw / 2, ph / 2))]
             self.block_polys.append(corners)

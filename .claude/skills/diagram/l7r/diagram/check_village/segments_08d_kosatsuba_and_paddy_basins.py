@@ -392,7 +392,7 @@ def _seg_0603__paddy_plot_seams_shared(*, M: Any = _UNBOUND, check: Any = _UNBOU
     # so two basins parted by a delivery ditch are correct. The strip is judged at its MIDPOINT -
     # the sample itself sits on the bank by construction, so testing it would exempt every
     # canal-side bund on the map.
-    # A DIKE-POND IS THE ONE FIELD WHERE TWO RINGS A STRIP APART ARE RIGHT (feature 134, the first
+    # A DIKE-POND IS THE ONE FIELD WHERE TWO RINGS A STRIP APART ARE RIGHT (feature 139, the first
     # scripted mulberry_dike_fishpond): its parcels are not basins sharing an aze but PONDS each
     # rimmed by its own planted dike, and the ~22 ft strip between two rings IS the dike - a
     # hand-piled earthwork 6-10 m wide carrying the mulberry (research/archetypes.md "The 6:4
@@ -880,7 +880,7 @@ def _seg_0614_500__all_ink_is_ruled_on(
 ) -> dict[str, Any]:
     """Gate segment 0614_500 (all_ink_is_ruled_on) - on a SCRIPTED hamlet, every drawn element is either
     in a feature class of the interactive map or ruled not highlighted, and every class the engine
-    tagged is one the registry knows (feature 134, spec FR-009 / SC-006).
+    tagged is one the registry knows (feature 139, spec FR-009 / SC-006).
 
     WHY: the interactive page highlights and explains features BY CLASS (`interactive/classes.py`);
     ink with no class is dead ground a reader can hover and learn nothing from, and the GM's own

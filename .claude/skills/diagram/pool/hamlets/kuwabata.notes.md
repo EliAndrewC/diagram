@@ -1,6 +1,6 @@
 # Design notes: Kuwabata (桑畑, "mulberry field"), the CASH-CROP hamlet - SCRIPTED
 
-*Rewritten 2026-08-27 (feature 134) when the map was converted from a hand-authored script to a
+*Rewritten 2026-08-27 (feature 139) when the map was converted from a hand-authored script to a
 `hamletgen` declaration. The earlier notes (reconstructed 2026-08-08 from the old generator's
 comments) are in git history with that script; what they recorded that still holds is carried here.*
 
@@ -32,7 +32,7 @@ the windbreak, the plank crossings clustered on the settlement side (`polder_cro
   siting' attests the village on whichever dry ground the margin polder abuts; the head is dry
   ground here (the reservoir is beside it, not under it). The east-flank village was a hand
   decision, not a researched one; the derived seat is recorded as a GUESS between attested options
-  until the audit says otherwise (spec 134, Decisions Recorded).
+  until the audit says otherwise (spec 139, Decisions Recorded).
 - **The waterward flanks are derived** (`waterward_flanks`): the cross flanks the village does not
   occupy plus the foot - `["W", "E", "S"]` here, where the hand-authored map declared `["W", "S"]`
   because its village took the east. The head is never a waterward flank (the reservoir stands
@@ -64,5 +64,5 @@ district's ground. Drawn at 1 ft/px.
 ## Known open
 
 - The acreage per household is the PADDY figure (`GROSS_ACRES_PER_HOUSEHOLD`); whether a silk-and-
-  fish household held the same ground is a research question for the feature-134 audit.
+  fish household held the same ground is a research question for the feature-139 audit.
 - The pool sweep and the polder cohort are owed at unlock (scope locked at conversion time).

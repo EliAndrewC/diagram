@@ -17,6 +17,12 @@
             "command": "/diagram/scripts/idle-tests-hooks.sh prompt",
             "timeout": 30,
             "statusMessage": "Disarming the idle-tests timer; surfacing its last verdict..."
+          },
+          {
+            "type": "command",
+            "command": "/diagram/scripts/agent-watch-hooks.sh prompt",
+            "timeout": 30,
+            "statusMessage": "Checking for hung subagents..."
           }
         ]
       }
@@ -155,6 +161,11 @@
           {
             "type": "command",
             "command": "/diagram/scripts/idle-tests-hooks.sh stop",
+            "timeout": 30
+          },
+          {
+            "type": "command",
+            "command": "/diagram/scripts/agent-watch-hooks.sh stop",
             "timeout": 30
           }
         ]

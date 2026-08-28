@@ -72,7 +72,7 @@ STAGES = (
     stage_field,
     stage_sink,
     stage_seat,  # decides WHERE the settlement sits. Draws nothing.
-    # A POLDER'S WATERWARD FRINGE (feature 134) - the reed strips outside the dike on the flanks that
+    # A POLDER'S WATERWARD FRINGE (feature 139) - the reed strips outside the dike on the flanks that
     # face the water. It needs the SEAT (which flank is landward is a fact about where the village
     # stands) and it RESERVES ground, so it goes here and not in the hinterland: laid at stage 9 it
     # was drawn over a connector already routed at stage 6 (`roads_clear_of_marsh`, the grid knob
@@ -349,8 +349,8 @@ def main(argv: Sequence[str] | None = None) -> int:
     ap.add_argument("--sink", choices=("pond", "offmap"), default=None)
     ap.add_argument("--windward", default=None)
     ap.add_argument("--bamboo", choices=("none", "homestead", "thicket", "both"), default=None, help="pin the bamboo knob (feature 133 T47: one map per knob value is owed at unlock)")
-    ap.add_argument("--archetype", choices=FIELD_ARCHETYPES, default=None, help="pin the field archetype (feature 134: the dike-pond is opt-in, like the polder)")
-    ap.add_argument("--pond-layout", choices=("grid", "mosaic"), default=None, help="pin a dike-pond's arrangement (feature 134: one map per knob value is owed)")
+    ap.add_argument("--archetype", choices=FIELD_ARCHETYPES, default=None, help="pin the field archetype (feature 139: the dike-pond is opt-in, like the polder)")
+    ap.add_argument("--pond-layout", choices=("grid", "mosaic"), default=None, help="pin a dike-pond's arrangement (feature 139: one map per knob value is owed)")
     ap.add_argument("--out", default=None, help="write <out>.svg/.png/.json")
     ap.add_argument("--no-render", action="store_true")
     ap.add_argument("--batch", type=int, default=0, help="roll N hamlets from consecutive seeds and gate them all")

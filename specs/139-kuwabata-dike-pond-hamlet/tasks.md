@@ -1,4 +1,4 @@
-# Tasks: Kuwabata, the Dike-Pond Hamlet, Scripted and Audited (134)
+# Tasks: Kuwabata, the Dike-Pond Hamlet, Scripted and Audited (139)
 
 Checked off only when verified on Kuwabata (and Inashiro unchanged). T99 is the GM's alone.
 
@@ -51,8 +51,8 @@ Checked off only when verified on Kuwabata (and Inashiro unchanged). T99 is the 
       note: Fei 1939 READ in full locally (the one primary silk-village ethnography); Ruddle & Zhong SUMMARY-ONLY throughout (403 everywhere); pond huts NOT SUPPORTED after two searches
       research: physical
       - [x] research pass  - [x] source-reader confirmed (every non-Fei claim READ verbatim; the Fei quotes READ by the session from the full text - the reader's fetch truncates the book, recorded in SOURCES.md)  - [x] recorded and cited (research/archetypes.md 'What stands on a dike-pond hamlet...'; SOURCES.md 11 keys)
-- [x] T31 the record: research/archetypes.md gains the findings with `Sources:` lines; SOURCES.md the keys; `specs/134-.../audit.md` the gap list (prevalence, source, drawability), the not-owed list, and the should-be-absent list
-      note: `specs/134-kuwabata-dike-pond-hamlet/audit.md` - six candidates (A1 creek + boats + landing the strongest), one should-be-absent (B1 the threshing yard on a no-rice hamlet), six not-owed, the three archetype absences (D), the holding figure (E)
+- [x] T31 the record: research/archetypes.md gains the findings with `Sources:` lines; SOURCES.md the keys; `specs/139-.../audit.md` the gap list (prevalence, source, drawability), the not-owed list, and the should-be-absent list
+      note: `specs/139-kuwabata-dike-pond-hamlet/audit.md` - six candidates (A1 creek + boats + landing the strongest), one should-be-absent (B1 the threshing yard on a no-rice hamlet), six not-owed, the three archetype absences (D), the holding figure (E)
       research: physical
       - [x] research pass  - [x] source-reader confirmed  - [x] recorded and cited
 - [ ] T32 present to the GM and STOP: the generated map's path, the census, the audit list; `settlement-review` of Kuwabata launched in the background at this hand-back (dev/reviews.md: at acceptance, never per task); no item of the audit implemented (FR-007, FR-008)

@@ -20,7 +20,7 @@ Findings recorded before the rule, or on a source the rule now excludes. Each is
 - Nagoya Castle (Grokipedia; site documentation) - the site documentation half stands
 - Jokamachi surveys (Grokipedia; Nakasendo Way, *Castle Towns*) - the Nakasendo Way half stands
 - Village lane WIDTH (T50, 2026-08-27): no numeric source found for an ordinary hamlet lane or farm path in Japan or China; the drawn 3 / 5 / 6 ft stand as drawing conventions inside read bounds (Wikipedia "Stone routes" 2.7 m cart road; ja.wikipedia "大八車"; MLIT road history; Low-Tech Magazine on the wheelbarrow). A measured survey of a surviving village lane would settle it.
-- The coppiced-mulberry density and crown height (research/archetypes.md 'The 6:4 water-to-dike ratio, and coppiced mulberry'): not re-found in the feature-134 pass (2026-08-28); the ratio itself was re-sourced
+- The coppiced-mulberry density and crown height (research/archetypes.md 'The 6:4 water-to-dike ratio, and coppiced mulberry'): not re-found in the feature-139 pass (2026-08-28); the ratio itself was re-sourced
 - Still summary-only after the `source-reader` run of 2026-08-27 (T45), each labeled in its entry: the bund-width convention (IRRI, unreachable; FAO read and larger); the Shirakawa farmstead bamboo grove (Kids Web Japan, 403 with no corroboration); the turn-minimization sentence (Ma et al. 2024 full text - the abstract's angle finding IS read); EUNIS E5.2 (404). Resolved by that run: madake hardiness (read, three growers), the forest-edge three layers (German Wikipedia "Waldrand"), the Okinawa windbreak (PMC 7898781), the GSI bamboo symbol (ridgelineimages.com).
 
 
@@ -700,7 +700,7 @@ Guangming Daily, 【这些文化遗存现今的模样87】二千多岁的桑基�
 
 ### `cssn-sangyuanwei`
 
-中国社会科学网, 水乡农谚见证桑园围发展, 2022-09-23 (cssn.cn t20220923_5541513) - READ 2026-08-27 by the feature-134 search agent (its transcript carries the quotes; the page was not re-fetched by the session)
+中国社会科学网, 水乡农谚见证桑园围发展, 2022-09-23 (cssn.cn t20220923_5541513) - READ 2026-08-27 by the feature-139 search agent (its transcript carries the quotes; the page was not re-fetched by the session)
 
 *Used for:* the Sangyuanwei proverbs - 男贩鱼花，妇女喂爱蚕 (men trade fish fry, women feed the worms), 一船蚕丝出，一船白银归 (a boat of silk out, a boat of silver back), 又以塘泥肥桑; the polder's 窦 sluice named in a place-name saying
 
@@ -724,6 +724,6 @@ Steven B. Miles, "From Small Fry to Big Fish: Representing the Rise of Jiujiang 
 
 ### `mdpi-3860`
 
-*Sustainability* 10(11):3860 (2018), on the Pearl-delta dike-pond landscape - SUMMARY-ONLY: 403 on both hosts in the feature-134 pass; the "mosaic-like constructed ponds with meandering natural river systems" description in 'Grid vs mosaic' was read in the 2026-07 session that wrote that entry and could not be re-verified
+*Sustainability* 10(11):3860 (2018), on the Pearl-delta dike-pond landscape - SUMMARY-ONLY: 403 on both hosts in the feature-139 pass; the "mosaic-like constructed ponds with meandering natural river systems" description in 'Grid vs mosaic' was read in the 2026-07 session that wrote that entry and could not be re-verified
 
 *Used for:* the historical mosaic form versus the modern consolidated grid; ~20 m dikes eroded to under 4 m

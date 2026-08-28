@@ -130,7 +130,7 @@ def test_the_roll_only_offers_archetypes_that_gate_clean() -> None:
     assert rolled == set(hg.ROLLED_ARCHETYPES)
 
 
-# ---- the dike-pond archetype (feature 134) ----------------------------------------------------------
+# ---- the dike-pond archetype (feature 139) ----------------------------------------------------------
 
 
 def test_the_dike_pond_is_a_declared_archetype_laid_to_a_cardinal_fall() -> None:
@@ -174,5 +174,9 @@ def test_the_waterward_flanks_are_the_ones_the_village_does_not_stand_on() -> No
     plan.seat = {"out": (-1.0, 0.0)}
     assert hg.waterward_flanks(plan) == ["E", "S"]
     assert hg.polder_crossing_caps(plan)["w_toe"] == 3 and hg.polder_crossing_caps(plan)["e_toe"] == 0
+    plan.seat = {"out": (0.0, -1.0)}  # seated at the HEAD: the feeder is the village's collector
+    assert hg.polder_crossing_caps(plan) == {"feeder": 3, "drain": 0, "e_toe": 1, "w_toe": 1, "lateral": 1}
+    plan.seat = {"out": (0.0, 1.0)}  # at the foot: the drain
+    assert hg.polder_crossing_caps(plan)["drain"] == 3 and hg.polder_crossing_caps(plan)["feeder"] == 0
     plan.seat = {}
     assert hg.polder_flanks(plan)["cluster"] == ""

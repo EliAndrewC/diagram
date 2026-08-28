@@ -1073,7 +1073,7 @@ def _touch_junctions(s: Settlement, hard: list[Poly], walls: Sequence[Poly], wat
                 d, foot, k, _op = _best
                 if d <= 2.0 or d > reach:
                     continue
-                # NOT BACK ONTO ITSELF (feature 134, Kuwabata seed 21): a 30 ft lane whose two ends
+                # NOT BACK ONTO ITSELF (feature 139, Kuwabata seed 21): a 30 ft lane whose two ends
                 # both stood near the same spot on a neighbor had its start touched there, and then
                 # its end touched to the same foot - a lane closed into a 28 ft loop, which
                 # `lanes_bend_like_paths` read as a hairpin and `_smooth_web` never saw (it ran
@@ -2274,7 +2274,7 @@ def stage_track(s: Settlement, plan: SitePlan) -> None:
     # worse than pointless: every near target crosses the ring canal, so `path_violations` scored the
     # nearby vertices badly and the least-bad candidate ran from the cluster straight ACROSS the
     # block to a vertex on the far side (`fields_clear_of_road` on 4 of 12 cardinal polders).
-    if plan.field_archetype in POLDER_ARCHETYPES:  # both polder archetypes (feature 134)
+    if plan.field_archetype in POLDER_ARCHETYPES:  # both polder archetypes (feature 139)
         s.M["meta"]["lane_skeleton"] = plan.lane_skeleton
         toe = s.toe_band()
         drawn_wet = [[(float(a), float(b)) for a, b in m["poly"]] for m in s.M.get("marshes", []) if m.get("role") != "defense" and m.get("poly")]

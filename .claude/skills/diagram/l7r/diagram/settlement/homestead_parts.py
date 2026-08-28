@@ -462,7 +462,7 @@ class HomesteadPartsMixin:
         g.append("</g>")
         if n == 0:
             return 0
-        z = self.add("".join(g), cls="homestead bamboo" if role == "homestead" else "shared bamboo grove")  # feature 134
+        z = self.add("".join(g), cls="homestead bamboo" if role == "homestead" else "shared bamboo grove")  # feature 139
         self.M.setdefault("bamboo_stands", []).append(
             {
                 "x": round((x0 + x1) / 2, 1),
@@ -531,7 +531,7 @@ class HomesteadPartsMixin:
         # the village is the pond's open FORECOURT (the banyuetang fronted the settlement's ceremony/work
         # ground), so keeping the copse fringe off that band too is the historically right reading, not slack.
         occ += [(cp["cx"], cp["cy"], cp["r"] + clump * 0.90) for cp in self.M.get("crescent_ponds", [])]
-        # ... and OFF THE POND - the tameike or a polder's header reservoir (feature 134: the first
+        # ... and OFF THE POND - the tameike or a polder's header reservoir (feature 139: the first
         # scripted dike-pond seated its village at the block's head, so the windbreak's band ran
         # over the reservoir and 15 clumps stood in open water; nothing in this list knew the pond).
         # `M["pond"]` is [cx, cy, rx, ry]; the keep-out is the longer semi-axis + the canopy reach,
@@ -774,7 +774,7 @@ class HomesteadPartsMixin:
                 seated = [seated[k] for k in _keep]
                 clumps = [clumps[k] for k in _keep]
         for jx, jy in seated:
-            # feature 134: the belt and the copse are two highlight classes; a water_mouth grove has no
+            # feature 139: the belt and the copse are two highlight classes; a water_mouth grove has no
             # class in the vocabulary yet and stays unclassed so the census reports it
             self._draw_grove(jx, jy, clump, clump, face=(0, -1), mix=mix, cls={"windbreak": "windbreak", "copse": "copse"}.get(role))
         if clumps:

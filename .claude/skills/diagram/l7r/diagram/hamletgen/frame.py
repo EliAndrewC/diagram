@@ -28,7 +28,7 @@ def stage_crossings(s: Settlement, plan: SitePlan) -> None:
     s.bridges()
     if s.M.get("field_ditches"):
         if plan.field_archetype in POLDER_ARCHETYPES:
-            # A POLDER'S RING CANAL is crossed where the village is (feature 134; the rule the
+            # A POLDER'S RING CANAL is crossed where the village is (feature 139; the rule the
             # hand-authored polders carried, `polder_crossing_caps`): planks cluster on the
             # settlement-side toe collector, one per interior lateral, none on the feeder, the far
             # toe or the drain. Spacing as the hand-authored maps had it.

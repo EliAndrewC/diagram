@@ -81,7 +81,7 @@ def test_a_polder_hamlet_draws_its_grid_dike_and_reservoir() -> None:
 
 @pytest.mark.rolls_map
 def test_a_dike_pond_hamlet_is_ponds_in_a_diked_block_with_wet_flanks() -> None:
-    """THE THIRD FIELD ARCHETYPE (feature 134, Kuwabata): the polder carried to the wholesale
+    """THE THIRD FIELD ARCHETYPE (feature 139, Kuwabata): the polder carried to the wholesale
     dike-pond conversion. Asserts what the archetype is responsible for beyond the polder: the
     overlay record, the dike-pond parcels, the declared arrangement, and the waterward fringe
     (declared AND wet, so `polder_waterward_flanks_wet` has teeth rather than skipping)."""

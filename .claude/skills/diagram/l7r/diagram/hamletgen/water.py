@@ -260,7 +260,7 @@ def stage_polder(s: Settlement, plan: SitePlan) -> None:
 
     The SOURCE is a header reservoir OUTSIDE the dike above the high corner, charged through a sluice
     in the dike - not a brook running in over the crop, which is what a valley hamlet has."""
-    # BOTH polder archetypes come through here (feature 134): the fabric table sets the module and
+    # BOTH polder archetypes come through here (feature 139): the fabric table sets the module and
     # the parcel mix, the knob sets the arrangement, and the dike-pond's overlay is applied once the
     # grid is drawn - see `POLDER_ARCHETYPES` in consts.py for why the dike-pond is a polder.
     fabric = POLDER_FABRIC[plan.field_archetype]
@@ -513,7 +513,7 @@ def stage_field(s: Settlement, plan: SitePlan) -> None:
             s.corridors.append(([a, b], 30.0))
 
 
-# ---- the polder's flanks (feature 134) --------------------------------------------------------------
+# ---- the polder's flanks (feature 139) --------------------------------------------------------------
 
 
 def _compass(v: Pt) -> str:
@@ -594,7 +594,13 @@ def polder_crossing_caps(plan: SitePlan) -> dict[str, int]:
         return {"feeder": 0, "w_toe": 0, "drain": 0, "e_toe": 3, "lateral": 1}
     if f["cluster"] == f["minus"]:
         return {"feeder": 0, "e_toe": 0, "drain": 0, "w_toe": 3, "lateral": 1}
-    # The village at the HEAD (or the foot): neither toe is "far" - people walk down both banks
-    # from the houses, and an uncrossed toe collector is a long ditch with no plank
-    # (`long_ditches_have_a_footbridge`, Kuwabata seed 21, seated N). Two per toe.
-    return {"feeder": 0, "drain": 0, "e_toe": 2, "w_toe": 2, "lateral": 1}
+    # The village at the HEAD or the FOOT: its own collector is the one it abuts - the feeder at the
+    # head, the drain at the foot - and THAT carries the crossings, with one plank on each toe. The
+    # first cut here gave both toes two and the feeder none, which satisfied
+    # `long_ditches_have_a_footbridge` and put every plank 350-1,100 ft from the houses while the
+    # canal directly behind the north dike had none (settlement-review, Kuwabata 2026-08-28: "the
+    # crossings are where the CHECK wanted them, not where the feet are"). The research the rule
+    # rests on - people cross where they LIVE - applies to whichever collector that is.
+    if f["cluster"] == f["head"]:
+        return {"feeder": 3, "drain": 0, "e_toe": 1, "w_toe": 1, "lateral": 1}
+    return {"feeder": 0, "drain": 3, "e_toe": 1, "w_toe": 1, "lateral": 1}

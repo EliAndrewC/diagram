@@ -283,6 +283,15 @@ class FinishMixin:
                     rects.append((min(xs), min(ys), max(xs), max(ys)))
                 elif "w" in o and "h" in o:
                     rects.append((o["x"] - o["w"] / 2, o["y"] - o["h"] / 2, o["x"] + o["w"] / 2, o["y"] + o["h"] / 2))
+        # ...and the WELLS and the NOTICE BOARD (feature 139, settlement-review of Kuwabata: the placard sat on the
+        # east public well, its glyph showing through the card's edge). Both are traffic-sited fixtures with no
+        # w/h - a well records its drawn radius `vr`, the board its `w`/`h` - and neither was in the list above.
+        for o in self.M.get("wells", []):
+            _wr = float(o.get("vr", o.get("r", 8.0))) + 4.0
+            rects.append((o["x"] - _wr, o["y"] - _wr, o["x"] + _wr, o["y"] + _wr))
+        for o in self.M.get("kosatsuba", []):
+            _kw, _kh = float(o.get("w", 14.0)) / 2 + 4.0, float(o.get("h", 8.0)) / 2 + 4.0
+            rects.append((o["x"] - _kw, o["y"] - _kh, o["x"] + _kw, o["y"] + _kh))
         for lb in self.M.get("labels", []):  # placed LABEL boxes: a title must never cover a label
             rects.append((lb[0], lb[1], lb[2], lb[3]))  # (caught 2026-07-23: the Tango content crop landed the
             #                                             placard on the 'pauper ossuary mound' label)
