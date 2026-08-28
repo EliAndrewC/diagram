@@ -6,6 +6,7 @@ from collections.abc import Callable, Mapping, Sequence
 from typing import Any
 
 from l7r.diagram.settlement import _assert_not_main_tree, sat_overlap
+from l7r.diagram.settlement._geom.primitives import convex_hull as convex_hull  # re-exported: the hull lives in the geometry package since feature 140
 
 _assert_not_main_tree(__file__)  # standalone gate runs must also happen in a session clone, never in main (CLAUDE.md "Session clones"; settlement's own import-time guard backstops this)
 
@@ -71,29 +72,6 @@ def poly_area(pts: Poly) -> float:
         x1, y1 = pts[(i + 1) % n]
         s += x0 * y1 - x1 * y0
     return abs(s) / 2.0
-
-
-def convex_hull(pts: Sequence[Pt]) -> Poly:
-    """Convex hull (monotone chain) of a point cloud, as a CCW vertex list. <3 unique points returns them
-    as-is (a degenerate hull of zero area)."""
-    ps = sorted(set((round(x, 3), round(y, 3)) for x, y in pts))
-    if len(ps) < 3:
-        return [(x, y) for x, y in ps]
-
-    def cross(o: Pt, a: Pt, b: Pt) -> float:
-        return (a[0] - o[0]) * (b[1] - o[1]) - (a[1] - o[1]) * (b[0] - o[0])
-
-    lower: list[Pt] = []
-    for p in ps:
-        while len(lower) >= 2 and cross(lower[-2], lower[-1], p) <= 0:
-            lower.pop()
-        lower.append(p)
-    upper: list[Pt] = []
-    for p in reversed(ps):
-        while len(upper) >= 2 and cross(upper[-2], upper[-1], p) <= 0:
-            upper.pop()
-        upper.append(p)
-    return lower[:-1] + upper[:-1]
 
 
 def clip_to_convex(subject: Poly, clip: Poly) -> Poly:

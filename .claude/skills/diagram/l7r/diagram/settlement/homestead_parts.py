@@ -613,7 +613,9 @@ class HomesteadPartsMixin:
                 any((qx - ox) ** 2 + (qy - oy) ** 2 < rr * rr for ox, oy, rr in occ)
                 or any(abs(qx - sx) < shw and se - cr - 2 < qy < se + 24 + cr for sx, se, shw in sun)
                 or any(ex - cr - 2 < qx < ex + 24 + cr and abs(qy - ey) < ehh for ex, ey, ehh in east)
-                or any(wx0 - wl - cr - 2 < qx < wx0 + cr and wy0 - cr < qy < wy1 + wl + cr for wx0, wy0, wy1 in west)
+                # +1 ft of slack on the west sun-lane: the check reads clumps rounded to 0.1 with a strict `<`, and a
+                # clump seated exactly on the window's edge (cohort seed 16: 1793.9 against 1794) read as shading
+                or any(wx0 - wl - cr - 3 < qx < wx0 + cr + 1 and wy0 - cr - 1 < qy < wy1 + wl + cr + 1 for wx0, wy0, wy1 in west)
             )
 
         def _reseat(qx: float, qy: float, placed: list[Any], require_interior: bool) -> tuple[float, float] | None:
@@ -767,11 +769,19 @@ class HomesteadPartsMixin:
         # page" rule the `within` window applies on the other edges. Seating first and drawing
         # after is what makes this possible: the face is known only once every clump is down.
         # Draw order and positions are those of the seating loop, so nothing else moves.
+        _offpage: list[Any] = []
         if face_margin is not None and clumps:
             _face = windbreak_face(clumps, cr, self.M.get("houses", []))
             if _face is not None:
                 _axis, _sign, _inner = _face
                 _keep = [k for k, (px_, py_) in enumerate(seated) if _sign * ((px_, py_)[_axis] - _inner) >= -(face_margin + clump * 0.9)]
+                # THE TRIMMED CLUMPS STAY IN THE RECORD (feature 137 T05, 2026-08-28): they are trees that stand,
+                # only off the page. Tripwire seed 33's 40-50 ft belt hole was this trim: two garden beds at the
+                # belt's edge pushed the re-seated clumps into the outer strip, the page's edge (inner face +
+                # margin) fell inside that strip, and the trim dropped them from `clumps` - so the belt read as
+                # holed where it had in fact wrapped round the plot. The ink is still cut at the page; the
+                # record says the belt continues, and `village_windbreak_is_continuous` counts canopy where it is.
+                _offpage = [clumps[k] for k in range(len(clumps)) if k not in set(_keep)]
                 seated = [seated[k] for k in _keep]
                 clumps = [clumps[k] for k in _keep]
         for jx, jy in seated:
@@ -811,7 +821,8 @@ class HomesteadPartsMixin:
                     "rot": 0,
                     "role": role,
                     "r": round(clump / 2, 1),
-                    "clumps": clumps,  # actual drawn clump centers + radius, for groves_clear_of_lanes
+                    "clumps": clumps,
+                    "clumps_offpage": (_offpage if face_margin is not None and clumps else []),  # actual drawn clump centers + radius, for groves_clear_of_lanes
                     "poly": [[round(px, 1), round(py, 1)] for px, py in poly],
                 }
             )

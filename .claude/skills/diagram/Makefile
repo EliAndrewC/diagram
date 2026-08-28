@@ -605,6 +605,7 @@ durations:
 # (FULL=1 profiles the full tree too; the coverage carriers live there now, so `coverage_only` no longer needs deselecting - feature 135)
 
 quick:
+	$(DMYPY_SWEEP)
 	@python3 -m ruff check --fix l7r/ tests/ && python3 -m ruff format l7r/ tests/ && $(MYPY)
 	@start=$$(date +%s); $(EXHAUSTIVE_ENV) python3 -m pytest -n $(XDIST_WORKERS) --dist worksteal $(TESTMON) -q --no-cov -x --ff -m "not rolls_map" $(TIER_SELECT) $(QUICK_TREE); ec=$$?; \
 	  el=$$(( $$(date +%s) - start )); \
@@ -817,6 +818,15 @@ TESTMON = $(if $(ALL),--no-testmon,--testmon-forceselect)
 QUICK_TREE = tests --ignore=tests/tier_town --ignore=tests/tier_city --ignore=tests/gate --ignore=tests/full $(shell python3 -m l7r.diagram.ci tooling-fresh >/dev/null 2>&1 && echo --ignore=tests/tooling)
 # mypy through its daemon (dmypy): the warm daemon re-checks only what changed, ~0.25 s -> ~0.1 s per quick; one-shot on CodeBuild
 MYPY = $(if $(CODEBUILD_BUILD_ID),python3 -m mypy,python3 -m mypy.dmypy run --)
+# THE DAEMON COSTS 380-600 MB OF RSS PER CLONE (GM 2026-08-28) and nothing in mypy ever stops it - five of them, 2.3 GB, one
+# for a session that had ended. So `quick` also sweeps: scripts/dmypy-hooks.sh stops every daemon whose clone no LIVE session
+# owns (the SessionEnd hook stops the session's own; this catches a miss). Never in `done` - a slip stopping something
+# unrelated must not block a merge. Never fails, prints only what it stopped. Measured the same day: on a comment-only edit
+# warm daemon 0.13 s vs warm one-shot mypy 0.21-0.31 s, but on an INTERFACE change to a central module (a function added to
+# settlement/__init__.py) 0.15 s vs 2.9 s - one-shot re-checks every dependent, the daemon's fine-grained graph does not; that
+# ~2.7 s per engine-editing quick is what the RAM buys. Either one ~12 s cold; `--timeout` priced and declined (a 12 s cold
+# start after every break). (GUARD_EDIT_OK: the sweep is a side effect of quick, GM 2026-08-28)
+DMYPY_SWEEP = -@root=$$(git rev-parse --show-toplevel 2>/dev/null) && [ -x "$$root/scripts/dmypy-hooks.sh" ] && "$$root/scripts/dmypy-hooks.sh" sweep || true
 # THE GATE IS ALWAYS EXHAUSTIVE (constitution v2.9.0, GM 2026-08-26): `make quick` runs each test's quick form,
 # `make done` its full form - the corpus, the full matrices, the full-size canvases, the tooling tests.
 GATE_EXHAUSTIVE_ENV = L7R_TESTS_EXHAUSTIVE=1 $(if $(COV_FLOORS),L7R_COV_FLOORS=1,)  # GUARD_EDIT_OK: feature 133 T92's env, kept for any test that reads it; feature 135's own full-run signal is L7R_TESTS_FULL

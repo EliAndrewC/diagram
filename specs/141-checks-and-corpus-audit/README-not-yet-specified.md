@@ -1,0 +1,1 @@
+Feature 141 is CLAIMED (the number and the GM's words) but not yet specified: `spec.md` is written when the GM opens the work, after the session's feedback on the idea. Until then this directory holds only `gm-request.md`.

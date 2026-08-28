@@ -8,7 +8,7 @@ from __future__ import annotations
 import heapq
 import math
 from collections.abc import Callable, Mapping, Sequence
-from typing import cast
+from typing import Any, cast
 
 from l7r.diagram.settlement import Settlement, edge_dist, point_in_poly, rot_rect, seg_closest, seg_dist, seg_intersect, segments_cross, skeleton_layout, web_cuts
 from l7r.diagram.sitegen.geom import centroid, crop_polys, crosses_disc, crosses_poly, pull_clear, unit
@@ -359,6 +359,7 @@ def _lay_skeleton(s: Settlement, plan: SitePlan, frame: _margin_frame, arcs: Seq
 
 
 def stage_web(s: Settlement, plan: SitePlan) -> None:
+    _pass("cut")
     """STAGE 5b: the LANE WEB - the lanes that make every farmhouse reachable.
 
     WHY IT EXISTS. The record is decisive that a house in a nucleated cluster is reached by a way:
@@ -418,6 +419,7 @@ def stage_web(s: Settlement, plan: SitePlan) -> None:
     # two stages earlier, before any house existed; now it is derived from where they actually went.
     # It runs before the web cuts so the web sees it as existing network to thread around and join,
     # which is what `_net_segs` reads.
+    _pass("skeleton")
     _lay_skeleton(s, plan, frame, arcs, stands)
 
     pad = 30.0  # a lane runs a little past the last steading it serves, not up to its wall
@@ -521,12 +523,16 @@ def stage_web(s: Settlement, plan: SitePlan) -> None:
     # unreached houses stayed exactly eight. A door path is short on purpose; it is not a stub.
     # ONE NETWORK FIRST, then the houses that it still does not reach. Order matters: a footpath
     # that joins an orphaned component is worth nothing while the component itself is an island.
+    _pass("join-orphans")
     _join_orphan_ways(s, hard_built, walls, list(plan.watercourses) + drawn_water)
     # ...and close any break where one way was drawn as two. Before the stragglers: a house beside
     # the hole is served by the bridged street, and drawing it a footpath of its own first would be
     # curing the symptom.
+    _pass("bridge-breaks")
     _bridge_collinear_breaks(s, hard_built, walls, list(plan.watercourses) + drawn_water)
+    _pass("straggler")
     _serve_stragglers(s, plan, hard, fabric, list(plan.watercourses) + drawn_water)
+    _pass("touch")
     _touch_junctions(s, hard_built, walls, list(plan.watercourses) + drawn_water)
     # ...AND JOIN ORPHANS AGAIN, LAST. The first pass runs before the bridges and the footpaths, so
     # it can only see the lanes that exist then - on cohort seed 39 that was FOUR of the twelve the
@@ -538,7 +544,9 @@ def stage_web(s: Settlement, plan: SitePlan) -> None:
     # footpath pass draws lanes, and a lane drawn after the bridge pass can leave a hole the bridge
     # pass never saw. On cohort seed 48 the bridge found ZERO candidates and the finished map still
     # had a 78 ft hole in a street, because the hole did not exist yet when it looked.
+    _pass("bridge-breaks")
     _bridge_collinear_breaks(s, hard_built, walls, list(plan.watercourses) + drawn_water)
+    _pass("join-orphans")
     _join_orphan_ways(s, hard_built, walls, list(plan.watercourses) + drawn_water)
     # ...AND TRIM AGAINST THE FINAL NETWORK, ONCE, LAST.
     #
@@ -582,6 +590,7 @@ def stage_web(s: Settlement, plan: SitePlan) -> None:
     # LAST: read every lane as a shape and take out what feet would never wear (T32) - after the
     # trim, because the trim is the last pass that changes a record; then touch once more, because
     # cutting a hairpin's arm can move an end.
+    _pass("smooth")
     _smooth_web(s, hard_built, walls, list(plan.watercourses) + drawn_water)
     # AND TOUCH AGAIN (T99 unlock, tripwire seed 37): the smoothing cuts knots and hairpins into stubs,
     # and a stub that ends 3-30 ft short of the run it left is exactly the gap _touch_junctions closes -
@@ -594,6 +603,7 @@ def stage_web(s: Settlement, plan: SitePlan) -> None:
     _touch_junctions(
         s, hard_built, walls, list(plan.watercourses) + drawn_water, reach=_STUB_REACH_FT, only_orphans=True
     )  # the stubs the smoothing leaves stop 30-35 ft short (seed 37); a connected web is untouched
+    _pass("touch")
     _touch_junctions(s, hard_built, walls, list(plan.watercourses) + drawn_water)
     s.M["meta"]["lane_web"] = plan.lane_web
 
@@ -812,6 +822,37 @@ def _route(start: Pt, goal: Pt, hard: list[Poly], walls: Sequence[Poly], water: 
             j -= 1
         out.append(path[j])
         i = j
+    return _unjog(out, hard, walls, water)
+
+
+def _unjog(path: Poly, hard: list[Poly], walls: Sequence[Poly], water: list[tuple[Pt, Pt]]) -> Poly:
+    """Take the lattice's jogs out of a routed path where the chord clears at the JUNCTION margin.
+
+    The string-pull above tests every shortcut at the margin the route was planned with, so a route
+    that hugs a garden's corner at the fabric margin keeps a 7 ft step and a 13 ft step back where
+    the lattice turned the corner - `lanes_bend_like_paths` reads two turns past 50 degrees within
+    40 ft as a zigzag (cohort seed 14, feature 137 T03), and a turn past 140 as a hairpin. Both are
+    the lattice showing through, not the ground; a path that may brush a fence at a junction may
+    brush it at a corner, so each such jog is replaced by its chord when `_clear_touch` allows it.
+    The thresholds are the check's own, so this undoes exactly what the check would refuse."""
+    out = list(path)
+    k = 1
+    while k < len(out) - 1:
+        if _turn_deg(out[k - 1], out[k], out[k + 1]) >= 140.0 and _clear_touch(out[k - 1], out[k + 1], hard, walls, water):
+            del out[k]
+            k = max(1, k - 1)
+            continue
+        if (
+            k < len(out) - 2
+            and _turn_deg(out[k - 1], out[k], out[k + 1]) >= 50.0
+            and _turn_deg(out[k], out[k + 1], out[k + 2]) >= 50.0
+            and math.dist(out[k], out[k + 1]) <= 40.0
+            and _clear_touch(out[k - 1], out[k + 2], hard, walls, water)
+        ):
+            del out[k : k + 2]
+            k = max(1, k - 1)
+            continue
+        k += 1
     return out
 
 
@@ -1077,6 +1118,17 @@ def _touch_junctions(s: Settlement, hard: list[Poly], walls: Sequence[Poly], wat
                 d, foot, k, _op = _best
                 if d <= 2.0 or d > reach:
                     continue
+                # AN END THAT ALREADY STANDS ON THE NETWORK IS A JUNCTION, NOT A FREE END (feature 137
+                # T03, cohort seed 07): a door path whose end sat on another lane was linked onward to a
+                # SECOND way, and the link ran back over the first lane's tread - a 9 ft zigzag at the
+                # junction. `_by_way` excludes the ways this lane meets, so the test above cannot see it.
+                if any(
+                    seg_dist(q[0], q[1], a, b) <= _TOUCH_GAP
+                    for _k, o in enumerate(lanes)
+                    if _k != i and len(o.get("pts") or []) >= 2
+                    for a, b in zip([(float(x), float(y)) for x, y in o["pts"]], [(float(x), float(y)) for x, y in o["pts"]][1:], strict=False)
+                ):
+                    continue
                 # END MEETS END: two lanes whose ends stand near each other are ONE lane with a
                 # hole in it, and the honest join is to run the other lane's end onto this one -
                 # a link from tread to tread drew an 8 ft jog that read as a loop (T32). The other
@@ -1095,7 +1147,8 @@ def _touch_junctions(s: Settlement, hard: list[Poly], walls: Sequence[Poly], wat
                 link = [q, foot] if _clear_touch(q, foot, hard, walls, water) else _route(q, foot, hard, walls, water, gap=WEB_FABRIC_GAP, pad_mult=2.0, cell=10.0)
                 if not link or polyline_len(link) > _LINK_DIRECTNESS * d:
                     continue
-                new = (list(reversed(link[1:])) + new) if end == 0 else (new + link[1:])
+                link = _stop_at_network(link, [sg for _k, _os, _op in _by_way for sg in _os])
+                new = _unjog(_unretrace((list(reversed(link[1:])) + new) if end == 0 else (new + link[1:])), hard, walls, water)
                 closed += 1
                 moved += 1
             if new != pts:
@@ -1126,11 +1179,86 @@ def _touch_junctions(s: Settlement, hard: list[Poly], walls: Sequence[Poly], wat
                     break
                 link = [v, q] if _clear_touch(v, q, hard, walls, water) else _route(v, q, hard, walls, water, gap=WEB_FABRIC_GAP, pad_mult=2.0, cell=10.0)
                 if link and polyline_len(link) <= _LINK_DIRECTNESS * max(d, 1.0):
-                    _draw_web(s, link, int(float(lanes[i].get("w", 3))))
+                    _join_piece(s, lanes, i, ways[i], v, link, hard, walls, water, main_segs)
                     joined = True
                     break
             if joined:
                 break
+        if not joined:
+            # THE LADDER'S LAST TWO RUNGS (feature 137 T03, 2026-08-28). Tripwire seed 37 and 26 of 48
+            # cohort seeds carried a piece the two rungs above could not link: a stub whose only way to
+            # the spine is a slot between a house and a yard that the 7 ft fabric pad closes on both
+            # sides. (1) Route again at the JUNCTION standard - `_TOUCH_GAP`, the margin a link into a
+            # junction is already allowed to brush a fence at (see the note under `_ORPHAN_REACH`): a
+            # lane and a plot fence share a line in a real village. (2) Failing that, DROP the piece -
+            # but only when no farmhouse would be stranded by it: every house the piece serves (within
+            # `_SERVE_FT` of its tread) must still stand within `_SERVE_FT` of some other way. A fragment
+            # that serves no house nobody else reaches is a drawing, not a lane, and the network check
+            # is right to want it gone; a fragment that IS a house's only way stays, visibly broken.
+            for i in sorted(orphans, key=lambda k: -polyline_len(ways[k])):
+                # ONE TARGET PER WAY, not one per vertex: the nearest point on the whole network is the
+                # one the garden blocks; the L to the next way over is only ever found if it is offered.
+                # ... dealt ROUND-ROBIN across the ways: sorting every (vertex, foot) pair by air
+                # distance put the twelve nearest all on the way the garden blocks (measured on seed
+                # 03: five vertices, one `q`, five refusals), and one pair per way lost the vertex
+                # whose route round the garden did exist. So the four nearest ways each offer their
+                # three best pairs, dealt best-first across the ways - twelve routes at most, and
+                # the way the garden blocks still gets its second and third vertex (seed 03's U
+                # routed from the second vertex, not the first).
+                _main_ways = [ways[j] for j in range(len(ways)) if comp[j] == main and len(ways[j]) >= 2]
+                _per_way = sorted(
+                    (
+                        sorted(
+                            ((math.dist(v, q), v, q) for v in ways[i] for q in [min((seg_closest(v[0], v[1], a, b) for a, b in zip(w, w[1:], strict=False)), key=lambda z: math.dist(v, z))]),
+                            key=lambda c: c[0],
+                        )[:3]
+                        for w in _main_ways
+                    ),
+                    key=lambda g: g[0][0],
+                )[:4]
+                cands = [g[r] for r in range(3) for g in _per_way if r < len(g)]
+                # THE SHORTEST ROUTE WINS, NOT THE NEAREST TARGET (feature 137 T03, cohort seed 03): the
+                # nearest vertex by air was 44 ft off across a garden, and the only route to it walked
+                # round the garden AND a shed - a U of 66 + 36 + 54 ft enclosing the shed, which
+                # `lanes_bend_like_paths` reads as a zigzag. The next candidate, 60 ft off, was an L
+                # through the 17 ft slot between the two. So the first `_SHORTEST_OF` candidates that
+                # route at all are compared by the length of their ROUTE, and the shortest is drawn.
+                found: list[tuple[float, Pt, Poly]] = []
+                for d, v, q in cands[:12]:
+                    if d > _ORPHAN_REACH:
+                        break
+                    link = _route(v, q, hard, walls, water, gap=_TOUCH_GAP, pad_mult=2.0, cell=6.0)
+                    if not link:  # (3) the DETOUR: around the yard or the house that walls the slot - a wider box, a longer leash
+                        link = _route(v, q, hard, walls, water, gap=WEB_FABRIC_GAP, pad_mult=5.0, cell=10.0)
+                    if link and polyline_len(link) <= _DETOUR_DIRECTNESS * max(d, 1.0):
+                        found.append((polyline_len(link), v, link))
+                        if len(found) >= _SHORTEST_OF:
+                            break
+                if found:
+                    _len, v, link = min(found, key=lambda t: t[0])
+                    _join_piece(s, lanes, i, ways[i], v, link, hard, walls, water, main_segs)
+                    joined = True
+                    break
+        if not joined:
+            _others = [sg for j in range(len(ways)) if j not in orphans and len(ways[j]) >= 2 for sg in zip(ways[j], ways[j][1:], strict=False)]
+            _houses = [(float(h["x"]), float(h["y"])) for h in s.M.get("houses", [])]
+
+            def _near(pt: Pt, segs: list[tuple[Pt, Pt]]) -> float:
+                return min((seg_dist(pt[0], pt[1], a, b) for a, b in segs), default=float("inf"))
+
+            _dropped = 0
+            for i in orphans:
+                _mine = list(zip(ways[i], ways[i][1:], strict=False))
+                _served = [h for h in _houses if _near(h, _mine) <= _SERVE_FT]
+                if all(_near(h, _others) <= _SERVE_FT for h in _served):
+                    lanes[i]["pts"] = []
+                    s.reink_lane(i)
+                    _dropped += 1
+            if _dropped:
+                s.M["meta"]["lane_fragments_dropped"] = s.M["meta"].get("lane_fragments_dropped", 0) + _dropped
+                joined = _dropped == len(orphans)
+                if joined:
+                    continue
         if not joined:
             # KEPT, not dropped. The first cut of this pass DELETED a piece it could not link, and
             # on Inashiro that stranded a farmhouse the piece was serving: `farmhouses_reach_a_way`
@@ -1143,7 +1271,88 @@ def _touch_junctions(s: Settlement, hard: list[Poly], walls: Sequence[Poly], wat
     return closed
 
 
+def _join_piece(
+    s: Settlement, lanes: list[dict[str, Any]], i: int, way: Poly, v: Pt, link: Poly, hard: list[Poly], walls: Sequence[Poly], water: list[tuple[Pt, Pt]], net: list[tuple[Pt, Pt]]
+) -> None:
+    """Join an orphan piece to the network: EXTEND the piece when the link leaves one of its ends, else
+    draw the link as its own lane (the link left an interior vertex). A link drawn as a separate lane
+    from a door path's end put TWO lane ends beside the same farmhouse - the door path's and the
+    link's - and `lane_ends_front_different_houses` counted them (cohort seed 16, feature 137 T03).
+    One way that reaches the network is one lane. The splice is passed through `_unretrace` and
+    `_unjog`: a link leaving a piece's END may double back along the piece before it turns (cohort
+    seed 14 - 13 ft out, 7 ft up, 13 ft back), and the piece's own vertex is the right start."""
+    pts = [(float(x), float(y)) for x, y in way]
+    link = _stop_at_network(link, net)
+    if pts and math.dist(v, pts[-1]) < 0.5:
+        lanes[i]["pts"] = [[round(x, 1), round(y, 1)] for x, y in _unjog(_unretrace(pts + list(link[1:])), hard, walls, water)]
+        s.reink_lane(i)
+    elif pts and math.dist(v, pts[0]) < 0.5:
+        lanes[i]["pts"] = [[round(x, 1), round(y, 1)] for x, y in _unjog(_unretrace(list(reversed(link[1:])) + pts), hard, walls, water)]
+        s.reink_lane(i)
+    else:
+        _draw_web(s, link, int(float(lanes[i].get("w", 3))))
+
+
+def _stop_at_network(link: Poly, others: list[tuple[Pt, Pt]]) -> Poly:
+    """Cut a join link at the FIRST place it meets one of the ways it was sent to reach.
+
+    A link is routed to a point `q` on the network, and the router is free to run it along or
+    across another way on the road there - tripwire seed 27's link touched lane 8 at 20 ft and
+    carried on for 20 ft more to a `q` on a way that a later trim removed, leaving a hook to
+    nothing beside a shed (feature 137 T03). A link exists to reach the network; the moment it
+    does, the rest is a stub. Cut at a vertex within `_TOUCH_GAP` of one of `others`, or at a
+    crossing. `others` is the TARGET set only - the main component in the orphan ladder, the unmet
+    ways in the touch pass - never the piece's own component: a piece is often several lanes, and
+    cutting at one of them left the reference hamlet's web in pieces on the first try."""
+    if not others or len(link) < 2:
+        return list(link)
+    out = [link[0]]
+    for t in range(1, len(link)):
+        a, b = link[t - 1], link[t]
+        # `seg_intersect` meets LINES - guard it with `segments_cross`, as every other caller here does,
+        # or the cut lands on the link's own backward extension (the reference hamlet, first try).
+        hits = [x for c, d in others if segments_cross(a, b, c, d) for x in [seg_intersect(a, b, c, d)] if x is not None and math.dist(a, x) > 0.5]
+        if hits:
+            out.append(min(hits, key=lambda x: math.dist(a, x)))
+            return out
+        out.append(b)
+        if t < len(link) - 1:
+            _near = min(((seg_dist(b[0], b[1], c, d), c, d) for c, d in others), key=lambda z: z[0])
+            if _near[0] <= _TOUCH_GAP:
+                # LAND ON THE WAY, not beside it: the web counts two lanes as joined at 4 ft, and a
+                # link cut at a vertex 3.9 ft off rounds to a piece - the first cut of this pass
+                # took the reference hamlet's web apart that way.
+                foot = seg_closest(b[0], b[1], _near[1], _near[2])
+                if math.dist(b, foot) > 0.5:
+                    out.append(foot)
+                return out
+    return out
+
+
+def _unretrace(pts: Poly) -> Poly:
+    """Collapse an out-and-back in a polyline: a vertex whose two neighbors coincide is a spur to
+    nowhere, and both it and the return vertex go. A join link is routed from a piece's END, and the
+    router's first hop is free to land on the piece's own next vertex - so prepending the whole link
+    drew `A -> B -> A' -> B -> ...`, a 180-degree hairpin the eye reads as a loop (cohort seed 07,
+    feature 137 T03: lane 1 went 20 ft out to its old end and 20 ft back). Splicing is the one place
+    this shape is made, so it is undone here rather than by a general smoothing pass."""
+    out = [p for k, p in enumerate(pts) if k == 0 or math.dist(p, pts[k - 1]) > 0.5]
+    k = 1
+    while k < len(out) - 1:
+        if math.dist(out[k - 1], out[k + 1]) <= 2.0:
+            del out[k : k + 2]
+            k = max(1, k - 1)
+        else:
+            k += 1
+    # A polyline that folds away entirely (a door path whose link ran back past the door) is left
+    # as it was drawn: an ugly lane is a lane, an empty one is a hole in the web (cohort seed 03).
+    return out if len(out) >= 2 else list(pts)
+
+
 _ORPHAN_REACH = 150.0  # ft: how far a stranded piece may be linked back to the network before it is left as it is
+_SHORTEST_OF = 3  # the detour rung compares this many routable targets by route length before drawing one
+_DETOUR_DIRECTNESS = 8.0  # the last rung may walk round a yard: up to 8x the straight gap (a 29 ft gap -> a 230 ft way round)
+_SERVE_FT = 100.0  # ft: a way serves a house within this - `farmhouses_reach_a_way`'s own figure, so a dropped fragment never strands one
 
 # A JUNCTION LINK CROSSES NOTHING, BUT IT MAY BRUSH A FENCE. The 29 ft gaps this pass closes are
 # made by the fabric margin itself: `clear_runs` clips a lane wherever it passes within
@@ -1161,7 +1370,15 @@ _TOUCH_GAP = 4.0
 
 
 def _clear_touch(a: Pt, b: Pt, hard: list[Poly], walls: Sequence[Poly], water: list[tuple[Pt, Pt]]) -> bool:
-    """`_clear_link` at footprint margins - for the short link that closes a junction (see `_TOUCH_GAP`)."""
+    """`_clear_link` at footprint margins - for the short link that closes a junction (see `_TOUCH_GAP`).
+
+    THE 4 ft BRUSH STAYS - three wider margins were measured and each broke the reference hamlet
+    (feature 137 T03, 2026-08-28): 7 ft (the fabric margin) put the T32 zigzag back beside the notice
+    board and took the 24-cohort to 1/24; 6 ft for everything cost Inashiro three checks; 6 ft for
+    gardens/yards/sheds with 4 for houses still cost it `lanes_bend_like_paths`. The margin was a
+    ghost: on the current tree `houses_clear_of_lanes` is 0 of 48 and `features_do_not_overlap` 2 of
+    48 - the T32-era brush failures were cured by later work (the set-back re-pack, the guard, the
+    ladder). Do not widen this again without a failing seed that names it."""
     span = math.dist(a, b)
     if span < 1.0:
         return True
@@ -1247,6 +1464,56 @@ def _smooth_web(s: Settlement, hard: list[Poly], walls: Sequence[Poly], water: l
     changed = 0
     lanes = s.M.get("lanes") or []
 
+    # THE SMOOTHING NEVER DISCONNECTS THE WEB (feature 137 T03, 2026-08-28). Tripwire seed 37 (and
+    # the gate cohort's 43, the pool's Kashikawa and Sawada) failed `lanes_form_one_network` after T32:
+    # a hairpin cut took the short arm that was the piece's only link to the spine, and the orphan
+    # joiner could not put it back - the spine's end and the stub's end stood 29 ft apart in a 12 ft
+    # slot between a house and a threshing yard that the 7 ft fabric pad closes on both sides. The
+    # repair that made the picture nicer had made the map wrong, and no later pass could undo it.
+    # So every rewrite below goes through `_commit`: the web's piece count is taken before and after,
+    # and a rewrite that adds a piece is refused and the lane left as it was. The bends check may
+    # then fire on the kept hairpin - that is the honest verdict, and its own task (T04).
+    def _pieces() -> int:
+        _ways = [[(float(x), float(y)) for x, y in ln.get("pts") or []] for ln in lanes]
+        _comp = _components(_ways, 4.0)
+        return len({_comp[m] for m in range(len(_ways)) if len(_ways[m]) >= 2})
+
+    def _rejoinable() -> bool:
+        """After a rewrite that added a piece: will the post-smoothing touch pass close it again? Yes
+        iff some end of the new piece stands within `_STUB_REACH_FT` of another piece's tread with a
+        clear straight link (the touch pass draws exactly that). Inashiro's own smoothing makes such
+        cuts and the touch repairs them; seed 37's stub sat 29 ft off in a 12 ft slot no link clears."""
+        _ways = [[(float(x), float(y)) for x, y in ln.get("pts") or []] for ln in lanes]
+        _comp = _components(_ways, 4.0)
+        _live = [m for m in range(len(_ways)) if len(_ways[m]) >= 2]
+        _seed = next((m for m in _live if lanes[m].get("connector")), _live[0] if _live else 0)
+        for _c in {_comp[m] for m in _live} - {_comp[_seed]}:  # every piece OTHER than the connector's must reach one
+            _mine = [m for m in _live if _comp[m] == _c]
+            _segs = [sg for m in _live if _comp[m] != _c for sg in zip(_ways[m], _ways[m][1:], strict=False)]
+            if not _segs:
+                continue
+            _ok = False
+            for m in _mine:
+                for _e in (_ways[m][0], _ways[m][-1]):
+                    _foot = min((seg_closest(_e[0], _e[1], a, b) for a, b in _segs), key=lambda z: math.dist(_e, z))
+                    if math.dist(_e, _foot) <= _STUB_REACH_FT and _clear_touch(_e, _foot, hard, walls, water):
+                        _ok = True
+                        break
+                if _ok:
+                    break
+            if not _ok:
+                return False
+        return True
+
+    def _commit(m: int, new_pts: list[list[float]]) -> bool:
+        _before, _old = _pieces(), lanes[m]["pts"]
+        lanes[m]["pts"] = new_pts
+        if _pieces() > _before and not _rejoinable():
+            lanes[m]["pts"] = _old
+            return False
+        s.reink_lane(m)
+        return True
+
     def _others_segs(skip: int) -> list[tuple[Pt, Pt]]:
         return [
             (a, b)
@@ -1290,6 +1557,10 @@ def _smooth_web(s: Settlement, hard: list[Poly], walls: Sequence[Poly], water: l
         def _shortcut_ok(a: int, b: int, pts: Poly = pts) -> bool:
             if _clear_link(pts[a], pts[b], hard, walls, water):
                 return True
+            # A FOOTPATH CHORDED AT ITS OWN 4 ft MARGIN WAS TRIED AND ROTATED A BEND ONTO INASHIRO (feature 137
+            # T04, 2026-08-28): letting a straggler lane take any chord `_clear_touch` allows straightened seed
+            # 43's fold and put a new sharp bend on the reference hamlet's web. Not kept; the fold's real
+            # cause is the straggler router folding inside a pocket, and that is where the fix belongs.
             if not _clear_touch(pts[a], pts[b], hard, walls, water):
                 return False
             return all(seg_dist(v[0], v[1], pts[a], pts[b]) <= _JOG_FT for v in pts[a + 1 : b])
@@ -1303,9 +1574,7 @@ def _smooth_web(s: Settlement, hard: list[Poly], walls: Sequence[Poly], water: l
             out.append(pts[b])
             a = b
         pts = out
-        if [[round(x, 1), round(y, 1)] for x, y in pts] != ln["pts"]:
-            ln["pts"] = [[round(x, 1), round(y, 1)] for x, y in pts]
-            s.reink_lane(i)
+        if [[round(x, 1), round(y, 1)] for x, y in pts] != ln["pts"] and _commit(i, [[round(x, 1), round(y, 1)] for x, y in pts]):
             changed += 1
     # 4. KNOTS: ends of different lanes that stand within `_KNOT_FT` of one another meet at ONE
     # node. Three lanes arriving at three points a few feet apart drew a closed triangle on
@@ -1355,9 +1624,7 @@ def _smooth_web(s: Settlement, hard: list[Poly], walls: Sequence[Poly], water: l
             if len(_q) < 2:
                 continue
             _nb = _q[1] if f == 0 else _q[-2]
-            if _clear_touch(_nb, node, hard, walls, water) and [[round(x, 1), round(y, 1)] for x, y in _q] != lanes[j]["pts"]:
-                lanes[j]["pts"] = [[round(x, 1), round(y, 1)] for x, y in _q]
-                s.reink_lane(j)
+            if _clear_touch(_nb, node, hard, walls, water) and [[round(x, 1), round(y, 1)] for x, y in _q] != lanes[j]["pts"] and _commit(j, [[round(x, 1), round(y, 1)] for x, y in _q]):
                 changed += 1
     # 2b. shadows: a lane whose every vertex lies inside another lane's stroke is that lane drawn
     # twice (settlement-review at the T99 acceptance: lanes[7] lay for its whole 35.7 ft inside
@@ -1373,9 +1640,8 @@ def _smooth_web(s: Settlement, hard: list[Poly], walls: Sequence[Poly], water: l
                 continue
             tol = float(other.get("w", 3)) / 2 + float(ln.get("w", 3)) / 2 + 1.0
             if all(min(seg_dist(v[0], v[1], pts_j[k], pts_j[k + 1]) for k in range(len(pts_j) - 1)) <= tol for v in pts_i):
-                lanes[i]["pts"] = []
-                s.reink_lane(i)
-                changed += 1
+                if _commit(i, []):
+                    changed += 1
                 break
     # 3. bow-ties: a lane that crosses another mid-run and runs on for less than an arm
     for i, ln in enumerate(lanes):
@@ -1398,9 +1664,8 @@ def _smooth_web(s: Settlement, hard: list[Poly], walls: Sequence[Poly], water: l
                         pts = [x, *pts[k + 1 :]]
                     else:
                         continue
-                    ln["pts"] = [[round(px, 1), round(py, 1)] for px, py in pts]
-                    s.reink_lane(i)
-                    changed += 1
+                    if _commit(i, [[round(px, 1), round(py, 1)] for px, py in pts]):
+                        changed += 1
                     break
                 else:
                     continue
@@ -1440,6 +1705,15 @@ def _net_segs(s: Settlement) -> list[tuple[Pt, Pt]]:
     return [((float(p[0]), float(p[1])), (float(q[0]), float(q[1]))) for ln in s.M.get("lanes", []) for p, q in zip(ln["pts"], ln["pts"][1:], strict=False)]
 
 
+_PASS = "web"  # the web pass drawing right now, recorded on every lane it makes (feature 137 T04: provenance)
+
+
+def _pass(name: str) -> None:
+    """Name the pass about to draw, so a lane on the sheet can say who made it (`role`)."""
+    global _PASS  # noqa: PLW0603 - one module-level tag, set by stage_web between its passes
+    _PASS = name
+
+
 def _draw_web(s: Settlement, pts: Poly, width: int = 3, houses: Sequence[Pt] = ()) -> bool:
     """Draw a web lane, unless it is debris. See `_WEB_MIN_FT`.
 
@@ -1456,6 +1730,8 @@ def _draw_web(s: Settlement, pts: Poly, width: int = 3, houses: Sequence[Pt] = (
         if not earns:
             return False
     s.lane(pts, width=width, clearance=WEB_CLEARANCE, worn=True)
+    if s.M.get("lanes"):
+        s.M["lanes"][-1]["role"] = _PASS  # provenance: which pass drew it (feature 137 T04)
     # Flagged so `lane_frontage` does not offer seats along it. A web lane is SERVICE - it threads
     # behind and between the steadings - and inviting new houses onto the way that exists to reach
     # the old ones is how the cluster starts sprawling again.
@@ -1939,6 +2215,13 @@ def _serve_stragglers(s: Settlement, plan: SitePlan, hard: list[Poly], fabric: l
                     # same end-trim every web lane gets - a footpath that begins in bare grass is a
                     # dangling tread whatever drew it.
                     path = _trim_to_service(path, segs, [(float(q["x"]), float(q["y"])) for q in s.M.get("houses", [])])
+                    # A DOOR PATH THAT REACHES NO WAY IS NOT DRAWN (feature 137 T03, 2026-08-28): cohort seed 22
+                    # shipped a 4 ft straggler stub - the clip and the trim had eaten everything but the doorstep,
+                    # and the orphan joiner could neither link it nor drop it (its house had no other way). A
+                    # footpath is a run from a door TO a way; what survives must still end within a junction's
+                    # reach of the way it was aimed at, or it is a mark in the grass.
+                    if len(path) < 2 or min(math.dist(path[-1], tgt), math.dist(path[0], tgt)) > _LANE_JOIN_FT:
+                        continue
                     _draw_web(s, path, 3, houses=[c])
                     added += 1
                     _served = True
@@ -2196,6 +2479,10 @@ def stage_seat(s: Settlement, plan: SitePlan) -> None:
         plan.windward = min(WIND_VECTORS, key=lambda q: -(WIND_VECTORS[q][0] * seat["out"][0] + WIND_VECTORS[q][1] * seat["out"][1]))
         s.M["meta"]["windward"] = plan.windward
     s.M["meta"]["lane_skeleton"] = plan.lane_skeleton
+    # THE SIDE THE HOUSES STAND ON, told to the settlement (feature 140): every field test from here on measures
+    # the outline's few chords facing this seat (`rolling/fit.py::_field_chains`), never the whole outline.
+    if plan.seat:
+        s.field_face = (float(plan.seat["cx"]), float(plan.seat["cy"]))
 
 
 def stage_track(s: Settlement, plan: SitePlan) -> None:

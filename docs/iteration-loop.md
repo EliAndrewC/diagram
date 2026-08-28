@@ -260,6 +260,17 @@ runs) 8.7 -> ~7.0 s wall for 1,971 tests; with testmon, an unchanged tree answer
 one-file edit in ~4-7 s. `dmypy run` replaces one-shot mypy in quick (~0.25 -> ~0.1 s after the
 first run; one-shot on CodeBuild).
 
+**The daemon holds ~400-600 MB of RSS per clone for as long as it lives, and nothing in mypy stops it**
+(GM 2026-08-28: five daemons, one per session clone, ~2.3 GB, one of them for a session that had
+ended). The cleanup is `scripts/dmypy-hooks.sh`: the `SessionEnd` hook stops the ending session's
+own daemon, and `make quick` sweeps every daemon whose clone no live session owns - never `make done`,
+so a slip stopping something unrelated cannot block a merge. What the RAM buys, measured the same day: on a
+comment-only edit the daemon answers in 0.13 s and warm one-shot mypy in 0.21-0.31 s - but on an
+interface change to a central module (a function added to `settlement/__init__.py`) it is 0.15 s
+against 2.9 s, because one-shot mypy re-checks every dependent and the daemon's fine-grained graph
+does not. ~2.7 s per engine-editing quick. Either ~12 s cold; `--timeout` priced and declined (a
+12 s cold start after every break).
+
 
 ## DECLINED, by the GM (2026-08-26): a persistent test runner
 

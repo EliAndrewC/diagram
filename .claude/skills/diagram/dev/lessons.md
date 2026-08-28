@@ -249,3 +249,19 @@ under `L7R_COV_FLOORS=1`, which the Makefile now exports under COV_FLOORS) and j
 pinned expected-failure set with `baseline_verdict`'s rule (outside the set = regression, clean
 pinned seed = stale pin).
 
+## 2026-08-28 (feature 137 T03): the lock hid that T31/T32 broke the tier - 18/24 to 2/24 in two tasks
+
+The reference-hamlet period's lane passes (T31 `_touch_junctions`, T32 `_smooth_web`) made Inashiro
+right and the TIER wrong: a 24-seed cohort passed 18 at the lock and 2 after T32, with
+`houses_clear_of_lanes` on 13 seeds and `features_do_not_overlap` on 10. The doctrine written into
+T31 - "a junction link crosses nothing, but it may brush a fence" at a 4 ft footprints-only
+margin - was tuned on the one map, where every refused link was 29 ft long beside a garden; on the
+tier those brushes are lanes inside a house's 40 ft clearance and over garden rects the matrix sizes
+6 ft wide. Two lessons. (1) A pass tuned on one map is a hypothesis until the cohort has run - the
+lock's accepted cost ("found at unlock") was two days of building on a broken web. (2) A margin
+the GATE will not accept is not a margin the generator may use, whatever the picture on one map
+says; the fix that works is to hold every link to the web's own fabric margin and route the
+detour, never to relax the brush. The bisect that found this needed a CLEAN scratch clone: the
+first attempt measured one tree four times because a copied-in instrumented file blocked every
+checkout silently.
+
