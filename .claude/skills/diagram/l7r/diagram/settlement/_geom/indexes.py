@@ -250,7 +250,7 @@ class PointGrid:
 class RingIndex:
     """Point queries against ONE static ring - inside/outside and distance-to-edge - built once.
 
-    WHY IT EXISTS (feature 144, GM 2026-08-28: *"What are we doing billions of computations on
+    WHY IT EXISTS (feature 145, GM 2026-08-28: *"What are we doing billions of computations on
     exactly?"*). The ground-cover scatters (`commons`, `marsh`) throw ~100k+ candidate points per
     hamlet and asked the outline two questions per point, each by walking EVERY edge: `point_in_poly`
     and `edge_dist` - 1.3M ray tests and 156k full-ring distance scans on the reference, ~60M segment
@@ -306,7 +306,7 @@ class RingIndex:
 
 
 def boxed_rings(polys: Any, pad: float = 0.0) -> list[tuple[RingIndex, float, float, float, float]]:
-    """`boxed_polys` with each ring INDEXED (feature 144): the same `(payload, x0, y0, x1, y1)` shape
+    """`boxed_polys` with each ring INDEXED (feature 145): the same `(payload, x0, y0, x1, y1)` shape
     `boxed_grid` files, but the payload is a `RingIndex`, so `boxed_ring_hit` answers the inside
     and edge-margin questions from the edges near the point instead of walking every vertex. The
     scatters' crop-margin test was the last whole-ring scan per candidate: `boxed_hit(..., edge_pad)`

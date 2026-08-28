@@ -120,7 +120,7 @@ class GroundCoverMixin:
             clr_b, avd_b, cor_b = boxed_grid(boxed_rings(self.clearings)), boxed_grid(boxed_rings(avoid)), boxed_grid(boxed_segs(corridors))
             soft_polys = [[tuple(q) for q in sp] for sp in soft]
             soft_feather = MARSH_FEATHER_BS * bs  # the marsh's own reed feather (wet.py), so the two ramps are complements
-            # THE RING IS INDEXED ONCE (feature 144): every throw below asked `point_in_poly` and
+            # THE RING IS INDEXED ONCE (feature 145): every throw below asked `point_in_poly` and
             # `edge_dist` to walk the whole outline - 1.3M ray tests and 156k full-ring scans per
             # reference roll, two thirds of the stage. `RingIndex` answers both from the edges near
             # the point, exactly (its docstring carries the argument).

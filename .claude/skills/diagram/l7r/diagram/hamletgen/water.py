@@ -122,7 +122,7 @@ def _fit_at_aspect(plan: SitePlan, sluice: Pt, seed: int, plot_across: float, ro
     """`fit_field`'s bisection at ONE fan aspect. Returns ((illegal, acreage error), net)."""
     lo, hi = 0.35, 2.2
     best: tuple[tuple[bool, float], dict[str, Any]] | None = None
-    # PREDICT THE MULTIPLIER, THEN BRACKET IT (feature 144, GM 2026-08-28: "maps are now allowed to
+    # PREDICT THE MULTIPLIER, THEN BRACKET IT (feature 145, GM 2026-08-28: "maps are now allowed to
     # move ... we should just go ahead and fix it"). The fan scales in both dimensions with k, so
     # its acreage goes roughly as k^2: from one carve the size that lands the target is
     # k * sqrt(target / acres), and from two carves a power law through both points is better

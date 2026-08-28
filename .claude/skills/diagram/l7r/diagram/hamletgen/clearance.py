@@ -93,7 +93,7 @@ class FabricIndex:
         cell: float | None = None,
     ) -> None:
         # each entry: (kind, shape, margin, inflated bounds); kind 0 = polygon (a RingIndex), 1 = line (its two points)
-        # THE POLYGON IS INDEXED TOO (feature 144). Filing polygons by cell only narrowed WHICH polygons a
+        # THE POLYGON IS INDEXED TOO (feature 145). Filing polygons by cell only narrowed WHICH polygons a
         # lookup tests; each one it did test was still walked edge by edge for the margin - and the field
         # envelope, the crop rings and the marsh are `big`, tested on EVERY lookup, with rings of 40-60
         # vertices. Seed 25's web stage: 1.19M `fouled` calls, 30.8M `seg_dist`, 35 of the roll's 51 s.

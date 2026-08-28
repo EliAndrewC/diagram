@@ -70,7 +70,7 @@ class WetGroundMixin:
         fld_b, blk_b = boxed_grid(boxed_rings(self.field_polys, 10.0)), boxed_grid(boxed_rings(self.block_polys))
         clr_b, avd_b, cor_b = boxed_grid(boxed_rings(self.clearings)), boxed_grid(boxed_rings(avoid)), boxed_grid(boxed_segs(corridors))
         wat_b = boxed_grid(boxed_segs(self._watercourse_segs()))  # drawn water (streams/channels/comb laterals), pre-boxed once - see _watercourse_segs
-        ring = RingIndex(poly)  # the outline, indexed once per marsh (feature 144; the why is on RingIndex)
+        ring = RingIndex(poly)  # the outline, indexed once per marsh (feature 145; the why is on RingIndex)
 
         def _sparse(
             px: float, py: float, drop: float

@@ -83,7 +83,7 @@ def test_miter_normals_caps_the_scale_on_a_hairpin() -> None:
 
 
 def test_predict_k_steps_by_the_power_law_and_falls_back_to_the_midpoint() -> None:
-    """The field solver's step (feature 144): a square-root step from one carve, a power-law step
+    """The field solver's step (feature 145): a square-root step from one carve, a power-law step
     from two, and the bracket midpoint whenever the prediction is useless."""
     from l7r.diagram.hamletgen.water import _predict_k
 

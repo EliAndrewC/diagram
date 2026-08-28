@@ -1,6 +1,6 @@
 # Feature Specification: the hamlet coverage floor, and the sixteen-second roll
 
-**Feature Branch**: none - `specs/144-hamlet-rolls-and-floor` (`SPECIFY_FEATURE=144-hamlet-rolls-and-floor`)
+**Feature Branch**: none - `specs/145-hamlet-rolls-and-floor` (`SPECIFY_FEATURE=145-hamlet-rolls-and-floor`)
 **Created**: 2026-08-28
 **Status**: APPROVED by `spec-fidelity` - round 1 (2026-08-28) asked four changes (keep the settlement ratchet; tests not deletions; the unit-test time must be REDUCED; the 8 s / 40% figures are the session's targets, a miss is reported), all applied; round 2 verdict FAITHFUL. Implementation proceeds.
 **Input**: [`gm-request.md`](gm-request.md), the GM's words verbatim (two messages, 2026-08-28)

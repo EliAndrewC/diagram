@@ -453,7 +453,7 @@ def test_the_import_time_main_tree_guard_survived_the_split():
 
 
 def test_ring_index_matches_the_linear_scan_exactly() -> None:
-    """RingIndex (feature 144) is a prefilter: inside/outside and the feather-band distance must
+    """RingIndex (feature 145) is a prefilter: inside/outside and the feather-band distance must
     equal point_in_poly / edge_dist on every point - concave rings, points on the bbox edge, points
     outside, points far from every edge (None) and points inside the band (the true distance)."""
     import random as _r
@@ -481,7 +481,7 @@ def test_ring_index_matches_the_linear_scan_exactly() -> None:
 
 
 def test_boxed_rings_match_boxed_polys() -> None:
-    """`boxed_ring_hit` over `boxed_rings` (feature 144) gives `boxed_hit`'s verdict on every point,
+    """`boxed_ring_hit` over `boxed_rings` (feature 145) gives `boxed_hit`'s verdict on every point,
     with and without an edge pad - the box pad is the edge pad, as the contract requires."""
     import random as _r
 

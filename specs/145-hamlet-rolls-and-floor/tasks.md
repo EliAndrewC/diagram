@@ -1,4 +1,4 @@
-# Tasks: feature 144 - the hamlet coverage floor, and the sixteen-second roll
+# Tasks: feature 145 - the hamlet coverage floor, and the sixteen-second roll
 
 Every task is `research: rendering` (nothing physical is decided here).
 
@@ -19,3 +19,9 @@ Every task is `research: rendering` (nothing physical is decided here).
 - [ ] T23 settlement-review of the reference (maps moved); findings fixed - `research: rendering`
 - [ ] T24 doctrine: `dev/performance.md` (the index shape, again), `tests/CLAUDE.md` / settlement CLAUDE.md coverage paragraph (the derived floor) - `research: rendering`
 - [ ] T99 the GM accepts - verbatim, after the explanation of what changed and what remains (the 8 s / 40% targets: met or reported) - `research: rendering`
+
+Numbering: this feature was claimed as 144 on 2026-08-28 and renumbered to 145 the same day when a peer
+session's `specs/144-road-width-thirty` landed on main first (the clone could not push its claim while it
+carried uncommitted engine work). The perf bookend taken BEFORE any engine change keeps its recorded
+label `144-start` - an append-only record is not renamed; `make perf-report AGAINST=144-start` is the
+comparison, and the closing bookend is `145-end`.

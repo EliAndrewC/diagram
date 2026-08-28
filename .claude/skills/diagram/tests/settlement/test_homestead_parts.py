@@ -45,7 +45,7 @@ def test_corridor_buffers_gathers_lanes_streets_and_road():
     s.M["town_streets"] = [{"pts": [[0, 0], [10, 0]], "w": 10}]
     s.M["road"] = [[0, 0], [10, 0]]
     corr = s._corridor_buffers(4)
-    assert [b for _, b in corr] == [3 + 4, 5 + 4, 15 + 4]  # lane 6/2, street 10/2, road 30/2 (feature 144), each + extra
+    assert [b for _, b in corr] == [3 + 4, 5 + 4, 15 + 4]  # lane 6/2, street 10/2, road 30/2 (feature 145), each + extra
 
 
 def test_village_grove_skips_clumps_in_a_yards_sun_corridor():
