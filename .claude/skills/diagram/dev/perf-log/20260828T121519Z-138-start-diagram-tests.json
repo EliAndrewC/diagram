@@ -1,0 +1,130 @@
+{
+  "clone": "diagram-tests",
+  "commit": "bc48b5f2",
+  "cpus": 22,
+  "environment": "local",
+  "host": "laptop",
+  "hostname": "863bd4879ca8",
+  "image": "laptop",
+  "label": "138-start",
+  "machine": "x86_64",
+  "median_seconds": 76.3,
+  "reference": {
+    "down_deg": 90,
+    "households": 15,
+    "name": "Inashiro",
+    "water_sink": "pond"
+  },
+  "rows": [
+    {
+      "asked": 15,
+      "form": "nucleated",
+      "houses": 15,
+      "seconds": 57.9,
+      "seed": 4,
+      "shape": "crescent",
+      "stages": {
+        "appurtenances": 0.34,
+        "bamboo": 0.0,
+        "crossings": 0.77,
+        "field": 4.95,
+        "frame": 0.05,
+        "hinterland": 18.41,
+        "homesteads": 1.65,
+        "notice": 6.07,
+        "seat": 0.04,
+        "sink": 0.01,
+        "track": 5.46,
+        "water_frame": 0.0,
+        "web": 19.86,
+        "windbreak": 0.27,
+        "woodland": 0.05
+      }
+    },
+    {
+      "asked": 15,
+      "form": "nucleated",
+      "houses": 15,
+      "seconds": 59.9,
+      "seed": 25,
+      "shape": "crescent",
+      "stages": {
+        "appurtenances": 0.2,
+        "bamboo": 0.0,
+        "crossings": 0.45,
+        "field": 8.07,
+        "frame": 0.0,
+        "hinterland": 10.25,
+        "homesteads": 1.62,
+        "notice": 9.8,
+        "seat": 0.05,
+        "sink": 0.02,
+        "track": 4.6,
+        "water_frame": 0.0,
+        "web": 24.64,
+        "windbreak": 0.18,
+        "woodland": 0.02
+      }
+    },
+    {
+      "asked": 15,
+      "form": "nucleated",
+      "houses": 15,
+      "seconds": 110.3,
+      "seed": 39,
+      "shape": "round",
+      "stages": {
+        "appurtenances": 0.94,
+        "bamboo": 0.0,
+        "crossings": 0.49,
+        "field": 4.52,
+        "frame": 0.0,
+        "hinterland": 10.06,
+        "homesteads": 0.91,
+        "notice": 6.32,
+        "seat": 0.05,
+        "sink": 0.01,
+        "track": 9.47,
+        "water_frame": 0.0,
+        "web": 77.16,
+        "windbreak": 0.32,
+        "woodland": 0.02
+      }
+    },
+    {
+      "asked": 15,
+      "form": "nucleated",
+      "houses": 15,
+      "seconds": 92.7,
+      "seed": 47,
+      "shape": "round",
+      "stages": {
+        "appurtenances": 0.12,
+        "bamboo": 0.0,
+        "crossings": 0.38,
+        "field": 32.23,
+        "frame": 0.0,
+        "hinterland": 7.2,
+        "homesteads": 1.25,
+        "notice": 5.8,
+        "seat": 0.05,
+        "sink": 0.0,
+        "track": 15.08,
+        "water_frame": 0.0,
+        "web": 30.37,
+        "windbreak": 0.18,
+        "woodland": 0.0
+      }
+    }
+  ],
+  "seeds": [
+    4,
+    25,
+    39,
+    47
+  ],
+  "subject": "138: spec approved (spec-fidelity FAITHFUL, round 1); the fabric index + crossing sweep module with its oracle tests (not yet wired)",
+  "total_seconds": 320.8,
+  "utc": "20260828T121519Z",
+  "worst_seconds": 110.3
+}
