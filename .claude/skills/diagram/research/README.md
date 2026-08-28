@@ -42,6 +42,12 @@ Every entry carries the same four fields, in this order:
 **Evidence:** <one or more classes, see below>
 
 **Sources:** `key`, `key` - or an explicit "not recorded"
+```
+
+Every key in `SOURCES.md` carries the URL where the source can be read (constitution v2.13.0, GM
+2026-08-28), or `URL: none - <why>`; the interactive map's references modal links to it.
+
+```
 
 <the finding: what the research found, the decision it drove, and any disclosed departure>
 ```

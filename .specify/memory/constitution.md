@@ -1,7 +1,13 @@
 <!--
 SYNC IMPACT REPORT
 ==================
-Version change: 2.11.1 → 2.12.0
+Version change: 2.12.0 → 2.13.0
+
+Version 2.13.0 (amended 2026-08-28, feature 134): Principle XII gains "A SOURCE CARRIES ITS
+LINK" - every SOURCES.md key records the URL where the source can be read (or an explicit
+`URL: none - <why>`), because the interactive map links its references to them; the 228
+pre-rule sources were linked in one pass.
+
 
 Version 2.12.0 (amended 2026-08-27, feature 133 T46): Principle XII gains "A WORLD TASK CARRIES
 ITS RESEARCH AS CHECKBOXES" - every task classified rendering/physical at creation; a physical
@@ -1242,6 +1248,17 @@ editorial community and no provenance a reader can follow, so citing it hands th
 end. A web-search summary is a pointer to sources, never a source. Findings recorded before this
 rule without sources are re-sourced when next revisited (`research/SOURCES.md` keeps the queue),
 not rewritten wholesale.
+
+**A SOURCE CARRIES ITS LINK** (GM 2026-08-28, feature 134). Every key in `research/SOURCES.md`
+records the URL at which the source can be read - by a later session or by a human - alongside
+the citation: the DOI or J-STAGE landing page for a paper, the article URL for an encyclopedia,
+the institution's own page for a museum, ministry or prefecture document. The interactive map's
+references modal links each source to it; a citation without a link hands the reader a name and
+no way to check it, which is the failure the sources rule exists to prevent. A source that
+genuinely has no stable URL (a print-only book, a page that has gone) records `URL: none - <why>`
+in its entry, so the absence is a statement rather than an omission. The 228 sources registered
+before this rule were linked in one pass on 2026-08-28 (feature 134 T47); a key added after it
+without a URL fails `tests/interactive/test_page.py`.
 
 **READ WHAT YOU CITE** (GM 2026-08-27, feature 133 T44). A source is cited only after the session
 has read it - the page or paper itself, fetched and read, not a search engine's summary of it and

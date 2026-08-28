@@ -17,7 +17,7 @@ import pytest
 from l7r.diagram.interactive.classes import CLASSES
 from l7r.diagram.interactive.glossary import GLOSSARY
 from l7r.diagram.interactive.page import explanations, glossary_for, hit_copies, hit_regions, ink_census, marks_region, merge_primitives, present_classes, render_page, unregistered_classes, wrap
-from l7r.diagram.interactive.sources import citations, registry, research_sources, section_sources
+from l7r.diagram.interactive.sources import citations, registry, research_sources, section_sources, urls_of
 from l7r.diagram.interactive.tags import Split
 
 RECT = '<rect x="1" y="2" width="3" height="4" fill="#abc" stroke="#123"/>'
@@ -101,7 +101,7 @@ def test_explanations_hold_only_present_classes_and_present_siblings() -> None:
     assert data["farmhouse"]["siblings"] == [], "storage shed and byre are absent"
     assert data["windbreak"]["label_phrase"] == "historically accurate"
     assert data["windbreak"]["sources"] == research_sources(CLASSES["windbreak"].entry) and "forests-2020" in data["windbreak"]["sources"]
-    assert data["windbreak"]["refs"]["forests-2020"].startswith(("Chen", "Hu", "Fengshui", "forests", "Village")) or len(data["windbreak"]["refs"]["forests-2020"]) > 20
+    assert len(data["windbreak"]["refs"]["forests-2020"]["text"]) > 20
 
 
 def test_explanations_stub_an_unregistered_class_rather_than_dropping_it() -> None:
@@ -249,7 +249,8 @@ def test_the_citations_come_from_the_research_entries() -> None:
     assert "forests-2020" in keys
     reg = registry()
     assert len(reg) > 200 and "sugiura-1973-fuzoku" in reg and "Used for:" in reg["sugiura-1973-fuzoku"]
-    assert citations(["forests-2020", "no-such-key"])["no-such-key"] == "(not in research/SOURCES.md)"
+    assert citations(["forests-2020", "no-such-key"])["no-such-key"]["text"] == "(not in research/SOURCES.md)"
+    assert urls_of("Saitama City (https://www.city.saitama.lg.jp/p077111.html; READ). See https://example.org/a).") == ["https://www.city.saitama.lg.jp/p077111.html", "https://example.org/a"]
     assert section_sources("**Sources:** `a-1`, [`b-2`](SOURCES.md#b-2) and `a-1` again") == ["a-1", "b-2"]
     assert research_sources("nothing here") == []
 
@@ -269,3 +270,10 @@ def test_the_glossary_is_well_formed_and_used() -> None:
     assert {"bund", "coppice", "iriai", "tameike", "yashikirin", "kosatsuba", "hokora"} <= used
     unused = set(GLOSSARY) - used
     assert not unused, f"glossary terms no explanation uses: {sorted(unused)}"
+
+
+def test_every_registered_source_carries_a_link_or_says_why_not() -> None:
+    """Constitution v2.13.0 (GM 2026-08-28): a SOURCES.md key records the URL where the source can be
+    read, or an explicit `URL: none - <why>`; the references modal links to it."""
+    bare = sorted(k for k, text in registry().items() if not urls_of(text) and "URL: none" not in text)
+    assert bare == [], f"sources with neither a link nor a stated reason: {bare}"

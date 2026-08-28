@@ -54,3 +54,4 @@ a.sib:hover { color: var(--hl-stroke); }
 /* the references modal sits ABOVE the explanation */
 dialog#references { z-index: 11; max-width: 46rem; }
 dialog#references p { margin: 0 0 0.6rem; font-size: 0.9rem; line-height: 1.4; }
+a.ref { color: #5A3F1E; margin-left: 0.2rem; }

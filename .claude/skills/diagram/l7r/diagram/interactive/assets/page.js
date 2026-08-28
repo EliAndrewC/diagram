@@ -132,11 +132,26 @@
     var list = document.getElementById("r-list");
     list.textContent = "";
     d.sources.forEach(function (k) {
+      var ref = d.refs[k] || { text: "", urls: [] };
       var p = document.createElement("p");
       var b = document.createElement("b");
       b.textContent = k + ": ";
       p.appendChild(b);
-      p.appendChild(document.createTextNode(d.refs[k] || ""));
+      p.appendChild(document.createTextNode(ref.text));
+      // THE REFERENCE LINKS TO WHERE IT CAN BE READ (GM 2026-08-28); a source with no URL says so
+      if (ref.urls && ref.urls.length) {
+        ref.urls.forEach(function (u) {
+          p.appendChild(document.createTextNode(" "));
+          var a = document.createElement("a");
+          a.href = u; a.target = "_blank"; a.rel = "noopener"; a.className = "ref";
+          a.textContent = "[read]";
+          p.appendChild(a);
+        });
+      } else {
+        var i = document.createElement("i");
+        i.textContent = " (no link on record)";
+        p.appendChild(i);
+      }
       list.appendChild(p);
     });
     refsDialog.show();
