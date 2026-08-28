@@ -11,6 +11,12 @@
             "command": "/diagram/scripts/clone-sync-hooks.sh prompt",
             "timeout": 60,
             "statusMessage": "Syncing session clone with main..."
+          },
+          {
+            "type": "command",
+            "command": "/diagram/scripts/idle-tests-hooks.sh prompt",
+            "timeout": 30,
+            "statusMessage": "Disarming the idle-tests timer; surfacing its last verdict..."
           }
         ]
       }
@@ -139,6 +145,17 @@
             "type": "command",
             "command": "/diagram/scripts/batching-hooks.sh posttool",
             "timeout": 10
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/diagram/scripts/idle-tests-hooks.sh stop",
+            "timeout": 30
           }
         ]
       }
