@@ -1399,3 +1399,7 @@ straw rick is deferred with seasonal maps (T60).
 2. **Lane 5's terminal (1274,746) fades out** 12 ft short of the (1337,743) bed and 30 ft from that house's wall - a lane end off the network should land on a plot edge or a yard.
 
 Nitpicks: a 5 ft tail of lane 2 past the lane-4 junction at (1280,1035); the 12 ft jog at (1246,1013)-(1243,1025) before the east leg. The review's catch line: the caption-across-the-way defect and the fading terminal; nothing else new.
+
+### 2026-08-28 - manifest re-recorded under the landed feature-137 engine
+
+The committed manifest was rolled by an earlier engine state; this commit records what the landed engine (GitHub main f4456a72) draws, byte-identical to the mirror's render-sync, so main is clean. Not a review pass: the review of this map is the entry above (PASS WITH NOTES).

@@ -409,3 +409,7 @@ connector's bearing sweep ranks candidate bearings against the standing steading
 geometry moved with the reorder and it gates CLEAN, as it did before. Recorded so the manifest change
 in this commit is not an unexplained diff - the substantive write-up is on
 [`mizuguchi.notes.md`](mizuguchi.notes.md), which is the map that failed and forced the fix.
+
+### 2026-08-28 - manifest re-recorded under the landed feature-137 engine
+
+The committed manifest was rolled by an earlier engine state; this commit records what the landed engine (GitHub main f4456a72) draws, byte-identical to the mirror's render-sync, so main is clean. Not a review pass: this map is red on the gate and is feature 139 T08 (the review comes with its fix).
