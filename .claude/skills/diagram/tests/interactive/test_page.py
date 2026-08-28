@@ -285,3 +285,11 @@ def test_merge_primitives_folds_a_run_of_unfilled_circles() -> None:
     run = '<circle cx="1" cy="1" r="2" stroke="#000"/><circle cx="5" cy="5" r="2" stroke="#000"/>'
     out = merge_primitives(run)
     assert out.count("<circle") == 0 and "<path" in out
+
+
+def test_research_sections_of_a_missing_file_are_empty_not_an_error() -> None:
+    """Feature 146: a research pointer naming a file that is not there yields no sections - the interactive
+    page loses that entry's citations rather than failing to build."""
+    from l7r.diagram.interactive.sources import _sections
+
+    assert _sections("research/no-such-file-at-all.md") == []

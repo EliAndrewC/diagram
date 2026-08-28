@@ -342,3 +342,15 @@ def test_byre_clear_of_all_but_refuses_the_paddy_and_a_neighbour_s_yard() -> Non
     s.M["threshing_yards"].append({"x": 200.0, "y": 200.0, "w": 40.0, "h": 30.0})
     assert s._byre_clear_of_all_but(200, 200, 40, 24, house) is False, "on a neighbour's yard"
     assert s._byre_clear_of_all_but(120, 600, 40, 24, house) is True
+
+
+def test_fringe_blocked_refuses_the_crop_and_the_open_water() -> None:
+    """Feature 146: the wood's fringe grows on WASTE ground. Two of its refusal reasons - a fringe tree
+    inside (or within its own radius of) a crop polygon, and one standing on a watercourse."""
+    s = Settlement(1000, 1000, seed=1)
+    s.field_polys.append([(400, 400), (700, 400), (700, 700), (400, 700)])
+    assert s._fringe_blocked(550, 550, 8.0) is True, "in the basin"
+    assert s._fringe_blocked(396, 550, 8.0) is True, "off it, but inside the tree's own radius"
+    s.M["streams"] = [{"pts": [[100, 900], [900, 900]], "w": 8, "poly": [[100, 896], [900, 896], [900, 904], [100, 904]]}]
+    assert s._fringe_blocked(500, 900, 8.0) is True, "standing in the brook"
+    assert s._fringe_blocked(150, 150, 8.0) is False
