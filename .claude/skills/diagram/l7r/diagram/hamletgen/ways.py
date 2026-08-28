@@ -2139,12 +2139,6 @@ def _serve_stragglers(s: Settlement, plan: SitePlan, hard: list[Poly], fabric: l
                 # So the lattice is not what strands these houses, and 4x the generation time buys
                 # nothing. What does strand them is recorded with the reach residue.
                 routed = _route(door, tgt, hard, passable, [], gap=FOOTPATH_FABRIC_GAP)
-                if abs(c[0] - 1222) < 2 and abs(c[1] - 1347) < 2 and _pass == 0 and abs(math.dist(c, tgt) - 126) < 2:
-                    import sys, json
-                    for _hi, poly in enumerate(hard):
-                        if any(segments_cross(door, tgt, poly[k], poly[(k + 1) % len(poly)]) for k in range(len(poly))):
-                            json.dump([list(q) for q in poly], open('/tmp/claude-1000/-diagram/5a65a34b-80a0-41a3-8f43-52dfc597f5d3/scratchpad/hardpoly.json', 'w'))
-                            print('DBG hard index', _hi, 'of', len(hard), 'n', len(poly), 'bbox', round(min(q[0] for q in poly)), round(min(q[1] for q in poly)), round(max(q[0] for q in poly)), round(max(q[1] for q in poly)), file=sys.stderr)
                 if routed:
                     cands.append(routed)
                 # THE BEND IS A FRACTION OF THE RUN, not a fixed number of feet. Offsets of 40, 80
