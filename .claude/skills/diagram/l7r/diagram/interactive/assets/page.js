@@ -162,38 +162,9 @@
     else if (e.key === "-") zoomAt(0.5, c[0], c[1]);
     else if (e.key === "0") fit();
   });
-  // DRAG PANS; a drag is never a click (no modal opens after the pointer moved more than a few px)
-  var drag = null;
-  stage.addEventListener("pointerdown", function (e) {
-    if (e.button !== 0) return;
-    drag = { x: e.clientX, y: e.clientY, tx: view.tx, ty: view.ty, moved: false, id: e.pointerId };
-    suppressClick = false;  // a stale suppression (a drag that ended over another element fires no click) must not eat this press's click
-  });
-  stage.addEventListener("pointermove", function (e) {
-    if (!drag) return;
-    var dx = e.clientX - drag.x, dy = e.clientY - drag.y;
-    if (!drag.moved && Math.abs(dx) + Math.abs(dy) < 4) return;
-    if (!drag.moved) {
-      // capture only once a drag has really started: capturing at pointerdown retargets the
-      // CLICK to the stage, and the feature under the pointer never gets it (no modal opened)
-      try { stage.setPointerCapture(drag.id); } catch (err) { /* a synthetic pointer may not be capturable */ }
-    }
-    drag.moved = true;
-    stage.classList.add("panning");
-    view.tx = drag.tx + dx; view.ty = drag.ty + dy;
-    apply();
-  });
-  function endDrag(e) {
-    if (!drag) return;
-    var moved = drag.moved;
-    drag = null;
-    stage.classList.remove("panning");
-    if (moved) { suppressClick = true; }
-  }
-  var suppressClick = false;
-  stage.addEventListener("pointerup", endDrag);
-  stage.addEventListener("pointercancel", endDrag);
-  svg.addEventListener("click", function (e) { if (suppressClick) { e.stopImmediatePropagation(); suppressClick = false; } }, true);
+  // NO DRAG-TO-PAN (GM 2026-08-28: "I don't need to click and drag so we can get rid of that and
+  // make the mouse a normal pointer"): the wheel scrolls, the buttons and keys zoom, and a press is
+  // only ever a click.
   window.addEventListener("resize", function () {  // keep the zoom, re-derive the floor
     var W = stage.clientWidth, H = stage.clientHeight;
     view.fit = Math.min(W / vb.width, H / vb.height);

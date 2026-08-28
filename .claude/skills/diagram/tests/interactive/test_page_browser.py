@@ -219,10 +219,11 @@ def test_the_map_fits_the_viewport_at_load_and_zooms_between_fit_and_the_ceiling
     assert abs(synthetic.js("() => window.l7rMap.zoom()") - 1.0) < 1e-9, "cannot zoom out past the whole settlement"
 
 
-def test_the_wheel_scrolls_and_a_drag_pans_without_opening_a_modal(synthetic: Page) -> None:
-    """The wheel SCROLLS the map and never zooms (GM 2026-08-28: "I still want scrolling to scroll")."""
+def test_the_wheel_scrolls_and_a_press_is_only_a_click(synthetic: Page) -> None:
+    """The wheel SCROLLS the map and never zooms (GM 2026-08-28: "I still want scrolling to scroll"); there is
+    no drag-to-pan and the cursor is the normal pointer (GM 2026-08-28: "I don't need to click and drag")."""
     synthetic.js("() => window.l7rMap.fit()")
-    synthetic.js("() => document.querySelector('#zoom [data-z=in]').click()")  # at 2x the map overflows the viewport, so there is room to scroll
+    synthetic.js("() => document.querySelector('#zoom [data-z=in]').click()")
     zoom_before = synthetic.js("() => window.l7rMap.zoom()")
     ty_before = synthetic.js("() => window.l7rMap.view().ty")
     synthetic.page.mouse.move(700, 500)
@@ -230,22 +231,22 @@ def test_the_wheel_scrolls_and_a_drag_pans_without_opening_a_modal(synthetic: Pa
     synthetic.page.wait_for_timeout(30)
     assert synthetic.js("() => window.l7rMap.zoom()") == zoom_before, "the wheel does not zoom"
     assert abs((ty_before - synthetic.js("() => window.l7rMap.view().ty")) - 120) < 2, "the wheel scrolled the map by its own travel"
-    for _ in range(3):  # scroll to the map's top-left corner (bounded), where the first farmhouse is on screen
+    for _ in range(3):
         synthetic.page.mouse.wheel(-2000, -2000)
     synthetic.page.wait_for_timeout(30)
     x2, y2 = synthetic.center("farmhouse", 0)
     before = synthetic.js("() => window.l7rMap.view()")
     synthetic.page.mouse.move(x2, y2)
     synthetic.page.mouse.down()
-    synthetic.page.mouse.move(x2 - 60, y2 - 40, steps=5)  # inward - outward would be clamped at the edge
+    synthetic.page.mouse.move(x2 - 60, y2 - 40, steps=5)
     synthetic.page.mouse.up()
     synthetic.page.wait_for_timeout(50)
-    after = synthetic.js("() => window.l7rMap.view()")
-    assert abs(before["tx"] - after["tx"] - 60) < 2 and abs(before["ty"] - after["ty"] - 40) < 2, "the drag panned by the pointer's travel"
-    assert not synthetic.dialog()["open"], "a drag is not a click"
-    synthetic.page.mouse.click(x2 - 60, y2 - 40)
+    assert synthetic.js("() => window.l7rMap.view()") == before, "a drag moves nothing"
+    assert synthetic.js("() => getComputedStyle(document.getElementById('stage')).cursor") == "auto"
+    assert synthetic.js("() => getComputedStyle(document.querySelector('g.f')).cursor") == "auto", "a normal pointer over the features"
+    synthetic.page.mouse.click(x2, y2)
     synthetic.page.wait_for_timeout(50)
-    assert synthetic.dialog()["k"] == "farmhouse", "a click at the dragged-to spot still opens the modal"
+    assert synthetic.dialog()["k"] == "farmhouse"
     synthetic.page.keyboard.press("Escape")
     synthetic.js("() => window.l7rMap.fitWidth()")
 
