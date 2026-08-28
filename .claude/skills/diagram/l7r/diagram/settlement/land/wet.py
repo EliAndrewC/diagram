@@ -27,6 +27,8 @@ from typing import TYPE_CHECKING, Any
 from .._geom import Pt, boxed_grid, boxed_hit, boxed_polys, boxed_seg_hit, boxed_segs, edge_dist, point_in_poly, seg_dist
 
 MARSH_FEATHER_BS = 46  # the reeds thin to nothing over this band (x bscale) inside the polygon; `commons` thins its scrub INTO the marsh over the same band
+MARSH_TINT_R = 28.0  # the widest wet-tint circle's radius (x bscale) - also the keep-off a mound owes the tint (T54)
+MARSH_TUFT_R = 7.0  # the tallest reed blade / widest glint (x bscale) - the same keep-off for the tufts (T54)
 
 if TYPE_CHECKING:
     from ..core import Settlement
@@ -76,9 +78,28 @@ class WetGroundMixin:
         fld_b, blk_b = boxed_grid(boxed_polys(self.field_polys, 10.0)), boxed_grid(boxed_polys(self.block_polys))
         clr_b, avd_b, cor_b = boxed_grid(boxed_polys(self.clearings)), boxed_grid(boxed_polys(avoid)), boxed_grid(boxed_segs(corridors))
         wat_b = boxed_grid(boxed_segs(self._watercourse_segs()))  # drawn water (streams/channels/comb laterals), pre-boxed once - see _watercourse_segs
+        # REEDS KEEP OFF THE EARTHEN MOUNDS (feature 139 T54, GM 2026-08-28: "the marshland overlaps with the
+        # earthen mounds, which surround all of the ponds. like the hazy blue that denotes the marsh is clearly
+        # overlaid on top of the greenery of the earthen mounds. In some cases, it seems to even extend past
+        # them"). A perimeter dike and a fish pond's mulberry bank are RAISED, MAINTAINED, PLANTED earth - the
+        # spoil dug out of the pond, held in repair and cropped (research/archetypes.md); reeds root in shallow
+        # standing water, which is what lies OUTSIDE the embankment, so wet ground abuts a mound and never
+        # crosses it. Neither the band nor a bank was in any keep-out the scatter reads (they are not field
+        # plots, blocks or clearings), so a marsh polygon that lapped one was reeded and tinted straight over
+        # it - measured on Kuwabata: 320 of 3,481 sampled points of the waterward strips and 104 of the toe
+        # marsh's. Every role keeps off, not just the polder's own strips: the TOE marsh reaches the band from
+        # below and laps the pond banks. A drawn band's ribbon runs to ~2,880 points and this test runs per
+        # scatter point, so the ring is thinned to ~360 (its dense points lie 1-2 px apart, so the ribbon keeps
+        # its shape) - ADAPTIVELY, never a fixed stride: a fixed 8:1 on a coarse ring drops it to three points
+        # and the keep-out silently covers nothing, which is the shape of every "check that never runs" in this
+        # engine (caught by the test that reeds the band with no dike recorded and leaves it bare with one).
+        _mounds = [[(float(mx), float(my)) for mx, my in dk["outline"][:: max(1, len(dk["outline"]) // 360)]] for dk in self.M.get("dikes", []) if len(dk.get("outline") or []) >= 8]
+        _mounds += [[(float(mx), float(my)) for mx, my in dp["bank"]] for dp in self.M.get("dikeponds", []) if dp.get("bank")]
+        _mnd_pad = MARSH_TINT_R * bs  # the widest tint circle: its CENTER stands that far off, so no haze laps the mound
+        mnd_b = boxed_grid(boxed_polys(_mounds, _mnd_pad))  # the box pad matches the widest edge_pad below, so the prefilter can never reject a point the exact test wanted
 
         def _sparse(
-            px: float, py: float, drop: float
+            px: float, py: float, drop: float, mound_pad: float = 0.0
         ) -> bool:  # skip a point outside the poly, IN a paddy / ON the pond / on a corridor/building / in the urban halo / in a keep-out, or (probabilistically) near the edge
             if (
                 not point_in_poly(px, py, poly)
@@ -90,6 +111,7 @@ class WetGroundMixin:
                 or boxed_hit(px, py, blk_b.near(px, py))  # ... and OFF any building/shrine/torii footprint
                 or boxed_hit(px, py, clr_b.near(px, py))  # ... and off the swept sacred/funerary verge
                 or boxed_hit(px, py, avd_b.near(px, py))
+                or boxed_hit(px, py, mnd_b.near(px, py), mound_pad)  # ... and off every earthen mound, by the drawn mark's own reach (T54)
             ):  # ... and OUT of any keep-out
                 return True
             if pond and ((px - pond[0]) / pond[2]) ** 2 + ((py - pond[1]) / pond[3]) ** 2 < 1.0:
@@ -101,12 +123,12 @@ class WetGroundMixin:
         blades: list[str] = []  # SVG-size lever 2: bucket the constant-styled reed blades (see the note in cover.py's `commons`)
         for _ in range(int(area / (360 * bs * bs))):  # faint WET TINT: soft translucent blue-green patches (feathered, no hard edge)
             gx, gy = random.uniform(x0, x1), random.uniform(y0, y1)
-            if _sparse(gx, gy, 0.9):
+            if _sparse(gx, gy, 0.9, MARSH_TINT_R * bs):  # the WIDEST tint radius, not this circle's: the radius is drawn after the test, and drawing it first would re-roll every marsh on every map
                 continue
-            g.append(f'<circle cx="{gx:.1f}" cy="{gy:.1f}" r="{random.uniform(15, 28) * bs:.1f}" fill="#9FBBAE" fill-opacity="0.14"/>')
+            g.append(f'<circle cx="{gx:.1f}" cy="{gy:.1f}" r="{random.uniform(15, MARSH_TINT_R) * bs:.1f}" fill="#9FBBAE" fill-opacity="0.14"/>')
         for _ in range(int(area / (150 * bs * bs))):  # SPARSE reed / sedge tufts + the odd standing-water glint (thin, not a solid reedbed)
             gx, gy = random.uniform(x0, x1), random.uniform(y0, y1)
-            if _sparse(gx, gy, 0.7):
+            if _sparse(gx, gy, 0.7, MARSH_TUFT_R * bs):  # a tuft's blades and a glint's ellipse reach this far from the point
                 continue
             if random.random() < 0.12:  # a standing-water glint
                 g.append(f'<ellipse cx="{gx:.1f}" cy="{gy:.1f}" rx="{random.uniform(2.6, 4.6) * bs:.1f}" ry="{random.uniform(1.2, 2.0) * bs:.1f}" fill="#C2D6CE" fill-opacity="0.85"/>')

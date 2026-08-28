@@ -6,7 +6,7 @@ Split from hamletgen.py by feature 111; bodies verbatim. See hamletgen/CLAUDE.md
 from __future__ import annotations
 
 import math
-from collections.abc import Mapping
+from collections.abc import Mapping, Sequence
 from typing import Any
 
 from l7r.diagram.settlement import Settlement, knob_rng, point_in_poly, seg_intersect, segments_cross
@@ -588,6 +588,40 @@ def waterward_flanks(plan: SitePlan) -> list[str]:
     return [q for q in (f["minus"], f["plus"], f["foot"]) if q != f["cluster"]]
 
 
+def dike_face(pts: Sequence[Pt], flank: str, lo: float, hi: float, bins: int = 64) -> Poly:
+    """The dike's OUTER FACE along one flank, as a polyline spanning [lo, hi] (feature 139 T54).
+
+    The waterward reed strip has to end exactly where the embankment starts: on the mound is the GM's
+    defect, short of it is a dry apron in front of the water. A rectangle can do neither, because the
+    ring wanders - Kuwabata's west face stands up to 40 px inside its own outermost point. So the face
+    is read off the dike's drawn outline: bin the outline's points along the flank's axis and take the
+    OUTERMOST one in each bin (`min` on the W/N sides, `max` on the E/S). Outermost, not average, is
+    what keeps the strip off the band - within a bin the face can only be at or outside the value
+    taken. A bin the ring does not reach (the strip runs a little past the dike's extent, and the ring
+    is CUT by its crossing gaps) keeps its neighbor's face, so the polyline stays continuous to the
+    frame. Only the ring's own half counts, split at its center: measured, a gap in the west face let
+    the east face win those bins and the west strip came out 2,422 px wide - the whole map wet."""
+    horiz = flank in ("W", "E")
+    ai, fi = (1, 0) if horiz else (0, 1)  # bin ALONG `ai`; the face is the extreme on `fi`
+    outward_min = flank in ("W", "N")
+    fs = [p[fi] for p in pts]
+    mid = (min(fs) + max(fs)) / 2  # the ring's center on the face axis: only its own half counts
+    step = (hi - lo) / bins
+    buckets: list[list[float]] = [[] for _ in range(bins)]
+    for p in pts:
+        k = int((p[ai] - lo) / step)
+        if 0 <= k < bins and ((p[fi] <= mid) if outward_min else (p[fi] >= mid)):
+            buckets[k].append(p[fi])
+    last = min(fs) if outward_min else max(fs)  # the extreme, for the bins beyond the ring's own extent
+    out: Poly = []
+    for k in range(bins):
+        if buckets[k]:
+            last = min(buckets[k]) if outward_min else max(buckets[k])
+        c = lo + (k + 0.5) * step
+        out.append((round(last, 1), round(c, 1)) if horiz else (round(c, 1), round(last, 1)))
+    return out
+
+
 def stage_waterward(s: Settlement, plan: SitePlan) -> None:
     """The reed fringe along every water-facing flank of a polder dike, and its declaration.
 
@@ -596,20 +630,33 @@ def stage_waterward(s: Settlement, plan: SitePlan) -> None:
     keep-outs) and runs off the frame - it is wild ground continuing, not a feature with an edge,
     so `crop_to_content` ignores it. `meta.waterward` declares the flanks for
     `polder_waterward_flanks_wet`, which samples 28 px outside the dike's extreme on each and wants
-    14 of 20 points wet: the strip overlaps the band by 60 px inward for that reason, exactly as the
-    hand-authored polders drew it. A polder that declares nothing skips the check silently - the
-    'check that never runs' shape - which is why the scripted tier declares."""
+    14 of 20 points wet - so a strip ENDING at that extreme still satisfies it. A polder that declares
+    nothing skips the check silently - the 'check that never runs' shape - which is why the scripted
+    tier declares.
+
+    THE STRIP STOPS AT THE MOUND (feature 139 T54, GM 2026-08-28: "the marshland overlaps with the
+    earthen mounds ... In some cases, it seems to even extend past them"). Each strip used to lap 60 px
+    INWARD from the dike's outer extreme - past a band 11-38 px wide, so the reeds and their wet tint
+    were drawn over the mound and out the other side, and the recorded polygon claimed the mound as wet
+    ground (which since T50 is no-build ground too). The lap is gone: the strip's inner edge FOLLOWS the
+    dike's outer face (`dike_face`), so record and ink both stop where the embankment starts and neither
+    leaves a dry apron in front of it - clipping the rectangle to the dike's extreme instead was tried
+    and showed one up to 40 px wide wherever the ring wanders inward from its outermost point. `marsh()`
+    keeps the scatter off the band itself and off every pond bank in the same change: the strip is the
+    REGION, the keep-out is the guarantee - the two halves of one rule."""
     if plan.field_archetype not in POLDER_ARCHETYPES or not s.M.get("dikes"):  # pragma: no cover - polders always draw their dike
         return
     pts = [p for dk in s.M["dikes"] for p in dk.get("outline", [])]
     x0, x1 = min(p[0] for p in pts), max(p[0] for p in pts)
     y0, y1 = min(p[1] for p in pts), max(p[1] for p in pts)
     W, H = float(s.W), float(s.H)
+    ylo, yhi = y0 - 30.0, y1 + 20.0
+    xlo, xhi = x0 - 30.0, x1 + 20.0
     strips: dict[str, Poly] = {
-        "W": [(-20.0, y0 - 30.0), (x0 + 60.0, y0 - 30.0), (x0 + 60.0, y1 + 20.0), (-20.0, y1 + 20.0)],
-        "E": [(x1 - 60.0, y0 - 30.0), (W + 20.0, y0 - 30.0), (W + 20.0, y1 + 20.0), (x1 - 60.0, y1 + 20.0)],
-        "N": [(x0 - 30.0, -20.0), (x1 + 20.0, -20.0), (x1 + 20.0, y0 + 60.0), (x0 - 30.0, y0 + 60.0)],
-        "S": [(x0 - 30.0, y1 - 60.0), (x1 + 20.0, y1 - 60.0), (x1 + 20.0, H + 20.0), (x0 - 30.0, H + 20.0)],
+        "W": [(-20.0, ylo), *dike_face(pts, "W", ylo, yhi), (-20.0, yhi)],
+        "E": [(W + 20.0, ylo), *dike_face(pts, "E", ylo, yhi), (W + 20.0, yhi)],
+        "N": [(xlo, -20.0), *dike_face(pts, "N", xlo, xhi), (xhi, -20.0)],
+        "S": [(xlo, H + 20.0), *dike_face(pts, "S", xlo, xhi), (xhi, H + 20.0)],
     }
     flanks = waterward_flanks(plan)
     for q in flanks:

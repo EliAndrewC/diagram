@@ -63,6 +63,13 @@ other values are under `wip/kuwabata-*`.
   in rows; pens before sties). Open: 3 pits of 16 against a 0.465 share (the manure placer seats
   by the privy and fails silently where the privy took the wall) - pre-existing for heaps too.
 
+- 2026-08-28 the GM's second review (T54): the marsh haze lay over the mulberry dikes and past them.
+  Both halves fixed - `marsh()` keeps every role's ink off any dike band or pond bank, and the
+  waterward strip follows the dike's outer FACE instead of lapping 60 px inward. Priced and declined:
+  clipping the strip to the dike's outer EXTREME (simplest, but it opened a dry apron up to 40 px wide
+  wherever the ring wanders inward - the render showed it). Bug found and fixed on the way: binning
+  the face over the whole ring let the EAST face win the bins the west face's crossing gaps left
+  empty, and the west strip came out 2,422 px wide (the whole map wet, three checks red).
 - 2026-08-28 settlement-review DELTA of T50-T53: needs-work -> fixed (the NW ring corner's 1 ft
   seam - toes now overshoot 3 ft into their trunk; lane 9's hook - the final junction pass ends a
   lane where it first meets the way). See docs/review-ledger.md.
@@ -105,7 +112,8 @@ district's ground. Drawn at 1 ft/px.
 
 ## Known open
 
-- `scatter_audit` has no dike-pond mode: 2,242 of its 3,439 hits on this map are dike CROWNS on
+- `scatter_audit` has no dike-pond mode: 2,242 of its 3,083 hits on this map (T54 removed ~356 of
+  them - the reeds and tint that had stood on the mounds) are dike CROWNS on
   the dikes (the audit's crop keep-out predates the archetype), 474 are the west dike's crowns
   where the rectangular waterside marsh laps the dike outline, 105 are crowns lapping a pond feed
   by 1-2 ft. A clean bill cannot be earned here until the audit knows the archetype (review
