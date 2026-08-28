@@ -4,7 +4,7 @@
 
 **Created**: 2026-08-28
 
-**Status**: APPROVED - `spec-fidelity` round 3 (2026-08-28) found the requirement set faithful in both directions and only two stale headline figures (648 -> 636 names; 250 -> 231 measured), corrected; "the failure is a stale measured figure, not a misunderstanding of the request". Implementation proceeds.
+**Status**: APPROVED by `spec-fidelity` - round 3 verdict FAITHFUL in substance (2026-08-28): it found the requirement set faithful in both directions and only two stale headline figures (648 -> 636 names; 250 -> 231 measured), corrected; "the failure is a stale measured figure, not a misunderstanding of the request". Implementation proceeds.
 
 **Input**: [`gm-request.md`](gm-request.md), verbatim. That file is the authority.
 
