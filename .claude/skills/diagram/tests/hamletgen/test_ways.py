@@ -797,3 +797,35 @@ def test_thread_the_fabric_returns_the_run_untouched_when_there_is_no_fabric() -
     run = [(100.0, 100.0), (700.0, 700.0)]
     assert _thread_the_fabric(s, a_plan(), run) == run  # nothing standing: nothing to thread
     assert _thread_the_fabric(s, a_plan(), [(1.0, 1.0)]) == [(1.0, 1.0)]  # a one-point run is not a run
+
+
+def _webbed(lanes: list[dict[str, object]]) -> object:
+    """A Settlement carrying `lanes` and their ink, ready for the smoothing pass."""
+    from l7r.diagram.settlement import Settlement
+
+    s = Settlement(1400, 1400, seed=1)
+    s.meta(name="S", scale="hamlet", ftpx=1, down_deg=90)
+    for ln in lanes:
+        s.lane(list(ln["pts"]), width=int(ln.get("w", 5)))  # type: ignore[arg-type]
+    return s
+
+
+def test_smooth_web_cuts_the_SHORT_arm_off_a_hairpin() -> None:
+    """Feature 146: `_smooth_web`'s hairpin ARM cut, both directions. A lane that doubles back is not a way
+    feet wore. The un-jog pass gets first refusal and replaces the hairpin with its chord where the chord is
+    clear; where it is BLOCKED (a steading in the way, as here) the short arm is cut off instead."""
+    from l7r.diagram.hamletgen.ways import _smooth_web
+
+    block = [[(690.0, 220.0), (790.0, 220.0), (790.0, 250.0), (690.0, 250.0)]]  # across every chord below
+
+    # a short head (30 ft) doubling back into a longer tail: the HEAD goes
+    s1 = _webbed([{"pts": [[700.0, 230.0], [700.0, 200.0], [704.0, 232.0]], "w": 5}])
+    _smooth_web(s1, block, [], [])
+    kept = s1.M["lanes"][0]["pts"]
+    assert len(kept) == 2 and abs(kept[0][1] - 200.0) < 1e-6, kept
+
+    # the mirror: a short TAIL doubling back off a longer head
+    s2 = _webbed([{"pts": [[704.0, 232.0], [700.0, 200.0], [700.0, 230.0]], "w": 5}])
+    _smooth_web(s2, block, [], [])
+    kept2 = s2.M["lanes"][0]["pts"]
+    assert len(kept2) == 2 and abs(kept2[-1][1] - 200.0) < 1e-6, kept2
