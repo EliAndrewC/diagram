@@ -12,7 +12,7 @@ from ._knobs import crop_boxes, resolve_knob, scope_seed
 from .castle_civic import CastleCivicMixin
 from .city import CityMixin
 from .civic_grounds import CivicGroundsMixin
-from .farm_fixtures import FarmFixturesMixin
+from .farm_fixtures import FarmFixturesMixin, PondStockMixin
 from .fields import FieldsMixin
 from .finish import FinishMixin
 from .homestead_parts import HomesteadPartsMixin
@@ -40,6 +40,7 @@ class Settlement(
     RollingMixin,
     FinishMixin,
     FarmFixturesMixin,
+    PondStockMixin,
 ):
     def __init__(self: Settlement, W: int = 1820, H: int = 1180, seed: int = 23) -> None:
         random.seed(seed)

@@ -13,7 +13,10 @@ settlements/homesteads.md "Farmstead fixtures". Research and sources: research/h
 from __future__ import annotations
 
 import math
+from collections.abc import Sequence
 from typing import TYPE_CHECKING, Any
+
+from ._geom import Pt
 
 if TYPE_CHECKING:
     from .core import Settlement
@@ -115,3 +118,79 @@ class FarmFixturesMixin:
         if of is not None:
             rec["of"] = [round(float(of[0]), 1), round(float(of[1]), 1)]
         self.M.setdefault("persimmons", []).append(rec)
+
+
+# ---- the stock a dike-pond hamlet keeps on its ponds (feature 139 A3/A4) ---------------------------
+
+STY_FT = (8.0, 6.0)  # a simple pig shed on the dike, over the water's edge (FAO/NACA: "the simple pig shed constructed on the pond dyke")
+PEN_FT = (10.0, 6.0)  # the fenced DRY RUN of a duck pen on the dike; its WET RUN is a fenced corner of the pond
+PEN_WET_FT = 12.0  # how far the wet-run fence reaches into the water from the bank
+
+
+class PondStockMixin:
+    def pond_fixture_fits(self: Settlement, cx: float, cy: float, rot: float, kind: str) -> bool:  # type: ignore[misc]
+        """Room for a sty or a pen at this bank seat: clear of every placed footprint, every recorded
+        pond-stock fixture, and the plank crossings; the bank itself is field ground, which the
+        registries hold no structure off - that is what the seat is FOR."""
+        w, h = STY_FT if kind == "sty" else PEN_FT
+        w, h = self.px(w), self.px(h)
+        half = math.hypot(w, h) / 2 + self.px(2.0)
+        for key in ("pig_sties", "duck_pens", "houses", "farm_sheds", "byres", "wells", "kosatsuba", "footbridges"):
+            for o in self.M.get(key, []):
+                if "x" in o and math.hypot(float(o["x"]) - cx, float(o["y"]) - cy) < half + math.hypot(float(o.get("w", 6)), float(o.get("h", 6))) / 2:
+                    return False
+        return True
+
+    def pig_sty(self: Settlement, cx: float, cy: float, rot: float = 0.0, pond: int | None = None) -> None:  # type: ignore[misc]
+        """A pig shed on a pond dike: a small pitched shed with its pen rail, raked along the bank."""
+        w, h = self.px(STY_FT[0]), self.px(STY_FT[1])
+        x0, y0 = -w / 2, -h / 2
+        edge = "#5A4326"
+        g = [
+            f'<g transform="translate({cx:.1f},{cy:.1f}) rotate({rot:.2f})">',
+            f'<rect x="{x0:.1f}" y="{y0:.1f}" width="{w * 0.62:.1f}" height="{h:.1f}" rx="1" fill="#8F7548" stroke="{edge}" stroke-width="1.1"/>',  # the shed
+            f'<line x1="{x0 + 1:.1f}" y1="0" x2="{x0 + w * 0.62 - 1:.1f}" y2="0" stroke="#D8C08C" stroke-width="1"/>',  # its ridge
+            f'<rect x="{x0 + w * 0.62:.1f}" y="{y0:.1f}" width="{w * 0.38:.1f}" height="{h:.1f}" fill="none" stroke="{edge}" stroke-width="0.8" stroke-dasharray="1.2,1.2"/>',  # the railed pen
+            "</g>",
+        ]
+        self.add_top("".join(g), cls="pig sty")
+        rec: dict[str, Any] = {"x": round(cx, 1), "y": round(cy, 1), "w": round(w, 1), "h": round(h, 1), "rot": round(rot, 1)}
+        if pond is not None:
+            rec["pond"] = pond
+        self.M.setdefault("pig_sties", []).append(rec)
+
+    def duck_pen(self: Settlement, cx: float, cy: float, rot: float = 0.0, pond: int | None = None, water: Sequence[Pt] = ()) -> None:  # type: ignore[misc]
+        """A duck pen: a fenced dry run on the dike and a fenced wet run in the nearest corner of the pond
+        (FAO/NACA fish-cum-duck: "the dikes ... are partly fenced to form a dry run and part of the water
+        area or a corner of the pond is fenced ... to form a wet run")."""
+        w, h = self.px(PEN_FT[0]), self.px(PEN_FT[1])
+        x0, y0 = -w / 2, -h / 2
+        fence = "#6B5A3C"
+        g = [
+            f'<g transform="translate({cx:.1f},{cy:.1f}) rotate({rot:.2f})">',
+            f'<rect x="{x0:.1f}" y="{y0:.1f}" width="{w:.1f}" height="{h:.1f}" fill="#D9CBA0" fill-opacity="0.55" stroke="{fence}" stroke-width="0.9" stroke-dasharray="1.6,1.2"/>',  # the dry run
+            f'<rect x="{x0 + 1:.1f}" y="{y0 + 1:.1f}" width="{w * 0.3:.1f}" height="{h - 2:.1f}" fill="#A98C58" stroke="{fence}" stroke-width="0.7"/>',  # the duck house
+            "</g>",
+        ]
+        # the WET RUN: a fence arc from the bank into the water toward the pond's nearest water point
+        wet: list[list[float]] = []
+        if water:
+            wx, wy = min(water, key=lambda q: math.dist(q, (cx, cy)))
+            vx, vy = wx - cx, wy - cy
+            vl = math.hypot(vx, vy) or 1.0
+            ux, uy = vx / vl, vy / vl
+            reach = self.px(PEN_WET_FT)
+            px_, py_ = -uy, ux
+            arc = [(cx + ux * (vl - 1) + px_ * w / 2, cy + uy * (vl - 1) + py_ * w / 2)]
+            for k in range(1, 6):
+                t = k / 5
+                ang = math.pi * t
+                arc.append((cx + ux * (vl - 1 + reach * math.sin(ang) * 0.9) + px_ * (w / 2) * math.cos(ang), cy + uy * (vl - 1 + reach * math.sin(ang) * 0.9) + py_ * (w / 2) * math.cos(ang)))
+            pts = " ".join(f"{a:.1f},{b:.1f}" for a, b in arc)
+            g.append(f'<polyline points="{pts}" fill="none" stroke="{fence}" stroke-width="0.9" stroke-dasharray="1.6,1.2"/>')
+            wet = [[round(a, 1), round(b, 1)] for a, b in arc]
+        self.add_top("".join(g), cls="duck pen")
+        rec: dict[str, Any] = {"x": round(cx, 1), "y": round(cy, 1), "w": round(w, 1), "h": round(h, 1), "rot": round(rot, 1), "wet": wet}
+        if pond is not None:
+            rec["pond"] = pond
+        self.M.setdefault("duck_pens", []).append(rec)

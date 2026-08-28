@@ -33,6 +33,17 @@ def test_the_manure_pit_form_draws_a_jar_mouth_and_records_its_form():
         s.farm_fixture("privy", 100.0, 100.0, form="pit")
 
 
+def test_pond_stock_glyphs_record_and_class_themselves():
+    # feature 139 A3/A4: a sty and a pen on a pond bank, each its own class and record
+    s = Settlement(W=400, H=400, seed=1)
+    s.pig_sty(100.0, 100.0, rot=10.0, pond=3)
+    s.duck_pen(200.0, 100.0, rot=0.0, pond=4, water=[(200.0, 140.0), (260.0, 140.0), (260.0, 200.0), (200.0, 200.0)])
+    assert s.M["pig_sties"][0]["pond"] == 3 and s.top_cls[-2] == "pig sty"
+    pen = s.M["duck_pens"][0]
+    assert pen["pond"] == 4 and len(pen["wet"]) == 6 and s.top_cls[-1] == "duck pen"
+    assert s.pond_fixture_fits(300.0, 300.0, 0.0, "sty") and not s.pond_fixture_fits(100.0, 100.0, 0.0, "sty")
+
+
 def test_persimmon_is_one_crown_with_fruit_and_joins_the_tree_record():
     s = Settlement(W=600, H=600, seed=1)
     s.meta(name="T", scale="hamlet", ftpx=1)

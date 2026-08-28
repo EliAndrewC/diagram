@@ -177,6 +177,17 @@ def test_the_dike_crop_and_leftover_roll_on_the_dike_pond_and_pin_elsewhere() ->
         hg.HamletSpec(name="X", seed=1, leftover="wheat")
 
 
+def test_pond_stock_is_a_no_op_off_the_dike_pond() -> None:
+    """The stage draws nothing on a valley hamlet - it has no ponds to keep stock on (feature 139 A3/A4)."""
+    from l7r.diagram.hamletgen.pondstock import stage_pond_stock
+    from l7r.diagram.settlement import Settlement
+
+    s = Settlement(W=400, H=400, seed=1)
+    s.M["houses"] = [{"x": 100.0, "y": 100.0}]
+    stage_pond_stock(s, a_plan())
+    assert "pig_sties" not in s.M and "duck_pens" not in s.M
+
+
 def test_a_nonsense_pond_layout_is_refused() -> None:
     with pytest.raises(ValueError, match="pond_layout"):
         hg.HamletSpec(name="X", seed=1, pond_layout="chessboard")

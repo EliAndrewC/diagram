@@ -292,6 +292,8 @@ hover/click checks for the classes it contains.
   | banana dike | the dike planting when `meta.dike_crop` is banana - feature 139, audit A6 | mulberry dike |
   | fruit dike | the dike planting when `meta.dike_crop` is fruit - feature 139, audit A6 | mulberry dike |
   | vegetable ground | the leftover parcels of a converted block when `meta.leftover` is vegetables - feature 139, audit B2 | paddy |
+  | pig sty | a pig shed on a pond dike (`pig_sties[]`) - feature 139, audit A3 | byre |
+  | duck pen | a fenced dry run on the dike and wet run in the pond (`duck_pens[]`) - feature 139, audit A4 | hen coop |
   | field rock | a bedrock outcrop inside a plot (`field_rocks`) - added at implementation from cohort seed 42; the reference hamlet draws none | paddy; grave island |
   | grave island | the rare in-field grave mound (`field_graves`) - added at implementation from cohort seed 42; a calibrated liberty the record discloses | paddy; field rock |
   | village lane | EVERY lane on the map - the web, the internal skeleton, the connector to the off-map road and the field spur - one class whether or not they meet; the text may say the connector predates the settlement | - |

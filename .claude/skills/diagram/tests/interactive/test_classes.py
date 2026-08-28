@@ -68,6 +68,8 @@ SPEC_CLASSES = [
     "banana dike",
     "fruit dike",
     "vegetable ground",
+    "pig sty",
+    "duck pen",
 ]
 
 

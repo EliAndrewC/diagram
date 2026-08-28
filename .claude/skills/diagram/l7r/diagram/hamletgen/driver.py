@@ -24,6 +24,7 @@ from .frame import stage_crossings, stage_frame, stage_notice
 from .hinterland import stage_bamboo, stage_hinterland, stage_windbreak, stage_woodland
 from .homesteads import stage_appurtenances, stage_homesteads
 from .plan import HamletSpec, SitePlan, plan_site
+from .pondstock import stage_pond_stock
 from .sink import stage_sink
 from .water import stage_field, stage_water_frame, stage_waterward
 from .ways import stage_seat, stage_track, stage_web
@@ -82,6 +83,7 @@ STAGES = (
     stage_homesteads,  # the farmhouses, seated with no lane anywhere on the map
     stage_track,  # the connector and the field spur, derived from the placed houses
     stage_appurtenances,
+    stage_pond_stock,  # a dike-pond hamlet's pig sties and duck pens, on the ponds nearest the houses (feature 139 A3/A4)
     # THE WEB RUNS LAST OF THE BUILT THINGS, after the byres, sheds and wells - not just after the
     # houses. It FILLS leftover ground, so everything that RESERVES ground has to be seated first;
     # that is the same rule that put it after `stage_homesteads` in the first place, applied

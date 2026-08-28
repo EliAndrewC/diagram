@@ -92,6 +92,8 @@ def test_a_dike_pond_hamlet_is_ponds_in_a_diked_block_with_wet_flanks() -> None:
     assert any(r["overlay"] == "mulberry_fishpond" and r["count"] >= 20 for r in M["land_use"])
     assert M.get("dikeponds"), "the ponds are recorded as dike-ponds"
     assert 1 <= sum(1 for d in M["dikeponds"] if d.get("kind") == "fry") <= 3, "a few of the smallest parcels are fry nursery ponds (feature 139 A5)"
+    assert M.get("pig_sties") and M.get("duck_pens"), "the stock on the ponds (feature 139 A3/A4)"
+    assert all(d.get("wet") for d in M["duck_pens"]), "every duck pen fences a wet run into its pond"
     assert plan.placed == plan.spec.households
     assert set(m["waterward"]) and set(m["waterward"]) <= {"N", "E", "S", "W"}
     assert sum(1 for q in M["marshes"] if q.get("role") == "waterside") == len(m["waterward"])
