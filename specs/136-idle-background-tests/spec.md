@@ -4,7 +4,7 @@
 
 **Created**: 2026-08-28
 
-**Status**: round 1 returned five changes (decisions embedded as requirements; the lock an unrequested addition; `make maps` under the lock; two suspend rules; nothing carried "never interrupts the merge") - applied below; round 2 returned one change (a run in progress blocked the merge route) - applied as D9; round 3 pending
+**Status**: APPROVED by `spec-fidelity` - round 3 verdict **FAITHFUL** (2026-08-28), after round 1 returned five changes (decisions embedded as requirements; the lock an unrequested addition; `make maps` under the lock; two suspend rules; nothing carried "never interrupts the merge") and round 2 one (a run in progress blocked the merge route - D9). Reviewer asides for the GM at acceptance: D9 throws away a nearly-finished run; whether such a run may finish detached is the GM's call.
 
 **Input**: [`gm-request.md`](gm-request.md), verbatim and unedited. That file is the authority for
 this specification.

@@ -176,7 +176,7 @@ do_timer() {
   CLONE=$2; SESSION=$3; SID=${4:-}
   IDLE_ROOT=${IDLE_ROOT:-$CLONE}; export IDLE_ROOT
   configure
-  local sf armed wait_s awake last t drift suspends=0 deferrals=0 defer_s lock rc t0 t1 rec utc commit log target running tick_s
+  local sf armed wait_s last t suspends=0 deferrals=0 defer_s lock rc t0 t1 rec utc commit log target running tick_ms
   sf="$CLONE/.git/idle-tests.json"; running="$CLONE/.git/idle-tests.running"
   armed=$(state_of "$sf" armed_at); [ -n "$armed" ] || exit 0
   wait_s=${WAIT_S_OVERRIDE:-$(( $(stagger_min "$SESSION") * 60 ))}
@@ -188,15 +188,15 @@ do_timer() {
     [ $(( $(now) - armed )) -lt "$GIVE_UP_S" ] || return 1
     return 0
   }
-  tick_s=${TICK%.*}; [ -n "$tick_s" ] || tick_s=0
+  tick_ms=$(python3 -c "print(max(1, int(float('$TICK') * 1000)))")
   wait_awake() { # wait $1 seconds of AWAKE time; a wall jump past the ticks restarts the count (D2, D3)
-    local need=$1
-    awake=0; last=$(now)
-    while [ "$awake" -lt "$need" ]; do
+    local need_ms=$(( $1 * 1000 )) awake_ms=0 drift_ms
+    last=$(now)
+    while [ "$awake_ms" -lt "$need_ms" ]; do
       sleep "$TICK"; alive || exit 0
-      t=$(now); drift=$(( t - last - tick_s )); last=$t
-      if [ "$drift" -gt "$SUSPEND_S" ]; then awake=0; suspends=$((suspends + 1)); echo "suspend detected (wall jumped ${drift}s): the wait restarts"; continue; fi
-      awake=$(( awake + tick_s ))
+      t=$(now); drift_ms=$(( (t - last) * 1000 - tick_ms )); last=$t
+      if [ "$drift_ms" -gt $(( SUSPEND_S * 1000 )) ]; then awake_ms=0; suspends=$((suspends + 1)); echo "suspend detected (wall jumped $(( drift_ms / 1000 ))s past the ticks): the wait restarts"; continue; fi
+      awake_ms=$(( awake_ms + tick_ms ))
     done
   }
   wait_awake "$wait_s"

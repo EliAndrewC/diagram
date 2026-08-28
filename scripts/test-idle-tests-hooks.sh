@@ -34,6 +34,9 @@ hook() { # hook <mode> <clone> [sid] -> RC, OUT
 wait_for() { # wait_for <file-glob> <seconds>
   local i=0; while [ $i -lt $(( ${2:-5} * 10 )) ]; do ls $1 >/dev/null 2>&1 && return 0; sleep 0.1; i=$((i+1)); done; return 1
 }
+wait_grep() { # wait_grep <pattern> <file> <seconds>
+  local i=0; while [ $i -lt $(( ${3:-5} * 10 )) ]; do grep -q "$1" "$2" 2>/dev/null && return 0; sleep 0.1; i=$((i+1)); done; return 1
+}
 # a clock that advances by itself while a timer waits: every 0.1 s adds 1 "second"
 ticker() { while [ -f "$TMP/ticking" ]; do tick_clock 1; sleep 0.1; done; }
 
@@ -123,7 +126,7 @@ rm -f "$TMP/ticking"; wait $TK 2>/dev/null; rm -f "$CA/.git/idle-tests.json"
 SLOW="$TMP/slow.sh"; printf '#!/bin/sh\necho "start $(date +%%s.%%N) $PWD" >> %s; sleep 5; echo "end $(date +%%s.%%N) $PWD" >> %s\n' "$RUNLOG" "$RUNLOG" > "$SLOW"; chmod +x "$SLOW"
 export IDLE_WAIT_S=1 IDLE_RUN="$SLOW"; : > "$RUNLOG"; rm -f "$CA"/.claude/skills/diagram/dev/idle-log/*.json
 touch "$TMP/ticking"; ticker & TK=$!
-hook stop "$CA"; wait_for "$RUNLOG" 6; sleep 0.3
+hook stop "$CA"; wait_grep "^start" "$RUNLOG" 8; sleep 0.3
 hook prompt "$CA"; sleep 0.5
 check "the run was aborted on the prompt" '! grep -q "^end" "$RUNLOG" && [ ! -f "$CA/.git/idle-tests.running" ]'
 check "an aborted record exists and surfaces" 'grep -q "aborted" "$CA"/.claude/skills/diagram/dev/idle-log/*.json && printf "%s" "$OUT" | grep -q "aborted on your prompt"'

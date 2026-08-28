@@ -7,7 +7,7 @@
 # (GUARD_EDIT_OK: feature 132 adds the iteration switches - a new guard and five new operations)
 .PHONY: done lint format typecheck test test-full guard perf perf-report maps reference bypass-audit quick durations test-file audit perf-gate hooks-test explain \
 	 switches ci-off ci-on scope-lock scope-unlock _switch \
-	 map cohort tripwire hamlet cache-audit regressions placement-stages pool-index pool-index-if-stale compound render-sync \
+	 map cohort tripwire hamlet cache-audit regressions placement-stages pool-index pool-index-if-stale compound render-sync idle-tests \
 	 gate-manifest why-placed site-justice crop jogs pack-audit scatter-audit sun-audit new-check timings citybudget help \
 	 ci-status ci-check ci-merge ci-image commit-permitted \
 	 perf-explain perf-confirm perf-audit perf-signoff perf-review perf-profile
@@ -659,6 +659,15 @@ reference:
 	  printf 'Do not reach for REF_OK=1 - it prompts, and a prompt with no terminal is refused.\n\n'; exit 1; }
 	@$(STATE) green-local reference
 # (GUARD_EDIT_OK: a green reference records green-local - feature 130, FR-012)
+
+# THE IDLE RUN (feature 136, D1 - GUARD_EDIT_OK: a new target, the one an idle session's detached timer runs;
+# the GM: "a test which is relatively expensive in terms of me having to wait for it time becomes very cheap
+# because it is largely going to run unattended"). One target so the GM can change WHAT an idle session
+# runs in one place. It is `maps`: the reference map, the tripwire seeds, the tier sweep - under an
+# unlocked scope; under the lock, the reference alone (the lock admits no override, D1b). It writes no
+# `done` stamp, so it neither grants nor revokes a push (FR-006b c). Never run it by hand beside a gate.
+idle-tests:     ## what an idle session runs unattended (feature 136): the maps sweep
+	@$(MAKE) --no-print-directory maps
 
 maps:
 	@$(if $(filter all,$(SCOPE)),$(SWITCH) check scope "maps SCOPE=all",true)

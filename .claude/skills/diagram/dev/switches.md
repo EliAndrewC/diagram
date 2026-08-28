@@ -177,6 +177,14 @@ not to roll - declined by the GM); deselect only the non-reference rollers (no m
 apart, and the reference map is already rolled by `make reference` in the same gate - declined as a
 distinction without a saving).
 
+## The lock's cost, since feature 136
+
+An UNLOCKED scope now gets a nightly look at the tier: an idle session (feature 136) runs
+`make idle-tests` (= `maps`) after its staggered wait, so a tripwire regression is named on the
+night it is made instead of at the unlock. A LOCKED scope still gets nothing beyond the reference
+map - the lock admits no override by any variable, flag or environment (the GM's ruling), and the
+idle run honors it like every other invocation. That is D1b of feature 136, before the GM.
+
 ## When the lock is released
 
 `make scope-unlock` prints the reminder: nothing swept the pool, ran the map-rolling tests or took a
