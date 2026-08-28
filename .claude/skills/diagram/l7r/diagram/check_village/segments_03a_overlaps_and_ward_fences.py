@@ -11,13 +11,10 @@ from .common_01_geometry import (
     _OVERLAP_CLASSIFIED,
     _OVERLAP_SINGLETONS,
     _OVERLAP_STRUCTS,
-    Poly,
-    Pt,
     _struct_rect,
     poly_dist,
     rect_corners,
     seg_dist,
-    seg_intersect,
     segments_cross,
 )
 from .common_03_capacity import _UNBOUND, _kept
@@ -400,28 +397,9 @@ def _seg_0186__bad_1(
 ) -> dict[str, Any]:
     """Gate segment 186 (bad, lanes_over) - body verbatim from the legacy gate() (feature 022)."""
 
-    def lanes_over(ring: Poly, bz: float, closed: bool, exempt: Sequence[Pt], near: float = 6.0) -> list[str]:
-        edges = [(ring[k], ring[(k + 1) % len(ring)]) for k in (range(len(ring)) if closed else range(len(ring) - 1))]
-
-        def at_gate(x: float, y: float) -> bool:
-            return any(math.hypot(x - ex, y - ey) < 50 for ex, ey in exempt)
-
-        bad: list[str] = []
-        for name, pts, w, z in lanes:
-            if z < bz:
-                continue  # the lane already renders under this wall
-            meets = any(seg_dist(p[0], p[1], a, b) < near + w / 2 and not at_gate(p[0], p[1]) for p in pts for a, b in edges)
-            for k in range(len(pts) - 1):
-                for a, b in edges:
-                    if segments_cross(pts[k], pts[k + 1], a, b):
-                        xy = seg_intersect(pts[k], pts[k + 1], a, b)
-                        if xy and not at_gate(xy[0], xy[1]):
-                            meets = True
-            if meets:
-                bad.append(name)
-        return sorted(set(bad))
-
-    return _kept(locals(), ('bad', 'lanes_over'))
+    # `lanes_over` was defined here for checks feature 141 retired and NOTHING calls it - not this segment,
+    # not any later one (the registry's needs say so). Removed under feature 146 with the rest of that residue.
+    return _kept(locals(), ("bad",))
 
 
 def _seg_0187__wall(*, M: Any = _UNBOUND) -> dict[str, Any]:
