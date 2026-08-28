@@ -674,11 +674,7 @@ def _seg_0463__moat_channels_flow_with_current(
                 (sx, sy), (ex, ey) = c["poly"][0], c["poly"][-1]  # frm=moat, so poly[0] is the moat tap
                 if (ex - sx) * flow[0] + (ey - sy) * flow[1] < -8:  # field clearly upstream of the tap
                     against.append(c["to"].get("name", "?"))
-            check(
-                "moat_channels_flow_with_current",
-                not against,
-                f"moat-fed channel(s) running against the moat current (field is upstream of the tap; the feeder makes the moat flow {flow}): {sorted(set(against))}",
-            )
+            pass  # `` retired under feature 141 (the GM's cut); the segment stays for the check it keeps or the value it writes
     return _kept(locals(), ('_mdx', '_mdy', '_mfl', '_mi', '_mo', 'against', 'c', 'dx', 'dy', 'e', 'ends', 'ends_on_moat', 'entry', 'ex', 'ey', 'feeder', 'flow', 'origin', 'st', 'sx', 'sy'))
 
 

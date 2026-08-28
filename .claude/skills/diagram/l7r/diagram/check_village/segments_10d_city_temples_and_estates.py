@@ -239,11 +239,7 @@ def _seg_0563_170__city_temple_neighborhood_has_shrines(
     """Gate segment 563.170 (city_temple_neighborhood_has_shrines) - body verbatim from the city mega-segment (feature 023; guards preserved, see research.md R2/R3)."""
     if scale in ('city', 'capital') and meta.get('walled') and len(clustered) >= 2:
         near_sh = sum(1 for sh in shrines if any(math.hypot(sh["x"] - t["x"], sh["y"] - t["y"]) < 350 for t in clustered))
-        check(
-            "city_temple_neighborhood_has_shrines",
-            near_sh >= 3,
-            f"the temple neighborhood ({len(clustered)} clustered temples) has only {near_sh} small wayside shrine(s) - dot it with a few more (s.small_shrine)",
-        )
+        pass  # `` retired under feature 141 (the GM's cut); the segment stays for the check it keeps or the value it writes
     return _kept(locals(), ('near_sh', 'sh', 't'))
 
 

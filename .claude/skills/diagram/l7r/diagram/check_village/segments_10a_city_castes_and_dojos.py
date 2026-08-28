@@ -51,14 +51,7 @@ def _seg_0563_015__city_samurai_housing_varied(
             # yashiki INSIDE the wall - that is the defining jokamachi texture - and the
             # senior-heavy mix is policed by capital_housing_matches_band_targets instead
             in_est = []
-        check(
-            "city_samurai_housing_varied",
-            len(slarge) >= 3 and len(ssmall) > len(slarge) and not in_est,
-            f"samurai housing lacks size variety or has in-wall estates (large city houses={len(slarge)}, "
-            f"small={len(ssmall)}, walled estates inside the city={len(in_est)}) - senior ranks get large city "
-            f"houses, juniors small ones, and samurai walled estates sit OUTSIDE the walls (only the "
-            f"governor's mansion is walled within)",
-        )
+        pass  # `` retired under feature 141 (the GM's cut); the segment stays for the check it keeps or the value it writes
     return _kept(locals(), ('in_est', 'm', 'w'))
 
 

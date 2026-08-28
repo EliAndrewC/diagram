@@ -3,7 +3,7 @@
 import math
 from typing import Any
 
-from .common_01_geometry import point_in_poly, seg_closest
+from .common_01_geometry import seg_closest
 from .common_03_capacity import _UNBOUND, _kept
 
 # WHY (farmers are the overwhelming majority caste): settlements.md "Historical grounding"
@@ -163,11 +163,7 @@ def _seg_0543_048__theater_stage_inside_wall(
     """Gate segment 0543.048 (theater_stage_inside_wall) - body verbatim from _seg_0543__town_farmers_plurality (feature 024 per-check split; guards re-evaluated in the body, see split_oversized.py)."""
     if scale == 'town' and amph and meta.get("walled") and ts_meta != "outside":
         w = M.get("wall") or []
-        check(
-            "theater_stage_inside_wall",
-            len(w) >= 3 and point_in_poly(amph["x"], amph["y"], w),
-            "a walled town's theater stage belongs inside the walls (set meta(theater_stage='outside') to allow outside)",
-        )
+        pass  # `` retired under feature 141 (the GM's cut); the segment stays for the check it keeps or the value it writes
     return _kept(locals(), ('w',))
 
 

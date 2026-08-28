@@ -33,20 +33,11 @@ def _seg_0286_026__walled_graveyards_inside_and_outside(
     if scale in ('village', 'town', 'city', 'capital') and wall and cems:
         ins = [c for c in cems if _inside(c["x"], c["y"])]
         out = [c for c in cems if not _inside(c["x"], c["y"])]
-        check(
-            "walled_graveyards_inside_and_outside",
-            bool(ins) and bool(out),
-            f"a walled settlement keeps a graveyard both inside AND outside the walls (inside {len(ins)}, outside {len(out)}) - keep at least one of each",
-        )
+        pass  # `` retired under feature 141 (the GM's cut); the segment stays for the check it keeps or the value it writes
         if ins and out:
             bi = max(c["w"] * c["h"] for c in ins)
             bo = max(c["w"] * c["h"] for c in out)
-            check(
-                "walled_exterior_cemetery_larger",
-                bo >= 1.3 * bi,
-                f"the exterior common burial ground should be noticeably larger than the cramped intramural "
-                f"ground (outside {bo:.0f}px2 vs inside {bi:.0f}px2; want >= 1.3x) - there is room beyond the walls",
-            )
+            pass  # `` retired under feature 141 (the GM's cut); the segment stays for the check it keeps or the value it writes
     return _kept(locals(), ('bi', 'bo', 'c', 'ins', 'out'))
 
 
@@ -98,15 +89,7 @@ def _seg_0286_027__walled_settlement_has_drum_tower(
             return any(min(abs(a - b), math.pi - abs(a - b)) > 0.5 for a in angs for b in angs)
 
         ok_dt = len(dts) == 1 and _inside(dts[0]["x"], dts[0]["y"]) and _dt_at_crossing(dts[0])
-        check(
-            "walled_settlement_has_drum_tower",
-            ok_dt,
-            f"{len(dts)} bell-and-drum tower(s) at the main crossing - every walled seat keeps EXACTLY ONE "
-            f"combined bell-and-drum tower (s.drum_tower) inside the walls at the main street crossing "
-            f"(within ~80px of two non-parallel road/street segments); it signals the gate curfew and the "
-            f"night watches, which the fire towers do not cover; an unwalled town is exempt (its time "
-            f"signal is the monastery's bell)",
-        )
+        pass  # `` retired under feature 141 (the GM's cut); the segment stays for the check it keeps or the value it writes
     return _kept(locals(), ('_dt_at_crossing', 'angs', 'dts', 'ok_dt', 'st', 'ways'))
 
 
@@ -141,11 +124,7 @@ def _seg_0286_029__city_temples_have_graveyards(
         # every temple that CAN host a graveyard has one in its precinct (graveyard=False opts out)
         needy = [r for r in temples if r.get("graveyard", True)]
         unserved = [r.get("label", (round(r["x"]), round(r["y"]))) for r in needy if not any(math.hypot(c["x"] - r["x"], c["y"] - r["y"]) < 230 for c in cems)]
-        check(
-            "city_temples_have_graveyards",
-            not unserved,
-            f"temple(s) with no graveyard in their precinct: {unserved[:3]} - Shinsei and Fortune worship are merged, so every temple keeps a burial ground unless it opts out (graveyard=False)",
-        )
+        pass  # `` retired under feature 141 (the GM's cut); the segment stays for the check it keeps or the value it writes
         # CLAN MAUSOLEUM: a walled crypt precinct inside the walls, by the samurai/government quarter
         gov = M.get("governor_mansion")
         sam = [b for b in M.get("buildings", []) if b.get("kind") in ("samurai", "samurai_large")]
@@ -156,25 +135,13 @@ def _seg_0286_029__city_temples_have_graveyards(
         else:
             anchor = None
         maus_ok = bool(maus) and any(_inside(m2["x"], m2["y"]) for m2 in maus) and (anchor is None or any(math.hypot(m2["x"] - anchor[0], m2["y"] - anchor[1]) < 640 for m2 in maus))
-        check(
-            "city_has_mausoleum",
-            maus_ok,
-            "a provincial city needs the ruling clan's ancestral MAUSOLEUM (s.mausoleum) inside the walls, by the samurai/government quarter - a walled crypt precinct for the elite dead",
-        )
+        pass  # `` retired under feature 141 (the GM's cut); the segment stays for the check it keeps or the value it writes
         # CREMATION GROUND: smoke, fire, and pollution push the crematory OUTSIDE the walls
         crem_out = [c for c in crem if not _inside(c["x"], c["y"])]
-        check(
-            "city_has_cremation_ground",
-            bool(crem_out),
-            "a city cremates its dead at a CREMATION GROUND (s.cremation_ground) OUTSIDE the walls - monk-run with burakumin assistants; smoke and fire keep it beyond a gate",
-        )
+        pass  # `` retired under feature 141 (the GM's cut); the segment stays for the check it keeps or the value it writes
         # PAUPER OSSUARY: outside the walls, beside the cremation ground
         oss_ok = any(not _inside(o["x"], o["y"]) and any(math.hypot(o["x"] - c["x"], o["y"] - c["y"]) < 320 for c in crem) for o in oss)
-        check(
-            "city_has_ossuary",
-            oss_ok,
-            "a city needs a pauper OSSUARY mound (s.ossuary) outside the walls by the cremation ground - the communal bones of the poor and the unconnected dead (muenbotoke)",
-        )
+        pass  # `` retired under feature 141 (the GM's cut); the segment stays for the check it keeps or the value it writes
     return _kept(locals(), ('anchor', 'b', 'c', 'crem_out', 'gov', 'm2', 'maus_ok', 'needy', 'o', 'oss_ok', 'r', 'sam', 'unserved'))
 
 

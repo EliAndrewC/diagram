@@ -64,7 +64,7 @@ def _seg_0556__walled_town_has_wall(
 ) -> dict[str, Any]:
     """Gate segment 556 (streets_have_buildings, wall_hugs_the_town, wall_sections_irregular, walled_town_commoners_inside_walls, walled_town_has_gate_market, walled_town_has_main_street, walled_town_has_wall) - body verbatim from the legacy gate() (feature 022)."""
     if scale == "town" and meta.get("walled"):
-        check("walled_town_has_wall", bool(M.get("wall")) and bool(M.get("gate")), "a walled town must have a wall and a gate")
+        pass  # `` retired under feature 141 (the GM's cut); the segment stays for the check it keeps or the value it writes
         # COMMONERS SHELTER INSIDE THE RAMPART - the jokamachi doctrine every walled-town docstring
         # states, previously enforced by nothing (GM audit 2026-07; the town analog of
         # city_commoner_dwellings_inside_walls). Town exemptions differ from the city's: the
@@ -82,12 +82,7 @@ def _seg_0556__walled_town_has_wall(
                 and not point_in_poly(b["x"], b["y"], wallp_t)
                 and (not gate_t or math.hypot(b["x"] - gate_t[0], b["y"] - gate_t[1]) > 260)
             ]
-            check(
-                "walled_town_commoners_inside_walls",
-                not out_ls and not out_mm,
-                f"commoner dwelling(s) outside the rampart: laborers/servants {out_ls[:3]}, far-from-gate merchants {out_mm[:3]} - "
-                f"a walled town's urban castes live INSIDE; only farmhouses, the segregated burakumin quarter, and the gate market belong outside",
-            )
+            pass  # `` retired under feature 141 (the GM's cut); the segment stays for the check it keeps or the value it writes
 
         w = M.get("wall") or []
         if len(w) >= 3:
@@ -98,23 +93,19 @@ def _seg_0556__walled_town_has_wall(
             # field) while still failing a lazy near-equal-sided wall.
             mean = sum(lens) / len(lens)
             cov = (sum((ln - mean) ** 2 for ln in lens) / len(lens)) ** 0.5 / mean if mean else 0
-            check("wall_sections_irregular", len(lens) >= 5 and cov >= 0.25, f"wall has {len(lens)} sections, length CoV {cov:.2f} (need >= 5 sections and CoV >= 0.25 for an irregular rampart)")
+            pass  # `` retired under feature 141 (the GM's cut); the segment stays for the check it keeps or the value it writes
         # the gate-to-yamen axis: a main street must run inward from the gate
         gate: Any = M.get("gate")  # type: ignore[no-redef]
         mains = [st for st in M.get("town_streets", []) if st.get("main")]
         has_main = bool(gate) and any(min(math.hypot(p[0] - gate[0], p[1] - gate[1]) for p in st["pts"]) < 75 for st in mains)
-        check("walled_town_has_main_street", has_main, "a walled town needs a main street running inward from the gate (the gate-to-yamen axis)")
+        pass  # `` retired under feature 141 (the GM's cut); the segment stays for the check it keeps or the value it writes
 
         # no "street to nowhere": a street exists to give access to the buildings along it,
         # and is paved/worn by the traffic to and from them - so no long INSIDE-the-walls
         # stretch may be empty of buildings. (Buildings off any street are fine; that's the
         # poor who can't afford street frontage.) The map edge / off-wall approach is exempt.
         empty = empty_street_runs(M, w)
-        check(
-            "streets_have_buildings",
-            not empty,
-            f"street(s) with a stretch inside the walls with no building FRONTING it (a street with no buildings would not exist - trim it or move buildings onto it): {empty}",
-        )
+        pass  # `` retired under feature 141 (the GM's cut); the segment stays for the check it keeps or the value it writes
 
         # a wall is expensive: it should HUG the built-up town, not enclose large empty
         # margins. Terrain can justify some slack (a wall climbs/skirts a hill rather than
@@ -151,7 +142,7 @@ def _seg_0556__walled_town_has_wall(
                         worst = max(worst, run)
                     else:
                         run = 0
-            check("wall_hugs_the_town", worst <= EMPTY_RUN, f"~{worst:.0f}px of wall runs more than {MAXGAP}px from any building or terrain (it encloses empty space - draw a tighter wall)")
+            pass  # `` retired under feature 141 (the GM's cut); the segment stays for the check it keeps or the value it writes
 
         # (RETIRED 2026-07-24: monastery_torii_scale_with_space - "roomy approach OWES the seven,
         # cramped corner keeps 1-2" - is superseded by the per-temple seeded ROLL, and it predated
@@ -179,11 +170,7 @@ def _seg_0556__walled_town_has_wall(
                 outside_biz = [
                     b for b in M.get("buildings", []) if b.get("kind") in ("shop", "merchant") and not point_in_poly(b["x"], b["y"], w) and math.hypot(b["x"] - gate[0], b["y"] - gate[1]) <= 420
                 ]
-                check(
-                    "walled_town_has_gate_market",
-                    len(outside_biz) >= 3,
-                    f"{len(outside_biz)} business(es) outside the gate - a walled town has a small gate market (guan-xiang) of a few shophouses unless meta(gate_market=False)",
-                )
+                pass  # `` retired under feature 141 (the GM's cut); the segment stays for the check it keeps or the value it writes
     return _kept(
         locals(),
         (

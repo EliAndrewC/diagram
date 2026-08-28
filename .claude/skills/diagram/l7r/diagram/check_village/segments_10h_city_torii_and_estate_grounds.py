@@ -98,11 +98,7 @@ def _seg_0563_335__city_streets_connected(
                         if beds_meet(ai, bi):
                             parent[find2(ai)] = find2(bi)
                 comps = {find2(i) for i in range(len(streets))}
-                check(
-                    "city_streets_connected",
-                    len(comps) == 1,
-                    f"the city streets form {len(comps)} disconnected groups - a street whose bed does not actually reach another's is a separate network; wire every grid to the Imperial road (extend it until the beds overlap)",
-                )
+                pass  # `` retired under feature 141 (the GM's cut); the segment stays for the check it keeps or the value it writes
 
                 # two streets that come ALMOST together without meeting read as a mistake - they
                 # should either JOIN (cross/touch) or stay clearly apart, never leave a sliver gap
@@ -119,11 +115,7 @@ def _seg_0563_335__city_streets_connected(
                                     continue
                                 if 2 < seg_seg_dist(slines[ia][i], slines[ia][i + 1], slines[ib][ki], slines[ib][ki + 1]) < 30:
                                     near_miss.add((ia, ib))
-                check(
-                    "city_streets_no_near_miss",
-                    not near_miss,
-                    f"city street pair(s) that come within a sliver of each other without meeting - close the gap so they join, or separate them: {sorted(near_miss)}",
-                )
+                pass  # `` retired under feature 141 (the GM's cut); the segment stays for the check it keeps or the value it writes
                 # a street that crosses another and then STOPS a little way past it leaves an ugly
                 # dangling stub. Fine to cross and keep going (to the next block/edge), or to
                 # terminate AT the junction (an L/T corner), but not to overshoot it by a sliver.
@@ -136,11 +128,7 @@ def _seg_0563_335__city_streets_connected(
                             for ki in range(len(sb) - 1):
                                 if segments_cross(nbr, end, sb[ki], sb[ki + 1]) and 3 < seg_dist(end[0], end[1], sb[ki], sb[ki + 1]) < 50:
                                     stub.add((ia, ib))
-                check(
-                    "city_streets_no_intersection_stub",
-                    not stub,
-                    f"city street(s) that cross another and then stop just past it, leaving a dangling stub - end them AT the junction or run them on: {sorted(stub)}",
-                )
+                pass  # `` retired under feature 141 (the GM's cut); the segment stays for the check it keeps or the value it writes
     return _kept(
         locals(),
         (

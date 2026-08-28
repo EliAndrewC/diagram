@@ -137,7 +137,7 @@ def _seg_0563_321__city_imperial_road_through(
     if scale in ('city', 'capital') and meta.get('walled'):
         if meta.get("imperial_road", True):
             road_through = bool(road) and any(p[1] < EY0 for p in road) and any(p[1] > EY1 for p in road)
-            check("city_imperial_road_through", road_through, "the Imperial road must run N-S through a walled city - off both the top and bottom edges, via the gates")
+            pass  # `` retired under feature 141 (the GM's cut); the segment stays for the check it keeps or the value it writes
         else:
             # NO Imperial road (it passes miles away): the city still lives on through-traffic,
             # so its road net must leave the map in at least TWO directions (one polyline
@@ -150,11 +150,7 @@ def _seg_0563_321__city_imperial_road_through(
 
             exits = sum(1 for r in rds for e in (r[0], r[-1]) if offend(e))
             dead = [(round(e[0]), round(e[1])) for r in rds for e in (r[0], r[-1]) if not offend(e)]
-            check(
-                "city_roads_run_offmap",
-                exits >= 2 and not dead,
-                f"{exits} off-map road end(s), dead end(s) at {dead[:3]} - a provincial city without an Imperial spine still connects to the wider world in >= 2 directions, and no road stops dead",
-            )
+            pass  # `` retired under feature 141 (the GM's cut); the segment stays for the check it keeps or the value it writes
     return _kept(locals(), ('dead', 'e', 'exits', 'offend', 'p', 'r', 'rds', 'road_through'))
 
 

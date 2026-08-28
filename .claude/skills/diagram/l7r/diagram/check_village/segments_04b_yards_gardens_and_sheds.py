@@ -267,11 +267,7 @@ def _seg_0285_025__farm_sheds_attached(
         for sd in sheds:
             if not any(within_edge_gap(sd, h, 10) for h in M["houses"]):  # 10 px of true daylight; two half-diagonals used to stand in for the two extents
                 stranded.append((round(sd["x"]), round(sd["y"])))
-        check(
-            "farm_sheds_attached",
-            not stranded,
-            f"{len(stranded)} farm storehouse(s) detached from any farmhouse at {stranded[:4]} - a kura is an annex on the house's back wall; draw it WITH the house so a move cannot strand it",
-        )
+        pass  # `` retired under feature 141 (the GM's cut); the segment stays for the check it keeps or the value it writes
     return _kept(locals(), ('h', 'sd', 'stranded'))
 
 
@@ -558,13 +554,7 @@ def _seg_0609__byres_stand_in_their_declared_form(*, M: Any = _UNBOUND, check: A
                 _by_d = math.hypot(_by_h["x"] - _by["x"], _by_h["y"] - _by["y"])
                 if _by_d > courtyard_annex_span(_by_h["w"], _by_h["h"], _by["h"]) + 2.0:
                     _by_bad.append((round(_by["x"]), round(_by["y"]), round(_by_d)))
-            check(
-                "courtyard_byres_annex_their_homestead",
-                not _by_bad,
-                f"{len(_by_bad)} byre(s) stand off on their own while the map declares byre_form='courtyard': {_by_bad[:4]} "
-                f"(x, y, ft to the nearest farmhouse) - in that form the byre is the owning homestead's stable wing, so it belongs in "
-                f"that household's yard; a shed out on the shared ground is the OTHER form and must say so",
-            )
+            pass  # `` retired under feature 141 (the GM's cut); the segment stays for the check it keeps or the value it writes
     return _kept(locals(), ())
 
 

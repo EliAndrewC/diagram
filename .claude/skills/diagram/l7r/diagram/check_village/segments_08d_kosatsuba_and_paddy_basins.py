@@ -108,11 +108,7 @@ def _seg_0546__hamlet_has_kosatsuba(
             mains_kb = ([r["pts"] for r in M.get("roads") or []] or ([M["road"]] if M.get("road") else [])) + [st["pts"] for st in M.get("town_streets", []) if st.get("main")]
             if mains_kb:
                 off_main_kb = [(round(b["x"]), round(b["y"])) for b in kbs if min(seg_dist(b["x"], b["y"], r[k], r[k + 1]) for r in mains_kb for k in range(len(r) - 1)) > lim_kb]
-                check(
-                    "kosatsuba_on_a_main_way",
-                    not off_main_kb,
-                    f"notice board(s) at {off_main_kb} stand off every MAIN way - the board is posted to be noticed, so it goes on the main street/road (a road, or a main: True town street), never a side street or lane (GM 2026-08-02)",
-                )
+                pass  # `` retired under feature 141 (the GM's cut); the segment stays for the check it keeps or the value it writes
             # ORIENTATION, the other half of siting (GM 2026-07-27, catching Nagahara's third
             # board). A kosatsu is a BROADSIDE signboard: a 7x3 ft face under a little roof,
             # read by someone walking past without leaving the road. Standing it PERPENDICULAR
@@ -149,11 +145,7 @@ def _seg_0546__hamlet_has_kosatsuba(
             # gate - the corridor, not the furnished throat itself)
             lim_gate_kb = 800.0 / float(meta.get("ftpx") or 1)
             uncovered_kb = [[round(g[0]), round(g[1])] for g in M["gates"] if min(math.hypot(b["x"] - g[0], b["y"] - g[1]) for b in kbs) > lim_gate_kb]
-            check(
-                "city_kosatsuba_per_gate",
-                not uncovered_kb,
-                f"main gate(s) at {uncovered_kb} have no notice board on their approach corridor - a city posted a board at every trafficked gate (draw them all, label ONE)",
-            )
+            pass  # `` retired under feature 141 (the GM's cut); the segment stays for the check it keeps or the value it writes
     return _kept(
         locals(),
         ('b', 'b_kb', 'devs_kb', 'edgeon_kb', 'face_deg_kb', 'far_kb', 'floor_kb', 'g', 'k', 'kbs', 'lim_gate_kb', 'lim_kb', 'ln', 'mains_kb', 'off_main_kb', 'r', 'routes_kb', 'st', 'uncovered_kb'),

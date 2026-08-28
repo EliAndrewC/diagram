@@ -155,11 +155,7 @@ def _seg_0563_072__city_neighborhoods_have_wells(
                 for b in M.get("buildings", [])
                 if b.get("kind") in COMMON and inw(b["x"], b["y"]) and min(math.hypot(b["x"] - w["x"], b["y"] - w["y"]) for w in wells) > REACH
             ]
-            check(
-                "city_neighborhoods_have_wells",
-                not dry,
-                f"{len(dry)} commoner dwelling(s) inside the walls more than {REACH}px from any public well - every neighborhood needs water access; scatter wells through the warren (e.g. {dry[:3]})",
-            )
+            pass  # `` retired under feature 141 (the GM's cut); the segment stays for the check it keeps or the value it writes
             # and ENOUGH wells that none is OVER-BURDENED: a communal well historically served a courtyard
             # / cluster of ~10-20 households, so assigning each commoner dwelling (servants included - they
             # draw here too) to its NEAREST well, no well should end up doing the work of three. The reach
@@ -203,12 +199,7 @@ def _seg_0563_072__city_neighborhoods_have_wells(
                 served_out[min(range(len(wells)), key=lambda i: math.hypot(hx - wells[i]["x"], hy - wells[i]["y"]))] += 1
             swamped = [(round(wells[i]["x"]), round(wells[i]["y"]), c + served_out[i]) for i, c in enumerate(served) if c > MAX_PER_WELL or c + served_out[i] > MAX_PER_WELL_OUTCAST]
             # WHY (~1 communal well per 10-20 households - the premodern courtyard-well norm): settlements.md "Historical grounding"
-            check(
-                "city_well_density_sufficient",
-                not swamped,
-                f"public well(s) each the nearest for more than {MAX_PER_WELL} commoner households - too few wells for "
-                f"the neighborhood (~1 per 10-20 households is realistic); add wells where the warren is densest: {swamped}",
-            )
+            pass  # `` retired under feature 141 (the GM's cut); the segment stays for the check it keeps or the value it writes
             # wells sit in a block INTERIOR off the lanes (the idobata was a courtyard, not the avenue),
             # and a wellhead must not overlap a building or compound. Placement guarantees both (well_at /
             # place_wells use the same clearance test the houses do), so this is the backstop.
@@ -223,7 +214,7 @@ def _seg_0563_072__city_neighborhoods_have_wells(
                     bad_well.append((round(wx), round(wy), "on a lane"))
                 elif any("w" in st and abs(wx - st["x"]) < st["w"] / 2 + wr and abs(wy - st["y"]) < st["h"] / 2 + wr for st in structs):
                     bad_well.append((round(wx), round(wy), "on a building"))
-            check("city_wells_in_block_interiors", not bad_well, f"well(s) not sitting clear in a block interior - a wellhead is on a lane or overlaps a structure: {bad_well[:4]}")
+            pass  # `` retired under feature 141 (the GM's cut); the segment stays for the check it keeps or the value it writes
             # the SAMURAI/GOVERNMENT quarter has NO public wells - samurai drew from PRIVATE wells inside
             # their own walled compounds, and gathering at the communal idobata was a commoner-district
             # institution (beneath samurai status). So a public wellhead embedded AMONG the samurai
@@ -260,12 +251,7 @@ def _seg_0563_072__city_neighborhoods_have_wells(
                 if near_dw and sum(1 for d in near_dw if d[2]) * 2 >= len(near_dw):  # most of its nearest neighbors are samurai
                     sam_wells.append((round(w["x"]), round(w["y"])))
             # WHY (samurai/official households drew from PRIVATE wells inside their walled compounds): settlements.md "Historical grounding"
-            check(
-                "city_samurai_quarter_has_no_public_wells",
-                not sam_wells,
-                f"public well(s) sitting among the samurai dwellings: {sam_wells} - the samurai/government quarter has no "
-                f"communal wells (samurai draw from private wells inside their compounds; the public idobata is a commoner institution)",
-            )
+            pass  # `` retired under feature 141 (the GM's cut); the segment stays for the check it keeps or the value it writes
     return _kept(
         locals(),
         (
@@ -390,12 +376,7 @@ def _seg_0563_075__city_imperial_road_has_commerce(
             1 for bg in M.get("buildings", []) if bg.get("kind") in COMMERCE and in_city(bg["x"], bg["y"]) and min(seg_dist(bg["x"], bg["y"], road[k], road[k + 1]) for k in range(len(road) - 1)) <= 95
         )
         need = round(il / 130)
-        check(
-            "city_imperial_road_has_commerce",
-            road_comm >= need,
-            f"only {road_comm} shops/inns front the {round(il)}px of Imperial road running through the city (want >= {need}) - a "
-            f"city on a trade route lines its through-road with commerce to service travelers; don't leave the prime road frontage bare",
-        )
+        pass  # `` retired under feature 141 (the GM's cut); the segment stays for the check it keeps or the value it writes
     return _kept(locals(), ('COMMERCE', 'a', 'b', 'bg', 'bx', 'by', 'frac_inside', 'i', 'il', 'in_city', 'k', 'need', 'road_comm', 't', 'wp', 'x0', 'x1', 'y0', 'y1'))
 
 

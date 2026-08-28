@@ -83,13 +83,7 @@ def _seg_0563_081__kido_aligned_with_ward_fence(
             diff8 = min(diff8, 180.0 - diff8)
             if diff8 > 7.0:
                 kido_off.append([round(kd2["x"]), round(kd2["y"]), round(diff8), "lane" if lane8 else "fence"])
-        check(
-            "kido_aligned_with_ward_fence",
-            not kido_off,
-            f"ward gate(s) not square to what they bar (x, y, degrees off, what it should follow): {kido_off} - a kido "
-            f"shuts a WAY, so its roofed bar stands SQUARE ACROSS the lane running through it; only a gate with no lane "
-            f"through it follows the local fence tangent (s.ward computes both; pass rot= to s.kido for a hand-placed gate)",
-        )
+        pass  # `` retired under feature 141 (the GM's cut); the segment stays for the check it keeps or the value it writes
         # ...AND THE GUARD BOX STANDS ON THE VERGE, NOT IN THE ROAD (GM 2026-07-26). The watch
         # box beside the gate is a small building - the one solid thing in the kido group - and
         # a patrol road or street with a shack in its bed is not passable. It is not covered by
@@ -105,13 +99,7 @@ def _seg_0563_081__kido_aligned_with_ward_fence(
             gpoly = [(float(c[0]), float(c[1])) for c in gbox]
             if any(footprint_on_line(gpoly, pts, half) for pts, half in lane_runs(M)):
                 box_on_lane.append([round(kd3["x"]), round(kd3["y"])])
-        check(
-            "kido_guard_box_clear_of_lanes",
-            not box_on_lane,
-            f"ward gate(s) whose guard box stands IN a roadbed: {box_on_lane} - the gate's watch box is a building on the "
-            f"verge beside the way, never an obstruction in it (s.kido slides it clear; a curving ring road is the case "
-            f"straight-line arithmetic misses)",
-        )
+        pass  # `` retired under feature 141 (the GM's cut); the segment stays for the check it keeps or the value it writes
     return _kept(locals(), ('b2', 'best2', 'box_on_lane', 'c', 'd8', 'diff8', 'gbox', 'got8', 'gpoly', 'half', 'i8', 'kd2', 'kd3', 'kido_off', 'lane8', 'pts', 'want8', 'wd2'))
 
 

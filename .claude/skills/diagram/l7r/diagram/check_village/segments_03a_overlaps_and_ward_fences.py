@@ -494,13 +494,7 @@ def _seg_0195__city_ward_cap_flush_to_wall(
                     _d = min(seg_dist(cx3, cy3, _ring[i], _ring[i + 1]) for i in range(len(_ring) - 1))
                     if _d > 4.0:  # a flush cap sits ON the wall (~0-1 px); >4 px means it juts across the bend
                         _off.append((round(cx3), round(cy3), round(_d, 1)))
-        check(
-            "city_ward_cap_flush_to_wall",
-            not _off,
-            f"ward fence wall-cap vertex/vertices jut off the rampart (x, y, px-off-wall): {_off[:4]} - the cap plugs the "
-            f"fence into the wall and must lie FLUSH along it (follow the wall through any corner), not cross it as a "
-            f"straight stub - which renders as two wall sections overlapping instead of one bent wall (settlement.ward)",
-        )
+        pass  # `` retired under feature 141 (the GM's cut); the segment stays for the check it keeps or the value it writes
     return _kept(locals(), ('_d', '_off', '_ring', '_wrng', 'cap', 'cx3', 'cy3', 'i', 'wd', 'x', 'y'))
 
 

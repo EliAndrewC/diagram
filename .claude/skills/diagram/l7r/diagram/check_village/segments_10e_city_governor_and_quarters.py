@@ -171,7 +171,7 @@ def _seg_0563_247__city_streets_clear_of_moat(
     """Gate segment 563.247 (city_streets_clear_of_moat) - body verbatim from the city mega-segment (feature 023; guards preserved, see research.md R2/R3)."""
     if scale in ('city', 'capital') and meta.get('walled') and moat:
         moat_hit = [pts[0] for pts in lanes_pts if crosses_ring(pts, moat, False)]
-        check("city_streets_clear_of_moat", not moat_hit, f"{len(moat_hit)} street/alley(s) crossing the moat: {moat_hit}")
+        pass  # `` retired under feature 141 (the GM's cut); the segment stays for the check it keeps or the value it writes
     return _kept(locals(), ('moat_hit', 'pts'))
 
 

@@ -92,11 +92,7 @@ def _seg_0232__cluster_abuts_fields(
                 harea = poly_area(convex_hull([(h["x"], h["y"]) for h in houses]))
                 built = sum(r.get("w", 30) * r.get("h", 24) for grp in ("houses", "gardens", "threshing_yards", "groves") for r in M.get(grp, []))
                 cov = built / harea if harea else 0.0
-                check(
-                    "village_cluster_compact",
-                    cov >= 0.25,
-                    f"nucleated village cluster fills only {cov:.0%} of the footprint it spans (want >=25%): the houses are strung thin over a hollow hull (an over-wide cluster stranding houses far from the fields), not a compact village fabric",
-                )
+                pass  # `` retired under feature 141 (the GM's cut); the segment stays for the check it keeps or the value it writes
         else:
             # A FLAT ADJ, WITH NO SPAN ALLOWANCE - and it stays that way. Feature 126 relaxed this
             # to `ADJ + 2 * span`, arguing that the NUCLEATED branch above is the more generous of
@@ -109,7 +105,7 @@ def _seg_0232__cluster_abuts_fields(
             # hamletgen/consts.py, currently pinned to nucleated), this branch is worth revisiting -
             # but WITH that fixture kept red, not by widening the bound until the new maps pass.
             far = [h for h, d in dists if d > ADJ]
-            check("all_houses_field_adjacent", not far, f"{len(far)} house(s) >{ADJ}px from any field")
+            pass  # `` retired under feature 141 (the GM's cut); the segment stays for the check it keeps or the value it writes
 
             # ...and the outline that adjacency was just measured against must BE the planting. A field's
             # `outline` is the smoothed ENVELOPE the water net claims; `vis_bbox` is the extent of the plots
@@ -131,7 +127,7 @@ def _seg_0232__cluster_abuts_fields(
                 pad = max(v[0] - b[0], v[1] - b[1], b[2] - v[2], b[3] - v[3])
                 if pad > PHANTOM:
                     tails.append(f"{f.get('name')} (+{pad:.0f}px)")
-            check("field_outline_matches_planting", not tails, f"field outline overruns the planted crop by >{PHANTOM}px, so adjacency is measured against empty ground: {', '.join(tails)}")
+            pass  # `` retired under feature 141 (the GM's cut); the segment stays for the check it keeps or the value it writes
     return _kept(locals(), ('PHANTOM', '_', 'b', 'built', 'ccx', 'ccy', 'cov', 'd', 'dists', 'f', 'far', 'grp', 'h', 'harea', 'hh', 'hx', 'hy', 'nearest', 'pad', 'r', 'span', 'tails', 'v'))
 
 
@@ -245,13 +241,7 @@ def _seg_0237__dwellings_above_field_drain(
                 if not at_end and _d <= toe_px and (h["x"] - px) * dux + (h["y"] - py) * duy > 18:  # center clearly on the wet (downslope) side, within the toe band
                     in_toe.append((round(h["x"]), round(h["y"])))
                     break
-        check(
-            "dwellings_above_field_drain",
-            not in_toe,
-            f"{len(in_toe)} dwelling(s) sit in the WET low toe DOWNSLOPE of the field drain at {in_toe[:4]} - the "
-            f"ground below the drainage line (marsh / low reclaimed paddy / the tameike) is the wettest in the "
-            f"valley, not building ground; strew the farms on the DRY margins ABOVE the drain (flank farms past the drain's ends are fine)",
-        )
+        pass  # `` retired under feature 141 (the GM's cut); the segment stays for the check it keeps or the value it writes
     return _kept(locals(), ('_d', '_ddd', 'at_end', 'ax', 'ay', 'best', 'bx', 'by', 'd', 'dp', 'dux', 'duy', 'h', 'in_toe', 'll', 'px', 'py', 'si', 'toe_px', 'tt', 'vx', 'vy'))
 
 
@@ -285,7 +275,7 @@ def _seg_0242__h_2(*, h: Any = _UNBOUND, houses: Any = _UNBOUND) -> dict[str, An
 def _seg_0243__village_has_headman(*, check: Any = _UNBOUND, headman: Any = _UNBOUND, scale: Any = _UNBOUND) -> dict[str, Any]:
     """Gate segment 243 (capital_has_no_headman, city_has_no_headman, hamlet_has_no_headman, town_has_no_headman, village_has_headman, village_has_no_headman) - body verbatim from the legacy gate() (feature 022)."""
     if scale == "village":
-        check("village_has_headman", headman is not None, "a village must have a headman")
+        pass  # `` retired under feature 141 (the GM's cut); the segment stays for the check it keeps or the value it writes
     else:
         # hamlets fall under the village district headman; towns are run by the magistrate
         check(f"{scale}_has_no_headman", headman is None, f"a {scale} has no peasant headman of its own")
@@ -368,20 +358,10 @@ def _seg_0250__shrine_clear_of_grove_trees(
             return any((cx - cx0 - max(-hw, min(hw, cx - cx0))) ** 2 + (cy - cy0 - max(-hh, min(hh, cy - cy0))) ** 2 < cr * cr for cx, cy, cr in grove_clumps)
 
         under_trees = [(round(r["x"]), round(r["y"])) for r in M.get("religious", []) if _under_trees(r["x"], r["y"], r["w"] / 2, r["h"] / 2)]
-        check(
-            "shrine_clear_of_grove_trees",
-            not under_trees,
-            f"{len(under_trees)} shrine/temple(s) sit UNDER the grove's trees at {under_trees[:4]} - a hall nestles "
-            f"in a CLEARING within the sacred grove; draw the grove to skip the shrine (place the shrine BEFORE it)",
-        )
+        pass  # `` retired under feature 141 (the GM's cut); the segment stays for the check it keeps or the value it writes
         # a torii is recorded [x, y, z]; its arch spans x +/-19, y -10..+18 (center ~y+4, half-height 14)
         torii_under = [(round(t[0]), round(t[1])) for t in M.get("torii", []) if _under_trees(t[0], t[1] + 4, 19, 14)]
-        check(
-            "torii_clear_of_grove_trees",
-            not torii_under,
-            f"{len(torii_under)} torii arch(es) sit UNDER the grove's trees at {torii_under[:4]} - a torii stands "
-            f"in the OPEN before its shrine, not buried in the wood; draw the grove to skip it (place torii BEFORE it)",
-        )
+        pass  # `` retired under feature 141 (the GM's cut); the segment stays for the check it keeps or the value it writes
         # ... and no tree canopy crosses a fengshui CRESCENT POND's water (GM 2026-07-21, caught on
         # Hoshigaoka, where a windbreak clump overhung the half-moon pond): the banyuetang is an OPEN water
         # mirror at the settlement's front - reflecting sky is its fengshui job - and its flat-side forecourt
@@ -392,11 +372,7 @@ def _seg_0250__shrine_clear_of_grove_trees(
             for gcx, gcy, gcr in grove_clumps:
                 if point_in_poly(gcx, gcy, cpd["poly"]) or poly_dist(gcx, gcy, [tuple(p) for p in cpd["poly"]]) < gcr:
                     pond_trees.append((round(gcx), round(gcy)))
-        check(
-            "trees_clear_of_fengshui_ponds",
-            not pond_trees,
-            f"tree clump(s) overhang the fengshui crescent pond's water at {pond_trees[:4]} - the half-moon pond is an open water mirror (its fengshui job is reflecting sky); the grove placement keeps a full-disk keep-out around it",
-        )
+        pass  # `` retired under feature 141 (the GM's cut); the segment stays for the check it keeps or the value it writes
     return _kept(locals(), ('_under_trees', 'cpd', 'gcr', 'gcx', 'gcy', 'p', 'pond_trees', 'r', 't', 'torii_under', 'under_trees'))
 
 

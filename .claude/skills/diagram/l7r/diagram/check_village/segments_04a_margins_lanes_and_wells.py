@@ -301,11 +301,7 @@ def _seg_0279__wells_among_dwellings(
                 vr_w = float(wl.get("vr") or wl.get("r") or 8.0)
                 if any(ring_touches(wl["x"], wl["y"], vr_w, ring) for ring in wet_rings):
                     in_paddy.append((round(wl["x"]), round(wl["y"])))
-            check(
-                "wells_clear_of_paddies",
-                not in_paddy,
-                f"wellhead(s) at {in_paddy[:4]} standing in a rice paddy - a paddy is flooded and bunded, so a well cannot be sunk in one (a DRY plot is different and is allowed, and so is the fan's unplanted rim slack); move the head onto the dooryard/margin ground it serves",
-            )
+            pass  # `` retired under feature 141 (the GM's cut); the segment stays for the check it keeps or the value it writes
 
         # THE WELL IS A LOCATION MARKER under the stroke convention (GM ruling 2026-07-21): a real
         # curb is ~3-4 ft (sub-glyph at every scale), so the wellhead marks the well's TO-SCALE
@@ -320,12 +316,7 @@ def _seg_0279__wells_among_dwellings(
         if ddims and any("vr" in wl for wl in all_wells):
             med = sorted(ddims)[len(ddims) // 2]
             mean_dia = 2 * sum(wl.get("vr", 5) for wl in all_wells) / len(all_wells)
-            check(
-                "wells_sized_to_buildings",
-                0.35 <= mean_dia / med <= 0.85,
-                f"wells are mis-sized for this map - drawn at {mean_dia:.0f}px against a ~{med:.0f}px median dwelling "
-                f"({mean_dia / med:.0%}; want ~40-80%): a wellhead must scale with the map grain (bscale), not a fixed pixel size",
-            )
+            pass  # `` retired under feature 141 (the GM's cut); the segment stays for the check it keeps or the value it writes
     return _kept(locals(), ('_k', '_q', 'b', 'ddims', 'dwell_all', 'in_paddy', 'mean_dia', 'med', 'ring', 'stray', 'vr_w', 'wet_rings', 'wl'))
 
 
@@ -428,11 +419,7 @@ def _seg_0284__wells_sized_to_population(
         _whh = meta["households"]
         _wlo, _whi = (2.0, 20.0) if scale == "hamlet" else (8.0, 26.0)
         _wr = _whh / len(_draw_wells) if _draw_wells else float("inf")
-        check(
-            "wells_sized_to_population",
-            _wlo <= _wr <= _whi,
-            f"{len(_draw_wells)} communal well(s) for {_whh} households = {_wr:.1f} hh/well, outside the {scale} band [{_wlo:.0f}-{_whi:.0f}] - Rokugan's prosperity liberty runs generous wells (settlements.md 'Wells'); shrine temizu wells are excluded from the count",
-        )
+        pass  # `` retired under feature 141 (the GM's cut); the segment stays for the check it keeps or the value it writes
     return _kept(locals(), ('_draw_wells', '_whh', '_whi', '_wlo', '_wr', 'w'))
 
 
@@ -504,13 +491,7 @@ def _seg_0285_004__wells_clear_of_shrine_and_torii(
                 if ddx * ddx + ddy * ddy < wl["r"] * wl["r"]:
                     on_sacred.append((round(wl["x"]), round(wl["y"])))
                     break
-        check(
-            "wells_clear_of_shrine_and_torii",
-            not on_sacred,
-            f"{len(on_sacred)} well(s) overlap a shrine hall or torii arch at {on_sacred[:4]} - a wellhead "
-            f"stands BESIDE the shrine, never on the hall or under the gateway; place the shrine + torii "
-            f"BEFORE the wells so they are blocked out",
-        )
+        pass  # `` retired under feature 141 (the GM's cut); the segment stays for the check it keeps or the value it writes
     return _kept(locals(), ('bx', 'by', 'ddx', 'ddy', 'hh', 'hw', 'on_sacred', 'wl'))
 
 

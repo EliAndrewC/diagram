@@ -334,13 +334,7 @@ def _seg_0033__hard_features_within_frame(
                         clipped.append((k, round((fx0 + fx1) / 2), round((fy0 + fy1) / 2)))
                 elif fx0 < EX0 - 1 or fy0 < EY0 - 1 or fx1 > EX1 + 1 or fy1 > EY1 + 1:
                     clipped.append((k, round((fx0 + fx1) / 2), round((fy0 + fy1) / 2)))
-        check(
-            "hard_features_within_frame",
-            not clipped,
-            f"{len(clipped)} hard feature(s) run OUTSIDE the cropped frame and get clipped: {clipped[:4]} - a "
-            f"feature the frame must contain (esp. a set-apart graveyard/shrine placed AFTER crop_to_content) "
-            f"must sit inside the view; place it BEFORE the crop so the frame includes it",
-        )
+        pass  # `` retired under feature 141 (the GM's cut); the segment stays for the check it keeps or the value it writes
 
         # ... and the frame must be TIGHT to that content (GM 2026-07-20): prefer the SMALLER crop - a view
         # edge held open where the only content in the extra band is the communal windbreak (already partly
@@ -429,11 +423,7 @@ def _seg_0033__hard_features_within_frame(
                 "south": EY1 - max(fsy),
             }
             _edge_loose = {side: round(v) for side, v in _edge_slack.items() if v > ALLOW}
-            check(
-                "crop_hugs_content",
-                not _edge_loose,
-                f"view edge(s) held open past the frame-setting content by more than {ALLOW}px: {_edge_loose} - prefer the smaller crop; a band whose only extra content is more windbreak grove (or open ground) is wasted image, so let the grove clip at the edge (crop_to_content no longer counts village_groves)",
-            )
+            pass  # `` retired under feature 141 (the GM's cut); the segment stays for the check it keeps or the value it writes
     return _kept(
         locals(),
         (

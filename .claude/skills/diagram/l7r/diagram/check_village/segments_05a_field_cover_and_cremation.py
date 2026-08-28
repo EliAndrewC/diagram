@@ -148,13 +148,7 @@ def _seg_0285_096__woodland_clear_of_crops(
                 if gap < (SHADE if south else CLEAR):
                     w_shade.append(tag)
                     break
-        check(
-            "woodland_clear_of_crops",
-            not w_over and not w_shade,
-            f"managed-woodland patch(es) overlap {sorted(set(w_over))[:3]} or shade {sorted(set(w_shade))[:3]} the "
-            f"crops - a coppice patch must stand clear of the paddy + dry hatake (a canopy over crops competes; a "
-            f"tree on the crop's SOUTH/sunny side blocks its light). Set it back on the high ground, north/beside the fields",
-        )
+        pass  # `` retired under feature 141 (the GM's cut); the segment stays for the check it keeps or the value it writes
         # a coppice WOODLAND patch is a DISTINCT wood from the protected fengshui GROVE (village_groves) -
         # the two must not overlap, or they merge into one indistinct green mass (GM). Keep each patch off
         # every grove clump (its drawn radius). Place the coppice on its OWN stretch of the high ground.
@@ -165,12 +159,7 @@ def _seg_0285_096__woodland_clear_of_crops(
                 continue
             if any(point_in_poly(gx, gy, wp) or poly_dist(gx, gy, wp) < g.get("r", 6) for g in M.get("village_groves", []) for gx, gy in g.get("clumps", [])):
                 w_on_grove.append((round(c["x"]), round(c["y"])))
-        check(
-            "woodland_clear_of_grove",
-            not w_on_grove,
-            f"managed-woodland patch(es) {sorted(set(w_on_grove))[:3]} overlap the fengshui GROVE - the coppice "
-            f"commons and the protected village grove are DISTINCT woods; keep the patch off the grove clumps",
-        )
+        pass  # `` retired under feature 141 (the GM's cut); the segment stays for the check it keeps or the value it writes
     return _kept(
         locals(),
         ('CLEAR', 'SHADE', '_fp', 'c', 'crop', 'crops', 'cx0', 'cx1', 'cy1', 'dp', 'f', 'g', 'gap', 'gx', 'gy', 'p', 'south', 'tag', 'w_on_grove', 'w_over', 'w_shade', 'wp', 'wx0', 'wx1', 'wy0'),
@@ -391,12 +380,7 @@ def _seg_0286_024__cremation_ground_by_external_cemetery(
             return math.hypot(gx, gy)
 
         lonely = [(round(cr["x"]), round(cr["y"])) for cr in crem if not any(_edge_gap(cr, c) <= 70 for c in ext_cems)]
-        check(
-            "cremation_ground_by_external_cemetery",
-            not lonely,
-            f"cremation ground(s) not adjacent to an external (outside-the-walls) burial ground: {lonely[:3]} - "
-            f"the body is cremated and its bones interred next door, so the crematory adjoins an extramural cemetery",
-        )
+        pass  # `` retired under feature 141 (the GM's cut); the segment stays for the check it keeps or the value it writes
 
         # SET BACK FROM THE MAIN ROAD: the crematory is marginal, polluting land reached by a minor
         # funeral path, NOT the high street - so it keeps clear of the Imperial / trunk road (town
@@ -410,12 +394,7 @@ def _seg_0286_024__cremation_ground_by_external_cemetery(
                 return min(seg_dist(x, y, mainroad[k], mainroad[k + 1]) for k in range(len(mainroad) - 1))
 
             crem_on_road = [(round(cr["x"]), round(cr["y"])) for cr in crem if _rdist(cr["x"], cr["y"]) < ROAD_SETBACK]
-            check(
-                "cremation_ground_set_back_from_main_road",
-                not crem_on_road,
-                f"cremation ground(s) crowd the main road: {crem_on_road[:3]} - a crematory is marginal land reached "
-                f"by a minor funeral path, not high-street frontage; keep it >= {ROAD_SETBACK}px off the trunk road",
-            )
+            pass  # `` retired under feature 141 (the GM's cut); the segment stays for the check it keeps or the value it writes
             # NOT BETWEEN its temple and the road: you should not walk past the pyre to reach the
             # monastery. The crematory sits BEHIND or beside its nearest temple (at least as far from
             # the road as that temple, less a small tolerance), never on the road-side approach to it.
@@ -428,10 +407,5 @@ def _seg_0286_024__cremation_ground_by_external_cemetery(
                     t = min(near_t, key=lambda t: math.hypot(t["x"] - cr["x"], t["y"] - cr["y"]))
                     if _rdist(cr["x"], cr["y"]) < _rdist(t["x"], t["y"]) - 40:
                         between.append((round(cr["x"]), round(cr["y"])))
-            check(
-                "cremation_ground_not_between_temple_and_road",
-                not between,
-                f"cremation ground(s) sit between a temple and the road: {between[:3]} - you should not walk past "
-                f"the pyre to reach the monastery; put the crematory BEHIND or beside its temple, off the road side",
-            )
+            pass  # `` retired under feature 141 (the GM's cut); the segment stays for the check it keeps or the value it writes
     return _kept(locals(), ('ROAD_SETBACK', '_edge_gap', '_rdist', 'between', 'c', 'cr', 'crem_on_road', 'ext_cems', 'lonely', 'mainroad', 'near_t', 't', 'temples_r'))

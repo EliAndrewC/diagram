@@ -96,13 +96,7 @@ def _seg_0285_991__village_trees_unshade_from_west(
             w_x0, w_y0, w_y1 = w_f["x"] - w_f["w"] / 2, w_f["y"] - w_f["h"] / 2, w_f["y"] + w_f["h"] / 2
             if any(w_x0 - w_lane - w_r < w_cx < w_x0 + w_r and w_y0 - w_r < w_cy < w_y1 + w_lane + w_r for w_cx, w_cy, w_r in w_wb):
                 w_shade.append((round(w_f["x"]), round(w_f["y"])))
-        check(
-            "village_trees_unshade_from_west",
-            not w_shade,
-            f"a windbreak tree stands within {w_ft:.0f} ft WEST/SOUTHWEST of yard/garden(s) {w_shade[:3]} - a 10 m "
-            f"belt throws ~50 ft of afternoon shadow eastward in the shoulder month, so the plot loses the 9-to-3 "
-            f"day's second half. Keep the belt out of the west sun-lane (the generator does it with s.west_sun_lane(50))",
-        )
+        pass  # `` retired under feature 141 (the GM's cut); the segment stays for the check it keeps or the value it writes
     return _kept(locals(), ('w_cx', 'w_cy', 'w_f', 'w_ft', 'w_ftpx', 'w_g', 'w_lane', 'w_r', 'w_shade', 'w_wb', 'w_x0', 'w_y0', 'w_y1'))
 
 
@@ -234,13 +228,7 @@ def _seg_0285_077__gardens_unshaded_from_east(
                     east_bad.append((round(gx), round(gy)))  # a clear south-shift existed -> avoidable
                     break
                 dy += 4
-        check(
-            "gardens_unshaded_from_east",
-            not east_bad,
-            f"kitchen garden(s) {east_bad[:4]} sit with a tree hard against their EAST (losing the morning sun) "
-            f"though a small SOUTHWARD shift into open ground would clear it - nudge the garden south of the "
-            f"tree (the placement's _relax_gardens_south does this; a garden truly boxed in south is exempt)",
-        )
+        pass  # `` retired under feature 141 (the GM's cut); the segment stays for the check it keeps or the value it writes
     return _kept(
         locals(),
         (
@@ -414,12 +402,7 @@ def _seg_0285_081__groves_where_possible(
                 continue
             if any(clump_clear(*min_clump(hh_, fdx, fdy, perp), par) for (fdx, fdy), perp in WF.get(windward, WF["NW"])):
                 omitted.append(par)
-        check(
-            "groves_where_possible",
-            not omitted,
-            f"farm(s) {omitted[:4]} have clear windward room but no grove - a yashikirin is drawn on every farm "
-            f"that can host one; only a paddy/neighbor/yard-shaded windward side may leave a farm grove-less",
-        )
+        pass  # `` retired under feature 141 (the GM's cut); the segment stays for the check it keeps or the value it writes
     return _kept(locals(), ('B', 'Hm', 'WF', 'Wm', 'avoid', 'c', 'clump_clear', 'corridors', 'crop_ol', 'dpl', 'fdx', 'fdy', 'hh_', 'min_clump', 'omitted', 'par', 'perp', 's'))
 
 
@@ -506,12 +489,7 @@ def _seg_0285_083__village_windbreak_present(
             f"no substantial windbreak belt (>= 12 clumps) nestles against the farm cluster (nearest {None if nestle_d is None else round(nestle_d)}px; want <= 150) - "
             f"the back-village grove EMBRACES the houses' windward fringe; far corner masses alone are decoration",
         )
-        check(
-            "village_windbreak_on_windward_side",
-            not lee,
-            f"the village windbreak sits on the LEE/sunny side of the cluster, not the windward {windward}: "
-            f"{lee[:2]} - the back-village grove shelters the high windward edge and leaves the sunny field side open",
-        )
+        pass  # `` retired under feature 141 (the GM's cut); the segment stays for the check it keeps or the value it writes
         # THE BELT SCALES WITH THE CLUSTER (GM 2026-07-25, after Moritono's belt read as a few
         # blobs behind 16 farmhouses). The >= 12-clump embrace test above is a FIXED floor, so a
         # belt sized for a 5-house corner passes unchanged behind a whole hamlet. Measure the

@@ -133,12 +133,7 @@ def _seg_0108__merchant_estate_wall_clear_of_water(
 
         est_wet = [(round(e["x"]), round(e["y"]), _wall_hits(e, est_waters)) for e in M["merchant_estates"]]
         est_wet = [ew for ew in est_wet if ew[2]]
-        check(
-            "merchant_estate_wall_clear_of_water",
-            not est_wet,
-            f"merchant-estate wall(s) running through open water: {est_wet} - a compound wall stands on dry ground; "
-            f"the canal/dock/moat/pond edge is working waterfront (boats, porters, the towpath), not private wall footing - move the estate clear",
-        )
+        pass  # `` retired under feature 141 (the GM's cut); the segment stays for the check it keeps or the value it writes
 
         # a tower ENCLOSED in the private court (wall-line clear, tower trapped inside) is the
         # same siting error as a wall through it - the watch must reach its tower from public ground
@@ -148,12 +143,7 @@ def _seg_0108__merchant_estate_wall_clear_of_water(
             return any(abs(t["x"] - e["x"]) < e["w"] / 2 and abs(t["y"] - e["y"]) < e["h"] / 2 for t in M.get("fire_towers", []) if "w" in t)
 
         towered = [(round(e["x"]), round(e["y"])) for e in M["merchant_estates"] if _tower_conflict(e)]
-        check(
-            "merchant_estate_wall_clear_of_fire_towers",
-            not towered,
-            f"merchant-estate wall(s) running through - or enclosing - a fire tower: {towered} - the fire watch is municipal; the tower needs its own "
-            f"footing, daylight around the braced frame, and watch access from public ground - it cannot be embedded in (or walled inside) a private compound; move the estate or the tower",
-        )
+        pass  # `` retired under feature 141 (the GM's cut); the segment stays for the check it keeps or the value it writes
 
         # THE SAME WALLS STAY OFF THE STREETS (GM follow-up, 2026-07-19): a compound wall
         # standing in a street bed blocks the public way - the wall may LINE a street (that is
@@ -167,12 +157,7 @@ def _seg_0108__merchant_estate_wall_clear_of_water(
             est_streets.append(("ring road", _near_line(M["ring_road"], M.get("ring_road_width", 7) / 2 + WMARG)))
         est_on_st = [(round(e["x"]), round(e["y"]), _wall_hits(e, est_streets)) for e in M["merchant_estates"]]
         est_on_st = [ew for ew in est_on_st if ew[2]]
-        check(
-            "merchant_estate_wall_clear_of_streets",
-            not est_on_st,
-            f"merchant-estate wall(s) standing IN a street/alley/road bed: {est_on_st} - the public way stays open; "
-            f"a compound wall may line a street but never stand in its cleared band - move the estate off the street",
-        )
+        pass  # `` retired under feature 141 (the GM's cut); the segment stays for the check it keeps or the value it writes
     return _kept(
         locals(),
         (

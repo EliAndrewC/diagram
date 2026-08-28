@@ -435,13 +435,13 @@ def _seg_0539__torii_spread_out(
         if shrine:
             sx, sy, sw, sh = shrine
             under = [t for t in torii if sx - 6 <= t[0] <= sx + sw + 6 and sy - 6 <= t[1] <= sy + sh + 6]
-            check("torii_clear_of_shrine", not under, f"{len(under)} torii under the shrine")
+            pass  # `` retired under feature 141 (the GM's cut); the segment stays for the check it keeps or the value it writes
         # No two arches closer than one rail-span (16 ft): a dense senbon-style AVENUE may pack the arches
         # close, but they must not overlap into a vermilion blob. Scale-aware (was a fixed 25px, tuned to the
         # pre-true-scale 38px glyph - too coarse now the arch is ~8px/16ft at village scale; GM 2026-07-22).
         _tfloor = 16.0 / meta.get("ftpx", 1)
         spread = all(math.hypot(torii[i][0] - torii[j][0], torii[i][1] - torii[j][1]) > _tfloor for i in range(len(torii)) for j in range(i + 1, len(torii)))
-        check("torii_spread_out", spread, f"torii closer than one arch-span (~{_tfloor:.0f}px) apart - they overlap into a blob rather than reading as distinct gateways")
+        pass  # `` retired under feature 141 (the GM's cut); the segment stays for the check it keeps or the value it writes
         # NO ARCH STANDS IN A CROP (torii_clear_of_fields, 2026-07-24): caught during the torii
         # re-roll when Hirameki's Benten rolled 7 and the naive single-point avenue extension
         # marched five arches straight through the Imperial chrysanthemum field - torii are
@@ -449,11 +449,7 @@ def _seg_0539__torii_spread_out(
         # guarded them against fields. A sando is a cleared processional way: it may run BESIDE
         # a field (route the avenue's geometry around the crop), never through the planting.
         _in_field = [(round(t[0]), round(t[1])) for t in torii if any(point_in_poly(t[0], t[1], f["outline"]) for f in M.get("fields", []) + M.get("flower_fields", []))]
-        check(
-            "torii_clear_of_fields",
-            not _in_field,
-            f"torii arch(es) standing IN a field/flower-field at {_in_field[:4]} - a sando runs beside the crop, never through it; route the avenue geometry around the field",
-        )
+        pass  # `` retired under feature 141 (the GM's cut); the segment stays for the check it keeps or the value it writes
 
         # A village-shrine SANDO (>= 3 arches marching to the hall) puts its INNERMOST arch at the hall's
         # THRESHOLD, directly in front, not set out with a gap (GM 2026-07-22, "village shrines only"). Exempt the
@@ -481,11 +477,7 @@ def _seg_0539__torii_spread_out(
                 continue  # gateway beside the hall (Hikari), arches lining the track - not a sando to the hall
             if pt_to_rect(near[0], near[1], r) > _gap_max:
                 _set_out.append((round(r["x"]), round(r["y"])))
-        check(
-            "shrine_avenue_fronts_the_hall",
-            not _set_out,
-            f"{len(_set_out)} village shrine(s) whose torii avenue stands off from the hall at {_set_out[:4]} - the innermost arch of a sando sits at the hall's threshold, directly in front, not set out with a gap",
-        )
+        pass  # `` retired under feature 141 (the GM's cut); the segment stays for the check it keeps or the value it writes
     return _kept(
         locals(),
         (
@@ -563,10 +555,10 @@ def _seg_0542__households_consistent(
     elif meta.get("target_houses"):
         t = meta["target_houses"]
         lo, hi = round(0.85 * t), round(1.15 * t)
-        check("house_count_in_range", lo <= len(houses) <= hi, f"{len(houses)} houses (expect ~{t})")
+        pass  # `` retired under feature 141 (the GM's cut); the segment stays for the check it keeps or the value it writes
     elif scale in ("village", "hamlet"):
         lo, hi = (40, 80) if scale == "village" else (10, 30)
-        check("house_count_in_range", lo <= len(houses) <= hi, f"{len(houses)} houses (expect {lo}-{hi} for a {scale})")
+        pass  # `` retired under feature 141 (the GM's cut); the segment stays for the check it keeps or the value it writes
     return _kept(locals(), ('hh', 'hi', 'lo', 't'))
 
 

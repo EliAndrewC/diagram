@@ -97,3 +97,10 @@ placers' guarantees (captions, the board, the bridges, the belt's count, the lon
 that ride in a kept segment; and 84 cut-class checks are STILL EVALUATED because they ride in the 36
 writer segments and 7 mixed segments (they pass vacuously on a hamlet - a manor no hamlet has). Splitting
 those is the hand edit (5) named before, now 84 check calls across 43 segments; the ledger names each.
+
+**The (5) edit, done (2026-08-28, the same day):** every `check("<cut name>", ...)` call inside a kept segment was
+removed and a stub left in its place - 85 calls across 25 files; the 9 that remain are the ones whose name is built
+at run time (`f"{scale}_has_kosatsuba"`, the headman family) and the two stream anchors a writer segment carries.
+The reference hamlet now runs **136 checks** (232 at the feature's opening); the registry names 153, of which 126
+keep on the measured test, 17 are best-effort placers' guarantees, 10 are the run-time-named residue. The
+frozen check-name roster is regenerated from the live registry; the corpus stands at what those checks can fire.

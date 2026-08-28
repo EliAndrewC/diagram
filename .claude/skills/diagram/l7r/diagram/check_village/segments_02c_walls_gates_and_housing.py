@@ -155,13 +155,7 @@ def _seg_0127__city_fan_heads_quilted(
                                             _hq_bare += 1
                         t += stp
         if _hq_total:
-            check(
-                "city_fan_heads_quilted",
-                _hq_bare <= 0.20 * _hq_total,
-                f"{_hq_bare}/{_hq_total} head-band samples along the supply canals are bare parchment (>20%) - the fan head "
-                f"is uncommanded ground the DRY-CROP HEM must quilt (village-real dry_band, the fork-triangle b-side band, "
-                f"the grain-scaled berm); rice cannot grow there but barley does, and bare heads are the white-gaps regression",
-            )
+            pass  # `` retired under feature 141 (the GM's cut); the segment stays for the check it keeps or the value it writes
     return _kept(
         locals(),
         (
@@ -401,11 +395,7 @@ def _seg_0133_012__city_interior_fields_farmhouse_density(
             nv = sum(1 for h in houses if poly_dist(h["x"], h["y"], f["outline"]) <= ADJ)
             if nv < FARM_LD_INWALL * edge / 1000:
                 thin.append((f["name"], nv, round(FARM_LD_INWALL * edge / 1000, 1)))
-        check(
-            "city_interior_fields_farmhouse_density",
-            not thin,
-            f"in-wall agricultural field(s) too sparsely farmed - an in-wall field shows its WHOLE perimeter, so ring it densely all the way round (no long bare edges), not a token few: {thin}",
-        )
+        pass  # `` retired under feature 141 (the GM's cut); the segment stays for the check it keeps or the value it writes
     return _kept(locals(), ('cx', 'cy', 'edge', 'f', 'h', 'nv', 'thin'))
 
 

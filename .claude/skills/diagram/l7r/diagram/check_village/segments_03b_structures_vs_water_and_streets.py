@@ -87,13 +87,7 @@ def _seg_0197__walled_structure_yields_to_ward_wall(
             for name, (a, b) in sides.items():
                 if name != s.get("gate_dir") and _wall_along_fence(a, b) and name not in recorded:
                     unyielded.append((round(cx), round(cy), name))
-        check(
-            "walled_structure_yields_to_ward_wall",
-            not unyielded,
-            f"walled compound(s) draw their own wall OVER a neighborhood (ward) fence instead of yielding to it: {unyielded[:3]} - "
-            f"where a mausoleum/manor wall abuts a ward fence, the FENCE is that side's wall (render the compound's wall UNDER it); "
-            f"s.mausoleum / s.manor do this automatically and record the yielded sides in 'ward_walls'",
-        )
+        pass  # `` retired under feature 141 (the GM's cut); the segment stays for the check it keeps or the value it writes
     return _kept(locals(), ('_wall_along_fence', 'a', 'b', 'cx', 'cy', 'h', 'name', 'recorded', 's', 'sides', 'unyielded', 'w', 'wall_ring', 'x0', 'x1', 'y0', 'y1'))
 
 

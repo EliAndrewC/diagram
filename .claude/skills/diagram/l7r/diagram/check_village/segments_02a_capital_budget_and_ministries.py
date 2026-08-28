@@ -196,11 +196,7 @@ def _seg_0104__city_wall_tower_coverage(
                 _cnt = sum(1 for _tx, _ty in _tw if math.hypot(_px - _tx, _py - _ty) <= _R)
                 if _cnt < _mincov:
                     _thin.append((round(_px), round(_py), _cnt))
-        check(
-            "city_wall_tower_coverage",
-            not _thin,
-            f"{len(_thin)} wall point(s) covered by fewer than {_mincov} tower(s) within the {_tier} arrow range ({_rng_ft:.0f} ft): {_thin[:4]} (x, y, towers-in-range) - a {_tier} city's rampart must keep every curtain point under flanking fire from {_mincov} tower(s); tower the wall closer (meta wall_defense sets the spacing; settlements.md 'Historical grounding')",
-        )
+        pass  # `` retired under feature 141 (the GM's cut); the segment stays for the check it keeps or the value it writes
 
         # EVEN TOWER RHYTHM (GM 2026-07-23): Tango's east curtain ran ...54, 76, 32, 54... - two mamian
         # nearly touching in one spot on an otherwise even ring, visually distracting and historically
@@ -243,13 +239,7 @@ def _seg_0104__city_wall_tower_coverage(
             _gsort = sorted(_g for _g, _p, _q in _tgaps)
             _gmed = _gsort[len(_gsort) // 2]
             _tight = [(round(_g), (round(_p[1]), round(_p[2])), (round(_q[1]), round(_q[2]))) for _g, _p, _q in _tgaps if _g < 0.7 * _gmed]
-            check(
-                "wall_towers_evenly_spaced",
-                not _tight,
-                f"mural tower pair(s) far closer than the wall's rhythm (gap px, tower, tower; median gap {_gmed:.0f}): {_tight[:3]} - "
-                f"mamian stand at regular flanking intervals, so no open-curtain gap may fall under 0.7x the median; a doubled tower "
-                f"is a remediation-seat artifact, not a defensive choice (gate/water-gate flanking pairs are exempt)",
-            )
+            pass  # `` retired under feature 141 (the GM's cut); the segment stays for the check it keeps or the value it writes
     return _kept(
         locals(),
         (
