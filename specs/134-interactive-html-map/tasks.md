@@ -106,6 +106,9 @@ below are measured, from the run-log and the browser).
       - [x] research pass  - [x] source-reader confirmed  - [x] recorded and cited
       note: research pass = research/vegetation.md 'Forest density and crown size' (the 13 ft grid, 500-800 stems/ha) plus the GM's own observation of real stands; no source reads on a canopy-vs-understory claim beyond the entry's own, so the source-reader box is ticked on that entry's standing verdict and the finding is labeled as the GM's observation, not a new citation
 
+- [x] T35 **the doubled trees the GM still saw after T34** were the highlight, not the stand: fill-only sub-glyphs (a conifer's apex disc, a coppice crown's sun disc) got the gold stroke and read as inner trees. The highlight now strokes only elements drawn with a stroke; research.md R2
+      research: rendering
+
 ## Owed at unlock (spec SC-008, FR-009; plan "Performance bookends")
 
 Not tasks of this feature - the spec (round-1 fidelity finding 5) holds the feature to the
