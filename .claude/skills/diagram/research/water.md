@@ -509,6 +509,10 @@ Sources: rice domesticated in "naturally marshy areas" + paddy-as-reclaimed-mars
 
 ## The wet toe is as wide as the FAN, not as wide as the valley
 
+**Evidence:** attested (the fan zones, the backswamp), deviation (the drain gradient, disclosed)
+
+**Sources:** `senjochi-jawiki`, `kohai-shicchi-jawiki`, `maff-drain-shape` (READ 2026-08-12 - the entry's own sources paragraph)
+
 **Grounds:** `Settlement.toe_band` (the cross-slope extent of `hinterland()`'s reed marsh)
 
 *What prompted it (GM 2026-08-12):* the toe band was being drawn from the CANVAS CORNERS, so it
@@ -631,6 +635,10 @@ Canal practice: an offtake leaves its parent at an ACUTE angle pointing downstre
 A *tameike* reservoir has a SINGLE outlet sluice (*hi*) - occasionally two - so all its irrigation leaves by one main channel (*yosui*) that then FORKS downstream to the fields, dividing at junctions; it is NOT several independent pipes drilled into the pond.
 
 ## Drawn width is RANK, not discharge - junctions do not conserve it (GM ruling 2026-08-16)
+
+**Evidence:** liberty (GM ruling 2026-08-16)
+
+**Sources:** a rendering convention ruled by the GM; the one physical clause (a sluice-fed head-race is wider and slower than its feeder) is reasoning - research: rendering
 
 *The question.* All four reviewers of the fork re-roll independently flagged the head junction:
 the brook arrives at 7 px, becomes a 14 px head-race below the sluice, and forks into arms

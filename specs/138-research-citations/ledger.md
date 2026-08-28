@@ -123,15 +123,15 @@
 
 | # | entry | evidence class | found as | status |
 |---|---|---|---|---|
-| 1 | Homestead groves (yashikirin) - the real scale and prevalence | attested | not recorded | open |
-| 2 | The threshing yard's sun, and how far a farmhouse shades | - | no sources line | open |
-| 3 | The garden's sun, and how far the windbreak shades (researched 2026-08-25, feature 133 T10) | - | no sources line | open |
-| 4 | May a byre stand beside a wellhead? (researched 2026-08-18) | - | no sources line | open |
-| 5 | How does a village lane bend? (researched 2026-08-27, feature 133 T32) | - | no sources line | open |
-| 6 | How close does a farmhouse stand to the paddy? Up against it - but never on the bund (researched 2026-08-27, feature 133 T41) | - | no sources line | open |
-| 7 | What stood on a farmstead - the inventory, with numbers (researched 2026-08-27, feature 133 T52) | - | no sources line | open |
-| 8 | Does a DISPERSED hamlet's outlying farm have its own well? Yes - and the question was never the GM's | - | no sources line | open |
-| 9 | The farmstead's fixtures - privy, woodpile, manure heap, bath, coop, household shrine, persimmon (researched 2026-08-27, feature 133 T53-T59) | - | no sources line | open |
+| 1 | Homestead groves (yashikirin) - the real scale and prevalence | attested | not recorded | open - leftover (1987 Kashima survey pointer) |
+| 2 | The threshing yard's sun, and how far a farmhouse shades | - | no sources line | re-sourced (derived); roof pitch leftover |
+| 3 | The garden's sun, and how far the windbreak shades (researched 2026-08-25, feature 133 T10) | - | no sources line | re-sourced (derived) |
+| 4 | May a byre stand beside a wellhead? (researched 2026-08-18) | - | no sources line | open - leftover (曲家 pages) |
+| 5 | How does a village lane bend? (researched 2026-08-27, feature 133 T32) | - | no sources line | re-sourced (inline keys) |
+| 6 | How close does a farmhouse stand to the paddy? Up against it - but never on the bund (researched 2026-08-27, feature 133 T41) | - | no sources line | re-sourced (inline keys) |
+| 7 | What stood on a farmstead - the inventory, with numbers (researched 2026-08-27, feature 133 T52) | - | no sources line | re-sourced (sugiura) |
+| 8 | Does a DISPERSED hamlet's outlying farm have its own well? Yes - and the question was never the GM's | - | no sources line | re-sourced |
+| 9 | The farmstead's fixtures - privy, woodpile, manure heap, bath, coop, household shrine, persimmon (researched 2026-08-27, feature 133 T53-T59) | - | no sources line | re-sourced (15 existing keys) |
 
 ### `religion-and-death.md` (5)
 
@@ -179,12 +179,12 @@
 |---|---|---|---|---|
 | 1 | Forest density and crown size | reconstruction | not recorded | no-source (403s) - SUMMARY-ONLY abstracts |
 | 2 | The crop margin - scrub stands 6 ft off every field edge | reconstruction (web research 2026-08-15; searched paddy-levee structure/width and traditional field-margin management) | not recorded | re-sourced (bund); Biwa mowing leftover |
-| 3 | Scrub stays off open water - including the comb laterals' drawn width | defect fix (GM 2026-08-16, Inashiro), not new research | no sources line | open |
-| 4 | The cut bank - scrub stands 6 ft off every irrigation channel's drawn edge | GM decision (2026-08-16, Inashiro second pass), extending the crop-margin reconstruction above; no new sources consulted | no sources line | open |
-| 5 | The marsh margin: reed -> sedge/grass -> dry ground; woody at a reed edge is alder or willow, never pine - ACCURATE (researched 2026-08-26) | - | no sources line | open |
-| 6 | Does scrub stand under a village wood? No - the floor was worked clear; grass fringes the edge (researched 2026-08-27, feature 133 T34) | - | no sources line | open |
-| 7 | How is a coppice lot bounded? By ridge, stream and path - never by a page axis (researched 2026-08-18, revisited 2026-08-27, feature 133 T36) | - | no sources line | open |
-| 8 | Bamboo: how common, where it stood, and how to show it (researched 2026-08-27, feature 133 T42 - a question, not yet a rule) | - | no sources line | open |
+| 3 | Scrub stays off open water - including the comb laterals' drawn width | defect fix (GM 2026-08-16, Inashiro), not new research | no sources line | n/a - rendering |
+| 4 | The cut bank - scrub stands 6 ft off every irrigation channel's drawn edge | GM decision (2026-08-16, Inashiro second pass), extending the crop-margin reconstruction above; no new sources consulted | no sources line | re-sourced (reasoning, labeled) |
+| 5 | The marsh margin: reed -> sedge/grass -> dry ground; woody at a reed edge is alder or willow, never pine - ACCURATE (researched 2026-08-26) | - | no sources line | re-sourced (7 keys) |
+| 6 | Does scrub stand under a village wood? No - the floor was worked clear; grass fringes the edge (researched 2026-08-27, feature 133 T34) | - | no sources line | re-sourced |
+| 7 | How is a coppice lot bounded? By ridge, stream and path - never by a page axis (researched 2026-08-18, revisited 2026-08-27, feature 133 T36) | - | no sources line | re-sourced |
+| 8 | Bamboo: how common, where it stood, and how to show it (researched 2026-08-27, feature 133 T42 - a question, not yet a rule) | - | no sources line | re-sourced |
 
 ### `water.md` (9)
 
@@ -193,12 +193,12 @@
 | 1 | A fed closed moat must drain - the physics and the precedent | attested, corroborated | not recorded | re-sourced |
 | 2 | The diverted-stream moat is a historical type | attested, corroborated | not recorded | re-sourced (Edo); Forbidden City SUMMARY-ONLY |
 | 3 | One name per river - and why that is anti-historical | attested, corroborated, liberty | not recorded | re-sourced |
-| 4 | The wet toe is as wide as the FAN, not as wide as the valley | - | no sources line | open |
+| 4 | The wet toe is as wide as the FAN, not as wide as the valley | - | no sources line | re-sourced |
 | 5 | No toe marsh at town/city scale - the drainage-investment gradient | attested, corroborated | not recorded | re-sourced |
 | 6 | Defensive marshland - the engineered wet belt | attested, corroborated | not recorded | re-sourced (Japan); Song belt leftover |
 | 7 | Canal junction angles - an offtake leaves pointing downstream | attested | not recorded | re-sourced (SUMMARY-ONLY) |
 | 8 | Irrigation topology - one pond outlet that branches | attested | not recorded | re-sourced |
-| 9 | Drawn width is RANK, not discharge - junctions do not conserve it (GM ruling 2026-08-16) | - | no sources line | open |
+| 9 | Drawn width is RANK, not discharge - junctions do not conserve it (GM ruling 2026-08-16) | - | no sources line | n/a - rendering (GM ruling) |
 
 ## B. Standalone research documents under the skill root
 
@@ -263,6 +263,7 @@ Worked with the batch that owns each entry; struck from `SOURCES.md` when done (
 
 ## F2. Batch leftovers - claims searched and not read this pass (one follow-up reader at the end)
 
+- homesteads: the 1987 Kashima kainyo survey pointer (ja.wikipedia 屋敷林); the kayabuki roof pitch and ridge height; the magariya umaya / doma well (ja.wikipedia 曲家, 民家).
 - fields/religion/vegetation/water: the in-field feature matrix (feng-shui graves, terrace outcrops); azolla-cyanobacteria and renge (open source); tameike m3/ha (Aomori PDF), 1.3 koku/tan, plot sizes, Tedori straightening; the Takeuchi catena paper; 90,000 Edo temples, Shaolin/Daxiangguo; torii distances (Kasuga, Meiji Jingu, the 400 m run); Adashino/Rendaino/大坂七墓; forest stems/ha and crown width (open source); Lake Biwa levee mowing; Forbidden City moat flow; reed beds under iriai, fukada, Suzhou canals; the Song 塘泺 belt (fx361); the FAO offtake manual.
 - towns/cities/urban-features: the gate-to-yamen axis; guard-room and gate-tower bay estimates; lijin/chaoguan barriers; Chinese party-wall housing; fragmented gentry parcels; Xiangyang/Pingyao/Okayama/Shanghai moats; the wharf entry (雁木, 河岸, matou); the whole Trade-works shortlist; Kiln works; Kaifeng tower count, Kawagoe base, Dingbian/Xingcheng; merchant-over-shop and wealth spread; communal-well ratio; 町木戸 night closure; yamen offices on an avenue; Song iron output (replace Grokipedia); loess rainfall (replace Grokipedia).
 - buildings.md: Jōge jin'ya plan (230x88 ft; two shrines) - `daikanpanfu2.pdf`, k-yagumo excavation page; tedai origins and Qing clerk counts; rural jin'ya staff rowhouses; Hida staging and hired boats; genkan staged arrival; yamen predecessor veneration; tax shares 30-40% coin and soybean bales (NTA 214.htm); Chinese granary grain mix; Izumo 2x2 ken (primary), 67 tsubo house, 2-4 horse stable; jin'ya coverage 37-42% (上嶋 report); samurai kawaya beside the guest room; south garden / north service strip.

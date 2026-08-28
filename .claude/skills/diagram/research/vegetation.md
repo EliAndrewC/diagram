@@ -45,7 +45,9 @@ Every entry: what the research found, the decision it drove, and any deliberate 
 
 **Grounds:** `settlement._watercourse_segs`, `test_commons_keeps_scrub_off_drawn_channels`
 
-**Evidence:** defect fix (GM 2026-08-16, Inashiro), not new research
+**Evidence:** liberty (a drawing rule)
+
+**Sources:** not applicable - a rendering fix (the scatter's water skip reading the drawn width); nothing physical asserted (research: rendering)
 
 - The scatter's water skip ("vegetation never draws OVER open water") read `M['streams']` + `M['channels']` only - and on a comb-built map `M['channels']` holds the hairline TOPOLOGY connectors (w 2.5) while the drawn supply laterals live in `M['drawn_channels']`, up to ~14 ft wide on their own filleted post-clip polylines. Result: 27 grass tufts standing on Inashiro's head-race, plus tufts crowding its banks inside the drawn stroke. `_watercourse_segs` now feeds the skip every drawn course at its drawn (piece-tapered) width; base points keep the same 2 px pad as before, and the scatters query it through a pre-boxed grid (the grid prunes, it never decides).
 - *Deliberately NOT decided here* (as of this fix): a maintained-bank margin - tufts standing right up to the water's edge remained legal. DECIDED the same day, when the GM saw them: see "The cut bank" below. *(Worked example for the open-decision-sketch convention, diagram CLAUDE.md: this entry should also have carried the three lines the deciding session had to re-derive - land it at the commons scatter's `wat_b` grid in `settlement/land/cover.py` (it was `settlement/land.py` until feature 120 split the package); hold it by extending the drawn-channels margin test in `tests/settlement/test_homestead_parts.py`; exclude streams + marsh, whose natural banks keep vegetation to the water's edge.)*
@@ -54,7 +56,9 @@ Every entry: what the research found, the decision it drove, and any deliberate 
 
 **Grounds:** `settlement/homestead_parts.py` `_BANK_MARGIN_FT`, `test_commons_keeps_scrub_a_cut_bank_off_the_channels_but_not_the_streams`
 
-**Evidence:** GM decision (2026-08-16, Inashiro second pass), extending the crop-margin reconstruction above; no new sources consulted
+**Evidence:** reconstruction
+
+**Sources:** reasoning from the crop-margin entry (`pmc7538448-levee`: levees mown; bund upkeep) applied to the channel bank; no source states a bank margin in feet - the 6 ft is the crop margin's figure reused
 
 - *What prompted it.* After the drawn-width fix (previous section), tufts still seeded the 10-16 ft berm strips between the supply channels and the dry hem plots: the drawn-width skip (2 px pad) and the 6 ft crop margin each guarded their own edge and left a legal sliver mid-strip. The GM read the strips as scrub crowding the channels and resolved the open decision: the bank takes a margin too.
 - *The decision.* The `commons` scatter (all roles) stands its base points `_BANK_MARGIN_FT = 6.0` real feet off the drawn water edge of every IRRIGATION course - `M['channels']` and `M['drawn_channels']` at their drawn (piece-tapered) widths, converted at the map's `ftpx`. The reasoning is the crop margin's, applied to the bank: a supply channel's bank is maintained ground - walked for sluice operation and bund upkeep, its grass scythed for fodder on the same rotation as the field margins - so woody scrub never establishes within a swath of the water. 6 ft = one scythe swath, the same figure as `_CROP_MARGIN_FT`. Between them the crop margin and the bank margin close any berm strip up to ~12 ft of bare ground, which covers every hem berm the comb builds (Inashiro's run 3-9 ft).
@@ -62,6 +66,10 @@ Every entry: what the research found, the decision it drove, and any deliberate 
 
 
 ## The marsh margin: reed -> sedge/grass -> dry ground; woody at a reed edge is alder or willow, never pine - ACCURATE (researched 2026-08-26)
+
+**Evidence:** attested
+
+**Sources:** `packer-2017-phragmites`, `kushiro-mire-2014`, `otanoshike-2004`, `mlit-vegetation-classes`, `hotes-wetland-diversity`, `plos-2016-pine`, `gymnosperm-densiflora` (READ 2026-08-26 - the inline links); the managed-margin reasoning is marked unsourced in the entry
 
 **Label: accurate** for the rule as drawn (grass alone grades into the reeds; no pine or brush in
 the marsh); **the managed-margin reasoning below is unsourced and marked**. Researched 2026-08-26
@@ -103,6 +111,10 @@ were mown (ヨシ刈り, 茅場) and that mowing is what kept the margin open - 
 
 
 ## Does scrub stand under a village wood? No - the floor was worked clear; grass fringes the edge (researched 2026-08-27, feature 133 T34)
+
+**Evidence:** attested
+
+**Sources:** `satoyama-enwiki`, `geography-hub-satoyama`, `uehara-2009-agris`, `waldrand-dewiki`, `pmc7898781-fukugi` (READ); EUNIS E5.2 (404) and Forests 2025 Okinawa (403) SUMMARY-ONLY / not read
 
 The GM: *"Should scrubland overlap with forests? It seems like it shouldn't. Like, visually, it looks
 weird. but maybe what is being represented is more accurate than what I am imagining."* It was not
@@ -158,6 +170,10 @@ three-layer terms. Corrected 2026-08-27 under T44 and T45.
 
 ## How is a coppice lot bounded? By ridge, stream and path - never by a page axis (researched 2026-08-18, revisited 2026-08-27, feature 133 T36)
 
+**Evidence:** attested (iriai institutions), reconstruction (the boundary forms)
+
+**Sources:** `ijc-yamaguni`, `satoyama-enwiki`, `kichijoji-enwiki` (READ); the "bounded by ridge, stream and path" sentence is marked summary-only of unknown provenance in the entry; Totman *The Green Archipelago* and the Indiana DLC paper not read
+
 The GM: *"those coppice Patches. basically it looked like little squares ... I want to make sure that
 that is intentional and based on research rather than just happenstance because when we decided to
 draw patches of trees, we just kind of unthinkingly drew a square."* It was happenstance, twice over.
@@ -207,6 +223,10 @@ and path" (2026-08-18). Corrected 2026-08-27 under T44/T46.
 
 
 ## Bamboo: how common, where it stood, and how to show it (researched 2026-08-27, feature 133 T42 - a question, not yet a rule)
+
+**Evidence:** attested (presence and use), interpolated (how common at a hamlet)
+
+**Sources:** `satoyama-enwiki`, `phyllostachys-enwiki`, `pmc5723622-bamboo-range`, `bamboo-growers-hardiness`, `tsuijimatsu` (READ); the Shirakawa farmstead grove (Kids Web Japan, 403) SUMMARY-ONLY
 
 The GM: *"is there supposed to be bamboo on the reference hamlet? Why or why not? how common was it
 for there to be bamboo in settlements such as this?"* - and the rendering problem behind it: a culm

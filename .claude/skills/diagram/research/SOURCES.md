@@ -1198,3 +1198,177 @@ Diversion-angle hydraulics (SUMMARY-ONLY 2026-08-28: search syntheses of several
 FAO, *Water for animals* ch. 6 surface reservoirs (https://www.fao.org/4/r7488e/r7488e06.htm; READ 2026-08-28)
 
 *Used for:* evaporation (up to 2 m/yr) and seepage as the losses of a standing reservoir; the page states the losses in prose, not as the balance equation
+
+### `desire-path-enwiki`
+
+en.wikipedia Desire path (READ 2026-08-27, feature 133 T32; cites Hampton and Cole 1988 for the fifteen-passage figure)
+
+*Used for:* "as few as 15 passages over a site can be enough to create a distinct trail"; a desire path "usually represents the shortest or the most easily navigated route", sidestepping slopes and obstacles
+
+### `ninety-nine-pi-desire`
+
+99% Invisible on desire paths (READ 2026-08-27, T32)
+
+*Used for:* corroborating the desire-line reading
+
+### `ma-2024-desire-paths`
+
+Ma, Brandt, Seipel and Ma (2024), *Environment and Planning B* - agent-based desire paths (SUMMARY-ONLY: paywalled/403; abstract READ via ideas.repec.org, T45, and found to be about a field-of-view angle, NOT turn minimization)
+
+*Used for:* nothing load-bearing - recorded as the case where a search summary recast a parameter as a finding
+
+### `pmc7538448-levee`
+
+"Earthworm species and density in semi-natural grasslands on rice paddy levees in Japanese satoyama", PMC 7538448 (READ 2026-08-27, T41)
+
+*Used for:* levees "constructed and maintained to retain water in the paddies and to allow the passage of people and transportation of tools"; "farmers generally maintain levee grasslands by periodic mowing"
+
+### `paddy-field-enwiki`
+
+en.wikipedia Paddy field (READ 2026-08-27, T41)
+
+*Used for:* plots "separated by bunds approximately 10 cm in height" (a Korean example)
+
+### `irri-bund-summary`
+
+IRRI Rice Knowledge Bank on bund height (SUMMARY-ONLY 2026-08-27, T45 - unreachable; the "15-150 cm" range seen nowhere)
+
+*Used for:* bunds built ~20 cm to avoid overflow - summary only
+
+### `visit-toyama-sankyoson`
+
+Visit Toyama, the Tonami dispersed settlement (https://visit-toyama-japan.com/en/travel-inspiration/sankyoson; READ 2026-08-24)
+
+*Used for:* farmers building "in the middle of their cultivated rice fields so that they could easily manage the water for their own rice fields"; ~7,000 farmsteads over ~220 km2 with their kainyo groves
+
+### `mdpi-sho-fan-groundwater`
+
+Sho River alluvial-fan groundwater study, *Geosciences* 11(8):352 (https://www.mdpi.com/2076-3263/11/8/352; READ 2026-08-24)
+
+*Used for:* shallow groundwater on the fan as a mix of river water and paddy recharge - a well anywhere on the fan finds water
+
+### `geography-hub-satoyama`
+
+The Geography Hub, "Japan's Satoyama Landscapes" (READ 2026-08-27, T34)
+
+*Used for:* leaf litter to fertilizer, oak and chestnut cut cyclically, sunlight reaching the floor
+
+### `uehara-2009-agris`
+
+Uehara et al. 2009, on Rhododendron in the abandoned satoyama coppice forest (AGRIS record; READ 2026-08-27, T34)
+
+*Used for:* a managed coppice floor under a cut canopy
+
+### `waldrand-dewiki`
+
+de.wikipedia Waldrand (READ 2026-08-27, T45 - found when the English "Woodland edge" page did not carry the terms)
+
+*Used for:* the three-layer edge: herb fringe, shrub belt, forest mantle
+
+### `pmc7898781-fukugi`
+
+"Distribution and utilization of homestead windbreak Fukugi trees", PMC 7898781 (READ 2026-08-27, T45)
+
+*Used for:* Okinawan homestead windbreaks planted around 300 years ago
+
+### `ijc-yamaguni`
+
+International Journal of the Commons, "External impacts on traditional commons ..." - the Yamaguni district study (READ 2026-08-27, T36)
+
+*Used for:* "each of the 11 villages in Yamaguni district has its own unique institutions for managing its customary common property forests"; no boundary description
+
+### `kichijoji-enwiki`
+
+en.wikipedia Kichijōji (READ 2026-08-27, T36)
+
+*Used for:* a village laid out on strip lots from a road - dropped from the coppice argument
+
+### `phyllostachys-enwiki`
+
+en.wikipedia Phyllostachys bambusoides (READ 2026-08-27, T42)
+
+*Used for:* madake's uses - baskets, fans, sheaths for food and geta, shakuhachi
+
+### `pmc5723622-bamboo-range`
+
+The moso/madake range study, PMC 5723622 (READ 2026-08-27, T42)
+
+*Used for:* bamboo's distribution and cold tolerance (around -18 to -20 C)
+
+### `bamboo-growers-hardiness`
+
+Grower pages on madake hardiness - completebamboo.com and two others (READ 2026-08-27, T45)
+
+*Used for:* "-15 C, zone 7" and -18 to -23 C - a spread, not a number
+
+### `tsuijimatsu`
+
+tsuijimatsu.com (READ 2026-08-27, T42)
+
+*Used for:* bamboo in the homestead setting
+
+### `packer-2017-phragmites`
+
+Packer et al. 2017, Biological Flora of *Phragmites australis*, J. Ecology (https://besjournals.onlinelibrary.wiley.com/doi/full/10.1111/1365-2745.12797; READ 2026-08-26)
+
+*Used for:* the hydrosere - open water, littoral, reed swamp, sedge meadow, swamp woodland, dry ground
+
+### `kushiro-mire-2014`
+
+Kushiro Mire alder invasion, *Ecohydrology & Hydrobiology* 2014 (https://www.sciencedirect.com/science/article/abs/pii/S1642359314000706; READ 2026-08-26 - abstract)
+
+*Used for:* reed marsh invaded by alder where it dries
+
+### `otanoshike-2004`
+
+Otanoshike wetland, *Ecological Research* 2004 (https://link.springer.com/article/10.1111/j.1440-1703.2004.00644.x; READ 2026-08-26 - abstract)
+
+*Used for:* grassland with *Spiraea* shrubs at the marsh margin
+
+### `mlit-vegetation-classes`
+
+MLIT/NILIM river-environment vegetation classes (https://www.nilim.go.jp/lab/fbg/ksnkankyo/mizukokuweb/system/maegaki.files/shiryo2.pdf; READ 2026-08-26)
+
+*Used for:* the willow (タチヤナギ) and alder (ハンノキ) communities of Japanese wet margins
+
+### `hotes-wetland-diversity`
+
+Hotes, wetland ecosystem diversity, *Global Environmental Research* 12(1) (https://www.airies.or.jp/attach.php/6a6f75726e616c5f31322d316a706e/save/0/0/12_1-04.pdf; READ 2026-08-26)
+
+*Used for:* Japanese wetland zonation
+
+### `plos-2016-pine`
+
+PLOS One 2016 (https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0153972; READ 2026-08-26)
+
+*Used for:* pine's intolerance of waterlogged ground
+
+### `gymnosperm-densiflora`
+
+The Gymnosperm Database, *Pinus densiflora* (https://www.conifers.org/pi/Pinus_densiflora.php; READ 2026-08-26) with the Mt. Takao museum page
+
+*Used for:* red pine as a tree of dry, well-drained slopes - never a reed edge
+
+### `maff-drain-shape`
+
+MAFF, 排水路の形状・構造と適用条件 (技術書 20-23; https://www.maff.go.jp/j/nousin/noukan/tyotei/kizyun/pdf/04_hojou_hata_gijutsusho20-23.pdf; READ 2026-08-12)
+
+*Used for:* drain gradients and sections
+
+### `senjochi-jawiki`
+
+ja.wikipedia 扇状地, with MLIT land-classification notes (READ 2026-08-12)
+
+*Used for:* the three fan zones 扇頂 / 扇央 / 扇端 and the 扇端 spring line where the wet toe begins
+
+### `kohai-shicchi-jawiki`
+
+ja.wikipedia 後背湿地 and 自然堤防 (with GSI notes; READ 2026-08-12)
+
+*Used for:* backswamp formation behind the natural levee and its land use
+
+### `kashima-kainyo-1987`
+
+The 1987 survey of Kashima, Tonami plain (kainyo homestead groves) - SUMMARY-ONLY: the pointer was not recorded at the 2026-07 pass and is to be re-found (ja.wikipedia 屋敷林 / カイニョ cite the survey literature)
+
+*Used for:* the real scale of a homestead grove stand

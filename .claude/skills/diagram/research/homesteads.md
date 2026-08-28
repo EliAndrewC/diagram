@@ -14,9 +14,13 @@ Every entry: what the research found, the decision it drove, and any deliberate 
 
 **Evidence:** attested
 
-**Sources:** not recorded - the finding is in the prose below; add a key to `SOURCES.md` when it is re-consulted
+**Sources:** `kashima-kainyo-1987` (SUMMARY-ONLY - the 1987 Kashima survey is named in the prose; its pointer was never recorded); ja.wikipedia 屋敷林 is the page to re-read - leftover
 
 ## The threshing yard's sun, and how far a farmhouse shades
+
+**Evidence:** reconstruction (derived from geometry)
+
+**Sources:** derived - solar geometry at 38N for the 10th month, and the minka's 46 x 28 ft footprint; the thatched-roof pitch (45 degrees or steeper) and the 6-7 m ridge of surviving farmhouses were not cited when written - leftover (ja.wikipedia 茅葺 / 民家)
 
 **Grounds:** the sun-corridor keep-out in the nucleated bundle placer; `yards_unshaded_by_neighbors`
 
@@ -69,6 +73,10 @@ minka ridge heights cross-checked against surviving farmhouses.
 - *Historical scale - the real numbers (research grounding, for calibrating the glyph).* A homestead grove is a substantial STAND, not a few trees. The best hard data is a 1987 survey of Kashima in the Tonami plain (the classic *kainyo* dispersed-farmstead country, 46 households): **~33 trees of trunk diameter >= 10 cm per homestead**, of which cedar (*sugi*) was ~48% (**~16 cedars per house**), the rest spread over ~83 other species; **~6 species per homestead** (range 1-14); a large/notable homestead ran **200+ trees across 31 species**. That count is trunks >= 10 cm ONLY - it EXCLUDES the bamboo stand (hundreds of culms), saplings, and the trimmed hedge layer - so the honest figure for a typical grove is **~30-40 mature trees + a bamboo grove + understory**, and a big one **100-200+**. The grove canopy footprint is therefore the LARGEST homestead appurtenance - **bigger than the farmhouse**, and far bigger than the garden or threshing yard - wrapping the N/W as a belt several trees deep. The map need not draw every tree (houses/yards are already oversized symbols), but per Principle "relative sizes roughly honest" the grove glyph must read at the RIGHT relative scale: clearly the dominant homestead feature, a dense stand suggesting dozens of trees - not a garden-sized clump of 5-10. *(Cross-check on the windward rule: Okinawa's homestead groves sit on the E/N sides, because the islands' damaging wind is the typhoon/NE monsoon, not the mainland NW - same logic, different geography, which is exactly why `windward` is a per-map knob.)*
 
 ## The garden's sun, and how far the windbreak shades (researched 2026-08-25, feature 133 T10)
+
+**Evidence:** reconstruction (derived), attested (the belt's side - SUMMARY-ONLY)
+
+**Sources:** derived from the threshing-yard entry above; the bamboo-strip aspect is SUMMARY-ONLY (flagged under T48; ja.wikipedia 屋敷林 puts Tonami's bamboo on the south) - see the entry's own flag
 
 **Grounds:** the garden half of the sun corridor (`_sun_corridor_ok` / `_gardens_sun_ok`,
 `gardens_unshaded_by_neighbors`); the belt's afternoon lane (`west_sun_lane`, `WEST_SUN_FT`,
@@ -158,6 +166,10 @@ homestead; Izumo tsuijimatsu (Kanto Gakuin column); ISA Arboriculture & Urban Fo
 fukugi; solar elevations computed for 38N.
 
 ## May a byre stand beside a wellhead? (researched 2026-08-18)
+
+**Evidence:** attested
+
+**Sources:** the magariya umaya on the south face and the well inside the doma (2026-08-18) - pointers not recorded at the time; ja.wikipedia 曲家 / 南部曲り家 and 民家 are the pages to re-read - leftover
 
 **Answer: yes, and the vernacular puts them far closer than our maps do. No GM ruling wanted.**
 
@@ -266,6 +278,10 @@ finding - see `_TOUCH_GAP`).
 
 ## How does a village lane bend? (researched 2026-08-27, feature 133 T32)
 
+**Evidence:** attested (desire lines), reconstruction (the thresholds)
+
+**Sources:** `desire-path-enwiki`, `ninety-nine-pi-desire` (READ); `ma-2024-desire-paths` (SUMMARY-ONLY, supports nothing here - see the entry)
+
 **Answer: like a line feet wear - as few turns as the plots allow, none of them sharp, and never
 back on itself. Decisive on the principle; the thresholds are drawing conventions.**
 
@@ -322,6 +338,10 @@ agents' angle of VISION, not turning - the turn-minimization sentence is not fro
 
 ## How close does a farmhouse stand to the paddy? Up against it - but never on the bund (researched 2026-08-27, feature 133 T41)
 
+**Evidence:** attested (the levee's role), interpolated (the 6 ft floor)
+
+**Sources:** `pmc7538448-levee`, `paddy-field-enwiki` (READ); `irri-bund-summary` (SUMMARY-ONLY); the eave-gap figure carried over from `FARMHOUSE_EAVE_GAP_FT`, unsourced
+
 The GM: *"One of the farmhouses in the reference hamlet appears to actually be touching the edge of
 the rice paddy fields. Is this realistic? ... I do imagine that they would be pretty much right up
 against the edge, but actually touching looks wrong to me."* Measured first: one house's corner
@@ -372,6 +392,10 @@ ResearchGate "Scheme of bund, terrace, and field dimensions" (the 15-150 cm widt
 unread pages as if read.
 
 ## What stood on a farmstead - the inventory, with numbers (researched 2026-08-27, feature 133 T52)
+
+**Evidence:** attested
+
+**Sources:** `sugiura-1973-fuzoku` (READ, all eight pages) - the one quantified source; the 37-fetch reader pass is folded into the fixtures entry below
 
 The GM: *"What things would exist on a noticeable percentage of farmhouses that we are not currently
 representing on our maps ... What, if anything, are we missing?"* A `source-reader` pass (37 fetches)
@@ -509,6 +533,10 @@ and Evolution of Traditional Villages in the Mountainous Area of Southwest Zheji
 
 ## Does a DISPERSED hamlet's outlying farm have its own well? Yes - and the question was never the GM's
 
+**Evidence:** attested
+
+**Sources:** `visit-toyama-sankyoson`, `mdpi-sho-fan-groundwater` (READ 2026-08-24)
+
 **Asked** in `pool/hamlets/akagahara.notes.md` as *"a GM ruling that would generalize to every
 dispersed map"*, after three east-row farms measured 501 / 622 / 741 ft from a well while
 `farm_wells_within_reach` (the 500 ft doctrine) is gated to town/city scale so nothing enforced it.
@@ -542,6 +570,10 @@ Sources: [Visit Toyama on sanson dispersed settlement](https://visit-toyama-japa
 [Sho River alluvial fan groundwater study](https://www.mdpi.com/2076-3263/11/8/352).
 
 ## The farmstead's fixtures - privy, woodpile, manure heap, bath, coop, household shrine, persimmon (researched 2026-08-27, feature 133 T53-T59)
+
+**Evidence:** attested (existence and use), reconstruction (placement and size - GUESS where marked)
+
+**Sources:** `kotobank-benjo`, `sinyoken-madori`, `artic-pigsty-latrine`, `boso-no-mura-kigoya`, `jawiki-koedame`, `mizumaki-goemonburo`, `cambridge-animals-china`, `qimin-yaoshu-yangji`, `pitt-zhengzhou-coop`, `zhwiki-liuchu`, `tokushima-yashikigami`, `jawiki-yashikigami`, `kameyama-yashikigami`, `toyoko-kaki`, `uekipedia-kaki` (READ); `326woods-stack` and the japaaan / note.com sentences SUMMARY-ONLY; `sugiura-1973-fuzoku` for the rates
 
 The GM chose from the T52 inventory: *"privies are something that we want ... firewood stacks are
 actually large enough to render ... Same thing with manure heaps, same thing with baths, same thing
