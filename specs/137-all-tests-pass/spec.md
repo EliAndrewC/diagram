@@ -4,7 +4,7 @@
 
 **Created**: 2026-08-28
 
-**Status**: round 1 returned three changes (the opening message to the tests session unrecorded; completion narrower than 100%; GM acceptance as a completion condition unrequested) - applied; round 2 pending
+**Status**: APPROVED by `spec-fidelity` - round 2 verdict **FAITHFUL** (2026-08-28), after round 1 returned three changes (the opening message to the tests session unrecorded; completion narrower than 100%; GM acceptance as a completion condition unrequested).
 
 **Input**: [`gm-request.md`](gm-request.md), verbatim and unedited. That file is the authority for
 this specification.
@@ -74,7 +74,7 @@ belt-face lesson of 133 T91): each fix is measured on the full tripwire, the gat
 - **FR-000** (the request's first sentence): before any pull, message the "Diagram tests" session
   that this session is merging its changes into this clone and is taking on fixing the expected
   failures, and ask it to name a commit it considers safe (or expects to be safe); record the
-  message in `handoffs.md`. SENT 2026-08-28 04:0xZ (msg 7b11f701), before this spec was reviewed.
+  message in `handoffs.md`. SENT 2026-08-28 04:05Z (msg 7b11f701), before this spec was reviewed.
 - **FR-001**: Before any correctness work, pull main and then the efficiency session's clone up to
   the commit it names as safe; record it in `handoffs.md`.
 - **FR-002**: Each inventory row is a task with its own measurement (the failing check's message on
