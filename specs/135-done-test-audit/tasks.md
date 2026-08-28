@@ -56,7 +56,7 @@ the feature's own evidence.
 - [x] T53 coverage follows the diff at reference scope (`ci cov-scope`, `COV_SCOPE` in the Makefile; directories, not module names - the double-import lesson is on `delta.coverage_scope`); FULL traces everything
 - [x] T54 the cohort sweep keyed to FULL rather than EXHAUSTIVE (the gate is always EXHAUSTIVE; a first-pass slip that would have rolled four seeds at every unlocked gate)
 - [x] T55 declined, measured: `COVERAGE_CORE=sysmon` (slower), caching the ~20 settlement fixture tests (~1 s of wall), the duplicate-defs scan (a 1 s merge guard)
-- [x] T56 end to end after the second pass: locked `make done` 0m51.787s with nothing short-circuited (research R10)
+- [x] T56 end to end after the second pass: locked `make done` 0m17.333s with nothing short-circuited (research R10)
 
 ## Phase 9 - acceptance
 
