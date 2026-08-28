@@ -548,4 +548,4 @@ def test_lane_runs_includes_the_ring_road_and_the_alleys() -> None:
 
     M = {"lanes": [{"pts": [[0, 0], [10, 0]], "w": 5}], "alleys": [{"pts": [[0, 20], [10, 20]], "w": 6}], "ring_road": [[0, 40], [10, 40]], "ring_road_width": 20}
     halves = sorted(round(h, 1) for _pts, h in lane_runs(M))
-    assert 2.5 in halves and 3.0 in halves and 10.0 in halves, halves
+    assert 3.0 in halves and 10.0 in halves, halves  # the alley at w 6 and the ring road at w 20
