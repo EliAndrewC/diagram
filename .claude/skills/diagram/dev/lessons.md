@@ -217,3 +217,35 @@ it was built to test. Three known shapes (square mid-edge 0, square spanning a c
 half-lap 180) caught it in one run. **An instrument that cannot fail its own sanity case is not
 evidence, and a hypothesis confirmed by an untested instrument is worse than no result** - it ends the
 investigation.
+
+## 2026-08-27/28 (feature 133 T92): a gate that "hangs" is a serial roll ladder; and how the harness fights a long gate
+
+**The shape.** The first unlocked `make done` in two days sat 25 minutes with ONE xdist worker at
+100% and seven idle. Not a hang: `test_a_rolled_cohort_passes_the_whole_gate` rolled four seeds
+SERIALLY (a coverage reason that only matters under the coverage floors), each seed with the driver's
+re-roll ladder (up to five rolls of ~80 s when a farmhouse is stranded), while the rest of the suite
+finished. Per-test durations (`make durations MARK=rolls_map N=40`) named it in one run - 1,329 s
+against the next-slowest at 101 s. Reach for `durations` BEFORE bisecting seeds: the seed hunt
+(24 seeds at 90 s each) burned 20 minutes to learn only that rolls take 65-101 s.
+
+**What could not be measured.** `py-spy dump` cannot attach in this container - ptrace is refused
+even as root - so a hot worker's stack is not available; /proc gives nothing useful for Python.
+The measurement that works is the per-test duration table, or a per-seed roll with a wall clock.
+
+**How the harness fights a long gate (measured, three ways).** (1) A foreground Bash call is
+capped at 10 minutes whatever `timeout` is passed - the command is killed and its make with it,
+so nothing is stamped. (2) A background Bash task running `make done` was killed by the harness
+within seconds, twice (status "killed", no output), while the same session's 20-minute bisect and
+22-minute durations runs in background survived - the difference is not understood; do not rely on
+a background `make done` surviving. (3) What works: launch the gate fully detached -
+`setsid nohup bash -c '... make done > gate.log 2>&1; echo EXIT=$? >> gate.log' &` - and watch
+the log with a Monitor for the verdict lines. The run-log/verification stamp is written by make
+at the end, so a killed wrapper leaves NO record: an empty record after a "run" means the run
+never finished, not that it was green.
+
+**The fix that was in scope.** The GM's ruling (T92): the gate must TERMINATE; failures become
+expected failures for a separate session. So the cohort test rolls 4-wide at the gate (serial only
+under `L7R_COV_FLOORS=1`, which the Makefile now exports under COV_FLOORS) and judges against a
+pinned expected-failure set with `baseline_verdict`'s rule (outside the set = regression, clean
+pinned seed = stale pin).
+

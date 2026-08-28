@@ -12,6 +12,11 @@ Version 2.11.1 (amended 2026-08-27, feature 133 T44, the GM's clarification): a 
 search summary of a paper that cannot be read MAY be asserted and cited - labeled SUMMARY-ONLY;
 only citing a summary as if read is forbidden. PATCH.
 
+Version 2.13.0 (amended 2026-08-27, feature 135): the Development Workflow's "Quick runs the
+unit form" gains three consequences - three test trees and no roster (the directory decides when
+a test runs), a seed sweep is a different test and lives in `tests/full/`, and a rolled map nothing
+changed is served from the roll cache - quoting the GM's audit request. MINOR.
+
 Version 2.11.0 (amended 2026-08-27, feature 133 T44): Principle XII gains "READ WHAT YOU CITE" -
 a source is cited only after the session has read the text itself, never from a search summary
 or another page's paraphrase; an unfetchable source is not cited as read. MINOR.
@@ -1734,6 +1739,39 @@ The unit form must still prove the property; what it drops is size and
 repetition, never the assertion. And the gate is the place the full forms
 live, which is why nothing lands without it.
 
+**The directory decides when a test runs, and the gate rolls one representative
+map, not a sweep (GM 2026-08-27, feature 135).** The GM, on auditing the gate
+the way the quick suite had been audited: *"I suspect that we are doing things
+similar to what we were doing on those original quick tests, things like
+recomputing things that could be cached, thus wasting millions of operations
+on every test run, and running tests against many random seeds on the same
+map when, in fact, that is something either more suited to a EXAUSTIVE=1 Test
+run or better yet best farmed out to the AWS tests."* And: *"if we have one
+directory for our quick tests, one directory for our done tests, and one
+directory for our lengthy AWS tests ... the directory into which we added is
+the thing that inherently determines When and under what circumstance that
+test is run"*. So, refining the four consequences above:
+
+5. **Three trees, and no roster.** `tests/` is the quick suite, `tests/gate/`
+   the merge check's own tests, `tests/full/` the sweeps - the pool, every
+   seed of a cohort, a determinism test that must roll twice for real, a
+   fixture replayed only to carry coverage. The Makefile collects trees; a
+   deselect list is forbidden (the one that existed went stale within a day
+   and ran the FULL-only cohort ratchet at every unlocked gate).
+6. **The gate stays EXHAUSTIVE for what it collects** - the full comb, all
+   four cardinals, the whole corpus - but a SWEEP OF SEEDS is not an
+   exhaustive form of a test, it is a different test, and it lives in
+   `tests/full/`. At merge time one representative roll of each engine path
+   is enough; the sweep runs under `FULL=1` and on AWS.
+7. **A rolled map nothing changed is served, not re-rolled.** A test's roll
+   is keyed the way the pool cache keys a gen - the source of every function
+   the roll executed, every file it read, every module's top level - and a
+   matching key serves the plan and manifest the test asserts on. The
+   assertion always runs; only the production is skipped. Any doubt rolls;
+   the FULL run and `GATE_NO_CACHE=1` roll everything; a test that
+   monkeypatches the engine never uses the cache, because a patch changes
+   the roll without moving any hashed source.
+
 **A test's cost is a cost, and the phase sets the standard (GM 2026-08-26,
 feature 133 T19).** The GM: *"our project has gone through a phase in which
 for a long time, we had problems with the maps being wrong. And so we really
@@ -1826,4 +1864,4 @@ document wins; where this document is silent, defer to the project's
 guidance. This constitution is the higher-level authority; CLAUDE.md
 operationalizes it.
 
-**Version**: 2.9.0 | **Ratified**: 2026-05-27 | **Last Amended**: 2026-08-26
+**Version**: 2.13.0 | **Ratified**: 2026-05-27 | **Last Amended**: 2026-08-27

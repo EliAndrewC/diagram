@@ -30,8 +30,8 @@ from tests._scope import EXHAUSTIVE
 # gate tests as un-marked map-rollers. They roll nothing.
 #
 # So a dotted call must come off the generator module, and only the distinctive bare names count.
-ROLLING_ATTRS = frozenset({"build", "generate", "main", "roll_village", "cohort", "gate_obtain"})
-ROLLING_RECEIVERS = frozenset({"hg", "hamletgen", "driver"})
+ROLLING_ATTRS = frozenset({"build", "generate", "main", "roll_village", "cohort", "gate_obtain", "hamlet", "report", "keyed_to"})
+ROLLING_RECEIVERS = frozenset({"hg", "hamletgen", "driver", "rollcache"})  # rollcache.hamlet / .report roll on a miss (feature 135)
 ROLLING_BARE = frozenset({"roll_village", "cohort", "gate_obtain"})
 
 # ADDED AFTER PROFILING RATHER THAN BY GUESSING, and the two additions were the two most expensive
@@ -50,18 +50,55 @@ ROLLING_BARE = frozenset({"roll_village", "cohort", "gate_obtain"})
 TESTS = pathlib.Path(__file__).resolve().parent
 
 
+# A STUB IS NOT A ROLL (feature 135 T11, GM 2026-08-27). Seven CLI tests `monkeypatch.setattr(hg.driver, "cohort", ...)`
+# or `"generate"` and then call `hg.main` / `hg.cohort` - the call is real, the roll is not, and they measure in
+# milliseconds. Matching the call alone put them in the gate tree carrying `rolls_map`. So the walk first reads the
+# stubs: with `generate` stubbed nothing below it can roll; with `cohort` stubbed, `main`/`cohort` calls roll nothing
+# (`build`, `generate`, `roll_village`, `gate_obtain` still do). Both directions are pinned by the unit test below.
+_STUBBABLE = frozenset({"cohort", "generate"})
+_VIA_COHORT = frozenset({"main", "cohort"})
+
+
+def _stubbed(node: ast.AST) -> set[str]:
+    out: set[str] = set()
+    for sub in ast.walk(node):
+        if isinstance(sub, ast.Call) and isinstance(sub.func, ast.Attribute) and sub.func.attr == "setattr" and len(sub.args) >= 2:
+            tgt, name = sub.args[0], sub.args[1]
+            on_driver = (isinstance(tgt, ast.Attribute) and tgt.attr == "driver") or (isinstance(tgt, ast.Name) and tgt.id == "driver")
+            if on_driver and isinstance(name, ast.Constant) and name.value in _STUBBABLE:
+                out.add(str(name.value))
+    return out
+
+
 def _rolls_a_map(node: ast.AST) -> bool:
-    """Does this test actually CALL something that generates a settlement?"""
+    """Does this test actually CALL something that generates a settlement - and not a stub of it?"""
+    stubs = _stubbed(node)
+    if "generate" in stubs:
+        return False
     for sub in ast.walk(node):
         if not isinstance(sub, ast.Call):
             continue
         fn = sub.func
         if isinstance(fn, ast.Attribute) and fn.attr in ROLLING_ATTRS:
-            if isinstance(fn.value, ast.Name) and fn.value.id in ROLLING_RECEIVERS:
+            if isinstance(fn.value, ast.Name) and fn.value.id in ROLLING_RECEIVERS and not ("cohort" in stubs and fn.attr in _VIA_COHORT):
                 return True
-        elif isinstance(fn, ast.Name) and fn.id in ROLLING_BARE:
+        elif isinstance(fn, ast.Name) and fn.id in ROLLING_BARE and not ("cohort" in stubs and fn.id == "cohort"):
             return True
     return False
+
+
+def test_a_stubbed_generator_is_not_a_roll_and_a_real_one_is() -> None:
+    """The guard's two directions (feature 135 T11): the same call, stubbed and not."""
+
+    def fn(src: str) -> ast.AST:
+        return next(n for n in ast.walk(ast.parse(src)) if isinstance(n, ast.FunctionDef))
+
+    assert _rolls_a_map(fn("def test_x():\n    hg.main(['--batch', '1'])\n"))
+    assert _rolls_a_map(fn("def test_x():\n    hg.cohort(4, first_seed=41, jobs=1)\n"))
+    assert not _rolls_a_map(fn("def test_x(monkeypatch):\n    monkeypatch.setattr(hg.driver, 'cohort', lambda n, first_seed=1, jobs=None: [])\n    hg.main(['--batch', '1'])\n"))
+    assert not _rolls_a_map(fn("def test_x(monkeypatch):\n    monkeypatch.setattr(hg.driver, 'generate', fake)\n    hg.cohort(3, first_seed=5, jobs=1)\n"))
+    # a stubbed cohort does not excuse a direct build
+    assert _rolls_a_map(fn("def test_x(monkeypatch):\n    monkeypatch.setattr(hg.driver, 'cohort', lambda n: [])\n    hg.build(plan)\n"))
 
 
 def test_tiers_markers_name_only_real_tiers() -> None:

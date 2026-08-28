@@ -241,8 +241,16 @@ even collected by `make quick`:
 |---|---|---|
 | `tests/` (with its packages) | the unit forms, relevant to the lane tiers or to every tier | quick and the gate |
 | `tests/tier_town/`, `tests/tier_city/` | tests tagged for other tiers only (232 + 451 functions), mirrored package paths | the gate; quick once the scope lock moves to that tier |
-| `tests/gate/` | the bad-map corpus, the coverage carriers, the map-rolling tests | the gate only |
-| `tests/tooling/` | tests that RUN the make/ci/pipeline tooling (+ the whole ci package) | the gate; quick only when the tooling changed (`ci tooling-fresh`) |
+| `tests/gate/` | the bad-map corpus and the map-rolling tests that earn MERGE time - one representative spec each, served from the roll cache while nothing they execute changed | the gate only |
+| `tests/full/` (feature 135, 2026-08-27) | the pool sweep, the seed sweeps, the determinism tests, the coverage carriers, the real-map cache round trip | `make done FULL=1` and the AWS check only |
+| `tests/tooling/` | tests that RUN the make/ci/pipeline tooling (+ the whole ci package) | the gate and FULL; quick only when the tooling changed (`ci tooling-fresh`); skipped at the gate too while unchanged (never in FULL) |
+
+Feature 135 (GM 2026-08-27: *"the directory into which we added is the thing that inherently
+determines When and under what circumstance that test is run"*) added the third tree and deleted the
+Makefile's deselect LIST, which had gone stale within a day of T29 - it still named
+`tests/hamletgen/test_driver.py` after the cohort ratchet moved to `tests/gate/`, so the FULL-only
+"seeds 41-44 ratchet" ran in every unlocked gate. A tree cannot go stale that way. The audit ledger is
+`specs/135-done-test-audit/research.md`.
 
 Moved tests import their helpers from the source module; a fixture they take comes through the
 tree's `conftest.py` (a parameter name is a use pytest sees and ruff does not). The tier and
@@ -288,3 +296,20 @@ and gets a mechanism: **at close, the `given` stamp is already in the entry, so 
 latency (75%), 2.1 min tool execution, 31 tool calls in 17 turns, three regen cycles of ~2.5 min
 each (measure, look, fix), the two longest single gaps the 75 s and 90 s it took to compose the two
 large code edits.
+
+## The idle hours are free (feature 136, GM 2026-08-27)
+
+The motivating incident: the reference-hamlet period (feature 133) locked the scope to one map for
+two days, exactly as designed, and the tripwire seeds went unrolled the whole time. At the unlock
+four regressions surfaced at once and cost a 20-minute bisect across eight milestone commits to
+attribute - T10, T41 + T32, two new checks - where a look at those seeds on each night would have
+named each culprit while it was still the last commit. The GM: *"a test which is relatively
+expensive in terms of me having to wait for it time becomes very cheap because it is largely going
+to run unattended."* So a session that finishes a turn and hears nothing for its staggered wait
+(60-120 min of awake time, restarted on a laptop resume, one runner at a time across sessions) runs
+`make idle-tests` - the whole `done` gate, never the AWS-reserved FULL sweep (the GM's ruling) - in
+its clone, and the next prompt opens with the verdict (`dev/idle-log/`). What it never does: run in
+main, run twice per idle, run again on a clone unchanged since its last green idle run, or make the
+GM wait - a prompt aborts a run in progress. The scope lock is relaxed for that run and only for
+it: `switches.read` unlocks the scope solely for a process that descends from the idle timer, which
+a session's shell never does (the GM's ruling, D1b).

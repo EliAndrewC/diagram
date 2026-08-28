@@ -217,6 +217,12 @@ def test_cache_round_trip_and_failure_soft(tmp_path, monkeypatch):
     monkeypatch.setattr(reg, "_CACHE_PATH", tmp_path / "sub" / "registry_rows.json")
     names = {r.fn.__name__ for r in reg.GATE_SEGMENTS}
     rows = reg._derive_rows(names, fresh=True)  # the proof must derive, not read the cache it is proving
+    # A ROUND TRIP NEEDS ROWS, NOT ALL 1,371 OF THEM (feature 135, third pass): the derivation is ~2 s and this
+    # test is about store/load/staleness, so the round trip below runs on ten rows; the full-size derivation
+    # still happens once above (the disagreement guard in `_derive_rows` needs the whole name set) and
+    # `test_cached_rows_rebuild_identical_registry` proves the full rebuild at the gate.
+    rows = rows[:10]
+    names = {r["name"] for r in rows}
     key = reg._source_key()
     assert reg._load_cached(key, names) is None  # cold: no file yet
     reg._store_cache(key, rows)

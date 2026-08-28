@@ -41,10 +41,13 @@ def pytest_collection_modifyitems(config, items):  # type: ignore[no-untyped-def
     """TIER RELEVANCE (GM 2026-08-26, feature 133 T17): while scope is locked to the reference hamlet,
     a test tagged `tiers("town", "city")` cannot say anything about the map on the sheet - skip it.
     A test with no `tiers` marker is relevant to every tier and always runs."""
-    from tests._scope import EXHAUSTIVE
+    from tests._scope import FULL
 
     tier = config.getoption("--tier")
-    skip_tooling = _tooling_unchanged() and not EXHAUSTIVE
+    # AT THE GATE TOO (feature 135 T22): a green `make done` records the tooling hash only when it RAN the tooling
+    # tests, so an unchanged hash means a gate already vouched for exactly this tooling - the same reasoning the
+    # gate applies to `hooks-test` with its stamp. Never in the FULL run, where the ci package owes its 100%.
+    skip_tooling = _tooling_unchanged() and not FULL
     keep, drop = [], []
     for item in items:
         if "/tests/tooling/" in str(item.fspath) and item.get_closest_marker("tooling") is None:
@@ -89,13 +92,15 @@ def pool_tier_glob(request):  # type: ignore[no-untyped-def]
 
 
 def pytest_report_header(config):  # type: ignore[no-untyped-def]
-    from tests._scope import EXHAUSTIVE
+    from tests._scope import EXHAUSTIVE, FULL
 
     tier = config.getoption("--tier")
     lines = []
     if tier:
         lines.append(f"tier: {tier} - tests tagged for other tiers only are deselected (scope locked to the reference settlement)")
     lines.append("scope: EXHAUSTIVE - every sweep in full" if EXHAUSTIVE else "scope: quick - sweeps run their documented subset (EXHAUSTIVE=1 for the full form)")
-    if not EXHAUSTIVE and _tooling_unchanged():
+    if not FULL and _tooling_unchanged():
         lines.append("tooling: unchanged since the last green gate - the make/ci/pipeline tooling tests are deselected")
+    if FULL:
+        lines.append("scope: FULL - the full tree is collected, the coverage floors are enforced, no cache serves a roll")
     return lines

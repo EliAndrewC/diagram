@@ -7,7 +7,7 @@
 # (GUARD_EDIT_OK: feature 132 adds the iteration switches - a new guard and five new operations)
 .PHONY: done lint format typecheck test test-full guard perf perf-report maps reference bypass-audit quick durations test-file audit perf-gate hooks-test explain \
 	 switches ci-off ci-on scope-lock scope-unlock _switch \
-	 map cohort tripwire hamlet cache-audit regressions placement-stages pool-index pool-index-if-stale compound render-sync \
+	 map cohort tripwire hamlet cache-audit regressions placement-stages pool-index pool-index-if-stale compound render-sync idle-tests \
 	 gate-manifest why-placed site-justice crop jogs pack-audit scatter-audit sun-audit new-check timings citybudget help \
 	 ci-status ci-check ci-merge ci-image commit-permitted \
 	 perf-explain perf-confirm perf-audit perf-signoff perf-review perf-profile
@@ -84,7 +84,7 @@ done:
 #  ends the target before the reference step. Re-stamping is safe because the key includes the stamp's own hash.)
 	@if [ -z "$(FULL)" ] && python3 -m l7r.diagram.ci verified-done; then \
 	  root=$$(git rev-parse --show-toplevel 2>/dev/null) && [ -n "$$root" ] && python3 "$$root/scripts/gate-stamp.py" --write diagram || true; \
-	  $(LOGRUN) done reference 0 already-verified; $(STATE) green-local done reused; \
+	  $(LOGRUN) $(DONE_NAME) reference 0 already-verified; $(STATE) green-local $(DONE_NAME) reused; \
 	  printf '\n\033[1mgate green\033[0m (already verified - nothing the gate exercises has changed since the last green run)\n'; exit 0; \
 	fi; \
 	$(if $(FULL),$(MAKE) --no-print-directory bypass-audit REF_WHY="$(REF_WHY)" || exit 1;,) \
@@ -96,10 +96,10 @@ done:
 	    printf 'hooks-test: already green against exactly these guard scripts - skipped (gate-stamp --fresh hooks; 84 s measured 2026-08-26)\n'; continue; fi; \
 	  $(MAKE) --no-print-directory $$phase || fail="$$fail $$phase"; \
 	done; \
-	if [ -n "$$fail" ]; then $(LOGRUN) done "$(if $(FULL),full,reference)" "$$(( $$(date +%s) - $$T0 ))" "failed:$$fail"; $(STATE) failed-gate done; printf '\n\033[1mGATE FAILED:%s\033[0m (every phase ran - fix them together, then re-run once)\n' "$$fail"; exit 1; fi; \
+	if [ -n "$$fail" ]; then $(LOGRUN) $(DONE_NAME) "$(if $(FULL),full,reference)" "$$(( $$(date +%s) - $$T0 ))" "failed:$$fail"; $(STATE) failed-gate $(DONE_NAME); printf '\n\033[1mGATE FAILED:%s\033[0m (every phase ran - fix them together, then re-run once)\n' "$$fail"; exit 1; fi; \
 	root=$$(git rev-parse --show-toplevel 2>/dev/null) && [ -n "$$root" ] && python3 "$$root/scripts/gate-stamp.py" --write diagram || true; \
-	$(LOGRUN) done "$(if $(FULL),full,reference)" "$$(( $$(date +%s) - $$T0 ))" green; \
-	$(STATE) green-local done; \
+	$(LOGRUN) $(DONE_NAME) "$(if $(FULL),full,reference)" "$$(( $$(date +%s) - $$T0 ))" green; \
+	$(STATE) green-local $(DONE_NAME); \
 	$(if $(FULL),printf '\n\033[1mgate green (FULL - every pool map re-gated, seeds 41-44 rolled)\033[0m\n',printf '\n\033[1mgate green\033[0m (reference settlement + non-map tests; `make done FULL=1` also rolls the other pool maps)\n')
 
 # THE REFERENCE-HAMLET PERFORMANCE BOOKENDS (constitution VI, GM 2026-08-23).
@@ -389,7 +389,7 @@ citybudget:     ## the city/capital space-budget planner
 # Python without a green `make done`. Motivating case: a RED hooks-test followed by `commit; ritual`
 # landed on main, because nothing at push time knew the guards had been edited.
 hooks-test:     ## run every scripts/test-*-hooks.sh, and prove each guard still has a companion
-	@root=$$(git rev-parse --show-toplevel); fail=""; n=0; \
+	@root=$$(git rev-parse --show-toplevel); fail=""; n=0; skipped=0; \
 	for h in $$root/scripts/*-hooks.sh $$root/scripts/review-gate.sh $$root/scripts/gate-stamp.py $$root/scripts/sync-with-main.sh; do \
 	  : "(GUARD_EDIT_OK: sync-with-main.sh joins the roster - its route decision is a guard, feature 130 T031)"; \
 	  b=$$(basename $$h); case $$b in test-*) continue ;; esac; \
@@ -400,13 +400,23 @@ hooks-test:     ## run every scripts/test-*-hooks.sh, and prove each guard still
 	    printf 'fires - or whether it fires on correct work, which is the more expensive failure.\n\n'; \
 	    fail="$$fail $$b"; continue; \
 	  fi; \
+	  deps="$$h $$root/scripts/$$t $$root/scripts/_hookmatch.py $$root/scripts/test_hooks_cases.py"; \
+	  case $$b in sync-with-main.sh|review-gate.sh|gate-stamp.py) deps="$$root/scripts/*.sh $$root/scripts/*.py";; esac; \
+	  sha=$$(cat $$deps 2>/dev/null | sha256sum | cut -c1-16); mkdir -p "$$root/.git/hooks-test"; \
+	  if [ -z "$(HOOKS_ALL)" ] && [ "$$(cat "$$root/.git/hooks-test/$$b" 2>/dev/null)" = "$$sha" ]; then skipped=$$((skipped+1)); continue; fi; \
 	  n=$$((n+1)); \
-	  "$$root/scripts/$$t" >/tmp/ht.$$$$ 2>&1 || { printf '\n\033[1mHOOK TESTS FAILED: %s\033[0m\n' "$$b"; sed 's/^/  /' /tmp/ht.$$$$; fail="$$fail $$b"; }; \
+	  "$$root/scripts/$$t" >/tmp/ht.$$$$ 2>&1 && printf '%s' "$$sha" > "$$root/.git/hooks-test/$$b" || { printf '\n\033[1mHOOK TESTS FAILED: %s\033[0m\n' "$$b"; sed 's/^/  /' /tmp/ht.$$$$; fail="$$fail $$b"; }; \
 	  rm -f /tmp/ht.$$$$; \
 	done; \
 	if [ -n "$$fail" ]; then printf '\n\033[1mhooks-test FAILED:%s\033[0m\n\n' "$$fail"; exit 1; fi; \
 	python3 "$$root/scripts/gate-stamp.py" --write hooks; \
-	printf 'hooks-test: %s guard suites green (hooks area stamped)\n' "$$n"
+	printf 'hooks-test: %s guard suites green, %s unchanged since they last went green (hooks area stamped)\n' "$$n" "$$skipped"
+# PER-SUITE FRESHNESS (feature 135, third pass; GUARD_EDIT_OK: the roster and the failure path are unchanged - a suite
+# is SKIPPED only when its guard, its test and the shared helpers (`_hookmatch.py`, `test_hooks_cases.py`; for the
+# three suites that drive other scripts, all of scripts/) hash to what they hashed when the suite last went GREEN in
+# this clone (.git/hooks-test/<guard>). Measured: 90 s to re-run all 13 suites for a one-line edit to one guard;
+# `HOOKS_ALL=1` runs every suite regardless. The whole-area stamp (`gate-stamp --write hooks`) is written only when
+# every suite is green, exactly as before.
 # (GUARD_EDIT_OK: adds gate-stamp.py to the guard roster with a .sh companion, and stamps the hooks area on green)
 
 perf-gate:      ## require the feature's -start bookend, take -end, and FAIL on a regression
@@ -573,7 +583,8 @@ tooling:        ## run every `tooling` test (make/ci/pipeline, exhaustive) and r
 	@$(GATE_EXHAUSTIVE_ENV) python3 -m pytest -n $(XDIST_WORKERS) -q --no-cov -m tooling && python3 -m l7r.diagram.ci tooling-green
 
 test-file:      ## run ONE test file, whole              FILE=tests/pipeline/test_gencache.py
-	@python3 -m pytest -n $(XDIST_WORKERS) -q --no-cov $(FILE) && $(STATE) green-local test-file
+	@python3 -m pytest -n $(XDIST_WORKERS) --dist worksteal -q --no-cov $(FILE) && $(STATE) green-local test-file
+# (worksteal, feature 135: two 50 s rollers landing on one worker under the default scheduler doubled a file's wall clock)
 
 # WHY EVERY CHECK FAILED ON THE REFERENCE MAP, in detail rather than by name.
 #
@@ -594,11 +605,12 @@ explain:        ## why a map is failing - every check with its message.   SEED=2
 	@SEED=$(or $(SEED),4) python3 .explain.py
 
 durations:
-	@python3 -m pytest -n $(XDIST_WORKERS) -q --no-cov $(if $(MARK),-m "$(MARK)",-m "not rolls_map and not coverage_only" --deselect tests/test_villages.py) --durations=$(or $(N),12) 2>&1 | grep -E "^[0-9.]+s (call|setup)|passed|failed" | head -$$(( $(or $(N),12) + 2 ))
+	@python3 -m pytest -n $(XDIST_WORKERS) -q --no-cov $(if $(FULL),,--ignore=tests/full) $(if $(MARK),-m "$(MARK)",-m "not rolls_map") --durations=$(or $(N),12) 2>&1 | grep -E "^[0-9.]+s (call|setup)|passed|failed" | head -$$(( $(or $(N),12) + 2 ))
+# (FULL=1 profiles the full tree too; the coverage carriers live there now, so `coverage_only` no longer needs deselecting - feature 135)
 
 quick:
 	@python3 -m ruff check --fix l7r/ tests/ && python3 -m ruff format l7r/ tests/ && $(MYPY)
-	@start=$$(date +%s); $(EXHAUSTIVE_ENV) python3 -m pytest -n $(XDIST_WORKERS) --dist worksteal $(TESTMON) -q --no-cov -x --ff -m "not rolls_map and not coverage_only" --deselect tests/test_villages.py $(TIER_SELECT) $(QUICK_TREE); ec=$$?; \
+	@start=$$(date +%s); $(EXHAUSTIVE_ENV) python3 -m pytest -n $(XDIST_WORKERS) --dist worksteal $(TESTMON) -q --no-cov -x --ff -m "not rolls_map" $(TIER_SELECT) $(QUICK_TREE); ec=$$?; \
 	  el=$$(( $$(date +%s) - start )); \
 	  if [ $$ec -ne 0 ]; then exit $$ec; fi; \
 	  if [ $$el -gt $(QUICK_BUDGET) ]; then \
@@ -607,7 +619,7 @@ quick:
 	    printf 'A test near the top of that list without @pytest.mark.rolls_map is the cause.\n\n'; \
 	    exit 1; \
 	  fi
-	@printf '\n\033[1mquick: clean\033[0m - the %s map-rolling tests were NOT run; `make done` before pushing.\n' "$$(grep -rho '@pytest.mark.rolls_map' tests | wc -l)"
+	@printf '\n\033[1mquick: clean\033[0m - the %s map-rolling tests were NOT run; `make done` before pushing.\n' "$$(grep -rho --include='*.py' '@pytest.mark.rolls_map' tests | wc -l)"
 # (the count used to come from a SECOND pytest collection of the whole suite, ~2 s of every quick - GM 2026-08-26, T25)
 	@$(STATE) green-local quick
 # (GUARD_EDIT_OK: a green quick records green-local - feature 130, FR-012)
@@ -659,10 +671,25 @@ bypass-audit:
 # (GUARD_EDIT_OK: the message named a file that does not exist - the log is a directory; feature 130 T073, Principle XIV)
 
 reference:
-	@python3 -c "import sys; sys.path.insert(0, '.'); 	from l7r.diagram import hamletgen as hg; 	r = hg.generate(hg.HamletSpec(name='Inashiro', seed=4, households=15, down_deg=90, water_sink='pond'), out_base=None, render=False); 	print('\033[1mreference settlement (Inashiro, seed 4): ' + ('CLEAN\033[0m' if r.ok else 'FAILING\033[0m -> ' + ', '.join(r.failures))); 	sys.exit(0 if r.ok else 1)" || { 	  printf '\n\033[1mSTOPPING HERE.\033[0m The reference settlement is red, so nothing more expensive runs.\n'; 	  printf 'Fix Inashiro first - it rebuilds in about a minute. Everything else is 4x to 25x that,\n'; 	  printf 'and none of it can tell you anything useful while the one map you iterate on is broken.\n'; 	  printf 'To REGENERATE it and read every failure in full: \033[1mmake maps\033[0m (reference only under the lock).\n'; \
+	@python3 -c "import sys; sys.path.insert(0, '.'); 	from l7r.diagram import hamletgen as hg; 	from l7r.diagram.pipeline import rollcache; 	r, how = rollcache.report(hg.HamletSpec(name='Inashiro', seed=4, households=15, down_deg=90, water_sink='pond')); 	print('\033[1mreference settlement (Inashiro, seed 4): ' + ('CLEAN\033[0m' if r.ok else 'FAILING\033[0m -> ' + ', '.join(r.failures)) + ' [' + how + (' - served from the roll cache: nothing the roll executes changed; GATE_NO_CACHE=1 rolls it' if how == 'HIT' else '') + ']'); 	sys.exit(0 if r.ok else 1)" || { 	  printf '\n\033[1mSTOPPING HERE.\033[0m The reference settlement is red, so nothing more expensive runs.\n'; 	  printf 'Fix Inashiro first - it rebuilds in about a minute. Everything else is 4x to 25x that,\n'; 	  printf 'and none of it can tell you anything useful while the one map you iterate on is broken.\n'; 	  printf 'To REGENERATE it and read every failure in full: \033[1mmake maps\033[0m (reference only under the lock).\n'; \
 	  printf 'Do not reach for REF_OK=1 - it prompts, and a prompt with no terminal is refused.\n\n'; exit 1; }
 	@$(STATE) green-local reference
 # (GUARD_EDIT_OK: a green reference records green-local - feature 130, FR-012)
+
+# THE IDLE RUN (feature 136, D1 - GUARD_EDIT_OK: a new target, the one an idle session's detached timer runs;
+# the GM: "a test which is relatively expensive in terms of me having to wait for it time becomes very cheap
+# because it is largely going to run unattended"). One target so the GM can change WHAT an idle session
+# runs in one place. It is `maps`: the reference map, the tripwire seeds, the tier sweep - under an
+# unlocked scope; under the lock, the reference alone (the lock admits no override, D1b). It writes no
+# `done` stamp under the idle run's own name (`idle-done`, DONE_NAME below), so it neither grants nor revokes a
+# push (FR-006b c). The GM (2026-08-28): "I do want it to be more than just the reference map tests. I do not
+# want to run the full test suite, which is to say the one that we reserve for AWS. However, I would like to
+# run the lengthier test suite" - so it is `done` (the 21-minute unlocked gate), never `done FULL=1`, and the
+# scope lock is RELAXED for it by `switches.read` when the caller descends from the timer. Never by hand.
+IDLE_CTX = $(shell $(SWITCH) idle 2>/dev/null)
+DONE_NAME = $(if $(filter 1,$(IDLE_CTX)),idle-done,done)
+idle-tests:     ## what an idle session runs unattended (feature 136): the whole gate, scope relaxed, never FULL
+	@$(MAKE) --no-print-directory done
 
 maps:
 	@$(if $(filter all,$(SCOPE)),$(SWITCH) check scope "maps SCOPE=all",true)
@@ -732,8 +759,22 @@ SETTLEMENT_COV_FLOOR = 94
 # and miss-subprocess recordings, feature 026) that pytest-cov's own end-of-session combine may or
 # may not have consumed already - the explicit combine is deterministic either way, and a no-op
 # when there is nothing left to merge.
-# The tests that roll a map other than the reference one. `test` deselects them; `test-full` does not.
-DESELECT = --deselect tests/test_villages.py --deselect tests/hamletgen/test_driver.py
+# THE FULL TREE (feature 135, GM 2026-08-27: "one directory for our quick tests, one directory for our done
+# tests, and one directory for our lengthy AWS tests ... the directory into which we added is the thing that
+# inherently determines When and under what circumstance that test is run"). `tests/full/` holds the pool
+# sweep, the seed sweeps, the coverage carriers and the real-map cache round trip; the gate does not COLLECT
+# it, `test-full` does. This replaces the deselect LIST that used to name two files - and had gone stale: it
+# still named `tests/hamletgen/test_driver.py` after 133 T29 moved the cohort ratchet to `tests/gate/`, so the
+# FULL-only "seeds 41-44 ratchet" ran in every unlocked reference gate and seven cheap tests in the old file
+# were silenced (research R6). A tree cannot go stale that way. `L7R_TESTS_FULL=1` tells the conftest it is
+# the full run (the tooling tests then never skip - the ci package owes its 100% there).
+FULL_TREE_IGNORE = $(if $(COV_FLOORS),,--ignore=tests/full)
+FULL_ENV = $(if $(COV_FLOORS),L7R_TESTS_FULL=1,)
+# COVERAGE FOLLOWS THE DIFF at reference scope (feature 135, second pass; the why is on `delta.coverage_scope`):
+# the gate traces only the engine modules the diff touched - `uncovered-in-diff.py` needs no more - and nothing
+# when none changed; measured 9 s of a 25 s locked gate. FULL traces everything (the floors). An empty answer
+# (no git, an error) leaves pytest's own addopts in force, i.e. full tracing - the safe direction.
+COV_SCOPE = $(if $(COV_FLOORS),,$(shell python3 -m l7r.diagram.ci cov-scope 2>/dev/null))
 # THE LOCK DEFERS THE MAP-ROLLING TESTS TOO (GM 2026-08-26, feature 133 T11). Measured that day: under
 # `scope reference`, `make done`'s pytest phase took 233 s of a 4.5 min gate, and the time was the
 # `rolls_map` tests - a 48-seed cohort, polder hamlets, the real pool through the gen cache - i.e. maps
@@ -777,18 +818,21 @@ TESTMON = $(if $(ALL),--no-testmon,--testmon-forceselect)
 # tests/gate (the corpus, the coverage carriers, the map-rolling tests) and tests/tooling (collected only when the
 # tooling changed since the last record, `ci tooling-fresh`). The gate collects all of `tests/`. Collection is
 # paid per worker, so ~1,000 fewer items is ~0.4 s of a 3.3 s floor - and the layout says what each test is.
-QUICK_TREE = tests --ignore=tests/tier_town --ignore=tests/tier_city --ignore=tests/gate $(shell python3 -m l7r.diagram.ci tooling-fresh >/dev/null 2>&1 && echo --ignore=tests/tooling)
+QUICK_TREE = tests --ignore=tests/tier_town --ignore=tests/tier_city --ignore=tests/gate --ignore=tests/full $(shell python3 -m l7r.diagram.ci tooling-fresh >/dev/null 2>&1 && echo --ignore=tests/tooling)
 # mypy through its daemon (dmypy): the warm daemon re-checks only what changed, ~0.25 s -> ~0.1 s per quick; one-shot on CodeBuild
 MYPY = $(if $(CODEBUILD_BUILD_ID),python3 -m mypy,python3 -m mypy.dmypy run --)
 # THE GATE IS ALWAYS EXHAUSTIVE (constitution v2.9.0, GM 2026-08-26): `make quick` runs each test's quick form,
 # `make done` its full form - the corpus, the full matrices, the full-size canvases, the tooling tests.
-GATE_EXHAUSTIVE_ENV = L7R_TESTS_EXHAUSTIVE=1
-TIER_SELECT = $(if $(COV_FLOORS),,$(if $(filter reference,$(SCOPE_STATE)),--tier $(REFERENCE_TIER),))
+GATE_EXHAUSTIVE_ENV = L7R_TESTS_EXHAUSTIVE=1 $(if $(COV_FLOORS),L7R_COV_FLOORS=1,)  # GUARD_EDIT_OK: feature 133 T92's env, kept for any test that reads it; feature 135's own full-run signal is L7R_TESTS_FULL
+# ...and the other tiers' TREES are not even collected under the lock (feature 135, third pass): every xdist
+# worker collected ~700 town/city items to deselect them a moment later; the ignore is the same decision made
+# before collection instead of after it.
+TIER_SELECT = $(if $(COV_FLOORS),,$(if $(filter reference,$(SCOPE_STATE)),--tier $(REFERENCE_TIER) --ignore=tests/tier_town --ignore=tests/tier_city,))
 
 # (GUARD_EDIT_OK: feature 132 - test-full rolls every pool map, so the scope lock refuses it before `test` starts)
 test-full:
 	$(SWEEP_OK)
-	@$(MAKE) --no-print-directory test DESELECT= COV_FLOORS=1
+	@$(MAKE) --no-print-directory test COV_FLOORS=1
 
 # A DESELECTED TEST TAKES ITS COVERAGE WITH IT, so the reference scope CANNOT hold the 100% floor
 # (measured 2026-08-24, the first green-path run of this restructure). Deselecting
@@ -819,13 +863,15 @@ test:
 # --dist worksteal (GM 2026-08-26, the make quick profile): the default `load` scheduler hands each worker a
 # fixed slice up front, so on a suite whose tests range from 5 ms to 4 s the last worker finishes ~5 s after
 # the rest; worksteal lets idle workers take from busy ones. Measured on quick: 27.5 s -> 22.0 s wall.
-	@if python3 -c "import xdist" >/dev/null 2>&1; then $(GATE_EXHAUSTIVE_ENV) python3 -m pytest -n $(XDIST_WORKERS) --dist worksteal $(DESELECT) $(ROLL_DESELECT) $(TIER_SELECT); else $(GATE_EXHAUSTIVE_ENV) python3 -m pytest $(DESELECT) $(ROLL_DESELECT) $(TIER_SELECT); fi; ec=$$?; \
-	if [ $$ec -ne 0 ]; then python3 ../../../scripts/uncovered-in-diff.py || true; exit $$ec; fi; \
-	python3 -m coverage combine --append >/dev/null 2>&1 || true; \
+	@$(if $(COV_SCOPE),printf 'coverage: %s\n' "$(COV_SCOPE)";,)
+	@if python3 -c "import xdist" >/dev/null 2>&1; then $(GATE_EXHAUSTIVE_ENV) $(FULL_ENV) python3 -m pytest -n $(XDIST_WORKERS) --dist worksteal $(COV_SCOPE) $(FULL_TREE_IGNORE) $(ROLL_DESELECT) $(TIER_SELECT); else $(GATE_EXHAUSTIVE_ENV) $(FULL_ENV) python3 -m pytest $(COV_SCOPE) $(FULL_TREE_IGNORE) $(ROLL_DESELECT) $(TIER_SELECT); fi; ec=$$?; \
+	traced=$(if $(filter --no-cov,$(COV_SCOPE)),,1); \
+	if [ $$ec -ne 0 ]; then [ -n "$$traced" ] && { python3 ../../../scripts/uncovered-in-diff.py || true; }; exit $$ec; fi; \
 	if [ -z "$(COV_FLOORS)" ]; then \
 	  printf '\033[1mcoverage floors: deferred to `make done FULL=1`\033[0m (a deselected test takes its coverage with it - see the Makefile comment)\n'; \
-	  python3 ../../../scripts/uncovered-in-diff.py || true; \
+	  [ -n "$$traced" ] && { python3 -m coverage combine --append >/dev/null 2>&1 || true; python3 ../../../scripts/uncovered-in-diff.py || true; }; \
 	  exit 0; \
 	fi; \
+	python3 -m coverage combine --append >/dev/null 2>&1 || true; \
 	python3 -m coverage report -m --omit='*/settlement/*' --fail-under=100 || { echo "COVERAGE: a module other than settlement.py is under 100% - the table above names it and its missing lines"; exit 1; }; \
 	python3 -m coverage report --include='*/settlement/*' --fail-under=$(SETTLEMENT_COV_FLOOR) || { echo "COVERAGE: settlement/ (package combined) fell below its $(SETTLEMENT_COV_FLOOR)% ratchet floor (see the comment above SETTLEMENT_COV_FLOOR in this Makefile; 'python3 -m coverage report -m --include=*/settlement/*' shows the missing lines)"; exit 1; }
