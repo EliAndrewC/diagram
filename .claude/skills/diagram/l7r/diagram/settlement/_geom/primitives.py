@@ -133,7 +133,7 @@ def ring_offset(ring: Sequence[Pt], out: float, inward: float) -> Poly:
     # OUTWARD BY WINDING, never by a centroid test: in a concave pocket the edge that faces the centroid is the one
     # whose outward normal points AT it, and a centroid test turned that edge inside out (one chord vertex of a
     # wobbly test ring escaped its own keep-out). The ring's signed area fixes the orientation once.
-    ccw = _signed_area(ring) > 0
+    ccw = _signed_area(list(ring)) > 0
     outer: Poly = []
     inner: Poly = []
 
@@ -157,8 +157,11 @@ def ring_offset(ring: Sequence[Pt], out: float, inward: float) -> Poly:
         # the plain vertex normal and the caller adds tolerance instead (`keepout_ring`).
         scale = 1.0 / max(0.25, mx * n1[0] + my * n1[1])
         outer.append((b[0] + mx * out * scale, b[1] + my * out * scale))
-        inner.append((b[0] - mx * inward, b[1] - my * inward))
-    return [*outer, *reversed(inner)]
+        inner.append((b[0] - mx * inward * min(scale, 1.5), b[1] - my * inward * min(scale, 1.5)))  # a gentler miter inward: enough for a drawn crest's corners, short of a fold
+    # CLOSE THE ANNULUS THROUGH THE FIRST VERTEX: outer 0..n-1, back to outer 0, across to inner 0, inner n-1..0 - the
+    # version that jumped from outer n-1 straight to inner n-1 left the LAST chord's sector out of the polygon, and
+    # every containment escape in the tests sat in that sector.
+    return [*outer, outer[0], inner[0], *reversed(inner)]
 
 
 def simplify_ring(pts: Sequence[Pt], eps: float) -> Poly:
@@ -197,7 +200,7 @@ def simplify_ring(pts: Sequence[Pt], eps: float) -> Poly:
     return first[:-1] + second[:-1]
 
 
-def keepout_ring(chain: Sequence[Pt], covered: Sequence[Pt], eps: float) -> tuple[Poly, Poly]:
+def keepout_ring(chain: Sequence[Pt], covered: Sequence[Pt], eps: float, filled: bool = False) -> tuple[Poly, Poly]:
     """`(keepout, chords)`: `chain` simplified to a few chords, then pushed out on each side by as far as any
     point of `covered` lies from those chords (measured, not assumed) plus `eps` - so the keep-out CONTAINS
     every covered point by construction. For a field, `chain` and `covered` are both the outline (the
@@ -214,6 +217,11 @@ def keepout_ring(chain: Sequence[Pt], covered: Sequence[Pt], eps: float) -> tupl
             in_reach = max(in_reach, d)
         else:
             out_reach = max(out_reach, d)
+    if filled:
+        # A FIELD blocks its whole interior, so its keep-out is the outward offset alone - and the annulus's seam
+        # (where the outer and inner rings join) is a zero-width slit that a chord vertex can land ON and be read as
+        # outside; a filled ring has no seam.
+        return ring_offset(chords, out_reach + eps, 0.0)[: len(chords)], chords
     return ring_offset(chords, out_reach + eps, in_reach + eps * 3.0), chords  # the inner edge is un-mitered (see ring_offset), so it carries extra tolerance
 
 
@@ -231,7 +239,7 @@ def facing_chains(outline: Sequence[Pt], seat: Pt, eps: float) -> list[list[Chor
     n = len(chords)
     if n < 3:
         return []
-    ccw = _signed_area(chords) > 0
+    ccw = _signed_area(list(chords)) > 0
     normals: list[Pt] = []
     faces: list[bool] = []
     for i in range(n):

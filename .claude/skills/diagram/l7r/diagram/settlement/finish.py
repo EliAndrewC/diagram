@@ -404,7 +404,7 @@ class FinishMixin:
             if _face is not None:
                 _fld["keepout_chords"] = sum(len(_ch) for _ch in facing_chains(_ol, _face, FIELD_KEEPOUT_EPS))  # the count the record reports; the gate reads M["field_chains"]
             else:
-                _keep, _chords = keepout_ring(_ol, _ol, FIELD_KEEPOUT_EPS)
+                _keep, _chords = keepout_ring(_ol, _ol, FIELD_KEEPOUT_EPS, filled=True)
                 _fld["keepout"] = [[round(_p[0], 1), round(_p[1], 1)] for _p in _keep]
                 _fld["keepout_chords"] = len(_chords)
         # Deferred place_caption() seats, in call order, against the FINISHED map - and BEFORE the

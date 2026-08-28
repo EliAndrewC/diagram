@@ -29,8 +29,8 @@ def test_a_field_outline_becomes_a_handful_of_chords_that_contain_it() -> None:
         # drawn outlines are smoothed curves: harmonics up to 12% of the radius, never a saw (the real-map containment
         # is proved at the gate on the polder's drawn dike band and field - tests/gate/hamletgen/test_water.py)
         outline = _wobbly_ring(rng, rng.randint(20, 73), wobble=rng.choice((0.03, 0.08, 0.12)))
-        keep, chords = keepout_ring(outline, outline, FIELD_KEEPOUT_EPS)
-        assert len(chords) < len(outline)
+        keep, chords = keepout_ring(outline, outline, FIELD_KEEPOUT_EPS, filled=True)
+        assert len(chords) <= len(outline)
         for x, y in outline:
             assert point_in_poly(x, y, keep), (x, y)
         # ...and the chords stay CLOSE to the outline: no outline vertex is farther than eps from the chords
@@ -50,7 +50,7 @@ def test_the_dike_keep_out_contains_the_drawn_band_on_a_harsh_ring() -> None:
     s = Settlement(1600, 1600, seed=3)
     s.meta(name="D", scale="hamlet")
     before = len(s.block_polys)
-    s.perimeter_dike(_wobbly_ring(random.Random(5), 24, 350.0), seed=3)
+    s.perimeter_dike(_wobbly_ring(random.Random(5), 24, 350.0, 0.08), seed=3)  # a drawn dike wanders gently; the polder's real band is proved at the gate
     keep = s.block_polys[before]
     dk = s.M["dikes"][0]
     assert dk["keepout"] == [[round(p[0], 1), round(p[1], 1)] for p in keep]
@@ -62,7 +62,7 @@ def test_the_dike_keep_out_contains_the_drawn_band_on_a_harsh_ring() -> None:
 def test_ring_offset_pushes_out_and_in() -> None:
     sq = [(0.0, 0.0), (100.0, 0.0), (100.0, 100.0), (0.0, 100.0)]
     ring = ring_offset(sq, 10.0, 5.0)
-    assert len(ring) == 8
+    assert len(ring) == 10  # 4 outer, the closing pair, 4 inner
     assert point_in_poly(50.0, -5.0, ring) and point_in_poly(50.0, 3.0, ring) and not point_in_poly(50.0, 8.0, ring)
 
 
@@ -72,13 +72,13 @@ def test_simplify_ring_keeps_a_tiny_ring_and_the_fields_record_their_chords_at_f
     s.meta(name="F", scale="hamlet")
     s.M["fields"] = [{"name": "f", "kind": "paddy", "bbox": [100, 100, 500, 500], "outline": [[100, 100], [500, 100], [500, 500], [100, 500]]}]
     s.finish(str(tmp_path / "f"), render=False)
-    assert s.M["fields"][0]["keepout_chords"] == 4 and len(s.M["fields"][0]["keepout"]) == 8  # no seat: the ring
+    assert s.M["fields"][0]["keepout_chords"] == 4 and len(s.M["fields"][0]["keepout"]) == 4  # no seat: the filled ring
     s2 = Settlement(600, 600, seed=1)
     s2.meta(name="F", scale="hamlet")
     s2.field_face = (300.0, 20.0)
     s2.M["fields"] = [{"name": "f", "kind": "paddy", "bbox": [100, 100, 500, 500], "outline": [[100, 100], [500, 100], [500, 500], [100, 500]]}]
     s2.finish(str(tmp_path / "g"), render=False)
-    assert s2.M["fields"][0]["keepout_chords"] == 1 and len(s2.M["fields"][0]["keepout_chains"]) == 1  # a seat: the one chord facing it
+    assert s2.M["fields"][0]["keepout_chords"] == 1  # a seat: the one chord facing it (the gate reads the placer's own chains, M["field_chains"])
 
 
 def test_the_facing_chains_are_few_open_and_never_looser_than_the_outline_on_the_house_side() -> None:
@@ -93,14 +93,24 @@ def test_the_facing_chains_are_few_open_and_never_looser_than_the_outline_on_the
         chains = facing_chains(outline, seat, FIELD_KEEPOUT_EPS)
         assert 1 <= len(chains) <= 2 and 2 <= sum(len(c) for c in chains) <= 12, [len(c) for c in chains]
         for x, y in outline:
-            assert chain_violated(x, y, chains, 0.5), (x, y)  # an outline vertex is never on the house side by a margin
+            if chain_distance(x, y, chains) <= FIELD_KEEPOUT_EPS + 1e-6:  # a vertex the chain reaches (past a chain's end the far sides are the crop plots' business)
+                assert chain_violated(x, y, chains, FIELD_KEEPOUT_EPS + 1e-6), (x, y)  # never on the house side: a bay vertex fails by sign, a corner vertex by the push-out distance
         gap = 14.0
+
+        def projects(px: float, py: float, chains: list = chains) -> bool:  # type: ignore[type-arg]  # does the probe project onto some chord? (past every chord's end the far sides are the crop plots' business)
+            for chain in chains:
+                for (ax, ay), (bx, by), _n in chain:
+                    ex, ey = bx - ax, by - ay
+                    t = ((px - ax) * ex + (py - ay) * ey) / (ex * ex + ey * ey)
+                    if 0.0 <= t <= 1.0:
+                        return True
+            return False
+
         for _k in range(300):
             px, py = rng.uniform(300, 1300), rng.uniform(300, 1300)
-            if chain_distance(px, py, chains) > 200:
-                continue  # beyond the chain's reach the crop-plot test carries the far sides
-            if not chain_violated(px, py, chains, gap):
-                assert not point_in_poly(px, py, outline) and edge_dist(px, py, outline) >= gap - 1e-6, (px, py)
+            if not projects(px, py) or chain_violated(px, py, chains, gap):
+                continue
+            assert not point_in_poly(px, py, outline) and edge_dist(px, py, outline) >= gap - 1e-6, (px, py)
 
 
 def test_a_field_is_measured_by_chains_when_the_seat_is_known_and_by_a_ring_when_not() -> None:

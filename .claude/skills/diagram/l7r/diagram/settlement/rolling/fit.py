@@ -58,7 +58,7 @@ class BundleFitMixin:
                 chains = [c for p in polys if len(p) >= 4 for c in facing_chains(p, face, FIELD_KEEPOUT_EPS)]
                 cached = (key, (chains, Indexed()))
             else:
-                cached = (key, ([], Indexed([keepout_ring(p, p, FIELD_KEEPOUT_EPS)[0] if len(p) >= 4 else list(p) for p in polys])))
+                cached = (key, ([], Indexed([keepout_ring(p, p, FIELD_KEEPOUT_EPS, filled=True)[0] if len(p) >= 4 else list(p) for p in polys])))
             self._field_chain_cache = cached
         return cached[1]
 

@@ -92,6 +92,8 @@ def test_the_polders_keep_outs_contain_what_they_stand_for() -> None:
     outside = [(x, y) for x, y in dk["outline"] if not point_in_poly(x, y, dk["keepout"])]
     assert not outside, f"{len(outside)} of {len(dk['outline'])} band vertices outside the keep-out, e.g. {outside[:3]}"
     fld = M["fields"][0]
-    chains = [[((a[0], a[1]), (b[0], b[1]), (nv[0], nv[1])) for a, b, nv in ch] for ch in fld["keepout_chains"]]
-    assert 1 <= fld["keepout_chords"] <= 12
-    assert all(chain_violated(x, y, chains, 0.5) for x, y in fld["outline"] if any(True for _ in chains))  # no outline vertex on the house side
+    chains = [[((a[0], a[1]), (b[0], b[1]), (nv[0], nv[1])) for a, b, nv in ch] for ch in M["field_chains"]]
+    assert 1 <= fld["keepout_chords"] <= 12 and chains
+    from l7r.diagram.settlement._geom.primitives import FIELD_KEEPOUT_EPS
+
+    assert all(chain_violated(x, y, chains, FIELD_KEEPOUT_EPS + 1e-6) for x, y in fld["outline"])  # no outline vertex on the house side
