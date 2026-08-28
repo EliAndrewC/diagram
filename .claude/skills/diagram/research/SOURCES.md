@@ -658,6 +658,8 @@ ja.wikipedia 屋敷神; minka-en.com 屋敷神; satologue.com 屋敷神様 (READ
 
 Fei Hsiao-tung, *Peasant Life in China: A Field Study of Country Life in the Yangtze Valley* (Routledge, 1939) - archive.org in.ernet.dli.2015.76327, full text READ 2026-08-28 (the djvu text, grepped)
 
+READ by the session from the downloaded djvu text (671 KB), each quote located by grep. The `source-reader` run of 2026-08-28 could confirm only the boat/village-plan sentences: its fetch truncates the book inside chapter III, so its NOT-FOUND on the silkworm-tray, manure-pit and yu-margin quotes is a tool limit, not an absence; and its CONTRADICTED on the boats is two sentences that both exist - II-4 "Nearly every household possesses at least one boat" and XIV-3 "Nearly every household possesses one or more boats except those who are not engaged in agricultural or fishing work." Average holding "about 8.5 mow" (XI), 3,065 mow over 450 adult men
+
 *Used for:* silkworms reared inside the dwelling on tray stands (five stands of eight 1.5 x 1 m trays per house; every room but the kitchen at the peak); home reeling; nearly every household owning one or more boats and the village laid out along its streams; the village agent boat; manure kept in half-buried earthenware pits behind the house and along the road; mulberry on the 10-30 m raised margin that is also the dyke, houses on it, vegetables beneath it; sheep huts as a 1920s innovation; rice threshed in the open space before the house or the front room
 
 ### `fao-ac264e`

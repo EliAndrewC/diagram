@@ -11,27 +11,26 @@ Checked off only when verified on Kuwabata (and Inashiro unchanged). T99 is the 
 
 ## Phase 1 - research before the generator (constitution XII)
 
-- [ ] T10 the conversion's own research: where a dike-pond hamlet's houses stand, how the block is fed and drained, grid vs mosaic, the 6:4 ratio - the record already answers (research/archetypes.md 'Polder siting', 'A dike-pond is fed and drained through sluice gates', 'Grid vs mosaic', 'The 6:4 water-to-dike ratio'); this task confirms the pointers and lists what the generator will read from them
-      given 2026-08-27T23:40Z | done - | elapsed - | runs: -
+- [x] T10 the conversion's own research: where a dike-pond hamlet's houses stand, how the block is fed and drained, grid vs mosaic, the 6:4 ratio - the record already answers (research/archetypes.md 'Polder siting', 'A dike-pond is fed and drained through sluice gates', 'Grid vs mosaic', 'The 6:4 water-to-dike ratio'); this task confirms the pointers and lists what the generator will read from them
+      given 2026-08-27T23:40Z | done 2026-08-28 (with T11) | runs: none (reads)
       research: physical
-      - [ ] research pass  - [ ] source-reader confirmed  - [ ] recorded and cited
-- [ ] T11 source the four dike-pond entries the conversion rests on whose `Sources:` line reads "not recorded" (v2.10.0): find and read the sources, register them in SOURCES.md, mark SUMMARY-ONLY where the page could not be read
+      - [x] research pass (the record's four entries, pointers above)  - [x] source-reader confirmed (the 2026-08-28 run: sluice, ratio, dredging, pond size all READ)  - [x] recorded and cited (research/archetypes.md, the four `Sources:` lines)
+- [x] T11 source the four dike-pond entries the conversion rests on whose `Sources:` line reads "not recorded" (v2.10.0): find and read the sources, register them in SOURCES.md, mark SUMMARY-ONLY where the page could not be read
+      note: sourced - ratio (`gd-gazetteer-sangji` READ, `fao-ac241e` READ), sluice (`fao-x6708e` READ), pond size/dike width (`isis-dykepond` READ carrying `ruddle-zhong-1988` SUMMARY-ONLY: 403 on every host), grid-vs-mosaic (`mdpi-3860` SUMMARY-ONLY, 403). The coppice density was not re-found: on the re-sourcing queue. The first research agent hung 8+ h and never returned; the pass was redone in-session (parallel fetches) and verified by `source-reader` (2 min)
       research: physical
-      - [ ] research pass  - [ ] source-reader confirmed  - [ ] recorded and cited
+      - [x] research pass  - [x] source-reader confirmed  - [x] recorded and cited
 
 ## Phase 2 - the conversion
 
-- [ ] T20 the archetype in the spec and the plan: `mulberry_dike_fishpond` in FIELD_ARCHETYPES (not ROLLED), cardinal falls, the per-archetype polder table (cell, parcel mix, gap, mosaic), `pond_layout` as a rolled knob with Kuwabata pinned to mosaic; tests in tests/hamletgen/test_plan.py
+- [x] T20 the archetype in the spec and the plan: `mulberry_dike_fishpond` in FIELD_ARCHETYPES (not ROLLED), cardinal falls, the per-archetype polder table (cell, parcel mix, gap, mosaic), `pond_layout` as a rolled knob with Kuwabata pinned to mosaic; tests in tests/hamletgen/test_plan.py
       given 2026-08-27T23:05Z | done 2026-08-27T23:40Z (with T21-T24; one sitting) | runs: quick x4, map x4, hamlet x3, family-census x2, gate-manifest x4
-      OPEN ONLY FOR T11: the code and the map are done; the box stays open until the source-reader confirms the entries (constitution v2.12.0 refuses a ticked physical task with an open box)
       note: the record already answered every number (`build_polder` TRUE-SCALE SIZING, research/archetypes.md 'Grid vs mosaic', 'The 6:4 water-to-dike ratio'); `POLDER_FABRIC`, `POND_LAYOUTS`, `DIKEPOND_CONVERSION` carry the why. The source-reader box is owed with T11: those entries' `Sources:` lines read 'not recorded'
       research: physical (the numbers are the record's: build_polder TRUE-SCALE SIZING, research 'Grid vs mosaic')
-      - [x] research pass (the record: pointers above)  - [ ] source-reader confirmed (T11)  - [ ] recorded and cited (T11)
-- [ ] T21 the stage: `stage_polder` parameterized by the table; the dike-pond path applies the wholesale overlay, declares `field_archetype` / `pond_layout` / `waterward`, draws the waterward reed fringe; every `== "polder_grid"` in the generator becomes `is_polder(plan)`; footbridge caps on the dike-pond ring
-      OPEN ONLY FOR T11, as T20
+      - [x] research pass (the record: pointers above)  - [x] source-reader confirmed (T11's run)  - [x] recorded and cited (T11)
+- [x] T21 the stage: `stage_polder` parameterized by the table; the dike-pond path applies the wholesale overlay, declares `field_archetype` / `pond_layout` / `waterward`, draws the waterward reed fringe; every `== "polder_grid"` in the generator becomes `is_polder(plan)`; footbridge caps on the dike-pond ring
       note: three defects met and fixed here (XIV): the windbreak drew over the header reservoir (`village_grove` had no pond keep-out); `_touch_junctions` closed a 30 ft lane onto its own start (a 28 ft loop, `lanes_bend_like_paths`); the fringe first went in the hinterland and was drawn over an already-routed connector (`roads_clear_of_marsh`) - now its own stage after the seat. The seams check stands aside for dike-pond fabric (two rings a dike apart ARE the system). Crossing caps: village on a toe flank -> that toe 3, far toe 0; at the head or foot -> both toes 2 (a capped-to-zero toe was a long ditch with no plank)
       research: physical (research 'Polder siting', 'Polder ring canal' crossings)
-      - [x] research pass (the record: research/archetypes.md 'Polder siting', settlements.md 'Polder ring canal')  - [ ] source-reader confirmed (T11)  - [ ] recorded and cited (T11)
+      - [x] research pass (the record: research/archetypes.md 'Polder siting', settlements.md 'Polder ring canal')  - [x] source-reader confirmed (T11's run; 'Polder siting' carries shen-kuo / fei-xiaotong)  - [x] recorded and cited (T11)
 - [x] T22 Kuwabata's pool entry is a declaration (`HamletSpec(name="Kuwabata", seed=..., households=16, down_deg=90, field_archetype="mulberry_dike_fishpond", pond_layout="mosaic")`); the hand-authored script retired (git history keeps it); renders un-tracked (`git rm` svg/png, drop the `.gitignore` `!` lines - dev/pool.md); kuwabata.notes.md rewritten for the scripted map; migration-plan.md status table updated
       note: `kuwabata.gen.py` is 4 lines of declaration + docstring; svg/png untracked, the two `!` lines dropped from .gitignore; notes.md rewritten; migration-plan.md FITTED
       research: rendering
@@ -47,12 +46,15 @@ Checked off only when verified on Kuwabata (and Inashiro unchanged). T99 is the 
 
 ## Phase 3 - the audit (present, do not implement)
 
-- [ ] T30 the dike-pond research pass: what stands on a silk-and-fish hamlet that a paddy hamlet lacks, and which paddy features a no-rice hamlet should lack (search-pass agent, then `source-reader` on every claim)
+- [x] T30 the dike-pond research pass: what stands on a silk-and-fish hamlet that a paddy hamlet lacks, and which paddy features a no-rice hamlet should lack (search-pass agent, then `source-reader` on every claim)
+      given 2026-08-27T23:09Z | done 2026-08-28 | elapsed: 8+ h of it a hung search agent (never returned; the pass redone in-session in ~25 min, 4 parallel fetch/search turns) | runs: source-reader x1 (Sonnet, 11 fetches, 2 min)
+      note: Fei 1939 READ in full locally (the one primary silk-village ethnography); Ruddle & Zhong SUMMARY-ONLY throughout (403 everywhere); pond huts NOT SUPPORTED after two searches
       research: physical
-      - [ ] research pass  - [ ] source-reader confirmed  - [ ] recorded and cited
-- [ ] T31 the record: research/archetypes.md gains the findings with `Sources:` lines; SOURCES.md the keys; `specs/134-.../audit.md` the gap list (prevalence, source, drawability), the not-owed list, and the should-be-absent list
+      - [x] research pass  - [x] source-reader confirmed (every non-Fei claim READ verbatim; the Fei quotes READ by the session from the full text - the reader's fetch truncates the book, recorded in SOURCES.md)  - [x] recorded and cited (research/archetypes.md 'What stands on a dike-pond hamlet...'; SOURCES.md 11 keys)
+- [x] T31 the record: research/archetypes.md gains the findings with `Sources:` lines; SOURCES.md the keys; `specs/134-.../audit.md` the gap list (prevalence, source, drawability), the not-owed list, and the should-be-absent list
+      note: `specs/134-kuwabata-dike-pond-hamlet/audit.md` - six candidates (A1 creek + boats + landing the strongest), one should-be-absent (B1 the threshing yard on a no-rice hamlet), six not-owed, the three archetype absences (D), the holding figure (E)
       research: physical
-      - [ ] research pass  - [ ] source-reader confirmed  - [ ] recorded and cited
+      - [x] research pass  - [x] source-reader confirmed  - [x] recorded and cited
 - [ ] T32 present to the GM and STOP: the generated map's path, the census, the audit list; `settlement-review` of Kuwabata launched in the background at this hand-back (dev/reviews.md: at acceptance, never per task); no item of the audit implemented (FR-007, FR-008)
       research: procedure
 
