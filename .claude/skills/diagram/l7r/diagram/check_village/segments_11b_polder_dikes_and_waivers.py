@@ -196,11 +196,12 @@ def _seg_0581__polder_dike_is_earthwork(
             # bank carries only its own soil-binding trees). perimeter_dike registers the band as a placement
             # keep-out; this verifies it. A house corner or a grove clump center inside the dike band fires.
             on_dike = []
+            _keep = dk.get("keepout") or band  # the crest's few chords the placer kept off (feature 139); the band for an older manifest
             for h in M.get("houses", []):
                 if h.get("on_dike"):
                     continue  # a dike_top_houses house LIVES on the bank (settlement_form 'dike_top') - dike_top_houses_on_the_dike verifies it instead
                 hw, hh = h.get("w", 40) / 2, h.get("h", 26) / 2
-                if any(point_in_poly(h["x"] + sx * hw, h["y"] + sy * hh, band) for sx in (-1, 1) for sy in (-1, 1)):
+                if any(point_in_poly(h["x"] + sx * hw, h["y"] + sy * hh, _keep) for sx in (-1, 1) for sy in (-1, 1)):
                     on_dike.append(("house", round(h["x"]), round(h["y"])))
             for g in M.get("village_groves", []):
                 on_dike += [("grove", round(cx), round(cy)) for cx, cy in g.get("clumps", []) if point_in_poly(cx, cy, band)]

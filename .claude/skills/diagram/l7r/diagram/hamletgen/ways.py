@@ -2196,6 +2196,10 @@ def stage_seat(s: Settlement, plan: SitePlan) -> None:
         plan.windward = min(WIND_VECTORS, key=lambda q: -(WIND_VECTORS[q][0] * seat["out"][0] + WIND_VECTORS[q][1] * seat["out"][1]))
         s.M["meta"]["windward"] = plan.windward
     s.M["meta"]["lane_skeleton"] = plan.lane_skeleton
+    # THE SIDE THE HOUSES STAND ON, told to the settlement (feature 139): every field test from here on measures
+    # the outline's few chords facing this seat (`rolling/fit.py::_field_chains`), never the whole outline.
+    if plan.seat:
+        s.field_face = (float(plan.seat["cx"]), float(plan.seat["cy"]))
 
 
 def stage_track(s: Settlement, plan: SitePlan) -> None:

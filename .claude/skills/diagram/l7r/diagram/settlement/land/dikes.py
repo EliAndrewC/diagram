@@ -19,7 +19,11 @@ import math
 import random
 from typing import TYPE_CHECKING, Any
 
+from l7r.diagram.settlement._geom.primitives import keepout_ring
+
 from .._geom import Poly, Pt, point_in_poly, smooth_closed, smooth_points
+
+DIKE_KEEPOUT_EPS = 8.0  # px: a chord may stray this far from the crest; the keep-out is pushed out by it (feature 139)
 
 if TYPE_CHECKING:
     from ..core import Settlement
@@ -174,7 +178,20 @@ class DikeMixin:
         # the dike is a raised earthwork bank - NO-BUILD ground: houses and the windbreak grove keep OFF it
         # (GM 2026-07-22). Register the band as a placement keep-out so try_place / farmsteads / village_grove
         # flow around it (validated by structures_clear_of_dike).
-        self.block_polys.append(smoothed)
+        # THE KEEP-OUT IS A FEW CHORDS ALONG THE CREST, NOT THE DRAWN BAND (feature 139, GM 2026-08-28:
+        # *"thousands of vertices is obviously bad ... draw a single line segement along the edge of the actual
+        # polder boundaries and then put the houses on one side of it"*). The smoothed band has 2,880 vertices
+        # on the seed-19 polder and every homestead seat test walked all of them (8 s of a roll). The crest is
+        # simplified to at most a couple of dozen chords (Douglas-Peucker at DIKE_KEEPOUT_EPS) and pushed out on
+        # each side by the band's MEASURED reach plus the tolerance, so it contains every vertex of the band
+        # (`tests/settlement/test_keepouts.py`); placement, the scatter and the near-ring paddies keep off it,
+        # and `structures_clear_of_dike` measures the same chords (recorded as `keepout`). The drawing and the
+        # `outline` record are unchanged.
+        _crest = [((inner_s[i][0] + outer_s[i][0]) / 2, (inner_s[i][1] + outer_s[i][1]) / 2) for i in range(n)]
+        _keep, _chords = keepout_ring(_crest, smoothed, DIKE_KEEPOUT_EPS)
+        self.M["dikes"][-1]["keepout"] = [[round(p[0], 1), round(p[1], 1)] for p in _keep]
+        self.M["dikes"][-1]["keepout_chords"] = len(_chords)
+        self.block_polys.append(_keep)
         if label:
             # site the label on a clear stretch: the outward-most mid-edge point that is NOT near the village
             houses = self.M.get("houses", [])

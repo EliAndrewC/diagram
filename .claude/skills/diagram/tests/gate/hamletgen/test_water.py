@@ -77,3 +77,21 @@ def test_a_polder_hamlet_draws_its_grid_dike_and_reservoir() -> None:
     pond = M.get("pond")
     assert pond, "the header reservoir is the polder's water source"
     assert not point_in_poly(pond[0], pond[1], list(plan.envelope)), "the reservoir sits BESIDE the crop, never in it"
+
+
+@pytest.mark.rolls_map
+def test_the_polders_keep_outs_contain_what_they_stand_for() -> None:
+    """Feature 139 on REAL geometry: the dike's few-chord keep-out contains every vertex of the drawn band, the
+    field's facing chains never accept a point the outline refuses, and the counts are the GM's - a couple of
+    dozen chords around the ring dike, under ten on the field's house side."""
+    from l7r.diagram.settlement._geom.primitives import chain_violated
+
+    _plan, M = rollcache.hamlet(hg.HamletSpec(name="Polder", seed=19, households=16, field_archetype="polder_grid", down_deg=90))
+    dk = M["dikes"][0]
+    assert dk["keepout_chords"] <= 24 and len(dk["keepout"]) <= 48
+    outside = [(x, y) for x, y in dk["outline"] if not point_in_poly(x, y, dk["keepout"])]
+    assert not outside, f"{len(outside)} of {len(dk['outline'])} band vertices outside the keep-out, e.g. {outside[:3]}"
+    fld = M["fields"][0]
+    chains = [[((a[0], a[1]), (b[0], b[1]), (nv[0], nv[1])) for a, b, nv in ch] for ch in fld["keepout_chains"]]
+    assert 1 <= fld["keepout_chords"] <= 12
+    assert all(chain_violated(x, y, chains, 0.5) for x, y in fld["outline"] if any(True for _ in chains))  # no outline vertex on the house side

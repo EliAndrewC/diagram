@@ -153,7 +153,7 @@ def executed_lines(paths: list[str]) -> dict[str, set[int]]:
     return {rel: set(v["executed_lines"]) for rel, v in rels.items() if rel.startswith(drawn)}
 
 
-def numeric_sites(source: str, executed: set[int]) -> list[tuple[int, int, int, str]]:
+def numeric_sites(source: str, executed: set[int]) -> list[tuple[int, int, int | None, str]]:
     """(lineno, col, end_col, text) for every numeric literal a mutation could actually move a map
     with - which is a much smaller set than "every numeric literal", and that gap was the whole cost.
 
@@ -185,7 +185,7 @@ def numeric_sites(source: str, executed: set[int]) -> list[tuple[int, int, int, 
     return sorted(sites)
 
 
-def mutate(source: str, site: tuple[int, int, int, str]) -> str:
+def mutate(source: str, site: tuple[int, int, int | None, str]) -> str:
     lineno, col, end_col, text = site
     lines = source.splitlines(keepends=True)
     value = ast.literal_eval(text)
@@ -264,7 +264,7 @@ def main(argv: list[str]) -> int:
         vacuous = 0
         while done < args.trials and sites:
             rel, *rest = sites.pop(rng.randrange(len(sites)))
-            site: tuple[int, int, int, str] = (rest[0], rest[1], rest[2], rest[3])
+            site: tuple[int, int, int | None, str] = (rest[0], rest[1], rest[2], rest[3])
             path = pathlib.Path(os.path.join(HERE, rel))
             where = f"{os.path.relpath(rel, ENGINE)}:{site[0]}"
             path.write_text(mutate(originals[rel], site))

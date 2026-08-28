@@ -6,7 +6,8 @@ Split from settlement/rolling.py by feature 118 - see settlement/rolling/CLAUDE.
 import math
 from typing import TYPE_CHECKING, Any, cast
 
-from .._geom import FARMHOUSE_EAVE_GAP_FT, Pt, edge_dist, point_in_poly, poly_gap, rot_rect, seg_dist, segments_cross
+from .._geom import FARMHOUSE_EAVE_GAP_FT, Indexed, Pt, edge_dist, point_in_poly, poly_gap, rot_rect, seg_dist, segments_cross
+from .._geom.primitives import FIELD_KEEPOUT_EPS, chain_distance, chain_violated, facing_chains, keepout_ring
 
 if TYPE_CHECKING:
     from ..core import Settlement
@@ -16,7 +17,7 @@ class BundleFitMixin:
     def _field_adjacent(self: Settlement, x: float, y: float) -> bool:  # type: ignore[misc]
         """A farmhouse must stay near the farmland (within the gate's ADJ=165), so a nudge cannot drift it
         off into the urban core or the void."""
-        return any(edge_dist(x, y, poly) <= 165 for poly in self.field_polys) if self.field_polys else True
+        return self._field_within(x, y, 165) if self.field_polys else True
 
     def _rect_corners(self: Settlement, rect: Any) -> list[Pt]:  # type: ignore[misc]
         cx, cy, w, h = rect
@@ -37,6 +38,51 @@ class BundleFitMixin:
             cached = (len(polys), boxes)
             self._bbox_cache[id(polys)] = cached
         return cast(list[Any], cached[1])
+
+    def _field_chains(self: Settlement) -> Any:  # type: ignore[misc]
+        """THE FIELD EDGE AS A FEW OPEN CHORDS ON THE HOUSE SIDE (feature 139, GM 2026-08-28: *"49-73 verticies still
+        sounds like a lot ... just a few line segments on one side of the field that you are checking that you are
+        on the correct side of ... not forming a closed shape"*). When the engine has planned the cluster's seat
+        (`field_face`, set by hamletgen's `stage_seat`), each field outline becomes the open chain(s) of its
+        chords facing that seat - the reference hamlet's 73-vertex outline gives 5 chords - each pushed out by
+        the tolerance so no drawn outline lies on the house side of it; a seat is judged by SIDE and by the
+        rule's own gap (`chain_violated`). Where no seat is planned (the legacy village roll) a closed ring of
+        the simplified outline stands in (`keepout` polygons, as before feature 139 but with a handful of
+        vertices). Returns `(chains, rings)`: one of them empty. Cached by the registry's identity and length."""
+        polys = self.field_polys
+        face = getattr(self, "field_face", None)
+        key = (id(polys), len(polys), face)
+        cached = getattr(self, "_field_chain_cache", None)
+        if cached is None or cached[0] != key:
+            if face is not None:
+                chains = [c for p in polys if len(p) >= 4 for c in facing_chains(p, face, FIELD_KEEPOUT_EPS)]
+                cached = (key, (chains, Indexed()))
+            else:
+                cached = (key, ([], Indexed([keepout_ring(p, p, FIELD_KEEPOUT_EPS)[0] if len(p) >= 4 else list(p) for p in polys])))
+            self._field_chain_cache = cached
+        return cached[1]
+
+    def _field_blocks_point(self: Settlement, x: float, y: float, gap: float) -> bool:  # type: ignore[misc]
+        """Does a field's edge refuse the point (x, y) at `gap`? Chains where the seat is known, rings otherwise."""
+        chains, rings = self._field_chains()
+        if chains:
+            return chain_violated(x, y, chains, gap)
+        return any(point_in_poly(x, y, poly) or edge_dist(x, y, poly) < gap for poly, *_ in self._keepout_index(rings, "field_ring_keepout", gap).near(x, y))
+
+    def _field_blocks_rect(self: Settlement, rect: Any) -> bool:  # type: ignore[misc]
+        """Does a field's edge refuse this axis-aligned rect? Its four corners and center against the chains (any
+        corner on the field side or within the tolerance fails), or the rings by overlap as before."""
+        chains, rings = self._field_chains()
+        if chains:
+            cx, cy, w, h = rect
+            return any(chain_violated(px, py, chains, 0.0) for px, py in ((cx - w / 2, cy - h / 2), (cx + w / 2, cy - h / 2), (cx + w / 2, cy + h / 2), (cx - w / 2, cy + h / 2), (cx, cy)))
+        return bool(self._rect_hits(rect, rings))
+
+    def _field_within(self: Settlement, x: float, y: float, reach: float) -> bool:  # type: ignore[misc]
+        chains, rings = self._field_chains()
+        if chains:
+            return chain_distance(x, y, chains) <= reach
+        return any(edge_dist(x, y, poly) <= reach for poly in rings)
 
     def _rect_hits(self: Settlement, rect: Any, polys: Any) -> bool:  # type: ignore[misc]
         """Whether an axis-aligned rect overlaps any polygon in `polys` (corner-in, vertex-in, or edge-cross).
@@ -117,7 +163,7 @@ class BundleFitMixin:
         fields and the water lines."""
         if self._rect_hits(rect, self.block_polys):
             return True
-        if fields and self._rect_hits(rect, self.field_polys):
+        if fields and self._field_blocks_rect(rect):
             return True
         if fields and self._rect_on_water(rect):
             return True

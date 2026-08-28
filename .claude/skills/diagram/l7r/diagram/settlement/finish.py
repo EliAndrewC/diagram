@@ -362,6 +362,28 @@ class FinishMixin:
         # that frames to the bare canvas never calls either (Hoshizora), and a queued stand that is
         # never flushed is a wood with no trees. Idempotent, so the usual crop-time flush still wins.
         self.flush_tree_stands()
+        # THE FIELD'S CHORDS FOR THE GATE (feature 139): `houses_clear_of_paddies` measures the same few chords the
+        # placer measured (`rolling/fit.py::_field_chains`) - open chains facing the planned seat when there is one
+        # (`keepout_chains`, each chord with its outward normal), a closed simplified ring (`keepout`) when not.
+        from l7r.diagram.settlement._geom.primitives import FIELD_KEEPOUT_EPS, facing_chains, keepout_ring  # noqa: PLC0415 - finish-time only
+
+        _face = getattr(self, "field_face", None)
+        if _face is not None and self.field_polys:
+            # THE PLACER'S OWN CHAINS, recorded flat: `houses_clear_of_paddies` must measure the very chords placement
+            # measured, or a seat can pass one and fail the other (Mizuguchi did, 2026-08-28, when the gate rebuilt
+            # chains from the manifest's rounded outline instead).
+            _chains, _rings = self._field_chains()
+            self.M["field_chains"] = [[[[round(_a[0], 1), round(_a[1], 1)], [round(_b[0], 1), round(_b[1], 1)], [round(_n[0], 4), round(_n[1], 4)]] for _a, _b, _n in _ch] for _ch in _chains]
+        for _fld in self.M.get("fields") or []:
+            _ol = [(float(_x), float(_y)) for _x, _y in (_fld.get("outline") or [])]
+            if len(_ol) < 4 or "keepout" in _fld or "keepout_chords" in _fld:
+                continue
+            if _face is not None:
+                _fld["keepout_chords"] = sum(len(_ch) for _ch in facing_chains(_ol, _face, FIELD_KEEPOUT_EPS))  # the count the record reports; the gate reads M["field_chains"]
+            else:
+                _keep, _chords = keepout_ring(_ol, _ol, FIELD_KEEPOUT_EPS)
+                _fld["keepout"] = [[round(_p[0], 1), round(_p[1], 1)] for _p in _keep]
+                _fld["keepout_chords"] = len(_chords)
         # Deferred place_caption() seats, in call order, against the FINISHED map - and BEFORE the
         # road caption, which goes last because it has by far the most room to move: its subject is
         # a whole road segment with a wide slide set, where a market row's caption has one short
