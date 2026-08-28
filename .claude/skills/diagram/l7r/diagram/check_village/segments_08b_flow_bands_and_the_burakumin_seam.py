@@ -433,14 +433,10 @@ def _seg_0542__households_consistent(
         else:  # legacy tiers still depict ~0.7-0.9 (extended-family sharing, off-frame)
             lo, hi = round(0.68 * hh), round(0.9 * hh)
         check("households_consistent", lo <= occupied <= hi, f"{occupied} occupied houses for ~{hh} households (expect {lo}-{hi}; +{abandoned} abandoned)")
-    elif meta.get("target_houses"):
-        t = meta["target_houses"]
-        lo, hi = round(0.85 * t), round(1.15 * t)
-        pass  # `` retired under feature 141 (the GM's cut); the segment stays for the check it keeps or the value it writes
-    elif scale in ("village", "hamlet"):
-        lo, hi = (40, 80) if scale == "village" else (10, 30)
-        pass  # `` retired under feature 141 (the GM's cut); the segment stays for the check it keeps or the value it writes
-    return _kept(locals(), ('hh', 'hi', 'lo', 't'))
+    # THE OTHER TWO ARMS WERE DEAD (feature 146): each computed a band for a check feature 141 retired and
+    # then did nothing with it, and nothing downstream reads `lo`/`hi`/`t` - the live check above binds its
+    # own. `_kept` keeps `hh` alone, which is what the following segments actually need.
+    return _kept(locals(), ("hh",))
 
 
 # a caste's homes come in size variants (the wealthy get larger houses); count them together

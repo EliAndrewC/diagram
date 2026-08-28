@@ -127,3 +127,14 @@ def test_feature_022_registry_base_names_match_the_frozen_legacy_set():
     frozen = json.loads((pathlib.Path(__file__).parent.parent / "fixtures" / "gate_check_names.json").read_text())
     registry = sorted({c for seg in check_village.GATE_SEGMENTS for c in seg.checks})
     assert registry == frozen
+
+
+def test_a_waiver_excuses_its_check_and_is_recorded_as_used() -> None:
+    """Feature 146: the WAIVE arm of `driver.check` - a map may break a rule in writing, and the driver
+    records what was actually excused so a waiver whose defect is fixed can be reported stale."""
+    from l7r.diagram import check_village
+
+    M = manifest(meta={"scale": "hamlet", "households": 15, "toscale": True}, houses=[])
+    M["meta"]["waivers"] = {"households_consistent": "a deliberate break, with a reason long enough to satisfy the minimum the gate demands of one"}
+    fails = check_village.gate(M, verbose=False, only={"households_consistent"})
+    assert "households_consistent" not in fails, "the waiver must excuse the check"

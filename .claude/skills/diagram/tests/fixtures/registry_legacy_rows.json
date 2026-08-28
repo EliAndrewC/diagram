@@ -8131,10 +8131,7 @@
         "t"
       ],
       "writes": [
-        "hh",
-        "hi",
-        "lo",
-        "t"
+        "hh"
       ],
       "checks": [
         "households_consistent"
