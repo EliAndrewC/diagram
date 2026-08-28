@@ -231,7 +231,7 @@ def _seg_0069___mw_rd(*, M: Any = _UNBOUND) -> dict[str, Any]:
 def _seg_0070___mw_ways_1(*, M: Any = _UNBOUND, _mw_rd: Any = _UNBOUND, _mw_ways: Any = _UNBOUND) -> dict[str, Any]:
     """Gate segment 70 (_mw_ways) - body verbatim from the legacy gate() (feature 022)."""
     if _mw_rd:
-        _mw_ways.append((_mw_rd, float(M.get("road_width") or 26.0) / 2.0))
+        _mw_ways.append((_mw_rd, float(M.get("road_width") or 30.0) / 2.0))
     return _kept(locals(), ('_mw_ways',))
 
 
@@ -752,7 +752,7 @@ def _seg_0096__dung_heaps_clear_of_hitch_rails(
     if _sy_yards:
         _fw_ways: list[tuple[list[Any], float]] = []  # type: ignore[no-redef]
         if M.get("road"):
-            _fw_ways.append((M["road"], M.get("road_width", 26) / 2))
+            _fw_ways.append((M["road"], M.get("road_width", 30) / 2))
         if M.get("ring_road"):
             _fw_ways.append((M["ring_road"], M.get("ring_road_width", 20) / 2))
         for _st in M.get("town_streets", []) or []:

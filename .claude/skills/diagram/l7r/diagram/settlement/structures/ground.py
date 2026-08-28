@@ -18,17 +18,26 @@ if TYPE_CHECKING:
     from ..core import Settlement
 
 
+#: the trunk road's default real width, feet - 5 ken (the 1604 Tokaido standard) drawn at 30 (feature 144)
+ROAD_W_FT = 30.0
+
+
 class GroundMixin:
     def road(self: Settlement, pts: Any, label: Any = None, width: float | None = None, label_xy: Any = None) -> None:  # type: ignore[misc]
         """A major road (e.g. an Imperial road) - a bordered roadbed. No-build corridor.
-        Default real width 26 ft (an Imperial trunk highway; the historical Tokaido ran
-        ~18-24 ft), converted at the map's ftpx and linework-floored.
+        Default real width ROAD_W_FT = 30 ft (an Imperial trunk highway), converted at the
+        map's ftpx and linework-floored. WHY 30 (GM 2026-08-28, feature 144): the Tokaido's
+        width was standardized at 5 ken in 1604 ("街道の幅員を5間とし", ja.wikipedia 東海道 -
+        `tokaido-jawiki` in research/SOURCES.md), 5 ken = 29.5 ft; drawn at the round 30 the
+        GM asked for. The earlier 26 ft ("the Tokaido's own width") and the "~18-24 ft" this
+        docstring once claimed were both unsourced - research/cities/capitals.md "Street
+        widths" carries the read and the correction.
         label_xy overrides the label anchor (default: the polyline midpoint). For a city the
         midpoint is the city CENTER, but the road label names the *Imperial* road, which is an
         Imperial responsibility only OUTSIDE the walls - inside, the same roadway is a city
         street the city maintains - so a city must pass label_xy a point beyond the gates."""
         if width is None:
-            width = self.lw(26)
+            width = self.lw(ROAD_W_FT)
         dd = 'M' + ' L'.join(f'{x},{y}' for x, y in pts)
         self.corridors.append((pts, width / 2 + max(32 * self.bscale, 17)))  # wide road -> larger building setback (at the map's grain, floored)
         if "road" not in self.M or self.M["road"] is None:

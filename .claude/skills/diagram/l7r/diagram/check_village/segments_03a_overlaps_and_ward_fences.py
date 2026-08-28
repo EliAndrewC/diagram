@@ -417,7 +417,7 @@ def _seg_0168__road_layers() -> dict[str, Any]:
 def _seg_0169__road_layers_1(*, M: Any = _UNBOUND, road_layers: Any = _UNBOUND) -> dict[str, Any]:
     """Gate segment 169 (road_layers) - body verbatim from the legacy gate() (feature 022)."""
     if M.get("road") is not None and M.get("road_z") is not None:
-        road_layers.append((M["road"], M["road_z"], M.get("road_width", 26) / 2))
+        road_layers.append((M["road"], M["road_z"], M.get("road_width", 30) / 2))
     return _kept(locals(), ('road_layers',))
 
 
@@ -513,7 +513,7 @@ def _seg_0176__lanes() -> dict[str, Any]:
 def _seg_0177__lanes_1(*, M: Any = _UNBOUND, lanes: Any = _UNBOUND) -> dict[str, Any]:
     """Gate segment 177 (lanes) - body verbatim from the legacy gate() (feature 022)."""
     if M.get("road") and M.get("road_z") is not None:
-        lanes.append(("road", M["road"], M.get("road_width", 26), M["road_z"]))
+        lanes.append(("road", M["road"], M.get("road_width", 30), M["road_z"]))
     return _kept(locals(), ('lanes',))
 
 

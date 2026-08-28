@@ -533,7 +533,7 @@ def _seg_0106_012__ring_road_kept_clear(*, M: Any = _UNBOUND, check: Any = _UNBO
 def _seg_0106_013__cap_ways(*, M: Any = _UNBOUND, r: Any = _UNBOUND, scale: Any = _UNBOUND) -> dict[str, Any]:
     """Gate segment 0106.013 (cap_ways, r) - body verbatim from _seg_0106__capital_declares_a_budget (feature 024 per-check split; guards re-evaluated in the body, see split_oversized.py)."""
     if scale == 'capital':
-        cap_ways = ([(M["road"], M.get("road_width") or 26.0)] if M.get("road") else []) + [(r["pts"], r.get("w", 26.0)) for r in M.get("roads", [])]
+        cap_ways = ([(M["road"], M.get("road_width") or 30.0)] if M.get("road") else []) + [(r["pts"], r.get("w", 26.0)) for r in M.get("roads", [])]
     return _kept(locals(), ('cap_ways', 'r'))
 
 

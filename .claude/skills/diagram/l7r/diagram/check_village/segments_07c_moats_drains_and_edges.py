@@ -582,7 +582,7 @@ def _seg_0499___hcorr_1(*, M: Any = _UNBOUND, _hcorr: Any = _UNBOUND, s: Any = _
 def _seg_0500___hcorr_2(*, M: Any = _UNBOUND, _hcorr: Any = _UNBOUND) -> dict[str, Any]:
     """Gate segment 500 (_hcorr) - body verbatim from the legacy gate() (feature 022)."""
     if M.get("road"):
-        _hcorr.append((M["road"], M.get("road_width", 26) / 2 + 2))
+        _hcorr.append((M["road"], M.get("road_width", 30) / 2 + 2))
     return _kept(locals(), ('_hcorr',))
 
 
@@ -630,7 +630,7 @@ def _seg_0504__corridors_1(*, M: Any = _UNBOUND, corridors: Any = _UNBOUND, s: A
 def _seg_0505__corridors_2(*, M: Any = _UNBOUND, corridors: Any = _UNBOUND) -> dict[str, Any]:
     """Gate segment 505 (corridors) - body verbatim from the legacy gate() (feature 022)."""
     if M.get("road"):
-        corridors.append((M["road"], M.get("road_width", 26) / 2))
+        corridors.append((M["road"], M.get("road_width", 30) / 2))
     return _kept(locals(), ('corridors',))
 
 

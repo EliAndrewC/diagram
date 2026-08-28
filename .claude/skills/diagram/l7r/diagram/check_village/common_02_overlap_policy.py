@@ -216,7 +216,7 @@ def matrix_extents(M: Mapping[str, Any]) -> list[tuple[str, list[tuple[float, fl
             if p_:
                 out.append((k, [(p_[0] + p_[2] * math.cos(a_), p_[1] + p_[3] * math.sin(a_)) for a_ in [i * math.pi / 8 for i in range(16)]], None, None))
         elif k in ("road", "moat", "ring_road", "wall", "lane"):
-            _w = {"road": float(M.get("road_width") or 26.0), "moat": float(M.get("moat_width") or 22.0), "ring_road": 20.0, "wall": 10.0, "lane": 6.0}[k]
+            _w = {"road": float(M.get("road_width") or 30.0), "moat": float(M.get("moat_width") or 22.0), "ring_road": 20.0, "wall": 10.0, "lane": 6.0}[k]
             for q in _mx_stroke(M.get(k) or [], _w / 2):
                 out.append((k, q, None, None))
         elif k == "torii":
@@ -501,7 +501,7 @@ def _theater_one_stage(M: Manifest, ts: dict[str, Any], ts_hits: list[str], ts_f
     if M.get("moat"):
         lines.append(("the moat", M["moat"], M.get("moat_width", 26) / 2 + 4))
     if M.get("road"):
-        lines.append(("a road", M["road"], M.get("road_width", 26) / 2))
+        lines.append(("a road", M["road"], M.get("road_width", 30) / 2))
     if M.get("ring_road"):
         lines.append(("the ring road", M["ring_road"], M.get("ring_road_width", 15) / 2))
     lines += [("a street", st["pts"], st.get("w", 18) / 2) for st in M.get("town_streets", [])]

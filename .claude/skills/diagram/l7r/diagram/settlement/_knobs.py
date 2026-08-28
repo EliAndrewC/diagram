@@ -520,7 +520,7 @@ def bridge_carried_ways(M: Any) -> list[tuple[Any, float]]:
     the sets are derived ONCE, here, and consumed by both."""
     carried: list[tuple[Any, float]] = []
     if M.get("road"):
-        carried.append((M["road"], M.get("road_width", 26)))
+        carried.append((M["road"], M.get("road_width", 30)))
     for rd in M.get("roads", []):  # every OTHER trunk road - the omission that left two gates unbridged
         carried.append((rd["pts"], rd.get("w", 26)))
     if M.get("ring_road"):

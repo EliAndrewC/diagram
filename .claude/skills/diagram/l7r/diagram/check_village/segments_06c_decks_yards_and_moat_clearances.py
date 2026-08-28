@@ -38,7 +38,7 @@ def _seg_0387__ways_cross_water_on_a_deck(
 ) -> dict[str, Any]:
     """Gate segment 387 (ways_cross_water_on_a_deck) - body verbatim from the legacy gate() (feature 022)."""
     if wd_waters:
-        wd_ways = ([("road", M["road"], float(M.get("road_width", 26)))] if M.get("road") else []) + [
+        wd_ways = ([("road", M["road"], float(M.get("road_width", 30)))] if M.get("road") else []) + [
             ("road", r9["pts"] if isinstance(r9, dict) else r9, float(r9.get("w", 20)) if isinstance(r9, dict) else 20.0) for r9 in M.get("roads", [])
         ]
         wd_ways += [("street", s9["pts"], float(s9.get("w", 18))) for s9 in M.get("town_streets", [])]
@@ -457,7 +457,7 @@ def _seg_0397__wells_not_clustered(
 
 def _seg_0398__r9_1(*, M: Any = _UNBOUND, r9: Any = _UNBOUND) -> dict[str, Any]:
     """Gate segment 398 (r9, rb_roads) - body verbatim from the legacy gate() (feature 022)."""
-    rb_roads = ([{"pts": M["road"], "w": M.get("road_width", 26)}] if M.get("road") else []) + [r9 if isinstance(r9, dict) else {"pts": r9, "w": 20} for r9 in M.get("roads", [])]
+    rb_roads = ([{"pts": M["road"], "w": M.get("road_width", 30)}] if M.get("road") else []) + [r9 if isinstance(r9, dict) else {"pts": r9, "w": 20} for r9 in M.get("roads", [])]
     return _kept(locals(), ('r9', 'rb_roads'))
 
 

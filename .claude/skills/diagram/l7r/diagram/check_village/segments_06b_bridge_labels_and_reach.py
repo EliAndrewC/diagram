@@ -551,7 +551,7 @@ def _seg_0375__city_streets_serve_both_sides(
 
 def _seg_0376__r9(*, M: Any = _UNBOUND, r9: Any = _UNBOUND) -> dict[str, Any]:
     """Gate segment 376 (r9, sf_ways) - body verbatim from the legacy gate() (feature 022)."""
-    sf_ways = ([("road", M["road"], float(M.get("road_width", 26)))] if M.get("road") else []) + [
+    sf_ways = ([("road", M["road"], float(M.get("road_width", 30)))] if M.get("road") else []) + [
         ("road", r9["pts"] if isinstance(r9, dict) else r9, float(r9.get("w", 20)) if isinstance(r9, dict) else 20.0) for r9 in M.get("roads", [])
     ]
     return _kept(locals(), ('r9', 'sf_ways'))

@@ -735,7 +735,7 @@ def _seg_0563_240__est_on_road(
 ) -> dict[str, Any]:
     """Gate segment 563.240 (est_on_road, mn, rp) - body verbatim from the city mega-segment (feature 023; guards preserved, see research.md R2/R3)."""
     if scale in ('city', 'capital') and meta.get('walled'):
-        est_on_road = [(round(mn["x"]), round(mn["y"])) for mn in est_out if any(footprint_on_line(rect_corners(_struct_rect(mn)), rp, (M.get("road_width", 26) / 2 + 4)) for rp in roads_all)]
+        est_on_road = [(round(mn["x"]), round(mn["y"])) for mn in est_out if any(footprint_on_line(rect_corners(_struct_rect(mn)), rp, (M.get("road_width", 30) / 2 + 4)) for rp in roads_all)]
     return _kept(locals(), ('est_on_road', 'mn', 'rp'))
 
 

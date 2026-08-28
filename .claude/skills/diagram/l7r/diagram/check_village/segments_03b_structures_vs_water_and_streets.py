@@ -129,7 +129,7 @@ def _seg_0199__no_structure_on_road(
 ) -> dict[str, Any]:
     """Gate segment 199 (no_structure_on_road) - body verbatim from the legacy gate() (feature 022)."""
     if road:
-        rw = M.get("road_width", 26) / 2 + 2  # roadbed half-width + a little
+        rw = M.get("road_width", 30) / 2 + 2  # roadbed half-width + a little
 
         def on_road(sc: Poly) -> bool:
             if any(seg_dist(cx, cy, road[k], road[k + 1]) < rw for (cx, cy) in sc for k in range(len(road) - 1)):

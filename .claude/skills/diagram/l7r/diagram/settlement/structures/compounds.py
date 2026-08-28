@@ -187,7 +187,7 @@ class CompoundsMixin:
         lines += [(al["pts"], al.get("w", 8) / 2 + marg) for al in self.M.get("alleys", [])]
         lines += [(rd["pts"], rd["w"] / 2 + marg) for rd in self.M.get("roads", [])]
         if self.M.get("road"):
-            lines.append((self.M["road"], self.M.get("road_width", 26) / 2 + marg))
+            lines.append((self.M["road"], self.M.get("road_width", 30) / 2 + marg))
         if self.M.get("ring_road"):
             lines.append((self.M["ring_road"], self.M.get("ring_road_width", 7) / 2 + marg))
         boxes = [(dk["x"], dk["y"], dk["w"] / 2 + marg, dk["h"] / 2 + marg) for dk in self.M.get("docks", [])]

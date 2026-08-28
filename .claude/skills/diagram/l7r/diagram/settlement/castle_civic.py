@@ -779,7 +779,7 @@ class CastleCivicMixin:
         if self.M.get("moat_layer") or self.M.get("moat"):
             lines.append((self.M.get("moat_layer") or self.M.get("moat"), self.M.get("moat_width", 22) / 2))
         if self.M.get("road"):
-            lines.append((self.M["road"], self.M.get("road_width", 26) / 2))
+            lines.append((self.M["road"], self.M.get("road_width", 30) / 2))
         for st in self.M.get("streams", []):
             lines.append((st["poly"], st.get("w", 9) / 2))
         for pts, half in lines:

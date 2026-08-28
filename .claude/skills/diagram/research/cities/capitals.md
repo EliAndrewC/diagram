@@ -529,7 +529,7 @@ the checks do not currently care - say the word.
 
 ## Street widths: the ote-suji is a grand street, not an imperial boulevard
 
-**Evidence:** attested, liberty (the 45 ft choice)
+**Evidence:** attested (5 ken), deviation (30 drawn for 29.5 - a rounding)
 
 **Sources:** `suzaku-oji-jawiki` (READ: 82 m Heian-kyō, 147 m Chang'an - the entry's 84 / ~150 are rounded), `tokaido-jawiki` (READ: 5 ken in 1604 - see the correction); Honchō-dōri at 13.8 m not found (secondary pages give 9.9-11.8 m post-Meireki)
 
@@ -556,6 +556,8 @@ default's docstring already cites its source, and any hand width should be able 
 
 *Correction to the record (2026-08-28, feature 143) - CONTRADICTED on a drawn default, rule unchanged, awaiting the GM:* the engine's `s.road` default of 26 ft is glossed as "the Tōkaidō's own width"; ja.wikipedia 東海道 gives the 1604 standard as **5 ken ≈ 9 m ≈ 29.5 ft**. The 45 ft ōte-suji stands as a proportion (half again the highway); the 13.8 m Honchō figure it was pegged to was not found (9.9-11.8 m are the figures seen). Ledger section G.
 
+**GM ruling (2026-08-28, feature 144) - FIXED:** the trunk-road default is **30 ft** on every Mode B map (`ground.py` `ROAD_W_FT`), from the 1604 standard of 5 ken ≈ 29.5 ft (`tokaido-jawiki`), rounded to the "about thirty feet" the GM asked for. The 26 ft gloss ("the Tōkaidō's own width") and the docstring's "~18-24 ft" are struck. The ōte-suji's 45 ft is now exactly half again the highway (45 / 30). Class for the HTML modal: **accurate** (the width), **deviation** (the half-foot rounding).
+
 ## Dimensional audit of the drawn capital (GM-prompted, 2026-08-09)
 
 **Evidence:** liberty (an audit against anchors already recorded)
@@ -579,7 +581,7 @@ failed and was fixed; the rest hold.
 | Imperial Magistrate | 300 x 225 ft = 0.63 ha | Ubame's county magistracy manor (360 x 216 ft = 0.72 ha); ~68 staff + family | HOLDS - same institutional class |
 | sovereign temple halls | 150 x 100 ft | the shrine_hall guard's researched kondo ceiling (largest real main halls ~150-190 ft) | HOLDS |
 | granary kura | 60 x 36 ft per store | the town granary research (58 x 34 family) | HOLDS |
-| ote-suji 45 ft / roads 26 ft / ring 20 ft / brokers' lane 24 ft | | Honcho-dori / Tokaido / patrol-lane conventions | HOLDS (see "Street widths") |
+| ote-suji 45 ft / roads 30 ft (26 until feature 144) / ring 20 ft / brokers' lane 24 ft | | Honcho-dori / Tokaido 5 ken / patrol-lane conventions | HOLDS (see "Street widths") |
 | towpath 8 ft | | Shaoxing's stone qiandao ~5-6.5 ft; ours carries horse teams | HOLDS, upper band |
 | aqueduct cut 10 ft | | josui earth cuts ~1-3 ken (6-18 ft) | HOLDS, mid-band |
 | moat feeder leat 48 ft | | Tango's 66 ft feeder; moat-class water | HOLDS |

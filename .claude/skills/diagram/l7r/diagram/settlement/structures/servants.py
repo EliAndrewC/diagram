@@ -122,7 +122,7 @@ class ServantRangesMixin:
         beds = [(st["pts"], st.get("w", 18) / 2) for st in self.M.get("town_streets", [])]
         beds += [(al["pts"], al.get("w", 10) / 2) for al in self.M.get("alleys", [])]
         if self.M.get("road"):
-            beds.append((self.M["road"], self.M.get("road_width", 26) / 2))
+            beds.append((self.M["road"], self.M.get("road_width", 30) / 2))
         if self.M.get("ring_road"):
             beds.append((self.M["ring_road"], self.M.get("ring_road_width", 15) / 2))
         in_ward = [b for b in self.M["buildings"] if any(point_in_poly(b["x"], b["y"], rg) for rg in self._samurai_ward_interiors)]

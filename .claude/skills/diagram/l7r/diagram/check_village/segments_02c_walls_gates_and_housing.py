@@ -349,7 +349,7 @@ def _seg_0133_000__r22(*, M: Any = _UNBOUND, r22: Any = _UNBOUND, scale: Any = _
     if scale in ('town', 'city', 'capital'):
         st_lines = (
             [(st["pts"], st.get("w", 18)) for st in M.get("town_streets", [])]
-            + ([(M["road"], M.get("road_width", 26))] if M.get("road") else [])
+            + ([(M["road"], M.get("road_width", 30))] if M.get("road") else [])
             + [(r22["pts"], r22.get("width") or 26) for r22 in M.get("roads", [])]
         )  # trunk roads carry frontage too (021: the guan-xiang wards string their shops along them)
     return _kept(locals(), ('r22', 'st', 'st_lines'))
