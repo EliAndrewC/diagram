@@ -101,3 +101,39 @@ def test_ways_cross_water_on_a_deck_fires_when_a_lane_is_laid_down_the_channel()
         M["bridges"] = []
 
     _fires(REFERENCE, "ways_cross_water_on_a_deck", down_the_channel)
+
+
+@pytest.mark.rolls_map
+def test_scalebar_matches_declared_scale_fires_when_the_declared_scale_changes_under_it() -> None:
+    _fires(REFERENCE, "scalebar_matches_declared_scale", lambda M: M["meta"].__setitem__("ftpx", 3.0))
+
+
+@pytest.mark.rolls_map
+def test_lanes_bend_like_paths_fires_on_a_hairpin() -> None:
+    def hairpin(M: dict[str, Any]) -> None:
+        x, y = M["houses"][0]["x"], M["houses"][0]["y"]
+        M["lanes"].append({"pts": [[x, y - 200], [x, y - 100], [x + 4, y - 200]], "w": 5, "worn": True, "connector": False})  # out and straight back
+
+    _fires(REFERENCE, "lanes_bend_like_paths", hairpin)
+
+
+@pytest.mark.rolls_map
+def test_woodland_commons_on_dry_ground_fires_when_a_coppice_is_laid_in_the_marsh() -> None:
+    def into_the_bog(M: dict[str, Any]) -> None:
+        poly = [[float(a), float(b)] for a, b in M["marshes"][0]["poly"][:4]]
+        cx = sum(q[0] for q in poly) / len(poly)
+        cy = sum(q[1] for q in poly) / len(poly)
+        M["commons"].append(
+            {"x": cx, "y": cy, "w": 120.0, "h": 120.0, "rot": 0, "role": "woodland", "seq": 99, "poly": [[cx - 60, cy - 60], [cx + 60, cy - 60], [cx + 60, cy + 60], [cx - 60, cy + 60]]}
+        )
+
+    _fires(REFERENCE, "woodland_commons_on_dry_ground", into_the_bog)
+
+
+@pytest.mark.rolls_map
+def test_map_frame_hugs_its_content_fires_when_the_frame_is_blown_out() -> None:
+    def blow_out_the_frame(M: dict[str, Any]) -> None:
+        v = list(M["meta"]["view"])
+        M["meta"]["view"] = [v[0] - 900, v[1] - 900, v[2] + 1800, v[3] + 1800]
+
+    _fires(REFERENCE, "map_frame_hugs_its_content", blow_out_the_frame)
