@@ -188,7 +188,7 @@ class FinishMixin:
         except Exception:  # PIL / font absent: the engine stays standalone on a generous estimate
             return len(s) * fs * 0.62
 
-    def title(self: Settlement, name: str, fs: float = 30) -> None:  # type: ignore[misc]
+    def title(self: Settlement, name: str, fs: float = 30, prefer: tuple[float, float, float, float] | None = None) -> None:  # type: ignore[misc]
         """Place the map title (the bold place name plus a scale bar under it) over BLANK space: scan the
         rendered window for a spot where the box clears every feature (buildings, fields, water, groves,
         the pond), scanning top-first so the title lands high when it can. Records the placed box in M['title']
@@ -214,7 +214,18 @@ class FinishMixin:
         PAD = 12  # placard padding around the text block
         bw, bh = max(tw, bar_px) + 2 * PAD, th + 46 + 2 * PAD  # the searched box: the whole placard
         vx0, vy0, vw, vh = self.view if self.view else (0, 0, self.W, self.H)
-        spot = self._blank_label_spot(vx0, vy0, vw, vh, bw, bh)
+        # THE RESERVED POCKET FIRST (feature 139): the scripted tier holds a pocket of blank ground for the
+        # title before the coppice and the belt are seated, and DENTS the windbreak around it - so a title
+        # that then lands in another corner leaves the dent as a hole in the belt (Kuwabata, a 40-50 ft
+        # bare run: `village_windbreak_is_continuous`). If the caller names its pocket and the placard
+        # fits there clear of every obstacle, that is where it goes; the scan is the fallback.
+        spot = None
+        if prefer is not None:
+            _px, _py = prefer[0] + 6.0, prefer[1] + 6.0
+            if _px + bw <= prefer[2] and _py + bh <= prefer[3] and self._box_clear(_px, _py, _px + bw, _py + bh, self._title_obstacles()):
+                spot = (_px, _py)
+        if spot is None:
+            spot = self._blank_label_spot(vx0, vy0, vw, vh, bw, bh)
         if spot:
             px0, py0 = spot
         elif self.view:  # map too full - fall back to the top-left corner

@@ -93,3 +93,5 @@ def test_a_dike_pond_hamlet_is_ponds_in_a_diked_block_with_wet_flanks() -> None:
     assert plan.placed == plan.spec.households
     assert set(m["waterward"]) and set(m["waterward"]) <= {"N", "E", "S", "W"}
     assert sum(1 for q in M["marshes"] if q.get("role") == "waterside") == len(m["waterward"])
+    # no threshing yards on a no-rice hamlet (feature 139 T41, GM 2026-08-28) - declared and drawn so
+    assert m["work_yards"] is False and M["threshing_yards"] and all(y.get("kind") == "forecourt" for y in M["threshing_yards"])

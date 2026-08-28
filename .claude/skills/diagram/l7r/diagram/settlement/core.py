@@ -56,6 +56,9 @@ class Settlement(
         # the PNG is byte-identical by construction (spec FR-010) - and the HTML target wraps each
         # classed string in a `<g class="f f-<class>">` for the hover/click page. `None` means no one
         # has ruled on that ink (the FR-009 census reports it); `"-"` is the not-highlighted ruling.
+        # WORK YARDS: every farmstead bundle carries a threshing yard unless the generator declares the
+        # settlement grows no rice (feature 139: the dike-pond hamlet; `meta.work_yards`, `_bundle_geom`).
+        self._work_yards: bool = True
         self.out_cls: list[ClsTag] = []
         self.top_cls: list[ClsTag] = []
         self.toplabels_cls: list[ClsTag] = []

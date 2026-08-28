@@ -52,7 +52,8 @@ class FarmsteadFlushMixin:
         self._relax_gardens_south(bundled)  # nudge east-shaded gardens a little S (all groves now known)
         for rec in bundled:
             geom = rec["geom"]
-            self._attach_yard(rec["x"], rec["y"], geom["yard"])
+            if geom.get("yard") is not None:
+                self._attach_yard(rec["x"], rec["y"], geom["yard"])
             self._attach_garden(rec["x"], rec["y"], geom["gardens"])
             self.house(rec["x"], rec["y"], rec["w"], rec["h"], rec["kind"], rec["rot"], shed=rec["shed"], shed_side=rec.get("shed_side", "W"))
         # The yashikirin arms DRAW LAST, after every house/shed of this pass is down (GM 2026-07-25).
@@ -112,7 +113,8 @@ class FarmsteadFlushMixin:
                     continue
                 g = r["geom"]
                 out.append(tuple(g["house"]))
-                out.append(tuple(g["yard"]))
+                if g.get("yard") is not None:
+                    out.append(tuple(g["yard"]))
                 out += [tuple(b) for b in g.get("gardens", [])]
                 out += [tuple(g[k]) for k in ("grove_n", "grove_w") if k in g]
             return out
@@ -133,7 +135,7 @@ class FarmsteadFlushMixin:
             if not any(overlaps((gcy - gh / 2, gcy + gh / 2), t) for t in trees):
                 continue  # not currently east-shaded - nothing to do
             maxshift = gh + rec["h"] + 6  # 'a little' - stays a dooryard garden near the house
-            others = footprints(i) + [tuple(geom["house"]), tuple(geom["yard"])]
+            others = footprints(i) + [tuple(geom["house"])] + ([tuple(geom["yard"])] if geom.get("yard") is not None else [])
             dy = step
             while dy <= maxshift:
                 lane = (gcy + dy - gh / 2, gcy + dy + gh / 2)  # clear of EVERY east tree (a small shift can slip INTO a taller arm)

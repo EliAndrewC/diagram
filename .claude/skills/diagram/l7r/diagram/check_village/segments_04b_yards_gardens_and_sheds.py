@@ -129,10 +129,15 @@ def _seg_0285_009__h(*, h: Any = _UNBOUND, houses: Any = _UNBOUND, scale: Any = 
 # (nudging it as needed) - so a farmhouse without a yard is a generator bug, not a density limit.
 
 
-def _seg_0285_010__h_1(*, h: Any = _UNBOUND, occ_h: Any = _UNBOUND, scale: Any = _UNBOUND, t: Any = _UNBOUND, yards: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 0285.010 (h, t, without) - body verbatim from _seg_0285__wells_clear_of_shrine_and_torii (feature 024 per-check split; guards re-evaluated in the body, see split_oversized.py)."""
+def _seg_0285_010__h_1(*, h: Any = _UNBOUND, meta: Any = _UNBOUND, occ_h: Any = _UNBOUND, scale: Any = _UNBOUND, t: Any = _UNBOUND, yards: Any = _UNBOUND) -> dict[str, Any]:
+    """Gate segment 0285.010 (h, t, without) - body verbatim from _seg_0285__wells_clear_of_shrine_and_torii (feature 024 per-check split; guards re-evaluated in the body, see split_oversized.py).
+
+    A map that DECLARES no work yards (`meta.work_yards: false` - the dike-pond hamlet, which grows no
+    rice; feature 139, GM 2026-08-28) has nothing to thresh, so no farmhouse is "without" one. The
+    declaration is what is tested, not the absence: an undeclared map with a yardless farmhouse still
+    fires, which keeps the generator bug the rule exists for visible."""
     if scale in ('town', 'village', 'hamlet') and scale in ('town', 'village', 'hamlet', 'city'):
-        without = [(round(h["x"]), round(h["y"])) for h in occ_h if not any(t["of"][0] == h["x"] and t["of"][1] == h["y"] for t in yards)]
+        without = [] if meta.get("work_yards") is False else [(round(h["x"]), round(h["y"])) for h in occ_h if not any(t["of"][0] == h["x"] and t["of"][1] == h["y"] for t in yards)]
     return _kept(locals(), ('h', 't', 'without'))
 
 

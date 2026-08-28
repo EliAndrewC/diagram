@@ -11,7 +11,7 @@ from l7r.diagram.settlement import Settlement, seg_dist
 from l7r.diagram.settlement.structures.fixtures import KOSATSUBA_VERGE_FT
 
 from .consts import POLDER_ARCHETYPES
-from .hinterland import CROP_MARGIN
+from .hinterland import CROP_MARGIN, title_pocket
 from .plan import SitePlan
 from .water import polder_crossing_caps
 
@@ -159,4 +159,4 @@ def stage_frame(s: Settlement, plan: SitePlan) -> None:
     # only extra is open ground is wasted image. 64 was tried and fails all twelve. 48 is the most
     # air the frame will give the title.
     s.crop_to_content(margin=CROP_MARGIN)
-    s.title(plan.spec.name)
+    s.title(plan.spec.name, prefer=title_pocket(s, plan))  # the pocket the belt was dented around (feature 139)

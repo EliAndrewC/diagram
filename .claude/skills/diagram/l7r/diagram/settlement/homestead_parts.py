@@ -92,8 +92,19 @@ class HomesteadPartsMixin:
         inscribed in the reserved rect so it can never breach the collision the rect already cleared."""
         ox, oy, yw, yh = spot
         poly = self._quad(ox, oy, yw, yh, 0.10, 41.0)
-        self._draw_threshing_yard(ox, oy, yw, yh, poly)
-        self.M["threshing_yards"].append({"x": round(ox, 1), "y": round(oy, 1), "w": yw, "h": yh, "rot": 0, "of": [hx, hy], "poly": [[round(px, 1), round(py, 1)] for px, py in poly]})
+        # A NO-RICE HAMLET DRAWS NO THRESHING FLOOR (feature 139, GM 2026-08-28: "thrashing yards on a
+        # no-rice hamlet seem bad and should be eliminated"). The ground is still RECORDED, as a
+        # `forecourt`: the open ground before a farmhouse is what the lane web threads around, what
+        # trees, scrub and wells keep out of, and what a silk-and-fish household works its leaf and
+        # nets on - dropping the record (measured) re-packed the web and the belt, which was not the
+        # ask. Only the ink goes: no swept floor, no bordered frame. `harvest_yards_present` reads
+        # `meta.work_yards` and stands aside; the interactive class `threshing yard` has no ink here.
+        _fore = not getattr(self, "_work_yards", True)
+        if not _fore:
+            self._draw_threshing_yard(ox, oy, yw, yh, poly)
+        self.M["threshing_yards"].append(
+            {"x": round(ox, 1), "y": round(oy, 1), "w": yw, "h": yh, "rot": 0, "of": [hx, hy], "poly": [[round(px, 1), round(py, 1)] for px, py in poly], **({"kind": "forecourt"} if _fore else {})}
+        )
         self.placed.append((ox, oy, yw, yh))
 
     def _draw_garden(self: Settlement, cx: float, cy: float, w: float, h: float, poly: Any) -> None:  # type: ignore[misc]

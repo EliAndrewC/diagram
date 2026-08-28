@@ -241,7 +241,7 @@ class BundleFitMixin:
         # `|dx| < (yard_w + house_w)/2`, and a seat that missed the placer's version by 0.35 px failed
         # the check's on a held-out cohort map. Both axes, or the disagreement just moves.
         hx, hy, hw, hh = geom["house"]
-        yx, yy, yw, yh = geom["yard"]
+        yard = geom.get("yard")  # None on a no-yard bundle (feature 139): nothing of its own to keep sunny; it may still shade a neighbor's
         # THE NEIGHBORS' YARDS ARE READ OFF THE PLACED BUNDLES, not off `M["threshing_yards"]`.
         # Yards are not drawn until `farmsteads()` flushes, long after every house is seated, so the
         # manifest list is EMPTY while placement runs - testing it caught nothing in the direction
@@ -250,10 +250,10 @@ class BundleFitMixin:
         # its own `geom`, so the yard is there to be read.
         for b in self.M.get("houses", []):
             g = b.get("geom")
-            ty = g["yard"] if g else None
-            if ty is None:
+            if not g:
                 continue
-            if abs(ty[0] - hx) < (ty[2] + hw) / 2 + side and 0 < (hy - hh / 2) - (ty[1] + ty[3] / 2) < reach:
+            ty = g.get("yard")  # None on a no-yard bundle (feature 139) - its GARDENS below still get their corridor
+            if ty is not None and abs(ty[0] - hx) < (ty[2] + hw) / 2 + side and 0 < (hy - hh / 2) - (ty[1] + ty[3] / 2) < reach:
                 return False
             # ...NOR A NEIGHBOR'S GARDEN BEDS (feature 133 T10, GM 2026-08-25: "there is not enough
             # space for sunlight to hit the gardens"). The corridor was stated for the yard and never
@@ -265,6 +265,9 @@ class BundleFitMixin:
                 if abs(tg[0] - hx) < (tg[2] + hw) / 2 + side and 0 < (hy - hh / 2) - (tg[1] + tg[3] / 2) < reach:
                     return False
         # ...and this YARD must not sit in a standing house's shadow
+        if yard is None:
+            return True
+        yx, yy, yw, yh = yard
         return not any(abs(b["x"] - yx) < (b["w"] + yw) / 2 + side and 0 < (b["y"] - b["h"] / 2) - (yy + yh / 2) < reach for b in self.M.get("houses", []))
 
     def _gardens_sun_ok(self: Settlement, geom: Any) -> bool:  # type: ignore[misc]
@@ -298,7 +301,11 @@ class BundleFitMixin:
         """The fit checks that do NOT depend on which side the garden is on - the house, the south threshing
         yard, a north kura, the windward grove (dispersed only), and the yard sun-corridor. Same for every
         garden side at a given position, so it is tested once per position."""
-        if self._rect_blocked(geom["house"], fields=True) or self._rect_blocked(geom["yard"], fields=True) or ("shed" in geom and self._rect_blocked(geom["shed"], fields=True)):
+        if (
+            self._rect_blocked(geom["house"], fields=True)
+            or (geom.get("yard") is not None and self._rect_blocked(geom["yard"], fields=True))
+            or ("shed" in geom and self._rect_blocked(geom["shed"], fields=True))
+        ):
             return False
         # THE WALL HOLDS ITS OWN FLOOR OFF THE PADDY (feature 133 T41). `_rect_blocked` refuses a house
         # that LAPS a paddy and nothing more, so a seat could put the wall on the bund - Inashiro's
@@ -357,10 +364,10 @@ class BundleFitMixin:
             g = rec.get("geom")
             if not g:
                 continue
-            if any(shades(gv, g["yard"]) for gv in new_groves):
+            if g.get("yard") is not None and any(shades(gv, g["yard"]) for gv in new_groves):
                 return True
             other_groves = (g["grove_n"], g["grove_w"]) if "grove_n" in g else ()
-            if any(shades(gv, new_yard) for gv in other_groves):
+            if new_yard is not None and any(shades(gv, new_yard) for gv in other_groves):
                 return True
         return False
 

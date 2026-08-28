@@ -53,7 +53,12 @@ def stage_water_frame(s: Settlement, plan: SitePlan) -> None:
         nucleated=plan.settlement_form == "nucleated",
         field_footbridges=True,
         water_kind="stream",
+        # NO WORK YARDS ON A NO-RICE HAMLET (feature 139, GM 2026-08-28): the threshing yard is a rice
+        # feature; the dike-pond archetype sells silk and fish and buys grain in. Declared here so the
+        # bundle omits the yard (`_bundle_geom`) and `harvest_yards_present` stands aside.
+        work_yards=plan.field_archetype != "mulberry_dike_fishpond",
     )
+    s._work_yards = plan.field_archetype != "mulberry_dike_fishpond"
     # `_nucleated` IS NOT THE FORM - it is the engine's flag for a COMPACT BUNDLE (house + lee
     # garden + south yard, no per-house grove; see `_place_bundle`, which branches on it). The two
     # were the same thing only while every hamlet was nucleated.

@@ -712,6 +712,15 @@ def test_wells_sized_to_buildings_passes_when_proportional():
     assert "wells_sized_to_buildings" not in f_only(_well_size_city(11.9), "wells_sized_to_buildings")
 
 
+def test_harvest_yards_present_stands_aside_on_a_map_that_declares_no_work_yards():
+    # feature 139 (GM 2026-08-28): a dike-pond hamlet grows no rice, so its farmsteads carry no threshing
+    # yard and DECLARE it (`meta.work_yards: false`); an undeclared yardless farmhouse still fires
+    M = _harvest(_SIX, [])
+    assert "harvest_yards_present" in f_only(M, "harvest_yards_present")
+    M["meta"]["work_yards"] = False
+    assert "harvest_yards_present" not in f_only(M, "harvest_yards_present")
+
+
 def test_harvest_yards_present_fires_when_any_farmhouse_lacks_one():
     # 5 of 6 yards - even one farmhouse without a yard fails (the work yard was universal)
     assert "harvest_yards_present" in f_only(_harvest(_SIX, [_yard(h) for h in _SIX[:5]]), "harvest_yards_present")
