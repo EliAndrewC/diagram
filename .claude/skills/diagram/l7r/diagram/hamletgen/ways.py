@@ -492,7 +492,6 @@ def stage_web(s: Settlement, plan: SitePlan) -> None:
     # things built on it. Counting them walls a steading in behind its own commons.
     _solid = [poly for poly, _own, kind in fabric if kind not in ("commons", "village_groves")]
     hard_built = [*hard, *_solid]
-    _set_touch_soft([poly for poly, _own, kind in fabric if kind not in ("commons", "village_groves", "groves", "houses")])  # the junction margins (feature 137 T03)
     walls = [poly for poly, _, _ in fabric]
     # The shelter belts, separately: a web lane may CROSS one but may not run its length.
     belts = [[(float(a), float(b)) for a, b in g["poly"]] for g in s.M.get("village_groves", []) if g.get("poly")]
@@ -1215,36 +1214,21 @@ _SERVE_FT = 100.0  # ft: a way serves a house within this - `farmhouses_reach_a_
 _TOUCH_GAP = 4.0
 
 
-_TOUCH_SOFT: list[Poly] = []  # the non-house fabric a junction link keeps _TOUCH_SOFT_GAP off (set by stage_web)
-_TOUCH_SOFT_GAP = 6.0  # ft: the matrix sizes a lane 6 ft wide and a garden's rect stands ~2.3 ft proud of its bed, so 4 ft is inside it
-
-
-def _set_touch_soft(polys: list[Poly]) -> None:
-    global _TOUCH_SOFT  # noqa: PLW0603 - one module-level list, set by stage_web before its passes
-    _TOUCH_SOFT = list(polys)
-
-
 def _clear_touch(a: Pt, b: Pt, hard: list[Poly], walls: Sequence[Poly], water: list[tuple[Pt, Pt]]) -> bool:
     """`_clear_link` at footprint margins - for the short link that closes a junction (see `_TOUCH_GAP`).
 
-    TWO MARGINS, THE GATE'S OWN (feature 137 T03, 2026-08-28). One 4 ft brush for everything drew
-    the tier's links over garden rects - `houses_clear_of_lanes` permits a tread 3.5 ft from a house
-    point, but the overlap matrix sizes a lane 6 ft wide against a garden rect ~2.3 ft proud of its
-    bed, so a 4 ft brush of a garden is an overlap (features_do_not_overlap on 10 of 24 seeds after
-    T32, `houses_clear_of_lanes` on 13). A house keeps its 4 ft; a garden, yard, shed, byre or well
-    keeps `_TOUCH_SOFT_GAP`. One margin of 6 for all cost Inashiro three checks; 7 (the fabric
-    margin) cost the tier 1/24 - both measured and recorded in specs/137 T03."""
+    THE 4 ft BRUSH STAYS - three wider margins were measured and each broke the reference hamlet
+    (feature 137 T03, 2026-08-28): 7 ft (the fabric margin) put the T32 zigzag back beside the notice
+    board and took the 24-cohort to 1/24; 6 ft for everything cost Inashiro three checks; 6 ft for
+    gardens/yards/sheds with 4 for houses still cost it `lanes_bend_like_paths`. The margin was a
+    ghost: on the current tree `houses_clear_of_lanes` is 0 of 48 and `features_do_not_overlap` 2 of
+    48 - the T32-era brush failures were cured by later work (the set-back re-pack, the guard, the
+    ladder). Do not widen this again without a failing seed that names it."""
     span = math.dist(a, b)
     if span < 1.0:
         return True
     runs = clear_runs([a, b], hard, _TOUCH_GAP, step=3.0, lines=water, tight=walls, tight_margin=_TOUCH_GAP, floor=0.5)
-    if not any(polyline_len(r) >= span - 3.0 for r in runs):
-        return False
-    if _TOUCH_SOFT:
-        soft = clear_runs([a, b], _TOUCH_SOFT, _TOUCH_SOFT_GAP, step=3.0, lines=[], tight=[], tight_margin=_TOUCH_SOFT_GAP, floor=0.5)
-        if not any(polyline_len(r) >= span - 3.0 for r in soft):
-            return False
-    return True
+    return any(polyline_len(r) >= span - 3.0 for r in runs)
 
 
 def _components(ways: Sequence[Poly], touch: float) -> list[int]:
