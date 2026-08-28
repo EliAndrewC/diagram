@@ -135,7 +135,7 @@ Additionally, after the decomposition:
 
 Must print only `checked` (SC-002).
 
-## 9. Stop-work ritual
+## 9. Stop-work procedure
 
 Commit in the clone, then `scripts/sync-with-main.sh done` from inside it. **Not before** the gate
 is green AND the sweep says IDENTICAL - a byte that moved is a regression under Principle XIII, and

@@ -127,7 +127,7 @@
 - [x] T035 Run `make done` ONCE, backgrounded, and act on the completion notification - never poll it. Fix everything it reports together, then re-run once
 - [x] T036 **Principle XII closing gate**: batch every crop into ONE `crop_map.py` call across all four maps, read the PNGs together, and confirm per map that the execution ground reads as outside the settlement, as bare waste ground rather than a field, as disused at county tier, as on the road past the boundary stone, and as a visibly different place from the burial/cremation cluster. `make done` proves internal consistency; only the picture proves this
 - [x] T037 Confirm SC-005: all hamlet and village renders are unchanged (no tracked manifest for those tiers is dirty after the full sweep)
-- [ ] T038 Commit in the clone and run the stop-work ritual: `scripts/sync-with-main.sh done`
+- [ ] T038 Commit in the clone and run the stop-work procedure: `scripts/sync-with-main.sh done`
 
 ---
 
