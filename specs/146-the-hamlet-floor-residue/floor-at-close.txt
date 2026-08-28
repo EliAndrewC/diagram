@@ -1,0 +1,31 @@
+l7r/diagram/check_village/segments_01a_city_ring_and_frame.py                    90      2    98%   95, 98
+l7r/diagram/check_village/segments_02a_capital_budget_and_ministries.py          36      1    97%   93
+l7r/diagram/check_village/segments_02c_walls_gates_and_housing.py                59      2    97%   126-127
+l7r/diagram/check_village/segments_03c_clusters_and_labels.py                   138      7    95%   91-94, 128, 438-439
+l7r/diagram/check_village/segments_04b_yards_gardens_and_sheds.py               123      1    99%   438
+l7r/diagram/check_village/segments_05b_graveyards_and_channel_sources.py         36      6    83%   83, 87, 89, 97-98, 105
+l7r/diagram/check_village/segments_06a_bridges_and_gate_roads.py                 53      1    98%   147
+l7r/diagram/check_village/segments_06b_bridge_labels_and_reach.py                73      1    99%   150
+l7r/diagram/check_village/segments_06c_decks_yards_and_moat_clearances.py       167      3    98%   254-255, 257
+l7r/diagram/check_village/segments_07c_moats_drains_and_edges.py                439      1    99%   1117
+l7r/diagram/check_village/segments_11b_polder_dikes_and_waivers.py               80      1    99%   202
+l7r/diagram/hamletgen/hinterland.py                                             330      2    99%   611, 613
+l7r/diagram/hamletgen/homesteads.py                                             416      7    98%   266, 379-382, 617, 790
+l7r/diagram/hamletgen/water.py                                                  199      1    99%   205
+l7r/diagram/hamletgen/ways.py                                                  1259     28    98%   577, 1282-1283, 1303-1304, 1507, 1518, 1525-1526, 1677, 1826, 2087, 2309, 2346, 2399-2411, 2454
+l7r/diagram/settlement/_geom/primitives.py                                      196      2    99%   256, 269
+l7r/diagram/settlement/city/bridges.py                                          196     17    91%   199-209, 222, 300-303, 398
+l7r/diagram/settlement/fields/comb.py                                           264      3    99%   59, 220, 227
+l7r/diagram/settlement/finish.py                                                324      4    99%   228, 402, 418-419
+l7r/diagram/settlement/homestead_parts.py                                       478      2    99%   145, 692
+l7r/diagram/settlement/houses.py                                                415      3    99%   403-404, 540
+l7r/diagram/settlement/rolling/fit.py                                           224      2    99%   357, 370
+l7r/diagram/settlement/shrines_wells/byres.py                                   114      1    99%   129
+l7r/diagram/settlement/shrines_wells/woods.py                                   103      1    99%   200
+l7r/diagram/settlement/structures/captions.py                                    90      1    99%   122
+l7r/diagram/settlement/structures/fixtures.py                                   248      6    98%   289, 372, 456, 460-461, 617
+l7r/diagram/settlement/water_ways.py                                            556      9    98%   589-591, 599, 616, 724-725, 941, 1005
+l7r/diagram/waterfields/carve.py                                                445      6    99%   280, 414, 471, 681, 734, 844
+l7r/diagram/waterfields/comb.py                                                 249      1    99%   481
+l7r/diagram/waterfields/polder.py                                               229      1    99%   455
+l7r/diagram/waterfields/seams.py                                                383      5    99%   714, 786-787, 839, 924

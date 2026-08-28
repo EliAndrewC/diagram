@@ -88,4 +88,46 @@ finishable; it is simply not finished, and no number here is rounded up to prete
 
 ## R3 - the numbers at the end
 
-(filled in at the closing task)
+| | at 145's landing | at 146's close |
+|---|---|---|
+| hamlet-path floor | 373 lines, 94.8% -> 98.86% during 145 | **128 lines, 99.13%** |
+| modules on the path | 99 | 89 |
+| dead check code | - | **~5,300 lines removed** (210 segments, 29 helpers); all 153 checks intact |
+| frozen registry rows | 595 | 385 |
+| checks proved to fire on a scripted break | 4 | **31** |
+| the town/city battery | ungated since the 2026-08-16 freeze | gated read-only, each exhibit's post-freeze failures pinned |
+
+**SC-001 (a GREEN floor) is NOT met.** 128 lines remain and the record says so plainly rather than
+rounding. The table as it stands is `floor-at-close.txt`. What is in it:
+
+- **`hamletgen/ways.py`, 28** - nested closures inside the web stages (`_rejoinable`, `_commit`,
+  `_join_piece`, `_touch_junctions`, the detour inside `_thread_the_fabric`). Each is reachable in
+  principle; each needs a lane geometry contrived precisely enough that the router, the string-pull AND
+  the un-jog pass all fail first. Three were closed this way (the hairpin cut both ways, the cluster-edge
+  fallbacks); the rest are the same work at a higher price.
+- **`settlement/city/bridges.py`, 17** - the city bridge's rotation search and the footbridge's per-segment
+  caps. Reachable only by a city map's PLACER, and the city pool is frozen (never regenerated), so nothing
+  runs them. Not removable - the city tier needs them - and not reachable until a city is scripted.
+- **~83 across 29 more modules** - ones and twos: a refusal reason inside a predicate whose setup is a whole
+  carve or a whole web (`close_seams`, `_carve_sector`, `_dry_fields`), or a check branch inside a segment
+  that needs a manifest shape the reference does not carry.
+
+**What closed the 245 that did close**: ~50 unit tests naming one refusal reason each, 27 scripted negative
+fixtures, the frozen-exhibit gate, and - the larger half - deleting code that could not be reached at all.
+
+## R4 - findings this feature made that are not about coverage
+
+1. **`labels_clear_of_other_buildings` was retired by feature 141**, so the whole `_LABEL_GROUP` /
+   `_LABEL_EXEMPT` caption registry - still maintained in comments - has no consumer, and a caption drawn
+   through a byre passes green (T16; found by the Kashikawa settlement-review under 145).
+2. **The grove's BAMBOO species is declared and never drawn**: `b_th` is 0.0 in both mixes, so
+   `_draw_grove`'s culm arm was unreachable. Removed; the intent recorded in
+   `future-work/farming-communities.md`, because raising the threshold moves every grove on every map.
+3. **Nothing had gated the town or city battery since the 2026-08-16 freeze** - the structural reason city
+   code read as uncovered.
+4. **Two interactive browser tests failed intermittently** because they hovered a group's BOUNDING-BOX
+   CENTRE, which for a scattered glyph (a windbreak's clumps, a farmhouse's roof and ridge) lands on bare
+   parchment. Both now target the element.
+5. **Four cohort seeds draw defective maps** (56 and 58 bend a lane like no foot would and leave the web in
+   two pieces, 57 leaves it in two, 59 puts a caption on the way it stands on and staggers a bund). Found by
+   widening the sweep to 24 seeds, which was then declined (R2d) - the seeds are recorded here instead.
