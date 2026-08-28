@@ -100,7 +100,7 @@ FORMAT_VERSION = "1"  # bump to invalidate every entry when this file's key sche
 _KERNEL_FS = ("/proc/", "/sys/", "/dev/")
 
 _NOT_ENGINE = {"gencache.py", "regen.py"}
-OUTPUT_SUFFIXES = (".json", ".svg", ".png")
+OUTPUT_SUFFIXES = (".json", ".svg", ".png", ".html")  # .html: the interactive page, written beside the svg (feature 134)
 GATE_BYPASS = "GATE_NO_CACHE"  # =1 forces the gate to regenerate everything (feature 026)
 COVERAGE_NAME = "coverage.data"  # per-entry generation coverage, stored by the gate's miss path
 

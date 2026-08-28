@@ -24,6 +24,25 @@ from pathlib import Path
 from types import ModuleType
 
 STATE_FILE = ".git/verification-state.json"
+
+
+def _state_file(root: Path) -> Path:
+    """Where the state lives for this checkout. In a plain clone `.git` is a directory; in a
+    `git worktree` it is a FILE reading `gitdir: <path>`, and writing under it raised
+    NotADirectoryError - which is how feature 134's baseline (`make done` in a detached worktree,
+    the way constitution XIII asks for it) failed before the first test ran. A worktree's state
+    goes in its own gitdir, so two worktrees of one repository never share a record."""
+    dotgit = root / ".git"
+    if dotgit.is_file():
+        text = dotgit.read_text(encoding="utf-8").strip()
+        if text.startswith("gitdir:"):
+            gitdir = Path(text[len("gitdir:") :].strip())
+            if not gitdir.is_absolute():
+                gitdir = (root / gitdir).resolve()
+            return gitdir / Path(STATE_FILE).name
+    return root / STATE_FILE
+
+
 GREEN = "green-local"
 FAILED = "failed-gate"
 GREEN_TARGETS = ("quick", "reference", "test-file", "done")
@@ -64,7 +83,7 @@ def _commit(root: Path) -> str:
 
 
 def read(root: Path) -> VerificationState | None:
-    path = root / STATE_FILE
+    path = _state_file(root)
     if not path.is_file():
         return None
     data = json.loads(path.read_text(encoding="utf-8"))
@@ -116,7 +135,7 @@ def write(root: Path, event: str, target: str, reused: bool = False) -> Verifica
         # skipped tooling tests no gate had run on a changed Makefile (caught 2026-08-26, T22)
         tooling=tooling_hash(root) if (target == "done" and not reused) else (prior.tooling if prior is not None else ""),
     )
-    (root / STATE_FILE).write_text(json.dumps(asdict(st), indent=2) + "\n", encoding="utf-8")
+    (_state_file(root)).write_text(json.dumps(asdict(st), indent=2) + "\n", encoding="utf-8")
     return st
 
 
@@ -165,7 +184,7 @@ def record_tooling(root: Path) -> str:
         )
     else:
         st = VerificationState(**{**asdict(prior), "tooling": h})
-    (root / STATE_FILE).write_text(json.dumps(asdict(st), indent=2) + "\n", encoding="utf-8")
+    (_state_file(root)).write_text(json.dumps(asdict(st), indent=2) + "\n", encoding="utf-8")
     return h
 
 

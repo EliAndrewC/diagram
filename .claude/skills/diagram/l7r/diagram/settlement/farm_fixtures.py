@@ -26,6 +26,10 @@ if TYPE_CHECKING:
 # Ming find (size GUESS). shrine: the one measured hokora is a 40 cm stone (READ); at 3 ft the GM could
 # not tell what it was, so it is DRAWN at the small-shed size - vermilion, a torii mark in front - as a
 # glyph rendering convention (GM 2026-08-27, T62; recorded as a deviation in settlements/homesteads.md).
+# The interactive map's feature class per fixture kind (feature 134, spec FR-007) - the vocabulary
+# is `interactive/classes.py`; a kind missing here is a KeyError at draw time, never silent ink.
+FIXTURE_CLASS = {"privy": "privy", "woodpile": "woodpile", "manure": "manure heap", "bath": "bathhouse", "coop": "hen coop", "shrine": "household shrine"}
+
 FIXTURE_FT: dict[str, tuple[float, float]] = {
     "privy": (6.0, 6.0),
     "woodpile": (10.0, 3.5),
@@ -76,7 +80,7 @@ class FarmFixturesMixin:
             g.append(f'<line x1="{x0 + 0.6:.1f}" y1="{ty - 0.4:.1f}" x2="{x0 + 0.6:.1f}" y2="{ty + 2.2:.1f}" stroke="{SHRINE_RED}" stroke-width="1.1"/>')
             g.append(f'<line x1="{-x0 - 0.6:.1f}" y1="{ty - 0.4:.1f}" x2="{-x0 - 0.6:.1f}" y2="{ty + 2.2:.1f}" stroke="{SHRINE_RED}" stroke-width="1.1"/>')
         g.append("</g>")
-        self.add_top("".join(g))
+        self.add_top("".join(g), cls=FIXTURE_CLASS[kind])  # feature 134: each kind is its own highlight class
         rec: dict[str, Any] = {"kind": kind, "x": round(cx, 1), "y": round(cy, 1), "w": round(w, 1), "h": round(h, 1), "rot": round(rot, 1)}
         if of is not None:
             rec["of"] = [round(float(of[0]), 1), round(float(of[1]), 1)]
@@ -90,7 +94,7 @@ class FarmFixturesMixin:
         for k in range(4):
             a = math.radians(45 + 90 * k)
             g.append(f'<circle cx="{cx + 0.55 * r * math.cos(a):.1f}" cy="{cy + 0.55 * r * math.sin(a):.1f}" r="{max(1.0, r * 0.14):.1f}" fill="#E07B22"/>')
-        self.add_top("".join(g))
+        self.add_top("".join(g), cls="persimmon")
         self._record_crowns([(cx, cy, r)])
         rec: dict[str, Any] = {"x": round(cx, 1), "y": round(cy, 1), "r": round(r, 1)}
         if of is not None:

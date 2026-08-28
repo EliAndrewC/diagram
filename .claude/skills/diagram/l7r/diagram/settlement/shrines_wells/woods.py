@@ -19,7 +19,7 @@ if TYPE_CHECKING:
 
 
 class TreeStandsMixin:
-    def _tree_stand(self: Settlement, poly: Poly, seed: int, floor: Poly | None = None, outliers: bool = True) -> None:  # type: ignore[misc]
+    def _tree_stand(self: Settlement, poly: Poly, seed: int, floor: Poly | None = None, outliers: bool = True, cls: str | None = None) -> None:  # type: ignore[misc]
         """Fill `poly` with INDIVIDUAL TREES - the ONE way this engine draws a wood (GM 2026-07-25).
 
         A forest is NOT a terrain type here. It used to be drawn as a flat pale wash under a widely-
@@ -61,8 +61,8 @@ class TreeStandsMixin:
         # wash - under a closed canopy hardly any of it shows, and its outline is buried under the
         # trees whose centers stand inside it.
         d = 'M' + ' L'.join(f'{x:.0f},{y:.0f}' for x, y in (floor or poly)) + ' Z'
-        self.add(f'<path d="{d}" fill="{self.FOREST_FLOOR}"/>')
-        self._pending_stands.append((list(poly), seed, outliers))
+        self.add(f'<path d="{d}" fill="{self.FOREST_FLOOR}"/>', cls=cls)
+        self._pending_stands.append((list(poly), seed, outliers, cls))  # the class rides to the deferred canopy (feature 134)
 
     def flush_tree_stands(self: Settlement) -> None:  # type: ignore[misc]
         """Draw the canopy of every queued tree stand (see _tree_stand). Runs at CROP time, so each
@@ -72,11 +72,11 @@ class TreeStandsMixin:
         stand re-seeds its own RNG, state saved/restored), so deferring ripples nothing. Idempotent;
         unit tests call it directly after forest()/forest_patch()."""
         pending = self._pending_stands
-        self._pending_stands: list[tuple[Poly, int, bool]] = []
-        for poly, seed, outliers in pending:
-            self._draw_stand(poly, seed, outliers)
+        self._pending_stands: list[tuple[Poly, int, bool, str | None]] = []
+        for poly, seed, outliers, cls in pending:
+            self._draw_stand(poly, seed, outliers, cls)
 
-    def _draw_stand(self: Settlement, poly: Poly, seed: int, outliers: bool) -> None:  # type: ignore[misc]
+    def _draw_stand(self: Settlement, poly: Poly, seed: int, outliers: bool, cls: str | None = None) -> None:  # type: ignore[misc]
         """One queued stand's canopy: the crowns inside `poly` plus (optionally) its fringe outside,
         each filtered so no tree is drawn on a roof or a wellhead."""
         xs = [p[0] for p in poly]
@@ -101,9 +101,9 @@ class TreeStandsMixin:
         # no crown is drawn on a roof or a wellhead - and by flush time that means EVERY one of them
         reach = rad * 1.4
         krect, kcirc = self._canopy_keepouts((min(xs) - reach, min(ys) - reach, max(xs) + reach, max(ys) + reach))
-        self.add(''.join(self._crowns([t for t in trees if not self._crown_covers(t[0], t[1], t[2], krect, kcirc, self.CANOPY_PAD)])))
+        self.add(''.join(self._crowns([t for t in trees if not self._crown_covers(t[0], t[1], t[2], krect, kcirc, self.CANOPY_PAD)])), cls=cls)
         if outliers:
-            self.add(''.join(self._crowns(self._stand_fringe(poly, step, rad, krect, kcirc))))
+            self.add(''.join(self._crowns(self._stand_fringe(poly, step, rad, krect, kcirc))), cls=cls)
         random.setstate(st)
 
     def _stand_fringe(self: Settlement, poly: Poly, step: float, rad: float, krect: Any, kcirc: Any) -> list[tuple[float, float, float, str]]:  # type: ignore[misc]

@@ -41,6 +41,7 @@ still resolve here, because a wrong depth is silent and just lands one directory
 | [`l7r/diagram/hamletgen/`](l7r/diagram/hamletgen/CLAUDE.md) | the scripted hamlet generator - a whole hamlet from a 9-line spec | you are working on scripted generation |
 | [`l7r/diagram/sitegen/`](l7r/diagram/sitegen/CLAUDE.md) | tier-agnostic generation machinery the tiers SHARE (geometry, types, worker counts) | you are adding a tier generator, or moving a stage out of one |
 | [`l7r/diagram/pipeline/`](l7r/diagram/pipeline/CLAUDE.md) | how a map gets regenerated, cached, rendered and indexed | the cache is behaving oddly, or you are changing how generation is DRIVEN |
+| [`l7r/diagram/interactive/`](l7r/diagram/interactive/CLAUDE.md) | the interactive HTML map (feature 134): the feature-class vocabulary with its explanations, and the page writer | you are adding a KIND of feature (it needs a class and an explanation), changing what a modal says, or the `all_ink_is_ruled_on` check fired |
 | [`l7r/diagram/tools/`](l7r/diagram/tools/CLAUDE.md) | read-only diagnostics and audits you run by hand | a map came out wrong and you need to ask WHY, or a number needs measuring |
 | [`l7r/diagram/ci/`](l7r/diagram/ci/CLAUDE.md) | the CodeBuild dispatcher: when a PAID remote run may start, and how it is driven (feature 130) | a remote run refused, or you are changing when money may be spent |
 | [`tests/`](tests/CLAUDE.md) | every test, mirroring the source layout, plus the frozen fixtures | you need to find or add a test |

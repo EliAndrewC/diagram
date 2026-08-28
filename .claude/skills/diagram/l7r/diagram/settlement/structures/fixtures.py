@@ -165,7 +165,7 @@ class PublicFixturesMixin:
         g.append(f'<rect x="{-hw:.1f}" y="{-hh:.1f}" width="{vw:.1f}" height="{vh:.1f}" rx="1" fill="#7A5A30" stroke="#5A3F1E" stroke-width="0.8"/>')  # the little tiled roof, seen from above
         g.append(f'<line x1="{-hw:.1f}" y1="0" x2="{hw:.1f}" y2="0" stroke="#EFE6CC" stroke-width="0.9"/>')  # the ridge
         g.append('</g>')
-        z = self.add_top(''.join(g))
+        z = self.add_top(''.join(g), cls="notice board")
         self.M["kosatsuba"].append({"x": round(x, 1), "y": round(y, 1), "w": w, "h": h, "vw": round(vw, 1), "vh": round(vh, 1), "rot": round(rot, 1), "z": z, "label": label})
         self.placed.append((x, y, vw, vh))
         bm = 6
@@ -433,7 +433,7 @@ class PublicFixturesMixin:
                 for dx, dy in ((-hw, -hh), (hw, -hh), (hw, hh), (-hw, hh))
             ]
             _lx, _ly = self.pull_caption_toward((_lx, _ly), label, 8, "middle", _t, _bq)
-            self.label(_lx, _ly, label, 8, italic=True, color="#7A5A30", rot=_t, ref=(x - hw, y - hh, x + hw, y + hh))
+            self.label(_lx, _ly, label, 8, italic=True, color="#7A5A30", rot=_t, ref=(x - hw, y - hh, x + hw, y + hh), cls="notice board")  # the caption shares the board's class (feature 134 FR-006)
         return z
 
     def fixture_clear_of_water(self: Settlement, x: float, y: float, half: float) -> bool:  # type: ignore[misc]

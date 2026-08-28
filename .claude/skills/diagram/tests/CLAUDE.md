@@ -13,6 +13,7 @@ changed, you know which directory to open.
 | `sitegen/` | the machinery the tiers SHARE (geometry, types, worker counts) | - |
 | `waterfields/` | the water-first field engine | - |
 | `pipeline/` | the cache, regen driver, render cache and pool index | - |
+| `interactive/` | the interactive HTML map (feature 134): the class registry, the page's string layer, and the Playwright browser test (`test_page_browser.py` - a synthetic page in quick, the reference hamlet's page at the gate) | - |
 | `tools/` | the audits and diagnostics that are under the 100% rule | - |
 | `fixtures/` | DATA, not tests: frozen red SVGs (Mode A negative fixtures), `gate_check_names.json`, `registry_legacy_rows.json` | - |
 

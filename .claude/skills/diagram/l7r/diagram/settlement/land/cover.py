@@ -237,8 +237,11 @@ class GroundCoverMixin:
                             ly, sp = py - th * (0.45 + 0.25 * k), (3.6 - k) * bs
                             g.append(f'<line x1="{px:.1f}" y1="{ly:.1f}" x2="{px - sp:.1f}" y2="{ly + 2 * bs:.1f}" stroke="#6E8452" stroke-width="{1.0 * bs:.1f}"/>')
                             g.append(f'<line x1="{px:.1f}" y1="{ly:.1f}" x2="{px + sp:.1f}" y2="{ly + 2 * bs:.1f}" stroke="#6E8452" stroke-width="{1.0 * bs:.1f}"/>')
-            self.add(f'<g stroke="#A7A860" stroke-width="0.8">{"".join(blades)}</g>')  # bucketed blades (empty group when none - harmless)
-            self.add(''.join(g))
+            # feature 134: the commons' highlight class follows its ROLE; a role the vocabulary does not
+            # name yet (pasture) stays unclassed so the census reports it rather than misfiling it
+            _ccls = {"woodland": "woodland commons", "grazing": "scrub and rough grazing", "commons": "scrub and rough grazing"}.get(role)
+            self.add(f'<g stroke="#A7A860" stroke-width="0.8">{"".join(blades)}</g>', cls=_ccls)  # bucketed blades (empty group when none - harmless)
+            self.add(''.join(g), cls=_ccls)
             random.setstate(st)
             self._cover_n += 1
             if role == "woodland":

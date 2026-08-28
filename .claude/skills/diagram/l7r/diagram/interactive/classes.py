@@ -1,0 +1,560 @@
+"""The feature-class vocabulary of the interactive map, and what each class tells its reader.
+
+Feature 134 (GM 2026-08-27): a player mousing over the HTML map highlights every feature OF A KIND,
+and a click opens a modal that says what the kind is, why it stands where it does, whether that is
+historically ACCURATE, a deliberate DEVIATION or a GUESS (constitution XII), and which research
+entries it rests on. This module is the ONE place the vocabulary lives: the engine tags ink with a
+class KEY (`Settlement.add(..., cls=...)`), the page reads the entry for every key present on the
+map, and nothing hamlet-specific is written anywhere - the explanations are per KIND, not per map.
+
+The vocabulary is the spec's FR-007 table (`specs/134-interactive-html-map/spec.md`), verbatim:
+those rows are the GM's judgment calls, listed so any can be overruled BY NAME. The distinguishing
+text is keyed by SIBLING PAIR and is SYMMETRIC (if A names B, B names A - the fidelity review's
+round-1 finding), and the page includes a sibling paragraph only when BOTH classes are on the map,
+so a hamlet with no woodland commons never claims the windbreak differs from one.
+
+Every explanation is written FROM a `research/` entry and carries that entry's label; where the
+record is silent the entry says GUESS in so many words. `research/README.md`: "an entry that
+presents reasoning as a finding is the one failure".
+
+`NOT_HIGHLIGHTED` is the pseudo-class for ink the GM has ruled OUT of highlighting (FR-002:
+"judgment calls to make about what things get highlighted and which things do not"). It is a
+ruling, not an omission: the census in `page.py` reports only ink that carries NO class at all, so
+a `"-"` tag keeps the frame off the report while a forgotten tag still fails the gate.
+"""
+
+from __future__ import annotations
+
+from dataclasses import dataclass, field
+from typing import Literal
+
+Label = Literal["accurate", "deviation", "guess"]
+
+#: The pseudo-class of ink ruled out of highlighting. Recorded, never wrapped, never reported.
+NOT_HIGHLIGHTED = "-"
+
+#: Each ruling that put a kind of ink on the not-highlighted list: (what, who, when, why).
+NOT_HIGHLIGHTED_RULINGS: tuple[tuple[str, str, str, str], ...] = (
+    ("the background sheet", "the spec (FR-002)", "2026-08-27", "not a feature of the place"),
+    ("the title placard and its text", "the spec (FR-002)", "2026-08-27", "map furniture, not a feature"),
+    ("the scale bar and its captions", "the spec (FR-002)", "2026-08-27", "map furniture, not a feature"),
+)
+
+
+@dataclass(frozen=True)
+class FeatureClass:
+    """One highlightable KIND of thing on the map, and what its modal says."""
+
+    key: str  # the tag the engine writes; also the CSS token (`f-<key>` after slugging)
+    name: str  # the class's display name - FR-007's row name, verbatim
+    covers: str  # which manifest features it draws - documentation for the next reader
+    what: str  # what the thing IS
+    why: str  # why it stands where it does on the map
+    label: Label  # constitution XII: accurate | deviation | guess
+    label_note: str  # the one line that justifies the label (a deviation says what deviates; a guess says what is silent)
+    sources: tuple[str, ...]  # `research/SOURCES.md` keys, or ("not recorded",)
+    entry: str  # the research/ entry (file + heading) the text was written FROM
+    siblings: dict[str, str] = field(default_factory=dict)  # sibling key -> how THIS class differs from it
+
+
+_LABEL_WORDS: dict[Label, str] = {
+    "accurate": "historically accurate",
+    "deviation": "a deliberate deviation",
+    "guess": "a guess",
+}
+
+
+def label_phrase(label: Label) -> str:
+    """The words the modal uses for a label - constitution XII's three, in the GM's own phrasing."""
+    return _LABEL_WORDS[label]
+
+
+def _c(**kw: object) -> FeatureClass:
+    return FeatureClass(**kw)  # type: ignore[arg-type]
+
+
+# The sibling texts, written once per PAIR and installed in both directions below. Each is how the
+# FIRST-named class differs from the second; the reverse direction reads the same text from the
+# other side, which is what "distinguished from one another" asks for.
+_PAIRS: dict[tuple[str, str], str] = {
+    (
+        "farmhouse",
+        "storage shed",
+    ): "The farmhouse is the dwelling; a storage shed is a roofed outbuilding for grain, straw, tools and fuel - Sugiura's 1972 survey counted 4.4 outbuildings per household, and the sheds drawn here stand for that inventory, not for a second house.",
+    (
+        "farmhouse",
+        "byre",
+    ): "A farmhouse shelters the household; a byre shelters its draft animal. In the temperate lowland this map draws the two are separate buildings - the attached stable wing (magariya) is a cold-country form and is not drawn.",
+    (
+        "storage shed",
+        "byre",
+    ): "A storage shed holds things; a byre holds an ox or a water buffalo. The GM's own line: a storage shed attached to a farmhouse is different from the animal sheds where the animals are kept - so the two never highlight together.",
+    (
+        "byre",
+        "hen coop",
+    ): "The byre is for the one draft animal a household could keep; the hen coop is a small ground-level roost for a few chickens - the Qimin Yaoshu says to build the roost as an enclosure on the ground with a perch inside, because birds left to the trees sicken.",
+    (
+        "threshing yard",
+        "garden",
+    ): "The threshing yard is bare, swept, tamped earth - a work floor for drying and threshing the harvest; the kitchen garden is tilled soil in planted rows. Both want sun, which is why neither is put in a neighbor's shadow.",
+    ("garden", "millet"): "The dooryard garden grows the household's vegetables beside the house; the millet plot is a field crop on the dry hem above the paddy, worked in rows.",
+    ("garden", "buckwheat"): "The dooryard garden grows the household's vegetables beside the house; the buckwheat plot is a field crop on the dry hem above the paddy, worked in rows.",
+    ("garden", "barley"): "The dooryard garden grows the household's vegetables beside the house; the barley plot is a field crop on the dry hem above the paddy, worked in rows.",
+    (
+        "privy",
+        "manure heap",
+    ): "The privy is the one-room outhouse; the manure heap is where its night soil and the byre's litter are composted before going onto the fields. They stand together because they were one cluster - in Han China the latrine sat over the pigsty and drained to the cesspool.",
+    (
+        "persimmon",
+        "copse",
+    ): "The persimmon is one household's dooryard tree, planted beside the house for its fruit and its summer shade; the copse is village greenery standing in the open ground among the houses.",
+    (
+        "homestead bamboo",
+        "shared bamboo grove",
+    ): "This stand belongs to one household - the damp north or west strip of its plot, cut for the household's own baskets, poles and fences. A shared grove is a take-yabu held by the hamlet at the field margin and cut like a coppice, under the village's rules on who may cut and when.",
+    (
+        "windbreak",
+        "copse",
+    ): "The windbreak is a planted shelter belt - the fengshui back grove - kept on the windward, high side of the cluster to break the winter monsoon, cedar-backed and dense. A copse is looser fruit-tree and broadleaf greenery in the gaps among the houses, with no sheltering purpose; the households used it for shade and fruit, not as a wall against the wind.",
+    (
+        "windbreak",
+        "woodland commons",
+    ): "The windbreak belongs to the settlement as shelter and was kept standing - a village would not cut its own wind wall. The woodland commons was cut: an iriai wood coppiced on a 10-30 year cycle for firewood, forage and leaf litter, under customary rules on who might cut, when, and how much.",
+    (
+        "copse",
+        "woodland commons",
+    ): "The copse is greenery among the houses, used for shade and fruit; the woodland commons is a managed coppice on the slope above the paddy, cut on a cycle for fuel and fertilizer under the village's own rules.",
+    (
+        "scrub and rough grazing",
+        "marsh",
+    ): "Scrub is dry ground - cut-over fuel and fodder land with grass and the odd scraggly pine, grazed and cut; marsh is the undrained wet ground that wet rice was reclaimed from and that stays reed wetland where reclamation stopped.",
+    ("marsh", "pond"): "Marsh is reed wetland on undrained low ground; the pond is an engineered tameike - open water behind an earthen dike, sitting above the fields it waters.",
+    ("paddy", "millet"): "A paddy is a flooded basin holding four to six inches of water for wet rice; millet is a dry crop on the higher, well-drained hem the water cannot command.",
+    ("paddy", "buckwheat"): "A paddy is a flooded basin holding four to six inches of water for wet rice; buckwheat is a dry crop on the higher, well-drained hem the water cannot command.",
+    ("paddy", "barley"): "A paddy is a flooded basin holding four to six inches of water for wet rice; barley is a dry crop on the higher, well-drained hem the water cannot command.",
+    ("paddy", "fallow"): "A paddy is in crop and under water; a fallow patch is ground resting out of crop for the season.",
+    (
+        "bund",
+        "bund beans",
+    ): "The bund is the earthwork - the puddled-mud ridge between two basins, re-plastered every spring so each paddy holds its water. The beans are the crop planted along its top (azemame): the bund is soil, the beans are what grows on it, so each highlights on its own.",
+    (
+        "millet",
+        "buckwheat",
+    ): "Millet is a summer grain; buckwheat is a short-season crop sown late and taken in autumn, tolerant of poor soil. Both sit on the dry hem; the furrows run the same way, the crop differs.",
+    ("millet", "barley"): "Millet is a summer grain; barley is the winter grain of the dry hem, sown in autumn and taken before the rice is transplanted. Both sit on the dry hem; the crop differs.",
+    ("buckwheat", "barley"): "Buckwheat is a short-season late crop for thin soil; barley is the winter grain, sown in autumn and taken in early summer. Both sit on the dry hem; the crop differs.",
+    ("millet", "fallow"): "The millet plot is in crop; a fallow patch rests out of crop for the season.",
+    ("buckwheat", "fallow"): "The buckwheat plot is in crop; a fallow patch rests out of crop for the season.",
+    ("barley", "fallow"): "The barley plot is in crop; a fallow patch rests out of crop for the season.",
+    (
+        "stream",
+        "field ditch",
+    ): "The stream is a natural brook - about two meters across in reality, the widest water on a hamlet map short of the pond. A field ditch is dug: a hairline in reality (about a third of a meter, one three-hundredth of the paddy it waters), drawn at true size.",
+    ("stream", "pond"): "The stream is running water off the high ground; the pond is standing water held behind a dike, fed by the stream and let out through one outlet.",
+    (
+        "pond",
+        "field pond",
+    ): "The pond is the tameike - the reservoir behind a dike at the field's foot, the hamlet's water store. A field pond is a small open-water pocket sunk into one low paddy, the one obstacle that genuinely belongs in the wet middle of a flooded field.",
+    ("paddy", "field pond"): "The paddy is the flooded rice basin; the field pond is a small pocket of open water sunk into one low plot, reed-fringed, drawn where the ground pools.",
+    (
+        "field ditch",
+        "pond",
+    ): "The ditches distribute the water; the pond stores it. One outlet leaves the pond and branches into the head race and the laterals - the smallest ditches were often counted as part of the paddy they serve.",
+}
+
+
+_DEFS: tuple[FeatureClass, ...] = (
+    _c(
+        key="farmhouse",
+        name="farmhouse",
+        covers="`houses` - the dwelling of each household",
+        what="The dwelling of one farming household: a thatched minka, its ridge on the long axis, standing on the slightly raised ground the homesteads share, its work yard and garden beside it.",
+        why="A house in a nucleated hamlet is reached by a lane and stands close to the paddy - up against it, but never on the bund. The farmhouses are placed first, before any lane inside the settlement: the lanes between farmsteads are trodden by the households already living there.",
+        label="accurate",
+        label_note="Placement and form follow the read record; the setback from the paddy is DERIVED (no source states it in feet) and is a drawing convention inside read bounds.",
+        sources=("sugiura-1973-fuzoku",),
+        entry="research/homesteads.md - 'What stood on a farmstead', 'How close does a farmhouse stand to the paddy', 'Is every farmhouse reached by a lane'",
+    ),
+    _c(
+        key="storage shed",
+        name="storage shed",
+        covers="`houses[].shed` (the lean-to against a farmhouse) and `farm_sheds` (the detached sheds of the same household)",
+        what="A roofed outbuilding for storage - grain, straw, tools, fuel. Some stand as a lean-to against the farmhouse, some free in the yard; storage either way.",
+        why="A July 1972 survey of 87 households in three Miyagi hamlets counted 4.4 outbuildings per household - firewood shed, straw shed, barn, work shed, storehouse - so a farmstead with only its house would be the anomaly. The count drawn here is a band below that snow-country figure, because the temperate lowland hamlet this map draws kept fewer.",
+        label="accurate",
+        label_note="Presence and prevalence read (Sugiura 1973); the drawn count per household is calibrated below the source's Tohoku figure, as the entry itself advises.",
+        sources=("sugiura-1973-fuzoku",),
+        entry="research/homesteads.md - 'What stood on a farmstead - the inventory, with numbers'",
+    ),
+    _c(
+        key="byre",
+        name="byre",
+        covers="`byres` - the draft-animal sheds",
+        what="An open-fronted shed for a household's ox or water buffalo - a roof carried on posts over a shaded stall, standing among the homesteads.",
+        why="Most farmsteads kept a draft animal or two, and the vernacular put the animal far closer to the house and the well than a European barn would. Where a byre is shared it stands in a courtyard between the homesteads it serves.",
+        label="accurate",
+        label_note="The separate byre is the temperate reading of the record; the attached stable wing (magariya) is a cold-country form and is deliberately not drawn.",
+        sources=("cambridge-animals-china",),
+        entry="research/homesteads.md - 'May a byre stand beside a wellhead?', 'What stood on a farmstead'",
+    ),
+    _c(
+        key="threshing yard",
+        name="threshing yard",
+        covers="`threshing_yards`",
+        what="A small tamped-earth work floor beside each farmhouse - swept bare, with a straw drying mat and a little rack for hanging sheaves.",
+        why="Threshing and drying were done per household, in the yard, and the yard needs sun: a thatched roof pitched at 45 degrees puts a minka's ridge at 20-22 feet, so no yard is placed in the shadow band south of a neighbor's wall.",
+        label="accurate",
+        label_note="The sun corridor is derived from the read roof pitch and house height; the yard's size is a drawing convention.",
+        sources=("not recorded",),
+        entry="research/homesteads.md - 'The threshing yard's sun, and how far a farmhouse shades'",
+    ),
+    _c(
+        key="garden",
+        name="garden",
+        covers="`gardens`",
+        what="The household's kitchen garden: a tilled bed in planted rows of greens, beside the house.",
+        why="A dooryard garden fed the household and, like the yard, wants light - beds are kept out of a neighbor's shadow to the south and clear of the windbreak's afternoon shade to the west.",
+        label="accurate",
+        label_note="Presence and the sun rule are read; the bed's size and row count are drawing conventions.",
+        sources=("not recorded",),
+        entry="research/homesteads.md - 'The garden's sun, and how far the windbreak shades'",
+    ),
+    _c(
+        key="privy",
+        name="privy",
+        covers="`farm_fixtures[kind=privy]`",
+        what="The household privy - on a farm, the urinal and the privy were one small building standing apart from the main house.",
+        why="Near-universal: the Nipponica entry calls the detached privy the norm, and the 1972 survey counted one on 87 of 100 households. Its seat is rolled from three attested positions - by the back door, at the gate, or by the shed.",
+        label="accurate",
+        label_note="Presence and the three seats are read (kotobank, sinyoken); the 6 x 6 ft footprint is a GUESS - the one sizing page is dead.",
+        sources=("kotobank-benjo", "sinyoken-madori", "sugiura-1973-fuzoku"),
+        entry="research/homesteads.md - 'The farmstead's fixtures'",
+    ),
+    _c(
+        key="woodpile",
+        name="woodpile",
+        covers="`farm_fixtures[kind=woodpile]`",
+        what="The household's fuel: split logs stacked head-high against a wall, out of the rain.",
+        why="Firewood and charcoal were the fuel, and a shed for them stood on three farms in four; the open stack under the eaves is the cheaper and older form, and the one drawn.",
+        label="guess",
+        label_note="The firewood SHED is read (Boso-no-Mura); where the open STACK stood relative to the house was found nowhere - the back wall or the shed's outer wall is a guess, and the stack's height is modern practice.",
+        sources=("boso-no-mura-kigoya", "326woods-stack", "sugiura-1973-fuzoku"),
+        entry="research/homesteads.md - 'The farmstead's fixtures'",
+    ),
+    _c(
+        key="manure heap",
+        name="manure heap",
+        covers="`farm_fixtures[kind=manure]`",
+        what="The muck heap: night soil and byre litter composting before they go onto the fields.",
+        why="Night soil was fermented in buried jars or plastered pits and spread as fertilizer; the heap is drawn beyond the privy because the two were one cluster - in Han China the latrine stood over the pigsty and drained to the cesspool.",
+        label="guess",
+        label_note="The practice is read (jawiki, the Art Institute's Han model); the heap's PLACE on the farm and its size are guesses - the pages describe the pit, not where it stood.",
+        sources=("jawiki-koedame", "artic-pigsty-latrine"),
+        entry="research/homesteads.md - 'The farmstead's fixtures'",
+    ),
+    _c(
+        key="bathhouse",
+        name="bathhouse",
+        covers="`farm_fixtures[kind=bath]`",
+        what="A small bath shed - the iron goemon-buro tub under its own roof.",
+        why="The cauldron bath was widely used in self-sufficient farm villages; the 1972 survey found a bath shed on about three farms in ten and a bath inside the house on half, so only the shed share is drawn and the rest bathe indoors, unseen.",
+        label="guess",
+        label_note="Use is read (Mizumaki museum); where the shed stood was found nowhere - the back wall or a flank is a guess, and so is the 6 x 6 ft size.",
+        sources=("mizumaki-goemonburo", "sugiura-1973-fuzoku"),
+        entry="research/homesteads.md - 'The farmstead's fixtures'",
+    ),
+    _c(
+        key="hen coop",
+        name="hen coop",
+        covers="`farm_fixtures[kind=coop]`",
+        what="A small square roost for a few chickens, on the flank of the yard.",
+        why="Farmers in most regions of China kept a pig and some chickens in the yard along with a draft animal; the Qimin Yaoshu says to build the roost as a ground enclosure with a perch, because birds left to the trees sicken. The GM chose the Chinese reading over Japan's, where chickens before Meiji were timekeepers and coops rare.",
+        label="guess",
+        label_note="The coop's existence and ground form are read (Cambridge, the Qimin Yaoshu, the Zhengzhou coop); the household proportion, the 5 x 5 ft size and the seat are guesses bounded by 'most regions'.",
+        sources=("cambridge-animals-china", "qimin-yaoshu-yangji", "pitt-zhengzhou-coop"),
+        entry="research/homesteads.md - 'The farmstead's fixtures'",
+    ),
+    _c(
+        key="household shrine",
+        name="household shrine",
+        covers="`farm_fixtures[kind=shrine]` - the hokora",
+        what="A household's own small shrine - a stone or wooden hokora in a corner of the plot, drawn vermilion with a torii before its door.",
+        why="In some regions every house had one, in others only certain old families; the GM ruled for the old-families pattern here - rare, and notable when it appears - so the count is capped at about three households in a hundred. It stands in the plot's northwest, northeast or southwest corner, all three attested.",
+        label="deviation",
+        label_note="Presence, rarity and corner are read; the glyph is drawn at 6 x 6 ft against a measured stone shrine of about 1.3 ft - a deliberate deviation for legibility, ruled by the GM, like the oversized well.",
+        sources=("tokushima-yashikigami", "jawiki-yashikigami", "kameyama-yashikigami", "sugiura-1973-fuzoku"),
+        entry="research/homesteads.md - 'The farmstead's fixtures'",
+    ),
+    _c(
+        key="persimmon",
+        name="persimmon",
+        covers="`persimmons` - the dooryard persimmon tree",
+        what="The household's persimmon tree beside the house, drawn a yellower green than the groves with four fruit dots - the map's convention for naming the tree, not a season.",
+        why="A persimmon stood in every dooryard: the Edo agronomist Miyazaki Yasusada urged planting them around the homestead, and the tree shades the house in summer, so it stands beside it.",
+        label="guess",
+        label_note="Presence and the beside-the-house placement are read (toyoko, uekipedia); WHICH side and the 18 ft crown are guesses - the crown width was found nowhere.",
+        sources=("toyoko-kaki", "uekipedia-kaki"),
+        entry="research/homesteads.md - 'The farmstead's fixtures'",
+    ),
+    _c(
+        key="homestead bamboo",
+        name="homestead bamboo",
+        covers="`bamboo_stands[role=homestead]`",
+        what="A household's own bamboo stand on the damp north or west strip of its plot - a clonal thicket with a hard edge, drawn as paired culm strokes with a leafy fork.",
+        why="Below the frost line bamboo was a matter of course in a lowland paddy hamlet - baskets, poles, fences, fans, food wrappings - and the shady, always-damp service side of the yashiki was where it stood. A cold upland hamlet may have none; whether a hamlet has bamboo is rolled per settlement.",
+        label="deviation",
+        label_note="Presence and place are read; a culm is inches across and cannot be drawn at one foot per pixel, so the stand's extent is to scale and the marks inside it are symbolic - the convention Japan's own topographic legend uses.",
+        sources=("not recorded",),
+        entry="research/vegetation.md - 'Bamboo: how common, where it stood, and how to show it'",
+    ),
+    _c(
+        key="shared bamboo grove",
+        name="shared bamboo grove",
+        covers="`bamboo_stands` with any role other than homestead - the take-yabu at the field margin",
+        what="A bamboo thicket held by the hamlet at the field margin, cut like a coppice.",
+        why="The record gives bamboo two places: the household's own strip, and the take-yabu as a stand of its own at the village edge, harvested under the village's rules. The two forms are two knobs, not a choice.",
+        label="deviation",
+        label_note="Presence is read; the stand-level glyph is a deviation for legibility, exactly as for the homestead stand.",
+        sources=("not recorded",),
+        entry="research/vegetation.md - 'Bamboo: how common, where it stood, and how to show it'",
+    ),
+    _c(
+        key="windbreak",
+        name="windbreak",
+        covers="`village_groves[role=windbreak]`",
+        what="The village shelter belt - the fengshui back grove: a dense, cedar-backed stand of real crowns on the windward, high side of the cluster, embracing it.",
+        why="A nucleated village shelters behind one village-scale grove against the winter monsoon. Surveys of southern-China village fengshui forests find about two groves per village at closed-canopy density, the typical back grove one to two hectares - large relative to the cluster, and drawn so. It is kept off the west side of the gardens so the beds keep their afternoon sun.",
+        label="accurate",
+        label_note="Scale, density and placement follow the surveyed figures (forests-2020); the belt's shape follows the terrain and the cluster.",
+        sources=("forests-2020",),
+        entry="research/vegetation.md - 'The fengshui forest - real scale, and why ours is honest'; research/homesteads.md - 'The garden's sun, and how far the windbreak shades'",
+    ),
+    _c(
+        key="copse",
+        name="copse",
+        covers="`village_groves[role=copse]`",
+        what="A stand of fruit-tree and broadleaf greenery in the open ground among the houses - shade and fruit, not shelter.",
+        why="The leafy greenery scattered through the gaps of a nucleated cluster is the third of the village's grove roles, after the back belt and the water-mouth grove; it threads between the dwellings and never stands on a roof, a yard or a crop.",
+        label="accurate",
+        label_note="The role is attested with the fengshui-grove system; its extent on any one map is a drawing decision.",
+        sources=("forests-2020",),
+        entry="research/vegetation.md - 'The fengshui forest'; settlements/vegetation.md 'Village windbreak' (the three roles)",
+    ),
+    _c(
+        key="woodland commons",
+        name="woodland commons",
+        covers="`commons[role=woodland]` - the coppice patches",
+        what="A managed coppice wood on the slope above the paddy: spaced crowns with an open canopy, the floor raked clear of leaf litter.",
+        why="The village woods were iriai commons - customary common land held by the village and governed by its own rules on who might cut, when, and how much - coppiced on a 10-30 year cycle for firewood, forage and the leaf litter that fertilized the paddies. A cut wood lets sun reach the floor, so herbs grow there, not brush; the wood sits on the slope break above the fields.",
+        label="accurate",
+        label_note="The commons regime and the raked floor are read (the Yamaguni study, the satoyama entries); a lot's boundary was NOT laid out as a surveyed square, so the patches are irregular.",
+        sources=("not recorded",),
+        entry="research/vegetation.md - 'How is a coppice lot bounded?', 'Does scrub stand under a village wood?', 'Forest density and crown size'",
+    ),
+    _c(
+        key="scrub and rough grazing",
+        name="scrub and rough grazing",
+        covers="`commons[role=grazing]`",
+        what="The cut-over fuel and fodder land around the settlement: grass with a few scraggly pines, grazed and cut.",
+        why="Everything the paddy and the homesteads do not take is the hamlet's rough ground, and it is worked: scrub stands six feet off every field edge (one scythe swath - land hunger keeps the margin to that), off open water and off the cut banks of the channels.",
+        label="accurate",
+        label_note="The margins are read; what the scatter looks like at any one point is a drawing convention.",
+        sources=("not recorded",),
+        entry="research/vegetation.md - 'The crop margin', 'Scrub stays off open water', 'The cut bank'",
+    ),
+    _c(
+        key="marsh",
+        name="marsh",
+        covers="`marshes` - every marsh patch, whatever its role",
+        what="Reed wetland on the undrained low ground - the wet toe below the fields and the fringe of the pond.",
+        why="Wet rice is reclaimed FROM marsh: where reclamation stops, or the ground is too wet to manage, it stays reed wetland, and an abandoned paddy reverts to it. The toe marsh is as wide as the fan it drains, and its margin grades reed, then sedge and grass, then dry ground.",
+        label="accurate",
+        label_note="The reclaimed-from-marsh finding and the margin gradient are read.",
+        sources=("aas-rice-technology",),
+        entry="research/water.md - 'Marsh - wet rice is reclaimed FROM wetland', 'The wet toe is as wide as the FAN'; research/vegetation.md - 'The marsh margin'",
+    ),
+    _c(
+        key="paddy",
+        name="paddy",
+        covers="the wet plots of every `fields[kind=paddy]` - the flooded basins",
+        what="A flooded rice basin holding four to six inches of water behind its bunds - one plot of the hamlet's comb field.",
+        why="Pre-modern paddies were fitted to land and water by piecemeal reclamation and inheritance, so the plots are odd-sized and odd-shaped, meeting at T-junctions; the tidy rectangular grid is a Meiji land-consolidation artifact. A flooded paddy makes its own nitrogen, which is why the same basins were cropped year after year.",
+        label="accurate",
+        label_note="Plot form and the irregular patchwork are read; plot sizes are calibrated from the record.",
+        sources=("tabayashi-1986",),
+        entry="research/fields.md - 'Paddy plots - irregular patchwork', 'Nitrogen - a flooded paddy makes its own', 'Plot sizes'",
+    ),
+    _c(
+        key="bund",
+        name="bund",
+        covers="the stroke of every paddy plot and the piled junctions between them",
+        what="The aze: a puddled-mud ridge one to two feet wide and about a foot high between two basins, re-plastered every spring so each paddy holds its water; the walking bunds ran two to five feet. Where bunds cross, the earth is piled into a lumpy node - the most-worked point in a field.",
+        why="A bund is the wall BETWEEN two basins and is built once, so the fabric is one connected network meeting at T-junctions - never two parallel ridges with idle ground between. Farmers walked the bunds to reach the plots; the footplanks over the ditches serve that walking.",
+        label="accurate",
+        label_note="Construction, width and the shared-wall finding are read; the drawn stroke is at true size.",
+        sources=("aze-standard",),
+        entry="research/fields.md - 'Bunds are SHARED, and the fabric is continuous', 'A bund runs on, or it turns for a reason'; research/water.md - 'The bund runs along the channel bank'",
+    ),
+    _c(
+        key="bund beans",
+        name="bund beans",
+        covers="the bead run along the bunds (`bund_beans`)",
+        what="Soybeans planted along the tops of the paddy bunds - azemame - drawn as dark green beads.",
+        why="A bund's top is soil that would otherwise grow weeds; planting it with beans took a second crop from the same ground without touching the paddy. A share of the bunds is planted, rolled per map.",
+        label="deviation",
+        label_note="The practice is attested; the bead color is a deliberate deviation - real soybean foliage is lighter, and the deep pine green was chosen so the beads read against the pale rice.",
+        sources=("not recorded",),
+        entry="research/fields.md - the bund entries; waterfields/palette.py BEAN_GREEN (the color decision)",
+    ),
+    _c(
+        key="millet",
+        name="millet",
+        covers="`dry_plots[crop=millet]` and their furrows",
+        what="A dry-field (hatake) plot under millet, worked in ridged rows.",
+        why="Wet-rice villages sort by a topographic catena: the paddy holds the flat valley bottom, dry crops take the higher, well-drained ground the water cannot command - the hem above the paddy and the raised ground the homesteads sit on - and coppice crowns the hills above.",
+        label="accurate",
+        label_note="Placement on the catena is read; the crop MIX on any one map (how much millet against buckwheat and barley) is rolled from the seed and is a GUESS at the proportions.",
+        sources=("not recorded",),
+        entry="research/fields.md - 'Where dry (hatake) crops go - the topographic catena', 'Why ruled rows waited for Meiji'",
+    ),
+    _c(
+        key="buckwheat",
+        name="buckwheat",
+        covers="`dry_plots[crop=buckwheat]` and their furrows",
+        what="A dry-field plot under buckwheat - the short-season crop for thin soil, sown late and taken in autumn - worked in ridged rows.",
+        why="Dry crops take the higher, well-drained hem above the paddy, where the water cannot command the ground.",
+        label="accurate",
+        label_note="Placement on the catena is read; the crop mix per map is rolled from the seed and is a GUESS at the proportions.",
+        sources=("not recorded",),
+        entry="research/fields.md - 'Where dry (hatake) crops go - the topographic catena'",
+    ),
+    _c(
+        key="barley",
+        name="barley",
+        covers="`dry_plots[crop=barley]` and their furrows",
+        what="A dry-field plot under barley - the winter grain, sown in autumn and taken in early summer - worked in ridged rows.",
+        why="Dry crops take the higher, well-drained hem above the paddy, where the water cannot command the ground.",
+        label="accurate",
+        label_note="Placement on the catena is read; the crop mix per map is rolled from the seed and is a GUESS at the proportions.",
+        sources=("not recorded",),
+        entry="research/fields.md - 'Where dry (hatake) crops go - the topographic catena'",
+    ),
+    _c(
+        key="fallow",
+        name="fallow",
+        covers="`fallow_patches`",
+        what="Ground resting out of crop for the season.",
+        why="Some dry ground rested between crops; how much, and where in the rotation, the record consulted here does not say.",
+        label="guess",
+        label_note="The record is thin on fallow in this tier's fields; the patch is drawn where the field builder leaves ground unplanted, and that is a guess.",
+        sources=("not recorded",),
+        entry="research/fields.md (no dedicated entry - recorded as silent)",
+    ),
+    _c(
+        key="stream",
+        name="stream",
+        covers="`streams` - the brook",
+        what="A natural brook off the high ground, feeding the head of the field and, below it, carrying the drain away.",
+        why="A village creek runs about two meters wide in reality, six times a field ditch; every watercourse on the map declares which way it flows, because downstream is a real constraint on what may stand beside it.",
+        label="deviation",
+        label_note="The stream's type and place are read; its DRAWN width is rank, not discharge - the GM's ruling - so junctions do not conserve width.",
+        sources=("gb50288", "toro-site"),
+        entry="research/water.md - 'Water-width ladder - the real-world tiers', 'Drawn width is RANK, not discharge'",
+    ),
+    _c(
+        key="field ditch",
+        name="field ditch",
+        covers="`field_ditches` and `channels` - the intake, head race, branches and drain",
+        what="The dug irrigation net: the intake from the stream, the head race along the high margin, the laterals running down-slope between the plots, and the drain along the low line.",
+        why="The comb layout - supply along the high margins, delivery ditches perpendicular down-slope, one drain on the lowest line - is the Edo Kishu-school layout and codified Chinese canal doctrine alike. Mains taper as branches tap them; the net is SPARSE because a village digs the minimum, and a ditch beside every paddy is a Meiji anachronism. The net is drawn at true size: a field ditch is about a third of a meter, a hairline.",
+        label="accurate",
+        label_note="Topology, taper and true-size width are read (Tabayashi, the Minuma-dai record, GB 50288).",
+        sources=("tabayashi-1986", "jsidre-minumadai", "gb50288", "nougyoudoboku-matsutan"),
+        entry="research/water.md - 'The comb net is drawn at TRUE SIZE', 'Where the drawn net STOPS', 'The head-race forks'; research/fields.md - 'Water-first v2'",
+    ),
+    _c(
+        key="pond",
+        name="pond",
+        covers="`pond` - the tameike",
+        what="An irrigation reservoir - a valley-head tameike behind an earthen dike, sitting above the fields it waters.",
+        why="A tameike is built by dividing off a valley mouth with a dike, at an elevation above the paddies it serves, with ONE outlet: an inclined intake feeding a bottom conduit through the dam. The spillway is for floods, never for distribution. On this map the pond is the field's drainage sink, at its low foot.",
+        label="accurate",
+        label_note="Form, siting and the single outlet are read (Tabayashi 1986, the Kagawa tameike documents).",
+        sources=("tabayashi-1986", "kagawa-tameike"),
+        entry="research/fields.md - 'Water-first v2 - pond, distribution and the three layout modes'",
+    ),
+    _c(
+        key="field pond",
+        name="field pond",
+        covers="`field_ponds` - the in-field pond sunk into one low paddy",
+        what="A small pocket of open water inside one low paddy plot, reed-fringed - a low pocket where the ground pools, or a header pond within the field.",
+        why="Flat, flooded valley-bottom paddy is the archetype that hosts non-rice obstacles LEAST - graves and knolls go to the slope, rock outcrops belong to terraces - and a small open-water pond is the one thing that genuinely belongs in the wet middle. It is drawn sunk into a single low plot, never across a bund.",
+        label="accurate",
+        label_note="The kind of obstacle a flooded paddy hosts is read (corroborated in both traditions); how often one appears on a map is a calibrated liberty the entry discloses.",
+        sources=("not recorded",),
+        entry="research/fields.md - 'In-field features - flat flooded paddy hosts obstacles least'",
+    ),
+    _c(
+        key="village lane",
+        name="village lane",
+        covers="`lanes` - every lane on the map: the web, the internal skeleton, the connector to the off-map road and the field spur",
+        what="A trodden earth track - packed dirt with soft worn shoulders, a single narrow way, no paving and no center line. Every lane on the map is one feature, connected or not.",
+        why="Every house in a nucleated village is reached by the interconnected lanes and alleys - that is what compactness is for - and the narrow lateral lanes are colonized as semi-private space by the houses beside them, which is why they are narrow and irregular. A lane bends like a line feet wear: as few turns as the plots allow, none sharp, never back on itself. The connector to the off-map road predates the settlement; the lanes between the farmsteads were trodden by the households already living there.",
+        label="accurate",
+        label_note="Access and form are read; the drawn WIDTHS (3, 5 and 6 ft) have no numeric source for an ordinary hamlet lane and stand as drawing conventions inside read bounds - a GUESS at the number.",
+        sources=("not recorded",),
+        entry="research/homesteads.md - 'Is every farmhouse reached by a lane, and in what FORM?', 'How does a village lane bend?'; research/SOURCES.md re-sourcing queue (lane width)",
+    ),
+    _c(
+        key="footbridge",
+        name="footbridge",
+        covers="`bridges[foot]` - every plank and deck over water",
+        what="A plank laid over a ditch, or a small timber deck where a lane crosses the stream.",
+        why="Farmers reach the plots by walking the bunds, and the long laterals cut across that walking; a plank every so often keeps the field passable. Where a way crosses water, one deck - never two at the same point.",
+        label="guess",
+        label_note="That ditches were planked is reasoned, not read: the record consulted says nothing about a plank over a two-foot ditch, and the spacing is a drawing convention. A guess, as the spec template's own worked example records.",
+        sources=("not recorded",),
+        entry="research/water.md - 'What drawing at TRUE SIZE left open' (channel_footbridges)",
+    ),
+    _c(
+        key="well",
+        name="well",
+        covers="`wells` - the wellheads",
+        what="A communal wellhead: a stone curb and the dark water of the shaft, under a small roof.",
+        why="A pre-modern rice village of about seventy households ran one to three communal wells, two typical - drinking water came mostly from surface water, settled and boiled, and a well was expensive durable capital dug by subscription only as surface quality forced. Shared wells outnumbered private ones.",
+        label="deviation",
+        label_note="Count and sharing are read (the Sphere/UNICEF figures, jawiki); the wellhead is DRAWN larger than true size so it can be seen at map scale - the project's canonical example of a legibility deviation.",
+        sources=("sphere-unicef",),
+        entry="research/urban-features.md - 'Wells - the research, and the deliberate liberty', 'Communal wells and the samurai exception'; research/homesteads.md - 'Does a DISPERSED hamlet's outlying farm have its own well?'",
+    ),
+    _c(
+        key="notice board",
+        name="notice board",
+        covers="`kosatsuba`, with its label",
+        what="The kosatsuba - the official edict board: a small roofed frame posting the standing law, rate tables and ban lists, its face turned square to the way it fronts.",
+        why="Every Edo town AND village kept one, and its siting was a traffic decision: the board stands where the settlement's one lane carries everyone past it, because it is the state talking at all who pass. The circulars reached the farmers through exactly this board, read aloud where needed - one reader per settlement makes it work.",
+        label="accurate",
+        label_note="Presence and siting are read; at hamlet grain the glyph is drawn at its true 12 x 5 ft.",
+        sources=("not recorded",),
+        entry="research/urban-features.md - 'The notice board (kosatsuba) - siting is a TRAFFIC decision'",
+    ),
+)
+
+
+def _install_siblings(defs: tuple[FeatureClass, ...]) -> dict[str, FeatureClass]:
+    by_key = {d.key: d for d in defs}
+    for (a, b), text in _PAIRS.items():
+        if a not in by_key or b not in by_key:
+            raise KeyError(f"sibling pair names an unknown class: {(a, b)}")
+        by_key[a].siblings[b] = text
+        by_key[b].siblings[a] = text
+    return by_key
+
+
+#: Every feature class, by key. Insertion order is the spec's FR-007 order.
+CLASSES: dict[str, FeatureClass] = _install_siblings(_DEFS)
+
+
+def slug(key: str) -> str:
+    """The CSS token for a class key: `storage shed` -> `storage-shed`."""
+    return key.replace(" ", "-")

@@ -46,10 +46,10 @@ class WellsMixin:
         vroof = self._well_vr()
         vcurb = self.px(9.36) if self._toscale() else 9.0 * self.bscale
         self.add(
-            f'<rect x="{x - vroof:.1f}" y="{y - vroof:.1f}" width="{2 * vroof:.1f}" height="{2 * vroof:.1f}" rx="1.5" fill="#C7B084" stroke="#6B5836" stroke-width="1.1" opacity="0.55"/>'
+            f'<rect x="{x - vroof:.1f}" y="{y - vroof:.1f}" width="{2 * vroof:.1f}" height="{2 * vroof:.1f}" rx="1.5" fill="#C7B084" stroke="#6B5836" stroke-width="1.1" opacity="0.55"/>', cls="well"
         )  # the well-house roof, light so the curb reads through
-        self.add(f'<circle cx="{x:.0f}" cy="{y:.0f}" r="{vcurb:.1f}" fill="#9AA1A4" stroke="#43403A" stroke-width="1.1"/>')  # stone curb
-        self.add(f'<circle cx="{x:.0f}" cy="{y:.0f}" r="{vcurb * 0.47:.1f}" fill="#2E4C58"/>')  # dark water in the shaft
+        self.add(f'<circle cx="{x:.0f}" cy="{y:.0f}" r="{vcurb:.1f}" fill="#9AA1A4" stroke="#43403A" stroke-width="1.1"/>', cls="well")  # stone curb
+        self.add(f'<circle cx="{x:.0f}" cy="{y:.0f}" r="{vcurb * 0.47:.1f}" fill="#2E4C58"/>', cls="well")  # dark water in the shaft
         _wrec: dict[str, Any] = {"x": round(x, 1), "y": round(y, 1), "r": r, "vr": round(vroof, 1), "shrine": shrine, "private": private}
         if kind is not None:
             # a josui-ido CISTERN-WELL taps the buried aqueduct main (research 021 item 4);
