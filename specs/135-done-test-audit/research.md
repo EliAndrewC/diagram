@@ -205,3 +205,37 @@ measurement deleted the record that lets them skip - steady state is ~1.5 s lowe
 module-level constant in `ci/delta.py` moved every roll's key, by design (the pool cache hashes every
 engine module's top level, conservatively) - the honest cost of any module-level edit anywhere in the engine. Steady state - a one-module engine edit, tooling unchanged - is lower
 still: the test phase alone measured 11.9 s wall with coverage narrowed to one module.
+
+## R11 - THE THIRD PASS (GM 2026-08-28: *"redo the whole thing for a third time"*)
+
+Where the 17 s locked gate went: reference 0.56, lint 1.16 (1.0 the duplicate-defs scan), format 0.06,
+typecheck 0.26, hooks-test 0.1 when stamped (but **90 s whenever ANY guard script changed** - all 15 suites
+re-ran for a one-line edit), test phase 12 s wall = 9.8 s pytest on 36 CPU-s over 8 workers (settlement
+16.9 s, the corpus 6.6 s served, check_village 4.1 s; a 1.9 s xdist floor; engine import 0.63 s per worker)
+plus 0.15 s combine and 0.59 s `uncovered-in-diff` even with nothing traced. The make/Python glue is 50 ms
+per call - not the problem it looked like. `-n 12` vs 8: 9.5 vs 9.9 s - not worth the shared box.
+
+| change | before | after | principle |
+|---|---|---|---|
+| per-suite `hooks-test` freshness (`.git/hooks-test/<guard>` = sha of guard + test + shared helpers; the three suites that drive other scripts key on all of scripts/; `HOOKS_ALL=1` runs everything) | 90 s for any scripts edit | 0.4 s unchanged; ~16 s for one guard (its suite + the three all-scripts suites) | recompute only what changed |
+| `test_slow_gen_budget_fires..` on a stubbed `gate_obtain` | 2.6 s (two real `coverage run` subprocesses on a 50 ms gen) | ms | the assert reads one number; the number's measurement is `gate_obtain`'s own test |
+| the registry round trip on ten rows | 2.2 s | ~0.3 s (one full derivation kept for the disagreement guard; the full rebuild proof stays exhaustive) | size, not repetition |
+| no `coverage combine` / `uncovered-in-diff` when nothing was traced | 0.75 s | 0 | |
+| `tests/tier_town` / `tests/tier_city` not collected under the lock (the `--tier` deselect happened after collection) | ~700 items collected per worker | not collected | decide before collecting |
+| the cohort pin judged only for seeds this scope rolled | (merge of 133 T92's pin: "STALE PIN seed 42..44" on a one-seed gate) | clean; FULL judges all four | |
+| DECLINED: `-n 12` (0.4 s, shared box); the duplicate-defs scan (1 s, a merge guard); a persistent runner (the GM declined it 2026-08-26) | | | |
+
+**Main's unlock arrived mid-pass (feature 136 / 133 T92 merged in): the gate is UNLOCKED now, so these are the
+real merge check's numbers, every map-rolling test included (T42):**
+
+| | baseline (2026-08-27) | after three passes |
+|---|---|---|
+| unlocked `make done`, warm, end to end | ~270 s (4.5 min; 233 s of rolls) | **21.7 s** (3,750 tests, 16.2 s pytest) - 8% |
+| unlocked `make done` after a main merge that changed the engine (every cached roll re-rolled, 5 hook suites changed) | ~270 s | 5 m 42 s - the honest cold cost: every roll keyed on its executed functions re-rolls at once, 4-wide on 8 workers, plus hooks |
+| locked `make done` | 33-39 s | 17 s |
+
+The cold figure is worth a sentence: a merge from main that touches hamletgen re-keys every gate roll
+(and the reference) in the same run; the rolls are bounded by the polders (~100 s each) and the serial
+re-roll ladders, and they all land in one gate. The first pass's ledger says the same. If the GM wants
+that cheaper, the lever is the rolls themselves (`GEN_TIME_BUDGETS` says the polder's cost is inherent),
+not the tests - or the idle-tests hook (feature 136) warming the cache after a sync.

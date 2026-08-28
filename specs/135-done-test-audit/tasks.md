@@ -44,7 +44,7 @@ the feature's own evidence.
 
 - [x] T40 research R7: one row per test the baseline ran (pytest list + the 13 guard suites + the reference step) - cost before, verdict, cost after, what changed
 - [x] T41 the after-measurement, the same way as T01-T03; SC-001's phase sum; the locked `make done` no slower (SC-004); collection no larger (SC-005)
-- [ ] T42 the unlocked end-to-end `make done` figure, recorded in the run-log when the GM releases the lock
+- [x] T42 the unlocked end-to-end `make done` figure: **21.7 s warm** (3,750 tests), 5 m 42 s cold after a main merge re-keyed every roll - run-log 2026-08-28, research R11
 
 - [x] T43 defects found while measuring, fixed here (constitution XIV): `state.write` vouched for the tooling on a FAILED gate (now green only, with a test); `make quick`'s `rolls_map` count read `__pycache__`; `make test-file` ran without `worksteal`; `gencache.split_sources` re-parsed ~180 files per key (memoized on content hash)
 
@@ -57,6 +57,15 @@ the feature's own evidence.
 - [x] T54 the cohort sweep keyed to FULL rather than EXHAUSTIVE (the gate is always EXHAUSTIVE; a first-pass slip that would have rolled four seeds at every unlocked gate)
 - [x] T55 declined, measured: `COVERAGE_CORE=sysmon` (slower), caching the ~20 settlement fixture tests (~1 s of wall), the duplicate-defs scan (a 1 s merge guard)
 - [x] T56 end to end after the second pass: locked `make done` 0m17.333s with nothing short-circuited (research R10)
+
+## Phase 6 - the third pass (GM 2026-08-28: "redo the whole thing for a third time")
+
+- [x] T60 re-measure: phases, glue (50 ms each - not a cost), xdist floor and width, CPU by directory (research R11)
+- [x] T61 per-suite `hooks-test` freshness: 90 s -> 0.4 s unchanged / ~16 s one guard touched; `HOOKS_ALL=1` runs all
+- [x] T62 the budget guard on a stubbed obtain (2.6 s -> ms); the registry round trip on ten rows (2.2 s -> 0.3 s)
+- [x] T63 no coverage glue when nothing is traced; the other tiers' trees not collected under the lock
+- [x] T64 merged main (feature 136 idle tests, 133 T92's cohort pin, the unlock); the cohort pin judged for the seeds this scope rolled
+- [x] T65 declined, measured: `-n 12`, the duplicate-defs scan, a persistent runner
 
 ## Phase 9 - acceptance
 

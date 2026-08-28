@@ -55,7 +55,8 @@ def test_a_rolled_cohort_passes_the_whole_gate() -> None:
     # (133 tasks.md T91/T92). `baseline_verdict` holds the line both ways: a check outside a seed's set is a
     # regression, a pinned seed that comes up clean is a stale pin. At the gate only seed 41 rolls (clean); the
     # FULL run judges all four against the pin.
-    lines, clean = hg.baseline_verdict(reports, GATE_COHORT_EXPECTED)
+    rolled = {r.plan.spec.seed for r in reports}
+    lines, clean = hg.baseline_verdict(reports, {seed: checks for seed, checks in GATE_COHORT_EXPECTED.items() if seed in rolled})  # a pin for a seed this scope did not roll is neither stale nor met
     assert clean, "\n".join(lines)
 
 
