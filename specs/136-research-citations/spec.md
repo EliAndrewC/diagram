@@ -4,7 +4,7 @@
 
 **Created**: 2026-08-28
 
-**Status**: Draft - awaiting `spec-fidelity` review (constitution XVI)
+**Status**: Round 2 - `spec-fidelity` round 1 (2026-08-28) returned five changes (inventory under-inclusive; the gate check was unasked scope; FR-004 over-tightened; FR-006/FR-008 conflict; the count), all applied; awaiting round 2
 
 **Input**: [`gm-request.md`](gm-request.md), verbatim and unedited. That file is the authority for
 this specification.
@@ -37,20 +37,36 @@ now and documenting as future work.
 
 ## What "research in the diagram skill" is (the inventory's scope)
 
-The skill keeps its historical findings in three kinds of place, and all three are in scope
-because the GM asked for *all* of the research, not for one file:
+The inventory covers **every place in the skill where a historical finding is written down** -
+the constitution's own words are "in `research/`, a feature's `research.md`, or wherever a
+finding is first written down" - because the GM asked for *all* of the research, not for one
+file. The homes known at the start:
 
-1. **The research tree** (`.claude/skills/diagram/research/`) - the canonical home. Every entry
-   carries a `**Sources:**` line; at the start of this feature 73 of its 124 entries say
-   `not recorded`.
-2. **Inline "Historical grounding" prose in the operative documents** (`settlements/*.md`,
-   `settlements/cities/*.md`, `buildings.md`, `buildings/programs.md`, `SKILL.md`) - findings
-   written next to their rule before the research tree existed, some migrated to (1) with a
-   pointer, some not.
-3. **Historical research in spec-kit feature directories** (`specs/NNN-*/research.md`) - the
-   research that a feature did at plan time. Only the HISTORICAL findings are in scope (how a
-   place was built, farmed, planted, lived in, governed, defended); the technical research
-   (package layout, caching, CI, test tooling) has no sources to cite and is out of scope.
+1. **The research tree** (`.claude/skills/diagram/research/`) - the canonical home. Counting
+   rule: an entry is a `## ` heading in any file there other than `README.md` and `SOURCES.md`.
+   At the start of this feature **73** entries carry a `**Sources:**` line saying `not recorded`
+   and **44** more carry no `**Sources:**` line at all (most are recent entries that name their
+   sources in the prose; the pass normalizes each to a sources line or finds its sources) -
+   117 candidate rows out of 167 headings, some of which will prove to be section headers
+   rather than findings and are struck from the ledger with that note.
+2. **Standalone research documents** under the skill root - `flophouse-research.md`,
+   `town-deep-audit.md`, `town-checks-audit.md`, `pending-enclosed-fan-floor.md` and any other
+   file there that states a historical finding.
+3. **Inline "Historical grounding" prose in any operative or pool document** - the top-level
+   `settlements.md` (its "Historical grounding" section), `settlements/*.md`,
+   `settlements/cities/*.md`, `buildings.md`, `buildings/programs.md`, `SKILL.md`, and the pool
+   notes files (`pool/**/*.notes.md`) - findings written next to their rule or their map before
+   the research tree existed, some migrated to (1) with a pointer, some not.
+4. **Historical research in spec-kit feature directories** (`specs/NNN-*/research.md`) - the
+   research a feature did at plan time. Only the HISTORICAL findings are in scope (how a place
+   was built, farmed, planted, lived in, governed, defended); technical research (package
+   layout, caching, CI, test tooling) has no sources to cite and is out of scope.
+5. **Grounding stated in engine comments** (`l7r/**/*.py` - e.g. a comment giving a Chinese
+   county seat's street share, or an Edo zoning law) - a finding is a finding wherever it sits.
+
+A finding that lives in engine code or a pool artifact is **recorded and cited in the research
+tree, with the code and the pool text left untouched** - that is how the inventory stays complete
+without breaking the GM's prohibition below.
 
 A finding is "uncited" when it names no source a reader can check: a `**Sources:**` line saying
 `not recorded`, a grounding paragraph with no sources line at all, or a citation the current rule
@@ -145,26 +161,6 @@ operative rule text; every contradiction is listed in one place for the GM with 
 
 ---
 
-### User Story 4 - The inventory cannot silently regrow (Priority: P2)
-
-Once the record is fully cited, a check at the gate refuses a research-tree entry whose sources
-line says `not recorded` (or is missing), so a future finding cannot be written without sources -
-the rule the constitution already states, now enforced where it lives.
-
-**Why this priority**: the feature's value is durable only if the count stays at zero; the GM's
-request is about closing a gap the rule left open.
-
-**Independent Test**: delete the sources line from one entry in a fixture copy; the check fires.
-
-**Acceptance Scenarios**:
-
-1. **Given** a research-tree entry without a sources line or saying `not recorded`, **When** the
-   gate runs, **Then** it fails naming the entry.
-2. **Given** a cited entry whose key is not registered in `SOURCES.md`, **When** the gate runs,
-   **Then** it fails naming the key.
-
----
-
 ### Edge Cases
 
 - A finding rests on the GM's own setting notes (`setting-canon`): its source is `l7r.md` /
@@ -184,23 +180,26 @@ request is about closing a gap the rule left open.
 
 ### Functional Requirements
 
-- **FR-001**: The feature MUST produce a ledger of every uncited historical finding across the
-  three homes (research tree, inline grounding in operative docs, historical spec research), one
-  row per finding, with location, grounded rule and status.
+- **FR-001**: The feature MUST produce a ledger of every uncited historical finding across every
+  home listed above (research tree, standalone research documents, inline grounding in operative
+  and pool documents, historical spec research, engine comments), one row per finding, with
+  location, grounded rule and status.
 - **FR-002**: For every ledger row the feature MUST redo the research pass under the constitution's
   current rules: sources searched; those cited READ via the `source-reader` agent (a quote on
   record) or labeled SUMMARY-ONLY; never an AI-generated encyclopedia; never a search summary as a
   source.
 - **FR-003**: Every source cited MUST be registered by key in `research/SOURCES.md` with what it
   was used for; every re-sourced entry's `**Sources:**` line MUST name its keys.
-- **FR-004**: A finding the re-research AGREES with MUST keep its text; additions are permitted
-  only where the new reading usefully supplements it (a figure, an instance, a statute, a scope).
+- **FR-004**: A finding the re-research AGREES with need not be rewritten - the requirement is
+  the citation. Its prose MAY be supplemented or corrected for scope and accuracy where the
+  reading supports it (a figure, an instance, a statute, a scope); the real prohibition is FR-006.
 - **FR-005**: A claim for which no checkable source is found MUST say so on its sources line
   (what was searched) and have its evidence class corrected; it MUST NOT receive a citation that
   was not consulted.
 - **FR-006**: A finding the re-research CONTRADICTS MUST have its research entry corrected with
-  citations and marked contradicted; the operative rule text, every generator, check, constant,
-  pool artifact and rendered map MUST remain unchanged by this feature.
+  citations and marked contradicted. Nothing a generator, check or constant reads changes, no
+  pool artifact changes and no map is re-rendered by this feature; the operative rule text is
+  unchanged except for a pointer to its research entry (FR-008).
 - **FR-007**: The feature's report to the GM MUST list every contradicted finding with the rule
   and maps it affects and the two options (fix now / document as future work), or state that
   there were none.
@@ -208,8 +207,10 @@ request is about closing a gap the rule left open.
   sources) and a pointer from its rule, per the record-the-why rule; the rule text itself stays.
 - **FR-009**: The existing re-sourcing queue in `SOURCES.md` MUST be worked as part of the
   inventory and each row struck when re-sourced.
-- **FR-010**: A gate check MUST refuse a research-tree entry with a missing or `not recorded`
-  sources line, and a cited key absent from `SOURCES.md`, once the inventory reaches zero.
+- **FR-010**: The feature MUST NOT add a guard or gate check. A mechanical check that every
+  entry cites a registered key is a reasonable idea and is LISTED for the GM in the FR-007
+  report as proposed future work - the GM did not ask for it, and the project's standing
+  decision is that Principle XII is not enforced by a guard.
 - **FR-011**: Every task of the feature is classified `research: physical` and carries the three
   research boxes (constitution v2.12.0); the gate's task-research test applies.
 - **FR-012**: The feature MUST run its review subagents where the project requires them:
@@ -231,20 +232,21 @@ request is about closing a gap the rule left open.
 
 ### Measurable Outcomes
 
-- **SC-001**: Zero research-tree entries say `not recorded`; zero inline grounding findings lack a
-  research-tree entry with sources; zero historical spec-research findings lack sources or a
-  pointer to a cited research-tree entry.
+- **SC-001**: Zero research-tree entries say `not recorded` or lack a sources line; zero findings
+  in the other homes (standalone research documents, inline grounding in operative and pool
+  documents, historical spec research, engine comments) lack either sources of their own or a
+  pointer to a cited research-tree entry - the ledger's open-row count is zero.
 - **SC-002**: 100% of cited keys are registered in `SOURCES.md` with a use; 100% of READ keys have
   a `source-reader` quote on record; every SUMMARY-ONLY key says what was seen.
-- **SC-003**: The feature's diff contains no change under the engine paths, the pool, or the
-  operative rule text of any settlement/building document (pointers added to an existing rule
-  line excepted).
+- **SC-003**: The feature's diff contains no change under the engine paths or the pool, and no
+  change to the operative rule text of any settlement/building document other than a pointer to
+  a research entry.
 - **SC-004**: Every contradicted finding appears in the GM report with both options; the GM can
   decide each without reopening the research.
 - **SC-005**: The re-sourcing queue in `SOURCES.md` is empty (or lists only items the pass
   documented as unresolvable, each with what was searched).
-- **SC-006**: The gate check of FR-010 is proven to fire (a fixture with a stripped sources line
-  fails it).
+- **SC-006**: The GM report lists the proposed sources-registration check as future work for the
+  GM to accept or decline.
 
 ## Decisions Recorded
 
@@ -262,12 +264,10 @@ corrected class reaches its reader automatically once the GM has ruled.
 - Technical research in spec directories (package layout, CI, tooling, test audits) is not
   "research" in the GM's sense and needs no citation.
 - The feature will be long and is worked in batches by research file; each batch is a task, and
-  a batch's pushes are DIRECT (docs plus tests only) - engine paths are never touched, so no
+  a batch's pushes are DIRECT (docs only) - engine paths are never touched, so no
   CodeBuild run is owed. The `specs/` claim is pushed first, as the project requires.
 - "Redo the research pass" means a genuine search and read, not attributing a source from
   memory; where a finding cites an anchor (Takayama Jin'ya, Pingyao) the anchor's own
   documentation is the source to read.
 - Where a session's own doubt or a reviewer's comment surfaces a NEW question during a pass, it
   is researched under the same rules (constitution XII) and recorded; it does not change a rule.
-- The gate check (FR-010) is a test under `tests/` - a tests-only change that skips the build,
-  per feature 132 FR-024.

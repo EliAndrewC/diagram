@@ -6,26 +6,28 @@
 
 ## Summary
 
-Re-source every uncited historical finding in the diagram skill: 94 research-tree entries whose
-`**Sources:**` line says `not recorded` (plus the `SOURCES.md` re-sourcing queue), ~10 inline
-grounding passages in the operative docs, and the historical halves of ~12 spec research files.
+Re-source every uncited historical finding in the diagram skill: 117 research-tree candidate
+rows (73 `not recorded` + 44 with no sources line; the `SOURCES.md` queue), the standalone
+research documents under the skill root, inline grounding in the operative and pool documents
+(the top-level `settlements.md` included), the historical halves of ~12 spec research files, and
+grounding stated in engine comments (recorded in the tree; the code untouched).
 The work is a research feature, not an engine feature: its diff is docs (`research/`,
-`SOURCES.md`, pointers in operative docs, spec research files) plus one gate test. No engine path,
+`SOURCES.md`, pointers in operative docs, spec research files) and nothing else. No engine path,
 pool artifact or operative rule changes; a contradicted finding is corrected in the record and
 queued for the GM.
 
 ## Technical Context
 
-**Language/Version**: Markdown records; Python 3.14 for the one gate test
+**Language/Version**: Markdown records; no code
 **Primary Dependencies**: the `source-reader` agent (Sonnet; WebFetch/WebSearch) for every reading;
 `WebSearch` in the session for the search pass
 **Storage**: `research/*.md`, `research/SOURCES.md`, `specs/136-research-citations/ledger.md`
-**Testing**: `tests/test_research_sources.py` (new; a data-file test, gate scope) proven to fire
+**Testing**: the existing gate (the task-boxes test); the ledger's open-row count as the measure
 **Target Platform**: n/a
-**Project Type**: docs + one test
+**Project Type**: docs only
 **Performance Goals**: none - no generator runs
-**Constraints**: FR-006 - no engine, pool, or rule-text change; every push is DIRECT (docs + tests)
-**Scale/Scope**: ~94 + ~10 + ~12 findings; batches of one research file each (14 batches)
+**Constraints**: FR-006 - no engine, pool, or rule-text change beyond a pointer; every push is DIRECT (docs)
+**Scale/Scope**: ~117 tree rows + the other homes; batches of one research file each (15), plus one batch each for standalone docs, spec research and engine comments
 
 **Single-artifact target**: n/a - no generator change. **Every step is two steps**: n/a - no map
 is rolled; the "reference then pool" split has no meaning for a records feature.
@@ -33,7 +35,7 @@ is rolled; the "reference then pool" split has no meaning for a records feature.
 ## Performance bookends
 
 N/A - constitution VI's bookends bind a diagram-GENERATOR change; this feature changes no
-generator and rolls no map. The locked gate is still run before each push for the gate test.
+generator and rolls no map; a docs-only delta takes the DIRECT route and owes no gate run.
 
 ## Constitution Check
 
@@ -43,22 +45,20 @@ generator and rolls no map. The locked gate is still run before each push for th
 - **V. Protecting the GM's Writing**: PASS - `gm-request.md` is quoted verbatim and never edited;
   no SOURCE markers under the skill are edited.
 - **VI. Verify Before Reporting Done**: PASS - each batch: `source-reader` verdicts on record for
-  every cited key; the quick suite after the batch's edits (the new test + the task-boxes test);
-  the gate before push. `spec-fidelity` on the spec before implementation. No map review is
+  every cited key; the ledger recounted by the entry parser; the quick suite (the task-boxes
+  test) after the batch's edits. `spec-fidelity` on the spec before implementation. No map review is
   owed (no map changes).
 - **VII / VIII**: N/A - no in-world content generated.
 - **IX. Setting Integration**: PASS - `setting-canon` findings cite `l7r.md` / `budgets.md`
   by pointer; nothing contradicting the GM's notes is written.
-- **X. Python Discipline**: PASS for the one test file - ruff, mypy --strict, red-green (the test
-  written to fail on a fixture with a stripped sources line first). No production Python.
+- **X. Python Discipline**: N/A - no Python is written (the sources-registration check is
+  proposed to the GM as future work, not built - spec FR-010).
 - **XII. Historical Grounding Bookends**: PASS in the sense that binds here - the feature IS the
   opening bookend applied retroactively; each pass records finding, class and sources. The closing
   bookend (re-examine the rendered PNG) is N/A: nothing rendered changes. Decisions for the
   reader: every entry keeps or corrects its accurate / deviation / guess class in place; a
   contradiction is a row for the GM, not a rendering decision this feature makes.
-- **XIII. No Known Regressions**: PASS - baseline: the gate is green on main tip c5128b1a (the
-  gate's verified record); the feature adds one test and touches no code the existing tests
-  exercise; the new test is proven on a fixture before it is added to the gate scope.
+- **XIII. No Known Regressions**: PASS - a docs-only feature; nothing the tests exercise changes.
 - **XIV. Fix defects where found**: any DEFECT the passes surface in code (a stale `Grounds:` line
   naming a check that no longer exists, a comment describing dead code) is fixed if it is docs, and
   RECORDED with a measurement and reported if it is engine - because FR-006 forbids this feature
@@ -66,7 +66,7 @@ generator and rolls no map. The locked gate is still run before each push for th
 - **XV / XVI**: PASS - the chain runs unattended; the spec is reviewed by `spec-fidelity` against
   the GM's words; an exception (any temptation to "just fix" a contradicted rule) goes to
   `spec-fidelity` before it is taken.
-- **XVIII**: PASS - the new gate test has its fire-proof in the same file.
+- **XVIII**: N/A - no guard is added (deliberately: spec FR-010).
 
 ## Method, per batch (one research file = one task)
 
@@ -85,7 +85,7 @@ generator and rolls no map. The locked gate is still run before each push for th
    gets the corrected finding, the old finding kept as "what the rule currently implements", the
    status `contradicted - rule unchanged, awaiting GM`, and a row in ledger section E.
 5. **Ledger** rows updated; the `SOURCES.md` queue rows owned by the file struck.
-6. **Verify**: the quick suite (the sources test counts every entry; the task-boxes test); commit;
+6. **Verify**: the entry parser recount into the ledger; the quick suite (the task-boxes test); commit;
    push at the end of each batch (see "Pushing while the feature is open").
 
 ## Project Structure
@@ -102,9 +102,10 @@ specs/136-research-citations/
 
 .claude/skills/diagram/research/*.md, cities/*.md   # entries re-sourced in place
 .claude/skills/diagram/research/SOURCES.md          # keys added; queue worked
-.claude/skills/diagram/settlements/*.md, buildings.md  # pointers only
-.claude/skills/diagram/tests/test_research_sources.py  # FR-010 gate test
+.claude/skills/diagram/settlements.md, settlements/*.md, buildings.md, pool/**/*.notes.md  # pointers only
+.claude/skills/diagram/*.md (flophouse-research.md etc.)  # standalone docs: sources or a pointer
 specs/NNN-*/research.md                              # historical findings get sources or a pointer
+(l7r/**/*.py - READ for findings stated in comments; never edited)
 ```
 
 **Structure Decision**: no new directories; the record lives where the project already keeps it.

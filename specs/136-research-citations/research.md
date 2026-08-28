@@ -67,16 +67,17 @@ over-broad - scope added) or **contradiction** (the rule rests on what the sourc
 goes to ledger section E and the GM report, with: entry, what the record said, what the sources
 say (quotes), the `Grounds:` rule and checks, the maps that draw it, and the two options.
 
-## R4. The gate test (FR-010)
+## R4. The counting rule, and the 44 entries with no sources line
 
-`tests/test_research_sources.py`: walks `research/**/*.md` except README/SOURCES, requires every
-`## ` entry to carry a `**Sources:**` line that is not `not recorded` and whose backticked keys
-all appear as `### \`key\`` headings in `SOURCES.md`; a `setting-canon` pointer (`l7r.md`,
-`budgets.md`) and an explicit `searched: ... not found` are accepted forms. Data-file test:
-gate scope, re-runs under testmon on its own change. Fire-proof: an inline fixture string with a
-stripped line returns a violation. It is added to the gate only in the last batch, once the
-count is zero - before that it would turn the gate red on every push (its function is tested
-from the first batch; the gate assertion is enabled last).
+The ledger counts `## ` headings in the tree (README and SOURCES excluded): 167 headings, of which
+73 say `not recorded` and 44 carry no `**Sources:**` line at all - 20 of those in
+`cities/capitals.md` (the GM-question entries of 2026-08-09/10, which cite in prose), 8 in
+`homesteads.md` and 6 in `vegetation.md` (feature 133 entries that cite by key inline). The
+batch normalizes each to a sources line, adding keys where the prose names a source that is not
+yet registered; a heading that is a section header rather than a finding is struck with that
+note. The proposed mechanical check (every entry cites a registered key) is NOT built - the GM
+did not ask for it and the project does not guard Principle XII; it is listed in the final report
+for the GM to accept or decline.
 
 ## R5. Why batches are files, not entries
 
