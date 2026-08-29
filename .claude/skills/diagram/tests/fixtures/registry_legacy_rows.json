@@ -796,136 +796,6 @@
       "always": false
     },
     {
-      "name": "_seg_0097___wtr",
-      "free": [],
-      "writes": [
-        "_wtr"
-      ],
-      "checks": [],
-      "needs": [],
-      "meta": false,
-      "always": false
-    },
-    {
-      "name": "_seg_0098___wtr_1",
-      "free": [
-        "_wtr",
-        "cx",
-        "cy",
-        "kind",
-        "qx",
-        "qy"
-      ],
-      "writes": [
-        "_wtr",
-        "_wtr_add"
-      ],
-      "checks": [],
-      "needs": [
-        "_wtr"
-      ],
-      "meta": false,
-      "always": false
-    },
-    {
-      "name": "_seg_0099___wtr_2",
-      "free": [
-        "M",
-        "_wtr",
-        "_wtr_add",
-        "_wtr_w"
-      ],
-      "writes": [
-        "_wtr",
-        "_wtr_w"
-      ],
-      "checks": [],
-      "needs": [
-        "M",
-        "_wtr",
-        "_wtr_add"
-      ],
-      "meta": false,
-      "always": false
-    },
-    {
-      "name": "_seg_0100___wtr_3",
-      "free": [
-        "M",
-        "_wtr",
-        "_wtr_add",
-        "_wtr_box",
-        "_wtr_rl",
-        "_wtr_yd"
-      ],
-      "writes": [
-        "_wtr",
-        "_wtr_box",
-        "_wtr_rl",
-        "_wtr_yd"
-      ],
-      "checks": [],
-      "needs": [
-        "M",
-        "_wtr",
-        "_wtr_add"
-      ],
-      "meta": false,
-      "always": false
-    },
-    {
-      "name": "_seg_0101___wtr_bad",
-      "free": [],
-      "writes": [
-        "_wtr_bad"
-      ],
-      "checks": [],
-      "needs": [],
-      "meta": false,
-      "always": false
-    },
-    {
-      "name": "_seg_0102___ax",
-      "free": [
-        "_ax",
-        "_ay",
-        "_bx",
-        "_by",
-        "_ka",
-        "_kb",
-        "_qa",
-        "_qb",
-        "_ra",
-        "_rb",
-        "_wtr",
-        "_wtr_bad",
-        "_wtr_i",
-        "_wtr_j"
-      ],
-      "writes": [
-        "_ax",
-        "_ay",
-        "_bx",
-        "_by",
-        "_ka",
-        "_kb",
-        "_qa",
-        "_qb",
-        "_ra",
-        "_rb",
-        "_wtr_bad",
-        "_wtr_i",
-        "_wtr_j"
-      ],
-      "checks": [],
-      "needs": [
-        "_wtr",
-        "_wtr_bad"
-      ],
-      "meta": false,
-      "always": false
-    },
-    {
       "name": "_seg_0122__paddy_fan_has_floor",
       "free": [
         "M",
@@ -951,185 +821,6 @@
         "M",
         "check",
         "scale"
-      ],
-      "meta": false,
-      "always": false
-    },
-    {
-      "name": "_seg_0123___hq_ftpx",
-      "free": [
-        "meta"
-      ],
-      "writes": [
-        "_hq_ftpx"
-      ],
-      "checks": [],
-      "needs": [
-        "meta"
-      ],
-      "meta": false,
-      "always": false
-    },
-    {
-      "name": "_seg_0124___hq_tol",
-      "free": [
-        "_hq_ftpx"
-      ],
-      "writes": [
-        "_hq_tol"
-      ],
-      "checks": [],
-      "needs": [
-        "_hq_ftpx"
-      ],
-      "meta": false,
-      "always": false
-    },
-    {
-      "name": "_seg_0125___hq_bare",
-      "free": [],
-      "writes": [
-        "_hq_bare",
-        "_hq_total"
-      ],
-      "checks": [],
-      "needs": [],
-      "meta": false,
-      "always": false
-    },
-    {
-      "name": "_seg_0126___hq_fields",
-      "free": [
-        "M",
-        "f"
-      ],
-      "writes": [
-        "_hq_fields",
-        "f"
-      ],
-      "checks": [],
-      "needs": [
-        "M"
-      ],
-      "meta": false,
-      "always": false
-    },
-    {
-      "name": "_seg_0128___gpx",
-      "free": [
-        "meta"
-      ],
-      "writes": [
-        "_gpx"
-      ],
-      "checks": [],
-      "needs": [
-        "meta"
-      ],
-      "meta": false,
-      "always": false
-    },
-    {
-      "name": "_seg_0129___g_inset",
-      "free": [
-        "_gpx"
-      ],
-      "writes": [
-        "_g_inset",
-        "_g_step",
-        "_g_tol"
-      ],
-      "checks": [],
-      "needs": [
-        "_gpx"
-      ],
-      "meta": false,
-      "always": false
-    },
-    {
-      "name": "_seg_0130__gap_fields",
-      "free": [],
-      "writes": [
-        "gap_fields"
-      ],
-      "checks": [],
-      "needs": [],
-      "meta": false,
-      "always": false
-    },
-    {
-      "name": "_seg_0131__bx0",
-      "free": [
-        "M",
-        "_g_inset",
-        "_g_step",
-        "_g_tol",
-        "_gpx",
-        "bx0",
-        "bx1",
-        "by0",
-        "by1",
-        "d",
-        "dp",
-        "f",
-        "fditch",
-        "gap_fields",
-        "gbare",
-        "gout",
-        "gp",
-        "gplots",
-        "gtotal",
-        "gx",
-        "gy",
-        "hw",
-        "i",
-        "ok_pt",
-        "pboxes",
-        "px0",
-        "px1",
-        "py0",
-        "py1",
-        "q"
-      ],
-      "writes": [
-        "bx0",
-        "bx1",
-        "by0",
-        "by1",
-        "d",
-        "dp",
-        "f",
-        "fditch",
-        "gap_fields",
-        "gbare",
-        "gout",
-        "gp",
-        "gplots",
-        "gtotal",
-        "gx",
-        "gy",
-        "hw",
-        "i",
-        "ok_pt",
-        "pboxes",
-        "px0",
-        "px1",
-        "py0",
-        "py1",
-        "q"
-      ],
-      "checks": [],
-      "needs": [
-        "M",
-        "_g_inset",
-        "_g_step",
-        "_g_tol",
-        "_gpx",
-        "gap_fields",
-        "gbare",
-        "gtotal",
-        "gx",
-        "gy"
       ],
       "meta": false,
       "always": false
@@ -1954,71 +1645,46 @@
       "free": [
         "ADJ",
         "M",
-        "PHANTOM",
-        "b",
-        "built",
         "ccx",
         "ccy",
         "check",
-        "cov",
         "d",
         "dists",
-        "f",
         "far",
         "fields",
-        "grp",
         "h",
-        "harea",
         "hh",
         "houses",
         "hx",
         "hy",
         "meta",
         "nearest",
-        "pad",
-        "r",
         "scale",
-        "span",
-        "tails",
-        "v"
+        "span"
       ],
       "writes": [
-        "PHANTOM",
         "_",
-        "b",
-        "built",
         "ccx",
         "ccy",
-        "cov",
         "d",
         "dists",
-        "f",
         "far",
-        "grp",
         "h",
-        "harea",
         "hh",
         "hx",
         "hy",
         "nearest",
-        "pad",
-        "r",
-        "span",
-        "tails",
-        "v"
+        "span"
       ],
       "checks": [
         "cluster_abuts_fields"
       ],
       "needs": [
         "ADJ",
-        "M",
         "check",
         "fields",
         "houses",
-        "meta",
-        "scale",
-        "tails"
+        "meta"
       ],
       "meta": false,
       "always": false

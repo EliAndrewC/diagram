@@ -1,14 +1,5 @@
 """Gate segments (capital budget and ministries; keys 0097-0106_026) - bodies verbatim, registry order preserved."""
 
-import math
-from typing import Any
-
-from l7r.diagram.settlement import rail_quad, sat_overlap, trough_quad, wellhead_quad
-
-from .common_03_capacity import (
-    _UNBOUND,
-    _kept,
-)
 
 # WELLS, TROUGHS, AND HITCHING POSTS NEVER OVERLAP ONE ANOTHER (GM 2026-07-25). The motivating
 # defect was Nagahara's flophouse yard: a hitching rail drawn straight ACROSS a wellhead, with
@@ -24,74 +15,6 @@ from .common_03_capacity import (
 # ones s._stable_yard places against (with YARD_GLYPH_SLACK of margin), so placement and check
 # can never drift apart. Every pair on the map is tested, ACROSS yards as well as within one -
 # the cross-yard hole is what the dung-heap rule had to be widened for twice.
-
-
-def _seg_0097___wtr() -> dict[str, Any]:
-    """Gate segment 97 (_wtr) - body verbatim from the legacy gate() (feature 022)."""
-    _wtr: list[tuple[str, list[tuple[float, float]], float, float, float]] = []
-    return _kept(locals(), ('_wtr',))
-
-
-def _seg_0098___wtr_1(*, _wtr: Any = _UNBOUND, cx: Any = _UNBOUND, cy: Any = _UNBOUND, kind: Any = _UNBOUND, qx: Any = _UNBOUND, qy: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 98 (_wtr, _wtr_add) - body verbatim from the legacy gate() (feature 022)."""
-
-    def _wtr_add(kind: str, quad: list[tuple[float, float]], cx: float, cy: float) -> None:
-        _wtr.append((kind, quad, cx, cy, max(math.hypot(qx - cx, qy - cy) for qx, qy in quad)))
-
-    return _kept(locals(), ('_wtr', '_wtr_add'))
-
-
-def _seg_0099___wtr_2(*, M: Any = _UNBOUND, _wtr: Any = _UNBOUND, _wtr_add: Any = _UNBOUND, _wtr_w: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 99 (_wtr, _wtr_w) - body verbatim from the legacy gate() (feature 022)."""
-    for _wtr_w in M.get("wells", []) or []:
-        _wtr_add("well", wellhead_quad(_wtr_w), _wtr_w["x"], _wtr_w["y"])
-    return _kept(locals(), ('_wtr', '_wtr_w'))
-
-
-def _seg_0100___wtr_3(*, M: Any = _UNBOUND, _wtr: Any = _UNBOUND, _wtr_add: Any = _UNBOUND, _wtr_box: Any = _UNBOUND, _wtr_rl: Any = _UNBOUND, _wtr_yd: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 100 (_wtr, _wtr_box, _wtr_rl, _wtr_yd) - body verbatim from the legacy gate() (feature 022)."""
-    for _wtr_yd in M.get("stable_yards", []) or []:
-        _wtr_box = _wtr_yd.get("troughs_box")
-        if _wtr_box:
-            _wtr_add("troughs", trough_quad(_wtr_box), (_wtr_box[0] + _wtr_box[2]) / 2, (_wtr_box[1] + _wtr_box[3]) / 2)
-        for _wtr_rl in _wtr_yd.get("rails", []) or []:
-            _wtr_add("hitching rail", rail_quad(_wtr_rl), _wtr_rl["x"], _wtr_rl["y"])
-    return _kept(locals(), ('_wtr', '_wtr_box', '_wtr_rl', '_wtr_yd'))
-
-
-def _seg_0101___wtr_bad() -> dict[str, Any]:
-    """Gate segment 101 (_wtr_bad) - body verbatim from the legacy gate() (feature 022)."""
-    _wtr_bad = []  # type: ignore[var-annotated]
-    return _kept(locals(), ('_wtr_bad',))
-
-
-def _seg_0102___ax(
-    *,
-    _ax: Any = _UNBOUND,
-    _ay: Any = _UNBOUND,
-    _bx: Any = _UNBOUND,
-    _by: Any = _UNBOUND,
-    _ka: Any = _UNBOUND,
-    _kb: Any = _UNBOUND,
-    _qa: Any = _UNBOUND,
-    _qb: Any = _UNBOUND,
-    _ra: Any = _UNBOUND,
-    _rb: Any = _UNBOUND,
-    _wtr: Any = _UNBOUND,
-    _wtr_bad: Any = _UNBOUND,
-    _wtr_i: Any = _UNBOUND,
-    _wtr_j: Any = _UNBOUND,
-) -> dict[str, Any]:
-    """Gate segment 102 (_ax, _ay, _bx, _by) - body verbatim from the legacy gate() (feature 022)."""
-    for _wtr_i in range(len(_wtr)):
-        _ka, _qa, _ax, _ay, _ra = _wtr[_wtr_i]
-        for _wtr_j in range(_wtr_i + 1, len(_wtr)):
-            _kb, _qb, _bx, _by, _rb = _wtr[_wtr_j]
-            if math.hypot(_ax - _bx, _ay - _by) > _ra + _rb:  # circumradii cannot reach: no overlap possible
-                continue
-            if sat_overlap(_qa, _qb):
-                _wtr_bad.append((f"{_ka}/{_kb}", round(_ax), round(_ay)))
-    return _kept(locals(), ('_ax', '_ay', '_bx', '_by', '_ka', '_kb', '_qa', '_qb', '_ra', '_rb', '_wtr_bad', '_wtr_i', '_wtr_j'))
 
 
 # WALL TOWER COVERAGE by the city's DEFENSE POSTURE (GM 2026-07-22): the interlocking-flanking-fire rule
@@ -154,3 +77,13 @@ def _seg_0102___ax(
 
 # The FR-015 ratchet again: without the declaration every lineage check below SKIPS while
 # showing green, so the missing declaration is itself the failure.
+
+# `wells_troughs_rails_clear_of_each_other` RETIRED WITH ITS WHOLE DERIVATION (feature 141's cut; the
+# residue removed here in 146). It built a quad for every wellhead, trough cluster and hitching rail on
+# the map and ran a pairwise separating-axis test over the lot, failing when two drawn extents
+# intersected: the three stand SIDE BY SIDE at a watering point (the troughs hug their well, the animals
+# stand between rail and trough), and stacked they read as one unidentifiable smear that also implies a
+# yard tying its stock across its own draw-point. Feature 141 cut it as a check that re-measures what the
+# placer guarantees - `_stable_yard`'s `_glyph_free` seats those three against each other and cannot
+# return an overlapping trio - and this feature removes the six segments (97-102) that went on deriving
+# the quads and running the O(n^2) comparison on every gate with nothing reading the result.

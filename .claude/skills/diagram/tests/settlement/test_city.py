@@ -287,3 +287,51 @@ def test_channel_footbridges_refuses_a_plank_whose_deck_would_not_clear_its_wate
     s._deck_clears_its_water = lambda *_a, **_k: False  # type: ignore[method-assign]
     assert s.channel_footbridges(spacing=320) == 0
     assert not s.M["bridges"], "a deck that stands in its own water is not drawn at all"
+
+
+# ---- seat_deck: the SKEW fallback, lifted out of bridges() (feature 146) ---------------------
+
+
+def test_seat_deck_grows_a_square_crossing_and_leaves_its_rotation_alone():
+    from l7r.diagram.settlement.city.bridges import seat_deck
+
+    water = [(0.0, 300.0), (1000.0, 300.0)]
+    rot, span, seated = seat_deck((500.0, 300.0), 90.0, 30.0, 8.0, water, 12.0, (water[0], water[1]))
+    assert seated and rot == 90.0 and span == 30.0, "square to the stream: the first span tried clears"
+
+
+def test_seat_deck_skews_toward_square_when_growth_cannot_clear_an_oblique_crossing():
+    """Growth lengthens the deck ALONG THE WAY, which at a shallow crossing drives its ends further along
+    the water rather than clear of it - so no ceiling on the growth could ever have worked. Only cohort
+    seed 47 ever rolled a map that reached this."""
+    from l7r.diagram.settlement.city.bridges import seat_deck
+
+    water = [(0.0, 300.0), (1000.0, 300.0)]
+    rot, span, seated = seat_deck((500.0, 300.0), 20.0, 30.0, 8.0, water, 12.0, (water[0], water[1]))
+    assert seated
+    assert rot != 20.0 and abs(rot - 20.0) <= 8.0, "skewed toward square, inside BRIDGE_ROT_TOL"
+    assert span > 30.0, "and grown at the skewed heading"
+
+
+def test_seat_deck_hands_back_the_original_span_when_nothing_seats():
+    """An undersized deck the caller draws anyway, so `bridges_span_their_water` names it - better than a
+    silent no-bridge at a crossing the road plainly makes."""
+    from l7r.diagram.settlement.city.bridges import seat_deck
+
+    water = [(0.0, 300.0), (1000.0, 300.0)]
+    rot, span, seated = seat_deck((500.0, 300.0), 12.0, 30.0, 8.0, water, 12.0, (water[0], water[1]))
+    assert not seated and (rot, span) == (12.0, 30.0)
+
+
+def test_two_ways_crossing_one_ditch_side_by_side_share_the_plank():
+    """ONE DECK PER CROSSING PLACE. A real crossing is a place, not a per-way entitlement: two tracks
+    converging on the same plank use the plank. Feature 126 shipped overlapping decks on four cohort
+    seeds once the lane work began drawing orphan links alongside existing ways."""
+    s = _crop_settlement()
+    s.M["streams"] = [{"poly": [[100, 300], [900, 300]], "w": 10}]
+    s.M["lanes"] = [
+        {"pts": [[500, 100], [500, 500]], "w": 6},
+        {"pts": [[510, 100], [510, 500]], "w": 6},  # a second track 10 px along the same bank, inside the deck it would build
+    ]
+    n = s.bridges()
+    assert n == 1 and len(s.M["bridges"]) == 1, "the second way uses the deck that is already there"

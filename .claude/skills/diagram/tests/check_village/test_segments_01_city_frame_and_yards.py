@@ -113,3 +113,22 @@ def test_matrix_reads_drawn_extents_not_envelopes():
     M = _mx_map(commons=[{"x": 500, "y": 500, "w": 400, "h": 400, "rot": 0, "role": "grazing", "poly": [[300, 300], [700, 300], [700, 700], [300, 700]]}], houses=[house(500, 500)])
     assert "features_do_not_overlap" not in f_only(M, "features_do_not_overlap")
     assert not [e for e in check_village.matrix_extents(M) if e[0] == "commons"]
+
+
+def test_no_caption_holds_the_frame_open():
+    """A caption sitting far past the last STRUCTURE forces the crop to open around it, and the map reads
+    as badly cropped - the capital's road and towpath words sat 180 ft out. A caption naming a long linear
+    feature may sit anywhere ALONG it, so the rule costs nothing to satisfy: sit where the drawing is.
+
+    The short record in the middle is the other half: a label list shorter than six entries carries no
+    text to name, and is stepped over rather than measured."""
+    M = manifest(
+        houses=[house(500, 500)],
+        labels=[[480, 488, 520, 510, 9, "Kita Road"], [1, 2, 3], [900, 900, 1400, 920, 9, "Far Away"]],
+    )
+    M["meta"].update({"scale": "city", "ftpx": 3})
+    assert "no_caption_holds_the_frame_open" in f_only(M, "no_caption_holds_the_frame_open")
+
+    near = manifest(houses=[house(500, 500)], labels=[[480, 488, 520, 510, 9, "Kita Road"], [1, 2, 3]])
+    near["meta"].update({"scale": "city", "ftpx": 3})
+    assert "no_caption_holds_the_frame_open" not in f_only(near, "no_caption_holds_the_frame_open")

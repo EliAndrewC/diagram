@@ -3,7 +3,7 @@
 import math
 from typing import Any
 
-from l7r.diagram.settlement import FARMHOUSE_EAVE_GAP_FT, courtyard_annex_span, surface_water_dist
+from l7r.diagram.settlement import FARMHOUSE_EAVE_GAP_FT, surface_water_dist
 
 from .common_01_geometry import (
     _OVERLAP_STRUCTS,
@@ -426,17 +426,14 @@ def _seg_0609__byres_stand_in_their_declared_form(*, M: Any = _UNBOUND, check: A
             f"shortfall is a placement failure, not a settlement without oxen. Check the form's seat search: the courtyard "
             f"form has only its owner's own walls to work with, and a homestead ringed by its yard and garden can refuse it",
         )
-        if _byf == "courtyard":
-            _by_houses = M.get("houses") or []
-            _by_bad = []
-            for _by in M["byres"]:
-                if not _by_houses:
-                    break  # pragma: no cover - a map drawing byres always has the houses they belong to
-                _by_h = min(_by_houses, key=lambda q: math.hypot(q["x"] - _by["x"], q["y"] - _by["y"]))
-                _by_d = math.hypot(_by_h["x"] - _by["x"], _by_h["y"] - _by["y"])
-                if _by_d > courtyard_annex_span(_by_h["w"], _by_h["h"], _by["h"]) + 2.0:
-                    _by_bad.append((round(_by["x"]), round(_by["y"]), round(_by_d)))
-            pass  # `` retired under feature 141 (the GM's cut); the segment stays for the check it keeps or the value it writes
+        # `courtyard_byres_annex_their_house` RETIRED WITH ITS CHECK, AND THE MEASURE KEPT (feature 146).
+        # It held that a byre in the COURTYARD form stands against its owner's own wall: it took each byre's
+        # nearest farmhouse and failed the map when the two stood further apart than
+        # `courtyard_annex_span(house w, house h, byre h) + 2 px`. Feature 141 cut it as a check that
+        # re-measures what the placer guarantees - the courtyard seat search only ever offers seats on the
+        # owner's walls, so the distance cannot come out wrong - and this feature removes the loop it left
+        # standing, which walked every byre on every hamlet and village gate and appended to a list nothing
+        # read. `courtyard_annex_span` itself is live and is where the rule now lives.
     return _kept(locals(), ())
 
 
