@@ -672,3 +672,24 @@ centres with radii from 6.1 to 16.5 ft - so the lane-1 offender reaches 23.8 ft 
 11.0, a 12.8 ft blind spot. `scatter_audit` cannot see it either: its keep-out families are water,
 crop, marsh and grove, with no way or corridor family at all. The fix is to walk `M["tree_crowns"]` -
 the discs the engine actually recorded and drew - against the corridors, instead of the clump seeds.
+
+
+## 2026-08-29 - feature 157: the label phase, and the caption beside its board
+
+The GM read KUWABATA and found its notice-board caption standing past the end of its own label -
+35.6 px along the caption's baseline from a 12 ft plank. The three causes were in the shared seat
+search (a lateral ladder scaled to the caption rather than to the subject, a standoff ladder that
+stepped over the one legal rung, and a structural probe deciding on the bounding box of a rotated
+quad), so every scripted hamlet re-rolled through the corrected placer.
+
+**What moved on this map: the notice board's caption box, by 1.0 px, and nothing else.** A
+structural diff of the whole manifest against the pre-fix roll shows exactly four differing leaves,
+all four the caption's own box; every house, lane, field, fixture and tree is byte-identical. This
+map's caption was already seated centrally - its along-baseline offset is 1.55 px against a
+bound of ~11 - so the fix only refined it.
+
+Labels also have a phase of their own now (the GM's other ask): the board is placed in
+`stage_notice` and every caption is seated in `stage_labels` after it, because *"how we place labels
+will always depend on what else is on the map."* On a hamlet nothing is placed between the two, so
+the phase move alone is byte-neutral - which is what lets the one changed box above be attributed to
+the seat rules and to nothing else.
