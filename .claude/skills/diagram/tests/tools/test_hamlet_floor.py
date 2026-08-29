@@ -118,13 +118,13 @@ def test_a_PARKED_line_is_excused_loudly_and_does_not_excuse_its_neighbours(tmp_
 
     # `f(True)` runs the def, the first `if` and its `return 1`; lines 4, 5 and 6 are the misses.
     # Park ONLY line 5 - lines 4 and 6 are still real misses and must still fail.
-    monkeypatch.setattr(hf, "PARKED", {rel: (frozenset({5}), "owned by feature 148 - do not re-derive")})  # type: ignore[attr-defined]
+    monkeypatch.setattr(hf, "PARKED", {rel: (frozenset({5}), "owned by feature 149 - do not re-derive")})  # type: ignore[attr-defined]
     out = io.StringIO()
     assert hf.check([rel], data_file=data, out=out) == 1, "the unparked miss still fails the floor"
-    assert "PARKED" in out.getvalue() and "feature 148" in out.getvalue(), "and the park is announced with its owner"
+    assert "PARKED" in out.getvalue() and "feature 149" in out.getvalue(), "and the park is announced with its owner"
 
     # now park both: the floor passes, and still says so out loud
-    monkeypatch.setattr(hf, "PARKED", {rel: (frozenset({4, 5, 6}), "owned by feature 148 - do not re-derive")})  # type: ignore[attr-defined]
+    monkeypatch.setattr(hf, "PARKED", {rel: (frozenset({4, 5, 6}), "owned by feature 149 - do not re-derive")})  # type: ignore[attr-defined]
     out2 = io.StringIO()
     assert hf.check([rel], data_file=data, out=out2) == 0
     assert "PARKED" in out2.getvalue(), "a silent park would let the list grow unnoticed"

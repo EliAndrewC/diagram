@@ -2,7 +2,7 @@
 
 **Feature**: 147-test-suite-cost
 **Created**: 2026-08-29
-**Status**: COMPLETE and landed 2026-08-29 on the GM's explicit authorization to land the speedup ahead of the flakiness fix; the acceptance of the whole line of work moved to feature 148 (tasks T22/T10). Originally APPROVED. `spec-fidelity` round 1 returned CHANGES REQUIRED (6 items - the four-to-five-minute question unanswered, the COLD run dropped along with the corrected number, the GM's named techniques not made requirements, no lessons audit, FR-001 forbidding what the GM invited, and two unsourced numbers); all six applied. Round 2 verdict FAITHFUL. Implementation proceeds.
+**Status**: COMPLETE and landed 2026-08-29 on the GM's explicit authorization to land the speedup ahead of the flakiness fix; the acceptance of the whole line of work moved to feature 149 (tasks T22/T10). Originally APPROVED. `spec-fidelity` round 1 returned CHANGES REQUIRED (6 items - the four-to-five-minute question unanswered, the COLD run dropped along with the corrected number, the GM's named techniques not made requirements, no lessons audit, FR-001 forbidding what the GM invited, and two unsourced numbers); all six applied. Round 2 verdict FAITHFUL. Implementation proceeds.
 
 ## The GM's request (verbatim, the thing this is graded against)
 

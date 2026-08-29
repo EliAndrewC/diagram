@@ -497,18 +497,12 @@ def open_ground_patches(s: Settlement, plan: SitePlan, count: int, size: float =
                     # near the edge that a slightly smaller square clears, and a smaller coppice on
                     # the sheet beats a larger one the crop cuts off. Only when even the floor-sized
                     # parcel fails is the seat genuinely unusable.
-                    # PARKED, NOT UNTESTED (feature 147, the GM's ruling 2026-08-29; feature 148 owns the fix).
-                    # `tests/gate/hamletgen/test_woodland_shrink_147.py` walks this ladder and covers these two
-                    # lines when it runs on its own - and contributes nothing to them inside the full sweep,
-                    # because `--dist worksteal` makes which tests share a worker vary between runs and the
-                    # coverage verdict varies with it. DO NOT write another test for these lines; that was
-                    # tried, along with ruling out the roll-sharing, the cohort seed count, single-worker runs,
-                    # forced pool regeneration and a synthetic fixture. The pragma is what lets the feature-147
-                    # speedup ship while the defect stays owned; `tools/hamlet_floor.PARKED` announces it on
-                    # every run so the list has to shrink.
+                    # (Feature 147 parked these two lines behind a coverage pragma while the floor's verdict
+                    # on them flickered; feature 149 found the cause - an entry's stored coverage outliving
+                    # the key it was recorded under - and the park came off with it.)
                     for _sh in (0.9, 0.8, 0.7, 0.6):
                         _cand_half = max(half_used * _sh, _COMMONS_FLOOR_FT / 2.0)
-                        if _ok(x, y, _cand_half) and _bbox_ok(_cand_half, _cand_half):  # pragma: no cover - see above
+                        if _ok(x, y, _cand_half) and _bbox_ok(_cand_half, _cand_half):
                             half_used, _asp = _cand_half, 1.0
                             break
                 if not _asp:
