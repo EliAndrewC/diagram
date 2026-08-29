@@ -104,10 +104,28 @@ is the INVERSE test (a footprint under someone else's caption) and its only cons
 
 ## Two thresholds, so the next session does not decide them under pressure
 
-- **`fixtures.py` is the largest module at 407 lines.** Re-split it when it crosses ~500 lines or
-  any member crosses ~150. The seam is **glyph-drawers** (`theater_stage`, `fire_tower`,
-  `kosatsuba`, `drum_tower`) versus **auto-siters** (`place_kosatsuba`, `place_punishment_spot`) -
-  the two halves share nothing but the subject.
+- **`fixtures.py` IS PAST BOTH ITS THRESHOLDS, and this entry said 407 lines while the file held
+  1,020** (measured 2026-08-29, feature 157 - the number had gone stale by 2.5x, so the rule it
+  states had quietly stopped applying). Today it is **1,083 lines**, past the package rule's ~500 and
+  past constitution X clause 13's ~1,000; `_draw_board_caption` is **387** and `place_kosatsuba`
+  **262**, both far past the ~150 member bar. The size rule PROMPTS A QUESTION rather than forbidding
+  a size (`make audit` reports it, nothing gates it), so here is the answer, written down rather than
+  rediscovered:
+
+  **DEFERRED, deliberately, with the seam and the sketch** (Principle XIV allows deferring only an
+  architectural change, and only as a deliverable). Feature 157 added 63 lines here and split one
+  340-line member into a 53-line `kosatsuba` and a 387-line `_draw_board_caption`; doing the package
+  split in the same feature would move four hundred lines of code that three review agents were about
+  to read, inside a feature about where a caption sits.
+
+  **The seam has changed since this entry was written.** It was glyph-drawers versus auto-siters, and
+  that is still one cut - but `_draw_board_caption` is now neither: it is a LABEL-PHASE placer,
+  dispatched from `captions.py`'s `_PLACERS` table and running in the phase, not when the board is
+  drawn. So the cheaper first cut is to move it (and `pick_caption_seat`, `CAPTION_LANE_TARGET_FT`)
+  into `captions.py`, which is where the caption subsystem already lives and where its only caller
+  is - that alone takes this file to ~700 lines and each remaining member under 300, with no call
+  site changed because everything is reached through `self.`. The glyph/siter split is then the
+  second cut, if it is still wanted.
 - **`tests/settlement/test_structures.py` stays ONE file** at its current ~690 lines. When it
   crosses ~1,000 it becomes `tests/settlement/test_structures/`, mirroring this package. Clause 13
   gives tests no exemption; this file is simply not over the bar yet.
