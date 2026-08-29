@@ -1,0 +1,6 @@
+{
+  "utc": "20260829T165803Z",
+  "guard": "pair-hooks",
+  "what": "gate alone",
+  "reason": "restoring the pre-experiment state after a measured-and-reverted fix attempt; three settlement-reviews have run on this delta"
+}

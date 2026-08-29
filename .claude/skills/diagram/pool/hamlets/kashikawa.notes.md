@@ -552,3 +552,51 @@ quoted:**
   **17.0 ft from the field outline**. A track that runs out of the cluster and stops at the paddy
   edge, where you step onto the bunds, is the arrangement these notes already ruled sound on
   2026-08-17. Re-recorded as sound so the next session does not trim it.
+
+## 2026-08-29 - feature 154: an `entrance` board on the windward fringe eats the shelter belt (OPEN)
+
+**THE REGRESSION, and it is this feature's own.** The `kosatsuba_seat` knob rolled `entrance` here,
+which pushes the board out of the cluster - and on this map the way out runs along the windward
+fringe, so the board landed inside the windbreak belt's own band. `stage_notice` runs BEFORE
+`stage_windbreak`, so the board wins and the belt yields: five clumps that had covered those columns
+are gone, all five inside the board's `village_grove` keep-out disk, and nothing re-seated into them.
+`village_windbreak_is_continuous` fails with a 40 ft bare run.
+
+**PROVEN BY A REVIEWER, AGAINST TWO OF MY OWN WRONG DIAGNOSES.** I called it a chord artifact - the
+straight across-wind projection leaving a bowed belt's footprint, which a peer session had just fixed
+on Kuwabata. It is not, and the proof is clean:
+
+- the belt's recorded `poly` is **byte-identical** between the two commits - 24 vertices, unchanged
+- replaying segment 0613 by hand: the previous roll gives a **20 ft** run and PASSES; this one gives
+  **40 ft** and FAILS, on the same polygon
+- the polygon has **93.7 to 95.2 ft of depth** at every bare column, so the peer's polygon-depth fix
+  cannot clear it
+- I had sampled `(2205, 3118)`, the coordinate in the failure message. **That is not the hole.** The
+  segment reports `_near`, the nearest clump in projection - 15.5 ft outside the r=14 window. Reading
+  a diagnostic's coordinate as the thing it diagnoses is how both wrong diagnoses happened.
+
+**A FIX WAS TRIED, MEASURED AND REVERTED - recorded so nobody pulls the same lever.** The board's
+keep-out is one disc, `30.0 + clump * 0.90`, sized to reach the far end of a ~53 x 8 ft caption: about
+9,500 sq ft of woodland cleared to protect about 450. Replacing it with a small disc on the glyph plus
+a row of discs stepped along the caption's recorded box **made the hole worse - 40 ft to 70 ft, five
+more belt clumps lost.** The reason is that `M["labels"]` records the caption's box UNROTATED while
+the caption is drawn rotated about its centre (here -42.7 degrees), so the discs march along a line
+the caption does not occupy: they clear ground the belt needed and miss ground the caption uses. Any
+shape-aware keep-out has to rotate the box first.
+
+**TWO OPTIONS PRICED, NEITHER TAKEN, because both are bigger than the hour they were found in:**
+
+1. **Refuse an anchored seat whose keep-out would lie in the belt**, when a legal seat outside it
+   exists. This is the narrow fix and it is contained to the board siting. The obstacle is ordering:
+   `plan.belt` is not populated until `stage_hinterland`, one stage AFTER `stage_notice`, so the
+   siter cannot see the belt. `belt_polygon(s, plan)` is pure and could be called early from
+   `stage_notice` to predict it, and the prediction passed to `place_kosatsuba` as an avoid region -
+   new plumbing across a layer boundary, worth doing deliberately rather than late.
+2. **Make the keep-out proportionate**, rotating the caption box first. Fixes every map at once and
+   removes the disproportion (a 12 x 5 ft plank clearing a 55 ft radius, larger than a well's or a
+   shrine's). Blast radius is every map that carries a board.
+
+**And a research question the reviewer raised that would settle which:** was a village's planted
+windbreak cleared around a notice board at all? The expectation is that it was not - the board stood
+at the wood's EDGE, not in a glade - which would argue for option 2 with a much tighter figure, and
+would resolve this as a side effect. Nothing in `research/urban-features.md` speaks to it.
