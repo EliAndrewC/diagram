@@ -131,3 +131,40 @@ this feature's charter was the fourteen recorded findings, and a third knob is n
 **Sources:** `coggins-minor-2018`, `honda-1915-via-miura-2019`, `yashikirin-jawiki`, `igune-jawiki`,
 `purdue-ncr191`, `gd-fengshui-types` (SUMMARY-ONLY).
 
+### The GM's ruling on the hook, and why no knob was built (2026-08-29)
+
+Presented with the research above - that the Izumo *tsuijimatsu* enclosed the whole house before Meiji
+and was later cut back to a north-and-west hook - the GM ruled for the hook, and against building the
+`belt_enclosure` knob the two-form finding would otherwise have earned:
+
+> *"I think that having a north and west hook is what we want because that is where things ended up, and
+> Rokugan has been around for a long time. So I think they would have ended up in the same place and for
+> the same reason. It also communicates that wind tends to blow from the northwest to the southeast,
+> which is an interesting geographical fact about China and Japan, which we have decided is also true
+> for Rokugan in most places when the local geography does not override the regional geography."*
+
+**Two reasons, and the second is the one worth keeping.** The first is that a long-settled country
+converges on the same answer for the same reason, so the END STATE is the right one to draw. The second
+is that the belt's shape is *communicative*: a reader who sees belts on the north and west of most
+settlements is being told a real fact about the regional wind, and a per-settlement full-ring knob would
+scramble that signal for variety's sake. This is the rare case where constitution XII's "two supportable
+answers become a knob" is answered with a ruling instead - not because the second form is unsupported,
+but because the FIRST form carries information the map is trying to convey.
+
+**Nothing was changed for this ruling, and that was checked rather than assumed.** The regional-versus-
+local rule it describes is already the engine's, recorded at `WIND_TURNS` in `hamletgen/consts.py`: NW is
+the default and "at the scale of a province that is the right answer", while the windward quarter of any
+one map is its UPSLOPE bearing, because cold air drains downhill and 背山面水 makes the high side and the
+windward side the same fact. And the belts already draw as hooks. Measured over the scripted pool, the
+arc each belt subtends around its own cluster:
+
+| map | windward | belt arc | reads as |
+|---|---|---|---|
+| Inashiro | W | 102 deg | hook, two sides |
+| Kashikawa | SE | 146 deg | hook, two sides |
+| Kuwabata | NW | 97 deg | one side |
+| Mizuguchi | S | 136 deg | hook, two sides |
+| Sawada | NE | 129 deg | hook, two sides |
+
+None exceeds 200 degrees; none wraps its settlement. The maps already accord with the ruling.
+
