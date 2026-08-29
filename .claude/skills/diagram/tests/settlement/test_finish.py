@@ -217,3 +217,18 @@ def test_pull_caption_toward_keeps_its_seat_when_the_two_centres_coincide() -> N
     subject = [(400.0, 400.0), (600.0, 400.0), (600.0, 600.0), (400.0, 600.0)]
     seat = (500.0, 500.0 + 8 * 0.275)  # the block's own centre lands on the subject's
     assert s.pull_caption_toward(seat, "notice board", 8, "middle", 0.0, subject) == seat
+
+
+def test_finish_steps_over_a_field_too_small_to_carry_keepout_chords_and_inks_the_road_caption(tmp_path):
+    """Two arms of `finish` that the scripted hamlets never take: a field whose outline is under four
+    points (nothing to derive a facing chain from) is stepped over, and the Imperial-road caption - a
+    town and city feature, deferred out of `road()` so it draws over the ground - is flushed here."""
+    s = Settlement(1000, 1000, seed=1)
+    s.meta(name="T", scale="town", ftpx=1, toscale=True)
+    s.M["fields"] = [{"name": "stub", "kind": "paddy", "outline": [[10, 10], [20, 10], [20, 20]]}]
+    s.M["road"] = [[100, 500], [900, 500]]
+    s.M["road_width"] = 26
+    s._road_label = ("Tokaido", 500.0, 500.0)
+    s.finish(str(tmp_path / "m"), render=False)
+    assert any("Tokaido" in frag for frag in s.toplabels), "the road's name is on the sheet"
+    assert s._road_label is None, "and the deferred record is cleared, so a second finish cannot double it"

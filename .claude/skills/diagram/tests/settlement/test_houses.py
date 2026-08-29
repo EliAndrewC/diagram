@@ -477,3 +477,23 @@ def test_fits_measures_drawn_extents_when_both_are_known() -> None:
     far = s._fits(700.0, 500.0, 60.0, 30.0)
     assert near is False, "overlapping drawn extents"
     assert far is True
+
+
+def test_fits_measures_the_exact_box_when_both_sides_declare_what_they_draw():
+    """The circumscribed circle is rotation-invariant and refuses seats nothing occupies - 38.7% of all
+    refusals on a provincial city - so where BOTH the candidate and the standing feature have declared
+    their drawn extent, the exact box is used instead. The candidate declares by passing `rot`."""
+    s = Settlement(1000, 1000, seed=1)
+    s.meta(name="V", scale="hamlet", ftpx=1, toscale=True)
+    s.placed.append((500.0, 500.0, 40.0, 26.0, 40.0, 26.0))  # a standing feature that knows its rake
+    assert not s._fits(510.0, 505.0, 40.0, 26.0, rot=0.0), "the boxes lap"
+    assert s._fits(700.0, 700.0, 40.0, 26.0, rot=0.0), "and well clear is clear"
+
+
+def test_frontage_walks_past_the_first_leg_of_a_bent_street():
+    """`at(d)` accumulates segment lengths until it finds the one the seat falls in. Every scripted map
+    fronts a straight two-point way, so the accumulation step past the first leg had never run."""
+    s = Settlement(1000, 1000, seed=1)
+    s.meta(name="T", scale="town", ftpx=1, toscale=True)
+    assert s.frontage([(100.0, 500.0), (300.0, 500.0), (700.0, 500.0)], ["merchant"] * 6, spacing=58) == 6
+    assert any(b["x"] > 300 for b in s.M["buildings"]), "seats were taken on the SECOND leg"

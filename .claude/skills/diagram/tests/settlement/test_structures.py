@@ -499,3 +499,30 @@ def test_pull_caption_toward_leaves_a_seat_that_already_sits_on_its_subject_cent
     c_shape = [(0.0, 0.0), (200.0, 0.0), (200.0, 40.0), (60.0, 40.0), (60.0, 160.0), (200.0, 160.0), (200.0, 200.0), (0.0, 200.0)]
     seat = (115.0, 100.0 + 9 * 0.275)  # the block's own center lands exactly on the subject's
     assert s.pull_caption_toward(seat, "Kura", 9, "middle", 0.0, c_shape) == seat
+
+
+def test_caption_lane_clearance_reads_a_tread_through_the_caption_box():
+    """Three verdicts, and only the middle one is reached by a rolled map. A lane VERTEX inside the box
+    is the worst case and returns a negative clearance (the tread's own half-width); a lane CROSSING an
+    edge without a vertex inside is zero clearance; a lane passing well clear is measured."""
+    s = Settlement(1000, 1000, seed=1)
+    s.meta(name="V", scale="hamlet", ftpx=1, toscale=True)
+    s.M["lanes"] = [{"pts": [[500, 500], [520, 500]], "w": 4}]  # both vertices inside the box
+    assert s.caption_lane_clearance(510, 500, 40.0) == -2.0
+
+    s.M["lanes"] = [{"pts": [[400, 500], [700, 500]], "w": 4}]  # crosses the box, no vertex inside
+    assert s.caption_lane_clearance(510, 500, 40.0) == -2.0, "a crossing tread is zero clearance, less its half-width"
+
+    s.M["lanes"] = [{"pts": [[400, 900], [700, 900]], "w": 4}]
+    assert s.caption_lane_clearance(510, 500, 40.0) > 100.0, "well clear, and measured"
+
+
+def test_a_notice_board_with_no_caption_is_sitable_anywhere():
+    """`_sitable` ranks a board position by whether its caption could find a seat there. A board with no
+    caption to place has nothing to rank, so every position is equally good - the arm no pool map takes,
+    because every board on every map is labeled."""
+    s = Settlement(1000, 1000, seed=1)
+    s.meta(name="V", scale="hamlet", ftpx=1, toscale=True)
+    s.M["lanes"] = [{"pts": [[100, 500], [900, 500]], "w": 4}]
+    s.place_kosatsuba(label="")
+    assert s.M.get("kosatsuba"), "a board is still placed"

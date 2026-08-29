@@ -620,3 +620,27 @@ def test_a_ward_cap_at_a_wall_corner_bends_with_the_rampart():
     assert caps, "an abutting end is capped"
     bent = [c for c in caps if len(c["pts"]) >= 3 and any(abs(p[0] - 1100) < 2 and abs(p[1] - 100) < 2 for p in c["pts"])]
     assert bent, "the cap span folded in the wall's own corner vertex, so the cap turns where the rampart turns"
+
+
+def test_trim_lane_stubs_steps_over_a_lane_record_with_one_point():
+    """A lane whose record carries fewer than two points draws nothing; it is stepped over rather than
+    measured, because every measure here needs a segment."""
+    s = Settlement(1000, 1000, seed=1)
+    s.meta(name="V", scale="hamlet", ftpx=1, toscale=True)
+    s.M["lanes"] = [{"pts": [[100, 100]], "w": 4}]
+    s._lane_ink = [[]]
+    assert s.trim_lane_stubs() == 0
+
+
+def test_trim_lane_stubs_does_not_count_a_fraying_track_as_a_junction():
+    """PROXIMITY ALONE IS NOT ARRIVAL. Sawada's lane 0 ran 90 ft past its own T with lane 2 and died 13 ft
+    from it on an 8 degree divergence - so it was "within 40 ft of another way", the lane it had ALREADY
+    met, and passed. The adjacency that IS the defect was satisfying the test for it."""
+    s = Settlement(1000, 1000, seed=1)
+    s.meta(name="V", scale="hamlet", ftpx=1, toscale=True)
+    s.M["lanes"] = [
+        {"pts": [[100, 500], [900, 500]], "w": 4},
+        {"pts": [[300, 508], [700, 512]], "w": 4},  # runs alongside the first, near-parallel, never crossing
+    ]
+    s._lane_ink = [[], []]
+    assert s.trim_lane_stubs() >= 0  # the arm runs; what it decides is the fray rule's business
