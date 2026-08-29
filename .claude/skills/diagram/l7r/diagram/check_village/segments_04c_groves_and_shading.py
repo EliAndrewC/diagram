@@ -79,7 +79,12 @@ def _column_in_belt(t: float, px: float, py: float, wx: float, wy: float, poly: 
     exactly that invisible tail."""
     _c = [(q[0] * px + q[1] * py, q[0] * wx + q[1] * wy) for q in poly]
     _d0, _d1 = min(q[1] for q in _c), max(q[1] for q in _c)
-    _n = 24
+    # 25 samples was a 14.7 px step on Kuwabata against a decisive on-page window of 13.0 px - that
+    # column's verdict was decided at the sampling limit (settlement-review 2026-08-29). A miss falls
+    # toward leniency (a dropped column resets the run) so it cannot manufacture a failure, but it can
+    # hide one on a hook whose arms lie far apart along the wind axis. 200 samples is a ~1.8 px step
+    # there, well under a crown.
+    _n = 200
     for _k in range(_n + 1):
         _d = _d0 + (_d1 - _d0) * _k / _n
         _qx, _qy = t * px + _d * wx, t * py + _d * wy
@@ -343,9 +348,29 @@ def _seg_0613__village_windbreak_is_continuous(*, M: Any = _UNBOUND, check: Any 
         _thin: list[tuple[int, int, int]] = []
         for _g in _wb:
             _r = float(_g.get("r", 6))
-            _pr = [
-                (c[0] * _px + c[1] * _py, c[0] * _wx + c[1] * _wy, c[0], c[1]) for c in _g["clumps"] + (_g.get("clumps_offpage") or [])
-            ]  # a clump the page trim cut still stands off the page (feature 137 T05): the belt wraps a plot there, it is not holed
+            # AN OFF-PAGE CLUMP STILL FILLS AN ON-PAGE COLUMN, and that asymmetry with the window is
+            # DELIBERATE (feature 137 T05, re-tested 2026-08-29). The acceptance review read it as a
+            # one-sided test - the window is clipped to the page, so why is the planting not - and the
+            # symmetric version was implemented and rolled: credit a clump only where its crown reaches
+            # the view. It fails Mizuguchi with a 60 ft run at x 1133..1183, where the belt polygon holds
+            # 48 px of visible ground (y 1902..1950) at the frame's bottom edge and the nearest clumps
+            # sit at y 1971-1983 with their crowns 5 px short of it.
+            #
+            # THAT GROUND IS A HOMESTEAD, and the belt is FORBIDDEN to plant on it: one farmhouse, two
+            # threshing yards, two kitchen gardens and a persimmon stand within 90 ft of (1160, 1925),
+            # and a yard's southern sun corridor and a garden's eastern one are keep-outs the seating
+            # must respect. So the symmetric check demands canopy where the generator is right to refuse
+            # it - a check failing for something a placement rule already gets right, which is the exact
+            # class the GM ruled out (2026-08-29). The reader loses nothing: the canopy visible in that
+            # gap is the copse, which is what a dooryard grove is for.
+            #
+            # The asymmetry is therefore kept and now has a reason: the WINDOW asks "is there belt here
+            # for a reader to see", and the PLANTING asks "is the belt holed", which a clump answers
+            # whether or not the frame happens to cut it. What the review is right about is that the
+            # guarantee is weaker than it looks - delete Mizuguchi's copse and this still passes. Closing
+            # that needs the check to know the seating's keep-outs, which is a second copy of the
+            # generator inside the gate; not worth it for one column at one page edge.
+            _pr = [(c[0] * _px + c[1] * _py, c[0] * _wx + c[1] * _wy, c[0], c[1]) for c in _g["clumps"] + (_g.get("clumps_offpage") or [])]
             # AN EMPTY COLUMN IS THE WORST CASE, NOT A SKIPPED ONE. The first cut of this check wrote
             # `if _spans:` and so scored a column with NO canopy as nothing at all - it passed a
             # sabotaged Inashiro with a 60 ft band cut clean out of its belt, which is the exact

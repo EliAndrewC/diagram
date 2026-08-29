@@ -194,3 +194,24 @@ whose crown merely crosses the frame is kept, one with no visible ink is waste
 **The other repair was tried first and measured.** Extending the PLANTING to the polygon's ends, so the
 end stretches were offered seats like any interior gap, bought one clump on one map at the page edge.
 It is reverted, with the numbers recorded in `homestead_parts.py` at the point of change.
+
+### Why the continuity check is asymmetric on purpose (2026-08-29)
+
+The window is clipped to the page; the PLANTING is not - an off-page clump still fills an on-page
+column. An acceptance review read that as a one-sided test, which is a fair reading, so the symmetric
+version was implemented and rolled: credit a clump only where its crown reaches the view.
+
+It fails Mizuguchi with a 60 ft bare run at x 1133..1183, and the ground under it settles the question.
+The belt polygon holds 48 px of visible ground there (y 1902..1950) at the frame's bottom edge, the
+nearest belt clumps sit at y 1971-1983 with their crowns stopping 5 px short of it - **and that visible
+ground is a homestead.** One farmhouse, two threshing yards, two kitchen gardens and a persimmon stand
+within 90 ft of (1160, 1925); a yard's southern sun corridor and a garden's eastern one are keep-outs
+the belt seating must respect. The symmetric check therefore demands canopy exactly where the generator
+is right to refuse it, which is the class of check the GM ruled out - one that fails for something a
+placement rule already gets right. The reader loses nothing either: the canopy visible in that gap is
+the copse, which is what a dooryard grove is for.
+
+**What the review is right about, and what it would cost to close.** The guarantee is weaker than it
+looks - delete Mizuguchi's copse and the check still passes. Closing that would need the check to know
+the seating's keep-outs, which is a second copy of the generator living inside the gate. Declined for
+one column at one page edge; reopen it if a map ever ships a hole a reader can actually see.
