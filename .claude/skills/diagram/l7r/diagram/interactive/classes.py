@@ -687,7 +687,7 @@ _DEFS: tuple[FeatureClass, ...] = (
         what="A plank laid over a ditch, or a small timber deck where a lane crosses the stream.",
         why="Farmers reach the plots by walking the bunds, and the long laterals cut across that walking; a plank every so often keeps the field passable. Where a way crosses water, one deck - never two at the same point.",
         label="guess",
-        label_note="That ditches were planked is reasoned, not read: the record consulted says nothing about a plank over a two-foot ditch, and the spacing is a drawing convention.",
+        label_note="That ditches were planked is reasoned, not read: the record consulted says nothing about a plank over a two-foot ditch, so the plank and its spacing are a guess.",
         sources=("not recorded",),
         entry="research/water.md - 'What drawing at TRUE SIZE left open' (channel_footbridges)",
     ),

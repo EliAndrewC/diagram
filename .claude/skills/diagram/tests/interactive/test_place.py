@@ -265,7 +265,7 @@ def test_the_card_on_the_reference_hamlet() -> None:
     assert card is not None
     assert card["name"] == "Inashiro"
     assert card["what"].startswith("Inashiro is a hamlet of 15 farmhouses, population ~75:")
-    assert "no headman of its own" in card["what"]
+    assert "no headsman of its own" in card["what"], "one spelling of the office - l7r.md's own"
     assert "The flooded fields grow rice." in card["why"]
     assert "village district of Hoshigaoka, which lies east" in card["why"]
     assert card["lead"] == "", "the card does not announce accuracy either (spec FR-001)"
