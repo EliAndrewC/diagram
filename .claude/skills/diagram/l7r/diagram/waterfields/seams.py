@@ -56,7 +56,7 @@ from collections.abc import Callable
 from typing import Any
 
 from shapely.errors import GEOSException
-from shapely.geometry import LineString, Point, Polygon
+from shapely.geometry import LineString, MultiPolygon, Point, Polygon
 from shapely.geometry.base import BaseGeometry
 from shapely.ops import unary_union
 
@@ -773,6 +773,38 @@ def _trade(
             # THE GROUND HAS TO COME FROM SOMEWHERE. Whatever the corner overlaps gives it up - all of
             # them, not the best one, or two basins end up claiming the same square foot. What it
             # overlaps nothing of is bare floor, and taking that in is free and is the point.
+            # THE BITE WIDENS RATHER THAN THE NEIGHBOUR SPLITTING (feature 152 T18). The dominant refusal
+            # on Mizuguchi - and the largest surviving step in the pool, 30.0 ft - is a neighbour that
+            # would come apart in two if it gave up the corner, so `qp.difference(traded)` returns a
+            # MultiPolygon and the whole repair is declined. `future-work/farming-communities.md` recorded
+            # the answer and left it UNTRIED: "keep the largest part for the neighbour and hand the
+            # orphaned fragment to the basin that cut it, so the bite widens rather than the neighbour
+            # splitting." That is what this does, once, before the neighbour loop - widening mid-loop would
+            # change decisions already taken. The orphan is capped against the trade so this stays a repair
+            # rather than a land grab, and every guard below still judges the widened result.
+            _orphans = []
+            for _k, _q in enumerate(plots):
+                if _k == i or len(_q["poly"]) < 3:
+                    continue
+                _qp = Polygon(_q["poly"]).buffer(0)
+                if not isinstance(_qp, Polygon) or not _qp.is_valid or _qp.is_empty or _qp.intersection(traded).area <= 0.01:
+                    continue
+                _lost = _qp.difference(traded).buffer(0)
+                if isinstance(_lost, MultiPolygon):
+                    _parts = sorted((_g for _g in _lost.geoms if isinstance(_g, Polygon) and not _g.is_empty), key=lambda _g: _g.area, reverse=True)
+                    _orphans.extend(_parts[1:])
+            if _orphans and sum(_g.area for _g in _orphans) <= _ORPHAN_MAX_SHARE * traded.area:
+                _wide = unary_union([traded, *_orphans]).buffer(0)
+                _grown = unary_union([now, *_orphans]).buffer(0)
+                _gr = _ring(_grown) if isinstance(_grown, Polygon) and _grown.is_valid and not _grown.interiors else []
+                # the widened taker must still be a basin, and the repair must still RETIRE the step
+                if (
+                    len(_gr) >= 3
+                    and Polygon(_gr).buffer(0).is_valid
+                    and not pointed_ring(dedup_ring(_gr, 1.0), _GATE_MIN_APEX)
+                    and jog_steps([(float(_a), float(_b)) for _a, _b in _gr], g) < jog_steps([(float(_a), float(_b)) for _a, _b in plots[i]["poly"]], g)
+                ):
+                    traded, now, _new = _wide, _grown, _gr
             rings = [(i, _new)]
             tx0, ty0, tx1, ty1 = traded.bounds
             for k, q in enumerate(plots):
@@ -801,6 +833,11 @@ def _trade(
     for k, r in rings:
         plots[k]["poly"] = r
     return True
+
+
+_ORPHAN_MAX_SHARE = 0.5  # an orphaned fragment handed to the taker may not exceed half the traded corner:
+# past that the 'repair' is moving more ground than the step it retires, which is a land grab wearing a
+# repair's clothes. Feature 152 T18; the lever itself was recorded untried in future-work/farming-communities.md.
 
 
 def close_seams(

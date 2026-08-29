@@ -49,6 +49,7 @@ def pick_caption_seat(
     hug_cap: float,
     box_clearance: Callable[[Pt], float],
     lane_target: float,
+    blocked: Callable[[Pt], bool] | None = None,
 ) -> Pt:
     """The board's caption seat: the NEAREST seat that clears the ways by `lane_target`, and if none does,
     the legal seat that clears them best.
@@ -58,8 +59,25 @@ def pick_caption_seat(
     meant building a settlement whose every seat was blocked. The tie-break is (distance, then ORDER), which
     is what keeps an unblocked board on its historical seat when a diagonal ties with it.
     """
-    legal = [q for q in seats if hug(q) <= hug_cap] or list(seats)
+    # `blocked` IS A THIRD LEGALITY TERM, and it degrades in the same direction as the other two
+    # (feature 152 T12). The filter scored hug and lane clearance and NOTHING ELSE, so a caption could
+    # be seated on top of a garden, or with a whole lane between it and the thing it names - Inashiro's
+    # "notice board" stood with the full 6 ft width of lane 1 between the caption and its board, and a
+    # shrine 22 ft away on the caption's own side, so the words read as naming the shrine. The comment
+    # under the satisfice rule already knew the shape ("a copse clump through the text") and chose lane
+    # clearance as the only bar anyway. If every seat is blocked the term is dropped rather than the map
+    # left captionless, which is the same "or list(seats)" fallback the hug cap has always had.
+    _hug_ok = [q for q in seats if hug(q) <= hug_cap] or list(seats)
+    legal = _hug_ok
+    # `blocked` REFINES AMONG SEATS THAT ALREADY CLEAR THE WAYS - it does not outrank the lane bar
+    # (feature 152 T12). Applied as a filter over ALL legal seats it changed which seat the ladder fell
+    # back to, and tripwire seed 33 came out with its caption standing on a way
+    # (`captions_clear_the_ways_they_stand_on`) - trading the defect this term was written for against a
+    # worse one. Lane clearance is the older and harder rule; the fabric and way-side terms pick BETWEEN
+    # the seats that already satisfy it, and drop away entirely when none of them is unblocked.
     clear = [q for q in legal if box_clearance(q) >= lane_target]
+    _unblocked = [q for q in clear if not (blocked and blocked(q))]
+    clear = _unblocked or clear
     if clear:
         ix = {id(q): i for i, q in enumerate(seats)}
         return min(clear, key=lambda q: (round((q[0] - at[0]) ** 2 + (q[1] - at[1]) ** 2, 3), ix[id(q)]))
@@ -302,8 +320,36 @@ class PublicFixturesMixin:
                 ]
                 return poly_gap(_quad, [(_board_box[0], _board_box[1]), (_board_box[2], _board_box[1]), (_board_box[2], _board_box[3]), (_board_box[0], _board_box[3])])
 
+            def _blocked(_q: Pt) -> bool:
+                """Does this seat lap a solid feature, or sit across a way from the board it names?"""
+                _lb = (_q[0] - _chw, _q[1] - 5.0, _q[0] + _chw, _q[1] + 5.0)
+                _ca2, _sa2 = math.cos(math.radians(_t)), math.sin(math.radians(_t))
+                _quad = [
+                    (_q[0] + (_px2 - _q[0]) * _ca2 - (_py2 - _q[1]) * _sa2, _q[1] + (_px2 - _q[0]) * _sa2 + (_py2 - _q[1]) * _ca2)
+                    for _px2, _py2 in ((_lb[0], _lb[1]), (_lb[2], _lb[1]), (_lb[2], _lb[3]), (_lb[0], _lb[3]))
+                ]
+                _qx0, _qx1 = min(_c[0] for _c in _quad), max(_c[0] for _c in _quad)
+                _qy0, _qy1 = min(_c[1] for _c in _quad), max(_c[1] for _c in _quad)
+                for _fam in ("houses", "gardens", "threshing_yards", "farm_sheds", "byres", "storehouses", "persimmons", "bamboo_stands", "wells"):
+                    for _o in self.M.get(_fam) or []:
+                        if not isinstance(_o, dict) or "x" not in _o:
+                            continue
+                        _ow, _oh = float(_o.get("w") or _o.get("r", 0) * 2), float(_o.get("h") or _o.get("r", 0) * 2)
+                        if _ow <= 0 or _oh <= 0:
+                            continue
+                        if abs(_q[0] - float(_o["x"])) < (_qx1 - _qx0 + _ow) / 2 and abs(_q[1] - float(_o["y"])) < (_qy1 - _qy0 + _oh) / 2:
+                            return True
+                # ...AND NOT ACROSS A WAY FROM ITS SUBJECT: if the straight line from the board to the
+                # caption crosses a drawn lane, the reader has a way between the words and the thing.
+                for _ln in self.M.get("lanes") or []:
+                    _pp = [(float(_a), float(_b)) for _a, _b in (_ln.get("pts") or [])]
+                    for _u, _v in zip(_pp, _pp[1:], strict=False):
+                        if segments_cross((x, y), (_q[0], _q[1]), _u, _v):
+                            return True
+                return False
+
             def _pick(_seats: list[Pt]) -> Pt:
-                return pick_caption_seat(_seats, (x, y), _hug, _hug_cap, _box_clearance, _lane_target)
+                return pick_caption_seat(_seats, (x, y), _hug, _hug_cap, _box_clearance, _lane_target, _blocked)
 
             if label_xy:
                 _lx, _ly = label_xy
