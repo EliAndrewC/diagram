@@ -686,7 +686,7 @@ _WALL_GAP_FT = 3.5  # the review measured -0.3 ft at 3.0 against the drawn wall;
 _SALT = {"privy": 101.0, "manure": 102.0, "woodpile": 103.0, "bath": 104.0, "coop": 105.0, "shrine": 106.0, "persimmon": 107.0}
 
 
-def nearer_own_house(seat: tuple[float, float, float, float], hx: float, hy: float, ca: float, sa: float, others: Sequence[Pt]) -> tuple[int, float]:
+def nearer_own_house(seat: tuple[float, float, float, float], hx: float, hy: float, ca: float, sa: float, others: Sequence[Pt]) -> tuple[int, float, float]:
     """Sort key preferring a fixture seat that is nearer its OWN farmhouse than any other house's.
 
     `seat` is (dx, dy, w, d) in the house's own raked frame; `ca`/`sa` are that rake's cosine and sine.

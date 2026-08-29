@@ -55,7 +55,13 @@ def _sections(path: str) -> list[tuple[str, str]]:
 
 def section_sources(body: str) -> list[str]:
     """The SOURCES.md keys a section's `**Sources:**` line names (in order, deduplicated)."""
-    m = re.search(r"^\*\*Sources:\*\*(.*)$", body, re.M)
+    # THE LINE WRAPS, AND THE KEYS AFTER THE WRAP COUNT (2026-08-29). Matching to end-of-LINE read only
+    # the first physical line of a `**Sources:**` entry, so a section citing more keys than fit in one
+    # 100-column line silently lost the rest - and lost them INVISIBLY, since the modal still showed a
+    # plausible list. Measured on research/water.md "A reservoir's shore is reeded": the line names seven
+    # keys over two lines and only the first four reached the page, dropping `nies-tameike`,
+    # `inamino-tameike-museum` and `ohmi-yoshi`. The entry runs to the blank line that ends the paragraph.
+    m = re.search(r"^\*\*Sources:\*\*((?:.*(?:\n(?!\s*$).*)*))", body, re.M)
     if not m:
         return []
     keys: list[str] = []
