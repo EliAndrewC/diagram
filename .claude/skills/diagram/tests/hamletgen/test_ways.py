@@ -847,3 +847,131 @@ def test_the_cluster_gateway_and_edge_fall_back_when_no_house_is_placed_yet() ->
     s.M["houses"].append({"x": 500.0, "y": 500.0, "w": 50.0, "h": 30.0})
     assert _cluster_gateway(s, seat, fallback) != fallback, "with a house placed it measures the cloud"
     assert _cluster_edge_toward(s, (900.0, 500.0), fallback) != fallback
+
+
+# ---- feature 134 T50: the three lane-web defects T49's rolled yard sizes exposed ----------------
+
+# A hairpin whose short HEAD runs back west along y=300 while the rest of the lane runs west along
+# y=318, with a bar between them so the chord over the fold is blocked and the arm cut is the only
+# way out. The apex is (702, 300); cutting the head leaves the apex as the lane's new end.
+_HAIRPIN = [[620.0, 300.0], [702.0, 300.0], [630.0, 318.0], [560.0, 318.0]]  # head 82 ft: past _ARM_FT, inside _LONG_ARM_FT
+_LONG_HAIRPIN = [[602.0, 300.0], [702.0, 300.0], [630.0, 318.0], [560.0, 318.0]]  # head 100 ft: past _LONG_ARM_FT
+_FOLD_BAR = [[(560.0, 306.0), (700.0, 306.0), (700.0, 312.0), (560.0, 312.0)]]
+_TIP_WAY = {"pts": [[728.0, 272.0], [790.0, 272.0]], "w": 5}  # 38 ft off the apex - inside _END_WAY_FT
+
+
+def test_a_hairpin_arm_LONGER_than_the_cheap_cap_is_cut_once_the_cut_is_MEASURED() -> None:
+    """The repair's threshold and the check's threshold were different numbers, and nothing compared them.
+
+    `lanes_bend_like_paths` fails ANY turn past 140 degrees, while `_smooth_web` would only cut an arm
+    under `_ARM_FT` (40 ft). Everything in the band between was drawn, failed, and could not be repaired
+    by any pass - tripwire seed 47's lane 11 doubled back 62 ft. The cap was standing in for "do not
+    destroy a lane doing real work", so `_arm_cuttable` measures that instead: the arm goes when no
+    farmhouse loses its way and the tip left behind still reaches something."""
+    from l7r.diagram.hamletgen.ways import _smooth_web, _turn_deg
+
+    assert _turn_deg((620.0, 300.0), (702.0, 300.0), (630.0, 318.0)) >= 140.0, "the fixture really is a hairpin"
+    s = _webbed([{"pts": [list(p) for p in _HAIRPIN], "w": 5}, dict(_TIP_WAY)])
+    _smooth_web(s, _FOLD_BAR, [], [])
+    kept = s.M["lanes"][0]["pts"]
+    assert kept[0] == [702.0, 300.0], f"the 82 ft arm is cut and the apex becomes the end: {kept}"
+    assert all(_turn_deg(tuple(kept[k - 1]), tuple(kept[k]), tuple(kept[k + 1])) < 140.0 for k in range(1, len(kept) - 1)), kept
+
+
+def test_the_arm_is_KEPT_when_a_farmhouse_would_lose_its_only_way() -> None:
+    """The measurement has to preserve what the cap was protecting. This house stands 95 ft off the
+    arm and 113 ft from every other tread, so cutting would strand it; the lane keeps its hairpin and
+    `lanes_bend_like_paths` then fires on it honestly, which is the visible, correct outcome."""
+    from l7r.diagram.hamletgen.ways import _smooth_web
+
+    s = _webbed([{"pts": [list(p) for p in _HAIRPIN], "w": 5}, dict(_TIP_WAY)])
+    s.M["houses"].append({"x": 620.0, "y": 205.0, "w": 40.0, "h": 25.0})
+    _smooth_web(s, _FOLD_BAR, [], [])
+    assert s.M["lanes"][0]["pts"] == [list(p) for p in _HAIRPIN], "a farmhouse with no other way keeps the arm that serves it"
+
+
+def test_the_arm_is_KEPT_when_the_tip_left_behind_would_reach_nothing() -> None:
+    """The other half of the measurement, and the one that binds most often. After the cut the tip IS
+    the lane's end, and an end owes `lanes_reach_something` a way within 40 ft or a farmhouse within
+    90 ft - so a cut that would trade a bend failure for a reach failure is refused. Same fixture with
+    the neighbouring way taken away."""
+    from l7r.diagram.hamletgen.ways import _smooth_web
+
+    s = _webbed([{"pts": [list(p) for p in _HAIRPIN], "w": 5}])
+    _smooth_web(s, _FOLD_BAR, [], [])
+    assert s.M["lanes"][0]["pts"] == [list(p) for p in _HAIRPIN], "nothing within reach of the tip, so the arm stays"
+
+
+def test_an_arm_past_the_long_cap_is_a_lane_rather_than_an_arm() -> None:
+    """`_LONG_ARM_FT` is the check's own farmhouse figure: past 90 ft the arm reaches ground the rest
+    of the lane cannot, so it is a lane in its own right and is kept whatever the measurement says.
+    The cap bounds how much of the picture one cut may change; it no longer decides the cut alone."""
+    from l7r.diagram.hamletgen.ways import _smooth_web
+
+    s = _webbed([{"pts": [list(p) for p in _LONG_HAIRPIN], "w": 5}, dict(_TIP_WAY)])
+    _smooth_web(s, _FOLD_BAR, [], [])
+    assert s.M["lanes"][0]["pts"] == [list(p) for p in _LONG_HAIRPIN], "a 100 ft arm is a lane, not an arm"
+
+
+def test_a_lane_whittled_below_the_minimum_and_left_standing_alone_is_swept() -> None:
+    """`draw_web_lane` refuses to draw anything under `_WEB_MIN_FT`, and that rule was asked ONCE, at
+    draw time - while a trim, a hairpin cut and `_stop_at_network` all shorten lanes afterwards.
+    Tripwire seed 27 shipped a 20.5 ft two-point stub standing 31 ft off the nearest lane, in a slot
+    about 7 ft wide that no link the joiner may draw could reach. The husk goes with the ink (feature
+    145's rule from a Sawada review), so the record is deleted rather than left empty."""
+    from l7r.diagram.hamletgen.ways import _sweep_debris
+
+    s = _webbed([{"pts": [[300.0, 300.0], [300.0, 500.0]], "w": 5}, {"pts": [[600.0, 300.0], [614.0, 315.0]], "w": 5}])
+    assert _sweep_debris(s) == 1
+    assert len(s.M["lanes"]) == 1, "the record is deleted with its ink, not left declaring a lane nothing draws"
+    assert s.M["lanes"][0]["pts"][0] == [300.0, 300.0], "the real lane is untouched"
+    assert s.M["meta"]["lane_fragments_dropped"] == 1
+
+
+def test_the_sweep_spares_a_short_lane_that_MEETS_the_web_and_one_that_is_a_houses_only_way() -> None:
+    """Two guards, both load-bearing: a short spur that joins the network is a real lane and not
+    debris, and a stranded fragment that is some farmhouse's only way stays visibly broken rather
+    than stranding the house - `farmhouses_reach_a_way` is the check that should speak in that case."""
+    from l7r.diagram.hamletgen.ways import _sweep_debris
+
+    joined = _webbed([{"pts": [[300.0, 300.0], [300.0, 500.0]], "w": 5}, {"pts": [[300.0, 400.0], [318.0, 404.0]], "w": 5}])
+    assert _sweep_debris(joined) == 0, "a 20 ft spur that touches the web is a lane, not debris"
+    assert len(joined.M["lanes"]) == 2
+
+    only_way = _webbed([{"pts": [[300.0, 300.0], [300.0, 500.0]], "w": 5}, {"pts": [[900.0, 300.0], [914.0, 315.0]], "w": 5}])
+    only_way.M["houses"].append({"x": 930.0, "y": 330.0, "w": 40.0, "h": 25.0})
+    assert _sweep_debris(only_way) == 0, "the fragment is that house's only way"
+    assert len(only_way.M["lanes"]) == 2
+
+
+def test_a_FINER_lattice_walks_a_narrower_corridor_than_a_coarse_one() -> None:
+    """`_route` plans on a lattice and inflates its clearance by half a cell's diagonal
+    (`gap + cell * 0.71`) so that "this cell is free" means every point in it is clear. That is
+    load-bearing - it is what stopped lanes planned at 7 ft from being drawn at 4 - but the cost is
+    charged against the CORRIDOR and it is invisible at the call site: at cell 6 a `_TOUCH_GAP`
+    route really demands 8.26 ft, and at cell 10 a fabric route 14.1 ft. Tripwire seed 27's only way
+    out of a stranded stub was a gap about 7 ft wide, so every rung of the orphan joiner's ladder
+    reported NO ROUTE for a journey that plainly existed, and the caller could only say the piece
+    would not join. Planning the last rung at `_FINE_CELL` is what opens it.
+
+    The relationship is measured rather than predicted: the narrowest gap each cell size can thread
+    is searched for, so the test cannot be wrong about the router's internals - which an earlier
+    version of it was, twice."""
+    from l7r.diagram.hamletgen.ways import _FINE_CELL, _TOUCH_GAP, _route
+
+    def narrowest_passable(cell: float) -> float | None:
+        """The smallest half-gap this cell size can plan through, in a wall that seals the search box
+        except for one opening OFFSET from the straight line - offset so the router cannot take its
+        straight-line shortcut and must actually plan."""
+        for half in range(4, 17):
+            wall = [
+                [(300.0, 480.0), (445.0 - half, 480.0), (445.0 - half, 520.0), (300.0, 520.0)],
+                [(445.0 + half, 480.0), (700.0, 480.0), (700.0, 520.0), (445.0 + half, 520.0)],
+            ]
+            if _route((500.0, 470.0), (500.0, 530.0), wall, [], [], gap=_TOUCH_GAP, pad_mult=2.0, cell=cell):
+                return float(half)
+        return None
+
+    fine, coarse = narrowest_passable(_FINE_CELL), narrowest_passable(6.0)
+    assert fine is not None and coarse is not None, (fine, coarse)
+    assert fine < coarse, f"a {_FINE_CELL} ft lattice threads a narrower corridor than a 6 ft one: {fine} vs {coarse}"

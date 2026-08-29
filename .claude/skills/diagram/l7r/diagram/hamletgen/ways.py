@@ -572,6 +572,7 @@ def stage_web(s: Settlement, plan: SitePlan) -> None:
     def _inside(q: Pt) -> bool:
         return 0.0 <= q[0] <= _W and 0.0 <= q[1] <= _H
 
+    _fabric_now = [poly for poly, _owner, _kind in _homestead_polys(s)]  # what the connector's end must stay clear of, as `_thread_the_fabric` left it
     for _i, _ln in enumerate(list(s.M.get("lanes", []))):
         if len(_ln.get("pts") or []) < 2:
             continue
@@ -582,7 +583,7 @@ def stage_web(s: Settlement, plan: SitePlan) -> None:
             if _o is not _ln and len(_o.get("pts") or []) >= 2
             for sg in zip([(float(x), float(y)) for x, y in _o["pts"]], [(float(x), float(y)) for x, y in _o["pts"]][1:], strict=False)
         ]
-        _kept = _pull_back_to_service(_pts, _others, _final_houses, _inside) if _ln.get("connector") else _trim_to_service(_pts, _others, _final_houses, [list(plan.envelope)])
+        _kept = _pull_back_to_service(_pts, _others, _final_houses, _inside, _fabric_now) if _ln.get("connector") else _trim_to_service(_pts, _others, _final_houses, [list(plan.envelope)])
         if len(_kept) >= 2 and polyline_len(_kept) >= _WEB_MIN_FT and _kept != _pts:
             _ln["pts"] = [[round(x, 1), round(y, 1)] for x, y in _kept]
             # AND THE INK WITH IT - see `Settlement.reink_lane`. Shortening the record alone left the
@@ -1282,7 +1283,19 @@ def _touch_junctions(s: Settlement, hard: list[Poly], walls: Sequence[Poly], wat
         ways = [[(float(x), float(y)) for x, y in ln["pts"]] for ln in lanes]
         comp = _components(ways, 4.0)
         seed = next((i for i, ln in enumerate(lanes) if ln.get("connector")), 0)
-        main = comp[seed] if comp else None
+        # THE NETWORK IS THE BIGGEST PIECE, NOT THE CONNECTOR'S PIECE (feature 134 T50, 2026-08-29).
+        # Anchoring on the connector reads a map with a detached ROAD as a map with a detached WEB:
+        # measured on cohort seeds 13 and 17, where the connector alone failed to touch and this tail
+        # then reported seven and six orphan lanes and spent all twelve of its passes trying to drag
+        # the whole web across to the road, joining nothing. One short link from the road to the web
+        # is the same repair and it is the one that exists - 24.1 ft on seed 13. The connector may be
+        # the orphan; `lanes_form_one_network` measures whether the pieces are ONE, and it does not
+        # care which of them moved to meet the other.
+        _sizes: dict[int, int] = {}
+        for _k in range(len(ways)):
+            if len(ways[_k]) >= 2:
+                _sizes[comp[_k]] = _sizes.get(comp[_k], 0) + 1
+        main = max(_sizes, key=lambda c: (_sizes[c], c == comp[seed])) if _sizes else (comp[seed] if comp else None)
         orphans = [i for i in range(len(ways)) if comp[i] != main and len(ways[i]) >= 2]
         if not orphans:
             break
@@ -1371,7 +1384,7 @@ def _touch_junctions(s: Settlement, hard: list[Poly], walls: Sequence[Poly], wat
                     for d, v, q in _along[:_ALONG_CANDS]:
                         if d > _ORPHAN_REACH:
                             break
-                        link = _route(v, q, hard, walls, water, gap=_TOUCH_GAP, pad_mult=2.0, cell=_FINE_CELL)
+                        link = _route(v, q, hard, walls, water, gap=WEB_FABRIC_GAP, pad_mult=2.0, cell=_FINE_CELL)
                         if link and polyline_len(link) <= _DETOUR_DIRECTNESS * max(d, 1.0):
                             found.append((polyline_len(link), v, link))
                             if len(found) >= _SHORTEST_OF:
@@ -1519,7 +1532,16 @@ _DETOUR_DIRECTNESS = 8.0  # the last rung may walk round a yard: up to 8x the st
 # ladder above has failed, so a piece that joins today joins by exactly the same route it did before.
 _ALONG_STEP_FT = 40.0  # a sample every 40 ft: finer than the shortest link worth drawing, coarse enough to stay cheap
 _ALONG_CANDS = 8  # routes attempted at the fine cell, nearest first - the cost bound on a rung that only runs for a stranded piece
-_FINE_CELL = 3.0  # planning clearance `_TOUCH_GAP + 3 * 0.71` = 6.1 ft: a real 7 ft corridor fits, a 4 ft one still does not
+_FINE_CELL = 3.0
+# THE FINE RUNG'S NOVELTY IS THE LATTICE, NOT A LOOSER CLEARANCE - and getting that wrong was a
+# regression of this feature's own making (measured on cohort seeds 6 and 18, 2026-08-28). The rung
+# first planned at `_TOUCH_GAP`, the margin a link is allowed INTO a junction, on the reasoning that
+# a lane and a plot fence share a line in a real village. That margin is earned by the last few feet
+# of a short link; this rung can draw a 300 ft lane, and at 4 ft it drew one THROUGH a garden
+# (`features_do_not_overlap`, seed 18) and another under a farmhouse (`houses_clear_of_lanes`, seed
+# 6). So it plans at the ordinary fabric standard and buys its reach from the CELL alone:
+# `WEB_FABRIC_GAP + 3 * 0.71` = 9.1 ft against the 14.1 ft the coarse detour rung was asking, which
+# is what opened tripwire seed 27's corridor while keeping every lane off the steadings.
 _SERVE_FT = 100.0  # ft: a way serves a house within this - `farmhouses_reach_a_way`'s own figure, so a dropped fragment never strands one
 
 # A JUNCTION LINK CROSSES NOTHING, BUT IT MAY BRUSH A FENCE. The 29 ft gaps this pass closes are
@@ -1537,20 +1559,29 @@ _SERVE_FT = 100.0  # ft: a way serves a house within this - `farmhouses_reach_a_
 _TOUCH_GAP = 4.0
 
 
-def _clear_touch(a: Pt, b: Pt, hard: list[Poly], walls: Sequence[Poly], water: list[tuple[Pt, Pt]]) -> bool:
+def _clear_touch(a: Pt, b: Pt, hard: list[Poly], walls: Sequence[Poly], water: list[tuple[Pt, Pt]], gap: float = _TOUCH_GAP) -> bool:
     """`_clear_link` at footprint margins - for the short link that closes a junction (see `_TOUCH_GAP`).
 
-    THE 4 ft BRUSH STAYS - three wider margins were measured and each broke the reference hamlet
+    THE DEFAULT 4 ft BRUSH STAYS - three wider margins were measured and each broke the reference hamlet
     (feature 137 T03, 2026-08-28): 7 ft (the fabric margin) put the T32 zigzag back beside the notice
     board and took the 24-cohort to 1/24; 6 ft for everything cost Inashiro three checks; 6 ft for
     gardens/yards/sheds with 4 for houses still cost it `lanes_bend_like_paths`. The margin was a
     ghost: on the current tree `houses_clear_of_lanes` is 0 of 48 and `features_do_not_overlap` 2 of
     48 - the T32-era brush failures were cured by later work (the set-back re-pack, the guard, the
-    ladder). Do not widen this again without a failing seed that names it."""
+    ladder). Do not widen this again without a failing seed that names it.
+
+    `gap` IS THE CALLER'S TO RAISE, and that is not the flat widening warned off above (feature 134
+    T50, 2026-08-28). All three reverted attempts moved the DEFAULT, which is charged to every junction
+    link on the map. A caller rewriting one KNOWN lane can do better: the checks size a way's keep-out
+    from its own width - `houses_clear_of_lanes` reads `half + 2.0` - so a repair on a 5 ft lane owes
+    4.5 ft and one on a 3 ft lane owes 3.5. At the flat 4.0 the smoother was allowed to draw exactly
+    what the check forbids, which is cohort seed 6: a farmhouse corner 4.09 ft from a 5 ft web lane,
+    put there by a string-pull that tested its own chord and passed. Deriving it leaves the common 3 ft
+    lane untouched (3.5 is below the default) and tightens only the wide ways."""
     span = math.dist(a, b)
     if span < 1.0:
         return True
-    runs = clear_runs([a, b], hard, _TOUCH_GAP, step=3.0, lines=water, tight=walls, tight_margin=_TOUCH_GAP, floor=0.5)
+    runs = clear_runs([a, b], hard, gap, step=3.0, lines=water, tight=walls, tight_margin=gap, floor=0.5)
     return any(polyline_len(r) >= span - 3.0 for r in runs)
 
 
@@ -1762,14 +1793,17 @@ def _smooth_web(s: Settlement, hard: list[Poly], walls: Sequence[Poly], water: l
         # every footprint-legal chord and put a lane through a house's clearance and a bed's edge:
         # `houses_clear_of_lanes`, `features_do_not_overlap`), while the 4 ft stepping and the jogs
         # a junction leaves are the SAME line drawn badly.
-        def _shortcut_ok(a: int, b: int, pts: Poly = pts) -> bool:
+        # THE CHORD OWES THIS LANE'S OWN KEEP-OUT, not a flat 4 ft (feature 134 T50) - see `_clear_touch`.
+        _lane_gap = max(_TOUCH_GAP, float(ln.get("w") or 5.0) / 2.0 + 2.0)
+
+        def _shortcut_ok(a: int, b: int, pts: Poly = pts, _g: float = _lane_gap) -> bool:
             if _clear_link(pts[a], pts[b], hard, walls, water):
                 return True
             # A FOOTPATH CHORDED AT ITS OWN 4 ft MARGIN WAS TRIED AND ROTATED A BEND ONTO INASHIRO (feature 137
             # T04, 2026-08-28): letting a straggler lane take any chord `_clear_touch` allows straightened seed
             # 43's fold and put a new sharp bend on the reference hamlet's web. Not kept; the fold's real
             # cause is the straggler router folding inside a pocket, and that is where the fix belongs.
-            if not _clear_touch(pts[a], pts[b], hard, walls, water):
+            if not _clear_touch(pts[a], pts[b], hard, walls, water, _g):
                 return False
             return all(seg_dist(v[0], v[1], pts[a], pts[b]) <= _JOG_FT for v in pts[a + 1 : b])
 
@@ -1992,7 +2026,7 @@ def _nearest_seg(q: Pt, segs: Sequence[tuple[Pt, Pt]]) -> tuple[float, tuple[Pt,
     return best, at
 
 
-def _pull_back_to_service(run: Poly, segs: Sequence[tuple[Pt, Pt]], houses: Sequence[Pt], inside: Callable[[Pt], bool]) -> Poly:
+def _pull_back_to_service(run: Poly, segs: Sequence[tuple[Pt, Pt]], houses: Sequence[Pt], inside: Callable[[Pt], bool], fabric: Sequence[Poly] = (), gap: float = _TOUCH_GAP) -> Poly:
     """Pull a CONNECTOR's inside-the-canvas end back to where it last meets the settlement.
 
     A connector is exempt from `_trim_to_service` because it legitimately runs off the frame - and
@@ -2038,12 +2072,18 @@ def _pull_back_to_service(run: Poly, segs: Sequence[tuple[Pt, Pt]], houses: Sequ
         best = float("inf")
         seg_at: tuple[Pt, Pt] | None = None
         k_at = 0
+        # EVERY approach that joins, not only the closest one (feature 134 T50). The closest is still
+        # preferred - it is the first one tried - but when it is the one that fouls a steading, a
+        # slightly longer approach that does not is a far better answer than abandoning the junction.
+        opts: list[tuple[float, Pt, tuple[Pt, Pt], int]] = []
         for k in range(len(pts) - 1):
             a, b = pts[k], pts[k + 1]
             steps = max(1, int(math.dist(a, b) / 4.0))
             for j in range(steps + 1):
                 q = (a[0] + (b[0] - a[0]) * j / steps, a[1] + (b[1] - a[1]) * j / steps)
                 d, sg = _nearest_seg(q, segs)
+                if d <= _LANE_JOIN_FT and sg is not None:
+                    opts.append((d, q, sg, k))
                 if d < best:
                     best, cut, seg_at, k_at = d, q, sg, k
                 elif cut is not None and best <= _LANE_JOIN_FT:
@@ -2051,8 +2091,26 @@ def _pull_back_to_service(run: Poly, segs: Sequence[tuple[Pt, Pt]], houses: Sequ
             if cut is not None and best <= _LANE_JOIN_FT and best < _nearest_seg(pts[k + 1], segs)[0]:
                 break
         if cut is not None and seg_at is not None and best <= _LANE_JOIN_FT:
+            for _d, _q, _sg, _k in sorted(opts, key=lambda t: t[0]):
+                _snap = seg_closest(_q[0], _q[1], _sg[0], _sg[1])
+                _try = [_snap, *pts[_k + 1 :]] if _end == 0 else [*pts[_k + 1 :][::-1], _snap]
+                if len(_try) >= 2 and not (fabric and _crosses_fabric(_try, fabric, gap)):
+                    cut, seg_at, k_at = _q, _sg, _k
+                    break
             cut = seg_closest(cut[0], cut[1], seg_at[0], seg_at[1])
-            out = [cut, *pts[k_at + 1 :]] if _end == 0 else [*pts[k_at + 1 :][::-1], cut]
+            cand = [cut, *pts[k_at + 1 :]] if _end == 0 else [*pts[k_at + 1 :][::-1], cut]
+            # THE SNAP MAY NOT UNDO THE THREADING (feature 134 T50, 2026-08-28). This moves the
+            # connector's inner end onto the lane it joins, and until now it did so with no idea what
+            # else is standing there - while `_thread_the_fabric`, which ran earlier in the same
+            # stage, had already routed and clipped that very end clear of every steading. So the
+            # last pass to touch the run quietly put back what the pass before it existed to remove:
+            # on cohort seed 18 the threaded end stood 18.0 ft off the nearest fabric and the snap
+            # landed it 0.8 ft from a garden's corner, well inside the 6 ft the overlap matrix gives
+            # every lane, and `features_do_not_overlap` read it as lanes x gardens. The junction is
+            # worth having, but not at the price of drawing through the vegetables: take the snap
+            # only when it does not foul anything the threading had cleared.
+            if not fabric or not _crosses_fabric(cand, fabric, gap) or _crosses_fabric(out, fabric, gap):
+                out = cand
     return out
 
 
@@ -2603,6 +2661,10 @@ def _thread_the_fabric(s: Settlement, plan: SitePlan, run: Poly, gap: float = TR
             cand = clip_to_clear(detour, fabric, gap)
             if len(cand) >= 2 and not _crosses_fabric(cand, fabric, gap):
                 return cand
+        # A DEAD END, MEASURED (feature 134 T50): a ladder that walked run[0] outward too, on the
+        # theory that the offending leg was the first one and nothing above can move it. It changed
+        # no map, because this function was never the one at fault - see `_pull_back_to_service`,
+        # which moves a connector's inner end AFTER this has cleared it.
     return out if len(out) >= 2 else run
 
 
