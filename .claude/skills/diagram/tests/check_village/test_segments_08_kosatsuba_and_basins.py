@@ -557,3 +557,30 @@ def test_all_ink_is_ruled_on_fires_and_passes():
     assert "all_ink_is_ruled_on" not in f_only(good, "all_ink_is_ruled_on"), "ruled-out ink (the `-` class) never fires"
     hand = manifest(unclassed_ink=["<rect> x"])  # no generated_by: a hand-authored tier, its vocabulary is later work
     assert "all_ink_is_ruled_on" not in f_only(hand, "all_ink_is_ruled_on")
+
+
+def test_caption_stands_beside_its_referent_fires_and_passes():
+    """A notice board's caption stands BESIDE the board, not past the end of it (GM 2026-08-29, feature
+    157, reading Kuwabata: *"rather than being directly below the notice board, it's off to the right a
+    bit"*). Both records below are the SHIPPED ones, before and after - the board is unmoved and only the
+    caption's seat differs, which is exactly what the GM was looking at."""
+
+    def _csb(lab):
+        return {"meta": {"scale": "hamlet", "generated_by": "hamletgen"}, "kosatsuba": [{"x": 2394.2, "y": 559.1, "w": 12.0, "h": 5.0, "rot": 151.9, "label": "notice board"}], "labels": [lab]}
+
+    # AS SHIPPED, the map the GM read: 35.6 px along the caption's own baseline from a 12 x 5 ft board
+    bad = _csb([2404.1, 547.3, 2456.9, 555.7, 20000005, "notice board", [2388.2, 556.6, 2400.2, 561.6], -28.1])
+    assert "caption_stands_beside_its_referent" in f_only(bad, "caption_stands_beside_its_referent"), "the motivating defect must fire"
+    # AFTER: the same board, its caption seated 1.0 px along the baseline - directly beside it
+    good = _csb([2375.1, 566.4, 2427.9, 574.8, 20000005, "notice board", [2388.2, 556.6, 2400.2, 561.6], -28.1])
+    assert "caption_stands_beside_its_referent" not in f_only(good, "caption_stands_beside_its_referent"), "a conforming map must pass"
+    # ...AND A CAPTION THAT RECORDS NO REFERENT FAILS RATHER THAN SKIPPING. `label_hugs_its_referent`
+    # opens `if len(L) < 7 or not L[6]: continue`, which is how a 68.5 px drift went unseen on three
+    # hamlets until 2026-08-20 - a rule that cannot run looks exactly like a rule that passes.
+    unmeasurable = _csb([2404.1, 547.3, 2456.9, 555.7, 20000005, "notice board"])
+    assert "caption_stands_beside_its_referent" in f_only(unmeasurable, "caption_stands_beside_its_referent"), "an unmeasurable board caption must fail, not skip"
+    # A LEGACY map is out of scope by the same rule every sibling check uses: the eight frozen exhibits
+    # carrying referent-less board records are never regenerated (GM 2026-08-16).
+    legacy = _csb([2404.1, 547.3, 2456.9, 555.7, 20000005, "notice board"])
+    legacy["meta"].pop("generated_by")
+    assert "caption_stands_beside_its_referent" not in f_only(legacy, "caption_stands_beside_its_referent"), "a frozen legacy exhibit is not judged by a post-freeze rule"

@@ -3,6 +3,7 @@
 import math
 from typing import Any
 
+from l7r.diagram.settlement import LABEL_MIN_AIR
 from l7r.diagram.settlement.structures.fixtures import KOSATSUBA_VERGE_FT
 from l7r.diagram.waterfields import dedup_ring, floor_overhang, pointed_ring
 
@@ -762,3 +763,85 @@ def _seg_0614_500__all_ink_is_ruled_on(
             f"ink nobody ruled on {all_ink_is_ruled_on_bad[:3]} - tag it at its emit site (`cls=`, or `with self.feature(...)`), rule it out (`cls=\"-\"` + a NOT_HIGHLIGHTED_RULINGS row), or give an unregistered class its interactive/classes.py entry",
         )
     return _kept(locals(), ("all_ink_is_ruled_on_bad",))
+
+
+# WHY: <one paragraph - what the research found, the decision it drove, the departure taken>.
+# Declare EVERY input the body reads as a keyword parameter (an undeclared one is a NameError at
+# gate time, not at import), and keep the `_kept` tuple a LITERAL of the names this body binds.
+
+
+def _seg_0614_501__caption_stands_beside_its_referent(
+    *,
+    M: Any = _UNBOUND,
+    check: Any = _UNBOUND,
+    meta: Any = _UNBOUND,
+    scale: Any = _UNBOUND,
+    caption_stands_beside_its_referent_bad: Any = _UNBOUND,
+) -> dict[str, Any]:
+    """Gate segment 0614_501 (caption_stands_beside_its_referent) - a notice board's caption stands
+    BESIDE the board, not past the end of it.
+
+    WHY (GM 2026-08-29, feature 157, reading Kuwabata): *"the label for the notice board ... is
+    surprisingly far away from the notice board itself. It is correctly aligned with the notice board,
+    and the distance of the line on which the label rests is the correct distance from the notice
+    board. But for some reason, rather than being directly below the notice board, it's off to the
+    right a bit."* Measured on the map they were reading: the caption sat 35.6 px along its OWN
+    BASELINE from the board, against a caption half-run of 26.4 - so the board stood past the end of
+    its own label and a reader had to follow a line of text to find what it named.
+
+    THE TWO AXES ARE NOT INTERCHANGEABLE, which is the whole rule. A caption displaced ACROSS its
+    baseline still reads as beside its subject; the same displacement ALONG the baseline does not, and
+    `label_hugs_its_referent` cannot tell them apart because it measures the gap between two shapes.
+    So this measures the ALONG component alone, in the caption's own frame.
+
+    THE BOUND: a caption may slide along its subject as far as the subject itself extends, plus
+    `LABEL_MIN_AIR` - the engine's own constant for the clear air that makes a caption read as
+    "beside, but not touching" (`_geom/labels.py`). Reused rather than invented, and not fitted to the
+    motivating map: measured across the five scripted hamlets AFTER the fix, the along-baseline
+    offsets are 2.22 / 1.53 / 1.02 / 0.63 / 1.55 px against bounds of 8.0-11.5, so the rule passes
+    with 3.6x to 10x of headroom while failing the map the GM complained about by a factor of three.
+    A rule calibrated to the single case that was easiest to measure is this repository's recurring
+    defect; this one is calibrated to the ground the placer actually finds.
+
+    A REJECTED ALTERNATIVE, recorded because it looks more natural and has no teeth: *"the caption and
+    its subject must OVERLAP along the baseline"* (`|lat| <= capHalf + subjHalf + air`). It does not
+    catch Kuwabata - 35.6 against a bound of 32.9 - because the caption is four times the length of
+    the 12 ft plank it names, so a caption can clear the board entirely and still formally overlap it.
+
+    IT ALSO REQUIRES THE REFERENT TO BE THERE. A record with no referent box is not measurable, and
+    `label_hugs_its_referent` SKIPS one - which is how a 68.5 px drift went unseen on three hamlets
+    until 2026-08-20. So a board caption that records none FAILS here rather than passing quietly.
+
+    GENERATED MAPS ONLY, the same scoping `captions_clear_the_ways_they_stand_on` uses one file over.
+    The eight manifests carrying referent-less board records - enokida, honda, yatsuda, tanada,
+    hirameki, minami, nagahara, tango - are all FROZEN legacy exhibits, which by the GM's 2026-08-16
+    ruling are never regenerated and whose rule violations are explicitly not bugs."""
+    if meta.get("generated_by") and scale in ("hamlet", "village", "town", "city"):
+        caption_stands_beside_its_referent_bad = []
+        for _csb_b in M.get("kosatsuba") or []:
+            _csb_txt = str(_csb_b.get("label") or "")
+            _csb_cands = [_l for _l in (M.get("labels") or []) if len(_l) > 5 and _l[5] == _csb_txt] if _csb_txt else []
+            if not _csb_cands:
+                continue  # an unlabeled or uncaptioned board is another rule's business
+            _csb_bx, _csb_by = float(_csb_b["x"]), float(_csb_b["y"])
+            _csb_l = min(_csb_cands, key=lambda _q: ((float(_q[0]) + float(_q[2])) / 2 - _csb_bx) ** 2 + ((float(_q[1]) + float(_q[3])) / 2 - _csb_by) ** 2)
+            if len(_csb_l) < 7 or not _csb_l[6]:
+                caption_stands_beside_its_referent_bad.append((round(_csb_bx), round(_csb_by), "no referent recorded"))
+                continue
+            _csb_t = math.radians(float(_csb_l[7])) if len(_csb_l) > 7 else 0.0
+            _csb_ca, _csb_sa = math.cos(_csb_t), math.sin(_csb_t)
+            _csb_cx, _csb_cy = (float(_csb_l[0]) + float(_csb_l[2])) / 2, (float(_csb_l[1]) + float(_csb_l[3])) / 2
+            _csb_r = [float(_v) for _v in _csb_l[6]]
+            _csb_lat = ((_csb_r[0] + _csb_r[2]) / 2 - _csb_cx) * _csb_ca + ((_csb_r[1] + _csb_r[3]) / 2 - _csb_cy) * _csb_sa
+            _csb_reach = abs((_csb_r[2] - _csb_r[0]) / 2 * _csb_ca) + abs((_csb_r[3] - _csb_r[1]) / 2 * _csb_sa) + LABEL_MIN_AIR
+            if abs(_csb_lat) > _csb_reach:
+                caption_stands_beside_its_referent_bad.append((round(_csb_cx), round(_csb_cy), f"{abs(_csb_lat):.1f} px along its own baseline, bound {_csb_reach:.1f}"))
+        check(
+            "caption_stands_beside_its_referent",
+            not caption_stands_beside_its_referent_bad,
+            f"notice-board caption(s) at {caption_stands_beside_its_referent_bad[:3]} stand PAST THE END of the board they name rather than beside it - "
+            f"a reader has to follow a line of text to find what it labels. The seat ladder ranks legal seats by displacement ALONG the caption's own "
+            f"baseline first (fixtures.py, the tilted branch of `_draw_board_caption`); a caption this far along it means no legal seat was found near the "
+            f"board, or the caption records no referent to be measured against",
+        )
+    return _kept(locals(), ("caption_stands_beside_its_referent_bad",))
