@@ -30,3 +30,36 @@ drawn, and nothing about their form, size, position or existence changes.
       wrong order - Kuwabata's woodland as glass rings, the page 0.255% of pixels from its own PNG.
       Fixed in `merge_primitives`, with the element cost measured at each step and the remaining
       antialiasing residual accepted and recorded (research R5, R6). `research: rendering`
+- [x] **T11** (settlement-review error 2) the sluice's widened box lost to the field ditch's on 49 of 52
+      sluices. `HIT_ON_TOP` lifts it into one layer above the ink; two wider designs measured and
+      rejected (research R7). 42.4% -> 88.6% of its own box, worst 10.3% -> 75.8%. `research: rendering`
+- [x] **T12** (settlement-review error 1) the perimeter dike's willow and mulberry rows now carry
+      `Planted`, so the GM's own complaint is fixed on both dikes rather than one (research R8).
+      `research: rendering`
+- [x] **T13** (settlement-review, questionable 1) `pond sluice` <-> `sluice gate` - the near-homonym the
+      GM's list did not name and the likeliest confusion on this map - is a sibling pair now.
+      `research: rendering`
+- [x] **T14** (settlement-review nitpicks 1-3) the four crop-dike sibling paragraphs share one constant;
+      the walk figure is measured (815 ft median, 3.1 min) rather than "a minute"; `landuse.py` uses the
+      absolute import its neighbors use. `research: rendering`
+- [x] **T15** (settlement-review round 2, error 1) the lifted sluice layer swallowed a pig sty (88.4% of
+      its footprint) and a duck pen (42.8%) - it broke the rule its own docstring states. `HIT_KEEP_CLEAR`
+      clips the layer against every recorded structure; each is back to its main-branch share and the
+      sluice keeps 88.3% (research R7). `research: rendering`
+- [x] **T16** (settlement-review round 2, error 2 + questionables) the perimeter-dike walk figure was a
+      double count - the manifest's `outline` is the band polygon, 1.99x the `crest` it should be keyed
+      on - so "half an hour" is "the better part of twenty" (4,591 ft at 260 ft/min); the raster record
+      corrected to 45,564 px / max 3 with the browser-identical finding; both sluice measurement
+      definitions recorded; `HIT_PRIORITY`'s fallback no longer ranks a forgotten lifted class weakest.
+      `research: rendering`
+- [x] **T17** (settlement-review round 3) Kuwabata had been absent from `make maps` since its conversion
+      on 2026-08-27 - `mapcheck._live_gens` read `LEGACY_FROZEN_GENS` by raw membership where `regen.py`
+      asks `classify()`. The sweep asks `classify()` now and the map is off the legacy list.
+      `research: rendering`
+- [x] **T18** (settlement-review round 3) the clip's hole is padded 0.1 px and covers a record's
+      auxiliary polygon (a duck pen's `wet` apron); `HIT_KEEP_CLEAR` keys are counted against their
+      records by a test; R7 names the measured region precisely and labels the pre/post-clip figures.
+      `research: rendering`
+- [x] **T19** measured, not fixed: `make maps` fails on tripwire seed 37 (`paddy_bunds_do_not_stagger`)
+      and fails identically on unmodified `origin/main`, so it is pre-existing and stays ledgered
+      (constitution XIII). Recorded in research R9 with the worktree measurement. `research: rendering`

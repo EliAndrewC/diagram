@@ -51,7 +51,6 @@ LEGACY_FROZEN_GENS = frozenset(
         "enokida.gen.py",
         "honda.gen.py",
         "ikegami.gen.py",
-        "kuwabata.gen.py",
         "moritono.gen.py",
         "shimizu.gen.py",
         "tanada.gen.py",

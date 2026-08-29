@@ -104,12 +104,16 @@ def tripwire_verdict(seed: int, failures: list[str]) -> tuple[str, bool]:
 
 def _live_gens(tier: str) -> list[str]:
     """Every gen in the tier that is not frozen, reference first."""
-    from l7r.diagram.pipeline.poolmaps import LEGACY_FROZEN_GENS
+    # ASK `classify`, DO NOT READ THE LIST. Raw membership goes stale silently: Kuwabata was converted to
+    # `hamletgen` on 2026-08-27 (feature 150) and left in `LEGACY_FROZEN_GENS`, so `regen.py` - which
+    # goes through `classify`, and so tests the engine imports FIRST - regenerated it happily while this
+    # sweep, the one behind `make maps`, never rolled it at all (settlement-review round 3, 2026-08-29).
+    from l7r.diagram.pipeline.poolmaps import classify
 
     d = os.path.join(SKILL, "pool", tier)
     if not os.path.isdir(d):
         return []
-    gens = sorted(f for f in os.listdir(d) if f.endswith(".gen.py") and f not in LEGACY_FROZEN_GENS)
+    gens = sorted(f for f in os.listdir(d) if f.endswith(".gen.py") and classify(os.path.join(d, f)) != "legacy")
     ref = f"{TIERS.get(tier, '')}.gen.py"
     gens.sort(key=lambda f: (f != ref, f))  # reference first, so a narrow run is a prefix of a wide one
     return [os.path.join("pool", tier, f) for f in gens]

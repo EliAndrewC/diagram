@@ -119,3 +119,116 @@ Declined.
 antialiasing at overlapping same-color strokes. Kuwabata 0.236%, Inashiro 0.005%, all of it under
 delta 25/255. Recorded so a later session does not read it as a bug and pay the element cost to
 "fix" it. If it ever needs revisiting, the lever is one condition in `_refused`.
+
+## R7 - a widened box that loses to another class's box (DEFECT, found by review, fixed here)
+
+`settlement-review` measured what the commit had claimed. FR-001 shipped, and the sluice still did not
+win its own box: **42.4% of the widened area, median 40%, worst 10.3%, seven of 52 under 25%** - and
+only 47.3% of the sluice's own drawn 2.4 px stroke. The evidence in the commit ("a point in the middle
+of the widened copy resolves to `pond sluice`") was true of the midpoint and false of most of the box.
+
+**Mechanism.** A hit copy rode inside its own class group, so document order decided every contest
+between two invisible boxes. **49 of the 52 sluices are drawn ON a field ditch** (median centerline
+separation 0.03 px - a sluice IS a gate in a watercourse, so this is correct engineering), the ditch's
+group comes later, and its 14.4 px box therefore covered the sluice's box AND the sluice's own ink.
+
+**Fix, and the design that was tried first.** `HIT_ON_TOP` lifts a class's boxes out of its group into
+one layer above the ink. Lifting EVERY widened class was implemented first and measured wrong: above
+the ink, the bund's 12 px box (eight times a 1.4 px mark) stops being buried and blankets the map -
+**+5,112 sample points to the bund, -2,802 from the mulberry dike, -1,472 from the vegetable ground,
+-914 from the paddy**, so hovering a dike would have answered "bund". An intermediate rule, "the
+thinnest drawn mark wins", is the same mistake with arithmetic on top: the bund IS the thinnest, and it
+took 59.5% of every sluice box. **Thinness is not smallness, and it is smallness that makes a target
+hard.** So only a mark that cannot be hit any other way is lifted, and today that is the pond sluice
+alone.
+
+**Measured after** (125,173 sample points, `document.elementFromPoint`, each box scrolled into view):
+sluice **88.3%** of the rectangle spanned by each hit line's own ENDPOINTS, median 91.7%, worst 72.2%,
+**none under 25%** (against 42.4%, worst 10.3% before). Name the region precisely, because two others
+give different answers on the same page and the first version of this entry named the wrong one: the
+widened STROKE REGION - the part that can actually be hit, a rectangle's corners lying outside a
+diagonal line's stroke - gives **95.5%, median 95.6%, worst 83.2%** after the keep-clear clip and 96.0 /
+95.8 / 92.6 before it; the bounding box of the whole widened copy gives 55.4%. Two of the three were measured on the pre-fix page and agree there - the endpoint rectangle at 42.4%
+(mine) and the stroke region at 42.3% (`settlement-review`) - which is what says they differ only in
+what counts as inside rather than in what they are watching. **The bounding box of the widened copy was
+measured post-fix only**; its pre-fix figure is not recorded, and is not claimed. The endpoint rectangle
+is the pessimistic one of the two that were measured both sides, and is the number this feature is held
+to. Map-wide, every other class is unchanged to the sample except
+the ground immediately around the sluices - field ditch -300 points, mulberry dike -128.
+
+**AND THE LIFT BROKE ITS OWN RULE** (settlement-review round 2). "A box may beat empty ground; it may
+not beat another feature's drawn ink" - it took **88.4% of one pig sty's own footprint and 42.8% of a
+duck pen's**, because that sty's center lies 4.67 px from a lifted line whose half-width is 7.2, so the
+box simply contained it. The GM's "really hard to click on" had been moved off the sluice and onto a
+farm building. My own map-wide census could not see it: at a 7 px grid the sty is four sample points.
+The layer is now clipped (`HIT_KEEP_CLEAR`) against every recorded structure footprint - **77 holes for
+this map's 75 records and the two aprons below**, an even-odd path, since clipping is part of SVG
+hit-testing where masking is not.
+Measured after, by `settlement-review` round 3 over every structure's rotated footprint on both pages:
+**all 75 structures back to their main-branch share, every delta +0.00, across 85,767 sample points**
+(74.5% for the flagged sty, against 11.6% before the clip). The holes cost the sluice 0.53% of its
+lifted region and cut exactly one of 52 centerlines, by 0.9 px of 25.0 - the segment the sty stands on.
+Two refinements came out of that pass: the hole is padded 0.1 px per side, because coordinates are
+written to one decimal and the "never smaller than the glyph" claim was false by up to 0.0919 px without
+it (round 4 re-measured the shipped clip at **0.0000 px** overhang, on the same house); and a record's
+auxiliary polygon is held clear too, since a duck pen's `wet` apron is drawn 6-7 px outside the `w` x `h`
+the hole was built from and the lifted box was taking **10.17%** of one apron (round 4, shipped: 0.00%).
+
+**Which figures were taken on which clip.** The shares above - 88.3%, the stroke region's 95.5%, the
+0.53% of the lifted region given up - were measured on the clip BEFORE those two refinements. Round 4
+re-measured the shipped one: the holes now cost **0.60%** of the lifted region, 0.12 points more. The
+share figures are not re-measured because both refinements only ENLARGE holes, and a larger hole can
+only hand more ground back to a structure and take a little more from the sluice - so "every structure
+back to its main-branch share" survives them by construction, and 0.12 points is under the resolution of
+the browser sampling that produced the shares.
+
+**Sources:** none - a page interaction convention, with nothing physical behind it.
+
+## R8 - the GM's own defect was still standing on the perimeter dike (DEFECT, found by review)
+
+R1 fixed the crop dike. `dikes.py` draws the polder embankment's two planted rows - willow on the water
+face, mulberry on the inner - inside the same string as the earth mottle, tagged plain. Lit, that was
+**36,843 px of drawn crown turned flat gold, and 0 px of `--hl-planted`**, under a modal that says the
+bank is "planted with willow and mulberry to bind it". FR-005's new sibling link walks the reader
+straight from the fixed dike to the unfixed one.
+
+The planted rows are now their own string under the same clip, tagged `Planted("perimeter dike")`. The
+split re-opens the clip group, so the raster is no longer bit-for-bit: **45,564 px of 12,181,000 differ,
+44,860 of them by 1, 699 by 2 and five by 3**, every one within 36.6 px of the dike outline -
+clip-edge antialiasing, no geometry moved. (An earlier version of this entry said 18,640 and a maximum
+of 2; `settlement-review` re-rendered both SVGs with the pipeline's own resvg flags and got the figures
+above. The wrong ones are left visible here rather than quietly corrected, because a measurement nobody
+can reproduce is worse than one that is openly wrong.) **In Chromium the two pages render pixel-identical
+unlit** - 0 differing pixels - so the antialiasing does not reach the interactive target at all. The
+manifest changes only in `z` ordinals (one more drawn string shifts every later index by one), and the
+two consumers of the shifted fields move together, so relative order holds.
+
+Rejoining the two emitted strings reproduces the original byte for byte (124,431 chars), which is the
+proof that this is a split and not an edit.
+
+## R9 - `make maps` is red on tripwire seed 37, and it was red before this feature (PRE-EXISTING)
+
+Running the tier sweep to see what Kuwabata's return to it would cost (R7's T17) surfaced a failure
+that has nothing to do with this work: **tripwire seed 37 fails `paddy_bunds_do_not_stagger`**, and the
+sweep stops there before it ever reaches the pool tier list.
+
+Measured against unmodified main in a detached worktree (`git worktree add --detach /tmp/base153
+origin/main`, then `make tripwire SEEDS=37`): **identical failure, same check, same seed.** So it is a
+pre-existing red, not a regression from the dike split's `z` shift - which was the live hypothesis,
+since one more drawn string moves every later ordinal and a check that compares `z` could flip.
+Constitution XIII: a pre-existing failure is ledgered, not fixed under another feature's number.
+
+Two consequences worth writing down. The sweep never reaches the pool tier under this failure, so
+**T17's fix - Kuwabata rejoining the hamlet tier list - is not exercised by `make maps` today**; it is
+verified by `_live_gens("hamlets")` returning the five names directly. And a session that runs
+`make maps` on main right now gets a red that is nobody's current work.
+
+**AND THERE IS A SECOND RED WAITING BEHIND IT, WHICH THIS FEATURE ARMS.** Kuwabata's committed manifest
+fails `village_windbreak_is_continuous` - the windbreak carries a gap wider than 30 ft at three points,
+(1888, 506, 40), (1888, 506, 50) and (2257, 396, 40) - so putting the map back in the tier list (T17)
+puts that failure in front of the sweep. It arrives sooner than seed 37's fix: the tripwire only gates
+the tier on the RECOVERING path, so a run with a saved `prev_ok` rolls all five maps straight away
+(`settlement-review` round 4). That is the right outcome and NOT a case for a waiver row - the map has
+been invisible to this sweep since 2026-08-27, surfacing it is the point of T17, and `specs/150` D1-D3
+already defers windbreak work with its own measurements. It is written here so the next session meets a
+red it has already been told about, rather than discovering it.

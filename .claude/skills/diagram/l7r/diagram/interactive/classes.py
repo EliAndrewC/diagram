@@ -78,7 +78,25 @@ def _c(**kw: object) -> FeatureClass:
 # asked for the linkage as "Not to be confused with the X" LINKS (hover lights X, click opens X's
 # modal) so each modal's text stays its own; the texts remain here as the record of what
 # distinguishes each pair, to be folded into the classes' own explanations as those lengthen.
+#: One text for all four rolled crop-dike values - the distinction from the perimeter dike is identical
+#: whichever crop the knob rolled, and four copies is four chances for a later edit to fix one and leave
+#: three (settlement-review, 2026-08-29). The walk figures are measured on Kuwabata: the crop dike loops
+#: run a median 815 ft (3.1 min at 260 ft/min), the perimeter dike 4,591 ft along its CREST
+#: (18 min) - the walkable top of the bank, which is the thing you would walk. The first
+#: version of this line said half an hour, on the manifest's `outline`: that is the band POLYGON, outer
+#: face plus inner face returned, 1.99x the crest, so it counted the same walk twice
+#: (settlement-review round 2).
+_CROP_VS_PERIMETER = "The crop dike is the wall AROUND one pond - six to ten meters of dredged mud, planted, and part of the loop that feeds the fish. The perimeter dike is the polder's own embankment, the one that holds the river off the whole settlement. You can walk a crop dike round in about three minutes; the polder's takes the better part of twenty, and it is the reason the hamlet is dry."
+
+#: The near-homonym the GM's own list did not name, and the pair a reader is likeliest to confuse on a
+#: dike-pond map: both are "sluice", both are boards in a cut (settlement-review, 2026-08-29).
+_POND_VS_POLDER_SLUICE = "Both are boards in a cut, and the difference is which wall they sit in. A pond sluice is a gate in a fish pond's own dike, worked by the household that farms that pond - it moves water between pond and channel. A sluice gate is set in the POLDER dike, and it is what lets water in or out of the settlement as a whole; nobody opens one on their own account."
+
 _PAIRS: dict[tuple[str, str], str] = {
+    (
+        "pond sluice",
+        "sluice gate",
+    ): _POND_VS_POLDER_SLUICE,
     (
         "field ditch",
         "pond sluice",
@@ -86,19 +104,19 @@ _PAIRS: dict[tuple[str, str], str] = {
     (
         "mulberry dike",
         "perimeter dike",
-    ): "The crop dike is the wall AROUND one pond - six to ten meters of dredged mud, planted, and part of the loop that feeds the fish. The perimeter dike is the polder's own embankment, the one that holds the river off the whole settlement. One is a field boundary you could walk in a minute; the other is the reason the hamlet is dry.",
+    ): _CROP_VS_PERIMETER,
     (
         "sugarcane dike",
         "perimeter dike",
-    ): "The crop dike is the wall AROUND one pond - six to ten meters of dredged mud, planted, and part of the loop that feeds the fish. The perimeter dike is the polder's own embankment, the one that holds the river off the whole settlement. One is a field boundary you could walk in a minute; the other is the reason the hamlet is dry.",
+    ): _CROP_VS_PERIMETER,
     (
         "banana dike",
         "perimeter dike",
-    ): "The crop dike is the wall AROUND one pond - six to ten meters of dredged mud, planted, and part of the loop that feeds the fish. The perimeter dike is the polder's own embankment, the one that holds the river off the whole settlement. One is a field boundary you could walk in a minute; the other is the reason the hamlet is dry.",
+    ): _CROP_VS_PERIMETER,
     (
         "fruit dike",
         "perimeter dike",
-    ): "The crop dike is the wall AROUND one pond - six to ten meters of dredged mud, planted, and part of the loop that feeds the fish. The perimeter dike is the polder's own embankment, the one that holds the river off the whole settlement. One is a field boundary you could walk in a minute; the other is the reason the hamlet is dry.",
+    ): _CROP_VS_PERIMETER,
     (
         "farmhouse",
         "storage shed",

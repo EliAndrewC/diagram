@@ -14,9 +14,22 @@ import re
 
 import pytest
 
-from l7r.diagram.interactive.classes import CLASSES
+from l7r.diagram.interactive.classes import CLASSES, NOT_HIGHLIGHTED
 from l7r.diagram.interactive.glossary import GLOSSARY
-from l7r.diagram.interactive.page import explanations, glossary_for, hit_copies, hit_regions, ink_census, marks_region, merge_primitives, present_classes, render_page, unregistered_classes, wrap
+from l7r.diagram.interactive.page import (
+    explanations,
+    glossary_for,
+    hit_copies,
+    hit_layer,
+    hit_regions,
+    ink_census,
+    marks_region,
+    merge_primitives,
+    present_classes,
+    render_page,
+    unregistered_classes,
+    wrap,
+)
 from l7r.diagram.interactive.sources import citations, registry, research_sources, section_sources, urls_of
 from l7r.diagram.interactive.tags import Split
 
@@ -200,7 +213,7 @@ def test_widened_classes_carry_their_hit_copies_and_others_do_not() -> None:
     assert 'class="hit"' in wrap(lane, "village lane") and 'class="hit"' not in wrap(lane, "pond")
     paddy = '<polygon points="0,0 9,0 9,9" fill="#A6C398" stroke="#7A5A30" stroke-width="1.4"/>'
     out = wrap(paddy, Split("paddy", "bund"))
-    assert out.count('class="hit"') == 1 and out.index('class="hit"') > out.index('data-k="bund"'), "the bund's hit copy rides in the bund group, above the paddy fill"
+    assert out.count('class="hit"') == 1 and out.index('class="hit"') > out.index('data-k="bund"'), "the bund's box rides in the bund group, above the paddy fill"
 
 
 def test_the_marks_region_covers_only_cells_that_hold_a_mark() -> None:
@@ -387,7 +400,7 @@ def test_a_pond_sluice_gets_the_field_ditchs_widening() -> None:
 
     assert HIT_WIDEN["pond sluice"] == HIT_WIDEN["field ditch"]
     sluice = '<line x1="10" y1="10" x2="30" y2="10" stroke="#37637F" stroke-width="2.4"/>'
-    out = wrap(sluice, "pond sluice")
+    out = hit_layer([sluice], ["pond sluice"])
     widths = [float(w) for w in re.findall(r'class="hit"[^>]*stroke-width: ([\d.]+)px', out)]
     assert widths == [14.4], f"one invisible copy, six times the drawn 2.4 px: {out}"
 
@@ -443,6 +456,97 @@ def test_a_fill_only_shape_is_not_outlined_and_still_merges_where_it_overlaps() 
     assert _outlined("circle", {"fill": "#4F6E33", "stroke": "#3C5526"})
     over = '<circle cx="10" cy="10" r="6" fill="#4F6E33"/><circle cx="14" cy="10" r="6" fill="#4F6E33"/>'
     assert merge_primitives(over).count("<circle") == 0
+
+
+def test_only_the_lifted_class_leaves_its_own_group() -> None:
+    """Feature 153. A pond sluice is a gate IN a watercourse, so 49 of Kuwabata's 52 are drawn on top of
+    a field ditch - and while every box rode inside its own class group, the ditch's group came later
+    and its 14.4 px box took the pointer from the sluice's own 2.4 px line (the sluice won 42.4% of its
+    own box; `settlement-review` measured it at 125,173 points, worst sluice 10.3%). Lifting the sluice
+    alone fixes it - 88.6%, worst 75.8% - and lifting EVERY box does not: above the ink the bund's 12 px
+    box stops being buried and takes 5,112 sample points off the dikes, the vegetable ground and the
+    paddy. So the layer holds exactly `HIT_ON_TOP`, and everything else stays where the GM tuned it."""
+    from l7r.diagram.interactive.page import HIT_ON_TOP
+
+    ditch = '<line x1="0" y1="10" x2="100" y2="10" stroke="#6E93A8" stroke-width="3.5"/>'
+    sluice = '<line x1="48" y1="10" x2="52" y2="10" stroke="#37637F" stroke-width="2.4"/>'
+    assert frozenset({"pond sluice"}) == HIT_ON_TOP
+    assert 'class="hit"' not in wrap(sluice, "pond sluice"), "the lifted class leaves nothing behind"
+    assert 'class="hit"' in wrap(ditch, "field ditch"), "every other widened class keeps its box inline"
+    layer = hit_layer([ditch, sluice], ["field ditch", "pond sluice"])
+    assert 'data-k="pond sluice"' in layer and 'data-k="field ditch"' not in layer
+
+
+def test_the_hit_layer_sits_above_the_ink_it_widens() -> None:
+    """One layer for every widened box, emitted after the drawn record and before `</svg>`."""
+    strings = ['<svg viewBox="0 0 20 20">', '<line x1="1" y1="1" x2="9" y2="9" stroke="#37637F" stroke-width="2.4"/>', "</svg>"]
+    tags = [NOT_HIGHLIGHTED, "pond sluice", None]
+    page = render_page(strings, tags, "t")
+    assert page.index('class="hit"') > page.index('stroke-width="2.4"')
+    assert page.index('class="hit"') < page.index("</svg>")
+
+
+def test_a_lifted_box_gives_up_the_ground_a_structure_stands_on() -> None:
+    """Feature 153, settlement-review round 2. Lifting the sluice above the ink broke the rule the lift
+    is allowed under: its 14.4 px box swallowed 88.4% of one pig sty's own footprint and 42.8% of a duck
+    pen's - the sty's center sits 4.67 px from a lifted line whose half-width is 7.2. The layer is
+    clipped against every recorded structure, so it keeps the open ground and gives up the glyph."""
+    from l7r.diagram.interactive.page import hit_layer
+
+    sluice = '<line x1="90" y1="100" x2="110" y2="100" stroke="#37637F" stroke-width="2.4"/>'
+    manifest = {"pig_sties": [{"x": 100.0, "y": 100.0, "w": 10.0, "h": 8.0, "rot": 0}]}
+    out = hit_layer([sluice], ["pond sluice"], manifest)
+    assert 'clip-path="url(#hit-keep-clear)"' in out, out
+    assert 'clip-rule="evenodd"' in out and "M94.9,95.9h10.2v8.2h-10.2Z" in out, "a hole over the sty, padded the tenth of a pixel the coordinates round to"
+    assert "clip-path" not in hit_layer([sluice], ["pond sluice"], {}), "no structures, no clip"
+    junk = {"pig_sties": ["not a record", {"x": 1.0}, {"x": 100.0, "y": 100.0, "w": 10.0, "h": 8.0, "rot": 0}]}
+    assert hit_layer([sluice], ["pond sluice"], junk).count("M94.9,95.9") == 1, "a record it cannot read is skipped, not fatal"
+
+
+def test_a_rotated_footprint_is_held_clear_by_its_whole_box() -> None:
+    """The hole is the axis-aligned box of the ROTATED glyph - a superset, so it is never smaller than
+    the thing it protects."""
+    from l7r.diagram.interactive.page import hit_layer
+
+    sluice = '<line x1="90" y1="100" x2="110" y2="100" stroke="#37637F" stroke-width="2.4"/>'
+    out = hit_layer([sluice], ["pond sluice"], {"byres": [{"x": 100.0, "y": 100.0, "w": 10.0, "h": 10.0, "rot": 45}]})
+    assert "h14.3v14.3" in out, f"10 x 10 turned 45 degrees needs a 14.14 px box, plus the 0.2 pad: {out}"
+
+
+def test_a_lifted_class_the_priority_list_forgets_still_wins() -> None:
+    """The list ranks the lifted classes against each other; a class lifted BECAUSE it cannot otherwise
+    be hit must not land in the weakest place because someone forgot to add it (the first version's
+    `-1` fallback did exactly that)."""
+    from l7r.diagram.interactive import page as pg
+
+    ditch = '<line x1="0" y1="10" x2="100" y2="10" stroke="#6E93A8" stroke-width="3.5"/>'
+    sluice = '<line x1="48" y1="10" x2="52" y2="10" stroke="#37637F" stroke-width="2.4"/>'
+    lifted = pg.HIT_ON_TOP | {"field ditch"}
+    with pytest.MonkeyPatch.context() as mp:
+        mp.setattr(pg, "HIT_ON_TOP", lifted)
+        mp.setattr(pg, "HIT_PRIORITY", ("field ditch",))  # the sluice is the forgotten one
+        out = pg.hit_layer([ditch, sluice], ["field ditch", "pond sluice"])
+    assert out.index('data-k="field ditch"') < out.index('data-k="pond sluice"'), out
+
+
+def test_every_keep_clear_key_makes_its_holes() -> None:
+    """`HIT_KEEP_CLEAR` names manifest keys, and a key whose records carry some other shape - a well's
+    `x,y,r`, a footbridge's `span`, a sluice gate's bare `x,y,rot` - yields NO hole and NO error
+    (settlement-review round 3). So the count is asserted against a real manifest: one hole per record,
+    plus one per auxiliary polygon (a duck pen's `wet` apron), plus the canvas rectangle."""
+    import json
+    from pathlib import Path
+
+    from l7r.diagram.interactive.page import HIT_KEEP_CLEAR, _keep_clear_clip
+
+    man = json.loads((Path(__file__).resolve().parents[2] / "pool/hamlets/kuwabata.json").read_text())
+    for k in HIT_KEEP_CLEAR:
+        assert man.get(k), f"{k} records nothing on this map, so the count below cannot see it go wrong"
+    recs = [r for k in HIT_KEEP_CLEAR for r in man.get(k) or []]
+    aprons = sum(1 for r in recs for e in ("wet", "poly") if isinstance(r.get(e), list) and len(r[e]) > 2)
+    clip, _ = _keep_clear_clip(man)
+    assert recs, "the reference dike-pond map records structures"
+    assert clip.count("M") == 1 + len(recs) + aprons, f"{len(recs)} records + {aprons} aprons + the canvas"
 
 
 def test_an_element_with_no_extent_is_treated_as_touching_everything() -> None:
