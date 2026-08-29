@@ -249,7 +249,7 @@
   // THE WHEEL SCROLLS, IT DOES NOT ZOOM (GM 2026-08-28: "I don't want scrolling to zoom - I still
   // want scrolling to scroll"): a wheel turn pans the map by the wheel's own travel, exactly as a
   // document scrolls. Zoom is the buttons and the keys only.
-  stage.addEventListener("wheel", function (e) {
+  function onWheel(e) {
     e.preventDefault();
     if (e.ctrlKey || e.metaKey) {  // the browser's pinch / Ctrl+wheel zoom gesture becomes OUR zoom, about the pointer (GM 2026-08-28: one way of zooming)
       var r = stage.getBoundingClientRect();
@@ -259,7 +259,16 @@
     view.tx -= e.deltaX;
     view.ty -= e.deltaY;
     apply();
-  }, { passive: false });
+  }
+  stage.addEventListener("wheel", onWheel, { passive: false });
+  // ...AND THE SHADE SCROLLS THE MAP BEHIND IT (GM 2026-08-29: "when my mouse is not over top of the
+  // actual modal itself, ... the map, which is in the background, will then scroll"). The shade is a
+  // SIBLING of the stage covering the whole viewport, so with an explanation open every wheel turn
+  // outside the dialog landed on the shade and bubbled to <body>, not to the stage - the map sat
+  // still and the page looked frozen. The same handler on the shade makes "not over the modal" mean
+  // the map, exactly as it does with the modal closed. Over the dialog itself the event never
+  // reaches the shade (z-index 10 above 9), so the dialog's own overflow keeps scrolling its text.
+  shade.addEventListener("wheel", onWheel, { passive: false });
   document.getElementById("zoom").addEventListener("click", function (e) {
     var b = e.target.closest("button"); if (!b) return;
     var c = center();
