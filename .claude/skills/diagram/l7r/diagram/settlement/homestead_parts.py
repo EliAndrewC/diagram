@@ -609,11 +609,17 @@ class HomesteadPartsMixin:
         occ += [
             (o["x"], o["y"], o.get("vr", o["r"]) + clump * 1.05 + 1.0) for o in self.M.get("wells", [])
         ]  # 1.05, not 0.90 (feature 145): a DRAWN crown runs to ~1.03 x clump (Kashikawa: 14.4 on a 14 clump reached a well 25.4 px away, vr 12.4), and the check measures the drawn crown
-        # ...and the NOTICE BOARD with its caption band (settlement-review, Sawada 2026-08-16: a
-        # copse clump seated 10 px from the kosatsuba swallowed the board outright and pierced its
-        # caption mid-word - the board is a 12x5 point fixture nothing in this list covered). 30 ft
-        # reaches past the glyph and the ~54 ft tilted caption box's half-length from the center.
-        occ += [(o["x"], o["y"], 30.0 + clump * 0.90) for o in self.M.get("kosatsuba", [])]
+        # ...and NOT the notice board, which no longer exists when this runs (GM 2026-08-29). This
+        # list used to give the kosatsuba a `30.0 + clump * 0.90` keep-out - about 55 ft, larger than
+        # a well's and larger than a shrine's - so that a clump could not swallow the board or pierce
+        # its caption. Two things retired it. The board is now the LAST thing placed on a hamlet, so
+        # `M["kosatsuba"]` is empty here and the entry could only ever have matched nothing; and the
+        # GM has ruled the clearing itself wrong: "it would be very easy to put the notice board at
+        # the edge of the forest. We could even display it as being underneath the canopy because I
+        # think in many cases it would be ... humans would not need to clear any amount of space in
+        # order to put up a notice board at the side of a path." A village drives a plank in beside a
+        # way; it does not fell 9,500 sq ft of its own shelter wood to do it. What protects the board
+        # now is that it is sited last and can see the trees, not that the trees were kept off it.
         # A SHRINE and its TORII sit in a CLEAN clearing: no tree CANOPY may reach them (a hall/arch lost in the
         # wood reads wrong - shrine_clear_of_grove_trees / torii_clear_of_grove_trees gate it). The DRAWN canopy
         # overhangs the nominal clump radius (crowns spill past clump/2), reaching ~0.85*clump from the clump

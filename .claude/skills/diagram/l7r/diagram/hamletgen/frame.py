@@ -79,10 +79,22 @@ def stage_notice(s: Settlement, plan: SitePlan) -> None:
     # what `crop_not_held_open_by_one_feature` exists to stop. The board belongs among the houses it
     # is read by, so if the engine's traffic score sends it outside them, re-seat it on the nearest
     # verge that is inside the cloud.
+    # THE GUARD NOW TESTS THE FRAME ITSELF, because the frame exists (GM 2026-08-29). This stage runs
+    # after `stage_frame`, so `meta.view` is already decided - and the requirement was always
+    # `labels_within_image`, never "among the houses". The house-cloud bbox was standing in for the
+    # crop because the crop had not been computed yet, and standing in badly: it refused every seat
+    # outside the built ground, which is exactly where an `entrance` board belongs, so it threw away
+    # the placement the knob had rolled on two of three maps and put the board back at the busiest
+    # node while the manifest went on claiming `entrance`.
     hs = s.M.get("houses", [])
-    if spot is not None and hs:
-        hx0, hx1 = min(h["x"] for h in hs), max(h["x"] for h in hs)
-        hy0, hy1 = min(h["y"] for h in hs), max(h["y"] for h in hs)
+    _view = (s.M.get("meta") or {}).get("view")
+    if spot is not None and (_view or hs):
+        if _view:
+            _vx, _vy, _vw, _vh = (float(_q) for _q in _view)
+            hx0, hy0, hx1, hy1 = _vx, _vy, _vx + _vw, _vy + _vh
+        else:  # no crop recorded (the frame test drives this stage with a stub) - fall back to the cloud
+            hx0, hx1 = min(h["x"] for h in hs), max(h["x"] for h in hs)
+            hy0, hy1 = min(h["y"] for h in hs), max(h["y"] for h in hs)
         if not (hx0 - 30 <= spot[0] <= hx1 + 30 and hy0 - 30 <= spot[1] <= hy1 + 30):
             board = s.M["kosatsuba"].pop()
             # ...AND ITS INK (feature 133 T48). Popping the record and the caption left the first
