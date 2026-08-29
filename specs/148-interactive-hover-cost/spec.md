@@ -40,8 +40,9 @@ ADDITIVE: they catch bare ground falling through, while the scatter above them i
 A reader opens a map whose ground is mostly scrub and marsh and moves the pointer across it. The
 highlight follows as it does today, and the page does not lag.
 
-**Independent Test**: the generated page carries `pointer-events: none` on the ink of every class that
-has a hit region, and the browser test still highlights that class from a point inside its ground.
+**Independent Test**: the generated page carries `pointer-events: none` on the scrub and marsh ink, and
+the browser test still highlights those classes from a point inside their ground AND from a point on a
+disabled mark.
 
 **Acceptance Scenarios**:
 
@@ -64,16 +65,44 @@ to contain the class's own marks - a tuft outside its polygon would otherwise go
 
 ## Requirements
 
-- **FR-001** The ink of a feature class MUST NOT be hit-tested when that class has a hit region on the
-  same page; the region resolves the hover instead.
-- **FR-002** A class MUST NOT have its ink disabled unless a region for it is present - a page that would
-  disable a class with no region keeps the ink hit-testable.
+- **FR-001** The ink of the **scrub-and-rough-grazing** and **marsh** classes MUST NOT be hit-tested on a
+  page where that class has a hit region; the region resolves the hover instead. THESE TWO ONLY - see
+  "Why not every class with a region" below.
+- **FR-002** A class MUST NOT have its ink disabled unless its region is present AND covers that class's
+  own marks on that page. Presence is not coverage: a mark outside its region would go dead, which is the
+  one failure this change can cause. Where coverage does not hold, the ink stays hit-testable.
+- **FR-006** The browser test MUST assert hover FROM A POINT ON THE DISABLED INK ITSELF for each affected
+  class, so the verification the GM was promised happens before this ships - not merely that the existing
+  hover assertions still pass, which they would even if a mark went dead.
 - **FR-003** Hover behavior MUST be unchanged for the reader: the same classes highlight from the same
   places, and features drawn above the scatter keep the pointer as they do now.
 - **FR-004** The SVG and PNG MUST remain byte-identical - the class and its hit behavior ride in the
   page's own serialization, never in the drawn record (feature 134 FR-010).
-- **FR-005** The change MUST be measured on both pages, before and after, by the geometry the browser
-  would hit-test.
+- **FR-005** The change MUST be measured on both pages, before and after: the geometry the browser would
+  hit-test, AND page load to first interaction. The GM reported BOTH "slower to load" and "more sluggish";
+  this feature targets the second, and the first is measured rather than assumed away so the GM gets a
+  plain answer about it.
+
+### Why not every class with a region
+
+The first draft made FR-001 general - any class with a hit region. `spec-fidelity` refused it, and was
+right on the mechanism as well as the scope. `HIT_REGIONS` covers seven classes, and the safety argument
+the GM approved does not reach five of them:
+
+- **Coverage.** Only scrub goes through `marks_region(..., within=polys)`, which builds the region FROM
+  the marks. The other five take the recorded footprint polygon out of the manifest, so "region coverage
+  built from their own marks" - the sentence the GM said yes to - is simply not true of them.
+- **Stack order, which is worse.** Regions sit at the BOTTOM, and `hit_regions`' own docstring says
+  everything drawn later keeps the pointer. Windbreak (stage 11), bamboo (stage 12) and the copse are
+  drawn LATE, above yards, gardens, houses and paddies. They keep the pointer today BECAUSE they are on
+  top; disable their ink and wherever a crown overlaps a yard, the yard - drawn below the crown but above
+  the region - takes the pointer and the class goes dead there. That is the hover regression FR-003
+  forbids.
+- **Worth.** The table above says the two named classes are ~95% of the hit-test geometry. The other five
+  together buy under 5%, for five untested classes.
+
+A general rule is a separate ask to the GM, and would need per-class region coverage and a draw-order
+answer first.
 
 ## Success Criteria
 
@@ -83,8 +112,22 @@ to contain the class's own marks - a tuft outside its polygon would otherwise go
 
 ## Assumptions
 
-- The GM's complaint is about pointer responsiveness, not initial load: both pages are ~9 MB and within
-  0.7 MB of each other, so download and parse are not the difference. Load time is expected to improve
-  only incidentally.
+- The approved fix targets pointer responsiveness. The GM also reported the page being "much slower to
+  load", and that is NOT resolved here: byte size settles download and the two pages are within 0.7 MB,
+  but it says nothing about parse, layout or first paint, and kuwabata carries 3,455 `<path>` elements to
+  inashiro's 1,576 at that similar size. FR-005 measures load before and after; if the fix does not move
+  it, the load half is an OPEN QUESTION FOR THE GM, not something this feature has answered.
 - Kuwabata itself belongs to another session's clone (feature 147, `diagram-kuwabata`); this feature
   changes the shared page writer, so that map benefits without this session touching it.
+
+## Review history
+
+- **Round 1, `spec-fidelity`, 2026-08-29: CHANGES REQUIRED.** Three findings, all accepted and all fixed
+  above. (1) FR-001 widened the GM's "scrub and marsh" to every region-bearing class - a real widening
+  with a real hazard, since five of the seven take a manifest polygon rather than a marks-built region and
+  three of them are drawn late enough that disabling their ink would hand the pointer to whatever sits
+  under them. (2) FR-002 demoted the session's own caveat from COVERAGE to mere presence, and nothing
+  required the browser verification the GM was promised - now FR-002 requires coverage and FR-006 requires
+  the assertion. (3) The Assumptions section explained the GM's "much slower to load" away on evidence
+  that did not reach it - the claim is deleted, FR-005 now measures load, and the load half is named as an
+  open question rather than answered by assertion.
