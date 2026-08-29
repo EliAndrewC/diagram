@@ -581,7 +581,7 @@ def test_the_placard_opens_the_place_card() -> None:
     notes = MapNotes(place={"district": "Hoshigaoka", "district direction": "east"}, features={})
     data = _render([PLACE, "paddy", "village lane"], {"scale": "hamlet", "name": "Inashiro", "households": 15}, notes)
     card = data[PLACE]
-    assert card["name"] == "Inashiro" and "is a hamlet of ~15 farmhouses, population ~75" in card["what"]
+    assert card["name"] == "Inashiro" and "is a hamlet of 15 farmhouses, population ~75" in card["what"]
     assert "village district of Hoshigaoka, which lies east" in card["why"]
     assert card["lead"] == "" and card["caveat"], "no accuracy claim; the basis is stated (FR-001, FR-008a)"
 

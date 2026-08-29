@@ -79,18 +79,30 @@ def test_bund_beans_are_a_sentence_of_their_own_not_an_item_in_a_list() -> None:
 # --- the figures, tilde-marked ---
 
 
-def test_the_figures_carry_a_tilde() -> None:
-    """The GM: "we should use a tilde and say something like population ~75 to make it clear that
-    these numbers are approximate"."""
+def test_only_the_population_carries_a_tilde() -> None:
+    """The GM, 2026-08-29: "You should not use a ~ for the number of farmhouses, because that actually
+    IS an exact map feature - the number of farmhouses listed should be whatever is actually displayed
+    on the map itself for hamlets and villages." The count is a statement about the sheet, which the
+    reader could check by counting; the population is an inference from it."""
     got = size_sentence(KINDS["hamlet"], HAMLET, 15)
-    assert got == "~15 farmhouses, population ~75"
+    assert got == "15 farmhouses, population ~75"
+    assert not got.startswith("~")
     assert str(PER_HOUSEHOLD * 15) == "75"
 
 
 def test_a_recorded_population_beats_the_household_multiple() -> None:
     """A town's inhabitants are not a multiple of anybody's farmhouses, and its tier records its own."""
-    got = size_sentence(KINDS["town"], {"scale": "town", "population": 680}, 42)
-    assert got == "~42 dwellings drawn, population ~680"
+    assert size_sentence(KINDS["town"], {"scale": "town", "population": 680}, 42) == "population ~680"
+
+
+def test_a_town_and_a_city_do_not_state_a_dwelling_count() -> None:
+    """The count would be a fact about the DRAWING read as a fact about the place: Tango is 3,000
+    inhabitants drawn with 273 representative dwellings, and "~273 dwellings, population ~3,000" tells
+    a reader something false. A hamlet's houses ARE its households, so there the figure means what it
+    says (found while sweeping the pool's cards, 2026-08-29)."""
+    for scale in ("town", "city"):
+        assert "dwelling" not in size_sentence(KINDS[scale], {"population": 3000}, 273)
+    assert KINDS["hamlet"].houses_noun == "farmhouses" and KINDS["city"].houses_noun is None
 
 
 def test_a_thousands_separator_on_a_city() -> None:
@@ -99,7 +111,7 @@ def test_a_thousands_separator_on_a_city() -> None:
 
 @pytest.mark.parametrize(
     ("meta", "houses", "want"),
-    [({}, 0, ""), ({}, 15, "~15 farmhouses"), ({"households": 15}, 0, "population ~75")],
+    [({}, 0, ""), ({}, 15, "15 farmhouses"), ({"households": 15}, 0, "population ~75")],
 )
 def test_each_figure_is_omitted_cleanly_when_it_is_not_known(meta: dict[str, object], houses: int, want: str) -> None:
     assert size_sentence(KINDS["hamlet"], meta, houses) == want
@@ -166,7 +178,7 @@ def test_the_card_on_the_reference_hamlet() -> None:
     card = place_card(HAMLET, 15, PADDY, NOTES)
     assert card is not None
     assert card["name"] == "Inashiro"
-    assert card["what"].startswith("Inashiro is a hamlet of ~15 farmhouses, population ~75:")
+    assert card["what"].startswith("Inashiro is a hamlet of 15 farmhouses, population ~75:")
     assert "no headman of its own" in card["what"]
     assert "The flooded fields grow rice." in card["why"]
     assert "village district of Hoshigaoka, which lies east" in card["why"]
@@ -195,7 +207,7 @@ def test_a_map_with_no_notes_at_all_still_describes_itself() -> None:
     """Spec Story 2 AS6, and the normal case for most of the pool."""
     card = place_card(HAMLET, 15, PADDY, EMPTY)
     assert card is not None
-    assert "~15 farmhouses, population ~75" in card["what"]
+    assert "15 farmhouses, population ~75" in card["what"]
     assert card["why"].startswith("The flooded fields grow rice.")
     assert "district of" not in card["why"], "nothing is asserted that nothing authored"
 

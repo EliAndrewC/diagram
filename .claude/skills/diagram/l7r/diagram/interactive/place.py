@@ -54,7 +54,12 @@ class Kind:
 
     noun: str
     what: str  # the sentence that follows "<Name> is a <noun>"
-    counts_farmhouses: bool  # a hamlet's and a village's dwellings are farms; a town's are not
+    # What to call the dwellings the map draws, or None to say nothing about them. A hamlet's and a
+    # village's houses ARE its households - the manifest's count and `meta.households` agree - so the
+    # figure means something. A town's and a city's do not: a settlement of 3,000 inhabitants is drawn
+    # with a few hundred representative dwellings, and printing "~273 dwellings" beside "population
+    # ~3,000" tells a reader something false about the place rather than about the drawing.
+    houses_noun: str | None
 
 
 #: Keyed by `meta.scale`. Written from `l7r.md` (a hamlet "belongs to a village district and is
@@ -64,22 +69,22 @@ KINDS: dict[str, Kind] = {
     "hamlet": Kind(
         "hamlet",
         "a small outlying farming community belonging to a village district. Like every hamlet it has no headman of its own - its overseer, the district headman, lives in the main village - no shrine, no tax-free plot and no burial ground; its dead go to the district's ground.",
-        True,
+        "farmhouses",
     ),
     "village": Kind(
         "village",
         "the main village of a village district: the seat of the headman who oversees the district's outlying hamlets, with its own shrine, its tax-free plots and the burial ground the whole district uses. Like every village district it is peasant-only - no samurai live here.",
-        True,
+        "farmhouses",
     ),
     "town": Kind(
         "town",
         "a county town: the lowest level of Rokugani society at which samurai live, and the lowest that has resident merchants, which is why the farmers of the surrounding districts come in for market day. The county magistrate holds court here.",
-        False,
+        None,
     ),
     "city": Kind(
         "city",
         "a provincial city: the seat of a province's governor and its ministries, and a market the whole province turns toward.",
-        False,
+        None,
     ),
 }
 
@@ -158,15 +163,21 @@ def crop_sentence(present: set[str]) -> str:
 
 
 def size_sentence(kind: Kind, meta: dict[str, Any], houses: int) -> str:
-    """The farmhouse count and the population, both tilde-marked (the GM: *"we should use a tilde and
-    say something like population ~75 to make it clear that these numbers are approximate"*).
+    """The farmhouse count, EXACT, and the population, tilde-marked.
+
+    ONLY THE POPULATION CARRIES THE TILDE (GM 2026-08-29): *"You should not use a ~ for the number of
+    farmhouses, because that actually IS an exact map feature - the number of farmhouses listed should
+    be whatever is actually displayed on the map itself for hamlets and villages."* The count comes
+    from the manifest's own `houses`, so it is not an estimate of anything - it is a statement about
+    the sheet in front of the reader, who could sit and count them. The population is an inference
+    from it (five to a household) and reads *"population ~75"*, the GM's own phrasing.
 
     The population comes from the tier's own record where it has one - a town and a city carry
     `meta.population`, because their inhabitants are not a multiple of anybody's farmhouses - and
     otherwise from `l7r.md`'s five to a household. Either may be missing, and then it is not said."""
     parts = []
-    if houses:
-        parts.append(f"~{houses} {'farmhouses' if kind.counts_farmhouses else 'dwellings drawn'}")
+    if houses and kind.houses_noun:
+        parts.append(f"{houses} {kind.houses_noun}")  # no tilde: the reader can count them
     population = meta.get("population") or (PER_HOUSEHOLD * meta["households"] if meta.get("households") else None)
     if population:
         parts.append(f"population ~{int(population):,}")
