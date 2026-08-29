@@ -293,3 +293,70 @@ the next session inherits the measurement:
   takafuda stood at crossroads and bridgeheads, and at the village well - so by constitution XII this
   is two supportable answers and therefore a per-settlement knob, which the siter cannot express today.
 
+## The pool sweep, round 2: what the four reviews found after the first four fixes
+
+- [x] P5 **A record that still contradicted its ink on the REFERENCE hamlet.** The keep-out refactor made
+      `wet_polys` no-build, so every over-claim in a marsh outline became a placement rule and an
+      interactive answer. On Inashiro, **46.7% of the pond-fringe polygon lay inside the pond** and the toe
+      polygon covered **88,418 sq ft of the drawn rice fan**, with a field pond inside it - ink clean, record
+      wrong. The clip now subtracts the pond from a fringe and the fields from a toe or waterside, as well as
+      the diked block. Two bugs surfaced doing it and both are recorded at the point of change: a field
+      outline that self-intersects makes `buffer(0)` return a MultiPolygon (`_filled`), and subtracting the
+      pond turns a fringe into an ANNULUS, which `best.exterior` silently threw away - handing the disc
+      straight back. The record carries one ring, so the hole is spliced in on a zero-width **keyhole** seam,
+      oriented so the signed area subtracts. Measured after: fringe ring **30,860 sq ft against 30,819
+      expected** (outer minus pond), pond centre outside the ring, toe **0.00%** in the fields. *(rendering)*
+- [x] P6 **The nub pass was calibrated below the defect it was written for.** It shipped at a 5 ft floor -
+      taken from the ONE case that prompted it, 3.1 ft - and Sawada then showed two nubs that cleared it: an
+      8.25 ft boot turning -87 degrees off a 117 ft run, and a 5.74 ft first segment turning 88 degrees. The
+      floor is 9 ft now, about a lane-width-and-a-half at hamlet tier, and the blast radius was MEASURED
+      before it was changed: over the whole pool, 5 -> 9 ft drops 3 more end vertices, **all three on Sawada,
+      no other map touched**; 12 ft catches nothing 9 does not. *(rendering)*
+- [x] P7 **A bead where two watercourses butt end-to-end** - Sawada's brook mouth and head intake, and
+      Kashikawa's head join. `_clip_to_moat` and `_clip_to_river` have pulled their endpoints back by the
+      stroke's CAP RADIUS since they were written, because a round cap bulges half a stroke-width past its
+      endpoint; `_clip_to_stream` never took the argument, and the caller passed it to the other two and not
+      to it. A one-argument asymmetry, not a new mechanism. *(rendering)*
+- [x] P8 **The reviewer's own doc carried a retired rule.** `.claude/agents/settlement-review.md` still
+      stated the 45-degree steep-caption clamp that the GM retired on 2026-08-27 (feature 133 T38), so the
+      reviewer reported Inashiro's 84.8-degree and Sawada's 80.9-degree captions as defects while the engine
+      was following the ruling exactly. Corrected, with a note not to re-raise them. *(rendering)*
+
+**Found and NOT fixed - recorded with the measurement so the next session inherits it.** Each moves
+placement or ink on maps across the pool, and none was caused by this feature:
+
+- **Every privy and manure pit on Sawada stands UPWIND of its own house** - 11 of 12 NE and 1 E against
+  `windward: NE`. Mechanism, measured pool-wide: `_PRIVY_SEATS` in `hamletgen/homesteads.py` is expressed in
+  the HOUSE's local frame (back 0.60 / gate 0.25 / naya 0.15) and houses draw at rot 0-4 degrees, so "back"
+  is north on every map. Inashiro 0/11 upwind, Kuwabata 0/9, Mizuguchi 0/4, Kashikawa 3/14, **Sawada 12/12**
+  - the other four are downwind by luck, and Sawada drew the one windward value that exposes it. Nothing in
+  the seat table consults `plan.windward`. The three seats are each attested, so the fix is not a new seat:
+  when two seats are otherwise equal, prefer the one not within 90 degrees of `windward`.
+- **Every flooded-plot predicate tests SHARPNESS and none tests SIZE.** Sawada's surviving flooded plot is
+  6,706 sq ft - **4.9x the median basin and the largest of 776** - on the one map whose brief is that it has
+  no pond, so the object the eye lands on in the field is a 170 ft blue sheet. Its position is sanctioned
+  doctrine and the 2026-08-28 nearest-corner fix works; the gap is that a basin `close_seams` absorbed up to
+  five design cells keeps the tint it was given as one. Add an AREA clause, tested on the FINAL ring.
+- **A caption can be seated across a lane from its own glyph** (Inashiro: the board at x 1094.5-1100.5, lane
+  1 at 1103.5-1110.6, the caption at 1109.3-1122.5 - the full lane width between them, and a shrine 22 ft
+  away on the caption's own side). This is the half D3 does not cover: a way-side term in the seat filter.
+  The map's notes also assert this defect "did not recur", and it is on the shipped sheet.
+- **The windbreak trim got WORSE, not better** (Sawada): the deferral of 2026-08-28 recorded 57 px of bare
+  strip and 37 in-frame undrawn clumps "improving"; it is now **85 px and 38**, with **5 of 19 houses beyond
+  the drawn belt's end** and a 510 ft belt against a 714 ft cluster. The deferral's premise no longer holds.
+- **The copse draws inside the windbreak** (Sawada: 13 of 17 copse clumps touching a windbreak clump; and
+  degenerate elsewhere - Mizuguchi's copse is 2 clumps in a 205 ft record, Inashiro's 2 in a 313 ft one).
+  The project's own doctrine says they are different plantings for different reasons, so this contradicts a
+  recorded claim. A knob candidate: a copse embedded in the belt vs one threading the houses.
+- **The persimmon's four fruit dots are a rigid mirrored 2x2** at exactly (+/-3.5, +/-3.5), r 1.3, identical
+  on every tree and every map - the doctrine's own strongest face-read trigger, and the anti-twin problem in
+  miniature. Jitter them off the position hash.
+- **Seated fixture counts fall well short of their declared shares**: Inashiro declares manure .531 per
+  household and seats 2 of 15 (p about 0.002 under a binomial); Kashikawa and Mizuguchi show the same gap.
+  Either the placer refuses at a rate nothing records, or the shares do not mean what the record reads.
+- **`make jogs` exits RED on Sawada** - 3 sideways steps in 776 rings, the largest 12.5 ft - and nobody is
+  reading a diagnostic the project maintains for exactly this.
+- **Notes drift on three maps**: Kashikawa's accepted-limitation entry names a byre that stands nowhere
+  within 167 ft; Inashiro's notes give stale clump, stand and fixture counts; Mizuguchi's records a board at
+  "the traffic optimum" it no longer occupies.
+

@@ -88,8 +88,28 @@ def _ellipse(pond: Any, n: int = 64) -> Any:
     return ShapelyPolygon([(cx + rx * math.cos(2 * math.pi * k / n), cy + ry * math.sin(2 * math.pi * k / n)) for k in range(n)])
 
 
-def _clipped_to_open_ground(poly: Any, dikes: Any) -> Any:
+def _filled(ring: Any) -> Any:
+    """A ring as a SOLID - its outline with everything inside it, holes included.
+
+    `buffer(0)` on a self-intersecting outline returns a MultiPolygon (a field outline that pinches or
+    crosses itself does), so each part is re-made from its own exterior and the parts unioned. Filling is
+    the point: subtracting a dike BAND left the ground it encloses standing, which is the bug this
+    function's caller was written to fix."""
+    g = ShapelyPolygon([(float(a), float(b)) for a, b in ring]).buffer(0)
+    return unary_union([ShapelyPolygon(part.exterior) for part in getattr(g, "geoms", [g]) if part.geom_type == "Polygon" and not part.is_empty])
+
+
+def _clipped_to_open_ground(poly: Any, dikes: Any, fields: Any = (), pond: Any = None) -> Any:
     """A waterside/toe marsh outline with the DIKED GROUND taken out of it (settlement-review 2026-08-29).
+
+    THREE THINGS ARE SUBTRACTED, and each is ground the scatter already refuses (settlement-review
+    2026-08-29, Kuwabata and then Inashiro - the reference hamlet). The keep-out refactor made `wet_polys`
+    NO-BUILD, which turned every over-claim in these outlines into a placement rule and into the answer
+    the interactive map gives a reader: on Inashiro, **46.7% of the pond-fringe polygon lay inside the
+    pond** - it is recorded as a filled disc CONTAINING the water rather than the annulus it draws - and
+    the toe polygon covered **88,418 sq ft of the drawn rice fan**, with a field pond inside it. The ink
+    was clean in both cases; the record was not. So a fringe loses the open water, and a toe or waterside
+    loses the diked block and the fields, which is exactly what `_sparse` already refuses to scatter on.
 
     A polder's wet wild lies OUTSIDE its perimeter dike; the outline the caller hands in is a generous
     region that laps the dike and the ground it encloses. What is subtracted is the FILLED block - the
@@ -108,19 +128,54 @@ def _clipped_to_open_ground(poly: Any, dikes: Any) -> Any:
     block on two flanks and is cut in half by it, and each flank is its own call. Falls back to the input
     whenever shapely returns nothing usable, so a degenerate outline cannot lose a feature."""
     rings = [list(dk["outline"]) for dk in dikes if len(dk.get("outline") or []) >= 3]
-    if not rings:
+    rings += [list(f) for f in fields if len(f) >= 3]
+    if not rings and not pond:
         return poly
     try:
         keep = ShapelyPolygon([(float(a), float(b)) for a, b in poly]).buffer(0)
-        cut = unary_union([ShapelyPolygon(ShapelyPolygon([(float(a), float(b)) for a, b in r]).buffer(0).exterior) for r in rings])
-        out = keep.difference(cut)
+        cuts = [_filled(r) for r in rings]
+        if pond:
+            cuts.append(_ellipse(pond))
+        out = keep.difference(unary_union(cuts))
     except ValueError, GEOSException:
         return poly
     parts = [g for g in getattr(out, "geoms", [out]) if not g.is_empty and g.geom_type == "Polygon"]
     if not parts:
         return poly
     best = max(parts, key=lambda g: g.area)
-    return [(float(x), float(y)) for x, y in best.exterior.coords[:-1]]
+    return _keyholed(best)
+
+
+def _signed_area(ring: Any) -> float:
+    """Twice a ring's signed area - positive one way round, negative the other. Orientation only."""
+    return sum(ring[k][0] * ring[(k + 1) % len(ring)][1] - ring[(k + 1) % len(ring)][0] * ring[k][1] for k in range(len(ring)))
+
+
+def _keyholed(g: Any) -> Any:
+    """A polygon as ONE ring, holes spliced in on a seam.
+
+    A record carries a single ring, and `best.exterior` throws every hole away - which is exactly what
+    made the first version of this clip a silent no-op for a pond fringe (settlement-review 2026-08-29,
+    Inashiro): the fringe is a filled disc, subtracting the pond turns it into an ANNULUS, and taking the
+    exterior handed the disc straight back, still claiming 46.7% of it was the open water it had just been
+    clipped off. The earlier docstring predicted a hole "cannot arise here" and was wrong the moment the
+    pond became one of the things subtracted.
+
+    A keyhole is the standard answer: cut from the outer ring to the inner one at their closest pair of
+    vertices, walk the hole the opposite way round, and come back along the same cut. The seam is
+    zero-width, so every point-in-polygon consumer - the keep-out, the checks, the interactive hit test -
+    reads the annulus correctly."""
+    ring = [(float(x), float(y)) for x, y in g.exterior.coords[:-1]]
+    for hole in g.interiors:
+        pts = [(float(x), float(y)) for x, y in hole.coords[:-1]]
+        if len(pts) < 3 or len(ring) < 3:
+            continue
+        i, j = min(((a, b) for a in range(len(ring)) for b in range(len(pts))), key=lambda ab: math.dist(ring[ab[0]], pts[ab[1]]))
+        loop = pts[j:] + pts[:j]  # the hole, starting at its closest vertex
+        if _signed_area(loop) * _signed_area(ring) > 0:
+            loop.reverse()  # ...walked the OPPOSITE way round the outer ring, so the seam subtracts
+        ring = ring[: i + 1] + loop + [loop[0], ring[i]] + ring[i + 1 :]
+    return ring
 
 
 class WetGroundMixin:
@@ -153,8 +208,13 @@ class WetGroundMixin:
         # is what makes the two agree, and it is done ONCE here so `wet_polys`, `M['marshes']` and the hit
         # polygon are all the same shape. Only the OUTSIDE roles are clipped: a `pond_fringe` is a shore and
         # a `defense` belt hugs its wall, and neither has a polder block to be outside of.
-        if role in ("toe", "waterside"):
-            poly = _clipped_to_open_ground(poly, self.M.get("dikes", ()))
+        _outside = role in ("toe", "waterside")
+        poly = _clipped_to_open_ground(
+            poly,
+            self.M.get("dikes", ()) if _outside else (),
+            self.field_polys if _outside else (),
+            self.M.get("pond") if role == "pond_fringe" else None,
+        )
         self.wet_polys.append([(float(px), float(py)) for px, py in poly])
         xs = [p[0] for p in poly]
         ys = [p[1] for p in poly]

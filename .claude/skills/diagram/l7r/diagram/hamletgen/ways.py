@@ -1140,7 +1140,13 @@ def _join_orphan_ways(s: Settlement, hard: list[Poly], walls: Sequence[Poly], wa
     return made  # pragma: no cover - six links is far more than any hamlet needs
 
 
-_NUB_FT = 5.0  # a leading/trailing segment under this is not a stretch of way, it is a splice artifact
+_NUB_FT = 9.0  # a leading/trailing segment under this is not a stretch of way, it is a splice artifact
+# NOT 5: the pass shipped at 5 ft and a settlement-review then found two nubs on Sawada that cleared it -
+# an 8.25 ft boot turning -87 deg off a 117 ft run, and a 5.74 ft first segment turning 88 deg. The floor
+# was set from the ONE case the pass was written for (3.1 ft) and was therefore calibrated below the defect
+# rather than to it. 9 ft is about a lane-width-and-a-half at hamlet tier, and the blast radius was
+# MEASURED before it was changed: over the whole pool, 5 -> 9 ft drops 3 more end vertices, all three on
+# Sawada, no other map touched; 12 ft catches nothing 9 does not.
 _NUB_TURN = 60.0  # ...and one that turns this far is a lump on the knuckle rather than the way arriving
 # NOT 90: the motivating nub measured 92.6 deg, and a bar sitting 2.6 deg under the one case it was
 # written for stops firing the first time a re-roll nudges it. Dropping the vertex is near-free at a

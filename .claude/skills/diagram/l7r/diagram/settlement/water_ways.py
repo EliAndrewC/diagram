@@ -396,13 +396,21 @@ class WaterWaysMixin:
         out = snap_front(out[::-1])[::-1]
         return out
 
-    def _clip_to_stream(self: Settlement, pts: Any) -> Any:  # type: ignore[misc]
+    def _clip_to_stream(self: Settlement, pts: Any, capr: float = 0.0) -> Any:  # type: ignore[misc]
         """Snap a channel endpoint that reaches INTO a stream bed onto the bed's edge (~2px inside
         the bank, so the mouth covers the bank stroke) - the same clean CONFLUENCE `_clip_to_pond`
         and `_clip_to_moat` give: a drain culvert JOINS the receiving stream without drawing its own
         bed as a colored tongue across the current. Trim-only: an end short of the bank is left
         alone (the `channels_join_streams_at_confluence` check requires the RECORDED polyline to
-        reach the bed, so the gen extends the record to the centerline and this trims the DRAWING)."""
+        reach the bed, so the gen extends the record to the centerline and this trims the DRAWING).
+
+        `capr` IS THE CAP RADIUS, and it was missing here while both siblings had it (settlement-review
+        2026-08-29, on Sawada's brook mouth and head intake and again on Kashikawa's head join). A round
+        stroke cap bulges half the stroke's width PAST its endpoint, so a channel trimmed exactly to the
+        bank still printed a rounded plug of its own bed colour inside the receiving stream - a bead across
+        the joint, which is the opposite of the GM's "water just flows". `_clip_to_moat` and `_clip_to_river`
+        have pulled their endpoints back by `capr` since they were written; a stream confluence simply never
+        got the argument, and the caller passed it to those two and not to this one."""
         streams = self.M.get("streams", [])
         if not streams or len(pts) < 2:
             return pts
@@ -442,7 +450,7 @@ class WaterWaysMixin:
             nxt = out[i + 1]
             ux, uy = nxt[0] - f[0], nxt[1] - f[1]
             ul = math.hypot(ux, uy) or 1.0
-            return [(f[0] + ux / ul * (hw - 2), f[1] + uy / ul * (hw - 2))] + out[i + 1 :]
+            return [(f[0] + ux / ul * (hw - 2 + capr), f[1] + uy / ul * (hw - 2 + capr))] + out[i + 1 :]
 
         out = snap_front(pts)
         out = snap_front(out[::-1])[::-1]
@@ -472,7 +480,7 @@ class WaterWaysMixin:
         whether the joining stroke's tip lands inside the OTHER stroke's drawn band - which needs
         that band's width, and needs it from the post-clip record rather than the pre-clip
         field_ditches/channels (the two diverge wherever a mouth was snapped onto open water)."""
-        pts = self._clip_to_stream(self._clip_to_river(self._clip_to_moat(self._clip_to_pond(pts), capr=max(w0, w1) / 2), capr=max(w0, w1) / 2))
+        pts = self._clip_to_stream(self._clip_to_river(self._clip_to_moat(self._clip_to_pond(pts), capr=max(w0, w1) / 2), capr=max(w0, w1) / 2), capr=max(w0, w1) / 2)
         # ROUND THE BENDS: an earthen ditch turns on a swept curve, never a mitred corner (see
         # fillet_polyline for the why and the ~2.5-widths radius). Applied AFTER the mouth clips so a
         # snapped pond/moat/stream junction keeps its exact endpoint, and the DRAWN geometry recorded
