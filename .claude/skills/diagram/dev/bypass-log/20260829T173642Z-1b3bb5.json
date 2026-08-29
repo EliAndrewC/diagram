@@ -1,0 +1,6 @@
+{
+  "utc": "20260829T173642Z",
+  "guard": "pair-hooks",
+  "what": "gate alone",
+  "reason": "the settlement-review that read these maps closed this turn; no manifest or render has moved since (git diff over pool/hamlets/*.json and *.png is empty), and this re-run only adds a registry row the previous gate asked for"
+}
