@@ -86,12 +86,18 @@ def _place(data: bytes, dest: str) -> None:
 # the same toy subject, and sharing across those would serve one test another's payload - a far worse bug
 # than the one this fixes. The producer's code object separates them: every caller inside `hamlet()` shares
 # one code object (so the 31 fixtures share, which is the point), while two different call sites do not.
-_SHARED_BYPASS: dict[tuple[str, int], bytes] = {}
+_SHARED_BYPASS: dict[tuple[str, str], bytes] = {}
 
 
-def _share_key(subject: str, produce: Callable[[], Any]) -> tuple[str, int]:
+def _share_key(subject: str, produce: Callable[[], Any]) -> tuple[str, str]:
+    """The producer's CALL SITE, not `id(code)`. An id is unique only among LIVE objects, so a code object
+    that has been collected can have its id handed to a different one - and the failure mode is serving one
+    caller another caller's roll, which is far worse than the re-rolling this whole mechanism removes. The
+    file, line and name of the code object are stable for the life of the process and unique per call site.
+    """
     code = getattr(produce, "__code__", None)
-    return (subject, id(code) if code is not None else 0)
+    site = f"{code.co_filename}:{code.co_firstlineno}:{code.co_name}" if code is not None else repr(type(produce))
+    return (subject, site)
 
 
 def reset_shared() -> None:
