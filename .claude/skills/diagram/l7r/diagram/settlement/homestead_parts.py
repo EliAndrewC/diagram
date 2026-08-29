@@ -11,6 +11,24 @@ if TYPE_CHECKING:
     from .core import Settlement
 
 
+_BELT_GAP_FT = 30.0  # `village_windbreak_is_continuous`'s own bar - the fill closes what that check reads
+
+
+def _belt_axis(pts: Sequence[tuple[float, float]]) -> tuple[float, float]:
+    """The unit vector along a belt's own length, from the spread of its clumps.
+
+    Taken from the seated points rather than from the wind, because what has to be walked in order is
+    the run as DRAWN - a belt that bows around a plot is still one run, and sorting it by a wind-derived
+    axis would interleave the two flanks of the bow."""
+    n = len(pts)
+    cx, cy = sum(p[0] for p in pts) / n, sum(p[1] for p in pts) / n
+    sxx = sum((p[0] - cx) ** 2 for p in pts)
+    syy = sum((p[1] - cy) ** 2 for p in pts)
+    sxy = sum((p[0] - cx) * (p[1] - cy) for p in pts)
+    th = 0.5 * math.atan2(2.0 * sxy, sxx - syy)  # the principal axis of the cloud
+    return (math.cos(th), math.sin(th))
+
+
 class HomesteadPartsMixin:
     def _draw_threshing_yard(self: Settlement, cx: float, cy: float, w: float, h: float, poly: Any) -> None:  # type: ignore[misc]
         """Draw one small tamped earthen threshing/drying yard (a straw mat + a little hazakake rack). The
@@ -876,6 +894,41 @@ class HomesteadPartsMixin:
                     jx, jy = _alt
                 seated.append((jx, jy))
                 clumps.append([round(jx, 1), round(jy, 1)])
+        # AND CLOSE THE INTERIOR HOLES (feature 152, acceptance review; the GM's own complaint in its
+        # last form - "it's not clear that it will, in fact, be breaking much wind"). The grid decides
+        # where a clump is TRIED, and where a try is refused the belt carries a hole: Kuwabata shipped
+        # gaps of 73, 67 and 34 ft at 29%, 88% and 79% of the way ALONG its belt, and
+        # `village_windbreak_is_continuous` failed on it - identically on main, so this is old.
+        #
+        # The rejection chain above deliberately does NOT re-seat a clump refused by the crop, open water
+        # or a lane, on the grounds that those "are the edges where a belt is supposed to stop". That is
+        # right at an END and wrong in the MIDDLE: a hole 29% of the way along is not the belt stopping.
+        # So the run is walked once more along its own axis and each interior gap over `_BELT_GAP_FT` is
+        # offered a seat at its midpoint, re-asking every test the loop asks. Nothing is relaxed - a gap
+        # the ground truly refuses stays a gap.
+        # ...and it SUBDIVIDES until the gap closes or the ground refuses. One clump at the midpoint turns
+        # a 94 ft hole into two 47 ft holes, which is still a hole - measured on Kuwabata's first pass.
+        if role == "windbreak" and len(seated) >= 2:
+            _wv = _belt_axis(seated)
+            for _ in range(6):  # a 94 ft gap needs three rounds; six is headroom, and it stops when nothing lands
+                _order = sorted(range(len(seated)), key=lambda _k: seated[_k][0] * _wv[0] + seated[_k][1] * _wv[1])
+                _added = 0
+                for _a, _b in zip(_order, _order[1:], strict=False):
+                    _pa, _pb = seated[_a], seated[_b]
+                    if math.dist(_pa, _pb) <= _BELT_GAP_FT:
+                        continue
+                    _mx, _my = (_pa[0] + _pb[0]) / 2, (_pa[1] + _pb[1]) / 2
+                    if not point_in_poly(_mx, _my, poly):
+                        continue
+                    if within is not None and (_mx + clump * 0.9 < within[0] or _mx - clump * 0.9 > within[2] or _my + clump * 0.9 < within[1] or _my - clump * 0.9 > within[3]):
+                        continue
+                    if _hard_blocked(_mx, _my) or _local_blocked(_mx, _my) or _lane_blocked(_mx, _my):
+                        continue
+                    seated.append((_mx, _my))
+                    clumps.append([round(_mx, 1), round(_my, 1)])
+                    _added += 1
+                if not _added:
+                    break
         # THE FACE TRIM, then the ink (GM 2026-08-26, feature 133 T10). With `face_margin` the
         # caller says the frame will follow this belt's INNER FACE by that margin (`crop_boxes`
         # reads the same `windbreak_face`), so a clump whose whole crown lies deeper than

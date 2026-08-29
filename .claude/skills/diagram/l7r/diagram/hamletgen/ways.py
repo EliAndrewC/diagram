@@ -626,7 +626,7 @@ def stage_web(s: Settlement, plan: SitePlan) -> None:
     # AND SWEEP WHAT IS LEFT (feature 134 T50): the passes above shorten lanes, and `_WEB_MIN_FT` was
     # only ever asked at draw time. Last, so it judges the tread the map actually ships.
     _sweep_debris(s)
-    _drop_end_nubs(s)  # last of all: every pass above can leave a nub at a junction it laid
+    _drop_end_nubs(s, hard_built)  # last of all: every pass above can leave a nub at a junction it laid
     _keep_the_route_wide(s, hard_built, walls, list(plan.watercourses) + drawn_water)  # ...and a cart route may not neck to a footpath
     s.M["meta"]["lane_web"] = plan.lane_web
 
@@ -1204,12 +1204,34 @@ def drop_end_nubs(ways: list[list[Pt]]) -> list[int]:
     return hit
 
 
-def _drop_end_nubs(s: Settlement) -> int:
+def _closest_hard(run: Sequence[Pt], hard: Sequence[Poly]) -> float:
+    """The nearest distance from any vertex of `hard` to the run's tread centerline."""
+    best = float("inf")
+    for poly in hard:
+        for vx, vy in poly:
+            for a, b in zip(run, run[1:], strict=False):
+                best = min(best, seg_dist(vx, vy, a, b))
+    return best
+
+
+def _drop_end_nubs(s: Settlement, hard: Sequence[Poly] = ()) -> int:
     """`drop_end_nubs` over the settlement's lanes, re-inking each one it changes. Runs LAST, beside
     `_sweep_debris`, for the same reason: every earlier pass can leave one."""
     lanes = s.M.get("lanes") or []
     ways = [[(float(x), float(y)) for x, y in ln.get("pts") or []] for ln in lanes]
+    before = [list(w) for w in ways]
     for i in drop_end_nubs(ways):
+        # JUDGE THE RESULT, NOT THE MOVE (feature 152, acceptance review). Dropping the vertex after an
+        # end STRAIGHTENS the lane, and a straightened door path can lie closer to a neighbouring
+        # farmhouse than the doglegged one did: on Kashikawa this pass took a house corner from 3.18 ft
+        # clear of lane 11's tread to 0.69 ft INSIDE it, turning `features_do_not_overlap` from green to
+        # red. That is the same rule `_may_write` already applies one pass over - a rewrite may leave a
+        # lane no nearer the fabric than it already was. The nub is only worth removing if what replaces
+        # it is clear.
+        _w = float(lanes[i].get("w") or 5.0) / 2.0 + 2.0
+        if hard and _closest_hard(ways[i], hard) < min(_closest_hard(before[i], hard), _w):
+            ways[i] = before[i]
+            continue
         lanes[i]["pts"] = [[round(x, 1), round(y, 1)] for x, y in ways[i]]
         s.reink_lane(i)
     return len(ways)
