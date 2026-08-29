@@ -2433,7 +2433,8 @@ def _serve_stragglers(s: Settlement, plan: SitePlan, hard: list[Poly], fabric: l
             # that has room wins.
             targets = sorted((seg_closest(c[0], c[1], a, b) for a, b in segs), key=lambda q: math.dist(c, q))
             _served = False
-            _folded: Poly | None = None  # a workable path that bends the way the check refuses - the last resort
+            _folded: Poly | None = None  # a workable path that bends or fouls - the last resort, ranked
+            _folded_rank = (True, True)
             _key = tuple((round(float(t[0]), 1), round(float(t[1]), 1)) for t in targets[:60])
             if _exhausted.get(id(h)) == _key:
                 continue  # same house, same candidate ways, same obstacles - a replay of a pass that already failed
@@ -2604,20 +2605,17 @@ def _serve_stragglers(s: Settlement, plan: SitePlan, hard: list[Poly], fabric: l
                     # that used to be drawn stops being drawn.
                     _dists = [min(seg_dist(_v[0], _v[1], _a, _b) for _a, _b in segs) for _v in path]
                     _first = next((_i for _i in range(1, len(path)) if _dists[_i] <= _LANE_JOIN_FT), None)
-                    _cuts = []
+                    _cuts = [len(path) - 1]  # no vertex inside the bar: the run stands as routed, as it did before
                     if _first is not None:
                         _far = _first
                         while _far + 1 < len(path) and _dists[_far + 1] < _dists[_far]:
                             _far += 1
                         _cuts = [_far, _first] if _far != _first else [_first]
-                    else:
-                        _cuts = [len(path) - 1]
                     _whole = list(path)
                     _picked = None
+                    _best_rank = (True, True)
                     for _cut in _cuts:
                         _p = _whole[: _cut + 1]
-                        if len(_p) < 2:
-                            continue
                         _j = min((seg_closest(_p[-1][0], _p[-1][1], a, b) for a, b in segs), key=lambda z: math.dist(_p[-1], z))
                         if _clear_link(_p[-1], _j, hard, others, water) or _clear_touch(_p[-1], _j, hard, others, water):
                             # A JUNCTION IS CONTACT, AND ITS LAST FEW FEET GET THE JUNCTION MARGIN. Tested
@@ -2638,11 +2636,18 @@ def _serve_stragglers(s: Settlement, plan: SitePlan, hard: list[Poly], fabric: l
                         # from its obstacle list precisely so it can leave its dooryard, so a test that
                         # includes them is true of every candidate and discriminates between none - which
                         # is what the first version of this guard did.
-                        if not _bends_badly(_p) and not _crosses_fabric(_p, passable, _TOUCH_GAP):
+                        # RANKED, NOT FIRST-PAST-THE-POST. Where neither cut is clean the fallback used to
+                        # be whichever was built first, which is the LONG one - so a candidate that merely
+                        # bent could lose to one that drew a tread through somebody else's vegetables.
+                        # An overlap is a rule the matrix forbids outright; a bend is a complaint about
+                        # shape. Cohort seed 18's footpath grazed a neighbour's garden at 1.21 ft while the
+                        # shorter cut only bent. So they are ordered (fouls, bends) and the least bad wins.
+                        _rank = (_crosses_fabric(_p, passable, _TOUCH_GAP), _bends_badly(_p))
+                        if _rank == (False, False):
                             _picked = _p
                             break
-                        if _picked is None:
-                            _picked = _p  # the first candidate is the fallback, so nothing is ever lost
+                        if _picked is None or _rank < _best_rank:
+                            _picked, _best_rank = _p, _rank
                     path = _picked if _picked is not None else path
                     # NO EXTRA STEP TOWARD THE DOOR. The path already begins at `door`, which is the
                     # house's own half-diagonal plus eight feet - i.e. just outside the wall. Pushing
@@ -2678,9 +2683,16 @@ def _serve_stragglers(s: Settlement, plan: SitePlan, hard: list[Poly], fabric: l
                     # continuing. The folded run is kept as the last resort - a house reached by an ugly
                     # path is still better served than one reached by none, and `farmhouses_reach_a_way`
                     # is the harsher verdict of the two.
-                    if _bends_badly(path):
-                        if _folded is None:
-                            _folded = path
+                    # ...AND A FOUL IS THE SAME KIND OF REASON AS A FOLD (feature 134 T50, 2026-08-29).
+                    # A tread drawn through a NEIGHBOUR'S garden is not a footpath either, and the overlap
+                    # matrix says so outright - cohort seed 18's path grazed one at 1.21 ft. Ranked the
+                    # same way as the two cuts are: an overlap is a rule broken, a fold is a shape
+                    # complaint, so (fouls, bends) orders them and the least bad is what gets drawn if no
+                    # way on the map yields a clean one.
+                    _bad = (_crosses_fabric(path, passable, _TOUCH_GAP), _bends_badly(path))
+                    if _bad != (False, False):
+                        if _folded is None or _bad < _folded_rank:
+                            _folded, _folded_rank = path, _bad
                         continue
                     _draw_web(s, path, 3, houses=[c])
                     added += 1
