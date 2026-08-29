@@ -141,6 +141,24 @@
             "command": "/diagram/scripts/source-block-hooks.sh pretool"
           }
         ]
+      },
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/diagram/scripts/pair-hooks.sh pretool"
+          }
+        ]
+      },
+      {
+        "matcher": "Agent",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/diagram/scripts/pair-hooks.sh pretool"
+          }
+        ]
       }
     ],
     "PostToolUse": [
@@ -167,6 +185,10 @@
             "type": "command",
             "command": "/diagram/scripts/agent-watch-hooks.sh stop",
             "timeout": 30
+          },
+          {
+            "type": "command",
+            "command": "/diagram/scripts/pair-hooks.sh stop"
           }
         ]
       }

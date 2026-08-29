@@ -27,6 +27,8 @@ Not `python3 tools/why_placed.py`. A package module run as a loose script puts `
 | Does using the generation cache ever change what a map looks like? | `cache_audit` |
 | I fixed one hamlet - does the fix generalize across a cohort, and what exactly collides? | `cohort_audit` |
 | I want to look closely at one spot on a rendered map, in manifest coordinates | `crop_map` |
+| I changed a polder's geometry - do parcels still cross a channel, what is the berm, what did it cost in acreage, are the outlines still hand-piled? MEASURE THIS BEFORE ROLLING A MAP (0.2 s against a 47 s roll) | `polder_probe` (`make polder-probe`) |
+| Does A overlap B on a finished map - a footprint on marsh, a parcel across its ditch, reed INK over a mound or open water? | `overlap_audit` (`make overlap-audit`) |
 | How long does this loop actually take, and where does the time go? | `timings` |
 | Does a paddy bund step sideways and carry on parallel to itself anywhere on this map? | `jogs` |
 | Rebuild the frozen negative-fixture corpus in `pool/regressions/` | `make_regressions` |

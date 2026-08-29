@@ -121,6 +121,10 @@ it is the tooling. With remote off, a paid run the tooling was about to start is
 |---|---|---|
 | `make quick` | lint, types, and every test that does not roll a map; stops at the first failure, failed-first (`--ff`) so a fix that did not take fails in seconds | **~33 s** |
 | `make sun-audit M=...` | the sun rules and the belt's page presence off the manifest - the numbers a record may quote | ~1 s |
+| `make polder-probe SEED=21` | the polder block ALONE with its geometry metrics - parcels across a channel, the berm, acreage, the organic numbers. The geometry loop's fast path: it builds through the same `fit_polder` the map does, so it cannot pass while the map fails | **0.2 s** (a map roll is ~47 s) |
+| `make overlap-audit M=...` | does A overlap B on a finished map, over RECORDS and over drawn INK (five families). Replaces the point-in-polygon script that got hand-written twelve times across feature 139 | ~2 s |
+| `make map GEN=... PROFILE=1` | the same roll, plus where its time went: per-stage timings, the total and the slowest stage | the roll + ~0 |
+| `make verify` | THE PAIRED RUN: starts the gate and prints the settlement-review to dispatch in the same turn. Neither half runs alone (`pair-hooks.sh`); a one-sided case takes `PAIR_OK="<reason>"` | the gate, with the review beside it |
 | `make new-check NAME= FILE= TEST=` | scaffold a gate check: segment stub with the next key, sorted fixture entry, test stub with builders imported | ~1 s |
 | `make reference` | one seed of the reference hamlet (Inashiro), alone - through the roll cache since feature 135: **1.7 s** when nothing the roll executes changed (it says HIT), ~37 s when something did; `GATE_NO_CACHE=1` forces the roll | **0.55 s HIT / ~37 s MISS** |
 | `make durations` | where the suite's time goes - run this when a target feels slow | ~35 s |
