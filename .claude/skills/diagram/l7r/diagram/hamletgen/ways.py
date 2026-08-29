@@ -1456,6 +1456,42 @@ def _sweep_debris(s: Settlement) -> int:
     return len(swept)
 
 
+def fabric_clearance(pts: Sequence[Pt], fabric: Sequence[Poly]) -> float:
+    """How near a run passes to the settlement's own fabric - infinity when there is none to pass.
+
+    Lifted out of `_touch_junctions` so the rewrite rule below can be asked with plain lists
+    (GM 2026-08-28 on testability); the inner one delegates, so there is ONE body."""
+    if len(pts) < 2 or not fabric:
+        return float("inf")
+    return min(seg_dist(v[0], v[1], a2, b2) for poly in fabric for v in poly for a2, b2 in zip(pts, pts[1:], strict=False))
+
+
+def may_write(old_pts: Sequence[Pt], new_pts: Sequence[Pt], width: float, fabric: Sequence[Poly]) -> bool:
+    """May this rewrite of a lane be committed? JUDGE THE RESULT, NOT JUST THE MOVE.
+
+    A TOUCH MAY NOT PUSH A LANE INTO THE FABRIC IT WAS DRAWN CLEAR OF (feature 134 T50). Every rung of
+    the junction pass tests the LINK it is about to draw and none looks at the lane that comes out - so
+    a link that is itself legal, spliced on by `_unjog`/`_unretrace` or by moving another lane's end
+    onto a node, can leave a tread nearer a garden than the router ever put it. Traced on cohort seed
+    18: footpaths drawn 5.2 ft clear of the nearest garden survived the smoother at 5.16 and came out
+    of the pass at 1.21 - `features_do_not_overlap`, lanes x gardens.
+
+    ...NOR PUT A BEND IN IT THAT FEET WOULD NEVER WEAR. Cohort seed 21's footpath was accepted with no
+    bend in it and came out turning 90 degrees and then 60 within 34 ft; `_smooth_web` runs afterwards
+    and cannot take the chord, because the steading the path was threading is still in the way, so the
+    fold ships.
+
+    BOTH RULES ARE "NO WORSE THAN IT WAS", not "good": a rewrite may leave a lane no nearer the fabric
+    than it already was, or than its own keep-out allows - whichever is the more forgiving - and no
+    worse bent than it already was. A lane already inside the bar is never made worse, but is not
+    required to fix itself either, because the pass that is moving it is not the pass that owns it.
+    """
+    bar = max(_TOUCH_GAP, float(width or 5.0) / 2.0 + 2.0)
+    if fabric_clearance(new_pts, fabric) < min(fabric_clearance(old_pts, fabric), bar) - 1e-9:
+        return False
+    return not (_bends_badly(new_pts) and not _bends_badly(old_pts))
+
+
 def _touch_junctions(s: Settlement, hard: list[Poly], walls: Sequence[Poly], water: list[tuple[Pt, Pt]], reach: float = _LANE_JOIN_FT, only_orphans: bool = False, final: bool = False) -> int:
     """The LAST pass over the web: every lane end that stands NEAR another way is extended to TOUCH it.
 
@@ -1484,23 +1520,13 @@ def _touch_junctions(s: Settlement, hard: list[Poly], walls: Sequence[Poly], wat
     _fab = [poly for poly in walls if len(poly) >= 3]
 
     def _clearance(pts: Sequence[Pt]) -> float:
-        if len(pts) < 2 or not _fab:
-            return float("inf")
-        return min(seg_dist(v[0], v[1], a2, b2) for poly in _fab for v in poly for a2, b2 in zip(pts, pts[1:], strict=False))
+        return fabric_clearance(pts, _fab)
 
     def _may_write(idx: int, new_pts: Sequence[Pt], lane_list: Sequence[Mapping[str, Any]]) -> bool:
+        """This lane's rewrite rule - see `may_write`, which holds the body."""
         _old = [(float(x), float(y)) for x, y in (lane_list[idx].get("pts") or [])]
-        _bar = max(_TOUCH_GAP, float(lane_list[idx].get("w") or 5.0) / 2.0 + 2.0)
-        if _clearance(new_pts) < min(_clearance(_old), _bar) - 1e-9:
-            return False
-        # ...NOR PUT A BEND IN IT THAT FEET WOULD NEVER WEAR. The link is tested for legality and the
-        # spliced RESULT is not, so an end extended onto a way it was already running alongside meets
-        # it at a right angle: cohort seed 21's footpath was accepted with no bend in it and came out
-        # of this pass turning 90 degrees and then 60 within 34 ft. `_smooth_web` runs afterwards and
-        # cannot take the chord - the steading the path was threading is still in the way - so the
-        # fold ships. Same rule as the clearance above: a rewrite may leave a lane no worse bent than
-        # it already was.
-        return not (_bends_badly(new_pts) and not _bends_badly(_old))
+        return may_write(_old, new_pts, float(lane_list[idx].get("w") or 5.0), _fab)
+        # (the two paragraphs that used to stand here are on `may_write`)
 
     closed = 0
     for _pass in range(3):  # a touch can bring another end into reach; converge

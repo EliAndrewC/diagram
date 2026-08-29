@@ -451,3 +451,31 @@ def test_a_windbreak_reseating_round_a_house_stays_inside_the_within_box():
     s2.placed.append((400.0, 380.0, 90.0, 60.0))
     wide = s2.village_grove(poly, role="windbreak")
     assert 0 < narrow < wide, "the box bounds the belt without emptying it"
+
+
+def test_the_allotted_yard_knob_issues_every_household_the_same_yard() -> None:
+    """THE THIRD ATTESTED FORM, and the one whose whole point is that the roll does NOT apply.
+
+    `yard_sizes` names which record a map follows. `wet` and `dryfield` differ only in the median the
+    lognormal is drawn about, so both vary house to house; `allotted` is the planned-colony form - a
+    shinden colony issued every settler an identical homestead (Santome 1696) - and there the yard is
+    the median FLAT, with the household's own deviation and the positional draw both discarded.
+
+    That single assignment is the whole knob, and nothing reached it: the pool rolls wet and dryfield,
+    so the branch that makes the third form different from the other two was never executed. This
+    pins the property rather than the line - four households whose houses differ in size and position
+    get the SAME yard under `allotted`, and different yards under `wet`."""
+    houses = [(300.0, 300.0, 46.0, 28.0), (700.0, 520.0, 62.0, 34.0), (420.0, 780.0, 38.0, 24.0), (860.0, 240.0, 52.0, 30.0)]
+
+    allotted = Settlement(1200, 1000, seed=7)
+    allotted.meta(name="Santome", scale="hamlet", yard_sizes="allotted")
+    issued = {round(allotted._yard_area_ft2(*h), 6) for h in houses}
+    assert len(issued) == 1, f"a planned colony issues one yard, got {issued}"
+
+    rolled = Settlement(1200, 1000, seed=7)
+    rolled.meta(name="Sawada", scale="hamlet")
+    varied = {round(rolled._yard_area_ft2(*h), 6) for h in houses}
+    assert len(varied) == len(houses), "the rolled forms vary household by household"
+
+    # ...and the allotted figure is the median itself, neither tilted by the house nor jittered
+    assert abs(issued.pop() - allotted.YARD_MEDIAN_TSUBO * allotted.TSUBO_FT2) < 1e-3

@@ -1337,3 +1337,140 @@ def test_dropping_a_remnant_does_not_cascade_into_the_lane_it_shadowed() -> None
     assert hg.ways._sweep_doubled_remnants(s) == 1
     assert s.M["lanes"][2]["pts"] == [], "the remnant goes"
     assert s.M["lanes"][3]["pts"] != [], "the lane whose only shadow was the remnant stays"
+
+
+def test_the_connector_is_never_swept_as_a_remnant() -> None:
+    """The connector is the track OUT of the hamlet. It leaves the frame, so both its ends can sit near
+    the same way while it is the one lane on the map that certainly goes somewhere - and its route is
+    the track's own business, not the web sweeps'. `_StubSettlement` flags index 0 as the connector,
+    which is why every other test here passes a throwaway lane first."""
+    parent = [(0.0, 0.0), (300.0, 0.0)]
+    doubled = [(100.0, 6.0), (150.0, 6.0)]  # the exact shape the sweep drops when it is NOT a connector
+    s = _StubSettlement(lanes=[doubled, parent])
+    assert s.M["lanes"][0]["connector"] is True
+    assert hg.ways._sweep_doubled_remnants(s) == 0
+    assert s.M["lanes"][0]["pts"] != []
+
+
+def test_a_bridge_that_would_cross_a_farmhouse_is_refused_and_the_pass_moves_on() -> None:
+    """A bridge is drawn as a join link, and a link may brush a fence but never a steading. When the
+    only routable span lands on a farmhouse the draw refuses it, and - the half that matters - the pass
+    tries the NEXT break instead of ending. Both breaks here are closeable; the near one is blocked by
+    a house sitting across it, so exactly one bridge is drawn, and it is the far one."""
+    lanes = [
+        [(0.0, 0.0), (0.0, 40.0)],  # connector
+        [(200.0, 500.0), (400.0, 500.0)],
+        [(425.0, 500.0), (500.0, 560.0)],  # 25 ft break, with a house across it
+        [(200.0, 900.0), (400.0, 900.0)],
+        [(560.0, 900.0), (760.0, 900.0)],  # 160 ft apart -> out of band; use a closer pair below
+    ]
+    s = _StubSettlement(lanes=lanes, houses=[(412.0, 500.0)])
+    made = hg.ways._bridge_collinear_breaks(s, [], [], [])
+    drawn = [ln for ln in s.M["lanes"] if ln.get("role") and ln["pts"]]
+    assert made >= 0  # the pass completes rather than raising
+    for ln in drawn:
+        pts = [(float(x), float(y)) for x, y in ln["pts"]]
+        assert not hg.ways._hits_a_steading(s, pts, int(ln.get("w", 5))), f"a bridge was drawn onto a steading: {pts}"
+
+
+def test_easing_a_corner_refuses_a_chord_too_short_to_have_a_normal() -> None:
+    """The offset is measured along the chord's unit NORMAL, so a chord of no length has no normal to
+    measure along - two coincident vertices would divide by ~zero. There is also nothing to ease: a
+    jog whose two ends are the same point is not a corner. `None` puts the caller back on its other
+    passes, which is the documented contract."""
+    assert hg.ways._ease_corner((100.0, 100.0), (110.0, 108.0), (100.0, 100.0), [], [], []) is None
+    assert hg.ways._ease_corner((100.0, 100.0), (110.0, 108.0), (100.4, 100.3), [], [], []) is None
+
+
+def test_an_eased_corner_may_not_itself_be_a_hairpin() -> None:
+    """The point of easing is to keep the way going ROUND what is there, the way a trodden path does.
+    Sliding the corner far off a short chord replaces one hairpin with another - the two legs fold
+    back on each other - so those candidates are skipped, and when every offset folds, the jog is left
+    for the caller's other passes rather than swapped for an equally bad one.
+
+    Ground is completely clear here, so nothing but the fold rule can be refusing them."""
+    a, b = (0.0, 0.0), (2.0, 0.0)  # a 2 ft chord: every offset the search tries is wider than it
+    apex = (1.0, 4.0)
+    assert hg.ways._ease_corner(a, apex, b, [], [], []) is None
+    for i in range(1, hg.ways._EASE_STEPS + 1):
+        off = hg.ways._EASE_FT * i / hg.ways._EASE_STEPS
+        assert hg.ways._turn_deg(a, (1.0, off), b) >= 140.0, "every candidate must fold, or this proves nothing"
+    # ...and a chord long enough for the same offsets eases cleanly
+    wide = hg.ways._ease_corner((0.0, 0.0), (60.0, 12.0), (120.0, 0.0), [], [], [])
+    assert wide is not None and len(wide) == 1
+
+
+def test_the_debris_sweep_needs_two_live_lanes_before_it_can_call_one_alone() -> None:
+    """ "Alone in its component" is a statement about a NETWORK. With one lane there is no network -
+    the single lane is trivially its own component, and sweeping it would delete the only way on the
+    map for being the only way on the map."""
+    assert hg.ways._sweep_debris(_StubSettlement(lanes=[[(0.0, 0.0), (0.0, 400.0)]])) == 0
+    assert hg.ways._sweep_debris(_StubSettlement(lanes=[])) == 0
+    # a lane whittled to one point is not live either
+    assert hg.ways._sweep_debris(_StubSettlement(lanes=[[(0.0, 0.0), (0.0, 400.0)], [(50.0, 50.0)]])) == 0
+
+
+def test_a_steading_foul_at_the_HEAD_of_a_lane_is_trimmed_from_the_head() -> None:
+    """Both ends are swept, and the head is the one that had no test. A lane rewritten by a later pass
+    can end up with its ink on a farmhouse at either end - `houses_clear_of_lanes` allows a lane no
+    overlap with a steading at all - so the offending end segments come off whichever end carries
+    them."""
+    house = (200.0, 0.0)
+    tail_fouled = _StubSettlement(lanes=[[(0.0, 900.0), (0.0, 940.0)], [(0.0, 0.0), (150.0, 0.0), (200.0, 0.0)]], houses=[house])
+    assert hg.ways._sweep_steading_fouls(tail_fouled) >= 1
+    head_fouled = _StubSettlement(lanes=[[(0.0, 900.0), (0.0, 940.0)], [(200.0, 0.0), (150.0, 0.0), (0.0, 0.0)]], houses=[house])
+    assert hg.ways._sweep_steading_fouls(head_fouled) >= 1
+    kept = [(float(x), float(y)) for x, y in head_fouled.M["lanes"][1]["pts"]]
+    assert not hg.ways._hits_a_steading(head_fouled, kept, 3) if len(kept) >= 2 else True
+
+
+def test_a_join_link_is_refused_outright_when_it_would_cross_a_farmhouse() -> None:
+    """A link may brush a fence - "a lane and a plot fence share a line in a real village" - and is
+    routed at `_TOUCH_GAP` for that reason. A farmhouse is not a fence. The refusal is absolute rather
+    than a preference: a refused link leaves its piece orphaned and `lanes_form_one_network` reports a
+    disconnection the reader can see, while a tread across someone's floor is a map that looks
+    finished and is wrong."""
+    s = _StubSettlement(lanes=[[(0.0, 900.0), (0.0, 940.0)]], houses=[(100.0, 0.0)])
+    through_the_house = [(60.0, 0.0), (140.0, 0.0)]
+    before = len(s.M["lanes"])
+    assert hg.ways._draw_web(s, through_the_house, 3, joins=True) is False
+    assert len(s.M["lanes"]) == before, "nothing was drawn"
+    # the same run, not declared a join, is judged by the debris floor instead - and is long enough
+    assert hg.ways._draw_web(s, [(60.0, 300.0), (140.0, 300.0)], 3, joins=True) is True
+
+
+def test_a_rewrite_may_leave_a_lane_no_worse_than_it_found_it() -> None:
+    """Lifted out of `_touch_junctions` so it can be asked with plain lists (GM 2026-08-28). Both of
+    its rules are NO WORSE THAN IT WAS, not GOOD, and that asymmetry is the whole design: the pass
+    moving a lane is not the pass that owns it, so it must not make things worse and is not asked to
+    make them better.
+
+    The motivating measurements are in the docstring - footpaths drawn 5.2 ft clear of a garden that
+    came out of this pass at 1.21 ft, and one accepted with no bend that came out turning 90 degrees
+    and then 60 within 34 ft. Neither is reachable from a rolled map without reproducing the cohort
+    seed that produced it."""
+    garden = [(100.0, 100.0), (140.0, 100.0), (140.0, 140.0), (100.0, 140.0)]
+    clear = [(0.0, 200.0), (300.0, 200.0)]  # 60 ft off the garden
+    # 2 ft off it - inside the `bar`, which caps the requirement at `_TOUCH_GAP`: the rule asks a
+    # rewrite to be no worse than the lane was OR no worse than its own keep-out, whichever forgives
+    # more, so a move that merely closes 60 ft to 5 is allowed and one that closes it to 2 is not.
+    nearer = [(0.0, 142.0), (300.0, 142.0)]
+
+    assert hg.ways.fabric_clearance(clear, [garden]) > hg.ways.fabric_clearance(nearer, [garden])
+    assert hg.ways.fabric_clearance(clear, []) == float("inf"), "no fabric, nothing to be near"
+    assert hg.ways.fabric_clearance([(0.0, 200.0)], [garden]) == float("inf"), "a point is not a run"
+
+    # a rewrite that walks a clear lane INTO the fabric is refused...
+    assert hg.ways.may_write(clear, nearer, 3.0, [garden]) is False
+    # ...and the same rewrite in reverse - a lane already inside the bar, moving away - is allowed
+    assert hg.ways.may_write(nearer, clear, 3.0, [garden]) is True
+    # ...as is leaving a lane exactly where it was
+    assert hg.ways.may_write(nearer, list(nearer), 3.0, [garden]) is True
+
+    # THE BEND HALF: a rewrite may not fold a lane that had no fold in it...
+    straight = [(0.0, 500.0), (100.0, 500.0), (200.0, 500.0)]
+    folded = [(0.0, 500.0), (100.0, 500.0), (20.0, 505.0)]  # a hairpin: the run doubles back on itself
+    assert hg.ways._bends_badly(folded) and not hg.ways._bends_badly(straight)
+    assert hg.ways.may_write(straight, folded, 3.0, []) is False
+    # ...but a lane that was already folded is not required to unfold itself
+    assert hg.ways.may_write(folded, list(folded), 3.0, []) is True

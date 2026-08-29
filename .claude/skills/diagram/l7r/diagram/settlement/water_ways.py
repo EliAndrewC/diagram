@@ -101,6 +101,48 @@ def _pull_back(pts: list[Pt], reaches: Any, step: float = 8.0, keep_frac: float 
     return best if best is not None else list(pts)
 
 
+def junction_floor(pts: list[Pt], lanes: Any, drop: Any, way_reach: float, me: int) -> float:
+    """How much of a lane may NOT be trimmed away, because another way ties into it.
+
+    AN END THAT CARRIES A JUNCTION IS NOT BLUNT - holding the network together is its own reason to
+    exist. `_pull_back` keeps the SHORTEST end that reaches something, so without this it happily
+    cuts past a tie point and orphans whatever was tied on. Measured on Mizuguchi: the trim cut 160 ft
+    off a lane, taking its junction with it, the orphan-healer then re-laid the same alignment as a
+    3 ft web path, and the street came out stroked 5 / 3 / 5 with a round-cap knuckle at the step - a
+    repair scar in open ground, which a review read at 2x as a lollipop knob mid-street.
+
+    Walking from the START, `keep` is the distance to the FURTHEST tie found, so everything up to the
+    last junction is protected and anything past it may go.
+
+    AND IT HAS TO BE A CROSSING, NOT A NEIGHBOR - the `_FRAY_DEG` rule again. Counting proximity alone
+    made every point of a near-parallel arm look like a tie, so the floor came out at the full length
+    and nothing could be trimmed at all. A CONTINUATION - two lanes meeting end to end at a shallow
+    angle - is deliberately NOT protected here, though it is a real tie: protecting it was tried and it
+    deadlocks against the fan rule on a map where the two tines of the fan are themselves a
+    continuation - the arm cannot be trimmed without cutting the street, and the fan cannot be cleared
+    without trimming the arm. The repair scar that motivated the attempt was a WIDTH problem, not a
+    trim problem, and is fixed where the width is chosen instead.
+
+    Lifted out of `trim_lane_stubs`'s closure so it can be asked with plain lists (GM 2026-08-28 on
+    testability); the inner one delegates here, so there is ONE body.
+    """
+    acc, keep = 0.0, 0.0
+    for n in range(len(pts) - 1):
+        acc += math.dist(pts[n], pts[n + 1])
+        q = pts[n + 1]
+        for k, o in enumerate(lanes):
+            if k == me or k in drop or len(o["pts"]) < 2:
+                continue
+            op = [(float(x), float(y)) for x, y in o["pts"]]
+            seg = min(zip(op, op[1:], strict=False), key=lambda ab, _q=q: seg_dist(_q[0], _q[1], ab[0], ab[1]))
+            if seg_dist(q[0], q[1], seg[0], seg[1]) > way_reach:
+                continue
+            if _angle_between((pts[n], q), seg) >= _FRAY_DEG:
+                keep = acc
+                break
+    return keep
+
+
 def fan_rival(lanes: Any, q: Pt, bearing: float, house: Pt, mine: float, me: int, fan_spread: float, fan_bearing: float) -> bool:
     """Is another lane's end already fanning to this house on this bearing? A second stub arriving beside the
     first, within `fan_spread` of it and within `fan_bearing` degrees of the same heading, is the same
@@ -665,42 +707,8 @@ class WaterWaysMixin:
                 return False
 
             def _junction_floor(_p: list[Pt], me: int = i) -> float:
-                """How much of this lane may NOT be trimmed away, because another way ties into it.
-
-                AN END THAT CARRIES A JUNCTION IS NOT BLUNT - holding the network together is its own
-                reason to exist. `_pull_back` keeps the SHORTEST end that reaches something, so
-                without this it happily cuts past a tie point and orphans whatever was tied on.
-                Measured on Mizuguchi: the trim cut 160 ft off a lane, taking its junction with it,
-                the orphan-healer then re-laid the same alignment as a 3 ft web path, and the street
-                came out stroked 5 / 3 / 5 with a round-cap knuckle at the step - a repair scar in
-                open ground, which a review read at 2x as a lollipop knob mid-street."""
-                _acc, _keep = 0.0, 0.0
-                for _n in range(len(_p) - 1):
-                    _acc += math.dist(_p[_n], _p[_n + 1])
-                    _q = _p[_n + 1]
-                    for _k, _o in enumerate(lanes):
-                        if _k == me or _k in _drop or len(_o["pts"]) < 2:
-                            continue
-                        _op = [(float(x), float(y)) for x, y in _o["pts"]]
-                        _seg = min(zip(_op, _op[1:], strict=False), key=lambda _ab: seg_dist(_q[0], _q[1], _ab[0], _ab[1]))
-                        if seg_dist(_q[0], _q[1], _seg[0], _seg[1]) > way_reach:
-                            continue
-                        # AND IT HAS TO BE A CROSSING, NOT A NEIGHBOR - the `_FRAY_DEG` rule again.
-                        # Counting proximity alone made every point of a near-parallel arm look like
-                        # a tie, so the floor came out at the full length and nothing could be
-                        # trimmed at all.
-                        #
-                        # A CONTINUATION - two lanes meeting end to end at a shallow angle - is
-                        # deliberately NOT protected here, though it is a real tie. Protecting it
-                        # was tried, and it deadlocks against the fan rule on a map where the two
-                        # tines of the fan are themselves a continuation: the arm cannot be trimmed
-                        # without cutting the street, and the fan cannot be cleared without trimming
-                        # the arm. The repair scar that motivated the attempt was a WIDTH problem,
-                        # not a trim problem, and is fixed where the width is chosen instead.
-                        if _angle_between((_p[_n], _q), _seg) >= _FRAY_DEG:
-                            _keep = _acc
-                            break
-                return _keep
+                """This lane's junction floor - see `junction_floor`, which holds the body."""
+                return junction_floor(_p, lanes, _drop, way_reach, me)
 
             for _ in range(2):  # each end in turn; a 2-point lane can lose at most one
                 if len(pts) >= 2 and not _reaches(pts[-1], run=(pts[-2], pts[-1])):

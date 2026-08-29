@@ -544,3 +544,25 @@ def test_a_notice_board_hemmed_on_every_side_still_gets_its_caption():
     seat = [frag for frag in s.toplabels if "notice board" in frag]
     assert len(seat) == 1, "the caption is drawn all the same"
     assert 'y="514"' in seat[0], "on the default seat below the board - the fallback, since nothing cleared"
+
+
+def test_the_board_can_be_sited_on_a_manifest_that_records_runs_but_no_lane_records() -> None:
+    """THE LAST-DITCH CANDIDATE SOURCE, and it exists for the frozen fixtures. `place_kosatsuba` reads
+    lane RECORDS to get each way's real width - a route carries its own width, and giving them all a
+    nominal 8 ft put the board `(8 - w) / 2` too far out. Six hand-built regression manifests carry
+    `lane` (singular) and no `lanes` at all, so there is no record to read a width from, and without
+    this branch those maps offer the siter not one candidate seat and it returns None.
+
+    The nominal 8 ft here is honest about being a guess: it is only reached when the manifest cannot
+    say, and `kosatsuba_by_the_road` still judges the result."""
+    s = Settlement(1400, 1000, seed=5)
+    s.meta(name="Fixture", scale="hamlet")
+    s.M["lane"] = [(200.0, 500.0), (1200.0, 500.0)]
+    s.M["lanes"] = []
+    s.M["houses"] = [{"x": x, "y": 430.0, "w": 46.0, "h": 28.0, "rot": 0.0} for x in (500.0, 620.0, 740.0, 860.0)]
+    spot = s.place_kosatsuba()
+    assert spot is not None, "a manifest with runs but no lane records must still seat a board"
+    assert s.M["kosatsuba"], "and it is recorded"
+    # ...it stands off the tread, on the verge of the one way there is
+    x, y = spot
+    assert 4.0 < abs(y - 500.0) < 60.0, f"the board should hug the verge, got {abs(y - 500.0):.1f} ft off"

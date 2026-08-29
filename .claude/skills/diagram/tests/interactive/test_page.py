@@ -443,3 +443,19 @@ def test_a_fill_only_shape_is_not_outlined_and_still_merges_where_it_overlaps() 
     assert _outlined("circle", {"fill": "#4F6E33", "stroke": "#3C5526"})
     over = '<circle cx="10" cy="10" r="6" fill="#4F6E33"/><circle cx="14" cy="10" r="6" fill="#4F6E33"/>'
     assert merge_primitives(over).count("<circle") == 0
+
+
+def test_an_element_with_no_extent_is_treated_as_touching_everything() -> None:
+    """`_hits` decides whether two drawn elements merge into one hover group. An extent of `None` means
+    the emitter recorded no geometry for that element, and the safe answer is YES: refusing to merge
+    would split one feature into two hover groups on the sheet, which the reader sees, while merging
+    slightly too eagerly costs nothing visible. Boxes and circles both go through here, and a circle
+    is tested AS a circle - two crowns whose boxes overlap at a corner do not actually touch."""
+    from l7r.diagram.interactive.page import _hits
+
+    assert _hits(None, (0.0, 0.0, 5.0)) is True
+    assert _hits((0.0, 0.0, 5.0), None) is True
+    assert _hits(None, None) is True
+    # circles: touching exactly at the rims counts, a hair further apart does not
+    assert _hits((0.0, 0.0, 5.0), (10.0, 0.0, 5.0)) is True
+    assert _hits((0.0, 0.0, 5.0), (10.1, 0.0, 5.0)) is False
