@@ -60,6 +60,27 @@ other values are under `wip/kuwabata-*`.
 
 ## Review log
 
+- **2026-08-29 settlement-review, DELTA after the merge onto main** (the map re-rolled under a
+  291-commit main): **needs-work, six errors**, four of which no gate check can see. Fixed here: the
+  marsh HIT polygon still covering the mulberry banks while the ink was clean (the record half of the
+  GM's own T54 complaint - 5.2% of the toe outline, 5 of 26 bank rings); the reed fringe at 48% of
+  this map's own bed density with one empty 30-degree sector; the connector's 3.1 ft splice nub.
+  Deferred with their measurements in `specs/150-kuwabata-dike-pond-hamlet/tasks.md` D1-D3: the back
+  lane severed by 25 ft at a woodpile, the windbreak sheltering 3 of 16 houses, the caption lapping a
+  garden. **What the author had got wrong**: the fringe had been called fixed on a TUFT COUNT, which
+  was never the thing that was wrong.
+
+- **2026-08-29 settlement-review, DELTA re-check of those three fixes**: all three verified
+  independently, and **three more caught**. The reservoir's shore now has reeds but no WET TINT - a
+  pond fringe can never carry it, because the tint's pond keep-out inflates the water by its own 28 ft
+  radius while the fringe is only 44 ft wide; see the open question below. `_clipped_to_open_ground`
+  contradicted its own docstring (it subtracted the dike BAND, not the filled block, and got the right
+  answer only because the largest-piece tie-break happened to pick the outside one, silently
+  discarding 65,325 sq ft) - now fixed by filling the ring, so the geometry does what the docstring
+  says. And the write-up's claim that the 22 ft overrun "went with" the nub was a shapely-intersection
+  artifact: the overrun is byte-identical in both rolls and is closed on the honest ground instead -
+  it runs to a real three-way node, so it is a route rather than a hook.
+
 - **2026-08-29: ACCEPTED by the GM** (feature 150 T99), after T50-T55 and four settlement-review
   passes. The map ships as the scripted dike-pond exemplar.
 
@@ -155,13 +176,18 @@ district's ground. Drawn at 1 ft/px.
 
 ## Known open
 
-- `scatter_audit` has no dike-pond mode. Re-measured by the review of 2026-08-29 after T55: 2,988
-  violations, of which 2,171 are `crown inside crop` (the archetype's OWN mulberry banks - the audit's
-  crop keep-out predates the archetype), 564 `blade inside marsh` (commons grass grading into the reeds,
-  which the doctrine admits over the same feather band), 133 `crown inside marsh` and 120 `crown inside
-  water` - of which 0 crown centers stand inside pond water or a channel band; every one is inside the
-  audit's pad only, and 67 are on the cut parcels because their banks are now correctly tighter. A clean
-  bill cannot be earned on this archetype until the audit knows it.
+- `scatter_audit` has no dike-pond mode. **Re-measured 2026-08-29 after the marsh clip** (the previous
+  figures in this paragraph were two rolls stale, which the re-check review caught - it is the second
+  time this paragraph has gone stale, so re-measure it whenever the map is re-rolled): **2,774
+  violations**, of which **2,155** are `crown inside crop` (the archetype's OWN mulberry banks - the
+  audit's crop keep-out predates the archetype), **573** `blade inside marsh` (commons grass grading
+  into the reeds, which the doctrine admits over the same feather band) and **46** `crown inside
+  water+cutbank`. `crown inside marsh` is now **0**, down from 133, and the water family fell from 120
+  to 46: both are a direct consequence of clipping the marsh record to the ground outside the dike.
+  Density beyond the water keep-out: 0-15 px = 399, 15-30 px = 372, 30-45 px = 70. Of the 46, zero
+  crown centers stand on a water-colored pixel - confirmed by a manifest-free pixel count over 3,716
+  crown bases - so they are inside the audit's pad only. A clean bill cannot be earned on this
+  archetype until the audit knows it.
 - PERFORMANCE, measured against the pre-T54 tree in a detached worktree: Kuwabata's gen was 13-17 s and
   is now 27-32 s (the machine's own noise is +/-20% on both). The cost is T54's marsh keep-out, which
   asks a per-scatter-point question of every mound, plus the face-following waterward strips, whose

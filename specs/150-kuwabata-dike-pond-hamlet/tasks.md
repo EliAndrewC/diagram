@@ -214,7 +214,11 @@ rather than a hook).
       The physical question it opens - a windbreak's extent relative to what it shelters - owes the
       research pass, a `source-reader` confirmation and a citation when it is taken up.
 
-**D3.A caption is seated with no regard for anything but lanes** - MEASURED: `labels[0]`
+**D3 (SINCE RESOLVED ITSELF ON THIS MAP - do not implement the sketch against today's Kuwabata).**
+The re-check review of 2026-08-29 found the re-rolled caption wrapped to two lines at rot -43.1, and
+its rotated quad now laps nothing: the 78.1 sq ft overlap into the garden at (2427, 620) is gone.
+The mechanism below is unchanged and will recur, so whoever takes this up needs a map that still
+shows it. **A caption is seated with no regard for anything but lanes** - MEASURED: `labels[0]`
       ("notice board") rotates to corners (2428.6, 613.5), (2465.9, 576.2), (2471.8, 582.1),
       (2434.5, 619.4); the first lies INSIDE the garden of the house at (2384.7, 590.1), and the box
       laps that garden by 12.3 x 13.0 ft and the persimmon at (2425, 593) by 5.1 x 18.0 ft.

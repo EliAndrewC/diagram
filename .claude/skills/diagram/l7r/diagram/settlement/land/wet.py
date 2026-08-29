@@ -60,7 +60,7 @@ if TYPE_CHECKING:
     from ..core import Settlement
 
 
-def _band_half_width(poly: Any, pond: Any) -> float:
+def _band_half_width(poly: Any, pond: Any, role: str) -> float:
     """Half-width of the ground a marsh outline actually leaves for reeds - `area / perimeter`.
 
     Measured on the GROUND, not the outline: a pond's reed fringe is recorded as a filled disc (the pond
@@ -73,8 +73,8 @@ def _band_half_width(poly: Any, pond: Any) -> float:
         return 0.0
     try:
         g = ShapelyPolygon(pts).buffer(0)
-        if pond:
-            g = g.difference(_ellipse(pond))
+        if pond and role == "pond_fringe":  # ONLY the role the paragraph above is about: a waterside bed that
+            g = g.difference(_ellipse(pond))  # happened to wrap the pond would otherwise be over-feathered too
     except ValueError, GEOSException:
         return 0.0
     if g.is_empty or g.length <= 0:
@@ -92,21 +92,27 @@ def _clipped_to_open_ground(poly: Any, dikes: Any) -> Any:
     """A waterside/toe marsh outline with the DIKED GROUND taken out of it (settlement-review 2026-08-29).
 
     A polder's wet wild lies OUTSIDE its perimeter dike; the outline the caller hands in is a generous
-    region that laps the dike and the ground it encloses. Subtracting the dike's own outline leaves the
-    marsh where the marsh is - and because the enclosed ground goes with it, every mulberry bank inside
-    the block goes too, which is the half of the GM's T54 complaint the scatter fix did not reach.
+    region that laps the dike and the ground it encloses. What is subtracted is the FILLED block - the
+    dike band's outer ring taken as a solid - so the enclosed ground goes with it and every mulberry bank
+    inside it goes too, which is the half of the GM's T54 complaint the scatter fix did not reach.
 
-    Returns the largest remaining piece's exterior. Records carry ONE ring with no holes, so a clip that
-    left a hole (a marsh entirely surrounding a dike) would have to drop it; that cannot arise here - the
-    dike meets the frame on the waterward flanks - and if it ever does, the largest piece is still marsh
-    and still true, just smaller. Falls back to the input whenever shapely returns nothing usable, so a
-    degenerate outline cannot lose a feature."""
+    THE FILLED RING, NOT THE BAND (settlement-review 2026-08-29). Subtracting `dk["outline"]` as given -
+    a ring 119,693 sq ft in area with no interior - left the enclosed ground standing and got the right
+    answer only because `max(parts, key=area)` happened to pick the outside piece: on Kuwabata the toe
+    came apart into 1,079,925 sq ft outside and 65,325 sq ft inside the block, and the second was thrown
+    away by a rule that was never checking where it was. Filling the ring makes the geometry do what this
+    docstring says, rather than the tie-break doing it by luck.
+
+    Returns the largest remaining piece's exterior. Records carry ONE ring, so several pieces cannot all
+    be kept; with the block filled, a second piece can only arise where a single `marsh()` call wraps the
+    block on two flanks and is cut in half by it, and each flank is its own call. Falls back to the input
+    whenever shapely returns nothing usable, so a degenerate outline cannot lose a feature."""
     rings = [list(dk["outline"]) for dk in dikes if len(dk.get("outline") or []) >= 3]
     if not rings:
         return poly
     try:
         keep = ShapelyPolygon([(float(a), float(b)) for a, b in poly]).buffer(0)
-        cut = unary_union([ShapelyPolygon([(float(a), float(b)) for a, b in r]).buffer(0) for r in rings])
+        cut = unary_union([ShapelyPolygon(ShapelyPolygon([(float(a), float(b)) for a, b in r]).buffer(0).exterior) for r in rings])
         out = keep.difference(cut)
     except ValueError, GEOSException:
         return poly
@@ -165,7 +171,7 @@ class WetGroundMixin:
         # 44%, and the reservoir read as a bare blue plate rather than a reeded shore. `area / perimeter` is
         # a band's half-width (a width-w ribbon of mean radius R: 2 pi R w / 4 pi R = w/2) and is large for
         # a blob, so the constant still governs everywhere it should; only a narrow outline is affected.
-        _half = _band_half_width(poly, self.M.get("pond"))
+        _half = _band_half_width(poly, self.M.get("pond"), role)
         feather = min(MARSH_FEATHER_BS * bs, _half) if _half > 0 else MARSH_FEATHER_BS * bs
         pond = self.M.get("pond")
         halo_rects, halo_circles = self._urban_keepouts((x0, y0, x1, y1))  # the urban-clearance halo (see _urban_keepouts): reeds no more belong in a dooryard than scrub does
