@@ -933,20 +933,42 @@ class HomesteadPartsMixin:
                     # of the windbreak fence", never left as a bare opening, because "when high-velocity
                     # air passes through a constriction, its velocity increases". So the gap is offered
                     # seats across its span and takes whichever the ground allows.
+                    # ...AND ACROSS THE BELT'S DEPTH, not only along the straight line between the two
+                    # clumps. `village_windbreak_is_continuous` walks COLUMNS of the belt's own span and
+                    # asks whether each has canopy; a belt that bows around a plot has columns whose
+                    # midpoint-between-neighbors lies outside its own polygon, so a fill that only tried
+                    # that line refused every seat and left the column bare - measured on Kuwabata, where
+                    # the run leaves the polygon after 14 of its 40 ft. So each fraction along the gap is
+                    # also tried at several depths across the band, which is where the belt actually is.
+                    # ...AT THE BELT'S OWN DEPTH FOR THAT COLUMN. The continuity check walks COLUMNS
+                    # across the wind and asks whether each carries canopy, so a fill has to answer in
+                    # the same terms: find where the belt's polygon actually lies at the bare column and
+                    # seat there. Offsetting from the straight chord between two clumps does not do it -
+                    # a belt that bows leaves that chord entirely, and measured on Kuwabata the polygon's
+                    # depth at the bare columns sits in a band the chord never reaches.
                     _took = False
-                    for _f in (0.5, 0.32, 0.68, 0.2, 0.8):
-                        _mx = _pa[0] + (_pb[0] - _pa[0]) * _f
-                        _my = _pa[1] + (_pb[1] - _pa[1]) * _f
-                        if not point_in_poly(_mx, _my, poly):
-                            continue
-                        if within is not None and (_mx + clump * 0.9 < within[0] or _mx - clump * 0.9 > within[2] or _my + clump * 0.9 < within[1] or _my - clump * 0.9 > within[3]):
-                            continue
-                        if _hard_blocked(_mx, _my) or _local_blocked(_mx, _my) or _lane_blocked(_mx, _my):
-                            continue
-                        seated.append((_mx, _my))
-                        clumps.append([round(_mx, 1), round(_my, 1)])
-                        _took = True
-                        break
+                    _perp = (-_wv[1], _wv[0])
+                    _pd = [(q[0] * _perp[0] + q[1] * _perp[1]) for q in poly]
+                    _d0, _d1 = min(_pd), max(_pd)
+                    for _f in (0.5, 0.34, 0.66, 0.22, 0.78):
+                        _col = (_pa[0] * _wv[0] + _pa[1] * _wv[1]) + ((_pb[0] * _wv[0] + _pb[1] * _wv[1]) - (_pa[0] * _wv[0] + _pa[1] * _wv[1])) * _f
+                        _inside = []
+                        for _k in range(33):
+                            _d = _d0 + (_d1 - _d0) * _k / 32
+                            _qx, _qy = _col * _wv[0] + _d * _perp[0], _col * _wv[1] + _d * _perp[1]
+                            if point_in_poly(_qx, _qy, poly):
+                                _inside.append((_qx, _qy))
+                        for _qx, _qy in _inside[len(_inside) // 2 :] + _inside[: len(_inside) // 2]:  # the band's middle outward
+                            if within is not None and (_qx + clump * 0.9 < within[0] or _qx - clump * 0.9 > within[2] or _qy + clump * 0.9 < within[1] or _qy - clump * 0.9 > within[3]):
+                                continue
+                            if _hard_blocked(_qx, _qy) or _local_blocked(_qx, _qy) or _lane_blocked(_qx, _qy):
+                                continue
+                            seated.append((_qx, _qy))
+                            clumps.append([round(_qx, 1), round(_qy, 1)])
+                            _took = True
+                            break
+                        if _took:
+                            break
                     if _took:
                         _added += 1
                 if not _added:

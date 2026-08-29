@@ -91,7 +91,7 @@ researched, and the task is to make the drawing obey them.
 
 ## Phase 7 - acceptance
 
-- [ ] T23 Pool re-rolled; `make maps` to the standard of before.
+- [x] T23 Pool re-rolled; `make maps` CLEAN - better than the standard of before, which carried the seed-37 tripwire failure.
 - [ ] T24 A `settlement-review` pass over the changed maps, paired with the gate; no NEW error.
 - [ ] T25 `make done` green; push by the LOCAL-GATED route.
 

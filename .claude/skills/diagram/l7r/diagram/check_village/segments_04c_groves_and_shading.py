@@ -62,6 +62,22 @@ from .common_03_capacity import _UNBOUND, _kept
 # The scatter records its real clumps, so test those, not the bounding poly. WHY: settlements.md 'Village windbreak'.
 
 
+def _column_in_belt(t: float, px: float, py: float, wx: float, wy: float, poly: list[tuple[float, float]]) -> bool:
+    """Does the belt's own footprint have any depth at this across-wind column?
+
+    The continuity walk projects onto a straight axis; a belt that bows around a plot has columns on
+    that axis where its polygon simply is not. Sampling the column along the WIND axis, across the
+    polygon's own extent, answers whether there is belt there to be holed."""
+    _c = [(q[0] * px + q[1] * py, q[0] * wx + q[1] * wy) for q in poly]
+    _d0, _d1 = min(q[1] for q in _c), max(q[1] for q in _c)
+    _n = 24
+    for _k in range(_n + 1):
+        _d = _d0 + (_d1 - _d0) * _k / _n
+        if point_in_poly(t * px + _d * wx, t * py + _d * wy, poly):
+            return True
+    return False
+
+
 def _seg_0285_073__cx_1(*, M: Any = _UNBOUND, cx: Any = _UNBOUND, cy: Any = _UNBOUND, g: Any = _UNBOUND, scale: Any = _UNBOUND) -> dict[str, Any]:
     """Gate segment 0285.073 (cx, cy, g, vg_clumps) - body verbatim from _seg_0285__wells_clear_of_shrine_and_torii (feature 024 per-check split; guards re-evaluated in the body, see split_oversized.py)."""
     if scale in ('town', 'village', 'hamlet') and scale in ('town', 'village', 'hamlet', 'city'):
@@ -326,12 +342,29 @@ def _seg_0613__village_windbreak_is_continuous(*, M: Any = _UNBOUND, check: Any 
             #
             # The ENDS are excluded by one clump radius at each side: a belt tapers where it stops,
             # and the outermost column of a diagonal belt legitimately carries one clump's worth.
+            # ...AND A COLUMN THE BELT DOES NOT OCCUPY IS NOT A HOLE IN IT (feature 152, GM ruling
+            # 2026-08-29: "we should just do whatever was historically true"). The research pass that
+            # ruling authorized found that neither literature describes a belt as a closed perimeter:
+            # a Chinese village's fengshui forest is a SYSTEM OF SEPARATE PATCHES with open ground
+            # between them by design, and Honda Seiroku's 1915 founding definition of `yashikirin` puts
+            # the Japanese farmstead grove on the west and north sides only, leaving the entrance side
+            # open. So the defect is a hole in the PLANTED RUN, and the absence of belt is not one -
+            # see settlements/vegetation.md, "A shelter belt is not a RING".
+            #
+            # This walk projects onto a straight across-wind axis, so on a belt that BOWS around a plot
+            # the chord between its outermost clumps crosses ground the belt's own footprint never
+            # covers. Measured on Kuwabata: the flagged 40 ft run leaves the belt polygon after 14 ft,
+            # and no amount of seating will fill ground the band does not occupy. Columns are therefore
+            # counted only where the belt's own polygon has depth.
+            _poly = [(float(_a), float(_b)) for _a, _b in (_g.get("poly") or [])]
             _lo, _hi = min(p[0] for p in _pr) + _r, max(p[0] for p in _pr) - _r
             _run = 0.0
             _t = _lo
             while _t <= _hi:
                 if any(abs(p[0] - _t) <= _r for p in _pr):
                     _run = 0.0
+                elif _poly and not _column_in_belt(_t, _px, _py, _wx, _wy, _poly):
+                    _run = 0.0  # the belt does not reach this column: its edge, not its hole
                 else:
                     _run += 10.0
                     if _run > _BELT_MAX_GAP_FT:
