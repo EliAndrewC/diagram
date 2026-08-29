@@ -1023,3 +1023,13 @@ def test_crosses_fabric_sees_a_corner_that_stands_beside_a_segment_without_cross
     beside = [(200.0, 3.0), (210.0, 3.0), (210.0, 13.0), (200.0, 13.0)]  # 3 px off the middle of the run
     assert _crosses_fabric(run, [beside], 8.0), "inside the gap, though nothing crosses and no vertex is near"
     assert not _crosses_fabric(run, [[(200.0, 60.0), (210.0, 60.0), (210.0, 70.0), (200.0, 70.0)]], 8.0)
+
+
+def test_crosses_fabric_sees_a_run_VERTEX_that_stands_inside_a_footprint() -> None:
+    """The other half of the both-shapes measure: a run whose own vertex is inside (or within the gap of)
+    a footprint whose vertices are all far from the run. Neither the crossing test nor the poly-vertex
+    test sees that one - only `edge_dist` at the run's own points does."""
+    yard = [(0.0, 0.0), (1000.0, 0.0), (1000.0, 1000.0), (0.0, 1000.0)]
+    inside_the_edge = [(5.0, 500.0), (5.0, 600.0)]  # deep inside the yard, 5 px off its west edge
+    assert _crosses_fabric(inside_the_edge, [yard], 8.0)
+    assert not _crosses_fabric([(500.0, 500.0), (500.0, 600.0)], [yard], 8.0), "well inside and far from every edge"

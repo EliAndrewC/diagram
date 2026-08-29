@@ -589,6 +589,16 @@ tooling:        ## run every `tooling` test (make/ci/pipeline, exhaustive) and r
 
 test-file:      ## run ONE test file, whole              FILE=tests/pipeline/test_gencache.py
 	@python3 -m pytest -n $(XDIST_WORKERS) --dist worksteal -q --no-cov $(FILE) && $(STATE) green-local test-file
+
+# WHICH LINES DOES THIS TEST ACTUALLY REACH? (feature 146, and it is an ITERATION-LOOP target rather than a
+# gate one - CLAUDE.md, "iterations are expensive in terms of wall clock time"). Writing a test for an
+# uncovered branch and then finding out from `make test-full` costs 10 minutes per answer, and the answer is
+# routinely "you covered the guard ABOVE the one you were aiming at" - measured on this feature: two full
+# runs spent discovering that `_in_blocked` had already refused the seat the byre and garden tests meant to
+# have refused one line further down. This asks the same question in about a second. Serial (-n0) on purpose:
+# xdist's coverage combine is the slow half, and one file does not need workers.
+cov-file:       ## which lines of MOD does ONE test file reach?   FILE=tests/settlement/test_houses.py MOD=l7r/diagram/settlement/houses.py
+	@python3 -m pytest -n0 -q --no-header -p no:cacheprovider --cov=$(MOD) --cov-report=term-missing $(FILE)
 # (worksteal, feature 135: two 50 s rollers landing on one worker under the default scheduler doubled a file's wall clock)
 
 # WHY EVERY CHECK FAILED ON THE REFERENCE MAP, in detail rather than by name.

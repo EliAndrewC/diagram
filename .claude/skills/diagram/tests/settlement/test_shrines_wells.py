@@ -378,7 +378,9 @@ def test_a_byre_is_refused_a_seat_on_the_paddy():
     s.meta(name="V", scale="hamlet", ftpx=1, toscale=True)
     s.field_polys.append([(100.0, 100.0), (400.0, 100.0), (400.0, 400.0), (100.0, 400.0)])
     h = {"x": 600, "y": 600, "w": 40, "h": 26}
-    assert not s._byre_clear_of_all_but(250, 250, 30, 20, h)
+    # 18 px OUT from the field edge: past `_in_blocked`'s own 14 px setback (which would otherwise
+    # answer first and leave this rule untested) and inside the byre's half-diagonal of 18.
+    assert not s._byre_clear_of_all_but(418, 250, 30, 20, h), "its corner would be over the bund"
     assert s._byre_clear_of_all_but(700, 700, 30, 20, h)
 
 

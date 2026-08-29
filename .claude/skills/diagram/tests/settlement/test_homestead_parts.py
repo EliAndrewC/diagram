@@ -430,5 +430,7 @@ def test_a_kitchen_garden_is_refused_a_seat_on_the_paddy():
     s = Settlement(1000, 1000, seed=1)
     s.meta(name="V", scale="hamlet", ftpx=1, toscale=True)
     s.field_polys.append([(100.0, 100.0), (400.0, 100.0), (400.0, 400.0), (100.0, 400.0)])
-    assert not s._garden_fits(250, 250, 22, 24, 600, 600, (600, 600, 30, 20)), "in the rice"
-    assert s._garden_fits(700, 700, 22, 24, 600, 600, (600, 600, 30, 20)), "and dry ground is fine"
+    # 18 px OUT from the field edge: past `_in_blocked`'s own 14 px setback, which answers first for
+    # anything nearer and would leave the garden's own rule (its half-diagonal plus 4) untested.
+    assert not s._garden_fits(418, 250, 22, 24, 900, 900, (900, 900, 30, 20)), "its corner laps the bund"
+    assert s._garden_fits(700, 700, 22, 24, 900, 900, (900, 900, 30, 20)), "and dry ground is fine"

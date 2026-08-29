@@ -10,7 +10,7 @@ import pytest
 from l7r.diagram import hamletgen as hg
 from l7r.diagram.settlement import Settlement
 
-from ._builders import a_plan
+from ._builders import SQUARE, a_plan
 
 
 @pytest.mark.parametrize(("households", "wells"), [(10, 2), (12, 2), (15, 2), (20, 3)])
@@ -166,9 +166,12 @@ def test_strip_blocked_sees_a_lane_that_crosses_the_strip_between_its_samples() 
 
     s = Settlement(1000, 1000, seed=1)
     s.meta(name="V", scale="hamlet", ftpx=1, toscale=True)
-    diagonal = [([(400.0, 400.0), (600.0, 600.0)], 1.0)]
-    assert _strip_blocked(s, 500.0, 500.0, 22.0, 16.0, 900.0, 900.0, [], [], None, diagonal)
-    assert not _strip_blocked(s, 200.0, 800.0, 22.0, 16.0, 900.0, 900.0, [], [], None, diagonal)
+    # The five samples are the four corners AND the center, so a tread through the middle is caught a
+    # line earlier. This one clips the strip between them: 2.2 px from the nearest sample, well past
+    # the tread's own half-width, and still straight through the strip.
+    clipping = [([(480.0, 505.0), (520.0, 485.0)], 1.0)]
+    assert _strip_blocked(s, 500.0, 500.0, 22.0, 16.0, 900.0, 900.0, [], [], None, clipping)
+    assert not _strip_blocked(s, 200.0, 800.0, 22.0, 16.0, 900.0, 900.0, [], [], None, clipping)
 
 
 def test_a_woodpile_stacks_against_the_kura_when_the_shed_is_not_on_the_north_side() -> None:
@@ -199,5 +202,25 @@ def test_a_linear_hamlet_strings_its_houses_along_the_connector() -> None:
         s = Settlement(1400, 1400, seed=3)
         s.meta(name="V", scale="hamlet", ftpx=1, toscale=True, households=15, down_deg=90, water_flow=90, nucleated=True)
         s.field_polys.append(list(plan.envelope))
+        # the connector has to BE there for the linear form to string anything along it - it is the one
+        # way on the map that predates the houses, which is the whole premise of the archetype
+        cx_, cy_ = float(plan.seat["cx"]), float(plan.seat["cy"])
+        s.M["lanes"] = [{"pts": [[cx_ - 400, cy_], [cx_ + 400, cy_]], "w": 6, "connector": True}]
         stage_homesteads(s, plan)
         assert len(s.M["houses"]) == 15, f"{form}: every household seated"
+
+    # ...and the frontage loop STOPS when the households run out rather than filling the whole
+    # connector: the same plan, with the ask cut to three, seats three and leaves the rest of the
+    # road bare. A row village is as long as its households, not as long as its road.
+    spec = hg.HamletSpec(name="Row", seed=3, households=10, down_deg=90.0, windward="N")
+    plan = hg.plan_site(spec)
+    plan.envelope = list(SQUARE)
+    plan.seat = hg.seat_cluster(plan)
+    plan.settlement_form = "linear"
+    s = Settlement(1400, 1400, seed=3)
+    s.meta(name="V", scale="hamlet", ftpx=1, toscale=True, households=10, down_deg=90, water_flow=90, nucleated=True)
+    s.field_polys.append(list(plan.envelope))
+    cx_, cy_ = float(plan.seat["cx"]), float(plan.seat["cy"])
+    s.M["lanes"] = [{"pts": [[cx_ - 620, cy_], [cx_ + 620, cy_]], "w": 6, "connector": True}]
+    stage_homesteads(s, plan)
+    assert len(s.M["houses"]) == 10

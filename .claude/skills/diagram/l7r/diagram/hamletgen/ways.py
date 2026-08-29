@@ -1593,8 +1593,8 @@ def _smooth_web(s: Settlement, hard: list[Poly], walls: Sequence[Poly], water: l
     # So every rewrite below goes through `_commit`: the web's piece count is taken before and after,
     # and a rewrite that adds a piece is refused and the lane left as it was. The bends check may
     # then fire on the kept hairpin - that is the honest verdict, and its own task (T04).
-    def _pieces() -> int:
-        return web_pieces(lanes)
+    # `_pieces()` stood here and lost its only caller when `_commit` moved out to `commit_lane`, which
+    # counts the pieces itself. Removed with it (feature 146).
 
     def _commit(m: int, new_pts: list[list[float]]) -> bool:
         return commit_lane(lanes, m, new_pts, hard, walls, water, s.reink_lane)
@@ -1891,9 +1891,9 @@ def _pull_back_to_service(run: Poly, segs: Sequence[tuple[Pt, Pt]], houses: Sequ
     # with the house clause in, Mizuguchi's tread stopped 85.5 ft from a house center - inside the
     # 90 ft bar, so nothing trimmed - and 164 ft past the lane it should have joined, which is
     # exactly the picture the review objected to: a track petering out in the grass.
-    def serves(q: Pt) -> bool:
-        return any(seg_dist(q[0], q[1], a, b) <= _LANE_JOIN_FT for a, b in segs)
-
+    # A second copy of the trim pass's `serves` predicate stood here with no callers at all - dead since
+    # this function stopped deciding whether an end reaches and started walking it to the closest
+    # approach instead. Removed (feature 146); the live one is in `_trim_blunt_ends` above.
     out = list(run)
     for _end in (0, -1):
         pts = out if _end == 0 else out[::-1]
