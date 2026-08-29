@@ -98,14 +98,14 @@ each is useful the moment it lands.
 
 ## Phase 5: User Story 4 - per-stage timings (P3)
 
-- [ ] T040 [US4] Time each stage in `hamletgen/driver.py` `build()` when `L7R_STAGE_PROFILE` is set; print the per-stage table, the total and the slowest stage. With the variable unset the loop is exactly today's.
-      given 2026-08-29T03:15Z | done - | elapsed - | runs: -
+- [x] T040 [US4] Time each stage in `hamletgen/driver.py` `build()` when `L7R_STAGE_PROFILE` is set; print the per-stage table, the total and the slowest stage. With the variable unset the loop is exactly today's.
+      given 2026-08-29T03:15Z | done 2026-08-29T04:45Z | elapsed ~15 min (US4 whole) | runs: 3 profiled rolls, 3 quick runs. First profile on Kuwabata: 33.7 s total, stage_hinterland 13.9 s (41%), stage_waterward 9.5 s (28%)
       research: procedure
-- [ ] T041 [US4] Plumb `PROFILE=1` through the skill Makefile's `map` and `hamlet` targets, and record at the point of change why an environment variable is legitimate here where feature 132 forbids one for switches (it changes what is PRINTED, never what is ROLLED).
-      given 2026-08-29T03:15Z | done - | elapsed - | runs: -
+- [x] T041 [US4] Plumb `PROFILE=1` through the skill Makefile's `map` and `hamlet` targets, and record at the point of change why an environment variable is legitimate here where feature 132 forbids one for switches (it changes what is PRINTED, never what is ROLLED).
+      given 2026-08-29T03:15Z | done 2026-08-29T04:45Z | elapsed ~15 min (US4 whole) | runs: 3 profiled rolls, 3 quick runs. First profile on Kuwabata: 33.7 s total, stage_hinterland 13.9 s (41%), stage_waterward 9.5 s (28%)
       research: procedure
-- [ ] T042 [US4] Test: the manifest of a rolled map is byte-identical with the flag on and off, and the table appears only when it is on.
-      given 2026-08-29T03:15Z | done - | elapsed - | runs: -
+- [x] T042 [US4] Test: the manifest of a rolled map is byte-identical with the flag on and off, and the table appears only when it is on.
+      given 2026-08-29T03:15Z | done 2026-08-29T04:45Z | elapsed ~15 min (US4 whole) | runs: 3 profiled rolls, 3 quick runs. First profile on Kuwabata: 33.7 s total, stage_hinterland 13.9 s (41%), stage_waterward 9.5 s (28%)
       research: procedure
 
 ## Phase 6: Polish and cross-cutting

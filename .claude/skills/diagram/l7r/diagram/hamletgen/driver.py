@@ -8,6 +8,8 @@ from __future__ import annotations
 import argparse
 import concurrent.futures
 import os
+import sys
+import time
 from collections.abc import Sequence
 from dataclasses import dataclass, field
 
@@ -68,6 +70,8 @@ from .ways import stage_seat, stage_track, stage_web
 # unrelated jobs: it SEATED the cluster (`plan.seat`, a hard dependency of `stage_homesteads`) and it
 # DREW the connector and spur. Because of the first, the stage could not simply be moved after the
 # houses - which is why feature 126 moved only the skeleton and left the other two where they were.
+STAGE_PROFILE_ENV = "L7R_STAGE_PROFILE"  # `make map ... PROFILE=1`: print where the roll spent its time (feature 147)
+
 STAGES = (
     stage_water_frame,
     stage_field,
@@ -150,8 +154,27 @@ def build(plan: SitePlan, avoid: Sequence[tuple[float, float]] = ()) -> Settleme
     s = Settlement(W=plan.W, H=plan.H, seed=plan.spec.seed)
     s._avoid_seats = list(avoid)  # type: ignore[attr-defined]
 
+    if not os.environ.get(STAGE_PROFILE_ENV):
+        for stage in STAGES:
+            stage(s, plan)
+        return s
+    # WHERE THE TIME WENT, in one roll (feature 147, US4). Finding the slow stage used to mean editing
+    # this loop by hand, rolling, reading, and reverting - done twice in one session before this existed,
+    # and the second time it found `stage_waterward` at 21.7 s of a 45 s gen. An environment variable is
+    # the channel because `make map` reaches the stages through `regen.py` and a frozen pool generator;
+    # feature 132 forbids a variable that changes what a map ROLLS, and this changes only what is
+    # PRINTED - `tests/hamletgen/test_driver.py` asserts the manifest is identical with it set and unset.
+    timings: list[tuple[str, float]] = []
     for stage in STAGES:
+        t0 = time.time()
         stage(s, plan)
+        timings.append((stage.__name__, time.time() - t0))
+    total = sum(d for _n, d in timings)
+    slowest = max(timings, key=lambda t: t[1])
+    print(f"\n\033[1mstage profile\033[0m {plan.spec.name} seed {plan.spec.seed}: {total:.1f}s total, slowest {slowest[0]} {slowest[1]:.1f}s", file=sys.stderr)
+    for name, dur in sorted(timings, key=lambda t: -t[1]):
+        if dur >= 0.05:
+            print(f"  {dur:6.2f}s  {100 * dur / total:4.1f}%  {name}", file=sys.stderr)
     return s
 
 

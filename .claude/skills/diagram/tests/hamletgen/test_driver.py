@@ -144,3 +144,38 @@ def test_cohort_derives_each_spec_and_can_be_forced_serial(monkeypatch) -> None:
     seen.clear()
     hg.cohort(2, first_seed=9, households=14, jobs=1)  # an explicit count overrides the ladder
     assert [s.households for s in seen] == [14, 14]
+
+
+# ---- feature 147 US4: the stage profile prints, and changes nothing -------------------------------
+def test_the_stage_profile_prints_only_when_asked_and_rolls_the_same_map(monkeypatch, capfd) -> None:
+    """`PROFILE=1` is an environment variable, which feature 132 forbids for a SWITCH - no variable may
+    change what a map rolls. This one changes what is PRINTED, and this is the test that says so: the same
+    stages run in the same order with it set and unset, and the settlement they build is identical."""
+    from l7r.diagram.hamletgen import driver
+
+    seen: list[str] = []
+
+    def stage_alpha(s, plan) -> None:  # noqa: ANN001 - a stand-in stage
+        seen.append("alpha")
+        s.M.setdefault("probe", []).append("alpha")
+
+    def stage_beta(s, plan) -> None:  # noqa: ANN001
+        seen.append("beta")
+        s.M.setdefault("probe", []).append("beta")
+
+    plan = hg.plan_site(hg.HamletSpec(name="Prof", seed=3, households=10))
+    monkeypatch.setattr(driver, "STAGES", (stage_alpha, stage_beta))
+
+    monkeypatch.delenv(driver.STAGE_PROFILE_ENV, raising=False)
+    quiet = driver.build(plan)
+    assert capfd.readouterr().err == "", "an unasked-for profile is noise in every roll"
+
+    seen.clear()
+    monkeypatch.setenv(driver.STAGE_PROFILE_ENV, "1")
+    loud = driver.build(plan)
+    err = capfd.readouterr().err
+    assert "stage profile" in err and "Prof seed 3" in err  # the header: the roll's total and its slowest stage
+    assert "stage_alpha" in err  # ...which is named
+    assert "stage_beta" not in err, "a stage under the 0.05 s floor stays out of the table - the point is the SLOW one"
+    assert seen == ["alpha", "beta"], "the stages run in the same order either way"
+    assert loud.M["probe"] == quiet.M["probe"] == ["alpha", "beta"]

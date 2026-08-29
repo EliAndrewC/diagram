@@ -261,7 +261,8 @@ _switch:
 	@git add dev/switches.json && git commit -q -m "chore: $(MSG) - $(REASON)" && printf '\ncommitted: %s - %s\n' "$(MSG)" "$(REASON)"
 
 # --- expensive: they generate ---------------------------------------------------------------
-map:            ## regenerate ONE gen and gate it            GEN=pool/hamlets/inashiro.gen.py
+map: export L7R_STAGE_PROFILE = $(if $(PROFILE),1,)
+map:            ## regenerate ONE gen and gate it   GEN=pool/hamlets/inashiro.gen.py [PROFILE=1: where the roll spent its time]
 	$(REF_FIRST)
 	$(RUN).pipeline.regen $(or $(GEN),pool/hamlets/inashiro.gen.py)
 	@$(MAKE) --no-print-directory pool-index-if-stale
@@ -275,7 +276,8 @@ tripwire:       ## the middle tier: reference map, then the tripwire seeds
 	$(SWEEP_OK)
 	$(RUN).tools.mapcheck $(if $(SCOPE),--scope $(SCOPE),)
 
-hamlet:         ## generate one hamlet from the CLI           ARGS="--name X --seed 4 ..."
+hamlet: export L7R_STAGE_PROFILE = $(if $(PROFILE),1,)
+hamlet:         ## generate one hamlet from the CLI   ARGS="--name X --seed 4 ..." [PROFILE=1]
 	$(REF_FIRST)
 	$(RUN).hamletgen $(ARGS)
 	@$(MAKE) --no-print-directory pool-index-if-stale
