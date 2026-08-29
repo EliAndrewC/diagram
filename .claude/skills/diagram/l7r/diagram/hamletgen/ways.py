@@ -22,6 +22,7 @@ from .consts import (
     FOOTPATH_FABRIC_GAP,
     LANE_CLEARANCE,
     MIN_WEB_GAP,
+    POLDER_ARCHETYPES,
     SPUR_SETBACK,
     TRACK_FABRIC_GAP,
     WEB_CLEARANCE,
@@ -962,7 +963,7 @@ def _bridge_collinear_breaks(s: Settlement, hard: list[Poly], walls: Sequence[Po
     A lane that stops and resumes 110 ft further on, 8 degrees off collinear, is not two arms - it is
     one street with a hole in the middle of the built-up frontage, and both its ends read as rounded
     caps dying in bare grass. `lanes_reach_something` passes them because it tests each END
-    independently: an end 83 ft from a house CENTRE is "fronting" it even when that is 55 ft from the
+    independently: an end 83 ft from a house CENTER is "fronting" it even when that is 55 ft from the
     wall, i.e. out past the dooryard.
 
     THE TEST IS WHETHER THE GAP IS WALKABLE, which is what makes this a defect rather than an
@@ -1272,6 +1273,14 @@ def _touch_junctions(s: Settlement, hard: list[Poly], walls: Sequence[Poly], wat
                 )
                 d, foot, k, _op = _best
                 _os_k = list(zip(_op, _op[1:], strict=False))
+                # NOT BACK ONTO ITSELF (feature 150, Kuwabata seed 21): a 30 ft lane whose two ends
+                # both stood near the same spot on a neighbor had its start touched there, and then
+                # its end touched to the same foot - a lane closed into a 28 ft loop, which
+                # `lanes_bend_like_paths` read as a hairpin and `_smooth_web` never saw (it ran
+                # first). A foot within a few feet of the lane's OTHER end is its own junction, not a
+                # new one; leave that end alone.
+                if math.dist(foot, new[-1 if end == 0 else 0]) <= 6.0:
+                    continue
                 if d <= 2.0 or d > reach:
                     continue
                 # AN END THAT ALREADY STANDS ON THE NETWORK IS A JUNCTION, NOT A FREE END (feature 137
@@ -1339,23 +1348,14 @@ def _touch_junctions(s: Settlement, hard: list[Poly], walls: Sequence[Poly], wat
                     if _cut_at is not None:
                         _run = _run[: _cut_at[0] + 1] + [_cut_at[1]]
                         _cand = list(reversed(_run)) if end == 0 else _run
-                if final and len(new) >= 3 and _zigzags(_cand):
-                    # A HAIRPIN AT THE DOOR (feature 150, Kuwabata seed 21): after the smoothing, a lane whose
-                    # last 13 ft turned down toward a farmhouse door was joined back UP to the way it had
-                    # just left - the sheet showed a hairpin the bend rule flags. Nothing smooths a final-pass
-                    # link, so it is repaired here: when the joined run would zigzag and the joining end is a
-                    # short spur (16 ft or less), the spur is dropped and the junction made from the vertex
-                    # before it. Only where today's link would already fail the gate - a clean join, and every
-                    # join on a map that passes, is laid exactly as before.
-                    _prev = new[1] if end == 0 else new[-2]
-                    if math.dist(q, _prev) <= 16.0:
-                        _foot2 = min((seg_closest(_prev[0], _prev[1], a, b) for a, b in _os_k), key=lambda z: math.dist(_prev, z))
-                        _d2 = math.dist(_prev, _foot2)
-                        if 2.0 < _d2 <= reach and _clear_touch(_prev, _foot2, hard, walls, water):
-                            _base = new[1:] if end == 0 else new[:-1]
-                            _cand2 = ([_foot2] + _base) if end == 0 else (_base + [_foot2])
-                            if not _zigzags(_cand2):
-                                _cand = _cand2
+                # A HAIRPIN AT THE DOOR, AND WHY THERE IS NO REPAIR HERE (feature 150, Kuwabata seed 21;
+                # re-measured 2026-08-29 against main). This clone carried a repair for a lane whose last
+                # 13 ft turned down toward a door and was then joined back UP to the way it had just left.
+                # Feature 137 landed `_unjog`/`_unretrace` on the link above, which takes that step out
+                # first, so the repair fired 0 times over Inashiro, the 5 tripwire seeds, the 48-seed
+                # cohort and Kuwabata - 54 maps, no fires - and its own fixture no longer reaches it. Two
+                # mechanisms for one defect; the splice is the one that runs, so the repair was removed
+                # rather than left as unreachable code. Restore it only with a map that hairpins here.
                 new = _cand
                 closed += 1
                 moved += 1
@@ -1684,26 +1684,6 @@ _SERVE_FT = 100.0  # ft: a way serves a house within this - `farmhouses_reach_a_
 # corner - clear of the footprint, inside the tread's ink (`features_do_not_overlap`, lanes vs
 # gardens, feature 133 T41). A junction link may still brush a fence; it may not paint on it.
 _TOUCH_GAP = 4.0
-
-
-def _zigzags(pts: Sequence[Pt]) -> bool:
-    """The gate's `lanes_bend_like_paths` measure, applied to a run before it is laid: a hairpin (a turn of
-    140 deg or more) or a zigzag (two turns of 50 deg or more within 40 ft of path)."""
-    turns: list[float] = []  # path position of each turn past 50 deg
-    run = 0.0
-    for k in range(1, len(pts) - 1):
-        run += math.dist(pts[k - 1], pts[k])
-        ax, ay = pts[k][0] - pts[k - 1][0], pts[k][1] - pts[k - 1][1]
-        bx, by = pts[k + 1][0] - pts[k][0], pts[k + 1][1] - pts[k][1]
-        la, lb = math.hypot(ax, ay), math.hypot(bx, by)
-        if la < 1e-9 or lb < 1e-9:
-            continue
-        turn = math.degrees(math.acos(max(-1.0, min(1.0, (ax * bx + ay * by) / (la * lb)))))
-        if turn >= 140.0:
-            return True
-        if turn >= 50.0:
-            turns.append(run)
-    return any(b - a <= 40.0 for a, b in zip(turns, turns[1:], strict=False))
 
 
 def _clear_touch(a: Pt, b: Pt, hard: list[Poly], walls: Sequence[Poly], water: list[tuple[Pt, Pt]], gap: float = _TOUCH_GAP) -> bool:
@@ -3230,7 +3210,7 @@ def stage_track(s: Settlement, plan: SitePlan) -> None:
     # worse than pointless: every near target crosses the ring canal, so `path_violations` scored the
     # nearby vertices badly and the least-bad candidate ran from the cluster straight ACROSS the
     # block to a vertex on the far side (`fields_clear_of_road` on 4 of 12 cardinal polders).
-    if plan.field_archetype == "polder_grid":
+    if plan.field_archetype in POLDER_ARCHETYPES:  # both polder archetypes (feature 150)
         s.M["meta"]["lane_skeleton"] = plan.lane_skeleton
         toe = s.toe_band()
         drawn_wet = [[(float(a), float(b)) for a, b in m["poly"]] for m in s.M.get("marshes", []) if m.get("role") != "defense" and m.get("poly")]

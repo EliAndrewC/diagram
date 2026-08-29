@@ -42,6 +42,12 @@ def hem_on_water(poly: Poly, wet: Sequence[tuple[Any, float]], pond: Any) -> boo
 
 
 class CombMixin:
+    # Held between `_comb_draw_source` and `draw_comb_field` (see both): the source pond's reed fringe
+    # and the no-build rect that must follow it. `Settlement.__init__` gives them their value; declared
+    # here too because a mixin cannot see the composed class's own `__init__` (pyrefly, feature 142).
+    _pending_fringe: Poly | None
+    _pending_block: Poly | None
+
     def comb_base_fill(self: Settlement, net: dict[str, Any], name: str, color: str = "", full_envelope: bool = False) -> None:  # type: ignore[misc]
         """Draw a FIELD FLOOR under a build_comb net's plots and record it (M['comb_floors'][name]),
         so the parchment BACKGROUND never shows through as bare 'white' at the canal junctions the

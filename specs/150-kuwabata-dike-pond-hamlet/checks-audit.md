@@ -14,12 +14,12 @@ cannot vary.
 
 ## What feature 150 actually added: one check, and it is 149's
 
-Measured off the check-name fixture between this clone's merge base and its head: **139 added no check
+Measured off the check-name fixture between this clone's merge base and its head: **150 added no check
 names at all.** Every dike-pond check it appeared to own (`mulberry_banks_clear_of_channels`,
 `dikepond_*`, `polder_parcels_are_organic`, `polder_waterward_flanks_wet`) predates it and was retired by
-main's own audit (features 141/145/146, 637 check names -> 153). What 139 did was MODIFY existing checks.
+main's own audit (features 141/145/146, 637 check names -> 153). What 150 did was MODIFY existing checks.
 
-| what 139 did | check | main's verdict | ours |
+| what 150 did | check | main's verdict | ours |
 |---|---|---|---|
 | read the DRAWN stroke, not only the record | `sluice_gates_on_water` | KEPT | re-apply: it corrects an existing check's fidelity, adds no new rule |
 | count the title placard as frame-setting | `crop_hugs_content` -> `map_frame_hugs_its_content` | KEPT (renamed) | re-apply: it prevents a FALSE POSITIVE against 149's title-pocket behavior |
@@ -32,7 +32,7 @@ main's own audit (features 141/145/146, 637 check names -> 153). What 139 did wa
 ## Applying the rule to the retired dike-pond family
 
 Each was written by an earlier feature and each fails the GM's test - which is why main was right to cut
-them, and why porting 139 must not bring them back:
+them, and why porting 150 must not bring them back:
 
 - **`mulberry_banks_clear_of_channels`** - a bank cannot lap a channel unless `build_polder` puts it
   there. One placer owns the bank's geometry; `tests/waterfields/` owns that placer. Systemic? No.
