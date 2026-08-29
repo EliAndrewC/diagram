@@ -133,20 +133,19 @@ def check(files: list[str], data_file: str = ".coverage", out: IO[str] = sys.std
     # THE VERDICT IS TAKEN PER LINE, NOT FROM THE PERCENTAGE, so a parked line can be excused without
     # excusing anything else in the same module (feature 147).
     unparked: list[str] = []
-    parked_seen: list[str] = []
     for f in files:
-        lines, reason = parked_for(f)
-        try:
-            missing = set(cov.analysis2(str(SKILL / f))[3])
-        except Exception:  # noqa: BLE001 - a file coverage cannot analyze is not a floor verdict
-            continue
-        if missing & lines:
-            parked_seen.append(f"{f} {sorted(missing & lines)} - {reason}")
+        lines, _reason = parked_for(f)
+        # No try/except: every file here came from the derived set and is a real module, so a failure to
+        # analyze one is a broken floor rather than a line to skip, and it should raise where it happens.
+        missing = set(cov.analysis2(str(SKILL / f))[3])
         if missing - lines:
             unparked.append(f"{f} {sorted(missing - lines)}")
 
-    for entry in parked_seen:
-        print(f"hamlet-floor: PARKED (feature 147, the GM's ruling - known wrong, owned, NOT to be re-derived): {entry}", file=out)
+    # ANNOUNCED WHETHER OR NOT THE LINE IS CURRENTLY MISSING. A park that only speaks up when the floor
+    # would have failed is silent exactly when someone could act on it, and the point of the list is that it
+    # SHRINKS. Printing it every run is the pressure.
+    for _f, (_lines, _why) in sorted(PARKED.items()):
+        print(f"hamlet-floor: PARKED (feature 147, the GM's ruling - known wrong, owned, NOT to be re-derived): {_f} {sorted(_lines)} - {_why}", file=out)
     if unparked:
         print(
             f"COVERAGE: a module on the HAMLET PATH is under 100% ({total:.2f}% combined) - {'; '.join(unparked)} "
