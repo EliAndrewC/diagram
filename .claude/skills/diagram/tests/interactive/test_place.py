@@ -14,6 +14,8 @@ settlement. The two properties worth stating up front, because most of the file 
 
 from __future__ import annotations
 
+import re
+
 import pytest
 
 from l7r.diagram.interactive.classes import CLASSES
@@ -138,9 +140,13 @@ def test_each_tier_explains_what_its_population_figure_COUNTS() -> None:
     # THE TOWN'S FIGURE TAKES IN THE COUNTY'S FARMERS, most of whom are deliberately not drawn - the
     # GM's ruling of 2026-08-29, and the reason the tier states 1,200 rather than its manifest's
     # depicted slice. The card must say so, or a reader counts the dwellings and finds them short.
-    assert "156 farming households work the fields around the town and belong to it" in KINDS["town"].population_note
+    assert "about 238 households" in KINDS["town"].population_note
+    assert "roughly two in three work the fields around the town" in KINDS["town"].population_note
     assert "only a sample of the farmhouses" in KINDS["town"].population_note
     assert "counts them under their own districts" in KINDS["town"].population_note, "the county's farmers are NOT in the figure"
+    # NO EXACT NON-FARM COUNT in the note: 82 is Ubame's, and Hoshizora draws 94, Hirameki 87
+    # (settlement-review round 9). The counted figure is the sentence above it and speaks for itself.
+    assert not re.search(r"\b(82|94|87)\b", KINDS["town"].population_note), "a per-map count in a tier-wide note"
     # THE CITY IS COUNTED THE OTHER WAY. Its note used to claim the figure "takes in the samurai
     # country estates", which all three cities' arithmetic denies - Minami's 520 dwellings x 5 IS its
     # declared 2,600, with no headroom for an undrawn household. The estate convention is the GM's and
