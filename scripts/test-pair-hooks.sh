@@ -44,6 +44,16 @@ check "a heredoc that TALKS about the gate passes" '[ "$(rc_pretool "$MENTION")"
 check "a quoted mention passes" '[ "$(rc_pretool "$QUOTED")" -eq 0 ]'
 check "another target passes" '[ "$(rc_pretool "$OTHER")" -eq 0 ]'
 
+# ...AND THE SAME RULE ON THE AGENT SIDE, which the guard's own author got wrong (2026-08-29). The
+# branch greped the whole tool_input for "settlement-review", so a `spec-fidelity` dispatch that merely
+# QUOTED the referent was blocked - a spec review, which owes no gate at all and cannot have one,
+# because there is no map. The subagent TYPE is the invocation; the prompt is prose.
+SPECREV=$(stdin_for Agent '{"subagent_type":"spec-fidelity","prompt":"the referent is the settlement-review pass of 2026-08-29; judge the spec"}')
+READER=$(stdin_for Agent '{"subagent_type":"source-reader","prompt":"read what a settlement-review cited"}')
+check "a spec-fidelity dispatch that MENTIONS a settlement-review passes" '[ "$(rc_pretool "$SPECREV")" -eq 0 ]'
+check "a source-reader that mentions one passes" '[ "$(rc_pretool "$READER")" -eq 0 ]'
+check "...while a real settlement-review is still refused" '[ "$(rc_pretool "$REVIEW")" -eq 2 ]'
+
 # --- 3. the pair: a pending review lets the gate through ------------------------------------------
 TU='{"type":"assistant","message":{"role":"assistant","stop_reason":"tool_use","content":[{"type":"tool_use","name":"Read","input":{}}]}}'
 TR='{"type":"user","message":{"role":"user","content":[{"type":"tool_result","content":"..."}]}}'

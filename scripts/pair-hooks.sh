@@ -151,6 +151,13 @@ pretool() {
   tool="$(printf '%s' "$payload" | python3 -c 'import json,sys; print(json.load(sys.stdin).get("tool_name",""))' 2>/dev/null)"
   cmd="$(printf '%s' "$payload" | python3 -c 'import json,sys; d=json.load(sys.stdin); print(d.get("tool_input",{}).get("command",""))' 2>/dev/null)"
   prompt="$(printf '%s' "$payload" | python3 -c 'import json,sys; d=json.load(sys.stdin); print(json.dumps(d.get("tool_input",{})))' 2>/dev/null)"
+  # THE AGENT TYPE, NOT THE PROMPT TEXT (2026-08-29). This branch used to grep the whole tool_input for
+  # "settlement-review", which is a MENTION test rather than an INVOCATION test - the rule this project
+  # states for every guard, broken by the guard's own author within a day of writing it. It fired on a
+  # `spec-fidelity` dispatch whose prompt merely QUOTED the referent, blocking a spec review that owes no
+  # gate at all because there is no map. The subagent type is the one field that says which agent is
+  # actually being launched; `scripts/test-pair-hooks.sh` now proves both directions.
+  atype="$(printf '%s' "$payload" | python3 -c 'import json,sys; d=json.load(sys.stdin); print(d.get("tool_input",{}).get("subagent_type",""))' 2>/dev/null)"
   dir="$(printf '%s' "$payload" | python3 -c '
 import json, pathlib, sys
 d = json.load(sys.stdin)
@@ -178,7 +185,7 @@ print(str(pathlib.Path(tp).parent / sid / "subagents") if tp and sid else "")
     exit 2
   fi
 
-  if [ "$tool" = "Agent" ] && printf '%s' "$prompt" | grep -q "settlement-review"; then
+  if [ "$tool" = "Agent" ] && { [ "$atype" = "settlement-review" ] || [ "$atype" = "building-review" ]; }; then
     case "$prompt" in *PAIR_OK*) log_bypass "named in the dispatch" "review alone"; exit 0;; esac
     if gate_running_or_fresh "$key"; then
       [ -n "$key" ] && write_pairing "$(pairing_file)" review_key "$key"
