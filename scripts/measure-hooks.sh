@@ -85,11 +85,16 @@ case "$MODE" in
           cat >&2 <<'MSG'
 BLOCKED: that is the third EXPENSIVE measurement in a row with no engine change and no commit between.
 
-`make test-full` costs 2.5-4 minutes; `make quick` costs ~4 seconds and `make test-file` 1-3. Measured on
-feature 146: 20 test-full runs, about an hour, almost all of it re-deriving a coverage worklist the session
-had already written down.
+`make test-full` costs 2.5-4 minutes; `make quick` costs ~4 seconds, `make test-file` 1-3, and
+`make cov-file` about the same. Measured on feature 146: 20 test-full runs, about an hour, almost all of it
+re-deriving a coverage worklist the session already had written down.
 
 Do this instead:
+ - ASKING WHICH LINES A TEST REACHES? That is what the third run is usually for, and this is the slowest way
+   to be told. `make cov-file FILE=tests/... MOD=l7r/diagram/...` answers it in seconds, for one test file,
+   and it is the only command here that answers it at all. It catches the commonest mistake this guard sees:
+   a test that covers the guard ABOVE the branch it was aimed at (measured twice on feature 146, at ten
+   minutes an answer).
  - You already know what the measurement will say. Work from the LIST, not from the run: write the whole
    batch of tests or fixes in one go.
  - Between edits run `make quick` (or `make test-file FILE=...`) - free, and it catches a broken test at once.
