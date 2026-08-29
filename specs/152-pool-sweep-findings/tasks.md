@@ -105,8 +105,19 @@ researched, and the task is to make the drawing obey them.
         sun-side share the heap inherits
       - [x] recorded and cited - `research/homesteads.md` "The muck heap that reads as the neighbor's"
         and `settlements/vegetation.md` "A belt runs off the page"
-- [ ] T24 A `settlement-review` pass over the changed maps, paired with the gate; no NEW error.
-- [ ] T25 `make done` green; push by the LOCAL-GATED route.
+- [x] T24 A `settlement-review` pass over the changed maps, paired with the gate. THREE rounds ran; the
+      third confirmed all five fixes independently and raised two errors, two questionables and four
+      nitpicks, all now closed:
+      - stale counts in three notes files -> `tools/notes_census.py`, `make notes-census` and
+        `tests/test_notes_census.py`, so a stated count is derived and a stale one fails the gate
+      - the heap-ownership figure measured on centers -> stated on FOOTPRINTS (6 of 66, not 4)
+      - the check's off-page planting -> the symmetric form implemented, rolled, and REFUSED on
+        evidence (it demands canopy on a homestead's yards and gardens); asymmetry recorded with why
+      - the review's own untried heap lever -> implemented, rolled, identical on all three metrics,
+        reverted and recorded as the third dead end
+      - the duplicated comment paragraph, Kuwabata's D2 bullet, the "entirely off-page" overclaim and
+        `_column_in_belt`'s 25-sample step (now 200) - all fixed
+- [x] T25 `make done` green; push by the LOCAL-GATED route.
 
 ## T13 and T14 closed by MEASUREMENT rather than by a change (2026-08-29)
 
