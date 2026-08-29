@@ -105,6 +105,18 @@ review_recorded() { # a review already recorded for this exact content
   [ "$(read_field "$(pairing_file)" review_key)" = "$key" ]
 }
 
+review_waived() { # the gate ran with PAIR_OK against this exact content, so no review is owed for it
+  # THE ESCAPE HAS TO CLEAR THE GUARD IT ESCAPES (2026-08-29, the second time this fired). The stop
+  # branch's own message says "record why it is not owed: PAIR_OK=... on your next gate run" - and
+  # before this, doing exactly that logged the bypass and changed nothing the stop branch reads, so the
+  # hook went on firing and told you to repeat the remedy you had just used. A guard whose documented
+  # remedy does not clear it teaches a session to ignore the guard, which is the failure this project's
+  # own rule about checking the escape FIRST exists to prevent.
+  local key="$1"
+  [ -n "$key" ] || return 1
+  [ "$(read_field "$(pairing_file)" waived_key)" = "$key" ]
+}
+
 gate_running_or_fresh() { # a gate started for this content, or a green record against it
   local key="$1"
   [ -n "$key" ] || return 1
@@ -168,7 +180,11 @@ print(str(pathlib.Path(tp).parent / sid / "subagents") if tp and sid else "")
   key="$(engine_key)"
 
   if [ "$tool" = "Bash" ] && is_gate_invocation "$cmd"; then
-    case "$cmd" in *PAIR_OK=*) log_bypass "$(printf '%s' "$cmd" | sed -n 's/.*PAIR_OK=["\x27]\{0,1\}\([^"\x27]*\).*/\1/p')" "gate alone"; exit 0;; esac
+    case "$cmd" in *PAIR_OK=*)
+      log_bypass "$(printf '%s' "$cmd" | sed -n 's/.*PAIR_OK=["\x27]\{0,1\}\([^"\x27]*\).*/\1/p')" "gate alone"
+      [ -n "$key" ] && write_pairing "$(pairing_file)" waived_key "$key"   # ...and the stop branch honors it
+      exit 0;;
+    esac
     if review_pending "$dir" || review_recorded "$key"; then
       [ -n "$key" ] && write_pairing "$(pairing_file)" gate_key "$key"
       exit 0
@@ -218,6 +234,7 @@ print(str(pathlib.Path(tp).parent / sid / "subagents") if tp and sid else "")
   [ "$(read_field "${CLONE_ROOT}/.git/verification-state.json" engine_key)" = "$key" ] || exit 0
   review_recorded "$key" && exit 0
   review_pending "$dir" && exit 0
+  review_waived "$key" && exit 0
   [ "$(read_field "$(pairing_file)" stop_told)" = "$key" ] && exit 0   # once per content, never a loop
   write_pairing "$(pairing_file)" stop_told "$key"
   printf 'PAIRING HALF-OPEN: the gate went green on this content and no settlement-review looked at it.\n' >&2

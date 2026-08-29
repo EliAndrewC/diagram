@@ -87,8 +87,19 @@ to - lists the agent correctly. The most likely cause is a race, since the check
 transcript the agent is still writing and the gate's reference sub-phase records a green key of its own
 partway through the run.
 
-Recorded rather than fixed, deliberately: the hook is self-limiting (`stop_told` fires once per engine
-key, never in a loop), the cost of a false fire is one line of noise, and a speculative edit to a guard
-that cannot be reproduced is the kind of change that breaks the guard for real. **If it fires a second
-time with a review demonstrably running, that is the second data point - fix it then**, and the place
-to look is `review_pending()`'s window rather than the key comparison, which was correct here.
+Recorded rather than fixed at first, deliberately: the hook is self-limiting (`stop_told` fires once
+per engine key, never in a loop), the cost of a false fire is one line of noise, and a speculative edit
+to a guard that cannot be reproduced is the kind of change that breaks the guard for real.
+
+**It fired a second time the same day, and the second one was reproducible and worse.** The gate had
+been run with `PAIR_OK` and a written reason - which is precisely what the hook's own message asks for,
+*"record why it is not owed: PAIR_OK=... on your next gate run"* - and the override logged its reason
+and then changed nothing the stop branch reads. So the guard told the session to do the thing the
+session had just done. That is the failure mode this project's own guard rules single out ("check the
+ESCAPE FIRST or the guard cannot be repaired through the channel it guards"), and it is worse than a
+false fire because it teaches a session that the documented remedy does not work.
+
+Fixed: a `PAIR_OK` gate run now records `waived_key` against that exact engine key, and `stop` honors
+it. Per content, so an engine edit after a waived gate is guarded again rather than riding the old
+waiver. `scripts/test-pair-hooks.sh` gained four cases (21 total), and deleting the one line that
+records the waiver turns two of them red.
