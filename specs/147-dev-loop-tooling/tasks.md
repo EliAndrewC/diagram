@@ -44,20 +44,20 @@ each is useful the moment it lands.
 **Goal**: ask "does A overlap B" with one command, over records and over drawn ink.
 **Independent test**: the questions asked by hand in T50-T55 answered on the shipped maps, no script written.
 
-- [ ] T020 [US2] Write `l7r/diagram/tools/overlap_audit.py` with the RECORD families from plan.md Design 2 - `footprints-water`, `footprints-marsh`, `parcels-channels` - each naming its offenders with family, coordinates and count. Entry-point guard as above.
-      given 2026-08-29T03:15Z | done - | elapsed - | runs: -
+- [x] T020 [US2] Write `l7r/diagram/tools/overlap_audit.py` with the RECORD families from plan.md Design 2 - `footprints-water`, `footprints-marsh`, `parcels-channels` - each naming its offenders with family, coordinates and count. Entry-point guard as above.
+      given 2026-08-29T03:15Z | done 2026-08-29T04:30Z | elapsed ~45 min (US2 whole) | runs: 9 audit runs over 5 maps, 6 quick runs, 2 map rolls
       research: procedure
-- [ ] T021 [US2] Add the INK families - `ink-mounds`, `ink-water` - reading the rendered SVG beside the manifest, by each mark's own reach (a tint circle by its radius, a blade by its length). This is the half the manifest cannot answer and half the questions asked in T54/T55 needed.
-      given 2026-08-29T03:15Z | done - | elapsed - | runs: -
+- [x] T021 [US2] Add the INK families - `ink-mounds`, `ink-water` - reading the rendered SVG beside the manifest, by each mark's own reach (a tint circle by its radius, a blade by its length). This is the half the manifest cannot answer and half the questions asked in T54/T55 needed.
+      given 2026-08-29T03:15Z | done 2026-08-29T04:30Z | elapsed ~45 min (US2 whole) | runs: 9 audit runs over 5 maps, 6 quick runs, 2 map rolls
       research: procedure
-- [ ] T022 [US2] A family whose inputs a map does not carry reports `unmeasured`, never `0`; the tool exits non-zero only on a real offender.
-      given 2026-08-29T03:15Z | done - | elapsed - | runs: -
+- [x] T022 [US2] A family whose inputs a map does not carry reports `unmeasured`, never `0`; the tool exits non-zero only on a real offender.
+      given 2026-08-29T03:15Z | done 2026-08-29T04:30Z | elapsed ~45 min (US2 whole) | runs: 9 audit runs over 5 maps, 6 quick runs, 2 map rolls
       research: procedure
-- [ ] T023 [US2] Add the `overlap-audit` target to the skill Makefile (`M=`, optional `FAMILIES=`).
-      given 2026-08-29T03:15Z | done - | elapsed - | runs: -
+- [x] T023 [US2] Add the `overlap-audit` target to the skill Makefile (`M=`, optional `FAMILIES=`).
+      given 2026-08-29T03:15Z | done 2026-08-29T04:30Z | elapsed ~45 min (US2 whole) | runs: 9 audit runs over 5 maps, 6 quick runs, 2 map rolls
       research: procedure
-- [ ] T024 [US2] `tests/tools/test_overlap_audit.py` - each family fires on a hand-built offending manifest/SVG and stays silent on a clean one; `unmeasured` is reported rather than a zero.
-      given 2026-08-29T03:15Z | done - | elapsed - | runs: -
+- [x] T024 [US2] `tests/tools/test_overlap_audit.py` - each family fires on a hand-built offending manifest/SVG and stays silent on a clean one; `unmeasured` is reported rather than a zero.
+      given 2026-08-29T03:15Z | done 2026-08-29T04:30Z | elapsed ~45 min (US2 whole) | runs: 9 audit runs over 5 maps, 6 quick runs, 2 map rolls
       research: procedure
 - [ ] T025 [US2] SC-002 demonstration: re-ask on the shipped maps every overlap question T54 and T55 answered by hand (marsh ink on a mound, a footprint on marsh, a parcel across a ditch, a mark over water) using only this tool, and record the commands in `quickstart.md`.
       given 2026-08-29T03:15Z | done - | elapsed - | runs: -

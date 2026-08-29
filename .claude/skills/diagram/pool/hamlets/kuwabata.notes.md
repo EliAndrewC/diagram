@@ -58,6 +58,15 @@ other values are under `wip/kuwabata-*`.
 
 ## Review log
 
+- 2026-08-29 feature 147's own `make overlap-audit`, on its first run against this map, found ink on
+  water: one reed tuft 4.6 px from the inlet hairline with three of its blades drawn across it. MECHANISM:
+  `draw_comb_field` drew the source pond's reed fringe BEFORE the field's channels were inked or recorded,
+  so the reed keep-out - which does keep off every drawn watercourse - had nothing to keep off. On a comb
+  map the source pond sits away from the channels and it never showed; on a polder the inlet hairline runs
+  straight through the reservoir's fringe. FIXED in the same work (constitution XIV): the ring is handed
+  back and scattered once the channels exist. The fringe's own rng is seeded from its bbox, so the scatter's
+  draw order is unchanged - only the keep-out now sees what it must avoid.
+
 - 2026-08-29 the GM's third review (T55): a vegetable ground lay across the irrigated channel beside
   it. Fixed in `build_polder`: a channel that crosses a parcel cuts it, and the rest of the outline is
   projected onto the band's edge (0 of 335 stroke samples remain inside a parcel). Two other approaches

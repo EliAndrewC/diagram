@@ -190,6 +190,10 @@ class CombMixin:
         # records its own connector channel with to={"kind":"field",...}), so no hairline is added -
         # its frm={"kind":"stream"} anchor would dangle with no stream at the sluice.
         self._comb_source_channel(net, name, source, sluice, pond_rec, join_head)
+        _fringe = getattr(self, "_pending_fringe", None)  # see `_comb_draw_source`: the reeds keep off water that exists
+        if _fringe:
+            self._pending_fringe = None
+            self.marsh(_fringe, role="pond_fringe")
         return cast("list[Pt]", net["envelope"])
 
     def _comb_draw_hem(self: Settlement, net: dict[str, Any]) -> None:  # type: ignore[misc]
@@ -292,10 +296,17 @@ class CombMixin:
             pcx, pcy, prx, pry = source["pond"]
             self.stream([(sluice[0], sluice[1]), (pcx, pcy)], frm={"kind": "offmap"}, to={"kind": "pond"}, width=6) if source.get("feeder") else None
             self.pond(pcx, pcy, prx, pry)
-            ring = [(pcx + (prx + 40) * math.cos(a), pcy + (pry + 40) * math.sin(a)) for a in [i * math.pi / 8 for i in range(16)]]
-            self.marsh(ring, role="pond_fringe")
+            # THE FRINGE WAITS FOR THE WATER (feature 147, found by `make overlap-audit` the day it was
+            # written). The reed scatter keeps off every drawn watercourse - but this ran BEFORE the field's
+            # channels were inked or recorded, so on a polder, whose inlet hairline runs straight through the
+            # reservoir's fringe, the keep-out had nothing to keep off: measured on Kuwabata, one tuft 4.6 px
+            # from the hairline with three of its blades drawn across the water. The ring is handed back and
+            # scattered once the channels exist. Its own rng is seeded from its bbox, so the scatter's draw
+            # order is unchanged - only the keep-out now sees what it is supposed to avoid.
+            fringe_ring = [(pcx + (prx + 40) * math.cos(a), pcy + (pry + 40) * math.sin(a)) for a in [i * math.pi / 8 for i in range(16)]]
             self.block_polys.append([(pcx - prx - 10, pcy - pry - 10), (pcx + prx + 10, pcy - pry - 10), (pcx + prx + 10, pcy + pry + 10), (pcx - prx - 10, pcy + pry + 10)])  # no build on the pond
             pond_rec = (pcx, pcy)
+            self._pending_fringe = fringe_ring  # drawn by `draw_comb_field` once every channel is recorded
         elif source.get("kind") == "stream" and source.get("stream"):
             # no "stream" polyline = an existing on-map stream already runs at the sluice (the town
             # pattern: the comb taps the map's stream via a weir); nothing extra is drawn, the
