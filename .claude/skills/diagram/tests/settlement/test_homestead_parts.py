@@ -88,27 +88,43 @@ def test_village_grove_keeps_the_windbreak_out_of_a_plots_west_sun_lane():
     assert lane_hit(copse), "a copse is the dooryard's own trees and is not held to the belt's lane"
 
 
-def test_village_grove_face_margin_drops_only_clumps_no_frame_could_show():
-    """GM 2026-08-26 (feature 133 T10): with `face_margin`, a windbreak clump whose whole crown lies
-    deeper than the belt's inner face + margin is never inked; everything the margin can show stays."""
-    poly = [(100, 300), (400, 300), (400, 600), (100, 600)]
-    full = _nuc_village()
-    full.M["houses"] = [{"x": 700, "y": 450, "w": 46, "h": 28}]
-    n_full = full.village_grove(poly, role="windbreak")
-    trimmed = _nuc_village()
-    trimmed.M["houses"] = [{"x": 700, "y": 450, "w": 46, "h": 28}]
-    n_trim = trimmed.village_grove(poly, role="windbreak", face_margin=48)
-    from l7r.diagram.settlement._knobs import windbreak_face
+def test_village_grove_keeps_every_clump_and_set_view_decides_which_are_on_the_page():
+    """The page decides, and it is only known at the crop (feature 152 T02).
 
-    g = trimmed.M["village_groves"][0]
-    _axis, _sign, inner = windbreak_face(g["clumps"], g["r"], trimmed.M["houses"])
-    assert (_axis, _sign) == (0, 1)
-    assert 0 < n_trim < n_full, "the deep side of a 300 px band is beyond any 48 px margin"
-    assert all(cx - inner >= -(48 + 2 * g["r"] * 0.9) for cx, _cy in g["clumps"]), "every kept clump can show ink inside face + margin"
-    # feature 137 T05 (2026-08-28): the trimmed clumps still STAND, off the page - recorded apart, so the
-    # continuity check sees the belt wrap a plot there while the page-bound checks read only the ink
-    assert len(g["clumps_offpage"]) == n_full - n_trim and all(cx - inner < -(48 + 2 * g["r"] * 0.9) for cx, _cy in g["clumps_offpage"])
-    assert inner == windbreak_face(full.M["village_groves"][0]["clumps"], 14.0, full.M["houses"])[2], "the trim never moves the face"
+    THIS TEST USED TO PIN THE OPPOSITE and was right to, until the thing it pinned turned out to be
+    wrong. `face_margin` trimmed at SEATING time against a stand-in for the page - the belt's own inner
+    face plus 48 ft - and this test asserted that a 300 px band's deep side is "beyond any 48 px
+    margin", which it is. What the test could not see is that the stand-in is only the page when the
+    BELT is what sets the frame's edge: let a field or a marsh hold the frame open wider and the proxy
+    under-estimates it and deletes canopy a reader can see. Measured over the pool against each map's
+    real `meta.view`, Kashikawa discarded 61 clumps of which ALL 61 were wholly inside the rendered
+    view, and it was one of three maps with farmhouses standing beyond their belt's ends.
+
+    So seating keeps everything the `within` window admits, and `set_view` - the first moment the page
+    exists - partitions the record. That is what this now tests."""
+    poly = [(100, 300), (400, 300), (400, 600), (100, 600)]
+    s = _nuc_village()
+    s.M["houses"] = [{"x": 700, "y": 450, "w": 46, "h": 28}]
+    n = s.village_grove(poly, role="windbreak", face_margin=48)
+    g = s.M["village_groves"][0]
+    assert n > 0 and len(g["clumps"]) == n, "seating keeps every clump the window admits"
+    assert g["clumps_offpage"] == [], "nothing is off the page until there IS a page"
+
+    # a crop that takes in the whole belt leaves every clump on it...
+    s.set_view(0.0, 0.0, 1000.0, 1000.0)
+    assert len(g["clumps"]) == n and g["clumps_offpage"] == []
+
+    # ...and one that cuts the band in half moves exactly the clumps it cuts off, and no others
+    s.set_view(0.0, 0.0, 260.0, 1000.0)
+    r = float(g["r"])
+    assert g["clumps"] and g["clumps_offpage"], "a crop through the band must split the record"
+    assert len(g["clumps"]) + len(g["clumps_offpage"]) == n, "no clump is lost by the partition"
+    assert all(cx - r < 260.0 for cx, _cy in g["clumps"]), "every drawn clump reaches the page"
+    assert all(cx - r >= 260.0 for cx, _cy in g["clumps_offpage"]), "every off-page clump is WHOLLY off it"
+
+    # the partition is a function of the view, not a one-way door: widening it brings them back
+    s.set_view(0.0, 0.0, 1000.0, 1000.0)
+    assert len(g["clumps"]) == n and g["clumps_offpage"] == []
 
 
 def test_grove_fits_rejects_a_belt_over_a_dry_strip():
