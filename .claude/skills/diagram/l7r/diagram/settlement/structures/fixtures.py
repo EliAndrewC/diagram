@@ -526,8 +526,22 @@ class PublicFixturesMixin:
         routes.extend(([(p[0], p[1]) for p in r["pts"]], 18.0) for r in (self.M.get("roads") or [])[1:])
         routes.extend(([(p[0], p[1]) for p in st["pts"]], float(st.get("w", 18))) for st in self.M.get("town_streets") or [] if st.get("main"))
         if not routes:
-            for _st in street_runs(self.M):  # every lane; `M["lane"]` is only the last one drawn
-                routes.append((_st, 8.0))
+            # A ROUTE CARRIES ITS OWN WIDTH, AND THIS BLOCK USED TO GIVE THEM ALL THE SAME ONE (feature
+            # 134 T50, 2026-08-29). `street_runs` returns EVERY drawn lane, and they were all added at a
+            # nominal 8 ft - so the seater measured the tread edge 4 ft from the centreline on a lane
+            # that is 3 or 5 ft wide, and placed the board `(8 - w) / 2` too far out while believing it
+            # had put it exactly on the verge. Gate seed 44's board landed at 12.5 ft from a 5 ft lane's
+            # centreline - which is 6 (the verge) + 4 (half of the imagined 8) + 2.5 (half the board),
+            # to the foot - and `kosatsuba_by_the_road` measures against 12.0 and refused it.
+            #
+            # It also quietly undid the rule the note below states. `_main` exists to keep the state's
+            # notice off a SERVICE lane, and this loop had already put every web lane into `routes`
+            # before that filter ran, so the filter decided nothing. The per-lane extend below covers
+            # exactly the same ways with their real widths, so this is now only the last-ditch case
+            # where the manifest has runs but no lane records to read a width from.
+            if not (self.M.get("lanes") or []):
+                for _st in street_runs(self.M):  # every lane; `M["lane"]` is only the last one drawn
+                    routes.append((_st, 8.0))
             # A SERVICE LANE IS NOT A PLACE TO POST THE STATE'S NOTICE. The fallback takes the whole
             # network when no way declares itself main, which a hamlet never does - so when the lane
             # web arrived it put ~1,000 ft of 3 ft footpaths into the candidate list on equal footing
