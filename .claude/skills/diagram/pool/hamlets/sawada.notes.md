@@ -489,3 +489,48 @@ plot is 6,706 sq ft, **4.9x the median basin and the largest of 776**, because e
 tests sharpness and none tests size; the windbreak trim got WORSE rather than better since its
 deferral (57 -> 85 px of bare strip, 5 of 19 houses now beyond the drawn belt); the copse draws inside
 the windbreak (13 of 17 clumps touching one); and `make jogs` exits RED here with nobody reading it.
+
+## 2026-08-29 - feature 152: the remnant sweep rewritten; the board's audience OPEN for the GM
+
+**FIXED - the 37.6 ft remnant (lane 6, leaving lane 11 and dying 11.4 ft from it).** The sweep written
+for it measured `1.5 * w` - 4.5 ft for a footpath - and this map's own 11.4 ft figure was quoted in its
+docstring three lines above the constant that rejected it. The reviewer named the pattern rather than
+just the bug: *"calibrating a general rule to the single case that was easiest to measure is the
+recurring defect here, not a coincidence"* - the third instance on this map's notes, after the 5 ft nub
+floor shipped for an 8.25 ft boot and the marsh clip's `.exterior` handing the disc back. The metric is
+gone; the test is now structural (both ends on one other way, and no farmhouse stranded at
+`farmhouses_reach_a_way`'s own 100 ft), which has no dial to leave set too low.
+
+**DEFERRED with its measurement - lane 10 doubles back on ITSELF** at (1464.4, 2057.7) -> (1613.7,
+2009.7) -> (1609.3, 2030.3): 156.8 ft out, a 119.9 degree turn, 21.1 ft back onto the way it left. At
+zoom an arrowhead driven into the lane. Under `lanes_bend_like_paths`'s 140 degree hairpin bar and over
+`_NUB_FT` (9), so nothing sees it. The obvious lever - a severity-coupled second nub band - was
+implemented and ROLLED: Inashiro failed `farmhouses_reach_a_way`, Kashikawa and Mizuguchi failed
+`features_do_not_overlap`, because `drop_end_nubs` deletes the INTERIOR vertex and the lane re-routes
+along what is left. At 9 ft that re-route is negligible, which is why the rule is safe; at 30 ft it
+drags the tread through whatever stood inside the elbow. **The nub floor is load-bearing, not merely
+low.** The mechanism, the pool census (three lanes on three maps) and the implementation sketch are
+recorded at the point of change in `hamletgen/ways.py`; the fix belongs in the junction pass, which
+measures its 40 ft overrun from the wrong end.
+
+**OPEN, FOR THE GM - the notice board stands where nobody passes, and this is a DOCTRINE question.**
+Measured on this roll: the board at **(1941.2, 2443.0)** has **7 of 19** dwellings within 250 ft and 5
+within 150. The busiest point on the whole web, at (1611.7, 2279.8) where lanes 5/11/6 meet, has
+**13 of 19** within 250. The board stands 9.0 ft off `lanes[1]`, an **81.7 ft spur one of whose ends is
+70 ft from any other way** - a cul-de-sac. `kosatsuba_by_the_road` is green; the siter is behaving
+correctly.
+
+The cause is the recorded main-way rule (GM 2026-08-02, from Ubame: *"it should be along the main road,
+in order to be more noticed"*), which admits any lane not flagged `web` - and this spur is not flagged
+`web`, so a stub competes on equal footing with the through lanes. Kashikawa's reviewer measured the
+same siter on that map as sitting on its own optimum (10 against a best available 9), so this is a
+priced trade-off whose price has risen on this roll, not a siting bug.
+
+**Why this is not fixed here.** Both reviewers converged on the same resolution and it is the project's
+own ladder: the record supports the kosatsuba standing at the village entrance, the crossroads, the
+bridgehead AND the headman's frontage - several of which are EDGE positions, which would vindicate the
+current seat. Where the record permits two forms, the rule is a KNOB rolled from the map's seed, never
+a session picking the reading it prefers. That needs a research pass with sources read and cited, which
+is a feature, not a line in someone else's delta. **Recommended as the next feature**; the alternative
+considered and declined was to exclude dead-end stubs from the main-way candidate set, which is a new
+siting rule invented mid-delta without the research the ladder requires.

@@ -453,3 +453,57 @@ from the nearest farmhouse, blunt-capped in open grazing, with `lanes_reach_some
 homestead fixture ring is stamped rather than composed (13 of 20 houses carry the row at dy -18 to -21
 ft, privies at bearing 31-41 degrees at 10 of 13); and the accepted-limitation entry in these notes
 names a byre clipped by the board caption that stands nowhere within 167 ft, in this manifest or main's.
+
+## 2026-08-29 - feature 152: the lane sweeps rewritten, and the 25 ft hole ACCEPTED as honest
+
+Two `settlement-review` passes on this map graded the previous round's fixes `needs-work` and were
+right on both counts: of the two lane defects, one fix was a no-op and the other could not reach its
+target. Both are fixed at the cause now, and the third finding is recorded here rather than fixed.
+
+**FIXED - the 44 ft doubled remnant (lane 11, running within 6.6 ft of lane 8 for its whole length).**
+The sweep written for it measured `1.5 * w` - 4.5 ft for a 3 ft footpath - against a 6.58 ft defect, so
+it dropped nothing on the map it was written for, and nothing on Sawada either, whose own 11.4 ft
+remnant was quoted in the sweep's docstring three lines above the constant that rejected it. The
+metric is gone. The test is now STRUCTURAL: a lane whose two ends both land on the same other way
+connects that way to itself, and unless dropping it would put a farmhouse beyond
+`farmhouses_reach_a_way`'s own 100 ft, it is ink for a journey nobody makes. A structural predicate
+has no dial to leave set too low, which is the point - Sawada's reviewer named
+*"calibrating a general rule to the single case that was easiest to measure"* as the recurring defect
+across three separate fixes on these maps, and a threshold was going to keep re-committing it.
+
+**ACCEPTED, NOT FIXED - the 24.95 ft hole between the caps at (2009.0, 2938.3) and (2000.9, 2914.7).**
+The pass that exists to close it, `_bridge_collinear_breaks`, had been silently excluding it for six
+days: `c0c724b2` (2026-08-23) wrote a tread-width candidate floor and a short-gap exemption from the
+collinearity test, `569136fc` reverted the code the same day as collateral in a five-change revert
+that does not name it, and **both comments survived**, so the function told every reader it handled
+short holes while the code required 30 ft. That is repaired - the floor and the exemption are
+restored narrowly, and three further defects the restoration exposed are fixed with it: the debris
+floor silently refused every bridge shorter than 30 ft (a bridge is a join link and is now drawn as
+one); a 10 ft routing lattice cannot represent a 25 ft gap; and the pass took the single smallest gap
+and RETURNED when it could not route it, so one honestly-interrupted break silenced every other break
+on the map.
+
+With all four repaired, this hole still does not close, and the measurement says it should not.
+`_route` returns **nothing at all** between these two caps - not "nothing short enough" - at BOTH the
+fabric clearance (7 ft) and the join clearance (4 ft), on a 3 ft lattice. The reason is on the sheet:
+**garden bed 0, at (1992, 2935), stands 2.81 ft off the straight line between the caps**, and nothing
+else is within 12 ft. So the ground between them carries a lane at no planning margin this engine is
+willing to use, and the function's own words apply - *"something is genuinely in the way; the
+interruption is honest"*.
+
+**What it costs, in observable terms**: at fit zoom the reader sees two rounded caps facing each other
+across ~25 px of bare grass in the middle of the built-up frontage. It is a LEGIBILITY cost only - the
+lane web remains a single connected component at a 6 ft ink tolerance, and every farmhouse is served.
+
+**Alternatives priced and declined**:
+- *Relax the directness budget* (currently `_PATH_DIRECTNESS` x 24.95 = 49.9 ft). Declined because it
+  buys nothing: there is no route at any length, so the budget is not what refuses this one.
+- *Route below the join clearance* - under 4 ft of planning margin. Declined: at a 3 ft tread that puts
+  drawn ink inside the garden bed, and `features_do_not_overlap` is right to refuse it. Trading a
+  visible gap for a tread through someone's vegetables is the worse map.
+- *Trim the two caps back so they stop reading as an interrupted way.* Declined: both arms front
+  farmhouses at their far ends, so the trim would strand service to buy tidiness.
+
+Decided by the session, on the measurement above, under the project's accepted-limitation rule; the
+GM has not been asked, because the record answers it. **Reopen only with a route that clears the
+garden bed** - not with a wider tolerance.

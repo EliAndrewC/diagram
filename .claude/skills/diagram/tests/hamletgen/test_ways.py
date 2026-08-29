@@ -1257,3 +1257,83 @@ def test_a_track_that_cannot_thread_the_cluster_takes_a_wider_berth() -> None:
     assert len(out) >= 2, "a track is always handed back - the caller has a lane to draw"
     fabric = [poly for poly, _owner, _kind in _homestead_polys(s)]
     assert _crosses_fabric(list(run), fabric, 16.0), "the straight line really is blocked"
+
+
+def test_bridge_closes_a_short_hole_the_bearing_test_would_have_refused() -> None:
+    """The restored `c0c724b2` floor. Over 150 ft, "one way with a hole" and "two arms that end near
+    each other" is a real distinction and the collinearity test draws it. Over 25 ft it is not - a
+    back lane following a curved margin breaks at 37 deg of aim-off and is still one lane - so the
+    test applies only from `_LANE_JOIN_FT` up, and a shorter hole is closed on proximity alone.
+
+    Kashikawa shipped 24.95 ft of bare grass between two rounded caps in the middle of its frontage
+    for six days because the floor was `_LANE_JOIN_FT` while the comment beside it said the floor was
+    a tread width. The two ends here aim 38.7 deg apart, so this fails the bearing test on purpose:
+    it pins the EXEMPTION, not merely the bridging."""
+    s = _StubSettlement(lanes=[[(0.0, 0.0), (0.0, 40.0)], [(200.0, 500.0), (400.0, 500.0)], [(425.0, 500.0), (500.0, 560.0)]])
+    assert hg.ways._aim_off((500.0, 560.0), (425.0, 500.0), (400.0, 500.0)) > hg.ways._BREAK_BEARING_DEG
+    assert hg.ways._bridge_collinear_breaks(s, [], [], []) == 1
+    assert len(s.M["lanes"]) == 4
+
+    # ...and two treads already touching have nothing between them to draw.
+    touching = _StubSettlement(lanes=[[(0.0, 0.0), (0.0, 40.0)], [(200.0, 500.0), (400.0, 500.0)], [(404.0, 500.0), (600.0, 500.0)]])
+    assert hg.ways._bridge_collinear_breaks(touching, [], [], []) == 0
+
+
+def test_shadowing_lane_asks_whether_a_lane_goes_anywhere() -> None:
+    """A structural yes-or-no, with no dial to leave set too low. Both ends on one way means the
+    lane connects that way to itself."""
+    parent = [(0.0, 0.0), (300.0, 0.0)]
+    assert hg.ways.shadowing_lane([(100.0, 6.6), (144.0, 6.6)], [parent], 30.0) == 0
+    assert hg.ways.shadowing_lane([(100.0, 0.0), (136.0, 11.4)], [parent], 30.0) == 0
+    # a lane that goes somewhere: one end on the parent, the other out in the fields
+    assert hg.ways.shadowing_lane([(100.0, 0.0), (100.0, 120.0)], [parent], 30.0) is None
+    assert hg.ways.shadowing_lane([(0.0, 0.0)], [parent], 30.0) is None  # nothing is a lane
+    assert hg.ways.shadowing_lane([(100.0, 6.6), (144.0, 6.6)], [[(0.0, 0.0)]], 30.0) is None  # nor is the other one
+
+
+def test_a_doubled_remnant_is_dropped_at_BOTH_recorded_distances() -> None:
+    """THE REGRESSION THIS PINS IS A NO-OP, NOT A CRASH. The first form of this sweep measured
+    `1.5 * w` - 4.5 ft for a footpath - and shipped against kashikawa's remnant at 6.58 ft and
+    sawada's at 11.4 ft, the second of which was written into its own docstring three lines above
+    the constant that rejected it. Both real figures are asserted here so no future threshold can
+    drift back under its own motivating cases."""
+    parent = [(0.0, 0.0), (300.0, 0.0)]
+    kashikawa = _StubSettlement(lanes=[[(0.0, 900.0), (0.0, 940.0)], parent, [(100.0, 6.6), (144.0, 6.6)]])
+    assert hg.ways._sweep_doubled_remnants(kashikawa) == 1
+    assert kashikawa.M["lanes"][2]["pts"] == []
+
+    sawada = _StubSettlement(lanes=[[(0.0, 900.0), (0.0, 940.0)], parent, [(100.0, 0.0), (136.0, 11.4)]])
+    assert hg.ways._sweep_doubled_remnants(sawada) == 1
+    assert sawada.M["lanes"][2]["pts"] == []
+
+    # a spur that goes somewhere keeps its ink, however close it starts
+    spur = _StubSettlement(lanes=[[(0.0, 900.0), (0.0, 940.0)], parent, [(100.0, 0.0), (100.0, 120.0)]])
+    assert hg.ways._sweep_doubled_remnants(spur) == 0
+
+
+def test_a_remnant_that_alone_reaches_a_farmhouse_is_kept() -> None:
+    """A visible remnant beats an unreached house: `farmhouses_reach_a_way` should be able to say
+    what it sees. This is the clause that makes the structural test safe to apply length-blind."""
+    parent = [(0.0, 0.0), (300.0, 0.0)]
+    remnant = [(100.0, 0.0), (130.0, 29.0)]
+    s = _StubSettlement(lanes=[[(0.0, 900.0), (0.0, 940.0)], parent, remnant], houses=[(135.0, 125.0)])
+    # THE FIGURE IS `farmhouses_reach_a_way`'s OWN, and getting it wrong is what stranded the
+    # reference hamlet: at `_LANE_JOIN_FT` this house is not even counted as served by the remnant.
+    assert hg.ways._reach((135.0, 125.0), parent) > hg.ways.WEB_REACH_FT, "the house is out of the parent's reach"
+    assert hg.ways._reach((135.0, 125.0), remnant) <= hg.ways.WEB_REACH_FT, "...but the remnant reaches it"
+    assert hg.ways._sweep_doubled_remnants(s) == 0
+    assert s.M["lanes"][2]["pts"] != []
+
+
+def test_dropping_a_remnant_does_not_cascade_into_the_lane_it_shadowed() -> None:
+    """`ways` is a snapshot. Emptying a lane in the manifest without emptying it here leaves a
+    corpse standing as a live shadow for every later index, so one honest drop takes a second,
+    legitimate lane with it - and the stranding clause clears the way, because it still sees the
+    dropped lane serving the house."""
+    parent = [(0.0, 0.0), (300.0, 0.0)]
+    shadowed = [(100.0, 6.0), (150.0, 6.0)]  # both ends 6 ft off the parent - a real remnant
+    beyond = [(100.0, 36.0), (150.0, 36.0)]  # 30 ft off the remnant, 36 ft off the parent
+    s = _StubSettlement(lanes=[[(0.0, 900.0), (0.0, 940.0)], parent, shadowed, beyond])
+    assert hg.ways._sweep_doubled_remnants(s) == 1
+    assert s.M["lanes"][2]["pts"] == [], "the remnant goes"
+    assert s.M["lanes"][3]["pts"] != [], "the lane whose only shadow was the remnant stays"
