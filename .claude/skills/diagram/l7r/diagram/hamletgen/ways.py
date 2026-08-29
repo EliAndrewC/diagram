@@ -830,7 +830,7 @@ def _route(start: Pt, goal: Pt, hard: list[Poly], walls: Sequence[Poly], water: 
     return _unjog(out, hard, walls, water)
 
 
-def _unjog(path: Poly, hard: list[Poly], walls: Sequence[Poly], water: list[tuple[Pt, Pt]]) -> Poly:
+def _unjog(path: Poly, hard: list[Poly], walls: Sequence[Poly], water: list[tuple[Pt, Pt]], gap: float | None = None) -> Poly:
     """Take the lattice's jogs out of a routed path where the chord clears at the JUNCTION margin.
 
     The string-pull above tests every shortcut at the margin the route was planned with, so a route
@@ -840,11 +840,12 @@ def _unjog(path: Poly, hard: list[Poly], walls: Sequence[Poly], water: list[tupl
     the lattice showing through, not the ground; a path that may brush a fence at a junction may
     brush it at a corner, so each such jog is replaced by its chord when `_clear_touch` allows it.
     The thresholds are the check's own, so this undoes exactly what the check would refuse."""
+    gap = _TOUCH_GAP if gap is None else gap  # the module constant is defined below this function
     out = list(path)
     k = 1
     while k < len(out) - 1:
         if _turn_deg(out[k - 1], out[k], out[k + 1]) >= 140.0:
-            if _clear_touch(out[k - 1], out[k + 1], hard, walls, water):
+            if _clear_touch(out[k - 1], out[k + 1], hard, walls, water, gap):
                 del out[k]
                 k = max(1, k - 1)
                 continue
@@ -854,7 +855,7 @@ def _unjog(path: Poly, hard: list[Poly], walls: Sequence[Poly], water: list[tupl
                 k = max(1, k - 1)
                 continue
         if k < len(out) - 2 and _turn_deg(out[k - 1], out[k], out[k + 1]) >= 50.0 and _turn_deg(out[k], out[k + 1], out[k + 2]) >= 50.0 and math.dist(out[k], out[k + 1]) <= 40.0:
-            if _clear_touch(out[k - 1], out[k + 2], hard, walls, water):
+            if _clear_touch(out[k - 1], out[k + 2], hard, walls, water, gap):
                 del out[k : k + 2]
                 k = max(1, k - 1)
                 continue
@@ -862,7 +863,7 @@ def _unjog(path: Poly, hard: list[Poly], walls: Sequence[Poly], water: list[tupl
             # 7 px lattice step round a garden corner survived because the straight chord over both turns
             # brushed the garden; one vertex at the step's midpoint keeps the corner and takes the zigzag out.
             knee = ((out[k][0] + out[k + 1][0]) / 2.0, (out[k][1] + out[k + 1][1]) / 2.0)
-            if _clear_touch(out[k - 1], knee, hard, walls, water) and _clear_touch(knee, out[k + 2], hard, walls, water):
+            if _clear_touch(out[k - 1], knee, hard, walls, water, gap) and _clear_touch(knee, out[k + 2], hard, walls, water, gap):
                 out[k : k + 2] = [knee]
                 k = max(1, k - 1)
                 continue
@@ -1816,6 +1817,13 @@ def _smooth_web(s: Settlement, hard: list[Poly], walls: Sequence[Poly], water: l
             out.append(pts[b])
             a = b
         pts = out
+        # A DEAD END, MEASURED (feature 134 T50, 2026-08-29): running `_unjog` over the finished lane
+        # here - the same three rungs (chord, knee, corner-off-apex) the router's own output gets - on
+        # the theory that a bend the string-pull cannot chord is exactly what that pass repairs. It
+        # changed the 24-seed cohort not at all (17/24 either way, the same four regressions), because
+        # on the seeds that motivated it every rung is blocked: cohort seed 16's fold has 29 ft of
+        # obstacle between the chord and the ground. Not kept - a shape change to every map on the
+        # tier has to buy something. The bends that remain want the router not to fold there at all.
         if [[round(x, 1), round(y, 1)] for x, y in pts] != ln["pts"] and _commit(i, [[round(x, 1), round(y, 1)] for x, y in pts]):
             changed += 1
     # 4. KNOTS: ends of different lanes that stand within `_KNOT_FT` of one another meet at ONE

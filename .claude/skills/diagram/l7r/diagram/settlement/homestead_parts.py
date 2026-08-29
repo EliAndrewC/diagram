@@ -451,8 +451,18 @@ class HomesteadPartsMixin:
             # house it shelters and a village copse threads between the dwellings, so the stand is filtered
             # tree-by-tree rather than pushed back as a whole: it THINS where it would cover a building and
             # keeps its shape everywhere else. Crown centers below are relative to (cx, cy); keep-outs absolute.
-            krect, kcirc = self._canopy_keepouts((cx - w / 2 - 9 * bs, cy - h / 2 - 9 * bs, cx + w / 2 + 9 * bs, cy + h / 2 + 9 * bs))
-            _near = self._crowns_near(cx - w / 2 - 9 * bs, cy - h / 2 - 9 * bs, cx + w / 2 + 9 * bs, cy + h / 2 + 9 * bs)  # the crowns of earlier clumps and stands (GM 2026-08-28)
+            # THE PREFILTER MUST REACH AS FAR AS A CROWN DOES (feature 134 T50, 2026-08-29). Both lists
+            # below are PREFILTERED to this box, and the pad was a flat `9 * bs` while a crown's own
+            # radius is `px(CANOPY_R_FT) * s * 1.15` with `s` as high as 1.7 - about 14.5 px on a hamlet.
+            # So a building standing 10-14 px outside the stand's box was not in `krect` at all, and
+            # `_crown_covers` then cleared a crown that plainly covered it: cohort seed 9's farmhouse at
+            # (1938, 2655) sat under a 14.4 ft crown from a copse whose box ended 10.7 px short of it,
+            # and `structures_clear_of_trees` read it correctly. A prefilter that prunes a candidate the
+            # test would have rejected is not an optimization, it is a silent wrong answer - the same
+            # rule this engine states for every other index ("the index prunes; it never decides").
+            _cpad = max(9.0 * bs, self.px(self.CANOPY_R_FT) * 1.7 * 1.15 + 1.0)
+            krect, kcirc = self._canopy_keepouts((cx - w / 2 - _cpad, cy - h / 2 - _cpad, cx + w / 2 + _cpad, cy + h / 2 + _cpad))
+            _near = self._crowns_near(cx - w / 2 - _cpad, cy - h / 2 - _cpad, cx + w / 2 + _cpad, cy + h / 2 + _cpad)  # the crowns of earlier clumps and stands (GM 2026-08-28)
             drawn: list[tuple[float, float, float]] = []
             g = [f'<g transform="translate({cx:.0f},{cy:.0f})">']
             # Draw back-to-front so the stand layers with depth. Each CROWN is one tree at real size (~5-6 m; a few
