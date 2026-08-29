@@ -37,23 +37,23 @@ three physical checkboxes (constitution v2.12.0; the reasoning is in the spec's 
 - [x] **T17** `research: rendering` - **the phase alone must move nothing at hamlet scale.**
       **Measured**: Inashiro and Kuwabata regenerate BYTE-IDENTICAL. That is what lets every caption
       that moves later in this feature be attributed to the seat rules.
-- [ ] **T18** `research: rendering` - route `paddy_field(label=...)` and `water_field(label=...)`
+- [x] **T18** `research: rendering` - route `paddy_field(label=...)` and `water_field(label=...)`
       through the phase. Both emit raw `<text>` via `add_label` + `_record_label` today, so they
       would draw outside it; both are dormant (no pool map passes `label=`). Found by the round-2
       spec review.
 
 ## Phase 2 - the caption that stands beside its board
 
-- [ ] **T20** `research: rendering` - the structural probe measures the caption's TRUE ROTATED QUAD
+- [x] **T20** `research: rendering` - the structural probe measures the caption's TRUE ROTATED QUAD
       (FR-008). Measured defect: at -28.1 degrees it inflates a 54 x 10 px caption to a 52 x 34 px
       box and refuses a seat the caption clears by 4.43 px.
-- [ ] **T21** `research: rendering` - the tilted ladder samples finely in BOTH axes, keeping its
+- [x] **T21** `research: rendering` - the tilted ladder samples finely in BOTH axes, keeping its
       reach (FR-007). The reach is load-bearing: five cohort seeds have no legal seat on the
       perpendicular line at all.
-- [ ] **T22** `research: rendering` - the seat ranking states the GM's rule (FR-006): among legal
+- [x] **T22** `research: rendering` - the seat ranking states the GM's rule (FR-006): among legal
       seats, least displacement ALONG the caption's baseline wins; the standoff across it breaks the
       tie.
-- [ ] **T23** `research: rendering` - regenerate Kuwabata and read the manifest. **Acceptance**: the
+- [x] **T23** `research: rendering` - regenerate Kuwabata and read the manifest. **Acceptance**: the
       board's center falls within the caption's own run, and the standoff stays inside the hug cap.
 - [x] **T24** `research: rendering` - the two WORKAROUND hand seats: removed, then REVERTED.
       Minami and Nagahara are FROZEN legacy exhibits (GM 2026-08-16, `dev/pool.md`): *"never
@@ -74,18 +74,21 @@ three physical checkboxes (constitution v2.12.0; the reasoning is in the spec's 
       regenerated (see T24).
 - [ ] **T31** `research: rendering` - read the LATERAL DISTRIBUTION the fixed placer produces across
       the pool and the cohort, and set `caption_stands_beside_its_referent`'s threshold from it with
-      a stated margin. The number is measured, never chosen in advance (plan D6).
-- [ ] **T32** `research: rendering` - the check itself (`make new-check`), scoped to the
+      a stated margin. The number is measured, never chosen in advance (plan D6). **Pool done**
+      (research R5: 0.63-2.22 px against bounds of 8.0-11.5, so 3.6x-18x of headroom, while the map
+      the GM complained about fails by 3.1x). The 48-seed cohort with the check active is the
+      remaining half.
+- [x] **T32** `research: rendering` - the check itself (`make new-check`), scoped to the
       notice-board caption family, with the "a board caption MUST record a referent" clause so a
       six-element record fails rather than skips. It must NOT read any placer-written "no legal
       seat" verdict - a check graded by the thing it grades is not a check.
-- [ ] **T33** `research: rendering` - freeze today's Kuwabata manifest into `pool/regressions/` as
+- [x] **T33** `research: rendering` - freeze today's Kuwabata manifest into `pool/regressions/` as
       the negative fixture and prove the check FIRES on it (delete the check, watch a test go red).
 
 ## Phase 4 - the record, and the review
 
-- [ ] **T40** `research: rendering` - the comments at each point of change, `dev/placement.md`'s
+- [x] **T40** `research: rendering` - the comments at each point of change, `dev/placement.md`'s
       DRAW ORDER map, `hamletgen/CLAUDE.md`'s stage table, `settlement/structures/CLAUDE.md`.
-- [ ] **T41** `research: rendering` - the pool notes for every map whose caption moved.
+- [x] **T41** `research: rendering` - the pool notes for every map whose caption moved.
 - [ ] **T42** `research: rendering` - `make verify`: the gate and the independent `settlement-review`
       together (feature 151), then the stop-work procedure.

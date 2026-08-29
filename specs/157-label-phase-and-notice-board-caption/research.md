@@ -159,3 +159,57 @@ intended effect, and those maps get a pool sweep and an independent review befor
 measured on this repository's own artifacts at commit `7aee251f` by the scripts recorded in the
 task list. (Constitution XII asks for sources behind research FINDINGS; a measurement of our own
 output is sourced by being reproducible, and the reproduction is the point.)
+
+## R5 - what the fixed placer actually produces, and where the check's bound came from
+
+Measured on the five scripted hamlets after the fix (`make maps`, whole tier, clean). `lat` is the
+displacement ALONG the caption's own baseline - the axis the GM's complaint is about - and `bound` is
+the rule's limit, the subject's own half-extent along that baseline plus `LABEL_MIN_AIR`:
+
+| map | lat, before | lat, after | subjHalf | bound | headroom |
+|---|---|---|---|---|---|
+| inashiro | 2.22 | **2.22** | 3.0 | 8.0 | 3.6x |
+| kashikawa | -1.53 | **-1.53** | 6.1 | 11.1 | 7.3x |
+| **kuwabata** | **-35.6** | **-1.02** | 6.5 | 11.5 | 11.3x |
+| mizuguchi | -0.63 | **-0.63** | 6.5 | 11.5 | 18x |
+| sawada | 1.55 | **1.55** | 5.9 | 10.9 | 7.0x |
+
+Only Kuwabata's caption moved materially; inashiro and mizuguchi were already seated centrally and
+their manifests are byte-unchanged. Kuwabata fails the bound by a factor of **3.1** before the fix and
+passes with 11x of headroom after it.
+
+**THE BOUND IS REUSED, NOT INVENTED, AND NOT FITTED.** `LABEL_MIN_AIR` (5.0 px) is the engine's own
+constant for the clear air that makes a caption read as "beside, but not touching". The rule it states
+is one sentence - *a caption may slide along its subject as far as the subject itself extends, plus the
+air it keeps across it* - and it is deliberately NOT tuned to the motivating map: fitting a general
+rule to the single case that was easiest to measure is this repository's recurring defect, named as
+such by a settlement-review three days ago (`sawada.notes.md`, the 4.5 ft remnant constant against an
+11.4 ft remnant, *"the third instance on this one map's notes"*).
+
+**The alternative that was priced and rejected** is in R3: the natural "the caption and its subject must
+OVERLAP along the baseline" does not catch the map the GM complained about, because the caption is four
+times the length of the plank it names.
+
+## R6 - the legacy pool is FROZEN, which reverses one of the spec review's prescriptions
+
+The round-1 spec review asked for two WORKAROUND hand seats to be removed so the corrected placer would
+seat them - Minami's `place_punishment_spot(label_xy=(1270, 1454))` and Nagahara's
+`kosatsuba(1492, 1341, rot=0, label_xy=(1530, 1329))`. Both were removed. Both removals were then
+REVERTED, and the reason is a GM ruling the reviewer had no way to know about.
+
+Minami and Nagahara are two of the 19 hand-authored maps the GM froze on 2026-08-16 (`dev/pool.md`,
+`migration-plan.md` section 2): *"never regenerated, never re-gated ... The fix for a frozen map that
+violates a post-freeze rule is CONVERSION, not retrofit - do not 'fix' a frozen map, and do not treat
+its rule violations as bugs."* `make maps` confirms it in the artifact - the tier sweep rolls five
+scripted hamlets and no legacy map at all - and `regen.py` prints `FROZEN` and skips.
+
+So the edit changes nothing any reader will ever see, while desynchronizing an exhibit's source from
+the manifest it shipped with. **Accepted**: Nagahara's city map keeps a notice-board caption 38.0 px
+along its own baseline from its board. **What it costs**: one frozen exhibit displays the defect this
+feature fixes. **The alternative priced**: converting Nagahara to scripted generation, which is a
+feature of its own and would land the corrected caption for free. **Who chose**: the GM, on 2026-08-16.
+
+The same ruling settles the eight referent-less board records the review flagged (`enokida`, `honda`,
+`yatsuda`, `tanada`, `hirameki`, `minami`, `nagahara`, `tango`): every one is a frozen exhibit, so the
+new check is scoped to `meta.generated_by` maps - which is not a dodge but the scoping every sibling
+caption check already uses.
