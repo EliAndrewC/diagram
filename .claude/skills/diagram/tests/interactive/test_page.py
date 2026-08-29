@@ -293,3 +293,66 @@ def test_research_sections_of_a_missing_file_are_empty_not_an_error() -> None:
     from l7r.diagram.interactive.sources import _sections
 
     assert _sections("research/no-such-file-at-all.md") == []
+
+
+# ---- feature 148: the merge gathers what is SEPARATED, without moving the picture ----------------
+
+
+def test_same_styled_primitives_merge_even_when_something_sits_between_them() -> None:
+    """The defect feature 148 exists for: `merge_primitives` took only CONSECUTIVE runs, and a map whose
+    glyphs interleave has almost none. Kuwabata's mulberry dike draws trunk, shadow and foliage per tree -
+    a mean run of 2.4 elements - so 2,975 circles carrying three styles collapsed to nothing."""
+    from l7r.diagram.interactive.page import merge_primitives
+
+    s = (
+        '<circle cx="10" cy="10" r="2" fill="#0a0"/>'
+        '<path d="M100 100 L110 110" stroke="#333"/>'  # in the way, and nowhere near the circles
+        '<circle cx="40" cy="40" r="2" fill="#0a0"/>'
+    )
+    out = merge_primitives(s)
+    assert out.count("<circle") == 0, out
+    assert out.count("<path") == 2, "the two circles became one path, and the intervening path is untouched"
+    assert 'fill="#0a0"' in out
+
+
+def test_a_primitive_is_not_moved_past_something_it_overlaps() -> None:
+    """FR-002. The reorder is only invisible where the extents do not touch - otherwise the thing in
+    between would change which of the two paints on top."""
+    from l7r.diagram.interactive.page import merge_primitives
+
+    s = (
+        '<circle cx="10" cy="10" r="5" fill="#0a0"/>'
+        '<path d="M8 8 L60 60" stroke="#333"/>'  # crosses BOTH circles
+        '<circle cx="40" cy="40" r="5" fill="#0a0"/>'
+    )
+    assert merge_primitives(s).count("<circle") == 2, "neither circle may jump the path it lies under"
+
+
+def test_a_translucent_shape_does_not_merge_with_one_it_overlaps() -> None:
+    """Two blobs at opacity 0.85 stack DARKER where they cross; the same two as subpaths of one path are
+    a single 0.85 fill and the crossing goes light. Measured on the reference hamlet before this guard
+    existed: the page differed from its own SVG on 14.5% of pixels."""
+    from l7r.diagram.interactive.page import merge_primitives
+
+    over = '<circle cx="10" cy="10" r="6" fill="#0a0" opacity="0.85"/><circle cx="14" cy="10" r="6" fill="#0a0" opacity="0.85"/>'
+    assert merge_primitives(over).count("<circle") == 2, "overlapping translucent shapes keep their own stacking"
+    apart = '<circle cx="10" cy="10" r="2" fill="#0a0" opacity="0.85"/><circle cx="90" cy="90" r="2" fill="#0a0" opacity="0.85"/>'
+    assert merge_primitives(apart).count("<circle") == 0, "translucent shapes that do NOT overlap still merge"
+
+
+def test_ellipses_merge_like_circles() -> None:
+    """FR-003 - the marsh is 1,656 ellipses on the reference hamlet and the pass ignored them entirely."""
+    from l7r.diagram.interactive.page import merge_primitives
+
+    s = '<ellipse cx="10" cy="10" rx="3" ry="2" fill="#456"/><ellipse cx="80" cy="80" rx="3" ry="2" fill="#456"/>'
+    out = merge_primitives(s)
+    assert out.count("<ellipse") == 0 and out.count("<path") == 1, out
+    assert "a3,2 " in out, "an ellipse becomes two elliptical arcs, not a circle's"
+
+
+def test_an_unreadable_extent_blocks_the_reorder_rather_than_risking_it() -> None:
+    """An element whose box cannot be computed counts as being in the way. Too careful, never wrong."""
+    from l7r.diagram.interactive.page import merge_primitives
+
+    s = '<circle cx="10" cy="10" r="2" fill="#0a0"/><path d="M"/><circle cx="90" cy="90" r="2" fill="#0a0"/>'
+    assert merge_primitives(s).count("<circle") == 2

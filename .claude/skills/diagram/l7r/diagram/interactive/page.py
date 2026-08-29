@@ -45,6 +45,69 @@ _LINE = re.compile(r'<line ((?:[a-z0-9-]+="[^"]*"\s*)+)/>')
 _CIRCLE = re.compile(r'<circle ((?:[a-z0-9-]+="[^"]*"\s*)+)/>')
 _ATTR = re.compile(r'([a-z0-9-]+)="([^"]*)"')
 _RUN = re.compile(r"(?:<(?:line|circle) (?:[a-z0-9-]+=\"[^\"]*\"\s*)+/>){2,}")
+#: Every element the merge has to reason about: the three it can MERGE, and the rest, which it only has
+#: to locate well enough to know whether something may be moved past them.
+_ELEM = re.compile(r'<(line|circle|ellipse|path|polygon|polyline|rect)\s((?:[a-z0-9-]+="[^"]*"\s*)+)/?>')
+_NUM = re.compile(r"-?\d+(?:\.\d+)?")
+#: Coordinates, per tag - everything else is the STYLE, and two elements sharing a style draw the same
+#: ink in either order, which is what makes reordering thinkable at all.
+_COORDS: dict[str, tuple[str, ...]] = {
+    "line": ("x1", "y1", "x2", "y2"),
+    "circle": ("cx", "cy", "r"),
+    "ellipse": ("cx", "cy", "rx", "ry"),
+}
+#: How many skipped extents one bucket will hold before it gives up and starts a new run. A bound on the
+#: work, not a rule about the map: past this the bucket is almost certainly blocked anyway.
+_SKIP_CAP = 400
+
+
+def _extent(tag: str, at: dict[str, str], raw: str) -> tuple[float, float, float, float] | None:
+    """The box this element paints inside, or None when that cannot be known cheaply.
+
+    A SUPERSET IS SAFE AND AN UNDERSET IS NOT. For a path the box is taken over every number in `d`,
+    which for a curve is its control points - always a superset of the curve itself, so the overlap test
+    below can only ever be too careful. None means "assume it is in the way"."""
+    try:
+        if tag == "line":
+            xs = (float(at["x1"]), float(at["x2"]))
+            ys = (float(at["y1"]), float(at["y2"]))
+        elif tag == "circle":
+            cx, cy, r = float(at["cx"]), float(at["cy"]), float(at["r"])
+            xs, ys = (cx - r, cx + r), (cy - r, cy + r)
+        elif tag == "ellipse":
+            cx, cy, rx, ry = float(at["cx"]), float(at["cy"]), float(at["rx"]), float(at["ry"])
+            xs, ys = (cx - rx, cx + rx), (cy - ry, cy + ry)
+        elif tag == "rect":
+            x, y, w, h = float(at["x"]), float(at["y"]), float(at["width"]), float(at["height"])
+            xs, ys = (x, x + w), (y, y + h)
+        else:  # path, polygon, polyline - every number in the geometry attribute
+            nums = [float(v) for v in _NUM.findall(at.get("d") or at.get("points") or "")]
+            if len(nums) < 4:
+                return None
+            xs, ys = tuple(nums[0::2]), tuple(nums[1::2])
+            return (min(xs), min(ys), max(xs), max(ys))
+    except KeyError, ValueError:  # pragma: no cover - an attribute shape the writer does not emit
+        return None
+    pad = float(at.get("stroke-width") or 0.0) / 2.0
+    return (min(xs) - pad, min(ys) - pad, max(xs) + pad, max(ys) + pad)
+
+
+def _hits(a: tuple[float, float, float, float] | None, b: tuple[float, float, float, float] | None) -> bool:
+    """Do these two painted boxes touch? An unknown box is treated as touching everything."""
+    if a is None or b is None:
+        return True
+    return not (a[2] < b[0] or b[2] < a[0] or a[3] < b[1] or b[3] < a[1])
+
+
+def _sub(tag: str, at: dict[str, str]) -> str:
+    """One element as a subpath of the merged `d`."""
+    if tag == "line":
+        return f"M{at['x1']},{at['y1']}L{at['x2']},{at['y2']}"
+    if tag == "circle":
+        r = float(at["r"])
+        return f"M{float(at['cx']) - r:g},{at['cy']}a{r:g},{r:g} 0 1 0 {2 * r:g},0a{r:g},{r:g} 0 1 0 {-2 * r:g},0"
+    rx, ry = float(at["rx"]), float(at["ry"])
+    return f"M{float(at['cx']) - rx:g},{at['cy']}a{rx:g},{ry:g} 0 1 0 {2 * rx:g},0a{rx:g},{ry:g} 0 1 0 {-2 * rx:g},0"
 
 
 def _attrs(body: str) -> dict[str, str]:
@@ -62,35 +125,86 @@ def merge_primitives(s: str) -> str:
     stays crisp and the class groups keep their hit-testing - which is what a raster layer per class
     would have cost (at 16x a full-map raster is ~46,000 px square; see research.md R5)."""
 
-    def _merge_run(m: re.Match[str]) -> str:
-        items = [(t, _attrs(a)) for t, a in re.findall(r'<(line|circle) ((?:[a-z0-9-]+="[^"]*"\s*)+)/>', m.group(0))]
-        out: list[str] = []
-        i = 0
-        while i < len(items):
-            tag, at = items[i]
-            coord = ("x1", "y1", "x2", "y2") if tag == "line" else ("cx", "cy", "r")
-            style = {k: v for k, v in at.items() if k not in coord}
-            j = i
-            d: list[str] = []
-            while j < len(items) and items[j][0] == tag and {k: v for k, v in items[j][1].items() if k not in coord} == style:
-                a = items[j][1]
-                if tag == "line":
-                    d.append(f"M{a['x1']},{a['y1']}L{a['x2']},{a['y2']}")
-                else:
-                    r = float(a["r"])
-                    d.append(f"M{float(a['cx']) - r:g},{a['cy']}a{r:g},{r:g} 0 1 0 {2 * r:g},0a{r:g},{r:g} 0 1 0 {-2 * r:g},0")
-                j += 1
-            if j - i == 1:
-                out.append(m.group(0)[0:0] + (f"<{tag} " + " ".join(f'{k}="{v}"' for k, v in at.items()) + "/>"))
-            else:
-                if tag == "circle" and "fill" not in style:
-                    style = {**style}  # a circle's default fill is black; an arc path's is too - nothing to add
-                attrs = " ".join(f'{k}="{v}"' for k, v in style.items())
-                out.append(f'<path d="{"".join(d)}"' + (" " + attrs if attrs else "") + ("" if tag == "circle" else ' fill="none"' if "fill" not in style else "") + "/>")
-            i = j
-        return "".join(out)
+    # SEPARATED IS NOT THE SAME AS UNMERGEABLE (feature 148, GM 2026-08-29: "please re aim the feature at
+    # element count since that seems to be the cause of the ball performance"). The first cut merged only
+    # CONSECUTIVE runs, which is nearly nothing on a map whose glyphs interleave: Kuwabata's mulberry dike
+    # draws a trunk, a shadow and its foliage per tree, a mean run of 2.4 elements, so 2,975 circles
+    # carrying THREE styles collapsed to almost none of them. Gathering them instead takes that page's
+    # groups from 10,462 elements toward 4,140 (research R2).
+    #
+    # WHAT MAKES THE REORDER LEGAL. Two elements of the same style paint the same ink in either order, so
+    # they may always be gathered. Moving one BACKWARD past a different element is only invisible when the
+    # two do not overlap - so each bucket remembers the extents it has skipped since its last member, and
+    # an element joins only if it touches none of them. An extent that cannot be computed counts as
+    # touching everything, which makes the test too careful rather than wrong. That is why the trees
+    # gather at all: a crown's own blobs overlap and keep their order, while tree 40's foliage never
+    # reaches tree 12's.
+    elems: list[tuple[int, int, str, dict[str, str]]] = []
+    for m in _ELEM.finditer(s):
+        elems.append((m.start(), m.end(), m.group(1), _attrs(m.group(2))))
+    if len(elems) < 2:
+        return s
 
-    return _RUN.sub(_merge_run, s)
+    buckets: dict[tuple[str, str], dict[str, Any]] = {}
+    order: list[dict[str, Any]] = []
+    for idx, (_a, _b, tag, at) in enumerate(elems):
+        ext = _extent(tag, at, s)
+        coords = _COORDS.get(tag)
+        key = (tag, " ".join(f"{k}={v}" for k, v in sorted(at.items()) if k not in coords)) if coords else None
+        joined = None
+        if key is not None:
+            got = buckets.get(key)
+            # ...AND A TRANSLUCENT SHAPE MAY NOT MERGE WITH ONE IT OVERLAPS, even at the same style
+            # (feature 148, measured). Two blobs at opacity 0.85 stack darker where they cross; the same
+            # two as subpaths of ONE path are a single 0.85 fill, and the crossing goes light. It is a
+            # small thing - 0.0025% of the reference hamlet's pixels, max delta 35/255 - and it is still
+            # the picture changing, which FR-002 forbids. Opaque styles are exempt: overlapping subpaths
+            # under the default nonzero fill rule paint exactly what the separate shapes painted.
+            if got is not None and got["translucent"] and any(_hits(ext, e) for e in got["extents"]):
+                got = None
+            if got is not None and not got["blocked"] and not any(_hits(ext, e) for e in got["skip"]):
+                got["members"].append(idx)
+                got["extents"].append(ext)
+                got["skip"] = []
+                joined = got
+            else:
+                _st = dict(at)
+                _translucent = any(float(_st.get(k, 1) or 1) < 1.0 for k in ("opacity", "fill-opacity", "stroke-opacity"))
+                joined = {"first": idx, "members": [idx], "extents": [ext], "skip": [], "blocked": False, "tag": tag, "translucent": _translucent}
+                buckets[key] = joined
+                order.append(joined)
+        for other in buckets.values():
+            if other is joined:
+                continue
+            other["skip"].append(ext)
+            if ext is None or len(other["skip"]) > _SKIP_CAP:
+                other["blocked"] = True
+
+    #: what each element becomes: its own text, nothing (it was gathered into an earlier one), or the path
+    repl: dict[int, str] = {}
+    for b in order:
+        if len(b["members"]) < 2:
+            continue
+        tag = b["tag"]
+        at0 = elems[b["members"][0]][3]
+        style = {k: v for k, v in at0.items() if k not in _COORDS[tag]}
+        d = "".join(_sub(tag, elems[k][3]) for k in b["members"])
+        attrs = " ".join(f'{k}="{v}"' for k, v in style.items())
+        tail = ' fill="none"' if tag == "line" and "fill" not in style else ""
+        repl[b["members"][0]] = f'<path d="{d}"' + (" " + attrs if attrs else "") + tail + "/>"
+        for k in b["members"][1:]:
+            repl[k] = ""
+
+    if not repl:
+        return s
+    out: list[str] = []
+    at_pos = 0
+    for idx, (a, b2, _t, _at) in enumerate(elems):
+        out.append(s[at_pos:a])
+        out.append(repl.get(idx, s[a:b2]))
+        at_pos = b2
+    out.append(s[at_pos:])
+    return "".join(out)
 
 
 #: Thin classes whose marks get a FAT INVISIBLE HIT COPY (GM 2026-08-28: "very thin and hard for me to

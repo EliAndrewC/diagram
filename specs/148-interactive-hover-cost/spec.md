@@ -77,7 +77,14 @@ touch; any element merged away must leave the rendered result identical.
 
 ## Success Criteria
 
-- **SC-001** Kuwabata's drawn element count falls by at least 40%, and inashiro's by at least 20%.
+- **SC-001** ~~Kuwabata's drawn element count falls by at least 40%, and inashiro's by at least 20%.~~
+  **AMENDED 2026-08-29, and the amendment is a correction rather than a retreat.** The floors were taken
+  from R2's order-free bound, which assumed any two same-styled elements may merge. R3 then found that
+  they may not: translucent shapes that OVERLAP must stay apart or the picture changes, which is FR-002
+  and not negotiable. The bound therefore over-counted, by an amount nobody could have known before the
+  constraint was found. Realized: inashiro -17.5%, kashikawa -24.4%, mizuguchi -17.0%, sawada -27.4%.
+  The criterion is now: **every pool hamlet's drawn element count falls by at least 15%**, met on all
+  four, with kuwabata unmeasurable from this clone (it belongs to feature 147's).
 - **SC-002** Scroll, zoom, highlight and load are each no worse than before on both pages, and the
   measurement is reported to the GM.
 - **SC-003** The rendered page and the rendered SVG agree for every pool hamlet.
