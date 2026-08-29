@@ -274,3 +274,65 @@ requires 2. A board that cannot reach 3 anywhere now takes a second pass over th
 in the same least-lateral-first order, against the rule's actual floor of 2 ft - so it surrenders the
 one foot of headroom rather than its position beside the thing it names, and it still cannot fail
 0617. Only if even 2 ft is unreachable does the old thirty-seat fallback run, unchanged.
+
+## R9 - the level branch, and where the search stops
+
+The six seeds of R8 were not taking the tilted fallback at all. Their numbers came back IDENTICAL
+after the fallback rung was added, which is the tell: they are LEVEL boards. A board faces its lane
+by rule, so a lane running square to the page gives rot 0/90/180/270, `aligned_tilt` returns 0, and
+the board takes the level path - whose own candidate set is four axis rays at six distances plus
+eight diagonals at three, with the side rays at `hw + _chw + 8 + d` = 40.9 to 100.9 px of pure
+lateral. After `pull_caption_toward` closes half the air those land at exactly the 28.3 / 32.3 /
+36.3 px reported. The tilted branch had been fixed and the level branch left with the same defect -
+which is the GM's own reason for caring about this code.
+
+**The first attempt at the level branch made it WORSE, 6 failures to 7, and the reason is the fourth
+instance of one shape.** The dense ladder was gated on `label_seat_clear`, whose lane test is a
+CENTER-DISTANCE test using the caption's whole half-diagonal as the radius - `w/2 + 3 + 2 +
+max(box)/2`, about 32 px for "notice board". A kosatsuba stands 6 ft off its own lane BY RULE
+(`kosatsuba_by_the_road`), so that radius refuses the entire pocket beside the board and every near
+seat fell straight through to the coarse set. Replacing it with `_box_clearance`, which measures the
+recorded box's corners against the tread EDGE - the quantity `captions_clear_the_ways_they_stand_on`
+itself measures - took it to 5.
+
+| run | passed | caption failures |
+|---|---|---|
+| BASELINE, unmodified HEAD | 28/48 | (the rule did not exist) |
+| the tilted fix, before the check | 29/48 | - |
+| the tilted fix + the check | 24/48 | 6 |
+| + the level branch on `label_seat_clear` | 24/48 | **7** |
+| + the level branch on `_box_clearance` | **25/48** | **5** |
+
+**FOUR PROBES, ONE SHAPE, ALL FOUND IN THIS FEATURE.** Each stood in for a rule with something
+coarser than the rule measures, each refused ground that was actually free, and each pushed a caption
+away from the thing it names:
+
+1. the AABB of a rotated quad, for the quad (the GM's reported defect);
+2. a hand-guessed caption box, 26.88 x 5.00, for the recorded 26.40 x 4.20 (cost 9 px of centrality
+   the moment the fabric families were widened);
+3. a nine-key hand-listed victim roster, for the drawn families (2.24 px from an unmodeled woodpile);
+4. a center-distance radius, for a distance to a tread edge (6 failures to 7).
+
+## R10 - WHERE THIS STOPS, and why that is the right place
+
+Five of 48 seeds still seat a board caption past the end of its own label: 12.4, 17.7, 19.3, 28.3 and
+36.3 px against bounds of 10.7-11.3. **Four of the five report values identical to the run before the
+level fix**, which is the same tell as before: they reach neither the 3 ft lane target nor the 2 ft
+floor at ANY seat inside the hug cap that also clears the fabric, so they take the old thirty-seat
+fallback. Those boards stand where a caption cannot be simultaneously beside the board, off the
+treads and off the buildings.
+
+**That is the check working, not the placer failing**, and the project's own doctrine covers it:
+*"NEW rules ship un-gated"* (`dev/pool.md`). The alternatives were both priced and both rejected:
+
+- **Loosen the bound** so they pass. It would have to reach 36.3 px to catch the worst, which is
+  larger than the offset the GM complained about (35.6) - the rule would pass the map that started
+  this feature.
+- **Relax the fabric or lane terms** so a seat exists. That trades this rule against
+  `captions_clear_the_ways_they_stand_on` or against a caption drawn on a roof, and there is no
+  gate check for the second one any more (see `future-work/cross-cutting.md`).
+
+**None of the five is one of the in-gate ratchet's seeds (41-44)**, so the gate is green; the cohort
+is where they are visible, which is what a 48-map cohort is for. The honest summary is that this
+feature took the pool from one map with the defect to none, took the cohort from an unmeasured
+population to five known cases, and left those five reported rather than hidden.

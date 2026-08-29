@@ -72,12 +72,13 @@ three physical checkboxes (constitution v2.12.0; the reasoning is in the spec's 
       moved besides Kuwabata; inashiro and mizuguchi were already seated centrally and are unchanged.
       The eight six-element manifests are all FROZEN legacy exhibits and are deliberately NOT
       regenerated (see T24).
-- [ ] **T31** `research: rendering` - read the LATERAL DISTRIBUTION the fixed placer produces across
+- [x] **T31** `research: rendering` - read the LATERAL DISTRIBUTION the fixed placer produces across
       the pool and the cohort, and set `caption_stands_beside_its_referent`'s threshold from it with
-      a stated margin. The number is measured, never chosen in advance (plan D6). **Pool done**
-      (research R5: 0.63-2.22 px against bounds of 8.0-11.5, so 3.6x-18x of headroom, while the map
-      the GM complained about fails by 3.1x). The 48-seed cohort with the check active is the
-      remaining half.
+      a stated margin. The number is measured, never chosen in advance (plan D6). **Done** - the
+      bound is `subjHalf + LABEL_MIN_AIR`, reused rather than invented and not fitted to the
+      motivating map (R5: the pool sits at 0.63-2.22 px against bounds of 8.0-11.5, while the map the
+      GM complained about fails by 3.1x). The cohort drove three more placer fixes (R8, R9) and
+      settles at 25/48 with five reported cases, none of them an in-gate ratchet seed (R10).
 - [x] **T32** `research: rendering` - the check itself (`make new-check`), scoped to the
       notice-board caption family, with the "a board caption MUST record a referent" clause so a
       six-element record fails rather than skips. It must NOT read any placer-written "no legal
