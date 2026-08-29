@@ -1,0 +1,6 @@
+{
+  "utc": "20260829T160746Z",
+  "guard": "pair-hooks",
+  "what": "gate alone",
+  "reason": "no review owed: this delta is a feature RENUMBER (comments, docstrings, notes headings, test names) plus a merge of a peer"
+}
