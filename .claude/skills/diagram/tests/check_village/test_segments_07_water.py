@@ -798,3 +798,19 @@ def test_footplanks_keep_their_short_abutment_but_a_flush_plank_fires():
     assert "bridges_span_their_water" not in f_only(M, "bridges_span_their_water")
     M["bridges"] = [{"x": 500, "y": 500, "rot": 0, "span": 10, "w": 2, "foot": True}]
     assert "bridges_span_their_water" in f_only(M, "bridges_span_their_water")
+
+
+def test_a_deck_with_no_water_under_its_seat_leaves_the_span_rule_nothing_to_measure() -> None:
+    """`_seg_0363`'s dry arm (feature 158). A deck whose seat touches no watercourse is recorded as
+    DRY and skipped by the span rule, which has no width to size an abutment against.
+
+    It is tested here now because the check that used to read `b_dry` - `bridges_seat_on_water` -
+    was retired by feature 158, and the only thing still exercising this branch was a frozen capital
+    manifest from the hand-placement era that went with the corpus cut. The branch is real: a way's
+    crossing can move and leave the deck behind, which is exactly what it was written for."""
+    M = manifest(bridges=[{"x": 900, "y": 900, "span": 40, "w": 10, "rot": 0}], streams=[{"poly": [[100, 100], [200, 100]], "w": 9}])
+    assert "bridges_span_their_water" not in f_only(M, "bridges_span_their_water"), "a deck on dry ground has no span to fail"
+    # ...and the SAME deck over the stream, too short for it, does fail - so the skip above is the dry
+    # arm rather than the check being toothless
+    wet = manifest(bridges=[{"x": 150, "y": 100, "span": 2, "w": 10, "rot": 0}], streams=[{"poly": [[100, 100], [200, 100]], "w": 40}])
+    assert "bridges_span_their_water" in f_only(wet, "bridges_span_their_water")

@@ -320,7 +320,29 @@ def test_a_channel_source_on_a_river_is_anchored_across_its_half_width():
     assert not _anchor("river", (500.0, 420.0), M={}), "no river, no river anchor"
 
 
+def test_a_channel_source_on_the_moat_is_anchored():
+    """The MOAT arm (feature 158). It was reached only by the frozen city manifests in the hand-era
+    corpus, which went with the GM's cut of the stored bad maps - and a moat is not a hamlet feature,
+    so no scripted roll will ever walk it. Lifted-function testing is the answer the project already
+    has for exactly this: one call per arm."""
+    M = {"moat": [(100.0, 400.0), (900.0, 400.0)]}
+    assert _anchor("moat", (500.0, 420.0), M=M), "20 px off the ring is on it (the bar is 34)"
+    assert not _anchor("moat", (500.0, 500.0), M=M)
+    assert not _anchor("moat", (500.0, 420.0), M={}), "no moat, no moat anchor"
+
+
 def test_an_unknown_anchor_kind_holds_nothing():
     """The closing `return False`: an anchor naming a source the rule does not know is not silently
     accepted - `channel_field_anchored` reports it."""
     assert not _anchor("hearsay", (500.0, 500.0))
+
+
+def test_a_pond_drawn_over_a_paddy_fires_and_one_beside_it_does_not():
+    """`pond_clear_of_paddies` (feature 158): the open tank is water, the paddy is a worked basin, and
+    a map that draws one on top of the other has claimed the same ground twice. Its only exerciser was
+    a frozen city manifest in the hand-era corpus; this is the same question on four vertices."""
+    paddy = {"name": "f", "kind": "paddy", "outline": [[300, 300], [500, 300], [500, 500], [300, 500]], "bbox": [300, 300, 500, 500]}
+    on_it = manifest(pond=[400, 400, 60, 50], fields=[paddy])
+    assert "pond_clear_of_paddies" in f_only(on_it, "pond_clear_of_paddies")
+    beside = manifest(pond=[800, 800, 60, 50], fields=[paddy])
+    assert "pond_clear_of_paddies" not in f_only(beside, "pond_clear_of_paddies")

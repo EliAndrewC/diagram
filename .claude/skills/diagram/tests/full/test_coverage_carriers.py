@@ -54,10 +54,18 @@ def test_the_whole_gate_runs_end_to_end_on_a_real_roll_and_still_names_a_break()
 # What DID go with feature 158 is `tests/tier_city/test_frozen_pool_gate.py`, which replayed the same
 # manifests and PINNED each one's failures. That is the GM's category exactly - it existed to say what
 # happens when you meet such a map - and its coverage is held here instead.
+# ALL SIX town/city exhibits, not the five the greedy search picked (feature 158). The sixth, and
+# `nagahara` and `tango`, were reaching their lines through `test_frozen_pool_gate.py` - which pinned
+# verdicts and is gone - so the carrier list absorbs them: same manifests, same full gate, still
+# nothing asserted about what they fail. Measured: without them the hamlet-path floor loses six lines
+# across four shared segment modules.
 _FROZEN_POOL_COVERAGE_CARRIERS = [
     "towns/hirameki.json",
     "towns/hoshizora.json",
+    "towns/ubame.json",
     "provincial-cities/minami.json",
+    "provincial-cities/nagahara.json",
+    "provincial-cities/tango.json",
     "hamlets/akagahara.json",
     "hamlets/enokida.json",
 ]
