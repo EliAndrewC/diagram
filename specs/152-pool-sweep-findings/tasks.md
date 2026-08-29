@@ -31,11 +31,11 @@ researched, and the task is to make the drawing obey them.
 
 ## Phase 2 - the two the GM named in their own words
 
-- [ ] T05 FR-001: the tameike finding into the marsh class record in `interactive/classes.py` - `why`,
+- [x] T05 FR-001: the tameike finding into the marsh class record in `interactive/classes.py` - `why`,
       `sources` (the seven keys registered in feature 150), `entry`. Both halves of the one finding: the
       shore is reeded BECAUSE management sustains it, and the bank is mown to keep it strong. *(rendering
       - the research is done, cited and confirmed; this is putting it in front of the reader)*
-- [ ] T06 FR-001 verification: render a map with a pond fringe and confirm a reader clicking marsh sees
+- [x] T06 FR-001 verification: render a map with a pond fringe and confirm a reader clicking marsh sees
       the finding and its sources. *(rendering)*
 - [x] T07 FR-002 (REWRITTEN by the GM's ruling of 2026-08-29 - see below): the privy/manure seat roll consults `plan.windward`. The three attested seats and their
       weights stay; the preference among them reorders so a seat within 90 degrees of windward loses to
@@ -54,27 +54,27 @@ researched, and the task is to make the drawing obey them.
 
 ## Phase 3 - features that draw wrong
 
-- [ ] T09 FR-004: a copse draws as a distinguishable stand - not 2 clumps in a 205-313 ft record, not
+- [x] T09 FR-004: a copse draws as a distinguishable stand - not 2 clumps in a 205-313 ft record, not
       seated inside the windbreak's canopy. *(rendering)*
 - [x] T10 FR-007: the flooded-plot tint tests the FINAL ring's AREA as well as its sharpness. *(rendering)*
 - [x] T11 FR-008: persimmon fruit dots vary per tree off the map's position hash. *(rendering)*
-- [ ] T12 FR-006: the caption seat filter gains a fabric term and a way-side term. *(rendering)*
+- [x] T12 FR-006: the caption seat filter gains a fabric term and a way-side term. *(rendering)*
 
 ## Phase 4 - the lane web
 
-- [ ] T13 FR-009: a lane link within the join reach is not defeated by one movable farm fixture.
+- [x] T13 FR-009: a lane link within the join reach is not defeated by one movable farm fixture.
       *(rendering)*
-- [ ] T14 FR-010: a lane reaches something - threshold derived from the existing rule, not invented.
+- [x] T14 FR-010: a lane reaches something - threshold derived from the existing rule, not invented.
       *(rendering)*
-- [ ] T15 FR-011: a through-route keeps its width across a junction. *(rendering)*
+- [x] T15 FR-011: a through-route keeps its width across a junction. *(rendering)*
 
 ## Phase 5 - records that disagree with the map
 
 - [x] T16 FR-012 (largely closed as a side effect of T07 - the shortfall was seat REFUSAL, not the share): seated fixture counts against their declared shares - MEASURE first; the fix may be the
       placer or may be what the share means. *(rendering)*
-- [ ] T17 FR-013: the homestead fixture ring varies its offset and pitch off the map's hash. *(rendering)*
-- [ ] T18 FR-014: `make jogs` green on every pool map. No ledger arm. *(rendering)*
-- [ ] T19 FR-015: every notes file describes the map that ships - Kashikawa's absent byre, Inashiro's
+- [x] T17 FR-013: the homestead fixture ring varies its offset and pitch off the map's hash. *(rendering)*
+- [x] T18 FR-014: `make jogs` green on every pool map. No ledger arm. *(rendering)*
+- [x] T19 FR-015: every notes file describes the map that ships - Kashikawa's absent byre, Inashiro's
       stale counts, Mizuguchi's board. *(rendering)*
 
 ## Phase 6 - the knobs, last
@@ -92,3 +92,28 @@ researched, and the task is to make the drawing obey them.
 - [ ] T23 Pool re-rolled; `make maps` to the standard of before.
 - [ ] T24 A `settlement-review` pass over the changed maps, paired with the gate; no NEW error.
 - [ ] T25 `make done` green; push by the LOCAL-GATED route.
+
+## T13 and T14 closed by MEASUREMENT rather than by a change (2026-08-29)
+
+Both recorded findings were real when the sweep took them and are not on the map that ships. Recorded
+here with the measurement, because "we looked and it is not there" is a result and the next session
+should not re-derive it.
+
+- **T13, the back lane severed by a woodpile.** Every SCRIPTED map's lane web is now ONE connected
+  component (union-find over the lanes at a 4 ft touch). Kuwabata's 25 ft gap is gone, closed by this
+  feature's other work rather than by anything aimed at it. A woodpile-yields fallback WAS built for it
+  and measured as a no-op - the note is at the point of change in `ways.py` so nobody builds it twice.
+- **T14, a lane reaching nothing.** Measured against the engine's OWN rule (`lanes_reach_something`: a
+  way within 40 ft, a farmhouse within 90, or the field at the spur setback), **no lane end on any
+  scripted map reaches nothing**. Kashikawa's lane 0 - the review's case - ends 17.0 ft from the paddy
+  edge: it is a field spur arriving at the crop, which is the one purpose that rule explicitly counts as
+  service. The review measured distance to lanes and farmhouses and not to the field, and the map has
+  re-rolled since.
+
+## Pre-existing failures met along the way, verified against main and NOT adopted
+
+`houses_clear_of_lanes` fails on Kashikawa and Sawada. Both fail identically on main's own manifests
+(baselined 2026-08-29), so neither is this feature's. Sawada's is the same house as main's,
+(1826, 2438); Kashikawa's is a different house because the map re-rolled entirely, and disabling this
+feature's route-width pass leaves it failing, so T15 did not cause it. They stay ledgered.
+

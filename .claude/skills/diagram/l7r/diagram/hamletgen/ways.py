@@ -494,6 +494,15 @@ def stage_web(s: Settlement, plan: SitePlan) -> None:
     # cross grazing scrub and run along a tree belt, because those are what the ground IS rather than
     # things built on it. Counting them walls a steading in behind its own commons.
     _solid = [poly for poly, _own, kind in fabric if kind not in ("commons", "village_groves")]
+    # A WOODPILE-YIELDS FALLBACK WAS BUILT HERE AND MEASURED AS A NO-OP (feature 152 T13, 2026-08-29).
+    # The recorded defect was Kuwabata's back lane coming apart with 25 ft between two rounded caps and a
+    # 10 x 3.5 ft woodpile 5.6 ft off the line, so the short-gap router was given a wall set with the small
+    # movable fixtures removed - a household shifts a stack when the path it walks says to. It closed
+    # nothing: measured after, the facing gaps on all four maps were unchanged, because by then every
+    # scripted map's lane web was already ONE connected component. The severance had been fixed upstream
+    # by this feature's other work, and what my gap detector was finding was two ends of an already-joined
+    # web standing near each other, which is not a defect. Do not build it again without a map whose web
+    # is genuinely in two pieces AND whose gap holds a fixture.
     hard_built = [*hard, *_solid]
     walls = [poly for poly, _, _ in fabric]
     # The shelter belts, separately: a web lane may CROSS one but may not run its length.
@@ -618,6 +627,7 @@ def stage_web(s: Settlement, plan: SitePlan) -> None:
     # only ever asked at draw time. Last, so it judges the tread the map actually ships.
     _sweep_debris(s)
     _drop_end_nubs(s)  # last of all: every pass above can leave a nub at a junction it laid
+    _keep_the_route_wide(s, hard_built, walls, list(plan.watercourses) + drawn_water)  # ...and a cart route may not neck to a footpath
     s.M["meta"]["lane_web"] = plan.lane_web
 
 
@@ -1205,6 +1215,62 @@ def _drop_end_nubs(s: Settlement) -> int:
     return len(ways)
 
 
+_ROUTE_MIN_W = 5.0  # a cart way; anything under this is a footpath and may legitimately neck
+_ROUTE_JOIN_FT = 30.0  # the same reach the toucher uses - this closes what it declined, not more
+
+
+def _keep_the_route_wide(s: Settlement, hard: list[Poly], walls: Sequence[Poly], water: list[tuple[Pt, Pt]]) -> int:
+    """Join two CART-WIDTH lane ends that stand within reach of each other but meet only through a
+    narrower way.
+
+    THE THROUGH-ROUTE NECKED FROM 6 FT TO 3 AND BACK (feature 152 T15, settlement-review 2026-08-29).
+    On Mizuguchi the way out of the hamlet runs lane1 -> lane4 -> node -> lane3 -> the connector, all
+    5-6 ft; but lane4 ends at (933.0, 1778.0) and lane3 begins at (944.1, 1779.6), 11 ft apart, and the
+    only ink joining them is a stretch of lane2's THREE foot back-lane tread, capped at both ends by the
+    wide lanes' round caps. Measured across the waist: 9.5 ft of tread, then 3.2, then 7.6.
+
+    The toucher does not see it, and is right not to: both ends already touch lane2 at 0.0 ft, so the web
+    is whole and every reach test passes. What is wrong is not connectivity but WIDTH - the route a cart
+    takes pinches to a footpath for eleven feet. Feature 124's rule ("a healing link inherits the width of
+    the way it joins") does not reach it either, because there the thin lane joins the wide one and here
+    the wide ones join the thin.
+
+    So the two wide ends are joined to each other directly, at their own width. Only where both are cart
+    width, only within the toucher's own reach, and only when the direct link is clear - this closes what
+    the toucher declined rather than laying new ways of its own."""
+    lanes = s.M.get("lanes") or []
+    closed = 0
+    for i, ln in enumerate(lanes):
+        pts = [(float(x), float(y)) for x, y in (ln.get("pts") or [])]
+        if len(pts) < 2 or float(ln.get("w") or 0.0) < _ROUTE_MIN_W:
+            continue
+        for end in (0, -1):
+            q = pts[end]
+            for j, lo in enumerate(lanes):
+                if j == i or float(lo.get("w") or 0.0) < _ROUTE_MIN_W:
+                    continue
+                other = [(float(x), float(y)) for x, y in (lo.get("pts") or [])]
+                if len(other) < 2:
+                    continue
+                for oe in (0, -1):
+                    b = other[oe]
+                    d = math.dist(q, b)
+                    if not (_TOUCH_GAP < d <= _ROUTE_JOIN_FT) or not _clear_touch(q, b, hard, walls, water):
+                        continue
+                    new = [b, *pts] if end == 0 else [*pts, b]
+                    if _bends_badly(new):
+                        continue
+                    lanes[i]["pts"] = [[round(x, 1), round(y, 1)] for x, y in new]
+                    s.reink_lane(i)
+                    pts = new
+                    closed += 1
+                    break
+                else:
+                    continue
+                break
+    return closed
+
+
 def _sweep_debris(s: Settlement) -> int:
     """Drop a lane the passes have whittled below `_WEB_MIN_FT` and left standing on its own.
 
@@ -1255,7 +1321,16 @@ def _sweep_debris(s: Settlement) -> int:
     return len(swept)
 
 
-def _touch_junctions(s: Settlement, hard: list[Poly], walls: Sequence[Poly], water: list[tuple[Pt, Pt]], reach: float = _LANE_JOIN_FT, only_orphans: bool = False, final: bool = False) -> int:
+def _touch_junctions(
+    s: Settlement,
+    hard: list[Poly],
+    walls: Sequence[Poly],
+    water: list[tuple[Pt, Pt]],
+    reach: float = _LANE_JOIN_FT,
+    only_orphans: bool = False,
+    final: bool = False,
+    movable: Sequence[Poly] | None = None,
+) -> int:
     """The LAST pass over the web: every lane end that stands NEAR another way is extended to TOUCH it.
 
     THE NETWORK WAS CONNECTED BY TOLERANCE AND DISCONNECTED IN INK (GM 2026-08-27, feature 133 T31:
