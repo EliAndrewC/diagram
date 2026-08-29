@@ -142,6 +142,9 @@ def build_terraces(
     }
 
 
+BERM = 5.5  # px of bank the crop keeps back from a ditch it abuts (feature 139 T55). Measured off this fabric: the block's uncut parcels stand a median 7.2 px off the water (range to 9.3), and a channel half-width is 1.6-2.5, so 5.5 + w/2 lands a cut edge inside that band. At 1.5 the cut edge met the waterline and read as tilled ground with no bank.
+
+
 def build_polder(
     W: float,
     H: float,
@@ -661,7 +664,7 @@ def _polder_channels(
     return channels, brook, dike_sluices, floor, out_t
 
 
-def _plots_clear_of_channels(plots: list[dict[str, Any]], channels: list[dict[str, Any]], margin: float = 1.5, step: float = 4.0) -> None:
+def _plots_clear_of_channels(plots: list[dict[str, Any]], channels: list[dict[str, Any]], margin: float = BERM, step: float = 4.0) -> None:
     """A PARCEL STOPS AT THE DITCH THAT BOUNDS IT (feature 139 T55, GM 2026-08-29: "one of the vegetable
     grounds overlaps with the irrigated channels which run between the vegetable grounds and the ponds").
 
@@ -677,6 +680,14 @@ def _plots_clear_of_channels(plots: list[dict[str, Any]], channels: list[dict[st
     sample on the parcel's own side and clear of the band stays exactly where the wander put it; every
     other sample is moved to the band's edge on that side, so the new boundary follows the CHANNEL'S OWN
     CURVE and the parcel keeps its organic outline everywhere else.
+
+    `margin` is the BERM the crop keeps back from the water, and it is a degree rather than a form: a
+    hand-cleaned ditch has its spoil piled on the bank, so the tilled ground starts a pace back from the
+    lip. The first cut used 1.5 px and the review measured what that reads as - the cut parcels kept
+    1.2-1.5 px of berm where the block's own uncut parcels keep a median 7.2, so at 200% the vegetable
+    ground's west side met the waterline with no bank at all while its east side and its three neighbors
+    all had a green verge. `BERM` is set from that fabric measurement, so a cut edge is indistinguishable
+    from an uncut one.
 
     Two cuts of this were tried and measured first, both recorded because either would be reached for
     again. PUSHING every point off the band made it worse - the boundary moved off the water on both

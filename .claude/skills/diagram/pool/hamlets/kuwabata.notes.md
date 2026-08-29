@@ -58,6 +58,19 @@ other values are under `wip/kuwabata-*`.
 
 ## Review log
 
+- 2026-08-29 the GM's third review (T55): a vegetable ground lay across the irrigated channel beside
+  it. Fixed in `build_polder`: a channel that crosses a parcel cuts it, and the rest of the outline is
+  projected onto the band's edge (0 of 335 stroke samples remain inside a parcel). Two other approaches
+  were measured and declined - see `_plots_clear_of_channels`.
+- 2026-08-29 settlement-review DELTA of T55: PASS on the GM's own complaint, verified by a
+  manifest-free pixel count (0 of 130 tilled-row elements on water; every channel at full nominal width
+  along its whole run). CAUGHT: the `WATERWARD_DEPTH` comment citing 400 for a 280 constant; a garbled
+  and stale `scatter_audit` paragraph here; a 1.2 px berm where the fabric keeps 7 (the cut edge met the
+  waterline - fixed, `BERM` is now set from the fabric's own median); and the unguarded assumption that a
+  280 px strip outlasts every crop (fixed: `waterward_strips_run_off_the_frame`). Also measured for the
+  record: the cut costs 0.29% of the block's area against the 3.4% the declined half-plane clip cost, and
+  four of the five cut edges wander at or above the fabric's median, so no cut reads as ruled.
+
 - 2026-08-28 settlement-review FULL: needs-work -> fixed (crossings, title, caption). DELTA after
   the audit items: needs-work -> fixed (the north gate on the drawn stroke; banana as stools; cane
   in rows; pens before sties). Open: 3 pits of 16 against a 0.465 share (the manure placer seats
@@ -117,20 +130,13 @@ district's ground. Drawn at 1 ft/px.
 
 ## Known open
 
-- `scatter_audit` has no dike-pond mode. Re-counted by the review of 2026-08-28 after T54: 3,083
-  violations, of which 2,242 are `crown inside crop` (the archetype's OWN mulberry banks - the
-  audit's crop keep-out predates the archetype), 600 `blade inside marsh` (commons grass grading
-  into the reeds, which `wet.py` admits by doctrine over the same feather band), 135 `crown inside
-  marsh`, 105 `crown inside water`, 1 `dot inside marsh`. A clean bill cannot be earned on this
-  archetype until the audit knows it are dike CROWNS on
-  the dikes (the audit's crop keep-out predates the archetype), 474 are the west dike's crowns
-  where the rectangular waterside marsh laps the dike outline, 105 are crowns lapping a pond feed
-  by 1-2 ft. A clean bill cannot be earned here until the audit knows the archetype (review
-  2026-08-28).
-- 2026-08-29 the GM's third review (T55): a vegetable ground lay across the irrigated channel beside
-  it. Fixed in `build_polder`: a channel that crosses a parcel cuts it, and the rest of the outline is
-  projected onto the band's edge (0 of 335 stroke samples remain inside a parcel). Two other approaches
-  were measured and declined - see `_plots_clear_of_channels`.
+- `scatter_audit` has no dike-pond mode. Re-measured by the review of 2026-08-29 after T55: 2,988
+  violations, of which 2,171 are `crown inside crop` (the archetype's OWN mulberry banks - the audit's
+  crop keep-out predates the archetype), 564 `blade inside marsh` (commons grass grading into the reeds,
+  which the doctrine admits over the same feather band), 133 `crown inside marsh` and 120 `crown inside
+  water` - of which 0 crown centers stand inside pond water or a channel band; every one is inside the
+  audit's pad only, and 67 are on the cut parcels because their banks are now correctly tighter. A clean
+  bill cannot be earned on this archetype until the audit knows it.
 - PERFORMANCE, measured against the pre-T54 tree in a detached worktree: Kuwabata's gen was 13-17 s and
   is now 27-32 s (the machine's own noise is +/-20% on both). The cost is T54's marsh keep-out, which
   asks a per-scatter-point question of every mound, plus the face-following waterward strips, whose

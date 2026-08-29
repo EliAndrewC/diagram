@@ -330,7 +330,7 @@ DIKE_CROPS = ("mulberry", "mulberry", "mulberry", "sugarcane", "banana", "fruit"
 # WHAT THE LEFTOVER PARCELS OF A WHOLESALE CONVERSION READ AS (feature 139 B2): standing rice, vegetable
 # ground (Fei: vegetables under the mulberry; the gazetteers: no rice inside a converted district), or no
 # leftover at all (every parcel a pond). Three attested states; the roll is even.
-WATERWARD_DEPTH = 280.0  # px of wild water drawn outside a polder's dike face (feature 139 T55). Not "to the canvas edge": the crop keeps ~120 px past the content at most on this tier, so everything beyond was scattered, keep-out tested and thrown away - 18.4 s of a 40 s gen. 400 outlasts any hamlet crop measured with room to spare.
+WATERWARD_DEPTH = 280.0  # px of wild water drawn outside a polder's dike face (feature 139 T55). Not "to the canvas edge": the crop keeps ~120 px past the content at most on this tier, so everything beyond was scattered, keep-out tested and thrown away - 18.4 s of a 40 s gen. 280 outlasts any hamlet crop measured (the tightest flank keeps 245 px of headroom), and `waterward_strips_run_off_the_frame` holds the line.
 LEFTOVER_FORMS = ("rice", "vegetables", "pond")
 POND_LAYOUT_MOSAIC = 0.5
 

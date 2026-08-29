@@ -603,3 +603,52 @@ def _seg_0594__k_3(*, _waived: Any = _UNBOUND, fails: Any = _UNBOUND, k: Any = _
             print("\n" + "\n".join(f"WAIVED {k}: {v}" for k, v in sorted(_waived.items())))
         print(f"\n{len(fails)} failing check(s): {fails}" if fails else "\nALL CHECKS PASSED")
     return _kept(locals(), ('k', 'v'))
+
+
+# WHY: <one paragraph - what the research found, the decision it drove, the departure taken>.
+# Declare EVERY input the body reads as a keyword parameter (an undeclared one is a NameError at
+# gate time, not at import), and keep the `_kept` tuple a LITERAL of the names this body binds.
+
+
+def _seg_0594_500__waterward_strips_run_off_the_frame(
+    *,
+    M: Any = _UNBOUND,
+    check: Any = _UNBOUND,
+    meta: Any = _UNBOUND,
+    scale: Any = _UNBOUND,
+    waterward_strips_run_off_the_frame_bad: Any = _UNBOUND,
+) -> dict[str, Any]:
+    """Gate segment 0594_500 (waterward_strips_run_off_the_frame) - a polder's waterward reed strip is wild
+    water CONTINUING, so its outer edge must lie outside the rendered view.
+
+    The strip is not a feature with an edge: outside the dike is the fluctuating lake or creek the polder
+    was reclaimed from, and it goes on past the sheet (`settlements/archetypes.md`, "Polder waterward
+    fringe"). It used to be drawn to the canvas edge, which made that true by construction and wasted the
+    scatter - on Kuwabata the crop kept 74 px of the 1,880 px drawn, and the discarded reeds cost 18 s of
+    a 40 s gen. Feature 139 T55 cut it to a `WATERWARD_DEPTH` band off the dike face, and a band CAN stop
+    inside the frame: then the reader sees a straight line where wild water stops being wild. Nothing
+    checked that, which is this engine's standing failure shape ("a rule that cannot fire looks exactly
+    like a rule that passes"), so the check is the guard - measured per DECLARED flank (`meta.waterward`),
+    against the drawn view, on the map that has one. TEETH: a strip that ends inside the view fails.
+    Grounding: `hamletgen.stage_waterward`, `consts.WATERWARD_DEPTH`; caught by settlement-review
+    2026-08-29."""
+    if scale in ("hamlet", "village", "town"):
+        waterward_strips_run_off_the_frame_bad = []
+        _wwf = meta.get("waterward") or []
+        _wwv = meta.get("view")
+        _wws = [m for m in M.get("marshes", []) if m.get("role") == "waterside" and m.get("poly")]
+        if _wwf and _wwv and _wws:
+            _vx0, _vy0, _vw, _vh = (float(v) for v in _wwv)
+            for _wwm in _wws:
+                _wxs = [float(q[0]) for q in _wwm["poly"]]
+                _wys = [float(q[1]) for q in _wwm["poly"]]
+                # the strip belongs to the flank its OUTER edge faces; each flank's edge must clear the view
+                _reach = {"W": min(_wxs) <= _vx0, "E": max(_wxs) >= _vx0 + _vw, "N": min(_wys) <= _vy0, "S": max(_wys) >= _vy0 + _vh}
+                if not any(_reach[_f] for _f in _wwf if _f in _reach):
+                    waterward_strips_run_off_the_frame_bad.append((round(min(_wxs)), round(min(_wys))))
+        check(
+            "waterward_strips_run_off_the_frame",
+            not waterward_strips_run_off_the_frame_bad,
+            f"waterward reed strip(s) at {waterward_strips_run_off_the_frame_bad[:3]} STOP inside the drawn view - the un-reclaimed water outside a dike goes on past the sheet, so a strip that ends in frame draws a straight line where wild water stops being wild; widen `WATERWARD_DEPTH` (hamletgen/consts.py) until every declared flank's strip clears the view",
+        )
+    return _kept(locals(), ("waterward_strips_run_off_the_frame_bad",))
