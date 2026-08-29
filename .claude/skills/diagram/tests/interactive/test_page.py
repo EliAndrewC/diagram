@@ -23,6 +23,7 @@ from l7r.diagram.interactive.page import (
     hit_copies,
     hit_layer,
     hit_regions,
+    CAVEAT_LEAD,
     ink_census,
     marks_region,
     merge_primitives,
@@ -117,7 +118,10 @@ def test_explanations_hold_only_present_classes_and_present_siblings() -> None:
     # its record discloses rides in `caveat` instead, to be shown after the what and the why
     assert data["windbreak"]["label"] == "accurate", "the classification is still recorded (constitution XII)"
     assert data["windbreak"]["lead"] == "", "an accurate class leads with what the feature is, not with a claim"
-    assert data["windbreak"]["caveat"] == CLASSES["windbreak"].caveat and data["windbreak"]["caveat"]
+    # the windbreak is one of the seven whose record discloses no liberty, so it shows no caveat at
+    # all (settlement-review, 2026-08-29); the copse beside it on this map does have one
+    assert data["windbreak"]["caveat"] == "", "the windbreak discloses no liberty - see test_classes"
+    assert data["copse"]["caveat"] == CAVEAT_LEAD + CLASSES["copse"].caveat and CLASSES["copse"].caveat
     assert data["windbreak"]["sources"] == research_sources(CLASSES["windbreak"].entry) and "forests-2020" in data["windbreak"]["sources"]
     assert len(data["windbreak"]["refs"]["forests-2020"]["text"]) > 20
 
