@@ -11,11 +11,11 @@ each is useful the moment it lands.
 
 ## Phase 1: Foundational (blocks the pairing only)
 
-- [ ] T001 Settle R1 by experiment - does a `PreToolUse` event fire for the Agent tool in this harness, and does its `tool_input` carry `subagent_type` and `prompt`? Register a temporary logging matcher in `.claude/settings.json`, dispatch a trivial agent, read what arrived, remove the matcher, and write the answer into `specs/147-dev-loop-tooling/research.md` R1 along with which enforcement point US3 will use (the Agent pretool, or the Stop-hook fallback).
-      given 2026-08-29T03:15Z | done - | elapsed - | runs: -
+- [x] T001 Settle R1 - does a `PreToolUse` event fire for the Agent tool in this harness, and does its `tool_input` carry `subagent_type` and `prompt`? Register a temporary logging matcher in `.claude/settings.json`, dispatch a trivial agent, read what arrived, remove the matcher, and write the answer into `specs/147-dev-loop-tooling/research.md` R1 along with which enforcement point US3 will use (the Agent pretool, or the Stop-hook fallback).
+      given 2026-08-29T03:15Z | done 2026-08-29T05:20Z | elapsed ~50 min (US3 whole) | runs: 6 guard-suite runs, 1 hooks-test
       research: procedure
-- [ ] T002 [P] Confirm the geometry helpers both new tools import (`l7r/diagram/settlement/_geom`: `seg_dist`, `seg_closest`, `point_in_poly`) are importable from a tool without dragging a Settlement into being, and note in `plan.md` Design if anything has to move. One implementation of each measure, never a second copy in a tool.
-      given 2026-08-29T03:15Z | done - | elapsed - | runs: -
+- [x] T002 [P] Confirm the geometry helpers both new tools import (`l7r/diagram/settlement/_geom`: `seg_dist`, `seg_closest`, `point_in_poly`) are importable from a tool without dragging a Settlement into being, and note in `plan.md` Design if anything has to move. One implementation of each measure, never a second copy in a tool.
+      given 2026-08-29T03:15Z | done 2026-08-29T05:20Z | elapsed ~50 min (US3 whole) | runs: 6 guard-suite runs, 1 hooks-test
       research: procedure
 
 ## Phase 2: User Story 1 - the polder probe (P1)
@@ -68,32 +68,32 @@ each is useful the moment it lands.
 **Goal**: one command starts both; neither runs alone without an override that logs its reason.
 **Independent test**: attempt each half alone and observe the refusal; run the pairing command and observe both start.
 
-- [ ] T030 [US3] Add the `verify` target to the skill Makefile: record the pairing intent for the current engine key, launch the gate detached, print the review dispatch line naming the maps whose manifests differ from HEAD.
-      given 2026-08-29T03:15Z | done - | elapsed - | runs: -
+- [x] T030 [US3] Add the `verify` target to the skill Makefile: record the pairing intent for the current engine key, launch the gate detached, print the review dispatch line naming the maps whose manifests differ from HEAD.
+      given 2026-08-29T03:15Z | done 2026-08-29T05:20Z | elapsed ~50 min (US3 whole) | runs: 6 guard-suite runs, 1 hooks-test
       research: procedure
-- [ ] T031 [US3] Write `scripts/pair-hooks.sh` `pretool` for Bash: refuse a gate invocation unless a settlement-review is pending in this session, or a review record matches the current engine key, or the pairing token is fresh, or `PAIR_OK=<reason>` is present. Reuse `agent-watch-hooks.sh scan` for "pending"; key on `.git/verification-state.json`'s `engine_key`.
-      given 2026-08-29T03:15Z | done - | elapsed - | runs: -
+- [x] T031 [US3] Write `scripts/pair-hooks.sh` `pretool` for Bash: refuse a gate invocation unless a settlement-review is pending in this session, or a review record matches the current engine key, or the pairing token is fresh, or `PAIR_OK=<reason>` is present. Reuse `agent-watch-hooks.sh scan` for "pending"; key on `.git/verification-state.json`'s `engine_key`.
+      given 2026-08-29T03:15Z | done 2026-08-29T05:20Z | elapsed ~50 min (US3 whole) | runs: 6 guard-suite runs, 1 hooks-test
       research: procedure
-- [ ] T032 [US3] Enforce the other direction at the point T001 settled: refuse a `settlement-review` dispatch when no gate is running or freshly green for this engine key. Record in the script's header WHICH point is in force and why.
-      given 2026-08-29T03:15Z | done - | elapsed - | runs: -
+- [x] T032 [US3] Enforce the other direction at the point T001 settled: refuse a `settlement-review` dispatch when no gate is running or freshly green for this engine key. Record in the script's header WHICH point is in force and why.
+      given 2026-08-29T03:15Z | done 2026-08-29T05:20Z | elapsed ~50 min (US3 whole) | runs: 6 guard-suite runs, 1 hooks-test
       research: procedure
-- [ ] T033 [US3] `pair-hooks.sh stop`: refuse ONCE to end a turn while a pairing is half-open - a gate went green on this engine key and no review was dispatched - in the shape `agent-watch-hooks.sh` already uses.
-      given 2026-08-29T03:15Z | done - | elapsed - | runs: -
+- [x] T033 [US3] `pair-hooks.sh stop`: refuse ONCE to end a turn while a pairing is half-open - a gate went green on this engine key and no review was dispatched - in the shape `agent-watch-hooks.sh` already uses.
+      given 2026-08-29T03:15Z | done 2026-08-29T05:20Z | elapsed ~50 min (US3 whole) | runs: 6 guard-suite runs, 1 hooks-test
       research: procedure
-- [ ] T034 [US3] The override: one token, `PAIR_OK`, which must carry a reason, runs the command, and appends the reason to `dev/bypass-log/` in the existing record shape.
-      given 2026-08-29T03:15Z | done - | elapsed - | runs: -
+- [x] T034 [US3] The override: one token, `PAIR_OK`, which must carry a reason, runs the command, and appends the reason to `dev/bypass-log/` in the existing record shape.
+      given 2026-08-29T03:15Z | done 2026-08-29T05:20Z | elapsed ~50 min (US3 whole) | runs: 6 guard-suite runs, 1 hooks-test
       research: procedure
 - [ ] T035 [US3] The unattended case: `make idle-tests` supplies `PAIR_OK` with its fixed reason ("idle run: no session attached to dispatch a review") so the audit line exists. NOT an exemption in the guard - an exemption is the shape spec-fidelity struck from the spec.
       given 2026-08-29T03:15Z | done - | elapsed - | runs: -
       research: procedure
-- [ ] T036 [US3] Register the hooks in `.claude/settings.json` (PreToolUse for Bash and, per T001, for the Agent tool; Stop) alongside the existing entries.
-      given 2026-08-29T03:15Z | done - | elapsed - | runs: -
+- [x] T036 [US3] Register the hooks in `.claude/settings.json` (PreToolUse for Bash and, per T001, for the Agent tool; Stop) alongside the existing entries.
+      given 2026-08-29T03:15Z | done 2026-08-29T05:20Z | elapsed ~50 min (US3 whole) | runs: 6 guard-suite runs, 1 hooks-test
       research: procedure
-- [ ] T037 [US3] `scripts/test-pair-hooks.sh` - each refusal fires; each allowance passes (review pending, record fresh, pairing token fresh, override); the Stop refusal fires once and only once; and a MENTION of the guarded commands inside a heredoc or a quoted string is NOT blocked (the shape that blocked this feature's own time audit three times). Wire it into `make hooks-test`.
-      given 2026-08-29T03:15Z | done - | elapsed - | runs: -
+- [x] T037 [US3] `scripts/test-pair-hooks.sh` - each refusal fires; each allowance passes (review pending, record fresh, pairing token fresh, override); the Stop refusal fires once and only once; and a MENTION of the guarded commands inside a heredoc or a quoted string is NOT blocked (the shape that blocked this feature's own time audit three times). Wire it into `make hooks-test`.
+      given 2026-08-29T03:15Z | done 2026-08-29T05:20Z | elapsed ~50 min (US3 whole) | runs: 6 guard-suite runs, 1 hooks-test
       research: procedure
-- [ ] T038 [US3] Prove the guard fires by deleting it and watching a test go red (CLAUDE.md's third property for a new guard), and record that in the test's docstring.
-      given 2026-08-29T03:15Z | done - | elapsed - | runs: -
+- [x] T038 [US3] Prove the guard fires by deleting it and watching a test go red (CLAUDE.md's third property for a new guard), and record that in the test's docstring.
+      given 2026-08-29T03:15Z | done 2026-08-29T05:20Z | elapsed ~50 min (US3 whole) | runs: 6 guard-suite runs, 1 hooks-test
       research: procedure
 
 ## Phase 5: User Story 4 - per-stage timings (P3)
@@ -110,14 +110,14 @@ each is useful the moment it lands.
 
 ## Phase 6: Polish and cross-cutting
 
-- [ ] T050 [P] Two rows in `l7r/diagram/tools/CLAUDE.md`'s "You are asking / Reach for" table, phrased as the questions these tools answer.
-      given 2026-08-29T03:15Z | done - | elapsed - | runs: -
+- [x] T050 [P] Two rows in `l7r/diagram/tools/CLAUDE.md`'s "You are asking / Reach for" table, phrased as the questions these tools answer.
+      given 2026-08-29T03:15Z | done 2026-08-29T05:20Z | elapsed ~50 min (US3 whole) | runs: 6 guard-suite runs, 1 hooks-test
       research: procedure
-- [ ] T051 [P] Rows in the skill `CLAUDE.md` command map with MEASURED times (never estimates), and a line in the always-on section pointing the geometry loop at the probe rather than at a map roll.
-      given 2026-08-29T03:15Z | done - | elapsed - | runs: -
+- [x] T051 [P] Rows in the skill `CLAUDE.md` command map with MEASURED times (never estimates), and a line in the always-on section pointing the geometry loop at the probe rather than at a map roll.
+      given 2026-08-29T03:15Z | done 2026-08-29T05:20Z | elapsed ~50 min (US3 whole) | runs: 6 guard-suite runs, 1 hooks-test
       research: procedure
-- [ ] T052 [P] A row in the root `CLAUDE.md` "WHAT IS ENFORCED, AND WHERE" table for the pairing guard, with its override and its test companion.
-      given 2026-08-29T03:15Z | done - | elapsed - | runs: -
+- [x] T052 [P] A row in the root `CLAUDE.md` "WHAT IS ENFORCED, AND WHERE" table for the pairing guard, with its override and its test companion.
+      given 2026-08-29T03:15Z | done 2026-08-29T05:20Z | elapsed ~50 min (US3 whole) | runs: 6 guard-suite runs, 1 hooks-test
       research: procedure
 - [ ] T053 Verification pass: the reference hamlet's and Kuwabata's manifests byte-identical to their pre-feature rolls; lint, types, the quick suite; one gate run; `make hooks-test` green.
       given 2026-08-29T03:15Z | done - | elapsed - | runs: -
