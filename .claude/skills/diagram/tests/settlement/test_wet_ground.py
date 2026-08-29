@@ -52,7 +52,10 @@ def _ring(x0: float, y0: float, x1: float, y1: float, n: int = 30) -> list[list[
     )
 
 
-_BAND = _ring(600.0, 200.0, 640.0, 800.0)  # a 40 ft dike band, N-S
+_BAND = _ring(600.0, 200.0, 640.0, 800.0)  # a 40 ft dike band, N-S...
+_CREST = [
+    [620.0, 200.0 + 30.0 * i] for i in range(21)
+]  # ...and its centerline, which every drawn band records and the keep-out reads (it tests the crest + half of w_max, not the 360-point ribbon: feature 139 T55 perf)
 _WIDE = [(300.0, 200.0), (900.0, 200.0), (900.0, 800.0), (300.0, 800.0)]  # a marsh polygon straight over it
 
 
@@ -81,7 +84,7 @@ def test_a_marsh_over_a_dike_band_draws_no_reed_on_it_and_would_without_the_dike
 
     diked = Settlement(1200, 1000, seed=2)
     diked.meta(name="V", scale="village")
-    diked.M["dikes"] = [{"outline": _BAND, "w_min": 40.0, "w_max": 40.0}]
+    diked.M["dikes"] = [{"outline": _BAND, "crest": _CREST, "w_min": 40.0, "w_max": 40.0}]
     diked.marsh(_WIDE, role="waterside")
     assert [1 for x, y in _marks(diked) if _on_band(x, y)] == []
 
@@ -91,7 +94,7 @@ def test_a_wet_tint_circle_keeps_its_whole_body_off_the_mound() -> None:
     is what laps the greenery. Centers stand at least the widest radius clear."""
     s = Settlement(1200, 1000, seed=5)
     s.meta(name="V", scale="village")
-    s.M["dikes"] = [{"outline": _BAND, "w_min": 40.0, "w_max": 40.0}]
+    s.M["dikes"] = [{"outline": _BAND, "crest": _CREST, "w_min": 40.0, "w_max": 40.0}]
     s.marsh(_WIDE, role="waterside")
     svg = "".join(s.out)
     tints = [(float(a), float(b), float(r)) for a, b, r in re.findall(r'<circle cx="([-\d.]+)" cy="([-\d.]+)" r="([\d.]+)" fill="#9FBBAE"', svg)]

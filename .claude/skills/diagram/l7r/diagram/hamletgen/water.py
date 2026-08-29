@@ -12,9 +12,9 @@ from typing import Any
 from l7r.diagram.settlement import Settlement, knob_rng, point_in_poly, seg_intersect, segments_cross
 from l7r.diagram.settlement.land.dikes import DIKE_GAP_HW
 from l7r.diagram.sitegen.geom import crosses_poly, net_acres, poly_area
-from l7r.diagram.waterfields import build_comb, build_polder
+from l7r.diagram.waterfields import build_comb, build_polder, clean_polder_parcels
 
-from .consts import DIKEPOND_CONVERSION, FAN_ASPECTS, GRAIN, POLDER_ARCHETYPES, POLDER_FABRIC, POND_LAYOUT_MOSAIC, REF_CANAL_A, REF_CANAL_B, REF_FIELD_FALL, Poly, Pt
+from .consts import DIKEPOND_CONVERSION, FAN_ASPECTS, GRAIN, POLDER_ARCHETYPES, POLDER_FABRIC, POND_LAYOUT_MOSAIC, REF_CANAL_A, REF_CANAL_B, REF_FIELD_FALL, WATERWARD_DEPTH, Poly, Pt
 from .plan import SitePlan, _roll
 
 # ---- STAGE 1: the water frame -------------------------------------------------------------------
@@ -468,7 +468,19 @@ def fit_polder(plan: SitePlan, seed: int, tolerance: float = 0.06, rounds: int =
         net = None
         for wander in (0.5, 0.4, 0.3, 0.2, 0.12):
             net = build_polder(
-                plan.W, plan.H, origin, seed, down_deg=plan.down_deg, rows=rows, cols=cols, cell=cellpx, parcel_mix=tuple(fab["parcel_mix"]), gap=tuple(fab["gap"]), edge_wander=wander, mosaic=mosaic
+                plan.W,
+                plan.H,
+                origin,
+                seed,
+                down_deg=plan.down_deg,
+                rows=rows,
+                cols=cols,
+                cell=cellpx,
+                parcel_mix=tuple(fab["parcel_mix"]),
+                gap=tuple(fab["gap"]),
+                edge_wander=wander,
+                mosaic=mosaic,
+                clean_parcels=False,
             )
             _env = [(float(a), float(b)) for a, b in net["envelope"]]
             _xs = [q[0] for q in _env]
@@ -488,6 +500,7 @@ def fit_polder(plan: SitePlan, seed: int, tolerance: float = 0.06, rounds: int =
         if lo > hi:
             break  # pragma: no cover - the bisection exhausts its bracket without meeting tolerance; every seed tried lands inside 6% within the rounds allowed, and the guard is what stops a runaway if a future cell size widens the gap between grid steps
     assert best is not None
+    clean_polder_parcels(best)  # the parcel/channel cleanup runs on the WINNER only (feature 139 T55) - see clean_polder_parcels for the 15 s -> 41 s it costs on all 45 candidates
     return best
 
 
@@ -589,7 +602,7 @@ def waterward_flanks(plan: SitePlan) -> list[str]:
     return [q for q in (f["minus"], f["plus"], f["foot"]) if q != f["cluster"]]
 
 
-def dike_face(pts: Sequence[Pt], flank: str, lo: float, hi: float, bins: int = 64, cut: float = 0.0, cuts: Sequence[Pt] = (), cut_hw: float = DIKE_GAP_HW) -> Poly:
+def dike_face(pts: Sequence[Pt], flank: str, lo: float, hi: float, bins: int = 32, cut: float = 0.0, cuts: Sequence[Pt] = (), cut_hw: float = DIKE_GAP_HW) -> Poly:
     """The dike's OUTER FACE along one flank, as a polyline spanning [lo, hi] (feature 139 T54).
 
     The waterward reed strip has to end exactly where the embankment starts: on the mound is the GM's
@@ -628,15 +641,26 @@ def dike_face(pts: Sequence[Pt], flank: str, lo: float, hi: float, bins: int = 6
     filled = [k for k in range(bins) if buckets[k]]
     first, final = (filled[0], filled[-1]) if filled else (bins, -1)
     last = min(fs) if outward_min else max(fs)  # the extreme, for the bins beyond the ring's own extent
-    out: Poly = []
+    vals: list[float] = []
     for k in range(bins):
         if buckets[k]:
             last = min(buckets[k]) if outward_min else max(buckets[k])
         v = last
         c = lo + (k + 0.5) * step
-        if first <= k <= final and any(abs(g[ai] - c) <= cut_hw + step / 2 for g in cuts):  # the OPENING itself (dikes.DIKE_GAP_HW), plus the bin that holds it - not a band's width either side
+        if first <= k <= final and any(abs(g[ai] - c) <= cut_hw + step / 2 for g in cuts):
             v = last + (cut if outward_min else -cut)  # a NOTCH on this flank: the water passes through the cut
-        out.append((round(v, 1), round(c, 1)) if horiz else (round(c, 1), round(v, 1)))
+        vals.append(v)
+    # THINNED, BUT IN SQUARE STEPS. Every point of this polyline is paid for again by `marsh()`'s
+    # per-scatter-point `point_in_poly` - 64 bins turned a 4-point rectangle into a 66-point ring in the
+    # hottest test on the map - so a run of bins at one face value emits its FIRST and LAST point only.
+    # Keeping just the first was tried and is wrong: the run then slants to the next value across its
+    # whole length, and a slant cuts back INSIDE the band it was measured to stay outside of (5.5 px on
+    # the unit fixture). The step is square; only the one bin where the face actually changes slants.
+    out: Poly = []
+    for k, v in enumerate(vals):
+        if k in (0, bins - 1) or v != vals[k - 1] or v != vals[k + 1]:
+            c = lo + (k + 0.5) * step
+            out.append((round(v, 1), round(c, 1)) if horiz else (round(c, 1), round(v, 1)))
     return out
 
 
@@ -678,11 +702,18 @@ def stage_waterward(s: Settlement, plan: SitePlan) -> None:
         for g in dk.get("gaps") or []:
             gx, gy = float(g[0]), float(g[1])
             by_flank[min((("W", gx - x0), ("E", x1 - gx), ("N", gy - y0), ("S", y1 - gy)), key=lambda t: t[1])[0]].append((gx, gy))
+    # THE STRIP IS A BAND, NOT A HALF-CANVAS (feature 139 T55). It used to run from the dike's face to the
+    # edge of the canvas, and the crop then threw nearly all of it away - on Kuwabata the view keeps ~74 px
+    # of open water west of the dike out of the 1,880 px drawn. Every one of those reeds and tint circles
+    # was scattered, tested against every keep-out and discarded: `stage_waterward` cost 18-24 s of a 40 s
+    # gen. `WATERWARD_DEPTH` outlasts any crop this tier produces while cutting the scatter ~4x; the strip
+    # still runs off the frame, so it is still wild ground continuing rather than a feature with an edge.
+    d = WATERWARD_DEPTH
     strips: dict[str, Poly] = {
-        "W": [(-20.0, ylo), *dike_face(pts, "W", ylo, yhi, cut=cut, cuts=by_flank["W"]), (-20.0, yhi)],
-        "E": [(W + 20.0, ylo), *dike_face(pts, "E", ylo, yhi, cut=cut, cuts=by_flank["E"]), (W + 20.0, yhi)],
-        "N": [(xlo, -20.0), *dike_face(pts, "N", xlo, xhi, cut=cut, cuts=by_flank["N"]), (xhi, -20.0)],
-        "S": [(xlo, H + 20.0), *dike_face(pts, "S", xlo, xhi, cut=cut, cuts=by_flank["S"]), (xhi, H + 20.0)],
+        "W": [(max(-20.0, x0 - d), ylo), *dike_face(pts, "W", ylo, yhi, cut=cut, cuts=by_flank["W"]), (max(-20.0, x0 - d), yhi)],
+        "E": [(min(W + 20.0, x1 + d), ylo), *dike_face(pts, "E", ylo, yhi, cut=cut, cuts=by_flank["E"]), (min(W + 20.0, x1 + d), yhi)],
+        "N": [(xlo, max(-20.0, y0 - d)), *dike_face(pts, "N", xlo, xhi, cut=cut, cuts=by_flank["N"]), (xhi, max(-20.0, y0 - d))],
+        "S": [(xlo, min(H + 20.0, y1 + d)), *dike_face(pts, "S", xlo, xhi, cut=cut, cuts=by_flank["S"]), (xhi, min(H + 20.0, y1 + d))],
     }
     flanks = waterward_flanks(plan)
     for q in flanks:

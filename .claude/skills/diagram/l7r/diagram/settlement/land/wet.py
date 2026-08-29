@@ -93,10 +93,39 @@ class WetGroundMixin:
         # its shape) - ADAPTIVELY, never a fixed stride: a fixed 8:1 on a coarse ring drops it to three points
         # and the keep-out silently covers nothing, which is the shape of every "check that never runs" in this
         # engine (caught by the test that reeds the band with no dike recorded and leaves it bare with one).
-        _mounds = [[(float(mx), float(my)) for mx, my in dk["outline"][:: max(1, len(dk["outline"]) // 360)]] for dk in self.M.get("dikes", []) if len(dk.get("outline") or []) >= 8]
-        _mounds += [[(float(mx), float(my)) for mx, my in dp["bank"]] for dp in self.M.get("dikeponds", []) if dp.get("bank")]
-        _mnd_pad = MARSH_TINT_R * bs  # the widest tint circle: its CENTER stands that far off, so no haze laps the mound
-        mnd_b = boxed_grid(boxed_polys(_mounds, _mnd_pad))  # the box pad matches the widest edge_pad below, so the prefilter can never reject a point the exact test wanted
+        # THE BAND IS ITS CREST AND ITS WIDTH, not its outline ring. Testing a 360-point ribbon per scatter
+        # point cost 21.7 s in `stage_waterward` alone and 11.9 s in the hinterland (measured 2026-08-29,
+        # a 14 s gen become 45 s) - the ribbon's bbox covers the whole block, so the prefilter pruned
+        # nothing and every point paid for a full point-in-poly plus an edge walk. The crest is 144 points
+        # of SEGMENTS, each with its own small box, so a point tests one or two of them. The trade is
+        # deliberate and one-directional: half of `w_max` is used the whole way round, so on a stretch
+        # pinched to `w_min` the keep-off runs up to (w_max - w_min)/2 further out than the drawn earth -
+        # reeds standing a few feet further back on a narrow stretch, never a mark ON the mound.
+        _pads = {MARSH_TINT_R * bs, MARSH_TUFT_R * bs}
+        _reach = max(_pads) + 40.0  # this polygon's own box, plus the widest keep-off and the widest band
+        _crests = [
+            ([(float(mx), float(my)) for mx, my in dk["crest"]], float(dk.get("w_max", 0.0)) / 2)
+            for dk in self.M.get("dikes", [])
+            if len(dk.get("crest") or []) >= 2
+            and not (
+                min(q[0] for q in dk["crest"]) - _reach > x1
+                or max(q[0] for q in dk["crest"]) + _reach < x0
+                or min(q[1] for q in dk["crest"]) - _reach > y1
+                or max(q[1] for q in dk["crest"]) + _reach < y0
+            )
+        ]
+        mnd_g = {pad: boxed_grid(boxed_segs([(pl, hw + pad) for pl, hw in _crests])) for pad in _pads}
+        # ...and only the mounds THIS polygon could reach: a waterward strip lies outside the block, so
+        # none of the 26 pond banks can touch it, and testing each of them per scatter point was pure cost.
+        _banks = [
+            [(float(mx), float(my)) for mx, my in dp["bank"][:: max(1, len(dp["bank"]) // 16)]]  # a bank ring is a parcel outline; 16 points hold its shape for a keep-out
+            for dp in self.M.get("dikeponds", [])
+            if dp.get("bank")
+            and not (
+                min(q[0] for q in dp["bank"]) - _reach > x1 or max(q[0] for q in dp["bank"]) + _reach < x0 or min(q[1] for q in dp["bank"]) - _reach > y1 or max(q[1] for q in dp["bank"]) + _reach < y0
+            )
+        ]
+        bank_b = boxed_grid(boxed_polys(_banks, max(_pads)))  # a pond bank is a small ring - its own box prunes it
 
         def _sparse(
             px: float, py: float, drop: float, mound_pad: float = 0.0
@@ -113,7 +142,8 @@ class WetGroundMixin:
                 or boxed_hit(px, py, blk_b.near(px, py))  # ... and OFF any building/shrine/torii footprint
                 or boxed_hit(px, py, clr_b.near(px, py))  # ... and off the swept sacred/funerary verge
                 or boxed_hit(px, py, avd_b.near(px, py))
-                or boxed_hit(px, py, mnd_b.near(px, py), mound_pad)  # ... and off every earthen mound, by the drawn mark's own reach (T54)
+                or (mound_pad in mnd_g and boxed_seg_hit(px, py, mnd_g[mound_pad].near(px, py)))  # ... and off every earthen mound, by the drawn mark's own reach (T54)
+                or boxed_hit(px, py, bank_b.near(px, py), mound_pad)  # ... and off every fish pond's mulberry bank
             ):  # ... and OUT of any keep-out
                 return True
             # ...AND THE MARK'S OWN REACH KEEPS OFF THE WATER, not just its center (feature 139 T54,

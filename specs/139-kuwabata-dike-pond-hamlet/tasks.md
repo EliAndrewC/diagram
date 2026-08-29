@@ -137,4 +137,16 @@ Checked off only when verified on Kuwabata (and Inashiro unchanged). T99 is the 
       - [x] recorded and cited (`settlement/land/wet.py` `marsh` keep-out, `hamletgen/water.py` `dike_face` + `stage_waterward`, `settlements/water.md`, `pool/hamlets/kuwabata.notes.md`, the spec's Decisions Recorded)
       outcome: no reed blade, glint or wet-tint circle of any marsh role touches a perimeter dike band or a fish pond's mulberry bank on any map (structural check on Kuwabata's own ink: 0 of 11,299 tint circles, 0 of 98,928 blades, 0 of 3,260 glints), and the waterward strip's inner edge FOLLOWS the dike's outer face, so nothing extends past a mound either; Inashiro byte-identical
 
+- [x] T55 **a vegetable ground may not overlap the channels beside it** - the GM (2026-08-29), reviewing the map after T54: *"Looks great!  The only issue I see now is that one of the vegetable grounds overlaps with the irrigated channels which run between the vegetable grounds and the ponds.  So the placement rules should be updated to fix this."*
+      given 2026-08-29T01:20Z | done 2026-08-29T03:10Z | elapsed ~1.9 h | runs: 12 map rolls, 6 quick runs, 1 baseline worktree, 1 gate
+      research: rendering
+      outcome: a channel that CROSSES a parcel now cuts it (the strip beyond the ditch was never that
+      holding's ground) and the remaining outline is projected onto the band's edge, so it follows the
+      channel's own curve and keeps its wander everywhere else. Measured on Kuwabata: 335 channel-stroke
+      samples inside a parcel -> 0, with the leftover vegetable ground the GM saw the worst of them.
+      Priced and declined, both measured: PUSHING every outline point off the band (the parcel swallowed
+      the ditch whole - 45 samples became 133) and CLIPPING by half-planes along the run (cleared the
+      water but straightened the wandered edges, failing `polder_parcels_are_organic`, and cost 3.4% of
+      the block's acreage).
+
 - [ ] T99 **the GM accepts the scripted Kuwabata** - tickable only on the GM's explicit word, recorded here verbatim. Never ticked by a session.

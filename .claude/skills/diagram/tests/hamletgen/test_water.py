@@ -95,7 +95,7 @@ def test_dike_face_reads_the_rings_own_side_and_carries_a_gap() -> None:
     ring += [(210.0, y) for y in range(600, 801, 10)]  # west face again below a gap, 10 px further in
     ring += [(900.0, y) for y in range(200, 801, 10)]  # the east face
     face = hg.water.dike_face(ring, "W", 100.0, 900.0, bins=16)
-    assert len(face) == 16
+    assert 3 <= len(face) <= 16  # thinned as it goes: a straight run of bins emits two points, not sixteen
     assert all(x <= 210.0 for x, _y in face), f"the east face leaked into the west flank: {face}"
     at = lambda y: min(face, key=lambda p: abs(p[1] - y))[0]  # noqa: E731 - the bin whose center is nearest y
     assert at(250.0) == 200.0 and at(750.0) == 210.0  # each stretch reports its own face

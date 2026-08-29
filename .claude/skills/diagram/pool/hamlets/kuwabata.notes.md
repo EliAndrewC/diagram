@@ -127,6 +127,20 @@ district's ground. Drawn at 1 ft/px.
   where the rectangular waterside marsh laps the dike outline, 105 are crowns lapping a pond feed
   by 1-2 ft. A clean bill cannot be earned here until the audit knows the archetype (review
   2026-08-28).
+- 2026-08-29 the GM's third review (T55): a vegetable ground lay across the irrigated channel beside
+  it. Fixed in `build_polder`: a channel that crosses a parcel cuts it, and the rest of the outline is
+  projected onto the band's edge (0 of 335 stroke samples remain inside a parcel). Two other approaches
+  were measured and declined - see `_plots_clear_of_channels`.
+- PERFORMANCE, measured against the pre-T54 tree in a detached worktree: Kuwabata's gen was 13-17 s and
+  is now 27-32 s (the machine's own noise is +/-20% on both). The cost is T54's marsh keep-out, which
+  asks a per-scatter-point question of every mound, plus the face-following waterward strips, whose
+  outlines are 30-60 points where they used to be 4 - `point_in_poly` on the strip is the hottest test
+  on the map (`stage_waterward` 0.68 s -> 7.4 s, `stage_hinterland` 3.5 s -> 9.8 s). Clawed back so far:
+  the band is tested as its CREST + half-width rather than a 360-point ribbon, the strips are a 280 px
+  band rather than a half-canvas the crop throws away, the face is thinned to square steps, and mounds
+  and banks are pruned to each marsh's own bbox. T55's own parcel cleanup costs 0.02 s and runs on the
+  winning block only, never on the 45 the acreage fit tries. No other map is affected: with no dike and
+  no dike-ponds recorded the keep-out sets are empty and the per-point cost is a length check.
 - The south outfall's surroundings, measured after the notch step-in landed (2026-08-29): the strip's
   inner edge now dips into the cut (edge y 2249.8 -> 2200.4 -> 2227.9 across x 2293-2354), the sluice
   gate is still drawn, and no mark stands on the band. The ground right at the mouth is still barer

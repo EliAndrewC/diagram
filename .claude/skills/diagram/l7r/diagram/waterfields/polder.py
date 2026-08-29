@@ -5,6 +5,8 @@ import random
 from collections.abc import Callable
 from typing import Any
 
+from l7r.diagram.settlement._geom import seg_closest
+
 from .banks import hem_to_bank, round_channel_joints
 from .frame import Poly, Pt, _poly_area
 from .palette import FLOODED, PADDY_CELL_ACRES, RICE_GREENS, organic_parcel
@@ -156,6 +158,7 @@ def build_polder(
     mosaic: float = 0.0,
     line_wander: float = 0.10,
     organic: tuple[float, float] = (0.05, 0.02),
+    clean_parcels: bool = True,
 ) -> dict[str, Any]:
     """POLDER GRID (圩田 wei-tian / reclaimed-marsh grid): a rectilinear block of paddies on flat reclaimed
     low ground, an orthogonal ditch-grid module inside a perimeter dike. Returns build_comb-compatible keys
@@ -211,7 +214,6 @@ def build_polder(
     sides_st, fi, di, sluice = _polder_ring(R, grid, span_s, span_t)
     channels, brook, dike_sluices, floor, out_t = _polder_channels(grid, sides_st, nodes, rows, cols, tt, span_s, span_t, fi, di)
     _drn = _polder_close(plots, channels, sides_st, grid, down_deg)
-    acres = sum(_poly_area(p["poly"]) for p in plots) * 4 / 43560
     round_channel_joints(channels)  # earthen water turns on a swept bend, not a mitred corner
     # THE RING CLOSES (feature 139 T52, GM 2026-08-28: "a spot close to the top left of the rectangular boundary
     # of irrigated channels ... does not plate connect. It stops just short"). The corner rounding above sweeps
@@ -238,6 +240,9 @@ def build_polder(
                     _hx, _hy = _best[0] - _nb[0], _best[1] - _nb[1]
                     _hl = math.hypot(_hx, _hy) or 1.0
                     c["pts"][_k] = (round(_best[0] + _hx / _hl * 3.0, 1), round(_best[1] + _hy / _hl * 3.0, 1))
+    if clean_parcels:  # after the channels are FINAL - the rounding and the toe snap both move them
+        _plots_clear_of_channels(plots, channels)
+    acres = sum(_poly_area(p["poly"]) for p in plots) * 4 / 43560  # ...and after the parcels are, so the acreage is the ground actually cropped
     return {
         "channels": channels,
         "plots": plots,
@@ -656,6 +661,111 @@ def _polder_channels(
     return channels, brook, dike_sluices, floor, out_t
 
 
+def _plots_clear_of_channels(plots: list[dict[str, Any]], channels: list[dict[str, Any]], margin: float = 1.5, step: float = 4.0) -> None:
+    """A PARCEL STOPS AT THE DITCH THAT BOUNDS IT (feature 139 T55, GM 2026-08-29: "one of the vegetable
+    grounds overlaps with the irrigated channels which run between the vegetable grounds and the ponds").
+
+    The lattice's channels are laid on the IDEAL grid line, while the parcels are wandered off it for an
+    organic look (`line_wander`, `organic`) and the joints are rounded and the toe ends snapped
+    afterwards - so a parcel can end up on the wrong side of the very ditch that bounds it. Measured on
+    Kuwabata: a lateral ran 9 ft INSIDE one parcel's west edge for its whole length, and because that
+    parcel was the block's leftover ground its vegetable rows were drawn under the water; two converted
+    parcels in the same state hid it under their mulberry banks.
+
+    THE EDGE IS PROJECTED ONTO THE CHANNEL, not straightened and not shoved. Each parcel outline is
+    densified and every sample asked one question - which side of the water is it on, and how far. A
+    sample on the parcel's own side and clear of the band stays exactly where the wander put it; every
+    other sample is moved to the band's edge on that side, so the new boundary follows the CHANNEL'S OWN
+    CURVE and the parcel keeps its organic outline everywhere else.
+
+    Two cuts of this were tried and measured first, both recorded because either would be reached for
+    again. PUSHING every point off the band made it worse - the boundary moved off the water on both
+    sides, so the parcel swallowed the ditch whole with a 3 ft clearance (plot 20: 45 stroke samples
+    inside became 133). CLIPPING by half-planes along the run did clear the water (0 samples) but
+    replaced the wandered edges with straight cuts and failed `polder_parcels_are_organic`, and cost
+    3.4% of the block's acreage."""
+    chans: list[tuple[Poly, float, float, float, float, float]] = []
+    for c in channels:
+        hw = max(float(c.get("w", 0.0)), float(c.get("w_tail", 0.0))) / 2 + margin
+        pts = [(float(x), float(y)) for x, y in c["pts"]]
+        if len(pts) < 2:
+            continue
+        xs, ys = [q[0] for q in pts], [q[1] for q in pts]
+        chans.append((pts, hw, min(xs) - hw, min(ys) - hw, max(xs) + hw, max(ys) + hw))
+    if not chans:
+        return
+    for p in plots:
+        ring = [(float(x), float(y)) for x, y in p["poly"]]
+        if len(ring) < 3:
+            continue
+        xs, ys = [q[0] for q in ring], [q[1] for q in ring]
+        rx0, ry0, rx1, ry1 = min(xs), min(ys), max(xs), max(ys)
+        near = [ch for ch in chans if not (ch[2] > rx1 or ch[4] < rx0 or ch[3] > ry1 or ch[5] < ry0)]
+        if not near:
+            continue
+        dense: list[tuple[Pt, bool]] = []  # the outline at `step` (so a 72 ft edge cannot straddle the
+        for i, q in enumerate(ring):  # water between its ends), each point flagged once it has been MOVED
+            nxt = ring[(i + 1) % len(ring)]
+            n = max(1, int(math.dist(q, nxt) / step))
+            dense += [
+                ((q[0] + (nxt[0] - q[0]) * k / n, q[1] + (nxt[1] - q[1]) * k / n), k == 0) for k in range(n)
+            ]  # the parcel's OWN vertices are locked too: they carry the wander the archetype is checked on
+        for pts, hw, *_ in near:
+            # ONLY THE SEGMENTS THIS PARCEL CAN REACH: a trunk runs the whole block (500 segments) and
+            # this asks a nearest-point question per boundary sample - unpruned it cost 18 s of gen.
+            segs = [(a, b) for a, b in zip(pts, pts[1:], strict=False) if not (min(a[0], b[0]) - hw > rx1 or max(a[0], b[0]) + hw < rx0 or min(a[1], b[1]) - hw > ry1 or max(a[1], b[1]) + hw < ry0)]
+            if not segs:
+                continue
+            marks = [_nearest_on(q, segs) for q, _lk in dense]  # (foot, distance, signed side) per sample
+            if not any(d < hw for _f, d, _s in marks):
+                continue  # this channel passes the parcel's box but not the parcel
+            keep_side = 1.0 if sum(1 for _f, _d, s in marks if s > 0) >= len(marks) / 2 else -1.0
+            moved: list[tuple[Pt, bool]] = []
+            for (q, lock), (f, d, s) in zip(dense, marks, strict=True):
+                if d >= hw and s * keep_side > 0:
+                    moved.append((q, lock))
+                    continue
+                vx, vy = (q[0] - f[0]) * (s * keep_side), (q[1] - f[1]) * (s * keep_side)  # to the band's edge, on the parcel's own side
+                vl = math.hypot(vx, vy)
+                if vl < 1e-6:
+                    continue
+                moved.append(((f[0] + vx / vl * hw, f[1] + vy / vl * hw), True))
+            dense = [qp for i, qp in enumerate(moved) if i == 0 or math.dist(qp[0], moved[i - 1][0]) > 0.5]
+            if len(dense) < 3:
+                break
+        if len(dense) >= 3:
+            p["poly"] = [(round(x, 1), round(y, 1)) for x, y in _thin(dense)]
+
+
+def _thin(ring: list[tuple[Pt, bool]], tol: float = 0.4) -> Poly:
+    """Drop the samples the densify added back out: a point within `tol` of the line between its
+    neighbors carries no shape. A point MOVED onto the water's edge is locked - thinning those away put the parcels back in the ditch (44 stroke samples) and flattened the wander until `polder_parcels_are_organic` fired. The pass works at 4 ft to find the water; the ring it hands back
+    is the wandered outline again (~30-60 points), not a 200-point polyline in every manifest and every
+    drawn `<polygon>`."""
+    out: Poly = []
+    for i, (q, lock) in enumerate(ring):
+        a = out[-1] if out else ring[-1][0]
+        b = ring[(i + 1) % len(ring)][0]
+        dx, dy = b[0] - a[0], b[1] - a[1]
+        ln = math.hypot(dx, dy)
+        if lock or ln < 1e-9 or abs((q[0] - a[0]) * dy - (q[1] - a[1]) * dx) / ln > tol:
+            out.append(q)  # a MOVED point is the new edge along the water: never thinned away
+    return out if len(out) >= 3 else [q for q, _lk in ring]
+
+
+def _nearest_on(q: Pt, segs: list[tuple[Pt, Pt]]) -> tuple[Pt, float, float]:
+    """The nearest point of a polyline to `q`, its distance, and which SIDE of the run `q` lies on (+/-1)."""
+    best: tuple[Pt, float, float] | None = None
+    for a, b in segs:
+        f = seg_closest(q[0], q[1], a, b)
+        d = math.hypot(q[0] - f[0], q[1] - f[1])
+        if best is None or d < best[1]:
+            cross = (b[0] - a[0]) * (q[1] - a[1]) - (b[1] - a[1]) * (q[0] - a[0])
+            best = (f, d, 1.0 if cross >= 0 else -1.0)
+    assert best is not None
+    return best
+
+
 def _onto_poly(pt: Pt, poly: list[Pt]) -> Pt:
     """The closest point on a polyline to `pt` (feature 139 T52: a collector's end onto its trunk)."""
     best, bd = pt, float("inf")
@@ -820,3 +930,13 @@ def build_ribbon(
         "furrows_vary": False,
         "sluice": (round(sluice[0], 1), round(sluice[1], 1)),
     }
+
+
+def clean_polder_parcels(net: dict[str, Any]) -> dict[str, Any]:  # noqa: D401
+    """Run the parcel/channel cleanup on a block built with `clean_parcels=False`, and re-measure its
+    acreage (feature 139 T55). `fit_polder` bisects with up to 45 candidate blocks and only one of them
+    is drawn, so the cleanup - which densifies every outline against every nearby channel - runs on the
+    WINNER rather than on all 45: measured, 15 s of gen became 41 s when every candidate paid for it."""
+    _plots_clear_of_channels(net["plots"], net["channels"])
+    net["acres"] = sum(_poly_area(p["poly"]) for p in net["plots"]) * 4 / 43560
+    return net

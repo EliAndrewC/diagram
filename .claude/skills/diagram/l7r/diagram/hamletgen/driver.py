@@ -149,6 +149,7 @@ def build(plan: SitePlan, avoid: Sequence[tuple[float, float]] = ()) -> Settleme
     these points. See `generate`, which re-rolls a map whose finished manifest stranded a farmhouse."""
     s = Settlement(W=plan.W, H=plan.H, seed=plan.spec.seed)
     s._avoid_seats = list(avoid)  # type: ignore[attr-defined]
+
     for stage in STAGES:
         stage(s, plan)
     return s
