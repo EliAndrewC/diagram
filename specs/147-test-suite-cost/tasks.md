@@ -36,6 +36,15 @@ and fix them."*
       (announced whether or not it is currently missing - a park that speaks up only when the floor would
       have failed is silent exactly when someone could act on it). `tests/tools/test_hamlet_floor.py` proves
       a parked line passes AND that it excuses only itself, so parking cannot quietly lower the floor
-- [ ] T22 feature 148: FIX the flakiness. What is already ruled out is recorded in both places above, so the
-      next session starts from the elimination rather than repeating it
-- [ ] T10 the GM's acceptance of the resulting state
+- [x] T22 the flakiness handed to its own feature (148) rather than left open here. WHY THE SPLIT, since it
+      changes where the GM's acceptance sits: the GM asked for acceptance as 147's final task, and then - after
+      the findings, exactly as they predicted - ruled that the speedup should land FIRST and the flakiness be
+      fixed after (*"I think it is worth pushing the speed up back to main even with the four being somewhat
+      flaky. However, once we have pushed back to main, I would like to have you work on fixing the
+      flakiness"*). A feature in progress lands nothing (constitution, no flag), so those two instructions
+      cannot both hold inside one feature: 147 would have to stay open for the fix, and then nothing could be
+      pushed. So 147 is the audit, the speedup and the park - complete and landed on the GM's own
+      authorization to land it - and 148 carries the fix AND the acceptance of the whole line of work. The GM
+      can move the acceptance back by saying so; nothing here is hard to undo
+- [x] T10 SUPERSEDED by T22: the GM authorized this landing in their own words rather than at an acceptance
+      task, and their acceptance now sits at the end of feature 148
