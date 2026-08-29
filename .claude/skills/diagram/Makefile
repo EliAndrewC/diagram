@@ -272,13 +272,14 @@ _switch:
 # --- expensive: they generate ---------------------------------------------------------------
 verify:         ## THE PAIRED RUN: start the gate and dispatch the settlement-review together (feature 149)
 	@printf '\033[1mverify\033[0m: the gate and the independent review run TOGETHER - neither alone (GM 2026-08-29).\n'
-	@$(RUN).ci engine-key worktree > .git/pairing-key 2>/dev/null || true
-	@printf 'engine key %s\n' "$$(cut -c1-12 .git/pairing-key 2>/dev/null)"
-	@maps=$$(git -C .. diff --name-only -- '.claude/skills/diagram/pool/*/*.json' 2>/dev/null | sed 's#.*/##;s#\.json##' | tr '\n' ' '); \
+	@root=$$(git rev-parse --show-toplevel) && python3 -m l7r.diagram.ci engine-key worktree > "$$root/.git/pairing-key" || true  # NOT $(RUN): it carries a leading @, which is a literal argument once it is not at the start of a recipe line
+	@root=$$(git rev-parse --show-toplevel) && printf 'engine key %s\n' "$$(cut -c1-12 "$$root/.git/pairing-key" 2>/dev/null)"
+	@root=$$(git rev-parse --show-toplevel); \
+	  maps=$$(git -C "$$root" diff --name-only HEAD~1 HEAD -- '.claude/skills/diagram/pool/*/*.json' 2>/dev/null | sed 's#.*/##;s#\.json##' | tr '\n' ' '); \
 	  printf 'maps whose manifest changed: %s\n' "$${maps:-none}"; \
 	  printf '\n\033[1mDISPATCH NOW\033[0m, in the same turn: settlement-review over%s, then let this gate run beside it.\n' " $${maps:-the delta}"
 	@printf '\nstarting the gate in the background - its verdict arrives as a task notification.\n\n'
-	@PAIR_OK="started by make verify - the review is dispatched in the same turn" nohup $(MAKE) --no-print-directory done > .git/verify-gate.log 2>&1 &
+	@root=$$(git rev-parse --show-toplevel); PAIR_OK="started by make verify - the review is dispatched in the same turn" nohup $(MAKE) --no-print-directory done > "$$root/.git/verify-gate.log" 2>&1 &
 
 map: export L7R_STAGE_PROFILE = $(if $(PROFILE),1,)
 map:            ## regenerate ONE gen and gate it   GEN=pool/hamlets/inashiro.gen.py [PROFILE=1: where the roll spent its time]

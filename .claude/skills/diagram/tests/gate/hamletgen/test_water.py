@@ -77,6 +77,7 @@ def test_a_dike_pond_hamlet_is_ponds_in_a_diked_block_with_wet_flanks() -> None:
     assert m["work_yards"] is False and M["threshing_yards"] and all(y.get("kind") == "forecourt" for y in M["threshing_yards"])
 
 
+@pytest.mark.rolls_map
 def test_the_polders_keep_outs_contain_what_they_stand_for() -> None:
     """Feature 139 on REAL geometry: the dike's few-chord keep-out contains every vertex of the drawn band, the
     field's facing chains never accept a point the outline refuses, and the counts are the GM's - a couple of

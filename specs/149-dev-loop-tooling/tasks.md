@@ -131,3 +131,19 @@ each is useful the moment it lands.
 - T001 blocks T032 and T036 (it decides where the second half is enforced). Nothing else waits on it.
 - US1, US2 and US4 are independent of each other and of US3; any of them can land alone.
 - T053 runs last, after every other task, and is the only task that may not be parallelized.
+
+## After acceptance: two defects in `make verify` itself, found the first time it ran for real (2026-08-29)
+
+- [x] T031a `verify` wrote `.git/pairing-key` and `.git/verify-gate.log` RELATIVE to the skill
+      directory, where there is no `.git` - so the pairing key was never recorded and the gate it
+      claimed to start never started (`/bin/sh: cannot create .git/verify-gate.log: Directory
+      nonexistent`, swallowed into the target's own output). Every path now resolves through
+      `git rev-parse --show-toplevel`. *(research: rendering)*
+- [x] T031b ...and the engine key was still empty after that, because `$(RUN)` is defined as
+      `@python3 -m l7r.diagram` - the `@` is a recipe-line prefix, and mid-line it is a literal
+      argument. `2>/dev/null || true` hid the failure. The line now names the interpreter directly,
+      with a comment saying why it may not use `$(RUN)`. *(research: rendering)*
+
+Both were invisible until the target ran outside its own test fixture, which is the lesson worth
+keeping: the fixture drove `pair-hooks.sh` (the guard) and never `make verify` (the caller).
+
