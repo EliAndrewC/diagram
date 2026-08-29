@@ -1,0 +1,6 @@
+{
+  "utc": "20260829T175034Z",
+  "guard": "pair-hooks",
+  "what": "gate alone",
+  "reason": "measurement roll for the caption same-side fix; two settlement-reviews have already run on this delta and their findings are what is being fixed"
+}

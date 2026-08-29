@@ -64,10 +64,19 @@ def stage_notice(s: Settlement, plan: SitePlan) -> None:
     hamlet's senior farmer, answering to the village headman). `place_kosatsuba` sites it itself,
     deterministically, from the same route records the validator reads.
 
-    It runs BEFORE the ground cover and the woods, not with the framing, because it needs a clear
-    verge and it competes for the same ground the scrub scatter and the grove clumps take. Sited
-    after them it silently found nowhere to go on one cohort map in six and the gate reported a
-    hamlet with no notice board - a failure of ORDER, not of siting."""
+    IT RUNS LAST - stage 17 of 17, after the woods, the ground cover, the crop and the title (GM
+    2026-08-29). This docstring used to say the opposite, and the reason it gave was real at the time:
+    sited after the cover it "silently found nowhere to go on one cohort map in six". What made that
+    true was the board AVOIDING the woods - it needed a clear verge, and by then there was none. The
+    board no longer avoids anything: its `village_grove` keep-out is retired and it may stand under a
+    canopy at the wood's edge, so the ground it needs is a verge, which the woods never took.
+
+    The GM's reasoning is about the settlement rather than the drawing: "the real humans that live in
+    the society that decide where the notice board will go will look around at the things which
+    already exist and then decide where to put the notice board. They may even decide to move a notice
+    board which has already been placed." Every other stage reserves ground or grows into it; a plank
+    driven in beside a way does neither, so it is the one feature that should see the whole map first -
+    and nothing is placed after it for it to displace."""
     spot = s.place_kosatsuba()
     # ...AND IT MUST STAND WHERE THE FRAME WILL KEEP IT. `place_kosatsuba` maximizes passing traffic
     # (dwellings within ~260 px) along the whole way network, and a lane ARM that runs past the

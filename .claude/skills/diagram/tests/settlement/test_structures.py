@@ -667,3 +667,36 @@ def test_the_placement_is_seeded_and_reproduces() -> None:
     assert resolve_knob("kosatsuba_seat", 3, ctx, {"kosatsuba_seat": "frontage"}) == "frontage"
     with pytest.raises(ValueError, match="typing rule"):
         resolve_knob("kosatsuba_seat", 3, {"has_approach": False, "has_headman_house": False}, {"kosatsuba_seat": "entrance"})
+
+
+def test_the_caption_fallback_still_prefers_the_board_s_own_side() -> None:
+    """THE PATH MOST BOARDS TAKE HAD NO WAY-SIDE TERM AT ALL (settlement-review x3, feature 154).
+
+    `pick_caption_seat` applies `blocked` - "does this seat sit across a way from the board it names" -
+    among the seats that clear the lane target. When NO seat clears it, which is the case for every
+    board standing close beside a way, it used to fall back to `max(legal, key=box_clearance)` and skip
+    the term entirely. Sawada shipped a caption with the full tread between it and its own board three
+    reviews running, while the board's own side was measurably clear.
+
+    The degradation is the same as everywhere else in this function: prefer unblocked, and drop the
+    term rather than leave the map captionless when nothing is."""
+    from l7r.diagram.settlement.structures.fixtures import pick_caption_seat
+
+    near, across, far = (0.0, -10.0), (0.0, 10.0), (0.0, -40.0)
+    seats = [across, near, far]
+    at = (0.0, -20.0)
+
+    # nothing reaches the lane target, so every seat takes the fallback; `across` clears best
+    def _clearance(q):
+        return {across: 9.0, near: 3.0, far: 1.0}[q]
+
+    picked = pick_caption_seat(seats, at, lambda _q: 0.0, 100.0, _clearance, 50.0, lambda q: q is across)
+    assert picked is near, "the fallback must not take the seat across the way from the board"
+
+    # ...and when EVERY seat is across, the term drops rather than the caption
+    every = pick_caption_seat(seats, at, lambda _q: 0.0, 100.0, _clearance, 50.0, lambda _q: True)
+    assert every is across, "with nothing unblocked, best clearance wins rather than no caption at all"
+
+    # the satisfied path is unchanged: a seat that clears the target still wins on nearness
+    ok = pick_caption_seat(seats, at, lambda _q: 0.0, 100.0, lambda _q: 99.0, 50.0, lambda q: q is across)
+    assert ok is near, "nearest among the seats that clear, with the blocked one refused"

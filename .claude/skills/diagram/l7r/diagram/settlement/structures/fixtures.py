@@ -81,7 +81,19 @@ def pick_caption_seat(
     if clear:
         ix = {id(q): i for i, q in enumerate(seats)}
         return min(clear, key=lambda q: (round((q[0] - at[0]) ** 2 + (q[1] - at[1]) ** 2, 3), ix[id(q)]))
-    return max(legal, key=box_clearance)
+    # ...AND THE FALLBACK REFINES BY IT TOO (settlement-review x3, feature 154). This returned
+    # `max(legal, key=box_clearance)` and never consulted `blocked` at all - so on a board where NO
+    # seat reaches the lane target, which is every board standing close beside a way, the whole
+    # way-side term was silently skipped and the best-clearing seat won even with the tread between
+    # the caption and its own board. Sawada shipped exactly that three passes running: board at -12.0
+    # to -7.0 off the connector's axis, tread -3.0 to +3.0, caption +6.0 to +14.5, with the board's
+    # own side measurably clear. A rule that cannot fire on the path most boards take looks exactly
+    # like a rule that passes.
+    #
+    # Same degradation as above, deliberately: prefer the unblocked seats, and drop the term entirely
+    # when none of them is - never leave the map captionless for it.
+    _legal_unblocked = [q for q in legal if not (blocked and blocked(q))]
+    return max(_legal_unblocked or legal, key=box_clearance)
 
 
 KOSATSUBA_ENTRANCE_REACH_FT = 100.0
@@ -647,8 +659,10 @@ class PublicFixturesMixin:
         else the whole network (`M['lane']` + `M['lanes']` + `town_streets`), and probes
         candidate verge spots with `_fits`, scoring for the most dwellings within ~260 px
         (siting is a TRAFFIC decision - the state talks at everyone who passes) while
-        hugging the verge. Call AFTER the lanes, homesteads, and wells and BEFORE the crop, so
-        the frame contains the board. No-op under meta(kosatsuba=False); returns the spot, or
+        hugging the verge. Call LAST - after the crop, not before it (GM 2026-08-29). This said
+        "BEFORE the crop, so the frame contains the board", which inverted the dependency: the
+        board is sited against `meta.view` now, so the frame constrains the board rather than the
+        board holding the frame open (`crop_not_held_open_by_one_feature`). No-op under meta(kosatsuba=False); returns the spot, or
         None when no verge inside the validator's ~60-real-ft siting band fits (the
         settlement-tier check would then fire - place by hand or widen the lane network)."""
         if not self.M["meta"].get("kosatsuba", True):

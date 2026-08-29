@@ -582,7 +582,7 @@ correct the last one - so the numbers a reader can check now come from the artif
 - copse: **19** clumps drawn
 - farmhouses: **20**
 - farmstead fixtures: bath **3**, coop **10**, pit **3**, privy **12**, woodpile **13**
-- notice board at **(2324.3, 2740.6)**, **7** of 20 farmhouses within 250 ft
+- notice board at **(2244.5, 2990.6)**, **9** of 20 farmhouses within 250 ft
 <!-- /census -->
 
 ## 2026-08-29 - feature 154: an `entrance` board on the windward fringe eats the shelter belt (OPEN)
