@@ -8,6 +8,7 @@ import random
 from collections.abc import Sequence
 from typing import TYPE_CHECKING, Any
 
+from ...interactive.tags import Planted
 from .._geom import (
     Poly,
     Pt,
@@ -497,7 +498,7 @@ class LandUseMixin:
                 r = rng.uniform(4.0, 5.0)
                 g.append(f'<circle cx="{x:.1f}" cy="{y:.1f}" r="{r:.1f}" fill="{rng.choice(("#5E7C40", "#4F6E33"))}" stroke="#3C5526" stroke-width="0.8" opacity="0.92"/>')
         g.append("</g>")
-        self.add("".join(g), cls=DIKE_CROP_CLASS[crop])  # the crowns, canes or fans are the dike's planting
+        self.add("".join(g), cls=Planted(DIKE_CROP_CLASS[crop]))  # the crowns, canes or fans are the dike's planting - lit WITH the dike, in their own tone (feature 153)
 
     @staticmethod
     def _pick_overlay_plots(eligible: list[Any], take: int, clustered: bool, rng: random.Random) -> list[Any]:

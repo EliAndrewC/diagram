@@ -25,7 +25,7 @@ from typing import Any
 from .classes import CLASSES, NOT_HIGHLIGHTED, label_phrase, slug
 from .glossary import GLOSSARY
 from .sources import citations, research_sources
-from .tags import ClsTag, Split
+from .tags import ClsTag, Planted, Split
 
 _HERE = os.path.dirname(os.path.abspath(__file__))
 _ASSETS = os.path.join(_HERE, "assets")
@@ -56,13 +56,17 @@ _COORDS: dict[str, tuple[str, ...]] = {
     "circle": ("cx", "cy", "r"),
     "ellipse": ("cx", "cy", "rx", "ry"),
 }
+#: What one element paints inside: a disc (cx, cy, r) for a circle, a box (x0, y0, x1, y1) for anything
+#: else, None for a shape whose area cannot be read - which counts as being in the way everywhere.
+Extent = tuple[float, float, float] | tuple[float, float, float, float] | None
 #: How many skipped extents one bucket will hold before it gives up and starts a new run. A bound on the
 #: work, not a rule about the map: past this the bucket is almost certainly blocked anyway.
 _SKIP_CAP = 400
 
 
-def _extent(tag: str, at: dict[str, str], raw: str) -> tuple[float, float, float, float] | None:
-    """The box this element paints inside, or None when that cannot be known cheaply.
+def _extent(tag: str, at: dict[str, str], raw: str) -> Extent:
+    """The area this element paints inside - a disc `(cx, cy, r)` for a circle, otherwise a box
+    `(x0, y0, x1, y1)` - or None when that cannot be known cheaply.
 
     A SUPERSET IS SAFE AND AN UNDERSET IS NOT. For a path the box is taken over every number in `d`,
     which for a curve is its control points - always a superset of the curve itself, so the overlap test
@@ -73,7 +77,7 @@ def _extent(tag: str, at: dict[str, str], raw: str) -> tuple[float, float, float
             ys = (float(at["y1"]), float(at["y2"]))
         elif tag == "circle":
             cx, cy, r = float(at["cx"]), float(at["cy"]), float(at["r"])
-            xs, ys = (cx - r, cx + r), (cy - r, cy + r)
+            return (cx, cy, r + float(at.get("stroke-width") or 0.0) / 2.0)
         elif tag == "ellipse":
             cx, cy, rx, ry = float(at["cx"]), float(at["cy"]), float(at["rx"]), float(at["ry"])
             xs, ys = (cx - rx, cx + rx), (cy - ry, cy + ry)
@@ -92,11 +96,70 @@ def _extent(tag: str, at: dict[str, str], raw: str) -> tuple[float, float, float
     return (min(xs) - pad, min(ys) - pad, max(xs) + pad, max(ys) + pad)
 
 
-def _hits(a: tuple[float, float, float, float] | None, b: tuple[float, float, float, float] | None) -> bool:
-    """Do these two painted boxes touch? An unknown box is treated as touching everything."""
+def _hits(a: Extent, b: Extent) -> bool:
+    """Do these two painted areas touch? An unknown one is treated as touching everything.
+
+    A CIRCLE IS TESTED AS A CIRCLE (feature 153). Boxes are what every other shape gets, but a scatter
+    of round blobs is exactly where a box lies most: two crowns whose boxes overlap in a corner do not
+    touch at all, and under the box test they refuse to merge for nothing. Measured on Kuwabata's
+    woodland, where the difference is thousands of elements."""
     if a is None or b is None:
         return True
-    return not (a[2] < b[0] or b[2] < a[0] or a[3] < b[1] or b[3] < a[1])
+    if len(a) == 3 and len(b) == 3:
+        return (a[0] - b[0]) ** 2 + (a[1] - b[1]) ** 2 <= (a[2] + b[2]) ** 2
+    ba, bb = _box(a), _box(b)
+    return not (ba[2] < bb[0] or bb[2] < ba[0] or ba[3] < bb[1] or bb[3] < ba[1])
+
+
+def _box(e: tuple[float, ...]) -> tuple[float, float, float, float]:
+    """A disc's bounding box, or a box unchanged."""
+    if len(e) == 3:
+        x, y, r = e
+        return (x - r, y - r, x + r, y + r)
+    return (e[0], e[1], e[2], e[3])
+
+
+def _refused(b: dict[str, Any], ext: Extent) -> bool:
+    """May this bucket NOT take an element painting inside `ext`? Three ways it may not.
+
+    A TRANSLUCENT SHAPE MAY NOT MERGE WITH ONE IT OVERLAPS (feature 148, measured). Two blobs at
+    opacity 0.85 stack darker where they cross; the same two as subpaths of ONE path are a single 0.85
+    fill and the crossing goes light. Small - 0.0025% of the reference hamlet's pixels - and still the
+    picture changing, which feature 134's FR-002 forbids.
+
+    NOR MAY AN OUTLINED ONE (feature 153, measured on Kuwabata). A path paints ALL its subpath fills and
+    only THEN its stroke, so an earlier crown's outline that a later crown's fill used to hide comes back
+    over it: the dike-pond map's woodland read as a heap of glass rings, and the page sat 0.255% of
+    pixels from its own PNG against the reference hamlet's 0.015%.
+
+    And nothing may move BACKWARD past a different element it overlaps - the `skip` extents gathered
+    since this bucket's last member, or `blocked` when one of them could not be read at all."""
+    if b["blocked"]:
+        return True
+    if (b["translucent"] or b["outlined"]) and any(_hits(ext, e) for e in b["extents"]):
+        return True
+    return any(_hits(ext, e) for e in b["skip"])
+
+
+def _outlined(tag: str, at: dict[str, str]) -> bool:
+    """Does this element paint a fill AND a stroke? Those two are painted in different PASSES once the
+    element is a subpath of a merged path - every fill, then the one stroke - so where two of them
+    overlap the merge changes which is on top. A fill-only or stroke-only shape has no such order to
+    lose. An absent `fill` is black in SVG, which is why the default here is a visible fill.
+
+    A LINE HAS NO FILL, whatever its attributes say. Reading one as outlined cost 4,336 elements on
+    Kuwabata's scrub alone - 5,536 unmerged blades where 1,200 paths had been - because the scatter is
+    one <line> per blade, drawn with no `fill` attribute at all."""
+    if tag == "line":
+        return False
+    if at.get("fill", "black") == "none":
+        return False
+    if at.get("stroke", "none") == "none":
+        return False
+    try:
+        return float(at.get("stroke-width", "1")) > 0.0
+    except ValueError:  # pragma: no cover - a stroke-width shape the writer does not emit
+        return True
 
 
 def _sub(tag: str, at: dict[str, str]) -> str:
@@ -145,6 +208,9 @@ def merge_primitives(s: str) -> str:
     if len(elems) < 2:
         return s
 
+    # ONE OPEN BUCKET PER STYLE, and a refused element opens a new one. Keeping SEVERAL open and trying
+    # each was implemented and measured (feature 153) on the map that stresses this hardest: Kuwabata
+    # came out at 9,726 elements either way, byte for byte. It bought nothing, so it is not here.
     buckets: dict[tuple[str, str], dict[str, Any]] = {}
     order: list[dict[str, Any]] = []
     for idx, (_a, _b, tag, at) in enumerate(elems):
@@ -154,23 +220,16 @@ def merge_primitives(s: str) -> str:
         joined = None
         if key is not None:
             got = buckets.get(key)
-            # ...AND A TRANSLUCENT SHAPE MAY NOT MERGE WITH ONE IT OVERLAPS, even at the same style
-            # (feature 148, measured). Two blobs at opacity 0.85 stack darker where they cross; the same
-            # two as subpaths of ONE path are a single 0.85 fill, and the crossing goes light. It is a
-            # small thing - 0.0025% of the reference hamlet's pixels, max delta 35/255 - and it is still
-            # the picture changing, which FR-002 forbids. Opaque styles are exempt: overlapping subpaths
-            # under the default nonzero fill rule paint exactly what the separate shapes painted.
-            if got is not None and got["translucent"] and any(_hits(ext, e) for e in got["extents"]):
+            if got is not None and _refused(got, ext):
                 got = None
-            if got is not None and not got["blocked"] and not any(_hits(ext, e) for e in got["skip"]):
+            if got is not None:
                 got["members"].append(idx)
                 got["extents"].append(ext)
-                got["skip"] = []
                 joined = got
             else:
                 _st = dict(at)
                 _translucent = any(float(_st.get(k, 1) or 1) < 1.0 for k in ("opacity", "fill-opacity", "stroke-opacity"))
-                joined = {"first": idx, "members": [idx], "extents": [ext], "skip": [], "blocked": False, "tag": tag, "translucent": _translucent}
+                joined = {"first": idx, "members": [idx], "extents": [ext], "skip": [], "blocked": False, "tag": tag, "translucent": _translucent, "outlined": _outlined(tag, _st)}
                 buckets[key] = joined
                 order.append(joined)
         for other in buckets.values():
@@ -221,6 +280,10 @@ HIT_WIDEN: dict[str, tuple[float, float, float]] = {
     "bund": (8.0, 12.0, 6.0),
     "bund beans": (8.0, 12.0, 6.0),
     "field ditch": (6.0, 9.0, 4.5),
+    #: the GM, 2026-08-29: "the pond sluices are really hard to click on ... a larger highlight box,
+    #: similar to what we are doing with the field ditches". It is a 2.4 px line - thinner than a ditch -
+    #: so the ditch's own factors give it a 14 px box, which is what "similar" buys at that width.
+    "pond sluice": (6.0, 9.0, 4.5),
     "stream": (1.5, 12.0, 4.5),
     "village lane": (4.0, 6.0, 3.0),
 }
@@ -312,8 +375,11 @@ def marks_region(strings: Sequence[str], cell: float = HIT_CELL, grow: int = 1, 
     return "".join(out)
 
 
-def _open(key: str) -> str:
-    return f'<g class="f f-{slug(key)}" data-k="{html.escape(key, quote=True)}">'
+def _open(key: str, planted: bool = False) -> str:
+    #: `planted` adds the token the stylesheet needs to keep a feature's greenery legible while the
+    #: feature is lit - see `tags.Planted`. The key, and so the hover and the modal, are unchanged.
+    mark = " planted" if planted else ""
+    return f'<g class="f f-{slug(key)}{mark}" data-k="{html.escape(key, quote=True)}">'
 
 
 def wrap(s: str, tag: ClsTag) -> str:
@@ -323,7 +389,7 @@ def wrap(s: str, tag: ClsTag) -> str:
     if tag is None or tag == NOT_HIGHLIGHTED or not s:
         return s
     if isinstance(tag, str):
-        return _open(tag) + merge_primitives(s) + (hit_copies(s, *HIT_WIDEN[tag]) if tag in HIT_WIDEN else "") + "</g>"
+        return _open(tag, isinstance(tag, Planted)) + merge_primitives(s) + (hit_copies(s, *HIT_WIDEN[tag]) if tag in HIT_WIDEN else "") + "</g>"
     if isinstance(tag, Split):
         fill_copy = _ATTR_STROKE.sub(' stroke="none"', s)
         stroke_copy = _ATTR_FILL.sub(' fill="none"', s)

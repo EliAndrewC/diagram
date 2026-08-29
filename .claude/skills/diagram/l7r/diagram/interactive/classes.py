@@ -80,6 +80,26 @@ def _c(**kw: object) -> FeatureClass:
 # distinguishes each pair, to be folded into the classes' own explanations as those lengthen.
 _PAIRS: dict[tuple[str, str], str] = {
     (
+        "field ditch",
+        "pond sluice",
+    ): "A field ditch carries water through the CROP - it is the paddy fabric's own plumbing, cut between the plots and crossed by a plank. A pond sluice is a gate in a dike: a cut closed with boards that lets one fish pond take water in at its high side and let it out at its low side. The ditch moves water along; the sluice decides whether it moves at all.",
+    (
+        "mulberry dike",
+        "perimeter dike",
+    ): "The crop dike is the wall AROUND one pond - six to ten meters of dredged mud, planted, and part of the loop that feeds the fish. The perimeter dike is the polder's own embankment, the one that holds the river off the whole settlement. One is a field boundary you could walk in a minute; the other is the reason the hamlet is dry.",
+    (
+        "sugarcane dike",
+        "perimeter dike",
+    ): "The crop dike is the wall AROUND one pond - six to ten meters of dredged mud, planted, and part of the loop that feeds the fish. The perimeter dike is the polder's own embankment, the one that holds the river off the whole settlement. One is a field boundary you could walk in a minute; the other is the reason the hamlet is dry.",
+    (
+        "banana dike",
+        "perimeter dike",
+    ): "The crop dike is the wall AROUND one pond - six to ten meters of dredged mud, planted, and part of the loop that feeds the fish. The perimeter dike is the polder's own embankment, the one that holds the river off the whole settlement. One is a field boundary you could walk in a minute; the other is the reason the hamlet is dry.",
+    (
+        "fruit dike",
+        "perimeter dike",
+    ): "The crop dike is the wall AROUND one pond - six to ten meters of dredged mud, planted, and part of the loop that feeds the fish. The perimeter dike is the polder's own embankment, the one that holds the river off the whole settlement. One is a field boundary you could walk in a minute; the other is the reason the hamlet is dry.",
+    (
         "farmhouse",
         "storage shed",
     ): "The farmhouse is the dwelling; a storage shed is a roofed outbuilding for grain, straw, tools and fuel - Sugiura's 1972 survey counted 4.4 outbuildings per household, and the sheds drawn here stand for that inventory, not for a second house.",
@@ -344,7 +364,10 @@ _DEFS: tuple[FeatureClass, ...] = (
     ),
     _c(
         key="windbreak",
-        name="windbreak",
+        # the GM, 2026-08-29: the modal should "actually say 'Windbreak forest' instead of just
+        # 'windbreak'". The NAME is what the heading renders (`cap(d.name)`); the KEY is what the ink
+        # carries and what `all_ink_is_ruled_on` reads, so it does not move.
+        name="windbreak forest",
         covers="`village_groves[role=windbreak]`",
         what="The village shelter belt - the fengshui back grove: a dense, cedar-backed stand of real crowns on the windward, high side of the cluster, embracing it.",
         why="A nucleated village shelters behind one village-scale grove against the winter monsoon. Surveys of southern-China village fengshui forests find about two groves per village at closed-canopy density, the typical back grove one to two hectares - large relative to the cluster, and drawn so. It is kept off the west side of the gardens so the beds keep their afternoon sun.",
