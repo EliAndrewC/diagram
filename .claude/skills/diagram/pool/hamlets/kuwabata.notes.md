@@ -70,6 +70,11 @@ other values are under `wip/kuwabata-*`.
   wherever the ring wanders inward - the render showed it). Bug found and fixed on the way: binning
   the face over the whole ring let the EAST face win the bins the west face's crossing gaps left
   empty, and the west strip came out 2,422 px wide (the whole map wet, three checks red).
+- T54's shore rule reaches EVERY map with a marsh beside water, by design: Inashiro, Mizuguchi,
+  Kashikawa and Sawada each lost the marsh marks that had washed over their pond or a channel bed.
+  Their geometry is untouched - the only manifest field that moved is `ink_classes` (the interactive
+  census of marks per class). The commit that made the change said "pool manifests unchanged", which
+  was wrong in that one field; recorded here rather than rewritten, since the history is the record.
 - 2026-08-28 settlement-review DELTA of T50-T53: needs-work -> fixed (the NW ring corner's 1 ft
   seam - toes now overshoot 3 ft into their trunk; lane 9's hook - the final junction pass ends a
   lane where it first meets the way). See docs/review-ledger.md.
