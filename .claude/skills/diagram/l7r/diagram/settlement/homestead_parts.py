@@ -593,7 +593,13 @@ class HomesteadPartsMixin:
         x0, x1, y0, y1 = min(xs), max(xs), min(ys), max(ys)
         mix = "windbreak" if role in ("windbreak", "water_mouth") else "dooryard"
         bs = self.bscale
-        step = (20 if dense else 52) * bs
+        # 32, NOT 52, FOR A SPARSE STAND (feature 152 T09). A copse's job is to fill the gaps AMONG the
+        # homesteads, and a 52 ft grid cannot see a 30 ft gap: Inashiro drew 2 clumps in a 98 x 313 ft
+        # record and Mizuguchi 2 in a 205 x 58 one - two stray bushes recorded as a wood. The grid is the
+        # only thing that decides where a clump is even TRIED, so a stand that has to thread a dense
+        # cluster needs a finer one. It stays well coarser than the belt's 20 ft, which is what keeps a
+        # copse reading as scattered trees rather than the canopy the windbreak draws.
+        step = (20 if dense else 32) * bs
         clump = (28 if dense else 22) * bs
         # never draw a clump ON a home/yard/garden/byre/kura: keep the clump CENTER clear by the footprint's
         # circumscribing radius PLUS the clump's own drawn radius (clump/2) and a hair - so the tree blob settles
