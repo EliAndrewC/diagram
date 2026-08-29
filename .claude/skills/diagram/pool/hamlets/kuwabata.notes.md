@@ -249,6 +249,7 @@ district's ground. Drawn at 1 ft/px.
   fish household held the same ground is a research question for the feature-139 audit.
 - The pool sweep and the polder cohort are owed at unlock (scope locked at conversion time).
 
+<<<<<<< HEAD
 ## 2026-08-29 - feature 152: D1-D3 are closed, and this file still called them deferred
 
 The three deferrals recorded against this map are done, and an acceptance review found nothing here
@@ -272,3 +273,34 @@ holes. This is the GM's own complaint in its remaining form and it is recorded r
 
 **Re-measured:** copse 21 clumps; fixtures {'bath': 8, 'coop': 5, 'pit': 4, 'privy': 12, 'shrine': 1, 'woodpile': 12}; knobs rolled {'copse_siting': 'among_the_houses', 'kosatsuba_siting': 'frontage'}.
 
+=======
+## 2026-08-29 - feature 153, the highlighting changes (page-side)
+
+The drawn map is unchanged in substance: the manifest moved only in `z` ordinals, and the PNG differs on
+18,640 of 12,181,000 pixels, every one of them by 1 or 2 of 255 - clip-edge antialiasing from splitting
+the perimeter dike's planted rows into their own string so they can carry their own highlight tone.
+
+`settlement-review` read the delta (scoped to the lit appearance, the hit regions and the changed
+strings, since the ink did not move) and returned **needs-work**, catching two defects the gate could
+not see: the perimeter dike's willow and mulberry still flattening to gold when lit (36,843 px), and the
+pond sluice's widened hit box winning only 42.4% of its own area because 49 of the 52 sluices are drawn
+on a field ditch whose group came later. Both fixed and re-measured (sluice 88.6%, worst 75.8%); the
+full row, including what was recorded rather than fixed, is in `docs/review-ledger.md`.
+
+**Round 2 of that review** verified both fixes on its own measurements and caught the sluice fix
+breaking the rule it was allowed under: the lifted box took 88.4% of a pig sty's own footprint and
+42.8% of a duck pen's. The layer is clipped against every recorded structure now (75 holes for this
+map's 75 records); each sty and pen is back to its main-branch share, and the sluice keeps 88.3% of its
+box (96.0% of the widened stroke region, on the reviewer's stricter definition of "inside").
+
+Two record corrections from that pass, both against my numbers: the raster delta from the dike split is
+**45,564 px of 12,181,000, max 3 of 255** (not 18,640 / max 2), and in a browser the two pages render
+pixel-identical unlit; and the perimeter dike is **4,591 ft along its crest** - the manifest's `outline`
+is the band polygon, 1.99x that, so the sibling text's "half an hour" was a double count and now reads
+"the better part of twenty".
+
+**Round 3** verified the clip on all 75 structures (+0.00 everywhere, 85,767 sample points) and found
+this map had been **missing from `make maps` since its conversion to `hamletgen` on 2026-08-27** - the
+tier sweep filtered the frozen list by raw membership while `regen.py` asks `classify()`. The sweep asks
+`classify()` now and Kuwabata is off the legacy list, so it is swept with the rest of the tier.
+>>>>>>> origin/main

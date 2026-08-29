@@ -80,7 +80,13 @@ def test_every_spec_class_is_registered_and_nothing_else() -> None:
 @pytest.mark.parametrize("key", SPEC_CLASSES)
 def test_an_entry_is_complete(key: str) -> None:
     fc: FeatureClass = CLASSES[key]
-    assert fc.key == key and fc.name == key
+    assert fc.key == key
+    # THE NAME IS THE HEADING, THE KEY IS THE INK. They matched for every class until feature 153, when
+    # the GM asked that the windbreak modal "actually say 'Windbreak forest' instead of just 'windbreak'"
+    # - and the key cannot follow, because it rides on every drawn element and `all_ink_is_ruled_on`
+    # reads it. So the rule is that a heading exists and still names the thing the ink is tagged with,
+    # not that the two strings are identical.
+    assert fc.name and key in fc.name, "the modal's heading names the class its ink carries"
     assert len(fc.what) > 40 and len(fc.why) > 40, "an explanation is a paragraph, not a label"
     assert fc.label in ("accurate", "deviation", "guess")
     assert fc.label_note, "the label is justified in one line"
@@ -170,3 +176,31 @@ def test_a_sibling_pair_naming_an_unknown_class_is_refused(monkeypatch: object) 
 
     with pytest.raises(KeyError):
         c._install_siblings(tuple(c.CLASSES.values()) if isinstance(c.CLASSES, dict) else tuple(c.CLASSES))
+
+
+@pytest.mark.parametrize(
+    ("a", "b"),
+    [
+        ("pond sluice", "field ditch"),
+        ("pond sluice", "sluice gate"),
+        ("mulberry dike", "perimeter dike"),
+        ("sugarcane dike", "perimeter dike"),
+        ("banana dike", "perimeter dike"),
+        ("fruit dike", "perimeter dike"),
+    ],
+)
+def test_the_confusable_water_and_dike_pairs_link_both_ways(a: str, b: str) -> None:
+    """Feature 153, the GM: the pond sluice modal should link to the field ditch modal "and vice versa,
+    as we do with e.g. woodland commands and windbreak forests. We can do the same with the two
+    different dike modals too." The crop dike is a four-valued rolled knob, so the dike pair is written
+    once per value - a cane hamlet would otherwise ship a half-linked pair (spec Assumptions)."""
+    assert b in CLASSES[a].siblings and a in CLASSES[b].siblings
+    assert CLASSES[a].siblings[b] == CLASSES[b].siblings[a]
+
+
+def test_the_windbreak_modal_is_headed_with_the_full_name() -> None:
+    """The GM, 2026-08-29: "I would also like the windbreak model to actually say 'Windbreak forest'
+    instead of just 'windbreak'." The KEY does not move - it rides on every drawn element and
+    `all_ink_is_ruled_on` reads it - so this is the first class whose name and key differ."""
+    assert CLASSES["windbreak"].key == "windbreak"
+    assert CLASSES["windbreak"].name == "windbreak forest"

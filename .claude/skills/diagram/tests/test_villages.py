@@ -141,6 +141,16 @@ GEN_TIME_BUDGETS = {
     # solver is left alone because changing it moves the maps. After the fabric index and the crossing
     # sweep (`hamletgen/clearance.py`, `_geom/water_index.py`): the polder 110 -> ~30 s, the reference
     # 37 -> ~21 s, every manifest byte-identical. The entries below still stand at ~4x SOLO, re-measured.
+    # KUWABATA HAS AN ENTRY BECAUSE IT IS A DIKE-POND MAP, NOT BECAUSE IT IS SLOW (feature 152). It landed
+    # with feature 150 and inherited the 45 s default, which the comment above says is for "an ordinary map
+    # [that] measures 1-7s solo" - a mulberry-dike fishpond is not that map. Measured 2026-08-29 on this
+    # clone: 26.3 s solo (the child-recorded `gen_cpu_s`), against 16.8 for inashiro and 12.9 for mizuguchi.
+    # In-gate it reported 49.4 s under `-n auto` and passed serially, which is the 2.5x contention inflation
+    # this block already documents - so the failure was the budget being the wrong one for the archetype,
+    # not a perf regression. The entry is 4x the solo measurement, the same policy as every line below.
+    # NOT a licence: if this number has to rise again, the question is what got slower, and the answer
+    # belongs here beside it.
+    "kuwabata": 105.0,  # 26.3s solo measured 2026-08-29
     "sawada": 125.0,  # 30.6s solo measured 2026-08-19
     "kashikawa": 130.0,  # 32.2s solo
     "inashiro": 90.0,  # 22.4s solo
@@ -309,3 +319,45 @@ if __name__ == "__main__":
         print(("PASS " if ok else "FAIL ") + os.path.basename(g))
         rc |= 0 if ok else 1
     sys.exit(rc)
+
+
+def test_every_live_render_matches_its_own_svg_geometry():
+    """A PNG that does not match its SVG's viewBox is a STALE RENDER, and it is invisible to every other
+    check (settlement-review, feature 152).
+
+    Sawada and kashikawa shipped PNGs from the roll BEFORE their lane webs were fixed - kashikawa's matched
+    the pre-delta manifest at 96% - so the picture the GM opens showed a farmhouse the lane no longer crossed.
+    The mechanism: the gate's regeneration child runs with `DIAGRAM_SKIP_RENDER=1` (it reads the manifest,
+    never the raster), so a gate-driven roll writes a new `.json` and `.svg` and no `.png`, and the old
+    raster stays on disk beside them. Nothing compared the two.
+
+    Geometry is the cheap invariant that catches the whole class: `render_png` scales the SVG to a fixed
+    width, so the height is determined by the viewBox aspect. A render from a DIFFERENT roll almost always
+    has a different aspect, and one pixel of rounding is the whole tolerance. It cannot catch a stale render
+    whose aspect happens to match, which is why it is a floor rather than a proof - but it caught both of the
+    real ones with no false positives across the twelve hamlet renders in the pool."""
+    import re
+    import struct
+    from pathlib import Path
+
+    checked = 0
+    for gen in sorted(glob.glob(os.path.join(HERE, "pool", "hamlets", "*.gen.py"))):
+        stem = gen[: -len(".gen.py")]
+        if not (os.path.isfile(stem + ".svg") and os.path.isfile(stem + ".png")):
+            continue  # live renders are gitignored; a clean checkout simply has none
+        head = Path(stem + ".svg").read_text(errors="ignore")[:4000]
+        box = re.search(r'viewBox="([-\d.eE ]+)"', head)
+        if not box:
+            continue
+        _x, _y, vw, vh = (float(v) for v in box.group(1).split())
+        raw = Path(stem + ".png").read_bytes()[:24]
+        w, h = struct.unpack(">II", raw[16:24])
+        expected = round(w * vh / vw)
+        assert abs(h - expected) <= 1, (
+            f"{os.path.basename(stem)}.png is {w}x{h} but its own SVG's viewBox ({vw:.0f}x{vh:.0f}) makes a "
+            f"{w}-wide render {expected} tall - the raster is from a DIFFERENT roll than the manifest beside "
+            f"it. Re-render the map (`make maps SCOPE=all`); every consumer that maps world coordinates "
+            f"through the viewBox onto the PNG, `tools/crop_map.py` included, is silently misplaced until you do."
+        )
+        checked += 1
+    assert checked, "no live hamlet render to check - expected in a clean checkout, suspicious after a sweep"

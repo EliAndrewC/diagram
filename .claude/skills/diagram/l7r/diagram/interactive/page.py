@@ -17,6 +17,7 @@ from __future__ import annotations
 
 import html
 import json
+import math
 import os
 import re
 from collections.abc import Iterator, Sequence
@@ -25,7 +26,7 @@ from typing import Any
 from .classes import CLASSES, NOT_HIGHLIGHTED, label_phrase, slug
 from .glossary import GLOSSARY
 from .sources import citations, research_sources
-from .tags import ClsTag, Split
+from .tags import ClsTag, Planted, Split
 
 _HERE = os.path.dirname(os.path.abspath(__file__))
 _ASSETS = os.path.join(_HERE, "assets")
@@ -56,13 +57,17 @@ _COORDS: dict[str, tuple[str, ...]] = {
     "circle": ("cx", "cy", "r"),
     "ellipse": ("cx", "cy", "rx", "ry"),
 }
+#: What one element paints inside: a disc (cx, cy, r) for a circle, a box (x0, y0, x1, y1) for anything
+#: else, None for a shape whose area cannot be read - which counts as being in the way everywhere.
+Extent = tuple[float, float, float] | tuple[float, float, float, float] | None
 #: How many skipped extents one bucket will hold before it gives up and starts a new run. A bound on the
 #: work, not a rule about the map: past this the bucket is almost certainly blocked anyway.
 _SKIP_CAP = 400
 
 
-def _extent(tag: str, at: dict[str, str], raw: str) -> tuple[float, float, float, float] | None:
-    """The box this element paints inside, or None when that cannot be known cheaply.
+def _extent(tag: str, at: dict[str, str], raw: str) -> Extent:
+    """The area this element paints inside - a disc `(cx, cy, r)` for a circle, otherwise a box
+    `(x0, y0, x1, y1)` - or None when that cannot be known cheaply.
 
     A SUPERSET IS SAFE AND AN UNDERSET IS NOT. For a path the box is taken over every number in `d`,
     which for a curve is its control points - always a superset of the curve itself, so the overlap test
@@ -73,7 +78,7 @@ def _extent(tag: str, at: dict[str, str], raw: str) -> tuple[float, float, float
             ys = (float(at["y1"]), float(at["y2"]))
         elif tag == "circle":
             cx, cy, r = float(at["cx"]), float(at["cy"]), float(at["r"])
-            xs, ys = (cx - r, cx + r), (cy - r, cy + r)
+            return (cx, cy, r + float(at.get("stroke-width") or 0.0) / 2.0)
         elif tag == "ellipse":
             cx, cy, rx, ry = float(at["cx"]), float(at["cy"]), float(at["rx"]), float(at["ry"])
             xs, ys = (cx - rx, cx + rx), (cy - ry, cy + ry)
@@ -92,11 +97,70 @@ def _extent(tag: str, at: dict[str, str], raw: str) -> tuple[float, float, float
     return (min(xs) - pad, min(ys) - pad, max(xs) + pad, max(ys) + pad)
 
 
-def _hits(a: tuple[float, float, float, float] | None, b: tuple[float, float, float, float] | None) -> bool:
-    """Do these two painted boxes touch? An unknown box is treated as touching everything."""
+def _hits(a: Extent, b: Extent) -> bool:
+    """Do these two painted areas touch? An unknown one is treated as touching everything.
+
+    A CIRCLE IS TESTED AS A CIRCLE (feature 153). Boxes are what every other shape gets, but a scatter
+    of round blobs is exactly where a box lies most: two crowns whose boxes overlap in a corner do not
+    touch at all, and under the box test they refuse to merge for nothing. Measured on Kuwabata's
+    woodland, where the difference is thousands of elements."""
     if a is None or b is None:
         return True
-    return not (a[2] < b[0] or b[2] < a[0] or a[3] < b[1] or b[3] < a[1])
+    if len(a) == 3 and len(b) == 3:
+        return (a[0] - b[0]) ** 2 + (a[1] - b[1]) ** 2 <= (a[2] + b[2]) ** 2
+    ba, bb = _box(a), _box(b)
+    return not (ba[2] < bb[0] or bb[2] < ba[0] or ba[3] < bb[1] or bb[3] < ba[1])
+
+
+def _box(e: tuple[float, ...]) -> tuple[float, float, float, float]:
+    """A disc's bounding box, or a box unchanged."""
+    if len(e) == 3:
+        x, y, r = e
+        return (x - r, y - r, x + r, y + r)
+    return (e[0], e[1], e[2], e[3])
+
+
+def _refused(b: dict[str, Any], ext: Extent) -> bool:
+    """May this bucket NOT take an element painting inside `ext`? Three ways it may not.
+
+    A TRANSLUCENT SHAPE MAY NOT MERGE WITH ONE IT OVERLAPS (feature 148, measured). Two blobs at
+    opacity 0.85 stack darker where they cross; the same two as subpaths of ONE path are a single 0.85
+    fill and the crossing goes light. Small - 0.0025% of the reference hamlet's pixels - and still the
+    picture changing, which feature 134's FR-002 forbids.
+
+    NOR MAY AN OUTLINED ONE (feature 153, measured on Kuwabata). A path paints ALL its subpath fills and
+    only THEN its stroke, so an earlier crown's outline that a later crown's fill used to hide comes back
+    over it: the dike-pond map's woodland read as a heap of glass rings, and the page sat 0.255% of
+    pixels from its own PNG against the reference hamlet's 0.015%.
+
+    And nothing may move BACKWARD past a different element it overlaps - the `skip` extents gathered
+    since this bucket's last member, or `blocked` when one of them could not be read at all."""
+    if b["blocked"]:
+        return True
+    if (b["translucent"] or b["outlined"]) and any(_hits(ext, e) for e in b["extents"]):
+        return True
+    return any(_hits(ext, e) for e in b["skip"])
+
+
+def _outlined(tag: str, at: dict[str, str]) -> bool:
+    """Does this element paint a fill AND a stroke? Those two are painted in different PASSES once the
+    element is a subpath of a merged path - every fill, then the one stroke - so where two of them
+    overlap the merge changes which is on top. A fill-only or stroke-only shape has no such order to
+    lose. An absent `fill` is black in SVG, which is why the default here is a visible fill.
+
+    A LINE HAS NO FILL, whatever its attributes say. Reading one as outlined cost 4,336 elements on
+    Kuwabata's scrub alone - 5,536 unmerged blades where 1,200 paths had been - because the scatter is
+    one <line> per blade, drawn with no `fill` attribute at all."""
+    if tag == "line":
+        return False
+    if at.get("fill", "black") == "none":
+        return False
+    if at.get("stroke", "none") == "none":
+        return False
+    try:
+        return float(at.get("stroke-width", "1")) > 0.0
+    except ValueError:  # pragma: no cover - a stroke-width shape the writer does not emit
+        return True
 
 
 def _sub(tag: str, at: dict[str, str]) -> str:
@@ -145,6 +209,9 @@ def merge_primitives(s: str) -> str:
     if len(elems) < 2:
         return s
 
+    # ONE OPEN BUCKET PER STYLE, and a refused element opens a new one. Keeping SEVERAL open and trying
+    # each was implemented and measured (feature 153) on the map that stresses this hardest: Kuwabata
+    # came out at 9,726 elements either way, byte for byte. It bought nothing, so it is not here.
     buckets: dict[tuple[str, str], dict[str, Any]] = {}
     order: list[dict[str, Any]] = []
     for idx, (_a, _b, tag, at) in enumerate(elems):
@@ -154,23 +221,16 @@ def merge_primitives(s: str) -> str:
         joined = None
         if key is not None:
             got = buckets.get(key)
-            # ...AND A TRANSLUCENT SHAPE MAY NOT MERGE WITH ONE IT OVERLAPS, even at the same style
-            # (feature 148, measured). Two blobs at opacity 0.85 stack darker where they cross; the same
-            # two as subpaths of ONE path are a single 0.85 fill, and the crossing goes light. It is a
-            # small thing - 0.0025% of the reference hamlet's pixels, max delta 35/255 - and it is still
-            # the picture changing, which FR-002 forbids. Opaque styles are exempt: overlapping subpaths
-            # under the default nonzero fill rule paint exactly what the separate shapes painted.
-            if got is not None and got["translucent"] and any(_hits(ext, e) for e in got["extents"]):
+            if got is not None and _refused(got, ext):
                 got = None
-            if got is not None and not got["blocked"] and not any(_hits(ext, e) for e in got["skip"]):
+            if got is not None:
                 got["members"].append(idx)
                 got["extents"].append(ext)
-                got["skip"] = []
                 joined = got
             else:
                 _st = dict(at)
                 _translucent = any(float(_st.get(k, 1) or 1) < 1.0 for k in ("opacity", "fill-opacity", "stroke-opacity"))
-                joined = {"first": idx, "members": [idx], "extents": [ext], "skip": [], "blocked": False, "tag": tag, "translucent": _translucent}
+                joined = {"first": idx, "members": [idx], "extents": [ext], "skip": [], "blocked": False, "tag": tag, "translucent": _translucent, "outlined": _outlined(tag, _st)}
                 buckets[key] = joined
                 order.append(joined)
         for other in buckets.values():
@@ -221,9 +281,47 @@ HIT_WIDEN: dict[str, tuple[float, float, float]] = {
     "bund": (8.0, 12.0, 6.0),
     "bund beans": (8.0, 12.0, 6.0),
     "field ditch": (6.0, 9.0, 4.5),
+    #: the GM, 2026-08-29: "the pond sluices are really hard to click on ... a larger highlight box,
+    #: similar to what we are doing with the field ditches". It is a 2.4 px line - thinner than a ditch -
+    #: so the ditch's own factors give it a 14 px box, which is what "similar" buys at that width.
+    "pond sluice": (6.0, 9.0, 4.5),
     "stream": (1.5, 12.0, 4.5),
     "village lane": (4.0, 6.0, 3.0),
 }
+#: WHOSE BOX RIDES ABOVE THE INK instead of inside its own class group (feature 153). Everything else
+#: keeps the arrangement the GM tuned on 2026-08-28 - a box just above its own class's ink, buried by
+#: whatever is drawn later - and only a mark that CANNOT be hit any other way is lifted out.
+#:
+#: A pond sluice is the case: 49 of Kuwabata's 52 are drawn ON a field ditch (median centerline
+#: separation 0.03 px - a sluice IS a gate in a watercourse), the ditch group comes later, and its box
+#: took the pointer from the sluice's own 2.4 px line. Measured by `settlement-review`: the sluice won
+#: 42.4% of its own widened box, median 40%, worst 10.3%, seven sluices under 25% - so the GM's "really
+#: hard to click on" was still true after the widening meant to fix it. Lifted out: 88.6%, median 91.7%,
+#: worst 75.8%, none under 25%.
+#:
+#: LIFTING EVERY BOX WAS TRIED FIRST AND IS WRONG. Above the ink, the bund's 12 px box (8x a 1.4 px
+#: mark) stops being buried and blankets the map: +5,112 sample points for the bund, -2,802 for the
+#: mulberry dike, -1,472 for the vegetable ground, -914 for the paddy - hovering a dike would have
+#: given "bund". A box may beat empty ground; it may not beat another feature's drawn ink.
+HIT_ON_TOP: frozenset[str] = frozenset({"pond sluice"})
+#: Among the lifted ones, hardest-to-hit last (it wins). One member today; the order is here so the
+#: second one is a decision rather than a coincidence of dict order. A lifted class this list forgets
+#: sorts LAST rather than first - a class is lifted precisely because it must win, and the earlier
+#: version's `-1` fallback silently gave it the weakest place, the opposite of the rule stated here.
+HIT_PRIORITY: tuple[str, ...] = ("stream", "village lane", "bund", "bund beans", "field ditch", "pond sluice")
+#: THE STRUCTURES A LIFTED BOX MUST NOT SWALLOW. `HIT_ON_TOP` puts a box above the ink, and the rule it
+#: is allowed under is that a box may beat empty ground and area fills but never another feature's drawn
+#: glyph. It broke that rule the moment it shipped: the sluice box took 88.4% of one pig sty's own
+#: footprint and 42.8% of a duck pen's (settlement-review, 2026-08-29, 0.25 px grid) - the sty's center
+#: is 4.67 px from a lifted line whose half-width is 7.2, so the box simply contained it, and the GM's
+#: "really hard to click on" moved from the sluice onto a farm building. Every one of these is a rect in
+#: the manifest, so the layer is clipped against them: the box keeps the open ground and gives up the
+#: glyph. Ground records (gardens, threshing yards) are deliberately NOT here - they are area fills, and
+#: a box over one is the case the widening exists for.
+#: EVERY KEY LISTED MUST RECORD `x/y/w/h`: a key whose records carry some other shape (a well's `x,y,r`,
+#: a footbridge's `span`, a sluice gate's bare `x,y,rot`) makes no hole and no error, so
+#: `test_every_keep_clear_key_makes_its_holes` counts holes against records on a real manifest.
+HIT_KEEP_CLEAR: tuple[str, ...] = ("houses", "byres", "farm_sheds", "farm_fixtures", "duck_pens", "pig_sties", "kosatsuba")
 HIT_WIDEN_FACTOR = 4.0
 HIT_WIDEN_MIN = 6.0
 #: The scrub's hit region is where its MARKS are, not its recorded polygon (the polygon is the whole
@@ -312,8 +410,16 @@ def marks_region(strings: Sequence[str], cell: float = HIT_CELL, grow: int = 1, 
     return "".join(out)
 
 
-def _open(key: str) -> str:
-    return f'<g class="f f-{slug(key)}" data-k="{html.escape(key, quote=True)}">'
+def _open(key: str, planted: bool = False) -> str:
+    #: `planted` adds the token the stylesheet needs to keep a feature's greenery legible while the
+    #: feature is lit - see `tags.Planted`. The key, and so the hover and the modal, are unchanged.
+    mark = " planted" if planted else ""
+    return f'<g class="f f-{slug(key)}{mark}" data-k="{html.escape(key, quote=True)}">'
+
+
+def _inline_hits(s: str, key: str) -> str:
+    """The widened copies that stay INSIDE their class group - every widened class but the lifted ones."""
+    return hit_copies(s, *HIT_WIDEN[key]) if key in HIT_WIDEN and key not in HIT_ON_TOP else ""
 
 
 def wrap(s: str, tag: ClsTag) -> str:
@@ -323,11 +429,11 @@ def wrap(s: str, tag: ClsTag) -> str:
     if tag is None or tag == NOT_HIGHLIGHTED or not s:
         return s
     if isinstance(tag, str):
-        return _open(tag) + merge_primitives(s) + (hit_copies(s, *HIT_WIDEN[tag]) if tag in HIT_WIDEN else "") + "</g>"
+        return _open(tag, isinstance(tag, Planted)) + merge_primitives(s) + _inline_hits(s, tag) + "</g>"
     if isinstance(tag, Split):
         fill_copy = _ATTR_STROKE.sub(' stroke="none"', s)
         stroke_copy = _ATTR_FILL.sub(' fill="none"', s)
-        return _open(tag.fill) + fill_copy + "</g>" + _open(tag.stroke) + stroke_copy + (hit_copies(stroke_copy, *HIT_WIDEN[tag.stroke]) if tag.stroke in HIT_WIDEN else "") + "</g>"
+        return _open(tag.fill) + fill_copy + "</g>" + _open(tag.stroke) + stroke_copy + _inline_hits(stroke_copy, tag.stroke) + "</g>"
     return "".join(wrap(piece, c) for c, piece in tag)
 
 
@@ -483,6 +589,89 @@ def hit_regions(manifest: dict[str, Any] | None, present: set[str]) -> str:
     return "".join(out)
 
 
+def _hit_pieces(s: str, tag: ClsTag) -> Iterator[tuple[str, str]]:
+    """(class, the ink a widened copy would be taken from) for one record string. A `Split` widens its
+    STROKE class only - the bund, not the paddy body it bounds."""
+    if isinstance(tag, str):
+        yield tag, s
+    elif isinstance(tag, Split):
+        yield tag.stroke, _ATTR_FILL.sub(' fill="none"', s)
+    elif tag is not None and tag != NOT_HIGHLIGHTED:
+        for c, piece in tag:
+            if c is not None:
+                yield from _hit_pieces(piece, c)
+
+
+def hit_layer(strings: Sequence[str], tags: Sequence[ClsTag], manifest: dict[str, Any] | None = None) -> str:
+    """Every widened hit copy on the page, in ONE layer, THINNEST-DRAWN CLASS LAST.
+
+    THE COPIES USED TO RIDE INSIDE THEIR OWN CLASS GROUP, and a group drawn later then buried them:
+    49 of Kuwabata's 52 pond sluices are drawn ON a field ditch (median centerline separation 0.03 px,
+    which is correct engineering - a sluice IS a gate in a watercourse), the ditch group comes later,
+    and its 14.4 px invisible box therefore took the pointer from the sluice's own drawn line. Measured
+    at 83,690 sample points by `settlement-review` on the first cut of this feature: the sluice won
+    44.2% of its own widened box and 47.3% of its own 2.4 px stroke, and 28 of those lost points went
+    to an invisible box rather than to any visible ink - so the GM's "really hard to click on" was
+    still true of most sluices after the widening that was meant to fix it.
+
+    One layer, ordered by `HIT_PRIORITY`, puts the decision on HOW HARD THE MARK IS TO HIT rather than
+    on draw order. Each class keeps its own `data-k` group, so hover, highlight and the modal are
+    unchanged - `page.js` already collects every `g.f` carrying a key."""
+    per: dict[str, list[str]] = {}
+    for s, tag in zip(strings, tags, strict=True):
+        for key, piece in _hit_pieces(s, tag):
+            if key not in HIT_ON_TOP or key not in HIT_WIDEN:
+                continue
+            copies = hit_copies(piece, *HIT_WIDEN[key])
+            if copies:
+                per.setdefault(key, []).append(copies)
+    order = sorted(per, key=lambda k: (HIT_PRIORITY.index(k) if k in HIT_PRIORITY else len(HIT_PRIORITY), k))
+    clip, attr = _keep_clear_clip(manifest)
+    return clip + "".join(_open(k)[:-1] + attr + ">" + "".join(per[k]) + "</g>" for k in order)
+
+
+def _keep_clear_clip(manifest: dict[str, Any] | None) -> tuple[str, str]:
+    """(the clipPath, the attribute that applies it) - the map minus every recorded structure footprint.
+
+    An even-odd path of one huge rectangle plus one rectangle per structure, so the structures are HOLES:
+    a lifted box hit-tests everywhere except over a drawn building. Clipping is part of hit-testing in
+    SVG, which masking is not, so this is the mechanism that actually moves the pointer."""
+    holes: list[str] = []
+    for key in HIT_KEEP_CLEAR:
+        for rec in (manifest or {}).get(key) or []:
+            if not isinstance(rec, dict):
+                continue
+            try:
+                x, y, w, h = (float(rec[k]) for k in ("x", "y", "w", "h"))
+                rot = math.radians(float(rec.get("rot") or 0.0))
+            except KeyError, TypeError, ValueError:
+                continue
+            # the AXIS-ALIGNED BOX OF THE ROTATED FOOTPRINT, plus the tenth of a pixel the coordinates
+            # are rounded to - without that pad the "never smaller than the glyph" claim is false by up
+            # to 0.0919 px (measured, settlement-review round 3; with it, 0.0000). The margin is exactly
+            # adequate rather than generous: 0.1 px a side against a worst case of 0.05 on the origin
+            # plus 0.05 on the width. It holds because the pad is added BEFORE the `:.1f` rounding - a
+            # format that ever drops a decimal breaks the claim silently.
+            bw = abs(w * math.cos(rot)) + abs(h * math.sin(rot)) + 0.2
+            bh = abs(w * math.sin(rot)) + abs(h * math.cos(rot)) + 0.2
+            holes.append(f"M{x - bw / 2:.1f},{y - bh / 2:.1f}h{bw:.1f}v{bh:.1f}h{-bw:.1f}Z")
+            # ...AND THE APRON A GLYPH IS DRAWN OUTSIDE ITS OWN BOX. A duck pen's `wet` reaches 6-7 px
+            # past its `w` x `h`, and the lifted box was taking 10.17% of one apron (settlement-review
+            # rounds 3-4). Any auxiliary polygon on the record is held clear too - which is a BBOX with
+            # no size bound, so a record that ever carries a large `poly` (a pond ring, a compound
+            # outline) would punch a correspondingly large hole, and the count test would not see it.
+            for extra in ("wet", "poly"):
+                pts = rec.get(extra)
+                if isinstance(pts, list) and len(pts) > 2:
+                    xs, ys = [float(q[0]) for q in pts], [float(q[1]) for q in pts]
+                    ew, eh = max(xs) - min(xs) + 0.2, max(ys) - min(ys) + 0.2
+                    holes.append(f"M{min(xs) - 0.1:.1f},{min(ys) - 0.1:.1f}h{ew:.1f}v{eh:.1f}h{-ew:.1f}Z")
+    if not holes:
+        return "", ""
+    d = "M-99999,-99999h199998v199998h-199998Z" + "".join(holes)
+    return f'<clipPath id="hit-keep-clear"><path clip-rule="evenodd" d="{d}"/></clipPath>', ' clip-path="url(#hit-keep-clear)"'
+
+
 def render_page(strings: Sequence[str], tags: Sequence[ClsTag], name: str, meta: dict[str, Any] | None = None, manifest: dict[str, Any] | None = None) -> str:
     """The whole page as one string - `write_html` writes it; tests read it."""
     present = present_classes(tags)
@@ -501,6 +690,9 @@ def render_page(strings: Sequence[str], tags: Sequence[ClsTag], name: str, meta:
         if rects:
             regions += _open(key) + f'<g class="hit" fill="none" style="pointer-events: fill">{rects}</g></g>'
     wrapped.insert(sheet + 1, regions)
+    # the widened boxes ride ABOVE the ink, in one layer of their own - see `hit_layer`
+    close = next((i for i in range(len(wrapped) - 1, -1, -1) if "</svg>" in wrapped[i]), len(wrapped))
+    wrapped.insert(close, hit_layer(strings, tags, manifest))
     svg = "\n".join(wrapped)
     svg = svg.replace("<svg ", '<svg id="map" ', 1)
     data = explanations(present)

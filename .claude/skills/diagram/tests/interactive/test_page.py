@@ -14,9 +14,22 @@ import re
 
 import pytest
 
-from l7r.diagram.interactive.classes import CLASSES
+from l7r.diagram.interactive.classes import CLASSES, NOT_HIGHLIGHTED
 from l7r.diagram.interactive.glossary import GLOSSARY
-from l7r.diagram.interactive.page import explanations, glossary_for, hit_copies, hit_regions, ink_census, marks_region, merge_primitives, present_classes, render_page, unregistered_classes, wrap
+from l7r.diagram.interactive.page import (
+    explanations,
+    glossary_for,
+    hit_copies,
+    hit_layer,
+    hit_regions,
+    ink_census,
+    marks_region,
+    merge_primitives,
+    present_classes,
+    render_page,
+    unregistered_classes,
+    wrap,
+)
 from l7r.diagram.interactive.sources import citations, registry, research_sources, section_sources, urls_of
 from l7r.diagram.interactive.tags import Split
 
@@ -200,7 +213,7 @@ def test_widened_classes_carry_their_hit_copies_and_others_do_not() -> None:
     assert 'class="hit"' in wrap(lane, "village lane") and 'class="hit"' not in wrap(lane, "pond")
     paddy = '<polygon points="0,0 9,0 9,9" fill="#A6C398" stroke="#7A5A30" stroke-width="1.4"/>'
     out = wrap(paddy, Split("paddy", "bund"))
-    assert out.count('class="hit"') == 1 and out.index('class="hit"') > out.index('data-k="bund"'), "the bund's hit copy rides in the bund group, above the paddy fill"
+    assert out.count('class="hit"') == 1 and out.index('class="hit"') > out.index('data-k="bund"'), "the bund's box rides in the bund group, above the paddy fill"
 
 
 def test_the_marks_region_covers_only_cells_that_hold_a_mark() -> None:
@@ -356,3 +369,197 @@ def test_an_unreadable_extent_blocks_the_reorder_rather_than_risking_it() -> Non
 
     s = '<circle cx="10" cy="10" r="2" fill="#0a0"/><path d="M"/><circle cx="90" cy="90" r="2" fill="#0a0"/>'
     assert merge_primitives(s).count("<circle") == 2
+
+
+def test_a_planted_tag_marks_the_group_and_a_plain_one_does_not() -> None:
+    """Feature 153: the crowns on a crop dike carry the DIKE's class - hovering either lights both - so
+    the only thing separating them is a token on the group, which the stylesheet paints in its own
+    tone. A plain `str` tag must emit exactly what it emitted before the token existed."""
+    from l7r.diagram.interactive.tags import Planted
+
+    lit = wrap(RECT, Planted("mulberry dike"))
+    assert lit.startswith('<g class="f f-mulberry-dike planted" data-k="mulberry dike">'), lit
+    assert wrap(RECT, "mulberry dike") == f'<g class="f f-mulberry-dike" data-k="mulberry dike">{RECT}</g>'
+
+
+def test_a_planted_tag_is_a_str_and_so_takes_every_str_path() -> None:
+    """`Planted` subclasses `str` on purpose: the census, the hit boxes, `present_classes` and every
+    `isinstance(tag, str)` branch keep working with no knowledge of it."""
+    from l7r.diagram.interactive.tags import Planted
+
+    tag = Planted("mulberry dike")
+    assert isinstance(tag, str) and tag == "mulberry dike"
+    assert ink_census([RECT], [tag])[0]["mulberry dike"] == 1
+
+
+def test_a_pond_sluice_gets_the_field_ditchs_widening() -> None:
+    """The GM, 2026-08-29: the sluices are "really hard to click on ... a larger highlight box, similar
+    to what we are doing with the field ditches". Same factors; the sluice's mark being thinner, the
+    box comes out smaller in absolute terms and larger relative to the ink, which is the point."""
+    from l7r.diagram.interactive.page import HIT_WIDEN
+
+    assert HIT_WIDEN["pond sluice"] == HIT_WIDEN["field ditch"]
+    sluice = '<line x1="10" y1="10" x2="30" y2="10" stroke="#37637F" stroke-width="2.4"/>'
+    out = hit_layer([sluice], ["pond sluice"])
+    widths = [float(w) for w in re.findall(r'class="hit"[^>]*stroke-width: ([\d.]+)px', out)]
+    assert widths == [14.4], f"one invisible copy, six times the drawn 2.4 px: {out}"
+
+
+def test_outlined_shapes_that_overlap_keep_their_own_paint_order() -> None:
+    """Feature 153, measured on Kuwabata. One <path> paints every subpath's FILL and only then its
+    stroke, so an earlier crown's outline that a later crown's fill used to cover comes back over it -
+    the woodland read as a heap of glass rings. Same style, apart: still merged."""
+    over = '<circle cx="10" cy="10" r="6" fill="#4F6E33" stroke="#3C5526" stroke-width="0.8"/><circle cx="14" cy="10" r="6" fill="#4F6E33" stroke="#3C5526" stroke-width="0.8"/>'
+    assert merge_primitives(over).count("<circle") == 2, "overlapping outlined shapes keep their order"
+    apart = '<circle cx="10" cy="10" r="2" fill="#4F6E33" stroke="#3C5526" stroke-width="0.8"/><circle cx="90" cy="90" r="2" fill="#4F6E33" stroke="#3C5526" stroke-width="0.8"/>'
+    assert merge_primitives(apart).count("<circle") == 0, "outlined shapes that do not touch still merge"
+
+
+def test_a_line_is_never_outlined_however_the_scatter_is_written() -> None:
+    """A line has no fill area, whatever `fill` says or leaves unsaid - and the scatters ARE lines, one
+    per blade, sharing a root. Reading them as outlined cost 4,336 elements on Kuwabata's scrub alone
+    (5,536 unmerged blades where 1,200 paths had been), which is the whole point of the merge pass."""
+    tuft = '<line x1="10" y1="20" x2="11" y2="14" stroke="#6E9377" stroke-width="0.8"/><line x1="10" y1="20" x2="9" y2="15" stroke="#6E9377" stroke-width="0.8"/>'
+    assert merge_primitives(tuft).count("<line") == 0, "two blades of one tuft still become one path"
+
+
+def test_two_circles_whose_boxes_overlap_but_whose_edges_do_not_still_merge() -> None:
+    """A box lies most about a round blob: two crowns can share a box corner and not touch at all. The
+    overlap test reads a circle AS a circle for exactly this case."""
+    corner = '<circle cx="0" cy="0" r="10" fill="#4F6E33" stroke="#3C5526" stroke-width="0.5"/><circle cx="18" cy="18" r="10" fill="#4F6E33" stroke="#3C5526" stroke-width="0.5"/>'
+    assert merge_primitives(corner).count("<circle") == 0, "boxes overlap, circles do not - so they merge"
+    touching = '<circle cx="0" cy="0" r="10" fill="#4F6E33" stroke="#3C5526" stroke-width="0.5"/><circle cx="12" cy="12" r="10" fill="#4F6E33" stroke="#3C5526" stroke-width="0.5"/>'
+    assert merge_primitives(touching).count("<circle") == 2, "circles that really do touch keep their order"
+
+
+def test_a_member_may_not_jump_back_past_anything_skipped_since_the_buckets_FIRST_member() -> None:
+    """Feature 148 cleared a bucket's skipped extents whenever a member joined, which proves only that
+    THAT member cleared them. A third member is emitted at the FIRST member's position too, so it has to
+    clear everything skipped since the bucket opened (feature 153)."""
+    a = '<circle cx="10" cy="10" r="2" fill="#0a0"/>'
+    blocker = '<circle cx="60" cy="60" r="6" fill="#a00"/>'
+    b = '<circle cx="200" cy="200" r="2" fill="#0a0"/>'
+    c = '<circle cx="61" cy="61" r="2" fill="#0a0"/>'
+    out = merge_primitives(a + blocker + b + c)
+    assert out.count("<circle") >= 2, f"the third member overlaps what the second cleared: {out}"
+    assert '<circle cx="61" cy="61" r="2" fill="#0a0"/>' in out, "it stays where it was drawn"
+
+
+def test_a_fill_only_shape_is_not_outlined_and_still_merges_where_it_overlaps() -> None:
+    """Only a shape painting BOTH has a paint order to lose. Two overlapping opaque fills of one color
+    are the same ink whether they are two elements or two subpaths, so they merge."""
+    from l7r.diagram.interactive.page import _outlined
+
+    assert not _outlined("circle", {"fill": "#4F6E33"})
+    assert not _outlined("circle", {"fill": "none", "stroke": "#3C5526"})
+    assert not _outlined("circle", {"fill": "#4F6E33", "stroke": "#3C5526", "stroke-width": "0"})
+    assert _outlined("circle", {"fill": "#4F6E33", "stroke": "#3C5526"})
+    over = '<circle cx="10" cy="10" r="6" fill="#4F6E33"/><circle cx="14" cy="10" r="6" fill="#4F6E33"/>'
+    assert merge_primitives(over).count("<circle") == 0
+
+
+def test_only_the_lifted_class_leaves_its_own_group() -> None:
+    """Feature 153. A pond sluice is a gate IN a watercourse, so 49 of Kuwabata's 52 are drawn on top of
+    a field ditch - and while every box rode inside its own class group, the ditch's group came later
+    and its 14.4 px box took the pointer from the sluice's own 2.4 px line (the sluice won 42.4% of its
+    own box; `settlement-review` measured it at 125,173 points, worst sluice 10.3%). Lifting the sluice
+    alone fixes it - 88.6%, worst 75.8% - and lifting EVERY box does not: above the ink the bund's 12 px
+    box stops being buried and takes 5,112 sample points off the dikes, the vegetable ground and the
+    paddy. So the layer holds exactly `HIT_ON_TOP`, and everything else stays where the GM tuned it."""
+    from l7r.diagram.interactive.page import HIT_ON_TOP
+
+    ditch = '<line x1="0" y1="10" x2="100" y2="10" stroke="#6E93A8" stroke-width="3.5"/>'
+    sluice = '<line x1="48" y1="10" x2="52" y2="10" stroke="#37637F" stroke-width="2.4"/>'
+    assert frozenset({"pond sluice"}) == HIT_ON_TOP
+    assert 'class="hit"' not in wrap(sluice, "pond sluice"), "the lifted class leaves nothing behind"
+    assert 'class="hit"' in wrap(ditch, "field ditch"), "every other widened class keeps its box inline"
+    layer = hit_layer([ditch, sluice], ["field ditch", "pond sluice"])
+    assert 'data-k="pond sluice"' in layer and 'data-k="field ditch"' not in layer
+
+
+def test_the_hit_layer_sits_above_the_ink_it_widens() -> None:
+    """One layer for every widened box, emitted after the drawn record and before `</svg>`."""
+    strings = ['<svg viewBox="0 0 20 20">', '<line x1="1" y1="1" x2="9" y2="9" stroke="#37637F" stroke-width="2.4"/>', "</svg>"]
+    tags = [NOT_HIGHLIGHTED, "pond sluice", None]
+    page = render_page(strings, tags, "t")
+    assert page.index('class="hit"') > page.index('stroke-width="2.4"')
+    assert page.index('class="hit"') < page.index("</svg>")
+
+
+def test_a_lifted_box_gives_up_the_ground_a_structure_stands_on() -> None:
+    """Feature 153, settlement-review round 2. Lifting the sluice above the ink broke the rule the lift
+    is allowed under: its 14.4 px box swallowed 88.4% of one pig sty's own footprint and 42.8% of a duck
+    pen's - the sty's center sits 4.67 px from a lifted line whose half-width is 7.2. The layer is
+    clipped against every recorded structure, so it keeps the open ground and gives up the glyph."""
+    from l7r.diagram.interactive.page import hit_layer
+
+    sluice = '<line x1="90" y1="100" x2="110" y2="100" stroke="#37637F" stroke-width="2.4"/>'
+    manifest = {"pig_sties": [{"x": 100.0, "y": 100.0, "w": 10.0, "h": 8.0, "rot": 0}]}
+    out = hit_layer([sluice], ["pond sluice"], manifest)
+    assert 'clip-path="url(#hit-keep-clear)"' in out, out
+    assert 'clip-rule="evenodd"' in out and "M94.9,95.9h10.2v8.2h-10.2Z" in out, "a hole over the sty, padded the tenth of a pixel the coordinates round to"
+    assert "clip-path" not in hit_layer([sluice], ["pond sluice"], {}), "no structures, no clip"
+    junk = {"pig_sties": ["not a record", {"x": 1.0}, {"x": 100.0, "y": 100.0, "w": 10.0, "h": 8.0, "rot": 0}]}
+    assert hit_layer([sluice], ["pond sluice"], junk).count("M94.9,95.9") == 1, "a record it cannot read is skipped, not fatal"
+
+
+def test_a_rotated_footprint_is_held_clear_by_its_whole_box() -> None:
+    """The hole is the axis-aligned box of the ROTATED glyph - a superset, so it is never smaller than
+    the thing it protects."""
+    from l7r.diagram.interactive.page import hit_layer
+
+    sluice = '<line x1="90" y1="100" x2="110" y2="100" stroke="#37637F" stroke-width="2.4"/>'
+    out = hit_layer([sluice], ["pond sluice"], {"byres": [{"x": 100.0, "y": 100.0, "w": 10.0, "h": 10.0, "rot": 45}]})
+    assert "h14.3v14.3" in out, f"10 x 10 turned 45 degrees needs a 14.14 px box, plus the 0.2 pad: {out}"
+
+
+def test_a_lifted_class_the_priority_list_forgets_still_wins() -> None:
+    """The list ranks the lifted classes against each other; a class lifted BECAUSE it cannot otherwise
+    be hit must not land in the weakest place because someone forgot to add it (the first version's
+    `-1` fallback did exactly that)."""
+    from l7r.diagram.interactive import page as pg
+
+    ditch = '<line x1="0" y1="10" x2="100" y2="10" stroke="#6E93A8" stroke-width="3.5"/>'
+    sluice = '<line x1="48" y1="10" x2="52" y2="10" stroke="#37637F" stroke-width="2.4"/>'
+    lifted = pg.HIT_ON_TOP | {"field ditch"}
+    with pytest.MonkeyPatch.context() as mp:
+        mp.setattr(pg, "HIT_ON_TOP", lifted)
+        mp.setattr(pg, "HIT_PRIORITY", ("field ditch",))  # the sluice is the forgotten one
+        out = pg.hit_layer([ditch, sluice], ["field ditch", "pond sluice"])
+    assert out.index('data-k="field ditch"') < out.index('data-k="pond sluice"'), out
+
+
+def test_every_keep_clear_key_makes_its_holes() -> None:
+    """`HIT_KEEP_CLEAR` names manifest keys, and a key whose records carry some other shape - a well's
+    `x,y,r`, a footbridge's `span`, a sluice gate's bare `x,y,rot` - yields NO hole and NO error
+    (settlement-review round 3). So the count is asserted against a real manifest: one hole per record,
+    plus one per auxiliary polygon (a duck pen's `wet` apron), plus the canvas rectangle."""
+    import json
+    from pathlib import Path
+
+    from l7r.diagram.interactive.page import HIT_KEEP_CLEAR, _keep_clear_clip
+
+    man = json.loads((Path(__file__).resolve().parents[2] / "pool/hamlets/kuwabata.json").read_text())
+    for k in HIT_KEEP_CLEAR:
+        assert man.get(k), f"{k} records nothing on this map, so the count below cannot see it go wrong"
+    recs = [r for k in HIT_KEEP_CLEAR for r in man.get(k) or []]
+    aprons = sum(1 for r in recs for e in ("wet", "poly") if isinstance(r.get(e), list) and len(r[e]) > 2)
+    clip, _ = _keep_clear_clip(man)
+    assert recs, "the reference dike-pond map records structures"
+    assert clip.count("M") == 1 + len(recs) + aprons, f"{len(recs)} records + {aprons} aprons + the canvas"
+
+
+def test_an_element_with_no_extent_is_treated_as_touching_everything() -> None:
+    """`_hits` decides whether two drawn elements merge into one hover group. An extent of `None` means
+    the emitter recorded no geometry for that element, and the safe answer is YES: refusing to merge
+    would split one feature into two hover groups on the sheet, which the reader sees, while merging
+    slightly too eagerly costs nothing visible. Boxes and circles both go through here, and a circle
+    is tested AS a circle - two crowns whose boxes overlap at a corner do not actually touch."""
+    from l7r.diagram.interactive.page import _hits
+
+    assert _hits(None, (0.0, 0.0, 5.0)) is True
+    assert _hits((0.0, 0.0, 5.0), None) is True
+    assert _hits(None, None) is True
+    # circles: touching exactly at the rims counts, a hair further apart does not
+    assert _hits((0.0, 0.0, 5.0), (10.0, 0.0, 5.0)) is True
+    assert _hits((0.0, 0.0, 5.0), (10.1, 0.0, 5.0)) is False

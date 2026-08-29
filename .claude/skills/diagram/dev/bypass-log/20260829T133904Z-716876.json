@@ -1,0 +1,6 @@
+{
+  "utc": "20260829T133904Z",
+  "guard": "pair-hooks",
+  "what": "gate alone",
+  "reason": "the drawn map is byte-identical to main"
+}

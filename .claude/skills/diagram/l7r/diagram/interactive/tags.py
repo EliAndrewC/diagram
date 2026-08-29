@@ -19,6 +19,23 @@ from __future__ import annotations
 from dataclasses import dataclass
 
 
+class Planted(str):
+    """A class key, marking a string as the PLANTING on that feature rather than the feature itself.
+
+    Feature 153 (GM 2026-08-29: *"when the Mulberry dikes are highlighted ... we can no longer see the
+    greenery along them ... it will be clear that there is cultivated plant life growing on top of the
+    thing"*). The crop dike's coppiced crowns are already tagged with the dike's own key - one `add()`
+    for the band, another for the planting - so both light together, which is what the GM asked for. What
+    was missing is that the highlight sets ONE fill across the group, so the bushes vanish into the bank.
+
+    A `str` SUBCLASS on purpose: every consumer that asks `isinstance(tag, str)` - the census, the present
+    set, the hit-copy lookup - keeps treating it as the key it is, and only the page's group opener
+    notices the difference and adds a marker the stylesheet can reach. Nothing about the drawn record
+    changes; the SVG and PNG stay byte-identical (feature 134 FR-010)."""
+
+    __slots__ = ()
+
+
 @dataclass(frozen=True)
 class Split:
     """One element, two classes: `fill` for its filled body, `stroke` for its outline."""
@@ -28,4 +45,4 @@ class Split:
 
 
 Parts = tuple[tuple[str | None, str], ...]
-ClsTag = str | Split | Parts | None
+ClsTag = str | Planted | Split | Parts | None

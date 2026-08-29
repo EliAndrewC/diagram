@@ -82,6 +82,56 @@ size we have already said does not read. A settlement whose ground genuinely can
 FEWER parcels rather than smaller ones."""
 
 
+def parcel_bbox_ok(x: float, y: float, hw: float, hh: float, bc: float, bs: float, frame: tuple[float, float, float, float]) -> bool:
+    """Does a ROTATED parcel keep enough of its own bbox inside the frame? The check's own rule.
+
+    ROTATING A BOX GROWS ITS AXIS-ALIGNED BBOX - by up to sqrt(2), at 45 degrees, even for a square -
+    and `woodland_commons_within_the_frame` measures that grown bbox. Testing the unrotated square
+    instead let a seat pass the ladder at 0.8 and draw a parcel 0.67 inside the window, which is what
+    cohort seed 33 did the moment the cluster change walked it to the edge: a check and the thing it
+    checks measuring different quantities.
+
+    `WOODLAND_BBOX_FLOOR` is 0.72, NOT the 0.8 the square test uses, and the difference is measured
+    rather than taste. The 0.8 elsewhere buys slack because that window is called a PREDICTION of the
+    crop - but instrumenting seed 33 showed the window is byte-identical at all 16 `_crop_boxes` calls
+    across the build AND equal to the final `meta.view`, because everything that sets the frame is
+    already placed when the woodland scan runs. The prediction does not drift, so paying 10 points of
+    slack for drift that does not happen just deletes coppices: at 0.8 on the rotated bbox seed 33 lost
+    its woodland outright, a worse map than the 67%-clipped parcel this rule set out to stop. 0.72
+    keeps a 2-point cushion over the gate for float ordering.
+
+    Lifted out of `open_ground_patches` so it can be asked with plain numbers (GM 2026-08-28).
+    """
+    fx0, fy0, fx1, fy1 = frame
+    bw, bh = abs(hw * bc) + abs(hh * bs), abs(hw * bs) + abs(hh * bc)
+    inside = max(0.0, min(x + bw, fx1) - max(x - bw, fx0)) * max(0.0, min(y + bh, fy1) - max(y - bh, fy0))
+    return inside >= WOODLAND_BBOX_FLOOR * (2.0 * bw) * (2.0 * bh)
+
+
+def fit_square_parcel(half: float, floor_half: float, fits: Any) -> float | None:
+    """Shrink a square parcel down the ladder until it fits, or return None.
+
+    SHRINK BEFORE DROPPING - the same principle as the outer aspect ladder, applied to the rotated
+    bbox. A seat whose square will not fit the window is usually a seat near the edge that a slightly
+    smaller square clears, and a smaller coppice on the sheet beats a larger one the crop cuts off.
+    Only when even the floor-sized parcel fails is the seat genuinely unusable.
+
+    The floor is a FLOOR, not a rung: every rung is clamped up to it, so a parcel already at the
+    minimum is offered once rather than shrunk below the size at which a commons is still legible.
+
+    Lifted out of `open_ground_patches` (GM 2026-08-28). Feature 147 parked its two lines behind a
+    coverage pragma while the floor's verdict on them flickered; feature 149 found the cause - an
+    entry's stored coverage outliving the key it was recorded under - and the park came off. This is
+    what should have happened instead of the park: the ladder is a decision about numbers, and it can
+    be asked about numbers.
+    """
+    for sh in (0.9, 0.8, 0.7, 0.6):
+        cand = max(half * sh, floor_half)
+        if fits(cand):
+            return cand
+    return None
+
+
 def open_ground_patches(s: Settlement, plan: SitePlan, count: int, size: float = 250.0) -> list[Poly]:
     """Find `count` patches of ground still open enough for a managed woodland - by SCANNING.
 
@@ -469,20 +519,8 @@ def open_ground_patches(s: Settlement, plan: SitePlan, count: int, size: float =
                 _bc, _bs = math.cos(_bear), math.sin(_bear)  # not `_cb` - that name is the crop-boxes list above
 
                 def _bbox_ok(hw: float, hh: float, x: float = x, y: float = y, _bc: float = _bc, _bs: float = _bs) -> bool:
-                    """The rotated parcel's own bbox, against the check's own 70%-of-bbox rule.
-
-                    0.72, NOT the 0.8 the square test uses, and the difference is measured rather than
-                    taste. The 0.8 elsewhere buys slack because that window is called a PREDICTION of
-                    the crop - but instrumenting seed 33 showed the window is byte-identical at all 16
-                    `_crop_boxes` calls across the build AND equal to the final `meta.view`, because
-                    everything that sets the frame is already placed when the woodland scan runs. The
-                    prediction does not drift, so paying 10 points of slack for drift that does not
-                    happen just deletes coppices: at 0.8 on the rotated bbox seed 33 lost its woodland
-                    outright, which is a worse map than the 67%-clipped parcel this fix set out to
-                    stop. 0.72 keeps a 2-point cushion over the gate for float ordering."""
-                    _bw, _bh = abs(hw * _bc) + abs(hh * _bs), abs(hw * _bs) + abs(hh * _bc)
-                    _in = max(0.0, min(x + _bw, _fx1) - max(x - _bw, _fx0)) * max(0.0, min(y + _bh, _fy1) - max(y - _bh, _fy0))
-                    return _in >= WOODLAND_BBOX_FLOOR * (2.0 * _bw) * (2.0 * _bh)
+                    """This seat's rotated-bbox test - see `parcel_bbox_ok`, which holds the body."""
+                    return parcel_bbox_ok(x, y, hw, hh, _bc, _bs, (_fx0, _fy0, _fx1, _fy1))
 
                 _excess = 1.2 * s._hjit(x, y, 77.0)
                 _asp = 0.0  # 0.0 means "no rung fitted" - distinct from the square, which is 1.0
@@ -492,19 +530,14 @@ def open_ground_patches(s: Settlement, plan: SitePlan, count: int, size: float =
                         _asp = _try
                         break
                 if not _asp:
-                    # SHRINK BEFORE DROPPING - the same principle as the outer ladder, applied to the
-                    # rotated bbox. A seat whose square will not fit the window is usually a seat
-                    # near the edge that a slightly smaller square clears, and a smaller coppice on
-                    # the sheet beats a larger one the crop cuts off. Only when even the floor-sized
-                    # parcel fails is the seat genuinely unusable.
-                    # (Feature 147 parked these two lines behind a coverage pragma while the floor's verdict
-                    # on them flickered; feature 149 found the cause - an entry's stored coverage outliving
-                    # the key it was recorded under - and the park came off with it.)
-                    for _sh in (0.9, 0.8, 0.7, 0.6):
-                        _cand_half = max(half_used * _sh, _COMMONS_FLOOR_FT / 2.0)
-                        if _ok(x, y, _cand_half) and _bbox_ok(_cand_half, _cand_half):
-                            half_used, _asp = _cand_half, 1.0
-                            break
+                    # SHRINK BEFORE DROPPING - see `fit_square_parcel`, which holds the ladder and is
+                    # unit-tested over plain numbers. Written as one expression rather than an `if`
+                    # on purpose: the DECISION is tested in that function, so a separate branch here
+                    # is plumbing that only a real site can execute, and pinning a cohort member to
+                    # execute it is what made `test_woodland_shrink_147` rot twice (features 147 and
+                    # 149) before it was re-aimed a third time.
+                    _cand_half = fit_square_parcel(half_used, _COMMONS_FLOOR_FT / 2.0, lambda _h, _x=x, _y=y: _ok(_x, _y, _h) and _bbox_ok(_h, _h))
+                    half_used, _asp = (_cand_half, 1.0) if _cand_half is not None else (half_used, _asp)
                 if not _asp:
                     # Nothing fits. Drop the parcel rather than draw one the crop will cut off: a
                     # settlement whose ground cannot hold a legible commons draws FEWER, never one

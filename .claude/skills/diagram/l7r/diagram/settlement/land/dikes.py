@@ -19,6 +19,7 @@ import math
 import random
 from typing import TYPE_CHECKING, Any
 
+from l7r.diagram.interactive.tags import Planted
 from l7r.diagram.settlement._geom.primitives import keepout_ring
 
 from .._geom import Poly, Pt, point_in_poly, smooth_closed, smooth_points
@@ -155,6 +156,15 @@ class DikeMixin:
                         out2.append((a2[0] + (b2[0] - a2[0]) * f2, a2[1] + (b2[1] - a2[1]) * f2))
             return out2
 
+        g.append("</g>")
+        self.add("".join(g), cls="perimeter dike")
+        # THE PLANTED ROWS ARE THEIR OWN STRING, under the same clip (feature 153). They are the dike's
+        # own planting and keep its class, so hovering either still lights both - but tagged `Planted`
+        # they take the stylesheet's leaf tone instead of the bank's gold, and the willow and mulberry
+        # stay visible while the dike is lit. Without this the highlight painted 36,843 px of crown flat
+        # gold under a modal that says the bank is "planted with willow and mulberry to bind it" - the
+        # GM's own complaint about the crop dike, standing on the class the new sibling link points at.
+        g = [f'<g clip-path="url(#{cid})">']
         for wx, wy in _row_walk(0.74, 8.5):  # the WILLOW row rides the outer (water) face - pollarded, larger crowns
             wcol = random.choice(("#7C9856", "#87A45C", "#6E8B4A"))
             g.append(f'<circle cx="{wx + random.uniform(-1.4, 1.4):.1f}" cy="{wy + random.uniform(-1.4, 1.4):.1f}" r="{random.uniform(3.5, 5.5):.1f}" fill="{wcol}" opacity="0.75"/>')
@@ -162,7 +172,7 @@ class DikeMixin:
             mcol2 = random.choice(("#6E8B4A", "#7C9A54", "#5E7C40"))
             g.append(f'<circle cx="{mx2 + random.uniform(-1.2, 1.2):.1f}" cy="{my2 + random.uniform(-1.2, 1.2):.1f}" r="{random.uniform(2.2, 3.6):.1f}" fill="{mcol2}" opacity="0.85"/>')
         g.append("</g>")
-        self.add("".join(g), cls="perimeter dike")
+        self.add("".join(g), cls=Planted("perimeter dike"))
         random.setstate(st)
         self.M.setdefault("dikes", []).append(
             {

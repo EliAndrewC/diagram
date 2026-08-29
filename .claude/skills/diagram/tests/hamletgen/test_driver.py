@@ -155,3 +155,18 @@ def test_the_stage_profile_prints_only_when_asked_and_rolls_the_same_map(monkeyp
     assert "stage_beta" not in err, "a stage under the 0.05 s floor stays out of the table - the point is the SLOW one"
     assert seen == ["alpha", "beta"], "the stages run in the same order either way"
     assert loud.M["probe"] == quiet.M["probe"] == ["alpha", "beta"]
+
+    # ...AND A STAGE OVER THE FLOOR GETS ITS ROW. The assertions above prove only the negative - a
+    # fast stage stays out of the table - so the table itself was never printed by any test, and the
+    # line that prints it could have been deleted silently. Stand-in stages are instant by design, so
+    # the CLOCK is what gets stood in for here rather than the work: each `time.time()` call advances
+    # a tenth of a second, which puts both stages over the 0.05 s floor without the test sleeping.
+    ticks = iter(0.1 * i for i in range(1000))
+    monkeypatch.setattr(driver.time, "time", lambda: next(ticks))
+    seen.clear()
+    driver.build(plan)
+    table = capfd.readouterr().err
+    assert "stage profile" in table
+    for row in ("stage_alpha", "stage_beta"):
+        assert row in table, f"{row} took 0.1 s and owes a row"
+    assert "%" in table and "s  " in table, "the row carries its duration and its share of the roll"

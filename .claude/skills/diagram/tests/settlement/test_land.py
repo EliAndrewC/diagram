@@ -589,3 +589,26 @@ def test_reserve_clearing_registers_swept_ground_before_the_scatter_runs() -> No
     xs = [p[0] for p in poly]
     ys = [p[1] for p in poly]
     assert min(xs) <= 460 and max(xs) >= 540 and min(ys) <= 470 and max(ys) >= 530
+
+
+def test_a_dike_cut_with_no_watercourse_in_reach_seats_its_gate_on_the_cut_itself() -> None:
+    """A sluice gate is SNAPPED onto the recorded watercourse the gate checks measure against, because
+    drawing it from the dike alone put the inlet gate 8.9 px off its stream. But a perimeter dike has
+    cuts that no stream or canal runs through - a field crossing, a drain that leaves offmap - and
+    there is nothing to snap to. The cut's own position is then the seat, which is the honest answer:
+    the gate stands where the opening is.
+
+    Reaching this from a rolled map needs a dike-pond hamlet with a cut more than 20 ft from every
+    recorded watercourse, which none in the pool has - all four of Kuwabata's are fed."""
+    s = Settlement(1000, 1000, seed=2)
+    s.meta(name="P", scale="hamlet")
+    crest = [(200.0, 200.0), (800.0, 200.0), (800.0, 800.0), (200.0, 800.0)]
+    s.M["dikes"] = [{"crest": crest, "gaps": [(500.0, 200.0)], "outline": crest}]
+    assert s.dike_gates() == 1, "the cut got its gate"
+
+    # ...and with a watercourse running through the same cut, the gate snaps onto IT instead
+    snapped = Settlement(1000, 1000, seed=2)
+    snapped.meta(name="P", scale="hamlet")
+    snapped.M["dikes"] = [{"crest": crest, "gaps": [(500.0, 200.0)], "outline": crest}]
+    snapped.M["streams"] = [{"poly": [(495.0, 100.0), (495.0, 300.0)], "bedz": 0}]
+    assert snapped.dike_gates() == 1

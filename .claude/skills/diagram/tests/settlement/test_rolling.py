@@ -432,3 +432,28 @@ def test_a_bundle_is_refused_a_seat_the_re_roll_loop_has_already_forbidden():
     s._avoid_seats = [(700.0, 700.0)]
     assert s._place_bundle_nucleated(700.0, 700.0, 30.0, 20.0) is None, "the forbidden seat is refused outright"
     assert s._place_bundle_nucleated(300.0, 300.0, 30.0, 20.0) is not None, "and a seat nowhere near it is not"
+
+
+def test_the_sun_corridor_clears_a_bundle_that_has_no_yard_of_its_own() -> None:
+    """A no-yard bundle (feature 150) has nothing of its own to keep sunny, so once it has been
+    checked against the yards ALREADY standing there is nothing left to ask and it clears.
+
+    Both directions are tested on purpose - this house may not shade a yard already placed, and this
+    yard may not be shaded by a house already standing - and it is the second direction that has
+    nothing to say here. The rule is opt-in, so the corridor is turned on explicitly; with it off
+    every seat clears for a different reason and the branch is never reached."""
+    s = Settlement(1000, 1000, seed=3)
+    s.meta(name="V", scale="hamlet")
+    s.sun_corridor(39)
+    assert s._sun_corridor_ok({"house": (400.0, 400.0, 46.0, 28.0)}) is True, "no yard, no standing houses"
+
+    # ...and it still answers about the OTHER direction: a standing house with a yard, shaded by this one
+    # y grows southward, so a house shades a yard that lies just NORTH of it (smaller y)
+    s.M["houses"] = [{"x": 400.0, "y": 340.0, "w": 46.0, "h": 28.0, "geom": {"house": (400.0, 340.0, 46.0, 28.0), "yard": (400.0, 360.0, 40.0, 20.0)}}]
+    assert s._sun_corridor_ok({"house": (400.0, 400.0, 46.0, 28.0)}) is False, "it shades the standing yard"
+
+    # with the corridor OFF nothing is refused, whatever stands where
+    off = Settlement(1000, 1000, seed=3)
+    off.meta(name="V", scale="hamlet")
+    off.M["houses"] = list(s.M["houses"])
+    assert off._sun_corridor_ok({"house": (400.0, 400.0, 46.0, 28.0)}) is True
