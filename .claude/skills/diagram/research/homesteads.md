@@ -780,10 +780,28 @@ already used on its north-east side. **The yard blocks a slice of a 90-degree ar
 plateau was evidence about the offsets, not about the ground, and the physical-sounding explanation was
 wrong. Searching the sector took the realized share to **66.2%**.
 
-**What remains of the gap is honest.** 66.2% against a 72.7% rule: a homestead whose sun-side arc is
-genuinely closed - by a paddy, a lane or the marsh, which the free-ground count above did not test -
-seats its privy at one of the three attested seats instead. That is the rule degrading correctly rather
-than a number to be tuned.
+**How far out, and why the realized share is NOT tuned to the target.** The source gives a DIRECTION and
+no distance, and the three attested seats are all against the house - so the radius is ours to choose, and
+choosing it to hit 72.7% would be fitting the map to the statistic rather than to the place. Measured, at
+three radii, over the five scripted maps:
+
+| sun-side radius | privies seated | SE-to-S | nearer a NEIGHBOUR's house | standing beyond 45 ft |
+|---|---|---|---|---|
+| 48 ft | 50 | **46.0%** | **3** | 11 |
+| 58 ft | 65 | 73.8% | 8 | 43 |
+| 66 ft | 65 | 76.9% | 8 | 46 |
+
+**48 ft is chosen**, and it is the one that does not hit the number. Past it the privy walks out beyond
+its own work yard and, in a cluster where the next farmhouse is 50 ft away, out of its own homestead: at
+72 ft an acceptance review measured 15 of 86 privies and manure pits nearer ANOTHER house than the one
+they serve, against 0 of 52 before this feature - a legibility defect no check can see, because nothing
+tests which farmstead a fixture belongs to. A reader attributes a fixture to the nearest house whatever
+the record says.
+
+So the realized share is **46%** against a 72.7% rule, and the gap is the work yard: the near sun side is
+the threshing floor, and a privy may not stand on it. Closing it honestly means reserving the sun seat
+BEFORE the yard and gardens are placed - a stage reorder, recorded and not yet attempted - not widening
+the radius until the number comes out right.
 
 **Sources:** `wang-ochiai-2022`.
 

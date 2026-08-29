@@ -669,7 +669,15 @@ FIXTURE_BANDS: dict[str, tuple[float, float]] = {
 _FIXTURE_ORDER = ("privy", "manure", "bath", "coop", "woodpile", "shrine", "persimmon")  # the buildings before the stack, which has the most seats
 _PRIVY_SEATS = (("back", 0.60), ("gate", 0.25), ("naya", 0.15))
 PRIVY_SUN_MIN_FT = 18.0  # the sun-side search starts at the house wall and steps out; measured free ground begins 24-32 ft
-PRIVY_SUN_MAX_FT = 72.0  # ...and stops where a fixture would no longer read as belonging to that homestead
+# 48, NOT 72 (settlement-review 2026-08-29, acceptance). At 72 ft the search walked the privy out past
+# its own work yard and, in a cluster where the next farmhouse is 50 ft away, out of its own homestead
+# altogether: 15 of 86 privies and manure pits ended up nearer ANOTHER house than the one they serve,
+# against 0 of 52 on main - a legibility defect this feature CREATED, and one no check can see, because
+# nothing tests which farmstead a fixture belongs to. The comment that used to sit on 72 claimed it
+# "stops where a fixture would no longer read as belonging to that homestead"; that was the property it
+# was chosen for and it did not hold. Wang & Ochiai gives a DIRECTION, not a distance, so the radius is
+# ours to set and it belongs against the house: the three attested seats are all at the wall.
+PRIVY_SUN_MAX_FT = 48.0
 PRIVY_SUNNY_SHARE = 0.727  # the share of outhouses seated SE-to-S: Wang & Ochiai 2022 measured 72.7% in
 # Arakawa village, and the GM (2026-08-29) ruled the figure be used literally rather than rounded. The
 # reason the record gives is fermentation, not wind - see the note at the seat roll.
@@ -826,6 +834,30 @@ def farmstead_fixtures(s: Settlement, plan: SitePlan, houses: Sequence[Mapping[s
                         _dx, _dy = _rr * math.sin(math.radians(_bd)), -_rr * math.cos(math.radians(_bd))
                         _sun.append((_dx * ca + _dy * sa, -_dx * sa + _dy * ca, w, d))
                 _sun.sort(key=lambda q: (math.hypot(q[0], q[1]), abs(math.degrees(math.atan2(q[0] * ca - q[1] * sa, -(q[0] * sa + q[1] * ca))) % 360.0 - 157.5)))
+                # ...AND A FIXTURE BELONGS TO THE HOMESTEAD IT SERVES. A seat closer to a neighbour's
+                # farmhouse than to its own is drawn in that neighbour's yard as far as a reader is
+                # concerned, whatever the record says - so the sun list drops any seat that is not
+                # strictly nearest its own house. This is the ownership test the 72 ft radius was
+                # trusting the geometry to provide, made explicit.
+                # A STRICT "must be nearest to its OWN house" filter was tried here and cost too much.
+                # It states the defect exactly - a fixture nearer a neighbour's farmhouse reads as theirs -
+                # but in a cluster the sun side of one house often IS nearer the next, and filtering on it
+                # rejected seats that sit honestly in their own yard: privies fell to 2 of 11 declared on
+                # Mizuguchi and the sun share to 49%. The bound that does the work without the collateral
+                # is the RADIUS (`PRIVY_SUN_MAX_FT`, cut 72 -> 48): a seat against its own house is in its
+                # own yard whoever else is near. Ownership stays as a TIE-BREAK - among seats the ground
+                # allows, one that is nearer its own house than any other comes first.
+                _others = [(float(_h["x"]), float(_h["y"])) for _h in houses if (float(_h["x"]), float(_h["y"])) != (hx, hy)]
+                if _others:
+
+                    def _mine_first(
+                        _q: tuple[float, float, float, float], _hx: float = hx, _hy: float = hy, _ca: float = ca, _sa: float = sa, _oth: list[Pt] = _others
+                    ) -> tuple[int, float]:  # the loop's values bound as defaults - this closure outlives the iteration
+                        _mx, _my = _hx + _q[0] * _ca - _q[1] * _sa, _hy + _q[0] * _sa + _q[1] * _ca
+                        _dmine = math.hypot(_mx - _hx, _my - _hy)
+                        return (0 if _dmine < min(math.dist((_mx, _my), _o) for _o in _oth) else 1, _dmine)
+
+                    _sun.sort(key=_mine_first)
                 seats = (_sun + seats) if _u_dir < PRIVY_SUNNY_SHARE else seats
             elif kind == "manure":
                 if privy_at is not None:
