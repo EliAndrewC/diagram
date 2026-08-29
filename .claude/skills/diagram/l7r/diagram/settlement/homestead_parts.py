@@ -11,7 +11,15 @@ if TYPE_CHECKING:
     from .core import Settlement
 
 
-_BELT_GAP_FT = 30.0  # `village_windbreak_is_continuous`'s own bar - the fill closes what that check reads
+_BELT_GAP_FT = 30.0  # `village_windbreak_is_continuous`'s own bar - the fill closes what that check reads.
+# THE NUMBER IS OURS; THE DIRECTION OF THE RULE IS THE RECORD'S (GM ruling 2026-08-29, "do whatever was
+# historically true", research in settlements/vegetation.md). No source reached - Chinese or Japanese,
+# historical or agronomic - gives a WIDTH for an opening in a shelter belt, so 30 ft is a rendering
+# convention and is labelled one. What IS sourced is that a belt occupies one or two sides and is planted
+# along them, that its ABSENT flank is not a gap (Honda 1915 defines yashikirin as the west and north
+# sides), and that a bare run inside the planted stretch is not attested and funnels wind (Purdue NCR-191:
+# an access crossing keeps the belt's own porosity rather than being left open). Hence: close holes WITHIN
+# the run, never wrap the settlement.
 
 
 def _belt_axis(pts: Sequence[tuple[float, float]]) -> tuple[float, float]:
@@ -917,16 +925,30 @@ class HomesteadPartsMixin:
                     _pa, _pb = seated[_a], seated[_b]
                     if math.dist(_pa, _pb) <= _BELT_GAP_FT:
                         continue
-                    _mx, _my = (_pa[0] + _pb[0]) / 2, (_pa[1] + _pb[1]) / 2
-                    if not point_in_poly(_mx, _my, poly):
-                        continue
-                    if within is not None and (_mx + clump * 0.9 < within[0] or _mx - clump * 0.9 > within[2] or _my + clump * 0.9 < within[1] or _my - clump * 0.9 > within[3]):
-                        continue
-                    if _hard_blocked(_mx, _my) or _local_blocked(_mx, _my) or _lane_blocked(_mx, _my):
-                        continue
-                    seated.append((_mx, _my))
-                    clumps.append([round(_mx, 1), round(_my, 1)])
-                    _added += 1
+                    # FILL UP TO THE OBSTACLE FROM BOTH SIDES, not only at the midpoint. Where a lane
+                    # crosses the belt the midpoint IS the lane, so a midpoint-only fill gives up and
+                    # leaves the whole 40-50 ft hole - when what the record and the agronomy both want is
+                    # the wall resuming on each side of the crossing. Purdue NCR-191, on a windbreak that
+                    # must be crossed: an access gate is built "the same height and porosity as the rest
+                    # of the windbreak fence", never left as a bare opening, because "when high-velocity
+                    # air passes through a constriction, its velocity increases". So the gap is offered
+                    # seats across its span and takes whichever the ground allows.
+                    _took = False
+                    for _f in (0.5, 0.32, 0.68, 0.2, 0.8):
+                        _mx = _pa[0] + (_pb[0] - _pa[0]) * _f
+                        _my = _pa[1] + (_pb[1] - _pa[1]) * _f
+                        if not point_in_poly(_mx, _my, poly):
+                            continue
+                        if within is not None and (_mx + clump * 0.9 < within[0] or _mx - clump * 0.9 > within[2] or _my + clump * 0.9 < within[1] or _my - clump * 0.9 > within[3]):
+                            continue
+                        if _hard_blocked(_mx, _my) or _local_blocked(_mx, _my) or _lane_blocked(_mx, _my):
+                            continue
+                        seated.append((_mx, _my))
+                        clumps.append([round(_mx, 1), round(_my, 1)])
+                        _took = True
+                        break
+                    if _took:
+                        _added += 1
                 if not _added:
                     break
         # THE FACE TRIM, then the ink (GM 2026-08-26, feature 133 T10). With `face_margin` the

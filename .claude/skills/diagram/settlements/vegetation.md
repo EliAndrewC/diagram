@@ -82,3 +82,52 @@ the GM.**
 - **BAMBOO IS A STAND, DRAWN AS ONE** (GM 2026-08-27, feature 133 T42/T47). Researched ([`../research/vegetation.md`](../research/vegetation.md) "Bamboo: how common, where it stood, and how to show it"): below the frost line a village has bamboo as a matter of course - a clonal thicket with a hard edge, at the homestead's damp shady strip or as a take-yabu at the field margin - and a culm cannot be drawn at 1 px = 1 ft. So: the `bamboo` knob (none / homestead / thicket / both) rolls per settlement; `hamletgen.bamboo_seats` scans a seat per form and `stage_bamboo` draws `s.bamboo_stand(poly, role)` after the belt - a stand-level glyph (paired culm strokes with a leafy fork, pale yellow-green, 7 ft pitch, no fill) inside a to-scale outline, the convention of Japan's own GSI legend, which gives bamboo its own symbol beside broadleaf and conifer. The knob's forms (T48): `homestead` = a 22 x 16 ft strip per farmstead that rolls one (`hamletgen.household_bamboo`, seated in `stage_hinterland` AFTER the web and the notice board so it keeps 6 ft off every lane - seated with the sheds it was in the web's way and lanes ran through it (T49); two offsets per side; presence 0.6 - a labeled GUESS, no source gives a share; side rolled per house, weighted to the back and the shed's side - READ: with the storehouses on Tonami's south side, at a plot's wet edge for the roots, the grove as a whole to the wind); `thicket` = one communal take-yabu at the cluster's shady edge; `both` = both. A DEVIATION for legibility, recorded like the oversized well. Bamboo is no longer in the grove species mix (it was 20% of the belt's crowns, one invisible six-foot culm at a time). Held by `bamboo_declared_and_drawn`, `bamboo_stands_legible` (20 ft floor) and `bamboo_stands_clear_of_paddies`; a stand is a wood to the scrub keep-out and the scatter audit.
 
 **No canopy tree stands under another's crown** (GM 2026-08-28, feature 134). Crowns may interlace at their edges; a crown whose center falls inside an already-seated crown is not drawn (it would be an understory stem, not canopy). The rule is `woods._crown_seat_clear`, applied by every stand and grove clump against the map's recorded crowns; gated by `tree_crowns_not_subsumed`. Why: [`../research/vegetation.md`](../research/vegetation.md#no-canopy-tree-stands-under-anothers-crown-researched-2026-08-28-feature-134).
+
+## A shelter belt is not a RING, and its open side is not a gap (GM ruling 2026-08-29)
+
+**The ruling, verbatim**: *"The actual ruling that I have on whether or not it is okay for a windbreak
+forest to have gaps is that we should just do whatever was historically true. If we believe that
+windbreak forests would have had such gaps based on our historical findings, then we can give them
+gaps. Otherwise, we should not have any gaps."* A research pass was authorized and run; this is what it
+found, and it changes the shape of the rule rather than settling a number.
+
+**The question was posed wrongly, and the record says so.** We asked whether a belt is an unbroken wall
+or a wall with holes. Neither literature describes a single continuous perimeter in the first place:
+
+- **China, at village scale, a fengshui forest is a SYSTEM OF SEPARATE PATCHES, not a ring.** Coggins &
+  Minor (2018) map them at named topographic points - the back / master-mountain grove (*zhushan*), the
+  water-head grove, the water-mouth (*shuikou*) grove downstream, and mountain-gap groves *"at specific
+  topographic positions corresponding to especially energetic winds (mountain gaps) and water
+  (cutbanks)"* - with the rice paddies lying in the open ground between the built village and the
+  water-tail grove. A Guangdong forestry-bureau source names four types in the same way (水口林 /
+  龙座林 / 垫脚林 / 宅基林). The open ground BETWEEN the patches is the design, and it is not narrow.
+- **Japan, at farmstead scale, the grove is built on ONE OR TWO SIDES by design.** Honda Seiroku's 1915
+  founding definition of *yashikirin* restricts it to two named sides: 屋敷林ハ...農家ノ周圍特ニ西ト北
+  トノ両側ニ設ケラルヽモノ - established *"mainly on the two sides, specifically west and north"* of the
+  farmstead, the winter-monsoon-facing sides. The *igune* entry says the same (多くの居久根は屋敷の北側
+  と西側に存在し), and the south and east are the entrance, the garden and the yard.
+
+**So the operative distinction is between an ABSENT FLANK and a HOLE IN A PLANTED RUN**, and only the
+second is a defect. A belt that does not wrap the settlement is correct and historical. A bare 40 ft run
+in the middle of the side the belt DOES occupy is not attested anywhere, and the agronomy says it is
+actively harmful: Purdue NCR-191 - *"when high-velocity air passes through a constriction, its velocity
+increases"* - and where a windbreak must be crossed for access, the gate is built *"the same height and
+porosity as the rest of the windbreak fence"*, never left as a bare opening.
+
+**What this makes of our 30 ft threshold: a RENDERING CONVENTION, not a finding.** No source reached,
+historical or modern, Chinese or Japanese, gives a width for an opening - not for the open flank, not for
+a gate, not for the *shuikou* passage the stream and road already run through. `_BELT_MAX_GAP_FT = 30` is
+ours, and it is now labelled as ours. What IS sourced is the direction of the rule: within the planted
+run, close the holes.
+
+**A KNOB the record hands us, recorded and not yet built** (constitution XII). Both forms are attested in
+the Japanese material itself: the Izumo *tsuijimatsu* *"enclosed the entire circumference of the house"*
+before Meiji and was later reduced to a 鉤型 hook shape *"covering only the north and west sides"* as
+flood risk fell and building styles changed. A full-ring belt and a two-sided belt are therefore both
+historical, at different places and times - which is exactly the two-supportable-answers condition, and a
+`belt_enclosure` knob (`full_ring` | `windward_flanks`) is the honest expression of it. Not built here:
+this feature's charter was the fourteen recorded findings, and a third knob is new scope.
+
+**Sources:** `coggins-minor-2018`, `honda-1915-via-miura-2019`, `yashikirin-jawiki`, `igune-jawiki`,
+`purdue-ncr191`, `gd-fengshui-types` (SUMMARY-ONLY).
+

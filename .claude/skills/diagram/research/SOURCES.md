@@ -1907,3 +1907,37 @@ Wang Jingying and Ochiai Chiho, "Spatial composition and building techniques of 
 
 *Used for:* the 72.7% of toilets sited southeast-to-south for solar warmth to speed fermentation of night soil - the figure the GM ruled be used literally as the seat share. Also used for what it does NOT say: its wind-siting finding covers storage buildings and retirement houses rather than toilets, and it contains no leeward/downwind/odor/hygiene language, which is what CONTRADICTED the proposal to seat privies downwind.
 
+### `coggins-minor-2018`
+
+Chris Coggins and Jesse Minor, "Fengshui Forests as A Socio-Natural Reservoir in the Face of Climate Change and Environmental Transformation", *Asia Pacific Perspectives* 15:2 (2018) (https://jayna.usfca.edu/asia-pacific-perspectives/pdfs/1-coggins-minor-fengshui-forests.pdf) - READ 2026-08-29 by a `source-reader`, from the PDF itself (pages 1-20) after the fetcher could not decode its text stream.
+
+*Used for:* the finding that a Chinese village's fengshui forest is a SYSTEM OF SEPARATE PATCHES rather than a perimeter belt - back / master-mountain (*zhushan*), water-head, water-mouth (*shuikou*) and mountain-gap groves, sited "at specific topographic positions corresponding to especially energetic winds (mountain gaps) and water (cutbanks)", with the paddies in the open ground between. This is what CONTRADICTED the question as we first posed it.
+
+### `honda-1915-via-miura-2019`
+
+Honda Seiroku, *Hoanrin Zorinho* (1915), quoted verbatim in Miura Osamu, "Invention Process of a Technical Term *Yashikirin* and Its Diffusion Process in Geography", *Quarterly Journal of Geography* 71:3 (2019), pp. 120-127 (https://www.jstage.jst.go.jp/article/tga/71/3/71_120/_pdf) - READ 2026-08-29 from the PDF.
+
+*Used for:* the FOUNDING technical definition of *yashikirin*, which restricts the belt to two named sides - 屋敷林ハ...農家ノ周圍特ニ西ト北トノ両側ニ設ケラルヽモノ, "established mainly on the two sides, specifically west and north" of an isolated farmhouse. The source of the rule that an absent flank is not a gap. Cited through Miura because Honda's 1915 text was reached in his verbatim quotation of it, not separately.
+
+### `yashikirin-jawiki`
+
+ウィキペディア日本語版 屋敷林 (https://ja.wikipedia.org/wiki/%E5%B1%8B%E6%95%B7%E6%9E%97) - READ 2026-08-29
+
+*Used for:* the east side as the entrance with garden and ornamental trees against tall cedar on the west and south; and - the load-bearing part - the Izumo *tsuijimatsu*, which "enclosed the entire circumference of the house" before Meiji and was later reduced to a 鉤型 hook shape "covering only the north and west sides". That is what makes full-ring versus two-sided a KNOB rather than one right answer.
+
+### `igune-jawiki`
+
+ウィキペディア日本語版 居久根 (https://ja.wikipedia.org/wiki/%E5%B1%85%E4%B9%85%E6%A0%B9) - READ 2026-08-29
+
+*Used for:* 多くの居久根は屋敷の北側と西側に存在し - most igune stand on the north and west sides of the farmstead - corroborating Honda's two-sided definition in the dispersed-settlement (Tohoku) case.
+
+### `purdue-ncr191`
+
+Purdue Extension, "Wind and Snow Control Around the Farm" (NCR-191) (https://www.extension.purdue.edu/extmedia/ncr/ncr-191.html) - READ 2026-08-29
+
+*Used for:* the engineering half of the rule, offered as modern evidence about what a FUNCTIONING belt looks like rather than as history: "when high-velocity air passes through a constriction, its velocity increases", and an access opening through a windbreak is built "the same height and porosity as the rest of the windbreak fence" rather than left bare. It gives no width, which is why our 30 ft threshold is labelled a rendering convention.
+
+### `gd-fengshui-types`
+
+Guangdong Provincial Forestry Administration, on the four types of village fengshui forest (水口林 / 龙座林 / 垫脚林 / 宅基林) (URL: none - the page at `lyj.gd.gov.cn/news/special/forum/content/post_1876507.html` 404s and no live address for it was found; the text below is a search summary of it) - SUMMARY-ONLY: the page at lyj.gd.gov.cn 404'd on fetch and only a search summary of it could be read. Labelled here rather than dropped because it corroborates `coggins-minor-2018` independently and in categorical forestry-bureau language; nothing rests on it alone.
+
