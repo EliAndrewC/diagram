@@ -64,6 +64,7 @@ from .banks import (
     _GATE_MIN_APEX,
     _GATE_MIN_AREA,
     _TINT_END_FT,
+    _TINT_MAX_AREA_RATIO,
     _TINT_MAX_ASPECT,
     _TINT_MIN_APEX,
     _TINT_MIN_SOLIDITY,
@@ -961,6 +962,16 @@ def close_seams(
     # merged triangle shows the needle - but the merge can also retire an apex the raw ring still
     # has, and `flooded_plots_read_as_basins` reads the ring as recorded (cohort seed 8). Testing
     # both at the carve's generous 25 deg keeps the placer strictly stricter than the gate's 15.
+    # THE FOURTH BLIND SPOT: EVERY PREDICATE MEASURES SHAPE, NONE MEASURES SIZE (feature 152 T10,
+    # settlement-review 2026-08-29). Sawada's surviving flooded plot is 6,706 sq ft - 4.9x the median
+    # basin and the largest of 776 - on the one map whose whole brief is that it has no pond, so the
+    # object a reader's eye lands on in the field is a 170 ft blue sheet. Every shape test passed it
+    # honestly: min apex 29.4 deg, no short end, good solidity. What it is, is BIG - `close_seams`
+    # absorbed it up to several design cells and it kept the tint it was given as one. A basin far
+    # larger than its neighbors does not read as a basin whatever its outline, so size joins the other
+    # four. Measured on the FINAL ring, after absorption, which is the only place the size exists.
+    _areas = sorted(Polygon(_q["poly"]).buffer(0).area for _q in plots if len(_q.get("poly") or []) >= 3)
+    _median_plot = _areas[len(_areas) // 2] if _areas else 0.0
     for p in plots:
         # TWO RINGS, AND BOTH CLAUSES EARN THEIR KEEP - this is the one place a second measurement is
         # right, and the reason is that they answer to different masters. `flooded_plots_read_as_basins`
@@ -1016,5 +1027,6 @@ def close_seams(
             or _psol < _TINT_MIN_SOLIDITY
             or _at_outfall
             or _asp > _TINT_MAX_ASPECT
+            or (_median_plot > 0.0 and _pg.area > _TINT_MAX_AREA_RATIO * _median_plot)
         ):
             p["fill"] = RICE_GREENS[(int(abs(p["poly"][0][0]) * 7) + int(abs(p["poly"][0][1]) * 3)) % len(RICE_GREENS)]

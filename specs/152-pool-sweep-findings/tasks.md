@@ -56,8 +56,8 @@ researched, and the task is to make the drawing obey them.
 
 - [ ] T09 FR-004: a copse draws as a distinguishable stand - not 2 clumps in a 205-313 ft record, not
       seated inside the windbreak's canopy. *(rendering)*
-- [ ] T10 FR-007: the flooded-plot tint tests the FINAL ring's AREA as well as its sharpness. *(rendering)*
-- [ ] T11 FR-008: persimmon fruit dots vary per tree off the map's position hash. *(rendering)*
+- [x] T10 FR-007: the flooded-plot tint tests the FINAL ring's AREA as well as its sharpness. *(rendering)*
+- [x] T11 FR-008: persimmon fruit dots vary per tree off the map's position hash. *(rendering)*
 - [ ] T12 FR-006: the caption seat filter gains a fabric term and a way-side term. *(rendering)*
 
 ## Phase 4 - the lane web

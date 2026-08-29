@@ -109,9 +109,18 @@ class FarmFixturesMixin:
         the fruit is the map's convention for "this one tree is the persimmon", not a season."""
         r = self.px(PERSIMMON_CROWN_FT)
         g = [f'<circle cx="{cx:.1f}" cy="{cy:.1f}" r="{r:.1f}" fill="#7C9A3E" stroke="#4E6A28" stroke-width="0.8"/>']
+        # THE FRUIT IS NOT A STENCIL (feature 152 T11, settlement-review 2026-08-29). The four dots sat at
+        # exactly (+/-0.55r, +/-0.55r) at 45/135/225/315 degrees, identical on every tree on every map: a
+        # rigid mirrored 2x2 of saturated marks, which is this project's own named strongest face-read
+        # trigger, and the anti-twin problem in miniature - two hamlets' persimmons were pixel-identical.
+        # Fruit does not hang in a square. Angle and radius are jittered off the tree's own position, so
+        # the pattern is stable for a given tree and different between trees; the count stays four, which
+        # is the convention that says "this one is the persimmon".
+        _j = self._hjit(cx, cy, 107.0)
         for k in range(4):
-            a = math.radians(45 + 90 * k)
-            g.append(f'<circle cx="{cx + 0.55 * r * math.cos(a):.1f}" cy="{cy + 0.55 * r * math.sin(a):.1f}" r="{max(1.0, r * 0.14):.1f}" fill="#E07B22"/>')
+            a = math.radians(45 + 90 * k + 34.0 * (self._hjit(cx + k * 13.0, cy - k * 7.0, 107.5) - 0.5))
+            _rad = r * (0.44 + 0.24 * self._hjit(cx - k * 11.0, cy + k * 5.0, 107.9)) * (0.92 + 0.16 * _j)
+            g.append(f'<circle cx="{cx + _rad * math.cos(a):.1f}" cy="{cy + _rad * math.sin(a):.1f}" r="{max(1.0, r * 0.14):.1f}" fill="#E07B22"/>')
         self.add_top("".join(g), cls="persimmon")
         self._record_crowns([(cx, cy, r)])
         rec: dict[str, Any] = {"x": round(cx, 1), "y": round(cy, 1), "r": round(r, 1)}
