@@ -17,7 +17,8 @@ roll executed changed - rolls for real, which is exactly when the test has somet
 WHAT IT NEVER SERVES. Any doubt at all - a missing or unreadable entry, a payload that will not
 unpickle, a vanished data file - regenerates. Under `GATE_NO_CACHE=1` and under the FULL run
 (`L7R_TESTS_FULL=1`, where the coverage floors are enforced and a served roll would execute none of the
-rolled code) every call produces.
+rolled code) every DISTINCT subject produces - once per process, shared as bytes thereafter (feature 147;
+see `_SHARED_BYPASS`), so the floors still watch a real roll while thirty identical re-rolls do not happen.
 
 A TEST THAT MONKEYPATCHES THE ENGINE goes through `keyed_to(test, ...)`, never bare `obtain`: a patched
 function changes what the roll does without changing any hashed engine source, so the engine key alone
@@ -30,6 +31,7 @@ Excluded from the engine file set (`gencache._NOT_ENGINE`): this module serves r
 
 from __future__ import annotations
 
+import contextlib
 import hashlib
 import inspect
 import json
@@ -64,11 +66,53 @@ def _place(data: bytes, dest: str) -> None:
     os.replace(tmp, dest)
 
 
+# THE BYPASS USED TO RE-ROLL THE SAME SPEC ONCE PER CALLER (feature 147). The FULL run bypasses SERVING so
+# the coverage floors watch the rolled code execute - which is right, and which nobody costed: the 31 scripted
+# negative fixtures share just TWO specs between them, so the bypass rolled one of two identical hamlets 31
+# times, ~14 s each, ~430 s of CPU to execute a set of lines that one roll executes. Measured 2026-08-29.
+#
+# So the bypass now produces each distinct subject ONCE per process and shares it. The floors are unaffected
+# for the reason the sharing is safe at all: the first call performs a real roll, so every line an identical
+# roll would execute is executed and traced; the other thirty would have executed the SAME lines.
+#
+# WHAT IS SHARED IS THE BYTES, NOT THE OBJECT, and that is the whole of the isolation argument. A served HIT
+# unpickles a fresh payload for every caller, so no test has ever been able to affect another's geometry
+# through this module; storing the pickle and re-loading it keeps that exactly, at microseconds against the
+# 14 s it replaces. Sharing the object itself would let one fixture's deliberate break leak into the next
+# and silently disarm it - the one failure this pass must not introduce.
+#
+# KEYED ON THE PRODUCER AS WELL AS THE SUBJECT. `subject` is contracted to determine the roll completely and
+# in the engine it does (a spec's repr), but a TEST may legitimately hand two different `produce` callables
+# the same toy subject, and sharing across those would serve one test another's payload - a far worse bug
+# than the one this fixes. The producer's code object separates them: every caller inside `hamlet()` shares
+# one code object (so the 31 fixtures share, which is the point), while two different call sites do not.
+_SHARED_BYPASS: dict[tuple[str, int], bytes] = {}
+
+
+def _share_key(subject: str, produce: Callable[[], Any]) -> tuple[str, int]:
+    code = getattr(produce, "__code__", None)
+    return (subject, id(code) if code is not None else 0)
+
+
+def reset_shared() -> None:
+    """Forget every shared bypass payload. For a test that means to watch a roll happen again."""
+    _SHARED_BYPASS.clear()
+
+
 def obtain[T](subject: str, produce: Callable[[], T]) -> tuple[T, str]:
-    """`(payload, how)` for `subject` - "HIT" (served), "MISS" (produced, recorded, stored) or "BYPASS"
-    (produced, nothing stored). `subject` must determine the roll completely (a spec's repr)."""
+    """`(payload, how)` for `subject` - "HIT" (served), "MISS" (produced, recorded, stored), "BYPASS"
+    (produced, nothing stored) or "BYPASS-SHARED" (this process already produced this subject under the
+    bypass; a fresh copy of it). `subject` must determine the roll completely (a spec's repr)."""
     if bypassed():
-        return produce(), "BYPASS"
+        share = _share_key(subject, produce)
+        cached = _SHARED_BYPASS.get(share)
+        if cached is not None:
+            return pickle.loads(cached), "BYPASS-SHARED"  # noqa: S301 - our own bytes, dumped below
+        payload = produce()
+        # an unpicklable payload shares nothing rather than sharing wrongly - the next caller rolls
+        with contextlib.suppress(pickle.PicklingError, TypeError, RecursionError):
+            _SHARED_BYPASS[share] = pickle.dumps(payload)
+        return payload, "BYPASS"
     entry = _entry(subject)
     meta_path, payload_path = os.path.join(entry, "meta.json"), os.path.join(entry, "payload.pickle")
     try:
