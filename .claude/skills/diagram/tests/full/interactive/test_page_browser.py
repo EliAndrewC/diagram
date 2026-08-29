@@ -105,7 +105,7 @@ class Page:
 
     def dialog(self) -> dict[str, Any]:
         return self.js(
-            "() => { const d = document.getElementById('explain'); return { open: d.open, k: d.getAttribute('data-k'), label: d.getAttribute('data-label'), name: document.getElementById('x-name').textContent, labeltext: document.getElementById('x-label').textContent, siblings: document.getElementById('x-siblings').textContent, sources: document.getElementById('x-refs').textContent }; }"
+            "() => { const d = document.getElementById('explain'); return { open: d.open, k: d.getAttribute('data-k'), label: d.getAttribute('data-label'), name: document.getElementById('x-name').textContent, labeltext: document.getElementById('x-label').textContent, caveat: document.getElementById('x-caveat').textContent, siblings: document.getElementById('x-siblings').textContent, sources: document.getElementById('x-refs').textContent }; }"
         )
 
     def close(self) -> None:
@@ -132,9 +132,17 @@ def _mechanics(page: Page, present: list[str]) -> None:
     for key in present:
         d = page.open(key)
         assert d["open"] and d["k"] == key and d["name"].lower() == key
-        assert d["label"] == CLASSES[key].label
-        assert CLASSES[key].label_note[:30] in d["labeltext"]
-        assert any(w in d["labeltext"] for w in ("historically accurate", "deliberate deviation", "a guess"))
+        assert d["label"] == CLASSES[key].label, "the classification still reaches the page (constitution XII)"
+        # THE PRESUMPTION OF ACCURACY (feature 154): an accurate class says nothing about accuracy at
+        # all - the lead line is empty and hidden - while a deviation or a guess still opens with its
+        # liberty. The caveat, where the record discloses one, sits below the why instead.
+        if CLASSES[key].label == "accurate":
+            assert d["labeltext"] == "", f"{key}: an accurate class announced itself"
+        else:
+            assert CLASSES[key].label_note[:30] in d["labeltext"]
+            assert any(w in d["labeltext"] for w in ("deliberate deviation", "a guess"))
+        assert "historically accurate" not in d["labeltext"]
+        assert (CLASSES[key].caveat[:30] in d["caveat"]) if CLASSES[key].caveat else (d["caveat"] == "")
         for other in CLASSES[key].siblings:
             assert (("the " + CLASSES[other].name) in d["siblings"]) == (other in present), (key, other)
         page.page.keyboard.press("Escape")

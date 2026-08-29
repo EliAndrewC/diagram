@@ -106,6 +106,13 @@ Pull from `/host-l7r-repo/gm-assistant/setting/median-domain.md`, `demographics.
 - To seat ~50 houses you usually need them **two-deep** around the fields, not a single necklace - call `ring()` twice per field, an inner pass (small gap) and an outer pass (larger gap, e.g. ~55). A single ring saturates a field's perimeter around ~40 houses.
 - Hamlet (`meta(scale="hamlet")`): 50-100 people = 10-20 households. A hamlet has **no headman of its own** (it falls under the village district's headman - so omit `s.headman(...)`), **no village shrine**, and **no tax-free plot**. The gate enforces this asymmetry: `hamlet_has_no_headman` for hamlets vs `village_has_headman` for villages; tax-free and the orientation checks simply don't apply at hamlet scale. A hamlet typically has just 1-3 small fields.
 - Villages and hamlets are peasant-only - no resident samurai (samurai live in the county town).
+- **A map may hand facts to its own interactive page** (feature 154). A `## Map notes` section in
+  `<name>.notes.md` - `### Place` for the settlement's geography (the village district it belongs to
+  and in which direction, the Imperial road, the county, the town), `### Features` for a sentence true
+  of ONE map's instance of any feature class - is read at page-write time and shown on the title card
+  and in that class's modal. Everything about it is optional and every parse failure is silent; the
+  format and the key list are in
+  [`l7r/diagram/interactive/CLAUDE.md`](l7r/diagram/interactive/CLAUDE.md).
 - **Non-standard size:** for a larger-than-usual village (say 500 people / ~80 houses), declare `meta(target_houses=N)` and the gate's count band follows it (~N ±15%). House count is bounded by field perimeter (houses ring fields at ~56px spacing), so to actually *seat* that many: enlarge the canvas (`Settlement(W=..., H=...)`) and give bigger/more fields, then raise the `ring()` counts. A second concentric house ring is a small library addition if one ring around the fields can't hold them.
 - **Farmland is sampled, non-farmers are not.** We deliberately draw only some of a town's ~156 farmer households (the rest implied by the off-edge field, below), but we draw **all** the non-farmer households at their documented counts - so the map answers "where does each caste live?" faithfully. Farmers must still be the largest single group on the map (`town_farmers_plurality`), so ring the fields deep enough that farmhouses out-number the laborers (the largest non-farmer group, ~29).
 

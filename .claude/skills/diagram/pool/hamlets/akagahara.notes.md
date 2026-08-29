@@ -9,6 +9,32 @@ feature-005 `settlement_form="dispersed"` archetype - the *kainyo* strewn-farmst
 margins**, RINGING the paddy, each on its own dry patch nestled in **its own yashikirin windbreak
 grove** - there is no communal wood, which is the visible difference from a nucleated village.
 
+## Map notes
+
+<!-- READ BY THE INTERACTIVE MAP (`l7r/diagram/interactive/notes.py`, feature 154): these bullets
+     appear on the page's title card and in feature modals. Everything is optional and the reader is
+     forgiving by design (GM 2026-08-29: "we should not presume that such sections exist ... should
+     default to simply not pulling anything in if the parsing fails") - a missing, misspelled or
+     half-written block simply contributes nothing. The key list and the format are documented in
+     `l7r/diagram/interactive/CLAUDE.md`. Every other word in this file is prose and is never parsed. -->
+
+### Place
+
+- **district**: Hoshigaoka
+- **district direction**: north-east
+- **imperial road**: directly south
+- **county**: Hayakawa
+- **town**: Hayakawa
+- **town direction**: further south, beyond the Imperial road
+
+*The district, the road, the county and the town are the GM's own, dictated 2026-08-29. The
+connector track on this sheet runs SOUTH, which is where they put the Imperial road; Hoshigaoka
+lies north-east along it.*
+
+### Features
+
+- **scrub and rough grazing**: The rough ground here reads red-brown rather than dun: Akagahara sits on iron-rich RED CLAY, and that is what names the place (赤 aka, red; 原 hara, plain).
+
 ## Why they ring the field rather than line one margin
 
 A dispersed farm needs about **twice the margin room** of a nucleated one - its own grove plus real

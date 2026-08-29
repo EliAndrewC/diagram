@@ -23,8 +23,10 @@ import re
 from collections.abc import Iterator, Sequence
 from typing import Any
 
-from .classes import CLASSES, NOT_HIGHLIGHTED, label_phrase, slug
+from .classes import CLASSES, NOT_HIGHLIGHTED, PLACE, label_phrase, lead_sentence, slug
 from .glossary import GLOSSARY
+from .notes import EMPTY, MapNotes, read_map_notes
+from .place import LANE, lane_default, place_card
 from .sources import citations, research_sources
 from .tags import ClsTag, Planted, Split
 
@@ -480,7 +482,7 @@ def ink_census(strings: Sequence[str], tags: Sequence[ClsTag]) -> tuple[dict[str
 def unregistered_classes(counts: dict[str, int]) -> list[str]:
     """Class keys the engine tagged that `classes.py` has no entry for - a typo, or a class the
     vocabulary does not name yet. The gate fails on either (FR-009 reads this beside the census)."""
-    return sorted(k for k in counts if k != NOT_HIGHLIGHTED and k not in CLASSES)
+    return sorted(k for k in counts if k not in (NOT_HIGHLIGHTED, PLACE) and k not in CLASSES)
 
 
 def present_classes(tags: Sequence[ClsTag]) -> set[str]:
@@ -497,7 +499,7 @@ def present_classes(tags: Sequence[ClsTag]) -> set[str]:
     return keys
 
 
-def explanations(present: set[str]) -> dict[str, dict[str, Any]]:
+def explanations(present: set[str], notes: MapNotes = EMPTY) -> dict[str, dict[str, Any]]:
     """The embedded data: one entry per present class, in vocabulary order, with only the sibling
     paragraphs whose OTHER class is also present (spec US4 scenario 4 - an absent sibling is never
     claimed). A present key the registry does not know gets a stub that says so, never silence."""
@@ -513,17 +515,26 @@ def explanations(present: set[str]) -> dict[str, dict[str, Any]]:
             "name": fc.name,
             "what": fc.what,
             "why": fc.why,
+            # `lead` is empty for an `accurate` class (feature 154) - see `classes.lead_sentence`.
+            # `caveat` is the liberty its record discloses, shown after the why; `label` stays so the
+            # classification is still readable on the page (`data-label`), per constitution XII.
             "label": fc.label,
-            "label_phrase": label_phrase(fc.label),
-            "label_note": fc.label_note,
+            "lead": lead_sentence(fc.label, fc.label_note),
+            "caveat": fc.caveat,
             "sources": keys,
             "refs": citations(keys),
             "entry": fc.entry,
             # siblings are LINKS now (hover lights the other class, click opens its modal); the
             # distinguishing texts stay in the registry as the record, not on the page
             "siblings": [other for other in fc.siblings if other in present],
+            # WHAT IS TRUE OF THIS MAP ONLY (feature 154, the GM's general capability: "This is, in
+            # general, the kind of thing that we want to be able to do for any kind of map feature").
+            # Kept in its own key rather than appended to `why`, so a reader is never led to take a
+            # local fact for a general one - and absent for every class the notes do not annotate,
+            # which is nearly all of them on nearly every map.
+            "on_this_map": notes.features.get(key, ""),
         }
-    for key in sorted(present - CLASSES.keys()):
+    for key in sorted(present - CLASSES.keys() - {PLACE}):
         out[key] = {
             "name": key,
             "what": "This kind of feature has no entry in the class registry yet (interactive/classes.py).",
@@ -535,14 +546,21 @@ def explanations(present: set[str]) -> dict[str, dict[str, Any]]:
             "refs": {},
             "entry": "",
             "siblings": [],
+            "on_this_map": "",
         }
     return out
 
 
 def glossary_for(data: dict[str, dict[str, Any]]) -> list[dict[str, Any]]:
     """The glossary entries whose terms occur in the present explanations - variants and definition,
-    longest variants first so "head race" wins over "head". The page wraps each occurrence."""
-    text = " ".join(str(d.get("what", "")) + " " + str(d.get("why", "")) + " " + str(d.get("label_note", "")) for d in data.values()).lower()
+    longest variants first so "head race" wins over "head". The page wraps each occurrence.
+
+    IT READS WHAT THE PAGE RENDERS, and nothing else. That used to include `label_note`; since
+    feature 154 the note itself is not rendered - only the `lead` built from it for a liberty, and
+    the `caveat` split out of it for an accurate class - so those two are what is scanned. Scanning
+    a string the reader never sees would define terms that never appear, which the companion test
+    in `test_page.py` catches from the other direction."""
+    text = " ".join(str(d.get("what", "")) + " " + str(d.get("why", "")) + " " + str(d.get("lead", "")) + " " + str(d.get("caveat", "")) for d in data.values()).lower()
     out: list[dict[str, Any]] = []
     for term, (variants, definition) in GLOSSARY.items():
         if any(re.search(r"\b" + re.escape(v.lower()) + r"\b", text) for v in variants):
@@ -672,8 +690,12 @@ def _keep_clear_clip(manifest: dict[str, Any] | None) -> tuple[str, str]:
     return f'<clipPath id="hit-keep-clear"><path clip-rule="evenodd" d="{d}"/></clipPath>', ' clip-path="url(#hit-keep-clear)"'
 
 
-def render_page(strings: Sequence[str], tags: Sequence[ClsTag], name: str, meta: dict[str, Any] | None = None, manifest: dict[str, Any] | None = None) -> str:
-    """The whole page as one string - `write_html` writes it; tests read it."""
+def render_page(strings: Sequence[str], tags: Sequence[ClsTag], name: str, meta: dict[str, Any] | None = None, manifest: dict[str, Any] | None = None, notes: MapNotes = EMPTY) -> str:
+    """The whole page as one string - `write_html` writes it; tests read it.
+
+    `notes` is the map's own `.notes.md` "Map notes" block, and is EMPTY for most maps and for every
+    caller that does not have one. Nothing here fails on its absence: the place card falls back to
+    what the map itself knows, and a class with no annotation simply carries none."""
     present = present_classes(tags)
     wrapped = [wrap(s, t) for s, t in zip(strings, tags, strict=True)]
     # the hit regions go right after the SHEET (the first "-"-tagged string), under everything drawn
@@ -695,7 +717,18 @@ def render_page(strings: Sequence[str], tags: Sequence[ClsTag], name: str, meta:
     wrapped.insert(close, hit_layer(strings, tags, manifest))
     svg = "\n".join(wrapped)
     svg = svg.replace("<svg ", '<svg id="map" ', 1)
-    data = explanations(present)
+    data = explanations(present, notes)
+    # THE PLACE CARD rides in the same map, under the placard's own reserved key, so the page opens it
+    # through the one modal every other feature uses (feature 154). None for a tier the vocabulary does
+    # not describe - and then the placard simply has nothing to open, exactly as before.
+    card = place_card(meta or {}, len((manifest or {}).get("houses") or []), present, notes)
+    if card is not None:
+        data[PLACE] = card
+    # THE LANE'S DEFAULT DESTINATION (spec FR-021). An explicit annotation always wins - this only
+    # fills in where the notes named a district but said nothing about the lanes, which is the case
+    # on every hamlet in the pool.
+    if LANE in data and not data[LANE]["on_this_map"]:
+        data[LANE]["on_this_map"] = lane_default(str((meta or {}).get("scale") or ""), notes.place)
     blob = json.dumps({"classes": data, "glossary": glossary_for(data)}, ensure_ascii=False).replace("</", "<\\/")
     title = html.escape(name)
     # NO HEADER ON THE PAGE (GM 2026-08-28: "we can get rid of the entire header") - the map already
@@ -713,7 +746,9 @@ def render_page(strings: Sequence[str], tags: Sequence[ClsTag], name: str, meta:
         '<div id="shade" hidden></div>\n'
         '<dialog id="explain" aria-labelledby="x-name"><article>'
         '<header><h2 id="x-name"></h2><p id="x-label" class="label"></p></header>'
-        '<section id="x-what"></section><section id="x-why"></section><section id="x-siblings"></section>'
+        '<section id="x-what"></section><section id="x-why"></section>'
+        '<section id="x-onmap" class="onmap" hidden></section><section id="x-caveat" class="caveat" hidden></section>'
+        '<section id="x-siblings"></section>'
         '<footer><p id="x-entry"></p><p><a id="x-refs" href="#references">See references</a></p><button id="x-close" type="button">Close</button></footer>'
         "</article></dialog>\n"
         '<dialog id="references" aria-labelledby="r-name"><article><header><h2 id="r-name"></h2></header><section id="r-list"></section>'
@@ -724,5 +759,9 @@ def render_page(strings: Sequence[str], tags: Sequence[ClsTag], name: str, meta:
 
 
 def write_html(path: str, strings: Sequence[str], tags: Sequence[ClsTag], name: str, meta: dict[str, Any] | None = None, manifest: dict[str, Any] | None = None) -> None:
+    """`<base>.html`, beside the map's other outputs. The map's `<base>.notes.md` is read here if it
+    exists - one place, derived from the output path rather than searched for, so a stale or foreign
+    notes file in the same directory can never be picked up (spec, Edge Cases)."""
+    notes = read_map_notes(path[: -len(".html")] + ".notes.md") if path.endswith(".html") else EMPTY
     with open(path, "w", encoding="utf-8") as fh:
-        fh.write(render_page(strings, tags, name, meta, manifest))
+        fh.write(render_page(strings, tags, name, meta, manifest, notes))

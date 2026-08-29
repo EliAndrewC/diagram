@@ -1,8 +1,11 @@
 # The GM's request, verbatim (2026-08-29)
 
 Recorded unedited so the spec can be graded against it (constitution Principle XVI). Transcription
-of a dictated message; the GM's own capitalization and slips are kept, including "Isashiro" for
-Inashiro and "models" for modals.
+of a dictated message; the GM's own capitalization and slips are kept. Three are resolved rather
+than silently edited: "Isashiro" is Inashiro, "models" is modals, and **"the town of Hawakawa" is
+Hayakawa** - the GM names Hayakawa county in the same breath, and `pool/magistracies/`
+already carries a `hayakawa-magistracy`. The resolution is recorded here so it is visible AS a
+resolution (spec-fidelity, 2026-08-29).
 
 <!-- SOURCE: GM NOTES - DO NOT MODIFY -->
 I am looking at the HTML output for our reference hamlet of Inashiro. I'd like to make some changes to the content of the models which are pulled up when we click on various map features. First, I notice that the very first thing that is shown is whether or not something is historically accurate. And we almost always say that it is historically accurate. I would like to not explicitly say that things are historically accurate when they are because I want the presumption to be that things are always historically accurate unless stated otherwise. In other words, we should call out liberties that we have taken when we have chosen to deviate from historical accuracy. But in all other cases, we should simply say what A map feature is with the presumption of historical accuracy.

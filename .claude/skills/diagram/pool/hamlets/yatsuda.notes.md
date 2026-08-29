@@ -9,6 +9,24 @@ floor** - `field_archetype="ribbon_valley"`, `terrain="narrow_valley"`, drawn by
 room for either an organic fan or a surveyed grid - the cultivable land is the valley floor itself,
 so the field takes the valley's shape and the settlement takes what dry flank is left.
 
+## Map notes
+
+<!-- READ BY THE INTERACTIVE MAP (`l7r/diagram/interactive/notes.py`, feature 154): these bullets
+     appear on the page's title card and in feature modals. Everything is optional and the reader is
+     forgiving by design (GM 2026-08-29: "we should not presume that such sections exist ... should
+     default to simply not pulling anything in if the parsing fails") - a missing, misspelled or
+     half-written block simply contributes nothing. The key list and the format are documented in
+     `l7r/diagram/interactive/CLAUDE.md`. Every other word in this file is prose and is never parsed. -->
+
+### Place
+
+- **district**: Takadani
+- **district direction**: south
+
+*Takadani (高谷, "high valley") is INVENTED for this map - drawn from gm-assistant's
+`place-names/pool.jsonl`, which carries its kanji and meaning, and not ruled on by the GM. The
+DIRECTION is not invented: it is the way this map's land falls (`meta.down_deg`), the wider ground a district's main village sits on.*
+
 ## Correction recorded 2026-08-08
 
 The gen's docstring **described a polder** - a rectilinear block inside a perimeter dike, water in at

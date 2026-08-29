@@ -10,6 +10,24 @@ of its own, no shrine, no tax-free plots and no burial ground.
 稲代 Inashiro, "the rice-field" - the plainest possible name for the plainest possible hamlet, which
 is the point: this map exists to be ordinary.
 
+## Map notes
+
+<!-- READ BY THE INTERACTIVE MAP (`l7r/diagram/interactive/notes.py`, feature 154): these bullets
+     appear on the page's title card and in feature modals. Everything is optional and the reader is
+     forgiving by design (GM 2026-08-29: "we should not presume that such sections exist ... should
+     default to simply not pulling anything in if the parsing fails") - a missing, misspelled or
+     half-written block simply contributes nothing. The key list and the format are documented in
+     `l7r/diagram/interactive/CLAUDE.md`. Every other word in this file is prose and is never parsed. -->
+
+### Place
+
+- **district**: Mizuho-no-sato
+- **district direction**: north
+
+*Mizuho-no-sato (瑞穂の里, "village of ripe rice ears") is INVENTED for this map - drawn from gm-assistant's
+`place-names/pool.jsonl`, which carries its kanji and meaning, and not ruled on by the GM. The
+DIRECTION is not invented: it is the bearing of this map's own connector track where it leaves the cluster.*
+
 ## Why it exists
 
 It is the deliverable of the experiment in [`../../hamletgen/`](../../hamletgen/): can a SCRIPT

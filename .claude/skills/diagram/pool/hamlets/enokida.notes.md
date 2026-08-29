@@ -9,6 +9,24 @@ opposite of the organic valley comb. China-first grounding: the *wei-tian* 圩�
 lower-Yangtze lake plains. A straight ditch-grid module whose bays subdivide into a varied parcel
 patchwork, all inside a perimeter dike on flat reclaimed LOW ground.
 
+## Map notes
+
+<!-- READ BY THE INTERACTIVE MAP (`l7r/diagram/interactive/notes.py`, feature 154): these bullets
+     appear on the page's title card and in feature modals. Everything is optional and the reader is
+     forgiving by design (GM 2026-08-29: "we should not presume that such sections exist ... should
+     default to simply not pulling anything in if the parsing fails") - a missing, misspelled or
+     half-written block simply contributes nothing. The key list and the format are documented in
+     `l7r/diagram/interactive/CLAUDE.md`. Every other word in this file is prose and is never parsed. -->
+
+### Place
+
+- **district**: Hirano-mura
+- **district direction**: south
+
+*Hirano-mura (平野村, "flat field village") is INVENTED for this map - drawn from gm-assistant's
+`place-names/pool.jsonl`, which carries its kanji and meaning, and not ruled on by the GM. The
+DIRECTION is not invented: it is the way this map's land falls (`meta.down_deg`), the wider ground a district's main village sits on.*
+
 ## Water
 
 Water enters the **high corner**, a perimeter feeder supplies the grid, and it drains to the **low

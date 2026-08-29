@@ -180,3 +180,67 @@ Silkworm mulberry was not grown as trees: it was COPPICED into low bushes (crown
 - **Holdings.** Not settled: nothing read gives a silk-and-fish household's ground, so `GROSS_ACRES_PER_HOUSEHOLD` (the paddy 1.3 ac) stays a labeled GUESS on this archetype.
 
 *Departures and honesty.* The gazetteer office frames 桑、蔗、蕉 as a SUCCESSION of dike-pond types (桑基 giving way to 果基、蔗基、菜基 over the region's history), not one dike carrying all three - so a `dike_crop` knob would roll a hamlet's TYPE, not mix crops on a dike. Fei is Lake Tai, 1936; the Pearl-delta reads are 1980s surveys and a 2006 summary of the 1988 monograph, which itself could not be fetched (403 on every host) - every Ruddle & Zhong number here is SUMMARY-ONLY. No single source describes a WHOLLY converted hamlet's farmsteads; the list is assembled across the two systems and says so per item.
+
+## What a settlement IS, and what the place card may say about it (feature 154, 2026-08-29)
+
+The interactive page's title card describes the settlement itself, so it makes claims a feature modal
+never had to: what kind of place this is, how many live here, and whether that kind is ordinary. The
+`source-reader` pass run before the spec was finished decided what it is allowed to say, and it came
+back mostly NEGATIVE - which is the finding.
+
+**Branch hamlets under a parent village are a real and common form, and the mechanism is attested.**
+Edo Japan called the parent settlement the *hongo* and the newly founded one the *edago*: ja.wikipedia
+枝郷, READ - 「もとの村を本郷（本郷、元郷、親郷、親村、本村）とよぶのに対し、新村を枝郷（枝村、子村）と称した」
+and 「多くの場合、本郷の庄屋・名主から村高が分け与えられていた」. The National Diet Library's reference
+service gives the fiscal half, READ: 「年貢の賦課徴収では検地帳・年貢免定は親村の名義で、小村の年貢納入は
+親村を通してしかできませんでした」 - the land registers and the tax quota stood in the PARENT village's
+name, and the branch could pay only through it. That is the reason a branch hamlet has no headman of
+its own standing: there is no separate tax unit for one to administer.
+
+**But the record ranks NOTHING by frequency, so neither does the map.** No page read gives a national
+count or share of any settlement form; a J-STAGE study of Kishu shows only that multi-hamlet
+administrative villages were commoner in mountains than on plains. The GM asked whether a rice-farming
+hamlet is *"the most common type of hamlet that exists or whatever"* - and nothing answers it, at
+either scope. **Decision:** the card makes no historical ranking. It states the SETTING's arithmetic,
+which is decisive for these maps and is the GM's own: `l7r.md`'s median-domain table gives ~1,296
+hamlets to ~216 villages and ~40% of a domain's inhabitants living in one. It ranks no kind of hamlet
+at all.
+
+**Wet-rice dominance: NOT FOUND, and `kokudaka` is a trap.** Every source that would give the
+paddy-versus-dry-field land share either did not address it or could not be fetched. `kokudaka` looks
+like evidence and is not - en.wikipedia, READ: "The amount of taxation was not based on the actual
+quantity of rice harvested, but was an estimate based on the total economic yield of the land in
+question, with the value of other crops and produce converted to their equivalent value in terms of
+rice." A fiscal convention covering dry field too. **Decision:** the card says this hamlet farms rice
+because the map draws rice, and claims no dominance.
+
+**"A hamlet has no headman of its own" is CANON, and a deliberate deviation from history.** The same
+枝郷 entry records the exceptions: 「中には庄屋や組頭などが置かれ、本郷並の扱いを受けていた枝郷も存在した」 -
+some branch hamlets had their own *shoya* and *kumigashira* and were treated on a par with the parent.
+So the flat rule is CONTRADICTED as history. It is not a defect in this project's rule, because that
+rule was never a historical finding: `l7r.md` states it twice, in the hamlet definition ("overseen by
+a village headsman who lives in the main village and not in the hamlet") and in the direct answer
+("Do hamlets have their own village headsman? No, but with a caveat" - the caveat being about the
+headman's workload, not about hamlets having one). Rokugan is deliberately simpler here.
+**Decision:** the card states the setting's rule AND discloses the simplification, in the basis
+paragraph (`interactive/place.py` `BASIS`, spec FR-008a). Constitution XII's "deliberate deviation"
+class covers exactly this - a departure the reader is told about rather than one they discover.
+
+**Five to a household is canon, and only SUMMARY-ONLY as history.** `l7r.md`: "The median household
+size is generally assumed to be 5", and "Most hamlets have a population of 50-100 (i.e. 10-20
+households)". The nearest historical figure the pass could reach was Kinoshita 1995 at summary level
+(SagePub, 403 on its one attempt): one Tohoku village whose mean household size "rose from about five
+to six persons" over 1760-1870 - one village, and a trend rather than a constant. **Decision:** the
+card multiplies by the setting's five, and the historical figure is recorded here as support rather
+than as the basis.
+
+**The shrine and the burial ground: nothing found either way.** No page read said whether a branch
+hamlet had its own *chinju* or graveyard. Neither claim is reopened here: the burial ground rests on
+`settlements/religion-and-death.md`'s district-catchment finding, which is researched and sourced in
+its own right, and the shrine on the GM's tier rule in `settlements.md`.
+
+**A district takes its main village's name**, which is what lets one authored key name both the
+district a hamlet belongs to and the village its lanes lead to (spec FR-021). `l7r.md`, "Place
+Names", inside a GM SOURCE block: "a village and its district".
+
+**Sources:** [`edago-ja`](SOURCES.md#edago-ja) (READ), [`ndl-hongo-edago`](SOURCES.md#ndl-hongo-edago) (READ), [`jstage-admin-natural-village`](SOURCES.md#jstage-admin-natural-village) (READ, abstract level), [`kokudaka-en`](SOURCES.md#kokudaka-en) (READ - cited for what it does NOT establish), [`nanushi-en`](SOURCES.md#nanushi-en) (READ, does not resolve the branch/parent question), [`kinoshita-1995`](SOURCES.md#kinoshita-1995) (SUMMARY-ONLY - 403 on one attempt), [`hayami-encyclopedia`](SOURCES.md#hayami-encyclopedia) (READ, no absolute figure), [`l7r-median-domain`](SOURCES.md#l7r-median-domain) (the setting's own canon, which decides where history is silent)

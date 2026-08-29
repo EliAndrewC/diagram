@@ -13,6 +13,24 @@ combination** - the pair is the point.
 Read that as a constraint when reviewing: what looks like an authoring choice here is the roll, and
 the fix belongs in the knob's `typing_rule` rather than in a coordinate.
 
+## Map notes
+
+<!-- READ BY THE INTERACTIVE MAP (`l7r/diagram/interactive/notes.py`, feature 154): these bullets
+     appear on the page's title card and in feature modals. Everything is optional and the reader is
+     forgiving by design (GM 2026-08-29: "we should not presume that such sections exist ... should
+     default to simply not pulling anything in if the parsing fails") - a missing, misspelled or
+     half-written block simply contributes nothing. The key list and the format are documented in
+     `l7r/diagram/interactive/CLAUDE.md`. Every other word in this file is prose and is never parsed. -->
+
+### Place
+
+- **district**: Yamashita
+- **district direction**: south
+
+*Yamashita (山下, "below the mountain") is INVENTED for this map - drawn from gm-assistant's
+`place-names/pool.jsonl`, which carries its kanji and meaning, and not ruled on by the GM. The
+DIRECTION is not invented: it is the way this map's land falls (`meta.down_deg`), the wider ground a district's main village sits on.*
+
 ## The name
 
 Named for its defining feature: the clean **spring-fed pond** at the head of the paddy fan, whose

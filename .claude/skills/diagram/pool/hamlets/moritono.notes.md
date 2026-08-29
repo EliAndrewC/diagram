@@ -13,6 +13,24 @@ part of it; that distinction is the point, and a reviewer should not read it as 
 Moritono is also the pool's **atypical legacy hamlet**: it keeps the old (non-bundle) homestead path
 where the other to-scale hamlets opt in via `toscale=True`.
 
+## Map notes
+
+<!-- READ BY THE INTERACTIVE MAP (`l7r/diagram/interactive/notes.py`, feature 154): these bullets
+     appear on the page's title card and in feature modals. Everything is optional and the reader is
+     forgiving by design (GM 2026-08-29: "we should not presume that such sections exist ... should
+     default to simply not pulling anything in if the parsing fails") - a missing, misspelled or
+     half-written block simply contributes nothing. The key list and the format are documented in
+     `l7r/diagram/interactive/CLAUDE.md`. Every other word in this file is prose and is never parsed. -->
+
+### Place
+
+- **district**: Matsumori
+- **district direction**: north-west
+
+*Matsumori (松森, "pine forest") is INVENTED for this map - drawn from gm-assistant's
+`place-names/pool.jsonl`, which carries its kanji and meaning, and not ruled on by the GM. The
+DIRECTION is not invented: it is the bearing of this map's own connector track where it leaves the cluster.*
+
 ## What makes it a hamlet, not a village
 
 A hamlet is a small outlying community belonging to a village district, and the absences are the

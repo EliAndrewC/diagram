@@ -14,6 +14,24 @@ rolls a visibly different combination** - the pair together is the demonstration
 Read that as a constraint when reviewing: a feature sitting somewhere odd here is the roll, not an
 authoring choice, and the fix belongs in the knob's `typing_rule` rather than in a coordinate.
 
+## Map notes
+
+<!-- READ BY THE INTERACTIVE MAP (`l7r/diagram/interactive/notes.py`, feature 154): these bullets
+     appear on the page's title card and in feature modals. Everything is optional and the reader is
+     forgiving by design (GM 2026-08-29: "we should not presume that such sections exist ... should
+     default to simply not pulling anything in if the parsing fails") - a missing, misspelled or
+     half-written block simply contributes nothing. The key list and the format are documented in
+     `l7r/diagram/interactive/CLAUDE.md`. Every other word in this file is prose and is never parsed. -->
+
+### Place
+
+- **district**: Nakamura
+- **district direction**: south
+
+*Nakamura (中村, "middle village") is INVENTED for this map - drawn from gm-assistant's
+`place-names/pool.jsonl`, which carries its kanji and meaning, and not ruled on by the GM. The
+DIRECTION is not invented: it is the way this map's land falls (`meta.down_deg`), the wider ground a district's main village sits on.*
+
 ## The name
 
 Named for its defining feature: the district's **oldest cleared fields** - a broad paddy fan in large

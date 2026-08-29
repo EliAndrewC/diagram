@@ -9,6 +9,7 @@ import sys
 from collections.abc import Sequence
 from typing import TYPE_CHECKING, Any
 
+from l7r.diagram.interactive.classes import PLACE
 from l7r.diagram.interactive.page import ink_census, unregistered_classes, write_html
 from l7r.diagram.interactive.tags import ClsTag
 
@@ -264,14 +265,19 @@ class FinishMixin:
         # than a card. This is the SAME defect, and the same fix, as the field grave on that map eight
         # days earlier ("painted at 0.9 opacity over an intact lattice ... it is opaque now"); one was
         # fixed for that reason and this one was left translucent with nothing recorded either way.
-        # The placard, the name, the bar and its captions are MAP FURNITURE - ruled not highlighted
-        # (feature 134 FR-002, `interactive/classes.py` NOT_HIGHLIGHTED_RULINGS), hence cls="-".
+        # THE PLACARD IS THE PLACE (feature 154, GM 2026-08-29): "I would like to be able to click on
+        # the title card for a settlement and then pull up an explanation of the type of settlement
+        # that this is." It was ruled map furniture on 2026-08-27 and that ruling is OVERTURNED - the
+        # card and its name now carry the reserved class `place` (`interactive/classes.py` PLACE, with
+        # the overturning recorded beside the ruling it replaces), so hovering lights the card and
+        # clicking opens the settlement's own overview. THE SCALE BAR BELOW KEEPS `cls="-"`: it is
+        # still furniture, and it has nothing to tell a reader that the card does not.
         self.add_label(  # the card FIRST, so every text draws over it (add_label draws in call order)
             f'<g><rect x="{px0:.0f}" y="{py0:.0f}" width="{bw:.0f}" height="{bh:.0f}" rx="7" fill="#F7F0DC" stroke="#8C7A55" stroke-width="1.6"/>'
             f'<rect x="{px0 + 3.5:.0f}" y="{py0 + 3.5:.0f}" width="{bw - 7:.0f}" height="{bh - 7:.0f}" rx="5" fill="none" stroke="#BCAA7E" stroke-width="0.8"/></g>',
-            cls="-",
+            cls=PLACE,
         )
-        self.add_label(f'<text x="{pcx:.0f}" y="{y + fs:.0f}" text-anchor="middle" font-size="{fs}" font-weight="bold" fill="#2D2A24">{name}</text>', cls="-")
+        self.add_label(f'<text x="{pcx:.0f}" y="{y + fs:.0f}" text-anchor="middle" font-size="{fs}" font-weight="bold" fill="#2D2A24">{name}</text>', cls=PLACE)
         bx0, bx1, by = pcx - bar_px / 2, pcx + bar_px / 2, y + th + 12  # bar CENTERED under the name, on the placard's axis
         # THE BOX IS THE INK, not the placard's foot (settlement-review 2026-08-29, Kashikawa). The bottom
         # was `y + bh` - the placard's own base - which over-claimed 26 px, 41% of the box's height, and

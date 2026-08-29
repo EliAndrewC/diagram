@@ -13,7 +13,7 @@ import re
 
 import pytest
 
-from l7r.diagram.interactive.classes import CLASSES, NOT_HIGHLIGHTED, NOT_HIGHLIGHTED_RULINGS, FeatureClass, label_phrase, slug
+from l7r.diagram.interactive.classes import ANNOUNCED, CLASSES, NOT_HIGHLIGHTED, NOT_HIGHLIGHTED_RULINGS, FeatureClass, label_phrase, lead_sentence, slug
 
 # The spec's FR-007 vocabulary, verbatim (plus `field pond`, added at implementation and recorded
 # in the spec table). A row added to the spec without an entry here fails this test; an entry here
@@ -142,6 +142,54 @@ def test_label_phrases_are_the_constitutions_three() -> None:
     assert label_phrase("accurate") == "historically accurate"
     assert label_phrase("deviation") == "a deliberate deviation"
     assert label_phrase("guess") == "a guess"
+
+
+# --- the presumption of accuracy (feature 154, GM 2026-08-29) ---
+
+
+def test_only_a_liberty_is_announced() -> None:
+    """The GM: don't say a thing is historically accurate; call out the liberties. So `accurate`
+    produces no lead sentence at all, and the other two are unchanged."""
+    assert lead_sentence("accurate", "Plot form and the irregular patchwork are read.") == ""
+    assert lead_sentence("deviation", "drawn larger") == "This is a deliberate deviation - drawn larger"
+    assert lead_sentence("guess", "") == "This is a guess."
+    assert {"deviation", "guess"} == ANNOUNCED
+
+
+@pytest.mark.parametrize("key", SPEC_CLASSES)
+def test_the_caveat_is_a_verbatim_half_of_the_record(key: str) -> None:
+    """`caveat` is rendered and `label_note` is not, so the two must not be allowed to drift: the
+    caveat is always a literal slice of the note it was split out of."""
+    fc = CLASSES[key]
+    if fc.caveat:
+        assert fc.caveat in fc.label_note, f"{key}: the caveat must be verbatim from its own record"
+
+
+@pytest.mark.parametrize("key", SPEC_CLASSES)
+def test_only_an_accurate_class_carries_a_caveat(key: str) -> None:
+    """A deviation and a guess already lead with their liberty; a second copy below the why would
+    say it twice."""
+    fc = CLASSES[key]
+    if fc.label != "accurate":
+        assert fc.caveat == "", f"{key}: a {fc.label} announces its liberty in the lead"
+
+
+def test_no_caveat_merely_reasserts_accuracy() -> None:
+    """The point of the split (spec-fidelity round 1): "Topology, taper and true-size width are
+    read" is the accuracy claim in other words, and moving it below the why would keep the GM's
+    complaint alive on most of the map. A caveat says what was DRAWN rather than what was read."""
+    for key, fc in CLASSES.items():
+        if not fc.caveat:
+            continue
+        opener = fc.caveat.split(";")[0]
+        assert not re.search(r"\bare read\b|\bis read\b|\bare attested\b", opener), f"{key}: the caveat's first clause is a provenance claim, not a liberty"
+
+
+def test_every_accurate_class_without_a_caveat_is_deliberate() -> None:
+    """The four whose whole record is provenance. Listed so adding a fifth is a decision someone
+    makes on purpose rather than an omission nobody notices."""
+    bare = {k for k, fc in CLASSES.items() if fc.label == "accurate" and not fc.caveat}
+    assert bare == {"marsh", "paddy", "field ditch", "pond"}
 
 
 def test_slug_is_a_css_token() -> None:

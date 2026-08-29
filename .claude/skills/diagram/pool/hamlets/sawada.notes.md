@@ -71,6 +71,24 @@ the low side where the gate requires it.
   (18 crowns, the review's "form done right") beside the original dry-shoulder parcel (12
   crowns - straggly per the review, logged as cosmetic).
 
+## Map notes
+
+<!-- READ BY THE INTERACTIVE MAP (`l7r/diagram/interactive/notes.py`, feature 154): these bullets
+     appear on the page's title card and in feature modals. Everything is optional and the reader is
+     forgiving by design (GM 2026-08-29: "we should not presume that such sections exist ... should
+     default to simply not pulling anything in if the parsing fails") - a missing, misspelled or
+     half-written block simply contributes nothing. The key list and the format are documented in
+     `l7r/diagram/interactive/CLAUDE.md`. Every other word in this file is prose and is never parsed. -->
+
+### Place
+
+- **district**: Shimoda
+- **district direction**: north-west
+
+*Shimoda (下田, "lower paddy") is INVENTED for this map - drawn from gm-assistant's
+`place-names/pool.jsonl`, which carries its kanji and meaning, and not ruled on by the GM. The
+DIRECTION is not invented: it is the bearing of this map's own connector track where it leaves the cluster.*
+
 ## 2026-08-17 - the fan-toe needle fix, and the tint threshold it collided with
 
 The fan-toe SUNBURST ruling (full research in `research/fields.md`, "A basin never tapers to a

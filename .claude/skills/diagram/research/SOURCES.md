@@ -1901,3 +1901,50 @@ ja.wikipedia 家老 (READ 2026-08-28) (https://ja.wikipedia.org/wiki/%E5%AE%B6%E
 
 *Used for:* the reed-harvest economy - winter cutting for yoshizu screens, thatch and summer shoji, and an uncut bed going 荒れる - and, just as importantly, for the SCOPE LIMIT recorded against it: this foundation is named for Lake Biwa and every example on the page is a lake or river reed bed. It is cited as evidence about lake and river reed beds ONLY. Nothing found puts that economy on tameike margins, and the research entry says so rather than extending it.
 
+### `edago-ja`
+
+"枝郷" (edago, branch village), ja.wikipedia (https://ja.wikipedia.org/wiki/%E6%9E%9D%E9%83%B7; READ 2026-08-29)
+
+*Used for:* the hongo/edago parent-and-branch settlement form, its commonness ("in most cases" the branch's assessed yield came from the parent's headman), AND the attested exceptions - branch hamlets with their own shoya and kumigashira - which is what makes Rokugan's flat "a hamlet has no headman" a deliberate deviation rather than a finding
+
+### `ndl-hongo-edago`
+
+National Diet Library Collaborative Reference Database, entry on hongo/oyamura and edago/komura (https://crd.ndl.go.jp/reference/entry/index.php?id=1000166660&page=ref_view; READ 2026-08-29)
+
+*Used for:* the fiscal mechanism of the dependency - land registers and tax quotas in the PARENT village's name, the branch able to pay only through it - which is the reason a branch hamlet had no headman of its own standing
+
+### `jstage-admin-natural-village`
+
+"The Relation between Administrative Village and Natural Village in the Edo Era", *Japanese Journal of Human Geography* 19(2) (https://www.jstage.jst.go.jp/article/jjhg1948/19/2/19_2_117/_article; READ 2026-08-29, abstract level - the full text was not fetched)
+
+*Used for:* that multi-hamlet administrative villages were commoner in mountains than on plains - a terrain pattern, and the closest thing found to a frequency statement. Cited as evidence that the record does NOT rank settlement forms
+
+### `kokudaka-en`
+
+"Kokudaka", en.wikipedia (https://en.wikipedia.org/wiki/Kokudaka; READ 2026-08-29)
+
+*Used for:* what it does NOT establish. Kokudaka's rice denomination is a FISCAL convention - "the value of other crops and produce converted to their equivalent value in terms of rice" - covering dry field as well as paddy, so it is not evidence of wet-rice land-use dominance. Recorded so a later pass does not reach for it
+
+### `nanushi-en`
+
+"Nanushi", en.wikipedia (https://en.wikipedia.org/wiki/Nanushi; READ 2026-08-29)
+
+*Used for:* one headman per (administrative) village as the general rule - and recorded as NOT resolving whether "village" there means the natural hamlet or the unit containing several, which is the question at issue
+
+### `kinoshita-1995`
+
+Kinoshita, "Household Size, Household Structure, and Developmental Cycle of a Japanese Village: Eighteenth to Nineteenth Centuries", *Journal of Family History* 20(3), 1995 (https://journals.sagepub.com/doi/abs/10.1177/036319909502000302; SUMMARY-ONLY - HTTP 403 on one attempt, 2026-08-29)
+
+*Used for:* the nearest historical anchor for ~5 to a household - the abstract synopsis reads that mean household size "rose from about five to six persons" over 1760-1870. ONE village in northeastern Japan and a rising trend, not a national constant; the map's figure rests on the setting's canon instead
+
+### `hayami-encyclopedia`
+
+"Hayami, Akira", encyclopedia.com (https://www.encyclopedia.com/social-sciences/encyclopedias-almanacs-transcripts-and-maps/hayami-akira; READ 2026-08-29)
+
+*Used for:* confirming the shumon aratame cho register methodology and a downward household-size trend in the regions studied. Recorded as giving NO absolute figure
+
+### `l7r-median-domain`
+
+The GM's campaign notes, `l7r.md`, "The Median Domain" and "Place Names" (URL: none - the GM's own unpublished writing, at `/host-l7r-repo/setting/l7r.md`; READ 2026-08-29)
+
+*Used for:* the settlement-tier counts a median domain holds (~1,296 hamlets, ~216 villages, ~40% of inhabitants in a hamlet), five to a household, a hamlet's 50-100 for 10-20 households, that a hamlet's headman lives in the main village, and that a village and its district share a name. The setting's canon, which decides these maps where the historical record is silent or messier

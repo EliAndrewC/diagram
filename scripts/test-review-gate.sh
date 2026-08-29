@@ -38,11 +38,36 @@ check "a spec with no fidelity verdict" a blocked
 mkrepo b withmap; echo '{"v":2}' > "$POOL/m.json"; git add -A; git commit -qm reroll
 check "a re-rolled map with no review logged" b blocked
 
+# The two shapes the bare `grep FAITHFUL` used to let through (feature 154, 2026-08-29). The first is
+# the dangerous one: a spec a reviewer REJECTED shipped as if it had passed.
+mkrepo b2; printf '# spec\n\n## Review history\n- **Round 1 (2026-08-29): NOT FAITHFUL.** FR-003 carved out a case.\n' > specs/900-x/spec.md
+git add -A; git commit -qm s
+check "a spec whose only verdict is NOT FAITHFUL" b2 blocked
+
+mkrepo b3; printf '# spec\n\nThe word FAITHFUL must never be written here by the author.\n' > specs/900-x/spec.md
+git add -A; git commit -qm s
+check "a spec that merely MENTIONS the word in prose" b3 blocked
+
 echo
 echo "2. IT STAYS QUIET on work that did the reviews"
 mkrepo c; printf '# spec\n\n## Review history\nRound 1 - FAITHFUL\n' > specs/900-x/spec.md
 git add -A; git commit -qm s
 check "a spec carrying a FAITHFUL verdict" c ok
+
+# The house's real shapes, taken verbatim from specs 127, 142 and 132 - a tightened check that fired
+# on any of these would stop a push at the end of a feature, which section 2 exists to prevent.
+mkrepo c2; printf '# spec\n\n**Status**: APPROVED by `spec-fidelity` (round 3, verdict FAITHFUL) - ready to implement\n' > specs/900-x/spec.md
+git add -A; git commit -qm s
+check "the Status-line form" c2 ok
+
+mkrepo c3; printf '# spec\n\n- **2026-08-28, spec-fidelity round 2**: **FAITHFUL** - every clause carried.\n' > specs/900-x/spec.md
+git add -A; git commit -qm s
+check "the dated round-history form" c3 ok
+
+# A spec that was rejected and then passed keeps both lines; the pass must still count.
+mkrepo c4; printf '# spec\n\n- **Round 1: NOT FAITHFUL.** FR-010 was an enumeration.\n- **Round 3 (2026-08-25): FAITHFUL.** Nothing missing, nothing added.\n' > specs/900-x/spec.md
+git add -A; git commit -qm s
+check "a rejection followed by a pass" c4 ok
 
 mkrepo d withmap; echo '{"v":2}' > "$POOL/m.json"; echo "reviewed 2026-08-24" >> "$POOL/m.notes.md"
 git add -A; git commit -qm reroll

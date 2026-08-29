@@ -81,6 +81,24 @@ beyond the frame.
   (15 and 17 crowns), dry and on-frame - the exact stands are roll-derived, the invariants
   (dry, on-frame, recorded canopy, check-legal set-backs) are what hold.
 
+## Map notes
+
+<!-- READ BY THE INTERACTIVE MAP (`l7r/diagram/interactive/notes.py`, feature 154): these bullets
+     appear on the page's title card and in feature modals. Everything is optional and the reader is
+     forgiving by design (GM 2026-08-29: "we should not presume that such sections exist ... should
+     default to simply not pulling anything in if the parsing fails") - a missing, misspelled or
+     half-written block simply contributes nothing. The key list and the format are documented in
+     `l7r/diagram/interactive/CLAUDE.md`. Every other word in this file is prose and is never parsed. -->
+
+### Place
+
+- **district**: Kawakami
+- **district direction**: north-east
+
+*Kawakami (川上, "upstream, upper river") is INVENTED for this map - drawn from gm-assistant's
+`place-names/pool.jsonl`, which carries its kanji and meaning, and not ruled on by the GM. The
+DIRECTION is not invented: it is the bearing of this map's own connector track where it leaves the cluster.*
+
 ## 2026-08-17 - re-packed by feature 121 (the placer tests the rake it draws)
 
 19 of 20 houses re-seated (median 362 ft, max 866 - a full re-seed, not a nudge); the SW outlier at
