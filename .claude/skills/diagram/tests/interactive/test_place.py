@@ -95,9 +95,20 @@ def test_only_the_population_carries_a_tilde() -> None:
     assert str(PER_HOUSEHOLD * 15) == "75"
 
 
-def test_a_recorded_population_beats_the_household_multiple() -> None:
-    """A town's inhabitants are not a multiple of anybody's farmhouses, and its tier records its own."""
-    assert size_sentence(KINDS["town"], {"scale": "town", "population": 680}, 42) == "42 dwellings, population ~680"
+def test_a_towns_population_is_the_tiers_1200_not_its_manifests_depicted_figure() -> None:
+    """GM 2026-08-29: "The default population of a town is already 1,200 So you can make that the
+    population for all of the towns which we have already generated." It is a COUNTY figure, taking in
+    a farming population deliberately not drawn - so it is the tier's, and it beats the manifest's,
+    which records the depicted slice the housing check keys on. The three town maps are frozen legacy
+    exhibits and are never regenerated, so the page is where the real figure can be stated at all."""
+    assert KINDS["town"].default_population == 1200
+    assert size_sentence(KINDS["town"], {"scale": "town", "population": 680}, 42) == "42 non-farmhouse dwellings, population ~1,200"
+
+
+def test_a_city_still_uses_its_own_recorded_population() -> None:
+    """A city's manifest figure is already the city's own and already excludes the countryside."""
+    assert KINDS["city"].default_population is None
+    assert size_sentence(KINDS["city"], {"population": 2600}, 520) == "520 non-farmhouse dwellings, population ~2,600"
 
 
 def test_a_town_and_a_city_count_dwellings_and_never_farmhouses() -> None:
@@ -107,8 +118,11 @@ def test_a_town_and_a_city_count_dwellings_and_never_farmhouses() -> None:
     deliberately not drawn whole."""
     assert KINDS["hamlet"].houses_noun == "farmhouses" and not KINDS["hamlet"].excludes_farms
     for scale in ("town", "city"):
-        assert KINDS[scale].houses_noun == "dwellings" and KINDS[scale].excludes_farms
-        assert "farmhouse" not in size_sentence(KINDS[scale], {"population": 3000}, 260)
+        assert KINDS[scale].houses_noun == "non-farmhouse dwellings" and KINDS[scale].excludes_farms
+        # the words are NOT "260 farmhouses" - they are "260 non-farmhouse dwellings", which contains
+        # the substring, so the assertion is on the phrase a reader would misread rather than on it
+        got = size_sentence(KINDS[scale], {"population": 3000}, 260)
+        assert "non-farmhouse dwellings" in got and "260 farmhouses" not in got
 
 
 def test_each_tier_explains_what_its_population_figure_COUNTS() -> None:
@@ -121,16 +135,17 @@ def test_each_tier_explains_what_its_population_figure_COUNTS() -> None:
     county's farmers would contradict its own manifest. The GM's convention needs the gens to
     re-declare `population`; until they do, the card states the smaller true thing and names the
     larger one as not yet given (settlement-review, 2026-08-29)."""
-    assert "counts the settlement as drawn" in KINDS["town"].population_note
-    assert "does not yet state that larger number" in KINDS["town"].population_note
-    # THE CITY NOTE SAYS WHAT ITS FIGURE IS. It used to claim the figure "takes in the samurai country
-    # estates", which all three cities' arithmetic denies - Minami's 520 dwellings x 5 IS its declared
-    # 2,600, with no headroom for an undrawn household, and each city draws three estates that
-    # contribute nothing. The estate convention is the GM's and is recorded as owed, not asserted
-    # (settlement-review round 4, 2026-08-29).
-    assert "households drawn inside the city itself" in KINDS["city"].population_note
-    assert "farmhouses that stand within the wall" in KINDS["city"].population_note, "Tango's declared 3,000 is (583 + 17 in-wall farmhouses) x 5"
-    assert "does not yet state that larger number either" in KINDS["city"].population_note
+    # THE TOWN'S FIGURE TAKES IN THE COUNTY'S FARMERS, most of whom are deliberately not drawn - the
+    # GM's ruling of 2026-08-29, and the reason the tier states 1,200 rather than its manifest's
+    # depicted slice. The card must say so, or a reader counts the dwellings and finds them short.
+    assert "farming population of the whole county as part of the town" in KINDS["town"].population_note
+    assert "deliberately not on this sheet" in KINDS["town"].population_note
+    # THE CITY IS COUNTED THE OTHER WAY. Its note used to claim the figure "takes in the samurai
+    # country estates", which all three cities' arithmetic denies - Minami's 520 dwellings x 5 IS its
+    # declared 2,600, with no headroom for an undrawn household. The estate convention is the GM's and
+    # is recorded as owed, not asserted (settlement-review round 4, 2026-08-29).
+    assert "does NOT take in the farming countryside" in KINDS["city"].population_note
+    assert "does not yet state that larger number" in KINDS["city"].population_note
     assert "counts separately" in KINDS["city"].population_note
     assert KINDS["hamlet"].population_note == "" and KINDS["village"].population_note == ""
 
@@ -162,7 +177,7 @@ def test_an_upper_tier_counts_buildings_and_a_lower_one_counts_houses() -> None:
         "houses": [{"x": 1.0, "y": 1.0}] * 40,  # the farm ring
         "buildings": [{"kind": "merchant"}, {"kind": "laborer"}, {"kind": "samurai"}, {"kind": "granary"}, {"kind": "gate"}],
     }
-    assert dwellings_shown(manifest, KINDS["city"]) == 3, "three dwellings; the granary and the gate house nobody"
+    assert dwellings_shown(manifest, KINDS["city"]) == 3, "three non-farmhouse dwellings; the granary and the gate house nobody"
     assert dwellings_shown(manifest, KINDS["town"]) == 3
     assert dwellings_shown(manifest, KINDS["hamlet"]) == 40, "a hamlet counts every house it draws"
 
@@ -203,10 +218,16 @@ def test_where_sentences_read_every_authored_fact() -> None:
     assert "The town of Hayakawa lies further south." in got
 
 
-def test_a_village_heads_its_district_rather_than_belonging_to_one() -> None:
-    """`l7r.md`, the GM's own Place Names block: "a village and its district" share a name."""
-    got = where_sentences("village", {"district": "Hoshigaoka"})
-    assert got == ["It is the main village of the Hoshigaoka district, which takes its name."]
+def test_a_village_is_never_said_to_belong_to_a_district_and_gets_its_county_instead() -> None:
+    """GM 2026-08-29: "the name of the village is the name of the village district ... there is no
+    reason to ever say what village district a village belongs to. However, it does make sense to say
+    what county a village belongs to because all villages belong to a county." The shared name is a
+    documented departure from history that the GM's players already know, so the map does not raise
+    it either."""
+    assert where_sentences("village", {"district": "Hoshigaoka"}) == [], "a village IS its district"
+    assert where_sentences("village", {"county": "Hayakawa"}) == ["It is in Hayakawa county."]
+    # ...and a hamlet still belongs to one, which is the whole point of recording it
+    assert "belongs to the village district of Hoshigaoka" in " ".join(where_sentences("hamlet", {"district": "Hoshigaoka"}))
 
 
 def test_nothing_authored_means_nothing_said() -> None:

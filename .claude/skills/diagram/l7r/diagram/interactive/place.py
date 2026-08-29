@@ -72,7 +72,9 @@ class Kind:
     # and known and which is actually exact and rendered"). What differs is WHICH dwellings are
     # countable: a hamlet's and a village's are farmhouses and are all of them, while a town's and a
     # city's farmhouses are only a sample of a countryside deliberately not drawn whole, so those
-    # tiers count their NON-farm dwellings and say nothing about farmhouses at all.
+    # tiers count their NON-farm dwellings and say nothing about farmhouses at all. They also SAY
+    # "non-farmhouse dwellings" in as many words (GM 2026-08-29) - "dwellings" alone left a reader to
+    # infer which dwellings were counted, on the one tier where the answer is not obvious.
     houses_noun: str
     # Whether the count excludes dwellings standing in a drawn agricultural district.
     excludes_farms: bool
@@ -80,6 +82,16 @@ class Kind:
     # rather than of arithmetic, and differs between a town and a city (GM 2026-08-29). Empty where
     # the population is simply five to a drawn household and needs no explaining.
     population_note: str
+    # The tier's DEFAULT population, used ahead of `meta.population` where the tier has a standing
+    # figure. A town does (GM 2026-08-29: "The default population of a town is already 1,200 So you
+    # can make that the population for all of the towns which we have already generated"), and it is
+    # a COUNTY figure - it counts the farming population of the whole county as part of the town, so
+    # most of it is deliberately not on the sheet. The three town maps are frozen legacy exhibits
+    # (`pipeline/poolmaps.py` `classify` -> "legacy"), never regenerated, so their manifests keep the
+    # DEPICTED figure the housing check keys on and the page states the tier's real one. None for a
+    # hamlet or a village, whose population is five to a drawn household, nor for a city, whose
+    # manifest records its own and whose figure already excludes the countryside.
+    default_population: int | None = None
 
 
 #: Keyed by `meta.scale`. Written from `l7r.md` (a hamlet "belongs to a village district and is
@@ -104,16 +116,17 @@ KINDS: dict[str, Kind] = {
     "town": Kind(
         "town",
         "the seat of a county magistrate, and the lowest level of Rokugani society at which samurai live - the lowest, too, that has resident merchants, which is why the farmers of the surrounding districts come in for market day.",
-        "dwellings",
+        "non-farmhouse dwellings",
         True,
-        "That figure counts the settlement as drawn - its townsfolk and the farming households on the sheet around them, about five to each. The county the town heads is larger again, and the Imperial convention counts the whole of its farming population as part of the town; this map does not yet state that larger number.",
+        "A town is counted the Imperial way, which takes in the farming population of the whole county as part of the town. Most of those farmers live out in the village districts and are deliberately not on this sheet - what you can see here is the town itself, its dwellings drawn and counted.",
+        1200,
     ),
     "city": Kind(
         "city",
         "the seat of a province's governor and its ministries, and a market the whole province turns toward.",
-        "dwellings",
+        "non-farmhouse dwellings",
         True,
-        "That figure is the households drawn inside the city itself, about five to a dwelling - including the few farmhouses that stand within the wall. It does NOT take in the farming countryside: the farms out on this sheet belong to village districts and counties, which the Imperial census counts separately from the city. (By convention the city's figure also takes in the samurai country estates around it, only some of which are drawn; this map does not yet state that larger number either.)",
+        "A city is counted the other way from a town: its figure is the households of the city itself, and it does NOT take in the farming countryside. The farms out on this sheet belong to village districts and counties, which the Imperial census counts separately. (By convention it does take in the samurai country estates around the city, only some of which are drawn; this map does not yet state that larger number.)",
     ),
 }
 
@@ -224,7 +237,9 @@ def size_sentence(kind: Kind, meta: dict[str, Any], houses: int) -> str:
     if houses:
         parts.append(f"{houses} {kind.houses_noun}")  # no tilde: the reader can count them
     households = meta.get("households")
-    population = meta.get("population") or (PER_HOUSEHOLD * households if households else None)
+    # THE TIER'S OWN FIGURE FIRST where it has one - a town's 1,200 is a standing county figure and is
+    # not what its frozen manifest records, which is the depicted slice the housing check keys on.
+    population = kind.default_population or meta.get("population") or (PER_HOUSEHOLD * households if households else None)
     if population:
         # SAY THE HOUSEHOLDS WHERE THE ARITHMETIC WOULD NOT WORK (settlement-review, 2026-08-29).
         # `settlements.md` permits ~0.7 houses per household at village scale, and Hikari no Sato uses
@@ -247,8 +262,13 @@ def where_sentences(scale: str, place: dict[str, str]) -> list[str]:
     district also names the village a hamlet's lanes lead to."""
     out: list[str] = []
     district, direction = place.get("district"), place.get("district direction")
+    # A VILLAGE IS ITS DISTRICT, so it is never said to belong to one (GM 2026-08-29: "the name of the
+    # village is the name of the village district ... there is no reason to ever say what village
+    # district a village belongs to"). The shared name is a documented departure from history, in the
+    # GM's own core materials, and one their players already know - so the map does not raise it
+    # either. What a village DOES get said about it is its county, which every village belongs to.
     if district and scale == "village":
-        out.append(f"It is the main village of the {district} district, which takes its name.")
+        pass
     elif district:
         out.append(f"It belongs to the village district of {district}" + (f", which lies {direction}." if direction else "."))
     if place.get("imperial road"):
@@ -257,7 +277,7 @@ def where_sentences(scale: str, place: dict[str, str]) -> list[str]:
         # what the bearing is of.
         out.append(f"An Imperial road passes {place['imperial road']} of here.")
     if place.get("county"):
-        out.append(f"The district is part of {place['county']} county.")
+        out.append(f"It is in {place['county']} county." if scale == "village" else f"The district is part of {place['county']} county.")
     if place.get("town"):
         out.append(f"The town of {place['town']} lies {place['town direction']}." if place.get("town direction") else f"The town of {place['town']} is the county seat.")
     if place.get("also"):

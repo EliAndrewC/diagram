@@ -363,3 +363,25 @@ spec-kit task number and one exists only to warn future sessions off a source; t
 "the research entry records no citation yet"; three crop modals share a verbatim-identical `why`; and
 nothing on the page hints it is clickable at all. An editorial pass over feature 134's vocabulary,
 worth commissioning as its own feature rather than smuggling into this one.
+
+## The GM's rulings of 2026-08-29 (verbatim in [`request.md`](request.md))
+
+Q1 and Q2 above are answered; a third clarification arrived with them.
+
+- [x] **T68** (answers Q2) A town's population is **1,200**, the tier's standing county figure,
+      and it takes in a farming population deliberately not drawn. The three town maps are FROZEN
+      legacy exhibits, so their manifests keep the depicted slice `population_consistent_with_housing`
+      keys on and the page states the real figure - `Kind.default_population`. Documented in
+      `settlements.md` with what a later scripted conversion would owe. `research: rendering`
+- [x] **T69** (answers Q1) The presumption of accuracy does NOT mean staying silent about a liberty
+      inside an otherwise accurate feature: *"even when we are displaying something which we believe
+      to be accurate, then if we had to guess or deviate from some documented source, then we should
+      say so and explain why we did it."* The caveat mechanism already said so; eight of them did not
+      explain WHY. Each now carries its reason, and `label_note` moved with it so the registry's
+      verbatim-substring guard still holds. The deviation and guess LEADS stay as they are - the
+      ruling asks for saying and explaining, which is what they do. `research: rendering`
+- [x] **T70** A village IS its district and the two names are always the same, so a village page never
+      states a district at all - it states its COUNTY, which every village belongs to. The shared name
+      is a deliberate departure from history, documented in `l7r.md` and reviewed with the players, and
+      the maps do NOT flag it. A hamlet genuinely belongs to a district with a different name and still
+      says so. `research: rendering`

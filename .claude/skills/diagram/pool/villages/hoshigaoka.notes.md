@@ -30,13 +30,14 @@ the lanes, connector track and plank footbridges across the ditches.
 
 ### Place
 
-- **district**: Hoshigaoka
 - **imperial road**: directly south
 - **county**: Hayakawa
 - **town**: Hayakawa
 - **town direction**: further south, beyond the Imperial road
 
-*The county, the road and the town are the GM's own, dictated 2026-08-29. A district takes its
+*No **district** key: a village IS its district and the two names are always the same, so the page
+never states it (GM 2026-08-29). The county is what a village page says instead. The county, the road
+and the town are the GM's own, dictated 2026-08-29. A district takes its
 main village's name (`l7r.md`, "Place Names"), so Hoshigaoka names both.*
 
 ## GM decisions (settled)
