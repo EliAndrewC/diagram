@@ -81,8 +81,19 @@ no caption.
 
 - **No legal seat anywhere.** A board hemmed in on every side keeps today's behavior: the least-bad
   seat is taken and the caption is still drawn. A map is never shipped with an unlabeled board.
-- **A hand seat.** A caption given an explicit position by its generator is honored exactly, as
-  today - a hand seat is a decision, not a hint.
+- **A hand seat is TWO unlike things, and only one of them is a decision.**
+  - A hand seat that records a GM RULING is honored exactly, as today - Hoshizora's
+    `label_xy=(1760, 195)` on the Imperial Road (*"GM 2026-08-08"*), Nagahara's boundary stone
+    (*"the stone keeps its verge, GM 2026-08-10"*). The GM asked to correct the placement
+    ALGORITHM, and a GM ruling is not the algorithm.
+  - A hand seat that exists only as a WORKAROUND for the placer misplacing the caption is not a
+    decision, and this feature REMOVES it so the fixed placer seats the caption. Two are known:
+    Minami's `place_punishment_spot(label_xy=(1270, 1454))`, whose own comment says *"the
+    auto-caption sat 106 px east of its own spot"*, and Nagahara's
+    `kosatsuba(1492, 1341, rot=0, label_xy=(1530, 1329))`, which is the GM's reported defect
+    preserved by hand on a city map. Leaving them would let the acceptance surface go green while
+    the defect the GM reported still stands on the tier whose future reuse is the reason for the
+    work.
 - **A board at a square rotation.** Its caption is level; the "beside, not past the end" rule is
   measured on the same axes and means the same thing.
 - **A generator that never runs the label phase.** Impossible by construction: the phase is also
@@ -96,8 +107,20 @@ no caption.
 
 - **FR-001**: Every settlement's generation MUST end with a LABEL PHASE that runs after every map
   feature has been placed. On a hamlet that means after the notice board, which is the last feature.
-- **FR-002**: A feature that carries a caption MUST place its glyph in its own phase and QUEUE its
-  caption for the label phase. The notice board is the case that exists today.
+- **FR-002**: EVERY feature that carries a caption MUST place its glyph in its own phase and leave
+  its caption to the label phase - the notice board, the punishment ground, the execution ground,
+  the boundary stone, the theater stage, the ossuary mound, the road caption and every other
+  captioned feature the engine draws. The GM's words are *"labels for whatever map features get
+  labels"*, and an earlier draft of this requirement said "the notice board is the case that exists
+  today", which is simply false: `place_punishment_spot` runs its own seat search, `finish()`
+  already defers several captions with a documented drain order, and Nagahara's manifest carries
+  five auto-seated captions besides the board. The remit is every caption, with no per-feature
+  exception.
+- **FR-002a**: The deferral MUST be GENERAL rather than per-feature - the engine's caption
+  primitive queues while the phase is pending, so a captioned feature is covered the day it is
+  drawn and cannot be forgotten. This is the same reasoning `label_blocker_quads` records for
+  deriving its blocker list rather than hand-listing it: *"a probe that cannot see a feature looks
+  exactly like a probe that passes"*.
 - **FR-003**: The label phase MUST seat each caption against the FINISHED map - every feature drawn,
   the frame decided, and every caption already seated in this phase counted as an obstacle.
 - **FR-004**: A generator with no stage pipeline (the hand-authored town, city and village scripts)
@@ -117,16 +140,27 @@ no caption.
 - **FR-008**: The structural-legality term of the seat search MUST measure the caption's TRUE
   ROTATED QUAD against each obstacle, not the axis-aligned bounding box of that quad. (Defect found
   in the course of this work, fixed under Principle XIV - see Success Criteria SC-004.)
-- **FR-009**: A new gate check MUST hold FR-006 on every map that records a caption with a
-  referent: the subject's center projects onto the caption's baseline within the caption's own run.
-  The check MUST be proven to fire by a frozen negative fixture built from the current Kuwabata
-  manifest.
+- **FR-009**: A new gate check MUST hold FR-006: a caption may not stand further along its own
+  baseline from the thing it names than that thing extends, plus the standoff air. The check reads
+  the caption's recorded REFERENT box, so a second requirement comes with it - **every notice-board
+  caption MUST record one**, and the check MUST fail a map whose board caption records none rather
+  than skipping it. (Nagahara's manifest carries a six-element notice-board record with no referent,
+  frozen before the engine started passing one; its caption stands 38.0 px right of its board with
+  the board 11.6 px outside the caption's own run - the identical defect on a city map, invisible to
+  any rule keyed on a referent. The sweep regenerates it; the "must record one" clause is what stops
+  a future map going quiet the same way.) The check MUST be proven to fire by a frozen negative
+  fixture built from the current Kuwabata manifest.
 - **FR-010**: No existing gate check may regress. `label_hugs_its_referent`,
   `captions_clear_the_ways_they_stand_on`, `labels_clear_of_other_buildings` and
   `labels_within_image` stay green across the whole pool and the cohort.
-- **FR-011**: The placer and its checks MUST read ONE measure. Where the seat search scores lane
-  clearance it MUST score the quantity `captions_clear_the_ways_they_stand_on` scores; where it
-  scores structural clearance it MUST score the quantity `labels_clear_of_other_buildings` scores.
+- **FR-011**: The seat search's LANE clearance term already reads the quantity
+  `captions_clear_the_ways_they_stand_on` reads, and MUST still read it after this feature - a
+  non-regression property, not a new requirement. It is stated here because the structural fix in
+  FR-008 sits three lines away from it and the two were confused once already: an earlier draft of
+  this requirement demanded a lane-scoring change that had in fact landed four attempts ago
+  (recorded in the code as *"READS THE LANE'S EDGE, THE SAME QUANTITY
+  `captions_clear_the_ways_they_stand_on` READS - and it did not, for four attempts"*). Held by
+  SC-007.
 
 ### Key Entities
 
@@ -157,6 +191,13 @@ no caption.
   of text to its end - the board is under (or over) the words that name it.
 - **SC-006**: Removing the new check from the battery turns a test red (the negative fixture), so
   the rule is proven to have teeth rather than assumed to.
+- **SC-007**: The seat search's lane-clearance term still measures the lane's EDGE, as
+  `captions_clear_the_ways_they_stand_on` does - proven by the existing test that pins it, still
+  green.
+- **SC-008**: No caption anywhere in the engine is drawn outside the label phase. Measured
+  structurally rather than by inspection: with the phase pending, the caption primitive draws
+  nothing, so a caption emitted early would be missing from the finished map and every
+  caption-reading check would say so.
 
 ## Decisions Recorded *(mandatory)*
 
@@ -192,3 +233,15 @@ farmed, planted or lived in, and none of these are).
   a regression - it is the caption now seeing features that were drawn after the board.
 - Scale is unlocked and remote is off (`dev/switches.json`), so the pool sweep this feature owes can
   actually be run locally.
+
+## Review record
+
+**Round 1** (`spec-fidelity`, 2026-08-29): CHANGES REQUIRED, four items. All four accepted and
+applied - FR-002/FR-002a (the phase's remit is every caption, and the earlier "the notice board is
+the case that exists today" was false), the hand-seat edge case split into a GM ruling and a
+workaround with the two workarounds named for removal, FR-011 restated as the non-regression
+property it actually is with SC-007 behind it, and FR-009 given the "every notice-board caption
+records a referent" clause that stops the rule going quiet on a manifest like Nagahara's. The agent
+also confirmed as faithful, and untouched: FR-006, FR-007, FR-008, FR-010, the exclusion of caption
+priority, and the reading of *"every settlement creation process"* as covering both the hamlet
+pipeline and the hand-authored gen scripts.
