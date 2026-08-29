@@ -340,3 +340,34 @@ correct the last one - so the numbers a reader can check now come from the artif
 - farmstead fixtures: bath **8**, coop **5**, pit **4**, privy **12**, shrine **1**, woodpile **12**
 - notice board at **(2394.2, 559.1)**, **10** of 16 farmhouses within 250 ft
 <!-- /census -->
+
+
+## 2026-08-29 - feature 154: the notice board becomes a knob and moves to the last stage
+
+This map's `.gen.py` is unchanged; the engine moved under it. Two changes reach every hamlet:
+
+- **`kosatsuba_seat` is a per-settlement knob** rolled from the map's own seed over the placements the
+  record attests AND the map can site - the center where villagers assembled, the entrance where the
+  approach arrives, and the frontage of the official's gate. Two further attested sites, a bridgehead
+  and the shrine precinct, are deliberately withheld at this tier: the pool's "bridges" are 9.8-10.5 ft
+  planks over field ditches and its only "shrines" are household hokora in dooryards, so pressing
+  either into service would reach five placements by relabelling things the record does not mean.
+- **`stage_notice` is now the LAST stage, 17 of 17** (GM 2026-08-29), after the woods, the ground
+  cover, the crop and the title - *"the real humans that live in the society ... look around at the
+  things which already exist and then decide where to put the notice board."* The board's
+  `village_grove` keep-out went with it: it may stand at the wood's edge or under a canopy, and its
+  label carries the read (verified - the caption is on the topmost layer at z 20,000,005, above every
+  crown, on every map).
+
+**NO PER-MAP settlement-review ran on THIS map**, and that is deliberate rather than an omission. Three
+maps were read in four passes for this feature - Sawada and Kashikawa twice each, Mizuguchi once - and
+every error they raised was fixed at the cause and re-verified. This manifest moved only because the
+engine did, which is the case the GM ruled on: they read the map themselves. Their ruling on the
+placements, given after seeing the knob's output across the pool: *"literally every place that you have
+ever described the notice board as being put as specified by these different tunable knobs is all
+fine."*
+
+**This map's outcome**: rolled `center`; the board stands at (2394.2, 559.1) with 10 of
+16 dwellings within 250 ft, broadside to the way it fronts, one caption on the board's own side
+of the tread. `kosatsuba_by_the_road` and `kosatsuba_faces_the_road` - the only two live gate checks
+that constrain where the board goes, the other five merely asserting it exists - both pass.

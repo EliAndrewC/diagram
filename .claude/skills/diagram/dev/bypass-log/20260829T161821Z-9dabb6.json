@@ -1,0 +1,6 @@
+{
+  "utc": "20260829T161821Z",
+  "guard": "pair-hooks",
+  "what": "gate alone",
+  "reason": "feature 154 measurement roll: seeing which placement each map draws and whether the pool still gates; settlement-review is task T09, dispatched once the maps are settled"
+}

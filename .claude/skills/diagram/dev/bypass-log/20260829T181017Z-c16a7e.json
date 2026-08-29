@@ -1,0 +1,6 @@
+{
+  "utc": "20260829T181017Z",
+  "guard": "pair-hooks",
+  "what": "gate alone",
+  "reason": "post-merge verification gate; four settlement-review passes have run across three maps on this feature"
+}

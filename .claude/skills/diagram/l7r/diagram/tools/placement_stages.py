@@ -119,11 +119,23 @@ NOTES: dict[str, tuple[str, str]] = {
         "and zigzags - a worn path minimizes its turns, and a bend sits at a plot corner.",
     ),
     "stage_notice": (
-        "The notice board",
-        "The kosatsuba stands ON a way, so it cannot be placed until the ways are final - which is after "
-        "the web, not with the other structures. This is the clearest case on the map of a feature whose "
-        "position is defined by something drawn later than itself. It stands on the verge, a few feet "
-        "off the tread (feature 133 T13) - a kosatsu is read where people pass.",
+        "The notice board - the LAST thing placed",
+        "The kosatsuba is deliberately last, after even the crop and the title, and the reason is about the "
+        "settlement rather than about the drawing (GM 2026-08-29): \u201cwhere you put the notice board on the "
+        "map does depend on what other features already exist ... the real humans that live in the society "
+        "that decide where the notice board will go will look around at the things which already exist and "
+        "then decide where to put the notice board. They may even decide to move a notice board which has "
+        "already been placed.\u201d Every other stage either reserves ground or grows into it; the board does "
+        "neither. It is a 12 x 5 ft plank a village drives in beside a way once the village is there, so it "
+        "is the one feature that should see the whole map before it chooses. "
+        "It stands ON a way - on the verge, a few feet off the tread (feature 133 T13), because a kosatsu is "
+        "read where people pass - and WHICH way, and where along it, is a per-settlement knob rolled from the "
+        "map\u2019s own seed over the placements the record attests and the map can site (feature 154). "
+        "Placing it last also fixed a defect by construction: sited among the trees it used to claim a ~55 ft "
+        "cleared disc, and an entrance seat on a windward fringe punched a 40 ft hole in the shelter belt that "
+        "nothing replanted. Nothing is placed after the board now, so it displaces nothing - and the GM\u2019s "
+        "ruling is that it never should have: \u201chumans would not need to clear any amount of space in order "
+        "to put up a notice board at the side of a path.\u201d It may stand under a canopy at the wood\u2019s edge.",
     ),
     "stage_hinterland": (
         "The marsh, then scrub and rough grazing",

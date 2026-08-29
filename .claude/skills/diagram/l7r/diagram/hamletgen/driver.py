@@ -99,13 +99,31 @@ STAGES = (
     # lane, and after this reorder it does, because the byre is simply part of the fabric the web
     # threads around.
     stage_web,
-    stage_notice,
     stage_hinterland,
     stage_woodland,
     stage_windbreak,
     stage_bamboo,  # the bamboo stands, over the scrub that kept out of them (feature 133 T47)
     stage_crossings,
     stage_frame,
+    # THE NOTICE BOARD GOES LAST - AFTER THE FRAME (GM 2026-08-29). It used to sit between the lane
+    # web and the hinterland, which made it the one built thing the woods had to work around: its
+    # keep-out suppressed grove clumps, and on Kashikawa an `entrance` seat on the windward fringe
+    # punched a 40 ft hole in the shelter belt that nothing replanted.
+    #
+    # The GM's reasoning is about the settlement rather than about the bug: "where you put the notice
+    # board on the map does depend on what other features already exist ... the real humans that live
+    # in the society that decide where the notice board will go will look around at the things which
+    # already exist and then decide where to put the notice board. They may even decide to move a
+    # notice board which has already been placed. Therefore ... the notice board should be literally
+    # the very last thing that is ever put on the map."
+    #
+    # Everything else here reserves ground or grows into it. The board does neither: it is a 12 x 5 ft
+    # plank a village drives in beside a way once the village is there. Placing it last means it can
+    # see the whole map, and - the part that fixes the defect by construction - nothing is placed
+    # after it for it to displace. It also runs after `crop_to_content`, so the frame is already
+    # decided and the board can simply be kept inside it, instead of being sited blind and re-seated
+    # by a frame guard that knew nothing about why it had been put where it was.
+    stage_notice,
 )
 
 

@@ -1,0 +1,6 @@
+{
+  "utc": "20260829T170854Z",
+  "guard": "pair-hooks",
+  "what": "gate alone",
+  "reason": "no review owed: measured, all five scripted manifests are byte-identical to the state three settlement-reviews examined (f03da17f). The only change since is a message-only edit to one check"
+}

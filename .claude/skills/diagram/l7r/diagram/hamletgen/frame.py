@@ -8,7 +8,7 @@ from __future__ import annotations
 import math
 
 from l7r.diagram.settlement import Settlement, seg_dist
-from l7r.diagram.settlement.structures.fixtures import KOSATSUBA_MARKER_MIN_PX, KOSATSUBA_VERGE_FT
+from l7r.diagram.settlement.structures.fixtures import KOSATSUBA_MARKER_MIN_PX, KOSATSUBA_VERGE_FT, kosatsuba_anchor
 
 from .consts import POLDER_ARCHETYPES
 from .hinterland import CROP_MARGIN, title_pocket
@@ -64,10 +64,19 @@ def stage_notice(s: Settlement, plan: SitePlan) -> None:
     hamlet's senior farmer, answering to the village headman). `place_kosatsuba` sites it itself,
     deterministically, from the same route records the validator reads.
 
-    It runs BEFORE the ground cover and the woods, not with the framing, because it needs a clear
-    verge and it competes for the same ground the scrub scatter and the grove clumps take. Sited
-    after them it silently found nowhere to go on one cohort map in six and the gate reported a
-    hamlet with no notice board - a failure of ORDER, not of siting."""
+    IT RUNS LAST - stage 17 of 17, after the woods, the ground cover, the crop and the title (GM
+    2026-08-29). This docstring used to say the opposite, and the reason it gave was real at the time:
+    sited after the cover it "silently found nowhere to go on one cohort map in six". What made that
+    true was the board AVOIDING the woods - it needed a clear verge, and by then there was none. The
+    board no longer avoids anything: its `village_grove` keep-out is retired and it may stand under a
+    canopy at the wood's edge, so the ground it needs is a verge, which the woods never took.
+
+    The GM's reasoning is about the settlement rather than the drawing: "the real humans that live in
+    the society that decide where the notice board will go will look around at the things which
+    already exist and then decide where to put the notice board. They may even decide to move a notice
+    board which has already been placed." Every other stage reserves ground or grows into it; a plank
+    driven in beside a way does neither, so it is the one feature that should see the whole map first -
+    and nothing is placed after it for it to displace."""
     spot = s.place_kosatsuba()
     # ...AND IT MUST STAND WHERE THE FRAME WILL KEEP IT. `place_kosatsuba` maximizes passing traffic
     # (dwellings within ~260 px) along the whole way network, and a lane ARM that runs past the
@@ -79,10 +88,22 @@ def stage_notice(s: Settlement, plan: SitePlan) -> None:
     # what `crop_not_held_open_by_one_feature` exists to stop. The board belongs among the houses it
     # is read by, so if the engine's traffic score sends it outside them, re-seat it on the nearest
     # verge that is inside the cloud.
+    # THE GUARD NOW TESTS THE FRAME ITSELF, because the frame exists (GM 2026-08-29). This stage runs
+    # after `stage_frame`, so `meta.view` is already decided - and the requirement was always
+    # `labels_within_image`, never "among the houses". The house-cloud bbox was standing in for the
+    # crop because the crop had not been computed yet, and standing in badly: it refused every seat
+    # outside the built ground, which is exactly where an `entrance` board belongs, so it threw away
+    # the placement the knob had rolled on two of three maps and put the board back at the busiest
+    # node while the manifest went on claiming `entrance`.
     hs = s.M.get("houses", [])
-    if spot is not None and hs:
-        hx0, hx1 = min(h["x"] for h in hs), max(h["x"] for h in hs)
-        hy0, hy1 = min(h["y"] for h in hs), max(h["y"] for h in hs)
+    _view = (s.M.get("meta") or {}).get("view")
+    if spot is not None and (_view or hs):
+        if _view:
+            _vx, _vy, _vw, _vh = (float(_q) for _q in _view)
+            hx0, hy0, hx1, hy1 = _vx, _vy, _vx + _vw, _vy + _vh
+        else:  # no crop recorded (the frame test drives this stage with a stub) - fall back to the cloud
+            hx0, hx1 = min(h["x"] for h in hs), max(h["x"] for h in hs)
+            hy0, hy1 = min(h["y"] for h in hs), max(h["y"] for h in hs)
         if not (hx0 - 30 <= spot[0] <= hx1 + 30 and hy0 - 30 <= spot[1] <= hy1 + 30):
             board = s.M["kosatsuba"].pop()
             # ...AND ITS INK (feature 133 T48). Popping the record and the caption left the first
@@ -106,9 +127,25 @@ def stage_notice(s: Settlement, plan: SitePlan) -> None:
                     if _tl is not None and 0 <= _lz < len(_tl):
                         _tl[_lz] = ""
                     break
+            # THE RE-SEAT MUST OBEY THE SAME TWO RULES THE SITER DOES, and it obeyed neither
+            # (settlement-review, feature 154). It ran after `place_kosatsuba` and ranked purely by
+            # traffic over every non-connector lane, so on Sawada and Kashikawa it silently threw away
+            # the `entrance` seat the knob had rolled and put the board back at the interior busiest
+            # node - the map RECORDED a placement it had not drawn, and the interactive page told a
+            # clicking reader so. It also seated on a 3 ft `web` straggler, which is exactly what
+            # `place_kosatsuba`'s own comment forbids: "A SERVICE LANE IS NOT A PLACE TO POST THE
+            # STATE'S NOTICE ... a side lane's busiest node is still a side lane, so scoring must never
+            # see it."
+            #
+            # So: MAIN WAYS FIRST, web lanes only if nothing else takes a board; and where the map
+            # declares an anchored placement, rank by nearness to that anchor rather than by traffic.
+            _seat = str((s.M.get("meta") or {}).get("kosatsuba_seat") or "center")
+            _anchor = kosatsuba_anchor(s.M, _seat)
+            _lanes = [ln for ln in s.M.get("lanes", []) if not ln.get("connector")]
+            _ranked = [ln for ln in _lanes if not ln.get("web")] or _lanes
             best: tuple[float, float, float, float] | None = None
-            for lane in s.M.get("lanes", []):
-                if lane.get("connector"):
+            for lane in _ranked:
+                if lane.get("connector"):  # pragma: no cover - filtered above; kept so the loop reads on its own
                     continue
                 pts = lane["pts"]
                 for i in range(len(pts) - 1):
@@ -145,9 +182,10 @@ def stage_notice(s: Settlement, plan: SitePlan) -> None:
                             # hole and shipped it on cohort seed 13.
                             if not s.fixture_clear_of_water(cx2, cy2, math.hypot(_bw, _bh) / 2):
                                 continue
-                            busy = sum(1 for h in hs if math.hypot(cx2 - h["x"], cy2 - h["y"]) < 260)
-                            if best is None or -busy < best[0]:
-                                best = (-busy, cx2, cy2, rot)
+                            # nearest the declared placement where there is one, else the busiest node
+                            _rank = math.hypot(cx2 - _anchor[0], cy2 - _anchor[1]) if _anchor is not None else -sum(1 for h in hs if math.hypot(cx2 - h["x"], cy2 - h["y"]) < 260)
+                            if best is None or _rank < best[0]:
+                                best = (_rank, cx2, cy2, rot)
             if best is not None:
                 s.kosatsuba(best[1], best[2], rot=best[3])
             else:  # pragma: no cover - no verge inside the cloud takes a board; keep the engine's seat rather than none

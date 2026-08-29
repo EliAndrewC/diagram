@@ -1,0 +1,6 @@
+{
+  "utc": "20260829T180609Z",
+  "guard": "pair-hooks",
+  "what": "gate alone",
+  "reason": "no review owed: four settlement-review passes have run across three maps on this feature and every error they raised is fixed and re-verified; the delta since the last pass is notes text, a task list and a manifest field that records a measured distance - no ink changed, confirmed by make maps reporting clean with no manifest rewrite"
+}

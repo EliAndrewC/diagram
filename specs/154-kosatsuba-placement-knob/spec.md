@@ -71,18 +71,23 @@ only one placement is ever selected.
 
 ### User Story 3 - A map is only offered placements it actually affords (Priority: P2)
 
-**Why this priority**: rolling `bridgehead` on a hamlet with no crossing would either fail to site
-the board or site it somewhere arbitrary, which is worse than not offering it.
+**Why this priority**: a placement the map cannot site is worse than one not offered - the board would
+either fail to be placed or land somewhere arbitrary.
 
-**Independent Test**: build settlements missing a bridge, a shrine and a distinguishable headman's
-house, and confirm the selection never returns those placements.
+**Independent Test**: build a settlement with no recorded connector, and one with no house carrying
+`role == "headman"`, and confirm the selection never returns the placement each lacks.
 
 **Acceptance Scenarios**:
 
-1. **Given** a settlement with no crossing recorded, **When** the placement is rolled, **Then**
-   `bridgehead` is not selected.
-2. **Given** a settlement affording no placement but the center, **When** the placement is rolled,
-   **Then** the center is selected and the board is still sited.
+1. **Given** a settlement with no connector recorded, **When** the placement is rolled, **Then** the
+   entrance/approach is not selected.
+2. **Given** a settlement with no house carrying `role == "headman"`, **When** the placement is
+   rolled, **Then** the official's frontage is not selected.
+3. **Given** a settlement affording no placement but the center, **When** the placement is rolled,
+   **Then** the center is selected and the board is still sited. This is not hypothetical: 5 of the
+   13 pool hamlets record no connector, so they afford one placement and get no variance - which is
+   what Principle XII asks, since the knob applies where the record supports two forms FOR THAT
+   SETTLEMENT.
 
 ## Requirements *(mandatory)*
 
@@ -108,12 +113,12 @@ house, and confirm the selection never returns those placements.
   that was the GM's correction. It is not a ban: they said in the same breath *"I don't object to doing
   more research"*, so if a decision arises that the existing record does not answer, the standing rule
   applies unchanged - search first, and escalate only where the record is silent or contradictory.
+- **FR-008**: `sawada.notes.md`'s OPEN entry MUST be closed with the measured outcome, and the
+  research doc's placement bullet MUST gain the pointer to the knob that implements it.
 - **FR-009**: The knob MUST apply at `scale in ("hamlet", "village")` ONLY. Town and city boards keep
   their present seats. This is a REQUIREMENT and not an assumption because the code contradicts the
   obvious assumption: `pool/towns/hirameki.gen.py:475` calls `place_kosatsuba()`, so a town does go
   through this siter, and Hirameki's recorded board position MUST NOT move.
-- **FR-008**: `sawada.notes.md`'s OPEN entry MUST be closed with the measured outcome, and the
-  research doc's placement bullet MUST gain the pointer to the knob that implements it.
 
 ### Key Entities
 
@@ -133,6 +138,11 @@ house, and confirm the selection never returns those placements.
   and the gate is green.
 - **SC-004**: Re-rolling any map from its seed reproduces its placement and seat exactly.
 - **SC-005**: Hirameki's recorded board position is byte-identical before and after.
+- **SC-006**: The seat chosen for the busiest node is measured to hold the board AND its caption, or
+  the fallback is taken and reported. `sawada.notes.md` makes this its own precondition - the Ubame
+  lesson is that the caption is much larger than the glyph, so a siter denied a quiet spur can walk to
+  the next empty verge rather than to the busy one. FR-004 keeps the caption machinery unchanged, so
+  this is a measurement to take, not machinery to build.
 
 ## Decisions Recorded *(mandatory - this feature changes what a map draws and states)*
 
@@ -160,8 +170,20 @@ recorded, labeled a guess. Measurement retired it: across the 13 pool hamlets th
 second-largest dwellings differ by **1.00 to 1.14x**, and on several they are identical - so "largest"
 would have been picking a house very nearly at random and calling it the headman's. The manifest
 answers the question directly instead (`role == "headman"`), which is the same-source doctrine and
-needs no guess. A hamlet simply does not afford this placement, which is also what the record implies:
-a hamlet's board answers to the senior farmer of a VILLAGE elsewhere.
+needs no guess.
+
+**Withheld because it cannot be SITED, not because the official did not exist** - the distinction
+matters, and an earlier draft of this section got it backwards. The record puts the person IN the
+hamlet: *"the headman (or in a hamlet the senior farmer answering to the village headman) received,
+copied, and relayed the circulars"* - local person, upward authority. What is missing is not the
+official but a HOUSE for them: no hamlet manifest records `role == "headman"`, and the measured proxy
+is arbitrary. Writing that up as "a hamlet has no such official" would have dressed a data limitation
+in a finding's clothes, in the very section that feeds the interactive map's accurate / deviation /
+guess labeling - constitution XII's one named failure. If hamlet manifests ever record the senior
+farmer's house, this placement becomes affordable there with no change to the placement rule - but a
+session doing that must also revisit `hamlet_has_no_headman`
+(`check_village/segments_03c_clusters_and_labels.py:159`), which actively FORBIDS that field at hamlet
+scale today. Recorded so the next reader does not have to discover it.
 
 ## Assumptions
 
@@ -182,10 +204,23 @@ a hamlet's board answers to the senior farmer of a VILLAGE elsewhere.
   keep hand placement and the code says otherwise - `pool/towns/hirameki.gen.py:475` calls
   `place_kosatsuba()`; now FR-009, a requirement, with Hirameki's seat pinned by SC-005. (4) The
   mandatory "Decisions Recorded" section was missing; added, with each placement's evidence class.
-  (5) British `centre` at four places; fixed. The reviewer ADJUDICATED the knob framing FAITHFUL rather
+  (5) British spelling at four places; fixed. The reviewer ADJUDICATED the knob framing FAITHFUL rather
   than a session's design choice - constitution lines 1135-1140 make a knob the compliant answer where
   the record supports distinct FORMS, so picking one placement would have been the violation - and
   accepted the largest-dwelling proxy as a labeled guess.
+- **2026-08-29, `spec-fidelity` round 2 - CHANGES REQUIRED (2), both taken.** (1) User Story 3 still
+  described a five-placement world and contradicted the narrowed FR-001 - its fixtures would have
+  commissioned selection logic and tests for two placements FR-001 forbids; rewritten around the
+  affordances that exist at these tiers. (2) **The Decisions Recorded section inverted the record**: it
+  said a hamlet's board answers to a senior farmer of a village elsewhere, where
+  `research/urban-features.md` puts the senior farmer IN the hamlet, answering upward. That is a data
+  limitation written up as a historical finding, inside the section that feeds the interactive map's
+  labeling - the failure constitution XII names. Corrected to the honest ground: the placement is
+  withheld because no hamlet manifest records a house for the official, not because the official did
+  not exist. The reviewer also adjudicated the narrowing to three placements FAITHFUL, on a stronger
+  basis than I had argued it - `research/urban-features.md:23` carries the doc's own SETTLEMENT-scale
+  sentence, "by the headman's frontage or the lane junction/entrance", so the five-item list at :26-29
+  is the bakufu's general catalog across barriers, ports and bridges, not a roster every village had.
 - **2026-08-29, measurement between rounds.** The proxy the reviewer was willing to accept was retired
   instead: the pool's largest and second-largest dwellings differ by 1.00-1.14x, so it would have been
   arbitrary, while `role == "headman"` is recorded outright on one house in each village. The affordance

@@ -707,10 +707,10 @@ _DEFS: tuple[FeatureClass, ...] = (
         name="notice board",
         covers="`kosatsuba`, with its label",
         what="The kosatsuba - the official edict board: a small roofed frame posting the standing law, rate tables and ban lists, its face turned square to the way it fronts.",
-        why="Every Edo town AND village kept one, and its siting was a traffic decision: the board stands where the settlement's one lane carries everyone past it, because it is the state talking at all who pass. The circulars reached the farmers through exactly this board, read aloud where needed - one reader per settlement makes it work.",
+        why="Every Edo town AND village kept one, and its siting was a traffic decision: it is the state talking at all who pass, so the board stands where the settlement's one lane carries everyone. The circulars reached the farmers through exactly this board, read aloud where needed - one reader per settlement makes it work. The record names SEVERAL such places rather than one, so which of them a settlement uses is rolled from its own seed: the center where villagers assembled, the entrance where the track arrives, or the frontage of the village official's gate. Two more the record attests - a bridgehead, and the shrine precinct - are real at town and city scale and are deliberately not offered at a hamlet, whose crossings are 10 ft ditch planks and whose only shrine is a household hokora in someone's dooryard.",
         label="accurate",
-        label_note="Presence and siting are read; at hamlet grain the glyph is drawn at its true 12 x 5 ft.",
-        sources=("not recorded",),
+        label_note="Presence and siting are both read. The placement is chosen from the attested set the map can actually site, never from one preferred reading; at hamlet grain the glyph is drawn at its true 12 x 5 ft.",
+        sources=("fuchu-kosatsuba", "ogose-kosatsuba", "kosatsu-jawiki", "adachi-kosatsu"),
         entry="research/urban-features.md - 'The notice board (kosatsuba) - siting is a TRAFFIC decision'",
     ),
     # ---- the dike-pond hamlet (feature 150, Kuwabata - the first scripted mulberry_dike_fishpond) ----

@@ -608,5 +608,86 @@ correct the last one - so the numbers a reader can check now come from the artif
 - copse: **19** clumps drawn
 - farmhouses: **20**
 - farmstead fixtures: bath **3**, coop **10**, pit **3**, privy **12**, woodpile **13**
-- notice board at **(2324.3, 2740.6)**, **7** of 20 farmhouses within 250 ft
+- notice board at **(2244.5, 2990.6)**, **9** of 20 farmhouses within 250 ft
 <!-- /census -->
+
+## 2026-08-29 - feature 154: an `entrance` board on the windward fringe ate the shelter belt (CLOSED)
+
+**THE REGRESSION, and it is this feature's own.** The `kosatsuba_seat` knob rolled `entrance` here,
+which pushes the board out of the cluster - and on this map the way out runs along the windward
+fringe, so the board landed inside the windbreak belt's own band. `stage_notice` runs BEFORE
+`stage_windbreak`, so the board wins and the belt yields: five clumps that had covered those columns
+are gone, all five inside the board's `village_grove` keep-out disk, and nothing re-seated into them.
+`village_windbreak_is_continuous` fails with a 40 ft bare run.
+
+**PROVEN BY A REVIEWER, AGAINST TWO OF MY OWN WRONG DIAGNOSES.** I called it a chord artifact - the
+straight across-wind projection leaving a bowed belt's footprint, which a peer session had just fixed
+on Kuwabata. It is not, and the proof is clean:
+
+- the belt's recorded `poly` is **byte-identical** between the two commits - 24 vertices, unchanged
+- replaying segment 0613 by hand: the previous roll gives a **20 ft** run and PASSES; this one gives
+  **40 ft** and FAILS, on the same polygon
+- the polygon has **93.7 to 95.2 ft of depth** at every bare column, so the peer's polygon-depth fix
+  cannot clear it
+- I had sampled `(2205, 3118)`, the coordinate in the failure message. **That is not the hole.** The
+  segment reports `_near`, the nearest clump in projection - 15.5 ft outside the r=14 window. Reading
+  a diagnostic's coordinate as the thing it diagnoses is how both wrong diagnoses happened.
+
+**A FIX WAS TRIED, MEASURED AND REVERTED - recorded so nobody pulls the same lever.** The board's
+keep-out is one disc, `30.0 + clump * 0.90`, sized to reach the far end of a ~53 x 8 ft caption: about
+9,500 sq ft of woodland cleared to protect about 450. Replacing it with a small disc on the glyph plus
+a row of discs stepped along the caption's recorded box **made the hole worse - 40 ft to 70 ft, five
+more belt clumps lost.** The reason is that `M["labels"]` records the caption's box UNROTATED while
+the caption is drawn rotated about its centre (here -42.7 degrees), so the discs march along a line
+the caption does not occupy: they clear ground the belt needed and miss ground the caption uses. Any
+shape-aware keep-out has to rotate the box first.
+
+**TWO OPTIONS PRICED, NEITHER TAKEN, because both are bigger than the hour they were found in:**
+
+1. **Refuse an anchored seat whose keep-out would lie in the belt**, when a legal seat outside it
+   exists. This is the narrow fix and it is contained to the board siting. The obstacle is ordering:
+   `plan.belt` is not populated until `stage_hinterland`, one stage AFTER `stage_notice`, so the
+   siter cannot see the belt. `belt_polygon(s, plan)` is pure and could be called early from
+   `stage_notice` to predict it, and the prediction passed to `place_kosatsuba` as an avoid region -
+   new plumbing across a layer boundary, worth doing deliberately rather than late.
+2. **Make the keep-out proportionate**, rotating the caption box first. Fixes every map at once and
+   removes the disproportion (a 12 x 5 ft plank clearing a 55 ft radius, larger than a well's or a
+   shrine's). Blast radius is every map that carries a board.
+
+**And a research question the reviewer raised that would settle which:** was a village's planted
+windbreak cleared around a notice board at all? The expectation is that it was not - the board stood
+at the wood's EDGE, not in a glade - which would argue for option 2 with a much tighter figure, and
+would resolve this as a side effect. Nothing in `research/urban-features.md` speaks to it.
+
+
+### CLOSED the same day, by the GM's reorder rather than by either option priced above
+
+Neither of the two options was taken. The GM ruled on the stage order instead, and it removed the
+cause: **`stage_notice` is now the LAST stage, 17 of 17**, after the woods, the ground cover, the crop
+and the title. *"The real humans that live in the society that decide where the notice board will go
+will look around at the things which already exist and then decide where to put the notice board. They
+may even decide to move a notice board which has already been placed."* A board placed after the belt
+cannot suppress it - nothing is placed after the board for it to displace - so the hole is gone by
+construction rather than by a keep-out being retuned.
+
+The board's `village_grove` keep-out went with it, on a separate ruling of the same kind: *"it would be
+very easy to put the notice board at the edge of the forest. We could even display it as being
+underneath the canopy ... humans would not need to clear any amount of space in order to put up a
+notice board at the side of a path."*
+
+**Verified by a settlement-review, on the ink**: the belt polygon is byte-identical across the delta,
+the worst bare run went **40 ft -> 20 ft** on an independent replay of segment 0613 and is 10 ft on the
+current roll, the restored clumps are exactly the ones ringing the board (22.4 to 33.2 ft), and every
+other family on the map - houses, fields, water, lanes, wells, gardens, yards, marsh, commons - is
+byte-identical. The reorder dragged nothing with it.
+
+**A NOTE ON HOW THIS WAS REPORTED, because the record should carry it.** The GM had to push back on the
+framing twice. The belt hole was a real defect and worth escalating; the two things reported alongside
+it in the same tone were not. The caption sitting across the tread was a legibility issue, and the two
+placement knobs "disagreeing" was not a placement problem at all - every seat either knob chose was
+fine, and the only real fault was that the manifest claimed `waterside` for a board 276 ft from a well,
+which is a labelling bug worth one line. Audited afterwards at the GM's instruction: **seven live gate
+checks name the board, five of which only assert it exists; the two substantive ones require it to
+stand within ~12 ft of a lane and to face the way it fronts** - exactly the historical requirement, and
+no check constrains entrance-versus-middle or distance from anything. **No board check failed at any
+point.** The checks were never the problem; the reporting was.
