@@ -37,8 +37,12 @@ its own gate and the floor red. Nothing lied; nothing was looked at.
   under which rule it was fixed.
 - **FR-002** The floor is reached BY TESTS. No `# pragma: no cover` is added and `PARKED` stays empty. A
   hamlet-path line that only a NON-HAMLET tier reaches is put to the GM under the disposition
-  `specs/145-hamlet-rolls-and-floor/spec.md` FR-002 already set, in the GM's own words - *"no engine code is
-  deleted to make the floor green ... that specific case is put to the GM"*. Deletion is available only for a
+  `specs/145-hamlet-rolls-and-floor/spec.md` FR-002 already set - session-authored and `spec-fidelity`
+  FAITHFUL, so binding as a project requirement but NOT as GM speech: *"no engine code is deleted to make the
+  floor green ... that specific case is put to the GM"*. (An earlier draft of this line credited those words
+  to the GM personally. They are 145's spec text; the GM's own words on the subject are *"eventually, we will
+  just go back to one hundred percent code coverage everywhere"*. In this project italics mean verbatim GM
+  writing, so the misattribution would have had a future session believe the GM ruled it at a terminal.) Deletion is available only for a
   line proved dead on EVERY path, with the proof recorded. (The first draft said an unreachable line is
   simply deleted, which reversed a standing GM ruling this session had forgotten.)
 - **FR-003** A map fixed under FR-001 MUST be fixed at its cause. A house on a lane is a PLACER defect; a

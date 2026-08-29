@@ -617,7 +617,13 @@ def stage_web(s: Settlement, plan: SitePlan) -> None:
     # AND SWEEP WHAT IS LEFT (feature 134 T50): the passes above shorten lanes, and `_WEB_MIN_FT` was
     # only ever asked at draw time. Last, so it judges the tread the map actually ships.
     _sweep_debris(s)
-    _drop_end_nubs(s)  # last of all: every pass above can leave a nub at a junction it laid
+    _drop_end_nubs(s)  # every pass above can leave a nub at a junction it laid
+    # LAST OF ALL, AFTER THE NUB DROP AND NOT BEFORE IT (feature 152). Placed ahead of them this swept a
+    # foul that did not exist yet: `_drop_end_nubs` shortens a lane, and the END IT LEAVES BEHIND can be
+    # nearer a steading than the one it removed. So the steading sweep has to be the last thing that looks
+    # at a lane, for the same reason the nub drop is placed after everything else.
+    _sweep_steading_fouls(s)
+    _sweep_debris(s)  # a lane the steading sweep emptied is debris; the rule is applied once more
     s.M["meta"]["lane_web"] = plan.lane_web
 
 
@@ -1192,6 +1198,44 @@ def drop_end_nubs(ways: list[list[Pt]]) -> list[int]:
         if changed:
             hit.append(i)
     return hit
+
+
+def _sweep_steading_fouls(s: Settlement) -> int:
+    """Pull back any lane end whose ink lands on a farmhouse, and empty what is left if nothing survives.
+
+    RUNS LAST, BESIDE `_sweep_debris` AND `_drop_end_nubs`, FOR THE SAME REASON THEY DO: every earlier pass
+    can leave one. The straggler pass routes clear of the steadings and the joiner brushes a fence at
+    `_TOUCH_GAP` on purpose, but the passes AFTER them - the touch, the smoothing's cuts, the nub drop -
+    each rewrite a lane's ends without re-asking whether the result still clears a house. Measured
+    2026-08-29 on main: sawada shipped an 8.6 ft two-point stub 2 ft inside the farmhouse at (1826, 2438)
+    and kashikawa a 45 ft run 3 ft inside one at (2136, 2762). Both lanes record `role=straggler` - the pass
+    that FIRST drew them - which is what made the cause hard to see: the pass named on the lane had drawn a
+    clean path, and a later one cut it onto the wall.
+    `houses_clear_of_lanes` allows a lane no overlap with a steading at all, so this trims rather than
+    ranks: the offending end segments come off, and a lane whittled below two points is emptied for
+    `_sweep_debris`'s rule to finish. A house left unserved is `farmhouses_reach_a_way`'s honest verdict; a
+    tread drawn across someone's floor is a map that looks finished and is wrong.
+    """
+    lanes = s.M.get("lanes") or []
+    fixed = 0
+    for i, ln in enumerate(lanes):
+        pts = [(float(x), float(y)) for x, y in (ln.get("pts") or [])]
+        if len(pts) < 2 or ln.get("connector"):
+            continue  # a connector's route is the track's own business and it never ends in the cluster
+        width = int(float(ln.get("w", 3)))
+        before = len(pts)
+        while len(pts) >= 2 and _hits_a_steading(s, pts[-2:], width):
+            pts.pop()
+        while len(pts) >= 2 and _hits_a_steading(s, pts[:2], width):
+            pts.pop(0)
+        if len(pts) == before and not _hits_a_steading(s, pts, width):
+            continue
+        if len(pts) < 2 or _hits_a_steading(s, pts, width):
+            pts = []  # the foul is in the middle of the run, or nothing is left - hand it to the debris sweep
+        ln["pts"] = [[round(x, 1), round(y, 1)] for x, y in pts]
+        s.reink_lane(i)
+        fixed += 1
+    return fixed
 
 
 def _drop_end_nubs(s: Settlement) -> int:
@@ -2279,6 +2323,29 @@ def _pass(name: str) -> None:
     _PASS = name
 
 
+def _hits_a_steading(s: Settlement, pts: Poly, width: int) -> bool:
+    """Would a lane of this width, drawn along `pts`, put ink on a farmhouse footprint?
+
+    The measure `houses_clear_of_lanes` uses: the house's DRAWN rectangle (rotation included) against the
+    tread, which is the polyline widened by half its stroke. No tolerance either way - the check allows the
+    overlap none, so neither does this.
+    """
+    # MIRROR THE CHECK'S WINDOW, NOT JUST ITS FORMULA (this skill's CLAUDE.md). `houses_clear_of_lanes`
+    # tests the house's four ROTATED CORNERS PLUS ITS CENTRE against each lane segment at
+    # `w / 2 + 2` - the centre is in the list so a lane narrower than a house cannot thread between the
+    # corners. The first cut of this helper used a quad-versus-segment overlap at half the tolerance, and
+    # so passed paths the gate still failed: same intent, different window, which is exactly the drift
+    # the rule exists to stop.
+    half = width / 2.0 + 2.0
+    for h in s.M.get("houses") or []:
+        quad = rot_rect(float(h["x"]), float(h["y"]), float(h["w"]), float(h["h"]), float(h.get("rot", 0.0)))
+        probes = [*quad, (float(h["x"]), float(h["y"]))]
+        for i in range(len(pts) - 1):
+            if any(seg_dist(px, py, pts[i], pts[i + 1]) < half for px, py in probes):
+                return True
+    return False
+
+
 def _draw_web(s: Settlement, pts: Poly, width: int = 3, houses: Sequence[Pt] = (), joins: bool = False) -> bool:
     """Draw a web lane, unless it is debris. See `_WEB_MIN_FT`.
 
@@ -2295,6 +2362,21 @@ def _draw_web(s: Settlement, pts: Poly, width: int = 3, houses: Sequence[Pt] = (
     # job is the junction, and it is short precisely because it is the shortest way to make one. Left
     # under the floor the link was simply discarded and the piece stayed orphaned, which is how cohort
     # seed 18 traded an overlap for `lanes_form_one_network`.
+    # A JOIN LINK IS ALLOWED TO BRUSH A FENCE. IT IS NOT ALLOWED THROUGH A HOUSE (feature 152).
+    # The exemption above lets a short link be drawn, and the link is routed at `_TOUCH_GAP` (4 px)
+    # rather than `WEB_FABRIC_GAP` (7) because "a lane and a plot fence share a line in a real village".
+    # That reasoning is about FENCES. A farmhouse is not a fence: `houses_clear_of_lanes` allows a lane
+    # no overlap with a steading at all, so a 4 px routing margin plus the tread's own half-width plus
+    # the straightening `_unjog` does afterwards can and did put a link's ink on a house corner -
+    # sawada shipped an 8.6 px stub 2 px into one (1826, 2438) and kashikawa a 45 px link 3 px into
+    # another (2136, 2762), both from the 2026-08-29 pool sweep, both gating red on main.
+    #
+    # A refused link leaves its piece orphaned, and that is the trade this engine already made once and
+    # documented: `lanes_form_one_network` reports a disconnection the reader can see, while a lane
+    # drawn through a farmhouse is a map that looks finished and is wrong. The piece is kept and the
+    # gate says so, which is the same ruling as the orphan joiner's "KEPT, not dropped".
+    if joins and _hits_a_steading(s, pts, width):
+        return False
     if not joins and polyline_len(pts) < _WEB_MIN_FT:
         segs = _net_segs(s)
         earns = any(_reach(h, pts) <= WEB_REACH_FT and (not segs or min(seg_dist(h[0], h[1], a, b) for a, b in segs) > WEB_REACH_FT) for h in houses)
@@ -2940,8 +3022,24 @@ def _serve_stragglers(s: Settlement, plan: SitePlan, hard: list[Poly], fabric: l
                     # same way as the two cuts are: an overlap is a rule broken, a fold is a shape
                     # complaint, so (fouls, bends) orders them and the least bad is what gets drawn if no
                     # way on the map yields a clean one.
-                    _bad = (_bends_badly(path),)
-                    if _bad != (False,):
+                    # THE FOUL HALF OF THAT RANKING WAS DESCRIBED AND NEVER IMPLEMENTED (feature 152). The
+                    # comment above says "(fouls, bends) orders them"; the code ranked `(_bends_badly(path),)`
+                    # alone, so a tread that fouled a STEADING was only ever judged on its shape. Both maps
+                    # that gated red on main were this: sawada's 8.6 ft stub 2 ft into a farmhouse at
+                    # (1826, 2438) and kashikawa's 45 ft path 3 ft into one at (2136, 2762), each drawn by
+                    # this pass on 2026-08-29 and each perfectly straight, so nothing here objected.
+                    #
+                    # AND A STEADING FOUL IS NEVER DRAWN, not even as the last resort the fold gets.
+                    # `houses_clear_of_lanes` allows a lane no overlap with a house AT ALL, so a fouling path
+                    # is not "the least bad option" - it is a guaranteed red gate and a map that shows a
+                    # track through someone's floor. The honest fallback is the house going unserved, which
+                    # `farmhouses_reach_a_way` reports in words a reader can act on. That is the same trade
+                    # the orphan joiner makes when it keeps a disconnected piece rather than inventing a link.
+                    _fouls = _hits_a_steading(s, path, 3)
+                    _bad = (_fouls, _bends_badly(path))
+                    if _fouls:
+                        continue
+                    if _bad != (False, False):
                         if _folded is None or _bad < _folded_rank:
                             _folded, _folded_rank = path, _bad
                         continue

@@ -141,6 +141,16 @@ GEN_TIME_BUDGETS = {
     # solver is left alone because changing it moves the maps. After the fabric index and the crossing
     # sweep (`hamletgen/clearance.py`, `_geom/water_index.py`): the polder 110 -> ~30 s, the reference
     # 37 -> ~21 s, every manifest byte-identical. The entries below still stand at ~4x SOLO, re-measured.
+    # KUWABATA HAS AN ENTRY BECAUSE IT IS A DIKE-POND MAP, NOT BECAUSE IT IS SLOW (feature 152). It landed
+    # with feature 150 and inherited the 45 s default, which the comment above says is for "an ordinary map
+    # [that] measures 1-7s solo" - a mulberry-dike fishpond is not that map. Measured 2026-08-29 on this
+    # clone: 26.3 s solo (the child-recorded `gen_cpu_s`), against 16.8 for inashiro and 12.9 for mizuguchi.
+    # In-gate it reported 49.4 s under `-n auto` and passed serially, which is the 2.5x contention inflation
+    # this block already documents - so the failure was the budget being the wrong one for the archetype,
+    # not a perf regression. The entry is 4x the solo measurement, the same policy as every line below.
+    # NOT a licence: if this number has to rise again, the question is what got slower, and the answer
+    # belongs here beside it.
+    "kuwabata": 105.0,  # 26.3s solo measured 2026-08-29
     "sawada": 125.0,  # 30.6s solo measured 2026-08-19
     "kashikawa": 130.0,  # 32.2s solo
     "inashiro": 90.0,  # 22.4s solo

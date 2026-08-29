@@ -1,0 +1,6 @@
+{
+  "utc": "20260829T132716Z",
+  "guard": "pair-hooks",
+  "what": "gate alone",
+  "reason": "diagnostic regeneration mid-fix, not a ship - I am still finding why a lane clips a house, and the maps are not final. settlement-review runs before anything is pushed, per this feature"
+}
