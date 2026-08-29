@@ -99,9 +99,13 @@ simplification. The pass is recorded in [`research.md`](research.md).
 
 ## Phase 5 - verification
 
-- [ ] **T22** `make maps` for the reference hamlet, then the tier; the `.svg`/`.png`/`.json` diff is
-      empty apart from the placard's recorded class (spec SC-007). `research: rendering`
-- [ ] **T23** `make verify` - the gate and the independent `settlement-review` together (feature 151)
+- [x] **T22** The reference hamlet, then the tier. `make maps` cannot reach the pool: it halts at
+      tripwire seed 37 (`paddy_bunds_do_not_stagger`), red before this feature and ledgered in
+      `specs/153-highlight-legibility/research.md` R9. So the five scripted maps were regenerated
+      directly, which is also what cleared three stale clone-side renders. **The result is SC-007
+      exactly**: Inashiro, Kashikawa and Sawada byte-identical, Mizuguchi and Kuwabata differing in
+      `ink_classes` alone (`-` 10 -> 7, `place` 3). No map's geometry moved. `research: rendering`
+- [x] **T23** `make verify` - the gate and the independent `settlement-review` together (feature 151)
       - green, with every finding either fixed or recorded. `research: rendering`
 - [x] **T24** The review ledger row in `docs/review-ledger.md`, and this feature's entry in
       `dev/reviews.md` if the pass changed doctrine. `research: rendering`
@@ -242,20 +246,6 @@ backwards.
       it" attached to the road rather than the district; and two pre-existing British spellings.
       `research: rendering`
 
-## Open, for the GM
-
-- [ ] **T51** `settlement-review` argues the presumption of accuracy should extend to the DEVIATION and
-      GUESS leads too. They currently open with the provenance half before the liberty - *"This is a
-      guess - The firewood SHED is read (Boso-no-Mura); where the open STACK stood ... is a guess"* -
-      and "X is read" is the paraphrase FR-001 bars from the page, now surviving on exactly the modals
-      a reader is likeliest to open. The machinery already exists (the caveat is the liberty half); it
-      is simply not populated for announced classes, and nothing would be lost since the note stays in
-      the record and behind the references link.
-      **NOT DONE, deliberately**: the approved spec's FR-002 says those leads are "unchanged, exactly
-      as today", and `spec-fidelity` passed that wording three times against the GM's request. Changing
-      it now would be this session deciding an exception to its own approved spec, which is the one
-      thing Principle XVI forbids. It is a small change and a one-word ruling either way.
-      `research: rendering`
 
 ## From `settlement-review`, round 4 - the second verification pass (2026-08-29)
 
@@ -340,18 +330,36 @@ tier, with fine print addressed to reviewers.
       `FAITHFUL` line to get past the review gate - precisely the shape the tightening rejects. The
       fixtures write a verdict line now; all 43 checks pass. `research: rendering`
 
-## Recorded for the GM, not acted on (round 6)
+## Questions for the GM (not tasks - nothing here is owed by this feature)
 
-- [ ] **T67** The references and the modal chrome are still written in build-team register, and this is
-      a larger editorial pass over feature 134's vocabulary rather than this feature's delta. Measured
-      by the reviewer: seven farmstead fixtures share one research entry and therefore ONE 17-source
-      reference list, so clicking the woodpile returns a Han pigsty latrine, night-soil jars, a cauldron
-      bath and three chicken-coop sources; every `[read]` entry carries its own provenance stamp
-      (`READ 2026-08-27, source-reader`, `SUMMARY-ONLY - HTTP 403 on one attempt`, `a second page
-      returned mojibake`); one entry carries a spec-kit task number (`uekipedia-kaki`, "(T57)"); one
-      exists only to warn future sessions off a source (`kokudaka-en`, "what it does NOT establish ...
-      Recorded so a later pass does not reach for it"); two classes advertise "the research entry
-      records no citation yet"; six caveats disclose nothing actionable ("the bed's size and row count
-      are drawing conventions"); three crop modals share a verbatim-identical `why`; the threshing yard
-      gives four unreconciled size figures and none in feet; and nothing on the page hints it is
-      clickable at all. `research: rendering`
+Both are recorded so they are not lost, and neither is a checkbox: an open task refuses a push, and
+these are rulings rather than work.
+
+**Q1 - should the presumption of accuracy extend to the DEVIATION and GUESS leads?** They open with
+the provenance half before the liberty - *"This is a guess - The firewood SHED is read (Boso-no-Mura);
+where the open STACK stood ... is a guess"*. `settlement-review` argues, twice, that "X is read" is
+exactly the paraphrase FR-001 bars from the page and it now survives on the modals a reader opens
+most; it also notes the shorthand source names in those leads go unglossed, so a player reading about
+a Rokugani well meets "the Sphere/UNICEF figures". The machinery exists - the caveat is the liberty
+half - and is simply not populated for announced classes. NOT DONE because the approved spec's FR-002
+says those leads are "unchanged, exactly as today" and `spec-fidelity` passed that wording three
+times against the GM's own request; changing it is this session carving an exception into its own
+approved spec, which Principle XVI forbids. One word settles it either way.
+
+**Q2 - should a town's population become the county figure?** The GM's ruling is that it *"includes
+the nearby farmers who are counted as being part of the town, Not all of which are depicted on the
+map"* - Ubame's ~1,200, not the ~590 it declares. Every town in the pool declares the depicted slice
+and `settlements.md` has said so since before this feature, so the card states the smaller true thing
+and names the larger as not yet given. Implementing the ruling needs the town gens to re-declare
+`population` and `population_consistent_with_housing` to stop keying off it at town scale - the
+towns-and-cities work the GM deferred this to.
+
+**Q3 - the references and the modal chrome.** Not this feature's delta but measured while reviewing
+it, and the largest remaining gap between what the page is and what it is for: seven farmstead
+fixtures share one research entry and therefore ONE 17-source reference list, so clicking the woodpile
+returns a Han pigsty latrine and three chicken-coop sources; every entry carries its own provenance
+stamp (`READ 2026-08-27, source-reader`, `SUMMARY-ONLY - HTTP 403 on one attempt`); one carries a
+spec-kit task number and one exists only to warn future sessions off a source; two classes advertise
+"the research entry records no citation yet"; three crop modals share a verbatim-identical `why`; and
+nothing on the page hints it is clickable at all. An editorial pass over feature 134's vocabulary,
+worth commissioning as its own feature rather than smuggling into this one.
