@@ -1,0 +1,6 @@
+{
+  "utc": "20260829T172844Z",
+  "guard": "pair-hooks",
+  "what": "gate alone",
+  "reason": "five settlement-review rounds have run on this delta; round 5 (2026-08-29) verified all six of round 4"
+}

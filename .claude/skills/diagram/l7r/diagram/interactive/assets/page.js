@@ -77,9 +77,27 @@
     if (!d) return;
     if (refsDialog.open) refsDialog.close();
     setText("x-name", cap(d.name));
-    fillText(document.getElementById("x-label"), "This is " + d.label_phrase + (d.label_note ? " - " + d.label_note : "."));
+    // THE PRESUMPTION OF ACCURACY (feature 156, GM 2026-08-29). `lead` is empty for everything the
+    // record calls accurate, so the modal opens with what the feature IS; a deviation or a guess
+    // still leads with its liberty, because that is the case worth a reader's attention. The
+    // caveat - the liberty an accurate class's own record discloses - goes AFTER the why.
+    var label = document.getElementById("x-label");
+    fillText(label, d.lead);
+    label.hidden = !d.lead;
     fillText(document.getElementById("x-what"), d.what);
     fillText(document.getElementById("x-why"), d.why);
+    // WHAT IS TRUE OF THIS MAP ONLY (feature 156): authored in the settlement's own .notes.md and
+    // headed so it cannot be read as a general fact about the kind. Absent on nearly every class of
+    // nearly every map, and then the section is not there at all.
+    var onmap = document.getElementById("x-onmap");
+    fillText(onmap, d.on_this_map || "");
+    onmap.hidden = !d.on_this_map;
+    // VERBATIM - the lead-in is part of the string now (page.py CAVEAT_LEAD, place.py BASIS_LEAD).
+    // A renderer that prepended "On the drawing:" to every caveat also prepended it to the place
+    // card's basis, which is about where the card's claims come from and not about the drawing.
+    var caveat = document.getElementById("x-caveat");
+    fillText(caveat, d.caveat || "");
+    caveat.hidden = !d.caveat;
     // SIBLINGS ARE LINKS (GM 2026-08-28): "Not to be confused with the X" - hovering X lights X on
     // the map (the pinned highlight yields while the pointer is on the link), clicking X opens X's
     // modal in place of this one. Each modal's own text stays its own.

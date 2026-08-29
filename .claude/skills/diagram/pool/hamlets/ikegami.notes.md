@@ -9,6 +9,32 @@ established the to-scale hamlet tier.
 1 ft/px, and the map the tier's rules were settled against. Moritono is the atypical legacy sibling
 that deliberately keeps the old path.
 
+## Map notes
+
+<!-- READ BY THE INTERACTIVE MAP (`l7r/diagram/interactive/notes.py`, feature 156): these bullets
+     appear on the page's title card and in feature modals. Everything is optional and the reader is
+     forgiving by design (GM 2026-08-29: "we should not presume that such sections exist ... should
+     default to simply not pulling anything in if the parsing fails") - a missing, misspelled or
+     half-written block simply contributes nothing. The key list and the format are documented in
+     `l7r/diagram/interactive/CLAUDE.md`. Every other word in this file is prose and is never parsed. -->
+
+### Place
+
+- **district**: Hoshigaoka
+- **district direction**: east
+- **imperial road**: directly south
+- **county**: Hayakawa
+- **town**: Hayakawa
+- **town direction**: further south, beyond the Imperial road
+
+*The district, the road, the county and the town are the GM's own, dictated 2026-08-29. The
+connector track on this sheet runs SOUTH, which is where they put the Imperial road; Hoshigaoka
+lies east of that road.*
+
+### Features
+
+- **village lane**: The connector track runs SOUTH, to the Imperial road; Hoshigaoka, the district's main village, lies east of that road.
+
 ## What makes it a hamlet, not a village
 
 A hamlet is a small outlying community belonging to a village district, and the absences are the

@@ -105,7 +105,7 @@ class Page:
 
     def dialog(self) -> dict[str, Any]:
         return self.js(
-            "() => { const d = document.getElementById('explain'); return { open: d.open, k: d.getAttribute('data-k'), label: d.getAttribute('data-label'), name: document.getElementById('x-name').textContent, labeltext: document.getElementById('x-label').textContent, siblings: document.getElementById('x-siblings').textContent, sources: document.getElementById('x-refs').textContent }; }"
+            "() => { const d = document.getElementById('explain'); return { open: d.open, k: d.getAttribute('data-k'), label: d.getAttribute('data-label'), name: document.getElementById('x-name').textContent, labeltext: document.getElementById('x-label').textContent, caveat: document.getElementById('x-caveat').textContent, siblings: document.getElementById('x-siblings').textContent, sources: document.getElementById('x-refs').textContent }; }"
         )
 
     def close(self) -> None:
@@ -138,9 +138,17 @@ def _mechanics(page: Page, present: list[str]) -> None:
         # the test reads the registry the page reads. The KEY is still pinned separately, above,
         # because that is what the ink carries and what `all_ink_is_ruled_on` reads.
         assert d["open"] and d["k"] == key and d["name"].lower() == CLASSES[key].name.lower()
-        assert d["label"] == CLASSES[key].label
-        assert CLASSES[key].label_note[:30] in d["labeltext"]
-        assert any(w in d["labeltext"] for w in ("historically accurate", "deliberate deviation", "a guess"))
+        assert d["label"] == CLASSES[key].label, "the classification still reaches the page (constitution XII)"
+        # THE PRESUMPTION OF ACCURACY (feature 156): an accurate class says nothing about accuracy at
+        # all - the lead line is empty and hidden - while a deviation or a guess still opens with its
+        # liberty. The caveat, where the record discloses one, sits below the why instead.
+        if CLASSES[key].label == "accurate":
+            assert d["labeltext"] == "", f"{key}: an accurate class announced itself"
+        else:
+            assert CLASSES[key].label_note[:30] in d["labeltext"]
+            assert any(w in d["labeltext"] for w in ("deliberate deviation", "a guess"))
+        assert "historically accurate" not in d["labeltext"]
+        assert (CLASSES[key].caveat[:30] in d["caveat"]) if CLASSES[key].caveat else (d["caveat"] == "")
         for other in CLASSES[key].siblings:
             assert (("the " + CLASSES[other].name) in d["siblings"]) == (other in present), (key, other)
         page.page.keyboard.press("Escape")
@@ -392,8 +400,8 @@ def test_a_sibling_link_lights_the_other_class_on_hover_and_replaces_the_modal_o
     """GM 2026-08-28: "Not to be confused with the X" - hover lights X, click opens X's modal in place."""
     synthetic.js("() => window.l7rMap.fit()")
     x, y = synthetic.center("windbreak", 0)
-    # CLICK THE ELEMENT, not its bounding-box centre (feature 146): a windbreak group is a scatter of clumps
-    # and its bbox centre can fall on bare ground between them, which is why this flaked under a loaded run.
+    # CLICK THE ELEMENT, not its bounding-box center (feature 146): a windbreak group is a scatter of clumps
+    # and its bbox center can fall on bare ground between them, which is why this flaked under a loaded run.
     synthetic.page.locator('g.f[data-k="windbreak"]').first.click(force=True)
     synthetic.page.wait_for_timeout(50)
     assert synthetic.dialog()["k"] == "windbreak" and synthetic.settles({"windbreak": 1}, synthetic.on) == {"windbreak": 1}

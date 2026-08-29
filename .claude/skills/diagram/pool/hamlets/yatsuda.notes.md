@@ -9,6 +9,24 @@ floor** - `field_archetype="ribbon_valley"`, `terrain="narrow_valley"`, drawn by
 room for either an organic fan or a surveyed grid - the cultivable land is the valley floor itself,
 so the field takes the valley's shape and the settlement takes what dry flank is left.
 
+## Map notes
+
+<!-- READ BY THE INTERACTIVE MAP (`l7r/diagram/interactive/notes.py`, feature 156): these bullets
+     appear on the page's title card and in feature modals. Everything is optional and the reader is
+     forgiving by design (GM 2026-08-29: "we should not presume that such sections exist ... should
+     default to simply not pulling anything in if the parsing fails") - a missing, misspelled or
+     half-written block simply contributes nothing. The key list and the format are documented in
+     `l7r/diagram/interactive/CLAUDE.md`. Every other word in this file is prose and is never parsed. -->
+
+### Place
+
+- **district**: Kayano
+- **district direction**: south
+
+*Kayano (萱野, "reed plain" - kaya is the silvergrass that thatches a roof) is INVENTED for this map - drawn from gm-assistant's
+`place-names/pool.jsonl`, which carries its kanji and meaning, and not ruled on by the GM. The
+DIRECTION is not invented: it is the way this map's land falls (`meta.down_deg`), the wider ground a district's main village sits on.*
+
 ## Correction recorded 2026-08-08
 
 The gen's docstring **described a polder** - a rectilinear block inside a perimeter dike, water in at
@@ -32,3 +50,10 @@ on a village sheet.
 - **No `notes.md` existed for this map until 2026-08-08**, so anything settled between its authoring
   and that date lives only in gen comments and may not be recorded here. Treat gaps as unrecorded
   rather than as decided.
+
+*It was Takadani (高谷, "high valley") until settlement-review swept the pool for the defect that
+renamed Kashikawa's district on the same day: this land falls SOUTH, so a district recorded to the
+south is downhill, and a "high valley" is the one thing it cannot be. Kayano claims no elevation at
+all. The rest of the pool was checked against the same standard and is clean - Yamashita ("below the
+mountain") and Yamaguchi-mura ("mountain mouth") are both correctly downhill, Shimoda ("lower paddy")
+matches Sawada's north-west fall, and the remaining six names make no elevation claim.*

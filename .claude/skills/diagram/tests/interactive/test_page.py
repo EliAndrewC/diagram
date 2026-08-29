@@ -14,9 +14,11 @@ import re
 
 import pytest
 
-from l7r.diagram.interactive.classes import CLASSES, NOT_HIGHLIGHTED
+from l7r.diagram.interactive.classes import CLASSES, NOT_HIGHLIGHTED, PLACE
 from l7r.diagram.interactive.glossary import GLOSSARY
+from l7r.diagram.interactive.notes import EMPTY, MapNotes
 from l7r.diagram.interactive.page import (
+    CAVEAT_LEAD,
     explanations,
     glossary_for,
     hit_copies,
@@ -112,7 +114,14 @@ def test_explanations_hold_only_present_classes_and_present_siblings() -> None:
     assert set(data) == {"windbreak", "copse", "farmhouse"}
     assert data["windbreak"]["siblings"] == ["copse"], "woodland commons is absent from this map, so it is not claimed; siblings are link keys now"
     assert data["farmhouse"]["siblings"] == [], "storage shed and byre are absent"
-    assert data["windbreak"]["label_phrase"] == "historically accurate"
+    # the presumption of accuracy (feature 156): an accurate class announces nothing, and the liberty
+    # its record discloses rides in `caveat` instead, to be shown after the what and the why
+    assert data["windbreak"]["label"] == "accurate", "the classification is still recorded (constitution XII)"
+    assert data["windbreak"]["lead"] == "", "an accurate class leads with what the feature is, not with a claim"
+    # the windbreak is one of the seven whose record discloses no liberty, so it shows no caveat at
+    # all (settlement-review, 2026-08-29); the copse beside it on this map does have one
+    assert data["windbreak"]["caveat"] == "", "the windbreak discloses no liberty - see test_classes"
+    assert data["copse"]["caveat"] == CAVEAT_LEAD + CLASSES["copse"].caveat and CLASSES["copse"].caveat
     assert data["windbreak"]["sources"] == research_sources(CLASSES["windbreak"].entry) and "forests-2020" in data["windbreak"]["sources"]
     assert len(data["windbreak"]["refs"]["forests-2020"]["text"]) > 20
 
@@ -547,6 +556,74 @@ def test_every_keep_clear_key_makes_its_holes() -> None:
     clip, _ = _keep_clear_clip(man)
     assert recs, "the reference dike-pond map records structures"
     assert clip.count("M") == 1 + len(recs) + aprons, f"{len(recs)} records + {aprons} aprons + the canvas"
+
+
+# --- the notes block and the place card reach the page (feature 156) ---
+
+
+def test_an_annotation_reaches_only_the_class_its_notes_name() -> None:
+    notes = MapNotes(place={}, features={"windbreak": "Unusually deep on this map.", "flying castle": "dropped", "pond": "absent from this map"})
+    data = explanations({"windbreak", "copse"}, notes)
+    assert data["windbreak"]["on_this_map"] == "Unusually deep on this map."
+    assert data["copse"]["on_this_map"] == "", "a class the notes do not annotate carries nothing"
+    assert "flying castle" not in data, "a key the registry does not know is dropped, silently"
+    assert "pond" not in data, "a class absent from this map is dropped, silently"
+
+
+def test_with_no_notes_no_class_claims_anything_local() -> None:
+    data = explanations({"windbreak", "copse"})
+    assert all(d["on_this_map"] == "" for d in data.values())
+
+
+def _render(tags: list, meta: dict, notes: MapNotes = EMPTY) -> dict:
+    strings = ['<svg viewBox="0 0 9 9">'] + [RECT] * len(tags) + ["</svg>"]
+    page = render_page(strings, ["-", *tags, None], "Inashiro", meta, {"houses": [{}] * 15}, notes)
+    return json.loads(re.search(r'<script id="classes" type="application/json">(.*?)</script>', page, re.S).group(1).replace("<\\/", "</"))["classes"]
+
+
+def test_the_placard_opens_the_place_card() -> None:
+    notes = MapNotes(place={"district": "Hoshigaoka", "district direction": "east"}, features={})
+    data = _render([PLACE, "paddy", "village lane"], {"scale": "hamlet", "name": "Inashiro", "households": 15}, notes)
+    card = data[PLACE]
+    assert card["name"] == "Inashiro" and "is a hamlet of 15 farmhouses, population ~75" in card["what"]
+    assert "village district of Hoshigaoka, which lies east" in card["why"]
+    assert card["lead"] == "" and card["caveat"], "no accuracy claim; the basis is stated (FR-001, FR-008a)"
+
+
+def test_the_lane_default_names_the_village_the_notes_name() -> None:
+    notes = MapNotes(place={"district": "Hoshigaoka", "district direction": "east"}, features={})
+    data = _render([PLACE, "village lane"], {"scale": "hamlet", "name": "Inashiro", "households": 15}, notes)
+    assert (
+        data["village lane"]["on_this_map"]
+        == "The connector track leads out of the hamlet toward Hoshigaoka, the main village of the district it belongs to; the lanes between the farmsteads feed it."
+    )
+
+
+def test_an_authored_lane_annotation_beats_the_default() -> None:
+    notes = MapNotes(place={"district": "Hoshigaoka"}, features={"village lane": "This one climbs the spur first."})
+    data = _render([PLACE, "village lane"], {"scale": "hamlet", "name": "Inashiro", "households": 15}, notes)
+    assert data["village lane"]["on_this_map"] == "This one climbs the spur first."
+
+
+def test_a_tier_the_vocabulary_does_not_describe_gets_no_card() -> None:
+    data = _render([PLACE, "paddy"], {"scale": "megalopolis", "name": "Nowhere"})
+    assert PLACE not in data, "the placard simply has nothing to open, exactly as before"
+
+
+def test_the_reserved_place_key_is_never_reported_as_unruled() -> None:
+    assert unregistered_classes({PLACE: 3, "paddy": 1}) == []
+    assert unregistered_classes({"flying castle": 1}) == ["flying castle"]
+
+
+def test_no_rendered_page_tells_a_reader_a_feature_is_historically_accurate() -> None:
+    """Spec SC-001, at the page level: the phrase and its paraphrases are gone from what is rendered."""
+    page = _page()
+    assert "historically accurate" not in page
+    data = json.loads(re.search(r'<script id="classes" type="application/json">(.*?)</script>', page, re.S).group(1).replace("<\\/", "</"))["classes"]
+    for key, d in data.items():
+        if d["label"] == "accurate":
+            assert d["lead"] == "", key
+            assert not re.search(r"\bare read\b|\bis read\b|\bat its true\b|\btrue size\b", d["caveat"]), key
 
 
 def test_an_element_with_no_extent_is_treated_as_touching_everything() -> None:

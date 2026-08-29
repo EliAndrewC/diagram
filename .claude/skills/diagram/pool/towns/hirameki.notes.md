@@ -32,6 +32,16 @@ its exceptions.
 | Scale | 1 px = 1 ft | the scale-ladder pass: the old `bscale` 0.82 grain implied ~1.3 ft/px and made this the one town out of step with the others. The rampart is the SAME real wall, redrawn - the ring is the pre-rescale ring scaled ~1.22x about the hill anchor |
 | Population | 780 depicted (156 dwellings x5) | urban housing full, most farms off-map: a slice of the ~1,200 county |
 
+**Correction, 2026-08-29 (settlement-review, feature 156).** The `156 dwellings` above is computed
+from a dwelling-kind list that had gone stale: the engine's own `DWELLING_KINDS` counts **166** on
+this map (87 urban dwellings + 79 farmhouses), because the three `_large` variants, `merchant_house`
+and `monk_house` were missing from the list `settlements.md` used to spell out. 166 x 5 = 830 against the declared
+780 - a 6.4% gap that passes only because `population_tol` defaults to 7%, and the only town in the
+pool where the declared figure is not exactly the drawn households x 5 (Ubame and Hoshizora are
+exact). Recorded rather than re-declared: which figure a town SHOULD state is the open question the
+GM deferred to the towns-and-cities work (`settlements.md`, the OWED note), and changing it here
+would pre-empt that ruling on one map.
+
 ## Water: five combs, each with a real source and a real sink
 
 Every field is a `build_comb` fan, and the interesting part is how each one is fed and drained:

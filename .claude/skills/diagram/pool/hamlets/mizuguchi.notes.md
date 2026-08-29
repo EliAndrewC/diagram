@@ -85,6 +85,24 @@ head-race) - a pipeline note, logged in `future-work/`.
   verified pond containment, old-site healing and 0 scatter violations; the rim kisses its bund
   at 0.65 px (nitpick, physically fine - dug up to the bund).
 
+## Map notes
+
+<!-- READ BY THE INTERACTIVE MAP (`l7r/diagram/interactive/notes.py`, feature 156): these bullets
+     appear on the page's title card and in feature modals. Everything is optional and the reader is
+     forgiving by design (GM 2026-08-29: "we should not presume that such sections exist ... should
+     default to simply not pulling anything in if the parsing fails") - a missing, misspelled or
+     half-written block simply contributes nothing. The key list and the format are documented in
+     `l7r/diagram/interactive/CLAUDE.md`. Every other word in this file is prose and is never parsed. -->
+
+### Place
+
+- **district**: Kawabe
+- **district direction**: west
+
+*Kawabe (川辺, "riverside, by the river") is INVENTED for this map - drawn from gm-assistant's
+`place-names/pool.jsonl`, which carries its kanji and meaning, and not ruled on by the GM. The
+DIRECTION is not invented: it is the bearing of this map's own connector track where it leaves the cluster.*
+
 ## 2026-08-17 - re-packed twice: feature 121, then the front-row cap
 
 **Read this entry, not an earlier draft of it.** A first version was written after the feature-121

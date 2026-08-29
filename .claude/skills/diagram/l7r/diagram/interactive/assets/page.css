@@ -47,6 +47,14 @@ g.f.on.planted:not([fill="none"]), g.f.on.planted *:not([fill="none"]) { fill: v
 dialog { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); margin: 0; z-index: 10; max-width: 42rem; max-height: 90vh; overflow: auto; border: 2px solid var(--rule); border-radius: 8px; background: var(--card); color: var(--ink); padding: 1rem 1.4rem; font-family: inherit; }
 dialog h2 { margin: 0 0 0.2rem; font-size: 1.3rem; }
 dialog .label { font-style: italic; color: var(--muted); margin: 0 0 0.8rem; }
+dialog .label[hidden] { display: none; }  /* an accurate class announces nothing (feature 156) */
+/* The caveat: the liberty an accurate class's own record discloses, set quieter than the
+   explanation and BELOW it - it qualifies the drawing, it does not introduce the feature. */
+dialog .caveat { font-size: 0.9rem; color: var(--muted); border-left: 2px solid var(--rule); padding-left: 0.7rem; }
+/* "On this map": a fact authored for THIS settlement in its own notes file, headed so it cannot be
+   mistaken for something true of the kind everywhere (feature 156). */
+dialog .onmap::before { content: "On this map: "; font-variant: small-caps; letter-spacing: 0.03em; color: var(--muted); }
+dialog .onmap { background: rgba(140, 122, 85, 0.10); border-radius: 5px; padding: 0.5rem 0.7rem; }
 dialog section { margin: 0 0 0.7rem; line-height: 1.45; }
 dialog section p { margin: 0 0 0.5rem; }
 dialog footer { font-size: 0.85rem; color: var(--muted); border-top: 1px solid #BCAA7E; padding-top: 0.5rem; }

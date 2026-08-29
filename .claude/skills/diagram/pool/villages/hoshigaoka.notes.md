@@ -19,6 +19,27 @@ yards, kitchen gardens, shared draft-animal byres and communal wells; the fengsh
 the earth-god shrine (with its own ablution well) at the water-mouth and the back-slope graveyard;
 the lanes, connector track and plank footbridges across the ditches.
 
+## Map notes
+
+<!-- READ BY THE INTERACTIVE MAP (`l7r/diagram/interactive/notes.py`, feature 156): these bullets
+     appear on the page's title card and in feature modals. Everything is optional and the reader is
+     forgiving by design (GM 2026-08-29: "we should not presume that such sections exist ... should
+     default to simply not pulling anything in if the parsing fails") - a missing, misspelled or
+     half-written block simply contributes nothing. The key list and the format are documented in
+     `l7r/diagram/interactive/CLAUDE.md`. Every other word in this file is prose and is never parsed. -->
+
+### Place
+
+- **imperial road**: directly south
+- **county**: Hayakawa
+- **town**: Hayakawa
+- **town direction**: further south, beyond the Imperial road
+
+*No **district** key: a village IS its district and the two names are always the same, so the page
+never states it (GM 2026-08-29). The county is what a village page says instead. The county, the road
+and the town are the GM's own, dictated 2026-08-29. A district takes its
+main village's name (`l7r.md`, "Place Names"), so Hoshigaoka names both.*
+
 ## GM decisions (settled)
 
 | Decision | Value |

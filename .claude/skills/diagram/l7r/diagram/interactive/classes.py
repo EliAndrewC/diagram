@@ -30,14 +30,39 @@ from typing import Literal
 
 Label = Literal["accurate", "deviation", "guess"]
 
+#: The labels the PAGE announces. `accurate` is not among them, and that is the whole of feature 156's
+#: first change (GM 2026-08-29): *"I would like to not explicitly say that things are historically
+#: accurate when they are because I want the presumption to be that things are always historically
+#: accurate unless stated otherwise. In other words, we should call out liberties that we have taken."*
+#: A claim made about nearly every feature on the map carries no information; a liberty does. The
+#: three-way classification itself is UNCHANGED and still recorded on every class (constitution XII) -
+#: only its presentation changed, and it still reaches the page as `data-label`.
+ANNOUNCED: frozenset[Label] = frozenset({"deviation", "guess"})
+
 #: The pseudo-class of ink ruled out of highlighting. Recorded, never wrapped, never reported.
 NOT_HIGHLIGHTED = "-"
+
+#: The reserved pseudo-class of the TITLE PLACARD (feature 156). Not a row of `CLASSES` - it is not a
+#: kind of feature and has no research entry of its own - but a key the census and the page both know,
+#: so the placard is highlightable, clickable, and never reported as ink nobody ruled on. Its modal is
+#: built per map by `place.py` from the manifest, the setting's canon and the map's own notes file.
+PLACE = "place"
 
 #: Each ruling that put a kind of ink on the not-highlighted list: (what, who, when, why).
 NOT_HIGHLIGHTED_RULINGS: tuple[tuple[str, str, str, str], ...] = (
     ("the background sheet", "the spec (FR-002)", "2026-08-27", "not a feature of the place"),
-    ("the title placard and its text", "the spec (FR-002)", "2026-08-27", "map furniture, not a feature"),
     ("the scale bar and its captions", "the spec (FR-002)", "2026-08-27", "map furniture, not a feature"),
+)
+
+#: A ruling that was OVERTURNED, kept beside the list rather than deleted from it - the record should
+#: show that a decision was made and then remade, not quietly lose one: (what, who, when, why).
+NOT_HIGHLIGHTED_OVERTURNED: tuple[tuple[str, str, str, str], ...] = (
+    (
+        "the title placard and its text",
+        "the GM",
+        "2026-08-29",
+        'ruled map furniture on 2026-08-27 (feature 134 FR-002) and overturned by the GM in feature 156: "I would like to be able to click on the title card for a settlement and then pull up an explanation of the type of settlement that this is." The placard now carries the reserved class `place`; the scale bar beside it keeps its ruling, having nothing to say.',
+    ),
 )
 
 
@@ -54,6 +79,15 @@ class FeatureClass:
     label_note: str  # the one line that justifies the label (a deviation says what deviates; a guess says what is silent)
     sources: tuple[str, ...]  # `research/SOURCES.md` keys, or ("not recorded",)
     entry: str  # the research/ entry (file + heading) the text was written FROM
+    # THE LIBERTY HALF of `label_note`, and only that (feature 156, GM 2026-08-29). An `accurate`
+    # class's note usually says two things at once - which parts are READ, and which parts are a
+    # drawing convention, a derived number or a sub-guess. The first half is the accuracy claim in
+    # other words and the page no longer prints it; the second is exactly what the GM asked to have
+    # called out, so it survives, shown AFTER the what and the why instead of ahead of them. Always a
+    # verbatim substring of `label_note` (a registry test proves it, so the two cannot drift), and
+    # empty both for a class whose note discloses no liberty at all and for every `deviation` or
+    # `guess`, whose lead sentence already carries theirs.
+    caveat: str = ""
     siblings: dict[str, str] = field(default_factory=dict)  # sibling key -> how THIS class differs from it
 
 
@@ -67,6 +101,17 @@ _LABEL_WORDS: dict[Label, str] = {
 def label_phrase(label: Label) -> str:
     """The words the modal uses for a label - constitution XII's three, in the GM's own phrasing."""
     return _LABEL_WORDS[label]
+
+
+def lead_sentence(label: Label, note: str) -> str:
+    """The sentence a modal OPENS with, or "" when there is nothing to announce.
+
+    Only a liberty is announced (`ANNOUNCED`). An `accurate` class returns "" and its modal leads
+    with what the feature IS - the presumption of accuracy the GM asked for, which is enforced HERE,
+    at the one place the sentence is built, rather than by asking every caller to remember it."""
+    if label not in ANNOUNCED:
+        return ""
+    return "This is " + _LABEL_WORDS[label] + (" - " + note if note else ".")
 
 
 def _c(**kw: object) -> FeatureClass:
@@ -231,9 +276,10 @@ _DEFS: tuple[FeatureClass, ...] = (
         name="farmhouse",
         covers="`houses` - the dwelling of each household",
         what="The dwelling of one farming household: a thatched minka, its ridge on the long axis, standing on the slightly raised ground the homesteads share, its work yard and garden beside it and, where a farm stands alone, its own yashikirin sheltering it.",
-        why="A house in a nucleated hamlet is reached by a lane and stands close to the paddy - up against it, but never on the bund. The farmhouses are placed first, before any lane inside the settlement: the lanes between farmsteads are trodden by the households already living there.",
+        why="A house in a nucleated hamlet is reached by a lane and stands close to the paddy - up against it, but never on the bund. The lanes between farmsteads are trodden by the households already living there.",
         label="accurate",
-        label_note="Placement and form follow the read record; the setback from the paddy is DERIVED (no source states it in feet) and is a drawing convention inside read bounds.",
+        label_note="Placement and form follow the read record; the setback from the paddy is DERIVED - no source states it in feet - so it is set at the near end of what the read bounds allow, close enough that the household works its own ground.",
+        caveat="the setback from the paddy is DERIVED - no source states it in feet - so it is set at the near end of what the read bounds allow, close enough that the household works its own ground.",
         sources=("sugiura-1973-fuzoku",),
         entry="research/homesteads.md - 'What stood on a farmstead', 'How close does a farmhouse stand to the paddy', 'Is every farmhouse reached by a lane'",
     ),
@@ -244,7 +290,8 @@ _DEFS: tuple[FeatureClass, ...] = (
         what="A roofed outbuilding for storage - grain, straw, tools, fuel. Some stand as a lean-to against the farmhouse, some free in the yard; storage either way.",
         why="A July 1972 survey of 87 households in three Miyagi hamlets counted 4.4 outbuildings per household - firewood shed, straw shed, barn, work shed, storehouse - so a farmstead with only its house would be the anomaly. The count drawn here is a band below that snow-country figure, because the temperate lowland hamlet this map draws kept fewer.",
         label="accurate",
-        label_note="Presence and prevalence read (Sugiura 1973); the drawn count per household is calibrated below the source's Tohoku figure, as the entry itself advises.",
+        label_note="Presence and prevalence read (Sugiura 1973); the drawn count per household is deliberately set below the source's Tohoku figure, which is a colder and better-stocked district than this one.",
+        caveat="the drawn count per household is deliberately set below the source's Tohoku figure, which is a colder and better-stocked district than this one.",
         sources=("sugiura-1973-fuzoku",),
         entry="research/homesteads.md - 'What stood on a farmstead - the inventory, with numbers'",
     ),
@@ -256,6 +303,7 @@ _DEFS: tuple[FeatureClass, ...] = (
         why="Most farmsteads kept a draft animal or two, and the vernacular put the animal far closer to the house and the well than a European barn would. Where a byre is shared it stands in a courtyard between the homesteads it serves.",
         label="accurate",
         label_note="The separate byre is the temperate reading of the record; the attached stable wing (magariya) is a cold-country form and is deliberately not drawn.",
+        caveat="the attached stable wing (magariya) is a cold-country form and is deliberately not drawn.",
         sources=("cambridge-animals-china",),
         entry="research/homesteads.md - 'May a byre stand beside a wellhead?', 'What stood on a farmstead'",
     ),
@@ -267,6 +315,7 @@ _DEFS: tuple[FeatureClass, ...] = (
         why="Threshing and drying were done per household, in the yard, and the yard needs sun: a thatched roof pitched at 45 degrees puts a minka's ridge at 20-22 feet, so no yard is placed in the shadow band south of a neighbor's wall. Its SIZE follows the crop the household must dry, which is why every yard on this map is different: each is rolled from a right-skewed spread about 18 tsubo (59.5 sq m), correlated with the household - a large farm overwhelmingly has a large yard, and the occasional mismatch is a fact about that farmstead.",
         label="accurate",
         label_note="The size band and the spread's shape are read - Kitamoto's mat counts, and the lognormal that fits Kamikanai's 1771 house histogram; the wet-rice CENTER is interpolated from the crop (rice is field-dried on racks first, so a paddy household needs less floor than the barley district the mat counts come from), and the sun corridor is derived from the read roof pitch.",
+        caveat="the wet-rice CENTER is interpolated from the crop (rice is field-dried on racks first, so a paddy household needs less floor than the barley district the mat counts come from), and the sun corridor is derived from the read roof pitch.",
         sources=("not recorded",),
         entry="research/homesteads.md - 'How big was the work yard, and how did the sizes spread'; 'The threshing yard's sun, and how far a farmhouse shades'",
     ),
@@ -277,7 +326,8 @@ _DEFS: tuple[FeatureClass, ...] = (
         what="The household's kitchen garden: a tilled bed in planted rows of greens, beside the house.",
         why="A dooryard garden fed the household and, like the yard, wants light - beds are kept out of a neighbor's shadow to the south and clear of the windbreak's afternoon shade to the west.",
         label="accurate",
-        label_note="Presence and the sun rule are read; the bed's size and row count are drawing conventions.",
+        label_note="Presence and the sun rule are read; the record fixes the bed's AREA but not its shape, so the proportions and the row count are drawn to read as a worked kitchen bed at this scale.",
+        caveat="the record fixes the bed's AREA but not its shape, so the proportions and the row count are drawn to read as a worked kitchen bed at this scale.",
         sources=("not recorded",),
         entry="research/homesteads.md - 'The garden's sun, and how far the windbreak shades'; 'The threshing yard's sun, and how far a farmhouse shades' (the garden rule is derived from it)",
     ),
@@ -289,6 +339,7 @@ _DEFS: tuple[FeatureClass, ...] = (
         why="Near-universal: the Nipponica entry calls the detached privy the norm, and the 1972 survey counted one on 87 of 100 households. Its seat is rolled from three attested positions - by the back door, at the gate, or by the shed.",
         label="accurate",
         label_note="Presence and the three seats are read (kotobank, sinyoken); the 6 x 6 ft footprint is a GUESS - the one sizing page is dead.",
+        caveat="the 6 x 6 ft footprint is a GUESS - the one sizing page is dead.",
         sources=("kotobank-benjo", "sinyoken-madori", "sugiura-1973-fuzoku"),
         entry="research/homesteads.md - 'The farmstead's fixtures'",
     ),
@@ -330,7 +381,7 @@ _DEFS: tuple[FeatureClass, ...] = (
         name="hen coop",
         covers="`farm_fixtures[kind=coop]`",
         what="A small square roost for a few chickens, on the flank of the yard.",
-        why="Farmers in most regions of China kept a pig and some chickens in the yard along with a draft animal; the Qimin Yaoshu says to build the roost as a ground enclosure with a perch, because birds left to the trees sicken. The GM chose the Chinese reading over Japan's, where chickens before Meiji were timekeepers and coops rare.",
+        why="Farmers kept a pig and some chickens in the yard along with a draft animal; the Qimin Yaoshu says to build the roost as a ground enclosure with a perch, because birds left to the trees sicken.",
         label="guess",
         label_note="The coop's existence and ground form are read (Cambridge, the Qimin Yaoshu, the Zhengzhou coop); the household proportion, the 5 x 5 ft size and the seat are guesses bounded by 'most regions'.",
         sources=("cambridge-animals-china", "qimin-yaoshu-yangji", "pitt-zhengzhou-coop"),
@@ -343,7 +394,7 @@ _DEFS: tuple[FeatureClass, ...] = (
         what="A household's own small shrine - a stone or wooden hokora in a corner of the plot, drawn vermilion with a torii before its door.",
         why="In some regions every house had one, in others only certain old families; the GM ruled for the old-families pattern here - rare, and notable when it appears - so the count is capped at about three households in a hundred. It stands in the plot's northwest, northeast or southwest corner, all three attested.",
         label="deviation",
-        label_note="Presence, rarity and corner are read; the glyph is drawn at 6 x 6 ft against a measured stone shrine of about 1.3 ft - a deliberate deviation for legibility, ruled by the GM, like the oversized well.",
+        label_note="Presence, rarity and corner are read; the glyph is drawn at 6 x 6 ft against a measured stone shrine of about 1.3 ft - a deliberate deviation for legibility.",
         sources=("tokushima-yashikigami", "jawiki-yashikigami", "kameyama-yashikigami", "sugiura-1973-fuzoku"),
         entry="research/homesteads.md - 'The farmstead's fixtures'",
     ),
@@ -401,7 +452,8 @@ _DEFS: tuple[FeatureClass, ...] = (
         what="A stand of fruit-tree and broadleaf greenery in the open ground among the houses - shade and fruit, not shelter.",
         why="The leafy greenery scattered through the gaps of a nucleated cluster is the third of the village's grove roles, after the back belt and the water-mouth grove; it threads between the dwellings and never stands on a roof, a yard or a crop.",
         label="accurate",
-        label_note="The role is attested with the fengshui-grove system; its extent on any one map is a drawing decision.",
+        label_note="The role is attested with the fengshui-grove system; how much ground one takes is nowhere given, so the copse is drawn to the gap it fills between the belt and the houses.",
+        caveat="how much ground one takes is nowhere given, so the copse is drawn to the gap it fills between the belt and the houses.",
         sources=("forests-2020",),
         entry="research/vegetation.md - 'The fengshui forest'; settlements/vegetation.md 'Village windbreak' (the three roles)",
     ),
@@ -410,9 +462,10 @@ _DEFS: tuple[FeatureClass, ...] = (
         name="woodland commons",
         covers="`commons[role=woodland]` - the coppice patches",
         what="A managed coppice wood on the slope above the paddy: spaced crowns with an open canopy, the floor raked clear of leaf litter.",
-        why="The village woods were iriai commons - customary common land held by the village and governed by its own rules on who might cut, when, and how much - coppiced on a 10-30 year cycle for firewood, forage and the leaf litter that fertilized the paddies. A cut wood lets sun reach the floor, so herbs grow there, not brush; the wood sits on the slope break above the fields.",
+        why="The village woods were iriai commons - customary common land held by the village and governed by its own rules on who might cut, when, and how much - coppiced on a 10-30 year cycle for firewood, forage and the leaf litter that fertilized the paddies. A cut wood lets sun reach the floor, so herbs grow there, not brush; the wood sits on the slope break above the fields, one part of the satoyama the community worked as a whole.",
         label="accurate",
         label_note="The commons regime and the raked floor are read (the Yamaguni study, the satoyama entries); a lot's boundary was NOT laid out as a surveyed square, so the patches are irregular.",
+        caveat="a lot's boundary was NOT laid out as a surveyed square, so the patches are irregular.",
         sources=("not recorded",),
         entry="research/vegetation.md - 'How is a coppice lot bounded?', 'Does scrub stand under a village wood?', 'Forest density and crown size'",
     ),
@@ -423,7 +476,8 @@ _DEFS: tuple[FeatureClass, ...] = (
         what="The cut-over fuel and fodder land around the settlement: grass with a few scraggly pines, grazed and cut.",
         why="Everything the paddy and the homesteads do not take is the hamlet's rough ground, and it is worked: scrub stands six feet off every field edge (one scythe swath - land hunger keeps the margin to that), off open water and off the cut banks of the channels.",
         label="accurate",
-        label_note="The margins are read; what the scatter looks like at any one point is a drawing convention.",
+        label_note="The margins are read; nothing describes how the clumps sit within them, so the scatter is drawn to read as rough grazing rather than as any surveyed pattern.",
+        caveat="nothing describes how the clumps sit within them, so the scatter is drawn to read as rough grazing rather than as any surveyed pattern.",
         sources=("not recorded",),
         entry="research/vegetation.md - 'The crop margin', 'Scrub stays off open water', 'The cut bank'",
     ),
@@ -491,6 +545,7 @@ _DEFS: tuple[FeatureClass, ...] = (
         why="Wet-rice villages sort by a topographic catena: the paddy holds the flat valley bottom, dry crops take the higher, well-drained ground the water cannot command - the hem above the paddy and the raised ground the homesteads sit on - and coppice crowns the hills above.",
         label="accurate",
         label_note="Placement on the catena is read; the crop MIX on any one map (how much millet against buckwheat and barley) is rolled from the seed and is a GUESS at the proportions.",
+        caveat="the crop MIX on any one map (how much millet against buckwheat and barley) is rolled from the seed and is a GUESS at the proportions.",
         sources=("not recorded",),
         entry="research/fields.md - 'Where dry (hatake) crops go - the topographic catena', 'Why ruled rows waited for Meiji'",
     ),
@@ -502,6 +557,7 @@ _DEFS: tuple[FeatureClass, ...] = (
         why="Dry crops take the higher, well-drained hem above the paddy, where the water cannot command the ground.",
         label="accurate",
         label_note="Placement on the catena is read; the crop mix per map is rolled from the seed and is a GUESS at the proportions.",
+        caveat="the crop mix per map is rolled from the seed and is a GUESS at the proportions.",
         sources=("not recorded",),
         entry="research/fields.md - 'Where dry (hatake) crops go - the topographic catena'",
     ),
@@ -513,6 +569,7 @@ _DEFS: tuple[FeatureClass, ...] = (
         why="Dry crops take the higher, well-drained hem above the paddy, where the water cannot command the ground.",
         label="accurate",
         label_note="Placement on the catena is read; the crop mix per map is rolled from the seed and is a GUESS at the proportions.",
+        caveat="the crop mix per map is rolled from the seed and is a GUESS at the proportions.",
         sources=("not recorded",),
         entry="research/fields.md - 'Where dry (hatake) crops go - the topographic catena'",
     ),
@@ -524,6 +581,7 @@ _DEFS: tuple[FeatureClass, ...] = (
         why="Dry crops take the higher, well-drained hem above the paddy, where the water cannot command the ground; the bean fixes its own nitrogen, which is why it also went along the bunds.",
         label="accurate",
         label_note="Placement on the catena is read; the crop mix per map is rolled from the seed and is a GUESS at the proportions.",
+        caveat="the crop mix per map is rolled from the seed and is a GUESS at the proportions.",
         sources=("not recorded",),
         entry="research/fields.md - 'Where dry (hatake) crops go - the topographic catena'",
     ),
@@ -578,7 +636,8 @@ _DEFS: tuple[FeatureClass, ...] = (
         what="A small pocket of open water inside one low paddy plot, reed-fringed - a low pocket where the ground pools, or a header pond within the field.",
         why="Flat, flooded valley-bottom paddy is the archetype that hosts non-rice obstacles LEAST - graves and knolls go to the slope, rock outcrops belong to terraces - and a small open-water pond is the one thing that genuinely belongs in the wet middle. It is drawn sunk into a single low plot, never across a bund.",
         label="accurate",
-        label_note="The kind of obstacle a flooded paddy hosts is read (corroborated in both traditions); how often one appears on a map is a calibrated liberty the entry discloses.",
+        label_note="The kind of obstacle a flooded paddy hosts is read (corroborated in both traditions); no source counts how often, so the rate is chosen - often enough that a reader meets the feature, rare enough that it does not litter the field.",
+        caveat="no source counts how often, so the rate is chosen - often enough that a reader meets the feature, rare enough that it does not litter the field.",
         sources=("not recorded",),
         entry="research/fields.md - 'In-field features - flat flooded paddy hosts obstacles least'",
     ),
@@ -589,7 +648,8 @@ _DEFS: tuple[FeatureClass, ...] = (
         what="A cluster of gray boulders inside a field plot - a bedrock outcrop the terrace risers wrap around, too big to clear.",
         why="Rock outcrops are a TERRACE feature, bedrock the risers wrap around, and are absent on alluvial valley, polder and delta ground; where the archetype allows one it stands off-center in its plot so it reads as a natural obstacle.",
         label="accurate",
-        label_note="Which archetypes host an outcrop is read (corroborated); how often one appears is a calibrated liberty the entry discloses.",
+        label_note="Which archetypes host an outcrop is read (corroborated); no source counts how often, so the rate is chosen - often enough that a reader meets the feature, rare enough that it does not litter the field.",
+        caveat="no source counts how often, so the rate is chosen - often enough that a reader meets the feature, rare enough that it does not litter the field.",
         sources=("not recorded",),
         entry="research/fields.md - 'In-field features - flat flooded paddy hosts obstacles least'",
     ),
@@ -604,14 +664,19 @@ _DEFS: tuple[FeatureClass, ...] = (
         sources=("not recorded",),
         entry="research/fields.md - 'In-field features - flat flooded paddy hosts obstacles least' (the CALIBRATED LIBERTY paragraph, GM 2026-07-20)",
     ),
+    # WHY THE CLASS IS A *VILLAGE* LANE AND NOT A HAMLET LANE - the GM, 2026-08-29: "I have been
+    # referring to hamlet lanes as village lanes specifically for this reason because they are presumed
+    # to lead into the main village when not otherwise stated." The rule is in the `why` where a reader
+    # needs it; the naming rationale is project process and stays here (settlement-review, 2026-08-29).
     _c(
         key="village lane",
         name="village lane",
         covers="`lanes` - every lane on the map: the web, the internal skeleton, the connector to the off-map road and the field spur",
-        what="A trodden earth track - packed dirt with soft worn shoulders, a single narrow way, no paving and no center line. Every lane on the map is one feature, connected or not.",
-        why="Every house in a nucleated village is reached by the interconnected lanes and alleys - that is what compactness is for - and the narrow lateral lanes are colonized as semi-private space by the houses beside them, which is why they are narrow and irregular. A lane bends like a line feet wear: as few turns as the plots allow, none sharp, never back on itself. The connector to the off-map road predates the settlement; the lanes between the farmsteads were trodden by the households already living there.",
+        what="A trodden earth track - packed dirt with soft worn shoulders, a single narrow way, no paving and no center line.",
+        why="Every house in a nucleated village is reached by the interconnected lanes and alleys - that is what compactness is for - and the narrow lateral lanes are colonized as semi-private space by the houses beside them, which is why they are narrow and irregular. A lane bends like a line feet wear: as few turns as the plots allow, none sharp, never back on itself. The connector to the off-map road predates the settlement; the lanes between the farmsteads were trodden by the households already living there. And the lane leads somewhere: unless this map's notes say otherwise, a village lane runs to the main village of the district the settlement belongs to.",
         label="accurate",
-        label_note="Access and form are read; the drawn WIDTHS (3, 5 and 6 ft) have no numeric source for an ordinary hamlet lane and stand as drawing conventions inside read bounds - a GUESS at the number.",
+        label_note="Access and form are read; the drawn WIDTHS (3, 5 and 6 ft) are a GUESS - no source gives a figure for an ordinary hamlet lane - set so that a cart fits the through track and only a person fits the ways between the farmsteads.",
+        caveat="the drawn WIDTHS (3, 5 and 6 ft) are a GUESS - no source gives a figure for an ordinary hamlet lane - set so that a cart fits the through track and only a person fits the ways between the farmsteads.",
         sources=("not recorded",),
         entry="research/homesteads.md - 'Is every farmhouse reached by a lane, and in what FORM?', 'How does a village lane bend?'; research/SOURCES.md re-sourcing queue (lane width)",
     ),
@@ -622,7 +687,7 @@ _DEFS: tuple[FeatureClass, ...] = (
         what="A plank laid over a ditch, or a small timber deck where a lane crosses the stream.",
         why="Farmers reach the plots by walking the bunds, and the long laterals cut across that walking; a plank every so often keeps the field passable. Where a way crosses water, one deck - never two at the same point.",
         label="guess",
-        label_note="That ditches were planked is reasoned, not read: the record consulted says nothing about a plank over a two-foot ditch, and the spacing is a drawing convention. A guess, as the spec template's own worked example records.",
+        label_note="That ditches were planked is reasoned, not read: the record consulted says nothing about a plank over a two-foot ditch, so the plank and its spacing are a guess.",
         sources=("not recorded",),
         entry="research/water.md - 'What drawing at TRUE SIZE left open' (channel_footbridges)",
     ),
@@ -633,7 +698,7 @@ _DEFS: tuple[FeatureClass, ...] = (
         what="A communal wellhead: a stone curb and the dark water of the shaft, under a small roof.",
         why="A pre-modern rice village of about seventy households ran one to three communal wells, two typical - drinking water came mostly from surface water, settled and boiled, and a well was expensive durable capital dug by subscription only as surface quality forced. Shared wells outnumbered private ones.",
         label="deviation",
-        label_note="Count and sharing are read (the Sphere/UNICEF figures, jawiki); the wellhead is DRAWN larger than true size so it can be seen at map scale - the project's canonical example of a legibility deviation.",
+        label_note="Count and sharing are read (the Sphere/UNICEF figures, jawiki); the wellhead is DRAWN larger than true size so it can be seen at map scale.",
         sources=("sphere-unicef",),
         entry="research/urban-features.md - 'Wells - the research, and the deliberate liberty', 'Communal wells and the samurai exception'; research/homesteads.md - 'Does a DISPERSED hamlet's outlying farm have its own well?'",
     ),
@@ -657,6 +722,7 @@ _DEFS: tuple[FeatureClass, ...] = (
         why="A dike-pond is dug where the ground was low and flood-prone: the digging drains the hollow and the spoil raises the dike, so the landscape was made cell by cell by the households that farmed it, over centuries. Each pond is fed and drained through a sluice in its dike, plumbed inlet-high and outlet-low, and is drained two or three times a year to dredge the mud onto the dikes. The ponds here are 0.4 to 0.6 hectare oblongs, the size the surveys of the traditional landscape record.",
         label="accurate",
         label_note="The form and the loop are read; the pond SIZES are from 20th-century surveys of the traditional landscape, not Ming or Qing documents, and the whole-block conversion drawn here is the rare end state of a normally scattered system.",
+        caveat="the pond SIZES are from 20th-century surveys of the traditional landscape, not Ming or Qing documents, and the whole-block conversion drawn here is the rare end state of a normally scattered system.",
         sources=("isis-dykepond", "ruddle-zhong-1988", "fao-ac241e", "gmrb-2024-sangji"),
         entry="research/archetypes.md - 'The three overlay values', 'The 6:4 water-to-dike ratio, and coppiced mulberry', 'A dike-pond is fed and drained through sluice gates'",
     ),
@@ -668,6 +734,7 @@ _DEFS: tuple[FeatureClass, ...] = (
         why="The dike is the silk side of the loop: mulberry leaf feeds the silkworms, the silkworm waste feeds the fish, the dredged pond mud re-fertilizes the dike. The prescription was six parts water to four parts dike (three-to-seven to four-to-six in the gazetteers) because too much water starves the worms and too much dike starves the fish. A bare dike of heaped mud gullies and slumps, so every dike was planted; in sericulture districts that planting was mulberry.",
         label="accurate",
         label_note="The ratio, the dike width and the planting are read; the coppice density the crowns are drawn at (one bush per ten to twenty square feet) was not re-found and stays on the re-sourcing queue.",
+        caveat="the coppice density the crowns are drawn at (one bush per ten to twenty square feet) was not re-found and stays on the re-sourcing queue.",
         sources=("gd-gazetteer-sangji", "fao-ac241e", "isis-dykepond", "ruddle-zhong-1988"),
         entry="research/archetypes.md - 'The 6:4 water-to-dike ratio, and coppiced mulberry', 'Why dikes were planted at all'",
     ),
@@ -679,6 +746,7 @@ _DEFS: tuple[FeatureClass, ...] = (
         why="A dike-pond is not a sealed basin: the whole system runs in series from a high intake to a low outfall, each pond taking water in at its high side and letting it out at its low side. The stub drawn here is the cut in the dike; the boards themselves are a few inches wide and are not drawn at this scale.",
         label="accurate",
         label_note="The sluice's form is read from the FAO pond-construction manual; its position on each pond is the engine's inlet-high, outlet-low rule from the record, not a surveyed plan.",
+        caveat="its position on each pond is the engine's inlet-high, outlet-low rule from the record, not a surveyed plan.",
         sources=("fao-x6708e", "cssn-sangyuanwei"),
         entry="research/archetypes.md - 'A dike-pond is fed and drained through sluice gates'",
     ),
@@ -690,6 +758,7 @@ _DEFS: tuple[FeatureClass, ...] = (
         why="The dike-pond types succeeded one another across the delta: mulberry, then fruit, cane and vegetables as markets changed, and by the late 1980s cane dikes covered more of the district than mulberry. One hamlet is one type, so a cane hamlet rolls cane on every dike.",
         label="accurate",
         label_note="The type and the loop are read; the row pitch is a drawing calibration from the plant's habit, not a Ming or Qing figure.",
+        caveat="the row pitch is a drawing calibration from the plant's habit, not a Ming or Qing figure.",
         sources=("gd-gazetteer-sangji", "isis-dykepond", "ruddle-zhong-1988", "dili360-2005-sangji"),
         entry="research/archetypes.md - 'What stands on a dike-pond hamlet that a paddy hamlet lacks - the audit'",
     ),
@@ -701,6 +770,7 @@ _DEFS: tuple[FeatureClass, ...] = (
         why="Banana took the dikes where the silk market fell away; a type of the same system, drawn as a hamlet's whole planting because the types succeeded one another rather than mixing on a dike.",
         label="accurate",
         label_note="The type is read; the clump pitch and crown size are a drawing calibration from the plant's habit, not a surveyed figure.",
+        caveat="the clump pitch and crown size are a drawing calibration from the plant's habit, not a surveyed figure.",
         sources=("gd-gazetteer-sangji", "dili360-2005-sangji"),
         entry="research/archetypes.md - 'What stands on a dike-pond hamlet that a paddy hamlet lacks - the audit'",
     ),
@@ -712,6 +782,7 @@ _DEFS: tuple[FeatureClass, ...] = (
         why="The fruit dike is the type the delta's own accounts put first, before mulberry displaced it; the standard trees stand on the band's crest at an orchard's spacing.",
         label="accurate",
         label_note="The type is read; the tree spacing is an orchard convention, not a measured dike.",
+        caveat="the tree spacing is an orchard convention, not a measured dike.",
         sources=("gd-gazetteer-sangji", "dili360-2005-sangji"),
         entry="research/archetypes.md - 'What stands on a dike-pond hamlet that a paddy hamlet lacks - the audit'",
     ),
@@ -722,7 +793,8 @@ _DEFS: tuple[FeatureClass, ...] = (
         what="A parcel of tilled vegetable ground in rows among the fish ponds - the one piece of the block that was neither dug into a pond nor left in rice.",
         why="A converted district grew no rice, and Fei's silk village grew its vegetables on whatever ground the mulberry left; so the residual parcel of a converted block reads as vegetable ground as honestly as paddy. Two attested forms, so each hamlet rolls one.",
         label="accurate",
-        label_note="The absence of rice and the vegetable ground are read; which parcels and how many is the generator's leftover roll.",
+        label_note="The absence of rice and the vegetable ground are read; nothing says WHICH parcels carried them, so they take whatever the crop dikes and the ponds leave over.",
+        caveat="nothing says WHICH parcels carried them, so they take whatever the crop dikes and the ponds leave over.",
         sources=("fei-1939", "gd-gazetteer-sangji"),
         entry="research/archetypes.md - 'What stands on a dike-pond hamlet that a paddy hamlet lacks - the audit'",
     ),
@@ -767,6 +839,7 @@ _DEFS: tuple[FeatureClass, ...] = (
         why="The most important fertilizer on a rice-and-silk farm was human manure, and Fei's village kept it in pits of earthenware half buried behind the buildings, so many that the public road along the stream was lined with them. Where Tohoku farms heaped theirs by the stable, the silk villages potted theirs: two attested forms, so each hamlet rolls one.",
         label="accurate",
         label_note="The form and its place behind the house are read (Fei 1939); the drawn 3.5 ft mouth is a size the record does not give.",
+        caveat="the drawn 3.5 ft mouth is a size the record does not give.",
         sources=("fei-1939", "sugiura-1973-fuzoku"),
         entry="research/archetypes.md - 'What stands on a dike-pond hamlet that a paddy hamlet lacks - the audit'",
     ),
@@ -778,6 +851,7 @@ _DEFS: tuple[FeatureClass, ...] = (
         why="A polder is enclosed against the flood outside, so its dike is cut only where a gate controls the water - at the inlet high on the block and the outfall low on it. The gate is a protected opening closed with wooden boards to set the level, and it is why the dike can be complete and the block still fed and drained.",
         label="accurate",
         label_note="The form is read from the FAO pond-construction manual; the 6 x 3 ft bar is drawn at the size of a board set, a glyph the record does not measure.",
+        caveat="the 6 x 3 ft bar is drawn at the size of a board set, a glyph the record does not measure.",
         sources=("fao-x6708e", "cssn-sangyuanwei", "shen-kuo"),
         entry="research/archetypes.md - 'A dike-pond is fed and drained through sluice gates', 'Polder siting - full enclosure, fluctuating water, and where the village sits'",
     ),
@@ -789,6 +863,7 @@ _DEFS: tuple[FeatureClass, ...] = (
         why="A polder is wetland enclosed by dikes so it can be drained; its floor sits at or below the flood stage outside, so the enclosure is complete - any gap re-floods the block. The dike was dredged pond mud heaped and packed, breached and repaired for centuries, so it reads as a mottled vegetated band of varying width rather than a ruled line; the dead-straight rectangle is a post-1949 industrial shape.",
         label="accurate",
         label_note="Full enclosure, the organic outline and the planting are read; the drawn width band (14-40 ft) is a drawing calibration inside the attested 6-10 m dike widths.",
+        caveat="the drawn width band (14-40 ft) is a drawing calibration inside the attested 6-10 m dike widths.",
         sources=("shen-kuo", "isis-dykepond", "ruddle-zhong-1988"),
         entry="research/archetypes.md - 'Polder siting - full enclosure, fluctuating water, and where the village sits', 'Why dikes were planted at all'",
     ),

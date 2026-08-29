@@ -34,7 +34,15 @@ fail=""
 # --- 1. every spec.md being shipped carries a fidelity verdict --------------------------------
 for spec in $(printf '%s\n' "$changed" | grep -E '^specs/[^/]+/spec\.md$' || true); do
   [ -f "$spec" ] || continue
-  if ! grep -qE 'FAITHFUL' "$spec"; then
+  # A VERDICT, not a MENTION (feature 156, 2026-08-29). The check used to be a bare `grep FAITHFUL`,
+  # which two shapes satisfied without a review having passed: a spec whose only occurrence is "NOT
+  # FAITHFUL" - i.e. one a reviewer REJECTED - and a spec whose prose merely discusses the word. So
+  # the occurrence must survive dropping every negated line AND must sit on a line that names the
+  # review it reports (a Status line, a round, a verdict, the agent). Still deliberately coarse: this
+  # proves the RECORD exists, never that the review was good. Measured against all 56 specs in the
+  # repository when it was written - 71 of 71 unchanged, and it is the guard's own "match INVOCATIONS
+  # not mentions" rule finally applied to itself.
+  if ! grep -E 'FAITHFUL' "$spec" | grep -viE 'NOT[[:space:]]+\**FAITHFUL' | grep -qiE 'status|verdict|round|spec-fidelity'; then
     printf '\n\033[1mREVIEW GATE: %s has no fidelity verdict.\033[0m\n' "$spec"
     printf 'Constitution XVI: a specification is reviewed against the GM'"'"'S OWN WORDS before\n'
     printf 'implementation, by someone other than its author. Run the `spec-fidelity` subagent in\n'

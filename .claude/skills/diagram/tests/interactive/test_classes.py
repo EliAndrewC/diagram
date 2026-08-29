@@ -13,7 +13,7 @@ import re
 
 import pytest
 
-from l7r.diagram.interactive.classes import CLASSES, NOT_HIGHLIGHTED, NOT_HIGHLIGHTED_RULINGS, FeatureClass, label_phrase, slug
+from l7r.diagram.interactive.classes import ANNOUNCED, CLASSES, NOT_HIGHLIGHTED, NOT_HIGHLIGHTED_OVERTURNED, NOT_HIGHLIGHTED_RULINGS, FeatureClass, label_phrase, lead_sentence, slug
 
 # The spec's FR-007 vocabulary, verbatim (plus `field pond`, added at implementation and recorded
 # in the spec table). A row added to the spec without an entry here fails this test; an entry here
@@ -144,6 +144,69 @@ def test_label_phrases_are_the_constitutions_three() -> None:
     assert label_phrase("guess") == "a guess"
 
 
+# --- the presumption of accuracy (feature 156, GM 2026-08-29) ---
+
+
+def test_only_a_liberty_is_announced() -> None:
+    """The GM: don't say a thing is historically accurate; call out the liberties. So `accurate`
+    produces no lead sentence at all, and the other two are unchanged."""
+    assert lead_sentence("accurate", "Plot form and the irregular patchwork are read.") == ""
+    assert lead_sentence("deviation", "drawn larger") == "This is a deliberate deviation - drawn larger"
+    assert lead_sentence("guess", "") == "This is a guess."
+    assert {"deviation", "guess"} == ANNOUNCED
+
+
+@pytest.mark.parametrize("key", SPEC_CLASSES)
+def test_the_caveat_is_a_verbatim_half_of_the_record(key: str) -> None:
+    """`caveat` is rendered and `label_note` is not, so the two must not be allowed to drift: the
+    caveat is always a literal slice of the note it was split out of."""
+    fc = CLASSES[key]
+    if fc.caveat:
+        assert fc.caveat in fc.label_note, f"{key}: the caveat must be verbatim from its own record"
+
+
+@pytest.mark.parametrize("key", SPEC_CLASSES)
+def test_only_an_accurate_class_carries_a_caveat(key: str) -> None:
+    """A deviation and a guess already lead with their liberty; a second copy below the why would
+    say it twice."""
+    fc = CLASSES[key]
+    if fc.label != "accurate":
+        assert fc.caveat == "", f"{key}: a {fc.label} announces its liberty in the lead"
+
+
+def test_no_caveat_says_a_thing_is_drawn_at_its_TRUE_size() -> None:
+    """Drawn at true size is ACCURACY, not a liberty - the trap `bund` and `notice board` fell into,
+    and the one a later editor is likeliest to re-open, because "the drawn stroke" sounds like a
+    drawing note (settlement-review, 2026-08-29)."""
+    for key, fc in CLASSES.items():
+        if fc.caveat:
+            assert not re.search(r"\b(at its |at )?true(-| )size\b|\bat its true\b", fc.caveat), f"{key}: true size is accuracy, not a liberty"
+
+
+def test_no_caveat_merely_reasserts_accuracy() -> None:
+    """The point of the split (spec-fidelity round 1): "Topology, taper and true-size width are
+    read" is the accuracy claim in other words, and moving it below the why would keep the GM's
+    complaint alive on most of the map. A caveat says what was DRAWN rather than what was read."""
+    for key, fc in CLASSES.items():
+        if not fc.caveat:
+            continue
+        opener = fc.caveat.split(";")[0]
+        assert not re.search(r"\bare read\b|\bis read\b|\bare attested\b", opener), f"{key}: the caveat's first clause is a provenance claim, not a liberty"
+
+
+def test_every_accurate_class_without_a_caveat_is_deliberate() -> None:
+    """The classes whose record discloses no liberty at all. Listed so adding one more is a decision
+    someone makes on purpose rather than an omission nobody notices.
+
+    Four were there from the split (their whole note is provenance). Three joined on 2026-08-29 when
+    settlement-review read the rendered page: `bund` ("the drawn stroke is at true size") and
+    `notice board` ("drawn at its true 12 x 5 ft") were the accuracy claim in other words, under an
+    "On the drawing:" heading that promises a disclosure and delivered none; `windbreak` ("the belt's
+    shape follows the terrain and the cluster") discloses nothing either way."""
+    bare = {k for k, fc in CLASSES.items() if fc.label == "accurate" and not fc.caveat}
+    assert bare == {"marsh", "paddy", "field ditch", "pond", "bund", "notice board", "windbreak"}
+
+
 def test_slug_is_a_css_token() -> None:
     for key in CLASSES:
         assert re.fullmatch(r"[a-z][a-z-]*", slug(key)), key
@@ -152,9 +215,20 @@ def test_slug_is_a_css_token() -> None:
 def test_the_not_highlighted_list_is_a_record_of_rulings() -> None:
     assert NOT_HIGHLIGHTED == "-"
     assert NOT_HIGHLIGHTED not in CLASSES
-    assert len(NOT_HIGHLIGHTED_RULINGS) >= 3
-    for what, who, when, why in NOT_HIGHLIGHTED_RULINGS:
+    assert len(NOT_HIGHLIGHTED_RULINGS) >= 2
+    for what, who, when, why in NOT_HIGHLIGHTED_RULINGS + NOT_HIGHLIGHTED_OVERTURNED:
         assert what and who and re.fullmatch(r"\d{4}-\d{2}-\d{2}", when) and why
+
+
+def test_an_overturned_ruling_is_kept_beside_the_list_rather_than_deleted() -> None:
+    """The title placard was ruled map furniture on 2026-08-27 and let back in on 2026-08-29. The
+    record should show that a decision was made and then remade, not quietly lose one - so the row
+    moves to `NOT_HIGHLIGHTED_OVERTURNED` and neither list holds it twice."""
+    standing = {what for what, *_ in NOT_HIGHLIGHTED_RULINGS}
+    overturned = {what for what, *_ in NOT_HIGHLIGHTED_OVERTURNED}
+    assert "the title placard and its text" in overturned
+    assert "the scale bar and its captions" in standing, "the bar beside it keeps its ruling"
+    assert not (standing & overturned), "a ruling is on one list or the other, never both"
 
 
 def test_house_style_in_the_prose() -> None:
