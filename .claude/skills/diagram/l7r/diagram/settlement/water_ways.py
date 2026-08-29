@@ -215,7 +215,15 @@ class WaterWaysMixin:
         self.M["streams"].append(rec)
         bed_t = f'<path d="{{dd}}" fill="none" stroke="#9CB4C8" stroke-width="{width}" stroke-linejoin="round" stroke-linecap="round"/>'
         # lighter mid-current highlight (NOT a dashed lane line - this is water, not a road)
-        sheen_t = f'<path d="{{dd}}" fill="none" stroke="#B6CAD8" stroke-width="{max(2, width * 0.35):.0f}" stroke-linejoin="round" stroke-linecap="round"/>'
+        # THE SHEEN IS BUTT-CAPPED (settlement-review 2026-08-29, Mizuguchi error 2 and Kashikawa's bead).
+        # A sheen is the highlight ALONG a course, not the course itself, and a round cap makes it bulge
+        # half its own width past the end of its own bed. Since feature 150 T53 put every watercourse in
+        # ONE block, every sheen draws above every bed, so that bulge prints INSIDE whatever the course
+        # runs into: at Mizuguchi's intake - the join the hamlet is named for - it printed a pale blob on
+        # the head-race, measured in the PNG. Measured across the pool, a stream sheen lies under a later
+        # bed for 0.1 to 4.3 ft per map: cap-sized at joins, never a long run, which is why the cap is the
+        # fix and the block order is not. A butt cap ends the highlight where its bed ends.
+        sheen_t = f'<path d="{{dd}}" fill="none" stroke="#B6CAD8" stroke-width="{max(2, width * 0.35):.0f}" stroke-linejoin="round" stroke-linecap="butt"/>'
         clip = {"pts": [(x, y) for x, y in pts], "bed_t": bed_t, "sheen_t": sheen_t} if self._pond_anchored(frm, to) else None
         self._water(  # opacity comes from the shared bed/sheen groups, so crossings don't stack into a dark seam
             bed_t.format(dd=dd), rec, sheen=sheen_t.format(dd=dd), clip=clip, cls=cls

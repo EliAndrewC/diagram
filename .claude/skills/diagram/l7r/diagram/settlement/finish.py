@@ -258,16 +258,29 @@ class FinishMixin:
             "bbox": [round(px0, 1), round(py0, 1), round(px0 + bw, 1), round(py0 + bh, 1)],
             "placard": [round(px0, 1), round(py0, 1), round(px0 + bw, 1), round(py0 + bh, 1)],
         }
+        # OPAQUE, not 0.94 (settlement-review 2026-08-29, Kashikawa): at 0.94 the ground cover showed
+        # through - 6,900 of 79,772 interior pixels, 8.65%, with grass, brush dots and two whole pine
+        # glyphs legible at native resolution - and the placard read as a decal laid on the field rather
+        # than a card. This is the SAME defect, and the same fix, as the field grave on that map eight
+        # days earlier ("painted at 0.9 opacity over an intact lattice ... it is opaque now"); one was
+        # fixed for that reason and this one was left translucent with nothing recorded either way.
         # The placard, the name, the bar and its captions are MAP FURNITURE - ruled not highlighted
         # (feature 134 FR-002, `interactive/classes.py` NOT_HIGHLIGHTED_RULINGS), hence cls="-".
         self.add_label(  # the card FIRST, so every text draws over it (add_label draws in call order)
-            f'<g><rect x="{px0:.0f}" y="{py0:.0f}" width="{bw:.0f}" height="{bh:.0f}" rx="7" fill="#F7F0DC" fill-opacity="0.94" stroke="#8C7A55" stroke-width="1.6"/>'
+            f'<g><rect x="{px0:.0f}" y="{py0:.0f}" width="{bw:.0f}" height="{bh:.0f}" rx="7" fill="#F7F0DC" stroke="#8C7A55" stroke-width="1.6"/>'
             f'<rect x="{px0 + 3.5:.0f}" y="{py0 + 3.5:.0f}" width="{bw - 7:.0f}" height="{bh - 7:.0f}" rx="5" fill="none" stroke="#BCAA7E" stroke-width="0.8"/></g>',
             cls="-",
         )
         self.add_label(f'<text x="{pcx:.0f}" y="{y + fs:.0f}" text-anchor="middle" font-size="{fs}" font-weight="bold" fill="#2D2A24">{name}</text>', cls="-")
         bx0, bx1, by = pcx - bar_px / 2, pcx + bar_px / 2, y + th + 12  # bar CENTERED under the name, on the placard's axis
-        self.M["scalebar"] = {"ft": bar_ft, "ftpx": self.ftpx, "bbox": [round(bx0, 1), round(by - 5, 1), round(bx1, 1), round(y + bh, 1)]}
+        # THE BOX IS THE INK, not the placard's foot (settlement-review 2026-08-29, Kashikawa). The bottom
+        # was `y + bh` - the placard's own base - which over-claimed 26 px, 41% of the box's height, and
+        # reached 12 px BELOW the placard that contains it. Nothing keeps out of this box (the two checks
+        # that read `scalebar` test its `ft` against the declared scale and skip its geometry), so the
+        # over-claim bought nothing and cost the interactive map, which highlights the recorded box. The
+        # last ink is the "(1 px = N ft)" caption at baseline `by + 31`, 10 pt, so its descender ends ~2 px
+        # under that.
+        self.M["scalebar"] = {"ft": bar_ft, "ftpx": self.ftpx, "bbox": [round(bx0, 1), round(by - 5, 1), round(bx1, 1), round(by + 33, 1)]}
         self.add_label(
             f'<g stroke="#3A2E1C" stroke-width="2">'
             f'<line x1="{bx0:.0f}" y1="{by:.0f}" x2="{bx1:.0f}" y2="{by:.0f}"/>'

@@ -234,3 +234,62 @@ shows it. **A caption is seated with no regard for anything but lanes** - MEASUR
       keeping the satisfice-then-nearest tie-break. Deferred because it moves a caption on every map
       in the pool and each one then owes a review. *(research: rendering)*
 
+## The pool sweep of 2026-08-29: what it fixed, and what it found that this feature did not cause
+
+Four `settlement-review` passes ran over the maps the merge re-rolled (Inashiro, Kashikawa,
+Mizuguchi, Sawada), because `lanes`, `farm_fixtures`, `drawn_channels`, `streams` and
+`bamboo_stands` all moved on all four under an unchanged `.gen.py`. Fixed in this feature:
+
+- [x] P1 **A regression this feature caused.** Putting every watercourse in ONE block (T53) left every
+      sheen above every bed, so a sheen's ROUND CAP printed inside whatever its course ran into - a
+      pale blob on the head-race at Mizuguchi's intake, the join the hamlet is named for. Measured
+      across the pool before fixing: a stream sheen lies under a later-drawn bed for **0.1 to 4.3 ft
+      per map** - cap-sized at joins, never a long run - which is why the CAP is the fix and the block
+      order is not. Sheens are butt-capped now. *(research: rendering)*
+- [x] P2 **The reed fringe was thinnest exactly where the record says reeds are thickest.** The pad
+      holding reeds off the water was the mark's isotropic reach (7 ft), so tufts stood 7.66 ft off
+      the waterline and the density profile out from Mizuguchi's rim ran 12.0 / 27.4 / 33.0 / 24.4 per
+      1,000 sq ft. But a reed tuft's blades are drawn near-VERTICAL - ~7 ft up, at most ~1.4 ft
+      sideways. The pad is split: lateral reach for the tuft's own point, and the blade TOP tested
+      separately, so a tuft south of the pond still keeps its height back while one beside it stands
+      at the rim. After: nearest base **7.66 -> 1.52 ft**, rim band **12.0 -> 21.2**, profile
+      21.2 / 29.3 / 35.9 / 21.8 / 22.5, and **0 blades in the water**. Grounded in the research pass
+      recorded at research/water.md, not in a preference. *(research: physical - already researched,
+      confirmed and cited in this feature)*
+- [x] P3 **The title placard was translucent** at `fill-opacity="0.94"` and the ground cover ghosted
+      through it - 6,900 of 79,772 interior pixels on Kashikawa, 8.65%, with grass, brush dots and two
+      whole pine glyphs legible at native resolution. Identical defect and identical fix to that map's
+      own field grave eight days earlier. Opaque now. *(research: rendering)*
+- [x] P4 **The scalebar's recorded box was the placard's foot, not its ink** - over-claiming 26 px,
+      41% of its own height, and reaching 12 px BELOW the placard containing it. Nothing keeps out of
+      that box, so the over-claim bought nothing and cost the interactive map, which highlights it.
+      Derived from the drawn extents now. *(research: rendering)*
+
+**Found by the sweep, NOT caused by this feature, and left alone** - each is byte-identical to main's
+tip, so fixing it here would put an unreviewed change into a merge that is already large. Recorded so
+the next session inherits the measurement:
+
+- **Kashikawa lane 0 ends in bare ground reaching nothing**: its north end (2401.4, 2453.7) stands
+  206.1 ft from any other lane and 246.5 ft from the nearest farmhouse corner, blunt-capped in open
+  grazing, the outer half of a 229.8 ft run serving nothing. `lanes_reach_something` is green on it,
+  which is the gap a reviewer exists to close.
+- **Mizuguchi's through-route necks 6 ft -> 3 ft -> 6 ft for 11 ft** at (933-944, 1778-1780): lane4
+  and lane3 never meet, and the only ink joining two 6 ft lanes is 11.1 ft of a 3 ft back lane, capped
+  at both ends. Measured tread depth 9.5 / 3.2 / 7.6 ft across the waist. Feature 124's rule ("a
+  healing link inherits the width of the way it joins") did not apply because here the WIDE lane joins
+  the THIN one.
+- **Mizuguchi's "copse" is two trees** - `village_groves[1]`, 205.4 x 58.5 ft, r=11, 2 clumps 175 ft
+  apart, both inside the windbreak's own canopy. A feature that draws degenerate should be placed
+  properly or dropped, the way woodland parcels under the legibility floor already are.
+- **Kashikawa's homestead fixture ring is stamped, not composed**: 13 of 20 farmhouses carry the row
+  at dy -18 to -21 ft, privies at bearing 31-41 deg at 10 of 13, and at 3 of 4 manure homesteads the
+  pit sits 9.5 ft directly above the privy with x agreeing to 0.7 ft. The arrangement is right; the
+  VARIANCE is zero. This is calibrated liberty (a degree, not a knob) and the degree is currently nil.
+- **Kashikawa's notes carry an accepted limitation that is not on the map** - a board caption clipping
+  "the byre's roof by 15.4 x 4.8 ft" at (2003, 2838), where no byre stands within 167 ft in this
+  manifest or main's. A future session will quote it as a live cost.
+- **A knob candidate, not a defect**: where a kosatsuba stands. Mizuguchi's is at the western wellhead
+  (7 of 12 houses within 250 ft) rather than the busiest frontage (11 of 12). Both are attested - the
+  takafuda stood at crossroads and bridgeheads, and at the village well - so by constitution XII this
+  is two supportable answers and therefore a per-settlement knob, which the siter cannot express today.
+

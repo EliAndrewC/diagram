@@ -202,7 +202,7 @@ class WetGroundMixin:
         ring = RingIndex(poly)  # the outline, indexed once per marsh (feature 145; the why is on RingIndex)
 
         def _sparse(
-            px: float, py: float, drop: float, mound_pad: float = 0.0
+            px: float, py: float, drop: float, mound_pad: float = 0.0, blade_up: float = 0.0
         ) -> bool:  # skip a point outside the poly, IN a paddy / ON the pond / on a corridor/building / in the urban halo / in a keep-out, or (probabilistically) near the edge
             if (
                 not ring.inside(px, py)
@@ -229,8 +229,20 @@ class WetGroundMixin:
             # settlement-review): this read the CENTER while the mound test above reads the radius, so a 28 ft
             # tint circle centered a foot outside the rim washed 27 ft of haze over open water - measured, 26%
             # of Kuwabata's reservoir surface.
-            if pond and ((px - pond[0]) / (pond[2] + mound_pad)) ** 2 + ((py - pond[1]) / (pond[3] + mound_pad)) ** 2 < 1.0:
+            # A BLADE REACHES UP, NOT SIDEWAYS (settlement-review 2026-08-29, Mizuguchi). The pad against the
+            # water was the mark's own isotropic reach - 7 ft for a tuft - so reeds were held 7.7 ft off the
+            # waterline all round, and the density profile out from the rim ran 12.0 / 27.4 / 33.0 / 24.4 per
+            # 1,000 sq ft: THINNEST exactly where the record says reeds are thickest (research/water.md, "A
+            # reservoir's shore is reeded"; the emergent belt roots in the shallows). But a reed tuft's blades
+            # are drawn near-VERTICAL - `random.uniform(-0.2, 0.2)` radians off vertical, 4-7 ft long - so they
+            # reach ~7 ft UP the sheet and at most ~1.4 ft to the side. The pad is therefore split: the LATERAL
+            # reach keeps the tuft's own point off the water, and the blade TOP is tested separately, so a tuft
+            # standing south of the pond still keeps its full height back while one beside it stands at the rim.
+            _lat = mound_pad if not blade_up else min(mound_pad, 1.5)
+            if pond and ((px - pond[0]) / (pond[2] + _lat)) ** 2 + ((py - pond[1]) / (pond[3] + _lat)) ** 2 < 1.0:
                 return True  # reeds fringe the shore, they do not float on open water
+            if blade_up and pond and ((px - pond[0]) / pond[2]) ** 2 + ((py - blade_up - pond[1]) / pond[3]) ** 2 < 1.0:
+                return True  # ...and neither do the blade TIPS, which is the reach that actually crosses a rim
             ed = ring.edge_within(px, py, feather)
             return ed is not None and random.random() > (ed / feather) ** drop
 
@@ -257,7 +269,7 @@ class WetGroundMixin:
             g.append(f'<circle cx="{gx:.1f}" cy="{gy:.1f}" r="{random.uniform(min(15.0, _tint_r * 0.6), _tint_r) * bs:.1f}" fill="#9FBBAE" fill-opacity="0.14"/>')
         for _ in range(int(area / (150 * bs * bs))):  # SPARSE reed / sedge tufts + the odd standing-water glint (thin, not a solid reedbed)
             gx, gy = random.uniform(x0, x1), random.uniform(y0, y1)
-            if _sparse(gx, gy, 0.7, MARSH_TUFT_R * bs):  # a tuft's blades and a glint's ellipse reach this far from the point
+            if _sparse(gx, gy, 0.7, MARSH_TUFT_R * bs, blade_up=MARSH_TUFT_R * bs):  # a tuft's blades reach this far UP; see `blade_up`
                 continue
             if random.random() < 0.12:  # a standing-water glint
                 g.append(f'<ellipse cx="{gx:.1f}" cy="{gy:.1f}" rx="{random.uniform(2.6, 4.6) * bs:.1f}" ry="{random.uniform(1.2, 2.0) * bs:.1f}" fill="#C2D6CE" fill-opacity="0.85"/>')
