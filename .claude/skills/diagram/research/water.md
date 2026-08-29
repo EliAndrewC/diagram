@@ -671,3 +671,65 @@ delivery), never the conservation arithmetic.
 *The decision it drove.* A comb fan is planted on BOTH sides of its *bunsuiguchi* - the engine's own model already said so (`build_comb` carves canal B as a supply thread that shapes the far margin's plots and keeps deliveries off it) - so the DRAWN net must show both arms of the fork. Every `hamletgen.OFFTAKE_LADDER` row now gives canal B an offtake (~0.55), which inks the second arm partway down its margin, tapering to a thread per the Tabayashi taper rule. The hamlet rows' old `offtakes_b=()` was inherited from Ikegami's authored choice, and it left the modeled net and the inked net disagreeing: measured on the motivating map (Inashiro), **255 ft of planted paddy west of the fork carried 0 ft of drawn supply** while the east flank showed 994/995. Post-fix, every live hamlet's short flank carries ~170-200 ft of drawn supply against ~250-260 ft of paddy. Two terminations are honest, and the pool shows both: where the dug arm runs past its last offtake, the tail tapers to a thread and dies at the crop (Inashiro, Kashikawa, Mizuguchi); where the dug arm ENDS at its offtake, the canal hands its whole flow to the delivery and stops at the junction (Sawada) - what is dishonest is only a working-width canal chopped mid-margin, which the interpolated piece slicing in `build_comb` now prevents. Gated by `comb_supply_commands_both_flanks`: it reads the recorded fork and, on every flank with more than ~150 ft of paddy (cross-slope from the fork), demands drawn main/branch supply reaching at least 80 ft or 30% of that flank's extent.
 
 *When a single arm IS honest.* The command principle cuts both ways: a tract lying wholly on ONE side of its supply needs no second arm - a ribbon strip along a contour canal, a terrace flight, a polder ring. None of those record a fork, so the check does not touch them; and a fan whose far flank is a sliver (under the 150 ft demand line) legitimately runs one arm. The frozen legacy hamlets keep their single-arm draws as exhibits - conversion, not retrofit, is their fix, per the migration doctrine.
+
+## A reservoir's shore is reeded, and its EMBANKMENT is mown - the two are different ground
+
+**The question, and why it was asked.** A settlement-review (2026-08-29) found the reeds we scatter round
+a tameike's shore standing on visibly dry ground: the reed tufts were there, the wet-tint haze that says
+"wet" was not. Before changing what is drawn, the obvious counter-hypothesis had to be tested, because it
+is the intuitive one and it would have made the current picture correct by accident: **a working
+reservoir is maintained - the bank repaired, the silt dredged, the water drawn down each season - so
+perhaps a managed tameike's margin is kept clear, and reeds there would mean neglect.**
+
+**The record contradicts that outright, and the contradiction is the finding.** Mineta 2007 in the
+*Journal of the JSIDRE*, reporting a Kagawa Prefecture study of tameike management against aquatic flora:
+*"抽水植物や浮葉植物の出現種数に対して泥上げや池内の藻刈りとの間に有意な正の相関が認められた"* - a statistically
+significant POSITIVE correlation between the number of emergent- and floating-leaf plant species and the
+practice of dredging silt and cutting algae in the pond - and it is the small ponds where water use has
+stopped and mowing has declined that are LOSING plant diversity. Active management is what sustains the
+reed fringe, not what clears it. So the reeds stay, and they stand on wet ground.
+
+**But the record also draws a line we were already drawing, which is the pleasing part.** The
+EMBANKMENT itself is a different piece of ground and is kept clear: *"堤は耕作を禁じたり、草刈りや野焼き
+を行ったりして草木の生育を阻む等、強度を維持するための管理が行われる"* - cultivation is forbidden on it and
+it is mown and burned to stop woody growth, **to keep the bank strong** - and the plants named as
+growing there are dry-grassland herbs (ワレモコウ, キキョウ, リンドウ, オミナエシ - several of the seven
+autumn grasses), not wetland ones. The dam's water-contact slope is armored outright against wave
+erosion - *"捨石、石張り、コンクリートブロック張"*. This is an INDEPENDENT confirmation of the rule the GM's
+own T54 complaint produced on 2026-08-28 (*"the hazy blue that denotes the marsh is clearly overlaid on
+top of the greenery of the earthen mounds"*): reeds keep off a raised, maintained, planted bank and root
+in the shallow water outside it. We drew that rule from the GM's eye; the record says the same thing, and
+gives the reason - the bank is mown to keep it strong.
+
+**What the shallow shore carries, positively.** MAFF's own technical material draws the zonation from land
+to open water as riparian forest -> wet-meadow plants -> emergent plants -> floating-leaf -> submerged,
+and names the emergent belt as ヨシ・ガマ・マコモ (reed, cattail, wild rice); Mineta puts *"ヨシやガマなどの
+大型抽水植物"* in the shallow, gently-sloped part of the pond by depth and slope. A tameike museum in Hyogo
+says the same of lowland ponds specifically: *"このような池の周囲にはヨシ、マコモ、ヒメガマなどの大型抽水植物
+が群落を形成し"*. The low-diversity end of that spectrum is the concrete-armored urban pond, not the
+farmed one.
+
+**The rules this produces**, all three already implemented in `settlement/land/wet.py`:
+
+1. A pond fringe is REEDED and reads WET. The wet-tint haze belongs there as much as it does in a
+   waterside bed - hence the narrow-band tint radius, which exists so a 44 ft fringe can carry the mark
+   at all (the mechanism, and the 25x deficit that prompted it, are at the point of change).
+2. Reeds and haze keep OFF the embankment and off a pond's raised bank - because it is mown and burned
+   to keep it strong, which is also why nothing is cultivated on it.
+3. Neither of the above is a legibility deviation. Both are what the record describes.
+
+**Deliberately NOT concluded.** That the reed at a tameike margin was itself cut as a thatch or screen
+crop. The reed-harvest economy (*yoshizu* screens, thatch, an uncut bed going 荒れる) is READ and well
+attested - for **Lake Biwa and river reed beds**, by an organization named for Lake Biwa. No source, primary
+or scholarly, was found putting that economy on tameike margins, and extending it there is an inference the
+sources do not make. If it is ever wanted, that is the search to run.
+
+**Still open.** Whether the record distinguishes the vegetation of a DIKED polder's wet foot from an
+UNDIKED valley toe - the question already parked in `pool/hamlets/kuwabata.notes.md`. The adjacent
+river-engineering vocabulary exists (堤外地, the unprotected land outside a flood levee, whose default
+vegetation in that literature is reed bed, against 堤内地, the protected land), but nothing read compares a
+paddy dike's foot to a valley toe as such. NOT-FOUND rather than silent: the search was run and named it.
+
+**Sources:** `mineta-2007-tameike`, `tameike-jawiki`, `kagawa-tameike-structure`, `maff-tameike-shizen`,
+`nies-tameike`, `inamino-tameike-museum`, `ohmi-yoshi` (the Lake Biwa scope note).
+

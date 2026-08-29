@@ -210,6 +210,20 @@ district's ground. Drawn at 1 ft/px.
   empty bin, and a notch bin holds 14 outline points (the ring's cut ends fill it), so it fired 0 times
   on all four flanks. The lesson is the standing one - a rule that cannot fire looks exactly like a
   rule that passes - and the guard is now a unit test that steps a notch whose bin is FULL.
+- **PARTLY ANSWERED 2026-08-29 by a `source-reader` pass on the tameike record** (research/water.md
+  "A reservoir's shore is reeded, and its EMBANKMENT is mown"). The half that is settled: the
+  reviewer's "berm on a diked margin" read is CORRECT for the embankment itself and for the reason
+  the reviewer guessed - a tameike's 堤 is mown and burned and may not be cultivated, **to keep the
+  bank strong**, and the plants recorded on it are dry-grassland herbs. That is an independent
+  confirmation of the GM's own T54 rule, arrived at from the other direction. The half that is
+  OVERTURNED: the intuition that a *maintained* pond has a bare *margin*. Mineta 2007 (JSIDRE),
+  on a Kagawa study, found a statistically significant POSITIVE correlation between emergent-plant
+  species counts and dredging and algae-cutting - active management SUSTAINS the reed fringe, and it
+  is the abandoned ponds that lose it. So the shore is reeded and reads wet, which is why the fringe
+  now carries the wet tint. Still NOT-FOUND, and the search was run and named it: whether the record
+  distinguishes a DIKED polder's wet foot from an UNDIKED valley toe. The line below stands for that
+  remainder only.
+
 - OPEN QUESTION for the GM, raised by the review of 2026-08-28 and NOT settled here: which way the
   reed density should run at a DIKED toe. Our strip feathers on every edge, so now that its inner
   edge is the dike face the ramp lands on the water side - 6% ink in the first 10 ft, full density

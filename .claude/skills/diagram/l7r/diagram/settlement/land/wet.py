@@ -236,11 +236,25 @@ class WetGroundMixin:
 
         g: list[str] = []
         blades: list[str] = []  # SVG-size lever 2: bucket the constant-styled reed blades (see the note in cover.py's `commons`)
+        # A NARROW BAND GETS A SMALLER HAZE, NOT NO HAZE (settlement-review 2026-08-29). That a pond fringe
+        # reads WET at all is a RESEARCH finding, not a rendering choice - research/water.md "A reservoir's
+        # shore is reeded, and its EMBANKMENT is mown": the intuitive counter-hypothesis (a maintained
+        # reservoir has a bare margin, so reeds there would mean neglect) is contradicted by a Kagawa study
+        # in which dredging and algae-cutting correlate POSITIVELY with emergent-plant richness. The tint keeps its
+        # own radius clear of the open water, and for a pond fringe that pad - 28 ft - is wider than the band
+        # the reeds have: on Kuwabata a 44 ft fringe left a 12 ft strip for the tint CENTER, the feather then
+        # thinned that to nothing, and the shore came out with reeds standing on visibly dry ground - 0.09
+        # tint circles per 1,000 sq ft against 1.87-2.25 in this map's own beds, a 25x deficit, and one no
+        # density knob could reach because NO pond fringe on ANY map could carry the mark. Where the band is
+        # narrow the circle is drawn SMALLER and its own radius is the pad, so the haze still never washes
+        # over the water. The radius is rolled BEFORE the test only here: rolling it first everywhere would
+        # re-roll every marsh on every map, which is why the widest radius is used below.
+        _tint_r = min(MARSH_TINT_R, max(6.0, _half * 0.6)) if role == "pond_fringe" else MARSH_TINT_R
         for _ in range(int(area / (360 * bs * bs))):  # faint WET TINT: soft translucent blue-green patches (feathered, no hard edge)
             gx, gy = random.uniform(x0, x1), random.uniform(y0, y1)
-            if _sparse(gx, gy, 0.9, MARSH_TINT_R * bs):  # the WIDEST tint radius, not this circle's: the radius is drawn after the test, and drawing it first would re-roll every marsh on every map
+            if _sparse(gx, gy, 0.9, _tint_r * bs):  # the WIDEST tint radius, not this circle's: the radius is drawn after the test, and drawing it first would re-roll every marsh on every map
                 continue
-            g.append(f'<circle cx="{gx:.1f}" cy="{gy:.1f}" r="{random.uniform(15, MARSH_TINT_R) * bs:.1f}" fill="#9FBBAE" fill-opacity="0.14"/>')
+            g.append(f'<circle cx="{gx:.1f}" cy="{gy:.1f}" r="{random.uniform(min(15.0, _tint_r * 0.6), _tint_r) * bs:.1f}" fill="#9FBBAE" fill-opacity="0.14"/>')
         for _ in range(int(area / (150 * bs * bs))):  # SPARSE reed / sedge tufts + the odd standing-water glint (thin, not a solid reedbed)
             gx, gy = random.uniform(x0, x1), random.uniform(y0, y1)
             if _sparse(gx, gy, 0.7, MARSH_TUFT_R * bs):  # a tuft's blades and a glint's ellipse reach this far from the point

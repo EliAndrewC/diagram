@@ -1858,3 +1858,46 @@ ja.wikipedia 家老 (READ 2026-08-28) (https://ja.wikipedia.org/wiki/%E5%AE%B6%E
 コトバンク 御用部屋 (READ 2026-08-28 - the SHOGUNATE's executive room inside Edo castle, near the shogun's quarters; analogy only, not han evidence) (https://kotobank.jp/word/%E5%BE%A1%E7%94%A8%E9%83%A8%E5%B1%8B-66403)
 
 *Used for:* the executive council room inside the seat of government
+
+### `mineta-2007-tameike`
+
+嶺田拓也, 「生態系配慮の基礎知識（その3）― 水田とため池の植物相 ―」, 農業農村工学会誌 (Journal of the JSIDRE) 75(8), 2007, pp. 745-748 (https://www.jstage.jst.go.jp/article/jjsidre2007/75/8/75_8_745/_pdf) - READ 2026-08-29 (the PDF itself, by a `source-reader`)
+
+*Used for:* the finding that CONTRADICTS "a managed reservoir has a bare margin" - a Kagawa Prefecture study found a statistically significant POSITIVE correlation between emergent- and floating-leaf plant species counts and the practice of dredging silt and cutting algae, and it is the ponds whose water use has stopped that lose diversity; and for the zonation of reed and cattail (ヨシやガマなどの大型抽水植物) by water depth and slope. The one number-bearing source behind the rule that a tameike's shallow shore is reeded.
+
+### `tameike-jawiki`
+
+ウィキペディア日本語版 ため池 (https://ja.wikipedia.org/wiki/%E3%81%9F%E3%82%81%E6%B1%A0) - READ 2026-08-29
+
+*Used for:* the embankment being managed by forbidding cultivation and by mowing and controlled burning, TO KEEP THE BANK STRONG, and the dry-grassland herbs (not wetland plants) that grow there as a result - the independent confirmation of the GM's T54 rule that reeds keep off a raised planted bank. An encyclopedia article, cited for a plainly-stated maintenance practice that the prefectural and MAFF sources corroborate.
+
+### `kagawa-tameike-structure`
+
+香川県 ため池の構造 (https://www.pref.kagawa.lg.jp/tochikai/about_tameike/repair/structure.html) - READ 2026-08-29
+
+*Used for:* the dam's water-contact slope being armored against wave erosion - 捨石、石張り、コンクリートブロック張 - i.e. one part of a reservoir's shore is bare by engineering, which is why the rule is positional rather than a single answer for the whole margin.
+
+### `maff-tameike-shizen`
+
+農林水産省, 自然環境に果たす役割 - 2. ため池 (https://www.maff.go.jp/j/council/seisaku/nousin/seibibukai/gijutu_syoiinkai/h14-1/pdf/data3-2.pdf) - READ 2026-08-29 (the PDF, page 1)
+
+*Used for:* the land-to-water zonation of a gently-sloping natural shore - riparian forest, wet-meadow, emergent, floating-leaf, submerged - with the emergent belt named as ヨシ・ガマ・マコモ. Note the diagram credits 桜井義雄『水辺の環境学』, which was NOT read; the zonation is cited from this document, one step from that figure.
+
+### `nies-tameike`
+
+国立環境研究所, ため池の生物とその環境 (https://www.nies.go.jp/biology/data/tameike.html) - READ 2026-08-29
+
+*Used for:* the low-diversity end of the spectrum being the urbanized, concrete-armored, eutrophic pond (six dragonfly species) rather than the farmed one - the check that "managed" and "bare" are not the same axis.
+
+### `inamino-tameike-museum`
+
+いなみ野ため池ミュージアム, 水生植物 (https://www.inamino-tameike-museum.com/pond-creature/aquatic-plants.html) - READ 2026-08-29
+
+*Used for:* reed, wild rice and lesser cattail forming colonies around LOWLAND tameike specifically - a tameike-scoped corroboration of the zonation, from an institution documenting a real pond cluster in Hyogo.
+
+### `ohmi-yoshi`
+
+公益財団法人淡海環境保全財団, ヨシとは (https://www.ohmi.or.jp/yoshi/about/whats/) - READ 2026-08-29
+
+*Used for:* the reed-harvest economy - winter cutting for yoshizu screens, thatch and summer shoji, and an uncut bed going 荒れる - and, just as importantly, for the SCOPE LIMIT recorded against it: this foundation is named for Lake Biwa and every example on the page is a lake or river reed bed. It is cited as evidence about lake and river reed beds ONLY. Nothing found puts that economy on tameike margins, and the research entry says so rather than extending it.
+
