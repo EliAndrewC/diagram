@@ -2,7 +2,7 @@
 
 **Feature**: 147-test-suite-cost
 **Created**: 2026-08-29
-**Status**: DRAFT - audit complete; `spec-fidelity` round 1 returned CHANGES REQUIRED (6 items), all applied here; awaiting the round 2 verdict before implementation
+**Status**: APPROVED. `spec-fidelity` round 1 returned CHANGES REQUIRED (6 items - the four-to-five-minute question unanswered, the COLD run dropped along with the corrected number, the GM's named techniques not made requirements, no lessons audit, FR-001 forbidding what the GM invited, and two unsourced numbers); all six applied. Round 2 verdict FAITHFUL. Implementation proceeds.
 
 ## The GM's request (verbatim, the thing this is graded against)
 
@@ -129,20 +129,20 @@ were warm sends them chasing the wrong thing - which is exactly what happened he
   property, or KEPT with a written statement of what its time buys.
 - **FR-005** Every reduction in seeds, corpus size or map count MUST record what was dropped and the argument
   that the dropped case proved nothing the kept cases do not.
-- **FR-009** Each of the THREE techniques the GM named MUST be examined across the whole suite, not only
+- **FR-006** Each of the THREE techniques the GM named MUST be examined across the whole suite, not only
   within the five named tests, and each MUST produce a written finding whether or not it yields a change:
   (i) **caching rather than recomputing every time**; (ii) **running on a smaller input** rather than one
   carrying many thousands of polygons and overlap candidates; (iii) **seed counts** - for every test that
   rolls more than one seed, how many it rolls and how many are actually needed for decent coverage. Technique
   (iii) had no examination requirement in the first draft, and it is the one the GM named most specifically.
-- **FR-010** The prior performance rounds MUST be enumerated (features 135, 138, 140, 141, 146 and any
+- **FR-007** The prior performance rounds MUST be enumerated (features 135, 138, 140, 141, 146 and any
   others the record shows) and, for each technique they produced, this feature MUST state whether it applies
   to the expensive tests here and why or why not. It MUST also answer the GM's direct question - whether this
   set of tests has ever had an optimization pass - rather than leaving it implied.
-- **FR-006** The cheap loop MUST stay inside its 60 s budget, and no cost may be moved from the sweep into it.
-- **FR-007** Timings recorded by this feature MUST state COLD or WARM. The docs' existing figures that are
+- **FR-008** The cheap loop MUST stay inside its 60 s budget, and no cost may be moved from the sweep into it.
+- **FR-009** Timings recorded by this feature MUST state COLD or WARM. The docs' existing figures that are
   now known to be cold MUST be corrected.
-- **FR-008** The audit's before/after numbers MUST be recorded in the feature's research so the next
+- **FR-010** The audit's before/after numbers MUST be recorded in the feature's research so the next
   efficiency pass starts from measurements rather than from a fresh profile.
 
 ### Key Entities
@@ -182,6 +182,8 @@ with the argument that it proved nothing the kept cases do.
 ## Assumptions
 
 - The GM's acceptance is the final task; more tasks are expected after these findings.
-- "Materially less" is quantified as the SC-001 target rather than left to judgment.
+- "Materially less" is given a provisional figure in SC-001 so the criterion is measurable, but that figure
+  is a floor on ambition rather than a ceiling on effort: anything cheaper found below it is reported, and the
+  bar that decides the feature is the GM's at the acceptance task.
 - The measurements are from this clone on 8 workers; another machine will differ in absolute terms but the
   RATIOS between the rows are what this feature acts on.
