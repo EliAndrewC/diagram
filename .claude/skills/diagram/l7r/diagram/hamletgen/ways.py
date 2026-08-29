@@ -623,7 +623,15 @@ def stage_web(s: Settlement, plan: SitePlan) -> None:
     # nearer a steading than the one it removed. So the steading sweep has to be the last thing that looks
     # at a lane, for the same reason the nub drop is placed after everything else.
     _sweep_steading_fouls(s)
-    _sweep_debris(s)  # a lane the steading sweep emptied is debris; the rule is applied once more
+    # ...AND RE-JOIN WHAT THE TRIMS SEPARATED (settlement-review, feature 152). `_bridge_collinear_breaks`
+    # already runs twice above, but both times BEFORE the trims that can open a break - kashikawa came back
+    # with one route drawn as two and 19.5 ft of bare ground between two ends pointing straight at each
+    # other. Running it once more here closes what this pass opened; it routes against the same obstacle set
+    # as every other join, so it cannot bridge THROUGH a steading, and the sweep below re-checks anyway.
+    _bridge_collinear_breaks(s, hard_built, walls, list(plan.watercourses) + drawn_water)
+    _sweep_steading_fouls(s)  # a bridge is a lane too, and it gets the same last look
+    _sweep_doubled_remnants(s)  # doubled ink is debris however long it is
+    _sweep_debris(s)  # a lane any sweep above emptied is debris; the rule is applied once more
     s.M["meta"]["lane_web"] = plan.lane_web
 
 
@@ -1198,6 +1206,41 @@ def drop_end_nubs(ways: list[list[Pt]]) -> list[int]:
         if changed:
             hit.append(i)
     return hit
+
+
+def _sweep_doubled_remnants(s: Settlement) -> int:
+    """Drop a lane that lies wholly alongside another one - doubled ink, not a way, however long it is.
+
+    `_WEB_MIN_FT` asks whether a fragment is SHORT and `_sweep_debris` asks whether it is ALONE; neither asks
+    whether it is simply the same way drawn twice. A trim that shortens one arm of a fork can leave the other
+    running beside its neighbour for its whole length, and at fit zoom that is one smudged band with a
+    hairline down the middle rather than two paths (settlement-review, feature 152: kashikawa shipped a 44 ft
+    remnant every point of which sat within 6.6 ft of another lane - about 1.1 ft of background between the
+    two halos - and sawada a 37.6 ft one that left its parent and died 11.4 ft from it).
+
+    The measure is the reviewer's: a lane whose EVERY point lies within a lane-width-and-a-half of one other
+    lane is the same ground twice. It is length-blind on purpose, which is what makes it catch what the
+    30 ft floor cannot. A lane that merely starts beside another and goes somewhere is untouched, because
+    only its whole length counts.
+    """
+    lanes = s.M.get("lanes") or []
+    ways = [[(float(x), float(y)) for x, y in (ln.get("pts") or [])] for ln in lanes]
+    dropped = 0
+    for i, ln in enumerate(lanes):
+        pts = ways[i]
+        if len(pts) < 2 or ln.get("connector"):
+            continue
+        near = 1.5 * float(ln.get("w", 3))
+        for j, other in enumerate(ways):
+            if j == i or len(other) < 2:
+                continue
+            segs = list(zip(other, other[1:], strict=False))
+            if all(min(seg_dist(q[0], q[1], a, b) for a, b in segs) <= near for q in pts):
+                ln["pts"] = []
+                s.reink_lane(i)
+                dropped += 1
+                break
+    return dropped
 
 
 def _sweep_steading_fouls(s: Settlement) -> int:

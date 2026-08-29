@@ -1,0 +1,6 @@
+{
+  "utc": "20260829T140543Z",
+  "guard": "pair-hooks",
+  "what": "gate alone",
+  "reason": "re-render before the re-review"
+}
