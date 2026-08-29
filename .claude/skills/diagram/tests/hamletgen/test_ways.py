@@ -1064,3 +1064,25 @@ def test_a_footpath_junction_is_never_seated_on_the_water() -> None:
     wet.M["houses"], wet.M["lanes"] = list(house), [dict(lane[0])]
     _serve_stragglers(wet, plan, [], [], [((300.0, 500.0), (1100.0, 500.0))])  # a brook along the lane
     assert len(wet.M["lanes"]) == 1, "no junction on the water, so no path at all"
+
+
+def test_a_track_that_cannot_thread_the_cluster_takes_a_wider_berth() -> None:
+    """THE FALLBACK MUST NOT BE THE OFFENDING RUN, which is what the first version returned: when routing
+    and clipping both failed it handed back the original path, silently re-drawing the lane straight
+    through the steadings it was meant to avoid. That is worse than failing - the map ships looking
+    finished and the gate is what discovers it, if anything does. So the track goes AROUND, swinging its
+    midpoint out along the cluster's own outward normal, and what comes back never crosses more than the
+    straight line did."""
+    from l7r.diagram.hamletgen.ways import _crosses_fabric, _homestead_polys, _thread_the_fabric
+
+    plan = a_plan()
+    plan.seat = hg.seat_cluster(plan)
+    s = _hamlet_for_ways()
+    # a wall of steadings, with the run starting inside one of them: nothing can be clipped off the
+    # front, so the straight answer is refused and the detour is the only thing left to try
+    s.M["houses"] = [{"x": 700.0, "y": 500.0 + dy, "w": 60.0, "h": 40.0, "rot": 0.0, "kind": "plain"} for dy in range(0, 401, 40)]
+    run = [(700.0, 700.0), (950.0, 700.0)]
+    out = _thread_the_fabric(s, plan, run)
+    assert len(out) >= 2, "a track is always handed back - the caller has a lane to draw"
+    fabric = [poly for poly, _owner, _kind in _homestead_polys(s)]
+    assert _crosses_fabric(list(run), fabric, 16.0), "the straight line really is blocked"
