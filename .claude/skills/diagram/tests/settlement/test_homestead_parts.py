@@ -66,7 +66,11 @@ def test_village_grove_keeps_the_windbreak_out_of_a_plots_west_sun_lane():
     """Feature 133 T10: with `west_sun_lane` on, a windbreak clump never stands in the lane (50 ft
     in the generator; any value here) west/southwest of a yard or bed; a copse is exempt, and the
     rule is off by default."""
-    poly = [(100, 300), (400, 300), (400, 600), (100, 600)]
+    # A NARROWER BAND (feature 158): a dense belt's cost is its AREA, and this test's question is
+    # whether one fixed lane strip is kept clear. x is narrowed to 250..400 and y to 320..580, which
+    # still leaves planting ground on both sides of the strip (the "and the belt still stands" arm),
+    # for a little over half the clumps.
+    poly = [(250, 320), (400, 320), (400, 580), (250, 580)]
     plot = {"x": 380, "y": 420, "w": 30, "h": 20}  # west edge 365, y 410..430
 
     def lane_hit(s):
@@ -102,7 +106,7 @@ def test_village_grove_keeps_every_clump_and_set_view_decides_which_are_on_the_p
 
     So seating keeps everything the `within` window admits, and `set_view` - the first moment the page
     exists - partitions the record. That is what this now tests."""
-    poly = [(100, 300), (400, 300), (400, 600), (100, 600)]
+    poly = [(100, 300), (250, 300), (250, 450), (100, 450)]  # half the band of feature 152's version: the partition is a property, not a size (feature 158)
     s = _nuc_village()
     s.M["houses"] = [{"x": 700, "y": 450, "w": 46, "h": 28}]
     n = s.village_grove(poly, role="windbreak", face_margin=48)
@@ -115,12 +119,12 @@ def test_village_grove_keeps_every_clump_and_set_view_decides_which_are_on_the_p
     assert len(g["clumps"]) == n and g["clumps_offpage"] == []
 
     # ...and one that cuts the band in half moves exactly the clumps it cuts off, and no others
-    s.set_view(0.0, 0.0, 260.0, 1000.0)
+    s.set_view(0.0, 0.0, 180.0, 1000.0)  # cuts the narrowed band roughly in half
     r = float(g["r"])
     assert g["clumps"] and g["clumps_offpage"], "a crop through the band must split the record"
     assert len(g["clumps"]) + len(g["clumps_offpage"]) == n, "no clump is lost by the partition"
-    assert all(cx - r < 260.0 for cx, _cy in g["clumps"]), "every drawn clump reaches the page"
-    assert all(cx - r >= 260.0 for cx, _cy in g["clumps_offpage"]), "every off-page clump is WHOLLY off it"
+    assert all(cx - r < 180.0 for cx, _cy in g["clumps"]), "every drawn clump reaches the page"
+    assert all(cx - r >= 180.0 for cx, _cy in g["clumps_offpage"]), "every off-page clump is WHOLLY off it"
 
     # the partition is a function of the view, not a one-way door: widening it brings them back
     s.set_view(0.0, 0.0, 1000.0, 1000.0)
@@ -456,7 +460,7 @@ def test_a_windbreak_reseating_round_a_house_stays_inside_the_within_box():
     """A DENSE belt flows around a local obstacle instead of losing the column - it tries eight bearings
     at five radii for a new seat. `within` bounds where those seats may land: a clump that would be
     pushed wholly outside the caller's box is refused there rather than planted off the frame."""
-    poly = [(200.0, 300.0), (600.0, 300.0), (600.0, 460.0), (200.0, 460.0)]
+    poly = [(300.0, 320.0), (500.0, 320.0), (500.0, 440.0), (300.0, 440.0)]  # half the band, same house, same question (feature 158)
     s = _nuc_village()
     s.M["houses"] = [{"x": 400.0, "y": 380.0, "w": 90.0, "h": 60.0, "rot": 0, "kind": "plain"}]
     s.placed.append((400.0, 380.0, 90.0, 60.0))
