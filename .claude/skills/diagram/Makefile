@@ -326,6 +326,9 @@ render-sync:    ## regenerate MAIN's renders (called by sync-with-main.sh; not f
 gate-manifest:  ## run the check battery on an existing manifest   M=pool/hamlets/inashiro.json
 	$(RUN).check_village $(or $(M),pool/hamlets/inashiro.json) $(ARGS)
 
+polder-probe:   ## the polder block ALONE with its geometry metrics, no map   SEED=21 | SEEDS=21,22 ARCHETYPE=...
+	$(RUN).tools.polder_probe $(if $(SEED),--seed $(SEED),)$(if $(SEEDS),--seeds $(SEEDS),)$(if $(ARCHETYPE),--archetype $(ARCHETYPE),)$(if $(LAYOUT),--layout $(LAYOUT),)$(if $(HOUSEHOLDS),--households $(HOUSEHOLDS),)
+
 why-placed:     ## who placed this, and what refused to        GEN=... AT=x,y | REFUSED=x,y
 	$(RUN).tools.why_placed $(GEN) $(if $(AT),--at $(AT),)$(if $(REFUSED),--refused $(REFUSED),)
 

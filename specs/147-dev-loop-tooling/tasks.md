@@ -1,6 +1,6 @@
 # Tasks: Dev-loop tooling - the probe, the audit, the profile, and the paired gate
 
-**Feature**: 147-dev-loop-tooling | **Spec**: [spec.md](spec.md) (FAITHFUL) | **Plan**: [plan.md](plan.md)
+**Feature**: 147-dev-loop-tooling | **30 tasks** | **Spec**: [spec.md](spec.md) (FAITHFUL) | **Plan**: [plan.md](plan.md)
 
 Every task here is `research: procedure` - this feature draws nothing and states nothing about how a place
 was built, so no task carries the three physical-research boxes (constitution v2.12.0; the classification
@@ -23,20 +23,20 @@ each is useful the moment it lands.
 **Goal**: measure a polder geometry change in about a second, without drawing a map.
 **Independent test**: change a polder rule, run the probe, read the metrics; no map is rendered.
 
-- [ ] T010 [US1] Write `l7r/diagram/tools/polder_probe.py` - build the block through `hamletgen.plan_site` + `hamletgen.fit_polder` (the same path `stage_polder` takes, so the probe cannot pass while the map fails) and print the metrics table from plan.md Design 1: parcels overlapping a channel with coordinates, minimum and median berm, acreage against target, per-parcel vertex count and square-corner mean, ring point counts, wall time. Carries the `_invocation.guard` entry-point refusal.
-      given 2026-08-29T03:15Z | done - | elapsed - | runs: -
+- [x] T010 [US1] Write `l7r/diagram/tools/polder_probe.py` - build the block through `hamletgen.plan_site` + `hamletgen.fit_polder` (the same path `stage_polder` takes, so the probe cannot pass while the map fails) and print the metrics table from plan.md Design 1: parcels overlapping a channel with coordinates, minimum and median berm, acreage against target, per-parcel vertex count and square-corner mean, ring point counts, wall time. Carries the `_invocation.guard` entry-point refusal.
+      given 2026-08-29T03:15Z | done 2026-08-29T03:45Z | elapsed ~30 min (US1 whole) | runs: 4 probe runs, 3 quick runs.
       research: procedure
-- [ ] T011 [US1] Exit non-zero when a metric would fail the gate - overlap > 0, any parcel under 12 vertices, square-corner mean over 2.5 - so the probe can guard an expensive run; print WHICH metric failed.
-      given 2026-08-29T03:15Z | done - | elapsed - | runs: -
+- [x] T011 [US1] Exit non-zero when a metric would fail the gate - overlap > 0, any parcel under 12 vertices, square-corner mean over 2.5 - so the probe can guard an expensive run; print WHICH metric failed.
+      given 2026-08-29T03:15Z | done 2026-08-29T03:45Z | elapsed ~30 min (US1 whole) | runs: 4 probe runs, 3 quick runs.
       research: procedure
-- [ ] T012 [US1] Add the `polder-probe` target to `.claude/skills/diagram/Makefile` (`SEED=`, `SEEDS=`, `ARCHETYPE=`), following the `$(RUN).tools.*` shape of `why-placed` and `crop`.
-      given 2026-08-29T03:15Z | done - | elapsed - | runs: -
+- [x] T012 [US1] Add the `polder-probe` target to `.claude/skills/diagram/Makefile` (`SEED=`, `SEEDS=`, `ARCHETYPE=`), following the `$(RUN).tools.*` shape of `why-placed` and `crop`.
+      given 2026-08-29T03:15Z | done 2026-08-29T03:45Z | elapsed ~30 min (US1 whole) | runs: 4 probe runs, 3 quick runs.
       research: procedure
-- [ ] T013 [US1] `tests/tools/test_polder_probe.py` - the metrics are right on a known block; a seeded violation exits non-zero and names the metric; and the probe's numbers AGREE with the same block's rolled manifest (the guard against the probe becoming a second implementation).
-      given 2026-08-29T03:15Z | done - | elapsed - | runs: -
+- [x] T013 [US1] `tests/tools/test_polder_probe.py` - the metrics are right on a known block; a seeded violation exits non-zero and names the metric; and the probe's numbers AGREE with the same block's rolled manifest (the guard against the probe becoming a second implementation).
+      given 2026-08-29T03:15Z | done 2026-08-29T03:45Z | elapsed ~30 min (US1 whole) | runs: 4 probe runs, 3 quick runs.
       research: procedure
-- [ ] T014 [US1] Measure the probe's wall time against SC-001 (about a second, at most three) and record the number in the skill's command map row.
-      given 2026-08-29T03:15Z | done - | elapsed - | runs: -
+- [x] T014 [US1] Measure the probe's wall time against SC-001 (about a second, at most three) and record the number in the skill's command map row.
+      given 2026-08-29T03:15Z | done 2026-08-29T03:45Z | elapsed ~30 min (US1 whole) | runs: 4 probe runs, 3 quick runs. measured 0.23 s for one block (0.41 s wall through make), against SC-001's 'about a second, at most three' and the 47 s median map roll it replaces
       research: procedure
 
 ## Phase 3: User Story 2 - the overlap audit (P1)
