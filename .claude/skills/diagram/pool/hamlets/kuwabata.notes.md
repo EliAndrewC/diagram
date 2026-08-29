@@ -410,3 +410,38 @@ central and their manifests are unchanged).
 place labels will always depend on what else is on the map."* On a hamlet nothing is placed between
 the two, so the phase move alone is byte-neutral - which is what lets the caption movement above be
 attributed to the seat rules and to nothing else.
+
+### What the independent review then found on this map (settlement-review, 2026-08-29)
+
+It confirmed the fix from PIXELS rather than from the manifest - the caption's 280 dark-ink pixels
+have their nearest foreign ink at 4.30 px, the board's own at 7.55, and the halo (stroke `#EFE3C2`,
+exactly the parchment) notches nothing at 6x. It verified independently that nothing else on the map
+moved. And then it caught two engine defects this feature was leaning on:
+
+- **The caption placer's own safety comment cited a check that does not exist.**
+  `labels_clear_of_other_buildings` was deleted in b709c4ae (feature 141's cut), so nothing in the
+  gate measures a caption against a building any more - while ~15 live comments and a whole registry
+  with its completeness guard still describe it as operative. That matters HERE because this feature
+  pulls captions in off the empty margins, leaning on a defense that had quietly become the only one.
+  The comment is corrected; the restore-or-retire decision is written up in
+  `future-work/cross-cutting.md` because it reverses or ratifies a GM cut.
+- **The fabric probe was hand-listed and had fallen behind the map.** Nine families, missing
+  `farm_fixtures` - the engine's own *"every ROOFED structure"* - and the sties, pens and boundary
+  markers. Measured across the five scripted hamlets, the caption's clearance to the nearest built
+  glyph is 20-70 px on four of them and **2.24 px here**, nine times tighter, at exactly the map
+  whose caption had just been pulled inward.
+
+**And fixing the second exposed a third that neither of us had seen.** Widening the families cost
+this caption 9 px of centrality (lateral -1.02 -> -10.06), because `_hug` and `_blocked` probed a
+hand-guessed box - 26.88 x 5.00 against the recorded 26.40 x 4.20, 19% too tall - so the inflated box
+just touched the woodpile at the seat directly under the board and the search walked out for a
+collision no drawn glyph makes. `_box_clearance` had been taught to measure the recorded box in
+feature 137; these two were left on the guess. Both read `label_caption_hw` now, and the caption is
+back at **lateral -1.02** with the placer able to see what it is clearing.
+
+**Two things recorded rather than changed**: about 6 px of the GM's own "off to the right" survives by
+construction (a perpendicular hang from a -28.1 degree caption is not vertical in the reader's frame -
+an 82% reduction, and sliding it out would trade the axis the new check measures for one nothing
+does); and the recorded referent is the board's UNROTATED footprint, 12 x 5 against a drawn rotated
+AABB of 13.2 x 10.1, which is conservative in both directions and so tightens two live rules rather
+than loosening them.

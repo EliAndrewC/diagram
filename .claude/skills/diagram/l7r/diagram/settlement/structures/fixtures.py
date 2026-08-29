@@ -735,19 +735,28 @@ class PublicFixturesMixin:
                 # -32 degree caption's far end reached a threshing yard the level box had cleared.
                 # `label_seat_clear` already knows how to probe the rotated AABB; it was not being asked.
                 _ok = [_q for _q in _pool if self.label_seat_clear(_q[0], _q[1], _tw_lab, 8.0, _boxes, tilt=_t)]
-                # THE DENSE LADDER FIRST, IN THE SAME ORDER THE TILTED BRANCH USES (feature 157, second
-                # pass): least displacement ALONG the caption's baseline, then the smallest standoff,
-                # then below before above - and the first seat that is legal by THIS branch's own terms
-                # wins. The terms are the level branch's, unchanged: `label_seat_clear` (which is what
-                # sees other captions, and the ways at their own margin) on top of the hug cap, the
-                # fabric test and the lane target. Only the GROUND being searched is different, and the
-                # coarse set below stays as the fallback so a board with nowhere good behaves as it did.
+                # ONE RULE FOR BOTH BRANCHES, and the PRECISE predicates decide it (feature 157, second
+                # pass). The dense ladder is walked in the same order the tilted branch uses - least
+                # displacement ALONG the caption's baseline, then the smallest standoff, then below
+                # before above - and judged by the same three terms: the hug cap, the fabric test, and
+                # `_box_clearance` against the lane target.
+                #
+                # `label_seat_clear` is deliberately NOT the gate on this ladder, and that is the
+                # measured half of this change. Its lane test is a CENTER-DISTANCE test with the
+                # caption's whole half-diagonal as the radius - `w/2 + 3 + 2 + max(box)/2`, about 32 px
+                # for "notice board" - so it refuses every seat within ~32 px of any tread. A kosatsuba
+                # stands 6 ft off its own lane BY RULE (`kosatsuba_by_the_road`), so that radius refuses
+                # the entire pocket beside the board and the search fell straight through to the coarse
+                # set below: gating the dense ladder on it took the cohort's caption failures from 6 to
+                # 7 rather than down. `_box_clearance` measures the recorded box's corners against the
+                # tread EDGE - the quantity `captions_clear_the_ways_they_stand_on` itself measures - so
+                # it is both stricter where it matters and honest about the ground a caption may use.
+                # It stays the filter on the coarse fallback below, where it always was.
                 _lvl = [_q for _, _q in _ranked if not label_above or _q[1] < y]
-                _lvl_ok = [_q for _q in _lvl if self.label_seat_clear(_q[0], _q[1], _tw_lab, 8.0, _boxes, tilt=_t)]
-                _seat = next((_q for _q in _lvl_ok if _hug(_q) <= _hug_cap and not _blocked(_q) and _box_clearance(_q) >= _lane_target), None)
+                _seat = next((_q for _q in _lvl if _hug(_q) <= _hug_cap and not _blocked(_q) and _box_clearance(_q) >= _lane_target), None)
                 if _seat is None:  # the same rung the tilted branch takes: give up the MARGIN, never the 2 ft the rule asks
                     _floor = self.px(CAPTION_LANE_FLOOR_FT)
-                    _seat = next((_q for _q in _lvl_ok if _hug(_q) <= _hug_cap and not _blocked(_q) and _box_clearance(_q) >= _floor), None)
+                    _seat = next((_q for _q in _lvl if _hug(_q) <= _hug_cap and not _blocked(_q) and _box_clearance(_q) >= _floor), None)
                 if _seat is not None:
                     _lx, _ly = _seat
                 elif _ok:
