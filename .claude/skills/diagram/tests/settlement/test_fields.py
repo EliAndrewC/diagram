@@ -615,3 +615,24 @@ def test_comb_base_fill_can_floor_the_whole_envelope():
     }
     s.comb_base_fill(net, "p", full_envelope=True)
     assert any("310.0,90.0" in frag for frag in s.out), "the envelope itself is the floor"
+
+
+def test_the_dry_hem_stops_at_the_bank_of_a_watercourse_that_was_there_first():
+    """`build_comb` lays the fan from pure geometry, so a hem plot can be drafted straight across a
+    stream authored earlier (Ubame's). The draw yields: the crop stops at the bank rather than being
+    inked over the water."""
+    s = Settlement(1000, 1000, seed=1)
+    s.meta(name="V", scale="hamlet", ftpx=1, toscale=True)
+    s.M["streams"] = [{"poly": [[0, 120], [500, 120]], "w": 9}]
+    wet = [(100.0, 100.0), (140.0, 100.0), (140.0, 140.0), (100.0, 140.0)]
+    dry = [(600.0, 600.0), (640.0, 600.0), (640.0, 640.0), (600.0, 640.0)]
+    net = {
+        "dry_plots": [
+            {"poly": wet, "fill": "#DCCFA6", "furrow": 6.0, "theta": 0.0, "crop": "soy"},
+            {"poly": dry, "fill": "#DCCFA6", "furrow": 6.0, "theta": 0.0, "crop": "soy"},
+        ]
+    }
+    s._comb_draw_hem(net)
+    ink = "".join(s.out)
+    assert "600.0,600.0" in ink, "the dry plot is drawn"
+    assert "100.0,100.0" not in ink, "the one over the stream is not"

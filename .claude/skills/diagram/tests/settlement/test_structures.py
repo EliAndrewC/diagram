@@ -526,3 +526,21 @@ def test_a_notice_board_with_no_caption_is_sitable_anywhere():
     s.M["lanes"] = [{"pts": [[100, 500], [900, 500]], "w": 4}]
     s.place_kosatsuba(label="")
     assert s.M.get("kosatsuba"), "a board is still placed"
+
+
+def test_a_notice_board_hemmed_on_every_side_still_gets_its_caption():
+    """A board with nowhere clear to put its caption is still placed and still labeled - the seat falls
+    back to the default below (or above, when the caller has said so), and
+    `labels_clear_of_other_buildings` reports it rather than the siter hiding the board."""
+    s = Settlement(1000, 1000, seed=1)
+    s.meta(name="V", scale="hamlet", ftpx=1, toscale=True)
+    for dx in range(-150, 151, 30):
+        for dy in range(-150, 151, 30):
+            if abs(dx) < 20 and abs(dy) < 20:
+                continue  # leave the board's own ground free
+            s.M.setdefault("buildings", []).append({"x": 500 + dx, "y": 500 + dy, "w": 38, "h": 38, "rot": 0, "kind": "merchant"})
+            s.placed.append((500 + dx, 500 + dy, 38, 38))
+    s.kosatsuba(500, 500, label="notice board")
+    seat = [frag for frag in s.toplabels if "notice board" in frag]
+    assert len(seat) == 1, "the caption is drawn all the same"
+    assert 'y="514"' in seat[0], "on the default seat below the board - the fallback, since nothing cleared"
