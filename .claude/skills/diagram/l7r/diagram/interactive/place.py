@@ -118,7 +118,7 @@ KINDS: dict[str, Kind] = {
         "the seat of a county magistrate, and the lowest level of Rokugani society at which samurai live - the lowest, too, that has resident merchants, which is why the farmers of the surrounding districts come in for market day.",
         "non-farmhouse dwellings",
         True,
-        "A town is counted the Imperial way, which takes in the farming population of the whole county as part of the town. Most of those farmers live out in the village districts and are deliberately not on this sheet - what you can see here is the town itself, its dwellings drawn and counted.",
+        "A town of about 238 households, and most of them farm: some 156 farming households work the fields around the town and belong to it, against 82 of every other trade. Every one of those 82 is drawn and counted here; only a sample of the farmhouses is, which is why the figure is larger than anything you can count on the sheet. The farmers of the surrounding village districts are a different matter - they come in for market day, and the census counts them under their own districts.",
         1200,
     ),
     "city": Kind(
@@ -267,17 +267,15 @@ def where_sentences(scale: str, place: dict[str, str]) -> list[str]:
     # district a village belongs to"). The shared name is a documented departure from history, in the
     # GM's own core materials, and one their players already know - so the map does not raise it
     # either. What a village DOES get said about it is its county, which every village belongs to.
-    if district and scale == "village":
-        pass
-    elif district:
+    if district and scale != "village":
         out.append(f"It belongs to the village district of {district}" + (f", which lies {direction}." if direction else "."))
+    if place.get("county"):
+        out.append(f"It is in {place['county']} county." if scale == "village" else f"The district is part of {place['county']} county.")
     if place.get("imperial road"):
         # "runs south" is the road's COURSE; the GM's fact is its POSITION - it lies south of the
         # settlement (settlement-review, 2026-08-29). The notes keep the bearing; the template says
         # what the bearing is of.
         out.append(f"An Imperial road passes {place['imperial road']} of here.")
-    if place.get("county"):
-        out.append(f"It is in {place['county']} county." if scale == "village" else f"The district is part of {place['county']} county.")
     if place.get("town"):
         out.append(f"The town of {place['town']} lies {place['town direction']}." if place.get("town direction") else f"The town of {place['town']} is the county seat.")
     if place.get("also"):
@@ -332,8 +330,9 @@ def dwellings_shown(manifest: dict[str, Any], kind: Kind) -> int:
 
     The arithmetic confirms which list the tiers mean: Minami's 520 non-farm dwellings x 5 to a
     household is its declared 2,600 exactly, and Nagahara's 600 x 5 is its 3,000 - farmers excluded,
-    which is the city convention the GM described. (A town's declared figure counts the drawn
-    farmhouses too; see `KINDS["town"].population_note` and the open question recorded with it.)"""
+    which is the city convention the GM described. (A town's MANIFEST figure counts its drawn
+    farmhouses too and is the depicted slice the housing check keys on; the page states the tier's own
+    1,200 instead - see `Kind.default_population`.)"""
     if not kind.excludes_farms:
         return len(manifest.get("houses") or [])
     return sum(1 for b in (manifest.get("buildings") or []) if b.get("kind") in DWELLING_KINDS)

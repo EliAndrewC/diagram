@@ -125,9 +125,15 @@ Pull from `/host-l7r-repo/gm-assistant/setting/median-domain.md`, `demographics.
   explained rather than left bare, because a town's and a city's mean different things and a reader
   will otherwise take them for the same: a **city's** excludes farmers entirely (its declared figure
   is urban dwellings x 5, and the farms on its sheet belong to village districts and counties the
-  census counts separately), while a **town's** is the depicted slice - its townsfolk plus the
-  farmhouses actually drawn - and NOT the ~1,200 of the county it heads.
-  **A TOWN'S FIGURE IS 1,200, and it is the tier's rather than the map's** (GM 2026-08-29: *"The
+  census counts separately), while a **town's** is the town's OWN ~238 households, of
+  which some 156 farm the fields around it - so its figure is ~1,200 while its sheet draws every one
+  of the 82 non-farm dwellings and only a sample of the farmhouses.
+  **THE 1,200 IS THE TOWN'S OWN, not its county's** - `settlements/towns.md` puts a town at ~238
+  households (~156 farming + 24 merchant + 29 laborer + 13 servant + 12 burakumin + 4 samurai = 82
+  non-farm), Ubame draws exactly those 82, and `median-domain.md` lists towns, villages and hamlets as
+  SEPARATE lines summing to the domain - so reading the town's figure as taking in its county's
+  village-district farmers would double-count ~172,000 inhabitants (settlement-review round 8).
+  It is the tier's figure rather than the map's (GM 2026-08-29: *"The
   default population of a town is already 1,200 So you can make that the population for all of the
   towns which we have already generated and document that. Though, again, that is the total
   population including farmers, which means that the sum total of that population is not visible on

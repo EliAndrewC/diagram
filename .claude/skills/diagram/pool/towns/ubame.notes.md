@@ -12,6 +12,23 @@ unwalled with an Imperial road, Hirameki is walled with none, Ubame is **unwalle
 every rule that keys off `meta.walled` or `meta.imperial_road` runs a path neither existing artifact
 covers.
 
+## Map notes
+
+<!-- READ BY THE INTERACTIVE MAP (`l7r/diagram/interactive/notes.py`, feature 156). -->
+
+### Place
+
+- **county**: Ubame
+
+*The town's stated population is the TIER's ~1,200, not this manifest's 590 (GM 2026-08-29: "The
+default population of a town is already 1,200 ... that is the total population including farmers,
+which means that the sum total of that population is not visible on the map, which is intentional").
+Whose farmers, settled by settlement-review round 8: the town's OWN. `settlements/towns.md` puts a
+town at ~238 households - ~156 farming plus 82 of every other trade - and this sheet draws exactly
+those 82 and only 36 of the ~156 farmhouses, which is why 590 is what the housing check sees and
+~1,200 is what the town is. The county's village-district farmers are counted separately, under
+their own districts.*
+
 ## GM decisions (settled before drawing, not open for re-litigation)
 
 | Decision | Value | What it drove |

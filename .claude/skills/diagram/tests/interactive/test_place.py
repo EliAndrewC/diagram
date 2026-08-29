@@ -129,17 +129,18 @@ def test_each_tier_explains_what_its_population_figure_COUNTS() -> None:
     """A matter of Imperial census convention, not arithmetic, and the two upper tiers differ (GM
     2026-08-29). A hamlet's and a village's need no explaining - they are five to a drawn household.
 
-    THE TOWN NOTE SAYS WHAT ITS FIGURE IS, not what the convention wants it to be. Every town in the
-    pool declares the DEPICTED slice - Ubame's 590 is (36 farmhouses + 82 dwellings) x 5 exactly - and
-    `settlements.md` has said so since before this feature, so a card claiming the figure took in the
-    county's farmers would contradict its own manifest. The GM's convention needs the gens to
-    re-declare `population`; until they do, the card states the smaller true thing and names the
-    larger one as not yet given (settlement-review, 2026-08-29)."""
+    THE TOWN'S 1,200 IS ITS OWN (GM 2026-08-29, and settlement-review round 8 nailed down whose):
+    `settlements/towns.md` puts a town at ~238 households, ~156 of them farming and 82 not, and Ubame
+    draws exactly those 82. Its manifest's 590 is the DEPICTED slice the housing check keys on - the
+    82 plus the 36 farmhouses that fit the sheet - while the tier's real figure counts all ~156
+    farming households. Reading the 1,200 as the COUNTY's farmers would double-count against
+    `median-domain.md`, which lists towns, villages and hamlets as separate lines."""
     # THE TOWN'S FIGURE TAKES IN THE COUNTY'S FARMERS, most of whom are deliberately not drawn - the
     # GM's ruling of 2026-08-29, and the reason the tier states 1,200 rather than its manifest's
     # depicted slice. The card must say so, or a reader counts the dwellings and finds them short.
-    assert "farming population of the whole county as part of the town" in KINDS["town"].population_note
-    assert "deliberately not on this sheet" in KINDS["town"].population_note
+    assert "156 farming households work the fields around the town and belong to it" in KINDS["town"].population_note
+    assert "only a sample of the farmhouses" in KINDS["town"].population_note
+    assert "counts them under their own districts" in KINDS["town"].population_note, "the county's farmers are NOT in the figure"
     # THE CITY IS COUNTED THE OTHER WAY. Its note used to claim the figure "takes in the samurai
     # country estates", which all three cities' arithmetic denies - Minami's 520 dwellings x 5 IS its
     # declared 2,600, with no headroom for an undrawn household. The estate convention is the GM's and
