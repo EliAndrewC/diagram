@@ -463,6 +463,37 @@ class Settlement(
         run off the edge (a city map is about the city; a town map is about its surroundings)."""
         self.view = (ox, oy, w, h)
         self.M["meta"]["view"] = [ox, oy, w, h]
+        self._partition_grove_clumps(ox, oy, w, h)
+
+    def _partition_grove_clumps(self: Settlement, ox: float, oy: float, w: float, h: float) -> None:
+        """Split every communal grove's clumps into the ones on the page and the ones off it.
+
+        THIS IS THE FIRST MOMENT THE PAGE IS KNOWN (feature 152 T02). The belt is seated and inked long
+        before the crop is computed, so the trim that decides which clumps are visible used to run at
+        seating against a PROXY for the page - the belt's own inner face plus a 48 ft margin - and that
+        proxy under-estimates the frame whenever anything else holds it open wider. It deleted canopy a
+        reader can see: measured over the pool, Kashikawa lost 61 clumps of which all 61 were wholly
+        inside the rendered view, Kuwabata 21 of 45, Sawada 30 of 84, and those three are exactly the
+        maps with farmhouses standing beyond their belt's ends. Here there is no proxy - `meta.view` IS
+        the page.
+
+        A clump WHOLLY outside the view is off-page; the rest are drawn. That is the same "only wholly
+        outside" rule the `within` window applies, and it is deliberately generous: a belt is allowed to
+        clip at the frame ("a partially visible belt reads as 'the wood continues'", the frame note
+        above), so a clump the edge merely touches is real canopy and counts.
+
+        The ink is not rewritten - a clump past the page is clipped by the render, which is what a
+        communal grove is documented to do. Only the RECORD moves, so `clumps` means "canopy a reader
+        can see" and `clumps_offpage` means "trees that stand, off the page" - which is what the two
+        keys have always claimed and, until now, only claimed."""
+        for g in self.M.get("village_groves") or []:
+            allc = list(g.get("clumps") or []) + list(g.get("clumps_offpage") or [])
+            if not allc:
+                continue
+            r = float(g.get("r") or 0.0)
+            on = [c for c in allc if c[0] + r > ox and c[0] - r < ox + w and c[1] + r > oy and c[1] - r < oy + h]
+            off = [c for c in allc if c not in on]
+            g["clumps"], g["clumps_offpage"] = on, off
 
     # solid HARD footprints the frame must fully contain (+ margin); the fields and pond are added specially.
     # Everything NOT listed here - the commons scrub, streams/channels/lanes - does not set the frame: it is

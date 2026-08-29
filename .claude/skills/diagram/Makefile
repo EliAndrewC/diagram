@@ -9,6 +9,7 @@
 	 switches ci-off ci-on scope-lock scope-unlock _switch \
 	 map cohort tripwire hamlet cache-audit regressions placement-stages pool-index pool-index-if-stale compound render-sync idle-tests \
 	 gate-manifest why-placed site-justice crop jogs pack-audit scatter-audit sun-audit new-check timings citybudget help \
+	 notes-census \
 	 ci-status ci-check ci-merge ci-image commit-permitted \
 	 perf-explain perf-confirm perf-audit perf-signoff perf-review perf-profile check-census
 
@@ -371,6 +372,9 @@ pack-audit:     ## empty space and geometry in a Mode A compound SVG
 
 scatter-audit:  ## is drawn ground cover standing where keep-outs should have stopped it?
 	$(RUN).tools.scatter_audit $(ARGS)
+
+notes-census:   ## refresh the derived counts inside each map's notes census block   M="pool/hamlets/*.json"
+	$(RUN).tools.notes_census $(or $(M),$(wildcard pool/*/*.json))
 
 sun-audit:      ## the sun rules and the belt's page presence, off the manifest   M=pool/hamlets/inashiro.json
 	$(RUN).tools.sun_audit $(or $(M),pool/hamlets/inashiro.json)

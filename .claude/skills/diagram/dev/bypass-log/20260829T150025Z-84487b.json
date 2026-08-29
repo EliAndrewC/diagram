@@ -1,0 +1,6 @@
+{
+  "utc": "20260829T150025Z",
+  "guard": "pair-hooks",
+  "what": "gate alone",
+  "reason": "mid-implementation tier check for feature 152; the pool review runs at acceptance (T24)"
+}

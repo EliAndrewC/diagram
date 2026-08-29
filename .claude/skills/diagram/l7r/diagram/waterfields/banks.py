@@ -394,11 +394,16 @@ _TINT_MIN_SOLIDITY = 0.85
 # 114 x 18.9 ft and 139 x 24.8 ft, aspects 6.0 and 5.6, sharpest corners 28.5 and 27.9 deg, solidity
 # fine. Each reads at fit zoom as a blue-gray dagger of water tapering toward the collector, which is
 # the exact misreading `pointed_ring`'s own docstring says the tint rules exist to prevent - and
-# neither shape is wrong, only its COLOUR: the fan toe does truncate, and a hem strip that narrow is
+# neither shape is wrong, only its COLOR: the fan toe does truncate, and a hem strip that narrow is
 # honest ground. So the fourth clause measures proportion rather than taper. 4.0 is far above
 # anything a leveled basin runs at (the median plot on a hamlet fan is ~37 x 38 ft, aspect ~1, and
 # the whole map's worst is 7.2), so it demotes the two wedges and touches no basin that reads as one.
 _TINT_MAX_ASPECT = 4.0
+# A BASIN FAR LARGER THAN ITS NEIGHBORS DOES NOT READ AS A BASIN (feature 152 T10). 2.0x the map's own
+# MEDIAN plot: Sawada's offender was 4.9x and the largest of 776, and the reviewer's own suggested bar was
+# "2x would demote this one and leave every honest wet row". Relative to the map rather than absolute,
+# because a basin's size is set by the fan's design cell and that differs per settlement.
+_TINT_MAX_AREA_RATIO = 2.0
 
 
 # A CHEVRON IS POINTED **AND** NOTCHED - neither measure alone can see one, and that is the whole

@@ -1,0 +1,6 @@
+{
+  "utc": "20260829T173315Z",
+  "guard": "pair-hooks",
+  "what": "gate alone",
+  "reason": "the settlement-review that read these maps returned this turn and every finding is closed; no manifest or render has moved since (git diff 0e46dac1..HEAD over pool/hamlets/*.json and *.png is empty), so the artifacts under review are byte-identical to the ones it measured and a fourth dispatch would re-read the same files"
+}

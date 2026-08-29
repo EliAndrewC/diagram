@@ -62,6 +62,40 @@ from .common_03_capacity import _UNBOUND, _kept
 # The scatter records its real clumps, so test those, not the bounding poly. WHY: settlements.md 'Village windbreak'.
 
 
+def _column_in_belt(t: float, px: float, py: float, wx: float, wy: float, poly: list[tuple[float, float]], view: Any = None) -> bool:
+    """Does the belt's own footprint have any VISIBLE depth at this across-wind column?
+
+    The continuity walk projects onto a straight axis; a belt that bows around a plot has columns on
+    that axis where its polygon simply is not. Sampling the column along the WIND axis, across the
+    polygon's own extent, answers whether there is belt there to be holed.
+
+    AND ON THE PAGE (settlement-review 2026-08-29, acceptance re-check; measured the same day). The
+    window this feeds is the belt POLYGON's extent, which is the honest bound for "the planting stops
+    before the belt does" - but a footprint runs off the page as freely as a clump does, and demanding
+    canopy out there fails a belt for ground no reader can see. Measured on Kuwabata: the polygon runs
+    693..1440 along its own axis, only 790..1327 of that is inside the view, and the planting covers
+    734..1330 - so the belt is continuous across every column that is drawn, and the 110 ft "gap" at
+    the high end is entirely off-page. Without this clause the check failed Kuwabata and Kashikawa for
+    exactly that invisible tail."""
+    _c = [(q[0] * px + q[1] * py, q[0] * wx + q[1] * wy) for q in poly]
+    _d0, _d1 = min(q[1] for q in _c), max(q[1] for q in _c)
+    # 25 samples was a 14.7 px step on Kuwabata against a decisive on-page window of 13.0 px - that
+    # column's verdict was decided at the sampling limit (settlement-review 2026-08-29). A miss falls
+    # toward leniency (a dropped column resets the run) so it cannot manufacture a failure, but it can
+    # hide one on a hook whose arms lie far apart along the wind axis. 200 samples is a ~1.8 px step
+    # there, well under a crown.
+    _n = 200
+    for _k in range(_n + 1):
+        _d = _d0 + (_d1 - _d0) * _k / _n
+        _qx, _qy = t * px + _d * wx, t * py + _d * wy
+        if not point_in_poly(_qx, _qy, poly):
+            continue
+        if view and not (view[0] <= _qx <= view[0] + view[2] and view[1] <= _qy <= view[1] + view[3]):
+            continue
+        return True
+    return False
+
+
 def _seg_0285_073__cx_1(*, M: Any = _UNBOUND, cx: Any = _UNBOUND, cy: Any = _UNBOUND, g: Any = _UNBOUND, scale: Any = _UNBOUND) -> dict[str, Any]:
     """Gate segment 0285.073 (cx, cy, g, vg_clumps) - body verbatim from _seg_0285__wells_clear_of_shrine_and_torii (feature 024 per-check split; guards re-evaluated in the body, see split_oversized.py)."""
     if scale in ('town', 'village', 'hamlet') and scale in ('town', 'village', 'hamlet', 'city'):
@@ -283,7 +317,7 @@ that way passes the four maps whose belts happen to be dense and fails a third o
 
 What a reader actually sees, and what a wind wall actually fails at, is a GAP: a RUN of bare columns
 wide enough to see through. 30 ft is a clump's own drawn diameter (28 ft) rounded up - narrower than
-that and the neighbouring canopies close the view. The two real breaches this rule exists for
+that and the neighboring canopies close the view. The two real breaches this rule exists for
 measured ~45 ft (a wellhead seated inside the belt) and ~60 ft (a peer session's lane crossing it);
 a scatter's own worst pitch is ~12 ft.
 """
@@ -314,9 +348,29 @@ def _seg_0613__village_windbreak_is_continuous(*, M: Any = _UNBOUND, check: Any 
         _thin: list[tuple[int, int, int]] = []
         for _g in _wb:
             _r = float(_g.get("r", 6))
-            _pr = [
-                (c[0] * _px + c[1] * _py, c[0] * _wx + c[1] * _wy, c[0], c[1]) for c in _g["clumps"] + (_g.get("clumps_offpage") or [])
-            ]  # a clump the page trim cut still stands off the page (feature 137 T05): the belt wraps a plot there, it is not holed
+            # AN OFF-PAGE CLUMP STILL FILLS AN ON-PAGE COLUMN, and that asymmetry with the window is
+            # DELIBERATE (feature 137 T05, re-tested 2026-08-29). The acceptance review read it as a
+            # one-sided test - the window is clipped to the page, so why is the planting not - and the
+            # symmetric version was implemented and rolled: credit a clump only where its crown reaches
+            # the view. It fails Mizuguchi with a 60 ft run at x 1133..1183, where the belt polygon holds
+            # 48 px of visible ground (y 1902..1950) at the frame's bottom edge and the nearest clumps
+            # sit at y 1971-1983 with their crowns 5 px short of it.
+            #
+            # THAT GROUND IS A HOMESTEAD, and the belt is FORBIDDEN to plant on it: one farmhouse, two
+            # threshing yards, two kitchen gardens and a persimmon stand within 90 ft of (1160, 1925),
+            # and a yard's southern sun corridor and a garden's eastern one are keep-outs the seating
+            # must respect. So the symmetric check demands canopy where the generator is right to refuse
+            # it - a check failing for something a placement rule already gets right, which is the exact
+            # class the GM ruled out (2026-08-29). The reader loses nothing: the canopy visible in that
+            # gap is the copse, which is what a dooryard grove is for.
+            #
+            # The asymmetry is therefore kept and now has a reason: the WINDOW asks "is there belt here
+            # for a reader to see", and the PLANTING asks "is the belt holed", which a clump answers
+            # whether or not the frame happens to cut it. What the review is right about is that the
+            # guarantee is weaker than it looks - delete Mizuguchi's copse and this still passes. Closing
+            # that needs the check to know the seating's keep-outs, which is a second copy of the
+            # generator inside the gate; not worth it for one column at one page edge.
+            _pr = [(c[0] * _px + c[1] * _py, c[0] * _wx + c[1] * _wy, c[0], c[1]) for c in _g["clumps"] + (_g.get("clumps_offpage") or [])]
             # AN EMPTY COLUMN IS THE WORST CASE, NOT A SKIPPED ONE. The first cut of this check wrote
             # `if _spans:` and so scored a column with NO canopy as nothing at all - it passed a
             # sabotaged Inashiro with a 60 ft band cut clean out of its belt, which is the exact
@@ -326,12 +380,40 @@ def _seg_0613__village_windbreak_is_continuous(*, M: Any = _UNBOUND, check: Any 
             #
             # The ENDS are excluded by one clump radius at each side: a belt tapers where it stops,
             # and the outermost column of a diagonal belt legitimately carries one clump's worth.
-            _lo, _hi = min(p[0] for p in _pr) + _r, max(p[0] for p in _pr) - _r
+            # ...AND A COLUMN THE BELT DOES NOT OCCUPY IS NOT A HOLE IN IT (feature 152, GM ruling
+            # 2026-08-29: "we should just do whatever was historically true"). The research pass that
+            # ruling authorized found that neither literature describes a belt as a closed perimeter:
+            # a Chinese village's fengshui forest is a SYSTEM OF SEPARATE PATCHES with open ground
+            # between them by design, and Honda Seiroku's 1915 founding definition of `yashikirin` puts
+            # the Japanese farmstead grove on the west and north sides only, leaving the entrance side
+            # open. So the defect is a hole in the PLANTED RUN, and the absence of belt is not one -
+            # see settlements/vegetation.md, "A shelter belt is not a RING".
+            #
+            # This walk projects onto a straight across-wind axis, so on a belt that BOWS around a plot
+            # the chord between its outermost clumps crosses ground the belt's own footprint never
+            # covers. Measured on Kuwabata: the flagged 40 ft run leaves the belt polygon after 14 ft,
+            # and no amount of seating will fill ground the band does not occupy. Columns are therefore
+            # counted only where the belt's own polygon has depth.
+            _poly = [(float(_a), float(_b)) for _a, _b in (_g.get("poly") or [])]
+            # THE WINDOW IS THE BELT'S OWN FOOTPRINT, NOT ITS LAST CLUMP (settlement-review 2026-08-29,
+            # acceptance re-check). Bounding the scan by `max(clump) - r` makes the check structurally
+            # unable to see the one failure that matters most: a belt whose PLANTING stops before its
+            # polygon does. On Kuwabata the scan ended at u=1301 while the polygon ran to 1350 and the
+            # easternmost farmhouse sat at 1339 - so the column a reader would point at was outside the
+            # window by construction, and "the belt stops before the cluster does" could not fail.
+            # The polygon is the belt's own statement of the ground it holds; it is the honest window.
+            # The window is the whole polygon; `_column_in_belt` drops the columns of it that are off
+            # the page, so the scan asks for canopy exactly where a reader can look for it.
+            _pu = [q[0] * _px + q[1] * _py for q in _poly] if _poly else []
+            _lo = (min(_pu) if _pu else min(p[0] for p in _pr)) + _r
+            _hi = (max(_pu) if _pu else max(p[0] for p in _pr)) - _r
             _run = 0.0
             _t = _lo
             while _t <= _hi:
                 if any(abs(p[0] - _t) <= _r for p in _pr):
                     _run = 0.0
+                elif _poly and not _column_in_belt(_t, _px, _py, _wx, _wy, _poly, M["meta"].get("view")):
+                    _run = 0.0  # the belt does not reach this column: its edge, not its hole
                 else:
                     _run += 10.0
                     if _run > _BELT_MAX_GAP_FT:

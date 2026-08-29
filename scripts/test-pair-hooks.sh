@@ -44,6 +44,16 @@ check "a heredoc that TALKS about the gate passes" '[ "$(rc_pretool "$MENTION")"
 check "a quoted mention passes" '[ "$(rc_pretool "$QUOTED")" -eq 0 ]'
 check "another target passes" '[ "$(rc_pretool "$OTHER")" -eq 0 ]'
 
+# ...AND THE SAME RULE ON THE AGENT SIDE, which the guard's own author got wrong (2026-08-29). The
+# branch greped the whole tool_input for "settlement-review", so a `spec-fidelity` dispatch that merely
+# QUOTED the referent was blocked - a spec review, which owes no gate at all and cannot have one,
+# because there is no map. The subagent TYPE is the invocation; the prompt is prose.
+SPECREV=$(stdin_for Agent '{"subagent_type":"spec-fidelity","prompt":"the referent is the settlement-review pass of 2026-08-29; judge the spec"}')
+READER=$(stdin_for Agent '{"subagent_type":"source-reader","prompt":"read what a settlement-review cited"}')
+check "a spec-fidelity dispatch that MENTIONS a settlement-review passes" '[ "$(rc_pretool "$SPECREV")" -eq 0 ]'
+check "a source-reader that mentions one passes" '[ "$(rc_pretool "$READER")" -eq 0 ]'
+check "...while a real settlement-review is still refused" '[ "$(rc_pretool "$REVIEW")" -eq 2 ]'
+
 # --- 3. the pair: a pending review lets the gate through ------------------------------------------
 TU='{"type":"assistant","message":{"role":"assistant","stop_reason":"tool_use","content":[{"type":"tool_use","name":"Read","input":{}}]}}'
 TR='{"type":"user","message":{"role":"user","content":[{"type":"tool_result","content":"..."}]}}'
@@ -72,6 +82,26 @@ STOP=$(printf '{"transcript_path":"%s","session_id":"sid-1","cwd":"%s"}' "$TMP/p
 ( cd "$CLONE" && printf '%s' "$STOP" | "$HOOK" stop >/dev/null 2>&1 ); SECOND=$?
 check "stop refuses a half-open pairing" '[ "$FIRST" -eq 2 ]'
 check "...and never twice for the same content" '[ "$SECOND" -eq 0 ]'
+
+# --- 7. the documented remedy CLEARS the stop hook -------------------------------------------------
+# The stop message says "record why it is not owed: PAIR_OK=... on your next gate run". Before
+# 2026-08-29 doing exactly that logged a bypass and changed nothing stop reads, so the hook fired
+# again and repeated the remedy the session had just used. An escape that cannot clear its own guard
+# is the shape this project's guard rules single out.
+rm -f "$CLONE/.git/pairing-state.json"
+printf '{"engine_key":"%s"}' "$KEY" > "$CLONE/.git/verification-state.json"
+WAIVE=$(stdin_for Bash '{"command":"PAIR_OK=\"the review read these exact maps and nothing moved\" make done"}')
+check "the waived gate runs" '[ "$(rc_pretool "$WAIVE")" -eq 0 ]'
+check "...and records the waiver against this content" 'grep -q "waived_key" "$CLONE/.git/pairing-state.json"'
+STOP2=$(printf '{"transcript_path":"%s","session_id":"sid-2","cwd":"%s"}' "$TMP/proj/sid-2.jsonl" "$CLONE")
+( cd "$CLONE" && printf '%s' "$STOP2" | "$HOOK" stop >/dev/null 2>&1 ); WAIVED=$?
+check "...so stop does not fire on content the gate waived" '[ "$WAIVED" -eq 0 ]'
+# and the waiver is per-CONTENT: a waiver recorded against OTHER content does not cover this one, so
+# an engine edit after a waived gate is guarded again rather than riding the old waiver
+printf '{"waived_key":"deadbeefdeadbeef"}' > "$CLONE/.git/pairing-state.json"
+printf '{"engine_key":"%s"}' "$KEY" > "$CLONE/.git/verification-state.json"
+( cd "$CLONE" && printf '%s' "$STOP2" | "$HOOK" stop >/dev/null 2>&1 ); OTHER=$?
+check "...but a waiver for OTHER content does not cover this one" '[ "$OTHER" -eq 2 ]'
 
 printf '\ntest-pair-hooks: %d passed, %d failed\n' "$pass" "$fail"
 [ "$fail" -eq 0 ]

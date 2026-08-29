@@ -943,7 +943,19 @@ def stage_windbreak(s: Settlement, plan: SitePlan) -> None:
     xs = [h["x"] for h in houses]
     ys = [h["y"] for h in houses]
     pad = 16.0
-    s.village_grove([(min(xs) - pad, min(ys) - pad), (max(xs) + pad, min(ys) - pad), (max(xs) + pad, max(ys) + pad), (min(xs) - pad, max(ys) + pad)], role="copse", dense=False)
+    # WHERE THE COPSE SITS IS A KNOB (feature 152 T20, constitution XII). Both forms are what a
+    # back-village planting is: trees threading the homesteads, or a stand tucked against the shelter
+    # belt at the settlement's back. A settlement-review named the pair as a knob candidate while
+    # reporting Sawada's copse drawn INSIDE the belt - which is the second form happening by accident,
+    # unrecorded, on a map that had rolled the first. Rolled per settlement from the map's own seed, so
+    # two hamlets differ at a glance, which is the point of a knob rather than a house style.
+    _box = [(min(xs) - pad, min(ys) - pad), (max(xs) + pad, min(ys) - pad), (max(xs) + pad, max(ys) + pad), (min(xs) - pad, max(ys) + pad)]
+    if plan.copse_siting == "against_the_belt" and _dented:
+        # the belt's own footprint, stood off the houses so the two stands read as one wood at its back
+        _bx = [q[0] for q in _dented]
+        _by = [q[1] for q in _dented]
+        _box = [(min(_bx), min(_by)), (max(_bx), min(_by)), (max(_bx), max(_by)), (min(_bx), max(_by))]
+    s.village_grove(_box, role="copse", dense=False)
 
 
 def belt_polygon(s: Settlement, plan: SitePlan) -> Poly:

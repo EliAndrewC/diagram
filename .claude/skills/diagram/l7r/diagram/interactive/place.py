@@ -48,7 +48,10 @@ from .sources import citations, research_sources
 #: (settlement-review round 5 - the move had left the constant behind).
 PER_HOUSEHOLD = HOUSEHOLD
 
-#: `l7r.md`'s median-domain table, for the one ranking the card is allowed to make - of TIERS.
+#: `l7r.md`'s median-domain table, for the one ranking the card is allowed to make - of TIERS. They are
+#: INTERPOLATED into the hamlet's text below rather than typed into it: writing them out left these
+#: three with no consumer and the same numbers in two places, which nothing would have caught (ruff
+#: does not flag an unused module constant) - settlement-review round 7, 2026-08-29.
 HAMLETS_PER_DOMAIN, VILLAGES_PER_DOMAIN, HAMLET_SHARE = 1296, 216, "40%"
 
 
@@ -85,7 +88,8 @@ class Kind:
 KINDS: dict[str, Kind] = {
     "hamlet": Kind(
         "hamlet",
-        "a small outlying farming community belonging to a village district. It has no headman, no shrine and no burial ground of its own - the village headsman who oversees it lives in the main village, and its dead go to the district's ground. A hamlet is the commonest kind of settlement there is: a domain holds some 1,296 of them to 216 villages, and 40% of its inhabitants live in one.",
+        "a small outlying farming community belonging to a village district. It has no headsman of its own - the village headsman who oversees it lives in the main village - and no shrine and no burial ground; its dead go to the district's ground. "
+        f"A hamlet is the commonest kind of settlement there is: a domain holds {HAMLETS_PER_DOMAIN:,} of them to {VILLAGES_PER_DOMAIN} villages, and {HAMLET_SHARE} of its inhabitants live in one.",
         "farmhouses",
         False,
         "",

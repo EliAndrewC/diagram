@@ -668,9 +668,45 @@ FIXTURE_BANDS: dict[str, tuple[float, float]] = {
 }
 _FIXTURE_ORDER = ("privy", "manure", "bath", "coop", "woodpile", "shrine", "persimmon")  # the buildings before the stack, which has the most seats
 _PRIVY_SEATS = (("back", 0.60), ("gate", 0.25), ("naya", 0.15))
+PRIVY_SUN_MIN_FT = 18.0  # the sun-side search starts at the house wall and steps out; measured free ground begins 24-32 ft
+# 48, NOT 72 (settlement-review 2026-08-29, acceptance). At 72 ft the search walked the privy out past
+# its own work yard and, in a cluster where the next farmhouse is 50 ft away, out of its own homestead
+# altogether: 15 of 86 privies and manure pits ended up nearer ANOTHER house than the one they serve,
+# against 0 of 52 on main - a legibility defect this feature CREATED, and one no check can see, because
+# nothing tests which farmstead a fixture belongs to. The comment that used to sit on 72 claimed it
+# "stops where a fixture would no longer read as belonging to that homestead"; that was the property it
+# was chosen for and it did not hold. Wang & Ochiai gives a DIRECTION, not a distance, so the radius is
+# ours to set and it belongs against the house: the three attested seats are all at the wall.
+PRIVY_SUN_MAX_FT = 48.0
+PRIVY_SUNNY_SHARE = 0.727  # the share of outhouses seated SE-to-S: Wang & Ochiai 2022 measured 72.7% in
+# Arakawa village, and the GM (2026-08-29) ruled the figure be used literally rather than rounded. The
+# reason the record gives is fermentation, not wind - see the note at the seat roll.
 _SHRINE_CORNERS = (("NW", 0.45), ("NE", 0.35), ("SW", 0.20))
 _WALL_GAP_FT = 3.5  # the review measured -0.3 ft at 3.0 against the drawn wall; half a foot of true daylight
 _SALT = {"privy": 101.0, "manure": 102.0, "woodpile": 103.0, "bath": 104.0, "coop": 105.0, "shrine": 106.0, "persimmon": 107.0}
+
+
+def nearer_own_house(seat: tuple[float, float, float, float], hx: float, hy: float, ca: float, sa: float, others: Sequence[Pt]) -> tuple[int, float, float]:
+    """Sort key preferring a fixture seat that is nearer its OWN farmhouse than any other house's.
+
+    `seat` is (dx, dy, w, d) in the house's own raked frame; `ca`/`sa` are that rake's cosine and sine.
+    Returns (0 if the seat belongs unambiguously to this house else 1, distance from it) - so a caller
+    that sorts by it keeps its own candidate order within each class and only demotes the seats a
+    reader would attribute to the neighbor.
+
+    Lifted out of the privy branch's closure (GM 2026-08-28: an inner function that is hard to test
+    gets lifted out) so the manure heap can share ONE body with it, and so the rule can be asked with
+    two tuples instead of a whole settlement."""
+    _mx, _my = hx + seat[0] * ca - seat[1] * sa, hy + seat[0] * sa + seat[1] * ca
+    _dmine = math.hypot(_mx - hx, _my - hy)
+    if not others:
+        return (0, _dmine, -_dmine)
+    _dother = min(math.dist((_mx, _my), _o) for _o in others)
+    # The third element is the MARGIN, negative when the seat is unambiguously this house's. Sorting by
+    # it does what a flag cannot: where no candidate is unambiguous - which is the common case for a
+    # heap that must lie beyond a privy already on the neighbor's side - it still picks the LEAST
+    # misattributable of them, instead of leaving the arbitrary first one in place.
+    return (0 if _dmine < _dother else 1, _dmine, _dmine - _dother)
 
 
 def _roll(weights: Sequence[tuple[str, float]], u: float) -> str:
@@ -771,14 +807,143 @@ def farmstead_fixtures(s: Settlement, plan: SitePlan, houses: Sequence[Mapping[s
                     "back": (hw * 0.3, -(hh / 2 + g + d / 2), w, d),
                     "gate": (-hw * 0.35, hh / 2 + g + d / 2, w, d),
                     "naya": ((hw / 2 + g + d / 2), -hh * 0.25, d, w) if shed_side == "N" else (-(hw / 2 + hw * 0.32 + g + d / 2), -hh * 0.25, d, w),
+                    # THE SUN SIDE, which the record documents and this seat table did not have (feature 152
+                    # T07). The three seats above are all north or flank: measured on the pool before this
+                    # change, every privy on every map sat at bearing 33-73 degrees from its house. The source
+                    # the GM ruled on puts 72.7% of them SOUTHEAST to SOUTH, so a seat has to exist there.
                 }
                 first = _roll(_PRIVY_SEATS, u)
-                seats = [seat[first]] + [seat[k] for k, _ in _PRIVY_SEATS if k != first] + [(hw / 2 + g + d / 2, hh * 0.25, d, w)]
+                seats = [seat[first]] + [seat[k] for k, _ in _PRIVY_SEATS if k != first]
+                # THE OUTHOUSE FACES THE SUN, AT THE RATE THE RECORD GIVES (feature 152 T07, GM 2026-08-29:
+                # "we should literally use the 72.7% number for the chance of any given outhouse being in the
+                # southeast and south directions"). Wang & Ochiai's survey of farmhouses in Arakawa village
+                # (JAABE 21:6, 2022) found toilets "tended to be located in southeast and south directions,
+                # with a total percentage at 72.7%, as a relatively warm temperature helped quick fermentation
+                # of excrements" - night soil was fertilizer, and the sun on that side sped the composting.
+                #
+                # NOT WIND. A settlement-review found every privy on Sawada standing upwind of its own house
+                # and proposed seating them downwind; the research pass sent to settle it CONTRADICTED that -
+                # the same paper's wind-siting finding covers storage buildings and retirement houses, not
+                # toilets, and the words leeward, downwind, odor and hygiene appear nowhere in it. So the
+                # defect the review found was real (the seat was north on every map, because these offsets are
+                # in the HOUSE's frame and houses draw at rot 0-4) and its proposed cause was wrong.
+                #
+                # Direction is the primary rule and the attested seats are the tiebreak: the three seats keep
+                # their own weights (`_PRIVY_SEATS`) WITHIN each group, so a map that cannot put a privy to the
+                # southeast still seats it where the record says privies go.
+                _u_dir = s._hjit(hx, hy, _SALT[kind] + 0.25)
+                # THE SUN SIDE IS SEARCHED, NOT GUESSED AT (feature 152 T07 round 2, GM 2026-08-29).
+                # The first attempt offered the sector a handful of hand-picked offsets - a couple of
+                # bearings at a couple of radii, straight out from the house wall - and they happened to
+                # land on the work yard or a garden, so the placer fell through to the old north-east seat
+                # and the realized share stuck at 43.8%. I read that plateau as the ground being full and
+                # said so; the GM asked the obvious question back - the real farmsteads the 72.7% comes
+                # from had threshing yards too, so why can ours not do what they did? Measured in answer,
+                # on Sawada: EVERY one of the 19 houses has free sun-side ground, 49 to 151 clear 6x6 ft
+                # spots each, the nearest 24-32 ft out - the same radius the privy already uses on its
+                # north-east side. The yard blocks a slice of a 90-degree arc, not the side. The plateau
+                # was evidence about my offsets, not about the ground.
+                #
+                # So the sector is walked instead: bearings across SE-to-S, radii outward from the house,
+                # NEAREST FIRST (the attested seats are all against the house - back door, gate, naya - so
+                # the privy belongs as close as the ground allows), and `_strip_blocked` below takes the
+                # first that is clear. Bearings are COMPASS bearings in map space, converted back through
+                # the house's own rake, so a raked farmhouse still gets a true southeast seat.
+                _sun: list[tuple[float, float, float, float]] = []
+                for _r_ft in range(int(PRIVY_SUN_MIN_FT), int(PRIVY_SUN_MAX_FT) + 1, 4):
+                    for _b in range(1125, 2026, 75):  # 112.5 to 202.5 degrees, tenths
+                        _bd = _b / 10.0
+                        _rr = px(float(_r_ft))
+                        _dx, _dy = _rr * math.sin(math.radians(_bd)), -_rr * math.cos(math.radians(_bd))
+                        _sun.append((_dx * ca + _dy * sa, -_dx * sa + _dy * ca, w, d))
+                _sun.sort(key=lambda q: (math.hypot(q[0], q[1]), abs(math.degrees(math.atan2(q[0] * ca - q[1] * sa, -(q[0] * sa + q[1] * ca))) % 360.0 - 157.5)))
+                # ...AND A FIXTURE BELONGS TO THE HOMESTEAD IT SERVES. A seat closer to a neighbor's
+                # farmhouse than to its own is drawn in that neighbor's yard as far as a reader is
+                # concerned, whatever the record says - so the sun list drops any seat that is not
+                # strictly nearest its own house. This is the ownership test the 72 ft radius was
+                # trusting the geometry to provide, made explicit.
+                # A STRICT "must be nearest to its OWN house" filter was tried here and cost too much.
+                # It states the defect exactly - a fixture nearer a neighbor's farmhouse reads as theirs -
+                # but in a cluster the sun side of one house often IS nearer the next, and filtering on it
+                # rejected seats that sit honestly in their own yard: privies fell to 2 of 11 declared on
+                # Mizuguchi and the sun share to 49%. The bound that does the work without the collateral
+                # is the RADIUS (`PRIVY_SUN_MAX_FT`, cut 72 -> 48): a seat against its own house is in its
+                # own yard whoever else is near. Ownership stays as a TIE-BREAK - among seats the ground
+                # allows, one that is nearer its own house than any other comes first.
+                _others = [(float(_h["x"]), float(_h["y"])) for _h in houses if (float(_h["x"]), float(_h["y"])) != (hx, hy)]
+                if _others:
+
+                    def _mine_first(
+                        _q: tuple[float, float, float, float], _hx: float = hx, _hy: float = hy, _ca: float = ca, _sa: float = sa, _oth: list[Pt] = _others
+                    ) -> tuple[int, float]:  # the loop's values bound as defaults - this closure outlives the iteration
+                        _k = nearer_own_house(_q, _hx, _hy, _ca, _sa, _oth)
+                        return (_k[0], _k[1])
+
+                    _sun.sort(key=_mine_first)
+                seats = (_sun + seats) if _u_dir < PRIVY_SUNNY_SHARE else seats
             elif kind == "manure":
                 if privy_at is not None:
                     plx, ply = privy_at
                     out_ = -1.0 if ply < 0 else 1.0
-                    seats = [(plx, ply + out_ * (px(FIXTURE_FT["privy"][1]) / 2 + g + d / 2), w, d), (plx + w * 1.1, ply, w, d), (plx - w * 1.1, ply, w, d)]
+                    # BEYOND THE PRIVY, and with somewhere to go when that one spot is taken (feature 152
+                    # T16). Three candidates seated 3 of a declared 8 per map: the heap is placed against
+                    # the privy, and where the privy now sits on the sun side the ground just past it is
+                    # often the work yard. The researched rule is only that the heap lies BEYOND the privy
+                    # (research/homesteads.md) - which these all do; they differ in how far and how wide.
+                    # ...AND NOT AT A FIXED OFFSET (feature 152 T17). Every heap sat the SAME distance
+                    # beyond its privy - an acceptance review measured 15 of 19 pairs at |dy| 9.4-9.9 ft
+                    # with |dx| under 1 ft - so the pair read as one stamp repeated down the row. The
+                    # researched rule is only that the heap lies BEYOND the privy; how far beyond is ours,
+                    # and real yards vary. Jittered off the homestead's own position so it is stable for a
+                    # given farmstead and differs between them.
+                    _pout = px(FIXTURE_FT["privy"][1]) / 2 + g + d / 2 + px(9.0) * (s._hjit(hx, hy, 102.4) - 0.5)
+                    seats = [
+                        (plx, ply + out_ * _pout, w, d),
+                        (plx + w * 1.1, ply, w, d),
+                        (plx - w * 1.1, ply, w, d),
+                        (plx + w * 1.1, ply + out_ * _pout, w, d),
+                        (plx - w * 1.1, ply + out_ * _pout, w, d),
+                        (plx, ply + out_ * (_pout + px(10.0)), w, d),
+                        (plx + w * 1.9, ply, w, d),
+                        (plx - w * 1.9, ply, w, d),
+                    ]
+                    # ...AND THE HEAP IS THIS HOUSE'S HEAP (settlement-review 2026-08-29, acceptance
+                    # re-check). One pit on Kuwabata sat 53.7 ft from the farmhouse it serves and 45.4 ft
+                    # from another; a reader attributes it to the nearer house and the manifest says
+                    # otherwise. Ownership is a TIE-BREAK only, the same as the privy's and for the same
+                    # reason: in a cluster the ground beyond one house's privy is often nearer the next.
+                    #
+                    # TWO STRONGER LEVERS WERE TRIED AND REVERTED, MEASURED ACROSS THE 13-MAP POOL.
+                    # (1) A SECTOR SEARCH beyond the privy, the shape that worked for the privy itself
+                    #     (radii 2-24 ft past its far edge, swung +/-54 deg): 5 misattributed of 68, against
+                    #     4 of 66 with the eight offsets. It seats more heaps, none of them better placed.
+                    # (2) Sorting by the ownership MARGIN rather than the flag, so that where no candidate
+                    #     is unambiguous the LEAST misattributable wins: 4 of 67, no better - and it pulled
+                    #     heaps back toward the house to win the margin, so "the heap lies beyond the privy"
+                    #     - the actual researched rule (research/homesteads.md) - fell from 16 of 16 to
+                    #     9 of 15. A reader-legibility nicety is not worth a researched rule.
+                    # (3) The margin sort applied INSIDE the beyond-the-privy group only - the shape the
+                    #     acceptance review named as the one both attempts stepped over, and it is a real
+                    #     new mechanism: partitioning on the `out_ * _pout` term means every seat it can
+                    #     promote is already beyond the privy, so it cannot break the rule that killed (2).
+                    #     Implemented and rolled: 4 of 66 by centers, 6 of 66 by footprints, 14 of 14
+                    #     beyond - IDENTICAL to the shipped state on all three. Reverted as complexity
+                    #     that buys nothing; the lever is sound and it is the geometry that is fixed.
+                    #
+                    # THE FIGURE IS 6, NOT 4, AND A READER IS WHY (settlement-review 2026-08-29). The sort
+                    # above compares distances to recorded house CENTERS, and a reader compares against the
+                    # drawn RECTANGLE. Against footprints the pool carries SIX of 66, and the worst case is
+                    # much worse than the point metric renders it: Kashikawa's heap at (2194.1, 2759.2) is
+                    # 32.0 ft from its own farmhouse's wall and 8.4 ft from a neighbor's, which the center
+                    # metric flatters to 46.7 against 33.0. The count that belongs next to a claim about
+                    # what a reader attributes is the footprint one.
+                    # What is left is the geometry itself: where a privy sits on the sun side and the
+                    # neighbor is that way too, every seat beyond it belongs to that arc. Four heaps in the
+                    # pool are nearer a neighbor's house than their own, and the interactive page resolves
+                    # ownership on click. Do not re-try either lever without a new mechanism.
+                    _oth = [(float(_h["x"]), float(_h["y"])) for _h in houses if (float(_h["x"]), float(_h["y"])) != (hx, hy)]
+                    if _oth:
+                        seats.sort(key=lambda _q, _hx=hx, _hy=hy, _ca=ca, _sa=sa, _o=_oth: nearer_own_house(_q, _hx, _hy, _ca, _sa, _o)[0])
                 else:
                     seats = [(hw * 0.3, -(hh / 2 + g + d / 2), w, d), (hw / 2 + g + d / 2, hh * 0.3, d, w)]
             elif kind == "woodpile":
@@ -800,7 +965,21 @@ def farmstead_fixtures(s: Settlement, plan: SitePlan, houses: Sequence[Mapping[s
                     (hw * 0.3, -(hh / 2 + g + d * 1.5 + g), w, d),
                 ]
             elif kind == "coop":
-                seats = [(hw / 2 + g + d / 2, hh * 0.3, d, w), (0.0, -(hh / 2 + g + d / 2), w, d), (-(hw / 2 + g + d / 2), -hh * 0.3, d, w)]
+                # ...and the back seat is not DEAD CENTRE on the wall, which is the stamp itself: at
+                # x = 0.0 exactly, a coop taking it stands at bearing 0 from its house on every farmstead
+                # (houses draw at rot 0-4), so 9 of 12 Kashikawa coops sat within 4 degrees of north. A
+                # hen coop stands somewhere along the back wall, not on its midpoint.
+                _cjx = hw * 0.34 * (s._hjit(hx, hy, 105.9) - 0.5) * 2.0
+                seats = [(hw / 2 + g + d / 2, hh * 0.3, d, w), (_cjx, -(hh / 2 + g + d / 2), w, d), (-(hw / 2 + g + d / 2), -hh * 0.3, d, w)]
+                # A COOP IS NOT ALWAYS DUE NORTH (feature 152 T17). Measured on the shipped maps before
+                # this: 9 of 12 Kashikawa coops and 7 of 12 Sawada's stood within 4 degrees of north of
+                # their house, because the seat list is in the house's frame and houses draw at rot 0-4.
+                # The arrangement is right - a coop goes in the rear yard - and the INVARIANCE is not.
+                # The list is rotated by the homestead's own hash so which rear seat is tried first
+                # differs between farmsteads while every seat stays one the record supports.
+                if seats:
+                    _sh = int(s._hjit(hx, hy, 105.5) * len(seats)) % len(seats)
+                    seats = seats[_sh:] + seats[:_sh]
             else:  # shrine: a plot corner, world frame
                 off = px(14.0)
                 corner = {"NW": (-(hw / 2 + off), -(hh / 2 + off)), "NE": (hw / 2 + off, -(hh / 2 + off)), "SW": (-(hw / 2 + off), hh / 2 + off)}

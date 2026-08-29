@@ -318,6 +318,16 @@ POND_LAYOUTS = ("mosaic", "mosaic", "grid")
 # the back of the building", lined along the road. Neither source gives a share of villages using each, so
 # the roll is even. research/archetypes.md "What stands on a dike-pond hamlet that a paddy hamlet lacks".
 MANURE_FORMS = ("heap", "pit")
+# TWO SUPPORTABLE ANSWERS BECOME A KNOB (constitution XII), not a picked one. Both were named by a
+# settlement-review as knob candidates and the GM approved working them (feature 152, FR-005/FR-016).
+COPSE_SITINGS = ("among_the_houses", "against_the_belt")  # a village copse threading the homesteads, or
+# tucked against the back grove - both are what a back-village planting is, and they make a settlement
+# read differently at a glance, which is the whole point of a knob rather than a house style.
+KOSATSUBA_SITINGS = ("frontage", "waterside")  # the notice board on the busiest built frontage, or at the
+# drawing-water place. The takafuda stood at crossroads and bridgeheads AND at the village well; a
+# settlement-review measured Mizuguchi's at the wellhead (7 of 12 households within 250 ft) against 11 of
+# 12 at the frontage optimum and called it defensible-but-off-optimum, which is exactly the shape of a
+# genuine two-answer question rather than a defect.
 
 # THE DIKE CROP - which of the dike-pond TYPES a hamlet is (feature 150, GM 2026-08-28 choosing audit A6).
 # The gazetteer office frames 桑基 (mulberry), 果基 (fruit), 蔗基 (sugar cane) and 蕉基 (banana) as a
