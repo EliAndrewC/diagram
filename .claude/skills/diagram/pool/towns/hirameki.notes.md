@@ -34,8 +34,8 @@ its exceptions.
 
 **Correction, 2026-08-29 (settlement-review, feature 156).** The `156 dwellings` above is computed
 from a dwelling-kind list that had gone stale: the engine's own `DWELLING_KINDS` counts **166** on
-this map (87 urban dwellings + 79 farmhouses), because the four `_large` variants and `monk_house`
-were missing from the list `settlements.md` used to spell out. 166 x 5 = 830 against the declared
+this map (87 urban dwellings + 79 farmhouses), because the three `_large` variants, `merchant_house`
+and `monk_house` were missing from the list `settlements.md` used to spell out. 166 x 5 = 830 against the declared
 780 - a 6.4% gap that passes only because `population_tol` defaults to 7%, and the only town in the
 pool where the declared figure is not exactly the drawn households x 5 (Ubame and Hoshizora are
 exact). Recorded rather than re-declared: which figure a town SHOULD state is the open question the

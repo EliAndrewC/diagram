@@ -37,13 +37,16 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Any
 
-from ..dwellings import DWELLING_KINDS
+from ..dwellings import DWELLING_KINDS, HOUSEHOLD
 from .notes import MapNotes
 from .sources import citations, research_sources
 
 #: `l7r.md`, "The Median Domain": ~5 inhabitants per household, and a hamlet of 10-20 households
 #: holds 50-100. The tiers that record a population outright (towns, cities) use theirs instead.
-PER_HOUSEHOLD = 5
+#: TAKEN FROM THE LEAF, not restated: the gate's capacity maths uses the same five, and the whole
+#: point of `dwellings.py` was to stop this module keeping its own copy of what that package knows
+#: (settlement-review round 5 - the move had left the constant behind).
+PER_HOUSEHOLD = HOUSEHOLD
 
 #: `l7r.md`'s median-domain table, for the one ranking the card is allowed to make - of TIERS.
 HAMLETS_PER_DOMAIN, VILLAGES_PER_DOMAIN, HAMLET_SHARE = 1296, 216, "40%"

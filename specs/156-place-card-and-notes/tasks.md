@@ -292,3 +292,19 @@ Three of round 3's five fixes landed clean; the other two carried the same defec
       "along it" sweep finished in both files and both places; and the doubled noun at town, city AND
       village scale ("is a town of 82 dwellings, population ~590: a county town: the lowest ...") -
       the village had it too, caught by the guard written for the other two. `research: rendering`
+
+## From `settlement-review`, round 5 - convergence (2026-08-29)
+
+**All six of round 4's fixes fired**, verified independently: one definition of each moved name with
+identity holding through the re-export, every consumer censused and resolving, and - the measurement
+that proves the point of the move - importing `interactive.place` now loads **zero** `check_village`
+modules. Three residues, all in prose or in a constant, all closed:
+
+- [x] **T58** Hirameki's correction said "the four `_large` variants"; there are three, and the fourth
+      kind in the gap is `merchant_house`, which is not one. `research: rendering`
+- [x] **T59** `settlements.md` said the old list "had gone stale by four kinds"; it was five. (The
+      enumeration beside it was already right, which is how the count was checkable.)
+      `research: rendering`
+- [x] **T60** `place.py` still defined `PER_HOUSEHOLD = 5` beside the leaf it now imports - the
+      household constant kept two live definitions in the very module the move was made for. It is the
+      leaf's `HOUSEHOLD` now. `research: rendering`
