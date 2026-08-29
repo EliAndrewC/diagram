@@ -2580,13 +2580,70 @@ def _serve_stragglers(s: Settlement, plan: SitePlan, hard: list[Poly], fabric: l
                     # discontinuity. Truncating at first contact also takes that path's directness
                     # from 1.57 to 1.14. The snap below closes whatever gap is left.
                     path = list(hit[0])
-                    for _i, _v in enumerate(path):
-                        if _i and min(seg_dist(_v[0], _v[1], _a, _b) for _a, _b in segs) <= _LANE_JOIN_FT:
-                            path = path[: _i + 1]
+                    # WALK ON TO THE CLOSEST APPROACH, THEN TOUCH (feature 134 T50, 2026-08-29) - the
+                    # lesson `_pull_back_to_service` records for the connector, never applied to the
+                    # footpath that has the same job. Cutting at the FIRST vertex inside the join bar
+                    # stops the tread up to `_LANE_JOIN_FT` short of the way it is joining AND leaves the
+                    # join step aiming backwards: gate seed 18's path stepped past its junction and the
+                    # join then doubled back 77 ft, a 140 degree fold that `lanes_bend_like_paths` reads
+                    # exactly as it should. The bar is what makes a junction FINDABLE; it is not where the
+                    # ink should stop. So keep walking while the distance is still falling.
+                    # WALK ON TO THE CLOSEST APPROACH, THEN TOUCH (feature 134 T50, 2026-08-29) - the
+                    # lesson `_pull_back_to_service` records for the connector, never applied to the
+                    # footpath doing the same job. Cutting at the FIRST vertex inside the join bar stops
+                    # the tread up to `_LANE_JOIN_FT` short of the way it joins AND leaves the join step
+                    # aiming backwards: gate seed 18's path stepped past its junction and the join then
+                    # doubled back 77 ft, a 140 degree fold. The bar makes a junction FINDABLE; it is not
+                    # where the ink should stop.
+                    #
+                    # THE LONGER WALK IS A PREFERENCE, NOT A LAW. It is still a real extension of the
+                    # drawn tread, and on three seeds it bought a bend or an overlap it had not had - a
+                    # tread across a garden (18), a notice board that lost its roadside way (44), a fresh
+                    # fold (43). So both cuts are BUILT and the better one is drawn: the closest approach
+                    # when what it yields is clean, the old first-inside-the-bar cut otherwise. Nothing
+                    # that used to be drawn stops being drawn.
+                    _dists = [min(seg_dist(_v[0], _v[1], _a, _b) for _a, _b in segs) for _v in path]
+                    _first = next((_i for _i in range(1, len(path)) if _dists[_i] <= _LANE_JOIN_FT), None)
+                    _cuts = []
+                    if _first is not None:
+                        _far = _first
+                        while _far + 1 < len(path) and _dists[_far + 1] < _dists[_far]:
+                            _far += 1
+                        _cuts = [_far, _first] if _far != _first else [_first]
+                    else:
+                        _cuts = [len(path) - 1]
+                    _whole = list(path)
+                    _picked = None
+                    for _cut in _cuts:
+                        _p = _whole[: _cut + 1]
+                        if len(_p) < 2:
+                            continue
+                        _j = min((seg_closest(_p[-1][0], _p[-1][1], a, b) for a, b in segs), key=lambda z: math.dist(_p[-1], z))
+                        if _clear_link(_p[-1], _j, hard, others, water) or _clear_touch(_p[-1], _j, hard, others, water):
+                            # A JUNCTION IS CONTACT, AND ITS LAST FEW FEET GET THE JUNCTION MARGIN. Tested
+                            # at `_clear_link`'s 7 ft fabric margin the step reads as a run across open
+                            # ground; it is not, it is the stretch into a junction, which everywhere else
+                            # in this file may brush a fence at `_TOUCH_GAP` - a lane and a plot boundary
+                            # share a line in a real village. With no fallback the path simply stopped and
+                            # nothing afterwards could close it: gate seed 41's footpath ended 28.4 ft off
+                            # the web with clear ground between, and `lanes_form_one_network` said so.
+                            _p = [*_p, _j]
+                        else:
+                            # ...and failing even that, thread it at the fine lattice the coarse rungs
+                            # cannot match - the same reach the orphan tail gets, for the same reason.
+                            _tail = _route(_p[-1], _j, hard, others, water, gap=WEB_FABRIC_GAP, pad_mult=2.0, cell=_FINE_CELL)
+                            if _tail and polyline_len(_tail) <= _LINK_DIRECTNESS * max(math.dist(_p[-1], _j), 1.0):
+                                _p = [*_p, *_tail[1:]]
+                        # AGAINST `passable`, NOT `others`: the path's OWN yard and garden are exempt
+                        # from its obstacle list precisely so it can leave its dooryard, so a test that
+                        # includes them is true of every candidate and discriminates between none - which
+                        # is what the first version of this guard did.
+                        if not _bends_badly(_p) and not _crosses_fabric(_p, passable, _TOUCH_GAP):
+                            _picked = _p
                             break
-                    join = min((seg_closest(path[-1][0], path[-1][1], a, b) for a, b in segs), key=lambda z: math.dist(path[-1], z))
-                    if _clear_link(path[-1], join, hard, others, water):
-                        path = [*path, join]
+                        if _picked is None:
+                            _picked = _p  # the first candidate is the fallback, so nothing is ever lost
+                    path = _picked if _picked is not None else path
                     # NO EXTRA STEP TOWARD THE DOOR. The path already begins at `door`, which is the
                     # house's own half-diagonal plus eight feet - i.e. just outside the wall. Pushing
                     # a further point in at 0.6 of that standoff put the start of the lane INSIDE the
