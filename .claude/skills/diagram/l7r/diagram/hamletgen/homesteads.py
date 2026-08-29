@@ -909,14 +909,6 @@ def farmstead_fixtures(s: Settlement, plan: SitePlan, houses: Sequence[Mapping[s
                     ]
                     # ...AND THE HEAP IS THIS HOUSE'S HEAP (settlement-review 2026-08-29, acceptance
                     # re-check). One pit on Kuwabata sat 53.7 ft from the farmhouse it serves and 45.4 ft
-                    # from another - a reader attributes it to the nearer house, and the manifest says
-                    # otherwise. Same TIE-BREAK the privy takes, and for the same reason it is only a
-                    # tie-break: in a cluster the ground beyond one house's privy is often nearer the
-                    # next, and refusing those outright cost the privy 9 of 11 seats on Mizuguchi when it
-                    # was tried as a filter. Ordering demotes them instead, so an unambiguous seat wins
-                    # whenever the ground allows one.
-                    # ...AND THE HEAP IS THIS HOUSE'S HEAP (settlement-review 2026-08-29, acceptance
-                    # re-check). One pit on Kuwabata sat 53.7 ft from the farmhouse it serves and 45.4 ft
                     # from another; a reader attributes it to the nearer house and the manifest says
                     # otherwise. Ownership is a TIE-BREAK only, the same as the privy's and for the same
                     # reason: in a cluster the ground beyond one house's privy is often nearer the next.
@@ -930,6 +922,21 @@ def farmstead_fixtures(s: Settlement, plan: SitePlan, houses: Sequence[Mapping[s
                     #     heaps back toward the house to win the margin, so "the heap lies beyond the privy"
                     #     - the actual researched rule (research/homesteads.md) - fell from 16 of 16 to
                     #     9 of 15. A reader-legibility nicety is not worth a researched rule.
+                    # (3) The margin sort applied INSIDE the beyond-the-privy group only - the shape the
+                    #     acceptance review named as the one both attempts stepped over, and it is a real
+                    #     new mechanism: partitioning on the `out_ * _pout` term means every seat it can
+                    #     promote is already beyond the privy, so it cannot break the rule that killed (2).
+                    #     Implemented and rolled: 4 of 66 by centers, 6 of 66 by footprints, 14 of 14
+                    #     beyond - IDENTICAL to the shipped state on all three. Reverted as complexity
+                    #     that buys nothing; the lever is sound and it is the geometry that is fixed.
+                    #
+                    # THE FIGURE IS 6, NOT 4, AND A READER IS WHY (settlement-review 2026-08-29). The sort
+                    # above compares distances to recorded house CENTERS, and a reader compares against the
+                    # drawn RECTANGLE. Against footprints the pool carries SIX of 66, and the worst case is
+                    # much worse than the point metric renders it: Kashikawa's heap at (2194.1, 2759.2) is
+                    # 32.0 ft from its own farmhouse's wall and 8.4 ft from a neighbor's, which the center
+                    # metric flatters to 46.7 against 33.0. The count that belongs next to a claim about
+                    # what a reader attributes is the footprint one.
                     # What is left is the geometry itself: where a privy sits on the sun side and the
                     # neighbor is that way too, every seat beyond it belongs to that arc. Four heaps in the
                     # pool are nearer a neighbor's house than their own, and the interactive page resolves

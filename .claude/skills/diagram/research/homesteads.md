@@ -810,21 +810,32 @@ the radius until the number comes out right.
 
 The researched rule is that the heap lies BEYOND the privy (see "The farmstead's fixtures"). Once the
 privy moved to the sun side, that rule sometimes puts the heap nearer a neighbor's farmhouse than the
-one it serves - measured over the 13-map pool, **4 of 66 privies and heaps** sit that way. A reader
-attributes such a pit to the nearer house; the manifest says otherwise, and only the interactive page
-resolves it on click.
+one it serves. Measured over the 13-map pool, **6 of 66 privies and heaps** stand nearer a neighbor's
+drawn FOOTPRINT than their own - the number that matters, because a reader compares against the drawn
+rectangle rather than against a recorded center point. (By center-to-center, the metric the placement
+code itself sorts on, it is 4 of 66; the two figures disagree because a fixture can clear a distant
+house's center while standing against its wall. The worst case is Kashikawa's heap at (2194.1,
+2759.2): 32.0 ft from its own farmhouse's wall and 8.4 ft from a neighbor's, which the center metric
+renders as a mild 46.7 against 33.0.) A reader attributes such a pit to the nearer house; the manifest
+says otherwise, and only the interactive page resolves it on click.
 
-**This is an ACCEPTED limitation, and two priced alternatives were declined on measurement.**
+**This is an ACCEPTED limitation, and THREE priced alternatives were declined on measurement.**
 
-| lever | misattributed | heaps beyond their privy |
-|---|---|---|
-| eight hand-picked seats + ownership tie-break (**shipped**) | 4 of 66 | 14 of 14 |
-| sector search beyond the privy, radii 2-24 ft, swung +/-54 deg | 5 of 68 | 16 of 16 |
-| sorting candidates by ownership MARGIN rather than a flag | 4 of 67 | **9 of 15** |
+| lever | misattributed (centers) | misattributed (footprints) | heaps beyond their privy |
+|---|---|---|---|
+| eight hand-picked seats + ownership tie-break (**shipped**) | 4 of 66 | 6 of 66 | 14 of 14 |
+| sector search beyond the privy, radii 2-24 ft, swung +/-54 deg | 5 of 68 | - | 16 of 16 |
+| sorting candidates by ownership MARGIN over the whole seat list | 4 of 67 | - | **9 of 15** |
+| the margin sort INSIDE the beyond-the-privy group only | 4 of 66 | 6 of 66 | 14 of 14 |
 
 The sector search - the shape that worked for the privy itself - seats more heaps but none of them
 better placed. The margin sort wins its margin by pulling the heap back toward the house, which breaks
-the researched rule outright; a reader-legibility nicety is not worth a researched finding. What is
+the researched rule outright; a reader-legibility nicety is not worth a researched finding. The fourth
+row is the acceptance review's own proposal, and it is a genuinely new mechanism - partitioning the
+seats on the "beyond" term means the margin can only reorder seats that already satisfy the rule, so
+it cannot fail the way row three did. It was implemented and rolled and came back identical to the
+shipped state on every metric. That is the answer: the levers are sound and the GEOMETRY is what is
+fixed. What is
 left is the geometry: where a privy stands on the sun side and the neighbor is that way too, every seat
 beyond it belongs to that arc, exactly as it would in a real interlocked cluster. Ownership therefore
 stays a TIE-BREAK, promoting an unambiguous seat whenever the ground offers one.
