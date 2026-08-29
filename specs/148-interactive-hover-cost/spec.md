@@ -61,7 +61,19 @@ to contain the class's own marks - a tuft outside its polygon would otherwise go
 **Acceptance Scenarios**:
 
 1. **Given** any pool hamlet, **When** the page is written, **Then** no class has its ink disabled unless
-   a hit region for that class is also present on that page.
+   its hit region is present on that page AND covers that class's own marks - presence alone is not
+   enough, per FR-002.
+
+### One thing the session told the GM was inexact
+
+The proposal the GM approved said the fix was safe *"since those two classes already have region coverage
+built from their own marks"*. That is exact for SCRUB - `HIT_FROM_MARKS` contains scrub alone, and its
+region is `marks_region(..., within=polys)`, built from the marks themselves. It is NOT true of MARSH,
+whose region is the recorded `marshes` footprint polygon taken from the manifest; nothing checks that the
+polygon contains every marsh mark drawn on it. So for marsh, FR-002's coverage requirement is not
+belt-and-braces - it is the whole of the safety, and FR-006's browser assertion is what proves it. Said
+plainly here because the GM said yes to a sentence that was half right, and the correction changes which
+requirement is load-bearing rather than whether the fix is sound.
 
 ## Requirements
 
