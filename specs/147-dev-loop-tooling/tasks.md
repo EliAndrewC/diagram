@@ -119,11 +119,11 @@ each is useful the moment it lands.
 - [x] T052 [P] A row in the root `CLAUDE.md` "WHAT IS ENFORCED, AND WHERE" table for the pairing guard, with its override and its test companion.
       given 2026-08-29T03:15Z | done 2026-08-29T05:20Z | elapsed ~50 min (US3 whole) | runs: 6 guard-suite runs, 1 hooks-test
       research: procedure
-- [ ] T053 Verification pass: the reference hamlet's and Kuwabata's manifests byte-identical to their pre-feature rolls; lint, types, the quick suite; one gate run; `make hooks-test` green.
-      given 2026-08-29T03:15Z | done - | elapsed - | runs: -
+- [x] T053 Verification pass: the reference hamlet's and Kuwabata's manifests byte-identical to their pre-feature rolls; lint, types, the quick suite; one gate run; `make hooks-test` green.
+      given 2026-08-29T03:15Z | done 2026-08-29T05:55Z | elapsed ~2.5 h (the whole feature) | runs: 3 gates, 1 tier sweep, ~14 quick runs. gate green 3,961 tests; tier sweep shows only the three pre-existing failures; hooks-test green; every pool manifest identical
       research: procedure
-- [ ] T054 Record the feature's own numbers where the next session will find them: the probe's measured time, the audit's families, and the pairing's enforcement point, in `dev/loop.md` beside the rest of the dev-loop doctrine.
-      given 2026-08-29T03:15Z | done - | elapsed - | runs: -
+- [x] T054 Record the feature's own numbers where the next session will find them: the probe's measured time, the audit's families, and the pairing's enforcement point, in `dev/loop.md` beside the rest of the dev-loop doctrine.
+      given 2026-08-29T03:15Z | done 2026-08-29T05:55Z | elapsed ~2.5 h (the whole feature) | runs: 3 gates, 1 tier sweep, ~14 quick runs. recorded in dev/loop.md
       research: procedure
 
 ## Dependencies

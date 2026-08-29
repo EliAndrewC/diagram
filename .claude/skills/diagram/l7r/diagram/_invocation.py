@@ -214,6 +214,8 @@ OPERATIONS: dict[str, tuple[str, str]] = {
     "l7r.diagram.citybudget": ("citybudget", "cheap"),
     "l7r.diagram.tools.site_justice": ("site-justice", "cheap"),
     "l7r.diagram.tools.crop_map": ("crop", "cheap"),
+    "l7r.diagram.tools.polder_probe": ("polder-probe", "cheap"),  # 0.2 s: the polder block alone, no render (feature 147)
+    "l7r.diagram.tools.overlap_audit": ("overlap-audit", "cheap"),  # reads one finished map and its ink
     "l7r.diagram.tools.jogs": ("jogs", "cheap"),
     "l7r.diagram.tools.pack_audit": ("pack-audit", "cheap"),
     "l7r.diagram.tools.scatter_audit": ("scatter-audit", "cheap"),

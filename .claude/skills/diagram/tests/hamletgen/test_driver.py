@@ -3,6 +3,8 @@
 Split from test_hamletgen.py by feature 111; test bodies verbatim. See hamletgen/CLAUDE.md.
 """
 
+import pytest
+
 from l7r.diagram import hamletgen as hg
 
 from ._builders import a_plan
@@ -147,6 +149,7 @@ def test_cohort_derives_each_spec_and_can_be_forced_serial(monkeypatch) -> None:
 
 
 # ---- feature 147 US4: the stage profile prints, and changes nothing -------------------------------
+@pytest.mark.rolls_map  # it builds a Settlement (two stand-in stages, no render) - the marker keeps `make quick` honest about what it runs
 def test_the_stage_profile_prints_only_when_asked_and_rolls_the_same_map(monkeypatch, capfd) -> None:
     """`PROFILE=1` is an environment variable, which feature 132 forbids for a SWITCH - no variable may
     change what a map rolls. This one changes what is PRINTED, and this is the test that says so: the same

@@ -5,7 +5,23 @@ implementation, and carries a fallback so it cannot block the feature (constitut
 
 ## R1. Does this harness deliver a PreToolUse event for the Agent tool, and what does it carry?
 
-**Status: to be settled by experiment, first task of the pairing work.**
+**Settled from the documentation, 2026-08-29 - not by experiment, because the experiment is not available
+to a session: the hooks that actually run come from MAIN's `.claude/settings.json`, and main is never a
+workspace. A temporary logging matcher would have meant editing main.**
+
+- The matcher is **`Agent`** (the tool name for a subagent dispatch), and a `PreToolUse` hook on it CAN
+  refuse the call: exit 2, or `permissionDecision: deny`, exactly as for Bash. The refusal reaches the
+  model the same way.
+- The **shape of `tool_input` for a dispatch is NOT documented** - whether it carries `subagent_type`, the
+  prompt and a description is unspecified. So the guard does not read a named field: it serializes the
+  whole `tool_input` and looks for `settlement-review` in it. That is robust to whatever the schema turns
+  out to be, and `scripts/test-pair-hooks.sh` drives it with the shape we believe it has.
+- `Stop` fires for the main session; `SubagentStop` exists for the subagent's own end. The pairing uses
+  `Stop` only, and refuses ONCE per content key, so it can never loop.
+- Hooks are read from the session's own settings (project + user, merged). A clone's
+  `.claude/settings.json` is not read while the session's cwd is the main checkout - which is why this
+  guard, like every other guard here, only goes live when it lands in main. Its logic is proven before
+  then by the test companion, which drives the script with synthetic stdin.
 
 `.claude/settings.json` registers PreToolUse matchers for `Edit|Write|NotebookEdit`, `Read|Grep|Glob|Bash`
 and `Bash`. Nothing here matches a subagent dispatch today, so whether the matcher accepts `Agent` (and
