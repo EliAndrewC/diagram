@@ -1,0 +1,6 @@
+{
+  "utc": "20260829T081116Z",
+  "guard": "pair-hooks",
+  "what": "gate alone",
+  "reason": "the four-map pool sweep ran and is logged in each map"
+}
