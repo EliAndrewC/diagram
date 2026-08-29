@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# pair-hooks.sh - THE GATE AND THE INDEPENDENT REVIEW RUN TOGETHER, OR NEITHER RUNS (feature 149).
+# pair-hooks.sh - THE GATE AND THE INDEPENDENT REVIEW RUN TOGETHER, OR NEITHER RUNS (feature 151).
 #
 # THE GM, 2026-08-29, after a time audit of feature 150's T55: "is there some way to make [it] happen
 # automatically instead of reqiring you to remember it? Like is there a scripted way to have them both

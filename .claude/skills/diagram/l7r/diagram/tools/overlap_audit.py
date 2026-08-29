@@ -1,4 +1,4 @@
-"""DOES A OVERLAP B - asked once, not for the twelfth time (feature 149, US2).
+"""DOES A OVERLAP B - asked once, not for the twelfth time (feature 151, US2).
 
 WHY THIS EXISTS. Across features 150's T50-T55 the same point-in-polygon script was hand-written twelve
 times: is a farmhouse on marsh, is a garden on the reed fringe, does a parcel lie across its ditch, is
@@ -205,7 +205,7 @@ def audit(M: dict[str, Any], svg: str | None, families: tuple[str, ...] = FAMILI
 
 
 def main(argv: list[str] | None = None) -> int:
-    ap = argparse.ArgumentParser(description="does A overlap B, on a finished map (feature 149)")
+    ap = argparse.ArgumentParser(description="does A overlap B, on a finished map (feature 151)")
     ap.add_argument("manifest", help="pool/<tier>/<map>.json - the SVG beside it is read for the ink families")
     ap.add_argument("--families", default=",".join(FAMILIES), help=f"comma-separated: {', '.join(FAMILIES)}")
     a = ap.parse_args(argv)

@@ -323,7 +323,7 @@ class CombMixin:
             pcx, pcy, prx, pry = source["pond"]
             self.stream([(sluice[0], sluice[1]), (pcx, pcy)], frm={"kind": "offmap"}, to={"kind": "pond"}, width=6) if source.get("feeder") else None
             self.pond(pcx, pcy, prx, pry)
-            # THE FRINGE WAITS FOR THE WATER (feature 149, found by `make overlap-audit` the day it was
+            # THE FRINGE WAITS FOR THE WATER (feature 151, found by `make overlap-audit` the day it was
             # written). The reed scatter keeps off every drawn watercourse - but this ran BEFORE the field's
             # channels were inked or recorded, so on a polder, whose inlet hairline runs straight through the
             # reservoir's fringe, the keep-out had nothing to keep off: measured on Kuwabata, one tuft 4.6 px

@@ -1,4 +1,4 @@
-# Research: what the mechanism has to key on (feature 149)
+# Research: what the mechanism has to key on (feature 151)
 
 Phase 0. Four of the five questions are settled by reading the tree; R1 is settled by an experiment during
 implementation, and carries a fallback so it cannot block the feature (constitution XV).

@@ -95,7 +95,7 @@ other values are under `wip/kuwabata-*`.
 - OPEN (reviewer's nitpick): two call sites build the identical `+40` fringe ring by hand
   (`hamletgen/sink.py` and `settlement/fields/comb.py`) and only one is subject to that ordering hazard.
   One shared helper would stop the next ordering change diverging them.
-- 2026-08-29 feature 149's own `make overlap-audit`, on its first run against this map, found ink on
+- 2026-08-29 feature 151's own `make overlap-audit`, on its first run against this map, found ink on
   water: one reed tuft 4.6 px from the inlet hairline with three of its blades drawn across it. MECHANISM:
   `draw_comb_field` drew the source pond's reed fringe BEFORE the field's channels were inked or recorded,
   so the reed keep-out - which does keep off every drawn watercourse - had nothing to keep off. On a comb

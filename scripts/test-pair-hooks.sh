@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # test-pair-hooks.sh - prove the gate/review pairing refuses each half alone, allows the pair, takes the
 # override, and does NOT fire on a mention of the commands it guards.
-# (GUARD_EDIT_OK: the companion of a NEW guard, feature 149, GM 2026-08-29)
+# (GUARD_EDIT_OK: the companion of a NEW guard, feature 151, GM 2026-08-29)
 set -u
 HOOK="$(cd "$(dirname "$0")" && pwd)/pair-hooks.sh"
 WATCH="$(cd "$(dirname "$0")" && pwd)/agent-stall-hooks.sh"

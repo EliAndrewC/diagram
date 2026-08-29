@@ -12,7 +12,7 @@ with every placement rule working as written?** If one placer is responsible for
 test owns it and the gate check is dead weight - it runs on every map forever to re-assert something that
 cannot vary.
 
-## What feature 150 actually added: one check, and it is 149's
+## What feature 150 actually added: one check, and it is 151's
 
 Measured off the check-name fixture between this clone's merge base and its head: **150 added no check
 names at all.** Every dike-pond check it appeared to own (`mulberry_banks_clear_of_channels`,
@@ -22,7 +22,7 @@ main's own audit (features 141/145/146, 637 check names -> 153). What 150 did wa
 | what 150 did | check | main's verdict | ours |
 |---|---|---|---|
 | read the DRAWN stroke, not only the record | `sluice_gates_on_water` | KEPT | re-apply: it corrects an existing check's fidelity, adds no new rule |
-| count the title placard as frame-setting | `crop_hugs_content` -> `map_frame_hugs_its_content` | KEPT (renamed) | re-apply: it prevents a FALSE POSITIVE against 149's title-pocket behavior |
+| count the title placard as frame-setting | `crop_hugs_content` -> `map_frame_hugs_its_content` | KEPT (renamed) | re-apply: it prevents a FALSE POSITIVE against 151's title-pocket behavior |
 | skip the rule on a map declaring no work yards | `harvest_yards_present` | retired | drop - nothing to modify |
 | stand aside on a dike-pond | `paddy_plot_seams_shared` | KEPT | re-apply |
 | classify the new families | `every_feature_classified_for_matrix`, `all_ink_is_ruled_on` | KEPT | re-apply - these two are registries, and an unclassified family is exactly a SYSTEMIC gap |
@@ -41,7 +41,7 @@ them, and why porting 150 must not bring them back:
   tests. Systemic? No.
 - **`dikeponds_fed_and_drained`** - the sluice pairs are emitted by one loop. Systemic? No.
 - **`polder_parcels_are_organic`** - the wander is one knob in `_polder_parcels`. Systemic? No; a unit
-  test on the vertex and square-corner counts is the honest guard, which is what feature 149's
+  test on the vertex and square-corner counts is the honest guard, which is what feature 151's
   `make polder-probe` now reports on demand and what `tests/waterfields/test_polder_ring.py` pins.
 - **`polder_waterward_flanks_wet`** - the strips are drawn by `stage_waterward` from a declaration it
   makes itself. Systemic? No.
@@ -50,7 +50,7 @@ them, and why porting 150 must not bring them back:
 
 ## The one check we keep, and why it passes the rule
 
-**`waterward_strips_run_off_the_frame`** (feature 149). The failure it catches needs no placer to
+**`waterward_strips_run_off_the_frame`** (feature 151). The failure it catches needs no placer to
 misbehave: `stage_waterward` draws a band `WATERWARD_DEPTH` deep, correctly, and `crop_to_content` frames
 the map from the content, correctly - and the strip's outer edge appears in frame anyway, because the two
 independent decisions met on a map whose content happened to be wide. Neither rule failed to fire. No unit

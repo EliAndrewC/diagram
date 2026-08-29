@@ -1,4 +1,4 @@
-"""The polder probe reports the block's own numbers, and agrees with the map (feature 149, US1).
+"""The polder probe reports the block's own numbers, and agrees with the map (feature 151, US1).
 
 The last test is the one that matters: a diagnostic that re-implements the geometry it measures can pass
 while the map fails, which is worse than no diagnostic. The probe builds through `plan_site` + `fit_polder`

@@ -335,7 +335,7 @@ The transcript says which it is: a finished agent's `subagents/agent-<id>.jsonl`
 got its next turn, and its mtime is when it last did anything. `scripts/agent-stall-hooks.sh`
 reads that: the prompt hook lists any agent whose transcript has not moved for 5 minutes, a
 `Monitor` on its `watch` mode surfaces the same mid-turn, and `pending` answers the narrower
-question feature 149's pairing guard asks (has the review I launched finished?). Measured on the
+question feature 151's pairing guard asks (has the review I launched finished?). Measured on the
 live session: the dead agent scanned as stale at 46,670 s, every other agent as finished.
 
 **A second watcher was written and then dropped (2026-08-29).** Feature 150 T33 and feature 143

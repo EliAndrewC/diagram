@@ -147,7 +147,7 @@ class Settlement(
         # WET GROUND (feature 150 T50, GM 2026-08-28: houses and a garden stood on marsh): every drawn marsh
         # polygon, read by `_hard_ground` so no footprint the placer tests can land on reed or bog.
         self.wet_polys: list[Any] = []
-        self._pending_fringe: Poly | None = None  # a source pond's reed fringe, held until the field's channels are recorded so the reeds can keep off them (feature 149; `fields/comb.py`)
+        self._pending_fringe: Poly | None = None  # a source pond's reed fringe, held until the field's channels are recorded so the reeds can keep off them (feature 151; `fields/comb.py`)
         self._pending_block: Poly | None = None  # ...and the pond's no-build rect that must follow it (see `fields/comb.py`)
         self._hard_cache_key: tuple[int, ...] | None = None
         self._hard_cache: list[Any] = []

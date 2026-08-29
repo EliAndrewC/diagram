@@ -270,7 +270,7 @@ _switch:
 	@git add dev/switches.json && git commit -q -m "chore: $(MSG) - $(REASON)" && printf '\ncommitted: %s - %s\n' "$(MSG)" "$(REASON)"
 
 # --- expensive: they generate ---------------------------------------------------------------
-verify:         ## THE PAIRED RUN: start the gate and dispatch the settlement-review together (feature 149)
+verify:         ## THE PAIRED RUN: start the gate and dispatch the settlement-review together (feature 151)
 	@printf '\033[1mverify\033[0m: the gate and the independent review run TOGETHER - neither alone (GM 2026-08-29).\n'
 	@root=$$(git rev-parse --show-toplevel) && python3 -m l7r.diagram.ci engine-key worktree > "$$root/.git/pairing-key" || true  # NOT $(RUN): it carries a leading @, which is a literal argument once it is not at the start of a recipe line
 	@root=$$(git rev-parse --show-toplevel) && printf 'engine key %s\n' "$$(cut -c1-12 "$$root/.git/pairing-key" 2>/dev/null)"
@@ -727,7 +727,7 @@ reference:
 IDLE_CTX = $(shell $(SWITCH) idle 2>/dev/null)
 DONE_NAME = $(if $(filter 1,$(IDLE_CTX)),idle-done,done)
 idle-tests:     ## what an idle session runs unattended (feature 136): the whole gate, scope relaxed, never FULL
-# THE PAIRING'S ONE-SIDED CASE, TAKEN RATHER THAN CARVED OUT (feature 149): a detached timer has no
+# THE PAIRING'S ONE-SIDED CASE, TAKEN RATHER THAN CARVED OUT (feature 151): a detached timer has no
 # session to dispatch a settlement-review from, so it supplies the override with its reason and the
 # bypass log carries it like any other. An exemption inside the guard is the shape the spec review struck.
 	@PAIR_OK="idle run: no session attached to dispatch a review" $(MAKE) --no-print-directory done

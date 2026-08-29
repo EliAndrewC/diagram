@@ -33,7 +33,7 @@ def build_polder(
     mosaic: float = 0.0,
     line_wander: float = 0.10,
     organic: tuple[float, float] = (0.05, 0.02),
-    clean_parcels: bool = True,  # the parcel/channel cleanup runs on the block that is DRAWN; `fit_polder` bisects with up to 45 candidates and cleans only the winner (feature 149)
+    clean_parcels: bool = True,  # the parcel/channel cleanup runs on the block that is DRAWN; `fit_polder` bisects with up to 45 candidates and cleans only the winner (feature 151)
 ) -> dict[str, Any]:
     """POLDER GRID (圩田 wei-tian / reclaimed-marsh grid): a rectilinear block of paddies on flat reclaimed
     low ground, an orthogonal ditch-grid module inside a perimeter dike. Returns build_comb-compatible keys

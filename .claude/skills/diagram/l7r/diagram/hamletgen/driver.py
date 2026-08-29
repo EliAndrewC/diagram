@@ -70,7 +70,7 @@ from .ways import stage_seat, stage_track, stage_web
 # unrelated jobs: it SEATED the cluster (`plan.seat`, a hard dependency of `stage_homesteads`) and it
 # DREW the connector and spur. Because of the first, the stage could not simply be moved after the
 # houses - which is why feature 126 moved only the skeleton and left the other two where they were.
-STAGE_PROFILE_ENV = "L7R_STAGE_PROFILE"  # `make map ... PROFILE=1`: print where the roll spent its time (feature 149)
+STAGE_PROFILE_ENV = "L7R_STAGE_PROFILE"  # `make map ... PROFILE=1`: print where the roll spent its time (feature 151)
 
 STAGES = (
     stage_water_frame,
@@ -158,7 +158,7 @@ def build(plan: SitePlan, avoid: Sequence[tuple[float, float]] = ()) -> Settleme
         for stage in STAGES:
             stage(s, plan)
         return s
-    # WHERE THE TIME WENT, in one roll (feature 149, US4). Finding the slow stage used to mean editing
+    # WHERE THE TIME WENT, in one roll (feature 151, US4). Finding the slow stage used to mean editing
     # this loop by hand, rolling, reading, and reverting - done twice in one session before this existed,
     # and the second time it found `stage_waterward` at 21.7 s of a 45 s gen. An environment variable is
     # the channel because `make map` reaches the stages through `regen.py` and a frozen pool generator;

@@ -1,6 +1,6 @@
 # Tasks: Dev-loop tooling - the probe, the audit, the profile, and the paired gate
 
-**Feature**: 149-dev-loop-tooling | **30 tasks** | **Spec**: [spec.md](spec.md) (FAITHFUL) | **Plan**: [plan.md](plan.md)
+**Feature**: 151-dev-loop-tooling | **30 tasks** | **Spec**: [spec.md](spec.md) (FAITHFUL) | **Plan**: [plan.md](plan.md)
 
 Every task here is `research: procedure` - this feature draws nothing and states nothing about how a place
 was built, so no task carries the three physical-research boxes (constitution v2.12.0; the classification
@@ -11,7 +11,7 @@ each is useful the moment it lands.
 
 ## Phase 1: Foundational (blocks the pairing only)
 
-- [x] T001 Settle R1 - does a `PreToolUse` event fire for the Agent tool in this harness, and does its `tool_input` carry `subagent_type` and `prompt`? Register a temporary logging matcher in `.claude/settings.json`, dispatch a trivial agent, read what arrived, remove the matcher, and write the answer into `specs/149-dev-loop-tooling/research.md` R1 along with which enforcement point US3 will use (the Agent pretool, or the Stop-hook fallback).
+- [x] T001 Settle R1 - does a `PreToolUse` event fire for the Agent tool in this harness, and does its `tool_input` carry `subagent_type` and `prompt`? Register a temporary logging matcher in `.claude/settings.json`, dispatch a trivial agent, read what arrived, remove the matcher, and write the answer into `specs/151-dev-loop-tooling/research.md` R1 along with which enforcement point US3 will use (the Agent pretool, or the Stop-hook fallback).
       given 2026-08-29T03:15Z | done 2026-08-29T05:20Z | elapsed ~50 min (US3 whole) | runs: 6 guard-suite runs, 1 hooks-test
       research: procedure
 - [x] T002 [P] Confirm the geometry helpers both new tools import (`l7r/diagram/settlement/_geom`: `seg_dist`, `seg_closest`, `point_in_poly`) are importable from a tool without dragging a Settlement into being, and note in `plan.md` Design if anything has to move. One implementation of each measure, never a second copy in a tool.

@@ -1,6 +1,6 @@
 # Feature Specification: Dev-loop tooling - the probe, the audit, the profile, and the paired gate
 
-**Feature Branch**: none (this project stays on `main`; `export SPECIFY_FEATURE=149-dev-loop-tooling`)
+**Feature Branch**: none (this project stays on `main`; `export SPECIFY_FEATURE=151-dev-loop-tooling`)
 **Created**: 2026-08-29
 **Status**: Draft
 **Input**: The GM, 2026-08-29, after a time audit of feature 150 T55: *"Okay, let's do tooling fixes 1-3. And is there some way to make 6 happen automatically instead of reqiring you to remember it? Like is there a scripted way to have them both happen at the same time and that's the only way you can do either of them without some kind of override? We should do that if so."*

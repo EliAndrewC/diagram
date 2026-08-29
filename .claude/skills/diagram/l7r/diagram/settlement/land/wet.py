@@ -35,7 +35,7 @@ MARSH_TUFT_R = 7.0  # the tallest reed blade / widest glint (x bscale) - the sam
 
 
 def pond_fringe_ring(cx: float, cy: float, rx: float, ry: float, margin: float, n: int = 16) -> list[tuple[float, float]]:
-    """The reedy MARGIN of a pond, as the polygon `marsh(role="pond_fringe")` scatters (feature 149).
+    """The reedy MARGIN of a pond, as the polygon `marsh(role="pond_fringe")` scatters (feature 151).
 
     One helper because there are two call sites and they diverged: the sink's tameike keeps 44 px of fringe,
     a comb source pond 40, and each built the ring by hand. The margins still differ - a tameike is dug and

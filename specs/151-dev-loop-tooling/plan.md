@@ -1,6 +1,6 @@
 # Implementation Plan: Dev-loop tooling - the probe, the audit, the profile, and the paired gate
 
-**Feature**: 149-dev-loop-tooling | **Spec**: [spec.md](spec.md) (FAITHFUL, round 2) | **Date**: 2026-08-29
+**Feature**: 151-dev-loop-tooling | **Spec**: [spec.md](spec.md) (FAITHFUL, round 2) | **Date**: 2026-08-29
 
 ## Summary
 
@@ -137,7 +137,7 @@ dispatch line naming the maps whose manifests differ from HEAD.
 ### Documentation (this feature)
 
 ```
-specs/149-dev-loop-tooling/
+specs/151-dev-loop-tooling/
 ├── spec.md          # FAITHFUL, round 2
 ├── plan.md          # this file
 ├── research.md      # R1-R4, the open mechanism questions

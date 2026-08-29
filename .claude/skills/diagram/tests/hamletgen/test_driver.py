@@ -121,7 +121,7 @@ def test_cohort_derives_each_spec_and_can_be_forced_serial(monkeypatch) -> None:
     assert [s.households for s in seen] == [14, 14]
 
 
-# ---- feature 149 US4: the stage profile prints, and changes nothing -------------------------------
+# ---- feature 151 US4: the stage profile prints, and changes nothing -------------------------------
 @pytest.mark.rolls_map  # it builds a Settlement (two stand-in stages, no render) - the marker keeps `make quick` honest about what it runs
 def test_the_stage_profile_prints_only_when_asked_and_rolls_the_same_map(monkeypatch, capfd) -> None:
     """`PROFILE=1` is an environment variable, which feature 132 forbids for a SWITCH - no variable may
