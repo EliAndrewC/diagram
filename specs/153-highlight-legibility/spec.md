@@ -1,6 +1,6 @@
 # Feature Specification: five things about highlighting
 
-**Feature Branch**: none (`SPECIFY_FEATURE=152-highlight-legibility`)
+**Feature Branch**: none (`SPECIFY_FEATURE=153-highlight-legibility`)
 
 **Created**: 2026-08-29
 
@@ -52,14 +52,16 @@ Five separate things, all about the highlight and the modal. Nothing else.
 
 ### US4 - the windbreak is named in full (Priority: P3)
 
-1. **Given** the windbreak modal, **When** it is open, **Then** it is titled "windbreak forest".
+1. **Given** the windbreak modal, **When** it is open, **Then** its heading reads "Windbreak forest".
 
 ## Requirements
 
 - **FR-001** `pond sluice` MUST get a `HIT_WIDEN` entry. Its mark is a 2.4 px line, thinner than a field
   ditch's, so it takes at least the ditch's widening.
 - **FR-002** When a crop dike is highlighted, its bank and its planted crowns MUST both be highlighted
-  and MUST remain distinguishable from each other.
+  and MUST remain distinguishable from each other. (The crowns already carry the DIKE's own class - that
+  is why they light today, and why they vanish into it: one highlight color covers both. So this is a
+  distinction WITHIN one class, not a new class and not a re-tagging.)
 - **FR-003** FR-002 MUST NOT change how any other class highlights, and MUST NOT change the drawn map -
   the SVG and PNG stay byte-identical (feature 134 FR-010), so this is a page-side distinction only.
 - **FR-004** `pond sluice` and `field ditch` MUST be siblings, with text that says how they differ.
@@ -71,13 +73,21 @@ Five separate things, all about the highlight and the modal. Nothing else.
 
 - **SC-001** A pointer within the widened box of a sluice highlights the pond sluice class.
 - **SC-002** With a mulberry dike highlighted, the crowns are a different color from the bank.
-- **SC-003** Both new sibling pairs appear in both directions, and the existing pairs are untouched.
-- **SC-004** The windbreak modal reads "windbreak forest".
+- **SC-003** Five new sibling pairs appear in both directions - `pond sluice` <-> `field ditch`, and each
+  of the four crop dikes <-> `perimeter dike` - and the existing pairs are untouched.
+- **SC-004** The windbreak modal's heading reads "Windbreak forest" (the registry holds `windbreak forest`
+  lowercase; the page capitalizes the heading, as it does every other name).
 - **SC-005** `make done` green; the pool maps gate clean; the page still matches its own SVG (feature 148
   R3's check, ~0.03%).
 
 ## Assumptions
 
+- **FR-002 and FR-005 both read one rolled label as its kind.** The GM wrote "the Mulberry dikes" and
+  "the two different dike modals", naming what was on the sheet in front of them. The crop dike is one
+  knob whose VALUE is the label, and both defects - one fill covering the greenery, and the confusion
+  with the perimeter dike - are identical on a cane, banana or fruit dike. Writing either requirement
+  for mulberry alone would leave the reported defect standing on three of the four values while
+  claiming the feature had fixed it. Declared here, and adjudicated by the spec review.
 - **The crop dike is a rolled knob with four values** (`mulberry`, `sugarcane`, `banana`, `fruit`), each
   its own class. The GM said "the two different dike modals", speaking of the two on the map in front of
   them - mulberry and perimeter. FR-005 is written for the crop dike WHICHEVER kind it is, because the
@@ -85,3 +95,18 @@ Five separate things, all about the highlight and the modal. Nothing else.
   ship a half-linked pair. Flagged for the spec review as the one place this reads past the GM's words.
 - "Windbreak forest" is written lowercase in the registry to match every other name there (`fish pond`,
   `field ditch`); the page styles the heading.
+
+## Review history
+
+- **Round 1, `spec-fidelity`, 2026-08-29: CHANGES REQUIRED.** Three findings, all accepted and fixed
+  above. SC-003 counted two sibling pairs where the spec creates five; SC-004 said the modal "reads
+  windbreak forest" without saying that the heading is what the GM sees or that the registry holds the
+  name lowercase; and FR-002 did not record that the crowns ALREADY carry the dike's class, which is
+  what makes this a distinction within one class rather than a new class or a re-tagging.
+- **Round 2, `spec-fidelity`, 2026-08-29: FAITHFUL.** Every clause of the GM's message traced to a
+  requirement, nothing found that was not asked for, and the declared read-past (four crop-dike values
+  where the GM said "the two different dike modals") adjudicated as within the request: it is one
+  relationship over a rolled label, the page shows a sibling only when both classes are present, and
+  restricting it would leave the reported defect standing on three of the four values. Two non-blocking
+  asides, both taken: FR-002 generalizes in exactly the same way and the Assumptions block now says so,
+  and US4's scenario has been brought into line with SC-004's "Windbreak forest".

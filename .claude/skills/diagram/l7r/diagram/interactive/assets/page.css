@@ -7,6 +7,9 @@
      every one of those fills. A UI affordance, not a claim about the world. */
   --hl: #FFC83D;
   --hl-stroke: #B8860B;
+  /* the PLANTING on a lit feature (feature 153): lit, but still reading as leaf rather than as bank */
+  --hl-planted: #8FA31E;
+  --hl-planted-stroke: #5F6E12;
   --ground: #EFE3C2;
   --ink: #2D2A24;
   --card: #F7F0DC;
@@ -32,6 +35,12 @@ svg#map { position: absolute; left: 0; top: 0; display: block; }
    highlight they read as a smaller tree inside the crown). A fill-only mark just turns gold. */
 g.f.on[stroke]:not([stroke="none"]), g.f.on *[stroke]:not([stroke="none"]) { stroke: var(--hl-stroke) !important; }
 g.f.on:not([fill="none"]), g.f.on *:not([fill="none"]) { fill: var(--hl) !important; }
+/* ...and its greenery keeps its own tone inside the highlight (GM 2026-08-29: "we can no longer see the
+   greenery along them ... it will be clear that there is cultivated plant life growing on top"). The
+   crowns are already in the dike's class and already light with it; what they lacked was a color of
+   their own, so the whole dike went one flat gold. Placed after the rule above so it wins. */
+g.f.on.planted[stroke]:not([stroke="none"]), g.f.on.planted *[stroke]:not([stroke="none"]) { stroke: var(--hl-planted-stroke) !important; }
+g.f.on.planted:not([fill="none"]), g.f.on.planted *:not([fill="none"]) { fill: var(--hl-planted) !important; }
 /* The explanation is a NON-modal dialog over our own shade (see page.js `open`): a modal one makes
    the whole map inert and costs a full restyle of the 175,000-element tree per open and close. */
 #shade { position: fixed; inset: 0; background: rgba(45, 42, 36, 0.45); z-index: 9; }

@@ -356,3 +356,90 @@ def test_an_unreadable_extent_blocks_the_reorder_rather_than_risking_it() -> Non
 
     s = '<circle cx="10" cy="10" r="2" fill="#0a0"/><path d="M"/><circle cx="90" cy="90" r="2" fill="#0a0"/>'
     assert merge_primitives(s).count("<circle") == 2
+
+
+def test_a_planted_tag_marks_the_group_and_a_plain_one_does_not() -> None:
+    """Feature 153: the crowns on a crop dike carry the DIKE's class - hovering either lights both - so
+    the only thing separating them is a token on the group, which the stylesheet paints in its own
+    tone. A plain `str` tag must emit exactly what it emitted before the token existed."""
+    from l7r.diagram.interactive.tags import Planted
+
+    lit = wrap(RECT, Planted("mulberry dike"))
+    assert lit.startswith('<g class="f f-mulberry-dike planted" data-k="mulberry dike">'), lit
+    assert wrap(RECT, "mulberry dike") == f'<g class="f f-mulberry-dike" data-k="mulberry dike">{RECT}</g>'
+
+
+def test_a_planted_tag_is_a_str_and_so_takes_every_str_path() -> None:
+    """`Planted` subclasses `str` on purpose: the census, the hit boxes, `present_classes` and every
+    `isinstance(tag, str)` branch keep working with no knowledge of it."""
+    from l7r.diagram.interactive.tags import Planted
+
+    tag = Planted("mulberry dike")
+    assert isinstance(tag, str) and tag == "mulberry dike"
+    assert ink_census([RECT], [tag])[0]["mulberry dike"] == 1
+
+
+def test_a_pond_sluice_gets_the_field_ditchs_widening() -> None:
+    """The GM, 2026-08-29: the sluices are "really hard to click on ... a larger highlight box, similar
+    to what we are doing with the field ditches". Same factors; the sluice's mark being thinner, the
+    box comes out smaller in absolute terms and larger relative to the ink, which is the point."""
+    from l7r.diagram.interactive.page import HIT_WIDEN
+
+    assert HIT_WIDEN["pond sluice"] == HIT_WIDEN["field ditch"]
+    sluice = '<line x1="10" y1="10" x2="30" y2="10" stroke="#37637F" stroke-width="2.4"/>'
+    out = wrap(sluice, "pond sluice")
+    widths = [float(w) for w in re.findall(r'class="hit"[^>]*stroke-width: ([\d.]+)px', out)]
+    assert widths == [14.4], f"one invisible copy, six times the drawn 2.4 px: {out}"
+
+
+def test_outlined_shapes_that_overlap_keep_their_own_paint_order() -> None:
+    """Feature 153, measured on Kuwabata. One <path> paints every subpath's FILL and only then its
+    stroke, so an earlier crown's outline that a later crown's fill used to cover comes back over it -
+    the woodland read as a heap of glass rings. Same style, apart: still merged."""
+    over = '<circle cx="10" cy="10" r="6" fill="#4F6E33" stroke="#3C5526" stroke-width="0.8"/><circle cx="14" cy="10" r="6" fill="#4F6E33" stroke="#3C5526" stroke-width="0.8"/>'
+    assert merge_primitives(over).count("<circle") == 2, "overlapping outlined shapes keep their order"
+    apart = '<circle cx="10" cy="10" r="2" fill="#4F6E33" stroke="#3C5526" stroke-width="0.8"/><circle cx="90" cy="90" r="2" fill="#4F6E33" stroke="#3C5526" stroke-width="0.8"/>'
+    assert merge_primitives(apart).count("<circle") == 0, "outlined shapes that do not touch still merge"
+
+
+def test_a_line_is_never_outlined_however_the_scatter_is_written() -> None:
+    """A line has no fill area, whatever `fill` says or leaves unsaid - and the scatters ARE lines, one
+    per blade, sharing a root. Reading them as outlined cost 4,336 elements on Kuwabata's scrub alone
+    (5,536 unmerged blades where 1,200 paths had been), which is the whole point of the merge pass."""
+    tuft = '<line x1="10" y1="20" x2="11" y2="14" stroke="#6E9377" stroke-width="0.8"/><line x1="10" y1="20" x2="9" y2="15" stroke="#6E9377" stroke-width="0.8"/>'
+    assert merge_primitives(tuft).count("<line") == 0, "two blades of one tuft still become one path"
+
+
+def test_two_circles_whose_boxes_overlap_but_whose_edges_do_not_still_merge() -> None:
+    """A box lies most about a round blob: two crowns can share a box corner and not touch at all. The
+    overlap test reads a circle AS a circle for exactly this case."""
+    corner = '<circle cx="0" cy="0" r="10" fill="#4F6E33" stroke="#3C5526" stroke-width="0.5"/><circle cx="18" cy="18" r="10" fill="#4F6E33" stroke="#3C5526" stroke-width="0.5"/>'
+    assert merge_primitives(corner).count("<circle") == 0, "boxes overlap, circles do not - so they merge"
+    touching = '<circle cx="0" cy="0" r="10" fill="#4F6E33" stroke="#3C5526" stroke-width="0.5"/><circle cx="12" cy="12" r="10" fill="#4F6E33" stroke="#3C5526" stroke-width="0.5"/>'
+    assert merge_primitives(touching).count("<circle") == 2, "circles that really do touch keep their order"
+
+
+def test_a_member_may_not_jump_back_past_anything_skipped_since_the_buckets_FIRST_member() -> None:
+    """Feature 148 cleared a bucket's skipped extents whenever a member joined, which proves only that
+    THAT member cleared them. A third member is emitted at the FIRST member's position too, so it has to
+    clear everything skipped since the bucket opened (feature 153)."""
+    a = '<circle cx="10" cy="10" r="2" fill="#0a0"/>'
+    blocker = '<circle cx="60" cy="60" r="6" fill="#a00"/>'
+    b = '<circle cx="200" cy="200" r="2" fill="#0a0"/>'
+    c = '<circle cx="61" cy="61" r="2" fill="#0a0"/>'
+    out = merge_primitives(a + blocker + b + c)
+    assert out.count("<circle") >= 2, f"the third member overlaps what the second cleared: {out}"
+    assert '<circle cx="61" cy="61" r="2" fill="#0a0"/>' in out, "it stays where it was drawn"
+
+
+def test_a_fill_only_shape_is_not_outlined_and_still_merges_where_it_overlaps() -> None:
+    """Only a shape painting BOTH has a paint order to lose. Two overlapping opaque fills of one color
+    are the same ink whether they are two elements or two subpaths, so they merge."""
+    from l7r.diagram.interactive.page import _outlined
+
+    assert not _outlined("circle", {"fill": "#4F6E33"})
+    assert not _outlined("circle", {"fill": "none", "stroke": "#3C5526"})
+    assert not _outlined("circle", {"fill": "#4F6E33", "stroke": "#3C5526", "stroke-width": "0"})
+    assert _outlined("circle", {"fill": "#4F6E33", "stroke": "#3C5526"})
+    over = '<circle cx="10" cy="10" r="6" fill="#4F6E33"/><circle cx="14" cy="10" r="6" fill="#4F6E33"/>'
+    assert merge_primitives(over).count("<circle") == 0
