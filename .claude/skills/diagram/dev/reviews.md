@@ -77,3 +77,18 @@ All three were fixed in that feature - 106/59/65/77 ft lane medians, byre median
 off-canvas clumps - and the *first* attempt at the lane fix (a relaxation ladder) is recorded at the
 point of change as having measurably done nothing, because a fix that fails is worth as much to the
 next reader as the one that works.
+
+## The pairing's stop hook fired once with a review actually in flight (observed 2026-08-29)
+
+`scripts/pair-hooks.sh stop` reported PAIRING HALF-OPEN while a `settlement-review` agent was running
+over exactly that delta. Investigated and NOT reproduced: replaying the same payload by hand exits 0,
+and `agent-stall-hooks.sh pending` - which `review_pending()` delegates the "is it finished" question
+to - lists the agent correctly. The most likely cause is a race, since the check runs against a
+transcript the agent is still writing and the gate's reference sub-phase records a green key of its own
+partway through the run.
+
+Recorded rather than fixed, deliberately: the hook is self-limiting (`stop_told` fires once per engine
+key, never in a loop), the cost of a false fire is one line of noise, and a speculative edit to a guard
+that cannot be reproduced is the kind of change that breaks the guard for real. **If it fires a second
+time with a review demonstrably running, that is the second data point - fix it then**, and the place
+to look is `review_pending()`'s window rather than the key comparison, which was correct here.

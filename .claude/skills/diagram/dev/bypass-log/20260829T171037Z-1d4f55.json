@@ -1,0 +1,6 @@
+{
+  "utc": "20260829T171037Z",
+  "guard": "pair-hooks",
+  "what": "gate alone",
+  "reason": "the settlement-review over these five maps is already in flight from the make verify dispatch earlier this turn-sequence; this is the same delta plus the sources-parser fix, so a second dispatch would duplicate it"
+}
