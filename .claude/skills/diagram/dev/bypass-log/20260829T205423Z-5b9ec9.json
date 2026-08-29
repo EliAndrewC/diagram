@@ -1,0 +1,6 @@
+{
+  "utc": "20260829T205423Z",
+  "guard": "pair-hooks",
+  "what": "gate alone",
+  "reason": "no settlement-review is owed for this delta: the tier sweep confirms EVERY pool manifest byte-identical across round 2"
+}
