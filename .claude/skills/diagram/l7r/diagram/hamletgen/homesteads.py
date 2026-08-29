@@ -834,13 +834,13 @@ def farmstead_fixtures(s: Settlement, plan: SitePlan, houses: Sequence[Mapping[s
                         _dx, _dy = _rr * math.sin(math.radians(_bd)), -_rr * math.cos(math.radians(_bd))
                         _sun.append((_dx * ca + _dy * sa, -_dx * sa + _dy * ca, w, d))
                 _sun.sort(key=lambda q: (math.hypot(q[0], q[1]), abs(math.degrees(math.atan2(q[0] * ca - q[1] * sa, -(q[0] * sa + q[1] * ca))) % 360.0 - 157.5)))
-                # ...AND A FIXTURE BELONGS TO THE HOMESTEAD IT SERVES. A seat closer to a neighbour's
-                # farmhouse than to its own is drawn in that neighbour's yard as far as a reader is
+                # ...AND A FIXTURE BELONGS TO THE HOMESTEAD IT SERVES. A seat closer to a neighbor's
+                # farmhouse than to its own is drawn in that neighbor's yard as far as a reader is
                 # concerned, whatever the record says - so the sun list drops any seat that is not
                 # strictly nearest its own house. This is the ownership test the 72 ft radius was
                 # trusting the geometry to provide, made explicit.
                 # A STRICT "must be nearest to its OWN house" filter was tried here and cost too much.
-                # It states the defect exactly - a fixture nearer a neighbour's farmhouse reads as theirs -
+                # It states the defect exactly - a fixture nearer a neighbor's farmhouse reads as theirs -
                 # but in a cluster the sun side of one house often IS nearer the next, and filtering on it
                 # rejected seats that sit honestly in their own yard: privies fell to 2 of 11 declared on
                 # Mizuguchi and the sun share to 49%. The bound that does the work without the collateral
@@ -868,7 +868,13 @@ def farmstead_fixtures(s: Settlement, plan: SitePlan, houses: Sequence[Mapping[s
                     # the privy, and where the privy now sits on the sun side the ground just past it is
                     # often the work yard. The researched rule is only that the heap lies BEYOND the privy
                     # (research/homesteads.md) - which these all do; they differ in how far and how wide.
-                    _pout = px(FIXTURE_FT["privy"][1]) / 2 + g + d / 2
+                    # ...AND NOT AT A FIXED OFFSET (feature 152 T17). Every heap sat the SAME distance
+                    # beyond its privy - an acceptance review measured 15 of 19 pairs at |dy| 9.4-9.9 ft
+                    # with |dx| under 1 ft - so the pair read as one stamp repeated down the row. The
+                    # researched rule is only that the heap lies BEYOND the privy; how far beyond is ours,
+                    # and real yards vary. Jittered off the homestead's own position so it is stable for a
+                    # given farmstead and differs between them.
+                    _pout = px(FIXTURE_FT["privy"][1]) / 2 + g + d / 2 + px(9.0) * (s._hjit(hx, hy, 102.4) - 0.5)
                     seats = [
                         (plx, ply + out_ * _pout, w, d),
                         (plx + w * 1.1, ply, w, d),
@@ -900,7 +906,21 @@ def farmstead_fixtures(s: Settlement, plan: SitePlan, houses: Sequence[Mapping[s
                     (hw * 0.3, -(hh / 2 + g + d * 1.5 + g), w, d),
                 ]
             elif kind == "coop":
-                seats = [(hw / 2 + g + d / 2, hh * 0.3, d, w), (0.0, -(hh / 2 + g + d / 2), w, d), (-(hw / 2 + g + d / 2), -hh * 0.3, d, w)]
+                # ...and the back seat is not DEAD CENTRE on the wall, which is the stamp itself: at
+                # x = 0.0 exactly, a coop taking it stands at bearing 0 from its house on every farmstead
+                # (houses draw at rot 0-4), so 9 of 12 Kashikawa coops sat within 4 degrees of north. A
+                # hen coop stands somewhere along the back wall, not on its midpoint.
+                _cjx = hw * 0.34 * (s._hjit(hx, hy, 105.9) - 0.5) * 2.0
+                seats = [(hw / 2 + g + d / 2, hh * 0.3, d, w), (_cjx, -(hh / 2 + g + d / 2), w, d), (-(hw / 2 + g + d / 2), -hh * 0.3, d, w)]
+                # A COOP IS NOT ALWAYS DUE NORTH (feature 152 T17). Measured on the shipped maps before
+                # this: 9 of 12 Kashikawa coops and 7 of 12 Sawada's stood within 4 degrees of north of
+                # their house, because the seat list is in the house's frame and houses draw at rot 0-4.
+                # The arrangement is right - a coop goes in the rear yard - and the INVARIANCE is not.
+                # The list is rotated by the homestead's own hash so which rear seat is tried first
+                # differs between farmsteads while every seat stays one the record supports.
+                if seats:
+                    _sh = int(s._hjit(hx, hy, 105.5) * len(seats)) % len(seats)
+                    seats = seats[_sh:] + seats[:_sh]
             else:  # shrine: a plot corner, world frame
                 off = px(14.0)
                 corner = {"NW": (-(hw / 2 + off), -(hh / 2 + off)), "NE": (hw / 2 + off, -(hh / 2 + off)), "SW": (-(hw / 2 + off), hh / 2 + off)}

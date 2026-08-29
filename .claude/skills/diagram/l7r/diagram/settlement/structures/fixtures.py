@@ -578,10 +578,10 @@ class PublicFixturesMixin:
         if not routes:
             # A ROUTE CARRIES ITS OWN WIDTH, AND THIS BLOCK USED TO GIVE THEM ALL THE SAME ONE (feature
             # 134 T50, 2026-08-29). `street_runs` returns EVERY drawn lane, and they were all added at a
-            # nominal 8 ft - so the seater measured the tread edge 4 ft from the centreline on a lane
+            # nominal 8 ft - so the seater measured the tread edge 4 ft from the centerline on a lane
             # that is 3 or 5 ft wide, and placed the board `(8 - w) / 2` too far out while believing it
             # had put it exactly on the verge. Gate seed 44's board landed at 12.5 ft from a 5 ft lane's
-            # centreline - which is 6 (the verge) + 4 (half of the imagined 8) + 2.5 (half the board),
+            # centerline - which is 6 (the verge) + 4 (half of the imagined 8) + 2.5 (half the board),
             # to the foot - and `kosatsuba_by_the_road` measures against 12.0 and refused it.
             #
             # It also quietly undid the rule the note below states. `_main` exists to keep the state's

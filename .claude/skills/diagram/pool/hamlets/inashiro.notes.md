@@ -1030,7 +1030,7 @@ their local channel. The 2026-08-16 marsh-seated crownless parcel failure is abs
    circular seam across the roadway at (1185,785), (1249,801), (1270,1183), (1279,1312). Compounding it,
    `lanes[3]` is w=6 and `lanes[4]` is w=3, so one continuous ~230 ft back-lane run halves its width at
    that same junction (`ways.py:695`, a link inherits the width of the way it joins and leaves its far
-   neighbour at 3).
+   neighbor at 3).
 3. **The notice-board caption erases the lane it stands on.** The caption is centered on the glyph with a
    3 px background halo, and `lanes[1]` passes x~1235 at y=1009 with w=5 - so the halo knocks a visible
    notch out of the map's busiest internal lane, between "notice" and "board".

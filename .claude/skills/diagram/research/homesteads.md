@@ -683,7 +683,7 @@ Where the shed stood NOT-FOUND: seated at the back wall or a flank (GUESS), 6 x 
 
 **The chicken coop - imperial China's, READ.** *Animals through Chinese History* (Cambridge, READ):
 *"it seems that farmers in most regions of China managed to keep a pig and some chickens in their
-yard, along with a draught animal or two"* (late imperial; the chapter leans on 1930s survey data,
+yard, along with a draft animal or two"* (late imperial; the chapter leans on 1930s survey data,
 its own caveat). The Qimin Yaoshu 養雞第五十九 (wikisource, READ): *"雞棲，宜據地為籠，籠內著棧 ... 若任之
 樹林，一遇風寒，大者損瘦，小者或死"* - build the roost as a ground-level enclosure with a perch inside;
 left to roost in trees the birds sicken - so a COOP, not a tree. A late-Ming coop at Zhengzhou

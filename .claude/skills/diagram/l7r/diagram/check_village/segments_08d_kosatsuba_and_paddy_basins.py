@@ -481,7 +481,7 @@ def _seg_0605__paddy_plot_rings_overcount_stays_marginal(*, M: Any = _UNBOUND, c
     # that passes today. The defect it looks like is `paddy_plot_seams_shared`'s business (a whole
     # ring drawn inside a neighbor), and that rule does discriminate it. So this one is a DRIFT
     # ceiling, and its teeth are the synthetic break in
-    # `test_paddy_ring_overcount_fires_when_a_ring_is_painted_over_its_neighbour` rather than a
+    # `test_paddy_ring_overcount_fires_when_a_ring_is_painted_over_its_neighbor` rather than a
     # frozen fixture - the honest home for a rule whose defect has never yet been shipped.
     #
     # THE MEASUREMENT IS AN UPPER BOUND, deliberately. Each pair is clipped against the NEIGHBOR's
@@ -662,7 +662,7 @@ def _seg_0614__paddy_bunds_do_not_stagger(*, M: Any = _UNBOUND, check: Any = _UN
     # produces: on the pre-fix pool, 26 plot rings across the four scripted hamlets carried two or
     # more steps apiece, six of them on Inashiro's east flank alone. A SINGLE step is a different
     # animal: it is one awkward corner where a scrap of ground had exactly one home, the repair pass
-    # could not move the wall without breaking another rule (a neighbour split in two, a bund pushed
+    # could not move the wall without breaking another rule (a neighbor split in two, a bund pushed
     # into a delivery ditch, a basin drawn to a needle - see `_unjog`), and the map reads as an
     # ordinary piecemeal parcel. Seven of those survive across the four maps and are ledgered in
     # `future-work/` with the guard that refuses each; `python3 -m l7r.diagram.tools.jogs` lists

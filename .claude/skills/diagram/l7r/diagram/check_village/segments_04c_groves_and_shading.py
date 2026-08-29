@@ -283,7 +283,7 @@ that way passes the four maps whose belts happen to be dense and fails a third o
 
 What a reader actually sees, and what a wind wall actually fails at, is a GAP: a RUN of bare columns
 wide enough to see through. 30 ft is a clump's own drawn diameter (28 ft) rounded up - narrower than
-that and the neighbouring canopies close the view. The two real breaches this rule exists for
+that and the neighboring canopies close the view. The two real breaches this rule exists for
 measured ~45 ft (a wellhead seated inside the belt) and ~60 ft (a peer session's lane crossing it);
 a scatter's own worst pitch is ~12 ft.
 """

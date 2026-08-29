@@ -1865,7 +1865,7 @@ def _clear_touch(a: Pt, b: Pt, hard: list[Poly], walls: Sequence[Poly], water: l
     # THE WHOLE CHORD, NOT ALL BUT THREE FEET OF IT (feature 134 T50, 2026-08-29). This accepted a chord
     # whose longest CLEAR stretch reached `span - 3.0`, which is one sampling step - so a chord fouling
     # the fabric for up to three feet at one end passed as clear. That is exactly a corner graze, and it
-    # is how a lane the router had drawn 7.6 ft clear of a neighbour's garden came back from `_smooth_web`
+    # is how a lane the router had drawn 7.6 ft clear of a neighbor's garden came back from `_smooth_web`
     # at 1.21 ft, with `features_do_not_overlap` reading lanes x gardens (cohort seed 18). The slack was
     # sampling tolerance, but at 1 px = 1 ft three feet is half the width the overlap matrix gives every
     # lane. `clear_runs` already carries its own `floor`, so the run may still be a sample short of the
@@ -1938,7 +1938,7 @@ _KNOT_FT = 25.0  # ends of different lanes this close are one junction, not seve
 
 
 def _drop_collinear(pts: Poly, eps: float = 1e-6) -> Poly:
-    """Remove interior points that lie on the straight line between their neighbours.
+    """Remove interior points that lie on the straight line between their neighbors.
 
     Geometry-preserving by construction: a point dropped here is one the drawn stroke passes through
     anyway. It exists because `clear_runs` returns a polyline of SAMPLES, and a record of samples
@@ -2844,7 +2844,7 @@ def _serve_stragglers(s: Settlement, plan: SitePlan, hard: list[Poly], fabric: l
                     # until one long join leg is spliced onto the end of it and the fold appears all at
                     # once; `_smooth_web`'s string-pull cannot chord it because the samples hug the
                     # obstacles the clip was avoiding. Dropping a point that lies ON the segment between
-                    # its neighbours is EXACT - the ink is identical to the last decimal - so this changes
+                    # its neighbors is EXACT - the ink is identical to the last decimal - so this changes
                     # no geometry, only what the record says the shape is.
                     runs = [_drop_collinear(r) for r in runs]
                     # JOINING THE NETWORK, not arriving at the point that was aimed at. A candidate
@@ -2966,7 +2966,7 @@ def _serve_stragglers(s: Settlement, plan: SitePlan, hard: list[Poly], fabric: l
                         # be whichever was built first, which is the LONG one - so a candidate that merely
                         # bent could lose to one that drew a tread through somebody else's vegetables.
                         # An overlap is a rule the matrix forbids outright; a bend is a complaint about
-                        # shape. Cohort seed 18's footpath grazed a neighbour's garden at 1.21 ft while the
+                        # shape. Cohort seed 18's footpath grazed a neighbor's garden at 1.21 ft while the
                         # shorter cut only bent. So they are ordered (fouls, bends) and the least bad wins.
                         _rank = (_crosses_fabric(_p, passable, _TOUCH_GAP), _bends_badly(_p))
                         if _rank == (False, False):

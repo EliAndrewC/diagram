@@ -394,7 +394,7 @@ _TINT_MIN_SOLIDITY = 0.85
 # 114 x 18.9 ft and 139 x 24.8 ft, aspects 6.0 and 5.6, sharpest corners 28.5 and 27.9 deg, solidity
 # fine. Each reads at fit zoom as a blue-gray dagger of water tapering toward the collector, which is
 # the exact misreading `pointed_ring`'s own docstring says the tint rules exist to prevent - and
-# neither shape is wrong, only its COLOUR: the fan toe does truncate, and a hem strip that narrow is
+# neither shape is wrong, only its COLOR: the fan toe does truncate, and a hem strip that narrow is
 # honest ground. So the fourth clause measures proportion rather than taper. 4.0 is far above
 # anything a leveled basin runs at (the median plot on a hamlet fan is ~37 x 38 ft, aspect ~1, and
 # the whole map's worst is 7.2), so it demotes the two wedges and touches no basin that reads as one.

@@ -494,10 +494,10 @@ def _seam_cuts(lo: float, hi: float, want: float, marks: list[float]) -> list[fl
     The ideal spacing still governs; a mark only wins when it is within 0.35 of a cell of where the
     next cut wanted to be, and never when it would leave a sliver under a third of a cell on either
     side. THAT NUMBER IS A MEASURED CEILING, not a taste: at 0.40 and above the cut follows the
-    neighbours far enough to move the fan's envelope, and Kashikawa's dry hem - which tiles against
+    neighbors far enough to move the fan's envelope, and Kashikawa's dry hem - which tiles against
     that envelope - shifts onto a footbridge and trips `features_do_not_overlap`. Steps across the
     four scripted hamlets go 2/2/9/3 at 0.35 and 1/2/8/1 at 0.40, so the last four cost a regression
-    in another subsystem and are not taken (see `future-work/`). Where the neighbours break nowhere near the right place the grid falls back to the even
+    in another subsystem and are not taken (see `future-work/`). Where the neighbors break nowhere near the right place the grid falls back to the even
     spacing it always used, which is the honest answer: there is no seam there to line up with."""
     span = hi - lo
     if span <= 1.5 * want or want <= 0.0:
@@ -595,16 +595,16 @@ def _unjog(plots: list[dict[str, Any]], g: float, floor: float, water: BaseGeome
 
     THE MOVE IS THE ONE A FIELD WOULD MAKE: run the wall from where it starts to where it resumes, so
     the hop becomes a bend. `research/fields.md` says a bend is period-correct and a parcel fitted to
-    its neighbours is the honest look; what it never describes is a wall doubling back, which is
+    its neighbors is the honest look; what it never describes is a wall doubling back, which is
     exactly and only what this removes.
 
     IT TRADES GROUND RATHER THAN DROPPING VERTICES, and that distinction is the whole difference
     between this and the version that did not work. Dropping the step's two vertices from every ring
     that carries them looks partition-preserving and is not: the two rings either side of a wall have
-    DIFFERENT neighbouring vertices, so the chords they close over differ, and on Inashiro rings 460
+    DIFFERENT neighboring vertices, so the chords they close over differ, and on Inashiro rings 460
     and 592 lost 400 px2 and gained 259 - the difference being bare floor with a bund each side of it.
     Taking the corner as a polygon (`was.difference(now)`) and handing that same polygon to the
-    neighbour conserves the ground by construction, whatever the two rings look like.
+    neighbor conserves the ground by construction, whatever the two rings look like.
 
     EVERY REFUSAL BELOW IS A RULE THIS PASS WOULD OTHERWISE BREAK, and each was measured breaking it:
 
@@ -631,7 +631,7 @@ def _unjog(plots: list[dict[str, Any]], g: float, floor: float, water: BaseGeome
       stricter than the gate's own sampled clearance.
 
     IT RUNS UNTIL NOTHING MOVES, capped, because straightening one step can retire or expose
-    another and the cheapest cut for a ring often only becomes available once its neighbour has been
+    another and the cheapest cut for a ring often only becomes available once its neighbor has been
     repaired. The cap is a backstop against a repair that undoes itself, not a tuning knob - on every
     pool map the set converges in three rounds or fewer."""
     for _ in range(6):
@@ -774,12 +774,12 @@ def _trade(
             # them, not the best one, or two basins end up claiming the same square foot. What it
             # overlaps nothing of is bare floor, and taking that in is free and is the point.
             # THE BITE WIDENS RATHER THAN THE NEIGHBOUR SPLITTING (feature 152 T18). The dominant refusal
-            # on Mizuguchi - and the largest surviving step in the pool, 30.0 ft - is a neighbour that
+            # on Mizuguchi - and the largest surviving step in the pool, 30.0 ft - is a neighbor that
             # would come apart in two if it gave up the corner, so `qp.difference(traded)` returns a
             # MultiPolygon and the whole repair is declined. `future-work/farming-communities.md` recorded
-            # the answer and left it UNTRIED: "keep the largest part for the neighbour and hand the
-            # orphaned fragment to the basin that cut it, so the bite widens rather than the neighbour
-            # splitting." That is what this does, once, before the neighbour loop - widening mid-loop would
+            # the answer and left it UNTRIED: "keep the largest part for the neighbor and hand the
+            # orphaned fragment to the basin that cut it, so the bite widens rather than the neighbor
+            # splitting." That is what this does, once, before the neighbor loop - widening mid-loop would
             # change decisions already taken. The orphan is capped against the trade so this stays a repair
             # rather than a land grab, and every guard below still judges the widened result.
             _orphans = []

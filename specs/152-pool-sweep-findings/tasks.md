@@ -126,9 +126,9 @@ is the same house main reports, (1826, 2438)). It is not one of the fourteen the
 recorded here rather than fixed because the diagnosis lands in door-path geometry rather than anywhere this
 feature touched:
 
-Measured properly - the check tests the house's CORNERS against the lane CENTRELINE, not its centre, which
+Measured properly - the check tests the house's CORNERS against the lane CENTERLINE, not its centre, which
 is what my first measurement got wrong and why it found nothing. Both offenders are 2-point 3 ft door
-paths clearing a NEIGHBOURING corner of the house they serve: **Sawada lane 13 at 2.78 ft where the check
+paths clearing a NEIGHBORING corner of the house they serve: **Sawada lane 13 at 2.78 ft where the check
 wants 3.5 (short 0.72); Kashikawa lane 11 at 0.81 ft (short 2.69)**. A door path necessarily ends at its
 house, so its last stretch is close by construction; what fails is the clearance to the OTHER corners.
 
