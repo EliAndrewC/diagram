@@ -48,6 +48,19 @@ and a bisect whose verdicts move with which entries happen to be fresh.
 
 It is a hypothesis and the spec says so; FR-001 requires it to be tested before anything is built on it.
 
+## Review history
+
+- **`spec-fidelity`, round 1 - CHANGES REQUIRED (3).** (1) SC-002 demanded five consecutive full runs, which
+  contradicted FR-007's own reasoning ("re-running an intermittent failure proves nothing") and would have
+  cost 12-20 minutes against `scripts/measure-hooks.sh`, a guard the GM installed the day before for exactly
+  that waste. (2) FR-004 kept the `PARKED` machinery "as the general tool for a future case" - an unrequested
+  policy call creating a standing way to excuse lines from a NON-NEGOTIABLE floor. (3) The GM's plural ("the
+  flaky tests", "the four") was never accounted for, so the spec narrowed "the flakiness" to one symptom on
+  the reader's trust. The review also noted FR-006 was a weaker bar than SC-004.
+- **All three applied**, plus the FR-006 wording: repetition demoted from proof to evidence, `PARKED`'s
+  survival moved to Decisions Recorded for the GM to confirm or reverse, and the scope reading written down
+  with the evidence for it.
+
 ## Requirements *(mandatory)*
 
 - **FR-001** The CAUSE must be established by measurement before a fix is written, and recorded - including
