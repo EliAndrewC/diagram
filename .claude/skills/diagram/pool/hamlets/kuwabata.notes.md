@@ -127,6 +127,18 @@ district's ground. Drawn at 1 ft/px.
   where the rectangular waterside marsh laps the dike outline, 105 are crowns lapping a pond feed
   by 1-2 ft. A clean bill cannot be earned here until the audit knows the archetype (review
   2026-08-28).
+- The south outfall's surroundings, measured after the notch step-in landed (2026-08-29): the strip's
+  inner edge now dips into the cut (edge y 2249.8 -> 2200.4 -> 2227.9 across x 2293-2354), the sluice
+  gate is still drawn, and no mark stands on the band. The ground right at the mouth is still barer
+  than the flank either side (13 marks in the 120 ft window against 43 on the control stretch, nearest
+  mark 41.7 ft from the notch center) - and that residue is NOT the strip's shape: it is the outfall
+  channel's own keep-out (a tint circle stands 30 px off a bed, a tuft 9 px, so the water's own
+  corridor is bare by rule) plus the 46 px reed feather. Recorded rather than chased: the region is
+  honest, and the remaining bareness is water, not dry ground.
+- The reviewer's first cut of this rule was DEAD CODE and shipped as done: the step was an `elif` on an
+  empty bin, and a notch bin holds 14 outline points (the ring's cut ends fill it), so it fired 0 times
+  on all four flanks. The lesson is the standing one - a rule that cannot fire looks exactly like a
+  rule that passes - and the guard is now a unit test that steps a notch whose bin is FULL.
 - OPEN QUESTION for the GM, raised by the review of 2026-08-28 and NOT settled here: which way the
   reed density should run at a DIKED toe. Our strip feathers on every edge, so now that its inner
   edge is the dike face the ramp lands on the water side - 6% ink in the first 10 ft, full density
@@ -138,6 +150,9 @@ district's ground. Drawn at 1 ft/px.
   SITUATION - berm on a diked margin, gradient on an undiked toe marsh - which needs no knob. Those
   citations came from the review pass and have NOT been re-read by a `source-reader`; they are
   SUMMARY-ONLY until they are, and nothing in the engine rests on them today.
+- A 40-60 ft ring around the reservoir carries no cover at all - the seam between the pond fringe
+  polygon's outer edge and where the toe/waterside cover picks up. Invisible at fit zoom against the
+  tan ground (settlement-review 2026-08-29); worth a look if the fringe polygon is ever resized.
 - Three windbreak crowns stand ~1 radius onto the pond fringe's east edge (2022,612), (2028,618),
   (2034,660) - invisible at fit; the belt is laid after the fringe and does not read `wet_polys`.
 - The drain trunk is the engine's gray-blue drain palette (`#7C9EB0`) while the head canal and

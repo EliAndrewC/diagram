@@ -25,6 +25,9 @@ if TYPE_CHECKING:
     from ..core import Settlement
 
 
+DIKE_GAP_HW = 15.0  # half the width the band is CUT by at a sluice notch or a crossing; exported because the waterward reed strip steps into exactly that opening (feature 139 T54, hamletgen/water.py `dike_face`) and a drifted copy would leave the wet ground short of the cut or lapping the band
+
+
 class DikeMixin:
     def perimeter_dike(self: Settlement, inner_env: Any, seed: int = 0, label: str = "perimeter dike", width: tuple[float, float] = (14.0, 40.0), gaps: Any = ()) -> None:  # type: ignore[misc]
         """A reclaimed-polder PERIMETER DIKE, drawn as an irregular hand-piled EARTHWORK BAND (not a ruled
@@ -89,7 +92,7 @@ class DikeMixin:
         # BETWEEN the gaps and draw each as its own capped strip; with no gaps this is the single full loop,
         # byte-identical to before. Keep-out, label, width and the recorded outline still use the FULL band.
         gap_pts = [(float(gx), float(gy)) for gx, gy in gaps]
-        gap_hw = 15.0
+        gap_hw = DIKE_GAP_HW
         if gap_pts:
             keep = [all(math.hypot(x - gx, y - gy) > gap_hw for gx, gy in gap_pts) for x, y, _ei in dense]
             runs: list[list[int]] = []

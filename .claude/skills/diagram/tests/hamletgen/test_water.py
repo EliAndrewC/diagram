@@ -108,6 +108,13 @@ def test_dike_face_reads_the_rings_own_side_and_carries_a_gap() -> None:
     at_n = min(notched, key=lambda p: abs(p[1] - 500.0))[0]
     assert at_n == 240.0, notched
     assert min(notched, key=lambda p: abs(p[1] - 250.0))[0] == 200.0  # the face itself is untouched
+    # ...and the step reads the RECORD, not an empty bin: a notch whose own bin is FULL (the ring's cut
+    # ends fill it, which is what Kuwabata's does - the first cut of this rule never fired anywhere)
+    full = [(200.0, y) for y in range(200, 801, 10)]  # an unbroken west face, no gap at all
+    full += [(900.0, y) for y in range(200, 801, 10)]
+    stepped = hg.water.dike_face(full, "W", 100.0, 900.0, bins=16, cut=40.0, cuts=[(205.0, 500.0)])
+    assert min(stepped, key=lambda p: abs(p[1] - 500.0))[0] == 240.0, stepped
+    assert min(stepped, key=lambda p: abs(p[1] - 250.0))[0] == 200.0
 
 
 def test_the_waterward_strip_stops_at_the_dikes_face() -> None:

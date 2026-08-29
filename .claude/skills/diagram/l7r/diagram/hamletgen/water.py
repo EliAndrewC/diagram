@@ -10,6 +10,7 @@ from collections.abc import Mapping, Sequence
 from typing import Any
 
 from l7r.diagram.settlement import Settlement, knob_rng, point_in_poly, seg_intersect, segments_cross
+from l7r.diagram.settlement.land.dikes import DIKE_GAP_HW
 from l7r.diagram.sitegen.geom import crosses_poly, net_acres, poly_area
 from l7r.diagram.waterfields import build_comb, build_polder
 
@@ -588,7 +589,7 @@ def waterward_flanks(plan: SitePlan) -> list[str]:
     return [q for q in (f["minus"], f["plus"], f["foot"]) if q != f["cluster"]]
 
 
-def dike_face(pts: Sequence[Pt], flank: str, lo: float, hi: float, bins: int = 64, cut: float = 0.0, cuts: Sequence[Pt] = ()) -> Poly:
+def dike_face(pts: Sequence[Pt], flank: str, lo: float, hi: float, bins: int = 64, cut: float = 0.0, cuts: Sequence[Pt] = (), cut_hw: float = DIKE_GAP_HW) -> Poly:
     """The dike's OUTER FACE along one flank, as a polyline spanning [lo, hi] (feature 139 T54).
 
     The waterward reed strip has to end exactly where the embankment starts: on the mound is the GM's
@@ -604,11 +605,15 @@ def dike_face(pts: Sequence[Pt], flank: str, lo: float, hi: float, bins: int = 6
 
     `cut` is how far the face steps INWARD at a NOTCH - a sluice cut or a crossing, where the
     earthwork is cut through and the water passes - and `cuts` are the notch centers the dike itself
-    records (`M['dikes'][*]['gaps']`). Holding the neighbor's face across one left a ~50 ft dry pocket
-    in front of the south outfall (settlement-review 2026-08-28), which is backwards: an outfall notch
-    is the wettest ground on the flank. Keyed on the RECORD, not on an empty bin: a bin can be empty
-    because the ring is sparse or because the strip runs past the dike's ends, and stepping inward
-    there would eat into ground no water reaches."""
+    records (`M['dikes'][*]['gaps']`), already assigned to this flank by the caller. Holding the
+    neighbor's face across one left a ~50 ft dry pocket in front of the south outfall
+    (settlement-review 2026-08-28), which is backwards: an outfall notch is the wettest ground on the
+    flank. The step is keyed on the RECORD and applies UNCONDITIONALLY to the bins the notch covers -
+    the first cut made it an `elif` on an empty bucket, on the assumption that a cut empties its bin,
+    and the next review measured 14 outline points in the notch bin and 0 steps on all four flanks:
+    the ring's cut ENDS fill it. A rule that cannot fire looks exactly like a rule that passes, so the
+    step now reads the record alone (bins beyond the ring's own span still keep the extreme - the
+    strip runs a little past the dike's ends, and there is no cut there)."""
     horiz = flank in ("W", "E")
     ai, fi = (1, 0) if horiz else (0, 1)  # bin ALONG `ai`; the face is the extreme on `fi`
     outward_min = flank in ("W", "N")
@@ -627,12 +632,10 @@ def dike_face(pts: Sequence[Pt], flank: str, lo: float, hi: float, bins: int = 6
     for k in range(bins):
         if buckets[k]:
             last = min(buckets[k]) if outward_min else max(buckets[k])
-            v = last
-        elif first < k < final and any(abs(g[ai] - (lo + (k + 0.5) * step)) <= step + 20.0 and ((g[fi] <= mid) if outward_min else (g[fi] >= mid)) for g in cuts):
-            v = last + (cut if outward_min else -cut)  # a NOTCH on this flank: the water passes through the cut
-        else:
-            v = last
+        v = last
         c = lo + (k + 0.5) * step
+        if first <= k <= final and any(abs(g[ai] - c) <= cut_hw + step / 2 for g in cuts):  # the OPENING itself (dikes.DIKE_GAP_HW), plus the bin that holds it - not a band's width either side
+            v = last + (cut if outward_min else -cut)  # a NOTCH on this flank: the water passes through the cut
         out.append((round(v, 1), round(c, 1)) if horiz else (round(c, 1), round(v, 1)))
     return out
 
@@ -668,12 +671,18 @@ def stage_waterward(s: Settlement, plan: SitePlan) -> None:
     ylo, yhi = y0 - 30.0, y1 + 20.0
     xlo, xhi = x0 - 30.0, x1 + 20.0
     cut = max(float(dk.get("w_max", 0.0)) for dk in s.M["dikes"])  # a notch is cut through the whole band
-    cuts = [(float(g[0]), float(g[1])) for dk in s.M["dikes"] for g in dk.get("gaps") or []]
+    # EACH NOTCH BELONGS TO ONE FLANK - the one whose face it stands nearest. A cut near a corner is
+    # otherwise stepped into on both, which bites the strip's edge where the band is whole.
+    by_flank: dict[str, list[Pt]] = {"W": [], "E": [], "N": [], "S": []}
+    for dk in s.M["dikes"]:
+        for g in dk.get("gaps") or []:
+            gx, gy = float(g[0]), float(g[1])
+            by_flank[min((("W", gx - x0), ("E", x1 - gx), ("N", gy - y0), ("S", y1 - gy)), key=lambda t: t[1])[0]].append((gx, gy))
     strips: dict[str, Poly] = {
-        "W": [(-20.0, ylo), *dike_face(pts, "W", ylo, yhi, cut=cut, cuts=cuts), (-20.0, yhi)],
-        "E": [(W + 20.0, ylo), *dike_face(pts, "E", ylo, yhi, cut=cut, cuts=cuts), (W + 20.0, yhi)],
-        "N": [(xlo, -20.0), *dike_face(pts, "N", xlo, xhi, cut=cut, cuts=cuts), (xhi, -20.0)],
-        "S": [(xlo, H + 20.0), *dike_face(pts, "S", xlo, xhi, cut=cut, cuts=cuts), (xhi, H + 20.0)],
+        "W": [(-20.0, ylo), *dike_face(pts, "W", ylo, yhi, cut=cut, cuts=by_flank["W"]), (-20.0, yhi)],
+        "E": [(W + 20.0, ylo), *dike_face(pts, "E", ylo, yhi, cut=cut, cuts=by_flank["E"]), (W + 20.0, yhi)],
+        "N": [(xlo, -20.0), *dike_face(pts, "N", xlo, xhi, cut=cut, cuts=by_flank["N"]), (xhi, -20.0)],
+        "S": [(xlo, H + 20.0), *dike_face(pts, "S", xlo, xhi, cut=cut, cuts=by_flank["S"]), (xhi, H + 20.0)],
     }
     flanks = waterward_flanks(plan)
     for q in flanks:
