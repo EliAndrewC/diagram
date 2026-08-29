@@ -1,0 +1,6 @@
+{
+  "utc": "20260829T191705Z",
+  "guard": "pair-hooks",
+  "what": "gate alone",
+  "reason": "no review owed: no map changed. The only delta is one gate check relaxing from a canopy test to a trunk test, which cannot move a manifest - confirmed by git reporting the whole pool/hamlets tree unmodified against the state four settlement-review passes examined"
+}
