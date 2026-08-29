@@ -1,4 +1,4 @@
-"""THE WOODLAND SHRINK LADDER, WALKED ON PURPOSE (features 147, 149 and 152).
+"""THE WOODLAND SHRINK LADDER, WALKED ON PURPOSE (features 147, 149 and 155).
 
 `hinterland.open_ground_patches` steps a coppice DOWN in size when the seat it picked will not hold a
 full-sized parcel inside the crop window - *"a smaller coppice on the sheet beats a larger one the crop cuts

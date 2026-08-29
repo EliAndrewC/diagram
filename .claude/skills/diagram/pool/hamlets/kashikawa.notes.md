@@ -455,6 +455,7 @@ ft, privies at bearing 31-41 degrees at 10 of 13); and the accepted-limitation e
 names a byre clipped by the board caption that stands nowhere within 167 ft, in this manifest or main's.
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 ## 2026-08-29 - a correction to the accepted limitation above (feature 152 T19)
 
 **The board caption clips no byre, and has not for some time.** The 2026-08-28 entry accepts, with its
@@ -469,6 +470,9 @@ alternatives were declined) is still the reasoning that governs if the caption e
 
 =======
 ## 2026-08-29 - feature 152: the lane sweeps rewritten, and the 25 ft hole ACCEPTED as honest
+=======
+## 2026-08-29 - feature 155: the lane sweeps rewritten, and the 25 ft hole ACCEPTED as honest
+>>>>>>> origin/main
 
 Two `settlement-review` passes on this map graded the previous round's fixes `needs-work` and were
 right on both counts: of the two lane defects, one fix was a no-op and the other could not reach its
@@ -557,7 +561,7 @@ quoted:**
   (69% of the maximum). The feature-145 entry records "the board sits at the traffic optimum (14 of a
   possible 15 dwellings within 250 ft)", which described a roll that no longer exists. The board sat
   at (1999.8, 2852.0) with 13 of 13 at `b248ab25` and moved to (2255.5, 2989.2) at `8260a6e0` - the
-  commit BEFORE feature 152's lane work, so not caused by it. It stands on a lane fork rather than in
+  commit BEFORE feature 155's lane work, so not caused by it. It stands on a lane fork rather than in
   a quiet corner, so this is a drop rather than the Sawada failure mode; it was silent, and the stale
   number is the kind that gets quoted.
 - **Lane 0's north end is a FIELD TRACK, not an unfixed blunt end.** The 2026-08-29 entry records

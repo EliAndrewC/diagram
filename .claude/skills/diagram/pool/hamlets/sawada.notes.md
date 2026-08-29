@@ -491,6 +491,7 @@ deferral (57 -> 85 px of bare strip, 5 of 19 houses now beyond the drawn belt); 
 the windbreak (13 of 17 clumps touching one); and `make jogs` exits RED here with nobody reading it.
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 ## 2026-08-29 - feature 152 worked this map's findings off; the numbers above are stale
 
 An acceptance review found this file untouched while the map re-rolled, with a citable line that no
@@ -515,6 +516,9 @@ belt is 0 of 17. **`make jogs` remains red here at 1 step** - see the feature's 
 
 =======
 ## 2026-08-29 - feature 152: the remnant sweep rewritten; the board's audience OPEN for the GM
+=======
+## 2026-08-29 - feature 155: the remnant sweep rewritten; the board's audience OPEN for the GM
+>>>>>>> origin/main
 
 **FIXED - the 37.6 ft remnant (lane 6, leaving lane 11 and dying 11.4 ft from it).** The sweep written
 for it measured `1.5 * w` - 4.5 ft for a footpath - and this map's own 11.4 ft figure was quoted in its

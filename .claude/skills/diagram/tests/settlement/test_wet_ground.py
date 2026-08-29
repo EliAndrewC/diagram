@@ -114,7 +114,7 @@ def test_a_pond_bank_keeps_the_reeds_off_the_same_way() -> None:
 
 
 # ---------------------------------------------------------------------------
-# The degenerate-geometry guards (feature 152: the hamlet-path floor).
+# The degenerate-geometry guards (feature 155: the hamlet-path floor).
 #
 # Every one of these is a `return` taken when Shapely is handed something that is
 # not a polygon - a two-point ring, a collinear sliver, a clip that removes

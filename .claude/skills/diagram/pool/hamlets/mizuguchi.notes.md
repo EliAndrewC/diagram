@@ -489,6 +489,7 @@ reaching 11.0 ft.
 175 ft apart inside a 205 ft record, both inside the windbreak's own canopy.
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 ## 2026-08-29 - the notice board is no longer at the traffic optimum (feature 152 T19)
 
 The 2026-08-17 entry records the board "at the traffic optimum: 10 of 12 houses within 250 ft, equal to
@@ -504,6 +505,9 @@ answers a knob rather than a picked answer.
 
 =======
 ## 2026-08-29 - settlement-review, DELTA under feature 152's lane-web changes (not this map's feature)
+=======
+## 2026-08-29 - settlement-review, DELTA under feature 155's lane-web changes (not this map's feature)
+>>>>>>> origin/main
 
 This map's `.gen.py` is unchanged; the engine moved underneath it, and the review gate correctly
 refused to let that ship unlooked-at. It was the one of the three affected hamlets nobody had read,

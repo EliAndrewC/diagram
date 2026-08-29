@@ -587,7 +587,7 @@ def stage_web(s: Settlement, plan: SitePlan) -> None:
         # KEPT AND NOT REACHABLE TODAY, deliberately (feature 146). Every pass that can empty a lane
         # DELETES the record with the ink (feature 145's "the husk goes with the ink"), so no husk
         # survives to here - and injecting one to prove it fails earlier, in the orphan joiner, which
-        # cannot handle a one-point way at all. As of feature 152 that is true of the knot-collapse
+        # cannot handle a one-point way at all. As of feature 155 that is true of the knot-collapse
         # drop BELOW this line as well, which used to be the exception this comment pointed at. The
         # guard stays because a future reorder would hand one straight to `_ln["pts"][0]`, and because
         # three separate passes have now had to learn this rule one at a time.
@@ -621,7 +621,7 @@ def stage_web(s: Settlement, plan: SitePlan) -> None:
             _ln["pts"] = []
             s.reink_lane(_i)
             _collapsed.append(_i)
-    # AND THE HUSK GOES WITH THE INK HERE TOO (settlement-review x2, feature 152). This was the third
+    # AND THE HUSK GOES WITH THE INK HERE TOO (settlement-review x2, feature 155). This was the third
     # and last place that emptied a record without removing it, and it was the one that survived the
     # other two being fixed: sawada still shipped a `role=bridge-breaks` record with no points, a
     # bridge the smoothing had collapsed. Removed back-to-front so the earlier indices stay valid.
@@ -636,17 +636,17 @@ def stage_web(s: Settlement, plan: SitePlan) -> None:
     # only ever asked at draw time. Last, so it judges the tread the map actually ships.
     _sweep_debris(s)
     _drop_end_nubs(s, hard_built)  # every pass above can leave a nub at a junction it laid
-    # LAST OF ALL, AFTER THE NUB DROP AND NOT BEFORE IT (feature 152). Placed ahead of them this swept a
+    # LAST OF ALL, AFTER THE NUB DROP AND NOT BEFORE IT (feature 155). Placed ahead of them this swept a
     # foul that did not exist yet: `_drop_end_nubs` shortens a lane, and the END IT LEAVES BEHIND can be
     # nearer a steading than the one it removed. So the steading sweep has to be the last thing that looks
     # at a lane, for the same reason the nub drop is placed after everything else.
     _sweep_steading_fouls(s)
-    # ...AND RE-JOIN WHAT THE TRIMS SEPARATED (settlement-review, feature 152). `_bridge_collinear_breaks`
+    # ...AND RE-JOIN WHAT THE TRIMS SEPARATED (settlement-review, feature 155). `_bridge_collinear_breaks`
     # already runs twice above, but both times BEFORE the trims that can open a break - kashikawa came back
     # with one route drawn as two and 19.5 ft of bare ground between two ends pointing straight at each
     # other. Running it once more here closes what this pass opened; it routes against the same obstacle set
     # as every other join, so it cannot bridge THROUGH a steading, and the sweep below re-checks anyway.
-    # THE REMNANT SWEEP RUNS BEFORE THE LAST BRIDGE, NOT AFTER (settlement-review, feature 152). With
+    # THE REMNANT SWEEP RUNS BEFORE THE LAST BRIDGE, NOT AFTER (settlement-review, feature 155). With
     # it after, the two passes built and then deleted each other's work: sawada's 37.6 ft remnant left
     # lane 11 at 1.2 ft and died 11.4 ft from it, which sits inside the restored short-gap band, so the
     # bridge pass dutifully closed the remnant back onto its own parent - and the remnant sweep then
@@ -1001,7 +1001,7 @@ def _aim_off(prev: Pt, tip: Pt, target: Pt) -> float:
 _BRIDGE_DETOUR = 2.0
 """How much longer the existing walk must be before a bridge is worth drawing.
 
-A BRIDGE CLOSES A HOLE; IT DOES NOT CLOSE A LOOP (settlement-review, feature 152, Mizuguchi). The pass
+A BRIDGE CLOSES A HOLE; IT DOES NOT CLOSE A LOOP (settlement-review, feature 155, Mizuguchi). The pass
 below finds two lane ends facing each other across walkable ground and draws the missing piece - and
 with the short-gap floor restored it will do that even when the two ends are ALREADY connected a
 little way round, which is not a hole in a street, it is a second route. Mizuguchi shipped one: an
@@ -1140,7 +1140,7 @@ def _bridge_collinear_breaks(s: Settlement, hard: list[Poly], walls: Sequence[Po
                         # bridge, because the two treads already touch.
                         #
                         # THE PROSE ABOVE OUTLIVED THE CODE FOR SIX DAYS, AND THAT IS THE LESSON
-                        # WORTH KEEPING (settlement-review, feature 152, kashikawa). `c0c724b2`
+                        # WORTH KEEPING (settlement-review, feature 155, kashikawa). `c0c724b2`
                         # (2026-08-23) wrote both this floor and the exemption below; `569136fc`
                         # the same day reverted FIVE lane changes that had cost the cohort 44 -> 31
                         # and took these two lines with them as collateral - they are not among the
@@ -1185,7 +1185,7 @@ def _bridge_collinear_breaks(s: Settlement, hard: list[Poly], walls: Sequence[Po
                         cands.append((gap, ta, tb, float(li.get("w", 5)), float(lj.get("w", 5))))
         if not cands:
             return made
-        # AN UNROUTABLE BREAK SKIPS TO THE NEXT ONE; IT DOES NOT END THE PASS (feature 152). This
+        # AN UNROUTABLE BREAK SKIPS TO THE NEXT ONE; IT DOES NOT END THE PASS (feature 155). This
         # used to pick the single smallest gap and `return` the moment it could not be routed - so one
         # honestly-interrupted break silenced every other break on the map. That was harmless only
         # while the floor was `_LANE_JOIN_FT`: restoring the tread-width floor admits short candidates,
@@ -1331,7 +1331,7 @@ _NUB_FT = 9.0  # a leading/trailing segment under this is not a stretch of way, 
 _NUB_TURN = 60.0  # ...and one that turns this far is a lump on the knuckle rather than the way arriving
 
 # THE END SPIKE IS REAL, AND `_NUB_FT` IS THE WRONG LEVER FOR IT - DEFERRED WITH ITS MEASUREMENT
-# (settlement-review, feature 152; constitution Principle XIV's "a deferral is a deliverable").
+# (settlement-review, feature 155; constitution Principle XIV's "a deferral is a deliverable").
 #
 # THE DEFECT. Sawada's lane 10 runs 156.8 ft out, turns 119.9 deg and comes 21.1 ft back to touch the
 # way it had left: at zoom an arrowhead driven into the lane rather than a path. `lanes_bend_like_paths`
@@ -1413,7 +1413,7 @@ def shadowing_lane(pts: Poly, others: Sequence[Poly], reach: float) -> int | Non
     or a no, and it is deliberately not a distance between the two treads.
 
     THE METRIC FORM OF THIS TEST WAS WRITTEN FIRST AND WAS A NO-OP ON BOTH MAPS IT NAMED (settlement-review
-    x2, feature 152). It asked whether every point of a lane lay within `1.5 * w` - 4.5 ft for a footpath -
+    x2, feature 155). It asked whether every point of a lane lay within `1.5 * w` - 4.5 ft for a footpath -
     of another lane. Kashikawa's remnant sits at 6.58 ft and sawada's at 11.4 ft, and the sawada figure was
     written into the docstring three lines above the constant that rejected it. Sawada's reviewer named the
     pattern, and it is the one to guard against here: *"calibrating a general rule to the single case that
@@ -1465,7 +1465,7 @@ def _sweep_doubled_remnants(s: Settlement) -> int:
         others = [w if k != i else [] for k, w in enumerate(ways)]
         if shadowing_lane(ways[i], others, _LANE_JOIN_FT) is None:
             continue
-        # THE STRANDING TEST READS THE CHECK'S OWN FIGURE, NOT THE JOIN TOLERANCE (feature 152).
+        # THE STRANDING TEST READS THE CHECK'S OWN FIGURE, NOT THE JOIN TOLERANCE (feature 155).
         # Written first against `_LANE_JOIN_FT` (30), which is the "is this end ON that way" figure and
         # is the wrong question entirely: `farmhouses_reach_a_way` fails a house more than
         # `WEB_REACH_FT` (100 ft) from any drawn way. A house 80 ft from the remnant and 110 ft from
@@ -1481,7 +1481,7 @@ def _sweep_doubled_remnants(s: Settlement) -> int:
         gone.append(i)
         dropped += 1
     # AND THE HUSK GOES WITH THE INK - feature 145's rule, and this pass broke it (settlement-review
-    # x2, feature 152: sawada shipped 13 lane records for 11 drawn lanes, kashikawa 14 for 13). An
+    # x2, feature 155: sawada shipped 13 lane records for 11 drawn lanes, kashikawa 14 for 13). An
     # emptied `pts` leaves a record declaring a lane nothing draws, which every consumer then has to
     # special-case - and a reviewer's first dump of the manifest crashed on `pts[-1]`. Leaving it to
     # `_sweep_debris` does NOT work and the comment at the call site used to say it did: that pass
@@ -2768,7 +2768,7 @@ def _draw_web(s: Settlement, pts: Poly, width: int = 3, houses: Sequence[Pt] = (
     # job is the junction, and it is short precisely because it is the shortest way to make one. Left
     # under the floor the link was simply discarded and the piece stayed orphaned, which is how cohort
     # seed 18 traded an overlap for `lanes_form_one_network`.
-    # A JOIN LINK IS ALLOWED TO BRUSH A FENCE. IT IS NOT ALLOWED THROUGH A HOUSE (feature 152).
+    # A JOIN LINK IS ALLOWED TO BRUSH A FENCE. IT IS NOT ALLOWED THROUGH A HOUSE (feature 155).
     # The exemption above lets a short link be drawn, and the link is routed at `_TOUCH_GAP` (4 px)
     # rather than `WEB_FABRIC_GAP` (7) because "a lane and a plot fence share a line in a real village".
     # That reasoning is about FENCES. A farmhouse is not a fence: `houses_clear_of_lanes` allows a lane
@@ -3428,7 +3428,7 @@ def _serve_stragglers(s: Settlement, plan: SitePlan, hard: list[Poly], fabric: l
                     # same way as the two cuts are: an overlap is a rule broken, a fold is a shape
                     # complaint, so (fouls, bends) orders them and the least bad is what gets drawn if no
                     # way on the map yields a clean one.
-                    # THE FOUL HALF OF THAT RANKING WAS DESCRIBED AND NEVER IMPLEMENTED (feature 152). The
+                    # THE FOUL HALF OF THAT RANKING WAS DESCRIBED AND NEVER IMPLEMENTED (feature 155). The
                     # comment above says "(fouls, bends) orders them"; the code ranked `(_bends_badly(path),)`
                     # alone, so a tread that fouled a STEADING was only ever judged on its shape. Both maps
                     # that gated red on main were this: sawada's 8.6 ft stub 2 ft into a farmhouse at
