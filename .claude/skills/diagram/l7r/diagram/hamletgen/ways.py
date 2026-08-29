@@ -1662,6 +1662,21 @@ def _plen(pts: Poly) -> float:
     return sum(math.dist(pts[k], pts[k + 1]) for k in range(len(pts) - 1))
 
 
+def _bends_badly(pts: Poly) -> bool:
+    """The shape `lanes_bend_like_paths` refuses - a hairpin, or two 50 degree turns inside 40 ft.
+
+    Stated here so a pass that is about to DRAW a run can ask before drawing, rather than leaving the
+    gate to discover it. The thresholds are the check's own, deliberately: a repair that measures
+    something other than what the check measures is the defect this file has now met three times."""
+    for k in range(1, len(pts) - 1):
+        if _turn_deg(pts[k - 1], pts[k], pts[k + 1]) >= _HAIRPIN_DEG:
+            return True
+    return any(
+        _turn_deg(pts[k - 1], pts[k], pts[k + 1]) >= _ZIGZAG_DEG and _turn_deg(pts[k], pts[k + 1], pts[k + 2]) >= _ZIGZAG_DEG and math.dist(pts[k], pts[k + 1]) <= _ZIGZAG_RUN_FT
+        for k in range(1, len(pts) - 2)
+    )
+
+
 def _smooth_web(s: Settlement, hard: list[Poly], walls: Sequence[Poly], water: list[tuple[Pt, Pt]]) -> int:
     """The LAST pass over the web: take out what feet would never have worn.
 
@@ -2343,6 +2358,7 @@ def _serve_stragglers(s: Settlement, plan: SitePlan, hard: list[Poly], fabric: l
             # that has room wins.
             targets = sorted((seg_closest(c[0], c[1], a, b) for a, b in segs), key=lambda q: math.dist(c, q))
             _served = False
+            _folded: Poly | None = None  # a workable path that bends the way the check refuses - the last resort
             _key = tuple((round(float(t[0]), 1), round(float(t[1]), 1)) for t in targets[:60])
             if _exhausted.get(id(h)) == _key:
                 continue  # same house, same candidate ways, same obstacles - a replay of a pass that already failed
@@ -2519,10 +2535,29 @@ def _serve_stragglers(s: Settlement, plan: SitePlan, hard: list[Poly], fabric: l
                     # can leave a step the pull could not take at the fabric margin; the junction-margin pass that
                     # every web lane gets (`_unjog`) is what `lanes_bend_like_paths` measures against.
                     path = _unjog(path, hard, others, water)
+                    # A FOLD IS A REASON TO TRY THE NEXT WAY, NOT A REASON TO DRAW (feature 134 T50,
+                    # 2026-08-29). `_unjog` has three rungs and all of them can be blocked - cohort seed
+                    # 16's footpath kept a 71-then-61 degree fold because the vertex between the turns
+                    # stood 29 ft off the chord, with a steading on every way round it. Nothing later
+                    # looks at the shape again, so the fold shipped and `lanes_bend_like_paths` found it.
+                    # But this loop already has sixty candidate ways to aim at and takes the first that
+                    # routes at all: a path to the SECOND-nearest way that runs straight is a better
+                    # footpath than one to the nearest that doubles back, and it costs only the loop
+                    # continuing. The folded run is kept as the last resort - a house reached by an ugly
+                    # path is still better served than one reached by none, and `farmhouses_reach_a_way`
+                    # is the harsher verdict of the two.
+                    if _bends_badly(path):
+                        if _folded is None:
+                            _folded = path
+                        continue
                     _draw_web(s, path, 3, houses=[c])
                     added += 1
                     _served = True
                     break
+            if not _served and _folded is not None:
+                _draw_web(s, _folded, 3, houses=[c])
+                added += 1
+                _served = True
             if not _served:
                 _exhausted[id(h)] = _key
         if not added:
