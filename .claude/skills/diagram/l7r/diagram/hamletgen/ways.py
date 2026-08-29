@@ -576,11 +576,12 @@ def stage_web(s: Settlement, plan: SitePlan) -> None:
     _fabric_now = [poly for poly, _owner, _kind in _homestead_polys(s)]  # what the connector's end must stay clear of, as `_thread_the_fabric` left it
     for _i, _ln in enumerate(list(s.M.get("lanes", []))):
         # KEPT AND NOT REACHABLE TODAY, deliberately (feature 146). Every pass that can empty a lane
-        # before this point DELETES the record with the ink (feature 145's "the husk goes with the ink"),
-        # so no husk survives to here - and injecting one to prove it fails earlier, in the orphan
-        # joiner, which cannot handle a one-point way at all. The guard stays because the passes BELOW
-        # this line do leave empty records (`_ln["pts"] = []` at the knot-collapse drop), so a future
-        # reorder would hand one straight to `_ln["pts"][0]`.
+        # DELETES the record with the ink (feature 145's "the husk goes with the ink"), so no husk
+        # survives to here - and injecting one to prove it fails earlier, in the orphan joiner, which
+        # cannot handle a one-point way at all. As of feature 155 that is true of the knot-collapse
+        # drop BELOW this line as well, which used to be the exception this comment pointed at. The
+        # guard stays because a future reorder would hand one straight to `_ln["pts"][0]`, and because
+        # three separate passes have now had to learn this rule one at a time.
         if len(_ln.get("pts") or []) < 2:  # pragma: no cover - see above
             continue
         _pts = [(float(x), float(y)) for x, y in _ln["pts"]]
@@ -604,11 +605,19 @@ def stage_web(s: Settlement, plan: SitePlan) -> None:
     # AND TOUCH AGAIN (T99 unlock, tripwire seed 37): the smoothing cuts knots and hairpins into stubs,
     # and a stub that ends 3-30 ft short of the run it left is exactly the gap _touch_junctions closes -
     # but that pass ran BEFORE the smoothing. A way the knot collapse emptied to one point is dropped first.
+    _collapsed: list[int] = []
     for _i, _ln in enumerate(s.M.get("lanes", [])):
         _p = _ln.get("pts") or []
         if not _ln.get("connector") and (len(_p) < 2 or math.dist(_p[0], _p[-1]) < 1.0 and len(_p) == 2):
             _ln["pts"] = []
             s.reink_lane(_i)
+            _collapsed.append(_i)
+    # AND THE HUSK GOES WITH THE INK HERE TOO (settlement-review x2, feature 155). This was the third
+    # and last place that emptied a record without removing it, and it was the one that survived the
+    # other two being fixed: sawada still shipped a `role=bridge-breaks` record with no points, a
+    # bridge the smoothing had collapsed. Removed back-to-front so the earlier indices stay valid.
+    for _i in sorted(_collapsed, reverse=True):
+        del s.M["lanes"][_i]
     _touch_junctions(
         s, hard_built, walls, list(plan.watercourses) + drawn_water, reach=_STUB_REACH_FT, only_orphans=True, final=True
     )  # the stubs the smoothing leaves stop 30-35 ft short (seed 37); a connected web is untouched
@@ -617,7 +626,28 @@ def stage_web(s: Settlement, plan: SitePlan) -> None:
     # AND SWEEP WHAT IS LEFT (feature 134 T50): the passes above shorten lanes, and `_WEB_MIN_FT` was
     # only ever asked at draw time. Last, so it judges the tread the map actually ships.
     _sweep_debris(s)
-    _drop_end_nubs(s)  # last of all: every pass above can leave a nub at a junction it laid
+    _drop_end_nubs(s)  # every pass above can leave a nub at a junction it laid
+    # LAST OF ALL, AFTER THE NUB DROP AND NOT BEFORE IT (feature 155). Placed ahead of them this swept a
+    # foul that did not exist yet: `_drop_end_nubs` shortens a lane, and the END IT LEAVES BEHIND can be
+    # nearer a steading than the one it removed. So the steading sweep has to be the last thing that looks
+    # at a lane, for the same reason the nub drop is placed after everything else.
+    _sweep_steading_fouls(s)
+    # ...AND RE-JOIN WHAT THE TRIMS SEPARATED (settlement-review, feature 155). `_bridge_collinear_breaks`
+    # already runs twice above, but both times BEFORE the trims that can open a break - kashikawa came back
+    # with one route drawn as two and 19.5 ft of bare ground between two ends pointing straight at each
+    # other. Running it once more here closes what this pass opened; it routes against the same obstacle set
+    # as every other join, so it cannot bridge THROUGH a steading, and the sweep below re-checks anyway.
+    # THE REMNANT SWEEP RUNS BEFORE THE LAST BRIDGE, NOT AFTER (settlement-review, feature 155). With
+    # it after, the two passes built and then deleted each other's work: sawada's 37.6 ft remnant left
+    # lane 11 at 1.2 ft and died 11.4 ft from it, which sits inside the restored short-gap band, so the
+    # bridge pass dutifully closed the remnant back onto its own parent - and the remnant sweep then
+    # dropped both, because the bridge's two ends were now also on lane 11. One wasted routing pass and
+    # two husks for a picture that was correct either way.
+    _sweep_doubled_remnants(s)  # doubled ink is debris however long it is
+    _bridge_collinear_breaks(s, hard_built, walls, list(plan.watercourses) + drawn_water)
+    _sweep_steading_fouls(s)  # a bridge is a lane too, and it gets the same last look
+    _sweep_doubled_remnants(s)  # ...and a bridge can itself be doubled ink
+    _sweep_debris(s)  # a fragment the passes above whittled below the floor and left standing alone
     s.M["meta"]["lane_web"] = plan.lane_web
 
 
@@ -958,6 +988,98 @@ def _aim_off(prev: Pt, tip: Pt, target: Pt) -> float:
     return abs((out - aim + 180.0) % 360.0 - 180.0)
 
 
+_BRIDGE_DETOUR = 2.0
+"""How much longer the existing walk must be before a bridge is worth drawing.
+
+A BRIDGE CLOSES A HOLE; IT DOES NOT CLOSE A LOOP (settlement-review, feature 155, Mizuguchi). The pass
+below finds two lane ends facing each other across walkable ground and draws the missing piece - and
+with the short-gap floor restored it will do that even when the two ends are ALREADY connected a
+little way round, which is not a hole in a street, it is a second route. Mizuguchi shipped one: an
+89.9 ft span whose two ends already had a 126.9 ft walk between them, closing lanes 1/4/7 into a
+triangle enclosing 1,710 sq ft of nothing - and the fixture placer, running afterwards, deleted that
+homestead's woodpile and hen coop and left its bath marooned on the far side of a public lane.
+
+The discriminator is the DETOUR RATIO, not the length of either. A genuine break has no alternative at
+all (the walk is `None`) or one that goes right around the block, many times the gap; a redundant loop
+closure saves a fraction. Mizuguchi's was 1.41. The reviewer priced the threshold at "anywhere in
+1.5-2.5" and 2.0 sits in the middle of it; measured over the live pool, it removes that one lane and
+no other."""
+
+
+def existing_walk(ways: Sequence[Poly], a: Pt, b: Pt, touch: float) -> float | None:
+    """Shortest walk from `a` to `b` along the ways already drawn, or None when none exists.
+
+    The lane network as a graph: each way is an edge between its two ends, weighted by its own drawn
+    length, and two ends within `touch` of each other are the same junction. An end that lands part
+    way ALONG another way joins it there, at the arc distance to each of that way's ends - which is
+    the case that matters here, since a lane that tees into the middle of another is exactly the
+    shape that makes a bridge redundant.
+
+    Lifted to module level so it can be asked with plain lists (GM 2026-08-28 on testability)."""
+    nodes: list[Pt] = []
+    edges: list[list[tuple[int, float]]] = []
+
+    def _node(p: Pt) -> int:
+        for i, q in enumerate(nodes):
+            if math.dist(p, q) <= touch:
+                return i
+        nodes.append(p)
+        edges.append([])
+        return len(nodes) - 1
+
+    def _link(i: int, j: int, w: float) -> None:
+        if i != j:
+            edges[i].append((j, w))
+            edges[j].append((i, w))
+
+    live = [w for w in ways if len(w) >= 2]
+    ends = [(_node(w[0]), _node(w[-1])) for w in live]
+    for w, (i, j) in zip(live, ends, strict=False):
+        _link(i, j, polyline_len(w))
+    # ...and every end that tees into the MIDDLE of another way joins it THERE, in arc order along
+    # that way. Linking a tee-point only to the way's two ends is not the same graph and quietly
+    # over-states the walk: two spurs teeing into one lane 100 ft apart come out 200 ft apart, routed
+    # out to an end and back, so a redundant loop looks like a worthwhile one.
+    for k, w in enumerate(live):
+        acc = [0.0]
+        for u, v in zip(w, w[1:], strict=False):
+            acc.append(acc[-1] + math.dist(u, v))
+        along: list[tuple[float, int]] = [(0.0, ends[k][0]), (acc[-1], ends[k][1])]
+        for n, p in enumerate(list(nodes)):
+            if n in ends[k]:
+                continue
+            best = None
+            for t, (u, v) in enumerate(zip(w, w[1:], strict=False)):
+                c = seg_closest(p[0], p[1], u, v)
+                d = math.dist(p, c)
+                if best is None or d < best[0]:
+                    best = (d, acc[t] + math.dist(u, c))
+            if best is not None and best[0] <= touch:
+                along.append((best[1], n))
+        along.sort()
+        for (a1, n1), (a2, n2) in zip(along, along[1:], strict=False):
+            _link(n1, n2, a2 - a1)
+
+    src, dst = _node(a), _node(b)
+    if src == dst:
+        return 0.0
+    seen = [math.inf] * len(nodes)
+    seen[src] = 0.0
+    todo = [(0.0, src)]
+    while todo:
+        d, n = heapq.heappop(todo)
+        if n == dst:
+            return d
+        if d > seen[n]:
+            continue
+        for m, w in edges[n]:
+            nd = d + w
+            if nd < seen[m] - 1e-9:
+                seen[m] = nd
+                heapq.heappush(todo, (nd, m))
+    return None
+
+
 def _bridge_collinear_breaks(s: Settlement, hard: list[Poly], walls: Sequence[Poly], water: list[tuple[Pt, Pt]]) -> int:
     """Close a gap where ONE way has been drawn as two, and the ground between them is walkable.
 
@@ -981,7 +1103,7 @@ def _bridge_collinear_breaks(s: Settlement, hard: list[Poly], walls: Sequence[Po
     # exists only so a pathological map cannot spin; a hamlet uses two or three.
     for _ in range(12):
         ways = [[(float(x), float(y)) for x, y in ln["pts"]] for ln in s.M.get("lanes", [])]
-        best = None
+        cands: list[tuple[float, Pt, Pt, float, float]] = []
         for i, li in enumerate(s.M.get("lanes", [])):
             if li.get("connector") or len(ways[i]) < 2:
                 continue
@@ -1006,7 +1128,21 @@ def _bridge_collinear_breaks(s: Settlement, hard: list[Poly], walls: Sequence[Po
                         #
                         # The floor is now the tread's own width: below that there is nothing to
                         # bridge, because the two treads already touch.
-                        if not (_LANE_JOIN_FT < gap <= _BREAK_SPAN_FT):
+                        #
+                        # THE PROSE ABOVE OUTLIVED THE CODE FOR SIX DAYS, AND THAT IS THE LESSON
+                        # WORTH KEEPING (settlement-review, feature 155, kashikawa). `c0c724b2`
+                        # (2026-08-23) wrote both this floor and the exemption below; `569136fc`
+                        # the same day reverted FIVE lane changes that had cost the cohort 44 -> 31
+                        # and took these two lines with them as collateral - they are not among the
+                        # five its message names. The comments survived. So anyone reading this
+                        # function was told the short-gap case was handled while the code silently
+                        # excluded it, and kashikawa shipped a 24.95 ft hole at (2000.9, 2914.7)
+                        # for six days with a reviewer's fix landing beside it that could not
+                        # reach it. Restored NARROWLY here - this floor and this exemption only,
+                        # never the other four - because a comment and its code must not disagree,
+                        # and because 24.95 ft of bare grass between two rounded caps in the middle
+                        # of the built-up frontage is the exact defect the pass exists to close.
+                        if not (_TREAD_TOUCH_FT < gap <= _BREAK_SPAN_FT):
                             continue
                         # ...and a SHORT gap does not have to be collinear. The bearing test exists
                         # to tell "one way with a hole in it" from "two arms that happen to end near
@@ -1014,7 +1150,7 @@ def _bridge_collinear_breaks(s: Settlement, hard: list[Poly], walls: Sequence[Po
                         # not: a back lane following a curved field margin breaks at 37 deg of
                         # aim-off and is still one lane. So the test applies from `_LANE_JOIN_FT` up,
                         # and a shorter hole is closed on proximity alone.
-                        if _aim_off(pra, ta, tb) > _BREAK_BEARING_DEG or _aim_off(prb, tb, ta) > _BREAK_BEARING_DEG:
+                        if gap > _LANE_JOIN_FT and (_aim_off(pra, ta, tb) > _BREAK_BEARING_DEG or _aim_off(prb, tb, ta) > _BREAK_BEARING_DEG):
                             continue  # two arms, not one way
                         # POINTING AT EACH OTHER MEANS EACH END'S OUTWARD DIRECTION AIMS AT THE
                         # OTHER END - not that the two outward bearings are similar. Two ends facing
@@ -1036,19 +1172,54 @@ def _bridge_collinear_breaks(s: Settlement, hard: list[Poly], walls: Sequence[Po
                             for k, o in enumerate(ways)
                         ):
                             continue
-                        if best is None or gap < best[0]:
-                            best = (gap, ta, tb, float(li.get("w", 5)), float(lj.get("w", 5)))
-        if best is None:
+                        cands.append((gap, ta, tb, float(li.get("w", 5)), float(lj.get("w", 5))))
+        if not cands:
             return made
-        # PLAN AT THE CLEARANCE IT WILL BE DRAWN AT. A bridge inherits the width of the street it
-        # completes - 5 or 6 ft - so planning it at the FOOTPATH clearance leaves about a foot
-        # between a 3 ft half-tread and a wall, and `houses_clear_of_lanes` says so. A footpath is
-        # the one way on the map walked in single file; a street closing its own gap is not.
-        span = _route(best[1], best[2], hard, walls, water, gap=WEB_FABRIC_GAP)
-        if not span or polyline_len(span) > _PATH_DIRECTNESS * max(best[0], 1.0):
-            return made  # something is genuinely in the way; the interruption is honest
-        if not _draw_web(s, span, int(max(best[3], best[4]))):
-            return made  # pragma: no cover - a bridge is always longer than the debris floor
+        # AN UNROUTABLE BREAK SKIPS TO THE NEXT ONE; IT DOES NOT END THE PASS (feature 155). This
+        # used to pick the single smallest gap and `return` the moment it could not be routed - so one
+        # honestly-interrupted break silenced every other break on the map. That was harmless only
+        # while the floor was `_LANE_JOIN_FT`: restoring the tread-width floor admits short candidates,
+        # which sort first, and Kashikawa's unroutable 24.95 ft hole then blocked the whole pass. "The
+        # interruption is honest" is a statement about ONE pair, never about the rest of the web.
+        drew = False
+        for gap, ta, tb, wa, wb in sorted(cands, key=lambda c: c[0]):
+            # PLAN AT THE CLEARANCE IT WILL BE DRAWN AT. A bridge inherits the width of the street it
+            # completes - 5 or 6 ft - so planning it at the FOOTPATH clearance leaves about a foot
+            # between a 3 ft half-tread and a wall, and `houses_clear_of_lanes` says so. A footpath is
+            # the one way on the map walked in single file; a street closing its own gap is not.
+            #
+            # A SHORT GAP ALSO NEEDS A FINE LATTICE. `_route`'s 10 ft cell is right for the 110-150 ft
+            # breaks this pass was written for; across a 25 ft gap it has two and a half cells and
+            # cannot represent a route at all.
+            cell = min(10.0, max(_FINE_CELL, gap / 6.0))
+            span = _route(ta, tb, hard, walls, water, gap=WEB_FABRIC_GAP, cell=cell)
+            if not span:
+                # ...and where the fabric clearance finds nothing, a bridge retries at the JOIN
+                # clearance, because a bridge IS a join link and the joiner has routed at `_TOUCH_GAP`
+                # since feature 126 on the recorded reasoning that "a lane and a plot fence share a
+                # line in a real village". What makes that safe is what makes it safe for a link:
+                # `_draw_web(joins=True)` refuses outright to put a tread on a farmhouse. A garden bed
+                # may share a line with a lane; a steading may not.
+                span = _route(ta, tb, hard, walls, water, gap=_TOUCH_GAP, pad_mult=2.0, cell=cell)
+            if not span or polyline_len(span) > _PATH_DIRECTNESS * max(gap, 1.0):
+                continue  # something is genuinely in the way HERE; the interruption is honest
+            # A BRIDGE CLOSES A HOLE, NOT A LOOP - see `_BRIDGE_DETOUR`. If the walk already exists
+            # and is not much longer than the span, this is a second route rather than a missing
+            # piece, and drawing it encloses ground that nothing fronts.
+            _alt = existing_walk(ways, ta, tb, _TREAD_TOUCH_FT)
+            if _alt is not None and _alt <= _BRIDGE_DETOUR * max(gap, 1.0):
+                continue
+            # A BRIDGE IS A JOIN LINK, AND THE DEBRIS FLOOR WOULD SILENTLY REFUSE IT. The
+            # `# pragma: no cover` that stood here said "a bridge is always longer than the debris
+            # floor", true only while the candidate floor was 30 ft. `joins` carries the right
+            # reasoning already: the floor asks what a run EARNS in service, and a bridge earns
+            # nothing by that measure because the houses are served by the pieces it joins.
+            if not _draw_web(s, span, int(max(wa, wb)), joins=True):
+                continue
+            drew = True
+            break
+        if not drew:
+            return made
         made += 1
     return made  # pragma: no cover - twelve bridges is far more than any hamlet needs
 
@@ -1148,6 +1319,30 @@ _NUB_FT = 9.0  # a leading/trailing segment under this is not a stretch of way, 
 # MEASURED before it was changed: over the whole pool, 5 -> 9 ft drops 3 more end vertices, all three on
 # Sawada, no other map touched; 12 ft catches nothing 9 does not.
 _NUB_TURN = 60.0  # ...and one that turns this far is a lump on the knuckle rather than the way arriving
+
+# THE END SPIKE IS REAL, AND `_NUB_FT` IS THE WRONG LEVER FOR IT - DEFERRED WITH ITS MEASUREMENT
+# (settlement-review, feature 155; constitution Principle XIV's "a deferral is a deliverable").
+#
+# THE DEFECT. Sawada's lane 10 runs 156.8 ft out, turns 119.9 deg and comes 21.1 ft back to touch the
+# way it had left: at zoom an arrowhead driven into the lane rather than a path. `lanes_bend_like_paths`
+# misses it because its hairpin bar is 140 deg, and the nub rule misses it because 21.1 > `_NUB_FT` (9).
+# Three lanes on three live maps have the shape - sawada L10 (21.1 ft / 120 deg), kashikawa L4 (20.0 /
+# 105), mizuguchi L3 (19.0 / 100) - measured over the whole pool.
+#
+# WHY THE OBVIOUS FIX IS WRONG, MEASURED. Widening the nub band to a severity-coupled second pair
+# (`la < _WEB_MIN_FT and turn >= 100`) was implemented and rolled: Inashiro failed
+# `farmhouses_reach_a_way` and Kashikawa and Mizuguchi failed `features_do_not_overlap`. The mechanism
+# is that `drop_end_nubs` deletes the INTERIOR vertex and keeps the foot, so the lane re-routes along
+# the straight line between what remains. At 9 ft that re-route is negligible, which is the whole
+# reason the rule is safe; at 30 ft it drags the tread across whatever stood inside the elbow. The nub
+# floor is not a number that was set too low - it is load-bearing.
+#
+# THE SKETCH. Dropping the spike's own END vertex instead is safe but fixes nothing observed: on all
+# three maps the spike tip lands ON another lane (measured tip-to-lane distance 0.0), so it is a
+# junction FOOT, and the lane has overrun its junction and doubled back to reach it. That makes this
+# the same defect feature 150's junction pass already owns - "a lane ends where it first meets the way,
+# bounded to a 40 ft overrun" - which is passing a lane whose overrun is 156.8 ft because it measures
+# the overrun from the wrong end. The fix belongs there, with the pool rolled behind it, not here.
 # NOT 90: the motivating nub measured 92.6 deg, and a bar sitting 2.6 deg under the one case it was
 # written for stops firing the first time a re-roll nudges it. Dropping the vertex is near-free at a
 # SMALL turn anyway (the two stretches are nearly collinear, so the tread barely moves), so the bar
@@ -1168,15 +1363,20 @@ def drop_end_nubs(ways: list[list[Pt]]) -> list[int]:
     plain lists (GM 2026-08-28 on testability)."""
 
     def nub_at_head(pts: list[Pt]) -> bool:
-        """Is `pts[1]` a nub - a sub-5 ft first stretch that then turns back on itself?"""
+        """Is `pts[1]` a nub - a short first stretch that then turns back on itself?
+
+        TWO BANDS, not one: a mild corner has to be very short to be a splice artifact
+        (`_NUB_FT` / `_NUB_TURN`), while an outright reversal reads as a spike at any length below
+        the floor for a way at all (`_SPIKE_FT` / `_SPIKE_TURN`). See the constants."""
         if len(pts) < 3:
             return False
         a, b, c = pts[0], pts[1], pts[2]
         ax, ay, bx, by = b[0] - a[0], b[1] - a[1], c[0] - b[0], c[1] - b[1]
         la, lb = math.hypot(ax, ay), math.hypot(bx, by)
-        if not (0.0 < la < _NUB_FT) or lb <= 1e-9:
+        if la <= 0.0 or lb <= 1e-9:
             return False
-        return math.degrees(math.acos(max(-1.0, min(1.0, (ax * bx + ay * by) / (la * lb))))) >= _NUB_TURN
+        turn = math.degrees(math.acos(max(-1.0, min(1.0, (ax * bx + ay * by) / (la * lb)))))
+        return la < _NUB_FT and turn >= _NUB_TURN
 
     hit: list[int] = []
     for i, pts in enumerate(ways):
@@ -1192,6 +1392,141 @@ def drop_end_nubs(ways: list[list[Pt]]) -> list[int]:
         if changed:
             hit.append(i)
     return hit
+
+
+def shadowing_lane(pts: Poly, others: Sequence[Poly], reach: float) -> int | None:
+    """Index of a way that BOTH of this lane's ends stand on or beside, or None - "it goes nowhere".
+
+    A way earns its ink by connecting one thing to another. A lane whose two ends both land on the same
+    single other way connects that way to itself: whatever the shape in between, no journey uses it that
+    could not be walked along the way it leaves and returns to. That is a STRUCTURAL question with a yes
+    or a no, and it is deliberately not a distance between the two treads.
+
+    THE METRIC FORM OF THIS TEST WAS WRITTEN FIRST AND WAS A NO-OP ON BOTH MAPS IT NAMED (settlement-review
+    x2, feature 155). It asked whether every point of a lane lay within `1.5 * w` - 4.5 ft for a footpath -
+    of another lane. Kashikawa's remnant sits at 6.58 ft and sawada's at 11.4 ft, and the sawada figure was
+    written into the docstring three lines above the constant that rejected it. Sawada's reviewer named the
+    pattern, and it is the one to guard against here: *"calibrating a general rule to the single case that
+    was easiest to measure is the recurring defect on this map, not a coincidence"* - the same shape as the
+    5 ft nub floor shipped for an 8.25 ft boot and the 4.5 ft threshold shipped for a 6.6 ft remnant. A
+    structural predicate has no dial to leave set too low, which is the whole reason to prefer it.
+
+    `reach` is the gate's own "is this end ON that way" tolerance, not a tuning knob.
+    """
+    if len(pts) < 2:
+        return None
+    for j, other in enumerate(others):
+        if len(other) < 2:
+            continue
+        segs = list(zip(other, other[1:], strict=False))
+        if all(min(seg_dist(e[0], e[1], a, b) for a, b in segs) <= reach for e in (pts[0], pts[-1])):
+            return j
+    return None
+
+
+def _sweep_doubled_remnants(s: Settlement) -> int:
+    """Drop a lane that leaves one way and returns to it, serving nobody it does not already serve.
+
+    `_WEB_MIN_FT` asks whether a fragment is SHORT and `_sweep_debris` asks whether it is ALONE; neither asks
+    whether it simply goes nowhere. A trim that shortens one arm of a fork leaves the other running back to
+    its own parent, and at fit zoom that is a smudged band with a hairline down it, or an arm dying in grass
+    a few feet from the lane it left - kashikawa shipped a 44 ft one every point of which sat within 6.6 ft
+    of lane 8, sawada a 37.6 ft one that left lane 11 and died 11.4 ft from it (settlement-review, 152).
+
+    TWO CLAUSES, AND THE SECOND IS WHAT MAKES THE FIRST SAFE. `shadowing_lane` asks whether both ends land
+    on one other way; this then asks whether dropping the lane would strand a farmhouse, using the same
+    reach figure the gate uses. A ring road that genuinely fronts its own houses answers yes to the first
+    and no to the second and is kept. Measured on the two maps that motivated it, the pair selects exactly
+    the two remnants and no other lane of the twenty-six.
+
+    The drop is written back into `ways` as well as into the manifest. Without that, `ways` is a snapshot
+    taken before the loop: a lane emptied at `i` stays a live shadowing candidate for every later `j`, so
+    one drop cascades into dropping a second, legitimate lane whose only shadow was the corpse - and the
+    stranding test above would clear it, because it would still see the dropped lane serving the house.
+    """
+    lanes = s.M.get("lanes") or []
+    ways = [[(float(x), float(y)) for x, y in (ln.get("pts") or [])] for ln in lanes]
+    centers = [(float(h["x"]), float(h["y"])) for h in s.M.get("houses") or []]
+    dropped = 0
+    gone: list[int] = []
+    for i, ln in enumerate(lanes):
+        if len(ways[i]) < 2 or ln.get("connector"):
+            continue
+        others = [w if k != i else [] for k, w in enumerate(ways)]
+        if shadowing_lane(ways[i], others, _LANE_JOIN_FT) is None:
+            continue
+        # THE STRANDING TEST READS THE CHECK'S OWN FIGURE, NOT THE JOIN TOLERANCE (feature 155).
+        # Written first against `_LANE_JOIN_FT` (30), which is the "is this end ON that way" figure and
+        # is the wrong question entirely: `farmhouses_reach_a_way` fails a house more than
+        # `WEB_REACH_FT` (100 ft) from any drawn way. A house 80 ft from the remnant and 110 ft from
+        # everything else was therefore not even in `served`, so the remnant went and Inashiro - the
+        # REFERENCE hamlet - shipped a stranded farmhouse at (1185, 1008). Same-source doctrine: a
+        # guard against a check measures what the check measures.
+        served = [c for c in centers if _reach(c, ways[i]) <= WEB_REACH_FT]
+        if any(all(_reach(c, o) > WEB_REACH_FT for o in others if len(o) >= 2) for c in served):
+            continue  # a farmhouse would be stranded; a visible remnant beats an unreached house
+        ways[i] = []
+        ln["pts"] = []
+        s.reink_lane(i)
+        gone.append(i)
+        dropped += 1
+    # AND THE HUSK GOES WITH THE INK - feature 145's rule, and this pass broke it (settlement-review
+    # x2, feature 155: sawada shipped 13 lane records for 11 drawn lanes, kashikawa 14 for 13). An
+    # emptied `pts` leaves a record declaring a lane nothing draws, which every consumer then has to
+    # special-case - and a reviewer's first dump of the manifest crashed on `pts[-1]`. Leaving it to
+    # `_sweep_debris` does NOT work and the comment at the call site used to say it did: that pass
+    # opens with `live = [i for i in ... if len(ways[i]) >= 2]`, so a lane another sweep has already
+    # emptied is not live, never enters `swept`, and is never deleted. It only removes husks it made
+    # itself. Removed back-to-front so the earlier indices stay valid.
+    for i in sorted(gone, reverse=True):
+        del lanes[i]
+    return dropped
+
+
+def _sweep_steading_fouls(s: Settlement) -> int:
+    """Pull back any lane end whose ink lands on a farmhouse, and empty what is left if nothing survives.
+
+    RUNS LAST, BESIDE `_sweep_debris` AND `_drop_end_nubs`, FOR THE SAME REASON THEY DO: every earlier pass
+    can leave one. The straggler pass routes clear of the steadings and the joiner brushes a fence at
+    `_TOUCH_GAP` on purpose, but the passes AFTER them - the touch, the smoothing's cuts, the nub drop -
+    each rewrite a lane's ends without re-asking whether the result still clears a house. Measured
+    2026-08-29 on main: sawada shipped an 8.6 ft two-point stub 2 ft inside the farmhouse at (1826, 2438)
+    and kashikawa a 45 ft run 3 ft inside one at (2136, 2762). Both lanes record `role=straggler` - the pass
+    that FIRST drew them - which is what made the cause hard to see: the pass named on the lane had drawn a
+    clean path, and a later one cut it onto the wall.
+    `houses_clear_of_lanes` allows a lane no overlap with a steading at all, so this trims rather than
+    ranks: the offending end segments come off, and a lane whittled below two points is emptied for
+    `_sweep_debris`'s rule to finish. A house left unserved is `farmhouses_reach_a_way`'s honest verdict; a
+    tread drawn across someone's floor is a map that looks finished and is wrong.
+    """
+    lanes = s.M.get("lanes") or []
+    fixed = 0
+    emptied: list[int] = []
+    for i, ln in enumerate(lanes):
+        pts = [(float(x), float(y)) for x, y in (ln.get("pts") or [])]
+        if len(pts) < 2 or ln.get("connector"):
+            continue  # a connector's route is the track's own business and it never ends in the cluster
+        width = int(float(ln.get("w", 3)))
+        before = len(pts)
+        while len(pts) >= 2 and _hits_a_steading(s, pts[-2:], width):
+            pts.pop()
+        while len(pts) >= 2 and _hits_a_steading(s, pts[:2], width):
+            pts.pop(0)
+        if len(pts) == before and not _hits_a_steading(s, pts, width):
+            continue
+        if len(pts) < 2 or _hits_a_steading(s, pts, width):
+            pts = []  # the foul is in the middle of the run, or nothing is left of it
+        ln["pts"] = [[round(x, 1), round(y, 1)] for x, y in pts]
+        s.reink_lane(i)
+        if not pts:
+            emptied.append(i)
+        fixed += 1
+    # ...and its husk goes with it, for the reason spelled out in `_sweep_doubled_remnants`: this used
+    # to say "hand it to the debris sweep", and that sweep's `live` filter cannot see a lane already
+    # emptied, so the record simply shipped.
+    for i in sorted(emptied, reverse=True):
+        del lanes[i]
+    return fixed
 
 
 def _drop_end_nubs(s: Settlement) -> int:
@@ -1255,6 +1590,42 @@ def _sweep_debris(s: Settlement) -> int:
     return len(swept)
 
 
+def fabric_clearance(pts: Sequence[Pt], fabric: Sequence[Poly]) -> float:
+    """How near a run passes to the settlement's own fabric - infinity when there is none to pass.
+
+    Lifted out of `_touch_junctions` so the rewrite rule below can be asked with plain lists
+    (GM 2026-08-28 on testability); the inner one delegates, so there is ONE body."""
+    if len(pts) < 2 or not fabric:
+        return float("inf")
+    return min(seg_dist(v[0], v[1], a2, b2) for poly in fabric for v in poly for a2, b2 in zip(pts, pts[1:], strict=False))
+
+
+def may_write(old_pts: Sequence[Pt], new_pts: Sequence[Pt], width: float, fabric: Sequence[Poly]) -> bool:
+    """May this rewrite of a lane be committed? JUDGE THE RESULT, NOT JUST THE MOVE.
+
+    A TOUCH MAY NOT PUSH A LANE INTO THE FABRIC IT WAS DRAWN CLEAR OF (feature 134 T50). Every rung of
+    the junction pass tests the LINK it is about to draw and none looks at the lane that comes out - so
+    a link that is itself legal, spliced on by `_unjog`/`_unretrace` or by moving another lane's end
+    onto a node, can leave a tread nearer a garden than the router ever put it. Traced on cohort seed
+    18: footpaths drawn 5.2 ft clear of the nearest garden survived the smoother at 5.16 and came out
+    of the pass at 1.21 - `features_do_not_overlap`, lanes x gardens.
+
+    ...NOR PUT A BEND IN IT THAT FEET WOULD NEVER WEAR. Cohort seed 21's footpath was accepted with no
+    bend in it and came out turning 90 degrees and then 60 within 34 ft; `_smooth_web` runs afterwards
+    and cannot take the chord, because the steading the path was threading is still in the way, so the
+    fold ships.
+
+    BOTH RULES ARE "NO WORSE THAN IT WAS", not "good": a rewrite may leave a lane no nearer the fabric
+    than it already was, or than its own keep-out allows - whichever is the more forgiving - and no
+    worse bent than it already was. A lane already inside the bar is never made worse, but is not
+    required to fix itself either, because the pass that is moving it is not the pass that owns it.
+    """
+    bar = max(_TOUCH_GAP, float(width or 5.0) / 2.0 + 2.0)
+    if fabric_clearance(new_pts, fabric) < min(fabric_clearance(old_pts, fabric), bar) - 1e-9:
+        return False
+    return not (_bends_badly(new_pts) and not _bends_badly(old_pts))
+
+
 def _touch_junctions(s: Settlement, hard: list[Poly], walls: Sequence[Poly], water: list[tuple[Pt, Pt]], reach: float = _LANE_JOIN_FT, only_orphans: bool = False, final: bool = False) -> int:
     """The LAST pass over the web: every lane end that stands NEAR another way is extended to TOUCH it.
 
@@ -1283,23 +1654,13 @@ def _touch_junctions(s: Settlement, hard: list[Poly], walls: Sequence[Poly], wat
     _fab = [poly for poly in walls if len(poly) >= 3]
 
     def _clearance(pts: Sequence[Pt]) -> float:
-        if len(pts) < 2 or not _fab:
-            return float("inf")
-        return min(seg_dist(v[0], v[1], a2, b2) for poly in _fab for v in poly for a2, b2 in zip(pts, pts[1:], strict=False))
+        return fabric_clearance(pts, _fab)
 
     def _may_write(idx: int, new_pts: Sequence[Pt], lane_list: Sequence[Mapping[str, Any]]) -> bool:
+        """This lane's rewrite rule - see `may_write`, which holds the body."""
         _old = [(float(x), float(y)) for x, y in (lane_list[idx].get("pts") or [])]
-        _bar = max(_TOUCH_GAP, float(lane_list[idx].get("w") or 5.0) / 2.0 + 2.0)
-        if _clearance(new_pts) < min(_clearance(_old), _bar) - 1e-9:
-            return False
-        # ...NOR PUT A BEND IN IT THAT FEET WOULD NEVER WEAR. The link is tested for legality and the
-        # spliced RESULT is not, so an end extended onto a way it was already running alongside meets
-        # it at a right angle: cohort seed 21's footpath was accepted with no bend in it and came out
-        # of this pass turning 90 degrees and then 60 within 34 ft. `_smooth_web` runs afterwards and
-        # cannot take the chord - the steading the path was threading is still in the way - so the
-        # fold ships. Same rule as the clearance above: a rewrite may leave a lane no worse bent than
-        # it already was.
-        return not (_bends_badly(new_pts) and not _bends_badly(_old))
+        return may_write(_old, new_pts, float(lane_list[idx].get("w") or 5.0), _fab)
+        # (the two paragraphs that used to stand here are on `may_write`)
 
     closed = 0
     for _pass in range(3):  # a touch can bring another end into reach; converge
@@ -1790,7 +2151,7 @@ def _clear_touch(a: Pt, b: Pt, hard: list[Poly], walls: Sequence[Poly], water: l
     # THE WHOLE CHORD, NOT ALL BUT THREE FEET OF IT (feature 134 T50, 2026-08-29). This accepted a chord
     # whose longest CLEAR stretch reached `span - 3.0`, which is one sampling step - so a chord fouling
     # the fabric for up to three feet at one end passed as clear. That is exactly a corner graze, and it
-    # is how a lane the router had drawn 7.6 ft clear of a neighbour's garden came back from `_smooth_web`
+    # is how a lane the router had drawn 7.6 ft clear of a neighbor's garden came back from `_smooth_web`
     # at 1.21 ft, with `features_do_not_overlap` reading lanes x gardens (cohort seed 18). The slack was
     # sampling tolerance, but at 1 px = 1 ft three feet is half the width the overlap matrix gives every
     # lane. `clear_runs` already carries its own `floor`, so the run may still be a sample short of the
@@ -1863,7 +2224,7 @@ _KNOT_FT = 25.0  # ends of different lanes this close are one junction, not seve
 
 
 def _drop_collinear(pts: Poly, eps: float = 1e-6) -> Poly:
-    """Remove interior points that lie on the straight line between their neighbours.
+    """Remove interior points that lie on the straight line between their neighbors.
 
     Geometry-preserving by construction: a point dropped here is one the drawn stroke passes through
     anyway. It exists because `clear_runs` returns a polyline of SAMPLES, and a record of samples
@@ -2279,6 +2640,29 @@ def _pass(name: str) -> None:
     _PASS = name
 
 
+def _hits_a_steading(s: Settlement, pts: Poly, width: int) -> bool:
+    """Would a lane of this width, drawn along `pts`, put ink on a farmhouse footprint?
+
+    The measure `houses_clear_of_lanes` uses: the house's DRAWN rectangle (rotation included) against the
+    tread, which is the polyline widened by half its stroke. No tolerance either way - the check allows the
+    overlap none, so neither does this.
+    """
+    # MIRROR THE CHECK'S WINDOW, NOT JUST ITS FORMULA (this skill's CLAUDE.md). `houses_clear_of_lanes`
+    # tests the house's four ROTATED CORNERS PLUS ITS CENTER against each lane segment at
+    # `w / 2 + 2` - the center is in the list so a lane narrower than a house cannot thread between the
+    # corners. The first cut of this helper used a quad-versus-segment overlap at half the tolerance, and
+    # so passed paths the gate still failed: same intent, different window, which is exactly the drift
+    # the rule exists to stop.
+    half = width / 2.0 + 2.0
+    for h in s.M.get("houses") or []:
+        quad = rot_rect(float(h["x"]), float(h["y"]), float(h["w"]), float(h["h"]), float(h.get("rot", 0.0)))
+        probes = [*quad, (float(h["x"]), float(h["y"]))]
+        for i in range(len(pts) - 1):
+            if any(seg_dist(px, py, pts[i], pts[i + 1]) < half for px, py in probes):
+                return True
+    return False
+
+
 def _draw_web(s: Settlement, pts: Poly, width: int = 3, houses: Sequence[Pt] = (), joins: bool = False) -> bool:
     """Draw a web lane, unless it is debris. See `_WEB_MIN_FT`.
 
@@ -2295,6 +2679,21 @@ def _draw_web(s: Settlement, pts: Poly, width: int = 3, houses: Sequence[Pt] = (
     # job is the junction, and it is short precisely because it is the shortest way to make one. Left
     # under the floor the link was simply discarded and the piece stayed orphaned, which is how cohort
     # seed 18 traded an overlap for `lanes_form_one_network`.
+    # A JOIN LINK IS ALLOWED TO BRUSH A FENCE. IT IS NOT ALLOWED THROUGH A HOUSE (feature 155).
+    # The exemption above lets a short link be drawn, and the link is routed at `_TOUCH_GAP` (4 px)
+    # rather than `WEB_FABRIC_GAP` (7) because "a lane and a plot fence share a line in a real village".
+    # That reasoning is about FENCES. A farmhouse is not a fence: `houses_clear_of_lanes` allows a lane
+    # no overlap with a steading at all, so a 4 px routing margin plus the tread's own half-width plus
+    # the straightening `_unjog` does afterwards can and did put a link's ink on a house corner -
+    # sawada shipped an 8.6 px stub 2 px into one (1826, 2438) and kashikawa a 45 px link 3 px into
+    # another (2136, 2762), both from the 2026-08-29 pool sweep, both gating red on main.
+    #
+    # A refused link leaves its piece orphaned, and that is the trade this engine already made once and
+    # documented: `lanes_form_one_network` reports a disconnection the reader can see, while a lane
+    # drawn through a farmhouse is a map that looks finished and is wrong. The piece is kept and the
+    # gate says so, which is the same ruling as the orphan joiner's "KEPT, not dropped".
+    if joins and _hits_a_steading(s, pts, width):
+        return False
     if not joins and polyline_len(pts) < _WEB_MIN_FT:
         segs = _net_segs(s)
         earns = any(_reach(h, pts) <= WEB_REACH_FT and (not segs or min(seg_dist(h[0], h[1], a, b) for a, b in segs) > WEB_REACH_FT) for h in houses)
@@ -2614,7 +3013,7 @@ def _serve_stragglers(s: Settlement, plan: SitePlan, hard: list[Poly], fabric: l
             # house that a previous lane had already taken from 100.7 ft to 38.9, and which the new
             # lane then left at 70.5. A way exists because feet use it.
             segs = _net_segs(s)
-            # SERVE WITH MARGIN, NOT TO THE MILLIMETRE. Triggering at exactly the reach means a
+            # SERVE WITH MARGIN, NOT TO THE MILLIMETER. Triggering at exactly the reach means a
             # house at 99.7 ft is not a straggler and gets nothing, while one at 100.3 has a whole
             # path drawn for four inches of violation - the same bug at both ends. A review caught
             # the first half twice on the same steading ("satisfying the rule by 0.3 ft ... a re-roll
@@ -2769,7 +3168,7 @@ def _serve_stragglers(s: Settlement, plan: SitePlan, hard: list[Poly], fabric: l
                     # until one long join leg is spliced onto the end of it and the fold appears all at
                     # once; `_smooth_web`'s string-pull cannot chord it because the samples hug the
                     # obstacles the clip was avoiding. Dropping a point that lies ON the segment between
-                    # its neighbours is EXACT - the ink is identical to the last decimal - so this changes
+                    # its neighbors is EXACT - the ink is identical to the last decimal - so this changes
                     # no geometry, only what the record says the shape is.
                     runs = [_drop_collinear(r) for r in runs]
                     # JOINING THE NETWORK, not arriving at the point that was aimed at. A candidate
@@ -2891,7 +3290,7 @@ def _serve_stragglers(s: Settlement, plan: SitePlan, hard: list[Poly], fabric: l
                         # be whichever was built first, which is the LONG one - so a candidate that merely
                         # bent could lose to one that drew a tread through somebody else's vegetables.
                         # An overlap is a rule the matrix forbids outright; a bend is a complaint about
-                        # shape. Cohort seed 18's footpath grazed a neighbour's garden at 1.21 ft while the
+                        # shape. Cohort seed 18's footpath grazed a neighbor's garden at 1.21 ft while the
                         # shorter cut only bent. So they are ordered (fouls, bends) and the least bad wins.
                         _rank = (_crosses_fabric(_p, passable, _TOUCH_GAP), _bends_badly(_p))
                         if _rank == (False, False):
@@ -2935,13 +3334,29 @@ def _serve_stragglers(s: Settlement, plan: SitePlan, hard: list[Poly], fabric: l
                     # path is still better served than one reached by none, and `farmhouses_reach_a_way`
                     # is the harsher verdict of the two.
                     # ...AND A FOUL IS THE SAME KIND OF REASON AS A FOLD (feature 134 T50, 2026-08-29).
-                    # A tread drawn through a NEIGHBOUR'S garden is not a footpath either, and the overlap
+                    # A tread drawn through a NEIGHBOR'S garden is not a footpath either, and the overlap
                     # matrix says so outright - cohort seed 18's path grazed one at 1.21 ft. Ranked the
                     # same way as the two cuts are: an overlap is a rule broken, a fold is a shape
                     # complaint, so (fouls, bends) orders them and the least bad is what gets drawn if no
                     # way on the map yields a clean one.
-                    _bad = (_bends_badly(path),)
-                    if _bad != (False,):
+                    # THE FOUL HALF OF THAT RANKING WAS DESCRIBED AND NEVER IMPLEMENTED (feature 155). The
+                    # comment above says "(fouls, bends) orders them"; the code ranked `(_bends_badly(path),)`
+                    # alone, so a tread that fouled a STEADING was only ever judged on its shape. Both maps
+                    # that gated red on main were this: sawada's 8.6 ft stub 2 ft into a farmhouse at
+                    # (1826, 2438) and kashikawa's 45 ft path 3 ft into one at (2136, 2762), each drawn by
+                    # this pass on 2026-08-29 and each perfectly straight, so nothing here objected.
+                    #
+                    # AND A STEADING FOUL IS NEVER DRAWN, not even as the last resort the fold gets.
+                    # `houses_clear_of_lanes` allows a lane no overlap with a house AT ALL, so a fouling path
+                    # is not "the least bad option" - it is a guaranteed red gate and a map that shows a
+                    # track through someone's floor. The honest fallback is the house going unserved, which
+                    # `farmhouses_reach_a_way` reports in words a reader can act on. That is the same trade
+                    # the orphan joiner makes when it keeps a disconnected piece rather than inventing a link.
+                    _fouls = _hits_a_steading(s, path, 3)
+                    _bad = (_fouls, _bends_badly(path))
+                    if _fouls:
+                        continue
+                    if _bad != (False, False):
                         if _folded is None or _bad < _folded_rank:
                             _folded, _folded_rank = path, _bad
                         continue

@@ -617,3 +617,19 @@ def test_no_rendered_page_tells_a_reader_a_feature_is_historically_accurate() ->
         if d["label"] == "accurate":
             assert d["lead"] == "", key
             assert not re.search(r"\bare read\b|\bis read\b", d["caveat"].split(";")[0]), key
+
+
+def test_an_element_with_no_extent_is_treated_as_touching_everything() -> None:
+    """`_hits` decides whether two drawn elements merge into one hover group. An extent of `None` means
+    the emitter recorded no geometry for that element, and the safe answer is YES: refusing to merge
+    would split one feature into two hover groups on the sheet, which the reader sees, while merging
+    slightly too eagerly costs nothing visible. Boxes and circles both go through here, and a circle
+    is tested AS a circle - two crowns whose boxes overlap at a corner do not actually touch."""
+    from l7r.diagram.interactive.page import _hits
+
+    assert _hits(None, (0.0, 0.0, 5.0)) is True
+    assert _hits((0.0, 0.0, 5.0), None) is True
+    assert _hits(None, None) is True
+    # circles: touching exactly at the rims counts, a hair further apart does not
+    assert _hits((0.0, 0.0, 5.0), (10.0, 0.0, 5.0)) is True
+    assert _hits((0.0, 0.0, 5.0), (10.1, 0.0, 5.0)) is False

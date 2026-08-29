@@ -1,0 +1,6 @@
+{
+  "utc": "20260829T142647Z",
+  "guard": "pair-hooks",
+  "what": "gate alone",
+  "reason": "second intermediate measurement roll: isolating which of the three new lane rules broke Inashiro/Kashikawa/Mizuguchi; reviews dispatched on the final roll via make verify"
+}

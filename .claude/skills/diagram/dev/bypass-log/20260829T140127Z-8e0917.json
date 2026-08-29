@@ -1,0 +1,6 @@
+{
+  "utc": "20260829T140127Z",
+  "guard": "pair-hooks",
+  "what": "gate alone",
+  "reason": "regenerating renders after a review finding; the review has already run on this delta and a re-review follows"
+}

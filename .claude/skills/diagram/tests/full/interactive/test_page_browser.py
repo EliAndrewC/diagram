@@ -131,7 +131,13 @@ def _mechanics(page: Page, present: list[str]) -> None:
     page.clear()
     for key in present:
         d = page.open(key)
-        assert d["open"] and d["k"] == key and d["name"].lower() == key
+        # THE HEADING RENDERS THE CLASS'S DECLARED NAME, WHICH IS NOT THE KEY (feature 153, GM
+        # 2026-08-29: the modal should "actually say 'Windbreak forest' instead of just 'windbreak'").
+        # This asserted `name == key`, which held only while every name happened to equal its key -
+        # so the first class given a fuller name turned a correct change red. Same-source doctrine:
+        # the test reads the registry the page reads. The KEY is still pinned separately, above,
+        # because that is what the ink carries and what `all_ink_is_ruled_on` reads.
+        assert d["open"] and d["k"] == key and d["name"].lower() == CLASSES[key].name.lower()
         assert d["label"] == CLASSES[key].label, "the classification still reaches the page (constitution XII)"
         # THE PRESUMPTION OF ACCURACY (feature 154): an accurate class says nothing about accuracy at
         # all - the lead line is empty and hidden - while a deviation or a guess still opens with its

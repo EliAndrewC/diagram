@@ -651,3 +651,55 @@ def test_trim_lane_stubs_does_not_count_a_fraying_track_as_a_junction():
     ]
     s._lane_ink = [[], []]
     assert s.trim_lane_stubs() >= 0  # the arm runs; what it decides is the fray rule's business
+
+
+def test_pull_back_will_not_consume_the_last_segment_of_a_two_point_lane() -> None:
+    """The loop shortens a lane from its last vertex, dropping a whole vertex when one is consumed.
+    When only TWO points remain and the final segment is already shorter than a step, there is
+    nothing left to drop - popping would leave a single point, which is not a lane at all - so it
+    stops. That is the floor beneath the proportional guard, and it is reached by a lane that was
+    always short rather than by one trimmed down to short.
+
+    And when nothing the walk passed ever reached anything, the ORIGINAL run comes back untouched:
+    returning the floor-truncated one would manufacture the very defect `lanes_reach_something`
+    exists to catch."""
+    from l7r.diagram.settlement.water_ways import _pull_back
+
+    stub = [(0.0, 0.0), (4.0, 0.0)]  # 4 ft against an 8 ft step
+    assert _pull_back(stub, lambda _q: False) == stub
+    # ...and it is the SAME answer when the end does reach something, because there is no shorter
+    # end to prefer: the loop breaks before any candidate is generated.
+    assert _pull_back(stub, lambda _q: True) == stub
+    # a long lane whose end reaches nothing also comes back whole
+    long_run = [(0.0, 0.0), (200.0, 0.0)]
+    assert _pull_back(long_run, lambda _q: False) == long_run
+
+
+def test_junction_floor_protects_a_crossing_and_ignores_a_fraying_neighbor() -> None:
+    """Lifted out of `trim_lane_stubs` so it can be asked with plain lists (GM 2026-08-28). The
+    property: a lane may be trimmed back to its last real JUNCTION and no further.
+
+    The `_FRAY_DEG` half is the one that needed the lift. Counting proximity alone made every point
+    of a near-parallel arm look like a tie, so the floor came out at the whole length and nothing
+    could be trimmed at all - and that branch runs only when a lane happens to have a close neighbor
+    at a crossing angle, which no unit test could arrange through the caller."""
+    from l7r.diagram.settlement.water_ways import junction_floor
+
+    lane = [(0.0, 0.0), (100.0, 0.0), (200.0, 0.0)]
+
+    # a way crossing at 90 deg, 1 ft off the vertex at x=100: everything up to it is protected
+    crossing = [{"pts": [(100.0, -50.0), (100.0, 50.0)]}]
+    assert junction_floor(lane, crossing, set(), 5.0, me=1) == 100.0
+
+    # the SAME geometry, but the crossing way is this lane itself, or is being dropped -> no floor
+    assert junction_floor(lane, crossing, set(), 5.0, me=0) == 0.0
+    assert junction_floor(lane, crossing, {0}, 5.0, me=1) == 0.0
+
+    # a near-parallel arm running alongside is the same track fraying, not a tie
+    parallel = [{"pts": [(50.0, 2.0), (180.0, 2.0)]}]
+    assert junction_floor(lane, parallel, set(), 5.0, me=1) == 0.0
+
+    # ...and one that is simply too far away ties nothing
+    assert junction_floor(lane, [{"pts": [(100.0, 400.0), (100.0, 500.0)]}], set(), 5.0, me=1) == 0.0
+    # a degenerate record is skipped rather than crashing
+    assert junction_floor(lane, [{"pts": [(100.0, 1.0)]}], set(), 5.0, me=1) == 0.0

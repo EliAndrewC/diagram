@@ -507,3 +507,96 @@ plot is 6,706 sq ft, **4.9x the median basin and the largest of 776**, because e
 tests sharpness and none tests size; the windbreak trim got WORSE rather than better since its
 deferral (57 -> 85 px of bare strip, 5 of 19 houses now beyond the drawn belt); the copse draws inside
 the windbreak (13 of 17 clumps touching one); and `make jogs` exits RED here with nobody reading it.
+
+## 2026-08-29 - feature 155: the remnant sweep rewritten; the board's audience OPEN for the GM
+
+**FIXED - the 37.6 ft remnant (lane 6, leaving lane 11 and dying 11.4 ft from it).** The sweep written
+for it measured `1.5 * w` - 4.5 ft for a footpath - and this map's own 11.4 ft figure was quoted in its
+docstring three lines above the constant that rejected it. The reviewer named the pattern rather than
+just the bug: *"calibrating a general rule to the single case that was easiest to measure is the
+recurring defect here, not a coincidence"* - the third instance on this map's notes, after the 5 ft nub
+floor shipped for an 8.25 ft boot and the marsh clip's `.exterior` handing the disc back. The metric is
+gone; the test is now structural (both ends on one other way, and no farmhouse stranded at
+`farmhouses_reach_a_way`'s own 100 ft), which has no dial to leave set too low.
+
+**DEFERRED with its measurement - lane 10 doubles back on ITSELF** at (1464.4, 2057.7) -> (1613.7,
+2009.7) -> (1609.3, 2030.3): 156.8 ft out, a 119.9 degree turn, 21.1 ft back onto the way it left. At
+zoom an arrowhead driven into the lane. Under `lanes_bend_like_paths`'s 140 degree hairpin bar and over
+`_NUB_FT` (9), so nothing sees it. The obvious lever - a severity-coupled second nub band - was
+implemented and ROLLED: Inashiro failed `farmhouses_reach_a_way`, Kashikawa and Mizuguchi failed
+`features_do_not_overlap`, because `drop_end_nubs` deletes the INTERIOR vertex and the lane re-routes
+along what is left. At 9 ft that re-route is negligible, which is why the rule is safe; at 30 ft it
+drags the tread through whatever stood inside the elbow. **The nub floor is load-bearing, not merely
+low.** The mechanism, the pool census (three lanes on three maps) and the implementation sketch are
+recorded at the point of change in `hamletgen/ways.py`; the fix belongs in the junction pass, which
+measures its 40 ft overrun from the wrong end.
+
+**A SECOND LEVER WAS PRICED BY THE REVIEWER AND FAILS THE SAME WAY**, which is worth recording so
+nobody walks it again: instead of deleting the elbow, extend the lane's last real segment to its
+perpendicular foot on the way it joins - keeping the T-junction and moving the tread much less.
+Measured on all three affected maps:
+
+| map | lane | foot offset | max tread move | nearest recorded feature to the rewritten run |
+|---|---|---|---|---|
+| sawada | 10 | 11.5 ft | 9.9 ft | 7.8 ft (a house) - would pass |
+| kashikawa | 4 | 17.7 ft | 16.0 ft | **1.6 ft (a garden)** - fails |
+| mizuguchi | 3 | 19.0 ft (the foot IS the tip) | 19.0 ft | **0.5 ft (a garden)** - degenerates to the interior-vertex delete |
+
+The cheaper lever lands in the same two gardens the severity-coupled band did, by another route, and
+that sharpens the reason: **every post-hoc geometric rewrite of the spike has no router**, so on two of
+three maps it puts the tread inside a garden. Only a pass that still holds the obstacle set and
+`may_write` can choose a foot that clears - which is the junction pass, and is why the fix belongs
+there.
+
+**OPEN, FOR THE GM - the notice board stands where nobody passes, and this is a DOCTRINE question.**
+Measured on this roll: the board at **(1941.2, 2443.0)** has **7 of 19** dwellings within 250 ft and 5
+within 150. The busiest point on the whole web, at (1611.7, 2279.8) where lanes 5/11/6 meet, has
+**13 of 19** within 250. The board stands 9.0 ft off `lanes[1]`, an **81.7 ft spur one of whose ends is
+70 ft from any other way** - a cul-de-sac. `kosatsuba_by_the_road` is green; the siter is behaving
+correctly.
+
+The cause is the recorded main-way rule (GM 2026-08-02, from Ubame: *"it should be along the main road,
+in order to be more noticed"*), which admits any lane not flagged `web` - and this spur is not flagged
+`web`, so a stub competes on equal footing with the through lanes. Kashikawa's reviewer measured the
+same siter on that map as sitting on its own optimum (10 against a best available 9), so this is a
+priced trade-off whose price has risen on this roll, not a siting bug.
+
+**Why this is not fixed here - and it is NOT for want of research (GM 2026-08-29).** An earlier version
+of this entry called it a research question. The GM pushed back - *"I thought that our notice board
+already was well researched? I would be really surprised if our existing research was insufficient to
+that task"* - and they were right. `research/urban-features.md` already carries the answer, READ and
+cited in feature 133 T13 from four sources: the bakufu set kosatsuba *"at points of heavy passage:
+barriers and ports, the foot of large bridges, and the entrances and centers of towns and villages"*;
+in farming villages *"at the village center, the shrine precinct, or the place where villagers
+assembled"*; also *"at bridgeheads and before the gate of the village officials' houses"*. And the
+governing sentence: **"Every attested site is ON the way - a verge, a gate front, a bridge foot -
+never a plot of open ground beside it."**
+
+So this is an IMPLEMENTATION task, not a research one, and the record is decisive in two directions:
+
+1. **Four attested placements is already a knob's worth of variance** - the center, the entrance, the
+   bridgehead, the headman's frontage (and the shrine precinct) - which by Principle XII's ladder
+   becomes a seeded per-settlement knob rather than a reading someone picks. The research to build it
+   exists today; nothing further needs reading.
+2. **This board matches NONE of them, so it is not a defensible edge placement.** A dead-end spur is
+   not an entrance, not a center, not a bridgehead, not a headman's frontage and not a shrine
+   precinct. That is a stronger finding than "a priced trade-off whose price has risen" - the seat is
+   outside what the record attests, not at one end of a supported range. The earlier draft of this
+   entry had it the other way round and was wrong.
+
+**Recommended as the next feature: build the knob from the research already on file.** The narrower
+alternative - excluding dead-end stubs from the main-way candidate set - is declined on cost and
+sequencing only, NOT because it invents a rule: the recorded rule carries its own purpose clause (GM
+2026-08-02, *"it should be along the main road, in order to be more noticed"*), and a spur whose far
+end is 70 ft from any other way fails that on its face. It belongs in the same change as the knob,
+together with the Ubame measurement the knob will need - the board's CAPTION is much larger than its
+glyph, so a siter denied the quiet spur may walk to the next empty verge rather than to the busy node,
+and whether (1612, 2280) can hold the board PLUS its caption is a measurement, not an assumption.
+
+**A defect sits underneath the doctrine question, measurable today.** Of the free lane ends on this
+map, four internal ones sit 34.0-40.6 ft from the nearest house CENTER. Lane 1's - the one the board
+stands at - sits **64.3 ft** from the nearest house center, about 40 ft outside the wall and past the
+dooryard. `_bridge_collinear_breaks`'s own docstring names exactly this: *"an end 83 ft from a house
+CENTER is 'fronting' it even when that is 55 ft from the wall, i.e. out past the dooryard."* So the
+board stands at the one lane end on this sheet that fronts nothing, and that end is an overshoot by
+this map's own distribution.

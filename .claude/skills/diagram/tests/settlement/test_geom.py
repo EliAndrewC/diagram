@@ -580,3 +580,17 @@ def test_facing_chains_returns_one_run_when_every_chord_faces_the_seat() -> None
     some = facing_chains(square, (200.0, -600.0), 1.0)
     assert some and len(some) >= 1
     assert sum(len(c) for c in some) < 4, "not every chord of a square faces a seat off one side"
+
+
+def test_street_runs_honors_a_manifest_that_carries_only_the_singular_lane() -> None:
+    """The fallback the docstring exists for. Six frozen regression fixtures are hand-built manifests
+    carrying `lane` and no `lanes`, so a fixture that stops firing because the code stopped reading
+    its key is a fixture that has silently rotted. `lanes` wins where it exists; `lane` is honored
+    where it is all there is; nothing at all is an empty list, not a crash."""
+    from l7r.diagram.settlement import street_runs
+
+    both = {"lanes": [{"pts": [(0, 0), (10, 0)]}], "lane": [(50, 50), (60, 60)]}
+    assert street_runs(both) == [[(0.0, 0.0), (10.0, 0.0)]], "the plural wins where it exists"
+    assert street_runs({"lane": [(50, 50), (60, 60)]}) == [[(50.0, 50.0), (60.0, 60.0)]]
+    assert street_runs({}) == []
+    assert street_runs({"lanes": [{"pts": []}]}) == [], "a lane record with no points is not a run"

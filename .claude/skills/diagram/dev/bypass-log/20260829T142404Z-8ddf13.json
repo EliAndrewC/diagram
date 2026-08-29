@@ -1,0 +1,6 @@
+{
+  "utc": "20260829T142404Z",
+  "guard": "pair-hooks",
+  "what": "gate alone",
+  "reason": "intermediate measurement roll: checking whether the three new lane rules fire on their motivating cases and how widely they over-fire, before the map state is settled enough to be worth a reviewer"
+}
