@@ -6,8 +6,9 @@
 ## Why this feature exists
 
 The 2026-08-29 pool sweep - four `settlement-review` passes over Inashiro, Kashikawa, Mizuguchi and
-Sawada after feature 150's merge - fixed eight defects and RECORDED sixteen more with their
-measurements, because fixing them inside a 291-commit merge would have put unreviewed change into an
+Sawada after feature 150's merge - fixed eight defects and RECORDED fourteen distinct findings with their
+measurements (eighteen bullets; the windbreak, the caption, the copse and the notes drift are each
+recorded twice, once per round), because fixing them inside a 291-commit merge would have put unreviewed change into an
 already-large landing. The GM read that list and asked for all of it: *"the other findings that you say
 you recorded but are not fixed. also seem like they are worth doing. So please go through and take care
 of The rest of those as well."*
@@ -51,15 +52,24 @@ against a 714 ft cluster with **5 of 19 houses beyond its end**, and the bare st
 since it was deferred. The mechanism is known: the band is offset into the wind from the house CENTROID
 and sized across the wind, so an elongated cluster gets a band that lands on its own flank.
 
-*Independently testable*: for each pool map, the share of farmhouses with a drawn belt clump within
-150 ft, and the drawn belt's across-wind span against the cluster's.
+*Independently testable*: for each pool map, whether any farmhouse lies BEYOND the drawn belt's
+across-wind ends. Only that - the proximity measure this user story first carried (houses within 150 ft
+of a clump) is the wrong property and SC-002 records why.
+
+**Two vintages of numbers, deliberately kept apart.** The figures in the paragraph above are the
+2026-08-29 SWEEP's record, as the reviewers measured them at the time. SC-002 carries a FRESH
+re-measurement taken this session over the whole pool, on the span test rather than the proximity one -
+Sawada 8 of 19 rather than 5 of 19, Kuwabata 45 undrawn against 47 drawn rather than 24 against 38 -
+because the maps have been re-rolled since. **SC-002's numbers are the before-number FR-017 governs.**
 
 ### US2 - features that draw wrong (P2)
 
 **US2.1 A copse reads as a copse.** Mizuguchi's records 205 ft and draws 2 clumps 175 ft apart; Inashiro's
 records 313 ft and draws 2; Sawada's 17 clumps are drawn INSIDE the windbreak (13 of 17 touching a
 windbreak clump), so two recorded features draw as one ragged wood. The project's own doctrine says they
-are different plantings for different reasons.
+are different plantings for different reasons. The recorded finding also names a KNOB candidate -
+a copse embedded in the belt against one threading the houses - and constitution XII makes that a knob
+rather than a picked answer, so it is specified here (FR-005) exactly as the kosatsuba knob is at US4.5.
 
 **US2.2 A caption is not seated across a lane from its own glyph, nor on top of a feature.** Inashiro's
 "notice board" caption stands with the full width of lane 1 between it and its board, 22 ft from a shrine
@@ -99,7 +109,7 @@ dy -18 to -21 ft; privies at bearing 31-41 degrees at 10 of 13; at 3 of 4 manure
 9.5 ft directly above the privy with x agreeing to 0.7 ft. The arrangement is right and researched; the
 VARIANCE is nil.
 
-**US4.3 A diagnostic the project maintains is green, or its failure is ledgered.** `make jogs` exits RED
+**US4.3 A diagnostic the project maintains is green.** `make jogs` exits RED
 on Sawada - 3 sideways steps in 776 rings, the largest 12.5 ft - and nobody reads it.
 
 **US4.4 The notes describe the map that ships.** Kashikawa's accepted-limitation entry names a byre that
@@ -112,33 +122,109 @@ siter can express only one.
 
 ## Requirements
 
-- **FR-001** The marsh modal MUST carry the tameike finding and the embankment finding, each classed and
-  cited from `research/water.md`, visible to a reader who clicks marsh on a rendered map.
-- **FR-002** The privy/manure seat roll MUST consult `plan.windward`, preferring among the ALREADY
+- **FR-001** (US1.1) The marsh modal MUST carry the tameike finding, classed and cited from `research/water.md`,
+  visible to a reader who clicks marsh on a rendered map. Its second half - that the EMBANKMENT is mown
+  and burned to keep the bank strong - is part of the SAME recorded finding, not a second deliverable:
+  the section is titled "A reservoir's shore is reeded, and its EMBANKMENT is mown - the two are
+  different ground", and the bank half is why the reeds stop where they do. Carrying one without the
+  other would tell a reader the shore is reedy and leave them wondering why the bank beside it is not.
+- **FR-002** (US1.2) The privy/manure seat roll MUST consult `plan.windward`, preferring among the ALREADY
   ATTESTED seats the one not within 90 degrees of the windward bearing. It MUST NOT invent a new seat.
-- **FR-003** A windbreak belt MUST be derived from the drawn cluster's windward extent rather than an
+- **FR-003** (US1.3) A windbreak belt MUST be derived from the drawn cluster's windward extent rather than an
   offset from its centroid, so an elongated cluster gets an elongated belt; and clumps refused by the
   per-crown filter MUST move the BAND rather than be dropped from the canopy.
-- **FR-004** through **FR-014** One per US2/US3/US4 item above, each fixed at its named mechanism.
-- **FR-015** Every fix MUST be measured against the number already recorded for it, before and after.
-- **FR-016** No fix may be declared done on a check alone: the pool is re-rolled and re-reviewed.
+- **FR-004** (US2.1) A `copse` MUST draw as a distinguishable stand: it may not be recorded at 205-313 ft
+  and drawn as two clumps, and its clumps may not be seated inside the windbreak's own canopy.
+- **FR-005** (US2.1) Where a copse sits MUST become a per-settlement KNOB - embedded in the belt, or
+  threading the houses among the homesteads - because the recorded finding names both as supportable and
+  constitution XII makes two supportable answers a knob rather than a choice.
+- **FR-006** (US2.2) The caption seat filter MUST reject a seat whose rotated quad laps a solid feature,
+  and MUST reject one that a drawn way separates from the subject it names.
+- **FR-007** (US2.3) The flooded-plot tint MUST test the FINAL ring's AREA, not only its sharpness, so a
+  basin absorbed to several design cells is demoted.
+- **FR-008** (US2.4) A persimmon's fruit dots MUST vary per tree, rolled off the map's own position hash.
+- **FR-009** (US3.1) A lane link within the join reach MUST NOT be defeated by a single movable farm
+  fixture standing in the corridor; either the fixture yields or the link routes past it.
+- **FR-010** (US3.2) A lane MUST reach something. No threshold is set here: the recorded case measured
+  206.1 ft from any way and 246.5 ft from any farmhouse, and what counts as "reaching nothing" is for the
+  plan to derive from the existing rule (`lanes_reach_something` and the trim that already pulls internal
+  ends back), not for this spec to invent a number the GM never set.
+- **FR-011** (US3.3) A through-route MUST keep its width across a junction, rather than necking to a back
+  lane's tread between two wider ways that never meet.
+- **FR-012** (US4.1) Seated fixture counts MUST agree with their declared per-household shares, or the
+  record MUST state what the share actually means.
+- **FR-013** (US4.2) A homestead's fixture ring MUST vary its offset and pitch off the map's own hash.
+- **FR-014** (US4.3) `make jogs` MUST exit green on every pool map. It carries NO "or ledger it" arm: the
+  recorded finding is precisely that a maintained diagnostic is red and nobody reads it, so a residue
+  written down and shipped red would satisfy the words while leaving the defect on the map. If a residue
+  turns out genuinely unfixable, the project's own three exits (fix, revert, or a GM waiver for that
+  specific case) govern - a spec may not pre-authorize the outcome the GM asked to end.
+- **FR-015** (US4.4) Every notes file MUST describe the map that ships.
+- **FR-016** (US4.5) Where a kosatsuba stands MUST become a per-settlement knob - the busiest frontage, or
+  the drawing-water place - both being attested.
+- **FR-017** Every fix MUST be measured against the number already recorded for it, before and after.
+- **FR-018** No fix may be declared done on a check alone: the pool is re-rolled and re-reviewed.
 
 ## Success Criteria
 
 - **SC-001** No pool map has a majority of privies/manure pits within 90 degrees of its windward bearing;
   Sawada specifically goes from 12/12 to a minority.
-- **SC-002** On every pool map, at least 80% of farmhouses have a drawn windbreak clump within 150 ft,
-  and no map records more than a handful of clumps it never draws.
+- **SC-002** No farmhouse stands BEYOND the drawn belt's across-wind ends, on any pool map. This replaces
+  a first draft that asked for 80% of houses within 150 ft of a clump, which measures the wrong thing: a
+  tree line shelters well downwind of 150 ft, so proximity is not shelter, and the 80% was a number the
+  GM's request does not set. What the GM described is houses that are not BEHIND the belt at all -
+  *"how many houses appear uncovered"* - and that is an across-wind span test with no invented threshold.
+  Measured before, 2026-08-29: **Kashikawa 8 of 20 houses beyond the belt's ends (belt 494 ft against a
+  759 ft cluster), Sawada 8 of 19 (499 against 663), Kuwabata 3 of 16 (339 against 557)**; Inashiro and
+  Mizuguchi already 0. The same three maps discard most of their own canopy as "off-page" - Kuwabata 45
+  undrawn against 47 drawn, Sawada 84 against 95, Kashikawa 61 against 99 - which is the suspected
+  mechanism and what FR-003 addresses.
 - **SC-003** A reader clicking marsh sees the tameike finding with its sources.
-- **SC-004** `make jogs` exits green on every pool map, or its residue is ledgered with a measurement.
+- **SC-004** `make jogs` exits green on every pool map.
 - **SC-005** Every notes file describes the map that ships (no stale count, no absent byre).
 - **SC-006** The whole pool passes `make maps` to the same standard as before, and a settlement-review
   pass over the changed maps returns no NEW error.
 
 ## Assumptions
 
-- The pre-existing tripwire seed 37 failure (`paddy_bunds_do_not_stagger`, ledgered in
-  `specs/139-remaining-test-failures`) remains out of scope; it is not this feature's to fix.
-- "Recorded but not fixed" means the sixteen items in `specs/150-kuwabata-dike-pond-hamlet/tasks.md`.
+- The pre-existing tripwire seed 37 failure remains out of scope; it is not this feature's to fix, and
+  constitution XIII's "pre-existing failures are NOT regressions ... not fixed under someone else's
+  feature" is the project's own rule for it. **The check/seed pairing is a FRESH measurement, not a
+  citation**: `make tripwire` in this clone on 2026-08-29 reported `tripwire seed 37:
+  paddy_bunds_do_not_stagger`, and the same seed fails identically on a detached worktree at main's tip,
+  which is how it was established as pre-existing. `specs/139-remaining-test-failures` T06 ledgers
+  `paddy_bunds_do_not_stagger` against seeds 12 and 39, and seed 37's older ledgered checks are
+  `lanes_form_one_network` / `lanes_bend_like_paths` - so what seed 37 fails has MOVED since those were
+  written, and this feature does not adopt it either way. **This exclusion covers the tripwire cohort
+  ONLY. It does not touch US4.3**: `make jogs` red on Sawada is in scope and is fixed here, even though
+  `jogs.py` is a sibling tool of the same check family.
+- "Recorded but not fixed" means the **fourteen distinct** findings in
+  `specs/150-kuwabata-dike-pond-hamlet/tasks.md` - eighteen bullets, of which the windbreak, the caption,
+  the copse and the notes drift are each recorded twice, once per sweep round.
   D3's caption sketch is included even though the defect no longer shows on Kuwabata, because the
   mechanism is unchanged and Inashiro still shows it.
+
+## Spec-fidelity review
+
+Three rounds against the GM's verbatim request (`gm-request.md`), by an independent `spec-fidelity`
+agent, per constitution XVI.
+
+- **Round 1: NEEDS-CHANGES, five items.** Two were real scope defects, not wording. `FR-004` through
+  `FR-014` was written as a placeholder range - eleven slots for twelve items - so one requirement would
+  have fallen out with nothing marking which. And the tripwire exclusion mis-cited its ledger:
+  `specs/139` pairs `paddy_bunds_do_not_stagger` with seeds 12 and 39, not 37, so what was presented as
+  a citation was actually a fresh measurement. Also: a dropped copse-siting knob, an uncounted "sixteen",
+  and FR-001 reading as two deliverables.
+- **Round 2: NEEDS-CHANGES, two items.** `FR-014` carried an escape arm - *"or its residue MUST be
+  ledgered with a measurement"* - which would have let a red diagnostic ship while satisfying the
+  requirement, and contradicted this spec's own Assumptions. That is the exact failure class this review
+  exists to catch. And `US1.3` still stated the superseded proximity measure alongside a second vintage
+  of numbers, leaving `FR-017` two candidate before-numbers.
+- **Round 3: FAITHFUL.** Verified no requirement contains an "except when", an escape arm or an invented
+  threshold; every number in the requirements traces to a recorded finding. One text sweep applied here:
+  US4.3's heading still carried the arm FR-014 had voided.
+
+**Raised for the GM, not blocking**: FR-005 and FR-016 each add a per-settlement knob (copse siting,
+kosatsuba siting), and constitution VI makes a knob owe one map per VALUE at verification. That is the
+largest single cost in this feature and the spec does not size it; the plan does.
+
