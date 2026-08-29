@@ -99,18 +99,11 @@ def module_set(deps_for: Callable[[Any], dict[str, Any]] | None = None) -> list[
 # So each entry says what is wrong, who owns the fix, and - the part that stops the duplicated work - what has
 # ALREADY been tried. THE LIST MUST SHRINK, which is why it is printed on every run rather than hidden.
 PARKED: dict[str, tuple[frozenset[int], str]] = {
-    "l7r/diagram/hamletgen/hinterland.py": (
-        frozenset({503, 504}),
-        "the woodland shrink ladder. A direct test EXISTS and passes - tests/gate/hamletgen/"
-        "test_woodland_shrink_147.py - and covers these two lines when run on its own, but contributes "
-        "nothing to them inside the full sweep. Do NOT write another test for them; that was tried. The "
-        "cause is in how the coverage is OBSERVED: `--dist worksteal` hands tests to workers dynamically, so "
-        "which tests share a process varies between runs, and this verdict varies with it - a bisect over the "
-        "suite flipped repeatedly on unchanged code. Also tried and ruled out: the roll-sharing of feature "
-        "147 (red with it off), the cohort seed count (each of the eight members covers the rung alone), "
-        "single-worker runs (still red), forced pool regeneration (still red), and a synthetic fixture (the "
-        "woodland scan yields no seat without a fully planned site). Feature 148 owns it.",
-    ),
+    # EMPTY, AND THAT IS THE POINT. Feature 147 parked `hinterland.py` 503-504 here while the floor's verdict
+    # on them flickered; feature 149 found the cause - `gencache` let an entry's stored coverage outlive the
+    # key it was recorded under, so a hit replayed line numbers from an older source - and the park came off.
+    # The mechanism stays for the next case that earns it. An entry here must name its owner and what has
+    # already been tried, so the next session starts from the elimination instead of repeating it.
 }
 
 

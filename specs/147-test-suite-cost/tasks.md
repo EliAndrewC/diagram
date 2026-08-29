@@ -13,7 +13,7 @@ expected after the initial findings.
 - [x] T07 FR-004: the five named tests (cohort 155 s, determinism 105 s, pool round-trip 32 s, fan-out 22 s, re-roll 18 s) each cut, reduced, or KEPT with a written statement of what its time buys
 - [x] T08 re-measure all six baselines the same way they were taken (gate warm, gate rolls-forced, sweep warm, sweep cold, cheap loop, the rolls group) and record before/after (SC-001, SC-001b, SC-003)
 - [x] T09 FR-009: the docs corrected where they carry a cold figure as if warm, and every new timing labeled
-- [x] T10 the GM's acceptance - SUPERSEDED, see T22 at the foot of this file: the GM authorized this landing in their own words, and their acceptance of the whole line of work now sits at the end of feature 148
+- [x] T10 the GM's acceptance - SUPERSEDED, see T22 at the foot of this file: the GM authorized this landing in their own words, and their acceptance of the whole line of work now sits at the end of feature 149
 
 ## The flaky floor, and the GM's ruling (2026-08-29)
 
@@ -47,4 +47,4 @@ and fix them."*
       authorization to land it - and 148 carries the fix AND the acceptance of the whole line of work. The GM
       can move the acceptance back by saying so; nothing here is hard to undo
 - [x] T10 SUPERSEDED by T22: the GM authorized this landing in their own words rather than at an acceptance
-      task, and their acceptance now sits at the end of feature 148
+      task, and their acceptance now sits at the end of feature 149

@@ -1,6 +1,6 @@
 # Feature Specification: the coverage floor's flaky verdict
 
-**Feature**: 148-coverage-floor-flakiness
+**Feature**: 149-coverage-floor-flakiness
 **Created**: 2026-08-29
 **Status**: DRAFT - awaiting `spec-fidelity` before implementation
 

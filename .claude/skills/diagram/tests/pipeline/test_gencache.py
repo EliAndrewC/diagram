@@ -307,3 +307,40 @@ def test_the_deps_state_is_stable_within_a_process():
     first = gencache._deps_state()
     assert first == gencache._deps_state(), "the deps input must not wobble between key computations"
     assert first and not first.startswith("unresolvable-")
+
+
+def test_an_entry_never_keeps_coverage_it_did_not_just_record(tmp_path, monkeypatch):
+    """THE FLICKERING FLOOR (feature 149; feature 147 parked two `hinterland.py` lines over this).
+
+    `store` publishes a FRESH key at the end of every call. A caller that regenerates WITHOUT measuring
+    coverage - `make maps`, the iteration regen path, anything but the gate's miss path - used to leave the
+    old `coverage.data` beside that new key, and `gate_obtain` replayed it on the next hit. Coverage data is
+    a set of LINE NUMBERS, so a replay after the source moved marks the wrong lines: the hamlet-path floor
+    then gave 100% on one full run and 99.93% on the next, from the same code, depending on which entries had
+    last been written by a path that records coverage and which by a path that does not.
+
+    `_coverage_is_current` cannot catch it - it asks whether the measured files still EXIST, and here they
+    all do; they have simply moved. So the rule is the blunt one: no coverage unless it was just recorded."""
+    eng, gen, out = _fixture(tmp_path)
+    _with_engine(monkeypatch, tmp_path, eng)
+    deps = gencache.run_and_record(str(gen))
+    cov = tmp_path / "some.coverage"
+    cov.write_bytes(b"not really coverage, but this test is about the FILE's lifetime")
+    gencache.store(str(gen), deps, coverage_data=str(cov))
+    stored = Path(gencache.CACHE_DIR, "toy", gencache.COVERAGE_NAME)
+    assert stored.is_file(), "the gate's miss path stores the coverage the next hit would replay"
+
+    stamp = Path(gencache.CACHE_DIR, "toy", gencache.COVERAGE_KEY_NAME)
+    assert stamp.read_text().strip() == json.loads(Path(gencache.CACHE_DIR, "toy", "meta.json").read_text())["key"]
+    assert gencache._coverage_stamp_matches(str(gen)), "freshly recorded coverage is replayable"
+
+    # ...and a re-store WITHOUT coverage drops it, rather than pairing it with the new key
+    gencache.store(str(gen), deps)
+    assert not stored.exists(), "stale coverage must not survive beside a freshly written key"
+    assert not stamp.exists(), "and the stamp goes with it"
+
+    # AN ENTRY POISONED BEFORE THIS LANDED heals itself: coverage present, no stamp, so it is not replayed.
+    # Every clone in existence held some of these, and nothing in the entry said so.
+    gencache.store(str(gen), deps, coverage_data=str(cov))
+    stamp.unlink()
+    assert not gencache._coverage_stamp_matches(str(gen)), "an unstamped entry is regenerated, never replayed"
