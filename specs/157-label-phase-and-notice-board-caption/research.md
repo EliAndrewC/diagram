@@ -240,3 +240,37 @@ already failing something else, which is why the pass count falls by five rather
 counts as a gain rather than a wash: the pre-change engine shipped one caption outside the frame and
 one on a lane tread across 48 seeds. The first is fixed by the denser ladder finding a seat the
 coarse one stepped over. The second is unchanged - a different rule, on a seed where no seat clears.
+
+## R8 - the six seeds the new check caught, and the third instance of one flaw
+
+The check was written from the pool, where every board has somewhere good to put its caption. The
+48-seed cohort is what a rule is FOR, and it caught six boards the pool could not show:
+
+| seed | lateral, px | bound |
+|---|---|---|
+| 10 | 12.4 | 11.3 |
+| 26 | 17.7 | 11.3 |
+| 19 | 28.3 | 10.7 |
+| 36 | 28.4 | 11.0 |
+| 20 | 32.3 | 11.0 |
+| 23 | 36.3 | 11.3 |
+
+**None of them is one of the in-gate ratchet's seeds (41-44), so the gate was never going to see
+this.** That is the cohort earning its keep: 48 maps nobody has looked at, against 5 that have been
+read repeatedly.
+
+**They are all one mechanism, and it is a flaw this function has now grown three times.** Those
+numbers are the OLD coarse ladder's own lateral reach - `_chw + hw + 6` = 38.88 px - after
+`pull_caption_toward` closes half the remaining air. Every one of the six fell through the dense
+ranked search (no seat anywhere met the 3 ft lane target) into `pick_caption_seat`'s fallback, which
+is `max(legal, key=box_clearance)`: an unbounded maximize with no lateral term at all. The file's own
+comments already name the shape twice - *"SATISFICE, DO NOT MAXIMIZE ... the search did not fail to
+find good ground - it found it, scored it, and threw it away"* and *"THE HUG CAP BOUNDS THE SEARCH,
+IT DOES NOT MERELY JUDGE IT AFTERWARDS ... that is the SAME unbounded-maximize flaw one level down"*.
+This is its third instance, one level down again.
+
+**The fix gives up the MARGIN before it gives up the board.** The satisfice target is 3 ft; gate 0617
+requires 2. A board that cannot reach 3 anywhere now takes a second pass over the same dense ladder,
+in the same least-lateral-first order, against the rule's actual floor of 2 ft - so it surrenders the
+one foot of headroom rather than its position beside the thing it names, and it still cannot fail
+0617. Only if even 2 ft is unreachable does the old thirty-seat fallback run, unchanged.
