@@ -54,9 +54,14 @@ def test_a_map_is_immune_to_an_upstream_change_in_the_number_of_random_draws():
         with open(gen[: -len(".gen.py")] + ".json") as fh:
             return fh.read()
 
+    # TWO ROLLS, NOT THREE (feature 158). The claim needs one perturbed roll and one clean one; the
+    # third existed only to leave the committed manifest as the unperturbed run wrote it, and running
+    # the PERTURBED one first does that for free. Measured 2026-08-29: 214 s -> ~143 s, the largest
+    # single item in the full tier.
+    perturbed = once(1)
     clean = once(0)
-    assert once(1) == clean, "an upstream change in the number of random draws re-rolled the map - see CLAUDE.md 'RANDOMNESS IS POSITIONAL OR SCOPED'"
-    assert once(0) == clean  # ...and leave the committed manifest as the unperturbed run wrote it
+    assert perturbed == clean, "an upstream change in the number of random draws re-rolled the map - see CLAUDE.md 'RANDOMNESS IS POSITIONAL OR SCOPED'"
+    # ...and the clean roll ran LAST, so the committed manifest on disk is the unperturbed one.
 
 
 @pytest.mark.rolls_map

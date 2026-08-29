@@ -14,8 +14,11 @@ Two readings jump out of that table:
 
 1. **`make quick` has drifted.** Feature 147 measured the cheap loop at 26-29 s earlier the same day.
    It is 41.4 s here, and the cause is a single test (R2).
-2. **The coverage tracer is roughly half of tier 2.** The same tree costs 45 s untraced and 116 s
-   traced, and 28 minutes of the full tier's CPU goes through the same tracer.
+2. **Tier 2 looks like it is half coverage tracing** - 45 s untraced against 116 s traced - **and it
+   is not.** That reading is wrong and R5 is where it was corrected: the 116 s run had a COLD roll
+   cache in it, while `make durations` rolls no maps at all, so the two differ in two variables at
+   once. On a warm tree the same target is 16-23 s, and the tracer's share of it is small. Recorded
+   as the reading it was, because it is the one that sent this feature after `COVERAGE_CORE=sysmon`.
 
 **A PRE-EXISTING FAILURE IN THE FULL TIER, ledgered here, not caused by this feature** (constitution
 XIII - it was measured on the merge base, before any change):
@@ -63,3 +66,51 @@ acreage error 0.891 at every one of them.
 and `err` columns are the finding.) `plan.envelope` is not what clamps this fan, so "make the test
 settlement smaller" in the obvious sense buys nothing here. The cost is the PLOT COUNT, and the plot
 count is set by `plot_across` and `row_step` - the two arguments the test itself passes.
+
+## R4. What the plot grid buys (the lever that DOES work)
+
+Same test, same branch, same envelope; only `plot_across` and `row_step` change. Wall times were
+taken with other work on the machine and are indicative; `plots` and `err` are exact.
+
+    across=46   step=(26,30)   fit_field 35.0 s   plots=1985   err 0.891
+    across=92   step=(52,60)   fit_field 16.5 s   plots= 539   err 0.891
+    across=138  step=(78,90)   fit_field 17.2 s   plots= 257   err 0.891
+    across=184  step=(104,120) fit_field 13.1 s   plots= 148   err 0.891
+    across=276  step=(156,180) fit_field  4.9 s   plots=  30   err 0.969
+
+138 was taken: it is a 7.7x cut in the plot count with the acreage error, the winning aspect and the
+legality verdict all unchanged, and it keeps a fan large enough that the carve is doing real work.
+276 was declined - the error moves, which means the fan has stopped being the thing the branch is
+about. `make cov-file FILE=tests/hamletgen/test_seed_branches_147.py MOD=l7r/diagram/hamletgen/water.py`
+confirms lines 128-135 (the re-search branch this test exists for) are still executed.
+
+## R5. The coverage core: sysmon is slower here
+
+Python 3.14, coverage 7.15.2, line coverage only (no `branch = true`) - the configuration
+`sys.monitoring` exists for. Same tree, same selection, back to back:
+
+| core | wall | CPU | coverage table |
+|---|---|---|---|
+| the C tracer (default) | **16.2 s** | 1 m 30 s | - |
+| `COVERAGE_CORE=sysmon` | **20.1 s** | 1 m 59 s | byte-identical to the above |
+
+REJECTED. And the premise behind trying it was itself wrong: the "coverage roughly doubles the gate"
+reading in R1 came from a baseline `make test` whose roll cache was cold. On a warm tree the tracer's
+share is small, so there was never a large win to chase here.
+
+## R6. The proof census, corrected
+
+Round 2 of `spec-fidelity` reported 42 registered checks with no firing proof of any kind. That count
+looked at `tests/gate/test_scripted_fixtures.py` and `pool/regressions/` only; it did not count
+`tests/check_village/test_segments_*.py`, where most checks are proved to fire on a hand-built
+manifest. Measured over all three sources:
+
+| | before this feature | after |
+|---|---|---|
+| registered check names | 154 | 151 |
+| with a firing proof somewhere | 144 | 138 |
+| with none | **10** | **13** |
+
+Six of the 13 are a naming artifact rather than a check: `capital_/city_/town_/village_has_kosatsuba`
+and the `*_has_no_headman` family are ONE segment each emitting `check(f"{scale}_has_...")`, whose
+hamlet variant is live and proved. Nothing to delete and nothing to save.

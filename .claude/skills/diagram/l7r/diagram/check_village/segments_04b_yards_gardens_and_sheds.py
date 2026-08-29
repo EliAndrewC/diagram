@@ -102,13 +102,6 @@ def _seg_0285_007__fdef(*, fdef: Any = _UNBOUND, fields: Any = _UNBOUND, scale: 
     return _kept(locals(), ('fdef', 'fields_ol'))
 
 
-def _seg_0285_008__yards(*, M: Any = _UNBOUND, scale: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 0285.008 (yards) - body verbatim from _seg_0285__wells_clear_of_shrine_and_torii (feature 024 per-check split; guards re-evaluated in the body, see split_oversized.py)."""
-    if scale in ('town', 'village', 'hamlet') and scale in ('town', 'village', 'hamlet', 'city'):
-        yards = M.get("threshing_yards", [])
-    return _kept(locals(), ('yards',))
-
-
 # the HEADMAN is NOT exempt (GM 2026-07-21, caught on Hikari no Sato): the old role=="headman"
 # carve-out here existed only because the dispersed-style headman() predated the homestead
 # bundle and drew a lone house - the check was written around the bug. The headman is the
@@ -151,13 +144,6 @@ def _seg_0285_020__k(*, M: Any = _UNBOUND, k: Any = _UNBOUND, s: Any = _UNBOUND,
 # wall, so every one that exists must ABUT a farmhouse - never float detached in the courtyard (that
 # reads as a shed nobody owns). ~30% of farms carry one (a wealth marker), so it is not REQUIRED, but
 # any present must be attached. Guards the regression where a move-procedure strands the shed.
-
-
-def _seg_0285_024__sheds(*, M: Any = _UNBOUND, scale: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 0285.024 (sheds) - body verbatim from _seg_0285__wells_clear_of_shrine_and_torii (feature 024 per-check split; guards re-evaluated in the body, see split_oversized.py)."""
-    if scale in ('town', 'village', 'hamlet') and scale in ('town', 'village', 'hamlet', 'city'):
-        sheds = M.get("farm_sheds", [])
-    return _kept(locals(), ('sheds',))
 
 
 # DOORYARD KITCHEN GARDEN (saien). Every farmstead kept a small intensive vegetable plot for

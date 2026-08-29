@@ -104,6 +104,25 @@ not read `.gitignore`.
   negative fixture (`gate/test_scripted_fixtures.py`: a cached roll plus one deliberate break, targeted),
   not on a frozen manifest from the hand-placement era; `pool/regressions/` holds what remains of that
   corpus until the GM's ruling on the legacy tiers. Mode A fixtures are frozen bad SVGs in `fixtures/`.
+- **THE RECORD OF WHAT HAS FIRED BEATS THE DATAFLOW VERDICT (feature 158, 2026-08-29).** `make
+  check-census` answers one question - does any stage after this check's placer change an input it
+  reads - and a NO makes the check a retirement CANDIDATE. It is not a ruling, because the census
+  cannot see a placer that fails softly: it reads the manifest, not the code. Before retiring a
+  candidate, read the placer and grep the record. Worked example, both directions, in one feature:
+  `bridges_align_with_their_way` was retired (it re-derived the crossings from the same source the
+  placer uses, and its only evidence in the whole repository was two decks a person placed by hand on
+  maps no generator can produce), while `bridges_span_their_water` - the same family, the same
+  mechanical verdict - was KEPT, because `hamletgen/ways.py` records it catching the SCRIPTED placer
+  four separate times on oblique crossings. The candidate list is where the audit starts, not where
+  it ends.
+- **The hand-era corpus at the LEGACY tiers is gone (feature 158, GM 2026-08-29:** *"there is no
+  reason to see what would happen if we encountered a type of map, which is literally impossible to
+  produce any longer"***).** Every fixture in `pool/regressions/` declaring `town`, `city`, `capital`
+  or `village` scale was deleted (26 of them), along with `tests/tier_city/test_frozen_pool_gate.py`
+  and the five frozen-pool coverage carriers in `tests/full/`. The fixtures that declare NO tier stay:
+  those are synthetic manifests captured from unit tests - hand-BUILT, not hand-PLACED - and they are
+  the cheapest negative fixtures there are. When a tier converts to scripted generation it gets
+  scripted negative fixtures, not a restored corpus.
 
 ## `tests/` is invisible to the generation cache, on purpose
 

@@ -1,0 +1,6 @@
+{
+  "utc": "20260829T210039Z",
+  "guard": "pair-hooks",
+  "what": "gate alone",
+  "reason": "a RE-TAKEN regression baseline on unmodified code at main"
+}

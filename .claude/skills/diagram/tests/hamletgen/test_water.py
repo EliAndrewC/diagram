@@ -197,6 +197,9 @@ def test_a_saturated_aspect_stops_after_the_probe_instead_of_bisecting_a_fan_it_
 
     plan = a_plan()
     plan.target_acres = 500.0  # far past anything this envelope can hold: every aspect saturates
-    (bad, err), net = _fit_at_aspect(plan, (700.0, 300.0), 3, 46.0, (26.0, 30.0), 1.0, 0.06, 9, probe=True)
+    # ...on a COARSE plot grid, for the reason recorded at `test_the_fit_gives_a_saturated_best_aspect`
+    # (feature 158): the probe's decision is about the TARGET being unreachable, not about how many
+    # plots a carve lays, and the plot count is all this test's seconds were.
+    (bad, err), net = _fit_at_aspect(plan, (700.0, 300.0), 3, 138.0, (78.0, 90.0), 1.0, 0.06, 9, probe=True)
     assert not bad and err > 0.5, "the best legal fan is kept, and it is nowhere near the ask"
     assert net["plots"], "and it is a real fan, not an empty one"

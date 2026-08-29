@@ -418,3 +418,17 @@ def test_bamboo_stands_clear_of_paddies_fires_and_passes():
     paddy = [_field("f", 500, 300, 900, 700)]  # the stand's south-east corner lies in it
     assert "bamboo_stands_clear_of_paddies" in f_only(manifest(houses=[house(x=400, y=400)], fields=paddy, bamboo_stands=[stand]), "bamboo_stands_clear_of_paddies")
     assert "bamboo_stands_clear_of_paddies" not in f_only(manifest(houses=[house(x=400, y=400)], fields=[_field("f", 600, 400, 900, 700)], bamboo_stands=[stand]), "bamboo_stands_clear_of_paddies")
+
+
+def test_a_hilltop_shrine_needs_no_dug_well_of_its_own():
+    """`remote_shrine_has_own_well`'s HILL arm (feature 158). A shrine set apart from the houses keeps
+    its own draw-point for temizu - unless it stands on the hill, where it takes a spring or a rock
+    basin and no one digs a well up a slope. The arm was reached only by frozen hand-era manifests.
+
+    Both halves are asserted, because a `continue` that exempts everything looks exactly like one that
+    exempts the right thing."""
+    hall = {"x": 800, "y": 200, "w": 40, "h": 30, "kind": "shrine"}
+    on_the_hill = manifest(religious=[hall], hill=[800, 200, 160, 120], houses=[house(200, 800)])
+    assert "remote_shrine_has_own_well" not in f_only(on_the_hill, "remote_shrine_has_own_well")
+    off_the_hill = manifest(religious=[hall], houses=[house(200, 800)])
+    assert "remote_shrine_has_own_well" in f_only(off_the_hill, "remote_shrine_has_own_well"), "set apart, on flat ground, with no well: it owes one"

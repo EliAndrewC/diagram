@@ -50,7 +50,7 @@ def _deck_quad(cx: float, cy: float, w: float, h: float, deg: float) -> list[Pt]
     return [(cx + dx * ca - dy * sa, cy + dx * sa + dy * ca) for dx, dy in ((-w / 2, -h / 2), (w / 2, -h / 2), (w / 2, h / 2), (-w / 2, h / 2))]
 
 
-def _quads_overlap(p: Any, q: Any) -> bool:  # separating-axis rect overlap (matches bridges_clear_of_houses)
+def _quads_overlap(p: Any, q: Any) -> bool:  # separating-axis rect overlap (a deck must not sit on a home; the placer is the guarantee since feature 158)
     for poly in (p, q):
         for i in range(4):
             x1, y1 = poly[i]
@@ -94,7 +94,7 @@ def seat_deck(p: Pt, rot: float, span: float, rw: float, wpts: Any, need: float,
     WHY SKEW AND NOT MORE GROWTH (2026-08-19): the growth loop lengthens the deck ALONG THE WAY, and at a
     near-parallel crossing that drives its ends further along the water instead of clear of it, so no
     ceiling on the growth could ever have worked. A real bridge is built as square to the stream as the
-    road allows - the track bends onto the deck - and `bridges_align_with_their_way` already permits
+    road allows - the track bends onto the deck - which the deck's own seating already permits
     BRIDGE_ROT_TOL = 8 deg between deck and way, so 7 deg of skew needs no rule change: it took seed 47
     from an effective 16.6 deg to 23.6 and the span required from 44.6 px to about 31.
 
@@ -168,7 +168,7 @@ class BridgesMixin:
         water beside it (Nagahara's was 15 px / 24 deg off, the same way). Both were hand-placed
         because this pass could not SEE the crossing - the RING ROAD was not a carried way here and
         the cargo CANAL was not a watercourse - so both are scanned now, and the checks
-        `roads_bridge_water` + `bridges_align_with_their_way` re-derive the same crossings from the
+        `roads_bridge_water` re-derives the same crossings from the
         manifest. Anything this pass finds is aligned by construction; hand-place a deck only for a
         crossing this pass genuinely cannot see, and expect the alignment check to test it."""
         carried = bridge_carried_ways(self.M)

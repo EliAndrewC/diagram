@@ -1,45 +1,8 @@
 """Split from test_checks.py by feature 025 - see tests/check_village/CLAUDE.md for the index."""
 
-from tests.check_village._builders import _bridge_map, _skew_bridge_map, f_only, manifest
-
-
-def test_bridges_align_with_their_way_passes_a_solved_deck():
-    # a deck seated on the crossing and bearing with the road - what s.bridges() produces
-    assert "bridges_align_with_their_way" not in f_only(_skew_bridge_map(), "bridges_align_with_their_way")
-    # ...and a deck may point either way along the road: a plank has no forward direction
-    assert "bridges_align_with_their_way" not in f_only(_skew_bridge_map(rot=180), "bridges_align_with_their_way")
-
-
-def test_bridges_align_with_their_way_fires_on_a_deck_that_carries_nothing():
-    # a deck over water with no way on it at all: either the way or the watercourse is unrecorded
-    M = _bridge_map([{"x": 500, "y": 500, "rot": 0, "span": 37, "w": 26}])
-    del M["road"]
-    assert "bridges_align_with_their_way" in f_only(M, "bridges_align_with_their_way")
-
-
-def test_bridges_align_with_their_way_exempts_standalone_footplanks():
-    """A `foot` plank is carried by no way and crosses its ditch PERPENDICULAR by construction, so
-    the alignment rule would fire on every correct one. Its own rules are long_ditches_have_a_
-    footbridge and footbridges_reach_useful_ground."""
-    M = _skew_bridge_map(rot=90, foot=True)  # square across the road it is nowhere near carrying
-    assert "bridges_align_with_their_way" not in f_only(M, "bridges_align_with_their_way")
-
+from tests.check_village._builders import f_only, manifest
 
 # ---- feature 021: the capital housing layer ---------------------------------------------------
-
-
-def test_bridges_align_with_their_way():
-    """A deck seated on its crossing but turned across the road it carries. The seat and the skew are
-    separate failures on purpose - `seat_off` names a deck in the wrong PLACE, this one names a deck at the
-    wrong ANGLE, and a hand-placed deck is usually both."""
-    M = manifest(
-        roads=[{"pts": [[500, 100], [500, 900]], "w": 20}],
-        streams=[{"poly": [[100, 500], [900, 500]], "w": 12}],
-        bridges=[{"x": 500, "y": 500, "rot": 40.0, "span": 40, "w": 10}],
-    )
-    assert "bridges_align_with_their_way" in f_only(M, "bridges_align_with_their_way")
-    square = {**M, "bridges": [{"x": 500, "y": 500, "rot": 90.0, "span": 40, "w": 10}]}
-    assert "bridges_align_with_their_way" not in f_only(square, "bridges_align_with_their_way")
 
 
 def test_waterside_works_follow_the_bank():
