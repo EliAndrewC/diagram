@@ -1388,22 +1388,6 @@
       "always": false
     },
     {
-      "name": "_seg_0187__wall",
-      "free": [
-        "M"
-      ],
-      "writes": [
-        "wall",
-        "wall_z"
-      ],
-      "checks": [],
-      "needs": [
-        "M"
-      ],
-      "meta": false,
-      "always": false
-    },
-    {
       "name": "_seg_0198__road",
       "free": [
         "M"
@@ -2588,23 +2572,6 @@
       "always": false
     },
     {
-      "name": "_seg_0285_008__yards",
-      "free": [
-        "M",
-        "scale"
-      ],
-      "writes": [
-        "yards"
-      ],
-      "checks": [],
-      "needs": [
-        "M",
-        "scale"
-      ],
-      "meta": false,
-      "always": false
-    },
-    {
       "name": "_seg_0285_020__k",
       "free": [
         "M",
@@ -2616,23 +2583,6 @@
         "k",
         "others",
         "s"
-      ],
-      "checks": [],
-      "needs": [
-        "M",
-        "scale"
-      ],
-      "meta": false,
-      "always": false
-    },
-    {
-      "name": "_seg_0285_024__sheds",
-      "free": [
-        "M",
-        "scale"
-      ],
-      "writes": [
-        "sheds"
       ],
       "checks": [],
       "needs": [
@@ -3097,59 +3047,6 @@
         "houses",
         "plain",
         "scale"
-      ],
-      "meta": false,
-      "always": false
-    },
-    {
-      "name": "_seg_0286_000__cems",
-      "free": [
-        "M",
-        "scale"
-      ],
-      "writes": [
-        "cems"
-      ],
-      "checks": [],
-      "needs": [
-        "M",
-        "scale"
-      ],
-      "meta": false,
-      "always": false
-    },
-    {
-      "name": "_seg_0286_007__wall",
-      "free": [
-        "M",
-        "scale"
-      ],
-      "writes": [
-        "wall"
-      ],
-      "checks": [],
-      "needs": [
-        "M",
-        "scale"
-      ],
-      "meta": false,
-      "always": false
-    },
-    {
-      "name": "_seg_0286_008___inside",
-      "free": [
-        "px",
-        "py",
-        "scale",
-        "wall"
-      ],
-      "writes": [
-        "_inside"
-      ],
-      "checks": [],
-      "needs": [
-        "scale",
-        "wall"
       ],
       "meta": false,
       "always": false
@@ -4099,181 +3996,6 @@
       "always": false
     },
     {
-      "name": "_seg_0334__bridges",
-      "free": [
-        "M"
-      ],
-      "writes": [
-        "bridges"
-      ],
-      "checks": [],
-      "needs": [
-        "M"
-      ],
-      "meta": false,
-      "always": false
-    },
-    {
-      "name": "_seg_0335____1",
-      "free": [
-        "M",
-        "w"
-      ],
-      "writes": [
-        "_",
-        "w",
-        "waters_b"
-      ],
-      "checks": [],
-      "needs": [
-        "M"
-      ],
-      "meta": false,
-      "always": false
-    },
-    {
-      "name": "_seg_0336____2",
-      "free": [
-        "M",
-        "c"
-      ],
-      "writes": [
-        "_",
-        "c",
-        "carried_b"
-      ],
-      "checks": [],
-      "needs": [
-        "M"
-      ],
-      "meta": false,
-      "always": false
-    },
-    {
-      "name": "_seg_0337__xings_b",
-      "free": [],
-      "writes": [
-        "xings_b"
-      ],
-      "checks": [],
-      "needs": [],
-      "meta": false,
-      "always": false
-    },
-    {
-      "name": "_seg_0338__i_3",
-      "free": [
-        "carried_b",
-        "i",
-        "j",
-        "p",
-        "ra",
-        "rb",
-        "rpts",
-        "waters_b",
-        "wpts",
-        "xings_b"
-      ],
-      "writes": [
-        "i",
-        "j",
-        "p",
-        "ra",
-        "rb",
-        "rpts",
-        "wpts",
-        "xings_b"
-      ],
-      "checks": [],
-      "needs": [
-        "carried_b",
-        "waters_b",
-        "xings_b"
-      ],
-      "meta": false,
-      "always": false
-    },
-    {
-      "name": "_seg_0341__BRIDGE_ROT_TOL",
-      "free": [],
-      "writes": [
-        "BRIDGE_ROT_TOL",
-        "BRIDGE_SEAT_TOL"
-      ],
-      "checks": [],
-      "needs": [],
-      "meta": false,
-      "always": false
-    },
-    {
-      "name": "_seg_0342__crooked",
-      "free": [],
-      "writes": [
-        "crooked"
-      ],
-      "checks": [],
-      "needs": [],
-      "meta": false,
-      "always": false
-    },
-    {
-      "name": "_seg_0343__b",
-      "free": [
-        "BRIDGE_ROT_TOL",
-        "BRIDGE_SEAT_TOL",
-        "b",
-        "bridges",
-        "crooked",
-        "deck_skew",
-        "heading",
-        "near_x",
-        "px_",
-        "py_",
-        "seat_off",
-        "xings_b"
-      ],
-      "writes": [
-        "b",
-        "crooked",
-        "deck_skew",
-        "heading",
-        "near_x",
-        "px_",
-        "py_",
-        "seat_off"
-      ],
-      "checks": [],
-      "needs": [
-        "BRIDGE_ROT_TOL",
-        "BRIDGE_SEAT_TOL",
-        "bridges",
-        "crooked",
-        "heading",
-        "px_",
-        "py_",
-        "xings_b"
-      ],
-      "meta": false,
-      "always": false
-    },
-    {
-      "name": "_seg_0344__bridges_align_with_their_way",
-      "free": [
-        "check",
-        "crooked"
-      ],
-      "writes": [],
-      "checks": [
-        "bridges_align_with_their_way"
-      ],
-      "needs": [
-        "check",
-        "crooked"
-      ],
-      "meta": false,
-      "always": false
-    },
-    {
       "name": "_seg_0360__b_ftpx",
       "free": [
         "meta"
@@ -5032,23 +4754,6 @@
       "always": false
     },
     {
-      "name": "_seg_0413__bridges_seat_on_water",
-      "free": [
-        "b_dry",
-        "check"
-      ],
-      "writes": [],
-      "checks": [
-        "bridges_seat_on_water"
-      ],
-      "needs": [
-        "b_dry",
-        "check"
-      ],
-      "meta": false,
-      "always": false
-    },
-    {
       "name": "_seg_0414__bridges_span_their_water",
       "free": [
         "b_short",
@@ -5112,76 +4817,6 @@
         "meta",
         "stranded",
         "unplanked"
-      ],
-      "meta": false,
-      "always": false
-    },
-    {
-      "name": "_seg_0416__h_3",
-      "free": [
-        "M",
-        "h"
-      ],
-      "writes": [
-        "h",
-        "house_corners"
-      ],
-      "checks": [],
-      "needs": [
-        "M"
-      ],
-      "meta": false,
-      "always": false
-    },
-    {
-      "name": "_seg_0417__on_house",
-      "free": [],
-      "writes": [
-        "on_house"
-      ],
-      "checks": [],
-      "needs": [],
-      "meta": false,
-      "always": false
-    },
-    {
-      "name": "_seg_0418__b_2",
-      "free": [
-        "M",
-        "b",
-        "deck",
-        "hc",
-        "house_corners",
-        "on_house"
-      ],
-      "writes": [
-        "b",
-        "deck",
-        "hc",
-        "on_house"
-      ],
-      "checks": [],
-      "needs": [
-        "M",
-        "house_corners",
-        "on_house"
-      ],
-      "meta": false,
-      "always": false
-    },
-    {
-      "name": "_seg_0419__bridges_clear_of_houses",
-      "free": [
-        "check",
-        "on_house"
-      ],
-      "writes": [],
-      "checks": [
-        "bridges_clear_of_houses"
-      ],
-      "needs": [
-        "check",
-        "on_house"
       ],
       "meta": false,
       "always": false

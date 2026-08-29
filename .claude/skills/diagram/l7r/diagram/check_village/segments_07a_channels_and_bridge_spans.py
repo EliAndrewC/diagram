@@ -3,9 +3,7 @@
 import math
 from typing import Any
 
-from l7r.diagram.settlement import sat_overlap
-
-from .common_01_geometry import Poly, Pt, _struct_rect, point_in_poly, poly_dist, rect_corners, seg_dist, seg_intersect, segments_cross
+from .common_01_geometry import Poly, Pt, point_in_poly, poly_dist, seg_dist, seg_intersect, segments_cross
 from .common_02_overlap_policy import FOOT_BANK_REACH, _ditch_plankable, _footbridge_useful_ground
 from .common_03_capacity import _UNBOUND, _kept
 
@@ -135,17 +133,6 @@ def _seg_0412__towpath_hugs_the_bank(
     return _kept(locals(), ('ap9', 'aq9', 'aq_bad', 'd9', 'i9', 'mo9', 'p9', 'sg9', 'sl_bad', 'sl_waters', 'tow_bad', 'tp9', 'ty9', 'ty_bad', 'wp9', 'ww9'))
 
 
-def _seg_0413__bridges_seat_on_water(*, b_dry: Any = _UNBOUND, check: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 413 (bridges_seat_on_water) - body verbatim from the legacy gate() (feature 022)."""
-    check(
-        "bridges_seat_on_water",
-        not b_dry,
-        f"deck(s) seated on NO watercourse: {sorted(set(b_dry))[:4]} - the way's crossing moved and the deck kept "
-        f"its old seat; recompute the way x water segment intersection and re-seat the deck there (or delete it)",
-    )
-    return _kept(locals(), ())
-
-
 def _seg_0414__bridges_span_their_water(*, b_short: Any = _UNBOUND, check: Any = _UNBOUND) -> dict[str, Any]:
     """Gate segment 414 (bridges_span_their_water) - body verbatim from the legacy gate() (feature 022)."""
     check(
@@ -237,33 +224,6 @@ def _seg_0415__long_ditches_have_a_footbridge(
 # A plank bridge is overlap-EXEMPT in general (it intentionally sits ON the water it spans), but it must
 # never land on a FARMHOUSE - a plank crosses a ditch, it does not sit on a home. Rotated-rect SAT of each
 # bridge deck (span x deck-width) against every house footprint.
-
-
-def _seg_0416__h_3(*, M: Any = _UNBOUND, h: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 416 (h, house_corners) - body verbatim from the legacy gate() (feature 022)."""
-    house_corners = [rect_corners(_struct_rect(h)) for h in M.get("houses", [])]
-    return _kept(locals(), ('h', 'house_corners'))
-
-
-def _seg_0417__on_house() -> dict[str, Any]:
-    """Gate segment 417 (on_house) - body verbatim from the legacy gate() (feature 022)."""
-    on_house = []  # type: ignore[var-annotated]
-    return _kept(locals(), ('on_house',))
-
-
-def _seg_0418__b_2(*, M: Any = _UNBOUND, b: Any = _UNBOUND, deck: Any = _UNBOUND, hc: Any = _UNBOUND, house_corners: Any = _UNBOUND, on_house: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 418 (b, deck, hc, on_house) - body verbatim from the legacy gate() (feature 022)."""
-    for b in M.get("bridges", []):
-        deck = rect_corners({"x": b["x"], "y": b["y"], "w": b["span"], "h": b["w"], "rot": b.get("rot", 0)})
-        if any(sat_overlap(deck, hc) for hc in house_corners):
-            on_house.append((round(b["x"]), round(b["y"])))
-    return _kept(locals(), ('b', 'deck', 'hc', 'on_house'))
-
-
-def _seg_0419__bridges_clear_of_houses(*, check: Any = _UNBOUND, on_house: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 419 (bridges_clear_of_houses) - body verbatim from the legacy gate() (feature 022)."""
-    check("bridges_clear_of_houses", not on_house, f"{len(on_house)} plank bridge(s) overlap a farmhouse at {on_house[:4]} - a plank spans a ditch, it must not sit on a home")
-    return _kept(locals(), ())
 
 
 # WHERE WATERCOURSES MEET they must MERGE like a confluence, not stack opacity into a dark seam.

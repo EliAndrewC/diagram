@@ -17,6 +17,15 @@ explicit roster used to provide (clause 14: move the safety property into tests 
    checks went under 141 and both left their whole derivation behind - a pairwise quad comparison and
    a grid scan of every paddy, running on every gate and read by nothing. A DELETION is the one edit
    the oracle cannot catch drifting, so it is spelled out here: those segments no longer exist.
+   2026-08-29, feature 158 - TWENTY-FIVE rows deleted. Nineteen went with the four bridge checks the
+   audit retired (`bridges_align_with_their_way`, `bridges_seat_on_water`, `bridges_span_their_water`,
+   `bridges_clear_of_houses`): 0334-0338 and 0341-0344 in 06a, 0360-0363 in 06b, 0416-0419 in 07a -
+   the four emitters plus the derivation subgraph that fed nothing else, including 0338's
+   ways x waters double loop. The other six (0187, 0285.008, 0285.024, 0286.000, 0286.007, 0286.008)
+   were ALREADY dead before this feature and are a defect fixed where it was found (Principle XIV):
+   each computes a value that no surviving segment declares as an input, so the gate has been running
+   them on every map for nothing. The cut was proved CLOSED before it was made - no surviving segment
+   reads a name that only a deleted segment writes.
 2. Order: the fixture's order is a subsequence of the derived order - the execution contract.
 3. Structural invariants: literal-return shape, unique keys, needs within free, META_CHECKS.
 4. Fire-proofs: every guard demonstrably fails on a synthetic violation (a checker never seen

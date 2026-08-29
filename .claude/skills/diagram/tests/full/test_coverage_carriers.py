@@ -3,7 +3,6 @@ through the whole gate so deep branches execute. They prove nothing at the merge
 coverage floor (the Makefile's `test` target defers the floors to FULL), and the largest costs 10.6 s; so they
 run where the floors are enforced: `make done FULL=1` and the AWS check. Verdict-free as before."""
 
-import json
 import os
 
 import pytest

@@ -7,32 +7,7 @@ segment put its whole body under the hamlet floor. Execution order is by the seg
 
 from typing import Any
 
-from .common_01_geometry import point_in_poly
 from .common_03_capacity import _UNBOUND, _kept
-
-
-def _seg_0286_000__cems(*, M: Any = _UNBOUND, scale: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 0286.000 (cems) - body verbatim from _seg_0286__cemetery_clear_of_shrine (feature 024 per-check split; guards re-evaluated in the body, see split_oversized.py)."""
-    if scale in ('village', 'town', 'city', 'capital'):
-        cems = M.get("cemeteries", [])
-    return _kept(locals(), ('cems',))
-
-
-def _seg_0286_007__wall(*, M: Any = _UNBOUND, scale: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 0286.007 (wall) - body verbatim from _seg_0286__cemetery_clear_of_shrine (feature 024 per-check split; guards re-evaluated in the body, see split_oversized.py)."""
-    if scale in ('village', 'town', 'city', 'capital'):
-        wall = M.get("wall")
-    return _kept(locals(), ('wall',))
-
-
-def _seg_0286_008___inside(*, px: Any = _UNBOUND, py: Any = _UNBOUND, scale: Any = _UNBOUND, wall: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 0286.008 (_inside) - body verbatim from _seg_0286__cemetery_clear_of_shrine (feature 024 per-check split; guards re-evaluated in the body, see split_oversized.py)."""
-    if scale in ('village', 'town', 'city', 'capital'):
-
-        def _inside(px: float, py: float) -> bool:
-            return bool(wall) and point_in_poly(px, py, wall)
-
-    return _kept(locals(), ('_inside',))
 
 
 def _seg_0286_018__pond(*, M: Any = _UNBOUND, scale: Any = _UNBOUND) -> dict[str, Any]:
