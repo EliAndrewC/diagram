@@ -27,7 +27,11 @@ from l7r.diagram.hamletgen.hinterland import open_ground_patches
 
 @pytest.mark.rolls_map
 def test_an_oversized_coppice_is_shrunk_onto_the_sheet_rather_than_dropped() -> None:
-    spec = hg.driver.cohort_specs(8, first_seed=41)[0]
+    # MEMBER 1, NOT 0. Which members have open ground for a wood moves with the engine - member 0
+    # stopped yielding any parcel when feature 134's work landed - and the rung is not member-specific:
+    # most members walk it. This names one that has ground to shrink into, and if a future engine
+    # change takes that away the test FAILS rather than quietly stopping covering the rung.
+    spec = hg.driver.cohort_specs(8, first_seed=41)[1]
     plan = hg.plan_site(spec)
     s = hg.build(plan)
 
