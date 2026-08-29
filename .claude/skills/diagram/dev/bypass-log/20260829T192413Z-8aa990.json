@@ -1,0 +1,6 @@
+{
+  "utc": "20260829T192413Z",
+  "guard": "pair-hooks",
+  "what": "gate alone",
+  "reason": "no review owed: docs-only delta - one future-work file gains two deferred entries; no engine code and no manifest touched"
+}

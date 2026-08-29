@@ -1,0 +1,6 @@
+{
+  "utc": "20260829T191538Z",
+  "guard": "pair-hooks",
+  "what": "gate alone",
+  "reason": "restoring the pre-experiment placer state after a measured-and-reverted relaxation"
+}

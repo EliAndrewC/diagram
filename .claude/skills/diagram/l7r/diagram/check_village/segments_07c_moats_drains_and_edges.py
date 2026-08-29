@@ -499,7 +499,23 @@ def _seg_0507__cx_1(
     for g in M.get("village_groves", []):
         r = g.get("r", 6)
         for cx, cy in g.get("clumps", []):
-            if any(seg_dist(cx, cy, p[k], p[k + 1]) < half + r for p, half in corridors for k in range(len(p) - 1)):
+            # THE TRUNK, NOT THE CANOPY (GM 2026-08-29). This read `< half + r`, i.e. it demanded the
+            # whole CROWN clear the tread - and nothing ever justified that. The doctrine's own words
+            # are about planting: "a path is bare trodden earth - you do not plant trees on it", which
+            # is a statement about where a trunk stands. No source is cited for a canopy rule, and the
+            # GM's ruling is the physical one: "footpaths can run underneath tree canopies all the
+            # time ... those run through actual forests even deep into the woods. We need to make sure
+            # that the trunks of the trees are not being laid in the middle of the paths. But that's
+            # about it." A woodland path IS a path under canopy.
+            #
+            # The `r` term also made the rule strict in one direction and loose in another, which is
+            # the signature of measuring the wrong quantity: it failed maps for overhang while the
+            # nominal `r` understated the DRAWN crowns (scattered a median 8.1 ft off their clump
+            # centres, radii to 16.5 against a nominal 14), so a settlement-review's proposed fix was
+            # to tighten it further. That would have been correct engineering of the wrong
+            # requirement - forcing every map to clear canopy off every lane to satisfy a rule with
+            # nothing behind it.
+            if any(seg_dist(cx, cy, p[k], p[k + 1]) < half for p, half in corridors for k in range(len(p) - 1)):
                 tree_on_path.append((round(cx), round(cy)))
                 break
     return _kept(locals(), ('cx', 'cy', 'g', 'half', 'k', 'p', 'r', 'tree_on_path'))
@@ -531,7 +547,9 @@ def _seg_0509__groves_clear_of_lanes(*, check: Any = _UNBOUND, tree_on_path: Any
     check(
         "groves_clear_of_lanes",
         not tree_on_path,
-        f"tree/grove clump(s) sit ON a lane/street/road at {tree_on_path[:4]} - a path is bare trodden earth; keep vegetation off every corridor (the generator skips clumps within a lane's keep-out)",
+        f"tree/grove TRUNK(s) stand ON a lane/street/road at {tree_on_path[:4]} - you do not plant a tree in a path. "
+        f"Canopy OVER a way is fine and expected: a woodland path is a path under trees (GM 2026-08-29). What is measured "
+        f"here is the trunk position, not the crown's reach.",
     )
     return _kept(locals(), ())
 
