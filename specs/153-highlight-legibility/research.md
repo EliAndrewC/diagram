@@ -143,9 +143,23 @@ hard.** So only a mark that cannot be hit any other way is lifted, and today tha
 alone.
 
 **Measured after** (125,173 sample points, `document.elementFromPoint`, each box scrolled into view):
-sluice **88.6%** of its box, median 91.7%, worst 75.8%, **none under 25%**. Map-wide, every other class
-is unchanged to the sample except the ground immediately around the sluices - field ditch -300 points,
-mulberry dike -128, everything else +0.
+sluice **88.3%** of its box's bounding RECTANGLE, median 91.7%, worst 72.2%, **none under 25%**.
+`settlement-review` replayed it over the widened STROKE REGION instead - the part that is actually
+hittable, a rectangle's corners being outside a diagonal line's stroke - and got **96.0%, median 95.8%,
+worst 92.6%**. Both definitions reproduce the same 42.3-42.4% before the fix, so they agree about the
+mechanism and differ only in what counts as inside the box; the rectangle figure is the pessimistic one
+and is the number this feature is held to. Map-wide, every other class is unchanged to the sample except
+the ground immediately around the sluices - field ditch -300 points, mulberry dike -128.
+
+**AND THE LIFT BROKE ITS OWN RULE** (settlement-review round 2). "A box may beat empty ground; it may
+not beat another feature's drawn ink" - it took **88.4% of one pig sty's own footprint and 42.8% of a
+duck pen's**, because that sty's center lies 4.67 px from a lifted line whose half-width is 7.2, so the
+box simply contained it. The GM's "really hard to click on" had been moved off the sluice and onto a
+farm building. My own map-wide census could not see it: at a 7 px grid the sty is four sample points.
+The layer is now clipped (`HIT_KEEP_CLEAR`) against every recorded structure footprint - 75 holes for
+this map's 75 records, an even-odd path, since clipping is part of SVG hit-testing where masking is not.
+Measured after: every sty and pen back to its main-branch share to the tenth of a point (74.3% for the
+flagged one, against 11.6% before the clip), and the sluice keeps 88.3% - the clip costs it 0.3.
 
 **Sources:** none - a page interaction convention, with nothing physical behind it.
 
@@ -158,6 +172,15 @@ bank is "planted with willow and mulberry to bind it". FR-005's new sibling link
 straight from the fixed dike to the unfixed one.
 
 The planted rows are now their own string under the same clip, tagged `Planted("perimeter dike")`. The
-split re-opens the clip group, so the raster is no longer bit-for-bit: **18,640 px of 12,181,000 differ,
-every one of them by 1 or 2 of 255** - clip-edge antialiasing, nothing visible, no geometry moved. The
-manifest changes only in `z` ordinals (one more drawn string shifts every later index by one).
+split re-opens the clip group, so the raster is no longer bit-for-bit: **45,564 px of 12,181,000 differ,
+44,860 of them by 1, 699 by 2 and five by 3**, every one within 36.6 px of the dike outline -
+clip-edge antialiasing, no geometry moved. (An earlier version of this entry said 18,640 and a maximum
+of 2; `settlement-review` re-rendered both SVGs with the pipeline's own resvg flags and got the figures
+above. The wrong ones are left visible here rather than quietly corrected, because a measurement nobody
+can reproduce is worse than one that is openly wrong.) **In Chromium the two pages render pixel-identical
+unlit** - 0 differing pixels - so the antialiasing does not reach the interactive target at all. The
+manifest changes only in `z` ordinals (one more drawn string shifts every later index by one), and the
+two consumers of the shifted fields move together, so relative order holds.
+
+Rejoining the two emitted strings reproduces the original byte for byte (124,431 chars), which is the
+proof that this is a split and not an edit.

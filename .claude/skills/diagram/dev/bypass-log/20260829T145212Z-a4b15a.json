@@ -1,0 +1,6 @@
+{
+  "utc": "20260829T145212Z",
+  "guard": "pair-hooks",
+  "what": "gate alone",
+  "reason": "settlement-review round 2 ran on this content; its two errors are fixed and its four record corrections applied - docs/review-ledger.md and pool/hamlets/kuwabata.notes.md carry the record"
+}

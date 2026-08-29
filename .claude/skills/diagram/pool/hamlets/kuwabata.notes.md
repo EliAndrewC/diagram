@@ -261,3 +261,15 @@ not see: the perimeter dike's willow and mulberry still flattening to gold when 
 pond sluice's widened hit box winning only 42.4% of its own area because 49 of the 52 sluices are drawn
 on a field ditch whose group came later. Both fixed and re-measured (sluice 88.6%, worst 75.8%); the
 full row, including what was recorded rather than fixed, is in `docs/review-ledger.md`.
+
+**Round 2 of that review** verified both fixes on its own measurements and caught the sluice fix
+breaking the rule it was allowed under: the lifted box took 88.4% of a pig sty's own footprint and
+42.8% of a duck pen's. The layer is clipped against every recorded structure now (75 holes for this
+map's 75 records); each sty and pen is back to its main-branch share, and the sluice keeps 88.3% of its
+box (96.0% of the widened stroke region, on the reviewer's stricter definition of "inside").
+
+Two record corrections from that pass, both against my numbers: the raster delta from the dike split is
+**45,564 px of 12,181,000, max 3 of 255** (not 18,640 / max 2), and in a browser the two pages render
+pixel-identical unlit; and the perimeter dike is **4,591 ft along its crest** - the manifest's `outline`
+is the band polygon, 1.99x that, so the sibling text's "half an hour" was a double count and now reads
+"the better part of twenty".

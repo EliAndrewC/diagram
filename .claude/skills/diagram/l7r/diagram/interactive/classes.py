@@ -81,8 +81,12 @@ def _c(**kw: object) -> FeatureClass:
 #: One text for all four rolled crop-dike values - the distinction from the perimeter dike is identical
 #: whichever crop the knob rolled, and four copies is four chances for a later edit to fix one and leave
 #: three (settlement-review, 2026-08-29). The walk figures are measured on Kuwabata: the crop dike loops
-#: run a median 815 ft (3.1 min at 260 ft/min), the perimeter dike 9,157 ft.
-_CROP_VS_PERIMETER = "The crop dike is the wall AROUND one pond - six to ten meters of dredged mud, planted, and part of the loop that feeds the fish. The perimeter dike is the polder's own embankment, the one that holds the river off the whole settlement. You can walk a crop dike round in about three minutes; the polder's takes half an hour, and it is the reason the hamlet is dry."
+#: run a median 815 ft (3.1 min at 260 ft/min), the perimeter dike 4,591 ft along its CREST
+#: (18 min) - the walkable top of the bank, which is the thing you would walk. The first
+#: version of this line said half an hour, on the manifest's `outline`: that is the band POLYGON, outer
+#: face plus inner face returned, 1.99x the crest, so it counted the same walk twice
+#: (settlement-review round 2).
+_CROP_VS_PERIMETER = "The crop dike is the wall AROUND one pond - six to ten meters of dredged mud, planted, and part of the loop that feeds the fish. The perimeter dike is the polder's own embankment, the one that holds the river off the whole settlement. You can walk a crop dike round in about three minutes; the polder's takes the better part of twenty, and it is the reason the hamlet is dry."
 
 #: The near-homonym the GM's own list did not name, and the pair a reader is likeliest to confuse on a
 #: dike-pond map: both are "sluice", both are boards in a cut (settlement-review, 2026-08-29).

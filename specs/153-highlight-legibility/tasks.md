@@ -42,3 +42,13 @@ drawn, and nothing about their form, size, position or existence changes.
 - [x] **T14** (settlement-review nitpicks 1-3) the four crop-dike sibling paragraphs share one constant;
       the walk figure is measured (815 ft median, 3.1 min) rather than "a minute"; `landuse.py` uses the
       absolute import its neighbors use. `research: rendering`
+- [x] **T15** (settlement-review round 2, error 1) the lifted sluice layer swallowed a pig sty (88.4% of
+      its footprint) and a duck pen (42.8%) - it broke the rule its own docstring states. `HIT_KEEP_CLEAR`
+      clips the layer against every recorded structure; each is back to its main-branch share and the
+      sluice keeps 88.3% (research R7). `research: rendering`
+- [x] **T16** (settlement-review round 2, error 2 + questionables) the perimeter-dike walk figure was a
+      double count - the manifest's `outline` is the band polygon, 1.99x the `crest` it should be keyed
+      on - so "half an hour" is "the better part of twenty" (4,591 ft at 260 ft/min); the raster record
+      corrected to 45,564 px / max 3 with the browser-identical finding; both sluice measurement
+      definitions recorded; `HIT_PRIORITY`'s fallback no longer ranks a forgotten lifted class weakest.
+      `research: rendering`

@@ -484,3 +484,46 @@ def test_the_hit_layer_sits_above_the_ink_it_widens() -> None:
     page = render_page(strings, tags, "t")
     assert page.index('class="hit"') > page.index('stroke-width="2.4"')
     assert page.index('class="hit"') < page.index("</svg>")
+
+
+def test_a_lifted_box_gives_up_the_ground_a_structure_stands_on() -> None:
+    """Feature 153, settlement-review round 2. Lifting the sluice above the ink broke the rule the lift
+    is allowed under: its 14.4 px box swallowed 88.4% of one pig sty's own footprint and 42.8% of a duck
+    pen's - the sty's center sits 4.67 px from a lifted line whose half-width is 7.2. The layer is
+    clipped against every recorded structure, so it keeps the open ground and gives up the glyph."""
+    from l7r.diagram.interactive.page import hit_layer
+
+    sluice = '<line x1="90" y1="100" x2="110" y2="100" stroke="#37637F" stroke-width="2.4"/>'
+    manifest = {"pig_sties": [{"x": 100.0, "y": 100.0, "w": 10.0, "h": 8.0, "rot": 0}]}
+    out = hit_layer([sluice], ["pond sluice"], manifest)
+    assert 'clip-path="url(#hit-keep-clear)"' in out, out
+    assert 'clip-rule="evenodd"' in out and "M95.0,96.0h10.0v8.0h-10.0Z" in out, "a hole exactly over the sty"
+    assert "clip-path" not in hit_layer([sluice], ["pond sluice"], {}), "no structures, no clip"
+    junk = {"pig_sties": ["not a record", {"x": 1.0}, {"x": 100.0, "y": 100.0, "w": 10.0, "h": 8.0, "rot": 0}]}
+    assert hit_layer([sluice], ["pond sluice"], junk).count("M95.0,96.0") == 1, "a record it cannot read is skipped, not fatal"
+
+
+def test_a_rotated_footprint_is_held_clear_by_its_whole_box() -> None:
+    """The hole is the axis-aligned box of the ROTATED glyph - a superset, so it is never smaller than
+    the thing it protects."""
+    from l7r.diagram.interactive.page import hit_layer
+
+    sluice = '<line x1="90" y1="100" x2="110" y2="100" stroke="#37637F" stroke-width="2.4"/>'
+    out = hit_layer([sluice], ["pond sluice"], {"byres": [{"x": 100.0, "y": 100.0, "w": 10.0, "h": 10.0, "rot": 45}]})
+    assert "h14.1v14.1" in out, f"10 x 10 turned 45 degrees needs a 14.1 px box: {out}"
+
+
+def test_a_lifted_class_the_priority_list_forgets_still_wins() -> None:
+    """The list ranks the lifted classes against each other; a class lifted BECAUSE it cannot otherwise
+    be hit must not land in the weakest place because someone forgot to add it (the first version's
+    `-1` fallback did exactly that)."""
+    from l7r.diagram.interactive import page as pg
+
+    ditch = '<line x1="0" y1="10" x2="100" y2="10" stroke="#6E93A8" stroke-width="3.5"/>'
+    sluice = '<line x1="48" y1="10" x2="52" y2="10" stroke="#37637F" stroke-width="2.4"/>'
+    lifted = pg.HIT_ON_TOP | {"field ditch"}
+    with pytest.MonkeyPatch.context() as mp:
+        mp.setattr(pg, "HIT_ON_TOP", lifted)
+        mp.setattr(pg, "HIT_PRIORITY", ("field ditch",))  # the sluice is the forgotten one
+        out = pg.hit_layer([ditch, sluice], ["field ditch", "pond sluice"])
+    assert out.index('data-k="field ditch"') < out.index('data-k="pond sluice"'), out

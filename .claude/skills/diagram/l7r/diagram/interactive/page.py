@@ -17,6 +17,7 @@ from __future__ import annotations
 
 import html
 import json
+import math
 import os
 import re
 from collections.abc import Iterator, Sequence
@@ -304,8 +305,20 @@ HIT_WIDEN: dict[str, tuple[float, float, float]] = {
 #: given "bund". A box may beat empty ground; it may not beat another feature's drawn ink.
 HIT_ON_TOP: frozenset[str] = frozenset({"pond sluice"})
 #: Among the lifted ones, hardest-to-hit last (it wins). One member today; the order is here so the
-#: second one is a decision rather than a coincidence of dict order.
+#: second one is a decision rather than a coincidence of dict order. A lifted class this list forgets
+#: sorts LAST rather than first - a class is lifted precisely because it must win, and the earlier
+#: version's `-1` fallback silently gave it the weakest place, the opposite of the rule stated here.
 HIT_PRIORITY: tuple[str, ...] = ("stream", "village lane", "bund", "bund beans", "field ditch", "pond sluice")
+#: THE STRUCTURES A LIFTED BOX MUST NOT SWALLOW. `HIT_ON_TOP` puts a box above the ink, and the rule it
+#: is allowed under is that a box may beat empty ground and area fills but never another feature's drawn
+#: glyph. It broke that rule the moment it shipped: the sluice box took 88.4% of one pig sty's own
+#: footprint and 42.8% of a duck pen's (settlement-review, 2026-08-29, 0.25 px grid) - the sty's center
+#: is 4.67 px from a lifted line whose half-width is 7.2, so the box simply contained it, and the GM's
+#: "really hard to click on" moved from the sluice onto a farm building. Every one of these is a rect in
+#: the manifest, so the layer is clipped against them: the box keeps the open ground and gives up the
+#: glyph. Ground records (gardens, threshing yards) are deliberately NOT here - they are area fills, and
+#: a box over one is the case the widening exists for.
+HIT_KEEP_CLEAR: tuple[str, ...] = ("houses", "byres", "farm_sheds", "farm_fixtures", "duck_pens", "pig_sties", "kosatsuba")
 HIT_WIDEN_FACTOR = 4.0
 HIT_WIDEN_MIN = 6.0
 #: The scrub's hit region is where its MARKS are, not its recorded polygon (the polygon is the whole
@@ -586,7 +599,7 @@ def _hit_pieces(s: str, tag: ClsTag) -> Iterator[tuple[str, str]]:
                 yield from _hit_pieces(piece, c)
 
 
-def hit_layer(strings: Sequence[str], tags: Sequence[ClsTag]) -> str:
+def hit_layer(strings: Sequence[str], tags: Sequence[ClsTag], manifest: dict[str, Any] | None = None) -> str:
     """Every widened hit copy on the page, in ONE layer, THINNEST-DRAWN CLASS LAST.
 
     THE COPIES USED TO RIDE INSIDE THEIR OWN CLASS GROUP, and a group drawn later then buried them:
@@ -609,8 +622,36 @@ def hit_layer(strings: Sequence[str], tags: Sequence[ClsTag]) -> str:
             copies = hit_copies(piece, *HIT_WIDEN[key])
             if copies:
                 per.setdefault(key, []).append(copies)
-    order = sorted(per, key=lambda k: (HIT_PRIORITY.index(k) if k in HIT_PRIORITY else -1, k))
-    return "".join(_open(k) + "".join(per[k]) + "</g>" for k in order)
+    order = sorted(per, key=lambda k: (HIT_PRIORITY.index(k) if k in HIT_PRIORITY else len(HIT_PRIORITY), k))
+    clip, attr = _keep_clear_clip(manifest)
+    return clip + "".join(_open(k)[:-1] + attr + ">" + "".join(per[k]) + "</g>" for k in order)
+
+
+def _keep_clear_clip(manifest: dict[str, Any] | None) -> tuple[str, str]:
+    """(the clipPath, the attribute that applies it) - the map minus every recorded structure footprint.
+
+    An even-odd path of one huge rectangle plus one rectangle per structure, so the structures are HOLES:
+    a lifted box hit-tests everywhere except over a drawn building. Clipping is part of hit-testing in
+    SVG, which masking is not, so this is the mechanism that actually moves the pointer."""
+    holes: list[str] = []
+    for key in HIT_KEEP_CLEAR:
+        for rec in (manifest or {}).get(key) or []:
+            if not isinstance(rec, dict):
+                continue
+            try:
+                x, y, w, h = (float(rec[k]) for k in ("x", "y", "w", "h"))
+                rot = math.radians(float(rec.get("rot") or 0.0))
+            except KeyError, TypeError, ValueError:  # pragma: no cover - a record shape the writers do not emit
+                continue
+            # the AXIS-ALIGNED BOX OF THE ROTATED FOOTPRINT: a superset, so the hole is never smaller
+            # than the glyph it protects.
+            bw = abs(w * math.cos(rot)) + abs(h * math.sin(rot))
+            bh = abs(w * math.sin(rot)) + abs(h * math.cos(rot))
+            holes.append(f"M{x - bw / 2:.1f},{y - bh / 2:.1f}h{bw:.1f}v{bh:.1f}h{-bw:.1f}Z")
+    if not holes:
+        return "", ""
+    d = "M-99999,-99999h199998v199998h-199998Z" + "".join(holes)
+    return f'<clipPath id="hit-keep-clear"><path clip-rule="evenodd" d="{d}"/></clipPath>', ' clip-path="url(#hit-keep-clear)"'
 
 
 def render_page(strings: Sequence[str], tags: Sequence[ClsTag], name: str, meta: dict[str, Any] | None = None, manifest: dict[str, Any] | None = None) -> str:
@@ -633,7 +674,7 @@ def render_page(strings: Sequence[str], tags: Sequence[ClsTag], name: str, meta:
     wrapped.insert(sheet + 1, regions)
     # the widened boxes ride ABOVE the ink, in one layer of their own - see `hit_layer`
     close = next((i for i in range(len(wrapped) - 1, -1, -1) if "</svg>" in wrapped[i]), len(wrapped))
-    wrapped.insert(close, hit_layer(strings, tags))
+    wrapped.insert(close, hit_layer(strings, tags, manifest))
     svg = "\n".join(wrapped)
     svg = svg.replace("<svg ", '<svg id="map" ', 1)
     data = explanations(present)
