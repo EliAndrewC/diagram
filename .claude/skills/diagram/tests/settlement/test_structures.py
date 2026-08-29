@@ -52,8 +52,11 @@ def test_kosatsuba_records_a_blocking_struct():
     assert (kb["x"], kb["y"], kb["w"], kb["h"], kb["rot"]) == (500, 500, 12, 5, 15) and z > 0
     assert (kb["vw"], kb["vh"]) == (12, 5)  # at 1 ft/px the true frame already clears the marker floor
     assert not s._fits(500, 500, 20, 20)
+    s.place_labels()  # feature 157: captions are queued and drawn in the LABEL PHASE, so run it before reading M["labels"]
     assert s.M["labels"][-1][1] > 500  # default label sits BELOW the board
+    s._labels_pending = True  # the phase above drained; re-open it for the second board
     s.kosatsuba(800, 500, label_above=True)  # gate-adjacent boards label ABOVE (clear of the gate)
+    s.place_labels()
     assert s.M["labels"][-1][1] < 500
 
 
@@ -133,6 +136,7 @@ def test_place_punishment_spot_probes_for_a_clear_caption_seat():
             s.label(_lx, _ly, "riverside quarter", 9)
     spot = s.place_punishment_spot()
     assert spot is not None and s.M["punishment_spots"]
+    s.place_labels()  # feature 157: the LABEL PHASE draws the queued caption
     cap = next(lb for lb in s.M["labels"] if len(lb) > 5 and lb[5] == "punishment ground")
     # the real property: wherever the probe put it, the caption sits on NO shopfront
     for b in s.M["buildings"]:
@@ -225,6 +229,7 @@ def test_place_punishment_spot_walks_the_label_off_a_building_it_would_cover():
     s.building(145, 536, 20, 20, "merchant")  # sits under the DEFAULT below-label, not under the spot
     spot = s.place_punishment_spot()
     assert spot is not None
+    s.place_labels()  # feature 157: the LABEL PHASE draws the queued caption
     lb = [line for line in s.M["labels"] if len(line) > 5 and line[5] == "punishment ground"][0]
     below_default = spot[1] + s.px(12) / 2 + 11
     assert abs((lb[1] + lb[3]) / 2 - below_default) > 4  # the label moved off its default band
@@ -259,9 +264,12 @@ def test_building_refuses_commoners_inside_a_declared_samurai_ward():
 def test_compound_and_marker_captions_tilt_with_their_glyphs():
     s = _town()
     s.manor(500, 300, 120, 90, "Manor", sublabel="the bench", rot=-30)
+    s.place_labels()  # feature 157: every caption is queued and drawn in the LABEL PHASE
     recs = {L[5]: L for L in s.M["labels"]}
     assert recs["Manor"][7] == -30.0 and recs["the bench"][7] == -30.0
+    s._labels_pending = True  # the phase above drained; re-open it for the second feature
     s.kosatsuba(200, 700, rot=-29)
+    s.place_labels()
     assert s.M["labels"][-1][7] == -29.0
     s.fire_tower(800, 700, rot=150)
     assert s.M["labels"][-1][7] == -30.0
@@ -541,6 +549,7 @@ def test_a_notice_board_hemmed_on_every_side_still_gets_its_caption():
             s.M.setdefault("buildings", []).append({"x": 500 + dx, "y": 500 + dy, "w": 38, "h": 38, "rot": 0, "kind": "merchant"})
             s.placed.append((500 + dx, 500 + dy, 38, 38))
     s.kosatsuba(500, 500, label="notice board")
+    s.place_labels()  # feature 157: the LABEL PHASE seats and draws it
     seat = [frag for frag in s.toplabels if "notice board" in frag]
     assert len(seat) == 1, "the caption is drawn all the same"
     assert 'y="514"' in seat[0], "on the default seat below the board - the fallback, since nothing cleared"
@@ -700,3 +709,51 @@ def test_the_caption_fallback_still_prefers_the_board_s_own_side() -> None:
     # the satisfied path is unchanged: a seat that clears the target still wins on nearness
     ok = pick_caption_seat(seats, at, lambda _q: 0.0, 100.0, lambda _q: 99.0, 50.0, lambda q: q is across)
     assert ok is near, "nearest among the seats that clear, with the blocked one refused"
+
+
+def test_the_label_phase_defers_every_caption_and_drains_once():
+    """THE LABEL PHASE (feature 157, GM 2026-08-29): *"after the final map feature is added ... a final
+    phase in which we add labels for whatever map features get labels."* Nothing draws a caption before
+    the phase runs, and the phase is idempotent so a hamlet whose pipeline names it as a stage is not
+    labeled a second time by `finish()`."""
+    s = _town()
+    n_before = len(s.M["labels"])
+    s.label(500, 500, "gate market", 9)
+    assert len(s.M["labels"]) == n_before, "a caption must not be drawn before the label phase"
+    assert s._label_queue[-1][0] == "text"
+    s.place_labels()
+    assert len(s.M["labels"]) == n_before + 1, "the phase draws what was queued"
+    assert s._label_queue == [] and not s._labels_pending
+    s.place_labels()  # ...and a second run is a no-op, which is what lets finish() always call it
+    assert len(s.M["labels"]) == n_before + 1
+
+
+def test_a_withdrawn_feature_drops_its_queued_caption():
+    """`discard_queued_label` is the undo for a feature placed and then withdrawn - `stage_notice`
+    re-seats a board the frame cannot hold. It drops the MOST RECENT request of that kind, and asking
+    for a kind that was never queued is a no-op rather than an error (feature 157)."""
+    s = _town()
+    s.label(500, 500, "first", 9)
+    s._label_queue.append(("kosatsuba", (1.0, 2.0, 0.0, 12.0, 5.0, "notice board", False, None)))
+    s._label_queue.append(("kosatsuba", (3.0, 4.0, 0.0, 12.0, 5.0, "notice board", False, None)))
+    s.discard_queued_label("kosatsuba")
+    assert [k for k, _ in s._label_queue] == ["text", "kosatsuba"]
+    assert s._label_queue[-1][1][0] == 1.0, "the MOST RECENT request is the one withdrawn"
+    s.discard_queued_label("field_name")  # never queued - nothing to drop, and nothing to raise
+    assert len(s._label_queue) == 2
+
+
+def test_a_field_name_caption_goes_through_the_phase_too():
+    """`paddy_field(label=...)` and `water_field(label=...)` emit their own `<text>` rather than calling
+    `label()`, so the general deferral does not reach them; `field_name_label` carries that exact markup
+    into the phase instead (feature 157, found by the round-2 spec review). Dormant on every pool map -
+    which is why the caption is queued as-is rather than the primitive being changed to suit it."""
+    s = _town()
+    n_before = len(s.M["labels"])
+    s.field_name_label("Higashi-da", 400.0, 620.0)
+    assert len(s.M["labels"]) == n_before, "not drawn before the phase"
+    assert s._label_queue[-1] == ("field_name", ("Higashi-da", 400.0, 620.0))
+    s.place_labels()
+    rec = s.M["labels"][-1]
+    assert rec[5] == "Higashi-da"
+    assert any("letter-spacing" in ln and "Higashi-da" in ln for ln in s.toplabels), "the markup it always drew"
