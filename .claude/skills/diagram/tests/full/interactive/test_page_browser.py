@@ -301,6 +301,32 @@ def test_the_wheel_scrolls_and_a_press_is_only_a_click(synthetic: Page) -> None:
     synthetic.js("() => window.l7rMap.fitWidth()")
 
 
+def test_the_wheel_scrolls_the_map_when_the_pointer_is_not_over_the_open_modal(synthetic: Page) -> None:
+    """The GM (2026-08-29): with an explanation open, "when my mouse is not over top of the actual modal
+    itself ... the map, which is in the background, will then scroll". The shade is a sibling of the stage
+    covering the whole viewport, so every wheel turn outside the dialog landed on it and reached nothing."""
+    synthetic.js("() => window.l7rMap.fit()")
+    synthetic.js("() => document.querySelector('#zoom [data-z=in]').click()")
+    synthetic.open("farmhouse")
+    assert synthetic.js("() => !document.getElementById('shade').hidden"), "the shade is up"
+    zoom_before = synthetic.js("() => window.l7rMap.zoom()")
+    ty_before = synthetic.js("() => window.l7rMap.view().ty")
+    synthetic.page.mouse.move(80, 940)  # over the shade, well clear of the centered dialog
+    synthetic.page.mouse.wheel(0, 120)
+    synthetic.page.wait_for_timeout(30)
+    assert synthetic.js("() => window.l7rMap.zoom()") == zoom_before, "the wheel still does not zoom"
+    moved = ty_before - synthetic.js("() => window.l7rMap.view().ty")
+    assert abs(moved - 120) < 2, "the wheel over the shade scrolled the map behind it by its own travel"
+    held = synthetic.js("() => window.l7rMap.view()")
+    synthetic.page.mouse.move(700, 500)  # over the dialog itself - the wheel is its text's, not the map's
+    synthetic.page.mouse.wheel(0, 120)
+    synthetic.page.wait_for_timeout(30)
+    assert synthetic.js("() => window.l7rMap.view()") == held, "the map does not move under the modal"
+    synthetic.page.keyboard.press("Escape")
+    assert synthetic.js("() => document.getElementById('shade').hidden")
+    synthetic.js("() => window.l7rMap.fitWidth()")
+
+
 def test_bare_ground_inside_a_footprint_lights_its_class_and_drawn_ink_above_it_still_wins(synthetic: Page) -> None:
     """The GM (2026-08-28): hovering the scrub only worked over a blade; now the footprint takes the pointer."""
     synthetic.js("() => window.l7rMap.fit()")
