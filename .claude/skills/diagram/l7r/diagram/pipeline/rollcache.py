@@ -17,8 +17,8 @@ roll executed changed - rolls for real, which is exactly when the test has somet
 WHAT IT NEVER SERVES. Any doubt at all - a missing or unreadable entry, a payload that will not
 unpickle, a vanished data file - regenerates. Under `GATE_NO_CACHE=1` and under the FULL run
 (`L7R_TESTS_FULL=1`, where the coverage floors are enforced and a served roll would execute none of the
-rolled code) every DISTINCT subject produces - once per process, shared as bytes thereafter (feature 147;
-see `_SHARED_BYPASS`), so the floors still watch a real roll while thirty identical re-rolls do not happen.
+rolled code) every call produces - EXCEPT a caller that opts into `share=True`, which produces once per
+process and re-serves those bytes thereafter (feature 147; see `_SHARED_BYPASS`). Only `hamlet()` opts in.
 
 A TEST THAT MONKEYPATCHES THE ENGINE goes through `keyed_to(test, ...)`, never bare `obtain`: a patched
 function changes what the roll does without changing any hashed engine source, so the engine key alone
@@ -105,19 +105,21 @@ def reset_shared() -> None:
     _SHARED_BYPASS.clear()
 
 
-def obtain[T](subject: str, produce: Callable[[], T]) -> tuple[T, str]:
+def obtain[T](subject: str, produce: Callable[[], T], share: bool = False) -> tuple[T, str]:
     """`(payload, how)` for `subject` - "HIT" (served), "MISS" (produced, recorded, stored), "BYPASS"
     (produced, nothing stored) or "BYPASS-SHARED" (this process already produced this subject under the
     bypass; a fresh copy of it). `subject` must determine the roll completely (a spec's repr)."""
     if bypassed():
-        share = _share_key(subject, produce)
-        cached = _SHARED_BYPASS.get(share)
+        if not share:
+            return produce(), "BYPASS"
+        key = _share_key(subject, produce)
+        cached = _SHARED_BYPASS.get(key)
         if cached is not None:
             return pickle.loads(cached), "BYPASS-SHARED"  # noqa: S301 - our own bytes, dumped below
         payload = produce()
         # an unpicklable payload shares nothing rather than sharing wrongly - the next caller rolls
         with contextlib.suppress(pickle.PicklingError, TypeError, RecursionError):
-            _SHARED_BYPASS[share] = pickle.dumps(payload)
+            _SHARED_BYPASS[key] = pickle.dumps(payload)
         return payload, "BYPASS"
     entry = _entry(subject)
     meta_path, payload_path = os.path.join(entry, "meta.json"), os.path.join(entry, "payload.pickle")
@@ -158,7 +160,12 @@ def hamlet(spec: HamletSpec) -> tuple[SitePlan, dict[str, Any]]:
             s.finish(os.path.join(tmp, "scratch"), render=False)  # the manifest is not complete until finish() runs
         return plan, s.M
 
-    return obtain(f"hamlet:{spec!r}", produce)[0]
+    # SHARED (feature 147): the scripted negative fixtures are the measured case - 31 of them across two
+    # specs, each deep-copying the manifest before breaking it, so a shared roll is exactly what they want.
+    # Sharing is OPT-IN and stays here for now: turned on for `obtain` generally it made the hamlet-path
+    # floor NON-DETERMINISTIC (`hinterland.py` 503-504 flipped between otherwise identical full runs), and a
+    # coverage floor that flips is worse than a slow one. What the fixtures need is this call and no other.
+    return obtain(f"hamlet:{spec!r}", produce, share=True)[0]
 
 
 def report(spec: HamletSpec) -> tuple[Report, str]:

@@ -116,14 +116,16 @@ def test_the_bypasses_produce_and_store_nothing(tmp_path, monkeypatch, var):
     monkeypatch.setenv(var, "1")
     rollcache.reset_shared()
     assert rollcache.obtain("toy", produce) == ({"value": 7}, "BYPASS")
+    assert rollcache.obtain("toy", produce) == ({"value": 7}, "BYPASS"), "sharing is OPT-IN: a plain caller always produces"
     assert not Path(rollcache._entry("toy")).exists()
 
-    # ...AND THE SECOND CALLER IN THIS PROCESS DOES NOT ROLL AGAIN (feature 147). The bypass exists so the
-    # coverage floors watch real execution; one execution is all they can watch, and thirty-one identical
-    # re-rolls of the same spec cost ~430 s of CPU to trace lines the first roll already traced.
-    again, how = rollcache.obtain("toy", produce)
+    # ...AND A CALLER THAT OPTS IN DOES NOT ROLL TWICE (feature 147). The bypass exists so the coverage
+    # floors watch real execution; one execution is all they can watch, and the 31 scripted fixtures share
+    # two specs between them, so re-rolling per caller cost ~430 s of CPU to trace lines one roll traces.
+    assert rollcache.obtain("shared-toy", produce, share=True) == ({"value": 7}, "BYPASS")
+    again, how = rollcache.obtain("shared-toy", produce, share=True)
     assert (again, how) == ({"value": 7}, "BYPASS-SHARED")
-    assert not Path(rollcache._entry("toy")).exists(), "sharing still stores nothing on disk"
+    assert not Path(rollcache._entry("shared-toy")).exists(), "sharing still stores nothing on disk"
 
     monkeypatch.delenv(var)
     assert rollcache.obtain("toy", produce)[1] == "MISS", "a bypassed roll left nothing behind to serve"
@@ -163,9 +165,9 @@ def test_a_shared_bypass_hands_out_copies_so_one_caller_cannot_break_another(tmp
     monkeypatch.setenv(rollcache.FULL_ENV, "1")
     rollcache.reset_shared()
 
-    first, _ = rollcache.obtain("copies", produce)
+    first, _ = rollcache.obtain("copies", produce, share=True)
     first["value"] = "BROKEN BY THE FIRST CALLER"
-    second, how = rollcache.obtain("copies", produce)
+    second, how = rollcache.obtain("copies", produce, share=True)
     assert how == "BYPASS-SHARED"
     assert second == {"value": 7}, "the second caller gets the roll as it was produced, not as the first left it"
     assert second is not first
@@ -182,5 +184,5 @@ def test_two_different_producers_never_share_one_toy_subject(tmp_path, monkeypat
     def other() -> dict:
         return {"value": 99}
 
-    assert rollcache.obtain("same-name", produce) == ({"value": 7}, "BYPASS")
-    assert rollcache.obtain("same-name", other) == ({"value": 99}, "BYPASS"), "a different producer is a different roll"
+    assert rollcache.obtain("same-name", produce, share=True) == ({"value": 7}, "BYPASS")
+    assert rollcache.obtain("same-name", other, share=True) == ({"value": 99}, "BYPASS"), "a different producer is a different roll"
