@@ -207,3 +207,56 @@ def test_bamboo_blocked_refuses_the_canvas_margin_and_the_title_pocket() -> None
     assert bamboo_blocked(500.0, 990.0, extent, (0.0, 0.0, 0.0, 0.0), [], [], [], None, 30.0), "and the far margin"
     assert bamboo_blocked(500.0, 500.0, extent, (400.0, 400.0, 600.0, 600.0), [], [], [], None, 30.0), "under the title card"
     assert not bamboo_blocked(500.0, 500.0, extent, (0.0, 0.0, 10.0, 10.0), [], [], [], None, 30.0), "open ground"
+
+
+def test_a_parcel_that_will_not_fit_is_shrunk_down_the_ladder_before_it_is_dropped() -> None:
+    """SHRINK BEFORE DROPPING. A seat whose full-size square overruns the frame is usually a seat near
+    the edge that a slightly smaller square clears, and a smaller coppice on the sheet beats a larger
+    one the crop cuts off - so the parcel walks down 0.9 / 0.8 / 0.7 / 0.6 before the seat is called
+    unusable.
+
+    THIS LADDER HAS A HISTORY WORTH THE TEST. Feature 147 parked its two lines behind a coverage
+    pragma while the floor's verdict on them flickered, and feature 149 found the real cause (an
+    entry's stored coverage outliving the key it was recorded under). Parking was the wrong answer
+    twice over: the ladder is a decision about NUMBERS and can simply be asked about numbers, which is
+    what this does - `fits` is a plain predicate, not a settlement."""
+    from l7r.diagram.hamletgen.hinterland import fit_square_parcel
+
+    # nothing fits, at any rung
+    assert fit_square_parcel(100.0, 10.0, lambda _h: False) is None
+    # the first rung clears
+    assert fit_square_parcel(100.0, 10.0, lambda h: h <= 90.0) == 90.0
+    # ...and it walks on down when it must
+    assert fit_square_parcel(100.0, 10.0, lambda h: h <= 61.0) == 60.0
+    # THE FLOOR IS A FLOOR, NOT A RUNG: every rung is clamped up to it, so a parcel already at the
+    # minimum is offered once at the minimum rather than shrunk below legibility
+    assert fit_square_parcel(100.0, 95.0, lambda h: h <= 95.0) == 95.0
+    assert fit_square_parcel(100.0, 95.0, lambda h: h < 95.0) is None
+
+
+def test_a_rotated_parcel_is_measured_by_the_bbox_the_check_measures() -> None:
+    """ROTATING A BOX GROWS ITS AXIS-ALIGNED BBOX - up to sqrt(2) at 45 degrees, even for a square -
+    and `woodland_commons_within_the_frame` measures the grown one. Testing the unrotated square
+    instead let a seat pass the ladder at 0.8 and draw a parcel 0.67 inside the window, which cohort
+    seed 33 did the moment the cluster change walked it to the edge: a check and the thing it checks
+    measuring different quantities."""
+    import math
+
+    from l7r.diagram.hamletgen.hinterland import WOODLAND_BBOX_FLOOR, parcel_bbox_ok
+
+    frame = (0.0, 0.0, 1000.0, 1000.0)
+    axis = (1.0, 0.0)  # unrotated
+    diag = (math.cos(math.radians(45.0)), math.sin(math.radians(45.0)))
+
+    # dead centre: fits at any rotation
+    assert parcel_bbox_ok(500.0, 500.0, 100.0, 100.0, *axis, frame)
+    assert parcel_bbox_ok(500.0, 500.0, 100.0, 100.0, *diag, frame)
+
+    # ON THE EDGE, rotation is what decides it: the same square, same seat, different answer
+    on_edge_axis = parcel_bbox_ok(60.0, 500.0, 100.0, 100.0, *axis, frame)
+    on_edge_diag = parcel_bbox_ok(60.0, 500.0, 100.0, 100.0, *diag, frame)
+    assert on_edge_axis and not on_edge_diag, "the rotated bbox is wider and falls further outside"
+
+    # wholly outside keeps nothing
+    assert not parcel_bbox_ok(-500.0, 500.0, 100.0, 100.0, *axis, frame)
+    assert 0.0 < WOODLAND_BBOX_FLOOR < 1.0

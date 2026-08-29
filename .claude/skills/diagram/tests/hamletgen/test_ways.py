@@ -1300,11 +1300,11 @@ def test_a_doubled_remnant_is_dropped_at_BOTH_recorded_distances() -> None:
     parent = [(0.0, 0.0), (300.0, 0.0)]
     kashikawa = _StubSettlement(lanes=[[(0.0, 900.0), (0.0, 940.0)], parent, [(100.0, 6.6), (144.0, 6.6)]])
     assert hg.ways._sweep_doubled_remnants(kashikawa) == 1
-    assert kashikawa.M["lanes"][2]["pts"] == []
+    assert len(kashikawa.M["lanes"]) == 2, "the remnant's record goes with its ink"
 
     sawada = _StubSettlement(lanes=[[(0.0, 900.0), (0.0, 940.0)], parent, [(100.0, 0.0), (136.0, 11.4)]])
     assert hg.ways._sweep_doubled_remnants(sawada) == 1
-    assert sawada.M["lanes"][2]["pts"] == []
+    assert len(sawada.M["lanes"]) == 2, "the remnant's record goes with its ink"
 
     # a spur that goes somewhere keeps its ink, however close it starts
     spur = _StubSettlement(lanes=[[(0.0, 900.0), (0.0, 940.0)], parent, [(100.0, 0.0), (100.0, 120.0)]])
@@ -1335,8 +1335,8 @@ def test_dropping_a_remnant_does_not_cascade_into_the_lane_it_shadowed() -> None
     beyond = [(100.0, 36.0), (150.0, 36.0)]  # 30 ft off the remnant, 36 ft off the parent
     s = _StubSettlement(lanes=[[(0.0, 900.0), (0.0, 940.0)], parent, shadowed, beyond])
     assert hg.ways._sweep_doubled_remnants(s) == 1
-    assert s.M["lanes"][2]["pts"] == [], "the remnant goes"
-    assert s.M["lanes"][3]["pts"] != [], "the lane whose only shadow was the remnant stays"
+    assert len(s.M["lanes"]) == 3, "the remnant goes, record and all"
+    assert s.M["lanes"][2]["pts"], "the lane whose only shadow was the remnant stays"
 
 
 def test_the_connector_is_never_swept_as_a_remnant() -> None:
@@ -1474,3 +1474,32 @@ def test_a_rewrite_may_leave_a_lane_no_worse_than_it_found_it() -> None:
     assert hg.ways.may_write(straight, folded, 3.0, []) is False
     # ...but a lane that was already folded is not required to unfold itself
     assert hg.ways.may_write(folded, list(folded), 3.0, []) is True
+
+
+def test_a_swept_lane_takes_its_RECORD_with_it_not_just_its_points() -> None:
+    """THE HUSK GOES WITH THE INK - feature 145's rule, which feature 152 broke in two sweeps at once
+    (settlement-review x2: sawada shipped 13 lane records for 11 drawn lanes, kashikawa 14 for 13).
+
+    An emptied `pts` leaves a record declaring a lane that nothing draws, so every consumer has to
+    special-case it - a reviewer's own dump of the manifest crashed on `pts[-1]`. And leaving the
+    tidy-up to `_sweep_debris` cannot work, which is the part worth pinning: that pass opens with
+    `live = [i for i in ... if len(ways[i]) >= 2]`, so a lane another sweep already emptied is not
+    live, never enters `swept`, and is never deleted. It removes only husks it made itself. This
+    asserts the ABSENCE of husks after each sweep, which is what the manifest ships."""
+    parent = [(0.0, 0.0), (300.0, 0.0)]
+
+    remnants = _StubSettlement(lanes=[[(0.0, 900.0), (0.0, 940.0)], parent, [(100.0, 6.6), (144.0, 6.6)]])
+    assert hg.ways._sweep_doubled_remnants(remnants) == 1
+    assert len(remnants.M["lanes"]) == 2, "the record went with the ink"
+    assert all(ln["pts"] for ln in remnants.M["lanes"]), "no husk survives the sweep"
+
+    # ...and the steading sweep, which used to say in so many words that it handed its husks on
+    fouled = _StubSettlement(lanes=[[(0.0, 900.0), (0.0, 940.0)], parent, [(200.0, 0.0), (204.0, 0.0)]], houses=[(202.0, 0.0)])
+    hg.ways._sweep_steading_fouls(fouled)
+    assert all(ln["pts"] for ln in fouled.M["lanes"]), "no husk survives the steading sweep either"
+
+    # and `_sweep_debris` genuinely cannot do this job for them - proof the delegation was never real
+    with_husk = _StubSettlement(lanes=[[(0.0, 900.0), (0.0, 940.0)], parent, [(100.0, 6.6), (144.0, 6.6)]])
+    with_husk.M["lanes"][2]["pts"] = []
+    assert hg.ways._sweep_debris(with_husk) == 0
+    assert len(with_husk.M["lanes"]) == 3, "the debris sweep leaves a husk it did not make"

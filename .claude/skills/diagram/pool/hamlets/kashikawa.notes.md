@@ -485,25 +485,70 @@ on the map.
 
 With all four repaired, this hole still does not close, and the measurement says it should not.
 `_route` returns **nothing at all** between these two caps - not "nothing short enough" - at BOTH the
-fabric clearance (7 ft) and the join clearance (4 ft), on a 3 ft lattice. The reason is on the sheet:
-**garden bed 0, at (1992, 2935), stands 2.81 ft off the straight line between the caps**, and nothing
-else is within 12 ft. So the ground between them carries a lane at no planning margin this engine is
-willing to use, and the function's own words apply - *"something is genuinely in the way; the
-interruption is honest"*.
+fabric clearance (7 ft) and the join clearance (4 ft), on a 3 ft lattice.
+
+**WHAT IS ACTUALLY IN THE WAY - and the first version of this entry got it wrong three times over
+(settlement-review, 2026-08-29, third pass).** It named one obstacle at 2.81 ft and blamed overlap.
+All three corrections matter, because they are what a future session would act on:
+
+- **It is a TWO-SIDED PINCH between two different homesteads' appurtenances, not one garden.** Garden
+  bed 0 stands west of the line and **threshing yard 1** - house 1's yard - stands east of it. The
+  first entry missed the yard entirely.
+- **The distances were measured on the axis-aligned `x/y/w/h` rects, not the DRAWN polygons.** Read
+  the way `dev/placement.md` requires, garden bed 0 is **3.40 ft** off the line (not 2.81) and
+  threshing yard 1 is **3.64 ft**. This is the same error these notes record fixing in feature 121 -
+  *"the bundle placer used to clear an axis-aligned rect for a house the map draws raked"*.
+- **Overlap is NOT what refuses the bridge.** The narrowest free corridor across the gap is
+  **10.71 ft** (garden 6.76 ft one side, yard 3.94 ft the other, at 35% of the way across). A 3 ft
+  tread centered there would leave ~3.9 ft to each footprint and overlap nothing;
+  `features_do_not_overlap` would pass it. What refuses it is the **4 ft join clearance**, a planning
+  margin. Saying "a tread through someone's vegetables" priced the alternative against a consequence
+  it does not have, which is exactly the sentence that stops a future session looking further.
 
 **What it costs, in observable terms**: at fit zoom the reader sees two rounded caps facing each other
 across ~25 px of bare grass in the middle of the built-up frontage. It is a LEGIBILITY cost only - the
-lane web remains a single connected component at a 6 ft ink tolerance, and every farmhouse is served.
+lane web remains a single connected component at a 6 ft ink tolerance, and every farmhouse is served
+(worst house-to-way 89.1 ft, unchanged by the remnant drop).
 
 **Alternatives priced and declined**:
-- *Relax the directness budget* (currently `_PATH_DIRECTNESS` x 24.95 = 49.9 ft). Declined because it
-  buys nothing: there is no route at any length, so the budget is not what refuses this one.
-- *Route below the join clearance* - under 4 ft of planning margin. Declined: at a 3 ft tread that puts
-  drawn ink inside the garden bed, and `features_do_not_overlap` is right to refuse it. Trading a
-  visible gap for a tread through someone's vegetables is the worse map.
+- *Relax the directness budget* (`_PATH_DIRECTNESS` x 24.95 = 49.9 ft). Declined because it buys
+  nothing: there is no route at any length, so the budget is not what refuses this one.
+- *Route below the 4 ft join clearance.* Declined HERE, but not because the tread would overlap
+  anything - see above. Declined because lowering a global planning margin to close one hole on one
+  map is the wrong shape of fix; the right shape is the knob in the open question below.
 - *Trim the two caps back so they stop reading as an interrupted way.* Declined: both arms front
   farmhouses at their far ends, so the trim would strand service to buy tidiness.
 
-Decided by the session, on the measurement above, under the project's accepted-limitation rule; the
-GM has not been asked, because the record answers it. **Reopen only with a route that clears the
-garden bed** - not with a wider tolerance.
+**Reopen with a route that clears BOTH garden bed 0 and threshing yard 1 at the join clearance** - or
+with the ruling below. Not with a wider tolerance, and not by looking for the single obstacle the
+first version of this entry invented.
+
+**OPEN QUESTION this raises, for a research pass rather than a ruling: should a 4 ft planning margin
+bind inside a 10.7 ft interstice between two homesteads?** The gap sits between one house's garden and
+another's threshing yard - the interstitial courtyard ground `settlements/homesteads.md` already
+describes as shared, where byres and wells stand. A 3 ft footpath passing ~3.9 ft from a garden bed
+and ~3.9 ft from a work yard is not obviously a violation of anything physical; it is the ENGINE's
+margin that refuses it. What the record would have to show is attested in-cluster path widths and the
+clearance between a footway and a kitchen garden or work yard in a nucleated Japanese farming
+settlement - the roji/komichi literature and the vernacular farmstead-layout record both bear on it.
+The reviewer's read, which matches the project's own knob rule: the record will support NARROW
+in-cluster footways hard against garden and yard edges, since that is what makes a nucleated cluster
+nucleated - which would make this a **per-settlement in-cluster margin knob**, tight on a dense roll
+and generous on a loose one, rather than one number to lower. Take that shape, not this one hole.
+
+**ALSO CAUGHT by the same pass, outside the delta, and re-recorded here because the old numbers are
+quoted:**
+- **The notice board is no longer at the traffic optimum and these notes said it was.** Measured
+  2026-08-29: **9 of 20** dwellings within 250 ft against a best-available 13 anywhere in the cluster
+  (69% of the maximum). The feature-145 entry records "the board sits at the traffic optimum (14 of a
+  possible 15 dwellings within 250 ft)", which described a roll that no longer exists. The board sat
+  at (1999.8, 2852.0) with 13 of 13 at `b248ab25` and moved to (2255.5, 2989.2) at `8260a6e0` - the
+  commit BEFORE feature 152's lane work, so not caused by it. It stands on a lane fork rather than in
+  a quiet corner, so this is a drop rather than the Sawada failure mode; it was silent, and the stale
+  number is the kind that gets quoted.
+- **Lane 0's north end is a FIELD TRACK, not an unfixed blunt end.** The 2026-08-29 entry records
+  "206.1 ft from any other lane and 246.5 ft from the nearest farmhouse, blunt-capped in open
+  grazing". Current roll: **152.4 ft** and **166.4 ft** - and the number nobody had measured,
+  **17.0 ft from the field outline**. A track that runs out of the cluster and stops at the paddy
+  edge, where you step onto the bunds, is the arrangement these notes already ruled sound on
+  2026-08-17. Re-recorded as sound so the next session does not trim it.

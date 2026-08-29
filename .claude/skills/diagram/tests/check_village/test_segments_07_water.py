@@ -795,3 +795,29 @@ def test_lanes_bend_like_paths_steps_over_a_degenerate_vertex():
     # ...and a real hairpin at the same corner still fires, so the skip is not hiding anything
     hairpin = manifest(lanes=[{"pts": [[100, 100], [300, 100], [110, 104]], "w": 4}])
     assert "lanes_bend_like_paths" in f_only(hairpin, "lanes_bend_like_paths")
+
+
+def test_pond_fill_covers_channel_mouths_reads_a_STREAM_that_joins_the_pond():
+    """THREE RECORD KINDS JOIN A POND, and the stream one had no test. `drawn_channels` and
+    `channels` were both exercised; `M["streams"]` - a natural watercourse recorded as a `poly`
+    rather than `pts` - was not, so the arm of the check that reads it could have been deleted
+    without a single test noticing.
+
+    A stream carries no `late` flag (it is never in the late water block), so it is appended as
+    `late=False`; what the check then wants is the same as for any other joining course - a
+    recorded `pond_layer` saying where the fill sits. With the stream joining and no layer
+    recorded, the check must fire."""
+    M = {
+        "meta": {"scale": "village"},
+        "pond": [500, 500, 40, 25],
+        "streams": [{"poly": [[462.5, 505.0], [380.0, 560.0]], "bedz": 8}],  # mouth inside the rim zone
+    }
+    assert "pond_fill_covers_channel_mouths" in f_only(M, "pond_fill_covers_channel_mouths")
+
+    # ...and with the fill recorded ABOVE the stream's bed, the same geometry is clean
+    ok = {**M, "pond_layer": {"bedz": 9, "sheenz": 10, "late": False}}
+    assert "pond_fill_covers_channel_mouths" not in f_only(ok, "pond_fill_covers_channel_mouths")
+
+    # a stream that ends well clear of the pond joins nothing and is not read at all
+    away = {**M, "streams": [{"poly": [[100.0, 100.0], [120.0, 140.0]], "bedz": 8}]}
+    assert "pond_fill_covers_channel_mouths" not in f_only(away, "pond_fill_covers_channel_mouths")

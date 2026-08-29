@@ -1,0 +1,6 @@
+{
+  "utc": "20260829T151942Z",
+  "guard": "pair-hooks",
+  "what": "gate alone",
+  "reason": "verification roll after the third husk-deletion fix; two settlement-reviews already ran on this content and their findings are what is being fixed"
+}

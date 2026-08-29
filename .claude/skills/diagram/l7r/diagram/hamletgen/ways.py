@@ -576,11 +576,12 @@ def stage_web(s: Settlement, plan: SitePlan) -> None:
     _fabric_now = [poly for poly, _owner, _kind in _homestead_polys(s)]  # what the connector's end must stay clear of, as `_thread_the_fabric` left it
     for _i, _ln in enumerate(list(s.M.get("lanes", []))):
         # KEPT AND NOT REACHABLE TODAY, deliberately (feature 146). Every pass that can empty a lane
-        # before this point DELETES the record with the ink (feature 145's "the husk goes with the ink"),
-        # so no husk survives to here - and injecting one to prove it fails earlier, in the orphan
-        # joiner, which cannot handle a one-point way at all. The guard stays because the passes BELOW
-        # this line do leave empty records (`_ln["pts"] = []` at the knot-collapse drop), so a future
-        # reorder would hand one straight to `_ln["pts"][0]`.
+        # DELETES the record with the ink (feature 145's "the husk goes with the ink"), so no husk
+        # survives to here - and injecting one to prove it fails earlier, in the orphan joiner, which
+        # cannot handle a one-point way at all. As of feature 152 that is true of the knot-collapse
+        # drop BELOW this line as well, which used to be the exception this comment pointed at. The
+        # guard stays because a future reorder would hand one straight to `_ln["pts"][0]`, and because
+        # three separate passes have now had to learn this rule one at a time.
         if len(_ln.get("pts") or []) < 2:  # pragma: no cover - see above
             continue
         _pts = [(float(x), float(y)) for x, y in _ln["pts"]]
@@ -604,11 +605,19 @@ def stage_web(s: Settlement, plan: SitePlan) -> None:
     # AND TOUCH AGAIN (T99 unlock, tripwire seed 37): the smoothing cuts knots and hairpins into stubs,
     # and a stub that ends 3-30 ft short of the run it left is exactly the gap _touch_junctions closes -
     # but that pass ran BEFORE the smoothing. A way the knot collapse emptied to one point is dropped first.
+    _collapsed: list[int] = []
     for _i, _ln in enumerate(s.M.get("lanes", [])):
         _p = _ln.get("pts") or []
         if not _ln.get("connector") and (len(_p) < 2 or math.dist(_p[0], _p[-1]) < 1.0 and len(_p) == 2):
             _ln["pts"] = []
             s.reink_lane(_i)
+            _collapsed.append(_i)
+    # AND THE HUSK GOES WITH THE INK HERE TOO (settlement-review x2, feature 152). This was the third
+    # and last place that emptied a record without removing it, and it was the one that survived the
+    # other two being fixed: sawada still shipped a `role=bridge-breaks` record with no points, a
+    # bridge the smoothing had collapsed. Removed back-to-front so the earlier indices stay valid.
+    for _i in sorted(_collapsed, reverse=True):
+        del s.M["lanes"][_i]
     _touch_junctions(
         s, hard_built, walls, list(plan.watercourses) + drawn_water, reach=_STUB_REACH_FT, only_orphans=True, final=True
     )  # the stubs the smoothing leaves stop 30-35 ft short (seed 37); a connected web is untouched
@@ -628,10 +637,17 @@ def stage_web(s: Settlement, plan: SitePlan) -> None:
     # with one route drawn as two and 19.5 ft of bare ground between two ends pointing straight at each
     # other. Running it once more here closes what this pass opened; it routes against the same obstacle set
     # as every other join, so it cannot bridge THROUGH a steading, and the sweep below re-checks anyway.
+    # THE REMNANT SWEEP RUNS BEFORE THE LAST BRIDGE, NOT AFTER (settlement-review, feature 152). With
+    # it after, the two passes built and then deleted each other's work: sawada's 37.6 ft remnant left
+    # lane 11 at 1.2 ft and died 11.4 ft from it, which sits inside the restored short-gap band, so the
+    # bridge pass dutifully closed the remnant back onto its own parent - and the remnant sweep then
+    # dropped both, because the bridge's two ends were now also on lane 11. One wasted routing pass and
+    # two husks for a picture that was correct either way.
+    _sweep_doubled_remnants(s)  # doubled ink is debris however long it is
     _bridge_collinear_breaks(s, hard_built, walls, list(plan.watercourses) + drawn_water)
     _sweep_steading_fouls(s)  # a bridge is a lane too, and it gets the same last look
-    _sweep_doubled_remnants(s)  # doubled ink is debris however long it is
-    _sweep_debris(s)  # a lane any sweep above emptied is debris; the rule is applied once more
+    _sweep_doubled_remnants(s)  # ...and a bridge can itself be doubled ink
+    _sweep_debris(s)  # a fragment the passes above whittled below the floor and left standing alone
     s.M["meta"]["lane_web"] = plan.lane_web
 
 
@@ -1334,6 +1350,7 @@ def _sweep_doubled_remnants(s: Settlement) -> int:
     ways = [[(float(x), float(y)) for x, y in (ln.get("pts") or [])] for ln in lanes]
     centers = [(float(h["x"]), float(h["y"])) for h in s.M.get("houses") or []]
     dropped = 0
+    gone: list[int] = []
     for i, ln in enumerate(lanes):
         if len(ways[i]) < 2 or ln.get("connector"):
             continue
@@ -1353,7 +1370,18 @@ def _sweep_doubled_remnants(s: Settlement) -> int:
         ways[i] = []
         ln["pts"] = []
         s.reink_lane(i)
+        gone.append(i)
         dropped += 1
+    # AND THE HUSK GOES WITH THE INK - feature 145's rule, and this pass broke it (settlement-review
+    # x2, feature 152: sawada shipped 13 lane records for 11 drawn lanes, kashikawa 14 for 13). An
+    # emptied `pts` leaves a record declaring a lane nothing draws, which every consumer then has to
+    # special-case - and a reviewer's first dump of the manifest crashed on `pts[-1]`. Leaving it to
+    # `_sweep_debris` does NOT work and the comment at the call site used to say it did: that pass
+    # opens with `live = [i for i in ... if len(ways[i]) >= 2]`, so a lane another sweep has already
+    # emptied is not live, never enters `swept`, and is never deleted. It only removes husks it made
+    # itself. Removed back-to-front so the earlier indices stay valid.
+    for i in sorted(gone, reverse=True):
+        del lanes[i]
     return dropped
 
 
@@ -1375,6 +1403,7 @@ def _sweep_steading_fouls(s: Settlement) -> int:
     """
     lanes = s.M.get("lanes") or []
     fixed = 0
+    emptied: list[int] = []
     for i, ln in enumerate(lanes):
         pts = [(float(x), float(y)) for x, y in (ln.get("pts") or [])]
         if len(pts) < 2 or ln.get("connector"):
@@ -1388,10 +1417,17 @@ def _sweep_steading_fouls(s: Settlement) -> int:
         if len(pts) == before and not _hits_a_steading(s, pts, width):
             continue
         if len(pts) < 2 or _hits_a_steading(s, pts, width):
-            pts = []  # the foul is in the middle of the run, or nothing is left - hand it to the debris sweep
+            pts = []  # the foul is in the middle of the run, or nothing is left of it
         ln["pts"] = [[round(x, 1), round(y, 1)] for x, y in pts]
         s.reink_lane(i)
+        if not pts:
+            emptied.append(i)
         fixed += 1
+    # ...and its husk goes with it, for the reason spelled out in `_sweep_doubled_remnants`: this used
+    # to say "hand it to the debris sweep", and that sweep's `live` filter cannot see a lane already
+    # emptied, so the record simply shipped.
+    for i in sorted(emptied, reverse=True):
+        del lanes[i]
     return fixed
 
 
@@ -2514,7 +2550,7 @@ def _hits_a_steading(s: Settlement, pts: Poly, width: int) -> bool:
     overlap none, so neither does this.
     """
     # MIRROR THE CHECK'S WINDOW, NOT JUST ITS FORMULA (this skill's CLAUDE.md). `houses_clear_of_lanes`
-    # tests the house's four ROTATED CORNERS PLUS ITS CENTRE against each lane segment at
+    # tests the house's four ROTATED CORNERS PLUS ITS CENTER against each lane segment at
     # `w / 2 + 2` - the center is in the list so a lane narrower than a house cannot thread between the
     # corners. The first cut of this helper used a quad-versus-segment overlap at half the tolerance, and
     # so passed paths the gate still failed: same intent, different window, which is exactly the drift
@@ -2879,7 +2915,7 @@ def _serve_stragglers(s: Settlement, plan: SitePlan, hard: list[Poly], fabric: l
             # house that a previous lane had already taken from 100.7 ft to 38.9, and which the new
             # lane then left at 70.5. A way exists because feet use it.
             segs = _net_segs(s)
-            # SERVE WITH MARGIN, NOT TO THE MILLIMETRE. Triggering at exactly the reach means a
+            # SERVE WITH MARGIN, NOT TO THE MILLIMETER. Triggering at exactly the reach means a
             # house at 99.7 ft is not a straggler and gets nothing, while one at 100.3 has a whole
             # path drawn for four inches of violation - the same bug at both ends. A review caught
             # the first half twice on the same steading ("satisfying the rule by 0.3 ft ... a re-roll
@@ -3200,7 +3236,7 @@ def _serve_stragglers(s: Settlement, plan: SitePlan, hard: list[Poly], fabric: l
                     # path is still better served than one reached by none, and `farmhouses_reach_a_way`
                     # is the harsher verdict of the two.
                     # ...AND A FOUL IS THE SAME KIND OF REASON AS A FOLD (feature 134 T50, 2026-08-29).
-                    # A tread drawn through a NEIGHBOUR'S garden is not a footpath either, and the overlap
+                    # A tread drawn through a NEIGHBOR'S garden is not a footpath either, and the overlap
                     # matrix says so outright - cohort seed 18's path grazed one at 1.21 ft. Ranked the
                     # same way as the two cuts are: an overlap is a rule broken, a fold is a shape
                     # complaint, so (fouls, bends) orders them and the least bad is what gets drawn if no

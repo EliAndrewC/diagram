@@ -217,3 +217,37 @@ def test_the_waterward_flanks_are_the_ones_the_village_does_not_stand_on() -> No
     assert hg.polder_crossing_caps(plan)["drain"] == 3 and hg.polder_crossing_caps(plan)["feeder"] == 0
     plan.seat = {}
     assert hg.polder_flanks(plan)["cluster"] == ""
+
+
+def test_a_pond_whose_bank_cannot_hold_the_fixture_is_passed_over() -> None:
+    """EACH POND TAKES AT MOST ONE FIXTURE, AND ONLY IF ITS BANK HAS ROOM. The seat is derived from the
+    parcel and the house centroid, so it can land somewhere the fixture does not fit - on the water, off
+    the canvas, or against something already standing. The pond is then skipped and the next one in the
+    walk order is tried, rather than the fixture being forced or the whole run abandoned.
+
+    Reaching this from a rolled map needs a dike-pond hamlet whose nearest pond happens to have a
+    blocked bank, which none of the four in the pool does - so the branch is asked directly, with
+    hand-built pond records: one whose bank seat is off the canvas entirely, and one with room."""
+    from l7r.diagram.hamletgen.pondstock import stage_pond_stock
+    from l7r.diagram.settlement import Settlement
+
+    plan = hg.plan_site(hg.HamletSpec(name="X", seed=3, households=16, field_archetype="mulberry_dike_fishpond"))
+
+    def _pond(x: float, y: float) -> dict:
+        parcel = [(x - 60.0, y - 40.0), (x + 60.0, y - 40.0), (x + 60.0, y + 40.0), (x - 60.0, y + 40.0)]
+        return {"parcel": parcel, "water": parcel, "kind": "growout"}
+
+    s = Settlement(W=900, H=900, seed=1)
+    s.meta(name="X", scale="hamlet")
+    s.M["houses"] = [{"x": 450.0, "y": 450.0, "w": 46.0, "h": 28.0} for _ in range(4)]
+    # one pond's bank seat lands on the houses themselves - `pond_fixture_fits` holds a fixture clear
+    # of every placed footprint, so that pond can take nothing and the walk moves on to the next
+    s.M["dikeponds"] = [_pond(450.0, 500.0), _pond(450.0, 250.0), _pond(450.0, 700.0)]
+    stage_pond_stock(s, plan)
+
+    declared = s.M["meta"]["pond_stock"]
+    assert declared["sties"] >= 0 and declared["pens"] >= 0
+    placed = len(s.M.get("pig_sties") or []) + len(s.M.get("duck_pens") or [])
+    assert placed <= 2, "the pond whose bank is under the houses can hold nothing"
+    for rec in (s.M.get("pig_sties") or []) + (s.M.get("duck_pens") or []):
+        assert rec.get("pond") != 0, "the pond whose bank could not hold a fixture was skipped"

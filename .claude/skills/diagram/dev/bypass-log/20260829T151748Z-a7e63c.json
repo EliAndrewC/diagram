@@ -1,0 +1,6 @@
+{
+  "utc": "20260829T151748Z",
+  "guard": "pair-hooks",
+  "what": "gate alone",
+  "reason": "measurement roll after the husk-deletion and sweep-reordering fixes from two settlement-reviews already completed on this content"
+}

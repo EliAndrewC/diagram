@@ -513,6 +513,23 @@ low.** The mechanism, the pool census (three lanes on three maps) and the implem
 recorded at the point of change in `hamletgen/ways.py`; the fix belongs in the junction pass, which
 measures its 40 ft overrun from the wrong end.
 
+**A SECOND LEVER WAS PRICED BY THE REVIEWER AND FAILS THE SAME WAY**, which is worth recording so
+nobody walks it again: instead of deleting the elbow, extend the lane's last real segment to its
+perpendicular foot on the way it joins - keeping the T-junction and moving the tread much less.
+Measured on all three affected maps:
+
+| map | lane | foot offset | max tread move | nearest recorded feature to the rewritten run |
+|---|---|---|---|---|
+| sawada | 10 | 11.5 ft | 9.9 ft | 7.8 ft (a house) - would pass |
+| kashikawa | 4 | 17.7 ft | 16.0 ft | **1.6 ft (a garden)** - fails |
+| mizuguchi | 3 | 19.0 ft (the foot IS the tip) | 19.0 ft | **0.5 ft (a garden)** - degenerates to the interior-vertex delete |
+
+The cheaper lever lands in the same two gardens the severity-coupled band did, by another route, and
+that sharpens the reason: **every post-hoc geometric rewrite of the spike has no router**, so on two of
+three maps it puts the tread inside a garden. Only a pass that still holds the obstacle set and
+`may_write` can choose a foot that clears - which is the junction pass, and is why the fix belongs
+there.
+
 **OPEN, FOR THE GM - the notice board stands where nobody passes, and this is a DOCTRINE question.**
 Measured on this roll: the board at **(1941.2, 2443.0)** has **7 of 19** dwellings within 250 ft and 5
 within 150. The busiest point on the whole web, at (1611.7, 2279.8) where lanes 5/11/6 meet, has
