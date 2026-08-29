@@ -342,7 +342,9 @@ def _seg_0613__village_windbreak_is_continuous(*, M: Any = _UNBOUND, check: Any 
             "village_windbreak_is_continuous",
             not _thin,
             f"the windbreak carries a gap wider than {_BELT_MAX_GAP_FT:.0f} ft at {len(_thin)} point(s): {sorted(set(_thin))[:4]} "
-            f"(x, y, ft of bare run ACROSS the wind) - a belt with a hole in it is not a wind wall. Measured as a RUN of bare columns rather than "
+            f"(ft of bare run ACROSS the wind, at the NEAREST CLUMP to it - x, y is that clump, NOT the gap, which lies up to a "
+            f"clump radius further along the belt: do not sample the reported point to decide where the hole is) - a belt with a hole in it "
+            f"is not a wind wall. Measured as a RUN of bare columns rather than "
             f"as depth per column, because a belt is a jittered scatter and its own pitch leaves single columns empty. Let the belt re-seat around "
             f"whatever blocked it rather than losing the column",
         )
