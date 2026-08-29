@@ -27,6 +27,13 @@ from .._knobs import KOSATSUBA_MARKER_MIN_PX, PUNISHMENT_SPOT_FT, resolve_knob
 # note beside `_pick` in `kosatsuba` for why this satisfices rather than maximizes, and why 5 ft.
 CAPTION_LANE_TARGET_FT = 3.0
 
+# THE RULE'S OWN FLOOR, as opposed to the target above it. `captions_clear_the_ways_they_stand_on`
+# (gate 0617) requires 2 ft between a caption's box and a lane's tread edge; the 3 ft target keeps one
+# foot of margin over it and no more. A board that can reach the target takes it; a board that cannot
+# gives up the margin - never the two feet the rule actually asks for, and never its position beside
+# the board it names. Feature 157: the rung between "the good seat" and the old unbounded fallback.
+CAPTION_LANE_FLOOR_FT = 2.0
+
 # THE BOARD IS ROADSIDE (GM 2026-08-26, feature 133 T13: *"I would expect it to be essentially
 # roadside ... puts it right next to one of the village lanes"*). Real feet from the tread's EDGE to
 # the board's near edge. Research (research/urban-features.md): the kosatsu stood where traffic
@@ -591,10 +598,29 @@ class PublicFixturesMixin:
                 elif _seat is not None:
                     _lx, _ly = _seat
                 else:
-                    # NOTHING IS LEGAL ANYWHERE. Fall back to exactly the old thirty-seat search, so a
-                    # board with no good ground behaves as it always has - the least-bad seat, chosen by
-                    # the same satisficing rule - instead of inheriting a fallback nobody has measured.
-                    _lx, _ly = _pick(_tilted)
+                    # NOTHING CLEARS THE 3 FT TARGET ANYWHERE. Give up the MARGIN before giving up the
+                    # board (feature 157, measured on the cohort). The target is 3 ft and gate 0617
+                    # requires 2 - one foot of headroom, deliberately - so a board with nowhere good
+                    # surrenders that foot rather than surrendering its caption's position: the same
+                    # dense ladder, the same order, the same hug and fabric rules, judged against the
+                    # rule's own floor instead of against the margin above it.
+                    #
+                    # WHY THIS RUNG EXISTS AT ALL. Without it the fallback below is `pick_caption_seat`'s
+                    # `max(..., key=box_clearance)` - an UNBOUNDED MAXIMIZE with no lateral term, which is
+                    # the third recorded instance of that flaw in this one function (see the SATISFICE
+                    # note above, and the HUG CAP note below it). Measured across 48 cohort seeds: six
+                    # boards took it, and every one landed at the coarse ladder's own +/-38.9 px lateral -
+                    # 12.4, 17.7, 28.3, 28.4, 32.3 and 36.3 px along their own baselines, against bounds
+                    # of 10.7-11.3. They are the GM's Kuwabata defect, reproduced by the fallback on maps
+                    # nobody had looked at.
+                    _floor = self.px(CAPTION_LANE_FLOOR_FT)
+                    _seat = next((_q for _, _q in _ranked if _hug(_q) <= _hug_cap and not _blocked(_q) and _box_clearance(_q) >= _floor), None)
+                    if _seat is not None:
+                        _lx, _ly = _seat
+                    else:
+                        # ...and if even the floor is unreachable, exactly the old thirty-seat search, so
+                        # a board with genuinely nowhere to put its caption behaves as it always has.
+                        _lx, _ly = _pick(_tilted)
             else:
                 # THE HALO MUST NOT NOTCH THE WAY THE BOARD STANDS ON (settlement-review on Inashiro,
                 # 2026-08-19). The caption is drawn with a 3 px background halo
