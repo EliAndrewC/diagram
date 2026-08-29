@@ -455,3 +455,37 @@ touch, which is why it is deferred rather than half-done here.
 Also recorded, not raised: the midden-beside-the-wellhead class is settled research (`research/homesteads.md`,
 2026-08-18); two of four scripted hamlets now roll ZERO woodland commons, so three woodland checks pass
 vacuously - a question for feature 146's check census.
+
+## 2026-08-29 - settlement-review, DELTA after the merge onto main (feature 150)
+
+Re-rolled by the ENGINE under an unchanged `.gen.py`. Verdict **needs-work**.
+
+**CAUGHT that a fix of ours was calibrated below the defect it was written for.** `drop_end_nubs`
+shipped with a 5 ft floor - taken from the ONE case that prompted it, 3.1 ft - and this map carried two
+nubs that cleared it: an 8.25 ft boot turning -87 degrees off a 117 ft run, and a 5.74 ft first segment
+turning 88 degrees on an 11.5 ft lane hung off another lane's elbow. The floor is 9 ft now, about a
+lane-width-and-a-half at hamlet tier, and the blast radius was MEASURED before the change: pool-wide,
+5 -> 9 ft drops 3 more end vertices, **all three on this map**, no other map touched.
+
+**CAUGHT, and fixed here.** Two watercourses butted end-to-end with a rounded plug across the joint -
+the brook mouth (this map's thesis) and the head intake. `_clip_to_moat` and `_clip_to_river` have
+pulled their endpoints back by the stroke's CAP RADIUS since they were written, because a round cap
+bulges half a stroke-width past its endpoint; `_clip_to_stream` never took the argument, and the caller
+passed it to those two and not to it. A one-argument asymmetry, not a new mechanism.
+
+**Confirmed**: the marsh keep-out holds under a count that does not use the author's audit - 0 of 600
+in-frame brush dots, 0 of 39 pine trunks and 0 of 283 crowns inside the marsh, and 0 footprint corners
+of any family; going the other way, 0 of 10,172 reed blades and 0 of 1,200 tint circles centered inside
+the paddy. The three-arm water junction composites as one body. The 2026-08-28 fixes held (flooded
+plots 2 -> 1, no empty lane husk). The notice board is on the busiest ground the map has, 13 of 19
+households within 250 ft against a web maximum of 15.
+
+**CAUGHT, recorded, not fixed** - the largest is engine-wide: **every privy and manure pit on this map
+stands UPWIND of its own house**, 11 of 12 NE and 1 E against `windward: NE`. Measured pool-wide, the
+seat table is expressed in the HOUSE's local frame and houses draw at rot 0-4 degrees, so "back" is
+north on every map: Inashiro 0/11 upwind, Kuwabata 0/9, Mizuguchi 0/4, Kashikawa 3/14, Sawada 12/12 -
+the other four are downwind by luck and nothing consults `plan.windward`. Also: the surviving flooded
+plot is 6,706 sq ft, **4.9x the median basin and the largest of 776**, because every demotion predicate
+tests sharpness and none tests size; the windbreak trim got WORSE rather than better since its
+deferral (57 -> 85 px of bare strip, 5 of 19 houses now beyond the drawn belt); the copse draws inside
+the windbreak (13 of 17 clumps touching one); and `make jogs` exits RED here with nobody reading it.
