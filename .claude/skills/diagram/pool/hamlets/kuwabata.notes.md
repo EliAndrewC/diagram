@@ -58,6 +58,9 @@ other values are under `wip/kuwabata-*`.
 
 ## Review log
 
+- **2026-08-29: ACCEPTED by the GM** (feature 139 T99), after T50-T55 and four settlement-review
+  passes. The map ships as the scripted dike-pond exemplar.
+
 - 2026-08-29 settlement-review of that fringe fix: **needs-work, and it was right**. Deferring the fringe
   moved it past `block_polys.append(pond bbox + 10)` as well, and the reed scatter reads `block_polys` -
   so the reeds inherited a keep-out meant for BUILDINGS, covering the shore band itself. Measured by the

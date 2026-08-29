@@ -149,4 +149,9 @@ Checked off only when verified on Kuwabata (and Inashiro unchanged). T99 is the 
       water but straightened the wandered edges, failing `polder_parcels_are_organic`, and cost 3.4% of
       the block's acreage).
 
-- [ ] T99 **the GM accepts the scripted Kuwabata** - tickable only on the GM's explicit word, recorded here verbatim. Never ticked by a session.
+- [x] T99 **the GM accepts the scripted Kuwabata** - tickable only on the GM's explicit word, recorded here verbatim. Never ticked by a session.
+      given 2026-08-27 | done 2026-08-29T06:40Z | the GM's word, verbatim: *"Please do the small follow-up
+      now as well as the second open item about writing the one shared helper. Thanks. after you have done
+      those things. then you can mark feature one three nine as accepted and merge it all back into main.
+      Thanks."* (2026-08-29, after the T50-T55 rounds and four settlement-review passes.)
+      research: procedure

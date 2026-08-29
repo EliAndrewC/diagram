@@ -27,6 +27,29 @@ from typing import TYPE_CHECKING, Any
 from .._geom import Pt, boxed_grid, boxed_hit, boxed_polys, boxed_seg_hit, boxed_segs, edge_dist, point_in_poly, seg_dist
 
 MARSH_FEATHER_BS = 46  # the reeds thin to nothing over this band (x bscale) inside the polygon; `commons` thins its scrub INTO the marsh over the same band
+
+
+def pond_fringe_ring(cx: float, cy: float, rx: float, ry: float, margin: float, n: int = 16) -> list[tuple[float, float]]:
+    """The reedy MARGIN of a pond, as the polygon `marsh(role="pond_fringe")` scatters (feature 147).
+
+    One helper because there are two call sites and they diverged: the sink's tameike keeps 44 px of
+    fringe, a comb source pond 40, and each built the ring by hand. The margins still differ - a tameike
+    is dug and its shallows are wider - but the difference is now an ARGUMENT rather than two literals a
+    reader has to notice.
+
+    TWO ORDERING RULES BOTH CALLERS OWE, and both were learned by getting them wrong on 2026-08-29:
+
+    1. Scatter the fringe only AFTER the water it must keep off is recorded. `draw_comb_field` drew it
+       before the field's channels existed, so the reed keep-out had nothing to keep off and three blades
+       were drawn across the inlet hairline.
+    2. Let the pond's own no-build rect (`block_polys`) follow the fringe, never precede it. The reed
+       scatter reads `block_polys`, which exists to stop BUILDINGS standing on water; appended first it
+       covers the shore band and costs 45% of the annulus - 32 of 54 tufts, measured, with the tameike
+       reading as a bare plate.
+    """
+    return [(cx + (rx + margin) * math.cos(a), cy + (ry + margin) * math.sin(a)) for a in [i * math.pi / (n / 2) for i in range(n)]]
+
+
 MARSH_TINT_R = 28.0  # the widest wet-tint circle's radius (x bscale) - also the keep-off a mound owes the tint (T54)
 MARSH_TUFT_R = 7.0  # the tallest reed blade / widest glint (x bscale) - the same keep-off for the tufts (T54)
 

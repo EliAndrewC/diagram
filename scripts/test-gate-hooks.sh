@@ -78,6 +78,32 @@ run "$(bash_ev 'make done')"; check "done alone ok" ok $?
 run "$(bash_ev 'GATE_OK: comparing the two; make quick; make done')"; check "escape with a reason" ok $?
 teardown
 
+echo "9. a MENTION is not an INVOCATION (GM 2026-08-29: the small follow-up)"
+# Six pieces of correct work were blocked in one day by substring matching: a script ANALYSING how often
+# the two targets had run, a plan document quoting them, this file twice, and the command that fixed it.
+setup
+run "$(bash_ev 'python3 - <<PY
+print("counting the make quick and make done runs in the transcript")
+PY')"; check "a heredoc that talks about both targets" ok $?
+run "$(bash_ev 'grep -n "make quick.*make done" docs/iteration-loop.md')"; check "a quoted grep for both" ok $?
+run "$(bash_ev 'git commit -m "make quick while iterating, make done once at the end"')"; check "a commit message quoting both" ok $?
+run "$(bash_ev 'echo "make quick; make done" > /tmp/notes.txt')"; check "writing them into a file as text" ok $?
+teardown
+# a pytest MENTION must not arm the subset flag either - the seventh false positive of the day was this
+# file's own vectors (a quoted `-k foo`) arming a block for a run nobody made
+setup
+run "$(bash_ev 'python3 - <<PY
+print("the vector reads: pytest tests/test_x.py -k foo")
+PY')"
+run "$(bash_ev 'make done')"; check "a pytest mention does not arm the subset block" ok $?
+teardown
+# ...and the real thing is still caught, with the flag machinery untouched
+setup
+run "$(bash_ev 'pytest tests/test_x.py -k foo')"
+run "$(bash_ev 'echo "make done is what I will run next"')"; check "a mention does not consume the subset block" ok $?
+run "$(bash_ev 'make done')"; check "...and the real gate is still blocked once" blocked $?
+teardown
+
 echo
 if [ "$FAIL" -eq 0 ]; then echo "test-gate-hooks: all $PASS checks passed"; exit 0; fi
 echo "test-gate-hooks: $FAIL FAILED, $PASS passed"; exit 1

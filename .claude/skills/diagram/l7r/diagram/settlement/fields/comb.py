@@ -21,6 +21,7 @@ from .._geom import (
     seg_dist,
 )
 from .._knobs import _centroid, _sharp_corners, _toward
+from ..land.wet import pond_fringe_ring
 
 if TYPE_CHECKING:
     from ..core import Settlement
@@ -311,7 +312,7 @@ class CombMixin:
             # from the hairline with three of its blades drawn across the water. The ring is handed back and
             # scattered once the channels exist. Its own rng is seeded from its bbox, so the scatter's draw
             # order is unchanged - only the keep-out now sees what it is supposed to avoid.
-            fringe_ring = [(pcx + (prx + 40) * math.cos(a), pcy + (pry + 40) * math.sin(a)) for a in [i * math.pi / 8 for i in range(16)]]
+            fringe_ring = pond_fringe_ring(pcx, pcy, prx, pry, 40.0)  # the shared ring - its docstring carries the two ordering rules this call site owes
             pond_rec = (pcx, pcy)
             self._pending_fringe = fringe_ring  # drawn by `draw_comb_field` once every channel is recorded
             self._pending_block = [(pcx - prx - 10, pcy - pry - 10), (pcx + prx + 10, pcy - pry - 10), (pcx + prx + 10, pcy + pry + 10), (pcx - prx - 10, pcy + pry + 10)]
