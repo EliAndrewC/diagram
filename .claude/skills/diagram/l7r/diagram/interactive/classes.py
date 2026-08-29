@@ -74,8 +74,10 @@ def _c(**kw: object) -> FeatureClass:
 
 
 # The sibling texts, written once per PAIR and installed in both directions below. Each is how the
-# FIRST-named class differs from the second; the reverse direction reads the same text from the
-# other side, which is what "distinguished from one another" asks for.
+# FIRST-named class differs from the second. SINCE 2026-08-28 THE PAGE DOES NOT SHOW THEM: the GM
+# asked for the linkage as "Not to be confused with the X" LINKS (hover lights X, click opens X's
+# modal) so each modal's text stays its own; the texts remain here as the record of what
+# distinguishes each pair, to be folded into the classes' own explanations as those lengthen.
 _PAIRS: dict[tuple[str, str], str] = {
     (
         "farmhouse",
@@ -190,7 +192,7 @@ _DEFS: tuple[FeatureClass, ...] = (
         key="farmhouse",
         name="farmhouse",
         covers="`houses` - the dwelling of each household",
-        what="The dwelling of one farming household: a thatched minka, its ridge on the long axis, standing on the slightly raised ground the homesteads share, its work yard and garden beside it.",
+        what="The dwelling of one farming household: a thatched minka, its ridge on the long axis, standing on the slightly raised ground the homesteads share, its work yard and garden beside it and, where a farm stands alone, its own yashikirin sheltering it.",
         why="A house in a nucleated hamlet is reached by a lane and stands close to the paddy - up against it, but never on the bund. The farmhouses are placed first, before any lane inside the settlement: the lanes between farmsteads are trodden by the households already living there.",
         label="accurate",
         label_note="Placement and form follow the read record; the setback from the paddy is DERIVED (no source states it in feet) and is a drawing convention inside read bounds.",
@@ -223,12 +225,12 @@ _DEFS: tuple[FeatureClass, ...] = (
         key="threshing yard",
         name="threshing yard",
         covers="`threshing_yards`",
-        what="A small tamped-earth work floor beside each farmhouse - swept bare, with a straw drying mat and a little rack for hanging sheaves.",
-        why="Threshing and drying were done per household, in the yard, and the yard needs sun: a thatched roof pitched at 45 degrees puts a minka's ridge at 20-22 feet, so no yard is placed in the shadow band south of a neighbor's wall.",
+        what="A small tamped-earth work floor beside each farmhouse - swept bare, with a straw drying mat and a little rack for hanging sheaves. Households measured it in straw mats: 40 to 60 of them, two mats to the tsubo, so an ordinary yard is 20 to 30 tsubo and a few run past 50.",
+        why="Threshing and drying were done per household, in the yard, and the yard needs sun: a thatched roof pitched at 45 degrees puts a minka's ridge at 20-22 feet, so no yard is placed in the shadow band south of a neighbor's wall. Its SIZE follows the crop the household must dry, which is why every yard on this map is different: each is rolled from a right-skewed spread about 18 tsubo (59.5 sq m), correlated with the household - a large farm overwhelmingly has a large yard, and the occasional mismatch is a fact about that farmstead.",
         label="accurate",
-        label_note="The sun corridor is derived from the read roof pitch and house height; the yard's size is a drawing convention.",
+        label_note="The size band and the spread's shape are read - Kitamoto's mat counts, and the lognormal that fits Kamikanai's 1771 house histogram; the wet-rice CENTER is interpolated from the crop (rice is field-dried on racks first, so a paddy household needs less floor than the barley district the mat counts come from), and the sun corridor is derived from the read roof pitch.",
         sources=("not recorded",),
-        entry="research/homesteads.md - 'The threshing yard's sun, and how far a farmhouse shades'",
+        entry="research/homesteads.md - 'How big was the work yard, and how did the sizes spread'; 'The threshing yard's sun, and how far a farmhouse shades'",
     ),
     _c(
         key="garden",
@@ -239,7 +241,7 @@ _DEFS: tuple[FeatureClass, ...] = (
         label="accurate",
         label_note="Presence and the sun rule are read; the bed's size and row count are drawing conventions.",
         sources=("not recorded",),
-        entry="research/homesteads.md - 'The garden's sun, and how far the windbreak shades'",
+        entry="research/homesteads.md - 'The garden's sun, and how far the windbreak shades'; 'The threshing yard's sun, and how far a farmhouse shades' (the garden rule is derived from it)",
     ),
     _c(
         key="privy",
@@ -426,7 +428,7 @@ _DEFS: tuple[FeatureClass, ...] = (
         label="deviation",
         label_note="The practice is attested; the bead color is a deliberate deviation - real soybean foliage is lighter, and the deep pine green was chosen so the beads read against the pale rice.",
         sources=("not recorded",),
-        entry="research/fields.md - the bund entries; waterfields/palette.py BEAN_GREEN (the color decision)",
+        entry="research/fields.md - 'Paddy plots - irregular patchwork'; 'Bunds are SHARED, and the fabric is continuous'; waterfields/palette.py BEAN_GREEN (the color decision)",
     ),
     _c(
         key="millet",

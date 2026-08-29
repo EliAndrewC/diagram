@@ -132,3 +132,69 @@ def test_the_waterward_strip_stops_at_the_dikes_face() -> None:
     west = [m for m in strips if m["x"] < 900][0]
     assert max(p[0] for p in west["poly"]) <= 540.0  # never past the outermost face of the band
     assert hg.point_in_poly(500.0 - 28.0, 600.0, [(float(a), float(b)) for a, b in west["poly"]])  # the check's own sample is inside
+def test_predict_k_steps_by_the_power_law_and_falls_back_to_the_midpoint() -> None:
+    """The field solver's step (feature 145): a square-root step from one carve, a power-law step
+    from two, and the bracket midpoint whenever the prediction is useless."""
+    from l7r.diagram.hamletgen.water import _predict_k
+
+    # one carve at k=1 gave 9 acres against a 16-acre target: k^2 scaling predicts 4/3
+    assert abs(_predict_k([(1.0, 9.0)], 16.0, 0.35, 2.2) - 4.0 / 3.0) < 1e-9
+    # two carves on an exact k^2 curve predict the exact answer
+    assert abs(_predict_k([(1.0, 4.0), (1.5, 9.0)], 16.0, 0.35, 2.2) - 2.0) < 1e-9
+    # a flat (same acreage twice) has no slope - square-root step from the last point
+    assert abs(_predict_k([(1.0, 9.0), (1.2, 9.0)], 16.0, 0.35, 2.2) - 1.2 * (16.0 / 9.0) ** 0.5) < 1e-9
+    # an exponent outside (0.2, 6) is not a fan - square-root step
+    assert abs(_predict_k([(1.0, 1.0), (1.1, 100.0)], 200.0, 0.35, 2.2) - 1.1 * 2.0**0.5) < 1e-9
+    # nothing carved: midpoint
+    assert _predict_k([(1.0, 0.0)], 16.0, 0.5, 1.5) == 1.0
+    # a prediction outside the open bracket: midpoint
+    assert _predict_k([(1.0, 9.0)], 16.0, 0.5, 1.2) == 0.85
+    # the same k twice cannot give a slope: square-root step
+    assert abs(_predict_k([(1.0, 9.0), (1.0, 9.5)], 16.0, 0.35, 2.2) - (16.0 / 9.5) ** 0.5) < 1e-9
+
+
+def test_fit_field_probes_saturation_and_rerolls_the_best_aspect_in_full(monkeypatch: object) -> None:
+    """Feature 145: an aspect whose largest fan is still short is dropped after two carves, and when no
+    aspect lands the target the best one is searched again without the probe."""
+    from types import SimpleNamespace
+
+    from l7r.diagram.hamletgen import water as w
+
+    carves: list[tuple[float, float]] = []
+
+    def fake_comb(W: float, H: float, sluice: object, seed: int, **kw: object) -> dict[str, object]:
+        k = float(kw["field_fall"]) / w.REF_FIELD_FALL  # type: ignore[arg-type]
+        aspect = float(kw["canal_a_len"][0]) / (w.REF_CANAL_A[0] * k)  # type: ignore[index]
+        carves.append((round(aspect, 2), round(k, 3)))
+        return {"k": k, "aspect": aspect}
+
+    monkeypatch.setattr(w, "build_comb", fake_comb)  # type: ignore[attr-defined]
+    monkeypatch.setattr(w, "net_acres", lambda net, ftpx: min(9.0 * net["k"] ** 2, 10.0))  # type: ignore[attr-defined]  # saturates at 10 acres
+    monkeypatch.setattr(w, "tail_dangles", lambda net: False)  # type: ignore[attr-defined]
+    monkeypatch.setattr(w, "net_bends_acutely", lambda net: False)  # type: ignore[attr-defined]
+    plan = SimpleNamespace(W=1000.0, H=1000.0, down_deg=90.0, offtakes_a=(), offtakes_b=(), grain_drift=0.0, fan_aspect=w.FAN_ASPECTS[0], target_acres=16.0, ftpx=1.0)
+    net = w.fit_field(plan, (0.0, 0.0), 1, 20.0, (30.0, 40.0))  # type: ignore[arg-type]
+    per_aspect = {}
+    for a, _k in carves:
+        per_aspect[a] = per_aspect.get(a, 0) + 1
+    first = max(per_aspect, key=lambda a: per_aspect[a])  # the rolled aspect, searched again in full when nothing landed
+    assert max(n for a, n in per_aspect.items() if a != first) <= 3, per_aspect  # every other aspect: k = 1, the probe, dropped
+    assert per_aspect[first] > 3  # the rolled aspect was searched again in full
+    assert net["k"] > 0
+
+
+def test_a_saturated_aspect_stops_after_the_probe_instead_of_bisecting_a_fan_it_cannot_grow() -> None:
+    """Cohort seed 47 (2026-08-28): at four of its five aspects the fan SATURATES - the envelope clamps it
+    and the acreage sits at 16-17 against a 19.5 target however large k gets - and the old loop spent its
+    last four carves at k = 2.16, 2.18, 2.19, 2.195 drawing the same 16.35 acres each time. The probe asks
+    the question once: if neither k = 1 nor the LARGEST fan this aspect can draw reaches the target, keep
+    the better of the two and give the time to the next aspect."""
+    from l7r.diagram.hamletgen.water import _fit_at_aspect
+
+    from ._builders import a_plan
+
+    plan = a_plan()
+    plan.target_acres = 500.0  # far past anything this envelope can hold: every aspect saturates
+    (bad, err), net = _fit_at_aspect(plan, (700.0, 300.0), 3, 46.0, (26.0, 30.0), 1.0, 0.06, 9, probe=True)
+    assert not bad and err > 0.5, "the best legal fan is kept, and it is nowhere near the ask"
+    assert net["plots"], "and it is a real fan, not an empty one"

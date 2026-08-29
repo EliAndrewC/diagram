@@ -84,7 +84,7 @@ is_recon_call() {
     Bash) ;;
     *) return 1 ;;
   esac
-  if printf '%s' "$INPUT" | grep -qE '<<|&&|;|\\n|pytest|make |git commit|git add|python3? -|ruff|mypy'; then
+  if printf '%s' "$INPUT" | grep -qE '<<|&&|;|\\n|pytest|make |git commit|git add|python3? -|ruff|mypy|pyrefly'; then
     return 1
   fi
   return 0

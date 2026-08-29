@@ -19,13 +19,15 @@ import math
 import random
 from typing import TYPE_CHECKING, Any
 
+from l7r.diagram.settlement._geom.primitives import keepout_ring
+
 from .._geom import Poly, Pt, point_in_poly, smooth_closed, smooth_points
+
+DIKE_GAP_HW = 15.0  # half the width the band is CUT by at a sluice notch or a crossing; exported because the waterward reed strip steps into exactly that opening (feature 139 T54, hamletgen/water.py `dike_face`) and a drifted copy would leave the wet ground short of the cut or lapping the band
+DIKE_KEEPOUT_EPS = 8.0  # px: a chord may stray this far from the crest; the keep-out is pushed out by it (feature 140)
 
 if TYPE_CHECKING:
     from ..core import Settlement
-
-
-DIKE_GAP_HW = 15.0  # half the width the band is CUT by at a sluice notch or a crossing; exported because the waterward reed strip steps into exactly that opening (feature 139 T54, hamletgen/water.py `dike_face`) and a drifted copy would leave the wet ground short of the cut or lapping the band
 
 
 class DikeMixin:
@@ -93,9 +95,9 @@ class DikeMixin:
         # byte-identical to before. Keep-out, label, width and the recorded outline still use the FULL band.
         gap_pts = [(float(gx), float(gy)) for gx, gy in gaps]
         gap_hw = DIKE_GAP_HW
+        runs: list[list[int]] = []  # declared ahead of the branch: read below under the same `gap_pts` test, which a checker cannot correlate
         if gap_pts:
             keep = [all(math.hypot(x - gx, y - gy) > gap_hw for gx, gy in gap_pts) for x, y, _ei in dense]
-            runs: list[list[int]] = []
             if all(keep):
                 runs = [list(range(n))]
             else:
@@ -177,13 +179,71 @@ class DikeMixin:
         # the dike is a raised earthwork bank - NO-BUILD ground: houses and the windbreak grove keep OFF it
         # (GM 2026-07-22). Register the band as a placement keep-out so try_place / farmsteads / village_grove
         # flow around it (validated by structures_clear_of_dike).
-        self.block_polys.append(smoothed)
+        # THE KEEP-OUT IS A FEW CHORDS ALONG THE CREST, NOT THE DRAWN BAND (feature 140, GM 2026-08-28:
+        # *"thousands of vertices is obviously bad ... draw a single line segement along the edge of the actual
+        # polder boundaries and then put the houses on one side of it"*). The smoothed band has 2,880 vertices
+        # on the seed-19 polder and every homestead seat test walked all of them (8 s of a roll). The crest is
+        # simplified to at most a couple of dozen chords (Douglas-Peucker at DIKE_KEEPOUT_EPS) and pushed out on
+        # each side by the band's MEASURED reach plus the tolerance, so it contains every vertex of the band
+        # (`tests/settlement/test_keepouts.py`); placement, the scatter and the near-ring paddies keep off it,
+        # and `structures_clear_of_dike` measures the same chords (recorded as `keepout`). The drawing and the
+        # `outline` record are unchanged.
+        _crest = [((inner_s[i][0] + outer_s[i][0]) / 2, (inner_s[i][1] + outer_s[i][1]) / 2) for i in range(n)]
+        _keep, _chords = keepout_ring(_crest, smoothed, DIKE_KEEPOUT_EPS)
+        self.M["dikes"][-1]["keepout"] = [[round(p[0], 1), round(p[1], 1)] for p in _keep]
+        self.M["dikes"][-1]["keepout_chords"] = len(_chords)
+        self.block_polys.append(_keep)
         if label:
             # site the label on a clear stretch: the outward-most mid-edge point that is NOT near the village
             houses = self.M.get("houses", [])
             hx = sum(h["x"] for h in houses) / len(houses) if houses else cx
             best = max(outer_s, key=lambda p: (p[1] < cy) * 1000 - abs(p[0] - cx) - (200 if (p[0] - cx) * (hx - cx) > 0 else 0))
             self.label(best[0], best[1] - 8, label, 10, italic=True, color="#6B5836")
+
+
+    def dike_gates(self: Settlement, span_ft: float = 6.0) -> int:  # type: ignore[misc]
+        """A sluice gate at every cut of every perimeter dike (feature 139, GM 2026-08-28 choosing audit A7).
+
+        Water crosses a polder dike only through a gated sluice - "a protected opening in the pond dike that
+        can be easily closed with wooden boards" (FAO; research/archetypes.md 'A dike-pond is fed and drained
+        through sluice gates'). Drawn with the engine's own gate glyph (posts + lifted board, `city/moat.py`),
+        turned to lie along the crest, i.e. across the water, and SNAPPED onto the recorded watercourse the
+        gate checks measure against (streams + canals, `segments_06b` `sc_waters`) when one runs within 20 ft
+        of the cut - which is why this is a separate step, called from the crossings stage after every
+        watercourse is recorded, and not part of `perimeter_dike` (drawn before the inlet stream exists;
+        measured: the inlet gate landed 8.9 px off its stream). Returns the number of gates drawn."""
+        n_gates = 0
+        for dk in self.M.get("dikes", []):
+            crest = [(float(c[0]), float(c[1])) for c in dk.get("crest") or []]
+            if len(crest) < 4:  # pragma: no cover - a recorded dike always carries its crest
+                continue
+            n = len(crest)
+            for gx, gy in [(float(g[0]), float(g[1])) for g in dk.get("gaps") or []]:
+                k = min(range(n), key=lambda i: math.hypot(crest[i][0] - gx, crest[i][1] - gy))
+                a, b = crest[(k - 2) % n], crest[(k + 2) % n]
+                rot = math.degrees(math.atan2(b[1] - a[1], b[0] - a[0]))
+                sx, sy, sd = gx, gy, 1e9
+                for key in (
+                    "drawn_channels",
+                    "streams",
+                    "canals",
+                    "channels",
+                ):  # the checks' own set (segments_06b sc_waters) - the DRAWN strokes first: the reader sees ink, and the recorded inlet ran 7 ft off its stroke at the cut (settlement-review)
+                    for ch in self.M.get(key, []):
+                        pp = (ch.get("pts") if key == "drawn_channels" else ch.get("poly")) or []
+                        for q0, q1 in zip(pp, pp[1:], strict=False):
+                            ax, ay, bx, by = float(q0[0]), float(q0[1]), float(q1[0]), float(q1[1])
+                            ll = (bx - ax) ** 2 + (by - ay) ** 2
+                            tt = 0.0 if ll == 0 else max(0.0, min(1.0, ((gx - ax) * (bx - ax) + (gy - ay) * (by - ay)) / ll))
+                            cx, cy = ax + tt * (bx - ax), ay + tt * (by - ay)
+                            dd = math.hypot(cx - gx, cy - gy)
+                            if dd < sd:
+                                sx, sy, sd = cx, cy, dd
+                if sd > self.px(20.0):  # no recorded course within reach: the cut itself is the seat
+                    sx, sy = gx, gy
+                self.sluice_gate(sx, sy, rot=rot, span=self.px(span_ft))
+                n_gates += 1
+        return n_gates
 
     def dike_top_houses(self: Settlement, count: int, seed: int = 0, dike: int = 0, span: tuple[float, float] = (0.0, 1.0), size: tuple[float, float] = (46.0, 28.0), gap_clear: float = 34.0) -> int:  # type: ignore[misc]
         """A DIKE-TOP VILLAGE: farmhouses in SINGLE FILE ON the perimeter dike crest (settlement_form
@@ -272,47 +332,3 @@ class DikeMixin:
         random.setstate(st)
         self.M["meta"].setdefault("settlement_form", "dike_top")
         return n_placed
-
-    def dike_gates(self: Settlement, span_ft: float = 6.0) -> int:  # type: ignore[misc]
-        """A sluice gate at every cut of every perimeter dike (feature 139, GM 2026-08-28 choosing audit A7).
-
-        Water crosses a polder dike only through a gated sluice - "a protected opening in the pond dike that
-        can be easily closed with wooden boards" (FAO; research/archetypes.md 'A dike-pond is fed and drained
-        through sluice gates'). Drawn with the engine's own gate glyph (posts + lifted board, `city/moat.py`),
-        turned to lie along the crest, i.e. across the water, and SNAPPED onto the recorded watercourse the
-        gate checks measure against (streams + canals, `segments_06b` `sc_waters`) when one runs within 20 ft
-        of the cut - which is why this is a separate step, called from the crossings stage after every
-        watercourse is recorded, and not part of `perimeter_dike` (drawn before the inlet stream exists;
-        measured: the inlet gate landed 8.9 px off its stream). Returns the number of gates drawn."""
-        n_gates = 0
-        for dk in self.M.get("dikes", []):
-            crest = [(float(c[0]), float(c[1])) for c in dk.get("crest") or []]
-            if len(crest) < 4:  # pragma: no cover - a recorded dike always carries its crest
-                continue
-            n = len(crest)
-            for gx, gy in [(float(g[0]), float(g[1])) for g in dk.get("gaps") or []]:
-                k = min(range(n), key=lambda i: math.hypot(crest[i][0] - gx, crest[i][1] - gy))
-                a, b = crest[(k - 2) % n], crest[(k + 2) % n]
-                rot = math.degrees(math.atan2(b[1] - a[1], b[0] - a[0]))
-                sx, sy, sd = gx, gy, 1e9
-                for key in (
-                    "drawn_channels",
-                    "streams",
-                    "canals",
-                    "channels",
-                ):  # the checks' own set (segments_06b sc_waters) - the DRAWN strokes first: the reader sees ink, and the recorded inlet ran 7 ft off its stroke at the cut (settlement-review)
-                    for ch in self.M.get(key, []):
-                        pp = (ch.get("pts") if key == "drawn_channels" else ch.get("poly")) or []
-                        for q0, q1 in zip(pp, pp[1:], strict=False):
-                            ax, ay, bx, by = float(q0[0]), float(q0[1]), float(q1[0]), float(q1[1])
-                            ll = (bx - ax) ** 2 + (by - ay) ** 2
-                            tt = 0.0 if ll == 0 else max(0.0, min(1.0, ((gx - ax) * (bx - ax) + (gy - ay) * (by - ay)) / ll))
-                            cx, cy = ax + tt * (bx - ax), ay + tt * (by - ay)
-                            dd = math.hypot(cx - gx, cy - gy)
-                            if dd < sd:
-                                sx, sy, sd = cx, cy, dd
-                if sd > self.px(20.0):  # no recorded course within reach: the cut itself is the seat
-                    sx, sy = gx, gy
-                self.sluice_gate(sx, sy, rot=rot, span=self.px(span_ft))
-                n_gates += 1
-        return n_gates

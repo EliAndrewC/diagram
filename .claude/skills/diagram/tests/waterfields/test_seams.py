@@ -357,3 +357,76 @@ def test_jog_steps_ignores_a_gently_curving_bund():
     curve.append((curve[-1][0], curve[-1][1] + 200.0))
     curve.append((0.0, 200.0))
     assert jog_steps(curve, GRAIN) == 0
+
+
+def test_the_shapely_arms_fall_back_instead_of_raising(monkeypatch) -> None:  # type: ignore[no-untyped-def]
+    """Feature 145: `_open_to` and `_trade` guard every buffer against a GEOSException (a self-touching
+    ring shapely refuses to offset). The handler is the map's escape - it drops the pocket rather than
+    killing the roll - so it is asserted here rather than waited for on some future seed."""
+    from shapely.errors import GEOSException
+    from shapely.geometry import Polygon
+
+    from l7r.diagram.waterfields import seams
+
+    def boom(self, *a, **k):  # type: ignore[no-untyped-def]
+        raise GEOSException("synthetic")
+
+    square = Polygon([(0, 0), (100, 0), (100, 100), (0, 100)])
+    assert seams._open_to(square, 10.0) is not None  # the real path still works
+    monkeypatch.setattr(Polygon, "buffer", boom)
+    assert seams._open_to(square, 10.0) is None
+
+
+def test_water_skips_a_channel_with_a_single_point() -> None:
+    """Feature 146: a channel record with fewer than two points has no stroke to build - it is skipped,
+    not offset (which would raise). A one-point channel is what a trimmed lateral leaves behind."""
+    from l7r.diagram.waterfields.seams import _water
+
+    real = {"pts": [[0.0, 0.0], [100.0, 0.0]], "w": 6.0}
+    stub = {"pts": [[50.0, 50.0]], "w": 6.0}
+    empty: dict[str, object] = {"pts": [], "w": 6.0}
+    assert _water([real, stub, empty], 1.0).equals(_water([real], 1.0)), "the stubs contribute no ink"
+    assert _water([stub, empty], 1.0).is_empty, "stubs alone make no water at all"
+
+
+# ---- close_seams over a hand-built fabric (feature 146) --------------------------------------
+# The seam pass is normally reached only through a full carve, which is why several of its repair
+# arms had no test. It takes plain lists, so it can be handed a fabric with the defects it exists to
+# repair - a ring that is not a polygon at all, and slivers a rounding would collapse.
+
+_ENV = [(0.0, 0.0), (1400.0, 0.0), (1400.0, 1400.0), (0.0, 1400.0)]
+_A = [(700.0, 100.0), (700.0, 1300.0)]
+_D = [(100.0, 1300.0), (1300.0, 1300.0)]
+
+
+def _close(plots):
+    import random
+
+    from l7r.diagram.waterfields.frame import _Frame
+    from l7r.diagram.waterfields.seams import close_seams
+
+    close_seams(random.Random(1), _Frame(90.0), plots, _ENV, 2.0, [], 46.0, (26.0, 30.0), _A, _D, lambda _f: 6.0)
+    return plots
+
+
+def test_close_seams_steps_over_a_plot_ring_that_cannot_be_repaired() -> None:
+    """A recorded ring can be invalid - a bow-tie, or in the limit a run of collinear points enclosing
+    no area at all. The pass tries `buffer(0)` on it first, and where that yields nothing there is
+    nothing to repair, so the plot is left exactly as recorded rather than replaced by an empty ring."""
+    plots = [
+        {"poly": [(100.0, 100.0), (300.0, 100.0), (300.0, 300.0), (100.0, 300.0)], "crop": "rice"},
+        {"poly": [(400.0, 400.0), (450.0, 400.0), (500.0, 400.0), (420.0, 400.0)], "crop": "rice"},
+    ]
+    _close(plots)
+    assert len(plots[1]["poly"]) == 4, "the unrepairable ring is left as it stands"
+
+
+def test_close_seams_survives_a_fabric_of_slivers() -> None:
+    """Hundredth-of-a-pixel plots are what a rounding turns into needles, and the pass has to come back
+    with a fabric rather than an exception."""
+    plots = [
+        {"poly": [(600.0, 600.0), (900.0, 600.0), (900.0, 600.02), (600.0, 600.04)], "crop": "rice"},
+        {"poly": [(200.0, 700.0), (260.0, 700.0), (200.0, 700.03), (260.0, 700.06)], "crop": "rice"},
+        {"poly": [(1000.0, 200.0), (1000.02, 500.0), (1000.04, 200.0), (1000.06, 500.0)], "crop": "rice"},
+    ]
+    assert isinstance(_close(plots), list)

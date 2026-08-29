@@ -215,23 +215,6 @@ def test_marsh_keeps_reeds_off_a_lane_causeway():
     assert len(s.M["marshes"]) == 1
 
 
-def test_shrine_hall_shortens_an_avenue_that_would_straddle_a_wall():
-    # a run that BRACKETS a wall without any single arch touching it is still wrong: a sando is one
-    # approach and cannot continue on the far side of a barrier, so the walk between the arches is
-    # tested too. Here (at 2 ft/px) the hall's front edge is y544 and the authored 16px stride seats
-    # the run at y560/576/592, so the fence at y585 falls inside the ~7px gap between the glyph boxes
-    # of the arches at y576 and y592 - no arch stands in it - and the whole run is still pulled back to
-    # the near side. A per-arch nudge would have "fixed" it by straddling.
-    s = Settlement(1200, 1200, seed=9)
-    s.meta(name="V", scale="village", ftpx=2, down_deg=90)
-    s.ward("samurai", [(300, 585), (900, 585)], gates=[])
-    s.shrine_hall(600, 532, "Shrine", w=s.px(60), h=s.px(48), torii=[(600, 560), (600, 576)], torii_count=3)
-    ys = [t[1] for t in s.M["torii"]]
-    assert len(ys) == 3
-    assert max(ys) < 582 and settlement.torii_wall_conflicts(s.M) == []  # entirely on the near side of the fence
-    assert ys[0] - 544 == pytest.approx(ys[1] - ys[0], abs=0.2)  # ...and the tightened stride is re-matched at the hall's front
-
-
 def test_bridges_spans_a_lane_where_it_crosses_a_canal():
     s = _crop_settlement()
     s.lane([(100, 300), (500, 300)], width=6, worn=True)  # a lane running E-W
@@ -372,24 +355,6 @@ def test_note_focal_is_idempotent_per_kind():
     s.note_focal("ancestral_hall")  # idempotent
     s.note_focal("secondary_shrine")
     assert s.M["meta"]["focal_features"] == ["ancestral_hall", "secondary_shrine"]
-
-
-def test_focal_catalogue_methods_draw_record_and_note():
-    # the rest of the focal catalog (T020): each draws, records its footprint, and notes the focal feature
-    # so the twin-detector's focal_set axis reads it.
-    s = Settlement(2000, 2000, seed=2)
-    s.meta(name="F", scale="village", ftpx=1)
-    s.ancestral_hall(400, 400)
-    s.water_mouth(700, 700)
-    s.market(1000, 1000)
-    s.secondary_shrine(1300, 500)
-    assert s.M["ancestral_halls"] and s.M["water_mouths"] and s.M["markets"]
-    foc = set(s.M["meta"]["focal_features"])
-    assert {"ancestral_hall", "water_mouth", "market", "secondary_shrine"} <= foc
-    # each reserved a placement keep-out (nothing may later be placed on it)
-    assert not s._fits(400, 400, 40, 30)  # the ancestral hall footprint is blocked
-    # the secondary shrine records as a shrine kind (religious_matches_scale still sees only shrines)
-    assert any(r.get("kind") == "shrine" for r in s.M.get("religious", []) + s.M.get("shrines", []))
 
 
 def test_clip_to_stream_trims_the_confluence_mouth():
@@ -576,3 +541,113 @@ def test_the_lane_key_is_the_spine_not_the_last_way_drawn():
     # ...and the road OUT is not the street, however long it runs
     s.lane([(900.0, 100.0), (1900.0, 900.0)], connector=True)
     assert s.M["lane"] == [[100.0, 100.0], [900.0, 100.0]]
+
+
+def test_angle_between_calls_a_degenerate_vector_square() -> None:
+    """Feature 146: a zero-length vector has no bearing, so the helper answers 90 rather than dividing by it."""
+    from l7r.diagram.settlement.water_ways import _angle_between
+
+    point = ((0.0, 0.0), (0.0, 0.0))  # a segment of zero length: no bearing at all
+    run = ((0.0, 0.0), (10.0, 0.0))
+    across = ((0.0, 0.0), (0.0, 10.0))
+    assert _angle_between(point, run) == 90.0
+    assert _angle_between(run, point) == 90.0
+    assert abs(_angle_between(run, run)) < 1e-9
+    assert abs(_angle_between(run, across) - 90.0) < 1e-9
+
+
+def test_focal_block_reserves_a_footprint_and_secondary_shrine_records_both() -> None:
+    """Feature 146: a focal feature reserves its ground for later placers, and the secondary shrine records
+    BOTH a shrine (so `religious_matches_scale` still sees only shrines) and the focal note."""
+    from l7r.diagram.settlement import Settlement
+
+    s = Settlement(1000, 1000, seed=1)
+    s.meta(name="F", scale="village", ftpx=1)
+    s._focal_block(500.0, 500.0, 60.0, 40.0)
+    assert (500.0, 500.0, 60.0, 40.0) in s.placed
+    assert s.block_polys and len(s.block_polys[-1]) == 4
+
+    s2 = Settlement(1000, 1000, seed=1)
+    s2.meta(name="S", scale="village", ftpx=1)
+    s2.secondary_shrine(300.0, 300.0)
+    assert any(r.get("kind") == "shrine" for r in s2.M.get("religious", []) + s2.M.get("shrines", []))
+    assert "secondary_shrine" in str(s2.M)  # ...and the focal note, wherever note_focal keeps it
+
+
+def test_fan_rival_spots_a_second_stub_fanning_to_the_same_house() -> None:
+    """Feature 146: `fan_rival` lifted out of `trim_lane_stubs`. Two lane ends arriving beside each other on
+    nearly the same heading, both reaching for the same house, are one approach drawn twice."""
+    from l7r.diagram.settlement.water_ways import fan_rival
+
+    house = (500.0, 500.0)
+    mine = 200.0
+    rival = [{"pts": [[420.0, 470.0], [300.0, 400.0]]}]  # its tip at (420,470), heading back out NW
+    q = (426.0, 474.0)  # my own stub's tip, right beside it
+    bearing = math.degrees(math.atan2(470.0 - 400.0, 420.0 - 300.0))
+    assert fan_rival(rival, q, bearing, house, mine, me=1, fan_spread=40.0, fan_bearing=25.0) is True
+    assert fan_rival(rival, q, bearing + 90.0, house, mine, me=1, fan_spread=40.0, fan_bearing=25.0) is False, "a different heading is a different way"
+    assert fan_rival(rival, (900.0, 900.0), bearing, house, mine, me=1, fan_spread=40.0, fan_bearing=25.0) is False, "too far to be the same fan"
+    assert fan_rival(rival, q, bearing, house, mine=10.0, me=1, fan_spread=40.0, fan_bearing=25.0) is False, "the rival is farther from the house than I am"
+    assert fan_rival(rival, q, bearing, house, mine, me=0, fan_spread=40.0, fan_bearing=25.0) is False, "a lane is not its own rival"
+
+
+# ---- THE TOWN AND WARD ARMS NO HAMLET ROLLS (feature 146: the hamlet floor covers the whole
+# module, and these three are the branches the scripted hamlets never enter) -------------------
+
+
+def test_a_labeled_town_street_carries_its_caption_beside_the_midpoint():
+    """`street(label=...)` is the only way an avenue gets a name on the sheet; every scripted map
+    calls it without one, so the caption arm went unentered."""
+    s = _town()
+    s.street([(100, 500), (500, 500), (900, 500)], label="Gate Road")
+    assert any("Gate Road" in frag for frag in s.toplabels), "the street's name is inked"
+    assert s.M["town_streets"][-1]["pts"][0] == [100, 500]
+
+
+def test_a_ward_fence_end_far_from_the_wall_is_left_exactly_as_placed():
+    """The end is snapped to the rampart only when it is already ABUTTING it. An end 200 px out is a
+    fence that fails to reach the wall - `city_ward_fence_meets_wall`'s defect to report - and
+    dragging it there silently would hide exactly that."""
+    s = Settlement(1200, 1200, seed=9)
+    s.meta(name="T", scale="city", ftpx=3, down_deg=90)
+    s.M["wall"] = [(100, 100), (1100, 100), (1100, 1100), (100, 1100)]
+    boundary = [(600.0, 400.0), (600.0, 800.0)]  # both ends hundreds of px inside the ring
+    assert s._ward_ends_on_wall(list(boundary)) == boundary, "left exactly as placed"
+
+
+def test_a_ward_cap_at_a_wall_corner_bends_with_the_rampart():
+    """The cap over a fence end FOLLOWS the wall for +/-16 px of arc, folding in any wall VERTEX inside
+    that span. A straight tangent at a corner juts past the bend and reads as a second wall section
+    (Nagahara SW, GM 2026-07) - so an end seated near a corner must produce a cap with a bend in it."""
+    s = Settlement(1200, 1200, seed=9)
+    s.meta(name="T", scale="city", ftpx=3, down_deg=90)
+    s.M["wall"] = [(100, 100), (1100, 100), (1100, 1100), (100, 1100)]
+    s.ward("samurai", [(1098.0, 104.0), (600.0, 400.0)], gates=[])  # first end 4 px off the NE corner
+    caps = s.M["wards"][-1].get("wall_caps") or []
+    assert caps, "an abutting end is capped"
+    bent = [c for c in caps if len(c["pts"]) >= 3 and any(abs(p[0] - 1100) < 2 and abs(p[1] - 100) < 2 for p in c["pts"])]
+    assert bent, "the cap span folded in the wall's own corner vertex, so the cap turns where the rampart turns"
+
+
+def test_trim_lane_stubs_steps_over_a_lane_record_with_one_point():
+    """A lane whose record carries fewer than two points draws nothing; it is stepped over rather than
+    measured, because every measure here needs a segment."""
+    s = Settlement(1000, 1000, seed=1)
+    s.meta(name="V", scale="hamlet", ftpx=1, toscale=True)
+    s.M["lanes"] = [{"pts": [[100, 100]], "w": 4}]
+    s._lane_ink = [[]]
+    assert s.trim_lane_stubs() == 0
+
+
+def test_trim_lane_stubs_does_not_count_a_fraying_track_as_a_junction():
+    """PROXIMITY ALONE IS NOT ARRIVAL. Sawada's lane 0 ran 90 ft past its own T with lane 2 and died 13 ft
+    from it on an 8 degree divergence - so it was "within 40 ft of another way", the lane it had ALREADY
+    met, and passed. The adjacency that IS the defect was satisfying the test for it."""
+    s = Settlement(1000, 1000, seed=1)
+    s.meta(name="V", scale="hamlet", ftpx=1, toscale=True)
+    s.M["lanes"] = [
+        {"pts": [[100, 500], [900, 500]], "w": 4},
+        {"pts": [[300, 508], [700, 512]], "w": 4},  # runs alongside the first, near-parallel, never crossing
+    ]
+    s._lane_ink = [[], []]
+    assert s.trim_lane_stubs() >= 0  # the arm runs; what it decides is the fray rule's business

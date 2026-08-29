@@ -24,34 +24,33 @@ import math
 import random
 from typing import TYPE_CHECKING, Any
 
-from .._geom import Pt, boxed_grid, boxed_hit, boxed_polys, boxed_seg_hit, boxed_segs, edge_dist, point_in_poly, seg_dist
+from .._geom import Pt, RingIndex, boxed_grid, boxed_ring_hit, boxed_rings, boxed_seg_hit, boxed_segs, point_in_poly, seg_dist
 
-MARSH_FEATHER_BS = 46  # the reeds thin to nothing over this band (x bscale) inside the polygon; `commons` thins its scrub INTO the marsh over the same band
+MARSH_TINT_R = 28.0  # the widest wet-tint circle's radius (x bscale) - also the keep-off a mound owes the tint (feature 139 T54)
+MARSH_TUFT_R = 7.0  # the tallest reed blade / widest glint (x bscale) - the same keep-off for the tufts
 
 
 def pond_fringe_ring(cx: float, cy: float, rx: float, ry: float, margin: float, n: int = 16) -> list[tuple[float, float]]:
     """The reedy MARGIN of a pond, as the polygon `marsh(role="pond_fringe")` scatters (feature 147).
 
-    One helper because there are two call sites and they diverged: the sink's tameike keeps 44 px of
-    fringe, a comb source pond 40, and each built the ring by hand. The margins still differ - a tameike
-    is dug and its shallows are wider - but the difference is now an ARGUMENT rather than two literals a
-    reader has to notice.
+    One helper because there are two call sites and they diverged: the sink's tameike keeps 44 px of fringe,
+    a comb source pond 40, and each built the ring by hand. The margins still differ - a tameike is dug and
+    its shallows are wider - but the difference is an ARGUMENT now rather than two literals a reader has to
+    notice.
 
-    TWO ORDERING RULES BOTH CALLERS OWE, and both were learned by getting them wrong on 2026-08-29:
+    TWO ORDERING RULES BOTH CALLERS OWE, both learned by getting them wrong on 2026-08-29:
 
     1. Scatter the fringe only AFTER the water it must keep off is recorded. `draw_comb_field` drew it
        before the field's channels existed, so the reed keep-out had nothing to keep off and three blades
        were drawn across the inlet hairline.
     2. Let the pond's own no-build rect (`block_polys`) follow the fringe, never precede it. The reed
        scatter reads `block_polys`, which exists to stop BUILDINGS standing on water; appended first it
-       covers the shore band and costs 45% of the annulus - 32 of 54 tufts, measured, with the tameike
-       reading as a bare plate.
+       covers the shore band and costs 45% of the annulus - 32 of 54 tufts, measured.
     """
     return [(cx + (rx + margin) * math.cos(a), cy + (ry + margin) * math.sin(a)) for a in [i * math.pi / (n / 2) for i in range(n)]]
 
 
-MARSH_TINT_R = 28.0  # the widest wet-tint circle's radius (x bscale) - also the keep-off a mound owes the tint (T54)
-MARSH_TUFT_R = 7.0  # the tallest reed blade / widest glint (x bscale) - the same keep-off for the tufts (T54)
+MARSH_FEATHER_BS = 46  # the reeds thin to nothing over this band (x bscale) inside the polygon; `commons` thins its scrub INTO the marsh over the same band
 
 if TYPE_CHECKING:
     from ..core import Settlement
@@ -79,11 +78,10 @@ class WetGroundMixin:
         settlements.md 'Marsh' + 'Defensive marshland' + 'Polder siting Q&A'. Recorded M['marshes']."""
         if role not in ("toe", "pond_fringe", "defense", "waterside"):
             raise ValueError(f"unknown marsh role {role!r}; expected 'toe', 'pond_fringe', 'defense', or 'waterside'")
-        # MARSH IS NO-BUILD GROUND (feature 139 T50, GM 2026-08-28: "multiple farmhouses ... overlap with marshland
-        # ... one of the gardens also ... we need to update our placement algorithms to make that impossible").
-        # Registered BEFORE the reeds are scattered, whatever the role: a farmhouse, a garden bed, a fixture or a
-        # well tested by `_hard_clear` from here on can no longer sit on it. (The reference hamlet draws its toe
-        # marsh after its houses; this map draws its pond fringe and its waterward strips before them.)
+        # MARSH IS NO-BUILD GROUND (feature 139 T50, GM 2026-08-28: "multiple farmhouses ... overlap with
+        # marshland ... one of the gardens also ... we need to update our placement algorithms to make that
+        # impossible"). Registered BEFORE the reeds are scattered, whatever the role: a farmhouse, a garden
+        # bed, a fixture or a well tested by `_hard_clear` from here on can no longer sit on it.
         self.wet_polys.append([(float(px), float(py)) for px, py in poly])
         xs = [p[0] for p in poly]
         ys = [p[1] for p in poly]
@@ -98,88 +96,54 @@ class WetGroundMixin:
         corridors = self._corridor_buffers(3 * bs)  # every trodden tread (lane/street/road), not just lanes
         # PRE-BOX every static keep-out ONCE (see boxed_hit) - the field boxes carry the SAME 10px
         # pad as the edge test below, so the prefilter can never reject a point that test wanted
-        fld_b, blk_b = boxed_grid(boxed_polys(self.field_polys, 10.0)), boxed_grid(boxed_polys(self.block_polys))
-        clr_b, avd_b, cor_b = boxed_grid(boxed_polys(self.clearings)), boxed_grid(boxed_polys(avoid)), boxed_grid(boxed_segs(corridors))
-        wat_b = boxed_grid(boxed_segs(self._watercourse_segs()))  # drawn water (streams/channels/comb laterals), pre-boxed once - see _watercourse_segs
-        # REEDS KEEP OFF THE EARTHEN MOUNDS (feature 139 T54, GM 2026-08-28: "the marshland overlaps with the
-        # earthen mounds, which surround all of the ponds. like the hazy blue that denotes the marsh is clearly
-        # overlaid on top of the greenery of the earthen mounds. In some cases, it seems to even extend past
-        # them"). A perimeter dike and a fish pond's mulberry bank are RAISED, MAINTAINED, PLANTED earth - the
-        # spoil dug out of the pond, held in repair and cropped (research/archetypes.md); reeds root in shallow
-        # standing water, which is what lies OUTSIDE the embankment, so wet ground abuts a mound and never
-        # crosses it. Neither the band nor a bank was in any keep-out the scatter reads (they are not field
-        # plots, blocks or clearings), so a marsh polygon that lapped one was reeded and tinted straight over
-        # it - measured on Kuwabata: 320 of 3,481 sampled points of the waterward strips and 104 of the toe
-        # marsh's. Every role keeps off, not just the polder's own strips: the TOE marsh reaches the band from
-        # below and laps the pond banks. A drawn band's ribbon runs to ~2,880 points and this test runs per
-        # scatter point, so the ring is thinned to ~360 (its dense points lie 1-2 px apart, so the ribbon keeps
-        # its shape) - ADAPTIVELY, never a fixed stride: a fixed 8:1 on a coarse ring drops it to three points
-        # and the keep-out silently covers nothing, which is the shape of every "check that never runs" in this
-        # engine (caught by the test that reeds the band with no dike recorded and leaves it bare with one).
-        # THE BAND IS ITS CREST AND ITS WIDTH, not its outline ring. Testing a 360-point ribbon per scatter
-        # point cost 21.7 s in `stage_waterward` alone and 11.9 s in the hinterland (measured 2026-08-29,
-        # a 14 s gen become 45 s) - the ribbon's bbox covers the whole block, so the prefilter pruned
-        # nothing and every point paid for a full point-in-poly plus an edge walk. The crest is 144 points
-        # of SEGMENTS, each with its own small box, so a point tests one or two of them. The trade is
-        # deliberate and one-directional: half of `w_max` is used the whole way round, so on a stretch
-        # pinched to `w_min` the keep-off runs up to (w_max - w_min)/2 further out than the drawn earth -
-        # reeds standing a few feet further back on a narrow stretch, never a mark ON the mound.
+        fld_b, blk_b = boxed_grid(boxed_rings(self.field_polys, 10.0)), boxed_grid(boxed_rings(self.block_polys))
+        clr_b, avd_b, cor_b = boxed_grid(boxed_rings(self.clearings)), boxed_grid(boxed_rings(avoid)), boxed_grid(boxed_segs(corridors))
+        # REEDS KEEP OFF THE EARTHEN MOUNDS (feature 139 T54, GM 2026-08-28: "the hazy blue that denotes the
+        # marsh is clearly overlaid on top of the greenery of the earthen mounds"). A perimeter dike and a fish
+        # pond's mulberry bank are raised, maintained, PLANTED earth; reeds root in the shallow standing water
+        # OUTSIDE the embankment, so wet ground abuts a mound and never crosses it. Neither was in any keep-out
+        # the scatter read. The band is tested as its CREST plus half of `w_max` rather than its 2,880-point
+        # ribbon - the ribbon's bbox covers the whole block, so it pruned nothing and cost 21.7 s of a roll;
+        # the trade is one-directional (a pinched stretch keeps reeds a few feet further back, never a mark ON
+        # the mound). Both sets are pruned to this polygon's own reach first: a waterward strip lies outside
+        # the block, so none of the pond banks can touch it.
         _pads = {MARSH_TINT_R * bs, MARSH_TUFT_R * bs}
-        _reach = max(_pads) + 40.0  # this polygon's own box, plus the widest keep-off and the widest band
+        _reach = max(_pads) + 40.0
+        _near_box = lambda pts: not (min(q[0] for q in pts) - _reach > x1 or max(q[0] for q in pts) + _reach < x0 or min(q[1] for q in pts) - _reach > y1 or max(q[1] for q in pts) + _reach < y0)  # noqa: E731
         _crests = [
-            ([(float(mx), float(my)) for mx, my in dk["crest"]], float(dk.get("w_max", 0.0)) / 2)
-            for dk in self.M.get("dikes", [])
-            if len(dk.get("crest") or []) >= 2
-            and not (
-                min(q[0] for q in dk["crest"]) - _reach > x1
-                or max(q[0] for q in dk["crest"]) + _reach < x0
-                or min(q[1] for q in dk["crest"]) - _reach > y1
-                or max(q[1] for q in dk["crest"]) + _reach < y0
-            )
+            ([(float(mx), float(my)) for mx, my in dk["crest"]], float(dk.get("w_max", 0.0)) / 2) for dk in self.M.get("dikes", []) if len(dk.get("crest") or []) >= 2 and _near_box(dk["crest"])
         ]
         mnd_g = {pad: boxed_grid(boxed_segs([(pl, hw + pad) for pl, hw in _crests])) for pad in _pads}
-        # ...and only the mounds THIS polygon could reach: a waterward strip lies outside the block, so
-        # none of the 26 pond banks can touch it, and testing each of them per scatter point was pure cost.
-        _banks = [
-            [(float(mx), float(my)) for mx, my in dp["bank"][:: max(1, len(dp["bank"]) // 16)]]  # a bank ring is a parcel outline; 16 points hold its shape for a keep-out
-            for dp in self.M.get("dikeponds", [])
-            if dp.get("bank")
-            and not (
-                min(q[0] for q in dp["bank"]) - _reach > x1 or max(q[0] for q in dp["bank"]) + _reach < x0 or min(q[1] for q in dp["bank"]) - _reach > y1 or max(q[1] for q in dp["bank"]) + _reach < y0
-            )
-        ]
-        bank_b = boxed_grid(boxed_polys(_banks, max(_pads)))  # a pond bank is a small ring - its own box prunes it
+        _banks = [[(float(mx), float(my)) for mx, my in dp["bank"][:: max(1, len(dp["bank"]) // 16)]] for dp in self.M.get("dikeponds", []) if dp.get("bank") and _near_box(dp["bank"])]
+        bank_b = boxed_grid(boxed_rings(_banks, max(_pads)))
+        wat_b = boxed_grid(boxed_segs(self._watercourse_segs()))  # drawn water (streams/channels/comb laterals), pre-boxed once - see _watercourse_segs
+        ring = RingIndex(poly)  # the outline, indexed once per marsh (feature 145; the why is on RingIndex)
 
         def _sparse(
             px: float, py: float, drop: float, mound_pad: float = 0.0
         ) -> bool:  # skip a point outside the poly, IN a paddy / ON the pond / on a corridor/building / in the urban halo / in a keep-out, or (probabilistically) near the edge
             if (
-                not point_in_poly(px, py, poly)
-                or boxed_hit(px, py, fld_b.near(px, py), 10.0)
+                not ring.inside(px, py)
+                or boxed_ring_hit(px, py, fld_b.near(px, py), 10.0)
                 or boxed_seg_hit(px, py, cor_b.near(px, py))  # a causeway/path/road through the marsh stays bare, not reeded over
-                or self._on_watercourse(
-                    px, py, pad=2.0 + mound_pad, near=wat_b.near if not mound_pad else None
-                )  # ... and OFF a stream/channel bed (reeds fringe water, they do not float on it) - by the mark's own reach, so no haze washes over the bed either (T54, settlement-review)
+                or self._on_watercourse(px, py, pad=2.0 + mound_pad, near=wat_b.near if not mound_pad else None)  # ... and OFF a stream/channel bed (reeds fringe water, they do not float on it)
                 or any(x0r <= px <= x1r and y0r <= py <= y1r for x0r, y0r, x1r, y1r in halo_rects)  # ... and OUT of the urban-clearance halo (the swept/trodden ground around every structure)
                 or any((px - hx) ** 2 + (py - hy) ** 2 <= hr * hr for hx, hy, hr in halo_circles)  # ... and clear of every wellhead's trodden apron
-                or boxed_hit(px, py, blk_b.near(px, py))  # ... and OFF any building/shrine/torii footprint
-                or boxed_hit(px, py, clr_b.near(px, py))  # ... and off the swept sacred/funerary verge
-                or boxed_hit(px, py, avd_b.near(px, py))
+                or boxed_ring_hit(px, py, blk_b.near(px, py))  # ... and OFF any building/shrine/torii footprint
+                or boxed_ring_hit(px, py, clr_b.near(px, py))  # ... and off the swept sacred/funerary verge
+                or boxed_ring_hit(px, py, avd_b.near(px, py))
                 or (mound_pad in mnd_g and boxed_seg_hit(px, py, mnd_g[mound_pad].near(px, py)))  # ... and off every earthen mound, by the drawn mark's own reach (T54)
-                or boxed_hit(px, py, bank_b.near(px, py), mound_pad)  # ... and off every fish pond's mulberry bank
+                or boxed_ring_hit(px, py, bank_b.near(px, py), mound_pad)  # ... and off every fish pond's mulberry bank
             ):  # ... and OUT of any keep-out
                 return True
             # ...AND THE MARK'S OWN REACH KEEPS OFF THE WATER, not just its center (feature 139 T54,
-            # settlement-review 2026-08-28): this test read the CENTER while the mound test above reads the
-            # radius, so a 28 ft tint circle centered a foot outside the rim washed 27 ft of haze over open
-            # water - measured, 26% of Kuwabata's reservoir surface, up to 20 ft inside the rim. That is the
-            # GM's own complaint one feature over ("the hazy blue ... is clearly overlaid on top of"), so the
-            # shore keeps the mark off by the same rule the mound does. The ellipse is grown by the pad rather
-            # than offset exactly - a keep-out, not a boundary.
+            # settlement-review): this read the CENTER while the mound test above reads the radius, so a 28 ft
+            # tint circle centered a foot outside the rim washed 27 ft of haze over open water - measured, 26%
+            # of Kuwabata's reservoir surface.
             if pond and ((px - pond[0]) / (pond[2] + mound_pad)) ** 2 + ((py - pond[1]) / (pond[3] + mound_pad)) ** 2 < 1.0:
                 return True  # reeds fringe the shore, they do not float on open water
-            ed = edge_dist(px, py, poly)
-            return ed < feather and random.random() > (ed / feather) ** drop
+            ed = ring.edge_within(px, py, feather)
+            return ed is not None and random.random() > (ed / feather) ** drop
 
         g: list[str] = []
         blades: list[str] = []  # SVG-size lever 2: bucket the constant-styled reed blades (see the note in cover.py's `commons`)
@@ -314,10 +278,22 @@ class WetGroundMixin:
         step = max(24.0, pad / 3)
         n = max(2, int((u1 - u0) / step) + 1)
         stations = [u0 + (u1 - u0) * k / (n - 1) for k in range(n)]
-        vs = [p[0] * dx + p[1] * dy for p in cult]
+        # THE STATIONS READ THE FAN ONLY, never a dry plot (feature 137, cohort seed 14 at 20
+        # households). The hem's dry plots are in `cult` so the band's WIDTH and its global floor
+        # count them, but a station whose window held only a dry plot - one standing upslope of the
+        # settlement, with no paddy within `pad` of that station - took that plot's foot as "the
+        # crop's lowest point" and declared every foot of ground below it wet: a 30 ft column of
+        # marsh from the plot, straight through two ranks of farmhouses, to the real toe 1,800 ft
+        # further down. Nothing drew it (the marsh is inked from the field's foot), but the router
+        # walls a path off wet ground, so eight steadings east of the column could not be reached.
+        # The research this band encodes (research/water.md, "the wet toe is as wide as the fan")
+        # is about the FAN's spring line; a dry plot is not a fan and has no toe.
+        fan = [p for poly in polys for p in poly]
+        us_fan = [p[0] * ux + p[1] * uy for p in fan]
+        vs = [p[0] * dx + p[1] * dy for p in fan]
         local: list[float] = []
         for u in stations:
-            near = [v for v, uu in zip(vs, us, strict=True) if abs(uu - u) <= pad]
+            near = [v for v, uu in zip(vs, us_fan, strict=True) if abs(uu - u) <= pad]
             local.append((max(near) if near else v_in + pad) - pad)
         edge = [max(local[max(0, k - 1) : k + 2]) for k in range(n)]
         inner = [(u * ux + v * dx, u * uy + v * dy) for u, v in zip(stations, edge, strict=True)]

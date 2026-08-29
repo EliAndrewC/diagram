@@ -4,7 +4,8 @@ Split from settlement/structures.py by feature 114 - see settlement/structures/C
 """
 
 import math
-from typing import TYPE_CHECKING, Any
+from collections.abc import Callable, Sequence
+from typing import TYPE_CHECKING
 
 from .._geom import (
     LABEL_AIR_CAP,
@@ -41,59 +42,31 @@ if TYPE_CHECKING:
     from ..core import Settlement
 
 
-class PublicFixturesMixin:
-    def theater_stage(self: Settlement, cx: float, cy: float, w: Any = None, h: Any = None, rot: float = 0, label: Any = None, kind: str = "monzen") -> None:  # type: ignore[misc]
-        """A public THEATER STAGE: a roofed raised stage facing an open viewing ground - the troupe-and-
-        festival venue of a Rokugani town/city (the East Asian analog of a Greco-Roman amphitheater: a
-        temple OPERA STAGE / shrine NOH-kagura stage). It belongs to a temple/monastery precinct, the
-        audience gathering in the open ground between the stage and the hall. (cx,cy) is the center of the
-        w x h viewing ground; the roofed stage sits at the -y (north) end facing +y into it; `rot` turns the
-        whole feature (point it so the ground opens toward the temple). Records M['theater_stage'] - a LIST
-        since 2026-08-10: the singleton dict write meant a second stage clobbered the first, so Shiro
-        Daika's labeled entertainment-quarter theater existed as ink only, invisible to the overlap
-        matrix in both directions (settlement-review). `kind` says which siting doctrine the stage owes:
-        "monzen" (default) is a temple/shrine performance stage and must sit at its hall;
-        "machi" is a commercial quarter theater and sits in the fabric. Reserves its footprint so
-        packing avoids it."""
-        if w is None:
-            w, h = self.px(150), self.px(105)  # stage + viewing ground ~150x105 ft (town-calibrated)
-        hw, hh = w / 2, h / 2
-        sw, sh = w * 0.5, h * 0.26  # the roofed stage at the north end
-        sy = -hh - sh * 0.5  # straddling the ground's north edge
-        g = [f'<g transform="translate({cx:.1f},{cy:.1f}) rotate({rot:.1f})">']
-        g.append(f'<rect x="{-hw:.0f}" y="{-hh:.0f}" width="{w:.0f}" height="{h:.0f}" rx="4" fill="#E4D6B0" stroke="#A98E54" stroke-width="1.5"/>')  # the swept earthen viewing ground
-        g.append(f'<rect x="{-hw + 5:.0f}" y="{-hh + 5:.0f}" width="{w - 10:.0f}" height="{h - 10:.0f}" rx="3" fill="none" stroke="#C9B484" stroke-width="0.7" opacity="0.6"/>')
-        for i in range(3):  # a few faint rows of standing crowd in the ground
-            ry = -hh + h * (0.40 + 0.17 * i)
-            for k in range(7):
-                px = -hw + 14 + (w - 28) * (k + 0.5) / 7
-                g.append(f'<circle cx="{px:.0f}" cy="{ry:.0f}" r="1.7" fill="#8A7A56" opacity="0.5"/>')
-        g.append(f'<rect x="{-sw / 2:.0f}" y="{sy:.0f}" width="{sw:.0f}" height="{sh:.0f}" rx="2" fill="#C9A57A" stroke="#5A3F1E" stroke-width="1.8"/>')  # stage platform
-        g.append(f'<rect x="{-sw / 2:.0f}" y="{sy:.0f}" width="{sw:.0f}" height="{sh * 0.36:.0f}" fill="#7A5A30"/>')  # its roof
-        # NO painted-pine roundel. The kagami-ita's pine is painted on the VERTICAL back board, so a
-        # plan view cannot see it at all - and drawn as a green disc it used the sheet's own
-        # vegetation idiom and read as a bush growing on the stage (settlement-review, Ubame).
-        g.append(f'<rect x="{-sw / 2:.0f}" y="{sy + sh - 2.5:.0f}" width="{sw:.0f}" height="2.5" fill="#5A3F1E" opacity="0.6"/>')  # stage-front lip onto the ground
-        g.append('</g>')
-        self.add(''.join(g))
-        self.M.setdefault("theater_stage", []).append({"x": cx, "y": cy, "w": w, "h": h, "rot": rot, "kind": kind})
-        R = math.hypot(hw, hh) + sh * 0.5  # rotation-safe covering radius (stage + ground)
-        self.ellipses.append((cx, cy, R, R))
-        if label:
-            # Offset from the ROTATED extent, not the raw half-height. At rot=90 the ground's reach
-            # along +y is hw, not hh, so the caption landed INSIDE the ground it names, with the
-            # outline stroke running through the text (settlement-review, Ubame, 2026-07-26).
-            # Identical to the old expression at rot=0, so unrotated stages are untouched.
-            # Seat by the STANDOFF LADDER against the stage's ROTATED extent, hinted at the historical
-            # spot. Two bugs, one fix: the old `cy + hh + 16` used the unrotated half-height, so a
-            # rot=90 stage captioned INSIDE its own ground (Ubame); and a hand seat has no idea what
-            # else is there, so simply correcting the reach dropped Tango's caption onto a monk house.
-            # The hint keeps every UNROTATED stage exactly where it was whenever that seat is clear.
-            _a = math.radians(rot)
-            _rx = abs(hw * math.cos(_a)) + abs(hh * math.sin(_a))
-            _ry = abs(hw * math.sin(_a)) + abs(hh * math.cos(_a))
-            self.place_caption(label, (cx - _rx, cy - _ry, cx + _rx, cy + _ry), 11, italic=True, hint=(cx, cy + _ry + 16), rot=rot)
+def pick_caption_seat(
+    seats: Sequence[Pt],
+    at: Pt,
+    hug: Callable[[Pt], float],
+    hug_cap: float,
+    box_clearance: Callable[[Pt], float],
+    lane_target: float,
+) -> Pt:
+    """The board's caption seat: the NEAREST seat that clears the ways by `lane_target`, and if none does,
+    the legal seat that clears them best.
 
+    LIFTED OUT OF `place_kosatsuba` (feature 146, GM 2026-08-28 on inner functions and testability). It took
+    two closures and two numbers, all of which a test can hand it directly; reaching it through the placer
+    meant building a settlement whose every seat was blocked. The tie-break is (distance, then ORDER), which
+    is what keeps an unblocked board on its historical seat when a diagonal ties with it.
+    """
+    legal = [q for q in seats if hug(q) <= hug_cap] or list(seats)
+    clear = [q for q in legal if box_clearance(q) >= lane_target]
+    if clear:
+        ix = {id(q): i for i, q in enumerate(seats)}
+        return min(clear, key=lambda q: (round((q[0] - at[0]) ** 2 + (q[1] - at[1]) ** 2, 3), ix[id(q)]))
+    return max(legal, key=box_clearance)
+
+
+class PublicFixturesMixin:
     def fire_tower(self: Settlement, x: float, y: float, tw: float | None = None, rot: float = 0.0, label: str = "fire tower") -> int:  # type: ignore[misc]
         """A HINOMI-YAGURA (fire-watch tower): a tall, slender braced-timber tower with a lookout
         platform and an alarm bell (hansho), standing in the dense COMMONER quarter of a walled
@@ -243,7 +216,17 @@ class PublicFixturesMixin:
                 # five failing seeds. The placer and its check must read one source; that is the
                 # oldest rule in this engine's CLAUDE.md and I broke it in code written to enforce it.
                 _best = 1e9
-                _box = ((_q[0] - _chw, _q[1] - 5), (_q[0] + _chw, _q[1] - 5), (_q[0] - _chw, _q[1] + 5), (_q[0] + _chw, _q[1] + 5), _q)
+                # THE BOX THE RECORD WILL CARRY, not a one-line guess (feature 137, tripwire seed 33 and
+                # cohort seed 03): "notice board" WRAPS to two lines at 8 pt, so the recorded box is 26
+                # by 18, centered 2.2 px above the anchor - while this probe scored a 54 by 10 box on
+                # the anchor and called 0.2 px of overlap a 2 ft clearance. Same lines, same arithmetic
+                # as `label()` / `_record_label`, so what the seat search scores is what gate 0617 reads.
+                _lines = self._caption_lines(label, _q[0], _q[1], 8.0, "middle", _t)
+                _n, _lh = len(_lines), 8.0 * 1.15
+                _bw = max(len(_ln) for _ln in _lines) * 8.0 * 0.55 / 2.0
+                _bh = (8.0 * 1.05 + (_n - 1) * _lh) / 2.0
+                _cy = _q[1] - 8.0 * 0.275
+                _box = ((_q[0] - _bw, _cy - _bh), (_q[0] + _bw, _cy - _bh), (_q[0] - _bw, _cy + _bh), (_q[0] + _bw, _cy + _bh), (_q[0], _cy))
                 for _lane in self.M.get("lanes") or []:
                     _pts = _lane.get("pts") or []
                     _lhalf = float(_lane.get("w") or 3) / 2.0
@@ -320,15 +303,7 @@ class PublicFixturesMixin:
                 return poly_gap(_quad, [(_board_box[0], _board_box[1]), (_board_box[2], _board_box[1]), (_board_box[2], _board_box[3]), (_board_box[0], _board_box[3])])
 
             def _pick(_seats: list[Pt]) -> Pt:
-                _legal = [_q for _q in _seats if _hug(_q) <= _hug_cap] or _seats
-                _clear = [_q for _q in _legal if _box_clearance(_q) >= _lane_target]
-                if _clear:
-                    # (distance, then ORDER) - the order term is what keeps an unblocked board on its
-                    # historical seat when a diagonal ties with it, so adding the annulus above churns
-                    # no manifest that was already correct.
-                    _ix = {id(_q): _i for _i, _q in enumerate(_seats)}
-                    return min(_clear, key=lambda _q: (round((_q[0] - x) ** 2 + (_q[1] - y) ** 2, 3), _ix[id(_q)]))
-                return max(_legal, key=_box_clearance)
+                return pick_caption_seat(_seats, (x, y), _hug, _hug_cap, _box_clearance, _lane_target)
 
             if label_xy:
                 _lx, _ly = label_xy
@@ -555,8 +530,22 @@ class PublicFixturesMixin:
         routes.extend(([(p[0], p[1]) for p in r["pts"]], 18.0) for r in (self.M.get("roads") or [])[1:])
         routes.extend(([(p[0], p[1]) for p in st["pts"]], float(st.get("w", 18))) for st in self.M.get("town_streets") or [] if st.get("main"))
         if not routes:
-            for _st in street_runs(self.M):  # every lane; `M["lane"]` is only the last one drawn
-                routes.append((_st, 8.0))
+            # A ROUTE CARRIES ITS OWN WIDTH, AND THIS BLOCK USED TO GIVE THEM ALL THE SAME ONE (feature
+            # 134 T50, 2026-08-29). `street_runs` returns EVERY drawn lane, and they were all added at a
+            # nominal 8 ft - so the seater measured the tread edge 4 ft from the centreline on a lane
+            # that is 3 or 5 ft wide, and placed the board `(8 - w) / 2` too far out while believing it
+            # had put it exactly on the verge. Gate seed 44's board landed at 12.5 ft from a 5 ft lane's
+            # centreline - which is 6 (the verge) + 4 (half of the imagined 8) + 2.5 (half the board),
+            # to the foot - and `kosatsuba_by_the_road` measures against 12.0 and refused it.
+            #
+            # It also quietly undid the rule the note below states. `_main` exists to keep the state's
+            # notice off a SERVICE lane, and this loop had already put every web lane into `routes`
+            # before that filter ran, so the filter decided nothing. The per-lane extend below covers
+            # exactly the same ways with their real widths, so this is now only the last-ditch case
+            # where the manifest has runs but no lane records to read a width from.
+            if not (self.M.get("lanes") or []):
+                for _st in street_runs(self.M):  # every lane; `M["lane"]` is only the last one drawn
+                    routes.append((_st, 8.0))
             # A SERVICE LANE IS NOT A PLACE TO POST THE STATE'S NOTICE. The fallback takes the whole
             # network when no way declares itself main, which a hamlet never does - so when the lane
             # web arrived it put ~1,000 ft of 3 ft footpaths into the candidate list on equal footing
@@ -567,6 +556,10 @@ class PublicFixturesMixin:
             # `web` is exactly the hierarchy flag the hamlet tier lacked. Web lanes are used only if
             # there is nothing else to stand beside.
             _ways = self.M.get("lanes") or []
+            # TRIED AND REVERTED (feature 140, 2026-08-28): admitting every web lane as a route on a hamlet, to let the
+            # board reach the frontage. It moved nothing on Inashiro - the frontage has no verge seat that `_fits` a
+            # board after the re-seat (4 of 60 probes around the houses fit), so the choice of routes was never the
+            # constraint; the room is. Recorded so the lever is not pulled again (`research.md` R6).
             _main = [ln for ln in _ways if not ln.get("web")] or _ways
             routes.extend(([(p[0], p[1]) for p in ln["pts"]], float(ln.get("w", 8))) for ln in _main)
             routes.extend(([(p[0], p[1]) for p in st["pts"]], float(st.get("w", 18))) for st in self.M.get("town_streets") or [])
@@ -604,7 +597,10 @@ class PublicFixturesMixin:
                         while off <= lim:
                             x, y = mx + ux * off * side, my + uy * off * side
                             if off_every_bed(x, y) and self.fixture_clear_of_water(x, y, math.hypot(w, h) / 2) and self._fits(x, y, w, h, corridors=False):
-                                busy = sum(1 for sx, sy in spots if math.hypot(x - sx, y - sy) < 260)
+                                # BUSY IS WHERE THE FEET ARE (feature 140's Inashiro review, 2026-08-28): counting dwellings within 260 px
+                                # could not tell the frontage (11 within 150 ft) from the exit throat (5 within 150 ft) - both had ~16-21
+                                # within 260 - and a re-roll sat the board at the throat. The near count is weighted double.
+                                busy = sum(1 for sx, sy in spots if math.hypot(x - sx, y - sy) < 260) + 2 * sum(1 for sx, sy in spots if math.hypot(x - sx, y - sy) < 150)
                                 # THE CAPTION IS PART OF THE SEAT (GM 2026-07-27). The glyph is 11 px
                                 # and fits almost anywhere; its caption does not, and the busiest
                                 # frontage is exactly where there is least room for one - so a siter
@@ -761,47 +757,3 @@ class PublicFixturesMixin:
             label_xy = self.clear_label_seat(x, y, w, h, label, skip_key="punishment_spots")
         self.punishment_spot(x, y, rot, label=label, label_xy=label_xy)
         return (x, y)
-
-    def drum_tower(self: Settlement, x: float, y: float, tw: float | None = None, label: str = "drum tower") -> int:  # type: ignore[misc]
-        """A combined BELL-AND-DRUM TOWER (zhonggulou) - the timekeeping/curfew institution of a
-        WALLED seat (GM 2026-07-24). Morning bell, evening drum: dawn gate-opening, the dusk
-        gate-closing that starts the street curfew, the five night watches, alarm and ceremony.
-        Part of the standard county-seat kit (yamen, temples, drum tower); a county seat had ONE
-        combined tower - the paired gulou/zhonglou on an axis is capital grammar (Pingyao, a
-        wealthy county seat, has exactly one Market Tower, ~60 ft). Distinct from the fire towers:
-        fire watch was a SEPARATE institution in both reference cultures (Song Kaifeng ran
-        dedicated fire-lookout towers; Edo split the licensed toki-no-kane time bell from the
-        hinomi-yagura). Drawn as a heavy masonry platform (county tier ~60-80 ft square) carrying
-        a timber pavilion with the drum and the bell - visibly heavier-built than the skeletal
-        braced-frame fire towers. Stands at the main street crossing, near (not inside) the yamen.
-        Records M['drum_towers'] (an overlap-checked struct) and reserves a no-build block."""
-        if tw is None:
-            tw = self.px(
-                36
-            )  # county-tier footprint RE-VERIFIED (GM eye + research 2026-07-24): Pingyao's Market Tower - the wealthy-county showpiece - is ATTESTED at 133.4 m^2 plan (~38 ft square); these towers dominate by HEIGHT (50-60 ft), not plan, so ~36 ft = one rowhouse width reads correctly. The first-draft 70 ft was contaminated by garrison street-arch platforms (Dingbian 52 ft, Xingcheng 66 ft) - that variant is prefecture/garrison tier, never a 3,000-person seat
-        h = tw / 2
-        hi = tw * 0.31  # the pavilion atop the platform
-        g = [f'<g transform="translate({x:.0f},{y:.0f})">']
-        g.append(f'<rect x="{-h:.1f}" y="{-h:.1f}" width="{tw:.1f}" height="{tw:.1f}" rx="1.5" fill="#E3D7B8" stroke="#4A3318" stroke-width="2.4"/>')  # the masonry platform
-        g.append(f'<rect x="{-hi:.1f}" y="{-hi:.1f}" width="{hi * 2:.1f}" height="{hi * 2:.1f}" rx="1" fill="#C9A57A" stroke="#4A3318" stroke-width="1.5"/>')  # the timber pavilion
-        g.append(f'<line x1="{-hi:.1f}" y1="0" x2="{hi:.1f}" y2="0" stroke="#4A3318" stroke-width="0.9" opacity="0.7"/>')  # the pavilion roof ridge
-        g.append(
-            f'<circle cx="{-tw * 0.155:.1f}" cy="0" r="{max(tw * 0.105, 1.2):.1f}" fill="#8A4A2A" stroke="#4A3318" stroke-width="0.8"/>'
-        )  # the great drum (radius floored - legible at the corrected 12px platform)
-        g.append(f'<circle cx="{tw * 0.155:.1f}" cy="0" r="{max(tw * 0.08, 0.9):.1f}" fill="#6B5A3A" stroke="#4A3318" stroke-width="0.8"/>')  # the bell
-        g.append('</g>')
-        z = self.add_top(''.join(g))
-        self.M.setdefault("drum_towers", []).append({"x": round(x, 1), "y": round(y, 1), "w": tw, "h": tw, "rot": 0.0, "z": z, "label": label})
-        self.placed.append((x, y, tw, tw))
-        bm = 12
-        # the block reserves the caption band below too, AT THE CAPTION'S WIDTH - the corrected
-        # 36 ft platform is narrower than the "drum tower" text, so a footprint-width band let
-        # rowpack houses slide under the caption's ends (GM tower-resize ripple, 2026-07-24)
-        self.block_polys.append([(x - h - bm, y - h - bm), (x + h + bm, y - h - bm), (x + h + bm, y + h + bm), (x - h - bm, y + h + bm)])
-        cb_ = max(h + bm, 2.9 * len(label) + 10)
-        self.block_polys.append([(x - cb_, y + h), (x + cb_, y + h), (x + cb_, y + h + 40), (x - cb_, y + h + 40)])
-        # the caption is TWO LINES, "drum/bell" over "tower" (GM 2026-07-24): the county tower is
-        # genuinely the combined zhonggulou - both instruments in one building, and both are drawn
-        self.label(x, y + h + 12, "drum/bell", 9, italic=True, color="#4A3318")
-        self.label(x, y + h + 24, "tower", 9, italic=True, color="#4A3318")
-        return z

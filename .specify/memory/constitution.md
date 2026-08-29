@@ -1,7 +1,13 @@
 <!--
 SYNC IMPACT REPORT
 ==================
-Version change: 2.11.1 → 2.12.0
+Version change: 2.12.0 → 2.13.0
+
+Version 2.13.0 (amended 2026-08-28, feature 134): Principle XII gains "A SOURCE CARRIES ITS
+LINK" - every SOURCES.md key records the URL where the source can be read (or an explicit
+`URL: none - <why>`), because the interactive map links its references to them; the 228
+pre-rule sources were linked in one pass.
+
 
 Version 2.12.0 (amended 2026-08-27, feature 133 T46): Principle XII gains "A WORLD TASK CARRIES
 ITS RESEARCH AS CHECKBOXES" - every task classified rendering/physical at creation; a physical
@@ -585,7 +591,7 @@ No agent or skill may report a task complete without verifying the actual
 artifacts. Specifically:
 
 - **Python**: the gate is `make done` in `.claude/skills/diagram/` (lint,
-  format, `mypy --strict`, the hook suites, pytest with the coverage floors -
+  format, the strict type check, the hook suites, pytest with the coverage floors -
   nothing runs outside make, per feature 127). Target 100% line coverage on
   pure logic. External boundaries are tested via saved fixtures, not via
   transport-layer mocks.
@@ -831,7 +837,7 @@ any single rule is reason enough to refuse "done" status.
    is the single formatter (replaces black / autopep8); do not run
    alternatives alongside it.
 
-3. **Type checking is strict**: `mypy --strict` MUST pass on production
+3. **Type checking is strict**: strict static typing on production modules (pyrefly with the mypy-strict rule set, feature 142; `mypy --strict` before it, GM 2026-08-28) - it MUST pass on production
    modules. Public functions and methods carry full type annotations.
    The per-module ratchet that once relaxed the legacy engine modules is
    fully retired (all of `settlement/`, `check_village/`, `waterfields/`
@@ -1243,6 +1249,17 @@ end. A web-search summary is a pointer to sources, never a source. Findings reco
 rule without sources are re-sourced when next revisited (`research/SOURCES.md` keeps the queue),
 not rewritten wholesale.
 
+**A SOURCE CARRIES ITS LINK** (GM 2026-08-28, feature 134). Every key in `research/SOURCES.md`
+records the URL at which the source can be read - by a later session or by a human - alongside
+the citation: the DOI or J-STAGE landing page for a paper, the article URL for an encyclopedia,
+the institution's own page for a museum, ministry or prefecture document. The interactive map's
+references modal links each source to it; a citation without a link hands the reader a name and
+no way to check it, which is the failure the sources rule exists to prevent. A source that
+genuinely has no stable URL (a print-only book, a page that has gone) records `URL: none - <why>`
+in its entry, so the absence is a statement rather than an omission. The 228 sources registered
+before this rule were linked in one pass on 2026-08-28 (feature 134 T47); a key added after it
+without a URL fails `tests/interactive/test_page.py`.
+
 **READ WHAT YOU CITE** (GM 2026-08-27, feature 133 T44). A source is cited only after the session
 has read it - the page or paper itself, fetched and read, not a search engine's summary of it and
 not another page's paraphrase - and the finding written down is what THAT text says, in its own
@@ -1605,7 +1622,7 @@ shell command that writes one. It carries no silent escape - a genuine exception
 **Python tooling (per Principle X)**
 - **Lint + format**: `ruff` (lint + formatter, single tool). Config lives
   in `.claude/skills/diagram/pyproject.toml`.
-- **Type checking**: `mypy --strict` on production modules, configured in
+- **Type checking**: strict static typing on production modules (pyrefly with the mypy-strict rule set, feature 142; `mypy --strict` before it), configured in
   the same `pyproject.toml`; `l7r/` is a PEP 420 namespace portion and
   never gains an `__init__.py`.
 - **Testing**: `pytest` + `pytest-cov` + `pytest-xdist`, always under a
@@ -1615,15 +1632,22 @@ shell command that writes one. It carries no silent escape - a genuine exception
 - **Dependency management**: source-of-truth in
   `.claude/skills/diagram/requirements.in` / `requirements-dev.in`, compiled
   to the `.txt` lockfiles with `pip-compile`, pinned; a re-lock that bumps
-  ruff or mypy is a reviewed change, since it can change what the gate says.
+  ruff or the type checker is a reviewed change, since it can change what the gate says.
 - **Logging**: stdlib `logging` with `logging.getLogger(__name__)`.
 
 **Test layout**
 - Tests live under `.claude/skills/diagram/tests/`, mirroring the source
   layout (`tests/CLAUDE.md` indexes them).
-- Frozen negative fixtures - manifests of maps that were once wrong - live
-  in `pool/regressions/`; saved fixtures for external boundaries live in a
-  `fixtures/` subdirectory next to the tests that consume them.
+- A found defect becomes a unit test of the PLACER first, and a gate check
+  only where a later stage can undo the placer (feature 141, GM 2026-08-28:
+  a check that re-measures what a correct placer guaranteed "wastes time
+  with no benefit"; a label re-checked after later additions "is an example
+  of a useful automated check"). A kept check proves it fires on a SCRIPTED
+  negative fixture - a cached roll plus one deliberate break - not on a
+  frozen manifest; what remains of the hand-era corpus in `pool/regressions/`
+  awaits the GM's ruling on the legacy tiers. Saved fixtures for external
+  boundaries live in a `fixtures/` subdirectory next to the tests that
+  consume them.
 - Test names describe behavior (not implementation); parametrize
   variant inputs. A map-rolling test carries `@pytest.mark.rolls_map`.
 
@@ -1662,7 +1686,7 @@ at once:
 
 1. `ruff check`
 2. `ruff format --check`
-3. `mypy --strict` (on production modules)
+3. the strict type check - pyrefly with the mypy-strict rule set (on production modules)
 4. `make hooks-test` (every guard's test companion, Principle XVIII)
 5. `pytest -n auto` with the Makefile's coverage floors
    (`make done FULL=1` also re-gates every pool map and runs the

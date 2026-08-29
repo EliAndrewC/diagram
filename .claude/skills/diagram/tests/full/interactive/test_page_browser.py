@@ -59,6 +59,19 @@ class Page:
         """How many groups of each class carry the highlighted state right now."""
         return self.js("() => { const o = {}; for (const g of document.querySelectorAll('g.f.on')) { const k = g.getAttribute('data-k'); o[k] = (o[k] || 0) + 1; } return o; }")
 
+    def settles(self, want: Any, read: Any, ms: int = 2000) -> Any:
+        """Poll `read()` until it equals `want`, up to `ms` (feature 145). A fixed `wait_for_timeout(30)`
+        after a mouse move is enough on an idle box and not enough under a loaded FULL run - these two
+        assertions (the sibling-link hover, the scroll clamp) failed there on 2026-08-28 and passed alone
+        in two trees a minute later. Waiting for the STATE, bounded, keeps the assertion exactly as strict."""
+        got = read()
+        for _ in range(max(1, ms // 25)):
+            if got == want:
+                return got
+            self.page.wait_for_timeout(25)
+            got = read()
+        return got
+
     def groups(self, key: str) -> int:
         return self.js("k => window.l7rMap.count(k)", key)
 
@@ -68,6 +81,16 @@ class Page:
                 "([k, n]) => { const g = document.querySelectorAll('g.f[data-k=\"' + k + '\"]')[n]; const r = g.getBoundingClientRect(); return [r.x + r.width / 2, r.y + r.height / 2]; }", [key, nth]
             )
         )
+
+    def point_at(self, key: str, nth: int = 0) -> None:
+        """Put a REAL pointer on the nth group of `key` - on the element, not on its bounding-box center.
+
+        `center` returns the middle of the group's bbox, and a group is not its bbox: a farmhouse's ink is a
+        roof block and a ridge line, so the bbox center can land on bare parchment between them and light
+        nothing. That is intermittent by construction (it depends on the drawn geometry), and it failed a
+        parallel FULL run on 2026-08-28 and again alone a few minutes later on identical code. Playwright's
+        own hover picks a point INSIDE the element, which is what "a real pointer on the farmhouse" means."""
+        self.page.locator(f'g.f[data-k="{key}"]').nth(nth).hover(force=True)
 
     def hover_class(self, key: str) -> dict[str, int]:
         self.js("k => window.l7rMap.highlight(k)", key)
@@ -82,7 +105,7 @@ class Page:
 
     def dialog(self) -> dict[str, Any]:
         return self.js(
-            "() => { const d = document.getElementById('explain'); return { open: d.open, k: d.getAttribute('data-k'), label: d.getAttribute('data-label'), name: document.getElementById('x-name').textContent, labeltext: document.getElementById('x-label').textContent, siblings: document.getElementById('x-siblings').textContent, sources: document.getElementById('x-sources').textContent }; }"
+            "() => { const d = document.getElementById('explain'); return { open: d.open, k: d.getAttribute('data-k'), label: d.getAttribute('data-label'), name: document.getElementById('x-name').textContent, labeltext: document.getElementById('x-label').textContent, siblings: document.getElementById('x-siblings').textContent, sources: document.getElementById('x-refs').textContent }; }"
         )
 
     def close(self) -> None:
@@ -113,8 +136,7 @@ def _mechanics(page: Page, present: list[str]) -> None:
         assert CLASSES[key].label_note[:30] in d["labeltext"]
         assert any(w in d["labeltext"] for w in ("historically accurate", "deliberate deviation", "a guess"))
         for other in CLASSES[key].siblings:
-            assert (CLASSES[other].name in d["siblings"]) == (other in present), (key, other)
-        assert d["sources"].startswith("Sources: ")
+            assert (("the " + CLASSES[other].name) in d["siblings"]) == (other in present), (key, other)
         page.page.keyboard.press("Escape")
         assert not page.dialog()["open"]
     assert page.errors == [], page.errors
@@ -139,6 +161,10 @@ def _synthetic() -> tuple[list[str], list[Any]]:
     tags.append("notice board")
     strings.append(T.format(x=60, y=95, t="notice board"))
     tags.append("notice board")
+    strings.append('<path d="M20,150 L120,150" fill="none" stroke="#C9AE79" stroke-width="1.0"/>')  # a thin lane
+    tags.append("village lane")
+    strings.append('<g stroke="#A7A860" stroke-width="0.8"><line x1="20" y1="180" x2="21" y2="184"/><line x1="30" y1="182" x2="31" y2="186"/></g>')  # two scrub blades in one corner
+    tags.append("scrub and rough grazing")
     strings.append("</svg>")
     tags.append(None)
     return strings, tags
@@ -150,20 +176,28 @@ def synthetic(browser: Any) -> Iterator[Page]:
     with tempfile.TemporaryDirectory() as d:
         path = os.path.join(d, "synthetic.html")
         with open(path, "w", encoding="utf-8") as fh:
-            fh.write(render_page(strings, tags, "Synthetic", {"ftpx": 1.0}, {"marshes": [{"role": "toe", "poly": [[220, 100], [290, 100], [290, 190], [220, 190]]}]}))
+            fh.write(
+                render_page(
+                    strings,
+                    tags,
+                    "Synthetic",
+                    {"ftpx": 1.0},
+                    {"marshes": [{"role": "toe", "poly": [[220, 100], [290, 100], [290, 190], [220, 190]]}], "commons": [{"role": "grazing", "poly": [[0, 120], [300, 120], [300, 200], [0, 200]]}]},
+                )
+            )
         page = Page(browser, path)
         yield page
         page.close()
 
 
 def test_synthetic_page_mechanics(synthetic: Page) -> None:
-    present = ["farmhouse", "storage shed", "byre", "windbreak", "copse", "marsh", "paddy", "bund", "notice board"]
+    present = ["farmhouse", "storage shed", "byre", "windbreak", "copse", "marsh", "paddy", "bund", "notice board", "village lane", "scrub and rough grazing"]
     _mechanics(synthetic, present)
 
 
 def test_a_real_pointer_lights_the_kind_and_clicking_opens_its_modal(synthetic: Page) -> None:
     x, y = synthetic.center("farmhouse", 1)
-    synthetic.page.mouse.move(x, y)
+    synthetic.point_at("farmhouse", 1)
     synthetic.page.wait_for_timeout(30)
     assert synthetic.on() == {"farmhouse": 2}, "both farmhouses, disconnected, light as one kind (US1)"
     synthetic.page.mouse.click(x, y)
@@ -285,6 +319,99 @@ def test_ctrl_zoom_keys_and_ctrl_wheel_drive_the_page_zoom(synthetic: Page) -> N
     synthetic.js("() => window.l7rMap.fitWidth()")
 
 
+def test_a_thin_mark_is_hit_from_a_few_pixels_away(synthetic: Page) -> None:
+    """The GM (2026-08-28): the bunds, beans, ditches and lanes are too thin to hover; a fat invisible copy takes the pointer."""
+    synthetic.js("() => window.l7rMap.fit()")
+    x, y = synthetic.js("() => { const r = document.querySelector('g.f[data-k=\"village lane\"] path.hit').getBoundingClientRect(); return [r.x + r.width / 2, r.y + r.height / 2]; }")
+    synthetic.page.mouse.move(x, y + 8)  # 8 screen px off the 1 px line, inside its hit stroke
+    synthetic.page.wait_for_timeout(30)
+    assert synthetic.on() == {"village lane": 1}
+    synthetic.page.mouse.move(1, 199)
+    synthetic.page.wait_for_timeout(30)
+    assert synthetic.on() == {}
+
+
+def test_cleared_ground_inside_the_scrub_polygon_lights_nothing(synthetic: Page) -> None:
+    synthetic.js("() => window.l7rMap.fit()")
+    x, y = synthetic.js("() => { const r = document.querySelector('g.f[data-k=\"scrub and rough grazing\"] rect').getBoundingClientRect(); return [r.x + r.width / 2, r.y + r.height / 2]; }")
+    synthetic.page.mouse.move(x, y)
+    synthetic.page.wait_for_timeout(30)
+    assert synthetic.on() == {"scrub and rough grazing": 2}, "a cell with a blade in it lights the scrub"
+    assert synthetic.js("() => getComputedStyle(document.querySelector('g.f.on rect')).fill") == "none", "the region never paints, highlighted or not"
+    synthetic.page.mouse.move(x + 200, y)  # inside the recorded polygon, no blade within two cells
+    synthetic.page.wait_for_timeout(30)
+    assert synthetic.on() == {}, "cleared ground inside the scrub's polygon lights nothing"
+
+
+def test_the_clicked_class_stays_highlighted_while_its_modal_is_open(synthetic: Page) -> None:
+    """The GM (2026-08-28): while the modal explaining the highlighted thing is active, it stays highlighted."""
+    synthetic.js("() => window.l7rMap.fit()")
+    x, y = synthetic.center("farmhouse", 1)
+    synthetic.page.mouse.move(x, y)
+    synthetic.page.mouse.click(x, y)
+    synthetic.page.wait_for_timeout(50)
+    assert synthetic.dialog()["k"] == "farmhouse" and synthetic.on() == {"farmhouse": 2}
+    bx, by = synthetic.center("byre", 0)
+    synthetic.page.mouse.move(bx, by)
+    synthetic.page.wait_for_timeout(30)
+    assert synthetic.on() == {"farmhouse": 2}, "the pointer does not move the highlight while the modal is open"
+    synthetic.page.mouse.move(1, 199)
+    synthetic.page.wait_for_timeout(30)
+    assert synthetic.on() == {"farmhouse": 2}
+    synthetic.page.keyboard.press("Escape")
+    synthetic.page.wait_for_timeout(30)
+    assert not synthetic.dialog()["open"] and synthetic.on() == {}, "closing the modal releases the highlight"
+    synthetic.js("() => window.l7rMap.fitWidth()")
+
+
+def test_glossary_terms_carry_their_definition_and_the_references_open_on_top(synthetic: Page) -> None:
+    """GM 2026-08-28: hover a term for its definition; "See references" opens a second modal above the first."""
+    synthetic.js("() => window.l7rMap.fit()")
+    synthetic.open("bund")
+    spans = synthetic.js("() => Array.from(document.querySelectorAll('#explain .gl')).map(s => [s.textContent, s.getAttribute('data-def').slice(0, 30)])")
+    assert any(t.lower() in ("bund", "bunds", "aze", "azenuri") and d for t, d in spans), spans
+    assert synthetic.js("() => !document.getElementById('x-refs').hidden")
+    synthetic.js("() => document.getElementById('x-refs').click()")
+    synthetic.page.wait_for_timeout(30)
+    assert synthetic.js("() => document.getElementById('references').open && document.getElementById('explain').open"), "the references modal opens ON TOP of the explanation, which stays open"
+    assert synthetic.js("() => document.getElementById('r-list').children.length") >= 1
+    synthetic.page.keyboard.press("Escape")
+    synthetic.page.wait_for_timeout(30)
+    assert synthetic.js("() => !document.getElementById('references').open && document.getElementById('explain').open"), "Escape closes only the top modal"
+    synthetic.page.keyboard.press("Escape")
+    assert not synthetic.dialog()["open"]
+
+
+def test_a_sibling_link_lights_the_other_class_on_hover_and_replaces_the_modal_on_click(synthetic: Page) -> None:
+    """GM 2026-08-28: "Not to be confused with the X" - hover lights X, click opens X's modal in place."""
+    synthetic.js("() => window.l7rMap.fit()")
+    x, y = synthetic.center("windbreak", 0)
+    # CLICK THE ELEMENT, not its bounding-box centre (feature 146): a windbreak group is a scatter of clumps
+    # and its bbox centre can fall on bare ground between them, which is why this flaked under a loaded run.
+    synthetic.page.locator('g.f[data-k="windbreak"]').first.click(force=True)
+    synthetic.page.wait_for_timeout(50)
+    assert synthetic.dialog()["k"] == "windbreak" and synthetic.settles({"windbreak": 1}, synthetic.on) == {"windbreak": 1}
+    assert "Not to be confused with the copse" in synthetic.dialog()["siblings"]
+    lx, ly = synthetic.js("() => { const r = document.querySelector('#explain a.sib[data-k=\"copse\"]').getBoundingClientRect(); return [r.x + r.width / 2, r.y + r.height / 2]; }")
+    synthetic.page.mouse.move(lx, ly)
+    synthetic.page.wait_for_timeout(30)
+    assert synthetic.settles({"copse": 1}, synthetic.on) == {"copse": 1}, "hovering the link lights the copse instead of the windbreak"
+    synthetic.page.mouse.move(lx, ly + 200)
+    synthetic.page.wait_for_timeout(30)
+    assert synthetic.settles({"windbreak": 1}, synthetic.on) == {"windbreak": 1}, "leaving the link restores the pinned windbreak"
+    synthetic.page.mouse.click(lx, ly)
+    synthetic.page.wait_for_timeout(50)
+    synthetic.page.mouse.move(lx, ly + 200)  # off the new modal's own link, which the pointer would otherwise be peeking
+    synthetic.page.wait_for_timeout(30)
+    d = synthetic.dialog()
+    assert d["open"] and d["k"] == "copse" and synthetic.on() == {"copse": 1}, "clicking the link opens the copse's modal in place of the windbreak's"
+    assert "Not to be confused with the windbreak" in d["siblings"]
+    synthetic.page.keyboard.press("Escape")
+    synthetic.page.wait_for_timeout(30)
+    assert synthetic.on() == {}
+    synthetic.js("() => window.l7rMap.fitWidth()")
+
+
 def test_scrolling_stops_at_the_edge_of_the_map(synthetic: Page) -> None:
     """The GM (2026-08-28): scroll to the edge of the map, but not beyond it."""
     synthetic.js("() => window.l7rMap.fit()")
@@ -294,8 +421,8 @@ def test_scrolling_stops_at_the_edge_of_the_map(synthetic: Page) -> None:
     for _ in range(40):
         synthetic.page.mouse.wheel(-2000, -2000)
     synthetic.page.wait_for_timeout(50)
-    v = synthetic.js("() => window.l7rMap.view()")
-    assert v["tx"] == 0 and v["ty"] == 0, "the map's top-left corner stops at the viewport's corner"
+    v = synthetic.settles((0, 0), lambda: tuple(round(c) for c in (synthetic.js("() => window.l7rMap.view()")["tx"], synthetic.js("() => window.l7rMap.view()")["ty"])))
+    assert v == (0, 0), "the map's top-left corner stops at the viewport's corner"
     for _ in range(40):
         synthetic.page.mouse.wheel(2000, 2000)
     synthetic.page.wait_for_timeout(50)

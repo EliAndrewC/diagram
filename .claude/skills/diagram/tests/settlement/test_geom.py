@@ -10,7 +10,7 @@ import pytest
 
 from l7r.diagram import settlement
 from l7r.diagram.settlement import Settlement, seg_dist
-from tests.settlement._builders import _IDX_POLY, _cap020, _ladder_map, _max_turn_deg, _memo_city, _torii_city, _ward_city_with_samurai
+from tests.settlement._builders import _IDX_POLY, _cap020, _ladder_map, _max_turn_deg, _memo_city, _ward_city_with_samurai
 
 
 def test_stroke_quads_makes_one_quad_per_segment():
@@ -40,17 +40,6 @@ def test_way_beds_carries_the_lane_network_lane_runs_does_not():
 
 def test_seg_closest_degenerate_segment():
     assert settlement.seg_closest(0, 0, (5, 5), (5, 5)) == (5, 5)
-
-
-def test_shrine_hall_torii_count_pin_extends_a_single_point_avenue():
-    # the per-temple pin (the per-hall analog of the village 'torii_count' knob): a pinned 7
-    # marches the avenue away from the hall at the HOUSE PITCH (TORII_PITCH_FT, 20 real ft) from
-    # the single given point - it was a fixed 44px until 2026-07-25, which is 132 ft at city scale
-    s = _torii_city(torii_count=7)
-    step = s.px(settlement.TORII_PITCH_FT)
-    y0 = 500 + s.px(84) / 2 + step  # the hall's front edge + one pitch - _avenue_at_threshold owns the seat now
-    assert s.M["religious"][-1]["torii_count"] == 7
-    assert sorted(t[1] for t in s.M["torii"]) == pytest.approx([y0 + step * i for i in range(7)], abs=0.1)
 
 
 def test_indexed_overrides_every_mutating_list_method():
@@ -461,3 +450,133 @@ def test_the_import_time_main_tree_guard_survived_the_split():
     base = pathlib.Path(settlement._geom.__path__[0]) / "base.py"
     assert "\n_assert_not_main_tree()\n" in base.read_text()
     assert settlement._assert_not_main_tree is settlement._geom.base._assert_not_main_tree
+
+
+def test_ring_index_matches_the_linear_scan_exactly() -> None:
+    """RingIndex (feature 145) is a prefilter: inside/outside and the feather-band distance must
+    equal point_in_poly / edge_dist on every point - concave rings, points on the bbox edge, points
+    outside, points far from every edge (None) and points inside the band (the true distance)."""
+    import random as _r
+
+    from l7r.diagram.settlement._geom import RingIndex, edge_dist, point_in_poly
+
+    rng = _r.Random(144)
+    rings = [
+        [(0, 0), (300, 0), (300, 200), (150, 80), (0, 200)],  # a concave notch
+        [(50, 50), (400, 60), (420, 300), (200, 350), (180, 180), (40, 320)],  # irregular, six edges
+        [(0, 0), (1000, 0), (1000, 1000), (0, 1000)],  # spans many cells
+    ]
+    for ring in rings:
+        idx = RingIndex(ring, cell=64.0)
+        for _ in range(3000):
+            px, py = rng.uniform(-100, 1100), rng.uniform(-100, 1100)
+            assert idx.inside(px, py) == point_in_poly(px, py, ring), (ring, px, py)
+            for limit in (10.0, 42.0, 200.0):
+                exact = edge_dist(px, py, ring)
+                got = idx.edge_within(px, py, limit)
+                if exact < limit:
+                    assert got is not None and abs(got - exact) < 1e-9, (ring, px, py, limit)
+                else:
+                    assert got is None, (ring, px, py, limit)
+
+
+def test_boxed_rings_match_boxed_polys() -> None:
+    """`boxed_ring_hit` over `boxed_rings` (feature 145) gives `boxed_hit`'s verdict on every point,
+    with and without an edge pad - the box pad is the edge pad, as the contract requires."""
+    import random as _r
+
+    from l7r.diagram.settlement._geom import boxed_hit, boxed_polys, boxed_ring_hit, boxed_rings
+
+    rng = _r.Random(1440)
+    polys = [[(0, 0), (120, 0), (120, 90), (60, 40), (0, 90)], [(300, 300), (500, 320), (480, 520), (320, 480)]]
+    for pad in (0.0, 12.0):
+        a, b = boxed_polys(polys, pad), boxed_rings(polys, pad)
+        for _ in range(4000):
+            px, py = rng.uniform(-50, 600), rng.uniform(-50, 600)
+            assert boxed_ring_hit(px, py, b, pad) == boxed_hit(px, py, a, pad), (px, py, pad)
+
+
+# ---- feature 145: the branches the hamlet-path floor found no test reaching ---------------------------------
+
+
+def test_keepout_ring_and_facing_chains_degenerate_and_all_facing() -> None:
+    from l7r.diagram.settlement._geom.primitives import chain_distance, chain_violated, facing_chains, keepout_ring
+
+    line = [(0.0, 0.0), (100.0, 0.0)]  # two points simplify to fewer than three chords
+    assert keepout_ring(line, line, 3.0) == (line, line)
+    assert facing_chains(line, (50.0, 50.0), 3.0) == []
+    square = [(0.0, 0.0), (100.0, 0.0), (100.0, 100.0), (0.0, 100.0)]
+    assert facing_chains(square, (50.0, 50.0), 1.0) == []  # a seat INSIDE the ring faces no outward normal
+    # a seat far outside faces two edges; every chord faces it only when the ring is a sliver seen end-on
+    sliver = [(0.0, 0.0), (100.0, 0.0), (100.0, 1.0), (0.0, 1.0)]
+    chains = facing_chains(sliver, (50.0, -500.0), 0.1)
+    assert chains and all(len(ch) >= 1 for ch in chains)
+    # a zero-length chord is skipped by both walkers
+    zero = [[((0.0, 0.0), (0.0, 0.0), (0.0, -1.0)), ((0.0, 0.0), (10.0, 0.0), (0.0, -1.0))]]
+    assert chain_violated(5.0, 3.0, zero, 2.0) is True  # on the field side of the live chord
+    assert chain_distance(5.0, -4.0, zero) == 4.0
+
+
+def test_aabb_gap_forest_reveal_organic_bbox_flat_edge() -> None:
+    from l7r.diagram.settlement._geom.curves import organic_bbox
+    from l7r.diagram.settlement._geom.extents import forest_reveal_x
+    from l7r.diagram.settlement._geom.overlap import _aabb_gap
+
+    assert _aabb_gap([(0, 0), (10, 0), (10, 10), (0, 10)], [(13, 14), (20, 14), (20, 20), (13, 20)]) == 5.0
+    assert forest_reveal_x([(0, 0), (500, 0)], w=400, edge=[(-5, 0), (380, 0)], reveal=30) == [0, 380, 30, 400]
+    pts = organic_bbox((0.0, 0.0, 100.0, 50.0), 6.0, flat_edges=(0,))
+    assert [p for p in pts[:4]] == [(0.0, 0.0), (25.0, 0.0), (50.0, 0.0), (75.0, 0.0)]  # the flat top edge is exact
+
+
+def test_water_index_wide_fixture_wall_runs_skip_and_lane_alongside_a_fence() -> None:
+    from l7r.diagram.settlement._geom.walls import wall_runs
+    from l7r.diagram.settlement._geom.water_index import SLACK, WaterIndex
+    from l7r.diagram.settlement._geom.ways import lane_through_gate
+
+    M = {"streams": [{"pts": [[0, 100], [400, 100]], "w": 8}]}
+    idx = WaterIndex(M)
+    assert idx.clear(200.0, 300.0, SLACK + 10.0) is True and idx.clear(200.0, 110.0, SLACK + 10.0) is False
+    runs = wall_runs({"manors": [{"name": "a fixture compound with no footprint"}]})
+    assert runs == []
+    alongside = {"lanes": [{"pts": [[0, 0], [100, 0]], "w": 6}]}
+    assert lane_through_gate(alongside, 50.0, 2.0, fence_deg=0.0) is None  # parallel to the fence, not through it
+
+
+def test_lane_runs_includes_the_ring_road_and_the_alleys() -> None:
+    """Feature 146: `lane_runs` gathers every trodden run a gate rule measures against, the city's included."""
+    from l7r.diagram.settlement._geom.ways import lane_runs
+
+    M = {"lanes": [{"pts": [[0, 0], [10, 0]], "w": 5}], "alleys": [{"pts": [[0, 20], [10, 20]], "w": 6}], "ring_road": [[0, 40], [10, 40]], "ring_road_width": 20}
+    halves = sorted(round(h, 1) for _pts, h in lane_runs(M))
+    assert 3.0 in halves and 10.0 in halves, halves  # the alley at w 6 and the ring road at w 20
+
+
+def test_lane_through_gate_skips_a_far_lane_and_one_running_alongside_the_fence() -> None:
+    """Feature 146: two of the gate probe's skips - a lane too far to be the crossing, and one running ALONG
+    the fence, which the gate deliberately does not bar (only a lane THROUGH the gate counts)."""
+    from l7r.diagram.settlement._geom.ways import lane_through_gate
+
+    # `lane_runs` gathers the TRAVELED ways - roads, town streets, alleys, the ring road - so the probe is
+    # fed a street here; a hamlet's `lanes` are not among them, which is itself worth pinning.
+    far = {"town_streets": [{"pts": [[0, 400], [200, 400]], "w": 6}]}
+    assert lane_through_gate(far, 100.0, 0.0, fence_deg=0.0) is None, "400 px away is not this gate's way"
+    alongside = {"town_streets": [{"pts": [[0, 2], [200, 2]], "w": 6}]}
+    assert lane_through_gate(alongside, 100.0, 0.0, fence_deg=0.0) is None, "parallel to the fence"
+    across = {"town_streets": [{"pts": [[100, -60], [100, 60]], "w": 6}]}
+    assert lane_through_gate(across, 100.0, 0.0, fence_deg=0.0) is not None, "square through the gate"
+    assert lane_through_gate({"lanes": [{"pts": [[100, -60], [100, 60]], "w": 6}]}, 100.0, 0.0, fence_deg=0.0) is None
+
+
+def test_facing_chains_returns_one_run_when_every_chord_faces_the_seat() -> None:
+    """Feature 146: the two run-splitting arms. A seat far off one side of a long sliver faces EVERY chord,
+    which is the single-run case; a seat beside a wide ring faces only some, which splits into runs."""
+    from l7r.diagram.settlement._geom import facing_chains
+
+    sliver = [(0.0, 0.0), (400.0, 0.0), (400.0, 2.0), (0.0, 2.0)]
+    one = facing_chains(sliver, (200.0, -4000.0), 0.5)
+    assert len(one) == 1, one
+
+    square = [(0.0, 0.0), (400.0, 0.0), (400.0, 400.0), (0.0, 400.0)]
+    some = facing_chains(square, (200.0, -600.0), 1.0)
+    assert some and len(some) >= 1
+    assert sum(len(c) for c in some) < 4, "not every chord of a square faces a seat off one side"

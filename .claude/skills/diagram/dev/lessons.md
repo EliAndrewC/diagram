@@ -249,3 +249,61 @@ under `L7R_COV_FLOORS=1`, which the Makefile now exports under COV_FLOORS) and j
 pinned expected-failure set with `baseline_verdict`'s rule (outside the set = regression, clean
 pinned seed = stale pin).
 
+## 2026-08-28 (feature 137 T03): the lock hid that T31/T32 broke the tier - 18/24 to 2/24 in two tasks
+
+The reference-hamlet period's lane passes (T31 `_touch_junctions`, T32 `_smooth_web`) made Inashiro
+right and the TIER wrong: a 24-seed cohort passed 18 at the lock and 2 after T32, with
+`houses_clear_of_lanes` on 13 seeds and `features_do_not_overlap` on 10. The doctrine written into
+T31 - "a junction link crosses nothing, but it may brush a fence" at a 4 ft footprints-only
+margin - was tuned on the one map, where every refused link was 29 ft long beside a garden; on the
+tier those brushes are lanes inside a house's 40 ft clearance and over garden rects the matrix sizes
+6 ft wide. Two lessons. (1) A pass tuned on one map is a hypothesis until the cohort has run - the
+lock's accepted cost ("found at unlock") was two days of building on a broken web. (2) A margin
+the GATE will not accept is not a margin the generator may use, whatever the picture on one map
+says; the fix that works is to hold every link to the web's own fabric margin and route the
+detour, never to relax the brush. The bisect that found this needed a CLEAN scratch clone: the
+first attempt measured one tree four times because a copied-in instrumented file blocked every
+checkout silently.
+
+
+## 2026-08-28 (feature 134 T50): a REPAIR that cannot satisfy the CHECK it exists to satisfy, and a router whose lattice narrows every corridor
+
+Three lane-web defects, all latent for a long time. The threshing-yard roll (T49) did not create any of
+them - it moved geometry until each showed. That is the shape worth remembering: a placement change is a
+FUZZER for every rule that was tuned on one arrangement of the same map.
+
+**1. The repair's threshold and the check's threshold were different numbers, and nobody compared them.**
+`lanes_bend_like_paths` fails ANY turn past 140 degrees. `_smooth_web`'s hairpin repair would only cut an
+arm under `_ARM_FT` (40 ft). So the band between them - a hairpin whose arm is 40 ft or longer - was drawn,
+failed, and could not be repaired by any pass. Tripwire seed 47 sat in that band with a 62 ft arm. Nothing
+warned, because a check firing looks the same whether the repair declined or the repair was never able.
+**Whenever you write a repair for a check, state both thresholds in one place and ask what lives between
+them.** The fix was not to raise the cap: the cap was standing in for "do not destroy a lane doing real
+work", so that got MEASURED instead (no farmhouse loses its way; the tip left behind still reaches
+something by the check's own figures), and the cap became a bound on how much of the picture one cut may
+change.
+
+**2. A rule asked ONCE, at creation, by passes that all mutate afterwards.** `draw_web_lane` refuses to
+draw a lane under `_WEB_MIN_FT` (30 ft), and then a trim, a hairpin cut and `_stop_at_network` each shorten
+lanes with nothing re-asking. A 20.5 ft fragment shipped. **A validity rule enforced at construction is not
+enforced at all in a pipeline that keeps editing the object** - it needs a sweep at the end, over what
+actually ships.
+
+**3. THE ROUTER'S PLANNING CLEARANCE IS NOT THE CLEARANCE YOU PASSED IT.** `_route` plans on a lattice and
+uses `gap + cell * 0.71`, inflating by half a cell's diagonal so that "this cell is free" means every point
+in it is clear. That is load-bearing and correct. But it is charged against the CORRIDOR, and it is
+invisible at the call site: `gap=_TOUCH_GAP` (4 ft) with `cell=6.0` really demands **8.26 ft**, and
+`gap=WEB_FABRIC_GAP` (7) with `cell=10.0` demands **14.1 ft**. Seed 27's only way out was a corridor about
+7 ft wide, so both rungs reported NO ROUTE for a journey that plainly existed - and the caller's error
+message says the piece could not be joined, never that it was the lattice that could not see the gap.
+**When a router says no, check its effective clearance before believing the geometry.** At `cell=3.0` the
+same 4 ft standard costs 6.13 ft and the ways round opened.
+
+**And a candidate generator that only ever aims at the NEAREST point of a way writes off the whole way when
+that point is the walled one.** Nine points further along seed 27's same lane were reachable. Sampling
+along the way was the other half of the fix.
+
+**How each was found: by MEASUREMENT on the map's own manifest, not by reading the code harder.** A grid
+search over `wip/tw27.json`'s footprints, run at each rung's effective clearance, answered "is there a
+corridor, and how wide" in one turn - after two turns of reasoning about the code had produced only
+plausible guesses. When a placer or router refuses, probe the geometry it was given.

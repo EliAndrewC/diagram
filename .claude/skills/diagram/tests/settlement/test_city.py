@@ -174,21 +174,6 @@ def test_aqueduct_records_intake_channel_and_terminus():
     assert rec["w"] > 0
 
 
-def test_a_footplank_is_never_laid_across_the_hem_crop():
-    """THE RATCHET for the 2026-08-11 slide condition. A plank slides clear of houses and of banks
-    that open onto marsh; it must also slide clear of the DRY hem, because a deck laid on a hatake
-    strip is a board lying on the barley - the same rule `groves_clear_of_dry_plots` states for trees
-    and `structures_clear_of_dry_plots` for buildings."""
-    s = _plank_bed()
-    hem = [(560.0, 660.0), (840.0, 660.0), (840.0, 740.0), (560.0, 740.0)]  # straddles the ditch mid-run
-    s.M["dry_plots"].append({"poly": [list(p) for p in hem], "crop": "barley", "theta": 0.0})
-    s.dry_polys.append(hem)
-    s.channel_footbridges(spacing=300)
-    assert s.M["bridges"], "the fixture must actually place planks, or it proves nothing"
-    for b in s.M["bridges"]:
-        assert not (560.0 <= b["x"] <= 840.0 and 660.0 <= b["y"] <= 740.0), f"a plank was laid on the hem at {(round(b['x']), round(b['y']))}"
-
-
 def test_a_footplank_is_never_laid_on_a_bend_its_deck_cannot_clear():
     """THE RATCHET for the corner test. `bridges_span_their_water` requires every deck CORNER to
     stand clear of the crossed water; a deck perpendicular to a STRAIGHT ditch clears by
@@ -270,3 +255,106 @@ def test_no_two_city_submixins_define_the_same_name():
         for b in subs[i + 1 :]:
             overlap = _own_callables(a) & _own_callables(b)
             assert not overlap, f"{a.__name__} and {b.__name__} both define {sorted(overlap)} - MRO would orphan one"
+
+
+# ---- SIDE-AWARE plank caps: `seg_caps` (feature 146 - the arm no live map takes) ------------
+
+
+def test_channel_footbridges_honors_a_per_side_plank_cap():
+    """`seg_caps` maps a ring-canal's `seg` tag to how many planks that side may carry (research
+    2026-07-22: crossings cluster on the settled toe and are absent on the feeder and the drain,
+    because workers cross to the fields they live beside). A cap of 0 means NO plank on that side -
+    the polder gens set it, but no map in the pool rolls a ditch tagged with a zero-capped seg, so
+    both the cap lookup and its refusal went unentered."""
+    s = _crop_settlement()
+    s.M["fields"] = [{"outline": [[50, 120], [850, 120], [850, 280], [50, 280]]}]
+    s.M["field_ditches"] = [
+        {"poly": [[100, 200], [800, 200]], "w": 5, "role": "main", "seg": "drain"},
+        {"poly": [[100, 240], [800, 240]], "w": 5, "role": "main", "seg": "toe"},
+    ]
+    n = s.channel_footbridges(spacing=320, seg_caps={"drain": 0, "toe": 1})
+    assert n == 1, "the drain side is capped to nothing; the toe side takes its single plank"
+    assert all(230 < b["y"] < 250 for b in s.M["bridges"]), "the surviving plank is on the toe"
+
+
+def test_channel_footbridges_refuses_a_plank_whose_deck_would_not_clear_its_water():
+    """The last of the three siting guards. `_plank_reaches_useful_ground` and the house-slide both
+    have live maps behind them; this one only fires where a ditch bends back under its own deck, so
+    the guard is asked directly."""
+    s = _crop_settlement()
+    s.M["fields"] = [{"outline": [[50, 120], [850, 120], [850, 280], [50, 280]]}]
+    s.M["field_ditches"] = [{"poly": [[100, 200], [800, 200]], "w": 5, "role": "main"}]
+    s._deck_clears_its_water = lambda *_a, **_k: False  # type: ignore[method-assign]
+    assert s.channel_footbridges(spacing=320) == 0
+    assert not s.M["bridges"], "a deck that stands in its own water is not drawn at all"
+
+
+# ---- seat_deck: the SKEW fallback, lifted out of bridges() (feature 146) ---------------------
+
+
+def test_seat_deck_grows_a_square_crossing_and_leaves_its_rotation_alone():
+    from l7r.diagram.settlement.city.bridges import seat_deck
+
+    water = [(0.0, 300.0), (1000.0, 300.0)]
+    rot, span, seated = seat_deck((500.0, 300.0), 90.0, 30.0, 8.0, water, 12.0, (water[0], water[1]))
+    assert seated and rot == 90.0 and span == 30.0, "square to the stream: the first span tried clears"
+
+
+def test_seat_deck_skews_toward_square_when_growth_cannot_clear_an_oblique_crossing():
+    """Growth lengthens the deck ALONG THE WAY, which at a shallow crossing drives its ends further along
+    the water rather than clear of it - so no ceiling on the growth could ever have worked. Only cohort
+    seed 47 ever rolled a map that reached this."""
+    from l7r.diagram.settlement.city.bridges import seat_deck
+
+    water = [(0.0, 300.0), (1000.0, 300.0)]
+    rot, span, seated = seat_deck((500.0, 300.0), 20.0, 30.0, 8.0, water, 12.0, (water[0], water[1]))
+    assert seated
+    assert rot != 20.0 and abs(rot - 20.0) <= 8.0, "skewed toward square, inside BRIDGE_ROT_TOL"
+    assert span > 30.0, "and grown at the skewed heading"
+
+
+def test_seat_deck_hands_back_the_original_span_when_nothing_seats():
+    """An undersized deck the caller draws anyway, so `bridges_span_their_water` names it - better than a
+    silent no-bridge at a crossing the road plainly makes."""
+    from l7r.diagram.settlement.city.bridges import seat_deck
+
+    water = [(0.0, 300.0), (1000.0, 300.0)]
+    rot, span, seated = seat_deck((500.0, 300.0), 12.0, 30.0, 8.0, water, 12.0, (water[0], water[1]))
+    assert not seated and (rot, span) == (12.0, 30.0)
+
+
+def test_two_ways_crossing_one_ditch_side_by_side_share_the_plank():
+    """ONE DECK PER CROSSING PLACE. A real crossing is a place, not a per-way entitlement: two tracks
+    converging on the same plank use the plank. Feature 126 shipped overlapping decks on four cohort
+    seeds once the lane work began drawing orphan links alongside existing ways."""
+    s = _crop_settlement()
+    s.M["streams"] = [{"poly": [[100, 300], [900, 300]], "w": 10}]
+    s.M["lanes"] = [
+        {"pts": [[500, 100], [500, 500]], "w": 6},
+        {"pts": [[510, 100], [510, 500]], "w": 6},  # a second track 10 px along the same bank, inside the deck it would build
+    ]
+    n = s.bridges()
+    assert n == 1 and len(s.M["bridges"]) == 1, "the second way uses the deck that is already there"
+
+
+def test_a_footplank_is_not_laid_on_top_of_another_deck():
+    """Three siting guards keep a plank off ground that is spoken for - a farmhouse, the hem crop, and
+    another DECK. The last is reached only where two ditches cross near enough for their planks to collide,
+    which is an accident of the roll rather than something the pool maps reliably contain."""
+    s = _crop_settlement()
+    s.M["fields"] = [{"outline": [[50, 120], [850, 120], [850, 480], [50, 480]]}]
+    s.M["field_ditches"] = [{"poly": [[100, 300], [800, 300]], "w": 5, "role": "main"}]
+    alone = s.channel_footbridges(spacing=320)
+    assert alone >= 1, "the ditch takes its planks when nothing is in the way"
+
+    s2 = _crop_settlement()
+    s2.M["fields"] = [{"outline": [[50, 120], [850, 120], [850, 480], [50, 480]]}]
+    s2.M["field_ditches"] = [{"poly": [[100, 300], [800, 300]], "w": 5, "role": "main"}]
+    for b in s.M["bridges"]:  # every deck the first map laid, already standing before this pass runs
+        s2.bridge(b["x"], b["y"], b["rot"], b["span"], b["w"])
+    before = [dict(b) for b in s2.M["bridges"]]
+    s2.channel_footbridges(spacing=320)
+    # the guard REFUSES the seat; the siter then slides along the ditch looking for another, so the honest
+    # claim is not "no plank" but "no plank ON one already there"
+    for b in s2.M["bridges"][len(before) :]:
+        assert all(math.hypot(b["x"] - a["x"], b["y"] - a["y"]) > 1.0 for a in before), "a new plank sits clear of every standing deck"

@@ -25,7 +25,7 @@ from ._geom import (
     ward_interior,
     winding,
 )
-from ._knobs import machi_mouths
+from .city.knobs import machi_mouths
 
 if TYPE_CHECKING:
     from .core import Settlement
@@ -101,6 +101,27 @@ def _pull_back(pts: list[Pt], reaches: Any, step: float = 8.0, keep_frac: float 
     return best if best is not None else list(pts)
 
 
+def fan_rival(lanes: Any, q: Pt, bearing: float, house: Pt, mine: float, me: int, fan_spread: float, fan_bearing: float) -> bool:
+    """Is another lane's end already fanning to this house on this bearing? A second stub arriving beside the
+    first, within `fan_spread` of it and within `fan_bearing` degrees of the same heading, is the same
+    approach drawn twice rather than two ways.
+
+    LIFTED OUT OF `trim_lane_stubs` (feature 146, GM 2026-08-28 on making inner functions testable): it took
+    only these values from the closure, and a test can now hand it two lane dicts instead of building a
+    settlement whose web happens to fan."""
+    for k, other in enumerate(lanes):
+        if k == me or len(other.get("pts") or []) < 2:
+            continue
+        op = [(float(x), float(y)) for x, y in other["pts"]]
+        for tip, prev in ((op[0], op[1]), (op[-1], op[-2])):
+            if math.dist(tip, q) > fan_spread or math.hypot(tip[0] - house[0], tip[1] - house[1]) >= mine:
+                continue
+            b = math.degrees(math.atan2(tip[1] - prev[1], tip[0] - prev[0]))
+            if abs((bearing - b + 180.0) % 360.0 - 180.0) <= fan_bearing:
+                return True
+    return False
+
+
 class WaterWaysMixin:
     def note_focal(self: Settlement, kind: str) -> None:  # type: ignore[misc]
         """Record an optional FOCAL feature (feature 005 catalog) on the manifest so the twin-detector reads
@@ -135,53 +156,6 @@ class WaterWaysMixin:
         """Reserve a focal footprint as a placement keep-out (so a later farmstead can never overlap it)."""
         self.placed.append((x, y, pw, ph))
         self.block_polys.append([(x - pw / 2 - 6, y - ph / 2 - 6), (x + pw / 2 + 6, y - ph / 2 - 6), (x + pw / 2 + 6, y + ph / 2 + 6), (x - pw / 2 - 6, y + ph / 2 + 6)])
-
-    def ancestral_hall(self: Settlement, x: float, y: float, w: float = 110, h: float = 74) -> None:  # type: ignore[misc]
-        """A lineage ANCESTRAL HALL (祠堂), a focal feature: the grandest civic building of a single-lineage
-        village - broader than any house, a double-eave hall on the auspicious axis fronting the pond/water.
-        Draws the hall, records M['ancestral_halls'] + the focal feature, reserves the footprint. Grounding
-        (research.md D2): the ancestral hall was the ritual + governance center of a Huizhou/Hakka lineage
-        village, its single most prominent structure - so a village that HAS one reads unmistakably by it."""
-        pw, ph = self.px(w), self.px(h)
-        self.add(f'<rect x="{x - pw / 2:.1f}" y="{y - ph / 2:.1f}" width="{pw:.1f}" height="{ph:.1f}" fill="#DDB87A" stroke="#5A3F1E" stroke-width="2.4" rx="2"/>')
-        self.add(
-            f'<rect x="{x - pw / 2 + self.px(5):.1f}" y="{y - ph / 2 + self.px(5):.1f}" width="{pw - self.px(10):.1f}" height="{ph - self.px(10):.1f}" fill="none" stroke="#6B4F2A" stroke-width="1.2"/>'
-        )  # inner eave
-        self.add(f'<rect x="{x - self.px(9):.1f}" y="{y + ph / 2 - self.px(4):.1f}" width="{self.px(18):.1f}" height="{self.px(6):.1f}" fill="#5A3F1E"/>')  # entry porch on the water side
-        self.M.setdefault("ancestral_halls", []).append({"x": round(x, 1), "y": round(y, 1), "w": pw, "h": ph, "rot": 0})
-        self.note_focal("ancestral_hall")
-        self._focal_block(x, y, pw, ph)
-
-    def water_mouth(self: Settlement, x: float, y: float, r: float = 22) -> None:  # type: ignore[misc]
-        """A fengshui WATER-MOUTH complex (水口), a focal feature: the guarded outlet where the village stream
-        leaves, marked by a small hexagonal pavilion (and, per the gen, a screening grove) to 'lock in' the qi
-        of the departing water. Draws the pavilion, records M['water_mouths'] + the focal feature. Grounding:
-        the shuikou was a standard focal ensemble of south-China lineage villages, sited at the stream exit."""
-        pr = self.px(r)
-        pts = " ".join(f"{x + pr * math.cos(a):.1f},{y + pr * math.sin(a):.1f}" for a in [math.pi / 6 + i * math.pi / 3 for i in range(6)])
-        self.add(f'<polygon points="{pts}" fill="#C9876C" stroke="#6B2A18" stroke-width="2" stroke-linejoin="round"/>')
-        self.add(f'<circle cx="{x:.1f}" cy="{y:.1f}" r="{pr * 0.42:.1f}" fill="none" stroke="#6B2A18" stroke-width="1.2"/>')
-        self.M.setdefault("water_mouths", []).append({"x": round(x, 1), "y": round(y, 1), "w": pr * 2, "h": pr * 2, "rot": 0})
-        self.note_focal("water_mouth")
-        self._focal_block(x, y, pr * 2, pr * 2)
-
-    def market(self: Settlement, x: float, y: float, w: float = 120, h: float = 84) -> None:  # type: ignore[misc]
-        """A village MARKET clearing (墟/市), a focal feature: an open packed-earth space with a few stalls
-        where a periodic market gathers - a widening in the lane fabric, not a building. Draws the open court +
-        a row of stall marks, records M['markets'] + the focal feature. Grounding: a market node is exactly
-        where a `cross` lane skeleton reads as a market village rather than a plain farming one."""
-        pw, ph = self.px(w), self.px(h)
-        cid = self._cid("mkt")
-        self.add(f'<clipPath id="{cid}"><rect x="{x - pw / 2:.1f}" y="{y - ph / 2:.1f}" width="{pw:.1f}" height="{ph:.1f}" rx="3"/></clipPath>')
-        self.add(f'<rect x="{x - pw / 2:.1f}" y="{y - ph / 2:.1f}" width="{pw:.1f}" height="{ph:.1f}" fill="#D8C7A0" stroke="#9C7A40" stroke-width="1.6" stroke-dasharray="5 4" rx="3"/>')
-        stalls = "".join(
-            f'<rect x="{x - pw / 2 + self.px(10) + i * self.px(22):.1f}" y="{y - self.px(6):.1f}" width="{self.px(14):.1f}" height="{self.px(12):.1f}" fill="#C9A57A" stroke="#6B4F2A" stroke-width="1"/>'
-            for i in range(max(1, int(w / 34)))
-        )
-        self.add(f'<g clip-path="url(#{cid})">{stalls}</g>')
-        self.M.setdefault("markets", []).append({"x": round(x, 1), "y": round(y, 1), "w": pw, "h": ph, "rot": 0})
-        self.note_focal("market")
-        self._focal_block(x, y, pw, ph)
 
     def secondary_shrine(self: Settlement, x: float, y: float, w_ft: float = 42, h_ft: float = 30) -> None:  # type: ignore[misc]
         """A SECONDARY tutelary/roadside shrine, a focal feature: a small second shrine besides the village's
@@ -627,19 +601,7 @@ class WaterWaysMixin:
         _drop: set[int] = set()
 
         def _fan_rival(q: Pt, bearing: float, house: Pt, mine: float, me: int) -> bool:
-            """Is another lane's end standing beside this one, pointing the same way, and NEARER the
-            same house? If so this end is the spare tine of a fan and the house is not its to claim."""
-            for k, other in enumerate(lanes):
-                if k == me or k in _drop or other.get("connector") or len(other.get("pts") or []) < 2:
-                    continue
-                op = [(float(x), float(y)) for x, y in other["pts"]]
-                for tip, prev in ((op[0], op[1]), (op[-1], op[-2])):
-                    if math.dist(tip, q) > fan_spread or math.hypot(tip[0] - house[0], tip[1] - house[1]) >= mine:
-                        continue
-                    _b = math.degrees(math.atan2(tip[1] - prev[1], tip[0] - prev[0]))
-                    if abs((bearing - _b + 180.0) % 360.0 - 180.0) <= fan_bearing:
-                        return True
-            return False
+            return fan_rival(lanes, q, bearing, house, mine, me, fan_spread, fan_bearing)
 
         for i, ln in enumerate(lanes):
             if ln.get("connector") or i >= len(self._lane_ink):
@@ -1142,25 +1104,3 @@ class WaterWaysMixin:
             for k in range(1, 4):
                 ry = y0 + (y1 - y0) * k / 4
                 self.add(f'<line x1="{x0 + 6:.1f}" y1="{ry:.1f}" x2="{x1 - 6:.1f}" y2="{ry:.1f}" stroke="#6E9A40" stroke-width="2.0" stroke-linecap="round" opacity="0.75"/>')
-
-    def alley(self: Settlement, pts: Any, width: float | None = None) -> None:  # type: ignore[misc]
-        """An UNPAVED interior lane (gravel / wood planks, not the dressed earth of a street) that
-        threads the packed block cores: the poor reach their jammed interior housing by alleys,
-        not the paved street frontage. Thinner than a street, drawn as a pale gravel path with a
-        plank/speckle dash, and a NARROW no-build corridor so the dense core leaves a gap for it.
-        Real width ~10 ft (a generous roji is 3-6 ft; ours carries the access for a whole block
-        core) - at city scale that lands on the 4px linework floor, which is the doctrine: a roji
-        is drawn at the minimum visible width, never to (invisible) true scale."""
-        if width is None:
-            width = self.lw(10)
-        dd = 'M' + ' L'.join(f'{x},{y}' for x, y in pts)
-        self.corridors.append((pts, width / 2 + 11))  # setback keeps building CORNERS off the lane, not just centers
-        al = {"pts": [[x, y] for x, y in pts], "w": width, "z": None}
-        self.M.setdefault("alleys", []).append(al)
-        self._ground(
-            width,
-            al,
-            "z",  # an unpaved gravel lane: its surface IS the bed (no curb/edge), plus a speckle
-            bed=f'<path d="{dd}" fill="none" stroke="#C7BB9C" stroke-width="{width}" opacity="0.85" stroke-linejoin="round" stroke-linecap="round"/>',
-            top=f'<path d="{dd}" fill="none" stroke="#9A8A68" stroke-width="1.4" stroke-dasharray="2,5" opacity="0.7"/>',
-        )

@@ -38,11 +38,11 @@ a matcher that logs its stdin, dispatch a trivial agent, read the log.
 
 ## R2. How does a guard know a settlement-review is PENDING?
 
-**Settled.** `scripts/agent-watch-hooks.sh` already answers this: its `scan <subagents-dir> [min]` reads
+**Settled.** `scripts/agent-stall-hooks.sh` already answers this: its `scan <subagents-dir> [min]` reads
 `~/.claude/projects/<cwd>/<session>/subagents/agent-*.jsonl` and prints one line per agent -
 `finished | pending | stale`, its idle seconds and its last tool. The pairing guard reuses that scanner
 rather than writing a second one, and identifies WHICH agent by grepping the transcript for the agent type
-and the map name. `agent-watch-hooks.sh` also documents the failure this must survive: an agent whose
+and the map name. `agent-stall-hooks.sh` also documents the failure this must survive: an agent whose
 transcript ends on a tool_result and never moves again.
 
 ## R3. Unattended runs: the idle timer cannot dispatch a review
@@ -75,7 +75,7 @@ entry beside a re-rolled map, so the two guards agree on what "a changed map" me
 
 | need | existing thing | why not a new one |
 |---|---|---|
-| is an agent pending / stale | `agent-watch-hooks.sh scan` | one scanner, one failure model |
+| is an agent pending / stale | `agent-stall-hooks.sh pending` | one scanner, one failure model |
 | what content was verified | `.git/verification-state.json` `engine_key` | the gate's own key; a second definition would drift |
 | where an override is recorded | `dev/bypass-log/*.json` | the audit already reads it |
 | how a guard is tested | `scripts/test-*.sh` + `make hooks-test` | constitution XVIII |

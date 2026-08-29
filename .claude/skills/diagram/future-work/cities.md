@@ -121,3 +121,19 @@ follow-ups, either of which closes it:
 - Profile it. A capital map costing more than 3x the entire 28-map pool is itself a finding - the
   "one performance bug this engine keeps growing" section of `CLAUDE.md` describes the shape it is
   most likely to be.
+
+## Restore `labels_clear_of_other_buildings` - and give the hamlet tier a caption check at all (feature 146, 2026-08-28)
+
+Feature 141's cut retired `labels_clear_of_other_buildings`, and with it the only consumer of the
+`_LABEL_GROUP` / `_LABEL_EXEMPT` registry in `check_village/common_01_geometry.py` - a registry still
+maintained in comments to this day, now enforcing nothing. Restore it (the body is recoverable at
+`b709c4ae^:.../segments_04a_margins_lanes_and_wells.py`, lines 208-380) and prove it fires; the frozen
+town and city exhibits now run at the gate, so it has a test bed the day it comes back.
+
+**And the finding that came with it**: that check was guarded `if scale in ("town", "city")`. It never ran
+on a hamlet - so the Kashikawa caption drawn through a byre (settlement-review, 2026-08-28, accepted with
+its alternatives priced in that map's notes) was never covered by it, and **at hamlet scale no check tests
+whether a caption covers something it does not name**. Feature 145 moved `byres` out of `_LABEL_EXEMPT` into
+the `farmhouse` group so the registry says the right thing; nothing reads it yet at that tier. Whether the
+hamlet tier wants the same check is the open question - one caption on the sheet, in a dense cluster, and
+the board must stay on the traffic.

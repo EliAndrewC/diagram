@@ -57,20 +57,14 @@ CONSUMED_PUBLIC = [
     "RESERVE_CAP_FRAC",
     "TWIN_AXES",
     "city_capacity",
-    "clip_poly_rect",
-    "crop_relocatable_singletons",
     "edge_gap",
     "forest_reveal_x",
     "gate",
     "kiln_quarters",
-    "lane_near_misses",
-    "lane_ward_shortfalls",
-    "largest_empty_gap",
     "main",
     "matrix_extents",
     "matrix_policy",
     "matrix_violations",
-    "onmap_field_edge",
     "point_in_poly",
     "poly_area",
     "poly_dist",
@@ -80,10 +74,6 @@ CONSUMED_PUBLIC = [
     "seg_intersect",
     "seg_to_rect_dist",
     "sweep_hi",
-    "twin_axes",
-    "twin_diff_count",
-    "twin_report",
-    "water_setback",
 ]
 
 # The six underscore names with external consumers, and the submodule that owns each.
@@ -93,7 +83,7 @@ ALIASED_UNDERSCORE = {
     "_MATRIX_OUTSTANDING": "l7r.diagram.check_village.common_01_geometry",
     "_OVERLAP_EXEMPT": "l7r.diagram.check_village.common_01_geometry",
     "_OVERLAP_STRUCTS": "l7r.diagram.check_village.common_01_geometry",
-    "_ward_interior": "l7r.diagram.check_village.common_02_overlap_policy",
+    "_ward_interior": "l7r.diagram.check_village.common_04_urban_policy",  # feature 145: moved with the other town/city policy helpers
 }
 
 

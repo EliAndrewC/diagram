@@ -74,8 +74,8 @@ class ServantRangesMixin:
         ux, uy = -math.sin(th), math.cos(th)
         vx, vy = -uy, ux
         fx, fy = cx + ux * h / 2, cy + uy * h / 2
-        near = [o for o in self._solid_records() if o is not skip and math.hypot(o["x"] - cx, o["y"] - cy) < math.hypot(w, h) / 2 + dc + math.hypot(o["w"], o.get("h", o["w"])) / 2 + 2]
-        corners = [rot_rect(o["x"], o["y"], o["w"], o.get("h", o["w"]), o.get("rot", 0)) for o in near]
+        near = [o for o in self._solid_records() if o is not skip and math.hypot(o["x"] - cx, o["y"] - cy) < math.hypot(w, h) / 2 + dc + math.hypot(o["w"], o.get("h", o["w"])) / 2 + 2]  # pyrefly: ignore[bad-argument-type]  # dict.get(k, Any-default) typed Any|None by pyrefly, Any by mypy - research 142 R5
+        corners = [rot_rect(o["x"], o["y"], o["w"], o.get("h", o["w"]), o.get("rot", 0)) for o in near]  # pyrefly: ignore[bad-argument-type]  # dict.get(k, Any-default) typed Any|None by pyrefly, Any by mypy - research 142 R5
         for d in (0.8, dc * 0.55, dc):
             for t in (-0.3 * w, 0.0, 0.3 * w):
                 px_, py_ = fx + ux * d + vx * t, fy + uy * d + vy * t
@@ -122,7 +122,7 @@ class ServantRangesMixin:
         beds = [(st["pts"], st.get("w", 18) / 2) for st in self.M.get("town_streets", [])]
         beds += [(al["pts"], al.get("w", 10) / 2) for al in self.M.get("alleys", [])]
         if self.M.get("road"):
-            beds.append((self.M["road"], self.M.get("road_width", 26) / 2))
+            beds.append((self.M["road"], self.M.get("road_width", 30) / 2))
         if self.M.get("ring_road"):
             beds.append((self.M["ring_road"], self.M.get("ring_road_width", 15) / 2))
         in_ward = [b for b in self.M["buildings"] if any(point_in_poly(b["x"], b["y"], rg) for rg in self._samurai_ward_interiors)]
@@ -193,7 +193,7 @@ class ServantRangesMixin:
                 # iterate any manifest list of dicts carrying w/h, or the next feature is invisible
                 # to it). Offices additionally keep their 14px standoff
                 # (`city_government_offices_dont_abut`), so they are tested against an inflated range.
-                if any(rects_overlap(quad, rot_rect(o["x"], o["y"], o["w"], o.get("h", o["w"]), o.get("rot", 0))) for o in self._solid_records() if o is not b):
+                if any(rects_overlap(quad, rot_rect(o["x"], o["y"], o["w"], o.get("h", o["w"]), o.get("rot", 0))) for o in self._solid_records() if o is not b):  # pyrefly: ignore[bad-argument-type]  # dict.get(k, Any-default) typed Any|None by pyrefly, Any by mypy - research 142 R5
                     continue
                 # THE OFFICE STANDOFF, MEASURED THE WAY THE CHECK MEASURES IT - AABB to AABB.
                 # `city_government_offices_dont_abut` compares axis-aligned BOUNDS, while this

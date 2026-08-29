@@ -13,7 +13,7 @@ the Makefile collects TREES, and where you put a test is the whole decision.
 |---|---|---|
 | `tests/` (with its mirrored packages) | `make quick`, `make done`, the full run | it is a UNIT form: milliseconds to ~0.5 s, no map rolled, no tooling run. The quick suite's 60 s budget is the bar |
 | `tests/gate/` | `make done` and the full run - never quick | it earns MERGE time: a real roll of one representative spec (served from the roll cache while nothing it executes changed - `l7r/diagram/pipeline/rollcache.py`), the bad-map corpus, a proof of tooling |
-| `tests/full/` | `make done FULL=1` and the AWS check only | it is a SWEEP or a CARRIER: every pool map, every seed of a cohort, a determinism test that must roll twice for real, a fixture replayed only to carry coverage, a real-map cache round trip. The full run is where the coverage floors are enforced and where no cache serves a roll |
+| `tests/full/` | `make done FULL=1` and the AWS check only | it is a SWEEP or a CARRIER: every pool map, every seed of a cohort, a determinism test that must roll twice for real, a fixture replayed only to carry coverage, a real-map cache round trip. The full run is where the coverage floors are enforced - including the derived 100% floor on every module the scripted hamlet rolls execute (feature 145, `make hamlet-floor`) - and where no cache serves a roll |
 | `tests/tooling/` | the gate and the full run; quick ONLY when the tooling changed since the last green gate; skipped at the gate too while it is unchanged (never in FULL) | it RUNS the make/ci/pipeline tooling (make in a fixture, git repos in tmp, coverage subprocesses) |
 | `tests/tier_town/`, `tests/tier_city/` | the gate and the full run; quick once the scope lock moves to that tier | it is relevant to that tier only |
 
@@ -56,7 +56,7 @@ At the root of `tests/` sit the suites that are not about one module:
 
     python3 -m pytest -q -n auto                      # everything (from the skill root)
     python3 -m pytest tests/settlement/ -q -n auto    # one mirrored package, WHOLE
-    make done                                          # the real gate: lint + format + mypy + tests + coverage
+    make done                                          # the real gate: lint + format + pyrefly + tests + coverage
 
 **Always `-n auto`.** Serial pytest is about 7x slower here; the 695-manifest regression replay is
 ~2 minutes under the gate and 13.4 minutes serial. And before the gate, run the WHOLE affected file
@@ -78,9 +78,32 @@ not read `.gitignore`.
   guard: it censuses what the rest of the skill actually reaches through the package and proves the
   `__init__.py` re-export still resolves it. Feature 027 replaced hand-maintained rosters with star
   imports plus these guards, so the surface is derived and the guard is what makes that safe.
-- **Every found defect becomes a check, and the check gets a negative fixture.** Mode B fixtures
-  are frozen manifests in `pool/regressions/`; Mode A fixtures are frozen bad SVGs in
-  `fixtures/`. Coverage alone does not prove a check has teeth - a red fixture does.
+- **A CLOSURE YOU CANNOT REACH IS LIFTED OUT, NEVER DROPPED** (feature 146, GM 2026-08-28: *"if something
+  is only available as an inner function in a closure, then you can move it out into its own function to make
+  it more unit testable ... you can generally have your unit tests be much simpler if you're just calling
+  functions that take simple inputs and outputs without needing to create a lot of very complicated setup"*).
+  This repository's own commits carried the failure it replaces - *"dropped (nested closure)"* - so the rule is
+  written down: move the inner function to module level with its captured values as parameters, have the inner
+  one delegate so there is ONE body, and test the lifted function with plain dicts and tuples. Worked examples:
+  `web_pieces` / `web_rejoinable` / `commit_lane` / `bowtie_cut` / `push_clear_of_fabric` (hamletgen/ways.py),
+  `fan_rival` (settlement/water_ways.py), `pick_caption_seat` (settlement/structures/fixtures.py),
+  `anchor_holds` (check_village/segments_05b), `hem_on_water` (settlement/fields/comb.py), `s_on_side`
+  (waterfields/polder.py), `bamboo_blocked` (hamletgen/hinterland.py). **Lifting only helps when the closure
+  is CALLED and one branch inside it is not** - a closure a live roll never calls at all leaves the delegate
+  uncovered too, and that one wants a direct test of the function that owns it (`_pull_back_to_service`,
+  `_touch_junctions`, `caption_lane_clearance`), or the code deleted if nothing can reach it.
+- **A found defect becomes a UNIT TEST OF THE PLACER first, and a check only where a later stage can
+  undo the placer** (feature 141, GM 2026-08-28: *"If the thing which fixes the wrongness of the map is
+  an update to our placement algorithm, then I don't think that saving off that past map actually has
+  value ... we can have one hundred percent unit test coverage and have a unit test which asserts that
+  things are now correct without saving off the old map."*). The test per check is SAME MEASURE vs SAME
+  FACT: a check that re-measures what a correct placer guaranteed is retired, its guarantee carried by
+  the placer's test (`make check-census`; the ledger in `specs/141-checks-and-corpus-audit/`); a check
+  that measures a LATER fact - a caption after the scatter, the lane web after clipping, the board after
+  the yards - stays, because its placer only does its best. A kept check proves it fires on a SCRIPTED
+  negative fixture (`gate/test_scripted_fixtures.py`: a cached roll plus one deliberate break, targeted),
+  not on a frozen manifest from the hand-placement era; `pool/regressions/` holds what remains of that
+  corpus until the GM's ruling on the legacy tiers. Mode A fixtures are frozen bad SVGs in `fixtures/`.
 
 ## `tests/` is invisible to the generation cache, on purpose
 

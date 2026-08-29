@@ -1,0 +1,106 @@
+hamlet-floor: 99 modules on the hamlet path (derived from the scripted rolls' records)
+Name                                                                          Stmts   Miss  Cover   Missing
+-----------------------------------------------------------------------------------------------------------
+l7r/diagram/_invocation.py                                                       92      0   100%
+l7r/diagram/check_village/__init__.py                                            49      0   100%
+l7r/diagram/check_village/common_01_geometry.py                                 245      1    99%   774
+l7r/diagram/check_village/common_02_overlap_policy.py                           444    223    50%   68, 77, 116-141, 310-313, 452-477, 491-565, 573-715, 736-783, 796, 809, 811, 824, 834-845, 857-860, 869, 871
+l7r/diagram/check_village/common_03_capacity.py                                 431     32    93%   18, 23, 72, 191, 221, 277-290, 592, 628, 635, 779, 782-785, 825-830
+l7r/diagram/check_village/driver.py                                             135      4    97%   51-54
+l7r/diagram/check_village/registry.py                                           123      3    98%   168, 170-171
+l7r/diagram/check_village/registry_analysis.py                                  226      1    99%   142
+l7r/diagram/check_village/segments_01a_city_ring_and_frame.py                   156     13    92%   96, 99, 322-323, 334, 336, 390-391, 412-416
+l7r/diagram/check_village/segments_01b_quarters_and_civic_reserve.py            117     12    90%   114-117, 218, 220, 262, 266, 277, 279, 292, 370
+l7r/diagram/check_village/segments_01c_work_yards_and_matrix.py                  36      0   100%
+l7r/diagram/check_village/segments_02a_capital_budget_and_ministries.py          91      1    99%   93
+l7r/diagram/check_village/segments_02b_capital_ways_and_burial.py                63      3    95%   118-119, 142
+l7r/diagram/check_village/segments_02c_walls_gates_and_housing.py               219     22    90%   132, 307-308, 381-398, 459, 490-492, 560
+l7r/diagram/check_village/segments_03a_overlaps_and_ward_fences.py              161     18    89%   420-438, 496
+l7r/diagram/check_village/segments_03b_structures_vs_water_and_streets.py       104      4    96%   71, 73, 80, 89
+l7r/diagram/check_village/segments_03c_clusters_and_labels.py                   200     12    94%   92-95, 129, 242-243, 372-374, 592-593
+l7r/diagram/check_village/segments_04a_margins_lanes_and_wells.py               170      3    98%   303, 492-493
+l7r/diagram/check_village/segments_04b_yards_gardens_and_sheds.py               184      5    97%   205, 243-244, 269, 556
+l7r/diagram/check_village/segments_04c_groves_and_shading.py                    281     24    91%   98, 197-215, 228-229, 392-393
+l7r/diagram/check_village/segments_05a_field_cover_and_cremation.py             162      8    95%   134, 142-143, 149-150, 159, 161, 409
+l7r/diagram/check_village/segments_05b_graveyards_and_channel_sources.py        101      9    91%   134, 234, 238, 240, 245-246, 248-249, 256
+l7r/diagram/check_village/segments_05c_streams_and_field_ditches.py             195      0   100%
+l7r/diagram/check_village/segments_05d_supply_roadways_and_commons.py           193      0   100%
+l7r/diagram/check_village/segments_06a_bridges_and_gate_roads.py                 53      1    98%   147
+l7r/diagram/check_village/segments_06b_bridge_labels_and_reach.py                73      2    97%   150, 265
+l7r/diagram/check_village/segments_06c_decks_yards_and_moat_clearances.py       167     14    92%   63, 254-255, 257, 497-506
+l7r/diagram/check_village/segments_07a_channels_and_bridge_spans.py             246      0   100%
+l7r/diagram/check_village/segments_07b_ponds_hems_and_land_fall.py              244      9    96%   289, 350, 664-666, 668-670, 676
+l7r/diagram/check_village/segments_07c_moats_drains_and_edges.py                442      2    99%   147, 1123
+l7r/diagram/check_village/segments_08a_ponds_marshes_and_drainage.py            201      0   100%
+l7r/diagram/check_village/segments_08b_flow_bands_and_the_burakumin_seam.py     205      6    97%   469, 478-479, 556-558
+l7r/diagram/check_village/segments_08c_town_trades_and_theater.py                59      2    97%   119, 124
+l7r/diagram/check_village/segments_08d_kosatsuba_and_paddy_basins.py            272      0   100%
+l7r/diagram/check_village/segments_09a_justice_grounds_and_land_fall.py          67      0   100%
+l7r/diagram/check_village/segments_09b_tanning_yards.py                          22     10    55%   71-80
+l7r/diagram/check_village/segments_10a_city_castes_and_dojos.py                  19      1    95%   53
+l7r/diagram/check_village/segments_10b_city_civic_and_commerce.py               102     20    80%   214, 216, 242, 252, 361-379
+l7r/diagram/check_village/segments_10c_city_gates_and_wall_towers.py            136      9    93%   78, 85, 98, 101, 197, 201, 286, 340-341
+l7r/diagram/check_village/segments_10d_city_temples_and_estates.py               93      4    96%   26-27, 131, 136
+l7r/diagram/check_village/segments_10e_city_governor_and_quarters.py             34      0   100%
+l7r/diagram/check_village/segments_10f_city_labels_and_works.py                  45      7    84%   44, 46, 55, 100, 104, 106, 108
+l7r/diagram/check_village/segments_10g_city_streets_and_docks.py                 61      5    92%   102-103, 105, 139-140
+l7r/diagram/check_village/segments_10h_city_torii_and_estate_grounds.py          97      6    94%   62-63, 117, 130, 213, 244
+l7r/diagram/check_village/segments_11a_taxfree_terraces_and_dikeponds.py        158     56    65%   143, 171, 236, 241, 445-538
+l7r/diagram/check_village/segments_11b_polder_dikes_and_waivers.py               80      1    99%   202
+l7r/diagram/hamletgen/clearance.py                                              106      0   100%
+l7r/diagram/hamletgen/cluster.py                                                104      0   100%
+l7r/diagram/hamletgen/driver.py                                                 146      0   100%
+l7r/diagram/hamletgen/frame.py                                                   74      0   100%
+l7r/diagram/hamletgen/hinterland.py                                             329      4    99%   502-503, 605, 607
+l7r/diagram/hamletgen/homesteads.py                                             416     14    97%   266, 379-382, 591, 617, 632, 682, 695, 790, 831, 835, 851
+l7r/diagram/hamletgen/plan.py                                                   104      0   100%
+l7r/diagram/hamletgen/sink.py                                                   108      0   100%
+l7r/diagram/hamletgen/water.py                                                  199      4    98%   124-126, 205
+l7r/diagram/hamletgen/ways.py                                                  1254     38    97%   1273-1274, 1294-1295, 1498, 1509, 1516-1517, 1545-1547, 1549-1551, 1668, 1817, 2070, 2078, 2271, 2295, 2317, 2332, 2362, 2365, 2385-2397, 2440
+l7r/diagram/interactive/classes.py                                               36      1    97%   603
+l7r/diagram/interactive/page.py                                                 215      1    99%   85
+l7r/diagram/settlement/_geom/base.py                                             27      0   100%
+l7r/diagram/settlement/_geom/curves.py                                           91      2    98%   103-104
+l7r/diagram/settlement/_geom/extents.py                                          42      2    95%   28-29
+l7r/diagram/settlement/_geom/indexes.py                                         163      0   100%
+l7r/diagram/settlement/_geom/labels.py                                           39      0   100%
+l7r/diagram/settlement/_geom/overlap.py                                         117      3    97%   187-189
+l7r/diagram/settlement/_geom/primitives.py                                      196      6    97%   212, 241, 254, 256, 269, 291
+l7r/diagram/settlement/_geom/walls.py                                            97      1    99%   136
+l7r/diagram/settlement/_geom/water_index.py                                      38      1    97%   45
+l7r/diagram/settlement/_geom/ways.py                                             53      1    98%   122
+l7r/diagram/settlement/_knobs.py                                                390      7    98%   576, 579-582, 684-685
+l7r/diagram/settlement/city/bridges.py                                          196     18    91%   199-209, 222, 300-303, 382, 398
+l7r/diagram/settlement/core.py                                                  206      8    96%   547-554
+l7r/diagram/settlement/farm_fixtures.py                                          59      0   100%
+l7r/diagram/settlement/fields/comb.py                                           264      3    99%   59, 220, 227
+l7r/diagram/settlement/fields/features.py                                       135      0   100%
+l7r/diagram/settlement/finish.py                                                342     22    94%   229, 342, 403, 419-468
+l7r/diagram/settlement/homestead_parts.py                                       485     14    97%   62, 64, 145, 256, 402-407, 473, 692, 842, 865
+l7r/diagram/settlement/houses.py                                                415      3    99%   403-404, 540
+l7r/diagram/settlement/land/cover.py                                            176      1    99%   496
+l7r/diagram/settlement/land/dikes.py                                            163      0   100%
+l7r/diagram/settlement/land/wet.py                                              118      0   100%
+l7r/diagram/settlement/rolling/bundle.py                                         62      0   100%
+l7r/diagram/settlement/rolling/farmsteads.py                                    139      0   100%
+l7r/diagram/settlement/rolling/fit.py                                           224      3    99%   84, 357, 370
+l7r/diagram/settlement/rolling/place.py                                         138      1    99%   177
+l7r/diagram/settlement/shrines_wells/byres.py                                   114      2    98%   129, 140
+l7r/diagram/settlement/shrines_wells/wellground.py                               84      3    96%   168-170
+l7r/diagram/settlement/shrines_wells/wells.py                                   121      5    96%   116-118, 120, 122
+l7r/diagram/settlement/shrines_wells/woods.py                                   115     14    88%   176, 200, 204, 213-225
+l7r/diagram/settlement/structures/captions.py                                    90      3    97%   114, 117, 122
+l7r/diagram/settlement/structures/fixtures.py                                   297     32    89%   59, 92-95, 341, 424, 508, 512-513, 669, 791-820
+l7r/diagram/settlement/water_ways.py                                            590     44    93%   44, 136-137, 145-153, 160-166, 173-184, 192-193, 636-638, 646, 663, 771-772, 988, 1052, 1149-1155
+l7r/diagram/sitegen/geom.py                                                      34      0   100%
+l7r/diagram/waterfields/banks.py                                                229      2    99%   441, 453
+l7r/diagram/waterfields/carve.py                                                445      6    99%   280, 414, 471, 681, 734, 844
+l7r/diagram/waterfields/comb.py                                                 249      1    99%   481
+l7r/diagram/waterfields/frame.py                                                170      0   100%
+l7r/diagram/waterfields/palette.py                                               56      1    98%   123
+l7r/diagram/waterfields/polder.py                                               330    100    70%   42-126, 583, 704-769
+l7r/diagram/waterfields/seams.py                                                383      8    98%   173, 264-265, 714, 786-787, 839, 924
+-----------------------------------------------------------------------------------------------------------
+TOTAL                                                                         17827    932    95%
+COVERAGE: a module on the HAMLET PATH is under 100% (94.77% combined) - the table above names it (feature 145: the path is derived from what the scripted rolls execute; bring it up BY TESTS, spec FR-002)
+make: *** [Makefile:43: hamlet-floor-check] Error 1

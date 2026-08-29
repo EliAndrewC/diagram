@@ -17,7 +17,8 @@ roll executed changed - rolls for real, which is exactly when the test has somet
 WHAT IT NEVER SERVES. Any doubt at all - a missing or unreadable entry, a payload that will not
 unpickle, a vanished data file - regenerates. Under `GATE_NO_CACHE=1` and under the FULL run
 (`L7R_TESTS_FULL=1`, where the coverage floors are enforced and a served roll would execute none of the
-rolled code) every call produces.
+rolled code) every call produces - EXCEPT a caller that opts into `share=True`, which produces once per
+process and re-serves those bytes thereafter (feature 147; see `_SHARED_BYPASS`). Only `hamlet()` opts in.
 
 A TEST THAT MONKEYPATCHES THE ENGINE goes through `keyed_to(test, ...)`, never bare `obtain`: a patched
 function changes what the roll does without changing any hashed engine source, so the engine key alone
@@ -30,6 +31,7 @@ Excluded from the engine file set (`gencache._NOT_ENGINE`): this module serves r
 
 from __future__ import annotations
 
+import contextlib
 import hashlib
 import inspect
 import json
@@ -64,11 +66,61 @@ def _place(data: bytes, dest: str) -> None:
     os.replace(tmp, dest)
 
 
-def obtain[T](subject: str, produce: Callable[[], T]) -> tuple[T, str]:
-    """`(payload, how)` for `subject` - "HIT" (served), "MISS" (produced, recorded, stored) or "BYPASS"
-    (produced, nothing stored). `subject` must determine the roll completely (a spec's repr)."""
+# THE BYPASS USED TO RE-ROLL THE SAME SPEC ONCE PER CALLER (feature 147). The FULL run bypasses SERVING so
+# the coverage floors watch the rolled code execute - which is right, and which nobody costed: the 31 scripted
+# negative fixtures share just TWO specs between them, so the bypass rolled one of two identical hamlets 31
+# times, ~14 s each, ~430 s of CPU to execute a set of lines that one roll executes. Measured 2026-08-29.
+#
+# So the bypass now produces each distinct subject ONCE per process and shares it. The floors are unaffected
+# for the reason the sharing is safe at all: the first call performs a real roll, so every line an identical
+# roll would execute is executed and traced; the other thirty would have executed the SAME lines.
+#
+# WHAT IS SHARED IS THE BYTES, NOT THE OBJECT, and that is the whole of the isolation argument. A served HIT
+# unpickles a fresh payload for every caller, so no test has ever been able to affect another's geometry
+# through this module; storing the pickle and re-loading it keeps that exactly, at microseconds against the
+# 14 s it replaces. Sharing the object itself would let one fixture's deliberate break leak into the next
+# and silently disarm it - the one failure this pass must not introduce.
+#
+# KEYED ON THE PRODUCER AS WELL AS THE SUBJECT. `subject` is contracted to determine the roll completely and
+# in the engine it does (a spec's repr), but a TEST may legitimately hand two different `produce` callables
+# the same toy subject, and sharing across those would serve one test another's payload - a far worse bug
+# than the one this fixes. The producer's code object separates them: every caller inside `hamlet()` shares
+# one code object (so the 31 fixtures share, which is the point), while two different call sites do not.
+_SHARED_BYPASS: dict[tuple[str, str], bytes] = {}
+
+
+def _share_key(subject: str, produce: Callable[[], Any]) -> tuple[str, str]:
+    """The producer's CALL SITE, not `id(code)`. An id is unique only among LIVE objects, so a code object
+    that has been collected can have its id handed to a different one - and the failure mode is serving one
+    caller another caller's roll, which is far worse than the re-rolling this whole mechanism removes. The
+    file, line and name of the code object are stable for the life of the process and unique per call site.
+    """
+    code = getattr(produce, "__code__", None)
+    site = f"{code.co_filename}:{code.co_firstlineno}:{code.co_name}" if code is not None else repr(type(produce))
+    return (subject, site)
+
+
+def reset_shared() -> None:
+    """Forget every shared bypass payload. For a test that means to watch a roll happen again."""
+    _SHARED_BYPASS.clear()
+
+
+def obtain[T](subject: str, produce: Callable[[], T], share: bool = False) -> tuple[T, str]:
+    """`(payload, how)` for `subject` - "HIT" (served), "MISS" (produced, recorded, stored), "BYPASS"
+    (produced, nothing stored) or "BYPASS-SHARED" (this process already produced this subject under the
+    bypass; a fresh copy of it). `subject` must determine the roll completely (a spec's repr)."""
     if bypassed():
-        return produce(), "BYPASS"
+        if not share:
+            return produce(), "BYPASS"
+        key = _share_key(subject, produce)
+        cached = _SHARED_BYPASS.get(key)
+        if cached is not None:
+            return pickle.loads(cached), "BYPASS-SHARED"  # noqa: S301 - our own bytes, dumped below
+        payload = produce()
+        # an unpicklable payload shares nothing rather than sharing wrongly - the next caller rolls
+        with contextlib.suppress(pickle.PicklingError, TypeError, RecursionError):
+            _SHARED_BYPASS[key] = pickle.dumps(payload)
+        return payload, "BYPASS"
     entry = _entry(subject)
     meta_path, payload_path = os.path.join(entry, "meta.json"), os.path.join(entry, "payload.pickle")
     try:
@@ -108,7 +160,12 @@ def hamlet(spec: HamletSpec) -> tuple[SitePlan, dict[str, Any]]:
             s.finish(os.path.join(tmp, "scratch"), render=False)  # the manifest is not complete until finish() runs
         return plan, s.M
 
-    return obtain(f"hamlet:{spec!r}", produce)[0]
+    # SHARED (feature 147): the scripted negative fixtures are the measured case - 31 of them across two
+    # specs, each deep-copying the manifest before breaking it, so a shared roll is exactly what they want.
+    # Sharing is OPT-IN and stays here for now: turned on for `obtain` generally it made the hamlet-path
+    # floor NON-DETERMINISTIC (`hinterland.py` 503-504 flipped between otherwise identical full runs), and a
+    # coverage floor that flips is worse than a slow one. What the fixtures need is this call and no other.
+    return obtain(f"hamlet:{spec!r}", produce, share=True)[0]
 
 
 def report(spec: HamletSpec) -> tuple[Report, str]:
@@ -116,3 +173,29 @@ def report(spec: HamletSpec) -> tuple[Report, str]:
     from l7r.diagram import hamletgen as hg
 
     return obtain(f"report:{spec!r}", lambda: hg.generate(spec, out_base=None, render=False))
+
+
+def report_deps(spec: HamletSpec) -> dict[str, Any]:
+    """The DEPENDENCY RECORD of `report(spec)` - every engine function and file the roll executed - from
+    the cache when a valid record exists, else by rolling and recording now. Never bypassed: the FULL
+    run bypasses SERVING (a served roll executes nothing the coverage floors could see), but the floor
+    that derives the hamlet path from these records (feature 145, `tools/hamlet_floor.py`) needs the
+    record itself, and on a fresh clone or CodeBuild there is none until something rolls."""
+    from l7r.diagram import hamletgen as hg
+
+    subject = f"report:{spec!r}"
+    entry = _entry(subject)
+    meta_path, payload_path = os.path.join(entry, "meta.json"), os.path.join(entry, "payload.pickle")
+    try:
+        meta = json.loads(Path(meta_path).read_text(encoding="utf-8"))
+        if meta.get("subject") == subject and gencache.key_for(subject.encode(), meta.get("deps")) == meta.get("key"):
+            deps: dict[str, Any] = meta["deps"]
+            return deps
+    except OSError, ValueError, KeyError:
+        pass
+    holder: list[Report] = []
+    fresh = gencache.record(lambda: holder.append(hg.generate(spec, out_base=None, render=False)))
+    os.makedirs(entry, exist_ok=True)
+    _place(pickle.dumps(holder[0]), payload_path)
+    _place(json.dumps({"key": gencache.key_for(subject.encode(), fresh), "deps": fresh, "subject": subject}).encode(), meta_path)
+    return fresh

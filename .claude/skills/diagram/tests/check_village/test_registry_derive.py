@@ -9,6 +9,14 @@ explicit roster used to provide (clause 14: move the safety property into tests 
    the oracle keeps catching accidental drift in every other row. Edited so far: 2026-08-26,
    feature 133 T15 - four rows (0434, 0438.016/024/036) when the near-ring samplers and
    town_margins_clothed went onto the spatial index and their leaked loop names left).
+   2026-08-29, feature 146 - one row (0232) when `village_cluster_compact`'s and the dispersed
+   arm's residue was removed: three checks had been retired under 141 and their computations left
+   standing, so `free`, `writes` and `needs` all shed the names those computations leaked.
+   2026-08-29, feature 146 - FOURTEEN rows deleted (0097-0102, 0123-0126, 0128-0131) when the
+   `wells_troughs_rails_clear_of_each_other` and `paddy_fan_gapless` derivations were removed. Both
+   checks went under 141 and both left their whole derivation behind - a pairwise quad comparison and
+   a grid scan of every paddy, running on every gate and read by nothing. A DELETION is the one edit
+   the oracle cannot catch drifting, so it is spelled out here: those segments no longer exist.
 2. Order: the fixture's order is a subsequence of the derived order - the execution contract.
 3. Structural invariants: literal-return shape, unique keys, needs within free, META_CHECKS.
 4. Fire-proofs: every guard demonstrably fails on a synthetic violation (a checker never seen
@@ -107,11 +115,16 @@ def test_equality_guard_fires_on_missing_segment():
 
 
 def test_order_guard_fires_on_swapped_placement_anchors():
-    a, b = "_seg_0596__dry_plot_seams_shared", "_seg_0595__paddy_bunds_clear_the_supply_channels"
+    a, b = "_seg_0600__comb_floor_ends_at_the_collector", "_seg_0595__paddy_bunds_clear_the_supply_channels"
     swapped = dict(reg._PLACEMENTS)
     swapped[a], swapped[b] = swapped[b], swapped[a]
     names = {r.fn.__name__ for r in reg.GATE_SEGMENTS}
-    assert reg._ordered_names(names, swapped) != [r.fn.__name__ for r in reg.GATE_SEGMENTS]
+    # Since feature 141 retired the one independently-anchored placement (0596), every remaining entry hangs off
+    # 0595's chain, so a swap either reorders the chain or closes it into a cycle - the guard fires either way.
+    try:
+        assert reg._ordered_names(names, swapped) != [r.fn.__name__ for r in reg.GATE_SEGMENTS]
+    except _DerivationError as err:
+        assert "cycle" in str(err) or "resolve" in str(err)
 
 
 def test_order_guard_fires_on_stale_placement_entry():
@@ -123,7 +136,7 @@ def test_order_guard_fires_on_stale_placement_entry():
 
 def test_order_guard_fires_on_missing_anchor():
     broken = dict(reg._PLACEMENTS)
-    broken["_seg_0596__dry_plot_seams_shared"] = "_seg_9999__long_gone"
+    broken["_seg_0600__comb_floor_ends_at_the_collector"] = "_seg_9999__long_gone"
     with pytest.raises(_DerivationError, match="anchor"):
         reg._ordered_names({r.fn.__name__ for r in reg.GATE_SEGMENTS}, broken)
 
@@ -259,3 +272,15 @@ def test_assemble_derives_on_cache_miss_and_loads_on_hit(tmp_path, monkeypatch):
     warm = reg._assemble(names)  # hit: load
     assert cold == warm
     assert (tmp_path / "cache.json").exists()
+
+
+def test_cached_fields_is_failure_soft(tmp_path, monkeypatch) -> None:  # type: ignore[no-untyped-def]
+    import json
+
+    from l7r.diagram.check_village import registry as r
+
+    missing = tmp_path / "rows.json"
+    monkeypatch.setattr(r, "_CACHE_PATH", missing)
+    assert r._cached_fields("k") is None  # OSError
+    missing.write_text(json.dumps({"key": "other", "rows": []}))
+    assert r._cached_fields("k") is None  # a stale key

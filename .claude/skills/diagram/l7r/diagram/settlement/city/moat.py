@@ -51,6 +51,8 @@ class MoatMixin:
             dx, dy = x - cx, y - cy
             d = math.hypot(dx, dy) or 1.0
             mo.append((x + dx / d * gap, y + dy / d * gap))
+        inlet: list[float] | None = None  # the open-moat branch below sets both; read under the same `river` test, which a checker cannot correlate
+        outlet: list[float] | None = None
         if river:
 
             def rdist(q: Any) -> float:

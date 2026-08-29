@@ -23,6 +23,8 @@ from collections.abc import Iterator, Sequence
 from typing import Any
 
 from .classes import CLASSES, NOT_HIGHLIGHTED, label_phrase, slug
+from .glossary import GLOSSARY
+from .sources import citations, research_sources
 from .tags import ClsTag, Split
 
 _HERE = os.path.dirname(os.path.abspath(__file__))
@@ -91,6 +93,111 @@ def merge_primitives(s: str) -> str:
     return _RUN.sub(_merge_run, s)
 
 
+#: Thin classes whose marks get a FAT INVISIBLE HIT COPY (GM 2026-08-28: "very thin and hard for me to
+#: move my mouse over very precisely" - the bunds, the beans on them, the ditches, the lanes). The
+#: copy repeats the mark's geometry with `pointer-events: stroke` (a line, path or outline) or a
+#: tripled radius with `pointer-events: fill` (a bead), no paint, HIT_WIDEN_FACTOR times the drawn
+#: width with a floor of HIT_WIDEN_MIN px - the GM's "three or four times the width". It sits right
+#: after the mark inside its class group: above the paddy fill beneath a bund, below anything drawn
+#: later.
+#: Per class: (stroke factor, stroke floor px, bead radius factor). The GM, testing the first cut
+#: (2026-08-28): the bund and bean boxes "about twice as wide"; the channels and the stream could
+#: "stand to widen"; the lanes "seem fine".
+HIT_WIDEN: dict[str, tuple[float, float, float]] = {
+    "bund": (8.0, 12.0, 6.0),
+    "bund beans": (8.0, 12.0, 6.0),
+    "field ditch": (6.0, 9.0, 4.5),
+    "stream": (1.5, 12.0, 4.5),
+    "village lane": (4.0, 6.0, 3.0),
+}
+HIT_WIDEN_FACTOR = 4.0
+HIT_WIDEN_MIN = 6.0
+#: The scrub's hit region is where its MARKS are, not its recorded polygon (the polygon is the whole
+#: hinterland, including the ground the scatter deliberately keeps clear - the GM: "if my mouse is just
+#: in the middle of the village, over blank space where there is deliberately no scrubland, then I
+#: don't think that the scrubland should be highlighted"). A grid of HIT_CELL px cells; a cell with a
+#: mark in it is part of the region; runs of cells become one rect each.
+HIT_FROM_MARKS: frozenset[str] = frozenset({"scrub and rough grazing"})
+HIT_CELL = 24.0
+
+_STROKE_W = re.compile(r'stroke-width="([\d.]+)"')
+_GROUP_W = re.compile(r'<g [^>]*stroke-width="([\d.]+)"')
+_MARK_XY = re.compile(r'(?:x1|cx)="([-\d.]+)" (?:y1|cy)="([-\d.]+)"|[Mm]([-\d.]+),([-\d.]+)')
+
+
+def hit_copies(s: str, factor: float = HIT_WIDEN_FACTOR, floor: float = HIT_WIDEN_MIN, bead: float = 3.0) -> str:
+    """The fat invisible copies of every stroked mark and every bead in one classed string."""
+
+    def _hit_width(w: float) -> float:
+        return max(factor * w, floor)
+
+    out: list[str] = []
+    gm = _GROUP_W.search(s)
+    default_w = float(gm.group(1)) if gm else 1.0
+    for m in re.finditer(r'<(line|path|polygon|polyline) ([^>]*?)/>', s):
+        tag, attrs = m.group(1), m.group(2)
+        if tag in ("polygon", "polyline", "path") and 'fill="none"' not in attrs and tag != "path":
+            continue  # a filled shape already takes the pointer over its whole body
+        if tag == "path" and 'fill="none"' not in attrs and "stroke" not in attrs:
+            continue
+        wm = _STROKE_W.search(attrs)
+        w = float(wm.group(1)) if wm else default_w
+        geom = " ".join(a for a in re.findall(r'(?:points|d|x1|y1|x2|y2)="[^"]*"', attrs))
+        out.append(f'<{tag} {geom} fill="none" class="hit" style="pointer-events: stroke; stroke-width: {_hit_width(w):.1f}px"/>')
+    for m in re.finditer(r'<circle cx="([-\d.]+)" cy="([-\d.]+)" r="([-\d.]+)"[^>]*/>', s):
+        r = float(m.group(3))
+        out.append(f'<circle cx="{m.group(1)}" cy="{m.group(2)}" r="{max(bead * r, floor / 2):.1f}" fill="none" class="hit" style="pointer-events: fill"/>')
+    return "".join(out)
+
+
+def _in_any(x: float, y: float, polys: Sequence[Sequence[Sequence[float]]]) -> bool:
+    for poly in polys:
+        n = len(poly)
+        inside = False
+        for i in range(n):
+            x1, y1 = poly[i][0], poly[i][1]
+            x2, y2 = poly[(i + 1) % n][0], poly[(i + 1) % n][1]
+            if (y1 > y) != (y2 > y) and x < (x2 - x1) * (y - y1) / (y2 - y1) + x1:
+                inside = not inside
+        if inside:
+            return True
+    return False
+
+
+def marks_region(strings: Sequence[str], cell: float = HIT_CELL, grow: int = 1, within: Sequence[Sequence[Sequence[float]]] = ()) -> str:
+    """Rects over the grid cells that hold a mark of the given strings - the scrub's real extent -
+    GROWN by `grow` cells around every mark and kept inside the recorded footprints `within`. The
+    growth is what makes a bare patch INSIDE the scrub count as scrub (the GM, 2026-08-28: "patches
+    of dirt with nothing growing there ... should still be counted as part of the scrub land") while
+    the village's deliberate clearing, wider than two cells, stays clear; the footprint stops the
+    growth spilling past the scrub's own edge. The rects carry fill="none" so the highlight never
+    paints them - the first cut left the attribute off and the grid showed as gold steps."""
+    marked: set[tuple[int, int]] = set()
+    for s in strings:
+        for m in _MARK_XY.finditer(s):
+            x, y = (m.group(1), m.group(2)) if m.group(1) is not None else (m.group(3), m.group(4))
+            marked.add((int(float(x) // cell), int(float(y) // cell)))
+    cells: set[tuple[int, int]] = set()
+    for gx, gy in marked:
+        for dx in range(-grow, grow + 1):
+            for dy in range(-grow, grow + 1):
+                c = (gx + dx, gy + dy)
+                if (dx == 0 and dy == 0) or not within or _in_any((c[0] + 0.5) * cell, (c[1] + 0.5) * cell, within):
+                    cells.add(c)
+    out: list[str] = []
+    for gy in sorted({c[1] for c in cells}):
+        xs = sorted(c[0] for c in cells if c[1] == gy)
+        start = prev = xs[0]
+        for gx in xs[1:]:
+            if gx == prev + 1:
+                prev = gx
+                continue
+            out.append(f'<rect x="{start * cell:.0f}" y="{gy * cell:.0f}" width="{(prev - start + 1) * cell:.0f}" height="{cell:.0f}" fill="none"/>')
+            start = prev = gx
+        out.append(f'<rect x="{start * cell:.0f}" y="{gy * cell:.0f}" width="{(prev - start + 1) * cell:.0f}" height="{cell:.0f}" fill="none"/>')
+    return "".join(out)
+
+
 def _open(key: str) -> str:
     return f'<g class="f f-{slug(key)}" data-k="{html.escape(key, quote=True)}">'
 
@@ -102,11 +209,11 @@ def wrap(s: str, tag: ClsTag) -> str:
     if tag is None or tag == NOT_HIGHLIGHTED or not s:
         return s
     if isinstance(tag, str):
-        return _open(tag) + merge_primitives(s) + "</g>"
+        return _open(tag) + merge_primitives(s) + (hit_copies(s, *HIT_WIDEN[tag]) if tag in HIT_WIDEN else "") + "</g>"
     if isinstance(tag, Split):
         fill_copy = _ATTR_STROKE.sub(' stroke="none"', s)
         stroke_copy = _ATTR_FILL.sub(' fill="none"', s)
-        return _open(tag.fill) + fill_copy + "</g>" + _open(tag.stroke) + stroke_copy + "</g>"
+        return _open(tag.fill) + fill_copy + "</g>" + _open(tag.stroke) + stroke_copy + (hit_copies(stroke_copy, *HIT_WIDEN[tag.stroke]) if tag.stroke in HIT_WIDEN else "") + "</g>"
     return "".join(wrap(piece, c) for c, piece in tag)
 
 
@@ -178,6 +285,10 @@ def explanations(present: set[str]) -> dict[str, dict[str, Any]]:
     for key, fc in CLASSES.items():
         if key not in present:
             continue
+        # THE CITATIONS COME FROM THE RECORD (GM 2026-08-28): the keys the class's research entry
+        # cites, with each key's SOURCES.md text for the references modal; the registry's own tuple
+        # is the fallback only when the entry cannot be found or names no key.
+        keys = research_sources(fc.entry) or [k for k in fc.sources if k != "not recorded"]
         out[key] = {
             "name": fc.name,
             "what": fc.what,
@@ -185,9 +296,12 @@ def explanations(present: set[str]) -> dict[str, dict[str, Any]]:
             "label": fc.label,
             "label_phrase": label_phrase(fc.label),
             "label_note": fc.label_note,
-            "sources": list(fc.sources),
+            "sources": keys,
+            "refs": citations(keys),
             "entry": fc.entry,
-            "siblings": {other: text for other, text in fc.siblings.items() if other in present},
+            # siblings are LINKS now (hover lights the other class, click opens its modal); the
+            # distinguishing texts stay in the registry as the record, not on the page
+            "siblings": [other for other in fc.siblings if other in present],
         }
     for key in sorted(present - CLASSES.keys()):
         out[key] = {
@@ -197,10 +311,22 @@ def explanations(present: set[str]) -> dict[str, dict[str, Any]]:
             "label": "guess",
             "label_phrase": label_phrase("guess"),
             "label_note": "unregistered class - the gate reports it",
-            "sources": ["not recorded"],
+            "sources": [],
+            "refs": {},
             "entry": "",
-            "siblings": {},
+            "siblings": [],
         }
+    return out
+
+
+def glossary_for(data: dict[str, dict[str, Any]]) -> list[dict[str, Any]]:
+    """The glossary entries whose terms occur in the present explanations - variants and definition,
+    longest variants first so "head race" wins over "head". The page wraps each occurrence."""
+    text = " ".join(str(d.get("what", "")) + " " + str(d.get("why", "")) + " " + str(d.get("label_note", "")) for d in data.values()).lower()
+    out: list[dict[str, Any]] = []
+    for term, (variants, definition) in GLOSSARY.items():
+        if any(re.search(r"\b" + re.escape(v.lower()) + r"\b", text) for v in variants):
+            out.append({"term": term, "variants": sorted(variants, key=len, reverse=True), "def": definition})
     return out
 
 
@@ -249,11 +375,22 @@ def render_page(strings: Sequence[str], tags: Sequence[ClsTag], name: str, meta:
     wrapped = [wrap(s, t) for s, t in zip(strings, tags, strict=True)]
     # the hit regions go right after the SHEET (the first "-"-tagged string), under everything drawn
     sheet = next((i for i, t in enumerate(tags) if t == NOT_HIGHLIGHTED), 0)
-    wrapped.insert(sheet + 1, hit_regions(manifest, present))
+    regions = hit_regions(manifest, present - HIT_FROM_MARKS)
+    for key in sorted(HIT_FROM_MARKS & present):
+        polys = [
+            rec["poly"]
+            for mk, roles in HIT_REGIONS
+            for rec in (manifest or {}).get(mk) or []
+            if isinstance(rec, dict) and rec.get("poly") and roles.get(str(rec.get("role", "*")), roles.get("*")) == key
+        ]
+        rects = marks_region([s for s, t in zip(strings, tags, strict=True) if t == key], within=polys)
+        if rects:
+            regions += _open(key) + f'<g class="hit" fill="none" style="pointer-events: fill">{rects}</g></g>'
+    wrapped.insert(sheet + 1, regions)
     svg = "\n".join(wrapped)
     svg = svg.replace("<svg ", '<svg id="map" ', 1)
     data = explanations(present)
-    blob = json.dumps(data, ensure_ascii=False).replace("</", "<\\/")
+    blob = json.dumps({"classes": data, "glossary": glossary_for(data)}, ensure_ascii=False).replace("</", "<\\/")
     title = html.escape(name)
     # NO HEADER ON THE PAGE (GM 2026-08-28: "we can get rid of the entire header") - the map already
     # carries its own title placard and scale bar; the page is the map and nothing else.
@@ -271,8 +408,10 @@ def render_page(strings: Sequence[str], tags: Sequence[ClsTag], name: str, meta:
         '<dialog id="explain" aria-labelledby="x-name"><article>'
         '<header><h2 id="x-name"></h2><p id="x-label" class="label"></p></header>'
         '<section id="x-what"></section><section id="x-why"></section><section id="x-siblings"></section>'
-        '<footer><p id="x-sources"></p><p id="x-entry"></p><button id="x-close" type="button">Close</button></footer>'
+        '<footer><p id="x-entry"></p><p><a id="x-refs" href="#references">See references</a></p><button id="x-close" type="button">Close</button></footer>'
         "</article></dialog>\n"
+        '<dialog id="references" aria-labelledby="r-name"><article><header><h2 id="r-name"></h2></header><section id="r-list"></section>'
+        '<footer><button id="r-close" type="button">Close</button></footer></article></dialog>\n'
         f'<script id="classes" type="application/json">{blob}</script>\n'
         f"<script>\n{_asset('page.js')}</script>\n</body>\n</html>\n"
     )

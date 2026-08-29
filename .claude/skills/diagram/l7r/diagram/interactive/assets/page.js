@@ -3,7 +3,36 @@
 (function () {
   "use strict";
   var svg = document.getElementById("map");
-  var data = JSON.parse(document.getElementById("classes").textContent);
+  var payload = JSON.parse(document.getElementById("classes").textContent);
+  var data = payload.classes;
+  var glossary = payload.glossary || [];
+  // GLOSSARY TOOLTIPS (GM 2026-08-28): every occurrence of a glossary term in an explanation is
+  // wrapped so hovering it shows the definition. Built as DOM nodes, never innerHTML of the text.
+  var glossaryRe = null;
+  var glossaryDef = {};
+  if (glossary.length) {
+    var alts = [];
+    glossary.forEach(function (g) { g.variants.forEach(function (v) { alts.push(v.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")); glossaryDef[v.toLowerCase()] = g.def; }); });
+    alts.sort(function (a, b) { return b.length - a.length; });
+    glossaryRe = new RegExp("\\b(" + alts.join("|") + ")\\b", "gi");
+  }
+  function fillText(el, text) {
+    el.textContent = "";
+    if (!text) return;
+    if (!glossaryRe) { el.textContent = text; return; }
+    var last = 0, m;
+    glossaryRe.lastIndex = 0;
+    while ((m = glossaryRe.exec(text)) !== null) {
+      if (m.index > last) el.appendChild(document.createTextNode(text.slice(last, m.index)));
+      var span = document.createElement("span");
+      span.className = "gl";
+      span.textContent = m[0];
+      span.setAttribute("data-def", glossaryDef[m[0].toLowerCase()] || "");
+      el.appendChild(span);
+      last = m.index + m[0].length;
+    }
+    if (last < text.length) el.appendChild(document.createTextNode(text.slice(last)));
+  }
   var dialog = document.getElementById("explain");
 
   // Index the class groups ONCE: a few hundred groups per class at most (a bead run of ~12,000
@@ -16,7 +45,9 @@
   }
 
   var current = null;
+  var pinned = null;  // the class whose modal is open keeps its highlight until the modal closes (GM 2026-08-28)
   function highlight(key) {
+    if (pinned !== null && key !== pinned) return;
     if (key === current) return;
     var gs, j;
     if (current !== null) {
@@ -36,39 +67,98 @@
   }
   svg.addEventListener("pointerover", function (e) { highlight(keyAt(e.target)); });
   svg.addEventListener("pointerleave", function () { highlight(null); });
+  function unpin() { pinned = null; highlight(null); }
 
   function setText(id, s) { document.getElementById(id).textContent = s || ""; }
   function cap(s) { return s.charAt(0).toUpperCase() + s.slice(1); }
+  var refsDialog = document.getElementById("references");
   function open(key) {
     var d = data[key];
     if (!d) return;
+    if (refsDialog.open) refsDialog.close();
     setText("x-name", cap(d.name));
-    setText("x-label", "This is " + d.label_phrase + (d.label_note ? " - " + d.label_note : "."));
-    setText("x-what", d.what);
-    setText("x-why", d.why);
+    fillText(document.getElementById("x-label"), "This is " + d.label_phrase + (d.label_note ? " - " + d.label_note : "."));
+    fillText(document.getElementById("x-what"), d.what);
+    fillText(document.getElementById("x-why"), d.why);
+    // SIBLINGS ARE LINKS (GM 2026-08-28): "Not to be confused with the X" - hovering X lights X on
+    // the map (the pinned highlight yields while the pointer is on the link), clicking X opens X's
+    // modal in place of this one. Each modal's own text stays its own.
     var sib = document.getElementById("x-siblings");
     sib.textContent = "";
-    var others = Object.keys(d.siblings);
-    for (var i = 0; i < others.length; i++) {
+    if (d.siblings.length) {
       var p = document.createElement("p");
-      var b = document.createElement("b");
-      b.textContent = cap(d.name) + " and " + (data[others[i]] ? data[others[i]].name : others[i]) + ": ";
-      p.appendChild(b);
-      p.appendChild(document.createTextNode(d.siblings[others[i]]));
+      p.appendChild(document.createTextNode("Not to be confused with "));
+      d.siblings.forEach(function (other, i) {
+        if (i > 0) p.appendChild(document.createTextNode(i === d.siblings.length - 1 ? " or " : ", "));
+        var a = document.createElement("a");
+        a.href = "#" + other;
+        a.className = "sib";
+        a.setAttribute("data-k", other);
+        a.textContent = "the " + (data[other] ? data[other].name : other);
+        a.addEventListener("mouseenter", function () { peek(other); });
+        a.addEventListener("mouseleave", function () { unpeek(); });
+        a.addEventListener("click", function (e) { e.preventDefault(); unpeek(); open(other); });
+        p.appendChild(a);
+      });
+      p.appendChild(document.createTextNode("."));
       sib.appendChild(p);
     }
-    setText("x-sources", "Sources: " + d.sources.join(", "));
-    setText("x-entry", d.entry ? "Record: " + d.entry : "");
+    var refs = document.getElementById("x-refs");
+    refs.hidden = !d.sources.length;
+    refs.textContent = d.sources.length ? "See references (" + d.sources.length + ")" : "";
+    setText("x-entry", d.entry ? "Record: " + d.entry + (d.sources.length ? "" : " - the research entry records no citation yet") : "");
     dialog.setAttribute("data-k", key);
     dialog.setAttribute("data-label", d.label);
     // NOT showModal(): a modal dialog makes the rest of the document inert, and Chromium re-styles
     // all ~175,000 elements of the map on every open and close - measured ~1 s and ~50 MB per cycle
     // on Inashiro, enough to crash the tab in the browser test on a tight machine. A non-modal
     // dialog with our own shade behind it costs nothing; Escape and the shade close it below.
+    pinned = key;
+    highlight(key);
     shade.hidden = false;
     dialog.show();
   }
-  function closeDialog() { dialog.close(); shade.hidden = true; }
+  function closeDialog() { if (refsDialog.open) refsDialog.close(); dialog.close(); shade.hidden = true; unpin(); }
+  // a sibling link's hover lights the OTHER class while the pointer is on it; the pin resumes after
+  function peek(other) { var keep = pinned; pinned = null; highlight(other); pinned = keep; }
+  function unpeek() { var keep = pinned; pinned = null; highlight(keep); pinned = keep; }
+  // THE REFERENCES MODAL (GM 2026-08-28): a second dialog ON TOP of the explanation, listing every
+  // source the class's research entry cites, with what each was used for. Escape closes the top one.
+  function openRefs() {
+    var key = dialog.getAttribute("data-k");
+    var d = data[key];
+    if (!d || !d.sources.length) return;
+    setText("r-name", "References - " + cap(d.name));
+    var list = document.getElementById("r-list");
+    list.textContent = "";
+    d.sources.forEach(function (k) {
+      var ref = d.refs[k] || { text: "", urls: [] };
+      var p = document.createElement("p");
+      var b = document.createElement("b");
+      b.textContent = k + ": ";
+      p.appendChild(b);
+      p.appendChild(document.createTextNode(ref.text));
+      // THE REFERENCE LINKS TO WHERE IT CAN BE READ (GM 2026-08-28); a source with no URL says so
+      if (ref.urls && ref.urls.length) {
+        ref.urls.forEach(function (u) {
+          p.appendChild(document.createTextNode(" "));
+          var a = document.createElement("a");
+          a.href = u; a.target = "_blank"; a.rel = "noopener"; a.className = "ref";
+          a.textContent = "[read]";
+          p.appendChild(a);
+        });
+      } else {
+        var i = document.createElement("i");
+        i.textContent = " (no link on record)";
+        p.appendChild(i);
+      }
+      list.appendChild(p);
+    });
+    refsDialog.show();
+  }
+  document.getElementById("x-refs").addEventListener("click", function (e) { e.preventDefault(); openRefs(); });
+  document.getElementById("r-close").addEventListener("click", function () { refsDialog.close(); });
+  refsDialog.addEventListener("cancel", function (e) { e.preventDefault(); refsDialog.close(); });
   svg.addEventListener("click", function (e) {
     var key = keyAt(e.target);
     if (key !== null) open(key);
@@ -76,7 +166,7 @@
   var shade = document.getElementById("shade");
   document.getElementById("x-close").addEventListener("click", closeDialog);
   shade.addEventListener("click", closeDialog);  // a click outside the modal closes it
-  dialog.addEventListener("close", function () { shade.hidden = true; });
+  dialog.addEventListener("close", function () { shade.hidden = true; unpin(); });
 
   // ---- ZOOM AND PAN (spec FR-013, GM 2026-08-28: "zoom in significantly more ... zoom out ... to a
   // degree that the entire settlement is visible all within the browser viewport"). The map is
@@ -163,6 +253,7 @@
   // "it would be better if there was only one way of zooming"). The browser's menu zoom cannot be
   // intercepted from a page; the keyboard and Ctrl+wheel can.
   document.addEventListener("keydown", function (e) {
+    if (refsDialog.open) { if (e.key === "Escape") { e.preventDefault(); refsDialog.close(); } return; }
     if (dialog.open) { if (e.key === "Escape") closeDialog(); return; }
     var c = center();
     if (e.key === "+" || e.key === "=") { e.preventDefault(); zoomAt(2, c[0], c[1]); }
@@ -184,6 +275,8 @@
     highlight: highlight,
     open: open,
     current: function () { return current; },
+    pinned: function () { return pinned; },
+    openRefs: openRefs,
     classes: Object.keys(groups),
     count: function (key) { return (groups[key] || []).length; },
     zoom: function () { return view.s / view.fit; },

@@ -257,8 +257,14 @@ tree's `conftest.py` (a parameter name is a use pytest sees and ruff does not). 
 tooling MARKERS stay on the moved tests as the exact filter; the trees are the collection scope.
 Measured: the zero-test floor on the quick tree 3.5 -> 3.1 s; `make quick ALL=1` (everything quick
 runs) 8.7 -> ~7.0 s wall for 1,971 tests; with testmon, an unchanged tree answers in ~3.5 s and a
-one-file edit in ~4-7 s. `dmypy run` replaces one-shot mypy in quick (~0.25 -> ~0.1 s after the
-first run; one-shot on CodeBuild).
+one-file edit in ~4-7 s. The type check in quick is one-shot **pyrefly** (feature 142, GM 2026-08-28): the whole engine
+cold in ~0.6 s with nothing resident. HISTORY, kept so the daemon is not re-added: mypy needed
+12.7 s cold, so from feature 135 it ran through `dmypy` (0.13 s warm) - which held 400-600 MB of
+RSS per clone for as long as it lived, could not be shared across clones, and nothing in mypy ever
+stopped (five daemons, ~2.3 GB, one for a session that had ended). A `SessionEnd` hook and a
+`make quick` sweep (`scripts/dmypy-hooks.sh`) managed that for one day; the Rust checker made
+both unnecessary. Measurements and the pick (ty was as fast but has no rule for a missing
+annotation): `specs/142-rust-type-checker/research.md`.
 
 
 ## DECLINED, by the GM (2026-08-26): a persistent test runner
@@ -326,12 +332,22 @@ WebFetch/WebSearch) and verified by `source-reader` in 2 minutes.
 
 The transcript says which it is: a finished agent's `subagents/agent-<id>.jsonl` ends on an
 `assistant` record with `stop_reason: end_turn`; a hung one ends on a `user` tool_result that never
-got its next turn, and its mtime is when it last did anything. `scripts/agent-watch-hooks.sh`
-reads that: the Stop hook refuses to end a turn (once per agent) while an agent is pending and
-hands over the watchdog command; the watchdog is a background command that exits when the agent
-finishes or has been idle past the limit - and a background command exiting is exactly the wake
-signal that exists; the prompt hook flags anything idle past 20 minutes. Measured on the live
-session: the dead agent scanned as `stale 46670 s`, every other agent as `finished`.
+got its next turn, and its mtime is when it last did anything. `scripts/agent-stall-hooks.sh`
+reads that: the prompt hook lists any agent whose transcript has not moved for 5 minutes, a
+`Monitor` on its `watch` mode surfaces the same mid-turn, and `pending` answers the narrower
+question feature 147's pairing guard asks (has the review I launched finished?). Measured on the
+live session: the dead agent scanned as stale at 46,670 s, every other agent as finished.
+
+**A second watcher was written and then dropped (2026-08-29).** Feature 139 T33 and feature 143
+answered the same GM ask - *"can you add something to catch hung agents next time?"* - in two
+sessions on the same day, and both landed in different trees: `agent-watch-hooks.sh` (a Stop hook
+that REFUSES to end a turn while an agent is pending, plus a watchdog background command whose exit
+wakes the session) and `agent-stall-hooks.sh` (feature 143, above). At the merge only one could
+stay. Kept: the stall reporter, because it is the one on main, the one the root CLAUDE.md table
+documents, and the one whose doctrine the GM ruled on (*nothing of yours ever waits on it*). Dropped:
+the watchdog, whose extra capability - blocking the turn until a watchdog is armed - is exactly what
+that ruling declines. `pending` carries over the one thing the dropped script had that the kept one
+did not.
 
 The other half is the budget: an agent given "25-40 fetches" ran 50 and hung. Give a research agent
 10-15 fetches, or do the search pass in the session with parallel fetch calls and dispatch only the

@@ -8,85 +8,12 @@ from l7r.diagram.waterfields import dedup_ring, floor_overhang, pointed_ring
 
 from .common_01_geometry import Poly, clip_to_convex, convex_hull, point_in_poly, poly_area, seg_closest, seg_dist
 from .common_02_overlap_policy import GridIndex
-from .common_03_capacity import _UNBOUND, DWELLING_KINDS, _kept
+from .common_03_capacity import _UNBOUND, _kept
 
 # A magistrate's manor sits at the EDGE of its settlement; its gate faces what it fronts - the
 # town/hamlet it administers (the built-up centroid) OR the Imperial road it sits beside. There is
 # no fixed default direction (it depends where the town is); SOUTH is the formal fallback. (At CITY
 # scale M['manors'] are the scattered country estates, which face their own lanes - city_estate_gates_vary.)
-
-
-def _seg_0544__manor_gate_faces_town(
-    *,
-    GATE_OUT: Any = _UNBOUND,
-    M: Any = _UNBOUND,
-    ang: Any = _UNBOUND,
-    b: Any = _UNBOUND,
-    bad_mg: Any = _UNBOUND,
-    c: Any = _UNBOUND,
-    check: Any = _UNBOUND,
-    d: Any = _UNBOUND,
-    dirs: Any = _UNBOUND,
-    dwell_all: Any = _UNBOUND,
-    k: Any = _UNBOUND,
-    mn: Any = _UNBOUND,
-    mroad: Any = _UNBOUND,
-    o: Any = _UNBOUND,
-    ovec: Any = _UNBOUND,
-    rl: Any = _UNBOUND,
-    rp: Any = _UNBOUND,
-    rvx: Any = _UNBOUND,
-    rvy: Any = _UNBOUND,
-    scale: Any = _UNBOUND,
-    tl: Any = _UNBOUND,
-    tvx: Any = _UNBOUND,
-    tvy: Any = _UNBOUND,
-) -> dict[str, Any]:
-    """Gate segment 544 (manor_gate_faces_town) - body verbatim from the legacy gate() (feature 022)."""
-    if scale in ("hamlet", "town") and M.get("manors"):
-        GATE_OUT = {"north": (0, -1), "south": (0, 1), "east": (1, 0), "west": (-1, 0)}
-        dwell_all = M.get("houses", []) + M.get("buildings", [])
-        mroad = M.get("road")
-        bad_mg = []
-        for mn in M.get("manors", []):
-            o = GATE_OUT.get(mn.get("gate_dir"), (0, 0))
-            ang = math.radians(mn.get("rot", 0))
-            ovec = (o[0] * math.cos(ang) - o[1] * math.sin(ang), o[0] * math.sin(ang) + o[1] * math.cos(ang))
-            dirs = []
-            if dwell_all:
-                tvx = sum(b["x"] for b in dwell_all) / len(dwell_all) - mn["x"]
-                tvy = sum(b["y"] for b in dwell_all) / len(dwell_all) - mn["y"]
-                tl = math.hypot(tvx, tvy) or 1
-                dirs.append((tvx / tl, tvy / tl))
-            if mroad:
-                rp = min((seg_closest(mn["x"], mn["y"], mroad[k], mroad[k + 1]) for k in range(len(mroad) - 1)), key=lambda c: (c[0] - mn["x"]) ** 2 + (c[1] - mn["y"]) ** 2)
-                rvx, rvy = rp[0] - mn["x"], rp[1] - mn["y"]
-                rl = math.hypot(rvx, rvy) or 1
-                dirs.append((rvx / rl, rvy / rl))
-            if dirs and max(ovec[0] * d[0] + ovec[1] * d[1] for d in dirs) < 0.45:
-                bad_mg.append(mn.get("gate_dir"))
-        check(
-            "manor_gate_faces_town",
-            not bad_mg,
-            f"a magistrate's manor gate {bad_mg} faces neither the town it administers nor the road it fronts - "
-            f"it sits at the settlement's edge, so its gate should open toward the town/road (no fixed default; south is the formal fallback)",
-        )
-    return _kept(locals(), ('GATE_OUT', 'ang', 'b', 'bad_mg', 'd', 'dirs', 'dwell_all', 'k', 'mn', 'mroad', 'o', 'ovec', 'rl', 'rp', 'rvx', 'rvy', 'tl', 'tvx', 'tvy'))
-
-
-def _seg_0545__walled_town_has_fire_tower(*, M: Any = _UNBOUND, check: Any = _UNBOUND, meta: Any = _UNBOUND, scale: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 545 (walled_town_has_fire_tower) - body verbatim from the legacy gate() (feature 022)."""
-    if scale == "town" and meta.get("walled") and meta.get("fire_tower", True):
-        # WALLED towns only (GM 2026-07-24, REVERTING the 2026-07 audit widening to all towns).
-        # The audit argued an unwalled seat's "packed road-front core burns just the same", but an
-        # unwalled town is drawn at detached village grain (bscale 1.0, field gaps for natural
-        # breaks) - not the contiguous row fabric the hinomi-yagura historically watched - and
-        # real unwalled administrative seats (jin'ya/daikansho towns) kept fire BELLS, stored
-        # water, and fireproof kura, not watch towers; the freestanding rural tower is a
-        # Meiji-and-later institution. WHY: settlements.md "Fire towers". Opt out per-map with
-        # meta(fire_tower=False).
-        check("walled_town_has_fire_tower", len(M.get("fire_towers", [])) >= 1, "a walled town's dense wooden core needs a fire-watch tower (s.fire_tower(...); meta(fire_tower=False) to omit)")
-    return _kept(locals(), ())
 
 
 def _seg_0546__hamlet_has_kosatsuba(
@@ -181,11 +108,7 @@ def _seg_0546__hamlet_has_kosatsuba(
             mains_kb = ([r["pts"] for r in M.get("roads") or []] or ([M["road"]] if M.get("road") else [])) + [st["pts"] for st in M.get("town_streets", []) if st.get("main")]
             if mains_kb:
                 off_main_kb = [(round(b["x"]), round(b["y"])) for b in kbs if min(seg_dist(b["x"], b["y"], r[k], r[k + 1]) for r in mains_kb for k in range(len(r) - 1)) > lim_kb]
-                check(
-                    "kosatsuba_on_a_main_way",
-                    not off_main_kb,
-                    f"notice board(s) at {off_main_kb} stand off every MAIN way - the board is posted to be noticed, so it goes on the main street/road (a road, or a main: True town street), never a side street or lane (GM 2026-08-02)",
-                )
+                pass  # `` retired under feature 141 (the GM's cut); the segment stays for the check it keeps or the value it writes
             # ORIENTATION, the other half of siting (GM 2026-07-27, catching Nagahara's third
             # board). A kosatsu is a BROADSIDE signboard: a 7x3 ft face under a little roof,
             # read by someone walking past without leaving the road. Standing it PERPENDICULAR
@@ -222,11 +145,7 @@ def _seg_0546__hamlet_has_kosatsuba(
             # gate - the corridor, not the furnished throat itself)
             lim_gate_kb = 800.0 / float(meta.get("ftpx") or 1)
             uncovered_kb = [[round(g[0]), round(g[1])] for g in M["gates"] if min(math.hypot(b["x"] - g[0], b["y"] - g[1]) for b in kbs) > lim_gate_kb]
-            check(
-                "city_kosatsuba_per_gate",
-                not uncovered_kb,
-                f"main gate(s) at {uncovered_kb} have no notice board on their approach corridor - a city posted a board at every trafficked gate (draw them all, label ONE)",
-            )
+            pass  # `` retired under feature 141 (the GM's cut); the segment stays for the check it keeps or the value it writes
     return _kept(
         locals(),
         ('b', 'b_kb', 'devs_kb', 'edgeon_kb', 'face_deg_kb', 'far_kb', 'floor_kb', 'g', 'k', 'kbs', 'lim_gate_kb', 'lim_kb', 'ln', 'mains_kb', 'off_main_kb', 'r', 'routes_kb', 'st', 'uncovered_kb'),
@@ -242,61 +161,6 @@ def _seg_0546__hamlet_has_kosatsuba(
 # the jail holds the condemned while the warrant travels); Japanese kegare then pushes the ground
 # past the built edge. The punishment ground stays in the core because its governing variable is
 # foot traffic - it is a DISPLAY, and the beating itself is a court act inside the magistracy.
-
-
-def _seg_0547__psp_j(*, M: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 547 (psp_j) - body verbatim from the legacy gate() (feature 022)."""
-    psp_j = M.get("punishment_spots") or []
-    return _kept(locals(), ('psp_j',))
-
-
-def _seg_0548__exg_j(*, M: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 548 (exg_j) - body verbatim from the legacy gate() (feature 022)."""
-    exg_j = M.get("execution_grounds") or []
-    return _kept(locals(), ('exg_j',))
-
-
-def _seg_0549__bms_j(*, M: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 549 (bms_j) - body verbatim from the legacy gate() (feature 022)."""
-    bms_j = M.get("boundary_markers") or []
-    return _kept(locals(), ('bms_j',))
-
-
-def _seg_0550__ftpx_j(*, meta: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 550 (ftpx_j) - body verbatim from the legacy gate() (feature 022)."""
-    ftpx_j = float(meta.get("ftpx") or 1)
-    return _kept(locals(), ('ftpx_j',))
-
-
-def _seg_0551__b_3(*, M: Any = _UNBOUND, b: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 551 (b, dwell_j) - body verbatim from the legacy gate() (feature 022)."""
-    dwell_j = M.get("houses", []) + [b for b in M.get("buildings", []) if b.get("kind") in DWELLING_KINDS]
-    return _kept(locals(), ('b', 'dwell_j'))
-
-
-def _seg_0552__wall_j(*, M: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 552 (wall_j) - body verbatim from the legacy gate() (feature 022)."""
-    wall_j: Poly = M.get("wall") or []
-    return _kept(locals(), ('wall_j',))
-
-
-def _seg_0553___inwall_j(*, px: Any = _UNBOUND, py: Any = _UNBOUND, wall_j: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 553 (_inwall_j) - body verbatim from the legacy gate() (feature 022)."""
-
-    def _inwall_j(px: float, py: float) -> bool:
-        return len(wall_j) >= 3 and point_in_poly(px, py, wall_j)
-
-    return _kept(locals(), ('_inwall_j',))
-
-
-def _seg_0554__punishment_spot_only_at_a_seat_of_justice(*, check: Any = _UNBOUND, exg_j: Any = _UNBOUND, psp_j: Any = _UNBOUND, scale: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 554 (execution_ground_only_at_a_seat_of_justice, punishment_spot_only_at_a_seat_of_justice) - body verbatim from the legacy gate() (feature 022)."""
-    if scale in ("hamlet", "village"):
-        # Village authority topped out at banishment, and capital sentences were confirmed far above
-        # the county. A settlement with no magistrate's court has neither institution.
-        check("punishment_spot_only_at_a_seat_of_justice", not psp_j, f"a {scale} has no magistrate and no court - the punishment ground belongs to a county seat and above")
-        check("execution_ground_only_at_a_seat_of_justice", not exg_j, f"a {scale} has no magistrate and no court - the execution ground belongs to a county seat and above")
-    return _kept(locals(), ())
 
 
 def _seg_0600__comb_floor_ends_at_the_collector(*, M: Any = _UNBOUND, check: Any = _UNBOUND, fields: Any = _UNBOUND) -> dict[str, Any]:

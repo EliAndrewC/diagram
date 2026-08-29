@@ -322,7 +322,7 @@ def record(run: Callable[[], object]) -> dict[str, Any]:
             functions.add((path, code.co_qualname.replace(".<locals>", "")))
         return mon.DISABLE
 
-    builtins.open = spy_open  # type: ignore[assignment]
+    builtins.open = spy_open
     mon.use_tool_id(tool, "gencache")
     try:
         mon.register_callback(tool, mon.events.PY_START, on_start)
@@ -344,7 +344,7 @@ def record(run: Callable[[], object]) -> dict[str, Any]:
             mon.register_callback(tool, mon.events.PY_START, None)
     finally:
         mon.free_tool_id(tool)
-        builtins.open = real_open  # type: ignore[assignment]
+        builtins.open = real_open
     return {"functions": sorted(functions), "files": sorted(files - engine)}
 
 

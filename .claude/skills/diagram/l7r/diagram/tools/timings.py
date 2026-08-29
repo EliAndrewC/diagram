@@ -175,7 +175,7 @@ def bench_gate(bypass: bool = True) -> Result:
     for phase, label in (
         ("lint", "lint (ruff check + duplicate-def scan)"),
         ("format", "format (ruff format --check)"),
-        ("typecheck", "typecheck (mypy --strict, 9 modules)"),
+        ("typecheck", "typecheck (pyrefly, the engine file set)"),
         ("test", "test (pytest -n auto + 100% coverage gate)"),
     ):
         secs, phase_ok, _ = sh(["make", phase], GATE_COLD if bypass else None)

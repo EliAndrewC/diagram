@@ -187,3 +187,67 @@ def test_label_rot_emits_a_center_rotation_and_appends_the_tilt():
     assert any('transform="rotate(-30.0' in t for t in s.toplabels)
     s.label(500, 550, "level", 9, rot=90)  # a square rotation folds level: record format unchanged
     assert len(s.M["labels"][-1]) == 6
+
+
+def test_pull_caption_toward_keeps_its_seat_when_the_block_already_touches_or_overlaps_its_subject() -> None:
+    """Feature 145: the two early returns - the caption's block already ON the subject, and a gap under
+    half a pixel (there is nothing to close, and a pull would only jitter the seat)."""
+    s = Settlement(W=1000, H=1000, seed=1)
+    board = [(480.0, 490.0), (520.0, 490.0), (520.0, 510.0), (480.0, 510.0)]
+    on_it = (500.0, 505.0)  # the block lands ON the board
+    assert s.pull_caption_toward(on_it, "notice board", 8, "middle", 0.0, board) == on_it
+    touching = (500.0, 510.0 + 8 * 0.8 + 0.2)  # the block's top edge a fifth of a pixel under the board
+    assert s.pull_caption_toward(touching, "notice board", 8, "middle", 0.0, board) == touching
+
+
+def test_title_obstacles_gather_the_long_lines_a_placard_must_miss() -> None:
+    """Feature 146: the title's obstacle set includes the map's long POLYLINES - the wall, the moat, the ring
+    road and the road - not only its rectangles and polygons."""
+    s = Settlement(W=1000, H=1000, seed=1)
+    s.M["road"] = [[0, 500], [1000, 500]]
+    s.M["moat"] = [[100, 100], [900, 100]]
+    _rects, _polys, lines = s._title_obstacles()
+    assert len(lines) >= 2, lines
+
+
+def test_pull_caption_toward_keeps_its_seat_when_the_two_centres_coincide() -> None:
+    """Feature 146: the degenerate arm - the caption's block and its subject share a centre, so there is no
+    direction to pull along and the seat stands."""
+    s = Settlement(W=1000, H=1000, seed=1)
+    subject = [(400.0, 400.0), (600.0, 400.0), (600.0, 600.0), (400.0, 600.0)]
+    seat = (500.0, 500.0 + 8 * 0.275)  # the block's own centre lands on the subject's
+    assert s.pull_caption_toward(seat, "notice board", 8, "middle", 0.0, subject) == seat
+
+
+def test_finish_steps_over_a_field_too_small_to_carry_keepout_chords_and_inks_the_road_caption(tmp_path):
+    """Two arms of `finish` that the scripted hamlets never take: a field whose outline is under four
+    points (nothing to derive a facing chain from) is stepped over, and the Imperial-road caption - a
+    town and city feature, deferred out of `road()` so it draws over the ground - is flushed here."""
+    s = Settlement(1000, 1000, seed=1)
+    s.meta(name="T", scale="town", ftpx=1, toscale=True)
+    s.M["fields"] = [{"name": "stub", "kind": "paddy", "outline": [[10, 10], [20, 10], [20, 20]]}]
+    s.M["road"] = [[100, 500], [900, 500]]
+    s.M["road_width"] = 26
+    s._road_label = ("Tokaido", 500.0, 500.0)
+    s.finish(str(tmp_path / "m"), render=False)
+    assert any("Tokaido" in frag for frag in s.toplabels), "the road's name is on the sheet"
+    assert s._road_label is None, "and the deferred record is cleared, so a second finish cannot double it"
+
+
+def test_a_map_too_full_for_a_blank_title_spot_takes_a_clean_corner():
+    """The ladder `title` walks: blank ground, then ground under cover, then a CORNER that hides nothing
+    but cover, and only then the title band above the sheet (feature 137 T06 - seed 13's top-left corner
+    was a dry plot while its bottom-right was scrub). The corner rung is reached when the scan's own grid,
+    which starts 22 px in and steps 24, cannot fit the placard anywhere the corner offsets can."""
+    s = Settlement(1000, 1000, seed=1)
+    s.meta(name="V", scale="hamlet", ftpx=1, toscale=True)
+    s.view = (0, 0, 1000, 1000)
+
+    def _rect(x0, y0, x1, y1):
+        return {"x": (x0 + x1) / 2, "y": (y0 + y1) / 2, "w": x1 - x0, "h": y1 - y0, "rot": 0, "kind": "plain"}
+
+    # every part of the sheet is built on except a pocket that exactly holds the top-left corner seat
+    s.M["houses"] = [_rect(157, 0, 1000, 1000), _rect(0, 125, 157, 1000), _rect(0, 0, 27, 125), _rect(27, 0, 157, 13)]
+    s.title("V")
+    assert s.M["title"]["bbox"][0] == 30 and s.M["title"]["bbox"][1] == 16, "seated in the corner, not on a band"
+    assert s.M["title"]["bbox"][1] >= 0, "the band rung (a negative y, above the map) was not needed"

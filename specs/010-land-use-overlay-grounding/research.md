@@ -1,5 +1,8 @@
 # Phase 0 Research: Land-Use Overlay Historical Grounding
 
+**Sources (feature 138, 2026-08-28):** D1-D5 carry their own inline links (17); the settled findings are cited in `research/archetypes.md` "The three overlay values" (`fortune-1843`) and "Overlay extent".
+
+
 **This is the Principle XII OPENING BOOKEND.** Each element states what the historical reality was
 (China-first, Japan corroborating), whether the proposed design matches it, and what DETERMINES the
 element in reality. Designs that do not match are changed or dropped HERE.
@@ -140,9 +143,13 @@ default form.
 | 1642 | 58,094 mu | ~6.7% |
 | c. 1900 | - | rice under one-tenth of total |
 
-Decisively: **county-level ~5% contained townships above 50% in the same year** - Longshan township in
-Shunde was already over half pond agriculture in 1581. The mixed landscape and the converted landscape
-existed a few miles apart.
+Decisively: **county-level ~5% contained a township at 18% in the same year** - Longshan township in
+Shunde had 8,124 of its 44,947 mu in ponds in 1581, and was over half (75%, 乡之塘倍于田) by the
+Qianlong-Jiaqing era. The mixed landscape and the converting landscape existed a few miles apart.
+(CORRECTED 2026-08-28, feature 134 T48: this line used to say Longshan was "already over half pond
+agriculture in 1581" - a summary-only claim traced to an uncited blog; the archives' 1581 figure is
+18%. The argument stands on the 18%: the township ran four times the county share in the same
+year. Sources: `wanli-fishpond-summary`, now verified and linked.)
 
 Even in the 1980s heartland, a survey of the main dike-pond region (86,632 ha) found **rice and
 miscellaneous agriculture still at 35%**, the same share as the fishponds themselves; mulberry was only

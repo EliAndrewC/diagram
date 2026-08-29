@@ -4,7 +4,7 @@
 # (GUARD_EDIT_OK: the companion of a NEW guard, feature 147, GM 2026-08-29)
 set -u
 HOOK="$(cd "$(dirname "$0")" && pwd)/pair-hooks.sh"
-WATCH="$(cd "$(dirname "$0")" && pwd)/agent-watch-hooks.sh"
+WATCH="$(cd "$(dirname "$0")" && pwd)/agent-stall-hooks.sh"
 pass=0 fail=0
 ok() { pass=$((pass+1)); }
 bad() { fail=$((fail+1)); echo "FAIL: $1"; }
@@ -17,7 +17,7 @@ mkdir -p "$SKILL/dev/bypass-log" "$CLONE/scripts" "$TMP/proj/sid-1/subagents"
 : > "$TMP/proj/sid-1.jsonl"
 KEY=deadbeefcafe0000
 printf 'engine-key:\n\t@printf "%%s" %s\n' "$KEY" > "$SKILL/Makefile"   # the fixture's own key: the test never runs the engine
-cp "$WATCH" "$CLONE/scripts/agent-watch-hooks.sh"                        # the guard asks IT whether an agent is pending
+cp "$WATCH" "$CLONE/scripts/agent-stall-hooks.sh"                        # the guard asks IT whether an agent is pending
 DIR="$TMP/proj/sid-1/subagents"
 
 stdin_for() { printf '{"tool_name":"%s","tool_input":%s,"transcript_path":"%s","session_id":"sid-1","cwd":"%s"}' "$1" "$2" "$TMP/proj/sid-1.jsonl" "$CLONE"; }

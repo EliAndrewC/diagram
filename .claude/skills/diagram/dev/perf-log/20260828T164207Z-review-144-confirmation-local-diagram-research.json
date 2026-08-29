@@ -1,0 +1,33 @@
+{
+  "band": 1,
+  "base": {
+    "commit": "a6632e86",
+    "label": "144-start",
+    "utc": "20260828T162618Z"
+  },
+  "binding": "b0a2740c4a0fb0621debef48e86f28b9f75dc787ee7270d4a1350dc1587e90c0",
+  "end": {
+    "commit": "cc40133e",
+    "label": "144-end",
+    "utc": "20260828T163942Z"
+  },
+  "environment": "local",
+  "feature": "144-road-width-thirty",
+  "granted_by": {
+    "declared": "perf-audit",
+    "session_id": "5a8fec1c-3acd-48b5-ad7f-d6e1989e59a4",
+    "utc": "20260828T164207Z"
+  },
+  "kind": "confirmation",
+  "measurements": {
+    "seeds": {
+      "25": -0.6,
+      "39": -1.5,
+      "4": 1.7,
+      "47": 2.0
+    },
+    "total_pct": 0.4
+  },
+  "note": "Consistent: no stage grew systematically - hinterland and field move BOTH ways across seeds (s4 hinterland +0.20s, s47 +0.42s/field +0.29s against s25 -0.10s/-0.15s and s39 -0.15s/-0.10s) and the dominant web stage is flat (s25 34.78 -> 34.68s), which is the signature of run-to-run jitter rather than added work; the diff's only executable change is ROAD_W_FT 26 -> 30 in settlement/structures/ground.py plus 29 M.get road_width fallbacks, every one of them behind an if M.get road branch, and grep finds no road, road_width or ROAD_W_FT reference anywhere in l7r/diagram/hamletgen/ while every pool hamlet manifest carries road=None - so the timed path never evaluates the changed constant, exactly as the explanation claims; s4 +1.7% sits exactly on the 1.7% per-seed spread measured on identical local runs at one commit (129-noise-b vs -c, seed 39, commit 4ecdced) and s47 +2.0% is 0.3pt above that floor with no stage large enough to carry it, on runs less than half the duration of the ones the floor was measured on; NOTED for the record: the bookend span also merges main's feature 141 check-battery cut (13,639 deletions), which the explanation does not mention but which cannot move these numbers - it is confined to check_village/ and tools/check_census.py, and perf_snapshot.measure times the STAGES functions directly and never calls generate(), so the in-process gate is outside the measurement.",
+  "verdict": "consistent"
+}

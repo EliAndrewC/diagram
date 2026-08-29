@@ -8,35 +8,11 @@ import pytest
 
 from l7r.diagram import hamletgen as hg
 from l7r.diagram.pipeline import rollcache
-from l7r.diagram.settlement import point_in_poly, seg_dist
+from l7r.diagram.settlement import point_in_poly
 
 # SERVED FROM THE ROLL CACHE (feature 135): each polder is ~50-100 s to roll and nothing here patches the engine,
 # so `rollcache.hamlet` serves the plan and finished manifest while every function the roll executed is unchanged,
 # and rolls for real the moment one moves. The assertions run on the served map either way.
-
-
-@pytest.mark.rolls_map
-def test_a_polder_inlets_mouth_is_pulled_INSIDE_the_crop() -> None:
-    """THE RATCHET for `draw_comb_field`'s constructed inlet end (2026-08-15).
-
-    That end is not clipped from an anchor - it is BUILT, as the main channel's last point stepped
-    70 px straight downhill, which is a COMB's geometry. On a polder the main is the ring canal
-    running ALONG the high edge, so its last point is a corner and the step skims the boundary:
-    seed 19 landed the mouth 2.6 px inside where `channel_field_anchored` wants 10, and no amount of
-    moving the sluice changed it, because the anchor is not what sets this end.
-
-    Seed 19 is chosen deliberately - it is the case that needed the pull (seed 3 needs it at 6.0 px,
-    seed 8 does not need it at all), so this test exercises the branch rather than merely passing."""
-    _plan, M = rollcache.hamlet(hg.HamletSpec(name="Polder", seed=19, households=16, field_archetype="polder_grid", down_deg=90))
-    env = [(float(a), float(b)) for a, b in M["fields"][0]["outline"]]
-    n = len(env)
-    fed = [c for c in M["channels"] if (c.get("to") or {}).get("kind") == "field"]
-    assert fed, "the polder is fed by a channel from its header reservoir"
-    for c in fed:
-        end = c["poly"][-1]
-        assert point_in_poly(end[0], end[1], env), f"the inlet mouth {end} must finish INSIDE the crop"
-        gap = min(seg_dist(end[0], end[1], env[k], env[(k + 1) % n]) for k in range(n))
-        assert gap >= 10.0, f"the mouth is {gap:.1f} px from the outline; the rule wants 10 so the field paints over it"
 
 
 @pytest.mark.rolls_map
@@ -99,3 +75,22 @@ def test_a_dike_pond_hamlet_is_ponds_in_a_diked_block_with_wet_flanks() -> None:
     assert sum(1 for q in M["marshes"] if q.get("role") == "waterside") == len(m["waterward"])
     # no threshing yards on a no-rice hamlet (feature 139 T41, GM 2026-08-28) - declared and drawn so
     assert m["work_yards"] is False and M["threshing_yards"] and all(y.get("kind") == "forecourt" for y in M["threshing_yards"])
+def test_the_polders_keep_outs_contain_what_they_stand_for() -> None:
+    """Feature 139 on REAL geometry: the dike's few-chord keep-out contains every vertex of the drawn band, the
+    field's facing chains never accept a point the outline refuses, and the counts are the GM's - a couple of
+    dozen chords around the ring dike, under ten on the field's house side."""
+    from l7r.diagram.settlement._geom.primitives import chain_violated
+
+    _plan, M = rollcache.hamlet(hg.HamletSpec(name="Polder", seed=19, households=16, field_archetype="polder_grid", down_deg=90))
+    dk = M["dikes"][0]
+    assert dk["keepout_chords"] <= 24 and len(dk["keepout"]) <= 48
+    outside = [(x, y) for x, y in dk["outline"] if not point_in_poly(x, y, dk["keepout"])]
+    assert not outside, f"{len(outside)} of {len(dk['outline'])} band vertices outside the keep-out, e.g. {outside[:3]}"
+    fld = M["fields"][0]
+    chains = [[((a[0], a[1]), (b[0], b[1]), (nv[0], nv[1])) for a, b, nv in ch] for ch in M["field_chains"]]
+    assert 1 <= fld["keepout_chords"] <= 12 and chains
+    from l7r.diagram.settlement._geom.primitives import FIELD_KEEPOUT_EPS, chain_distance
+
+    assert all(
+        chain_violated(x, y, chains, FIELD_KEEPOUT_EPS + 1e-6) for x, y in fld["outline"] if chain_distance(x, y, chains) <= FIELD_KEEPOUT_EPS + 1e-6
+    )  # no vertex the chain reaches is on the house side

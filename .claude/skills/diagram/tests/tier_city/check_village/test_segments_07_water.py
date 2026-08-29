@@ -5,21 +5,9 @@ locked to another tier; the gate collects everything. Helpers stay in the source
 import pytest
 
 from tests.check_village._builders import (
-    _cap_water,
     _water_map,
-    f,
     f_only,
 )
-
-
-@pytest.mark.tiers("capital")
-def test_stream_runs_off_edge_accepts_a_trunk_river_tap():
-    """A sluiced moat feeder taps the trunk river (feature 020's capital) - the river is itself
-    edge-sourced, so a stream rooted on it inherits a real source the way an edge end does."""
-    M = _cap_water()
-    M["moat"] = [[900, 100], [900, 900]]
-    M["streams"].append({"poly": [[1180, 300], [1000, 350], [905, 400]], "frm": {"kind": "river"}, "to": {"kind": "moat"}, "w": 16})
-    assert "stream_runs_off_edge[1]" not in f(M)
 
 
 @pytest.mark.tiers("capital")

@@ -4,7 +4,6 @@ import math
 
 import pytest
 
-from l7r.diagram import settlement
 from l7r.diagram.settlement import Settlement
 from tests.settlement._builders import _byre_village, _crop_settlement, _nuc_village, _scatter_base_points, _town, _village, _walled_city
 
@@ -112,43 +111,6 @@ def test_torii_refuses_a_seat_standing_in_a_wall():
         s.torii_path([(600, 600), (600, 700), (600, 800)])
 
 
-def test_shrine_hall_shortens_its_avenue_short_of_a_wall():
-    # the avenue is pulled BACK as a whole (uniform stride) so the rolled count still fits on open
-    # ground rather than marching the last arches into the fence. The run is threshold-seated at the
-    # hall's front edge (y514) with a 10px (30 ft, inside the pitch band) stride, so 7 arches would
-    # reach y584 and cross the fence at y570.
-    s = _walled_city(fence=((300, 570), (900, 570)))
-    s.shrine_hall(600, 500, "Temple", w=s.px(130), h=s.px(84), kind="temple", torii=[(600, 560), (600, 570)], torii_count=7)
-    ys = [t[1] for t in s.M["torii"]]
-    assert len(ys) == 7  # every rolled arch is drawn
-    assert ys[-1] < 566 and settlement.torii_wall_conflicts(s.M) == []  # shortened to stop before the fence, all clear
-    strides = [ys[i + 1] - ys[i] for i in range(6)]
-    assert max(strides) - min(strides) <= 0.2  # ... and still evenly spaced (the run is scaled, not re-seated one by one)
-    # ...and the THRESHOLD is re-taken after the shortening: pulling the stride in would otherwise
-    # leave the innermost arch standing at the old, wider gap from the hall (GM 2026-07-27).
-    assert ys[0] - 514 == pytest.approx(strides[0], abs=0.2)
-
-
-def test_shrine_hall_refuses_an_avenue_that_cannot_be_shortened_clear():
-    # if even the first arch stands in the wall, no shortening helps: fail the gen rather than
-    # close the arches up on each other or fudge the geometry
-    # (the message names "a wall" rather than the fence here: no single arch STANDS in it - it is the
-    # walk between them that crosses - so torii_seat_on_wall has no run to name for the first arch)
-    s = _walled_city(fence=((300, 545), (900, 545)))
-    with pytest.raises(ValueError, match="cannot be shortened clear of a wall"):
-        s.shrine_hall(600, 500, "Temple", w=s.px(130), h=s.px(84), kind="temple", torii=[(600, 560), (600, 570)], torii_count=7)
-
-
-def test_shrine_hall_leaves_an_avenue_inside_the_pitch_band_alone():
-    # the village avenues (~30 ft, 1.9 rail-spans) are deliberate and must not be re-pitched: within
-    # the band the gen's own spacing stands, so only the over-wide town/city runs are touched
-    s = Settlement(1200, 1200, seed=9)
-    s.meta(name="V", scale="village", ftpx=2, down_deg=90)
-    s.shrine_hall(600, 500, "Shrine", w=s.px(60), h=s.px(48), torii=[(600, 560), (600, 575), (600, 590)], torii_count=3)
-    # the 15px stride survives untouched; only the run's distance from the hall changes (front edge y512 + 15)
-    assert [t[1] for t in s.M["torii"]] == pytest.approx([527, 542, 557], abs=0.1)
-
-
 def test_draft_byres_scatters_shared_sheds_among_the_houses():
     s, hs = _byre_village()
     placed = s.draft_byres(fraction=0.6, gap=40)  # ~60% of 5 = 3 shared byres
@@ -248,7 +210,7 @@ _SHRINES_WELLS_SURFACE = frozenset(
         "draft_byres",
         "farm_wells",
         "flush_tree_stands",
-        "forest",
+        # "forest" moved to shrines_wells/forest.py (ForestMixin) under feature 145 - still on Settlement, off the hamlet path module
         "frozen_terrain",
         "hill",
         "open_seat",
@@ -353,3 +315,79 @@ def test_frozen_terrain_is_still_a_context_manager():
     with s.frozen_terrain():
         assert s._frozen_wells is not None, "the freeze must actually build the index inside the scope"
     assert s._frozen_wells is None, "and release it on the way out"
+
+
+def test_farm_wells_seats_a_wellhead_in_a_steading_dooryard() -> None:
+    """Feature 146: the ring seating in `_farm_wells` - the fallback path for a farm belt, where the
+    cluster's open ground is mostly crop and the wellhead goes in a dooryard rather than at the centroid."""
+    s = Settlement(1200, 1200, seed=1)
+    s.meta(name="F", scale="hamlet", ftpx=1)
+    for i in range(4):  # a tight cluster of steadings on open ground, nothing else placed
+        s.M["houses"].append({"x": 500.0 + i * 70.0, "y": 600.0, "w": 50.0, "h": 30.0, "rot": 0})
+        s.placed.append((500.0 + i * 70.0, 600.0, 50.0, 30.0))
+    seated = s._farm_wells(220.0, 40.0)
+    assert seated >= 1, "a wellhead must seat in one of the dooryards"
+    assert s.M["wells"], "and be recorded"
+    assert any(min(abs(w["x"] - h["x"]) + abs(w["y"] - h["y"]) for h in s.M["houses"]) < 200 for w in s.M["wells"])
+
+
+def test_byre_clear_of_all_but_refuses_the_paddy_and_a_neighbour_s_yard() -> None:
+    """Feature 146: two of the byre arm's refusal reasons - it stands on dry ground off the basins, and it
+    clears every recorded appurtenance except its OWN homestead's."""
+    s = Settlement(1000, 1000, seed=1)
+    house = {"x": 300.0, "y": 300.0, "w": 50.0, "h": 30.0}
+    s.M["houses"].append(house)
+    s.field_polys.append([(500, 500), (800, 500), (800, 800), (500, 800)])
+    assert s._byre_clear_of_all_but(650, 650, 40, 24, house) is False, "in the basin"
+    s.M["threshing_yards"].append({"x": 200.0, "y": 200.0, "w": 40.0, "h": 30.0})
+    assert s._byre_clear_of_all_but(200, 200, 40, 24, house) is False, "on a neighbour's yard"
+    assert s._byre_clear_of_all_but(120, 600, 40, 24, house) is True
+
+
+def test_fringe_blocked_refuses_the_crop_and_the_open_water() -> None:
+    """Feature 146: the wood's fringe grows on WASTE ground. Two of its refusal reasons - a fringe tree
+    inside (or within its own radius of) a crop polygon, and one standing on a watercourse."""
+    s = Settlement(1000, 1000, seed=1)
+    s.field_polys.append([(400, 400), (700, 400), (700, 700), (400, 700)])
+    assert s._fringe_blocked(550, 550, 8.0) is True, "in the basin"
+    assert s._fringe_blocked(396, 550, 8.0) is True, "off it, but inside the tree's own radius"
+    s.M["streams"] = [{"pts": [[100, 900], [900, 900]], "w": 8, "poly": [[100, 896], [900, 896], [900, 904], [100, 904]]}]
+    assert s._fringe_blocked(500, 900, 8.0) is True, "standing in the brook"
+    assert s._fringe_blocked(150, 150, 8.0) is False
+
+
+def test_stand_fringe_skips_a_seat_a_crown_already_covers() -> None:
+    """Feature 146: the wood's fringe skips a seat whose ground is spoken for OR that an existing canopy
+    already covers - the no-double-ink rule, the same one the grove clumps follow."""
+    poly = [(200.0, 200.0), (900.0, 200.0), (900.0, 900.0), (200.0, 900.0)]
+
+    def fringe(preload: bool) -> list:  # a FRESH settlement each time - the scatter draws from the RNG
+        s = Settlement(1200, 1200, seed=3)
+        s.meta(name="W", scale="town", ftpx=1)
+        krect = [(150.0, 150.0, 950.0, 400.0)] if preload else []  # a canopy keep-out over the north band
+        return s._stand_fringe(poly, 18.0, 6.0, krect, [])
+
+    bare = fringe(False)
+    assert bare, "the fixture must offer seats, or the skip proves nothing"
+    assert len(fringe(True)) < len(bare), "seats an existing canopy already covers are skipped"
+
+
+def test_a_byre_is_refused_a_seat_on_the_paddy():
+    """A byre stands on dry ground: the draft team is stalled beside the steading, not in the rice."""
+    s = Settlement(1000, 1000, seed=1)
+    s.meta(name="V", scale="hamlet", ftpx=1, toscale=True)
+    s.field_polys.append([(100.0, 100.0), (400.0, 100.0), (400.0, 400.0), (100.0, 400.0)])
+    h = {"x": 600, "y": 600, "w": 40, "h": 26}
+    # 18 px OUT from the field edge: past `_in_blocked`'s own 14 px setback (which would otherwise
+    # answer first and leave this rule untested) and inside the byre's half-diagonal of 18.
+    assert not s._byre_clear_of_all_but(418, 250, 30, 20, h), "its corner would be over the bund"
+    assert s._byre_clear_of_all_but(700, 700, 30, 20, h)
+
+
+def test_a_fringe_tree_is_refused_ground_already_spoken_for():
+    """The wood's margin grows on WASTE ground - never over a blocking footprint, the crop, or a way."""
+    s = Settlement(1000, 1000, seed=1)
+    s.meta(name="V", scale="hamlet", ftpx=1, toscale=True)
+    s.block_polys.append([(100.0, 100.0), (400.0, 100.0), (400.0, 400.0), (100.0, 400.0)])
+    assert s._fringe_blocked(250, 250, 6)
+    assert not s._fringe_blocked(700, 700, 6)

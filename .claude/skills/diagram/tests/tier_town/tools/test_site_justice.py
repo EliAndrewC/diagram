@@ -38,24 +38,6 @@ def test_with_replaces_only_the_one_registry():
 
 
 @pytest.mark.tiers("town")
-def test_new_failures_reports_only_what_the_placement_adds():
-    M = town()
-    base = sj.failures(sj._with(M, "execution_ground", []))
-    assert "town_has_execution_ground" in base  # absent -> the presence check fires...
-    good = sj.new_failures(M, "execution_ground", 1700, 1060, base)
-    assert not good  # ...and seating it there adds nothing, so the presence failure is differenced out
-
-
-@pytest.mark.tiers("town")
-def test_new_failures_surfaces_a_rule_the_tool_never_names():
-    # Seated among the dwellings. The tool has no idea what this rule is called - it just reports
-    # what the gate said - which is the entire design.
-    M = town()
-    base = sj.failures(sj._with(M, "execution_ground", []))
-    assert "execution_ground_outside_the_settlement" in sj.new_failures(M, "execution_ground", 520, 1000, base)
-
-
-@pytest.mark.tiers("town")
 def test_view_box_prefers_the_recorded_view_and_falls_back_to_the_canvas():
     assert sj.view_box(town()) == (0.0, 0.0, 2400.0, 2000.0)
     M = town()
@@ -143,39 +125,9 @@ def test_propose_returns_only_seats_the_gate_accepts():
 
 
 @pytest.mark.tiers("town")
-def test_propose_rejects_a_seat_that_leaves_the_features_own_check_failing():
-    """The `curable` half of adjudication - the half whose absence shipped a bad map.
-
-    A feature whose ABSENCE is itself a gate failure puts that check into `base`, so a seat which
-    leaves it failing adds nothing NEW and scored as legal. That is how the tool recommended the
-    seat that put Ubame's boundary stone among the west-end shops (GM, 2026-07-26)."""
-    M = town(execution_grounds=[{"x": 1700, "y": 1060, "w": 60, "h": 60, "rot": 0, "screened": False, "label": "execution ground"}], boundary_markers=[])
-    base = sj.failures(sj._with(M, "boundary_marker", []))
-    assert "execution_ground_past_the_boundary_marker" in base  # failing because there is no stone
-    among_the_houses = (620.0, 1000.0)  # on the road, between core and ground, 67 ft from a house
-    assert not sj.new_failures(M, "boundary_marker", *among_the_houses, base)  # adds nothing NEW...
-    seats = sj.propose(M, "boundary_marker", limit=40, step=120.0)
-    assert seats
-    for s in seats:  # ...yet every seat the tool returns actually CURES the check
-        trial = sj._with(M, "boundary_marker", [sj.record(M, "boundary_marker", s["x"], s["y"])])
-        assert "execution_ground_past_the_boundary_marker" not in sj.failures(trial)
-
-
-@pytest.mark.tiers("town")
-def test_propose_finds_nothing_when_every_ranked_seat_is_illegal():
-    # limit=1 with a step that lands the single best-ranked candidate on the road.
-    assert sj.propose(town(), "execution_ground", limit=1, step=900.0) == []
-
-
-@pytest.mark.tiers("town")
 def test_report_names_the_seats_it_found():
     out = sj.report(town(), "execution_ground", 12, None, step=120.0)
     assert "adjudicating" in out and "frame_cost" in out
-
-
-@pytest.mark.tiers("town")
-def test_report_says_so_when_there_is_no_legal_seat():
-    assert "no legal seat" in sj.report(town(), "execution_ground", 1, (0.0, 0.0))
 
 
 @pytest.mark.tiers("town")

@@ -10,7 +10,7 @@ import random
 from collections.abc import Mapping, Sequence
 from typing import Any
 
-from l7r.diagram.settlement import Settlement, point_in_poly, seg_dist, surface_water_dist
+from l7r.diagram.settlement import Settlement, point_in_poly, seg_dist, segments_cross, surface_water_dist
 from l7r.diagram.settlement._knobs import knob_rng
 from l7r.diagram.settlement.farm_fixtures import FIXTURE_FT, PERSIMMON_CROWN_FT
 from l7r.diagram.sitegen.geom import centroid, unit
@@ -603,9 +603,18 @@ def _strip_blocked(
     for poly in list(fields) + list(marsh):
         if len(poly) >= 3 and any(point_in_poly(q[0], q[1], poly) or min(seg_dist(q[0], q[1], poly[k], poly[(k + 1) % len(poly)]) for k in range(len(poly))) < 6.0 for q in corners):
             return True
+    # A LANE THROUGH THE STRIP, not only past its corners (feature 137, cohort seed 03): five sample
+    # points on a 22 by 16 ft strip let a lane cross it diagonally between them, and
+    # `lanes_clear_of_bamboo` walks the tread's quarter-points. So the tread is also tested as a
+    # segment against the strip's edges - a crossing, or an end inside, is a stand on a lane.
+    _edges = [(corners[k], corners[(k + 1) % 4]) for k in range(4)]
     for pts, half in lanes:
-        if any(seg_dist(q[0], q[1], pts[k], pts[k + 1]) < half for q in corners for k in range(len(pts) - 1)):
-            return True
+        for k in range(len(pts) - 1):
+            a, b = pts[k], pts[k + 1]
+            if any(seg_dist(q[0], q[1], a, b) < half for q in corners):
+                return True
+            if any(segments_cross(a, b, e0, e1) for e0, e1 in _edges) or any(abs(p[0] - cx) < cw / 2 and abs(p[1] - cy) < ch / 2 for p in (a, b)):
+                return True
     # the dry hem's plots and the watercourses (unlock tripwire seed 47: a fixture on a dry plot and one
     # on the stream - neither is a paddy, a lane or the pond, so nothing above saw them), and any crown
     # already drawn (seed 37: a fixture seated under a grove crown drawn two stages earlier)

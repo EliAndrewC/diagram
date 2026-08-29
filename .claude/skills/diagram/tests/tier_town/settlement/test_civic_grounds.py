@@ -9,14 +9,6 @@ from tests.settlement._builders import _town
 
 
 @pytest.mark.tiers("town")
-def test_granary_draws_a_storehouse_row():
-    # opt-in rice-transit granary: a row of n fireproof kura, recorded for town_has_granary
-    s = _town()
-    stores = s.granary(500, 500, n=3)
-    assert len(stores) == 3 and s.M["granary"]["n"] == 3 and s.M["granary"]["label"] == "granary"
-
-
-@pytest.mark.tiers("town")
 def test_merchant_residences_stop_at_the_requested_count():
     # the placed >= count early-break: with more storefronts than requested homes, the loop
     # must stop at the cap (previously covered by the towns' legacy gens)

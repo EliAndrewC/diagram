@@ -20,9 +20,9 @@
           },
           {
             "type": "command",
-            "command": "/diagram/scripts/agent-watch-hooks.sh prompt",
-            "timeout": 30,
-            "statusMessage": "Checking for hung subagents..."
+            "command": "/diagram/scripts/agent-stall-hooks.sh prompt",
+            "timeout": 15,
+            "statusMessage": "Checking for stalled background agents..."
           }
         ]
       }
@@ -143,6 +143,16 @@
         ]
       },
       {
+        "matcher": "Bash|Edit|Write|NotebookEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/diagram/scripts/measure-hooks.sh pretool",
+            "timeout": 10
+          }
+        ]
+      },
+      {
         "matcher": "Bash",
         "hooks": [
           {
@@ -179,11 +189,6 @@
           {
             "type": "command",
             "command": "/diagram/scripts/idle-tests-hooks.sh stop",
-            "timeout": 30
-          },
-          {
-            "type": "command",
-            "command": "/diagram/scripts/agent-watch-hooks.sh stop",
             "timeout": 30
           },
           {

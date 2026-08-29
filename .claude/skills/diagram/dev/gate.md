@@ -232,6 +232,16 @@ proof about the engine that existed that day. `pytest tests/test_regressions.py`
 corpus in about 14 seconds and is the cheapest guard in the tree; run it after an engine change, not
 merely after a check change.
 
+**WHICH CHECKS EARN THEIR KEEP (feature 141, GM 2026-08-28).** Before a check is written or kept, ask
+whether any stage AFTER the placer changes what it reads. If none does, the check re-measures what a
+correct placer guaranteed - *"if our placement algorithm makes overlaps impossible, then checking for
+overlaps later in an automated check wastes time with no benefit"* - and the guarantee belongs in a unit
+test of the placer, not in the gate. If a later stage can undo the placer (a caption seated then crowded
+by the scatter, the lane web clipped after the houses, the board after the yards), the placer only does
+its best and the check IS the guarantee. `make check-census` measures this per check on per-stage
+snapshots (the ledger in `specs/141-checks-and-corpus-audit/`); a kept check proves it fires on a
+scripted negative fixture (`tests/gate/test_scripted_fixtures.py`), not on a frozen manifest.
+
 **The shape both sessions kept hitting: an EXCUSE clause keyed on PRESENCE cannot fire on ABSENCE.**
 Four instances in one day between two sessions - this check excusing a hole whenever anything stood
 in it; `village_windbreak_is_continuous` scoring a total gap as nothing because it skipped empty
@@ -344,3 +354,28 @@ read as a broom stood **21.6 and 24.3 ft** from another way and near-parallel to
 they are close; only the angle says whether one arrived at the other or is running alongside it. The
 gate does not import the generator, so the constant is restated on the gate side - keep the two
 numbers equal and say in a comment that they are meant to be.
+
+
+## A SEGMENT IS NOT ENTERED FOR A SCALE ITS GUARD EXCLUDES (feature 145)
+
+Write a tier-specific segment with its guard as the WHOLE body - `if scale in ('city', 'capital'):` (or `URBAN`) wrapping everything before `return _kept(...)` - and the driver will not call it on a hamlet; the registry derives that from the AST (`check_village/CLAUDE.md`, "Scales"). A mixed segment runs everywhere. This is what keeps a city check's file off the hamlet coverage path, so it is the shape to keep when adding one.
+
+## THE BATTERY IS A THIRD SMALLER, AND WHY (feature 146, 2026-08-28)
+
+Feature 141 retired ~385 check names by stubbing each `check(...)` call, and left every segment body that
+computed the retired check's inputs in place, on the comment "the segment stays for the check it keeps or
+the value it writes". For a third of the battery neither was true. Feature 146 removed **210 segments and
+29 helpers - about 5,300 lines** whose chains reach no live check; all 153 live checks survive and the
+frozen registry rows went 595 -> 385.
+
+Two things to carry forward when you next cut checks:
+
+- **A retired check leaves a body behind.** Stubbing the call is not removing the check; the computation
+  above it usually has no other consumer. Check `registry`'s own `needs` before assuming it does.
+- **Reachability by shared NAMES is useless here.** Segment locals are single letters (`q`, `k`, `b`, `s`),
+  so "does any later segment need a name this one writes" says everything reaches everything. The honest
+  test is "does this segment keep a live check, and does anything need a value only IT writes".
+
+And the town/city half of the battery had not been RUN since the 2026-08-16 freeze - the only maps at those
+scales are frozen and nothing gated them. `tests/tier_city/test_frozen_pool_gate.py` now gates each exhibit
+read-only with its post-freeze failures pinned. If you add a city check, that file is what exercises it.

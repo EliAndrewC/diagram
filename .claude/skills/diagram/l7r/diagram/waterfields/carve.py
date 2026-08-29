@@ -64,7 +64,7 @@ def _supply_index(supply: list[dict[str, Any]] | None, g: float) -> list[_SupRow
         spts = [(float(p[0]), float(p[1])) for p in sc["pts"]]
         if len(spts) >= 2:
             spts = _extend_span(spts, _SPAN_EPS)
-            _sw0, _sw1 = float(sc["w"]), float(sc.get("w_tail", sc["w"]))
+            _sw0, _sw1 = float(sc["w"]), float(sc.get("w_tail", sc["w"]))  # pyrefly: ignore[bad-argument-type]  # dict.get(k, Any-default) typed Any|None by pyrefly, Any by mypy - research 142 R5
             _sreach = max(_sw0, _sw1) / 2 + BANK_MARGIN * g + 2.0  # bbox prefilter: prunes only, never decides
             _sbb = (min(p[0] for p in spts) - _sreach, min(p[1] for p in spts) - _sreach, max(p[0] for p in spts) + _sreach, max(p[1] for p in spts) + _sreach)
             sup_idx.append((spts, polyline_cum(spts), _sw0, _sw1, _sbb))
@@ -678,7 +678,10 @@ def _dry_fields(
                 bx, by = a_pts[i + 1]
                 return (ax + (bx - ax) * t, ay + (by - ay) * t)
             acc += sl
-        return a_pts[-1]  # unreachable for a real (non-empty) canal; satisfies the type
+        # UNREACHABLE for a real (non-empty) canal, and kept to satisfy the type: the loop above returns
+        # on `i == len(seglen) - 1` whatever arc-length is asked for, so the only way past it is a canal
+        # with no segments at all - and a fan with no supply canal never carves (feature 146).
+        return a_pts[-1]  # pragma: no cover - see above
 
     bounds = [0.0]
     while bounds[-1] < total - plot * 0.6:
@@ -732,7 +735,7 @@ def _dry_fields(
         _sp = [(float(p[0]), float(p[1])) for p in _c.get("pts") or ()]
         if len(_sp) < 2:
             continue
-        _w0, _w1 = float(_c["w"]), float(_c.get("w_tail", _c["w"]))
+        _w0, _w1 = float(_c["w"]), float(_c.get("w_tail", _c["w"]))  # pyrefly: ignore[bad-argument-type]  # dict.get(k, Any-default) typed Any|None by pyrefly, Any by mypy - research 142 R5
         _reach = max(_w0, _w1) / 2 + berm_px + 2.0  # bbox prefilter: prunes only, never decides
         _sup.append((_sp, _w0, _w1, polyline_cum(_sp), (min(p[0] for p in _sp) - _reach, min(p[1] for p in _sp) - _reach, max(p[0] for p in _sp) + _reach, max(p[1] for p in _sp) + _reach)))
 
@@ -901,7 +904,7 @@ def _bund_beans(R: random.Random, plots: list[dict[str, Any]], frac: float, spac
         if len(cpts) < 2:
             continue
         cum = polyline_cum(cpts)
-        pad = max(c["w"], c.get("w_tail", c["w"])) / 2 + tol
+        pad = max(c["w"], c.get("w_tail", c["w"])) / 2 + tol  # pyrefly: ignore[unsupported-operation, bad-specialization]  # dict.get(k, Any-default) typed Any|None by pyrefly, Any by mypy - research 142 R5
         cbox = (min(q[0] for q in cpts) - pad, min(q[1] for q in cpts) - pad, max(q[0] for q in cpts) + pad, max(q[1] for q in cpts) + pad)
         chans.append((cpts, cum, cum[-1] or 1.0, c["w"], c.get("w_tail", c["w"]), cbox))
 
@@ -911,7 +914,7 @@ def _bund_beans(R: random.Random, plots: list[dict[str, Any]], frac: float, spac
                 continue
             for i in range(len(cpts) - 1):
                 # taper measured at the segment head - within one segment it moves less than tol
-                if _seg_d(x, y, cpts[i], cpts[i + 1]) < taper_w(w0, w1, cum[i] / tot) / 2 + tol:
+                if _seg_d(x, y, cpts[i], cpts[i + 1]) < taper_w(w0, w1, cum[i] / tot) / 2 + tol:  # pyrefly: ignore[bad-argument-type]  # dict.get(k, Any-default) typed Any|None by pyrefly, Any by mypy - research 142 R5
                     return True
         return False
 

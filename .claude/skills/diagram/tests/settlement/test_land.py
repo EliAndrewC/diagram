@@ -216,36 +216,6 @@ def test_village_grove_skips_the_dike_bank():
     assert clumps and not any(pip(cx, cy, dike) for cx, cy in clumps)  # some clumps, none on the dike
 
 
-def test_clearings_keep_scrub_off_sacred_and_funerary_ground():
-    """Feature: a swept verge around shrine/torii/graves. `_clear_ground` grows the footprint by `extra`
-    (bscale-scaled) into `self.clearings`, which the hinterland scatter skips - but building placement
-    (block_polys) and groves are untouched, so a shrine's preserved grove is unaffected."""
-    s = Settlement(1200, 1200, seed=1)
-    s.meta(name="C", scale="village", ftpx=1, down_deg=90)
-    n_block = len(s.block_polys)
-    s._clear_ground(600, 600, 40, 30, 58)
-    assert len(s.clearings) == 1 and len(s.block_polys) == n_block  # clearings, NOT block_polys
-    poly = s.clearings[0]
-    xs = [p[0] for p in poly]
-    ys = [p[1] for p in poly]
-    # the verge is an ORGANIC blob (irregular inward bays), not the padded rectangle: 16 edge samples,
-    # more than 4 distinct x values, contained in the padded rect (bays-only - the claim never grows),
-    # and still generously containing the footprint (a bay cuts at most ~55% of the 58px collar)
-    assert len(poly) == 16 and len({round(px, 1) for px in xs}) > 4
-    assert min(xs) >= 600 - 20 - 58 and max(xs) <= 600 + 20 + 58 and min(ys) >= 600 - 15 - 58 and max(ys) <= 600 + 15 + 58
-    assert all(settlement.point_in_poly(fx, fy, poly) for fx, fy in [(580, 585), (620, 585), (620, 615), (580, 615)])
-    # shrine_hall with a torii registers a clearing for BOTH the hall and the arch
-    s2 = Settlement(1200, 1200, seed=1)
-    s2.meta(name="C2", scale="village", ftpx=1, down_deg=90)
-    s2.shrine_hall(600, 600, "Shrine", torii=[(600, 680)], torii_count=1)  # pinned so the clearing count is stable under the per-temple roll
-    assert len(s2.clearings) == 2  # the hall + the one torii
-    # a cemetery registers one too
-    s3 = Settlement(1200, 1200, seed=1)
-    s3.meta(name="C3", scale="village", ftpx=1, down_deg=90)
-    s3.cemetery(600, 600, 90, 60, label="burial ground")
-    assert len(s3.clearings) == 1
-
-
 def test_clear_ground_is_deterministic_and_preserves_the_rng_stream():
     """The organic verge is seeded from its own footprint: identical args -> identical blob (render-sync
     determinism), and the map's global RNG stream is untouched (saved/restored), so adding or reshaping
@@ -604,3 +574,18 @@ def test_commons_keeps_scrub_off_every_recorded_marsh():
     # ...but it THINS INTO the marsh over the reeds' own feather (settlement-review 2026-08-26: a hard
     # cut left a ruled line and a bare strip on the toe's straight edge), so the band is not empty
     assert [b for b in fams["blade"] if inside(b[0], b[1], wet)], "no scrub in the feather band - the edge would be a ruled line"
+
+
+def test_reserve_clearing_registers_swept_ground_before_the_scatter_runs() -> None:
+    """Feature 146: a precinct drawn LATE must reserve its ground first, or the hinterland scatter covers it.
+    `reserve_clearing` is the pre-registration, and the scatter only skips clearings that already exist."""
+    from l7r.diagram.settlement import Settlement
+
+    s = Settlement(1000, 1000, seed=1)
+    assert not s.clearings
+    s.reserve_clearing(500, 500, 80, 60, extra=6)
+    assert len(s.clearings) == 1
+    poly = s.clearings[0]
+    xs = [p[0] for p in poly]
+    ys = [p[1] for p in poly]
+    assert min(xs) <= 460 and max(xs) >= 540 and min(ys) <= 470 and max(ys) >= 530

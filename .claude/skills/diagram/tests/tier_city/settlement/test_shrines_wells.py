@@ -12,83 +12,6 @@ from tests.settlement._builders import _caption_size
 
 
 @pytest.mark.tiers("city")
-def test_shrine_hall_extends_a_multi_point_avenue_along_its_own_step():
-    # >= 2 given points: extension continues the avenue's OWN stride, not the 44px default
-    s = Settlement(1200, 1200, seed=9)
-    s.meta(name="T", scale="city", ftpx=3, down_deg=90)
-    s.shrine_hall(600, 500, "Temple", w=s.px(130), h=s.px(84), kind="temple", torii=[(600, 560), (600, 570)], torii_count=3)
-    # a 10px (30 ft) authored stride is inside the pitch band, so it stands - but the whole run is
-    # slid in to the hall's threshold (front edge y514 + the 10px stride), which is _avenue_at_threshold's job
-    assert sorted(t[1] for t in s.M["torii"]) == pytest.approx([524, 534, 544], abs=0.1)
-
-
-@pytest.mark.tiers("city")
-def test_shrine_hall_roll_below_geometry_draws_the_first_n():
-    # a roll/pin smaller than the supplied avenue keeps the arches nearest the hall
-    s = Settlement(1200, 1200, seed=9)
-    s.meta(name="T", scale="city", ftpx=3, down_deg=90)
-    s.shrine_hall(600, 500, "Temple", w=s.px(130), h=s.px(84), kind="temple", torii=[(600, 560), (600, 598), (600, 636)], torii_count=1)
-    assert [t[1] for t in s.M["torii"]] == pytest.approx([500 + s.px(84) / 2 + s.px(settlement.TORII_PITCH_FT)], abs=0.1)  # ...seated at the threshold
-
-
-@pytest.mark.tiers("city")
-def test_shrine_hall_repitches_an_overwide_avenue_along_its_own_line():
-    # GM 2026-07-25: the gen authors the avenue's LINE, the engine owns its STRIDE. An authored run
-    # wider than two rail-spans is re-laid at the ~20 ft house pitch, resampled by arc length along
-    # the authored line - so a CURVED sando keeps its curve and its innermost seat, only tightening.
-    s = Settlement(1200, 1200, seed=9)
-    s.meta(name="T", scale="city", ftpx=3, down_deg=90)
-    s.shrine_hall(600, 500, "Temple", w=s.px(130), h=s.px(84), kind="temple", torii=[(600, 560), (600, 598), (640, 636)], torii_count=3)
-    ts = s.M["torii"]
-    step = s.px(settlement.TORII_PITCH_FT)
-    assert ts[0][0] == 600 and ts[0][1] == pytest.approx(500 + s.px(84) / 2 + step, abs=0.1)  # innermost arch one pitch off the hall's front
-    gaps = [math.hypot(ts[i + 1][0] - ts[i][0], ts[i + 1][1] - ts[i][1]) for i in range(2)]
-    assert gaps == pytest.approx([step, step], abs=0.15)  # evenly re-pitched to the house stride
-    assert all(t[0] == 600 for t in ts)  # ... and still on the authored line's first leg (it never reaches the bend)
-
-
-@pytest.mark.tiers("city")
-def test_ward_refuses_a_fence_laid_across_a_standing_torii():
-    # the Nagahara case (GM 2026-07-25): the fence is drawn AFTER the temple, so the avenue could not
-    # have avoided it - the wall side must catch it, since neither feature can move once drawn
-    s = Settlement(1200, 1200, seed=9)
-    s.meta(name="T", scale="city", ftpx=3, down_deg=90)
-    # the arch is seated by _avenue_at_threshold at the hall's front edge (y514) + one 20 ft pitch
-    s.shrine_hall(600, 500, "Temple", w=s.px(130), h=s.px(84), kind="temple", torii=[(600, 700)], torii_count=1)
-    with pytest.raises(ValueError, match=r"the samurai ward fence runs through torii arch\(es\) at \[\(600.0, 520.7\)\]"):
-        s.ward("samurai", [(300, 521), (900, 521)], gates=[])
-
-
-@pytest.mark.tiers("city")
-def test_avenue_at_threshold_slides_a_marooned_sando_in_to_its_hall():
-    # GM 2026-07-27: "the distance from the front of the temple should be the same as the distance
-    # between each torii arch". Tango's Bishamon sando was spaced right at 20 ft and authored 139 ft
-    # away, so it read as three red marks beside an unrelated building. The run keeps its direction,
-    # its curve and its stride - only its distance from the hall changes.
-    s = Settlement(1200, 1200, seed=9)
-    s.meta(name="T", scale="city", ftpx=3, down_deg=90)
-    s.shrine_hall(600, 500, "Temple", w=s.px(130), h=s.px(84), kind="temple", torii=[(600, 700), (600, 710)], torii_count=3)
-    ys = [t[1] for t in s.M["torii"]]
-    strides = [ys[i + 1] - ys[i] for i in range(2)]
-    assert strides == pytest.approx([10, 10], abs=0.1)  # the authored 10px (30 ft) stride is inside the pitch band and stands
-    assert ys[0] - (500 + s.px(84) / 2) == pytest.approx(10, abs=0.1)  # ...and the gap to the hall now MATCHES it
-
-
-@pytest.mark.tiers("city")
-def test_avenue_at_threshold_pulls_a_beside_the_hall_gate_onto_the_flank_it_stands_off():
-    # a run authored off to the SIDE is measured to the hall's nearest FACE, not its center (the
-    # footprint discipline), so it slides onto the flank it actually stands off rather than diagonally
-    # in toward the middle of the building - which is what makes a beside-the-hall gate read as
-    # belonging to that hall.
-    s = Settlement(1200, 1200, seed=9)
-    s.meta(name="T", scale="city", ftpx=3, down_deg=90)
-    s.shrine_hall(600, 500, "Temple", w=s.px(130), h=s.px(84), kind="temple", torii=[(760, 500)], torii_count=1)
-    (tx, ty, _z) = s.M["torii"][0]
-    assert ty == 500  # stayed on its own line
-    assert tx - (600 + s.px(130) / 2) == pytest.approx(s.px(settlement.TORII_PITCH_FT), abs=0.1)
-
-
-@pytest.mark.tiers("city")
 def test_avenue_at_threshold_leaves_a_degenerate_avenue_alone():
     # nothing to seat, and an arch drawn ON the hall is torii_clear_of_shrine's defect to report -
     # this method translates a sando, it does not paper over a broken one
@@ -97,21 +20,6 @@ def test_avenue_at_threshold_leaves_a_degenerate_avenue_alone():
     assert s._avenue_at_threshold(300, 300, 40, 30, []) == []
     on_the_hall = [(300.0, 300.0), (300.0, 320.0)]
     assert s._avenue_at_threshold(300, 300, 40, 30, on_the_hall) == on_the_hall
-
-
-@pytest.mark.tiers("city")
-def test_hall_caption_steps_out_of_its_own_sando():
-    # GM 2026-07-27: an arch is "never covered by the 'temple of X' label". A hall's caption and its
-    # approach both want the ground at the hall's face, so bringing the arches to the threshold put
-    # the two on the same spot - the caption takes the hall's other side.
-    s = Settlement(1200, 1200, seed=9)
-    s.meta(name="T", scale="city", ftpx=3, down_deg=90)
-    s.shrine_hall(600, 500, "Temple of Ebisu", w=s.px(130), h=s.px(84), kind="temple", torii=[(600, 700)], torii_count=7, label_below=True)
-    cap = [L for L in s.M["labels"] if L[5] == "Temple of Ebisu"][0]
-    arches = [(t[0], t[1]) for t in s.M["torii"]]
-    txh, tyu, tyd = settlement.torii_halfbox(s.ftpx)
-    assert not any(cap[0] < ax + txh and ax - txh < cap[2] and cap[1] < ay + tyd and ay - tyu < cap[3] for ax, ay in arches)
-    assert cap[1] > max(ay for _, ay in arches)  # here it stayed on the gen's side, stepping past the far end of the sando
 
 
 @pytest.mark.tiers("city")

@@ -337,7 +337,8 @@ hover/click checks for the classes it contains.
   we can get rid of that and make the mouse a normal pointer"*). Scrolling is BOUNDED by the map (the GM:
   *"We should be able to scroll to the edge of the map, but not beyond it"*): along an axis where the
   map is larger than the viewport its edge reaches the viewport's edge and no further; where it is
-  smaller it sits centered. The highlight and the modal work at every zoom.
+  smaller it sits centered. The highlight and the modal work at every zoom. While a modal is open the clicked class STAYS highlighted, whatever the pointer does,
+  and the highlight clears when the modal closes (the GM, 2026-08-28).
 - **FR-014 (performance) - the GM's question of 2026-08-28, verbatim in `gm-request.md`**: the page
   MUST NOT draw every blade and crown as its own element (*"many, many thousands ... a real impact
   on performance"*). The GM proposed prerendered raster layers per class, swapped on hover, and
@@ -359,6 +360,33 @@ hover/click checks for the classes it contains.
   is not changed (*"I don't think we should do that"*). (b) Ctrl/Cmd + `+`, `-`, `0` and Ctrl+wheel
   drive the page's own zoom (*"only one way of zooming"*); the browser's menu zoom cannot be
   intercepted by a page and is left as it is.
+- **FR-016 (thin marks; the scrub's real extent) - the GM's follow-up of 2026-08-28, verbatim in
+  `gm-request.md`**: (a) the bunds, the bund beans, the field ditches and the village lanes each
+  take the pointer over a hit shape *"three or four times the width"* of the drawn mark - an
+  invisible copy of the mark's own geometry - tuned by the GM on the first cut: bunds and beans at 8x
+  (floor 12 px; a bead at 6x its radius), ditches at 6x (floor 9 px), the stream at 1.5x (floor 12 px),
+  lanes at 4x (floor 6 px, *"seem fine"*) -
+  placed right above the mark so it wins over the paddy beneath a bund and loses to anything drawn
+  later; (b) the scrub lights up only where its marks are: its hit region is a grid of cells that
+  hold a blade or a brush dot, never the recorded hinterland polygon, so ground the scatter
+  deliberately keeps clear (*"the middle of the village"*) lights nothing.
+- **FR-017 (glossary; references; sibling links) - the GM's follow-up of 2026-08-28, verbatim in
+  `gm-request.md`**: (a) a GLOSSARY (`interactive/glossary.py`): every occurrence of a defined term
+  in a modal's text - *"bund"*, *"coppiced"*, the uncommon Japanese words (*"iriai"*, satoyama,
+  tameike, yashikirin ...) - shows its definition on hover. (b) REFERENCES: a modal's citations are
+  the keys its research entry's `**Sources:**` line names, read from the record at page-write time
+  (`interactive/sources.py`), with each key's `research/SOURCES.md` text; a "See references (N)"
+  link at the modal's foot opens a second modal ON TOP of the explanation listing them; Escape
+  closes the top one. A class whose entry still names no key says so (*"the research entry records
+  no citation yet"*) rather than showing nothing. (c) SIBLINGS ARE LINKS: instead of the shared
+  distinguishing paragraphs, a modal ends with *"Not to be confused with the X"* where X is a link -
+  hovering it lights X on the map in place of the pinned class, clicking it opens X's modal in
+  place of the current one; the pair texts stay in the registry as the record of each distinction.
+  (d) EVERY REFERENCE LINKS to where the source can be read (the GM, 2026-08-28): `SOURCES.md` records
+  a URL per key (constitution v2.13.0, `URL: none - <why>` when there is none), the modal shows a
+  `[read]` link per URL, and a test refuses a key with neither. The 228 keys without a link on
+  2026-08-28 were found in one six-agent pass: 203 verified by fetch, 23 with the page found but the
+  fetch blocked (marked `unfetched`), 2 not found and recorded as such.
 - **FR-012 (verified in a browser)**: the hover, highlight, click and modal behaviors MUST be
   proven by an automated headless-browser test in the suite (constitution VI - a page that was
   never opened has not been verified), running on the reference hamlet's page.

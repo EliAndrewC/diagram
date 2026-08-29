@@ -1,13 +1,11 @@
 # Lint + format + type + test + coverage config for the diagram skill's Python.
-# One gate command runs them all: `make done` -> ruff check + ruff format --check + mypy + pytest
+# One gate command runs them all: `make done` -> ruff check + ruff format --check + pyrefly + pytest
 # (100% coverage). Wired so Constitution Principle X is enforced for the whole skill, not missed.
 #
 # Principle X (feature 005, GM-directed 2026-07-13): the Mode B engine (settlement.py,
 # check_village.py, waterfields.py) is brought to FULL compliance - no grace period. ruff lint +
-# format apply now; mypy --strict is reached via a per-module ratchet (the three engine modules are
-# relaxed via [[tool.mypy.overrides]] below and annotated to strict in focused per-module passes,
-# each pass removing its module from the override so the gate blocks backsliding). pack_audit.py
-# (feature 007) stays strict-typed + linted.
+# format apply now; typing is pyrefly with the mypy-strict rule set (feature 142; the per-module
+# mypy ratchet that preceded it is fully retired - every engine module is strict).
 
 # ---- ruff (lint + format) ----------------------------------------------------------------
 [tool.ruff]
@@ -44,38 +42,36 @@ ignore = ["E501"]   # long descriptive lines are house style; the formatter caps
 # (f'<rect fill="{c}"/>'), so leaving quotes as-authored avoids needless churn/risk.
 quote-style = "preserve"
 
-# ---- mypy (strict, with a per-module ratchet) --------------------------------------------
-# Scoped to PRODUCTION LIBRARY modules (per Principle X - not the tests or the generator scripts).
-# `python3 -m mypy` (bare, in the Makefile) checks exactly these files.
-[tool.mypy]
-python_version = "3.14"
-strict = true
-
+# ---- pyrefly (the type checker the gate runs - feature 142) ------------------------------
+# pyrefly (Meta, Rust) is THE type checker (feature 142, GM 2026-08-28): a full cold check of the engine
+# is ~0.6 s with nothing resident, where mypy needed 12.7 s cold or a 400-600 MB daemon per clone to
+# reach 0.13 s (specs/142-rust-type-checker/research.md R2). ty (Astral) was measured too and is as
+# fast, but has no rule for a missing annotation - the property the project's strict discipline
+# rests on (R3) - so pyrefly. mypy is GONE (the GM, 2026-08-28: "get rid of mypy now completely") -
+# not in the lockfiles, no mypy config block; `project-includes` below is the one list of checked files.
+#
 # `l7r` is a PEP 420 namespace portion (feature 119) - no `__init__.py`, deliberately, so that the
-# webapp's `l7r.app` and this engine's `l7r.diagram.*` share one parent package. Without the two
-# settings below mypy walks up from a file, finds no `__init__.py` to stop at, and reports
-# "Source file found twice under different module names: diagram.waterfields and
-# l7r.diagram.waterfields". `explicit_package_bases` + an explicit root say where module paths
-# begin, so each file has exactly one identity. Do NOT "fix" this by adding `l7r/__init__.py` -
-# that silently hides the webapp's portion (tests/test_namespace_portion.py).
-explicit_package_bases = true
-mypy_path = "."
-files = ["l7r/diagram/settlement", "l7r/diagram/check_village", "l7r/diagram/waterfields", "l7r/diagram/hamletgen", "l7r/diagram/sitegen", "l7r/diagram/ci", "l7r/diagram/switches.py", "l7r/diagram/compound.py", "l7r/diagram/citybudget.py", "l7r/diagram/tools/pack_audit.py", "l7r/diagram/tools/why_placed.py", "l7r/diagram/tools/scatter_audit.py", "l7r/diagram/tools/timings.py", "l7r/diagram/tools/perf_bands.py", "l7r/diagram/tools/perf_review.py", "l7r/diagram/tools/perf_profile.py", "l7r/diagram/pipeline/pool_index.py", "l7r/diagram/pipeline/poolmaps.py"]
-
+# webapp's `l7r.app` and this engine's `l7r.diagram.*` share one parent package. `search-path = ["."]`
+# says where module paths begin, so each file has exactly one identity. Do NOT "fix" this by adding
+# `l7r/__init__.py` - that silently hides the webapp's portion (tests/test_namespace_portion.py).
 # boto3 ships no type information and is absent from the BUILD image on purpose (the build talks to
-# S3 through the AWS CLI), so mypy sees `import-untyped` on the laptop and `import-not-found` in a
-# CodeBuild run - an inline ignore cannot satisfy both under --strict (build e2511c85 failed its
-# typecheck phase on exactly that). The override covers both environments.
-[[tool.mypy.overrides]]
-module = ["boto3", "boto3.*", "botocore", "botocore.*"]
-ignore_missing_imports = true
+# S3 through the AWS CLI), hence `replace-imports-with-any` below.
+[tool.pyrefly]
+python-version = "3.14"
+search-path = ["."]                      # `l7r` is a namespace portion: module roots start here
+project-includes = ["l7r/diagram/settlement", "l7r/diagram/check_village", "l7r/diagram/waterfields", "l7r/diagram/hamletgen", "l7r/diagram/sitegen", "l7r/diagram/ci", "l7r/diagram/switches.py", "l7r/diagram/compound.py", "l7r/diagram/citybudget.py", "l7r/diagram/tools/pack_audit.py", "l7r/diagram/tools/why_placed.py", "l7r/diagram/tools/scatter_audit.py", "l7r/diagram/tools/timings.py", "l7r/diagram/tools/perf_bands.py", "l7r/diagram/tools/perf_review.py", "l7r/diagram/tools/perf_profile.py", "l7r/diagram/pipeline/pool_index.py", "l7r/diagram/pipeline/poolmaps.py"]
+replace-imports-with-any = ["boto3", "boto3.*", "botocore", "botocore.*"]
 
-# RATCHET FULLY RETIRED: all three legacy engine modules (waterfields.py, check_village.py,
-# settlement.py) have been migrated to mypy --strict and the per-module override that relaxed them is
-# gone, so the gate now blocks any backsliding across the whole Mode B engine. NEW modules are strict
-# from the start via `files` above. (History: the manifest is an untyped dict, so the engine carried
-# ~2,470 pre-existing strict errors; they were cleared module-by-module in focused behavior-preserving
-# passes, each verified by byte-identical map output + the full gate still passing on every pool map.)
+# The mypy-strict rule set, enabled by NAME rather than pyrefly's `strict` preset: that preset also
+# turns on implicit-any-lambda (167 hits) and implicit-any-empty-container (163) which mypy strict
+# never asked for (research R3). Each rule here is the flag mypy --strict used to set:
+[tool.pyrefly.errors]
+unannotated-parameter = true      # disallow_untyped_defs / disallow_incomplete_defs
+unannotated-return = true         # disallow_untyped_defs
+unannotated-attribute = true      # (class attributes; stricter than mypy was - 0 hits)
+implicit-any-type-argument = true # disallow_any_generics
+no-any-return-implicit = true     # warn_return_any
+unused-ignore = true              # warn_unused_ignores
 
 # ---- pytest + coverage -------------------------------------------------------------------
 [tool.pytest.ini_options]
@@ -120,7 +116,10 @@ markers = [
 # not under the 100% rule (the by-hand audits and drivers - cache_audit, cohort_audit, crop_map,
 # timings, make_regressions, gencache, regen). Naming the measured modules one by one keeps that
 # boundary explicit instead of making a new tool silently owe 100% coverage the day it lands.
-source = ["l7r.diagram._invocation", "l7r.diagram.switches", "l7r.diagram.ci", "l7r.diagram.check_village", "l7r.diagram.settlement", "l7r.diagram.hamletgen", "l7r.diagram.sitegen", "l7r.diagram.compound", "l7r.diagram.citybudget", "l7r.diagram.tools.pack_audit", "l7r.diagram.tools.site_justice", "l7r.diagram.tools.scatter_audit", "l7r.diagram.tools.perf_bands", "l7r.diagram.tools.perf_review", "l7r.diagram.pipeline.rollcache", "l7r.diagram.pipeline.render_cache", "l7r.diagram.pipeline.pool_index", "l7r.diagram.pipeline.poolmaps"]
+source = ["l7r.diagram._invocation", "l7r.diagram.switches", "l7r.diagram.ci", "l7r.diagram.check_village", "l7r.diagram.settlement", "l7r.diagram.hamletgen", "l7r.diagram.sitegen", "l7r.diagram.waterfields", "l7r.diagram.interactive", "l7r.diagram.compound", "l7r.diagram.citybudget", "l7r.diagram.tools.pack_audit", "l7r.diagram.tools.site_justice", "l7r.diagram.tools.scatter_audit", "l7r.diagram.tools.perf_bands", "l7r.diagram.tools.perf_review", "l7r.diagram.tools.hamlet_floor", "l7r.diagram.pipeline.rollcache", "l7r.diagram.pipeline.render_cache", "l7r.diagram.pipeline.pool_index", "l7r.diagram.pipeline.poolmaps"]
+# `waterfields` and `interactive` joined the measured set with feature 145: both are on the hamlet path (the field
+# engine, the interactive page) and the derived floor (tools/hamlet_floor.py) judges every hamlet-path module, so
+# every one of them has to be MEASURED - a module coverage never traced would pass the floor as an empty row.
 omit = ["*/tests/*", "pool/*/*.gen.py"]
 
 # COVERAGE ENFORCEMENT LIVES IN THE MAKEFILE since the 2026-08-16 legacy freeze, not here. The

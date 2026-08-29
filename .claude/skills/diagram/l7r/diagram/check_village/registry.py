@@ -47,6 +47,7 @@ class _GateSeg(NamedTuple):
     needs: tuple[str, ...]
     meta: bool
     always: bool
+    scales: tuple[str, ...] | None  # feature 145: the scales the leading guard admits; the driver skips the segment for any other
 
 
 # Hand-added segments numbered past the legacy range but REGISTERED mid-sequence: the registry
@@ -55,7 +56,7 @@ class _GateSeg(NamedTuple):
 # immediately after; a value may itself be a placed segment (chains splice in dict order). Each
 # segment's own docstring records the same decision.
 _PLACEMENTS: dict[str, str] = {
-    "_seg_0596__dry_plot_seams_shared": "_seg_0317__dry_plot_furrows_vary",  # beside the dry-plot checks whose dry_plots binding it shares
+    # (_seg_0596__dry_plot_seams_shared retired under feature 141: the carve shares seams by construction, tests/waterfields)
     "_seg_0595__paddy_bunds_clear_the_supply_channels": "_seg_0532__bund_beans_on_bunds",  # beside the bund checks whose fields binding it shares
     "_seg_0600__comb_floor_ends_at_the_collector": "_seg_0595__paddy_bunds_clear_the_supply_channels",  # registered beside 0595, whose fields binding it shares
     "_seg_0597__woodland_commons_within_the_frame": "_seg_0600__comb_floor_ends_at_the_collector",  # the 2026-08-16 hand-added cluster runs consecutively here
@@ -74,7 +75,7 @@ _NEEDS_OVERRIDES: dict[str, tuple[str, ...]] = {
 
 _PKG_DIR = Path(__file__).resolve().parent
 _CACHE_PATH = _PKG_DIR.parent / ".gencache" / "registry_rows.json"
-_DERIVATION_VERSION = 1  # bump to invalidate caches when the derivation scheme itself changes
+_DERIVATION_VERSION = 2  # feature 145 added `scales`; bump to invalidate caches when the derivation scheme itself changes
 
 
 def _segment_functions() -> dict[str, Callable[..., dict[str, Any]]]:
@@ -166,7 +167,18 @@ def _cached_fields(key: str) -> dict[str, _SegFields] | None:
         data = json.loads(_CACHE_PATH.read_text())
         if data["key"] != key:
             return None
-        return {d["name"]: _SegFields(tuple(d["free"]), tuple(d["writes"]), tuple(d["checks"]), tuple(d.get("needs_raw", d["needs"])), bool(d["meta"]), bool(d["always"])) for d in data["rows"]}
+        return {
+            d["name"]: _SegFields(
+                tuple(d["free"]),
+                tuple(d["writes"]),
+                tuple(d["checks"]),
+                tuple(d.get("needs_raw", d["needs"])),
+                bool(d["meta"]),
+                bool(d["always"]),
+                tuple(d["scales"]) if d.get("scales") is not None else None,
+            )
+            for d in data["rows"]
+        }
     except OSError, ValueError, KeyError, TypeError:
         return None
 
@@ -188,12 +200,24 @@ def _derive_rows(names: set[str], fresh: bool = False) -> list[dict[str, Any]]:
     for nm in _ordered_names(names, _PLACEMENTS):
         f = fields[nm]
         # JSON-shaped (lists, not tuples) so freshly derived rows compare equal to cached ones
-        out.append({"name": nm, "free": list(f.free), "writes": list(f.writes), "checks": list(f.checks), "needs": list(f.needs), "meta": f.meta, "always": f.always, "needs_raw": list(raw_needs[nm])})
+        out.append(
+            {
+                "name": nm,
+                "free": list(f.free),
+                "writes": list(f.writes),
+                "checks": list(f.checks),
+                "needs": list(f.needs),
+                "meta": f.meta,
+                "always": f.always,
+                "scales": (list(f.scales) if f.scales is not None else None),
+                "needs_raw": list(raw_needs[nm]),
+            }
+        )
     return out
 
 
 def _row(d: dict[str, Any], fns: dict[str, Callable[..., dict[str, Any]]]) -> _GateSeg:
-    f = _SegFields(tuple(d["free"]), tuple(d["writes"]), tuple(d["checks"]), tuple(d["needs"]), bool(d["meta"]), bool(d["always"]))
+    f = _SegFields(tuple(d["free"]), tuple(d["writes"]), tuple(d["checks"]), tuple(d["needs"]), bool(d["meta"]), bool(d["always"]), tuple(d["scales"]) if d.get("scales") is not None else None)
     return _GateSeg(fns[d["name"]], *f)
 
 

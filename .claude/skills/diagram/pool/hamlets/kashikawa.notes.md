@@ -381,3 +381,48 @@ connector's bearing sweep ranks candidate bearings against the standing steading
 geometry moved with the reorder and it gates CLEAN, as it did before. Recorded so the manifest change
 in this commit is not an unexplained diff - the substantive write-up is on
 [`mizuguchi.notes.md`](mizuguchi.notes.md), which is the map that failed and forced the fix.
+
+### 2026-08-28 - manifest re-recorded under the landed feature-137 engine
+
+The committed manifest was rolled by an earlier engine state; this commit records what the landed engine (GitHub main f4456a72) draws, byte-identical to the mirror's render-sync, so main is clean. Not a review pass: this map is red on the gate and is feature 139 T08 (the review comes with its fix).
+## 2026-08-28 - feature 140: seats measured against a few chords of the field edge (the map moved)
+
+Placement now judges a farmhouse seat against the field outline's chords facing the cluster (open chain,
+pushed out 3 px; `M["field_chains"]`) and never the full outline; `houses_clear_of_paddies` reads the same
+chords. The GM ruled the maps may move (*"none of what we have done so far is in any way canonical"*), and
+this one did - every seat re-rolled, wells, byres and the lane web with it. `settlement-review` DELTA
+pass: **ACCEPTABLE WITH NOTES** - nothing attributable to 140; the lane-ink residue it names
+(`lanes_bend_like_paths` on Kashikawa and Sawada) is feature 139's open class, now with coordinates in the
+review record (`specs/140-placement-segments/research.md` R5). Set-backs read as a rank; the measured
+corner-to-chord profile is in R5 too.
+
+## 2026-08-28 - feature 145 (the solver moved the fan; the whole map re-rolled)
+
+settlement-review, NEEDS-WORK: two errors, both in ground the re-roll moved, both invisible to a green gate.
+
+**The field grave (2092, 1645) - FIXED.** The mound was painted at 0.9 opacity over an intact lattice, so
+three plot rings and nine bund junctions ghosted through and it read as a translucent decal. It is opaque
+now. The registry's claim that the paddy tiles AROUND it is still geometrically false - carving the plots
+is a field-engine change, deferred with its measurement in `future-work/farming-communities.md`.
+
+**The board's caption over a byre (2003, 2838) - ACCEPTED, with what it costs and the alternatives.** The
+"notice board" caption clips the byre's roof by 15.4 x 4.8 ft. Three things are true and worth separating:
+
+1. The placer is doing what it was built to do. `label_blockers` is DERIVED and already includes byres, and
+   `_best_label_spot` takes the least-covered seat when nothing inside the ladder's reach is clear. In this
+   cluster nothing is clear: the board sits at the traffic optimum (14 of a possible 15 dwellings within
+   250 ft) and its caption has no clean ground within reach.
+2. The rule as written ALLOWED it. `_LABEL_EXEMPT` excused every caption over a byre, on the premise that
+   "a caption cleared for the house is cleared for it" - which holds where a farmhouse carries a caption and
+   fails at hamlet tier, which captions no farmhouse at all. Feature 145 moved `byres` into `_LABEL_GROUP`
+   under the "farmhouse" group, so the rule now says what it should: a farmhouse caption may cover a byre and
+   nothing else may.
+3. **No check enforces that rule any longer.** `labels_clear_of_other_buildings` - the check the whole
+   caption registry exists to feed - was retired by feature 141's cut and is not in `gate_check_names.json`;
+   only comments still name it. So the registry is live doctrine with no consumer, and this map was green by
+   construction. Restoring it is feature 146 (class 2 is exactly "a check nobody has proved fires").
+
+Alternatives priced and declined for the caption itself: move the board off the traffic (trades the thing
+the board is FOR against 15 x 5 ft of overlap on an annex roof); shrink or re-tilt the caption (the tilt
+already follows the glyph's own rake, which is the rule); drop the caption (a hamlet's one civic fixture
+needs its name). Accepted as drawn, recorded here so the next reader knows it was a decision.

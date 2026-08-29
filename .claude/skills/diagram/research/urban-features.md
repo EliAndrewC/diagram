@@ -14,7 +14,7 @@ Every entry: what the research found, the decision it drove, and any deliberate 
 
 **Evidence:** attested
 
-**Sources:** not recorded - the finding is in the prose below; add a key to `SOURCES.md` when it is re-consulted
+**Sources:** `fuchu-kosatsuba`, `ogose-kosatsuba`, `kosatsu-jawiki`, `adachi-kosatsu` (READ 2026-08-26, feature 133 T13 - the inline links below)
 
 Every Edo town AND village kept the official edict board - standing shogunal/domain law, porter and packhorse rate tables, currency regulations, ban edicts - and its siting was a TRAFFIC decision, not an administrative one: busy street corners, checkpoints, bridgeheads, the gate or center of the settlement, "in a prominent position alongside the main highway". Edo's principal board stood at Nihonbashi (the bridgehead where the five highways began), post towns' mid-shuku by the transport office - not at the government office.
 
@@ -41,7 +41,7 @@ the ofuregaki circulars reached the peasantry through exactly this board, posted
 
 **Evidence:** attested, corroborated, setting-canon, liberty
 
-**Sources:** not recorded - the finding is in the prose below; add a key to `SOURCES.md` when it is re-consulted
+**Sources:** `caishikou-enwiki`, `qiushen-zhwiki` (READ); `suzugamori-jawiki`, `kozukappara-jawiki` (READ: the two highway-entrance grounds). The 棄市 term and the third Edo ground (Ōwada) were not confirmed in the pages read; the county-jail reading of `budgets.md` is setting-canon
 
 - **THE JUSTICE WORKS: WHY A COUNTY SEAT EXECUTES, AND WHY THE GROUND IS OUTSIDE** (drives the punishment-ground and execution-ground vocabulary above and their twelve checks; feature 015, 2026-07-25).
   - *The China/Japan split, and how it resolves.* This is one of the few places the two grounding traditions genuinely disagree, so the reconciliation is load-bearing rather than decorative. **Japan** pushed executions OUT of the settlement for kegare (death pollution) - Edo's three grounds all sat at highway entrances outside the center, castle towns monopolized them, and village authority topped out at banishment. **China** executed in the marketplace (棄市 *qishi*, "abandon in the market"; Qing Beijing's Caishikou was the vegetable market at a crossroads outside Xuanwumen), and although a county magistrate could not CONFIRM a death sentence - capital cases climbed to the Board of Punishments and the emperor's autumn check-marking (秋審 *qiushen*) - the confirmed sentence came back DOWN and was carried out at the county seat where the crime happened, because local deterrence was the point. So: **China supplies the jurisdiction (the seat executes), Japan supplies the siting (past the built edge).** That is exactly what this file's town doctrine already asks for - "what would a Chinese county seat administered by samurai do?"
@@ -53,13 +53,15 @@ the ofuregaki circulars reached the peasantry through exactly this board, posted
   - *Two rules that had to be loosened, and why that was right rather than convenient.* (1) `execution_ground_by_the_road` measures ~120 real ft to a drawn ROAD but ~400 ft to a GATE: a road is a line the ground can hug (Suzugamori sat on the Tokaido), while a gate is a point standing in for the road that leaves it, and Edo's grounds were miles out along their highways. Measuring a gate at the road's tolerance made the rule unsatisfiable on Hirameki, which draws no extramural road at all. (2) `execution_ground_on_the_outcast_side` tests DIRECTION only. It began as "beyond the quarter as well", which was unsatisfiable on a walled town whose extramural outcast quarter already sits at the canvas corner - and radius is an artifact of where the wall happens to be, while the claim the research actually supports (downwind, downstream, the outcast side) is directional.
   - *The boundary stone earns its place.* 道祖神 *dosojin* / *sae no kami* stand at village boundaries, passes, and crossroads, and the etymology is the point: *sae* means "to block", and the deity's job is to stop evil, pestilence, and pollution from ENTERING. That converts "outside the settlement" from a vague spatial claim into a stated ritual boundary - the ground is not merely far from the houses, it is on the far side of the stone that keeps pollution out - which is why the check also demands the stone stand outside the wall. A dosojin inside the rampart bounds nothing.
 
+*Re-sourcing note (2026-08-28, feature 143):* the pages read call Suzugamori and Kozukappara Edo's "二大刑場"; the third (Ōwada) is the entry's and was not confirmed. The siting finding - past the built edge, on the highway - rests on the two.
+
 ## Trade works - which trades outgrow the shop glyph, and why
 
 **Grounds:** `s.brewery`, `s.dye_yard`, `s.lumber_yard`, `s.oil_press`, `s.pawnshop`, `s.bathhouse`, `s.kiln`, `s.farrier` and their checks
 
 **Evidence:** attested, corroborated, setting-canon
 
-**Sources:** not recorded - the finding is in the prose below; add a key to `SOURCES.md` when it is re-consulted
+**Sources:** the 2026-07-24 pass recorded no pointers; not re-sourced on 2026-08-28 - the shortlist (brewery, dye yard, lumber yard, oil press, bathhouse, farrier) is the largest leftover of feature 143 and gets its own reader; the pawnshop and kiln rest on their own entries (`pawnbroking-history`, `tontine-monastery-lending`; "Kiln works") `fukagawa-kiba-summary` (SUMMARY-ONLY: the lumber yard as a 300,000 m2 waterfront works ordered out of Edo after 1657); the brewery, dye works, oil press, bathhouse and farrier premises were searched on ja.wikipedia (酒蔵, 紺屋, 絞油 404, 銭湯, 馬沓) and none gives a footprint - they stay as reasoning
 
 - **TRADE WORKS - which trades outgrow the generic shop glyph, and why** (drives `s.brewery`, `s.dye_yard`, `s.lumber_yard`, `s.oil_press`, `s.pawnshop`, `s.bathhouse`/`s.bathhouses`, `s.kiln`, `s.farrier` and their checks; the DRAWN rules live under "Provincial cities" above. Research pass 2026-07-24, from the GM's question during the provincial-city audit - "are there trades whose real premises, with their attached works, yards, and outbuildings, are materially bigger than a shophouse, i.e. significant space our maps are not representing?" - plus the farriery reversal of 2026-07-25.)
   - *Where this entry came from.* It absorbs the former `trade-footprint-research.md`, a separate per-question research file. That file had already duplicated its own conclusions into the rules paragraph above, and the duplication is exactly what bit: when the GM reversed the horseshoe finding, the stale claim "there are NO FARRIERS" was living in THREE places (the research file, the rules paragraph, and a `settlement.py` comment) and every one had to be found and fixed. The standing convention that follows: **the rule and its why belong in this file, stated once**; a standalone research file is for a derivation too long to inline (`flophouse-research.md`) or a dated point-in-time audit (`town-deep-audit.md`), and it must never restate a rule the operative doc also states.
@@ -73,6 +75,10 @@ the ofuregaki circulars reached the peasantry through exactly this board, posted
 
 ## The log boom - a shore-fast holding pen, not sticks in the stream
 
+**Evidence:** attested, analog (the American booms)
+
+**Sources:** `nishikori-tsunaba`, `kiso-unzaihou`, `susquehanna-boom`, `stcroix-boom-nps`, `hudson-big-boom`, `kiba-koto`, `shangxinhe-gazetteer`, `timber-rafting-wiki` (cited inline below; read at the 2026-08-02 pass)
+
 - **LOG BOOM - anchored to the bank, run along a navigated river, and FULL** (drives `s.log_boom`'s pen form and `log_boom_moored_to_the_bank` / `log_boom_leaves_the_fairway` / `log_boom_serves_the_lumber_yard`; the pre-fix Minami capture is frozen in `pool/regressions/`. Research pass 2026-08-02, from the GM's reaction to the first drawn boom - *"it just looks like a bunch of logs in the middle of the river. How did log booms really work? Did they block the whole river? I assume they were at least partially against the shore."*)
   - *Two systems moved timber by water, and the full-river boom belongs to only one of them.* Loose-log driving (Japanese *kanagashi*, one log at a time) ran the upper, unnavigable reaches; rafting ran the lower river. The one place a boom legitimately spans the whole water is the catch point where driving hands off to rafting: on the Kiso this was the Owari domain's *tsunaba* ("rope place") at Nishikori, sited exactly where the river leaves its gorge - a great rope stretched bank to bank, in use from the 1340s, catching ~300,000 logs a year in a season running autumn equinox to spring equinox, administered by a timber magistracy of 138 permanent officials. Rafts were assembled there (three-man crews) and floated on to the storage yards at Nagoya and the bay ports. A full-span catch boom is legitimate ONLY where the river is not a navigation route - upstream, at the gorge mouth, never at a port.
   - *Where the river carries boats, the boom runs ALONG it - and the law said so.* The great American boom works are the same furniture at maximum documented scale. The Susquehanna Boom at Williamsport ran seven miles ALONG one side of the river, strung from ~350-400 man-made islands (timber cribs filled with stone, 22 ft high), enclosing the holding pen between boom line and shore; it held up to 300 million board feet afloat at once - on the order of a million logs - and corralled ~40 million over its working life. The St. Croix boom works divided the river lengthwise with piers, pilings and floating log fences into log channels and holding pens, a navigation channel maintained alongside and a hinged "sheer boom" at the head swinging open and closed to admit logs. Boom companies were statutorily barred from materially obstructing navigation, and spills into the fairway drew lawsuits and negligence rulings. Anchoring was always to fixed ground: bank abutments, stone-filled cribs, driven piles - the Hudson's Big Boom rode on hewn timbers bolted four-together raftwise, chained end to end over friction rollers to abutments on the banks. A boom is a floating fence; a fence anchored to nothing holds nothing.
@@ -82,6 +88,10 @@ the ofuregaki circulars reached the peasantry through exactly this board, posted
   **Sources:** `nishikori-tsunaba`, `kiso-unzaihou`, `susquehanna-boom`, `stcroix-boom-nps`, `hudson-big-boom`, `kiba-koto`, `shangxinhe-gazetteer`, `timber-rafting-wiki`
 
 ## Kiln works - a kiln is not a tile kiln, and the potters live at it
+
+**Evidence:** researched
+
+**Sources:** the 2026-07-27 pass recorded no pointers; not re-sourced on 2026-08-28 - leftover (kawara demand, the noborigama and its potters' housing, the fire-gap) `kawara-jawiki` (READ: commoners board-roofed, tile general only at the end of Edo - tile demand confined to the few); the potters living at the noborigama and the fire gap remain unsourced
 
 - **KILN WORKS - why the glyph is a WORKS with housing, and why the caption stopped saying "tile"** (drives `s.kiln`, `kiln_works_houses_its_workers`, `kiln_keeps_fire_gap`, and the wording of `city_kiln_outside_walls`; the DRAWN rules live under "Provincial cities" in [`../settlements/urban-features.md`](../settlements/urban-features.md). Research pass 2026-07-27, from two GM questions: *"would the tile kiln have housing close to it, i.e. would whoever works the kiln also live next to it?"* and *"why is it specifically a 'tile kiln' and not just a kiln? Are there potters in the city with their own non-tile kilns? Or are we not accounting for them as well?"*)
   - *What was there before, and why it was thin.* The kiln was drawn as a lone 28 x 18 ft earthen mound captioned "tile kiln", governed by exactly one rule (`city_kiln_outside_walls`) whose whole justification was "fire law + smoke". It appears in the 2026-07-24 trade-works pass only as a clause in the list of banished nuisance trades - it never got an entry of its own, and the "tile" in the caption was never argued for anywhere. Both GM questions land on that gap. This entry is the argument that was missing.
@@ -100,7 +110,7 @@ the ofuregaki circulars reached the peasantry through exactly this board, posted
 
 **Evidence:** attested, setting-canon
 
-**Sources:** not recorded - the finding is in the prose below; add a key to `SOURCES.md` when it is re-consulted
+**Sources:** `shiniuba-jawiki` (READ: danna-ba / kusaba), `himeji-shironameshi-jawiki` (READ), `northampton-tannery-1996` (SUMMARY-ONLY); the L7R horse stream is setting-canon (`l7r.md`)
 
 - *Why towns tan too, and this is not a city-only trade.* The GM's opening guess was that most towns would have no tannery. The research says otherwise, because of where hides come from: NOT butchery but **fallen draft stock**. Under the Tokugawa status order the kawata held carcass rights over a defined service territory (*danna-ba*) - when an ox or horse died it became that community's property automatically, with no compensation to the owner. So a county town's ~12 burakumin households (budgets.md town tier: 60 inhabitants) work the whole county's dead animals, not just the town's. L7R canon supplies the same stream from the other end: `l7r.md` has daimyo giving surplus horses to village headmen to distribute to farms as draft animals, and those horses "often slaughtered and eaten when the need for meat outweighs the capacity of the peasants to feed those horses."
   - *Throughput is small, and scales with the territory served - which is what `pits` encodes.* A county of ~6,800 inhabitants sheds on the order of a couple dozen carcasses a year, so the town yard is a **seasonal works of ~4 pits**, never an industry. A provincial city adds the daimyo's stable (several hundred horses per domain) and the armor/saddle/drum/bellows demand of its ~300 samurai, so it runs **~12**. That ratio is why the city yard draws roughly 1.7x the town yard's area rather than 5x: pits, not prestige, set the size. For comparison, the largest excavated urban tannery at Northampton ran 36-37 pits - far past anything in this pool.
@@ -126,13 +136,15 @@ the ofuregaki circulars reached the peasantry through exactly this board, posted
   - *Why direction is the thing taboo actually systematizes.* Kegare leaves a settlement ONE way. Edo stacked Asakusa, the Kozukappara execution ground and the Yoshiwara at the northeast *kimon*; Kyoto put its outcast communities on the riverbeds and the southern roads out. So the quarter, the execution ground and the tanning yard share a bearing, and the daily carcass haul never crosses the rest of the settlement - real castle towns kept designated carcass routes off the main streets for precisely that reason. The CREMATION ground is the deliberate exclusion: it is monk-run and follows the temple/funerary complex. Tested across the pool, that association is real where it matters (Hoshizora 130 ft from its monastery, Ubame 360 ft) and absent elsewhere (Tango 2,606 ft), so cremation is excluded from the bearing rule WITHOUT a positive "follows the monastery" rule being asserted in its place - the evidence supports the exclusion, not the converse claim.
   - *The 90 deg threshold, and why it is not a fresh number.* It is the dot-product "same half of the compass" test `execution_ground_on_the_outcast_side` already used; the new check simply applies the existing rule to the other burakumin-run works rather than inventing a tolerance. The pool's loosest ACCEPTED map (Nagahara, 83.7 deg by the laborer-core measure) sits inside it and the two defects sit outside, so the line separates the corpus as it stands.
 
+*Correction to the record (2026-08-28, feature 143):* the Himeji page read says the hides soak "数日間" - several days - not one week in summer and two in winter; the seasonal figure is struck until a source carrying it is read. Water as the gate stands on the soak itself.
+
 ## The bell-and-drum tower - one per walled seat
 
 **Grounds:** `s.drum_tower`, `walled_settlement_has_drum_tower`
 
 **Evidence:** attested, corroborated
 
-**Sources:** not recorded - the finding is in the prose below; add a key to `SOURCES.md` when it is re-consulted
+**Sources:** `pingyao-shilou-zhwiki` (READ: 133.4 m2, three bays square), `dongjing-menghualu-rujia` (READ: 军巡铺 every 300 paces, 望火楼 with a hundred soldiers). Not found in any page read: a citywide count of Kaifeng's towers ("20+"), Kawagoe's base dimension (only its ~16 m height), the Dingbian / Xingcheng figures - leftover
 
 *What the research found:* the "morning bell, evening drum" institution (dawn gate-opening, the dusk gate-closing that began the street curfew, the five night watches, alarm and ceremony) was part of the standard Ming county-seat kit alongside the yamen, the Confucian temple, and the City God temple - common approaching standard in walled northern seats. A county seat had ONE tower - a drum tower, a combined bell-and-drum tower, or a market tower straddling the main street; the paired gulou + zhonglou on an axis is CAPITAL grammar (Beijing, Xi'an), and Pingyao, a wealthy county seat, has exactly one (the ~60 ft Market Tower on South Street). County-tier form (footprint RE-VERIFIED 2026-07-24, second research pass after the GM's eye caught the first-draft 70 ft platform oversized): **Pingyao's Market Tower - the wealthy-county showpiece - is ATTESTED at 133.4 m^2 plan, ~38 ft square**; these towers dominated by HEIGHT (50-60 ft), not plan, and Kawagoe's famous time-bell tower served a town of tens of thousands from a <20 ft base. The 50-66 ft square examples (Dingbian 52 ft, Xingcheng 66 ft) are the tower-over-street-arch type - garrison/prefecture fabric, never a 3,000-person seat - and the original 60-80 ft figure was contaminated by them. The drawn band is therefore **30-45 ft: ~36 ft at city tier, ~30 ft at town tier** - one rowhouse width, which is exactly how they read in plan. Siting: the central crossroads near (not inside) the yamen; poorer seats made do with a *qiaolou* - a drum tower over the yamen's own gate (a recognized cheaper variant, not drawn here). Critically, FIRE WATCH WAS A SEPARATE INSTITUTION in both reference cultures - Song Kaifeng ran 20+ dedicated *wanghuolou* fire-lookout towers with a standing brigade, and Edo split the licensed *toki no kane* time bell from the *hinomi-yagura* fire towers - so the fire towers do not cover the timekeeping/curfew niche. *The decision it drove:* every walled seat (provincial city or walled town) draws exactly ONE combined bell-and-drum tower at its main street crossing (a corner of the crossing, not straddling the street), 70 ft at city tier, ~60 ft at town tier, visibly heavier-built than the skeletal fire towers; the capital tier may take the full paired gulou/zhonglou when it exists (and the street-arch platform type, 50-66 ft, is available as a garrison-city variant). **An UNWALLED town is exempt**: it has no gates to close, and its time signal is the monastery's bell - the Edo pattern, where most towns contracted a temple bell rather than building a tower - implied within the precinct, no glyph (Hoshizora). The tower follows the WALL, not the population. The caption reads **"drum/bell" over "tower"** (GM 2026-07-24): the drawn building is genuinely the combined *zhonggulou* - both instruments in one pavilion, and both are drawn - so the label says so. *Audibility - one central tower covers the whole seat with enormous margin (GM sanity check 2026-07-24, researched).* The geometry: Tango's farthest in-wall resident stands ~1,640 ft (500 m) from its tower and the farthest drawn gate-suburb structure ~790 m; Nagahara ~435 m / ~920 m. The attested anchors dwarf those distances: Edo's Kokucho time bell BILLED ~400-410 blocks of households "within earshot" (*kane-yaku-sen*, 4 mon per month per house - an effective fee radius of ~1.2-1.4 km in a far denser, noisier city, and a conservative figure, since only admitted hearers were billed); Basho casually heard the Ueno/Asakusa bells ~3-4 km away across the river; Beijing's single drum tower timed the watches for an inner city ~6.5 x 5.3 km. Acoustically, a large bell or great drum runs ~110-130 dB near the tower; at a 500-730 m city edge that arrives ~40 dB above a premodern NIGHT noise floor (~25-35 dBA, when the watches matter most) - loud, not merely detectable, everywhere inside the walls and suburbs, and the low frequencies diffract over one-story rooflines. One tower stops sufficing only past a ~2-3 km radius of daytime urban din, so even the future ~12,000-pop capital tier (~1 mi across) needs no second tower on audibility grounds: the historical scaling answers are Edo's multiplied fee-district bells vs the China-first pattern of ONE monumental tower whose watches ward night-watchmen relay through the streets with clappers and gongs - the capital tier should take the latter (grander tower, implied watchmen, still exactly one).
 
@@ -163,33 +175,37 @@ the ofuregaki circulars reached the peasantry through exactly this board, posted
 
 ## Commercial frontage and wealth-stratified housing
 
-**Evidence:** researched
+**Evidence:** attested (frontage), reconstruction (the wealth spread)
 
-**Sources:** not recorded - the finding is in the prose below; add a key to `SOURCES.md` when it is re-consulted
+**Sources:** `kyomachiya-jawiki`, `kyototuu-unagi`, `nagaya-jawiki` (READ, via cities/fabric.md); the merchant living over the shop and the stratified spread not re-sourced - leftover
 In premodern Japanese castle-towns (*jokamachi*) and Chinese cities the valuable street frontage is COMMERCE: shops and workshops line the high street, each facing the road, while dwellings sit behind them or in the block interior reached by alleys. A merchant family lived over/behind its own shop (so merchant residences sit directly behind the storefronts, sharing their orientation). Housing was **stratified by wealth** - a few rich households in large homes or walled courtyard estates, most in modest/uniform dwellings, never one size - and the merchant quarter SPREADS (courtyard compounds) while the laborer warren packs dense and uniform.
 
 ## Communal wells and the samurai exception
 
-**Evidence:** researched
+**Evidence:** reconstruction
 
-**Sources:** not recorded - the finding is in the prose below; add a key to `SOURCES.md` when it is re-consulted
+**Sources:** searched 2026-08-28 (共同井戸 世帯数; 武家屋敷 井戸) - no page gives a households-per-well ratio or states the samurai private-well contrast; the 1 per 10-20 households is a guess and is labeled one - leftover
 Commoner *machi* shared **public wells in the block interiors** (courtyard wells), roughly **1 per ~10-20 households** - enough that no quarter lacks water, not one on every corner. The samurai/government quarter shows **NO public wells**: noble and official households drew from **private wells inside their own walled compounds** (a status + security distinction), so a communal well there would read wrong.
 
 ## Caste geography and status zoning
 
-**Evidence:** researched
+**Evidence:** attested (kawata quarters inside castle towns - SUMMARY-ONLY), reconstruction (the siege-labor reason)
 
-**Sources:** not recorded - the finding is in the prose below; add a key to `SOURCES.md` when it is re-consulted
+**Sources:** `kichinyado-jawiki` (the flophouse); kawata communities relocated into castle towns (Matsumoto, Takada) SUMMARY-ONLY from search syntheses; kido night-closure: ja.wikipedia 木戸 is a disambiguation page - read 町木戸 / 木戸 (江戸) - leftover. The siege-labor causal claim was found nowhere and is the entry's reasoning
 Castes lived apart. Burakumin cluster at the margin (a town's edge, or outside a city) - but a WALLED city keeps at least one burakumin neighborhood INSIDE, because it cannot do without their labor during a siege. The samurai/government quarter is sealed off the commoner streets by **kido ward-gates shut at night** (status separation + night security; a small provincial city uses kido, not the continuous walled wards of a great Tang-style capital). The cheap flophouse (*kichin-yado*) belongs in a humble laborer/agrarian quarter, not beside the temples, merchants, or samurai. Wealthy samurai kept walled country **estates outside the walls** and commuted in, for roomier houses than cramped city lots allowed.
 
 ## Government and commerce of a seat of administration
 
-**Evidence:** researched
+**Evidence:** setting-canon, researched
 
-**Sources:** not recorded - the finding is in the prose below; add a key to `SOURCES.md` when it is re-consulted
+**Sources:** setting-canon - `budgets.md` (the Six Ministries, gate tariffs, the tax-rice granary); `guanxiang-zdic` (markets outside the gates - SUMMARY-ONLY beyond the definition). Offices clustering on an official avenue: not in en.wikipedia Yamen as read; chinaknowledge.de unreachable (TLS) - leftover
 Following imperial Chinese *yamen* and Japanese *jokamachi* practice, government offices cluster around the **governor's mansion** (the grandest compound) and FRONT an official avenue, never floating mid-block. A provincial city carries the **Six provincial Ministries** (one being Rites, sited in the temple neighborhood). The state taxes trade: **inspection/tariff stations at every gate**, **caravan facilities** (inn + stables + animal pasture) on the trade route, a **tax-rice granary** at a collecting magistracy, and **markets** springing up just outside the gates. A county-seat **town** is run by a magistrate from a walled manor.
 
 ## Charcoal yards: a tallied depot, a cooling ground, and a weighing floor
+
+**Evidence:** attested, corroborated
+
+**Sources:** `wagner-ming-iron`, `fao-charcoal-safety`, `tonya-enwiki`, `fires-in-edo-enwiki`, `sizes-koku` (the inline list below). The Song output figures (125,000 tons by 1078; regulated smelting households) came from Grokipedia and are in the re-sourcing queue - to be re-read from en.wikipedia *Economy of the Song dynasty* and its references - leftover `economy-song-enwiki` (READ 2026-08-28: Hartwell's 125,000 t by 1078; state charcoal supplies to iron households) - the Grokipedia citation is replaced
 
 **China first.** Charcoal was an industrial input at state scale. Song iron-smelting households were
 government-regulated, with state support that explicitly included **charcoal supplies**, and a large
@@ -233,6 +249,10 @@ defends against smell over distance and would push the yard off the cart route i
 
 ## Refining forges: smelting goes to the fuel, refining comes to the town
 
+**Evidence:** attested, corroborated, liberty (the two-site divergence)
+
+**Sources:** `wagner-ming-iron`, `wagner-fining-puddling`, `xuxiebian-han-fining`, `tetsu-to-hagane-91`, `ohitayama-tatara-enwiki` (the inline list below)
+
 **China first.** Ming ironworks converted blast-furnace pig iron to wrought iron by **fining**,
 Chinese *chao* 炒, literally "stir-frying": an **open fire under a forced blast, fuelled with
 charcoal**, into which wood, charcoal and broken cast iron were charged and then stirred with an iron
@@ -272,6 +292,10 @@ stands, not in the seat.
 
 ## Drawing a clan border
 
+**Evidence:** attested
+
+**Sources:** `nanbu-date-mounds-enwiki`, `kuniezu-enwiki`, `mukoyama-linear-borders` (the inline list below)
+
 Linear, demarcated borders were **not** foreign to early modern Japan: domains were already building
 a territorial order with agreed boundaries and mutual exclusion, evidenced by boundary disputes,
 boundary markers and map-making. The worked example is the **Nanbu-Date border mounds** - a series of
@@ -279,6 +303,8 @@ boundary markers and map-making. The worked example is the **Nanbu-Date border m
 by the shogunate in **1642**; such markers were common under the Tokugawa. Separately, the shogunate
 ordered every province to produce **kuniezu** 国絵図, provincial land maps with the boundaries drawn
 on them - so **putting the line on a map is itself the authentic act**.
+
+*Pool-notes finding recorded here (feature 143, 2026-08-28):* `pool/magistracies/ubame-magistracy.notes.md` sizes its boundary pillars at ~1-1.5 ft shaft height (up to ~3 ft with a plinth) - a size-audit estimate, not a read figure; labeled GUESS. The notes are left as they are.
 
 **The decision.** Draw the LINE, not the mound. The Mode A `ubame-magistracy.notes.md` had already
 reserved against the mound ("the physically large period border markers were earthen *mounds*, which
@@ -301,12 +327,16 @@ same fact this drawn line is the cartographic expression of.
 - [Donald Wagner, Traditional Chinese fining and puddling](http://donwagner.dk/arch-iron/eu/fining-puddling-china-eu.html)
 - [Cast Iron Smelting and Fining: an Eastern Han site at Xuxiebian, Sichuan](https://muse.jhu.edu/article/725769)
 - [FAO, Charcoal safety precautions (ch. 5)](https://www.fao.org/4/X5555E/x5555e06.htm) - self-heating, fines, the 24-hour and 8-day rule
-- [Economy of the Song dynasty](https://grokipedia.com/page/Economy_of_the_Song_dynasty) - charcoal-driven output, regulated smelting households
+- Economy of the Song dynasty - now `economy-song-enwiki` (en.wikipedia, read 2026-08-28); the Grokipedia link is withdrawn
 - [Ton'ya](https://en.wikipedia.org/wiki/Ton%27ya) / [Fires in Edo](https://en.wikipedia.org/wiki/Fires_in_Edo)
 - [What is the unit called a koku? (Sizes)](https://www.sizes.com/units/koku.htm) - the charcoal *hyō* is of indeterminate size
 - [Nanbu-Date border mounds](https://en.wikipedia.org/wiki/Nanbu-Date_border_mounds) / [Kuniezu](https://en.wikipedia.org/wiki/Kuniezu) / [Mukoyama, linear borders in early modern Japan](https://journals.sagepub.com/doi/full/10.1177/13540661221133206)
 
 ## Wells in crop fields: two different objects, and only one of them is ours
+
+**Evidence:** attested, corroborated
+
+**Sources:** `irripro-jiegao-lulu`, `ide-japanese-experience`, `harie-kabata`, `kabu-ido-commons` (the inline list below). The loess-plain rainfall and drought exposure came from Grokipedia (re-sourcing queue) - re-read from en.wikipedia *Loess Plateau* / *Agriculture in China* - leftover `loess-plateau-enwiki` (READ: 40-60% of rain in June-August; the 400-800 mm figure not on the page - labeled unsourced) - the Grokipedia citation is replaced
 
 **The question** (GM, 2026-07-26): the overlap matrix forbids a well overlapping a dry crop plot.
 "Should dry plots have wells? I could see a wheat field having a well in the middle of it if that's
@@ -368,7 +398,7 @@ historical direction of travel was restriction, not generosity.
 ### Sources
 
 - [History of Irrigation - irrigation tools (jiegao, lulu)](http://www.irripro.net/en/nd.jsp?id=113) and [Lulu](https://baike.baidu.com/en/item/L%C3%B9lu/1467455) - the shadoof and windlass, and the Ming-Qing upgrade to animal power and deeper wells
-- [History of agriculture in China](https://grokipedia.com/page/History_of_agriculture_in_China) - loess dryland farming, 400-800 mm rainfall, drought exposure
+- Loess dryland farming - now `loess-plateau-enwiki` (en.wikipedia, read 2026-08-28); the Grokipedia link is withdrawn
 - [Passing on "The Japanese Experience" (IDE)](https://d-arch.ide.go.jp/je_archive/english/society/wp_je_unu4.html) - hatake vs suiden; small farmers on "rainfall or natural underground sources"; the defeated late-Tokugawa hata irrigation schemes
 - [Harie Shozu no Sato, the kabata wells](https://ihcsacafe-en.ihcsa.or.jp/news/harie/) - the domestic/social character of the village well
 - [Groundwater commons and the kabu-ido rules](https://link.springer.com/article/10.1007/s12685-022-00302-1) - community regulation of the NUMBER of wells per village

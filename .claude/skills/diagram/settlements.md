@@ -184,6 +184,8 @@ settled, then let the unusual ones earn waivers.
 
 ## Historical grounding: the "why" behind the realism checks
 
+**Sources (feature 143, 2026-08-28):** the entries below are the older inline form of the record; each rule's cited finding now lives in [`research/`](research/README.md) (the scale ladder is a rendering decision - `research/buildings.md` "The Mode A scale is 3 px = 1 ft" carries its anchors), and a new finding is written there, never here.
+
 **Requirement (project rule, restated here):** whenever historical research drives a check, a generation rule, or a magic number, record the *reasoning* here next to the rule - not just the rule. The check is the "what"; this section is the "why," so a future reader (or a future us, after the research has fallen out of memory / context) can revisit a decision without redoing the legwork. Source citations are optional; the reasoning is mandatory. Each entry: what the research found, the decision it drove, and any deliberate departure from literal scale (we draw small features oversized for legibility - see "Core principle: roughly to scale" in [`SKILL.md`](SKILL.md) - but keep *relative* sizes roughly honest).
 
 - **The scale ladder itself** (drives `meta(ftpx=...)`, `s.px()/s.lw()`, the 4px linework floor, and the ftpx-aware check thresholds - `on_a_street` 85 real ft, the city theater's 185 real ft).

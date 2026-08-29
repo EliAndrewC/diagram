@@ -1,8 +1,8 @@
 # The diagram-skill quality gate (Constitution Principle X). Run `make done` before declaring
 # any Python change complete. Runs, in order: lint, format-check, type-check, tests+100% coverage.
 #
-# mypy uses a per-module ratchet (see pyproject.toml): the legacy engine modules are relaxed until
-# each is migrated to --strict in its own pass; new modules are strict immediately.
+# The type checker is pyrefly (feature 142, 2026-08-28): a Rust one-shot, ~0.6 s cold for the whole engine
+# with nothing resident - it replaced mypy + the dmypy daemon (400-600 MB per clone). Rules in pyproject.toml.
 
 # (GUARD_EDIT_OK: feature 132 adds the iteration switches - a new guard and five new operations)
 .PHONY: done lint format typecheck test test-full guard perf perf-report maps reference bypass-audit quick durations test-file audit perf-gate hooks-test explain \
@@ -10,7 +10,7 @@
 	 map cohort tripwire hamlet cache-audit regressions placement-stages pool-index pool-index-if-stale compound render-sync idle-tests \
 	 gate-manifest why-placed site-justice crop jogs pack-audit scatter-audit sun-audit new-check timings citybudget help \
 	 ci-status ci-check ci-merge ci-image commit-permitted \
-	 perf-explain perf-confirm perf-audit perf-signoff perf-review perf-profile
+	 perf-explain perf-confirm perf-audit perf-signoff perf-review perf-profile check-census
 
 # ---- THE PERFORMANCE BANDS (feature 129 - GUARD_EDIT_OK: adding the review-record operations) ----
 # Any increase (total OR any seed, per ENVIRONMENT) owes a written explanation and a perf-audit
@@ -30,8 +30,17 @@ perf-signoff:   ## band 3 - the GM, at a terminal   WHY="..."
 	@$(PERF_REVIEW) signoff --why "$(WHY)" --as GM --environment "$(or $(ENV),local)"
 perf-review:    ## does every environment's newest bookend pair carry the records its band owes? (the push runs this)
 	@$(PERF_REVIEW) check
+check-census:   ## feature 141: which checks re-measure a placer's guarantee (the ledger)   OUT=specs/141-checks-and-corpus-audit/ledger
+	$(RUN).tools.check_census --out "$(or $(OUT),specs/141-checks-and-corpus-audit/ledger)"
+
 perf-profile:   ## tier 2 evidence: cProfile ONE stage of ONE seed   SEED=25 STAGE=web
 	$(RUN).tools.perf_profile --seed "$(SEED)" --stage "$(STAGE)"
+
+hamlet-floor:   ## the modules under the 100% hamlet-path floor (feature 145; derived from the scripted rolls' records; GUARD_EDIT_OK: a new operation)
+	$(RUN).tools.hamlet_floor --list
+
+hamlet-floor-check:   ## judge the last coverage data against the hamlet-path floor (what test-full's last phase does; GUARD_EDIT_OK: a new operation)
+	$(RUN).tools.hamlet_floor
 
 # THE VERIFICATION STATE (feature 130, FR-012 - GUARD_EDIT_OK: adding the CodeBuild gate). Every
 # local target that proves something records it in .git/verification-state.json with the content
@@ -602,6 +611,16 @@ tooling:        ## run every `tooling` test (make/ci/pipeline, exhaustive) and r
 
 test-file:      ## run ONE test file, whole              FILE=tests/pipeline/test_gencache.py
 	@python3 -m pytest -n $(XDIST_WORKERS) --dist worksteal -q --no-cov $(FILE) && $(STATE) green-local test-file
+
+# WHICH LINES DOES THIS TEST ACTUALLY REACH? (feature 146, and it is an ITERATION-LOOP target rather than a
+# gate one - CLAUDE.md, "iterations are expensive in terms of wall clock time"). Writing a test for an
+# uncovered branch and then finding out from `make test-full` costs 10 minutes per answer, and the answer is
+# routinely "you covered the guard ABOVE the one you were aiming at" - measured on this feature: two full
+# runs spent discovering that `_in_blocked` had already refused the seat the byre and garden tests meant to
+# have refused one line further down. This asks the same question in about a second. Serial (-n0) on purpose:
+# xdist's coverage combine is the slow half, and one file does not need workers.
+cov-file:       ## which lines of MOD does ONE test file reach?   FILE=tests/settlement/test_houses.py MOD=l7r/diagram/settlement/houses.py
+	@python3 -m pytest -n0 -q --no-header -p no:cacheprovider --cov=$(MOD) --cov-report=term-missing $(FILE)
 # (worksteal, feature 135: two 50 s rollers landing on one worker under the default scheduler doubled a file's wall clock)
 
 # WHY EVERY CHECK FAILED ON THE REFERENCE MAP, in detail rather than by name.
@@ -627,7 +646,7 @@ durations:
 # (FULL=1 profiles the full tree too; the coverage carriers live there now, so `coverage_only` no longer needs deselecting - feature 135)
 
 quick:
-	@python3 -m ruff check --fix l7r/ tests/ && python3 -m ruff format l7r/ tests/ && $(MYPY)
+	@python3 -m ruff check --fix l7r/ tests/ && python3 -m ruff format l7r/ tests/ && $(TYPECHECK)
 	@start=$$(date +%s); $(EXHAUSTIVE_ENV) python3 -m pytest -n $(XDIST_WORKERS) --dist worksteal $(TESTMON) -q --no-cov -x --ff -m "not rolls_map" $(TIER_SELECT) $(QUICK_TREE); ec=$$?; \
 	  el=$$(( $$(date +%s) - start )); \
 	  if [ $$ec -ne 0 ]; then exit $$ec; fi; \
@@ -760,7 +779,7 @@ format:
 	python3 -m ruff format .
 
 typecheck:
-	python3 -m mypy
+	$(TYPECHECK)
 
 # parallel across cores when pytest-xdist is installed (~1 min vs ~5 min serial, measured
 # 2026-07-20 on 22 cores), plain serial pytest otherwise - xdist is a speedup, not a requirement.
@@ -840,8 +859,12 @@ TESTMON = $(if $(ALL),--no-testmon,--testmon-forceselect)
 # tooling changed since the last record, `ci tooling-fresh`). The gate collects all of `tests/`. Collection is
 # paid per worker, so ~1,000 fewer items is ~0.4 s of a 3.3 s floor - and the layout says what each test is.
 QUICK_TREE = tests --ignore=tests/tier_town --ignore=tests/tier_city --ignore=tests/gate --ignore=tests/full $(shell python3 -m l7r.diagram.ci tooling-fresh >/dev/null 2>&1 && echo --ignore=tests/tooling)
-# mypy through its daemon (dmypy): the warm daemon re-checks only what changed, ~0.25 s -> ~0.1 s per quick; one-shot on CodeBuild
-MYPY = $(if $(CODEBUILD_BUILD_ID),python3 -m mypy,python3 -m mypy.dmypy run --)
+# THE TYPE CHECK IS ONE-SHOT pyrefly (feature 142, GM 2026-08-28). History, so nobody re-adds a daemon: mypy needed
+# 12.7 s cold, so it ran through dmypy - which held 380-600 MB of RSS per clone, could not be shared across clones,
+# and nothing ever stopped (five daemons, 2.3 GB, one for a session that had ended). pyrefly checks the whole engine
+# cold in ~0.6 s (ty: ~0.5 s, but it has no rule for a missing annotation, research 142 R3), so there is nothing to
+# keep warm and no sweep to run. Same command on CodeBuild. Measurements: specs/142-rust-type-checker/research.md R2.
+TYPECHECK = pyrefly check
 # THE GATE IS ALWAYS EXHAUSTIVE (constitution v2.9.0, GM 2026-08-26): `make quick` runs each test's quick form,
 # `make done` its full form - the corpus, the full matrices, the full-size canvases, the tooling tests.
 GATE_EXHAUSTIVE_ENV = L7R_TESTS_EXHAUSTIVE=1 $(if $(COV_FLOORS),L7R_COV_FLOORS=1,)  # GUARD_EDIT_OK: feature 133 T92's env, kept for any test that reads it; feature 135's own full-run signal is L7R_TESTS_FULL
@@ -894,5 +917,17 @@ test:
 	  exit 0; \
 	fi; \
 	python3 -m coverage combine --append >/dev/null 2>&1 || true; \
-	python3 -m coverage report -m --omit='*/settlement/*' --fail-under=100 || { echo "COVERAGE: a module other than settlement.py is under 100% - the table above names it and its missing lines"; exit 1; }; \
-	python3 -m coverage report --include='*/settlement/*' --fail-under=$(SETTLEMENT_COV_FLOOR) || { echo "COVERAGE: settlement/ (package combined) fell below its $(SETTLEMENT_COV_FLOOR)% ratchet floor (see the comment above SETTLEMENT_COV_FLOOR in this Makefile; 'python3 -m coverage report -m --include=*/settlement/*' shows the missing lines)"; exit 1; }
+	cov_ec=0; \
+	python3 -m coverage report -m --omit='*/settlement/*,*/waterfields/*,*/interactive/*,*/check_village/*' --fail-under=100 || { echo "COVERAGE: a module other than settlement/, waterfields/, interactive/ and check_village/ is under 100% - the table above names it and its missing lines (those four are judged by the settlement ratchet and the hamlet-path floor below; check_village joined them under feature 145 - its city and capital segments lost their coverage carriers with feature 141 s corpus cut, and the GM ruled on 2026-08-28 that other tiers owe no floor while nothing exercises them)"; cov_ec=1; }; \
+	python3 -m coverage report --include='*/settlement/*' --fail-under=$(SETTLEMENT_COV_FLOOR) || { echo "COVERAGE: settlement/ (package combined) fell below its $(SETTLEMENT_COV_FLOOR)% ratchet floor (see the comment above SETTLEMENT_COV_FLOOR in this Makefile; 'python3 -m coverage report -m --include=*/settlement/*' shows the missing lines)"; cov_ec=1; }; \
+	python3 -m l7r.diagram.tools.hamlet_floor || cov_ec=1; \
+	exit $$cov_ec
+# ALL THREE FLOORS REPORT TOGETHER (GUARD_EDIT_OK: feature 145) - the same rule as the test phase: a first floor that
+# `exit 1`s hides every floor after it, and on 2026-08-28 that made the hamlet floor UNREACHABLE while the global one was
+# red on pre-existing tooling misses. Each records its own failure; the phase exits non-zero once, at the end.
+# THE HAMLET-PATH FLOOR (GUARD_EDIT_OK: feature 145 adds a new gate phase - GM 2026-08-28: "one hundred percent code
+# coverage on the scripted procedure and anything related to it ... automatic rather than something that we just
+# remember to maintain"): every module the scripted rolls execute - derived from the roll cache's records of the
+# reference, the three gate polders and the cohort's ratchet seeds, never a hand list - must be at 100%; town/city-only
+# modules owe nothing here, and the settlement ratchet above stays. The module set: `make hamlet-floor`. The why:
+# tools/hamlet_floor.py.

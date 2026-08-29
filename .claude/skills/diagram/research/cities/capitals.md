@@ -326,6 +326,10 @@ The **domain school** sits on the same avenue: the *hanko* was built in the cast
 
 ## Wall geometry: rectangles and terrain loops - the circle is the form BOTH anchors decline
 
+**Evidence:** attested (Nanjing, Shanghai), researched (the rectangle roster - not re-read)
+
+**Sources:** `nanjing-wall-enwiki`, `shanghai-xiancheng-zhwiki` (READ); the five rectangular cities are the earlier keys (`beijing-imperial-city`, `pingyao-yamen`, `xian-wall-zhwiki`) - Chang'an and Suzhou not re-read; "thrown up in one season" not on the page
+
 **The question that prompted this** (GM 2026-08-09): should the castle enceinte - and by
 extension the governor's mansion - be rectangular or rounder? The working assumption was: small
 compounds (magistrate manors, governor mansions, country estates) rectangular; large enclosures
@@ -385,6 +389,10 @@ loop, not a rounder ring.
 
 ## The chancellery meets IN the castle - executive out, council in
 
+**Evidence:** attested (a median domain's administration inside the castle enclosure), setting-canon (the House Chancellery as an L7R institution)
+
+**Sources:** `hancho-jawiki`, `honmaru-jawiki`, `kakegawa-castle-jawiki`, `jinya-jawiki`, `karo-jawiki` (READ 2026-08-28, the GM's question); `goyobeya-kotobank` (analogy only); `hyojosho-jawiki` (the Edo anchor, corrected)
+
 **The question** (GM 2026-08-09): would the House Chancellery actually have its own meeting
 building outside the castle? The GM's working assumption was that chancellery meetings happen in
 the castle itself - and feature 020 had drawn a chancellery compound on the government avenue.
@@ -404,7 +412,15 @@ the castle's implied goten (never drawn, per the blank-castle doctrine). The che
 it: `capital_chancellery_meets_in_the_castle` now fires if a chancellery compound is drawn
 outside. The inventory table in `settlements/capitals.md` moves the chancellery inside.
 
+*Correction to the record (2026-08-28, feature 143) - CONTRADICTED on the anchor, rule unchanged, awaiting the GM:* ja.wikipedia 評定所 places the Hyōjōsho **outside Edo castle, at Tatsunokuchi** (present Marunouchi) - across the moat from the Ōte gate, in the daimyo-mansion belt, not within the castle. The entry's "sat WITHIN Edo castle" is wrong as written; whether the capital's chancellery should therefore stand in the castle (the GM's ruling, which feature 020 implemented) or on the government avenue beside the castle (the Edo form) is the GM's call. Listed in the feature 143 ledger, section G.
+
+**Resolved (GM question 2026-08-28, feature 143 T20) - ACCURATE for a median domain; the Edo anchor replaced.** The GM asked whether a TYPICAL domain's council met inside or outside its castle, Edo being an unusual capital. The record read: a castle-holding han's 藩庁 stood "城に" - at the castle - and a castle-less han's at its jin'ya (`hancho-jawiki`); the goten's public half is the 政庁 (`honmaru-jawiki`); at Kakegawa, ~51-59,000 koku - a median domain - the "政務所である二ノ丸御殿" sat in the ninomaru (`kakegawa-castle-jawiki`), and Kawagoe likewise used its ninomaru; the karō decided in council and lived near the castle (`karo-jawiki`); a small domain's jin'ya held 居館 and 役所 in one compound (`jinya-jawiki`). No page read puts a domain's administration in the town. So the capital's chancellery meeting IN the castle is the attested median form - in the ninomaru or honmaru goten, which ring varying by castle - and the earlier prose about Edo's Hyōjōsho (a bakufu judicial council at Tatsunokuchi, outside the castle) is struck as the wrong anchor. Class for the HTML modal: **accurate**.
+
 ## Moat water: drawn connections outside, standing water inside - and yes, it scums
+
+**Evidence:** attested (Xi'an, Tango precedent), reconstruction (the scum)
+
+**Sources:** `xian-moat-zhwiki` (READ: a permanently watered moat 20 x 10 m); "Edo's moats bloom green" not read (ja.wikipedia 外濠 is a disambiguation page; env.go.jp 濠環境保全 is the lead) - leftover
 
 **The questions** (GM 2026-08-09): does the inner (castle) moat need to connect to anything?
 How is the water kept in, and kept from stagnating? And why was the CITY moat not simply
@@ -450,6 +466,10 @@ not unflattering. Nothing to draw; recorded so nobody "fixes" it later.
 
 ## The aqueduct supplies the CITY - the moat spill was a drawing artifact
 
+**Evidence:** attested
+
+**Sources:** `tamagawa-josui-jawiki` (READ: the open cut hands off at the Yotsuya Ōkido 水番所 to buried wooden and stone pipes), `edo-josui`, `kanda-kakehi`
+
 **The question** (GM 2026-08-09): the aqueduct exists because a capital outgrows its wells, but
 the drawn cut appeared to feed the city moat instead of supplying the city. Which is it?
 
@@ -467,6 +487,10 @@ AND the flume - see "How a josui actually ran".
 
 ## The domain school is the hanko: a school of letters WITH the martial wing
 
+**Evidence:** attested (hanko with martial halls), researched (the three named pairings)
+
+**Sources:** `hanko-jawiki` (READ: 255 schools; 武芸 and 演武場), `nisshinkan-jawiki` (READ: 弓道場・武道場 at the reconstruction; Mito and Kagoshima not re-read)
+
 **The question** (GM 2026-08-09): is the "Domain School" an office-like building (ministry
 glyph) or the capital equivalent of the provincial martial hall?
 
@@ -480,6 +504,10 @@ the larger civil lecture hall - recorded in `M['martial_halls']` with `kind='han
 the ministry box the first draft used.
 
 ## Why the temples belt the wall instead of clustering in a temple quarter
+
+**Evidence:** attested (bodaiji), setting-canon (the two sovereign temples)
+
+**Sources:** `bodaiji-jawiki` (READ: the lineage temple), `kanazawa-teramachi`, `takada-teramachi`, `takayama-teramachi` (the temple belt at the rim)
 
 **The question** (GM 2026-08-09): why seven temples strewn through the city rather than two
 main temples plus smaller ones in a temple neighborhood?
@@ -500,6 +528,10 @@ pointer. If the GM prefers a gathered temple quarter anyway, that is a one-sessi
 the checks do not currently care - say the word.
 
 ## Street widths: the ote-suji is a grand street, not an imperial boulevard
+
+**Evidence:** attested (5 ken), deviation (30 drawn for 29.5 - a rounding)
+
+**Sources:** `suzaku-oji-jawiki` (READ: 82 m Heian-kyō, 147 m Chang'an - the entry's 84 / ~150 are rounded), `tokaido-jawiki` (READ: 5 ken in 1604 - see the correction); Honchō-dōri at 13.8 m not found (secondary pages give 9.9-11.8 m post-Meireki)
 
 **The question** (GM 2026-08-09): is the width of the avenue into the castle realistic? "It
 looks huge."
@@ -522,7 +554,15 @@ they front the avenue like a corridor instead of floating beside a runway.
 **The transferable rule:** pass `s.lw(real_ft)` to every way's width, never raw pixels - the
 default's docstring already cites its source, and any hand width should be able to as well.
 
+*Correction to the record (2026-08-28, feature 143) - CONTRADICTED on a drawn default, rule unchanged, awaiting the GM:* the engine's `s.road` default of 26 ft is glossed as "the Tōkaidō's own width"; ja.wikipedia 東海道 gives the 1604 standard as **5 ken ≈ 9 m ≈ 29.5 ft**. The 45 ft ōte-suji stands as a proportion (half again the highway); the 13.8 m Honchō figure it was pegged to was not found (9.9-11.8 m are the figures seen). Ledger section G.
+
+**GM ruling (2026-08-28, feature 144) - FIXED:** the trunk-road default is **30 ft** on every Mode B map (`ground.py` `ROAD_W_FT`), from the 1604 standard of 5 ken ≈ 29.5 ft (`tokaido-jawiki`), rounded to the "about thirty feet" the GM asked for. The 26 ft gloss ("the Tōkaidō's own width") and the docstring's "~18-24 ft" are struck. The ōte-suji's 45 ft is now exactly half again the highway (45 / 30). Class for the HTML modal: **accurate** (the width), **deviation** (the half-foot rounding).
+
 ## Dimensional audit of the drawn capital (GM-prompted, 2026-08-09)
+
+**Evidence:** liberty (an audit against anchors already recorded)
+
+**Sources:** the anchors named in the table are the entries above and their keys (`jokamachi-wiki-corpus`, `hikone-castle-town`, `okayama-castle`, `beijing-imperial-city`); nothing new asserted - research: rendering
 
 **The question**: are the ministries, lineage estates, walls, river and the rest realistically
 sized? Every drawn family converted at 3 ft/px and checked against its anchor. One feature
@@ -541,7 +581,7 @@ failed and was fixed; the rest hold.
 | Imperial Magistrate | 300 x 225 ft = 0.63 ha | Ubame's county magistracy manor (360 x 216 ft = 0.72 ha); ~68 staff + family | HOLDS - same institutional class |
 | sovereign temple halls | 150 x 100 ft | the shrine_hall guard's researched kondo ceiling (largest real main halls ~150-190 ft) | HOLDS |
 | granary kura | 60 x 36 ft per store | the town granary research (58 x 34 family) | HOLDS |
-| ote-suji 45 ft / roads 26 ft / ring 20 ft / brokers' lane 24 ft | | Honcho-dori / Tokaido / patrol-lane conventions | HOLDS (see "Street widths") |
+| ote-suji 45 ft / roads 30 ft (26 until feature 144) / ring 20 ft / brokers' lane 24 ft | | Honcho-dori / Tokaido 5 ken / patrol-lane conventions | HOLDS (see "Street widths") |
 | towpath 8 ft | | Shaoxing's stone qiandao ~5-6.5 ft; ours carries horse teams | HOLDS, upper band |
 | aqueduct cut 10 ft | | josui earth cuts ~1-3 ken (6-18 ft) | HOLDS, mid-band |
 | moat feeder leat 48 ft | | Tango's 66 ft feeder; moat-class water | HOLDS |
@@ -555,6 +595,10 @@ anchor cited at the point of use. A size that cannot cite its anchor is the one 
 
 
 ## How a josui actually ran (GM 2026-08-09: intake, route, terminus, and what it fed)
+
+**Evidence:** attested
+
+**Sources:** `tamagawa-josui-jawiki` (READ: 92.3 m over 42.74 km; the Yotsuya Ōkido terminus), `suidobashi-jawiki` (READ: named for the Kanda crossing), `edo-josui`, `kanda-kakehi`. Not found: the "~67 km of buried mokuhi" total and the row-house wells as the aqueduct's taps (the 玉川上水 page says the mains ran underground below the 水番所 without a length) - leftover
 
 **The questions**: why does the aqueduct have a bridge? Why is it blue - is it open-topped? It
 leaves the river at the wrong angle, then wanders. Where did real ones start, what direction
@@ -596,6 +640,10 @@ in-wall system draws as draw-points and not as channels.
 
 ## A castle has TWO gates (GM 2026-08-09: the ote-mon / karamete-mon pair)
 
+**Evidence:** attested (the ōte / karamete pair), researched (the 36 and the divination - hedged)
+
+**Sources:** `karamete-jawiki` (READ: the rear gate opposite the ōte-mon), `edo-36-mitsuke-jawiki` (READ - "36" is the popular number; the page says the true count ran 66-90). The south-facing-by-divination reasoning was not found on a read page
+
 **The question**: would an interior capital castle keep a single gate, or several, with more
 than one bridge over its own moat? Multiple would be preferred - if realistic.
 
@@ -615,6 +663,10 @@ city gate - the GM's own suggested connection, and the historically right one. T
 remains the ceremonial front; the karamete approach is the working back door.
 
 ## The moat RING and the river-flank moat are both real - and the wall's distance to the bank decides
+
+**Evidence:** attested, corroborated
+
+**Sources:** `xian-moat-zhwiki` (READ), `osaka-castle-jawiki` (READ: the Yodo as a natural moat feeding the castle's own); Edo's Sumida flank not re-read
 
 **The question** (GM 2026-08-09): Minami and Nagahara's moats do not fully encircle - they are
 open arcs whose ends meet the river, the river itself completing the circuit. The capital's
@@ -645,6 +697,10 @@ showing through two different sitings, not an inconsistency. A future capital dr
 bank (castle_seat="edge" already anticipates one) would take the river-flank form instead.
 
 ## Temple approaches face their street, and the modest temples have PATRONS
+
+**Evidence:** attested
+
+**Sources:** `sando-jawiki` (READ: the approach runs from the busy road to the hall), `bodaiji-jawiki` (READ: the patron temple)
 
 **Two GM findings in one pass (2026-08-09).**
 
@@ -678,6 +734,10 @@ planning - the GM's eye found the story in it, and the doctrine above makes it c
 than accident. The best worldbuilding this map has produced was noticed, not designed.
 
 ## Which districts get INTERNAL walls - and the fang ward as the Lion variant
+
+**Evidence:** attested (the Tang ward, the Song opening), setting-canon (the Lion knob)
+
+**Sources:** `changan-enwiki` (READ: walled wards, the market drum; the count SUMMARY-ONLY - 109-110 by most accounts, "108" the popular figure), `song-architecture-enwiki` (READ: shops on the street after the Song), `edo-machi-kido`, `qing-zhalan`
 
 **The question** (GM 2026-08-09): at capital scale, are the temple neighborhoods walled, or
 just neighborhoods? Which district types take internal walls at all - and can this be a
@@ -726,6 +786,10 @@ castle waits for its first riverside capital.
 
 ## The sluice's lifting frame, the quay-side kura, and the boat-length jetty (GM battery, 2026-08-09)
 
+**Evidence:** reconstruction (the mechanism), attested (kura at the quay)
+
+**Sources:** `kuramae-jawiki` (READ: eight numbered channels into the Asakusa storehouse ground); the board-in-grooves / windlass mechanism was found on none of ja.wikipedia 水門, 樋門, kotobank 樋門 - it stands as reasoning; the jetty-length and fairway clauses rest on the log-boom entry
+
 **How a sluice was operated.** The GM's inference is right on both counts: the gates control
 the moat's exchange with the river (holding its level in drought, shutting the intake in
 flood), and they were worked by a real MECHANISM. A hi / suimon board rides in grooves in its
@@ -748,6 +812,10 @@ stage runs about a boat-length - ~39 ft here, a third of the channel - and the w
 stage per granary-complex end rather than a picket line of piers.
 
 ## Ministry offices: six equal compounds, the SAME size the province builds - on purpose
+
+**Evidence:** setting-canon
+
+**Sources:** the recorded feature 018 decision and the GM's rank-law reading; the provincial footprint in `cities/government.md` - nothing physical re-sourced
 
 **The questions** (GM 2026-08-09): are the capital's ministries larger than the provincial
 ones, and was the size researched? Why are all six identical - peer standing, or oversight?
@@ -775,6 +843,10 @@ provincial city's identical compound is drawn in a tighter fabric, so its captio
 BESIDE the box, exactly as shipped.
 
 ## The internal dock and the bank quay: the WATER decides which a city gets
+
+**Evidence:** attested (Nagoya), researched (Edo's nine - SUMMARY-ONLY)
+
+**Sources:** `horikawa-nagoya-jawiki` (READ), `osaka-kurayashiki`, `shaoxing-towpath`; "Edo dug nine funairi-bori" SUMMARY-ONLY
 
 **The question** (GM 2026-08-09): Nagahara and Minami let barges float INTO the city - water
 gate, dock basin. Shiro Daika unloads everything at a riverbank quay, and so far only grain.
@@ -825,6 +897,10 @@ design.
 
 ## How often is a sluice OPEN? The duty cycle, and why one glyph suffices
 
+**Evidence:** reconstruction
+
+**Sources:** reasoning from the moat-water and sluice entries above; no page read describes a moat gate's duty cycle - research: physical, labeled a guess
+
 **The question** (GM 2026-08-09): were sluices closed by default and opened only when more
 water was needed, or did something else set the schedule? This decides whether the map needs
 separate open and closed glyphs.
@@ -861,6 +937,10 @@ permanent glyph.
 
 
 ## How much of a capital lives OUTSIDE the walls (SETTLED, GM ruling 2026-08-10)
+
+**Evidence:** attested (the commercial suburbs), setting-canon (the GM's ruling)
+
+**Sources:** `changmen-zhwiki` (READ: the Ming-Qing Changmen belt), `guanxiang-zdic`, `kaifeng-flood-1642-enwiki`; the Song attribution for Kaifeng's suburbs not re-read
 
 The question went through three answers in one feature, and the trail matters more than the
 number:
@@ -907,6 +987,10 @@ of the fabric-first regeneration, which should draw approach-road country seats 
 compounds, not rows.
 
 ## Do a capital's trades and funerary program scale from a provincial city's? (research, GM question 2026-08-10)
+
+**Evidence:** attested (the theaters, the cremation ground), researched (the counts - SUMMARY-ONLY)
+
+**Sources:** `edo-sanza-jawiki` (READ: exactly three licensed playhouses), `sento-jawiki` (READ: 600+ sento in the Bunka era - the "523 in 1810" is a search-summary figure), `shichiya-jawiki` (the 2,700+ pawnshops SUMMARY-ONLY), `kasoba-jawiki` (READ: temple-precinct cremation). Not found: the Kaifeng patrol-station rule of 1023 (the `dongjing-menghualu-rujia` passage is the read form), the 50+ goulan
 
 The GM asked it plainly: "would there be the same number and size of kiln works in a capital
 city as in a provincial city? Same question for dye works, the common burial ground, etc."
@@ -995,7 +1079,13 @@ grounds (parish + extramural common), while our cemeteries key also holds each t
 precinct plot. A capital therefore shows more cemetery records than the band, legitimately, and
 the band is not applied at capital scale.
 
+*Re-sourcing note (2026-08-28, feature 143):* the bathhouse count reads as "over 600" in the Bunka era on the page read, not 523; the per-capita conclusion (one per ~2,000) is unchanged in magnitude.
+
 ## How far outside the wall does the funerary ground sit? (research, GM question 2026-08-10)
+
+**Evidence:** attested (Edo cremation in temple precincts; the 1873 proposal), interpolated (the distance band)
+
+**Sources:** `kasoba-jawiki` (READ), `bernstein-fire-and-earth` (SUMMARY-ONLY as to the paper; the May 1873 shubiki proposal and the stench read in a secondary account), `louzeyuan-zhwiki` (READ), `suzugamori-jawiki`, `kozukappara-jawiki`; the Rokudō-Toribeno 1,334 ft and the Zhejiang "one to ten li" spread were not re-read (ja.wikipedia 六道の辻 is Sendai's, a same-name trap; the Kyoto page gives no distance) - leftover
 
 The GM's objection: the capital's common burial ground, cremation ground and pauper's ossuary
 sat 909-1,260 real ft outside the wall, which "makes the map harder to read," and they asked for

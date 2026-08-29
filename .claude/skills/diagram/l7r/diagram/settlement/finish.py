@@ -2,7 +2,6 @@
 
 import itertools
 import json
-import math
 import os
 import shutil
 import subprocess
@@ -13,7 +12,7 @@ from typing import TYPE_CHECKING, Any
 from l7r.diagram.interactive.page import ink_census, unregistered_classes, write_html
 from l7r.diagram.interactive.tags import ClsTag
 
-from ._geom import LAND, Poly, Pt, label_quad, label_tilt, linear_tilt, linear_tilt_full, point_in_poly, rects_overlap, seg_closest, seg_dist, segments_cross
+from ._geom import LAND, Poly, Pt, label_quad, label_tilt, linear_tilt, linear_tilt_full, point_in_poly, rects_overlap, segments_cross
 
 if TYPE_CHECKING:
     from .core import Settlement
@@ -216,20 +215,40 @@ class FinishMixin:
         vx0, vy0, vw, vh = self.view if self.view else (0, 0, self.W, self.H)
         # THE RESERVED POCKET FIRST (feature 139): the scripted tier holds a pocket of blank ground for the
         # title before the coppice and the belt are seated, and DENTS the windbreak around it - so a title
-        # that then lands in another corner leaves the dent as a hole in the belt (Kuwabata, a 40-50 ft
-        # bare run: `village_windbreak_is_continuous`). If the caller names its pocket and the placard
-        # fits there clear of every obstacle, that is where it goes; the scan is the fallback.
+        # that then lands in another corner leaves the dent as a hole in the belt (Kuwabata, a 40-50 ft bare
+        # run). If the caller names its pocket and the placard fits there clear of every obstacle, that is
+        # where it goes; main's blank-then-cover scan (feature 137 T06) is the fallback beneath it.
         spot = None
         if prefer is not None:
             _px, _py = prefer[0] + 6.0, prefer[1] + 6.0
             if _px + bw <= prefer[2] and _py + bh <= prefer[3] and self._box_clear(_px, _py, _px + bw, _py + bh, self._title_obstacles()):
                 spot = (_px, _py)
         if spot is None:
-            spot = self._blank_label_spot(vx0, vy0, vw, vh, bw, bh)
+            spot = self._blank_label_spot(vx0, vy0, vw, vh, bw, bh) or self._blank_label_spot(
+                vx0, vy0, vw, vh, bw, bh, cover_ok=True
+            )  # blank first; cover (a belt, a wood) as the last resort before the corner (feature 137 T06)
         if spot:
             px0, py0 = spot
-        elif self.view:  # map too full - fall back to the top-left corner
-            px0, py0 = vx0 + 30, vy0 + 16
+        elif self.view:
+            # MAP TOO FULL: the four corners, first one that hides nothing but cover, else the top-left
+            # (feature 137 T06 - seed 13's top-left corner was a dry plot while its bottom-right was scrub)
+            obs = self._title_obstacles(cover_ok=True)
+            corners = [(vx0 + 30, vy0 + 16), (vx0 + vw - bw - 30, vy0 + 16), (vx0 + 30, vy0 + vh - bh - 16), (vx0 + vw - bw - 30, vy0 + vh - bh - 16)]
+            clean = next(((cx, cy) for cx, cy in corners if self._box_clear(cx, cy, cx + bw, cy + bh, obs)), None)
+            if clean is not None:
+                px0, py0 = clean
+            else:
+                # THE TITLE BAND, the last rung (feature 137 T06): every corner hides a plot (seed 13's dry hem
+                # rings the whole view). The title is not a feature of the place and owes it no ground, so
+                # the sheet grows a band above the map sized to the placard, declared in meta so
+                # `crop_hugs_content` allows exactly that much on the north edge, and the placard sits in
+                # it - over nothing, unless a feature runs off the frame there, which the check still reports.
+                band = bh + 32
+                vy0 -= band
+                vh += band
+                self.set_view(vx0, vy0, vw, vh)
+                self.M["meta"]["title_band"] = round(band, 1)
+                px0, py0 = vx0 + 30, vy0 + 16
         else:
             px0, py0 = self.W / 2 - bw / 2, 22
         y = py0 + PAD  # the text block's top, inside the card
@@ -261,7 +280,7 @@ class FinishMixin:
         self.add_label(f'<text x="{(bx0 + bx1) / 2:.0f}" y="{by + 17:.0f}" text-anchor="middle" font-size="12" fill="#3A2E1C">{bar_ft} ft</text>', cls="-")
         self.add_label(f'<text x="{(bx0 + bx1) / 2:.0f}" y="{by + 31:.0f}" text-anchor="middle" font-size="10" font-style="italic" fill="#5C4830">(1 px = {self.ftpx:g} ft)</text>', cls="-")
 
-    def _title_obstacles(self: Settlement) -> tuple[list[Any], list[Any], list[Any]]:  # type: ignore[misc]
+    def _title_obstacles(self: Settlement, cover_ok: bool = False) -> tuple[list[Any], list[Any], list[Any]]:  # type: ignore[misc]
         """Feature footprints a title must clear, as (rects, polys, lines). Solid buildings/plots -> rects;
         the fields, groves, and commons -> polygons (so the title can sit in the empty corners around a diagonal
         field); the pond -> a rect; water lines + lanes -> polylines (a title must not cross a road or stream)."""
@@ -294,6 +313,26 @@ class FinishMixin:
                     rects.append((min(xs), min(ys), max(xs), max(ys)))
                 elif "w" in o and "h" in o:
                     rects.append((o["x"] - o["w"] / 2, o["y"] - o["h"] / 2, o["x"] + o["w"] / 2, o["y"] + o["h"] / 2))
+        for lb in self.M.get("labels", []):  # placed LABEL boxes: a title must never cover a label
+            rects.append((lb[0], lb[1], lb[2], lb[3]))  # (caught 2026-07-23: the Tango content crop landed the
+            #                                             placard on the 'pauper ossuary mound' label)
+        # NOT the scrub commons: it is sparse GROUND COVER (a feathered scatter of grass tufts on open ground),
+        # not a feature with a footprint, and a bold place name reads perfectly well over it. Treating it as an
+        # obstacle only worked while some ground was left bare - once the commons properly clothes the field's
+        # voids too, scrub covers nearly the whole map and a title could find nowhere at all to sit. The grove
+        # (dense closed canopy) and the marsh (a distinct wetland) stay obstacles.
+        # ...and a WOODLAND commons is dense canopy too, so it is an obstacle by the same test the
+        # paragraph above applies (2026-08-17). The exclusion above is for the SCRUB commons - a
+        # feathered scatter of grass tufts that a bold place name reads perfectly well over - and a
+        # `role="woodland"` parcel is not that: it is a stand of tree crowns, the same closed canopy
+        # as a grove. Left out, the placard printed over 64-68% of one of Sawada's two woodland
+        # parcels, with a dozen crown circles ghosting up through the title card: one of the map's
+        # two woods two-thirds invisible, and the title reading as smudged. The grazing parcels stay
+        # excluded, which is what keeps a title from having nowhere to sit.
+        _woodland = [c for c in self.M.get("commons", []) if c.get("role") == "woodland" and c.get("poly")]
+        _cover = [] if cover_ok else self.M.get("village_groves", []) + self.M.get("bamboo_stands", []) + _woodland
+        for o in _cover + self.M.get("marshes", []):
+            polys.append([tuple(p) for p in o["poly"]])
         # ...and the WELLS and the NOTICE BOARD (feature 139, settlement-review of Kuwabata: the placard sat on the
         # east public well, its glyph showing through the card's edge). Both are traffic-sited fixtures with no
         # w/h - a well records its drawn radius `vr`, the board its `w`/`h` - and neither was in the list above.
@@ -363,10 +402,12 @@ class FinishMixin:
                 return False
         return True
 
-    def _blank_label_spot(self: Settlement, vx0: float, vy0: float, vw: float, vh: float, tw: float, th: float, margin: float = 22, step: float = 24) -> Pt | None:  # type: ignore[misc]
+    def _blank_label_spot(self: Settlement, vx0: float, vy0: float, vw: float, vh: float, tw: float, th: float, margin: float = 22, step: float = 24, cover_ok: bool = False) -> Pt | None:  # type: ignore[misc]
         """Scan the window (top-to-bottom, left-to-right) for the first box of size (tw, th) that clears every
-        feature; returns its (x, y) top-left, or None if the map is too full."""
-        obs = self._title_obstacles()
+        feature; returns its (x, y) top-left, or None if the map is too full. With `cover_ok` the belt, the
+        bamboo and the woodland commons are not obstacles (the placard may sit on cover, never on a
+        building, a plot, a field, water, a lane or a label - `title_clear_of_features`, feature 137)."""
+        obs = self._title_obstacles(cover_ok=cover_ok)
         y = vy0 + margin
         while y + th <= vy0 + vh - margin:
             x = vx0 + margin
@@ -382,6 +423,28 @@ class FinishMixin:
         # that frames to the bare canvas never calls either (Hoshizora), and a queued stand that is
         # never flushed is a wood with no trees. Idempotent, so the usual crop-time flush still wins.
         self.flush_tree_stands()
+        # THE FIELD'S CHORDS FOR THE GATE (feature 140): `houses_clear_of_paddies` measures the same few chords the
+        # placer measured (`rolling/fit.py::_field_chains`) - open chains facing the planned seat when there is one
+        # (`keepout_chains`, each chord with its outward normal), a closed simplified ring (`keepout`) when not.
+        from l7r.diagram.settlement._geom.primitives import FIELD_KEEPOUT_EPS, facing_chains, keepout_ring  # noqa: PLC0415 - finish-time only
+
+        _face = getattr(self, "field_face", None)
+        if _face is not None and self.field_polys:
+            # THE PLACER'S OWN CHAINS, recorded flat: `houses_clear_of_paddies` must measure the very chords placement
+            # measured, or a seat can pass one and fail the other (Mizuguchi did, 2026-08-28, when the gate rebuilt
+            # chains from the manifest's rounded outline instead).
+            _chains, _rings = self._field_chains()
+            self.M["field_chains"] = [[[[round(_a[0], 1), round(_a[1], 1)], [round(_b[0], 1), round(_b[1], 1)], [round(_n[0], 4), round(_n[1], 4)]] for _a, _b, _n in _ch] for _ch in _chains]
+        for _fld in self.M.get("fields") or []:
+            _ol = [(float(_x), float(_y)) for _x, _y in (_fld.get("outline") or [])]
+            if len(_ol) < 4 or "keepout" in _fld or "keepout_chords" in _fld:
+                continue
+            if _face is not None:
+                _fld["keepout_chords"] = sum(len(_ch) for _ch in facing_chains(_ol, _face, FIELD_KEEPOUT_EPS))  # the count the record reports; the gate reads M["field_chains"]
+            else:
+                _keep, _chords = keepout_ring(_ol, _ol, FIELD_KEEPOUT_EPS, filled=True)
+                _fld["keepout"] = [[round(_p[0], 1), round(_p[1], 1)] for _p in _keep]
+                _fld["keepout_chords"] = len(_chords)
         # Deferred place_caption() seats, in call order, against the FINISHED map - and BEFORE the
         # road caption, which goes last because it has by far the most room to move: its subject is
         # a whole road segment with a wide slide set, where a market row's caption has one short
@@ -391,56 +454,8 @@ class FinishMixin:
             self.label(_lx, _ly, _tx, _sz, italic=_it, weight=_wt, color=_co, ref=_bx, rot=_ro)
         self._captions: list[tuple[Any, ...]] = []
         if getattr(self, "_road_label", None):
-            text, lx, ly = self._road_label
-            rd = self.M.get("road") or []
-            # The caption names the ROAD, so its subject is the nearest STRETCH of roadway: box
-            # that segment out to the corridor half-width and run the standard standoff ladder
-            # against it. The authored label_xy stays a HINT - which flank, and where along the
-            # road - and no longer sets the distance. That was the defect the GM caught on Tango
-            # (2026-07-26): the old candidates were generated at the anchor's own perpendicular
-            # offset, mirrored across the roadline and slid along it, so a hand anchor 102px out
-            # produced a label 55px clear of the roadway with nothing but bare ground between.
-            half = float(self.M.get("road_width") or 26) / 2
-            i_ = min(range(len(rd) - 1), key=lambda i: seg_dist(lx, ly, rd[i], rd[i + 1]))
-            (ax_, ay_), (bx_, by_) = (rd[i_][0], rd[i_][1]), (rd[i_ + 1][0], rd[i_ + 1][1])
-            # The subject is the roadway's CROSS-SECTION at the point the anchor pointed at, plus
-            # the tangent there - NOT the segment's bounding box, which for a diagonal road is a
-            # huge square whose edges are hundreds of px from the roadway (Hoshizora: a 486x256 box
-            # for a road running through it at 27 degrees). Cross-section + axis is right at any angle.
-            px_, py_ = seg_closest(lx, ly, (ax_, ay_), (bx_, by_))
-            seg_ = math.hypot(bx_ - ax_, by_ - ay_) or 1.0
-            axis_ = ((bx_ - ax_) / seg_, (by_ - ay_) / seg_)
-            # ...and the caption RUNS ALONG that tangent (GM 2026-08-08): "Imperial Road" set level
-            # beside Hoshizora's -27deg roadbed named the road the way a caption beside a diagonal
-            # building named the building - which is the defect the 2026-08-02 tilt fixed for
-            # glyphs and stopped short of fixing for the linear features. A road is a LINE, so this
-            # takes linear_tilt's clamp, NOT label_tilt's fold: past 45deg the caption goes level
-            # (the GM's own north-south convention), where the fold would tilt it to the road's
-            # cross direction, which is an axis of nothing. Tango (due N-S) and Nagahara (72deg)
-            # therefore stay exactly as they were; only genuinely diagonal roads move.
-            tilt_ = linear_tilt(math.degrees(math.atan2(axis_[1], axis_[0])))
-            box = (px_ - half, py_ - half, px_ + half, py_ + half)
-            lx, ly = self._best_label_spot(box, text, 12, hint=(lx, ly), slides=(-45.0, 45.0, 90.0, -90.0), axis=axis_, tilt=tilt_)
-            # RE-SEAT the recorded subject on the roadway beside where the caption actually landed.
-            # `label_hugs_its_referent` measures an axis-aligned gap between two recorded boxes, so a
-            # cross-section pinned at the ANCHOR reads the along-road distance as drift once the
-            # ladder slides the caption - Tango measured 45px for a caption sitting 29px off the
-            # roadway. Boxing the roadway nearest the caption's own box makes the recorded gap the
-            # clearance a reader sees, at any road angle.
-            # A TILTED caption re-seats on the quad it actually DRAWS, not its pre-tilt box - the
-            # recorded gap has to be the clearance a reader sees. At tilt 0 label_quad returns that
-            # box corner-for-corner in the same order, so every level road's referent is unchanged.
-            lb_ = self._label_box(lx, ly, text, 12)
-            qs_ = label_quad([*lb_, 0, text, None, tilt_])
-            cq_ = ((qs_[0][0] + qs_[2][0]) / 2, (qs_[0][1] + qs_[2][1]) / 2)
-            px_, py_ = min(
-                (seg_closest(qx, qy, (ax_, ay_), (bx_, by_)) for qx, qy in (*qs_, cq_)),
-                key=lambda c: min(math.hypot(c[0] - qx, c[1] - qy) for qx, qy in qs_),
-            )
-            box = (px_ - half, py_ - half, px_ + half, py_ + half)
-            self.label(lx, ly, text, 12, italic=True, weight="bold", color="#5A4326", ref=box, rot=tilt_, linear=True)
-            self.M["road_label"] = [lx, ly]
-            self._road_label = None
+            self._finish_road_label()  # feature 145: the Imperial-road caption, a town/city feature, lives in structures/ground.py
+            self._road_label: Any = None  # declared Any at structures/ground.py; re-declared for the checker (the attribute is conditional)
         # Every block below is built as TWO aligned lists - the strings, and their feature classes
         # (feature 134): the string block is spliced into `self.out` exactly as before, the class
         # block into `self.out_cls` at the same index, so the side-list stays index-aligned with the

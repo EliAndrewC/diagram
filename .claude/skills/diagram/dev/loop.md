@@ -126,7 +126,7 @@ have caught: the change altered geometry an existing test depended on, and the p
 `pytest -k torii`, which did not include that test. The whole files for the modules you touched cost
 ~45s and reach every test the change can. So: cheap linters, then whole files, then the gate ONCE.
 
-    python3 -m ruff format . && python3 -m ruff check . && python3 -m mypy
+    python3 -m ruff format . && python3 -m ruff check . && pyrefly check
     python3 -m pytest tests/settlement/ tests/check_village/ -q -n auto --no-cov    # the files you touched, WHOLE
     make done                                                                  # once, backgrounded, not watched
 
@@ -156,7 +156,7 @@ trivial formatting or type slip makes you pay a full ~1-min gate run to discover
 again - the failures surface one per gate run, not all at once. After writing engine code and
 BEFORE `make done`, run the seconds-long prefix yourself:
 
-    python3 -m ruff format . && python3 -m ruff check . && python3 -m mypy
+    python3 -m ruff format . && python3 -m ruff check . && pyrefly check
 
 That catches format + lint + type errors in one cheap shot. Only then spend the gate run on tests
 + coverage. (The old warning here about local names colliding "in the huge gate() scope" retired

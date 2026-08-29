@@ -8,26 +8,9 @@ import math
 import pytest
 
 from l7r.diagram import hamletgen as hg
+from l7r.diagram.settlement import Settlement
 
-from ._builders import a_plan
-
-
-def test_place_wells_never_clusters_two_wells_inside_the_spacing_floor():
-    """The greedy coverage sort (2026-08-15) pops FAR seats first, so the 170 px spacing guard can
-    only fire when every seat the engine will accept sits beside an existing well. Build exactly
-    that: `well_at` accepts only a small disc, so after the first (central) well every acceptable
-    candidate is inside the spacing floor and must be skipped - one well places, never a clustered
-    pair (`wells_not_clustered` is the rule the guard exists for)."""
-    from types import SimpleNamespace
-
-    houses = [{"x": 500, "y": 500}, {"x": 520, "y": 500}, {"x": 500, "y": 520}, {"x": 520, "y": 520}]
-    # M={}: no surface water, so every house is needy (the minimax filter reads s.M).
-    # `_crop_boxes` returning [] is deliberate, not a shrug: the later-well tie-break asks the crop
-    # for the box it will set (see `_outside_cloud`), and an empty answer is what exercises its
-    # house-centers FALLBACK - so this stub covers both the call and the default it degrades to.
-    s = SimpleNamespace(well_at=lambda x, y: math.hypot(x - 510, y - 510) < 60.0, M={}, _crop_boxes=lambda city=False: [])
-    plan = SimpleNamespace(spec=SimpleNamespace(households=12), ftpx=1.0)
-    assert hg.place_wells(s, plan, houses) == 1  # type: ignore[arg-type]
+from ._builders import SQUARE, a_plan
 
 
 @pytest.mark.parametrize(("households", "wells"), [(10, 2), (12, 2), (15, 2), (20, 3)])
@@ -116,3 +99,128 @@ def test_farmstead_fixtures_honor_the_spec_floor() -> None:
     assert s.M["meta"]["farm_fixtures_min"] == {"shrine": 2, "bath": 3}
     owners = {(r["kind"], tuple(r["of"])) for r in s.M["farm_fixtures"]}
     assert len(owners) == len(s.M["farm_fixtures"]), "the floor never doubles a house"
+
+
+# ---- feature 145: the refusal branches of the fixture placer that no cohort seed took --------------
+
+
+def _strip_settlement() -> tuple[object, object]:
+    from l7r.diagram.settlement import Settlement
+
+    s = Settlement(1000, 1000, seed=1)
+    s.meta(name="S", scale="hamlet", ftpx=1, down_deg=90)
+    return s, a_plan()
+
+
+def test_strip_blocked_refuses_the_canvas_edge_a_crossing_lane_and_a_drawn_crown() -> None:
+    s, _plan = _strip_settlement()
+    blocked = hg.homesteads._strip_blocked
+    assert blocked(s, 20, 500, 30, 20, 0, 0, [], [], None, []) is True, "over the canvas edge"
+    assert blocked(s, 500, 500, 30, 20, 0, 0, [], [], None, []) is False, "open ground"
+    lane = [([(500, 400), (500, 600)], 3.0)]  # a lane running THROUGH the strip, both ends outside it
+    assert blocked(s, 500, 500, 30, 20, 0, 0, [], [], None, lane) is True
+    s.M["tree_crowns"] = [500.0, 500.0, 12.0]
+    assert blocked(s, 500, 500, 30, 20, 0, 0, [], [], None, []) is True, "a crown drawn two stages earlier"
+
+
+def test_farmstead_fixtures_on_a_houseless_map_place_nothing() -> None:
+    s, plan = _strip_settlement()
+    assert hg.homesteads.farmstead_fixtures(s, plan, []) == 0
+
+
+def test_roll_falls_through_to_the_last_weight() -> None:
+    """A u past the weights' sum (floating-point slack) takes the last row rather than raising."""
+    assert hg.homesteads._roll([("a", 0.3), ("b", 0.3)], 0.99) == "b"
+    assert hg.homesteads._roll([("a", 0.3), ("b", 0.3)], 0.1) == "a"
+
+
+def test_strip_blocked_refuses_a_lane_that_only_crosses_the_strip() -> None:
+    """Feature 146: the crossing arm of `_strip_blocked` - a lane whose ENDS are both outside the strip but
+    whose segment passes through it (the corner test above cannot see that one)."""
+    s, _plan = _strip_settlement()
+    blocked = hg.homesteads._strip_blocked
+    across = [([(440.0, 500.0), (560.0, 500.0)], 1.0)]  # a hairline lane straight through, ends well clear
+    assert blocked(s, 500, 500, 30, 20, 0, 0, [], [], None, across) is True
+    beside = [([(440.0, 300.0), (560.0, 300.0)], 1.0)]
+    assert blocked(s, 500, 500, 30, 20, 0, 0, [], [], None, beside) is False
+
+
+def test_trunk_blocked_refuses_the_canvas_edge_and_a_record_without_a_footprint() -> None:
+    """Feature 146: two arms of the trunk test - a trunk hanging off the canvas, and a record in one of the
+    scanned lists that carries no `x` at all (a synthetic entry another check keeps), which is skipped
+    rather than raising."""
+    s, _plan = _strip_settlement()
+    blocked = hg.homesteads._trunk_blocked
+    assert blocked(s, 20, 500, 10, [], [], None, []) is True, "over the canvas edge"
+    s.M["persimmons"] = [{"note": "a record with no footprint at all"}]
+    assert blocked(s, 500, 500, 10, [], [], None, []) is False, "the footprint-less record is skipped"
+    s.M["persimmons"].append({"x": 500.0, "y": 500.0, "w": 20.0, "h": 20.0})
+    assert blocked(s, 500, 500, 10, [], [], None, []) is True, "and a real one blocks"
+
+
+def test_strip_blocked_sees_a_lane_that_crosses_the_strip_between_its_samples() -> None:
+    """Five sample points on a 22 by 16 ft strip let a lane cross it DIAGONALLY between them (cohort
+    seed 03), and `lanes_clear_of_bamboo` walks the tread's quarter-points, so the gate saw what the
+    placer did not. The tread is therefore tested as a segment against the strip's own edges."""
+    from l7r.diagram.hamletgen.homesteads import _strip_blocked
+
+    s = Settlement(1000, 1000, seed=1)
+    s.meta(name="V", scale="hamlet", ftpx=1, toscale=True)
+    # The five samples are the four corners AND the center, so a tread through the middle is caught a
+    # line earlier. This one clips the strip between them: 2.2 px from the nearest sample, well past
+    # the tread's own half-width, and still straight through the strip.
+    clipping = [([(480.0, 505.0), (520.0, 485.0)], 1.0)]
+    assert _strip_blocked(s, 500.0, 500.0, 22.0, 16.0, 900.0, 900.0, [], [], None, clipping)
+    assert not _strip_blocked(s, 200.0, 800.0, 22.0, 16.0, 900.0, 900.0, [], [], None, clipping)
+
+
+def test_a_woodpile_stacks_against_the_kura_when_the_shed_is_not_on_the_north_side() -> None:
+    """The stack stands against whichever wall is free. Which wall that is depends on `shed_side`, and
+    every live hamlet rolls the same side - so the other seat list had never been built."""
+    from l7r.diagram.hamletgen.homesteads import farmstead_fixtures
+
+    plan = a_plan()
+    s = Settlement(1400, 1400, seed=3)
+    s.meta(name="V", scale="hamlet", ftpx=1, toscale=True, households=6, down_deg=90, water_flow=90)
+    houses = [{"x": 700.0, "y": 700.0, "w": 46.0, "h": 28.0, "rot": 0.0, "kind": "plain", "shed_side": "S", "wealth": 1.0}]
+    farmstead_fixtures(s, plan, houses)
+    assert s.M["farm_fixtures"], "the steading's fixtures are seated round it"
+    assert all(abs(f["x"] - 700.0) < 200 and abs(f["y"] - 700.0) < 200 for f in s.M["farm_fixtures"])
+
+
+def test_a_linear_hamlet_strings_its_houses_along_the_connector() -> None:
+    """The `linear` settlement form is attested and implemented but pinned off (`SETTLEMENT_FORMS`), so
+    the arm that fronts the CONNECTOR - the only way on the map that predates the houses - has never
+    rolled. `lane_frontage` skips the connector for exactly the reason this form wants it: fronting it
+    strings the hamlet along the road instead of nucleating it, which is this archetype."""
+    from l7r.diagram.hamletgen.homesteads import stage_homesteads  # through the MODULE: a stage is not package surface
+
+    for form in ("nucleated", "linear"):
+        plan = a_plan()
+        plan.seat = hg.seat_cluster(plan)
+        plan.settlement_form = form
+        s = Settlement(1400, 1400, seed=3)
+        s.meta(name="V", scale="hamlet", ftpx=1, toscale=True, households=15, down_deg=90, water_flow=90, nucleated=True)
+        s.field_polys.append(list(plan.envelope))
+        # the connector has to BE there for the linear form to string anything along it - it is the one
+        # way on the map that predates the houses, which is the whole premise of the archetype
+        cx_, cy_ = float(plan.seat["cx"]), float(plan.seat["cy"])
+        s.M["lanes"] = [{"pts": [[cx_ - 400, cy_], [cx_ + 400, cy_]], "w": 6, "connector": True}]
+        stage_homesteads(s, plan)
+        assert len(s.M["houses"]) == 15, f"{form}: every household seated"
+
+    # ...and the frontage loop STOPS when the households run out rather than filling the whole
+    # connector: the same plan, with the ask cut to three, seats three and leaves the rest of the
+    # road bare. A row village is as long as its households, not as long as its road.
+    spec = hg.HamletSpec(name="Row", seed=3, households=10, down_deg=90.0, windward="N")
+    plan = hg.plan_site(spec)
+    plan.envelope = list(SQUARE)
+    plan.seat = hg.seat_cluster(plan)
+    plan.settlement_form = "linear"
+    s = Settlement(1400, 1400, seed=3)
+    s.meta(name="V", scale="hamlet", ftpx=1, toscale=True, households=10, down_deg=90, water_flow=90, nucleated=True)
+    s.field_polys.append(list(plan.envelope))
+    cx_, cy_ = float(plan.seat["cx"]), float(plan.seat["cy"])
+    s.M["lanes"] = [{"pts": [[cx_ - 620, cy_], [cx_ + 620, cy_]], "w": 6, "connector": True}]
+    stage_homesteads(s, plan)
+    assert len(s.M["houses"]) == 10

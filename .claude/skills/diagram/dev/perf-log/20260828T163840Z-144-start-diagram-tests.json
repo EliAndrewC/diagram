@@ -1,0 +1,130 @@
+{
+  "clone": "diagram-tests",
+  "commit": "514e6cc0",
+  "cpus": 22,
+  "environment": "local",
+  "host": "laptop",
+  "hostname": "863bd4879ca8",
+  "image": "laptop",
+  "label": "144-start",
+  "machine": "x86_64",
+  "median_seconds": 29.8,
+  "reference": {
+    "down_deg": 90,
+    "households": 15,
+    "name": "Inashiro",
+    "water_sink": "pond"
+  },
+  "rows": [
+    {
+      "asked": 15,
+      "form": "nucleated",
+      "houses": 15,
+      "seconds": 17.6,
+      "seed": 4,
+      "shape": "crescent",
+      "stages": {
+        "appurtenances": 0.18,
+        "bamboo": 0.0,
+        "crossings": 0.35,
+        "field": 3.58,
+        "frame": 0.02,
+        "hinterland": 7.11,
+        "homesteads": 0.98,
+        "notice": 0.65,
+        "seat": 0.03,
+        "sink": 0.01,
+        "track": 0.9,
+        "water_frame": 0.0,
+        "web": 3.66,
+        "windbreak": 0.13,
+        "woodland": 0.03
+      }
+    },
+    {
+      "asked": 15,
+      "form": "nucleated",
+      "houses": 15,
+      "seconds": 51.0,
+      "seed": 25,
+      "shape": "crescent",
+      "stages": {
+        "appurtenances": 0.74,
+        "bamboo": 0.0,
+        "crossings": 0.22,
+        "field": 4.5,
+        "frame": 0.0,
+        "hinterland": 6.79,
+        "homesteads": 1.17,
+        "notice": 0.82,
+        "seat": 0.04,
+        "sink": 0.01,
+        "track": 0.95,
+        "water_frame": 0.0,
+        "web": 35.65,
+        "windbreak": 0.09,
+        "woodland": 0.01
+      }
+    },
+    {
+      "asked": 15,
+      "form": "nucleated",
+      "houses": 15,
+      "seconds": 19.9,
+      "seed": 39,
+      "shape": "round",
+      "stages": {
+        "appurtenances": 0.61,
+        "bamboo": 0.0,
+        "crossings": 0.39,
+        "field": 2.65,
+        "frame": 0.0,
+        "hinterland": 8.06,
+        "homesteads": 0.57,
+        "notice": 0.58,
+        "seat": 0.04,
+        "sink": 0.01,
+        "track": 1.31,
+        "water_frame": 0.0,
+        "web": 5.33,
+        "windbreak": 0.25,
+        "woodland": 0.05
+      }
+    },
+    {
+      "asked": 15,
+      "form": "nucleated",
+      "houses": 15,
+      "seconds": 39.7,
+      "seed": 47,
+      "shape": "round",
+      "stages": {
+        "appurtenances": 0.07,
+        "bamboo": 0.0,
+        "crossings": 0.4,
+        "field": 26.21,
+        "frame": 0.0,
+        "hinterland": 7.07,
+        "homesteads": 0.58,
+        "notice": 0.59,
+        "seat": 0.04,
+        "sink": 0.0,
+        "track": 1.59,
+        "water_frame": 0.0,
+        "web": 2.91,
+        "windbreak": 0.2,
+        "woodland": 0.0
+      }
+    }
+  ],
+  "seeds": [
+    4,
+    25,
+    39,
+    47
+  ],
+  "subject": "141: the spec's status line in the review gate's form",
+  "total_seconds": 128.2,
+  "utc": "20260828T163840Z",
+  "worst_seconds": 51.0
+}

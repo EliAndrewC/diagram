@@ -187,10 +187,21 @@ class FieldFeaturesMixin:
 
     def _plot_grave_island(self: Settlement, plot: dict[str, Any], rng: random.Random) -> None:  # type: ignore[misc]
         """A RARE in-field grave island (calibrated liberty) - a small raised earthen mound with a couple of
-        stone markers, the flat paddy tiling around it. Recorded in M['field_graves']."""
+        stone markers. Recorded in M['field_graves'].
+
+        DRAWN OVER THE LATTICE, NOT CARVED OUT OF IT - a recorded deviation (settlement-review, Kashikawa,
+        feature 145). The registry entry said "the flat paddy tiling around it" and the plots are NOT carved:
+        three plot rings and nine bund junctions lie inside Kashikawa's mound. At `opacity="0.9"` they ghosted
+        through and the mound read as a translucent decal pasted on the field - a bund arriving at the outline
+        and re-emerging beyond it. The mound is now OPAQUE, so what is drawn is a solid raised island the
+        basins run up to, which is what a grave island looks like. What it costs: the bunds still exist
+        underneath, so the manifest says tiled-through where the ink says tiled-around, and a check reading
+        plot rings will still find them inside the mound. The alternative - carving the plots around the grave
+        in the toe pass - is the honest fix and a field-engine change; it is future work
+        (`future-work/farming-communities.md`), deferred here with this measurement rather than half-done."""
         cx, cy, hx, hy = self._plot_center_span(plot["poly"])
         rx, ry = max(9.0, hx * 0.55), max(6.0, hy * 0.55)
-        self.add(f'<ellipse cx="{cx:.1f}" cy="{cy:.1f}" rx="{rx:.1f}" ry="{ry:.1f}" fill="#CFC6B4" stroke="#8C8470" stroke-width="1.2" opacity="0.9"/>', cls="grave island")  # feature 134
+        self.add(f'<ellipse cx="{cx:.1f}" cy="{cy:.1f}" rx="{rx:.1f}" ry="{ry:.1f}" fill="#CFC6B4" stroke="#8C8470" stroke-width="1.2"/>', cls="grave island")  # feature 134
         markers = ""
         for i in range(rng.randint(2, 3)):
             mx = cx + (i - 1) * 6

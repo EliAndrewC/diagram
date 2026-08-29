@@ -166,3 +166,25 @@ prints "(none)", which reads as "nothing wanted a build"; the honest reading is 
 enough to want one". A one-line change when it matters: `ci-status` could count the FR-006 refusals
 in the period beside the trail, so an empty trail says which of the two it is. Not a task - the
 audit's answer (should any have run? no) does not change either way.
+
+## The hamlet coverage floor's last 128 lines (feature 146 closed at 99.13%, 2026-08-28)
+
+Feature 146 took the derived hamlet-path floor from 373 uncovered lines to **128** (99.13%) - about 5,300
+lines of dead check code removed, ~50 refusal-reason unit tests, 27 scripted negative fixtures, and the
+town/city battery gated for the first time since the 2026-08-16 freeze. It did NOT reach green, and the
+spec records that rather than rounding. What is left, from `specs/146-the-hamlet-floor-residue/floor-at-close.txt`:
+
+- **`hamletgen/ways.py`, 28** - nested closures in the web stages (`_rejoinable`, `_commit`, `_join_piece`,
+  `_touch_junctions`, `_thread_the_fabric`'s detour). Reachable, but each needs a lane geometry contrived so
+  precisely that the router, the string-pull AND the un-jog pass all fail first. Three were closed that way
+  under 146, so the method is proven; the rest is the same work at a higher price per line.
+- **`settlement/city/bridges.py`, 17** - the city bridge's rotation search and the footbridge's per-segment
+  caps. Reachable only by a city map's PLACER, and the city pool is frozen, so nothing runs them. Not
+  removable (the city tier needs them) and not reachable until a city is scripted - so this half closes for
+  free the day the city tier converts, and not before.
+- **~83 across 29 modules** - ones and twos, each a refusal reason whose setup is a whole carve or a whole
+  web (`close_seams`, `_carve_sector`, `_dry_fields`), or a check branch needing a manifest shape the
+  reference does not carry.
+
+`research: rendering`. Whoever picks this up: the worklist is generated straight off the FULL run's
+hamlet-floor table, and `make hamlet-floor` lists the modules under it.

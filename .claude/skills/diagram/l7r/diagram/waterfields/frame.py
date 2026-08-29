@@ -440,6 +440,13 @@ def _miter_normals(bpts: Poly, F: _Frame) -> list[Pt]:
     245 sq ft; 7 pairs overlapped outright, and every scripted hamlet had some). Offsetting each
     boundary point along ONE shared vector makes every seam a single straight line both quads lie
     on - gated by dry_plot_seams_shared."""
+    # A BOUNDARY WITH NO CHORD HAS NO NORMAL (feature 146, and this raised rather than returning).
+    # `bpts` comes from the hem's column boundaries, and a fan whose hem is one boundary wide - measured
+    # on a down_deg=210 fan sluiced at the west edge, where the dry band is clipped to a single column -
+    # produced an empty `cn` and then `cn[0]` IndexError'd. The caller loops `range(len(bounds) - 1)`, so
+    # with one boundary it tiles nothing and never indexes this list; an empty answer is the honest one.
+    if len(bpts) < 2:
+        return []
     cn: list[Pt] = []
     for i in range(len(bpts) - 1):
         tx, ty = bpts[i + 1][0] - bpts[i][0], bpts[i + 1][1] - bpts[i][1]

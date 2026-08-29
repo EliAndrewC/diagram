@@ -71,13 +71,13 @@ each is useful the moment it lands.
 - [x] T030 [US3] Add the `verify` target to the skill Makefile: record the pairing intent for the current engine key, launch the gate detached, print the review dispatch line naming the maps whose manifests differ from HEAD.
       given 2026-08-29T03:15Z | done 2026-08-29T05:20Z | elapsed ~50 min (US3 whole) | runs: 6 guard-suite runs, 1 hooks-test
       research: procedure
-- [x] T031 [US3] Write `scripts/pair-hooks.sh` `pretool` for Bash: refuse a gate invocation unless a settlement-review is pending in this session, or a review record matches the current engine key, or the pairing token is fresh, or `PAIR_OK=<reason>` is present. Reuse `agent-watch-hooks.sh scan` for "pending"; key on `.git/verification-state.json`'s `engine_key`.
+- [x] T031 [US3] Write `scripts/pair-hooks.sh` `pretool` for Bash: refuse a gate invocation unless a settlement-review is pending in this session, or a review record matches the current engine key, or the pairing token is fresh, or `PAIR_OK=<reason>` is present. Reuse `agent-stall-hooks.sh pending` for "pending"; key on `.git/verification-state.json`'s `engine_key`.
       given 2026-08-29T03:15Z | done 2026-08-29T05:20Z | elapsed ~50 min (US3 whole) | runs: 6 guard-suite runs, 1 hooks-test
       research: procedure
 - [x] T032 [US3] Enforce the other direction at the point T001 settled: refuse a `settlement-review` dispatch when no gate is running or freshly green for this engine key. Record in the script's header WHICH point is in force and why.
       given 2026-08-29T03:15Z | done 2026-08-29T05:20Z | elapsed ~50 min (US3 whole) | runs: 6 guard-suite runs, 1 hooks-test
       research: procedure
-- [x] T033 [US3] `pair-hooks.sh stop`: refuse ONCE to end a turn while a pairing is half-open - a gate went green on this engine key and no review was dispatched - in the shape `agent-watch-hooks.sh` already uses.
+- [x] T033 [US3] `pair-hooks.sh stop`: refuse ONCE to end a turn while a pairing is half-open - a gate went green on this engine key and no review was dispatched - in the shape `agent-stall-hooks.sh` already uses.
       given 2026-08-29T03:15Z | done 2026-08-29T05:20Z | elapsed ~50 min (US3 whole) | runs: 6 guard-suite runs, 1 hooks-test
       research: procedure
 - [x] T034 [US3] The override: one token, `PAIR_OK`, which must carry a reason, runs the command, and appends the reason to `dev/bypass-log/` in the existing record shape.

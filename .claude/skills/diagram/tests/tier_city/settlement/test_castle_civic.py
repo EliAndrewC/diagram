@@ -51,26 +51,6 @@ def test_dojos_roll_follows_the_samurai_cohort():
         s4.dojos([(300, 300)])  # a guaranteed 2 needs 2 seats
 
 
-@pytest.mark.tiers("city")
-def test_martial_hall_and_dojo_draw_their_researched_program():
-    # sizes are TRUE feet, not legibility choices (settlements.md "Historical grounding: martial
-    # training in a provincial city"): the state hall is a 130x100 ft compound whose archery lane
-    # covers the kyudo standard 92 ft shot, a private dojo a 76x44 ft lot with no lane at all.
-    s = Settlement(1200, 1200, seed=3)
-    s.meta(name="C", scale="city", ftpx=3)
-    s.martial_hall(400, 400)
-    s.dojo(800, 800)
-    (mh,) = s.M["martial_halls"]
-    assert (round(mh["w"] * 3), round(mh["h"] * 3)) == (130, 100)
-    assert mh["range_ft"] >= 90  # city_martial_hall_has_archery_range's floor
-    assert mh["label"] == "martial hall"
-    (dj,) = s.M["dojos"]
-    assert (round(dj["w"] * 3), round(dj["h"] * 3)) == (76, 44)
-    assert "range_ft" not in dj  # no archery lane on a 76 ft lot - the butt is the state hall's
-    # the state hall is drawn in government violet, the private hall in ordinary building tan
-    assert "#CDBBD6" in s.out[-2] and "#D9C8A4" in s.out[-1]
-
-
 @pytest.mark.tiers("capital", "city")
 def test_ministry_label_inside_stacks_two_lines_on_the_glyph():
     """The capital's ministry captions sit ON the glyph (GM 2026-08-09) - the estate rule

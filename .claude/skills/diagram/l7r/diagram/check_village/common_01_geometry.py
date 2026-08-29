@@ -6,6 +6,7 @@ from collections.abc import Callable, Mapping, Sequence
 from typing import Any
 
 from l7r.diagram.settlement import _assert_not_main_tree, sat_overlap
+from l7r.diagram.settlement._geom.primitives import convex_hull as convex_hull  # re-exported: the hull lives in the geometry package since feature 140
 
 _assert_not_main_tree(__file__)  # standalone gate runs must also happen in a session clone, never in main (CLAUDE.md "Session clones"; settlement's own import-time guard backstops this)
 
@@ -73,29 +74,6 @@ def poly_area(pts: Poly) -> float:
     return abs(s) / 2.0
 
 
-def convex_hull(pts: Sequence[Pt]) -> Poly:
-    """Convex hull (monotone chain) of a point cloud, as a CCW vertex list. <3 unique points returns them
-    as-is (a degenerate hull of zero area)."""
-    ps = sorted(set((round(x, 3), round(y, 3)) for x, y in pts))
-    if len(ps) < 3:
-        return [(x, y) for x, y in ps]
-
-    def cross(o: Pt, a: Pt, b: Pt) -> float:
-        return (a[0] - o[0]) * (b[1] - o[1]) - (a[1] - o[1]) * (b[0] - o[0])
-
-    lower: list[Pt] = []
-    for p in ps:
-        while len(lower) >= 2 and cross(lower[-2], lower[-1], p) <= 0:
-            lower.pop()
-        lower.append(p)
-    upper: list[Pt] = []
-    for p in reversed(ps):
-        while len(upper) >= 2 and cross(upper[-2], upper[-1], p) <= 0:
-            upper.pop()
-        upper.append(p)
-    return lower[:-1] + upper[:-1]
-
-
 def clip_to_convex(subject: Poly, clip: Poly) -> Poly:
     """Sutherland-Hodgman clip of an arbitrary `subject` polygon by a CONVEX `clip` polygon, as a
     vertex list (empty when the two do not meet). Exact for a convex clip - which is why the one
@@ -136,34 +114,6 @@ def clip_to_convex(subject: Poly, clip: Poly) -> Poly:
                 nxt.append((c[0] + t * (d[0] - c[0]), c[1] + t * (d[1] - c[1])))
         out = nxt
     return out
-
-
-def largest_empty_gap(poly: Poly, pts: Sequence[Pt], occupied: list[dict[str, Any]] | None = None, step: float = 30) -> float:
-    """The radius of the largest empty pocket inside `poly`: the max over interior grid points of the
-    distance to the nearest point in `pts`. A thin firebreak strip stays within a house-reach of homes
-    on either side (small gap); a whole empty block has an interior point far from any house (large gap).
-    This is the dead-zone signal a per-quarter density AVERAGE cannot see (a half-full quarter averages
-    fine). Grid points that fall inside an `occupied` rect (a civic compound - a temple or yamen in a
-    mixed quarter is built ground, not empty) are skipped, so a compound does not read as a dwelling
-    dead zone. Returns 0.0 for an empty poly bbox; a large sentinel if `pts` is empty."""
-    if not pts:
-        return float("inf")
-    occupied = occupied or []
-    xs = [p[0] for p in poly]
-    ys = [p[1] for p in poly]
-    worst = 0.0
-    _hx, _hy = sweep_hi(min(xs), max(xs), step), sweep_hi(min(ys), max(ys), step)  # bounded: a malformed vertex cannot hang the sweep
-    gx = min(xs)
-    while gx <= _hx:
-        gy = min(ys)
-        while gy <= _hy:
-            if point_in_poly(gx, gy, poly) and not any(abs(gx - r["x"]) <= r["w"] / 2 and abs(gy - r["y"]) <= r["h"] / 2 for r in occupied):
-                d = min(math.hypot(gx - dx, gy - dy) for dx, dy in pts)
-                if d > worst:
-                    worst = d
-            gy += step
-        gx += step
-    return worst
 
 
 # ---- overlap classification registry ---------------------------------------------------------------
@@ -259,8 +209,6 @@ _OVERLAP_EXEMPT = {
     "storehouses": "merchant kura drawn as an annex deliberately abutting its shop",
     "borders": "a drawn CLAN/jurisdictional border is a LINE OF LAW, not a physical object - it has no footprint (no w/h), reserves no ground and blocks nothing. Being overlapped is the POINT: a frontier magistracy stands its wall ON the line so the border runs across the parley-room floor (the Mode A ubame-magistracy sheet), and the period PHYSICAL marker - an earthen mound, as at the Nanbu-Date boundary - is deliberately NOT what this draws, precisely because a mound would be a structure everything then had to stay clear of",
     "farm_sheds": "a farmstead's grain-storehouse kura drawn as an annex abutting its own farmhouse's back wall (farm_sheds_attached verifies the attachment)",
-    "pig_sties": "a pig shed ON a pond dike, over the water's edge, by construction (feature 139 A3; FAO/NACA: 'the simple pig shed constructed on the pond dyke or over the water surface')",
-    "duck_pens": "a duck pen's dry run on the dike and its wet run fenced INTO the pond, by construction (feature 139 A4)",
     "farm_fixtures": "a farmstead's small fixtures - privy, woodpile, manure heap, bath shed, chicken coop, household shrine - each seated against its own farmhouse by the placer, which tests the seat against every placed footprint, lane, paddy and water (feature 133 T53-T59; farm_fixtures_attached verifies the attachment)",
     "persimmons": "the yard persimmon: a crown record (x, y, r) whose ink is also in tree_crowns, which structures_clear_of_trees tests; the placer keeps the trunk off every footprint (feature 133 T57)",
     "threshing_yards": "a farmstead's threshing/drying yard drawn as an annex abutting its own farmhouse",
@@ -304,9 +252,13 @@ _OVERLAP_EXEMPT = {
 # NAME to be allowed to cover the feature - and because the group name is the caption word, that
 # permission is derived rather than hand-listed too (see _label_allows).
 _LABEL_GROUP = {
-    "pig_sties": "sty",
-    "duck_pens": "duck pen",
-    "sluice_gates": "sluice",
+    # A BYRE IS EXEMPT FROM ITS OWN HOMESTEAD'S CAPTION, NOT FROM EVERY CAPTION (settlement-review, Kashikawa,
+    # feature 145). It sat in _LABEL_EXEMPT on the premise that "a caption cleared for the house is cleared for
+    # it" - true where a farmhouse carries a caption, and false at hamlet tier, which captions no farmhouse at
+    # all: Kashikawa's ONE caption belongs to a notice board 20 ft away and was drawn through a byre's roof,
+    # with the gate green by construction. Under the "farmhouse" group a farmhouse caption may still cover it
+    # and nothing else may.
+    "byres": "farmhouse",
     "quays": "quay",
     "theater_stage": "theater",
     "granaries": "granary",
@@ -393,7 +345,6 @@ _LABEL_EXEMPT = {
     # the property that holds in EITHER - the byre stands in the homestead ground among the houses,
     # near enough that a caption cleared for the house is cleared for it - and the form-specific
     # geometry is gated by `byres_stand_in_their_declared_form` instead of asserted here.
-    "byres": "a draft-ox byre stands in the homestead ground - its owner's own yard in the courtyard form, the shared courtyards between houses in the detached form - so it shares that ground and any caption cleared for the house is cleared for it",
 }
 
 _LABEL_CLASSIFIED = set(_LABEL_GROUP) | set(_LABEL_BY_KIND) | set(_LABEL_EXEMPT)
@@ -489,7 +440,7 @@ OVERLAP_CLASS: dict[str, str] = {
     # ANNEX - belongs to a named parent and abuts IT (and nothing else)
     **{
         k: "ANNEX" for k in ("gardens", "threshing_yards", "farm_sheds", "storehouses", "byres", "farm_fixtures", "persimmons", "pig_sties", "duck_pens")
-    },  # pig_sties / duck_pens: on the pond dike by construction (feature 139)
+    },  # pig_sties / duck_pens stand ON the pond dike by construction (feature 139)
     # --- PERMISSIVE CLASSES (never tested; each row below records WHY) ---------------------------
     **{k: "COVER" for k in ("commons", "pastures", "marsh", "marshes")},
     "quarters": "OVERLAY",
@@ -771,37 +722,6 @@ _MX_LINE_W = {"streams": 9.0, "channels": 2.5, "field_ditches": 1.5, "canals": 1
 _OVERLAP_SINGLETONS = ("governor_mansion",)  # solid footprints the manifest stores as ONE dict, not a list
 
 _OVERLAP_CLASSIFIED = set(_OVERLAP_STRUCTS) | set(_OVERLAP_TARGETS) | set(_OVERLAP_LINEAR) | set(_OVERLAP_EXEMPT)
-
-
-def solid_structs(M: Mapping[str, Any], *extra: str, exclude: tuple[str, ...] = ()) -> list[dict[str, Any]]:
-    """EVERY solid footprint on the map, read from the _OVERLAP_STRUCTS registry.
-
-    WHY THIS EXISTS (GM 2026-07-25). The `no_structure_on_*` battery has always been registry-driven:
-    it builds its rects from _OVERLAP_STRUCTS, so classifying a new feature there - which
-    `every_feature_classified_for_overlap` already FORCES - wires it into all thirteen hazards at
-    once (wall, moat, road, street, stream, channel, canal, pond, manor, religious hall, gate
-    furniture, torii, and every other structure). But a handful of keep-clear checks predate that
-    battery and hand-listed their own keys instead, so each new feature had to be remembered into
-    each of them - and a forgotten one looks exactly like a passing check.
-
-    That is precisely how the martial hall came to sit on Tango's ring road with a green gate: the
-    hall was correctly classified in _OVERLAP_STRUCTS and correctly cleared of all thirteen battery
-    hazards, but `ring_road_kept_clear` was reading its own list of eight keys that nobody had
-    updated. The fix is not to remember harder - it is for every keep-clear check to read the SAME
-    registry, which is what this helper is for, and for `test_every_solid_struct_is_gated_off_every_hazard`
-    to prove that each registered key really does trip each hazard's check.
-
-    `extra` names _OVERLAP_TARGETS keys a particular hazard must ALSO keep clear of - "religious"
-    for the ring road (a temple may not stand on the patrol lane), which is not in _OVERLAP_STRUCTS
-    because halls are what structs avoid rather than structs themselves. `exclude` drops keys a
-    particular rule deliberately does not govern; use it only with a stated reason at the call site,
-    since a silent omission is the exact bug this helper exists to prevent. Records without a drawn
-    footprint are skipped, so a caller can pass a key whose dicts are positional-only."""
-    out = [s for k in _OVERLAP_STRUCTS + extra if k not in exclude for s in (M.get(k) or [])]
-    out += [M[k] for k in _OVERLAP_SINGLETONS if k not in exclude and M.get(k)]
-    if M.get("granary") and "granary" not in exclude:
-        out += M["granary"]["stores"]
-    return [s for s in out if isinstance(s, dict) and "x" in s and "w" in s]
 
 
 def seg_closest(px: float, py: float, a: Pt, b: Pt) -> tuple[float, float]:

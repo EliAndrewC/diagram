@@ -180,3 +180,28 @@ def test_a_sheet_with_no_blank_box_reserves_a_pocket_outside_its_content() -> No
     assert tp[3] <= 400.0 - 14.0  # above the houses' top edge (14 px past the envelope the content box reports), not over it
     tries = s.M["meta"]["title_pocket_tries"]
     assert tries and tries[-1][4] == 1.0 and all(t[4] == 0.0 for t in tries[:-1])
+def test_bamboo_seats_refuse_the_canvas_edge_and_the_title_pocket() -> None:
+    """Feature 146: two of the bamboo scan's refusal reasons - a candidate hanging off the canvas, and one
+    inside the pocket the title placard will occupy (the title is drawn later, so its ground is reserved)."""
+    from l7r.diagram.settlement import Settlement
+
+    from ._builders import a_plan
+
+    s = Settlement(600, 600, seed=1)  # small, so the 30 px margin is a large share of the sheet
+    s.meta(name="B", scale="hamlet", ftpx=1, down_deg=90)
+    plan = a_plan()
+    seats = hg.hinterland.bamboo_seats(s, plan)
+    assert all(30 <= sum(q[0] for q in poly) / len(poly) <= 570 for poly in seats), "no seat hangs off the canvas"
+
+
+def test_bamboo_blocked_refuses_the_canvas_margin_and_the_title_pocket() -> None:
+    """Two arms of the take-yabu siter that a rolled hamlet never enters, because its sampler never
+    proposes a candidate that near the frame or under the title card. They are real refusals all the
+    same: a stand drawn into the margin is cropped in half, and one under the title is illegible."""
+    from l7r.diagram.hamletgen.hinterland import bamboo_blocked
+
+    extent = (1000.0, 1000.0)
+    assert bamboo_blocked(10.0, 500.0, extent, (0.0, 0.0, 0.0, 0.0), [], [], [], None, 30.0), "inside the margin"
+    assert bamboo_blocked(500.0, 990.0, extent, (0.0, 0.0, 0.0, 0.0), [], [], [], None, 30.0), "and the far margin"
+    assert bamboo_blocked(500.0, 500.0, extent, (400.0, 400.0, 600.0, 600.0), [], [], [], None, 30.0), "under the title card"
+    assert not bamboo_blocked(500.0, 500.0, extent, (0.0, 0.0, 10.0, 10.0), [], [], [], None, 30.0), "open ground"

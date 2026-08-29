@@ -15,7 +15,9 @@ import re
 import pytest
 
 from l7r.diagram.interactive.classes import CLASSES
-from l7r.diagram.interactive.page import explanations, hit_regions, ink_census, merge_primitives, present_classes, render_page, unregistered_classes, wrap
+from l7r.diagram.interactive.glossary import GLOSSARY
+from l7r.diagram.interactive.page import explanations, glossary_for, hit_copies, hit_regions, ink_census, marks_region, merge_primitives, present_classes, render_page, unregistered_classes, wrap
+from l7r.diagram.interactive.sources import citations, registry, research_sources, section_sources, urls_of
 from l7r.diagram.interactive.tags import Split
 
 RECT = '<rect x="1" y="2" width="3" height="4" fill="#abc" stroke="#123"/>'
@@ -95,10 +97,11 @@ def test_present_classes_reads_every_tag_shape() -> None:
 def test_explanations_hold_only_present_classes_and_present_siblings() -> None:
     data = explanations({"windbreak", "copse", "farmhouse"})
     assert set(data) == {"windbreak", "copse", "farmhouse"}
-    assert set(data["windbreak"]["siblings"]) == {"copse"}, "woodland commons is absent from this map, so it is not claimed"
-    assert data["farmhouse"]["siblings"] == {}, "storage shed and byre are absent"
+    assert data["windbreak"]["siblings"] == ["copse"], "woodland commons is absent from this map, so it is not claimed; siblings are link keys now"
+    assert data["farmhouse"]["siblings"] == [], "storage shed and byre are absent"
     assert data["windbreak"]["label_phrase"] == "historically accurate"
-    assert data["windbreak"]["sources"] == list(CLASSES["windbreak"].sources)
+    assert data["windbreak"]["sources"] == research_sources(CLASSES["windbreak"].entry) and "forests-2020" in data["windbreak"]["sources"]
+    assert len(data["windbreak"]["refs"]["forests-2020"]["text"]) > 20
 
 
 def test_explanations_stub_an_unregistered_class_rather_than_dropping_it() -> None:
@@ -124,9 +127,11 @@ def test_the_page_embeds_only_the_present_classes() -> None:
     page = _page()
     blob = re.search(r'<script id="classes" type="application/json">(.*?)</script>', page, re.S)
     assert blob
-    data = json.loads(blob.group(1).replace("<\\/", "</"))
+    payload = json.loads(blob.group(1).replace("<\\/", "</"))
+    data = payload["classes"]
     assert set(data) == {"farmhouse", "paddy", "bund"}
-    assert set(data["paddy"]["siblings"]) == set() and set(data["bund"]["siblings"]) == set(), "bund beans are not on this page"
+    assert data["paddy"]["siblings"] == [] and data["bund"]["siblings"] == [], "bund beans are not on this page"
+    assert any(g["term"] == "bund" for g in payload["glossary"]), "the glossary carries the terms the present explanations use"
 
 
 def test_the_page_escapes_a_closing_script_tag_inside_the_json() -> None:
@@ -177,3 +182,114 @@ def test_the_page_puts_the_hit_regions_right_above_the_sheet() -> None:
     hit = page.index('class="hit"')
     ink = page.index(RECT)
     assert sheet < hit < ink
+
+
+def test_thin_marks_get_a_fat_invisible_hit_copy() -> None:
+    lane = '<path d="M1,1 L9,9" fill="none" stroke="#C9AE79" stroke-width="5.0"/>'
+    out = hit_copies(lane)
+    assert out == '<path d="M1,1 L9,9" fill="none" class="hit" style="pointer-events: stroke; stroke-width: 20.0px"/>'
+    bead = '<g opacity="0.85"><circle cx="10" cy="20" r="1.4" fill="#2F6B35"/></g>'
+    assert hit_copies(bead) == '<circle cx="10" cy="20" r="4.2" fill="none" class="hit" style="pointer-events: fill"/>'
+    blades = '<g stroke="#A7A860" stroke-width="0.8"><line x1="1" y1="2" x2="3" y2="4"/></g>'
+    assert 'stroke-width: 6.0px' in hit_copies(blades), "the floor: four times 0.8 is under 6 px"
+    assert hit_copies('<polygon points="0,0 1,0 1,1" fill="#abc"/>') == "", "a filled shape already takes the pointer"
+
+
+def test_widened_classes_carry_their_hit_copies_and_others_do_not() -> None:
+    lane = '<path d="M1,1 L9,9" fill="none" stroke="#C9AE79" stroke-width="5.0"/>'
+    assert 'class="hit"' in wrap(lane, "village lane") and 'class="hit"' not in wrap(lane, "pond")
+    paddy = '<polygon points="0,0 9,0 9,9" fill="#A6C398" stroke="#7A5A30" stroke-width="1.4"/>'
+    out = wrap(paddy, Split("paddy", "bund"))
+    assert out.count('class="hit"') == 1 and out.index('class="hit"') > out.index('data-k="bund"'), "the bund's hit copy rides in the bund group, above the paddy fill"
+
+
+def test_the_marks_region_covers_only_cells_that_hold_a_mark() -> None:
+    rects = marks_region(['<g><line x1="5" y1="5" x2="6" y2="6"/><line x1="30" y1="5" x2="31" y2="6"/><circle cx="100" cy="100" r="2"/></g>'], cell=24.0, grow=0)
+    assert rects == '<rect x="0" y="0" width="48" height="24" fill="none"/><rect x="96" y="96" width="24" height="24" fill="none"/>'
+    assert marks_region([]) == ""
+
+
+def test_the_region_grows_a_cell_around_each_mark_but_stays_inside_the_footprint() -> None:
+    one = ['<line x1="36" y1="36" x2="37" y2="37"/>']  # the cell (1, 1)
+    grown = marks_region(one, cell=24.0, grow=1)
+    assert grown.count("<rect") == 3 and 'x="0" y="0" width="72"' in grown, "the eight neighbors are in: three rows of three"
+    clipped = marks_region(one, cell=24.0, grow=1, within=[[[0, 0], [48, 0], [48, 48], [0, 48]]])
+    assert clipped.count("<rect") == 2 and 'width="48"' in clipped and 'y="48"' not in clipped, "the growth stops at the footprint; the marked cell itself always counts"
+
+
+def test_the_scrub_region_comes_from_its_marks_not_its_polygon() -> None:
+    strings = [
+        '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300">',
+        '<rect width="300" height="300" fill="#EFE3C2"/>',
+        '<g stroke="#A7A860" stroke-width="0.8"><line x1="5" y1="5" x2="6" y2="9"/></g>',
+        "</svg>",
+    ]
+    tags = [None, "-", "scrub and rough grazing", None]
+    page = render_page(strings, tags, "T", {"ftpx": 1.0}, {"commons": [{"role": "grazing", "poly": [[0, 0], [300, 0], [300, 300], [0, 300]]}]})
+    assert "<rect x=\"0\" y=\"0\" width=\"48\" height=\"24\" fill=\"none\"/>" in page and 'polygon class="hit"' not in page
+
+
+def test_the_hit_widths_are_per_class_as_the_gm_tuned_them() -> None:
+    """Bunds and beans twice the first cut, channels and the stream widened, lanes unchanged (GM 2026-08-28)."""
+    bund = '<polygon points="0,0 9,0 9,9" fill="none" stroke="#7A5A30" stroke-width="1.4"/>'
+    assert "stroke-width: 12.0px" in wrap(bund, Split("paddy", "bund")), "1.4 * 8 = 11.2 -> the 12 px floor"
+    bead = '<circle cx="10" cy="20" r="1.4" fill="#2F6B35"/>'
+    assert 'r="8.4"' in wrap(bead, "bund beans")
+    ditch = '<path d="M1,1 L9,9" fill="none" stroke="#6C9CBE" stroke-width="2.5"/>'
+    assert "stroke-width: 15.0px" in wrap(ditch, "field ditch")
+    stream = '<path d="M1,1 L9,9" fill="none" stroke="#9CB4C8" stroke-width="7"/>'
+    assert "stroke-width: 12.0px" in wrap(stream, "stream")
+    lane = '<path d="M1,1 L9,9" fill="none" stroke="#C9AE79" stroke-width="5.0"/>'
+    assert "stroke-width: 20.0px" in wrap(lane, "village lane")
+
+
+def test_the_citations_come_from_the_research_entries() -> None:
+    """GM 2026-08-28: the references behind a modal are the entry's own Sources line, read from the record."""
+    keys = research_sources("research/vegetation.md - 'The fengshui forest - real scale, and why ours is honest'")
+    assert "forests-2020" in keys
+    reg = registry()
+    assert len(reg) > 200 and "sugiura-1973-fuzoku" in reg and "Used for:" in reg["sugiura-1973-fuzoku"]
+    assert citations(["forests-2020", "no-such-key"])["no-such-key"]["text"] == "(not in research/SOURCES.md)"
+    assert urls_of("Saitama City (https://www.city.saitama.lg.jp/p077111.html; READ). See https://example.org/a).") == ["https://www.city.saitama.lg.jp/p077111.html", "https://example.org/a"]
+    assert section_sources("**Sources:** `a-1`, [`b-2`](SOURCES.md#b-2) and `a-1` again") == ["a-1", "b-2"]
+    assert research_sources("nothing here") == []
+
+
+def test_every_class_cites_what_its_entry_cites_and_the_uncited_are_the_known_five() -> None:
+    uncited = sorted(k for k, fc in CLASSES.items() if not research_sources(fc.entry))
+    assert uncited == ["fallow", "field pond", "field rock", "footbridge", "grave island"], "an entry the citation pass left without keys (report.md lists them)"
+    for k, fc in CLASSES.items():
+        for key in research_sources(fc.entry):
+            assert key in registry(), f"{k} cites {key}, which SOURCES.md does not register"
+
+
+def test_the_glossary_is_well_formed_and_used() -> None:
+    for term, (variants, definition) in GLOSSARY.items():
+        assert variants and len(definition) > 30 and "\u2014" not in definition, term
+    used = {g["term"] for g in glossary_for(explanations(set(CLASSES)))}
+    assert {"bund", "coppice", "iriai", "tameike", "yashikirin", "kosatsuba", "hokora"} <= used
+    unused = set(GLOSSARY) - used
+    assert not unused, f"glossary terms no explanation uses: {sorted(unused)}"
+
+
+def test_every_registered_source_carries_a_link_or_says_why_not() -> None:
+    """Constitution v2.13.0 (GM 2026-08-28): a SOURCES.md key records the URL where the source can be
+    read, or an explicit `URL: none - <why>`; the references modal links to it."""
+    bare = sorted(k for k, text in registry().items() if not urls_of(text) and "URL: none" not in text)
+    assert bare == [], f"sources with neither a link nor a stated reason: {bare}"
+
+
+def test_merge_primitives_folds_a_run_of_unfilled_circles() -> None:
+    from l7r.diagram.interactive.page import merge_primitives
+
+    run = '<circle cx="1" cy="1" r="2" stroke="#000"/><circle cx="5" cy="5" r="2" stroke="#000"/>'
+    out = merge_primitives(run)
+    assert out.count("<circle") == 0 and "<path" in out
+
+
+def test_research_sections_of_a_missing_file_are_empty_not_an_error() -> None:
+    """Feature 146: a research pointer naming a file that is not there yields no sections - the interactive
+    page loses that entry's citations rather than failing to build."""
+    from l7r.diagram.interactive.sources import _sections
+
+    assert _sections("research/no-such-file-at-all.md") == []

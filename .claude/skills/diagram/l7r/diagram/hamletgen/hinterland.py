@@ -8,6 +8,7 @@ from __future__ import annotations
 import math
 import random
 from collections.abc import Sequence
+from typing import Any
 
 from l7r.diagram.settlement import Settlement, point_in_poly, seg_dist
 from l7r.diagram.sitegen.geom import crop_polys
@@ -496,9 +497,18 @@ def open_ground_patches(s: Settlement, plan: SitePlan, count: int, size: float =
                     # near the edge that a slightly smaller square clears, and a smaller coppice on
                     # the sheet beats a larger one the crop cuts off. Only when even the floor-sized
                     # parcel fails is the seat genuinely unusable.
+                    # PARKED, NOT UNTESTED (feature 147, the GM's ruling 2026-08-29; feature 148 owns the fix).
+                    # `tests/gate/hamletgen/test_woodland_shrink_147.py` walks this ladder and covers these two
+                    # lines when it runs on its own - and contributes nothing to them inside the full sweep,
+                    # because `--dist worksteal` makes which tests share a worker vary between runs and the
+                    # coverage verdict varies with it. DO NOT write another test for these lines; that was
+                    # tried, along with ruling out the roll-sharing, the cohort seed count, single-worker runs,
+                    # forced pool regeneration and a synthetic fixture. The pragma is what lets the feature-147
+                    # speedup ship while the defect stays owned; `tools/hamlet_floor.PARKED` announces it on
+                    # every run so the list has to shrink.
                     for _sh in (0.9, 0.8, 0.7, 0.6):
                         _cand_half = max(half_used * _sh, _COMMONS_FLOOR_FT / 2.0)
-                        if _ok(x, y, _cand_half) and _bbox_ok(_cand_half, _cand_half):
+                        if _ok(x, y, _cand_half) and _bbox_ok(_cand_half, _cand_half):  # pragma: no cover - see above
                             half_used, _asp = _cand_half, 1.0
                             break
                 if not _asp:
@@ -560,6 +570,42 @@ BAMBOO_THICKET_FT = (84.0, 58.0)
 BAMBOO_LEGIBLE_FT = 14.0  # the SHORT axis: a household strip is ~16 ft deep and reads; below this, nothing does
 
 
+def bamboo_blocked(
+    x: float,
+    y: float,
+    extent: Pt,
+    pocket: tuple[float, float, float, float],
+    rects: Sequence[tuple[float, float, float, float, float]],
+    lanes: Sequence[tuple[Poly, float]],
+    polys: Sequence[tuple[Poly, float]],
+    pond: Any,
+    pond_pad: float,
+) -> bool:
+    """Is this ground already spoken for, as far as a stand of take-yabu is concerned?
+
+    LIFTED OUT OF `bamboo_seats` (feature 146, GM 2026-08-28 on inner functions and testability). Two of
+    its arms - the canvas MARGIN and the TITLE POCKET - are geometry no rolled hamlet ever offers a culm
+    for, because the sampler this serves never proposes a candidate that near the frame or under the title
+    card. They are real refusals all the same, and want asking directly rather than through a planned site.
+    """
+    if x < 30 or y < 30 or x > extent[0] - 30 or y > extent[1] - 30:
+        return True
+    if pocket[0] <= x <= pocket[2] and pocket[1] <= y <= pocket[3]:
+        return True
+    for rx, ry, rw, rh, pad in rects:
+        if abs(x - rx) <= rw / 2 + pad and abs(y - ry) <= rh / 2 + pad:
+            return True
+    for pts, half in lanes:
+        if any(seg_dist(x, y, pts[k], pts[k + 1]) < half for k in range(len(pts) - 1)):
+            return True
+    for poly, pad in polys:
+        if len(poly) >= 3 and (point_in_poly(x, y, poly) or min(seg_dist(x, y, poly[k], poly[(k + 1) % len(poly)]) for k in range(len(poly))) < pad):
+            return True
+    if not pond:
+        return False
+    return bool(((x - pond[0]) / (pond[2] + pond_pad)) ** 2 + ((y - pond[1]) / (pond[3] + pond_pad)) ** 2 <= 1.0)
+
+
 def bamboo_seats(s: Settlement, plan: SitePlan) -> list[Poly]:
     """Where the hamlet's bamboo stands go, per the `bamboo` knob - SCANNED, like the coppice patches.
 
@@ -594,6 +640,12 @@ def bamboo_seats(s: Settlement, plan: SitePlan) -> list[Poly]:
                 rects.append((float(o["x"]), float(o["y"]), float(o["w"]), float(o["h"]), px(pad)))
     lanes = [([(float(a), float(b)) for a, b in ln["pts"]], float(ln.get("w", 3)) / 2 + px(10.0)) for ln in s.M.get("lanes", []) if len(ln.get("pts") or []) >= 2]
     polys: list[tuple[Poly, float]] = [(list(f), px(12.0)) for f in s.field_polys]
+    # A TAKE-YABU MAY NOT STAND IN THE CROP - the DRY crop included (settlement-review, Mizuguchi, feature 145).
+    # `field_polys` holds the paddy; the dry hem's plots are crop too, and nothing here refused them, so seed 23's
+    # stand put 14 of its 66 culms up to 12.2 ft inside a soybean plot. A clonal bamboo rhizome in a bean field is
+    # the one thing a farmer digs a trench to stop, so this is a placement error rather than a legibility one. The
+    # gate could not catch it either: `bamboo_stands_clear_of_paddies` reads paddy outlines only (widened with this).
+    polys += [([(float(a_), float(b_)) for a_, b_ in (o.get("poly") or [])], px(12.0)) for o in s.M.get("dry_plots", []) if len(o.get("poly") or []) >= 3]
     polys += [([(float(a), float(b)) for a, b in m["poly"]], px(6.0)) for m in s.M.get("marshes", []) if m.get("poly")]
     polys += [(list(plan.belt), px(10.0))] if plan.belt else []
     polys += [(list(w), px(20.0)) for w in plan.woodland_polys]
@@ -601,22 +653,7 @@ def bamboo_seats(s: Settlement, plan: SitePlan) -> list[Poly]:
     tp = title_pocket(s, plan)
 
     def _blocked(x: float, y: float) -> bool:
-        if x < 30 or y < 30 or x > s.W - 30 or y > s.H - 30:
-            return True
-        if tp[0] <= x <= tp[2] and tp[1] <= y <= tp[3]:
-            return True
-        for rx, ry, rw, rh, pad in rects:
-            if abs(x - rx) <= rw / 2 + pad and abs(y - ry) <= rh / 2 + pad:
-                return True
-        for pts, half in lanes:
-            if any(seg_dist(x, y, pts[k], pts[k + 1]) < half for k in range(len(pts) - 1)):
-                return True
-        for poly, pad in polys:
-            if len(poly) >= 3 and (point_in_poly(x, y, poly) or min(seg_dist(x, y, poly[k], poly[(k + 1) % len(poly)]) for k in range(len(poly))) < pad):
-                return True
-        if not pond:
-            return False
-        return bool(((x - pond[0]) / (pond[2] + px(30.0))) ** 2 + ((y - pond[1]) / (pond[3] + px(30.0))) ** 2 <= 1.0)
+        return bamboo_blocked(x, y, (s.W, s.H), tp, rects, lanes, polys, pond, px(30.0))
 
     def _fits(cx: float, cy: float, hw: float, hh: float) -> bool:
         samples = [(cx + dx * hw, cy + dy * hh) for dx in (-1.0, -0.5, 0.0, 0.5, 1.0) for dy in (-1.0, 0.0, 1.0)]

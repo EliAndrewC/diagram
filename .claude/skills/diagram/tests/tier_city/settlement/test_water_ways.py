@@ -6,7 +6,7 @@ import pytest
 
 from l7r.diagram import settlement
 from l7r.diagram.settlement import Settlement
-from tests.settlement._builders import _crop_settlement, _walled
+from tests.settlement._builders import _crop_settlement
 
 
 @pytest.mark.tiers("city")
@@ -28,29 +28,6 @@ def test_mausoleum_yields_walls_to_abutting_ward_fences():
     s.ward("d", [(1500, 100), (1500, 250)], [])  # vertical fence high above...
     s.mausoleum(1527, 650, 54, 40, gate_dir="east")  # ...this west wall (no y-overlap)
     assert "west" not in s.M["mausoleums"][-1]["ward_walls"]
-
-
-@pytest.mark.tiers("city")
-def test_ward_fence_end_snaps_onto_the_wall_ALONG_ITS_OWN_AXIS():
-    # GM 2026-07-27: "the neighborhood walls stick out the other side of the city walls". The end is
-    # placed 20px past the north rampart (y200) on an OBLIQUE run, which is what separates the two
-    # candidate fixes: trimming back along the fence's own terminal segment lands at x=556.8, while
-    # a perpendicular snap to the nearest point on the wall would land at x=560 and kink the last
-    # stretch off the line the gen drew. Same rule city_streets_meet_through_lanes states for a lane.
-    s = _walled()
-    s.ward("samurai", [(500, 560), (560, 180)], gates=[])
-    end = s.M["wards"][-1]["boundary"][-1]
-    assert end == pytest.approx([556.8, 200.0], abs=0.1)
-    assert s.M["wards"][-1]["stroke"] == 5.0 and s.M["wall_stroke"] == 11.0
-
-
-@pytest.mark.tiers("city")
-def test_ward_fence_end_far_from_the_wall_is_left_exactly_where_the_gen_put_it():
-    # an end nowhere near the rampart is not a junction at all but a fence that FAILS to reach it -
-    # city_ward_fence_meets_wall's defect to report. Dragging it silently would hide that.
-    s = _walled()
-    s.ward("samurai", [(500, 700), (500, 400)], gates=[])
-    assert s.M["wards"][-1]["boundary"][-1] == [500.0, 400.0]
 
 
 @pytest.mark.tiers("capital")

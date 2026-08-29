@@ -58,7 +58,7 @@ class BundleGeomMixin:
         dispersed) plus the whole-bundle bbox. (NW windward; other winds are a later generalisation.)"""
         gap = self.px(3)  # 3 ft between a house and its yard/garden, at this map's ftpx
         gw, gh = 0.48 * hw, 0.85 * hh  # garden - tight to the house, scales with wealth
-        yw, yh = 0.80 * hw, 0.92 * hh  # threshing/drying yard, ~house-sized
+        yw, yh = self._yard_dims(hw, hh, hx, hy)  # threshing/drying yard - the rolled area (homestead_parts._yard_area_ft2); the placer reserves exactly what gets drawn
         if not getattr(self, "_nucleated", False):
             # CAP the DISPERSED appurtenances too, same doctrine as the nucleated branch below: a BIG house
             # (the 46x28 px headman) keeps an ORDINARY farm's garden/yard, not ones scaled to the grand
@@ -71,7 +71,7 @@ class BundleGeomMixin:
             # its own caps) so nucleated maps stay byte-identical - capping its inputs re-rolled
             # Hoshigaoka's packing and pushed its fixed-coordinate graveyard off-frame.
             gw, gh = min(gw, self.px(42)), min(gh, self.px(30))
-            yw, yh = min(yw, self.px(68)), min(yh, self.px(44))
+            # the yard is ROLLED, not scaled off the house (feature 134 T49), so it needs no headman cap
         east = hx + hw / 2 + gap + gw
         south = hy + hh / 2 + gap + yh
         base: dict[str, Any] = {
@@ -95,8 +95,9 @@ class BundleGeomMixin:
             # which also varies its proportions; the threshing yard's base is its MAXIMUM (a work apron sized
             # to the harvest) so it jitters DOWN. No two homesteads are identical. Both are CAPPED afterward so
             # the big headman still keeps an ordinary farm's yard/garden (the garden jitter can't breach it).
-            yw = min(yw * (0.75 + self._hjit(hx, hy, 5.0) * 0.25), self.px(68))  # yard  [0.75,1.00]x, capped at 68 ft
-            yh = min(yh * (0.75 + self._hjit(hx, hy, 6.0) * 0.25), self.px(44))
+            # THE YARD KEEPS ITS ROLLED DIMS (feature 134 T49): the lognormal IS its variation, and
+            # re-jittering it here would flatten the distribution the research fixed. The garden below
+            # still jitters UP from its minimum - that rule is unchanged.
             gw = min(gw * (1.0 + self._hjit(hx, hy, 3.0) * 0.25), self.px(48))  # garden [1.00,1.25]x, capped at 48 ft
             gh = min(gh * (1.0 + self._hjit(hx, hy, 4.0) * 0.25), self.px(34))
             # THE FORECOURT IS RESERVED WHETHER OR NOT A THRESHING FLOOR IS DRAWN ON IT (feature 139, GM

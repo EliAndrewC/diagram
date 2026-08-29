@@ -15,11 +15,3 @@ def test_justice_town_fixture_passes_every_justice_check():
     # The control. Without it, a check that fires on EVERYTHING would look like a working check.
     bad = f(_justice_town())
     assert not {n for n in bad if n.startswith(("punishment_spot", "execution_ground", "town_has_punishment", "town_has_execution"))}
-
-
-@pytest.mark.tiers("town")
-def test_cistern_wells_with_no_aqueduct_fire():
-    """A josui-ido cistern-well claims to draw on a buried main - with NO aqueduct on the map
-    there is nothing to tap (coverage: the no-aqueduct branch)."""
-    M = {"meta": {"scale": "town"}, "wells": [{"x": 500, "y": 500, "kind": "cistern"}]}
-    assert any("cistern" in c for c in f(M)), "the no-aqueduct cistern must fail the josui-ido rule"

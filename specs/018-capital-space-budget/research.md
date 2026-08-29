@@ -1,5 +1,8 @@
 # Research: Domain-capital space budget
 
+**Sources (feature 138, 2026-08-28):** section B names its anchors in prose without links (recorded 2026-08); cited from `research/cities/capitals.md` (`jokamachi-wiki-corpus`, `hikone-castle-town`, `okayama-castle`, `beijing-imperial-city` and the 2026-08-28 keys).
+
+
 **Phase 0. This file is the Principle XII OPENING GATE.** For every element the budget prices it states what the historical reality was, whether the design matches it, and **what determines the element in reality** - because a generator usually gets the *existence* of a thing right and its *governing variable* wrong.
 
 The full findings, with sources and disclosed departures, live in [`research/cities/capitals.md`](../../.claude/skills/diagram/research/cities/capitals.md). This file does not restate them; it records what each budget NUMBER rests on and where the design was changed to match.

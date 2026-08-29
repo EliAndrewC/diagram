@@ -425,3 +425,34 @@ and left EAST - straight back across the settlement it had just come out of.
 
 **The ordering that came out of it**: wet ground, then steadings, then crops. A marsh cannot be
 nudged and neither can somebody's house; a crop clip can, and `route_around` is the call that does it.
+
+### 2026-08-28 - manifest re-recorded under the landed feature-137 engine
+
+The committed manifest was rolled by an earlier engine state; this commit records what the landed engine (GitHub main f4456a72) draws, byte-identical to the mirror's render-sync, so main is clean. Not a review pass: this map is red on the gate and is feature 139 T08 (the review comes with its fix).
+## 2026-08-28 - feature 140: seats measured against a few chords of the field edge (the map moved)
+
+Placement now judges a farmhouse seat against the field outline's chords facing the cluster (open chain,
+pushed out 3 px; `M["field_chains"]`) and never the full outline; `houses_clear_of_paddies` reads the same
+chords. The GM ruled the maps may move (*"none of what we have done so far is in any way canonical"*), and
+this one did - every seat re-rolled, wells, byres and the lane web with it. `settlement-review` DELTA
+pass: **ACCEPTABLE WITH NOTES** - nothing attributable to 140; the lane-ink residue it names
+(`lanes_bend_like_paths` on Kashikawa and Sawada) is feature 139's open class, now with coordinates in the
+review record (`specs/140-placement-segments/research.md` R5). Set-backs read as a rank; the measured
+corner-to-chord profile is in R5 too.
+
+## 2026-08-28 - feature 145 (the solver moved the fan; the whole map re-rolled)
+
+settlement-review, PASS with one error and two questionables. The error is FIXED here rather than filed
+(constitution XIV): the take-yabu stood 12.2 ft inside a soybean plot - 14 of its 66 culms on the hatch -
+because `bamboo_seats._blocked` refused `field_polys` (the paddy) and never `M["dry_plots"]`, and the gate's
+`bamboo_stands_clear_of_paddies` read paddy outlines only, so it was green by construction. Both now read
+the same ground: the seat scan refuses dry plots at the same 12 ft pad and the check measures any crop
+polygon. Verified across the pool: 12 stands on four hamlets, none in crop (was 19.9% of this stand's
+footprint, 41.4% before the re-roll).
+
+Deferred with their measurements, both pre-existing and both `research: physical` rather than rulings:
+the marsh's wet tint is seated by CENTER against `field_polys+10` while the blotch is a disc up to 28 px
+across, so 52 blotches reach up to 15.2 ft inside the paddy outline (the doctrine says gap verdicts read
+footprints, never centers - but which edge feathers and which stops hard at a bund is the research
+question); and a woodland commons at (387,1767) is 99 x 116 ft against the recorded 120 ft legibility
+floor, so either the floor measures another axis or the drop is not firing.

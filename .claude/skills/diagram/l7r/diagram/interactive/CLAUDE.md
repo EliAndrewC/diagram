@@ -14,6 +14,8 @@ PNG is byte-identical by construction; the page is a second serialization of the
 |---|---|
 | `tags.py` | you need the tag shapes: a `str` class, `Parts` (one string, several classes - a farmhouse and its shed), `Split` (one element, fill and stroke in different classes - a paddy and its bund), `"-"` (ruled not highlighted), `None` (nobody ruled) |
 | `classes.py` | you are adding a KIND of feature, changing what a modal says, or adding a sibling distinction. The vocabulary is the spec's FR-007 table; every entry is written FROM a `research/` entry and carries its label; sibling text is per PAIR and symmetric; `NOT_HIGHLIGHTED_RULINGS` is the record of what was ruled out and by whom |
+| `glossary.py` | you are adding a term the explanations use, or a definition reads wrong - every occurrence of a term in a modal is a hover tooltip; a test proves each term is used and each explanation's terms are defined |
+| `sources.py` | a modal's references look wrong - they are READ FROM THE RECORD at page-write time: the class's research entry's `**Sources:**` keys and `research/SOURCES.md`'s citation text; the registry's own `sources` tuple is only the fallback |
 | `page.py` | `wrap()` (the HTML form of one stream string), `ink_census()` (the FR-009 data: elements per class, and the unclassed ones), `explanations()` (only present classes, only present siblings), `render_page()` / `write_html()` |
 | `assets/page.css`, `assets/page.js` | the look and the behavior; inlined at write time. The highlight color is a recorded rendering decision (research.md R2) - change it there and here together |
 

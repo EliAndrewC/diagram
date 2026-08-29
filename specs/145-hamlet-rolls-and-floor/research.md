@@ -1,0 +1,214 @@
+# Research: feature 145 - the hamlet coverage floor, and the sixteen-second roll
+
+All `research: rendering` - nothing here is about how a place was built. Every number is a stopwatch
+or a cProfile on this container (22 cores, several sessions sharing it); the bookends are the record.
+
+## R1 - "What are we doing billions of computations on exactly?" (the GM's question)
+
+Profiled on the reference hamlet (Inashiro, seed 4) and the cohort's two slowest seeds, 2026-08-28,
+BEFORE any change (`dev/perf-log/20260828T1634*-profile-adhoc-*`, bookend `144-start` = 128.2 s over
+seeds 4/25/39/47 = 17.6 / 51.0 / 19.9 / 39.7 s):
+
+| stage | seed | what the time was | calls |
+|---|---|---|---|
+| `hinterland` | 4 | the scrub and marsh scatters asking the outline "am I inside, how far is the edge" per throw, walking EVERY edge each time | 1.3M `point_in_poly`, 156k `edge_dist`, ~5M `seg_dist`; 13.4 of 20.6 profiled s |
+| `web` | 25 | `FabricIndex.fouled` - the grid narrowed WHICH polygons a lookup tested, but each polygon was still walked edge by edge, and the field envelope / crop rings / marsh are `big` (tested on every lookup) | 1.19M `fouled`, 30.8M `seg_dist`; 35.6 of the roll's 51 s |
+| `field` | 47 | `fit_field`'s bisection: nine carves per aspect, five aspects, most of them at aspects where the fan SATURATES (16-17 acres against 19.5 whatever k) | 42 `build_comb` at ~0.6 s each; 26.2 s |
+| `field` | 4 | four carves where the first predicts the answer | 3.5 s |
+
+Not billions - tens of millions of segment operations per roll, in Python, on questions whose answer
+depends only on the few edges near the point. The shape is the one `dev/performance.md` already
+names: a per-candidate scan of geometry that does not change during the scan.
+
+## R2 - the fixes, and what each bought
+
+1. **`RingIndex`** (`settlement/_geom/indexes.py`): a ring's edges filed in a `PointGrid`, `inside`
+   counting crossings only against the edges whose y-span can meet the ray, `edge_within(limit)`
+   returning the true distance under the limit or None. Exact - the test compares 9,000 random
+   points against `point_in_poly`/`edge_dist`. Used by `commons`, `marsh` (the outline and the soft
+   marsh polygons), `boxed_rings`/`boxed_ring_hit` (the scatters' keep-out grids, whose crop-margin
+   test was the last whole-ring scan), and `FabricIndex` (every obstacle polygon). Hinterland on seed
+   4: 20.6 -> 7.0 profiled s; web on seed 25: 62.4 -> 8.9 profiled s.
+2. **`_predict_k`** (`hamletgen/water.py`): a power-law step through the last two (k, acres) points
+   instead of halving the bracket - the fan scales in two dimensions so acres ~ k^2 - with the
+   bracket kept and the prediction clamped into it. Seed 4: 4 carves -> 2.
+3. **The saturation probe** (`_fit_at_aspect(probe=True)`): when k = 1 falls short, the second carve
+   is the largest fan the bracket allows; if that too is short by more than the tolerance the aspect
+   cannot reach the target and the search moves on after two carves. `fit_field` re-runs the best
+   aspect in full when no aspect landed the target, so the map the household ratchet judges is as
+   refined as before. Seed 47: 39 carves -> 8; the stage 63 -> 12 profiled s.
+4. A collapsed bracket (< 0.03 of k, under a plot row) ends an aspect.
+
+Bookends: `144-start` 128.2 s -> `144-mid` (after 1-2) 65.6 s -> `145-mid` (after 3) **48.0 s**,
+seeds 4/25/39/47 = 9.9 / 13.8 / 11.9 / 12.4 s (-62.6% total; worst seed 51.0 -> 13.8 s). The
+reference roll alone (`GATE_NO_CACHE=1 make reference`, gate included, process start included):
+17.6 -> 12.2 s wall; its remaining stages are the web (~1.5 s), the field (~1.5 s), hinterland
+(~3 s), homesteads, the notice board, and ~2 s of gate.
+
+## R2b - what the moved maps exposed (constitution XIV: fixed here, not filed)
+
+The first FULL run after the solver change found four checks firing on three maps that were green
+before the move. Each was diagnosed to a PLACER defect the old field geometry had happened to hide:
+
+| map | check | cause | fix |
+|---|---|---|---|
+| Sawada | `roads_clear_of_marsh` | the connector grazed the toe band's corner by 4.5 px off-page: `connector_track` grew the wet band by scaling about its CENTROID, which barely moves the corners of a 2,900 px contour strip | `_inflated` now offsets along the ring's normals (`ring_offset`, feature 140) |
+| Kashikawa | `wells_clear_of_trees` | the windbreak's clump keep-out for a well was vr + 0.90 x clump, but a drawn crown runs to ~1.03 x clump (14.4 on a 14 clump, 25.4 px from a well of vr 12.4) | vr + 1.05 x clump + 1 |
+| Kashikawa | `lanes_bend_like_paths` | a straggler footpath kept a 7 px lattice step: `_unjog` replaces a zigzag only by its full chord, and the chord brushed a garden | a knee at the step's midpoint is tried when the chord is blocked |
+| Cohort-41 | `ways_cross_water_on_a_deck` | the footpath's standing place at the door was tested with `_clear_link(q, q, ...)`, which returns True for any span under 1 px - never tested at all; it stood 1.3 px off the drain brook. Its network junction had no water test either | the standing place is judged as a POINT by the router's own index (14 px off water); a junction within 14 px of water is skipped |
+
+After the fixes all three roll clean; cohort seeds 42 and 43, pinned failing since 2026-08-27, also
+come up clean and their pins are removed (gate/hamletgen/test_driver.py).
+
+## R2c - what the wider FULL cohort found, and what the baseline says
+
+Widening the FULL cohort from four seeds to eight (41-48) to let the floor see the seed-dependent placer
+branches found seed 45 short of its acreage (18.6 of 22.1, past the cohort test's 15% bar). Rolled on
+the pre-145 worktree (514e6cc0) the same seed gives 18.1 - the bisection was shorter still - so the
+fan saturates at every aspect for 17 households at that fall: an envelope/canvas sizing limit, not the
+solver. Ledgered in `ACREAGE_SHORT` with both numbers (constitution XIII: pre-existing, measured).
+
+The baseline FULL run on that worktree also failed the switches tests under MAKEFLAGS, the Sawada and
+Kashikawa gates and the four-seed cohort ratchet, and carried the same `ci/`, `switches.py`,
+`perf_review`, `scatter_audit` and `site_justice` lines under 100% - so every one of those is
+pre-existing, and the three map failures were FIXED here (R2b) rather than inherited.
+
+## R3 - the floor's definition (the GM's ruling, and what it means in practice)
+
+Three definitions were priced (the GM was told the second and third; the ruling was module level):
+
+| definition | automatic? | what it catches | what it misses |
+|---|---|---|---|
+| a hand list of hamlet packages | no - "something we just remember to maintain" | - | every shared module in `settlement/` |
+| **module level, derived from what the scripted rolls execute** (chosen) | yes - the roll cache's dependency records | an untested function in any module a hamlet roll touches, including a city-only branch inside it | nothing at module granularity |
+| line level: every line a hamlet roll executes must be reached by a NON-rolling test | yes | untested hamlet code precisely | it is a different, much larger program; measured against a suite that includes the rolls it is a tautology |
+
+The set is derived from a FIXED list of subjects (the reference, the gate's three polders, cohort
+seeds 41-44) so it is the same on every machine; `rollcache.report_deps` reads the record or rolls
+once. First derivation: **99 modules** - `check_village` (45), `settlement` (~30 of 70), `hamletgen`
+(10), `waterfields` (7), `interactive` (2), `sitegen`, `_invocation`. `waterfields` and
+`interactive` were not in the measured `source` list at all before this feature.
+
+## R3b - the floor's first measurement, and what it is made of (T12)
+
+`floor-first.txt` is the table. 932 uncovered lines on the 99 hamlet-path modules, mapped to the
+functions holding them. Two kinds, and the spec treats them differently (FR-002):
+
+**Hamlet code no roll or test reached (~200 lines)** - covered in this feature by tests where a unit
+can reach the branch (the geometry predicates, the solver's probe and re-run, the registry cache, the
+sibling guard, the SVG merger, the waive printout), and otherwise by the cohort the FULL run rolls
+(seed-dependent placer branches: `_thread_the_fabric`, `_smooth_web`, `_strip_blocked`, the well and
+byre fits, the carve's sector edge cases). The residue after the next FULL run is listed at T12.
+
+**Code only another tier reaches, inside a module the hamlet path executes (~700 lines)** - the case
+the spec sends to the GM, not to tests and not to deletion. By function:
+
+| module | lines | what it is |
+|---|---|---|
+| `check_village/common_02_overlap_policy.py` | 223 | `check_fire_features` (143), `_theater_one_stage` (75), `_ward_interior` (48), `check_ring_road_clear`, `check_theater_stage` - town/city fire towers, theaters, wards, the ring road |
+| `check_village/segments_11a_taxfree_terraces_and_dikeponds.py` | 56 | `dikepond_is_ponds_in_a_block` (94 lines of it) - the mulberry dike-pond form, which no scripted map draws yet |
+| `check_village/segments_01*, 02*, 03a/b, 10*` (city, capital, wards) | ~150 | the city/capital branches of segments the hamlet gate still enters and leaves at their scale guard |
+| `check_village/common_03_capacity.py` | 32 | `_fronts_route`, `city_capacity` |
+| `waterfields/polder.py` | 100 | `build_terraces` (85), `build_ribbon` (66) - the contour-terrace and ribbon-valley field engines; `FIELD_ARCHETYPES` deliberately holds two of the five (`consts.py`), so hamletgen never calls them; the two pool maps that did are frozen legacy |
+| `settlement/water_ways.py` | 44 | `market`, `ancestral_hall`, `water_mouth`, `alley` - town features |
+| `settlement/structures/fixtures.py` | 32 | `drum_tower` (30) - a city fixture; the kosatsuba branches are hamlet's and get tests |
+| `settlement/city/bridges.py` | 18 | `bridges`, `channel_footbridges` - the city's spans; the hamlet path enters the module for the footbridge helper |
+| `settlement/finish.py` | 22 | `finish`'s city crop / legend branch (lines 419-468) |
+| `settlement/core.py` | 8 | `crop_city` |
+| `settlement/_knobs.py` | 7 | `machi_mouths`, `moat_swept_tap` |
+| `settlement/shrines_wells/woods.py` | 14 | `forest` (13) - the town-scale canvas-filling wood |
+
+Three ways to make the floor honest about these, for the GM to choose between (none taken here):
+
+1. **Write the tests** - contradicts the GM's own reason for the exemption ("they might be deleted entirely"), ~700 lines of city/town test-writing.
+2. **Move the other-tier code out of the shared modules** into modules the hamlet path never executes (a `city/` segment file, a `polder_hill.py`, `water_ways_town.py`) - mechanical, no behavior change, and it makes the module-level floor mean exactly what the GM said; the cost is a file move per function and the frozen-registry re-derivation for the check segments.
+3. **A recorded, per-function exemption list** read by the floor - the "something we just remember to maintain" the GM asked to avoid; listed only for completeness.
+
+The session's recommendation was 2, and the GM chose it (2026-08-28: *"Moving that code into modules the
+Hamlet path never executes seems like the correct thing to do here."*). Done as: `common_04_urban_policy.py`,
+`settlement/town_ways.py`, `structures/urban_fixtures.py`, `city/crop.py`, `city/knobs.py`,
+`shrines_wells/forest.py`, `waterfields/hill.py`, `GroundMixin._finish_road_label`; plus two things the moves
+alone could not fix - the gate now derives each segment's SCALES and never enters a city segment on a hamlet
+(the file used to land on the path by being entered and returning at its guard), and the floor ignores
+`<module>` entries (an import is not execution; the registry imports every segment file). The path went
+99 -> 89 modules.
+
+## R3c - what the ~150 remaining hamlet-path lines ARE (the GM's question, 2026-08-28)
+
+Not modules and not 150 of anything large: **~150 LINES in about eleven modules**, and nothing tests them -
+not the gate, not `make done`, not the FULL/AWS run. They are a COVERAGE matter only; none of them costs
+test time. Three kinds:
+
+1. **Refusal branches in placement predicates** (the bulk). `_strip_blocked`, `_trunk_blocked`,
+   `_yard_fits`, `_garden_fits`, `_grove_fits`, `_bundle_common_fits`, `_blocked`, `bamboo_seats`,
+   `_comb_draw_hem` each list a dozen reasons to refuse a seat, one `return True` per reason. A roll takes
+   whichever reasons its geometry happens to hit; eight cohort seeds plus the reference and three polders
+   hit most, and the rest are simply reasons no seed needed. A unit test hits one directly (build the
+   manifest that trips it, assert the predicate) - eleven were closed that way under this feature.
+2. **Fallbacks nothing has needed yet**: `_thread_the_fabric`'s "no gap exists, so shorten the track"
+   (15 lines), `_smooth_web`'s rollback when a smoothed lane fails its re-test (11), `pull_caption_toward`'s
+   three early returns, `_dry_fields`' degenerate-canal guard (its own comment says "unreachable for a real
+   canal; satisfies the type").
+3. **Exception handlers**: the shapely `GEOSException` arms in `seams.py`.
+
+Kinds 1 and 3 are cheap unit tests. Kind 2 is the honest question: a fallback the placer has never needed
+is either dead (delete it, and the code says so) or a real path (write the geometry that forces it), and
+telling those apart is a per-case reading, not a sweep.
+## R3d - the GLOBAL floor is red on tooling, and it predates this feature (ledgered, not fixed here)
+
+`make test-full`'s existing 100% floor (everything outside `settlement/`, `waterfields/`, `interactive/`
+and now `check_village/`) fails on ~30 lines in five tooling modules: `ci/__main__.py` (4), `ci/delta.py`
+(5), `ci/state.py` (6), `ci/dispatch.py` (1), `switches.py` (8), `tools/perf_review.py` (3),
+`tools/scatter_audit.py` (2), `tools/site_justice.py` (1). Every one is a path a CHILD process takes -
+the fixtures run `python3 -m l7r.diagram.ci` and `make` in a subprocess whose coverage this run does not
+collect - or an OS-error arm (`/proc` reads in `switches.idle_context`, an unreadable record).
+
+**Pre-existing**: the pre-145 baseline worktree (514e6cc0) prints the same modules with the same or
+larger miss counts (switches 10 against 8 now, scatter_audit 5 against 2). It is invisible in ordinary
+work because `make done FULL=1` needs a prompt and the remote switch, so the FULL floors have not been
+evaluated in a while; the baseline run does not even reach them (its test phase fails first).
+
+Not fixed under this feature (constitution XIII: a pre-existing failure stays ledgered and is not fixed
+under someone else's feature) - and it is a real follow-up: either the tooling tests collect their
+subprocesses' coverage (`coverage run --parallel` in the fixture, combined after), or the tooling modules
+join the packages judged by their own floor. The GM's call.
+
+**One thing this feature DID fix about it**: the floors used to `exit 1` one at a time, so the first red
+floor hid every floor after it - which made the new hamlet floor unreachable while the tooling floor was
+red. All three now report together and the phase exits once, at the end (the same rule the test phase has).
+
+## R3e - the second move: 66 segments out of the mixed files (the GM's ruling, applied one level finer)
+
+After the first pass the hamlet floor still listed 21 `check_village` segment files. The scale skip had
+taken the pure-city files off the path; what remained were files holding BOTH - a hamlet segment and a
+dozen city ones - and the floor is module level, so every city body in them counted. 66 segments moved:
+
+| out of | count | into |
+|---|---|---|
+| `segments_01b_quarters_and_civic_reserve` | 15 | `segments_01d_city_quarters_and_civic_reserve` |
+| `segments_02c_walls_gates_and_housing` | 14 | `segments_02e_city_walls_gates_and_housing` |
+| `segments_07b_ponds_hems_and_land_fall` | 21 | `segments_07d_city_ponds_and_hems` |
+| `segments_05a_field_cover_and_cremation`, `05b_graveyards_and_channel_sources` | 11 + 3 | `segments_05e_city_field_cover_and_cremation` |
+| `segments_02a_capital_budget_and_ministries`, `02b_capital_ways_and_burial` | 1 + 1 | `segments_02d_capital_ministries_only` |
+
+**The move costs nothing**, which is worth knowing before the next one: execution order is the numeric key
+parsed from the segment's NAME (`registry._ordered_names`), never the file it sits in, so no placement row,
+no frozen-fixture edit (the rows and the check roster key on names), and the registry's own glob finds the
+new file. 595 segments before and after; the frozen order test is a subsequence check and stays green.
+
+## R4 - the numbers at the end
+
+**The rolls** (`make perf`, seeds 4/25/39/47, this container): `144-start` 126.7 s -> `145-end`
+**49.2 s** (-61.2%; per seed -30.7 / -72.9 / -50.5 / -65.2%; worst seed 51.0 -> 13.8 s; band 0,
+nothing owed). The reference alone rolls in ~12 s wall including its gate - the session's own 8 s
+target was NOT met (reported, per SC-001): what remains is the hinterland's scatter volume (~3 s),
+the field's two carves (~1.5 s), the web (~1.5 s), homesteads, the notice board, and ~2 s of gate.
+
+**The unit tests** (`make durations`, quick set, 2,116 tests): pytest **10.9 s** wall on 8 workers.
+The settlement-geometry tests that led the profile on 2026-08-28 morning are gone from its top:
+the slowest ten are now tooling fixtures (2.96 s, `make` in a fixture) and comb builds (~2 s); the
+fabric-index brute-force comparison is 0.79 s. Nothing over the quick cutoff was left deliberately.
+
+**The floor**: 99 modules derived; the FULL run judges them (and now rolls eight cohort seeds in
+process so the seed-dependent placer branches count). The residue and the other-tier decision are
+in R3b and at T12.

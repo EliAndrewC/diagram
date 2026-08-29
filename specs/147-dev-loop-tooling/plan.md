@@ -126,7 +126,7 @@ dispatch line naming the maps whose manifests differ from HEAD.
 - `pretool` on **Agent**: a `settlement-review` dispatch is refused unless a gate is running or freshly
   green for this `engine_key`, or `PAIR_OK=<reason>`.
 - `stop`: refuses to end a turn once while a pairing is half-open (a gate went green on this key and no
-  review was dispatched) - the same shape as `agent-watch-hooks.sh`.
+  review was dispatched) - the same shape as `agent-stall-hooks.sh`.
 - Every refusal names the pairing command and the override; every override appends its reason to
   `dev/bypass-log/` in the existing record shape.
 - Matching is on INVOCATIONS, not mentions: the time audit that produced this feature was itself blocked

@@ -3,82 +3,9 @@
 import math
 from typing import Any
 
-from l7r.diagram.settlement import moat_current_at
-
-from .common_01_geometry import Pt, _struct_rect, point_in_poly, poly_dist, rect_corners, seg_dist, seg_to_rect_dist, segments_cross
+from .common_01_geometry import Pt, _struct_rect, point_in_poly, rect_corners, seg_dist, seg_to_rect_dist, segments_cross
 from .common_02_overlap_policy import in_ellipse
 from .common_03_capacity import _UNBOUND, _kept
-
-
-def _seg_0465___mjf(*, M: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 465 (_mjf) - body verbatim from the legacy gate() (feature 022)."""
-    _mjf = M.get("moat_flow") or {}
-    return _kept(locals(), ('_mjf',))
-
-
-def _seg_0466__moat_junctions_swept_with_the_current(
-    *,
-    M: Any = _UNBOUND,
-    _along: Any = _UNBOUND,
-    _cur: Any = _UNBOUND,
-    _head: Any = _UNBOUND,
-    _hl: Any = _UNBOUND,
-    _mfr: Any = _UNBOUND,
-    _mj_bad: Any = _UNBOUND,
-    _mj_current: Any = _UNBOUND,
-    _mjc: Any = _UNBOUND,
-    _mjf: Any = _UNBOUND,
-    _mjp: Any = _UNBOUND,
-    _mjr: Any = _UNBOUND,
-    _mto: Any = _UNBOUND,
-    _role: Any = _UNBOUND,
-    _tap: Any = _UNBOUND,
-    _who: Any = _UNBOUND,
-    check: Any = _UNBOUND,
-) -> dict[str, Any]:
-    """Gate segment 466 (moat_junctions_swept_with_the_current) - body verbatim from the legacy gate() (feature 022)."""
-    if _mjr and len(_mjr) >= 3 and _mjf.get("inlet") and _mjf.get("outlet"):
-        _mjn = len(_mjr)
-
-        def _mj_current(tap_: Any) -> tuple[float, float] | None:
-            return moat_current_at(_mjr, _mjf["inlet"], _mjf["outlet"], tap_)
-
-        _mj_bad = []
-        for _mjc in M.get("channels", []):
-            _mjp = _mjc.get("poly") or []
-            if len(_mjp) < 2:
-                continue
-            _mfr, _mto = (_mjc.get("frm") or {}), (_mjc.get("to") or {})
-            if _mfr.get("kind") == "moat":  # an OFFTAKE leaves the ring: its mouth is the first step
-                _tap, _head, _who, _role = _mjp[0], (_mjp[1][0] - _mjp[0][0], _mjp[1][1] - _mjp[0][1]), _mto.get("name", "?"), "offtake"
-            elif _mto.get("kind") == "moat":  # a DRAIN arrives: its last step is the entry
-                _tap, _head, _who, _role = _mjp[-1], (_mjp[-1][0] - _mjp[-2][0], _mjp[-1][1] - _mjp[-2][1]), _mfr.get("name", "?"), "drain"
-            else:
-                continue
-            _cur = _mj_current(_tap)
-            _hl = math.hypot(*_head)
-            if _cur is None or _hl == 0:
-                continue
-            _along = (_head[0] * _cur[0] + _head[1] * _cur[1]) / _hl
-            # A SQUARE TAP IS THE DEFECT, not merely an upstream-facing one. Canal practice: the best
-            # offtake alignment is 0 deg to the parent, separating out in transition, and the studied
-            # optimum for water and sediment is 15-45 deg - explicitly "30 or 45 INSTEAD OF 90". A
-            # perpendicular junction sheds sediment into its own mouth and, on the page, says nothing
-            # about which way the water goes. 75 deg is the generous line for "clearly swept": well
-            # outside the textbook band, and the engine's two correct junctions (nw1 35, fn1 41) sit
-            # comfortably inside it.
-            if _along <= math.cos(math.radians(75.0)):
-                _mj_bad.append(f"{_who} ({_role}, {math.degrees(math.acos(max(-1.0, min(1.0, _along)))):.0f} deg)")
-        check(
-            "moat_junctions_swept_with_the_current",
-            not _mj_bad,
-            f"moat junction(s) not swept downstream: {_mj_bad} - where a channel meets the moat its local heading at "
-            f"the junction must carry a DOWNSTREAM component. A tributary joins pointing downstream and an offtake "
-            f"takes off downstream; a junction angled back up the current reads as water doubling on itself. Flip the "
-            f"offtake tee's along-rim step (or the drain culvert's landing point) to the downstream side",
-        )
-    return _kept(locals(), ('_along', '_cur', '_head', '_hl', '_mfr', '_mj_bad', '_mj_current', '_mjc', '_mjn', '_mjp', '_mto', '_role', '_tap', '_who'))
-
 
 # WATER JOINS WATER AT A CONFLUENCE, NEVER CROSSES IT (GM 2026-07-23, feature 014 endgame: "I can
 # visually see the intersection where ditches and channels just run into the moat... they just keep
@@ -383,71 +310,6 @@ def _seg_0481__inwall_drains_gated_at_cutoff(*, check: Any = _UNBOUND, inwall_ba
 # they continue beyond what's drawn. Bounded farm fields are exempt.
 
 
-def _seg_0482__NEAR() -> dict[str, Any]:
-    """Gate segment 482 (NEAR) - body verbatim from the legacy gate() (feature 022)."""
-    NEAR = 55
-    return _kept(locals(), ('NEAR',))
-
-
-def _seg_0483__area_feats(*, M: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 483 (area_feats) - body verbatim from the legacy gate() (feature 022)."""
-    area_feats = [("forest", M["forest"])] if M.get("forest") else []
-    return _kept(locals(), ('area_feats',))
-
-
-def _seg_0484__area_feats_1(*, M: Any = _UNBOUND, area_feats: Any = _UNBOUND, fp: Any = _UNBOUND, i: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 484 (area_feats, fp, i) - body verbatim from the legacy gate() (feature 022)."""
-    area_feats += [(f"forest_patch[{i}]", fp) for i, fp in enumerate(M.get("forest_patches", []))]
-    return _kept(locals(), ('area_feats', 'fp', 'i'))
-
-
-def _seg_0485__area_feats_2(*, M: Any = _UNBOUND, area_feats: Any = _UNBOUND, i: Any = _UNBOUND, ps: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 485 (area_feats, i, ps) - body verbatim from the legacy gate() (feature 022)."""
-    area_feats += [(f"pasture[{i}]", ps) for i, ps in enumerate(M.get("pastures", []))]
-    return _kept(locals(), ('area_feats', 'i', 'ps'))
-
-
-def _seg_0486__edge_bad() -> dict[str, Any]:
-    """Gate segment 486 (edge_bad) - body verbatim from the legacy gate() (feature 022)."""
-    edge_bad = []  # type: ignore[var-annotated]
-    return _kept(locals(), ('edge_bad',))
-
-
-def _seg_0487__edge_bad_1(
-    *,
-    EX0: Any = _UNBOUND,
-    EX1: Any = _UNBOUND,
-    EY0: Any = _UNBOUND,
-    EY1: Any = _UNBOUND,
-    NEAR: Any = _UNBOUND,
-    area_feats: Any = _UNBOUND,
-    edge_bad: Any = _UNBOUND,
-    nm: Any = _UNBOUND,
-    ol: Any = _UNBOUND,
-    p: Any = _UNBOUND,
-    xs: Any = _UNBOUND,
-    ys: Any = _UNBOUND,
-) -> dict[str, Any]:
-    """Gate segment 487 (edge_bad, nm, ol, p) - body verbatim from the legacy gate() (feature 022)."""
-    for nm, ol in area_feats:
-        xs, ys = [p[0] for p in ol], [p[1] for p in ol]
-        if EX1 - NEAR <= max(xs) < EX1:
-            edge_bad.append(f"{nm}:right")
-        if EX0 < min(xs) <= EX0 + NEAR:
-            edge_bad.append(f"{nm}:left")
-        if EY1 - NEAR <= max(ys) < EY1:
-            edge_bad.append(f"{nm}:bottom")
-        if EY0 < min(ys) <= EY0 + NEAR:
-            edge_bad.append(f"{nm}:top")
-    return _kept(locals(), ('edge_bad', 'nm', 'ol', 'p', 'xs', 'ys'))
-
-
-def _seg_0488__edge_features_run_off_map(*, check: Any = _UNBOUND, edge_bad: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 488 (edge_features_run_off_map) - body verbatim from the legacy gate() (feature 022)."""
-    check("edge_features_run_off_map", not edge_bad, f"edge feature(s) stop short of the edge: {edge_bad}")
-    return _kept(locals(), ())
-
-
 # roads and streams must run off the map edge (a stream may instead end in a pond
 # at one end; irrigation channels are exempt - they connect ponds/fields)
 
@@ -467,30 +329,10 @@ def _seg_0490__at_edge(*, EDGE: Any = _UNBOUND, EX0: Any = _UNBOUND, EX1: Any = 
     return _kept(locals(), ('at_edge',))
 
 
-def _seg_0491__road_runs_off_edge(*, at_edge: Any = _UNBOUND, check: Any = _UNBOUND, road: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 491 (road_runs_off_edge) - body verbatim from the legacy gate() (feature 022)."""
-    if road:
-        check("road_runs_off_edge", at_edge(road[0]) and at_edge(road[-1]), f"a road must reach the map edge at both ends (ends {road[0]}, {road[-1]})")
-    return _kept(locals(), ())
-
-
 # a CONNECTOR lane (the trodden path leaving the village for the wider world) must run OFF the map
 # edge - it links to a district/Imperial road (or a canal landing) beyond the frame, so it must not
 # stop mid-landscape. Internal lanes (the spine, field spurs) are exempt: they legitimately end in
 # the cluster or at the paddy. See settlements.md 'Village lanes and connecting paths'.
-
-
-def _seg_0492__connector_lane_runs_off_edge(*, M: Any = _UNBOUND, at_edge: Any = _UNBOUND, check: Any = _UNBOUND, i: Any = _UNBOUND, ln: Any = _UNBOUND, p: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 492 (connector_lane_runs_off_edge) - body verbatim from the legacy gate() (feature 022)."""
-    for i, ln in enumerate(M.get("lanes", [])):
-        if ln.get("connector"):
-            p = ln["pts"]
-            check(
-                f"connector_lane_runs_off_edge[{i}]",
-                at_edge(p[0]) or at_edge(p[-1]),
-                f"the connector path (lane {i}) must run OFF the map edge (ends {p[0]}, {p[-1]}) - it leaves the village for the wider world and must not stop mid-landscape",
-            )
-    return _kept(locals(), ('i', 'ln', 'p'))
 
 
 # FARMHOUSES must not sit ON a village lane - a lane lays a no-build corridor and houses FRONT it,
@@ -582,7 +424,7 @@ def _seg_0499___hcorr_1(*, M: Any = _UNBOUND, _hcorr: Any = _UNBOUND, s: Any = _
 def _seg_0500___hcorr_2(*, M: Any = _UNBOUND, _hcorr: Any = _UNBOUND) -> dict[str, Any]:
     """Gate segment 500 (_hcorr) - body verbatim from the legacy gate() (feature 022)."""
     if M.get("road"):
-        _hcorr.append((M["road"], M.get("road_width", 26) / 2 + 2))
+        _hcorr.append((M["road"], M.get("road_width", 30) / 2 + 2))
     return _kept(locals(), ('_hcorr',))
 
 
@@ -630,7 +472,7 @@ def _seg_0504__corridors_1(*, M: Any = _UNBOUND, corridors: Any = _UNBOUND, s: A
 def _seg_0505__corridors_2(*, M: Any = _UNBOUND, corridors: Any = _UNBOUND) -> dict[str, Any]:
     """Gate segment 505 (corridors) - body verbatim from the legacy gate() (feature 022)."""
     if M.get("road"):
-        corridors.append((M["road"], M.get("road_width", 26) / 2))
+        corridors.append((M["road"], M.get("road_width", 30) / 2))
     return _kept(locals(), ('corridors',))
 
 
@@ -692,79 +534,6 @@ def _seg_0509__groves_clear_of_lanes(*, check: Any = _UNBOUND, tree_on_path: Any
         f"tree/grove clump(s) sit ON a lane/street/road at {tree_on_path[:4]} - a path is bare trodden earth; keep vegetation off every corridor (the generator skips clumps within a lane's keep-out)",
     )
     return _kept(locals(), ())
-
-
-def _seg_0510__moat_ring_1(*, M: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 510 (moat_ring) - body verbatim from the legacy gate() (feature 022)."""
-    moat_ring = M.get("moat")
-    return _kept(locals(), ('moat_ring',))
-
-
-def _seg_0511__stream_runs_off_edge(
-    *,
-    M: Any = _UNBOUND,
-    anchored: Any = _UNBOUND,
-    at_ditch: Any = _UNBOUND,
-    at_drain: Any = _UNBOUND,
-    at_edge: Any = _UNBOUND,
-    at_moat: Any = _UNBOUND,
-    at_river: Any = _UNBOUND,
-    check: Any = _UNBOUND,
-    d: Any = _UNBOUND,
-    dp: Any = _UNBOUND,
-    e: Any = _UNBOUND,
-    e0: Any = _UNBOUND,
-    e1: Any = _UNBOUND,
-    f: Any = _UNBOUND,
-    fields: Any = _UNBOUND,
-    i: Any = _UNBOUND,
-    idx: Any = _UNBOUND,
-    in_field: Any = _UNBOUND,
-    in_pond: Any = _UNBOUND,
-    moat_ring: Any = _UNBOUND,
-    ok: Any = _UNBOUND,
-    p: Any = _UNBOUND,
-    pond: Any = _UNBOUND,
-    st: Any = _UNBOUND,
-) -> dict[str, Any]:
-    """Gate segment 511 (stream_runs_off_edge) - body verbatim from the legacy gate() (feature 022)."""
-    for idx, st in enumerate(M.get("streams", [])):
-        e0, e1 = st["poly"][0], st["poly"][-1]
-
-        def in_pond(p: Pt) -> bool:
-            return bool(pond) and in_ellipse(p[0], p[1], pond, 1.05)
-
-        def at_moat(p: Pt) -> bool:
-            return bool(moat_ring) and poly_dist(p[0], p[1], moat_ring) <= 32  # a city stream may feed the moat
-
-        def at_drain(p: Pt) -> bool:
-            return anchored(p, {"kind": "drain"})  # type: ignore[no-any-return]  # a brook may START at the field drain's outfall
-
-        def in_field(p: Pt) -> bool:
-            return any(point_in_poly(p[0], p[1], f["outline"]) for f in fields)  # a SOURCE brook may END at the field head
-
-        def at_ditch(p: Pt) -> bool:
-            return any(
-                seg_dist(p[0], p[1], dp[i], dp[i + 1]) < 22  # a brook DIVERTED into an irrigation channel
-                for d in (M.get("field_ditches", []) + M.get("channels", []))
-                for dp in [d["poly"]]
-                for i in range(len(dp) - 1)
-            )
-
-        def at_river(p: Pt) -> bool:
-            # a sluiced moat FEEDER taps the trunk river (feature 020's capital: the ring stands
-            # ~200px off the bank, so the connection Minami/Nagahara get from their moat feet is
-            # drawn as a short leat instead). The river is itself edge-sourced, so a stream rooted
-            # on it inherits a real source the way an edge end does.
-            riv_ = M.get("river")
-            rp_ = (riv_ or {}).get("pts") or (riv_ or {}).get("poly")
-            if not rp_:
-                return False
-            return any(seg_dist(p[0], p[1], rp_[i], rp_[i + 1]) <= (riv_ or {}).get("w", 40) / 2 + 12 for i in range(len(rp_) - 1))
-
-        ok = all(at_edge(e) or in_pond(e) or at_moat(e) or at_drain(e) or in_field(e) or at_ditch(e) or at_river(e) for e in (e0, e1)) and (at_edge(e0) or at_edge(e1) or at_river(e0) or at_river(e1))
-        check(f"stream_runs_off_edge[{idx}]", ok, f"stream {idx} ends {e0},{e1} must run off the edge (one end may be a pond, the moat, the field drain, the field head, or a trunk-river tap)")
-    return _kept(locals(), ('at_ditch', 'at_drain', 'at_moat', 'at_river', 'e', 'e0', 'e1', 'idx', 'in_field', 'in_pond', 'ok', 'st'))
 
 
 # WATER SOURCES COME FROM THE MAP EDGE: a pond does not generate water, so any brook FEEDING it (a
@@ -1365,32 +1134,3 @@ def _seg_0619_501__lanes_bend_like_paths(
 # WHY: <one paragraph - what the research found, the decision it drove, the departure taken>.
 # Declare EVERY input the body reads as a keyword parameter (an undeclared one is a NameError at
 # gate time, not at import), and keep the `_kept` tuple a LITERAL of the names this body binds.
-
-
-def _seg_0619_502__lanes_clear_of_bamboo(
-    *,
-    M: Any = _UNBOUND,
-    check: Any = _UNBOUND,
-    meta: Any = _UNBOUND,
-    scale: Any = _UNBOUND,
-    lanes_clear_of_bamboo_bad: Any = _UNBOUND,
-) -> dict[str, Any]:
-    """Gate segment (lanes_clear_of_bamboo) - no lane's tread runs through a bamboo stand: a way may pass a stand, but bamboo does not grow in the middle of a trodden lane (GM 2026-08-27, feature 133 T49)."""
-    if scale in ("hamlet", "village", "town"):
-        lanes_clear_of_bamboo_bad = []
-        _lcb_stands = [[(float(a), float(b)) for a, b in st["poly"]] for st in (M.get("bamboo_stands") or []) if st.get("poly")]
-        for _ln in M.get("lanes") or []:
-            _pts = [(float(a), float(b)) for a, b in (_ln.get("pts") or [])]
-            for _k in range(len(_pts) - 1):
-                _a, _c = _pts[_k], _pts[_k + 1]
-                for _t in (0.0, 0.25, 0.5, 0.75, 1.0):
-                    _q = (_a[0] + (_c[0] - _a[0]) * _t, _a[1] + (_c[1] - _a[1]) * _t)
-                    if any(point_in_poly(_q[0], _q[1], sp) for sp in _lcb_stands):
-                        lanes_clear_of_bamboo_bad.append((round(_q[0]), round(_q[1])))
-                        break
-        check(
-            "lanes_clear_of_bamboo",
-            not lanes_clear_of_bamboo_bad,
-            f"lane tread(s) inside a bamboo stand at {lanes_clear_of_bamboo_bad[:3]} - a stand is fabric to the web (hamletgen.ways._homestead_polys) and the strips are recorded when seated; a lane may pass a stand, never through it",
-        )
-    return _kept(locals(), ("lanes_clear_of_bamboo_bad",))

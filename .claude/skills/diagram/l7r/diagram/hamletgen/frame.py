@@ -8,14 +8,32 @@ from __future__ import annotations
 import math
 
 from l7r.diagram.settlement import Settlement, seg_dist
-from l7r.diagram.settlement.structures.fixtures import KOSATSUBA_VERGE_FT
+from l7r.diagram.settlement.structures.fixtures import KOSATSUBA_MARKER_MIN_PX, KOSATSUBA_VERGE_FT
 
 from .consts import POLDER_ARCHETYPES
 from .hinterland import CROP_MARGIN, title_pocket
 from .plan import SitePlan
 from .water import polder_crossing_caps
 
-_BOARD_W, _BOARD_H = 14.0, 8.0  # the kosatsuba plank's footprint, as the re-seat probe measures it
+# THE RE-SEAT PROBE MUST MEASURE THE BOARD THAT IS DRAWN (feature 134 T50, 2026-08-29). This was pinned
+# at 14 x 8 while `Settlement.kosatsuba` draws the researched 12 x 5 - not even the same aspect - and the
+# probe offsets the seat by HALF THE DEPTH, so every re-seated board stood (8 - 5) / 2 = 1.5 ft further
+# from its lane than the verge rule intends. On a 5 ft lane that is 12.5 ft from the centreline where the
+# rule asks 11.0, and `kosatsuba_by_the_road` measures against 12.0: gate seed 44 failed by half a foot
+# for a board the placer believed it had put exactly on the verge. Derived from the same expression the
+# drawing uses, so the two cannot drift again - this engine's standing rule is DERIVE, NEVER PIN.
+_BOARD_FT_W, _BOARD_FT_H = 12.0, 5.0  # the researched plank; see `Settlement.kosatsuba`
+
+
+def _board_footprint(s: Settlement) -> tuple[float, float]:
+    """The board's drawn footprint, exactly as `place_kosatsuba` computes it.
+
+    The frame test drives this path with a stub that has no scale, so `px` is optional; without it the
+    true feet ARE the pixels, which is the hamlet grain this re-seat exists for."""
+    _px = getattr(s, "px", None)
+    _w = max(_px(_BOARD_FT_W), KOSATSUBA_MARKER_MIN_PX) if _px else _BOARD_FT_W
+    return _w, _w * _BOARD_FT_H / _BOARD_FT_W
+
 
 # ---- STAGE 8: crossings, the board, and the frame ------------------------------------------------
 
@@ -104,7 +122,8 @@ def stage_notice(s: Settlement, plan: SitePlan) -> None:
                         # board outside `kosatsuba_by_the_road`'s band the first time this path ran
                         # on the reference hamlet. Tread half-width + the verge + the board's half depth.
                         _pxf = getattr(s, "px", None)  # the frame test drives this with a stub that has no scale
-                        _off = float(lane.get("w", 3)) / 2 + (_pxf(KOSATSUBA_VERGE_FT) if _pxf else KOSATSUBA_VERGE_FT) + _BOARD_H / 2
+                        _bw, _bh = _board_footprint(s)
+                        _off = float(lane.get("w", 3)) / 2 + (_pxf(KOSATSUBA_VERGE_FT) if _pxf else KOSATSUBA_VERGE_FT) + _bh / 2
                         for side in (1.0, -1.0):
                             cx2, cy2 = mx + ux * _off * side, my + uy * _off * side
                             if not (hx0 <= cx2 <= hx1 and hy0 <= cy2 <= hy1):
@@ -116,7 +135,7 @@ def stage_notice(s: Settlement, plan: SitePlan) -> None:
                             _nb = _nearest_way_bearing(s, cx2, cy2)
                             if _nb is not None and min(abs((_nb - rot) % 180.0), 180.0 - abs((_nb - rot) % 180.0)) > 15.0:
                                 continue
-                            if not s._fits(cx2, cy2, _BOARD_W, _BOARD_H, corridors=False):
+                            if not s._fits(cx2, cy2, _bw, _bh, corridors=False):
                                 continue
                             # ...AND NOT IN THE WATER. `_fits(corridors=False)` is required here - the
                             # corridor test is a HOUSE setback from the tread and would refuse every
@@ -124,7 +143,7 @@ def stage_notice(s: Settlement, plan: SitePlan) -> None:
                             # the same call, so this probe would seat a plank board in a stream.
                             # ONE predicate, shared with `place_kosatsuba`, which had the identical
                             # hole and shipped it on cohort seed 13.
-                            if not s.fixture_clear_of_water(cx2, cy2, math.hypot(_BOARD_W, _BOARD_H) / 2):
+                            if not s.fixture_clear_of_water(cx2, cy2, math.hypot(_bw, _bh) / 2):
                                 continue
                             busy = sum(1 for h in hs if math.hypot(cx2 - h["x"], cy2 - h["y"]) < 260)
                             if best is None or -busy < best[0]:

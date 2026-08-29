@@ -12,13 +12,19 @@ Every entry: what the research found, the decision it drove, and any deliberate 
 
 **Grounds:** `s.rowpack`, `city_row_housing_touches`
 
-**Evidence:** attested, corroborated
+**Evidence:** attested (Japan), researched (China - not re-read)
 
-**Sources:** not recorded - the finding is in the prose below; add a key to `SOURCES.md` when it is re-consulted
+**Sources:** `kyomachiya-jawiki`, `kyototuu-unagi`, `nagaya-jawiki` (READ). Chinese county-seat party-wall housing not re-sourced - leftover
 
 - *What the history says.* Urban commoners in both reference cultures did not build detached-with-yard. Machiya street frontage was continuous - party walls or touching eaves, because street frontage was taxed and precious; back-lot *nagaya* were literally ONE ROOF over a row of family units; Chinese county-seat courtyard housing shared rammed-earth or brick party walls in continuous street walls. Detached-with-yard was a samurai (and rural) form.
 
+*Correction to the record (2026-08-28, feature 143):* "street frontage was taxed" is the popular explanation of the narrow lot (`kyototuu-unagi` carries it), and ja.wikipedia 京町家 disputes it outright - Edo-period Kyoto assessed a lump sum per town, not per frontage. The continuous built edge is read either way; the tax is not the reason to cite.
+
 ## Machiya row density: a commercial street is a continuous built edge
+
+**Evidence:** attested
+
+**Sources:** `kyototuu-unagi` (READ: frontage ~2 ken, depth 10-12 ken), `kyomachiya-jawiki`, `hiyokechi-jawiki` (READ: breaks at block scale after 1657). See the frontage-tax correction in the entry above
 
 **The question (GM, 2026-08-11), looking at Shiro Daika's north gate market:** *"Is that the
 correct amount of space between gate market buildings? No objection, they just look more spaced
@@ -59,3 +65,13 @@ crowded southwest strip, 48 ft on the loose roadside market at the east gate, wh
 different thing and should stay loose). At 3 ft/px an 18 ft gap is 6 px: enough that a reader can
 still count individual shops and see which way each one faces, which is the whole job of the
 drawing. The relative sizes stay honest; only the mortar joint is drawn wider than life.
+
+## A county seat's street share, open reserve and civic share
+
+**Grounds:** `citybudget.py` (module docstring: streets ~10-20% of ground, 25-30% deliberately unbuilt), `check_village/common_03_capacity.py` (civic buildings ~3-6% of a county seat; the ~20% reserve cap); `settlements/cities/sizing.md`
+
+**Evidence:** interpolated (the circulation figure is triangulated - specs/009 research B says so), attested (the named open-ground anchors)
+
+**Sources:** `chang-morphology-walled-capitals`; specs/009-city-area-budget/research.md section B (Quanzhou a quarter vacant in 1945, Suzhou's intramural farmland, Jinan's lake, Pingyao's "4 big streets, 8 small streets, 72 lanes") - recorded at the 2026-07 pass, not re-read 2026-08-28
+
+*Recorded here on 2026-08-28 (feature 143) because the finding was stated only in engine comments.* A Chinese county seat ran a sparse street net - one or two gate-to-gate trunks in a cross or T with the drum tower at the crossing, everything else lanes - at roughly 10-20% of the walled ground, and normally enclosed 25-30% deliberately unbuilt ground: walls were sized to administrative rank and growth, and intramural fields, gardens and ponds were siege insurance and flood refuge. Civic buildings alone took only a few percent; the big open consumer was the drill ground and the under-built remainder. The maps draw streets at ~7% (deep blocks, alley warrens) and admit open ground only as a declared, drawn line (agricultural district, drill ground, gardens), never as ambient slack - the engine's budget constant is map-calibrated, the historical band its plausibility envelope.

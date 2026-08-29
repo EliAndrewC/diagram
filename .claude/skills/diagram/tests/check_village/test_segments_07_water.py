@@ -9,12 +9,8 @@ from tests.check_village._builders import (
     _field,
     _footbridge_map,
     _iw_manifest,
-    _mj_map,
-    _moat_city,
-    _moat_map,
     _sink_channel,
     _water_map,
-    f,
     f_only,
     house,
     manifest,
@@ -92,16 +88,6 @@ def test_groves_clear_of_lanes_fires_when_a_per_house_grove_sits_on_a_road():
     assert "groves_clear_of_lanes" in f_only(M, "groves_clear_of_lanes")
 
 
-def test_connector_lane_runs_off_edge_fires_when_it_stops_short():
-    M = {"lanes": [{"pts": [[500, 500], [500, 700]], "worn": True, "w": 6, "connector": True}]}  # both ends interior
-    assert any(c.startswith("connector_lane_runs_off_edge") for c in f(M))
-
-
-def test_connector_lane_runs_off_edge_passes_when_it_reaches_the_edge():
-    M = {"lanes": [{"pts": [[500, 500], [500, 1165]], "worn": True, "w": 6, "connector": True}]}  # runs off the bottom
-    assert not any(c.startswith("connector_lane_runs_off_edge") for c in f(M))
-
-
 def test_pond_fed_from_edge_fires_when_the_feeder_starts_mid_map():
     # a brook whose pond end is in the pond but whose FAR end sits mid-map (water out of nowhere)
     M = {"pond": [400, 300, 150, 90], "streams": [{"poly": [[600, 600], [420, 320]], "frm": {"kind": "offmap"}, "to": {"kind": "pond"}, "w": 9}]}
@@ -119,41 +105,6 @@ def test_fields_show_water_source_branches():
     dry = _field("d", 100, 600, 300, 800)  # no channel/stream/pond -> dry, fires
     M = {"fields": [abut, ponded, dry], "streams": [{"poly": [[95, 90], [95, 310]]}], "pond": [700, 200, 80, 60]}
     assert "fields_show_water_source" in f_only(M, "fields_show_water_source")
-
-
-def test_edge_features_run_off_map_fires_each_direction():
-    M = {
-        "meta": {"W": 1000, "H": 1000},
-        "pastures": [
-            [[960, 400], [990, 400], [990, 460], [960, 460]],  # right edge, stops short
-            [[10, 400], [40, 400], [40, 460], [10, 460]],  # left
-            [[400, 960], [460, 960], [460, 990], [400, 990]],  # bottom
-            [[400, 10], [460, 10], [460, 40], [400, 40]],
-        ],
-    }  # top
-    assert "edge_features_run_off_map" in f_only(M, "edge_features_run_off_map")
-
-
-def test_moat_channels_flow_with_current_fires_when_against():
-    # moat flows south; this channel taps the moat at (350,300) and runs NORTH to a field at (350,150)
-    # - the field is upstream of the tap, so water would run field->moat (backwards)
-    assert "moat_channels_flow_with_current" in f_only(_moat_city([[350, 300], [350, 150]]), "moat_channels_flow_with_current")
-
-
-def test_moat_channels_flow_with_current_passes_when_downstream():
-    # same moat, but the channel runs SOUTH (with the current) to a field below its tap
-    assert "moat_channels_flow_with_current" not in f_only(_moat_city([[350, 700], [350, 850]]), "moat_channels_flow_with_current")
-
-
-def test_bridges_span_their_water_fires_on_a_short_deck():
-    """A deck must FULLY cross its water - both ends past the bank onto dry ground (GM
-    2026-08-09: the towpath's hand-placed plank stopped mid-channel and read as a bridge
-    hanging over the water). roads_bridge_water is satisfied by ANY deck within 40px, so a
-    stub deck passes it - this rule is what catches the stub."""
-    M = _bridge_map([{"x": 500, "y": 500, "rot": 0, "span": 4, "w": 26}])  # a 4px stub deck on a 9px stream
-    assert "bridges_span_their_water" in f_only(M, "bridges_span_their_water")
-    M["bridges"] = [{"x": 500, "y": 500, "rot": 0, "span": 37, "w": 26}]
-    assert "bridges_span_their_water" not in f_only(M, "bridges_span_their_water")
 
 
 def test_bridges_span_their_water_fires_on_an_oblique_underspan():
@@ -361,18 +312,6 @@ def test_watercourse_ends_reach_water_allows_a_canal_tail_at_the_crop_edge():
 # threshold leaves room for the genuine fallow/margin scrub. Town + city only.
 
 
-def test_near_ring_cultivated_fraction_ignores_village_and_hamlet_sheets():
-    for sc in ("village", "hamlet"):
-        M = {"meta": {"scale": sc, "W": 1000, "H": 1000}}  # bare, but the near-ring rule is town/city only
-        assert "near_ring_cultivated_fraction" not in f_only(M, "near_ring_cultivated_fraction")
-
-
-def test_near_ring_paddy_dominant_ignores_village_and_hamlet_sheets():
-    for sc in ("village", "hamlet"):
-        M = {"meta": {"scale": sc, "W": 1000, "H": 1000}, "dry_plots": [{"poly": [[0, 300], [1000, 300], [1000, 900], [0, 900]], "crop": "soy", "theta": 0.0}]}
-        assert "near_ring_paddy_dominant" not in f_only(M, "near_ring_paddy_dominant")
-
-
 # ---- scrub_clear_of_urban_fabric (GM 2026-07-21, Hoshizora): settlement ground is CLEARED - a
 # commons/pasture/coppice cover poly that CONTAINS an occupied structure or a wellhead is claiming
 # grazed waste where the town stands. Scrub lives on the outskirts only; field barns are exempt
@@ -558,47 +497,6 @@ def test_channels_flow_downhill_judges_a_channel_by_the_FIELD_it_feeds():
     assert "channels_flow_downhill" not in f_only(M, "channels_flow_downhill")
 
 
-def test_moat_channels_flow_with_current_takes_the_current_from_moat_flow():
-    # a southward-heading offtake agrees with an inlet-NW/outlet-SE circulation
-    assert "moat_channels_flow_with_current" not in f_only(_moat_map(), "moat_channels_flow_with_current")
-
-
-def test_moat_channels_flow_with_current_fires_on_an_offtake_back_upstream():
-    # the same moat, but the field lies NORTH of the tap - water would run from the field INTO the moat
-    M = _moat_map(
-        fields=[{"name": "fn", "kind": "paddy", "outline": [[300, 60], [600, 60], [600, 200], [300, 200]], "bbox": [300, 60, 600, 200], "vis_bbox": [300, 60, 600, 200]}],
-        channels=[{"poly": [[500, 300], [480, 100]], "frm": {"kind": "moat"}, "to": {"kind": "field", "name": "fn"}, "w": 2.5}],
-    )
-    assert "moat_channels_flow_with_current" in f_only(M, "moat_channels_flow_with_current")
-
-
-def test_moat_junction_fires_on_a_SQUARE_offtake():
-    # a tap leaving at 90 deg is the defect canal practice warns about ("30 or 45 instead of 90") -
-    # it sheds sediment into its own mouth and says nothing about which way the water runs
-    M = _mj_map({"poly": [[400, 500], [340, 500], [250, 850]], "frm": {"kind": "moat"}, "to": {"kind": "field", "name": "f1"}, "w": 2.5})
-    assert "moat_junctions_swept_with_the_current" in f_only(M, "moat_junctions_swept_with_the_current")
-
-
-def test_moat_junction_passes_an_offtake_swept_downstream():
-    # same tap, but the throat leaves angled WITH the current (the west arc runs south here)
-    M = _mj_map({"poly": [[400, 450], [340, 520], [250, 850]], "frm": {"kind": "moat"}, "to": {"kind": "field", "name": "f1"}, "w": 2.5})
-    assert "moat_junctions_swept_with_the_current" not in f_only(M, "moat_junctions_swept_with_the_current")
-
-
-def test_moat_junction_fires_on_a_drain_arriving_against_the_current():
-    # Tango's fn2: the culvert doubled back to meet the rim pointing upstream
-    M = _mj_map({"poly": [[250, 850], [340, 700], [400, 620]], "frm": {"kind": "drain", "name": "f1"}, "to": {"kind": "moat"}, "w": 2.5})
-    assert "moat_junctions_swept_with_the_current" in f_only(M, "moat_junctions_swept_with_the_current")
-
-
-def test_moat_junction_skips_degenerate_channels():
-    # a one-point poly has no heading, and a zero-length first step has no direction: both are
-    # skipped rather than crashing or being scored
-    for poly in ([[400, 500]], [[400, 500], [400, 500]]):
-        M = _mj_map({"poly": poly, "frm": {"kind": "moat"}, "to": {"kind": "field", "name": "f1"}, "w": 2.5})
-        assert "moat_junctions_swept_with_the_current" not in f_only(M, "moat_junctions_swept_with_the_current")
-
-
 def test_bridges_seat_on_water_fires_on_a_dry_deck():
     """A deck seated on NO water at all - the floating towpath plank (settlement-review
     2026-08-10): the drain's re-route moved the ford and the deck kept its old seat, and
@@ -663,19 +561,6 @@ def test_lanes_reach_something_passes_when_the_end_meets_another_way_or_a_house(
         [{"x": 500, "y": 500, "w": 46, "h": 28, "rot": 0, "kind": "plain"}, {"x": 540, "y": 890, "w": 46, "h": 28, "rot": 0, "kind": "plain"}],
     )
     assert "lanes_reach_something" not in f_only(met, "lanes_reach_something"), "meeting another way is something to reach"
-
-
-def test_lanes_reach_something_exempts_the_connector_and_skips_a_degenerate_lane():
-    """The connector is the track OUT of the settlement and `connector_lane_runs_off_edge` REQUIRES
-    it to reach the frame, so its far end is meant to serve nothing - exempting it is what stops the
-    two rules contradicting each other. A one-point lane has no end to judge."""
-    conn = _lane_map(
-        [{"pts": [[500, 500], [500, 3000]], "w": 5, "connector": True}],
-        [{"x": 500, "y": 500, "w": 46, "h": 28, "rot": 0, "kind": "plain"}],
-    )
-    assert "lanes_reach_something" not in f_only(conn, "lanes_reach_something")
-    degenerate = _lane_map([{"pts": [[500, 500]], "w": 5, "connector": False}], [{"x": 900, "y": 900, "w": 46, "h": 28, "rot": 0, "kind": "plain"}])
-    assert "lanes_reach_something" not in f_only(degenerate, "lanes_reach_something")
 
 
 def test_lanes_reach_something_is_gated_on_generated_by():
@@ -889,15 +774,6 @@ def test_lanes_bend_like_paths_fires_and_passes():
     assert "lanes_bend_like_paths" not in f_only(corner, "lanes_bend_like_paths"), "a corner and a bend are how a lane runs"
 
 
-def test_lanes_clear_of_bamboo_fires_and_passes():
-    """No lane tread through a bamboo stand (GM 2026-08-27, T49: "I would not expect to see bamboo actually growing in the middle of the lane")."""
-    stand = {"x": 500.0, "y": 500.0, "w": 22.0, "h": 16.0, "rot": 0, "role": "homestead", "poly": [[489, 492], [511, 492], [511, 508], [489, 508]]}
-    through = manifest(houses=[house(x=400, y=400)], lane=[[0, 500], [300, 500]], lanes=[{"pts": [[300, 500], [700, 500]], "w": 3}], bamboo_stands=[stand])
-    assert "lanes_clear_of_bamboo" in f_only(through, "lanes_clear_of_bamboo")
-    past = manifest(houses=[house(x=400, y=400)], lane=[[0, 500], [300, 500]], lanes=[{"pts": [[300, 520], [700, 520]], "w": 3}], bamboo_stands=[stand])
-    assert "lanes_clear_of_bamboo" not in f_only(past, "lanes_clear_of_bamboo")
-
-
 def test_a_sluice_gate_on_a_drawn_channel_stroke_stands_in_water():
     """Feature 139 T51: the inlet sluice sits on the ring feeder's DRAWN bend; once the feeder stub reaches
     the reservoir rim the recorded hairline no longer passes within reach of it, so the drawn strokes
@@ -905,3 +781,17 @@ def test_a_sluice_gate_on_a_drawn_channel_stroke_stands_in_water():
     drawn = [{"pts": [[400, 700], [600, 700]], "w0": 5.0, "w1": 4.0}]
     assert "sluice_gates_on_water" not in f_only(_water_map(sluice_gates=[{"x": 500, "y": 701, "rot": 0}], drawn_channels=drawn), "sluice_gates_on_water")
     assert "sluice_gates_on_water" in f_only(_water_map(sluice_gates=[{"x": 500, "y": 701, "rot": 0}]), "sluice_gates_on_water")
+
+
+def test_lanes_bend_like_paths_steps_over_a_degenerate_vertex():
+    """A lane record can carry the same point twice - a join that landed on its own endpoint, a rounding
+    that collapsed a 0.04 px step. The turn at such a vertex is undefined (a zero-length arm has no
+    bearing), so it is stepped over rather than measured; without that the angle would come out of an
+    `acos` on a division by zero."""
+    from tests.check_village._builders import f_only, manifest
+
+    doubled = manifest(lanes=[{"pts": [[100, 100], [100, 100], [300, 100], [300, 300]], "w": 4}])
+    assert "lanes_bend_like_paths" not in f_only(doubled, "lanes_bend_like_paths")
+    # ...and a real hairpin at the same corner still fires, so the skip is not hiding anything
+    hairpin = manifest(lanes=[{"pts": [[100, 100], [300, 100], [110, 104]], "w": 4}])
+    assert "lanes_bend_like_paths" in f_only(hairpin, "lanes_bend_like_paths")

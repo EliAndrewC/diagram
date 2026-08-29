@@ -205,6 +205,11 @@ OPERATIONS: dict[str, tuple[str, str]] = {
     "l7r.diagram.tools.perf_review": ("perf-review", "cheap"),  # feature 129: the review records and the push-time check
     "l7r.diagram.switches": ("switches", "cheap"),  # feature 132: the iteration switches - remote off, scope locked
     "l7r.diagram.tools.perf_profile": ("perf-profile", "expensive"),  # feature 129: tier 2 - cProfile of one stage of one seed
+    "l7r.diagram.tools.check_census": ("check-census", "expensive"),
+    "l7r.diagram.tools.hamlet_floor": (
+        "hamlet-floor",
+        "cheap",
+    ),  # feature 145: the derived 100% floor on the hamlet path; rolls only what is not yet recorded  # feature 141: the check census rolls the reference and a polder stage by stage
     "l7r.diagram.tools.cache_audit": ("cache-audit", "expensive"),
     "l7r.diagram.tools.make_regressions": ("regressions", "expensive"),
     "l7r.diagram.tools.placement_stages": ("placement-stages", "expensive"),

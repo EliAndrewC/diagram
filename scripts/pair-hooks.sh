@@ -91,12 +91,10 @@ review_pending() { # a settlement-review agent this session launched that has no
   for f in "$dir"/agent-*.jsonl; do
     [ -e "$f" ] || continue
     grep -ql "settlement-review" "$f" 2>/dev/null || continue
-    # finished agents carry a final assistant turn with no pending tool_result; agent-watch owns that
-    # determination, so ask IT rather than keeping a second copy of the rule
-    local verdict
+    # finished agents carry a final assistant turn with no pending tool_result; agent-stall-hooks.sh
+    # owns that determination, so ask IT rather than keeping a second copy of the rule
     local aid; aid="$(basename "$f" .jsonl)"; aid="${aid#agent-}"   # the scanner prints the bare id
-    verdict="$(bash "${CLONE_ROOT}/scripts/agent-watch-hooks.sh" scan "$dir" 2>/dev/null | awk -v id="$aid" '$1 == id {print $2}')"
-    [ "$verdict" = "pending" ] && return 0
+    bash "${CLONE_ROOT}/scripts/agent-stall-hooks.sh" pending "$dir" 2>/dev/null | grep -qx "$aid" && return 0
   done
   return 1
 }

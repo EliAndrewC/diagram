@@ -63,22 +63,6 @@ def test_near_ring_paddy_respects_the_moat_current_when_the_moat_is_fed():
             assert ey - sy >= -8  # field-end not upstream (north) of the moat tap - flows with the southward current
 
 
-@pytest.mark.tiers("city")
-def test_near_ring_paddy_keeps_basins_off_a_polygon_cemetery():
-    # a funerary ground recorded as a POLYGON (not an x/w dict) still sets the paddy back (funerary_set_back_from_water)
-    s = Settlement(1400, 1400, seed=9)
-    s.meta(name="C", scale="city")
-    s.M["wall"] = [[560, 560], [840, 560], [840, 840], [560, 840]]
-    s.M["moat"] = [[540, 540], [860, 540], [860, 860], [540, 860]]
-    s.M["moat_width"] = 22
-    s.M["cemeteries"] = [{"poly": [[900, 900], [1050, 900], [1050, 1050], [900, 1050]], "label": "graveyard"}]
-    s.near_ring_paddy((0, 0, 1400, 1400), seed=9, cell_ft=200)
-    for fld in s.M["fields"]:
-        if fld["name"].startswith("nrp_"):
-            for vx, vy in fld["outline"]:
-                assert not (900 - 60 <= vx <= 1050 + 60 and 900 - 60 <= vy <= 1050 + 60)  # set back from the grave poly
-
-
 @pytest.mark.tiers("capital")
 def test_commons_bare_records_the_claim_and_draws_nothing():
     """render='bare' claims the ground (full record: role, poly, render) but scatters no scrub -

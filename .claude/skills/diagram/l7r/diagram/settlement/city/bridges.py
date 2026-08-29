@@ -82,6 +82,43 @@ def _deck_corners_clear(p: Any, rot_deg: float, span: float, rw: float, wpts: An
     )
 
 
+def seat_deck(p: Pt, rot: float, span: float, rw: float, wpts: Any, need: float, water_seg: tuple[Pt, Pt]) -> tuple[float, float, bool]:
+    """Find a deck that actually clears the water at this crossing: grow it along the way, and failing that
+    SKEW it toward square and grow again. Returns (rotation, span, seated).
+
+    LIFTED OUT OF `bridges` (feature 146, GM 2026-08-28 on inner functions and testability). The skew
+    fallback sat four loops deep inside a method that scans every way against every watercourse, so the
+    only way to reach it was to roll a map with a near-parallel crossing on it - cohort seed 47 was the
+    one that ever did. Lifted, the whole decision is seven plain numbers.
+
+    WHY SKEW AND NOT MORE GROWTH (2026-08-19): the growth loop lengthens the deck ALONG THE WAY, and at a
+    near-parallel crossing that drives its ends further along the water instead of clear of it, so no
+    ceiling on the growth could ever have worked. A real bridge is built as square to the stream as the
+    road allows - the track bends onto the deck - and `bridges_align_with_their_way` already permits
+    BRIDGE_ROT_TOL = 8 deg between deck and way, so 7 deg of skew needs no rule change: it took seed 47
+    from an effective 16.6 deg to 23.6 and the span required from 44.6 px to about 31.
+
+    Seating unchanged is the point: the skew is reached ONLY when plain growth failed, so every deck that
+    seats today seats identically. When nothing seats, the ORIGINAL span comes back and the caller draws
+    it anyway - an undersized deck that `bridges_span_their_water` then fails is better than none, because
+    the check names it.
+    """
+    for grow in range(14):
+        wider = span * (1.0 + 0.12 * grow)
+        if _deck_corners_clear(p, rot, wider, rw, wpts, need):
+            return rot, wider, True
+    wa, wb = water_seg
+    wb_deg = math.degrees(math.atan2(wb[1] - wa[1], wb[0] - wa[0]))
+    toward = (wb_deg + 90.0 - rot + 90.0) % 180.0 - 90.0  # signed, toward square
+    for sk in (2.0, 4.0, 6.0, 7.0):
+        cand_rot = rot + math.copysign(sk, toward or 1.0)
+        for grow in range(14):
+            wider = span * (1.0 + 0.12 * grow)
+            if _deck_corners_clear(p, cand_rot, wider, rw, wpts, need):
+                return cand_rot, wider, True
+    return rot, span, False
+
+
 class BridgesMixin:
     def bridge(self: Settlement, x: float, y: float, rot: float, span: float, deck_w: float) -> int:  # type: ignore[misc]
         """A timber BRIDGE carrying a road (or town street) over a watercourse - a stream, an
@@ -172,41 +209,7 @@ class BridgesMixin:
                             # same question the check asks and lengthen until the answer is yes.
                             _need = ww / 2 + CARRIED_LANDING_FLOOR_FT / self.ftpx  # the check's own carried-way floor
 
-                            _rot_used, _seated = rot, False
-                            for _grow in range(14):
-                                _try = _span * (1.0 + 0.12 * _grow)
-                                if _deck_corners_clear(p, rot, _try, rw, wpts, _need):
-                                    _span, _seated = _try, True
-                                    break
-                            if not _seated:
-                                # SKEW THE DECK TOWARD SQUARE - GROWTH IS THE WRONG AXIS HERE (2026-08-19).
-                                # The loop above lengthens the deck along the WAY. At a near-parallel
-                                # crossing that drives its ends further ALONG the water instead of clear of
-                                # it, so no ceiling on `_grow` could ever have worked - and the loop breaks
-                                # only on success, so on failure it silently drew the UNDERSIZED deck and
-                                # left `bridges_span_their_water` to fail it. Measured, cohort seed 47: a
-                                # way crossing a 7 px stream at 16.6 deg, span 57.6, abutment in the water,
-                                # all 14 growth steps refused.
-                                #
-                                # A real bridge is built as square to the stream as the road allows - the
-                                # track bends onto the deck. `bridges_align_with_their_way` already permits
-                                # BRIDGE_ROT_TOL = 8 deg between deck and way, so this needs no rule
-                                # change: 7 deg of skew takes seed 47 from an effective 16.6 deg to 23.6
-                                # and the span required from 44.6 px to about 31.
-                                #
-                                # ONLY REACHED WHEN PLAIN GROWTH FAILED, so every deck that seats today
-                                # seats identically. The fallback cannot move a passing map.
-                                _wb_deg = math.degrees(math.atan2(wb[1] - wa[1], wb[0] - wa[0]))
-                                _toward = (_wb_deg + 90.0 - rot + 90.0) % 180.0 - 90.0  # signed, toward square
-                                for _sk in (2.0, 4.0, 6.0, 7.0):
-                                    _cand_rot = rot + math.copysign(_sk, _toward or 1.0)
-                                    for _grow in range(14):
-                                        _try = _span * (1.0 + 0.12 * _grow)
-                                        if _deck_corners_clear(p, _cand_rot, _try, rw, wpts, _need):
-                                            _rot_used, _span, _seated = _cand_rot, _try, True
-                                            break
-                                    if _seated:
-                                        break
+                            _rot_used, _span, _seated = seat_deck(p, rot, _span, rw, wpts, _need, (wa, wb))
                             # ONE DECK PER CROSSING PLACE. Two ways that cross the same ditch a few
                             # feet apart each ask for a bridge, and the two decks are then drawn on
                             # top of one another - `features_do_not_overlap` reports it as

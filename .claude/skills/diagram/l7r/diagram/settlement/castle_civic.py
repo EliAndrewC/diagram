@@ -261,7 +261,7 @@ class CastleCivicMixin:
             "wall_w": round(ww, 2),
             "gate_w": round(2 * gg, 2),
         }
-        if karamete is not None:
+        if karamete is not None and karamete_dir:  # karamete exists only when karamete_dir was given (above); the second test is the narrowing a checker can see
             rec["karamete"] = [round(karamete[0], 1), round(karamete[1], 1)]
             rec["karamete_dir"] = karamete_dir
         # BOTH registries - see the docstring. The reservation covers the MOAT too: nothing builds
@@ -779,7 +779,7 @@ class CastleCivicMixin:
         if self.M.get("moat_layer") or self.M.get("moat"):
             lines.append((self.M.get("moat_layer") or self.M.get("moat"), self.M.get("moat_width", 22) / 2))
         if self.M.get("road"):
-            lines.append((self.M["road"], self.M.get("road_width", 26) / 2))
+            lines.append((self.M["road"], self.M.get("road_width", 30) / 2))
         for st in self.M.get("streams", []):
             lines.append((st["poly"], st.get("w", 9) / 2))
         for pts, half in lines:
