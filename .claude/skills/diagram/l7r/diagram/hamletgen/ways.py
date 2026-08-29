@@ -574,7 +574,13 @@ def stage_web(s: Settlement, plan: SitePlan) -> None:
 
     _fabric_now = [poly for poly, _owner, _kind in _homestead_polys(s)]  # what the connector's end must stay clear of, as `_thread_the_fabric` left it
     for _i, _ln in enumerate(list(s.M.get("lanes", []))):
-        if len(_ln.get("pts") or []) < 2:
+        # KEPT AND NOT REACHABLE TODAY, deliberately (feature 146). Every pass that can empty a lane
+        # before this point DELETES the record with the ink (feature 145's "the husk goes with the ink"),
+        # so no husk survives to here - and injecting one to prove it fails earlier, in the orphan
+        # joiner, which cannot handle a one-point way at all. The guard stays because the passes BELOW
+        # this line do leave empty records (`_ln["pts"] = []` at the knot-collapse drop), so a future
+        # reorder would hand one straight to `_ln["pts"][0]`.
+        if len(_ln.get("pts") or []) < 2:  # pragma: no cover - see above
             continue
         _pts = [(float(x), float(y)) for x, y in _ln["pts"]]
         _others = [
@@ -1677,6 +1683,113 @@ def _bends_badly(pts: Poly) -> bool:
     )
 
 
+def web_pieces(lanes: Sequence[Mapping[str, Any]]) -> int:
+    """How many connected pieces the lane web is in - a lane of fewer than two points is not a piece.
+
+    LIFTED OUT OF `_smooth_web` (feature 146, GM 2026-08-28: *"if something is only available as an inner
+    function in a closure, then you can move it out into its own function to make it more unit testable"*).
+    It closed over `lanes` alone and is a pure count, so a test can hand it three dicts instead of building
+    a settlement, a fabric and a water list to reach it."""
+    ways = [[(float(x), float(y)) for x, y in ln.get("pts") or []] for ln in lanes]
+    comp = _components(ways, 4.0)
+    return len({comp[m] for m in range(len(ways)) if len(ways[m]) >= 2})
+
+
+def web_rejoinable(lanes: Sequence[Mapping[str, Any]], hard: list[Poly], walls: Sequence[Poly], water: list[tuple[Pt, Pt]]) -> bool:
+    """After a rewrite that added a piece: will the post-smoothing touch pass close it again? Yes iff some
+    end of the new piece stands within `_STUB_REACH_FT` of another piece's tread with a clear straight link
+    (the touch pass draws exactly that). Inashiro's own smoothing makes such cuts and the touch repairs them;
+    seed 37's stub sat 29 ft off in a 12 ft slot no link clears.
+
+    LIFTED OUT OF `_smooth_web` for the same reason as `web_pieces`: it took nothing from the closure but
+    these four values, and a caller that must build a whole web to ask it a yes/no question is a test nobody
+    writes."""
+    ways = [[(float(x), float(y)) for x, y in ln.get("pts") or []] for ln in lanes]
+    comp = _components(ways, 4.0)
+    live = [m for m in range(len(ways)) if len(ways[m]) >= 2]
+    seed = next((m for m in live if lanes[m].get("connector")), live[0] if live else 0)
+    for c in {comp[m] for m in live} - {comp[seed]}:  # every piece OTHER than the connector's must reach one
+        mine = [m for m in live if comp[m] == c]
+        # `segs` is NEVER empty here, and the `if not segs: continue` that stood on these lines was
+        # therefore dead: `seed` is itself live and `comp[seed]` is excluded from `c`, so every other
+        # component always has at least the seed's own tread to reach for. Removed with its reasoning
+        # rather than left in place reading as a case that can happen (feature 146).
+        segs = [sg for m in live if comp[m] != c for sg in zip(ways[m], ways[m][1:], strict=False)]
+        ok = False
+        for m in mine:
+            for e in (ways[m][0], ways[m][-1]):
+                foot = min((seg_closest(e[0], e[1], a, b) for a, b in segs), key=lambda z: math.dist(e, z))
+                if math.dist(e, foot) <= _STUB_REACH_FT and _clear_touch(e, foot, hard, walls, water):
+                    ok = True
+                    break
+            if ok:
+                break
+        if not ok:
+            return False
+    return True
+
+
+def commit_lane(
+    lanes: list[dict[str, Any]],
+    m: int,
+    new_pts: list[list[float]],
+    hard: list[Poly],
+    walls: Sequence[Poly],
+    water: list[tuple[Pt, Pt]],
+    reink: Callable[[int], None],
+) -> bool:
+    """Rewrite lane `m` - and put it back if the rewrite BREAKS the web and the touch pass cannot mend it.
+
+    LIFTED OUT OF `_smooth_web` (feature 146, GM 2026-08-28 on inner functions and testability). The
+    revert arm is the whole reason the function exists (feature 137 T03: a hairpin cut took the short
+    arm that was a piece's only link to the spine, and tripwire seed 37, gate seed 43, Kashikawa and
+    Sawada all came out failing `lanes_form_one_network`), and it is the arm a clean roll never enters -
+    so it had no test until it could be called with four plain lists.
+    """
+    before, old = web_pieces(lanes), lanes[m]["pts"]
+    lanes[m]["pts"] = new_pts
+    if web_pieces(lanes) > before and not web_rejoinable(lanes, hard, walls, water):
+        lanes[m]["pts"] = old
+        return False
+    reink(m)
+    return True
+
+
+def bowtie_cut(pts: Poly, k: int, x: Pt, arm_ft: float = _ARM_FT) -> Poly | None:
+    """A lane crosses another at `x` inside its segment `k`; cut back the SHORT tail past the crossing,
+    which then becomes the junction. `None` when neither side is short enough to be a stray tail.
+
+    LIFTED OUT OF `_smooth_web` (feature 146). The head arm - the crossing near the lane's START, so the
+    beginning is the stray - never ran on a live map; which arm a roll takes is an accident of which
+    direction the lane happened to be recorded in, so the two want asking directly.
+    """
+    head = polyline_len(pts[: k + 1]) + math.dist(pts[k], x)
+    tail = math.dist(x, pts[k + 1]) + polyline_len(pts[k + 1 :])
+    if tail < arm_ft and tail <= head:
+        return [*pts[: k + 1], x]
+    if head < arm_ft and head < tail:
+        return [x, *pts[k + 1 :]]
+    return None
+
+
+def push_clear_of_fabric(base: Pt, unit: Pt, edge: float, fabric: Sequence[Poly], gap: float = TRACK_FABRIC_GAP) -> Pt:
+    """Walk out from `base` along the unit vector `unit`, starting `edge` out, until the point clears every
+    standing thing by `gap`. Twenty-four steps of 6 px, then the last point tried.
+
+    LIFTED OUT OF `_cluster_gateway` AND `_cluster_edge_toward` (feature 146), which carried the same loop
+    twice. Stepping rather than solving is deliberate - the fabric is an arbitrary set of polygons, the step
+    is cheap, and a bounded walk cannot fail to terminate the way a solve can. The bound is what makes the
+    LAST line a real branch: a cluster ringed all the way round returns a point that does not clear, and the
+    caller draws from it anyway rather than returning nothing. No live hamlet is that crowded.
+    """
+    for _ in range(24):
+        gx, gy = base[0] + unit[0] * edge, base[1] + unit[1] * edge
+        if all(edge_dist(gx, gy, poly) >= gap for poly in fabric):
+            return (gx, gy)
+        edge += 6.0
+    return (base[0] + unit[0] * edge, base[1] + unit[1] * edge)
+
+
 def _smooth_web(s: Settlement, hard: list[Poly], walls: Sequence[Poly], water: list[tuple[Pt, Pt]]) -> int:
     """The LAST pass over the web: take out what feet would never have worn.
 
@@ -1714,46 +1827,11 @@ def _smooth_web(s: Settlement, hard: list[Poly], walls: Sequence[Poly], water: l
     # So every rewrite below goes through `_commit`: the web's piece count is taken before and after,
     # and a rewrite that adds a piece is refused and the lane left as it was. The bends check may
     # then fire on the kept hairpin - that is the honest verdict, and its own task (T04).
-    def _pieces() -> int:
-        _ways = [[(float(x), float(y)) for x, y in ln.get("pts") or []] for ln in lanes]
-        _comp = _components(_ways, 4.0)
-        return len({_comp[m] for m in range(len(_ways)) if len(_ways[m]) >= 2})
-
-    def _rejoinable() -> bool:
-        """After a rewrite that added a piece: will the post-smoothing touch pass close it again? Yes
-        iff some end of the new piece stands within `_STUB_REACH_FT` of another piece's tread with a
-        clear straight link (the touch pass draws exactly that). Inashiro's own smoothing makes such
-        cuts and the touch repairs them; seed 37's stub sat 29 ft off in a 12 ft slot no link clears."""
-        _ways = [[(float(x), float(y)) for x, y in ln.get("pts") or []] for ln in lanes]
-        _comp = _components(_ways, 4.0)
-        _live = [m for m in range(len(_ways)) if len(_ways[m]) >= 2]
-        _seed = next((m for m in _live if lanes[m].get("connector")), _live[0] if _live else 0)
-        for _c in {_comp[m] for m in _live} - {_comp[_seed]}:  # every piece OTHER than the connector's must reach one
-            _mine = [m for m in _live if _comp[m] == _c]
-            _segs = [sg for m in _live if _comp[m] != _c for sg in zip(_ways[m], _ways[m][1:], strict=False)]
-            if not _segs:
-                continue
-            _ok = False
-            for m in _mine:
-                for _e in (_ways[m][0], _ways[m][-1]):
-                    _foot = min((seg_closest(_e[0], _e[1], a, b) for a, b in _segs), key=lambda z: math.dist(_e, z))
-                    if math.dist(_e, _foot) <= _STUB_REACH_FT and _clear_touch(_e, _foot, hard, walls, water):
-                        _ok = True
-                        break
-                if _ok:
-                    break
-            if not _ok:
-                return False
-        return True
+    # `_pieces()` stood here and lost its only caller when `_commit` moved out to `commit_lane`, which
+    # counts the pieces itself. Removed with it (feature 146).
 
     def _commit(m: int, new_pts: list[list[float]]) -> bool:
-        _before, _old = _pieces(), lanes[m]["pts"]
-        lanes[m]["pts"] = new_pts
-        if _pieces() > _before and not _rejoinable():
-            lanes[m]["pts"] = _old
-            return False
-        s.reink_lane(m)
-        return True
+        return commit_lane(lanes, m, new_pts, hard, walls, water, s.reink_lane)
 
     def _others_segs(skip: int) -> list[tuple[Pt, Pt]]:
         return [
@@ -1930,13 +2008,10 @@ def _smooth_web(s: Settlement, hard: list[Poly], walls: Sequence[Poly], water: l
                     x = _seg_cross(pts[k], pts[k + 1], opts[m], opts[m + 1])
                     if x is None:
                         continue
-                    head, tail = polyline_len(pts[: k + 1]) + math.dist(pts[k], x), math.dist(x, pts[k + 1]) + polyline_len(pts[k + 1 :])
-                    if tail < _ARM_FT and tail <= head:
-                        pts = [*pts[: k + 1], x]
-                    elif head < _ARM_FT and head < tail:
-                        pts = [x, *pts[k + 1 :]]
-                    else:
+                    _cut = bowtie_cut(pts, k, x)
+                    if _cut is None:
                         continue
+                    pts = _cut
                     if _commit(i, [[round(px, 1), round(py, 1)] for px, py in pts]):
                         changed += 1
                     break
@@ -2082,9 +2157,9 @@ def _pull_back_to_service(run: Poly, segs: Sequence[tuple[Pt, Pt]], houses: Sequ
     # with the house clause in, Mizuguchi's tread stopped 85.5 ft from a house center - inside the
     # 90 ft bar, so nothing trimmed - and 164 ft past the lane it should have joined, which is
     # exactly the picture the review objected to: a track petering out in the grass.
-    def serves(q: Pt) -> bool:
-        return any(seg_dist(q[0], q[1], a, b) <= _LANE_JOIN_FT for a, b in segs)
-
+    # A second copy of the trim pass's `serves` predicate stood here with no callers at all - dead since
+    # this function stopped deciding whether an end reaches and started walking it to the closest
+    # approach instead. Removed (feature 146); the live one is in `_trim_blunt_ends` above.
     out = list(run)
     for _end in (0, -1):
         pts = out if _end == 0 else out[::-1]
@@ -2604,13 +2679,7 @@ def _cluster_gateway(s: Settlement, seat: Mapping[str, object], fallback: Pt) ->
     # rather than solving: the fabric is an arbitrary set of polygons, the step is cheap, and a
     # bounded walk cannot fail to terminate the way a solve can.
     fabric = [poly for poly, _owner, _kind in _homestead_polys(s)]
-    edge = out_reach + TRACK_FABRIC_GAP + 8.0
-    for _ in range(24):
-        gx, gy = cx + ax * along_mid + ox * edge, cy + ay * along_mid + oy * edge
-        if all(edge_dist(gx, gy, poly) >= TRACK_FABRIC_GAP for poly in fabric):
-            return (gx, gy)
-        edge += 6.0
-    return (cx + ax * along_mid + ox * edge, cy + ay * along_mid + oy * edge)
+    return push_clear_of_fabric((cx + ax * along_mid, cy + ay * along_mid), (ox, oy), out_reach + TRACK_FABRIC_GAP + 8.0, fabric)
 
 
 def _cluster_edge_toward(s: Settlement, target: Pt, fallback: Pt) -> Pt:
@@ -2641,13 +2710,7 @@ def _cluster_edge_toward(s: Settlement, target: Pt, fallback: Pt) -> Pt:
     ux, uy = ux / n, uy / n
     reach = max(((x - cx) * ux + (y - cy) * uy for x, y in zip(xs, ys, strict=False)), default=0.0)
     fabric = [poly for poly, _owner, _kind in _homestead_polys(s)]
-    edge = reach + TRACK_FABRIC_GAP + 8.0
-    for _ in range(24):
-        gx, gy = cx + ux * edge, cy + uy * edge
-        if all(edge_dist(gx, gy, poly) >= TRACK_FABRIC_GAP for poly in fabric):
-            return (gx, gy)
-        edge += 6.0
-    return (cx + ux * edge, cy + uy * edge)
+    return push_clear_of_fabric((cx, cy), (ux, uy), reach + TRACK_FABRIC_GAP + 8.0, fabric)
 
 
 def _thread_the_fabric(s: Settlement, plan: SitePlan, run: Poly, gap: float = TRACK_FABRIC_GAP) -> Poly:
@@ -2710,8 +2773,18 @@ def _thread_the_fabric(s: Settlement, plan: SitePlan, run: Poly, gap: float = TR
         for step in (40.0, 80.0, 140.0, 220.0):
             detour = [run[0], (mx + ux * step, my + uy * step), run[-1]]
             cand = clip_to_clear(detour, fabric, gap)
+            # THE SWING THAT WORKS. Not reached by any test, and the structural reason is worth stating
+            # rather than leaving for the next session to re-derive (feature 146, ~25 configurations
+            # tried): the detour KEEPS `run[0]` and `run[-1]`, so whatever refused the straight run
+            # usually refuses the detour on the same grounds. The two ways into this block are a clipped
+            # run that still crosses - whose only cause `clip_to_clear` cannot see is `run[0]` itself
+            # sitting in the fabric, which the detour inherits - and a clip that died under the 70 ft
+            # floor, where the surviving stub is short because the obstacle is near `run[0]`, which the
+            # detour's first leg then has to pass anyway. It is kept because the alternative below is to
+            # hand back a run known to cross the steadings, and because a real cluster (not a fixture)
+            # can present an obstacle the swing clears where the straight line does not.
             if len(cand) >= 2 and not _crosses_fabric(cand, fabric, gap):
-                return cand
+                return cand  # pragma: no cover - see above
         # A DEAD END, MEASURED (feature 134 T50): a ladder that walked run[0] outward too, on the
         # theory that the offending leg was the first one and nothing above can move it. It changed
         # no map, because this function was never the one at fault - see `_pull_back_to_service`,

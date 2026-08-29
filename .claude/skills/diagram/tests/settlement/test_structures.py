@@ -448,3 +448,99 @@ def test_every_structures_member_resolves_on_settlement_itself():
     # what consumers actually rely on: the name reaching Settlement, not merely StructuresMixin
     unreachable = sorted(n for n in _STRUCTURES_SURFACE if not hasattr(Settlement, n))
     assert not unreachable, f"not resolvable on Settlement: {unreachable}"
+
+
+# ---------------------------------------------------------------------------------------------
+# EXTRACTED FROM A CLOSURE SO IT COULD BE TESTED (feature 146, GM 2026-08-28). `pick_caption_seat`
+# was `_pick` inside `place_kosatsuba`: reaching its two branches through the placer meant building
+# a settlement whose every caption seat is blocked by a lane, which is why neither branch had a test.
+# Lifted, it takes two callables and two numbers.
+# ---------------------------------------------------------------------------------------------
+
+
+def test_pick_caption_seat_takes_the_nearest_seat_that_clears_the_ways() -> None:
+    from l7r.diagram.settlement.structures.fixtures import pick_caption_seat
+
+    seats = [(100.0, 0.0), (20.0, 0.0), (5.0, 0.0)]
+    # every seat is legal; the two far ones clear the lane bar, the nearest one does not
+    clearance = {(100.0, 0.0): 9.0, (20.0, 0.0): 9.0, (5.0, 0.0): 0.5}
+    got = pick_caption_seat(seats, (0.0, 0.0), lambda _q: 1.0, 99.0, lambda q: clearance[q], 2.0)
+    assert got == (20.0, 0.0), "nearest of the seats that CLEAR, not nearest overall"
+
+
+def test_pick_caption_seat_falls_back_to_the_best_clearance_when_nothing_clears() -> None:
+    """The board is placed even when its caption is hemmed - `labels_clear_of_other_buildings` reports
+    that rather than the siter hiding it - so the fallback arm has to choose, and it chooses the
+    roomiest legal seat regardless of distance."""
+    from l7r.diagram.settlement.structures.fixtures import pick_caption_seat
+
+    seats = [(5.0, 0.0), (200.0, 0.0)]
+    clearance = {(5.0, 0.0): 0.4, (200.0, 0.0): 1.9}
+    got = pick_caption_seat(seats, (0.0, 0.0), lambda _q: 1.0, 99.0, lambda q: clearance[q], 2.0)
+    assert got == (200.0, 0.0), "nothing clears the 2 ft bar, so the roomiest seat wins on clearance alone"
+
+
+def test_pick_caption_seat_keeps_every_seat_when_the_hug_cap_would_leave_none() -> None:
+    """`_legal ... or _seats`: a caption that hugs nothing within the cap still needs a seat."""
+    from l7r.diagram.settlement.structures.fixtures import pick_caption_seat
+
+    seats = [(5.0, 0.0), (9.0, 0.0)]
+    got = pick_caption_seat(seats, (0.0, 0.0), lambda _q: 500.0, 10.0, lambda _q: 8.0, 2.0)
+    assert got in seats
+
+
+def test_pull_caption_toward_leaves_a_seat_that_already_sits_on_its_subject_center():
+    """The pull runs along the line from the caption's block to the subject's; when the two centers
+    coincide there is no line to run along, so the seat is handed back. A concave subject is how that
+    happens on a map - the caption sits in the notch of a C-shaped footprint, clear of every arm of it
+    while sharing its center."""
+    s = Settlement(1000, 1000, seed=1)
+    s.meta(name="V", scale="hamlet", ftpx=1, toscale=True)
+    c_shape = [(0.0, 0.0), (200.0, 0.0), (200.0, 40.0), (60.0, 40.0), (60.0, 160.0), (200.0, 160.0), (200.0, 200.0), (0.0, 200.0)]
+    seat = (115.0, 100.0 + 9 * 0.275)  # the block's own center lands exactly on the subject's
+    assert s.pull_caption_toward(seat, "Kura", 9, "middle", 0.0, c_shape) == seat
+
+
+def test_caption_lane_clearance_reads_a_tread_through_the_caption_box():
+    """Three verdicts, and only the middle one is reached by a rolled map. A lane VERTEX inside the box
+    is the worst case and returns a negative clearance (the tread's own half-width); a lane CROSSING an
+    edge without a vertex inside is zero clearance; a lane passing well clear is measured."""
+    s = Settlement(1000, 1000, seed=1)
+    s.meta(name="V", scale="hamlet", ftpx=1, toscale=True)
+    s.M["lanes"] = [{"pts": [[500, 500], [520, 500]], "w": 4}]  # both vertices inside the box
+    assert s.caption_lane_clearance(510, 500, 40.0) == -2.0
+
+    s.M["lanes"] = [{"pts": [[400, 500], [700, 500]], "w": 4}]  # crosses the box, no vertex inside
+    assert s.caption_lane_clearance(510, 500, 40.0) == -2.0, "a crossing tread is zero clearance, less its half-width"
+
+    s.M["lanes"] = [{"pts": [[400, 900], [700, 900]], "w": 4}]
+    assert s.caption_lane_clearance(510, 500, 40.0) > 100.0, "well clear, and measured"
+
+
+def test_a_notice_board_with_no_caption_is_sitable_anywhere():
+    """`_sitable` ranks a board position by whether its caption could find a seat there. A board with no
+    caption to place has nothing to rank, so every position is equally good - the arm no pool map takes,
+    because every board on every map is labeled."""
+    s = Settlement(1000, 1000, seed=1)
+    s.meta(name="V", scale="hamlet", ftpx=1, toscale=True)
+    s.M["lanes"] = [{"pts": [[100, 500], [900, 500]], "w": 4}]
+    s.place_kosatsuba(label="")
+    assert s.M.get("kosatsuba"), "a board is still placed"
+
+
+def test_a_notice_board_hemmed_on_every_side_still_gets_its_caption():
+    """A board with nowhere clear to put its caption is still placed and still labeled - the seat falls
+    back to the default below (or above, when the caller has said so), and
+    `labels_clear_of_other_buildings` reports it rather than the siter hiding the board."""
+    s = Settlement(1000, 1000, seed=1)
+    s.meta(name="V", scale="hamlet", ftpx=1, toscale=True)
+    for dx in range(-150, 151, 30):
+        for dy in range(-150, 151, 30):
+            if abs(dx) < 20 and abs(dy) < 20:
+                continue  # leave the board's own ground free
+            s.M.setdefault("buildings", []).append({"x": 500 + dx, "y": 500 + dy, "w": 38, "h": 38, "rot": 0, "kind": "merchant"})
+            s.placed.append((500 + dx, 500 + dy, 38, 38))
+    s.kosatsuba(500, 500, label="notice board")
+    seat = [frag for frag in s.toplabels if "notice board" in frag]
+    assert len(seat) == 1, "the caption is drawn all the same"
+    assert 'y="514"' in seat[0], "on the default seat below the board - the fallback, since nothing cleared"

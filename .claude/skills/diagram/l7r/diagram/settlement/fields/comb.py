@@ -26,6 +26,20 @@ if TYPE_CHECKING:
     from ..core import Settlement
 
 
+def hem_on_water(poly: Poly, wet: Sequence[tuple[Any, float]], pond: Any) -> bool:
+    """Does this dry-hem plot lie across a watercourse or over the pond?
+
+    LIFTED OUT OF `_comb_draw_hem` (feature 146, GM 2026-08-28 on inner functions and testability). The
+    hem yields to standing water because `build_comb` lays the fan from pure geometry and `draw_comb_field`
+    used to render it blind - it was the ONLY placer that consulted nothing, so a hem plot could be drawn
+    straight across a stream that had been authored earlier (Ubame's). The stream arm and the pond arm are
+    different geometry and want asking separately, which through the method meant building a whole comb net.
+    """
+    if any(quad_hits_seg(poly, pl_[i], pl_[i + 1], hw_) for pl_, hw_ in wet for i in range(len(pl_) - 1)):
+        return True
+    return bool(pond is not None and point_quad_dist(pond[0], pond[1], poly) < max(pond[2], pond[3]))
+
+
 class CombMixin:
     def comb_base_fill(self: Settlement, net: dict[str, Any], name: str, color: str = "", full_envelope: bool = False) -> None:  # type: ignore[misc]
         """Draw a FIELD FLOOR under a build_comb net's plots and record it (M['comb_floors'][name]),
@@ -216,9 +230,7 @@ class CombMixin:
         _wpond = self.M.get("pond")
 
         def _hem_on_water(poly: Poly) -> bool:
-            if any(quad_hits_seg(poly, pl_[i], pl_[i + 1], hw_) for pl_, hw_ in _wet for i in range(len(pl_) - 1)):
-                return True
-            return _wpond is not None and point_quad_dist(_wpond[0], _wpond[1], poly) < max(_wpond[2], _wpond[3])
+            return hem_on_water(poly, _wet, _wpond)
 
         for p in net["dry_plots"]:  # the dry upslope hem
             if any(hem_on_paddy(p["poly"], _pol) for _pol in _prior_paddies):

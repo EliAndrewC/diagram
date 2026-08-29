@@ -772,3 +772,17 @@ def test_lanes_bend_like_paths_fires_and_passes():
     assert "lanes_bend_like_paths" in f_only(zigzag, "lanes_bend_like_paths"), "two sharp turns inside 40 ft must fire"
     corner = manifest(houses=[house(x=400, y=400)], lane=[[0, 500], [300, 500]], lanes=[{"pts": [[0, 500], [300, 500], [300, 700], [420, 780]], "w": 3}])
     assert "lanes_bend_like_paths" not in f_only(corner, "lanes_bend_like_paths"), "a corner and a bend are how a lane runs"
+
+
+def test_lanes_bend_like_paths_steps_over_a_degenerate_vertex():
+    """A lane record can carry the same point twice - a join that landed on its own endpoint, a rounding
+    that collapsed a 0.04 px step. The turn at such a vertex is undefined (a zero-length arm has no
+    bearing), so it is stepped over rather than measured; without that the angle would come out of an
+    `acos` on a division by zero."""
+    from tests.check_village._builders import f_only, manifest
+
+    doubled = manifest(lanes=[{"pts": [[100, 100], [100, 100], [300, 100], [300, 300]], "w": 4}])
+    assert "lanes_bend_like_paths" not in f_only(doubled, "lanes_bend_like_paths")
+    # ...and a real hairpin at the same corner still fires, so the skip is not hiding anything
+    hairpin = manifest(lanes=[{"pts": [[100, 100], [300, 100], [110, 104]], "w": 4}])
+    assert "lanes_bend_like_paths" in f_only(hairpin, "lanes_bend_like_paths")

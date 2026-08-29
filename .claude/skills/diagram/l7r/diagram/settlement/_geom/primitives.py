@@ -252,21 +252,23 @@ def facing_chains(outline: Sequence[Pt], seat: Pt, eps: float) -> list[list[Chor
         faces.append(nx * (seat[0] - mx) + ny * (seat[1] - my) > 0)
     if not any(faces):
         return []
-    if all(faces):
-        runs = [list(range(n))]
-    else:
-        start = next(i for i in range(n) if not faces[i])
-        runs = []
-        cur: list[int] = []
-        for k in range(1, n + 1):
-            i = (start + k) % n
-            if faces[i]:
-                cur.append(i)
-            elif cur:
-                runs.append(cur)
-                cur = []
-        if cur:
+    # TWO GUARDS STOOD HERE AND BOTH WERE DEAD (removed with their proof, feature 146). An `if all(faces)`
+    # arm handled a seat that faces EVERY edge, and an `if cur` after the loop handled a run still open at
+    # the end. Neither can happen, and not by luck: the outward half-planes of a CLOSED ring have empty
+    # intersection, so no seat is on the outward side of every edge (40,000 random 3-to-5-gons found none);
+    # and the walk starts at a non-facing edge and ends on that same edge, so an open run is always flushed
+    # by the `elif` on the last step. `next()` raising is the right answer if the geometry ever says
+    # otherwise - a silent default would hand back a chain nothing verified.
+    start = next(i for i in range(n) if not faces[i])
+    runs = []
+    cur: list[int] = []
+    for k in range(1, n + 1):
+        i = (start + k) % n
+        if faces[i]:
+            cur.append(i)
+        elif cur:
             runs.append(cur)
+            cur = []
     out: list[list[Chord]] = []
     for run in runs:
         chain: list[Chord] = []

@@ -588,3 +588,51 @@ def test_plot_pond_fits_the_polygon_not_the_bbox():
     for a in [i * math.pi / 12 for i in range(24)]:
         px, py = fp["x"] + fp["rx"] * math.cos(a), fp["y"] + fp["ry"] * math.sin(a)
         assert 100 <= px <= 190 and 100 <= py <= 170  # every rim point inside the plot
+
+
+def test_hem_on_water_sees_a_stream_and_a_pond_separately():
+    """`build_comb` lays the fan from pure geometry and `draw_comb_field` used to render it blind - it
+    was the ONLY placer that consulted nothing, so a dry-hem plot could be drawn straight across a
+    stream authored earlier (Ubame's). The two arms are different geometry: a stroked watercourse with
+    a half-width, and the pond's ellipse."""
+    from l7r.diagram.settlement.fields.comb import hem_on_water
+
+    plot = [(100.0, 100.0), (140.0, 100.0), (140.0, 140.0), (100.0, 140.0)]
+    assert hem_on_water(plot, [([(0.0, 120.0), (500.0, 120.0)], 4.5)], None), "the stream runs under it"
+    assert hem_on_water(plot, [], (120.0, 120.0, 60.0, 40.0)), "and the pond stands under it"
+    assert not hem_on_water(plot, [([(0.0, 900.0), (500.0, 900.0)], 4.5)], (800.0, 800.0, 20.0, 20.0))
+
+
+def test_comb_base_fill_can_floor_the_whole_envelope():
+    """Cities crop tight and carry no surrounding scrub, so their field floor must cover the edge
+    junctions too; a village clips the fill to the plots' union bbox instead, which hides the nucleated
+    map's harmless phantom tail. Gated by `paddy_fan_has_floor`."""
+    s = Settlement(1000, 1000, seed=1)
+    s.meta(name="V", scale="hamlet", ftpx=1, toscale=True)
+    net = {
+        "plots": [{"poly": [(100.0, 100.0), (300.0, 100.0), (300.0, 300.0), (100.0, 300.0)]}],
+        "envelope": [(90.0, 90.0), (310.0, 90.0), (310.0, 310.0), (90.0, 310.0)],
+    }
+    s.comb_base_fill(net, "p", full_envelope=True)
+    assert any("310.0,90.0" in frag for frag in s.out), "the envelope itself is the floor"
+
+
+def test_the_dry_hem_stops_at_the_bank_of_a_watercourse_that_was_there_first():
+    """`build_comb` lays the fan from pure geometry, so a hem plot can be drafted straight across a
+    stream authored earlier (Ubame's). The draw yields: the crop stops at the bank rather than being
+    inked over the water."""
+    s = Settlement(1000, 1000, seed=1)
+    s.meta(name="V", scale="hamlet", ftpx=1, toscale=True)
+    s.M["streams"] = [{"poly": [[0, 120], [500, 120]], "w": 9}]
+    wet = [(100.0, 100.0), (140.0, 100.0), (140.0, 140.0), (100.0, 140.0)]
+    dry = [(600.0, 600.0), (640.0, 600.0), (640.0, 640.0), (600.0, 640.0)]
+    net = {
+        "dry_plots": [
+            {"poly": wet, "fill": "#DCCFA6", "furrow": 6.0, "theta": 0.0, "crop": "soy"},
+            {"poly": dry, "fill": "#DCCFA6", "furrow": 6.0, "theta": 0.0, "crop": "soy"},
+        ]
+    }
+    s._comb_draw_hem(net)
+    ink = "".join(s.out)
+    assert "600.0,600.0" in ink, "the dry plot is drawn"
+    assert "100.0,100.0" not in ink, "the one over the stream is not"

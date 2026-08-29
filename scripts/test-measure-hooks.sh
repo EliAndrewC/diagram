@@ -32,6 +32,12 @@ run "$(edit_ev '/diagram/.claude/skills/diagram/tests/settlement/test_geom.py')"
 run "$(bash_ev 'make test-full')"; check "the THIRD is BLOCKED" blocked $?
 grep -q "Measure ONCE" /tmp/mt.err && { echo "  ok    the message says what to do instead"; PASS=$((PASS+1)); } || { echo "  FAIL  message unhelpful"; FAIL=$((FAIL+1)); }
 grep -q "make quick" /tmp/mt.err && { echo "  ok    the message names the cheap loop"; PASS=$((PASS+1)); } || { echo "  FAIL  message does not name make quick"; FAIL=$((FAIL+1)); }
+# ...AND THE COMMAND THAT ANSWERS THE BLOCKED QUESTION. A session reaching for `make test-full` a third time
+# is almost always asking "which lines does this test reach?", and `make quick` does not answer that - so a
+# message that names only the cheap loop sends it back to the expensive call (GM 2026-08-29: *"Does the make
+# cov-file get suggested automatically when you are warned about running make test-full too often"* - it did
+# not). A guard that blocks a legitimate question without giving the route is one that gets worked around.
+grep -q "make cov-file" /tmp/mt.err && { echo "  ok    the message names the targeted coverage probe"; PASS=$((PASS+1)); } || { echo "  FAIL  message does not name make cov-file"; FAIL=$((FAIL+1)); }
 run "$(bash_ev 'make test-full')"; check "re-issuing goes through (blocks once, no deadlock)" ok $?
 teardown
 

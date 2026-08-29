@@ -370,3 +370,24 @@ def test_stand_fringe_skips_a_seat_a_crown_already_covers() -> None:
     bare = fringe(False)
     assert bare, "the fixture must offer seats, or the skip proves nothing"
     assert len(fringe(True)) < len(bare), "seats an existing canopy already covers are skipped"
+
+
+def test_a_byre_is_refused_a_seat_on_the_paddy():
+    """A byre stands on dry ground: the draft team is stalled beside the steading, not in the rice."""
+    s = Settlement(1000, 1000, seed=1)
+    s.meta(name="V", scale="hamlet", ftpx=1, toscale=True)
+    s.field_polys.append([(100.0, 100.0), (400.0, 100.0), (400.0, 400.0), (100.0, 400.0)])
+    h = {"x": 600, "y": 600, "w": 40, "h": 26}
+    # 18 px OUT from the field edge: past `_in_blocked`'s own 14 px setback (which would otherwise
+    # answer first and leave this rule untested) and inside the byre's half-diagonal of 18.
+    assert not s._byre_clear_of_all_but(418, 250, 30, 20, h), "its corner would be over the bund"
+    assert s._byre_clear_of_all_but(700, 700, 30, 20, h)
+
+
+def test_a_fringe_tree_is_refused_ground_already_spoken_for():
+    """The wood's margin grows on WASTE ground - never over a blocking footprint, the crop, or a way."""
+    s = Settlement(1000, 1000, seed=1)
+    s.meta(name="V", scale="hamlet", ftpx=1, toscale=True)
+    s.block_polys.append([(100.0, 100.0), (400.0, 100.0), (400.0, 400.0), (100.0, 400.0)])
+    assert s._fringe_blocked(250, 250, 6)
+    assert not s._fringe_blocked(700, 700, 6)

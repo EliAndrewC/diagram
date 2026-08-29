@@ -78,6 +78,20 @@ not read `.gitignore`.
   guard: it censuses what the rest of the skill actually reaches through the package and proves the
   `__init__.py` re-export still resolves it. Feature 027 replaced hand-maintained rosters with star
   imports plus these guards, so the surface is derived and the guard is what makes that safe.
+- **A CLOSURE YOU CANNOT REACH IS LIFTED OUT, NEVER DROPPED** (feature 146, GM 2026-08-28: *"if something
+  is only available as an inner function in a closure, then you can move it out into its own function to make
+  it more unit testable ... you can generally have your unit tests be much simpler if you're just calling
+  functions that take simple inputs and outputs without needing to create a lot of very complicated setup"*).
+  This repository's own commits carried the failure it replaces - *"dropped (nested closure)"* - so the rule is
+  written down: move the inner function to module level with its captured values as parameters, have the inner
+  one delegate so there is ONE body, and test the lifted function with plain dicts and tuples. Worked examples:
+  `web_pieces` / `web_rejoinable` / `commit_lane` / `bowtie_cut` / `push_clear_of_fabric` (hamletgen/ways.py),
+  `fan_rival` (settlement/water_ways.py), `pick_caption_seat` (settlement/structures/fixtures.py),
+  `anchor_holds` (check_village/segments_05b), `hem_on_water` (settlement/fields/comb.py), `s_on_side`
+  (waterfields/polder.py), `bamboo_blocked` (hamletgen/hinterland.py). **Lifting only helps when the closure
+  is CALLED and one branch inside it is not** - a closure a live roll never calls at all leaves the delegate
+  uncovered too, and that one wants a direct test of the function that owns it (`_pull_back_to_service`,
+  `_touch_junctions`, `caption_lane_clearance`), or the code deleted if nothing can reach it.
 - **A found defect becomes a UNIT TEST OF THE PLACER first, and a check only where a later stage can
   undo the placer** (feature 141, GM 2026-08-28: *"If the thing which fixes the wrongness of the map is
   an update to our placement algorithm, then I don't think that saving off that past map actually has

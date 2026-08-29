@@ -125,9 +125,3 @@ def _seg_0122__paddy_fan_has_floor(
 # moat/ring corridors, and require the map-wide bare fraction under 20% (calibrated: the
 # pre-fix manifest reads ~25%, the quilted maps ~13-16%). Fields recording plot_polys (the
 # city gens) are gated; a village opts in by recording them.
-
-
-def _seg_0123___hq_ftpx(*, meta: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 123 (_hq_ftpx) - body verbatim from the legacy gate() (feature 022)."""
-    _hq_ftpx = float(meta.get("ftpx", 1) or 1)
-    return _kept(locals(), ('_hq_ftpx',))

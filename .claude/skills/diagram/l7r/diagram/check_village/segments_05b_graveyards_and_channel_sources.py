@@ -55,6 +55,57 @@ def _seg_0298__forest(*, M: Any = _UNBOUND) -> dict[str, Any]:
     return _kept(locals(), ('forest',))
 
 
+def anchor_holds(
+    pt: Pt,
+    anchor: dict[str, Any],
+    *,
+    M: Any,
+    pond: Any = None,
+    forest: Any = None,
+    field_by: Any = None,
+    frame: tuple[float, float, float, float] = (0.0, 0.0, 0.0, 0.0),
+) -> bool:
+    """Does the point `pt` actually sit on the source the `anchor` names?
+
+    LIFTED OUT OF SEGMENT 299 (feature 146, GM 2026-08-28: *"if something is only available as an inner
+    function in a closure, then you can move it out into its own function to make it more unit testable"*).
+    It is a nine-armed predicate, and reaching an arm through the segment meant building a manifest that
+    declares a channel source of that exact kind; six of the nine had therefore never run at all. Its
+    captured world is now four keywords and the extent frame `(EX0, EX1, EY0, EY1)`.
+
+    `channel_field_anchored` is the rule behind it: a conduit feeding a paddy must be VISIBLY sourced, so
+    an anchor naming a source that is not there - or not there AT THAT POINT - is a declaration the map
+    does not honor. The closing `return False` is an anchor of a kind the rule does not know.
+    """
+    EX0, EX1, EY0, EY1 = frame
+    field_by = field_by or {}
+    k = anchor["kind"]
+    if k == "pond":
+        return bool(pond) and in_ellipse(pt[0], pt[1], pond, 1.02)
+    if k == "offmap":
+        return bool(min(pt[0] - EX0, EX1 - pt[0], pt[1] - EY0, EY1 - pt[1]) <= 32)
+    if k == "forest":
+        return bool(forest) and point_in_poly(pt[0], pt[1], forest)
+    if k == "stream":
+        return any(seg_dist(pt[0], pt[1], sp[i], sp[i + 1]) < 30 for st in M.get("streams", []) for sp in [st["poly"]] for i in range(len(sp) - 1))
+    if k == "field":
+        fo: Any = field_by.get(anchor["name"])
+        return bool(fo) and point_in_poly(pt[0], pt[1], fo["outline"]) and edge_dist(pt[0], pt[1], fo["outline"]) >= 10
+    if k == "moat":
+        mo: Any = M.get("moat")
+        return bool(mo) and any(seg_dist(pt[0], pt[1], mo[i], mo[i + 1]) < 34 for i in range(len(mo) - 1))
+    if k == "river":  # a fan tapped straight off a river (Nagahara's Hayakawa far bank, 2026-07-23)
+        rv2: Any = M.get("river")
+        return bool(rv2) and any(seg_dist(pt[0], pt[1], rv2["pts"][i], rv2["pts"][i + 1]) < rv2.get("w", 40) / 2 + 14 for i in range(len(rv2["pts"]) - 1))
+    if k == "drain":  # a brook empties FROM the field drain (akusui outfall)
+        return any(seg_dist(pt[0], pt[1], dp[i], dp[i + 1]) < 30 for fd in M.get("field_ditches", []) if fd.get("role") == "drain" for dp in [fd["poly"]] for i in range(len(dp) - 1))
+    if k == "ditch":
+        # a weir/intake HANDS OFF to the irrigation works (a head-race, a canal): the mirror of
+        # the stream-diverted-into-a-channel clause in stream_runs_off_edge (GM audit 2026-07)
+        return any(seg_dist(pt[0], pt[1], dp[i], dp[i + 1]) < 22 for d2 in (M.get("field_ditches", []) + M.get("channels", [])) for dp in [d2["poly"]] for i in range(len(dp) - 1))
+    return False
+
+
 def _seg_0299__anchored(
     *,
     EX0: Any = _UNBOUND,
@@ -78,31 +129,7 @@ def _seg_0299__anchored(
     """Gate segment 299 (anchored) - body verbatim from the legacy gate() (feature 022)."""
 
     def anchored(pt: Pt, anchor: dict[str, Any]) -> bool:
-        k = anchor["kind"]
-        if k == "pond":
-            return bool(pond) and in_ellipse(pt[0], pt[1], pond, 1.02)
-        if k == "offmap":
-            return bool(min(pt[0] - EX0, EX1 - pt[0], pt[1] - EY0, EY1 - pt[1]) <= 32)
-        if k == "forest":
-            return bool(forest) and point_in_poly(pt[0], pt[1], forest)
-        if k == "stream":
-            return any(seg_dist(pt[0], pt[1], sp[i], sp[i + 1]) < 30 for st in M.get("streams", []) for sp in [st["poly"]] for i in range(len(sp) - 1))
-        if k == "field":
-            fo: Any = field_by.get(anchor["name"])
-            return bool(fo) and point_in_poly(pt[0], pt[1], fo["outline"]) and edge_dist(pt[0], pt[1], fo["outline"]) >= 10
-        if k == "moat":
-            mo: Any = M.get("moat")
-            return bool(mo) and any(seg_dist(pt[0], pt[1], mo[i], mo[i + 1]) < 34 for i in range(len(mo) - 1))
-        if k == "river":  # a fan tapped straight off a river (Nagahara's Hayakawa far bank, 2026-07-23)
-            rv2: Any = M.get("river")
-            return bool(rv2) and any(seg_dist(pt[0], pt[1], rv2["pts"][i], rv2["pts"][i + 1]) < rv2.get("w", 40) / 2 + 14 for i in range(len(rv2["pts"]) - 1))
-        if k == "drain":  # a brook empties FROM the field drain (akusui outfall)
-            return any(seg_dist(pt[0], pt[1], dp[i], dp[i + 1]) < 30 for fd in M.get("field_ditches", []) if fd.get("role") == "drain" for dp in [fd["poly"]] for i in range(len(dp) - 1))
-        if k == "ditch":
-            # a weir/intake HANDS OFF to the irrigation works (a head-race, a canal): the mirror of
-            # the stream-diverted-into-a-channel clause in stream_runs_off_edge (GM audit 2026-07)
-            return any(seg_dist(pt[0], pt[1], dp[i], dp[i + 1]) < 22 for d2 in (M.get("field_ditches", []) + M.get("channels", [])) for dp in [d2["poly"]] for i in range(len(dp) - 1))
-        return False
+        return anchor_holds(pt, anchor, M=M, pond=pond, forest=forest, field_by=field_by, frame=(EX0, EX1, EY0, EY1))
 
     return _kept(locals(), ('anchored',))
 

@@ -269,3 +269,58 @@ def test_woodland_stocked_ignores_the_grazing_bleed():
 
 def test_woodland_stocked_skips_legacy_maps():
     assert "woodland_commons_visibly_stocked" not in _stock_f(_stock_M([None], gen=None))
+
+
+# ---------------------------------------------------------------------------------------------
+# THE ANCHOR ARMS, ASKED ONE AT A TIME (feature 146, GM 2026-08-28 on lifting an inner function out
+# of its closure). `anchor_holds` was `anchored` inside segment 299 - a nine-armed predicate reachable
+# only by building a manifest that declares a channel source of each kind. Six of the nine arms had
+# never run. Lifted, each arm is one call.
+# ---------------------------------------------------------------------------------------------
+
+
+def _anchor(kind, pt, **world):
+    from l7r.diagram.check_village.segments_05b_graveyards_and_channel_sources import anchor_holds
+
+    world.setdefault("M", {})
+    world.setdefault("pond", None)
+    world.setdefault("forest", None)
+    world.setdefault("field_by", {})
+    world.setdefault("frame", (0.0, 1000.0, 0.0, 1000.0))
+    return anchor_holds(pt, {"kind": kind, **world.pop("anchor", {})}, **world)
+
+
+def test_a_channel_source_on_the_pond_is_anchored():
+    assert _anchor("pond", (500.0, 500.0), pond=(500.0, 500.0, 120.0, 90.0))
+    assert not _anchor("pond", (500.0, 500.0), pond=None), "no pond on the map, no pond anchor"
+
+
+def test_a_channel_source_at_the_frame_is_anchored_offmap():
+    assert _anchor("offmap", (10.0, 500.0)), "within 32 px of the west edge"
+    assert not _anchor("offmap", (500.0, 500.0)), "mid-map is not off-map"
+
+
+def test_a_channel_source_inside_the_forest_is_anchored():
+    wood = [(100.0, 100.0), (300.0, 100.0), (300.0, 300.0), (100.0, 300.0)]
+    assert _anchor("forest", (200.0, 200.0), forest=wood)
+    assert not _anchor("forest", (500.0, 500.0), forest=wood)
+    assert not _anchor("forest", (200.0, 200.0), forest=None)
+
+
+def test_a_channel_source_on_a_stream_is_anchored():
+    M = {"streams": [{"poly": [(100.0, 400.0), (900.0, 400.0)]}]}
+    assert _anchor("stream", (500.0, 410.0), M=M), "10 px off the thread is on it (the bar is 30)"
+    assert not _anchor("stream", (500.0, 500.0), M=M)
+
+
+def test_a_channel_source_on_a_river_is_anchored_across_its_half_width():
+    M = {"river": {"pts": [(100.0, 400.0), (900.0, 400.0)], "w": 40}}
+    assert _anchor("river", (500.0, 420.0), M=M), "inside w/2 + 14"
+    assert not _anchor("river", (500.0, 470.0), M=M)
+    assert not _anchor("river", (500.0, 420.0), M={}), "no river, no river anchor"
+
+
+def test_an_unknown_anchor_kind_holds_nothing():
+    """The closing `return False`: an anchor naming a source the rule does not know is not silently
+    accepted - `channel_field_anchored` reports it."""
+    assert not _anchor("hearsay", (500.0, 500.0))

@@ -117,9 +117,13 @@ class CaptionProbesMixin:
             return seat
         bc = (sum(p[0] for p in before) / len(before), sum(p[1] for p in before) / len(before))
         sc = (sum(p[0] for p in subject) / len(subject), sum(p[1] for p in subject) / len(subject))
+        # A `if d < 1e-6: return seat` guard stood here and was DEAD (removed with its proof, feature 146).
+        # `bc` is the mean of the caption block's four corners and `sc` the mean of the subject's vertices,
+        # so `d == 0` puts the block's center on the subject's own centroid - which lies inside the
+        # subject's convex hull by construction, and `rects_overlap` above (a separating-axis test, so a
+        # hull test) has already returned the seat unchanged in that case. There is no geometry that
+        # reaches here with the two centers on top of each other.
         d = math.dist(bc, sc)
-        if d < 1e-6:
-            return seat
         ux, uy = (sc[0] - bc[0]) / d, (sc[1] - bc[1]) / d
         pulled = (seat[0] + ux * gap * frac, seat[1] + uy * gap * frac)
         after = _block(*pulled)

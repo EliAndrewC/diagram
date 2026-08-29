@@ -9,6 +9,14 @@ explicit roster used to provide (clause 14: move the safety property into tests 
    the oracle keeps catching accidental drift in every other row. Edited so far: 2026-08-26,
    feature 133 T15 - four rows (0434, 0438.016/024/036) when the near-ring samplers and
    town_margins_clothed went onto the spatial index and their leaked loop names left).
+   2026-08-29, feature 146 - one row (0232) when `village_cluster_compact`'s and the dispersed
+   arm's residue was removed: three checks had been retired under 141 and their computations left
+   standing, so `free`, `writes` and `needs` all shed the names those computations leaked.
+   2026-08-29, feature 146 - FOURTEEN rows deleted (0097-0102, 0123-0126, 0128-0131) when the
+   `wells_troughs_rails_clear_of_each_other` and `paddy_fan_gapless` derivations were removed. Both
+   checks went under 141 and both left their whole derivation behind - a pairwise quad comparison and
+   a grid scan of every paddy, running on every gate and read by nothing. A DELETION is the one edit
+   the oracle cannot catch drifting, so it is spelled out here: those segments no longer exist.
 2. Order: the fixture's order is a subsequence of the derived order - the execution contract.
 3. Structural invariants: literal-return shape, unique keys, needs within free, META_CHECKS.
 4. Fire-proofs: every guard demonstrably fails on a synthetic violation (a checker never seen

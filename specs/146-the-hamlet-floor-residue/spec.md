@@ -2,7 +2,7 @@
 
 **Feature Branch**: none - `specs/146-the-hamlet-floor-residue` (`SPECIFY_FEATURE=146-the-hamlet-floor-residue`)
 **Created**: 2026-08-28
-**Status**: CLOSED 2026-08-28 with SC-001 NOT MET - the floor is 128 lines / 99.13%, from 373 (research R3 classifies every remaining line; the GM was told before the landing). Everything else in the spec is done. Originally APPROVED by `spec-fidelity` - round 1 required two changes (FR-003 had re-inserted a GM gate the GM removed and permitted a red floor at landing; FR-006/SC-003 demanded a green FULL run the spec's own Assumptions said could not be green), both applied; round 2 verdict FAITHFUL. Implementation proceeds.
+**Status**: RE-OPENED by the GM 2026-08-28 (*"please proceed until we are actually back up to everything passing and full coverage. at one hundred percent in the place that you currently report as 99.13%"*) and CLOSED 2026-08-29 with **SC-001 MET - the hamlet-path floor is 100%**, 0 lines from 373. The method the GM named is the one that got there: EXTRACT the closure, then test it. Superseded first status: CLOSED 2026-08-28 with SC-001 NOT MET - the floor is 128 lines / 99.13%, from 373 (research R3 classifies every remaining line; the GM was told before the landing). Everything else in the spec is done. Originally APPROVED by `spec-fidelity` - round 1 required two changes (FR-003 had re-inserted a GM gate the GM removed and permitted a red floor at landing; FR-006/SC-003 demanded a green FULL run the spec's own Assumptions said could not be green), both applied; round 2 verdict FAITHFUL. Implementation proceeds.
 **Input**: [`gm-request.md`](gm-request.md), the GM's words verbatim (2026-08-28, accepting feature 145)
 
 ## What the GM asked for

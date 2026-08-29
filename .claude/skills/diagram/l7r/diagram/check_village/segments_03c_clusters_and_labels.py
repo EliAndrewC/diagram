@@ -9,8 +9,6 @@ from l7r.diagram.settlement import LABEL_AIR_CAP, aligned_tilt, box_gap, label_a
 from .common_01_geometry import (
     Poly,
     _box_hits_poly,
-    convex_hull,
-    poly_area,
     poly_dist,
 )
 from .common_02_overlap_policy import poly_gap
@@ -31,33 +29,22 @@ def _seg_0232__cluster_abuts_fields(
     *,
     ADJ: Any = _UNBOUND,
     M: Any = _UNBOUND,
-    PHANTOM: Any = _UNBOUND,
-    b: Any = _UNBOUND,
-    built: Any = _UNBOUND,
     ccx: Any = _UNBOUND,
     ccy: Any = _UNBOUND,
     check: Any = _UNBOUND,
-    cov: Any = _UNBOUND,
     d: Any = _UNBOUND,
     dists: Any = _UNBOUND,
-    f: Any = _UNBOUND,
     far: Any = _UNBOUND,
     fields: Any = _UNBOUND,
-    grp: Any = _UNBOUND,
     h: Any = _UNBOUND,
-    harea: Any = _UNBOUND,
     hh: Any = _UNBOUND,
     houses: Any = _UNBOUND,
     hx: Any = _UNBOUND,
     hy: Any = _UNBOUND,
     meta: Any = _UNBOUND,
     nearest: Any = _UNBOUND,
-    pad: Any = _UNBOUND,
-    r: Any = _UNBOUND,
     scale: Any = _UNBOUND,
     span: Any = _UNBOUND,
-    tails: Any = _UNBOUND,
-    v: Any = _UNBOUND,
 ) -> dict[str, Any]:
     """Gate segment 232 (all_houses_field_adjacent, cluster_abuts_fields, field_outline_matches_planting, village_cluster_compact) - body verbatim from the legacy gate() (feature 022)."""
     if fields and houses:
@@ -75,59 +62,38 @@ def _seg_0232__cluster_abuts_fields(
                 nearest <= ADJ and not far,
                 f"nucleated cluster: nearest house {nearest:.0f}px from a field (want <={ADJ}); {len(far)} house(s) beyond a cluster-span of the fields",
             )
-            # A NUCLEATED cluster must be a COMPACT FABRIC, not a thin hollow arc. `cluster_abuts_fields`
-            # measures each house against the cluster's OWN span, so a big hollow cluster gets a big
-            # allowance and passes even when a horn juts into empty ground far from the crops. Measure the
-            # BUILT COVERAGE of the cluster's convex hull instead: the houses + their gardens / threshing
-            # yards / farmstead groves should fill a healthy fraction of the footprint they span. A cluster
-            # strung thin over a wide, hollow hull (the placer pulls every house to hug the paddy and packs
-            # ALONG it, so an over-WIDE seed shape strings them into a stranded arc) fills far less of its
-            # hull than a compact blob does. CALIBRATION: the pathological rolled crescent that motivated this
-            # filled ~0.20 (Kikuta: 55 houses over a hull filled 20%, NE horn ~400px from any crop); the
-            # roll_village placer's healthy nucleated villages fill ~0.28-0.31, and the tightly hand-placed
-            # villages ~0.40. Floor 0.25 sits clear below the healthy band and above the pathology. Village
-            # scale + >=12 houses only: a hamlet is legitimately loose, and a tiny cluster's hull is degenerate.
-            if scale == "village" and len(houses) >= 12:
-                harea = poly_area(convex_hull([(h["x"], h["y"]) for h in houses]))
-                built = sum(r.get("w", 30) * r.get("h", 24) for grp in ("houses", "gardens", "threshing_yards", "groves") for r in M.get(grp, []))
-                cov = built / harea if harea else 0.0
-                pass  # `` retired under feature 141 (the GM's cut); the segment stays for the check it keeps or the value it writes
-        else:
-            # A FLAT ADJ, WITH NO SPAN ALLOWANCE - and it stays that way. Feature 126 relaxed this
-            # to `ADJ + 2 * span`, arguing that the NUCLEATED branch above is the more generous of
-            # the two and that a scattered settlement legitimately spreads further from its fields.
-            # The regression corpus refuted it within one gate run:
-            # `all_houses_field_adjacent_dispersed_fires_on_a_remote_house.json` stopped tripping,
-            # and that is a frozen map which MUST fail. The flat rule is doing real work here.
-            #
-            # If the dispersed and linear forms are switched back on (see `SETTLEMENT_FORMS` in
-            # hamletgen/consts.py, currently pinned to nucleated), this branch is worth revisiting -
-            # but WITH that fixture kept red, not by widening the bound until the new maps pass.
-            far = [h for h, d in dists if d > ADJ]
-            pass  # `` retired under feature 141 (the GM's cut); the segment stays for the check it keeps or the value it writes
-
-            # ...and the outline that adjacency was just measured against must BE the planting. A field's
-            # `outline` is the smoothed ENVELOPE the water net claims; `vis_bbox` is the extent of the plots
-            # actually DRAWN. They diverge when a gen declares more field than the comb fills (an over-declared
-            # `field_fall`): the surplus becomes a PHANTOM TAIL - invisible on the map, but fully real to every
-            # distance test. A farm hugging that tail reads as "field-adjacent" while sitting well out past the
-            # last rice, which is exactly how Akagahara grew a line of farmsteads hanging south of its paddy
-            # (the tail was 181px; the gate saw nothing). Without this, `all_houses_field_adjacent` has no teeth
-            # on precisely the maps that need it. DISPERSED only: there the outline is load-bearing for
-            # placement, whereas a nucleated cluster is seeded as a unit and never rides the envelope, so a tail
-            # is inert (Hoshigaoka/Kikuta carry ~210px tails harmlessly). Tolerance 60px allows the genuine
-            # rounding of a smoothed rim over irregular plots, well under the ~165px band it protects.
-            PHANTOM = 60
-            tails = []
-            for f in fields:
-                b, v = f.get("bbox"), f.get("vis_bbox")
-                if not b or not v:
-                    continue
-                pad = max(v[0] - b[0], v[1] - b[1], b[2] - v[2], b[3] - v[3])
-                if pad > PHANTOM:
-                    tails.append(f"{f.get('name')} (+{pad:.0f}px)")
-            pass  # `` retired under feature 141 (the GM's cut); the segment stays for the check it keeps or the value it writes
-    return _kept(locals(), ('PHANTOM', '_', 'b', 'built', 'ccx', 'ccy', 'cov', 'd', 'dists', 'f', 'far', 'grp', 'h', 'harea', 'hh', 'hx', 'hy', 'nearest', 'pad', 'r', 'span', 'tails', 'v'))
+            # `village_cluster_compact` RETIRED WITH ITS CHECK, AND THE REASONING KEPT (feature 146). It held
+            # that a nucleated cluster must be a COMPACT FABRIC rather than a thin hollow arc:
+            # `cluster_abuts_fields` above measures each house against the cluster's OWN span, so a big
+            # hollow cluster gets a big allowance and passes even when a horn juts into empty ground far
+            # from the crops. RETIRED WITH ITS CHECK, AND THE REASONING KEPT (feature 146). `village_cluster_compact`
+            # measured the fraction of a nucleated cluster's convex hull that its own buildings fill -
+            # a pathological rolled crescent filled ~0.20 against a healthy 0.28-0.31 and a tight
+            # hand-placed village ~0.40, so the floor was 0.25. Feature 141 cut the check (the placer
+            # now seats a cluster as a unit and cannot produce the crescent), and this feature removes
+            # the three computations it left standing behind it - `harea`, `built` and `cov` were
+            # derived on every village-scale gate and read by nothing.
+    # THE DISPERSED ARM WENT WITH ITS TWO CHECKS (feature 141's cut; the residue removed here in 146).
+    # Both are worth keeping on the record, because either would have to be rebuilt from scratch if the
+    # dispersed and linear settlement forms are switched back on (`SETTLEMENT_FORMS` in
+    # hamletgen/consts.py, currently pinned to nucleated):
+    #
+    #   `all_houses_field_adjacent` used a FLAT ADJ with no span allowance, and it stayed flat on purpose.
+    #   Feature 126 relaxed it to `ADJ + 2 * span`, arguing that the nucleated branch above is the more
+    #   generous of the two and that a scattered settlement legitimately spreads further from its fields.
+    #   The regression corpus refuted it within one gate run:
+    #   `all_houses_field_adjacent_dispersed_fires_on_a_remote_house.json` stopped tripping, and that is a
+    #   frozen map which MUST fail. If the form comes back, bring the rule back flat and keep that fixture red.
+    #
+    #   `field_outline_matches_planting` caught a PHANTOM TAIL: a field's `outline` is the smoothed envelope
+    #   the water net claims, `vis_bbox` the extent of the plots actually DRAWN, and the surplus of one over
+    #   the other is invisible on the map but fully real to every distance test. A farm hugging that tail
+    #   reads as field-adjacent while sitting well past the last rice - which is how Akagahara grew a line of
+    #   farmsteads hanging south of its paddy on a 181 px tail the gate could not see. Tolerance was 60 px
+    #   (genuine rounding of a smoothed rim), against the ~165 px band it protected. DISPERSED only: there the
+    #   outline is load-bearing for placement, while a nucleated cluster is seeded as a unit and never rides
+    #   the envelope, so a tail is inert (Hoshigaoka and Kikuta carry ~210 px tails harmlessly).
+    return _kept(locals(), ('_', 'ccx', 'ccy', 'd', 'dists', 'far', 'h', 'hh', 'hx', 'hy', 'nearest', 'span'))
 
 
 # DWELLINGS sit on the DRY higher ground, NEVER in the wet low toe below the field's drainage. The field

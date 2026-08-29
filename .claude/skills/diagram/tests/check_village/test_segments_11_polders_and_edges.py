@@ -29,6 +29,11 @@ def test_structures_clear_of_dike():
     assert "structures_clear_of_dike" not in f_only(
         {**base, "houses": [{"x": 1200, "y": 500, "w": 40, "h": 26, "rot": 0, "kind": "plain"}], "village_groves": [{"clumps": [[1200, 1200]]}]}, "structures_clear_of_dike"
     )
+    # ...AND A DIKE-TOP HOUSE IS EXEMPT BY DECLARATION. The `dike_top` settlement form seats its farmhouses
+    # ON the bank on purpose - that is the whole archetype - and each such house carries `on_dike`, which
+    # `dike_top_houses_on_the_dike` is the check for. Without the exemption the two rules contradict each
+    # other and no dike-top map could ever pass both.
+    assert "structures_clear_of_dike" not in f_only({**base, "houses": [{"x": 500, "y": 500, "w": 40, "h": 26, "rot": 0, "kind": "plain", "on_dike": True}]}, "structures_clear_of_dike")
     # a non-polder map (no dike) never trips it
     assert "structures_clear_of_dike" not in f_only(
         {"meta": {"scale": "hamlet", "field_archetype": "valley_paddy"}, "houses": [{"x": 500, "y": 500, "w": 40, "h": 26, "rot": 0, "kind": "plain"}]}, "structures_clear_of_dike"

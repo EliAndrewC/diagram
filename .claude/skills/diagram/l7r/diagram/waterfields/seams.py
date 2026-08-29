@@ -710,7 +710,13 @@ def _trade(
             return False
         gives = now.area < was.area
         traded = was.difference(now) if gives else now.difference(was)
-        if traded.is_empty or traded.area <= 0.0:
+        # A CUT THAT TRADES NOTHING. Defensive, and not reachable from this engine's own geometry: the
+        # guard above has already refused a cut that does not LOWER the ring's step count, and a cut that
+        # lowers it has moved a wall, so the symmetric difference has area. Tried and refused by the
+        # earlier guards (feature 146): a collinear extra vertex, a zero-area spike back up a wall, a
+        # self-touching slit that `buffer(0)` repairs away, and rings carrying NaN and 1e400 coordinates.
+        # It stays because shapely, not this module, decides what `difference` returns.
+        if traded.is_empty or traded.area <= 0.0:  # pragma: no cover - see above
             return False
         near = traded.buffer(0.4)
         # THE NEW WALL, WHICH IS THE ONLY GEOMETRY THIS REPAIR INVENTS. A basin's bund is SUPPOSED to
@@ -783,7 +789,13 @@ def _trade(
                 if len(lr) < 3 or not Polygon(lr).buffer(0).is_valid or pointed_ring(dedup_ring(lr, 1.0), _GATE_MIN_APEX):
                     return False
                 rings.append((k, lr))
-    except GEOSException:
+    # SHAPELY DECIDING IT CANNOT ANSWER. Defensive, and not reachable from this engine's own geometry:
+    # every ring entering the block is `buffer(0)`-repaired first, which is what makes the predicate
+    # operations safe. Tried and refused (feature 146): NaN and 1e400 coordinates in the plot ring, and
+    # in the `water` and `outside` geometries the block intersects against - each was caught by an
+    # earlier guard or sanitized by `buffer(0)`. Removing it would turn a library edge case into a
+    # crash mid-carve, which is the one outcome worse than a refused trade.
+    except GEOSException:  # pragma: no cover - see above
         return False
     for k, r in rings:
         plots[k]["poly"] = r
@@ -920,7 +932,13 @@ def close_seams(
         # rounding a welded one does. A basin that will not survive it is dropped and its ground
         # left to the fan floor - bare ground is an honest thing to record, a crossing ring is not.
         ring = _ring(basin)
-        if len(ring) < 3 or not Polygon(ring).is_valid:
+        # A PLANTED BASIN THAT WILL NOT SURVIVE ITS OWN ROUNDING. Defensive, and not reachable from this
+        # engine's own geometry: a valid polygon can still cross itself once `_ring` rounds it to 0.1 px,
+        # so a planted basin gets the same test a welded one does - but the basins this pass plants come
+        # from the fan's own tessellation and are far larger than the rounding. Tried and refused
+        # (feature 146): collinear plot rings, 0.02-0.06 px slivers, and bow-tie rings, all dropped by an
+        # earlier guard. Bare ground is an honest thing to record; a crossing ring is not.
+        if len(ring) < 3 or not Polygon(ring).is_valid:  # pragma: no cover - see above
             continue
         # `filler` is read by the water-topology anchors (channel_field_anchored), which want a
         # plot the CARVE sited rather than one this pass reclaimed

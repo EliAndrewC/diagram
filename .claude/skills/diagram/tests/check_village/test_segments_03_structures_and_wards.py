@@ -261,3 +261,17 @@ def test_labels_align_with_their_referent_fires_and_passes():
     assert "labels_align_with_their_referent" not in f_only(aligned, "labels_align_with_their_referent"), "the board's own angle passes"
     noref = manifest(houses=[house(x=400, y=400)], kosatsuba=[board], labels=[[480.0, 512.0, 533.0, 520.0, 2, "notice board"]])
     assert "labels_align_with_their_referent" not in f_only(noref, "labels_align_with_their_referent"), "no referent, no judgment"
+
+
+def test_title_clear_of_features_fires_over_a_feature_label():
+    """A title placard over a caption ERASES it - caught on the Tango content crop 2026-07-23, where the
+    card landed on the 'pauper ossuary mound' label. The label arm is tested last, after every footprint
+    and the pond, so a map with nothing else in the way is what reaches it."""
+    M = {
+        "meta": {"scale": "village"},
+        "labels": [[300, 300, 420, 316, 1, "pauper ossuary mound"]],
+        "title": {"name": "V", "bbox": [280, 290, 440, 330], "placard": True},
+    }
+    assert "title_clear_of_features" in f_only(M, "title_clear_of_features")
+    clear = {**M, "labels": [[800, 800, 920, 816, 1, "pauper ossuary mound"]]}
+    assert "title_clear_of_features" not in f_only(clear, "title_clear_of_features")
