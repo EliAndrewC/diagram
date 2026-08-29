@@ -585,7 +585,7 @@ correct the last one - so the numbers a reader can check now come from the artif
 - notice board at **(2244.5, 2990.6)**, **9** of 20 farmhouses within 250 ft
 <!-- /census -->
 
-## 2026-08-29 - feature 154: an `entrance` board on the windward fringe eats the shelter belt (OPEN)
+## 2026-08-29 - feature 154: an `entrance` board on the windward fringe ate the shelter belt (CLOSED)
 
 **THE REGRESSION, and it is this feature's own.** The `kosatsuba_seat` knob rolled `entrance` here,
 which pushes the board out of the cluster - and on this map the way out runs along the windward
@@ -632,3 +632,36 @@ shape-aware keep-out has to rotate the box first.
 windbreak cleared around a notice board at all? The expectation is that it was not - the board stood
 at the wood's EDGE, not in a glade - which would argue for option 2 with a much tighter figure, and
 would resolve this as a side effect. Nothing in `research/urban-features.md` speaks to it.
+
+
+### CLOSED the same day, by the GM's reorder rather than by either option priced above
+
+Neither of the two options was taken. The GM ruled on the stage order instead, and it removed the
+cause: **`stage_notice` is now the LAST stage, 17 of 17**, after the woods, the ground cover, the crop
+and the title. *"The real humans that live in the society that decide where the notice board will go
+will look around at the things which already exist and then decide where to put the notice board. They
+may even decide to move a notice board which has already been placed."* A board placed after the belt
+cannot suppress it - nothing is placed after the board for it to displace - so the hole is gone by
+construction rather than by a keep-out being retuned.
+
+The board's `village_grove` keep-out went with it, on a separate ruling of the same kind: *"it would be
+very easy to put the notice board at the edge of the forest. We could even display it as being
+underneath the canopy ... humans would not need to clear any amount of space in order to put up a
+notice board at the side of a path."*
+
+**Verified by a settlement-review, on the ink**: the belt polygon is byte-identical across the delta,
+the worst bare run went **40 ft -> 20 ft** on an independent replay of segment 0613 and is 10 ft on the
+current roll, the restored clumps are exactly the ones ringing the board (22.4 to 33.2 ft), and every
+other family on the map - houses, fields, water, lanes, wells, gardens, yards, marsh, commons - is
+byte-identical. The reorder dragged nothing with it.
+
+**A NOTE ON HOW THIS WAS REPORTED, because the record should carry it.** The GM had to push back on the
+framing twice. The belt hole was a real defect and worth escalating; the two things reported alongside
+it in the same tone were not. The caption sitting across the tread was a legibility issue, and the two
+placement knobs "disagreeing" was not a placement problem at all - every seat either knob chose was
+fine, and the only real fault was that the manifest claimed `waterside` for a board 276 ft from a well,
+which is a labelling bug worth one line. Audited afterwards at the GM's instruction: **seven live gate
+checks name the board, five of which only assert it exists; the two substantive ones require it to
+stand within ~12 ft of a lane and to face the way it fronts** - exactly the historical requirement, and
+no check constrains entrance-versus-middle or distance from anything. **No board check failed at any
+point.** The checks were never the problem; the reporting was.

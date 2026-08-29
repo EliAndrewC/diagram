@@ -621,3 +621,36 @@ correct the last one - so the numbers a reader can check now come from the artif
 - farmstead fixtures: bath **4**, coop **10**, pit **3**, privy **12**, shrine **1**, woodpile **9**
 - notice board at **(1901.2, 2224.6)**, **7** of 19 farmhouses within 250 ft
 <!-- /census -->
+
+
+## 2026-08-29 - feature 154: the board is a knob, is placed last, and its caption came back to its own side
+
+**The board moved off the cul-de-sac.** The `kosatsuba_seat` knob rolled `entrance` here, and the seat
+is at the fork where the connector leaves the last house: 10 of 19 dwellings within 250 ft against the
+7 of 19 this map's previous entry records, on an 81.7 ft dead-end spur whose far end was 70 ft from any
+other way. A settlement-review's verdict on the picture: *"the board still reads as standing where the
+hamlet begins."* It is 34.4 ft from the entrance anchor, broadside to the connector at 0.0 degrees off,
+4.02 ft from tread edge to board edge.
+
+**THE CAPTION DEFECT WAS A RULE THAT COULD NOT FIRE - three reviews to find, one line to fix.**
+`pick_caption_seat` already refused a seat "across a way from the board it names". It refused them only
+among seats that CLEAR THE LANE TARGET, and when none does - which is every board standing close beside
+a way, i.e. every board that matters - it fell through to `max(legal, key=box_clearance)` and never
+consulted the test at all. Sawada shipped board at -12.0..-7.0 off the connector's axis, tread
+-3.0..+3.0, caption +6.0..+14.5, with the board's own side measurably clear, three passes running. The
+fallback now refines by the same term and degrades the same way (prefer unblocked; drop the term rather
+than leave a map captionless). All five scripted hamlets now carry the caption on the board's own side.
+
+**Placed last (GM 2026-08-29).** `stage_notice` is stage 17 of 17. Measured here: the reorder changed
+`village_groves[0]`, `tree_crowns`, the board's z and the label's z, and nothing else - houses, lanes,
+gardens, wells, byres, sheds, fields, water, marsh, commons and the frame are byte-identical.
+
+**Caught by the same review and NOT fixed - pre-existing, measured, and worth a feature of its own:**
+crowns bury lane tread on four lanes here - **lane 7 at 63.2%** of its whole 68.5 ft, lane 1 at 28.2%,
+lane 0 at 7.7%, lane 2 at 2.7%, by pixel count rather than by record. None of the eight offending crowns
+is one this delta added. The mechanism is precise: `groves_clear_of_lanes` tests each recorded clump
+CENTRE at the grove's single nominal radius, while the drawn crowns scatter a median 8.1 ft off their
+centres with radii from 6.1 to 16.5 ft - so the lane-1 offender reaches 23.8 ft where the check models
+11.0, a 12.8 ft blind spot. `scatter_audit` cannot see it either: its keep-out families are water,
+crop, marsh and grove, with no way or corridor family at all. The fix is to walk `M["tree_crowns"]` -
+the discs the engine actually recorded and drew - against the corridors, instead of the clump seeds.

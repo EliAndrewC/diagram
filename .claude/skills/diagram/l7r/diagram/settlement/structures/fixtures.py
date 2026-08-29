@@ -884,6 +884,27 @@ class PublicFixturesMixin:
         # to prefer a BOARD POSITION where some caption seat exists at all - that is a different
         # question and a good one. The parameter stays on `kosatsuba` for external callers who know
         # something the manifest does not (the gate-adjacent case its docstring describes).
+        # RECORD WHAT WAS DRAWN, NOT ONLY WHAT WAS ROLLED (settlement-review, feature 154). Two knobs
+        # decide this seat and they can disagree: `kosatsuba_siting` (feature 152 - frontage or the
+        # drawing-water place) bids through the `busy` score, while `kosatsuba_seat` (feature 154 -
+        # center, entrance or the official's gate) culls the candidates to the ground around its
+        # anchor. Where the anchor's ground holds no wellhead, every surviving candidate earns the
+        # waterside bonus of zero, so the siting knob decides nothing - and the manifest went on
+        # saying `waterside` anyway. Measured on Kashikawa: `kosatsuba_siting: waterside` on a board
+        # 276 ft from the nearest of three wells, which the interactive page would have told a
+        # clicking reader was the drawing-water place.
+        #
+        # That is this feature's own defect one field over - a placement recorded and not drawn - so
+        # the fix is the same: state the achieved fact beside the rolled one. Neither knob is
+        # overwritten; a reader can see what was asked for and what the ground allowed.
+        # A MEASUREMENT, NOT A SECOND LABEL. Recording a drawn "waterside"/"frontage" was tried and
+        # discarded in the same breath: a board that happens to land 60 ft from a well did not choose
+        # the drawing-water place, and labelling it `waterside` would assert an intent the seat never
+        # had - the same overstatement this field exists to catch. The distance claims nothing and
+        # settles the question either way: on the five scripted hamlets the rolled siting and the
+        # ground disagree on four, which is what says the two knobs are not composing.
+        if _wells:
+            self.M["meta"]["kosatsuba_well_ft"] = round(min(math.hypot(x - _wx3, y - _wy3) for _wx3, _wy3 in _wells) * float(self.M["meta"].get("ftpx") or 1), 1)
         self.kosatsuba(x, y, rot, label=label)
         return (x, y)
 
