@@ -308,3 +308,50 @@ modules. Three residues, all in prose or in a constant, all closed:
 - [x] **T60** `place.py` still defined `PER_HOUSEHOLD = 5` beside the leaf it now imports - the
       household constant kept two live definitions in the very module the move was made for. It is the
       leaf's `HOUSEHOLD` now. `research: rendering`
+
+## From `settlement-review`, round 6 - the readthrough (2026-08-29)
+
+The pass was commissioned to answer one question no author can answer about their own page: after five
+rounds of correcting errors, does it still read as something written for a player? Its verdict was that
+the feature modals do and the place card did not - it had accreted into a specification of the hamlet
+tier, with fine print addressed to reviewers.
+
+- [x] **T61** The basis opened on "Two of those", which pointed at nothing a reader could see - residue
+      of T34's own fix, which had moved the tier ranking out of the basis into the body and left the
+      pronoun behind. Rewritten to name what rests on the setting and stop. `research: rendering`
+- [x] **T62** The card defined the place by four absences, and "tax-free plot" is defined nowhere on
+      the page - a player met a term and was told this place lacks it. Dropped; the two absences with
+      a stated consequence stay. `research: rendering`
+- [x] **T63** Where the place IS was the fourth sentence of the crop paragraph, opening on an "It"
+      whose nearest nouns were "weeds" and "ground". `where_sentences` runs before `crop_sentence` now.
+      `research: rendering`
+- [x] **T64** Two spellings of one office in one sentence ("no headman of its own - the village
+      headsman who oversees it"), and "about 1,296" hedging an exact figure. `research: rendering`
+- [x] **T65** Six sentences in the class prose written for the build team, in windows a player opens -
+      the same defect the GM reported originally, one layer down. The lane modal described the data
+      model ("Every lane on the map is one feature, connected or not"); the farmhouse led with
+      generator ordering; the footbridge cited "the spec template's own worked example"; the well
+      called itself "the project's canonical example of a legibility deviation"; the household shrine
+      carried ", ruled by the GM, like the oversized well"; and the hen coop told a player the GM had
+      chosen a Chinese reading over Japan's, "where chickens before Meiji were timekeepers and coops
+      rare" - a sentence that deletes the feature it explains. `research: rendering`
+- [x] **T66** REGRESSION, mine, caught by the gate: tightening `review-gate.sh` to demand a verdict
+      rather than a mention broke two fixtures in `scripts/test-sync-with-main.sh`, which wrote a bare
+      `FAITHFUL` line to get past the review gate - precisely the shape the tightening rejects. The
+      fixtures write a verdict line now; all 43 checks pass. `research: rendering`
+
+## Recorded for the GM, not acted on (round 6)
+
+- [ ] **T67** The references and the modal chrome are still written in build-team register, and this is
+      a larger editorial pass over feature 134's vocabulary rather than this feature's delta. Measured
+      by the reviewer: seven farmstead fixtures share one research entry and therefore ONE 17-source
+      reference list, so clicking the woodpile returns a Han pigsty latrine, night-soil jars, a cauldron
+      bath and three chicken-coop sources; every `[read]` entry carries its own provenance stamp
+      (`READ 2026-08-27, source-reader`, `SUMMARY-ONLY - HTTP 403 on one attempt`, `a second page
+      returned mojibake`); one entry carries a spec-kit task number (`uekipedia-kaki`, "(T57)"); one
+      exists only to warn future sessions off a source (`kokudaka-en`, "what it does NOT establish ...
+      Recorded so a later pass does not reach for it"); two classes advertise "the research entry
+      records no citation yet"; six caveats disclose nothing actionable ("the bed's size and row count
+      are drawing conventions"); three crop modals share a verbatim-identical `why`; the threshing yard
+      gives four unreconciled size figures and none in feet; and nothing on the page hints it is
+      clickable at all. `research: rendering`

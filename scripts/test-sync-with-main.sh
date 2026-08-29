@@ -123,13 +123,13 @@ expect_out "could not decide the route"
 
 echo "7d. A FEATURE IN PROGRESS LANDS NOTHING (feature 133): open tasks refuse both routes; the spec directory alone is the one exception"
 D=$(topology fp)
-( cd "$D/main/.clones/c" && mkdir -p specs/140-x && printf -- '- [ ] T01 open\n' > specs/140-x/tasks.md && echo 'FAITHFUL' > specs/140-x/spec.md && echo docs > note.md && git add -A && git commit -qm "feature plus docs" )
+( cd "$D/main/.clones/c" && mkdir -p specs/140-x && printf -- '- [ ] T01 open\n' > specs/140-x/tasks.md && printf -- '**Status**: APPROVED by `spec-fidelity` - round 1 verdict FAITHFUL\n' > specs/140-x/spec.md && echo docs > note.md && git add -A && git commit -qm "feature plus docs" )
 OUT=$(CI_ROUTE=DIRECT CI_MERGE="false" syncmain "$D" push); check "IT FIRES: open tasks + an unrelated file -> refused on the DIRECT route" 1 $?
 expect_out "IN PROGRESS"
 expect_out "note.md"
 [ "$(git -C "$D/github.git" rev-parse main)" != "$(git -C "$D/main/.clones/c" rev-parse HEAD)" ] && PASS=$((PASS+1)) || { echo "FAIL  a feature in progress landed"; FAIL=$((FAIL+1)); }
 D=$(topology fq)
-( cd "$D/main/.clones/c" && mkdir -p specs/140-x && printf -- '- [ ] T01 open\n' > specs/140-x/tasks.md && echo 'FAITHFUL' > specs/140-x/spec.md && git add -A && git commit -qm "the claim" )
+( cd "$D/main/.clones/c" && mkdir -p specs/140-x && printf -- '- [ ] T01 open\n' > specs/140-x/tasks.md && printf -- '**Status**: APPROVED by `spec-fidelity` - round 1 verdict FAITHFUL\n' > specs/140-x/spec.md && git add -A && git commit -qm "the claim" )
 OUT=$(CI_ROUTE=DIRECT CI_MERGE="false" syncmain "$D" push); check "the spec directory ALONE (the number claim) is allowed" 0 $?
 expect_out "the claim), allowed"
 ( cd "$D/main/.clones/c" && echo docs > note.md && git add -A && git commit -qm docs )

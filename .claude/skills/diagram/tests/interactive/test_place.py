@@ -290,9 +290,11 @@ def test_the_card_ranks_tiers_and_never_kinds_of_hamlet() -> None:
     assert card is not None
     assert "the commonest kind of settlement there is" in card["what"], "the tier ranking is body text"
     assert "1,296" in card["what"] and "40%" in card["what"]
-    # ...and the ranking is of TIERS. No kind of hamlet is ranked anywhere on the card.
-    assert "none says which KIND of hamlet is commonest" in BASIS
-    assert "kind of hamlet" not in card["what"]
+    # ...and the ranking is of TIERS. No kind of hamlet is ranked anywhere on the card, and the basis
+    # no longer argues the point with an absent reviewer - it names what rests on the setting and stops
+    # (settlement-review round 6: two negations and an all-caps KIND, about a claim the reader never saw).
+    assert "Rokugan's own arithmetic rather than a historical finding" in BASIS
+    assert "KIND" not in BASIS and "kind of hamlet" not in card["what"]
 
 
 def test_a_map_with_no_notes_at_all_still_describes_itself() -> None:

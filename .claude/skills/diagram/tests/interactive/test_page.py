@@ -18,12 +18,12 @@ from l7r.diagram.interactive.classes import CLASSES, NOT_HIGHLIGHTED, PLACE
 from l7r.diagram.interactive.glossary import GLOSSARY
 from l7r.diagram.interactive.notes import EMPTY, MapNotes
 from l7r.diagram.interactive.page import (
+    CAVEAT_LEAD,
     explanations,
     glossary_for,
     hit_copies,
     hit_layer,
     hit_regions,
-    CAVEAT_LEAD,
     ink_census,
     marks_region,
     merge_primitives,

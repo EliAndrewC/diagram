@@ -85,7 +85,7 @@ class Kind:
 KINDS: dict[str, Kind] = {
     "hamlet": Kind(
         "hamlet",
-        "a small outlying farming community belonging to a village district. Like every hamlet it has no headman of its own - the village headsman who oversees it lives in the main village - no village shrine, no tax-free plot and no burial ground of its own; its dead go to the district's ground. A hamlet is the commonest kind of settlement there is: a domain holds about 1,296 of them to 216 villages, and about 40% of its inhabitants live in one.",
+        "a small outlying farming community belonging to a village district. It has no headman, no shrine and no burial ground of its own - the village headsman who oversees it lives in the main village, and its dead go to the district's ground. A hamlet is the commonest kind of settlement there is: a domain holds some 1,296 of them to 216 villages, and 40% of its inhabitants live in one.",
         "farmhouses",
         False,
         "",
@@ -173,11 +173,9 @@ ENTRY = "research/archetypes.md - 'What a settlement IS'"
 #: the FINE PRINT and it reads as fine print: the facts themselves belong in the body, where the reader
 #: meets them (settlement-review, 2026-08-29 - the basis block had grown longer than the card).
 BASIS = (
-    "Two of those rest on the setting rather than on the historical record. The counts are Rokugan's own "
-    f"arithmetic ({HAMLETS_PER_DOMAIN:,} hamlets to {VILLAGES_PER_DOMAIN} villages, {HAMLET_SHARE} of a domain's inhabitants): no historical source found "
-    "ranks settlement forms by frequency, and none says which KIND of hamlet is commonest, so neither is claimed "
-    "here. And that a hamlet never has a headman of its own is the setting's rule - the Edo record has branch "
-    "hamlets that kept their own officials and were treated on a par with the parent village."
+    "the counts above are Rokugan's own arithmetic rather than a historical finding, and so is the rule that a "
+    "hamlet keeps no headman - the Edo record has branch hamlets that kept their own officials and stood on a par "
+    "with the parent village."
 )
 
 #: What introduces the basis on the card. NOT "On the drawing:", which is what a class's caveat gets:
@@ -331,7 +329,10 @@ def place_card(meta: dict[str, Any], present: set[str], notes: MapNotes, manifes
     if size:
         what = f"{name} is a {kind.noun} of {size}: {kind.what}"
     what = " ".join([what, *(text for key, text in COLLISIONS.items() if key in present)])
-    why = " ".join(x for x in [crop_sentence(present), *where_sentences(str(meta.get("scale")), notes.place), kind.population_note] if x)
+    # WHERE IT IS COMES BEFORE WHAT IT GROWS (settlement-review round 6, 2026-08-29). A player wants
+    # the place located before they want its crops, and with the crops first the district sentence
+    # opened on an "It" whose nearest nouns were "weeds" and "ground".
+    why = " ".join(x for x in [*where_sentences(str(meta.get("scale")), notes.place), crop_sentence(present), kind.population_note] if x)
     keys = research_sources(ENTRY)
     return {
         "name": name,
