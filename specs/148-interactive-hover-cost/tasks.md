@@ -25,7 +25,7 @@ hamlet was built. No acceptance task: the GM reads the map by eye.
       sat 12-18% of its pixels away from its own SVG. Now 0.03%, which is antialiasing (research R3)
 - [x] T09 AFTER, the same five measurements on both pages (FR-005); SC-001 wants kuwabata down 40% and
       inashiro down 20%
-- [ ] T10 the report to the GM: element count, load, scroll, zoom, highlight - and if LOAD has not moved,
+- [x] T10 the report to the GM: element count, load, scroll, zoom, highlight - and if LOAD has not moved,
       the open question handed back rather than closed over. The GM reported it and never withdrew it
-- [ ] T11 the pool maps regenerated and gated, `make done` green, the why at the point of change and in
+- [x] T11 the pool maps regenerated and gated, `make done` green, the why at the point of change and in
       `interactive/CLAUDE.md`
