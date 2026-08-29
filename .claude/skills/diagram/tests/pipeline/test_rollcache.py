@@ -114,8 +114,19 @@ def test_a_roll_keyed_to_a_test_is_remade_when_that_test_changes(tmp_path, monke
 def test_the_bypasses_produce_and_store_nothing(tmp_path, monkeypatch, var):
     _, _, produce = _toy(tmp_path, monkeypatch)
     monkeypatch.setenv(var, "1")
+    rollcache.reset_shared()
     assert rollcache.obtain("toy", produce) == ({"value": 7}, "BYPASS")
+    assert rollcache.obtain("toy", produce) == ({"value": 7}, "BYPASS"), "sharing is OPT-IN: a plain caller always produces"
     assert not Path(rollcache._entry("toy")).exists()
+
+    # ...AND A CALLER THAT OPTS IN DOES NOT ROLL TWICE (feature 147). The bypass exists so the coverage
+    # floors watch real execution; one execution is all they can watch, and the 31 scripted fixtures share
+    # two specs between them, so re-rolling per caller cost ~430 s of CPU to trace lines one roll traces.
+    assert rollcache.obtain("shared-toy", produce, share=True) == ({"value": 7}, "BYPASS")
+    again, how = rollcache.obtain("shared-toy", produce, share=True)
+    assert (again, how) == ({"value": 7}, "BYPASS-SHARED")
+    assert not Path(rollcache._entry("shared-toy")).exists(), "sharing still stores nothing on disk"
+
     monkeypatch.delenv(var)
     assert rollcache.obtain("toy", produce)[1] == "MISS", "a bypassed roll left nothing behind to serve"
 
@@ -142,3 +153,36 @@ def test_report_deps_records_once_and_then_reads_the_record(tmp_path, monkeypatc
     assert calls == [1] and "functions" in first and os.path.isfile(tmp_path / "entry" / "meta.json")
     again = rollcache.report_deps(spec)
     assert calls == [1] and again == first
+
+
+def test_a_shared_bypass_hands_out_copies_so_one_caller_cannot_break_another(tmp_path, monkeypatch):  # type: ignore[no-untyped-def]
+    """THE WHOLE SAFETY ARGUMENT FOR SHARING (feature 147). The scripted negative fixtures each take a rolled
+    manifest and DELIBERATELY break it; if they shared one object rather than one set of bytes, the first
+    fixture's break would arrive in the next fixture's map and silently disarm it - a suite that still passes
+    while proving nothing. A served HIT has always unpickled a fresh payload per caller, and the shared
+    bypass keeps exactly that."""
+    _, _, produce = _toy(tmp_path, monkeypatch)
+    monkeypatch.setenv(rollcache.FULL_ENV, "1")
+    rollcache.reset_shared()
+
+    first, _ = rollcache.obtain("copies", produce, share=True)
+    first["value"] = "BROKEN BY THE FIRST CALLER"
+    second, how = rollcache.obtain("copies", produce, share=True)
+    assert how == "BYPASS-SHARED"
+    assert second == {"value": 7}, "the second caller gets the roll as it was produced, not as the first left it"
+    assert second is not first
+
+
+def test_two_different_producers_never_share_one_toy_subject(tmp_path, monkeypatch):  # type: ignore[no-untyped-def]
+    """`subject` is contracted to determine the roll completely, and in the engine it does. A test may still
+    hand two different callables the same short subject, and serving one of them the other's payload would be
+    a worse bug than the re-rolling this replaces - so the producer's code object joins the share key."""
+    _, _, produce = _toy(tmp_path, monkeypatch)
+    monkeypatch.setenv(rollcache.FULL_ENV, "1")
+    rollcache.reset_shared()
+
+    def other() -> dict:
+        return {"value": 99}
+
+    assert rollcache.obtain("same-name", produce, share=True) == ({"value": 7}, "BYPASS")
+    assert rollcache.obtain("same-name", other, share=True) == ({"value": 99}, "BYPASS"), "a different producer is a different roll"

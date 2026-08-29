@@ -335,3 +335,26 @@ def test_two_ways_crossing_one_ditch_side_by_side_share_the_plank():
     ]
     n = s.bridges()
     assert n == 1 and len(s.M["bridges"]) == 1, "the second way uses the deck that is already there"
+
+
+def test_a_footplank_is_not_laid_on_top_of_another_deck():
+    """Three siting guards keep a plank off ground that is spoken for - a farmhouse, the hem crop, and
+    another DECK. The last is reached only where two ditches cross near enough for their planks to collide,
+    which is an accident of the roll rather than something the pool maps reliably contain."""
+    s = _crop_settlement()
+    s.M["fields"] = [{"outline": [[50, 120], [850, 120], [850, 480], [50, 480]]}]
+    s.M["field_ditches"] = [{"poly": [[100, 300], [800, 300]], "w": 5, "role": "main"}]
+    alone = s.channel_footbridges(spacing=320)
+    assert alone >= 1, "the ditch takes its planks when nothing is in the way"
+
+    s2 = _crop_settlement()
+    s2.M["fields"] = [{"outline": [[50, 120], [850, 120], [850, 480], [50, 480]]}]
+    s2.M["field_ditches"] = [{"poly": [[100, 300], [800, 300]], "w": 5, "role": "main"}]
+    for b in s.M["bridges"]:  # every deck the first map laid, already standing before this pass runs
+        s2.bridge(b["x"], b["y"], b["rot"], b["span"], b["w"])
+    before = [dict(b) for b in s2.M["bridges"]]
+    s2.channel_footbridges(spacing=320)
+    # the guard REFUSES the seat; the siter then slides along the ditch looking for another, so the honest
+    # claim is not "no plank" but "no plank ON one already there"
+    for b in s2.M["bridges"][len(before) :]:
+        assert all(math.hypot(b["x"] - a["x"], b["y"] - a["y"]) > 1.0 for a in before), "a new plank sits clear of every standing deck"

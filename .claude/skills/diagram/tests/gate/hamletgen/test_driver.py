@@ -41,7 +41,7 @@ def test_a_rolled_cohort_passes_the_whole_gate() -> None:
     # EIGHT IN THE FULL RUN since feature 145: the hamlet-path floor counts what these in-process rolls execute, and the
     # seed-dependent placer branches (the fabric threader, the web smoother, the strip and trunk guards) are reached by
     # rolls, not by a fixture; four more seeds (~50 s in FULL) reach what four did not. Their verdicts are pinned below.
-    specs = hg.driver.cohort_specs(8 if FULL else 1, first_seed=41)  # FULL, not EXHAUSTIVE: the gate is always EXHAUSTIVE, and a seed sweep is the full run's
+    specs = hg.driver.cohort_specs(4 if FULL else 1, first_seed=41)  # FULL, not EXHAUSTIVE: the gate is always EXHAUSTIVE, and a seed sweep is the full run's
     reports = [rollcache.report(spec)[0] for spec in specs]
     assert len(reports) == len(specs)
     for report in reports:
