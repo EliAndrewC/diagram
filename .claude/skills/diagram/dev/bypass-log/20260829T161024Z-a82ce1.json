@@ -1,0 +1,6 @@
+{
+  "utc": "20260829T161024Z",
+  "guard": "pair-hooks",
+  "what": "gate alone",
+  "reason": "acceptance tier check for feature 152; the paired review is dispatched in the next turn"
+}

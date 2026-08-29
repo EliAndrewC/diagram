@@ -6,10 +6,35 @@ from collections.abc import Iterator, Sequence
 from typing import TYPE_CHECKING, Any
 
 from ._geom import _union_area, boxed_seg_hit, edge_dist, point_in_poly, seg_dist
-from ._knobs import windbreak_face
 
 if TYPE_CHECKING:
     from .core import Settlement
+
+
+_BELT_GAP_FT = 30.0  # `village_windbreak_is_continuous`'s own bar - the fill closes what that check reads.
+# THE NUMBER IS OURS; THE DIRECTION OF THE RULE IS THE RECORD'S (GM ruling 2026-08-29, "do whatever was
+# historically true", research in settlements/vegetation.md). No source reached - Chinese or Japanese,
+# historical or agronomic - gives a WIDTH for an opening in a shelter belt, so 30 ft is a rendering
+# convention and is labelled one. What IS sourced is that a belt occupies one or two sides and is planted
+# along them, that its ABSENT flank is not a gap (Honda 1915 defines yashikirin as the west and north
+# sides), and that a bare run inside the planted stretch is not attested and funnels wind (Purdue NCR-191:
+# an access crossing keeps the belt's own porosity rather than being left open). Hence: close holes WITHIN
+# the run, never wrap the settlement.
+
+
+def _belt_axis(pts: Sequence[tuple[float, float]]) -> tuple[float, float]:
+    """The unit vector along a belt's own length, from the spread of its clumps.
+
+    Taken from the seated points rather than from the wind, because what has to be walked in order is
+    the run as DRAWN - a belt that bows around a plot is still one run, and sorting it by a wind-derived
+    axis would interleave the two flanks of the bow."""
+    n = len(pts)
+    cx, cy = sum(p[0] for p in pts) / n, sum(p[1] for p in pts) / n
+    sxx = sum((p[0] - cx) ** 2 for p in pts)
+    syy = sum((p[1] - cy) ** 2 for p in pts)
+    sxy = sum((p[0] - cx) * (p[1] - cy) for p in pts)
+    th = 0.5 * math.atan2(2.0 * sxy, sxx - syy)  # the principal axis of the cloud
+    return (math.cos(th), math.sin(th))
 
 
 class HomesteadPartsMixin:
@@ -594,7 +619,13 @@ class HomesteadPartsMixin:
         x0, x1, y0, y1 = min(xs), max(xs), min(ys), max(ys)
         mix = "windbreak" if role in ("windbreak", "water_mouth") else "dooryard"
         bs = self.bscale
-        step = (20 if dense else 52) * bs
+        # 32, NOT 52, FOR A SPARSE STAND (feature 152 T09). A copse's job is to fill the gaps AMONG the
+        # homesteads, and a 52 ft grid cannot see a 30 ft gap: Inashiro drew 2 clumps in a 98 x 313 ft
+        # record and Mizuguchi 2 in a 205 x 58 one - two stray bushes recorded as a wood. The grid is the
+        # only thing that decides where a clump is even TRIED, so a stand that has to thread a dense
+        # cluster needs a finer one. It stays well coarser than the belt's 20 ft, which is what keeps a
+        # copse reading as scattered trees rather than the canopy the windbreak draws.
+        step = (20 if dense else 32) * bs
         clump = (28 if dense else 22) * bs
         # never draw a clump ON a home/yard/garden/byre/kura: keep the clump CENTER clear by the footprint's
         # circumscribing radius PLUS the clump's own drawn radius (clump/2) and a hair - so the tree blob settles
@@ -877,6 +908,99 @@ class HomesteadPartsMixin:
                     jx, jy = _alt
                 seated.append((jx, jy))
                 clumps.append([round(jx, 1), round(jy, 1)])
+        # AND CLOSE THE INTERIOR HOLES (feature 152, acceptance review; the GM's own complaint in its
+        # last form - "it's not clear that it will, in fact, be breaking much wind"). The grid decides
+        # where a clump is TRIED, and where a try is refused the belt carries a hole: Kuwabata shipped
+        # gaps of 73, 67 and 34 ft at 29%, 88% and 79% of the way ALONG its belt, and
+        # `village_windbreak_is_continuous` failed on it - identically on main, so this is old.
+        #
+        # The rejection chain above deliberately does NOT re-seat a clump refused by the crop, open water
+        # or a lane, on the grounds that those "are the edges where a belt is supposed to stop". That is
+        # right at an END and wrong in the MIDDLE: a hole 29% of the way along is not the belt stopping.
+        # So the run is walked once more along its own axis and each interior gap over `_BELT_GAP_FT` is
+        # offered a seat at its midpoint, re-asking every test the loop asks. Nothing is relaxed - a gap
+        # the ground truly refuses stays a gap.
+        # ...and it SUBDIVIDES until the gap closes or the ground refuses. One clump at the midpoint turns
+        # a 94 ft hole into two 47 ft holes, which is still a hole - measured on Kuwabata's first pass.
+        if role == "windbreak" and len(seated) >= 2:
+            _wv = _belt_axis(seated)
+            for _ in range(6):  # a 94 ft gap needs three rounds; six is headroom, and it stops when nothing lands
+                _order = sorted(range(len(seated)), key=lambda _k: seated[_k][0] * _wv[0] + seated[_k][1] * _wv[1])
+                _added = 0
+                # A DEAD END, MEASURED AND REVERTED (2026-08-29, the acceptance re-check's ERROR 2).
+                # The review read Kuwabata's belt as stopping before its polygon did, and the obvious
+                # repair was to bracket this run by the polygon's own across-wind extent so the END
+                # stretches were offered seats like any interior gap. Implemented and rolled: it bought
+                # ONE clump, on ONE map, at (2273.9, 393.6) on the page edge - because the unplanted
+                # tail is off the page. Kuwabata's belt polygon runs 693..1440 along its own axis, the
+                # view holds only 790..1327 of that, and the planting already covers 734..1330. The
+                # honest fix was in the CHECK, which was demanding canopy on ground no reader can see;
+                # `_column_in_belt` now clips its columns to the view. Do not re-add the end bracket to
+                # chase a belt that "stops short" - measure whether the short end is on the page first.
+                for _a, _b in zip(_order, _order[1:], strict=False):
+                    _pa, _pb = seated[_a], seated[_b]
+                    if math.dist(_pa, _pb) <= _BELT_GAP_FT:
+                        continue
+                    # FILL UP TO THE OBSTACLE FROM BOTH SIDES, not only at the midpoint. Where a lane
+                    # crosses the belt the midpoint IS the lane, so a midpoint-only fill gives up and
+                    # leaves the whole 40-50 ft hole - when what the record and the agronomy both want is
+                    # the wall resuming on each side of the crossing. Purdue NCR-191, on a windbreak that
+                    # must be crossed: an access gate is built "the same height and porosity as the rest
+                    # of the windbreak fence", never left as a bare opening, because "when high-velocity
+                    # air passes through a constriction, its velocity increases". So the gap is offered
+                    # seats across its span and takes whichever the ground allows.
+                    # ...AND ACROSS THE BELT'S DEPTH, not only along the straight line between the two
+                    # clumps. `village_windbreak_is_continuous` walks COLUMNS of the belt's own span and
+                    # asks whether each has canopy; a belt that bows around a plot has columns whose
+                    # midpoint-between-neighbors lies outside its own polygon, so a fill that only tried
+                    # that line refused every seat and left the column bare - measured on Kuwabata, where
+                    # the run leaves the polygon after 14 of its 40 ft. So each fraction along the gap is
+                    # also tried at several depths across the band, which is where the belt actually is.
+                    # ...AT THE BELT'S OWN DEPTH FOR THAT COLUMN. The continuity check walks COLUMNS
+                    # across the wind and asks whether each carries canopy, so a fill has to answer in
+                    # the same terms: find where the belt's polygon actually lies at the bare column and
+                    # seat there. Offsetting from the straight chord between two clumps does not do it -
+                    # a belt that bows leaves that chord entirely, and measured on Kuwabata the polygon's
+                    # depth at the bare columns sits in a band the chord never reaches.
+                    _took = False
+                    _perp = (-_wv[1], _wv[0])
+                    _pd = [(q[0] * _perp[0] + q[1] * _perp[1]) for q in poly]
+                    _d0, _d1 = min(_pd), max(_pd)
+                    for _f in (0.5, 0.34, 0.66, 0.22, 0.78):
+                        _col = (_pa[0] * _wv[0] + _pa[1] * _wv[1]) + ((_pb[0] * _wv[0] + _pb[1] * _wv[1]) - (_pa[0] * _wv[0] + _pa[1] * _wv[1])) * _f
+                        _inside = []
+                        for _k in range(33):
+                            _d = _d0 + (_d1 - _d0) * _k / 32
+                            _qx, _qy = _col * _wv[0] + _d * _perp[0], _col * _wv[1] + _d * _perp[1]
+                            if point_in_poly(_qx, _qy, poly):
+                                _inside.append((_qx, _qy))
+                        for _qx, _qy in _inside[len(_inside) // 2 :] + _inside[: len(_inside) // 2]:  # the band's middle outward
+                            if within is not None and (_qx + clump * 0.9 < within[0] or _qx - clump * 0.9 > within[2] or _qy + clump * 0.9 < within[1] or _qy - clump * 0.9 > within[3]):
+                                continue
+                            if _hard_blocked(_qx, _qy) or _local_blocked(_qx, _qy) or _lane_blocked(_qx, _qy):
+                                continue
+                            # ...AND NEVER ON TOP OF A CLUMP THAT IS ALREADY THERE (settlement-review
+                            # 2026-08-29, acceptance re-check). The depth search is deterministic, so a gap
+                            # that survives one round is offered the SAME point on the next and the fill
+                            # piled crowns instead of converging. Measured by rolling Kuwabata with this
+                            # clause disabled: 246 recorded windbreak clumps at 211 distinct positions,
+                            # five of them at (1695.8, 576.9) alone, and 46 off-page clumps at 41
+                            # positions. Refusing a seat within half a crown of one already taken brings
+                            # the same belt in at 101 on-page clumps with nothing stacked. A stacked crown
+                            # is invisible in ink and inflates every count taken off the record - including
+                            # the one I first quoted for this feature.
+                            if any((_qx - _sx) ** 2 + (_qy - _sy) ** 2 < (clump * 0.5) ** 2 for _sx, _sy in seated):
+                                continue
+                            seated.append((_qx, _qy))
+                            clumps.append([round(_qx, 1), round(_qy, 1)])
+                            _took = True
+                            break
+                        if _took:
+                            break
+                    if _took:
+                        _added += 1
+                if not _added:
+                    break
         # THE FACE TRIM, then the ink (GM 2026-08-26, feature 133 T10). With `face_margin` the
         # caller says the frame will follow this belt's INNER FACE by that margin (`crop_boxes`
         # reads the same `windbreak_face`), so a clump whose whole crown lies deeper than
@@ -884,21 +1008,23 @@ class HomesteadPartsMixin:
         # page" rule the `within` window applies on the other edges. Seating first and drawing
         # after is what makes this possible: the face is known only once every clump is down.
         # Draw order and positions are those of the seating loop, so nothing else moves.
+        # THE PAGE IS THE PAGE, NOT A PROXY FOR IT (feature 152 T02, GM 2026-08-29: "it's not clear that
+        # it will, in fact, be breaking much wind. Given how many houses appear uncovered"). A trim used to
+        # run HERE, against the belt's own inner face plus `face_margin` - 48 ft - as a stand-in for the
+        # page's windward edge. That proxy is right only when the belt is what sets that edge; whenever
+        # other content (fields, marsh, a pond) holds the frame open wider, it under-estimates the page and
+        # deletes canopy a reader can see. Measured over the pool against each map's FINAL `meta.view`:
+        # Kashikawa discarded 61 clumps of which ALL 61 were wholly inside the rendered view, Kuwabata 21
+        # of 45, Sawada 30 of 84 - and those three are exactly the maps with houses standing beyond their
+        # belt's ends (8 of 20, 3 of 16, 8 of 19). Inashiro and Mizuguchi discarded only genuinely off-page
+        # clumps and have no house beyond the belt. The belt was not too short: a third of it was being
+        # thrown away on the page it belongs to.
+        #
+        # The trim is not gone - it MOVED to `Settlement.set_view`, the first moment the real page is
+        # known. Everything the `within` window admits is drawn here (ink past the page is clipped by the
+        # render, which is the documented behavior for a communal grove - see the note at `set_view`'s
+        # frame list), and the RECORD is partitioned against the actual view once there is one.
         _offpage: list[Any] = []
-        if face_margin is not None and clumps:
-            _face = windbreak_face(clumps, cr, self.M.get("houses", []))
-            if _face is not None:
-                _axis, _sign, _inner = _face
-                _keep = [k for k, (px_, py_) in enumerate(seated) if _sign * ((px_, py_)[_axis] - _inner) >= -(face_margin + clump * 0.9)]
-                # THE TRIMMED CLUMPS STAY IN THE RECORD (feature 137 T05, 2026-08-28): they are trees that stand,
-                # only off the page. Tripwire seed 33's 40-50 ft belt hole was this trim: two garden beds at the
-                # belt's edge pushed the re-seated clumps into the outer strip, the page's edge (inner face +
-                # margin) fell inside that strip, and the trim dropped them from `clumps` - so the belt read as
-                # holed where it had in fact wrapped round the plot. The ink is still cut at the page; the
-                # record says the belt continues, and `village_windbreak_is_continuous` counts canopy where it is.
-                _offpage = [clumps[k] for k in range(len(clumps)) if k not in set(_keep)]
-                seated = [seated[k] for k in _keep]
-                clumps = [clumps[k] for k in _keep]
         for jx, jy in seated:
             # feature 150: the belt and the copse are two highlight classes; a water_mouth grove has no
             # class in the vocabulary yet and stays unclassed so the census reports it

@@ -56,7 +56,7 @@ from collections.abc import Callable
 from typing import Any
 
 from shapely.errors import GEOSException
-from shapely.geometry import LineString, Point, Polygon
+from shapely.geometry import LineString, MultiPolygon, Point, Polygon
 from shapely.geometry.base import BaseGeometry
 from shapely.ops import unary_union
 
@@ -64,6 +64,7 @@ from .banks import (
     _GATE_MIN_APEX,
     _GATE_MIN_AREA,
     _TINT_END_FT,
+    _TINT_MAX_AREA_RATIO,
     _TINT_MAX_ASPECT,
     _TINT_MIN_APEX,
     _TINT_MIN_SOLIDITY,
@@ -493,10 +494,10 @@ def _seam_cuts(lo: float, hi: float, want: float, marks: list[float]) -> list[fl
     The ideal spacing still governs; a mark only wins when it is within 0.35 of a cell of where the
     next cut wanted to be, and never when it would leave a sliver under a third of a cell on either
     side. THAT NUMBER IS A MEASURED CEILING, not a taste: at 0.40 and above the cut follows the
-    neighbours far enough to move the fan's envelope, and Kashikawa's dry hem - which tiles against
+    neighbors far enough to move the fan's envelope, and Kashikawa's dry hem - which tiles against
     that envelope - shifts onto a footbridge and trips `features_do_not_overlap`. Steps across the
     four scripted hamlets go 2/2/9/3 at 0.35 and 1/2/8/1 at 0.40, so the last four cost a regression
-    in another subsystem and are not taken (see `future-work/`). Where the neighbours break nowhere near the right place the grid falls back to the even
+    in another subsystem and are not taken (see `future-work/`). Where the neighbors break nowhere near the right place the grid falls back to the even
     spacing it always used, which is the honest answer: there is no seam there to line up with."""
     span = hi - lo
     if span <= 1.5 * want or want <= 0.0:
@@ -594,16 +595,16 @@ def _unjog(plots: list[dict[str, Any]], g: float, floor: float, water: BaseGeome
 
     THE MOVE IS THE ONE A FIELD WOULD MAKE: run the wall from where it starts to where it resumes, so
     the hop becomes a bend. `research/fields.md` says a bend is period-correct and a parcel fitted to
-    its neighbours is the honest look; what it never describes is a wall doubling back, which is
+    its neighbors is the honest look; what it never describes is a wall doubling back, which is
     exactly and only what this removes.
 
     IT TRADES GROUND RATHER THAN DROPPING VERTICES, and that distinction is the whole difference
     between this and the version that did not work. Dropping the step's two vertices from every ring
     that carries them looks partition-preserving and is not: the two rings either side of a wall have
-    DIFFERENT neighbouring vertices, so the chords they close over differ, and on Inashiro rings 460
+    DIFFERENT neighboring vertices, so the chords they close over differ, and on Inashiro rings 460
     and 592 lost 400 px2 and gained 259 - the difference being bare floor with a bund each side of it.
     Taking the corner as a polygon (`was.difference(now)`) and handing that same polygon to the
-    neighbour conserves the ground by construction, whatever the two rings look like.
+    neighbor conserves the ground by construction, whatever the two rings look like.
 
     EVERY REFUSAL BELOW IS A RULE THIS PASS WOULD OTHERWISE BREAK, and each was measured breaking it:
 
@@ -630,7 +631,7 @@ def _unjog(plots: list[dict[str, Any]], g: float, floor: float, water: BaseGeome
       stricter than the gate's own sampled clearance.
 
     IT RUNS UNTIL NOTHING MOVES, capped, because straightening one step can retire or expose
-    another and the cheapest cut for a ring often only becomes available once its neighbour has been
+    another and the cheapest cut for a ring often only becomes available once its neighbor has been
     repaired. The cap is a backstop against a repair that undoes itself, not a tuning knob - on every
     pool map the set converges in three rounds or fewer."""
     for _ in range(6):
@@ -772,6 +773,38 @@ def _trade(
             # THE GROUND HAS TO COME FROM SOMEWHERE. Whatever the corner overlaps gives it up - all of
             # them, not the best one, or two basins end up claiming the same square foot. What it
             # overlaps nothing of is bare floor, and taking that in is free and is the point.
+            # THE BITE WIDENS RATHER THAN THE NEIGHBOUR SPLITTING (feature 152 T18). The dominant refusal
+            # on Mizuguchi - and the largest surviving step in the pool, 30.0 ft - is a neighbor that
+            # would come apart in two if it gave up the corner, so `qp.difference(traded)` returns a
+            # MultiPolygon and the whole repair is declined. `future-work/farming-communities.md` recorded
+            # the answer and left it UNTRIED: "keep the largest part for the neighbor and hand the
+            # orphaned fragment to the basin that cut it, so the bite widens rather than the neighbor
+            # splitting." That is what this does, once, before the neighbor loop - widening mid-loop would
+            # change decisions already taken. The orphan is capped against the trade so this stays a repair
+            # rather than a land grab, and every guard below still judges the widened result.
+            _orphans = []
+            for _k, _q in enumerate(plots):
+                if _k == i or len(_q["poly"]) < 3:
+                    continue
+                _qp = Polygon(_q["poly"]).buffer(0)
+                if not isinstance(_qp, Polygon) or not _qp.is_valid or _qp.is_empty or _qp.intersection(traded).area <= 0.01:
+                    continue
+                _lost = _qp.difference(traded).buffer(0)
+                if isinstance(_lost, MultiPolygon):
+                    _parts = sorted((_g for _g in _lost.geoms if isinstance(_g, Polygon) and not _g.is_empty), key=lambda _g: _g.area, reverse=True)
+                    _orphans.extend(_parts[1:])
+            if _orphans and sum(_g.area for _g in _orphans) <= _ORPHAN_MAX_SHARE * traded.area:
+                _wide = unary_union([traded, *_orphans]).buffer(0)
+                _grown = unary_union([now, *_orphans]).buffer(0)
+                _gr = _ring(_grown) if isinstance(_grown, Polygon) and _grown.is_valid and not _grown.interiors else []
+                # the widened taker must still be a basin, and the repair must still RETIRE the step
+                if (
+                    len(_gr) >= 3
+                    and Polygon(_gr).buffer(0).is_valid
+                    and not pointed_ring(dedup_ring(_gr, 1.0), _GATE_MIN_APEX)
+                    and jog_steps([(float(_a), float(_b)) for _a, _b in _gr], g) < jog_steps([(float(_a), float(_b)) for _a, _b in plots[i]["poly"]], g)
+                ):
+                    traded, now, _new = _wide, _grown, _gr
             rings = [(i, _new)]
             tx0, ty0, tx1, ty1 = traded.bounds
             for k, q in enumerate(plots):
@@ -800,6 +833,11 @@ def _trade(
     for k, r in rings:
         plots[k]["poly"] = r
     return True
+
+
+_ORPHAN_MAX_SHARE = 0.5  # an orphaned fragment handed to the taker may not exceed half the traded corner:
+# past that the 'repair' is moving more ground than the step it retires, which is a land grab wearing a
+# repair's clothes. Feature 152 T18; the lever itself was recorded untried in future-work/farming-communities.md.
 
 
 def close_seams(
@@ -961,6 +999,16 @@ def close_seams(
     # merged triangle shows the needle - but the merge can also retire an apex the raw ring still
     # has, and `flooded_plots_read_as_basins` reads the ring as recorded (cohort seed 8). Testing
     # both at the carve's generous 25 deg keeps the placer strictly stricter than the gate's 15.
+    # THE FOURTH BLIND SPOT: EVERY PREDICATE MEASURES SHAPE, NONE MEASURES SIZE (feature 152 T10,
+    # settlement-review 2026-08-29). Sawada's surviving flooded plot is 6,706 sq ft - 4.9x the median
+    # basin and the largest of 776 - on the one map whose whole brief is that it has no pond, so the
+    # object a reader's eye lands on in the field is a 170 ft blue sheet. Every shape test passed it
+    # honestly: min apex 29.4 deg, no short end, good solidity. What it is, is BIG - `close_seams`
+    # absorbed it up to several design cells and it kept the tint it was given as one. A basin far
+    # larger than its neighbors does not read as a basin whatever its outline, so size joins the other
+    # four. Measured on the FINAL ring, after absorption, which is the only place the size exists.
+    _areas = sorted(Polygon(_q["poly"]).buffer(0).area for _q in plots if len(_q.get("poly") or []) >= 3)
+    _median_plot = _areas[len(_areas) // 2] if _areas else 0.0
     for p in plots:
         # TWO RINGS, AND BOTH CLAUSES EARN THEIR KEEP - this is the one place a second measurement is
         # right, and the reason is that they answer to different masters. `flooded_plots_read_as_basins`
@@ -1016,5 +1064,6 @@ def close_seams(
             or _psol < _TINT_MIN_SOLIDITY
             or _at_outfall
             or _asp > _TINT_MAX_ASPECT
+            or (_median_plot > 0.0 and _pg.area > _TINT_MAX_AREA_RATIO * _median_plot)
         ):
             p["fill"] = RICE_GREENS[(int(abs(p["poly"][0][0]) * 7) + int(abs(p["poly"][0][1]) * 3)) % len(RICE_GREENS)]

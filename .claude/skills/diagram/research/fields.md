@@ -116,8 +116,8 @@ rule's own thresholds across the four scripted hamlets, 26/37/20/24 before):
 - `_seam_cuts` - **cut a pocket where the fabric already breaks.** A pocket's outline IS the
   surrounding basins' outline, so its corners are where the rows either side of it end; cutting
   there means an offcut lines up with the basin it will be welded into. The even spacing still
-  governs and a neighbour's corner only wins within 0.35 of a cell of it, which is a MEASURED
-  ceiling: at 0.40 the cut follows the neighbours far enough to move the fan's envelope, and
+  governs and a neighbor's corner only wins within 0.35 of a cell of it, which is a MEASURED
+  ceiling: at 0.40 the cut follows the neighbors far enough to move the fan's envelope, and
   Kashikawa's dry hem - tiled against that envelope - shifts onto a footbridge.
 - `_absorb`'s **jog guard** - refuse a weld that adds a step to its host, ranked in the same ladder
   that already refuses a needle or a lump. Alone it takes 26/37/20/24 to 23/33/17/16: it can only

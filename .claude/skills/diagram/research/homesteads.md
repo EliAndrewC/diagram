@@ -683,7 +683,7 @@ Where the shed stood NOT-FOUND: seated at the back wall or a flank (GUESS), 6 x 
 
 **The chicken coop - imperial China's, READ.** *Animals through Chinese History* (Cambridge, READ):
 *"it seems that farmers in most regions of China managed to keep a pig and some chickens in their
-yard, along with a draught animal or two"* (late imperial; the chapter leans on 1930s survey data,
+yard, along with a draft animal or two"* (late imperial; the chapter leans on 1930s survey data,
 its own caveat). The Qimin Yaoshu 養雞第五十九 (wikisource, READ): *"雞棲，宜據地為籠，籠內著棧 ... 若任之
 樹林，一遇風寒，大者損瘦，小者或死"* - build the roost as a ground-level enclosure with a perch inside;
 left to roost in trees the birds sicken - so a COOP, not a tree. A late-Ming coop at Zhengzhou
@@ -740,3 +740,108 @@ toyoko-housing (ameblo) 農家の庭先の柿; uekipedia カキ; Tokushima prefe
 厩肥; Kameyama city history 屋敷神 survey (17/37, 11/37); the stable-and-eaves pit placement.
 **Withdrawn:** MAFF persimmon "without exception"; Boso-no-Mura firewood placement; 百姓伝記 on
 night soil (the readable manual saying it is 農業全書, 1696). Keys in `research/SOURCES.md`.
+
+## The outhouse faces the SUN, not away from the wind - and 72.7% of them do
+
+**The question, and the hypothesis it killed.** A settlement-review found every privy on Sawada standing
+UPWIND of its own house (11 of 12 north-east, 1 east) and proposed seating them downwind. That is the
+intuitive rule, and it is wrong. The research pass sent to settle it read the one primary source we could
+reach and found the opposite consideration governing.
+
+**What the record says.** Wang & Ochiai surveyed farmhouses in Arakawa village, Shiga - a windstorm-prone
+settlement, so a place where wind-conscious siting would show if it existed anywhere: *"toilets, as
+important sources of fertilizer for the paddy fields in the past ... tended to be located in southeast and
+south directions, with a total percentage at 72.7%, as a relatively warm temperature helped quick
+fermentation of excrements."* Night soil was a crop input, not a nuisance to be blown away; the sun on
+that side sped the composting.
+
+**And the wind finding in the same paper is about something else.** It covers *"storage buildings and
+retirement houses in the southwest and west directions ... thus forming wind fences to protect the open
+space in front of the house entrance"* - and even there the paper frames the placement as sunlight-driven
+(the front yard wants sun) with the wind-fence effect as a consequence rather than the cause. The words
+*leeward*, *downwind*, *windward*, *odor* and *hygiene* do not appear in the article at all. No source, in
+English or Japanese, was found stating any general wind rule for *koedame* or *benjo* siting.
+
+**The rule this produces.** `PRIVY_SUNNY_SHARE = 0.727` in `hamletgen/homesteads.py` - the GM's ruling
+(2026-08-29) was to use the figure literally rather than round it. The three attested seats (back door,
+戸口便所 at the gate, beside the *naya*) keep their own weights as the tiebreak WITHIN each group, so a
+homestead that cannot put a privy to the southeast still seats it where the record says privies go.
+
+**How the seat is found, and a wrong turn worth keeping.** The sun side is SEARCHED - bearings across
+southeast to south, radii stepping out from the house wall, nearest first, taking the first spot clear of
+the keep-outs. The first implementation instead offered the sector a handful of hand-picked offsets, they
+landed on the work yard or a garden, the placer fell through to the old seat, and the realized share stuck
+at 43.8%. I read that plateau as the sun side being FULL and wrote exactly that here.
+
+The GM asked the question that broke it: the real farmsteads this 72.7% comes from had threshing yards
+too, so why can ours not do what they did? Measured in answer, on Sawada: every one of the 19 houses has
+free sun-side ground - 49 to 151 clear spots each, the nearest 24-32 ft out, the same radius the privy
+already used on its north-east side. **The yard blocks a slice of a 90-degree arc, not the side.** The
+plateau was evidence about the offsets, not about the ground, and the physical-sounding explanation was
+wrong. Searching the sector took the realized share to **66.2%**.
+
+**How far out, and why the realized share is NOT tuned to the target.** The source gives a DIRECTION and
+no distance, and the three attested seats are all against the house - so the radius is ours to choose, and
+choosing it to hit 72.7% would be fitting the map to the statistic rather than to the place. Measured, at
+three radii, over the five scripted maps:
+
+| sun-side radius | privies seated | SE-to-S | nearer a NEIGHBOUR's house | standing beyond 45 ft |
+|---|---|---|---|---|
+| 48 ft | 50 | **46.0%** | **3** | 11 |
+| 58 ft | 65 | 73.8% | 8 | 43 |
+| 66 ft | 65 | 76.9% | 8 | 46 |
+
+**48 ft is chosen**, and it is the one that does not hit the number. Past it the privy walks out beyond
+its own work yard and, in a cluster where the next farmhouse is 50 ft away, out of its own homestead: at
+72 ft an acceptance review measured 15 of 86 privies and manure pits nearer ANOTHER house than the one
+they serve, against 0 of 52 before this feature - a legibility defect no check can see, because nothing
+tests which farmstead a fixture belongs to. A reader attributes a fixture to the nearest house whatever
+the record says.
+
+So the realized share is **46%** against a 72.7% rule, and the gap is the work yard: the near sun side is
+the threshing floor, and a privy may not stand on it. Closing it honestly means reserving the sun seat
+BEFORE the yard and gardens are placed - a stage reorder, recorded and not yet attempted - not widening
+the radius until the number comes out right.
+
+**Sources:** `wang-ochiai-2022`.
+
+
+## The muck heap that reads as the neighbor's (accepted 2026-08-29, feature 152)
+
+The researched rule is that the heap lies BEYOND the privy (see "The farmstead's fixtures"). Once the
+privy moved to the sun side, that rule sometimes puts the heap nearer a neighbor's farmhouse than the
+one it serves. Measured over the 13-map pool, **6 of 66 privies and heaps** stand nearer a neighbor's
+drawn FOOTPRINT than their own - the number that matters, because a reader compares against the drawn
+rectangle rather than against a recorded center point. (By center-to-center, the metric the placement
+code itself sorts on, it is 4 of 66; the two figures disagree because a fixture can clear a distant
+house's center while standing against its wall. The worst case is Kashikawa's heap at (2194.1,
+2759.2): 32.0 ft from its own farmhouse's wall and 8.4 ft from a neighbor's, which the center metric
+renders as a mild 46.7 against 33.0.) A reader attributes such a pit to the nearer house; the manifest
+says otherwise, and only the interactive page resolves it on click.
+
+**This is an ACCEPTED limitation, and THREE priced alternatives were declined on measurement.**
+
+| lever | misattributed (centers) | misattributed (footprints) | heaps beyond their privy |
+|---|---|---|---|
+| eight hand-picked seats + ownership tie-break (**shipped**) | 4 of 66 | 6 of 66 | 14 of 14 |
+| sector search beyond the privy, radii 2-24 ft, swung +/-54 deg | 5 of 68 | - | 16 of 16 |
+| sorting candidates by ownership MARGIN over the whole seat list | 4 of 67 | - | **9 of 15** |
+| the margin sort INSIDE the beyond-the-privy group only | 4 of 66 | 6 of 66 | 14 of 14 |
+
+The sector search - the shape that worked for the privy itself - seats more heaps but none of them
+better placed. The margin sort wins its margin by pulling the heap back toward the house, which breaks
+the researched rule outright; a reader-legibility nicety is not worth a researched finding. The fourth
+row is the acceptance review's own proposal, and it is a genuinely new mechanism - partitioning the
+seats on the "beyond" term means the margin can only reorder seats that already satisfy the rule, so
+it cannot fail the way row three did. It was implemented and rolled and came back identical to the
+shipped state on every metric. That is the answer: the levers are sound and the GEOMETRY is what is
+fixed. What is
+left is the geometry: where a privy stands on the sun side and the neighbor is that way too, every seat
+beyond it belongs to that arc, exactly as it would in a real interlocked cluster. Ownership therefore
+stays a TIE-BREAK, promoting an unambiguous seat whenever the ground offers one.
+
+**The lever NOT yet tried**, for whoever reopens this: seat the fixtures BEFORE the yard and gardens (a
+stage reorder, the same one the sun-share entry above names). Nothing else on this list should be
+re-pulled without a new mechanism.
+
+**Sources:** `wang-ochiai-2022` (the sun-side share the heap inherits).

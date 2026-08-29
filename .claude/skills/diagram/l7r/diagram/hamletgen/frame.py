@@ -18,7 +18,7 @@ from .water import polder_crossing_caps
 # THE RE-SEAT PROBE MUST MEASURE THE BOARD THAT IS DRAWN (feature 134 T50, 2026-08-29). This was pinned
 # at 14 x 8 while `Settlement.kosatsuba` draws the researched 12 x 5 - not even the same aspect - and the
 # probe offsets the seat by HALF THE DEPTH, so every re-seated board stood (8 - 5) / 2 = 1.5 ft further
-# from its lane than the verge rule intends. On a 5 ft lane that is 12.5 ft from the centreline where the
+# from its lane than the verge rule intends. On a 5 ft lane that is 12.5 ft from the centerline where the
 # rule asks 11.0, and `kosatsuba_by_the_road` measures against 12.0: gate seed 44 failed by half a foot
 # for a board the placer believed it had put exactly on the verge. Derived from the same expression the
 # drawing uses, so the two cannot drift again - this engine's standing rule is DERIVE, NEVER PIN.

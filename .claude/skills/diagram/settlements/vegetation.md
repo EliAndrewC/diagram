@@ -82,3 +82,136 @@ the GM.**
 - **BAMBOO IS A STAND, DRAWN AS ONE** (GM 2026-08-27, feature 133 T42/T47). Researched ([`../research/vegetation.md`](../research/vegetation.md) "Bamboo: how common, where it stood, and how to show it"): below the frost line a village has bamboo as a matter of course - a clonal thicket with a hard edge, at the homestead's damp shady strip or as a take-yabu at the field margin - and a culm cannot be drawn at 1 px = 1 ft. So: the `bamboo` knob (none / homestead / thicket / both) rolls per settlement; `hamletgen.bamboo_seats` scans a seat per form and `stage_bamboo` draws `s.bamboo_stand(poly, role)` after the belt - a stand-level glyph (paired culm strokes with a leafy fork, pale yellow-green, 7 ft pitch, no fill) inside a to-scale outline, the convention of Japan's own GSI legend, which gives bamboo its own symbol beside broadleaf and conifer. The knob's forms (T48): `homestead` = a 22 x 16 ft strip per farmstead that rolls one (`hamletgen.household_bamboo`, seated in `stage_hinterland` AFTER the web and the notice board so it keeps 6 ft off every lane - seated with the sheds it was in the web's way and lanes ran through it (T49); two offsets per side; presence 0.6 - a labeled GUESS, no source gives a share; side rolled per house, weighted to the back and the shed's side - READ: with the storehouses on Tonami's south side, at a plot's wet edge for the roots, the grove as a whole to the wind); `thicket` = one communal take-yabu at the cluster's shady edge; `both` = both. A DEVIATION for legibility, recorded like the oversized well. Bamboo is no longer in the grove species mix (it was 20% of the belt's crowns, one invisible six-foot culm at a time). Held by `bamboo_declared_and_drawn`, `bamboo_stands_legible` (20 ft floor) and `bamboo_stands_clear_of_paddies`; a stand is a wood to the scrub keep-out and the scatter audit.
 
 **No canopy tree stands under another's crown** (GM 2026-08-28, feature 134). Crowns may interlace at their edges; a crown whose center falls inside an already-seated crown is not drawn (it would be an understory stem, not canopy). The rule is `woods._crown_seat_clear`, applied by every stand and grove clump against the map's recorded crowns; gated by `tree_crowns_not_subsumed`. Why: [`../research/vegetation.md`](../research/vegetation.md#no-canopy-tree-stands-under-anothers-crown-researched-2026-08-28-feature-134).
+
+## A shelter belt is not a RING, and its open side is not a gap (GM ruling 2026-08-29)
+
+**The ruling, verbatim**: *"The actual ruling that I have on whether or not it is okay for a windbreak
+forest to have gaps is that we should just do whatever was historically true. If we believe that
+windbreak forests would have had such gaps based on our historical findings, then we can give them
+gaps. Otherwise, we should not have any gaps."* A research pass was authorized and run; this is what it
+found, and it changes the shape of the rule rather than settling a number.
+
+**The question was posed wrongly, and the record says so.** We asked whether a belt is an unbroken wall
+or a wall with holes. Neither literature describes a single continuous perimeter in the first place:
+
+- **China, at village scale, a fengshui forest is a SYSTEM OF SEPARATE PATCHES, not a ring.** Coggins &
+  Minor (2018) map them at named topographic points - the back / master-mountain grove (*zhushan*), the
+  water-head grove, the water-mouth (*shuikou*) grove downstream, and mountain-gap groves *"at specific
+  topographic positions corresponding to especially energetic winds (mountain gaps) and water
+  (cutbanks)"* - with the rice paddies lying in the open ground between the built village and the
+  water-tail grove. A Guangdong forestry-bureau source names four types in the same way (水口林 /
+  龙座林 / 垫脚林 / 宅基林). The open ground BETWEEN the patches is the design, and it is not narrow.
+- **Japan, at farmstead scale, the grove is built on ONE OR TWO SIDES by design.** Honda Seiroku's 1915
+  founding definition of *yashikirin* restricts it to two named sides: 屋敷林ハ...農家ノ周圍特ニ西ト北
+  トノ両側ニ設ケラルヽモノ - established *"mainly on the two sides, specifically west and north"* of the
+  farmstead, the winter-monsoon-facing sides. The *igune* entry says the same (多くの居久根は屋敷の北側
+  と西側に存在し), and the south and east are the entrance, the garden and the yard.
+
+**So the operative distinction is between an ABSENT FLANK and a HOLE IN A PLANTED RUN**, and only the
+second is a defect. A belt that does not wrap the settlement is correct and historical. A bare 40 ft run
+in the middle of the side the belt DOES occupy is not attested anywhere, and the agronomy says it is
+actively harmful: Purdue NCR-191 - *"when high-velocity air passes through a constriction, its velocity
+increases"* - and where a windbreak must be crossed for access, the gate is built *"the same height and
+porosity as the rest of the windbreak fence"*, never left as a bare opening.
+
+**What this makes of our 30 ft threshold: a RENDERING CONVENTION, not a finding.** No source reached,
+historical or modern, Chinese or Japanese, gives a width for an opening - not for the open flank, not for
+a gate, not for the *shuikou* passage the stream and road already run through. `_BELT_MAX_GAP_FT = 30` is
+ours, and it is now labelled as ours. What IS sourced is the direction of the rule: within the planted
+run, close the holes.
+
+**A KNOB the record hands us, recorded and not yet built** (constitution XII). Both forms are attested in
+the Japanese material itself: the Izumo *tsuijimatsu* *"enclosed the entire circumference of the house"*
+before Meiji and was later reduced to a 鉤型 hook shape *"covering only the north and west sides"* as
+flood risk fell and building styles changed. A full-ring belt and a two-sided belt are therefore both
+historical, at different places and times - which is exactly the two-supportable-answers condition, and a
+`belt_enclosure` knob (`full_ring` | `windward_flanks`) is the honest expression of it. Not built here:
+this feature's charter was the fourteen recorded findings, and a third knob is new scope.
+
+**Sources:** `coggins-minor-2018`, `honda-1915-via-miura-2019`, `yashikirin-jawiki`, `igune-jawiki`,
+`purdue-ncr191`, `gd-fengshui-types` (SUMMARY-ONLY).
+
+### The GM's ruling on the hook, and why no knob was built (2026-08-29)
+
+Presented with the research above - that the Izumo *tsuijimatsu* enclosed the whole house before Meiji
+and was later cut back to a north-and-west hook - the GM ruled for the hook, and against building the
+`belt_enclosure` knob the two-form finding would otherwise have earned:
+
+> *"I think that having a north and west hook is what we want because that is where things ended up, and
+> Rokugan has been around for a long time. So I think they would have ended up in the same place and for
+> the same reason. It also communicates that wind tends to blow from the northwest to the southeast,
+> which is an interesting geographical fact about China and Japan, which we have decided is also true
+> for Rokugan in most places when the local geography does not override the regional geography."*
+
+**Two reasons, and the second is the one worth keeping.** The first is that a long-settled country
+converges on the same answer for the same reason, so the END STATE is the right one to draw. The second
+is that the belt's shape is *communicative*: a reader who sees belts on the north and west of most
+settlements is being told a real fact about the regional wind, and a per-settlement full-ring knob would
+scramble that signal for variety's sake. This is the rare case where constitution XII's "two supportable
+answers become a knob" is answered with a ruling instead - not because the second form is unsupported,
+but because the FIRST form carries information the map is trying to convey.
+
+**Nothing was changed for this ruling, and that was checked rather than assumed.** The regional-versus-
+local rule it describes is already the engine's, recorded at `WIND_TURNS` in `hamletgen/consts.py`: NW is
+the default and "at the scale of a province that is the right answer", while the windward quarter of any
+one map is its UPSLOPE bearing, because cold air drains downhill and 背山面水 makes the high side and the
+windward side the same fact. And the belts already draw as hooks. Measured over the scripted pool, the
+arc each belt subtends around its own cluster:
+
+| map | windward | belt arc | reads as |
+|---|---|---|---|
+| Inashiro | W | 102 deg | hook, two sides |
+| Kashikawa | SE | 146 deg | hook, two sides |
+| Kuwabata | NW | 97 deg | one side |
+| Mizuguchi | S | 136 deg | hook, two sides |
+| Sawada | NE | 129 deg | hook, two sides |
+
+None exceeds 200 degrees; none wraps its settlement. The maps already accord with the ruling.
+
+
+### A belt runs off the page, and the check must not ask for canopy out there (2026-08-29)
+
+A settlement-review pass read Kuwabata's belt as claiming ground it did not plant: the recorded polygon
+ran on past the last clump. The finding was real and the window it prompted is the right one - the
+continuity check now scans the belt POLYGON's across-wind extent instead of stopping at its outermost
+clump, because bounding a continuity scan by the last thing it finds makes the one failure that matters
+most, *the planting stopping before the belt does*, structurally invisible.
+
+**But a footprint runs off the page as freely as a clump does.** Measured on the two maps the widened
+window failed:
+
+| map | belt polygon, along its own across-wind axis | inside `meta.view` | planted run |
+|---|---|---|---|
+| Kuwabata | 693 - 1440 | 790 - 1327 | 734 - 1330 |
+| Kashikawa | -1121 - -204 | -945 - -204 | -992 - -205 |
+
+On both, the planting covers every column a reader can see and overruns it at each end; the whole
+"gap" is off-page. So `_column_in_belt` clips its columns to the view, and the scan asks for canopy
+exactly where the reader can look for it. This is the same rule the seating already follows - a clump
+whose crown merely crosses the frame is kept, one with no visible ink is waste
+(`settlements/presentation.md`, GM 2026-07-20) - applied to the check that reads the result.
+
+**The other repair was tried first and measured.** Extending the PLANTING to the polygon's ends, so the
+end stretches were offered seats like any interior gap, bought one clump on one map at the page edge.
+It is reverted, with the numbers recorded in `homestead_parts.py` at the point of change.
+
+### Why the continuity check is asymmetric on purpose (2026-08-29)
+
+The window is clipped to the page; the PLANTING is not - an off-page clump still fills an on-page
+column. An acceptance review read that as a one-sided test, which is a fair reading, so the symmetric
+version was implemented and rolled: credit a clump only where its crown reaches the view.
+
+It fails Mizuguchi with a 60 ft bare run at x 1133..1183, and the ground under it settles the question.
+The belt polygon holds 48 px of visible ground there (y 1902..1950) at the frame's bottom edge, the
+nearest belt clumps sit at y 1971-1983 with their crowns stopping 5 px short of it - **and that visible
+ground is a homestead.** One farmhouse, two threshing yards, two kitchen gardens and a persimmon stand
+within 90 ft of (1160, 1925); a yard's southern sun corridor and a garden's eastern one are keep-outs
+the belt seating must respect. The symmetric check therefore demands canopy exactly where the generator
+is right to refuse it, which is the class of check the GM ruled out - one that fails for something a
+placement rule already gets right. The reader loses nothing either: the canopy visible in that gap is
+the copse, which is what a dooryard grove is for.
+
+**What the review is right about, and what it would cost to close.** The guarantee is weaker than it
+looks - delete Mizuguchi's copse and the check still passes. Closing that would need the check to know
+the seating's keep-outs, which is a second copy of the generator living inside the gate. Declined for
+one column at one page edge; reopen it if a map ever ships a hole a reader can actually see.

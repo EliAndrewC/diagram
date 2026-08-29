@@ -16,6 +16,7 @@ from .consts import (
     BAMBOO_FORMS,
     CARDINAL_BEARINGS,
     CLUSTER_SHAPES,
+    COPSE_SITINGS,
     DIKE_CROPS,
     FALL_BEARINGS,
     FAN_ASPECTS,
@@ -23,6 +24,7 @@ from .consts import (
     GRAIN_DRIFTS,
     GROSS_ACRES_PER_HOUSEHOLD,
     HOUSEHOLD_BAND,
+    KOSATSUBA_SITINGS,
     LANE_SKELETONS,
     LANE_WEBS,
     LEFTOVER_FORMS,
@@ -76,6 +78,8 @@ class HamletSpec:
     field_archetype: str | None = None
     pond_layout: str | None = None  # a dike-pond's arrangement, grid | mosaic (feature 150; `POND_LAYOUTS`)
     manure_form: str | None = None  # the manure fixture's form, heap | pit (feature 150; `MANURE_FORMS`)
+    copse_siting: str | None = None  # among_the_houses | against_the_belt (feature 152; `COPSE_SITINGS`)
+    kosatsuba_siting: str | None = None  # frontage | waterside (feature 152; `KOSATSUBA_SITINGS`)
     dike_crop: str | None = None  # a dike-pond's dike planting, mulberry | sugarcane | banana | fruit (feature 150; `DIKE_CROPS`)
     leftover: str | None = None  # a dike-pond block's unconverted parcels, rice | vegetables | pond (feature 150; `LEFTOVER_FORMS`)
     plot_size: str | None = None
@@ -93,6 +97,10 @@ class HamletSpec:
             raise ValueError(f"leftover {self.leftover!r} must be one of {sorted(set(LEFTOVER_FORMS))}")
         if self.manure_form is not None and self.manure_form not in MANURE_FORMS:
             raise ValueError(f"manure_form {self.manure_form!r} must be one of {sorted(set(MANURE_FORMS))}")
+        if self.copse_siting is not None and self.copse_siting not in COPSE_SITINGS:
+            raise ValueError(f"copse_siting {self.copse_siting!r} must be one of {sorted(set(COPSE_SITINGS))}")
+        if self.kosatsuba_siting is not None and self.kosatsuba_siting not in KOSATSUBA_SITINGS:
+            raise ValueError(f"kosatsuba_siting {self.kosatsuba_siting!r} must be one of {sorted(set(KOSATSUBA_SITINGS))}")
         if self.pond_layout is not None and self.pond_layout not in POND_LAYOUTS:
             raise ValueError(f"pond_layout {self.pond_layout!r} must be one of {sorted(set(POND_LAYOUTS))} (research/archetypes.md 'Grid vs mosaic')")
         lo, hi = HOUSEHOLD_BAND
@@ -133,6 +141,8 @@ class SitePlan:
     # and pinned to "grid" for a rice polder (see `POND_LAYOUTS`). Read by `stage_polder`.
     pond_layout: str
     manure_form: str  # heap | pit (feature 150, `MANURE_FORMS`), read by `farmstead_fixtures`
+    copse_siting: str  # among_the_houses | against_the_belt (feature 152, `COPSE_SITINGS`)
+    kosatsuba_siting: str  # frontage | waterside (feature 152, `KOSATSUBA_SITINGS`)
     dike_crop: str  # the dike-pond's planting (feature 150 A6), read by `stage_polder`
     leftover: str  # the dike-pond's unconverted parcels (feature 150 B2), read by `stage_polder`
     plot_size: str
@@ -267,6 +277,8 @@ def plan_site(spec: HamletSpec) -> SitePlan:
         field_archetype=_archetype,
         pond_layout=_pond_layout,
         manure_form=spec.manure_form or str(_roll(spec.seed, "manure_form", MANURE_FORMS)),
+        copse_siting=spec.copse_siting or str(_roll(spec.seed, "copse_siting", COPSE_SITINGS)),
+        kosatsuba_siting=spec.kosatsuba_siting or str(_roll(spec.seed, "kosatsuba_siting", KOSATSUBA_SITINGS)),
         dike_crop=(spec.dike_crop or str(_roll(spec.seed, "dike_crop", DIKE_CROPS))) if _archetype == "mulberry_dike_fishpond" else "mulberry",
         leftover=(spec.leftover or str(_roll(spec.seed, "leftover", LEFTOVER_FORMS))) if _archetype == "mulberry_dike_fishpond" else "rice",
         plot_size=spec.plot_size or str(_roll(spec.seed, "plot_size", PLOT_SIZES)),

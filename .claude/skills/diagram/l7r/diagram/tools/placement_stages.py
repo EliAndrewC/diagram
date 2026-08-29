@@ -42,7 +42,7 @@ from l7r.diagram.settlement import Settlement  # noqa: E402
 
 # WHAT EACH STAGE IS FOR, AND WHY IT SITS WHERE IT SITS. Keyed by function name so a reordering of
 # `STAGES` reorders the page automatically and a RENAMED or NEW stage shows up as missing prose
-# rather than silently inheriting its neighbour's - which is the failure mode a hand-kept list has.
+# rather than silently inheriting its neighbor's - which is the failure mode a hand-kept list has.
 NOTES: dict[str, tuple[str, str]] = {
     "stage_water_frame": (
         "The bearing and the fall",
@@ -208,10 +208,10 @@ def _plate(snap: Settlement, out_dir: str, stem: str, width: int) -> tuple[str, 
         w, h = im.size
         if w > width:
             im = im.resize((width, max(1, round(h * width / w))), Image.LANCZOS)
-        # PALETTISED, because these are flat-colour maps and this page is COMMITTED. At full render
+        # PALETTISED, because these are flat-color maps and this page is COMMITTED. At full render
         # size thirteen plates come to 96 MB, which is not a documentation asset, it is a liability -
         # and the whole point is that the page lives in the repo and is re-run when `STAGES` changes.
-        # An adaptive 128-colour palette is visually indistinguishable on flat fills and hard strokes
+        # An adaptive 128-color palette is visually indistinguishable on flat fills and hard strokes
         # while cutting each plate by roughly an order of magnitude.
         im = im.convert("RGB").quantize(colors=128, method=Image.Quantize.MEDIANCUT, dither=Image.Dither.NONE)
         im.save(png, optimize=True)

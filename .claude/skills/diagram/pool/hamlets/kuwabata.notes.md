@@ -176,18 +176,16 @@ district's ground. Drawn at 1 ft/px.
 
 ## Known open
 
-- `scatter_audit` has no dike-pond mode. **Re-measured 2026-08-29 after the marsh clip** (the previous
-  figures in this paragraph were two rolls stale, which the re-check review caught - it is the second
-  time this paragraph has gone stale, so re-measure it whenever the map is re-rolled): **2,774
-  violations**, of which **2,155** are `crown inside crop` (the archetype's OWN mulberry banks - the
-  audit's crop keep-out predates the archetype), **573** `blade inside marsh` (commons grass grading
-  into the reeds, which the doctrine admits over the same feather band) and **46** `crown inside
-  water+cutbank`. `crown inside marsh` is now **0**, down from 133, and the water family fell from 120
-  to 46: both are a direct consequence of clipping the marsh record to the ground outside the dike.
-  Density beyond the water keep-out: 0-15 px = 399, 15-30 px = 372, 30-45 px = 70. Of the 46, zero
-  crown centers stand on a water-colored pixel - confirmed by a manifest-free pixel count over 3,716
-  crown bases - so they are inside the audit's pad only. A clean bill cannot be earned on this
-  archetype until the audit knows it.
+- `scatter_audit` has no dike-pond mode. **Re-measured 2026-08-29 on the roll that shipped** (this
+  paragraph has now gone stale twice, both times caught by a review, so re-measure it whenever the map
+  is re-rolled and quote the roll): **2,787 violations**, of which **2,155** are `crown inside crop`
+  (the archetype's OWN mulberry banks - the audit's crop keep-out predates the archetype), **576**
+  `blade inside marsh` (commons grass grading into the reeds, which the doctrine admits over the same
+  feather band), **46** `crown inside water+cutbank` and **10** `crown inside marsh`. The marsh clip
+  took the crown family from 133 to 10 and the water family from 120 to 46; the ten that remain are in
+  the audit's feather pad, not on drawn water. Density beyond the water keep-out: 0-15 px = 366,
+  15-30 px = 346, 30-45 px = 59. A clean bill cannot be earned on this archetype until the audit knows
+  the dike-pond.
 - PERFORMANCE, measured against the pre-T54 tree in a detached worktree: Kuwabata's gen was 13-17 s and
   is now 27-32 s (the machine's own noise is +/-20% on both). The cost is T54's marsh keep-out, which
   asks a per-scatter-point question of every mound, plus the face-following waterward strips, whose
@@ -278,3 +276,49 @@ is the band polygon, 1.99x that, so the sibling text's "half an hour" was a doub
 this map had been **missing from `make maps` since its conversion to `hamletgen` on 2026-08-27** - the
 tier sweep filtered the frozen list by raw membership while `regen.py` asks `classify()`. The sweep asks
 `classify()` now and Kuwabata is off the legacy list, so it is swept with the rest of the tier.
+
+## 2026-08-29 - feature 152: D1-D3 are closed, and this file still called them deferred
+
+The three deferrals recorded against this map are done, and an acceptance review found nothing here
+saying so:
+
+- **D1, the back lane severed by 25 ft at a woodpile** - closed. Every scripted map's lane web is now
+  ONE connected component; this map's gap is gone, closed by other work rather than by anything aimed
+  at it. A woodpile-yields fallback was built for it and measured as a no-op, and reverted with the
+  reason at the point of change.
+- **D2, the belt sheltering 3 of 16 houses** - closed. The trim that decides which clumps are drawn now
+  tests the real page rather than a 48 ft proxy for it, and houses standing beyond the belt's ends went
+  3 of 16 to 1. (The clump figures this bullet used to quote were an intermediate roll's and
+  contradicted the same file four paragraphs down; the shipped counts are in the Census block.)
+- **D3, the caption lapping a garden** - closed twice over: it resolved itself on the re-roll, and the
+  seat filter now carries a fabric term and a way-side term regardless.
+
+**Closed 2026-08-29:** `village_windbreak_is_continuous` passes here. The gaps it used to flag were
+two separate things and each needed its own answer. The planted run's interior holes were filled by
+seating at the belt polygon's real depth rather than on the chord between neighbors. The remaining
+"gap" was not in the belt at all: the check bounded its scan by the belt POLYGON's across-wind extent,
+and almost all of that extent is off the page - Kuwabata's belt polygon runs 693..1440 along its own
+axis, the planting covers 734..1330, and fine-sampling the polygon at 4,000 points per column puts the
+last on-page belt ground at u ~ 1350. So about **20 ft** of visible belt carries no canopy, under the
+40 ft the check flags, and it reads at native resolution as the wood running off the page; the earlier
+"entirely off-page" in this paragraph was 20 ft stronger than the measurement supports
+(settlement-review, 2026-08-29). The check now clips its columns to the view, so it asks for canopy
+exactly where a reader can look for it.
+
+**Counts:** in the Census block below. Knobs rolled {'copse_siting': 'among_the_houses', 'kosatsuba_siting': 'frontage'}.
+
+
+## Census - the counts this map ships with
+
+Derived, never typed. `make notes-census` rewrites the block below from the manifest and
+`tests/test_notes_census.py` fails when it disagrees with one. Three settlement-review passes running
+caught a hand-typed count describing a roll that no longer shipped, twice in the paragraph written to
+correct the last one - so the numbers a reader can check now come from the artifact itself.
+
+<!-- census: generated by `make notes-census` - do not hand-edit -->
+- windbreak: **101** clumps drawn, **19** off the page
+- copse: **23** clumps drawn
+- farmhouses: **16**
+- farmstead fixtures: bath **8**, coop **5**, pit **4**, privy **12**, shrine **1**, woodpile **12**
+- notice board at **(2394.2, 559.1)**, **10** of 16 farmhouses within 250 ft
+<!-- /census -->

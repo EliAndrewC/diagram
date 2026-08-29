@@ -432,11 +432,23 @@ _DEFS: tuple[FeatureClass, ...] = (
         name="marsh",
         covers="`marshes` - every marsh patch, whatever its role",
         what="Reed wetland on the undrained low ground - the wet toe below the fields and the fringe of the pond.",
-        why="Wet rice is reclaimed FROM marsh: where reclamation stops, or the ground is too wet to manage, it stays reed wetland, and an abandoned paddy reverts to it. The toe marsh is as wide as the fan it drains, and its margin grades reed, then sedge and grass, then dry ground.",
+        why=(
+            "Wet rice is reclaimed FROM marsh: where reclamation stops, or the ground is too wet to manage, it stays reed wetland, "
+            "and an abandoned paddy reverts to it. The toe marsh is as wide as the fan it drains, and its margin grades reed, then "
+            "sedge and grass, then dry ground. A RESERVOIR'S SHORE IS REEDED BECAUSE THE POND IS WORKED, not in spite of it: the "
+            "obvious guess is that a maintained tameike - its bank repaired, its silt dredged, its water drawn down each season - "
+            "would have a margin kept clear, and the record contradicts that. A Kagawa Prefecture study found a statistically "
+            "significant POSITIVE correlation between the number of emergent-plant species (the reed and cattail belt) and the "
+            "practice of dredging silt and cutting algae, and it is the ponds whose water use has STOPPED that lose the fringe. "
+            "The reeds are a sign of a pond in use. The EMBANKMENT is the other half of the same finding and is different ground: "
+            "it is mown and burned and may not be cultivated, to keep the bank strong, and what grows on it is dry-grassland herbs. "
+            "So reeds stand in the shallows and stop at the foot of the bank - which is why you will not see the wet haze on a dike "
+            "or a pond's raised rim."
+        ),
         label="accurate",
-        label_note="The reclaimed-from-marsh finding and the margin gradient are read.",
-        sources=("aas-rice-technology",),
-        entry="research/water.md - 'Marsh - wet rice is reclaimed FROM wetland', 'The wet toe is as wide as the FAN'; research/vegetation.md - 'The marsh margin'",
+        label_note="The reclaimed-from-marsh finding, the margin gradient, and the reeded-shore finding are all read; the embankment is mown in the record as it is bare on the map.",
+        sources=("aas-rice-technology", "mineta-2007-tameike", "tameike-jawiki", "kagawa-tameike-structure", "maff-tameike-shizen", "nies-tameike", "inamino-tameike-museum"),
+        entry="research/water.md - 'Marsh - wet rice is reclaimed FROM wetland', 'The wet toe is as wide as the FAN', \"A reservoir's shore is reeded, and its EMBANKMENT is mown\"; research/vegetation.md - 'The marsh margin'",
     ),
     _c(
         key="paddy",
