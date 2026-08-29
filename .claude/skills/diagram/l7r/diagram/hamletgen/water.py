@@ -59,6 +59,8 @@ def stage_water_frame(s: Settlement, plan: SitePlan) -> None:
         # bundle omits the yard (`_bundle_geom`) and `harvest_yards_present` stands aside.
         work_yards=plan.field_archetype != "mulberry_dike_fishpond",
         manure_form=plan.manure_form,  # the rolled manure form (feature 150 A2), read by farmstead_fixtures
+        kosatsuba_siting=plan.kosatsuba_siting,  # frontage | waterside (feature 152 T21), read by place_kosatsuba
+        copse_siting=plan.copse_siting,  # among_the_houses | against_the_belt (feature 152 T20)
     )
     s._work_yards = plan.field_archetype != "mulberry_dike_fishpond"
     # `_nucleated` IS NOT THE FORM - it is the engine's flag for a COMPACT BUNDLE (house + lee

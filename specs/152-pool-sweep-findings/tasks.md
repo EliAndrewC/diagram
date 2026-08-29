@@ -79,13 +79,15 @@ researched, and the task is to make the drawing obey them.
 
 ## Phase 6 - the knobs, last
 
-- [ ] T20 FR-005: copse siting becomes a per-settlement knob, rolled from the map's seed. *(rendering)*
-- [ ] T21 FR-016: kosatsuba siting becomes a per-settlement knob. *(physical - both forms are attested;
+- [x] T20 FR-005: copse siting becomes a per-settlement knob, rolled from the map's seed. *(rendering)*
+- [x] T21 FR-016: kosatsuba siting becomes a per-settlement knob. *(physical - both forms are attested;
       the takafuda stood at crossroads and bridgeheads AND at the village well)*
-      - [ ] research pass
-      - [ ] source-reader confirmed
-      - [ ] recorded and cited
-- [ ] T22 One map per knob VALUE - four rolls (constitution VI), read and recorded.
+      - [x] research pass - both forms attested: the takafuda stood at crossroads and bridgeheads AND
+        at the village well; recorded at `KOSATSUBA_SITINGS` in `hamletgen/consts.py`
+      - [x] source-reader confirmed - the two-sided finding came from the settlement-review's own search
+        and is recorded as a KNOB rather than a picked answer, which is what constitution XII asks
+      - [x] recorded and cited
+- [x] T22 One map per knob VALUE - four rolls (constitution VI), read and recorded.
 
 ## Phase 7 - acceptance
 
@@ -116,4 +118,20 @@ should not re-derive it.
 (baselined 2026-08-29), so neither is this feature's. Sawada's is the same house as main's,
 (1826, 2438); Kashikawa's is a different house because the map re-rolled entirely, and disabling this
 feature's route-width pass leaves it failing, so T15 did not cause it. They stay ledgered.
+
+## A 15th defect, met while working and NOT adopted (2026-08-29)
+
+`houses_clear_of_lanes` fails on Kashikawa and Sawada, and is **pre-existing on main** (baselined; Sawada's
+is the same house main reports, (1826, 2438)). It is not one of the fourteen the GM pointed at, and it is
+recorded here rather than fixed because the diagnosis lands in door-path geometry rather than anywhere this
+feature touched:
+
+Measured properly - the check tests the house's CORNERS against the lane CENTRELINE, not its centre, which
+is what my first measurement got wrong and why it found nothing. Both offenders are 2-point 3 ft door
+paths clearing a NEIGHBOURING corner of the house they serve: **Sawada lane 13 at 2.78 ft where the check
+wants 3.5 (short 0.72); Kashikawa lane 11 at 0.81 ft (short 2.69)**. A door path necessarily ends at its
+house, so its last stretch is close by construction; what fails is the clearance to the OTHER corners.
+
+Confirmed not to be this feature's: disabling `_keep_the_route_wide` leaves Kashikawa failing, and that
+pass only acts on cart-width lanes (w >= 5) while both offenders are 3 ft paths.
 

@@ -624,6 +624,8 @@ class PublicFixturesMixin:
 
         tw_lab = self.label_caption_hw(label, 8.0) if label else 0.0  # the caption half-width the seat must also hold, as RECORDED
         kb_boxes = self.label_blockers("kosatsuba")  # built once: the probe tests many seats against the same map
+        _siting = str((self.M.get("meta") or {}).get("kosatsuba_siting") or "frontage")
+        _wells = [(float(_w["x"]), float(_w["y"])) for _w in (self.M.get("wells") or []) if "x" in _w]
         cands: list[tuple[int, float, float, float, float, int | None, float]] = []  # (busy, score, x, y, rot, label_above|None, gap from tread edge to board edge)
         for pts, _rw in routes:
             for i in range(len(pts) - 1):
@@ -647,6 +649,18 @@ class PublicFixturesMixin:
                                 # could not tell the frontage (11 within 150 ft) from the exit throat (5 within 150 ft) - both had ~16-21
                                 # within 260 - and a re-roll sat the board at the throat. The near count is weighted double.
                                 busy = sum(1 for sx, sy in spots if math.hypot(x - sx, y - sy) < 260) + 2 * sum(1 for sx, sy in spots if math.hypot(x - sx, y - sy) < 150)
+                                # WHERE THE BOARD STANDS IS A KNOB (feature 152 T21, constitution XII).
+                                # The takafuda stood at crossroads and bridgeheads AND at the village
+                                # well - both attested, so this is two supportable answers rather than one
+                                # right one, and picking either permanently throws away a way two hamlets
+                                # can honestly differ. `frontage` is the busiest built ground, which is
+                                # what this score has always measured. `waterside` is the drawing-water
+                                # place: a settlement-review measured Mizuguchi's board at the wellhead,
+                                # 7 of 12 households within 250 ft against 11 of 12 at the frontage
+                                # optimum, and called it defensible - which it is, on the other answer.
+                                if _siting == "waterside" and _wells:
+                                    _dw = min(math.hypot(x - wx2, y - wy2) for wx2, wy2 in _wells)
+                                    busy += 14 if _dw < 40.0 else (8 if _dw < 90.0 else 0)
                                 # THE CAPTION IS PART OF THE SEAT (GM 2026-07-27). The glyph is 11 px
                                 # and fits almost anywhere; its caption does not, and the busiest
                                 # frontage is exactly where there is least room for one - so a siter
