@@ -10,6 +10,7 @@ from typing import TYPE_CHECKING, Any
 from l7r.diagram.interactive.tags import ClsTag
 
 from .._geom import (
+    LAND,
     Poly,
     Pt,
     label_aabb,
@@ -188,7 +189,26 @@ class CaptionProbesMixin:
     # WHICH METHOD DRAWS EACH QUEUED KIND. An ordered-data row rather than a derived one (clause 14's
     # carve-out): it states a DECISION - that a kosatsuba's seat is searched in the phase while a
     # `text` caption's was fixed by its feature - which no introspection could recover.
-    _PLACERS = {"text": "_draw_queued_label", "kosatsuba": "_draw_board_caption"}
+    _PLACERS = {"text": "_draw_queued_label", "kosatsuba": "_draw_board_caption", "field_name": "_draw_field_name_label"}
+
+    def field_name_label(self: Settlement, label: str, lx: float, ly: float) -> None:  # type: ignore[misc]
+        """Queue a FIELD-NAME caption - the big letter-spaced name a `paddy_field` or `water_field`
+        lays across its own body (feature 157).
+
+        It has its own `kind` because it is one of the two captions in the engine that do NOT go
+        through `label()`: the markup carries `letter-spacing` and a 3.5 px halo that the caption
+        primitive has no parameters for, and inventing them to route two dormant call sites through it
+        would be changing the primitive to suit a caller. Queuing the exact markup instead keeps the
+        phase's coverage STRUCTURAL - no caption is drawn outside it - without touching how these two
+        would look if a map ever asked for them."""
+        self._label_queue.append(("field_name", (label, lx, ly)))
+
+    def _draw_field_name_label(self: Settlement, label: str, lx: float, ly: float) -> None:  # type: ignore[misc]
+        """Draw one queued field-name caption - the markup `paddy_field` used to emit inline."""
+        z = self.add_label(
+            f'<text x="{lx:.0f}" y="{ly:.0f}" text-anchor="middle" font-size="15" font-weight="bold" fill="#33301E" letter-spacing="1.5" paint-order="stroke" stroke="{LAND}" stroke-width="3.5">{label}</text>'
+        )
+        self._record_label(lx, ly, label, 15, "middle", z)
 
     def _draw_queued_label(  # type: ignore[misc]
         self: Settlement,

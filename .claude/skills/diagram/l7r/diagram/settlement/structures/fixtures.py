@@ -459,6 +459,22 @@ class PublicFixturesMixin:
                     (_q[0] + (_px2 - _q[0]) * _ca2 - (_py2 - _q[1]) * _sa2, _q[1] + (_px2 - _q[0]) * _sa2 + (_py2 - _q[1]) * _ca2)
                     for _px2, _py2 in ((_lb[0], _lb[1]), (_lb[2], _lb[1]), (_lb[2], _lb[3]), (_lb[0], _lb[3]))
                 ]
+                # THE AABB OF THE ROTATED QUAD IS A PREFILTER, NOT THE VERDICT (feature 157, the GM's
+                # reported defect). This built the caption's true quad and then threw it away, deciding
+                # on `min/max` of its corners - and for a tilted caption that box is enormous: at
+                # -28.1 degrees a 53.8 x 10 px caption boxes to 52 x 34, more than TRIPLING its
+                # thickness. Measured on Kuwabata, that is what refused the seat directly below the
+                # board, whose true quad clears the nearest structure by 4.43 px, and so drove the
+                # caption 35.6 px along its own baseline to the far side of the board - the exact drift
+                # the GM saw. The same error is written up twice within a hundred lines of here ("an
+                # AABB standoff to a diagonal subject is the caption's own length, not its thickness";
+                # "the placer and its check must read one source"), and this call site had it anyway.
+                #
+                # So the box PRUNES and the QUAD decides - this engine's standing rule for a slow test
+                # (skill CLAUDE.md: "when a check is slow, INDEX it - do not coarsen it"). The obstacle
+                # keeps the extent the GATE gives it, its rotated corners' AABB, because that is what
+                # `labels_clear_of_other_buildings` measures; probing anything tighter would pass here
+                # and fail there.
                 _qx0, _qx1 = min(_c[0] for _c in _quad), max(_c[0] for _c in _quad)
                 _qy0, _qy1 = min(_c[1] for _c in _quad), max(_c[1] for _c in _quad)
                 for _fam in ("houses", "gardens", "threshing_yards", "farm_sheds", "byres", "storehouses", "persimmons", "bamboo_stands", "wells"):
@@ -468,7 +484,14 @@ class PublicFixturesMixin:
                         _ow, _oh = float(_o.get("w") or _o.get("r", 0) * 2), float(_o.get("h") or _o.get("r", 0) * 2)
                         if _ow <= 0 or _oh <= 0:
                             continue
-                        if abs(_q[0] - float(_o["x"])) < (_qx1 - _qx0 + _ow) / 2 and abs(_q[1] - float(_o["y"])) < (_qy1 - _qy0 + _oh) / 2:
+                        _orot = float(_o.get("rot") or 0.0)
+                        if _orot:  # the gate boxes a rotated victim by its rotated corners' AABB
+                            _oc, _os = abs(math.cos(math.radians(_orot))), abs(math.sin(math.radians(_orot)))
+                            _ow, _oh = _ow * _oc + _oh * _os, _ow * _os + _oh * _oc
+                        _ox, _oy = float(_o["x"]), float(_o["y"])
+                        if abs(_q[0] - _ox) >= (_qx1 - _qx0 + _ow) / 2 or abs(_q[1] - _oy) >= (_qy1 - _qy0 + _oh) / 2:
+                            continue  # the prefilter: the caption's quad cannot possibly reach this one
+                        if poly_gap(_quad, [(_ox - _ow / 2, _oy - _oh / 2), (_ox + _ow / 2, _oy - _oh / 2), (_ox + _ow / 2, _oy + _oh / 2), (_ox - _ow / 2, _oy + _oh / 2)]) <= 0.0:
                             return True
                 # ...AND NOT ACROSS A WAY FROM ITS SUBJECT: if the straight line from the board to the
                 # caption crosses a drawn lane, the reader has a way between the words and the thing.
@@ -513,7 +536,65 @@ class PublicFixturesMixin:
                 _tilted = [
                     tilt_caption_seat(x, y, rot, _t, hw, hh, _g, above=_ab, lateral=_lat) for _ab in (False, True) for _g in (11, 16, 21, 28, 36) for _lat in (0.0, _chw + hw + 6, -(_chw + hw + 6))
                 ]
-                _lx, _ly = _tilted[15] if label_above else _pick(_tilted)
+                # A CAPTION STANDS BESIDE ITS BOARD, NOT PAST THE END OF IT (feature 157, GM
+                # 2026-08-29: *"rather than being directly below the notice board, it's off to the
+                # right a bit ... there is plenty of empty space to put the label directly next to the
+                # notice board"*). Two things were wrong with the thirty seats above, and they compound.
+                #
+                # FIRST, THE LADDER IS TOO COARSE TO FIND THE GOOD GROUND. Five standoffs and three
+                # lateral offsets. Measured on Kuwabata: at lateral 0 the board's south side is legal
+                # at a standoff of 14 and at NO other sampled value - 11 misses the lane target by
+                # 1.1 ft and 16 and beyond genuinely clip a house - so the ladder steps straight over
+                # the one seat the GM is asking for. A dense re-scan of the same ground under the same
+                # rules finds 97 legal seats. This is the identical failure the LEVEL branch below
+                # already fixed once and recorded as "DENSE ANNULUS, NOT FOUR RAYS ... four rays cannot
+                # serve two constraints at once"; the fix was never carried across to this branch.
+                #
+                # SECOND, THE THREE LATERAL OFFSETS ARE DERIVED FROM THE CAPTION, NOT FROM THE SUBJECT:
+                # `_chw + hw + 6` is 38.88 px of slide along a 12 px plank. Sliding a caption along its
+                # subject is a real convention - `_best_label_spot` does it, and a river's name lies
+                # along the river - but there the slides are FRACTIONS OF THE SUBJECT (`span * 0.25`,
+                # `span * 0.4`). A 39 px slide along a 12 px board is not "along the subject", it is
+                # "away from it", and it is what the GM saw.
+                #
+                # THE FIX IS THE ORDER OF THE SEARCH, not a new constraint. The reach is KEPT - it is
+                # load-bearing, and the note below records why: a board in a lane crotch has no legal
+                # seat on the perpendicular line at all, and five cohort seeds are in that position.
+                # What changes is that the ground is sampled finely and walked in the order the GM
+                # described: least displacement ALONG the caption's own baseline first, then the
+                # smallest standoff across it, then below before above. The FIRST fully legal seat in
+                # that order wins - so a board with clear ground beneath it gets the caption directly
+                # beneath it, and a board in a crotch still reaches the far seats it needs.
+                #
+                # Straight-line distance, which is what ranked these seats before, cannot tell a 39 px
+                # slide from a 39 px standoff; it scores them identically, and only one of the two
+                # still reads as "beside".
+                _lat_reach = _chw + hw + 6
+                _lats = [0.0]
+                for _i in range(1, int(_lat_reach // 3.0) + 1):
+                    _lats += [_i * 3.0, -_i * 3.0]
+                if _lat_reach - (_lat_reach // 3.0) * 3.0 > 0.5:  # ...and the reach itself, exactly
+                    _lats += [_lat_reach, -_lat_reach]
+                _ranked = sorted(
+                    ((abs(_lat), _g, _si), tilt_caption_seat(x, y, rot, _t, hw, hh, _g, above=_ab, lateral=_lat))
+                    for _lat in _lats
+                    for _g in [11.0 + _r for _r in range(26)]
+                    for _ab, _si in ((False, 0), (True, 1))
+                )
+                # EVALUATED LAZILY, CHEAPEST TEST FIRST, and stopped at the first legal seat: the rank
+                # IS the preference, so there is nothing to gain by scoring the rest. That is what keeps
+                # a ladder of 1,300 seats cheaper than the 30-seat one it replaces on any board that has
+                # somewhere good to put its caption - Kuwabata settles on the sixth.
+                _seat = next((_q for _, _q in _ranked if _hug(_q) <= _hug_cap and not _blocked(_q) and _box_clearance(_q) >= _lane_target), None)
+                if label_above:  # a HARD constraint from the caller, unchanged: its seat is named, not searched
+                    _lx, _ly = _tilted[15]
+                elif _seat is not None:
+                    _lx, _ly = _seat
+                else:
+                    # NOTHING IS LEGAL ANYWHERE. Fall back to exactly the old thirty-seat search, so a
+                    # board with no good ground behaves as it always has - the least-bad seat, chosen by
+                    # the same satisficing rule - instead of inheriting a fallback nobody has measured.
+                    _lx, _ly = _pick(_tilted)
             else:
                 # THE HALO MUST NOT NOTCH THE WAY THE BOARD STANDS ON (settlement-review on Inashiro,
                 # 2026-08-19). The caption is drawn with a 3 px background halo

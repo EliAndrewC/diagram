@@ -1263,7 +1263,11 @@ s.kosatsuba(1398, 1348, rot=90)
 s.kosatsuba(1384, 974, rot=78, label=None)  # the north gate's board, on the road verge inside
 s.kosatsuba(1016, 1348, rot=0, label=None)  # the river gate's board
 
-s.place_punishment_spot(label_xy=(1270, 1454))  # the auto-caption sat 106 px east of its own spot AND across the ward kido at (1421,1450)
+# THE HAND SEAT IS GONE (feature 157). It read *"the auto-caption sat 106 px east of its own
+# spot AND across the ward kido at (1421,1450)"* - which is a WORKAROUND for the placer, not a
+# decision about this map, and the GM asked for the placer to be corrected. Kept, it would have
+# frozen the old behavior on the one tier whose future reuse is the stated reason for the work.
+s.place_punishment_spot()
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 nb = {}
