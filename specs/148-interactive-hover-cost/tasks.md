@@ -11,18 +11,19 @@ hamlet was built. No acceptance task: the GM reads the map by eye.
 - [x] T03 the spec re-aimed at element count; `spec-fidelity` round 1 on the new aim: FAITHFUL, with
       three asides - the plan and tasks still described the dead aim (this rewrite), SC-001's headroom
       numbers were not in the record (T04), and the load half must be handed back if it does not move (T10)
-- [ ] T04 research R2: the counting method behind SC-001, with the numbers - drawn now, the
+- [x] T04 research R2: the counting method behind SC-001, with the numbers - drawn now, the
       order-preserving floor, and the order-free bound, per page. SC-001 rests on these and this feature
       exists because an unrecorded premise turned out false
-- [ ] T05 `<ellipse>` joins `<line>` and `<circle>` in the merge (FR-003)
-- [ ] T06 the merge gathers same-styled primitives that are SEPARATED by others (FR-001), with the
+- [x] T05 `<ellipse>` joins `<line>` and `<circle>` in the merge (FR-003)
+- [x] T06 the merge gathers same-styled primitives that are SEPARATED by others (FR-001), with the
       skipped-extent test that keeps the picture (FR-002): an element joins an earlier bucket only where
       nothing it must pass overlaps it
-- [ ] T07 the unit tests: a separated same-styled pair merges; a pair separated by something it OVERLAPS
+- [x] T07 the unit tests: a separated same-styled pair merges; a pair separated by something it OVERLAPS
       does not; the emitted `d` draws what the elements drew; ellipses merge
-- [ ] T08 the picture is proved unchanged (US2, SC-003): the rendered page against the rendered SVG, which
-      this feature does not touch
-- [ ] T09 AFTER, the same five measurements on both pages (FR-005); SC-001 wants kuwabata down 40% and
+- [x] T08 the picture is proved unchanged (US2, SC-003) - AND IT WAS ALREADY CHANGED, before this feature:
+      the old merge had no overlap test, so translucent shapes it joined painted lighter, and every page
+      sat 12-18% of its pixels away from its own SVG. Now 0.03%, which is antialiasing (research R3)
+- [x] T09 AFTER, the same five measurements on both pages (FR-005); SC-001 wants kuwabata down 40% and
       inashiro down 20%
 - [ ] T10 the report to the GM: element count, load, scroll, zoom, highlight - and if LOAD has not moved,
       the open question handed back rather than closed over. The GM reported it and never withdrew it
