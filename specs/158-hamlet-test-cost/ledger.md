@@ -11,12 +11,18 @@ See `research.md` R1 for the baseline's conditions. Warm-versus-warm comparisons
 non-rolling profile (`make durations`) and `make quick` never touch the roll cache, so those two are
 the fair unit-test numbers.
 
-| tier | before | after |
-|---|---|---|
-| **1 - `make quick ALL=1`** (pytest half) | 40.6 s, 2,206 tests | see §6 |
-| **the non-rolling suite** (`make durations`, no coverage) | 45.2 s, 2,390 tests | see §6 |
-| **2 - the gate** | see §6 | see §6 |
-| **3 - the full sweep** | 390.6 s, 2,794 tests (1 pre-existing failure) | see §6 |
+| tier | before | after | |
+|---|---|---|---|
+| **1 - `make quick ALL=1`** (the pytest half) | 40.6 s, 2,206 tests | **10.5 s**, 2,199 tests | **3.9x** |
+| **the non-rolling suite** (`make durations`, no coverage) | 45.2 s, 2,390 tests | **9.9 s**, 2,376 tests | **4.6x** |
+| **2 - the gate** (`make done`, warm, coverage on) | 116 s cold-cache / 16-23 s warm | **23.4 s** in its test phase, 46.6 s the whole gate | the baseline's 116 s was a cold-cache artifact (R1) |
+| **3 - the full sweep** | 390.6 s, 2,794 tests | **366 s**, 2,748 tests | 1.07x |
+
+And the test that WAS the whole shape of the profile: **39.2 s -> 8.1 s**.
+
+The full tier moved least, and honestly: it is dominated by real map rolls that the GM wants, and the
+one big cut there (the determinism ratchet, 214 s -> ~143 s) is partly offset by the fact that the
+full run deliberately serves nothing from the roll cache. The unit tiers are where a 4x lives.
 
 ## 2. The checks - what was retired, and what carries it now
 
@@ -141,9 +147,39 @@ turned out not to be half of tier 2 at all - the 116 s baseline had a cold roll 
 coverage overhead on a warm tree is small. A hypothesis this feature would have shipped on
 plausibility alone, and the measurement killed it.
 
-## 6. The closing measurements
+## 6. The coverage floors - a regression this feature CAUSED, found and fixed
 
-Filled from the verification run - see the "after" section appended below.
+The hamlet-path floor (feature 145: every module the scripted rolls execute must be at 100%) came
+back **RED at 99.48%, 19 modules under 100**. Before treating that as this feature's, it was measured
+on unmodified code in a detached worktree at the merge base, as constitution XIII requires - and the
+answer was both halves at once:
+
+| | merge base `77fc359a` | after the first pass |
+|---|---|---|
+| hamlet-path floor | **99.78%**, 8 modules under 100 | 99.48%, 19 modules |
+
+So the floor was **already red on main** - 36 lines across 8 modules, pre-existing, not this
+feature's to fix (`ways.py` alone carries 23 of them). But the after-run added **48 newly-uncovered
+lines across 11 more modules**, and that WAS mine. The diff named the cause exactly:
+
+- **Ten `check_village` segment modules and `_knobs.py`'s `_crop_boxes(city=True)`** lost their only
+  exerciser when the frozen-pool coverage carriers were deleted. **That deletion was wrong and is
+  reverted.** The GM's ruling is about STORED MAPS FROM PAST FAILURES - `pool/regressions/` - and the
+  carriers are not that: they are the frozen SHIPPED pool, replayed with nothing asserted about their
+  verdicts, purely so the urban half of a SHARED segment file executes. A segment file holds hamlet
+  rules and city rules together, and only a city manifest walks the city ones. `test_frozen_pool_gate.py`
+  stays deleted: it replayed the same manifests and PINNED their failures, which IS the GM's category.
+- **`_knobs.py`'s `bridge_carried_ways`** lost its only caller when `_seg_0335` / `_seg_0336` went
+  with `bridges_align_with_their_way`. Keeping a retired check alive to execute a function is not an
+  option, so the function is now tested directly (`tests/settlement/test_bridge_sources.py`) - which
+  is the doctrine ("bring it up BY TESTS") and the better test anyway: a plain function taking a dict,
+  covering the defaults and the two documented odd branches (an undrawn channel, a river recorded as
+  `poly`), instead of a side effect of a city gate replay.
+
+**The lesson, and it is the one worth carrying:** a coverage floor is the only thing that can see a
+deletion's second-order cost, and it can only see it against a BASELINE. Both runs are red, and
+without the worktree measurement "the floor is red" would have looked like main's problem.
+
 
 ## 7. Ledgered, NOT fixed by this feature
 
