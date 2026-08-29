@@ -102,6 +102,12 @@ def test_dike_face_reads_the_rings_own_side_and_carries_a_gap() -> None:
     assert at(500.0) == 200.0  # the gap between them keeps the neighbor's, not a jump across the ring
     east = hg.water.dike_face(ring, "E", 100.0, 900.0, bins=16)
     assert all(x >= 900.0 for x, _y in east)
+    # a NOTCH the dike RECORDS steps the face inward, so the wet ground reaches into the cut; the same
+    # empty bins with nothing recorded there stay at the neighbor's face (a sparse ring is not a notch)
+    notched = hg.water.dike_face(ring, "W", 100.0, 900.0, bins=16, cut=40.0, cuts=[(205.0, 500.0)])
+    at_n = min(notched, key=lambda p: abs(p[1] - 500.0))[0]
+    assert at_n == 240.0, notched
+    assert min(notched, key=lambda p: abs(p[1] - 250.0))[0] == 200.0  # the face itself is untouched
 
 
 def test_the_waterward_strip_stops_at_the_dikes_face() -> None:

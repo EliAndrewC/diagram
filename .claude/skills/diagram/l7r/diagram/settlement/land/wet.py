@@ -105,7 +105,9 @@ class WetGroundMixin:
                 not point_in_poly(px, py, poly)
                 or boxed_hit(px, py, fld_b.near(px, py), 10.0)
                 or boxed_seg_hit(px, py, cor_b.near(px, py))  # a causeway/path/road through the marsh stays bare, not reeded over
-                or self._on_watercourse(px, py, near=wat_b.near)  # ... and OFF a stream/channel bed (reeds fringe water, they do not float on it)
+                or self._on_watercourse(
+                    px, py, pad=2.0 + mound_pad, near=wat_b.near if not mound_pad else None
+                )  # ... and OFF a stream/channel bed (reeds fringe water, they do not float on it) - by the mark's own reach, so no haze washes over the bed either (T54, settlement-review)
                 or any(x0r <= px <= x1r and y0r <= py <= y1r for x0r, y0r, x1r, y1r in halo_rects)  # ... and OUT of the urban-clearance halo (the swept/trodden ground around every structure)
                 or any((px - hx) ** 2 + (py - hy) ** 2 <= hr * hr for hx, hy, hr in halo_circles)  # ... and clear of every wellhead's trodden apron
                 or boxed_hit(px, py, blk_b.near(px, py))  # ... and OFF any building/shrine/torii footprint
@@ -114,7 +116,14 @@ class WetGroundMixin:
                 or boxed_hit(px, py, mnd_b.near(px, py), mound_pad)  # ... and off every earthen mound, by the drawn mark's own reach (T54)
             ):  # ... and OUT of any keep-out
                 return True
-            if pond and ((px - pond[0]) / pond[2]) ** 2 + ((py - pond[1]) / pond[3]) ** 2 < 1.0:
+            # ...AND THE MARK'S OWN REACH KEEPS OFF THE WATER, not just its center (feature 139 T54,
+            # settlement-review 2026-08-28): this test read the CENTER while the mound test above reads the
+            # radius, so a 28 ft tint circle centered a foot outside the rim washed 27 ft of haze over open
+            # water - measured, 26% of Kuwabata's reservoir surface, up to 20 ft inside the rim. That is the
+            # GM's own complaint one feature over ("the hazy blue ... is clearly overlaid on top of"), so the
+            # shore keeps the mark off by the same rule the mound does. The ellipse is grown by the pad rather
+            # than offset exactly - a keep-out, not a boundary.
+            if pond and ((px - pond[0]) / (pond[2] + mound_pad)) ** 2 + ((py - pond[1]) / (pond[3] + mound_pad)) ** 2 < 1.0:
                 return True  # reeds fringe the shore, they do not float on open water
             ed = edge_dist(px, py, poly)
             return ed < feather and random.random() > (ed / feather) ** drop

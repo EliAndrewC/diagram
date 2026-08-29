@@ -55,7 +55,7 @@ CROP_MARGIN = 48.0  # the one crop margin, shared by stage_frame's crop_to_conte
 # 0.72 sits 2 points above `woodland_commons_within_the_frame`'s own 0.7, which is all the cushion
 # the prediction needs: instrumenting cohort seed 33 showed the window is byte-identical at all 16
 # `_crop_boxes` calls of a build AND equal to the final `meta.view`, because everything that sets the
-# frame is placed before the woodland scan runs. The neighbouring square test's 0.8 exists for drift
+# frame is placed before the woodland scan runs. The neighboring square test's 0.8 exists for drift
 # that measurement says does not happen; carrying 0.8 over to the rotated bbox cost seed 33 its
 # woodland outright. See future-work/, "the woodland scan vetted a SQUARE".
 WOODLAND_BBOX_FLOOR = 0.72
@@ -965,7 +965,7 @@ def belt_polygon(s: Settlement, plan: SitePlan) -> Poly:
             near = [u for u, vv in uv if abs(vv - v) <= width]
             if not near:  # a column with no house of its own leans on the whole cluster's fringe
                 near = [max(u for u, _v in uv) - 40.0]
-            # THE COLUMN CLEARS THE WINDWARD-MOST HOUSE IN ITS OWN NEIGHBOURHOOD, not merely the
+            # THE COLUMN CLEARS THE WINDWARD-MOST HOUSE IN ITS OWN NEIGHBORHOOD, not merely the
             # ones directly in front of it. `near` is the houses within half a column of this v, so
             # a steading sitting just outside that window - which a SPREAD cluster produces
             # constantly - is not counted, the band is laid across it, and `village_grove` then
@@ -973,7 +973,7 @@ def belt_polygon(s: Settlement, plan: SitePlan) -> Poly:
             # belt ends up with a hole exactly one homestead wide.
             #
             # Measured on cohort seeds 33 and 37: the biggest hole in each belt has a whole
-            # steading inside it (house 57 ft from the hole centre, threshing yard 38-41, gardens
+            # steading inside it (house 57 ft from the hole center, threshing yard 38-41, gardens
             # 10-46), and the holes are 78 and 84 ft - about one homestead across. Widening the
             # window to a full column each side is what makes the band clear the fabric it is
             # meant to shelter rather than straddle it.

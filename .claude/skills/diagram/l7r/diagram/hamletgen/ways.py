@@ -848,7 +848,7 @@ def _bridge_collinear_breaks(s: Settlement, hard: list[Poly], walls: Sequence[Po
     A lane that stops and resumes 110 ft further on, 8 degrees off collinear, is not two arms - it is
     one street with a hole in the middle of the built-up frontage, and both its ends read as rounded
     caps dying in bare grass. `lanes_reach_something` passes them because it tests each END
-    independently: an end 83 ft from a house CENTRE is "fronting" it even when that is 55 ft from the
+    independently: an end 83 ft from a house CENTER is "fronting" it even when that is 55 ft from the
     wall, i.e. out past the dooryard.
 
     THE TEST IS WHETHER THE GAP IS WALKABLE, which is what makes this a defect rather than an

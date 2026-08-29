@@ -112,12 +112,27 @@ district's ground. Drawn at 1 ft/px.
 
 ## Known open
 
-- `scatter_audit` has no dike-pond mode: 2,242 of its 3,083 hits on this map (T54 removed ~356 of
-  them - the reeds and tint that had stood on the mounds) are dike CROWNS on
+- `scatter_audit` has no dike-pond mode. Re-counted by the review of 2026-08-28 after T54: 3,083
+  violations, of which 2,242 are `crown inside crop` (the archetype's OWN mulberry banks - the
+  audit's crop keep-out predates the archetype), 600 `blade inside marsh` (commons grass grading
+  into the reeds, which `wet.py` admits by doctrine over the same feather band), 135 `crown inside
+  marsh`, 105 `crown inside water`, 1 `dot inside marsh`. A clean bill cannot be earned on this
+  archetype until the audit knows it are dike CROWNS on
   the dikes (the audit's crop keep-out predates the archetype), 474 are the west dike's crowns
   where the rectangular waterside marsh laps the dike outline, 105 are crowns lapping a pond feed
   by 1-2 ft. A clean bill cannot be earned here until the audit knows the archetype (review
   2026-08-28).
+- OPEN QUESTION for the GM, raised by the review of 2026-08-28 and NOT settled here: which way the
+  reed density should run at a DIKED toe. Our strip feathers on every edge, so now that its inner
+  edge is the dike face the ramp lands on the water side - 6% ink in the first 10 ft, full density
+  at ~30 ft. The reviewer's search of the reed-zonation literature (Phragmites/Scirpus depth-gradient
+  work, Lake Balaton, Dutch wave-exposure studies) says stem density RISES as the water shallows,
+  which argues the densest reed should hug the toe; against that, a maintained polder dike's toe is
+  walked, cut for withies and kept clear, which is the bare berm we now draw. If both stand for the
+  same ground it is a KNOB (constitution XII); the reviewer's own read is that they split by
+  SITUATION - berm on a diked margin, gradient on an undiked toe marsh - which needs no knob. Those
+  citations came from the review pass and have NOT been re-read by a `source-reader`; they are
+  SUMMARY-ONLY until they are, and nothing in the engine rests on them today.
 - Three windbreak crowns stand ~1 radius onto the pond fringe's east edge (2022,612), (2028,618),
   (2034,660) - invisible at fit; the belt is laid after the fringe and does not read `wet_polys`.
 - The drain trunk is the engine's gray-blue drain palette (`#7C9EB0`) while the head canal and
