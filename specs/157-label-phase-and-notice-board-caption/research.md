@@ -213,3 +213,30 @@ The same ruling settles the eight referent-less board records the review flagged
 `yatsuda`, `tanada`, `hirameki`, `minami`, `nagahara`, `tango`): every one is a frozen exhibit, so the
 new check is scoped to `meta.generated_by` maps - which is not a dodge but the scoping every sibling
 caption check already uses.
+
+## R7 - the 48-seed cohort, measured three ways
+
+Constitution XIII: a regression is measured, not remembered. The baseline was taken on unmodified
+HEAD in a detached worktree; the two post-change runs differ only in whether the new check existed.
+
+| run | passed | `labels_within_image` | `captions_clear_the_ways_they_stand_on` | `caption_stands_beside_its_referent` |
+|---|---|---|---|---|
+| BASELINE (unmodified HEAD, worktree) | **28/48** | 1 | 1 | - |
+| the seat fix, before the check existed | **29/48** | **0** | 1 | - |
+| the seat fix, with the check | **24/48** | 0 | 1 | 6 |
+
+**The seat fix is a net GAIN and breaks nothing**: 28 -> 29, with one `labels_within_image` failure
+fixed, `captions_clear_the_ways_they_stand_on` unmoved, and no check newly firing. Every other
+residue line is identical seed for seed (10 `lanes_form_one_network`, 3 `farmhouses_reach_a_way`,
+2 `features_do_not_overlap`, 2 `lanes_reach_something`, 2 `paddy_bunds_do_not_stagger`, 1 each
+`village_windbreak_is_continuous`, `wells_clear_of_trees`, `lanes_bend_like_paths`) - all
+pre-existing, none of them this feature's.
+
+**The whole 29 -> 24 drop is the NEW RULE reporting maps that were already like that.** Six of 48
+seeds seat a board caption further along its baseline than the board extends; one of the six was
+already failing something else, which is why the pass count falls by five rather than six.
+
+**A note on the baseline's own two caption failures**, because they are the reason the seat fix
+counts as a gain rather than a wash: the pre-change engine shipped one caption outside the frame and
+one on a lane tread across 48 seeds. The first is fixed by the denser ladder finding a seat the
+coarse one stepped over. The second is unchanged - a different rule, on a seed where no seat clears.
