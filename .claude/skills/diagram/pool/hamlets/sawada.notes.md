@@ -489,3 +489,26 @@ plot is 6,706 sq ft, **4.9x the median basin and the largest of 776**, because e
 tests sharpness and none tests size; the windbreak trim got WORSE rather than better since its
 deferral (57 -> 85 px of bare strip, 5 of 19 houses now beyond the drawn belt); the copse draws inside
 the windbreak (13 of 17 clumps touching one); and `make jogs` exits RED here with nobody reading it.
+
+## 2026-08-29 - feature 152 worked this map's findings off; the numbers above are stale
+
+An acceptance review found this file untouched while the map re-rolled, with a citable line that no
+longer describes it. Corrected here rather than edited above, because the prose above is the record of
+what was true when it was written.
+
+**The flooded plot is gone entirely.** Line ~436 records "Sawada's flooded plots: 2 -> 1". The shipped
+manifest now carries **0**: feature 152 gave the tint an AREA test as well as its shape
+tests, and this map's survivor was 6,706 sq ft - 4.9x the median basin and the largest of 776 - on the
+one map whose brief is that it has no pond. It is a green basin now.
+
+**The "CAUGHT, recorded, not fixed" block is out of date.** Of the five items it lists as open, four are
+closed: the privies are seated by the researched sun rule rather than blindly upwind; the oversized
+flooded plot is demoted; the belt trim now tests the real page (this map's canopy 137 drawn,
+42 off-page, and its houses beyond the belt's ends went 8 of 19 to 1); and the copse inside the
+belt is 0 of 17. **`make jogs` remains red here at 1 step** - see the feature's own record.
+
+**Other counts, re-measured:** copse 41 clumps; fixtures {'bath': 4, 'coop': 10, 'pit': 3, 'privy': 12, 'shrine': 1, 'woodpile': 9}; knobs rolled
+{'copse_siting': 'among_the_houses', 'kosatsuba_siting': 'frontage'}.
+
+**The board's traffic figure above still holds** - I re-measured it and it is right.
+

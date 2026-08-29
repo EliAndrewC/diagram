@@ -248,3 +248,27 @@ district's ground. Drawn at 1 ft/px.
 - The acreage per household is the PADDY figure (`GROSS_ACRES_PER_HOUSEHOLD`); whether a silk-and-
   fish household held the same ground is a research question for the feature-139 audit.
 - The pool sweep and the polder cohort are owed at unlock (scope locked at conversion time).
+
+## 2026-08-29 - feature 152: D1-D3 are closed, and this file still called them deferred
+
+The three deferrals recorded against this map are done, and an acceptance review found nothing here
+saying so:
+
+- **D1, the back lane severed by 25 ft at a woodpile** - closed. Every scripted map's lane web is now
+  ONE connected component; this map's gap is gone, closed by other work rather than by anything aimed
+  at it. A woodpile-yields fallback was built for it and measured as a no-op, and reverted with the
+  reason at the point of change.
+- **D2, the belt sheltering 3 of 16 houses** - closed. The trim that decides which clumps are drawn now
+  tests the real page rather than a 48 ft proxy for it: this map's drawn canopy went 47 clumps to
+  79 (13 genuinely off-page, from 45), and houses standing beyond the belt's ends went
+  3 of 16 to 1.
+- **D3, the caption lapping a garden** - closed twice over: it resolved itself on the re-roll, and the
+  seat filter now carries a fabric term and a way-side term regardless.
+
+**Still open on this map, and not this feature's:** `village_windbreak_is_continuous` FAILS here with
+gaps at (1888, 506) and (2257, 396) - **byte-identical on main**, so the record's clump list never
+moved. The span fix is real and is not the same property: a belt can span its cluster and still carry
+holes. This is the GM's own complaint in its remaining form and it is recorded rather than fixed.
+
+**Re-measured:** copse 21 clumps; fixtures {'bath': 8, 'coop': 5, 'pit': 4, 'privy': 12, 'shrine': 1, 'woodpile': 12}; knobs rolled {'copse_siting': 'among_the_houses', 'kosatsuba_siting': 'frontage'}.
+

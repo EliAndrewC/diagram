@@ -167,8 +167,24 @@ siter can express only one.
 
 ## Success Criteria
 
-- **SC-001** No pool map has a majority of privies/manure pits within 90 degrees of its windward bearing;
-  Sawada specifically goes from 12/12 to a minority.
+- **SC-001** **SUPERSEDED 2026-08-29 by the research, and revised in place the way SC-002 was.** It read:
+  *"No pool map has a majority of privies/manure pits within 90 degrees of its windward bearing; Sawada
+  specifically goes from 12/12 to a minority."* That criterion encodes the WIND hypothesis, and the
+  research pass the GM's own conditional called for CONTRADICTED it: the one primary source reachable
+  (Wang & Ochiai 2022) puts 72.7% of toilets southeast-to-south for solar warmth to speed fermentation of
+  night soil, its wind-siting finding covers storage buildings and retirement houses rather than toilets,
+  and the words leeward, downwind, odor and hygiene appear nowhere in it. The GM then ruled the 72.7%
+  figure be used literally. A criterion that still tests wind would mark the researched behavior a
+  failure - Kashikawa has 13 of 15 privies within 90 degrees of its windward bearing precisely BECAUSE
+  its sun side lies that way.
+
+  It now reads: **privies are seated southeast-to-south at the rate the ground allows, and the shortfall
+  against 72.7% is explained by measurement rather than tuned away.** Measured: 0% before this feature,
+  46% after, with a recorded radius sweep showing that reaching 73.8% costs privies drawn into
+  neighbouring farmsteads. The honest route to the rest is a stage reorder, recorded and not attempted.
+
+  *This is flagged in the handback, not buried here: the GM asked for the wind change in their own words
+  and a source overturned it, which they should hear from me rather than discover from a manifest.*
 - **SC-002** The belt's recorded extent spans the cluster across-wind on every pool map, and the DRAWN
   canopy fills it except where the page cuts the belt.
 
