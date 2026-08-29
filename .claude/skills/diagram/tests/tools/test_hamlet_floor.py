@@ -101,3 +101,30 @@ def test_module_set_defaults_to_the_roll_cache_records(monkeypatch: object) -> N
 
     monkeypatch.setattr(rollcache, "report_deps", lambda spec: _deps("l7r/diagram/hamletgen/sink.py"))  # type: ignore[attr-defined]
     assert hf.module_set() == ["l7r/diagram/hamletgen/sink.py"]
+
+
+def test_a_PARKED_line_is_excused_loudly_and_does_not_excuse_its_neighbours(tmp_path: Path, monkeypatch: object) -> None:
+    """PARKING (feature 147, the GM's ruling): a known-wrong line ships without failing the gate, but it is
+    ANNOUNCED on every run so the list has to shrink, and it excuses only itself.
+
+    The two properties that matter. First, a parked line passes - otherwise the speedup could not ship while
+    the defect is owned by a later feature. Second, an UNPARKED miss in the very same module still fails,
+    because parking a line must not turn its module into a blind spot: that is the difference between
+    skipping a known-flaky case and quietly lowering the floor."""
+    body = "def f(x):\n    if x:\n        return 1\n    if x is None:\n        return 3\n    return 2\n"
+    mod, data = _measure(tmp_path, body, "f(True)")  # neither `return 3` nor `return 2` runs
+    rel = str(Path(mod).resolve()).lstrip("/")
+    monkeypatch.setattr(hf, "SKILL", Path("/"))  # type: ignore[attr-defined]
+
+    # `f(True)` runs the def, the first `if` and its `return 1`; lines 4, 5 and 6 are the misses.
+    # Park ONLY line 5 - lines 4 and 6 are still real misses and must still fail.
+    monkeypatch.setattr(hf, "PARKED", {rel: (frozenset({5}), "owned by feature 148 - do not re-derive")})  # type: ignore[attr-defined]
+    out = io.StringIO()
+    assert hf.check([rel], data_file=data, out=out) == 1, "the unparked miss still fails the floor"
+    assert "PARKED" in out.getvalue() and "feature 148" in out.getvalue(), "and the park is announced with its owner"
+
+    # now park both: the floor passes, and still says so out loud
+    monkeypatch.setattr(hf, "PARKED", {rel: (frozenset({4, 5, 6}), "owned by feature 148 - do not re-derive")})  # type: ignore[attr-defined]
+    out2 = io.StringIO()
+    assert hf.check([rel], data_file=data, out=out2) == 0
+    assert "PARKED" in out2.getvalue(), "a silent park would let the list grow unnoticed"

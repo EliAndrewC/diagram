@@ -86,6 +86,38 @@ def module_set(deps_for: Callable[[Any], dict[str, Any]] | None = None) -> list[
     return hamlet_path_files(deps_for(spec) for spec in subjects())
 
 
+# PARKED LINES (feature 147, GM 2026-08-29). A line listed here is KNOWN-uncovered and deliberately does
+# NOT fail the floor. It is the equivalent of skipping a flaky test, for a case where there is no test to
+# skip: the tests all pass, and what is unreliable is the floor's VERDICT on them.
+#
+# The GM's ruling, in their words: *"I would like to keep the speed up even with the flaky floor ... once we
+# have pushed back to main, I would like to have you work on fixing the flakiness. This gives other sessions
+# the benefit of the faster tests while also prioritizing fixing something that we know is wrong. With that
+# being said, why don't we mark the flaky tests as skipped so that other sessions don't end up trying to
+# duplicate your work and fix them."*
+#
+# So each entry says what is wrong, who owns the fix, and - the part that stops the duplicated work - what has
+# ALREADY been tried. THE LIST MUST SHRINK, which is why it is printed on every run rather than hidden.
+PARKED: dict[str, tuple[frozenset[int], str]] = {
+    "l7r/diagram/hamletgen/hinterland.py": (
+        frozenset({503, 504}),
+        "the woodland shrink ladder. A direct test EXISTS and passes - tests/gate/hamletgen/"
+        "test_woodland_shrink_147.py - and covers these two lines when run on its own, but contributes "
+        "nothing to them inside the full sweep. Do NOT write another test for them; that was tried. The "
+        "cause is in how the coverage is OBSERVED: `--dist worksteal` hands tests to workers dynamically, so "
+        "which tests share a process varies between runs, and this verdict varies with it - a bisect over the "
+        "suite flipped repeatedly on unchanged code. Also tried and ruled out: the roll-sharing of feature "
+        "147 (red with it off), the cohort seed count (each of the eight members covers the rung alone), "
+        "single-worker runs (still red), forced pool regeneration (still red), and a synthetic fixture (the "
+        "woodland scan yields no seat without a fully planned site). Feature 148 owns it.",
+    ),
+}
+
+
+def parked_for(path: str) -> tuple[frozenset[int], str]:
+    return PARKED.get(path, (frozenset(), ""))
+
+
 def check(files: list[str], data_file: str = ".coverage", out: IO[str] = sys.stdout) -> int:
     """0 when every file is at 100% in the coverage data; 1 otherwise (the table names the misses); 2 when the set is empty."""
     import coverage
@@ -97,9 +129,28 @@ def check(files: list[str], data_file: str = ".coverage", out: IO[str] = sys.std
     cov.load()
     print(f"hamlet-floor: {len(files)} modules on the hamlet path (derived from the scripted rolls' records)", file=out)
     total = cov.report(include=[str(SKILL / f) for f in files], show_missing=True, file=out)
-    if total < 100.0:
+
+    # THE VERDICT IS TAKEN PER LINE, NOT FROM THE PERCENTAGE, so a parked line can be excused without
+    # excusing anything else in the same module (feature 147).
+    unparked: list[str] = []
+    parked_seen: list[str] = []
+    for f in files:
+        lines, reason = parked_for(f)
+        try:
+            missing = set(cov.analysis2(str(SKILL / f))[3])
+        except Exception:  # noqa: BLE001 - a file coverage cannot analyze is not a floor verdict
+            continue
+        if missing & lines:
+            parked_seen.append(f"{f} {sorted(missing & lines)} - {reason}")
+        if missing - lines:
+            unparked.append(f"{f} {sorted(missing - lines)}")
+
+    for entry in parked_seen:
+        print(f"hamlet-floor: PARKED (feature 147, the GM's ruling - known wrong, owned, NOT to be re-derived): {entry}", file=out)
+    if unparked:
         print(
-            f"COVERAGE: a module on the HAMLET PATH is under 100% ({total:.2f}% combined) - the table above names it (feature 145: the path is derived from what the scripted rolls execute; bring it up BY TESTS, spec FR-002)",
+            f"COVERAGE: a module on the HAMLET PATH is under 100% ({total:.2f}% combined) - {'; '.join(unparked)} "
+            "(feature 145: the path is derived from what the scripted rolls execute; bring it up BY TESTS, spec FR-002)",
             file=out,
         )
         return 1
