@@ -208,3 +208,51 @@ Four errors, four questionable, eleven nitpicks. Every error and every questiona
 - [x] **T44** The number claim collided: a peer session's `154-kosatsuba-placement-knob` reached main
       first and `155-mains-red-floor` behind it, so this feature renumbered 154 -> 156 and every
       reference moved with it (32 files). `research: rendering`
+
+## From `settlement-review`, round 3 - the verification pass (2026-08-29)
+
+A pass whose whole job was to check that round 1's and round 2's fixes fired. Four of the seven did
+exactly what the commit claimed; three did not, and one of those was the GM's own ruling implemented
+backwards.
+
+- [x] **T45** (error 1, the serious one) `dwellings_shown` counted `houses` at town and city scale -
+      but `houses` IS the farm ring at those tiers, so the GM's "state the non-farm dwellings, not the
+      farmhouses" was implemented as "state the farmhouses". The `273 -> 260` result looked like proof
+      and was 260 farmhouses. Now counts `buildings` under `DWELLING_KINDS`, the same set the capacity
+      checks use, so there is one definition of a dwelling in the engine: Minami 520, Tango 583, Ubame
+      82. The arithmetic is the check - Minami's 520 x 5 is its declared 2,600 exactly.
+      `research: rendering`
+- [x] **T46** (error 2) The town's population note asserted the GM's Imperial convention over a figure
+      that means something else: every town in the pool declares the DEPICTED slice (Ubame's 590 is
+      (36 + 82) x 5 exactly), and `settlements.md` has said so since before this feature. The card now
+      states what its figure IS and names the larger one as not yet given; the convention is recorded
+      as owed, with what implementing it costs. `research: rendering`
+- [x] **T47** (error 3) The fix for the shrine collision opened another: the card put the hokora
+      "beside a farmhouse door" where its own class puts it in a corner of the plot - and Sawada's sits
+      46 ft from its house. The card follows the class's wording now. `research: rendering`
+- [x] **T48** (error 4) The Kawakami defect had a second instance the first sweep missed: Yatsuda's
+      Takadani, 高谷 "high valley", recorded on the downhill side. It is Kayano, 萱野 "reed plain",
+      which claims no elevation. The rest of the pool was swept against the same standard and is clean.
+      `research: rendering`
+- [x] **T49** (questionable 2) The disambiguating clause was unconditional, so Mizuguchi - which draws
+      neither a household shrine nor a grave island - was told about both. It is per-class and keyed on
+      what is present now, the same rule the crop sentence follows. `research: rendering`
+- [x] **T50** (nitpicks) Kashikawa's notes quoted a math-convention angle in a file whose neighbors
+      speak compass, so it read as "north" three lines under "east"; Akagahara's "lies northeast along
+      it" attached to the road rather than the district; and two pre-existing British spellings.
+      `research: rendering`
+
+## Open, for the GM
+
+- [ ] **T51** `settlement-review` argues the presumption of accuracy should extend to the DEVIATION and
+      GUESS leads too. They currently open with the provenance half before the liberty - *"This is a
+      guess - The firewood SHED is read (Boso-no-Mura); where the open STACK stood ... is a guess"* -
+      and "X is read" is the paraphrase FR-001 bars from the page, now surviving on exactly the modals
+      a reader is likeliest to open. The machinery already exists (the caveat is the liberty half); it
+      is simply not populated for announced classes, and nothing would be lost since the note stays in
+      the record and behind the references link.
+      **NOT DONE, deliberately**: the approved spec's FR-002 says those leads are "unchanged, exactly
+      as today", and `spec-fidelity` passed that wording three times against the GM's request. Changing
+      it now would be this session deciding an exception to its own approved spec, which is the one
+      thing Principle XVI forbids. It is a small change and a one-word ruling either way.
+      `research: rendering`

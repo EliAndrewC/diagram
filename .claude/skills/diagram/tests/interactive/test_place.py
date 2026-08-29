@@ -21,6 +21,7 @@ from l7r.diagram.interactive.notes import EMPTY, MapNotes
 from l7r.diagram.interactive.place import (
     BASIS,
     BASIS_LEAD,
+    COLLISIONS,
     CROP_SENTENCES,
     CROPS,
     KINDS,
@@ -112,35 +113,63 @@ def test_a_town_and_a_city_count_dwellings_and_never_farmhouses() -> None:
 
 def test_each_tier_explains_what_its_population_figure_COUNTS() -> None:
     """A matter of Imperial census convention, not arithmetic, and the two upper tiers differ (GM
-    2026-08-29). A hamlet's and a village's need no explaining - they are five to a drawn household."""
-    assert "as part of the town" in KINDS["town"].population_note
+    2026-08-29). A hamlet's and a village's need no explaining - they are five to a drawn household.
+
+    THE TOWN NOTE SAYS WHAT ITS FIGURE IS, not what the convention wants it to be. Every town in the
+    pool declares the DEPICTED slice - Ubame's 590 is (36 farmhouses + 82 dwellings) x 5 exactly - and
+    `settlements.md` has said so since before this feature, so a card claiming the figure took in the
+    county's farmers would contradict its own manifest. The GM's convention needs the gens to
+    re-declare `population`; until they do, the card states the smaller true thing and names the
+    larger one as not yet given (settlement-review, 2026-08-29)."""
+    assert "the settlement as drawn" in KINDS["town"].population_note
+    assert "does not yet state that larger number" in KINDS["town"].population_note
     assert "NOT the farmers" in KINDS["city"].population_note
     assert "counts separately" in KINDS["city"].population_note
     assert KINDS["hamlet"].population_note == "" and KINDS["village"].population_note == ""
 
 
-def test_a_farm_dwelling_inside_a_drawn_agricultural_district_is_not_counted() -> None:
-    """Tango draws one, and 13 of its 273 houses stand in it - so its card says 260 dwellings."""
-    square = [[0, 0], [10, 0], [10, 10], [0, 10]]
+@pytest.mark.parametrize("key", sorted(COLLISIONS))
+def test_every_collision_clause_names_a_real_class(key: str) -> None:
+    assert key in CLASSES
+
+
+def test_a_collision_clause_appears_only_where_its_class_is_drawn() -> None:
+    """The card and the vocabulary use one word for two things - "shrine", "burial ground" - so the
+    card disambiguates; but only on a map that draws the other thing. Mizuguchi draws neither, and was
+    being told about both (settlement-review, 2026-08-29)."""
+    bare = place_card(HAMLET, PADDY, EMPTY, M15)
+    with_shrine = place_card(HAMLET, PADDY | {"household shrine"}, EMPTY, M15)
+    assert bare is not None and with_shrine is not None
+    assert "hokora" not in bare["what"], "a map with no household shrine hears nothing about one"
+    assert "hokora in a corner of a farmstead plot" in with_shrine["what"], "and it stands where its own class puts it"
+    assert "field grave" not in with_shrine["what"], "this map draws no grave island"
+
+
+def test_an_upper_tier_counts_buildings_and_a_lower_one_counts_houses() -> None:
+    """`houses` IS THE FARM RING at town and city scale, and this is the trap the first cut fell into:
+    it counted `houses` and looked right (Tango 273 -> 260) while counting nothing but the farmhouses
+    the GM said to leave out (settlement-review, 2026-08-29). A town's and a city's dwellings are
+    `buildings` under `DWELLING_KINDS` - the same set the capacity checks use."""
     manifest = {
-        "houses": [{"x": 5.0, "y": 5.0}, {"x": 5.0, "y": 6.0}, {"x": 50.0, "y": 50.0}],
-        "quarters": [{"kind": "agricultural_district", "poly": square}],
+        "houses": [{"x": 1.0, "y": 1.0}] * 40,  # the farm ring
+        "buildings": [{"kind": "merchant"}, {"kind": "laborer"}, {"kind": "samurai"}, {"kind": "granary"}, {"kind": "gate"}],
     }
-    assert dwellings_shown(manifest, KINDS["city"]) == 1, "the two inside the district are farm housing"
-    assert dwellings_shown(manifest, KINDS["hamlet"]) == 3, "a hamlet counts every house it draws"
+    assert dwellings_shown(manifest, KINDS["city"]) == 3, "three dwellings; the granary and the gate house nobody"
+    assert dwellings_shown(manifest, KINDS["town"]) == 3
+    assert dwellings_shown(manifest, KINDS["hamlet"]) == 40, "a hamlet counts every house it draws"
 
 
-def test_a_town_with_no_agricultural_district_counts_every_house() -> None:
-    """The pool's towns draw none, so the exclusion is a no-op there - recorded because it is the
-    difference between a correct count and an unnoticed over-count if one ever gains unmarked farm
-    housing."""
-    manifest = {"houses": [{"x": 1.0, "y": 1.0}] * 42, "quarters": []}
-    assert dwellings_shown(manifest, KINDS["town"]) == 42
+def test_the_upper_tiers_arithmetic_is_the_check_on_which_list_is_right() -> None:
+    """Minami declares 2,600 and draws 520 non-farm dwellings - five to a household, exactly, with its
+    148 farmhouses excluded. That is the city convention the GM described, and it is what proves the
+    count reads `buildings` rather than `houses`."""
+    manifest = {"houses": [{}] * 148, "buildings": [{"kind": "merchant"}] * 520}
+    assert dwellings_shown(manifest, KINDS["city"]) * PER_HOUSEHOLD == 2600
 
 
 def test_dwellings_shown_survives_a_manifest_with_nothing_in_it() -> None:
     assert dwellings_shown({}, KINDS["city"]) == 0
-    assert dwellings_shown({"houses": [{}], "quarters": [{"kind": "agricultural_district"}]}, KINDS["city"]) == 1
+    assert dwellings_shown({}, KINDS["hamlet"]) == 0
 
 
 def test_a_thousands_separator_on_a_city() -> None:

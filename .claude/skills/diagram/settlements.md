@@ -106,16 +106,24 @@ Pull from `/host-l7r-repo/gm-assistant/setting/median-domain.md`, `demographics.
 - To seat ~50 houses you usually need them **two-deep** around the fields, not a single necklace - call `ring()` twice per field, an inner pass (small gap) and an outer pass (larger gap, e.g. ~55). A single ring saturates a field's perimeter around ~40 houses.
 - Hamlet (`meta(scale="hamlet")`): 50-100 people = 10-20 households. A hamlet has **no headman of its own** (it falls under the village district's headman - so omit `s.headman(...)`), **no village shrine**, and **no tax-free plot**. The gate enforces this asymmetry: `hamlet_has_no_headman` for hamlets vs `village_has_headman` for villages; tax-free and the orientation checks simply don't apply at hamlet scale. A hamlet typically has just 1-3 small fields.
 - Villages and hamlets are peasant-only - no resident samurai (samurai live in the county town).
-- **What a tier's POPULATION FIGURE COUNTS differs by tier, and it is an Imperial census convention
-  rather than arithmetic** (GM 2026-08-29). A hamlet's and a village's is simply five to a household,
-  and every household is drawn. A **town's includes the farming population of the surrounding
-  countryside**, counted as part of the town though not all of it is drawn. A **provincial city's
-  does the opposite**: it includes the samurai country estates around the city, only some of them
-  drawn, but NOT the farmers - the farms on a city sheet belong to village districts and counties,
-  which the census counts separately. Any figure a map states must say which of these it is, or a
-  reader will take a town's and a city's to mean the same thing. Consequently a town and a city
-  count their **non-farm dwellings** (enumerated, exact, all drawn) and state no farmhouse count at
-  all, while a hamlet and a village count farmhouses. Rendered by
+- **What a settlement's page STATES about its size, per tier** (GM 2026-08-29; the underlying
+  population model is the bullet above and is unchanged). A hamlet and a village state their
+  **farmhouse count**, exact and untilded - every household is drawn, so the reader could count them -
+  and a population of ~5 x households. A town and a city state their **non-farm dwelling count**
+  instead, also exact, and **no farmhouse count at all**: the GM's reason is that both *"are
+  surrounded by significant farm fields and farmer populations, which are deliberately not all
+  rendered on the map. Therefore, that number should not be included."* Their populations are then
+  explained rather than left bare, because a town's and a city's mean different things and a reader
+  will otherwise take them for the same: a **city's** excludes farmers entirely (its declared figure
+  is urban dwellings x 5, and the farms on its sheet belong to village districts and counties the
+  census counts separately), while a **town's** is the depicted slice - its townsfolk plus the
+  farmhouses actually drawn - and NOT the ~1,200 of the county it heads.
+  **OWED, and the GM has ruled on it** (2026-08-29): by Imperial convention a town's figure should
+  count the whole of its county's farming population, *"Not all of which are depicted on the map"* -
+  which is the ~1,200, not the ~590 Ubame declares. That needs the town gens to re-declare
+  `population` and `population_consistent_with_housing` to stop keying off it at town scale, so it
+  waits for the towns-and-cities work the GM deferred it to; until then the card states the smaller
+  figure and says the larger one is not yet given. Rendered by
   [`l7r/diagram/interactive/place.py`](l7r/diagram/interactive/place.py).
 - **A map may hand facts to its own interactive page** (feature 156). A `## Map notes` section in
   `<name>.notes.md` - `### Place` for the settlement's geography (the village district it belongs to

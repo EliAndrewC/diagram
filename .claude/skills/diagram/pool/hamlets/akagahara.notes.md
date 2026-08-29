@@ -33,7 +33,7 @@ lies northeast along it.*
 
 ### Features
 
-- **village lane**: The connector track runs SOUTH, to the Imperial road; Hoshigaoka, the district's main village, lies northeast along it.
+- **village lane**: The connector track runs SOUTH, to the Imperial road; Hoshigaoka, the district's main village, lies northeast of that road.
 - **scrub and rough grazing**: The rough ground here reads red-brown rather than dun: Akagahara sits on iron-rich RED CLAY, and that is what names the place (赤 aka, red; 原 hara, plain).
 
 ## Why they ring the field rather than line one margin
@@ -130,6 +130,6 @@ Still open from that review, and NOT fixed:
   argument, not a check. Whether a dispersed hamlet's ring farms are expected to have a well at all
   was NOT a GM ruling - it was a research question, and it is
   ANSWERED (2026-08-24, `research/homesteads.md`): a dispersed farmstead carries its own well,
-  because a shared well with a reach radius presupposes a centre to be near and dispersal is the
+  because a shared well with a reach radius presupposes a center to be near and dispersal is the
   absence of one. The 500 ft rule is not unenforced at hamlet scale; it is the wrong rule for this
   form. The well rule should be FORM-conditional rather than scale-conditional.

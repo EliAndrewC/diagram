@@ -98,7 +98,8 @@ beyond the frame.
 *Hirose (広瀬, "broad rapids") is INVENTED for this map - drawn from gm-assistant's
 `place-names/pool.jsonl`, which carries its kanji and meaning, and not ruled on by the GM. The
 DIRECTION is not invented: it is the bearing of this map's own connector track where it leaves the
-cluster, 351.2 deg on the sheet's axes.*
+cluster - compass 98.8 deg, a little south of due east. (The engine's own axes put that at
+351.2 deg, measured counter-clockwise from east; the compass figure is the one to read.)*
 
 *It was Kawakami (川上, "upstream") until settlement-review measured the two against each other on
 2026-08-29: this land falls to the north-east, so upstream is roughly the opposite way from the

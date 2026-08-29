@@ -81,7 +81,7 @@ class Kind:
 KINDS: dict[str, Kind] = {
     "hamlet": Kind(
         "hamlet",
-        "a small outlying farming community belonging to a village district. Like every hamlet it has no headman of its own - the village headsman who oversees it lives in the main village - no VILLAGE shrine, no tax-free plot and no burial ground OF ITS OWN; its dead go to the district's ground. (The little hokora beside a farmhouse door is a household's own, and an in-field grave mound is not a burial ground.) A hamlet is the commonest kind of settlement there is: a domain holds about 1,296 of them to 216 villages, and about 40% of its inhabitants live in one.",
+        "a small outlying farming community belonging to a village district. Like every hamlet it has no headman of its own - the village headsman who oversees it lives in the main village - no village shrine, no tax-free plot and no burial ground of its own; its dead go to the district's ground. A hamlet is the commonest kind of settlement there is: a domain holds about 1,296 of them to 216 villages, and about 40% of its inhabitants live in one.",
         "farmhouses",
         False,
         "",
@@ -98,7 +98,7 @@ KINDS: dict[str, Kind] = {
         "a county town: the lowest level of Rokugani society at which samurai live, and the lowest that has resident merchants, which is why the farmers of the surrounding districts come in for market day. The county magistrate holds court here.",
         "dwellings",
         True,
-        "A town's population is counted the Imperial way, which takes in the farming population of the surrounding countryside as part of the town - so the figure is larger than the settlement you can see, and only some of those farms are drawn on this sheet.",
+        "That figure is the settlement as drawn - its townsfolk and the farming households on the sheet around them. The county the town heads is larger again, and the Imperial convention counts the whole of its farming population as part of the town; this map does not yet state that larger number.",
     ),
     "city": Kind(
         "city",
@@ -141,6 +141,18 @@ _CROP_LEAD: dict[str, str] = {
 #: between them, and listing them under either says something false about where they grow.
 CROP_SENTENCES: dict[str, str] = {
     "bund beans": "Soybeans are sown along the tops of the paddy bunds, a second crop off ground that would otherwise grow weeds.",
+}
+
+#: Where the card and the class vocabulary use ONE WORD FOR TWO THINGS, and the sentence that keeps a
+#: reader from meeting a contradiction. Appended only when that class is actually drawn on this map -
+#: the same rule the crop sentence follows, and the reason it must not live inside `Kind.what`, which
+#: cannot see what is present (settlement-review, 2026-08-29: the card told every hamlet about a grave
+#: mound, and Mizuguchi draws none). The wording follows the CLASS's own, not the card's: the hokora
+#: stands in a corner of the plot, which is where `household shrine` puts it and where Sawada's sits,
+#: 46 ft from its house.
+COLLISIONS: dict[str, str] = {
+    "household shrine": "(The little hokora in a corner of a farmstead plot is a household's own shrine, which is a different thing from the village shrine a hamlet does not have.)",
+    "grave island": "(The mound out among the plots is a field grave, not a burial ground.)",
 }
 
 #: The `### Place` keys the card understands. Anything else an author writes is ignored rather than
@@ -280,37 +292,31 @@ def lane_default(scale: str, place: dict[str, str]) -> str:
 def dwellings_shown(manifest: dict[str, Any], kind: Kind) -> int:
     """How many dwellings this map DRAWS that the tier is willing to count.
 
-    A hamlet and a village count every house: each is a household of the settlement, and the sheet
-    holds all of them. A town and a city do not (GM 2026-08-29): they *"are surrounded by significant
-    farm fields and farmer populations, which are deliberately not all rendered on the map. Therefore,
-    that number should not be included."* So a farmhouse standing inside a drawn agricultural district
-    is left out of the count, and what remains is the non-farm dwellings - which ARE all there and are
-    exact.
+    A hamlet and a village count `houses`: every one is a household of the settlement, and the sheet
+    holds all of them. A town and a city count something else entirely (GM 2026-08-29): they *"are
+    surrounded by significant farm fields and farmer populations, which are deliberately not all
+    rendered on the map. Therefore, that number should not be included."*
 
-    KNOWN LIMIT, recorded rather than papered over: the manifest carries no per-dwelling farm flag, so
-    the only thing this can key on is whether a house stands inside a `quarters[kind=agricultural_district]`
-    polygon. That works on a city that draws one (Tango: 13 of 273) and is a no-op on the pool's towns,
-    which draw none - their houses are read as town dwellings entire. A town that grows an agricultural
-    district later gets the exclusion for free; a town with unmarked farm housing would over-count, and
-    the fix for that is a flag on the record, not a cleverer polygon test here."""
-    houses = manifest.get("houses") or []
+    **`houses` IS THE FARM RING at those tiers**, and getting that wrong is the whole trap. The first
+    cut of this function counted `houses` and subtracted the few standing inside a drawn
+    `agricultural_district` - which looked like it worked (Tango 273 -> 260) while counting nothing but
+    farmhouses, exactly the number the GM said to leave out (settlement-review, 2026-08-29). A town's
+    and a city's non-farm dwellings live in `buildings`, under `DWELLING_KINDS` - the same set the
+    capacity checks use, so there is one definition of "a dwelling" in the engine rather than two.
+
+    The arithmetic confirms which list the tiers mean: Minami's 520 non-farm dwellings x 5 to a
+    household is its declared 2,600 exactly, and Nagahara's 600 x 5 is its 3,000 - farmers excluded,
+    which is the city convention the GM described. (A town's declared figure counts the drawn
+    farmhouses too; see `KINDS["town"].population_note` and the open question recorded with it.)"""
     if not kind.excludes_farms:
-        return len(houses)
-    farmland = [q.get("poly") for q in (manifest.get("quarters") or []) if q.get("kind") == "agricultural_district" and q.get("poly")]
-    return sum(1 for h in houses if not any(_inside((h.get("x", 0.0), h.get("y", 0.0)), poly) for poly in farmland))
+        return len(manifest.get("houses") or [])
+    # DEFERRED IMPORT, and it is a cycle rather than a preference: `check_village` reaches
+    # `settlement`, which reaches `interactive.page`, which reaches this module. Sharing the ONE
+    # definition of "a dwelling" with the capacity checks is worth an import inside the function;
+    # copying the set here would be the second definition the review asked us not to make.
+    from ..check_village.common_03_capacity import DWELLING_KINDS
 
-
-def _inside(pt: tuple[float, float], poly: list[Any]) -> bool:
-    """Ray casting, the same crossing rule the rest of the engine uses."""
-    x, y = pt
-    hit, j = False, len(poly) - 1
-    for i in range(len(poly)):
-        xi, yi = poly[i][0], poly[i][1]
-        xj, yj = poly[j][0], poly[j][1]
-        if (yi > y) != (yj > y) and x < (xj - xi) * (y - yi) / ((yj - yi) or 1e-9) + xi:
-            hit = not hit
-        j = i
-    return hit
+    return sum(1 for b in (manifest.get("buildings") or []) if b.get("kind") in DWELLING_KINDS)
 
 
 def place_card(meta: dict[str, Any], present: set[str], notes: MapNotes, manifest: dict[str, Any]) -> dict[str, Any] | None:
@@ -326,6 +332,7 @@ def place_card(meta: dict[str, Any], present: set[str], notes: MapNotes, manifes
     what = f"{name} is a {kind.noun}: {kind.what}"
     if size:
         what = f"{name} is a {kind.noun} of {size}: {kind.what}"
+    what = " ".join([what, *(text for key, text in COLLISIONS.items() if key in present)])
     why = " ".join(x for x in [crop_sentence(present), *where_sentences(str(meta.get("scale")), notes.place), kind.population_note] if x)
     keys = research_sources(ENTRY)
     return {
