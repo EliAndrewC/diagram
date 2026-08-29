@@ -1254,7 +1254,7 @@ def _touch_junctions(s: Settlement, hard: list[Poly], walls: Sequence[Poly], wat
                 _oe = 0 if math.dist(foot, _op[0]) <= 4.0 else (-1 if math.dist(foot, _op[-1]) <= 4.0 else None)
                 if _oe is not None and len(_op) >= 2 and not lanes[k].get("connector"):
                     _nb = _op[1] if _oe == 0 else _op[-2]
-                    if _clear_touch(_nb, q, hard, walls, water) and math.dist(_nb, q) <= 2.0 * math.dist(_nb, _op[_oe]) + 4.0:
+                    if _clear_touch(_nb, q, hard, walls, water, max(_TOUCH_GAP, float(lanes[k].get("w") or 5.0) / 2.0 + 2.0)) and math.dist(_nb, q) <= 2.0 * math.dist(_nb, _op[_oe]) + 4.0:
                         _np = list(_op)
                         _np[_oe] = q
                         lanes[k]["pts"] = [[round(x, 1), round(y, 1)] for x, y in _np]
@@ -1262,7 +1262,15 @@ def _touch_junctions(s: Settlement, hard: list[Poly], walls: Sequence[Poly], wat
                         closed += 1
                         moved += 1
                         continue
-                link = [q, foot] if _clear_touch(q, foot, hard, walls, water) else _route(q, foot, hard, walls, water, gap=WEB_FABRIC_GAP, pad_mult=2.0, cell=10.0)
+                # THE LINK OWES ITS OWN LANE'S KEEP-OUT (feature 134 T50) - the same reasoning as the
+                # string-pull's, one pass over: `houses_clear_of_lanes` sizes a way's keep-out from its
+                # width, so a straight junction link drawn at a flat 4 ft puts a 5 ft tread 4.09 ft from
+                # a farmhouse corner and the check reads a house standing in the lane (cohort seed 6).
+                link = (
+                    [q, foot]
+                    if _clear_touch(q, foot, hard, walls, water, max(_TOUCH_GAP, float(ln.get("w") or 5.0) / 2.0 + 2.0))
+                    else _route(q, foot, hard, walls, water, gap=WEB_FABRIC_GAP, pad_mult=2.0, cell=10.0)
+                )
                 if not link or polyline_len(link) > _LINK_DIRECTNESS * d:
                     continue
                 link = _stop_at_network(link, [sg for _k, _os, _op in _by_way for sg in _os])
