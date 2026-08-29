@@ -30,27 +30,12 @@ def test_full_gate_coverage_sentinel(name):
     assert not missing, f"{name} no longer trips under the FULL gate: {missing}"
 
 
-# The 2026-08-16 legacy freeze (migration-plan.md "The accepted trade") removed the hand-authored
-# maps from the test_villages sweep, which uncovered the handful of check_village branches only
-# those maps' full-gate runs reached (a town's fire/justice variants, minami's no-Imperial-road
-# walled-city branch, the odd water fork). These FROZEN pool manifests - committed, permanent,
-# never regenerated - are replayed through the FULL gate purely as coverage carriers, selected by
-# the same greedy line-coverage search as the sentinels above (if coverage drops here again,
-# re-run the search rather than guessing). NOTHING is asserted about their verdicts: a frozen map
-# is allowed to fail rules added after the freeze, so the only claim held is that the gate still
-# RUNS on old manifests - the claim the whole corpus already makes.
-_FROZEN_POOL_COVERAGE_CARRIERS = [
-    "towns/hirameki.json",
-    "towns/hoshizora.json",
-    "provincial-cities/minami.json",
-    "hamlets/akagahara.json",
-    "hamlets/enokida.json",
-]
-
-
-@pytest.mark.parametrize("rel", _FROZEN_POOL_COVERAGE_CARRIERS)
-def test_frozen_pool_full_gate_coverage_carrier(rel):
-    with open(os.path.join(HERE, "pool", rel)) as fh:
-        M = json.load(fh)
-    failed = check_village.gate(M, verbose=False)
-    assert failed is not None  # verdicts deliberately unchecked - see the carrier comment above
+# THE FROZEN-POOL CARRIERS ARE GONE (feature 158, GM 2026-08-29: *"there is no reason to see what would
+# happen if we encountered a type of map, which is literally impossible to produce any longer"*). Five frozen
+# hand-authored manifests - two towns, a provincial city and two hamlets - used to be replayed through the FULL
+# gate purely to carry line coverage into `check_village`'s urban branches. They carried NOTHING enforced: since
+# feature 145 the Makefile omits `check_village` from the global 100% floor (the GM ruled on 2026-08-28 that the
+# other tiers owe no floor while nothing exercises them), and the derived hamlet-path floor judges only modules
+# the scripted rolls execute, which these do not touch. So the carriers were paying ~3 s of every full sweep to
+# hold up a floor that no longer exists, on maps no generator can produce. The synthetic sentinel above stays: it
+# is a hand-built manifest, not a map from the hand-placement era, and it still holds full-mode `gate()` under test.
