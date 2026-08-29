@@ -617,6 +617,7 @@ def stage_web(s: Settlement, plan: SitePlan) -> None:
     # AND SWEEP WHAT IS LEFT (feature 134 T50): the passes above shorten lanes, and `_WEB_MIN_FT` was
     # only ever asked at draw time. Last, so it judges the tread the map actually ships.
     _sweep_debris(s)
+    _drop_end_nubs(s)  # last of all: every pass above can leave a nub at a junction it laid
     s.M["meta"]["lane_web"] = plan.lane_web
 
 
@@ -1139,6 +1140,65 @@ def _join_orphan_ways(s: Settlement, hard: list[Poly], walls: Sequence[Poly], wa
     return made  # pragma: no cover - six links is far more than any hamlet needs
 
 
+_NUB_FT = 5.0  # a leading/trailing segment under this is not a stretch of way, it is a splice artifact
+_NUB_TURN = 60.0  # ...and one that turns this far is a lump on the knuckle rather than the way arriving
+# NOT 90: the motivating nub measured 92.6 deg, and a bar sitting 2.6 deg under the one case it was
+# written for stops firing the first time a re-roll nudges it. Dropping the vertex is near-free at a
+# SMALL turn anyway (the two stretches are nearly collinear, so the tread barely moves), so the bar
+# only limits scope - it does not protect anything - and 60 deg is where a 3 ft stretch reads as a lump.
+
+
+def drop_end_nubs(ways: list[list[Pt]]) -> list[int]:
+    """Indices whose SECOND (or second-to-last) vertex is a nub, dropped in place.
+
+    A junction foot is laid on the way it meets; the vertex after it is whatever the lane's own first
+    stretch was. When the splice leaves those two within a few feet of each other AND the lane then turns
+    back on itself, the sheet shows a nub sticking out of the junction rather than a way arriving at it -
+    Kuwabata's connector began (2442.4, 643.0) -> (2444.5, 645.3) with a 93-degree reversal, 3.1 ft of
+    tread drawn as a lump on the knuckle (settlement-review 2026-08-29, error 2's second half).
+
+    Only the vertex AFTER the end is dropped, never the end itself: the end is the foot, and moving it
+    would take the lane off the way it was joined to. Lifted out of the pass below so it can be asked with
+    plain lists (GM 2026-08-28 on testability)."""
+
+    def nub_at_head(pts: list[Pt]) -> bool:
+        """Is `pts[1]` a nub - a sub-5 ft first stretch that then turns back on itself?"""
+        if len(pts) < 3:
+            return False
+        a, b, c = pts[0], pts[1], pts[2]
+        ax, ay, bx, by = b[0] - a[0], b[1] - a[1], c[0] - b[0], c[1] - b[1]
+        la, lb = math.hypot(ax, ay), math.hypot(bx, by)
+        if not (0.0 < la < _NUB_FT) or lb <= 1e-9:
+            return False
+        return math.degrees(math.acos(max(-1.0, min(1.0, (ax * bx + ay * by) / (la * lb))))) >= _NUB_TURN
+
+    hit: list[int] = []
+    for i, pts in enumerate(ways):
+        changed = False
+        if nub_at_head(pts):
+            del pts[1]
+            changed = True
+        pts.reverse()
+        if nub_at_head(pts):
+            del pts[1]
+            changed = True
+        pts.reverse()  # unconditional, so the lane always comes back in its drawn orientation
+        if changed:
+            hit.append(i)
+    return hit
+
+
+def _drop_end_nubs(s: Settlement) -> int:
+    """`drop_end_nubs` over the settlement's lanes, re-inking each one it changes. Runs LAST, beside
+    `_sweep_debris`, for the same reason: every earlier pass can leave one."""
+    lanes = s.M.get("lanes") or []
+    ways = [[(float(x), float(y)) for x, y in ln.get("pts") or []] for ln in lanes]
+    for i in drop_end_nubs(ways):
+        lanes[i]["pts"] = [[round(x, 1), round(y, 1)] for x, y in ways[i]]
+        s.reink_lane(i)
+    return len(ways)
+
+
 def _sweep_debris(s: Settlement) -> int:
     """Drop a lane the passes have whittled below `_WEB_MIN_FT` and left standing on its own.
 
@@ -1320,6 +1380,18 @@ def _touch_junctions(s: Settlement, hard: list[Poly], walls: Sequence[Poly], wat
                     if _clear_touch(q, foot, hard, walls, water, max(_TOUCH_GAP, float(ln.get("w") or 5.0) / 2.0 + 2.0))
                     else _route(q, foot, hard, walls, water, gap=WEB_FABRIC_GAP, pad_mult=2.0, cell=10.0)
                 )
+                if not link and d <= _LANE_JOIN_FT:
+                    # A SHORT GAP GETS A SECOND, TIGHTER ATTEMPT (settlement-review 2026-08-29, error 1).
+                    # The first attempt walks a 10 ft lattice at DOUBLE the fabric pad, which is right for a
+                    # long route through other people's yards and too coarse for a few feet of slack: on
+                    # Kuwabata the back lane came out in two pieces with a 25 ft hole between two rounded
+                    # caps and a woodpile - 10 x 3.5 ft - standing 5.6 ft off the line between them. Every
+                    # endpoint-reach test passed, because each piece reaches the network at its OTHER end,
+                    # so nothing in the gate saw a severed back lane. A 10 ft obstacle should not cost 25 ft
+                    # of way. Only for a gap already inside the join reach, and the result still has to pass
+                    # `_may_write` - which judges the SPLICED lane's clearance and bend, not the link - so a
+                    # tread this finds but should not have is still refused there.
+                    link = _route(q, foot, hard, walls, water, gap=WEB_FABRIC_GAP, pad_mult=1.0, cell=5.0)
                 if not link or polyline_len(link) > _LINK_DIRECTNESS * d:
                     continue
                 link = _stop_at_network(link, [sg for _k, _os, _op in _by_way for sg in _os])
