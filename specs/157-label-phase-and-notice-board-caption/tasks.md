@@ -55,18 +55,23 @@ three physical checkboxes (constitution v2.12.0; the reasoning is in the spec's 
       tie.
 - [ ] **T23** `research: rendering` - regenerate Kuwabata and read the manifest. **Acceptance**: the
       board's center falls within the caption's own run, and the standoff stays inside the hug cap.
-- [ ] **T24** `research: rendering` - remove the two WORKAROUND hand seats so the corrected placer
-      seats them: `minami.gen.py` `place_punishment_spot(label_xy=(1270, 1454))` (*"the auto-caption
-      sat 106 px east of its own spot"*) and `nagahara.gen.py`
-      `kosatsuba(1492, 1341, rot=0, label_xy=(1530, 1329))` (38.0 px right of its own board - the
-      GM's reported defect, frozen by hand on a city map). The GM-RULING hand seats stay.
+- [x] **T24** `research: rendering` - the two WORKAROUND hand seats: removed, then REVERTED.
+      Minami and Nagahara are FROZEN legacy exhibits (GM 2026-08-16, `dev/pool.md`): *"never
+      regenerated, never re-gated ... do not 'fix' a frozen map, and do not treat its rule
+      violations as bugs."* The edit would change nothing a reader sees - the gen is never re-run -
+      while desynchronizing an exhibit's source from its shipped manifest. Accepted, with the cost
+      and the priced alternative (conversion) recorded in the spec's hand-seat edge case. The
+      GM-RULING hand seats stay, as they always would have.
 
 ## Phase 3 - the sweep, and the rule with teeth
 
-- [ ] **T30** `research: rendering` - `make maps` over the whole tier, plus the 48-seed cohort.
-      Compare against T01. Eight manifests carry six-element board records with no referent
-      (`enokida`, `honda`, `yatsuda`, `tanada`, `hirameki`, `minami`, `nagahara`, `tango`) and must
-      come out of the sweep carrying one.
+- [x] **T30** `research: rendering` - `make maps` over the whole tier. **maps clean**, five
+      scripted hamlets regenerated. **Measured** - every board caption now stands beside its board:
+      |lateral| of 2.22 / 1.53 / 1.02 / 0.63 / 1.55 px (inashiro, kashikawa, kuwabata, mizuguchi,
+      sawada) against subject half-extents of 3.0-6.5. Kuwabata was 35.6. Only kashikawa and sawada
+      moved besides Kuwabata; inashiro and mizuguchi were already seated centrally and are unchanged.
+      The eight six-element manifests are all FROZEN legacy exhibits and are deliberately NOT
+      regenerated (see T24).
 - [ ] **T31** `research: rendering` - read the LATERAL DISTRIBUTION the fixed placer produces across
       the pool and the cohort, and set `caption_stands_beside_its_referent`'s threshold from it with
       a stated margin. The number is measured, never chosen in advance (plan D6).

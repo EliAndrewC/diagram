@@ -1358,12 +1358,7 @@ s.kosatsuba(1492, 954, rot=72, label=None)  # nudged 10px up the wall (2026-07-2
 # road's corner. rot=0 squares the face to the eastbound leg it fronts
 # (kosatsuba_faces_the_road; the old edge-on and guard-box seats are in the 2026-07-27
 # history above and in pool/regressions/).
-# THE HAND SEAT IS GONE (feature 157). `label_xy=(1530, 1329)` stood a notice-board caption
-# centered at x 1530 beside a board at x 1492 - 38.0 px along its own baseline, with the board
-# 11.6 px past the end of its own label. That is the GM's reported defect, frozen by hand on a
-# city map; the corrected placer seats it now. (A GM-RULED hand seat, like the boundary stone's
-# verge below, is a decision and stays.)
-s.kosatsuba(1492, 1341, rot=0)  # carries the set's one LABEL - the
+s.kosatsuba(1492, 1341, rot=0, label_xy=(1530, 1329))  # carries the set's one LABEL - the
 # gate verges had no caption room (see the east board above). HAND-SEATED caption: the
 # below band holds the drum tower at (1500,1362); the above band at this x abutted the
 # samurai ward gate glyph and stacked under its caption, reading as one label on the gate

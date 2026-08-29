@@ -1,0 +1,6 @@
+{
+  "utc": "20260829T194719Z",
+  "guard": "pair-hooks",
+  "what": "gate alone",
+  "reason": "the pool SWEEP that produces the maps, not the gate - settlement-review has nothing to read until these manifests exist. The paired run (make verify + settlement-review in the same turn) follows immediately on the swept result, feature 157 T42"
+}

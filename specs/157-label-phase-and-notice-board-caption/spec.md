@@ -87,13 +87,24 @@ no caption.
     (*"the stone keeps its verge, GM 2026-08-10"*). The GM asked to correct the placement
     ALGORITHM, and a GM ruling is not the algorithm.
   - A hand seat that exists only as a WORKAROUND for the placer misplacing the caption is not a
-    decision, and this feature REMOVES it so the fixed placer seats the caption. Two are known:
-    Minami's `place_punishment_spot(label_xy=(1270, 1454))`, whose own comment says *"the
-    auto-caption sat 106 px east of its own spot"*, and Nagahara's
+    decision. Two are known: Minami's `place_punishment_spot(label_xy=(1270, 1454))`, whose own
+    comment says *"the auto-caption sat 106 px east of its own spot"*, and Nagahara's
     `kosatsuba(1492, 1341, rot=0, label_xy=(1530, 1329))`, which is the GM's reported defect
-    preserved by hand on a city map. Leaving them would let the acceptance surface go green while
-    the defect the GM reported still stands on the tier whose future reuse is the reason for the
-    work.
+    preserved by hand on a city map (38.0 px along the caption's baseline, the board 11.6 px past
+    the end of its own label).
+
+    **Both were removed, and both removals were REVERTED, because those maps are FROZEN.** Minami
+    and Nagahara are two of the 19 hand-authored legacy exhibits the GM froze on 2026-08-16: *"never
+    regenerated, never re-gated ... The fix for a frozen map that violates a post-freeze rule is
+    CONVERSION, not retrofit - do not 'fix' a frozen map, and do not treat its rule violations as
+    bugs"* (`dev/pool.md`). Editing their gens changes nothing a reader will ever see - the gen is
+    never re-run - while desynchronizing an exhibit's source from the manifest it shipped with.
+    **What was accepted**: Nagahara's city map keeps a notice-board caption 38.0 px off its board.
+    **What it costs**: one frozen exhibit displays the defect this feature fixes. **The alternative
+    priced**: converting Nagahara to scripted generation, which is a feature of its own (the standing
+    plan is `migration-plan.md`) and would land the corrected caption for free. **Who chose**: the
+    GM, on 2026-08-16, in the freeze itself; this feature only discovered that the ruling already
+    covers the case.
 - **A board at a square rotation.** Its caption is level; the "beside, not past the end" rule is
   measured on the same axes and means the same thing.
 - **A generator that never runs the label phase.** Impossible by construction: the phase is also
@@ -141,14 +152,16 @@ no caption.
   ROTATED QUAD against each obstacle, not the axis-aligned bounding box of that quad. (Defect found
   in the course of this work, fixed under Principle XIV - see Success Criteria SC-004.)
 - **FR-009**: A new gate check MUST hold FR-006: a caption may not stand further along its own
-  baseline from the thing it names than that thing extends, plus the standoff air. The check reads
-  the caption's recorded REFERENT box, so a second requirement comes with it - **every notice-board
-  caption MUST record one**, and the check MUST fail a map whose board caption records none rather
-  than skipping it. (Nagahara's manifest carries a six-element notice-board record with no referent,
-  frozen before the engine started passing one; its caption stands 38.0 px right of its board with
-  the board 11.6 px outside the caption's own run - the identical defect on a city map, invisible to
-  any rule keyed on a referent. The sweep regenerates it; the "must record one" clause is what stops
-  a future map going quiet the same way.) The check MUST be proven to fire by a frozen negative
+  baseline from the thing it names than that thing extends, plus a margin measured from what the
+  fixed placer actually produces. The check reads the caption's recorded REFERENT box, so a second
+  requirement comes with it - **every notice-board caption on a GENERATED map MUST record one**, and
+  the check MUST fail such a map whose board caption records none rather than skipping it. It runs
+  on `meta.generated_by` maps only, which is not a dodge but the same scoping every sibling check
+  uses (`captions_clear_the_ways_they_stand_on` opens
+  `if M["meta"].get("generated_by") and ...`): the eight manifests carrying six-element board
+  records - `enokida`, `honda`, `yatsuda`, `tanada`, `hirameki`, `minami`, `nagahara`, `tango` - are
+  all FROZEN legacy exhibits, which by the GM's 2026-08-16 ruling are never regenerated and whose
+  rule violations are explicitly not bugs. The check MUST be proven to fire by a frozen negative
   fixture built from the current Kuwabata manifest.
 - **FR-010**: No existing gate check may regress. `label_hugs_its_referent`,
   `captions_clear_the_ways_they_stand_on`, `labels_clear_of_other_buildings` and
