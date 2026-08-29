@@ -141,7 +141,7 @@ GEN_TIME_BUDGETS = {
     # solver is left alone because changing it moves the maps. After the fabric index and the crossing
     # sweep (`hamletgen/clearance.py`, `_geom/water_index.py`): the polder 110 -> ~30 s, the reference
     # 37 -> ~21 s, every manifest byte-identical. The entries below still stand at ~4x SOLO, re-measured.
-    # KUWABATA HAS AN ENTRY BECAUSE IT IS A DIKE-POND MAP, NOT BECAUSE IT IS SLOW (feature 152). It landed
+    # KUWABATA HAS AN ENTRY BECAUSE IT IS A DIKE-POND MAP, NOT BECAUSE IT IS SLOW (feature 155). It landed
     # with feature 150 and inherited the 45 s default, which the comment above says is for "an ordinary map
     # [that] measures 1-7s solo" - a mulberry-dike fishpond is not that map. Measured 2026-08-29 on this
     # clone: 26.3 s solo (the child-recorded `gen_cpu_s`), against 16.8 for inashiro and 12.9 for mizuguchi.
@@ -323,7 +323,7 @@ if __name__ == "__main__":
 
 def test_every_live_render_matches_its_own_svg_geometry():
     """A PNG that does not match its SVG's viewBox is a STALE RENDER, and it is invisible to every other
-    check (settlement-review, feature 152).
+    check (settlement-review, feature 155).
 
     Sawada and kashikawa shipped PNGs from the roll BEFORE their lane webs were fixed - kashikawa's matched
     the pre-delta manifest at 96% - so the picture the GM opens showed a farmhouse the lane no longer crossed.

@@ -488,7 +488,7 @@ reaching 11.0 ft.
 3 ft back lane (measured tread depth 9.5 / 3.2 / 7.6 ft across the waist); and the "copse" is 2 clumps
 175 ft apart inside a 205 ft record, both inside the windbreak's own canopy.
 
-## 2026-08-29 - settlement-review, DELTA under feature 152's lane-web changes (not this map's feature)
+## 2026-08-29 - settlement-review, DELTA under feature 155's lane-web changes (not this map's feature)
 
 This map's `.gen.py` is unchanged; the engine moved underneath it, and the review gate correctly
 refused to let that ship unlooked-at. It was the one of the three affected hamlets nobody had read,

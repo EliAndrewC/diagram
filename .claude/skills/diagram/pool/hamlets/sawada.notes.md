@@ -490,7 +490,7 @@ tests sharpness and none tests size; the windbreak trim got WORSE rather than be
 deferral (57 -> 85 px of bare strip, 5 of 19 houses now beyond the drawn belt); the copse draws inside
 the windbreak (13 of 17 clumps touching one); and `make jogs` exits RED here with nobody reading it.
 
-## 2026-08-29 - feature 152: the remnant sweep rewritten; the board's audience OPEN for the GM
+## 2026-08-29 - feature 155: the remnant sweep rewritten; the board's audience OPEN for the GM
 
 **FIXED - the 37.6 ft remnant (lane 6, leaving lane 11 and dying 11.4 ft from it).** The sweep written
 for it measured `1.5 * w` - 4.5 ft for a footpath - and this map's own 11.4 ft figure was quoted in its

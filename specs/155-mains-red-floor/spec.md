@@ -1,6 +1,6 @@
 # Feature Specification: main's red floor, and the coverage picture
 
-**Feature**: 152-mains-red-floor
+**Feature**: 155-mains-red-floor
 **Created**: 2026-08-29
 **Status**: `spec-fidelity` round 1 returned CHANGES REQUIRED (4); all four applied, round 2 pending.
 

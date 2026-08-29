@@ -1477,7 +1477,7 @@ def test_a_rewrite_may_leave_a_lane_no_worse_than_it_found_it() -> None:
 
 
 def test_a_swept_lane_takes_its_RECORD_with_it_not_just_its_points() -> None:
-    """THE HUSK GOES WITH THE INK - feature 145's rule, which feature 152 broke in two sweeps at once
+    """THE HUSK GOES WITH THE INK - feature 145's rule, which feature 155 broke in two sweeps at once
     (settlement-review x2: sawada shipped 13 lane records for 11 drawn lanes, kashikawa 14 for 13).
 
     An emptied `pts` leaves a record declaring a lane that nothing draws, so every consumer has to
@@ -1506,7 +1506,7 @@ def test_a_swept_lane_takes_its_RECORD_with_it_not_just_its_points() -> None:
 
 
 def test_a_bridge_closes_a_hole_and_refuses_to_close_a_loop() -> None:
-    """MIZUGUCHI'S REGRESSION, PINNED (settlement-review, feature 152). With the short-gap floor
+    """MIZUGUCHI'S REGRESSION, PINNED (settlement-review, feature 155). With the short-gap floor
     restored, the pass drew an 89.9 ft span between two ends that already had a 126.9 ft walk between
     them - lanes 1/4/7 closed into a triangle enclosing 1,710 sq ft of nothing, and the fixture placer
     running afterwards deleted that homestead's woodpile and hen coop and left its bath on the far
