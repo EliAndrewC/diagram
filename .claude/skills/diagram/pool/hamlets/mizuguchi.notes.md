@@ -487,3 +487,55 @@ reaching 11.0 ft.
 (933-944, 1778-1780), where two 6 ft lanes never meet and the only ink joining them is 11.1 ft of a
 3 ft back lane (measured tread depth 9.5 / 3.2 / 7.6 ft across the waist); and the "copse" is 2 clumps
 175 ft apart inside a 205 ft record, both inside the windbreak's own canopy.
+
+## 2026-08-29 - settlement-review, DELTA under feature 152's lane-web changes (not this map's feature)
+
+This map's `.gen.py` is unchanged; the engine moved underneath it, and the review gate correctly
+refused to let that ship unlooked-at. It was the one of the three affected hamlets nobody had read,
+and it was the one carrying a new defect.
+
+**CAUGHT, and fixed at the cause: the restored short-gap bridge floor closed a LOOP, not a hole.**
+The pass drew an 89.9 ft span (`role=bridge-breaks`) between two ends that already had a **126.9 ft
+walk** between them, closing lanes 1/4/7 into a triangle enclosing **1,710 sq ft with nothing in it
+but one bathhouse** - the shape feature 124 exists to keep off these sheets. It brought no farmhouse
+into reach that was not already in reach, and saved 37 ft on a 126.9 ft alternative: a detour ratio of
+**1.41**.
+
+Its second-order cost was worse than the island, and no check could see it: the fixture placer runs
+after the web, so that homestead's **woodpile and hen coop were deleted** (`farm_fixtures` 18 -> 16,
+with `ink_classes` confirming the ink went with the records) and its **bath was left marooned inside
+the triangle, on the far side of a public lane from its own door** - the manifest's own `of:` field
+pointing at a house the drawing now separates it from.
+
+**The fix is the reviewer's, and it is structural like the remnant test it sits beside.** Before a
+bridge is drawn, ask what the walk between its two ends already costs along the ways in place: a
+genuine break has no walk at all, or one that goes round the block; a redundant loop closure saves a
+fraction. `existing_walk` (lifted, unit-tested over plain lists) builds the lane network as a graph -
+each way an edge weighted by its own length, ends within a tread-width the same junction, and an end
+that tees into the MIDDLE of a way joining it there in arc order, which is the case that made this
+loop invisible to anything reading only lane ends. `_BRIDGE_DETOUR` is 2.0, in the middle of the
+reviewer's priced 1.5-2.5 band. Measured over the live pool it removes this one lane and no other;
+mizuguchi is back to 7 lanes and 18 fixtures, byte-identical to main.
+
+**Why the remnant sweep did not catch it**: its structural test is ONE-HOP. Lane 7's east end sat on
+lanes 2/4, not on lane 1, so the both-ends-on-one-way test passed - the loop was two-hop (7 -> 4 -> 1).
+
+**Confirmed by the same pass**: no lane or route was lost (worst house-to-way 78.8 ft, median 39.6,
+12 of 12 under 100); no husks before or after; the eight footbridges are unmoved in x/y/rot/span (only
+`z` shifted, mechanically, from two fewer fixtures emitted ahead of them - "bridges moved" in the diff
+was a draw-order change, not geometry); `scatter_audit` clean on 220,122 bases; and feature 145's
+bamboo/soybean fix still holds at 87.4 ft.
+
+**Caught, NOT fixed, recorded here**:
+- **A village lane tread 3.85 ft from a thatched farmhouse's rotated NE corner.** `houses_clear_of_lanes`
+  cannot see it - the segment appends to `lane_hits` only when the house CENTER is inside half the
+  tread, i.e. it tests OVERLAP and never CLEARANCE - so no rule on this map measures the gap between a
+  public way and a house wall. This project's own `farmhouses_shed_separately` derives 8 ft wall-to-wall
+  from two thatched drip lines plus a footpath, implying ~4 ft per roof, which puts this tread under the
+  eaves. A DEGREE on a continuum rather than a choice of forms, so a calibration and not a knob; wants a
+  `research: physical` task with the drip-line figure sourced.
+- **The 6 -> 3 -> 6 ft neck at (931.6,1777.8) moved the wrong way**, 11.2 -> 12.6 ft between the two 6 ft
+  caps. Already this map's recorded open item; reporting only that the delta lengthened it.
+- **`make overlap-audit` is RED on `ink-water`**: one marsh glint at (1829,425) printed on the drawn
+  tameike's northern rim. Pre-existing (no water, marsh or pond record differs from main) and invisible
+  to the gate, which reads records where this is ink.

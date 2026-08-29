@@ -1503,3 +1503,39 @@ def test_a_swept_lane_takes_its_RECORD_with_it_not_just_its_points() -> None:
     with_husk.M["lanes"][2]["pts"] = []
     assert hg.ways._sweep_debris(with_husk) == 0
     assert len(with_husk.M["lanes"]) == 3, "the debris sweep leaves a husk it did not make"
+
+
+def test_a_bridge_closes_a_hole_and_refuses_to_close_a_loop() -> None:
+    """MIZUGUCHI'S REGRESSION, PINNED (settlement-review, feature 152). With the short-gap floor
+    restored, the pass drew an 89.9 ft span between two ends that already had a 126.9 ft walk between
+    them - lanes 1/4/7 closed into a triangle enclosing 1,710 sq ft of nothing, and the fixture placer
+    running afterwards deleted that homestead's woodpile and hen coop and left its bath on the far
+    side of a public lane from its own door.
+
+    The discriminator is the DETOUR RATIO. A genuine break has no alternative walk at all, or one that
+    goes right around the block; a redundant loop closure saves a fraction. This asserts both ends of
+    that distinction on the geometry, not on the map."""
+    # a straight way with a hole in it, and nothing else: no walk exists at all
+    apart = [[(0.0, 0.0), (100.0, 0.0)], [(125.0, 0.0), (225.0, 0.0)]]
+    assert hg.ways.existing_walk(apart, (100.0, 0.0), (125.0, 0.0), 6.0) is None
+
+    # ...the same two ends, with a long way round: the walk exists but the detour is worth bridging
+    around = [*apart, [(100.0, 0.0), (100.0, 300.0)], [(100.0, 300.0), (125.0, 300.0)], [(125.0, 300.0), (125.0, 0.0)]]
+    long_way = hg.ways.existing_walk(around, (100.0, 0.0), (125.0, 0.0), 6.0)
+    assert long_way is not None and long_way > hg.ways._BRIDGE_DETOUR * 25.0
+
+    # ...and a short way round: the hole is a second route, and a bridge would only enclose ground
+    short_way = [*apart, [(100.0, 0.0), (112.5, 20.0)], [(112.5, 20.0), (125.0, 0.0)]]
+    near = hg.ways.existing_walk(short_way, (100.0, 0.0), (125.0, 0.0), 6.0)
+    assert near is not None and near <= hg.ways._BRIDGE_DETOUR * 25.0
+
+    # AN END THAT TEES INTO THE MIDDLE of a way joins it there, which is the shape that made
+    # Mizuguchi's loop invisible to a test that looked only at lane ENDS
+    tee = [[(0.0, 0.0), (200.0, 0.0)], [(50.0, 0.0), (50.0, 60.0)], [(150.0, 0.0), (150.0, 60.0)]]
+    assert hg.ways.existing_walk(tee, (50.0, 60.0), (150.0, 60.0), 6.0) == 220.0
+
+    # the pass itself: the loop is refused, the honest hole is drawn
+    loop = _StubSettlement(lanes=[[(0.0, 900.0), (0.0, 940.0)], [(200.0, 500.0), (400.0, 500.0)], [(425.0, 500.0), (500.0, 560.0)], [(400.0, 500.0), (412.0, 470.0)], [(412.0, 470.0), (425.0, 500.0)]])
+    assert hg.ways._bridge_collinear_breaks(loop, [], [], []) == 0, "the walk round is already short"
+    hole = _StubSettlement(lanes=[[(0.0, 900.0), (0.0, 940.0)], [(200.0, 500.0), (400.0, 500.0)], [(425.0, 500.0), (500.0, 560.0)]])
+    assert hg.ways._bridge_collinear_breaks(hole, [], [], []) == 1, "nothing connects these ends: bridge it"

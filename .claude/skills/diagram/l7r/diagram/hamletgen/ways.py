@@ -988,6 +988,98 @@ def _aim_off(prev: Pt, tip: Pt, target: Pt) -> float:
     return abs((out - aim + 180.0) % 360.0 - 180.0)
 
 
+_BRIDGE_DETOUR = 2.0
+"""How much longer the existing walk must be before a bridge is worth drawing.
+
+A BRIDGE CLOSES A HOLE; IT DOES NOT CLOSE A LOOP (settlement-review, feature 152, Mizuguchi). The pass
+below finds two lane ends facing each other across walkable ground and draws the missing piece - and
+with the short-gap floor restored it will do that even when the two ends are ALREADY connected a
+little way round, which is not a hole in a street, it is a second route. Mizuguchi shipped one: an
+89.9 ft span whose two ends already had a 126.9 ft walk between them, closing lanes 1/4/7 into a
+triangle enclosing 1,710 sq ft of nothing - and the fixture placer, running afterwards, deleted that
+homestead's woodpile and hen coop and left its bath marooned on the far side of a public lane.
+
+The discriminator is the DETOUR RATIO, not the length of either. A genuine break has no alternative at
+all (the walk is `None`) or one that goes right around the block, many times the gap; a redundant loop
+closure saves a fraction. Mizuguchi's was 1.41. The reviewer priced the threshold at "anywhere in
+1.5-2.5" and 2.0 sits in the middle of it; measured over the live pool, it removes that one lane and
+no other."""
+
+
+def existing_walk(ways: Sequence[Poly], a: Pt, b: Pt, touch: float) -> float | None:
+    """Shortest walk from `a` to `b` along the ways already drawn, or None when none exists.
+
+    The lane network as a graph: each way is an edge between its two ends, weighted by its own drawn
+    length, and two ends within `touch` of each other are the same junction. An end that lands part
+    way ALONG another way joins it there, at the arc distance to each of that way's ends - which is
+    the case that matters here, since a lane that tees into the middle of another is exactly the
+    shape that makes a bridge redundant.
+
+    Lifted to module level so it can be asked with plain lists (GM 2026-08-28 on testability)."""
+    nodes: list[Pt] = []
+    edges: list[list[tuple[int, float]]] = []
+
+    def _node(p: Pt) -> int:
+        for i, q in enumerate(nodes):
+            if math.dist(p, q) <= touch:
+                return i
+        nodes.append(p)
+        edges.append([])
+        return len(nodes) - 1
+
+    def _link(i: int, j: int, w: float) -> None:
+        if i != j:
+            edges[i].append((j, w))
+            edges[j].append((i, w))
+
+    live = [w for w in ways if len(w) >= 2]
+    ends = [(_node(w[0]), _node(w[-1])) for w in live]
+    for w, (i, j) in zip(live, ends, strict=False):
+        _link(i, j, polyline_len(w))
+    # ...and every end that tees into the MIDDLE of another way joins it THERE, in arc order along
+    # that way. Linking a tee-point only to the way's two ends is not the same graph and quietly
+    # over-states the walk: two spurs teeing into one lane 100 ft apart come out 200 ft apart, routed
+    # out to an end and back, so a redundant loop looks like a worthwhile one.
+    for k, w in enumerate(live):
+        acc = [0.0]
+        for u, v in zip(w, w[1:], strict=False):
+            acc.append(acc[-1] + math.dist(u, v))
+        along: list[tuple[float, int]] = [(0.0, ends[k][0]), (acc[-1], ends[k][1])]
+        for n, p in enumerate(list(nodes)):
+            if n in ends[k]:
+                continue
+            best = None
+            for t, (u, v) in enumerate(zip(w, w[1:], strict=False)):
+                c = seg_closest(p[0], p[1], u, v)
+                d = math.dist(p, c)
+                if best is None or d < best[0]:
+                    best = (d, acc[t] + math.dist(u, c))
+            if best is not None and best[0] <= touch:
+                along.append((best[1], n))
+        along.sort()
+        for (a1, n1), (a2, n2) in zip(along, along[1:], strict=False):
+            _link(n1, n2, a2 - a1)
+
+    src, dst = _node(a), _node(b)
+    if src == dst:
+        return 0.0
+    seen = [math.inf] * len(nodes)
+    seen[src] = 0.0
+    todo = [(0.0, src)]
+    while todo:
+        d, n = heapq.heappop(todo)
+        if n == dst:
+            return d
+        if d > seen[n]:
+            continue
+        for m, w in edges[n]:
+            nd = d + w
+            if nd < seen[m] - 1e-9:
+                seen[m] = nd
+                heapq.heappush(todo, (nd, m))
+    return None
+
+
 def _bridge_collinear_breaks(s: Settlement, hard: list[Poly], walls: Sequence[Poly], water: list[tuple[Pt, Pt]]) -> int:
     """Close a gap where ONE way has been drawn as two, and the ground between them is walkable.
 
@@ -1111,6 +1203,12 @@ def _bridge_collinear_breaks(s: Settlement, hard: list[Poly], walls: Sequence[Po
                 span = _route(ta, tb, hard, walls, water, gap=_TOUCH_GAP, pad_mult=2.0, cell=cell)
             if not span or polyline_len(span) > _PATH_DIRECTNESS * max(gap, 1.0):
                 continue  # something is genuinely in the way HERE; the interruption is honest
+            # A BRIDGE CLOSES A HOLE, NOT A LOOP - see `_BRIDGE_DETOUR`. If the walk already exists
+            # and is not much longer than the span, this is a second route rather than a missing
+            # piece, and drawing it encloses ground that nothing fronts.
+            _alt = existing_walk(ways, ta, tb, _TREAD_TOUCH_FT)
+            if _alt is not None and _alt <= _BRIDGE_DETOUR * max(gap, 1.0):
+                continue
             # A BRIDGE IS A JOIN LINK, AND THE DEBRIS FLOOR WOULD SILENTLY REFUSE IT. The
             # `# pragma: no cover` that stood here said "a bridge is always longer than the debris
             # floor", true only while the candidate floor was 30 ft. `joins` carries the right
