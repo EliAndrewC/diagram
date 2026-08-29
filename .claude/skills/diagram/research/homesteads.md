@@ -740,3 +740,39 @@ toyoko-housing (ameblo) 農家の庭先の柿; uekipedia カキ; Tokushima prefe
 厩肥; Kameyama city history 屋敷神 survey (17/37, 11/37); the stable-and-eaves pit placement.
 **Withdrawn:** MAFF persimmon "without exception"; Boso-no-Mura firewood placement; 百姓伝記 on
 night soil (the readable manual saying it is 農業全書, 1696). Keys in `research/SOURCES.md`.
+
+## The outhouse faces the SUN, not away from the wind - and 72.7% of them do
+
+**The question, and the hypothesis it killed.** A settlement-review found every privy on Sawada standing
+UPWIND of its own house (11 of 12 north-east, 1 east) and proposed seating them downwind. That is the
+intuitive rule, and it is wrong. The research pass sent to settle it read the one primary source we could
+reach and found the opposite consideration governing.
+
+**What the record says.** Wang & Ochiai surveyed farmhouses in Arakawa village, Shiga - a windstorm-prone
+settlement, so a place where wind-conscious siting would show if it existed anywhere: *"toilets, as
+important sources of fertilizer for the paddy fields in the past ... tended to be located in southeast and
+south directions, with a total percentage at 72.7%, as a relatively warm temperature helped quick
+fermentation of excrements."* Night soil was a crop input, not a nuisance to be blown away; the sun on
+that side sped the composting.
+
+**And the wind finding in the same paper is about something else.** It covers *"storage buildings and
+retirement houses in the southwest and west directions ... thus forming wind fences to protect the open
+space in front of the house entrance"* - and even there the paper frames the placement as sunlight-driven
+(the front yard wants sun) with the wind-fence effect as a consequence rather than the cause. The words
+*leeward*, *downwind*, *windward*, *odor* and *hygiene* do not appear in the article at all. No source, in
+English or Japanese, was found stating any general wind rule for *koedame* or *benjo* siting.
+
+**The rule this produces.** `PRIVY_SUNNY_SHARE = 0.727` in `hamletgen/homesteads.py` - the GM's ruling
+(2026-08-29) was to use the figure literally rather than round it. The three attested seats (back door,
+戸口便所 at the gate, beside the *naya*) keep their own weights as the tiebreak WITHIN each group, so a
+homestead that cannot put a privy to the southeast still seats it where the record says privies go.
+
+**The deliberate departure, recorded because a reader will measure it.** The realized share on our maps is
+**43.8%, not 72.7%**, and the gap is not a knob mis-set: it is `0.727 x P(a sun-side seat is free)`. Our
+homesteads put the threshing yard due south at 24-28 ft and gardens at 120-140 degrees, and a privy may
+not stand on a work floor. Closing the gap means reserving the sun seat BEFORE the yard and gardens are
+placed - a stage reorder, not attempted yet. Until then the map under-represents the sun side, and this
+paragraph is why.
+
+**Sources:** `wang-ochiai-2022`.
+

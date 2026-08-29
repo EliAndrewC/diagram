@@ -1901,3 +1901,9 @@ ja.wikipedia 家老 (READ 2026-08-28) (https://ja.wikipedia.org/wiki/%E5%AE%B6%E
 
 *Used for:* the reed-harvest economy - winter cutting for yoshizu screens, thatch and summer shoji, and an uncut bed going 荒れる - and, just as importantly, for the SCOPE LIMIT recorded against it: this foundation is named for Lake Biwa and every example on the page is a lake or river reed bed. It is cited as evidence about lake and river reed beds ONLY. Nothing found puts that economy on tameike margins, and the research entry says so rather than extending it.
 
+### `wang-ochiai-2022`
+
+Wang Jingying and Ochiai Chiho, "Spatial composition and building techniques of farmhouses prone to windstorms: a case study in Arakawa Village, Shiga Prefecture, Japan", *Journal of Asian Architecture and Building Engineering* 21:6 (2022), DOI 10.1080/13467581.2021.1972810 (https://doi.org/10.1080/13467581.2021.1972810) - READ 2026-08-29 by a `source-reader`, full text via a text-extraction proxy after tandfonline, DOAJ, CORE and ResearchGate each returned 403 to a direct fetch; the article is Gold open access (CC BY), confirmed through the Semantic Scholar API.
+
+*Used for:* the 72.7% of toilets sited southeast-to-south for solar warmth to speed fermentation of night soil - the figure the GM ruled be used literally as the seat share. Also used for what it does NOT say: its wind-siting finding covers storage buildings and retirement houses rather than toilets, and it contains no leeward/downwind/odor/hygiene language, which is what CONTRADICTED the proposal to seat privies downwind.
+
