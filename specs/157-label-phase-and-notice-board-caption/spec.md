@@ -245,3 +245,22 @@ records a referent" clause that stops the rule going quiet on a manifest like Na
 also confirmed as faithful, and untouched: FR-006, FR-007, FR-008, FR-010, the exclusion of caption
 priority, and the reading of *"every settlement creation process"* as covering both the hamlet
 pipeline and the hand-authored gen scripts.
+
+**Round 2** (`spec-fidelity`, 2026-08-29): **FAITHFUL**. Every clause of the request is carried and
+nothing is missing; the general deferral was checked against the code rather than taken on trust
+(54 `self.label(...)` emit sites against 5 `place_caption(...)` ones, so `label()` is the real
+caption primitive and queuing there reaches them all); the hand-seat split and the removal of the
+two workaround seats were adjudicated separately and both held in scope; the only
+exception-shaped clause left (a board with no legal seat anywhere) was adjudicated as a
+physical-impossibility case the GM himself conditioned the ask on (*"there is plenty of empty
+space"*). Three asides, all folded into the task list rather than the spec:
+
+1. **Eight** pool manifests carry six-element notice-board records with no referent, not one -
+   `enokida`, `honda`, `yatsuda`, `tanada`, `hirameki`, `minami`, `nagahara`, `tango`. The sweep
+   SC-003 requires must regenerate all of them.
+2. The FR-009 check must NOT honor a placer-written "no legal seat" record. A check that reads the
+   placer's own verdict is graded by the thing it grades - the hazard FR-002a itself quotes.
+3. Two caption paths emit raw text without going through the caption primitive
+   (`fields/paddy.py` `paddy_field(label=...)` and `water_field(label=...)`; dormant - no pool map
+   passes either today). SC-008 as written already covers them; the implementation routes them
+   through the phase so the coverage is structural rather than incidental.
