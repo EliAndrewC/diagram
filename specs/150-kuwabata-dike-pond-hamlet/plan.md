@@ -1,6 +1,6 @@
 # Implementation Plan: Kuwabata, the Dike-Pond Hamlet, Scripted and Audited
 
-**Branch**: none (`SPECIFY_FEATURE=139-kuwabata-dike-pond-hamlet`) | **Date**: 2026-08-27 | **Spec**: [spec.md](spec.md)
+**Branch**: none (`SPECIFY_FEATURE=150-kuwabata-dike-pond-hamlet`) | **Date**: 2026-08-27 | **Spec**: [spec.md](spec.md)
 
 ## Summary
 

@@ -1,10 +1,10 @@
 # Implementation Plan: Dev-loop tooling - the probe, the audit, the profile, and the paired gate
 
-**Feature**: 147-dev-loop-tooling | **Spec**: [spec.md](spec.md) (FAITHFUL, round 2) | **Date**: 2026-08-29
+**Feature**: 149-dev-loop-tooling | **Spec**: [spec.md](spec.md) (FAITHFUL, round 2) | **Date**: 2026-08-29
 
 ## Summary
 
-Four additions to the dev loop, each removing a measured cost from feature 139's T55 (79.8 min, 19 map
+Four additions to the dev loop, each removing a measured cost from feature 150's T55 (79.8 min, 19 map
 rolls, 42 throwaway measurement scripts, a 17-minute review on the critical path):
 
 1. `make polder-probe` - the polder block alone, with its geometry metrics, in ~1 s instead of a 47 s roll.
@@ -137,7 +137,7 @@ dispatch line naming the maps whose manifests differ from HEAD.
 ### Documentation (this feature)
 
 ```
-specs/147-dev-loop-tooling/
+specs/149-dev-loop-tooling/
 ├── spec.md          # FAITHFUL, round 2
 ├── plan.md          # this file
 ├── research.md      # R1-R4, the open mechanism questions

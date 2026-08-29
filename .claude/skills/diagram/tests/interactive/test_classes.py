@@ -56,7 +56,7 @@ SPEC_CLASSES = [
     "footbridge",
     "well",
     "notice board",
-    # the dike-pond hamlet (feature 139, Kuwabata), recorded in the spec table like `field pond`
+    # the dike-pond hamlet (feature 150, Kuwabata), recorded in the spec table like `field pond`
     "fish pond",
     "mulberry dike",
     "pond sluice",

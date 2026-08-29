@@ -21,7 +21,7 @@ def test_every_fixture_kind_draws_on_top_and_records_its_house():
 
 
 def test_the_manure_pit_form_draws_a_jar_mouth_and_records_its_form():
-    # feature 139 A2: the pit is the same KIND (one share, one seat table) in another form and class
+    # feature 150 A2: the pit is the same KIND (one share, one seat table) in another form and class
     from l7r.diagram.settlement import Settlement
 
     s = Settlement(W=400, H=400, seed=1)
@@ -34,7 +34,7 @@ def test_the_manure_pit_form_draws_a_jar_mouth_and_records_its_form():
 
 
 def test_pond_stock_glyphs_record_and_class_themselves():
-    # feature 139 A3/A4: a sty and a pen on a pond bank, each its own class and record
+    # feature 150 A3/A4: a sty and a pen on a pond bank, each its own class and record
     s = Settlement(W=400, H=400, seed=1)
     s.pig_sty(100.0, 100.0, rot=10.0, pond=3)
     s.duck_pen(200.0, 100.0, rot=0.0, pond=4, water=[(200.0, 140.0), (260.0, 140.0), (260.0, 200.0), (200.0, 200.0)])

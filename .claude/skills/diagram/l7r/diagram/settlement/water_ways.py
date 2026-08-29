@@ -522,7 +522,7 @@ class WaterWaysMixin:
     def _lane_ink_at(self: Settlement, pts: Any, width: float, worn: bool, rec: Any) -> tuple[int]:  # type: ignore[misc]
         """Emit a lane's two strokes INTO THE GROUND BLOCK and return the ground entry's index.
 
-        JUNCTIONS RENDER AS ONE STRUCTURE (feature 139 T53, GM 2026-08-28: "When two village lane segments
+        JUNCTIONS RENDER AS ONE STRUCTURE (feature 150 T53, GM 2026-08-28: "When two village lane segments
         intersect ... it looks like one of them is literally just rendered on top of the other ... It should
         look as if they are all essentially one contiguous structure"). Drawn inline, a later lane's soft
         shoulder lay across an earlier lane's tread at every junction. The town streets never had the

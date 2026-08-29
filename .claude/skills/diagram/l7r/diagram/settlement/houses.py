@@ -218,7 +218,7 @@ class HousesMixin:
         if self._hard_cache_key == key:
             return self._hard_cache
         out: list[Any] = [list(self.hard_polys)[i] for i in range(len(self.hard_polys))]
-        out += [list(wp) for wp in self.wet_polys if len(wp) >= 3]  # every drawn marsh (feature 139 T50)
+        out += [list(wp) for wp in self.wet_polys if len(wp) >= 3]  # every drawn marsh (feature 150 T50)
         out += [[(q[0], q[1]) for q in d["poly"]] for d in dp if d.get("poly") and len(d["poly"]) >= 3]
         for ch in fd:
             pts = ch.get("poly") or ch.get("pts")

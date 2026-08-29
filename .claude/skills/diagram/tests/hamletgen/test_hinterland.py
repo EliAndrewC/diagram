@@ -152,7 +152,7 @@ def test_a_seat_whose_rotated_parcel_cannot_fit_the_window_is_dropped(monkeypatc
 
 
 def test_the_title_pocket_is_reserved_once_and_shrinks_before_it_gives_up() -> None:
-    """Feature 139 (Kuwabata seed 21): four callers ask for the pocket at four stages and each ask used to
+    """Feature 150 (Kuwabata seed 21): four callers ask for the pocket at four stages and each ask used to
     re-run the search against ITS moment's obstacles, so the belt was dented around one answer and the
     frame got another. The first answer is the reservation. And a sheet with no 300 x 190 blank still
     reserves a 210 x 120 one (the placard is ~195 x 106) before reserving nothing."""
@@ -168,7 +168,7 @@ def test_the_title_pocket_is_reserved_once_and_shrinks_before_it_gives_up() -> N
 
 
 def test_a_sheet_with_no_blank_box_reserves_a_pocket_outside_its_content() -> None:
-    """Feature 139 (Kuwabata seed 21): with the cluster seated clear of the reed fringe nothing on the sheet
+    """Feature 150 (Kuwabata seed 21): with the cluster seated clear of the reed fringe nothing on the sheet
     was blank enough for the placard, and `title()` fell back to a corner ON the windbreak. The pocket is
     then reserved just outside the content, at the first ask, so the belt dents around it and the crop can
     take it in as content; every candidate tried is recorded in the manifest."""
@@ -180,6 +180,8 @@ def test_a_sheet_with_no_blank_box_reserves_a_pocket_outside_its_content() -> No
     assert tp[3] <= 400.0 - 14.0  # above the houses' top edge (14 px past the envelope the content box reports), not over it
     tries = s.M["meta"]["title_pocket_tries"]
     assert tries and tries[-1][4] == 1.0 and all(t[4] == 0.0 for t in tries[:-1])
+
+
 def test_bamboo_seats_refuse_the_canvas_edge_and_the_title_pocket() -> None:
     """Feature 146: two of the bamboo scan's refusal reasons - a candidate hanging off the canvas, and one
     inside the pocket the title placard will occupy (the title is drawn later, so its ground is reserved)."""

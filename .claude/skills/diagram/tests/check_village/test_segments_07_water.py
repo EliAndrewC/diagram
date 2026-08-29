@@ -775,7 +775,7 @@ def test_lanes_bend_like_paths_fires_and_passes():
 
 
 def test_a_sluice_gate_on_a_drawn_channel_stroke_stands_in_water():
-    """Feature 139 T51: the inlet sluice sits on the ring feeder's DRAWN bend; once the feeder stub reaches
+    """Feature 150 T51: the inlet sluice sits on the ring feeder's DRAWN bend; once the feeder stub reaches
     the reservoir rim the recorded hairline no longer passes within reach of it, so the drawn strokes
     count here as they do for `sluice_gates_centered_on_their_channel`."""
     drawn = [{"pts": [[400, 700], [600, 700]], "w0": 5.0, "w1": 4.0}]

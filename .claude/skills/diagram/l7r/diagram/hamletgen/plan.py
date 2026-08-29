@@ -74,10 +74,10 @@ class HamletSpec:
     fixtures_min: dict[str, int] | None = None  # at least N of a farmstead fixture kind, e.g. {"shrine": 1} (feature 133 T61)
     settlement_form: str | None = None
     field_archetype: str | None = None
-    pond_layout: str | None = None  # a dike-pond's arrangement, grid | mosaic (feature 139; `POND_LAYOUTS`)
-    manure_form: str | None = None  # the manure fixture's form, heap | pit (feature 139; `MANURE_FORMS`)
-    dike_crop: str | None = None  # a dike-pond's dike planting, mulberry | sugarcane | banana | fruit (feature 139; `DIKE_CROPS`)
-    leftover: str | None = None  # a dike-pond block's unconverted parcels, rice | vegetables | pond (feature 139; `LEFTOVER_FORMS`)
+    pond_layout: str | None = None  # a dike-pond's arrangement, grid | mosaic (feature 150; `POND_LAYOUTS`)
+    manure_form: str | None = None  # the manure fixture's form, heap | pit (feature 150; `MANURE_FORMS`)
+    dike_crop: str | None = None  # a dike-pond's dike planting, mulberry | sugarcane | banana | fruit (feature 150; `DIKE_CROPS`)
+    leftover: str | None = None  # a dike-pond block's unconverted parcels, rice | vegetables | pond (feature 150; `LEFTOVER_FORMS`)
     plot_size: str | None = None
     grain_drift: int | None = None
     woodland_patches: int | None = None
@@ -129,12 +129,12 @@ class SitePlan:
     # `settlement_form_asked` preserves the ROLL when a site cannot take that form; see `stage_track`.
     settlement_form: str
     field_archetype: str
-    # THE DIKE-POND'S ARRANGEMENT (feature 139): "grid" or "mosaic", rolled for a dike-pond hamlet
+    # THE DIKE-POND'S ARRANGEMENT (feature 150): "grid" or "mosaic", rolled for a dike-pond hamlet
     # and pinned to "grid" for a rice polder (see `POND_LAYOUTS`). Read by `stage_polder`.
     pond_layout: str
-    manure_form: str  # heap | pit (feature 139, `MANURE_FORMS`), read by `farmstead_fixtures`
-    dike_crop: str  # the dike-pond's planting (feature 139 A6), read by `stage_polder`
-    leftover: str  # the dike-pond's unconverted parcels (feature 139 B2), read by `stage_polder`
+    manure_form: str  # heap | pit (feature 150, `MANURE_FORMS`), read by `farmstead_fixtures`
+    dike_crop: str  # the dike-pond's planting (feature 150 A6), read by `stage_polder`
+    leftover: str  # the dike-pond's unconverted parcels (feature 150 B2), read by `stage_polder`
     plot_size: str
     grain_drift: int
     woodland_patches: int
@@ -163,7 +163,7 @@ class SitePlan:
         default_factory=dict
     )  # the spec's floor per fixture kind (T61); the placer forces presence up to it  # "thicket" (communal, one) or "homestead" (per farmstead), parallel to bamboo_polys
     seat: dict[str, Any] = field(default_factory=dict)
-    title_pocket: tuple[float, float, float, float] | None = None  # reserved ONCE, at the first ask (feature 139 T50 fallout - see hinterland.title_pocket)
+    title_pocket: tuple[float, float, float, float] | None = None  # reserved ONCE, at the first ask (feature 150 T50 fallout - see hinterland.title_pocket)
     title_pocket_outside: bool = False  # the reservation lies OUTSIDE the content and the crop must take it in (hamletgen.stage_frame)
     placed: int = 0
     acres: float = 0.0

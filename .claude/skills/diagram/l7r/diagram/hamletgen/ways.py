@@ -1340,7 +1340,7 @@ def _touch_junctions(s: Settlement, hard: list[Poly], walls: Sequence[Poly], wat
                         _run = _run[: _cut_at[0] + 1] + [_cut_at[1]]
                         _cand = list(reversed(_run)) if end == 0 else _run
                 if final and len(new) >= 3 and _zigzags(_cand):
-                    # A HAIRPIN AT THE DOOR (feature 139, Kuwabata seed 21): after the smoothing, a lane whose
+                    # A HAIRPIN AT THE DOOR (feature 150, Kuwabata seed 21): after the smoothing, a lane whose
                     # last 13 ft turned down toward a farmhouse door was joined back UP to the way it had
                     # just left - the sheet showed a hairpin the bend rule flags. Nothing smooths a final-pass
                     # link, so it is repaired here: when the joined run would zigzag and the joining end is a
@@ -3134,7 +3134,7 @@ def stage_seat(s: Settlement, plan: SitePlan) -> None:
     ] + [((float(a[0]), float(a[1])), (float(b[0]), float(b[1]))) for rec in s.M.get("drawn_channels", []) for a, b in zip(rec["pts"], rec["pts"][1:], strict=False)]
     seat = seat_cluster(
         plan, dry_plots=crop_polys(s), drain=drain, toe=s.toe_band() or None, wet=[[(float(a), float(b)) for a, b in m["poly"]] for m in s.M.get("marshes", []) if m.get("role") == "pond_fringe"]
-    )  # the reservoir's reed fringe: not building ground (feature 139 T50)
+    )  # the reservoir's reed fringe: not building ground (feature 150 T50)
     plan.seat = seat
     # THE SITE'S BACK IS THE WINDWARD SIDE, and where the two disagree the site wins.
     #

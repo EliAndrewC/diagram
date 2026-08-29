@@ -26,12 +26,12 @@ from typing import TYPE_CHECKING, Any
 
 from .._geom import Pt, RingIndex, boxed_grid, boxed_ring_hit, boxed_rings, boxed_seg_hit, boxed_segs, point_in_poly, seg_dist
 
-MARSH_TINT_R = 28.0  # the widest wet-tint circle's radius (x bscale) - also the keep-off a mound owes the tint (feature 139 T54)
+MARSH_TINT_R = 28.0  # the widest wet-tint circle's radius (x bscale) - also the keep-off a mound owes the tint (feature 150 T54)
 MARSH_TUFT_R = 7.0  # the tallest reed blade / widest glint (x bscale) - the same keep-off for the tufts
 
 
 def pond_fringe_ring(cx: float, cy: float, rx: float, ry: float, margin: float, n: int = 16) -> list[tuple[float, float]]:
-    """The reedy MARGIN of a pond, as the polygon `marsh(role="pond_fringe")` scatters (feature 147).
+    """The reedy MARGIN of a pond, as the polygon `marsh(role="pond_fringe")` scatters (feature 149).
 
     One helper because there are two call sites and they diverged: the sink's tameike keeps 44 px of fringe,
     a comb source pond 40, and each built the ring by hand. The margins still differ - a tameike is dug and
@@ -78,7 +78,7 @@ class WetGroundMixin:
         settlements.md 'Marsh' + 'Defensive marshland' + 'Polder siting Q&A'. Recorded M['marshes']."""
         if role not in ("toe", "pond_fringe", "defense", "waterside"):
             raise ValueError(f"unknown marsh role {role!r}; expected 'toe', 'pond_fringe', 'defense', or 'waterside'")
-        # MARSH IS NO-BUILD GROUND (feature 139 T50, GM 2026-08-28: "multiple farmhouses ... overlap with
+        # MARSH IS NO-BUILD GROUND (feature 150 T50, GM 2026-08-28: "multiple farmhouses ... overlap with
         # marshland ... one of the gardens also ... we need to update our placement algorithms to make that
         # impossible"). Registered BEFORE the reeds are scattered, whatever the role: a farmhouse, a garden
         # bed, a fixture or a well tested by `_hard_clear` from here on can no longer sit on it.
@@ -98,7 +98,7 @@ class WetGroundMixin:
         # pad as the edge test below, so the prefilter can never reject a point that test wanted
         fld_b, blk_b = boxed_grid(boxed_rings(self.field_polys, 10.0)), boxed_grid(boxed_rings(self.block_polys))
         clr_b, avd_b, cor_b = boxed_grid(boxed_rings(self.clearings)), boxed_grid(boxed_rings(avoid)), boxed_grid(boxed_segs(corridors))
-        # REEDS KEEP OFF THE EARTHEN MOUNDS (feature 139 T54, GM 2026-08-28: "the hazy blue that denotes the
+        # REEDS KEEP OFF THE EARTHEN MOUNDS (feature 150 T54, GM 2026-08-28: "the hazy blue that denotes the
         # marsh is clearly overlaid on top of the greenery of the earthen mounds"). A perimeter dike and a fish
         # pond's mulberry bank are raised, maintained, PLANTED earth; reeds root in the shallow standing water
         # OUTSIDE the embankment, so wet ground abuts a mound and never crosses it. Neither was in any keep-out
@@ -136,7 +136,7 @@ class WetGroundMixin:
                 or boxed_ring_hit(px, py, bank_b.near(px, py), mound_pad)  # ... and off every fish pond's mulberry bank
             ):  # ... and OUT of any keep-out
                 return True
-            # ...AND THE MARK'S OWN REACH KEEPS OFF THE WATER, not just its center (feature 139 T54,
+            # ...AND THE MARK'S OWN REACH KEEPS OFF THE WATER, not just its center (feature 150 T54,
             # settlement-review): this read the CENTER while the mound test above reads the radius, so a 28 ft
             # tint circle centered a foot outside the rim washed 27 ft of haze over open water - measured, 26%
             # of Kuwabata's reservoir surface.

@@ -130,7 +130,7 @@ def test_the_roll_only_offers_archetypes_that_gate_clean() -> None:
     assert rolled == set(hg.ROLLED_ARCHETYPES)
 
 
-# ---- the dike-pond archetype (feature 139) ----------------------------------------------------------
+# ---- the dike-pond archetype (feature 150) ----------------------------------------------------------
 
 
 def test_the_dike_pond_is_a_declared_archetype_laid_to_a_cardinal_fall() -> None:
@@ -152,7 +152,7 @@ def test_a_dike_pond_rolls_its_arrangement_and_a_rice_polder_is_the_grid() -> No
 
 
 def test_the_manure_form_rolls_both_ways_and_pins() -> None:
-    """Two attested forms (feature 139 A2): heap (Tohoku) and pit (Lake Tai), rolled per hamlet."""
+    """Two attested forms (feature 150 A2): heap (Tohoku) and pit (Lake Tai), rolled per hamlet."""
     rolled = {hg.plan_site(hg.HamletSpec(name="X", seed=s, households=15)).manure_form for s in range(1, 30)}
     assert rolled == {"heap", "pit"}
     assert hg.plan_site(hg.HamletSpec(name="X", seed=3, households=15, manure_form="pit")).manure_form == "pit"
@@ -161,7 +161,7 @@ def test_the_manure_form_rolls_both_ways_and_pins() -> None:
 
 
 def test_the_dike_crop_and_leftover_roll_on_the_dike_pond_and_pin_elsewhere() -> None:
-    """Feature 139 A6/B2: a dike-pond hamlet rolls its dike type and its leftover form; every other archetype is
+    """Feature 150 A6/B2: a dike-pond hamlet rolls its dike type and its leftover form; every other archetype is
     mulberry/rice by definition (the knobs have no meaning there and must not re-roll anything)."""
     crops = {hg.plan_site(hg.HamletSpec(name="X", seed=s, households=16, field_archetype="mulberry_dike_fishpond")).dike_crop for s in range(1, 60)}
     assert crops == {"mulberry", "sugarcane", "banana", "fruit"}
@@ -178,7 +178,7 @@ def test_the_dike_crop_and_leftover_roll_on_the_dike_pond_and_pin_elsewhere() ->
 
 
 def test_pond_stock_is_a_no_op_off_the_dike_pond() -> None:
-    """The stage draws nothing on a valley hamlet - it has no ponds to keep stock on (feature 139 A3/A4)."""
+    """The stage draws nothing on a valley hamlet - it has no ponds to keep stock on (feature 150 A3/A4)."""
     from l7r.diagram.hamletgen.pondstock import stage_pond_stock
     from l7r.diagram.settlement import Settlement
 

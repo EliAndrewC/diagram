@@ -268,7 +268,7 @@ def test_crown_fills_covers_every_recorded_crown(pool_tier_glob):
         anchors = [(_flat[i], _flat[i + 1]) for i in range(0, len(_flat), 3)]
         for _g in json.loads(Path(stem + ".json").read_text()).get("village_groves") or []:
             anchors += [(c[0], c[1]) for c in _g["clumps"]]
-        # ...and the DIKE-POND BANKS (feature 139): a mulberry_dike_fishpond map draws tens of
+        # ...and the DIKE-POND BANKS (feature 150): a mulberry_dike_fishpond map draws tens of
         # thousands of coppiced mulberry crowns along its recorded `dikeponds[].bank` rings, which
         # are crowns to `CROWN_FILLS` but stand on no `tree_crowns` or clump record - the bank
         # polygon is their anchor.

@@ -70,14 +70,14 @@ from .ways import stage_seat, stage_track, stage_web
 # unrelated jobs: it SEATED the cluster (`plan.seat`, a hard dependency of `stage_homesteads`) and it
 # DREW the connector and spur. Because of the first, the stage could not simply be moved after the
 # houses - which is why feature 126 moved only the skeleton and left the other two where they were.
-STAGE_PROFILE_ENV = "L7R_STAGE_PROFILE"  # `make map ... PROFILE=1`: print where the roll spent its time (feature 147)
+STAGE_PROFILE_ENV = "L7R_STAGE_PROFILE"  # `make map ... PROFILE=1`: print where the roll spent its time (feature 149)
 
 STAGES = (
     stage_water_frame,
     stage_field,
     stage_sink,
     stage_seat,  # decides WHERE the settlement sits. Draws nothing.
-    # A POLDER'S WATERWARD FRINGE (feature 139) - the reed strips outside the dike on the flanks that
+    # A POLDER'S WATERWARD FRINGE (feature 150) - the reed strips outside the dike on the flanks that
     # face the water. It needs the SEAT (which flank is landward is a fact about where the village
     # stands) and it RESERVES ground, so it goes here and not in the hinterland: laid at stage 9 it
     # was drawn over a connector already routed at stage 6 (`roads_clear_of_marsh`, the grid knob
@@ -87,7 +87,7 @@ STAGES = (
     stage_homesteads,  # the farmhouses, seated with no lane anywhere on the map
     stage_track,  # the connector and the field spur, derived from the placed houses
     stage_appurtenances,
-    stage_pond_stock,  # a dike-pond hamlet's pig sties and duck pens, on the ponds nearest the houses (feature 139 A3/A4)
+    stage_pond_stock,  # a dike-pond hamlet's pig sties and duck pens, on the ponds nearest the houses (feature 150 A3/A4)
     # THE WEB RUNS LAST OF THE BUILT THINGS, after the byres, sheds and wells - not just after the
     # houses. It FILLS leftover ground, so everything that RESERVES ground has to be seated first;
     # that is the same rule that put it after `stage_homesteads` in the first place, applied
@@ -158,7 +158,7 @@ def build(plan: SitePlan, avoid: Sequence[tuple[float, float]] = ()) -> Settleme
         for stage in STAGES:
             stage(s, plan)
         return s
-    # WHERE THE TIME WENT, in one roll (feature 147, US4). Finding the slow stage used to mean editing
+    # WHERE THE TIME WENT, in one roll (feature 149, US4). Finding the slow stage used to mean editing
     # this loop by hand, rolling, reading, and reverting - done twice in one session before this existed,
     # and the second time it found `stage_waterward` at 21.7 s of a 45 s gen. An environment variable is
     # the channel because `make map` reaches the stages through `regen.py` and a frozen pool generator;
@@ -385,11 +385,11 @@ def main(argv: Sequence[str] | None = None) -> int:
     ap.add_argument("--sink", choices=("pond", "offmap"), default=None)
     ap.add_argument("--windward", default=None)
     ap.add_argument("--bamboo", choices=("none", "homestead", "thicket", "both"), default=None, help="pin the bamboo knob (feature 133 T47: one map per knob value is owed at unlock)")
-    ap.add_argument("--archetype", choices=FIELD_ARCHETYPES, default=None, help="pin the field archetype (feature 139: the dike-pond is opt-in, like the polder)")
-    ap.add_argument("--pond-layout", choices=("grid", "mosaic"), default=None, help="pin a dike-pond's arrangement (feature 139: one map per knob value is owed)")
-    ap.add_argument("--manure-form", choices=("heap", "pit"), default=None, help="pin the manure fixture's form (feature 139 A2)")
-    ap.add_argument("--dike-crop", choices=("mulberry", "sugarcane", "banana", "fruit"), default=None, help="pin a dike-pond's dike planting (feature 139 A6)")
-    ap.add_argument("--leftover", choices=("rice", "vegetables", "pond"), default=None, help="pin a dike-pond's leftover parcels (feature 139 B2)")
+    ap.add_argument("--archetype", choices=FIELD_ARCHETYPES, default=None, help="pin the field archetype (feature 150: the dike-pond is opt-in, like the polder)")
+    ap.add_argument("--pond-layout", choices=("grid", "mosaic"), default=None, help="pin a dike-pond's arrangement (feature 150: one map per knob value is owed)")
+    ap.add_argument("--manure-form", choices=("heap", "pit"), default=None, help="pin the manure fixture's form (feature 150 A2)")
+    ap.add_argument("--dike-crop", choices=("mulberry", "sugarcane", "banana", "fruit"), default=None, help="pin a dike-pond's dike planting (feature 150 A6)")
+    ap.add_argument("--leftover", choices=("rice", "vegetables", "pond"), default=None, help="pin a dike-pond's leftover parcels (feature 150 B2)")
     ap.add_argument("--out", default=None, help="write <out>.svg/.png/.json")
     ap.add_argument("--no-render", action="store_true")
     ap.add_argument("--batch", type=int, default=0, help="roll N hamlets from consecutive seeds and gate them all")

@@ -1,4 +1,4 @@
-"""`family_census` (feature 139): families and kinds present in one manifest and absent in the other."""
+"""`family_census` (feature 150): families and kinds present in one manifest and absent in the other."""
 
 from __future__ import annotations
 

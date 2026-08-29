@@ -1,4 +1,4 @@
-# The audit: what Kuwabata, a dike-pond hamlet, is still missing (feature 139, T31)
+# The audit: what Kuwabata, a dike-pond hamlet, is still missing (feature 150, T31)
 
 **Status 2026-08-28**: the GM chose every item but A1 (*"proceed with all of the items you listed from your audit"*; A1 declined). DONE: B1 (T41), A2 (T42), A5 (T43), A7 (T44), A3 (T45), A4 (T46), A6 (T47), B2 (T48) - see tasks.md and settlements/archetypes.md "The scripted dike-pond hamlet - the rules". The knobs (manure form, dike crop, leftover) ROLL; Kuwabata pins only what its name states (mulberry) and what the GM saw (the mosaic).
 

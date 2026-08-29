@@ -1,6 +1,6 @@
 # Design notes: Kuwabata (桑畑, "mulberry field"), the CASH-CROP hamlet - SCRIPTED
 
-*Rewritten 2026-08-27 (feature 139) when the map was converted from a hand-authored script to a
+*Rewritten 2026-08-27 (feature 150) when the map was converted from a hand-authored script to a
 `hamletgen` declaration. The earlier notes (reconstructed 2026-08-08 from the old generator's
 comments) are in git history with that script; what they recorded that still holds is carried here.*
 
@@ -48,10 +48,10 @@ the windbreak, the plank crossings clustered on the settlement side (`polder_cro
   a polder is a solid wet block), `field_ponds` (open water IS this fabric - no obstacle tiles,
   research D4), `field_ditches:branch` (a comb's deliveries; a polder has laterals).
 
-## What the GM's audit added (feature 139 T40-T48, 2026-08-28)
+## What the GM's audit added (feature 150 T40-T48, 2026-08-28)
 
 See `settlements/archetypes.md` "The scripted dike-pond hamlet - the rules" and
-`specs/139-kuwabata-dike-pond-hamlet/audit.md`. On THIS map, seed 21: no threshing floors
+`specs/150-kuwabata-dike-pond-hamlet/audit.md`. On THIS map, seed 21: no threshing floors
 (forecourts recorded, no ink); manure form rolled PIT; three fry ponds (the smallest parcels,
 same ink); a sluice gate at each of the two dike cuts; duck pens and pig sties on the ponds
 nearest the houses (pens first); the dike crop pinned MULBERRY (the name), the leftover form
@@ -60,7 +60,7 @@ other values are under `wip/kuwabata-*`.
 
 ## Review log
 
-- **2026-08-29: ACCEPTED by the GM** (feature 139 T99), after T50-T55 and four settlement-review
+- **2026-08-29: ACCEPTED by the GM** (feature 150 T99), after T50-T55 and four settlement-review
   passes. The map ships as the scripted dike-pond exemplar.
 
 - 2026-08-29 settlement-review of that fringe fix: **needs-work, and it was right**. Deferring the fringe
@@ -74,7 +74,7 @@ other values are under `wip/kuwabata-*`.
 - OPEN (reviewer's nitpick): two call sites build the identical `+40` fringe ring by hand
   (`hamletgen/sink.py` and `settlement/fields/comb.py`) and only one is subject to that ordering hazard.
   One shared helper would stop the next ordering change diverging them.
-- 2026-08-29 feature 147's own `make overlap-audit`, on its first run against this map, found ink on
+- 2026-08-29 feature 149's own `make overlap-audit`, on its first run against this map, found ink on
   water: one reed tuft 4.6 px from the inlet hairline with three of its blades drawn across it. MECHANISM:
   `draw_comb_field` drew the source pond's reed fringe BEFORE the field's channels were inked or recorded,
   so the reed keep-out - which does keep off every drawn watercourse - had nothing to keep off. On a comb
@@ -136,12 +136,12 @@ indigo switch. Stocked carp ponds; the loop is mulberry leaf -> silkworm -> fras
 dredged pond mud -> dike fertility. **Silk is the bigger earner**; fish go to market; grain is
 bought in. Gazetteers found the total absence of rice remarkable enough to record. The market link is
 the **connector lane** - to the market town, or to the river or canal that carries the goods there;
-the map draws no creek or boats of its own. The GM (2026-08-28, feature 139 audit A1): a hamlet of
+the map draws no creek or boats of its own. The GM (2026-08-28, feature 150 audit A1): a hamlet of
 this kind need not sit on navigable water, and the lane is presumed to lead to whatever does.
 Open flavor hook, NOT canon anywhere wider: L7R land tax is assessed in koku of rice, so
 Kuwabata's tax is presumably commuted to cash or silk.
 
-## No threshing floors (feature 139 T41, GM 2026-08-28)
+## No threshing floors (feature 150 T41, GM 2026-08-28)
 
 A hamlet that grows no rice threshes none: the farmsteads draw no threshing/drying floor. The open
 ground before each house is still RECORDED (`threshing_yards[].kind = "forecourt"`, no ink) because

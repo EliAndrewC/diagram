@@ -20,7 +20,7 @@ if TYPE_CHECKING:
     from ..core import Settlement
 
 
-# THE DIKE CROP TYPES and the highlight class each draws (feature 139 A6): one hamlet is one type.
+# THE DIKE CROP TYPES and the highlight class each draws (feature 150 A6): one hamlet is one type.
 DIKE_CROP_CLASS = {"mulberry": "mulberry dike", "sugarcane": "sugarcane dike", "banana": "banana dike", "fruit": "fruit dike"}
 
 
@@ -109,7 +109,7 @@ class LandUseMixin:
         # neighbors' raised banks bound a rice parcel, so its own drawn bund is noise. Painted BEFORE the
         # ponds so an expanded pond bank overlaps the repaint, never the reverse. Scoped to the archetype
         # case only: a partial overlay's unconverted plots are ordinary textured comb paddies already.
-        # THE DIKE CROP AND THE LEFTOVERS ARE KNOBS (feature 139, GM 2026-08-28 choosing audits A6 and B2).
+        # THE DIKE CROP AND THE LEFTOVERS ARE KNOBS (feature 150, GM 2026-08-28 choosing audits A6 and B2).
         # dike_crop: mulberry (桑基, the silk case), sugarcane (蔗基), banana (蕉基) or fruit (果基) - the gazetteer
         # office frames these as a SUCCESSION of dike-pond TYPES over the region's history, so one hamlet is one
         # type. leftover: what an unconverted parcel reads as - standing rice, vegetable ground (Fei: vegetables
@@ -130,7 +130,7 @@ class LandUseMixin:
             cpp = ch["pts"]
             chansegs += [((float(a[0]), float(a[1])), (float(b[0]), float(b[1]))) for a, b in zip(cpp, cpp[1:], strict=False)]
 
-        # FRY NURSERY PONDS (feature 139, GM 2026-08-28 choosing audit A5): fry are reared in small ponds before
+        # FRY NURSERY PONDS (feature 150, GM 2026-08-28 choosing audit A5): fry are reared in small ponds before
         # stocking the grow-out ponds - the delta's fry trade had its own Ming-era center (Miles 2003; the
         # Sangyuanwei proverb 男贩鱼花). On the WHOLESALE archetype the smallest parcels of the block are
         # designated fry ponds: no new ink, a record and a class of their own for the interactive map. The
@@ -200,7 +200,7 @@ class LandUseMixin:
 
     def _landuse_repaint_leftovers(self: Settlement, elig: list[Any], chosen: list[Any], overlay: str, eligible: str, rng: random.Random, leftover: str = "rice") -> list[Any]:  # type: ignore[misc]
         """Repaint the unconverted plots of a WHOLESALE conversion as standing rice rather than bare outlines -
-        or, with `leftover="vegetables"` (feature 139 B2), as tilled vegetable ground in rows: Fei's silk
+        or, with `leftover="vegetables"` (feature 150 B2), as tilled vegetable ground in rows: Fei's silk
         village grew its vegetables on the ground under the mulberry, and the gazetteers record NO rice
         inside a converted district, so the residual parcel of a wholly converted block is as honestly
         vegetable ground as paddy. Two attested forms, so a knob.
@@ -237,15 +237,15 @@ class LandUseMixin:
                     # the bund top the water cannot overtop.
                     self.add(
                         f'<polygon points="{pts}" fill="#A6C398" stroke="#A6C398" stroke-width="3" stroke-linejoin="round"/>', cls="paddy"
-                    )  # a leftover parcel is standing rice (feature 139: every dike-pond ink is ruled on)
+                    )  # a leftover parcel is standing rice (feature 150: every dike-pond ink is ruled on)
                     fd, fpoly = self._rounded_pond(p["poly"], inset=2.5, reach=12.0, rng=rng)
                     self.add(f'<path d="{fd}" fill="{lfill}"/>', cls="paddy")
                     fpts = " ".join(f"{x:.1f},{y:.1f}" for x, y in fpoly)
-                    with self.feature("paddy"):  # a repainted leftover is paddy ground (feature 139: every dike-pond ink is ruled on)
+                    with self.feature("paddy"):  # a repainted leftover is paddy ground (feature 150: every dike-pond ink is ruled on)
                         self._paddy_surface(fpoly, fpts, flooded=True, pitch=4.5)
                 else:
                     self.add(f'<polygon points="{pts}" fill="{lfill}" stroke="{lfill}" stroke-width="3" stroke-linejoin="round"/>', cls="paddy")
-                    with self.feature("paddy"):  # a repainted leftover is paddy ground (feature 139: every dike-pond ink is ruled on)
+                    with self.feature("paddy"):  # a repainted leftover is paddy ground (feature 150: every dike-pond ink is ruled on)
                         self._paddy_surface(p["poly"], pts, flooded=False, pitch=4.5)  # jittered-grid mottle, ~3-6 px between shoots (GM 2026-07-23)
             random.setstate(_lst)
         return leftover_plots
@@ -266,7 +266,7 @@ class LandUseMixin:
         dike_crop: str = "mulberry",
     ) -> None:
         """Draw ONE converted plot: a dike-pond unit (bank, water, deferred crowns, record) or a lotus field.
-        `fry` marks a fry nursery pond (feature 139): same ink, its own class and record kind.
+        `fry` marks a fry nursery pond (feature 150): same ink, its own class and record kind.
 
         `dikeponds` and `crown_q` are appended to in place - the caller needs both after the loop."""
         if overlay == "mulberry_fishpond":
@@ -453,7 +453,7 @@ class LandUseMixin:
         for mx, my in walk(s_w + 0.5 * (s_b - s_w), 30.0):  # earth mottle: packed / dried patches of different ages
             mcol = rng.choice(("#A8895A", "#B79B68", "#D2BC8C", "#9C8150"))
             g.append(f'<ellipse cx="{mx + rng.uniform(-3, 3):.1f}" cy="{my + rng.uniform(-3, 3):.1f}" rx="{rng.uniform(4, 8):.1f}" ry="{rng.uniform(3, 6):.1f}" fill="{mcol}" opacity="0.35"/>')
-        # THE PLANTING BY CROP (feature 139 A6). Mulberry: two rows of coppiced bushes. Sugar cane: the cane
+        # THE PLANTING BY CROP (feature 150 A6). Mulberry: two rows of coppiced bushes. Sugar cane: the cane
         # stands in close rows the full width of the dike - three rows of short cane strokes. Banana: big
         # clumps at ~14 ft, a stool of pseudostems with its leaf fan. Fruit (lychee, longan, citrus): standard
         # trees at ~18 ft on the band's centerline. The pitches are drawing calibrations from each plant's

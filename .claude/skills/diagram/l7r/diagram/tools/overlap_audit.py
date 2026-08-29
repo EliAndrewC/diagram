@@ -1,6 +1,6 @@
-"""DOES A OVERLAP B - asked once, not for the twelfth time (feature 147, US2).
+"""DOES A OVERLAP B - asked once, not for the twelfth time (feature 149, US2).
 
-WHY THIS EXISTS. Across features 139's T50-T55 the same point-in-polygon script was hand-written twelve
+WHY THIS EXISTS. Across features 150's T50-T55 the same point-in-polygon script was hand-written twelve
 times: is a farmhouse on marsh, is a garden on the reed fringe, does a parcel lie across its ditch, is
 reed INK drawn over a mulberry bank, does haze wash over open water. Each rewrite cost a model turn and
 carried the risk of measuring the wrong thing - and twice it did, reading vertices where the answer needed
@@ -27,7 +27,7 @@ from typing import Any
 
 from l7r.diagram.settlement._geom import point_in_poly, seg_dist
 
-# The drawn marks, by the ink they are made of and the reach each has from its own point (feature 139
+# The drawn marks, by the ink they are made of and the reach each has from its own point (feature 150
 # T54: a keep-out that reads a mark's CENTER lets its body lap the thing it is supposed to keep off).
 INK = {
     "marsh tint": (re.compile(r'<circle cx="([-\d.]+)" cy="([-\d.]+)" r="([\d.]+)" fill="#9FBBAE"'), None),
@@ -99,7 +99,7 @@ def _hits_band(pts: list[tuple[float, float]], bands: list[tuple[list[tuple[floa
 
     BOTH DIRECTIONS, and it has to be: a stream nine feet wide runs BETWEEN a farmhouse's corners, so a
     test that only asks "is a corner in the water" reports a clean map. That vertex-only trap has now been
-    walked three times in this engine - twice inside feature 139 (the T55 parcel clip and the polder
+    walked three times in this engine - twice inside feature 150 (the T55 parcel clip and the polder
     probe's first cut) and once here, caught by this tool's own test.
     """
     for q in pts:
@@ -205,7 +205,7 @@ def audit(M: dict[str, Any], svg: str | None, families: tuple[str, ...] = FAMILI
 
 
 def main(argv: list[str] | None = None) -> int:
-    ap = argparse.ArgumentParser(description="does A overlap B, on a finished map (feature 147)")
+    ap = argparse.ArgumentParser(description="does A overlap B, on a finished map (feature 149)")
     ap.add_argument("manifest", help="pool/<tier>/<map>.json - the SVG beside it is read for the ink families")
     ap.add_argument("--families", default=",".join(FAMILIES), help=f"comma-separated: {', '.join(FAMILIES)}")
     a = ap.parse_args(argv)

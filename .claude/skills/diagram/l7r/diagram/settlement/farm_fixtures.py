@@ -32,7 +32,7 @@ if TYPE_CHECKING:
 # The interactive map's feature class per fixture kind (feature 134, spec FR-007) - the vocabulary
 # is `interactive/classes.py`; a kind missing here is a KeyError at draw time, never silent ink.
 FIXTURE_CLASS = {"privy": "privy", "woodpile": "woodpile", "manure": "manure heap", "bath": "bathhouse", "coop": "hen coop", "shrine": "household shrine"}
-# THE MANURE FIXTURE HAS TWO ATTESTED FORMS (feature 139, GM 2026-08-28 choosing audit A2): the HEAP by the
+# THE MANURE FIXTURE HAS TWO ATTESTED FORMS (feature 150, GM 2026-08-28 choosing audit A2): the HEAP by the
 # privy or stable (Tohoku, Sugiura 1973) and the PIT - "pits made of earthenware, half buried in the ground at
 # the back of the building" and lined along the road (Fei 1939, Lake Tai). Two forms -> a knob, rolled per
 # hamlet (`MANURE_FORMS`); the record keeps `kind: manure` (one share, one seat table, every check unchanged)
@@ -56,7 +56,7 @@ SHRINE_RED = "#A03020"  # the same vermilion as small_shrine's roof - the GM's "
 class FarmFixturesMixin:
     def farm_fixture(self: Settlement, kind: str, cx: float, cy: float, rot: float = 0.0, of: Any = None, form: str | None = None) -> None:  # type: ignore[misc]
         """Draw and record one farmstead fixture of `kind` centered at (cx, cy), raked with its house. `form`
-        picks an attested alternative glyph of the same kind (`manure` -> `pit`, feature 139)."""
+        picks an attested alternative glyph of the same kind (`manure` -> `pit`, feature 150)."""
         if kind not in FIXTURE_FT:
             raise ValueError(f"unknown farm fixture kind {kind!r}")
         if form is not None and (kind, form) != ("manure", "pit"):
@@ -120,7 +120,7 @@ class FarmFixturesMixin:
         self.M.setdefault("persimmons", []).append(rec)
 
 
-# ---- the stock a dike-pond hamlet keeps on its ponds (feature 139 A3/A4) ---------------------------
+# ---- the stock a dike-pond hamlet keeps on its ponds (feature 150 A3/A4) ---------------------------
 
 STY_FT = (8.0, 6.0)  # a simple pig shed on the dike, over the water's edge (FAO/NACA: "the simple pig shed constructed on the pond dyke")
 PEN_FT = (10.0, 6.0)  # the fenced DRY RUN of a duck pen on the dike; its WET RUN is a fenced corner of the pond

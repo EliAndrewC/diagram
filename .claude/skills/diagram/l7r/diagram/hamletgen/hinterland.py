@@ -727,7 +727,7 @@ def title_pocket(s: Settlement, plan: SitePlan, w: float = 300.0, h: float = 190
     the one furthest from the field's middle AND from the houses - the emptiest quarter of the sheet,
     which is where a reader would expect the cartouche anyway. It is a reservation, not a placement:
     `title()` still does its own search and may well sit somewhere else."""
-    # RESERVED ONCE (feature 139, Kuwabata seed 21): four callers ask for the pocket at four stages, and each
+    # RESERVED ONCE (feature 150, Kuwabata seed 21): four callers ask for the pocket at four stages, and each
     # ask re-ran the blank-box search against the obstacles of ITS moment - the belt was dented around one
     # answer, the coppice kept out of another, and the frame's answer (after the crop, with the belt and the
     # groves on the sheet) came back degenerate, so the placard fell back to the corner ON the belt. The
@@ -747,7 +747,7 @@ def title_pocket(s: Settlement, plan: SitePlan, w: float = 300.0, h: float = 190
     # only two things left that could fill it (the coppice and the grove).
     spot = s._blank_label_spot(x0, y0, x1 - x0, y1 - y0, w, h)
     if spot is None:
-        # A SMALLER POCKET BEFORE NONE (feature 139 T50 fallout, Kuwabata seed 21): with a sixteenth house
+        # A SMALLER POCKET BEFORE NONE (feature 150 T50 fallout, Kuwabata seed 21): with a sixteenth house
         # on the sheet's right flank the 300 x 190 reservation found no home, nothing was held back, the
         # coppice took the last blank corner, and `title()` - finding no clear box either - fell back to
         # that corner ON the grove (`title_clear_of_features`). The placard itself is ~195 x 106, so a
@@ -755,7 +755,7 @@ def title_pocket(s: Settlement, plan: SitePlan, w: float = 300.0, h: float = 190
         w, h = 210.0, 120.0
         spot = s._blank_label_spot(x0, y0, x1 - x0, y1 - y0, w, h)
     if spot is None:
-        # THE SHEET HAS NO ROOM FOR ITS NAME (feature 139 T50 fallout, Kuwabata seed 21): with the cluster
+        # THE SHEET HAS NO ROOM FOR ITS NAME (feature 150 T50 fallout, Kuwabata seed 21): with the cluster
         # seated clear of the reed fringe, the houses, the fringe and the connector left no blank box the
         # placard's size anywhere inside the content, and `title()` fell back to a corner ON the windbreak.
         # The frame's margin is capped at 56 px by `crop_hugs_content`, so the answer is not a wider margin:

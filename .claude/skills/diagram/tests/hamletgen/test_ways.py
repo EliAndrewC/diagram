@@ -258,7 +258,7 @@ class _StubSettlement:
 
 
 def test_touch_junctions_does_not_close_a_short_lane_onto_its_own_start() -> None:
-    """Feature 139, Kuwabata seed 21: a 30 ft lane whose two ends both stood near the same spot on
+    """Feature 150, Kuwabata seed 21: a 30 ft lane whose two ends both stood near the same spot on
     a neighbor was touched there at BOTH ends and became a 28 ft loop - a hairpin to
     `lanes_bend_like_paths`, invisible to `_smooth_web`, which had already run. A foot within a few
     feet of the lane's other end is that end's own junction, not a new one."""
@@ -720,7 +720,7 @@ def test_trim_to_service_counts_ARRIVING_AT_THE_FIELD_as_service() -> None:
 
 
 def test_a_final_pass_junction_that_would_hairpin_at_a_door_spur_joins_from_the_vertex_before_it() -> None:
-    """Feature 139, Kuwabata seed 21: after the smoothing, a lane whose last 13 ft turned down toward a
+    """Feature 150, Kuwabata seed 21: after the smoothing, a lane whose last 13 ft turned down toward a
     farmhouse door was joined back UP to the way it had just left - a hairpin on the sheet. Nothing
     smooths a final-pass link, so the toucher repairs it there: the short spur is dropped and the
     junction made from the vertex before it. The first pass (`final=False`) lays what it always laid."""
@@ -760,6 +760,8 @@ def test_a_final_pass_junction_ends_the_lane_where_it_first_meets_the_way() -> N
     pts = [tuple(q) for q in s.M["lanes"][1]["pts"]]
     assert len(pts) == 2 and pts[0] == (300.0, 60.0), pts
     assert abs(pts[-1][1]) < 0.01 and 155.0 <= pts[-1][0] <= 170.0, pts
+
+
 # ---- the splice helpers (feature 137 T04) ---------------------------------------------------------
 
 

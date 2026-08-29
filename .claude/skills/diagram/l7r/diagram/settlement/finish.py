@@ -213,7 +213,7 @@ class FinishMixin:
         PAD = 12  # placard padding around the text block
         bw, bh = max(tw, bar_px) + 2 * PAD, th + 46 + 2 * PAD  # the searched box: the whole placard
         vx0, vy0, vw, vh = self.view if self.view else (0, 0, self.W, self.H)
-        # THE RESERVED POCKET FIRST (feature 139): the scripted tier holds a pocket of blank ground for the
+        # THE RESERVED POCKET FIRST (feature 150): the scripted tier holds a pocket of blank ground for the
         # title before the coppice and the belt are seated, and DENTS the windbreak around it - so a title
         # that then lands in another corner leaves the dent as a hole in the belt (Kuwabata, a 40-50 ft bare
         # run). If the caller names its pocket and the placard fits there clear of every obstacle, that is
@@ -333,7 +333,7 @@ class FinishMixin:
         _cover = [] if cover_ok else self.M.get("village_groves", []) + self.M.get("bamboo_stands", []) + _woodland
         for o in _cover + self.M.get("marshes", []):
             polys.append([tuple(p) for p in o["poly"]])
-        # ...and the WELLS and the NOTICE BOARD (feature 139, settlement-review of Kuwabata: the placard sat on the
+        # ...and the WELLS and the NOTICE BOARD (feature 150, settlement-review of Kuwabata: the placard sat on the
         # east public well, its glyph showing through the card's edge). Both are traffic-sited fixtures with no
         # w/h - a well records its drawn radius `vr`, the board its `w`/`h` - and neither was in the list above.
         for o in self.M.get("wells", []):
@@ -494,7 +494,7 @@ class FinishMixin:
         # pond. The rim EDGE stays early (below every bed, so the mouth still covers it); only the
         # fill and sheen move, re-emitted LAST among the late beds - restoring exactly the covering
         # order the shared block gives an early feeder. Gated by pond_fill_covers_channel_mouths.
-        # ONE WATER BLOCK (feature 139 T53, GM 2026-08-28: "when a stream meets a irrigated channel or where an
+        # ONE WATER BLOCK (feature 150 T53, GM 2026-08-28: "when a stream meets a irrigated channel or where an
         # irrigated channel or a ditch meets a pond ... it clearly looks like one is rendered on top of the
         # other ... water just flows"). There were TWO blocks - the early one (streams, the pond, a moat) at
         # the first water call and the LATE one (a comb's ditch net) after the field's plots - each its own

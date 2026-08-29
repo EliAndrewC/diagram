@@ -149,7 +149,7 @@ def test_field_ponds_sunk_into_one_plot_fires_when_bunds_cross_the_water():
 
 
 def test_waterward_strips_run_off_the_frame_fires_and_passes():
-    """A polder's waterward strip is wild water CONTINUING, so it must leave the frame. Feature 139 T55
+    """A polder's waterward strip is wild water CONTINUING, so it must leave the frame. Feature 150 T55
     cut the strip from a half-canvas to a 280 px band for the 18 s of scatter the crop threw away, and a
     band can stop inside the view - which draws a straight line where wild water stops being wild.
     Raised by settlement-review 2026-08-29 as an unguarded assumption; this is the guard."""

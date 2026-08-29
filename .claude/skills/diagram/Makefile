@@ -270,7 +270,7 @@ _switch:
 	@git add dev/switches.json && git commit -q -m "chore: $(MSG) - $(REASON)" && printf '\ncommitted: %s - %s\n' "$(MSG)" "$(REASON)"
 
 # --- expensive: they generate ---------------------------------------------------------------
-verify:         ## THE PAIRED RUN: start the gate and dispatch the settlement-review together (feature 147)
+verify:         ## THE PAIRED RUN: start the gate and dispatch the settlement-review together (feature 149)
 	@printf '\033[1mverify\033[0m: the gate and the independent review run TOGETHER - neither alone (GM 2026-08-29).\n'
 	@$(RUN).ci engine-key worktree > .git/pairing-key 2>/dev/null || true
 	@printf 'engine key %s\n' "$$(cut -c1-12 .git/pairing-key 2>/dev/null)"
@@ -376,7 +376,7 @@ sun-audit:      ## the sun rules and the belt's page presence, off the manifest 
 
 family-census:  ## which feature families one manifest records that another does not   A=pool/hamlets/inashiro.json B=pool/hamlets/kuwabata.json
 	$(RUN).tools.family_census --a $(or $(A),pool/hamlets/inashiro.json) --b $(or $(B),pool/hamlets/kuwabata.json)
-	@: "(GUARD_EDIT_OK: feature 139 - a read-only manifest census, the measured answer to 'does the converted map carry every reference-hamlet family')"
+	@: "(GUARD_EDIT_OK: feature 150 - a read-only manifest census, the measured answer to 'does the converted map carry every reference-hamlet family')"
 
 new-check:      ## scaffold a gate check: segment stub, sorted fixture entry, test stub   NAME=... FILE=segments_*.py TEST=test_segments_*.py
 	@test -n "$(NAME)" -a -n "$(FILE)" -a -n "$(TEST)" || { printf 'make new-check NAME=<check_name> FILE=l7r/diagram/check_village/segments_XX.py TEST=tests/check_village/test_segments_XX.py\n'; exit 2; }
@@ -726,7 +726,7 @@ reference:
 IDLE_CTX = $(shell $(SWITCH) idle 2>/dev/null)
 DONE_NAME = $(if $(filter 1,$(IDLE_CTX)),idle-done,done)
 idle-tests:     ## what an idle session runs unattended (feature 136): the whole gate, scope relaxed, never FULL
-# THE PAIRING'S ONE-SIDED CASE, TAKEN RATHER THAN CARVED OUT (feature 147): a detached timer has no
+# THE PAIRING'S ONE-SIDED CASE, TAKEN RATHER THAN CARVED OUT (feature 149): a detached timer has no
 # session to dispatch a settlement-review from, so it supplies the override with its reason and the
 # bypass log carries it like any other. An exemption inside the guard is the shape the spec review struck.
 	@PAIR_OK="idle run: no session attached to dispatch a review" $(MAKE) --no-print-directory done

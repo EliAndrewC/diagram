@@ -734,7 +734,7 @@ def test_surface_water_dist_reads_the_checks_own_sources():
 
 
 def test_crop_to_content_takes_reserved_ground_as_content():
-    """Feature 139: the title pocket a full sheet reserves OUTSIDE its content is handed to the crop as
+    """Feature 150: the title pocket a full sheet reserves OUTSIDE its content is handed to the crop as
     content, so the frame holds it in; without it the crop hugs the houses alone."""
     s = _crop_settlement()
     s.M["houses"] = [{"x": 500, "y": 500, "w": 40, "h": 30}]

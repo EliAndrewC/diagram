@@ -86,7 +86,7 @@ def test_miter_normals_caps_the_scale_on_a_hairpin() -> None:
 
 
 def test_dike_face_reads_the_rings_own_side_and_carries_a_gap() -> None:
-    """`dike_face` (feature 139 T54) is what makes the waterward strip end exactly at the embankment:
+    """`dike_face` (feature 150 T54) is what makes the waterward strip end exactly at the embankment:
     it takes the OUTERMOST point per bin on the flank's own half of the ring, so the strip can only
     stop at or outside the face - and a bin the ring does not reach (a crossing GAP cuts the outline,
     and the strip runs past the dike's ends) keeps its neighbor's face rather than jumping to the far
@@ -132,6 +132,8 @@ def test_the_waterward_strip_stops_at_the_dikes_face() -> None:
     west = [m for m in strips if m["x"] < 900][0]
     assert max(p[0] for p in west["poly"]) <= 540.0  # never past the outermost face of the band
     assert hg.point_in_poly(500.0 - 28.0, 600.0, [(float(a), float(b)) for a, b in west["poly"]])  # the check's own sample is inside
+
+
 def test_predict_k_steps_by_the_power_law_and_falls_back_to_the_midpoint() -> None:
     """The field solver's step (feature 145): a square-root step from one carve, a power-law step
     from two, and the bracket midpoint whenever the prediction is useless."""

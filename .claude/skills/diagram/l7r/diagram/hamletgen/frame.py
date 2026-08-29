@@ -46,12 +46,12 @@ def stage_crossings(s: Settlement, plan: SitePlan) -> None:
     s.bridges()
     if s.M.get("field_ditches"):
         if plan.field_archetype in POLDER_ARCHETYPES:
-            # A POLDER'S RING CANAL is crossed where the village is (feature 139; the rule the
+            # A POLDER'S RING CANAL is crossed where the village is (feature 150; the rule the
             # hand-authored polders carried, `polder_crossing_caps`): planks cluster on the
             # settlement-side toe collector, one per interior lateral, none on the feeder, the far
             # toe or the drain. Spacing as the hand-authored maps had it.
             s.channel_footbridges(spacing=320, seg_caps=polder_crossing_caps(plan))
-            s.dike_gates()  # a sluice gate at every cut of the perimeter dike, snapped to the recorded water (feature 139 A7)
+            s.dike_gates()  # a sluice gate at every cut of the perimeter dike, snapped to the recorded water (feature 150 A7)
         else:
             s.channel_footbridges(spacing=300)
 
@@ -178,7 +178,7 @@ def stage_frame(s: Settlement, plan: SitePlan) -> None:
     # content` allows at most 56 px of view past the frame-setting content, because a band whose
     # only extra is open ground is wasted image. 64 was tried and fails all twelve. 48 is the most
     # air the frame will give the title.
-    _pocket = title_pocket(s, plan)  # the pocket the belt was dented around (feature 139) - reserved once, see hinterland.title_pocket
+    _pocket = title_pocket(s, plan)  # the pocket the belt was dented around (feature 150) - reserved once, see hinterland.title_pocket
     _extra = [_pocket] if plan.title_pocket_outside else []  # an OUTSIDE reservation is content the crop must take in; an inside one changes nothing
     s.crop_to_content(margin=CROP_MARGIN, extra=_extra)
     s.M["meta"]["title_pocket"] = [round(v, 1) for v in _pocket]  # recorded so a placard that fell back can be read against the reservation

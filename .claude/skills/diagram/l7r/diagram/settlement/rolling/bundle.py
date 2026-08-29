@@ -100,7 +100,7 @@ class BundleGeomMixin:
             # still jitters UP from its minimum - that rule is unchanged.
             gw = min(gw * (1.0 + self._hjit(hx, hy, 3.0) * 0.25), self.px(48))  # garden [1.00,1.25]x, capped at 48 ft
             gh = min(gh * (1.0 + self._hjit(hx, hy, 4.0) * 0.25), self.px(34))
-            # THE FORECOURT IS RESERVED WHETHER OR NOT A THRESHING FLOOR IS DRAWN ON IT (feature 139, GM
+            # THE FORECOURT IS RESERVED WHETHER OR NOT A THRESHING FLOOR IS DRAWN ON IT (feature 150, GM
             # 2026-08-28: "thrashing yards on a no-rice hamlet seem bad and should be eliminated"). A
             # dike-pond hamlet grows no rice, so `_attach_yard` draws and records no threshing floor
             # when the generator declares `work_yards=False` - but the open ground before the house

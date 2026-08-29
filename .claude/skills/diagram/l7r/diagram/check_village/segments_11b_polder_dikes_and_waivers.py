@@ -337,7 +337,6 @@ def _seg_0592___wv_stale(*, _waived: Any = _UNBOUND, _waivers: Any = _UNBOUND) -
     return _kept(locals(), ('_wv_stale',))
 
 
-
 def _seg_0594_500__waterward_strips_run_off_the_frame(
     *,
     M: Any = _UNBOUND,
@@ -353,7 +352,7 @@ def _seg_0594_500__waterward_strips_run_off_the_frame(
     was reclaimed from, and it goes on past the sheet (`settlements/archetypes.md`, "Polder waterward
     fringe"). It used to be drawn to the canvas edge, which made that true by construction and wasted the
     scatter - on Kuwabata the crop kept 74 px of the 1,880 px drawn, and the discarded reeds cost 18 s of
-    a 40 s gen. Feature 139 T55 cut it to a `WATERWARD_DEPTH` band off the dike face, and a band CAN stop
+    a 40 s gen. Feature 150 T55 cut it to a `WATERWARD_DEPTH` band off the dike face, and a band CAN stop
     inside the frame: then the reader sees a straight line where wild water stops being wild. Nothing
     checked that, which is this engine's standing failure shape ("a rule that cannot fire looks exactly
     like a rule that passes"), so the check is the guard - measured per DECLARED flank (`meta.waterward`),
@@ -380,6 +379,7 @@ def _seg_0594_500__waterward_strips_run_off_the_frame(
             f"waterward reed strip(s) at {waterward_strips_run_off_the_frame_bad[:3]} STOP inside the drawn view - the un-reclaimed water outside a dike goes on past the sheet, so a strip that ends in frame draws a straight line where wild water stops being wild; widen `WATERWARD_DEPTH` (hamletgen/consts.py) until every declared flank's strip clears the view",
         )
     return _kept(locals(), ("waterward_strips_run_off_the_frame_bad",))
+
 
 def _seg_0593__waivers_are_live(*, _ran: Any = _UNBOUND, _wv_stale: Any = _UNBOUND, check: Any = _UNBOUND) -> dict[str, Any]:
     """Gate segment 593 (waivers_are_live) - body verbatim from the legacy gate() (feature 022)."""

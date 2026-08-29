@@ -1,4 +1,4 @@
-"""Feature 139 T50 (GM 2026-08-28): marsh is HARD ground - no house, garden or yard footprint may stand on it.
+"""Feature 150 T50 (GM 2026-08-28): marsh is HARD ground - no house, garden or yard footprint may stand on it.
 
 The reed fringe round a reservoir was drawn but registered nowhere a placer reads, so `_hard_clear`
 passed footprints on it and two of Kuwabata's farmhouses stood in the reeds. `marsh()` now records its
@@ -41,7 +41,7 @@ def test_the_hard_ground_cache_re_keys_when_a_marsh_is_added() -> None:
     assert s._hard_clear(400, 400, 46, 28) is False  # the key includes the wet count, so the cache does not lie
 
 
-# ---- feature 139 T54: reeds keep OFF the earthen mounds ------------------------------------------
+# ---- feature 150 T54: reeds keep OFF the earthen mounds ------------------------------------------
 def _ring(x0: float, y0: float, x1: float, y1: float, n: int = 30) -> list[list[float]]:
     """A rectangle's perimeter, sampled - the shape a drawn band records (a dense closed ribbon)."""
     return (
@@ -55,7 +55,7 @@ def _ring(x0: float, y0: float, x1: float, y1: float, n: int = 30) -> list[list[
 _BAND = _ring(600.0, 200.0, 640.0, 800.0)  # a 40 ft dike band, N-S...
 _CREST = [
     [620.0, 200.0 + 30.0 * i] for i in range(21)
-]  # ...and its centerline, which every drawn band records and the keep-out reads (it tests the crest + half of w_max, not the 360-point ribbon: feature 139 T55 perf)
+]  # ...and its centerline, which every drawn band records and the keep-out reads (it tests the crest + half of w_max, not the 360-point ribbon: feature 150 T55 perf)
 _WIDE = [(300.0, 200.0), (900.0, 200.0), (900.0, 800.0), (300.0, 800.0)]  # a marsh polygon straight over it
 
 
@@ -75,7 +75,7 @@ def _on_band(x: float, y: float) -> bool:
 
 def test_a_marsh_over_a_dike_band_draws_no_reed_on_it_and_would_without_the_dike() -> None:
     """The rule FIRES: the same marsh polygon over the same ground reeds the band when no dike is
-    recorded and leaves it bare when one is (feature 139 T54, GM 2026-08-28: "the hazy blue that
+    recorded and leaves it bare when one is (feature 150 T54, GM 2026-08-28: "the hazy blue that
     denotes the marsh is clearly overlaid on top of the greenery of the earthen mounds")."""
     bare = Settlement(1200, 1000, seed=2)
     bare.meta(name="V", scale="village")
@@ -105,7 +105,7 @@ def test_a_wet_tint_circle_keeps_its_whole_body_off_the_mound() -> None:
 
 
 def test_a_pond_bank_keeps_the_reeds_off_the_same_way() -> None:
-    """A fish pond's mulberry bank is the same planted earth as the perimeter dike (feature 139 T54)."""
+    """A fish pond's mulberry bank is the same planted earth as the perimeter dike (feature 150 T54)."""
     s = Settlement(1200, 1000, seed=3)
     s.meta(name="V", scale="village")
     s.M["dikeponds"] = [{"bank": _ring(600.0, 300.0, 700.0, 500.0)}]

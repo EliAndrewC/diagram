@@ -326,7 +326,7 @@ def test_paddy_seams_fires_on_a_bund_ring_drawn_inside_a_basin():
 
 
 def test_paddy_seams_stands_aside_for_a_dike_pond_block():
-    # feature 139: two ponds a dike apart are the 桑基魚塘 fabric, not a doubled aze - the ~22 ft
+    # feature 150: two ponds a dike apart are the 桑基魚塘 fabric, not a doubled aze - the ~22 ft
     # strip between the rings IS the planted dike. The same rings fire on a paddy field.
     rings = [_box(10, 10, 110, 110), _box(132, 10, 232, 110)]
     assert "paddy_plot_seams_shared" in _seam_f(_seam_M(rings))
@@ -536,7 +536,7 @@ def test_hamlet_and_village_boards_must_be_roadside():
 
 
 def _scripted(**over):
-    """A hamletgen-shaped manifest: the census keys `finish()` writes (feature 139)."""
+    """A hamletgen-shaped manifest: the census keys `finish()` writes (feature 150)."""
     m = manifest(**over)
     m["meta"]["generated_by"] = "hamletgen"
     m.setdefault("ink_classes", {"-": 3, "farmhouse": 2})
@@ -547,7 +547,7 @@ def _scripted(**over):
 
 def test_all_ink_is_ruled_on_fires_and_passes():
     """On a scripted hamlet every drawn element is in a feature class or ruled not highlighted, and
-    every class used is registered (feature 139 FR-009; the GM: "judgment calls to make about what
+    every class used is registered (feature 150 FR-009; the GM: "judgment calls to make about what
     things get highlighted and which things do not" - unclassed ink is an unmade decision)."""
     bad = _scripted(unclassed_ink=['<rect> <rect x="1" y="1" width="2" height="2"/>'])
     assert "all_ink_is_ruled_on" in f_only(bad, "all_ink_is_ruled_on"), "ink nobody ruled on must fire"

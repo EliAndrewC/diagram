@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # test-pair-hooks.sh - prove the gate/review pairing refuses each half alone, allows the pair, takes the
 # override, and does NOT fire on a mention of the commands it guards.
-# (GUARD_EDIT_OK: the companion of a NEW guard, feature 147, GM 2026-08-29)
+# (GUARD_EDIT_OK: the companion of a NEW guard, feature 149, GM 2026-08-29)
 set -u
 HOOK="$(cd "$(dirname "$0")" && pwd)/pair-hooks.sh"
 WATCH="$(cd "$(dirname "$0")" && pwd)/agent-stall-hooks.sh"
@@ -47,8 +47,9 @@ check "another target passes" '[ "$(rc_pretool "$OTHER")" -eq 0 ]'
 # --- 3. the pair: a pending review lets the gate through ------------------------------------------
 TU='{"type":"assistant","message":{"role":"assistant","stop_reason":"tool_use","content":[{"type":"tool_use","name":"Read","input":{}}]}}'
 TR='{"type":"user","message":{"role":"user","content":[{"type":"tool_result","content":"..."}]}}'
-printf '%s\n%s\n' "$TU" "$TR" > "$DIR/agent-rev.jsonl"
-printf '{"prompt":"settlement-review of the map"}\n' >> "$DIR/agent-rev.jsonl"
+# the launch record names the agent; the tool_result must stay LAST, because that is exactly what
+# `agent-stall-hooks.sh pending` reads to mean "this agent is still awaiting its next turn"
+printf '{"prompt":"settlement-review of the map"}\n%s\n%s\n' "$TU" "$TR" > "$DIR/agent-rev.jsonl"
 check "with a review PENDING the gate runs" '[ "$(rc_pretool "$GATE")" -eq 0 ]'
 check "...and the gate records its key" 'grep -q "gate_key" "$CLONE/.git/pairing-state.json"'
 

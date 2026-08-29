@@ -14,7 +14,7 @@ from .palette import FLOODED, RICE_GREENS, organic_parcel
 _RING = 18.0  # the inner-toe ring-canal corridor width in (s, t) px (see _polder_lattice's RING note)
 
 
-BERM = 5.5  # px of bank the crop keeps back from a ditch it abuts (feature 139 T55). Measured off this fabric: the block's uncut parcels stand a median 7.2 px off the water (range to 9.3), and a channel half-width is 1.6-2.5, so 5.5 + w/2 lands a cut edge inside that band. At 1.5 the cut edge met the waterline and read as tilled ground with no bank.
+BERM = 5.5  # px of bank the crop keeps back from a ditch it abuts (feature 150 T55). Measured off this fabric: the block's uncut parcels stand a median 7.2 px off the water (range to 9.3), and a channel half-width is 1.6-2.5, so 5.5 + w/2 lands a cut edge inside that band. At 1.5 the cut edge met the waterline and read as tilled ground with no bank.
 
 
 def build_polder(
@@ -33,7 +33,7 @@ def build_polder(
     mosaic: float = 0.0,
     line_wander: float = 0.10,
     organic: tuple[float, float] = (0.05, 0.02),
-    clean_parcels: bool = True,  # the parcel/channel cleanup runs on the block that is DRAWN; `fit_polder` bisects with up to 45 candidates and cleans only the winner (feature 147)
+    clean_parcels: bool = True,  # the parcel/channel cleanup runs on the block that is DRAWN; `fit_polder` bisects with up to 45 candidates and cleans only the winner (feature 149)
 ) -> dict[str, Any]:
     """POLDER GRID (圩田 wei-tian / reclaimed-marsh grid): a rectilinear block of paddies on flat reclaimed
     low ground, an orthogonal ditch-grid module inside a perimeter dike. Returns build_comb-compatible keys
@@ -90,7 +90,7 @@ def build_polder(
     channels, brook, dike_sluices, floor, out_t = _polder_channels(grid, sides_st, nodes, rows, cols, tt, span_s, span_t, fi, di)
     _drn = _polder_close(plots, channels, sides_st, grid, down_deg)
     round_channel_joints(channels)  # earthen water turns on a swept bend, not a mitred corner
-    # THE RING CLOSES (feature 139 T52, GM 2026-08-28: "a spot close to the top left of the rectangular boundary
+    # THE RING CLOSES (feature 150 T52, GM 2026-08-28: "a spot close to the top left of the rectangular boundary
     # of irrigated channels ... does not plate connect. It stops just short"). The corner rounding above sweeps
     # each trunk's corner INSIDE the lattice node the collectors were laid to, so a toe's end stood 9 ft off the
     # feeder's swept bend. Every collector end is snapped onto the trunk it meets, AFTER the rounding.
@@ -546,7 +546,7 @@ def _polder_channels(
 
 
 def _plots_clear_of_channels(plots: list[dict[str, Any]], channels: list[dict[str, Any]], margin: float = BERM, step: float = 4.0) -> None:
-    """A PARCEL STOPS AT THE DITCH THAT BOUNDS IT (feature 139 T55, GM 2026-08-29: "one of the vegetable
+    """A PARCEL STOPS AT THE DITCH THAT BOUNDS IT (feature 150 T55, GM 2026-08-29: "one of the vegetable
     grounds overlaps with the irrigated channels which run between the vegetable grounds and the ponds").
 
     The lattice's channels are laid on the IDEAL grid line, while the parcels are wandered off it for an
@@ -659,7 +659,7 @@ def _nearest_on(q: Pt, segs: list[tuple[Pt, Pt]]) -> tuple[Pt, float, float]:
 
 
 def _onto_poly(pt: Pt, poly: list[Pt]) -> Pt:
-    """The closest point on a polyline to `pt` (feature 139 T52: a collector's end onto its trunk)."""
+    """The closest point on a polyline to `pt` (feature 150 T52: a collector's end onto its trunk)."""
     best, bd = pt, float("inf")
     for i in range(len(poly) - 1):
         (ax, ay), (bx, by) = poly[i], poly[i + 1]
@@ -722,7 +722,7 @@ def _polder_close(plots: list[dict[str, Any]], channels: list[dict[str, Any]], s
 
 def clean_polder_parcels(net: dict[str, Any]) -> dict[str, Any]:  # noqa: D401
     """Run the parcel/channel cleanup on a block built with `clean_parcels=False`, and re-measure its
-    acreage (feature 139 T55). `fit_polder` bisects with up to 45 candidate blocks and only one of them
+    acreage (feature 150 T55). `fit_polder` bisects with up to 45 candidate blocks and only one of them
     is drawn, so the cleanup - which densifies every outline against every nearby channel - runs on the
     WINNER rather than on all 45: measured, 15 s of gen became 41 s when every candidate paid for it."""
     _plots_clear_of_channels(net["plots"], net["channels"])

@@ -1,6 +1,6 @@
 """Feature-family census: what one manifest records that another does not.
 
-WHY (feature 139, GM 2026-08-27): *"when I look at Kuwabata I do not See many of the features which
+WHY (feature 150, GM 2026-08-27): *"when I look at Kuwabata I do not See many of the features which
 we have incorporated into our reference hamlet. For example, I do not see bamboo groves, and the
 sheds look like the old style sheds."* The conversion of a hand-authored map to the scripted
 generator owes the GM a MEASURED answer to "does it carry every family the reference hamlet does?",

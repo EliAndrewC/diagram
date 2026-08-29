@@ -317,7 +317,7 @@ class CombMixin:
             pcx, pcy, prx, pry = source["pond"]
             self.stream([(sluice[0], sluice[1]), (pcx, pcy)], frm={"kind": "offmap"}, to={"kind": "pond"}, width=6) if source.get("feeder") else None
             self.pond(pcx, pcy, prx, pry)
-            # THE FRINGE WAITS FOR THE WATER (feature 147, found by `make overlap-audit` the day it was
+            # THE FRINGE WAITS FOR THE WATER (feature 149, found by `make overlap-audit` the day it was
             # written). The reed scatter keeps off every drawn watercourse - but this ran BEFORE the field's
             # channels were inked or recorded, so on a polder, whose inlet hairline runs straight through the
             # reservoir's fringe, the keep-out had nothing to keep off: measured on Kuwabata, one tuft 4.6 px
@@ -493,7 +493,7 @@ class CombMixin:
             # nothing moves (every comb map is byte-identical); otherwise the end is pulled in along
             # the nearest edge's inward normal until it clears.
             _env_in = net.get("envelope") or []
-            # ...and near a CORNER the pull runs again (feature 139 T51): pulled 14 px off the top edge, the
+            # ...and near a CORNER the pull runs again (feature 150 T51): pulled 14 px off the top edge, the
             # polder's mouth stood 9 px from the west edge. Up to three rounds, each on the now-nearest edge;
             # a comb's first round does not fire, so every comb map is still byte-identical.
             for _pull_round in range(3 if len(_env_in) >= 3 else 0):
@@ -563,7 +563,7 @@ class CombMixin:
             # check inside the code it governs is the trap this skill's notes name repeatedly; an
             # explicit flag from the one caller that needs it cannot drift.
             if join_head and _fk_d > 10.0:
-                # ...AT ITS PLACE ALONG THE RUN (feature 139 T51): the head used to go in just before the mouth,
+                # ...AT ITS PLACE ALONG THE RUN (feature 150 T51): the head used to go in just before the mouth,
                 # which is right while it lies past the bow's midpoint. Once the feeder stub reaches the reservoir
                 # rim the head sits in the run's upper half, and inserting it after the midpoint folded the run
                 # back on itself (an acute hairpin, `water_channels_obtuse_turns`). Its slot is chosen by its

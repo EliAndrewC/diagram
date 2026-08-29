@@ -320,7 +320,7 @@ GM wait - a prompt aborts a run in progress. The scope lock is relaxed for that 
 it: `switches.read` unlocks the scope solely for a process that descends from the idle timer, which
 a session's shell never does (the GM's ruling, D1b).
 
-## A hung agent is silent (feature 139, GM 2026-08-28)
+## A hung agent is silent (feature 150, GM 2026-08-28)
 
 The session launched a general-purpose research agent with a ~40-fetch budget at 23:09Z, ended its
 turn "waiting on the notification", and waited. The agent made ~50 fetches, stopped answering in
@@ -335,10 +335,10 @@ The transcript says which it is: a finished agent's `subagents/agent-<id>.jsonl`
 got its next turn, and its mtime is when it last did anything. `scripts/agent-stall-hooks.sh`
 reads that: the prompt hook lists any agent whose transcript has not moved for 5 minutes, a
 `Monitor` on its `watch` mode surfaces the same mid-turn, and `pending` answers the narrower
-question feature 147's pairing guard asks (has the review I launched finished?). Measured on the
+question feature 149's pairing guard asks (has the review I launched finished?). Measured on the
 live session: the dead agent scanned as stale at 46,670 s, every other agent as finished.
 
-**A second watcher was written and then dropped (2026-08-29).** Feature 139 T33 and feature 143
+**A second watcher was written and then dropped (2026-08-29).** Feature 150 T33 and feature 143
 answered the same GM ask - *"can you add something to catch hung agents next time?"* - in two
 sessions on the same day, and both landed in different trees: `agent-watch-hooks.sh` (a Stop hook
 that REFUSES to end a turn while an agent is pending, plus a watchdog background command whose exit

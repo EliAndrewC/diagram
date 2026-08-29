@@ -180,7 +180,7 @@ class MoatMixin:
         g.append(f'<line x1="{-4.4 * _sk:.1f}" y1="-3.1" x2="{4.4 * _sk:.1f}" y2="-3.1" stroke="{wc}" stroke-width="1.2"/>')  # the crossbeam walkway
         g.append(f'<rect x="-1.1" y="-4.2" width="2.2" height="2.2" fill="#B0905E" stroke="{wc}" stroke-width="0.8"/>')  # the windlass drum
         g.append('</g>')
-        z = self.add_top(''.join(g), cls="sluice gate")  # feature 139: its own highlight class
+        z = self.add_top(''.join(g), cls="sluice gate")  # feature 150: its own highlight class
         self.M.setdefault("sluice_gates", []).append({"x": round(x, 1), "y": round(y, 1), "rot": round(rot, 1), "z": z})
         if label:
             # a sluice reads as a bare black bar at fit zoom (GM 2026-08-09) - most of a real

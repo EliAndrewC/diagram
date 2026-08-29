@@ -1,6 +1,6 @@
 # Feature Specification: Kuwabata, the Dike-Pond Hamlet, Scripted and Audited
 
-**Feature Branch**: none - this project does not use feature branches (`SPECIFY_FEATURE=139-kuwabata-dike-pond-hamlet`)
+**Feature Branch**: none - this project does not use feature branches (`SPECIFY_FEATURE=150-kuwabata-dike-pond-hamlet`)
 
 **Created**: 2026-08-27
 

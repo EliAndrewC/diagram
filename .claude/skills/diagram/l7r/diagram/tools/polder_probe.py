@@ -1,6 +1,6 @@
-"""THE POLDER BLOCK ALONE, WITH ITS NUMBERS - the geometry loop without a map (feature 147, US1).
+"""THE POLDER BLOCK ALONE, WITH ITS NUMBERS - the geometry loop without a map (feature 149, US1).
 
-WHY THIS EXISTS. Feature 139's T55 - "one of the vegetable grounds overlaps with the irrigated channels"
+WHY THIS EXISTS. Feature 150's T55 - "one of the vegetable grounds overlaps with the irrigated channels"
 - took 79.8 minutes for a fix whose final diff is one function, and **19 of those minutes were map rolls**
 (29-100 s each, median 47 s) whose only purpose was to produce numbers that need no houses, no hinterland
 and no render. Four different algorithms were tried; each attempt cost a minute of wall clock before it
@@ -130,7 +130,7 @@ def probe(seed: int, archetype: str = "mulberry_dike_fishpond", households: int 
 
 
 def main(argv: list[str] | None = None) -> int:
-    ap = argparse.ArgumentParser(description="the polder block alone, with its geometry metrics (feature 147)")
+    ap = argparse.ArgumentParser(description="the polder block alone, with its geometry metrics (feature 149)")
     ap.add_argument("--seed", type=int, default=21, help="the block's seed (the reference dike-pond is 21)")
     ap.add_argument("--seeds", default=None, help="comma-separated seeds, for one table over several blocks")
     ap.add_argument("--archetype", default="mulberry_dike_fishpond", choices=POLDER_ARCHETYPES)

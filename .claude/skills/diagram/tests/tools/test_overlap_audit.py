@@ -1,7 +1,7 @@
-"""Every family of the overlap audit fires on an offender and stays silent on a clean map (feature 147, US2).
+"""Every family of the overlap audit fires on an offender and stays silent on a clean map (feature 149, US2).
 
 The `unmeasured` case matters as much as the others: a family that reports `0` when it could not look is
-the failure this tool exists to remove - twelve hand-written scripts across features 139's T50-T55, two of
+the failure this tool exists to remove - twelve hand-written scripts across features 150's T50-T55, two of
 which measured the wrong thing and reported a clean map.
 """
 
@@ -50,7 +50,7 @@ def test_a_channel_through_a_parcel_is_a_crossing_and_a_mouth_is_not() -> None:
 
 
 def test_ink_over_a_mound_and_over_water_is_named_by_the_marks_own_reach() -> None:
-    """A tint circle centered a foot outside a rim still paints its whole body over the water (feature 139
+    """A tint circle centered a foot outside a rim still paints its whole body over the water (feature 150
     T54's own defect), and a reed blade is a LINE that leans - read as a disc round its base it reports ink
     the map does not carry."""
     M = {

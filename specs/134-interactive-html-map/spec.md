@@ -281,19 +281,19 @@ hover/click checks for the classes it contains.
   | field ditch | the intake, head race, branches and drain (`field_ditches`, `channels`) | stream; pond |
   | pond | the tameike | stream; field ditch; marsh; field pond |
   | field pond | the small open-water pocket sunk into one low paddy (`field_ponds`) - added at implementation: the reference hamlet draws one and the table did not name it, so it is listed here for the GM to overrule by name | pond; paddy |
-  | fish pond | the dug water of every dike-pond parcel (`dikeponds[]`) - added by feature 139 (Kuwabata, the first scripted mulberry-dike fish-pond hamlet), listed here for the GM to overrule by name | pond; paddy |
-  | mulberry dike | the planted bank ring of every dike-pond parcel and its coppiced crowns - feature 139 | bund; windbreak |
-  | pond sluice | the cut in a pond's dike to the canal (`dikepond_sluices`) - feature 139 | field ditch |
-  | perimeter dike | the polder's enclosing earthwork band (`dikes[]`) - feature 139 | bund; field ditch |
-  | fry pond | a dike-pond parcel designated a fry nursery (`dikeponds[].kind = fry`) - feature 139, the GM's audit A5 | fish pond |
-  | manure pit | the manure fixture in its pit form (`farm_fixtures[].form = pit`) - feature 139, audit A2 | manure heap |
-  | sluice gate | the boards in a perimeter dike's cut (`sluice_gates[]`) - feature 139, audit A7 | pond sluice |
-  | sugarcane dike | the dike planting when `meta.dike_crop` is sugarcane - feature 139, audit A6 | mulberry dike |
-  | banana dike | the dike planting when `meta.dike_crop` is banana - feature 139, audit A6 | mulberry dike |
-  | fruit dike | the dike planting when `meta.dike_crop` is fruit - feature 139, audit A6 | mulberry dike |
-  | vegetable ground | the leftover parcels of a converted block when `meta.leftover` is vegetables - feature 139, audit B2 | paddy |
-  | pig sty | a pig shed on a pond dike (`pig_sties[]`) - feature 139, audit A3 | byre |
-  | duck pen | a fenced dry run on the dike and wet run in the pond (`duck_pens[]`) - feature 139, audit A4 | hen coop |
+  | fish pond | the dug water of every dike-pond parcel (`dikeponds[]`) - added by feature 150 (Kuwabata, the first scripted mulberry-dike fish-pond hamlet), listed here for the GM to overrule by name | pond; paddy |
+  | mulberry dike | the planted bank ring of every dike-pond parcel and its coppiced crowns - feature 150 | bund; windbreak |
+  | pond sluice | the cut in a pond's dike to the canal (`dikepond_sluices`) - feature 150 | field ditch |
+  | perimeter dike | the polder's enclosing earthwork band (`dikes[]`) - feature 150 | bund; field ditch |
+  | fry pond | a dike-pond parcel designated a fry nursery (`dikeponds[].kind = fry`) - feature 150, the GM's audit A5 | fish pond |
+  | manure pit | the manure fixture in its pit form (`farm_fixtures[].form = pit`) - feature 150, audit A2 | manure heap |
+  | sluice gate | the boards in a perimeter dike's cut (`sluice_gates[]`) - feature 150, audit A7 | pond sluice |
+  | sugarcane dike | the dike planting when `meta.dike_crop` is sugarcane - feature 150, audit A6 | mulberry dike |
+  | banana dike | the dike planting when `meta.dike_crop` is banana - feature 150, audit A6 | mulberry dike |
+  | fruit dike | the dike planting when `meta.dike_crop` is fruit - feature 150, audit A6 | mulberry dike |
+  | vegetable ground | the leftover parcels of a converted block when `meta.leftover` is vegetables - feature 150, audit B2 | paddy |
+  | pig sty | a pig shed on a pond dike (`pig_sties[]`) - feature 150, audit A3 | byre |
+  | duck pen | a fenced dry run on the dike and wet run in the pond (`duck_pens[]`) - feature 150, audit A4 | hen coop |
   | field rock | a bedrock outcrop inside a plot (`field_rocks`) - added at implementation from cohort seed 42; the reference hamlet draws none | paddy; grave island |
   | grave island | the rare in-field grave mound (`field_graves`) - added at implementation from cohort seed 42; a calibrated liberty the record discloses | paddy; field rock |
   | village lane | EVERY lane on the map - the web, the internal skeleton, the connector to the off-map road and the field spur - one class whether or not they meet; the text may say the connector predates the settlement | - |

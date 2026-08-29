@@ -23,7 +23,7 @@ from l7r.diagram.settlement._geom.primitives import keepout_ring
 
 from .._geom import Poly, Pt, point_in_poly, smooth_closed, smooth_points
 
-DIKE_GAP_HW = 15.0  # half the width the band is CUT by at a sluice notch or a crossing; exported because the waterward reed strip steps into exactly that opening (feature 139 T54, hamletgen/water.py `dike_face`) and a drifted copy would leave the wet ground short of the cut or lapping the band
+DIKE_GAP_HW = 15.0  # half the width the band is CUT by at a sluice notch or a crossing; exported because the waterward reed strip steps into exactly that opening (feature 150 T54, hamletgen/water.py `dike_face`) and a drifted copy would leave the wet ground short of the cut or lapping the band
 DIKE_KEEPOUT_EPS = 8.0  # px: a chord may stray this far from the crest; the keep-out is pushed out by it (feature 140)
 
 if TYPE_CHECKING:
@@ -200,9 +200,8 @@ class DikeMixin:
             best = max(outer_s, key=lambda p: (p[1] < cy) * 1000 - abs(p[0] - cx) - (200 if (p[0] - cx) * (hx - cx) > 0 else 0))
             self.label(best[0], best[1] - 8, label, 10, italic=True, color="#6B5836")
 
-
     def dike_gates(self: Settlement, span_ft: float = 6.0) -> int:  # type: ignore[misc]
-        """A sluice gate at every cut of every perimeter dike (feature 139, GM 2026-08-28 choosing audit A7).
+        """A sluice gate at every cut of every perimeter dike (feature 150, GM 2026-08-28 choosing audit A7).
 
         Water crosses a polder dike only through a gated sluice - "a protected opening in the pond dike that
         can be easily closed with wooden boards" (FAO; research/archetypes.md 'A dike-pond is fed and drained

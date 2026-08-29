@@ -271,7 +271,7 @@ WEST_SUN_FT = 50.0
 # keys) and almost nothing else: different water entry, different drainage, a perimeter dike, and a
 # village that must sit on the LANDWARD side rather than the upslope one.
 #
-# `mulberry_dike_fishpond` IS declared as a third archetype (feature 139, Kuwabata) because a pool
+# `mulberry_dike_fishpond` IS declared as a third archetype (feature 150, Kuwabata) because a pool
 # entry names it and the gate reads it (`dikepond_is_ponds_in_a_block` keys off
 # `meta.field_archetype`) - but it is BUILT as the polder carried to the wholesale-conversion
 # overlay, which is what it is historically too (research/archetypes.md "The three overlay values":
@@ -312,14 +312,14 @@ POLDER_FABRIC: dict[str, dict[str, Any]] = {
 # the grid, 0.5 the mosaic Kuwabata was drawn with (the GM saw and accepted that map's ponds).
 POND_LAYOUTS = ("mosaic", "mosaic", "grid")
 
-# THE MANURE FIXTURE'S FORM - heap or pit, two attested forms so a knob (constitution XII; feature 139, GM
+# THE MANURE FIXTURE'S FORM - heap or pit, two attested forms so a knob (constitution XII; feature 150, GM
 # 2026-08-28 choosing audit A2). Sugiura 1973 counts the manure shed/heap on Tohoku farmsteads; Fei 1939 has
 # the Lake Tai silk village keeping its manure "in the pits made of earthenware, half buried in the ground at
 # the back of the building", lined along the road. Neither source gives a share of villages using each, so
 # the roll is even. research/archetypes.md "What stands on a dike-pond hamlet that a paddy hamlet lacks".
 MANURE_FORMS = ("heap", "pit")
 
-# THE DIKE CROP - which of the dike-pond TYPES a hamlet is (feature 139, GM 2026-08-28 choosing audit A6).
+# THE DIKE CROP - which of the dike-pond TYPES a hamlet is (feature 150, GM 2026-08-28 choosing audit A6).
 # The gazetteer office frames 桑基 (mulberry), 果基 (fruit), 蔗基 (sugar cane) and 蕉基 (banana) as a
 # succession of types across the region's history, not crops mixed on one dike; the late-1980s survey
 # carried by Ruddle & Zhong had cane dikes at 18% of the district against mulberry at 12%, while the
@@ -327,10 +327,10 @@ MANURE_FORMS = ("heap", "pit")
 # (a DEGREE, constitution XII); the others roll so two dike-pond hamlets can honestly differ.
 DIKE_CROPS = ("mulberry", "mulberry", "mulberry", "sugarcane", "banana", "fruit")
 
-# WHAT THE LEFTOVER PARCELS OF A WHOLESALE CONVERSION READ AS (feature 139 B2): standing rice, vegetable
+# WHAT THE LEFTOVER PARCELS OF A WHOLESALE CONVERSION READ AS (feature 150 B2): standing rice, vegetable
 # ground (Fei: vegetables under the mulberry; the gazetteers: no rice inside a converted district), or no
 # leftover at all (every parcel a pond). Three attested states; the roll is even.
-WATERWARD_DEPTH = 280.0  # px of wild water drawn outside a polder's dike face (feature 139 T55). Not "to the canvas edge": the crop keeps ~120 px past the content at most on this tier, so everything beyond was scattered, keep-out tested and thrown away - 18.4 s of a 40 s gen. 280 outlasts any hamlet crop measured (the tightest flank keeps 245 px of headroom), and `waterward_strips_run_off_the_frame` holds the line.
+WATERWARD_DEPTH = 280.0  # px of wild water drawn outside a polder's dike face (feature 150 T55). Not "to the canvas edge": the crop keeps ~120 px past the content at most on this tier, so everything beyond was scattered, keep-out tested and thrown away - 18.4 s of a 40 s gen. 280 outlasts any hamlet crop measured (the tightest flank keeps 245 px of headroom), and `waterward_strips_run_off_the_frame` holds the line.
 LEFTOVER_FORMS = ("rice", "vegetables", "pond")
 POND_LAYOUT_MOSAIC = 0.5
 

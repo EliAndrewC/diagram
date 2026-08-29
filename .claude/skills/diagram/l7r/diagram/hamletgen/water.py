@@ -54,11 +54,11 @@ def stage_water_frame(s: Settlement, plan: SitePlan) -> None:
         nucleated=plan.settlement_form == "nucleated",
         field_footbridges=True,
         water_kind="stream",
-        # NO WORK YARDS ON A NO-RICE HAMLET (feature 139, GM 2026-08-28): the threshing yard is a rice
+        # NO WORK YARDS ON A NO-RICE HAMLET (feature 150, GM 2026-08-28): the threshing yard is a rice
         # feature; the dike-pond archetype sells silk and fish and buys grain in. Declared here so the
         # bundle omits the yard (`_bundle_geom`) and `harvest_yards_present` stands aside.
         work_yards=plan.field_archetype != "mulberry_dike_fishpond",
-        manure_form=plan.manure_form,  # the rolled manure form (feature 139 A2), read by farmstead_fixtures
+        manure_form=plan.manure_form,  # the rolled manure form (feature 150 A2), read by farmstead_fixtures
     )
     s._work_yards = plan.field_archetype != "mulberry_dike_fishpond"
     # `_nucleated` IS NOT THE FORM - it is the engine's flag for a COMPACT BUNDLE (house + lee
@@ -337,7 +337,7 @@ def stage_polder(s: Settlement, plan: SitePlan) -> None:
 
     The SOURCE is a header reservoir OUTSIDE the dike above the high corner, charged through a sluice
     in the dike - not a brook running in over the crop, which is what a valley hamlet has."""
-    # BOTH polder archetypes come through here (feature 139): the fabric table sets the module and
+    # BOTH polder archetypes come through here (feature 150): the fabric table sets the module and
     # the parcel mix, the knob sets the arrangement, and the dike-pond's overlay is applied once the
     # grid is drawn - see `POLDER_ARCHETYPES` in consts.py for why the dike-pond is a polder.
     fabric = POLDER_FABRIC[plan.field_archetype]
@@ -401,7 +401,7 @@ def stage_polder(s: Settlement, plan: SitePlan) -> None:
         if not any(point_in_poly(q[0], q[1], plan.envelope) for q in rim):
             break
         pond = (pond[0] + ux * 12.0, pond[1] + uy * 12.0, pond[2], pond[3])
-    # THE STUB REACHES THE RIM (feature 139 T51, GM 2026-08-28: "the irrigated channel which feeds into the water
+    # THE STUB REACHES THE RIM (feature 150 T51, GM 2026-08-28: "the irrigated channel which feeds into the water
     # for everything stops short of actually being connected to the feeder pond"). `build_polder` ends the
     # feeder's inlet stub a fixed 52 ft past the ring's corner, and the reservoir is walked uphill until its
     # rim clears the crop - so the stub stopped a measured 30 ft short of the water. The stub's last point is
@@ -434,7 +434,7 @@ def stage_polder(s: Settlement, plan: SitePlan) -> None:
     # the repainted leftovers are field ground the dike band and the houses draw over. Its RNG is
     # positional (`knob_rng`), so adding it re-rolls nothing else on the map.
     if plan.field_archetype == "mulberry_dike_fishpond":
-        # ...with the hamlet's dike crop and its leftover form (feature 139 A6/B2): a `pond` leftover means the
+        # ...with the hamlet's dike crop and its leftover form (feature 150 A6/B2): a `pond` leftover means the
         # whole block converted, so the fraction goes to 1.0 and no parcel is left to repaint.
         s.apply_land_use(
             net,
@@ -570,7 +570,7 @@ def fit_polder(plan: SitePlan, seed: int, tolerance: float = 0.06, rounds: int =
         if lo > hi:
             break  # pragma: no cover - the bisection exhausts its bracket without meeting tolerance; every seed tried lands inside 6% within the rounds allowed, and the guard is what stops a runaway if a future cell size widens the gap between grid steps
     assert best is not None
-    clean_polder_parcels(best)  # the parcel/channel cleanup runs on the WINNER only (feature 139 T55) - see clean_polder_parcels for the 15 s -> 41 s it costs on all 45 candidates
+    clean_polder_parcels(best)  # the parcel/channel cleanup runs on the WINNER only (feature 150 T55) - see clean_polder_parcels for the 15 s -> 41 s it costs on all 45 candidates
     return best
 
 
@@ -632,7 +632,7 @@ def stage_field(s: Settlement, plan: SitePlan) -> None:
             s.corridors.append(([a, b], 30.0))
 
 
-# ---- the polder's flanks (feature 139) --------------------------------------------------------------
+# ---- the polder's flanks (feature 150) --------------------------------------------------------------
 
 
 def _compass(v: Pt) -> str:
@@ -673,7 +673,7 @@ def waterward_flanks(plan: SitePlan) -> list[str]:
 
 
 def dike_face(pts: Sequence[Pt], flank: str, lo: float, hi: float, bins: int = 32, cut: float = 0.0, cuts: Sequence[Pt] = (), cut_hw: float = DIKE_GAP_HW) -> Poly:
-    """The dike's OUTER FACE along one flank, as a polyline spanning [lo, hi] (feature 139 T54).
+    """The dike's OUTER FACE along one flank, as a polyline spanning [lo, hi] (feature 150 T54).
 
     The waterward reed strip has to end exactly where the embankment starts: on the mound is the GM's
     defect, short of it is a dry apron in front of the water. A rectangle can do neither, because the
@@ -746,7 +746,7 @@ def stage_waterward(s: Settlement, plan: SitePlan) -> None:
     nothing skips the check silently - the 'check that never runs' shape - which is why the scripted
     tier declares.
 
-    THE STRIP STOPS AT THE MOUND (feature 139 T54, GM 2026-08-28: "the marshland overlaps with the
+    THE STRIP STOPS AT THE MOUND (feature 150 T54, GM 2026-08-28: "the marshland overlaps with the
     earthen mounds ... In some cases, it seems to even extend past them"). Each strip used to lap 60 px
     INWARD from the dike's outer extreme - past a band 11-38 px wide, so the reeds and their wet tint
     were drawn over the mound and out the other side, and the recorded polygon claimed the mound as wet
@@ -772,7 +772,7 @@ def stage_waterward(s: Settlement, plan: SitePlan) -> None:
         for g in dk.get("gaps") or []:
             gx, gy = float(g[0]), float(g[1])
             by_flank[min((("W", gx - x0), ("E", x1 - gx), ("N", gy - y0), ("S", y1 - gy)), key=lambda t: t[1])[0]].append((gx, gy))
-    # THE STRIP IS A BAND, NOT A HALF-CANVAS (feature 139 T55). It used to run from the dike's face to the
+    # THE STRIP IS A BAND, NOT A HALF-CANVAS (feature 150 T55). It used to run from the dike's face to the
     # edge of the canvas, and the crop then threw nearly all of it away - on Kuwabata the view keeps ~74 px
     # of open water west of the dike out of the 1,880 px drawn. Every one of those reeds and tint circles
     # was scattered, tested against every keep-out and discarded: `stage_waterward` cost 18-24 s of a 40 s

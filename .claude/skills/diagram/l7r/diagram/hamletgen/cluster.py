@@ -153,7 +153,7 @@ def seat_cluster(plan: SitePlan, dry_plots: Sequence[Poly] = (), drain: Poly | N
         # do not build in the bog, and you do not build where the bog is either.
         if toe and (point_in_poly(seat_c[0], seat_c[1], toe) or point_in_poly(mid[0], mid[1], toe)):
             continue
-        # THE REED FRINGE IS NOT BUILDING GROUND EITHER (feature 139 T50, GM 2026-08-28: "multiple farmhouses
+        # THE REED FRINGE IS NOT BUILDING GROUND EITHER (feature 150 T50, GM 2026-08-28: "multiple farmhouses
         # ... overlap with marshland ... update our placement algorithms to make that impossible"). The fringe
         # round the reservoir is drawn before the seat is chosen but was never scored here, so a cluster could
         # be seated with one end in the reeds; the house placer then refuses those seats (the marsh is hard

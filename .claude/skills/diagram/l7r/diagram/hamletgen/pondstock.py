@@ -1,4 +1,4 @@
-"""STAGE 6b (feature 139, GM 2026-08-28 choosing audits A3 and A4): the stock a dike-pond hamlet keeps ON its ponds.
+"""STAGE 6b (feature 150, GM 2026-08-28 choosing audits A3 and A4): the stock a dike-pond hamlet keeps ON its ponds.
 
 The dike-pond loop fed its fish with more than silkworm waste: "pigs, chickens and ducks are reared on
 the dykes, to provide manure to fertilise the fishponds" (Ruddle & Zhong via `isis-dykepond`), the

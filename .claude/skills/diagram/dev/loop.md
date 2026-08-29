@@ -229,9 +229,9 @@ month-to-date; `make audit` gains a "Remote spend" block summed from `dev/run-lo
 StartBuild deny to the session's user, a live alarm at 125 build-minutes per rolling day - are
 described in `specs/130-codebuild-merge-gate/spec.md`'s baseline table and are not repo code.
 
-## The three diagnostics and the paired gate (feature 147, 2026-08-29)
+## The three diagnostics and the paired gate (feature 149, 2026-08-29)
 
-Written after a time audit of feature 139's T55 - 79.8 minutes for a one-function geometry fix, of which
+Written after a time audit of feature 150's T55 - 79.8 minutes for a one-function geometry fix, of which
 19 map rolls (13.6 min), 42 hand-written measurement scripts, and 33.6 minutes waiting on background
 verification with a 17-minute review LAST because it is dispatched from memory.
 

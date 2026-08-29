@@ -1,4 +1,4 @@
-"""Feature 139 T52 (GM 2026-08-28): the polder's ring canal CLOSES - every toe collector ends ON the trunk it meets."""
+"""Feature 150 T52 (GM 2026-08-28): the polder's ring canal CLOSES - every toe collector ends ON the trunk it meets."""
 
 from __future__ import annotations
 
@@ -37,7 +37,7 @@ def test_both_toe_collectors_end_on_the_feeder_and_the_drain() -> None:
             assert math.dist(toe["pts"][0], toe["pts"][-1]) > 500, "a toe still spans the block - it was not thrown across it"
 
 
-# ---- feature 139 T55: a parcel stops at the ditch that bounds it ---------------------------------
+# ---- feature 150 T55: a parcel stops at the ditch that bounds it ---------------------------------
 def _parcel(x0: float, y0: float, x1: float, y1: float, n: int = 6) -> dict[str, object]:
     ring = (
         [(x0 + (x1 - x0) * i / n, y0) for i in range(n)]

@@ -440,7 +440,7 @@ OVERLAP_CLASS: dict[str, str] = {
     # ANNEX - belongs to a named parent and abuts IT (and nothing else)
     **{
         k: "ANNEX" for k in ("gardens", "threshing_yards", "farm_sheds", "storehouses", "byres", "farm_fixtures", "persimmons", "pig_sties", "duck_pens")
-    },  # pig_sties / duck_pens stand ON the pond dike by construction (feature 139)
+    },  # pig_sties / duck_pens stand ON the pond dike by construction (feature 150)
     # --- PERMISSIVE CLASSES (never tested; each row below records WHY) ---------------------------
     **{k: "COVER" for k in ("commons", "pastures", "marsh", "marshes")},
     "quarters": "OVERLAY",

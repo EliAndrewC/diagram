@@ -326,7 +326,7 @@ def test_lane_unworn_draws_a_dashed_causeway():
     s = _village()
     s.lane([(100, 300), (500, 300)], width=6, worn=False)
     assert s.M["lanes"][-1]["worn"] is False
-    # feature 139 T53: lanes render through the GROUND block (edges below beds, so junctions read as one
+    # feature 150 T53: lanes render through the GROUND block (edges below beds, so junctions read as one
     # structure); the dashed centerline is the entry's `top`, flushed into `out` by finish()
     assert 'stroke-dasharray="8,8"' in (s.ground[-1]["top"] or "")
     assert s.ground[-1]["cls"] == "village lane"
@@ -374,7 +374,7 @@ def test_clip_to_stream_trims_the_confluence_mouth():
 
 
 def test_pond_fill_stays_in_the_shared_block_without_a_late_join():
-    # ONE WATER BLOCK (feature 139 T53): every watercourse composites in one block at the late
+    # ONE WATER BLOCK (feature 150 T53): every watercourse composites in one block at the late
     # position whenever a late channel exists - rims first, one shared-opacity bed group with the
     # pond's fill LAST, then the sheens - so a non-joining late channel no longer sits in a second
     # block of its own; the fill covers the early feeder's overshoot AND draws over the late bed

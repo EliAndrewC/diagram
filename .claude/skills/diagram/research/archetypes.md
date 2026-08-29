@@ -104,7 +104,7 @@ The research upheld the instinct: the surveyed rectilinear chessboard of the Tai
 
 ## Grid vs mosaic - the arrangement differed by system
 
-**Grounds:** `build_polder(mosaic=)`; `pond_layout` as a twin axis (a rolled hamletgen knob since feature 139)
+**Grounds:** `build_polder(mosaic=)`; `pond_layout` as a twin axis (a rolled hamletgen knob since feature 150)
 
 **Evidence:** attested, corroborated
 
@@ -115,7 +115,7 @@ The research upheld the instinct: the surveyed rectilinear chessboard of the Tai
 
 ## The 6:4 water-to-dike ratio, and coppiced mulberry
 
-**Grounds:** the drawn bank width; `_mulberry_rows` crown density; `POLDER_FABRIC` (feature 139)
+**Grounds:** the drawn bank width; `_mulberry_rows` crown density; `POLDER_FABRIC` (feature 150)
 
 **Evidence:** attested (the ratio, three reads); the coppice density is still unsourced
 
@@ -153,9 +153,9 @@ Silkworm mulberry was not grown as trees: it was COPPICED into low bushes (crown
 
 (1) *Does the dike really surround the paddies completely?* Yes - full enclosure IS the defining feature, not a drawing convenience. A weitian is wetland "enclosed with dykes to be hydrologically separated from the surrounding fluctuating water and then drained" (the character 圩 means the enclosing embankment); Shen Kuo (Northern Song, Illustrated Records of Wanchun Polder) describes "dikes and dams... built along the rivers to enclose the farmland, which is called a polder." The enclosed floor sits at or below the surrounding FLOOD stage, so on a flat lake plain there is no safe side to leave open - any gap re-floods the whole block at the next high water, which is why water crosses only at the two gated sluices. The scale is attested too: fragmented small polders were each "cultivated by a group of 10-20 households" behind dikes ~1.5 m high - Enokida's 16 households are exactly this unit. (2) *Should there be marsh/wetland on all sides then?* The outside is "fluctuating water," but that means neither open lake on every side nor water year-round. Attested surroundings: the lake/creek network the polder was dug from; reed marsh and mudflat where reclamation had not yet reached; NEIGHBOR polders across a shared creek (the mature Taihu landscape was "islet-like" fish-scale polders packed into the water net); and - at the district margin - the natural shore, because reclamation advanced FROM the shore ("mudflats along rivers and lakes were transformed"). The water also FLUCTUATES seasonally: at low stage much of the outside is exposed mudflat and reed, at flood it is sheet water - the dike is built against the flood stage, not the average day. Both pool polders are drawn as the landward-margin case: wild header pond NW (the source), reed marsh at the low south outfall side, village on naturally dry ground east. **RESOLVED (GM 2026-07-24, same day):** the WEST flank's outside used to draw as the same dry scrub as the landward east, so nothing communicated that the west dike held anything back; both polders now carry a `waterside` reed fringe along the west and declare `meta.waterward`, gated by `polder_waterward_flanks_wet` - see 'Polder waterward fringe + dike-top housing' below. (3) *Should the farmhouses be INSIDE the dike?* Both siting patterns are attested, split by what dry ground exists. Where the polder abuts the natural shore, the village sits on the landward dry ground at the dike's shoulder - the current renders' configuration, and the natural one for a margin polder (nobody lives on a flood-fighting earthwork when real dry ground is a few steps east). In the DEEP-water landscape with no natural dry ground, settlement used the polder's own raised earth instead: linear villages ON the dikes (canal-dike settlement "taking advantage of the elevated typology" is attested from the 8th century on) or houses inside the polder along its interior streams (Fei Xiaotong's Kaixiangong / the Xichang polder layout). So Enokida and Kuwabata are correct AS margin polders - but an "islet" polder map, water-ringed on all sides, would REQUIRE dike-top or interior housing, and `structures_clear_of_dike` (which keeps all structures off the dike band) would need a carve-out for that settlement form. **RESOLVED (GM 2026-07-24, same day):** dike-top housing is now a real engine capability (`s.dike_top_houses`, `settlement_form="dike_top"`, the carve-out + its honesty check) implemented as a KNOB for future variety - the GM explicitly chose NOT to convert any existing settlement; no pool map uses it yet. See 'Polder waterward fringe + dike-top housing' below. One more confirmation from the same research: the polder community IS its dike-maintenance community ("sustaining a polder necessitated a close-knit community," often one extended family, which named its polder) - so a polder village always sits hard against its own block, which is what `field_ringed` and the cluster-hug behavior already enforce.
 
-## What stands on a dike-pond hamlet that a paddy hamlet lacks - the audit (feature 139, 2026-08-28)
+## What stands on a dike-pond hamlet that a paddy hamlet lacks - the audit (feature 150, 2026-08-28)
 
-**Grounds:** the feature-139 audit list (`specs/139-kuwabata-dike-pond-hamlet/audit.md`); nothing drawn from it yet - the GM chooses (FR-008)
+**Grounds:** the feature-139 audit list (`specs/150-kuwabata-dike-pond-hamlet/audit.md`); nothing drawn from it yet - the GM chooses (FR-008)
 
 **Evidence:** attested for the boats, the in-house rearing and the manure pits (one primary ethnography, Lake Tai); attested-at-secondhand for the dike livestock and the fry trade (Pearl delta); silent on pond huts
 

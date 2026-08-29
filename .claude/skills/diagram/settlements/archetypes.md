@@ -1,10 +1,10 @@
 # Field archetypes: land-use overlays and the polder build
 
-## The scripted dike-pond hamlet (feature 139, 2026-08-28) - the rules
+## The scripted dike-pond hamlet (feature 150, 2026-08-28) - the rules
 
 `hamletgen` draws `mulberry_dike_fishpond` as the polder carried to the wholesale overlay
 (`POLDER_ARCHETYPES`, `POLDER_FABRIC`); the research is in `research/archetypes.md`, the audit that
-added the rest in `specs/139-kuwabata-dike-pond-hamlet/audit.md` (the GM chose every item but the creek).
+added the rest in `specs/150-kuwabata-dike-pond-hamlet/audit.md` (the GM chose every item but the creek).
 
 - **No threshing floor** - the farmstead's forecourt is recorded (`threshing_yards[].kind = forecourt`)
   and reserved but not drawn; `meta.work_yards: false`.

@@ -595,7 +595,7 @@ _DEFS: tuple[FeatureClass, ...] = (
         sources=("not recorded",),
         entry="research/urban-features.md - 'The notice board (kosatsuba) - siting is a TRAFFIC decision'",
     ),
-    # ---- the dike-pond hamlet (feature 139, Kuwabata - the first scripted mulberry_dike_fishpond) ----
+    # ---- the dike-pond hamlet (feature 150, Kuwabata - the first scripted mulberry_dike_fishpond) ----
     FeatureClass(
         key="fish pond",
         name="fish pond",
