@@ -319,3 +319,36 @@ main, run twice per idle, run again on a clone unchanged since its last green id
 GM wait - a prompt aborts a run in progress. The scope lock is relaxed for that run and only for
 it: `switches.read` unlocks the scope solely for a process that descends from the idle timer, which
 a session's shell never does (the GM's ruling, D1b).
+
+## A hung agent is silent (feature 150, GM 2026-08-28)
+
+The session launched a general-purpose research agent with a ~40-fetch budget at 23:09Z, ended its
+turn "waiting on the notification", and waited. The agent made ~50 fetches, stopped answering in
+the middle of a WebSearch, and never returned; the harness sends a completion notification only
+when a background task COMPLETES, so nothing arrived, and nothing else wakes a session but the user.
+The GM came back 8 hours later to a session that had done no work: 13 hours of wall clock, almost
+all of it idle. The pass was then redone in-session in ~25 minutes (four turns of parallel
+WebFetch/WebSearch) and verified by `source-reader` in 2 minutes.
+
+The transcript says which it is: a finished agent's `subagents/agent-<id>.jsonl` ends on an
+`assistant` record with `stop_reason: end_turn`; a hung one ends on a `user` tool_result that never
+got its next turn, and its mtime is when it last did anything. `scripts/agent-stall-hooks.sh`
+reads that: the prompt hook lists any agent whose transcript has not moved for 5 minutes, a
+`Monitor` on its `watch` mode surfaces the same mid-turn, and `pending` answers the narrower
+question feature 151's pairing guard asks (has the review I launched finished?). Measured on the
+live session: the dead agent scanned as stale at 46,670 s, every other agent as finished.
+
+**A second watcher was written and then dropped (2026-08-29).** Feature 150 T33 and feature 143
+answered the same GM ask - *"can you add something to catch hung agents next time?"* - in two
+sessions on the same day, and both landed in different trees: `agent-watch-hooks.sh` (a Stop hook
+that REFUSES to end a turn while an agent is pending, plus a watchdog background command whose exit
+wakes the session) and `agent-stall-hooks.sh` (feature 143, above). At the merge only one could
+stay. Kept: the stall reporter, because it is the one on main, the one the root CLAUDE.md table
+documents, and the one whose doctrine the GM ruled on (*nothing of yours ever waits on it*). Dropped:
+the watchdog, whose extra capability - blocking the turn until a watchdog is armed - is exactly what
+that ruling declines. `pending` carries over the one thing the dropped script had that the kept one
+did not.
+
+The other half is the budget: an agent given "25-40 fetches" ran 50 and hung. Give a research agent
+10-15 fetches, or do the search pass in the session with parallel fetch calls and dispatch only the
+reading to `source-reader`, which is cheap and returns in minutes.

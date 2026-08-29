@@ -44,7 +44,9 @@ sequence one-to-one. Where the two disagree, `STAGES` wins for anything under `h
 | 2 | `stage_field` | the water skeleton AND the paddy - `build_comb` returns canals and plots from one call, so intake, head race and field ditches arrive here, not in stage 1 |
 | 3 | `stage_sink` | tail drain, pond or off-map outfall |
 | 4 | `stage_ways` | the CONNECTOR and the field spur only - the EXOGENOUS ways, which genuinely predate the settlement. The internal skeleton moved to stage 7 in feature 126 |
+| 4b | `stage_waterward` | a polder's WATERWARD reed fringe (feature 150): the strips outside the dike on the flanks that face the water, derived from the seat - laid BEFORE the houses and the track because it reserves wet ground both must avoid (laid in the hinterland it was drawn over an already-routed connector). No ink on a valley hamlet |
 | 5 | `stage_homesteads` | the farmhouses |
+| 6b | `stage_pond_stock` | a dike-pond hamlet's pig sties and duck pens, seated on the banks of the ponds nearest the houses after the appurtenances (they are structures on field ground the registries hold nothing off, so they are placed before the web and the scrub; feature 150 A3/A4) |
 | 6 | `stage_appurtenances` | yards, gardens, byres, wells, sheds |
 | 7 | `stage_web` | ALL the endogenous ways - the internal skeleton AND the lane web, both derived from where the houses actually landed. No-op for a dispersed hamlet, which has no internal network |
 | 8 | `stage_notice` | the kosatsuba, which stands ON a way and so waits for the web |
@@ -52,7 +54,7 @@ sequence one-to-one. Where the two disagree, `STAGES` wins for anything under `h
 | 10 | `stage_woodland` | woodland commons |
 | 11 | `stage_windbreak` | the shelter belt |
 | 12 | `stage_bamboo` | the bamboo stands, on seats the hinterland stage scanned (feature 133 T47) |
-| 13 | `stage_crossings` | planks and decks over every way that crosses water |
+| 13 | `stage_crossings` | planks and decks over every way that crosses water; on a polder the ring-canal planks cluster on the settlement-side toe collector and skip the feeder, the far toe and the drain (`polder_crossing_caps`, feature 150) |
 | 14 | `stage_frame` | crop to content, title, scalebar |
 
 **WAYS ARE SPLIT BY PROVENANCE, NOT BY TIMING** (feature 126, 2026-08-23). The GM asked whether
@@ -102,7 +104,7 @@ against `STAGES` on 2026-08-20 rather than by a failure - which is the point of 
 1. **terrain + water** - fields, channels, streams, pond, marsh
 2. **big terrain features** - `forest()` / `forest_patch()`. EARLY, because the settlement is sited
    against them; their FLOOR draws here but their CANOPY is deferred (see 7)
-3. **ways** - road, lanes, streets. This is the ground-RESERVING half: the skeleton and the
+3. **ways** - road, lanes, streets (since feature 150 T53 village lanes draw through the GROUND block like streets: shoulders in the bottom sub-layer, treads above, so junctions read as one tread - `_lane_ink_at`; `reink_lane` and the stub trimmer rewrite the ground entry). This is the ground-RESERVING half: the skeleton and the
    connector, laid so the homesteads front them
 4. **structures** - `manor()`, `farmsteads()`, urban packs, `place_wells()`, `draft_byres()`,
    `place_kosatsuba()`. Inside `farmsteads()` the bundle path records grove rects first (the garden
@@ -306,7 +308,7 @@ keep-out and footprint-test. That re-tunes margins pool-wide, so it is a separat
 
 ## Adding a new map feature: the KEEP-CLEAR CONTRACT (read this before writing the glyph)
 
-**And its FEATURE CLASS (feature 134).** Every `add*()` at the glyph's emit site carries the class
+**And its FEATURE CLASS (feature 150).** Every `add*()` at the glyph's emit site carries the class
 the interactive page highlights it under - `cls="<key>"` or `with self.feature("<key>"):` - and
 the key is a row of `l7r/diagram/interactive/classes.py` with its explanation and label; ink the
 GM has ruled NOT highlighted is tagged `"-"` with a row in `NOT_HIGHLIGHTED_RULINGS`. The gate

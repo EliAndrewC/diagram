@@ -11,6 +11,8 @@ from __future__ import annotations
 # The `X as X` form is not stylistic: mypy --strict turns on --no-implicit-reexport, so a
 # plain `from ... import X` would NOT re-export X and every `from .consts import Poly, Pt`
 # in this package would fail to type-check.
+from typing import Any
+
 from l7r.diagram.sitegen.types import SQ_FT_PER_ACRE as SQ_FT_PER_ACRE  # noqa: F401
 from l7r.diagram.sitegen.types import Poly as Poly  # noqa: F401
 from l7r.diagram.sitegen.types import Pt as Pt  # noqa: F401
@@ -269,9 +271,77 @@ WEST_SUN_FT = 50.0
 # keys) and almost nothing else: different water entry, different drainage, a perimeter dike, and a
 # village that must sit on the LANDWARD side rather than the upslope one.
 #
-# `mulberry_dike_fishpond` is not a third archetype here - it is an OVERLAY on the polder (see
-# `MULBERRY_ELIGIBLE`), which is what it is historically too.
-FIELD_ARCHETYPES = ("valley_paddy", "polder_grid")
+# `mulberry_dike_fishpond` IS declared as a third archetype (feature 150, Kuwabata) because a pool
+# entry names it and the gate reads it (`dikepond_is_ponds_in_a_block` keys off
+# `meta.field_archetype`) - but it is BUILT as the polder carried to the wholesale-conversion
+# overlay, which is what it is historically too (research/archetypes.md "The three overlay values":
+# the wall-to-wall dike-pond landscape is the rare END STATE of the scattered overlay, ~300 years
+# of 挖塘培基 plot by plot). So `POLDER_ARCHETYPES` is the set the polder stage serves, and the
+# dike-pond differs from the rice polder only in its PARCEL FABRIC (`POLDER_FABRIC`), the overlay
+# applied after the grid is drawn, and the ring-canal crossing caps.
+FIELD_ARCHETYPES = ("valley_paddy", "polder_grid", "mulberry_dike_fishpond")
+POLDER_ARCHETYPES = ("polder_grid", "mulberry_dike_fishpond")
+
+# THE PARCEL FABRIC PER POLDER ARCHETYPE - every number is `build_polder`'s TRUE-SCALE SIZING note
+# (researched 2026-07-21, source-verified the same day; 1 px = 1 ft, no legibility inflation):
+# - a RICE polder's module is ~110 ft (whole bay ~1.9 mu, halves ~0.9, thirds ~0.6 - Buck's
+#   1929-33 mean parcel ~1 mu), most bays split into strips ((0.52, 0.16, 0.12)), with 3 ft walking
+#   bunds between rows and 8 ft ditch corridors on the module lines ((1.5, 4.0));
+# - a DIKE-POND's ponds were 0.4-0.6 ha oblongs (Ruddle & Zhong / FAO; CAVEAT in the note: the
+#   sizes are Republican-to-1980s surveys of the traditional landscape, not Ming/Qing documents),
+#   so a ~160 ft module with a merge-heavy mix ((0.10, 0.0, 0.60): mostly 160x320 ft ~0.48 ha 1:2
+#   ponds, a square ~2.4-mu minority) and ~22 ft mulberry dikes ((11, 11)) - the 6:4 water-to-dike
+#   ratio measured on Kuwabata at 76% water per parcel, 50% over the block (research/archetypes.md
+#   "The 6:4 water-to-dike ratio").
+# `fit_polder` scales the GRID to the acreage and never the cell, so these calibrations hold
+# whatever the household count asks for.
+POLDER_FABRIC: dict[str, dict[str, Any]] = {
+    "polder_grid": {"cell": 110.0, "parcel_mix": (0.52, 0.16, 0.12), "gap": (1.5, 4.0)},
+    "mulberry_dike_fishpond": {"cell": 160.0, "parcel_mix": (0.10, 0.0, 0.60), "gap": (11.0, 11.0)},
+}
+
+# THE POND LAYOUT KNOB - two attested FORMS, so a knob rather than a choice (constitution XII,
+# GM 2026-08-18). research/archetypes.md "Grid vs mosaic": the lower-Yangtze wei-tian was a SURVEYED
+# rectilinear grid (the Song tangpu lattice) while the Pearl-delta dike-pond accreted household by
+# household into a MOSAIC - rectangles of varied size at varied local orientation around winding
+# creeks. Both systems carried dike-ponds (Lake Tai mulberry sat on the tang banks inside the
+# grid), so a dike-pond hamlet rolls between them; a RICE polder is the surveyed grid by definition
+# and does not roll (`plan_site` pins it to "grid", which keeps every polder_grid map byte-identical
+# to before this knob existed). The uniform chessboard is also the MODERN consolidated look, which
+# is why the mosaic is the more common roll. `build_polder(mosaic=)` is the engine's dial: 0.0 is
+# the grid, 0.5 the mosaic Kuwabata was drawn with (the GM saw and accepted that map's ponds).
+POND_LAYOUTS = ("mosaic", "mosaic", "grid")
+
+# THE MANURE FIXTURE'S FORM - heap or pit, two attested forms so a knob (constitution XII; feature 150, GM
+# 2026-08-28 choosing audit A2). Sugiura 1973 counts the manure shed/heap on Tohoku farmsteads; Fei 1939 has
+# the Lake Tai silk village keeping its manure "in the pits made of earthenware, half buried in the ground at
+# the back of the building", lined along the road. Neither source gives a share of villages using each, so
+# the roll is even. research/archetypes.md "What stands on a dike-pond hamlet that a paddy hamlet lacks".
+MANURE_FORMS = ("heap", "pit")
+
+# THE DIKE CROP - which of the dike-pond TYPES a hamlet is (feature 150, GM 2026-08-28 choosing audit A6).
+# The gazetteer office frames 桑基 (mulberry), 果基 (fruit), 蔗基 (sugar cane) and 蕉基 (banana) as a
+# succession of types across the region's history, not crops mixed on one dike; the late-1980s survey
+# carried by Ruddle & Zhong had cane dikes at 18% of the district against mulberry at 12%, while the
+# Ming-Qing heartland of Nanhai and Shunde was the silk case. Mulberry is weighted as the premodern norm
+# (a DEGREE, constitution XII); the others roll so two dike-pond hamlets can honestly differ.
+DIKE_CROPS = ("mulberry", "mulberry", "mulberry", "sugarcane", "banana", "fruit")
+
+# WHAT THE LEFTOVER PARCELS OF A WHOLESALE CONVERSION READ AS (feature 150 B2): standing rice, vegetable
+# ground (Fei: vegetables under the mulberry; the gazetteers: no rice inside a converted district), or no
+# leftover at all (every parcel a pond). Three attested states; the roll is even.
+WATERWARD_DEPTH = 280.0  # px of wild water drawn outside a polder's dike face (feature 150 T55). Not "to the canvas edge": the crop keeps ~120 px past the content at most on this tier, so everything beyond was scattered, keep-out tested and thrown away - 18.4 s of a 40 s gen. 280 outlasts any hamlet crop measured (the tightest flank keeps 245 px of headroom), and `waterward_strips_run_off_the_frame` holds the line.
+LEFTOVER_FORMS = ("rice", "vegetables", "pond")
+POND_LAYOUT_MOSAIC = 0.5
+
+# THE SHARE OF THE BLOCK THAT CONVERTED in the end state. `apply_land_use(fraction=)` is the ECONOMIC
+# term over the ELIGIBLE set, and the archetype opts out of the topographic filter by name
+# (`eligible="all"`); 0.9 is the hand-authored Kuwabata's figure - "(almost) every former paddy cell"
+# - so a few leftover parcels still read as standing rice among the ponds (settlements.md 'Polder
+# fourth pass': leftovers of a wholesale conversion are repainted as paddy, not left as outlines).
+# The exact share is a DEGREE along the attested continuum (Shunde: rice under one-tenth of the land
+# by c. 1900), a calibrated liberty rather than a measured number - recorded as such.
+DIKEPOND_CONVERSION = 0.9
 
 # ...but only the proven one is ROLLED, and `polder_grid` is opt-in until it survives a COHORT.
 #

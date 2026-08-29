@@ -37,6 +37,8 @@ MODE=${1:-}
 INPUT=$(cat 2>/dev/null || true)
 STATE_DIR=${GATE_STATE_DIR:-/tmp/claude-gate}
 
+HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"   # `_hookmatch.py` lives beside this hook
+
 json_str() { printf '%s' "$INPUT" | grep -o "\"$1\"[[:space:]]*:[[:space:]]*\"[^\"]*\"" | head -1 | sed 's/.*:[[:space:]]*"//; s/"$//'; }
 # The command can contain escaped quotes and newlines, so take everything between "command":" and
 # the closing quote of that field rather than trying to be clever - only substring tests follow.
@@ -61,19 +63,30 @@ case "$MODE" in
     [ "$TOOL" = Bash ] || exit 0
     case "$CMD" in *GATE_OK*) rm -f "$STATE"; exit 0 ;; esac
 
+    # WHICH TARGETS DOES THIS COMMAND ACTUALLY INVOKE? Asked of `_hookmatch.py`, which anchors the match
+    # to a real command position and blanks heredoc bodies and quoted strings first. Until 2026-08-29 this
+    # hook tested substrings, and in one day it blocked six pieces of correct work whose TEXT contained
+    # its two target names: a script analysing how often they had been run, a plan document quoting them,
+    # twice the guard-test file that exists to prove guards do not do this, and the command that fixed it.
+    # (GM 2026-08-29: "the small follow-up".) A guard that fires on correct work teaches a session to
+    # reach for the escape as a matter of routine, which costs more than the duplication it prevents.
+    TARGETS=" $(printf '%s' "$INPUT" | "$HERE/_hookmatch.py" targets 2>/dev/null | tr '\n' ' ')"
+
     # QUICK AND DONE NEVER SHARE A COMMAND (GM 2026-08-26). `make quick` is a strict subset of the
     # locked `make done` (~70 s), so chaining them re-runs ~30 s of the same tests for nothing -
     # measured three times in one 11-minute task, 1.5 min of pure duplication. The habit came from
     # when `done` cost 4.5 min; it costs 70 s now. Run `quick` while iterating, `done` once at the end.
-    case "$CMD" in
-      *"make quick"*"make done"*|*"make done"*"make quick"*)
+    case "$TARGETS" in
+      *" quick "*)
+        case "$TARGETS" in *" done "*)
         echo "BLOCKED: \`make quick\` and \`make done\` in ONE command. \`quick\` is a subset of \`done\` (~70 s with scope locked), so this re-runs ~30 s of the same tests for nothing (measured 2026-08-26: 3 times in one task, 1.5 min). Run \`make quick\` while iterating, \`make done\` ONCE when you think it is finished - never both. (GATE_OK with a reason if you truly need both.)" >&2
-        exit 2
+        exit 2 ;;
+        esac
         ;;
     esac
     # the GATE itself
-    case "$CMD" in
-      *"make done"*|*"make -C"*done*)
+    case "$TARGETS" in
+      *" done "*)
         if [ -f "$STATE" ]; then
           WAS=$(cat "$STATE" 2>/dev/null || true)
           rm -f "$STATE"          # block ONCE - re-issuing the gate goes straight through
@@ -85,14 +98,23 @@ case "$MODE" in
     esac
 
     # a local pytest run: subset or whole?
-    case "$CMD" in
-      *pytest*)
-        case "$CMD" in
-          *" -k "*|*" -k="*)  printf '%s' "$CMD" | head -c 120 > "$STATE" ;;
-          *)                  rm -f "$STATE" ;;   # a whole-file / whole-suite run vouches for the code
-        esac
-        ;;
-    esac
+    #
+    # AND A PYTEST MENTION IS NOT A PYTEST RUN (GM 2026-08-29, the same follow-up as the target matching
+    # above). This branch tested for the substring `pytest` and then for ` -k `, so the guard's OWN test
+    # file - whose vectors read `pytest tests/test_x.py -k foo` - set the subset flag, and the next gate
+    # was blocked for a subset nobody had run. Seventh false positive of this shape in one day. The
+    # matcher decides whether pytest is actually INVOKED: at a command position (`bare-pytest`), or
+    # through the make targets that run tests.
+    VERDICT=$(printf '%s' "$INPUT" | "$HERE/_hookmatch.py" 2>/dev/null || echo ok)
+    RUNS_TESTS=no
+    [ "$VERDICT" = "bare-pytest" ] && RUNS_TESTS=yes
+    case "$TARGETS" in *" test-file "*|*" test "*|*" quick "*) RUNS_TESTS=yes ;; esac
+    if [ "$RUNS_TESTS" = yes ]; then
+      case "$CMD" in
+        *" -k "*|*" -k="*)  printf '%s' "$CMD" | head -c 120 > "$STATE" ;;
+        *)                  rm -f "$STATE" ;;   # a whole-file / whole-suite run vouches for the code
+      esac
+    fi
     exit 0
     ;;
   status)

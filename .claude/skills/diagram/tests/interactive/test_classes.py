@@ -56,6 +56,20 @@ SPEC_CLASSES = [
     "footbridge",
     "well",
     "notice board",
+    # the dike-pond hamlet (feature 150, Kuwabata), recorded in the spec table like `field pond`
+    "fish pond",
+    "mulberry dike",
+    "pond sluice",
+    "perimeter dike",
+    "fry pond",
+    "manure pit",
+    "sluice gate",
+    "sugarcane dike",
+    "banana dike",
+    "fruit dike",
+    "vegetable ground",
+    "pig sty",
+    "duck pen",
 ]
 
 

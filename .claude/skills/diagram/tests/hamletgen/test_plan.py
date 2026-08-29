@@ -9,6 +9,8 @@ import pytest
 
 from l7r.diagram import hamletgen as hg
 
+from ._builders import a_plan
+
 # ---- the spec refuses what the tier cannot draw --------------------------------------------------
 
 
@@ -126,3 +128,92 @@ def test_the_roll_only_offers_archetypes_that_gate_clean() -> None:
     assert set(hg.ROLLED_ARCHETYPES) <= set(hg.FIELD_ARCHETYPES)
     rolled = {hg.plan_site(hg.HamletSpec(name="X", seed=s, households=15)).field_archetype for s in range(1, 30)}
     assert rolled == set(hg.ROLLED_ARCHETYPES)
+
+
+# ---- the dike-pond archetype (feature 150) ----------------------------------------------------------
+
+
+def test_the_dike_pond_is_a_declared_archetype_laid_to_a_cardinal_fall() -> None:
+    """`mulberry_dike_fishpond` is opt-in like the polder it is built on, and a polder is laid to
+    the cardinal survey grid (see `plan_site`)."""
+    for seed in range(1, 12):
+        plan = hg.plan_site(hg.HamletSpec(name="X", seed=seed, households=16, field_archetype="mulberry_dike_fishpond"))
+        assert plan.field_archetype == "mulberry_dike_fishpond"
+        assert plan.down_deg in hg.CARDINAL_BEARINGS
+
+
+def test_a_dike_pond_rolls_its_arrangement_and_a_rice_polder_is_the_grid() -> None:
+    """Two attested forms roll (`POND_LAYOUTS`); the rice polder never rolls, so every polder_grid
+    map is byte-identical to before the knob existed."""
+    rolled = {hg.plan_site(hg.HamletSpec(name="X", seed=s, households=16, field_archetype="mulberry_dike_fishpond")).pond_layout for s in range(1, 40)}
+    assert rolled == {"grid", "mosaic"}
+    assert all(hg.plan_site(hg.HamletSpec(name="X", seed=s, households=16, field_archetype="polder_grid")).pond_layout == "grid" for s in range(1, 12))
+    assert hg.plan_site(hg.HamletSpec(name="X", seed=3, households=16, field_archetype="mulberry_dike_fishpond", pond_layout="grid")).pond_layout == "grid"
+
+
+def test_the_manure_form_rolls_both_ways_and_pins() -> None:
+    """Two attested forms (feature 150 A2): heap (Tohoku) and pit (Lake Tai), rolled per hamlet."""
+    rolled = {hg.plan_site(hg.HamletSpec(name="X", seed=s, households=15)).manure_form for s in range(1, 30)}
+    assert rolled == {"heap", "pit"}
+    assert hg.plan_site(hg.HamletSpec(name="X", seed=3, households=15, manure_form="pit")).manure_form == "pit"
+    with pytest.raises(ValueError, match="manure_form"):
+        hg.HamletSpec(name="X", seed=1, manure_form="lagoon")
+
+
+def test_the_dike_crop_and_leftover_roll_on_the_dike_pond_and_pin_elsewhere() -> None:
+    """Feature 150 A6/B2: a dike-pond hamlet rolls its dike type and its leftover form; every other archetype is
+    mulberry/rice by definition (the knobs have no meaning there and must not re-roll anything)."""
+    crops = {hg.plan_site(hg.HamletSpec(name="X", seed=s, households=16, field_archetype="mulberry_dike_fishpond")).dike_crop for s in range(1, 60)}
+    assert crops == {"mulberry", "sugarcane", "banana", "fruit"}
+    lefts = {hg.plan_site(hg.HamletSpec(name="X", seed=s, households=16, field_archetype="mulberry_dike_fishpond")).leftover for s in range(1, 40)}
+    assert lefts == {"rice", "vegetables", "pond"}
+    p = hg.plan_site(hg.HamletSpec(name="X", seed=3, households=15))
+    assert (p.dike_crop, p.leftover) == ("mulberry", "rice")
+    p = hg.plan_site(hg.HamletSpec(name="X", seed=3, households=16, field_archetype="mulberry_dike_fishpond", dike_crop="banana", leftover="pond"))
+    assert (p.dike_crop, p.leftover) == ("banana", "pond")
+    with pytest.raises(ValueError, match="dike_crop"):
+        hg.HamletSpec(name="X", seed=1, dike_crop="tea")
+    with pytest.raises(ValueError, match="leftover"):
+        hg.HamletSpec(name="X", seed=1, leftover="wheat")
+
+
+def test_pond_stock_is_a_no_op_off_the_dike_pond() -> None:
+    """The stage draws nothing on a valley hamlet - it has no ponds to keep stock on (feature 150 A3/A4)."""
+    from l7r.diagram.hamletgen.pondstock import stage_pond_stock
+    from l7r.diagram.settlement import Settlement
+
+    s = Settlement(W=400, H=400, seed=1)
+    s.M["houses"] = [{"x": 100.0, "y": 100.0}]
+    stage_pond_stock(s, a_plan())
+    assert "pig_sties" not in s.M and "duck_pens" not in s.M
+
+
+def test_a_nonsense_pond_layout_is_refused() -> None:
+    with pytest.raises(ValueError, match="pond_layout"):
+        hg.HamletSpec(name="X", seed=1, pond_layout="chessboard")
+
+
+def test_the_polder_fabric_table_covers_every_polder_archetype() -> None:
+    """A polder archetype without a fabric row would KeyError in `stage_polder`."""
+    assert set(hg.POLDER_ARCHETYPES) == set(hg.POLDER_FABRIC)
+    assert set(hg.POLDER_ARCHETYPES) <= set(hg.FIELD_ARCHETYPES)
+    assert "mulberry_dike_fishpond" not in hg.ROLLED_ARCHETYPES  # opt-in until a cohort is green
+
+
+def test_the_waterward_flanks_are_the_ones_the_village_does_not_stand_on() -> None:
+    """Fall S, village seated E: the west flank and the south foot face the water - the
+    hand-authored Kuwabata's `["W", "S"]`, derived. The head (N, the reservoir) is never a flank."""
+    plan = a_plan(field_archetype="polder_grid")
+    plan.seat = {"out": (1.0, 0.0)}
+    assert hg.polder_flanks(plan) == {"head": "N", "foot": "S", "plus": "E", "minus": "W", "cluster": "E"}
+    assert hg.waterward_flanks(plan) == ["W", "S"]
+    assert hg.polder_crossing_caps(plan) == {"feeder": 0, "w_toe": 0, "drain": 0, "e_toe": 3, "lateral": 1}
+    plan.seat = {"out": (-1.0, 0.0)}
+    assert hg.waterward_flanks(plan) == ["E", "S"]
+    assert hg.polder_crossing_caps(plan)["w_toe"] == 3 and hg.polder_crossing_caps(plan)["e_toe"] == 0
+    plan.seat = {"out": (0.0, -1.0)}  # seated at the HEAD: the feeder is the village's collector
+    assert hg.polder_crossing_caps(plan) == {"feeder": 3, "drain": 0, "e_toe": 1, "w_toe": 1, "lateral": 1}
+    plan.seat = {"out": (0.0, 1.0)}  # at the foot: the drain
+    assert hg.polder_crossing_caps(plan)["drain"] == 3 and hg.polder_crossing_caps(plan)["feeder"] == 0
+    plan.seat = {}
+    assert hg.polder_flanks(plan)["cluster"] == ""

@@ -29,7 +29,7 @@ __pycache__
 #    KB-sized - so it stays tracked; only its .png render is ignored.
 #  - regressions/ holds tracked fixture .svgs (no ignore line -> tracked).
 # A NEW settlement type would add its two lines here; a new magistracy .svg is auto-tracked.
-#  - the interactive .html (feature 134) is a third derived render, written beside the .svg by every
+#  - the interactive .html (feature 150) is a third derived render, written beside the .svg by every
 #    Mode B run and refreshed by render-sync exactly like the .png.
 .claude/skills/diagram/pool/villages/*.svg
 .claude/skills/diagram/pool/villages/*.png
@@ -60,8 +60,6 @@ __pycache__
 !.claude/skills/diagram/pool/hamlets/honda.png
 !.claude/skills/diagram/pool/hamlets/ikegami.svg
 !.claude/skills/diagram/pool/hamlets/ikegami.png
-!.claude/skills/diagram/pool/hamlets/kuwabata.svg
-!.claude/skills/diagram/pool/hamlets/kuwabata.png
 !.claude/skills/diagram/pool/hamlets/moritono.svg
 !.claude/skills/diagram/pool/hamlets/moritono.png
 !.claude/skills/diagram/pool/hamlets/shimizu.svg
@@ -125,3 +123,4 @@ top_up-improvement.md
 development-secrets.ini
 # feature 129: raw cProfile output stays out of this repository (FR-011a); the derived table is committed
 .claude/skills/diagram/dev/perf-raw/
+.claude/skills/diagram/wip/*.html

@@ -82,9 +82,12 @@ def main(argv: list[str] | None = None) -> int:
         print(f"bypass-audit: {why}")
         return 0 if ok else 1
     if a.command == "engine-key":
-        from l7r.diagram.ci.delta import engine_key
+        from l7r.diagram.ci.delta import engine_key, engine_key_worktree
 
-        print(engine_key(root, a.args[0] if a.args else "HEAD"))
+        # `engine-key worktree` is what the gate/review PAIRING keys on (feature 151): the content a gate
+        # would verify and a review would look at is the working tree's, not HEAD's. Same formula either
+        # way - the guard must not carry a second definition of "the same content".
+        print(engine_key_worktree(root) if a.args and a.args[0] == "worktree" else engine_key(root, a.args[0] if a.args else "HEAD"))
         return 0
     if a.command == "remote-spend":
         print(runlog.remote_spend_report(skill))

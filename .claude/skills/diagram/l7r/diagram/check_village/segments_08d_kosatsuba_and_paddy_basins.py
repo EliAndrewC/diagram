@@ -256,7 +256,16 @@ def _seg_0603__paddy_plot_seams_shared(*, M: Any = _UNBOUND, check: Any = _UNBOU
     # so two basins parted by a delivery ditch are correct. The strip is judged at its MIDPOINT -
     # the sample itself sits on the bank by construction, so testing it would exempt every
     # canal-side bund on the map.
-    if M["meta"].get("generated_by"):
+    # A DIKE-POND IS THE ONE FIELD WHERE TWO RINGS A STRIP APART ARE RIGHT (feature 150, the first
+    # scripted mulberry_dike_fishpond): its parcels are not basins sharing an aze but PONDS each
+    # rimmed by its own planted dike, and the ~22 ft strip between two rings IS the dike - a
+    # hand-piled earthwork 6-10 m wide carrying the mulberry (research/archetypes.md "The 6:4
+    # water-to-dike ratio"; `POLDER_FABRIC` gap (11, 11)). Read as paddy fabric it fired on 29 of
+    # Kuwabata's parcels. So the rule stands aside for that archetype, whole-field: the leftover
+    # rice parcels inside the block are bounded by their neighbors' dikes too and have their own
+    # bund erased (`_landuse_repaint_leftovers`). `dikepond_water_within_banks` and
+    # `mulberry_banks_clear_of_channels` are the rules that judge that fabric.
+    if M["meta"].get("generated_by") and M["meta"].get("field_archetype") != "mulberry_dike_fishpond":
         _ps_ftpx = float(M["meta"].get("ftpx", 1.0) or 1.0)
         _ps_share = 3.0 / _ps_ftpx  # two AZE_FT strokes: this close, the two bunds ARE one line
         _ps_max = 24.0 / _ps_ftpx  # wider than this is bare floor, not a doubled bund
@@ -735,7 +744,7 @@ def _seg_0614_500__all_ink_is_ruled_on(
 ) -> dict[str, Any]:
     """Gate segment 0614_500 (all_ink_is_ruled_on) - on a SCRIPTED hamlet, every drawn element is either
     in a feature class of the interactive map or ruled not highlighted, and every class the engine
-    tagged is one the registry knows (feature 134, spec FR-009 / SC-006).
+    tagged is one the registry knows (feature 150, spec FR-009 / SC-006).
 
     WHY: the interactive page highlights and explains features BY CLASS (`interactive/classes.py`);
     ink with no class is dead ground a reader can hover and learn nothing from, and the GM's own

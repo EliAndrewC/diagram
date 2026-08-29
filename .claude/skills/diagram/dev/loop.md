@@ -228,3 +228,25 @@ month-to-date; `make audit` gains a "Remote spend" block summed from `dev/run-lo
 - $10/day and $75/month budgets emailing at every 20%, a $100/month hard stop that attaches a
 StartBuild deny to the session's user, a live alarm at 125 build-minutes per rolling day - are
 described in `specs/130-codebuild-merge-gate/spec.md`'s baseline table and are not repo code.
+
+## The three diagnostics and the paired gate (feature 151, 2026-08-29)
+
+Written after a time audit of feature 150's T55 - 79.8 minutes for a one-function geometry fix, of which
+19 map rolls (13.6 min), 42 hand-written measurement scripts, and 33.6 minutes waiting on background
+verification with a 17-minute review LAST because it is dispatched from memory.
+
+- **`make polder-probe SEED=21`** - the polder block alone with its geometry metrics, **measured 0.2 s**
+  against the 47 s median map roll it replaces. It builds through the same `fit_polder` the map does, and
+  a test holds its numbers against a rolled manifest, so it cannot pass while the map fails.
+- **`make overlap-audit M=...`** - "does A overlap B" over records AND drawn ink, five families. It found
+  a real defect on its first run (reed ink on the inlet hairline: the source pond's fringe was scattered
+  before the field's channels existed, so its keep-out had nothing to keep off).
+- **`make map ... PROFILE=1`** - per-stage timings, the total and the slowest stage. First use: Kuwabata
+  33.7 s, `stage_hinterland` 13.9 s (41%), `stage_waterward` 9.5 s (28%).
+- **`make verify`** - the gate and the settlement-review start together, and `pair-hooks.sh` refuses
+  either alone (`PAIR_OK="<reason>"` takes a one-sided case and logs it).
+
+THE MEASUREMENT TRAP THIS WORK WALKED THREE TIMES, and the reason a shared tool beats twelve scripts: a
+VERTEX-only test misses what passes BETWEEN the vertices - a stream running between a farmhouse's corners,
+a lateral crossing a parcel between its outline points, a blade read as a disc round its base. Every
+overlap question here is now asked in both directions by one implementation.

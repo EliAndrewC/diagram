@@ -270,7 +270,19 @@ _switch:
 	@git add dev/switches.json && git commit -q -m "chore: $(MSG) - $(REASON)" && printf '\ncommitted: %s - %s\n' "$(MSG)" "$(REASON)"
 
 # --- expensive: they generate ---------------------------------------------------------------
-map:            ## regenerate ONE gen and gate it            GEN=pool/hamlets/inashiro.gen.py
+verify:         ## THE PAIRED RUN: start the gate and dispatch the settlement-review together (feature 151)
+	@printf '\033[1mverify\033[0m: the gate and the independent review run TOGETHER - neither alone (GM 2026-08-29).\n'
+	@root=$$(git rev-parse --show-toplevel) && python3 -m l7r.diagram.ci engine-key worktree > "$$root/.git/pairing-key" || true  # NOT $(RUN): it carries a leading @, which is a literal argument once it is not at the start of a recipe line
+	@root=$$(git rev-parse --show-toplevel) && printf 'engine key %s\n' "$$(cut -c1-12 "$$root/.git/pairing-key" 2>/dev/null)"
+	@root=$$(git rev-parse --show-toplevel); \
+	  maps=$$(git -C "$$root" diff --name-only HEAD~1 HEAD -- '.claude/skills/diagram/pool/*/*.json' 2>/dev/null | sed 's#.*/##;s#\.json##' | tr '\n' ' '); \
+	  printf 'maps whose manifest changed: %s\n' "$${maps:-none}"; \
+	  printf '\n\033[1mDISPATCH NOW\033[0m, in the same turn: settlement-review over%s, then let this gate run beside it.\n' " $${maps:-the delta}"
+	@printf '\nstarting the gate in the background - its verdict arrives as a task notification.\n\n'
+	@root=$$(git rev-parse --show-toplevel); PAIR_OK="started by make verify - the review is dispatched in the same turn" nohup $(MAKE) --no-print-directory done > "$$root/.git/verify-gate.log" 2>&1 &
+
+map: export L7R_STAGE_PROFILE = $(if $(PROFILE),1,)
+map:            ## regenerate ONE gen and gate it   GEN=pool/hamlets/inashiro.gen.py [PROFILE=1: where the roll spent its time]
 	$(REF_FIRST)
 	$(RUN).pipeline.regen $(or $(GEN),pool/hamlets/inashiro.gen.py)
 	@$(MAKE) --no-print-directory pool-index-if-stale
@@ -284,7 +296,8 @@ tripwire:       ## the middle tier: reference map, then the tripwire seeds
 	$(SWEEP_OK)
 	$(RUN).tools.mapcheck $(if $(SCOPE),--scope $(SCOPE),)
 
-hamlet:         ## generate one hamlet from the CLI           ARGS="--name X --seed 4 ..."
+hamlet: export L7R_STAGE_PROFILE = $(if $(PROFILE),1,)
+hamlet:         ## generate one hamlet from the CLI   ARGS="--name X --seed 4 ..." [PROFILE=1]
 	$(REF_FIRST)
 	$(RUN).hamletgen $(ARGS)
 	@$(MAKE) --no-print-directory pool-index-if-stale
@@ -335,6 +348,12 @@ render-sync:    ## regenerate MAIN's renders (called by sync-with-main.sh; not f
 gate-manifest:  ## run the check battery on an existing manifest   M=pool/hamlets/inashiro.json
 	$(RUN).check_village $(or $(M),pool/hamlets/inashiro.json) $(ARGS)
 
+overlap-audit:  ## does A overlap B on a finished map (records AND drawn ink)   M=pool/hamlets/x.json [FAMILIES=...]
+	$(RUN).tools.overlap_audit $(M) $(if $(FAMILIES),--families $(FAMILIES),)
+
+polder-probe:   ## the polder block ALONE with its geometry metrics, no map   SEED=21 | SEEDS=21,22 ARCHETYPE=...
+	$(RUN).tools.polder_probe $(if $(SEED),--seed $(SEED),)$(if $(SEEDS),--seeds $(SEEDS),)$(if $(ARCHETYPE),--archetype $(ARCHETYPE),)$(if $(LAYOUT),--layout $(LAYOUT),)$(if $(HOUSEHOLDS),--households $(HOUSEHOLDS),)
+
 why-placed:     ## who placed this, and what refused to        GEN=... AT=x,y | REFUSED=x,y
 	$(RUN).tools.why_placed $(GEN) $(if $(AT),--at $(AT),)$(if $(REFUSED),--refused $(REFUSED),)
 
@@ -355,6 +374,10 @@ scatter-audit:  ## is drawn ground cover standing where keep-outs should have st
 
 sun-audit:      ## the sun rules and the belt's page presence, off the manifest   M=pool/hamlets/inashiro.json
 	$(RUN).tools.sun_audit $(or $(M),pool/hamlets/inashiro.json)
+
+family-census:  ## which feature families one manifest records that another does not   A=pool/hamlets/inashiro.json B=pool/hamlets/kuwabata.json
+	$(RUN).tools.family_census --a $(or $(A),pool/hamlets/inashiro.json) --b $(or $(B),pool/hamlets/kuwabata.json)
+	@: "(GUARD_EDIT_OK: feature 150 - a read-only manifest census, the measured answer to 'does the converted map carry every reference-hamlet family')"
 
 new-check:      ## scaffold a gate check: segment stub, sorted fixture entry, test stub   NAME=... FILE=segments_*.py TEST=test_segments_*.py
 	@test -n "$(NAME)" -a -n "$(FILE)" -a -n "$(TEST)" || { printf 'make new-check NAME=<check_name> FILE=l7r/diagram/check_village/segments_XX.py TEST=tests/check_village/test_segments_XX.py\n'; exit 2; }
@@ -704,7 +727,10 @@ reference:
 IDLE_CTX = $(shell $(SWITCH) idle 2>/dev/null)
 DONE_NAME = $(if $(filter 1,$(IDLE_CTX)),idle-done,done)
 idle-tests:     ## what an idle session runs unattended (feature 136): the whole gate, scope relaxed, never FULL
-	@$(MAKE) --no-print-directory done
+# THE PAIRING'S ONE-SIDED CASE, TAKEN RATHER THAN CARVED OUT (feature 151): a detached timer has no
+# session to dispatch a settlement-review from, so it supplies the override with its reason and the
+# bypass log carries it like any other. An exemption inside the guard is the shape the spec review struck.
+	@PAIR_OK="idle run: no session attached to dispatch a review" $(MAKE) --no-print-directory done
 
 maps:
 	@$(if $(filter all,$(SCOPE)),$(SWITCH) check scope "maps SCOPE=all",true)

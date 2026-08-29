@@ -156,8 +156,19 @@ class HomesteadPartsMixin:
         inscribed in the reserved rect so it can never breach the collision the rect already cleared."""
         ox, oy, yw, yh = spot
         poly = self._quad(ox, oy, yw, yh, 0.10, 41.0)
-        self._draw_threshing_yard(ox, oy, yw, yh, poly)
-        self.M["threshing_yards"].append({"x": round(ox, 1), "y": round(oy, 1), "w": yw, "h": yh, "rot": 0, "of": [hx, hy], "poly": [[round(px, 1), round(py, 1)] for px, py in poly]})
+        # A NO-RICE HAMLET DRAWS NO THRESHING FLOOR (feature 150, GM 2026-08-28: "thrashing yards on a
+        # no-rice hamlet seem bad and should be eliminated"). The ground is still RECORDED, as a
+        # `forecourt`: the open ground before a farmhouse is what the lane web threads around, what
+        # trees, scrub and wells keep out of, and what a silk-and-fish household works its leaf and
+        # nets on - dropping the record (measured) re-packed the web and the belt, which was not the
+        # ask. Only the ink goes: no swept floor, no bordered frame. `harvest_yards_present` reads
+        # `meta.work_yards` and stands aside; the interactive class `threshing yard` has no ink here.
+        _fore = not getattr(self, "_work_yards", True)
+        if not _fore:
+            self._draw_threshing_yard(ox, oy, yw, yh, poly)
+        self.M["threshing_yards"].append(
+            {"x": round(ox, 1), "y": round(oy, 1), "w": yw, "h": yh, "rot": 0, "of": [hx, hy], "poly": [[round(px, 1), round(py, 1)] for px, py in poly], **({"kind": "forecourt"} if _fore else {})}
+        )
         self.placed.append((ox, oy, yw, yh))
 
     def _draw_garden(self: Settlement, cx: float, cy: float, w: float, h: float, poly: Any) -> None:  # type: ignore[misc]
@@ -545,7 +556,7 @@ class HomesteadPartsMixin:
         g.append("</g>")
         if n == 0:
             return 0
-        z = self.add("".join(g), cls="homestead bamboo" if role == "homestead" else "shared bamboo grove")  # feature 134
+        z = self.add("".join(g), cls="homestead bamboo" if role == "homestead" else "shared bamboo grove")  # feature 150
         self.M.setdefault("bamboo_stands", []).append(
             {
                 "x": round((x0 + x1) / 2, 1),
@@ -616,6 +627,14 @@ class HomesteadPartsMixin:
         # the village is the pond's open FORECOURT (the banyuetang fronted the settlement's ceremony/work
         # ground), so keeping the copse fringe off that band too is the historically right reading, not slack.
         occ += [(cp["cx"], cp["cy"], cp["r"] + clump * 0.90) for cp in self.M.get("crescent_ponds", [])]
+        # ... and OFF THE POND - the tameike or a polder's header reservoir (feature 150: the first
+        # scripted dike-pond seated its village at the block's head, so the windbreak's band ran
+        # over the reservoir and 15 clumps stood in open water; nothing in this list knew the pond).
+        # `M["pond"]` is [cx, cy, rx, ry]; the keep-out is the longer semi-axis + the canopy reach,
+        # the same reading as the crescent pond above. `trees_clear_of_water` gates it.
+        _pnd = self.M.get("pond")
+        if _pnd:
+            occ.append((float(_pnd[0]), float(_pnd[1]), max(float(_pnd[2]), float(_pnd[3])) + clump * 0.90))
         # ... and OFF A GROVE THAT IS ALREADY PLANTED (settlement-review x1, 2026-08-19). Nothing here
         # kept one grove out of another, and the copse is seated AFTER the windbreak, so it simply
         # planted itself in the belt: measured on Inashiro, clump-to-nearest-belt-clump distances of
@@ -875,7 +894,7 @@ class HomesteadPartsMixin:
                 seated = [seated[k] for k in _keep]
                 clumps = [clumps[k] for k in _keep]
         for jx, jy in seated:
-            # feature 134: the belt and the copse are two highlight classes; a water_mouth grove has no
+            # feature 150: the belt and the copse are two highlight classes; a water_mouth grove has no
             # class in the vocabulary yet and stays unclassed so the census reports it
             self._draw_grove(jx, jy, clump, clump, face=(0, -1), mix=mix, cls={"windbreak": "windbreak", "copse": "copse"}.get(role))
         if clumps:

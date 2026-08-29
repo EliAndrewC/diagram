@@ -96,7 +96,13 @@ def test_ways_cross_water_on_a_deck_fires_when_a_lane_is_laid_down_the_channel()
     footbridges plank the field channels. So the break is a lane laid ALONG a drawn channel, with no deck."""
 
     def down_the_channel(M: dict[str, Any]) -> None:
-        pts = M["drawn_channels"][0]["pts"]
+        # ALONG A STREAM, which is what the check actually reads (feature 150, 2026-08-29). The break used
+        # `drawn_channels[0]`, and `wd_waters` is built from `streams` + `canals` + the moat - never from
+        # `drawn_channels` - so it only ever fired because that one channel happened to run alongside a
+        # stream. It stopped firing the moment `_clip_to_stream` began pulling a channel's endpoint back by
+        # its cap radius, which is a drawing fix with nothing to say about this check. A fixture that
+        # depends on an incidental adjacency is not testing the rule it names.
+        pts = M["streams"][0]["poly"]
         M["lanes"].append({"pts": [list(p) for p in pts], "w": 5, "worn": True, "connector": False})
         M["bridges"] = []
 
@@ -363,7 +369,13 @@ def test_pond_fill_covers_channel_mouths_fires_when_a_stream_mouth_is_left_dry()
     in bare ground where the water should be."""
 
     def strand_a_mouth(M: dict[str, Any]) -> None:
+        # THE BREAK IS A LATE DRAWN COURSE, NOT A STREAM (feature 150): the one water block paints the pond
+        # fill LAST, so `pond_layer` is now always `late`, and the check reads a stream's flank as never-late
+        # (`_pjz.append((pt, st.get("bedz"), False))`) - `(False, bz) >= (True, _pz)` cannot hold, so no
+        # stream can strand a mouth any more and the old break proved nothing. What CAN still happen is the
+        # defect the check was written for: a course drawn in the late block, after the fill, leaving its bed
+        # lying on top of the open water. That is what is broken here.
         pond = M["pond"]
-        M["streams"].append({"poly": [[float(pond[0]), float(pond[1])], [float(pond[0]) + 400.0, float(pond[1])]], "w": 7, "frm": {"kind": "pond"}, "to": None, "bedz": 99999})
+        M.setdefault("drawn_channels", []).append({"pts": [[float(pond[0]), float(pond[1])], [float(pond[0]) + 400.0, float(pond[1])]], "w0": 7.0, "w1": 7.0, "bedz": 99999, "late": True})
 
     _fires(REFERENCE, "pond_fill_covers_channel_mouths", strand_a_mouth)

@@ -22,6 +22,8 @@
 #   check <subagents-dir>   one-shot report for any directory (the test uses this).
 #   watch <subagents-dir>   the loop for a `Monitor`: one line per stall, once per stall (POLL_OK - the
 #                           harness does not notify on a stall; this watches EXTERNAL state).
+#   pending <subagents-dir> one bare agent id per line for every agent still awaiting a reply (feature 151's
+#                           pairing guard: has the settlement-review it launched finished?).
 #   ack <subagents-dir> <id> the session has handled this stall (TaskStop + relaunch): never report it
 #                           again (a stopped agent's transcript still ends on a tool_result).
 # Env: AGENT_STALE_S (default 300); AGENT_RECENT_S (default 172800 - older transcripts are ignored).
@@ -76,6 +78,17 @@ except Exception: print("")')
     exit 0 ;;
   check)
     report "${2:?subagents dir}"; exit 0 ;;
+  pending)
+    # `pending <dir>` -> one bare agent id per line, for every transcript still awaiting a reply
+    # (last record a tool_result), stalled or not. Feature 151's pairing guard asks whether a
+    # settlement-review it launched has finished; that is the SAME determination `report` makes on
+    # the stall side, so it is answered here rather than kept as a second copy of the rule.
+    for f in "${2:?subagents dir}"/agent-*.jsonl; do
+      [ -f "$f" ] || continue
+      [ "$(last_type "$f")" = "user" ] || continue
+      id=$(basename "$f" .jsonl); echo "${id#agent-}"
+    done
+    exit 0 ;;
   ack)
     mkdir -p "${2:?subagents dir}/../stall-ack" && touch "$2/../stall-ack/${3:?agent id}"; exit 0 ;;
   watch)

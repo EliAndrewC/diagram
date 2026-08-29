@@ -456,3 +456,34 @@ across, so 52 blotches reach up to 15.2 ft inside the paddy outline (the doctrin
 footprints, never centers - but which edge feathers and which stops hard at a bund is the research
 question); and a woodland commons at (387,1767) is 99 x 116 ft against the recorded 120 ft legibility
 floor, so either the floor measures another axis or the drop is not firing.
+
+## 2026-08-29 - settlement-review, DELTA after the merge onto main (feature 150)
+
+Re-rolled by the ENGINE under an unchanged `.gen.py`. Verdict **needs-work**.
+
+**CAUGHT A REGRESSION THE GREEN GATE COULD NOT SEE, and it was ours.** Feature 150's one-water-block
+compositing left every sheen above every bed (`streams[0].sheenz` 566 -> 920), so a sheen's ROUND CAP
+printed inside whatever its course ran into - measured in the PNG as a pale blob on the head-race at
+the intake **this hamlet is named for**. Before choosing a fix the whole pool was measured: a stream
+sheen lies under a later-drawn bed for 0.1 to 4.3 ft per map - cap-sized at joins, never a long run -
+so the CAP is the fix and the block order is not. Sheens are butt-capped now.
+
+**CAUGHT, and fixed here.** The reed fringe was thinnest exactly where the record says reeds are
+thickest: reeds stood **7.66 ft** off the waterline and the density profile out from the rim ran
+12.0 / 27.4 / 33.0 / 24.4 per 1,000 sq ft. The mechanism was named in code - the pad holding reeds off
+the water was the mark's isotropic reach, while a tuft's blades are drawn near-VERTICAL (~7 ft up, at
+most ~1.4 ft sideways). The pad is split now: lateral reach for the tuft's own point, blade TOP tested
+separately. After: nearest base **1.52 ft**, rim band **21.2**, profile 21.2 / 29.3 / 35.9 / 21.8 /
+22.5, and 0 blades in the water. Grounded in this feature's own research pass (`research/water.md`,
+"A reservoir's shore is reeded, and its EMBANKMENT is mown"), not in a preference.
+
+**Confirmed**: every recorded footprint corner tested against both marsh polygons - 0 on marsh. The
+2026-08-28 bamboo defect stayed fixed and did not return (the take-yabu is 87.4 ft clear of the nearest
+crop polygon). The pond's inlet composites as one contiguous structure with no rim across the mouth.
+The deferred wet-tint-into-paddy residue improved sharply: 52 blotches reaching 15.2 ft in, now 9
+reaching 11.0 ft.
+
+**CAUGHT, recorded, not fixed**: the through-route necks 6 ft -> 3 ft -> 6 ft for 11 ft at
+(933-944, 1778-1780), where two 6 ft lanes never meet and the only ink joining them is 11.1 ft of a
+3 ft back lane (measured tread depth 9.5 / 3.2 / 7.6 ft across the waist); and the "copse" is 2 clumps
+175 ft apart inside a 205 ft record, both inside the windbreak's own canopy.

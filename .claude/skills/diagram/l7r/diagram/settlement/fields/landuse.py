@@ -20,8 +20,14 @@ if TYPE_CHECKING:
     from ..core import Settlement
 
 
+# THE DIKE CROP TYPES and the highlight class each draws (feature 150 A6): one hamlet is one type.
+DIKE_CROP_CLASS = {"mulberry": "mulberry dike", "sugarcane": "sugarcane dike", "banana": "banana dike", "fruit": "fruit dike"}
+
+
 class LandUseMixin:
-    def apply_land_use(self: Settlement, net: dict[str, Any], overlay: str, rng: random.Random, fraction: float = 0.55, eligible: str = "wet") -> int:  # type: ignore[misc]
+    def apply_land_use(  # type: ignore[misc]
+        self: Settlement, net: dict[str, Any], overlay: str, rng: random.Random, fraction: float = 0.55, eligible: str = "wet", dike_crop: str = "mulberry", leftover: str = "rice"
+    ) -> int:
         """Overlay a LAND-USE archetype (feature 005 US4 `land_use_overlay`) onto an already-drawn comb field:
         recolor a FRACTION of the paddy plots (or, for tea, a hill-margin fringe) as the overlay crop, so a
         village growing mulberry-and-fishpond, lotus, or hill-tea reads distinctly from a plain-rice one.
@@ -103,7 +109,18 @@ class LandUseMixin:
         # neighbors' raised banks bound a rice parcel, so its own drawn bund is noise. Painted BEFORE the
         # ponds so an expanded pond bank overlaps the repaint, never the reverse. Scoped to the archetype
         # case only: a partial overlay's unconverted plots are ordinary textured comb paddies already.
-        leftover_plots = self._landuse_repaint_leftovers(elig, chosen, overlay, eligible, rng)
+        # THE DIKE CROP AND THE LEFTOVERS ARE KNOBS (feature 150, GM 2026-08-28 choosing audits A6 and B2).
+        # dike_crop: mulberry (桑基, the silk case), sugarcane (蔗基), banana (蕉基) or fruit (果基) - the gazetteer
+        # office frames these as a SUCCESSION of dike-pond TYPES over the region's history, so one hamlet is one
+        # type. leftover: what an unconverted parcel reads as - standing rice, vegetable ground (Fei: vegetables
+        # under the mulberry), or none at all (the block wholly converted; the caller passes fraction 1.0).
+        if dike_crop not in DIKE_CROP_CLASS:
+            raise ValueError(f"dike_crop {dike_crop!r} is not one of {sorted(DIKE_CROP_CLASS)}")
+        if leftover not in ("rice", "vegetables", "pond"):
+            raise ValueError(f"leftover {leftover!r} must be rice, vegetables or pond")
+        self.M["meta"]["dike_crop"] = dike_crop
+        self.M["meta"]["leftover"] = leftover
+        leftover_plots = self._landuse_repaint_leftovers(elig, chosen, overlay, eligible, rng, leftover=leftover)
         dikeponds: list[dict[str, Any]] = []
         # channel centerline segments, for the bush-vs-canal clearance filter in _mulberry_rows (the crowns
         # are coppiced BUSHES on the dike, not canopy - they cannot arch over the open water at the toe)
@@ -112,11 +129,25 @@ class LandUseMixin:
         for ch in net.get("channels", []):
             cpp = ch["pts"]
             chansegs += [((float(a[0]), float(a[1])), (float(b[0]), float(b[1]))) for a, b in zip(cpp, cpp[1:], strict=False)]
+
+        # FRY NURSERY PONDS (feature 150, GM 2026-08-28 choosing audit A5): fry are reared in small ponds before
+        # stocking the grow-out ponds - the delta's fry trade had its own Ming-era center (Miles 2003; the
+        # Sangyuanwei proverb 男贩鱼花). On the WHOLESALE archetype the smallest parcels of the block are
+        # designated fry ponds: no new ink, a record and a class of their own for the interactive map. The
+        # share (about one parcel in ten, one to three per hamlet) is a GUESS - nothing read gives a fry-pond
+        # count per household - and is labeled so in the class entry.
+        def _area(poly: Any) -> float:
+            return float(abs(sum(poly[i][0] * poly[(i + 1) % len(poly)][1] - poly[(i + 1) % len(poly)][0] * poly[i][1] for i in range(len(poly))))) / 2
+
+        fry_ids: set[int] = set()
+        if overlay == "mulberry_fishpond" and eligible == "all" and len(chosen) >= 4:
+            _n_fry = min(3, max(1, round(0.1 * len(chosen))))
+            fry_ids = {id(p) for p in sorted(chosen, key=lambda q: _area(q["poly"]))[:_n_fry]}
         for p in chosen:
             pts = " ".join(f"{x:.1f},{y:.1f}" for x, y in p["poly"])
             cx = sum(v[0] for v in p["poly"]) / len(p["poly"])
             cy = sum(v[1] for v in p["poly"]) / len(p["poly"])
-            self._landuse_draw_plot(p, pts, cx, cy, overlay, colors, chansegs, rng, dikeponds, crown_q)
+            self._landuse_draw_plot(p, pts, cx, cy, overlay, colors, chansegs, rng, dikeponds, crown_q, fry=id(p) in fry_ids, dike_crop=dike_crop)
             n += 1
         if dikeponds:
             self.M["dikeponds"] = dikeponds
@@ -140,7 +171,7 @@ class LandUseMixin:
         # above, so the channel block inserted there at flush time lands beneath them; the bank/water/rice
         # FILLS stay before the anchor (ground the channels must cover).
         for cq_poly, cq_bd, cq_cx, cq_cy in crown_q:
-            self._mulberry_rows(cq_poly, cq_bd, cq_cx, cq_cy, rng, chansegs)
+            self._mulberry_rows(cq_poly, cq_bd, cq_cx, cq_cy, rng, chansegs, crop=dike_crop)
         self.M.setdefault("land_use", []).append(
             {"overlay": overlay, "count": n, "eligible": eligible, "plots": [_centroid(p["poly"]) for p in chosen], "leftover_plots": [_centroid(p["poly"]) for p in leftover_plots]}
         )
@@ -167,8 +198,12 @@ class LandUseMixin:
         self.M.setdefault("land_use", []).append({"overlay": overlay, "count": n})
         return n
 
-    def _landuse_repaint_leftovers(self: Settlement, elig: list[Any], chosen: list[Any], overlay: str, eligible: str, rng: random.Random) -> list[Any]:  # type: ignore[misc]
-        """Repaint the unconverted plots of a WHOLESALE conversion as standing rice rather than bare outlines.
+    def _landuse_repaint_leftovers(self: Settlement, elig: list[Any], chosen: list[Any], overlay: str, eligible: str, rng: random.Random, leftover: str = "rice") -> list[Any]:  # type: ignore[misc]
+        """Repaint the unconverted plots of a WHOLESALE conversion as standing rice rather than bare outlines -
+        or, with `leftover="vegetables"` (feature 150 B2), as tilled vegetable ground in rows: Fei's silk
+        village grew its vegetables on the ground under the mulberry, and the gazetteers record NO rice
+        inside a converted district, so the residual parcel of a wholly converted block is as honestly
+        vegetable ground as paddy. Two attested forms, so a knob.
 
         Returns the leftover plots, which the land_use record reports."""
         leftover_plots: list[Any] = []
@@ -179,6 +214,18 @@ class LandUseMixin:
             for p in leftover_plots:
                 pts = " ".join(f"{x:.1f},{y:.1f}" for x, y in p["poly"])
                 lfill = p.get("fill", "#A6C398")
+                if leftover == "vegetables":
+                    xs_ = [q[0] for q in p["poly"]]
+                    ys_ = [q[1] for q in p["poly"]]
+                    vcid = self._cid("veg")
+                    self.add(f'<polygon points="{pts}" fill="#C9B784" stroke="#C9B784" stroke-width="3" stroke-linejoin="round"/>', cls="vegetable ground")  # tilled earth, the bund erased
+                    self.add(f'<clipPath id="{vcid}"><polygon points="{pts}"/></clipPath>', cls="vegetable ground")
+                    vrows = "".join(
+                        f'<line x1="{min(xs_):.1f}" y1="{yy:.1f}" x2="{max(xs_):.1f}" y2="{yy:.1f}" stroke="#6E8B4A" stroke-width="1.6" opacity="0.8"/>'
+                        for yy in [min(ys_) + 4 + i * 6 for i in range(int((max(ys_) - min(ys_)) / 6))]
+                    )
+                    self.add(f'<g clip-path="url(#{vcid})">{vrows}</g>', cls="vegetable ground")
+                    continue
                 random.seed(int(sum(x for x, _ in p["poly"]) * 7 + sum(y for _, y in p["poly"]) * 13))
                 if lfill == "#93B7AC":
                     # a FLOODED leftover reads with a ROUNDED, slightly IRREGULAR waterline (GM 2026-07-23):
@@ -188,14 +235,18 @@ class LandUseMixin:
                     # same _rounded_pond the dug ponds use - smaller inset, and NO water-edge stroke, so a
                     # flooded field never reads as dug infrastructure). The thin green rim left showing is
                     # the bund top the water cannot overtop.
-                    self.add(f'<polygon points="{pts}" fill="#A6C398" stroke="#A6C398" stroke-width="3" stroke-linejoin="round"/>')
+                    self.add(
+                        f'<polygon points="{pts}" fill="#A6C398" stroke="#A6C398" stroke-width="3" stroke-linejoin="round"/>', cls="paddy"
+                    )  # a leftover parcel is standing rice (feature 150: every dike-pond ink is ruled on)
                     fd, fpoly = self._rounded_pond(p["poly"], inset=2.5, reach=12.0, rng=rng)
-                    self.add(f'<path d="{fd}" fill="{lfill}"/>')
+                    self.add(f'<path d="{fd}" fill="{lfill}"/>', cls="paddy")
                     fpts = " ".join(f"{x:.1f},{y:.1f}" for x, y in fpoly)
-                    self._paddy_surface(fpoly, fpts, flooded=True, pitch=4.5)
+                    with self.feature("paddy"):  # a repainted leftover is paddy ground (feature 150: every dike-pond ink is ruled on)
+                        self._paddy_surface(fpoly, fpts, flooded=True, pitch=4.5)
                 else:
-                    self.add(f'<polygon points="{pts}" fill="{lfill}" stroke="{lfill}" stroke-width="3" stroke-linejoin="round"/>')
-                    self._paddy_surface(p["poly"], pts, flooded=False, pitch=4.5)  # jittered-grid mottle, ~3-6 px between shoots (GM 2026-07-23)
+                    self.add(f'<polygon points="{pts}" fill="{lfill}" stroke="{lfill}" stroke-width="3" stroke-linejoin="round"/>', cls="paddy")
+                    with self.feature("paddy"):  # a repainted leftover is paddy ground (feature 150: every dike-pond ink is ruled on)
+                        self._paddy_surface(p["poly"], pts, flooded=False, pitch=4.5)  # jittered-grid mottle, ~3-6 px between shoots (GM 2026-07-23)
             random.setstate(_lst)
         return leftover_plots
 
@@ -211,8 +262,11 @@ class LandUseMixin:
         rng: random.Random,
         dikeponds: list[dict[str, Any]],
         crown_q: list[tuple[Poly, str, float, float]],
+        fry: bool = False,
+        dike_crop: str = "mulberry",
     ) -> None:
         """Draw ONE converted plot: a dike-pond unit (bank, water, deferred crowns, record) or a lotus field.
+        `fry` marks a fry nursery pond (feature 150): same ink, its own class and record kind.
 
         `dikeponds` and `crown_q` are appended to in place - the caller needs both after the loop."""
         if overlay == "mulberry_fishpond":
@@ -234,7 +288,7 @@ class LandUseMixin:
             )
             _sc = 1.0 + 2.5 / max(1.0, _dm)
             cover = " ".join(f"{cx + (x - cx) * _sc:.1f},{cy + (y - cy) * _sc:.1f}" for x, y in p["poly"])
-            self.add(f'<polygon points="{cover}" fill="#A6C398"/>')
+            self.add(f'<polygon points="{cover}" fill="#A6C398"/>', cls="paddy")  # the bund-erasing cover is field floor
             # THE CANAL AT THE TOE BOUNDS THE BANK (settlements.md 'Mulberry bushes keep clear of the
             # canals'): where a mosaic-bent lateral rides INSIDE the parcel line (Kuwabata: two west-edge
             # ponds, up to 3.6 px), the whole pond unit is DUG BACK - shrunk about its centroid until the
@@ -259,14 +313,15 @@ class LandUseMixin:
                 _s2 = max(0.7, 1.0 - (pen + 1.0) / max(1.0, _dm))
                 qpoly = [(cx + (qx - cx) * _s2, cy + (qy - cy) * _s2) for qx, qy in qpoly]
             bd, bpoly = self._rounded_pond(qpoly, inset=0.0, reach=8.0, rng=rng)
-            self.add(f'<path d="{bd}" fill="#C2A772" stroke="#9C8558" stroke-width="1.2" stroke-linejoin="round" opacity="0.95"/>')
+            self.add(f'<path d="{bd}" fill="#C2A772" stroke="#9C8558" stroke-width="1.2" stroke-linejoin="round" opacity="0.95"/>', cls=DIKE_CROP_CLASS[dike_crop])
             wd, wpoly = self._rounded_pond(qpoly, inset=11.0, reach=16.0, rng=rng)
-            self.add(f'<path d="{wd}" fill="{colors[overlay]}" stroke="#6C9CBE" stroke-width="1.4"/>')
+            self.add(f'<path d="{wd}" fill="{colors[overlay]}" stroke="#6C9CBE" stroke-width="1.4"/>', cls="fry pond" if fry else "fish pond")
             crown_q.append((qpoly, bd, cx, cy))  # crowns drawn after the late-water anchor (see below)
             # `bank` = the planted band's outer edge, recorded so mulberry_banks_clear_of_channels has
             # manifest teeth: the crowns fill the bank, so "no canal runs inside a bank" bounds the bushes
             dikeponds.append(
                 {
+                    "kind": "fry" if fry else "grow-out",
                     "parcel": [[round(x, 1), round(y, 1)] for x, y in qpoly],
                     "water": [[round(x, 1), round(y, 1)] for x, y in wpoly],
                     "bank": [[round(x, 1), round(y, 1)] for x, y in bpoly],
@@ -338,11 +393,14 @@ class LandUseMixin:
             for anchor, uphill, kind in ((top, True, "feed"), (bot, False, "drain")):
                 tp = _target((anchor[0], anchor[1]), i, uphill)
                 if tp is not None:
-                    self.add(f'<line x1="{anchor[0]:.1f}" y1="{anchor[1]:.1f}" x2="{tp[0]:.1f}" y2="{tp[1]:.1f}" stroke="#6C9CBE" stroke-width="2.4" stroke-linecap="round" opacity="0.95"/>')
+                    self.add(
+                        f'<line x1="{anchor[0]:.1f}" y1="{anchor[1]:.1f}" x2="{tp[0]:.1f}" y2="{tp[1]:.1f}" stroke="#6C9CBE" stroke-width="2.4" stroke-linecap="round" opacity="0.95"/>',
+                        cls="pond sluice",
+                    )
                     sluices.append({"a": [round(anchor[0], 1), round(anchor[1], 1)], "b": [round(tp[0], 1), round(tp[1], 1)], "kind": kind})
         self.M["dikepond_sluices"] = sluices
 
-    def _mulberry_rows(self: Settlement, poly: Sequence[Pt], bank_d: str, cx: float, cy: float, rng: random.Random, channels: Sequence[tuple[Pt, Pt]] | None = None) -> None:  # type: ignore[misc]
+    def _mulberry_rows(self: Settlement, poly: Sequence[Pt], bank_d: str, cx: float, cy: float, rng: random.Random, channels: Sequence[tuple[Pt, Pt]] | None = None, crop: str = "mulberry") -> None:  # type: ignore[misc]
         """The 桑基 (mulberry-dike) half of a dike-pond unit rendered as what it is: PLANTED ground. Sparse
         earth mottle (patch-repairs, the perimeter dike's look) under two planted ROWS of coppiced mulberry
         crowns. TRUE SCALE (settlements.md 'Polder fourth pass'): silkworm mulberry was coppiced into low
@@ -395,24 +453,51 @@ class LandUseMixin:
         for mx, my in walk(s_w + 0.5 * (s_b - s_w), 30.0):  # earth mottle: packed / dried patches of different ages
             mcol = rng.choice(("#A8895A", "#B79B68", "#D2BC8C", "#9C8150"))
             g.append(f'<ellipse cx="{mx + rng.uniform(-3, 3):.1f}" cy="{my + rng.uniform(-3, 3):.1f}" rx="{rng.uniform(4, 8):.1f}" ry="{rng.uniform(3, 6):.1f}" fill="{mcol}" opacity="0.35"/>')
-        for t in (0.30, 0.72):  # two planted rows across the band
-            # in-row step 4.4 px: adjacent 4.4-7.2 ft crowns TOUCH but stay non-concentric (the GM's `oo`
-            # not `o o`, 2026-07-23), with bank tan showing in the notches. Measured density lands at
-            # ~1 bush per 23 sq ft (the old 6 px step sat at ~1/31; attested is 1 per 10-20 - still shy of
-            # the low end because only 2 rows fit legibly, but the touching-crown READ now matches a real
-            # planted dike row)
-            for x, y in walk(s_w + t * (s_b - s_w), 4.4):
-                jx, jy = x + rng.uniform(-1.3, 1.3), y + rng.uniform(-1.3, 1.3)
-                r = rng.uniform(2.2, 3.6)
-                ccol = rng.choice(("#6E8B4A", "#7C9A54", "#5E7C40"))
-                # the bush TRUNK stays off the canal (center > 3.5 px from the centerline), but the crown
-                # EDGE may overhang the water (GM 2026-07-24): crowns draw ABOVE the channel strokes, so an
-                # overhanging leaf edge covers the channel - never the channel slicing across a crown
-                if near and chan_dist(jx, jy) < 3.5:
+        # THE PLANTING BY CROP (feature 150 A6). Mulberry: two rows of coppiced bushes. Sugar cane: the cane
+        # stands in close rows the full width of the dike - three rows of short cane strokes. Banana: big
+        # clumps at ~14 ft, a stool of pseudostems with its leaf fan. Fruit (lychee, longan, citrus): standard
+        # trees at ~18 ft on the band's centerline. The pitches are drawing calibrations from each plant's
+        # habit, not surveyed dikes - labeled so in the class entries.
+        if crop == "mulberry":
+            for t in (0.30, 0.72):  # two planted rows across the band
+                for x, y in walk(s_w + t * (s_b - s_w), 4.4):
+                    jx, jy = x + rng.uniform(-1.3, 1.3), y + rng.uniform(-1.3, 1.3)
+                    r = rng.uniform(2.2, 3.6)
+                    ccol = rng.choice(("#6E8B4A", "#7C9A54", "#5E7C40"))
+                    if near and chan_dist(jx, jy) < 3.5:
+                        continue
+                    g.append(f'<circle cx="{jx:.1f}" cy="{jy:.1f}" r="{r:.1f}" fill="{ccol}" opacity="0.85"/>')
+        elif crop == "sugarcane":
+            # ROWS ALONG THE DIKE: cane is sett-planted in furrows down the bank's length, so the texture is
+            # ruled rows running with the dike, not a scatter (settlement-review: a scatter read as rough
+            # grass). Three rows of near-continuous dashes, each dash the loop's own direction.
+            for t in (0.22, 0.5, 0.78):
+                pts_ = walk(s_w + t * (s_b - s_w), 3.0)
+                for (x, y), (x2, y2) in zip(pts_, pts_[1:] + pts_[:1], strict=True):
+                    if math.hypot(x2 - x, y2 - y) > 4.5 or (near and chan_dist(x, y) < 3.0):
+                        continue
+                    g.append(f'<line x1="{x:.1f}" y1="{y:.1f}" x2="{x2:.1f}" y2="{y2:.1f}" stroke="{rng.choice(("#8FA84A", "#7E9A3E"))}" stroke-width="1.4" opacity="0.9"/>')
+        elif crop == "banana":
+            # STOOLS IN CLUMPS: a banana mat is a clump of three to five pseudostems with gaps between mats,
+            # not an orchard's single crowns at a regular pitch - the form that tells it from the fruit dike
+            # at fit zoom (settlement-review).
+            for x, y in walk(s_w + 0.5 * (s_b - s_w), 13.0):
+                if near and chan_dist(x, y) < 5.0:
                     continue
-                g.append(f'<circle cx="{jx:.1f}" cy="{jy:.1f}" r="{r:.1f}" fill="{ccol}" opacity="0.85"/>')
+                for _k in range(rng.randint(3, 5)):
+                    ox, oy = rng.uniform(-3.2, 3.2), rng.uniform(-3.2, 3.2)
+                    g.append(f'<circle cx="{x + ox:.1f}" cy="{y + oy:.1f}" r="{rng.uniform(1.6, 2.3):.1f}" fill="#9CBF4E" stroke="#4F6E22" stroke-width="0.6" opacity="0.92"/>')
+                for _k in range(4):  # the leaf fan of the mat
+                    a2 = rng.uniform(0, math.tau)
+                    g.append(f'<line x1="{x:.1f}" y1="{y:.1f}" x2="{x + math.cos(a2) * 5.5:.1f}" y2="{y + math.sin(a2) * 5.5:.1f}" stroke="#5E8630" stroke-width="0.8" opacity="0.7"/>')
+        else:  # fruit
+            for x, y in walk(s_w + 0.5 * (s_b - s_w), 18.0):
+                if near and chan_dist(x, y) < 5.5:
+                    continue
+                r = rng.uniform(4.0, 5.0)
+                g.append(f'<circle cx="{x:.1f}" cy="{y:.1f}" r="{r:.1f}" fill="{rng.choice(("#5E7C40", "#4F6E33"))}" stroke="#3C5526" stroke-width="0.8" opacity="0.92"/>')
         g.append("</g>")
-        self.add("".join(g))
+        self.add("".join(g), cls=DIKE_CROP_CLASS[crop])  # the crowns, canes or fans are the dike's planting
 
     @staticmethod
     def _pick_overlay_plots(eligible: list[Any], take: int, clustered: bool, rng: random.Random) -> list[Any]:

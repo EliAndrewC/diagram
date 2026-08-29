@@ -22,6 +22,7 @@ from .consts import (
     FOOTPATH_FABRIC_GAP,
     LANE_CLEARANCE,
     MIN_WEB_GAP,
+    POLDER_ARCHETYPES,
     SPUR_SETBACK,
     TRACK_FABRIC_GAP,
     WEB_CLEARANCE,
@@ -609,13 +610,14 @@ def stage_web(s: Settlement, plan: SitePlan) -> None:
             _ln["pts"] = []
             s.reink_lane(_i)
     _touch_junctions(
-        s, hard_built, walls, list(plan.watercourses) + drawn_water, reach=_STUB_REACH_FT, only_orphans=True
+        s, hard_built, walls, list(plan.watercourses) + drawn_water, reach=_STUB_REACH_FT, only_orphans=True, final=True
     )  # the stubs the smoothing leaves stop 30-35 ft short (seed 37); a connected web is untouched
     _pass("touch")
     _touch_junctions(s, hard_built, walls, list(plan.watercourses) + drawn_water)
     # AND SWEEP WHAT IS LEFT (feature 134 T50): the passes above shorten lanes, and `_WEB_MIN_FT` was
     # only ever asked at draw time. Last, so it judges the tread the map actually ships.
     _sweep_debris(s)
+    _drop_end_nubs(s)  # last of all: every pass above can leave a nub at a junction it laid
     s.M["meta"]["lane_web"] = plan.lane_web
 
 
@@ -962,7 +964,7 @@ def _bridge_collinear_breaks(s: Settlement, hard: list[Poly], walls: Sequence[Po
     A lane that stops and resumes 110 ft further on, 8 degrees off collinear, is not two arms - it is
     one street with a hole in the middle of the built-up frontage, and both its ends read as rounded
     caps dying in bare grass. `lanes_reach_something` passes them because it tests each END
-    independently: an end 83 ft from a house CENTRE is "fronting" it even when that is 55 ft from the
+    independently: an end 83 ft from a house CENTER is "fronting" it even when that is 55 ft from the
     wall, i.e. out past the dooryard.
 
     THE TEST IS WHETHER THE GAP IS WALKABLE, which is what makes this a defect rather than an
@@ -1138,6 +1140,71 @@ def _join_orphan_ways(s: Settlement, hard: list[Poly], walls: Sequence[Poly], wa
     return made  # pragma: no cover - six links is far more than any hamlet needs
 
 
+_NUB_FT = 9.0  # a leading/trailing segment under this is not a stretch of way, it is a splice artifact
+# NOT 5: the pass shipped at 5 ft and a settlement-review then found two nubs on Sawada that cleared it -
+# an 8.25 ft boot turning -87 deg off a 117 ft run, and a 5.74 ft first segment turning 88 deg. The floor
+# was set from the ONE case the pass was written for (3.1 ft) and was therefore calibrated below the defect
+# rather than to it. 9 ft is about a lane-width-and-a-half at hamlet tier, and the blast radius was
+# MEASURED before it was changed: over the whole pool, 5 -> 9 ft drops 3 more end vertices, all three on
+# Sawada, no other map touched; 12 ft catches nothing 9 does not.
+_NUB_TURN = 60.0  # ...and one that turns this far is a lump on the knuckle rather than the way arriving
+# NOT 90: the motivating nub measured 92.6 deg, and a bar sitting 2.6 deg under the one case it was
+# written for stops firing the first time a re-roll nudges it. Dropping the vertex is near-free at a
+# SMALL turn anyway (the two stretches are nearly collinear, so the tread barely moves), so the bar
+# only limits scope - it does not protect anything - and 60 deg is where a 3 ft stretch reads as a lump.
+
+
+def drop_end_nubs(ways: list[list[Pt]]) -> list[int]:
+    """Indices whose SECOND (or second-to-last) vertex is a nub, dropped in place.
+
+    A junction foot is laid on the way it meets; the vertex after it is whatever the lane's own first
+    stretch was. When the splice leaves those two within a few feet of each other AND the lane then turns
+    back on itself, the sheet shows a nub sticking out of the junction rather than a way arriving at it -
+    Kuwabata's connector began (2442.4, 643.0) -> (2444.5, 645.3) with a 93-degree reversal, 3.1 ft of
+    tread drawn as a lump on the knuckle (settlement-review 2026-08-29, error 2's second half).
+
+    Only the vertex AFTER the end is dropped, never the end itself: the end is the foot, and moving it
+    would take the lane off the way it was joined to. Lifted out of the pass below so it can be asked with
+    plain lists (GM 2026-08-28 on testability)."""
+
+    def nub_at_head(pts: list[Pt]) -> bool:
+        """Is `pts[1]` a nub - a sub-5 ft first stretch that then turns back on itself?"""
+        if len(pts) < 3:
+            return False
+        a, b, c = pts[0], pts[1], pts[2]
+        ax, ay, bx, by = b[0] - a[0], b[1] - a[1], c[0] - b[0], c[1] - b[1]
+        la, lb = math.hypot(ax, ay), math.hypot(bx, by)
+        if not (0.0 < la < _NUB_FT) or lb <= 1e-9:
+            return False
+        return math.degrees(math.acos(max(-1.0, min(1.0, (ax * bx + ay * by) / (la * lb))))) >= _NUB_TURN
+
+    hit: list[int] = []
+    for i, pts in enumerate(ways):
+        changed = False
+        if nub_at_head(pts):
+            del pts[1]
+            changed = True
+        pts.reverse()
+        if nub_at_head(pts):
+            del pts[1]
+            changed = True
+        pts.reverse()  # unconditional, so the lane always comes back in its drawn orientation
+        if changed:
+            hit.append(i)
+    return hit
+
+
+def _drop_end_nubs(s: Settlement) -> int:
+    """`drop_end_nubs` over the settlement's lanes, re-inking each one it changes. Runs LAST, beside
+    `_sweep_debris`, for the same reason: every earlier pass can leave one."""
+    lanes = s.M.get("lanes") or []
+    ways = [[(float(x), float(y)) for x, y in ln.get("pts") or []] for ln in lanes]
+    for i in drop_end_nubs(ways):
+        lanes[i]["pts"] = [[round(x, 1), round(y, 1)] for x, y in ways[i]]
+        s.reink_lane(i)
+    return len(ways)
+
+
 def _sweep_debris(s: Settlement) -> int:
     """Drop a lane the passes have whittled below `_WEB_MIN_FT` and left standing on its own.
 
@@ -1188,7 +1255,7 @@ def _sweep_debris(s: Settlement) -> int:
     return len(swept)
 
 
-def _touch_junctions(s: Settlement, hard: list[Poly], walls: Sequence[Poly], water: list[tuple[Pt, Pt]], reach: float = _LANE_JOIN_FT, only_orphans: bool = False) -> int:
+def _touch_junctions(s: Settlement, hard: list[Poly], walls: Sequence[Poly], water: list[tuple[Pt, Pt]], reach: float = _LANE_JOIN_FT, only_orphans: bool = False, final: bool = False) -> int:
     """The LAST pass over the web: every lane end that stands NEAR another way is extended to TOUCH it.
 
     THE NETWORK WAS CONNECTED BY TOLERANCE AND DISCONNECTED IN INK (GM 2026-08-27, feature 133 T31:
@@ -1271,6 +1338,15 @@ def _touch_junctions(s: Settlement, hard: list[Poly], walls: Sequence[Poly], wat
                     ((math.dist(q, z), z, k, _op) for k, _os, _op in _by_way for z in [min((seg_closest(q[0], q[1], a, b) for a, b in _os), key=lambda z: math.dist(q, z))]), key=lambda t: t[0]
                 )
                 d, foot, k, _op = _best
+                _os_k = list(zip(_op, _op[1:], strict=False))
+                # NOT BACK ONTO ITSELF (feature 150, Kuwabata seed 21): a 30 ft lane whose two ends
+                # both stood near the same spot on a neighbor had its start touched there, and then
+                # its end touched to the same foot - a lane closed into a 28 ft loop, which
+                # `lanes_bend_like_paths` read as a hairpin and `_smooth_web` never saw (it ran
+                # first). A foot within a few feet of the lane's OTHER end is its own junction, not a
+                # new one; leave that end alone.
+                if math.dist(foot, new[-1 if end == 0 else 0]) <= 6.0:
+                    continue
                 if d <= 2.0 or d > reach:
                     continue
                 # AN END THAT ALREADY STANDS ON THE NETWORK IS A JUNCTION, NOT A FREE END (feature 137
@@ -1310,10 +1386,55 @@ def _touch_junctions(s: Settlement, hard: list[Poly], walls: Sequence[Poly], wat
                     if _clear_touch(q, foot, hard, walls, water, max(_TOUCH_GAP, float(ln.get("w") or 5.0) / 2.0 + 2.0))
                     else _route(q, foot, hard, walls, water, gap=WEB_FABRIC_GAP, pad_mult=2.0, cell=10.0)
                 )
+                if not link and d <= _LANE_JOIN_FT:
+                    # A SHORT GAP GETS A SECOND, TIGHTER ATTEMPT (settlement-review 2026-08-29, error 1).
+                    # The first attempt walks a 10 ft lattice at DOUBLE the fabric pad, which is right for a
+                    # long route through other people's yards and too coarse for a few feet of slack: on
+                    # Kuwabata the back lane came out in two pieces with a 25 ft hole between two rounded
+                    # caps and a woodpile - 10 x 3.5 ft - standing 5.6 ft off the line between them. Every
+                    # endpoint-reach test passed, because each piece reaches the network at its OTHER end,
+                    # so nothing in the gate saw a severed back lane. A 10 ft obstacle should not cost 25 ft
+                    # of way. Only for a gap already inside the join reach, and the result still has to pass
+                    # `_may_write` - which judges the SPLICED lane's clearance and bend, not the link - so a
+                    # tread this finds but should not have is still refused there.
+                    link = _route(q, foot, hard, walls, water, gap=WEB_FABRIC_GAP, pad_mult=1.0, cell=5.0)
                 if not link or polyline_len(link) > _LINK_DIRECTNESS * d:
                     continue
                 link = _stop_at_network(link, [sg for _k, _os, _op in _by_way for sg in _os])
-                new = _unjog(_unretrace((list(reversed(link[1:])) + new) if end == 0 else (new + link[1:])), hard, walls, water)
+                _cand = _unjog(_unretrace((list(reversed(link[1:])) + new) if end == 0 else (new + link[1:])), hard, walls, water)
+                if final:
+                    # THE LANE ALREADY RUNS ONTO THE WAY (settlement-review 2026-08-28, Kuwabata lane 9): a lane
+                    # that comes within the touch gap of the way it is being joined to PART-WAY along its last
+                    # stretch, then runs on beside it, is ended where it first meets the way - not linked back
+                    # from beyond it, which left two treads 5-9 ft apart enclosing a sliver of ground.
+                    # Not conditioned on the bend rule: the V it left was 113 deg, legal to the gate and wrong on the sheet.
+                    _run = list(reversed(new)) if end == 0 else list(new)  # oriented so the joining end is LAST
+                    _cut_at: tuple[int, Pt] | None = None
+                    for _si in range(len(_run) - 1):  # walk the whole lane toward the joining end; first contact wins
+                        _a0, _b0 = _run[_si], _run[_si + 1]
+                        _span0 = math.dist(_a0, _b0)
+                        for _t in range(1, max(1, int(_span0 / 3.0))):
+                            _sx, _sy = _a0[0] + (_b0[0] - _a0[0]) * _t * 3.0 / _span0, _a0[1] + (_b0[1] - _a0[1]) * _t * 3.0 / _span0
+                            _f = min((seg_closest(_sx, _sy, a, b) for a, b in _os_k), key=lambda z: math.dist((_sx, _sy), z))
+                            if (
+                                math.dist((_sx, _sy), _f) <= _TOUCH_GAP and 6.0 < polyline_len([(_sx, _sy), *_run[_si + 1 :]]) <= 40.0
+                            ):  # only a SHORT overrun is cut (Kuwabata's was 32 ft); a long run past a way it grazes is a route, not a hook
+                                _cut_at = (_si, _f)
+                                break
+                        if _cut_at is not None:
+                            break
+                    if _cut_at is not None:
+                        _run = _run[: _cut_at[0] + 1] + [_cut_at[1]]
+                        _cand = list(reversed(_run)) if end == 0 else _run
+                # A HAIRPIN AT THE DOOR, AND WHY THERE IS NO REPAIR HERE (feature 150, Kuwabata seed 21;
+                # re-measured 2026-08-29 against main). This clone carried a repair for a lane whose last
+                # 13 ft turned down toward a door and was then joined back UP to the way it had just left.
+                # Feature 137 landed `_unjog`/`_unretrace` on the link above, which takes that step out
+                # first, so the repair fired 0 times over Inashiro, the 5 tripwire seeds, the 48-seed
+                # cohort and Kuwabata - 54 maps, no fires - and its own fixture no longer reaches it. Two
+                # mechanisms for one defect; the splice is the one that runs, so the repair was removed
+                # rather than left as unreachable code. Restore it only with a map that hairpins here.
+                new = _cand
                 closed += 1
                 moved += 1
             if new != pts and _may_write(i, new, lanes):
@@ -3069,7 +3190,9 @@ def stage_seat(s: Settlement, plan: SitePlan) -> None:
         for rec in list(s.M.get("field_ditches", [])) + list(s.M.get("channels", [])) + list(s.M.get("streams", []))
         for a, b in zip(rec["poly"], rec["poly"][1:], strict=False)
     ] + [((float(a[0]), float(a[1])), (float(b[0]), float(b[1]))) for rec in s.M.get("drawn_channels", []) for a, b in zip(rec["pts"], rec["pts"][1:], strict=False)]
-    seat = seat_cluster(plan, dry_plots=crop_polys(s), drain=drain, toe=s.toe_band() or None)
+    seat = seat_cluster(
+        plan, dry_plots=crop_polys(s), drain=drain, toe=s.toe_band() or None, wet=[[(float(a), float(b)) for a, b in m["poly"]] for m in s.M.get("marshes", []) if m.get("role") == "pond_fringe"]
+    )  # the reservoir's reed fringe: not building ground (feature 150 T50)
     plan.seat = seat
     # THE SITE'S BACK IS THE WINDWARD SIDE, and where the two disagree the site wins.
     #
@@ -3165,7 +3288,7 @@ def stage_track(s: Settlement, plan: SitePlan) -> None:
     # worse than pointless: every near target crosses the ring canal, so `path_violations` scored the
     # nearby vertices badly and the least-bad candidate ran from the cluster straight ACROSS the
     # block to a vertex on the far side (`fields_clear_of_road` on 4 of 12 cardinal polders).
-    if plan.field_archetype == "polder_grid":
+    if plan.field_archetype in POLDER_ARCHETYPES:  # both polder archetypes (feature 150)
         s.M["meta"]["lane_skeleton"] = plan.lane_skeleton
         toe = s.toe_band()
         drawn_wet = [[(float(a), float(b)) for a, b in m["poly"]] for m in s.M.get("marshes", []) if m.get("role") != "defense" and m.get("poly")]

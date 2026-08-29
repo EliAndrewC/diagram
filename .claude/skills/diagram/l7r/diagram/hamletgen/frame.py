@@ -10,8 +10,10 @@ import math
 from l7r.diagram.settlement import Settlement, seg_dist
 from l7r.diagram.settlement.structures.fixtures import KOSATSUBA_MARKER_MIN_PX, KOSATSUBA_VERGE_FT
 
-from .hinterland import CROP_MARGIN
+from .consts import POLDER_ARCHETYPES
+from .hinterland import CROP_MARGIN, title_pocket
 from .plan import SitePlan
+from .water import polder_crossing_caps
 
 # THE RE-SEAT PROBE MUST MEASURE THE BOARD THAT IS DRAWN (feature 134 T50, 2026-08-29). This was pinned
 # at 14 x 8 while `Settlement.kosatsuba` draws the researched 12 x 5 - not even the same aspect - and the
@@ -43,7 +45,15 @@ def stage_crossings(s: Settlement, plan: SitePlan) -> None:
     the engine's own `bridges()` docstring says so and the `roads_bridge_water` check enforces it."""
     s.bridges()
     if s.M.get("field_ditches"):
-        s.channel_footbridges(spacing=300)
+        if plan.field_archetype in POLDER_ARCHETYPES:
+            # A POLDER'S RING CANAL is crossed where the village is (feature 150; the rule the
+            # hand-authored polders carried, `polder_crossing_caps`): planks cluster on the
+            # settlement-side toe collector, one per interior lateral, none on the feeder, the far
+            # toe or the drain. Spacing as the hand-authored maps had it.
+            s.channel_footbridges(spacing=320, seg_caps=polder_crossing_caps(plan))
+            s.dike_gates()  # a sluice gate at every cut of the perimeter dike, snapped to the recorded water (feature 150 A7)
+        else:
+            s.channel_footbridges(spacing=300)
 
 
 def stage_notice(s: Settlement, plan: SitePlan) -> None:
@@ -168,5 +178,8 @@ def stage_frame(s: Settlement, plan: SitePlan) -> None:
     # content` allows at most 56 px of view past the frame-setting content, because a band whose
     # only extra is open ground is wasted image. 64 was tried and fails all twelve. 48 is the most
     # air the frame will give the title.
-    s.crop_to_content(margin=CROP_MARGIN)
-    s.title(plan.spec.name)
+    _pocket = title_pocket(s, plan)  # the pocket the belt was dented around (feature 150) - reserved once, see hinterland.title_pocket
+    _extra = [_pocket] if plan.title_pocket_outside else []  # an OUTSIDE reservation is content the crop must take in; an inside one changes nothing
+    s.crop_to_content(margin=CROP_MARGIN, extra=_extra)
+    s.M["meta"]["title_pocket"] = [round(v, 1) for v in _pocket]  # recorded so a placard that fell back can be read against the reservation
+    s.title(plan.spec.name, prefer=_pocket)

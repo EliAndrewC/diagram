@@ -326,7 +326,10 @@ def test_lane_unworn_draws_a_dashed_causeway():
     s = _village()
     s.lane([(100, 300), (500, 300)], width=6, worn=False)
     assert s.M["lanes"][-1]["worn"] is False
-    assert 'stroke-dasharray="8,8"' in "".join(s.out)  # the dashed centerline of a paved lane
+    # feature 150 T53: lanes render through the GROUND block (edges below beds, so junctions read as one
+    # structure); the dashed centerline is the entry's `top`, flushed into `out` by finish()
+    assert 'stroke-dasharray="8,8"' in (s.ground[-1]["top"] or "")
+    assert s.ground[-1]["cls"] == "village lane"
 
 
 def test_mill_draws_records_and_reserves():
@@ -371,8 +374,10 @@ def test_clip_to_stream_trims_the_confluence_mouth():
 
 
 def test_pond_fill_stays_in_the_shared_block_without_a_late_join():
-    # a late channel that does NOT touch the pond must not relocate the fill: the shared block's
-    # own pond_fill-last ordering already covers the early feeder's overshoot
+    # ONE WATER BLOCK (feature 150 T53): every watercourse composites in one block at the late
+    # position whenever a late channel exists - rims first, one shared-opacity bed group with the
+    # pond's fill LAST, then the sheens - so a non-joining late channel no longer sits in a second
+    # block of its own; the fill covers the early feeder's overshoot AND draws over the late bed
     with tempfile.TemporaryDirectory() as d:
         base = os.path.join(d, "t")
         s = Settlement(1000, 1000, seed=1)
@@ -384,9 +389,11 @@ def test_pond_fill_stays_in_the_shared_block_without_a_late_join():
         with open(base + ".svg") as _f:
             svg = _f.read()
     early, late = s.M["drawn_channels"]
-    assert s.M["pond_layer"]["bedz"] > early["bedz"]  # shared-block covering order holds (same block, z comparable)
-    assert s.M["pond_layer"]["late"] is False  # no relocation: the fill stayed in the shared block
-    assert svg.index('<ellipse cx="500" cy="250" rx="100" ry="70" fill="#9CB4C8"/>') < svg.index('stroke="#7C9EB0"')  # the non-joining late bed draws later (svg order, cross-block)
+    assert s.M["pond_layer"]["bedz"] > early["bedz"]  # the fill covers the early feeder (same block, z comparable)
+    assert s.M["pond_layer"]["bedz"] > late["bedz"]  # ...and the late bed: one block, fill last
+    assert s.M["pond_layer"]["late"] is True  # the one block lives at the late position when a late channel exists
+    assert svg.index('<ellipse cx="500" cy="250" rx="100" ry="70" fill="#9CB4C8"/>') > svg.index('stroke="#7C9EB0"')  # the fill draws after every bed
+    assert svg.count('<g opacity="0.85">') == 1  # one bed group - no second block stacking to a darker seam
 
 
 def test_draw_comb_field_snaps_the_intake_onto_a_nearby_stream():

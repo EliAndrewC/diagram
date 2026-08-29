@@ -104,6 +104,7 @@ _NOT_ENGINE = {"gencache.py", "regen.py", "rollcache.py"}  # rollcache (feature 
 OUTPUT_SUFFIXES = (".json", ".svg", ".png", ".html")  # .html: the interactive page, written beside the svg (feature 134)
 GATE_BYPASS = "GATE_NO_CACHE"  # =1 forces the gate to regenerate everything (feature 026)
 COVERAGE_NAME = "coverage.data"  # per-entry generation coverage, stored by the gate's miss path
+COVERAGE_KEY_NAME = "coverage.key"  # the entry key that coverage was recorded UNDER (feature 149)
 
 
 def engine_files() -> list[str]:
@@ -433,12 +434,61 @@ def store(gen: str, deps: dict[str, Any], *, gen_cpu_s: float | None = None, cov
             continue
         if os.path.isfile(out):
             place(Path(out).read_bytes(), os.path.join(entry, os.path.basename(out)))
+    # COVERAGE BELONGS TO THE KEY IT WAS RECORDED UNDER, and this is where it used to stop belonging
+    # (feature 149). `store` publishes a FRESH meta.json - a new key - at the end of every call. A caller
+    # that regenerates without measuring coverage (`make maps`, the iteration regen path, anything but the
+    # gate's miss path) therefore left the OLD coverage.data sitting beside the NEW key, and `gate_obtain`
+    # replayed it on the next hit. Coverage data is a set of LINE NUMBERS, so replaying it after the source
+    # moved marks the wrong lines: measured 2026-08-29 on all four scripted hamlets, whose artifacts were
+    # rewritten at 05:19 while their coverage.data stayed at 04:52, from before a merge of main.
+    #
+    # THAT IS WHAT MADE THE HAMLET-PATH FLOOR FLICKER (feature 147 parked two lines of `hinterland.py` over
+    # it). The verdict depended on which entries had last been written by a path that records coverage and
+    # which by a path that does not - so the same code gave 100% in one full run and 99.93% in the next, and
+    # a bisect over the suite returned contradictory answers because it was measuring cache history, not the
+    # tests. `_coverage_is_current` already guarded the DELETED-module case and structurally could not see
+    # this one: the files it measures all still exist, they have simply moved.
+    #
+    # So an entry never carries coverage it did not just record. Dropping it costs one regeneration the next
+    # time the gate wants this map, and buys a floor that means what it says.
+    key = compute_key(gen, deps)
     if coverage_data is not None and os.path.isfile(coverage_data):
         place(Path(coverage_data).read_bytes(), os.path.join(entry, COVERAGE_NAME))
-    meta: dict[str, Any] = {"key": compute_key(gen, deps), "deps": deps}
+        # ...STAMPED WITH THE KEY IT WAS RECORDED UNDER. Dropping stale coverage above is enough going
+        # forward, but every clone in existence already holds entries poisoned before this landed, and
+        # nothing in them says so. The stamp makes those self-healing: an entry with no stamp, or one whose
+        # stamp does not match, is not replayed - it regenerates, which is the cache's standing rule for
+        # doubt of any kind.
+        place(key.encode(), os.path.join(entry, COVERAGE_KEY_NAME))
+    else:
+        for gone in (COVERAGE_NAME, COVERAGE_KEY_NAME):
+            stale_cov = os.path.join(entry, gone)
+            if os.path.isfile(stale_cov):
+                os.remove(stale_cov)
+    meta: dict[str, Any] = {"key": key, "deps": deps}
     if gen_cpu_s is not None:
         meta["gen_cpu_s"] = gen_cpu_s
     place(json.dumps(meta).encode(), os.path.join(entry, "meta.json"))
+
+
+def _coverage_stamp_matches(gen: str) -> bool:
+    """Was this entry's coverage recorded under the key the entry now advertises? (feature 149)
+
+    `store` publishes a fresh key on EVERY call, and only the gate's miss path passes coverage - so a
+    regeneration by any other path (`make maps`, the iteration regen) used to leave old coverage beside a new
+    key, and the next hit replayed it. Coverage is a set of LINE NUMBERS: replayed after the source moved, it
+    marks the wrong lines, which is what made the hamlet-path floor return 100% on one full run and 99.93% on
+    the next from identical code. `_coverage_is_current` cannot see it - the measured files all still exist.
+
+    An unstamped entry is one written before this landed: not trusted, regenerated once, stamped thereafter.
+    """
+    entry = _entry_dir(gen)
+    try:
+        stamped = Path(os.path.join(entry, COVERAGE_KEY_NAME)).read_text(encoding="utf-8").strip()
+        meta = json.loads(Path(os.path.join(entry, "meta.json")).read_text(encoding="utf-8"))
+    except OSError, ValueError:
+        return False
+    return bool(stamped) and stamped == meta.get("key")
 
 
 def _coverage_is_current(cov_src: str) -> bool:
@@ -486,7 +536,7 @@ def gate_obtain(gen: str) -> tuple[str, str, float | None]:
     manifest = gen[: -len(".gen.py")] + ".json"
     stem = os.path.basename(gen)[: -len(".gen.py")]
     cov_src = os.path.join(_entry_dir(gen), COVERAGE_NAME)
-    if os.environ.get(GATE_BYPASS) != "1" and os.path.isfile(cov_src) and os.path.getsize(cov_src) > 0 and _coverage_is_current(cov_src) and load(gen):
+    if os.environ.get(GATE_BYPASS) != "1" and os.path.isfile(cov_src) and os.path.getsize(cov_src) > 0 and _coverage_stamp_matches(gen) and _coverage_is_current(cov_src) and load(gen):
         shutil.copyfile(cov_src, os.path.join(HERE, f".coverage.gatehit-{stem}-{os.getpid()}"))
         return manifest, "HIT", None
     # The child's scratch files (driver, record, raw coverage data) live OUTSIDE the engine tree:

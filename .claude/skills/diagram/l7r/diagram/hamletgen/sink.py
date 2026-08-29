@@ -8,6 +8,7 @@ from __future__ import annotations
 import math
 
 from l7r.diagram.settlement import Settlement, point_in_poly
+from l7r.diagram.settlement.land.wet import pond_fringe_ring
 from l7r.diagram.sitegen.geom import crosses_poly, unit
 from l7r.diagram.waterfields import DRAIN_FT, chan_px
 
@@ -321,7 +322,7 @@ def stage_sink(s: Settlement, plan: SitePlan) -> None:
     # open margin where the placer is free to seat a homestead on it (`no_structure_on_channel`).
     s.corridors.append((list(ditch), 33.0))
     # A reedy fringe rims the shore - the shallow margin of any standing water.
-    ring: Poly = [(pcx + (prx + 44) * math.cos(a), pcy + (pry + 44) * math.sin(a)) for a in [i * math.pi / 8 for i in range(16)]]
+    ring: Poly = pond_fringe_ring(pcx, pcy, prx, pry, 44.0)  # the shared ring (feature 151); a tameike keeps a wider fringe than a comb's source pond
     s.marsh(ring, role="pond_fringe")
     # No building on the water.
     s.block_polys.append([(pcx - prx - 10, pcy - pry - 10), (pcx + prx + 10, pcy - pry - 10), (pcx + prx + 10, pcy + pry + 10), (pcx - prx - 10, pcy + pry + 10)])

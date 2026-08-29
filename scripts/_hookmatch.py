@@ -54,6 +54,24 @@ def _strip_quotes(cmd: str) -> str:
     return re.sub(r"(?<!-c )(?<!-c\t)([\"'])(?:\\.|(?!\1).)*\1", r"\1\1", cmd, flags=re.S)
 
 
+_TARGET = re.compile(_POS + r"(?:\$\(MAKE\)|make)\s+(?:-\S+(?:\s+\S+)?\s+)*(?:[A-Za-z_][A-Za-z0-9_]*=\S*\s+)*([a-z][\w-]*)")
+
+
+def targets(cmd: str) -> set[str]:
+    """Every make TARGET this command actually INVOKES - a mention is not an invocation.
+
+    The same anchoring `classify` uses, for the hooks that care about WHICH target: heredoc bodies and
+    quoted strings are blanked first, and a target only counts at a command position (start, or after
+    `;`, `|`, `&&`, `||`, a newline), past any flags and `VAR=value` prefixes. `gate-hooks.sh` used a
+    bare substring test until 2026-08-29 and blocked six pieces of correct work in one day: a script
+    ANALYSING how often its two targets had been run, a plan document quoting them, twice the test file
+    that exists to prove guards do not do this, and finally the very command that fixed it. Fourth time
+    this repository has made the mention-versus-invocation mistake, which is why the answer lives here
+    rather than in another `case`.
+    """
+    return {m.group(1) for m in _TARGET.finditer(_strip_quotes(_strip_heredocs(cmd)))}
+
+
 def classify(cmd: str) -> str:
     if not cmd or "GUARD_EDIT_OK" in cmd:
         return "ok"
@@ -94,4 +112,9 @@ if __name__ == "__main__":
         payload = json.load(sys.stdin).get("tool_input", {}).get("command", "")
     except Exception:
         payload = ""
-    print(classify(payload))
+    # `_hookmatch.py targets` prints the make targets the command invokes, one per line, for the hooks
+    # that need to know WHICH; with no argument it prints the make-only classification as it always has.
+    if len(sys.argv) > 1 and sys.argv[1] == "targets":
+        print("\n".join(sorted(targets(payload))))
+    else:
+        print(classify(payload))

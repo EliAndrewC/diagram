@@ -1,0 +1,14 @@
+# Tasks: feature 149 - the coverage floor's flaky verdict
+
+Every task is `research: rendering`. No GM acceptance task, by their instruction (*"No need for me approving
+as a separate task"*).
+
+- [x] T01 the GM's request verbatim; spec carrying 147's eliminations so they are not re-derived; `spec-fidelity` round 1 (3 changes) and round 2
+- [x] T02 FR-001 the CAUSE established by measurement, not by hypothesis: all four scripted hamlets' cache entries carried `meta.json` written at 05:19 beside `coverage.data` from 04:52 - a fresh key advertising stale coverage. `store()` publishes a new key on every call but only the gate's miss path passes coverage, so any other regeneration path (`make maps`, the iteration regen) left the old data behind, and `gate_obtain` replayed it. Coverage is a set of LINE NUMBERS: replayed after the source moved, it marks the wrong lines
+- [x] T03 FR-005 a stale replay made IMPOSSIBLE, not unlikely: coverage is dropped when an entry is re-stored without it, AND stamped with the key it was recorded under, so an entry poisoned before this landed heals itself (no stamp -> not replayed -> regenerated once)
+- [x] T04 FR-007 the regression test, proved to FIRE by deleting the fix and watching it go red
+- [x] T05 FR-003 the park removed - both the `hinterland.py` pragma and the `PARKED` entry
+- [x] T06 FR-002/FR-006 measured on the sanctioned pair: the floor's verdict is now IDENTICAL on consecutive full runs of unchanged code (both 2 missing before the carrier was re-aimed, where before the fix the same code gave 0 and 2 on alternate runs). Sweep 265 s then 233 s - the first pays for regenerating every entry poisoned before the fix, since an unstamped entry is no longer replayed; the second is the standing cost and is inside feature 147's landed figure
+- [x] T06a the carrier re-aimed. `test_woodland_shrink_147.py` still PASSED while no longer reaching the rung after 134's landing moved which cohort member walks it - a test that silently stopped proving its point, which is the failure this feature is about in miniature. It is now an explicit COVERAGE CARRIER: its weak assertion is named as such, the floor is stated to be its assertion, and the docstring says how to re-aim it (`make cov-file`) and not to re-park the lines
+- [x] T06b **NOT THIS FEATURE'S DEBT, recorded rather than absorbed.** The hamlet-path floor is red on ~30 further lines that arrived with main: every uncovered `ways.py` line blames to feature 134's commits (0d56a747, 60217b90, 3c577af5, 47b62294), plus two older fix commits in `water_ways.py` and `_geom/ways.py`. Constitution XIII - a pre-existing failure stays ledgered and is not fixed under another feature's number. Worth the GM's attention: the push gate is `make done`, which DEFERS the coverage floors, so floor-red code can and did land on main
+- [x] T07 landed on main (this commit is the push; the gate was green at 48 s and the sweep pair recorded in T06)

@@ -215,7 +215,15 @@ class WaterWaysMixin:
         self.M["streams"].append(rec)
         bed_t = f'<path d="{{dd}}" fill="none" stroke="#9CB4C8" stroke-width="{width}" stroke-linejoin="round" stroke-linecap="round"/>'
         # lighter mid-current highlight (NOT a dashed lane line - this is water, not a road)
-        sheen_t = f'<path d="{{dd}}" fill="none" stroke="#B6CAD8" stroke-width="{max(2, width * 0.35):.0f}" stroke-linejoin="round" stroke-linecap="round"/>'
+        # THE SHEEN IS BUTT-CAPPED (settlement-review 2026-08-29, Mizuguchi error 2 and Kashikawa's bead).
+        # A sheen is the highlight ALONG a course, not the course itself, and a round cap makes it bulge
+        # half its own width past the end of its own bed. Since feature 150 T53 put every watercourse in
+        # ONE block, every sheen draws above every bed, so that bulge prints INSIDE whatever the course
+        # runs into: at Mizuguchi's intake - the join the hamlet is named for - it printed a pale blob on
+        # the head-race, measured in the PNG. Measured across the pool, a stream sheen lies under a later
+        # bed for 0.1 to 4.3 ft per map: cap-sized at joins, never a long run, which is why the cap is the
+        # fix and the block order is not. A butt cap ends the highlight where its bed ends.
+        sheen_t = f'<path d="{{dd}}" fill="none" stroke="#B6CAD8" stroke-width="{max(2, width * 0.35):.0f}" stroke-linejoin="round" stroke-linecap="butt"/>'
         clip = {"pts": [(x, y) for x, y in pts], "bed_t": bed_t, "sheen_t": sheen_t} if self._pond_anchored(frm, to) else None
         self._water(  # opacity comes from the shared bed/sheen groups, so crossings don't stack into a dark seam
             bed_t.format(dd=dd), rec, sheen=sheen_t.format(dd=dd), clip=clip, cls=cls
@@ -388,13 +396,21 @@ class WaterWaysMixin:
         out = snap_front(out[::-1])[::-1]
         return out
 
-    def _clip_to_stream(self: Settlement, pts: Any) -> Any:  # type: ignore[misc]
+    def _clip_to_stream(self: Settlement, pts: Any, capr: float = 0.0) -> Any:  # type: ignore[misc]
         """Snap a channel endpoint that reaches INTO a stream bed onto the bed's edge (~2px inside
         the bank, so the mouth covers the bank stroke) - the same clean CONFLUENCE `_clip_to_pond`
         and `_clip_to_moat` give: a drain culvert JOINS the receiving stream without drawing its own
         bed as a colored tongue across the current. Trim-only: an end short of the bank is left
         alone (the `channels_join_streams_at_confluence` check requires the RECORDED polyline to
-        reach the bed, so the gen extends the record to the centerline and this trims the DRAWING)."""
+        reach the bed, so the gen extends the record to the centerline and this trims the DRAWING).
+
+        `capr` IS THE CAP RADIUS, and it was missing here while both siblings had it (settlement-review
+        2026-08-29, on Sawada's brook mouth and head intake and again on Kashikawa's head join). A round
+        stroke cap bulges half the stroke's width PAST its endpoint, so a channel trimmed exactly to the
+        bank still printed a rounded plug of its own bed colour inside the receiving stream - a bead across
+        the joint, which is the opposite of the GM's "water just flows". `_clip_to_moat` and `_clip_to_river`
+        have pulled their endpoints back by `capr` since they were written; a stream confluence simply never
+        got the argument, and the caller passed it to those two and not to this one."""
         streams = self.M.get("streams", [])
         if not streams or len(pts) < 2:
             return pts
@@ -434,7 +450,7 @@ class WaterWaysMixin:
             nxt = out[i + 1]
             ux, uy = nxt[0] - f[0], nxt[1] - f[1]
             ul = math.hypot(ux, uy) or 1.0
-            return [(f[0] + ux / ul * (hw - 2), f[1] + uy / ul * (hw - 2))] + out[i + 1 :]
+            return [(f[0] + ux / ul * (hw - 2 + capr), f[1] + uy / ul * (hw - 2 + capr))] + out[i + 1 :]
 
         out = snap_front(pts)
         out = snap_front(out[::-1])[::-1]
@@ -464,7 +480,7 @@ class WaterWaysMixin:
         whether the joining stroke's tip lands inside the OTHER stroke's drawn band - which needs
         that band's width, and needs it from the post-clip record rather than the pre-clip
         field_ditches/channels (the two diverge wherever a mouth was snapped onto open water)."""
-        pts = self._clip_to_stream(self._clip_to_river(self._clip_to_moat(self._clip_to_pond(pts), capr=max(w0, w1) / 2), capr=max(w0, w1) / 2))
+        pts = self._clip_to_stream(self._clip_to_river(self._clip_to_moat(self._clip_to_pond(pts), capr=max(w0, w1) / 2), capr=max(w0, w1) / 2), capr=max(w0, w1) / 2)
         # ROUND THE BENDS: an earthen ditch turns on a swept curve, never a mitred corner (see
         # fillet_polyline for the why and the ~2.5-widths radius). Applied AFTER the mouth clips so a
         # snapped pond/moat/stream junction keeps its exact endpoint, and the DRAWN geometry recorded
@@ -494,14 +510,9 @@ class WaterWaysMixin:
         half-width (keep houses off the tread). `connector=True` marks the trodden path that LEAVES the
         village for the wider world - it MUST run off the map edge (checked), never stop mid-landscape.
         See settlements.md 'Village lanes and connecting paths'."""
-        _z = self._lane_ink_at(pts, width, worn)
-        self.M.setdefault("lanes", []).append({"pts": [[x, y] for x, y in pts], "worn": worn, "w": width, "connector": connector})
-        # THE INK'S OWN STREAM SLOTS, remembered so a later pass can TRIM this lane without moving it
-        # in z (see `trim_lane_stubs`). `add` returns the index it wrote, and rewriting that index in
-        # place is what lets the trim happen after the houses are down - which is the only moment the
-        # engine knows what a lane actually serves - while the lane keeps the exact draw position it
-        # has always had. Kept engine-side rather than on the record so no manifest byte moves.
-        self._lane_ink.append(_z)
+        rec = {"pts": [[x, y] for x, y in pts], "worn": worn, "w": width, "connector": connector}
+        self.M.setdefault("lanes", []).append(rec)
+        self._lane_ink.append(self._lane_ink_at(pts, width, worn, rec))
         # `M["lane"]` IS THE SPINE - the longest ordinary way on the map - not whichever lane was
         # drawn last. It used to be assigned unconditionally here, so it held the final `lane()` call
         # of the whole build, and five consumers read it as "the village street": two gate checks
@@ -524,23 +535,27 @@ class WaterWaysMixin:
         self.corridors.append((pts, clearance))
         self._record_tread(pts, width / 2)
 
-    def _lane_ink_at(self: Settlement, pts: Any, width: float, worn: bool) -> tuple[int, int]:  # type: ignore[misc]
-        """Emit a lane's two strokes and return the stream slots they landed in."""
+    def _lane_ink_at(self: Settlement, pts: Any, width: float, worn: bool, rec: Any) -> tuple[int]:  # type: ignore[misc]
+        """Emit a lane's two strokes INTO THE GROUND BLOCK and return the ground entry's index.
+
+        JUNCTIONS RENDER AS ONE STRUCTURE (feature 150 T53, GM 2026-08-28: "When two village lane segments
+        intersect ... it looks like one of them is literally just rendered on top of the other ... It should
+        look as if they are all essentially one contiguous structure"). Drawn inline, a later lane's soft
+        shoulder lay across an earlier lane's tread at every junction. The town streets never had the
+        problem because they go through `_ground`: every SHOULDER (edge) in one sub-layer at the bottom,
+        every TREAD (bed) above - so treads merge into one continuous surface and no shoulder crosses a
+        tread. Lanes now take the same path; `zpri` is the width, so a wider way still wins where two
+        treads overlap. `reink_lane` and the stub trimmer rewrite the ground entry, not stream slots."""
         dd = 'M' + ' L'.join(f'{x},{y}' for x, y in pts)
         if worn:
-            # EVERY lane is one highlight class, the connector and the field spur included (feature 134,
-            # the GM: "all of the village lanes ... treated as a single feature"; the fidelity review
-            # struck a connector carve-out from the spec)
-            z0 = self.add(
-                f'<path d="{dd}" fill="none" stroke="#A98C58" stroke-width="{width + 2.5:.1f}" opacity="0.4" stroke-linejoin="round" stroke-linecap="round"/>', cls="village lane"
-            )  # soft worn-earth shoulder
-            z1 = self.add(
-                f'<path d="{dd}" fill="none" stroke="#C9AE79" stroke-width="{width:.1f}" opacity="0.9" stroke-linejoin="round" stroke-linecap="round"/>', cls="village lane"
-            )  # packed-earth tread, no centerline
+            edge = f'<path d="{dd}" fill="none" stroke="#A98C58" stroke-width="{width + 2.5:.1f}" opacity="0.4" stroke-linejoin="round" stroke-linecap="round"/>'  # soft worn-earth shoulder
+            bed = f'<path d="{dd}" fill="none" stroke="#C9AE79" stroke-width="{width:.1f}" opacity="0.9" stroke-linejoin="round" stroke-linecap="round"/>'  # packed-earth tread, no centerline
+            self._ground(float(width), rec, "z", edge=edge, bed=bed, cls="village lane")
         else:
-            z0 = self.add(f'<path d="{dd}" fill="none" stroke="#CBB178" stroke-width="{width}" opacity="0.65"/>', cls="village lane")
-            z1 = self.add(f'<path d="{dd}" fill="none" stroke="#6B4F2A" stroke-width="1.4" stroke-dasharray="8,8" opacity="0.7"/>', cls="village lane")
-        return (z0, z1)
+            bed = f'<path d="{dd}" fill="none" stroke="#CBB178" stroke-width="{width}" opacity="0.65"/>'
+            top = f'<path d="{dd}" fill="none" stroke="#6B4F2A" stroke-width="1.4" stroke-dasharray="8,8" opacity="0.7"/>'
+            self._ground(float(width), rec, "z", bed=bed, top=top, cls="village lane")
+        return (len(self.ground) - 1,)
 
     def reink_lane(self: Settlement, i: int) -> None:  # type: ignore[misc]
         """Rewrite lane `i`'s DRAWN path from its record, so the two cannot disagree.
@@ -564,11 +579,15 @@ class WaterWaysMixin:
             # path with no points, which resvg ignores silently and a browser reports as an error
             # on every open. Blank the ink instead, exactly as `trim_lane_stubs` does for a stub.
             for z in self._lane_ink[i]:
-                self.out[z] = ""
+                for part in ("edge", "bed", "top"):
+                    if self.ground[z].get(part):
+                        self.ground[z][part] = ""
             return
         dd = "M" + " L".join(f"{x},{y}" for x, y in pts)
         for z in self._lane_ink[i]:
-            self.out[z] = re.sub(r'd="M[^"]*"', f'd="{dd}"', self.out[z], count=1)
+            for part in ("edge", "bed", "top"):
+                if self.ground[z].get(part):
+                    self.ground[z][part] = re.sub(r'd="M[^"]*"', f'd="{dd}"', self.ground[z][part], count=1)
 
     def trim_lane_stubs(self: Settlement, way_reach: float = 40.0, house_reach: float = 90.0, fan_spread: float = 60.0, fan_bearing: float = 25.0) -> int:  # type: ignore[misc]
         """Pull back any internal lane end that REACHES NOTHING. Returns how many ends were trimmed.
@@ -698,7 +717,9 @@ class WaterWaysMixin:
             if _lane_len(pts) < _LANE_MIN_FT / max(float(self.M["meta"].get("ftpx", 1) or 1), 0.01):
                 _drop.add(i)
                 for _z in self._lane_ink[i]:
-                    self.out[_z] = ""
+                    for _part in ("edge", "bed", "top"):
+                        if self.ground[_z].get(_part):
+                            self.ground[_z][_part] = ""
                 trimmed += 1
                 continue
             if [list(p) for p in pts] == ln["pts"]:
