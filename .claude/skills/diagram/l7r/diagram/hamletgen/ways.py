@@ -2434,7 +2434,7 @@ def _serve_stragglers(s: Settlement, plan: SitePlan, hard: list[Poly], fabric: l
             targets = sorted((seg_closest(c[0], c[1], a, b) for a, b in segs), key=lambda q: math.dist(c, q))
             _served = False
             _folded: Poly | None = None  # a workable path that bends or fouls - the last resort, ranked
-            _folded_rank = (True, True)
+            _folded_rank = (True,)
             _key = tuple((round(float(t[0]), 1), round(float(t[1]), 1)) for t in targets[:60])
             if _exhausted.get(id(h)) == _key:
                 continue  # same house, same candidate ways, same obstacles - a replay of a pass that already failed
@@ -2617,7 +2617,7 @@ def _serve_stragglers(s: Settlement, plan: SitePlan, hard: list[Poly], fabric: l
                     for _cut in _cuts:
                         _p = _whole[: _cut + 1]
                         _j = min((seg_closest(_p[-1][0], _p[-1][1], a, b) for a, b in segs), key=lambda z: math.dist(_p[-1], z))
-                        if _clear_link(_p[-1], _j, hard, others, water) or _clear_touch(_p[-1], _j, hard, others, water):
+                        if _clear_link(_p[-1], _j, hard, others, water):
                             # A JUNCTION IS CONTACT, AND ITS LAST FEW FEET GET THE JUNCTION MARGIN. Tested
                             # at `_clear_link`'s 7 ft fabric margin the step reads as a run across open
                             # ground; it is not, it is the stretch into a junction, which everywhere else
@@ -2689,8 +2689,8 @@ def _serve_stragglers(s: Settlement, plan: SitePlan, hard: list[Poly], fabric: l
                     # same way as the two cuts are: an overlap is a rule broken, a fold is a shape
                     # complaint, so (fouls, bends) orders them and the least bad is what gets drawn if no
                     # way on the map yields a clean one.
-                    _bad = (_crosses_fabric(path, passable, _TOUCH_GAP), _bends_badly(path))
-                    if _bad != (False, False):
+                    _bad = (_bends_badly(path),)
+                    if _bad != (False,):
                         if _folded is None or _bad < _folded_rank:
                             _folded, _folded_rank = path, _bad
                         continue
