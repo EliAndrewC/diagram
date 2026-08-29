@@ -2093,3 +2093,59 @@ what share, is a question the record can answer. The bamboo the maps DO draw is 
 
 Both are the shape this project has written down twice: *a check that never RUNS looks exactly like a check
 that passes*. `research: rendering` for the companion checks; the woodland seat question is `physical`.
+
+## The notice board: two knobs answer one question through different mechanisms (feature 154, 2026-08-29)
+
+`kosatsuba_siting` (feature 152: `frontage` / `waterside`) bids through the traffic score, while
+`kosatsuba_seat` (feature 154: `center` / `entrance` / `frontage`) culls candidates to the ground
+around its anchor. They are two rolls deciding one thing, and where the anchor's ground holds no
+wellhead every surviving candidate earns the waterside bonus of zero - so the siting knob decides
+nothing while the manifest goes on recording it.
+
+Measured across the five scripted hamlets, the rolled siting and the ground disagree on FOUR:
+
+| map | `kosatsuba_seat` | `kosatsuba_siting` | nearest well |
+|---|---|---|---|
+| kashikawa | entrance | **waterside** | **276.0 ft** |
+| inashiro | entrance | frontage | 76.2 ft |
+| kuwabata | center | frontage | 53.3 ft |
+| mizuguchi | entrance | frontage | 79.4 ft |
+| sawada | entrance | frontage | 106.4 ft |
+
+**This is NOT a placement defect and must not be written up as one.** The GM ruled on exactly that:
+*"literally every place that you have ever described the notice board as being put as specified by
+these different tunable knobs is all fine."* Every seat either knob picks is a good seat. What is
+wrong is only that the manifest asserted `waterside` for a board 276 ft from the nearest of three
+wells, which the interactive map would have told a clicking reader was the drawing-water place. That
+half is already fixed - `meta.kosatsuba_well_ft` records the measured distance, so nothing claims an
+intent the seat never had.
+
+What is left is a design question spanning two features: **the two knobs should be one decision.**
+Doing it well means deciding whether the placement anchor and the water preference compose (the
+anchor picks the ground, the siting knob picks among the seats on it) or whether one subsumes the
+other. `research: rendering` - the record is already read and cited; this is about mechanism, not
+about what a kosatsuba did.
+
+## Eight tree trunks stand in a tread on Moritono (2026-08-29)
+
+`groves_clear_of_lanes` now tests the TRUNK rather than the canopy (feature 157, the GM's ruling: a
+path may run under trees; a trunk may not stand in one). Measured against that rule across the live
+pool, two maps still fail it in the ink even though the check passes:
+
+- **Moritono: 8 drawn trunks inside a tread**, of 10,438 crowns.
+- **Inashiro: 2**, both at y = 12 - the extreme top edge of the canvas beside the connector's exit,
+  with no recorded feature within 120 ft. Edge scatter rather than a tree in a path; listed for
+  completeness, not as work.
+
+The mechanism is known and is the interesting part: **the placer constrains CLUMP CENTRES while the
+crowns are DRAWN scattered off them** (a settlement-review measured the scatter at a median 8.1 ft,
+radii 6.1-16.5 against a nominal 14). So the corridor keep-out that keeps clump centres off a lane
+does not keep the drawn trunks off it, and the check reads the recorded clumps rather than the drawn
+`tree_crowns`.
+
+**A relaxation was tried and REVERTED - do not repeat it.** Making `village_grove`'s corridor margin a
+plain trunk standoff (it is `clump * 0.45 + 4`, which scales with crown size and is therefore a canopy
+rule wearing a standoff's clothes) raised trunks-in-a-tread from 0 to 7 on Sawada, 0 to 3 on Kuwabata
+and 0 to 2 on Kashikawa. That oversized margin is keeping canopy off by accident and trunks off on
+purpose; relax it and the second goes with the first. The fix has to be at the SCATTER - the drawn
+crown positions - not at the margin. `research: rendering`.
