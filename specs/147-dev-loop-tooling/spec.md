@@ -80,14 +80,17 @@ both start.
 
 **Acceptance Scenarios**:
 
-1. **Given** a clone whose drawn map output has changed, **When** the gate is invoked alone, **Then** it is
-   refused with a message naming the pairing command and the override.
+1. **Given** any clone, **When** the gate is invoked alone, **Then** it is refused with a message naming
+   the pairing command and the override. (The Given is deliberately unconditional: an implementer must not
+   read an ink-change trigger back into the guard - scenario 4 is the one-sided case, taken by override.)
 2. **Given** no gate running or freshly green for this content, **When** a settlement-review is dispatched,
    **Then** it is refused the same way.
 3. **Given** the pairing command, **When** it runs, **Then** the gate starts and the review is dispatched
    for the same content, and the session is told both are running.
 4. **Given** a change that alters no drawn map output (docs, tests, a guard script), **When** the gate is
-   invoked alone, **Then** it runs normally - the pairing is owed by ink, not by every gate.
+   invoked alone WITH the override and a reason, **Then** it runs and the reason is recorded where the
+   audit can read it - the pairing is owed by both commands, and the override is how a one-sided case is
+   taken.
 5. **Given** an override with a reason, **When** either half is invoked alone, **Then** it runs and the
    reason is recorded where the audit can read it.
 
@@ -145,8 +148,13 @@ output unchanged.
 - **FR-009**: The timing output MUST name the slowest stage and the roll's total.
 - **FR-010**: One command MUST start the integration gate and dispatch the independent settlement-review
   for the same content, together.
-- **FR-011**: The integration gate MUST be refused when the clone's drawn map output has changed and no
-  settlement-review is pending or freshly complete for that content.
+- **FR-011**: The integration gate MUST be refused when no settlement-review is pending or freshly
+  complete for that content. Unconditionally and symmetrically with FR-012: a gate run that legitimately
+  needs no review - docs, tests, a guard script - takes the FR-013 override with its stated reason, which
+  is the mechanism the GM named ("without some kind of override"). "That content" keys on the project's
+  existing engine-content record (see Assumptions), never on a new drawn-output detector: a guard whose
+  trigger is an ink-diff of its own is where "no ink change detected" quietly becomes "the gate ran
+  alone", which is the failure this feature exists to remove.
 - **FR-012**: A settlement-review dispatch MUST be refused when no gate is running, or freshly green, for
   that content.
 - **FR-013**: Each refusal MUST name a single override token that carries a reason, MUST run the command
@@ -171,15 +179,15 @@ output unchanged.
 
 ### Measurable Outcomes
 
-- **SC-001**: A polder geometry change is measured in under 5 seconds, against the 47-second median map
-  roll it replaces.
+- **SC-001**: A polder geometry change is measured in about a second and at most three, against the
+  47-second median map roll it replaces.
 - **SC-002**: Every overlap question asked during T54 and T55 is answerable by one command with no script
   written - demonstrated by re-asking them on the shipped maps.
 - **SC-003**: A slow stage in a roll is identified from a single roll, with no edit to engine code.
 - **SC-004**: The gate and the review start within one minute of each other for the same content, so the
   review is no longer the last thing to finish.
-- **SC-005**: Neither the gate nor a settlement-review can be run alone, for content whose ink changed,
-  without an override that leaves a reason behind.
+- **SC-005**: Neither the gate nor a settlement-review can be run alone, without an override that leaves
+  a reason behind.
 - **SC-006**: A repeat of a T55-shaped fix takes at most two thirds of its 79.8 minutes, with the map-roll
   count down from 19 to 5 or fewer.
 
@@ -195,3 +203,16 @@ output unchanged.
   logged for the audit - the same shape as `GATE_OK`, `DISCARD_OK` and `MEASURE_OK`.
 - The audit reads a map that already exists; producing one is the roll's job, not the audit's.
 - No map's drawn output changes as a result of this feature: it adds diagnostics and guards only.
+
+## Review history
+
+- Round 1 (2026-08-29, `spec-fidelity`, against the GM's request verbatim): **changes required**. FR-011
+  carried a session-authored carve-out - the gate was refused only "when the clone's drawn map output has
+  changed" - which is the classic "except when": the GM had already supplied the escape ("without some kind
+  of override"), so a silent exemption removes the recorded reason their own mechanism produces. It was
+  also asymmetric against FR-012 and keyed on an ink-diff detector that does not exist, which is where "no
+  ink change detected" quietly becomes "the gate ran alone". US3 scenario 4 and SC-005 carried the same
+  qualifier. All three struck; the probe's bar tightened from 5 s to "about a second and at most three".
+- Round 2 (2026-08-29, same reviewer): **FAITHFUL**. Two drafting asides applied here: scenario 1's Given
+  is now unconditional so no implementer reads the ink trigger back in, and scenario 4 is noted as a
+  special case of scenario 5 to be merged when the tasks are written.
