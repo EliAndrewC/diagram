@@ -767,12 +767,23 @@ English or Japanese, was found stating any general wind rule for *koedame* or *b
 戸口便所 at the gate, beside the *naya*) keep their own weights as the tiebreak WITHIN each group, so a
 homestead that cannot put a privy to the southeast still seats it where the record says privies go.
 
-**The deliberate departure, recorded because a reader will measure it.** The realized share on our maps is
-**43.8%, not 72.7%**, and the gap is not a knob mis-set: it is `0.727 x P(a sun-side seat is free)`. Our
-homesteads put the threshing yard due south at 24-28 ft and gardens at 120-140 degrees, and a privy may
-not stand on a work floor. Closing the gap means reserving the sun seat BEFORE the yard and gardens are
-placed - a stage reorder, not attempted yet. Until then the map under-represents the sun side, and this
-paragraph is why.
+**How the seat is found, and a wrong turn worth keeping.** The sun side is SEARCHED - bearings across
+southeast to south, radii stepping out from the house wall, nearest first, taking the first spot clear of
+the keep-outs. The first implementation instead offered the sector a handful of hand-picked offsets, they
+landed on the work yard or a garden, the placer fell through to the old seat, and the realized share stuck
+at 43.8%. I read that plateau as the sun side being FULL and wrote exactly that here.
+
+The GM asked the question that broke it: the real farmsteads this 72.7% comes from had threshing yards
+too, so why can ours not do what they did? Measured in answer, on Sawada: every one of the 19 houses has
+free sun-side ground - 49 to 151 clear spots each, the nearest 24-32 ft out, the same radius the privy
+already used on its north-east side. **The yard blocks a slice of a 90-degree arc, not the side.** The
+plateau was evidence about the offsets, not about the ground, and the physical-sounding explanation was
+wrong. Searching the sector took the realized share to **66.2%**.
+
+**What remains of the gap is honest.** 66.2% against a 72.7% rule: a homestead whose sun-side arc is
+genuinely closed - by a paddy, a lane or the marsh, which the free-ground count above did not test -
+seats its privy at one of the three attested seats instead. That is the rule degrading correctly rather
+than a number to be tuned.
 
 **Sources:** `wang-ochiai-2022`.
 

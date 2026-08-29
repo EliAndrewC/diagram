@@ -668,6 +668,8 @@ FIXTURE_BANDS: dict[str, tuple[float, float]] = {
 }
 _FIXTURE_ORDER = ("privy", "manure", "bath", "coop", "woodpile", "shrine", "persimmon")  # the buildings before the stack, which has the most seats
 _PRIVY_SEATS = (("back", 0.60), ("gate", 0.25), ("naya", 0.15))
+PRIVY_SUN_MIN_FT = 18.0  # the sun-side search starts at the house wall and steps out; measured free ground begins 24-32 ft
+PRIVY_SUN_MAX_FT = 72.0  # ...and stops where a fixture would no longer read as belonging to that homestead
 PRIVY_SUNNY_SHARE = 0.727  # the share of outhouses seated SE-to-S: Wang & Ochiai 2022 measured 72.7% in
 # Arakawa village, and the GM (2026-08-29) ruled the figure be used literally rather than rounded. The
 # reason the record gives is fermentation, not wind - see the note at the seat roll.
@@ -778,22 +780,9 @@ def farmstead_fixtures(s: Settlement, plan: SitePlan, houses: Sequence[Mapping[s
                     # T07). The three seats above are all north or flank: measured on the pool before this
                     # change, every privy on every map sat at bearing 33-73 degrees from its house. The source
                     # the GM ruled on puts 72.7% of them SOUTHEAST to SOUTH, so a seat has to exist there.
-                    # ...and it must CLEAR THE WORK YARD, which owns the near sun side. Measured on Sawada
-                    # before this change: every house carries a threshing yard at bearing 180.0 degrees,
-                    # 24-28 ft out, and gardens at 120-140 degrees - so a seat at the house's own south edge
-                    # is refused every time, which is why the first attempt at this rule seated 0 of 38.
-                    # These are tried near-then-far, so a homestead with room close in still uses it.
-                    "sun_se": (hw / 2 + g + d / 2, hh * 0.30, d, w),
-                    "sun_se_out": ((hw / 2 + g + d / 2) * 1.15, hh / 2 + g + d / 2 + px(26.0), d, w),
-                    "sun_s_out": (hw * 0.12, hh / 2 + g + d / 2 + px(30.0), w, d),
-                    "sun_se_far": ((hw / 2 + g + d / 2) * 1.45, hh / 2 + g + d / 2 + px(40.0), d, w),
-                    "sun_s_far": (-hw * 0.20, hh / 2 + g + d / 2 + px(42.0), w, d),
-                    "sun_sse": (hw * 0.38, hh / 2 + g + d / 2 + px(34.0), w, d),
                 }
                 first = _roll(_PRIVY_SEATS, u)
-                seats = (
-                    [seat[first]] + [seat[k] for k, _ in _PRIVY_SEATS if k != first] + [seat["sun_se"], seat["sun_se_out"], seat["sun_s_out"], seat["sun_sse"], seat["sun_se_far"], seat["sun_s_far"]]
-                )
+                seats = [seat[first]] + [seat[k] for k, _ in _PRIVY_SEATS if k != first]
                 # THE OUTHOUSE FACES THE SUN, AT THE RATE THE RECORD GIVES (feature 152 T07, GM 2026-08-29:
                 # "we should literally use the 72.7% number for the chance of any given outhouse being in the
                 # southeast and south directions"). Wang & Ochiai's survey of farmhouses in Arakawa village
@@ -812,13 +801,32 @@ def farmstead_fixtures(s: Settlement, plan: SitePlan, houses: Sequence[Mapping[s
                 # their own weights (`_PRIVY_SEATS`) WITHIN each group, so a map that cannot put a privy to the
                 # southeast still seats it where the record says privies go.
                 _u_dir = s._hjit(hx, hy, _SALT[kind] + 0.25)
-                _sunny, _other = [], []
-                for _sx, _sy, _sw, _sd in seats:
-                    _mx, _my = _sx * math.cos(th) - _sy * math.sin(th), _sx * math.sin(th) + _sy * math.cos(th)  # `th`, the RADIANS - `rot` beside it is degrees
-                    _brg = math.degrees(math.atan2(_mx, -_my)) % 360.0  # compass bearing from the house
-                    (_sunny if 112.5 <= _brg <= 202.5 else _other).append((_sx, _sy, _sw, _sd))  # SE through S
-                if _sunny:
-                    seats = (_sunny + _other) if _u_dir < PRIVY_SUNNY_SHARE else (_other + _sunny)
+                # THE SUN SIDE IS SEARCHED, NOT GUESSED AT (feature 152 T07 round 2, GM 2026-08-29).
+                # The first attempt offered the sector a handful of hand-picked offsets - a couple of
+                # bearings at a couple of radii, straight out from the house wall - and they happened to
+                # land on the work yard or a garden, so the placer fell through to the old north-east seat
+                # and the realized share stuck at 43.8%. I read that plateau as the ground being full and
+                # said so; the GM asked the obvious question back - the real farmsteads the 72.7% comes
+                # from had threshing yards too, so why can ours not do what they did? Measured in answer,
+                # on Sawada: EVERY one of the 19 houses has free sun-side ground, 49 to 151 clear 6x6 ft
+                # spots each, the nearest 24-32 ft out - the same radius the privy already uses on its
+                # north-east side. The yard blocks a slice of a 90-degree arc, not the side. The plateau
+                # was evidence about my offsets, not about the ground.
+                #
+                # So the sector is walked instead: bearings across SE-to-S, radii outward from the house,
+                # NEAREST FIRST (the attested seats are all against the house - back door, gate, naya - so
+                # the privy belongs as close as the ground allows), and `_strip_blocked` below takes the
+                # first that is clear. Bearings are COMPASS bearings in map space, converted back through
+                # the house's own rake, so a raked farmhouse still gets a true southeast seat.
+                _sun: list[tuple[float, float, float, float]] = []
+                for _r_ft in range(int(PRIVY_SUN_MIN_FT), int(PRIVY_SUN_MAX_FT) + 1, 4):
+                    for _b in range(1125, 2026, 75):  # 112.5 to 202.5 degrees, tenths
+                        _bd = _b / 10.0
+                        _rr = px(float(_r_ft))
+                        _dx, _dy = _rr * math.sin(math.radians(_bd)), -_rr * math.cos(math.radians(_bd))
+                        _sun.append((_dx * ca + _dy * sa, -_dx * sa + _dy * ca, w, d))
+                _sun.sort(key=lambda q: (math.hypot(q[0], q[1]), abs(math.degrees(math.atan2(q[0] * ca - q[1] * sa, -(q[0] * sa + q[1] * ca))) % 360.0 - 157.5)))
+                seats = (_sun + seats) if _u_dir < PRIVY_SUNNY_SHARE else seats
             elif kind == "manure":
                 if privy_at is not None:
                     plx, ply = privy_at
