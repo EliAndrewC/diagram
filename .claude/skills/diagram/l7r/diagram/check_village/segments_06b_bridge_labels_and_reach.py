@@ -21,6 +21,20 @@ from .common_03_capacity import _UNBOUND, _kept
 # footprint family: gap VERDICT, measured on the deck's four real corners.
 
 
+# (`bridges_seat_on_water`, the rule that used to stand here, was retired by feature 158: its only
+# evidence in the whole record was Shiro Daika's hand-authored towpath plank, a map no generator can
+# produce. `b_dry` below still marks a deck with no water under its seat, because
+# `bridges_span_their_water` reads it to know it has nothing to measure.)
+# BANK-PARALLEL WORKS FOLLOW THEIR BANK (GM 2026-08-10: "when we originally rendered the
+# domain granaries and the imperial granary, they were aligned with the river. However, at
+# a certain point, it looks like the angle of the river changed slightly, but the angle of
+# the granaries did not"). A quay granary row is laid ALONG the water it loads from, and a
+# jetty runs ACROSS it - both angles are properties of the bank, not constants, so a
+# re-routed river must drag them or they read as a row built by someone who could not see
+# the water. Same family as towpath_hugs_the_bank: derive the angle from the CURRENT
+# polyline, never keep a rot that was right before the re-route.
+
+
 def _seg_0360__b_ftpx(*, meta: Any = _UNBOUND) -> dict[str, Any]:
     """Gate segment 360 (b_ftpx) - body verbatim from the legacy gate() (feature 022)."""
     b_ftpx = float(meta.get("ftpx", 1) or 1)
@@ -85,20 +99,6 @@ def _seg_0363__b_1(
                 b_short.append(f"({round(b['x'])},{round(b['y'])}) span {b['span']:.0f} on ~{b_cw:.0f}px water")
                 break
     return _kept(locals(), ('b', 'b_crossed', 'b_cw', 'b_cx', 'b_cy', 'b_d', 'b_dry', 'b_floor', 'b_hl', 'b_hw', 'b_pts', 'b_short', 'b_su', 'b_sv', 'b_th', 'b_ux', 'b_uy', 'b_wid', 'i'))
-
-
-# A DECK MUST SIT ON WATER AT ALL (settlement-review 2026-08-10): Shiro Daika's towpath
-# plank kept its seat when the drain's re-route moved the ford, and it lay on bare bank for
-# a whole feature - bridges_span_their_water silently skipped it (nothing to measure) and no
-# other rule owned the case. A check that never runs looks exactly like a check that passes.
-# BANK-PARALLEL WORKS FOLLOW THEIR BANK (GM 2026-08-10: "when we originally rendered the
-# domain granaries and the imperial granary, they were aligned with the river. However, at
-# a certain point, it looks like the angle of the river changed slightly, but the angle of
-# the granaries did not"). A quay granary row is laid ALONG the water it loads from, and a
-# jetty runs ACROSS it - both angles are properties of the bank, not constants, so a
-# re-routed river must drag them or they read as a row built by someone who could not see
-# the water. Same family as towpath_hugs_the_bank: derive the angle from the CURRENT
-# polyline, never keep a rot that was right before the re-route.
 
 
 def _seg_0364__bp_riv(*, M: Any = _UNBOUND, cn9: Any = _UNBOUND, w9: Any = _UNBOUND) -> dict[str, Any]:

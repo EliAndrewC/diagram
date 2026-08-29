@@ -195,19 +195,23 @@ def test_a_linear_hamlet_strings_its_houses_along_the_connector() -> None:
     strings the hamlet along the road instead of nucleating it, which is this archetype."""
     from l7r.diagram.hamletgen.homesteads import stage_homesteads  # through the MODULE: a stage is not package surface
 
+    # TEN HOUSEHOLDS, THE FLOOR OF THE HAMLET BAND (feature 158): the arm under test is the frontage
+    # loop, which does not care how many houses it strings - and every household is a seat search.
+    # Fifteen cost 4-5 s of every run in all three tiers; ten cost two thirds of that and prove the
+    # same thing. (Nine is not available: `HamletSpec` refuses anything outside 10-20.)
     for form in ("nucleated", "linear"):
-        plan = a_plan()
+        plan = a_plan(households=10)
         plan.seat = hg.seat_cluster(plan)
         plan.settlement_form = form
         s = Settlement(1400, 1400, seed=3)
-        s.meta(name="V", scale="hamlet", ftpx=1, toscale=True, households=15, down_deg=90, water_flow=90, nucleated=True)
+        s.meta(name="V", scale="hamlet", ftpx=1, toscale=True, households=10, down_deg=90, water_flow=90, nucleated=True)
         s.field_polys.append(list(plan.envelope))
         # the connector has to BE there for the linear form to string anything along it - it is the one
         # way on the map that predates the houses, which is the whole premise of the archetype
         cx_, cy_ = float(plan.seat["cx"]), float(plan.seat["cy"])
         s.M["lanes"] = [{"pts": [[cx_ - 400, cy_], [cx_ + 400, cy_]], "w": 6, "connector": True}]
         stage_homesteads(s, plan)
-        assert len(s.M["houses"]) == 15, f"{form}: every household seated"
+        assert len(s.M["houses"]) == 10, f"{form}: every household seated"
 
     # ...and the frontage loop STOPS when the households run out rather than filling the whole
     # connector: the same plan, with the ask cut to three, seats three and leaves the rest of the

@@ -379,3 +379,39 @@ def test_pond_fill_covers_channel_mouths_fires_when_a_stream_mouth_is_left_dry()
         M.setdefault("drawn_channels", []).append({"pts": [[float(pond[0]), float(pond[1])], [float(pond[0]) + 400.0, float(pond[1])]], "w0": 7.0, "w1": 7.0, "bedz": 99999, "late": True})
 
     _fires(REFERENCE, "pond_fill_covers_channel_mouths", strand_a_mouth)
+
+
+# ---- feature 158: three checks whose only proof was a hand-era legacy map --------------------------------
+# The GM's cut of the stored bad maps (*"no reason to see what would happen if we encountered a type of map,
+# which is literally impossible to produce any longer"*) took the last frozen fixture of three checks that
+# matter on a HAMLET. Each gets the post-141 replacement here: the engine's own roll, one deliberate break.
+
+
+@pytest.mark.rolls_map
+def test_water_channels_obtuse_turns_fires_when_a_ditch_is_kinked_back_on_itself() -> None:
+    def kink_it(M: dict[str, Any]) -> None:
+        d = M["field_ditches"][0]
+        (ax, ay), (bx, by) = d["poly"][0], d["poly"][1]
+        d["poly"] = [[ax, ay], [bx, by], [ax + 1.0, ay + 1.0]]  # straight out and straight back: a hairpin
+
+    _fires(REFERENCE, "water_channels_obtuse_turns", kink_it)
+
+
+@pytest.mark.rolls_map
+def test_field_ditches_terminate_fires_when_a_lateral_ends_in_open_ground() -> None:
+    def strand_a_lateral(M: dict[str, Any]) -> None:
+        lat = next(d for d in M["field_ditches"] if d.get("role") == "lateral")
+        lat["poly"] = [[float(x) + 4000.0, float(y) + 4000.0] for x, y in lat["poly"]]  # both ends far from every trunk
+
+    # THE POLDER, not the reference: only the polder grid draws `lateral` ditches (the reference's are
+    # main / branch / drain), so on Inashiro this check has nothing to measure and a break there would
+    # prove nothing. Measured 2026-08-29: polder seed 19 has 8 laterals, Inashiro none.
+    _fires(POLDER, "field_ditches_terminate", strand_a_lateral)
+
+
+@pytest.mark.rolls_map
+def test_paddy_fan_has_floor_fires_when_a_ditched_paddy_declares_no_floor() -> None:
+    def forget_the_floor(M: dict[str, Any]) -> None:
+        M["comb_floors"] = {}
+
+    _fires(REFERENCE, "paddy_fan_has_floor", forget_the_floor)

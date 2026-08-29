@@ -371,3 +371,77 @@ fine."*
 16 dwellings within 250 ft, broadside to the way it fronts, one caption on the board's own side
 of the tread. `kosatsuba_by_the_road` and `kosatsuba_faces_the_road` - the only two live gate checks
 that constrain where the board goes, the other five merely asserting it exists - both pass.
+
+## 2026-08-29 - feature 157: the LABEL PHASE, and the caption that stands beside its board
+
+**The GM read this map and reported the defect**: *"the label for the notice board on the Kuwabata
+Map is surprisingly far away from the notice board itself. It is correctly aligned with the notice
+board, and the distance of the line on which the label rests is the correct distance from the notice
+board. But for some reason, rather than being directly below the notice board, it's off to the right
+a bit, and I'm not really sure why or how that happened."*
+
+**Measured, before**: the board at (2394.2, 559.1) rot 151.9, its caption tilted -28.1 with its box
+at x 2404.1..2456.9. Decomposed in the caption's own frame that is **35.6 px along the baseline** and
+10.4 px across it, against a caption half-run of 26.4 - so the board stood **past the end of its own
+label**. The alignment and the standoff were right, exactly as the GM said; only the slide was wrong.
+
+**Three causes, all in the tilted branch of the board's seat search, and they compound:**
+
+1. **The lateral offsets were derived from the CAPTION, not from the SUBJECT** - `_chw + hw + 6`,
+   which is 38.88 px of slide along a 12 px plank. Sliding a caption along its subject is a real
+   convention, but where the engine does it deliberately the slides are fractions of the SUBJECT
+   (`span * 0.25`, `span * 0.4`). 39 px along a 12 ft board is not "along", it is "away".
+2. **The standoff ladder stepped over the good ground.** Five rungs (11, 16, 21, 28, 36). At lateral
+   0 this board's south side is legal at a standoff of **14 and at no other sampled value** - 11
+   misses the lane-clearance target by 1.1 ft, 16 and beyond genuinely clip a house. A dense re-scan
+   under the identical rules finds 97 legal seats.
+3. **The structural probe measured a box it does not draw.** It built the caption's true rotated quad
+   and then collapsed it to that quad's bounding box: at -28.1 degrees a 53.8 x 10 px caption becomes
+   52 x 34, more than tripling its thickness. That is what refused the seat directly below the board,
+   whose true quad clears the nearest structure by **4.43 px**.
+
+**Measured, after**: **lateral -1.02 px** - the caption is directly beside the board, and the standoff
+stays well inside what `label_hugs_its_referent` allows. Every other scripted hamlet improved or held:
+inashiro 2.22, kashikawa 1.53, mizuguchi 0.63, sawada 1.55 (inashiro and mizuguchi were already
+central and their manifests are unchanged).
+
+**And labels now have a phase of their own** (the GM's other ask): the notice board is placed in
+`stage_notice` and every caption on the sheet is seated in `stage_labels` after it, because *"how we
+place labels will always depend on what else is on the map."* On a hamlet nothing is placed between
+the two, so the phase move alone is byte-neutral - which is what lets the caption movement above be
+attributed to the seat rules and to nothing else.
+
+### What the independent review then found on this map (settlement-review, 2026-08-29)
+
+It confirmed the fix from PIXELS rather than from the manifest - the caption's 280 dark-ink pixels
+have their nearest foreign ink at 4.30 px, the board's own at 7.55, and the halo (stroke `#EFE3C2`,
+exactly the parchment) notches nothing at 6x. It verified independently that nothing else on the map
+moved. And then it caught two engine defects this feature was leaning on:
+
+- **The caption placer's own safety comment cited a check that does not exist.**
+  `labels_clear_of_other_buildings` was deleted in b709c4ae (feature 141's cut), so nothing in the
+  gate measures a caption against a building any more - while ~15 live comments and a whole registry
+  with its completeness guard still describe it as operative. That matters HERE because this feature
+  pulls captions in off the empty margins, leaning on a defense that had quietly become the only one.
+  The comment is corrected; the restore-or-retire decision is written up in
+  `future-work/cross-cutting.md` because it reverses or ratifies a GM cut.
+- **The fabric probe was hand-listed and had fallen behind the map.** Nine families, missing
+  `farm_fixtures` - the engine's own *"every ROOFED structure"* - and the sties, pens and boundary
+  markers. Measured across the five scripted hamlets, the caption's clearance to the nearest built
+  glyph is 20-70 px on four of them and **2.24 px here**, nine times tighter, at exactly the map
+  whose caption had just been pulled inward.
+
+**And fixing the second exposed a third that neither of us had seen.** Widening the families cost
+this caption 9 px of centrality (lateral -1.02 -> -10.06), because `_hug` and `_blocked` probed a
+hand-guessed box - 26.88 x 5.00 against the recorded 26.40 x 4.20, 19% too tall - so the inflated box
+just touched the woodpile at the seat directly under the board and the search walked out for a
+collision no drawn glyph makes. `_box_clearance` had been taught to measure the recorded box in
+feature 137; these two were left on the guess. Both read `label_caption_hw` now, and the caption is
+back at **lateral -1.02** with the placer able to see what it is clearing.
+
+**Two things recorded rather than changed**: about 6 px of the GM's own "off to the right" survives by
+construction (a perpendicular hang from a -28.1 degree caption is not vertical in the reader's frame -
+an 82% reduction, and sliding it out would trade the axis the new check measures for one nothing
+does); and the recorded referent is the board's UNROTATED footprint, 12 x 5 against a drawn rotated
+AABB of 13.2 x 10.1, which is conservative in both directions and so tightens two live rules rather
+than loosening them.

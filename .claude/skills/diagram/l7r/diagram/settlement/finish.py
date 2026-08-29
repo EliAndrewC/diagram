@@ -19,6 +19,30 @@ if TYPE_CHECKING:
     from .core import Settlement
 
 
+def caption_record_box(text: str, lines: Sequence[str], x: float, y: float, size: float, anchor: str) -> tuple[float, float, float, float]:
+    """The box `_record_label` will write for a caption of `lines` drawn at (x, y) - the ONE body for
+    that arithmetic (feature 157).
+
+    LIFTED OUT because a caller can now need the box before the caption exists. Captions are drawn in
+    the LABEL PHASE, so `shrine_hall` - which reserves the ground under its own caption, and must do
+    so while features are still being placed - can no longer read the record back out of
+    `M["labels"][-1]`. It computes the box here instead, from the same expression `label()` uses, so
+    the reservation and the record cannot drift (this engine's oldest rule).
+
+    A ONE-LINE caption keeps `_record_label`'s own default box, which is measured on the WHOLE text
+    rather than on the line list, and is what every shipped manifest carries."""
+    n = len(lines)
+    if n == 1:
+        w = len(text) * size * 0.55
+        x0 = x - w / 2 if anchor == "middle" else (x - w if anchor == "end" else x)
+        return (x0, y - size * 0.8, x0 + w, y + size * 0.25)
+    w_ = max(len(ln) for ln in lines) * size * 0.55
+    x0_ = x - w_ / 2 if anchor == "middle" else (x - w_ if anchor == "end" else x)
+    cy_ = y - size * 0.275
+    half = (size * 1.05 + (n - 1) * size * 1.15) / 2
+    return (x0_, cy_ - half, x0_ + w_, cy_ + half)
+
+
 class FinishMixin:
     # ---- annotation
 
@@ -34,6 +58,15 @@ class FinishMixin:
         bx0, by0, bx1, by1 = box if box is not None else (x0, y - size * 0.8, x0 + w, y + size * 0.25)
         rec: list[Any] = [round(bx0, 1), round(by0, 1), round(bx1, 1), round(by1, 1), z, text]
         if ref is not None or rot:
+            # THE REFERENT IS THE SUBJECT'S UNROTATED FOOTPRINT, which for a rotated subject is not
+            # what is drawn (settlement-review, Kuwabata 2026-08-29): the notice board records
+            # `[2388.2, 556.6, 2400.2, 561.6]` - 12 x 5 axis-aligned - while the plank is drawn at
+            # rot 151.9, whose true rotated AABB is 13.2 x 10.1. Both `label_hugs_its_referent` and
+            # `caption_stands_beside_its_referent` therefore measure against a box smaller than the
+            # glyph. The error is CONSERVATIVE in both directions - a smaller referent means a
+            # smaller "beside" bound and a larger measured hug gap - so nothing passes that should
+            # fail, which is why this is a note and not a change: widening it would loosen two live
+            # rules to fix an inaccuracy that only ever tightens them.
             # element [6]: the box of the ONE feature this caption names, recorded only by the
             # standoff-ladder path (`place_caption` / the road label). A district caption names an
             # AREA, not a thing, so it carries no referent and `label_hugs_its_referent` skips it.
@@ -64,6 +97,15 @@ class FinishMixin:
         wrap: bool = True,
         cls: ClsTag = None,
     ) -> None:
+        # NOTHING IS DRAWN UNTIL THE LABEL PHASE (feature 157, GM 2026-08-29). Every caption queues
+        # here and is drawn by `place_labels()` after the last map feature is placed, because *"how
+        # we place labels will always depend on what else is on the map"*. The queue keeps CALL
+        # ORDER, so captions still see each other exactly as they did - what changes is that they
+        # now also see every feature drawn after their own. `place_labels` clears the flag while it
+        # drains, which is what makes the replay below reach the body.
+        if self._labels_pending:
+            self._label_queue.append(("text", (x, y, text, size, anchor, italic, weight, color, ref, rot, linear, full_tilt, wrap, cls)))
+            return
         # `cls` is the class of the FEATURE the caption names (feature 134 FR-006): the label and its
         # subject share one class, so hovering either highlights both and a click on either opens the
         # subject's explanation. A caption with no subject class inherits the enclosing feature() scope.
@@ -94,7 +136,7 @@ class FinishMixin:
         w_ = max(len(ln) for ln in lines) * size * 0.55
         x0_ = x - w_ / 2 if anchor == "middle" else (x - w_ if anchor == "end" else x)
         cx_, cy_ = x0_ + w_ / 2, y - size * 0.275  # the one-line box's center; a wrapped block keeps it
-        box = (x0_, cy_ - (size * 1.05 + (n - 1) * lh) / 2, x0_ + w_, cy_ + (size * 1.05 + (n - 1) * lh) / 2)
+        box = caption_record_box(text, lines, x, y, size, anchor)  # the ONE body (feature 157); n == 1 gets _record_label's own default below
         tr = f' transform="rotate({tilt:.1f} {cx_:.1f} {cy_:.1f})"' if tilt else ''
         # labels live in the topmost LABEL layer so nothing - not a road, not a wall, not a kido or torii
         # - ever paints over the text (a label must always be fully readable)
@@ -464,17 +506,12 @@ class FinishMixin:
                 _keep, _chords = keepout_ring(_ol, _ol, FIELD_KEEPOUT_EPS, filled=True)
                 _fld["keepout"] = [[round(_p[0], 1), round(_p[1], 1)] for _p in _keep]
                 _fld["keepout_chords"] = len(_chords)
-        # Deferred place_caption() seats, in call order, against the FINISHED map - and BEFORE the
-        # road caption, which goes last because it has by far the most room to move: its subject is
-        # a whole road segment with a wide slide set, where a market row's caption has one short
-        # stretch of frontage to sit against. Most-constrained-first; the road yields.
-        for _tx, _bx, _sz, _it, _wt, _co, _hi, _sl, _ro in self._captions:
-            _lx, _ly = self._best_label_spot(_bx, _tx, _sz, hint=_hi, slides=_sl, tilt=_ro)
-            self.label(_lx, _ly, _tx, _sz, italic=_it, weight=_wt, color=_co, ref=_bx, rot=_ro)
-        self._captions: list[tuple[Any, ...]] = []
-        if getattr(self, "_road_label", None):
-            self._finish_road_label()  # feature 145: the Imperial-road caption, a town/city feature, lives in structures/ground.py
-            self._road_label: Any = None  # declared Any at structures/ground.py; re-declared for the checker (the attribute is conditional)
+        # THE LABEL PHASE (feature 157). The hamlet pipeline names it as a stage of its own
+        # (`stage_labels`, last in STAGES) so the pipeline reads the way the GM described it; every
+        # other tier is a hand-authored script with no pipeline, so `finish()` runs the same phase
+        # as the last thing it does. Draining an already-drained queue is a no-op, so a hamlet is
+        # never labeled twice.
+        self.place_labels()
         # Every block below is built as TWO aligned lists - the strings, and their feature classes
         # (feature 134): the string block is spliced into `self.out` exactly as before, the class
         # block into `self.out_cls` at the same index, so the side-list stays index-aligned with the

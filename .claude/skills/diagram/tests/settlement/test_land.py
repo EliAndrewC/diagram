@@ -182,6 +182,7 @@ def test_perimeter_dike_draws_an_irregular_earthwork_band():
     # the band stays a ring around the grid (outer points sit outside the inner env, none wildly off-map)
     assert all(0 <= x <= 1400 and 0 <= y <= 1400 for x, y in dk["outline"])
     # a label was recorded, and drawing is deterministic per seed
+    s.place_labels()  # feature 157: captions are queued and drawn in the LABEL PHASE, so run it before reading them
     assert any(lbl[5] == "perimeter dike" for lbl in s.M["labels"] if len(lbl) > 5)
     s2 = Settlement(full_or(900, 1400), full_or(900, 1400), seed=3)
     s2.meta(name="D", scale="hamlet", ftpx=1, toscale=True, households=8, field_archetype="polder_grid")
@@ -199,7 +200,11 @@ def test_village_grove_skips_the_dike_bank():
     # (GM 2026-07-22: the dike carries only its own soil-binding trees).
     s = Settlement(1400, 1400, seed=3)
     s.meta(name="G", scale="hamlet", ftpx=1, toscale=True, households=8, field_archetype="polder_grid")
-    s.perimeter_dike([(200, 200), (200, 1000), (900, 1000), (900, 200), (200, 200)], seed=5)
+    # A SHORTER RING (feature 158): `perimeter_dike` builds an organic band along the whole
+    # perimeter, so its cost is the ring's LENGTH - 1,600 px here against the 3,000 px this test used
+    # to draw, for exactly the same question. The belt below still straddles the NW corner, which is
+    # the only part of the earthwork the assertion looks at.
+    s.perimeter_dike([(200, 200), (200, 600), (600, 600), (600, 200), (200, 200)], seed=5)
     dike = s.M["dikes"][0]["outline"]
 
     def pip(x, y, poly):
@@ -211,7 +216,12 @@ def test_village_grove_skips_the_dike_bank():
             j = i
         return c
 
-    s.village_grove([(150, 150), (360, 150), (360, 280), (150, 280)], role="windbreak")  # a belt straddling the NW dike
+    belt = [(150, 150), (360, 150), (360, 280), (150, 280)]  # a belt straddling the NW dike
+    # ...AND IT REALLY DOES STRADDLE IT, asserted rather than assumed (feature 158). The ring above was
+    # shortened to make this test cheaper, and a belt that no longer touched the earthwork would leave
+    # the assertion below passing for the wrong reason - a clean map instead of a skipped bank.
+    assert any(150 <= dx <= 360 and 150 <= dy <= 280 for dx, dy in dike), "the earthwork must run through the belt's footprint, or the skip below proves nothing"
+    s.village_grove(belt, role="windbreak")
     clumps = s.M["village_groves"][-1]["clumps"]
     assert clumps and not any(pip(cx, cy, dike) for cx, cy in clumps)  # some clumps, none on the dike
 

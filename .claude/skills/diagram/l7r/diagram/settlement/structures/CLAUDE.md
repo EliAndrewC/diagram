@@ -22,7 +22,7 @@ for equal files would have to cut a cluster that no task cuts.
 | `urban.py` | the generic urban BUILDING: the `URBAN` palette (fill/edge/footprint by caste and role), `building` itself - the one seat every pack, frontage and top-up funnels through, and where the samurai-ward refusal lives - plus the per-building seating helpers `_dims`, `try_building`, `_face_street_rot`, `open_face_rot` |
 | `servants.py` | the SERVANT RANGE (nagaya) pass: `servant_ranges` and the four probes that exist to serve it (`_solid_records`, `_blocks_any_door`, `_door_is_clear`, `_office_records`), plus `SERVANT_RANGE_DEPTH_FT` and `_OFFICE_STANDOFF` |
 | `packing.py` | the two multi-building placement ENGINES - `rowpack` (city row housing: terraces, back-to-back pairs, roji and courts) and `pack` (grid-scan district fill, footpaths, street-facing) - and `_shortfall`, the authored-vs-landed bookkeeping both use (and `houses.py`'s `frontage` too) |
-| `captions.py` | the caption PROBES: what boxes a caption must miss (`label_blockers`), how wide it is AS RECORDED (`label_caption_hw`), whether a seat is clear (`label_seat_clear`), the outward-walking search (`clear_label_seat`), and the inverse test - would a FOOTPRINT land under a caption already placed (`_under_a_caption`) |
+| `captions.py` | **the LABEL PHASE** (`place_labels`, feature 157 - the last phase of every settlement's generation, its drain order, its one-row dispatch table, and `discard_queued_label` for a feature that is placed and then withdrawn), and the caption PROBES underneath it: what boxes a caption must miss (`label_blockers`), how wide it is AS RECORDED (`label_caption_hw`), whether a seat is clear (`label_seat_clear`), the outward-walking search (`clear_label_seat`), and the inverse test - would a FOOTPRINT land under a caption already placed (`_under_a_caption`) |
 | `fixtures.py` | public street furniture and civic fixtures: `theater_stage`, `fire_tower`, `kosatsuba` (the notice board), `drum_tower`, and the two traffic-driven auto-siters `place_kosatsuba` and `place_punishment_spot` |
 
 ## Composition, and why it is in `__init__.py`
@@ -104,10 +104,28 @@ is the INVERSE test (a footprint under someone else's caption) and its only cons
 
 ## Two thresholds, so the next session does not decide them under pressure
 
-- **`fixtures.py` is the largest module at 407 lines.** Re-split it when it crosses ~500 lines or
-  any member crosses ~150. The seam is **glyph-drawers** (`theater_stage`, `fire_tower`,
-  `kosatsuba`, `drum_tower`) versus **auto-siters** (`place_kosatsuba`, `place_punishment_spot`) -
-  the two halves share nothing but the subject.
+- **`fixtures.py` IS PAST BOTH ITS THRESHOLDS, and this entry said 407 lines while the file held
+  1,020** (measured 2026-08-29, feature 157 - the number had gone stale by 2.5x, so the rule it
+  states had quietly stopped applying). Today it is **1,083 lines**, past the package rule's ~500 and
+  past constitution X clause 13's ~1,000; `_draw_board_caption` is **387** and `place_kosatsuba`
+  **262**, both far past the ~150 member bar. The size rule PROMPTS A QUESTION rather than forbidding
+  a size (`make audit` reports it, nothing gates it), so here is the answer, written down rather than
+  rediscovered:
+
+  **DEFERRED, deliberately, with the seam and the sketch** (Principle XIV allows deferring only an
+  architectural change, and only as a deliverable). Feature 157 added 63 lines here and split one
+  340-line member into a 53-line `kosatsuba` and a 387-line `_draw_board_caption`; doing the package
+  split in the same feature would move four hundred lines of code that three review agents were about
+  to read, inside a feature about where a caption sits.
+
+  **The seam has changed since this entry was written.** It was glyph-drawers versus auto-siters, and
+  that is still one cut - but `_draw_board_caption` is now neither: it is a LABEL-PHASE placer,
+  dispatched from `captions.py`'s `_PLACERS` table and running in the phase, not when the board is
+  drawn. So the cheaper first cut is to move it (and `pick_caption_seat`, `CAPTION_LANE_TARGET_FT`)
+  into `captions.py`, which is where the caption subsystem already lives and where its only caller
+  is - that alone takes this file to ~700 lines and each remaining member under 300, with no call
+  site changed because everything is reached through `self.`. The glyph/siter split is then the
+  second cut, if it is still wanted.
 - **`tests/settlement/test_structures.py` stays ONE file** at its current ~690 lines. When it
   crosses ~1,000 it becomes `tests/settlement/test_structures/`, mirroring this package. Clause 13
   gives tests no exemption; this file is simply not over the bar yet.

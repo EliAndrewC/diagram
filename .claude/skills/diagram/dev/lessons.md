@@ -307,3 +307,26 @@ along the way was the other half of the fix.
 search over `wip/tw27.json`'s footprints, run at each rung's effective clearance, answered "is there a
 corridor, and how wide" in one turn - after two turns of reasoning about the code had produced only
 plausible guesses. When a placer or router refuses, probe the geometry it was given.
+
+## Two test-cost levers that were measured and do NOT work (feature 158, 2026-08-29)
+
+Both are the obvious next thing to reach for, and both are recorded here so the next session spends
+the measurement once rather than the implementation twice.
+
+**Shrinking a test's `plan.envelope` does not shrink its fan.** The 39-second
+`test_the_fit_gives_a_saturated_best_aspect_the_full_search_it_was_denied` looked like the textbook
+case for the GM's own *"reducing the size of the test fixture settlement"*. Taking the shared test
+envelope from a 600 px square down through 400, 300, 200 and 150 leaves the drawn fan at **1,985
+plots and an acreage error of 0.891 at every one of them**. The envelope is not what clamps a
+saturated fan - the CANVAS is, and the canvas is derived from the household count (`canvas_for`,
+`plan.py`). What actually costs the seconds is the PLOT COUNT, set by `plot_across` and `row_step`;
+coarsening those from 46/(26,30) to 138/(78,90) took the fan to 257 plots and the test to about a
+quarter of its time, with the branch under test and both assertions unchanged.
+
+**`COVERAGE_CORE=sysmon` is SLOWER here than the C tracer.** Python 3.14 with coverage 7.15 and
+line-only coverage (no `branch = true`) is precisely the configuration `sys.monitoring` was built
+for, and the tracer looked like half the gate's cost. Measured on the same tree and the same
+selection: **ctrace 16.2 s wall / 1 m 30 s CPU against sysmon 20.1 s / 1 m 59 s**, with the coverage
+tables byte-identical. The premise was wrong too - the "coverage doubles the gate" reading came from
+a baseline whose roll cache was cold; on a warm tree the tracer's share is small.
+

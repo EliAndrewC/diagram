@@ -242,6 +242,16 @@ its best and the check IS the guarantee. `make check-census` measures this per c
 snapshots (the ledger in `specs/141-checks-and-corpus-audit/`); a kept check proves it fires on a
 scripted negative fixture (`tests/gate/test_scripted_fixtures.py`), not on a frozen manifest.
 
+**AND THE CENSUS'S VERDICT IS A CANDIDATE, NOT A RULING (feature 158, 2026-08-29).** It reads the
+manifest, so it can see a later stage changing an input and it CANNOT see a placer that fails
+softly - the two look identical from outside. Before you retire a candidate, read the placer and
+grep the record for what the check has actually caught. Both directions happened in one afternoon:
+`bridges_align_with_their_way` went (it re-derived the crossings from the very source
+`settlement.bridges()` places from, and every scrap of evidence for it was two decks a person placed
+BY HAND on maps no generator can produce), while `bridges_span_their_water` - same family, same
+mechanical verdict - stayed, because `hamletgen/ways.py` records it catching the SCRIPTED placer four
+separate times on oblique crossings. Four recorded misses is not a guarantee.
+
 **The shape both sessions kept hitting: an EXCUSE clause keyed on PRESENCE cannot fire on ABSENCE.**
 Four instances in one day between two sessions - this check excusing a hole whenever anything stood
 in it; `village_windbreak_is_continuous` scoring a total gap as nothing because it skipped empty
@@ -377,5 +387,13 @@ Two things to carry forward when you next cut checks:
   test is "does this segment keep a live check, and does anything need a value only IT writes".
 
 And the town/city half of the battery had not been RUN since the 2026-08-16 freeze - the only maps at those
-scales are frozen and nothing gated them. `tests/tier_city/test_frozen_pool_gate.py` now gates each exhibit
-read-only with its post-freeze failures pinned. If you add a city check, that file is what exercises it.
+scales are frozen and nothing gated them. Feature 146 answered that with `tests/tier_city/test_frozen_pool_gate.py`,
+which gated each exhibit read-only with its post-freeze failures pinned; **feature 158 deleted it** (GM
+2026-08-29: *"there is no reason to see what would happen if we encountered a type of map, which is literally
+impossible to produce any longer"*). It was carrying coverage that the Makefile stopped enforcing under feature
+145 - `check_village` is omitted from the global floor, and the hamlet-path floor judges only what the scripted
+rolls execute - so it was paying seconds of every gate to pin the failures of six maps no generator can produce.
+The 26 legacy-tier fixtures in `pool/regressions/` went the same day and for the same reason. **If you add a
+city check, exercise it the way `tests/tier_city/test_urban_check_paths.py` does** - a small hand-BUILT manifest,
+which is a fixture rather than a stored bad map - and when the town and city tiers convert to scripted
+generation they get scripted negative fixtures, not a restored corpus.

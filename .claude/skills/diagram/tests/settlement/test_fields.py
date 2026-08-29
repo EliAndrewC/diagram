@@ -47,6 +47,7 @@ def test_paddy_field_marks_taxfree_plots_and_a_fallow_patch_and_labels():
     s.paddy_field((150, 150, 470, 470), "Rice", "f", taxfree=2, fallow_patch=[[250, 250], [380, 250], [380, 380], [250, 380]])
     assert s.M["taxfree"]  # tax-free plots recorded -> _taxfree_plots did real work
     assert s.M["fallow_patches"]  # blighted sub-region recorded
+    s.place_labels()  # feature 157: captions are queued and drawn in the LABEL PHASE, so run it before reading them
     assert any(lab[5] == "Rice" for lab in s.M["labels"])  # field name labeled
 
 
@@ -58,6 +59,7 @@ def test_water_field_from_a_bbox_marks_taxfree_and_labels():
     s.water_field((150, 150, 470, 470), "Paddy", "f", (150, 150), (470, 470), amp=10, taxfree=2, plot=34)
     assert any(fd["name"] == "f" and fd["kind"] == "paddy" for fd in s.M["fields"])
     assert s.M["taxfree"]
+    s.place_labels()  # feature 157: captions are queued and drawn in the LABEL PHASE, so run it before reading them
     assert any(lab[5] == "Paddy" for lab in s.M["labels"])
 
 
@@ -433,10 +435,14 @@ def test_a_comb_hem_is_registered_as_CROPLAND_not_only_as_no_build_ground():
     compensate; this holds the line for the ones that do not."""
     from l7r.diagram.waterfields import build_comb
 
-    s = Settlement(1800, 1800, seed=5)
+    # A SMALLER CANVAS AND A SHORTER FALL (feature 158): the question is whether every DRAWN hem plot
+    # is also registered as cropland, which one hem answers as well as forty. The guard on the next
+    # line is what makes the shrink safe - if the fixture stops drawing a hem it says so instead of
+    # passing vacuously.
+    s = Settlement(1200, 1200, seed=5)
     s.meta(name="Hem", scale="hamlet", ftpx=1, toscale=True, households=12, down_deg=90, water_flow=90)
-    net = build_comb(1800, 1800, (700.0, 380.0), full_or(2, 5), down_deg=90, field_fall=800)
-    s.draw_comb_field(net, "hem-paddies", {"kind": "stream", "stream": [(700.0, -40.0), (700.0, 380.0)]})
+    net = build_comb(1200, 1200, (600.0, 320.0), full_or(2, 5), down_deg=90, field_fall=520)
+    s.draw_comb_field(net, "hem-paddies", {"kind": "stream", "stream": [(600.0, -40.0), (600.0, 320.0)]})
     assert s.M["dry_plots"], "the fixture must actually draw a dry hem, or it proves nothing"
     assert len(s.dry_polys) == len(s.M["dry_plots"]), "every DRAWN hem plot is registered as cropland"
     assert all(any(abs(v[0] - p[0]) < 0.05 and abs(v[1] - p[1]) < 0.05 for p in poly) for rec, poly in zip(s.M["dry_plots"], s.dry_polys, strict=True) for v in [rec["poly"][0]]), (

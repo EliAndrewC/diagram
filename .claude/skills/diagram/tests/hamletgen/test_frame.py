@@ -31,6 +31,16 @@ def test_stage_notice_reseats_a_board_the_frame_would_lose():
         def place_kosatsuba(self):
             return (900.0, 100.0)  # outside the cloud - the frame would lose it
 
+        def discard_queued_label(self, kind):
+            # feature 157: the caption is QUEUED, so withdrawing the board withdraws the request rather
+            # than hunting a drawn label out of M["labels"]. The stub carries a pre-drawn "notice board"
+            # record from the era when it was drawn inline; dropping it here keeps the assertion below
+            # measuring the same thing - that the re-seat leaves no orphan caption behind.
+            self.M["labels"] = [lb for lb in self.M["labels"] if not (len(lb) > 5 and lb[5] == "notice board")]
+
+        def place_labels(self):
+            pass  # the phase itself is exercised where it lives, in tests/settlement/test_structures.py
+
         def _fits(self, x, y, w, h, corridors=False):
             return x >= 500.0  # some verge candidates refused, so the refusal path runs too
 
@@ -52,5 +62,6 @@ def test_stage_notice_reseats_a_board_the_frame_would_lose():
     bx, by, _rot = s.reseated[0]
     assert 440.0 <= bx <= 600.0 and 440.0 <= by <= 600.0, f"re-seated outside the cloud: {(bx, by)}"
     assert bx >= 540.0, f"re-seated into the stub's water at {(bx, by)} - the re-seat must consult fixture_clear_of_water"
+    s.place_labels()  # feature 157: captions are queued and drawn in the LABEL PHASE, so run it before reading them
     assert not any(len(lb) > 5 and lb[5] == "notice board" for lb in s.M["labels"]), "orphan caption left behind"
     assert len(s.M["kosatsuba"]) == 1, "old board not popped"

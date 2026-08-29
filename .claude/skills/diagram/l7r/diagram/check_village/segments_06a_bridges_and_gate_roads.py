@@ -1,161 +1,24 @@
 """Gate segments (bridges and gate roads; keys 0334-0359) - bodies verbatim, registry order preserved."""
 
-import math
-from typing import Any
 
-from l7r.diagram.settlement import bridge_carried_ways, bridge_crossed_waters
-
-from .common_01_geometry import seg_intersect, segments_cross
-from .common_03_capacity import _UNBOUND, _kept
-
-# WHERE A WAY CROSSES A WATERCOURSE, a bridge must carry it over - a way does not simply run
-# through open water. Crossings are road / RING ROAD / street / lane segments intersecting a
-# stream, an irrigation channel, a field ditch, the navigable cargo canal, or the city moat (a
-# walled city's approach road crosses the moat at each gate). Every such crossing must have a
-# recorded bridge near the intersection point. (A way merely running ALONGSIDE water, never
-# intersecting it, needs no bridge - only true crossings count.)
+# THREE OF THIS FILE'S BRIDGE RULES WERE RETIRED (feature 158, 2026-08-29, GM: *"if our placement
+# algorithm guarantees that a thing is correct, then I do not believe that there is value in running
+# an automated check afterwards to ensure that that exact same thing is correct"*).
+# `bridges_align_with_their_way` re-derived the way x water crossings from the SAME shared source
+# `settlement.bridges()` places from - `city/bridges.py` says so in its own docstring - and then
+# asked whether the deck it had just been handed sat on the crossing it had just been computed for:
+# the same measure of the same fact. Its whole evidence was two decks a person placed BY HAND on
+# Minami and Nagahara in July 2026, on maps no generator can produce; every deck `s.bridges()` has
+# ever solved landed 0.0-1.0 px and 0.0-1.0 deg off its crossing. `bridges_seat_on_water` and
+# `bridges_clear_of_houses` went with it - the first fired once, on Shiro Daika's hand-authored
+# towpath plank, the second never fired anywhere at all. Their whole derivation subgraph
+# (0334-0338, 0341-0344 here) went too, including the ways x waters double loop, which the gate had
+# been running on every map to feed a single retired verdict.
 #
-# The way and water sets here MIRROR settlement.bridges(), which draws from the same two lists -
-# they must stay in step or the engine places decks the gate does not ask for, or (worse) the
-# gate stays silent about a crossing the engine never saw. The ring road and the cargo canal were
-# missing from BOTH until 2026-07-27, which is why Minami's and Nagahara's canal crossings were
-# hand-placed and both went crooked (see bridges_align_with_their_way, below).
-#
-# An UNDRAWN channel (`drawn: False`, from topo_channel) is a buried conduit recorded for water
-# topology only - there is no seam on the ground, so a way crossing its line crosses nothing and
-# needs no deck. Tango's ring road runs over three of them.
-
-
-def _seg_0334__bridges(*, M: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 334 (bridges) - body verbatim from the legacy gate() (feature 022)."""
-    bridges = M.get("bridges", [])
-    return _kept(locals(), ('bridges',))
-
-
-# ONE SOURCE, shared with settlement.bridges() (feature 020). These sets used to be built
-# separately here and in the generator, and both omitted M["roads"], the river and a castle's
-# own moat - so the two agreed perfectly and were both wrong, leaving four of six crossings on
-# the first capital unbridged with a green gate. "Placement and its check read the SAME source"
-# guarantees they cannot DISAGREE; it does not make either correct, so they now read one
-# function rather than two lists that happen to match.
-
-
-def _seg_0335____1(*, M: Any = _UNBOUND, w: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 335 (_, w, waters_b) - body verbatim from the legacy gate() (feature 022)."""
-    waters_b = [w for w, _ in bridge_crossed_waters(M)]
-    return _kept(locals(), ('_', 'w', 'waters_b'))
-
-
-def _seg_0336____2(*, M: Any = _UNBOUND, c: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 336 (_, c, carried_b) - body verbatim from the legacy gate() (feature 022)."""
-    carried_b = [c for c, _ in bridge_carried_ways(M)]
-    return _kept(locals(), ('_', 'c', 'carried_b'))
-
-
-def _seg_0337__xings_b() -> dict[str, Any]:
-    """Gate segment 337 (xings_b) - body verbatim from the legacy gate() (feature 022)."""
-    xings_b = []  # type: ignore[var-annotated]  # (point, way heading in degrees) for every way x water crossing on the map
-    return _kept(locals(), ('xings_b',))
-
-
-def _seg_0338__i_3(
-    *,
-    carried_b: Any = _UNBOUND,
-    i: Any = _UNBOUND,
-    j: Any = _UNBOUND,
-    p: Any = _UNBOUND,
-    ra: Any = _UNBOUND,
-    rb: Any = _UNBOUND,
-    rpts: Any = _UNBOUND,
-    waters_b: Any = _UNBOUND,
-    wpts: Any = _UNBOUND,
-    xings_b: Any = _UNBOUND,
-) -> dict[str, Any]:
-    """Gate segment 338 (i, j, p, ra) - body verbatim from the legacy gate() (feature 022)."""
-    for rpts in carried_b:
-        for i in range(len(rpts) - 1):
-            ra, rb = rpts[i], rpts[i + 1]
-            for wpts in waters_b:
-                for j in range(len(wpts) - 1):
-                    if segments_cross(ra, rb, wpts[j], wpts[j + 1]):
-                        p = seg_intersect(ra, rb, wpts[j], wpts[j + 1])
-                        if p is not None:
-                            xings_b.append((p, math.degrees(math.atan2(rb[1] - ra[1], rb[0] - ra[0]))))
-    return _kept(locals(), ('i', 'j', 'p', 'ra', 'rb', 'rpts', 'wpts', 'xings_b'))
-
-
-# A BRIDGE MUST LIE ON ITS CROSSING AND RUN ALONG THE WAY IT CARRIES (GM 2026-07-27, Minami's
-# cargo-basin bridge). The rule above only asks that SOME deck be within 40px of each crossing,
-# which a deck sitting beside the crossing at a wrong angle satisfies - and the eye reads that as
-# the road running straight through the water with a crooked plank next to it, which is exactly
-# what the GM saw. So each carried deck is paired with the nearest crossing and must sit ON it
-# (within BRIDGE_SEAT_TOL) and share its bearing (within BRIDGE_ROT_TOL, mod 180 - a deck has no
-# forward direction). EVIDENCE for the tolerances: every deck s.bridges() solves lands 0.0-1.0 px
-# and 0.0-1.0 deg off its crossing (rounding only), while the two hand-placed canal decks were
-# 17px/39deg (Minami) and 15px/24deg (Nagahara) off - two orders of magnitude adrift, so a tight
-# tolerance separates them cleanly with room to spare.
-#
-# A deck with NO crossing under it at all fails the same check: it carries nothing, so either the
-# way or the watercourse it was drawn for is not in the manifest.
-#
-# STANDALONE plank footbridges (`foot`) are exempt: no way carries them, they cross the ditch
-# PERPENDICULAR by construction, and their own rules are long_ditches_have_a_footbridge /
-# footbridges_reach_useful_ground.
-
-
-def _seg_0341__BRIDGE_ROT_TOL() -> dict[str, Any]:
-    """Gate segment 341 (BRIDGE_ROT_TOL, BRIDGE_SEAT_TOL) - body verbatim from the legacy gate() (feature 022)."""
-    BRIDGE_SEAT_TOL, BRIDGE_ROT_TOL = 8.0, 8.0
-    return _kept(locals(), ('BRIDGE_ROT_TOL', 'BRIDGE_SEAT_TOL'))
-
-
-def _seg_0342__crooked() -> dict[str, Any]:
-    """Gate segment 342 (crooked) - body verbatim from the legacy gate() (feature 022)."""
-    crooked = []  # type: ignore[var-annotated]
-    return _kept(locals(), ('crooked',))
-
-
-def _seg_0343__b(
-    *,
-    BRIDGE_ROT_TOL: Any = _UNBOUND,
-    BRIDGE_SEAT_TOL: Any = _UNBOUND,
-    b: Any = _UNBOUND,
-    bridges: Any = _UNBOUND,
-    crooked: Any = _UNBOUND,
-    deck_skew: Any = _UNBOUND,
-    heading: Any = _UNBOUND,
-    near_x: Any = _UNBOUND,
-    px_: Any = _UNBOUND,
-    py_: Any = _UNBOUND,
-    seat_off: Any = _UNBOUND,
-    xings_b: Any = _UNBOUND,
-) -> dict[str, Any]:
-    """Gate segment 343 (b, crooked, deck_skew, heading) - body verbatim from the legacy gate() (feature 022)."""
-    for b in bridges:
-        if b.get("foot"):
-            continue
-        near_x = min(xings_b, key=lambda pv: math.hypot(pv[0][0] - b["x"], pv[0][1] - b["y"]), default=None)
-        if near_x is None:
-            crooked.append(f"({round(b['x'])},{round(b['y'])}) carries no way over any water")
-            continue
-        (px_, py_), heading = near_x
-        seat_off = math.hypot(px_ - b["x"], py_ - b["y"])
-        deck_skew = abs((b.get("rot", 0.0) - heading + 90) % 180 - 90)
-        if seat_off > BRIDGE_SEAT_TOL:
-            crooked.append(f"({round(b['x'])},{round(b['y'])}) sits {seat_off:.0f}px off its crossing at ({round(px_)},{round(py_)})")
-        elif deck_skew > BRIDGE_ROT_TOL:
-            crooked.append(f"({round(b['x'])},{round(b['y'])}) is rot {b.get('rot', 0.0):.0f} but its way bears {heading:.0f} ({deck_skew:.0f} deg askew)")
-    return _kept(locals(), ('b', 'crooked', 'deck_skew', 'heading', 'near_x', 'px_', 'py_', 'seat_off'))
-
-
-def _seg_0344__bridges_align_with_their_way(*, check: Any = _UNBOUND, crooked: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 344 (bridges_align_with_their_way) - body verbatim from the legacy gate() (feature 022)."""
-    check(
-        "bridges_align_with_their_way",
-        not crooked,
-        f"{len(crooked)} bridge(s) not seated on the crossing they carry: {crooked[:3]} - a deck lies ON the intersection and runs ALONG the way, or the way runs through the water beside it; solve it with s.bridges() instead of hand-placing coordinates",
-    )
-    return _kept(locals(), ())
+# `bridges_span_their_water` was a candidate on the same measurement and was KEPT, deliberately: the
+# recorded history in `hamletgen/ways.py` shows it catching the SCRIPTED placer four separate times
+# on oblique crossings (a 7 px stream at 17 degrees, and three more), so its placer does not
+# guarantee it - it is exactly the case Principle XIV's "the placer only does its best" describes.
 
 
 # A WATERCOURSE PIERCES A RAMPART ONLY AT A WATER GATE (GM 2026-08-09). Nagahara's cargo

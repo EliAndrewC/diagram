@@ -1,0 +1,6 @@
+{
+  "utc": "20260829T193252Z",
+  "guard": "pair-hooks",
+  "what": "gate alone",
+  "reason": "Phase 0 regression baseline on UNMODIFIED code in a detached worktree - no map changed and nothing is being shipped, so no settlement-review is owed for it (constitution XIII: the baseline is a measurement)"
+}

@@ -43,19 +43,27 @@ sequence one-to-one. Where the two disagree, `STAGES` wins for anything under `h
 | 1 | `stage_water_frame` | **nothing - it draws no ink at all.** Settles the drainage bearing and the land's fall and writes twelve values to `meta`; every later stage reads them |
 | 2 | `stage_field` | the water skeleton AND the paddy - `build_comb` returns canals and plots from one call, so intake, head race and field ditches arrive here, not in stage 1 |
 | 3 | `stage_sink` | tail drain, pond or off-map outfall |
-| 4 | `stage_ways` | the CONNECTOR and the field spur only - the EXOGENOUS ways, which genuinely predate the settlement. The internal skeleton moved to stage 7 in feature 126 |
-| 4b | `stage_waterward` | a polder's WATERWARD reed fringe (feature 150): the strips outside the dike on the flanks that face the water, derived from the seat - laid BEFORE the houses and the track because it reserves wet ground both must avoid (laid in the hinterland it was drawn over an already-routed connector). No ink on a valley hamlet |
-| 5 | `stage_homesteads` | the farmhouses |
-| 6b | `stage_pond_stock` | a dike-pond hamlet's pig sties and duck pens, seated on the banks of the ponds nearest the houses after the appurtenances (they are structures on field ground the registries hold nothing off, so they are placed before the web and the scrub; feature 150 A3/A4) |
-| 6 | `stage_appurtenances` | yards, gardens, byres, wells, sheds |
-| 7 | `stage_web` | ALL the endogenous ways - the internal skeleton AND the lane web, both derived from where the houses actually landed. No-op for a dispersed hamlet, which has no internal network |
-| 8 | `stage_notice` | the kosatsuba, which stands ON a way and so waits for the web |
-| 9 | `stage_hinterland` | marsh, the coppice scan, the farmstead FIXTURES (privy, heap, bath, coop, stack, hokora, persimmon - seated after the web so no lane is re-threaded, before the bamboo and the scrub, which keep off them; feature 133 T53-T59), the household bamboo, then scrub and rough grazing |
-| 10 | `stage_woodland` | woodland commons |
-| 11 | `stage_windbreak` | the shelter belt |
-| 12 | `stage_bamboo` | the bamboo stands, on seats the hinterland stage scanned (feature 133 T47) |
-| 13 | `stage_crossings` | planks and decks over every way that crosses water; on a polder the ring-canal planks cluster on the settlement-side toe collector and skip the feeder, the far toe and the drain (`polder_crossing_caps`, feature 150) |
-| 14 | `stage_frame` | crop to content, title, scalebar |
+| 4 | `stage_seat` | **nothing.** Decides WHERE the settlement sits (`plan.seat`), which `stage_homesteads` depends on. One half of what used to be `stage_ways`; the other half is stage 7 |
+| 5 | `stage_waterward` | a polder's WATERWARD reed fringe (feature 150): the strips outside the dike on the flanks that face the water, derived from the seat - laid BEFORE the houses and the track because it reserves wet ground both must avoid (laid in the hinterland it was drawn over an already-routed connector). No ink on a valley hamlet |
+| 6 | `stage_homesteads` | the farmhouses, seated with no lane anywhere on the map (feature 128, the GM's rule: water and fields, then FARMHOUSES, then every lane without exception) |
+| 7 | `stage_track` | the CONNECTOR and the field spur, derived from the houses that landed. Before the appurtenances, so a well is sunk where the track already runs |
+| 8 | `stage_appurtenances` | yards, gardens, byres, wells, sheds |
+| 9 | `stage_pond_stock` | a dike-pond hamlet's pig sties and duck pens, on the banks of the ponds nearest the houses (feature 150 A3/A4) |
+| 10 | `stage_web` | the lane web - last of the BUILT things, because it fills leftover ground where everything above reserves it |
+| 11 | `stage_hinterland` | marsh, the coppice scan, the farmstead FIXTURES (privy, heap, bath, coop, stack, hokora, persimmon - seated after the web so no lane is re-threaded, before the bamboo and the scrub, which keep off them; feature 133 T53-T59), the household bamboo, then scrub and rough grazing |
+| 12 | `stage_woodland` | woodland commons |
+| 13 | `stage_windbreak` | the shelter belt |
+| 14 | `stage_bamboo` | the bamboo stands, on seats the hinterland stage scanned (feature 133 T47) |
+| 15 | `stage_crossings` | planks and decks over every way that crosses water; on a polder the ring-canal planks cluster on the settlement-side toe collector and skip the feeder, the far toe and the drain (`polder_crossing_caps`, feature 150) |
+| 16 | `stage_frame` | crop to content, title, scalebar |
+| 17 | `stage_notice` | the kosatsuba - **the last map FEATURE**, after even the frame (GM 2026-08-29, feature 154): *"the real humans ... look around at the things which already exist and then decide where to put the notice board"*. It reserves no ground and grows into none, so nothing is placed after it for it to displace |
+| 18 | `stage_labels` | **the LABEL PHASE** - every caption on the map, seated against the finished sheet (GM 2026-08-29, feature 157): *"after the final map feature is added ... a final phase in which we add labels for whatever map features get labels ... how we place labels will always depend on what else is on the map."* No feature draws its own caption any more; `label()` queues and `Settlement.place_labels` drains. Draws no ink but text, reserves nothing, and so can only ever be last |
+
+**THIS TABLE WAS STALE AND WAS REBUILT AGAINST `STAGES` (feature 157).** It still listed
+`stage_ways` at position 4 (split into `stage_seat` and `stage_track` by feature 126) and
+`stage_notice` at position 8 (moved to last by feature 154), so it disagreed with the tuple it says
+is the authority - the failure mode this file's own header warns about, in the one document a
+session reads BEFORE moving a placement. If you move a stage, move its row here in the same change.
 
 **WAYS ARE SPLIT BY PROVENANCE, NOT BY TIMING** (feature 126, 2026-08-23). The GM asked whether
 laying lanes before houses reflects how lanes form, and it does not - a lane between farmsteads is

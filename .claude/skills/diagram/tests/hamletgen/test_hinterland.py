@@ -101,7 +101,7 @@ def test_a_belt_vertex_in_the_title_pocket_is_pushed_out_of_it() -> None:
     branch was live on the pool until the 2026-08-19 seam-alignment change moved every fan slightly,
     after which no map's belt happened to cross its title pocket and the gate failed on coverage
     rather than on behaviour. A dent that no map happens to need is exactly the kind that rots."""
-    plan = a_plan()
+    plan = a_plan(households=10)  # the canvas is derived from the household count, and the dent does not care (feature 158)
     s = Settlement(W=plan.W, H=plan.H, seed=plan.spec.seed)
     s.M["houses"] = [{"x": x, "y": 700.0, "w": 46.0, "h": 28.0} for x in (500.0, 560.0, 620.0)]
     tp = hinterland.title_pocket(s, plan)

@@ -31,6 +31,7 @@ def test_a_hall_caption_is_the_same_size_as_a_ministry_caption():
     s.meta(name="C", scale="city", ftpx=3)
     s.shrine_hall(400, 400, "Temple of Benten", w=s.px(130), h=s.px(84), kind="temple")
     s.ministry(900, 400, "Ministry of Rites")
+    s.place_labels()  # feature 157: captions are queued and drawn in the LABEL PHASE, so run it before reading them
     temple = next(lb for lb in s.M["labels"] if lb[5] == "Temple of Benten")
     ministry = next(lb for lb in s.M["labels"] if lb[5] == "Ministry of Rites")
     assert _caption_size(temple) == _caption_size(ministry) == settlement.HALL_CAPTION_FS

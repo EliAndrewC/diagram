@@ -22,7 +22,7 @@ from l7r.diagram.settlement import Settlement
 from l7r.diagram.sitegen.jobs import default_jobs as default_jobs  # noqa: PLC0414 - explicit re-export so `hamletgen.default_jobs` still resolves under --strict
 
 from .consts import FIELD_ARCHETYPES, REF_HOUSEHOLDS
-from .frame import stage_crossings, stage_frame, stage_notice
+from .frame import stage_crossings, stage_frame, stage_labels, stage_notice
 from .hinterland import stage_bamboo, stage_hinterland, stage_windbreak, stage_woodland
 from .homesteads import stage_appurtenances, stage_homesteads
 from .plan import HamletSpec, SitePlan, plan_site
@@ -124,6 +124,17 @@ STAGES = (
     # decided and the board can simply be kept inside it, instead of being sited blind and re-seated
     # by a frame guard that knew nothing about why it had been put where it was.
     stage_notice,
+    # ...AND THE LABELS AFTER EVEN THAT (feature 157, GM 2026-08-29). *"add a phase at the very end of
+    # every settlement creation process, which is putting down the labels for things. Thus, after the
+    # final map feature is added, which on a hamlet is the notice board, there is a final phase in
+    # which we add labels for whatever map features get labels. This is because how we place labels
+    # will always depend on what else is on the map."*
+    #
+    # It draws no feature and reserves no ground, so it can only ever be last: a caption is placed
+    # against a map that is finished being built. On a hamlet that is byte-neutral BY CONSTRUCTION -
+    # nothing is placed between the board and this stage - which is what makes it possible to attribute
+    # any caption that moves in this feature to the seat rules rather than to the reorder.
+    stage_labels,
 )
 
 

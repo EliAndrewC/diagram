@@ -68,6 +68,7 @@ def test_log_boom_defaults_to_a_full_holding_pen_and_records_its_box():
 def test_log_boom_labels_below_itself_unless_told_otherwise():
     s = _crop_settlement()
     s.log_boom(400, 300, rot=0, length=90, label="log boom")
+    s.place_labels()  # feature 157: captions are queued and drawn in the LABEL PHASE, so run it before reading them
     assert any(len(lb) > 5 and lb[5] == "log boom" for lb in s.M["labels"])
     s2 = _crop_settlement()
     s2.log_boom(400, 300, rot=0, length=90, label=None)

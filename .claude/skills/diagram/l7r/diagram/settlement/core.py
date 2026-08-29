@@ -87,6 +87,20 @@ class Settlement(
         self.frontage_box: tuple[float, float, float, float] | None = None  # extent of the LAST frontage() row,
         #                           for place_caption (see frontage's note)
         self._captions: list[tuple[Any, ...]] = []  # deferred place_caption() seats - flushed in finish()
+        # ---- THE LABEL PHASE (feature 157, GM 2026-08-29) ------------------------------------
+        # *"add a phase at the very end of every settlement creation process, which is putting down
+        # the labels for things ... after the final map feature is added ... a final phase in which
+        # we add labels for whatever map features get labels. This is because how we place labels
+        # will always depend on what else is on the map."*
+        #
+        # So NO caption is drawn by the feature that owns it. `label()` appends here instead, and
+        # `place_labels()` (structures/captions.py) drains the queue against the FINISHED map. The
+        # deferral is general rather than per-feature on purpose: the engine has 52 caption call
+        # sites, and a per-site conversion is a list that falls behind - the same reasoning
+        # `label_blocker_quads` records for deriving its blocker list instead of hand-listing it
+        # ("a probe that cannot see a feature looks exactly like a probe that passes").
+        self._label_queue: list[tuple[str, tuple[Any, ...]]] = []  # (kind, payload), in call order
+        self._labels_pending: bool = True  # False while place_labels() is draining, and after it
         self.walls: list[str] = []  # deferred WALL layer (city rampart) - over the ground lanes + buildings,
         #                           under the TOP layer, so a street running INTO a wall passes beneath it
         self.ground: list[dict[str, Any]] = []  # deferred LINEAR ground features (alley < street < road): the wider

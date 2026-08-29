@@ -9,7 +9,6 @@ from typing import TYPE_CHECKING, Any
 
 from .._geom import (
     FLOODED_SHADES,
-    LAND,
     PADDY_SHADES,
     RICE_GREENS,
     RIPE_SHADES,
@@ -135,13 +134,12 @@ class PaddyMixin:
         random.setstate(_fillstate)  # end fill-RNG isolation
         self.add(f'<path d="{d}" fill="none" stroke="#A98A52" stroke-width="3.5"/>')
         if label:
-            lx, ly = label_xy if label_xy else ((x0 + x1) / 2, (y0 + y1) / 2)
-            z = self.add_label(
-                f'<text x="{lx:.0f}" y="{ly:.0f}" text-anchor="middle" font-size="15" '
-                f'font-weight="bold" fill="#33301E" letter-spacing="1.5" '
-                f'paint-order="stroke" stroke="{LAND}" stroke-width="3.5">{label}</text>'
-            )
-            self._record_label(lx, ly, label, 15, "middle", z)
+            # QUEUED FOR THE LABEL PHASE like every other caption (feature 157). This is one of the two
+            # paths that emit a caption's `<text>` directly rather than through `label()`, so the
+            # general deferral there does not reach it; `field_name_label` carries this exact markup
+            # into the phase. Found by the round-2 spec review of feature 157 - dormant (no pool map
+            # passes `label=` to either field), which is why it is a call swap and not a reflow.
+            self.field_name_label(label, *(label_xy if label_xy else ((x0 + x1) / 2, (y0 + y1) / 2)))
 
     @staticmethod
     def _split_convex(poly: Poly, px: float, py: float, nx: float, ny: float) -> tuple[Poly, Poly]:
@@ -445,13 +443,12 @@ class PaddyMixin:
 
         self.add(f'<path d="{d}" fill="none" stroke="#A98A52" stroke-width="3.5"/>')
         if label:
-            lx, ly = label_xy if label_xy else ((x0 + x1) / 2, (y0 + y1) / 2)
-            z = self.add_label(
-                f'<text x="{lx:.0f}" y="{ly:.0f}" text-anchor="middle" font-size="15" '
-                f'font-weight="bold" fill="#33301E" letter-spacing="1.5" '
-                f'paint-order="stroke" stroke="{LAND}" stroke-width="3.5">{label}</text>'
-            )
-            self._record_label(lx, ly, label, 15, "middle", z)
+            # QUEUED FOR THE LABEL PHASE like every other caption (feature 157). This is one of the two
+            # paths that emit a caption's `<text>` directly rather than through `label()`, so the
+            # general deferral there does not reach it; `field_name_label` carries this exact markup
+            # into the phase. Found by the round-2 spec review of feature 157 - dormant (no pool map
+            # passes `label=` to either field), which is why it is a call swap and not a reflow.
+            self.field_name_label(label, *(label_xy if label_xy else ((x0 + x1) / 2, (y0 + y1) / 2)))
 
     def _wf_ditch(self: Settlement, name: str, pairs: Any, w: float, role: str) -> None:  # type: ignore[misc]
         """Draw a water-first field's ditch AND record it, so the checks can validate what was drawn."""

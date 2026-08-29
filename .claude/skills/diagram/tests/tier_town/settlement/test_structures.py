@@ -43,6 +43,7 @@ def test_kosatsuba_label_xy_hand_seats_the_caption():
     s = Settlement(1000, 1000, seed=1)
     s.meta(name="T", scale="town", ftpx=1)
     s.kosatsuba(500, 500, rot=0, label_xy=(560, 488))
+    s.place_labels()  # feature 157: captions are queued and drawn in the LABEL PHASE, so run it before reading them
     lab = s.M["labels"][-1]
     assert lab[5] == "notice board"
     assert abs((lab[0] + lab[2]) / 2 - 560) < 2  # seated at the hand x, not the default below-seat

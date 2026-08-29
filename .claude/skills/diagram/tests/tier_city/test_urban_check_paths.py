@@ -1,8 +1,11 @@
 """URBAN CHECK PATHS THE FROZEN EXHIBITS DO NOT REACH (feature 146).
 
-Gating the six frozen town and city manifests (`test_frozen_pool_gate.py`) exercises most of the urban
-battery, but not all of it: those maps carry a castle and a moat but no street beside it, so the
-castle-moat clearance - which measures a street, alley or lane against the moat - stayed unentered.
+Gating the six frozen town and city manifests exercised most of the urban battery, but not all of it:
+those maps carry a castle and a moat but no street beside it, so the castle-moat clearance - which
+measures a street, alley or lane against the moat - stayed unentered. (That frozen-manifest gate,
+`test_frozen_pool_gate.py`, was itself deleted by feature 158 on the GM's ruling that a stored map no
+generator can produce is not worth replaying. This file is what remains, and it is the RIGHT shape:
+a hand-BUILT manifest is a fixture, not a map from the hand-placement era.)
 
 (The ward-fence closure looked like the same case and was not: nothing calls it at all, so feature 146
 removed it with the rest of feature 141's residue rather than inventing a manifest to reach dead code.)

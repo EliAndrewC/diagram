@@ -4,9 +4,13 @@ Split from settlement/structures.py by feature 114 - see settlement/structures/C
 """
 
 import math
-from typing import TYPE_CHECKING
+from collections.abc import Sequence
+from typing import TYPE_CHECKING, Any
+
+from l7r.diagram.interactive.tags import ClsTag
 
 from .._geom import (
+    LAND,
     Poly,
     Pt,
     label_aabb,
@@ -140,6 +144,105 @@ class CaptionProbesMixin:
             if any(seg_dist(ac[0], ac[1], (float(pts[k][0]), float(pts[k][1])), (float(pts[k + 1][0]), float(pts[k + 1][1]))) < half + reach for k in range(len(pts) - 1)):
                 return seat
         return pulled
+
+    def place_labels(self: Settlement) -> None:  # type: ignore[misc]
+        """THE LABEL PHASE - the last phase of a settlement's generation (feature 157, GM 2026-08-29).
+
+        *"add a phase at the very end of every settlement creation process, which is putting down the
+        labels for things. Thus, after the final map feature is added, which on a hamlet is the notice
+        board, there is a final phase in which we add labels for whatever map features get labels. This
+        is because how we place labels will always depend on what else is on the map."*
+
+        Nothing draws a caption before this runs: `label()` queues, and this drains. TWO KINDS are in
+        the queue - a `text` request (a caption whose seat its feature already computed) and a
+        `kosatsuba` request (a caption whose SEAT is searched here, because the search must see the
+        finished map). A new labeled feature adds a row to `_PLACERS`, not a branch here.
+
+        THE DRAIN ORDER is the queue's own call order, then the deferred `place_caption` seats, then
+        the road caption - which is today's relative order preserved exactly, and it keeps the rule
+        `finish()` used to state inline: the most-constrained caption is seated first and the road,
+        which has by far the most room to move, yields last.
+
+        PRIORITY IS DELIBERATELY NOT HERE. The GM described it and then ruled it out for this map:
+        *"When we begin putting labels on maps that have many labels, we can assign a priority to each
+        type of thing ... However, that will not apply here."* When a map does have competing labels,
+        priority becomes one more key in front of the call-order sort in this function. That sentence
+        is the extension point; building the scheme now would be building what was not asked for.
+
+        IDEMPOTENT. The hamlet pipeline runs this as `stage_labels`; `finish()` runs it too, as the
+        last thing it does, so a hand-authored gen with no stage pipeline gets the same phase with no
+        change to the script. Whichever runs first drains the queue and the other does nothing."""
+        if not self._labels_pending:
+            return
+        self._labels_pending = False  # ...so `label()` below reaches its body instead of re-queuing
+        queued, self._label_queue = self._label_queue, []
+        for kind, payload in queued:
+            getattr(self, self._PLACERS[kind])(*payload)
+        for _tx, _bx, _sz, _it, _wt, _co, _hi, _sl, _ro in self._captions:
+            _lx, _ly = self._best_label_spot(_bx, _tx, _sz, hint=_hi, slides=_sl, tilt=_ro)
+            self.label(_lx, _ly, _tx, _sz, italic=_it, weight=_wt, color=_co, ref=_bx, rot=_ro)
+        self._captions = []
+        if getattr(self, "_road_label", None):
+            self._finish_road_label()  # feature 145: the Imperial-road caption, a town/city feature, lives in structures/ground.py
+            self._road_label: Any = None  # declared Any at structures/ground.py; re-declared for the checker (the attribute is conditional)
+
+    # WHICH METHOD DRAWS EACH QUEUED KIND. An ordered-data row rather than a derived one (clause 14's
+    # carve-out): it states a DECISION - that a kosatsuba's seat is searched in the phase while a
+    # `text` caption's was fixed by its feature - which no introspection could recover.
+    _PLACERS = {"text": "_draw_queued_label", "kosatsuba": "_draw_board_caption", "field_name": "_draw_field_name_label"}
+
+    def field_name_label(self: Settlement, label: str, lx: float, ly: float) -> None:  # type: ignore[misc]
+        """Queue a FIELD-NAME caption - the big letter-spaced name a `paddy_field` or `water_field`
+        lays across its own body (feature 157).
+
+        It has its own `kind` because it is one of the two captions in the engine that do NOT go
+        through `label()`: the markup carries `letter-spacing` and a 3.5 px halo that the caption
+        primitive has no parameters for, and inventing them to route two dormant call sites through it
+        would be changing the primitive to suit a caller. Queuing the exact markup instead keeps the
+        phase's coverage STRUCTURAL - no caption is drawn outside it - without touching how these two
+        would look if a map ever asked for them."""
+        self._label_queue.append(("field_name", (label, lx, ly)))
+
+    def _draw_field_name_label(self: Settlement, label: str, lx: float, ly: float) -> None:  # type: ignore[misc]
+        """Draw one queued field-name caption - the markup `paddy_field` used to emit inline."""
+        z = self.add_label(
+            f'<text x="{lx:.0f}" y="{ly:.0f}" text-anchor="middle" font-size="15" font-weight="bold" fill="#33301E" letter-spacing="1.5" paint-order="stroke" stroke="{LAND}" stroke-width="3.5">{label}</text>'
+        )
+        self._record_label(lx, ly, label, 15, "middle", z)
+
+    def _draw_queued_label(  # type: ignore[misc]
+        self: Settlement,
+        x: float,
+        y: float,
+        text: str,
+        size: float,
+        anchor: str,
+        italic: bool,
+        weight: str,
+        color: str,
+        ref: Sequence[float] | None,
+        rot: float,
+        linear: bool,
+        full_tilt: bool,
+        wrap: bool,
+        cls: ClsTag,
+    ) -> None:
+        """Draw one queued `text` caption - `label()`'s own arguments, replayed with the phase open."""
+        self.label(x, y, text, size, anchor, italic, weight, color, ref, rot, linear, full_tilt, wrap, cls)
+
+    def discard_queued_label(self: Settlement, kind: str) -> None:  # type: ignore[misc]
+        """Drop the most recent queued caption of `kind` - the UNDO for a feature that was placed and
+        then withdrawn (feature 157).
+
+        `hamletgen.stage_notice` re-seats a board the frame cannot hold, and it used to have to pop the
+        board's record, blank its glyph, hunt the finished caption out of `M['labels']` by its text and
+        blank that too. With the caption still queued there is nothing drawn to hunt: the request is
+        dropped and the re-seated board queues its own. That simplification is the phase paying for
+        itself - the orphan-caption bug it replaces (feature 133 T48) could not have existed."""
+        for i in range(len(self._label_queue) - 1, -1, -1):
+            if self._label_queue[i][0] == kind:
+                del self._label_queue[i]
+                return
 
     def label_caption_hw(self: Settlement, label: str, size: float) -> float:  # type: ignore[misc]
         """A caption\'s half-width AS RECORDED. `_record_label` writes len(text) * size * 0.55, and

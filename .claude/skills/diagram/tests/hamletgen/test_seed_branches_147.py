@@ -57,7 +57,17 @@ def test_the_fit_gives_a_saturated_best_aspect_the_full_search_it_was_denied() -
 
     plan = a_plan()
     plan.target_acres = 500.0  # far past what this envelope holds at any aspect, so every aspect saturates
-    net = fit_field(plan, (700.0, 300.0), 3, 46.0, (26.0, 30.0))
+    # A COARSE PLOT GRID, WHICH IS WHAT THIS TEST'S TIME WAS MADE OF (feature 158, 2026-08-29). The
+    # branch under test is `fit_field`'s: no aspect landed the target, so the best one is re-searched
+    # without the probe. Nothing in it depends on how many plots a carve lays - only on the target
+    # being unreachable - and the carve is where the seconds go: at `plot_across = 46` the largest fan
+    # is 1,985 plots and this test was 39 s, the single most expensive test in the whole suite and the
+    # critical path of `make quick`. At 138 it is 257 plots and ~11 s, with the acreage error
+    # unchanged at 0.891 and the same aspect winning. MEASURED, and the obvious lever measured FIRST
+    # and rejected: shrinking `plan.envelope` from 600 px through 400, 300, 200 and 150 changes
+    # nothing at all - same 1,985 plots, same 0.891 - because the envelope is not what clamps this
+    # fan (specs/158-hamlet-test-cost/research.md R3).
+    net = fit_field(plan, (700.0, 300.0), 3, 138.0, (78.0, 90.0))
     assert net["plots"], "a fan still comes back"
 
 

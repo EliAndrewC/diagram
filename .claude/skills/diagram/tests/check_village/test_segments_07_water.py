@@ -5,7 +5,6 @@ from tests.check_village._builders import (
     _channel,
     _confluence,
     _drain_ditch,
-    _farmhouse,
     _field,
     _footbridge_map,
     _iw_manifest,
@@ -107,29 +106,6 @@ def test_fields_show_water_source_branches():
     assert "fields_show_water_source" in f_only(M, "fields_show_water_source")
 
 
-def test_bridges_span_their_water_fires_on_an_oblique_underspan():
-    """An OBLIQUE crossing needs a longer deck - and the verdict is on the deck's CORNERS (GM
-    2026-08-09): a span whose centerline ends cleared the banks still left a corner sitting AT
-    the water's edge, structurally impossible for an abutment that must stand back from scour.
-    A carried deck's corners need >= 6 ft of dry landing (the drawn LANDING_FT is 10)."""
-    M = _bridge_map([{"x": 500, "y": 500, "rot": 45, "span": 8, "w": 6}])
-    assert "bridges_span_their_water" in f_only(M, "bridges_span_their_water")
-    M["bridges"] = [{"x": 500, "y": 500, "rot": 45, "span": 20, "w": 6}]  # ends clear, corners do not
-    assert "bridges_span_their_water" in f_only(M, "bridges_span_their_water")
-    M["bridges"] = [{"x": 500, "y": 500, "rot": 45, "span": 38, "w": 6}]
-    assert "bridges_span_their_water" not in f_only(M, "bridges_span_their_water")
-
-
-def test_footplanks_keep_their_short_abutment_but_a_flush_plank_fires():
-    """A standalone footplank's SHORT abutment stands (GM 2026-07-22: PLANK_ABUTMENT, ~3px of
-    bank rest per side) - so its floor is 2 ft, not the carried deck's 6 - but a plank whose
-    corner sits at the water's edge still fires."""
-    M = _bridge_map([{"x": 500, "y": 500, "rot": 0, "span": 15, "w": 2, "foot": True}])
-    assert "bridges_span_their_water" not in f_only(M, "bridges_span_their_water")
-    M["bridges"] = [{"x": 500, "y": 500, "rot": 0, "span": 10, "w": 2, "foot": True}]
-    assert "bridges_span_their_water" in f_only(M, "bridges_span_their_water")
-
-
 def test_long_ditches_have_a_footbridge_fires_when_a_long_ditch_is_planless():
     assert "long_ditches_have_a_footbridge" in f_only(_footbridge_map([]), "long_ditches_have_a_footbridge")
     assert "long_ditches_have_a_footbridge" not in f_only(_footbridge_map([{"x": 450, "y": 200, "rot": 90, "span": 20, "w": 5}]), "long_ditches_have_a_footbridge")
@@ -165,16 +141,6 @@ def test_footbridges_reach_useful_ground_exempts_untagged_lane_bridges():
     M = _footbridge_map([{"x": 450, "y": 200, "rot": 90, "span": 11, "w": 5}])
     M["fields"] = [{"name": "p", "kind": "paddy", "outline": [[50, 90], [850, 90], [850, 190], [50, 190]], "bbox": [50, 90, 850, 190]}]
     assert "footbridges_reach_useful_ground" not in f_only(M, "footbridges_reach_useful_ground")
-
-
-def test_bridges_clear_of_houses_fires_when_a_plank_sits_on_a_farmhouse():
-    M = {"meta": {"scale": "village"}, "houses": [_farmhouse(400, 300)], "bridges": [{"x": 400, "y": 300, "rot": 0, "span": 24, "w": 6}]}  # a plank ON the house
-    assert "bridges_clear_of_houses" in f_only(M, "bridges_clear_of_houses")
-
-
-def test_bridges_clear_of_houses_passes_when_a_plank_is_off_the_houses():
-    M = {"meta": {"scale": "village"}, "houses": [_farmhouse(400, 300)], "bridges": [{"x": 600, "y": 300, "rot": 0, "span": 24, "w": 6}]}  # a plank well clear of the house
-    assert "bridges_clear_of_houses" not in f_only(M, "bridges_clear_of_houses")
 
 
 def test_waterways_merge_at_crossings_fires_when_bed_over_sheen():
@@ -497,18 +463,6 @@ def test_channels_flow_downhill_judges_a_channel_by_the_FIELD_it_feeds():
     assert "channels_flow_downhill" not in f_only(M, "channels_flow_downhill")
 
 
-def test_bridges_seat_on_water_fires_on_a_dry_deck():
-    """A deck seated on NO water at all - the floating towpath plank (settlement-review
-    2026-08-10): the drain's re-route moved the ford and the deck kept its old seat, and
-    bridges_span_their_water silently skipped it (no crossed water -> continue), so a plank
-    lying on bare bank shipped green. A check that never runs looks exactly like a check that
-    passes."""
-    M = _bridge_map([{"x": 500, "y": 500, "rot": 0, "span": 37, "w": 26}])
-    assert "bridges_seat_on_water" not in f_only(M, "bridges_seat_on_water")  # this deck IS on its stream
-    M["bridges"] = [{"x": 800, "y": 200, "rot": 0, "span": 37, "w": 26, "foot": True}]  # far from every water
-    assert "bridges_seat_on_water" in f_only(M, "bridges_seat_on_water")
-
-
 def test_towpath_hugs_the_bank():
     """GM 2026-08-10: the river was re-routed and the towpath kept its old seat, running 100+px
     inland. A towpath is the hauling line's bank walk - every vertex stays on the bank."""
@@ -821,3 +775,42 @@ def test_pond_fill_covers_channel_mouths_reads_a_STREAM_that_joins_the_pond():
     # a stream that ends well clear of the pond joins nothing and is not read at all
     away = {**M, "streams": [{"poly": [[100.0, 100.0], [120.0, 140.0]], "bedz": 8}]}
     assert "pond_fill_covers_channel_mouths" not in f_only(away, "pond_fill_covers_channel_mouths")
+
+
+def test_bridges_span_their_water_fires_on_an_oblique_underspan():
+    """An OBLIQUE crossing needs a longer deck - and the verdict is on the deck's CORNERS (GM
+    2026-08-09): a span whose centerline ends cleared the banks still left a corner sitting AT
+    the water's edge, structurally impossible for an abutment that must stand back from scour.
+    A carried deck's corners need >= 6 ft of dry landing (the drawn LANDING_FT is 10)."""
+    M = _bridge_map([{"x": 500, "y": 500, "rot": 45, "span": 8, "w": 6}])
+    assert "bridges_span_their_water" in f_only(M, "bridges_span_their_water")
+    M["bridges"] = [{"x": 500, "y": 500, "rot": 45, "span": 20, "w": 6}]  # ends clear, corners do not
+    assert "bridges_span_their_water" in f_only(M, "bridges_span_their_water")
+    M["bridges"] = [{"x": 500, "y": 500, "rot": 45, "span": 38, "w": 6}]
+    assert "bridges_span_their_water" not in f_only(M, "bridges_span_their_water")
+
+
+def test_footplanks_keep_their_short_abutment_but_a_flush_plank_fires():
+    """A standalone footplank's SHORT abutment stands (GM 2026-07-22: PLANK_ABUTMENT, ~3px of
+    bank rest per side) - so its floor is 2 ft, not the carried deck's 6 - but a plank whose
+    corner sits at the water's edge still fires."""
+    M = _bridge_map([{"x": 500, "y": 500, "rot": 0, "span": 15, "w": 2, "foot": True}])
+    assert "bridges_span_their_water" not in f_only(M, "bridges_span_their_water")
+    M["bridges"] = [{"x": 500, "y": 500, "rot": 0, "span": 10, "w": 2, "foot": True}]
+    assert "bridges_span_their_water" in f_only(M, "bridges_span_their_water")
+
+
+def test_a_deck_with_no_water_under_its_seat_leaves_the_span_rule_nothing_to_measure() -> None:
+    """`_seg_0363`'s dry arm (feature 158). A deck whose seat touches no watercourse is recorded as
+    DRY and skipped by the span rule, which has no width to size an abutment against.
+
+    It is tested here now because the check that used to read `b_dry` - `bridges_seat_on_water` -
+    was retired by feature 158, and the only thing still exercising this branch was a frozen capital
+    manifest from the hand-placement era that went with the corpus cut. The branch is real: a way's
+    crossing can move and leave the deck behind, which is exactly what it was written for."""
+    M = manifest(bridges=[{"x": 900, "y": 900, "span": 40, "w": 10, "rot": 0}], streams=[{"poly": [[100, 100], [200, 100]], "w": 9}])
+    assert "bridges_span_their_water" not in f_only(M, "bridges_span_their_water"), "a deck on dry ground has no span to fail"
+    # ...and the SAME deck over the stream, too short for it, does fail - so the skip above is the dry
+    # arm rather than the check being toothless
+    wet = manifest(bridges=[{"x": 150, "y": 100, "span": 2, "w": 10, "rot": 0}], streams=[{"poly": [[100, 100], [200, 100]], "w": 40}])
+    assert "bridges_span_their_water" in f_only(wet, "bridges_span_their_water")

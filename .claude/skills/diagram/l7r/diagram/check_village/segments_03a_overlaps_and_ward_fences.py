@@ -402,12 +402,6 @@ def _seg_0186__bad_1(
     return _kept(locals(), ("bad",))
 
 
-def _seg_0187__wall(*, M: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 187 (wall, wall_z) - body verbatim from the legacy gate() (feature 022)."""
-    wall, wall_z = M.get("wall"), M.get("wall_z")
-    return _kept(locals(), ('wall', 'wall_z'))
-
-
 # NO DOUBLED WALL: the short wall-stroke CAP that plugs a ward fence into the rampart must lie FLUSH
 # along the wall, not jut across it. A straight cap tangent to one segment, laid at a wall CORNER, juts
 # past the bend and reads as a second wall section overlapping the first (Nagahara SW, GM 2026-07). The
