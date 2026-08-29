@@ -52,7 +52,7 @@ def back_fouled(anchor: Pt, out: Pt, dep: float, dry_plots: Sequence[Poly], reac
     return hit / total
 
 
-def seat_cluster(plan: SitePlan, dry_plots: Sequence[Poly] = (), drain: Poly | None = None, toe: Poly | None = None) -> dict[str, Any]:
+def seat_cluster(plan: SitePlan, dry_plots: Sequence[Poly] = (), drain: Poly | None = None, toe: Poly | None = None, wet: Sequence[Poly] = ()) -> dict[str, Any]:
     """WHERE THE HOUSES GO - the one derivation that decides how the whole map reads.
 
     背山面水, "back to the hill, face the water": a farming settlement stands with its back to the
@@ -153,10 +153,25 @@ def seat_cluster(plan: SitePlan, dry_plots: Sequence[Poly] = (), drain: Poly | N
         # do not build in the bog, and you do not build where the bog is either.
         if toe and (point_in_poly(seat_c[0], seat_c[1], toe) or point_in_poly(mid[0], mid[1], toe)):
             continue
+        # THE REED FRINGE IS NOT BUILDING GROUND EITHER (feature 150 T50, GM 2026-08-28: "multiple farmhouses
+        # ... overlap with marshland ... update our placement algorithms to make that impossible"). The fringe
+        # round the reservoir is drawn before the seat is chosen but was never scored here, so a cluster could
+        # be seated with one end in the reeds; the house placer then refuses those seats (the marsh is hard
+        # ground since T50) and re-seats the displaced houses at the cluster's far ends, where the lane web
+        # cannot serve them (Kuwabata seed 21: two houses, a web in three pieces). Scored like the dry-plot
+        # foul above - the share of the seat band's sample points standing in wet ground - so a seat with
+        # its end in the reeds loses to the next edge along; a seat CENTERED in them is refused outright.
+        if wet:
+            if any(point_in_poly(seat_c[0], seat_c[1], w) for w in wet):
+                continue
+            _wet_pts = [(mid[0] + nx * d - ny * lat * t, mid[1] + ny * d + nx * lat * t) for d in (dep * 0.5, dep + 34.0, dep * 2.0) for t in (-0.6, 0.0, 0.6)]
+            wet_foul = sum(1 for q in _wet_pts if any(point_in_poly(q[0], q[1], w) for w in wet)) / len(_wet_pts)
+        else:
+            wet_foul = 0.0
         # 1.0 x facing the wind (the back), 0.8 x being upslope. Both express the same siting
         # instinct from two directions, and weighting the wind slightly higher keeps the windbreak
         # unambiguously behind the houses even on a map whose fall and wind nearly oppose.
-        score = 1.0 * (nx * wx + ny * wy) - 0.8 * unit(*rel)[0] * dx - 0.8 * unit(*rel)[1] * dy
+        score = 1.0 * (nx * wx + ny * wy) - 0.8 * unit(*rel)[0] * dx - 0.8 * unit(*rel)[1] * dy - 2.5 * wet_foul
         # ...MINUS the dry hem. The upslope margin is contested ground: the comb's dry (hatake)
         # plots hem the high side along the supply canal, and they are cropland - a settlement
         # seated on top of them puts its windbreak's canopy in the crop (`groves_clear_of_dry_plots`)

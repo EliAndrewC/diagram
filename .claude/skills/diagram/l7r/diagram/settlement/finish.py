@@ -187,7 +187,7 @@ class FinishMixin:
         except Exception:  # PIL / font absent: the engine stays standalone on a generous estimate
             return len(s) * fs * 0.62
 
-    def title(self: Settlement, name: str, fs: float = 30) -> None:  # type: ignore[misc]
+    def title(self: Settlement, name: str, fs: float = 30, prefer: tuple[float, float, float, float] | None = None) -> None:  # type: ignore[misc]
         """Place the map title (the bold place name plus a scale bar under it) over BLANK space: scan the
         rendered window for a spot where the box clears every feature (buildings, fields, water, groves,
         the pond), scanning top-first so the title lands high when it can. Records the placed box in M['title']
@@ -213,9 +213,20 @@ class FinishMixin:
         PAD = 12  # placard padding around the text block
         bw, bh = max(tw, bar_px) + 2 * PAD, th + 46 + 2 * PAD  # the searched box: the whole placard
         vx0, vy0, vw, vh = self.view if self.view else (0, 0, self.W, self.H)
-        spot = self._blank_label_spot(vx0, vy0, vw, vh, bw, bh) or self._blank_label_spot(
-            vx0, vy0, vw, vh, bw, bh, cover_ok=True
-        )  # blank first; cover (a belt, a wood) as the last resort before the corner (feature 137 T06)
+        # THE RESERVED POCKET FIRST (feature 150): the scripted tier holds a pocket of blank ground for the
+        # title before the coppice and the belt are seated, and DENTS the windbreak around it - so a title
+        # that then lands in another corner leaves the dent as a hole in the belt (Kuwabata, a 40-50 ft bare
+        # run). If the caller names its pocket and the placard fits there clear of every obstacle, that is
+        # where it goes; main's blank-then-cover scan (feature 137 T06) is the fallback beneath it.
+        spot = None
+        if prefer is not None:
+            _px, _py = prefer[0] + 6.0, prefer[1] + 6.0
+            if _px + bw <= prefer[2] and _py + bh <= prefer[3] and self._box_clear(_px, _py, _px + bw, _py + bh, self._title_obstacles()):
+                spot = (_px, _py)
+        if spot is None:
+            spot = self._blank_label_spot(vx0, vy0, vw, vh, bw, bh) or self._blank_label_spot(
+                vx0, vy0, vw, vh, bw, bh, cover_ok=True
+            )  # blank first; cover (a belt, a wood) as the last resort before the corner (feature 137 T06)
         if spot:
             px0, py0 = spot
         elif self.view:
@@ -247,16 +258,29 @@ class FinishMixin:
             "bbox": [round(px0, 1), round(py0, 1), round(px0 + bw, 1), round(py0 + bh, 1)],
             "placard": [round(px0, 1), round(py0, 1), round(px0 + bw, 1), round(py0 + bh, 1)],
         }
+        # OPAQUE, not 0.94 (settlement-review 2026-08-29, Kashikawa): at 0.94 the ground cover showed
+        # through - 6,900 of 79,772 interior pixels, 8.65%, with grass, brush dots and two whole pine
+        # glyphs legible at native resolution - and the placard read as a decal laid on the field rather
+        # than a card. This is the SAME defect, and the same fix, as the field grave on that map eight
+        # days earlier ("painted at 0.9 opacity over an intact lattice ... it is opaque now"); one was
+        # fixed for that reason and this one was left translucent with nothing recorded either way.
         # The placard, the name, the bar and its captions are MAP FURNITURE - ruled not highlighted
         # (feature 134 FR-002, `interactive/classes.py` NOT_HIGHLIGHTED_RULINGS), hence cls="-".
         self.add_label(  # the card FIRST, so every text draws over it (add_label draws in call order)
-            f'<g><rect x="{px0:.0f}" y="{py0:.0f}" width="{bw:.0f}" height="{bh:.0f}" rx="7" fill="#F7F0DC" fill-opacity="0.94" stroke="#8C7A55" stroke-width="1.6"/>'
+            f'<g><rect x="{px0:.0f}" y="{py0:.0f}" width="{bw:.0f}" height="{bh:.0f}" rx="7" fill="#F7F0DC" stroke="#8C7A55" stroke-width="1.6"/>'
             f'<rect x="{px0 + 3.5:.0f}" y="{py0 + 3.5:.0f}" width="{bw - 7:.0f}" height="{bh - 7:.0f}" rx="5" fill="none" stroke="#BCAA7E" stroke-width="0.8"/></g>',
             cls="-",
         )
         self.add_label(f'<text x="{pcx:.0f}" y="{y + fs:.0f}" text-anchor="middle" font-size="{fs}" font-weight="bold" fill="#2D2A24">{name}</text>', cls="-")
         bx0, bx1, by = pcx - bar_px / 2, pcx + bar_px / 2, y + th + 12  # bar CENTERED under the name, on the placard's axis
-        self.M["scalebar"] = {"ft": bar_ft, "ftpx": self.ftpx, "bbox": [round(bx0, 1), round(by - 5, 1), round(bx1, 1), round(y + bh, 1)]}
+        # THE BOX IS THE INK, not the placard's foot (settlement-review 2026-08-29, Kashikawa). The bottom
+        # was `y + bh` - the placard's own base - which over-claimed 26 px, 41% of the box's height, and
+        # reached 12 px BELOW the placard that contains it. Nothing keeps out of this box (the two checks
+        # that read `scalebar` test its `ft` against the declared scale and skip its geometry), so the
+        # over-claim bought nothing and cost the interactive map, which highlights the recorded box. The
+        # last ink is the "(1 px = N ft)" caption at baseline `by + 31`, 10 pt, so its descender ends ~2 px
+        # under that.
+        self.M["scalebar"] = {"ft": bar_ft, "ftpx": self.ftpx, "bbox": [round(bx0, 1), round(by - 5, 1), round(bx1, 1), round(by + 33, 1)]}
         self.add_label(
             f'<g stroke="#3A2E1C" stroke-width="2">'
             f'<line x1="{bx0:.0f}" y1="{by:.0f}" x2="{bx1:.0f}" y2="{by:.0f}"/>'
@@ -321,6 +345,34 @@ class FinishMixin:
         _woodland = [c for c in self.M.get("commons", []) if c.get("role") == "woodland" and c.get("poly")]
         _cover = [] if cover_ok else self.M.get("village_groves", []) + self.M.get("bamboo_stands", []) + _woodland
         for o in _cover + self.M.get("marshes", []):
+            polys.append([tuple(p) for p in o["poly"]])
+        # ...and the WELLS and the NOTICE BOARD (feature 150, settlement-review of Kuwabata: the placard sat on the
+        # east public well, its glyph showing through the card's edge). Both are traffic-sited fixtures with no
+        # w/h - a well records its drawn radius `vr`, the board its `w`/`h` - and neither was in the list above.
+        for o in self.M.get("wells", []):
+            _wr = float(o.get("vr", o.get("r", 8.0))) + 4.0
+            rects.append((o["x"] - _wr, o["y"] - _wr, o["x"] + _wr, o["y"] + _wr))
+        for o in self.M.get("kosatsuba", []):
+            _kw, _kh = float(o.get("w", 14.0)) / 2 + 4.0, float(o.get("h", 8.0)) / 2 + 4.0
+            rects.append((o["x"] - _kw, o["y"] - _kh, o["x"] + _kw, o["y"] + _kh))
+        for lb in self.M.get("labels", []):  # placed LABEL boxes: a title must never cover a label
+            rects.append((lb[0], lb[1], lb[2], lb[3]))  # (caught 2026-07-23: the Tango content crop landed the
+            #                                             placard on the 'pauper ossuary mound' label)
+        # NOT the scrub commons: it is sparse GROUND COVER (a feathered scatter of grass tufts on open ground),
+        # not a feature with a footprint, and a bold place name reads perfectly well over it. Treating it as an
+        # obstacle only worked while some ground was left bare - once the commons properly clothes the field's
+        # voids too, scrub covers nearly the whole map and a title could find nowhere at all to sit. The grove
+        # (dense closed canopy) and the marsh (a distinct wetland) stay obstacles.
+        # ...and a WOODLAND commons is dense canopy too, so it is an obstacle by the same test the
+        # paragraph above applies (2026-08-17). The exclusion above is for the SCRUB commons - a
+        # feathered scatter of grass tufts that a bold place name reads perfectly well over - and a
+        # `role="woodland"` parcel is not that: it is a stand of tree crowns, the same closed canopy
+        # as a grove. Left out, the placard printed over 64-68% of one of Sawada's two woodland
+        # parcels, with a dozen crown circles ghosting up through the title card: one of the map's
+        # two woods two-thirds invisible, and the title reading as smudged. The grazing parcels stay
+        # excluded, which is what keeps a title from having nowhere to sit.
+        _woodland = [c for c in self.M.get("commons", []) if c.get("role") == "woodland" and c.get("poly")]
+        for o in self.M.get("village_groves", []) + self.M.get("bamboo_stands", []) + self.M.get("marshes", []) + _woodland:
             polys.append([tuple(p) for p in o["poly"]])
         for fd in self.M.get("fields", []):
             polys.append([tuple(p) for p in fd["outline"]])
@@ -455,85 +507,65 @@ class FinishMixin:
         # pond. The rim EDGE stays early (below every bed, so the mouth still covers it); only the
         # fill and sheen move, re-emitted LAST among the late beds - restoring exactly the covering
         # order the shared block gives an early feeder. Gated by pond_fill_covers_channel_mouths.
-        _pond_late = False
-        if self.M.get("pond") and self._pond_entry is not None and self._late_water_idx is not None:
-            _pex, _pey, _perx, _pery = self.M["pond"]
-            _pond_late = any(ch["late"] and ((q[0] - _pex) / _perx) ** 2 + ((q[1] - _pey) / _pery) ** 2 <= 1.12 for ch in self.M.get("drawn_channels", []) for q in (ch["pts"][0], ch["pts"][-1]))
-        if self._water_idx is not None:  # the watercourse block: all EDGES (pond rims), then all
-            wblock: list[Any] = []  # BEDS (one opacity group), then all SHEENS - crossings MERGE
-            wcls: list[ClsTag] = []
-            bedzs: list[Any] = []
-            sheenzs: list[Any] = []
-            for w in self.water:  # rims below every bed -> a feeder's bed covers the rim at its mouth
-                if w.get("edge") is not None:
-                    wblock.append(w["edge"])
-                    wcls.append(w["cls"])
-            for w in self.water:  # a pond-anchored feeder is snapped to the rim now that the
-                w["_bed"], w["_sheen"] = w["bed"], w["sheen"]  # pond is known (deferred - it may predate the pond)
-                if w["clip"] is not None and self.M.get("pond"):
+        # ONE WATER BLOCK (feature 150 T53, GM 2026-08-28: "when a stream meets a irrigated channel or where an
+        # irrigated channel or a ditch meets a pond ... it clearly looks like one is rendered on top of the
+        # other ... water just flows"). There were TWO blocks - the early one (streams, the pond, a moat) at
+        # the first water call and the LATE one (a comb's ditch net) after the field's plots - each its own
+        # opacity group, so where a ditch met a brook the two 0.85 groups stacked into a darker seam, and a
+        # sheen in one block rode over a bed in the other. Every watercourse now composites in ONE block at
+        # the late position when a late block exists (else the early one): all RIMS first, then every bed in
+        # one shared-opacity group with the pond's fill last (so a feeder's overshoot inside the rim is
+        # painted over), then every sheen. A pond's rim is therefore under every bed that reaches it - the
+        # dark outline stops where the channel enters, which is the GM's "continuous flow of water".
+        _entries = list(self.water) + list(self.late_water)
+        _widx = self._late_water_idx if self._late_water_idx is not None else self._water_idx
+        if _entries and _widx is not None:
+            for w in self.water:  # a pond-anchored feeder is snapped to the rim now that the pond is known
+                w["_bed"], w["_sheen"] = w["bed"], w["sheen"]
+                if w.get("clip") is not None and self.M.get("pond"):
                     cp = self._clip_to_pond(w["clip"]["pts"])
                     dd = 'M' + ' L'.join(f'{x:.1f},{y:.1f}' for x, y in cp)
                     w["_bed"] = w["clip"]["bed_t"].format(dd=dd)
                     if w["clip"]["sheen_t"] is not None:
                         w["_sheen"] = w["clip"]["sheen_t"].format(dd=dd)
+            for w in self.late_water:
+                w["_bed"], w["_sheen"] = w["bed"], w["sheen"]
+            wblock: list[Any] = []
+            wcls: list[ClsTag] = []
+            bedzs: list[Any] = []
+            sheenzs: list[Any] = []
+            for w in _entries:  # rims below every bed
+                if w.get("edge") is not None:
+                    wblock.append(w["edge"])
+                    wcls.append(w["cls"])
             wblock.append('<g opacity="0.85">')
             wcls.append(None)
-            for w in sorted(self.water, key=lambda w: w["pond_fill"]):  # pond FILL drawn LAST (stable sort) so it
-                if _pond_late and w is self._pond_entry:
-                    continue  # fill relocates to the late block (see above) - the rim edge already emitted
-                w["rec"]["bedz"] = self._water_idx + len(wblock)  # covers any feeder's inside-the-rim overshoot
-                bedzs.append(self._water_idx + len(wblock))
+            for w in sorted(_entries, key=lambda w: bool(w.get("pond_fill"))):  # the pond FILL last (stable)
+                w["rec"]["bedz"] = _widx + len(wblock)
+                bedzs.append(_widx + len(wblock))
                 wblock.append(w["_bed"])
                 wcls.append(w["cls"])
             wblock.append('</g>')
             wcls.append(None)
             wblock.append('<g opacity="0.55">')
             wcls.append(None)
-            for w in self.water:
+            for w in _entries:
                 if w["_sheen"] is not None:
-                    if _pond_late and w is self._pond_entry:
-                        continue  # the pond sheen moves with its fill
-                    w["rec"]["sheenz"] = self._water_idx + len(wblock)
-                    sheenzs.append(self._water_idx + len(wblock))
+                    w["rec"]["sheenz"] = _widx + len(wblock)
+                    sheenzs.append(_widx + len(wblock))
                     wblock.append(w["_sheen"])
                     wcls.append(w["cls"])
             wblock.append('</g>')
             wcls.append(None)
-            if bedzs:  # every bed sits below every sheen -> clean confluence
+            if bedzs:
                 self.M["water_bed_zmax"] = max(bedzs)
             if sheenzs:
                 self.M["water_sheen_zmin"] = min(sheenzs)
-            splices.append((self._water_idx, wblock, wcls))
-        if self._late_water_idx is not None:  # the LATE block (comb-field channels; see __init__): same
-            lblock: list[Any] = ['<g opacity="0.85">']  # shared-opacity compositing, spliced at ITS OWN
-            lcls: list[ClsTag] = [None]
-            for w in self.late_water:  # first-call position so the ditch net draws OVER the field's plots
-                w["rec"]["bedz"] = self._late_water_idx + len(lblock)
-                lblock.append(w["bed"])
-                lcls.append(w["cls"])
-            if _pond_late:  # the relocated pond FILL: topmost late bed, covering every joining mouth's overshoot
-                pe = self._pond_entry
-                assert pe is not None
-                pe["rec"]["late"] = True  # the fill now lives in the late block (z pairs: see pond())
-                pe["rec"]["bedz"] = self._late_water_idx + len(lblock)
-                lblock.append(pe["_bed"])
-                lcls.append(pe["cls"])
-            lblock.append('</g>')
-            lcls.append(None)
-            lblock.append('<g opacity="0.55">')
-            lcls.append(None)
-            for w in self.late_water:
-                if w["sheen"] is not None:
-                    w["rec"]["sheenz"] = self._late_water_idx + len(lblock)
-                    lblock.append(w["sheen"])
-                    lcls.append(w["cls"])
-            if _pond_late and self._pond_entry is not None and self._pond_entry["_sheen"] is not None:  # the pond sheen rides above the late beds too
-                self._pond_entry["rec"]["sheenz"] = self._late_water_idx + len(lblock)
-                lblock.append(self._pond_entry["_sheen"])
-                lcls.append(self._pond_entry["cls"])
-            lblock.append('</g>')
-            lcls.append(None)
-            splices.append((self._late_water_idx, lblock, lcls))
+            if self._pond_entry is not None:
+                self._pond_entry["rec"]["late"] = self._late_water_idx is not None  # the fill lives in the late block when one exists
+            splices.append((_widx, wblock, wcls))
+            if self._late_water_idx is not None and self._water_idx is not None:
+                splices.append((self._water_idx, [""], [None]))  # the early placeholder empties; nothing renders there
         for idx, block, bcls_ in sorted(splices, key=lambda s: -s[0]):  # high index first so the lower stays valid
             self.out[idx : idx + 1] = block
             self.out_cls[idx : idx + 1] = bcls_

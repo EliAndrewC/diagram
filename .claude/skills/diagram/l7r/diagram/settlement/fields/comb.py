@@ -21,6 +21,7 @@ from .._geom import (
     seg_dist,
 )
 from .._knobs import _centroid, _sharp_corners, _toward
+from ..land.wet import pond_fringe_ring
 
 if TYPE_CHECKING:
     from ..core import Settlement
@@ -41,6 +42,12 @@ def hem_on_water(poly: Poly, wet: Sequence[tuple[Any, float]], pond: Any) -> boo
 
 
 class CombMixin:
+    # Held between `_comb_draw_source` and `draw_comb_field` (see both): the source pond's reed fringe
+    # and the no-build rect that must follow it. `Settlement.__init__` gives them their value; declared
+    # here too because a mixin cannot see the composed class's own `__init__` (pyrefly, feature 142).
+    _pending_fringe: Poly | None
+    _pending_block: Poly | None
+
     def comb_base_fill(self: Settlement, net: dict[str, Any], name: str, color: str = "", full_envelope: bool = False) -> None:  # type: ignore[misc]
         """Draw a FIELD FLOOR under a build_comb net's plots and record it (M['comb_floors'][name]),
         so the parchment BACKGROUND never shows through as bare 'white' at the canal junctions the
@@ -204,6 +211,18 @@ class CombMixin:
         # records its own connector channel with to={"kind":"field",...}), so no hairline is added -
         # its frm={"kind":"stream"} anchor would dangle with no stream at the sluice.
         self._comb_source_channel(net, name, source, sluice, pond_rec, join_head)
+        _fringe = self._pending_fringe  # see `_comb_draw_source`: the reeds keep off water that exists
+        if _fringe:
+            self._pending_fringe = None
+            self.marsh(_fringe, role="pond_fringe")
+            # ...AND THE POND'S NO-BUILD RECT FOLLOWS THE REEDS, exactly as it did before the fringe was
+            # deferred (settlement-review 2026-08-29). `block_polys` stops a BUILDING standing on the water;
+            # the reed scatter reads it too, so deferring the fringe past it silently fed the reeds a
+            # keep-out covering the pond's bbox + 10 px - the shore band itself. Measured: 32 of 54 tufts
+            # gone, 45% of the annulus, three sectors empty, the tameike reading as a bare plate. That was
+            # 92% of the ink this fix actually changed, against the 3 tufts the channel rule intends.
+            self.block_polys.append(self._pending_block)
+            self._pending_block = None
         return cast("list[Pt]", net["envelope"])
 
     def _comb_draw_hem(self: Settlement, net: dict[str, Any]) -> None:  # type: ignore[misc]
@@ -304,10 +323,17 @@ class CombMixin:
             pcx, pcy, prx, pry = source["pond"]
             self.stream([(sluice[0], sluice[1]), (pcx, pcy)], frm={"kind": "offmap"}, to={"kind": "pond"}, width=6) if source.get("feeder") else None
             self.pond(pcx, pcy, prx, pry)
-            ring = [(pcx + (prx + 40) * math.cos(a), pcy + (pry + 40) * math.sin(a)) for a in [i * math.pi / 8 for i in range(16)]]
-            self.marsh(ring, role="pond_fringe")
-            self.block_polys.append([(pcx - prx - 10, pcy - pry - 10), (pcx + prx + 10, pcy - pry - 10), (pcx + prx + 10, pcy + pry + 10), (pcx - prx - 10, pcy + pry + 10)])  # no build on the pond
+            # THE FRINGE WAITS FOR THE WATER (feature 151, found by `make overlap-audit` the day it was
+            # written). The reed scatter keeps off every drawn watercourse - but this ran BEFORE the field's
+            # channels were inked or recorded, so on a polder, whose inlet hairline runs straight through the
+            # reservoir's fringe, the keep-out had nothing to keep off: measured on Kuwabata, one tuft 4.6 px
+            # from the hairline with three of its blades drawn across the water. The ring is handed back and
+            # scattered once the channels exist. Its own rng is seeded from its bbox, so the scatter's draw
+            # order is unchanged - only the keep-out now sees what it is supposed to avoid.
+            fringe_ring = pond_fringe_ring(pcx, pcy, prx, pry, 40.0)  # the shared ring - its docstring carries the two ordering rules this call site owes
             pond_rec = (pcx, pcy)
+            self._pending_fringe = fringe_ring  # drawn by `draw_comb_field` once every channel is recorded
+            self._pending_block = [(pcx - prx - 10, pcy - pry - 10), (pcx + prx + 10, pcy - pry - 10), (pcx + prx + 10, pcy + pry + 10), (pcx - prx - 10, pcy + pry + 10)]
         elif source.get("kind") == "stream" and source.get("stream"):
             # no "stream" polyline = an existing on-map stream already runs at the sluice (the town
             # pattern: the comb taps the map's stream via a weir); nothing extra is drawn, the
@@ -473,26 +499,30 @@ class CombMixin:
             # nothing moves (every comb map is byte-identical); otherwise the end is pulled in along
             # the nearest edge's inward normal until it clears.
             _env_in = net.get("envelope") or []
-            if len(_env_in) >= 3:
+            # ...and near a CORNER the pull runs again (feature 150 T51): pulled 14 px off the top edge, the
+            # polder's mouth stood 9 px from the west edge. Up to three rounds, each on the now-nearest edge;
+            # a comb's first round does not fire, so every comb map is still byte-identical.
+            for _pull_round in range(3 if len(_env_in) >= 3 else 0):
                 _n_in = len(_env_in)
                 _din_d = min(seg_dist(din[0], din[1], _env_in[_k], _env_in[(_k + 1) % _n_in]) for _k in range(_n_in))
-                if not point_in_poly(din[0], din[1], _env_in) or _din_d < 12.0:
-                    _best_in = min(
-                        ((seg_closest(din[0], din[1], _env_in[_k], _env_in[(_k + 1) % _n_in]), _env_in[_k], _env_in[(_k + 1) % _n_in]) for _k in range(_n_in)),
-                        key=lambda t: math.hypot(t[0][0] - din[0], t[0][1] - din[1]),
-                    )
-                    _q_in, _a_in, _b_in = _best_in
-                    _ex_in, _ey_in = -(_b_in[1] - _a_in[1]), _b_in[0] - _a_in[0]
-                    _el_in = math.hypot(_ex_in, _ey_in) or 1.0
-                    _nx_in, _ny_in = _ex_in / _el_in, _ey_in / _el_in
-                    _cx_in = sum(q[0] for q in _env_in) / _n_in
-                    _cy_in = sum(q[1] for q in _env_in) / _n_in
-                    if _nx_in * (_q_in[0] - _cx_in) + _ny_in * (_q_in[1] - _cy_in) > 0:  # point it INWARD
-                        _nx_in, _ny_in = (
-                            -_nx_in,
-                            -_ny_in,
-                        )  # pragma: no cover - the winding-order guard. `build_polder` winds its envelope so the raw edge normal already points inward (measured: dot -324 and -355 on the two seeds that need the pull), but a ring wound the other way would send the mouth OUT of the field, so the orientation is asserted rather than assumed
-                    din = (_q_in[0] + _nx_in * 14.0, _q_in[1] + _ny_in * 14.0)
+                if point_in_poly(din[0], din[1], _env_in) and _din_d >= 12.0:
+                    break
+                _best_in = min(
+                    ((seg_closest(din[0], din[1], _env_in[_k], _env_in[(_k + 1) % _n_in]), _env_in[_k], _env_in[(_k + 1) % _n_in]) for _k in range(_n_in)),
+                    key=lambda t: math.hypot(t[0][0] - din[0], t[0][1] - din[1]),
+                )
+                _q_in, _a_in, _b_in = _best_in
+                _ex_in, _ey_in = -(_b_in[1] - _a_in[1]), _b_in[0] - _a_in[0]
+                _el_in = math.hypot(_ex_in, _ey_in) or 1.0
+                _nx_in, _ny_in = _ex_in / _el_in, _ey_in / _el_in
+                _cx_in = sum(q[0] for q in _env_in) / _n_in
+                _cy_in = sum(q[1] for q in _env_in) / _n_in
+                if _nx_in * (_q_in[0] - _cx_in) + _ny_in * (_q_in[1] - _cy_in) > 0:  # point it INWARD
+                    _nx_in, _ny_in = (
+                        -_nx_in,
+                        -_ny_in,
+                    )  # pragma: no cover - the winding-order guard. `build_polder` winds its envelope so the raw edge normal already points inward (measured: dot -324 and -355 on the two seeds that need the pull), but a ring wound the other way would send the mouth OUT of the field, so the orientation is asserted rather than assumed
+                din = (_q_in[0] + _nx_in * 14.0, _q_in[1] + _ny_in * 14.0)
             start = pond_rec if pond_rec else (sluice[0], sluice[1])
             frm = {"kind": "pond"} if pond_rec else {"kind": "stream"}
             if not pond_rec:
@@ -539,7 +569,13 @@ class CombMixin:
             # check inside the code it governs is the trap this skill's notes name repeatedly; an
             # explicit flag from the one caller that needs it cannot drift.
             if join_head and _fk_d > 10.0:
-                _ch_poly.insert(len(_ch_poly) - 1, [round(_fk[0], 1), round(_fk[1], 1)])
+                # ...AT ITS PLACE ALONG THE RUN (feature 150 T51): the head used to go in just before the mouth,
+                # which is right while it lies past the bow's midpoint. Once the feeder stub reaches the reservoir
+                # rim the head sits in the run's upper half, and inserting it after the midpoint folded the run
+                # back on itself (an acute hairpin, `water_channels_obtuse_turns`). Its slot is chosen by its
+                # projection along the source -> mouth chord.
+                _fk_t = ((_fk[0] - start[0]) * vx + (_fk[1] - start[1]) * vy) / (vl * vl)
+                _ch_poly.insert(1 if _fk_t < 0.5 else len(_ch_poly) - 1, [round(_fk[0], 1), round(_fk[1], 1)])
             self.M["channels"].append(
                 {
                     "poly": _ch_poly,

@@ -774,6 +774,15 @@ def test_lanes_bend_like_paths_fires_and_passes():
     assert "lanes_bend_like_paths" not in f_only(corner, "lanes_bend_like_paths"), "a corner and a bend are how a lane runs"
 
 
+def test_a_sluice_gate_on_a_drawn_channel_stroke_stands_in_water():
+    """Feature 150 T51: the inlet sluice sits on the ring feeder's DRAWN bend; once the feeder stub reaches
+    the reservoir rim the recorded hairline no longer passes within reach of it, so the drawn strokes
+    count here as they do for `sluice_gates_centered_on_their_channel`."""
+    drawn = [{"pts": [[400, 700], [600, 700]], "w0": 5.0, "w1": 4.0}]
+    assert "sluice_gates_on_water" not in f_only(_water_map(sluice_gates=[{"x": 500, "y": 701, "rot": 0}], drawn_channels=drawn), "sluice_gates_on_water")
+    assert "sluice_gates_on_water" in f_only(_water_map(sluice_gates=[{"x": 500, "y": 701, "rot": 0}]), "sluice_gates_on_water")
+
+
 def test_lanes_bend_like_paths_steps_over_a_degenerate_vertex():
     """A lane record can carry the same point twice - a join that landed on its own endpoint, a rounding
     that collapsed a 0.04 px step. The turn at such a vertex is undefined (a zero-length arm has no

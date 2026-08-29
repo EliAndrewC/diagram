@@ -56,7 +56,7 @@ CROP_MARGIN = 48.0  # the one crop margin, shared by stage_frame's crop_to_conte
 # 0.72 sits 2 points above `woodland_commons_within_the_frame`'s own 0.7, which is all the cushion
 # the prediction needs: instrumenting cohort seed 33 showed the window is byte-identical at all 16
 # `_crop_boxes` calls of a build AND equal to the final `meta.view`, because everything that sets the
-# frame is placed before the woodland scan runs. The neighbouring square test's 0.8 exists for drift
+# frame is placed before the woodland scan runs. The neighboring square test's 0.8 exists for drift
 # that measurement says does not happen; carrying 0.8 over to the rotated bbox cost seed 33 its
 # woodland outright. See future-work/, "the woodland scan vetted a SQUARE".
 WOODLAND_BBOX_FLOOR = 0.72
@@ -721,6 +721,13 @@ def title_pocket(s: Settlement, plan: SitePlan, w: float = 300.0, h: float = 190
     the one furthest from the field's middle AND from the houses - the emptiest quarter of the sheet,
     which is where a reader would expect the cartouche anyway. It is a reservation, not a placement:
     `title()` still does its own search and may well sit somewhere else."""
+    # RESERVED ONCE (feature 150, Kuwabata seed 21): four callers ask for the pocket at four stages, and each
+    # ask re-ran the blank-box search against the obstacles of ITS moment - the belt was dented around one
+    # answer, the coppice kept out of another, and the frame's answer (after the crop, with the belt and the
+    # groves on the sheet) came back degenerate, so the placard fell back to the corner ON the belt. The
+    # first answer is the reservation; every later caller gets the same rectangle.
+    if plan.title_pocket is not None:
+        return plan.title_pocket
     x0, y0, x1, y1 = content_box(s, plan, pad=30.0)
     # ASK THE ENGINE WHICH GROUND IS ACTUALLY BLANK, rather than assuming a corner is.
     #
@@ -733,9 +740,50 @@ def title_pocket(s: Settlement, plan: SitePlan, w: float = 300.0, h: float = 190
     # because this runs after the water, the crops, the houses and the hinterland and before the
     # only two things left that could fill it (the coppice and the grove).
     spot = s._blank_label_spot(x0, y0, x1 - x0, y1 - y0, w, h)
-    if spot is None:  # pragma: no cover - the map is already too full to title; nothing to reserve
-        return (x0, y0, x0, y0)
-    return (spot[0], spot[1], spot[0] + w, spot[1] + h)
+    if spot is None:
+        # A SMALLER POCKET BEFORE NONE (feature 150 T50 fallout, Kuwabata seed 21): with a sixteenth house
+        # on the sheet's right flank the 300 x 190 reservation found no home, nothing was held back, the
+        # coppice took the last blank corner, and `title()` - finding no clear box either - fell back to
+        # that corner ON the grove (`title_clear_of_features`). The placard itself is ~195 x 106, so a
+        # 210 x 120 pocket is still a real reservation; only when even that fails is nothing reserved.
+        w, h = 210.0, 120.0
+        spot = s._blank_label_spot(x0, y0, x1 - x0, y1 - y0, w, h)
+    if spot is None:
+        # THE SHEET HAS NO ROOM FOR ITS NAME (feature 150 T50 fallout, Kuwabata seed 21): with the cluster
+        # seated clear of the reed fringe, the houses, the fringe and the connector left no blank box the
+        # placard's size anywhere inside the content, and `title()` fell back to a corner ON the windbreak.
+        # The frame's margin is capped at 56 px by `crop_hugs_content`, so the answer is not a wider margin:
+        # the pocket is reserved just OUTSIDE the content on the emptiest side - HERE, at the first ask,
+        # before the belt is dented and the coppice sited, because by the frame stage the belt has grown
+        # over the only outside band - and `stage_frame` hands it to the crop as content (the placard is
+        # something the reader needs on the sheet as much as a house is; `crop_hugs_content` counts it as
+        # frame-setting for the same reason). Tried in the order a reader scans: above-left, above-right,
+        # below-left, below-right; the first that clears every title obstacle (a connector leaving the
+        # sheet, a marsh, the field) is the reservation. Each try is recorded in the manifest.
+        _cx0, _cy0, _cx1, _cy1 = content_box(s, plan, pad=0.0)
+        _bw = max(s._text_width(plan.spec.name, 30) + 4, 100.0) + 24 + 12  # the placard's own size (settlement.title) + 6 px each side
+        _bh = 30 * 1.2 + 46 + 24 + 12
+        _obs = s._title_obstacles()
+        _tries: list[list[float]] = []
+        # ...stepping outward up to 48 px per corner: the content box is the field's envelope, and a house
+        # seated on its edge stands 14 px past it, so the first offset can land on a roof.
+        for _px, _py0, _out in ((_cx0, _cy0 - _bh - 8, -1.0), (_cx1 - _bw, _cy0 - _bh - 8, -1.0), (_cx0, _cy1 + 8, 1.0), (_cx1 - _bw, _cy1 + 8, 1.0)):
+            for _shift in (0.0, 16.0, 32.0, 48.0):
+                _py = _py0 + _out * _shift
+                _ok = s._box_clear(_px, _py, _px + _bw, _py + _bh, _obs)
+                _tries.append([round(_px, 1), round(_py, 1), round(_px + _bw, 1), round(_py + _bh, 1), float(_ok)])
+                if _ok:
+                    plan.title_pocket = (_px, _py, _px + _bw, _py + _bh)
+                    plan.title_pocket_outside = True
+                    break
+            if plan.title_pocket_outside:
+                break
+        s.M["meta"]["title_pocket_tries"] = _tries
+        if plan.title_pocket is None:  # pragma: no cover - the map is already too full to title; nothing to reserve
+            plan.title_pocket = (x0, y0, x0, y0)
+    else:
+        plan.title_pocket = (spot[0], spot[1], spot[0] + w, spot[1] + h)
+    return plan.title_pocket
 
 
 def _clear_gap(center: Pt, half: float, crops: Sequence[Poly], fall_y: float, normal: float = 80.0, sunny: float = 180.0) -> float | None:
@@ -948,7 +996,7 @@ def belt_polygon(s: Settlement, plan: SitePlan) -> Poly:
             near = [u for u, vv in uv if abs(vv - v) <= width]
             if not near:  # a column with no house of its own leans on the whole cluster's fringe
                 near = [max(u for u, _v in uv) - 40.0]
-            # THE COLUMN CLEARS THE WINDWARD-MOST HOUSE IN ITS OWN NEIGHBOURHOOD, not merely the
+            # THE COLUMN CLEARS THE WINDWARD-MOST HOUSE IN ITS OWN NEIGHBORHOOD, not merely the
             # ones directly in front of it. `near` is the houses within half a column of this v, so
             # a steading sitting just outside that window - which a SPREAD cluster produces
             # constantly - is not counted, the band is laid across it, and `village_grove` then
@@ -956,7 +1004,7 @@ def belt_polygon(s: Settlement, plan: SitePlan) -> Poly:
             # belt ends up with a hole exactly one homestead wide.
             #
             # Measured on cohort seeds 33 and 37: the biggest hole in each belt has a whole
-            # steading inside it (house 57 ft from the hole centre, threshing yard 38-41, gardens
+            # steading inside it (house 57 ft from the hole center, threshing yard 38-41, gardens
             # 10-46), and the holes are 78 and 84 ft - about one homestead across. Widening the
             # window to a full column each side is what makes the band clear the fabric it is
             # meant to shelter rather than straddle it.

@@ -100,6 +100,13 @@ class BundleGeomMixin:
             # still jitters UP from its minimum - that rule is unchanged.
             gw = min(gw * (1.0 + self._hjit(hx, hy, 3.0) * 0.25), self.px(48))  # garden [1.00,1.25]x, capped at 48 ft
             gh = min(gh * (1.0 + self._hjit(hx, hy, 4.0) * 0.25), self.px(34))
+            # THE FORECOURT IS RESERVED WHETHER OR NOT A THRESHING FLOOR IS DRAWN ON IT (feature 150, GM
+            # 2026-08-28: "thrashing yards on a no-rice hamlet seem bad and should be eliminated"). A
+            # dike-pond hamlet grows no rice, so `_attach_yard` draws and records no threshing floor
+            # when the generator declares `work_yards=False` - but the open ground before the house
+            # stays reserved here: a silk-and-fish farmstead still handles its leaf, cocoons and nets
+            # somewhere, and (measured) dropping the reservation re-packed the cluster tightly enough
+            # to break its lane web and its belt, which are not what the GM asked to change.
             base["yard"] = (hx, hy + hh / 2 + gap + yh / 2, yw, yh)
             if garden_side == "SE":  # tucked beside the south yard (sunny, tight)
                 gx, gy = hx + hw / 2 + gap + gw / 2, hy + hh / 2 + gap + gh / 2
@@ -112,7 +119,7 @@ class BundleGeomMixin:
             beds = self._garden_beds(hx, hy, hw, hh, gx, gy, gw, gh, garden_side, gap)
             base["gardens"] = beds  # 1 bed normally; 2 (flanking / stacked / side-by-side) when fragmented
             base["garden"] = beds[0]  # primary bed (kept for the shading score + back-compat)
-            rects = [base["house"], base["yard"], *beds]
+            rects = [r for r in (base["house"], base["yard"], *beds) if r is not None]
             if shed:  # a north-wall kura, reserved so a neighbor never lands on it
                 base["shed"] = (hx, hy - 0.60 * hh, 0.46 * hw, 0.30 * hh)
                 rects.append(base["shed"])

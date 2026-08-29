@@ -24,12 +24,158 @@ import math
 import random
 from typing import TYPE_CHECKING, Any
 
+from shapely.errors import GEOSException
+from shapely.geometry import Polygon as ShapelyPolygon
+from shapely.ops import unary_union
+
 from .._geom import Pt, RingIndex, boxed_grid, boxed_ring_hit, boxed_rings, boxed_seg_hit, boxed_segs, point_in_poly, seg_dist
+
+MARSH_TINT_R = 28.0  # the widest wet-tint circle's radius (x bscale) - also the keep-off a mound owes the tint (feature 150 T54)
+MARSH_TUFT_R = 7.0  # the tallest reed blade / widest glint (x bscale) - the same keep-off for the tufts
+
+
+def pond_fringe_ring(cx: float, cy: float, rx: float, ry: float, margin: float, n: int = 16) -> list[tuple[float, float]]:
+    """The reedy MARGIN of a pond, as the polygon `marsh(role="pond_fringe")` scatters (feature 151).
+
+    One helper because there are two call sites and they diverged: the sink's tameike keeps 44 px of fringe,
+    a comb source pond 40, and each built the ring by hand. The margins still differ - a tameike is dug and
+    its shallows are wider - but the difference is an ARGUMENT now rather than two literals a reader has to
+    notice.
+
+    TWO ORDERING RULES BOTH CALLERS OWE, both learned by getting them wrong on 2026-08-29:
+
+    1. Scatter the fringe only AFTER the water it must keep off is recorded. `draw_comb_field` drew it
+       before the field's channels existed, so the reed keep-out had nothing to keep off and three blades
+       were drawn across the inlet hairline.
+    2. Let the pond's own no-build rect (`block_polys`) follow the fringe, never precede it. The reed
+       scatter reads `block_polys`, which exists to stop BUILDINGS standing on water; appended first it
+       covers the shore band and costs 45% of the annulus - 32 of 54 tufts, measured.
+    """
+    return [(cx + (rx + margin) * math.cos(a), cy + (ry + margin) * math.sin(a)) for a in [i * math.pi / (n / 2) for i in range(n)]]
+
 
 MARSH_FEATHER_BS = 46  # the reeds thin to nothing over this band (x bscale) inside the polygon; `commons` thins its scrub INTO the marsh over the same band
 
 if TYPE_CHECKING:
     from ..core import Settlement
+
+
+def _band_half_width(poly: Any, pond: Any, role: str) -> float:
+    """Half-width of the ground a marsh outline actually leaves for reeds - `area / perimeter`.
+
+    Measured on the GROUND, not the outline: a pond's reed fringe is recorded as a filled disc (the pond
+    ellipse grown by its margin), and reeds are then kept off the open water by the pond test in `_sparse`.
+    So the outline's own area/perimeter is the disc's radius - large - while the band the reeds may occupy
+    is only the margin. Measuring the disc is what made the first attempt at this fix do nothing at all.
+    """
+    pts = [(float(a), float(b)) for a, b in poly]
+    if len(pts) < 3:
+        return 0.0
+    try:
+        g = ShapelyPolygon(pts).buffer(0)
+        if pond and role == "pond_fringe":  # ONLY the role the paragraph above is about: a waterside bed that
+            g = g.difference(_ellipse(pond))  # happened to wrap the pond would otherwise be over-feathered too
+    except ValueError, GEOSException:
+        return 0.0
+    if g.is_empty or g.length <= 0:
+        return 0.0
+    return float(g.area / g.length)
+
+
+def _ellipse(pond: Any, n: int = 64) -> Any:
+    """The open water as a polygon: `M['pond']` is (cx, cy, rx, ry)."""
+    cx, cy, rx, ry = (float(v) for v in pond[:4])
+    return ShapelyPolygon([(cx + rx * math.cos(2 * math.pi * k / n), cy + ry * math.sin(2 * math.pi * k / n)) for k in range(n)])
+
+
+def _filled(ring: Any) -> Any:
+    """A ring as a SOLID - its outline with everything inside it, holes included.
+
+    `buffer(0)` on a self-intersecting outline returns a MultiPolygon (a field outline that pinches or
+    crosses itself does), so each part is re-made from its own exterior and the parts unioned. Filling is
+    the point: subtracting a dike BAND left the ground it encloses standing, which is the bug this
+    function's caller was written to fix."""
+    g = ShapelyPolygon([(float(a), float(b)) for a, b in ring]).buffer(0)
+    return unary_union([ShapelyPolygon(part.exterior) for part in getattr(g, "geoms", [g]) if part.geom_type == "Polygon" and not part.is_empty])
+
+
+def _clipped_to_open_ground(poly: Any, dikes: Any, fields: Any = (), pond: Any = None) -> Any:
+    """A waterside/toe marsh outline with the DIKED GROUND taken out of it (settlement-review 2026-08-29).
+
+    THREE THINGS ARE SUBTRACTED, and each is ground the scatter already refuses (settlement-review
+    2026-08-29, Kuwabata and then Inashiro - the reference hamlet). The keep-out refactor made `wet_polys`
+    NO-BUILD, which turned every over-claim in these outlines into a placement rule and into the answer
+    the interactive map gives a reader: on Inashiro, **46.7% of the pond-fringe polygon lay inside the
+    pond** - it is recorded as a filled disc CONTAINING the water rather than the annulus it draws - and
+    the toe polygon covered **88,418 sq ft of the drawn rice fan**, with a field pond inside it. The ink
+    was clean in both cases; the record was not. So a fringe loses the open water, and a toe or waterside
+    loses the diked block and the fields, which is exactly what `_sparse` already refuses to scatter on.
+
+    A polder's wet wild lies OUTSIDE its perimeter dike; the outline the caller hands in is a generous
+    region that laps the dike and the ground it encloses. What is subtracted is the FILLED block - the
+    dike band's outer ring taken as a solid - so the enclosed ground goes with it and every mulberry bank
+    inside it goes too, which is the half of the GM's T54 complaint the scatter fix did not reach.
+
+    THE FILLED RING, NOT THE BAND (settlement-review 2026-08-29). Subtracting `dk["outline"]` as given -
+    a ring 119,693 sq ft in area with no interior - left the enclosed ground standing and got the right
+    answer only because `max(parts, key=area)` happened to pick the outside piece: on Kuwabata the toe
+    came apart into 1,079,925 sq ft outside and 65,325 sq ft inside the block, and the second was thrown
+    away by a rule that was never checking where it was. Filling the ring makes the geometry do what this
+    docstring says, rather than the tie-break doing it by luck.
+
+    Returns the largest remaining piece's exterior. Records carry ONE ring, so several pieces cannot all
+    be kept; with the block filled, a second piece can only arise where a single `marsh()` call wraps the
+    block on two flanks and is cut in half by it, and each flank is its own call. Falls back to the input
+    whenever shapely returns nothing usable, so a degenerate outline cannot lose a feature."""
+    rings = [list(dk["outline"]) for dk in dikes if len(dk.get("outline") or []) >= 3]
+    rings += [list(f) for f in fields if len(f) >= 3]
+    if not rings and not pond:
+        return poly
+    try:
+        keep = ShapelyPolygon([(float(a), float(b)) for a, b in poly]).buffer(0)
+        cuts = [_filled(r) for r in rings]
+        if pond:
+            cuts.append(_ellipse(pond))
+        out = keep.difference(unary_union(cuts))
+    except ValueError, GEOSException:
+        return poly
+    parts = [g for g in getattr(out, "geoms", [out]) if not g.is_empty and g.geom_type == "Polygon"]
+    if not parts:
+        return poly
+    best = max(parts, key=lambda g: g.area)
+    return _keyholed(best)
+
+
+def _signed_area(ring: Any) -> float:
+    """Twice a ring's signed area - positive one way round, negative the other. Orientation only."""
+    return sum(ring[k][0] * ring[(k + 1) % len(ring)][1] - ring[(k + 1) % len(ring)][0] * ring[k][1] for k in range(len(ring)))
+
+
+def _keyholed(g: Any) -> Any:
+    """A polygon as ONE ring, holes spliced in on a seam.
+
+    A record carries a single ring, and `best.exterior` throws every hole away - which is exactly what
+    made the first version of this clip a silent no-op for a pond fringe (settlement-review 2026-08-29,
+    Inashiro): the fringe is a filled disc, subtracting the pond turns it into an ANNULUS, and taking the
+    exterior handed the disc straight back, still claiming 46.7% of it was the open water it had just been
+    clipped off. The earlier docstring predicted a hole "cannot arise here" and was wrong the moment the
+    pond became one of the things subtracted.
+
+    A keyhole is the standard answer: cut from the outer ring to the inner one at their closest pair of
+    vertices, walk the hole the opposite way round, and come back along the same cut. The seam is
+    zero-width, so every point-in-polygon consumer - the keep-out, the checks, the interactive hit test -
+    reads the annulus correctly."""
+    ring = [(float(x), float(y)) for x, y in g.exterior.coords[:-1]]
+    for hole in g.interiors:
+        pts = [(float(x), float(y)) for x, y in hole.coords[:-1]]
+        if len(pts) < 3 or len(ring) < 3:
+            continue
+        i, j = min(((a, b) for a in range(len(ring)) for b in range(len(pts))), key=lambda ab: math.dist(ring[ab[0]], pts[ab[1]]))
+        loop = pts[j:] + pts[:j]  # the hole, starting at its closest vertex
+        if _signed_area(loop) * _signed_area(ring) > 0:
+            loop.reverse()  # ...walked the OPPOSITE way round the outer ring, so the seam subtracts
+        ring = ring[: i + 1] + loop + [loop[0], ring[i]] + ring[i + 1 :]
+    return ring
 
 
 class WetGroundMixin:
@@ -54,6 +200,22 @@ class WetGroundMixin:
         settlements.md 'Marsh' + 'Defensive marshland' + 'Polder siting Q&A'. Recorded M['marshes']."""
         if role not in ("toe", "pond_fringe", "defense", "waterside"):
             raise ValueError(f"unknown marsh role {role!r}; expected 'toe', 'pond_fringe', 'defense', or 'waterside'")
+        # THE RECORD SAYS WHAT THE INK SAYS (feature 150 T54 residue, settlement-review 2026-08-29). The
+        # scatter keeps reeds off the mounds (see the keep-out below) but the POLYGON was recorded raw, so
+        # the interactive map's hit area still answered "marsh" for ground drawn as mulberry dike and pond
+        # bank: measured on Kuwabata, 5.2% of the toe polygon - about 61,000 sq ft - lay inside the polder
+        # block, covering 5 of 26 bank rings. Clipping the outline to the same ground the marks are allowed
+        # is what makes the two agree, and it is done ONCE here so `wet_polys`, `M['marshes']` and the hit
+        # polygon are all the same shape. Only the OUTSIDE roles are clipped: a `pond_fringe` is a shore and
+        # a `defense` belt hugs its wall, and neither has a polder block to be outside of.
+        _outside = role in ("toe", "waterside")
+        poly = _clipped_to_open_ground(
+            poly,
+            self.M.get("dikes", ()) if _outside else (),
+            self.field_polys if _outside else (),
+            self.M.get("pond") if role == "pond_fringe" else None,
+        )
+        self.wet_polys.append([(float(px), float(py)) for px, py in poly])
         xs = [p[0] for p in poly]
         ys = [p[1] for p in poly]
         x0, x1, y0, y1 = min(xs), max(xs), min(ys), max(ys)
@@ -61,7 +223,16 @@ class WetGroundMixin:
         area = (x1 - x0) * (y1 - y0)
         st = random.getstate()
         random.seed(int(abs(x0) * 5 + abs(y0) * 7 + round(x1 - x0)))
-        feather = MARSH_FEATHER_BS * bs
+        # THE FEATHER CANNOT BE WIDER THAN THE BAND IT FEATHERS (settlement-review 2026-08-29). The reeds
+        # thin to nothing over `MARSH_FEATHER_BS` (46 ft) inside the outline, which is right for a blob and
+        # ruinous for a narrow one: a pond's reed fringe is a 44 ft annulus, so EVERY point in it stood
+        # within the feather distance of an edge and was thinned as margin. Measured on Kuwabata: 10.14 reed
+        # marks per 1,000 sq ft in the fringe against 22.9, 22.8 and 21.5 in this map's own waterside beds -
+        # 44%, and the reservoir read as a bare blue plate rather than a reeded shore. `area / perimeter` is
+        # a band's half-width (a width-w ribbon of mean radius R: 2 pi R w / 4 pi R = w/2) and is large for
+        # a blob, so the constant still governs everywhere it should; only a narrow outline is affected.
+        _half = _band_half_width(poly, self.M.get("pond"), role)
+        feather = min(MARSH_FEATHER_BS * bs, _half) if _half > 0 else MARSH_FEATHER_BS * bs
         pond = self.M.get("pond")
         halo_rects, halo_circles = self._urban_keepouts((x0, y0, x1, y1))  # the urban-clearance halo (see _urban_keepouts): reeds no more belong in a dooryard than scrub does
         corridors = self._corridor_buffers(3 * bs)  # every trodden tread (lane/street/road), not just lanes
@@ -69,39 +240,96 @@ class WetGroundMixin:
         # pad as the edge test below, so the prefilter can never reject a point that test wanted
         fld_b, blk_b = boxed_grid(boxed_rings(self.field_polys, 10.0)), boxed_grid(boxed_rings(self.block_polys))
         clr_b, avd_b, cor_b = boxed_grid(boxed_rings(self.clearings)), boxed_grid(boxed_rings(avoid)), boxed_grid(boxed_segs(corridors))
+        # REEDS KEEP OFF THE EARTHEN MOUNDS (feature 150 T54, GM 2026-08-28: "the hazy blue that denotes the
+        # marsh is clearly overlaid on top of the greenery of the earthen mounds"). A perimeter dike and a fish
+        # pond's mulberry bank are raised, maintained, PLANTED earth; reeds root in the shallow standing water
+        # OUTSIDE the embankment, so wet ground abuts a mound and never crosses it. Neither was in any keep-out
+        # the scatter read. The band is tested as its CREST plus half of `w_max` rather than its 2,880-point
+        # ribbon - the ribbon's bbox covers the whole block, so it pruned nothing and cost 21.7 s of a roll;
+        # the trade is one-directional (a pinched stretch keeps reeds a few feet further back, never a mark ON
+        # the mound). Both sets are pruned to this polygon's own reach first: a waterward strip lies outside
+        # the block, so none of the pond banks can touch it.
+        _pads = {MARSH_TINT_R * bs, MARSH_TUFT_R * bs}
+        _reach = max(_pads) + 40.0
+        _near_box = lambda pts: not (min(q[0] for q in pts) - _reach > x1 or max(q[0] for q in pts) + _reach < x0 or min(q[1] for q in pts) - _reach > y1 or max(q[1] for q in pts) + _reach < y0)  # noqa: E731
+        _crests = [
+            ([(float(mx), float(my)) for mx, my in dk["crest"]], float(dk.get("w_max", 0.0)) / 2) for dk in self.M.get("dikes", []) if len(dk.get("crest") or []) >= 2 and _near_box(dk["crest"])
+        ]
+        mnd_g = {pad: boxed_grid(boxed_segs([(pl, hw + pad) for pl, hw in _crests])) for pad in _pads}
+        _banks = [[(float(mx), float(my)) for mx, my in dp["bank"][:: max(1, len(dp["bank"]) // 16)]] for dp in self.M.get("dikeponds", []) if dp.get("bank") and _near_box(dp["bank"])]
+        bank_b = boxed_grid(boxed_rings(_banks, max(_pads)))
         wat_b = boxed_grid(boxed_segs(self._watercourse_segs()))  # drawn water (streams/channels/comb laterals), pre-boxed once - see _watercourse_segs
         ring = RingIndex(poly)  # the outline, indexed once per marsh (feature 145; the why is on RingIndex)
 
         def _sparse(
-            px: float, py: float, drop: float
+            px: float, py: float, drop: float, mound_pad: float = 0.0, blade_up: float = 0.0
         ) -> bool:  # skip a point outside the poly, IN a paddy / ON the pond / on a corridor/building / in the urban halo / in a keep-out, or (probabilistically) near the edge
             if (
                 not ring.inside(px, py)
                 or boxed_ring_hit(px, py, fld_b.near(px, py), 10.0)
                 or boxed_seg_hit(px, py, cor_b.near(px, py))  # a causeway/path/road through the marsh stays bare, not reeded over
-                or self._on_watercourse(px, py, near=wat_b.near)  # ... and OFF a stream/channel bed (reeds fringe water, they do not float on it)
+                # ... and OFF a stream/channel bed (reeds fringe water, they do not float on it). A REED
+                # FRINGE KEEPS A NARROWER BERTH (settlement-review 2026-08-29): the mark's own reach is the
+                # right pad against a wide watercourse, and far too wide against the 2.5 ft inlet crossing a
+                # 44 ft fringe - it cut a bare 18 ft lane through the reeds where the eye follows the water
+                # out of the reservoir, leaving one 30-degree sector empty and its neighbor at 9 marks
+                # against 33. Reeds grow AT a ditch's edge; only the pond's open surface (tested above at the
+                # mark's full reach) is water they may not stand on.
+                or self._on_watercourse(px, py, pad=2.0 if role == "pond_fringe" else 2.0 + mound_pad, near=wat_b.near if (role == "pond_fringe" or not mound_pad) else None)
                 or any(x0r <= px <= x1r and y0r <= py <= y1r for x0r, y0r, x1r, y1r in halo_rects)  # ... and OUT of the urban-clearance halo (the swept/trodden ground around every structure)
                 or any((px - hx) ** 2 + (py - hy) ** 2 <= hr * hr for hx, hy, hr in halo_circles)  # ... and clear of every wellhead's trodden apron
                 or boxed_ring_hit(px, py, blk_b.near(px, py))  # ... and OFF any building/shrine/torii footprint
                 or boxed_ring_hit(px, py, clr_b.near(px, py))  # ... and off the swept sacred/funerary verge
                 or boxed_ring_hit(px, py, avd_b.near(px, py))
+                or (mound_pad in mnd_g and boxed_seg_hit(px, py, mnd_g[mound_pad].near(px, py)))  # ... and off every earthen mound, by the drawn mark's own reach (T54)
+                or boxed_ring_hit(px, py, bank_b.near(px, py), mound_pad)  # ... and off every fish pond's mulberry bank
             ):  # ... and OUT of any keep-out
                 return True
-            if pond and ((px - pond[0]) / pond[2]) ** 2 + ((py - pond[1]) / pond[3]) ** 2 < 1.0:
+            # ...AND THE MARK'S OWN REACH KEEPS OFF THE WATER, not just its center (feature 150 T54,
+            # settlement-review): this read the CENTER while the mound test above reads the radius, so a 28 ft
+            # tint circle centered a foot outside the rim washed 27 ft of haze over open water - measured, 26%
+            # of Kuwabata's reservoir surface.
+            # A BLADE REACHES UP, NOT SIDEWAYS (settlement-review 2026-08-29, Mizuguchi). The pad against the
+            # water was the mark's own isotropic reach - 7 ft for a tuft - so reeds were held 7.7 ft off the
+            # waterline all round, and the density profile out from the rim ran 12.0 / 27.4 / 33.0 / 24.4 per
+            # 1,000 sq ft: THINNEST exactly where the record says reeds are thickest (research/water.md, "A
+            # reservoir's shore is reeded"; the emergent belt roots in the shallows). But a reed tuft's blades
+            # are drawn near-VERTICAL - `random.uniform(-0.2, 0.2)` radians off vertical, 4-7 ft long - so they
+            # reach ~7 ft UP the sheet and at most ~1.4 ft to the side. The pad is therefore split: the LATERAL
+            # reach keeps the tuft's own point off the water, and the blade TOP is tested separately, so a tuft
+            # standing south of the pond still keeps its full height back while one beside it stands at the rim.
+            _lat = mound_pad if not blade_up else min(mound_pad, 1.5)
+            if pond and ((px - pond[0]) / (pond[2] + _lat)) ** 2 + ((py - pond[1]) / (pond[3] + _lat)) ** 2 < 1.0:
                 return True  # reeds fringe the shore, they do not float on open water
+            if blade_up and pond and ((px - pond[0]) / pond[2]) ** 2 + ((py - blade_up - pond[1]) / pond[3]) ** 2 < 1.0:
+                return True  # ...and neither do the blade TIPS, which is the reach that actually crosses a rim
             ed = ring.edge_within(px, py, feather)
             return ed is not None and random.random() > (ed / feather) ** drop
 
         g: list[str] = []
         blades: list[str] = []  # SVG-size lever 2: bucket the constant-styled reed blades (see the note in cover.py's `commons`)
+        # A NARROW BAND GETS A SMALLER HAZE, NOT NO HAZE (settlement-review 2026-08-29). That a pond fringe
+        # reads WET at all is a RESEARCH finding, not a rendering choice - research/water.md "A reservoir's
+        # shore is reeded, and its EMBANKMENT is mown": the intuitive counter-hypothesis (a maintained
+        # reservoir has a bare margin, so reeds there would mean neglect) is contradicted by a Kagawa study
+        # in which dredging and algae-cutting correlate POSITIVELY with emergent-plant richness. The tint keeps its
+        # own radius clear of the open water, and for a pond fringe that pad - 28 ft - is wider than the band
+        # the reeds have: on Kuwabata a 44 ft fringe left a 12 ft strip for the tint CENTER, the feather then
+        # thinned that to nothing, and the shore came out with reeds standing on visibly dry ground - 0.09
+        # tint circles per 1,000 sq ft against 1.87-2.25 in this map's own beds, a 25x deficit, and one no
+        # density knob could reach because NO pond fringe on ANY map could carry the mark. Where the band is
+        # narrow the circle is drawn SMALLER and its own radius is the pad, so the haze still never washes
+        # over the water. The radius is rolled BEFORE the test only here: rolling it first everywhere would
+        # re-roll every marsh on every map, which is why the widest radius is used below.
+        _tint_r = min(MARSH_TINT_R, max(6.0, _half * 0.6)) if role == "pond_fringe" else MARSH_TINT_R
         for _ in range(int(area / (360 * bs * bs))):  # faint WET TINT: soft translucent blue-green patches (feathered, no hard edge)
             gx, gy = random.uniform(x0, x1), random.uniform(y0, y1)
-            if _sparse(gx, gy, 0.9):
+            if _sparse(gx, gy, 0.9, _tint_r * bs):  # the WIDEST tint radius, not this circle's: the radius is drawn after the test, and drawing it first would re-roll every marsh on every map
                 continue
-            g.append(f'<circle cx="{gx:.1f}" cy="{gy:.1f}" r="{random.uniform(15, 28) * bs:.1f}" fill="#9FBBAE" fill-opacity="0.14"/>')
+            g.append(f'<circle cx="{gx:.1f}" cy="{gy:.1f}" r="{random.uniform(min(15.0, _tint_r * 0.6), _tint_r) * bs:.1f}" fill="#9FBBAE" fill-opacity="0.14"/>')
         for _ in range(int(area / (150 * bs * bs))):  # SPARSE reed / sedge tufts + the odd standing-water glint (thin, not a solid reedbed)
             gx, gy = random.uniform(x0, x1), random.uniform(y0, y1)
-            if _sparse(gx, gy, 0.7):
+            if _sparse(gx, gy, 0.7, MARSH_TUFT_R * bs, blade_up=MARSH_TUFT_R * bs):  # a tuft's blades reach this far UP; see `blade_up`
                 continue
             if random.random() < 0.12:  # a standing-water glint
                 g.append(f'<ellipse cx="{gx:.1f}" cy="{gy:.1f}" rx="{random.uniform(2.6, 4.6) * bs:.1f}" ry="{random.uniform(1.2, 2.0) * bs:.1f}" fill="#C2D6CE" fill-opacity="0.85"/>')

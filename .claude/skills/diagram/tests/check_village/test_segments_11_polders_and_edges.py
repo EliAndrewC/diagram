@@ -5,7 +5,7 @@ import math
 import pytest
 
 from l7r.diagram import check_village
-from tests.check_village._builders import _WHY, _feature_022_manifest, _waived_map, f_only
+from tests.check_village._builders import _WHY, _feature_022_manifest, _field, _waived_map, f, f_only
 
 # ---- dwellings must not sit in the WET low toe below the field's drainage ditch (feature 005 / GM 2026-07) ----
 
@@ -132,3 +132,30 @@ def test_feature_022_gate_refuses_a_meta_check_in_targeted_mode():
     assert "waivers_are_live" in set(check_village.META_CHECKS)
     with pytest.raises(ValueError, match="waivers_are_live"):
         check_village.gate(_feature_022_manifest(), verbose=False, only={"waivers_are_live"})
+
+
+def test_field_ponds_sunk_into_one_plot_fires_when_bunds_cross_the_water():
+    """Inashiro 2026-08-16: a bbox-fitted pond in a fan-toe wedge - bund lines through open water,
+    while field_ponds_on_low_ground stayed green (it reads the host plot flag, not the extent).
+    The ring the pond is sunk into TOUCHES the shore and must not fire; a line through the core must."""
+    base = {"meta": {"scale": "village", "field_archetype": "valley_paddy"}, "wet_plots": [[100, 100]]}
+    pond = {"x": 100, "y": 100, "rx": 30, "ry": 20}
+    host = [[70, 80], [130, 80], [130, 120], [70, 120]]  # the host plot ring: touching the shore is fine
+    good = {**base, "field_ponds": [pond], "fields": [{**_field("p", 0, 0, 500, 500), "plot_rings": [host]}]}
+    assert "field_ponds_sunk_into_one_plot" not in f_only(good, "field_ponds_sunk_into_one_plot")
+    hem = [[100, 60], [100, 140], [110, 140], [110, 60]]  # runs straight through the water
+    bad = {**base, "field_ponds": [pond], "fields": [{**_field("p", 0, 0, 500, 500), "plot_rings": [host], "drain_hem": [hem]}]}
+    assert "field_ponds_sunk_into_one_plot" in f_only(bad, "field_ponds_sunk_into_one_plot")
+
+
+def test_waterward_strips_run_off_the_frame_fires_and_passes():
+    """A polder's waterward strip is wild water CONTINUING, so it must leave the frame. Feature 150 T55
+    cut the strip from a half-canvas to a 280 px band for the 18 s of scatter the crop threw away, and a
+    band can stop inside the view - which draws a straight line where wild water stops being wild.
+    Raised by settlement-review 2026-08-29 as an unguarded assumption; this is the guard."""
+    view = {"meta": {"scale": "hamlet", "view": [200, 100, 900, 800], "waterward": ["W"]}}
+    short = {**view, "marshes": [{"role": "waterside", "poly": [[300, 80], [700, 80], [700, 920], [300, 920]]}]}  # stops 100 px inside the west edge
+    assert "waterward_strips_run_off_the_frame" in f(short), "the motivating defect must fire"
+    off = {**view, "marshes": [{"role": "waterside", "poly": [[180, 80], [700, 80], [700, 920], [180, 920]]}]}  # reaches past it
+    assert "waterward_strips_run_off_the_frame" not in f(off), "a conforming map must pass"
+    assert "waterward_strips_run_off_the_frame" not in f({**view, "marshes": []}), "a map with no strip declares nothing to check"

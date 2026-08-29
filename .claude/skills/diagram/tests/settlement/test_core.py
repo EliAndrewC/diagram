@@ -731,3 +731,15 @@ def test_surface_water_dist_reads_the_checks_own_sources():
     M["moat"] = [[0, 300], [100, 300]]
     assert surface_water_dist(M, 50, 310) == pytest.approx(10.0)  # the moat counts too
     assert surface_water_dist({"canals": [{"poly": [[0, 0], [100, 0]]}]}, 50, 25) == pytest.approx(25.0)  # a town canal is an open watercourse, and does
+
+
+def test_crop_to_content_takes_reserved_ground_as_content():
+    """Feature 150: the title pocket a full sheet reserves OUTSIDE its content is handed to the crop as
+    content, so the frame holds it in; without it the crop hugs the houses alone."""
+    s = _crop_settlement()
+    s.M["houses"] = [{"x": 500, "y": 500, "w": 40, "h": 30}]
+    s.crop_to_content(margin=10)
+    x0, y0, _w, _h = s.view
+    assert y0 > 300
+    s.crop_to_content(margin=10, extra=[(400.0, 200.0, 600.0, 300.0)])
+    assert s.view[1] <= 190 and s.view[0] <= 390

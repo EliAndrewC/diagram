@@ -23,6 +23,7 @@ from l7r.diagram.settlement._geom.primitives import keepout_ring
 
 from .._geom import Poly, Pt, point_in_poly, smooth_closed, smooth_points
 
+DIKE_GAP_HW = 15.0  # half the width the band is CUT by at a sluice notch or a crossing; exported because the waterward reed strip steps into exactly that opening (feature 150 T54, hamletgen/water.py `dike_face`) and a drifted copy would leave the wet ground short of the cut or lapping the band
 DIKE_KEEPOUT_EPS = 8.0  # px: a chord may stray this far from the crest; the keep-out is pushed out by it (feature 140)
 
 if TYPE_CHECKING:
@@ -93,7 +94,7 @@ class DikeMixin:
         # BETWEEN the gaps and draw each as its own capped strip; with no gaps this is the single full loop,
         # byte-identical to before. Keep-out, label, width and the recorded outline still use the FULL band.
         gap_pts = [(float(gx), float(gy)) for gx, gy in gaps]
-        gap_hw = 15.0
+        gap_hw = DIKE_GAP_HW
         runs: list[list[int]] = []  # declared ahead of the branch: read below under the same `gap_pts` test, which a checker cannot correlate
         if gap_pts:
             keep = [all(math.hypot(x - gx, y - gy) > gap_hw for gx, gy in gap_pts) for x, y, _ei in dense]
@@ -115,7 +116,7 @@ class DikeMixin:
         else:
             run_paths = [d]
         for rp in run_paths:
-            self.add(f'<path d="{rp}" fill="{BUND}" stroke="#9C8558" stroke-width="1.2" stroke-linejoin="round" opacity="0.95"/>')
+            self.add(f'<path d="{rp}" fill="{BUND}" stroke="#9C8558" stroke-width="1.2" stroke-linejoin="round" opacity="0.95"/>', cls="perimeter dike")
         # MOTTLE + PLANTED ROWS (reworked GM 2026-07-24 - accuracy pass; settlements.md 'Perimeter dike'):
         # the old render scattered crowns at random over the band, but dike planting was ROW planting along
         # the alignment - a WILLOW row on the water face (wave-wash armor + withy supply; the Qing Willow
@@ -161,7 +162,7 @@ class DikeMixin:
             mcol2 = random.choice(("#6E8B4A", "#7C9A54", "#5E7C40"))
             g.append(f'<circle cx="{mx2 + random.uniform(-1.2, 1.2):.1f}" cy="{my2 + random.uniform(-1.2, 1.2):.1f}" r="{random.uniform(2.2, 3.6):.1f}" fill="{mcol2}" opacity="0.85"/>')
         g.append("</g>")
-        self.add("".join(g))
+        self.add("".join(g), cls="perimeter dike")
         random.setstate(st)
         self.M.setdefault("dikes", []).append(
             {
@@ -198,6 +199,50 @@ class DikeMixin:
             hx = sum(h["x"] for h in houses) / len(houses) if houses else cx
             best = max(outer_s, key=lambda p: (p[1] < cy) * 1000 - abs(p[0] - cx) - (200 if (p[0] - cx) * (hx - cx) > 0 else 0))
             self.label(best[0], best[1] - 8, label, 10, italic=True, color="#6B5836")
+
+    def dike_gates(self: Settlement, span_ft: float = 6.0) -> int:  # type: ignore[misc]
+        """A sluice gate at every cut of every perimeter dike (feature 150, GM 2026-08-28 choosing audit A7).
+
+        Water crosses a polder dike only through a gated sluice - "a protected opening in the pond dike that
+        can be easily closed with wooden boards" (FAO; research/archetypes.md 'A dike-pond is fed and drained
+        through sluice gates'). Drawn with the engine's own gate glyph (posts + lifted board, `city/moat.py`),
+        turned to lie along the crest, i.e. across the water, and SNAPPED onto the recorded watercourse the
+        gate checks measure against (streams + canals, `segments_06b` `sc_waters`) when one runs within 20 ft
+        of the cut - which is why this is a separate step, called from the crossings stage after every
+        watercourse is recorded, and not part of `perimeter_dike` (drawn before the inlet stream exists;
+        measured: the inlet gate landed 8.9 px off its stream). Returns the number of gates drawn."""
+        n_gates = 0
+        for dk in self.M.get("dikes", []):
+            crest = [(float(c[0]), float(c[1])) for c in dk.get("crest") or []]
+            if len(crest) < 4:  # pragma: no cover - a recorded dike always carries its crest
+                continue
+            n = len(crest)
+            for gx, gy in [(float(g[0]), float(g[1])) for g in dk.get("gaps") or []]:
+                k = min(range(n), key=lambda i: math.hypot(crest[i][0] - gx, crest[i][1] - gy))
+                a, b = crest[(k - 2) % n], crest[(k + 2) % n]
+                rot = math.degrees(math.atan2(b[1] - a[1], b[0] - a[0]))
+                sx, sy, sd = gx, gy, 1e9
+                for key in (
+                    "drawn_channels",
+                    "streams",
+                    "canals",
+                    "channels",
+                ):  # the checks' own set (segments_06b sc_waters) - the DRAWN strokes first: the reader sees ink, and the recorded inlet ran 7 ft off its stroke at the cut (settlement-review)
+                    for ch in self.M.get(key, []):
+                        pp = (ch.get("pts") if key == "drawn_channels" else ch.get("poly")) or []
+                        for q0, q1 in zip(pp, pp[1:], strict=False):
+                            ax, ay, bx, by = float(q0[0]), float(q0[1]), float(q1[0]), float(q1[1])
+                            ll = (bx - ax) ** 2 + (by - ay) ** 2
+                            tt = 0.0 if ll == 0 else max(0.0, min(1.0, ((gx - ax) * (bx - ax) + (gy - ay) * (by - ay)) / ll))
+                            cx, cy = ax + tt * (bx - ax), ay + tt * (by - ay)
+                            dd = math.hypot(cx - gx, cy - gy)
+                            if dd < sd:
+                                sx, sy, sd = cx, cy, dd
+                if sd > self.px(20.0):  # no recorded course within reach: the cut itself is the seat
+                    sx, sy = gx, gy
+                self.sluice_gate(sx, sy, rot=rot, span=self.px(span_ft))
+                n_gates += 1
+        return n_gates
 
     def dike_top_houses(self: Settlement, count: int, seed: int = 0, dike: int = 0, span: tuple[float, float] = (0.0, 1.0), size: tuple[float, float] = (46.0, 28.0), gap_clear: float = 34.0) -> int:  # type: ignore[misc]
         """A DIKE-TOP VILLAGE: farmhouses in SINGLE FILE ON the perimeter dike crest (settlement_form
@@ -261,7 +306,7 @@ class DikeMixin:
                 mcol = random.choice(["#A8895A", "#B79B68", "#D2BC8C"])
                 g.append(f'<ellipse cx="{mx:.1f}" cy="{my:.1f}" rx="{random.uniform(4, 8):.1f}" ry="{random.uniform(3, 5):.1f}" fill="{mcol}" opacity="0.4"/>')
             g.append("</g>")
-            self.add("".join(g))
+            self.add("".join(g), cls="perimeter dike")
             self.house(x, y, hw, hh, "plain", rot=ang)
             corners = [(x + cs * dx_ - sn * dy_, y + sn * dx_ + cs * dy_) for dx_, dy_ in ((-pw / 2, -ph / 2), (pw / 2, -ph / 2), (pw / 2, ph / 2), (-pw / 2, ph / 2))]
             self.block_polys.append(corners)

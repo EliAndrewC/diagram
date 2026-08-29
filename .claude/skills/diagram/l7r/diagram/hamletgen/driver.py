@@ -8,6 +8,8 @@ from __future__ import annotations
 import argparse
 import concurrent.futures
 import os
+import sys
+import time
 from collections.abc import Sequence
 from dataclasses import dataclass, field
 
@@ -19,13 +21,14 @@ from l7r.diagram._invocation import guard
 from l7r.diagram.settlement import Settlement
 from l7r.diagram.sitegen.jobs import default_jobs as default_jobs  # noqa: PLC0414 - explicit re-export so `hamletgen.default_jobs` still resolves under --strict
 
-from .consts import REF_HOUSEHOLDS
+from .consts import FIELD_ARCHETYPES, REF_HOUSEHOLDS
 from .frame import stage_crossings, stage_frame, stage_notice
 from .hinterland import stage_bamboo, stage_hinterland, stage_windbreak, stage_woodland
 from .homesteads import stage_appurtenances, stage_homesteads
 from .plan import HamletSpec, SitePlan, plan_site
+from .pondstock import stage_pond_stock
 from .sink import stage_sink
-from .water import stage_field, stage_water_frame
+from .water import stage_field, stage_water_frame, stage_waterward
 from .ways import stage_seat, stage_track, stage_web
 
 # THE PIPELINE. Read top to bottom: this is the generator.
@@ -67,14 +70,24 @@ from .ways import stage_seat, stage_track, stage_web
 # unrelated jobs: it SEATED the cluster (`plan.seat`, a hard dependency of `stage_homesteads`) and it
 # DREW the connector and spur. Because of the first, the stage could not simply be moved after the
 # houses - which is why feature 126 moved only the skeleton and left the other two where they were.
+STAGE_PROFILE_ENV = "L7R_STAGE_PROFILE"  # `make map ... PROFILE=1`: print where the roll spent its time (feature 151)
+
 STAGES = (
     stage_water_frame,
     stage_field,
     stage_sink,
     stage_seat,  # decides WHERE the settlement sits. Draws nothing.
+    # A POLDER'S WATERWARD FRINGE (feature 150) - the reed strips outside the dike on the flanks that
+    # face the water. It needs the SEAT (which flank is landward is a fact about where the village
+    # stands) and it RESERVES ground, so it goes here and not in the hinterland: laid at stage 9 it
+    # was drawn over a connector already routed at stage 6 (`roads_clear_of_marsh`, the grid knob
+    # map); laid before the houses and the track, both treat it as the wet ground it is. No ink on a
+    # valley hamlet.
+    stage_waterward,
     stage_homesteads,  # the farmhouses, seated with no lane anywhere on the map
     stage_track,  # the connector and the field spur, derived from the placed houses
     stage_appurtenances,
+    stage_pond_stock,  # a dike-pond hamlet's pig sties and duck pens, on the ponds nearest the houses (feature 150 A3/A4)
     # THE WEB RUNS LAST OF THE BUILT THINGS, after the byres, sheds and wells - not just after the
     # houses. It FILLS leftover ground, so everything that RESERVES ground has to be seated first;
     # that is the same rule that put it after `stage_homesteads` in the first place, applied
@@ -140,8 +153,28 @@ def build(plan: SitePlan, avoid: Sequence[tuple[float, float]] = ()) -> Settleme
     these points. See `generate`, which re-rolls a map whose finished manifest stranded a farmhouse."""
     s = Settlement(W=plan.W, H=plan.H, seed=plan.spec.seed)
     s._avoid_seats = list(avoid)  # type: ignore[attr-defined]
+
+    if not os.environ.get(STAGE_PROFILE_ENV):
+        for stage in STAGES:
+            stage(s, plan)
+        return s
+    # WHERE THE TIME WENT, in one roll (feature 151, US4). Finding the slow stage used to mean editing
+    # this loop by hand, rolling, reading, and reverting - done twice in one session before this existed,
+    # and the second time it found `stage_waterward` at 21.7 s of a 45 s gen. An environment variable is
+    # the channel because `make map` reaches the stages through `regen.py` and a frozen pool generator;
+    # feature 132 forbids a variable that changes what a map ROLLS, and this changes only what is
+    # PRINTED - `tests/hamletgen/test_driver.py` asserts the manifest is identical with it set and unset.
+    timings: list[tuple[str, float]] = []
     for stage in STAGES:
+        t0 = time.time()
         stage(s, plan)
+        timings.append((stage.__name__, time.time() - t0))
+    total = sum(d for _n, d in timings)
+    slowest = max(timings, key=lambda t: t[1])
+    print(f"\n\033[1mstage profile\033[0m {plan.spec.name} seed {plan.spec.seed}: {total:.1f}s total, slowest {slowest[0]} {slowest[1]:.1f}s", file=sys.stderr)
+    for name, dur in sorted(timings, key=lambda t: -t[1]):
+        if dur >= 0.05:
+            print(f"  {dur:6.2f}s  {100 * dur / total:4.1f}%  {name}", file=sys.stderr)
     return s
 
 
@@ -352,6 +385,11 @@ def main(argv: Sequence[str] | None = None) -> int:
     ap.add_argument("--sink", choices=("pond", "offmap"), default=None)
     ap.add_argument("--windward", default=None)
     ap.add_argument("--bamboo", choices=("none", "homestead", "thicket", "both"), default=None, help="pin the bamboo knob (feature 133 T47: one map per knob value is owed at unlock)")
+    ap.add_argument("--archetype", choices=FIELD_ARCHETYPES, default=None, help="pin the field archetype (feature 150: the dike-pond is opt-in, like the polder)")
+    ap.add_argument("--pond-layout", choices=("grid", "mosaic"), default=None, help="pin a dike-pond's arrangement (feature 150: one map per knob value is owed)")
+    ap.add_argument("--manure-form", choices=("heap", "pit"), default=None, help="pin the manure fixture's form (feature 150 A2)")
+    ap.add_argument("--dike-crop", choices=("mulberry", "sugarcane", "banana", "fruit"), default=None, help="pin a dike-pond's dike planting (feature 150 A6)")
+    ap.add_argument("--leftover", choices=("rice", "vegetables", "pond"), default=None, help="pin a dike-pond's leftover parcels (feature 150 B2)")
     ap.add_argument("--out", default=None, help="write <out>.svg/.png/.json")
     ap.add_argument("--no-render", action="store_true")
     ap.add_argument("--batch", type=int, default=0, help="roll N hamlets from consecutive seeds and gate them all")
@@ -375,7 +413,20 @@ def main(argv: Sequence[str] | None = None) -> int:
         return 0 if good == len(reports) else 1
 
     report = generate(
-        HamletSpec(name=args.name, seed=args.seed, households=args.households, down_deg=args.down_deg, water_sink=args.sink, windward=args.windward, bamboo=args.bamboo),
+        HamletSpec(
+            name=args.name,
+            seed=args.seed,
+            households=args.households,
+            down_deg=args.down_deg,
+            water_sink=args.sink,
+            windward=args.windward,
+            bamboo=args.bamboo,
+            field_archetype=args.archetype,
+            pond_layout=args.pond_layout,
+            manure_form=args.manure_form,
+            dike_crop=args.dike_crop,
+            leftover=args.leftover,
+        ),
         out_base=args.out,
         render=not args.no_render,
     )

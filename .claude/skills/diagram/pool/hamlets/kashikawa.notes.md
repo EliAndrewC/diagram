@@ -426,3 +426,30 @@ Alternatives priced and declined for the caption itself: move the board off the 
 the board is FOR against 15 x 5 ft of overlap on an annex roof); shrink or re-tilt the caption (the tilt
 already follows the glyph's own rake, which is the rule); drop the caption (a hamlet's one civic fixture
 needs its name). Accepted as drawn, recorded here so the next reader knows it was a decision.
+
+## 2026-08-29 - settlement-review, DELTA after the merge onto main (feature 150)
+
+Re-rolled by the ENGINE under an unchanged `.gen.py`; the real delta is narrower than it looks -
+`lanes` gained a `z` and two lost their end nubs, 4 manure heaps became pits, the title and scalebar
+translated, and the water z bookkeeping moved. Houses, byres, wells, gardens, yards, fields, marsh,
+commons and the kosatsuba are byte-identical to main. Verdict **needs-work**.
+
+**CAUGHT, and fixed here.** The title placard was drawn at `fill-opacity="0.94"` and the ground cover
+ghosted through it - **6,900 of 79,772 interior pixels, 8.65%**, with grass, brush dots and two whole
+pine glyphs legible at native resolution. That is the same defect, and the same fix, as this map's own
+field grave eight days earlier ("painted at 0.9 opacity over an intact lattice ... it is opaque now");
+one was fixed for that reason and the other was left translucent with nothing recorded either way. The
+placard is opaque now. Also fixed: the scalebar's recorded box was the placard's foot rather than its
+ink, over-claiming 26 px - 41% of its own height - and reaching 12 px BELOW the placard containing it.
+
+**Confirmed**: `drop_end_nubs` was surgical on this map - index 1 in both cases, first stretches 2.69
+and 4.00 ft, turns 66.7 and 90.0 degrees, both END points preserved exactly, and lane 11's approach to
+house 4's doorway now runs straight instead of doglegging. The marsh keep-out holds under a
+manifest-free pixel count: 0 of 691 brush dots, 0 of 72 pines and 0 of 78 crowns on marsh-colored
+ground. The 2026-08-28 field-grave fix held (0 paddy-green px inside the mound).
+
+**CAUGHT, recorded, not fixed**: lane 0's north end stands 206.1 ft from any other lane and 246.5 ft
+from the nearest farmhouse, blunt-capped in open grazing, with `lanes_reach_something` green on it; the
+homestead fixture ring is stamped rather than composed (13 of 20 houses carry the row at dy -18 to -21
+ft, privies at bearing 31-41 degrees at 10 of 13); and the accepted-limitation entry in these notes
+names a byre clipped by the board caption that stands nowhere within 167 ft, in this manifest or main's.

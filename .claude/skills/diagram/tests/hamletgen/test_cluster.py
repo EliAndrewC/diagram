@@ -95,3 +95,19 @@ def test_fork_spur_truncates_at_the_lane_and_survives_degenerate_input():
     assert hg._fork_spur(clean, [(arm, arm)]) == clean
     # degenerate input passes through the bounded loop's guard unharmed
     assert hg._fork_spur([(1.0, 2.0)], [(arm, arm)]) == [(1.0, 2.0)]
+
+
+def test_a_seat_centered_in_the_reed_fringe_is_refused_and_one_with_an_end_in_it_is_scored_down() -> None:
+    """Feature 150 T50 (GM 2026-08-28): the reservoir's reed fringe is drawn before the seat is chosen but
+    was never scored, so a cluster could be seated with one end in the reeds - the house placer then
+    refused those seats and re-seated the displaced houses at the cluster's far ends, out of the web's
+    reach (Kuwabata seed 21). Wet ground is scored like the dry-plot foul; a seat CENTERED in it is refused."""
+    plan = a_plan()
+    dry = hg.seat_cluster(plan)
+    north = [(300.0, 200.0), (1100.0, 200.0), (1100.0, 395.0), (300.0, 395.0)]  # the whole north margin band
+    wet = hg.seat_cluster(plan, wet=[north])
+    assert not hg.point_in_poly(wet["cx"], wet["cy"], north), "the seat left the reeds"
+    assert (wet["cx"], wet["cy"]) != (dry["cx"], dry["cy"])
+    corner = [(300.0, 200.0), (520.0, 200.0), (520.0, 395.0), (300.0, 395.0)]  # only the band's west end
+    scored = hg.seat_cluster(plan, wet=[corner])
+    assert scored["dep"] > 0  # a seat is still found; the foul is a score, not a refusal

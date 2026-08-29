@@ -271,7 +271,7 @@ class PaddyMixin:
         dxu, dyu = math.cos(theta), math.sin(theta)
         nx, ny = -dyu, dxu
         rcid = self._cid('rc')
-        self.add(f'<clipPath id="{rcid}"><polygon points="{pts}"/></clipPath>')
+        self.add(f'<clipPath id="{rcid}"><polygon points="{pts}"/></clipPath>', cls="paddy")
         # _rows is only ever called for dry/soy plots (rice paddies get _paddy_surface, no rows), so the
         # styling here is the dryland one - dashed, olive, wider spacing
         spacing, stroke, wdt, dash, op = 13, '#7E9B54', 0.8, ' stroke-dasharray="1,3"', 0.85

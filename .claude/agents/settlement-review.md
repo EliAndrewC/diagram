@@ -228,10 +228,15 @@ artifacts, so if you skip that nobody catches it.
   - The subject is a **rotated glyph** (a tilted inn, works, compound, execution ground): the
     caption carries the glyph's own tilt.
   - The subject is a **LINE or a run along one** - a road, a street, a row of shopfronts, a wall
-    line, a field belt: the caption runs ALONG it. The one exception is the steep case: a subject
-    within 45 degrees of vertical keeps a LEVEL caption, because text steeper than that is hard to
-    read and a near-vertical line has no shallower axis to align with. So level text beside a
-    north-south road is correct and level text beside a diagonal one is a defect.
+    line, a field belt: the caption runs ALONG it, **at exactly its angle, with no steep exception**.
+    A 45-degree clamp used to live here - a subject within 45 degrees of vertical kept a LEVEL
+    caption, because near-vertical text is hard to read - and the GM RETIRED it on 2026-08-27
+    (feature 133 T38): a caption is aligned with the thing it names, at its angle. The engine follows
+    the ruling (`settlement/_geom/labels.py`, `linear_tilt`, which records the same supersession), and
+    this file did not, so a reviewer working from it reported Inashiro's 84.8-degree and Sawada's
+    80.9-degree captions as defects on 2026-08-29 while the engine was doing exactly what it was told.
+    Do NOT re-raise a steep caption as a defect. If near-vertical text is genuinely hard to read on a
+    sheet, that is a note for the GM about the RULING, not a finding against the map.
   - The subject is an **area whose fabric is level** (a district of axis-aligned houses, a
     rectangular quarter) or a **point fixture** (a boundary stone, a wellhead): a level caption is
     correct and tilting it would align it with nothing. Tilt follows the subject's axis; it is

@@ -1,6 +1,6 @@
 # Implementation Plan: Kuwabata, the Dike-Pond Hamlet, Scripted and Audited
 
-**Branch**: none (`SPECIFY_FEATURE=134-kuwabata-dike-pond-hamlet`) | **Date**: 2026-08-27 | **Spec**: [spec.md](spec.md)
+**Branch**: none (`SPECIFY_FEATURE=150-kuwabata-dike-pond-hamlet`) | **Date**: 2026-08-27 | **Spec**: [spec.md](spec.md)
 
 ## Summary
 
@@ -63,7 +63,7 @@ table, not an impression. Absences are classified in the spec's Decisions Record
 ### The audit (T30-T32)
 
 One search-pass agent (running), then `source-reader` on every claim, then
-`specs/134-.../audit.md`: candidates with prevalence, source, drawability; a not-owed list; the
+`specs/139-.../audit.md`: candidates with prevalence, source, drawability; a not-owed list; the
 paddy features that should be ABSENT on a no-rice hamlet. Presented to the GM. No implementation.
 
 ### The task clock

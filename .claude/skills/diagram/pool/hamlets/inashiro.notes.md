@@ -1432,3 +1432,31 @@ its question in `future-work/farming-communities.md` ("Where does a field path E
 question (bund head, gate, or the margin), not a ruling. Pre-existing: twin branch canals ~25 ft
 apart at (2201,1276), legal topology that reads as one canal drawn twice. Catch line: the pass caught
 the whole-map re-roll, the recurring spur, and the twin branches; nothing in the ink of the change.
+
+## 2026-08-29 - settlement-review, DELTA after the merge onto main (feature 150)
+
+The map was re-rolled by the ENGINE under an unchanged `.gen.py`: `lanes` (a `z` key only - every
+`pts` array byte-identical, so the reference hamlet witnesses none of the lane-web work), the water
+z-order bookkeeping, `pond_layer`, `title`/`scalebar`, and `ink_classes.marsh`. Verdict **needs-work**.
+
+**CAUGHT, and fixed here.** The keep-out refactor made `wet_polys` NO-BUILD, which turned every
+over-claim in a marsh outline into a placement rule and into what the interactive map tells a reader.
+On this map **46.7% of the pond-fringe polygon lay inside the pond** - it is recorded as a filled disc
+CONTAINING the water, not the annulus it draws - and the toe polygon covered **88,418 sq ft of the
+drawn rice fan**, with `field_ponds[0]` inside it. The ink was clean in both cases; the record was not.
+The clip now subtracts the pond from a fringe and the fields from a toe, and because a record carries
+ONE ring the resulting hole is spliced in on a keyhole seam. After: fringe ring 30,860 sq ft against
+30,819 expected, the pond centre outside the ring, toe 0.00% in the fields.
+
+**CAUGHT, recorded, not fixed** (each moves ink pool-wide; measurements in `specs/150-.../tasks.md`):
+the "notice board" caption stands across a lane from its own glyph - board at x 1094.5-1100.5, lane 1
+at 1103.5-1110.6, caption at 1109.3-1122.5, with a shrine 22 ft away on the caption's own side - and
+the note below that records this defect as "not recurring" is wrong about the shipped sheet; the
+persimmon's four fruit dots are a rigid mirrored 2x2 at exactly (+/-3.5, +/-3.5), identical on every
+tree and every map; and the seated fixture counts fall well short of their declared shares (manure
+.531 declared, 2 of 15 seated, p about 0.002).
+
+**Confirmed by independent pixel count**, not by the author's own audit: 0 of 47,880 scatter bases on
+water-blue or paddy-green ground; 0 of 25,779 pond-interior pixels carrying reed or haze; the pond rim
+broken exactly at the outfall (6 px, the outfall's own width) so the water reads as one structure; and
+the lane web one connected component with every house 22.6-84.1 ft from a way.
