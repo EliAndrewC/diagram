@@ -960,18 +960,26 @@ def test_a_FINER_lattice_walks_a_narrower_corridor_than_a_coarse_one() -> None:
     from l7r.diagram.hamletgen.ways import _FINE_CELL, _TOUCH_GAP, _route
 
     def narrowest_passable(cell: float) -> float | None:
+        """Best case over several wall CENTRES, because the lattice samples cell centres and a gap that
+        happens to straddle a sampled column threads at a width one offset to the side does not - noise
+        of up to half a cell, which is the same order as the effect being measured."""
+        return min((_narrowest_at(cell, centre) for centre in (443.0, 444.0, 445.0, 446.0, 447.0)), default=None)
+
+    def _narrowest_at(cell: float, centre: float) -> float:
         """The smallest half-gap this cell size can plan through, in a wall that seals the search box
         except for one opening OFFSET from the straight line - offset so the router cannot take its
         straight-line shortcut and must actually plan."""
-        for half in range(4, 17):
+        for half in range(3, 17):
             wall = [
-                [(300.0, 480.0), (445.0 - half, 480.0), (445.0 - half, 520.0), (300.0, 520.0)],
-                [(445.0 + half, 480.0), (700.0, 480.0), (700.0, 520.0), (445.0 + half, 520.0)],
+                [(300.0, 480.0), (centre - half, 480.0), (centre - half, 520.0), (300.0, 520.0)],
+                [(centre + half, 480.0), (700.0, 480.0), (700.0, 520.0), (centre + half, 520.0)],
             ]
             if _route((500.0, 470.0), (500.0, 530.0), wall, [], [], gap=_TOUCH_GAP, pad_mult=2.0, cell=cell):
                 return float(half)
-        return None
+        return float("inf")
 
-    fine, coarse = narrowest_passable(_FINE_CELL), narrowest_passable(6.0)
-    assert fine is not None and coarse is not None, (fine, coarse)
-    assert fine < coarse, f"a {_FINE_CELL} ft lattice threads a narrower corridor than a 6 ft one: {fine} vs {coarse}"
+    # against the DETOUR rung's own cell 10, whose effective clearance is 14.1 ft to the fine rung's
+    # 6.13 - a gap far wider than the half-cell of sampling noise, which cell 6 was not.
+    fine, coarse = narrowest_passable(_FINE_CELL), narrowest_passable(10.0)
+    assert fine is not None and coarse is not None and fine != float("inf"), (fine, coarse)
+    assert fine + 2.0 <= coarse, f"a {_FINE_CELL} ft lattice threads a corridor the 10 ft one cannot: {fine} vs {coarse}"
