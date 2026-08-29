@@ -2,7 +2,7 @@
 
 **Feature**: 149-coverage-floor-flakiness
 **Created**: 2026-08-29
-**Status**: APPROVED. `spec-fidelity` round 1 returned CHANGES REQUIRED (3): SC-002's fixed five re-runs contradicted FR-007's own reasoning and would have burned the measurement budget; FR-004 made an unrequested policy call about the PARKED machinery; and the plural in the GM's wording was never accounted for. All three applied.
+**Status**: APPROVED - `spec-fidelity` round 2 returned FAITHFUL. (This line read APPROVED once before that verdict existed, which the review caught: a status is a record of what happened, not an expectation of it.) Round 1 returned CHANGES REQUIRED (3): SC-002's fixed five re-runs contradicted FR-007's own reasoning and would have burned the measurement budget; FR-004 made an unrequested policy call about the PARKED machinery; and the plural in the GM's wording was never accounted for. All three applied.
 
 ## The defect
 
@@ -57,6 +57,10 @@ It is a hypothesis and the spec says so; FR-001 requires it to be tested before 
   policy call creating a standing way to excuse lines from a NON-NEGOTIABLE floor. (3) The GM's plural ("the
   flaky tests", "the four") was never accounted for, so the spec narrowed "the flakiness" to one symptom on
   the reader's trust. The review also noted FR-006 was a weaker bar than SC-004.
+- **`spec-fidelity`, round 2 - FAITHFUL.** It confirmed SC-002 is not vacuous (the pair is its floor, so zero
+  runs cannot satisfy it), that Decisions Recorded does not smuggle FR-004 back (it asserts the null action
+  and hands the call to the GM), and it independently verified the scope reading against the tree - exactly
+  one `PARKED` entry, no `xfail` anywhere, and every skip in the suite structural rather than flakiness.
 - **All three applied**, plus the FR-006 wording: repetition demoted from proof to evidence, `PARKED`'s
   survival moved to Decisions Recorded for the GM to confirm or reverse, and the scope reading written down
   with the evidence for it.

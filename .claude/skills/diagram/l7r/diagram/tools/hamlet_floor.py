@@ -102,7 +102,10 @@ PARKED: dict[str, tuple[frozenset[int], str]] = {
     # EMPTY, AND THAT IS THE POINT. Feature 147 parked `hinterland.py` 503-504 here while the floor's verdict
     # on them flickered; feature 149 found the cause - `gencache` let an entry's stored coverage outlive the
     # key it was recorded under, so a hit replayed line numbers from an older source - and the park came off.
-    # The mechanism stays for the next case that earns it. An entry here must name its owner and what has
+    # Whether this mechanism should exist at all is the GM's call and is NOT settled here (149's Decisions
+    # Recorded puts both arguments): an unused way to excuse lines from a non-negotiable floor is an
+    # invitation, and the alternative is that the next such case gets an ad-hoc pragma with no owner and no
+    # announcement, which is what 147 would have had to do. An entry here must name its owner and what has
     # already been tried, so the next session starts from the elimination instead of repeating it.
 }
 
