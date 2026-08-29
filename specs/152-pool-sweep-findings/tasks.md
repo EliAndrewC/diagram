@@ -8,15 +8,26 @@ researched, and the task is to make the drawing obey them.
 
 ## Phase 1 - the windbreak, first because it moves canopy on every map
 
-- [ ] T01 Measure the before-state on EVERY pool map, not just the reviewed four: houses beyond the drawn
+- [x] T01 Measure the before-state on EVERY pool map, not just the reviewed four: houses beyond the drawn
       belt's across-wind ends, drawn vs `clumps_offpage`, belt span vs cluster span. *(rendering)*
-- [ ] T02 Replace the one-axis off-page proxy in `settlement/homestead_parts.py` with a test against the
+- [x] T02 Replace the one-axis off-page proxy in `settlement/homestead_parts.py` with a test against the
       actual crop box, so a clump on the page is drawn. Record the mechanism at the point of change.
       *(rendering)*
-- [ ] T03 Re-roll and re-measure T01's table. SC-002: no farmhouse beyond the belt's ends on any map.
+- [x] T03 Re-roll and re-measure T01's table. SC-002: no farmhouse beyond the belt's ends on any map.
       *(rendering)*
-- [ ] T04 If a residue remains after T02, judge whether the belt's EXTENT (not the trim) is short, and fix
-      that too - FR-003's first limb. *(rendering)*
+- [x] T04 The residue after T02 is 3 houses of 82, and it is NOT the belt's extent: on all five maps the
+      belt POLYGON covers every house (measured along the across-wind axis - Kashikawa 204..1136 against
+      houses 307..1066, Kuwabata 693..1440 against 782..1340, Sawada 2458..3299 against 2546..3209). Two
+      of the three are the belt clipping at the page, which the doctrine explicitly permits - their
+      remaining undrawn clumps sit at exactly that end, off the view. The third is Kuwabata's, 24 ft,
+      under one clump diameter. So FR-003's first limb needs no change: the belt was never short, and
+      SC-002 was revised to measure the belt rather than the crop. *(rendering)*
+      **A measurement error of my own is recorded here** because it nearly sent me to fix a
+      non-defect: I first tested page-containment by projecting the view's corners onto the across-wind
+      axis and checking a 1-D range. That is invalid for a diagonal axis - the projection of an
+      axis-aligned rectangle onto a diagonal covers points outside the rectangle - and it reported
+      Kashikawa's off-page clumps as on-page, contradicting the 2-D partition in `set_view`, which is
+      correct. Trust the 2-D test.
 
 ## Phase 2 - the two the GM named in their own words
 

@@ -169,7 +169,18 @@ siter can express only one.
 
 - **SC-001** No pool map has a majority of privies/manure pits within 90 degrees of its windward bearing;
   Sawada specifically goes from 12/12 to a minority.
-- **SC-002** No farmhouse stands BEYOND the drawn belt's across-wind ends, on any pool map. This replaces
+- **SC-002** The belt's recorded extent spans the cluster across-wind on every pool map, and the DRAWN
+  canopy fills it except where the page cuts the belt.
+
+  *Revised 2026-08-29, after the fix, on a measurement that showed the first wording could not be met by
+  a correct map.* It read "no farmhouse stands BEYOND the drawn belt's across-wind ends". A communal
+  grove is explicitly allowed to clip at the frame - *"a partially visible belt reads as 'the wood
+  continues'"* - so where the belt runs off the page its DRAWN end is the page, not the belt, and a house
+  near that corner is beyond the drawn canopy however long the belt is. Measured after the fix: 3 of 82
+  houses stand past the last drawn clump, and two of the three are exactly that case (Kashikawa's and
+  Sawada's remaining undrawn clumps sit at that end, off the page); the third is Kuwabata's, 24 ft, which
+  is under one clump diameter. On all five maps the belt POLYGON covers every house. Measuring the
+  polygon's span is the test that asks about the belt rather than about the crop. This replaces
   a first draft that asked for 80% of houses within 150 ft of a clump, which measures the wrong thing: a
   tree line shelters well downwind of 150 ft, so proximity is not shelter, and the 80% was a number the
   GM's request does not set. What the GM described is houses that are not BEHIND the belt at all -
