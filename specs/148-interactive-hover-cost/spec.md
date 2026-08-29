@@ -1,136 +1,96 @@
-# Feature Specification: the interactive map's hover cost
+# Feature Specification: the interactive map's element count
 
 **Feature Branch**: none - this repository does not use feature branches (`SPECIFY_FEATURE=148-interactive-hover-cost`)
 
-**Created**: 2026-08-29
+**Created**: 2026-08-29 (RE-AIMED the same day, after the measurement refuted the first aim)
 
-**Status**: Draft
+**Status**: Draft - re-aimed
 
-**Input**: The GM, 2026-08-29: *"Now I notice that kuwabata.html is much slower to load and more sluggish than inashiro.html - I'm guessing there are some places where we're checking for mouse pointer hovering by looking at individual lines and glyphs rather than by drawing bounding boxes, and that's why - does that sound right?"* - and, when the diagnosis and the proposed fix were put to them: *"yes please"*.
+**Input**: The GM, 2026-08-29: *"Now I notice that kuwabata.html is much slower to load and more sluggish than inashiro.html - I'm guessing there are some places where we're checking for mouse pointer hovering by looking at individual lines and glyphs rather than by drawing bounding boxes, and that's why - does that sound right?"* The session answered yes, specified that fix, and then MEASURED it before implementing - and the measurement said no (research R1). Taken back to the GM with two questions: what does "sluggish" mean, and should the feature be re-aimed at element count? The GM: *"yes to all of the above as to what sluggishness means. And, yes, please re aim the feature at element count since that seems to be the cause of the ball performance."*
 
 ## What the GM asked for
 
-One thing: **make the interactive page stop resolving hover against individual glyph geometry where a
-bounding box would do**, because that is why `kuwabata.html` is sluggish next to `inashiro.html`.
+**Make the page draw fewer elements.** "All of the above" was the session's list of what sluggishness could
+mean, so all three count: **scrolling, zooming, and the highlight lagging under the pointer** - plus the
+"much slower to load" from the original report, which is the one half already reproduced (313 ms against
+inashiro's 238).
 
-The GM's guess was checked and is correct. Hover is resolved by the browser, not by our code: the page
-listens for `pointerover` on the SVG and reads `e.target.closest("g.f")`, so every pointer move makes the
-browser hit-test the real drawn geometry - and for a stroked `fill="none"` path that is stroke-geometry
-hit-testing across every subpath. Measured on the two pages, path data by feature class:
+The first aim - hover hit-testing - is DEAD, and the measurement that killed it is kept in research R1
+because it is the reason this feature exists in its present form: kuwabata is the CHEAPER page at
+hit-testing (277 us/probe against 453), since inashiro carries 749 fat hit copies and a polder map
+carries none.
 
-| class | inashiro | kuwabata |
-|---|---|---|
-| scrub and rough grazing | 5.93 MB / 229,646 subpaths | 6.76 MB / 260,374 subpaths |
-| marsh | 1.61 MB / 53,956 | 1.35 MB / 45,723 |
-| every other class together | ~0.08 MB | ~0.40 MB |
+## What the measurement says the lever is
 
-Two classes are ~95% of everything the browser hit-tests on both maps, and kuwabata carries more of it -
-3,455 `<path>` elements against inashiro's 1,576, worst-case merged path 2.2 MB / 87,603 subpaths against
-1.6 MB / 63,738.
+`merge_primitives` already turns a run of consecutive same-styled `<line>`s or `<circle>`s into one
+`<path>`. It cannot do much on kuwabata because the elements are INTERLEAVED: the mulberry dike emits
+path, ellipse, circle per tree, a mean run of 2.4 elements, so 2,975 circles carrying only THREE distinct
+styles collapse to almost nothing. That one class is 4,739 elements - the largest on either page.
 
-The bounding boxes the GM assumed were missing DO exist - `hit_regions` builds footprint polygons for the
-scatter classes and `marks_region` a 24 ft grid for scrub - but they are placed at the BOTTOM of the stack
-and, as that function's own docstring says, everything drawn later "keeps the pointer". So the boxes are
-ADDITIVE: they catch bare ground falling through, while the scatter above them is still hit-tested in full.
+| | drawn now | consecutive-run merging | if order did not matter |
+|---|---|---|---|
+| inashiro | 9,090 | 6,819 (-25%) | 5,548 (-39%) |
+| kuwabata | 10,462 | 9,077 (-13%) | 4,140 (-60%) |
+
+The whole gap between the last two columns is PAINT ORDER, and that is the constraint this feature turns
+on: two elements may be merged whatever their order if they share a style, because the ink is identical
+either way; an element may be moved PAST another only if the two do not overlap, or the picture changes.
 
 ## User Scenarios & Testing
 
-### US1 - the heavy scatter stops being hit-tested (Priority: P1)
+### US1 - the page draws fewer elements (Priority: P1)
 
-A reader opens a map whose ground is mostly scrub and marsh and moves the pointer across it. The
-highlight follows as it does today, and the page does not lag.
-
-**Independent Test**: the generated page carries `pointer-events: none` on the scrub and marsh ink, and
-the browser test still highlights those classes from a point inside their ground AND from a point on a
-disabled mark.
+**Independent Test**: element count per page, before and after, and the four costs the GM named.
 
 **Acceptance Scenarios**:
 
-1. **Given** a map with scrub and marsh, **When** the page is written, **Then** the ink of those classes
-   is not hit-testable and their regions are.
-2. **Given** the reference hamlet's page in a browser, **When** the pointer is moved onto bare scrub,
-   **Then** every scrub feature highlights, exactly as before this change.
-3. **Given** the same page, **When** the pointer is moved onto a house, a lane or a bund standing ON that
-   ground, **Then** that feature highlights and not the scrub - the ink drawn above keeps the pointer.
+1. **Given** any pool hamlet, **When** the page is written, **Then** it carries materially fewer drawn
+   elements than before, with the largest reduction in the classes that interleave.
+2. **Given** the same page, **When** it is scrolled, zoomed, and a class is highlighted, **Then** each is
+   no slower than before and load has not regressed.
 
-### US2 - no class loses its hover (Priority: P1)
+### US2 - the picture does not change (Priority: P1)
 
-**Independent Test**: for every class whose ink is made non-hit-testable, its region coverage is asserted
-to contain the class's own marks - a tuft outside its polygon would otherwise go dead.
+**Independent Test**: the page's ink is compared against the same map's SVG, which this feature does not
+touch; any element merged away must leave the rendered result identical.
 
 **Acceptance Scenarios**:
 
-1. **Given** any pool hamlet, **When** the page is written, **Then** no class has its ink disabled unless
-   its hit region is present on that page AND covers that class's own marks - presence alone is not
-   enough, per FR-002.
-
-### One thing the session told the GM was inexact
-
-The proposal the GM approved said the fix was safe *"since those two classes already have region coverage
-built from their own marks"*. That is exact for SCRUB - `HIT_FROM_MARKS` contains scrub alone, and its
-region is `marks_region(..., within=polys)`, built from the marks themselves. It is NOT true of MARSH,
-whose region is the recorded `marshes` footprint polygon taken from the manifest; nothing checks that the
-polygon contains every marsh mark drawn on it. So for marsh, FR-002's coverage requirement is not
-belt-and-braces - it is the whole of the safety, and FR-006's browser assertion is what proves it. Said
-plainly here because the GM said yes to a sentence that was half right, and the correction changes which
-requirement is load-bearing rather than whether the fix is sound.
+1. **Given** a merge that would move an element past another it OVERLAPS, **When** the page is written,
+   **Then** the merge is refused and the elements stay in their drawn order.
+2. **Given** any pool hamlet, **When** its page and its SVG are rasterized, **Then** they agree.
 
 ## Requirements
 
-- **FR-001** The ink of the **scrub-and-rough-grazing** and **marsh** classes MUST NOT be hit-tested on a
-  page where that class has a hit region; the region resolves the hover instead. THESE TWO ONLY - see
-  "Why not every class with a region" below.
-- **FR-002** A class MUST NOT have its ink disabled unless its region is present AND covers that class's
-  own marks on that page. Presence is not coverage: a mark outside its region would go dead, which is the
-  one failure this change can cause. Where coverage does not hold, the ink stays hit-testable.
-- **FR-006** The browser test MUST assert hover FROM A POINT ON THE DISABLED INK ITSELF for each affected
-  class, so the verification the GM was promised happens before this ships - not merely that the existing
-  hover assertions still pass, which they would even if a mark went dead.
-- **FR-003** Hover behavior MUST be unchanged for the reader: the same classes highlight from the same
-  places, and features drawn above the scatter keep the pointer as they do now.
-- **FR-004** The SVG and PNG MUST remain byte-identical - the class and its hit behavior ride in the
-  page's own serialization, never in the drawn record (feature 134 FR-010).
-- **FR-005** The change MUST be measured on both pages, before and after: the geometry the browser would
-  hit-test, AND page load to first interaction. The GM reported BOTH "slower to load" and "more sluggish";
-  this feature targets the second, and the first is measured rather than assumed away so the GM gets a
-  plain answer about it.
-
-### Why not every class with a region
-
-The first draft made FR-001 general - any class with a hit region. `spec-fidelity` refused it, and was
-right on the mechanism as well as the scope. `HIT_REGIONS` covers seven classes, and the safety argument
-the GM approved does not reach five of them:
-
-- **Coverage.** Only scrub goes through `marks_region(..., within=polys)`, which builds the region FROM
-  the marks. The other five take the recorded footprint polygon out of the manifest, so "region coverage
-  built from their own marks" - the sentence the GM said yes to - is simply not true of them.
-- **Stack order, which is worse.** Regions sit at the BOTTOM, and `hit_regions`' own docstring says
-  everything drawn later keeps the pointer. Windbreak (stage 11), bamboo (stage 12) and the copse are
-  drawn LATE, above yards, gardens, houses and paddies. They keep the pointer today BECAUSE they are on
-  top; disable their ink and wherever a crown overlaps a yard, the yard - drawn below the crown but above
-  the region - takes the pointer and the class goes dead there. That is the hover regression FR-003
-  forbids.
-- **Worth.** The table above says the two named classes are ~95% of the hit-test geometry. The other five
-  together buy under 5%, for five untested classes.
-
-A general rule is a separate ask to the GM, and would need per-class region coverage and a draw-order
-answer first.
+- **FR-001** The page writer MUST merge same-styled primitives that today it leaves separate because
+  other elements sit between them.
+- **FR-002** A merge MUST NOT change the painted result. Two same-styled elements may always be merged;
+  an element may be reordered past another only where their drawn extents do not overlap.
+- **FR-003** `<ellipse>` MUST be mergeable alongside `<line>` and `<circle>` - the marsh is 1,656 ellipses
+  on inashiro and the dike another 264, and the pass ignores them today.
+- **FR-004** The SVG and the PNG MUST remain byte-identical: this is the HTML target only (feature 134
+  FR-010), and the SVG is what US2 compares against.
+- **FR-005** The change MUST be measured on both pages, before and after: element count, load, scroll,
+  zoom, and highlight - the four things the GM named plus the one already reproduced.
+- **FR-006** Hover behavior MUST be unchanged - a merged element keeps its class, so the group that
+  answers the pointer is the same group.
 
 ## Success Criteria
 
-- **SC-001** The hit-testable path geometry on the reference hamlet's page falls by at least 90%.
-- **SC-002** The browser test's hover assertions pass unchanged.
-- **SC-003** `make done` is green and the pool maps gate clean.
+- **SC-001** Kuwabata's drawn element count falls by at least 40%, and inashiro's by at least 20%.
+- **SC-002** Scroll, zoom, highlight and load are each no worse than before on both pages, and the
+  measurement is reported to the GM.
+- **SC-003** The rendered page and the rendered SVG agree for every pool hamlet.
+- **SC-004** `make done` is green and the pool maps gate clean.
 
 ## Assumptions
 
-- The approved fix targets pointer responsiveness. The GM also reported the page being "much slower to
-  load", and that is NOT resolved here: byte size settles download and the two pages are within 0.7 MB,
-  but it says nothing about parse, layout or first paint, and kuwabata carries 3,455 `<path>` elements to
-  inashiro's 1,576 at that similar size. FR-005 measures load before and after; if the fix does not move
-  it, the load half is an OPEN QUESTION FOR THE GM, not something this feature has answered.
-- Kuwabata itself belongs to another session's clone (feature 147, `diagram-kuwabata`); this feature
-  changes the shared page writer, so that map benefits without this session touching it.
+- The GM's "ball performance" is read as "bad performance" / overall performance.
+- Headless Chromium is the measuring instrument and it has no GPU compositing, so its scroll and zoom
+  numbers are a floor rather than the reader's experience. Element count is the thing being reduced and
+  it is exact; the timings are reported for direction, not as a promise about the GM's machine.
+- Kuwabata belongs to another session's clone (feature 147). This feature changes the shared page writer,
+  so that map benefits without this session writing to it.
 
 ## Review history
 
@@ -150,3 +110,7 @@ answer first.
   nowhere said out loud that the sentence the GM approved ("region coverage built from their own marks")
   was exact for scrub and NOT for marsh. That second one is recorded above under "One thing the session
   told the GM was inexact", because it changes which requirement carries the safety.
+- **RE-AIMED 2026-08-29 after T02.** The measurement refuted the first aim before any code was written;
+  the GM was told and chose the new one. The rounds above judged the hover spec and are kept because they
+  are the record of how the scope was held to what the GM approved - the same test now applies to the
+  element-count spec, from round 1 below.
