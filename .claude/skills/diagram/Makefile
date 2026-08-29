@@ -421,7 +421,8 @@ citybudget:     ## the city/capital space-budget planner
 # Python without a green `make done`. Motivating case: a RED hooks-test followed by `commit; procedure`
 # landed on main, because nothing at push time knew the guards had been edited.
 hooks-test:     ## run every scripts/test-*-hooks.sh, and prove each guard still has a companion
-	@root=$$(git rev-parse --show-toplevel); fail=""; n=0; skipped=0; \
+	@root=$$(git rev-parse --show-toplevel); gitdir=$$(git rev-parse --absolute-git-dir); fail=""; n=0; skipped=0; \
+	: "(GUARD_EDIT_OK: the freshness cache's directory, asked of git instead of assumed - see the note beside its mkdir below; feature 157)"; \
 	for h in $$root/scripts/*-hooks.sh $$root/scripts/review-gate.sh $$root/scripts/gate-stamp.py $$root/scripts/sync-with-main.sh; do \
 	  : "(GUARD_EDIT_OK: sync-with-main.sh joins the roster - its route decision is a guard, feature 130 T031)"; \
 	  b=$$(basename $$h); case $$b in test-*) continue ;; esac; \
@@ -434,10 +435,11 @@ hooks-test:     ## run every scripts/test-*-hooks.sh, and prove each guard still
 	  fi; \
 	  deps="$$h $$root/scripts/$$t $$root/scripts/_hookmatch.py $$root/scripts/test_hooks_cases.py"; \
 	  case $$b in sync-with-main.sh|review-gate.sh|gate-stamp.py) deps="$$root/scripts/*.sh $$root/scripts/*.py";; esac; \
-	  sha=$$(cat $$deps 2>/dev/null | sha256sum | cut -c1-16); mkdir -p "$$root/.git/hooks-test"; \
-	  if [ -z "$(HOOKS_ALL)" ] && [ "$$(cat "$$root/.git/hooks-test/$$b" 2>/dev/null)" = "$$sha" ]; then skipped=$$((skipped+1)); continue; fi; \
+	  : "(GUARD_EDIT_OK: fixing a guard that FIRES ON CORRECT WORK - the per-suite freshness cache resolved its own path as \$$root/.git/hooks-test, and in a LINKED WORKTREE .git is a FILE, so every one of the 19 suites failed with 'Directory nonexistent'. A detached worktree is exactly where constitution XIII requires the regression baseline to be taken, so the mandated procedure could not produce a green hooks-test on ANY commit. Asking git for the path fixes it in both layouts; the roster, the failure path and the stamp are unchanged. Feature 157.)"; \
+	  sha=$$(cat $$deps 2>/dev/null | sha256sum | cut -c1-16); mkdir -p "$$gitdir/hooks-test"; \
+	  if [ -z "$(HOOKS_ALL)" ] && [ "$$(cat "$$gitdir/hooks-test/$$b" 2>/dev/null)" = "$$sha" ]; then skipped=$$((skipped+1)); continue; fi; \
 	  n=$$((n+1)); \
-	  "$$root/scripts/$$t" >/tmp/ht.$$$$ 2>&1 && printf '%s' "$$sha" > "$$root/.git/hooks-test/$$b" || { printf '\n\033[1mHOOK TESTS FAILED: %s\033[0m\n' "$$b"; sed 's/^/  /' /tmp/ht.$$$$; fail="$$fail $$b"; }; \
+	  "$$root/scripts/$$t" >/tmp/ht.$$$$ 2>&1 && printf '%s' "$$sha" > "$$gitdir/hooks-test/$$b" || { printf '\n\033[1mHOOK TESTS FAILED: %s\033[0m\n' "$$b"; sed 's/^/  /' /tmp/ht.$$$$; fail="$$fail $$b"; }; \
 	  rm -f /tmp/ht.$$$$; \
 	done; \
 	if [ -n "$$fail" ]; then printf '\n\033[1mhooks-test FAILED:%s\033[0m\n\n' "$$fail"; exit 1; fi; \

@@ -64,6 +64,15 @@ class FinishMixin:
         wrap: bool = True,
         cls: ClsTag = None,
     ) -> None:
+        # NOTHING IS DRAWN UNTIL THE LABEL PHASE (feature 157, GM 2026-08-29). Every caption queues
+        # here and is drawn by `place_labels()` after the last map feature is placed, because *"how
+        # we place labels will always depend on what else is on the map"*. The queue keeps CALL
+        # ORDER, so captions still see each other exactly as they did - what changes is that they
+        # now also see every feature drawn after their own. `place_labels` clears the flag while it
+        # drains, which is what makes the replay below reach the body.
+        if self._labels_pending:
+            self._label_queue.append(("text", (x, y, text, size, anchor, italic, weight, color, ref, rot, linear, full_tilt, wrap, cls)))
+            return
         # `cls` is the class of the FEATURE the caption names (feature 134 FR-006): the label and its
         # subject share one class, so hovering either highlights both and a click on either opens the
         # subject's explanation. A caption with no subject class inherits the enclosing feature() scope.
@@ -464,17 +473,12 @@ class FinishMixin:
                 _keep, _chords = keepout_ring(_ol, _ol, FIELD_KEEPOUT_EPS, filled=True)
                 _fld["keepout"] = [[round(_p[0], 1), round(_p[1], 1)] for _p in _keep]
                 _fld["keepout_chords"] = len(_chords)
-        # Deferred place_caption() seats, in call order, against the FINISHED map - and BEFORE the
-        # road caption, which goes last because it has by far the most room to move: its subject is
-        # a whole road segment with a wide slide set, where a market row's caption has one short
-        # stretch of frontage to sit against. Most-constrained-first; the road yields.
-        for _tx, _bx, _sz, _it, _wt, _co, _hi, _sl, _ro in self._captions:
-            _lx, _ly = self._best_label_spot(_bx, _tx, _sz, hint=_hi, slides=_sl, tilt=_ro)
-            self.label(_lx, _ly, _tx, _sz, italic=_it, weight=_wt, color=_co, ref=_bx, rot=_ro)
-        self._captions: list[tuple[Any, ...]] = []
-        if getattr(self, "_road_label", None):
-            self._finish_road_label()  # feature 145: the Imperial-road caption, a town/city feature, lives in structures/ground.py
-            self._road_label: Any = None  # declared Any at structures/ground.py; re-declared for the checker (the attribute is conditional)
+        # THE LABEL PHASE (feature 157). The hamlet pipeline names it as a stage of its own
+        # (`stage_labels`, last in STAGES) so the pipeline reads the way the GM described it; every
+        # other tier is a hand-authored script with no pipeline, so `finish()` runs the same phase
+        # as the last thing it does. Draining an already-drained queue is a no-op, so a hamlet is
+        # never labeled twice.
+        self.place_labels()
         # Every block below is built as TWO aligned lists - the strings, and their feature classes
         # (feature 134): the string block is spliced into `self.out` exactly as before, the class
         # block into `self.out_cls` at the same index, so the side-list stays index-aligned with the

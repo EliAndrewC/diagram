@@ -277,6 +277,22 @@ class PublicFixturesMixin:
         bm = 6
         self.block_polys.append([(x - hw - bm, y - hh - bm), (x + hw + bm, y - hh - bm), (x + hw + bm, y + hh + bm), (x - hw - bm, y + hh + bm)])
         if label:
+            # THE BOARD IS PLACED HERE; ITS CAPTION IS SEATED IN THE LABEL PHASE (feature 157, GM
+            # 2026-08-29: *"moving label placement so that the notice board itself is placed during a
+            # separate phase than the labels for the map are placed"*). Unlike a `text` caption, whose
+            # feature has already chosen its seat, a board's seat is SEARCHED - so the search has to
+            # run when the map is finished, not when the plank goes in.
+            self._label_queue.append(("kosatsuba", (x, y, rot, vw, vh, label, label_above, label_xy)))
+        return z
+
+    def _draw_board_caption(self: Settlement, x: float, y: float, rot: float, vw: float, vh: float, label: str, label_above: bool, label_xy: Pt | None) -> None:  # type: ignore[misc]
+        """Seat and draw one notice board's caption, in the LABEL PHASE (feature 157).
+
+        Split out of `kosatsuba` unchanged except for the seat rules below: the board is drawn when it
+        is placed, the caption when every map feature exists. Reached through `place_labels`'s one-row
+        dispatch table, never called directly."""
+        hw, hh = vw / 2, vh / 2
+        if label:
             # label_above: for a board standing just inside a gate, the default below-label
             # would hang over the gate structure (labels_clear_of_other_buildings).
             # label_xy: a HAND seat for the caption when BOTH bands are taken - the forcing
@@ -575,7 +591,6 @@ class PublicFixturesMixin:
             if not label_xy:  # a HAND seat is a decision and is honored exactly; only the derived seat is pulled (T40; the town-tier hand-seat test found the pull moving it 13.9 px, 2026-08-28)
                 _lx, _ly = self.pull_caption_toward((_lx, _ly), label, 8, "middle", _t, _bq)
             self.label(_lx, _ly, label, 8, italic=True, color="#7A5A30", rot=_t, ref=(x - hw, y - hh, x + hw, y + hh), cls="notice board")  # the caption shares the board's class (feature 134 FR-006)
-        return z
 
     def fixture_clear_of_water(self: Settlement, x: float, y: float, half: float) -> bool:  # type: ignore[misc]
         """Does a point fixture of half-diagonal `half` stand clear of every watercourse?

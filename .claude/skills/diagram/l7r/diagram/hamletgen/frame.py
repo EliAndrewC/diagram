@@ -1,4 +1,4 @@
-"""STAGE 8: the crossings, the notice board, and the map frame.
+"""STAGE 8: the crossings, the notice board, the map frame - and the LABEL PHASE that closes every roll.
 
 Split from hamletgen.py by feature 111; bodies verbatim. See hamletgen/CLAUDE.md.
 """
@@ -114,19 +114,15 @@ def stage_notice(s: Settlement, plan: SitePlan) -> None:
             _zi = int(board.get("z", -1)) - int(getattr(s, "TOPZ", 0))
             if _top is not None and 0 <= _zi < len(_top):
                 _top[_zi] = ""
-            # ...and its CAPTION with it. `kosatsuba` records the board and calls `self.label`, so
-            # popping only the board leaves an orphan "notice board" caption sitting where the board
-            # used to be - which is the very label the frame could not hold, still failing
-            # `labels_within_image` after the board itself had moved.
-            for _li in range(len(s.M.get("labels", [])) - 1, -1, -1):
-                if len(s.M["labels"][_li]) > 5 and s.M["labels"][_li][5] == "notice board":
-                    _lab = s.M["labels"].pop(_li)
-                    # ...and the caption's INK, in the label layer (T48, the same defect one layer up)
-                    _tl = getattr(s, "toplabels", None)
-                    _lz = int(_lab[4]) - int(getattr(s, "LABELZ", 0))
-                    if _tl is not None and 0 <= _lz < len(_tl):
-                        _tl[_lz] = ""
-                    break
+            # ...and its CAPTION with it - which since feature 157 is one line, because the caption has
+            # not been drawn yet. This block used to hunt the finished "notice board" label out of
+            # `M['labels']` BY ITS TEXT, pop it, and blank its ink in the label layer, and the reason it
+            # had to was that `kosatsuba` drew the caption at placement time: pop only the board and an
+            # orphan caption stayed behind, still failing `labels_within_image` after the board itself
+            # had moved (feature 133 T48). With captions queued for the LABEL PHASE there is nothing
+            # drawn to hunt - the request is dropped and the re-seated board queues its own. The phase
+            # paying for itself: that bug could not now exist.
+            s.discard_queued_label("kosatsuba")
             # THE RE-SEAT MUST OBEY THE SAME TWO RULES THE SITER DOES, and it obeyed neither
             # (settlement-review, feature 154). It ran after `place_kosatsuba` and ranked purely by
             # traffic over every non-connector lane, so on Sawada and Kashikawa it silently threw away
@@ -221,3 +217,23 @@ def stage_frame(s: Settlement, plan: SitePlan) -> None:
     s.crop_to_content(margin=CROP_MARGIN, extra=_extra)
     s.M["meta"]["title_pocket"] = [round(v, 1) for v in _pocket]  # recorded so a placard that fell back can be read against the reservation
     s.title(plan.spec.name, prefer=_pocket)
+
+
+def stage_labels(s: Settlement, plan: SitePlan) -> None:
+    """THE LABEL PHASE - the last stage of a hamlet, after every map feature is on the sheet.
+
+    GM 2026-08-29 (feature 157): *"add a phase at the very end of every settlement creation process,
+    which is putting down the labels for things. Thus, after the final map feature is added, which on
+    a hamlet is the notice board, there is a final phase in which we add labels for whatever map
+    features get labels. This is because how we place labels will always depend on what else is on
+    the map."*
+
+    It draws no feature and reserves no ground, so nothing can be placed after it and nothing it
+    places can displace anything - the same argument that put `stage_notice` last, one step further.
+    The work itself is `Settlement.place_labels`, which every tier shares: a hand-authored village,
+    town or city script has no stage pipeline, so `finish()` runs the identical phase as the last
+    thing it does. Whichever runs first drains the queue; the other is a no-op.
+
+    `plan` is unused, and stays in the signature because `STAGES` is a list of `(s, plan)` callables -
+    the pipeline's contract, not this stage's need."""
+    s.place_labels()
