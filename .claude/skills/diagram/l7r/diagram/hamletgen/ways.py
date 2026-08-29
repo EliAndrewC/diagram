@@ -573,7 +573,13 @@ def stage_web(s: Settlement, plan: SitePlan) -> None:
         return 0.0 <= q[0] <= _W and 0.0 <= q[1] <= _H
 
     for _i, _ln in enumerate(list(s.M.get("lanes", []))):
-        if len(_ln.get("pts") or []) < 2:
+        # KEPT AND NOT REACHABLE TODAY, deliberately (feature 146). Every pass that can empty a lane
+        # before this point DELETES the record with the ink (feature 145's "the husk goes with the ink"),
+        # so no husk survives to here - and injecting one to prove it fails earlier, in the orphan
+        # joiner, which cannot handle a one-point way at all. The guard stays because the passes BELOW
+        # this line do leave empty records (`_ln["pts"] = []` at the knot-collapse drop), so a future
+        # reorder would hand one straight to `_ln["pts"][0]`.
+        if len(_ln.get("pts") or []) < 2:  # pragma: no cover - see above
             continue
         _pts = [(float(x), float(y)) for x, y in _ln["pts"]]
         _others = [

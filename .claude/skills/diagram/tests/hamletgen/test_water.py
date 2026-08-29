@@ -131,3 +131,20 @@ def test_fit_field_probes_saturation_and_rerolls_the_best_aspect_in_full(monkeyp
     assert max(n for a, n in per_aspect.items() if a != first) <= 3, per_aspect  # every other aspect: k = 1, the probe, dropped
     assert per_aspect[first] > 3  # the rolled aspect was searched again in full
     assert net["k"] > 0
+
+
+def test_a_saturated_aspect_stops_after_the_probe_instead_of_bisecting_a_fan_it_cannot_grow() -> None:
+    """Cohort seed 47 (2026-08-28): at four of its five aspects the fan SATURATES - the envelope clamps it
+    and the acreage sits at 16-17 against a 19.5 target however large k gets - and the old loop spent its
+    last four carves at k = 2.16, 2.18, 2.19, 2.195 drawing the same 16.35 acres each time. The probe asks
+    the question once: if neither k = 1 nor the LARGEST fan this aspect can draw reaches the target, keep
+    the better of the two and give the time to the next aspect."""
+    from l7r.diagram.hamletgen.water import _fit_at_aspect
+
+    from ._builders import a_plan
+
+    plan = a_plan()
+    plan.target_acres = 500.0  # far past anything this envelope can hold: every aspect saturates
+    (bad, err), net = _fit_at_aspect(plan, (700.0, 300.0), 3, 46.0, (26.0, 30.0), 1.0, 0.06, 9, probe=True)
+    assert not bad and err > 0.5, "the best legal fan is kept, and it is nowhere near the ask"
+    assert net["plots"], "and it is a real fan, not an empty one"

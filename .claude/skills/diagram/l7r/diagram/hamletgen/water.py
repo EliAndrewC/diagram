@@ -201,8 +201,13 @@ def _fit_at_aspect(
         if probe and len(pts) == 1 and acres < plan.target_acres:
             k = hi - 1e-3  # the probe: the largest fan this aspect can draw
             continue
-        if probe and len(pts) == 2 and pts[0][1] < plan.target_acres and acres < plan.target_acres * (1.0 - tolerance):
-            break  # saturated: neither k = 1 nor the largest fan reaches the target - keep the better, move on
+        # A SECOND SATURATION BREAK STOOD HERE AND WAS DEAD - the collapsed bracket above already does its
+        # job (removed with the proof, feature 146). Both arrived together in 145. The probe sets
+        # `k = hi - 1e-3`, so on the next round either the fan is still short of the target and `lo = k`
+        # collapses the bracket to 1e-3 - caught by `hi - lo < 0.03` one line up - or it is not short, and
+        # then the saturation test's own `acres < target * (1 - tolerance)` is false by construction.
+        # There is no third case, which is why no seed ever entered it. The saving it was written for is
+        # real and is being delivered; it is delivered by the line above.
         k = _predict_k(pts, plan.target_acres, lo, hi)
     assert best is not None
     return best
