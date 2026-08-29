@@ -197,11 +197,21 @@ hamlet-floor table, and `make hamlet-floor` lists the modules under it.
 deleted in **b709c4ae** ("141: the GM's cut - 442 legacy-tier checks and 39 untested keeps"). What
 survives it:
 
-- **~15 live comments** across `settlement/trades.py`, `settlement/castle_civic.py`,
+- **Live comments in NINE engine files** - `settlement/trades.py`, `settlement/castle_civic.py`,
   `settlement/shrines_wells/shrines.py`, `settlement/structures/captions.py`,
-  `settlement/structures/fixtures.py` and three pool gens still describe it as an operative rule and
-  justify real geometry choices by it. (Feature 157 corrected the one in `fixtures.py::_blocked`
-  because that comment was justifying code the feature was changing; the rest stand.)
+  `settlement/structures/fixtures.py`, `check_village/segments_06b_bridge_labels_and_reach.py`,
+  `check_village/segments_10b_city_civic_and_commerce.py`, `settlement/city/walls.py` - and three
+  pool gens, all describing it as an operative rule and justifying real geometry by it. (Feature 157
+  corrected the one in `fixtures.py::_blocked` because that comment was justifying code the feature
+  was changing; the rest stand.)
+- **FOUR OPERATIVE DOCS, which is the half that matters most and which the first draft of this entry
+  missed** (settlement-review round 2): `settlements/presentation.md`, `settlements/cities.md`,
+  `dev/placement.md`, `dev/diagnostics.md`. `presentation.md` is the worst - it states the rule as a
+  LIVE GATE in three separate passages, including the normative paragraph beginning *"A label must
+  also not sit on a feature it does NOT name (`labels_clear_of_other_buildings`, town + city
+  scale)"* and the "Checks stay narrow" bullet that names it as the backstop justifying why no wider
+  label gate exists. A session that swept only the code from this entry would leave the doctrine
+  asserting a gate that is gone - which is exactly how this got here.
 - **The whole `_LABEL_GROUP` / `_LABEL_EXEMPT` registry** (`check_village/common_01_geometry.py`,
   ~lines 256-356) - the map from each solid feature key to *"the word a caption must contain to be
   allowed to cover it"*.
