@@ -58,6 +58,17 @@ other values are under `wip/kuwabata-*`.
 
 ## Review log
 
+- 2026-08-29 settlement-review of that fringe fix: **needs-work, and it was right**. Deferring the fringe
+  moved it past `block_polys.append(pond bbox + 10)` as well, and the reed scatter reads `block_polys` -
+  so the reeds inherited a keep-out meant for BUILDINGS, covering the shore band itself. Measured by the
+  reviewer's replay: 32 of 54 tufts gone, 45% of the annulus, three sectors empty, the tameike reading as
+  a bare blue plate - 92% of the ink that fix actually changed, against the 3 tufts the channel rule
+  intends. My commit message said "only the keep-out now sees what it is supposed to avoid", which was
+  wrong. FIXED: the no-build rect follows the reeds again, as it always did. Now 52 tufts in the annulus,
+  0 marks on the water, and the ink delta is 13 marks rather than 149.
+- OPEN (reviewer's nitpick): two call sites build the identical `+40` fringe ring by hand
+  (`hamletgen/sink.py` and `settlement/fields/comb.py`) and only one is subject to that ordering hazard.
+  One shared helper would stop the next ordering change diverging them.
 - 2026-08-29 feature 147's own `make overlap-audit`, on its first run against this map, found ink on
   water: one reed tuft 4.6 px from the inlet hairline with three of its blades drawn across it. MECHANISM:
   `draw_comb_field` drew the source pond's reed fringe BEFORE the field's channels were inked or recorded,
