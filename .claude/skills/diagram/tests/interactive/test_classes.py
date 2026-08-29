@@ -182,6 +182,7 @@ def test_a_sibling_pair_naming_an_unknown_class_is_refused(monkeypatch: object) 
     ("a", "b"),
     [
         ("pond sluice", "field ditch"),
+        ("pond sluice", "sluice gate"),
         ("mulberry dike", "perimeter dike"),
         ("sugarcane dike", "perimeter dike"),
         ("banana dike", "perimeter dike"),

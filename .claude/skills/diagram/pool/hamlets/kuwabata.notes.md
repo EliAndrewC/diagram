@@ -248,3 +248,16 @@ district's ground. Drawn at 1 ft/px.
 - The acreage per household is the PADDY figure (`GROSS_ACRES_PER_HOUSEHOLD`); whether a silk-and-
   fish household held the same ground is a research question for the feature-139 audit.
 - The pool sweep and the polder cohort are owed at unlock (scope locked at conversion time).
+
+## 2026-08-29 - feature 153, the highlighting changes (page-side)
+
+The drawn map is unchanged in substance: the manifest moved only in `z` ordinals, and the PNG differs on
+18,640 of 12,181,000 pixels, every one of them by 1 or 2 of 255 - clip-edge antialiasing from splitting
+the perimeter dike's planted rows into their own string so they can carry their own highlight tone.
+
+`settlement-review` read the delta (scoped to the lit appearance, the hit regions and the changed
+strings, since the ink did not move) and returned **needs-work**, catching two defects the gate could
+not see: the perimeter dike's willow and mulberry still flattening to gold when lit (36,843 px), and the
+pond sluice's widened hit box winning only 42.4% of its own area because 49 of the 52 sluices are drawn
+on a field ditch whose group came later. Both fixed and re-measured (sluice 88.6%, worst 75.8%); the
+full row, including what was recorded rather than fixed, is in `docs/review-ledger.md`.

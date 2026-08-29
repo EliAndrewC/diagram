@@ -287,6 +287,25 @@ HIT_WIDEN: dict[str, tuple[float, float, float]] = {
     "stream": (1.5, 12.0, 4.5),
     "village lane": (4.0, 6.0, 3.0),
 }
+#: WHOSE BOX RIDES ABOVE THE INK instead of inside its own class group (feature 153). Everything else
+#: keeps the arrangement the GM tuned on 2026-08-28 - a box just above its own class's ink, buried by
+#: whatever is drawn later - and only a mark that CANNOT be hit any other way is lifted out.
+#:
+#: A pond sluice is the case: 49 of Kuwabata's 52 are drawn ON a field ditch (median centerline
+#: separation 0.03 px - a sluice IS a gate in a watercourse), the ditch group comes later, and its box
+#: took the pointer from the sluice's own 2.4 px line. Measured by `settlement-review`: the sluice won
+#: 42.4% of its own widened box, median 40%, worst 10.3%, seven sluices under 25% - so the GM's "really
+#: hard to click on" was still true after the widening meant to fix it. Lifted out: 88.6%, median 91.7%,
+#: worst 75.8%, none under 25%.
+#:
+#: LIFTING EVERY BOX WAS TRIED FIRST AND IS WRONG. Above the ink, the bund's 12 px box (8x a 1.4 px
+#: mark) stops being buried and blankets the map: +5,112 sample points for the bund, -2,802 for the
+#: mulberry dike, -1,472 for the vegetable ground, -914 for the paddy - hovering a dike would have
+#: given "bund". A box may beat empty ground; it may not beat another feature's drawn ink.
+HIT_ON_TOP: frozenset[str] = frozenset({"pond sluice"})
+#: Among the lifted ones, hardest-to-hit last (it wins). One member today; the order is here so the
+#: second one is a decision rather than a coincidence of dict order.
+HIT_PRIORITY: tuple[str, ...] = ("stream", "village lane", "bund", "bund beans", "field ditch", "pond sluice")
 HIT_WIDEN_FACTOR = 4.0
 HIT_WIDEN_MIN = 6.0
 #: The scrub's hit region is where its MARKS are, not its recorded polygon (the polygon is the whole
@@ -382,6 +401,11 @@ def _open(key: str, planted: bool = False) -> str:
     return f'<g class="f f-{slug(key)}{mark}" data-k="{html.escape(key, quote=True)}">'
 
 
+def _inline_hits(s: str, key: str) -> str:
+    """The widened copies that stay INSIDE their class group - every widened class but the lifted ones."""
+    return hit_copies(s, *HIT_WIDEN[key]) if key in HIT_WIDEN and key not in HIT_ON_TOP else ""
+
+
 def wrap(s: str, tag: ClsTag) -> str:
     """The HTML form of one record-stream string: unchanged when unclassed or ruled out; wrapped in its
     class group when classed; two copies for a `Split` (fill-only under the fill class, stroke-only under
@@ -389,11 +413,11 @@ def wrap(s: str, tag: ClsTag) -> str:
     if tag is None or tag == NOT_HIGHLIGHTED or not s:
         return s
     if isinstance(tag, str):
-        return _open(tag, isinstance(tag, Planted)) + merge_primitives(s) + (hit_copies(s, *HIT_WIDEN[tag]) if tag in HIT_WIDEN else "") + "</g>"
+        return _open(tag, isinstance(tag, Planted)) + merge_primitives(s) + _inline_hits(s, tag) + "</g>"
     if isinstance(tag, Split):
         fill_copy = _ATTR_STROKE.sub(' stroke="none"', s)
         stroke_copy = _ATTR_FILL.sub(' fill="none"', s)
-        return _open(tag.fill) + fill_copy + "</g>" + _open(tag.stroke) + stroke_copy + (hit_copies(stroke_copy, *HIT_WIDEN[tag.stroke]) if tag.stroke in HIT_WIDEN else "") + "</g>"
+        return _open(tag.fill) + fill_copy + "</g>" + _open(tag.stroke) + stroke_copy + _inline_hits(stroke_copy, tag.stroke) + "</g>"
     return "".join(wrap(piece, c) for c, piece in tag)
 
 
@@ -549,6 +573,46 @@ def hit_regions(manifest: dict[str, Any] | None, present: set[str]) -> str:
     return "".join(out)
 
 
+def _hit_pieces(s: str, tag: ClsTag) -> Iterator[tuple[str, str]]:
+    """(class, the ink a widened copy would be taken from) for one record string. A `Split` widens its
+    STROKE class only - the bund, not the paddy body it bounds."""
+    if isinstance(tag, str):
+        yield tag, s
+    elif isinstance(tag, Split):
+        yield tag.stroke, _ATTR_FILL.sub(' fill="none"', s)
+    elif tag is not None and tag != NOT_HIGHLIGHTED:
+        for c, piece in tag:
+            if c is not None:
+                yield from _hit_pieces(piece, c)
+
+
+def hit_layer(strings: Sequence[str], tags: Sequence[ClsTag]) -> str:
+    """Every widened hit copy on the page, in ONE layer, THINNEST-DRAWN CLASS LAST.
+
+    THE COPIES USED TO RIDE INSIDE THEIR OWN CLASS GROUP, and a group drawn later then buried them:
+    49 of Kuwabata's 52 pond sluices are drawn ON a field ditch (median centerline separation 0.03 px,
+    which is correct engineering - a sluice IS a gate in a watercourse), the ditch group comes later,
+    and its 14.4 px invisible box therefore took the pointer from the sluice's own drawn line. Measured
+    at 83,690 sample points by `settlement-review` on the first cut of this feature: the sluice won
+    44.2% of its own widened box and 47.3% of its own 2.4 px stroke, and 28 of those lost points went
+    to an invisible box rather than to any visible ink - so the GM's "really hard to click on" was
+    still true of most sluices after the widening that was meant to fix it.
+
+    One layer, ordered by `HIT_PRIORITY`, puts the decision on HOW HARD THE MARK IS TO HIT rather than
+    on draw order. Each class keeps its own `data-k` group, so hover, highlight and the modal are
+    unchanged - `page.js` already collects every `g.f` carrying a key."""
+    per: dict[str, list[str]] = {}
+    for s, tag in zip(strings, tags, strict=True):
+        for key, piece in _hit_pieces(s, tag):
+            if key not in HIT_ON_TOP or key not in HIT_WIDEN:
+                continue
+            copies = hit_copies(piece, *HIT_WIDEN[key])
+            if copies:
+                per.setdefault(key, []).append(copies)
+    order = sorted(per, key=lambda k: (HIT_PRIORITY.index(k) if k in HIT_PRIORITY else -1, k))
+    return "".join(_open(k) + "".join(per[k]) + "</g>" for k in order)
+
+
 def render_page(strings: Sequence[str], tags: Sequence[ClsTag], name: str, meta: dict[str, Any] | None = None, manifest: dict[str, Any] | None = None) -> str:
     """The whole page as one string - `write_html` writes it; tests read it."""
     present = present_classes(tags)
@@ -567,6 +631,9 @@ def render_page(strings: Sequence[str], tags: Sequence[ClsTag], name: str, meta:
         if rects:
             regions += _open(key) + f'<g class="hit" fill="none" style="pointer-events: fill">{rects}</g></g>'
     wrapped.insert(sheet + 1, regions)
+    # the widened boxes ride ABOVE the ink, in one layer of their own - see `hit_layer`
+    close = next((i for i in range(len(wrapped) - 1, -1, -1) if "</svg>" in wrapped[i]), len(wrapped))
+    wrapped.insert(close, hit_layer(strings, tags))
     svg = "\n".join(wrapped)
     svg = svg.replace("<svg ", '<svg id="map" ', 1)
     data = explanations(present)

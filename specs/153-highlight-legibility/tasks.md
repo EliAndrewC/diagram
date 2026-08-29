@@ -30,3 +30,15 @@ drawn, and nothing about their form, size, position or existence changes.
       wrong order - Kuwabata's woodland as glass rings, the page 0.255% of pixels from its own PNG.
       Fixed in `merge_primitives`, with the element cost measured at each step and the remaining
       antialiasing residual accepted and recorded (research R5, R6). `research: rendering`
+- [x] **T11** (settlement-review error 2) the sluice's widened box lost to the field ditch's on 49 of 52
+      sluices. `HIT_ON_TOP` lifts it into one layer above the ink; two wider designs measured and
+      rejected (research R7). 42.4% -> 88.6% of its own box, worst 10.3% -> 75.8%. `research: rendering`
+- [x] **T12** (settlement-review error 1) the perimeter dike's willow and mulberry rows now carry
+      `Planted`, so the GM's own complaint is fixed on both dikes rather than one (research R8).
+      `research: rendering`
+- [x] **T13** (settlement-review, questionable 1) `pond sluice` <-> `sluice gate` - the near-homonym the
+      GM's list did not name and the likeliest confusion on this map - is a sibling pair now.
+      `research: rendering`
+- [x] **T14** (settlement-review nitpicks 1-3) the four crop-dike sibling paragraphs share one constant;
+      the walk figure is measured (815 ft median, 3.1 min) rather than "a minute"; `landuse.py` uses the
+      absolute import its neighbors use. `research: rendering`

@@ -8,7 +8,8 @@ import random
 from collections.abc import Sequence
 from typing import TYPE_CHECKING, Any
 
-from ...interactive.tags import Planted
+from l7r.diagram.interactive.tags import Planted
+
 from .._geom import (
     Poly,
     Pt,

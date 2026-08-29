@@ -119,3 +119,45 @@ Declined.
 antialiasing at overlapping same-color strokes. Kuwabata 0.236%, Inashiro 0.005%, all of it under
 delta 25/255. Recorded so a later session does not read it as a bug and pay the element cost to
 "fix" it. If it ever needs revisiting, the lever is one condition in `_refused`.
+
+## R7 - a widened box that loses to another class's box (DEFECT, found by review, fixed here)
+
+`settlement-review` measured what the commit had claimed. FR-001 shipped, and the sluice still did not
+win its own box: **42.4% of the widened area, median 40%, worst 10.3%, seven of 52 under 25%** - and
+only 47.3% of the sluice's own drawn 2.4 px stroke. The evidence in the commit ("a point in the middle
+of the widened copy resolves to `pond sluice`") was true of the midpoint and false of most of the box.
+
+**Mechanism.** A hit copy rode inside its own class group, so document order decided every contest
+between two invisible boxes. **49 of the 52 sluices are drawn ON a field ditch** (median centerline
+separation 0.03 px - a sluice IS a gate in a watercourse, so this is correct engineering), the ditch's
+group comes later, and its 14.4 px box therefore covered the sluice's box AND the sluice's own ink.
+
+**Fix, and the design that was tried first.** `HIT_ON_TOP` lifts a class's boxes out of its group into
+one layer above the ink. Lifting EVERY widened class was implemented first and measured wrong: above
+the ink, the bund's 12 px box (eight times a 1.4 px mark) stops being buried and blankets the map -
+**+5,112 sample points to the bund, -2,802 from the mulberry dike, -1,472 from the vegetable ground,
+-914 from the paddy**, so hovering a dike would have answered "bund". An intermediate rule, "the
+thinnest drawn mark wins", is the same mistake with arithmetic on top: the bund IS the thinnest, and it
+took 59.5% of every sluice box. **Thinness is not smallness, and it is smallness that makes a target
+hard.** So only a mark that cannot be hit any other way is lifted, and today that is the pond sluice
+alone.
+
+**Measured after** (125,173 sample points, `document.elementFromPoint`, each box scrolled into view):
+sluice **88.6%** of its box, median 91.7%, worst 75.8%, **none under 25%**. Map-wide, every other class
+is unchanged to the sample except the ground immediately around the sluices - field ditch -300 points,
+mulberry dike -128, everything else +0.
+
+**Sources:** none - a page interaction convention, with nothing physical behind it.
+
+## R8 - the GM's own defect was still standing on the perimeter dike (DEFECT, found by review)
+
+R1 fixed the crop dike. `dikes.py` draws the polder embankment's two planted rows - willow on the water
+face, mulberry on the inner - inside the same string as the earth mottle, tagged plain. Lit, that was
+**36,843 px of drawn crown turned flat gold, and 0 px of `--hl-planted`**, under a modal that says the
+bank is "planted with willow and mulberry to bind it". FR-005's new sibling link walks the reader
+straight from the fixed dike to the unfixed one.
+
+The planted rows are now their own string under the same clip, tagged `Planted("perimeter dike")`. The
+split re-opens the clip group, so the raster is no longer bit-for-bit: **18,640 px of 12,181,000 differ,
+every one of them by 1 or 2 of 255** - clip-edge antialiasing, nothing visible, no geometry moved. The
+manifest changes only in `z` ordinals (one more drawn string shifts every later index by one).

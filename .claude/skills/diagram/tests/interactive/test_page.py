@@ -14,9 +14,22 @@ import re
 
 import pytest
 
-from l7r.diagram.interactive.classes import CLASSES
+from l7r.diagram.interactive.classes import CLASSES, NOT_HIGHLIGHTED
 from l7r.diagram.interactive.glossary import GLOSSARY
-from l7r.diagram.interactive.page import explanations, glossary_for, hit_copies, hit_regions, ink_census, marks_region, merge_primitives, present_classes, render_page, unregistered_classes, wrap
+from l7r.diagram.interactive.page import (
+    explanations,
+    glossary_for,
+    hit_copies,
+    hit_layer,
+    hit_regions,
+    ink_census,
+    marks_region,
+    merge_primitives,
+    present_classes,
+    render_page,
+    unregistered_classes,
+    wrap,
+)
 from l7r.diagram.interactive.sources import citations, registry, research_sources, section_sources, urls_of
 from l7r.diagram.interactive.tags import Split
 
@@ -200,7 +213,7 @@ def test_widened_classes_carry_their_hit_copies_and_others_do_not() -> None:
     assert 'class="hit"' in wrap(lane, "village lane") and 'class="hit"' not in wrap(lane, "pond")
     paddy = '<polygon points="0,0 9,0 9,9" fill="#A6C398" stroke="#7A5A30" stroke-width="1.4"/>'
     out = wrap(paddy, Split("paddy", "bund"))
-    assert out.count('class="hit"') == 1 and out.index('class="hit"') > out.index('data-k="bund"'), "the bund's hit copy rides in the bund group, above the paddy fill"
+    assert out.count('class="hit"') == 1 and out.index('class="hit"') > out.index('data-k="bund"'), "the bund's box rides in the bund group, above the paddy fill"
 
 
 def test_the_marks_region_covers_only_cells_that_hold_a_mark() -> None:
@@ -387,7 +400,7 @@ def test_a_pond_sluice_gets_the_field_ditchs_widening() -> None:
 
     assert HIT_WIDEN["pond sluice"] == HIT_WIDEN["field ditch"]
     sluice = '<line x1="10" y1="10" x2="30" y2="10" stroke="#37637F" stroke-width="2.4"/>'
-    out = wrap(sluice, "pond sluice")
+    out = hit_layer([sluice], ["pond sluice"])
     widths = [float(w) for w in re.findall(r'class="hit"[^>]*stroke-width: ([\d.]+)px', out)]
     assert widths == [14.4], f"one invisible copy, six times the drawn 2.4 px: {out}"
 
@@ -443,3 +456,31 @@ def test_a_fill_only_shape_is_not_outlined_and_still_merges_where_it_overlaps() 
     assert _outlined("circle", {"fill": "#4F6E33", "stroke": "#3C5526"})
     over = '<circle cx="10" cy="10" r="6" fill="#4F6E33"/><circle cx="14" cy="10" r="6" fill="#4F6E33"/>'
     assert merge_primitives(over).count("<circle") == 0
+
+
+def test_only_the_lifted_class_leaves_its_own_group() -> None:
+    """Feature 153. A pond sluice is a gate IN a watercourse, so 49 of Kuwabata's 52 are drawn on top of
+    a field ditch - and while every box rode inside its own class group, the ditch's group came later
+    and its 14.4 px box took the pointer from the sluice's own 2.4 px line (the sluice won 42.4% of its
+    own box; `settlement-review` measured it at 125,173 points, worst sluice 10.3%). Lifting the sluice
+    alone fixes it - 88.6%, worst 75.8% - and lifting EVERY box does not: above the ink the bund's 12 px
+    box stops being buried and takes 5,112 sample points off the dikes, the vegetable ground and the
+    paddy. So the layer holds exactly `HIT_ON_TOP`, and everything else stays where the GM tuned it."""
+    from l7r.diagram.interactive.page import HIT_ON_TOP
+
+    ditch = '<line x1="0" y1="10" x2="100" y2="10" stroke="#6E93A8" stroke-width="3.5"/>'
+    sluice = '<line x1="48" y1="10" x2="52" y2="10" stroke="#37637F" stroke-width="2.4"/>'
+    assert frozenset({"pond sluice"}) == HIT_ON_TOP
+    assert 'class="hit"' not in wrap(sluice, "pond sluice"), "the lifted class leaves nothing behind"
+    assert 'class="hit"' in wrap(ditch, "field ditch"), "every other widened class keeps its box inline"
+    layer = hit_layer([ditch, sluice], ["field ditch", "pond sluice"])
+    assert 'data-k="pond sluice"' in layer and 'data-k="field ditch"' not in layer
+
+
+def test_the_hit_layer_sits_above_the_ink_it_widens() -> None:
+    """One layer for every widened box, emitted after the drawn record and before `</svg>`."""
+    strings = ['<svg viewBox="0 0 20 20">', '<line x1="1" y1="1" x2="9" y2="9" stroke="#37637F" stroke-width="2.4"/>', "</svg>"]
+    tags = [NOT_HIGHLIGHTED, "pond sluice", None]
+    page = render_page(strings, tags, "t")
+    assert page.index('class="hit"') > page.index('stroke-width="2.4"')
+    assert page.index('class="hit"') < page.index("</svg>")
