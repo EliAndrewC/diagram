@@ -5,7 +5,7 @@ Split from settlement/structures.py by feature 114 - see settlement/structures/C
 
 import math
 from collections.abc import Callable, Sequence
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 
 from .._geom import (
     LABEL_AIR_CAP,
@@ -21,7 +21,7 @@ from .._geom import (
     tilt_caption_seat,
     way_beds,
 )
-from .._knobs import KOSATSUBA_MARKER_MIN_PX, PUNISHMENT_SPOT_FT
+from .._knobs import KOSATSUBA_MARKER_MIN_PX, PUNISHMENT_SPOT_FT, resolve_knob
 
 # The lane clearance a notice-board caption must MEET before nearness decides the seat. See the long
 # note beside `_pick` in `kosatsuba` for why this satisfices rather than maximizes, and why 5 ft.
@@ -64,6 +64,109 @@ def pick_caption_seat(
         ix = {id(q): i for i, q in enumerate(seats)}
         return min(clear, key=lambda q: (round((q[0] - at[0]) ** 2 + (q[1] - at[1]) ** 2, 3), ix[id(q)]))
     return max(legal, key=box_clearance)
+
+
+KOSATSUBA_ENTRANCE_REACH_FT = 100.0
+"""How near a dwelling the approach must come before it counts as having ARRIVED at the settlement.
+
+THE ENTRANCE IS THE FIRST BUILDINGS, NOT A RADIUS (settlement-review, feature 154). The first version
+measured arrival against the cluster's own reach - the greatest distance from any house to the house
+centroid - which is isotropic, and a settlement is not. On Sawada, a ribbon cluster of drawn aspect
+4.06, that radius is set by the ribbon's HALF-LENGTH: 382 ft. The approach crossed that circle 148 ft
+from the nearest house, out in the woodland and 3 ft above the top edge of the drawn sheet, so the
+board was sited off the page, `stage_notice`'s frame guard threw the seat away, and the map recorded
+an `entrance` placement it had not drawn.
+
+100 ft is not a new figure: it is the reach `farmhouses_reach_a_way` uses to decide whether a dwelling
+is served by a way at all. Where the approach first comes within serving distance of a house is where
+a walker would say the hamlet begins, and it is the same measure the rest of the engine already makes."""
+
+KOSATSUBA_ANCHOR_BAND_FT = 60.0
+"""How far from the best seat at an anchored placement another seat may stand and still compete.
+
+Not a new figure: it is `place_kosatsuba`'s own siting band, the ~60 real feet within which a board
+counts as belonging to the way it stands on (`kosatsuba_by_the_road`'s fallback tolerance). Reused
+here so an anchored placement admits the seats that genuinely front the entrance or the gate, and no
+others, and then hands the choice to the caption and roadside preferences that already existed.
+Making it TIGHTER would let a caption-blocked seat win on a foot of proximity; making it LOOSER would
+let the traffic term drag the board off the anchor, which is the defect this feature exists to fix."""
+
+
+def kosatsuba_affordances(M: Any) -> dict[str, bool]:
+    """Which board placements this map can SITE, read from the manifest the validator reads.
+
+    The same-source doctrine: a guard against a placement asks the question the checks ask. An
+    approach is a recorded road or a connector track; an official's gate is a house carrying
+    `role == "headman"`, which every pool VILLAGE records exactly once and no hamlet records at all.
+    """
+    lanes = M.get("lanes") or []
+    has_approach = bool(M.get("road") or (M.get("roads") or []) or any(ln.get("connector") for ln in lanes))
+    return {
+        "has_approach": has_approach,
+        "has_headman_house": any(h.get("role") == "headman" for h in (M.get("houses") or [])),
+    }
+
+
+def kosatsuba_anchor(M: Any, placement: str) -> tuple[float, float] | None:
+    """The point an anchored placement is measured to, or None when the placement is not anchored.
+
+    `center` returns None ON PURPOSE, and that is the whole reason this function has a null case: the
+    settlement center IS the traffic objective - *"the village center ... or the place where villagers
+    assembled"* - which `place_kosatsuba` already computes by counting dwellings around each seat, far
+    better than a centroid would. Returning the centroid here would replace a measure of where people
+    ARE with a measure of where the middle IS, and on a crescent or a ribbon cluster those are not the
+    same point. So `center` keeps today's behavior byte for byte, and only the two placements that
+    need a landmark get one.
+
+    `entrance` is the MOUTH, not the nearest point: the approach is walked from its far end inward and
+    the anchor is where it first reaches the cluster. Taking the nearest point instead would put the
+    anchor at the deepest point of the track's run past the houses, i.e. inside the settlement, which
+    is the opposite of an entrance.
+    """
+    houses = [(float(h["x"]), float(h["y"])) for h in (M.get("houses") or []) if "x" in h]
+    if not houses or placement == "center":
+        return None
+    if placement == "frontage":
+        gate = next((h for h in (M.get("houses") or []) if h.get("role") == "headman" and "x" in h), None)
+        return (float(gate["x"]), float(gate["y"])) if gate else None
+    if placement != "entrance":
+        return None  # pragma: no cover - the value space holds no other placement
+
+    def _at_the_buildings(q: tuple[float, float]) -> bool:
+        """Has the approach arrived? Measured to the nearest DWELLING, never to a centroid radius."""
+        return min(math.hypot(q[0] - h[0], q[1] - h[1]) for h in houses) <= KOSATSUBA_ENTRANCE_REACH_FT
+
+    runs: list[list[tuple[float, float]]] = []
+    if M.get("road"):
+        runs.append([(float(p[0]), float(p[1])) for p in M["road"]])
+    runs += [[(float(p[0]), float(p[1])) for p in (r.get("pts") or [])] for r in (M.get("roads") or [])]
+    runs += [[(float(x), float(y)) for x, y in (ln.get("pts") or [])] for ln in (M.get("lanes") or []) if ln.get("connector")]
+    best: tuple[float, tuple[float, float]] | None = None
+    for run in runs:
+        if len(run) < 2:
+            continue
+        # walk from whichever end is FURTHER out, so "first reach" means arriving rather than leaving
+        _far = min(math.hypot(run[0][0] - h[0], run[0][1] - h[1]) for h in houses)
+        _near = min(math.hypot(run[-1][0] - h[0], run[-1][1] - h[1]) for h in houses)
+        walk = run if _far >= _near else run[::-1]
+        # SAMPLED ALONG THE SEGMENTS, NOT AT THE VERTICES. A track is recorded with as few points as
+        # its shape needs, so one that runs straight through the cluster can have no vertex inside it
+        # at all - the first version of this tested vertices and returned "no entrance" for a
+        # two-point track passing right through the houses, caught by its own unit test rather than by
+        # a map, because the pool's connectors happen to be densely recorded.
+        acc = 0.0
+        for u, v in zip(walk, walk[1:], strict=False):
+            seg = math.dist(u, v)
+            steps = max(1, int(seg / 5.0))
+            for k in range(1, steps + 1):
+                q = (u[0] + (v[0] - u[0]) * k / steps, u[1] + (v[1] - u[1]) * k / steps)
+                if _at_the_buildings(q) and (best is None or acc + seg * k / steps < best[0]):
+                    best = (acc + seg * k / steps, q)
+                    break
+            if best is not None:
+                break
+            acc += seg
+    return best[1] if best else None
 
 
 class PublicFixturesMixin:
@@ -615,10 +718,38 @@ class PublicFixturesMixin:
         # ROADSIDE FIRST (GM 2026-08-26): at the lane tiers, if any seat stands within KOSATSUBA_VERGE_FT
         # of a tread, only those seats compete - the caption and traffic preferences below then choose
         # AMONG roadside seats instead of trading the roadside away for a clearer caption.
-        if str((self.M.get("meta") or {}).get("scale") or "") in ("hamlet", "village"):
+        _scale = str((self.M.get("meta") or {}).get("scale") or "")
+        if _scale in ("hamlet", "village"):
             roadside = [c for c in cands if c[6] <= KOSATSUBA_VERGE_FT / ftpx + 1e-6]
             if roadside:
                 cands = roadside
+
+        # THE PLACEMENT IS A KNOB, NOT ONE OBJECTIVE (feature 154, GM 2026-08-29). The record attests
+        # several sites for the board and this siter used to know one of them - the busiest node -
+        # so every hamlet answered the same way a question the record answers three ways, and Sawada's
+        # board ended up 9.0 ft off an 81.7 ft DEAD-END SPUR (7 of 19 dwellings within 250 ft against
+        # 13 at the busiest stretch). A cul-de-sac head is not a center, an entrance or an official's
+        # gate; it is outside what the record attests, not at one end of a supported range.
+        #
+        # Principle XII: where the record supports distinct FORMS, the rule is a knob rolled from the
+        # map's own seed. `_kosatsuba_seat_ok` carries the value space, the evidence and the reason two
+        # attested placements are withheld at these tiers.
+        #
+        # TIER-SCOPED (FR-009), and this is a requirement rather than an assumption because the code
+        # says so: `pool/towns/hirameki.gen.py` calls `place_kosatsuba()`, so a TOWN comes through here.
+        # Towns and cities keep the traffic objective they were sited under.
+        placement = "center"
+        if _scale in ("hamlet", "village"):
+            placement = str(resolve_knob("kosatsuba_seat", int(self.seed), kosatsuba_affordances(self.M), (self.M["meta"].get("knobs") or {})))
+        self.M["meta"]["kosatsuba_seat"] = placement
+        anchor = kosatsuba_anchor(self.M, placement)
+        if anchor is not None:
+            # AN ANCHORED PLACEMENT CHOOSES THE GROUND; the preferences below then choose among the
+            # seats on it. `center` returns no anchor on purpose - its objective IS the traffic count
+            # already computed, which measures where people ARE rather than where the middle is.
+            _near = min(math.hypot(c[2] - anchor[0], c[3] - anchor[1]) for c in cands)
+            _band = KOSATSUBA_ANCHOR_BAND_FT / ftpx
+            cands = [c for c in cands if math.hypot(c[2] - anchor[0], c[3] - anchor[1]) <= _near + _band] or cands
         # ON THE TRAFFIC IS THE RULE; A FITTING CAPTION IS ONLY THE PREFERENCE WITHIN IT. Scoring the
         # caption as a flat bonus large enough to outrank traffic was tried first and re-committed the
         # original sin at one remove: where no seat on a tight village frontage has a clear caption,
@@ -628,7 +759,9 @@ class PublicFixturesMixin:
         # sets a floor (60% of the best count available), and the caption chooses only among the seats
         # that already stand on the traffic. A board with nowhere to put its caption is still placed,
         # so labels_clear_of_other_buildings reports it rather than the siter hiding it.
-        floor = 0.6 * max(c[0] for c in cands)
+        # ...and the traffic floor applies only where traffic is the objective. Keeping it under an
+        # anchored placement would drag the board back toward the busy node the anchor just declined.
+        floor = 0.0 if anchor is not None else 0.6 * max(c[0] for c in cands)
 
         # A BOARD POSITION IS ONLY AS GOOD AS THE CAPTION IT CAN CARRY (cohort seed 14, 2026-08-20).
         # `lab` above asks only whether the two DEFAULT seats clear STRUCTURES. It never asks about

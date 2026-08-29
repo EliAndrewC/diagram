@@ -566,3 +566,104 @@ def test_the_board_can_be_sited_on_a_manifest_that_records_runs_but_no_lane_reco
     # ...it stands off the tread, on the verge of the one way there is
     x, y = spot
     assert 4.0 < abs(y - 500.0) < 60.0, f"the board should hug the verge, got {abs(y - 500.0):.1f} ft off"
+
+
+# ---------------------------------------------------------------------------
+# Feature 154: the kosatsuba's placement is a knob over the attested sites.
+
+
+def test_a_settlement_is_only_offered_the_board_placements_it_can_site() -> None:
+    """THE AFFORDANCE RULE IS THE TYPING RULE. A settlement with no recorded approach cannot put its
+    board at one, and one recording no house for its official cannot put it at their gate - so those
+    values are not in the rolled pool at all, rather than being rolled and then fudged.
+
+    The two attested placements that are NOT in the value space are asserted here too, because their
+    absence is a decision: a bridgehead and a shrine precinct are real sites in the record, withheld
+    at these tiers because the pool's "bridges" are 10 ft ditch planks and its only "shrines" are
+    household hokora in dooryards."""
+    from l7r.diagram.settlement._knobs import KNOBS
+
+    knob = KNOBS["kosatsuba_seat"]
+    assert set(knob.value_space) == {"center", "entrance", "frontage"}
+    assert "bridgehead" not in knob.value_space and "shrine" not in knob.value_space
+
+    bare = {"has_approach": False, "has_headman_house": False}
+    assert knob.allowed(bare) == ["center"], "every settlement can site the assembly ground"
+    assert knob.allowed({"has_approach": True, "has_headman_house": False}) == ["center", "entrance"]
+    assert knob.allowed({"has_approach": False, "has_headman_house": True}) == ["center", "frontage"]
+    assert len(knob.allowed({"has_approach": True, "has_headman_house": True})) == 3
+
+
+def test_the_board_affordances_are_read_from_the_manifest_the_checks_read() -> None:
+    """Same-source doctrine. An approach is a recorded road OR a connector track; an official's gate is
+    a house carrying `role == "headman"` - which every pool VILLAGE records exactly once and no hamlet
+    records at all, which is why a hamlet is not offered that placement."""
+    from l7r.diagram.settlement.structures.fixtures import kosatsuba_affordances
+
+    assert kosatsuba_affordances({}) == {"has_approach": False, "has_headman_house": False}
+    assert kosatsuba_affordances({"lanes": [{"pts": [], "connector": True}]})["has_approach"] is True
+    assert kosatsuba_affordances({"road": [(0, 0), (10, 10)]})["has_approach"] is True
+    assert kosatsuba_affordances({"roads": [{"pts": [(0, 0), (1, 1)]}]})["has_approach"] is True
+    assert kosatsuba_affordances({"lanes": [{"pts": [], "connector": False}]})["has_approach"] is False
+    houses = [{"x": 1.0, "y": 1.0}, {"x": 2.0, "y": 2.0, "role": "headman"}]
+    assert kosatsuba_affordances({"houses": houses})["has_headman_house"] is True
+    assert kosatsuba_affordances({"houses": houses[:1]})["has_headman_house"] is False
+
+
+def test_the_center_placement_is_deliberately_unanchored() -> None:
+    """`center` returns NO anchor, and that null case is the point. The settlement center is the
+    TRAFFIC objective - "the village center ... or the place where villagers assembled" - which the
+    siter already computes by counting dwellings around each seat. A centroid would measure where the
+    middle IS rather than where people ARE, and on a crescent or ribbon cluster those differ."""
+    from l7r.diagram.settlement.structures.fixtures import kosatsuba_anchor
+
+    M = {"houses": [{"x": 0.0, "y": 0.0}, {"x": 100.0, "y": 0.0}]}
+    assert kosatsuba_anchor(M, "center") is None
+    assert kosatsuba_anchor({"houses": []}, "entrance") is None, "no dwellings, no settlement to enter"
+
+
+def test_the_entrance_anchor_is_the_mouth_and_not_the_nearest_point() -> None:
+    """THE APPROACH IS WALKED FROM ITS FAR END INWARD. Taking the nearest point on the track instead
+    would anchor at the DEEPEST point of its run past the houses - inside the settlement, which is the
+    opposite of an entrance. Here the track runs from far away (x=-900) straight through the cluster:
+    the mouth is where it first reaches the houses, not where it passes the middle of them."""
+    from l7r.diagram.settlement.structures.fixtures import kosatsuba_anchor
+
+    houses = [{"x": float(x), "y": 0.0} for x in (0.0, 60.0, 120.0)]
+    track = {"houses": houses, "lanes": [{"connector": True, "pts": [(-900.0, 0.0), (400.0, 0.0)]}]}
+    got = kosatsuba_anchor(track, "entrance")
+    assert got is not None and got[0] < 60.0, f"the mouth is the near side, got {got}"
+
+    # ...and walked the other way round, the answer is the same end of the settlement it arrives at
+    reversed_track = {"houses": houses, "lanes": [{"connector": True, "pts": [(400.0, 0.0), (-900.0, 0.0)]}]}
+    assert kosatsuba_anchor(reversed_track, "entrance") == got, "direction of the record must not matter"
+
+    assert kosatsuba_anchor({"houses": houses}, "entrance") is None, "no approach recorded, no mouth"
+
+
+def test_the_frontage_anchor_is_the_official_s_own_house() -> None:
+    """Read, not proxied. An earlier draft approximated it by the largest dwelling; measurement retired
+    that - across the 13 pool hamlets the largest and second-largest differ by 1.00 to 1.14x, so it
+    would have been arbitrary."""
+    from l7r.diagram.settlement.structures.fixtures import kosatsuba_anchor
+
+    houses = [{"x": 10.0, "y": 10.0, "w": 90.0, "h": 90.0}, {"x": 300.0, "y": 40.0, "w": 20.0, "h": 20.0, "role": "headman"}]
+    assert kosatsuba_anchor({"houses": houses}, "frontage") == (300.0, 40.0), "the recorded gate, not the biggest roof"
+    assert kosatsuba_anchor({"houses": houses[:1]}, "frontage") is None
+
+
+def test_the_placement_is_seeded_and_reproduces() -> None:
+    """FR-002 / SC-004: the same seed yields the same placement, and it draws independently of every
+    other knob (`knob_rng` derives its own sub-seed), so adding it perturbs nothing already rolled."""
+    from l7r.diagram.settlement._knobs import resolve_knob
+
+    ctx = {"has_approach": True, "has_headman_house": True}
+    first = [resolve_knob("kosatsuba_seat", s, ctx, {}) for s in range(40)]
+    again = [resolve_knob("kosatsuba_seat", s, ctx, {}) for s in range(40)]
+    assert first == again, "a seeded knob reproduces"
+    assert len(set(first)) > 1, "and it is a knob, not a constant"
+    assert set(first) <= {"center", "entrance", "frontage"}
+    # a pinned value overrides the roll, and one the map cannot site is a loud error
+    assert resolve_knob("kosatsuba_seat", 3, ctx, {"kosatsuba_seat": "frontage"}) == "frontage"
+    with pytest.raises(ValueError, match="typing rule"):
+        resolve_knob("kosatsuba_seat", 3, {"has_approach": False, "has_headman_house": False}, {"kosatsuba_seat": "entrance"})

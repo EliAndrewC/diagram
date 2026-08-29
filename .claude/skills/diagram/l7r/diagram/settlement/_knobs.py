@@ -219,6 +219,47 @@ def _settlement_form_ok(v: Any, ctx: Mapping[str, Any]) -> bool:
 register_knob(Knob("settlement_form", ["nucleated", "linear", "dispersed", "water_town", "dike_top"], default="nucleated", typing_rule=_settlement_form_ok))
 register_knob(Knob("field_archetype", ["valley_paddy", "contour_terraces", "polder_grid", "ribbon_valley", "mulberry_dike_fishpond"], default="valley_paddy", typing_rule=_field_archetype_ok))
 register_knob(Knob("land_use_overlay", ["none", "mulberry_fishpond", "lotus", "tea_fringe"], default="none", typing_rule=_land_use_ok))
+
+
+def _kosatsuba_seat_ok(v: Any, ctx: Mapping[str, Any]) -> bool:
+    """Which attested board placements THIS settlement can actually site.
+
+    THE RECORD ATTESTS FIVE; THESE TIERS AFFORD THREE, and the difference is a measurement rather than
+    a preference (feature 154, `specs/154-kosatsuba-placement-knob/spec.md` "Decisions Recorded"). The
+    bakufu set kosatsuba *"at points of heavy passage: barriers and ports, the foot of large bridges,
+    and the entrances and centers of towns and villages"*; in farming villages *"at the village center,
+    the shrine precinct, or the place where villagers assembled"*; also *"at bridgeheads and before the
+    gate of the village officials' houses"* (`research/urban-features.md`, four sources READ 2026-08-26
+    under feature 133 T13). The doc's own settlement-scale sentence narrows it: the board stood *"where
+    the settlement's one lane carries everyone - by the headman's frontage or the lane junction /
+    entrance"*.
+
+    WITHHELD, DELIBERATELY, and not by this rule - they are absent from the value space entirely, so
+    nothing can roll them:
+      - a BRIDGEHEAD. Every pool hamlet records 4-17 crossings, and they are 9.8-10.5 ft planks 2 ft
+        wide over field ditches. "The foot of large bridges" is not that, and relabeling one would be
+        an unlabeled guess wearing a finding's clothes - constitution XII's one named failure.
+      - the SHRINE PRECINCT. Only 3 of 13 hamlets carry a shrine at all and it is a `farm_fixtures`
+        household hokora in a dooryard, which is private ground; siting the state's notice there would
+        also break "every attested site is ON the way".
+    Both become real at the town and city tiers, where a bridgehead and a shrine compound exist.
+
+    The three that remain are gated on EVIDENCE IN THE MANIFEST, read the way the validator reads it:
+    a settlement with no recorded approach cannot put its board at one, and a settlement recording no
+    house for its official cannot put it at their gate. Note what that second one is NOT: the record
+    puts the person in the hamlet - *"the headman (or in a hamlet the senior farmer answering to the
+    village headman) received, copied, and relayed the circulars"* - so this is a SITING limit, not a
+    claim that a hamlet had no such official."""
+    if v == "center":
+        return True  # every settlement has dwellings, so the assembly ground always exists
+    if v == "entrance":
+        return bool(ctx.get("has_approach"))
+    if v == "frontage":
+        return bool(ctx.get("has_headman_house"))
+    return False  # pragma: no cover - an unregistered value cannot reach here through `allowed`
+
+
+register_knob(Knob("kosatsuba_seat", ["center", "entrance", "frontage"], default="center", typing_rule=_kosatsuba_seat_ok))
 register_knob(Knob("cluster_position", ["high_margin", "flank", "mid_margin", "valley_mouth", "valley_head", "on_rise"], default="high_margin"))
 register_knob(Knob("cluster_shape", ["round", "elongated", "crescent", "split"], default="round", typing_rule=_cluster_shape_ok))
 register_knob(Knob("lane_web", list(LANE_WEBS), default="alleys"))

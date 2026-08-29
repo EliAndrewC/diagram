@@ -8,7 +8,7 @@ from __future__ import annotations
 import math
 
 from l7r.diagram.settlement import Settlement, seg_dist
-from l7r.diagram.settlement.structures.fixtures import KOSATSUBA_MARKER_MIN_PX, KOSATSUBA_VERGE_FT
+from l7r.diagram.settlement.structures.fixtures import KOSATSUBA_MARKER_MIN_PX, KOSATSUBA_VERGE_FT, kosatsuba_anchor
 
 from .consts import POLDER_ARCHETYPES
 from .hinterland import CROP_MARGIN, title_pocket
@@ -106,9 +106,25 @@ def stage_notice(s: Settlement, plan: SitePlan) -> None:
                     if _tl is not None and 0 <= _lz < len(_tl):
                         _tl[_lz] = ""
                     break
+            # THE RE-SEAT MUST OBEY THE SAME TWO RULES THE SITER DOES, and it obeyed neither
+            # (settlement-review, feature 154). It ran after `place_kosatsuba` and ranked purely by
+            # traffic over every non-connector lane, so on Sawada and Kashikawa it silently threw away
+            # the `entrance` seat the knob had rolled and put the board back at the interior busiest
+            # node - the map RECORDED a placement it had not drawn, and the interactive page told a
+            # clicking reader so. It also seated on a 3 ft `web` straggler, which is exactly what
+            # `place_kosatsuba`'s own comment forbids: "A SERVICE LANE IS NOT A PLACE TO POST THE
+            # STATE'S NOTICE ... a side lane's busiest node is still a side lane, so scoring must never
+            # see it."
+            #
+            # So: MAIN WAYS FIRST, web lanes only if nothing else takes a board; and where the map
+            # declares an anchored placement, rank by nearness to that anchor rather than by traffic.
+            _seat = str((s.M.get("meta") or {}).get("kosatsuba_seat") or "center")
+            _anchor = kosatsuba_anchor(s.M, _seat)
+            _lanes = [ln for ln in s.M.get("lanes", []) if not ln.get("connector")]
+            _ranked = [ln for ln in _lanes if not ln.get("web")] or _lanes
             best: tuple[float, float, float, float] | None = None
-            for lane in s.M.get("lanes", []):
-                if lane.get("connector"):
+            for lane in _ranked:
+                if lane.get("connector"):  # pragma: no cover - filtered above; kept so the loop reads on its own
                     continue
                 pts = lane["pts"]
                 for i in range(len(pts) - 1):
@@ -145,9 +161,10 @@ def stage_notice(s: Settlement, plan: SitePlan) -> None:
                             # hole and shipped it on cohort seed 13.
                             if not s.fixture_clear_of_water(cx2, cy2, math.hypot(_bw, _bh) / 2):
                                 continue
-                            busy = sum(1 for h in hs if math.hypot(cx2 - h["x"], cy2 - h["y"]) < 260)
-                            if best is None or -busy < best[0]:
-                                best = (-busy, cx2, cy2, rot)
+                            # nearest the declared placement where there is one, else the busiest node
+                            _rank = math.hypot(cx2 - _anchor[0], cy2 - _anchor[1]) if _anchor is not None else -sum(1 for h in hs if math.hypot(cx2 - h["x"], cy2 - h["y"]) < 260)
+                            if best is None or _rank < best[0]:
+                                best = (_rank, cx2, cy2, rot)
             if best is not None:
                 s.kosatsuba(best[1], best[2], rot=best[3])
             else:  # pragma: no cover - no verge inside the cloud takes a board; keep the engine's seat rather than none
