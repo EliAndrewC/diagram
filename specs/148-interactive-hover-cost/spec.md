@@ -143,3 +143,10 @@ answer first.
   the assertion. (3) The Assumptions section explained the GM's "much slower to load" away on evidence
   that did not reach it - the claim is deleted, FR-005 now measures load, and the load half is named as an
   open question rather than answered by assertion.
+- **Round 2, `spec-fidelity`, 2026-08-29: FAITHFUL.** All three findings fixed in substance rather than
+  wording; nothing in the revision - FR-006, the load clause, or the "Why not every class" section -
+  found to add anything the GM did not ask for. Two non-blocking asides, both taken: US2's acceptance
+  scenario still read presence-only where its own requirement asks presence AND coverage, and the spec
+  nowhere said out loud that the sentence the GM approved ("region coverage built from their own marks")
+  was exact for scrub and NOT for marsh. That second one is recorded above under "One thing the session
+  told the GM was inexact", because it changes which requirement carries the safety.
