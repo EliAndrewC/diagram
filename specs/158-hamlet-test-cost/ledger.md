@@ -74,6 +74,17 @@ tier (town, city, capital, village). These are the GM's category exactly: *"ther
 what would happen if we encountered a type of map, which is literally impossible to produce any
 longer"*. Four more went with the retired bridge checks. The corpus is **134 -> 104**.
 
+**One of the 26 was ALSO the full-gate coverage SENTINEL, and deleting it broke a test** - caught by
+the closing full-tier run, fixed rather than reverted.
+`settlement_wells_fire_on_a_village_with_no_wells.json` was a hand-authored Kikuta village with its
+wells taken out, picked by feature 022's greedy line-coverage search, and
+`tests/full/test_coverage_carriers.py` loaded it by name. Its remaining job was to keep full-mode
+`gate()` - no `only=`, every segment, the shared derivations end to end - under test inside the
+suite, and a REAL ROLL does that better: the sentinel is now the cached reference hamlet through the
+whole gate, asserted clean, plus one deliberate break (its wells removed) that the gate must still
+name. Recorded because the lesson generalizes: **a fixture's tier tells you whether it is a hand-era
+map; it does not tell you what else is holding on to it.**
+
 **What was NOT deleted, deliberately**: the 35 fixtures that declare no tier at all. Those are
 synthetic manifests captured from unit tests - hand-BUILT minimal manifests, not maps from the
 hand-placement era - and feature 141 kept them for that reason.

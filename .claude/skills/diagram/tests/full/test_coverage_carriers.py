@@ -1,40 +1,38 @@
-"""THE FULL TREE (feature 135, GM 2026-08-27): the coverage CARRIERS - fixtures and frozen pool maps replayed
-through the whole gate so deep branches execute. They prove nothing at the merge check, which enforces no
-coverage floor (the Makefile's `test` target defers the floors to FULL), and the largest costs 10.6 s; so they
-run where the floors are enforced: `make done FULL=1` and the AWS check. Verdict-free as before."""
+"""THE FULL TREE (feature 135, GM 2026-08-27): the coverage CARRIERS - subjects replayed through the WHOLE
+gate so deep branches execute. They prove nothing at the merge check, which enforces no coverage floor (the
+Makefile's `test` target defers the floors to FULL), so they run where the floors are enforced:
+`make done FULL=1` and the AWS check."""
 
-import os
+import copy
+from typing import Any
 
 import pytest
 
 from l7r.diagram import check_village
-from tests.gate.test_regressions import HERE, _load
+from l7r.diagram import hamletgen as hg
+from l7r.diagram.pipeline import rollcache
 
-# Feature 022: the targeted replay no longer runs every check against every fixture, which
-# uncovered 33 statements that only ever executed during fixtures' full-gate replays - deep
-# branches needing frozen bad geometry (a capital deferral pass, a samurai-estate label pile-up,
-# village fallow/shrine/pond forks). These four fixtures were selected EMPIRICALLY (greedy
-# line-coverage search, specs/022-gate-check-registry/) to cover them; they also keep full-mode
-# gate() integration-tested inside the suite. If coverage drops here again, re-run the greedy
-# search rather than guessing fixtures.
-_FULL_GATE_SENTINELS = ["settlement_wells_fire_on_a_village_with_no_wells.json"]
+REFERENCE = hg.HamletSpec(name="Inashiro", seed=4, households=15, down_deg=90, water_sink="pond")
 
 
-@pytest.mark.parametrize("name", _FULL_GATE_SENTINELS)
-def test_full_gate_coverage_sentinel(name):
-    path = os.path.join(HERE, "pool", "regressions", name)
-    M, fires = _load(path)
-    failed = set(check_village.gate(M, verbose=False))
-    missing = [c for c in fires if c not in failed]
-    assert not missing, f"{name} no longer trips under the FULL gate: {missing}"
+# THE SENTINEL IS A ROLL NOW, NOT A STORED BAD MAP (feature 158, 2026-08-29). It used to be
+# `settlement_wells_fire_on_a_village_with_no_wells.json` - a hand-authored Kikuta village with its wells
+# taken out, picked by feature 022's greedy line-coverage search. That fixture went with the rest of the
+# hand-era corpus on the GM's ruling (*"there is no reason to see what would happen if we encountered a type
+# of map, which is literally impossible to produce any longer"*), and what it was actually still earning its
+# place for - keeping full-mode `gate()` (no `only=`, every segment, the shared derivations end to end) under
+# test inside the suite - a real roll does better, because the manifest is one the engine can still produce.
+#
+# The deliberate break is what stops this going vacuous: a gate that returned `[]` for every input would pass
+# the "it runs" half and fail here.
+@pytest.mark.rolls_map
+def test_the_whole_gate_runs_end_to_end_on_a_real_roll_and_still_names_a_break() -> None:
+    _plan, rolled = rollcache.hamlet(REFERENCE)
 
+    clean: list[str] = check_village.gate(copy.deepcopy(rolled), verbose=False)
+    assert clean == [], f"the reference roll must be clean under the FULL gate, or the break below proves nothing: {clean}"
 
-# THE FROZEN-POOL CARRIERS ARE GONE (feature 158, GM 2026-08-29: *"there is no reason to see what would
-# happen if we encountered a type of map, which is literally impossible to produce any longer"*). Five frozen
-# hand-authored manifests - two towns, a provincial city and two hamlets - used to be replayed through the FULL
-# gate purely to carry line coverage into `check_village`'s urban branches. They carried NOTHING enforced: since
-# feature 145 the Makefile omits `check_village` from the global 100% floor (the GM ruled on 2026-08-28 that the
-# other tiers owe no floor while nothing exercises them), and the derived hamlet-path floor judges only modules
-# the scripted rolls execute, which these do not touch. So the carriers were paying ~3 s of every full sweep to
-# hold up a floor that no longer exists, on maps no generator can produce. The synthetic sentinel above stays: it
-# is a hand-built manifest, not a map from the hand-placement era, and it still holds full-mode `gate()` under test.
+    broken: dict[str, Any] = copy.deepcopy(rolled)
+    broken["wells"] = []
+    named = check_village.gate(broken, verbose=False)
+    assert "settlement_has_wells" in named and "settlement_dwellings_watered" in named, f"the full gate no longer names a settlement with no wells: {named}"
