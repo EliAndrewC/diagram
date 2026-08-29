@@ -395,3 +395,23 @@ the default for every target; the `COMPUTE=` knob remains for the next workload 
 | b3617f0d, 5b376edc, b2056da1 | `make ci-image` (T019): system pip on 26.04 refused Debian deps; Docker Hub 429'd CodeBuild; then **built and pushed in 96 s wall** from an ECR Public base through a uv venv | 2+1+2 (MEDIUM, $0.01/min) | ~$0.05 - the image exists; dispatches now pull it instead of bootstrapping |
 | a6e2afe6 | **`ci-check FULL=1`** (T080): the whole FULL sweep on 36 vCPU - test-full 280 s (3,599 passed, 2 failed: the pre-existing ratchet seed 41 `fields_clear_of_road`, and a test of this feature that read the build's SPECIFY_FEATURE - fixed), then perf-gate took BOTH bookends in-build (~9 min) | 18 | $1.44; the first two `codebuild` snapshots exist |
 | 8f16f7df, 7fb2f3b6, dc0dc235 | **CodeBuild noise floor** (feature 129 T005, `ci-check TARGET="perf LABEL=129-noise-x"`): totals 290.2 / 292.4 / 291.8 s - spread 0.8% total, 1.1% worst seed (laptop: 0.7% / 1.7%) | 6+7+6 | ~$1.52; the first runs on the custom image - ~6 min wall each vs 8 with the bootstrap |
+
+## 2026-08-29 - feature 158, the hamlet-tier test-cost pass
+
+Not a `timings.py` block: these are the three tiers the GM named, measured before and after, on the
+`diagram-tests` clone at merge base `77fc359a` with 8 xdist workers. Full record in
+`specs/158-hamlet-test-cost/ledger.md`.
+
+| tier | before | after |
+|---|---|---|
+| `make quick ALL=1` (the pytest half) | 40.6 s, 2,206 tests | **10.5 s**, 2,199 tests |
+| the non-rolling suite (`make durations`, no coverage) | 45.2 s, 2,390 tests | **9.9 s**, 2,376 tests |
+| the full sweep | 390.6 s | **246-366 s** (it rolls for real and serves nothing from the cache, so it is a range) |
+
+The hamlet-path coverage floor is unchanged at **99.78%** - the same 36 lines in the same 8 modules
+that main already carried.
+
+Two levers measured and REJECTED, recorded in `dev/lessons.md` so they are not re-tried: shrinking a
+test's `plan.envelope` (the fan is 1,985 plots at every size from 600 px down to 150) and
+`COVERAGE_CORE=sysmon` (slower here than the C tracer, on byte-identical coverage tables).
+

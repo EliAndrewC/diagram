@@ -119,7 +119,7 @@ it is the tooling. With remote off, a paid run the tooling was about to start is
 
 | command | what it does | time |
 |---|---|---|
-| `make quick` | lint, types, and every test that does not roll a map; stops at the first failure, failed-first (`--ff`) so a fix that did not take fails in seconds | **~33 s** |
+| `make quick` | lint, types, and every test that does not roll a map; stops at the first failure, failed-first (`--ff`) so a fix that did not take fails in seconds | **~11 s** (feature 158, 2026-08-29: 41 s before it - one 39 s test was the whole critical path) |
 | `make sun-audit M=...` | the sun rules and the belt's page presence off the manifest - the numbers a record may quote | ~1 s |
 | `make polder-probe SEED=21` | the polder block ALONE with its geometry metrics - parcels across a channel, the berm, acreage, the organic numbers. The geometry loop's fast path: it builds through the same `fit_polder` the map does, so it cannot pass while the map fails | **0.2 s** (a map roll is ~47 s) |
 | `make overlap-audit M=...` | does A overlap B on a finished map, over RECORDS and over drawn INK (five families). Replaces the point-in-polygon script that got hand-written twelve times across feature 150 | ~2 s |

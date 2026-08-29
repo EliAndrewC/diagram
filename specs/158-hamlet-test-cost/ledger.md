@@ -16,13 +16,17 @@ the fair unit-test numbers.
 | **1 - `make quick ALL=1`** (the pytest half) | 40.6 s, 2,206 tests | **10.5 s**, 2,199 tests | **3.9x** |
 | **the non-rolling suite** (`make durations`, no coverage) | 45.2 s, 2,390 tests | **9.9 s**, 2,376 tests | **4.6x** |
 | **2 - the gate** (`make done`, warm, coverage on) | 116 s cold-cache / 16-23 s warm | **23.4 s** in its test phase, 46.6 s the whole gate | the baseline's 116 s was a cold-cache artifact (R1) |
-| **3 - the full sweep** | 390.6 s, 2,794 tests | **366 s**, 2,748 tests | 1.07x |
+| **3 - the full sweep** | 390.6 s, 2,794 tests | **246-366 s**, 2,763 tests | up to 1.6x |
 
 And the test that WAS the whole shape of the profile: **39.2 s -> 8.1 s**.
 
-The full tier moved least, and honestly: it is dominated by real map rolls that the GM wants, and the
-one big cut there (the determinism ratchet, 214 s -> ~143 s) is partly offset by the fact that the
-full run deliberately serves nothing from the roll cache. The unit tiers are where a 4x lives.
+The full tier's figure is a RANGE and is quoted as one on purpose: it rolls maps for real and serves
+nothing from the roll cache, so its wall clock moves with what the generation cache happens to hold -
+three runs of the same tree on the same afternoon came in at 366 s, 292 s and 246 s. The unit tiers do
+not have that variance, and they are where the 4x lives.
+
+**The floors, measured after the regression below was fixed: 99.78%, 36 lines, 8 modules - EXACTLY
+main's line, the same lines in the same modules.** Nothing fell.
 
 ## 2. The checks - what was retired, and what carries it now
 
@@ -193,3 +197,15 @@ tier rolls. It is NOT this feature's (constitution XIII: pre-existing failures s
 not fixed under someone else's feature) and, more importantly, the only way to make the full tier
 green would be to ADD a pin - which would silence a real map defect rather than fix it. That is the
 GM's call, not a session's.
+
+## 8. The bypass-log audit (the closing step the constitution asks for)
+
+**No entry in `dev/bypass-log/` belongs to this feature.** Every gate run here supplied `PAIR_OK`
+with the same reason - that feature 158 changes no map, so a `settlement-review` has nothing to look
+at - and the guard accepted it without needing to log a bypass. The claim is checkable and was
+checked: `git diff --name-only 77fc359a HEAD -- 'pool/*/*.json'` (excluding `pool/regressions/`)
+returns nothing at all. Every pool manifest is byte-identical, which is FR-011 and SC-006 met by
+measurement rather than by assertion.
+
+The most recent entries in the log are feature 157's, from another session.
+
