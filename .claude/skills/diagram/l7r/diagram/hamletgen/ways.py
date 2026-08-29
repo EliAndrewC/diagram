@@ -2623,6 +2623,7 @@ def _serve_stragglers(s: Settlement, plan: SitePlan, hard: list[Poly], fabric: l
                 chord = math.dist(door, tgt)
                 cands += [[door, (mid[0] + sgn * px * k * chord, mid[1] + sgn * py * k * chord), tgt] for k in (0.2, 0.35, 0.5) for sgn in (1.0, -1.0)]
                 hit: list[Poly] = []
+                _fallback_hit: list[Poly] | None = None
                 for cand in cands:
                     runs = clear_runs(cand, hard, WEB_HARD_GAP, step=4.0, lines=[] if cand is routed else water, tight=others, tight_margin=FOOTPATH_FABRIC_GAP, floor=20.0)
                     # A CLIPPED RUN IS A STAIRCASE OF SAMPLES, NOT A LANE (feature 134 T50, 2026-08-29).
@@ -2660,8 +2661,21 @@ def _serve_stragglers(s: Settlement, plan: SitePlan, hard: list[Poly], fabric: l
                     # reach the network; and its length may not exceed `_PATH_DIRECTNESS` times its own
                     # chord, which is the band every honest way on these maps already sits in (1.00-1.34).
                     hit = [r for r in runs if _reach(c, r) <= WEB_REACH_FT and _net_reach(r, segs) <= _LANE_JOIN_FT and polyline_len(r) <= _PATH_DIRECTNESS * max(math.dist(r[0], r[-1]), 1.0)]
-                    if hit:
+                    # THE FIRST CANDIDATE THAT WORKS IS NOT THE BEST ONE THAT WORKS (feature 134 T50,
+                    # 2026-08-29). The candidates are already in preference order - the straight run, then
+                    # the ROUTED one, then the fabricated dog-legs - and taking the first that yields a
+                    # run at all meant a dog-leg was drawn whenever the two ahead of it were clipped away,
+                    # bend and all. A dog-leg is a bend BY CONSTRUCTION: cohort seed 21's footpath turned
+                    # 90 degrees and then 60 within 34 ft, which `lanes_bend_like_paths` reads exactly as
+                    # it should, and `_unjog`'s three rungs were all blocked by the steading the dog-leg
+                    # was thrown around. So every candidate is asked, and the first whose run does not
+                    # bend the way the check refuses is taken; the first that works at all remains the
+                    # fallback, so no house that is served today goes unserved.
+                    if hit and not _bends_badly(hit[0]):
                         break
+                    if hit and _fallback_hit is None:
+                        _fallback_hit = hit
+                    hit = []
                 # THE TEST IS WHETHER THE PATH SERVES THE HOUSE, not whether it starts exactly at
                 # the door. A run that begins a little way out - because the first few feet are
                 # taken by a neighbor's yard - still puts a way within reach of this steading, which
@@ -2670,6 +2684,8 @@ def _serve_stragglers(s: Settlement, plan: SitePlan, hard: list[Poly], fabric: l
                 # whose far end stops short of the way it was aimed at is a tread ending in bare
                 # grass, which `lanes_reach_something` rightly refuses - and it was the single
                 # biggest residue in the cohort (13 of 24 seeds) when only the house end was tested.
+                if not hit and _fallback_hit is not None:
+                    hit = _fallback_hit
                 if hit:
                     # Both ends SNAPPED, for the same reason a web lane's joining end is: acceptance
                     # tolerances are not ink tolerances, and a path that stops 13 ft short of the
