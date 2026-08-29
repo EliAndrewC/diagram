@@ -8,6 +8,7 @@ import math
 import pytest
 
 from l7r.diagram import hamletgen as hg
+from l7r.diagram.settlement import Settlement
 
 from ._builders import a_plan
 
@@ -155,3 +156,48 @@ def test_trunk_blocked_refuses_the_canvas_edge_and_a_record_without_a_footprint(
     assert blocked(s, 500, 500, 10, [], [], None, []) is False, "the footprint-less record is skipped"
     s.M["persimmons"].append({"x": 500.0, "y": 500.0, "w": 20.0, "h": 20.0})
     assert blocked(s, 500, 500, 10, [], [], None, []) is True, "and a real one blocks"
+
+
+def test_strip_blocked_sees_a_lane_that_crosses_the_strip_between_its_samples() -> None:
+    """Five sample points on a 22 by 16 ft strip let a lane cross it DIAGONALLY between them (cohort
+    seed 03), and `lanes_clear_of_bamboo` walks the tread's quarter-points, so the gate saw what the
+    placer did not. The tread is therefore tested as a segment against the strip's own edges."""
+    from l7r.diagram.hamletgen.homesteads import _strip_blocked
+
+    s = Settlement(1000, 1000, seed=1)
+    s.meta(name="V", scale="hamlet", ftpx=1, toscale=True)
+    diagonal = [([(400.0, 400.0), (600.0, 600.0)], 1.0)]
+    assert _strip_blocked(s, 500.0, 500.0, 22.0, 16.0, 900.0, 900.0, [], [], None, diagonal)
+    assert not _strip_blocked(s, 200.0, 800.0, 22.0, 16.0, 900.0, 900.0, [], [], None, diagonal)
+
+
+def test_a_woodpile_stacks_against_the_kura_when_the_shed_is_not_on_the_north_side() -> None:
+    """The stack stands against whichever wall is free. Which wall that is depends on `shed_side`, and
+    every live hamlet rolls the same side - so the other seat list had never been built."""
+    from l7r.diagram.hamletgen.homesteads import farmstead_fixtures
+
+    plan = a_plan()
+    s = Settlement(1400, 1400, seed=3)
+    s.meta(name="V", scale="hamlet", ftpx=1, toscale=True, households=6, down_deg=90, water_flow=90)
+    houses = [{"x": 700.0, "y": 700.0, "w": 46.0, "h": 28.0, "rot": 0.0, "kind": "plain", "shed_side": "S", "wealth": 1.0}]
+    farmstead_fixtures(s, plan, houses)
+    assert s.M["farm_fixtures"], "the steading's fixtures are seated round it"
+    assert all(abs(f["x"] - 700.0) < 200 and abs(f["y"] - 700.0) < 200 for f in s.M["farm_fixtures"])
+
+
+def test_a_linear_hamlet_strings_its_houses_along_the_connector() -> None:
+    """The `linear` settlement form is attested and implemented but pinned off (`SETTLEMENT_FORMS`), so
+    the arm that fronts the CONNECTOR - the only way on the map that predates the houses - has never
+    rolled. `lane_frontage` skips the connector for exactly the reason this form wants it: fronting it
+    strings the hamlet along the road instead of nucleating it, which is this archetype."""
+    from l7r.diagram.hamletgen.homesteads import stage_homesteads  # through the MODULE: a stage is not package surface
+
+    for form in ("nucleated", "linear"):
+        plan = a_plan()
+        plan.seat = hg.seat_cluster(plan)
+        plan.settlement_form = form
+        s = Settlement(1400, 1400, seed=3)
+        s.meta(name="V", scale="hamlet", ftpx=1, toscale=True, households=15, down_deg=90, water_flow=90, nucleated=True)
+        s.field_polys.append(list(plan.envelope))
+        stage_homesteads(s, plan)
+        assert len(s.M["houses"]) == 15, f"{form}: every household seated"

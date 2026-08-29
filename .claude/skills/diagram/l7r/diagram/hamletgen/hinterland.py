@@ -8,6 +8,7 @@ from __future__ import annotations
 import math
 import random
 from collections.abc import Sequence
+from typing import Any
 
 from l7r.diagram.settlement import Settlement, point_in_poly, seg_dist
 from l7r.diagram.sitegen.geom import crop_polys
@@ -560,6 +561,42 @@ BAMBOO_THICKET_FT = (84.0, 58.0)
 BAMBOO_LEGIBLE_FT = 14.0  # the SHORT axis: a household strip is ~16 ft deep and reads; below this, nothing does
 
 
+def bamboo_blocked(
+    x: float,
+    y: float,
+    extent: Pt,
+    pocket: tuple[float, float, float, float],
+    rects: Sequence[tuple[float, float, float, float, float]],
+    lanes: Sequence[tuple[Poly, float]],
+    polys: Sequence[tuple[Poly, float]],
+    pond: Any,
+    pond_pad: float,
+) -> bool:
+    """Is this ground already spoken for, as far as a stand of take-yabu is concerned?
+
+    LIFTED OUT OF `bamboo_seats` (feature 146, GM 2026-08-28 on inner functions and testability). Two of
+    its arms - the canvas MARGIN and the TITLE POCKET - are geometry no rolled hamlet ever offers a culm
+    for, because the sampler this serves never proposes a candidate that near the frame or under the title
+    card. They are real refusals all the same, and want asking directly rather than through a planned site.
+    """
+    if x < 30 or y < 30 or x > extent[0] - 30 or y > extent[1] - 30:
+        return True
+    if pocket[0] <= x <= pocket[2] and pocket[1] <= y <= pocket[3]:
+        return True
+    for rx, ry, rw, rh, pad in rects:
+        if abs(x - rx) <= rw / 2 + pad and abs(y - ry) <= rh / 2 + pad:
+            return True
+    for pts, half in lanes:
+        if any(seg_dist(x, y, pts[k], pts[k + 1]) < half for k in range(len(pts) - 1)):
+            return True
+    for poly, pad in polys:
+        if len(poly) >= 3 and (point_in_poly(x, y, poly) or min(seg_dist(x, y, poly[k], poly[(k + 1) % len(poly)]) for k in range(len(poly))) < pad):
+            return True
+    if not pond:
+        return False
+    return bool(((x - pond[0]) / (pond[2] + pond_pad)) ** 2 + ((y - pond[1]) / (pond[3] + pond_pad)) ** 2 <= 1.0)
+
+
 def bamboo_seats(s: Settlement, plan: SitePlan) -> list[Poly]:
     """Where the hamlet's bamboo stands go, per the `bamboo` knob - SCANNED, like the coppice patches.
 
@@ -607,22 +644,7 @@ def bamboo_seats(s: Settlement, plan: SitePlan) -> list[Poly]:
     tp = title_pocket(s, plan)
 
     def _blocked(x: float, y: float) -> bool:
-        if x < 30 or y < 30 or x > s.W - 30 or y > s.H - 30:
-            return True
-        if tp[0] <= x <= tp[2] and tp[1] <= y <= tp[3]:
-            return True
-        for rx, ry, rw, rh, pad in rects:
-            if abs(x - rx) <= rw / 2 + pad and abs(y - ry) <= rh / 2 + pad:
-                return True
-        for pts, half in lanes:
-            if any(seg_dist(x, y, pts[k], pts[k + 1]) < half for k in range(len(pts) - 1)):
-                return True
-        for poly, pad in polys:
-            if len(poly) >= 3 and (point_in_poly(x, y, poly) or min(seg_dist(x, y, poly[k], poly[(k + 1) % len(poly)]) for k in range(len(poly))) < pad):
-                return True
-        if not pond:
-            return False
-        return bool(((x - pond[0]) / (pond[2] + px(30.0))) ** 2 + ((y - pond[1]) / (pond[3] + px(30.0))) ** 2 <= 1.0)
+        return bamboo_blocked(x, y, (s.W, s.H), tp, rects, lanes, polys, pond, px(30.0))
 
     def _fits(cx: float, cy: float, hw: float, hh: float) -> bool:
         samples = [(cx + dx * hw, cy + dy * hh) for dx in (-1.0, -0.5, 0.0, 0.5, 1.0) for dy in (-1.0, 0.0, 1.0)]

@@ -163,3 +163,16 @@ def test_bamboo_seats_refuse_the_canvas_edge_and_the_title_pocket() -> None:
     plan = a_plan()
     seats = hg.hinterland.bamboo_seats(s, plan)
     assert all(30 <= sum(q[0] for q in poly) / len(poly) <= 570 for poly in seats), "no seat hangs off the canvas"
+
+
+def test_bamboo_blocked_refuses_the_canvas_margin_and_the_title_pocket() -> None:
+    """Two arms of the take-yabu siter that a rolled hamlet never enters, because its sampler never
+    proposes a candidate that near the frame or under the title card. They are real refusals all the
+    same: a stand drawn into the margin is cropped in half, and one under the title is illegible."""
+    from l7r.diagram.hamletgen.hinterland import bamboo_blocked
+
+    extent = (1000.0, 1000.0)
+    assert bamboo_blocked(10.0, 500.0, extent, (0.0, 0.0, 0.0, 0.0), [], [], [], None, 30.0), "inside the margin"
+    assert bamboo_blocked(500.0, 990.0, extent, (0.0, 0.0, 0.0, 0.0), [], [], [], None, 30.0), "and the far margin"
+    assert bamboo_blocked(500.0, 500.0, extent, (400.0, 400.0, 600.0, 600.0), [], [], [], None, 30.0), "under the title card"
+    assert not bamboo_blocked(500.0, 500.0, extent, (0.0, 0.0, 10.0, 10.0), [], [], [], None, 30.0), "open ground"
