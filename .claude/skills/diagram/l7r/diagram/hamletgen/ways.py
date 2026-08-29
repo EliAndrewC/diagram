@@ -2469,8 +2469,18 @@ def _thread_the_fabric(s: Settlement, plan: SitePlan, run: Poly, gap: float = TR
         for step in (40.0, 80.0, 140.0, 220.0):
             detour = [run[0], (mx + ux * step, my + uy * step), run[-1]]
             cand = clip_to_clear(detour, fabric, gap)
+            # THE SWING THAT WORKS. Not reached by any test, and the structural reason is worth stating
+            # rather than leaving for the next session to re-derive (feature 146, ~25 configurations
+            # tried): the detour KEEPS `run[0]` and `run[-1]`, so whatever refused the straight run
+            # usually refuses the detour on the same grounds. The two ways into this block are a clipped
+            # run that still crosses - whose only cause `clip_to_clear` cannot see is `run[0]` itself
+            # sitting in the fabric, which the detour inherits - and a clip that died under the 70 ft
+            # floor, where the surviving stub is short because the obstacle is near `run[0]`, which the
+            # detour's first leg then has to pass anyway. It is kept because the alternative below is to
+            # hand back a run known to cross the steadings, and because a real cluster (not a fixture)
+            # can present an obstacle the swing clears where the straight line does not.
             if len(cand) >= 2 and not _crosses_fabric(cand, fabric, gap):
-                return cand
+                return cand  # pragma: no cover - see above
     return out if len(out) >= 2 else run
 
 

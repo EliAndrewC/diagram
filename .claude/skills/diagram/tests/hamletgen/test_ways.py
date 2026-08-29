@@ -1033,3 +1033,34 @@ def test_crosses_fabric_sees_a_run_VERTEX_that_stands_inside_a_footprint() -> No
     inside_the_edge = [(5.0, 500.0), (5.0, 600.0)]  # deep inside the yard, 5 px off its west edge
     assert _crosses_fabric(inside_the_edge, [yard], 8.0)
     assert not _crosses_fabric([(500.0, 500.0), (500.0, 600.0)], [yard], 8.0), "well inside and far from every edge"
+
+
+def _hamlet_for_ways():
+    from l7r.diagram.settlement import Settlement
+
+    s = Settlement(1400, 1400, seed=3)
+    s.meta(name="V", scale="hamlet", ftpx=1, toscale=True, households=15, down_deg=90, water_flow=90, nucleated=True)
+    return s
+
+
+def test_a_footpath_junction_is_never_seated_on_the_water() -> None:
+    """A crossing gets a plank from `stage_crossings`; an ENDPOINT on the water gets nothing, and
+    `ways_cross_water_on_a_deck` fires on it (feature 145, cohort seed 41 after the field moved: the
+    nearest point of the network was where a lane skirts the drain brook, and the junction landed 1.3 px
+    off its centerline). The router keeps 14 px off every watercourse; the junction owes the same."""
+    from l7r.diagram.hamletgen.ways import _serve_stragglers
+
+    plan = a_plan()
+    plan.seat = hg.seat_cluster(plan)
+    lane = [{"pts": [[300.0, 500.0], [1100.0, 500.0]], "w": 4}]
+    house = [{"x": 700.0, "y": 800.0, "w": 46.0, "h": 28.0, "rot": 0.0, "kind": "plain"}]
+
+    dry = _hamlet_for_ways()
+    dry.M["houses"], dry.M["lanes"] = list(house), [dict(lane[0])]
+    _serve_stragglers(dry, plan, [], [], [])
+    assert len(dry.M["lanes"]) == 2, "the straggler gets its footpath"
+
+    wet = _hamlet_for_ways()
+    wet.M["houses"], wet.M["lanes"] = list(house), [dict(lane[0])]
+    _serve_stragglers(wet, plan, [], [], [((300.0, 500.0), (1100.0, 500.0))])  # a brook along the lane
+    assert len(wet.M["lanes"]) == 1, "no junction on the water, so no path at all"
