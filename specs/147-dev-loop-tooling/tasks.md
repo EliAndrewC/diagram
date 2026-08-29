@@ -59,8 +59,8 @@ each is useful the moment it lands.
 - [x] T024 [US2] `tests/tools/test_overlap_audit.py` - each family fires on a hand-built offending manifest/SVG and stays silent on a clean one; `unmeasured` is reported rather than a zero.
       given 2026-08-29T03:15Z | done 2026-08-29T04:30Z | elapsed ~45 min (US2 whole) | runs: 9 audit runs over 5 maps, 6 quick runs, 2 map rolls
       research: procedure
-- [ ] T025 [US2] SC-002 demonstration: re-ask on the shipped maps every overlap question T54 and T55 answered by hand (marsh ink on a mound, a footprint on marsh, a parcel across a ditch, a mark over water) using only this tool, and record the commands in `quickstart.md`.
-      given 2026-08-29T03:15Z | done - | elapsed - | runs: -
+- [x] T025 [US2] SC-002 demonstration: re-ask on the shipped maps every overlap question T54 and T55 answered by hand (marsh ink on a mound, a footprint on marsh, a parcel across a ditch, a mark over water) using only this tool, and record the commands in `quickstart.md`.
+      given 2026-08-29T03:15Z | done 2026-08-29T06:05Z | runs: 9 audit runs over 5 pool maps (T025); the idle target's override (T035)
       research: procedure
 
 ## Phase 4: User Story 3 - the paired gate and review (P2)
@@ -83,8 +83,8 @@ each is useful the moment it lands.
 - [x] T034 [US3] The override: one token, `PAIR_OK`, which must carry a reason, runs the command, and appends the reason to `dev/bypass-log/` in the existing record shape.
       given 2026-08-29T03:15Z | done 2026-08-29T05:20Z | elapsed ~50 min (US3 whole) | runs: 6 guard-suite runs, 1 hooks-test
       research: procedure
-- [ ] T035 [US3] The unattended case: `make idle-tests` supplies `PAIR_OK` with its fixed reason ("idle run: no session attached to dispatch a review") so the audit line exists. NOT an exemption in the guard - an exemption is the shape spec-fidelity struck from the spec.
-      given 2026-08-29T03:15Z | done - | elapsed - | runs: -
+- [x] T035 [US3] The unattended case: `make idle-tests` supplies `PAIR_OK` with its fixed reason ("idle run: no session attached to dispatch a review") so the audit line exists. NOT an exemption in the guard - an exemption is the shape spec-fidelity struck from the spec.
+      given 2026-08-29T03:15Z | done 2026-08-29T06:05Z | runs: 9 audit runs over 5 pool maps (T025); the idle target's override (T035)
       research: procedure
 - [x] T036 [US3] Register the hooks in `.claude/settings.json` (PreToolUse for Bash and, per T001, for the Agent tool; Stop) alongside the existing entries.
       given 2026-08-29T03:15Z | done 2026-08-29T05:20Z | elapsed ~50 min (US3 whole) | runs: 6 guard-suite runs, 1 hooks-test

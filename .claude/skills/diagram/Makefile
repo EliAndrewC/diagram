@@ -707,7 +707,10 @@ reference:
 IDLE_CTX = $(shell $(SWITCH) idle 2>/dev/null)
 DONE_NAME = $(if $(filter 1,$(IDLE_CTX)),idle-done,done)
 idle-tests:     ## what an idle session runs unattended (feature 136): the whole gate, scope relaxed, never FULL
-	@$(MAKE) --no-print-directory done
+# THE PAIRING'S ONE-SIDED CASE, TAKEN RATHER THAN CARVED OUT (feature 147): a detached timer has no
+# session to dispatch a settlement-review from, so it supplies the override with its reason and the
+# bypass log carries it like any other. An exemption inside the guard is the shape the spec review struck.
+	@PAIR_OK="idle run: no session attached to dispatch a review" $(MAKE) --no-print-directory done
 
 maps:
 	@$(if $(filter all,$(SCOPE)),$(SWITCH) check scope "maps SCOPE=all",true)

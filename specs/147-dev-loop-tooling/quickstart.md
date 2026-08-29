@@ -51,3 +51,11 @@ PAIR_OK="docs-only change, no map ink" make done
 ```
 
 The reason lands in `dev/bypass-log/` where the audit reads it.
+
+## SC-002, demonstrated (2026-08-29)
+
+Every overlap question features 139's T50-T55 answered by a hand-written script, re-asked with one command
+and no script written - `make overlap-audit M=pool/hamlets/<map>.json` over all five pool hamlets. All five
+families report `ok` on each. The audit found one defect on its first run (reed ink across the inlet
+hairline, because the source pond's fringe was scattered before the field's channels existed), recorded in
+`pool/hamlets/kuwabata.notes.md` and fixed.
