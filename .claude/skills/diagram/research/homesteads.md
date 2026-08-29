@@ -805,3 +805,32 @@ the radius until the number comes out right.
 
 **Sources:** `wang-ochiai-2022`.
 
+
+## The muck heap that reads as the neighbor's (accepted 2026-08-29, feature 152)
+
+The researched rule is that the heap lies BEYOND the privy (see "The farmstead's fixtures"). Once the
+privy moved to the sun side, that rule sometimes puts the heap nearer a neighbor's farmhouse than the
+one it serves - measured over the 13-map pool, **4 of 66 privies and heaps** sit that way. A reader
+attributes such a pit to the nearer house; the manifest says otherwise, and only the interactive page
+resolves it on click.
+
+**This is an ACCEPTED limitation, and two priced alternatives were declined on measurement.**
+
+| lever | misattributed | heaps beyond their privy |
+|---|---|---|
+| eight hand-picked seats + ownership tie-break (**shipped**) | 4 of 66 | 14 of 14 |
+| sector search beyond the privy, radii 2-24 ft, swung +/-54 deg | 5 of 68 | 16 of 16 |
+| sorting candidates by ownership MARGIN rather than a flag | 4 of 67 | **9 of 15** |
+
+The sector search - the shape that worked for the privy itself - seats more heaps but none of them
+better placed. The margin sort wins its margin by pulling the heap back toward the house, which breaks
+the researched rule outright; a reader-legibility nicety is not worth a researched finding. What is
+left is the geometry: where a privy stands on the sun side and the neighbor is that way too, every seat
+beyond it belongs to that arc, exactly as it would in a real interlocked cluster. Ownership therefore
+stays a TIE-BREAK, promoting an unambiguous seat whenever the ground offers one.
+
+**The lever NOT yet tried**, for whoever reopens this: seat the fixtures BEFORE the yard and gardens (a
+stage reorder, the same one the sun-share entry above names). Nothing else on this list should be
+re-pulled without a new mechanism.
+
+**Sources:** `wang-ochiai-2022` (the sun-side share the heap inherits).

@@ -168,3 +168,29 @@ arc each belt subtends around its own cluster:
 
 None exceeds 200 degrees; none wraps its settlement. The maps already accord with the ruling.
 
+
+### A belt runs off the page, and the check must not ask for canopy out there (2026-08-29)
+
+A settlement-review pass read Kuwabata's belt as claiming ground it did not plant: the recorded polygon
+ran on past the last clump. The finding was real and the window it prompted is the right one - the
+continuity check now scans the belt POLYGON's across-wind extent instead of stopping at its outermost
+clump, because bounding a continuity scan by the last thing it finds makes the one failure that matters
+most, *the planting stopping before the belt does*, structurally invisible.
+
+**But a footprint runs off the page as freely as a clump does.** Measured on the two maps the widened
+window failed:
+
+| map | belt polygon, along its own across-wind axis | inside `meta.view` | planted run |
+|---|---|---|---|
+| Kuwabata | 693 - 1440 | 790 - 1327 | 734 - 1330 |
+| Kashikawa | -1121 - -204 | -945 - -204 | -992 - -205 |
+
+On both, the planting covers every column a reader can see and overruns it at each end; the whole
+"gap" is off-page. So `_column_in_belt` clips its columns to the view, and the scan asks for canopy
+exactly where the reader can look for it. This is the same rule the seating already follows - a clump
+whose crown merely crosses the frame is kept, one with no visible ink is waste
+(`settlements/presentation.md`, GM 2026-07-20) - applied to the check that reads the result.
+
+**The other repair was tried first and measured.** Extending the PLANTING to the polygon's ends, so the
+end stretches were offered seats like any interior gap, bought one clump on one map at the page edge.
+It is reverted, with the numbers recorded in `homestead_parts.py` at the point of change.

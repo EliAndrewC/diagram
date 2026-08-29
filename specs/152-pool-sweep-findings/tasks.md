@@ -92,6 +92,19 @@ researched, and the task is to make the drawing obey them.
 ## Phase 7 - acceptance
 
 - [x] T23 Pool re-rolled; `make maps` CLEAN - better than the standard of before, which carried the seed-37 tripwire failure.
+- [x] T23b The acceptance re-check's four errors, closed (research: physical for the heap, rendering for
+      the rest). `village_windbreak_is_continuous` scans the belt POLYGON's extent, clipped to the page
+      (`check_village/segments_04c_groves_and_shading.py`); the gap fill refuses a seat within half a
+      crown of one already taken (246 recorded clumps at 211 positions -> 101 with none stacked);
+      `nearer_own_house()` lifted to module level and shared with the manure heap;
+      `interactive/sources.py` reads a "double-quoted" research heading; `kuwabata.notes.md`
+      re-measured on the roll that ships.
+      - [x] research pass - the heap's rule (BEYOND the privy) was re-read before each lever was
+        priced; both stronger levers were reverted for costing it
+      - [x] source-reader confirmed - no new claim was added; `wang-ochiai-2022` already carries the
+        sun-side share the heap inherits
+      - [x] recorded and cited - `research/homesteads.md` "The muck heap that reads as the neighbor's"
+        and `settlements/vegetation.md` "A belt runs off the page"
 - [ ] T24 A `settlement-review` pass over the changed maps, paired with the gate; no NEW error.
 - [ ] T25 `make done` green; push by the LOCAL-GATED route.
 
