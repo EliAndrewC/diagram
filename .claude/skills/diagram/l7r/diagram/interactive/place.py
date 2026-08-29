@@ -85,8 +85,12 @@ class Kind:
     # The tier's DEFAULT population, used ahead of `meta.population` where the tier has a standing
     # figure. A town does (GM 2026-08-29: "The default population of a town is already 1,200 So you
     # can make that the population for all of the towns which we have already generated"), and it is
-    # a COUNTY figure - it counts the farming population of the whole county as part of the town, so
-    # most of it is deliberately not on the sheet. The three town maps are frozen legacy exhibits
+    # the TOWN'S OWN - about 238 households of which some 156 farm the fields around it, so most of it
+    # is deliberately not on the sheet, which draws every non-farm dwelling and only a sample of the
+    # farmhouses. NOT its county's: `median-domain.md` lists towns, villages and hamlets as separate
+    # lines summing to the domain, and the gens put the county at ~7,000 (settlement-review rounds 8
+    # and 10 - this comment was the third and last place the retracted county reading survived, and
+    # the one both corrected passages point a reader at). The three town maps are frozen legacy exhibits
     # (`pipeline/poolmaps.py` `classify` -> "legacy"), never regenerated, so their manifests keep the
     # DEPICTED figure the housing check keys on and the page states the tier's real one. None for a
     # hamlet or a village, whose population is five to a drawn household, nor for a city, whose
