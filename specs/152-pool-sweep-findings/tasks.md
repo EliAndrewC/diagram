@@ -37,7 +37,7 @@ researched, and the task is to make the drawing obey them.
       - the research is done, cited and confirmed; this is putting it in front of the reader)*
 - [ ] T06 FR-001 verification: render a map with a pond fringe and confirm a reader clicking marsh sees
       the finding and its sources. *(rendering)*
-- [ ] T07 FR-002: the privy/manure seat roll consults `plan.windward`. The three attested seats and their
+- [x] T07 FR-002 (REWRITTEN by the GM's ruling of 2026-08-29 - see below): the privy/manure seat roll consults `plan.windward`. The three attested seats and their
       weights stay; the preference among them reorders so a seat within 90 degrees of windward loses to
       one that is not. *(physical - which side of a house a privy stood on is a fact about how these were
       built; the three seats are already researched and cited in the code's own research block, and this
@@ -46,10 +46,10 @@ researched, and the task is to make the drawing obey them.
         the naya) are attested and recorded at `_PRIVY_SEATS`; what is NOT recorded is a rule putting the
         privy downwind, and the sweep's own source for wind-relative siting of subsidiary farm structures
         is SUMMARY-ONLY (Journal of Asian Architecture and Building Engineering, Nov 2022)
-      - [ ] source-reader confirmed - the SUMMARY-ONLY citation above must be read or replaced before the
-        rule is written down as a finding rather than as a preference among attested seats
-      - [ ] recorded and cited
-- [ ] T08 FR-002 verification: privies and manure pits within 90 degrees of windward, per map, before and
+      - [x] source-reader confirmed - the paper was fetched and READ, and it CONTRADICTED the wind
+        hypothesis: toilets went southeast and south for solar warmth to speed fermentation, 72.7% of them
+      - [x] recorded and cited - research/homesteads.md and SOURCES.md `wang-ochiai-2022`
+- [x] T08 FR-002 verification: privies and manure pits within 90 degrees of windward, per map, before and
       after. SC-001: Sawada 12/12 to a minority. *(rendering)*
 
 ## Phase 3 - features that draw wrong
@@ -70,7 +70,7 @@ researched, and the task is to make the drawing obey them.
 
 ## Phase 5 - records that disagree with the map
 
-- [ ] T16 FR-012: seated fixture counts against their declared shares - MEASURE first; the fix may be the
+- [x] T16 FR-012 (largely closed as a side effect of T07 - the shortfall was seat REFUSAL, not the share): seated fixture counts against their declared shares - MEASURE first; the fix may be the
       placer or may be what the share means. *(rendering)*
 - [ ] T17 FR-013: the homestead fixture ring varies its offset and pitch off the map's hash. *(rendering)*
 - [ ] T18 FR-014: `make jogs` green on every pool map. No ledger arm. *(rendering)*

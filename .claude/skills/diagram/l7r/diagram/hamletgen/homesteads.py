@@ -668,6 +668,9 @@ FIXTURE_BANDS: dict[str, tuple[float, float]] = {
 }
 _FIXTURE_ORDER = ("privy", "manure", "bath", "coop", "woodpile", "shrine", "persimmon")  # the buildings before the stack, which has the most seats
 _PRIVY_SEATS = (("back", 0.60), ("gate", 0.25), ("naya", 0.15))
+PRIVY_SUNNY_SHARE = 0.727  # the share of outhouses seated SE-to-S: Wang & Ochiai 2022 measured 72.7% in
+# Arakawa village, and the GM (2026-08-29) ruled the figure be used literally rather than rounded. The
+# reason the record gives is fermentation, not wind - see the note at the seat roll.
 _SHRINE_CORNERS = (("NW", 0.45), ("NE", 0.35), ("SW", 0.20))
 _WALL_GAP_FT = 3.5  # the review measured -0.3 ft at 3.0 against the drawn wall; half a foot of true daylight
 _SALT = {"privy": 101.0, "manure": 102.0, "woodpile": 103.0, "bath": 104.0, "coop": 105.0, "shrine": 106.0, "persimmon": 107.0}
@@ -771,14 +774,71 @@ def farmstead_fixtures(s: Settlement, plan: SitePlan, houses: Sequence[Mapping[s
                     "back": (hw * 0.3, -(hh / 2 + g + d / 2), w, d),
                     "gate": (-hw * 0.35, hh / 2 + g + d / 2, w, d),
                     "naya": ((hw / 2 + g + d / 2), -hh * 0.25, d, w) if shed_side == "N" else (-(hw / 2 + hw * 0.32 + g + d / 2), -hh * 0.25, d, w),
+                    # THE SUN SIDE, which the record documents and this seat table did not have (feature 152
+                    # T07). The three seats above are all north or flank: measured on the pool before this
+                    # change, every privy on every map sat at bearing 33-73 degrees from its house. The source
+                    # the GM ruled on puts 72.7% of them SOUTHEAST to SOUTH, so a seat has to exist there.
+                    # ...and it must CLEAR THE WORK YARD, which owns the near sun side. Measured on Sawada
+                    # before this change: every house carries a threshing yard at bearing 180.0 degrees,
+                    # 24-28 ft out, and gardens at 120-140 degrees - so a seat at the house's own south edge
+                    # is refused every time, which is why the first attempt at this rule seated 0 of 38.
+                    # These are tried near-then-far, so a homestead with room close in still uses it.
+                    "sun_se": (hw / 2 + g + d / 2, hh * 0.30, d, w),
+                    "sun_se_out": ((hw / 2 + g + d / 2) * 1.15, hh / 2 + g + d / 2 + px(26.0), d, w),
+                    "sun_s_out": (hw * 0.12, hh / 2 + g + d / 2 + px(30.0), w, d),
+                    "sun_se_far": ((hw / 2 + g + d / 2) * 1.45, hh / 2 + g + d / 2 + px(40.0), d, w),
+                    "sun_s_far": (-hw * 0.20, hh / 2 + g + d / 2 + px(42.0), w, d),
+                    "sun_sse": (hw * 0.38, hh / 2 + g + d / 2 + px(34.0), w, d),
                 }
                 first = _roll(_PRIVY_SEATS, u)
-                seats = [seat[first]] + [seat[k] for k, _ in _PRIVY_SEATS if k != first] + [(hw / 2 + g + d / 2, hh * 0.25, d, w)]
+                seats = (
+                    [seat[first]] + [seat[k] for k, _ in _PRIVY_SEATS if k != first] + [seat["sun_se"], seat["sun_se_out"], seat["sun_s_out"], seat["sun_sse"], seat["sun_se_far"], seat["sun_s_far"]]
+                )
+                # THE OUTHOUSE FACES THE SUN, AT THE RATE THE RECORD GIVES (feature 152 T07, GM 2026-08-29:
+                # "we should literally use the 72.7% number for the chance of any given outhouse being in the
+                # southeast and south directions"). Wang & Ochiai's survey of farmhouses in Arakawa village
+                # (JAABE 21:6, 2022) found toilets "tended to be located in southeast and south directions,
+                # with a total percentage at 72.7%, as a relatively warm temperature helped quick fermentation
+                # of excrements" - night soil was fertilizer, and the sun on that side sped the composting.
+                #
+                # NOT WIND. A settlement-review found every privy on Sawada standing upwind of its own house
+                # and proposed seating them downwind; the research pass sent to settle it CONTRADICTED that -
+                # the same paper's wind-siting finding covers storage buildings and retirement houses, not
+                # toilets, and the words leeward, downwind, odor and hygiene appear nowhere in it. So the
+                # defect the review found was real (the seat was north on every map, because these offsets are
+                # in the HOUSE's frame and houses draw at rot 0-4) and its proposed cause was wrong.
+                #
+                # Direction is the primary rule and the attested seats are the tiebreak: the three seats keep
+                # their own weights (`_PRIVY_SEATS`) WITHIN each group, so a map that cannot put a privy to the
+                # southeast still seats it where the record says privies go.
+                _u_dir = s._hjit(hx, hy, _SALT[kind] + 0.25)
+                _sunny, _other = [], []
+                for _sx, _sy, _sw, _sd in seats:
+                    _mx, _my = _sx * math.cos(th) - _sy * math.sin(th), _sx * math.sin(th) + _sy * math.cos(th)  # `th`, the RADIANS - `rot` beside it is degrees
+                    _brg = math.degrees(math.atan2(_mx, -_my)) % 360.0  # compass bearing from the house
+                    (_sunny if 112.5 <= _brg <= 202.5 else _other).append((_sx, _sy, _sw, _sd))  # SE through S
+                if _sunny:
+                    seats = (_sunny + _other) if _u_dir < PRIVY_SUNNY_SHARE else (_other + _sunny)
             elif kind == "manure":
                 if privy_at is not None:
                     plx, ply = privy_at
                     out_ = -1.0 if ply < 0 else 1.0
-                    seats = [(plx, ply + out_ * (px(FIXTURE_FT["privy"][1]) / 2 + g + d / 2), w, d), (plx + w * 1.1, ply, w, d), (plx - w * 1.1, ply, w, d)]
+                    # BEYOND THE PRIVY, and with somewhere to go when that one spot is taken (feature 152
+                    # T16). Three candidates seated 3 of a declared 8 per map: the heap is placed against
+                    # the privy, and where the privy now sits on the sun side the ground just past it is
+                    # often the work yard. The researched rule is only that the heap lies BEYOND the privy
+                    # (research/homesteads.md) - which these all do; they differ in how far and how wide.
+                    _pout = px(FIXTURE_FT["privy"][1]) / 2 + g + d / 2
+                    seats = [
+                        (plx, ply + out_ * _pout, w, d),
+                        (plx + w * 1.1, ply, w, d),
+                        (plx - w * 1.1, ply, w, d),
+                        (plx + w * 1.1, ply + out_ * _pout, w, d),
+                        (plx - w * 1.1, ply + out_ * _pout, w, d),
+                        (plx, ply + out_ * (_pout + px(10.0)), w, d),
+                        (plx + w * 1.9, ply, w, d),
+                        (plx - w * 1.9, ply, w, d),
+                    ]
                 else:
                     seats = [(hw * 0.3, -(hh / 2 + g + d / 2), w, d), (hw / 2 + g + d / 2, hh * 0.3, d, w)]
             elif kind == "woodpile":
