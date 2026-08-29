@@ -52,3 +52,14 @@ drawn, and nothing about their form, size, position or existence changes.
       corrected to 45,564 px / max 3 with the browser-identical finding; both sluice measurement
       definitions recorded; `HIT_PRIORITY`'s fallback no longer ranks a forgotten lifted class weakest.
       `research: rendering`
+- [x] **T17** (settlement-review round 3) Kuwabata had been absent from `make maps` since its conversion
+      on 2026-08-27 - `mapcheck._live_gens` read `LEGACY_FROZEN_GENS` by raw membership where `regen.py`
+      asks `classify()`. The sweep asks `classify()` now and the map is off the legacy list.
+      `research: rendering`
+- [x] **T18** (settlement-review round 3) the clip's hole is padded 0.1 px and covers a record's
+      auxiliary polygon (a duck pen's `wet` apron); `HIT_KEEP_CLEAR` keys are counted against their
+      records by a test; R7 names the measured region precisely and labels the pre/post-clip figures.
+      `research: rendering`
+- [x] **T19** measured, not fixed: `make maps` fails on tripwire seed 37 (`paddy_bunds_do_not_stagger`)
+      and fails identically on unmodified `origin/main`, so it is pre-existing and stays ledgered
+      (constitution XIII). Recorded in research R9 with the worktree measurement. `research: rendering`

@@ -497,10 +497,10 @@ def test_a_lifted_box_gives_up_the_ground_a_structure_stands_on() -> None:
     manifest = {"pig_sties": [{"x": 100.0, "y": 100.0, "w": 10.0, "h": 8.0, "rot": 0}]}
     out = hit_layer([sluice], ["pond sluice"], manifest)
     assert 'clip-path="url(#hit-keep-clear)"' in out, out
-    assert 'clip-rule="evenodd"' in out and "M95.0,96.0h10.0v8.0h-10.0Z" in out, "a hole exactly over the sty"
+    assert 'clip-rule="evenodd"' in out and "M94.9,95.9h10.2v8.2h-10.2Z" in out, "a hole over the sty, padded the tenth of a pixel the coordinates round to"
     assert "clip-path" not in hit_layer([sluice], ["pond sluice"], {}), "no structures, no clip"
     junk = {"pig_sties": ["not a record", {"x": 1.0}, {"x": 100.0, "y": 100.0, "w": 10.0, "h": 8.0, "rot": 0}]}
-    assert hit_layer([sluice], ["pond sluice"], junk).count("M95.0,96.0") == 1, "a record it cannot read is skipped, not fatal"
+    assert hit_layer([sluice], ["pond sluice"], junk).count("M94.9,95.9") == 1, "a record it cannot read is skipped, not fatal"
 
 
 def test_a_rotated_footprint_is_held_clear_by_its_whole_box() -> None:
@@ -510,7 +510,7 @@ def test_a_rotated_footprint_is_held_clear_by_its_whole_box() -> None:
 
     sluice = '<line x1="90" y1="100" x2="110" y2="100" stroke="#37637F" stroke-width="2.4"/>'
     out = hit_layer([sluice], ["pond sluice"], {"byres": [{"x": 100.0, "y": 100.0, "w": 10.0, "h": 10.0, "rot": 45}]})
-    assert "h14.1v14.1" in out, f"10 x 10 turned 45 degrees needs a 14.1 px box: {out}"
+    assert "h14.3v14.3" in out, f"10 x 10 turned 45 degrees needs a 14.14 px box, plus the 0.2 pad: {out}"
 
 
 def test_a_lifted_class_the_priority_list_forgets_still_wins() -> None:
@@ -527,3 +527,23 @@ def test_a_lifted_class_the_priority_list_forgets_still_wins() -> None:
         mp.setattr(pg, "HIT_PRIORITY", ("field ditch",))  # the sluice is the forgotten one
         out = pg.hit_layer([ditch, sluice], ["field ditch", "pond sluice"])
     assert out.index('data-k="field ditch"') < out.index('data-k="pond sluice"'), out
+
+
+def test_every_keep_clear_key_makes_its_holes() -> None:
+    """`HIT_KEEP_CLEAR` names manifest keys, and a key whose records carry some other shape - a well's
+    `x,y,r`, a footbridge's `span`, a sluice gate's bare `x,y,rot` - yields NO hole and NO error
+    (settlement-review round 3). So the count is asserted against a real manifest: one hole per record,
+    plus one per auxiliary polygon (a duck pen's `wet` apron), plus the canvas rectangle."""
+    import json
+    from pathlib import Path
+
+    from l7r.diagram.interactive.page import HIT_KEEP_CLEAR, _keep_clear_clip
+
+    man = json.loads((Path(__file__).resolve().parents[2] / "pool/hamlets/kuwabata.json").read_text())
+    for k in HIT_KEEP_CLEAR:
+        assert man.get(k), f"{k} records nothing on this map, so the count below cannot see it go wrong"
+    recs = [r for k in HIT_KEEP_CLEAR for r in man.get(k) or []]
+    aprons = sum(1 for r in recs for e in ("wet", "poly") if isinstance(r.get(e), list) and len(r[e]) > 2)
+    clip, _ = _keep_clear_clip(man)
+    assert recs, "the reference dike-pond map records structures"
+    assert clip.count("M") == 1 + len(recs) + aprons, f"{len(recs)} records + {aprons} aprons + the canvas"

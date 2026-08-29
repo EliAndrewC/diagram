@@ -318,6 +318,9 @@ HIT_PRIORITY: tuple[str, ...] = ("stream", "village lane", "bund", "bund beans",
 #: the manifest, so the layer is clipped against them: the box keeps the open ground and gives up the
 #: glyph. Ground records (gardens, threshing yards) are deliberately NOT here - they are area fills, and
 #: a box over one is the case the widening exists for.
+#: EVERY KEY LISTED MUST RECORD `x/y/w/h`: a key whose records carry some other shape (a well's `x,y,r`,
+#: a footbridge's `span`, a sluice gate's bare `x,y,rot`) makes no hole and no error, so
+#: `test_every_keep_clear_key_makes_its_holes` counts holes against records on a real manifest.
 HIT_KEEP_CLEAR: tuple[str, ...] = ("houses", "byres", "farm_sheds", "farm_fixtures", "duck_pens", "pig_sties", "kosatsuba")
 HIT_WIDEN_FACTOR = 4.0
 HIT_WIDEN_MIN = 6.0
@@ -641,13 +644,28 @@ def _keep_clear_clip(manifest: dict[str, Any] | None) -> tuple[str, str]:
             try:
                 x, y, w, h = (float(rec[k]) for k in ("x", "y", "w", "h"))
                 rot = math.radians(float(rec.get("rot") or 0.0))
-            except KeyError, TypeError, ValueError:  # pragma: no cover - a record shape the writers do not emit
+            except KeyError, TypeError, ValueError:
                 continue
-            # the AXIS-ALIGNED BOX OF THE ROTATED FOOTPRINT: a superset, so the hole is never smaller
-            # than the glyph it protects.
-            bw = abs(w * math.cos(rot)) + abs(h * math.sin(rot))
-            bh = abs(w * math.sin(rot)) + abs(h * math.cos(rot))
+            # the AXIS-ALIGNED BOX OF THE ROTATED FOOTPRINT, plus the tenth of a pixel the coordinates
+            # are rounded to - without that pad the "never smaller than the glyph" claim is false by up
+            # to 0.0919 px (measured, settlement-review round 3; with it, 0.0000). The margin is exactly
+            # adequate rather than generous: 0.1 px a side against a worst case of 0.05 on the origin
+            # plus 0.05 on the width. It holds because the pad is added BEFORE the `:.1f` rounding - a
+            # format that ever drops a decimal breaks the claim silently.
+            bw = abs(w * math.cos(rot)) + abs(h * math.sin(rot)) + 0.2
+            bh = abs(w * math.sin(rot)) + abs(h * math.cos(rot)) + 0.2
             holes.append(f"M{x - bw / 2:.1f},{y - bh / 2:.1f}h{bw:.1f}v{bh:.1f}h{-bw:.1f}Z")
+            # ...AND THE APRON A GLYPH IS DRAWN OUTSIDE ITS OWN BOX. A duck pen's `wet` reaches 6-7 px
+            # past its `w` x `h`, and the lifted box was taking 10.17% of one apron (settlement-review
+            # rounds 3-4). Any auxiliary polygon on the record is held clear too - which is a BBOX with
+            # no size bound, so a record that ever carries a large `poly` (a pond ring, a compound
+            # outline) would punch a correspondingly large hole, and the count test would not see it.
+            for extra in ("wet", "poly"):
+                pts = rec.get(extra)
+                if isinstance(pts, list) and len(pts) > 2:
+                    xs, ys = [float(q[0]) for q in pts], [float(q[1]) for q in pts]
+                    ew, eh = max(xs) - min(xs) + 0.2, max(ys) - min(ys) + 0.2
+                    holes.append(f"M{min(xs) - 0.1:.1f},{min(ys) - 0.1:.1f}h{ew:.1f}v{eh:.1f}h{-ew:.1f}Z")
     if not holes:
         return "", ""
     d = "M-99999,-99999h199998v199998h-199998Z" + "".join(holes)

@@ -273,3 +273,8 @@ Two record corrections from that pass, both against my numbers: the raster delta
 pixel-identical unlit; and the perimeter dike is **4,591 ft along its crest** - the manifest's `outline`
 is the band polygon, 1.99x that, so the sibling text's "half an hour" was a double count and now reads
 "the better part of twenty".
+
+**Round 3** verified the clip on all 75 structures (+0.00 everywhere, 85,767 sample points) and found
+this map had been **missing from `make maps` since its conversion to `hamletgen` on 2026-08-27** - the
+tier sweep filtered the frozen list by raw membership while `regen.py` asks `classify()`. The sweep asks
+`classify()` now and Kuwabata is off the legacy list, so it is swept with the rest of the tier.
