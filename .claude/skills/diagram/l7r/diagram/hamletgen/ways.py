@@ -1223,7 +1223,16 @@ def _touch_junctions(s: Settlement, hard: list[Poly], walls: Sequence[Poly], wat
     def _may_write(idx: int, new_pts: Sequence[Pt], lane_list: Sequence[Mapping[str, Any]]) -> bool:
         _old = [(float(x), float(y)) for x, y in (lane_list[idx].get("pts") or [])]
         _bar = max(_TOUCH_GAP, float(lane_list[idx].get("w") or 5.0) / 2.0 + 2.0)
-        return _clearance(new_pts) >= min(_clearance(_old), _bar) - 1e-9
+        if _clearance(new_pts) < min(_clearance(_old), _bar) - 1e-9:
+            return False
+        # ...NOR PUT A BEND IN IT THAT FEET WOULD NEVER WEAR. The link is tested for legality and the
+        # spliced RESULT is not, so an end extended onto a way it was already running alongside meets
+        # it at a right angle: cohort seed 21's footpath was accepted with no bend in it and came out
+        # of this pass turning 90 degrees and then 60 within 34 ft. `_smooth_web` runs afterwards and
+        # cannot take the chord - the steading the path was threading is still in the way - so the
+        # fold ships. Same rule as the clearance above: a rewrite may leave a lane no worse bent than
+        # it already was.
+        return not (_bends_badly(new_pts) and not _bends_badly(_old))
 
     closed = 0
     for _pass in range(3):  # a touch can bring another end into reach; converge
@@ -1505,9 +1514,13 @@ def _join_piece(
 
     _was = _clear_of_fabric(pts)
 
+    _bent_before = _bends_badly(pts)
+
     def _spliced(run: Poly) -> bool:
         if _clear_of_fabric(run) < min(_was, _bar) - 1e-9:
             return False
+        if _bends_badly(run) and not _bent_before:
+            return False  # see `_may_write`: the splice may not put a fold in a lane that had none
         lanes[i]["pts"] = [[round(x, 1), round(y, 1)] for x, y in run]
         s.reink_lane(i)
         return True
@@ -1751,7 +1764,7 @@ def _plen(pts: Poly) -> float:
     return sum(math.dist(pts[k], pts[k + 1]) for k in range(len(pts) - 1))
 
 
-def _bends_badly(pts: Poly) -> bool:
+def _bends_badly(pts: Sequence[Pt]) -> bool:
     """The shape `lanes_bend_like_paths` refuses - a hairpin, or two 50 degree turns inside 40 ft.
 
     Stated here so a pass that is about to DRAW a run can ask before drawing, rather than leaving the
