@@ -1,4 +1,4 @@
-"""The map-notes block: facts a settlement's `.notes.md` hands to its interactive page (feature 154).
+"""The map-notes block: facts a settlement's `.notes.md` hands to its interactive page (feature 156).
 
 The GM, 2026-08-29: *"the notes that exist for a particular settlement should be formatted in such a
 way that the scripted process, which generates the HTML map, is able to pull these details"* - and,

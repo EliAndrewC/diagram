@@ -11,7 +11,7 @@ grove** - there is no communal wood, which is the visible difference from a nucl
 
 ## Map notes
 
-<!-- READ BY THE INTERACTIVE MAP (`l7r/diagram/interactive/notes.py`, feature 154): these bullets
+<!-- READ BY THE INTERACTIVE MAP (`l7r/diagram/interactive/notes.py`, feature 156): these bullets
      appear on the page's title card and in feature modals. Everything is optional and the reader is
      forgiving by design (GM 2026-08-29: "we should not presume that such sections exist ... should
      default to simply not pulling anything in if the parsing fails") - a missing, misspelled or
@@ -21,7 +21,7 @@ grove** - there is no communal wood, which is the visible difference from a nucl
 ### Place
 
 - **district**: Hoshigaoka
-- **district direction**: north-east
+- **district direction**: northeast
 - **imperial road**: directly south
 - **county**: Hayakawa
 - **town**: Hayakawa
@@ -29,10 +29,11 @@ grove** - there is no communal wood, which is the visible difference from a nucl
 
 *The district, the road, the county and the town are the GM's own, dictated 2026-08-29. The
 connector track on this sheet runs SOUTH, which is where they put the Imperial road; Hoshigaoka
-lies north-east along it.*
+lies northeast along it.*
 
 ### Features
 
+- **village lane**: The connector track runs SOUTH, to the Imperial road; Hoshigaoka, the district's main village, lies northeast along it.
 - **scrub and rough grazing**: The rough ground here reads red-brown rather than dun: Akagahara sits on iron-rich RED CLAY, and that is what names the place (赤 aka, red; 原 hara, plain).
 
 ## Why they ring the field rather than line one margin

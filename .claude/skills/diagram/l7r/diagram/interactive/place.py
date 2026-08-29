@@ -1,4 +1,4 @@
-"""The place card: what a reader gets for clicking the settlement's own title placard (feature 154).
+"""The place card: what a reader gets for clicking the settlement's own title placard (feature 156).
 
 The GM, 2026-08-29: *"I would like to be able to click on the title card for a settlement and then
 pull up an explanation of the type of settlement that this is. And I don't just mean saying that
@@ -53,13 +53,26 @@ class Kind:
     """What one tier IS, in terms a player can use at the table."""
 
     noun: str
-    what: str  # the sentence that follows "<Name> is a <noun>"
-    # What to call the dwellings the map draws, or None to say nothing about them. A hamlet's and a
-    # village's houses ARE its households - the manifest's count and `meta.households` agree - so the
-    # figure means something. A town's and a city's do not: a settlement of 3,000 inhabitants is drawn
-    # with a few hundred representative dwellings, and printing "~273 dwellings" beside "population
-    # ~3,000" tells a reader something false about the place rather than about the drawing.
-    houses_noun: str | None
+    # The sentence that follows "<Name> is a <noun>". MIND THE WORDS THE CLASS VOCABULARY ALSO USES:
+    # the hamlet's line said "no shrine" on a page whose own `household shrine` class describes a
+    # hokora with a torii, and "no burial ground" on maps that draw a `grave island`. Both were true
+    # and both read as contradictions, because the card and the classes were using one word for two
+    # things (settlement-review, 2026-08-29 - live on the reference map, not merely predicted).
+    what: str
+    # What to call the dwellings the map draws. EVERY tier states a count, and it is always exact,
+    # because every one of them is enumerated and rendered (GM 2026-08-29: "towns and cities should
+    # state and list the number of non farmhouse dwellings ... this is something which is enumerated
+    # and known and which is actually exact and rendered"). What differs is WHICH dwellings are
+    # countable: a hamlet's and a village's are farmhouses and are all of them, while a town's and a
+    # city's farmhouses are only a sample of a countryside deliberately not drawn whole, so those
+    # tiers count their NON-farm dwellings and say nothing about farmhouses at all.
+    houses_noun: str
+    # Whether the count excludes dwellings standing in a drawn agricultural district.
+    excludes_farms: bool
+    # What the population figure MEANS at this tier, which is a matter of Imperial census convention
+    # rather than of arithmetic, and differs between a town and a city (GM 2026-08-29). Empty where
+    # the population is simply five to a drawn household and needs no explaining.
+    population_note: str
 
 
 #: Keyed by `meta.scale`. Written from `l7r.md` (a hamlet "belongs to a village district and is
@@ -68,23 +81,31 @@ class Kind:
 KINDS: dict[str, Kind] = {
     "hamlet": Kind(
         "hamlet",
-        "a small outlying farming community belonging to a village district. Like every hamlet it has no headman of its own - its overseer, the district headman, lives in the main village - no shrine, no tax-free plot and no burial ground; its dead go to the district's ground.",
+        "a small outlying farming community belonging to a village district. Like every hamlet it has no headman of its own - the village headsman who oversees it lives in the main village - no VILLAGE shrine, no tax-free plot and no burial ground OF ITS OWN; its dead go to the district's ground. (The little hokora beside a farmhouse door is a household's own, and an in-field grave mound is not a burial ground.) A hamlet is the commonest kind of settlement there is: a domain holds about 1,296 of them to 216 villages, and about 40% of its inhabitants live in one.",
         "farmhouses",
+        False,
+        "",
     ),
     "village": Kind(
         "village",
-        "the main village of a village district: the seat of the headman who oversees the district's outlying hamlets, with its own shrine, its tax-free plots and the burial ground the whole district uses. Like every village district it is peasant-only - no samurai live here.",
+        "the main village of a village district: the seat of the village headsman who oversees the district's outlying hamlets, with its own shrine, its tax-free plots and the burial ground the whole district uses. Like every village district it is peasant-only - no samurai live here.",
         "farmhouses",
+        False,
+        "",
     ),
     "town": Kind(
         "town",
         "a county town: the lowest level of Rokugani society at which samurai live, and the lowest that has resident merchants, which is why the farmers of the surrounding districts come in for market day. The county magistrate holds court here.",
-        None,
+        "dwellings",
+        True,
+        "A town's population is counted the Imperial way, which takes in the farming population of the surrounding countryside as part of the town - so the figure is larger than the settlement you can see, and only some of those farms are drawn on this sheet.",
     ),
     "city": Kind(
         "city",
         "a provincial city: the seat of a province's governor and its ministries, and a market the whole province turns toward.",
-        None,
+        "dwellings",
+        True,
+        "A provincial city's population is counted the other way from a town's: it takes in the samurai country estates around the city, only some of which are drawn here, but NOT the farmers. The farms on this sheet belong to village districts and counties, which the Imperial census counts separately.",
     ),
 }
 
@@ -131,16 +152,22 @@ PLACE_KEYS = ("district", "district direction", "county", "imperial road", "town
 #: a second list here that could drift from it.
 ENTRY = "research/archetypes.md - 'What a settlement IS'"
 
-#: The basis the card owes its reader (spec FR-008a). Two statements rest on setting canon where the
-#: historical record does not back them, and the GM's rule is that a liberty is called out.
+#: The basis the card owes its reader (spec FR-008a). Two statements above rest on setting canon where
+#: the historical record does not back them, and the GM's rule is that a liberty is called out. It is
+#: the FINE PRINT and it reads as fine print: the facts themselves belong in the body, where the reader
+#: meets them (settlement-review, 2026-08-29 - the basis block had grown longer than the card).
 BASIS = (
-    f"A hamlet is the most numerous kind of settlement in a domain - about {HAMLETS_PER_DOMAIN:,} of them "
-    f"to {VILLAGES_PER_DOMAIN} villages, holding about {HAMLET_SHARE} of its inhabitants. That is the setting's own "
-    "arithmetic rather than a historical finding: the research pass found no source that ranks settlement forms "
-    "by frequency, and none for which KIND of hamlet is commonest either, so this map claims neither. "
-    "Rokugan is also simpler than history in one respect stated above - that a hamlet never has a headman of its "
-    "own is the setting's rule, where the Edo record has branch hamlets that did."
+    "Two of those rest on the setting rather than on the historical record. The counts are Rokugan's own "
+    f"arithmetic ({HAMLETS_PER_DOMAIN:,} hamlets to {VILLAGES_PER_DOMAIN} villages, {HAMLET_SHARE} of a domain's inhabitants): no historical source found "
+    "ranks settlement forms by frequency, and none says which KIND of hamlet is commonest, so neither is claimed "
+    "here. And that a hamlet never has a headman of its own is the setting's rule - the Edo record has branch "
+    "hamlets that kept their own officials and were treated on a par with the parent village."
 )
+
+#: What introduces the basis on the card. NOT "On the drawing:", which is what a class's caveat gets:
+#: this paragraph is about where the card's claims COME FROM, not about how anything was drawn, and a
+#: renderer that decides the lead-in for both cannot tell them apart (settlement-review, 2026-08-29).
+BASIS_LEAD = "What this rests on: "
 
 
 def join(items: list[str]) -> str:
@@ -176,11 +203,19 @@ def size_sentence(kind: Kind, meta: dict[str, Any], houses: int) -> str:
     `meta.population`, because their inhabitants are not a multiple of anybody's farmhouses - and
     otherwise from `l7r.md`'s five to a household. Either may be missing, and then it is not said."""
     parts = []
-    if houses and kind.houses_noun:
+    if houses:
         parts.append(f"{houses} {kind.houses_noun}")  # no tilde: the reader can count them
-    population = meta.get("population") or (PER_HOUSEHOLD * meta["households"] if meta.get("households") else None)
+    households = meta.get("households")
+    population = meta.get("population") or (PER_HOUSEHOLD * households if households else None)
     if population:
-        parts.append(f"population ~{int(population):,}")
+        # SAY THE HOUSEHOLDS WHERE THE ARITHMETIC WOULD NOT WORK (settlement-review, 2026-08-29).
+        # `settlements.md` permits ~0.7 houses per household at village scale, and Hikari no Sato uses
+        # it - 66 drawn against 70 households - so a card reading "66 farmhouses, population ~350"
+        # invites a reader to divide and get 5.3. Named only when the two differ, which is rare.
+        if households and houses and households != houses and not kind.excludes_farms:
+            parts.append(f"about {households} households, population ~{int(population):,}")
+        else:
+            parts.append(f"population ~{int(population):,}")
     # COMMA, NOT "and" - the GM's own phrasing is a bare apposition: "population ~75".
     return ", ".join(parts)
 
@@ -199,7 +234,10 @@ def where_sentences(scale: str, place: dict[str, str]) -> list[str]:
     elif district:
         out.append(f"It belongs to the village district of {district}" + (f", which lies {direction}." if direction else "."))
     if place.get("imperial road"):
-        out.append(f"An Imperial road runs {place['imperial road']}.")
+        # "runs south" is the road's COURSE; the GM's fact is its POSITION - it lies south of the
+        # settlement (settlement-review, 2026-08-29). The notes keep the bearing; the template says
+        # what the bearing is of.
+        out.append(f"An Imperial road passes {place['imperial road']} of here.")
     if place.get("county"):
         out.append(f"The district is part of {place['county']} county.")
     if place.get("town"):
@@ -221,14 +259,61 @@ def lane_default(scale: str, place: dict[str, str]) -> str:
     specified."* A district's name IS its main village's name - `l7r.md`'s Place Names, the GM's own
     writing: *"a village and its district"* - so recording the district is enough to name the place at
     the other end of the track. With no district recorded there is nothing to name and the class's own
-    explanation, which already states the default in general terms, stands alone."""
-    district, direction = place.get("district"), place.get("district direction")
+    explanation, which already states the default in general terms, stands alone.
+
+    IT NAMES NO DIRECTION, and that is a correction rather than a simplification (settlement-review,
+    2026-08-29). The direction a district LIES in is not the direction its track LEAVES in: on
+    Akagahara and Ikegami the connector runs SOUTH, to the Imperial road the GM put there, while
+    Hoshigaoka lies east and north-east along it. Composing the sentence from `district direction`
+    made both of those pages contradict their own ink. A route off the edge of the sheet is not
+    something the map knows, so the default states only the destination - and a map that DOES know its
+    route says so in its own `### Features` entry, which always wins.
+
+    It names the CONNECTOR too, not "the lanes": the class lights every lane on the sheet, and eight
+    of Inashiro's nine are three-foot stragglers between the farmsteads that lead nowhere at all."""
+    district = place.get("district")
     if scale != "hamlet" or not district:
         return ""
-    return f"The lanes lead {direction + ' ' if direction else ''}to {district}, the main village of the district this hamlet belongs to."
+    return f"The connector track leads out of the hamlet toward {district}, the main village of the district it belongs to; the lanes between the farmsteads feed it."
 
 
-def place_card(meta: dict[str, Any], houses: int, present: set[str], notes: MapNotes) -> dict[str, Any] | None:
+def dwellings_shown(manifest: dict[str, Any], kind: Kind) -> int:
+    """How many dwellings this map DRAWS that the tier is willing to count.
+
+    A hamlet and a village count every house: each is a household of the settlement, and the sheet
+    holds all of them. A town and a city do not (GM 2026-08-29): they *"are surrounded by significant
+    farm fields and farmer populations, which are deliberately not all rendered on the map. Therefore,
+    that number should not be included."* So a farmhouse standing inside a drawn agricultural district
+    is left out of the count, and what remains is the non-farm dwellings - which ARE all there and are
+    exact.
+
+    KNOWN LIMIT, recorded rather than papered over: the manifest carries no per-dwelling farm flag, so
+    the only thing this can key on is whether a house stands inside a `quarters[kind=agricultural_district]`
+    polygon. That works on a city that draws one (Tango: 13 of 273) and is a no-op on the pool's towns,
+    which draw none - their houses are read as town dwellings entire. A town that grows an agricultural
+    district later gets the exclusion for free; a town with unmarked farm housing would over-count, and
+    the fix for that is a flag on the record, not a cleverer polygon test here."""
+    houses = manifest.get("houses") or []
+    if not kind.excludes_farms:
+        return len(houses)
+    farmland = [q.get("poly") for q in (manifest.get("quarters") or []) if q.get("kind") == "agricultural_district" and q.get("poly")]
+    return sum(1 for h in houses if not any(_inside((h.get("x", 0.0), h.get("y", 0.0)), poly) for poly in farmland))
+
+
+def _inside(pt: tuple[float, float], poly: list[Any]) -> bool:
+    """Ray casting, the same crossing rule the rest of the engine uses."""
+    x, y = pt
+    hit, j = False, len(poly) - 1
+    for i in range(len(poly)):
+        xi, yi = poly[i][0], poly[i][1]
+        xj, yj = poly[j][0], poly[j][1]
+        if (yi > y) != (yj > y) and x < (xj - xi) * (y - yi) / ((yj - yi) or 1e-9) + xi:
+            hit = not hit
+        j = i
+    return hit
+
+
+def place_card(meta: dict[str, Any], present: set[str], notes: MapNotes, manifest: dict[str, Any]) -> dict[str, Any] | None:
     """The card behind the title placard, or None for a tier the vocabulary does not describe.
 
     Shaped like a class entry on purpose: the page opens it through the same modal, so there is one
@@ -237,11 +322,11 @@ def place_card(meta: dict[str, Any], houses: int, present: set[str], notes: MapN
     if kind is None:
         return None
     name = str(meta.get("name") or "This settlement")
-    size = size_sentence(kind, meta, houses)
+    size = size_sentence(kind, meta, dwellings_shown(manifest, kind))
     what = f"{name} is a {kind.noun}: {kind.what}"
     if size:
         what = f"{name} is a {kind.noun} of {size}: {kind.what}"
-    why = " ".join(x for x in [crop_sentence(present), *where_sentences(str(meta.get("scale")), notes.place)] if x)
+    why = " ".join(x for x in [crop_sentence(present), *where_sentences(str(meta.get("scale")), notes.place), kind.population_note] if x)
     keys = research_sources(ENTRY)
     return {
         "name": name,
@@ -249,7 +334,7 @@ def place_card(meta: dict[str, Any], houses: int, present: set[str], notes: MapN
         "why": why,
         "label": "accurate",
         "lead": "",  # the card never announces accuracy either (spec FR-001)
-        "caveat": BASIS if kind.noun == "hamlet" else "",
+        "caveat": BASIS_LEAD + BASIS if kind.noun == "hamlet" else "",
         "sources": keys,
         "refs": citations(keys),
         "entry": ENTRY,

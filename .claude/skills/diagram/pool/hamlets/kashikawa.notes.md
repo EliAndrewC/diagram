@@ -83,7 +83,7 @@ beyond the frame.
 
 ## Map notes
 
-<!-- READ BY THE INTERACTIVE MAP (`l7r/diagram/interactive/notes.py`, feature 154): these bullets
+<!-- READ BY THE INTERACTIVE MAP (`l7r/diagram/interactive/notes.py`, feature 156): these bullets
      appear on the page's title card and in feature modals. Everything is optional and the reader is
      forgiving by design (GM 2026-08-29: "we should not presume that such sections exist ... should
      default to simply not pulling anything in if the parsing fails") - a missing, misspelled or
@@ -92,12 +92,20 @@ beyond the frame.
 
 ### Place
 
-- **district**: Kawakami
-- **district direction**: north-east
+- **district**: Hirose
+- **district direction**: east
 
-*Kawakami (川上, "upstream, upper river") is INVENTED for this map - drawn from gm-assistant's
+*Hirose (広瀬, "broad rapids") is INVENTED for this map - drawn from gm-assistant's
 `place-names/pool.jsonl`, which carries its kanji and meaning, and not ruled on by the GM. The
-DIRECTION is not invented: it is the bearing of this map's own connector track where it leaves the cluster.*
+DIRECTION is not invented: it is the bearing of this map's own connector track where it leaves the
+cluster, 351.2 deg on the sheet's axes.*
+
+*It was Kawakami (川上, "upstream") until settlement-review measured the two against each other on
+2026-08-29: this land falls to the north-east, so upstream is roughly the opposite way from the
+district the track actually leads to, and Kashikawa is 樫川, "oak river" - the same water. An
+"upstream village" recorded downstream of its own hamlet is the sort of thing a reader checks. The
+bearing is measured and so cannot move; the name can, and a broad reach downstream is what Hirose
+names.*
 
 ## 2026-08-17 - re-packed by feature 121 (the placer tests the rake it draws)
 

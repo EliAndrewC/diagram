@@ -1,6 +1,6 @@
 # Implementation Plan: The place card, and per-map notes the page can read
 
-**Feature**: 154 | **Spec**: [spec.md](spec.md) | **GM request**: [request.md](request.md)
+**Feature**: 156 | **Spec**: [spec.md](spec.md) | **GM request**: [request.md](request.md)
 **Created**: 2026-08-29
 
 ## Summary

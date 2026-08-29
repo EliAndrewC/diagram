@@ -1,4 +1,4 @@
-"""The place card (feature 154): what a reader gets for clicking the settlement's title placard.
+"""The place card (feature 156): what a reader gets for clicking the settlement's title placard.
 
 Every function under test takes plain dicts and sets and returns a string, so nothing here builds a
 settlement. The two properties worth stating up front, because most of the file is one or the other:
@@ -20,11 +20,14 @@ from l7r.diagram.interactive.classes import CLASSES
 from l7r.diagram.interactive.notes import EMPTY, MapNotes
 from l7r.diagram.interactive.place import (
     BASIS,
+    BASIS_LEAD,
     CROP_SENTENCES,
     CROPS,
     KINDS,
     PER_HOUSEHOLD,
+    PLACE_KEYS,
     crop_sentence,
+    dwellings_shown,
     join,
     lane_default,
     place_card,
@@ -33,6 +36,7 @@ from l7r.diagram.interactive.place import (
 )
 
 HAMLET = {"scale": "hamlet", "name": "Inashiro", "households": 15}
+M15 = {"houses": [{"x": 0.0, "y": 0.0}] * 15}  # a manifest with 15 drawn dwellings and no agricultural district
 PADDY = {"paddy", "millet", "soy"}
 NOTES = MapNotes(
     place={"district": "Hoshigaoka", "district direction": "east", "imperial road": "directly south", "county": "Hayakawa", "town": "Hayakawa", "town direction": "further south"},
@@ -92,21 +96,55 @@ def test_only_the_population_carries_a_tilde() -> None:
 
 def test_a_recorded_population_beats_the_household_multiple() -> None:
     """A town's inhabitants are not a multiple of anybody's farmhouses, and its tier records its own."""
-    assert size_sentence(KINDS["town"], {"scale": "town", "population": 680}, 42) == "population ~680"
+    assert size_sentence(KINDS["town"], {"scale": "town", "population": 680}, 42) == "42 dwellings, population ~680"
 
 
-def test_a_town_and_a_city_do_not_state_a_dwelling_count() -> None:
-    """The count would be a fact about the DRAWING read as a fact about the place: Tango is 3,000
-    inhabitants drawn with 273 representative dwellings, and "~273 dwellings, population ~3,000" tells
-    a reader something false. A hamlet's houses ARE its households, so there the figure means what it
-    says (found while sweeping the pool's cards, 2026-08-29)."""
+def test_a_town_and_a_city_count_dwellings_and_never_farmhouses() -> None:
+    """The GM, 2026-08-29: "towns and cities should state and list the number of non farmhouse
+    dwellings ... this is something which is enumerated and known and which is actually exact and
+    rendered." What they must NOT count is the farm housing, because the countryside around them is
+    deliberately not drawn whole."""
+    assert KINDS["hamlet"].houses_noun == "farmhouses" and not KINDS["hamlet"].excludes_farms
     for scale in ("town", "city"):
-        assert "dwelling" not in size_sentence(KINDS[scale], {"population": 3000}, 273)
-    assert KINDS["hamlet"].houses_noun == "farmhouses" and KINDS["city"].houses_noun is None
+        assert KINDS[scale].houses_noun == "dwellings" and KINDS[scale].excludes_farms
+        assert "farmhouse" not in size_sentence(KINDS[scale], {"population": 3000}, 260)
+
+
+def test_each_tier_explains_what_its_population_figure_COUNTS() -> None:
+    """A matter of Imperial census convention, not arithmetic, and the two upper tiers differ (GM
+    2026-08-29). A hamlet's and a village's need no explaining - they are five to a drawn household."""
+    assert "as part of the town" in KINDS["town"].population_note
+    assert "NOT the farmers" in KINDS["city"].population_note
+    assert "counts separately" in KINDS["city"].population_note
+    assert KINDS["hamlet"].population_note == "" and KINDS["village"].population_note == ""
+
+
+def test_a_farm_dwelling_inside_a_drawn_agricultural_district_is_not_counted() -> None:
+    """Tango draws one, and 13 of its 273 houses stand in it - so its card says 260 dwellings."""
+    square = [[0, 0], [10, 0], [10, 10], [0, 10]]
+    manifest = {
+        "houses": [{"x": 5.0, "y": 5.0}, {"x": 5.0, "y": 6.0}, {"x": 50.0, "y": 50.0}],
+        "quarters": [{"kind": "agricultural_district", "poly": square}],
+    }
+    assert dwellings_shown(manifest, KINDS["city"]) == 1, "the two inside the district are farm housing"
+    assert dwellings_shown(manifest, KINDS["hamlet"]) == 3, "a hamlet counts every house it draws"
+
+
+def test_a_town_with_no_agricultural_district_counts_every_house() -> None:
+    """The pool's towns draw none, so the exclusion is a no-op there - recorded because it is the
+    difference between a correct count and an unnoticed over-count if one ever gains unmarked farm
+    housing."""
+    manifest = {"houses": [{"x": 1.0, "y": 1.0}] * 42, "quarters": []}
+    assert dwellings_shown(manifest, KINDS["town"]) == 42
+
+
+def test_dwellings_shown_survives_a_manifest_with_nothing_in_it() -> None:
+    assert dwellings_shown({}, KINDS["city"]) == 0
+    assert dwellings_shown({"houses": [{}], "quarters": [{"kind": "agricultural_district"}]}, KINDS["city"]) == 1
 
 
 def test_a_thousands_separator_on_a_city() -> None:
-    assert "population ~3,000" in size_sentence(KINDS["city"], {"population": 3000}, 273)
+    assert "population ~3,000" in size_sentence(KINDS["city"], {"population": 3000}, 260)
 
 
 @pytest.mark.parametrize(
@@ -123,7 +161,7 @@ def test_each_figure_is_omitted_cleanly_when_it_is_not_known(meta: dict[str, obj
 def test_where_sentences_read_every_authored_fact() -> None:
     got = " ".join(where_sentences("hamlet", NOTES.place))
     assert "village district of Hoshigaoka, which lies east" in got
-    assert "An Imperial road runs directly south." in got
+    assert "An Imperial road passes directly south of here." in got, "the road LIES south; it does not head south"
     assert "part of Hayakawa county" in got
     assert "The town of Hayakawa lies further south." in got
 
@@ -156,11 +194,22 @@ def test_the_free_also_line_is_punctuated_once(also: str) -> None:
 
 
 def test_the_lane_leads_to_the_district_the_notes_name() -> None:
-    assert lane_default("hamlet", NOTES.place) == "The lanes lead east to Hoshigaoka, the main village of the district this hamlet belongs to."
+    assert (
+        lane_default("hamlet", NOTES.place)
+        == "The connector track leads out of the hamlet toward Hoshigaoka, the main village of the district it belongs to; the lanes between the farmsteads feed it."
+    )
 
 
-def test_the_lane_default_needs_no_direction() -> None:
-    assert lane_default("hamlet", {"district": "Kawakami"}).startswith("The lanes lead to Kawakami,")
+def test_the_lane_default_states_no_direction_even_when_the_notes_record_one() -> None:
+    """The direction a district LIES in is not the direction its track LEAVES in (settlement-review,
+    2026-08-29): Akagahara's and Ikegami's connectors run SOUTH to the Imperial road while Hoshigaoka
+    lies east and north-east along it, so composing the sentence from `district direction` made both
+    pages contradict their own ink. A route off the sheet is not something the map knows."""
+    with_dir = lane_default("hamlet", NOTES.place)
+    without = lane_default("hamlet", {"district": "Hoshigaoka"})
+    assert with_dir == without, "the recorded direction changes nothing"
+    for word in ("east", "north", "south", "west"):
+        assert word not in with_dir
 
 
 @pytest.mark.parametrize(("scale", "place"), [("hamlet", {}), ("village", {"district": "Hoshigaoka"}), ("town", {"district": "X"})])
@@ -175,7 +224,7 @@ def test_no_default_where_there_is_nothing_to_name(scale: str, place: dict[str, 
 
 
 def test_the_card_on_the_reference_hamlet() -> None:
-    card = place_card(HAMLET, 15, PADDY, NOTES)
+    card = place_card(HAMLET, PADDY, NOTES, M15)
     assert card is not None
     assert card["name"] == "Inashiro"
     assert card["what"].startswith("Inashiro is a hamlet of 15 farmhouses, population ~75:")
@@ -188,24 +237,30 @@ def test_the_card_on_the_reference_hamlet() -> None:
 def test_the_card_states_the_basis_for_what_it_takes_from_canon() -> None:
     """Spec FR-008a - the GM's liberty rule applied to this surface. Without it the card would print
     a self-declared deliberate deviation under a page-wide presumption of accuracy."""
-    card = place_card(HAMLET, 15, PADDY, NOTES)
-    assert card is not None and card["caveat"] == BASIS
-    assert "the setting's own arithmetic rather than a historical finding" in BASIS
-    assert "the Edo record has branch hamlets that did" in BASIS
+    card = place_card(HAMLET, PADDY, NOTES, M15)
+    assert card is not None and card["caveat"] == BASIS_LEAD + BASIS
+    assert card["caveat"].startswith("What this rests on: "), "NOT 'On the drawing:' - this is sourcing, not drawing"
+    assert "Rokugan's own arithmetic" in BASIS
+    assert "the Edo record has branch hamlets that kept their own officials" in BASIS
 
 
 def test_the_card_ranks_tiers_and_never_kinds_of_hamlet() -> None:
-    """The GM asked which TYPE of hamlet is commonest; nothing answers it, so nothing is claimed."""
-    assert "most numerous kind of settlement" in BASIS
-    assert "none for which KIND of hamlet is commonest either" in BASIS
-    card = place_card(HAMLET, 15, PADDY, NOTES)
+    """The GM asked which TYPE of hamlet is commonest; nothing answers it, so nothing is claimed.
+    The TIER ranking the setting does support sits in the BODY, where a reader meets it, not in the
+    fine print (settlement-review, 2026-08-29: it was the one fact the GM asked about by name and it
+    had been buried in the quietest text on the card)."""
+    card = place_card(HAMLET, PADDY, NOTES, M15)
     assert card is not None
-    assert "commonest" not in card["what"] and "most common" not in card["what"]
+    assert "the commonest kind of settlement there is" in card["what"], "the tier ranking is body text"
+    assert "1,296" in card["what"] and "40%" in card["what"]
+    # ...and the ranking is of TIERS. No kind of hamlet is ranked anywhere on the card.
+    assert "none says which KIND of hamlet is commonest" in BASIS
+    assert "kind of hamlet" not in card["what"]
 
 
 def test_a_map_with_no_notes_at_all_still_describes_itself() -> None:
     """Spec Story 2 AS6, and the normal case for most of the pool."""
-    card = place_card(HAMLET, 15, PADDY, EMPTY)
+    card = place_card(HAMLET, PADDY, EMPTY, M15)
     assert card is not None
     assert "15 farmhouses, population ~75" in card["what"]
     assert card["why"].startswith("The flooded fields grow rice.")
@@ -214,25 +269,40 @@ def test_a_map_with_no_notes_at_all_still_describes_itself() -> None:
 
 @pytest.mark.parametrize("scale", sorted(KINDS))
 def test_every_tier_the_generator_supports_has_a_card(scale: str) -> None:
-    card = place_card({"scale": scale, "name": "Somewhere", "households": 20}, 20, PADDY, EMPTY)
+    card = place_card({"scale": scale, "name": "Somewhere", "households": 20, "population": 100}, PADDY, EMPTY, {"houses": [{"x": 0.0, "y": 0.0}] * 20})
     assert card is not None and card["what"].startswith("Somewhere is a ")
 
 
 def test_an_unknown_tier_gets_no_card_rather_than_a_wrong_one() -> None:
-    assert place_card({"scale": "megalopolis"}, 5, PADDY, EMPTY) is None
-    assert place_card({}, 5, PADDY, EMPTY) is None
+    assert place_card({"scale": "megalopolis"}, PADDY, EMPTY, M15) is None
+    assert place_card({}, PADDY, EMPTY, M15) is None
 
 
 def test_only_a_hamlet_carries_the_hamlet_basis() -> None:
-    card = place_card({"scale": "village", "name": "Hoshigaoka", "households": 70}, 70, PADDY, EMPTY)
+    card = place_card({"scale": "village", "name": "Hoshigaoka", "households": 70}, PADDY, EMPTY, {"houses": [{"x": 0.0, "y": 0.0}] * 70})
     assert card is not None and card["caveat"] == ""
 
 
 def test_an_unnamed_settlement_does_not_produce_a_blank_sentence() -> None:
-    card = place_card({"scale": "hamlet"}, 0, set(), EMPTY)
+    card = place_card({"scale": "hamlet"}, set(), EMPTY, {})
     assert card is not None and card["what"].startswith("This settlement is a hamlet:")
 
 
 @pytest.mark.parametrize(("items", "want"), [([], ""), (["a"], "a"), (["a", "b"], "a and b"), (["a", "b", "c"], "a, b and c")])
 def test_join(items: list[str], want: str) -> None:
     assert join(items) == want
+
+
+def test_place_keys_names_exactly_what_the_card_reads() -> None:
+    """`interactive/CLAUDE.md` tells authors that `PLACE_KEYS` is the list the card understands, and
+    `where_sentences` reads its keys literally - so the roster is DERIVED, not maintained, and the
+    doctrine (clause 14) says bind it with a guard rather than trust it (settlement-review nitpick,
+    2026-08-29). Feeding one key at a time is the census: a key that produces nothing is not read.
+    """
+    reads = {k for k in PLACE_KEYS if where_sentences("hamlet", {k: "X"}) or where_sentences("village", {k: "X"})}
+    # `district direction`, `town direction` and the county only ever qualify another key, so they
+    # produce nothing alone - they are read, and this is how they show it.
+    qualifiers = {"district direction", "town direction"}
+    for k in qualifiers:
+        assert where_sentences("hamlet", {"district": "D", "town": "T", k: "X"}) != where_sentences("hamlet", {"district": "D", "town": "T"}), f"{k} is not read"
+    assert reads | qualifiers == set(PLACE_KEYS), f"PLACE_KEYS and the card disagree: {set(PLACE_KEYS) ^ (reads | qualifiers)}"

@@ -139,7 +139,7 @@ def _mechanics(page: Page, present: list[str]) -> None:
         # because that is what the ink carries and what `all_ink_is_ruled_on` reads.
         assert d["open"] and d["k"] == key and d["name"].lower() == CLASSES[key].name.lower()
         assert d["label"] == CLASSES[key].label, "the classification still reaches the page (constitution XII)"
-        # THE PRESUMPTION OF ACCURACY (feature 154): an accurate class says nothing about accuracy at
+        # THE PRESUMPTION OF ACCURACY (feature 156): an accurate class says nothing about accuracy at
         # all - the lead line is empty and hidden - while a deviation or a guess still opens with its
         # liberty. The caveat, where the record discloses one, sits below the why instead.
         if CLASSES[key].label == "accurate":

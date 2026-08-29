@@ -30,7 +30,7 @@ from typing import Literal
 
 Label = Literal["accurate", "deviation", "guess"]
 
-#: The labels the PAGE announces. `accurate` is not among them, and that is the whole of feature 154's
+#: The labels the PAGE announces. `accurate` is not among them, and that is the whole of feature 156's
 #: first change (GM 2026-08-29): *"I would like to not explicitly say that things are historically
 #: accurate when they are because I want the presumption to be that things are always historically
 #: accurate unless stated otherwise. In other words, we should call out liberties that we have taken."*
@@ -42,7 +42,7 @@ ANNOUNCED: frozenset[Label] = frozenset({"deviation", "guess"})
 #: The pseudo-class of ink ruled out of highlighting. Recorded, never wrapped, never reported.
 NOT_HIGHLIGHTED = "-"
 
-#: The reserved pseudo-class of the TITLE PLACARD (feature 154). Not a row of `CLASSES` - it is not a
+#: The reserved pseudo-class of the TITLE PLACARD (feature 156). Not a row of `CLASSES` - it is not a
 #: kind of feature and has no research entry of its own - but a key the census and the page both know,
 #: so the placard is highlightable, clickable, and never reported as ink nobody ruled on. Its modal is
 #: built per map by `place.py` from the manifest, the setting's canon and the map's own notes file.
@@ -61,7 +61,7 @@ NOT_HIGHLIGHTED_OVERTURNED: tuple[tuple[str, str, str, str], ...] = (
         "the title placard and its text",
         "the GM",
         "2026-08-29",
-        'ruled map furniture on 2026-08-27 (feature 134 FR-002) and overturned by the GM in feature 154: "I would like to be able to click on the title card for a settlement and then pull up an explanation of the type of settlement that this is." The placard now carries the reserved class `place`; the scale bar beside it keeps its ruling, having nothing to say.',
+        'ruled map furniture on 2026-08-27 (feature 134 FR-002) and overturned by the GM in feature 156: "I would like to be able to click on the title card for a settlement and then pull up an explanation of the type of settlement that this is." The placard now carries the reserved class `place`; the scale bar beside it keeps its ruling, having nothing to say.',
     ),
 )
 
@@ -79,7 +79,7 @@ class FeatureClass:
     label_note: str  # the one line that justifies the label (a deviation says what deviates; a guess says what is silent)
     sources: tuple[str, ...]  # `research/SOURCES.md` keys, or ("not recorded",)
     entry: str  # the research/ entry (file + heading) the text was written FROM
-    # THE LIBERTY HALF of `label_note`, and only that (feature 154, GM 2026-08-29). An `accurate`
+    # THE LIBERTY HALF of `label_note`, and only that (feature 156, GM 2026-08-29). An `accurate`
     # class's note usually says two things at once - which parts are READ, and which parts are a
     # drawing convention, a derived number or a sub-guess. The first half is the accuracy claim in
     # other words and the page no longer prints it; the second is exactly what the GM asked to have
@@ -290,8 +290,8 @@ _DEFS: tuple[FeatureClass, ...] = (
         what="A roofed outbuilding for storage - grain, straw, tools, fuel. Some stand as a lean-to against the farmhouse, some free in the yard; storage either way.",
         why="A July 1972 survey of 87 households in three Miyagi hamlets counted 4.4 outbuildings per household - firewood shed, straw shed, barn, work shed, storehouse - so a farmstead with only its house would be the anomaly. The count drawn here is a band below that snow-country figure, because the temperate lowland hamlet this map draws kept fewer.",
         label="accurate",
-        label_note="Presence and prevalence read (Sugiura 1973); the drawn count per household is calibrated below the source's Tohoku figure, as the entry itself advises.",
-        caveat="the drawn count per household is calibrated below the source's Tohoku figure, as the entry itself advises.",
+        label_note="Presence and prevalence read (Sugiura 1973); the drawn count per household is deliberately set below the source's Tohoku figure, which is a colder and better-stocked district than this one.",
+        caveat="the drawn count per household is deliberately set below the source's Tohoku figure, which is a colder and better-stocked district than this one.",
         sources=("sugiura-1973-fuzoku",),
         entry="research/homesteads.md - 'What stood on a farmstead - the inventory, with numbers'",
     ),
@@ -442,7 +442,6 @@ _DEFS: tuple[FeatureClass, ...] = (
         why="A nucleated village shelters behind one village-scale grove against the winter monsoon. Surveys of southern-China village fengshui forests find about two groves per village at closed-canopy density, the typical back grove one to two hectares - large relative to the cluster, and drawn so. It is kept off the west side of the gardens so the beds keep their afternoon sun.",
         label="accurate",
         label_note="Scale, density and placement follow the surveyed figures (forests-2020); the belt's shape follows the terrain and the cluster.",
-        caveat="the belt's shape follows the terrain and the cluster.",
         sources=("forests-2020",),
         entry="research/vegetation.md - 'The fengshui forest - real scale, and why ours is honest'; research/homesteads.md - 'The garden's sun, and how far the windbreak shades'",
     ),
@@ -453,8 +452,8 @@ _DEFS: tuple[FeatureClass, ...] = (
         what="A stand of fruit-tree and broadleaf greenery in the open ground among the houses - shade and fruit, not shelter.",
         why="The leafy greenery scattered through the gaps of a nucleated cluster is the third of the village's grove roles, after the back belt and the water-mouth grove; it threads between the dwellings and never stands on a roof, a yard or a crop.",
         label="accurate",
-        label_note="The role is attested with the fengshui-grove system; its extent on any one map is a drawing decision.",
-        caveat="its extent on any one map is a drawing decision.",
+        label_note="The role is attested with the fengshui-grove system; the copse's extent on any one map is a drawing decision.",
+        caveat="the copse's extent on any one map is a drawing decision.",
         sources=("forests-2020",),
         entry="research/vegetation.md - 'The fengshui forest'; settlements/vegetation.md 'Village windbreak' (the three roles)",
     ),
@@ -512,7 +511,6 @@ _DEFS: tuple[FeatureClass, ...] = (
         why="A bund is the wall BETWEEN two basins and is built once, so the fabric is one connected network meeting at T-junctions - never two parallel ridges with idle ground between. Farmers walked the bunds to reach the plots; the footplanks over the ditches serve that walking.",
         label="accurate",
         label_note="Construction, width and the shared-wall finding are read; the drawn stroke is at true size.",
-        caveat="the drawn stroke is at true size.",
         sources=("aze-standard",),
         entry="research/fields.md - 'Bunds are SHARED, and the fabric is continuous', 'A bund runs on, or it turns for a reason'; research/water.md - 'The bund runs along the channel bank'",
     ),
@@ -626,8 +624,8 @@ _DEFS: tuple[FeatureClass, ...] = (
         what="A small pocket of open water inside one low paddy plot, reed-fringed - a low pocket where the ground pools, or a header pond within the field.",
         why="Flat, flooded valley-bottom paddy is the archetype that hosts non-rice obstacles LEAST - graves and knolls go to the slope, rock outcrops belong to terraces - and a small open-water pond is the one thing that genuinely belongs in the wet middle. It is drawn sunk into a single low plot, never across a bund.",
         label="accurate",
-        label_note="The kind of obstacle a flooded paddy hosts is read (corroborated in both traditions); how often one appears on a map is a calibrated liberty the entry discloses.",
-        caveat="how often one appears on a map is a calibrated liberty the entry discloses.",
+        label_note="The kind of obstacle a flooded paddy hosts is read (corroborated in both traditions); how often one appears on a map is a calibrated liberty, chosen rather than counted.",
+        caveat="how often one appears on a map is a calibrated liberty, chosen rather than counted.",
         sources=("not recorded",),
         entry="research/fields.md - 'In-field features - flat flooded paddy hosts obstacles least'",
     ),
@@ -638,8 +636,8 @@ _DEFS: tuple[FeatureClass, ...] = (
         what="A cluster of gray boulders inside a field plot - a bedrock outcrop the terrace risers wrap around, too big to clear.",
         why="Rock outcrops are a TERRACE feature, bedrock the risers wrap around, and are absent on alluvial valley, polder and delta ground; where the archetype allows one it stands off-center in its plot so it reads as a natural obstacle.",
         label="accurate",
-        label_note="Which archetypes host an outcrop is read (corroborated); how often one appears is a calibrated liberty the entry discloses.",
-        caveat="how often one appears is a calibrated liberty the entry discloses.",
+        label_note="Which archetypes host an outcrop is read (corroborated); how often one appears is a calibrated liberty, chosen rather than counted.",
+        caveat="how often one appears is a calibrated liberty, chosen rather than counted.",
         sources=("not recorded",),
         entry="research/fields.md - 'In-field features - flat flooded paddy hosts obstacles least'",
     ),
@@ -654,12 +652,16 @@ _DEFS: tuple[FeatureClass, ...] = (
         sources=("not recorded",),
         entry="research/fields.md - 'In-field features - flat flooded paddy hosts obstacles least' (the CALIBRATED LIBERTY paragraph, GM 2026-07-20)",
     ),
+    # WHY THE CLASS IS A *VILLAGE* LANE AND NOT A HAMLET LANE - the GM, 2026-08-29: "I have been
+    # referring to hamlet lanes as village lanes specifically for this reason because they are presumed
+    # to lead into the main village when not otherwise stated." The rule is in the `why` where a reader
+    # needs it; the naming rationale is project process and stays here (settlement-review, 2026-08-29).
     _c(
         key="village lane",
         name="village lane",
         covers="`lanes` - every lane on the map: the web, the internal skeleton, the connector to the off-map road and the field spur",
         what="A trodden earth track - packed dirt with soft worn shoulders, a single narrow way, no paving and no center line. Every lane on the map is one feature, connected or not.",
-        why="Every house in a nucleated village is reached by the interconnected lanes and alleys - that is what compactness is for - and the narrow lateral lanes are colonized as semi-private space by the houses beside them, which is why they are narrow and irregular. A lane bends like a line feet wear: as few turns as the plots allow, none sharp, never back on itself. The connector to the off-map road predates the settlement; the lanes between the farmsteads were trodden by the households already living there. AND THE LANE LEADS SOMEWHERE: unless this map's notes say otherwise, a village lane runs to the main village of the district the settlement belongs to. That is why the class is a VILLAGE lane and not a hamlet lane - the GM, 2026-08-29: \"I have been referring to hamlet lanes as village lanes specifically for this reason because they are presumed to lead into the main village when not otherwise stated.\"",
+        why="Every house in a nucleated village is reached by the interconnected lanes and alleys - that is what compactness is for - and the narrow lateral lanes are colonized as semi-private space by the houses beside them, which is why they are narrow and irregular. A lane bends like a line feet wear: as few turns as the plots allow, none sharp, never back on itself. The connector to the off-map road predates the settlement; the lanes between the farmsteads were trodden by the households already living there. And the lane leads somewhere: unless this map's notes say otherwise, a village lane runs to the main village of the district the settlement belongs to.",
         label="accurate",
         label_note="Access and form are read; the drawn WIDTHS (3, 5 and 6 ft) have no numeric source for an ordinary hamlet lane and stand as drawing conventions inside read bounds - a GUESS at the number.",
         caveat="the drawn WIDTHS (3, 5 and 6 ft) have no numeric source for an ordinary hamlet lane and stand as drawing conventions inside read bounds - a GUESS at the number.",
@@ -696,7 +698,6 @@ _DEFS: tuple[FeatureClass, ...] = (
         why="Every Edo town AND village kept one, and its siting was a traffic decision: the board stands where the settlement's one lane carries everyone past it, because it is the state talking at all who pass. The circulars reached the farmers through exactly this board, read aloud where needed - one reader per settlement makes it work.",
         label="accurate",
         label_note="Presence and siting are read; at hamlet grain the glyph is drawn at its true 12 x 5 ft.",
-        caveat="at hamlet grain the glyph is drawn at its true 12 x 5 ft.",
         sources=("not recorded",),
         entry="research/urban-features.md - 'The notice board (kosatsuba) - siting is a TRAFFIC decision'",
     ),

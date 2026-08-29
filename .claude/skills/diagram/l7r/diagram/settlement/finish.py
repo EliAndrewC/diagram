@@ -265,7 +265,7 @@ class FinishMixin:
         # than a card. This is the SAME defect, and the same fix, as the field grave on that map eight
         # days earlier ("painted at 0.9 opacity over an intact lattice ... it is opaque now"); one was
         # fixed for that reason and this one was left translucent with nothing recorded either way.
-        # THE PLACARD IS THE PLACE (feature 154, GM 2026-08-29): "I would like to be able to click on
+        # THE PLACARD IS THE PLACE (feature 156, GM 2026-08-29): "I would like to be able to click on
         # the title card for a settlement and then pull up an explanation of the type of settlement
         # that this is." It was ruled map furniture on 2026-08-27 and that ruling is OVERTURNED - the
         # card and its name now carry the reserved class `place` (`interactive/classes.py` PLACE, with

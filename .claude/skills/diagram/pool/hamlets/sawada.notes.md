@@ -73,7 +73,7 @@ the low side where the gate requires it.
 
 ## Map notes
 
-<!-- READ BY THE INTERACTIVE MAP (`l7r/diagram/interactive/notes.py`, feature 154): these bullets
+<!-- READ BY THE INTERACTIVE MAP (`l7r/diagram/interactive/notes.py`, feature 156): these bullets
      appear on the page's title card and in feature modals. Everything is optional and the reader is
      forgiving by design (GM 2026-08-29: "we should not presume that such sections exist ... should
      default to simply not pulling anything in if the parsing fails") - a missing, misspelled or
@@ -83,7 +83,7 @@ the low side where the gate requires it.
 ### Place
 
 - **district**: Shimoda
-- **district direction**: north-west
+- **district direction**: northwest
 
 *Shimoda (下田, "lower paddy") is INVENTED for this map - drawn from gm-assistant's
 `place-names/pool.jsonl`, which carries its kanji and meaning, and not ruled on by the GM. The

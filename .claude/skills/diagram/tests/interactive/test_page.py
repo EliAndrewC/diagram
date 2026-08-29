@@ -113,7 +113,7 @@ def test_explanations_hold_only_present_classes_and_present_siblings() -> None:
     assert set(data) == {"windbreak", "copse", "farmhouse"}
     assert data["windbreak"]["siblings"] == ["copse"], "woodland commons is absent from this map, so it is not claimed; siblings are link keys now"
     assert data["farmhouse"]["siblings"] == [], "storage shed and byre are absent"
-    # the presumption of accuracy (feature 154): an accurate class announces nothing, and the liberty
+    # the presumption of accuracy (feature 156): an accurate class announces nothing, and the liberty
     # its record discloses rides in `caveat` instead, to be shown after the what and the why
     assert data["windbreak"]["label"] == "accurate", "the classification is still recorded (constitution XII)"
     assert data["windbreak"]["lead"] == "", "an accurate class leads with what the feature is, not with a claim"
@@ -554,7 +554,7 @@ def test_every_keep_clear_key_makes_its_holes() -> None:
     assert clip.count("M") == 1 + len(recs) + aprons, f"{len(recs)} records + {aprons} aprons + the canvas"
 
 
-# --- the notes block and the place card reach the page (feature 154) ---
+# --- the notes block and the place card reach the page (feature 156) ---
 
 
 def test_an_annotation_reaches_only_the_class_its_notes_name() -> None:
@@ -589,7 +589,10 @@ def test_the_placard_opens_the_place_card() -> None:
 def test_the_lane_default_names_the_village_the_notes_name() -> None:
     notes = MapNotes(place={"district": "Hoshigaoka", "district direction": "east"}, features={})
     data = _render([PLACE, "village lane"], {"scale": "hamlet", "name": "Inashiro", "households": 15}, notes)
-    assert data["village lane"]["on_this_map"] == "The lanes lead east to Hoshigaoka, the main village of the district this hamlet belongs to."
+    assert (
+        data["village lane"]["on_this_map"]
+        == "The connector track leads out of the hamlet toward Hoshigaoka, the main village of the district it belongs to; the lanes between the farmsteads feed it."
+    )
 
 
 def test_an_authored_lane_annotation_beats_the_default() -> None:
@@ -616,7 +619,7 @@ def test_no_rendered_page_tells_a_reader_a_feature_is_historically_accurate() ->
     for key, d in data.items():
         if d["label"] == "accurate":
             assert d["lead"] == "", key
-            assert not re.search(r"\bare read\b|\bis read\b", d["caveat"].split(";")[0]), key
+            assert not re.search(r"\bare read\b|\bis read\b|\bat its true\b|\btrue size\b", d["caveat"]), key
 
 
 def test_an_element_with_no_extent_is_treated_as_touching_everything() -> None:

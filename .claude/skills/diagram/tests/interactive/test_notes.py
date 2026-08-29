@@ -1,4 +1,4 @@
-"""The map-notes reader (feature 154).
+"""The map-notes reader (feature 156).
 
 The GM's requirement is a NEGATIVE one - *"resilient against that formatting not being present ...
 default to simply not pulling anything in if the parsing fails"* - so most of this file is malformed

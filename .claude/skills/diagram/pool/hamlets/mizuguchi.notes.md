@@ -87,7 +87,7 @@ head-race) - a pipeline note, logged in `future-work/`.
 
 ## Map notes
 
-<!-- READ BY THE INTERACTIVE MAP (`l7r/diagram/interactive/notes.py`, feature 154): these bullets
+<!-- READ BY THE INTERACTIVE MAP (`l7r/diagram/interactive/notes.py`, feature 156): these bullets
      appear on the page's title card and in feature modals. Everything is optional and the reader is
      forgiving by design (GM 2026-08-29: "we should not presume that such sections exist ... should
      default to simply not pulling anything in if the parsing fails") - a missing, misspelled or

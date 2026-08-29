@@ -181,7 +181,7 @@ Silkworm mulberry was not grown as trees: it was COPPICED into low bushes (crown
 
 *Departures and honesty.* The gazetteer office frames 桑、蔗、蕉 as a SUCCESSION of dike-pond types (桑基 giving way to 果基、蔗基、菜基 over the region's history), not one dike carrying all three - so a `dike_crop` knob would roll a hamlet's TYPE, not mix crops on a dike. Fei is Lake Tai, 1936; the Pearl-delta reads are 1980s surveys and a 2006 summary of the 1988 monograph, which itself could not be fetched (403 on every host) - every Ruddle & Zhong number here is SUMMARY-ONLY. No single source describes a WHOLLY converted hamlet's farmsteads; the list is assembled across the two systems and says so per item.
 
-## What a settlement IS, and what the place card may say about it (feature 154, 2026-08-29)
+## What a settlement IS, and what the place card may say about it (feature 156, 2026-08-29)
 
 The interactive page's title card describes the settlement itself, so it makes claims a feature modal
 never had to: what kind of place this is, how many live here, and whether that kind is ordinary. The

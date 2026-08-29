@@ -11,7 +11,7 @@ that deliberately keeps the old path.
 
 ## Map notes
 
-<!-- READ BY THE INTERACTIVE MAP (`l7r/diagram/interactive/notes.py`, feature 154): these bullets
+<!-- READ BY THE INTERACTIVE MAP (`l7r/diagram/interactive/notes.py`, feature 156): these bullets
      appear on the page's title card and in feature modals. Everything is optional and the reader is
      forgiving by design (GM 2026-08-29: "we should not presume that such sections exist ... should
      default to simply not pulling anything in if the parsing fails") - a missing, misspelled or
@@ -30,6 +30,10 @@ that deliberately keeps the old path.
 *The district, the road, the county and the town are the GM's own, dictated 2026-08-29. The
 connector track on this sheet runs SOUTH, which is where they put the Imperial road; Hoshigaoka
 lies east along it.*
+
+### Features
+
+- **village lane**: The connector track runs SOUTH, to the Imperial road; Hoshigaoka, the district's main village, lies east along it.
 
 ## What makes it a hamlet, not a village
 

@@ -22,7 +22,7 @@ PNG is byte-identical by construction; the page is a second serialization of the
 | `page.py` | `wrap()` (the HTML form of one stream string), `ink_census()` (the FR-009 data: elements per class, and the unclassed ones), `explanations()` (only present classes, only present siblings), `render_page()` / `write_html()` |
 | `assets/page.css`, `assets/page.js` | the look and the behavior; inlined at write time. The highlight color is a recorded rendering decision (research.md R2) - change it there and here together |
 
-## The presumption of accuracy (feature 154)
+## The presumption of accuracy (feature 156)
 
 The page never tells a reader that a feature is historically accurate. The GM, 2026-08-29: *"we
 almost always say that it is historically accurate ... I want the presumption to be that things are
@@ -45,7 +45,7 @@ and is NOT rendered; four classes whose whole note is that get no caveat at all,
 them so a fifth is a decision rather than an omission. Both halves stay in the record, and the
 sources stay one click away.
 
-## The map-notes block: facts a `.notes.md` hands its page (feature 154)
+## The map-notes block: facts a `.notes.md` hands its page (feature 156)
 
 A settlement's own `<name>.notes.md` may carry a `## Map notes` section, and the page reads it.
 Optional everywhere, and absent from most of the pool.

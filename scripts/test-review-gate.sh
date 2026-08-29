@@ -38,7 +38,7 @@ check "a spec with no fidelity verdict" a blocked
 mkrepo b withmap; echo '{"v":2}' > "$POOL/m.json"; git add -A; git commit -qm reroll
 check "a re-rolled map with no review logged" b blocked
 
-# The two shapes the bare `grep FAITHFUL` used to let through (feature 154, 2026-08-29). The first is
+# The two shapes the bare `grep FAITHFUL` used to let through (feature 156, 2026-08-29). The first is
 # the dangerous one: a spec a reviewer REJECTED shipped as if it had passed.
 mkrepo b2; printf '# spec\n\n## Review history\n- **Round 1 (2026-08-29): NOT FAITHFUL.** FR-003 carved out a case.\n' > specs/900-x/spec.md
 git add -A; git commit -qm s

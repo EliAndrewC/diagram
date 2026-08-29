@@ -23,7 +23,7 @@ import re
 from collections.abc import Iterator, Sequence
 from typing import Any
 
-from .classes import CLASSES, NOT_HIGHLIGHTED, PLACE, label_phrase, lead_sentence, slug
+from .classes import CLASSES, NOT_HIGHLIGHTED, PLACE, lead_sentence, slug
 from .glossary import GLOSSARY
 from .notes import EMPTY, MapNotes, read_map_notes
 from .place import LANE, lane_default, place_card
@@ -42,6 +42,10 @@ _ATTR_FILL = re.compile(r'\sfill="[^"]*"')
 
 #: How many unclassed snippets the manifest keeps - enough to find the emit site, not the whole map.
 UNCLASSED_CAP = 20
+
+#: What introduces a feature class's caveat. The place card's basis gets its OWN lead-in
+#: (`place.BASIS_LEAD`) because it is not about the drawing - see `explanations`.
+CAVEAT_LEAD = "On the drawing: "
 
 
 _LINE = re.compile(r'<line ((?:[a-z0-9-]+="[^"]*"\s*)+)/>')
@@ -515,19 +519,24 @@ def explanations(present: set[str], notes: MapNotes = EMPTY) -> dict[str, dict[s
             "name": fc.name,
             "what": fc.what,
             "why": fc.why,
-            # `lead` is empty for an `accurate` class (feature 154) - see `classes.lead_sentence`.
+            # `lead` is empty for an `accurate` class (feature 156) - see `classes.lead_sentence`.
             # `caveat` is the liberty its record discloses, shown after the why; `label` stays so the
             # classification is still readable on the page (`data-label`), per constitution XII.
             "label": fc.label,
             "lead": lead_sentence(fc.label, fc.label_note),
-            "caveat": fc.caveat,
+            # THE LEAD-IN IS PART OF THE ENTRY (settlement-review, 2026-08-29). It used to be
+            # prepended by `page.js`, which meant one renderer put "On the drawing:" in front of
+            # every caveat - including the place card's, which is about where the card's claims come
+            # from and not about the drawing at all. A renderer cannot tell those apart; the writer of
+            # the string can.
+            "caveat": (CAVEAT_LEAD + fc.caveat) if fc.caveat else "",
             "sources": keys,
             "refs": citations(keys),
             "entry": fc.entry,
             # siblings are LINKS now (hover lights the other class, click opens its modal); the
             # distinguishing texts stay in the registry as the record, not on the page
             "siblings": [other for other in fc.siblings if other in present],
-            # WHAT IS TRUE OF THIS MAP ONLY (feature 154, the GM's general capability: "This is, in
+            # WHAT IS TRUE OF THIS MAP ONLY (feature 156, the GM's general capability: "This is, in
             # general, the kind of thing that we want to be able to do for any kind of map feature").
             # Kept in its own key rather than appended to `why`, so a reader is never led to take a
             # local fact for a general one - and absent for every class the notes do not annotate,
@@ -540,8 +549,11 @@ def explanations(present: set[str], notes: MapNotes = EMPTY) -> dict[str, dict[s
             "what": "This kind of feature has no entry in the class registry yet (interactive/classes.py).",
             "why": "",
             "label": "guess",
-            "label_phrase": label_phrase("guess"),
-            "label_note": "unregistered class - the gate reports it",
+            # the stub follows the same contract as a real entry, so its announcement survives
+            # (settlement-review nitpick, 2026-08-29: it still carried the pre-154 keys, which
+            # nothing reads, and had silently lost its lead)
+            "lead": lead_sentence("guess", "unregistered class - the gate reports it"),
+            "caveat": "",
             "sources": [],
             "refs": {},
             "entry": "",
@@ -556,11 +568,11 @@ def glossary_for(data: dict[str, dict[str, Any]]) -> list[dict[str, Any]]:
     longest variants first so "head race" wins over "head". The page wraps each occurrence.
 
     IT READS WHAT THE PAGE RENDERS, and nothing else. That used to include `label_note`; since
-    feature 154 the note itself is not rendered - only the `lead` built from it for a liberty, and
+    feature 156 the note itself is not rendered - only the `lead` built from it for a liberty, and
     the `caveat` split out of it for an accurate class - so those two are what is scanned. Scanning
     a string the reader never sees would define terms that never appear, which the companion test
     in `test_page.py` catches from the other direction."""
-    text = " ".join(str(d.get("what", "")) + " " + str(d.get("why", "")) + " " + str(d.get("lead", "")) + " " + str(d.get("caveat", "")) for d in data.values()).lower()
+    text = " ".join(" ".join(str(d.get(k, "")) for k in ("what", "why", "lead", "caveat", "on_this_map")) for d in data.values()).lower()
     out: list[dict[str, Any]] = []
     for term, (variants, definition) in GLOSSARY.items():
         if any(re.search(r"\b" + re.escape(v.lower()) + r"\b", text) for v in variants):
@@ -719,9 +731,9 @@ def render_page(strings: Sequence[str], tags: Sequence[ClsTag], name: str, meta:
     svg = svg.replace("<svg ", '<svg id="map" ', 1)
     data = explanations(present, notes)
     # THE PLACE CARD rides in the same map, under the placard's own reserved key, so the page opens it
-    # through the one modal every other feature uses (feature 154). None for a tier the vocabulary does
+    # through the one modal every other feature uses (feature 156). None for a tier the vocabulary does
     # not describe - and then the placard simply has nothing to open, exactly as before.
-    card = place_card(meta or {}, len((manifest or {}).get("houses") or []), present, notes)
+    card = place_card(meta or {}, present, notes, manifest or {})
     if card is not None:
         data[PLACE] = card
     # THE LANE'S DEFAULT DESTINATION (spec FR-021). An explicit annotation always wins - this only

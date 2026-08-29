@@ -12,7 +12,7 @@ is the point: this map exists to be ordinary.
 
 ## Map notes
 
-<!-- READ BY THE INTERACTIVE MAP (`l7r/diagram/interactive/notes.py`, feature 154): these bullets
+<!-- READ BY THE INTERACTIVE MAP (`l7r/diagram/interactive/notes.py`, feature 156): these bullets
      appear on the page's title card and in feature modals. Everything is optional and the reader is
      forgiving by design (GM 2026-08-29: "we should not presume that such sections exist ... should
      default to simply not pulling anything in if the parsing fails") - a missing, misspelled or
@@ -1048,7 +1048,7 @@ their local channel. The 2026-08-16 marsh-seated crownless parcel failure is abs
    circular seam across the roadway at (1185,785), (1249,801), (1270,1183), (1279,1312). Compounding it,
    `lanes[3]` is w=6 and `lanes[4]` is w=3, so one continuous ~230 ft back-lane run halves its width at
    that same junction (`ways.py:695`, a link inherits the width of the way it joins and leaves its far
-   neighbour at 3).
+   neighbor at 3).
 3. **The notice-board caption erases the lane it stands on.** The caption is centered on the glyph with a
    3 px background halo, and `lanes[1]` passes x~1235 at y=1009 with w=5 - so the halo knocks a visible
    notch out of the map's busiest internal lane, between "notice" and "board".
@@ -1464,7 +1464,7 @@ CONTAINING the water, not the annulus it draws - and the toe polygon covered **8
 drawn rice fan**, with `field_ponds[0]` inside it. The ink was clean in both cases; the record was not.
 The clip now subtracts the pond from a fringe and the fields from a toe, and because a record carries
 ONE ring the resulting hole is spliced in on a keyhole seam. After: fringe ring 30,860 sq ft against
-30,819 expected, the pond centre outside the ring, toe 0.00% in the fields.
+30,819 expected, the pond center outside the ring, toe 0.00% in the fields.
 
 **CAUGHT, recorded, not fixed** (each moves ink pool-wide; measurements in `specs/150-.../tasks.md`):
 the "notice board" caption stands across a lane from its own glyph - board at x 1094.5-1100.5, lane 1
