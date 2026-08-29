@@ -487,3 +487,17 @@ reaching 11.0 ft.
 (933-944, 1778-1780), where two 6 ft lanes never meet and the only ink joining them is 11.1 ft of a
 3 ft back lane (measured tread depth 9.5 / 3.2 / 7.6 ft across the waist); and the "copse" is 2 clumps
 175 ft apart inside a 205 ft record, both inside the windbreak's own canopy.
+
+## 2026-08-29 - the notice board is no longer at the traffic optimum (feature 152 T19)
+
+The 2026-08-17 entry records the board "at the traffic optimum: 10 of 12 houses within 250 ft, equal to
+the best point on the map". The cluster has re-rolled three times since (features 128, 140, 145) and the
+board did not follow it. Re-measured by the settlement-review of 2026-08-29: **5 of 12 households within
+150 ft and 7 of 12 within 250, against 11 of 12 at the grid optimum 133 ft east.**
+
+It is not the failure shape that rule exists to catch - the board is inside the cluster, on a lane, 22 ft
+from a public wellhead that eight households draw from, and a well IS traffic. It is recorded here as a
+KNOB candidate rather than a defect, and feature 152 makes it one: where a kosatsuba stands (the busiest
+frontage, or the drawing-water place) is attested both ways, and constitution XII makes two supportable
+answers a knob rather than a picked answer.
+

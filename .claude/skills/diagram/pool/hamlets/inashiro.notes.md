@@ -1460,3 +1460,21 @@ tree and every map; and the seated fixture counts fall well short of their decla
 water-blue or paddy-green ground; 0 of 25,779 pond-interior pixels carrying reed or haze; the pond rim
 broken exactly at the outfall (6 px, the outfall's own width) so the water reads as one structure; and
 the lane web one connected component with every house 22.6-84.1 ft from a way.
+
+## 2026-08-29 - stale counts corrected (feature 152 T19)
+
+A settlement-review found several numbers in these notes describing a map that no longer ships. All are
+re-measured here against the current roll; the prose above is left as written, because it is the record
+of what was true when it was written, and this section is the correction.
+
+| the notes say | the map that ships |
+|---|---|
+| the belt "carries 194 clumps" | **113 drawn + 49 off-page**. Both halves moved under feature 152 T02: the belt's trim now tests the real page rather than a proxy for it, so `clumps` finally means canopy a reader can see. |
+| "THREE stands" of woodland | **one**, 63 crowns |
+| privy 12, woodpile 7, coop 7, manure 5, bath 3 | **privy 14, woodpile 8, coop 5, manure 3, bath 8, shrine 1**. The privy count rose under feature 152 T07 - the outhouse now has a sun-side seat to go to, so far fewer are refused outright. |
+| the copse's clump count | **5**, up from 2 under T09's finer scatter grid |
+
+The lesson these share is worth more than the numbers: every one of them was correct when written and
+went stale because the ENGINE moved under an unchanged `.gen.py`. A count in a notes file is a
+measurement with a date, not a fact - re-measure it whenever the map is re-rolled.
+

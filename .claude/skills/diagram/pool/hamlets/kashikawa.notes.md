@@ -406,7 +406,7 @@ now. The registry's claim that the paddy tiles AROUND it is still geometrically 
 is a field-engine change, deferred with its measurement in `future-work/farming-communities.md`.
 
 **The board's caption over a byre (2003, 2838) - ACCEPTED, with what it costs and the alternatives.** The
-"notice board" caption clips the byre's roof by 15.4 x 4.8 ft. Three things are true and worth separating:
+"notice board" caption clips the byre's roof by 15.4 x 4.8 ft [SEE THE CORRECTION BELOW - no byre stands there]. Three things are true and worth separating:
 
 1. The placer is doing what it was built to do. `label_blockers` is DERIVED and already includes byres, and
    `_best_label_spot` takes the least-covered seat when nothing inside the ladder's reach is clear. In this
@@ -453,3 +453,16 @@ from the nearest farmhouse, blunt-capped in open grazing, with `lanes_reach_some
 homestead fixture ring is stamped rather than composed (13 of 20 houses carry the row at dy -18 to -21
 ft, privies at bearing 31-41 degrees at 10 of 13); and the accepted-limitation entry in these notes
 names a byre clipped by the board caption that stands nowhere within 167 ft, in this manifest or main's.
+
+## 2026-08-29 - a correction to the accepted limitation above (feature 152 T19)
+
+**The board caption clips no byre, and has not for some time.** The 2026-08-28 entry accepts, with its
+declined alternatives priced, a caption overlapping "the byre's roof by 15.4 x 4.8 ft" at (2003, 2838).
+Re-measured on the map that ships: the caption sits at (1969, 2833) and **the nearest byre of any
+homestead is 167 ft away**. There is no overlap and there is nothing being paid for.
+
+An accepted limitation that no longer describes the map is worse than no entry at all - it reads as a
+live cost, and the next session either re-derives it or quotes it. The entry above is kept rather than
+deleted, with this correction under it, because the DECISION it records (what was priced, and why the
+alternatives were declined) is still the reasoning that governs if the caption ever laps a byre again.
+
