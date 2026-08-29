@@ -78,6 +78,17 @@ modern number applied backward to a pre-modern map is exactly that risk.
   texts (`paddy` against millet, buckwheat, barley and soy) that each repeat it; the `seams.py`
   module docstring; and `research/fields.md`'s aze finding. Fixing the modal alone would leave the
   research record asserting it, which is where the next session would read it back.
+- **The walkthrough pages were 57 engine commits stale, and refreshing them is not this feature's
+  drawing change.** `dev/placement-stages/*.html` embeds a snapshot of the class registry, so it
+  carried the false depth claim and had to be rebuilt. Rebuilding also re-rendered its PNGs, which
+  differ from the committed ones in real pixels - chiefly feature 157's caption work. MEASURED
+  before committing: the walkthrough was last built at `c63df7c1` (feature 154) with **57 engine
+  commits since**, and all **13 stage PNGs rebuilt here are pixel-identical to the same pages built
+  from unmodified HEAD in a detached worktree**, while the baseline's HTML still carries "four to
+  six inches" and this one does not. So the pixel delta is accumulated drift being re-derived, and
+  the only change attributable to feature 160 is the text. **Nothing keeps this artifact fresh** -
+  no cache, no guard, no test - which is why it drifted 57 commits; recorded as a defect for the GM
+  rather than fixed here, since a staleness guard is its own piece of tooling.
 - **The bund is NOT re-derived from this.** `research/fields.md` has the aze at roughly 1-2 ft wide
   and about a foot high, separately sourced. A foot of bund over an inch of water is not a
   contradiction to be "fixed": the ridge has to hold the 10-20 cm cold-protection state and keep

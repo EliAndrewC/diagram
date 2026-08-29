@@ -28,7 +28,7 @@ Findings recorded before the rule, or on a source the rule now excludes. Each is
 - Still summary-only after the `source-reader` run of 2026-08-27 (T45), each labeled in its entry: the bund-width convention (IRRI, unreachable; FAO read and larger); the Shirakawa farmstead bamboo grove (Kids Web Japan, 403 with no corroboration); the turn-minimization sentence (Ma et al. 2024 full text - the abstract's angle finding IS read); EUNIS E5.2 (404).
 - Summary-only or not found after feature 143's passes (2026-08-28), each labeled in its entry and listed by file in `specs/143-research-citations/ledger.md` section F2: the Jōge daikansho plan; the daikan-debt figure; the jin'ya coverage ratio; the Song monk census year; the Shunde 1581 percentages; the dike-pond board sluice (Ruddle & Zhong 1988); the lotus area share; the tameike m3/ha ratio; the forest stems/ha band; the Kaifeng tower count; the communal-well ratio; the Sado fire count.
 - Feature 158's pass (2026-08-29) - three that did NOT come back, each labeled where it is used in `research/fields.md` 'The wettest plots are their own kind of ground':
-  - The MAINTAINED growing-season water depth. Our `paddy` modal has said "four to six inches" since feature 134, citing `tabayashi-1986`; the reader could not source that number - IRRI's 5-10 cm is search-summary only (`knowledgebank.irri.org` refused the connection) and FAO's fetched 5-20 cm is a bund-CONSTRUCTION range, not a maintained depth. The number is unverified rather than contradicted; `tabayashi-1986` has not itself been read for it. **For the GM**: the shipped modal states it as fact.
+  - The MAINTAINED growing-season water depth - **RESOLVED 2026-08-29 by feature 160, and the answer was not the one expected.** Our `paddy` modal had said "four to six inches" since feature 134, citing `tabayashi-1986`. The GM asked us to confirm the number or label it a guess; a second `source-reader` pass CONTRADICTED it instead. Maintained depth is 2-3 cm (`maff-suitou-mizu`, `zennoh-mizukanri`), the 10/20 cm figures are an explicit cold contingency at two growth stages, and the depth is STAGED across the season including a deliberate drain to cracking - so a single season-long number was the wrong shape as well as the wrong size. `tabayashi-1986` is about irrigation-system distribution and says nothing about depth: the citation was dropped, and this registry's own "Used for" line had already shown it never claimed to (tameike siting, one outlet, the canal taper, supply/drain separation). No PRE-MODERN figure was found, so what replaces it is labeled modern extension guidance in the class's own caveat. Entry: `research/fields.md` 'How deep the water actually stands'.
   - The water surface staying visible between the plants until the canopy closes. NOT-FOUND in anything read, so the drawn blue/green difference is asserted on the ground being wetter and not on that.
   - "Kishu-school" (紀州流) as the name for the comb layout, in `research/fields.md` 'Water-first v2'. What is attested under that name is Izawa Yasobei's river-channelization and levee method, not a paddy drainage layout; one fetch of `suido-ishizue.jp` returned navigation text only. The LAYOUT finding itself is separately sourced (`jsidre-minumadai`, Minuma-dai 1728); it is the NAME that did not check out, and it should not be re-used elsewhere until it does.
 
@@ -123,6 +123,18 @@ Encyclopedia entry s.v. 谷津田 / 谷地田, aggregated at kotobank (https://k
 Thierry Facon, "Water Management in Rice in Asia: Some Issues for the Future", FAO (https://www.fao.org/4/x6905e/x6905e0g.htm)
 
 *Used for:* the plot-to-plot cascade that the wettest-plot-on-the-drain inference rests on - "water flows from one plot to another and no distinction can be made between irrigation and drainage"; and drainage reuse - surface runoff "can be re-used, i.e., recycled within the system". NOT used for the inference itself, which the entry labels an inference
+
+### `maff-suitou-mizu`
+
+MAFF (Japan, Ministry of Agriculture, Forestry and Fisheries), 水稲栽培のポイント (https://www.maff.go.jp/j/seisan/gijutsuhasshin/techinfo/attach/pdf/suitou-2.pdf)
+
+*Used for:* the STAGED water depth, verbatim - 田植後活着するまでは水深3~4cmのやや深水 (3-4 cm until rooting), 活着後は水深2~3cmのやや浅水 (2-3 cm after rooting, to warm the water and promote tillering), the 中干し mid-season drain to 田面に小さなヒビが入り、軽く足跡がつく程度 (until small cracks appear and a footprint shows), and the 10 cm / 20 cm deep-water states as an explicit COLD CONTINGENCY - 気温が下がる恐れがある場合は - not a maintained depth. Modern extension guidance, labeled as such wherever cited
+
+### `zennoh-mizukanri`
+
+Zennoh (National Federation of Agricultural Cooperative Associations), 水管理について (https://www.zennoh.or.jp/ty/einou/high_quality_rice/pdf/production_001_05.pdf)
+
+*Used for:* the maintained depth through the critical ripening window - 出穂後20日間は、ほ場の水を切らさず、2~3cm程度の湛水状態を保つ (about 2-3 cm for the twenty days from heading); and the full-season sequence やや深水 -> 浅水 -> 中干し -> 間断かん水 -> 湛水 -> 間断かん水 -> 前落水 (final drain 5-7 days before harvest). Modern extension guidance
 
 ### `tabayashi-1986`
 

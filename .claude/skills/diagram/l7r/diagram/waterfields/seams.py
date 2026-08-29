@@ -7,7 +7,7 @@ rather than two different earthen walls"*).
 
 THE RESEARCH BEHIND THE RULE (see `research/fields.md`, "Bunds are shared, and the fabric is
 continuous"). An *aze* is a puddled-mud ridge 1-2 ft wide, re-plastered every spring (*azenuri*)
-so each basin holds its 4-6 inches of standing water. It is the WALL BETWEEN two basins, and it
+so each basin holds its shallow sheet of standing water. It is the WALL BETWEEN two basins, and it
 is built once: a second parallel ridge would double the annual azenuri, drain neither basin, and
 strand the strip between them - inside an irrigated command area, the most valuable land there is.
 Real paddy fabric is therefore one CONNECTED bund network whose lines meet at T-junctions; a

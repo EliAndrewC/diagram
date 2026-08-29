@@ -206,9 +206,14 @@ def test_every_accurate_class_without_a_caveat_is_deliberate() -> None:
     settlement-review read the rendered page: `bund` ("the drawn stroke is at true size") and
     `notice board` ("drawn at its true 12 x 5 ft") were the accuracy claim in other words, under an
     "On the drawing:" heading that promises a disclosure and delivered none; `windbreak` ("the belt's
-    shape follows the terrain and the cluster") discloses nothing either way."""
+    shape follows the terrain and the cluster") discloses nothing either way.
+
+    `paddy` LEFT the list on 2026-08-29 (feature 160). It now discloses that its water depths and the
+    drying stages between them are MODERN extension figures with no pre-modern record behind them -
+    a real liberty, and the reason the GM asked for the number to be confirmed or labeled. This
+    assertion is what made that a deliberate act rather than a quiet edit."""
     bare = {k for k, fc in CLASSES.items() if fc.label == "accurate" and not fc.caveat}
-    assert bare == {"marsh", "paddy", "field ditch", "pond", "bund", "notice board", "windbreak"}
+    assert bare == {"marsh", "field ditch", "pond", "bund", "notice board", "windbreak"}
 
 
 def test_slug_is_a_css_token() -> None:

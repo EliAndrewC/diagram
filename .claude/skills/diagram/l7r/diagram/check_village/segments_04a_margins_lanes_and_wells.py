@@ -277,8 +277,8 @@ def _seg_0279__wells_among_dwellings(
         )
 
         # AND NOT IN A RICE PADDY (GM 2026-07-27: "wells on dry crops are okay, but not in rice
-        # paddies, surely"). A paddy is a puddled, bunded basin held under standing water through the
-        # growing season: a wellhead drawn in one is standing in the water it is supposed to be an
+        # paddies, surely"). A paddy is a puddled, bunded basin held under standing water for most
+        # of the growing season (drained on purpose at midsummer, feature 160): a wellhead drawn in one is standing in the water it is supposed to be an
         # alternative to, and a shaft sunk there takes the field's own surface water. Dry crops are
         # a different matter and stay allowed - a hatake plot is worked ground you can walk on.
         #

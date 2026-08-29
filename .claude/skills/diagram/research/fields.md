@@ -30,7 +30,7 @@ Every entry: what the research found, the decision it drove, and any deliberate 
 
 Pre-modern paddies were fitted to the land and water by piecemeal reclamation and inheritance, so plots are odd-sized and odd-shaped with bunds meeting at **T-junctions**; the tidy rectangular grid is a **modern (Meiji/Showa) land-consolidation (*kochi seiri*) artifact** and reads as anachronistic.
 
-What the research found: what separated real paddies was the *aze* (China: *tiangeng*) - a puddled-mud ridge roughly 1-2 ft wide and ~1 ft high, re-plastered each spring (*azenuri*) so each basin holds its 4-6 inches of water; the walking bunds (*azemichi*) ran ~2-5 ft.
+What the research found: what separated real paddies was the *aze* (China: *tiangeng*) - a puddled-mud ridge roughly 1-2 ft wide and ~1 ft high, re-plastered each spring (*azenuri*) so each basin holds its shallow sheet of water (how deep, and the drained stages between, in 'How deep the water actually stands' below); the walking bunds (*azemichi*) ran ~2-5 ft.
 
 ### Bunds are SHARED, and the fabric is continuous
 
@@ -366,6 +366,53 @@ the number of sides but the SIZE, with triangularity as its symptom, because a c
 plot lattice at the fan's boundary is the shape a fragment naturally takes.
 
 *Re-sourcing note (2026-08-28, feature 143):* the bund page read gives a standard trapezoid of 30 cm height and 30 cm TOP width on 1:1 slopes, i.e. about 1 ft high and ~3 ft at the base - the entry's "1-2 ft wide, ~1 ft high" reads as a top-to-base span and is consistent; cold regions run ~50 cm top / ~40 cm high. Nothing read supports a bund a meter high.
+
+## How deep the water actually stands, and why a single number is the wrong shape
+
+**Grounds:** the `paddy` class's `what` and `caveat`; the aze finding above; `check_village/segments_04a` (no wellhead in a paddy)
+
+**Evidence:** researched, MODERN - every figure below is contemporary Japanese extension guidance; no pre-modern number was found
+
+**Sources:** [`maff-suitou-mizu`](SOURCES.md#maff-suitou-mizu), [`zennoh-mizukanri`](SOURCES.md#zennoh-mizukanri)
+
+- *What we said, and why it was wrong TWICE.* From feature 134 until 2026-08-29 the map told its
+  reader that a paddy holds "four to six inches of water" (about 10-15 cm), citing
+  `tabayashi-1986`. Both halves fail. The depth is wrong: the maintained figures are **2-3 cm**,
+  about an inch - 活着後は水深2~3cmのやや浅水とし ("after rooting, a slightly shallow 2-3 cm"), and for
+  the twenty days from heading, 2~3cm程度の湛水状態を保つことが重要です. And the SHAPE is wrong, which
+  is the larger error: there is no season-long depth to state.
+- *The season, as the sources give it.* 3-4 cm at transplanting, held slightly deep against cold and
+  wind until the plant roots; 2-3 cm once rooted, deliberately shallow so the water warms and
+  tillering starts early; then **中干し (nakaboshi), the mid-season drain** - the field is taken down
+  to nothing and dried until 田面に小さなヒビが入り、軽く足跡がつく程度 ("small cracks appear in the
+  field surface and a light footprint shows"); then intermittent wet-and-dry; standing water again
+  at heading, 2-3 cm for twenty days; intermittent through ripening; and a final drain 5-7 days
+  before harvest. **A paddy is not under water all season, and for part of midsummer it is dry
+  enough to crack.**
+- *Where the four-to-six-inch figure DOES appear, and why it misled.* 10 cm and 20 cm are real
+  numbers in the record - but as a cold contingency, not a norm: MAFF gives them under
+  気温が下がる恐れがある場合は ("when there is risk of falling temperature"), 10 cm at panicle
+  formation and 20 cm at booting, to protect the young panicle. A figure read out of that context
+  becomes a maintained depth that nobody maintains.
+- *The citation that never supported it.* `tabayashi-1986` is a study of the distribution and
+  development of irrigation systems, classified by water source. It says nothing about water depth.
+  Our own `SOURCES.md` "Used for" line had always said so - tameike siting, one outlet, the canal
+  taper, supply/drain separation - which is exactly what that field exists to make visible.
+- *What we could NOT get, and what that costs.* No pre-modern depth figure, in Japanese or Chinese
+  material. The searches returned Edo irrigation infrastructure and water-dispute histories and no
+  number. So the figures above are **modern extension guidance applied backward**, and the class's
+  caveat says so to the reader rather than presenting them as a historical finding. What is
+  plausible about applying them backward - that the agronomy of a puddled basin has not changed, and
+  that shallow warm water for tillering is a constraint of the plant rather than of the century - is
+  reasoning, not evidence, and is not asserted.
+- *The bund is NOT re-derived from this.* The aze runs roughly 1-2 ft wide and about a foot high
+  (sourced separately, above). A foot of ridge over an inch of water is not a contradiction to fix:
+  the ridge has to hold the 10-20 cm cold-protection state, keep freeboard in rain, and be walked.
+  That is inference rather than a finding, which is why it lives here and in the feature's spec
+  rather than as a sourced claim, and why nothing drawn changed - `AZE_FT` is a WIDTH.
+- *Available if wanted, not built.* The staging is a real seasonal axis: a map showing nakaboshi
+  would draw cracked mud where this one draws water. The map depicts one moment and which moment is
+  a question nobody has asked yet, so this is recorded rather than made a knob (feature 160).
 
 ## Nitrogen - a flooded paddy makes its own
 
