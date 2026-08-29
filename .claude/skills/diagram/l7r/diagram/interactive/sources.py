@@ -21,7 +21,12 @@ RESEARCH_DIR = os.path.normpath(os.path.join(_HERE, "..", "..", "..", "research"
 
 _KEY = re.compile(r"`([a-z0-9][a-z0-9-]*)`")
 _ENTRY_FILE = re.compile(r"research/([a-z-]+\.md)")
-_ENTRY_HEADING = re.compile(r"'((?:[^']|'(?=[A-Za-z]))+)'")
+# A heading is quoted 'like this', and "like this" when the heading itself contains an apostrophe -
+# the single-quote form cannot carry "A reservoir's shore is reeded". Both are read (settlement-review
+# 2026-08-29): with only the first form the marsh entry lost `mineta-2007-tameike` from the modal AND
+# swallowed the heading after it, because the run of characters between the two double quotes matched
+# as one giant "heading" that no section is named.
+_ENTRY_HEADING = re.compile(r"'((?:[^']|'(?=[A-Za-z]))+)'|\"([^\"]+)\"")
 
 
 @cache
@@ -68,7 +73,7 @@ def research_sources(entry: str, research_dir: str = RESEARCH_DIR) -> list[str]:
     # carry an apostrophe ("The garden's sun"), so a simple quote-to-quote match cuts it short
     # a quoted heading; a quote followed by a letter is an apostrophe INSIDE a title ("The garden's
     # sun"), any other quote closes it
-    headings = [m.group(1) for m in _ENTRY_HEADING.finditer(entry)]
+    headings = [m.group(1) or m.group(2) for m in _ENTRY_HEADING.finditer(entry)]
     keys: list[str] = []
     for fname in files:
         for heading, body in _sections(os.path.join(research_dir, fname)):

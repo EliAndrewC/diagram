@@ -686,6 +686,29 @@ _WALL_GAP_FT = 3.5  # the review measured -0.3 ft at 3.0 against the drawn wall;
 _SALT = {"privy": 101.0, "manure": 102.0, "woodpile": 103.0, "bath": 104.0, "coop": 105.0, "shrine": 106.0, "persimmon": 107.0}
 
 
+def nearer_own_house(seat: tuple[float, float, float, float], hx: float, hy: float, ca: float, sa: float, others: Sequence[Pt]) -> tuple[int, float]:
+    """Sort key preferring a fixture seat that is nearer its OWN farmhouse than any other house's.
+
+    `seat` is (dx, dy, w, d) in the house's own raked frame; `ca`/`sa` are that rake's cosine and sine.
+    Returns (0 if the seat belongs unambiguously to this house else 1, distance from it) - so a caller
+    that sorts by it keeps its own candidate order within each class and only demotes the seats a
+    reader would attribute to the neighbor.
+
+    Lifted out of the privy branch's closure (GM 2026-08-28: an inner function that is hard to test
+    gets lifted out) so the manure heap can share ONE body with it, and so the rule can be asked with
+    two tuples instead of a whole settlement."""
+    _mx, _my = hx + seat[0] * ca - seat[1] * sa, hy + seat[0] * sa + seat[1] * ca
+    _dmine = math.hypot(_mx - hx, _my - hy)
+    if not others:
+        return (0, _dmine, -_dmine)
+    _dother = min(math.dist((_mx, _my), _o) for _o in others)
+    # The third element is the MARGIN, negative when the seat is unambiguously this house's. Sorting by
+    # it does what a flag cannot: where no candidate is unambiguous - which is the common case for a
+    # heap that must lie beyond a privy already on the neighbor's side - it still picks the LEAST
+    # misattributable of them, instead of leaving the arbitrary first one in place.
+    return (0 if _dmine < _dother else 1, _dmine, _dmine - _dother)
+
+
 def _roll(weights: Sequence[tuple[str, float]], u: float) -> str:
     acc = 0.0
     for name, w in weights:
@@ -853,9 +876,8 @@ def farmstead_fixtures(s: Settlement, plan: SitePlan, houses: Sequence[Mapping[s
                     def _mine_first(
                         _q: tuple[float, float, float, float], _hx: float = hx, _hy: float = hy, _ca: float = ca, _sa: float = sa, _oth: list[Pt] = _others
                     ) -> tuple[int, float]:  # the loop's values bound as defaults - this closure outlives the iteration
-                        _mx, _my = _hx + _q[0] * _ca - _q[1] * _sa, _hy + _q[0] * _sa + _q[1] * _ca
-                        _dmine = math.hypot(_mx - _hx, _my - _hy)
-                        return (0 if _dmine < min(math.dist((_mx, _my), _o) for _o in _oth) else 1, _dmine)
+                        _k = nearer_own_house(_q, _hx, _hy, _ca, _sa, _oth)
+                        return (_k[0], _k[1])
 
                     _sun.sort(key=_mine_first)
                 seats = (_sun + seats) if _u_dir < PRIVY_SUNNY_SHARE else seats
@@ -885,6 +907,36 @@ def farmstead_fixtures(s: Settlement, plan: SitePlan, houses: Sequence[Mapping[s
                         (plx + w * 1.9, ply, w, d),
                         (plx - w * 1.9, ply, w, d),
                     ]
+                    # ...AND THE HEAP IS THIS HOUSE'S HEAP (settlement-review 2026-08-29, acceptance
+                    # re-check). One pit on Kuwabata sat 53.7 ft from the farmhouse it serves and 45.4 ft
+                    # from another - a reader attributes it to the nearer house, and the manifest says
+                    # otherwise. Same TIE-BREAK the privy takes, and for the same reason it is only a
+                    # tie-break: in a cluster the ground beyond one house's privy is often nearer the
+                    # next, and refusing those outright cost the privy 9 of 11 seats on Mizuguchi when it
+                    # was tried as a filter. Ordering demotes them instead, so an unambiguous seat wins
+                    # whenever the ground allows one.
+                    # ...AND THE HEAP IS THIS HOUSE'S HEAP (settlement-review 2026-08-29, acceptance
+                    # re-check). One pit on Kuwabata sat 53.7 ft from the farmhouse it serves and 45.4 ft
+                    # from another; a reader attributes it to the nearer house and the manifest says
+                    # otherwise. Ownership is a TIE-BREAK only, the same as the privy's and for the same
+                    # reason: in a cluster the ground beyond one house's privy is often nearer the next.
+                    #
+                    # TWO STRONGER LEVERS WERE TRIED AND REVERTED, MEASURED ACROSS THE 13-MAP POOL.
+                    # (1) A SECTOR SEARCH beyond the privy, the shape that worked for the privy itself
+                    #     (radii 2-24 ft past its far edge, swung +/-54 deg): 5 misattributed of 68, against
+                    #     4 of 66 with the eight offsets. It seats more heaps, none of them better placed.
+                    # (2) Sorting by the ownership MARGIN rather than the flag, so that where no candidate
+                    #     is unambiguous the LEAST misattributable wins: 4 of 67, no better - and it pulled
+                    #     heaps back toward the house to win the margin, so "the heap lies beyond the privy"
+                    #     - the actual researched rule (research/homesteads.md) - fell from 16 of 16 to
+                    #     9 of 15. A reader-legibility nicety is not worth a researched rule.
+                    # What is left is the geometry itself: where a privy sits on the sun side and the
+                    # neighbor is that way too, every seat beyond it belongs to that arc. Four heaps in the
+                    # pool are nearer a neighbor's house than their own, and the interactive page resolves
+                    # ownership on click. Do not re-try either lever without a new mechanism.
+                    _oth = [(float(_h["x"]), float(_h["y"])) for _h in houses if (float(_h["x"]), float(_h["y"])) != (hx, hy)]
+                    if _oth:
+                        seats.sort(key=lambda _q, _hx=hx, _hy=hy, _ca=ca, _sa=sa, _o=_oth: nearer_own_house(_q, _hx, _hy, _ca, _sa, _o)[0])
                 else:
                     seats = [(hw * 0.3, -(hh / 2 + g + d / 2), w, d), (hw / 2 + g + d / 2, hh * 0.3, d, w)]
             elif kind == "woodpile":

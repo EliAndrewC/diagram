@@ -921,6 +921,16 @@ class HomesteadPartsMixin:
             for _ in range(6):  # a 94 ft gap needs three rounds; six is headroom, and it stops when nothing lands
                 _order = sorted(range(len(seated)), key=lambda _k: seated[_k][0] * _wv[0] + seated[_k][1] * _wv[1])
                 _added = 0
+                # A DEAD END, MEASURED AND REVERTED (2026-08-29, the acceptance re-check's ERROR 2).
+                # The review read Kuwabata's belt as stopping before its polygon did, and the obvious
+                # repair was to bracket this run by the polygon's own across-wind extent so the END
+                # stretches were offered seats like any interior gap. Implemented and rolled: it bought
+                # ONE clump, on ONE map, at (2273.9, 393.6) on the page edge - because the unplanted
+                # tail is off the page. Kuwabata's belt polygon runs 693..1440 along its own axis, the
+                # view holds only 790..1327 of that, and the planting already covers 734..1330. The
+                # honest fix was in the CHECK, which was demanding canopy on ground no reader can see;
+                # `_column_in_belt` now clips its columns to the view. Do not re-add the end bracket to
+                # chase a belt that "stops short" - measure whether the short end is on the page first.
                 for _a, _b in zip(_order, _order[1:], strict=False):
                     _pa, _pb = seated[_a], seated[_b]
                     if math.dist(_pa, _pb) <= _BELT_GAP_FT:
@@ -962,6 +972,18 @@ class HomesteadPartsMixin:
                             if within is not None and (_qx + clump * 0.9 < within[0] or _qx - clump * 0.9 > within[2] or _qy + clump * 0.9 < within[1] or _qy - clump * 0.9 > within[3]):
                                 continue
                             if _hard_blocked(_qx, _qy) or _local_blocked(_qx, _qy) or _lane_blocked(_qx, _qy):
+                                continue
+                            # ...AND NEVER ON TOP OF A CLUMP THAT IS ALREADY THERE (settlement-review
+                            # 2026-08-29, acceptance re-check). The depth search is deterministic, so a gap
+                            # that survives one round is offered the SAME point on the next and the fill
+                            # piled crowns instead of converging. Measured by rolling Kuwabata with this
+                            # clause disabled: 246 recorded windbreak clumps at 211 distinct positions,
+                            # five of them at (1695.8, 576.9) alone, and 46 off-page clumps at 41
+                            # positions. Refusing a seat within half a crown of one already taken brings
+                            # the same belt in at 101 on-page clumps with nothing stacked. A stacked crown
+                            # is invisible in ink and inflates every count taken off the record - including
+                            # the one I first quoted for this feature.
+                            if any((_qx - _sx) ** 2 + (_qy - _sy) ** 2 < (clump * 0.5) ** 2 for _sx, _sy in seated):
                                 continue
                             seated.append((_qx, _qy))
                             clumps.append([round(_qx, 1), round(_qy, 1)])

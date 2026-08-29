@@ -62,19 +62,32 @@ from .common_03_capacity import _UNBOUND, _kept
 # The scatter records its real clumps, so test those, not the bounding poly. WHY: settlements.md 'Village windbreak'.
 
 
-def _column_in_belt(t: float, px: float, py: float, wx: float, wy: float, poly: list[tuple[float, float]]) -> bool:
-    """Does the belt's own footprint have any depth at this across-wind column?
+def _column_in_belt(t: float, px: float, py: float, wx: float, wy: float, poly: list[tuple[float, float]], view: Any = None) -> bool:
+    """Does the belt's own footprint have any VISIBLE depth at this across-wind column?
 
     The continuity walk projects onto a straight axis; a belt that bows around a plot has columns on
     that axis where its polygon simply is not. Sampling the column along the WIND axis, across the
-    polygon's own extent, answers whether there is belt there to be holed."""
+    polygon's own extent, answers whether there is belt there to be holed.
+
+    AND ON THE PAGE (settlement-review 2026-08-29, acceptance re-check; measured the same day). The
+    window this feeds is the belt POLYGON's extent, which is the honest bound for "the planting stops
+    before the belt does" - but a footprint runs off the page as freely as a clump does, and demanding
+    canopy out there fails a belt for ground no reader can see. Measured on Kuwabata: the polygon runs
+    693..1440 along its own axis, only 790..1327 of that is inside the view, and the planting covers
+    734..1330 - so the belt is continuous across every column that is drawn, and the 110 ft "gap" at
+    the high end is entirely off-page. Without this clause the check failed Kuwabata and Kashikawa for
+    exactly that invisible tail."""
     _c = [(q[0] * px + q[1] * py, q[0] * wx + q[1] * wy) for q in poly]
     _d0, _d1 = min(q[1] for q in _c), max(q[1] for q in _c)
     _n = 24
     for _k in range(_n + 1):
         _d = _d0 + (_d1 - _d0) * _k / _n
-        if point_in_poly(t * px + _d * wx, t * py + _d * wy, poly):
-            return True
+        _qx, _qy = t * px + _d * wx, t * py + _d * wy
+        if not point_in_poly(_qx, _qy, poly):
+            continue
+        if view and not (view[0] <= _qx <= view[0] + view[2] and view[1] <= _qy <= view[1] + view[3]):
+            continue
+        return True
     return False
 
 
@@ -357,13 +370,24 @@ def _seg_0613__village_windbreak_is_continuous(*, M: Any = _UNBOUND, check: Any 
             # and no amount of seating will fill ground the band does not occupy. Columns are therefore
             # counted only where the belt's own polygon has depth.
             _poly = [(float(_a), float(_b)) for _a, _b in (_g.get("poly") or [])]
-            _lo, _hi = min(p[0] for p in _pr) + _r, max(p[0] for p in _pr) - _r
+            # THE WINDOW IS THE BELT'S OWN FOOTPRINT, NOT ITS LAST CLUMP (settlement-review 2026-08-29,
+            # acceptance re-check). Bounding the scan by `max(clump) - r` makes the check structurally
+            # unable to see the one failure that matters most: a belt whose PLANTING stops before its
+            # polygon does. On Kuwabata the scan ended at u=1301 while the polygon ran to 1350 and the
+            # easternmost farmhouse sat at 1339 - so the column a reader would point at was outside the
+            # window by construction, and "the belt stops before the cluster does" could not fail.
+            # The polygon is the belt's own statement of the ground it holds; it is the honest window.
+            # The window is the whole polygon; `_column_in_belt` drops the columns of it that are off
+            # the page, so the scan asks for canopy exactly where a reader can look for it.
+            _pu = [q[0] * _px + q[1] * _py for q in _poly] if _poly else []
+            _lo = (min(_pu) if _pu else min(p[0] for p in _pr)) + _r
+            _hi = (max(_pu) if _pu else max(p[0] for p in _pr)) - _r
             _run = 0.0
             _t = _lo
             while _t <= _hi:
                 if any(abs(p[0] - _t) <= _r for p in _pr):
                     _run = 0.0
-                elif _poly and not _column_in_belt(_t, _px, _py, _wx, _wy, _poly):
+                elif _poly and not _column_in_belt(_t, _px, _py, _wx, _wy, _poly, M["meta"].get("view")):
                     _run = 0.0  # the belt does not reach this column: its edge, not its hole
                 else:
                     _run += 10.0

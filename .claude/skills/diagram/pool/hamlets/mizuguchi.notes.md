@@ -488,8 +488,9 @@ reaching 11.0 ft.
 3 ft back lane (measured tread depth 9.5 / 3.2 / 7.6 ft across the waist); and the "copse" is 2 clumps
 175 ft apart inside a 205 ft record, both inside the windbreak's own canopy.
 
-<<<<<<< HEAD
-<<<<<<< HEAD
+## 2026-08-29 - settlement-review, DELTA under feature 152's lane-web changes (not this map's feature)
+## 2026-08-29 - settlement-review, DELTA under feature 155's lane-web changes (not this map's feature)
+
 ## 2026-08-29 - the notice board is no longer at the traffic optimum (feature 152 T19)
 
 The 2026-08-17 entry records the board "at the traffic optimum: 10 of 12 houses within 250 ft, equal to
@@ -502,12 +503,6 @@ from a public wellhead that eight households draw from, and a well IS traffic. I
 KNOB candidate rather than a defect, and feature 152 makes it one: where a kosatsuba stands (the busiest
 frontage, or the drawing-water place) is attested both ways, and constitution XII makes two supportable
 answers a knob rather than a picked answer.
-
-=======
-## 2026-08-29 - settlement-review, DELTA under feature 152's lane-web changes (not this map's feature)
-=======
-## 2026-08-29 - settlement-review, DELTA under feature 155's lane-web changes (not this map's feature)
->>>>>>> origin/main
 
 This map's `.gen.py` is unchanged; the engine moved underneath it, and the review gate correctly
 refused to let that ship unlooked-at. It was the one of the three affected hamlets nobody had read,
@@ -558,4 +553,3 @@ bamboo/soybean fix still holds at 87.4 ft.
 - **`make overlap-audit` is RED on `ink-water`**: one marsh glint at (1829,425) printed on the drawn
   tameike's northern rim. Pre-existing (no water, marsh or pond record differs from main) and invisible
   to the gate, which reads records where this is ink.
->>>>>>> origin/main

@@ -454,8 +454,9 @@ homestead fixture ring is stamped rather than composed (13 of 20 houses carry th
 ft, privies at bearing 31-41 degrees at 10 of 13); and the accepted-limitation entry in these notes
 names a byre clipped by the board caption that stands nowhere within 167 ft, in this manifest or main's.
 
-<<<<<<< HEAD
-<<<<<<< HEAD
+## 2026-08-29 - feature 152: the lane sweeps rewritten, and the 25 ft hole ACCEPTED as honest
+## 2026-08-29 - feature 155: the lane sweeps rewritten, and the 25 ft hole ACCEPTED as honest
+
 ## 2026-08-29 - a correction to the accepted limitation above (feature 152 T19)
 
 **The board caption clips no byre, and has not for some time.** The 2026-08-28 entry accepts, with its
@@ -467,12 +468,6 @@ An accepted limitation that no longer describes the map is worse than no entry a
 live cost, and the next session either re-derives it or quotes it. The entry above is kept rather than
 deleted, with this correction under it, because the DECISION it records (what was priced, and why the
 alternatives were declined) is still the reasoning that governs if the caption ever laps a byre again.
-
-=======
-## 2026-08-29 - feature 152: the lane sweeps rewritten, and the 25 ft hole ACCEPTED as honest
-=======
-## 2026-08-29 - feature 155: the lane sweeps rewritten, and the 25 ft hole ACCEPTED as honest
->>>>>>> origin/main
 
 Two `settlement-review` passes on this map graded the previous round's fixes `needs-work` and were
 right on both counts: of the two lane defects, one fix was a no-op and the other could not reach its
@@ -570,4 +565,3 @@ quoted:**
   **17.0 ft from the field outline**. A track that runs out of the cluster and stops at the paddy
   edge, where you step onto the bunds, is the arrangement these notes already ruled sound on
   2026-08-17. Re-recorded as sound so the next session does not trim it.
->>>>>>> origin/main
