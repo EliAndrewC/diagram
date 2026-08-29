@@ -6,7 +6,6 @@ from collections.abc import Iterator, Sequence
 from typing import TYPE_CHECKING, Any
 
 from ._geom import _union_area, boxed_seg_hit, edge_dist, point_in_poly, seg_dist
-from ._knobs import windbreak_face
 
 if TYPE_CHECKING:
     from .core import Settlement
@@ -878,21 +877,23 @@ class HomesteadPartsMixin:
         # page" rule the `within` window applies on the other edges. Seating first and drawing
         # after is what makes this possible: the face is known only once every clump is down.
         # Draw order and positions are those of the seating loop, so nothing else moves.
+        # THE PAGE IS THE PAGE, NOT A PROXY FOR IT (feature 152 T02, GM 2026-08-29: "it's not clear that
+        # it will, in fact, be breaking much wind. Given how many houses appear uncovered"). A trim used to
+        # run HERE, against the belt's own inner face plus `face_margin` - 48 ft - as a stand-in for the
+        # page's windward edge. That proxy is right only when the belt is what sets that edge; whenever
+        # other content (fields, marsh, a pond) holds the frame open wider, it under-estimates the page and
+        # deletes canopy a reader can see. Measured over the pool against each map's FINAL `meta.view`:
+        # Kashikawa discarded 61 clumps of which ALL 61 were wholly inside the rendered view, Kuwabata 21
+        # of 45, Sawada 30 of 84 - and those three are exactly the maps with houses standing beyond their
+        # belt's ends (8 of 20, 3 of 16, 8 of 19). Inashiro and Mizuguchi discarded only genuinely off-page
+        # clumps and have no house beyond the belt. The belt was not too short: a third of it was being
+        # thrown away on the page it belongs to.
+        #
+        # The trim is not gone - it MOVED to `Settlement.set_view`, the first moment the real page is
+        # known. Everything the `within` window admits is drawn here (ink past the page is clipped by the
+        # render, which is the documented behavior for a communal grove - see the note at `set_view`'s
+        # frame list), and the RECORD is partitioned against the actual view once there is one.
         _offpage: list[Any] = []
-        if face_margin is not None and clumps:
-            _face = windbreak_face(clumps, cr, self.M.get("houses", []))
-            if _face is not None:
-                _axis, _sign, _inner = _face
-                _keep = [k for k, (px_, py_) in enumerate(seated) if _sign * ((px_, py_)[_axis] - _inner) >= -(face_margin + clump * 0.9)]
-                # THE TRIMMED CLUMPS STAY IN THE RECORD (feature 137 T05, 2026-08-28): they are trees that stand,
-                # only off the page. Tripwire seed 33's 40-50 ft belt hole was this trim: two garden beds at the
-                # belt's edge pushed the re-seated clumps into the outer strip, the page's edge (inner face +
-                # margin) fell inside that strip, and the trim dropped them from `clumps` - so the belt read as
-                # holed where it had in fact wrapped round the plot. The ink is still cut at the page; the
-                # record says the belt continues, and `village_windbreak_is_continuous` counts canopy where it is.
-                _offpage = [clumps[k] for k in range(len(clumps)) if k not in set(_keep)]
-                seated = [seated[k] for k in _keep]
-                clumps = [clumps[k] for k in _keep]
         for jx, jy in seated:
             # feature 150: the belt and the copse are two highlight classes; a water_mouth grove has no
             # class in the vocabulary yet and stays unclassed so the census reports it
