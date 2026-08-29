@@ -47,6 +47,7 @@ def test_paddy_field_marks_taxfree_plots_and_a_fallow_patch_and_labels():
     s.paddy_field((150, 150, 470, 470), "Rice", "f", taxfree=2, fallow_patch=[[250, 250], [380, 250], [380, 380], [250, 380]])
     assert s.M["taxfree"]  # tax-free plots recorded -> _taxfree_plots did real work
     assert s.M["fallow_patches"]  # blighted sub-region recorded
+    s.place_labels()  # feature 157: captions are queued and drawn in the LABEL PHASE, so run it before reading them
     assert any(lab[5] == "Rice" for lab in s.M["labels"])  # field name labeled
 
 
@@ -58,6 +59,7 @@ def test_water_field_from_a_bbox_marks_taxfree_and_labels():
     s.water_field((150, 150, 470, 470), "Paddy", "f", (150, 150), (470, 470), amp=10, taxfree=2, plot=34)
     assert any(fd["name"] == "f" and fd["kind"] == "paddy" for fd in s.M["fields"])
     assert s.M["taxfree"]
+    s.place_labels()  # feature 157: captions are queued and drawn in the LABEL PHASE, so run it before reading them
     assert any(lab[5] == "Paddy" for lab in s.M["labels"])
 
 

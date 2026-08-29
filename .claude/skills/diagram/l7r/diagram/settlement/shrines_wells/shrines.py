@@ -14,6 +14,7 @@ from .._geom import (
     torii_halfbox,
 )
 from .._knobs import roll_torii_count
+from ..finish import caption_record_box
 
 if TYPE_CHECKING:
     from ..core import Settlement
@@ -244,7 +245,15 @@ class ShrineHallsMixin:
             # A caption's band belongs to whoever knows where the caption went, which is here. The pad
             # absorbs half a dwelling, because block_polys is CENTER-tested (CLAUDE.md, "CENTER vs
             # FOOTPRINT"); the stale hand bands are now merely redundant, not wrong.
-            _lb = self.M["labels"][-1]
+            # THE BOX IS COMPUTED, NOT READ BACK (feature 157). This read `M["labels"][-1]` - the record
+            # `self.label` had just written one line above - and captions are now drawn in the LABEL
+            # PHASE, so at this point there is no record to read. The reservation cannot simply move
+            # into the phase either: it exists to keep dwellings off the caption's ground, and nothing
+            # is placed after the phase. So the box is derived from the same expression `label()` uses
+            # (`caption_record_box`), with the line break decided against the map AS IT IS NOW - which
+            # is exactly what the old readback measured, so every shipped band is byte-identical.
+            _lby = self._hall_caption_y(x, y, w, h, label, label_below, seats_t)
+            _lb = caption_record_box(label, self._caption_lines(label, x, _lby, HALL_CAPTION_FS, "middle", 0.0), x, _lby, HALL_CAPTION_FS, "middle")
             _lp = max(14 * self.bscale, 8.0)  # half a dwelling past the recorded box, which is already ~13% wider than the drawn glyphs
             self.block_polys.append([(_lb[0] - _lp, _lb[1] - _lp), (_lb[2] + _lp, _lb[1] - _lp), (_lb[2] + _lp, _lb[3] + _lp), (_lb[0] - _lp, _lb[3] + _lp)])
         if sublabel:

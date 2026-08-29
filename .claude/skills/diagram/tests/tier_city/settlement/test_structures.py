@@ -60,6 +60,7 @@ def test_ministry_auto_label_side_prefers_empty_ground():
     s.building(500, 462, 90, 24, "civic")  # crowd the ABOVE label spot
     s.ministry(500, 510, "Ministry of Test")
     assert s.M["ministries"][0]["w"] == s.px(224)
+    s.place_labels()  # feature 157: captions are queued and drawn in the LABEL PHASE, so run it before reading them
     lab = next(lb for lb in s.M["labels"] if lb[5] == "Ministry of Test")
     assert (lab[1] + lab[3]) / 2 > 510  # the label went BELOW, into the open ground
 
@@ -115,6 +116,7 @@ def test_martial_hall_caption_takes_the_emptier_side():
     s.meta(name="C", scale="city", ftpx=3)
     s.building(400, 440, 120, 40, kind="samurai")  # a neighbor directly BELOW the hall's seat
     s.martial_hall(400, 400)
+    s.place_labels()  # feature 157: captions are queued and drawn in the LABEL PHASE, so run it before reading them
     lab = [L for L in s.M["labels"] if len(L) > 5 and L[5] == "martial hall"][0]
     assert lab[1] < 400  # pushed ABOVE the compound, away from the occupied side
 
@@ -133,12 +135,14 @@ def test_manor_label_inside_fits_the_court():
     walls - and a small estate gets a smaller face rather than an overflowing one."""
     s = _cap020()
     s.manor(700, 700, 150, 118, "Hazama Estate", label_inside=True)
+    s.place_labels()  # feature 157: captions are queued and drawn in the LABEL PHASE, so run it before reading them
     lines = [L for L in s.M["labels"] if len(L) > 5 and L[5] in ("Hazama", "Estate")]
     assert len(lines) == 2  # split over two lines so the face runs bigger (GM 2026-08-09)
     for box in lines:
         assert box[0] > 625 and box[2] < 775 and box[1] > 641 and box[3] < 759  # fully inside the court
     s2 = _cap020()
     s2.manor(700, 700, 70, 54, "Lone", label_inside=True)  # a one-word label keeps the single line
+    s2.place_labels()  # feature 157: the LABEL PHASE
     assert any(len(L) > 5 and L[5] == "Lone" for L in s2.M["labels"])
 
 

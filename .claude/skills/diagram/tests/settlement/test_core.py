@@ -552,6 +552,8 @@ def test_castle_karamete_records_a_rear_gate_and_second_tower():
 def test_a_castle_caption_is_placed_only_when_a_label_is_given():
     s_none, _ = _castle_map(label="")
     s_lab, _ = _castle_map(label="Keep")
+    s_lab.place_labels()  # feature 157: the LABEL PHASE
+    s_none.place_labels()
     assert len(s_lab.M.get("labels", [])) == len(s_none.M.get("labels", [])) + 1
 
 
@@ -565,10 +567,12 @@ def test_sluice_gate_label_names_the_black_bar():
     assert len(s1.M.get("labels", [])) == n0  # unlabeled by default
     s2 = _cap020()
     s2.sluice_gate(500, 500, rot=30, label="sluice gate")
+    s2.place_labels()  # feature 157: captions are queued and drawn in the LABEL PHASE, so run it before reading them
     lab2 = [L for L in s2.M["labels"] if len(L) > 5 and L[5] == "sluice gate"]
     assert len(lab2) == 1
     s3 = _cap020()
     s3.sluice_gate(500, 500, rot=30, label="sluice gate", label_xy=(540, 480))
+    s3.place_labels()  # feature 157: the LABEL PHASE
     lab3 = [L for L in s3.M["labels"] if len(L) > 5 and L[5] == "sluice gate"]
     assert len(lab3) == 1 and abs((lab3[0][0] + lab3[0][2]) / 2 - 540) < 2  # seated at the hand point
     s4 = _cap020()

@@ -275,6 +275,7 @@ def test_quarter_label_is_drawn_at_the_centroid():
     s = _zoned_city()
     s.quarter([(0, 0), (200, 0), (200, 200), (0, 200)], "civic", label="yamen precinct")
     assert s.M["quarters"][-1]["name"] == "yamen precinct"
+    s.place_labels()  # feature 157: captions are queued and drawn in the LABEL PHASE, so run it before reading them
     assert any("yamen precinct" in frag for frag in s.toplabels)
 
 
@@ -600,6 +601,7 @@ def test_a_labeled_town_street_carries_its_caption_beside_the_midpoint():
     calls it without one, so the caption arm went unentered."""
     s = _town()
     s.street([(100, 500), (500, 500), (900, 500)], label="Gate Road")
+    s.place_labels()  # feature 157: captions are queued and drawn in the LABEL PHASE, so run it before reading them
     assert any("Gate Road" in frag for frag in s.toplabels), "the street's name is inked"
     assert s.M["town_streets"][-1]["pts"][0] == [100, 500]
 

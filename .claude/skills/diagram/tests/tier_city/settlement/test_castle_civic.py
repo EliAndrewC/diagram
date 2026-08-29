@@ -58,10 +58,12 @@ def test_ministry_label_inside_stacks_two_lines_on_the_glyph():
     width in one; a provincial city keeps its beside-captions (smaller compounds)."""
     s = _cap020()
     s.ministry(700, 700, "Ministry of Retainers", label_inside=True)
+    s.place_labels()  # feature 157: captions are queued and drawn in the LABEL PHASE, so run it before reading them
     recs = [L for L in s.M["labels"] if len(L) > 5 and L[5] in ("Ministry of", "Retainers")]
     assert len(recs) == 2
     for box2 in recs:
         assert box2[0] > 662 and box2[2] < 738 and box2[1] > 675 and box2[3] < 725  # on the glyph
     s2 = _cap020()
     s2.ministry(700, 700, "Records Hall", label_inside=True)  # a non-"Ministry of" office keeps one line
+    s2.place_labels()  # feature 157: the LABEL PHASE
     assert any(len(L) > 5 and L[5] == "Records Hall" for L in s2.M["labels"])

@@ -182,6 +182,7 @@ def test_perimeter_dike_draws_an_irregular_earthwork_band():
     # the band stays a ring around the grid (outer points sit outside the inner env, none wildly off-map)
     assert all(0 <= x <= 1400 and 0 <= y <= 1400 for x, y in dk["outline"])
     # a label was recorded, and drawing is deterministic per seed
+    s.place_labels()  # feature 157: captions are queued and drawn in the LABEL PHASE, so run it before reading them
     assert any(lbl[5] == "perimeter dike" for lbl in s.M["labels"] if len(lbl) > 5)
     s2 = Settlement(full_or(900, 1400), full_or(900, 1400), seed=3)
     s2.meta(name="D", scale="hamlet", ftpx=1, toscale=True, households=8, field_archetype="polder_grid")

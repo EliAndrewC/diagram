@@ -126,6 +126,8 @@ def test_a_castle_caption_can_be_hand_seated():
     """label_xy moves the caption off the court's center - the same escape s.martial_hall keeps."""
     s_def, _ = _castle_map(label="Keep")
     s_hand, _ = _castle_map(label="Keep", label_xy=(1150, 1050))
+    s_def.place_labels()  # feature 157: captions are queued and drawn in the LABEL PHASE, so run it before reading them
+    s_hand.place_labels()
     assert s_def.M["labels"][-1] != s_hand.M["labels"][-1]
 
 
@@ -138,8 +140,10 @@ def test_hanko_records_into_the_martial_halls_family():
     assert mh["kind"] == "hanko" and mh["label"] == "Domain School"
     assert mh["w"] == 133.3 and mh["h"] == 86.7  # 400 x 260 ft (~1 ha) at 3 ft/px - mid-band vs Meirinkan/Nisshinkan
     assert "range_ft" not in mh  # the court is BLANK (sync doctrine) - a dense real hanko belongs to its Mode A sheet
+    s.place_labels()  # feature 157: captions are queued and drawn in the LABEL PHASE, so run it before reading them
     caption = [L for L in s.M["labels"] if len(L) > 5 and L[5] in ("Domain", "School")]
     assert len(caption) == 2  # the two-line caption sits inside the court, like an estate's
     s2 = _cap020()
     s2.hanko(700, 700, label="Hanko")  # a one-word name keeps the single line
+    s2.place_labels()  # feature 157: the LABEL PHASE
     assert any(len(L) > 5 and L[5] == "Hanko" for L in s2.M["labels"])

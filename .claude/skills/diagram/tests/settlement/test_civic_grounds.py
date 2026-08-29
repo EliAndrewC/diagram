@@ -282,6 +282,7 @@ def test_execution_ground_label_can_flip_above_the_ground():
     # below-label can land on (Nagahara's kiln works).
     s = _town()
     s.execution_ground(500, 500, label_above=True)
+    s.place_labels()  # feature 157: captions are queued and drawn in the LABEL PHASE, so run it before reading them
     lb = [line for line in s.M["labels"] if len(line) > 5 and line[5] == "execution ground"][0]
     assert (lb[1] + lb[3]) / 2 < 500
 
@@ -325,19 +326,23 @@ def test_justice_works_can_be_unlabeled():
     s.punishment_spot(200, 200, label=None)
     s.execution_ground(500, 500, label=None)
     s.boundary_marker(700, 700, label=None)
+    s.place_labels()  # feature 157: captions are queued and drawn in the LABEL PHASE, so run it before reading them
     assert not s.M["labels"]
 
 
 def test_punishment_and_execution_captions_tilt_and_keep_their_escapes():
     s = _town()
     s.punishment_spot(500, 500, rot=150)  # the tilted default seat
+    s.place_labels()  # feature 157: captions are queued and drawn in the LABEL PHASE, so run it before reading them
     assert s.M["labels"][-1][7] == -30.0
     s2 = _town()
     s2.punishment_spot(500, 500, rot=150, label_xy=(430, 470))  # a hand seat keeps its spot, tilted
+    s2.place_labels()  # feature 157: the LABEL PHASE
     L2 = s2.M["labels"][-1]
     assert L2[7] == -30.0 and (L2[0] + L2[2]) / 2 == pytest.approx(430)
     s3 = _town()
     s3.execution_ground(500, 500, rot=164, label_above=True)
+    s3.place_labels()  # feature 157: the LABEL PHASE
     assert s3.M["labels"][-1][7] == -16.0
 
 

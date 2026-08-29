@@ -19,6 +19,30 @@ if TYPE_CHECKING:
     from .core import Settlement
 
 
+def caption_record_box(text: str, lines: Sequence[str], x: float, y: float, size: float, anchor: str) -> tuple[float, float, float, float]:
+    """The box `_record_label` will write for a caption of `lines` drawn at (x, y) - the ONE body for
+    that arithmetic (feature 157).
+
+    LIFTED OUT because a caller can now need the box before the caption exists. Captions are drawn in
+    the LABEL PHASE, so `shrine_hall` - which reserves the ground under its own caption, and must do
+    so while features are still being placed - can no longer read the record back out of
+    `M["labels"][-1]`. It computes the box here instead, from the same expression `label()` uses, so
+    the reservation and the record cannot drift (this engine's oldest rule).
+
+    A ONE-LINE caption keeps `_record_label`'s own default box, which is measured on the WHOLE text
+    rather than on the line list, and is what every shipped manifest carries."""
+    n = len(lines)
+    if n == 1:
+        w = len(text) * size * 0.55
+        x0 = x - w / 2 if anchor == "middle" else (x - w if anchor == "end" else x)
+        return (x0, y - size * 0.8, x0 + w, y + size * 0.25)
+    w_ = max(len(ln) for ln in lines) * size * 0.55
+    x0_ = x - w_ / 2 if anchor == "middle" else (x - w_ if anchor == "end" else x)
+    cy_ = y - size * 0.275
+    half = (size * 1.05 + (n - 1) * size * 1.15) / 2
+    return (x0_, cy_ - half, x0_ + w_, cy_ + half)
+
+
 class FinishMixin:
     # ---- annotation
 
@@ -103,7 +127,7 @@ class FinishMixin:
         w_ = max(len(ln) for ln in lines) * size * 0.55
         x0_ = x - w_ / 2 if anchor == "middle" else (x - w_ if anchor == "end" else x)
         cx_, cy_ = x0_ + w_ / 2, y - size * 0.275  # the one-line box's center; a wrapped block keeps it
-        box = (x0_, cy_ - (size * 1.05 + (n - 1) * lh) / 2, x0_ + w_, cy_ + (size * 1.05 + (n - 1) * lh) / 2)
+        box = caption_record_box(text, lines, x, y, size, anchor)  # the ONE body (feature 157); n == 1 gets _record_label's own default below
         tr = f' transform="rotate({tilt:.1f} {cx_:.1f} {cy_:.1f})"' if tilt else ''
         # labels live in the topmost LABEL layer so nothing - not a road, not a wall, not a kido or torii
         # - ever paints over the text (a label must always be fully readable)

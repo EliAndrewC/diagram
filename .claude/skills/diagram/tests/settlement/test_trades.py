@@ -9,10 +9,12 @@ def test_trade_works_caption_hand_seat_moves_the_label_and_its_band():
     # (Minami's lumber-yard caption grazed the log-boom pen by under a pixel, 2026-08-02)
     s = _crop_settlement()
     s.lumber_yard(400, 300, label_xy=(470, 340))
+    s.place_labels()  # feature 157: captions are queued and drawn in the LABEL PHASE, so run it before reading them
     lab = next(lb for lb in s.M["labels"] if len(lb) > 5 and lb[5] == "lumber yard")
     assert abs((lab[0] + lab[2]) / 2 - 470) < 1.0 and lab[1] < 340 < lab[3]
     s2 = _crop_settlement()
     s2.lumber_yard(400, 300)  # default seat: below the footprint
+    s2.place_labels()  # feature 157: the LABEL PHASE
     lab2 = next(lb for lb in s2.M["labels"] if len(lb) > 5 and lb[5] == "lumber yard")
     assert abs((lab2[0] + lab2[2]) / 2 - 400) < 1.0 and lab2[1] > 300
 
@@ -108,6 +110,7 @@ def test_border_line_caption_defaults_to_the_lines_midpoint_and_is_registered():
     draft emitted raw <text>, which is invisible to every label check - and duly shipped a border
     caption sitting on a wellhead with a green gate."""
     s = _town()
+    s.place_labels()  # feature 157: captions are queued and drawn in the LABEL PHASE, so run it before reading them
     n = len(s.M["labels"])
     s.border_line([(900, 0), (900, 400), (900, 800)], label="the Fox border")
     assert len(s.M["labels"]) == n + 1
@@ -115,12 +118,14 @@ def test_border_line_caption_defaults_to_the_lines_midpoint_and_is_registered():
     s2 = _town()
     m = len(s2.M["labels"])
     s2.border_line([(900, 0), (900, 800)], label="pinned", label_xy=(700, 300))
+    s2.place_labels()  # feature 157: the LABEL PHASE
     assert len(s2.M["labels"]) == m + 1
 
 
 def test_trade_caption_tilts_and_rotates_its_reserved_band():
     s = _town()
     s.brewery(500, 500, rot=150)
+    s.place_labels()  # feature 157: captions are queued and drawn in the LABEL PHASE, so run it before reading them
     L = s.M["labels"][-1]
     assert L[5] == "brewery" and len(L) == 8 and L[7] == -30.0
     # the caption hangs off the ROTATED lower edge - the seat swings off plumb with the tilt
@@ -129,4 +134,5 @@ def test_trade_caption_tilts_and_rotates_its_reserved_band():
     assert band[0][1] != band[1][1]  # the reserved caption band rotated with it
     s2 = _town()
     s2.brewery(500, 500, rot=90)
+    s2.place_labels()  # feature 157: the LABEL PHASE
     assert len(s2.M["labels"][-1]) == 6  # square rotation: the level path, byte-identical record

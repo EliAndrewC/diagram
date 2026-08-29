@@ -204,6 +204,7 @@ def test_governor_mansion_caption_sits_inside_its_walls():
     s.governor_mansion(700, 700, s.px(436), s.px(366), "Governor's Mansion", gate_dir="west")
     gov = s.M["governor_mansion"]
     assert gov["label"] == "Governor's Mansion"  # the record keeps the name manor() was not given
+    s.place_labels()  # feature 157: captions are queued and drawn in the LABEL PHASE, so run it before reading them
     lab = next(lb for lb in s.M["labels"] if lb[5] == "Governor's Mansion")
     assert _caption_size(lab) == settlement.GOVERNOR_CAPTION_FS
     assert lab[0] > 700 - gov["w"] / 2 and lab[2] < 700 + gov["w"] / 2  # clear of BOTH walls
@@ -217,6 +218,7 @@ def test_governor_mansion_can_be_left_unlabeled():
     s.meta(name="C", scale="city", ftpx=3)
     s.governor_mansion(700, 700, s.px(436), s.px(366), "", gate_dir="west")
     assert s.M["governor_mansion"]["label"] == ""
+    s.place_labels()  # feature 157: captions are queued and drawn in the LABEL PHASE, so run it before reading them
     assert not s.M["labels"]
 
 
