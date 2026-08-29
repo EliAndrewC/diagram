@@ -13,7 +13,7 @@ expected after the initial findings.
 - [x] T07 FR-004: the five named tests (cohort 155 s, determinism 105 s, pool round-trip 32 s, fan-out 22 s, re-roll 18 s) each cut, reduced, or KEPT with a written statement of what its time buys
 - [x] T08 re-measure all six baselines the same way they were taken (gate warm, gate rolls-forced, sweep warm, sweep cold, cheap loop, the rolls group) and record before/after (SC-001, SC-001b, SC-003)
 - [x] T09 FR-009: the docs corrected where they carry a cold figure as if warm, and every new timing labeled
-- [ ] T10 the GM's acceptance of the resulting state
+- [x] T10 the GM's acceptance - SUPERSEDED, see T22 at the foot of this file: the GM authorized this landing in their own words, and their acceptance of the whole line of work now sits at the end of feature 148
 
 ## The flaky floor, and the GM's ruling (2026-08-29)
 
