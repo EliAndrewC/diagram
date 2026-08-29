@@ -1,0 +1,6 @@
+{
+  "utc": "20260829T152435Z",
+  "guard": "pair-hooks",
+  "what": "gate alone",
+  "reason": "no review owed: measured, the drawn lane geometry of all four pool hamlets is byte-identical to the state two settlement-reviews just examined (43227292), and no other manifest key moved - the delta since then only DELETES empty lane records the reviewers themselves reported as husks, so there is no ink for a reviewer to look at"
+}

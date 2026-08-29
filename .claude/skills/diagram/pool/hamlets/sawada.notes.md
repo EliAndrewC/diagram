@@ -543,11 +543,42 @@ in order to be more noticed"*), which admits any lane not flagged `web` - and th
 same siter on that map as sitting on its own optimum (10 against a best available 9), so this is a
 priced trade-off whose price has risen on this roll, not a siting bug.
 
-**Why this is not fixed here.** Both reviewers converged on the same resolution and it is the project's
-own ladder: the record supports the kosatsuba standing at the village entrance, the crossroads, the
-bridgehead AND the headman's frontage - several of which are EDGE positions, which would vindicate the
-current seat. Where the record permits two forms, the rule is a KNOB rolled from the map's seed, never
-a session picking the reading it prefers. That needs a research pass with sources read and cited, which
-is a feature, not a line in someone else's delta. **Recommended as the next feature**; the alternative
-considered and declined was to exclude dead-end stubs from the main-way candidate set, which is a new
-siting rule invented mid-delta without the research the ladder requires.
+**Why this is not fixed here - and it is NOT for want of research (GM 2026-08-29).** An earlier version
+of this entry called it a research question. The GM pushed back - *"I thought that our notice board
+already was well researched? I would be really surprised if our existing research was insufficient to
+that task"* - and they were right. `research/urban-features.md` already carries the answer, READ and
+cited in feature 133 T13 from four sources: the bakufu set kosatsuba *"at points of heavy passage:
+barriers and ports, the foot of large bridges, and the entrances and centers of towns and villages"*;
+in farming villages *"at the village center, the shrine precinct, or the place where villagers
+assembled"*; also *"at bridgeheads and before the gate of the village officials' houses"*. And the
+governing sentence: **"Every attested site is ON the way - a verge, a gate front, a bridge foot -
+never a plot of open ground beside it."**
+
+So this is an IMPLEMENTATION task, not a research one, and the record is decisive in two directions:
+
+1. **Four attested placements is already a knob's worth of variance** - the center, the entrance, the
+   bridgehead, the headman's frontage (and the shrine precinct) - which by Principle XII's ladder
+   becomes a seeded per-settlement knob rather than a reading someone picks. The research to build it
+   exists today; nothing further needs reading.
+2. **This board matches NONE of them, so it is not a defensible edge placement.** A dead-end spur is
+   not an entrance, not a center, not a bridgehead, not a headman's frontage and not a shrine
+   precinct. That is a stronger finding than "a priced trade-off whose price has risen" - the seat is
+   outside what the record attests, not at one end of a supported range. The earlier draft of this
+   entry had it the other way round and was wrong.
+
+**Recommended as the next feature: build the knob from the research already on file.** The narrower
+alternative - excluding dead-end stubs from the main-way candidate set - is declined on cost and
+sequencing only, NOT because it invents a rule: the recorded rule carries its own purpose clause (GM
+2026-08-02, *"it should be along the main road, in order to be more noticed"*), and a spur whose far
+end is 70 ft from any other way fails that on its face. It belongs in the same change as the knob,
+together with the Ubame measurement the knob will need - the board's CAPTION is much larger than its
+glyph, so a siter denied the quiet spur may walk to the next empty verge rather than to the busy node,
+and whether (1612, 2280) can hold the board PLUS its caption is a measurement, not an assumption.
+
+**A defect sits underneath the doctrine question, measurable today.** Of the free lane ends on this
+map, four internal ones sit 34.0-40.6 ft from the nearest house CENTER. Lane 1's - the one the board
+stands at - sits **64.3 ft** from the nearest house center, about 40 ft outside the wall and past the
+dooryard. `_bridge_collinear_breaks`'s own docstring names exactly this: *"an end 83 ft from a house
+CENTER is 'fronting' it even when that is 55 ft from the wall, i.e. out past the dooryard."* So the
+board stands at the one lane end on this sheet that fronts nothing, and that end is an overshoot by
+this map's own distribution.
