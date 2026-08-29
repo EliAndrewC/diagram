@@ -69,15 +69,79 @@ class HomesteadPartsMixin:
                 return False
         return True
 
-    def _yard_dims(self: Settlement, hw: float, hh: float) -> tuple[float, float]:  # type: ignore[misc]
-        """PREVIEW: yard scaled to the (now smaller) house, capped so the big headman keeps an ordinary yard."""
-        return min(0.73 * hw, 32 * self.bscale), min(0.69 * hh, 20 * self.bscale)
+    # THE WORK YARD IS ROLLED FROM A LOGNORMAL, CORRELATED WITH THE HOUSEHOLD (GM 2026-08-28, feature
+    # 134 T49; research/homesteads.md "How big was the work yard, and how did the sizes spread").
+    #
+    # The record, in one line: Kitamoto's households stated their yard in straw mats - 40-60 mats
+    # usually, over 100 for a few, two mats to the tsubo - so 20-30 tsubo (66-99 sq m) ordinarily and
+    # past 50 tsubo (165 sq m) at the top. No survey tabulates yards, so the SHAPE comes from what the
+    # cadastres do tabulate, and every one of those is right-skewed: Kamikanai 1771's 31 commoner main
+    # houses fit a lognormal of median 22.5 tsubo, sigma_ln 0.46, its headman detached at 3.1x; Kikoba's
+    # lots run 15-100 bu about a mode of 30. Kitamoto's own band-and-tail implies sigma 0.35-0.45 - that
+    # convergence is what these numbers rest on. Hence median 25 tsubo, sigma_ln 0.40, floored at 8.
+    #
+    # CORRELATED, NOT PROPORTIONAL (the GM: "overwhelmingly likely that a large household has a large
+    # threshing yard", a mismatch "possible but rare"). Kamikanai measures the coupling as ADDITIVE -
+    # five more koku of holding buys about ten more tsubo of built area - so a 20x holder does not get a
+    # 20x yard. The household enters as its house footprint's deviation from the map's ordinary minka,
+    # damped by YARD_HOUSE_BETA; an independent positional draw supplies the rest of the spread.
+    # THE MEDIAN IS THE WET-RICE FIGURE, THE SHAPE IS KITAMOTO'S (GM 2026-08-28, option 2). Kitamoto's
+    # 20-30 tsubo is the one directly-stated yard size, but it is a BARLEY district - its yard is sized
+    # by the mugi crop the household spreads whole. Wet rice is field-dried on hazakake racks for 10-14
+    # days before it reaches the yard, and is threshed in batches over days, so a paddy household needs
+    # less standing floor: the crop derivation (1.3 koku/tan -> 247 kg momi -> mats at a 2.5 cm spread,
+    # batched) gives 55-100 sq m for a full cho, 35-65 for five tan. Hence 18 tsubo (59.5 sq m) as the
+    # median for a rice hamlet, with Kitamoto's 25 tsubo kept as YARD_MEDIAN_TSUBO_DRYFIELD for the
+    # barley village this generator does not yet draw. The SHAPE - lognormal, sigma 0.40 - is Kitamoto's
+    # and Kamikanai's and applies to both.
+    YARD_MEDIAN_TSUBO = 18.0  # wet rice, crop-derived (59.5 sq m); the map's `yard_sizes` knob may name the dry-field figure instead
+    YARD_SIGMA_LN = 0.40  # Kamikanai 0.46; Kitamoto's band-and-tail 0.35-0.45
+    YARD_MEDIAN_TSUBO_DRYFIELD = 25.0  # Kitamoto's 50 mats - a barley/wheat household spreads the whole crop
+    YARD_MIN_TSUBO = 8.0  # nobody is yardless (by Genroku every peasant held a homestead); the landless sit at the small end
+    YARD_HOUSE_BETA = 2.2  # how much of the household's own deviation the yard inherits (the drawn house varies only ~+-15% about the ordinary minka, so the household needs this much amplification to dominate the roll - measured on Inashiro: r = 0.17 at 0.55, r = 0.6-0.7 here, which is the GM's "overwhelmingly likely" without making it a rigid ratio)
+    YARD_ASPECT = 1.45  # a work apron is near-square, a little wider than deep (the drawn ratio, unchanged)
+    TSUBO_FT2 = 35.583  # 1 tsubo = 3.306 sq m
+
+    def _yard_area_ft2(self: Settlement, hx: float, hy: float, hw: float, hh: float) -> float:  # type: ignore[misc]
+        """This household's work-yard area in square FEET - the lognormal roll above, correlated with the
+        house. Position-seeded like every other homestead attribute, so it never ripples placement."""
+        import math as _m
+
+        base = self.px(46.0) * self.px(28.0)  # the ordinary minka footprint in this map's pixels
+        house = max(hw * hh, 1.0)
+        # the household's own deviation, in log space, damped: a house 1.5x the ordinary lifts the yard
+        # 1.5**0.55 = 1.25x before the independent draw - a strong correlation, not a rigid ratio
+        tilt = _m.log(house / base) * self.YARD_HOUSE_BETA
+        # THE NORMAL DRAW IS A SUM OF SIX POSITIONAL DRAWS, not Box-Muller (measured 2026-08-28): the two
+        # salted `_hjit` values a Box-Muller pair needs are not independent enough - one salt pair gave a
+        # population mean of -0.93 sigma across Inashiro's fifteen houses, dragging every yard a full sigma
+        # small, and a different pair gave +0.28. Six draws summed (Irwin-Hall, standardized) is
+        # near-normal by the central limit theorem, stable across salt choices, and has no runaway tail.
+        z = (sum(self._hjit(hx, hy, k) for k in (23.0, 29.0, 31.0, 37.0, 43.0, 47.0)) - 3.0) / _m.sqrt(0.5)
+        median = self.YARD_MEDIAN_TSUBO_DRYFIELD if self.M["meta"].get("yard_sizes") == "dryfield" else self.YARD_MEDIAN_TSUBO
+        tsubo = median * _m.exp(tilt + self.YARD_SIGMA_LN * z)
+        if self.M["meta"].get("yard_sizes") == "allotted":
+            # THE PLANNED-COLONY FORM, the second attested shape: a shinden colony issued every settler
+            # an identical homestead (Santome 1696), so its yards are uniform. Principle XII's knob rule:
+            # two attested forms become a per-settlement knob, never a preference.
+            tsubo = median
+        return max(tsubo, self.YARD_MIN_TSUBO) * self.TSUBO_FT2
+
+    def _yard_dims(self: Settlement, hw: float, hh: float, hx: float = 0.0, hy: float = 0.0) -> tuple[float, float]:  # type: ignore[misc]
+        """The yard's drawn width and depth: the rolled area at the apron's near-square aspect.
+        PREVIEW AND PLACEMENT MUST AGREE - `rolling/bundle.py` reserves what this returns, so changing
+        one without the other makes the placer clear a different rect than the map draws."""
+        import math as _m
+
+        area_px = self._yard_area_ft2(hx, hy, hw, hh) / (self.ftpx * self.ftpx)  # sq ft -> sq px
+        depth = _m.sqrt(area_px / self.YARD_ASPECT)
+        return depth * self.YARD_ASPECT, depth
 
     def _find_yard_spot(self: Settlement, hx: float, hy: float, hw: float, hh: float) -> tuple[float, float, float, float] | None:  # type: ignore[misc]
         """The first fitting threshing-yard position for a farmhouse: the sunny SOUTH/front side (+y) is
         the maeniwa; fall back to the E/W sides if the paddy blocks due-south, but NEVER the shady north
         back. Returns (ox, oy, yw, yh) or None if the farmstead is boxed in on all three sides."""
-        yw, yh = self._yard_dims(hw, hh)
+        yw, yh = self._yard_dims(hw, hh, hx, hy)
         for dx, dy in ((0, 1), (1, 0), (-1, 0)):
             ox = hx + dx * (hw / 2 + yw / 2 - 2)
             oy = hy + dy * (hh / 2 + yh / 2 - 2)
@@ -387,8 +451,18 @@ class HomesteadPartsMixin:
             # house it shelters and a village copse threads between the dwellings, so the stand is filtered
             # tree-by-tree rather than pushed back as a whole: it THINS where it would cover a building and
             # keeps its shape everywhere else. Crown centers below are relative to (cx, cy); keep-outs absolute.
-            krect, kcirc = self._canopy_keepouts((cx - w / 2 - 9 * bs, cy - h / 2 - 9 * bs, cx + w / 2 + 9 * bs, cy + h / 2 + 9 * bs))
-            _near = self._crowns_near(cx - w / 2 - 9 * bs, cy - h / 2 - 9 * bs, cx + w / 2 + 9 * bs, cy + h / 2 + 9 * bs)  # the crowns of earlier clumps and stands (GM 2026-08-28)
+            # THE PREFILTER MUST REACH AS FAR AS A CROWN DOES (feature 134 T50, 2026-08-29). Both lists
+            # below are PREFILTERED to this box, and the pad was a flat `9 * bs` while a crown's own
+            # radius is `px(CANOPY_R_FT) * s * 1.15` with `s` as high as 1.7 - about 14.5 px on a hamlet.
+            # So a building standing 10-14 px outside the stand's box was not in `krect` at all, and
+            # `_crown_covers` then cleared a crown that plainly covered it: cohort seed 9's farmhouse at
+            # (1938, 2655) sat under a 14.4 ft crown from a copse whose box ended 10.7 px short of it,
+            # and `structures_clear_of_trees` read it correctly. A prefilter that prunes a candidate the
+            # test would have rejected is not an optimization, it is a silent wrong answer - the same
+            # rule this engine states for every other index ("the index prunes; it never decides").
+            _cpad = max(9.0 * bs, self.px(self.CANOPY_R_FT) * 1.7 * 1.15 + 1.0)
+            krect, kcirc = self._canopy_keepouts((cx - w / 2 - _cpad, cy - h / 2 - _cpad, cx + w / 2 + _cpad, cy + h / 2 + _cpad))
+            _near = self._crowns_near(cx - w / 2 - _cpad, cy - h / 2 - _cpad, cx + w / 2 + _cpad, cy + h / 2 + _cpad)  # the crowns of earlier clumps and stands (GM 2026-08-28)
             drawn: list[tuple[float, float, float]] = []
             g = [f'<g transform="translate({cx:.0f},{cy:.0f})">']
             # Draw back-to-front so the stand layers with depth. Each CROWN is one tree at real size (~5-6 m; a few
@@ -683,6 +757,20 @@ class HomesteadPartsMixin:
             # THE RADII REACH PAST THE WIDEST LOCAL OBSTACLE, which is the sun corridor: a yard's
             # no-tree strip is ~25 px half-width across and ~31 px deep, so a search capped at
             # step*1.4 = 28 px could not clear one and seed 10 kept its hole. step*2.2 = 44 px can.
+            # A DEAD END, MEASURED AND REVERTED (feature 134 T50, 2026-08-28). When T49's rolled yard
+            # sizes opened a 197 ft hole in cohort seed 8's wind wall, the obvious suspect was this
+            # ladder: its top rung `step * 2.2` = 44 px is a number measured against the widest local
+            # obstacle OF ITS DAY, and a rolled 52 x 36 ft yard stands in `occ` with a keep-out near
+            # 57 px, so no rung could clear one. Deriving the top rung from the blocker actually
+            # standing at the point (`rr - dist`, capped at `step * 5`) was implemented and rolled:
+            # seed 8 came back with the SAME 65 clumps and the SAME 197 ft gap, and seeds 32 and 40
+            # were unchanged too. Instrumenting the seating loop's rejections said why - of the grid
+            # points in the hole, 166 were refused by `point_in_poly` and 39 by `within`, and NOT ONE
+            # reached `_reseat`. The belt's eastern arm had swung north OFF THE PAGE as the cluster
+            # repacked, so there was nothing there to re-seat around; the lone clump at (1423, 324) is
+            # the only column of that arm the frame still shows. Do not re-derive this radius to chase
+            # a belt hole - measure the rejection reasons first, because a hole in the ink and a hole
+            # in the ribbon look identical from the manifest.
             for _nr in (step * 0.6, step * 1.0, step * 1.4, step * 1.8, step * 2.2):
                 for _na in range(0, 360, 45):
                     ax, ay = qx + _nr * math.cos(math.radians(_na)), qy + _nr * math.sin(math.radians(_na))

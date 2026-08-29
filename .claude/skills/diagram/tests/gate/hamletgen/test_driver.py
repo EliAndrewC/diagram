@@ -80,9 +80,11 @@ GATE_COHORT_EXPECTED: dict[int, frozenset[str]] = {
     # came up clean when feature 145 moved the maps (the field solver); 43's routed footpath still keeps a 36 px
     # lattice step round a house corner that neither the chord nor the knee can take (research R2b) - the one pin left
     43: frozenset({"lanes_bend_like_paths"}),
-    45: frozenset(
-        {"lanes_do_not_break_mid_run", "village_windbreak_is_continuous"}
-    ),  # measured 2026-08-28 when the FULL cohort grew to eight (feature 145); 46 re-rolls once and is clean, 47 and 48 are clean
+    # seed 45 dropped `lanes_do_not_break_mid_run` on 2026-08-29 (feature 134 T50): the footpath router's
+    # clipped runs are simplified now, so the break that pin described is gone. A pinned check that passes
+    # is a STALE pin and `baseline_verdict` fails on it, which is the mechanism working - the pin only ever
+    # loosens otherwise. The windbreak entry stays; it is untouched by that work.
+    45: frozenset({"village_windbreak_is_continuous"}),  # measured 2026-08-28 when the FULL cohort grew to eight (feature 145); 46 re-rolls once and is clean, 47 and 48 are clean
     # seed 44 pinned `houses_clear_of_paddies` until feature 141 retired that check (the placer's chains are the guarantee)
 }
 

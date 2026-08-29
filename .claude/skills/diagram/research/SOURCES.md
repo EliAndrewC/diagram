@@ -27,6 +27,60 @@ Findings recorded before the rule, or on a source the rule now excludes. Each is
 
 ## Works cited
 
+### `kitamoto-mushiro-niwa`
+
+北本市史 民俗編, the farm yard measured in straw mats (https://kdas.jp/test2/detail_display.php?t_cd=1&acc_cd=3&aclc_cd=0&chap=6&hp_page=74&bc_cd=1; READ 2026-08-28, feature 134 T49)
+
+*Used for:* the one directly-stated work-yard size - 「普通四〇〜六〇枚、中には百枚を越す家もあった。ちなみに、ムシロ二枚が一坪にあたる」 = 20-30 tsubo (66-99 sq m) ordinarily, past 50 tsubo for a few; and that the yard tracks the household's cropped acreage (a barley district)
+
+### `kodaira-niwa`
+
+小平市史, the 回田新田 farmstead's measured yard (https://adeac.jp/kodaira-lib/text-list/d100010/ht002170; READ 2026-08-28)
+
+*Used for:* the one directly measured yard - 約七十坪 (231 sq m) of swept working ground inside a 700-tsubo homestead: the upper end of the range, a large Musashino dry-field holding
+
+### `yonekura-mushiro`
+
+Yonekura district museum note, Okayama, on the straw mats a farm kept (https://townweb.e-okayamacity.jp/yonegura/minna/hakubutukan/hakubutu012.htm; READ 2026-08-28)
+
+*Used for:* ~50 mats per farm - the independent second line that agrees with Kitamoto's count
+
+### `tobunken-mushiro`
+
+今石みぎわ, むしろ織り, Tokyo National Research Institute for Cultural Properties (https://tobunken.repo.nii.ac.jp/record/3166/files/06_55_Imaishi.pdf; READ 2026-08-28)
+
+*Used for:* the mat's measured size - 幅3尺 x 長6尺 (90 x 180 cm, 1.62 sq m) - which converts a mat count into an area
+
+### `kamikanai-1771-houses`
+
+上金井村 (Meiwa 8, 1771) main-house and holding histograms, 日本建築学会論文報告集 418 (https://www.jstage.jst.go.jp/article/aijax/418/0/418_KJ00004075360/_pdf; READ 2026-08-28)
+
+*Used for:* the SHAPE of the distribution - 31 commoner main houses fitting a lognormal of median 22.5 tsubo, sigma_ln 0.46, the headman detached at 3.1x; and the ADDITIVE coupling to holding size (5 koku more buys about 10 tsubo more)
+
+### `kikoba-kenchi`
+
+木古庭村 (Miura, Sagami) Bunroku 1594 and Genroku 1699 検地帳, 日本建築学会計画系論文集 222 (https://www.jstage.jst.go.jp/article/aijsaxx/222/0/222_KJ00003747888/_pdf; READ 2026-08-28)
+
+*Used for:* homestead-lot areas 15-100 bu about a mode of 30, great holders at 2x the ordinary class - the right-skew corroboration; and that by Genroku every peasant held a homestead, so the small end is occupied rather than empty
+
+### `santome-shinden-allotment`
+
+三富新田 (Genroku 9, 1696) founding allotment, 日本建築学会論文報告集 436 (https://www.jstage.jst.go.jp/article/aijax/436/0/436_KJ00004077200/_pdf; READ 2026-08-28)
+
+*Used for:* the counter-form - a planned shinden colony issued every settler an identical homestead, 屋敷の規模はまったくの均等配分: the uniform `yard_sizes="allotted"` knob
+
+### `ndl-kokumori`
+
+National Diet Library reference on 石盛 (the assessed yield per tan) (https://crd.ndl.go.jp/reference/entry/index.php?id=1000296656&page=ref_view; READ 2026-08-28)
+
+*Used for:* 1.3 koku/tan for 中田 - the first input of the crop-derived yard area
+
+### `irri-drying-floor`
+
+IRRI Rice Knowledge Bank, sun drying and drying-floor area (https://www.knowledgebank.irri.org/grainQuality/module_4/popups/pu_drying.htm; READ 2026-08-28)
+
+*Used for:* the spread depth ("thin layers of ideally 2-4 cm") and the only direct area statement ("500 square meters of drying floor can handle 6 tons of paddy") - MODERN practice, flagged as such, used only to convert a crop volume into a floor area
+
 ### `sugiura-1973-fuzoku`
 
 Sugiura Tadashi, 「農村集落における農家の付属建物について - 宮城県宮崎町の例」, *Tōhoku Chiri* 25(3): 145-152, 1973 (JStage tga1948/25/3/25_3_145; READ 2026-08-27, all eight pages) (https://www.jstage.jst.go.jp/article/tga1948/25/3/25_3_145/_article/-char/ja)
