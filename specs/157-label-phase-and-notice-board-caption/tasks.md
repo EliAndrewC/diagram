@@ -91,5 +91,15 @@ three physical checkboxes (constitution v2.12.0; the reasoning is in the spec's 
 - [x] **T40** `research: rendering` - the comments at each point of change, `dev/placement.md`'s
       DRAW ORDER map, `hamletgen/CLAUDE.md`'s stage table, `settlement/structures/CLAUDE.md`.
 - [x] **T41** `research: rendering` - the pool notes for every map whose caption moved.
-- [ ] **T42** `research: rendering` - `make verify`: the gate and the independent `settlement-review`
-      together (feature 151), then the stop-work procedure.
+- [x] **T42** `research: rendering` - `make verify`: the gate and the independent `settlement-review`
+      together (feature 151), then the stop-work procedure. **Two review rounds ran**, both on
+      Kuwabata: round 1 passed the picture and returned two engine errors (the delta's own comment
+      citing `labels_clear_of_other_buildings`, deleted in b709c4ae; `_blocked`'s hand-listed victim
+      families, with this map 2.24 px from an unmodeled woodpile); round 2 verified those fixes from
+      pixels and returned three more (the roster still hamlet-only, with a 0.66 px instance on
+      Hirameki; the probe box's 2.2 px registration error, measured as a 1.94 px placer/check
+      disagreement; and a write-up census missing three engine files and four docs). All fixed.
+      **The gate is green on the merged tree** (2554 passed, zero failures). The test COUNT moved
+      against the baseline's 2760 because feature 158 landed mid-feature and retired 19 check
+      segments, 3 bridge checks and 26 fixtures; the diff over `tests/` from this feature is additive
+      only (+161 lines, 0 deletions), so nothing here removed a test.

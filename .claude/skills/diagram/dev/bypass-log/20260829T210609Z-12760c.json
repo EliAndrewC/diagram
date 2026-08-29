@@ -1,0 +1,6 @@
+{
+  "utc": "20260829T210609Z",
+  "guard": "pair-hooks",
+  "what": "gate alone",
+  "reason": "re-gating on the MERGED content after main came in - required before any push, and it also settles the 2588-vs-2760 test count by running both sessions"
+}
