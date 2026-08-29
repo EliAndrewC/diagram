@@ -188,3 +188,47 @@ spec records that rather than rounding. What is left, from `specs/146-the-hamlet
 
 `research: rendering`. Whoever picks this up: the worklist is generated straight off the FULL run's
 hamlet-floor table, and `make hamlet-floor` lists the modules under it.
+
+## The caption-over-a-building rule was cut, and its whole apparatus is still standing
+
+**Found by `settlement-review` on Kuwabata, 2026-08-29 (feature 157), outside the delta.**
+
+`labels_clear_of_other_buildings` - the check that stopped a caption being drawn across a roof - was
+deleted in **b709c4ae** ("141: the GM's cut - 442 legacy-tier checks and 39 untested keeps"). What
+survives it:
+
+- **~15 live comments** across `settlement/trades.py`, `settlement/castle_civic.py`,
+  `settlement/shrines_wells/shrines.py`, `settlement/structures/captions.py`,
+  `settlement/structures/fixtures.py` and three pool gens still describe it as an operative rule and
+  justify real geometry choices by it. (Feature 157 corrected the one in `fixtures.py::_blocked`
+  because that comment was justifying code the feature was changing; the rest stand.)
+- **The whole `_LABEL_GROUP` / `_LABEL_EXEMPT` registry** (`check_village/common_01_geometry.py`,
+  ~lines 256-356) - the map from each solid feature key to *"the word a caption must contain to be
+  allowed to cover it"*.
+- **Its completeness guard, `every_solid_feature_classified_for_labels`**
+  (`segments_03a_overlaps_and_ward_fences.py`, segments 0141/0142), which still fails the gate when a
+  new solid feature is added without a caption GROUP - enforcing classification for a consumer that
+  no longer exists. Census: the registry's only consumers are that guard and its own tests.
+
+**Why it matters rather than being tidy-up**: nothing in the gate measures a caption against a
+building any more, so a placer's own fabric probe is the sole defense - and feature 157 is exactly
+the kind of change that leans on it, because it pulls captions IN off the empty margins and into the
+crowded ground beside their subject. Measured on the five scripted hamlets, the notice-board
+caption's clearance to the nearest built glyph is 20-70 px on four of them and **2.24 px on
+Kuwabata**, nine times tighter than the next.
+
+**The decision is the GM's, and it is one of two**, because both are defensible and they point
+opposite ways:
+
+- **RESTORE** it. The registry is sitting there unconsumed and the victim list derives from it, so
+  the check is mostly re-assembly rather than design. If the 2026-08-26 cut was about LEGACY-TIER
+  checks specifically, this one may have gone out with the tide rather than by intent.
+- **RETIRE** the apparatus. Sweep the comments, delete the registry, delete segments 0141/0142 and
+  their tests. A guard that enforces classification for nobody is the "verification that never runs"
+  shape this repository keeps re-finding, and it taxes every new feature that draws a solid thing.
+
+**Not decided here** because it reverses or ratifies a GM cut, which is not a session's call, and
+because either branch is a sweep across six files rather than a fix at a point of change. What
+feature 157 DID fix, at the point of change, is the narrow half that was its own: the comment that
+asserted the dead check, and `_blocked`'s hand-listed victim families, which had fallen behind the
+map exactly the way the registry's own docstring warns.

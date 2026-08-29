@@ -58,6 +58,15 @@ class FinishMixin:
         bx0, by0, bx1, by1 = box if box is not None else (x0, y - size * 0.8, x0 + w, y + size * 0.25)
         rec: list[Any] = [round(bx0, 1), round(by0, 1), round(bx1, 1), round(by1, 1), z, text]
         if ref is not None or rot:
+            # THE REFERENT IS THE SUBJECT'S UNROTATED FOOTPRINT, which for a rotated subject is not
+            # what is drawn (settlement-review, Kuwabata 2026-08-29): the notice board records
+            # `[2388.2, 556.6, 2400.2, 561.6]` - 12 x 5 axis-aligned - while the plank is drawn at
+            # rot 151.9, whose true rotated AABB is 13.2 x 10.1. Both `label_hugs_its_referent` and
+            # `caption_stands_beside_its_referent` therefore measure against a box smaller than the
+            # glyph. The error is CONSERVATIVE in both directions - a smaller referent means a
+            # smaller "beside" bound and a larger measured hug gap - so nothing passes that should
+            # fail, which is why this is a note and not a change: widening it would loosen two live
+            # rules to fix an inaccuracy that only ever tightens them.
             # element [6]: the box of the ONE feature this caption names, recorded only by the
             # standoff-ladder path (`place_caption` / the road label). A district caption names an
             # AREA, not a thing, so it carries no referent and `label_hugs_its_referent` skips it.

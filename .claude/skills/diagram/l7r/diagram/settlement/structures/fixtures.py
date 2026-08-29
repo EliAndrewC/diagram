@@ -325,7 +325,18 @@ class PublicFixturesMixin:
             # than folds and goes level past 45 degrees, which is the rule this file's own labels.md
             # docstring states for a line subject ("swapping them" is named there as the trap).
             _t = linear_tilt(rot)
-            _chw = max(10.0, len(label) * 8 * 0.28)
+            # THE BOX THE RECORD WILL CARRY, for the HUG and the FABRIC probes too (feature 157, after a
+            # settlement-review). `_box_clearance` was taught this in feature 137 - *"THE BOX THE RECORD
+            # WILL CARRY, not a one-line guess"* - and `_hug` and `_blocked` were left on the guess:
+            # `len * 8 * 0.28` = 26.88 against the recorded 26.40, and a half-height of 5.0 against the
+            # recorded 4.20, so the probe box was 19% taller and a hair wider than anything drawn or
+            # measured. It cost real centrality the moment the fabric families were widened below - the
+            # inflated box just touched a woodpile at the seat directly under the board, so the search
+            # walked out to 12 px of lateral for a collision no drawn glyph makes. Placement and its
+            # check read ONE geometry: `label_caption_hw` is the expression `_record_label` writes and
+            # `label_hugs_its_referent` measures.
+            _chw = self.label_caption_hw(label, 8.0)
+            _chh = 8.0 * 1.05 / 2.0  # the recorded box's half-height, as `label()` computes it
             # FOUR DIRECTIONS, WALKED OUTWARD - and the outward part is what these boards need. Note
             # which boards arrive here: `linear_tilt` CLAMPS past 45 degrees, so a board at rot 51.6
             # returns tilt 0.0 and takes THIS branch, not the tilted one. All five seeds that gate
@@ -448,7 +459,7 @@ class PublicFixturesMixin:
                 # empty, and the fallback took a distant seat that then failed the real check. The
                 # placer and its check must read ONE measure - this engine's oldest rule, and the
                 # second time I have broken it inside this one function.
-                _lb = (_q[0] - _chw, _q[1] - 5.0, _q[0] + _chw, _q[1] + 5.0)
+                _lb = (_q[0] - _chw, _q[1] - _chh, _q[0] + _chw, _q[1] + _chh)
                 if not _t:
                     return box_gap(_lb, _board_box)
                 _cx, _cy = _q[0], _q[1]
@@ -460,7 +471,7 @@ class PublicFixturesMixin:
 
             def _blocked(_q: Pt) -> bool:
                 """Does this seat lap a solid feature, or sit across a way from the board it names?"""
-                _lb = (_q[0] - _chw, _q[1] - 5.0, _q[0] + _chw, _q[1] + 5.0)
+                _lb = (_q[0] - _chw, _q[1] - _chh, _q[0] + _chw, _q[1] + _chh)
                 _ca2, _sa2 = math.cos(math.radians(_t)), math.sin(math.radians(_t))
                 _quad = [
                     (_q[0] + (_px2 - _q[0]) * _ca2 - (_py2 - _q[1]) * _sa2, _q[1] + (_px2 - _q[0]) * _sa2 + (_py2 - _q[1]) * _ca2)
@@ -479,12 +490,50 @@ class PublicFixturesMixin:
                 #
                 # So the box PRUNES and the QUAD decides - this engine's standing rule for a slow test
                 # (skill CLAUDE.md: "when a check is slow, INDEX it - do not coarsen it"). The obstacle
-                # keeps the extent the GATE gives it, its rotated corners' AABB, because that is what
-                # `labels_clear_of_other_buildings` measures; probing anything tighter would pass here
-                # and fail there.
+                # keeps its rotated corners' AABB, which is the extent `label_blockers` gives a victim
+                # everywhere else in the caption subsystem, so the two probes agree.
+                #
+                # AN EARLIER DRAFT OF THIS COMMENT JUSTIFIED THAT BY `labels_clear_of_other_buildings`,
+                # AND THAT CHECK DOES NOT EXIST - it was deleted in b709c4ae (feature 141, "the GM's
+                # cut"), so NOTHING in the gate measures a caption against a building any more and this
+                # probe is the only thing standing between a caption and a roof. Caught by a
+                # settlement-review, which also found ~15 live comments and a whole registry
+                # (`_LABEL_GROUP` / `_LABEL_EXEMPT`, plus its completeness guard
+                # `every_solid_feature_classified_for_labels`) still describing it as operative. That is
+                # written up as its own decision - restore the check or retire the registry - in
+                # `future-work/cross-cutting.md`; what is fixed HERE is the sentence that asserted it and
+                # the victim list below, because this feature is what pulls captions into that ground.
                 _qx0, _qx1 = min(_c[0] for _c in _quad), max(_c[0] for _c in _quad)
                 _qy0, _qy1 = min(_c[1] for _c in _quad), max(_c[1] for _c in _quad)
-                for _fam in ("houses", "gardens", "threshing_yards", "farm_sheds", "byres", "storehouses", "persimmons", "bamboo_stands", "wells"):
+                # EVERY BUILT FAMILY, not the nine somebody happened to list (settlement-review of
+                # Kuwabata, feature 157). The docstring says "a solid feature"; the tuple named nine
+                # keys and missed `farm_fixtures` - the engine's own `CANOPY_STRUCT_KEYS` calls those
+                # *"every ROOFED structure"*: the privy, the woodpile, the manure heap, the bath shed,
+                # the hen coop, the household hokora - plus the dike-pond `pig_sties` and `duck_pens`
+                # and the `boundary_markers`. A hand-listed victim roster falling behind the features is
+                # the exact failure `label_blocker_quads` was made derived to escape ("a probe that
+                # cannot see a feature looks exactly like a probe that passes"), and this feature made it
+                # bite: pulling captions IN off the empty margins put Kuwabata's caption **2.24 px** from
+                # a woodpile it could not see, against 20-70 px on the other four scripted hamlets.
+                #
+                # GROUND IS STILL NOT A BLOCKER, deliberately: `tree_crowns`, `village_groves` and the
+                # groves stay out, because a caption stands on a canopy the way a name stands on a map
+                # (`LABEL_GROUND_KEYS`), and feature 154 ruled the board itself may stand under one.
+                for _fam in (
+                    "houses",
+                    "gardens",
+                    "threshing_yards",
+                    "farm_sheds",
+                    "byres",
+                    "storehouses",
+                    "persimmons",
+                    "bamboo_stands",
+                    "wells",
+                    "farm_fixtures",
+                    "pig_sties",
+                    "duck_pens",
+                    "boundary_markers",
+                ):
                     for _o in self.M.get(_fam) or []:
                         if not isinstance(_o, dict) or "x" not in _o:
                             continue
@@ -512,6 +561,33 @@ class PublicFixturesMixin:
             def _pick(_seats: list[Pt]) -> Pt:
                 return pick_caption_seat(_seats, (x, y), _hug, _hug_cap, _box_clearance, _lane_target, _blocked)
 
+            # ONE LADDER, BOTH BRANCHES (feature 157, second pass). The dense ranked ladder was built
+            # inside the tilted branch and the LEVEL branch kept its own coarse candidate set - four
+            # axis rays at six distances plus eight diagonals at three - and that is where the six
+            # cohort seeds the new check caught actually live. A board FACES its lane
+            # (`kosatsuba_faces_the_road`), so a lane running square to the page gives rot 0/90/180/270,
+            # `aligned_tilt` returns 0, the board takes the LEVEL path, and that path's side rays sit at
+            # `hw + _chw + 8 + d` - 40.9 to 100.9 px of pure lateral. After `pull_caption_toward` closes
+            # half the air those land at exactly the 28.3 / 32.3 / 36.3 px the cohort reported. The
+            # tilted branch was fixed and the level branch was left with the same defect, which is the
+            # GM's own reason for caring about this code: *"the code that we write to apply labels will
+            # be generally reused for other map features on other types of settlements."*
+            #
+            # `tilt_caption_seat` at tilt 0 IS the level geometry - and truer than the hand-written rays
+            # it replaces, which always offset by the board's half-DEPTH even for a rot=90 board standing
+            # on its end, where the half-WIDTH is the perpendicular extent.
+            _lat_reach = _chw + hw + 6
+            _lats = [0.0]
+            for _i in range(1, int(_lat_reach // 3.0) + 1):
+                _lats += [_i * 3.0, -_i * 3.0]
+            if _lat_reach - (_lat_reach // 3.0) * 3.0 > 0.5:  # ...and the reach itself, exactly
+                _lats += [_lat_reach, -_lat_reach]
+            _ranked = sorted(
+                ((abs(_lat), _g, _si), tilt_caption_seat(x, y, rot, _t, hw, hh, _g, above=_ab, lateral=_lat))
+                for _lat in _lats
+                for _g in [11.0 + _r for _r in range(26)]
+                for _ab, _si in ((False, 0), (True, 1))
+            )
             if label_xy:
                 _lx, _ly = label_xy
             elif _t:
@@ -576,18 +652,6 @@ class PublicFixturesMixin:
                 # Straight-line distance, which is what ranked these seats before, cannot tell a 39 px
                 # slide from a 39 px standoff; it scores them identically, and only one of the two
                 # still reads as "beside".
-                _lat_reach = _chw + hw + 6
-                _lats = [0.0]
-                for _i in range(1, int(_lat_reach // 3.0) + 1):
-                    _lats += [_i * 3.0, -_i * 3.0]
-                if _lat_reach - (_lat_reach // 3.0) * 3.0 > 0.5:  # ...and the reach itself, exactly
-                    _lats += [_lat_reach, -_lat_reach]
-                _ranked = sorted(
-                    ((abs(_lat), _g, _si), tilt_caption_seat(x, y, rot, _t, hw, hh, _g, above=_ab, lateral=_lat))
-                    for _lat in _lats
-                    for _g in [11.0 + _r for _r in range(26)]
-                    for _ab, _si in ((False, 0), (True, 1))
-                )
                 # EVALUATED LAZILY, CHEAPEST TEST FIRST, and stopped at the first legal seat: the rank
                 # IS the preference, so there is nothing to gain by scoring the rest. That is what keeps
                 # a ladder of 1,300 seats cheaper than the 30-seat one it replaces on any board that has
@@ -671,7 +735,22 @@ class PublicFixturesMixin:
                 # -32 degree caption's far end reached a threshing yard the level box had cleared.
                 # `label_seat_clear` already knows how to probe the rotated AABB; it was not being asked.
                 _ok = [_q for _q in _pool if self.label_seat_clear(_q[0], _q[1], _tw_lab, 8.0, _boxes, tilt=_t)]
-                if _ok:
+                # THE DENSE LADDER FIRST, IN THE SAME ORDER THE TILTED BRANCH USES (feature 157, second
+                # pass): least displacement ALONG the caption's baseline, then the smallest standoff,
+                # then below before above - and the first seat that is legal by THIS branch's own terms
+                # wins. The terms are the level branch's, unchanged: `label_seat_clear` (which is what
+                # sees other captions, and the ways at their own margin) on top of the hug cap, the
+                # fabric test and the lane target. Only the GROUND being searched is different, and the
+                # coarse set below stays as the fallback so a board with nowhere good behaves as it did.
+                _lvl = [_q for _, _q in _ranked if not label_above or _q[1] < y]
+                _lvl_ok = [_q for _q in _lvl if self.label_seat_clear(_q[0], _q[1], _tw_lab, 8.0, _boxes, tilt=_t)]
+                _seat = next((_q for _q in _lvl_ok if _hug(_q) <= _hug_cap and not _blocked(_q) and _box_clearance(_q) >= _lane_target), None)
+                if _seat is None:  # the same rung the tilted branch takes: give up the MARGIN, never the 2 ft the rule asks
+                    _floor = self.px(CAPTION_LANE_FLOOR_FT)
+                    _seat = next((_q for _q in _lvl_ok if _hug(_q) <= _hug_cap and not _blocked(_q) and _box_clearance(_q) >= _floor), None)
+                if _seat is not None:
+                    _lx, _ly = _seat
+                elif _ok:
                     _lx, _ly = _pick(_ok)
                 else:
                     _lx, _ly = (x, y - hh - 11) if label_above else (x, y + hh + 11)
