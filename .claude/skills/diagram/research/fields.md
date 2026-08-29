@@ -398,7 +398,7 @@ plot lattice at the fan's boundary is the shape a fragment naturally takes.
 - **Pond**: a valley-head *tameike* behind an earthen dike, sitting ABOVE its fields ("located at a valley head and constructed by dividing off the valley mouth with an earthen dike... at elevations higher than the surface of the paddy fields they serve" - Tabayashi 1986, Geographical Review of Japan 60(1)). ONE outlet: an inclined intake (shahi) feeding a bottom conduit (sokohi) through the dam; the spillway is flood-safety, never distribution (Kagawa pref. tameike docs). Parent/child pond linkage (oyaike/koike, Kagawa; "melon-on-the-vine" in China) is attested flavor for larger systems.
    - **Distribution**: sluice -> head-race -> division point (bunsuiguchi) -> a branching TREE. "Main canals **gradually decrease in size as they are tapped by branch canals**" (Tabayashi) - hence the drawn taper. The smallest ditches "are often considered parts of the paddy fields they serve" - hence ditch-as-plot-boundary. SPARSE is correct: a village digs the minimum network; a ditch beside every paddy (yohaisui bunri) is a Meiji land-readjustment (1899/1905) anachronism.
    - **Layout modes** (terrain-driven; the GM wants all three eventually):
-     - **COMB (the default)**: supply canals along the HIGH margins, delivery ditches perpendicular down-slope, one drain along the low line. Grounding: the Edo Kishu-school layout (Minuma-dai 1728: supply on the elevated margins, drainage channel on the lowest line, water reused downstream) AND codified Chinese canal doctrine (mains along contours/ridges on high ground, field channels perpendicular to contours). Chinese *beitang* pond systems - the direct tameike analogue - were THE dominant village-scale mode in rice China (8.3M ponds serving ~39% of irrigated area into the 1950s, ~71% in hilly regions); the GM chose the Chinese default deliberately (Rokugan demographics anchor to Song/Ming China).
+     - **COMB (the default)**: supply canals along the HIGH margins, delivery ditches perpendicular down-slope, one drain along the low line. Grounding: the Edo Kishu-school layout (Minuma-dai 1728 - the LAYOUT is sourced, the NAME is queued: a 2026-08-29 read found 紀州流 attested as Izawa Yasobei's river-channelization method rather than a field layout, so do not re-use the name elsewhere until it checks out, `SOURCES.md` re-sourcing queue: supply on the elevated margins, drainage channel on the lowest line, water reused downstream) AND codified Chinese canal doctrine (mains along contours/ridges on high ground, field channels perpendicular to contours). Chinese *beitang* pond systems - the direct tameike analogue - were THE dominant village-scale mode in rice China (8.3M ponds serving ~39% of irrigated area into the 1950s, ~71% in hilly regions); the GM chose the Chinese default deliberately (Rokugan demographics anchor to Song/Ming China).
      - **FAN (supported option, not default)**: gently-descending canals radiating from a valley-mouth apex - the Dujiangyan / Tedori-alluvial-fan geometry. Correct where the land fans out below the pond.
      - **JORI GRID (future option, recorded on GM request - NOT implemented)**: from the 7th century much of Japan's long-settled PLAINS carried an astronomically-oriented 109 m grid (jori-sei: 1-cho squares in 6x6-ri blocks, cut into ~12 x 109 m tan strips). A plains village in an ancient core province shows semi-regular GRIDDED paddies, not organic patchwork - Rokugan analog: ancient heartland provinces (e.g. Crane/Phoenix cores). The organic warp-thread patchwork is correct for terrain-following villages like Kikuta.
 
@@ -445,6 +445,63 @@ The PLOT question (one leveled cell, ~0.05 ac) is settled above; this entry is t
 **Sources:** `satoyama-enwiki` (READ: the mosaic and the foothill-to-flat border zone). The Takeuchi-school catena sentence ("large middle river terraces... large areas of crop fields and small areas of paddy") is SUMMARY-ONLY - the mekongwatch PDF is unreadable to the fetcher; find the paper itself - leftover
 
 WHERE dry crops go: wet-rice villages sort by a topographic CATENA - irrigated paddy holds the flat valley bottom / plain; DRY fields (hatake) take the HIGHER, well-drained ground the water cannot command (river terraces, natural levees / micro-highs threading the plain, alluvial-fan edges, lower slopes, AND the slightly-raised ground the homesteads sit on); coppice woodland (satoyama) crowns the hills above. Sources: satoyama land-use literature ("wet-rice in the plains and valley bottoms... satoyama woodlands/grasslands for dry-field crops"; "large middle river terraces... large areas of crop fields and small areas of paddy"); Kanto-plain historical-GIS land-use studies. So dry fields are NOT one neat strip - historically they sit in SEVERAL positions, above all AROUND the houses ("each family has some paddy and some hatake", the household's dry plots near its home).
+
+## The wettest plots are their own kind of ground - shitsuden, and why they read blue
+
+**Grounds:** the `wet paddy` interactive class (feature 159); the FLOODED tint in `waterfields/carve.py`, `polder.py`, `hill.py`
+
+**Evidence:** researched (the category and its penalties are READ; the siting is an inference, said so below)
+
+**Sources:** [`kotobank-shitsuden`](SOURCES.md#kotobank-shitsuden), [`kotobank-kanden`](SOURCES.md#kotobank-kanden), [`kotobank-yatsuda`](SOURCES.md#kotobank-yatsuda), [`kotobank-fukada`](SOURCES.md#kotobank-fukada), [`fao-rice-water`](SOURCES.md#fao-rice-water)
+
+- *A wet paddy is a NAMED category, not a wetter example of the same thing.* Pre-modern Japanese
+  agriculture split paddy land in two. **湿田 (shitsuden)**, "wet paddy": 水はけが悪く、水稲を栽培
+  していないときでも過湿な状態の水田。また、麦などの裏作のできない水田。 - *"a paddy with poor
+  drainage that stays waterlogged even when rice is not being grown; also, a paddy on which a winter
+  crop such as wheat cannot be grown"*. Against it **乾田 (kanden)**, "dry paddy": 水はけのぐあいが
+  よく、水を入れないときには乾いて畑の状態になる田。 - *"a paddy with good drainage that, when water
+  is not let in, dries out to a dryland-field state"*. The distinction is about the ground and its
+  drainage, and it holds all year, which is why it is a KIND of plot rather than a moment in one
+  plot's season.
+- *It is worse ground, and the record is blunt about how.* 過湿、滞水のために農作業が困難で、また麦
+  などの裏作ができない排水不良田 - work is hard and there is no winter crop; 地温が夏は乾田より低く
+  酸素不足の状態で - the soil runs colder than a dry paddy in summer and short of oxygen; 倒伏や病害、
+  生育遅延などで収量は不安定である - lodging, disease and delayed growth make the yield unreliable.
+  Flatly: 湿田の生産性は概して低い - *"shitsuden productivity is generally low"*. So a household
+  holding one is holding the plot nobody wanted, and that is the fact the map is worth showing.
+- *The scale of the problem, from the other end.* From Meiji the state ran 湿田の乾田化 - the
+  conversion of wet paddy to dry - as a national undertaking, and 全国の水田の2/3以上は乾田となった
+  といわれる, *"it is said that more than two-thirds of the nation's paddies became kanden"*. A
+  program that size is the measure of how much wet paddy there was to convert, which is the reason a
+  pre-modern map should carry some.
+- *The valley bottom is where it sits, and it has its own word.* **谷津田 / 谷地田 (yatsuda /
+  yachida)** is the valley-bottom paddy - 台地が開析されてできた谷間の低地すなわち谷地に分布する水田
+  ... 一般に湿地で古く開発された, *"distributed in the valley lowland formed by the dissection of a
+  plateau ... generally wetland, developed long ago"*. **深田 (fukada)**, "deep paddy", is attested
+  separately as どろの深い田。沼田 - *"a paddy with deep mud; a swamp paddy"* - the opposite of 浅田
+  (asada, shallow paddy). It names a DEGREE of mud, not a position on a slope.
+- *What is an INFERENCE, and is drawn anyway (constitution XII).* That the plots lying on the drain
+  collector are therefore the wettest ground in the field is not a finding anybody wrote down. The
+  attested part is the cascade: in traditional terraced paddy *"water flows from one plot to another
+  and no distinction can be made between irrigation and drainage"*, and surface runoff *"can be
+  re-used, i.e., recycled within the system"*. Gravity does the rest, and the engine has always sited
+  the tint that way (`carve.py`: *"only the level whose BOTTOM edge lies on the collector floods -
+  the wettest, lowest ground"*). It is a reasoned inference from an attested mechanism, and it is
+  labeled one here rather than presented as a finding.
+- *Two things we did NOT get, and do not assert.* No source read gives a maintained growing-season
+  water depth of four to six inches as such - IRRI's 5-10 cm figure could only be reached in a search
+  summary (the host refused the fetch) and FAO's fetched 5-20 cm is a bund-construction range, not a
+  maintained depth. And nothing read says the water surface stays visible between the plants until
+  the canopy closes, which is the sentence a reader might expect to justify drawing one plot bluer
+  than another; the drawn difference rests on the ground being wetter, not on a sourced claim about
+  what a camera would see. Queued in [`SOURCES.md`](SOURCES.md#re-sourcing-queue).
+- *The drawing convention, stated where it will be read.* Which plots wear the tint is the picture,
+  not the topography, and the two field engines differ: a COMB field tints a random 45% of the
+  eligible rank (`carve.py`), so Inashiro shows 2 blue plots over 24 low ones, while a POLDER or
+  TERRACE field tints every low plot (`polder.py`, `hill.py`), so Enokida shows 22 over 22 and Tanada
+  40 over 40. On a comb map, therefore, blue is a SAMPLE of the wet ground and not the whole of it -
+  the modal says so, because a reader who reads the tint as the set is being misled about the other
+  22 plots.
 
 ## Free lore hooks, and the sources
 

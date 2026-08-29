@@ -285,7 +285,13 @@ class CombMixin:
             pts = " ".join(f"{x:.1f},{y:.1f}" for x, y in p["poly"])
             # ONE polygon, TWO classes (feature 134 `Split`): the fill is the flooded paddy, the stroke is
             # the bund - the HTML target emits a fill-only and a stroke-only copy so they highlight apart
-            self.add(f'<polygon points="{pts}" fill="{p["fill"]}" stroke="{AZE}" stroke-width="{aze_w(self.ftpx):.2f}" stroke-linejoin="round"/>', cls=Split("paddy", "bund"))
+            # THE BLUE PLOT IS ITS OWN KIND (feature 159, GM 2026-08-29: "that is its own type of thing,
+            # and it deserves its own explanation"). It is the wet paddy - shitsuden, ground too poorly
+            # drained to dry out - and it is decided HERE, from the fill about to be drawn, so the class
+            # and the color cannot disagree. The bund half is untouched: a blue plot's stroke is a bund
+            # like every other, and hovering one still lights the whole fabric.
+            plot_cls = "wet paddy" if p["fill"] == _WF_FLOODED else "paddy"
+            self.add(f'<polygon points="{pts}" fill="{p["fill"]}" stroke="{AZE}" stroke-width="{aze_w(self.ftpx):.2f}" stroke-linejoin="round"/>', cls=Split(plot_cls, "bund"))
             # Record the LOW/WET plots (feature 010). This is the topographic ELIGIBILITY set the
             # plot-based land-use overlays draw from. It is written HERE, by the field pass, so that
             # `overlays_on_wet_ground_only` compares two INDEPENDENTLY-produced records rather than

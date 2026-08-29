@@ -1,0 +1,6 @@
+{
+  "utc": "20260829T200954Z",
+  "guard": "pair-hooks",
+  "what": "gate alone",
+  "reason": "no settlement-review is owed: feature 158 changes only the interactive CLASS a paddy plot carries, and the drawn map is unchanged - inashiro.svg and .png are byte-identical after the regeneration, and the manifest moves in ink_classes alone (paddy 575 -> 573, wet paddy 2). Nothing a settlement-review looks at moved. GM 2026-08-29 standing ruling: the review is not owed when the map itself did not move."
+}

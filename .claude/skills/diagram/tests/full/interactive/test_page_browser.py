@@ -521,8 +521,71 @@ def test_reference_hamlet_page(inashiro: tuple[Page, dict[str, Any]]) -> None:
         "notice board",
         "well",
         "paddy",
+        "wet paddy",
     } <= set(present)
     _mechanics(page, present)
+
+
+@pytest.mark.rolls_map
+@pytest.mark.tiers("hamlet")
+def test_the_blue_plots_highlight_and_open_apart_from_the_green_ones(inashiro: tuple[Page, dict[str, Any]]) -> None:
+    """The GM's own scenario (feature 159, 2026-08-29): "I should be able to highlight it and click on
+    it separate from the rest of the fields, because that is its own type of thing, and it deserves its
+    own explanation." Inashiro draws 2 blue plots against 573 green ones."""
+    page, m = inashiro
+    assert m["ink_classes"]["wet paddy"] == 2 and m["ink_classes"]["paddy"] > 100, "the reference hamlet draws both kinds"
+    # A REAL POINTER MUST BE ABLE TO REACH IT, which `point_at` alone does not prove for a plot this
+    # small: a blue plot is a wedge a few tens of pixels across, its bunds carry fat invisible hit
+    # copies (`thin marks get a fat hit copy`), and the bbox center of a wedge is often outside the
+    # wedge - so aiming at the center lit `bund` on the first run of this test. What the GM's request
+    # needs is that SOME point a mouse can land on inside the plot lights it, so the test samples the
+    # plot's own box and asserts the reachable fraction rather than one guessed pixel.
+    reach = page.js(
+        """() => {
+            const g = document.querySelector('g.f[data-k="wet paddy"]');
+            const r = g.getBoundingClientRect();
+            let hit = 0, tried = 0;
+            for (let i = 1; i < 10; i++) for (let j = 1; j < 10; j++) {
+                const x = r.x + r.width * i / 10, y = r.y + r.height * j / 10;
+                if (x < 0 || y < 0 || x > innerWidth || y > innerHeight) continue;
+                tried++;
+                const el = document.elementFromPoint(x, y);
+                const owner = el && el.closest ? el.closest('g.f') : null;
+                if (owner && owner.getAttribute('data-k') === 'wet paddy') hit++;
+            }
+            return [hit, tried];
+        }"""
+    )
+    assert reach[1] > 0, "the plot is off-screen at the opening view - the probe measured nothing"
+    assert reach[0] > 0, f"no point inside the blue plot's box reaches it with a real pointer ({reach[0]}/{reach[1]})"
+    # ...and landing on it lights the blue plots and no green one
+    page.js(
+        """() => {
+            const g = document.querySelector('g.f[data-k="wet paddy"]');
+            const r = g.getBoundingClientRect();
+            for (let i = 1; i < 10; i++) for (let j = 1; j < 10; j++) {
+                const x = r.x + r.width * i / 10, y = r.y + r.height * j / 10;
+                const el = document.elementFromPoint(x, y);
+                const owner = el && el.closest ? el.closest('g.f') : null;
+                if (owner && owner.getAttribute('data-k') === 'wet paddy') { owner.dispatchEvent(new PointerEvent('pointerover', {bubbles: true})); return; }
+            }
+        }"""
+    )
+    on = page.settles({"wet paddy": 2}, page.on)
+    assert on == {"wet paddy": 2}, f"a pointer on a blue plot lit {on}"
+    # ...and a green plot lights the green ones and no blue one
+    lit = page.hover_class("paddy")
+    assert set(lit) == {"paddy"} and lit["paddy"] == page.groups("paddy"), "the green paddy is its own kind now"
+    page.clear()
+    # the modal is about the blue plot, and it is not the paddy's modal
+    blue, green = page.open("wet paddy"), page.open("paddy")
+    assert blue["k"] == "wet paddy" and "shitsuden" in blue["name"]
+    assert blue["name"] != green["name"] and blue["caveat"] != green["caveat"]
+    # the disclosure the reader needs: the tint marks a SHARE of the wet ground on a comb field
+    assert "share" in blue["caveat"] and "comb" in blue["caveat"], "the drawing liberty is disclosed in the modal"
+    # ...and each links to the other, since both kinds are on this map
+    assert "wet paddy" in green["siblings"] and "paddy" in blue["siblings"]
+    page.page.keyboard.press("Escape")  # leave the fixture unpinned for the timings test that shares it
 
 
 @pytest.mark.rolls_map

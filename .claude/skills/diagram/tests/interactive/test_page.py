@@ -126,6 +126,31 @@ def test_explanations_hold_only_present_classes_and_present_siblings() -> None:
     assert len(data["windbreak"]["refs"]["forests-2020"]["text"]) > 20
 
 
+def test_the_wet_paddy_is_explained_apart_from_the_paddy_and_only_when_present() -> None:
+    """Feature 158 (GM 2026-08-29): the blue plots are "its own type of thing, and it deserves its own
+    explanation". Both classes on one map means two entries and a link each way; a map with no blue
+    plot must show neither the class nor a sibling paragraph claiming a distinction from an absent one."""
+    both = explanations({"paddy", "wet paddy"})
+    assert set(both) == {"paddy", "wet paddy"}
+    assert both["paddy"]["what"] != both["wet paddy"]["what"], "two kinds, two explanations"
+    assert both["wet paddy"]["siblings"] == ["paddy"] and "wet paddy" in both["paddy"]["siblings"]
+    # the disclosure the GM's reader needs: on a comb field the tint marks a SHARE of the wet ground.
+    # It rides in the caveat, so the modal leads with what the plot is (feature 156).
+    assert both["wet paddy"]["caveat"], "the drawing liberty reaches the modal"
+    green_only = explanations({"paddy"})
+    assert set(green_only) == {"paddy"}
+    assert "wet paddy" not in green_only["paddy"]["siblings"], "a map with no blue plot claims no distinction"
+
+
+def test_a_blue_plot_and_a_green_one_carry_different_classes_on_the_same_polygon_shape() -> None:
+    """The fill half of the Split is what changes; the bund stroke is the same class either way
+    (spec FR-003), so hovering a bund still lights every bund in the field."""
+    blue = wrap(RECT, Split("wet paddy", "bund"))
+    green = wrap(RECT, Split("paddy", "bund"))
+    assert 'data-k="wet paddy"' in blue and 'data-k="paddy"' in green
+    assert blue.count('data-k="bund"') == green.count('data-k="bund"') == 1
+
+
 def test_explanations_stub_an_unregistered_class_rather_than_dropping_it() -> None:
     data = explanations({"flying castle"})
     assert data["flying castle"]["label"] == "guess" and "no entry" in data["flying castle"]["what"]

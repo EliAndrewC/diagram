@@ -27,6 +27,10 @@ Findings recorded before the rule, or on a source the rule now excludes. Each is
 
 - Still summary-only after the `source-reader` run of 2026-08-27 (T45), each labeled in its entry: the bund-width convention (IRRI, unreachable; FAO read and larger); the Shirakawa farmstead bamboo grove (Kids Web Japan, 403 with no corroboration); the turn-minimization sentence (Ma et al. 2024 full text - the abstract's angle finding IS read); EUNIS E5.2 (404).
 - Summary-only or not found after feature 143's passes (2026-08-28), each labeled in its entry and listed by file in `specs/143-research-citations/ledger.md` section F2: the Jōge daikansho plan; the daikan-debt figure; the jin'ya coverage ratio; the Song monk census year; the Shunde 1581 percentages; the dike-pond board sluice (Ruddle & Zhong 1988); the lotus area share; the tameike m3/ha ratio; the forest stems/ha band; the Kaifeng tower count; the communal-well ratio; the Sado fire count.
+- Feature 158's pass (2026-08-29) - three that did NOT come back, each labeled where it is used in `research/fields.md` 'The wettest plots are their own kind of ground':
+  - The MAINTAINED growing-season water depth. Our `paddy` modal has said "four to six inches" since feature 134, citing `tabayashi-1986`; the reader could not source that number - IRRI's 5-10 cm is search-summary only (`knowledgebank.irri.org` refused the connection) and FAO's fetched 5-20 cm is a bund-CONSTRUCTION range, not a maintained depth. The number is unverified rather than contradicted; `tabayashi-1986` has not itself been read for it. **For the GM**: the shipped modal states it as fact.
+  - The water surface staying visible between the plants until the canopy closes. NOT-FOUND in anything read, so the drawn blue/green difference is asserted on the ground being wetter and not on that.
+  - "Kishu-school" (紀州流) as the name for the comb layout, in `research/fields.md` 'Water-first v2'. What is attested under that name is Izawa Yasobei's river-channelization and levee method, not a paddy drainage layout; one fetch of `suido-ishizue.jp` returned navigation text only. The LAYOUT finding itself is separately sourced (`jsidre-minumadai`, Minuma-dai 1728); it is the NAME that did not check out, and it should not be re-used elsewhere until it does.
 
 ## Works cited
 
@@ -89,6 +93,36 @@ IRRI Rice Knowledge Bank, sun drying and drying-floor area (https://www.knowledg
 Sugiura Tadashi, 「農村集落における農家の付属建物について - 宮城県宮崎町の例」, *Tōhoku Chiri* 25(3): 145-152, 1973 (JStage tga1948/25/3/25_3_145; READ 2026-08-27, all eight pages) (https://www.jstage.jst.go.jp/article/tga1948/25/3/25_3_145/_article/-char/ja)
 
 *Used for:* the per-household inventory of farmstead outbuildings by function (Table 5) and what stood inside the old main house (Table 6) - privy 0.87, firewood shed 0.76, straw shed 0.68, barn 0.58, work shed 0.55, livestock shed 0.55, kura 0.24, manure shed 0.24, bath 0.29, coop 0.16-0.28, household shrine 0.03; scope 1972 Tōhoku, stated wherever quoted
+
+### `kotobank-shitsuden`
+
+*Seisenban Nihon Kokugo Daijiten* (Shogakukan), *Nihon Dai-hyakka Zensho* / Nipponica (Shogakukan) and *Kaitei Shinpan Sekai Dai-hyakka Jiten* (Heibonsha), s.v. 湿田, aggregated at kotobank (https://kotobank.jp/word/%E6%B9%BF%E7%94%B0-74168)
+
+*Used for:* shitsuden defined - 水はけが悪く、水稲を栽培していないときでも過湿な状態の水田 ("a paddy with poor drainage that stays waterlogged even when rice is not being grown"), no winter crop; and its penalties - 農作業が困難, 地温が夏は乾田より低く酸素不足, 収量は不安定, 湿田の生産性は概して低い
+
+### `kotobank-kanden`
+
+*Digital Daijisen* (Shogakukan) and *Kaitei Shinpan Sekai Dai-hyakka Jiten* (Heibonsha), s.v. 乾田, aggregated at kotobank (https://kotobank.jp/word/%E4%B9%BE%E7%94%B0-49311)
+
+*Used for:* the contrast term - 水はけのぐあいがよく、水を入れないときには乾いて畑の状態になる田 ("dries out to a dryland-field state"); and the Meiji national conversion program - 明治以降，国家的事業として湿田の乾田化が行われ，全国の水田の2/3以上は乾田となったといわれる
+
+### `kotobank-yatsuda`
+
+Encyclopedia entry s.v. 谷津田 / 谷地田, aggregated at kotobank (https://kotobank.jp/word/%E8%B0%B7%E6%B4%A5%E7%94%B0-400607)
+
+*Used for:* the valley-bottom paddy and its wetland character - 台地が開析されてできた谷間の低地すなわち谷地に分布する水田 ... 一般に湿地で古く開発された
+
+### `kotobank-fukada`
+
+*Digital Daijisen* and *Seisenban Nihon Kokugo Daijiten* (Shogakukan), s.v. 深田, aggregated at kotobank (https://kotobank.jp/word/%E6%B7%B1%E7%94%B0-123763)
+
+*Used for:* fukada as a degree of mud rather than a slope position - どろの深い田。沼田 ("a paddy with deep mud; a swamp paddy"), opposed to 浅田 (asada). Recorded with its LIMIT: nothing read equates fukada with the valley-bottom paddy, and no fetched source attaches a knee- or waist-deep figure to the word itself
+
+### `fao-rice-water`
+
+Thierry Facon, "Water Management in Rice in Asia: Some Issues for the Future", FAO (https://www.fao.org/4/x6905e/x6905e0g.htm)
+
+*Used for:* the plot-to-plot cascade that the wettest-plot-on-the-drain inference rests on - "water flows from one plot to another and no distinction can be made between irrigation and drainage"; and drainage reuse - surface runoff "can be re-used, i.e., recycled within the system". NOT used for the inference itself, which the entry labels an inference
 
 ### `tabayashi-1986`
 

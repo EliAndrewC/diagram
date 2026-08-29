@@ -39,6 +39,10 @@ SPEC_CLASSES = [
     "scrub and rough grazing",
     "marsh",
     "paddy",
+    # the wettest plots, told apart from the rest of the field (feature 159, GM 2026-08-29:
+    # "that is its own type of thing, and it deserves its own explanation") - recorded in that
+    # spec's Decisions table like `field pond` and the dike-pond rows
+    "wet paddy",
     "bund",
     "bund beans",
     "millet",

@@ -34,6 +34,11 @@ GLOSSARY: dict[str, tuple[tuple[str, ...], str]] = {
     "kosatsuba": (("kosatsuba",), "The notice board: a small roofed frame where the authorities posted the standing law, rate tables and ban lists, sited where everyone passes."),
     "minka": (("minka",), "A traditional Japanese farmhouse - a timber-framed dwelling under a steep thatched roof, its ridge on the long axis."),
     "take-yabu": (("take-yabu",), "A bamboo thicket: a clonal stand of bamboo with a hard edge, held and cut like a coppice."),
+    "shitsuden": (
+        ("shitsuden",),
+        "Wet paddy: rice ground too poorly drained to dry out, which holds water even out of season. Harder to work, colder, and lower-yielding than a paddy that can be emptied, and it takes no winter crop.",
+    ),
+    "kanden": (("kanden",), "Dry paddy: rice ground that drains, so that when the water is let out it dries to an ordinary dry field and can carry a winter crop before the next flooding."),
     "hatake": (("hatake",), "Dry-field farmland - the unirrigated ground that grows grains, beans and vegetables, as against the flooded paddy."),
     "goemon-buro": (("goemon-buro",), "The cauldron bath: an iron tub heated from below, the bath of self-sufficient farm villages."),
     "magariya": (("magariya",), "The L-shaped farmhouse of northern Japan, with the stable under the same roof as the dwelling - a cold-country form."),

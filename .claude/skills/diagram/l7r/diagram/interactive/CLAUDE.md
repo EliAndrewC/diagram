@@ -45,6 +45,33 @@ and is NOT rendered; four classes whose whole note is that get no caveat at all,
 them so a fifth is a decision rather than an omission. Both halves stay in the record, and the
 sources stay one click away.
 
+## The blue plot is its own class (feature 159)
+
+A paddy plot drawn with the FLOODED fill (`#93B7AC`) carries `wet paddy`, not `paddy`. The GM,
+2026-08-29: *"that is its own type of thing, and it deserves its own explanation."* It is the
+**shitsuden** - ground too poorly drained to dry out, which holds water even out of season, takes no
+winter crop and yields unreliably - against the **kanden**, the paddy that empties to a dry field.
+The research is `research/fields.md`, 'The wettest plots are their own kind of ground'.
+
+Decided at ONE emit site, `settlement/fields/comb.py` `_comb_draw_paddies`, from the fill about to be
+drawn, so the class and the color cannot disagree. Every field engine reaches that site, so every
+tint rule gets the class.
+
+**THERE ARE TWO TINT RULES, and the shared explanation must be true under both.** This is the thing
+to know before editing the class's prose:
+
+| engine | rule | measured |
+|---|---|---|
+| comb (`waterfields/carve.py:356`) | a random 45% of the closing rank - the plots on the drain collector - less the pointed slivers `carve.py:361` demotes back to green | inashiro 2/24, kashikawa 3/24, mizuguchi 2/20, sawada 0/19 |
+| terrace and polder (`hill.py:75`, `hill.py:191`, `polder.py:328`) | every `low` plot, no sample | **kuwabata 5/5** (the only LIVE one); enokida 22/22, tanada 40/40, yatsuda 18/18 are frozen legacy exhibits and never re-roll |
+
+So blue is a SAMPLE of the wet ground on a comb map and the WHOLE of it on the others, and the
+modal's disclosure is written conditionally ("on a comb field...") for that reason. A flat "only a
+sample" is false on kuwabata, which a reader can open today; a flat "the wet ground" is false on
+the comb maps. The
+`low` / `fill` split is the engine's own (`carve.py`: *"`low` is the TOPOGRAPHY; `fill` is only the
+PICTURE"*), and the land-use overlays still key off `low`, never off the class.
+
 ## The map-notes block: facts a `.notes.md` hands its page (feature 156)
 
 A settlement's own `<name>.notes.md` may carry a `## Map notes` section, and the page reads it.
