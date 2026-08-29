@@ -37,6 +37,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Any
 
+from ..dwellings import DWELLING_KINDS
 from .notes import MapNotes
 from .sources import citations, research_sources
 
@@ -88,24 +89,24 @@ KINDS: dict[str, Kind] = {
     ),
     "village": Kind(
         "village",
-        "the main village of a village district: the seat of the village headsman who oversees the district's outlying hamlets, with its own shrine, its tax-free plots and the burial ground the whole district uses. Like every village district it is peasant-only - no samurai live here.",
+        "the head of its village district, and the seat of the village headsman who oversees the outlying hamlets - with its own shrine, its tax-free plots and the burial ground the whole district uses. Like every village district it is peasant-only; no samurai live here.",
         "farmhouses",
         False,
         "",
     ),
     "town": Kind(
         "town",
-        "a county town: the lowest level of Rokugani society at which samurai live, and the lowest that has resident merchants, which is why the farmers of the surrounding districts come in for market day. The county magistrate holds court here.",
+        "the seat of a county magistrate, and the lowest level of Rokugani society at which samurai live - the lowest, too, that has resident merchants, which is why the farmers of the surrounding districts come in for market day.",
         "dwellings",
         True,
-        "That figure is the settlement as drawn - its townsfolk and the farming households on the sheet around them. The county the town heads is larger again, and the Imperial convention counts the whole of its farming population as part of the town; this map does not yet state that larger number.",
+        "That figure counts the settlement as drawn - its townsfolk and the farming households on the sheet around them, about five to each. The county the town heads is larger again, and the Imperial convention counts the whole of its farming population as part of the town; this map does not yet state that larger number.",
     ),
     "city": Kind(
         "city",
-        "a provincial city: the seat of a province's governor and its ministries, and a market the whole province turns toward.",
+        "the seat of a province's governor and its ministries, and a market the whole province turns toward.",
         "dwellings",
         True,
-        "A provincial city's population is counted the other way from a town's: it takes in the samurai country estates around the city, only some of which are drawn here, but NOT the farmers. The farms on this sheet belong to village districts and counties, which the Imperial census counts separately.",
+        "That figure is the households drawn inside the city itself, about five to a dwelling - including the few farmhouses that stand within the wall. It does NOT take in the farming countryside: the farms out on this sheet belong to village districts and counties, which the Imperial census counts separately from the city. (By convention the city's figure also takes in the samurai country estates around it, only some of which are drawn; this map does not yet state that larger number either.)",
     ),
 }
 
@@ -151,7 +152,7 @@ CROP_SENTENCES: dict[str, str] = {
 #: stands in a corner of the plot, which is where `household shrine` puts it and where Sawada's sits,
 #: 46 ft from its house.
 COLLISIONS: dict[str, str] = {
-    "household shrine": "(The little hokora in a corner of a farmstead plot is a household's own shrine, which is a different thing from the village shrine a hamlet does not have.)",
+    "household shrine": "(The little hokora in a corner of a farmstead plot is one household's own, and is a different thing from a village shrine.)",
     "grave island": "(The mound out among the plots is a field grave, not a burial ground.)",
 }
 
@@ -310,12 +311,6 @@ def dwellings_shown(manifest: dict[str, Any], kind: Kind) -> int:
     farmhouses too; see `KINDS["town"].population_note` and the open question recorded with it.)"""
     if not kind.excludes_farms:
         return len(manifest.get("houses") or [])
-    # DEFERRED IMPORT, and it is a cycle rather than a preference: `check_village` reaches
-    # `settlement`, which reaches `interactive.page`, which reaches this module. Sharing the ONE
-    # definition of "a dwelling" with the capacity checks is worth an import inside the function;
-    # copying the set here would be the second definition the review asked us not to make.
-    from ..check_village.common_03_capacity import DWELLING_KINDS
-
     return sum(1 for b in (manifest.get("buildings") or []) if b.get("kind") in DWELLING_KINDS)
 
 

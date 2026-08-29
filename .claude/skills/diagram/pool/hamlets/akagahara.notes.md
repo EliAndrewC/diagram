@@ -29,7 +29,7 @@ grove** - there is no communal wood, which is the visible difference from a nucl
 
 *The district, the road, the county and the town are the GM's own, dictated 2026-08-29. The
 connector track on this sheet runs SOUTH, which is where they put the Imperial road; Hoshigaoka
-lies northeast along it.*
+lies northeast of that road.*
 
 ### Features
 

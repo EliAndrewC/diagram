@@ -2,7 +2,16 @@
 
 from typing import Any
 
+from l7r.diagram.dwellings import BUSINESS_KINDS as BUSINESS_KINDS
+from l7r.diagram.dwellings import DWELLING_KINDS as DWELLING_KINDS
+from l7r.diagram.dwellings import HOUSEHOLD as HOUSEHOLD
+
 from .common_01_geometry import Manifest
+
+# DWELLING_KINDS, BUSINESS_KINDS and HOUSEHOLD are RE-EXPORTED above, from the leaf
+# `l7r/diagram/dwellings.py`. They moved there because the interactive page's place card needs the
+# same definition and sits on the far side of an import cycle from this package (feature 156; the
+# reason is in that module's docstring). Every existing `from .common_03_capacity import ...` works.
 
 DEFAULT_MANIFEST: Manifest = {
     "houses": [],
@@ -54,26 +63,6 @@ DEFAULT_MANIFEST: Manifest = {
     "title": None,
     "meta": {},
 }
-
-# a building's role for the population/frontage maths. A DWELLING houses one ~5-person household;
-# a BUSINESS is a commercial frontage (the merchant's house+shop is BOTH - dual-use); everything
-# else (civic, government, granary kura, barns, gate furniture) houses no one and fronts nothing.
-DWELLING_KINDS = {
-    "laborer",
-    "laborer_large",
-    "servant",
-    "burakumin",
-    "samurai",
-    "samurai_large",
-    "merchant",
-    "merchant_house",
-    "merchant_large",
-    "monk_house",  # adept-monk households by the temple precincts (GM 2026-07-24) - real resident families, so they count as housing; they are deliberately ABSENT from the caste bands (clergy are not a lay caste)
-}  # samurai_large was missing (a senior samurai house is a dwelling like every other _large variant) - found when Tango's population count kept landing 5 short of its generator's
-
-BUSINESS_KINDS = {"shop", "merchant"}
-
-HOUSEHOLD = 5
 
 # COMMONER dwellings must shelter INSIDE a walled city (feature 006). In imperial-Chinese and
 # Japanese practice the ordinary working population (laborers, artisans, most shopkeepers) lived

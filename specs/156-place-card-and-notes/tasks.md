@@ -256,3 +256,39 @@ backwards.
       it now would be this session deciding an exception to its own approved spec, which is the one
       thing Principle XVI forbids. It is a small change and a one-word ruling either way.
       `research: rendering`
+
+## From `settlement-review`, round 4 - the second verification pass (2026-08-29)
+
+Three of round 3's five fixes landed clean; the other two carried the same defect one tier over.
+
+- [x] **T52** (error 1) The CITY population note asserted that the figure "takes in the samurai
+      country estates", which all three city manifests deny: Minami's 520 dwellings x 5 IS its declared
+      2,600, with no headroom for an undrawn household, and each city draws three estates that
+      contribute nothing. The note states what its figure IS now - the households drawn inside the
+      city - and the estate convention is recorded as owed rather than asserted, the same treatment
+      the town's county figure already had. `research: rendering`
+- [x] **T53** (error 2) "but NOT the farmers" was false on Tango, whose declared 3,000 is
+      (583 dwellings + 17 IN-WALL farmhouses) x 5 - which is how the gate closes it
+      (`common_04_urban_policy.py`, in-wall `houses` count too). The note names the in-wall farmhouses.
+      `research: rendering`
+- [x] **T54** (error 3) "That figure is the settlement as drawn" was an exact identity on Ubame and
+      Hoshizora and 6.4% out on Hirameki, passing only inside the 7% tolerance. Stated as the model it
+      is. Two pre-existing record defects behind it, both fixed: `settlements.md`'s spelled-out
+      dwelling-kind list had gone stale by four kinds and now points at the one definition, and
+      Hirameki's notes quoted the figure that list produced (156 against the engine's 166) - corrected
+      with the measurement, and NOT re-declared, because which figure a town should state is the
+      question the GM deferred. `research: rendering`
+- [x] **T55** (questionable 1) The deferred import broke the cycle but executed all 52 modules and
+      14,524 lines of the check battery on every town and city page write, for a ten-element set.
+      `DWELLING_KINDS`, `BUSINESS_KINDS` and `HOUSEHOLD` moved to the leaf `l7r/diagram/dwellings.py`;
+      `common_03_capacity` re-exports them, so every existing import still works and there is one
+      definition with no cycle. `research: rendering`
+- [x] **T56** (questionable 3) `COLLISIONS` is appended at every tier, so its clause must not talk
+      about hamlets - a village that ever seats a household shrine would have been told about "the
+      village shrine a hamlet does not have" two sentences after being told it has one. Tier-neutral
+      now, and a test says so. `research: rendering`
+- [x] **T57** (nitpicks) Kashikawa's parenthetical attributed a y-up frame to the engine, whose axes
+      are 0 = east, 90 = south - dropped, leaving the compass bearing that was right all along; the
+      "along it" sweep finished in both files and both places; and the doubled noun at town, city AND
+      village scale ("is a town of 82 dwellings, population ~590: a county town: the lowest ...") -
+      the village had it too, caught by the guard written for the other two. `research: rendering`

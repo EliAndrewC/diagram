@@ -29,11 +29,11 @@ that deliberately keeps the old path.
 
 *The district, the road, the county and the town are the GM's own, dictated 2026-08-29. The
 connector track on this sheet runs SOUTH, which is where they put the Imperial road; Hoshigaoka
-lies east along it.*
+lies east of that road.*
 
 ### Features
 
-- **village lane**: The connector track runs SOUTH, to the Imperial road; Hoshigaoka, the district's main village, lies east along it.
+- **village lane**: The connector track runs SOUTH, to the Imperial road; Hoshigaoka, the district's main village, lies east of that road.
 
 ## What makes it a hamlet, not a village
 

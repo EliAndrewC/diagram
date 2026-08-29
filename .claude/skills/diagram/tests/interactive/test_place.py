@@ -121,9 +121,16 @@ def test_each_tier_explains_what_its_population_figure_COUNTS() -> None:
     county's farmers would contradict its own manifest. The GM's convention needs the gens to
     re-declare `population`; until they do, the card states the smaller true thing and names the
     larger one as not yet given (settlement-review, 2026-08-29)."""
-    assert "the settlement as drawn" in KINDS["town"].population_note
+    assert "counts the settlement as drawn" in KINDS["town"].population_note
     assert "does not yet state that larger number" in KINDS["town"].population_note
-    assert "NOT the farmers" in KINDS["city"].population_note
+    # THE CITY NOTE SAYS WHAT ITS FIGURE IS. It used to claim the figure "takes in the samurai country
+    # estates", which all three cities' arithmetic denies - Minami's 520 dwellings x 5 IS its declared
+    # 2,600, with no headroom for an undrawn household, and each city draws three estates that
+    # contribute nothing. The estate convention is the GM's and is recorded as owed, not asserted
+    # (settlement-review round 4, 2026-08-29).
+    assert "households drawn inside the city itself" in KINDS["city"].population_note
+    assert "farmhouses that stand within the wall" in KINDS["city"].population_note, "Tango's declared 3,000 is (583 + 17 in-wall farmhouses) x 5"
+    assert "does not yet state that larger number either" in KINDS["city"].population_note
     assert "counts separately" in KINDS["city"].population_note
     assert KINDS["hamlet"].population_note == "" and KINDS["village"].population_note == ""
 
@@ -142,6 +149,7 @@ def test_a_collision_clause_appears_only_where_its_class_is_drawn() -> None:
     assert bare is not None and with_shrine is not None
     assert "hokora" not in bare["what"], "a map with no household shrine hears nothing about one"
     assert "hokora in a corner of a farmstead plot" in with_shrine["what"], "and it stands where its own class puts it"
+    assert "hamlet" not in COLLISIONS["household shrine"], "the clause is appended at EVERY tier, so it must not talk about hamlets"
     assert "field grave" not in with_shrine["what"], "this map draws no grave island"
 
 
@@ -294,6 +302,14 @@ def test_a_map_with_no_notes_at_all_still_describes_itself() -> None:
     assert "15 farmhouses, population ~75" in card["what"]
     assert card["why"].startswith("The flooded fields grow rice.")
     assert "district of" not in card["why"], "nothing is asserted that nothing authored"
+
+
+def test_no_tier_restates_its_own_noun_after_the_colon() -> None:
+    """ "Ubame is a town of 82 dwellings, population ~590: a county town: the lowest level ..." - the
+    noun twice and the colon twice (settlement-review round 4). The card supplies "is a <noun>"; the
+    tier text continues that sentence rather than restarting it."""
+    for scale, kind in KINDS.items():
+        assert ":" not in kind.what.split(".")[0], f"{scale}: the tier text opens with a second colon"
 
 
 @pytest.mark.parametrize("scale", sorted(KINDS))
