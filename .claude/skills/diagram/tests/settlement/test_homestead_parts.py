@@ -434,3 +434,20 @@ def test_a_kitchen_garden_is_refused_a_seat_on_the_paddy():
     # anything nearer and would leave the garden's own rule (its half-diagonal plus 4) untested.
     assert not s._garden_fits(418, 250, 22, 24, 900, 900, (900, 900, 30, 20)), "its corner laps the bund"
     assert s._garden_fits(700, 700, 22, 24, 900, 900, (900, 900, 30, 20)), "and dry ground is fine"
+
+
+def test_a_windbreak_reseating_round_a_house_stays_inside_the_within_box():
+    """A DENSE belt flows around a local obstacle instead of losing the column - it tries eight bearings
+    at five radii for a new seat. `within` bounds where those seats may land: a clump that would be
+    pushed wholly outside the caller's box is refused there rather than planted off the frame."""
+    poly = [(200.0, 300.0), (600.0, 300.0), (600.0, 460.0), (200.0, 460.0)]
+    s = _nuc_village()
+    s.M["houses"] = [{"x": 400.0, "y": 380.0, "w": 90.0, "h": 60.0, "rot": 0, "kind": "plain"}]
+    s.placed.append((400.0, 380.0, 90.0, 60.0))
+    narrow = s.village_grove(poly, role="windbreak", within=(360.0, 350.0, 440.0, 410.0))  # the house's own box
+
+    s2 = _nuc_village()
+    s2.M["houses"] = [{"x": 400.0, "y": 380.0, "w": 90.0, "h": 60.0, "rot": 0, "kind": "plain"}]
+    s2.placed.append((400.0, 380.0, 90.0, 60.0))
+    wide = s2.village_grove(poly, role="windbreak")
+    assert 0 < narrow < wide, "the box bounds the belt without emptying it"

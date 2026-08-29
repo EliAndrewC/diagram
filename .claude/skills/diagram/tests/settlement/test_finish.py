@@ -232,3 +232,22 @@ def test_finish_steps_over_a_field_too_small_to_carry_keepout_chords_and_inks_th
     s.finish(str(tmp_path / "m"), render=False)
     assert any("Tokaido" in frag for frag in s.toplabels), "the road's name is on the sheet"
     assert s._road_label is None, "and the deferred record is cleared, so a second finish cannot double it"
+
+
+def test_a_map_too_full_for_a_blank_title_spot_takes_a_clean_corner():
+    """The ladder `title` walks: blank ground, then ground under cover, then a CORNER that hides nothing
+    but cover, and only then the title band above the sheet (feature 137 T06 - seed 13's top-left corner
+    was a dry plot while its bottom-right was scrub). The corner rung is reached when the scan's own grid,
+    which starts 22 px in and steps 24, cannot fit the placard anywhere the corner offsets can."""
+    s = Settlement(1000, 1000, seed=1)
+    s.meta(name="V", scale="hamlet", ftpx=1, toscale=True)
+    s.view = (0, 0, 1000, 1000)
+
+    def _rect(x0, y0, x1, y1):
+        return {"x": (x0 + x1) / 2, "y": (y0 + y1) / 2, "w": x1 - x0, "h": y1 - y0, "rot": 0, "kind": "plain"}
+
+    # every part of the sheet is built on except a pocket that exactly holds the top-left corner seat
+    s.M["houses"] = [_rect(157, 0, 1000, 1000), _rect(0, 125, 157, 1000), _rect(0, 0, 27, 125), _rect(27, 0, 157, 13)]
+    s.title("V")
+    assert s.M["title"]["bbox"][0] == 30 and s.M["title"]["bbox"][1] == 16, "seated in the corner, not on a band"
+    assert s.M["title"]["bbox"][1] >= 0, "the band rung (a negative y, above the map) was not needed"
