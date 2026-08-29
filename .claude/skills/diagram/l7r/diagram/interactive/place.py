@@ -118,7 +118,7 @@ KINDS: dict[str, Kind] = {
         "the seat of a county magistrate, and the lowest level of Rokugani society at which samurai live - the lowest, too, that has resident merchants, which is why the farmers of the surrounding districts come in for market day.",
         "non-farmhouse dwellings",
         True,
-        "A town of about 238 households, and most of them farm: some 156 farming households work the fields around the town and belong to it, against 82 of every other trade. Every one of those 82 is drawn and counted here; only a sample of the farmhouses is, which is why the figure is larger than anything you can count on the sheet. The farmers of the surrounding village districts are a different matter - they come in for market day, and the census counts them under their own districts.",
+        "A town runs to about 238 households and most of them farm - roughly two in three work the fields around the town and belong to it, the rest being of every other trade. Every dwelling of that rest is drawn, and is the number counted above; only a sample of the farmhouses is, which is why the figure is larger than anything on the sheet can add up to. The farmers of the surrounding village districts are a different matter - they come in for market day, and the census counts them under their own districts.",
         1200,
     ),
     "city": Kind(
@@ -237,8 +237,9 @@ def size_sentence(kind: Kind, meta: dict[str, Any], houses: int) -> str:
     if houses:
         parts.append(f"{houses} {kind.houses_noun}")  # no tilde: the reader can count them
     households = meta.get("households")
-    # THE TIER'S OWN FIGURE FIRST where it has one - a town's 1,200 is a standing county figure and is
-    # not what its frozen manifest records, which is the depicted slice the housing check keys on.
+    # THE TIER'S OWN FIGURE FIRST where it has one - a town's 1,200 is its OWN ~238 households, ~156 of
+    # them farming, and is not what its frozen manifest records - that is the depicted slice the
+    # housing check keys on, the non-farm dwellings plus only the farmhouses that fit the sheet.
     population = kind.default_population or meta.get("population") or (PER_HOUSEHOLD * households if households else None)
     if population:
         # SAY THE HOUSEHOLDS WHERE THE ARITHMETIC WOULD NOT WORK (settlement-review, 2026-08-29).
@@ -270,7 +271,7 @@ def where_sentences(scale: str, place: dict[str, str]) -> list[str]:
     if district and scale != "village":
         out.append(f"It belongs to the village district of {district}" + (f", which lies {direction}." if direction else "."))
     if place.get("county"):
-        out.append(f"It is in {place['county']} county." if scale == "village" else f"The district is part of {place['county']} county.")
+        out.append({"village": f"It is in {place['county']} county.", "town": f"It is the seat of {place['county']} county."}.get(scale, f"The district is part of {place['county']} county."))
     if place.get("imperial road"):
         # "runs south" is the road's COURSE; the GM's fact is its POSITION - it lies south of the
         # settlement (settlement-review, 2026-08-29). The notes keep the bearing; the template says
