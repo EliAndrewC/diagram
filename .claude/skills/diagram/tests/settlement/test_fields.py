@@ -588,3 +588,16 @@ def test_plot_pond_fits_the_polygon_not_the_bbox():
     for a in [i * math.pi / 12 for i in range(24)]:
         px, py = fp["x"] + fp["rx"] * math.cos(a), fp["y"] + fp["ry"] * math.sin(a)
         assert 100 <= px <= 190 and 100 <= py <= 170  # every rim point inside the plot
+
+
+def test_hem_on_water_sees_a_stream_and_a_pond_separately():
+    """`build_comb` lays the fan from pure geometry and `draw_comb_field` used to render it blind - it
+    was the ONLY placer that consulted nothing, so a dry-hem plot could be drawn straight across a
+    stream authored earlier (Ubame's). The two arms are different geometry: a stroked watercourse with
+    a half-width, and the pond's ellipse."""
+    from l7r.diagram.settlement.fields.comb import hem_on_water
+
+    plot = [(100.0, 100.0), (140.0, 100.0), (140.0, 140.0), (100.0, 140.0)]
+    assert hem_on_water(plot, [([(0.0, 120.0), (500.0, 120.0)], 4.5)], None), "the stream runs under it"
+    assert hem_on_water(plot, [], (120.0, 120.0, 60.0, 40.0)), "and the pond stands under it"
+    assert not hem_on_water(plot, [([(0.0, 900.0), (500.0, 900.0)], 4.5)], (800.0, 800.0, 20.0, 20.0))

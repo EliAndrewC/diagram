@@ -422,3 +422,13 @@ def test_draw_grove_draws_a_mixed_stand_at_its_seat() -> None:
     ink = "".join(str(o) for o in s.out[before:])
     assert "<circle" in ink and "translate(300,300)" in ink
     assert "#BBD06A" not in ink, "no culm: the bamboo arm was unreachable and was removed"
+
+
+def test_a_kitchen_garden_is_refused_a_seat_on_the_paddy():
+    """A garden is DRY ground. The refusal is by footprint plus a 4 px hair, so a seat whose center
+    stands clear but whose corner laps the bund is refused too."""
+    s = Settlement(1000, 1000, seed=1)
+    s.meta(name="V", scale="hamlet", ftpx=1, toscale=True)
+    s.field_polys.append([(100.0, 100.0), (400.0, 100.0), (400.0, 400.0), (100.0, 400.0)])
+    assert not s._garden_fits(250, 250, 22, 24, 600, 600, (600, 600, 30, 20)), "in the rice"
+    assert s._garden_fits(700, 700, 22, 24, 600, 600, (600, 600, 30, 20)), "and dry ground is fine"

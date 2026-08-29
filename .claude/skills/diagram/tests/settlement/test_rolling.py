@@ -399,3 +399,25 @@ def test_bundle_common_fits_refuses_a_grove_on_a_tread_and_a_shaded_bundle() -> 
     }
     s.lane([(300.0, 520.0), (900.0, 520.0)], width=6, worn=True)  # drawn, so it has a tread
     assert s._bundle_common_fits(geom) is False, "the north grove sits on the lane's tread"
+
+
+def test_a_bundle_is_refused_when_its_house_or_its_grove_stands_on_a_drawn_tread():
+    """`_rect_blocked`'s corridor test reads a CENTER; these two read the drawn tread by footprint.
+    The grove arm arrived with the settlement-form knob (until it was rolled, only dispersed maps grew
+    per-house groves and the scripted tier never rolled one), and every linear and dispersed hamlet
+    then planted yashikirin across the connector."""
+    s = Settlement(1000, 1000, seed=1)
+    s.meta(name="V", scale="hamlet", ftpx=1, toscale=True)
+    clean = {"house": (500.0, 500.0, 40.0, 26.0), "yard": (500.0, 560.0, 36.0, 26.0)}
+    assert s._bundle_common_fits(clean), "nothing drawn yet"
+
+    on_house = Settlement(1000, 1000, seed=1)
+    on_house.meta(name="V", scale="hamlet", ftpx=1, toscale=True)
+    on_house.treads.append(([(400.0, 500.0), (600.0, 500.0)], 3.0, [(400.0, 500.0), (600.0, 500.0)]))
+    assert not on_house._bundle_common_fits(clean), "the house has a corner on the lane"
+
+    on_grove = Settlement(1000, 1000, seed=1)
+    on_grove.meta(name="V", scale="hamlet", ftpx=1, toscale=True)
+    on_grove.treads.append(([(400.0, 300.0), (600.0, 300.0)], 3.0, [(400.0, 300.0), (600.0, 300.0)]))
+    with_grove = {**clean, "grove_n": (500.0, 300.0, 30.0, 20.0), "grove_w": (450.0, 500.0, 20.0, 30.0)}
+    assert not on_grove._bundle_common_fits(with_grove), "the windward grove is planted across the lane"

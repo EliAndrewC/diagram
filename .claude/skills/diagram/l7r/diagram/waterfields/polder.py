@@ -399,6 +399,24 @@ def _polder_ring(R: random.Random, grid: _GridFn, span_s: float, span_t: float) 
     return sides_st, fi, di, sluice
 
 
+def s_on_side(side_st: list[tuple[float, float]], tq: float) -> float:
+    """The s-coordinate where a ring side (mostly t-monotone) crosses the cross-coordinate `tq`.
+
+    The POSITION GUESS for a lateral's end, so it meets the feeder or the drain at roughly its own column
+    line rather than wherever the nearest-point projection would slide it. When `tq` falls outside every
+    span - the lateral's column runs past the end of that side - the NEARER end of the side is the answer;
+    a polder whose grid fits inside its own ring never asks that, which is why the arm had no test.
+
+    LIFTED OUT OF `_polder_channels` (feature 146, GM 2026-08-28 on inner functions and testability).
+    """
+    for i in range(len(side_st) - 1):
+        ta, tb = side_st[i][1], side_st[i + 1][1]
+        if (ta <= tq <= tb or tb <= tq <= ta) and tb != ta:
+            k = (tq - ta) / (tb - ta)
+            return side_st[i][0] + k * (side_st[i + 1][0] - side_st[i][0])
+    return side_st[0][0] if abs(tq - side_st[0][1]) < abs(tq - side_st[-1][1]) else side_st[-1][0]
+
+
 def _polder_channels(
     grid: _GridFn,
     sides_st: list[list[tuple[float, float]]],
@@ -443,16 +461,7 @@ def _polder_channels(
         _seg(sides_st[3], "lateral", 3.4, 3.0, "w_toe"),  # west toe collector
     ]
 
-    def _s_on_side(side_st: list[tuple[float, float]], tq: float) -> float:
-        # the s-coordinate where a ring side (mostly t-monotone) crosses cross-coord tq - the POSITION
-        # GUESS for a lateral's end, so it meets the feeder/drain at roughly its own column line rather
-        # than wherever the nearest-point projection below would slide it.
-        for i in range(len(side_st) - 1):
-            ta, tb = side_st[i][1], side_st[i + 1][1]
-            if (ta <= tq <= tb or tb <= tq <= ta) and tb != ta:
-                k = (tq - ta) / (tb - ta)
-                return side_st[i][0] + k * (side_st[i + 1][0] - side_st[i][0])
-        return side_st[0][0] if abs(tq - side_st[0][1]) < abs(tq - side_st[-1][1]) else side_st[-1][0]
+    _s_on_side = s_on_side
 
     # SNAP the lateral ends onto the feeder (top) + drain (bottom) centerlines so each lateral FEEDS the
     # trunk at a clean T instead of poking a stub past it. The snap must happen in DRAWN (xy) space, not

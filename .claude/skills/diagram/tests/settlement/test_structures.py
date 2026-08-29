@@ -487,3 +487,15 @@ def test_pick_caption_seat_keeps_every_seat_when_the_hug_cap_would_leave_none() 
     seats = [(5.0, 0.0), (9.0, 0.0)]
     got = pick_caption_seat(seats, (0.0, 0.0), lambda _q: 500.0, 10.0, lambda _q: 8.0, 2.0)
     assert got in seats
+
+
+def test_pull_caption_toward_leaves_a_seat_that_already_sits_on_its_subject_center():
+    """The pull runs along the line from the caption's block to the subject's; when the two centers
+    coincide there is no line to run along, so the seat is handed back. A concave subject is how that
+    happens on a map - the caption sits in the notch of a C-shaped footprint, clear of every arm of it
+    while sharing its center."""
+    s = Settlement(1000, 1000, seed=1)
+    s.meta(name="V", scale="hamlet", ftpx=1, toscale=True)
+    c_shape = [(0.0, 0.0), (200.0, 0.0), (200.0, 40.0), (60.0, 40.0), (60.0, 160.0), (200.0, 160.0), (200.0, 200.0), (0.0, 200.0)]
+    seat = (115.0, 100.0 + 9 * 0.275)  # the block's own center lands exactly on the subject's
+    assert s.pull_caption_toward(seat, "Kura", 9, "middle", 0.0, c_shape) == seat
