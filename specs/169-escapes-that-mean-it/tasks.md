@@ -73,10 +73,17 @@ the measurements in [`research.md`](research.md).
       research: procedure
       verify: spec-fidelity round 1 caught the false claim; the corrected text is FR-006
 
-- [ ] T12 SC-007: the close-out report tells the GM that FR-006's original warrant was wrong, in
+- [x] T12 SC-007: the close-out report tells the GM that FR-006's original warrant was wrong, in
       terms plain enough for them to withdraw item 5
       research: procedure
       verify: the report itself - the one requirement here that no test can tick
+
+- [x] T14 spec-fidelity round 3 returned CHANGES REQUIRED (a twelfth token), which under Principle
+      XVI is an ESCALATION to the GM rather than a fourth self-review round. The mechanical remedy
+      the reviewer named is implemented rather than argued - the census is DERIVED - and the two
+      decisions that remain theirs go in the close-out report
+      research: procedure
+      verify: R10; the review history in `spec.md`; both new checks proved to fire
 
 - [x] T13 the whole guard suite and the gate, green together, then the push
       research: procedure
