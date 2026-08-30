@@ -208,6 +208,34 @@ def regen_pool(
     return skipped, ran, frozen
 
 
+def stale_flat_renders(skill_dir: str) -> list[str]:
+    """Derived renders left at the PRE-FEATURE-161 flat path, `<tree>/<tier>/<map>.<ext>`.
+
+    WHY THIS REPORTS RATHER THAN DELETES. When every map gained its own folder, a tracked file moved
+    with the commit - but a live map's `.svg`/`.png`/`.html` are GITIGNORED, so they were never in
+    the commit and simply stayed where they were. Any tree that had rendered a map before the move
+    (main, the GM's own checkout, every other session's clone) therefore pulls the new folders and
+    keeps the old files sitting beside them - which is the exact flat clutter the reorganization
+    existed to remove, reappearing right after it was removed. They are no longer ignored either,
+    since the ignore rules moved a level deeper, so they show up as untracked noise in `git status`.
+
+    Deleting files is not render-sync's job - it regenerates, it does not tidy - and a session
+    reading its own `git status` is owed the explanation rather than a silent removal. So this names
+    them and says they are safe to go.
+
+    Only a file whose map ALSO exists in the new layout counts: a loose render with no map folder is
+    something else entirely (a draft, a hand copy) and is left alone and unmentioned.
+    """
+    out: list[str] = []
+    known = {(b.tree, b.tier, b.stem) for b in poolmaps.bundles(skill_dir=skill_dir)}
+    for tree, tier, stem in sorted(known):
+        for ext in (".svg", ".png", ".html"):
+            flat = os.path.join(skill_dir, tree, tier, stem + ext)
+            if os.path.isfile(flat):
+                out.append(flat)
+    return out
+
+
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description="Regenerate the diagram pool renders, cache-short-circuited.")
     ap.add_argument("--main-repo", default=None, help="git repo whose .gitignore decides Mode A vs B (default: the checkout this file is in)")
@@ -236,6 +264,11 @@ def main(argv: list[str] | None = None) -> int:
                 f"a frozen exhibit's render cannot be faithfully regenerated once the engine has drifted, so it is NOT healed here; "
                 f"the frozen renders are committed (GM 2026-08-16), so restore the file with git checkout rather than re-running the gen"
             )
+    for orphan in stale_flat_renders(args.skill_dir):
+        print(
+            f"  ORPHAN {os.path.relpath(orphan, args.skill_dir)} - a render at the PRE-161 flat path, beside the map's own "
+            f"folder. Nothing writes it any more and nothing ignores it; it is safe to delete."
+        )
     # The pool index is derived from the same tree the renders live in, so refresh it whenever the
     # renders are refreshed - this is what keeps main's index.html current (GM 2026-08-15).
     index_path = pool_index.write_index(args.skill_dir)

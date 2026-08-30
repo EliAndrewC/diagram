@@ -1,0 +1,6 @@
+{
+  "utc": "20260830T010323Z",
+  "guard": "pair-hooks",
+  "what": "gate alone",
+  "reason": "settlement-review is N/A: no manifest or render changed - this delta adds a REPORT-ONLY warning about files orphaned by the directory move, and the GM"
+}
