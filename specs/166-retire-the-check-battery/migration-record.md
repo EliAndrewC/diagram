@@ -64,6 +64,10 @@ box" - measuring the wrong one made every seat look illegal and the fallback too
 | `village_windbreak_scales_with_cluster` | same suite (a 12-house cluster gets more belt than a 3-house one) | same mutation -> RED |
 | `village_windbreak_is_continuous` | same suite (the belt spans a ragged fringe rather than one lobe) | same mutation -> RED |
 
+| `tree_crowns_not_subsumed` | `tests/settlement/test_canopy_seating.py` | `_crown_seat_clear` made to allow everything -> RED |
+| `structures_clear_of_trees` | same module (`_crown_covers` over a recorded roof) | - |
+| `wells_clear_of_trees` | same module (`_crown_covers` over a wellhead) | - |
+
 ## Already carried by an existing test - dropped against it, not rewritten
 
 | check | carried by | proof |
