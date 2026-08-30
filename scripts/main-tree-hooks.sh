@@ -79,6 +79,22 @@ case "${CWD%/}" in
   "$MAIN"|"$MAIN"/*) STANDING_IN_MAIN=yes ;;   # the mirror root, or anywhere else inside main's tree
 esac
 
+# GUARD_EDIT_OK: feature 172 - FIXING A GUARD THAT FIRED ON CORRECT WORK, mine, within the hour. A
+# command that LEAVES main before writing is safe, and the first version refused it: the session's cwd
+# was the mirror (a previous command had ended there), the command opened `cd <clone> && ...`, and
+# every write after that `cd` lands in the clone. Judging by the payload's cwd alone cannot see that.
+# So a `cd` OUT of main, at a command position, moves the effective directory before the write test -
+# which is the same reasoning as the leak this guard exists for, applied in the other direction.
+if [ "$STANDING_IN_MAIN" = yes ]; then
+  LEAVES=$(printf '%s' "$SCAN" | grep -oE "(^|[;&|]|&&)[[:space:]]*cd[[:space:]]+\"?[^\"[:space:];&|]+" | tail -1 | sed 's/.*cd[[:space:]]*"\?//')
+  case "$LEAVES" in
+    "") ;;                                    # no cd at all - the command runs where the session stands
+    "$MAIN"/.clones/*) STANDING_IN_MAIN=no ;; # into a clone: a workspace
+    "$MAIN"|"$MAIN"/*) ;;                     # deeper into main, or back to its root - still main
+    /*) STANDING_IN_MAIN=no ;;                # an absolute path outside main entirely
+  esac
+fi
+
 if [ "$STANDING_IN_MAIN" = no ]; then
   printf '%s' "$SCAN" | grep -qE "(^|[;&|]|&&)[[:space:]]*cd[[:space:]]+\"?${MAIN}/?\"?([[:space:]]*(;|&&|\||$))" || exit 0
 fi
