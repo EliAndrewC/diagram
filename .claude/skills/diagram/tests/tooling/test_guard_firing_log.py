@@ -51,14 +51,15 @@ CASES = [
 def test_a_guard_records_the_rule_that_fired(tmp_path, guard: str, payload: str, event: str, rule: str) -> None:
     subprocess.run(
         [str(SCRIPTS / f"{guard}-hooks.sh"), "pretool"],
-        input=payload, capture_output=True, text=True, check=False,
+        input=payload,
+        capture_output=True,
+        text=True,
+        check=False,
         env={"PATH": "/usr/bin:/bin", "HOME": str(tmp_path), "GUARD_LOG_DIR": str(tmp_path / "log")},
     )
     entries = [json.loads(f.read_text()) for f in sorted((tmp_path / "log").glob("*.json"))]
     assert entries, f"{guard} recorded nothing for the {rule} case"
-    assert any(e["event"] == event and e["rule"] == rule for e in entries), (
-        f"{guard} recorded {[(e['event'], e['rule']) for e in entries]}, wanted ({event}, {rule})"
-    )
+    assert any(e["event"] == event and e["rule"] == rule for e in entries), f"{guard} recorded {[(e['event'], e['rule']) for e in entries]}, wanted ({event}, {rule})"
 
 
 def test_the_gm_s_source_block_records_both_the_refusal_and_the_escape(tmp_path) -> None:
@@ -76,8 +77,12 @@ def test_the_gm_s_source_block_records_both_the_refusal_and_the_escape(tmp_path)
     def run(new_string: str, log: str) -> int:
         payload = _payload(_tool="Edit", file_path=str(note), old_string="the GM wrote this", new_string=new_string)
         return subprocess.run(
-            [str(SCRIPTS / "source-block-hooks.sh"), "pretool"], input=payload, capture_output=True,
-            text=True, check=False, env={**env, "GUARD_LOG_DIR": str(tmp_path / log)},
+            [str(SCRIPTS / "source-block-hooks.sh"), "pretool"],
+            input=payload,
+            capture_output=True,
+            text=True,
+            check=False,
+            env={**env, "GUARD_LOG_DIR": str(tmp_path / log)},
         ).returncode
 
     def entry(log: str) -> dict:
@@ -104,6 +109,4 @@ def test_every_recording_guard_names_a_rule_rather_than_defaulting() -> None:
         assert calls, f"{guard} has no guard_log call at all"
         for call in calls:
             body = call.split("guard_log ", 1)[1]
-            assert len(body.split('"')) > 2 or len(body.split()) >= 4, (
-                f"{guard} logs without a rule slug, so its branches cannot be told apart: {call.strip()}"
-            )
+            assert len(body.split('"')) > 2 or len(body.split()) >= 4, f"{guard} logs without a rule slug, so its branches cannot be told apart: {call.strip()}"

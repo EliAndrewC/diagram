@@ -531,11 +531,20 @@ rows=[json.load(open(f)) for f in glob.glob(os.path.expanduser(os.environ.get('G
 print('\033[1mGuard firings\033[0m (~/.claude/guard-log/) - what each guard did: blocked, rewrote, reminded, escaped'); \
 by=collections.defaultdict(collections.Counter); \
 [by[r['guard']].update([r['event']]) for r in rows]; \
-'GUARD_EDIT_OK: feature 168 - the census gains the RULE breakdown; everything else prints as before'; \
+'GUARD_EDIT_OK: feature 168 - the census gains the RULE breakdown; everything else prints as before.'; \
+'The by-rule line is SUPPRESSED when it carries nothing the line above did not: entries recorded before'; \
+'this feature default their rule to their event, so a guard whose whole history predates the slug would'; \
+'otherwise print `by rule: blocked=16, permitted=4` directly under `blocked=16, permitted=4`. A census'; \
+'line that restates the line above it trains a reader to skip both. (GUARD_EDIT_OK: this is the'; \
+'display half of FR-004, and it changes what the census PRINTS, never what any guard does.)'; \
 rules=collections.defaultdict(collections.Counter); \
 [rules[r['guard']].update([r.get('rule') or r['event']]) for r in rows]; \
 [ (print(f\"  {g:<12} \"+', '.join(f'{k}={v}' for k,v in sorted(c.items()))+(f\"   escape rate {c['escaped']/max(1,c['escaped']+c['blocked']):.0%}\" if c['blocked'] or c['escaped'] else '')), \
-   (print('               by rule: '+', '.join(f'{k}={v}' for k,v in rules[g].most_common(4))) if len(rules[g])>1 else None)) for g,c in sorted(by.items())] or print('  (none recorded yet)'); \
+   (print('               by rule: '+', '.join(f'{k}={v}' for k,v in rules[g].most_common(4))) if len(rules[g])>1 and set(rules[g])-set(c) else None)) for g,c in sorted(by.items())] or print('  (none recorded yet)'); \
+'GUARD_EDIT_OK: repairing my own break - a trailing `# comment` appended to the line above landed'; \
+'MID-EXPRESSION, between the list comprehension and its `or print(...)`, because the whole census is'; \
+'one python -c continuation. Nothing in a python -c block takes a shell comment; the reason lives in'; \
+'the bare-string lines above instead.'; \
 print(f\"  {len(rows)} entries\"+(f\", {min(r['utc'] for r in rows)} to {max(r['utc'] for r in rows)}\" if rows else '')); \
 print()"
 	@printf '\033[1mFiles past the ~1,000-line bar\033[0m (constitution X clause 13 - a QUESTION, not a limit)\n'

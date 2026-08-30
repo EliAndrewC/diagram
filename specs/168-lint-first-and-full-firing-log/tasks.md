@@ -68,6 +68,16 @@ measurements in [`research.md`](research.md).
       verify: R5 - running the suites of every recording guard leaves the real log at 91 entries,
       unchanged
 
-- [ ] T11 the whole guard suite and the gate, green together
+- [x] T11 the whole guard suite and the gate, green together
       research: procedure
-      verify: `make hooks-test` all suites green; `make done` green; recorded in the commit
+      verify: `make done` green (2804 passed, 2 skipped) and `make hooks-test` green - 19 suites
+      on the first run, then 4 re-run and 15 unchanged after the clone-sync fix, hooks area stamped
+
+- [x] T12 defect found while blocked BY a guard, fixed here (Principle XIV): `clone-sync-hooks.sh`
+      compared every clean clone against the MIRROR's HEAD, so one stray commit in main's tree
+      refused every session and sent each at `sync-in`, which fetches GitHub, finds nothing new and
+      reports success. It now asks whether the mirror's HEAD is on `origin/main` first, and when it
+      is not, names the stray commit and gives the recovery
+      research: procedure
+      verify: R7; four new cases in `scripts/test-clone-sync-hooks.sh`, asserting on the MESSAGE -
+      which is what exposed two fixtures of my own that proved nothing

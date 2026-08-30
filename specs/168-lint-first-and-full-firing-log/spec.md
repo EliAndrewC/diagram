@@ -155,3 +155,22 @@ own tests answers nothing, and that has already happened once (24 entries).
 | the in-scope set is a CRITERION, derived at implementation time | a hand-list went stale inside one session - the first draft described the tree as it was before feature 164 | FR-002 |
 | an entry names the RULE, not just the guard | the GM's "record more data ... to make improvements"; a future fix acts on a rule | FR-003 |
 | the gate's rising median is NOT touched here | the GM handed it to another session | Scope |
+
+## Review history
+
+Constitution XVI: reviewed against the GM's request AS WRITTEN (`request.md`), by an independent
+`spec-fidelity` subagent, before implementation - three rounds.
+
+| round | verdict | what it found |
+|---|---|---|
+| 1 | CHANGES REQUIRED | the census of which guards already record described the tree as it was BEFORE this same session's feature 164, which had added recording to five more; and FR-004 re-specified a census line feature 162 had already built. Fixed: the in-scope set became a derived CRITERION, and FR-004 shrank to the actual delta |
+| 2 | CHANGES REQUIRED | the list of recording verbs omitted ESCAPED - the escape RATE is the lever this project has actually acted on (feature 162 retired a refusal escaped 62% of the time) - and `idle-tests` and `review-gate` were missing from the scope discussion. Fixed: the escape branch runs throughout, and `idle-tests` is ruled out of class with its reason |
+| 3 | **FAITHFUL** | final round, verdict FAITHFUL: clause-by-clause against the request, both directions. It independently checked the one carve-out rather than accepting the argument - reading `scripts/idle-tests-hooks.sh` for an `exit 2`, an `updatedInput` or an `additionalContext`, finding none, and confirming `idle-tests` is a runner rather than an exception to the rule |
+
+**One note from round 3, recorded because it is a real tension rather than a fidelity defect.**
+SC-001 says a static failure is *"reported without the roll"*, which reads as fail-fast, while FR-001
+says *"only the order moves"* and this repository's standing rule is that `make done` reports all
+failures together. The implementation satisfies both, and deliberately: the three static phases run
+as a group and are collected together, so a run that breaks two of them reports both; the gate then
+stops before the reference roll rather than continuing. If the two are ever read against each other,
+FR-001 is the binding one.

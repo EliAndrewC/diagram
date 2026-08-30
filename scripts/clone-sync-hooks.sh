@@ -218,8 +218,32 @@ case $MODE in
     # until a fetch), and both of those mean stale.
     main_head=$(git -C "$MAIN" rev-parse HEAD 2>/dev/null)
     if [ -n "$main_head" ] && ! git -C "$clone" merge-base --is-ancestor "$main_head" HEAD 2>/dev/null; then
+      # GUARD_EDIT_OK: feature 168 - FIXING A GUARD THAT SENDS YOU AT A COMMAND THAT CANNOT HELP.
+      #
+      # THE MIRROR IS NOT ALWAYS MAIN. `/diagram` only ever fast-forwards from GitHub, so its HEAD
+      # normally IS main's tip - but a session that lets a bare `cd /diagram` leak into its next
+      # command commits INTO the mirror, and that commit then exists on no branch anywhere else.
+      # From that moment this check compares every clean clone against a commit GitHub main does not
+      # have, and tells all of them to run `sync-in` - which fetches GitHub, finds nothing new,
+      # reports success and changes nothing. The session is blocked from every edit with no route
+      # forward, and the advice it was handed amounts to building ON the stray commit, which is the
+      # one thing the mirror rule forbids.
+      #
+      # Measured 2026-08-30: it happened TWICE in one day, both times the bare-`cd` leak CLAUDE.md
+      # documents and deliberately leaves unenforced, and the second one blocked a peer session until
+      # it worked out from outside what had happened. So ask the mirror whether its HEAD is on GitHub
+      # main before believing it; when it is not, name the real problem and say who owns it. Nothing
+      # about a genuinely stale clone changes - that refusal is below, untouched.
+      if git -C "$MAIN" rev-parse --verify -q origin/main >/dev/null 2>&1 \
+         && ! git -C "$MAIN" merge-base --is-ancestor "$main_head" origin/main 2>/dev/null; then
+        echo "BLOCKED: the mirror $MAIN is carrying a commit GitHub main does not have ($(git -C "$MAIN" log -1 --format='%h %s' 2>/dev/null)), so this clone cannot be judged against it - and \`sync-in\` will NOT fix it: it fetches GitHub, finds nothing new, and reports success." >&2
+        echo "That is a STRAY COMMIT in main's tree, almost always a bare \`cd /diagram\` that leaked into the next command (CLAUDE.md, 'NAME THE TREE IN THE COMMAND'). Main is an integration point, never a workspace, so no session may build on it." >&2
+        echo "It belongs to whoever made it. Do NOT reset it unless it is yours - the mirror's working tree may be the only copy. Find that session (ListAgents / SendMessage); the recovery that loses nothing is: format-patch or copy the content into THAT session's clone and commit it there, check \`git -C $MAIN status --porcelain\` for untracked files a reset would destroy, then \`git -C $MAIN reset --hard origin/main\`." >&2
+        cs_block stray-mirror-commit "$MAIN"
+        exit 2
+      fi
       echo "BLOCKED: $clone has a clean tree (a new work unit) but its HEAD is behind main - new work must not build on a stale base. Run: cd $clone && scripts/sync-with-main.sh sync-in   (CLAUDE.md 'Session clones' / sync-in rule)" >&2
-      cs_block stale-head "$clone"   # GUARD_EDIT_OK: feature 168
+      cs_block stale-head "$clone"
       exit 2
     fi
     exit 0

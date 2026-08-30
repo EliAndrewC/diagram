@@ -91,3 +91,53 @@ feature 167's fixtures. The fix carries the count in a comment at the point of c
 The failure mode is worth naming: the test did not silently pass while proving nothing - it went red
 loudly, because it asserts on an artifact the hook must WRITE. A fixture that asserts on a file's
 existence cannot be fooled by a wrong path; one that asserts on the absence of a failure can.
+
+## R7 - a guard that sent every session at a command that could not help
+
+Found while implementing this feature, and fixed in it (Principle XIV). It is not about the firing
+log; it is about a refusal whose ADVICE was wrong, which is the same failure class feature 164 was
+built to attack.
+
+**What happened.** `/diagram` (the mirror) only ever fast-forwards from GitHub, so its HEAD is
+normally main's tip - and `clone-sync-hooks.sh` compares every clean clone against it. Twice on
+2026-08-30 a session let a bare `cd /diagram` leak into its next command (the exact trap
+`CLAUDE.md` documents under "NAME THE TREE IN THE COMMAND", and deliberately leaves unenforced) and
+COMMITTED into the mirror. From that moment:
+
+- the mirror's HEAD was a commit GitHub main did not have, and no clone had the object;
+- every clean clone was refused on the stale-base check and told to run `sync-in`;
+- `sync-in` fetched GitHub, found nothing new, **reported success**, and changed nothing;
+- so the session was blocked from every edit with no route forward, and the only advice it had been
+  given amounted to building ON the stray commit - the one thing the mirror rule forbids.
+
+Measured from the second occurrence: two sessions, ~20 minutes, and it took reading `origin/main`
+against the mirror's HEAD by hand to work out what had happened.
+
+**The fix.** Before believing the mirror, ask whether its HEAD is on `origin/main`. If it is not,
+say so: name the stray commit, say plainly that `sync-in` will not fix it, say that main is an
+integration point and no session may build on it, and give the recovery - into the OWNING session's
+clone, because the mirror's working tree may be the only copy of that work. A genuinely stale clone
+is unaffected; that refusal is untouched below the new branch.
+
+**Proof it fires.** Better than a synthetic one: the real incident produced the OLD message
+verbatim, twenty minutes before the fix, and that message is exactly what the new test now forbids
+for this scenario. The suite builds a bare "GitHub", a mirror cloned from it and a clone of the
+mirror, and asserts four things - the clean case is allowed, the stray commit blocks, the refusal
+names the stray commit and says `sync-in` cannot fix it, and a genuinely stale clone against a clean
+mirror still gets the ordinary `sync-in` refusal.
+
+**Two fixture defects on the way there, both of the kind that report success while proving nothing**
+(the same family as `specs/167-portable-roll-cache/` R6):
+
+1. `git init --bare` leaves HEAD on `master`, so cloning it produced a mirror with **no
+   `origin/main` at all** - the new branch could never have fired, and the test would have "passed"
+   against the fallback if it had asserted only on the exit code. It asserts on the MESSAGE, so it
+   went red. `symbolic-ref HEAD refs/heads/main` on the bare repo fixes it.
+2. `FMAIN4` was already in use by an unrelated fixture 45 lines above, so `git clone` failed with
+   *"destination path already exists"* and my scenario silently ran against **someone else's
+   repository**. Renamed to `FSTRAY`/`main-stray`. Nothing about this was visible in the exit codes;
+   the message assertion is what exposed it.
+
+The rule both of those teach, and it is the one this session keeps re-learning: **assert on the
+artifact the code must PRODUCE, not on the absence of a failure.** A test that asserts an exit code
+passes for the wrong reason; a test that asserts the text cannot.
