@@ -11,7 +11,23 @@ generated.
 
 **Status: hamlet tier converted (one archetype of five). Everything above hamlet is hand-authored -
 and the whole hand-authored pool is FROZEN as of 2026-08-16 (section 2): exhibits, not maintained
-artifacts.** Last updated 2026-08-16.
+artifacts.** Last updated 2026-08-30.
+
+**THE FREEZE IS NOW VISIBLE IN THE LAYOUT (feature 161, 2026-08-30).** The pool used to be one tree
+in which a frozen exhibit and a live scripted map sat side by side, distinguishable only by opening
+a file. It is now two, each `<tree>/<tier>/<map>/` with one folder per map:
+
+| tree | holds | regenerated | renders |
+|---|---|---|---|
+| `pool/` | the 5 scripted hamlets + the 5 Mode A magistracies | every run | derived, gitignored |
+| `legacy-hand-authored-pool/` | the 18 frozen hand-authored Mode B maps | **never** | committed write-once |
+
+`pool/villages/`, `pool/towns/` and `pool/provincial-cities/` no longer exist - every map they held
+was frozen. **A CONVERSION NOW MOVES A MAP BETWEEN TREES**: `git mv` its folder from
+`legacy-hand-authored-pool/<tier>/<map>/` to `pool/<tier>/<map>/`, and its renders become derived
+and ignored automatically - there is no ignore line to add or delete either way, because the rules
+are per-tree patterns rather than the 36 per-file exemptions they replaced. See section 5, criterion
+4.
 
 ---
 
@@ -63,7 +79,7 @@ gets fixed when its type is converted. Retrofitting by hand is the cost this pro
 paying. Record the decision in the map's `.notes.md` so nobody re-discovers it as a bug.
 
 **Extended to a full FREEZE** (GM, 2026-08-16): the hand-authored pool is no longer regenerated OR
-re-gated at all. The 19 legacy Mode B maps keep their committed .json/.svg/.png as permanent
+re-gated at all. The 18 legacy Mode B maps keep their committed .json/.svg/.png as permanent
 exhibits (still in `pool/index.html`), the `tests/test_villages.py` sweep covers scripted maps only, and
 `pipeline/regen.py` refuses a legacy gen (`FROZEN`; `--frozen-ok` overrides). `pipeline/poolmaps.py` is the
 classification all three tools share. What this buys: iteration on placement rules and checks costs
@@ -115,7 +131,11 @@ STARTED = partial. NOT STARTED = hand-authored only.
 | `mulberry_dike_fishpond` | **FITTED** (feature 150, 2026-08-27) | Kuwabata (seed 21, 16 hh) generates from a declaration and passes the gate; built as the polder carried to the wholesale `mulberry_fishpond` overlay, with the `pond_layout` grid/mosaic knob. Cohort OWED at unlock (scope locked) | Kuwabata (CONVERTED - the hand-authored script is in git history before 2026-08-27) |
 | overlays (`mulberry_fishpond`, `lotus`, `tea_fringe`) | STARTED | the generator drives `apply_land_use` for the dike-pond's wholesale case (feature 150); the SCATTERED overlays a paddy hamlet may carry are not yet rolled | Honda, Shimizu |
 
-Generated so far: Inashiro, Kashikawa, Mizuguchi, Sawada, Kuwabata (`pool/hamlets/`, beside the hand-authored hamlets - the pool is foldered by tier, and `meta.generated_by` marks the scripted maps).
+Generated so far: Inashiro, Kashikawa, Mizuguchi, Sawada, Kuwabata - each in its own folder under
+`pool/hamlets/`. Since feature 161 they no longer sit beside the hand-authored hamlets: those eight
+(Akagahara, Enokida, Honda, Ikegami, Moritono, Shimizu, Tanada, Yatsuda) are in
+`legacy-hand-authored-pool/hamlets/`. `meta.generated_by` still marks a scripted map, but the tree
+now says it first.
 
 ### Above hamlet
 
@@ -152,8 +172,12 @@ document is deliberately NOT a spec-kit feature: it outlives all of them.
    `pool/` stays clean apart from the maps you meant to change). When the conversion of a TIER
    lands, its legacy exemplars stay frozen as exhibits; raise the Makefile's
    `SETTLEMENT_COV_FLOOR` to cover the tier's newly re-exercised engine wing. And when a legacy
-   MAP is itself converted (superseded by a scripted version), remove its committed renders from
-   git (`git rm` the svg/png, delete its `!` lines in `.gitignore`) - see section 2.
+   MAP is itself converted (superseded by a scripted version), **move its folder into `pool/`**
+   (`git mv legacy-hand-authored-pool/<tier>/<map> pool/<tier>/<map>`). Its renders stop being
+   committed exhibits and become derived-and-ignored by the move alone: since feature 161 the ignore
+   rules are per-tree patterns, so there are no `!` lines to delete and no new ones to add. The old
+   instruction here - `git rm` the svg/png and delete its two `!` lines - described the pre-161
+   single-tree layout and no longer applies.
 5. **`make done` is green** - ruff, format, pyrefly (mypy-strict rules), pytest, 100% coverage.
 6. **A `settlement-review` pass on at least one generated map.** The gate cannot see glyph
    legibility, feature FORM, or whether the map reads as a distinct place. The author is not a

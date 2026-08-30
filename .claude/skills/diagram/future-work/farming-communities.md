@@ -981,7 +981,7 @@ wells, the board's clump keep-out, the lane-crossing guards).
 ## Review residue from the shared-bund re-roll (settlement-review + cohort, 2026-08-17)
 
 Both items are the CARVE's fan-toe geometry, not the seam pass that surfaced them, and both are
-measured rather than impressionistic. Full context in `pool/hamlets/inashiro.notes.md` (2026-08-17)
+measured rather than impressionistic. Full context in `pool/hamlets/inashiro/inashiro.notes.md` (2026-08-17)
 and `research/fields.md` "Bunds are shared, and the fabric is continuous".
 
 ### OPEN, each with its measurement: four things the 2026-08-18 review round raised and left
@@ -2089,7 +2089,7 @@ what share, is a question the record can answer. The bamboo the maps DO draw is 
 - **`village_windbreak_is_continuous`** counts the RECORD, not the ink, by deliberate design (feature 137
   T05's own comment). So a belt drawn 57 px short of the page - 37 recorded clumps standing inside the
   visible frame undrawn, measured on Sawada - passes by construction. The trim-versus-final-crop mechanism
-  is written up in `pool/hamlets/sawada.notes.md`.
+  is written up in `pool/hamlets/sawada/sawada.notes.md`.
 
 Both are the shape this project has written down twice: *a check that never RUNS looks exactly like a check
 that passes*. `research: rendering` for the companion checks; the woodland seat question is `physical`.

@@ -725,7 +725,7 @@ or scholarly, was found putting that economy on tameike margins, and extending i
 sources do not make. If it is ever wanted, that is the search to run.
 
 **Still open.** Whether the record distinguishes the vegetation of a DIKED polder's wet foot from an
-UNDIKED valley toe - the question already parked in `pool/hamlets/kuwabata.notes.md`. The adjacent
+UNDIKED valley toe - the question already parked in `pool/hamlets/kuwabata/kuwabata.notes.md`. The adjacent
 river-engineering vocabulary exists (堤外地, the unprotected land outside a flood levee, whose default
 vegetation in that literature is reed bed, against 堤内地, the protected land), but nothing read compares a
 paddy dike's foot to a valley toe as such. NOT-FOUND rather than silent: the search was run and named it.

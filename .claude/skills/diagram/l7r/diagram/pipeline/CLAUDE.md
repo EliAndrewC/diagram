@@ -6,9 +6,9 @@ diagnostics ([`../tools/`](../tools/CLAUDE.md)).
 
 Run these as modules, from the skill root:
 
-    python3 -m l7r.diagram.pipeline.regen pool/hamlets/sawada.gen.py       # ~20s cold, ~1s cached
+    python3 -m l7r.diagram.pipeline.regen pool/hamlets/sawada/sawada.gen.py       # ~20s cold, ~1s cached
     python3 -m l7r.diagram.pipeline.regen pool/*/*.gen.py                  # every LIVE map, fanned out
-    python3 -m l7r.diagram.pipeline.regen --no-cache pool/hamlets/inashiro.gen.py
+    python3 -m l7r.diagram.pipeline.regen --no-cache pool/hamlets/inashiro/inashiro.gen.py
 
 | module | what it is | measured for coverage |
 |---|---|---|

@@ -19,9 +19,9 @@ FROZEN" in [`pool.md`](pool.md):
 **...or let the CACHE skip the work entirely** (2026-08-08). `pipeline/regen.py` regenerates a map only if
 something that map depends on actually changed, and prints `CACHED` or `REGENERATED` every time:
 
-    python3 -m l7r.diagram.pipeline.regen pool/hamlets/sawada.gen.py              # ~20s cold, ~1s cached
+    python3 -m l7r.diagram.pipeline.regen pool/hamlets/sawada/sawada.gen.py              # ~20s cold, ~1s cached
     python3 -m l7r.diagram.pipeline.regen pool/*/*.gen.py                         # every LIVE map, fanned out (frozen legacy maps print FROZEN, skipped)
-    python3 -m l7r.diagram.pipeline.regen --no-cache pool/hamlets/inashiro.gen.py # force the work
+    python3 -m l7r.diagram.pipeline.regen --no-cache pool/hamlets/inashiro/inashiro.gen.py # force the work
 
 Multi-map runs fan out across worker processes (cpus minus 2; `--jobs 1` for serial), as do
 `tools/cohort_audit.py` and `python3 -m l7r.diagram.hamletgen --batch`. The audit since 2026-08-15, when the

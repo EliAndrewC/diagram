@@ -233,7 +233,7 @@ rolled maps. Marking is `@pytest.mark.rolls_map`, guarded by `tests/test_markers
 
 **The pool** ([`dev/pool.md`](dev/pool.md))
 
-- **The legacy pool is FROZEN.** The 19 hand-authored maps are permanent exhibits: never regenerated,
+- **The legacy pool is FROZEN.** The 18 hand-authored maps are permanent exhibits: never regenerated,
   never re-gated, renders committed. The fix for a frozen map that breaks a post-freeze rule is
   CONVERSION, not retrofit - do not "fix" one, and do not treat its violations as bugs.
 - New rules ship un-gated; engine changes no longer need byte-identity flags.

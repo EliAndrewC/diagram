@@ -56,14 +56,14 @@ OUT=$(syncmain "$D" sync-in --mirror-only); check "sync-in --mirror-only" 0 $?
 
 echo "2b. sync-in refreshes the CLONE's pool index on both branches, only when it is stale"
 D=$(topology b2)
-mkdir -p "$D/main/.clones/c/.claude/skills/diagram/pool/hamlets"
-printf 'pool-index:\n\t@echo built >> pool/index.html\npool-index-if-stale:\n\t@if [ ! -f pool/index.html ] || [ -n "$$(find pool -newer pool/index.html \\( -name "*.json" -o -name "*.png" -o -name "*.notes.md" \\) -print -quit)" ]; then $(MAKE) --no-print-directory pool-index; fi\n' > "$D/main/.clones/c/.claude/skills/diagram/Makefile"
+mkdir -p "$D/main/.clones/c/.claude/skills/diagram/pool/hamlets/x"
+printf 'pool-index:\n\t@echo built >> pool/index.html\npool-index-if-stale:\n\t@if [ ! -f pool/index.html ] || [ -n "$$(find pool legacy-hand-authored-pool -newer pool/index.html \\( -name "*.json" -o -name "*.png" -o -name "*.notes.md" \\) -print -quit 2>/dev/null)" ]; then $(MAKE) --no-print-directory pool-index; fi\n' > "$D/main/.clones/c/.claude/skills/diagram/Makefile"
 IDX="$D/main/.clones/c/.claude/skills/diagram/pool/index.html"
 OUT=$(syncmain "$D" sync-in --mirror-only); check "mirror-only sync-in with no index" 0 $?
 [ "$(cat "$IDX" 2>/dev/null)" = "built" ] && PASS=$((PASS+1)) || { echo "FAIL  missing index was not built on the dirty-clone branch"; FAIL=$((FAIL+1)); }
 OUT=$(syncmain "$D" sync-in); check "sync-in with a fresh index" 0 $?
 [ "$(cat "$IDX")" = "built" ] && PASS=$((PASS+1)) || { echo "FAIL  fresh index was rebuilt (efficiency check did not hold)"; FAIL=$((FAIL+1)); }
-touch -d '-10 seconds' "$IDX"; echo '{}' > "$D/main/.clones/c/.claude/skills/diagram/pool/hamlets/x.json"
+touch -d '-10 seconds' "$IDX"; echo '{}' > "$D/main/.clones/c/.claude/skills/diagram/pool/hamlets/x/x.json"
 OUT=$(syncmain "$D" sync-in); check "sync-in after a manifest changed" 0 $?
 [ "$(cat "$IDX")" = "$(printf 'built\nbuilt')" ] && PASS=$((PASS+1)) || { echo "FAIL  stale index was not rebuilt: $(cat "$IDX")"; FAIL=$((FAIL+1)); }
 

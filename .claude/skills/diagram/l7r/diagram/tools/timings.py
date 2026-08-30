@@ -123,8 +123,8 @@ def bench_cache(outdir: str) -> Result:
     hold and reports it as the cache's speed. The subject moved from frozen Minami to Sawada at
     the 2026-08-16 legacy freeze - a frozen map just prints FROZEN in 0.1 s, which the first
     post-freeze ledger block duly recorded as the finding."""
-    cold, ok_a, _ = sh([PY, "-m", "l7r.diagram.pipeline.regen", "--no-cache", "pool/hamlets/sawada.gen.py"], NO_RENDER)
-    warm, ok_b, out = sh([PY, "-m", "l7r.diagram.pipeline.regen", "pool/hamlets/sawada.gen.py"], NO_RENDER)
+    cold, ok_a, _ = sh([PY, "-m", "l7r.diagram.pipeline.regen", "--no-cache", "pool/hamlets/sawada/sawada.gen.py"], NO_RENDER)
+    warm, ok_b, out = sh([PY, "-m", "l7r.diagram.pipeline.regen", "pool/hamlets/sawada/sawada.gen.py"], NO_RENDER)
     hit = "CACHED" in out
     return Result(
         "map_regen_sawada",

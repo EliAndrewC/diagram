@@ -33,6 +33,15 @@ _ENGINE_DIRS: tuple[tuple[str, tuple[str, ...]], ...] = (
     # outside gate-stamp's diagram area. The cost is recorded in the spec: a test edited after the last
     # green run lands unexecuted and runs on the next real gate. Feature 130's first cut had tests/ here.
     ("pool/", (".gen.py", ".json")),  # a generator, or a manifest (a generator's output under test)
+    # The FROZEN tree, so the merge route is byte-for-byte what it was before feature 161 moved the
+    # hand-authored maps out of pool/. Leaving it out would have been defensible - a frozen exhibit
+    # can never change again, so a change to one owes no build - but that is a change to how the
+    # repository MERGES, and making it as a side effect of a directory move is exactly the quiet
+    # scope expansion Principle XVI exists to stop. If it is ever wanted it is a one-line deletion
+    # with its own reasoning. Note the direction is OPPOSITE to the engine-fingerprint prune lists
+    # in render_cache/gencache, which must EXCLUDE this tree: those ask "is this engine SOURCE"
+    # (a map generator is not), this asks "does this delta owe the paid gate".
+    ("legacy-hand-authored-pool/", (".gen.py", ".json")),
 )
 # Subtrees of l7r/ that are NOT engine either (feature 132 FR-025, GM 2026-08-25): the ci package is
 # tooling that decides whether the tests need to run - *"the engine itself isn't using it ... which

@@ -25,8 +25,8 @@ the feature belongs, not earlier.
 
 The other half of the same lesson. `open_seat` answers "where does this fit?"; **[`tools/why_placed.py`](../l7r/diagram/tools/why_placed.py)** answers *"who put this here?"* and *"what refused to put anything here?"* - the two questions you actually have when a map comes out wrong.
 
-    python3 -m l7r.diagram.tools.why_placed pool/provincial-cities/nagahara.gen.py --at 1102.6,1429.5
-    python3 -m l7r.diagram.tools.why_placed pool/provincial-cities/nagahara.gen.py --refused 1102.6,1429.5 --radius 12
+    python3 -m l7r.diagram.tools.why_placed legacy-hand-authored-pool/provincial-cities/nagahara/nagahara.gen.py --at 1102.6,1429.5
+    python3 -m l7r.diagram.tools.why_placed legacy-hand-authored-pool/provincial-cities/nagahara/nagahara.gen.py --refused 1102.6,1429.5 --radius 12
 
 `--at` prints every manifest record appended within the radius **with its call chain** - the gen
 line to go and look at, and the engine method under it that chose the spot. `--refused` prints how
@@ -57,8 +57,8 @@ outside the wall, on the way out, past the boundary stone, clear of the communit
 farmland, on the outcast side, clear of every structure, and inside the map's current view. Use
 [`tools/site_justice.py`](../l7r/diagram/tools/site_justice.py):
 
-    python3 -m l7r.diagram.tools.site_justice pool/provincial-cities/nagahara.json execution_ground --limit=25
-    python3 -m l7r.diagram.tools.site_justice pool/towns/hirameki.json boundary_marker --ground=1620,1900
+    python3 -m l7r.diagram.tools.site_justice legacy-hand-authored-pool/provincial-cities/nagahara/nagahara.json execution_ground --limit=25
+    python3 -m l7r.diagram.tools.site_justice legacy-hand-authored-pool/towns/hirameki/hirameki.json boundary_marker --ground=1620,1900
 
 It proposes seats **cheapest-on-the-frame first** (`frame_cost=0` means the crop is unchanged by
 that seat) and adjudicates each one by building a trial manifest and running `check_village.gate()`
@@ -110,9 +110,9 @@ the next turn. A footbridge review that touched 3 maps should be ~2 turns of ima
 **Use [`tools/crop_map.py`](../l7r/diagram/tools/crop_map.py) rather than re-writing the arithmetic** - it reads the viewBox
 itself and takes as many regions as you like in one invocation, which is the batching win made easy:
 
-    python3 -m l7r.diagram.tools.crop_map pool/towns/hoshizora 1600,900,220 1200,400,150   # x,y,radius (world coords)
-    python3 -m l7r.diagram.tools.crop_map pool/hamlets/moritono --box 2100,150,2418,760 --zoom 1.5
-    python3 -m l7r.diagram.tools.crop_map pool/villages/ueda --whole --zoom 0.4            # whole map, downscaled
+    python3 -m l7r.diagram.tools.crop_map legacy-hand-authored-pool/towns/hoshizora/hoshizora 1600,900,220 1200,400,150   # x,y,radius (world coords)
+    python3 -m l7r.diagram.tools.crop_map legacy-hand-authored-pool/hamlets/moritono/moritono --box 2100,150,2418,760 --zoom 1.5
+    python3 -m l7r.diagram.tools.crop_map legacy-hand-authored-pool/villages/ueda/ueda --whole --zoom 0.4            # whole map, downscaled
 
 It prints one path per line - feed them straight to Read, together. (The conversion is
 `(coord - viewBox_origin) * (png_w / viewBox_w)`; it was hand-written five times in one session,

@@ -57,7 +57,7 @@ each addition strengthens finding 1 rather than weakening it. Building COUNT is 
 
 **The trigger is a Mode A GENERATOR, not a Mode A count.** The day drawing a building type feels
 like "given knobs X, Y, Z, lay out the estate" rather than hand-authoring from
-`pool/magistracies/ochiba-magistracy.svg` - concretely, the day a `.gen.py` appears in a Mode A
+`pool/magistracies/ochiba-magistracy/ochiba-magistracy.svg` - concretely, the day a `.gen.py` appears in a Mode A
 pool directory the way `hamletgen` appeared for hamlets - Mode A acquires its own knobs, cohorts,
 manifests and checks, and starts wanting its own scope lock, perf bookends and gate phases.
 

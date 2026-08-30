@@ -134,4 +134,4 @@ unruled ink. The scale bar beside it keeps `cls="-"`.
 `tests/interactive/` - the registry (every entry complete, siblings closed and symmetric), the
 page (wrap, census, self-containment, present-only data), and the browser test (Playwright +
 Chromium, `rolls_map`: opens the reference hamlet's page from `file://` and drives hover, click and
-the modal). `make map GEN=pool/hamlets/inashiro.gen.py` writes the real page; open it in a browser.
+the modal). `make map GEN=pool/hamlets/inashiro/inashiro.gen.py` writes the real page; open it in a browser.

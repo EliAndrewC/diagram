@@ -54,7 +54,10 @@ for spec in $(printf '%s\n' "$changed" | grep -E '^specs/[^/]+/spec\.md$' || tru
 done
 
 # --- 2. a re-rolled pool map has a review logged beside it ------------------------------------
-for man in $(printf '%s\n' "$changed" | grep -E '^\.claude/skills/diagram/pool/.*\.json$' || true); do
+# BOTH TREES (feature 161). This is a PATTERN, not a walk: when the hand-authored maps moved to
+# legacy-hand-authored-pool/ a pattern anchored on `pool/` simply stopped matching them, with
+# nothing turning red - the guard would have quietly stopped covering the frozen tree.
+for man in $(printf '%s\n' "$changed" | grep -E '^\.claude/skills/diagram/(pool|legacy-hand-authored-pool)/.*\.json$' || true); do
   notes="${man%.json}.notes.md"
   [ -f "$notes" ] || continue          # a map with no notes file predates the convention
   if ! printf '%s\n' "$changed" | grep -qxF "$notes"; then

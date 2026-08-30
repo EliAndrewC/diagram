@@ -276,16 +276,16 @@ verify:         ## THE PAIRED RUN: start the gate and dispatch the settlement-re
 	@root=$$(git rev-parse --show-toplevel) && python3 -m l7r.diagram.ci engine-key worktree > "$$root/.git/pairing-key" || true  # NOT $(RUN): it carries a leading @, which is a literal argument once it is not at the start of a recipe line
 	@root=$$(git rev-parse --show-toplevel) && printf 'engine key %s\n' "$$(cut -c1-12 "$$root/.git/pairing-key" 2>/dev/null)"
 	@root=$$(git rev-parse --show-toplevel); \
-	  maps=$$(git -C "$$root" diff --name-only HEAD~1 HEAD -- '.claude/skills/diagram/pool/*/*.json' 2>/dev/null | sed 's#.*/##;s#\.json##' | tr '\n' ' '); \
+	  maps=$$(git -C "$$root" diff --name-only HEAD~1 HEAD -- '.claude/skills/diagram/pool/*/*/*.json' '.claude/skills/diagram/legacy-hand-authored-pool/*/*/*.json' 2>/dev/null | sed 's#.*/##;s#\.json##' | tr '\n' ' '); \
 	  printf 'maps whose manifest changed: %s\n' "$${maps:-none}"; \
 	  printf '\n\033[1mDISPATCH NOW\033[0m, in the same turn: settlement-review over%s, then let this gate run beside it.\n' " $${maps:-the delta}"
 	@printf '\nstarting the gate in the background - its verdict arrives as a task notification.\n\n'
 	@root=$$(git rev-parse --show-toplevel); PAIR_OK="started by make verify - the review is dispatched in the same turn" nohup $(MAKE) --no-print-directory done > "$$root/.git/verify-gate.log" 2>&1 &
 
 map: export L7R_STAGE_PROFILE = $(if $(PROFILE),1,)
-map:            ## regenerate ONE gen and gate it   GEN=pool/hamlets/inashiro.gen.py [PROFILE=1: where the roll spent its time]
+map:            ## regenerate ONE gen and gate it   GEN=pool/hamlets/inashiro/inashiro.gen.py [PROFILE=1: where the roll spent its time]
 	$(REF_FIRST)
-	$(RUN).pipeline.regen $(or $(GEN),pool/hamlets/inashiro.gen.py)
+	$(RUN).pipeline.regen $(or $(GEN),pool/hamlets/inashiro/inashiro.gen.py)
 	@$(MAKE) --no-print-directory pool-index-if-stale
 
 cohort:         ## roll N seeds and report every failure      N=48
@@ -329,7 +329,7 @@ pool-index:     ## rebuild the pool index
 # than the index or the index is missing. mtimes, not hashes: no state file to keep, and a false
 # "stale" costs half a second while a false "fresh" is impossible (a rewrite always bumps a mtime).
 pool-index-if-stale: ## rebuild the pool index only when a manifest, render or notes file is newer
-	@if [ ! -f pool/index.html ] || [ -n "$$(find pool -newer pool/index.html \( -name '*.json' -o -name '*.png' -o -name '*.notes.md' \) -print -quit)" ]; then \
+	@if [ ! -f pool/index.html ] || [ -n "$$(find pool legacy-hand-authored-pool -newer pool/index.html \( -name '*.json' -o -name '*.png' -o -name '*.notes.md' \) -print -quit 2>/dev/null)" ]; then \
 	  $(MAKE) --no-print-directory pool-index ARGS=; \
 	fi
 # (GUARD_EDIT_OK: adds a derived-artifact refresh, no gate or prompt is touched - GM 2026-08-27)
@@ -346,10 +346,10 @@ render-sync:    ## regenerate MAIN's renders (called by sync-with-main.sh; not f
 	$(RUN).pipeline.render_cache $(ARGS)
 
 # --- cheap: they READ a recorded artifact ----------------------------------------------------
-gate-manifest:  ## run the check battery on an existing manifest   M=pool/hamlets/inashiro.json
-	$(RUN).check_village $(or $(M),pool/hamlets/inashiro.json) $(ARGS)
+gate-manifest:  ## run the check battery on an existing manifest   M=pool/hamlets/inashiro/inashiro.json
+	$(RUN).check_village $(or $(M),pool/hamlets/inashiro/inashiro.json) $(ARGS)
 
-overlap-audit:  ## does A overlap B on a finished map (records AND drawn ink)   M=pool/hamlets/x.json [FAMILIES=...]
+overlap-audit:  ## does A overlap B on a finished map (records AND drawn ink)   M=pool/hamlets/x/x.json [FAMILIES=...]
 	$(RUN).tools.overlap_audit $(M) $(if $(FAMILIES),--families $(FAMILIES),)
 
 polder-probe:   ## the polder block ALONE with its geometry metrics, no map   SEED=21 | SEEDS=21,22 ARCHETYPE=...
@@ -374,13 +374,13 @@ scatter-audit:  ## is drawn ground cover standing where keep-outs should have st
 	$(RUN).tools.scatter_audit $(ARGS)
 
 notes-census:   ## refresh the derived counts inside each map's notes census block   M="pool/hamlets/*.json"
-	$(RUN).tools.notes_census $(or $(M),$(wildcard pool/*/*.json))
+	$(RUN).tools.notes_census $(or $(M),$(wildcard pool/*/*/*.json) $(wildcard legacy-hand-authored-pool/*/*/*.json))
 
-sun-audit:      ## the sun rules and the belt's page presence, off the manifest   M=pool/hamlets/inashiro.json
-	$(RUN).tools.sun_audit $(or $(M),pool/hamlets/inashiro.json)
+sun-audit:      ## the sun rules and the belt's page presence, off the manifest   M=pool/hamlets/inashiro/inashiro.json
+	$(RUN).tools.sun_audit $(or $(M),pool/hamlets/inashiro/inashiro.json)
 
-family-census:  ## which feature families one manifest records that another does not   A=pool/hamlets/inashiro.json B=pool/hamlets/kuwabata.json
-	$(RUN).tools.family_census --a $(or $(A),pool/hamlets/inashiro.json) --b $(or $(B),pool/hamlets/kuwabata.json)
+family-census:  ## which feature families one manifest records that another does not   A=pool/hamlets/inashiro/inashiro.json B=pool/hamlets/kuwabata/kuwabata.json
+	$(RUN).tools.family_census --a $(or $(A),pool/hamlets/inashiro/inashiro.json) --b $(or $(B),pool/hamlets/kuwabata/kuwabata.json)
 	@: "(GUARD_EDIT_OK: feature 150 - a read-only manifest census, the measured answer to 'does the converted map carry every reference-hamlet family')"
 
 new-check:      ## scaffold a gate check: segment stub, sorted fixture entry, test stub   NAME=... FILE=segments_*.py TEST=test_segments_*.py

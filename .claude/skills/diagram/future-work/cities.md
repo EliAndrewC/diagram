@@ -18,7 +18,7 @@ the tier's conversion.
 
 > **PREMISE RETIRED (audit 2026-08-24).** This entry assumes a NEXT hand-authored map: its fix
 > sketch says "extract the helper the next time a gate bundle is authored or moved". There will not
-> be one. The 19 hand-authored maps are FROZEN (never regenerated, never re-gated), and
+> be one. The 18 hand-authored maps are FROZEN (never regenerated, never re-gated), and
 > [`migration-plan.md`](migration-plan.md) makes conversion - not retrofit - the answer for every
 > tier above hamlet. So the TASK as written is dead.
 >
