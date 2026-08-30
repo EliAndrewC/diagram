@@ -124,6 +124,14 @@ differs by tier is the COUNT (a city draws the set: the principal board plus one
 | `paddy_plot_rings_overcount_stays_marginal` | same module (ring-area sum vs shapely union) | the 4% ceiling is ~1.6x the worst live map |
 | `paddy_bunds_do_not_stagger` | same module; the engine's own `jog_vertices` | `close_seams` made to stop straightening its own steps -> RED |
 
+| `channels_flow_downhill` | `tests/gate/test_water_flow.py` (a rolled map, judged against the DECLARED fall) | the map's fall turned 90 deg and flipped 180 deg -> RED both ways |
+| `drain_flows_downhill` | same module (the outfall's projection on the fall vs the head's) | same mutations -> RED |
+| `drainage_discharges_downhill` | same module (the sink pond / brook must lie down-fall of the outfall) | same mutations -> RED |
+| `streams_avoid_fields` | same module (stream vertices inside a field outline) | asserted with both populations non-empty first |
+| `stream_source_anchored` | same module (an off-map end is off the canvas; a pond end is on the pond) | the count of DECLARED ends is asserted, so it cannot judge nothing |
+| `stream_end_anchored` | same module (same assertion, the far end) | same |
+| `fields_show_water_source` | same module (every paddy named by a channel or a field ditch) | asserted with the paddy population non-empty first |
+
 ## Battery-internal - they go WITH the battery, and owe no destination
 
 These four do not state a rule about a map. They state that the battery's OWN classification tables are
