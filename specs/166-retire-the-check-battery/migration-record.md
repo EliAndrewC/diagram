@@ -41,6 +41,10 @@ box" - measuring the wrong one made every seat look illegal and the fallback too
 | `no_structure_on_paddy` | `tests/settlement/test_field_keepout.py` (point, gap and rect arms) | `_field_blocks_point` and `_field_blocks_rect` each short-circuited -> RED |
 | `dry_plots_clear_of_paddies` | same module - one segment emits both, and one keep-out guarantees both | same mutations -> RED |
 
+| `no_structure_on_stream` | `tests/settlement/test_way_and_water_corridors.py` (registration + refusal) | river's `corridors.append` removed -> RED; `_near_corridor` short-circuited -> RED |
+| `houses_clear_of_lanes` | same module | lane's `corridors.append` removed -> RED |
+| `no_farmhouse_stands_on_a_lane` | same module (the `width/2 + 11` setback, which is what clears building CORNERS) | same mutations -> RED |
+
 ## Already carried by an existing test - dropped against it, not rewritten
 
 | check | carried by | proof |
