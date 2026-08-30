@@ -1,6 +1,6 @@
 # Firing census - 152 live checks against 5 live maps and 105 frozen fixtures
 
-`FIRES` 40 | `FIRES-HAND-ONLY` 101 | `NEVER-FIRES` 11 - 1029 verdicts observed, suite journal folded in
+`FIRES` 40 | `FIRES-HAND-ONLY` 103 | `NEVER-FIRES` 9 - 1029 verdicts observed, suite journal folded in
 
 `FIRES` = the current implementation makes it fail. `FIRES-HAND-ONLY` = only a hand-era artifact
 does, which FR-003 treats as never-fires. Every non-`FIRES` row takes the FR-006 placer read
@@ -12,8 +12,6 @@ before anything is deleted - the census produces a candidate, not a ruling (feat
 | `capital_has_no_headman` | **NEVER-FIRES** | - |
 | `city_has_no_headman` | **NEVER-FIRES** | - |
 | `farmhouse_aspect_in_range` | **NEVER-FIRES** | - |
-| `stream_end_anchored` | **NEVER-FIRES** | - |
-| `stream_source_anchored` | **NEVER-FIRES** | - |
 | `town_has_no_headman` | **NEVER-FIRES** | - |
 | `village_has_no_headman` | **NEVER-FIRES** | - |
 | `waivers_are_documented` | **NEVER-FIRES** | - |
@@ -134,6 +132,8 @@ before anything is deleted - the census produces a candidate, not a ruling (feat
 | `settlement_has_wells` | **FIRES-HAND-ONLY** | `hand-fixture` hamlet_has_no_headman_fires_when_a_hamlet_has_one.json; `hand-fixture` houses_clear_of_lanes_fires_when_a_house_sits_on_the_tread.json; `hand-fixture` no_structure_on_paddy_fires_when_a_farmhouse_sinks_a_corner_into_the_crop.json; `hand-fixture` structures_clear_of_dike.json (+2 more) |
 | `shrine_halls_clear_of_lanes` | **FIRES-HAND-ONLY** | `test` suite:<unnamed> |
 | `sluice_gates_on_water` | **FIRES-HAND-ONLY** | `test` suite:<unnamed> |
+| `stream_end_anchored` | **FIRES-HAND-ONLY** | `hand-fixture` drain_flows_downhill_fires_when_outfall_is_uphill.json; `hand-fixture` drainage_discharges_downhill_fires_when_the_brook_runs_uphill.json; `hand-fixture` drainage_junction_smooth_fires_on_a_hard_corner.json; `hand-fixture` streams_avoid_fields_still_fires_when_a_drain_brook_reenters_the_field.json (+1 more) |
+| `stream_source_anchored` | **FIRES-HAND-ONLY** | `hand-fixture` pond_fed_from_edge_fires_when_the_feeder_starts_mid_map.json; `hand-fixture` streams_avoid_fields_still_fires_when_a_drain_brook_reenters_the_field.json; `test` suite:<unnamed> |
 | `streams_avoid_fields` | **FIRES-HAND-ONLY** | `hand-fixture` streams_avoid_fields_fires.json; `hand-fixture` streams_avoid_fields_still_fires_when_a_drain_brook_reenters_the_field.json; `test` suite:<unnamed> |
 | `structures_clear_of_dike` | **FIRES-HAND-ONLY** | `hand-fixture` polder_channels_clear_of_dike_fires_on_a_canal_in_the_dike.json; `hand-fixture` structures_clear_of_dike.json; `hand-fixture` structures_clear_of_dike_fires_on_a_house_on_the_dike.json; `test` suite:<unnamed> (+2 more) |
 | `structures_clear_of_trees` | **FIRES-HAND-ONLY** | `test` suite:<unnamed> |

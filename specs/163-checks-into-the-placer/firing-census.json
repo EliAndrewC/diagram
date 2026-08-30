@@ -6,8 +6,8 @@
  },
  "counts": {
   "FIRES": 40,
-  "FIRES-HAND-ONLY": 101,
-  "NEVER-FIRES": 11
+  "FIRES-HAND-ONLY": 103,
+  "NEVER-FIRES": 9
  },
  "rows": {
   "all_ink_is_ruled_on": {
@@ -3912,12 +3912,46 @@
    "verdict": "FIRES-HAND-ONLY"
   },
   "stream_end_anchored": {
-   "evidence": [],
-   "verdict": "NEVER-FIRES"
+   "evidence": [
+    [
+     "hand-fixture",
+     "pool/regressions/drain_flows_downhill_fires_when_outfall_is_uphill.json"
+    ],
+    [
+     "hand-fixture",
+     "pool/regressions/drainage_discharges_downhill_fires_when_the_brook_runs_uphill.json"
+    ],
+    [
+     "hand-fixture",
+     "pool/regressions/drainage_junction_smooth_fires_on_a_hard_corner.json"
+    ],
+    [
+     "hand-fixture",
+     "pool/regressions/streams_avoid_fields_still_fires_when_a_drain_brook_reenters_the_field.json"
+    ],
+    [
+     "test",
+     "suite:<unnamed>"
+    ]
+   ],
+   "verdict": "FIRES-HAND-ONLY"
   },
   "stream_source_anchored": {
-   "evidence": [],
-   "verdict": "NEVER-FIRES"
+   "evidence": [
+    [
+     "hand-fixture",
+     "pool/regressions/pond_fed_from_edge_fires_when_the_feeder_starts_mid_map.json"
+    ],
+    [
+     "hand-fixture",
+     "pool/regressions/streams_avoid_fields_still_fires_when_a_drain_brook_reenters_the_field.json"
+    ],
+    [
+     "test",
+     "suite:<unnamed>"
+    ]
+   ],
+   "verdict": "FIRES-HAND-ONLY"
   },
   "streams_avoid_fields": {
    "evidence": [

@@ -150,3 +150,64 @@ not a tier casualty, and `gardens_clear_of_channels` moved from NEVER-FIRES to `
 sweep, exactly as predicted when the gap was found.
 
 **Sources:** none - a measurement of this repository.
+
+## R7 - a defect in the census itself, found by doing the placer read
+
+The FR-006 read (T08) starts by reading each candidate's segment body, and the first two it opened
+invalidated two of the census's own rows. **Three checks build their name at RUNTIME and two of them
+append an INDEX:**
+
+    check(f"stream_source_anchored[{idx}]", ...)
+    check(f"stream_end_anchored[{idx}]", ...)
+    check(f"{scale}_has_no_headman", ...)
+
+So what `check()` emits is `stream_source_anchored[0]`, and what `gate_check_names.json` pins is
+`stream_source_anchored`. The census compared the two literally, found no match, and reported both stream
+anchors as NEVER-FIRES - **while the gate fires them on every map that has a stream.** They were two of the
+eleven names this feature was about to hand to a deletion task.
+
+Fixed in `tools/firing_census.py` with `base_name()`, applied on both read paths (the artifact gate and the
+suite journal), with a guard that goes red if a fourth dynamically-named check appears in a shape it
+cannot normalize. Corrected counts:
+
+| verdict | before the fix | after |
+|---|---|---|
+| `FIRES` | 40 | 40 |
+| `FIRES-HAND-ONLY` | 101 | **103** |
+| `NEVER-FIRES` | 11 | **9** |
+
+**The lesson is the one this repository keeps re-learning, in a new costume.** `dev/gate.md`'s "MEASURE
+WHAT THE RULE MEASURES" table collects nine defects that were each *"a correct measurement of a DIFFERENT
+QUANTITY than the rule it was serving"*. This is the tenth: the census correctly measured "which PINNED
+names appear in the verdict stream" when the rule it served was "which CHECKS fire". And it was caught the
+way every one of those nine was caught - by comparing against a case with a known answer, not by reading
+the code more carefully.
+
+It is also the argument for FR-006 in one instance: the census's verdict was a candidate, the read was the
+ruling, and the read overturned two of eleven.
+
+**Sources:** none - a measurement of this repository.
+
+## R8 - what the nine never-fires candidates turned out to be
+
+Full read in [`placer-reads.md`](placer-reads.md). The summary, because it changes where this feature's
+value lies:
+
+| group | n | what it is |
+|---|---|---|
+| **PHANTOM** | 2 | `village_has_no_headman`, `capital_has_kosatsuba` - names the derived registry minted from an f-string without evaluating the branch guard around it. Unreachable at every scale, proven by running the gate at all five. Not checks; pin entries. |
+| **TIER-DEAD** | 3 | `capital_has_no_headman`, `city_has_no_headman`, `town_has_no_headman` - reachable, but only on tiers feature 158 left without a single producible artifact. |
+| **KEEP** | 4 | `waivers_are_documented` + `waivers_are_live` (they guard the escape hatch, and never fire precisely because it is currently shut); `farmhouse_aspect_in_range` (live on every roll, drawn max 2.39 against a 2.70 threshold - an 11% margin, not a guarantee); `waterward_strips_run_off_the_frame` (written last week for a settlement-review finding, holding a 280 px constant with 35 px of headroom). |
+
+**Not one of the nine is a bug in the placement algorithm.** The GM's request anticipated two outcomes for
+a check the audit catches - a placer bug, or a fold into a trial-and-error placer - and the never-fires set
+produces neither. Whatever this feature is worth, it is not here: it is in the **103 `FIRES-HAND-ONLY`**
+rows, where the question is whether a check proven only by a hand-BUILT test manifest counts as firing
+"with our current implementation". That is the GM's call and it is the big lever.
+
+**The PHANTOM group is also a defect in its own right** (constitution XIV): two names in the live roster
+correspond to no reachable check, so every published count of "how many checks there are" is two high, and
+`registry_analysis` will mint more the same way for any future `check(f"{scale}_...")` behind a scale
+branch. The fix belongs with T10 and is held with it.
+
+**Sources:** none - a measurement of this repository.

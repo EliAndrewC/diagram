@@ -54,7 +54,7 @@ finding and is therefore `physical` with its three boxes.
 
 ## Phase 2 - read the placer, then delete (US1, P1)
 
-- [ ] **T08** For every NEVER-FIRES candidate, read the placer that produces the feature it judges and
+- [x] **T08** For every NEVER-FIRES candidate, read the placer that produces the feature it judges and
       grep `dev/`, `specs/` and the commit log for what the check has actually caught. **Two outcomes,
       no third** (FR-006): evidence that the CURRENT placer misses it reclassifies the check FIRING and
       routes it to T14's ledger; no such evidence and it is deleted. A placer that merely DECLINES is not

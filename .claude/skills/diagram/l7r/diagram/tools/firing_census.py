@@ -65,6 +65,21 @@ def live_check_names() -> list[str]:
         return sorted(json.load(fh))
 
 
+def base_name(emitted: str) -> str:
+    """`stream_source_anchored[0]` -> `stream_source_anchored`, the name the pin actually carries.
+
+    THREE checks build their name at runtime and two of them append an INDEX, so what `check()` emits
+    is not what `gate_check_names.json` lists. A census that compared the two literally reported
+    `stream_source_anchored` and `stream_end_anchored` as NEVER-FIRES while the gate fires them on
+    every map that has a stream - and this census was about to hand both to a deletion task.
+
+    Found by READING THE SEGMENT BODIES for the FR-006 placer read, which is exactly what that read
+    exists for: the census produces a candidate, the read produces the ruling (feature 158). Worth
+    keeping in mind for any future census over emitted names - `grep 'check(\\s*f"' segments_*.py`
+    is the whole population, and it is currently three."""
+    return emitted.split("[", 1)[0]
+
+
 def classify_manifest(M: dict[str, Any], frozen: bool) -> str:
     """Which evidence class a manifest belongs to.
 
@@ -87,7 +102,7 @@ def verdicts_for(M: dict[str, Any]) -> set[tuple[str, str]]:
         driver.gate(dict(M), verbose=False)
     except Exception as exc:  # a fixture built for one check can raise from an unrelated one
         return {("<error>", f"{type(exc).__name__}: {exc}"[:120])}
-    return {(n, v) for n, v, _src in driver._VERDICTS}
+    return {(base_name(n), v) for n, v, _src in driver._VERDICTS}
 
 
 def evidence_from_paths(paths: list[str], frozen: bool) -> dict[str, set[tuple[str, str]]]:
@@ -109,7 +124,7 @@ def evidence_from_journals(directory: str) -> dict[str, set[tuple[str, str]]]:
     for p in sorted(glob.glob(os.path.join(directory, "verdicts-*.json"))):
         with open(p, encoding="utf-8") as fh:
             for name, _verdict, source in json.load(fh):
-                out.setdefault(name, set()).add((TEST, f"suite:{source}"))
+                out.setdefault(base_name(name), set()).add((TEST, f"suite:{source}"))
     return out
 
 
