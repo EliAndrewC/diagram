@@ -68,6 +68,8 @@ box" - measuring the wrong one made every seat look illegal and the fallback too
 | `structures_clear_of_trees` | same module (`_crown_covers` over a recorded roof) | - |
 | `wells_clear_of_trees` | same module (`_crown_covers` over a wellhead) | - |
 
+| `settlement_has_wells` | `tests/hamletgen/test_wells.py` (floor, ceiling, and the 2-20 households-per-well band) | `well_target` divisor changed -> RED |
+
 ## Already carried by an existing test - dropped against it, not rewritten
 
 | check | carried by | proof |
