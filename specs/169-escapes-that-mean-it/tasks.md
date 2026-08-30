@@ -89,3 +89,11 @@ the measurements in [`research.md`](research.md).
       research: procedure
       verify: `make hooks-test` exit 0 and `make done` exit 0 together, after one red round
       that `pair-hooks` caught (R8); then `sync-with-main.sh done`
+
+- [x] T15 defects found by being blocked by them (Principle XIV), both in this feature's own family:
+      `make-only`'s guard-write detector refused a command that wrote nothing (an arrow in printed
+      prose reads as a redirect, and the patterns matched the RAW command), and a flaky
+      `idle-tests` gate case failed under load while passing standalone
+      research: procedure
+      verify: R11 and R12; four mention cases in `test-make-only-hooks.sh` proved to have TEETH
+      against main's copy, and five consecutive clean idle runs where the rate had been one in two
