@@ -19,6 +19,7 @@ from __future__ import annotations
 
 import json
 import pathlib
+import re
 import subprocess
 
 import pytest
@@ -98,15 +99,52 @@ def test_the_gm_s_source_block_records_both_the_refusal_and_the_escape(tmp_path)
     assert (entry("escape")["event"], entry("escape")["rule"]) == ("escaped", "source-edit-ok")
 
 
-def test_every_recording_guard_names_a_rule_rather_than_defaulting() -> None:
+def _recording_guards() -> list[pathlib.Path]:
+    """Every guard script that calls `guard_log`, DERIVED (feature 169).
+
+    The hand-written set this replaces named seven guards and omitted eight, so `guard-file`'s Read
+    reminder shipped without a rule slug and the census could not tell its three branches apart. A
+    census of your own tree written by hand is stale the day it is written - the same lesson feature
+    168's own spec review returned twice.
+    """
+    return sorted(p for p in SCRIPTS.glob("*.sh") if not p.name.startswith("test-") and "guard_log " in p.read_text())
+
+
+def test_every_recording_branch_names_a_rule_rather_than_defaulting() -> None:
     """A `guard_log` call with no fourth argument records the EVENT as its rule, which is right for a
-    single-branch guard and wrong for a multi-branch one. This catches a branch added later without
-    its slug."""
-    multi = {"no-poll", "make-only", "repo-safety", "clone-sync", "pair", "review-gate", "gate"}
-    for guard in sorted(multi):
-        text = (SCRIPTS / f"{guard}-hooks.sh").read_text() if guard != "review-gate" else (SCRIPTS / "review-gate.sh").read_text()
-        calls = [ln for ln in text.splitlines() if "guard_log " in ln and not ln.strip().startswith("#")]
-        assert calls, f"{guard} has no guard_log call at all"
+    guard with ONE acting branch and wrong for every other. Derived over the whole guard tree."""
+    for guard in _recording_guards():
+        calls = [ln for ln in guard.read_text().splitlines() if "guard_log " in ln and not ln.strip().lstrip("#").startswith("#")]
+        calls = [ln for ln in calls if not ln.strip().startswith("#")]
+        if len(calls) < 2:
+            continue  # a single-branch guard may let the rule default to its event
         for call in calls:
             body = call.split("guard_log ", 1)[1]
-            assert len(body.split('"')) > 2 or len(body.split()) >= 4, f"{guard} logs without a rule slug, so its branches cannot be told apart: {call.strip()}"
+            assert len(body.split('"')) > 2 or len(body.split()) >= 4, (
+                f"{guard.name} logs without a rule slug, so its branches cannot be told apart: {call.strip()}"
+            )
+
+
+def test_every_suite_of_a_recording_guard_isolates_the_firing_log() -> None:
+    """A suite that drives a recording guard must write into a throwaway log (feature 169).
+
+    Feature 168 added `GUARD_LOG_DIR` isolation to nine suites BY HAND and missed
+    `test-review-gate.sh`, because `review-gate.sh` is not a `*-hooks.sh` file. The cost was
+    measurable within a day: 24 of the live census's 113 entries were that suite's `specs/900-x`
+    fixtures - in the census this project uses to decide which guards are worth their cost.
+    """
+    missing = []
+    for guard in _recording_guards():
+        suite = SCRIPTS / f"test-{guard.stem}.sh"
+        if not suite.exists():
+            continue
+        text = suite.read_text()
+        # A suite may delegate to the shared runner (`exec python3 test_hooks_cases.py <guard>`)
+        # rather than isolate for itself; follow one level, and hold the runner to the same rule.
+        for delegate in re.findall(r"[\w./-]*test_hooks_cases\.py", text):
+            target = SCRIPTS / pathlib.Path(delegate).name
+            if target.exists():
+                text += target.read_text()
+        if "GUARD_LOG_DIR" not in text:
+            missing.append(suite.name)
+    assert not missing, f"these suites drive a recording guard but write into the real census: {missing}"

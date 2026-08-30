@@ -28,8 +28,17 @@ MODE="${1:-pretool}"
 [ "$MODE" = pretool ] || exit 0
 INPUT=$(cat)
 
+# GUARD_EDIT_OK: feature 169 - the ESCAPE is decided by the shared matcher, like every other guard's,
+# and handed to the verdict below. Blanking quoted strings is NOT enough on its own: a bare
+# `grep -rn HOST_GIT_OK scripts/ && git -C /host-l7r-repo commit ...` carries the token as an
+# unquoted word, so the first fix for this defect still disarmed the mount guard. `_hookmatch.py
+# escape` also drops search-command segments and `for VAR in` word lists, which is the whole point of
+# putting the rule in one place instead of writing it a twelfth time.
+RS_ESCAPED=$(printf '%s' "$INPUT" | "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/_hookmatch.py" escape HOST_GIT_OK 2>/dev/null)
+export RS_ESCAPED
+
 VERDICT=$(printf '%s' "$INPUT" | python3 -c '
-import json, re, sys
+import json, os, re, sys   # GUARD_EDIT_OK: feature 169 - os, for the escape the shell hands in
 try:
     cmd = json.load(sys.stdin).get("tool_input", {}).get("command", "")
 except Exception:
@@ -62,7 +71,13 @@ if re.search(POS + r"git\b(?:\s+-C\s+\S+|\s+-\S+)*\s+rebase\b", c) or re.search(
 if re.search(POS + r"git\b[^\n;|&]*\bmerge\b[^\n;|&]*--squash", c) or re.search(POS + r"git\b[^\n;|&]*\bcommit\b[^\n;|&]*--amend", c):
     print("history-rewrite"); raise SystemExit
 
-if "HOST_GIT_OK" not in cmd:
+# GUARD_EDIT_OK: feature 169 - `c`, not `cmd`. This escape was matched against the RAW command while
+# the sanitized `c` - heredoc bodies and quoted strings blanked, fourteen lines above, for exactly
+# this reason - sat right there. So a grep for the token, or a commit message quoting it, disarmed
+# the /host-l7r-repo mount guard: the one guard in this file that HAS an escape, sitting beside the
+# two that deliberately have none. Found by the spec review of this feature, which noticed that its
+# own audit command would have disarmed it.
+if not os.environ.get("RS_ESCAPED"):   # GUARD_EDIT_OK: feature 169, the matcher decides (see above)
     # a git WRITE aimed at the GM own repo, by -C or by a cd into it
     host = r"/host-l7r-repo"
     writes = r"\b(?:commit|push|add|rm|mv|reset|revert|checkout|switch|restore|merge|rebase|cherry-pick|clean|stash|tag|am|apply)\b"

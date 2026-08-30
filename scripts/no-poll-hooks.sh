@@ -57,7 +57,13 @@ except Exception: print("")' 2>/dev/null || true)
 NP_HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 # shellcheck source=/dev/null
 . "$NP_HERE/_guardlog.sh"
-case "$CMD" in *POLL_OK*) guard_log no-poll escaped "$(guard_cmd)" poll-ok; exit 0 ;; esac
+# GUARD_EDIT_OK: feature 169 - the escape is an INVOCATION, not a mention (was `case *POLL_OK*`).
+# GUARD_EDIT_OK: feature 169 - $NP_HERE, not $HERE. This branch sits at line 60 and `HERE` is not
+# defined until line 72, so the path was empty and the escape silently stopped working - caught by
+# the new suite within a minute, which is why the escape is tested in BOTH directions.
+if [ -n "$(printf '%s' "$INPUT" | "$NP_HERE/_hookmatch.py" escape POLL_OK 2>/dev/null)" ]; then
+  guard_log no-poll escaped "$(guard_cmd)" poll-ok; exit 0
+fi
 
 # GUARD_EDIT_OK: feature 164 - A MENTION IS NOT AN INVOCATION, and this guard was the last common
 # offender. It matches substrings, so it refused the very command that was WRITING feature 164's

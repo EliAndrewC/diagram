@@ -17,9 +17,9 @@ and then close out the feature and push back to main when you're done."*
 
 **All five are in scope.** The session had recommended three and offered the other two for a separate
 decision; the GM's reply answers the message as a whole, and narrowing it here would be a session
-quietly scaling down work that was asked for. FR-005 in particular is a hook the GM priced and
-DECLINED on 2026-08-17, so it is built only in the exact shape `CLAUDE.md` names as the condition for
-reopening - see that requirement for the wording.
+quietly scaling down work that was asked for. **FR-006** is the sensitive one - it stands next to a
+hook the GM priced and DECLINED on 2026-08-17 - and the honest account of how it relates to that
+decline is in FR-006 itself, including the part the GM has not yet been told.
 
 ## What was measured before specifying
 
@@ -33,6 +33,7 @@ Every finding below was produced by driving the real hook with a real payload, n
 | the live census is polluted | 24 of 113 entries name `specs/900-x` / `specs/901-new` | `test-review-gate.sh` has no `GUARD_LOG_DIR` |
 | the missing slug | `make audit` prints `guard-file rules={'reminded': 56}` | `guard-file-hooks.sh:62` passes no 4th field |
 | `sync-in`'s false success | observed twice on 2026-08-30 with a stray commit in the mirror | printed `clone synced with GitHub main`, changed nothing |
+| the unguarded write in main (FR-006) | the two incidents of 2026-08-30, each a bare `cd` into the mirror root followed by an edit and a commit | neither commit was seen by `webapp/mainguard.py`, the Makefile's `guard` or `settlement._assert_not_main_tree` - all three are in-process or `make`-time and none sees a `git commit` |
 
 ## Scope, stated exactly
 
@@ -46,9 +47,30 @@ any change to what a guard REFUSES, except where a requirement below says so exp
 
 A guard treats its escape token as used only when the session actually put it in the command as an
 escape - not when the command greps for it, quotes it in a commit message, or carries it inside a
-heredoc that is editing a document about guards. All nine tokens are covered: `GATE_OK`,
-`MEASURE_OK`, `POLL_OK`, `DISCARD_OK`, `NO_BRANCH_OK`, `PAIR_OK`, `REVIEW_GATE_OK`, `SOURCE_EDIT_OK`,
-`GUARD_EDIT_OK`.
+heredoc that is editing a document about guards. All ELEVEN tokens are covered - the ten that exist plus `MAIN_TREE_OK`, which FR-006 creates:
+`GATE_OK`, `MEASURE_OK`, `POLL_OK`, `DISCARD_OK`, `NO_BRANCH_OK`, `PAIR_OK`, `REVIEW_GATE_OK`,
+`SOURCE_EDIT_OK`, `GUARD_EDIT_OK`, `HOST_GIT_OK`, `MAIN_TREE_OK`.
+
+**`HOST_GIT_OK` was missed by this spec's own first two drafts** and found by the round-2 review,
+which noticed that its own audit command would have disarmed the guard it was auditing.
+`repo-safety-hooks.sh` matches it against the RAW command while the sanitized copy it built fourteen
+lines earlier - heredocs and quoted strings blanked, for exactly this reason - sat unused. It guards
+git writes against `/host-l7r-repo`, the GM's own repository, and it is the one escape in the file
+that stands beside two rules that deliberately have none. The GM's request says *"every guard's
+escape token"*, so an exclusion here would be theirs to approve, not this feature's.
+
+**`pair-hooks.sh`'s AGENT-PROMPT branch is deliberately OUT**, and this is the one place the rule
+does not reach. `PAIR_OK` on a Bash command routes through the matcher like the rest; the same token
+in a subagent's dispatch PROMPT does not, because a prompt is prose with no command grammar - there
+is no "invocation position" in a sentence, and the matcher blanks quoted regions, which prose carries
+for ordinary reasons. Converting it would trade a known false-permit for an unknown false-refusal on
+the guard that decides whether a settlement review is owed. The exclusion is stated at the point of
+change as well as here.
+
+**A feature whose whole purpose is that an escape means a session escaped must not ship an escape
+exempt from its own rule.** `MAIN_TREE_OK` is matched as an invocation through `_hookmatch.py` like
+the other nine, and records like the other nine (feature 168: every acting branch records, with a
+rule slug).
 
 **The escape is still checked FIRST.** `CLAUDE.md`'s rule - *"check the ESCAPE FIRST or the guard
 cannot be repaired through the channel it guards"* - is not weakened here: what changes is how the
@@ -114,19 +136,34 @@ everything else here is - never hardcoded) and then writes, commits, or otherwis
 refused, naming the leak and the `git -C` rule. Escape: `MAIN_TREE_OK` with a reason, because reading
 in main is legitimate and so, rarely, is render-sync.
 
-**This hook was priced and DECLINED once (GM 2026-08-17), and this requirement is built only because
-`CLAUDE.md` states the exact condition for reopening it**: *"Reopen only with a mechanism that would
-catch a single-`cd` command whose section header names the other tree - that is the shape to beat,
-and neither candidate above does."* The two candidates declined then were (a) demanding `git -C` on
-every git call, which fires on nearly every correct command, and (b) firing when one command names
-both a non-clone path and `.clones/`, which would have caught neither incident.
+**THIS IS A NEW GUARD, AND IT DOES NOT MEET THE REOPENING CONDITION `CLAUDE.md` STATES.** The first
+draft of this spec claimed it did, and so did the summary the GM approved - that claim was wrong, and
+the correction is owed to them (see below).
 
-The shape specified here is narrower than both and is measured against the two real incidents of
-2026-08-30, each of which was a bare `cd` into the mirror root followed by an edit and a commit in
-the same or the next command. It would have caught both. It fires on almost nothing legitimate,
-because a session never writes in main - that is already enforced three other ways
-(`webapp/mainguard.py`, the Makefile's `guard`, `settlement._assert_not_main_tree`), none of which
-sees a git commit.
+What `CLAUDE.md` actually says, and why the difference matters. The 2026-08-17 rule exists for a
+failure that is not this one: *"actually WRITING in main is already caught three ways
+(`webapp/mainguard.py`, the Makefile's `guard`, `settlement._assert_not_main_tree`). This rule
+prevents the quieter failure those guards cannot see - a read-only diagnostic that confidently
+reports the wrong tree, which is worse than an error because it looks like an answer."* Its reopening
+condition - *"a mechanism that would catch a single-`cd` command whose section header names the other
+tree"* - names that read-only case. **FR-006 explicitly excludes read-only `cd`**, and it could not
+read a section header in any event, since a header lives in the model's prose and never reaches the
+command payload. So the shape to beat is still unbeaten, and **the 2026-08-17 rule remains
+deliberately unenforced after this feature ships.**
+
+What FR-006 is, stated truthfully: a NEW guard against an unguarded WRITE or COMMIT in the mirror
+root. That gap is real and measured - the two incidents of 2026-08-30 were each a `cd /diagram`
+followed by an edit and a commit, and NONE of the three guards named above sees a git commit, which
+is exactly why both happened. It is also neither of the two candidates declined in 2026-08-17:
+candidate (a) demanded `git -C` on every git call (no rule here demands that), and candidate (b)
+fired when one command named both a non-clone path and `.clones/` (FR-006 needs no second path). It
+therefore does not contradict that decline; it sits beside it, guarding something else.
+
+**The GM is owed this correction, and the close-out report must carry it.** Their approval of finding
+5 was given against a request summary that asserted this shape *"is the condition CLAUDE.md set for
+reopening it"*. That was false. `request.md` is the GM-facing verbatim record and is not edited, so
+the correction is delivered in the report that closes this feature, in terms plain enough for the GM
+to withdraw item 5 if the true basis does not persuade them.
 
 **What it does NOT do**: it does not fire on a read-only `cd /diagram`, on `git -C /diagram <read>`,
 or on any command naming a clone. The declined candidate (a) is not revived - no rule here demands
@@ -134,13 +171,14 @@ or on any command naming a clone. The declined candidate (a) is not revived - no
 
 ## Success Criteria
 
-- **SC-001**: for each of the nine tokens, a command that MENTIONS it (a grep, a quoted commit message, a heredoc body) produces no `escaped` entry and no state change; a command that USES it as an escape still escapes exactly as before.
+- **SC-001**: for each of the eleven tokens (`HOST_GIT_OK` and `MAIN_TREE_OK` included; `pair`'s agent-prompt branch excluded, per FR-001), a command that MENTIONS it (a grep, a quoted commit message, a heredoc body) produces no `escaped` entry and no state change; a command that USES it as an escape still escapes exactly as before.
 - **SC-002**: a mention of `MEASURE_OK` or `GATE_OK` leaves the guard's state file untouched, proved by driving the guard to the edge of its threshold, sending a mention, and observing that the next expensive command is still refused.
 - **SC-003**: running every guard suite leaves the live census with zero new entries, and a test fails if a recording guard's suite stops isolating the log.
 - **SC-004**: every `guard_log` call in every guard passes a rule slug, proved by a DERIVED check over the guard tree rather than a hand-written list.
 - **SC-005**: with a stray commit in the mirror, `sync-in` reports it, names the commit, and does not claim the clone was synced; with a clean mirror it behaves exactly as it does today.
 - **SC-006**: a command that `cd`s into the mirror root and then writes or commits is refused and names the `git -C` rule; a read-only `cd` there, a `git -C` read, and any command naming a clone are untouched. Both real incidents of 2026-08-30 are fixture cases.
-- **SC-007**: `make hooks-test` and `make done` are green, and no guard refuses, permits or corrects anything it did not before except where a requirement above says so.
+- **SC-007**: the close-out report to the GM states plainly that FR-006's original warrant was wrong - that this guard does NOT meet `CLAUDE.md`'s reopening condition and the 2026-08-17 rule stays unenforced - so they can withdraw item 5 if the true basis does not persuade them. It is the one requirement here that a test cannot tick.
+- **SC-008**: `make hooks-test` and `make done` are green, and no guard refuses, permits or corrects anything it did not before except where a requirement above says so.
 
 ## Decisions Recorded
 
@@ -150,7 +188,7 @@ or on any command naming a clone. The declined candidate (a) is not revived - no
 | the escape stays checked FIRST; only the MATCH changes | a guard that cannot be repaired through its own channel is a worse defect | FR-001 |
 | the reminder's 56/day volume is reported, not changed | it is free, and the fix is a decision for the GM with the census in hand | FR-004 |
 | `sync-in` reports, never repairs | the mirror's working tree may be the only copy, and whose it is cannot be known from outside | FR-005 |
-| the mirror-`cd` hook is built in the narrowest shape only | `CLAUDE.md` names that shape as the condition for reopening a hook it declined in 2026-08-17 | FR-006 |
+| the mirror-`cd` hook is a NEW guard, not a reopening | it does NOT meet `CLAUDE.md`'s stated reopening condition, which names the read-only mislabeled-tree diagnostic this hook excludes; the 2026-08-17 rule stays unenforced, and the GM is told so at close-out because their approval rested on the opposite claim | FR-006 |
 | the gate's rising median stays out | handed to a different session by the GM | Scope |
 
 ## Review history

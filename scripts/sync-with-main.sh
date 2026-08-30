@@ -134,6 +134,19 @@ ensure_github_origin
 mirror_refresh() {
   flock "$LOCK" git -C "$MAIN" pull -q --ff-only origin main \
     || die "mirror $MAIN cannot fast-forward to GitHub main - someone committed there by hand (main is a MIRROR, nobody's workspace). Inspect 'git -C $MAIN log origin/main..HEAD' and move that work into a clone."
+  # GUARD_EDIT_OK: feature 169 - `--ff-only` DOES NOT CATCH THE COMMON CASE, and the documentation
+  # said it did. It fails on DIVERGENCE; a mirror that is merely AHEAD of GitHub - one stray commit
+  # on top of main's tip, nothing new to pull - satisfies it and prints "Already up to date". So on
+  # 2026-08-30, twice, a session committed into the mirror and every later `sync-in` reported
+  # `clone synced with GitHub main` while the mirror carried a commit GitHub did not have and every
+  # clean clone in the container was refused as stale. `CLAUDE.md` has always described this as
+  # stopping the next sync-in; this is the check that makes that true.
+  if git -C "$MAIN" rev-parse --verify -q origin/main >/dev/null 2>&1 \
+     && ! git -C "$MAIN" merge-base --is-ancestor HEAD origin/main 2>/dev/null; then
+    die "mirror $MAIN is AHEAD of GitHub main - it carries $(git -C "$MAIN" log -1 --format='%h %s') which GitHub does not have, so nothing was merged into this clone.
+Main is a MIRROR and nobody's workspace: this is a commit made in main's tree, almost always a bare 'cd $MAIN' that leaked into the next command (CLAUDE.md, 'NAME THE TREE IN THE COMMAND'). It blocks EVERY clean clone, not just this one.
+It belongs to whoever made it - do NOT reset it unless it is yours, because the mirror's working tree may be the only copy. Recovery: format-patch or copy the content into THAT session's clone and commit it there, check 'git -C $MAIN status --porcelain' for untracked files a reset would destroy, then 'git -C $MAIN reset --hard origin/main'."
+  fi
 }
 
 # SYNC-IN IS THE WHOLE FLOW (feature 130, FR-030, plan design note 8): fetch GitHub main -> mirror

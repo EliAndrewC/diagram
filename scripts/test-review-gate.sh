@@ -12,6 +12,11 @@ GATE="$HERE/review-gate.sh"
 PASS=0; FAIL=0
 T=$(mktemp -d)
 trap 'rm -rf "$T"' EXIT
+# GUARD_EDIT_OK: feature 169 - review-gate.sh records since 168, and this suite was the one that got
+# missed, because it is not a `*-hooks.sh` file and the isolation was added to nine suites by hand.
+# Measured cost: 24 of the live census's 113 entries were this file's `specs/900-x` fixtures, in the
+# census that is the input to every future tuning decision. Hangs off $T so the trap above cleans it.
+export GUARD_LOG_DIR="$T/guard-log"
 
 # The map fixture lives in its own folder, like every real map since feature 161.
 POOL=".claude/skills/diagram/pool/hamlets/m"

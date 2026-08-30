@@ -22,6 +22,7 @@ to be maintained for them.
 from __future__ import annotations
 
 import json
+import os.path
 import re
 import sys
 
@@ -91,7 +92,11 @@ def targets(cmd: str) -> set[str]:
 
 
 def classify(cmd: str) -> str:
-    if not cmd or "GUARD_EDIT_OK" in cmd:
+    # The escape is checked FIRST and stays first (CLAUDE.md: a guard that cannot be repaired
+    # through the channel it guards is a worse defect) - what changed in feature 169 is the MATCH.
+    # `grep -rn GUARD_EDIT_OK scripts/` used to classify the whole command as `ok`, which switched
+    # this guard off for the rest of that command.
+    if not cmd or escape_used(cmd, "GUARD_EDIT_OK"):
         return "ok"
     raw = cmd
     c = _strip_quotes(_strip_heredocs(cmd))
@@ -167,6 +172,49 @@ def _goals(seg: str) -> set[str]:
             if re.fullmatch(r"[a-z][\w-]*", word):
                 out.add(word)
     return out
+
+
+# An escape token is a SEARCH TARGET in these; anywhere else in a command it is being used.
+# `git grep` is covered because the segment's leading word is `git` and `grep` follows it, which the
+# scan below allows for; `for tok in GATE_OK POLL_OK ...` is handled separately, since a word list is
+# not a command at all.
+_SEARCHERS = ("grep", "egrep", "fgrep", "rg", "ack", "ag", "ripgrep")
+_FOR_IN = re.compile(r"\bfor\s+\w+\s+in\b[^;\n]*(?:;|\n|$)")
+
+
+def escape_used(cmd: str, token: str) -> bool:
+    """Did the session put `token` in this command AS AN ESCAPE, or merely mention it?
+
+    THE LAST SUBSTRING TESTS IN THE REPOSITORY WERE THE ESCAPE BRANCHES (feature 169). Every
+    BLOCKING decision here has been anchored since 2026-08-25 - `targets` carries the story of the
+    six pieces of correct work a bare substring test refused in one day - but every guard still
+    decided its own ESCAPE with `case "$CMD" in *TOKEN*)`. Measured on 2026-08-30, all six recorded
+    `measure escaped` entries were mentions: four commit messages and heredoc bodies, and two word
+    lists from an audit that was itself enumerating the tokens. So `make audit` reported
+    `measure escape rate 100%` for a guard nobody had escaped.
+
+    That is worse than a bad statistic, and the statistic is not cosmetic either - the escape RATE is
+    what this project acts on (feature 162 retired a refusal escaped in 62% of its firings). Two
+    guards also RESET their state on that branch (`measure` clears its repeat-measurement counter,
+    `gate` removes its state file), so a command that merely named the token silently disarmed the
+    guard for the next command. A session grepping for `MEASURE_OK` to find out how the escape works
+    thereby switched it off.
+
+    What counts as a mention: a heredoc body, a quoted string (both already blanked here, which is
+    where four of the six came from), a search pattern, and a `for VAR in ...` word list. What still
+    counts as an escape: a trailing `# TOKEN: reason` comment, a bare word in a command, and a
+    `TOKEN="reason"` assignment prefix - every form `CLAUDE.md` shows.
+    """
+    clean = _FOR_IN.sub(" ", _strip_quotes(_strip_heredocs(cmd)))
+    kept = []
+    for seg in re.split(r";|\|\||\||&&|\n", clean):
+        words = [w for w in seg.split() if not re.fullmatch(r"[A-Za-z_][A-Za-z0-9_]*=\S*", w)]
+        # `sudo`/`command`/`git` may stand in front of the searcher; skip them to find the real head
+        head = next((w for w in words if w not in ("sudo", "command", "git", "time", "env")), "")
+        if os.path.basename(head) in _SEARCHERS:
+            continue
+        kept.append(seg)
+    return token in " ".join(kept)
 
 
 def _balanced(text: str) -> bool:
@@ -409,5 +457,10 @@ if __name__ == "__main__":
             print("yes")
     elif len(sys.argv) > 1 and sys.argv[1] == "sanitize":
         print(_strip_quotes(_strip_heredocs(payload)))
+    elif len(sys.argv) > 2 and sys.argv[1] == "escape":
+        # `escape <TOKEN>` - prints `yes` when the token was USED as an escape, nothing when it was
+        # only mentioned. Every guard's escape branch asks this instead of `case "$CMD" in *TOKEN*)`.
+        if escape_used(payload, sys.argv[2]):
+            print("yes")
     else:
         print(classify(payload))

@@ -42,7 +42,10 @@ except Exception: print("")' 2>/dev/null || true)
 DG_HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 # shellcheck source=/dev/null
 . "$DG_HERE/_guardlog.sh"
-case "$CMD" in *DISCARD_OK*) guard_log discard escaped "$(guard_cmd)" discard-ok; exit 0 ;; esac
+# GUARD_EDIT_OK: feature 169 - the escape is an INVOCATION, not a mention (was `case *DISCARD_OK*`).
+if [ -n "$(printf '%s' "$INPUT" | "$DG_HERE/_hookmatch.py" escape DISCARD_OK 2>/dev/null)" ]; then
+  guard_log discard escaped "$(guard_cmd)" discard-ok; exit 0
+fi
 case "$CMD" in *"git checkout"*|*"git restore"*|*"git -C"*) ;; *) exit 0 ;; esac
 
 # Parse every git invocation in the command (they may be chained with && ; |) and collect the

@@ -59,7 +59,10 @@ if guard and not re.search(r"/scripts/test-[\w-]+-hooks\.sh$", path):
   GF_HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
   # shellcheck source=/dev/null
   . "$GF_HERE/_guardlog.sh"
-  guard_log guard-file reminded "$(guard_cmd)"
+  guard_log guard-file reminded "$(guard_cmd)" read-reminder   # GUARD_EDIT_OK: feature 169 - the slug
+  # this branch was missing, so the census could not tell the Read reminder (56 firings on
+  # 2026-08-30) from the block and the escape. Whether 56/day is too many is a separate question,
+  # left to the GM with the census in hand rather than answered here.
   exit 0
 fi
 

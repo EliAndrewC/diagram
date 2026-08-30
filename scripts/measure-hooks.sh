@@ -97,7 +97,15 @@ case "$MODE" in
     [ "$TOOL" = Bash ] || exit 0
     # GUARD_EDIT_OK: feature 162 - the escape is RECORDED, so the escape rate is a total rather than
     # an impression. The escape itself is unchanged; nothing is blocked that was not blocked before.
-    case "$CMD" in *MEASURE_OK*) guard_log measure escaped "$(guard_cmd)"; : > "$STATE"; exit 0 ;; esac
+    # GUARD_EDIT_OK: feature 169 - the escape is an INVOCATION, not a mention, and this guard is the
+    # one the defect was measured on: all six recorded `measure escaped` entries of 2026-08-30 were
+    # mentions (four heredoc bodies and commit messages, two word lists from an audit enumerating the
+    # tokens), so `make audit` reported a 100% escape rate for a guard nobody had escaped. Worse, the
+    # branch clears $STATE - the repeat-measurement counter - so a session that merely GREPPED for the
+    # token switched the guard off for its next expensive run. The escape is still checked first.
+    if [ -n "$(printf '%s' "$INPUT" | "$HERE/_hookmatch.py" escape MEASURE_OK 2>/dev/null)" ]; then
+      guard_log measure escaped "$(guard_cmd)" measure-ok; : > "$STATE"; exit 0
+    fi
     case "$CMD" in *"git commit"*) : > "$STATE"; exit 0 ;; esac
 
     # GUARD_EDIT_OK: feature 164 - the shapes are matched against the SANITIZED command (see the note
