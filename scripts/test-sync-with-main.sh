@@ -167,5 +167,38 @@ expect_out "performance bands owe a record"
 [ "$(git -C "$D/github.git" rev-parse main)" = "$gh_before" ] && PASS=$((PASS+1)) || { echo "FAIL  the push landed despite the refused review"; FAIL=$((FAIL+1)); }
 OUT=$(CI_ROUTE=DIRECT CI_PERF_REVIEW="echo 'perf-review: nothing owed'" syncmain "$D" push); check "STAYS QUIET: a passing perf-review pushes" 0 $?
 
+# GUARD_EDIT_OK: feature 167 - A NEW CLONE BORROWS A SIBLING ROLL CACHE (GM 2026-08-30). Measured:
+# a clone that has never rolled pays 30 s for the reference settlement and 122 s for the map-rolling
+# gate tests; seeded from a sibling at the same commit those become 5 s and 28 s. The seeding may
+# never make a clone WRONG, so the vectors below pin what it must not do as firmly as what it does.
+echo "== the roll cache is seeded from a sibling at the same commit =="
+D=$(topology seed167)
+SIB="$D/main/.clones/sib"; git clone -q "$D/github.git" "$SIB"
+mkdir -p "$SIB/.claude/skills/diagram/.gencache/rolls/abc"
+echo '{"key":"k","subject":"s","deps":{"functions":[],"files":[]}}' > "$SIB/.claude/skills/diagram/.gencache/rolls/abc/meta.json"
+
+OUT=$(syncmain "$D" sync-in); check "sync-in succeeds" 0 $?
+[ -d "$D/main/.clones/c/.claude/skills/diagram/.gencache/rolls/abc" ] \
+  && { echo "  ok    a clone with no cache is seeded from the sibling"; PASS=$((PASS+1)); } \
+  || { echo "FAIL  the clone was not seeded"; FAIL=$((FAIL+1)); }
+expect_out "seeded the roll cache"
+
+# ...and it must NOT overwrite a cache the clone already has - that one is keyed to work in progress
+echo 'MINE' > "$D/main/.clones/c/.claude/skills/diagram/.gencache/mine.txt"
+OUT=$(syncmain "$D" sync-in)
+[ -f "$D/main/.clones/c/.claude/skills/diagram/.gencache/mine.txt" ] \
+  && { echo "  ok    an existing cache is left alone"; PASS=$((PASS+1)); } \
+  || { echo "FAIL  the seeding clobbered an existing cache"; FAIL=$((FAIL+1)); }
+
+# ...and a sibling at a DIFFERENT commit is not taken: the clone starts cold instead
+D2=$(topology seed167b)
+SIB2="$D2/main/.clones/sib"; git clone -q "$D2/github.git" "$SIB2"
+mkdir -p "$SIB2/.claude/skills/diagram/.gencache/rolls/xyz"
+( cd "$SIB2" && echo drift > drift.txt && git add -A && git -c user.email=t@t -c user.name=t commit -qm drift )
+OUT=$(syncmain "$D2" sync-in)
+[ -d "$D2/main/.clones/c/.claude/skills/diagram/.gencache" ] \
+  && { echo "FAIL  seeded from a sibling at a different commit"; FAIL=$((FAIL+1)); } \
+  || { echo "  ok    a sibling at another commit is refused - the clone starts cold"; PASS=$((PASS+1)); }
+
 echo "-----"
 if [ "$FAIL" -eq 0 ]; then echo "all sync-with-main tests passed ($PASS checks)"; exit 0; else echo "SOME TESTS FAILED ($FAIL)"; exit 1; fi

@@ -95,7 +95,7 @@ def _rel(path: str) -> str:
     """
     try:
         rel = os.path.relpath(path, HERE)
-    except ValueError:                     # a different drive or an unresolvable pair
+    except ValueError:  # a different drive or an unresolvable pair
         return path
     return path if rel.startswith(os.pardir) else rel
 
@@ -103,6 +103,7 @@ def _rel(path: str) -> str:
 def _abs(recorded: str) -> str:
     """A recorded dependency path, resolved against THIS tree - the inverse of `_rel`."""
     return recorded if os.path.isabs(recorded) else os.path.join(HERE, recorded)
+
 
 # The cache itself never participates in generating a map, so its own source is not an input; every
 # other .py here is (tests excluded - they cannot affect a gen either, and including them would

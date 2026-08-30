@@ -164,6 +164,7 @@ seed_roll_cache() {
     [ -d "$sib/.claude/skills/diagram/.gencache" ] || continue
     sib_head="$(git -C "$sib" rev-parse HEAD 2>/dev/null)" || continue
     [ "$sib_head" = "$head" ] || continue
+    mkdir -p "$(dirname "$cache")" 2>/dev/null || return 0   # the skill dir exists in any real clone; a fixture may not have it
     cp -a "$sib/.claude/skills/diagram/.gencache" "$cache" 2>/dev/null || return 0
     echo "sync-with-main: seeded the roll cache from $(basename "${sib%/}") (same commit) - a cold clone pays ~2 min re-rolling maps"
     return 0
