@@ -75,9 +75,24 @@ One row per check: owning placer (feature 163's ledger already measured the last
 
 The ledger's stages are the batches: `water_frame`, `field`, `sink`, `seat`, `homesteads`, `track`,
 `appurtenances`, `web`, `notice`, `hinterland`, `woodland`, `windbreak`, `bamboo`, `crossings`, `frame`,
-`finish`. Per batch: write the replacement test, PROVE IT FIRES against the unfixed placer, then delete the
-check. **The battery keeps running throughout**, so a botched migration is visible immediately - that is
-the whole reason for this ordering.
+`finish`. Per batch: write the replacement test and PROVE IT FIRES against the unfixed placer. **The
+battery keeps running throughout**, so a botched migration is visible immediately - that is the whole
+reason for this ordering.
+
+**REVISED AFTER THE FIRST FIVE (2026-08-30): the DELETION is deferred to Phase 4 and done once.** The
+original plan deleted each check as its replacement landed. Five in, that turned out to buy nothing and
+cost a great deal: most segments only EMIT, their values being computed upstream through the registry's
+`needs` dataflow, so a per-check excision orphans computations that feature 146 warns about ("stubbing the
+call is not removing the check") - and Phase 4 deletes the whole package regardless, taking every orphan
+with it. Each per-check retirement also drags a ripple of check-suite edits that Phase 4 would delete
+anyway; the second migration spent as long repointing feature 163's journal-test fixture as it did on the
+rule.
+
+FR-004's requirement is that no check is deleted before its replacement exists and is PROVEN. Building all
+the replacements first and deleting once satisfies that more strictly, not less: the battery stays live over
+the entire migration rather than thinning as it goes, so every replacement is written against a tree the
+old rule is still guarding. The migration record (FR-009) tracks coverage per check, and Phase 4 refuses to
+start until every one of the 147 has a proven destination.
 
 The 17 completeness ratchets (which read no manifest key) become static tests over the code. The whole-map
 properties become one seed-sweep test.
