@@ -194,6 +194,16 @@ differs by tier is the COUNT (a city draws the set: the principal board plus one
 | `kosatsuba_by_the_road` | same module (the board within 90 px of a way) | the notice board never posted -> RED |
 | `kosatsuba_faces_the_road` | same module (`rot` PARALLEL to the nearest way's bearing) | same mutation -> RED. MEASURED, not guessed: the first draft asserted the perpendicular and read 90 deg off; the reference roll has rot -95.2 against a way bearing of -95.2, and the measurement is recorded in the test |
 
+| `paddy_bunds_clear_the_supply_channels` | `tests/gate/test_bunds_and_dikes.py`; the engine's own `supply_bank_clearance` - the same call `_carve`'s `clear_supply` makes | `supply_bank_clearance` made to report the bund inside -> RED. The judged-vertex count is asserted, so it cannot pass on an empty span |
+| `paddy_bunds_clear_the_collector` | same module (a ring SEGMENT with both ends on the drain and a span wider than the stroke has crossed it) | the supply half's twin, one ditch over |
+| `bund_beans_on_bunds` | same module (a bead inside a stroke's own HALF-WIDTH, never a flat tolerance) | my first draft used a flat 2 px and reported one false burial; measured, zero of 621 beads are inside any stroke, and the correction is recorded in the test |
+| `dry_plot_furrows_vary` | same module (the adjacency radius DERIVED from the plots' own size, as the rule has been since 2026-08-19) | `theta` is in RADIANS - my first draft compared it in degrees, called all 24 adjacent pairs identical and reported a defect that is not there. Live spread: -0.9 to +0.8 rad |
+| `polder_dike_is_earthwork` | same module (widest stretch at least 1.4x the narrowest) | the dike made to report a uniform width -> RED |
+| `structures_clear_of_dike` | same module (nothing built inside the dike's recorded keepout) | the keepout population is asserted first |
+| `polder_channels_clear_of_dike` | same module (a course crossing the crest away from a recorded GAP is a breach) | the crest and course populations are asserted first |
+| `waterward_strips_run_off_the_frame` | same module (the reed strip must reach the view edge on a DECLARED waterward face) | added 2026-08-29 for a defect a fix introduced: the strip went from "drawn to the canvas edge" to a fixed depth band, and a band can end inside the view |
+| `paddy_plot_seams_shared` | **carried by `tests/gate/test_paddy_fabric.py`'s over-count ceiling** - the seam and the lap are two readings of the same fabric, and the ceiling is what holds the lap to a shared wall rather than a doubled one | - |
+
 ## Battery-internal - they go WITH the battery, and owe no destination
 
 These four do not state a rule about a map. They state that the battery's OWN classification tables are
