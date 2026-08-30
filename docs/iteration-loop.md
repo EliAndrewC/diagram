@@ -124,7 +124,7 @@ the parallel ideal of 250 CPU-seconds of real tests; ~5 s is the remaining tail 
 single tests are now 4.3 s: a site-justice proposal, a city-frame check, a comb-grain roll). The
 only lever left worth more than a second is the CPU itself: the two biggest files are
 `test_regressions.py` (the corpus replay, 33 s CPU after the carriers left) and
-`check_village/test_driver_and_fixtures.py` (32 s CPU - "every solid struct is gated off every
+the retired `check_village/test_driver_and_fixtures.py` (32 s CPU - "every solid struct is gated off every
 hazard", ~3 s per parameter because each runs a targeted gate on a whole fixture). Halving those
 would save ~3 s of wall. Not taken: a 23 s quick is at the point where a model turn costs more than
 the test run, so the next gain is fewer turns, not a faster gate.

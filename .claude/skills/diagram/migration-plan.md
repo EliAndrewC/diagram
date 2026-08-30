@@ -38,7 +38,7 @@ A `/diagram` Mode B map has three layers, and only ONE of them is changing.
 | Layer | What it is | Size | Converting? |
 |---|---|---|---|
 | The **engine** - the `settlement/` package (split from settlement.py by feature 025) | 338 methods that DRAW things: farmhouses, paddy combs, torii, city walls, castles, markets, wards | 16.0k lines across 16 subfiles | **No.** Already spans hamlet to capital. |
-| The **validator** - `check_village/` | The gate. 189 checks run on a single hamlet; more at larger tiers | 15.7k lines | **No.** It is the reason this migration is safe. |
+| The **validator** - `check_village/` | RETIRED, feature 166. It was the reason this migration was safe while maps were placed by hand; once generation is scripted, a check that fires reports a bug in the placer, and the place to fix that is the placer | - | Deleted: 18,830 lines, 142 rules re-homed |
 | The **composition** - `pool/*/<name>.gen.py` | Which features exist on THIS map, where each one sits, how they relate | ~200-900 lines **per map**, hand-written | **Yes. This is the whole migration.** |
 
 The composition layer is what costs hours per map, is where every placement bug lives, and is what
@@ -204,7 +204,7 @@ These are the failure modes that have actually cost this project time. They are 
 - **A check that never runs looks exactly like a check that passes.** `wells_off_the_wet_toe` was
   written for a hamlet and placed inside a village-scale block; it never ran on the map that
   motivated it. When you add a check, prove it FIRES on the broken artifact before you fix it.
-- **Save every bad map as a negative fixture** in `pool/regressions/`. Coverage proves a check ran,
+- ~~**Save every bad map as a negative fixture** in `pool/regressions/`~~ (RETIRED with the battery, feature 166: a defect in a scripted map becomes a unit test of the placer that made it, and the frozen manifest proves nothing a placer test does not). Coverage proves a check ran,
   not that it has teeth.
 - **Enumerate what binds a feature BEFORE moving it.** One reservoir got moved five times because
   its three constraints (outside the crop, uphill, anchored on the main channel's last point) were
@@ -312,4 +312,4 @@ real consumer, so the seam is observed rather than predicted.
   the regression corpus's frozen fixtures.)
 - **Frozen** - a legacy map's permanent state since 2026-08-16: committed artifacts kept as
   exhibits, gen never re-run, gate never re-applied. `pipeline/poolmaps.py` holds the classification.
-- **The gate** - `check_village/`. **`make done`** - the full lint/type/test/coverage run.
+- **`make done`** - the full lint/type/test/coverage run. (The gate was `check_village/`; it is retired - see feature 166.)

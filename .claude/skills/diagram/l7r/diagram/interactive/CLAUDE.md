@@ -117,7 +117,8 @@ one key enough - and it is why the class is a VILLAGE lane rather than a hamlet 
 ## Tagging a new feature
 
 At the emit site, either `with self.feature("<class key>"):` around the drawing, or `cls=` on the
-one `add*()` call. A class key MUST be a row of `classes.py` - the gate check `all_ink_is_ruled_on`
+one `add*()` call. A class key MUST be a row of `classes.py` - `all_ink_is_ruled_on` (now
+`tests/gate/test_map_vocabulary.py`)
 fails a hamlet map on ink with no class and on a key the registry does not know. A feature the GM
 rules NOT highlighted is tagged `"-"` and gets a row in `NOT_HIGHLIGHTED_RULINGS`.
 
@@ -126,7 +127,7 @@ needs: label and subject are one class, so hovering either lights both.
 
 `place` is a RESERVED key rather than a row of `classes.py`: it tags the title placard and its name,
 and its modal is built per map by `place.py` instead of being written once in the vocabulary. The
-census and the gate check both know it, so the placard is highlightable and is never reported as
+census and the ruling both know it, so the placard is highlightable and is never reported as
 unruled ink. The scale bar beside it keeps `cls="-"`.
 
 ## Verifying

@@ -2,13 +2,15 @@
 
 Split from the 2,913-line `hamletgen.py` monolith by feature 111 (constitution Principle X
 clause 13: files stay at human scale - the cost being managed is context-window tokens), following
-the `check_village/` and `waterfields/` exemplars. **Load only the file the task calls for**; this
+the `waterfields/` exemplar. **Load only the file the task calls for**; this
 index is the map. `import hamletgen` still exposes the whole consumed surface via `__init__.py`
 (star-import re-exports, clause 14), and the CLI is now `python3 -m l7r.diagram.hamletgen`.
 
 Read the package docstring in `__init__.py` first if you have not worked on this engine before: it
-carries the four doctrine paragraphs (WHAT THIS IS, THE ORDER IS THE DESIGN, DERIVE NEVER PIN, THE
-CHECKS ARE THE ORACLE) that explain why the generator is shaped the way it is.
+carries the doctrine paragraphs (WHAT THIS IS, THE ORDER IS THE DESIGN, DERIVE NEVER PIN) that
+explain why the generator is shaped the way it is. A fourth, THE CHECKS ARE THE ORACLE, went with the
+check battery in feature 166: `generate()` no longer gates, and a roll's only self-report is whether
+its ways reach every house it seated.
 
 **Tiers share a library, and the rule is MOVE, never copy** (GM 2026-08-17, feature 119). The
 tier-agnostic machinery this package used to own - the geometry helper set, `Pt` / `Poly` /
@@ -27,10 +29,11 @@ Three invariants the split does NOT touch:
   map. A hard-coded coordinate silently becomes false when the thing it referenced moves; that is
   the project's standing rule and it is also what lets one script run at any size, seed or fall
   direction.
-- **The checks are the oracle, per ROUND not per placement.** `generate()` runs
-  `check_village.gate()` in-process on the finished manifest. The placer already refuses an
-  overlapping seat, so overlap checks are a formality; what the gate catches is emergent (acreage
-  vs household count, a marsh uphill, a windbreak on the lee side).
+- **A ROLL REPORTS ON ITSELF, AND ON ONE THING ONLY** (feature 166). `generate()` used to run the
+  whole check battery in-process on the finished manifest. It is retired: every rule it held is now
+  proven at the placer that makes it, or is a recorded drop. What a finished roll still says is
+  whether its ways reach every house it seated - the one property no placer can promise in advance,
+  because reachability depends on fabric that does not exist when the seats are chosen.
 
 ## Look here when
 

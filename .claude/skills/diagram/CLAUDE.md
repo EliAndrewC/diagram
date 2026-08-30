@@ -1,6 +1,6 @@
 # /diagram engine - dev loop
 
-Guidance for *working on the diagram engine* (the `settlement/` package, the `check_village/` package, the pool
+Guidance for *working on the diagram engine* (the `settlement/` package, the `overlap/` taxonomy, the pool
 generators), as opposed to *invoking* `/diagram` to draw a map (that is `SKILL.md`). This file
 auto-loads whenever a session edits files in this directory - which is exactly when it applies.
 
@@ -30,13 +30,13 @@ This directory - not `l7r/diagram/` - is still the `sys.path` root, and `pool/`,
 is unchanged by the move: `SKILL = dirname(dirname(HERE))` from `pool/<tier>/x.gen.py` still lands
 here. Engine modules that compute the skill root from their OWN location moved two levels deeper and
 were adjusted to match (`gencache`, `pool_index`, `render_cache`, `cohort_audit`, `cache_audit`,
-`make_regressions`, `timings`, `hamletgen`, `check_village/__main__`) - a test asserts three of them
+`timings`, `hamletgen`) - a test asserts three of them
 still resolve here, because a wrong depth is silent and just lands one directory short of `pool/`.
 
 | directory | what is in it | load its index when |
 |---|---|---|
 | [`l7r/diagram/settlement/`](l7r/diagram/settlement/CLAUDE.md) | the Mode B drawing engine (the `Settlement` class and its mixins) | you are changing what a settlement map DRAWS or where it places something |
-| [`l7r/diagram/check_village/`](l7r/diagram/check_village/CLAUDE.md) | the gate: the whole check battery, as a registry of segments | you are adding, changing or running a check |
+| [`l7r/diagram/overlap/`](l7r/diagram/overlap/__init__.py) | the overlap TAXONOMY and matrix: which features may lie on which, and why | you are adding a footprint feature, or a pair overlapped that should not have |
 | [`l7r/diagram/waterfields/`](l7r/diagram/waterfields/CLAUDE.md) | the water-first field engine (v2 comb fields) | you are changing paddies, bunds, canals or the field frame |
 | [`l7r/diagram/hamletgen/`](l7r/diagram/hamletgen/CLAUDE.md) | the scripted hamlet generator - a whole hamlet from a 9-line spec | you are working on scripted generation |
 | [`l7r/diagram/sitegen/`](l7r/diagram/sitegen/CLAUDE.md) | tier-agnostic generation machinery the tiers SHARE (geometry, types, worker counts) | you are adding a tier generator, or moving a stage out of one |
@@ -125,7 +125,6 @@ it is the tooling. With remote off, a paid run the tooling was about to start is
 | `make overlap-audit M=...` | does A overlap B on a finished map, over RECORDS and over drawn INK (five families). Replaces the point-in-polygon script that got hand-written twelve times across feature 150 | ~2 s |
 | `make map GEN=... PROFILE=1` | the same roll, plus where its time went: per-stage timings, the total and the slowest stage | the roll + ~0 |
 | `make verify` | THE PAIRED RUN: starts the gate and prints the settlement-review to dispatch in the same turn. Neither half runs alone (`pair-hooks.sh`); a one-sided case takes `PAIR_OK="<reason>"` | the gate, with the review beside it |
-| `make new-check NAME= FILE= TEST=` | scaffold a gate check: segment stub with the next key, sorted fixture entry, test stub with builders imported | ~1 s |
 | `make reference` | one seed of the reference hamlet (Inashiro), alone - through the roll cache since feature 135: **1.7 s** when nothing the roll executes changed (it says HIT), ~37 s when something did; `GATE_NO_CACHE=1` forces the roll | **0.55 s HIT / ~37 s MISS** |
 | `make durations` | where the suite's time goes - run this when a target feels slow | ~35 s |
 | `make cov-file FILE=... MOD=...` | which lines of MOD does ONE test file reach - the answer `make test-full` costs 10 minutes to give (feature 146). Serial, no workers; grep the module you care about out of the table | ~2-10 s |
@@ -158,7 +157,7 @@ rolled maps. Marking is `@pytest.mark.rolls_map`, guarded by `tests/test_markers
 
 - **A performance increase is never silently absorbed** (feature 129, constitution VI): `make perf-report` names the band; any increase on any seed or the total - per environment - owes `make perf-explain WHY=...` from you and a confirmation from the **`perf-audit` subagent** (launch it; never pass `AS=perf-audit` yourself); above 5%/10% the subagent's audit; above 10%/20% the GM's sign-off. The push refuses without them.
 - Iterate on the ONE motivating map; run the full test bed exactly **once**, at the end. That final
-  sweep is MANDATORY whenever shared engine code changed (`settlement/`, `check_village/`,
+  sweep is MANDATORY whenever shared engine code changed (`settlement/`, `overlap/`,
   `waterfields/`, a scripted engine).
 - `python3 -m l7r.diagram.pipeline.regen pool/<type>/<map>.gen.py` - the cache skips the work and
   prints `CACHED` / `REGENERATED` / `FROZEN` every time.
@@ -173,7 +172,7 @@ rolled maps. Marking is `@pytest.mark.rolls_map`, guarded by `tests/test_markers
   test run** - an unimported builder, an undeclared segment input, an unsorted fixture, a wrong test
   coordinate are ten-second fixes that cost a full model round trip each when a test finds them one
   at a time; fix everything a failing run lists before re-running; **scaffold a check with
-  `make new-check`** so the conventions cannot be missed; and **never write a number into a record
+  and **never write a number into a record
   that was not measured on the artifact** (`make sun-audit` for the sun and the belt) - a guessed
   figure is a correction round the reviewer will make you pay.
 
@@ -199,18 +198,18 @@ rolled maps. Marking is `@pytest.mark.rolls_map`, guarded by `tests/test_markers
 
 **The gate** ([`dev/gate.md`](dev/gate.md))
 
-- Adding a check: write `_seg_<key>__<name>` in the `check_village/segments_*` file that covers its
-  theme, body reading inputs as keyword params defaulting to `_UNBOUND` and returning
-  `_kept(locals(), <literal tuple>)`; extend `tests/fixtures/gate_check_names.json`. There is **no
-  registry row to write** - the row and the execution position both derive from the function itself.
-- Run one check by itself with `gate(M, only={"check_name"})`. Do not go hunting for the segment by hand.
-- **A check that never RUNS looks exactly like a check that passes.** Any rule behind
-  `if meta.get(...)` needs a companion check that the DECLARATION EXISTS.
-- Build check-test manifests with the fixture builders (`manifest`, `house`, `yard`, ...), not by hand.
-- Placement and its check must read the SAME manifest source - and when you mirror a gate
-  measurement, mirror its WINDOW, not just its formula.
-- A map may break a rule, but only IN WRITING: `s.meta(waivers={...})` with 60+ characters of real
-  reason, and freeze the pre-waiver manifest into `pool/regressions/`.
+- **A RULE ABOUT A MAP IS A TEST OF THE PLACER THAT MAKES IT** (feature 166, GM 2026-08-30). There is
+  no post-placement check battery: `check_village` and its 1,371 segments are deleted. A clearance or
+  seat a placer decides is a unit test of that placer; a property of a FINISHED map that no single
+  placement owns is a seed test in `tests/gate/` on a cached roll; a fact about the code is a static
+  test; and a rule about a feature no scripted generator produces is a recorded DROP with its
+  grounding kept. Mode A is the exception the GM drew himself - a compound plan is placed by a
+  person, so it keeps its `building-review` / `size-audit` agents and their frozen bad-SVG fixtures.
+- **Non-vacuity is asserted, never assumed.** A seed test whose subject list is empty passes; every
+  test in `tests/gate/` states what it FOUND before it states the found thing is well formed.
+- Placement and its test must read the SAME source - import the engine's predicate rather than
+  restating it, and where a restatement is unavoidable, restate it EXACTLY.
+
 
 **Diagnostics** ([`dev/diagnostics.md`](dev/diagnostics.md))
 

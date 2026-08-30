@@ -61,7 +61,7 @@ farmland, on the outcast side, clear of every structure, and inside the map's cu
     python3 -m l7r.diagram.tools.site_justice legacy-hand-authored-pool/towns/hirameki/hirameki.json boundary_marker --ground=1620,1900
 
 It proposes seats **cheapest-on-the-frame first** (`frame_cost=0` means the crop is unchanged by
-that seat) and adjudicates each one by building a trial manifest and running `check_village.gate()`
+that seat) and adjudicated each one by building a trial manifest and gating it (RETIRED with the battery, feature 166 - `make site-justice` no longer exists; ask the placer directly with `open_seat` and `why_placed`)
 on it, reporting the checks that fail there but not with the feature absent.
 
 **The lesson, which generalizes past this feature.** Its predecessor was a scratchpad script that

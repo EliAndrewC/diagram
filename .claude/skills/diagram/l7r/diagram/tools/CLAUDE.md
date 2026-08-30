@@ -23,7 +23,6 @@ Not `python3 tools/why_placed.py`. A package module run as a loose script puts `
 | Is drawn ground cover standing somewhere the engine's keep-outs should have stopped it? | `scatter_audit` |
 | Do the yards and beds have their sun, is the belt off the plots, and how much of the belt is actually on the page? MEASURE THIS BEFORE WRITING A NUMBER INTO A RECORD | `sun_audit` (`make sun-audit`) |
 | Does this converted map carry every feature FAMILY (and fixture kind) the reference hamlet does? MEASURE THIS BEFORE SAYING SO | `family_census` (`make family-census`) |
-| I am adding a gate check - write the segment stub, the sorted fixture entry and the test stub for me | `new_check` (`make new-check`) |
 | Does using the generation cache ever change what a map looks like? | `cache_audit` |
 | I fixed one hamlet - does the fix generalize across a cohort, and what exactly collides? | `cohort_audit` |
 | I want to look closely at one spot on a rendered map, in manifest coordinates | `crop_map` |
@@ -31,10 +30,8 @@ Not `python3 tools/why_placed.py`. A package module run as a loose script puts `
 | Does A overlap B on a finished map - a footprint on marsh, a parcel across its ditch, reed INK over a mound or open water? | `overlap_audit` (`make overlap-audit`) |
 | How long does this loop actually take, and where does the time go? | `timings` |
 | Does a paddy bund step sideways and carry on parallel to itself anywhere on this map? | `jogs` |
-| Rebuild the frozen negative-fixture corpus in `pool/regressions/` | `make_regressions` |
 | Which modules are on the HAMLET PATH and owe 100% coverage? (derived from the scripted rolls' records; the full run enforces it) | `hamlet_floor` (`make hamlet-floor`) |
 | What does the map look like after each placement stage, and why is that stage there? | `placement_stages` |
-| Which gate checks does anything the engine can produce TODAY still make FAIL - as opposed to which are merely NAMED in a test? | `firing_census` (`make firing-census`, `make firing-census-suite`) |
 
 Each module's own docstring carries the WHY it exists, usually with the incident that produced it.
 Read that before extending one. The skill's [`../CLAUDE.md`](../../../CLAUDE.md) carries the operational
@@ -44,7 +41,7 @@ guidance for the two that change how you debug: "Ask the GEN who placed it" (`wh
 ## The rule these share: a diagnostic OBSERVES, it never restates
 
 `site_justice` adjudicates a candidate seat by building a trial manifest and running
-`check_village.gate()` on it. `why_placed` reads its refusal causes off the real `_in_blocked` /
+the retired gate on it. `why_placed` reads its refusal causes off the real `_in_blocked` /
 `_near_corridor` / `_hard_clear` as they return. Neither re-implements a rule, and that is not
 style: the predecessor of `site_justice` was a scratchpad script that re-derived every rule as its
 own predicate, and it drifted **within a single session** - a relaxation made to satisfy one map
@@ -76,7 +73,7 @@ with the same shape:
   byte and the trial proves nothing while printing the same `[OK ]` as a real one.
 - **State the membership rule at BOTH ends.** Leaving it to coverage's config was wrong in both
   directions on the same day: `--include` is ignored when `[tool.coverage.run] source` is set (so
-  the census swept `check_village`, whose literals cannot move an artifact), and that same `source`
+  the census swept the retired `check_village`, whose literals could not move an artifact), and that same `source`
   list omits `waterfields` (so the comb-field engine, which draws every paddy on these maps,
   contributed zero candidates and nothing said so).
 
@@ -92,8 +89,9 @@ tool dropped in here does not silently owe 100% coverage on the day it arrives.
 
 ## Known stale, recorded rather than quietly fixed
 
-`make_regressions` reads `check_village.py` for the list of `check("...")` names. That file has not
-existed since feature 024 split the gate into the `check_village/` package, so the tool raises
-`FileNotFoundError` there. This predates the 2026-08-16 reorganization and was left alone by it.
-The check names are now derivable from `check_village.registry`, or readable from the frozen
-[`../tests/fixtures/gate_check_names.json`](../../../tests/fixtures/gate_check_names.json).
+The five tools that existed only to drive or count the check battery went with it in feature 166:
+`make_regressions` (rebuilt the frozen bad-manifest corpus), `check_census` and `firing_census` (asked
+which checks still fired), `site_justice` (adjudicated a seat by gating a trial manifest) and
+`new_check` (scaffolded a segment). A rule about a map is now a test of the placer that makes it; to
+ask where a feature may go, use `open_seat` and `why_placed`, which read the placer's own refusals
+rather than a second opinion about them.

@@ -1,7 +1,7 @@
 # `pipeline/` - how a pool map gets regenerated, cached, rendered and indexed
 
 The BUILD side of the skill. The other three sides are the drawing engines (`settlement/`,
-`waterfields/`, `hamletgen/`, `compound.py`), the gate (`check_village/`), and the by-hand
+`waterfields/`, `hamletgen/`, `compound.py`) and the by-hand
 diagnostics ([`../tools/`](../tools/CLAUDE.md)).
 
 Run these as modules, from the skill root:

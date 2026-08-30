@@ -14,7 +14,7 @@ The old heavy maps (Minami ~14.5s, Nagahara / Tango / Kikuta / Hoshizora ~10s af
 optimization passes) are FROZEN since 2026-08-16 and never regenerate - see "The legacy pool is
 FROZEN" in [`pool.md`](pool.md):
 
-    DIAGRAM_SKIP_RENDER=1 python3 pool/<type>/<map>.gen.py && python3 -m l7r.diagram.check_village pool/<type>/<map>.json
+    DIAGRAM_SKIP_RENDER=1 python3 pool/<type>/<map>.gen.py
 
 **...or let the CACHE skip the work entirely** (2026-08-08). `pipeline/regen.py` regenerates a map only if
 something that map depends on actually changed, and prints `CACHED` or `REGENERATED` every time:
@@ -57,7 +57,7 @@ brought it back to 77s. Re-measure and update this number when it drifts again -
 is what makes a session mis-plan its loop.) So run the red/green loop against the ONE map
 (or fixture) that shows the defect, where cycles are near-free, and reserve the full sweep for AFTER
 that map is green. The sweep is MANDATORY, though, whenever shared engine code changed
-(the `settlement/` package, the `check_village/` package, the `waterfields/` package, a scripted engine): every LIVE
+(the `settlement/` package, the `overlap/` taxonomy, the `waterfields/` package, a scripted engine): every LIVE
 pool map is a downstream artifact of the engine, so the sweep is what proves "no other map
 regressed" instead of hoping it. LIVE means the scripted maps only - the hand-authored pool is
 FROZEN (see "The legacy pool is FROZEN" in [`pool.md`](pool.md)) and is deliberately allowed to go stale.
@@ -127,7 +127,7 @@ have caught: the change altered geometry an existing test depended on, and the p
 ~45s and reach every test the change can. So: cheap linters, then whole files, then the gate ONCE.
 
     python3 -m ruff format . && python3 -m ruff check . && pyrefly check
-    python3 -m pytest tests/settlement/ tests/check_village/ -q -n auto --no-cov    # the files you touched, WHOLE
+    python3 -m pytest tests/settlement/ tests/gate/ -q -n auto --no-cov    # the files you touched, WHOLE
     make done                                                                  # once, backgrounded, not watched
 
 ### Probe vs survey: when `-x` pays (GM 2026-08-15)
@@ -166,7 +166,7 @@ with feature 022 - gate() is a registry of segment functions now, each with its 
 
 Touching a `settlement/` method breaks its unit tests deterministically - you know which ones
 before you run anything. `channel_footbridges` has `test_channel_footbridges_*` (in `tests/settlement/`)
-and the `_footbridge_map` (in `tests/check_village/`) fixture; changing placement semantics (e.g. "a plank now
+and the `_footbridge_map` fixture; changing placement semantics (e.g. "a plank now
 needs cultivation on both banks") means those setups need cultivated ground added. Update them in
 the same turn as the engine change, don't discover the breakage via a failed pool sweep. Grep for
 the method name in `test_*.py` before editing.

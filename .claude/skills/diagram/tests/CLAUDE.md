@@ -32,7 +32,6 @@ changed, you know which directory to open.
 | directory | tests | its own index |
 |---|---|---|
 | `settlement/` | the Mode B drawing engine | [CLAUDE.md](settlement/CLAUDE.md) |
-| `check_village/` | the gate (the ~1,371-segment check battery) | [CLAUDE.md](check_village/CLAUDE.md) |
 | `hamletgen/` | the scripted hamlet generator | - |
 | `sitegen/` | the machinery the tiers SHARE (geometry, types, worker counts) | - |
 | `waterfields/` | the water-first field engine | - |
@@ -44,11 +43,11 @@ changed, you know which directory to open.
 At the root of `tests/` sit the suites that are not about one module:
 
 - **`test_villages.py`** - the pool's cheap ratchets (every gen classified, the CPU-budget guard) and the
-  helpers; the sweep itself - every LIVE map through `gencache.gate_obtain` and the full check battery,
-  plus the `GEN_TIME_BUDGETS` - is `full/test_villages.py`.
-- **`gate/test_regressions.py`** - replays the frozen negative-fixture corpus in `pool/regressions/`,
-  demanding each manifest still fires the checks it was frozen to fire; its coverage carriers are
-  `full/test_coverage_carriers.py`.
+  helpers; the sweep itself - every LIVE map through `gencache.gate_obtain`, proving each shipped
+  generator RUNS inside its `GEN_TIME_BUDGETS` entry and emits a manifest - is `full/test_villages.py`.
+- **`gate/test_*.py`** - the rules that used to be the check battery, each now asserted once per code
+  change on a cached roll rather than once per map generated (feature 166; the per-rule ledger is
+  `specs/166-retire-the-check-battery/migration-record.md`).
 - **`test_compound.py` / `test_citybudget.py`** - the two engine modules that are still single
   top-level files.
 
@@ -71,10 +70,10 @@ not read `.gitignore`.
 ## Conventions
 
 - **`_builders.py`** in a mirrored package holds that package's shared manifest/settlement
-  builders. Import it by package path: `from tests.check_village._builders import bldg, house`.
+  builders. Import it by package path: `from tests.settlement._builders import bldg, house`.
   These files do not start with `test_`, which is why the engine-tree walks prune `tests/` by name
   (below).
-- **`test_surface.py`** in `check_village/`, `hamletgen/` and `waterfields/` is the package-surface
+- **`test_surface.py`** in `hamletgen/` and `waterfields/` is the package-surface
   guard: it censuses what the rest of the skill actually reaches through the package and proves the
   `__init__.py` re-export still resolves it. Feature 027 replaced hand-maintained rosters with star
   imports plus these guards, so the surface is derived and the guard is what makes that safe.
@@ -87,7 +86,7 @@ not read `.gitignore`.
   one delegate so there is ONE body, and test the lifted function with plain dicts and tuples. Worked examples:
   `web_pieces` / `web_rejoinable` / `commit_lane` / `bowtie_cut` / `push_clear_of_fabric` (hamletgen/ways.py),
   `fan_rival` (settlement/water_ways.py), `pick_caption_seat` (settlement/structures/fixtures.py),
-  `anchor_holds` (check_village/segments_05b), `hem_on_water` (settlement/fields/comb.py), `s_on_side`
+  `hem_on_water` (settlement/fields/comb.py), `s_on_side`
   (waterfields/polder.py), `bamboo_blocked` (hamletgen/hinterland.py). **Lifting only helps when the closure
   is CALLED and one branch inside it is not** - a closure a live roll never calls at all leaves the delegate
   uncovered too, and that one wants a direct test of the function that owns it (`_pull_back_to_service`,
@@ -139,4 +138,4 @@ imports, it does not belong here - put it in the engine, or in
 **`tests/` did not move under `l7r/diagram/` and should not.** The skill directory stays the
 `sys.path` root (feature 119), so `HERE`-style roots computed here are unchanged, while the engine's
 own roots moved two levels deeper. Tests import the engine by its full name -
-`from l7r.diagram.settlement import Settlement`, `from l7r.diagram import check_village`.
+`from l7r.diagram.settlement import Settlement`, `from l7r.diagram import overlap`.

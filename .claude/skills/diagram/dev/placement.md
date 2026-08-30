@@ -330,7 +330,7 @@ should not overlap with X'."* That is now a solved problem, and this is the whol
 to do.
 
 **One registry, and everything follows from it.** A new footprint feature goes in
-`_OVERLAP_STRUCTS` (check_village/common_01_geometry.py) - or, if it is MEANT to overlap something, in
+`_OVERLAP_STRUCTS` (`l7r/diagram/overlap/taxonomy.py`) - or, if it is MEANT to overlap something, in
 `_OVERLAP_EXEMPT` with the reason. You cannot forget: `every_feature_classified_for_overlap` fires
 when a generator emits a feature key nobody classified. Membership alone then gates the feature off
 **fifteen hazards** - the wall, the moat, the road, streets and alleys, streams, channels, the
@@ -347,7 +347,7 @@ at a rendered map. Four such checks now read `solid_structs(M)`: `ring_road_kept
 `city_government_offices_dont_abut`, `city_wells_in_block_interiors`, and the merchant-estate
 court test.
 
-**The ratchet.** `test_every_solid_struct_is_gated_off_every_hazard` (in `tests/check_village/`) plants one
+**The ratchet.** `tests/gate/test_no_feature_overlaps.py` asserts the matrix on both archetypes, and `tests/settlement/test_homestead_parts.py` censuses the roster; the older `test_every_solid_struct_is_gated_off_every_hazard` planted one
 instance of EVERY registered key squarely on EVERY hazard and demands the hazard's check fire. If a
 keep-clear check ever falls back to a hand list, that test names both the key and the hazard.
 Verified to have teeth: reverting `ring_road_kept_clear` to its old list fails it with 21 keys
