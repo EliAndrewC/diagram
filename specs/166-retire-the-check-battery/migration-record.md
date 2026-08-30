@@ -30,6 +30,14 @@ probes show existing placer suites already carry some of them, and those drop ag
 | `scalebar_matches_declared_scale` | `..::test_the_scalebar_reports_the_declared_scale` (3 rungs of the ladder) | `bar_ft` offset by one -> RED |
 | `title_clear_of_features` | `..::test_the_blank_spot_scan_refuses_a_box_that_covers_an_obstacle` + `_returns_nothing_when_the_window_is_full` | `_box_clear`'s rect arm short-circuited -> RED |
 
+| `labels_within_image` / `no_label_overlaps` (the REACH half) | `tests/settlement/test_label_placement.py::test_a_tilted_labels_reach_is_its_rotated_quad_not_its_unrotated_box` | `label_aabb` made to return the unrotated box -> RED |
+
+*Note on that last row:* it carries the REACH the two rules depend on, not the rules entire. Containment
+against the frame and pairwise non-overlap still need their own destinations; what is proven here is that a
+tilted caption's reach is its rotated quad, which is the quantity both rules measure and the one
+`dev/gate.md` records being got wrong ("a tilted caption as a ROTATED QUAD" vs "an axis-aligned bounding
+box" - measuring the wrong one made every seat look illegal and the fallback took a worse one).
+
 ## Already carried by an existing test - dropped against it, not rewritten
 
 | check | carried by | proof |

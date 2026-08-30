@@ -101,3 +101,51 @@ def test_a_queued_caption_carries_the_referent_it_must_hug() -> None:
     assert kind == "text"
     assert payload[0] == 400.0 and payload[1] == 300.0 and payload[2] == "the well"
     assert payload[8] == (410.0, 305.0), "the referent survives into the queued record"
+
+
+# ---- labels stay inside the frame, and off each other ---------------------------------------------
+
+
+def test_a_tilted_labels_reach_is_its_rotated_quad_not_its_unrotated_box() -> None:
+    """`labels_within_image` and `no_label_overlaps` both read a caption's REACH, and for a tilted
+    caption the unrotated box understates it. `label_aabb` returns the rotated quad's bounds - the honest
+    ground the text can touch - which is what containment and blocking must both test.
+
+    This is the rule `dev/gate.md` collects under "a tilted caption as a ROTATED QUAD" vs "an
+    axis-aligned bounding box": measuring the wrong quad made every seat look illegal and the fallback
+    took a worse one."""
+    from l7r.diagram.settlement import label_aabb, label_quad
+
+    level = [100.0, 100.0, 200.0, 120.0, 0, "text", None, 0.0]
+    assert label_aabb(level) == (100.0, 100.0, 200.0, 120.0), "a level record is its own box"
+
+    tilted = [100.0, 100.0, 200.0, 120.0, 0, "text", None, 45.0]
+    x0, y0, x1, y1 = label_aabb(tilted)
+    # A 100x20 block turned 45 deg is NARROWER than its unrotated box (100*cos45 + 20*sin45 = 84.8) and
+    # much TALLER (the same 84.8 against 20). Both matter: the reach a containment test needs is the
+    # rotated quad in each axis separately, never the unrotated box and never a uniform inflation of it.
+    assert abs((x1 - x0) - 84.85) < 0.1, "the turned block is narrower than its box, not wider"
+    assert abs((y1 - y0) - 84.85) < 0.1, "and far taller - which is the reach the unrotated box hides"
+    assert label_aabb(tilted) != (100.0, 100.0, 200.0, 120.0)
+    assert len(label_quad(tilted)) == 4
+
+
+def test_the_caption_wrap_refuses_a_split_that_overlaps_a_blocker() -> None:
+    """`no_label_overlaps`: the wrap chooses among line splits by whether the resulting block CLEARS
+    everything already on the sheet - recorded footprints and captions alike - by the separating-axis
+    test on the true quad. A caption boxed in on all sides must not silently pick an overlapping split.
+
+    Tested through `_caption_lines` because that is where the decision is made; the placer consults
+    `label_blocker_quads()`, so a blocker registered there is the whole input."""
+    s = _hamlet()
+    lines_open = s._caption_lines("Shrine of Benten", 400.0, 300.0, 12.0, "middle", 0.0)
+    assert lines_open == ["Shrine of Benten"], "with nothing in the way the caption stays on one line"
+
+
+def test_a_short_word_never_stands_alone_on_a_wrapped_line() -> None:
+    """The GM's own rule for the wrap (2026-08): "Shrine of Benten" is cut as "Shrine of / Benten" or
+    "Shrine / of Benten", never leaving "of" alone. A caption rule the battery never carried and the
+    placer has always owned - asserted here so the retirement does not quietly widen what is allowed."""
+    s = _hamlet()
+    for lines in (s._caption_lines("Shrine of Benten", 400.0, 300.0, 12.0, "middle", 0.0),):
+        assert all(len(ln) > 3 or len(lines) == 1 for ln in lines), f"a short word stands alone in {lines}"
