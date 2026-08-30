@@ -72,7 +72,37 @@ HERE = os.path.abspath(
     os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", "..")
 )  # the SKILL ROOT, not this package: every path below is relative to it. FOUR levels up since feature 119 (l7r/diagram/pipeline/), not two
 CACHE_DIR = os.path.join(HERE, ".gencache")
-FORMAT_VERSION = "1"  # bump to invalidate every entry when this file's key scheme changes
+FORMAT_VERSION = "2"  # bump to invalidate every entry when this file's key scheme changes
+# ^ 1 -> 2 (feature 167): dependency paths are recorded RELATIVE to the skill root, so a cache built
+# in one clone is usable in another. Entries written under "1" carry absolute paths and are ignored
+# rather than re-keyed under the new lookup rule - that discard is the whole point of the bump.
+
+
+def _rel(path: str) -> str:
+    """A dependency path as it is RECORDED: relative to the skill root, or absolute if outside it.
+
+    WHY (feature 167, GM 2026-08-30). A roll cache built by one clone was worthless to another - a
+    fresh clone paid ~2 minutes re-rolling maps a sibling had already rolled from identical source -
+    because `key_for` looks each recorded function up by its filename while walking `engine_files()`
+    of the CURRENT tree. Across roots those never match, every per-function part drops out of the
+    key, and the recomputed key cannot equal the stored one. Recording the path relative to the root
+    makes the two sides meet.
+
+    OUTSIDE THE ROOT STAYS ABSOLUTE, deliberately: the recorder sees every file a roll reads,
+    including fonts, installed packages and the notes mount. Those have no meaningful root-relative
+    form, they are the same files for every clone on this machine, and the only portability this
+    feature needs is between siblings on one machine.
+    """
+    try:
+        rel = os.path.relpath(path, HERE)
+    except ValueError:                     # a different drive or an unresolvable pair
+        return path
+    return path if rel.startswith(os.pardir) else rel
+
+
+def _abs(recorded: str) -> str:
+    """A recorded dependency path, resolved against THIS tree - the inverse of `_rel`."""
+    return recorded if os.path.isabs(recorded) else os.path.join(HERE, recorded)
 
 # The cache itself never participates in generating a map, so its own source is not an input; every
 # other .py here is (tests excluded - they cannot affect a gen either, and including them would
@@ -252,7 +282,10 @@ def key_for(subject: bytes, deps: dict[str, Any] | None) -> str:
             continue
         mod_hash, funcs, classes = split_sources(path)
         parts.append(f"{os.path.basename(path)}:mod={mod_hash}")
-        for qual in sorted(funcs_wanted.get(path, ())):
+        # LOOK IT UP BY THE RECORDED FORM, not by this tree's absolute path (feature 167): the two are
+        # the same string only within the clone that produced the entry, which is exactly why a copied
+        # cache used to miss on every per-function part.
+        for qual in sorted(funcs_wanted.get(_rel(path), ())):
             if qual in funcs:
                 parts.append(f"{os.path.basename(path)}:{qual}={funcs[qual]}")
             elif qual.rpartition(".")[2].startswith("<") or qual in classes:
@@ -269,8 +302,13 @@ def key_for(subject: bytes, deps: dict[str, Any] | None) -> str:
                 # a dep we can no longer resolve (renamed, deleted, or a construct the walk does
                 # not name): fall back to the WHOLE file rather than silently dropping it
                 parts.append(f"{os.path.basename(path)}:whole={_sha(Path(path).read_bytes())}")
+    # A DATA FILE IS HASHED FROM *THIS* TREE (feature 167). The key string carries the RECORDED form,
+    # which is root-relative for anything inside the skill, while the bytes are read from the path that
+    # form resolves to HERE. Hashing the recorded path directly would read the producing clone's copy -
+    # the one way this change could have turned a safe miss into a wrong hit.
     for datafile in sorted(deps.get("files", []) if deps else ()):
-        parts.append(f"data:{datafile}={_sha(Path(datafile).read_bytes()) if os.path.isfile(datafile) else 'missing'}")
+        here = _abs(datafile)
+        parts.append(f"data:{datafile}={_sha(Path(here).read_bytes()) if os.path.isfile(here) else 'missing'}")
     return _sha("\n".join(parts).encode())
 
 
@@ -350,7 +388,13 @@ def record(run: Callable[[], object]) -> dict[str, Any]:
     finally:
         mon.free_tool_id(tool)
         builtins.open = real_open
-    return {"functions": sorted(functions), "files": sorted(files - engine)}
+    # RECORDED ROOT-RELATIVE (feature 167), so the entry is usable by any clone of this tree. The set
+    # arithmetic stays in absolute terms above, because `engine` comes from `engine_files()`; only the
+    # form that lands in the entry is converted.
+    return {
+        "functions": sorted((_rel(path), qual) for path, qual in functions),
+        "files": sorted(_rel(p) for p in files - engine),
+    }
 
 
 def _entry_dir(gen: str) -> str:
