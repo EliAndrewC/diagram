@@ -56,9 +56,9 @@ esac
 [ -n "$MAIN" ] || exit 0
 
 # Does the command cd INTO the mirror root itself? Not a clone under it, and not a read of a path.
-# `_hookmatch.py sanitize` blanks heredoc bodies and quoted strings first, so a `cd /diagram` inside
+# `_hm_shape.py sanitize` blanks heredoc bodies and quoted strings first, so a `cd /diagram` inside
 # a commit message or a document is a MENTION - the rule this whole feature is about.
-SCAN=$(printf '%s' "$INPUT" | "$MT_HERE/_hookmatch.py" sanitize 2>/dev/null || printf '%s' "$CMD")
+SCAN=$(printf '%s' "$INPUT" | "$MT_HERE/_hm_shape.py" sanitize 2>/dev/null || printf '%s' "$CMD")
 
 # GUARD_EDIT_OK: feature 170 FR-005 - fixing a guard that MISSED the shape it was built for, which
 # is the legitimate case this marker exists for.
@@ -79,11 +79,34 @@ case "${CWD%/}" in
   "$MAIN"|"$MAIN"/*) STANDING_IN_MAIN=yes ;;   # the mirror root, or anywhere else inside main's tree
 esac
 
+# GUARD_EDIT_OK: feature 172 - FIXING A GUARD THAT FIRED ON CORRECT WORK, mine, within the hour. A
+# command that LEAVES main before writing is safe, and the first version refused it: the session's cwd
+# was the mirror (a previous command had ended there), the command opened `cd <clone> && ...`, and
+# every write after that `cd` lands in the clone. Judging by the payload's cwd alone cannot see that.
+# So a `cd` OUT of main, at a command position, moves the effective directory before the write test -
+# which is the same reasoning as the leak this guard exists for, applied in the other direction.
+if [ "$STANDING_IN_MAIN" = yes ]; then
+  LEAVES=$(printf '%s' "$SCAN" | grep -oE "(^|[;&|]|&&)[[:space:]]*cd[[:space:]]+\"?[^\"[:space:];&|]+" | tail -1 | sed 's/.*cd[[:space:]]*"\?//')
+  case "$LEAVES" in
+    "") ;;                                    # no cd at all - the command runs where the session stands
+    "$MAIN"/.clones/*) STANDING_IN_MAIN=no ;; # into a clone: a workspace
+    "$MAIN"|"$MAIN"/*) ;;                     # deeper into main, or back to its root - still main
+    /*) STANDING_IN_MAIN=no ;;                # an absolute path outside main entirely
+  esac
+fi
+
 if [ "$STANDING_IN_MAIN" = no ]; then
   printf '%s' "$SCAN" | grep -qE "(^|[;&|]|&&)[[:space:]]*cd[[:space:]]+\"?${MAIN}/?\"?([[:space:]]*(;|&&|\||$))" || exit 0
 fi
 
 # ...and does it then WRITE? A read in main is legitimate and stays legitimate.
+#
+# GUARD_EDIT_OK: feature 172 - A REDIRECT TO /dev/null IS NOT A WRITE, and neither is `2>&1`. The
+# write test matches `>`, so every `2>/dev/null` in an ordinary READ - which is most reads in this
+# repository - looked like a write, and the guard refused a plain `grep ... 2>/dev/null` of mine while
+# I stood in main. Third false positive this session from a pattern that matches a character rather
+# than a thing (`->` in prose, `make -n`, and now this). They are discarded before the test.
+SCAN=$(printf '%s' "$SCAN" | sed -E 's#[0-9]*>&[0-9-]##g; s#[0-9]*>[[:space:]]*/dev/null##g')
 WRITES='git[[:space:]]+(commit|add|merge|rebase|reset|checkout|restore|rm|mv|apply|am|stash|cherry-pick|push|pull|clean|tag|branch[[:space:]]+-)'
 WRITES="$WRITES|(^|[[:space:]])(vim|vi|nano|emacs|sed[[:space:]]+-i|tee|touch|mkdir|rmdir|rm|mv|cp|chmod|chown|ln|truncate|install)[[:space:]]"
 WRITES="$WRITES|>[^&]|>>|python3?[[:space:]]+-c|make[[:space:]]"

@@ -62,8 +62,8 @@ except Exception:
 # caller already read.
 escape_or_refuse() {
   local guard=$1 token=$2 rule=$3 here=$4 reason
-  printf '%s' "${INPUT:-}" | "$here/_hookmatch.py" escape "$token" 2>/dev/null | grep -q yes || return 1
-  reason=$(printf '%s' "${INPUT:-}" | "$here/_hookmatch.py" escape-reason "$token" 2>/dev/null)
+  printf '%s' "${INPUT:-}" | "$here/_hm_escape.py" escape "$token" 2>/dev/null | grep -q yes || return 1
+  reason=$(printf '%s' "${INPUT:-}" | "$here/_hm_escape.py" escape-reason "$token" 2>/dev/null)
   if [ -z "$reason" ]; then
     {
       printf 'BLOCKED: %s with no reason given.\n\n' "$token"

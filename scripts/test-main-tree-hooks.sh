@@ -88,6 +88,30 @@ check "standing in the mirror, escaped WITH a reason -> allowed" 0 "$RC"
 run "$MAIN" "git commit -am x  # MAIN_TREE_OK"
 check "standing in the mirror, escape with NO reason -> refused" 2 "$RC"
 
+echo "--- 4c. LEAVING main before writing is correct work (feature 172 - it refused ME) ---"
+# GUARD_EDIT_OK: feature 172 - the guard fired on its own author within the hour of shipping. The
+# session's cwd was the mirror (a previous command had ended there), the command opened
+# `cd <clone> && ...`, and every write after that cd lands in the clone. Judging by the payload's cwd
+# alone cannot see that, and a guard that refuses correct work is the expensive failure.
+run "$MAIN" "cd $MAIN/.clones/worker && git commit -am work"
+check "standing in main, but cd INTO A CLONE first -> allowed" 0 "$RC"
+run "$MAIN" "cd /tmp && echo x > f"
+check "standing in main, cd right out of the tree -> allowed" 0 "$RC"
+run "$MAIN" "cd $MAIN/specs && echo x > f"
+check "standing in main, cd DEEPER into main -> still refused" 2 "$RC"
+
+echo "--- 4d. a redirect to /dev/null is not a write (feature 172 - the third false positive) ---"
+# GUARD_EDIT_OK: feature 172 - the write test matches `>`, so every `2>/dev/null` in an ordinary READ
+# looked like a write and the guard refused a plain grep of mine while I stood in main. Third false
+# positive this session from a pattern matching a CHARACTER rather than a thing: `->` in printed
+# prose, `make -n`, and this.
+run "$MAIN" "grep -h X /tmp/f 2>/dev/null"
+check "a read with 2>/dev/null while standing in main -> allowed" 0 "$RC"
+run "$MAIN" "git log --oneline 2>&1 | head -3"
+check "a read with 2>&1 -> allowed" 0 "$RC"
+run "$MAIN" "git log > /tmp/out"
+check "a REAL redirect is still a write -> refused" 2 "$RC"
+
 echo "--- 5. it records, with a rule slug (feature 168) ---"
 rules=$(python3 -c "
 import json,glob,os,collections

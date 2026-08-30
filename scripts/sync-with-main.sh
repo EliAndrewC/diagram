@@ -237,7 +237,7 @@ push_cmd() {
   if [ -n "${GATE_STAMP_OK:-}" ]; then
     # shellcheck source=/dev/null
     . "$ROOT/scripts/_guardlog.sh"
-    if ! python3 "$ROOT/scripts/_hookmatch.py" reason-ok <<<"$GATE_STAMP_OK" >/dev/null; then
+    if ! python3 "$ROOT/scripts/_hm_escape.py" reason-ok <<<"$GATE_STAMP_OK" >/dev/null; then
       guard_log sync-with-main blocked "$GATE_STAMP_OK" GATE_STAMP_OK-no-reason
       die "GATE_STAMP_OK needs a REASON, not just a value: two words and eight characters, e.g. GATE_STAMP_OK=\"the gate is green on this content, the stamp predates a docs-only commit\". An escape nobody can audit is indistinguishable from the rule not existing (GM 2026-08-30, feature 170)."
     fi

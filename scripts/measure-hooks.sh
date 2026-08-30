@@ -111,7 +111,7 @@ case "$MODE" in
     # GUARD_EDIT_OK: feature 164 - the shapes are matched against the SANITIZED command (see the note
     # at the top). `SCAN` falls back to the raw command if the matcher cannot be reached, so a broken
     # helper makes this guard stricter rather than blind.
-    SCAN=$(printf '%s' "$INPUT" | "$HERE/_hookmatch.py" sanitize 2>/dev/null || printf '%s' "$CMD")
+    SCAN=$(printf '%s' "$INPUT" | "$HERE/_hm_shape.py" sanitize 2>/dev/null || printf '%s' "$CMD")
     [ -n "$SCAN" ] || SCAN="$CMD"
     case "$SCAN" in
       *"make test-full"*|*"make -C"*test-full*|*"done FULL=1"*)

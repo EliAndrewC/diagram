@@ -45,3 +45,187 @@ Each suite builds its fixtures in its own `mktemp -d`, and since feature 170 eac
 `GUARD_LOG_DIR`. That is the argument that parallelizing is safe; it is not proof, and two suites
 (`test-sync-with-main.sh`, `test-clone-sync-hooks.sh`) manipulate git trees and a host-wide lock.
 Verify before relying on it.
+
+## R4 - the split delivered nothing three times before it delivered anything
+
+Each failure was found by MEASURING the blast radius after the change rather than by assuming the
+split had worked, and each was the same mistake wearing a different coat.
+
+| attempt | measured | cause |
+|---|---|---|
+| after splitting into three leaves | `_hm_make.py` **17 of 18** guards | the deriver's `_SHARED` roster was a HARDCODED list of the four helpers that existed when it was written. The three new leaves were invisible to the closure, so it reported that no guard depends on the escape family - through which every guard reaches its escape. A hardcoded list, in the feature whose subject is deriving instead of listing |
+| after deriving the roster | still **17 of 18** | the closure scanned RAW TEXT, and this repository comments heavily: nearly every guard says *"detection lives in `_hookmatch.py`"* in prose. A mention counted as a dependency - the same mention-versus-invocation mistake the guards have made six times, now in the thing that decides what they depend on |
+| after stripping `#` comments | still **17 of 18** | each leaf's own DOCSTRING opens *"Split out of `_hookmatch.py`"*, and a docstring is not a `#` comment. Stripped via `ast`, and only docstrings: other string literals stay, because `spec_from_file_location(..., "_ratchet.py")` is a real reference expressed as a string and dropping those would UNDER-run |
+| after stripping docstrings | **3 of 18** | the split finally pays |
+
+Final, guards only, against 21 of 21 for every shared file before the feature:
+
+    _hm_make.py     3   (gate, make-only, pair)          _gatecost.py         2
+    _hm_shape.py    3   (main-tree, measure, no-poll)    test_hooks_cases.py  3
+    _hm_escape.py  17   - correct: every guard reaches its escape through `_guardlog.sh`
+    _guardlog.sh   17   - correct, same reason
+
+**The lesson, which is this repository's oldest one in a new place**: a dependency deriver has exactly
+the same failure mode as a guard, and it is not "is the answer plausible" but "is the thing I am
+matching an INVOCATION or a MENTION". Three of the four attempts above were plausible and wrong, and
+only measuring the resulting blast radius told them apart.
+
+## R5 - the final numbers, and one more under-run the tests caught
+
+After the split, comment/docstring stripping, and one more fix, the guard-only blast radius:
+
+| shared file | guards | before the feature |
+|---|---|---|
+| `_hm_make.py` | **3** (gate, make-only, pair) | 21 |
+| `_gatecost.py` | **2** | 21 |
+| `test_hooks_cases.py` | **3** | 21 |
+| `_hm_shape.py` | 17 | 21 |
+| `_hm_escape.py` | 17 | 21 |
+| `_guardlog.sh` | 17 | 21 |
+
+This is exactly the outcome predicted to the GM before the work started: the make/rewrite family drops
+to three, and the shape family stays wide **because the escape family stands on it and every guard
+reaches its escape**. No arrangement of files changes that, which is why the feature also parallelizes.
+
+**The last fix was an under-run my own test caught, and it is the sharpest instance of this feature's
+lesson.** `_hm_escape.py` imports `from _hm_shape import _strip_quotes` - and a Python import NEVER
+writes the extension, so a filename match could not see it. The deriver reported `_hm_shape.py` as
+depended on by 3 guards when the true answer is 17: it would have skipped fourteen suites that a
+change to the shape primitives can break. Created by this feature's own split, in the feature built to
+prevent exactly that, and caught only because FR-004 demanded an assertion on the transitive case.
+
+## R6 - what parallelism actually bought
+
+Measured on this clone, same content, every suite forced stale:
+
+    serial    194 s   (21 of 21 green)
+    parallel   63 s   (21 of 21 green)   HOOKS_JOBS=8 on a 22-core box
+
+3.1x. Not the theoretical 8x, because the suites are uneven - the slowest few dominate the wall clock
+once the rest have finished, and two of them (`test-sync-with-main.sh`, `test-clone-sync-hooks.sh`)
+build real git trees. Raising `HOOKS_JOBS` past 8 cannot beat the longest single suite.
+
+## R7 - the split dropped two constants, and the equivalence test did not catch it
+
+`hooks-test` went red on five suites after the split: every escape that needed a REASON was refused,
+because `_REASON_WORDS, _REASON_CHARS = 2, 8` never made it into `_hm_escape.py`. The splitter
+selected top-level nodes by name and its `name_of` handled only single-`Name` targets - a TUPLE
+assignment returned None and was silently skipped.
+
+**Two safeguards were in place and neither caught it**, which is the part worth recording:
+
+- the 320-comparison equivalence check compared `escape_used` and `escape_reason` against the
+  pre-split module - but not `reason_is_enough`, which is the one function that reads those constants.
+  A function-by-function equivalence check is only as complete as its function list.
+- the leaves all PARSED, because a name defined nowhere is a runtime `NameError`, not a syntax error.
+
+What did catch it: running the suites. The audit that should have run alongside the split is the one
+run afterwards - compare the set of top-level NAMES in the original against the union of the leaves,
+which reported exactly `['_REASON_CHARS', '_REASON_WORDS']` and would have taken ten seconds before
+the first suite ever ran.
+
+**The rule for the next mechanical split**: assert that the union of the parts defines every name the
+whole defined, before trusting any behavioral comparison. Behavior tests check the paths you thought
+of; a name census checks the ones you did not.
+
+## R8 - the parallel collector's reporting was verified by an accident
+
+FR-002 requires that a parallel run still report **every** failure together, with the suite that
+produced each - the property the serial loop had. That was verified by the run that went red when the
+split dropped its two constants: twelve suites failed at once, and the collector listed all twelve in
+one line with each suite's own output beneath its own heading.
+
+    hooks-test FAILED: clone-sync-hooks.sh discard-hooks.sh gate-hooks.sh guard-file-hooks.sh
+    main-tree-hooks.sh make-only-hooks.sh measure-hooks.sh no-branch-hooks.sh no-poll-hooks.sh
+    repo-safety-hooks.sh review-gate.sh source-block-hooks.sh
+
+A deliberate fixture would have planted one failure; the accident planted twelve, concurrently, which
+is the stronger test of a fan-out collector - it proves the per-job log and exit-code files do not
+collide under load, which is the failure a single planted failure could not have shown.
+
+## R9 - the success criteria understated the cost, and the incremental run said so
+
+SC-002 and SC-003 were written from the derivation alone: `_gatecost.py` reaches two guards, the
+make/rewrite family three. A real incremental run - append a comment, run `hooks-test`, revert -
+reports **5** and **6** of 21.
+
+The difference is the three whole-tree suites (`sync-with-main.sh`, `review-gate.sh`,
+`gate-stamp.py`), which re-run for ANY script change and always will: two are held there deliberately
+because they resolve script paths at run time, and one derives there because it reads the whole
+directory. That trio is a constant on every targeted change, and criteria that ignored it were
+quietly wrong in the flattering direction.
+
+Corrected to the measured figures. The win is undiminished and worth stating in its true form: **5 of
+21 instead of 21 of 21**, and the three that always run are three of the slower ones, which is a real
+part of what a targeted change still costs.
+
+### R9 addendum - those figures were superseded by round 3, the same day
+
+R9's 5 and 6 were measured while `review-gate.sh` was still held whole-tree. Round 3 measured the
+justification false of it - it reaches exactly two scripts, both statically visible - so it derives
+now, and the constant on every targeted change is TWO entries rather than three:
+
+    _gatecost.py       4 of 21     (2 consumers + sync-with-main.sh + gate-stamp.py)
+    make/rewrite       5 of 21     (3 guards + the same two)
+    _guardlog.sh      20 of 21     - and this is the number that must NOT fall
+
+The measurement in R9 is left standing rather than overwritten, because it was true of the tree it was
+taken on and the correction is the more useful record: a number in a document is only ever true of a
+version of the code, and this one lasted about an hour.
+
+## R10 - a suite that fails only when the suite is slow
+
+A late-arriving verification - dispatched before the last two fixes and overlapping them - reported
+`clone-sync-hooks.sh` red after **304 s**, on one case: *"canonical clone claimed by a LIVE other
+session -> blocked (expected rc=2, got rc=0)"*. The suite passed standalone immediately afterwards,
+and had passed in every 60 s parallel run.
+
+**It was a stopwatch, not a regression.** The fixture spawns a fake live session with `sleep 300` and
+later asserts that the guard refuses an edit claimed by it. In a 304-second run that process had
+already exited, so the "live" session was genuinely dead, the guard correctly ALLOWED the edit, and
+the case reported failure.
+
+The coupling is the defect: a fixture whose validity depends on a fixed sleep outlasting the entire
+suite fails exactly when the suite is slow - which is under load, which is precisely when a session is
+least able to tell a flake from a real regression. Raised to an hour: comfortably longer than any
+suite, and short enough that a suite killed hard, where the cleanup trap never runs, leaves nothing
+lingering for a day. (86400 was the first fix and was worse: it traded a rare false red for a rare
+day-long leak.)
+
+Two things this session did right, and they are the reason it took ten minutes rather than an hour:
+the failure was **not** dismissed as "probably the overlap" - the suite was re-run against the pushed
+state before anything else was said - and the fix was **not** a retry.
+
+## R11 - the job count ignored the project's own convention, in both directions
+
+The GM asked whether `HOOKS_JOBS` follows the rule the rest of the repository uses - capped at 8
+locally, all processors on AWS. It did not. It shipped as a flat `?= 8`, chosen from a measurement on
+this box and from nothing else.
+
+`XDIST_WORKERS` (Makefile) is the convention:
+
+    CPU_COUNT     ?= $(shell nproc 2>/dev/null || echo 8)
+    XDIST_WORKERS  = $(if $(CODEBUILD_BUILD_ID),auto,$(shell [ "$(CPU_COUNT)" -lt 8 ] && echo "$(CPU_COUNT)" || echo 8))
+
+A flat 8 is wrong at BOTH ends: it over-subscribes a machine with fewer cores, and it leaves the
+36-vCPU CodeBuild builder running eight jobs. `HOOKS_JOBS` follows the same rule now, verified by
+reading the EXPANDED recipe rather than the variable definition (`make -p` prints the recursive
+definition, which looks identical in every environment and proves nothing):
+
+    local, 22 cores                      xargs -P 8
+    CPU_COUNT=2                          xargs -P 2
+    CODEBUILD_BUILD_ID set, 22 cores     xargs -P 22
+    CODEBUILD_BUILD_ID set, 36 vCPU      xargs -P 36
+
+**One deliberate difference, stated at the point of change**: `xargs -P` needs a NUMBER where pytest
+accepts the literal `auto`, so the remote arm expands `CPU_COUNT` rather than passing `auto` through.
+
+**And a ceiling this knob has that `XDIST_WORKERS` does not**: more jobs than SUITES buys nothing, and
+past a handful the wall clock is the longest single suite. 194 s serial became 63 s at 8 rather than
+24 s, because `test-sync-with-main.sh` and `test-clone-sync-hooks.sh` build real git trees and own the
+tail. So the CodeBuild arm will not be 36/8 times faster than the local one; it will be a little
+faster and then flat.
+
+The general lesson, which is why this is recorded rather than just fixed: **a new knob should adopt
+the project's existing convention for its kind, not a number that happened to measure well on the box
+it was written on.** Nothing in the tooling would have caught this - the GM did.

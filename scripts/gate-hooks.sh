@@ -81,7 +81,7 @@ case "$MODE" in
     # twice the guard-test file that exists to prove guards do not do this, and the command that fixed it.
     # (GM 2026-08-29: "the small follow-up".) A guard that fires on correct work teaches a session to
     # reach for the escape as a matter of routine, which costs more than the duplication it prevents.
-    TARGETS=" $(printf '%s' "$INPUT" | "$HERE/_hookmatch.py" targets 2>/dev/null | tr '\n' ' ')"
+    TARGETS=" $(printf '%s' "$INPUT" | "$HERE/_hm_make.py" targets 2>/dev/null | tr '\n' ' ')"
 
     # QUICK AND DONE IN ONE COMMAND ARE COMBINED, NOT REJECTED (GM 2026-08-30, feature 162).
     #
@@ -97,12 +97,12 @@ case "$MODE" in
     # So the hook REWRITES instead. A `PreToolUse` hook may return `updatedInput` (the command the
     # session actually runs) and `additionalContext` (a line the model reads), both at exit 0 and
     # both free - verified against the installed harness before this was written, not read off a
-    # document. `_hookmatch.py combine` decides: it returns the command with the `quick` work removed
+    # document. `_hm_make.py combine` decides: it returns the command with the `quick` work removed
     # when it can rebuild the shape exactly, and NOTHING when it cannot - a heredoc, an unbalanced
     # fragment, a rewrite that would not leave `done` standing alone. Silence means the command goes
     # through UNCHANGED. The guard never guesses at a session's command, because a wrong rewrite
     # costs the session its command while the fallback costs 4.1 s.
-    COMBINED=$(printf '%s' "$INPUT" | "$HERE/_hookmatch.py" combine 2>/dev/null || true)
+    COMBINED=$(printf '%s' "$INPUT" | "$HERE/_hm_make.py" combine 2>/dev/null || true)
     if [ -n "$COMBINED" ]; then
       guard_log gate rewrote "$(guard_cmd)"
       printf '%s' "$INPUT" | REWRITTEN="$COMBINED" python3 -c '
@@ -147,7 +147,7 @@ print(json.dumps({"hookSpecificOutput": {
     # was blocked for a subset nobody had run. Seventh false positive of this shape in one day. The
     # matcher decides whether pytest is actually INVOKED: at a command position (`bare-pytest`), or
     # through the make targets that run tests.
-    VERDICT=$(printf '%s' "$INPUT" | "$HERE/_hookmatch.py" 2>/dev/null || echo ok)
+    VERDICT=$(printf '%s' "$INPUT" | "$HERE/_hm_make.py" 2>/dev/null || echo ok)
     RUNS_TESTS=no
     [ "$VERDICT" = "bare-pytest" ] && RUNS_TESTS=yes
     case "$TARGETS" in *" test-file "*|*" test "*|*" quick "*) RUNS_TESTS=yes ;; esac
