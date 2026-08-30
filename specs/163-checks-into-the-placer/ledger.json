@@ -1,0 +1,4515 @@
+{
+ "stages": [
+  "water_frame",
+  "field",
+  "sink",
+  "seat",
+  "waterward",
+  "homesteads",
+  "track",
+  "appurtenances",
+  "pond_stock",
+  "web",
+  "hinterland",
+  "woodland",
+  "windbreak",
+  "bamboo",
+  "crossings",
+  "frame",
+  "notice",
+  "labels",
+  "finish"
+ ],
+ "rows": [
+  {
+   "check": "all_ink_is_ruled_on",
+   "keys": [
+    "unclassed_ink",
+    "unregistered_classes"
+   ],
+   "stages": {
+    "reference": [
+     "water_frame",
+     "water_frame"
+    ],
+    "polder19": [
+     "water_frame",
+     "water_frame"
+    ]
+   },
+   "readers": [
+    "tests/check_village/test_segments_08_kosatsuba_and_basins.py (test)",
+    "tests/full/interactive/test_page_browser.py (test)",
+    "tests/gate/test_firing_census_guards.py (test)",
+    "tests/interactive/test_classes.py (test)",
+    "tests/tools/test_firing_census.py (test)"
+   ],
+   "fixtures": {
+    "?": 1
+   },
+   "verdict": "VACUOUS-ON-SCRIPTED",
+   "why": "every input is absent on both scripted maps (unclassed_ink, unregistered_classes) - a legacy-tier feature; passes with nothing to judge; the GM's choice with the legacy set",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "aqueduct_taps_water_lands_dry",
+   "keys": [
+    "aqueducts",
+    "canals",
+    "channels",
+    "drawn_channels",
+    "moat",
+    "moat_width",
+    "sluice_gates",
+    "streams",
+    "tanning_yards",
+    "towpaths"
+   ],
+   "stages": {
+    "reference": [
+     "field",
+     "finish"
+    ],
+    "polder19": [
+     "crossings",
+     "finish"
+    ]
+   },
+   "readers": [
+    "tests/tier_city/check_village/test_segments_07_water.py (test)"
+   ],
+   "fixtures": {},
+   "verdict": "KEEP",
+   "why": "an input changes after its placer: reference: placed at field, last changed at finish, polder19: placed at crossings, last changed at finish",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "bamboo_stands_clear_of_paddies",
+   "keys": [
+    "bamboo_stands",
+    "dry_plots",
+    "fields"
+   ],
+   "stages": {
+    "reference": [
+     "bamboo",
+     "finish"
+    ],
+    "polder19": [
+     "bamboo",
+     "finish"
+    ]
+   },
+   "readers": [
+    "tests/check_village/test_segments_04_homesteads.py (test)"
+   ],
+   "fixtures": {},
+   "verdict": "KEEP",
+   "why": "an input changes after its placer: reference: placed at bamboo, last changed at finish, polder19: placed at bamboo, last changed at finish",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "bridges_span_their_water",
+   "keys": [
+    "bridges"
+   ],
+   "stages": {
+    "reference": [
+     "crossings",
+     "crossings"
+    ],
+    "polder19": [
+     "crossings",
+     "crossings"
+    ]
+   },
+   "readers": [
+    "tests/check_village/test_registry_derive.py (test)",
+    "tests/check_village/test_segments_07_water.py (test)",
+    "tests/settlement/test_city.py (test)"
+   ],
+   "fixtures": {},
+   "verdict": "RETIRE-CANDIDATE",
+   "why": "inputs settle at their placer on both maps: reference: crossings, polder19: crossings",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "bund_beans_on_bunds",
+   "keys": [
+    "drawn_channels",
+    "field_ponds",
+    "pond"
+   ],
+   "stages": {
+    "reference": [
+     "sink",
+     "finish"
+    ],
+    "polder19": [
+     "field",
+     "finish"
+    ]
+   },
+   "readers": [
+    "tests/check_village/_builders.py (test)",
+    "tests/check_village/test_segments_08_kosatsuba_and_basins.py (test)",
+    "tests/settlement/test_fields.py (test)"
+   ],
+   "fixtures": {
+    "?": 2
+   },
+   "verdict": "KEEP",
+   "why": "an input changes after its placer: reference: placed at sink, last changed at finish, polder19: placed at field, last changed at finish",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "byre_form_declared",
+   "keys": [
+    "byres",
+    "meta"
+   ],
+   "stages": {
+    "reference": [
+     "appurtenances",
+     "notice"
+    ],
+    "polder19": [
+     "appurtenances",
+     "notice"
+    ]
+   },
+   "readers": [
+    "tests/gate/test_scripted_fixtures.py (test)"
+   ],
+   "fixtures": {
+    "?": 1
+   },
+   "verdict": "KEEP",
+   "why": "an input changes after its placer: reference: placed at appurtenances, last changed at notice, polder19: placed at appurtenances, last changed at notice",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "byres_meet_their_target",
+   "keys": [
+    "byres",
+    "meta"
+   ],
+   "stages": {
+    "reference": [
+     "appurtenances",
+     "notice"
+    ],
+    "polder19": [
+     "appurtenances",
+     "notice"
+    ]
+   },
+   "readers": [
+    "tests/gate/test_scripted_fixtures.py (test)"
+   ],
+   "fixtures": {},
+   "verdict": "KEEP",
+   "why": "an input changes after its placer: reference: placed at appurtenances, last changed at notice, polder19: placed at appurtenances, last changed at notice",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "canopy_clear_of_watercourses",
+   "keys": [
+    "channels",
+    "moat",
+    "moat_width",
+    "streams",
+    "village_groves"
+   ],
+   "stages": {
+    "reference": [
+     "windbreak",
+     "finish"
+    ],
+    "polder19": [
+     "windbreak",
+     "finish"
+    ]
+   },
+   "readers": [
+    "tests/check_village/test_segments_07_water.py (test)"
+   ],
+   "fixtures": {
+    "?": 1
+   },
+   "verdict": "KEEP",
+   "why": "an input changes after its placer: reference: placed at windbreak, last changed at finish, polder19: placed at windbreak, last changed at finish",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "caption_stands_beside_its_referent",
+   "keys": [
+    "kosatsuba",
+    "labels"
+   ],
+   "stages": {
+    "reference": [
+     "labels",
+     "labels"
+    ],
+    "polder19": [
+     "labels",
+     "labels"
+    ]
+   },
+   "readers": [
+    "tests/check_village/test_segments_08_kosatsuba_and_basins.py (test)"
+   ],
+   "fixtures": {
+    "?": 1
+   },
+   "verdict": "RETIRE-CANDIDATE",
+   "why": "inputs settle at their placer on both maps: reference: labels, polder19: labels",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "captions_clear_the_ways_they_stand_on",
+   "keys": [
+    "labels",
+    "lanes",
+    "meta"
+   ],
+   "stages": {
+    "reference": [
+     "labels",
+     "finish"
+    ],
+    "polder19": [
+     "labels",
+     "finish"
+    ]
+   },
+   "readers": [
+    "tests/check_village/test_segments_04_homesteads.py (test)"
+   ],
+   "fixtures": {
+    "?": 1
+   },
+   "verdict": "KEEP",
+   "why": "an input changes after its placer: reference: placed at labels, last changed at finish, polder19: placed at labels, last changed at finish",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "channel_gates_at_water_junctions",
+   "keys": [
+    "channels",
+    "sluice_gates"
+   ],
+   "stages": {
+    "reference": [
+     "field",
+     "sink"
+    ],
+    "polder19": [
+     "crossings",
+     "crossings"
+    ]
+   },
+   "readers": [
+    "tests/check_village/test_segments_07_water.py (test)"
+   ],
+   "fixtures": {},
+   "verdict": "RETIRE-CANDIDATE",
+   "why": "inputs settle at their placer on both maps: reference: field, polder19: crossings",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "channels_flow_downhill",
+   "keys": [
+    "channels",
+    "comb_floors",
+    "dikes",
+    "field_ditches",
+    "fields",
+    "houses",
+    "meta",
+    "streams",
+    "village_groves"
+   ],
+   "stages": {
+    "reference": [
+     "windbreak",
+     "finish"
+    ],
+    "polder19": [
+     "windbreak",
+     "finish"
+    ]
+   },
+   "readers": [
+    "tests/check_village/_builders.py (test)",
+    "tests/check_village/test_segments_07_water.py (test)"
+   ],
+   "fixtures": {
+    "?": 1
+   },
+   "verdict": "KEEP",
+   "why": "an input changes after its placer: reference: placed at windbreak, last changed at finish, polder19: placed at windbreak, last changed at finish",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "channels_join_not_cross_at_fork",
+   "keys": [
+    "channels",
+    "field_ditches",
+    "streams"
+   ],
+   "stages": {
+    "reference": [
+     "field",
+     "finish"
+    ],
+    "polder19": [
+     "field",
+     "finish"
+    ]
+   },
+   "readers": [
+    "tests/check_village/test_segments_05_fields_and_ditches.py (test)"
+   ],
+   "fixtures": {
+    "?": 1
+   },
+   "verdict": "KEEP",
+   "why": "an input changes after its placer: reference: placed at field, last changed at finish, polder19: placed at field, last changed at finish",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "channels_join_streams_at_confluence",
+   "keys": [
+    "channels",
+    "streams"
+   ],
+   "stages": {
+    "reference": [
+     "field",
+     "finish"
+    ],
+    "polder19": [
+     "field",
+     "finish"
+    ]
+   },
+   "readers": [
+    "tests/check_village/_builders.py (test)",
+    "tests/check_village/test_segments_07_water.py (test)"
+   ],
+   "fixtures": {
+    "?": 2
+   },
+   "verdict": "KEEP",
+   "why": "an input changes after its placer: reference: placed at field, last changed at finish, polder19: placed at field, last changed at finish",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "channels_join_water_not_cross",
+   "keys": [
+    "channels",
+    "field_ditches",
+    "moat",
+    "river"
+   ],
+   "stages": {
+    "reference": [
+     "field",
+     "sink"
+    ],
+    "polder19": [
+     "field",
+     "field"
+    ]
+   },
+   "readers": [
+    "tests/check_village/test_segments_07_water.py (test)",
+    "tests/tier_town/check_village/test_segments_07_water.py (test)"
+   ],
+   "fixtures": {},
+   "verdict": "KEEP",
+   "why": "an input changes after its placer: reference: placed at field, last changed at sink",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "city_has_kosatsuba",
+   "keys": [
+    "gates",
+    "kosatsuba",
+    "lane",
+    "lanes",
+    "road",
+    "roads",
+    "town_streets"
+   ],
+   "stages": {},
+   "readers": [
+    "tests/tier_city/check_village/test_segments_08_kosatsuba_and_basins.py (test)",
+    "tests/tier_town/check_village/test_segments_08_kosatsuba_and_basins.py (test)"
+   ],
+   "fixtures": {},
+   "verdict": "NO-SCRIPTED-EXECUTOR",
+   "why": "no scripted map exercises it (a legacy-tier check: town / city / capital / village hand-authored maps only); no measured verdict is possible - the GM's choice at acceptance",
+   "on": []
+  },
+  {
+   "check": "city_streets_reach_their_neighbors",
+   "keys": [
+    "alleys",
+    "lanes",
+    "town_streets"
+   ],
+   "stages": {
+    "reference": [
+     "track",
+     "finish"
+    ],
+    "polder19": [
+     "track",
+     "finish"
+    ]
+   },
+   "readers": [
+    "tests/tier_town/check_village/test_segments_06_ways_and_bridges.py (test)"
+   ],
+   "fixtures": {},
+   "verdict": "KEEP",
+   "why": "an input changes after its placer: reference: placed at track, last changed at finish, polder19: placed at track, last changed at finish",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "cluster_abuts_fields",
+   "keys": [],
+   "stages": {
+    "reference": [
+     "-",
+     "-"
+    ],
+    "polder19": [
+     "-",
+     "-"
+    ]
+   },
+   "readers": [
+    "tests/check_village/test_segments_03_structures_and_wards.py (test)",
+    "tests/gate/test_scripted_fixtures.py (test)"
+   ],
+   "fixtures": {},
+   "verdict": "KEEP",
+   "why": "reads no manifest key the census can see (derived entirely) - judge by hand",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "cluster_shape_matches_the_drawing",
+   "keys": [
+    "houses",
+    "meta"
+   ],
+   "stages": {
+    "reference": [
+     "homesteads",
+     "notice"
+    ],
+    "polder19": [
+     "homesteads",
+     "notice"
+    ]
+   },
+   "readers": [
+    "tests/hamletgen/test_cluster_shape.py (test)"
+   ],
+   "fixtures": {
+    "?": 2
+   },
+   "verdict": "KEEP",
+   "why": "an input changes after its placer: reference: placed at homesteads, last changed at notice, polder19: placed at homesteads, last changed at notice",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "comb_floor_ends_at_the_collector",
+   "keys": [
+    "field_ditches",
+    "meta"
+   ],
+   "stages": {
+    "reference": [
+     "field",
+     "notice"
+    ],
+    "polder19": [
+     "field",
+     "notice"
+    ]
+   },
+   "readers": [
+    "tests/check_village/test_registry_derive.py (test)",
+    "tests/check_village/test_segments_08_kosatsuba_and_basins.py (test)"
+   ],
+   "fixtures": {
+    "?": 1
+   },
+   "verdict": "KEEP",
+   "why": "an input changes after its placer: reference: placed at field, last changed at notice, polder19: placed at field, last changed at notice",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "comb_supply_commands_both_flanks",
+   "keys": [
+    "field_ditches",
+    "fields"
+   ],
+   "stages": {
+    "reference": [
+     "field",
+     "finish"
+    ],
+    "polder19": [
+     "field",
+     "finish"
+    ]
+   },
+   "readers": [
+    "tests/check_village/test_registry_derive.py (test)",
+    "tests/check_village/test_segments_05_supply_and_graveyards.py (test)"
+   ],
+   "fixtures": {
+    "?": 1
+   },
+   "verdict": "KEEP",
+   "why": "an input changes after its placer: reference: placed at field, last changed at finish, polder19: placed at field, last changed at finish",
+   "on": [
+    "reference"
+   ]
+  },
+  {
+   "check": "commons_clear_of_paddies",
+   "keys": [
+    "channels",
+    "comb_floors",
+    "commons",
+    "dikes",
+    "field_ditches",
+    "fields",
+    "forest",
+    "groves",
+    "houses",
+    "meta",
+    "quarters",
+    "streams",
+    "tree_crowns",
+    "village_groves",
+    "wall",
+    "wells"
+   ],
+   "stages": {
+    "reference": [
+     "windbreak",
+     "finish"
+    ],
+    "polder19": [
+     "windbreak",
+     "finish"
+    ]
+   },
+   "readers": [
+    "tests/check_village/test_segments_05_fields_and_ditches.py (test)",
+    "tests/gate/test_scripted_fixtures.py (test)"
+   ],
+   "fixtures": {},
+   "verdict": "KEEP",
+   "why": "an input changes after its placer: reference: placed at windbreak, last changed at finish, polder19: placed at windbreak, last changed at finish",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "copse_stands_clear_of_the_belt",
+   "keys": [
+    "meta",
+    "village_groves"
+   ],
+   "stages": {
+    "reference": [
+     "windbreak",
+     "notice"
+    ],
+    "polder19": [
+     "windbreak",
+     "notice"
+    ]
+   },
+   "readers": [],
+   "fixtures": {
+    "?": 1
+   },
+   "verdict": "KEEP",
+   "why": "an input changes after its placer: reference: placed at windbreak, last changed at notice, polder19: placed at windbreak, last changed at notice",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "crop_not_held_open_by_one_feature",
+   "keys": [],
+   "stages": {
+    "reference": [
+     "-",
+     "-"
+    ],
+    "polder19": [
+     "-",
+     "-"
+    ]
+   },
+   "readers": [
+    "tests/check_village/_builders.py (test)",
+    "tests/check_village/test_segments_01_city_frame_and_yards.py (test)"
+   ],
+   "fixtures": {},
+   "verdict": "KEEP",
+   "why": "reads no manifest key the census can see (derived entirely) - judge by hand",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "delivery_ditches_taper",
+   "keys": [
+    "channels",
+    "field_ditches",
+    "streams"
+   ],
+   "stages": {
+    "reference": [
+     "field",
+     "finish"
+    ],
+    "polder19": [
+     "field",
+     "finish"
+    ]
+   },
+   "readers": [
+    "tests/check_village/test_segments_05_fields_and_ditches.py (test)"
+   ],
+   "fixtures": {
+    "?": 1
+   },
+   "verdict": "KEEP",
+   "why": "an input changes after its placer: reference: placed at field, last changed at finish, polder19: placed at field, last changed at finish",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "drain_flows_downhill",
+   "keys": [
+    "channels",
+    "field_ditches",
+    "fields",
+    "meta",
+    "streams"
+   ],
+   "stages": {
+    "reference": [
+     "field",
+     "finish"
+    ],
+    "polder19": [
+     "field",
+     "finish"
+    ]
+   },
+   "readers": [
+    "tests/check_village/test_segments_08_kosatsuba_and_basins.py (test)",
+    "tests/check_village/test_segments_08_town_and_flow.py (test)",
+    "tests/tier_city/check_village/test_segments_08_kosatsuba_and_basins.py (test)"
+   ],
+   "fixtures": {
+    "?": 1
+   },
+   "verdict": "KEEP",
+   "why": "an input changes after its placer: reference: placed at field, last changed at finish, polder19: placed at field, last changed at finish",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "drain_runs_cross_slope",
+   "keys": [
+    "field_ditches",
+    "fields",
+    "meta"
+   ],
+   "stages": {
+    "reference": [
+     "field",
+     "finish"
+    ],
+    "polder19": [
+     "field",
+     "finish"
+    ]
+   },
+   "readers": [
+    "tests/check_village/test_segments_08_kosatsuba_and_basins.py (test)",
+    "tests/check_village/test_segments_08_town_and_flow.py (test)",
+    "tests/tier_city/check_village/test_segments_08_kosatsuba_and_basins.py (test)"
+   ],
+   "fixtures": {
+    "?": 1
+   },
+   "verdict": "KEEP",
+   "why": "an input changes after its placer: reference: placed at field, last changed at finish, polder19: placed at field, last changed at finish",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "drainage_discharges_downhill",
+   "keys": [
+    "fields",
+    "meta",
+    "streams"
+   ],
+   "stages": {
+    "reference": [
+     "field",
+     "finish"
+    ],
+    "polder19": [
+     "field",
+     "finish"
+    ]
+   },
+   "readers": [
+    "tests/check_village/test_segments_08_town_and_flow.py (test)"
+   ],
+   "fixtures": {
+    "?": 2
+   },
+   "verdict": "KEEP",
+   "why": "an input changes after its placer: reference: placed at field, last changed at finish, polder19: placed at field, last changed at finish",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "drainage_junction_smooth",
+   "keys": [
+    "field_ditches",
+    "streams"
+   ],
+   "stages": {
+    "reference": [
+     "field",
+     "finish"
+    ],
+    "polder19": [
+     "field",
+     "finish"
+    ]
+   },
+   "readers": [
+    "tests/check_village/test_segments_08_town_and_flow.py (test)",
+    "tests/hamletgen/test_sink.py (test)"
+   ],
+   "fixtures": {
+    "?": 2
+   },
+   "verdict": "KEEP",
+   "why": "an input changes after its placer: reference: placed at field, last changed at finish, polder19: placed at field, last changed at finish",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "dry_plot_furrows_vary",
+   "keys": [
+    "dry_plots",
+    "meta"
+   ],
+   "stages": {
+    "reference": [
+     "field",
+     "notice"
+    ],
+    "polder19": [
+     "water_frame",
+     "notice"
+    ]
+   },
+   "readers": [
+    "tests/check_village/test_registry_derive.py (test)",
+    "tests/check_village/test_segments_05_fields_and_ditches.py (test)"
+   ],
+   "fixtures": {
+    "?": 1
+   },
+   "verdict": "KEEP",
+   "why": "an input changes after its placer: reference: placed at field, last changed at notice, polder19: placed at water_frame, last changed at notice",
+   "on": [
+    "reference"
+   ]
+  },
+  {
+   "check": "dry_plots_clear_of_paddies",
+   "keys": [
+    "dry_plots",
+    "fields",
+    "granary"
+   ],
+   "stages": {
+    "reference": [
+     "field",
+     "finish"
+    ],
+    "polder19": [
+     "field",
+     "finish"
+    ]
+   },
+   "readers": [
+    "tests/check_village/test_segments_03_structures_and_wards.py (test)",
+    "tests/gate/test_scripted_fixtures.py (test)",
+    "tests/settlement/test_fields.py (test)"
+   ],
+   "fixtures": {
+    "?": 1
+   },
+   "verdict": "KEEP",
+   "why": "an input changes after its placer: reference: placed at field, last changed at finish, polder19: placed at field, last changed at finish",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "every_feature_classified_for_matrix",
+   "keys": [],
+   "stages": {
+    "reference": [
+     "-",
+     "-"
+    ],
+    "polder19": [
+     "-",
+     "-"
+    ]
+   },
+   "readers": [
+    "tests/check_village/test_segments_01_city_frame_and_yards.py (test)"
+   ],
+   "fixtures": {},
+   "verdict": "KEEP",
+   "why": "reads no manifest key the census can see (derived entirely) - judge by hand",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "every_feature_classified_for_overlap",
+   "keys": [],
+   "stages": {
+    "reference": [
+     "-",
+     "-"
+    ],
+    "polder19": [
+     "-",
+     "-"
+    ]
+   },
+   "readers": [
+    "tests/check_village/test_segments_03_structures_and_wards.py (test)"
+   ],
+   "fixtures": {},
+   "verdict": "KEEP",
+   "why": "reads no manifest key the census can see (derived entirely) - judge by hand",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "every_solid_feature_classified_for_labels",
+   "keys": [],
+   "stages": {
+    "reference": [
+     "-",
+     "-"
+    ],
+    "polder19": [
+     "-",
+     "-"
+    ]
+   },
+   "readers": [
+    "tests/check_village/test_segments_03_structures_and_wards.py (test)"
+   ],
+   "fixtures": {},
+   "verdict": "KEEP",
+   "why": "reads no manifest key the census can see (derived entirely) - judge by hand",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "farmhouse_aspect_in_range",
+   "keys": [],
+   "stages": {
+    "reference": [
+     "-",
+     "-"
+    ],
+    "polder19": [
+     "-",
+     "-"
+    ]
+   },
+   "readers": [],
+   "fixtures": {},
+   "verdict": "KEEP",
+   "why": "reads no manifest key the census can see (derived entirely) - judge by hand",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "farmhouse_sizes_vary",
+   "keys": [],
+   "stages": {
+    "reference": [
+     "-",
+     "-"
+    ],
+    "polder19": [
+     "-",
+     "-"
+    ]
+   },
+   "readers": [
+    "tests/check_village/test_segments_05_fields_and_ditches.py (test)",
+    "tests/gate/test_scripted_fixtures.py (test)"
+   ],
+   "fixtures": {},
+   "verdict": "KEEP",
+   "why": "reads no manifest key the census can see (derived entirely) - judge by hand",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "farmhouses_reach_a_way",
+   "keys": [
+    "houses",
+    "lanes",
+    "meta"
+   ],
+   "stages": {
+    "reference": [
+     "track",
+     "finish"
+    ],
+    "polder19": [
+     "track",
+     "finish"
+    ]
+   },
+   "readers": [
+    "l7r/diagram/hamletgen/driver.py",
+    "tests/check_village/test_segments_07_water.py (test)",
+    "tests/gate/hamletgen/test_driver.py (test)",
+    "tests/gate/test_scripted_fixtures.py (test)",
+    "tests/hamletgen/test_consts.py (test)",
+    "tests/hamletgen/test_driver.py (test)",
+    "tests/hamletgen/test_ways.py (test)"
+   ],
+   "fixtures": {
+    "?": 4
+   },
+   "verdict": "KEEP",
+   "why": "a consumer branches on the verdict: l7r/diagram/hamletgen/driver.py",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "farmhouses_shed_separately",
+   "keys": [
+    "houses",
+    "meta"
+   ],
+   "stages": {
+    "reference": [
+     "homesteads",
+     "notice"
+    ],
+    "polder19": [
+     "homesteads",
+     "notice"
+    ]
+   },
+   "readers": [
+    "tests/check_village/test_segments_04_homesteads.py (test)"
+   ],
+   "fixtures": {
+    "?": 1
+   },
+   "verdict": "KEEP",
+   "why": "an input changes after its placer: reference: placed at homesteads, last changed at notice, polder19: placed at homesteads, last changed at notice",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "features_do_not_overlap",
+   "keys": [],
+   "stages": {
+    "reference": [
+     "-",
+     "-"
+    ],
+    "polder19": [
+     "-",
+     "-"
+    ]
+   },
+   "readers": [
+    "tests/check_village/test_segments_01_city_frame_and_yards.py (test)",
+    "tests/gate/test_scripted_fixtures.py (test)",
+    "tests/tier_city/check_village/test_segments_01_city_frame_and_yards.py (test)"
+   ],
+   "fixtures": {
+    "?": 1
+   },
+   "verdict": "KEEP",
+   "why": "reads no manifest key the census can see (derived entirely) - judge by hand",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "field_ditch_tips_land_on_the_trunk",
+   "keys": [
+    "channels",
+    "field_ditches",
+    "streams"
+   ],
+   "stages": {
+    "reference": [
+     "field",
+     "finish"
+    ],
+    "polder19": [
+     "field",
+     "finish"
+    ]
+   },
+   "readers": [
+    "tests/check_village/test_segments_05_fields_and_ditches.py (test)"
+   ],
+   "fixtures": {
+    "?": 1,
+    "hamlet": 1
+   },
+   "verdict": "KEEP",
+   "why": "an input changes after its placer: reference: placed at field, last changed at finish, polder19: placed at field, last changed at finish",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "field_ditches_reach_source_and_sink",
+   "keys": [
+    "channels",
+    "field_ditches",
+    "streams"
+   ],
+   "stages": {
+    "reference": [
+     "field",
+     "finish"
+    ],
+    "polder19": [
+     "field",
+     "finish"
+    ]
+   },
+   "readers": [
+    "tests/check_village/test_segments_05_fields_and_ditches.py (test)",
+    "tests/check_village/test_segments_05_supply_and_graveyards.py (test)"
+   ],
+   "fixtures": {
+    "?": 1
+   },
+   "verdict": "KEEP",
+   "why": "an input changes after its placer: reference: placed at field, last changed at finish, polder19: placed at field, last changed at finish",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "field_ditches_terminate",
+   "keys": [
+    "channels",
+    "field_ditches",
+    "streams"
+   ],
+   "stages": {
+    "reference": [
+     "field",
+     "finish"
+    ],
+    "polder19": [
+     "field",
+     "finish"
+    ]
+   },
+   "readers": [
+    "tests/check_village/test_segments_05_fields_and_ditches.py (test)",
+    "tests/gate/test_scripted_fixtures.py (test)"
+   ],
+   "fixtures": {},
+   "verdict": "KEEP",
+   "why": "an input changes after its placer: reference: placed at field, last changed at finish, polder19: placed at field, last changed at finish",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "field_ponds_sunk_into_one_plot",
+   "keys": [
+    "field_ponds",
+    "fields"
+   ],
+   "stages": {
+    "reference": [
+     "field",
+     "finish"
+    ],
+    "polder19": [
+     "field",
+     "finish"
+    ]
+   },
+   "readers": [
+    "tests/check_village/test_segments_11_polders_and_edges.py (test)"
+   ],
+   "fixtures": {
+    "?": 1
+   },
+   "verdict": "KEEP",
+   "why": "an input changes after its placer: reference: placed at field, last changed at finish, polder19: placed at field, last changed at finish",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "fields_clear_of_road",
+   "keys": [
+    "alleys",
+    "lanes",
+    "marshes",
+    "road",
+    "road_width",
+    "town_streets"
+   ],
+   "stages": {
+    "reference": [
+     "track",
+     "finish"
+    ],
+    "polder19": [
+     "track",
+     "finish"
+    ]
+   },
+   "readers": [
+    "tests/check_village/test_segments_05_fields_and_ditches.py (test)"
+   ],
+   "fixtures": {
+    "?": 2
+   },
+   "verdict": "KEEP",
+   "why": "an input changes after its placer: reference: placed at track, last changed at finish, polder19: placed at track, last changed at finish",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "fields_show_water_source",
+   "keys": [
+    "buildings",
+    "channels",
+    "hill",
+    "houses",
+    "moat",
+    "pond",
+    "religious",
+    "streams",
+    "wells"
+   ],
+   "stages": {
+    "reference": [
+     "appurtenances",
+     "finish"
+    ],
+    "polder19": [
+     "appurtenances",
+     "finish"
+    ]
+   },
+   "readers": [
+    "tests/check_village/test_segments_07_water.py (test)"
+   ],
+   "fixtures": {
+    "?": 1
+   },
+   "verdict": "KEEP",
+   "why": "an input changes after its placer: reference: placed at appurtenances, last changed at finish, polder19: placed at appurtenances, last changed at finish",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "flooded_plots_read_as_basins",
+   "keys": [
+    "flooded_plots",
+    "meta"
+   ],
+   "stages": {
+    "reference": [
+     "field",
+     "notice"
+    ],
+    "polder19": [
+     "field",
+     "notice"
+    ]
+   },
+   "readers": [
+    "tests/check_village/test_segments_08_kosatsuba_and_basins.py (test)"
+   ],
+   "fixtures": {
+    "?": 1
+   },
+   "verdict": "KEEP",
+   "why": "an input changes after its placer: reference: placed at field, last changed at notice, polder19: placed at field, last changed at notice",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "footbridges_reach_useful_ground",
+   "keys": [
+    "bridges",
+    "field_ditches"
+   ],
+   "stages": {
+    "reference": [
+     "crossings",
+     "crossings"
+    ],
+    "polder19": [
+     "crossings",
+     "crossings"
+    ]
+   },
+   "readers": [
+    "tests/check_village/test_segments_07_water.py (test)"
+   ],
+   "fixtures": {},
+   "verdict": "RETIRE-CANDIDATE",
+   "why": "inputs settle at their placer on both maps: reference: crossings, polder19: crossings",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "funerary_clear_of_fields",
+   "keys": [
+    "field_ditches",
+    "fields"
+   ],
+   "stages": {
+    "reference": [
+     "field",
+     "finish"
+    ],
+    "polder19": [
+     "field",
+     "finish"
+    ]
+   },
+   "readers": [
+    "tests/check_village/test_segments_05_fields_and_ditches.py (test)"
+   ],
+   "fixtures": {
+    "?": 1
+   },
+   "verdict": "KEEP",
+   "why": "an input changes after its placer: reference: placed at field, last changed at finish, polder19: placed at field, last changed at finish",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "gardens_clear_of_channels",
+   "keys": [
+    "channels",
+    "field_ditches",
+    "gardens",
+    "streams"
+   ],
+   "stages": {
+    "reference": [
+     "homesteads",
+     "finish"
+    ],
+    "polder19": [
+     "homesteads",
+     "finish"
+    ]
+   },
+   "readers": [
+    "tests/check_village/test_segments_04_homesteads.py (test)",
+    "tests/check_village/test_verdict_journal.py (test)"
+   ],
+   "fixtures": {},
+   "verdict": "KEEP",
+   "why": "an input changes after its placer: reference: placed at homesteads, last changed at finish, polder19: placed at homesteads, last changed at finish",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "groves_clear_of_lanes",
+   "keys": [
+    "groves",
+    "lanes",
+    "road",
+    "road_width",
+    "town_streets",
+    "village_groves"
+   ],
+   "stages": {
+    "reference": [
+     "windbreak",
+     "finish"
+    ],
+    "polder19": [
+     "windbreak",
+     "finish"
+    ]
+   },
+   "readers": [
+    "tests/check_village/test_segments_07_water.py (test)",
+    "tests/gate/test_scripted_fixtures.py (test)"
+   ],
+   "fixtures": {
+    "?": 2
+   },
+   "verdict": "KEEP",
+   "why": "an input changes after its placer: reference: placed at windbreak, last changed at finish, polder19: placed at windbreak, last changed at finish",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "hamlet_has_kosatsuba",
+   "keys": [
+    "gates",
+    "kosatsuba",
+    "lane",
+    "lanes",
+    "road",
+    "roads",
+    "town_streets"
+   ],
+   "stages": {
+    "reference": [
+     "notice",
+     "finish"
+    ],
+    "polder19": [
+     "notice",
+     "finish"
+    ]
+   },
+   "readers": [
+    "tests/check_village/test_segments_08_kosatsuba_and_basins.py (test)",
+    "tests/gate/test_scripted_fixtures.py (test)"
+   ],
+   "fixtures": {
+    "hamlet": 1
+   },
+   "verdict": "KEEP",
+   "why": "an input changes after its placer: reference: placed at notice, last changed at finish, polder19: placed at notice, last changed at finish",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "hamlet_has_no_headman",
+   "keys": [],
+   "stages": {
+    "reference": [
+     "-",
+     "-"
+    ],
+    "polder19": [
+     "-",
+     "-"
+    ]
+   },
+   "readers": [
+    "tests/check_village/test_segments_03_structures_and_wards.py (test)",
+    "tests/gate/test_scripted_fixtures.py (test)"
+   ],
+   "fixtures": {
+    "hamlet": 1
+   },
+   "verdict": "KEEP",
+   "why": "reads no manifest key the census can see (derived entirely) - judge by hand",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "households_consistent",
+   "keys": [],
+   "stages": {
+    "reference": [
+     "-",
+     "-"
+    ],
+    "polder19": [
+     "-",
+     "-"
+    ]
+   },
+   "readers": [
+    "tests/check_village/test_driver_and_fixtures.py (test)",
+    "tests/check_village/test_segments_08_kosatsuba_and_basins.py (test)",
+    "tests/gate/test_scripted_fixtures.py (test)"
+   ],
+   "fixtures": {},
+   "verdict": "KEEP",
+   "why": "reads no manifest key the census can see (derived entirely) - judge by hand",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "houses_clear_of_lanes",
+   "keys": [
+    "houses",
+    "lanes"
+   ],
+   "stages": {
+    "reference": [
+     "track",
+     "finish"
+    ],
+    "polder19": [
+     "track",
+     "finish"
+    ]
+   },
+   "readers": [
+    "tests/check_village/test_segments_07_water.py (test)",
+    "tests/gate/test_scripted_fixtures.py (test)",
+    "tests/hamletgen/test_ways.py (test)",
+    "tests/settlement/test_houses.py (test)"
+   ],
+   "fixtures": {
+    "?": 1
+   },
+   "verdict": "KEEP",
+   "why": "an input changes after its placer: reference: placed at track, last changed at finish, polder19: placed at track, last changed at finish",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "houses_face_south",
+   "keys": [],
+   "stages": {
+    "reference": [
+     "-",
+     "-"
+    ],
+    "polder19": [
+     "-",
+     "-"
+    ]
+   },
+   "readers": [
+    "tests/gate/test_scripted_fixtures.py (test)"
+   ],
+   "fixtures": {},
+   "verdict": "KEEP",
+   "why": "reads no manifest key the census can see (derived entirely) - judge by hand",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "inwall_drains_gated_at_cutoff",
+   "keys": [
+    "channels",
+    "drawn_channels",
+    "ring_road",
+    "ring_road_width",
+    "sluice_gates",
+    "wall"
+   ],
+   "stages": {
+    "reference": [
+     "field",
+     "finish"
+    ],
+    "polder19": [
+     "crossings",
+     "finish"
+    ]
+   },
+   "readers": [
+    "tests/check_village/_builders.py (test)",
+    "tests/check_village/test_segments_07_water.py (test)",
+    "tests/settlement/test_city.py (test)"
+   ],
+   "fixtures": {},
+   "verdict": "KEEP",
+   "why": "an input changes after its placer: reference: placed at field, last changed at finish, polder19: placed at crossings, last changed at finish",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "irrigation_channels_hairline",
+   "keys": [
+    "channels"
+   ],
+   "stages": {
+    "reference": [
+     "field",
+     "sink"
+    ],
+    "polder19": [
+     "field",
+     "field"
+    ]
+   },
+   "readers": [
+    "tests/check_village/test_segments_03_structures_and_wards.py (test)",
+    "tests/tier_city/check_village/test_segments_03_structures_and_wards.py (test)"
+   ],
+   "fixtures": {
+    "?": 2
+   },
+   "verdict": "KEEP",
+   "why": "an input changes after its placer: reference: placed at field, last changed at sink",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "kosatsuba_by_the_road",
+   "keys": [
+    "gates",
+    "kosatsuba",
+    "lane",
+    "lanes",
+    "road",
+    "roads",
+    "town_streets"
+   ],
+   "stages": {
+    "reference": [
+     "notice",
+     "finish"
+    ],
+    "polder19": [
+     "notice",
+     "finish"
+    ]
+   },
+   "readers": [
+    "tests/check_village/test_segments_08_kosatsuba_and_basins.py (test)",
+    "tests/gate/test_scripted_fixtures.py (test)",
+    "tests/settlement/test_structures.py (test)",
+    "tests/settlement/test_water_ways.py (test)",
+    "tests/tier_town/check_village/test_segments_08_kosatsuba_and_basins.py (test)",
+    "tests/tier_town/check_village/test_segments_08_town_and_flow.py (test)"
+   ],
+   "fixtures": {
+    "?": 1,
+    "hamlet": 1
+   },
+   "verdict": "KEEP",
+   "why": "an input changes after its placer: reference: placed at notice, last changed at finish, polder19: placed at notice, last changed at finish",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "kosatsuba_faces_the_road",
+   "keys": [
+    "gates",
+    "kosatsuba",
+    "lane",
+    "lanes",
+    "road",
+    "roads",
+    "town_streets"
+   ],
+   "stages": {
+    "reference": [
+     "notice",
+     "finish"
+    ],
+    "polder19": [
+     "notice",
+     "finish"
+    ]
+   },
+   "readers": [
+    "tests/tier_town/check_village/test_segments_08_kosatsuba_and_basins.py (test)",
+    "tests/tier_town/check_village/test_segments_08_town_and_flow.py (test)"
+   ],
+   "fixtures": {},
+   "verdict": "KEEP",
+   "why": "an input changes after its placer: reference: placed at notice, last changed at finish, polder19: placed at notice, last changed at finish",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "label_hugs_its_referent",
+   "keys": [
+    "labels"
+   ],
+   "stages": {
+    "reference": [
+     "labels",
+     "labels"
+    ],
+    "polder19": [
+     "labels",
+     "labels"
+    ]
+   },
+   "readers": [
+    "tests/check_village/test_segments_03_structures_and_wards.py (test)",
+    "tests/check_village/test_segments_08_kosatsuba_and_basins.py (test)"
+   ],
+   "fixtures": {
+    "?": 1
+   },
+   "verdict": "RETIRE-CANDIDATE",
+   "why": "inputs settle at their placer on both maps: reference: labels, polder19: labels",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "labels_align_with_their_referent",
+   "keys": [
+    "labels"
+   ],
+   "stages": {
+    "reference": [
+     "labels",
+     "labels"
+    ],
+    "polder19": [
+     "labels",
+     "labels"
+    ]
+   },
+   "readers": [
+    "tests/check_village/test_segments_03_structures_and_wards.py (test)"
+   ],
+   "fixtures": {
+    "?": 1
+   },
+   "verdict": "RETIRE-CANDIDATE",
+   "why": "inputs settle at their placer on both maps: reference: labels, polder19: labels",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "labels_within_image",
+   "keys": [
+    "labels"
+   ],
+   "stages": {
+    "reference": [
+     "labels",
+     "labels"
+    ],
+    "polder19": [
+     "labels",
+     "labels"
+    ]
+   },
+   "readers": [
+    "tests/check_village/test_segments_04_homesteads.py (test)",
+    "tests/gate/test_scripted_fixtures.py (test)",
+    "tests/settlement/test_castle_civic.py (test)"
+   ],
+   "fixtures": {
+    "?": 2
+   },
+   "verdict": "RETIRE-CANDIDATE",
+   "why": "inputs settle at their placer on both maps: reference: labels, polder19: labels",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "lane_ends_front_different_houses",
+   "keys": [
+    "houses",
+    "lanes"
+   ],
+   "stages": {
+    "reference": [
+     "track",
+     "finish"
+    ],
+    "polder19": [
+     "track",
+     "finish"
+    ]
+   },
+   "readers": [
+    "tests/check_village/test_segments_07_water.py (test)"
+   ],
+   "fixtures": {
+    "?": 2
+   },
+   "verdict": "KEEP",
+   "why": "an input changes after its placer: reference: placed at track, last changed at finish, polder19: placed at track, last changed at finish",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "lanes_bend_like_paths",
+   "keys": [
+    "lanes"
+   ],
+   "stages": {
+    "reference": [
+     "track",
+     "finish"
+    ],
+    "polder19": [
+     "track",
+     "finish"
+    ]
+   },
+   "readers": [
+    "tests/check_village/test_segments_07_water.py (test)",
+    "tests/gate/hamletgen/test_driver.py (test)",
+    "tests/gate/test_scripted_fixtures.py (test)",
+    "tests/hamletgen/test_ways.py (test)"
+   ],
+   "fixtures": {
+    "?": 1
+   },
+   "verdict": "KEEP",
+   "why": "an input changes after its placer: reference: placed at track, last changed at finish, polder19: placed at track, last changed at finish",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "lanes_clear_of_dry_plots",
+   "keys": [
+    "dry_plots",
+    "lanes"
+   ],
+   "stages": {
+    "reference": [
+     "track",
+     "finish"
+    ],
+    "polder19": [
+     "track",
+     "finish"
+    ]
+   },
+   "readers": [
+    "tests/check_village/test_segments_04_homesteads.py (test)"
+   ],
+   "fixtures": {},
+   "verdict": "KEEP",
+   "why": "an input changes after its placer: reference: placed at track, last changed at finish, polder19: placed at track, last changed at finish",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "lanes_do_not_break_mid_run",
+   "keys": [
+    "dry_plots",
+    "fields",
+    "lanes",
+    "wells"
+   ],
+   "stages": {
+    "reference": [
+     "appurtenances",
+     "finish"
+    ],
+    "polder19": [
+     "appurtenances",
+     "finish"
+    ]
+   },
+   "readers": [
+    "tests/check_village/test_segments_07_water.py (test)",
+    "tests/gate/hamletgen/test_driver.py (test)"
+   ],
+   "fixtures": {
+    "?": 1
+   },
+   "verdict": "KEEP",
+   "why": "an input changes after its placer: reference: placed at appurtenances, last changed at finish, polder19: placed at appurtenances, last changed at finish",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "lanes_form_one_network",
+   "keys": [
+    "lanes"
+   ],
+   "stages": {
+    "reference": [
+     "track",
+     "finish"
+    ],
+    "polder19": [
+     "track",
+     "finish"
+    ]
+   },
+   "readers": [
+    "tests/check_village/test_segments_07_water.py (test)",
+    "tests/gate/hamletgen/test_driver.py (test)",
+    "tests/gate/test_scripted_fixtures.py (test)",
+    "tests/hamletgen/test_ways.py (test)",
+    "tests/tools/test_mapcheck.py (test)"
+   ],
+   "fixtures": {
+    "?": 1
+   },
+   "verdict": "KEEP",
+   "why": "an input changes after its placer: reference: placed at track, last changed at finish, polder19: placed at track, last changed at finish",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "lanes_reach_something",
+   "keys": [
+    "fields",
+    "houses",
+    "lanes",
+    "meta"
+   ],
+   "stages": {
+    "reference": [
+     "track",
+     "finish"
+    ],
+    "polder19": [
+     "track",
+     "finish"
+    ]
+   },
+   "readers": [
+    "tests/check_village/test_segments_07_water.py (test)",
+    "tests/gate/test_scripted_fixtures.py (test)",
+    "tests/hamletgen/test_ways.py (test)",
+    "tests/settlement/test_water_ways.py (test)"
+   ],
+   "fixtures": {},
+   "verdict": "KEEP",
+   "why": "an input changes after its placer: reference: placed at track, last changed at finish, polder19: placed at track, last changed at finish",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "long_ditches_have_a_footbridge",
+   "keys": [
+    "bridges",
+    "field_ditches"
+   ],
+   "stages": {
+    "reference": [
+     "crossings",
+     "crossings"
+    ],
+    "polder19": [
+     "crossings",
+     "crossings"
+    ]
+   },
+   "readers": [
+    "tests/check_village/test_segments_07_water.py (test)"
+   ],
+   "fixtures": {},
+   "verdict": "RETIRE-CANDIDATE",
+   "why": "inputs settle at their placer on both maps: reference: crossings, polder19: crossings",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "map_frame_hugs_its_content",
+   "keys": [],
+   "stages": {
+    "reference": [
+     "-",
+     "-"
+    ],
+    "polder19": [
+     "-",
+     "-"
+    ]
+   },
+   "readers": [
+    "tests/gate/test_scripted_fixtures.py (test)",
+    "tests/tier_city/check_village/test_segments_06_ways_and_bridges.py (test)"
+   ],
+   "fixtures": {},
+   "verdict": "KEEP",
+   "why": "reads no manifest key the census can see (derived entirely) - judge by hand",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "margins_form_continuous_ring",
+   "keys": [
+    "channels",
+    "comb_floors",
+    "commons",
+    "dikes",
+    "field_ditches",
+    "fields",
+    "forest",
+    "groves",
+    "houses",
+    "meta",
+    "pond",
+    "quarters",
+    "streams",
+    "tree_crowns",
+    "village_groves",
+    "wall",
+    "wells"
+   ],
+   "stages": {
+    "reference": [
+     "windbreak",
+     "finish"
+    ],
+    "polder19": [
+     "windbreak",
+     "finish"
+    ]
+   },
+   "readers": [
+    "tests/check_village/test_segments_04_homesteads.py (test)"
+   ],
+   "fixtures": {},
+   "verdict": "KEEP",
+   "why": "an input changes after its placer: reference: placed at windbreak, last changed at finish, polder19: placed at windbreak, last changed at finish",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "marsh_on_low_ground",
+   "keys": [
+    "fields",
+    "marshes",
+    "meta"
+   ],
+   "stages": {
+    "reference": [
+     "sink",
+     "finish"
+    ],
+    "polder19": [
+     "field",
+     "finish"
+    ]
+   },
+   "readers": [
+    "tests/check_village/test_segments_08_kosatsuba_and_basins.py (test)",
+    "tests/check_village/test_segments_08_town_and_flow.py (test)"
+   ],
+   "fixtures": {
+    "hamlet": 1
+   },
+   "verdict": "KEEP",
+   "why": "an input changes after its placer: reference: placed at sink, last changed at finish, polder19: placed at field, last changed at finish",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "matrix_debts_still_owed",
+   "keys": [],
+   "stages": {
+    "reference": [
+     "-",
+     "-"
+    ],
+    "polder19": [
+     "-",
+     "-"
+    ]
+   },
+   "readers": [
+    "tests/check_village/test_segments_01_city_frame_and_yards.py (test)"
+   ],
+   "fixtures": {},
+   "verdict": "KEEP",
+   "why": "reads no manifest key the census can see (derived entirely) - judge by hand",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "no_caption_holds_the_frame_open",
+   "keys": [
+    "labels",
+    "tree_crowns"
+   ],
+   "stages": {
+    "reference": [
+     "labels",
+     "labels"
+    ],
+    "polder19": [
+     "labels",
+     "labels"
+    ]
+   },
+   "readers": [
+    "tests/check_village/test_segments_01_city_frame_and_yards.py (test)"
+   ],
+   "fixtures": {},
+   "verdict": "RETIRE-CANDIDATE",
+   "why": "inputs settle at their placer on both maps: reference: labels, polder19: labels",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "no_farmhouse_stands_on_a_lane",
+   "keys": [
+    "houses",
+    "lanes"
+   ],
+   "stages": {
+    "reference": [
+     "track",
+     "finish"
+    ],
+    "polder19": [
+     "track",
+     "finish"
+    ]
+   },
+   "readers": [
+    "tests/check_village/test_segments_07_water.py (test)"
+   ],
+   "fixtures": {},
+   "verdict": "KEEP",
+   "why": "an input changes after its placer: reference: placed at track, last changed at finish, polder19: placed at track, last changed at finish",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "no_label_overlaps",
+   "keys": [
+    "labels"
+   ],
+   "stages": {
+    "reference": [
+     "labels",
+     "labels"
+    ],
+    "polder19": [
+     "labels",
+     "labels"
+    ]
+   },
+   "readers": [
+    "tests/check_village/test_segments_03_structures_and_wards.py (test)",
+    "tests/gate/test_scripted_fixtures.py (test)"
+   ],
+   "fixtures": {
+    "?": 1
+   },
+   "verdict": "RETIRE-CANDIDATE",
+   "why": "inputs settle at their placer on both maps: reference: labels, polder19: labels",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "no_structure_on_paddy",
+   "keys": [
+    "dry_plots",
+    "fields",
+    "granary"
+   ],
+   "stages": {
+    "reference": [
+     "field",
+     "finish"
+    ],
+    "polder19": [
+     "field",
+     "finish"
+    ]
+   },
+   "readers": [
+    "tests/check_village/test_segments_03_structures_and_wards.py (test)",
+    "tests/check_village/test_segments_05_supply_and_graveyards.py (test)",
+    "tests/gate/test_scripted_fixtures.py (test)"
+   ],
+   "fixtures": {
+    "?": 1
+   },
+   "verdict": "KEEP",
+   "why": "an input changes after its placer: reference: placed at field, last changed at finish, polder19: placed at field, last changed at finish",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "no_structure_on_stream",
+   "keys": [
+    "granary",
+    "streams"
+   ],
+   "stages": {
+    "reference": [
+     "field",
+     "finish"
+    ],
+    "polder19": [
+     "field",
+     "finish"
+    ]
+   },
+   "readers": [
+    "tests/check_village/_builders.py (test)",
+    "tests/check_village/test_segments_03_structures_and_wards.py (test)"
+   ],
+   "fixtures": {},
+   "verdict": "KEEP",
+   "why": "an input changes after its placer: reference: placed at field, last changed at finish, polder19: placed at field, last changed at finish",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "no_structure_on_torii",
+   "keys": [
+    "granary",
+    "meta",
+    "torii"
+   ],
+   "stages": {
+    "reference": [
+     "water_frame",
+     "notice"
+    ],
+    "polder19": [
+     "water_frame",
+     "notice"
+    ]
+   },
+   "readers": [
+    "tests/check_village/_builders.py (test)",
+    "tests/gate/test_scripted_fixtures.py (test)"
+   ],
+   "fixtures": {},
+   "verdict": "KEEP",
+   "why": "an input changes after its placer: reference: placed at water_frame, last changed at notice, polder19: placed at water_frame, last changed at notice",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "paddy_basins_are_worth_their_bund",
+   "keys": [
+    "meta"
+   ],
+   "stages": {
+    "reference": [
+     "water_frame",
+     "notice"
+    ],
+    "polder19": [
+     "water_frame",
+     "notice"
+    ]
+   },
+   "readers": [
+    "tests/check_village/test_segments_08_kosatsuba_and_basins.py (test)",
+    "tests/test_villages.py (test)"
+   ],
+   "fixtures": {
+    "?": 2
+   },
+   "verdict": "KEEP",
+   "why": "an input changes after its placer: reference: placed at water_frame, last changed at notice, polder19: placed at water_frame, last changed at notice",
+   "on": [
+    "reference"
+   ]
+  },
+  {
+   "check": "paddy_bunds_clear_the_collector",
+   "keys": [
+    "field_ditches",
+    "fields",
+    "meta"
+   ],
+   "stages": {
+    "reference": [
+     "field",
+     "finish"
+    ],
+    "polder19": [
+     "field",
+     "finish"
+    ]
+   },
+   "readers": [
+    "tests/check_village/_builders.py (test)",
+    "tests/check_village/test_segments_08_town_and_flow.py (test)"
+   ],
+   "fixtures": {},
+   "verdict": "KEEP",
+   "why": "an input changes after its placer: reference: placed at field, last changed at finish, polder19: placed at field, last changed at finish",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "paddy_bunds_clear_the_supply_channels",
+   "keys": [
+    "field_ditches",
+    "meta"
+   ],
+   "stages": {
+    "reference": [
+     "field",
+     "notice"
+    ],
+    "polder19": [
+     "field",
+     "notice"
+    ]
+   },
+   "readers": [
+    "l7r/diagram/hamletgen/driver.py",
+    "tests/check_village/_builders.py (test)",
+    "tests/check_village/test_registry_derive.py (test)",
+    "tests/check_village/test_segments_08_town_and_flow.py (test)",
+    "tests/hamletgen/test_driver.py (test)"
+   ],
+   "fixtures": {
+    "?": 2
+   },
+   "verdict": "KEEP",
+   "why": "a consumer branches on the verdict: l7r/diagram/hamletgen/driver.py",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "paddy_bunds_do_not_stagger",
+   "keys": [
+    "meta"
+   ],
+   "stages": {
+    "reference": [
+     "water_frame",
+     "notice"
+    ],
+    "polder19": [
+     "water_frame",
+     "notice"
+    ]
+   },
+   "readers": [
+    "tests/check_village/test_segments_08_kosatsuba_and_basins.py (test)"
+   ],
+   "fixtures": {
+    "?": 1
+   },
+   "verdict": "KEEP",
+   "why": "an input changes after its placer: reference: placed at water_frame, last changed at notice, polder19: placed at water_frame, last changed at notice",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "paddy_fan_has_floor",
+   "keys": [
+    "comb_floors",
+    "field_ditches",
+    "fields"
+   ],
+   "stages": {
+    "reference": [
+     "field",
+     "finish"
+    ],
+    "polder19": [
+     "field",
+     "finish"
+    ]
+   },
+   "readers": [
+    "tests/gate/test_scripted_fixtures.py (test)",
+    "tests/settlement/test_fields.py (test)"
+   ],
+   "fixtures": {},
+   "verdict": "KEEP",
+   "why": "an input changes after its placer: reference: placed at field, last changed at finish, polder19: placed at field, last changed at finish",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "paddy_plot_rings_overcount_stays_marginal",
+   "keys": [
+    "meta"
+   ],
+   "stages": {
+    "reference": [
+     "water_frame",
+     "notice"
+    ],
+    "polder19": [
+     "water_frame",
+     "notice"
+    ]
+   },
+   "readers": [
+    "tests/check_village/test_segments_08_kosatsuba_and_basins.py (test)"
+   ],
+   "fixtures": {},
+   "verdict": "KEEP",
+   "why": "an input changes after its placer: reference: placed at water_frame, last changed at notice, polder19: placed at water_frame, last changed at notice",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "paddy_plot_seams_shared",
+   "keys": [
+    "channels",
+    "drawn_channels",
+    "field_ditches",
+    "field_ponds",
+    "meta"
+   ],
+   "stages": {
+    "reference": [
+     "field",
+     "finish"
+    ],
+    "polder19": [
+     "field",
+     "finish"
+    ]
+   },
+   "readers": [
+    "tests/check_village/test_segments_08_kosatsuba_and_basins.py (test)"
+   ],
+   "fixtures": {
+    "?": 4
+   },
+   "verdict": "KEEP",
+   "why": "an input changes after its placer: reference: placed at field, last changed at finish, polder19: placed at field, last changed at finish",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "paddy_plots_are_workable_basins",
+   "keys": [
+    "meta"
+   ],
+   "stages": {
+    "reference": [
+     "water_frame",
+     "notice"
+    ],
+    "polder19": [
+     "water_frame",
+     "notice"
+    ]
+   },
+   "readers": [],
+   "fixtures": {
+    "?": 4
+   },
+   "verdict": "KEEP",
+   "why": "an input changes after its placer: reference: placed at water_frame, last changed at notice, polder19: placed at water_frame, last changed at notice",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "polder_channels_clear_of_dike",
+   "keys": [
+    "channels",
+    "comb_floors",
+    "dikes",
+    "field_ditches",
+    "fields",
+    "houses",
+    "meta",
+    "streams",
+    "village_groves"
+   ],
+   "stages": {
+    "reference": [
+     "windbreak",
+     "finish"
+    ],
+    "polder19": [
+     "windbreak",
+     "finish"
+    ]
+   },
+   "readers": [
+    "tests/check_village/test_segments_11_polders_and_edges.py (test)"
+   ],
+   "fixtures": {
+    "?": 1,
+    "hamlet": 1
+   },
+   "verdict": "KEEP",
+   "why": "an input changes after its placer: reference: placed at windbreak, last changed at finish, polder19: placed at windbreak, last changed at finish",
+   "on": [
+    "polder19"
+   ]
+  },
+  {
+   "check": "polder_dike_gapped_at_sluices",
+   "keys": [
+    "channels",
+    "comb_floors",
+    "dikes",
+    "field_ditches",
+    "fields",
+    "houses",
+    "meta",
+    "streams",
+    "village_groves"
+   ],
+   "stages": {
+    "reference": [
+     "windbreak",
+     "finish"
+    ],
+    "polder19": [
+     "windbreak",
+     "finish"
+    ]
+   },
+   "readers": [
+    "tests/check_village/test_segments_11_polders_and_edges.py (test)",
+    "tests/gate/test_scripted_fixtures.py (test)"
+   ],
+   "fixtures": {
+    "?": 2,
+    "hamlet": 1
+   },
+   "verdict": "KEEP",
+   "why": "an input changes after its placer: reference: placed at windbreak, last changed at finish, polder19: placed at windbreak, last changed at finish",
+   "on": [
+    "polder19"
+   ]
+  },
+  {
+   "check": "polder_dike_is_earthwork",
+   "keys": [
+    "channels",
+    "comb_floors",
+    "dikes",
+    "field_ditches",
+    "fields",
+    "houses",
+    "meta",
+    "streams",
+    "village_groves"
+   ],
+   "stages": {
+    "reference": [
+     "windbreak",
+     "finish"
+    ],
+    "polder19": [
+     "windbreak",
+     "finish"
+    ]
+   },
+   "readers": [
+    "tests/check_village/test_segments_11_polders_and_edges.py (test)"
+   ],
+   "fixtures": {
+    "hamlet": 1,
+    "?": 1
+   },
+   "verdict": "KEEP",
+   "why": "an input changes after its placer: reference: placed at windbreak, last changed at finish, polder19: placed at windbreak, last changed at finish",
+   "on": [
+    "polder19"
+   ]
+  },
+  {
+   "check": "polder_edges_wander",
+   "keys": [
+    "channels",
+    "comb_floors",
+    "dikes",
+    "field_ditches",
+    "fields",
+    "houses",
+    "meta",
+    "streams",
+    "village_groves"
+   ],
+   "stages": {
+    "reference": [
+     "windbreak",
+     "finish"
+    ],
+    "polder19": [
+     "windbreak",
+     "finish"
+    ]
+   },
+   "readers": [
+    "tests/check_village/test_segments_11_polders_and_edges.py (test)"
+   ],
+   "fixtures": {
+    "?": 2,
+    "hamlet": 1
+   },
+   "verdict": "KEEP",
+   "why": "an input changes after its placer: reference: placed at windbreak, last changed at finish, polder19: placed at windbreak, last changed at finish",
+   "on": [
+    "polder19"
+   ]
+  },
+  {
+   "check": "polder_fills_its_bbox",
+   "keys": [],
+   "stages": {
+    "reference": [
+     "-",
+     "-"
+    ],
+    "polder19": [
+     "-",
+     "-"
+    ]
+   },
+   "readers": [
+    "tests/check_village/test_segments_11_polders_and_edges.py (test)"
+   ],
+   "fixtures": {
+    "hamlet": 1
+   },
+   "verdict": "KEEP",
+   "why": "reads no manifest key the census can see (derived entirely) - judge by hand",
+   "on": [
+    "polder19"
+   ]
+  },
+  {
+   "check": "polder_floor_is_ring_interior",
+   "keys": [
+    "channels",
+    "comb_floors",
+    "dikes",
+    "field_ditches",
+    "fields",
+    "houses",
+    "meta",
+    "streams",
+    "village_groves"
+   ],
+   "stages": {
+    "reference": [
+     "windbreak",
+     "finish"
+    ],
+    "polder19": [
+     "windbreak",
+     "finish"
+    ]
+   },
+   "readers": [
+    "tests/check_village/test_segments_11_polders_and_edges.py (test)"
+   ],
+   "fixtures": {
+    "?": 1,
+    "hamlet": 1
+   },
+   "verdict": "KEEP",
+   "why": "an input changes after its placer: reference: placed at windbreak, last changed at finish, polder19: placed at windbreak, last changed at finish",
+   "on": [
+    "polder19"
+   ]
+  },
+  {
+   "check": "pond_clear_of_field",
+   "keys": [
+    "buildings",
+    "channels",
+    "hill",
+    "houses",
+    "moat",
+    "pond",
+    "religious",
+    "streams",
+    "wells"
+   ],
+   "stages": {
+    "reference": [
+     "appurtenances",
+     "finish"
+    ],
+    "polder19": [
+     "appurtenances",
+     "finish"
+    ]
+   },
+   "readers": [
+    "tests/check_village/test_segments_08_town_and_flow.py (test)",
+    "tests/hamletgen/test_sink.py (test)",
+    "tests/tier_city/check_village/test_segments_08_town_and_flow.py (test)"
+   ],
+   "fixtures": {
+    "?": 1
+   },
+   "verdict": "KEEP",
+   "why": "an input changes after its placer: reference: placed at appurtenances, last changed at finish, polder19: placed at appurtenances, last changed at finish",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "pond_clear_of_paddies",
+   "keys": [
+    "buildings",
+    "channels",
+    "hill",
+    "houses",
+    "moat",
+    "pond",
+    "religious",
+    "streams",
+    "wells"
+   ],
+   "stages": {
+    "reference": [
+     "appurtenances",
+     "finish"
+    ],
+    "polder19": [
+     "appurtenances",
+     "finish"
+    ]
+   },
+   "readers": [
+    "tests/check_village/test_segments_05_supply_and_graveyards.py (test)"
+   ],
+   "fixtures": {
+    "?": 1
+   },
+   "verdict": "KEEP",
+   "why": "an input changes after its placer: reference: placed at appurtenances, last changed at finish, polder19: placed at appurtenances, last changed at finish",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "pond_connected_to_field",
+   "keys": [
+    "buildings",
+    "channels",
+    "field_ditches",
+    "hill",
+    "houses",
+    "moat",
+    "pond",
+    "religious",
+    "streams",
+    "wells"
+   ],
+   "stages": {
+    "reference": [
+     "appurtenances",
+     "finish"
+    ],
+    "polder19": [
+     "appurtenances",
+     "finish"
+    ]
+   },
+   "readers": [
+    "tests/check_village/test_segments_08_town_and_flow.py (test)"
+   ],
+   "fixtures": {
+    "hamlet": 1
+   },
+   "verdict": "KEEP",
+   "why": "an input changes after its placer: reference: placed at appurtenances, last changed at finish, polder19: placed at appurtenances, last changed at finish",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "pond_fed_from_edge",
+   "keys": [
+    "buildings",
+    "channels",
+    "hill",
+    "houses",
+    "moat",
+    "pond",
+    "religious",
+    "streams",
+    "wells"
+   ],
+   "stages": {
+    "reference": [
+     "appurtenances",
+     "finish"
+    ],
+    "polder19": [
+     "appurtenances",
+     "finish"
+    ]
+   },
+   "readers": [
+    "tests/check_village/test_segments_07_water.py (test)"
+   ],
+   "fixtures": {
+    "?": 1
+   },
+   "verdict": "KEEP",
+   "why": "an input changes after its placer: reference: placed at appurtenances, last changed at finish, polder19: placed at appurtenances, last changed at finish",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "pond_fill_covers_channel_mouths",
+   "keys": [
+    "channels",
+    "drawn_channels",
+    "field_ditches",
+    "pond",
+    "pond_layer",
+    "streams"
+   ],
+   "stages": {
+    "reference": [
+     "sink",
+     "finish"
+    ],
+    "polder19": [
+     "field",
+     "finish"
+    ]
+   },
+   "readers": [
+    "tests/check_village/test_segments_07_water.py (test)",
+    "tests/gate/test_scripted_fixtures.py (test)",
+    "tests/settlement/test_fields.py (test)"
+   ],
+   "fixtures": {},
+   "verdict": "KEEP",
+   "why": "an input changes after its placer: reference: placed at sink, last changed at finish, polder19: placed at field, last changed at finish",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "religious_clear_of_ring_and_towers",
+   "keys": [
+    "channels",
+    "comb_floors",
+    "dikes",
+    "field_ditches",
+    "fields",
+    "fire_towers",
+    "gate_structs",
+    "houses",
+    "meta",
+    "religious",
+    "ring_road",
+    "ring_road_width",
+    "streams",
+    "village_groves",
+    "wall_towers"
+   ],
+   "stages": {
+    "reference": [
+     "windbreak",
+     "finish"
+    ],
+    "polder19": [
+     "windbreak",
+     "finish"
+    ]
+   },
+   "readers": [
+    "tests/tier_city/check_village/test_segments_03_structures_and_wards.py (test)"
+   ],
+   "fixtures": {},
+   "verdict": "KEEP",
+   "why": "an input changes after its placer: reference: placed at windbreak, last changed at finish, polder19: placed at windbreak, last changed at finish",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "remote_shrine_has_own_well",
+   "keys": [
+    "buildings",
+    "channels",
+    "hill",
+    "houses",
+    "moat",
+    "pond",
+    "religious",
+    "streams",
+    "wells"
+   ],
+   "stages": {
+    "reference": [
+     "appurtenances",
+     "finish"
+    ],
+    "polder19": [
+     "appurtenances",
+     "finish"
+    ]
+   },
+   "readers": [
+    "tests/check_village/test_segments_04_homesteads.py (test)"
+   ],
+   "fixtures": {},
+   "verdict": "KEEP",
+   "why": "an input changes after its placer: reference: placed at appurtenances, last changed at finish, polder19: placed at appurtenances, last changed at finish",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "roads_clear_of_marsh",
+   "keys": [
+    "alleys",
+    "lanes",
+    "marshes",
+    "road",
+    "road_width",
+    "town_streets"
+   ],
+   "stages": {
+    "reference": [
+     "track",
+     "finish"
+    ],
+    "polder19": [
+     "track",
+     "finish"
+    ]
+   },
+   "readers": [
+    "tests/check_village/test_segments_05_supply_and_graveyards.py (test)"
+   ],
+   "fixtures": {
+    "?": 2
+   },
+   "verdict": "KEEP",
+   "why": "an input changes after its placer: reference: placed at track, last changed at finish, polder19: placed at track, last changed at finish",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "scalebar_matches_declared_scale",
+   "keys": [
+    "fields",
+    "labels",
+    "meta",
+    "pond",
+    "scalebar",
+    "title"
+   ],
+   "stages": {
+    "reference": [
+     "labels",
+     "finish"
+    ],
+    "polder19": [
+     "labels",
+     "finish"
+    ]
+   },
+   "readers": [
+    "tests/check_village/test_segments_03_structures_and_wards.py (test)",
+    "tests/gate/test_scripted_fixtures.py (test)"
+   ],
+   "fixtures": {},
+   "verdict": "KEEP",
+   "why": "an input changes after its placer: reference: placed at labels, last changed at finish, polder19: placed at labels, last changed at finish",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "scatter_respects_swept_clearings",
+   "keys": [
+    "channels",
+    "clearings",
+    "comb_floors",
+    "commons",
+    "dikes",
+    "field_ditches",
+    "fields",
+    "houses",
+    "marshes",
+    "meta",
+    "streams",
+    "village_groves"
+   ],
+   "stages": {
+    "reference": [
+     "windbreak",
+     "finish"
+    ],
+    "polder19": [
+     "windbreak",
+     "finish"
+    ]
+   },
+   "readers": [
+    "tests/check_village/test_segments_04_homesteads.py (test)"
+   ],
+   "fixtures": {},
+   "verdict": "KEEP",
+   "why": "an input changes after its placer: reference: placed at windbreak, last changed at finish, polder19: placed at windbreak, last changed at finish",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "scrub_clear_of_urban_fabric",
+   "keys": [
+    "commons"
+   ],
+   "stages": {
+    "reference": [
+     "hinterland",
+     "woodland"
+    ],
+    "polder19": [
+     "hinterland",
+     "hinterland"
+    ]
+   },
+   "readers": [
+    "tests/check_village/test_segments_07_water.py (test)",
+    "tests/tier_town/check_village/test_segments_07_water.py (test)"
+   ],
+   "fixtures": {},
+   "verdict": "KEEP",
+   "why": "an input changes after its placer: reference: placed at hinterland, last changed at woodland",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "settlement_declares_a_land_fall",
+   "keys": [
+    "field_ditches",
+    "fields"
+   ],
+   "stages": {
+    "reference": [
+     "field",
+     "finish"
+    ],
+    "polder19": [
+     "field",
+     "finish"
+    ]
+   },
+   "readers": [
+    "tests/check_village/_builders.py (test)",
+    "tests/check_village/test_segments_08_town_and_flow.py (test)",
+    "tests/check_village/test_segments_09_justice_and_tanning.py (test)",
+    "tests/tier_city/check_village/test_segments_09_justice_and_tanning.py (test)"
+   ],
+   "fixtures": {},
+   "verdict": "KEEP",
+   "why": "an input changes after its placer: reference: placed at field, last changed at finish, polder19: placed at field, last changed at finish",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "settlement_dwellings_watered",
+   "keys": [
+    "buildings",
+    "channels",
+    "hill",
+    "houses",
+    "moat",
+    "pond",
+    "religious",
+    "streams",
+    "wells"
+   ],
+   "stages": {
+    "reference": [
+     "appurtenances",
+     "finish"
+    ],
+    "polder19": [
+     "appurtenances",
+     "finish"
+    ]
+   },
+   "readers": [
+    "tests/check_village/test_segments_04_homesteads.py (test)",
+    "tests/full/test_coverage_carriers.py (test)"
+   ],
+   "fixtures": {},
+   "verdict": "KEEP",
+   "why": "an input changes after its placer: reference: placed at appurtenances, last changed at finish, polder19: placed at appurtenances, last changed at finish",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "settlement_has_wells",
+   "keys": [
+    "buildings",
+    "channels",
+    "hill",
+    "houses",
+    "moat",
+    "pond",
+    "religious",
+    "streams",
+    "wells"
+   ],
+   "stages": {
+    "reference": [
+     "appurtenances",
+     "finish"
+    ],
+    "polder19": [
+     "appurtenances",
+     "finish"
+    ]
+   },
+   "readers": [
+    "tests/check_village/test_segments_04_homesteads.py (test)",
+    "tests/full/test_coverage_carriers.py (test)"
+   ],
+   "fixtures": {},
+   "verdict": "KEEP",
+   "why": "an input changes after its placer: reference: placed at appurtenances, last changed at finish, polder19: placed at appurtenances, last changed at finish",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "settlement_records_cluster_seeding",
+   "keys": [
+    "meta"
+   ],
+   "stages": {
+    "reference": [
+     "water_frame",
+     "notice"
+    ],
+    "polder19": [
+     "water_frame",
+     "notice"
+    ]
+   },
+   "readers": [
+    "tests/check_village/test_segments_04_homesteads.py (test)"
+   ],
+   "fixtures": {
+    "?": 1
+   },
+   "verdict": "KEEP",
+   "why": "an input changes after its placer: reference: placed at water_frame, last changed at notice, polder19: placed at water_frame, last changed at notice",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "shrine_halls_clear_of_lanes",
+   "keys": [
+    "lanes",
+    "religious",
+    "road",
+    "road_width",
+    "town_streets"
+   ],
+   "stages": {
+    "reference": [
+     "track",
+     "finish"
+    ],
+    "polder19": [
+     "track",
+     "finish"
+    ]
+   },
+   "readers": [
+    "tests/check_village/test_segments_07_water.py (test)"
+   ],
+   "fixtures": {},
+   "verdict": "KEEP",
+   "why": "an input changes after its placer: reference: placed at track, last changed at finish, polder19: placed at track, last changed at finish",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "sluice_gates_on_water",
+   "keys": [
+    "aqueducts",
+    "canals",
+    "channels",
+    "drawn_channels",
+    "moat",
+    "moat_width",
+    "sluice_gates",
+    "streams",
+    "tanning_yards",
+    "towpaths"
+   ],
+   "stages": {
+    "reference": [
+     "field",
+     "finish"
+    ],
+    "polder19": [
+     "crossings",
+     "finish"
+    ]
+   },
+   "readers": [
+    "tests/check_village/test_segments_07_water.py (test)"
+   ],
+   "fixtures": {},
+   "verdict": "KEEP",
+   "why": "an input changes after its placer: reference: placed at field, last changed at finish, polder19: placed at crossings, last changed at finish",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "stream_end_anchored",
+   "keys": [
+    "buildings",
+    "channels",
+    "forest",
+    "hill",
+    "houses",
+    "moat",
+    "pond",
+    "religious",
+    "streams",
+    "wells"
+   ],
+   "stages": {
+    "reference": [
+     "appurtenances",
+     "finish"
+    ],
+    "polder19": [
+     "appurtenances",
+     "finish"
+    ]
+   },
+   "readers": [
+    "tests/tools/test_firing_census.py (test)"
+   ],
+   "fixtures": {},
+   "verdict": "KEEP",
+   "why": "an input changes after its placer: reference: placed at appurtenances, last changed at finish, polder19: placed at appurtenances, last changed at finish",
+   "on": [
+    "polder19"
+   ]
+  },
+  {
+   "check": "stream_source_anchored",
+   "keys": [
+    "buildings",
+    "channels",
+    "forest",
+    "hill",
+    "houses",
+    "moat",
+    "pond",
+    "religious",
+    "streams",
+    "wells"
+   ],
+   "stages": {
+    "reference": [
+     "appurtenances",
+     "finish"
+    ],
+    "polder19": [
+     "appurtenances",
+     "finish"
+    ]
+   },
+   "readers": [
+    "tests/tools/test_firing_census.py (test)"
+   ],
+   "fixtures": {},
+   "verdict": "KEEP",
+   "why": "an input changes after its placer: reference: placed at appurtenances, last changed at finish, polder19: placed at appurtenances, last changed at finish",
+   "on": [
+    "polder19"
+   ]
+  },
+  {
+   "check": "streams_avoid_fields",
+   "keys": [
+    "buildings",
+    "channels",
+    "forest",
+    "hill",
+    "houses",
+    "moat",
+    "pond",
+    "religious",
+    "streams",
+    "wells"
+   ],
+   "stages": {
+    "reference": [
+     "appurtenances",
+     "finish"
+    ],
+    "polder19": [
+     "appurtenances",
+     "finish"
+    ]
+   },
+   "readers": [
+    "tests/check_village/test_segments_05_fields_and_ditches.py (test)"
+   ],
+   "fixtures": {
+    "?": 2
+   },
+   "verdict": "KEEP",
+   "why": "an input changes after its placer: reference: placed at appurtenances, last changed at finish, polder19: placed at appurtenances, last changed at finish",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "structures_clear_of_dike",
+   "keys": [
+    "channels",
+    "comb_floors",
+    "dikes",
+    "field_ditches",
+    "fields",
+    "houses",
+    "meta",
+    "streams",
+    "village_groves"
+   ],
+   "stages": {
+    "reference": [
+     "windbreak",
+     "finish"
+    ],
+    "polder19": [
+     "windbreak",
+     "finish"
+    ]
+   },
+   "readers": [
+    "tests/check_village/test_segments_11_polders_and_edges.py (test)",
+    "tests/gate/test_scripted_fixtures.py (test)"
+   ],
+   "fixtures": {
+    "hamlet": 1,
+    "?": 1
+   },
+   "verdict": "KEEP",
+   "why": "an input changes after its placer: reference: placed at windbreak, last changed at finish, polder19: placed at windbreak, last changed at finish",
+   "on": [
+    "polder19"
+   ]
+  },
+  {
+   "check": "structures_clear_of_trees",
+   "keys": [
+    "channels",
+    "fields",
+    "meta",
+    "tree_crowns"
+   ],
+   "stages": {
+    "reference": [
+     "hinterland",
+     "finish"
+    ],
+    "polder19": [
+     "hinterland",
+     "finish"
+    ]
+   },
+   "readers": [
+    "tests/settlement/test_farm_fixtures.py (test)",
+    "tests/settlement/test_shrines_wells.py (test)",
+    "tests/tier_town/check_village/test_segments_01_city_frame_and_yards.py (test)"
+   ],
+   "fixtures": {},
+   "verdict": "KEEP",
+   "why": "an input changes after its placer: reference: placed at hinterland, last changed at finish, polder19: placed at hinterland, last changed at finish",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "tanning_yards_on_water",
+   "keys": [
+    "aqueducts",
+    "canals",
+    "channels",
+    "drawn_channels",
+    "moat",
+    "moat_width",
+    "sluice_gates",
+    "streams",
+    "tanning_yards",
+    "towpaths"
+   ],
+   "stages": {
+    "reference": [
+     "field",
+     "finish"
+    ],
+    "polder19": [
+     "crossings",
+     "finish"
+    ]
+   },
+   "readers": [
+    "tests/check_village/test_segments_07_water.py (test)"
+   ],
+   "fixtures": {},
+   "verdict": "KEEP",
+   "why": "an input changes after its placer: reference: placed at field, last changed at finish, polder19: placed at crossings, last changed at finish",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "title_clear_of_features",
+   "keys": [
+    "fields",
+    "labels",
+    "meta",
+    "pond",
+    "scalebar",
+    "title"
+   ],
+   "stages": {
+    "reference": [
+     "labels",
+     "finish"
+    ],
+    "polder19": [
+     "labels",
+     "finish"
+    ]
+   },
+   "readers": [
+    "tests/check_village/test_segments_03_structures_and_wards.py (test)",
+    "tests/gate/hamletgen/test_driver.py (test)",
+    "tests/gate/test_scripted_fixtures.py (test)"
+   ],
+   "fixtures": {},
+   "verdict": "KEEP",
+   "why": "an input changes after its placer: reference: placed at labels, last changed at finish, polder19: placed at labels, last changed at finish",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "title_has_placard",
+   "keys": [
+    "fields",
+    "labels",
+    "meta",
+    "pond",
+    "scalebar",
+    "title"
+   ],
+   "stages": {
+    "reference": [
+     "labels",
+     "finish"
+    ],
+    "polder19": [
+     "labels",
+     "finish"
+    ]
+   },
+   "readers": [
+    "tests/check_village/test_segments_03_structures_and_wards.py (test)",
+    "tests/gate/test_scripted_fixtures.py (test)"
+   ],
+   "fixtures": {},
+   "verdict": "KEEP",
+   "why": "an input changes after its placer: reference: placed at labels, last changed at finish, polder19: placed at labels, last changed at finish",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "torii_clear_of_halls_towers_ring",
+   "keys": [
+    "channels",
+    "comb_floors",
+    "dikes",
+    "field_ditches",
+    "fields",
+    "fire_towers",
+    "gate_structs",
+    "houses",
+    "meta",
+    "religious",
+    "ring_road",
+    "ring_road_width",
+    "streams",
+    "torii",
+    "village_groves",
+    "wall_towers"
+   ],
+   "stages": {
+    "reference": [
+     "windbreak",
+     "finish"
+    ],
+    "polder19": [
+     "windbreak",
+     "finish"
+    ]
+   },
+   "readers": [
+    "tests/tier_city/check_village/test_segments_03_structures_and_wards.py (test)"
+   ],
+   "fixtures": {},
+   "verdict": "KEEP",
+   "why": "an input changes after its placer: reference: placed at windbreak, last changed at finish, polder19: placed at windbreak, last changed at finish",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "torii_clear_of_walls",
+   "keys": [],
+   "stages": {
+    "reference": [
+     "-",
+     "-"
+    ],
+    "polder19": [
+     "-",
+     "-"
+    ]
+   },
+   "readers": [
+    "tests/tier_city/check_village/test_segments_03_structures_and_wards.py (test)"
+   ],
+   "fixtures": {},
+   "verdict": "KEEP",
+   "why": "reads no manifest key the census can see (derived entirely) - judge by hand",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "town_has_kosatsuba",
+   "keys": [
+    "gates",
+    "kosatsuba",
+    "lane",
+    "lanes",
+    "road",
+    "roads",
+    "town_streets"
+   ],
+   "stages": {},
+   "readers": [
+    "tests/check_village/test_segments_08_town_and_flow.py (test)",
+    "tests/tier_town/check_village/test_segments_08_town_and_flow.py (test)"
+   ],
+   "fixtures": {},
+   "verdict": "NO-SCRIPTED-EXECUTOR",
+   "why": "no scripted map exercises it (a legacy-tier check: town / city / capital / village hand-authored maps only); no measured verdict is possible - the GM's choice at acceptance",
+   "on": []
+  },
+  {
+   "check": "towpath_hugs_the_bank",
+   "keys": [
+    "aqueducts",
+    "canals",
+    "channels",
+    "drawn_channels",
+    "moat",
+    "moat_width",
+    "sluice_gates",
+    "streams",
+    "tanning_yards",
+    "towpaths"
+   ],
+   "stages": {
+    "reference": [
+     "field",
+     "finish"
+    ],
+    "polder19": [
+     "crossings",
+     "finish"
+    ]
+   },
+   "readers": [
+    "tests/check_village/test_segments_07_water.py (test)"
+   ],
+   "fixtures": {},
+   "verdict": "KEEP",
+   "why": "an input changes after its placer: reference: placed at field, last changed at finish, polder19: placed at crossings, last changed at finish",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "tree_crowns_not_subsumed",
+   "keys": [
+    "tree_crowns"
+   ],
+   "stages": {
+    "reference": [
+     "hinterland",
+     "windbreak"
+    ],
+    "polder19": [
+     "hinterland",
+     "windbreak"
+    ]
+   },
+   "readers": [
+    "tests/check_village/test_segments_04_farm_fixtures.py (test)"
+   ],
+   "fixtures": {
+    "?": 1
+   },
+   "verdict": "KEEP",
+   "why": "an input changes after its placer: reference: placed at hinterland, last changed at windbreak, polder19: placed at hinterland, last changed at windbreak",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "village_groves_visibly_stocked",
+   "keys": [
+    "meta",
+    "village_groves"
+   ],
+   "stages": {
+    "reference": [
+     "windbreak",
+     "notice"
+    ],
+    "polder19": [
+     "windbreak",
+     "notice"
+    ]
+   },
+   "readers": [
+    "tests/check_village/test_segments_04_homesteads.py (test)"
+   ],
+   "fixtures": {},
+   "verdict": "KEEP",
+   "why": "an input changes after its placer: reference: placed at windbreak, last changed at notice, polder19: placed at windbreak, last changed at notice",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "village_has_kosatsuba",
+   "keys": [
+    "gates",
+    "kosatsuba",
+    "lane",
+    "lanes",
+    "road",
+    "roads",
+    "town_streets"
+   ],
+   "stages": {},
+   "readers": [
+    "tests/check_village/test_segments_08_kosatsuba_and_basins.py (test)"
+   ],
+   "fixtures": {},
+   "verdict": "NO-SCRIPTED-EXECUTOR",
+   "why": "no scripted map exercises it (a legacy-tier check: town / city / capital / village hand-authored maps only); no measured verdict is possible - the GM's choice at acceptance",
+   "on": []
+  },
+  {
+   "check": "village_windbreak_embraces_cluster",
+   "keys": [
+    "forest",
+    "groves",
+    "village_groves"
+   ],
+   "stages": {
+    "reference": [
+     "windbreak",
+     "frame"
+    ],
+    "polder19": [
+     "windbreak",
+     "windbreak"
+    ]
+   },
+   "readers": [
+    "tests/check_village/test_segments_04_homesteads.py (test)",
+    "tests/gate/test_scripted_fixtures.py (test)"
+   ],
+   "fixtures": {
+    "?": 1
+   },
+   "verdict": "KEEP",
+   "why": "an input changes after its placer: reference: placed at windbreak, last changed at frame",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "village_windbreak_is_continuous",
+   "keys": [
+    "meta",
+    "village_groves"
+   ],
+   "stages": {
+    "reference": [
+     "windbreak",
+     "notice"
+    ],
+    "polder19": [
+     "windbreak",
+     "notice"
+    ]
+   },
+   "readers": [
+    "tests/gate/hamletgen/test_driver.py (test)",
+    "tests/tools/test_mapcheck.py (test)"
+   ],
+   "fixtures": {
+    "?": 1
+   },
+   "verdict": "KEEP",
+   "why": "an input changes after its placer: reference: placed at windbreak, last changed at notice, polder19: placed at windbreak, last changed at notice",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "village_windbreak_present",
+   "keys": [
+    "forest",
+    "groves",
+    "village_groves"
+   ],
+   "stages": {
+    "reference": [
+     "windbreak",
+     "frame"
+    ],
+    "polder19": [
+     "windbreak",
+     "windbreak"
+    ]
+   },
+   "readers": [
+    "tests/check_village/test_segments_04_homesteads.py (test)",
+    "tests/gate/test_scripted_fixtures.py (test)"
+   ],
+   "fixtures": {},
+   "verdict": "KEEP",
+   "why": "an input changes after its placer: reference: placed at windbreak, last changed at frame",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "village_windbreak_scales_with_cluster",
+   "keys": [
+    "forest",
+    "groves",
+    "village_groves"
+   ],
+   "stages": {
+    "reference": [
+     "windbreak",
+     "frame"
+    ],
+    "polder19": [
+     "windbreak",
+     "windbreak"
+    ]
+   },
+   "readers": [
+    "tests/check_village/test_segments_04_homesteads.py (test)",
+    "tests/gate/test_scripted_fixtures.py (test)"
+   ],
+   "fixtures": {
+    "?": 1
+   },
+   "verdict": "KEEP",
+   "why": "an input changes after its placer: reference: placed at windbreak, last changed at frame",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "waivers_are_documented",
+   "keys": [],
+   "stages": {
+    "reference": [
+     "-",
+     "-"
+    ],
+    "polder19": [
+     "-",
+     "-"
+    ]
+   },
+   "readers": [
+    "tests/check_village/test_segments_11_polders_and_edges.py (test)",
+    "tests/check_village/test_verdict_journal.py (test)"
+   ],
+   "fixtures": {},
+   "verdict": "KEEP",
+   "why": "reads no manifest key the census can see (derived entirely) - judge by hand",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "waivers_are_live",
+   "keys": [],
+   "stages": {
+    "reference": [
+     "-",
+     "-"
+    ],
+    "polder19": [
+     "-",
+     "-"
+    ]
+   },
+   "readers": [
+    "tests/check_village/_builders.py (test)",
+    "tests/check_village/test_segments_11_polders_and_edges.py (test)",
+    "tests/gate/test_regressions.py (test)",
+    "tests/hamletgen/test_driver.py (test)"
+   ],
+   "fixtures": {},
+   "verdict": "KEEP",
+   "why": "reads no manifest key the census can see (derived entirely) - judge by hand",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "water_channels_join_not_cross",
+   "keys": [
+    "drawn_channels"
+   ],
+   "stages": {
+    "reference": [
+     "field",
+     "finish"
+    ],
+    "polder19": [
+     "field",
+     "finish"
+    ]
+   },
+   "readers": [
+    "tests/check_village/test_segments_05_fields_and_ditches.py (test)"
+   ],
+   "fixtures": {
+    "?": 1,
+    "hamlet": 1
+   },
+   "verdict": "KEEP",
+   "why": "an input changes after its placer: reference: placed at field, last changed at finish, polder19: placed at field, last changed at finish",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "water_channels_obtuse_turns",
+   "keys": [
+    "channels",
+    "field_ditches",
+    "granary",
+    "streams"
+   ],
+   "stages": {
+    "reference": [
+     "field",
+     "finish"
+    ],
+    "polder19": [
+     "field",
+     "finish"
+    ]
+   },
+   "readers": [
+    "tests/gate/test_scripted_fixtures.py (test)"
+   ],
+   "fixtures": {},
+   "verdict": "KEEP",
+   "why": "an input changes after its placer: reference: placed at field, last changed at finish, polder19: placed at field, last changed at finish",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "watercourse_ends_reach_water",
+   "keys": [
+    "channels",
+    "field_ditches",
+    "fields",
+    "moat",
+    "streams"
+   ],
+   "stages": {
+    "reference": [
+     "field",
+     "finish"
+    ],
+    "polder19": [
+     "field",
+     "finish"
+    ]
+   },
+   "readers": [
+    "tests/check_village/test_segments_07_water.py (test)"
+   ],
+   "fixtures": {
+    "?": 2
+   },
+   "verdict": "KEEP",
+   "why": "an input changes after its placer: reference: placed at field, last changed at finish, polder19: placed at field, last changed at finish",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "watercourses_wider_than_ditches",
+   "keys": [
+    "channels",
+    "streams"
+   ],
+   "stages": {
+    "reference": [
+     "field",
+     "finish"
+    ],
+    "polder19": [
+     "field",
+     "finish"
+    ]
+   },
+   "readers": [
+    "tests/check_village/test_segments_03_structures_and_wards.py (test)"
+   ],
+   "fixtures": {
+    "?": 1
+   },
+   "verdict": "KEEP",
+   "why": "an input changes after its placer: reference: placed at field, last changed at finish, polder19: placed at field, last changed at finish",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "waterside_works_follow_the_bank",
+   "keys": [
+    "canals",
+    "streams"
+   ],
+   "stages": {
+    "reference": [
+     "field",
+     "finish"
+    ],
+    "polder19": [
+     "field",
+     "finish"
+    ]
+   },
+   "readers": [
+    "tests/check_village/test_segments_06_ways_and_bridges.py (test)"
+   ],
+   "fixtures": {},
+   "verdict": "KEEP",
+   "why": "an input changes after its placer: reference: placed at field, last changed at finish, polder19: placed at field, last changed at finish",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "waterward_strips_run_off_the_frame",
+   "keys": [
+    "marshes"
+   ],
+   "stages": {
+    "reference": [
+     "sink",
+     "hinterland"
+    ],
+    "polder19": [
+     "field",
+     "hinterland"
+    ]
+   },
+   "readers": [
+    "tests/check_village/test_segments_11_polders_and_edges.py (test)"
+   ],
+   "fixtures": {},
+   "verdict": "KEEP",
+   "why": "an input changes after its placer: reference: placed at sink, last changed at hinterland, polder19: placed at field, last changed at hinterland",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "waterways_merge_at_crossings",
+   "keys": [
+    "channels",
+    "moat",
+    "moat_layer",
+    "streams"
+   ],
+   "stages": {
+    "reference": [
+     "field",
+     "finish"
+    ],
+    "polder19": [
+     "field",
+     "finish"
+    ]
+   },
+   "readers": [
+    "tests/check_village/test_segments_07_water.py (test)"
+   ],
+   "fixtures": {},
+   "verdict": "KEEP",
+   "why": "an input changes after its placer: reference: placed at field, last changed at finish, polder19: placed at field, last changed at finish",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "ways_clear_of_castle_moat",
+   "keys": [
+    "alleys",
+    "castles",
+    "lanes",
+    "town_streets"
+   ],
+   "stages": {
+    "reference": [
+     "track",
+     "finish"
+    ],
+    "polder19": [
+     "track",
+     "finish"
+    ]
+   },
+   "readers": [],
+   "fixtures": {},
+   "verdict": "KEEP",
+   "why": "an input changes after its placer: reference: placed at track, last changed at finish, polder19: placed at track, last changed at finish",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "ways_cross_water_on_a_deck",
+   "keys": [
+    "alleys",
+    "bridges",
+    "canals",
+    "castles",
+    "lanes",
+    "moat",
+    "moat_width",
+    "ring_road",
+    "ring_road_width",
+    "road",
+    "road_width",
+    "roads",
+    "streams",
+    "town_streets"
+   ],
+   "stages": {
+    "reference": [
+     "crossings",
+     "finish"
+    ],
+    "polder19": [
+     "crossings",
+     "finish"
+    ]
+   },
+   "readers": [
+    "tests/gate/test_scripted_fixtures.py (test)",
+    "tests/hamletgen/test_ways.py (test)"
+   ],
+   "fixtures": {},
+   "verdict": "KEEP",
+   "why": "an input changes after its placer: reference: placed at crossings, last changed at finish, polder19: placed at crossings, last changed at finish",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "ways_not_inside_road_beds",
+   "keys": [
+    "alleys",
+    "lanes",
+    "road",
+    "road_width",
+    "roads",
+    "town_streets"
+   ],
+   "stages": {
+    "reference": [
+     "track",
+     "finish"
+    ],
+    "polder19": [
+     "track",
+     "finish"
+    ]
+   },
+   "readers": [
+    "tests/check_village/test_segments_06_ways_and_bridges.py (test)"
+   ],
+   "fixtures": {},
+   "verdict": "KEEP",
+   "why": "an input changes after its placer: reference: placed at track, last changed at finish, polder19: placed at track, last changed at finish",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "wells_among_dwellings",
+   "keys": [
+    "buildings",
+    "houses",
+    "kilns",
+    "religious",
+    "wells"
+   ],
+   "stages": {
+    "reference": [
+     "appurtenances",
+     "appurtenances"
+    ],
+    "polder19": [
+     "appurtenances",
+     "appurtenances"
+    ]
+   },
+   "readers": [
+    "tests/check_village/_builders.py (test)",
+    "tests/check_village/test_segments_04_homesteads.py (test)",
+    "tests/gate/test_scripted_fixtures.py (test)"
+   ],
+   "fixtures": {},
+   "verdict": "RETIRE-CANDIDATE",
+   "why": "inputs settle at their placer on both maps: reference: appurtenances, polder19: appurtenances",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "wells_clear_of_trees",
+   "keys": [
+    "channels",
+    "commons",
+    "fields",
+    "forest",
+    "groves",
+    "meta",
+    "tree_crowns",
+    "village_groves",
+    "wells"
+   ],
+   "stages": {
+    "reference": [
+     "windbreak",
+     "finish"
+    ],
+    "polder19": [
+     "windbreak",
+     "finish"
+    ]
+   },
+   "readers": [
+    "tests/check_village/test_segments_04_homesteads.py (test)"
+   ],
+   "fixtures": {},
+   "verdict": "KEEP",
+   "why": "an input changes after its placer: reference: placed at windbreak, last changed at finish, polder19: placed at windbreak, last changed at finish",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "wells_off_the_wet_toe",
+   "keys": [
+    "dry_plots",
+    "fields",
+    "marshes",
+    "meta",
+    "wells"
+   ],
+   "stages": {
+    "reference": [
+     "appurtenances",
+     "finish"
+    ],
+    "polder19": [
+     "appurtenances",
+     "finish"
+    ]
+   },
+   "readers": [],
+   "fixtures": {
+    "?": 1
+   },
+   "verdict": "KEEP",
+   "why": "an input changes after its placer: reference: placed at appurtenances, last changed at finish, polder19: placed at appurtenances, last changed at finish",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "woodland_commons_on_dry_ground",
+   "keys": [
+    "commons",
+    "marshes",
+    "meta"
+   ],
+   "stages": {
+    "reference": [
+     "hinterland",
+     "notice"
+    ],
+    "polder19": [
+     "hinterland",
+     "notice"
+    ]
+   },
+   "readers": [
+    "tests/check_village/test_segments_05_supply_and_graveyards.py (test)",
+    "tests/gate/test_scripted_fixtures.py (test)"
+   ],
+   "fixtures": {
+    "?": 2
+   },
+   "verdict": "KEEP",
+   "why": "an input changes after its placer: reference: placed at hinterland, last changed at notice, polder19: placed at hinterland, last changed at notice",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "woodland_commons_visibly_stocked",
+   "keys": [
+    "commons",
+    "meta"
+   ],
+   "stages": {
+    "reference": [
+     "hinterland",
+     "notice"
+    ],
+    "polder19": [
+     "hinterland",
+     "notice"
+    ]
+   },
+   "readers": [
+    "tests/check_village/test_segments_05_supply_and_graveyards.py (test)"
+   ],
+   "fixtures": {
+    "?": 1
+   },
+   "verdict": "KEEP",
+   "why": "an input changes after its placer: reference: placed at hinterland, last changed at notice, polder19: placed at hinterland, last changed at notice",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  },
+  {
+   "check": "woodland_commons_within_the_frame",
+   "keys": [
+    "commons",
+    "meta"
+   ],
+   "stages": {
+    "reference": [
+     "hinterland",
+     "notice"
+    ],
+    "polder19": [
+     "hinterland",
+     "notice"
+    ]
+   },
+   "readers": [
+    "tests/check_village/test_segments_05_supply_and_graveyards.py (test)",
+    "tests/hamletgen/test_hinterland.py (test)"
+   ],
+   "fixtures": {
+    "?": 1
+   },
+   "verdict": "KEEP",
+   "why": "an input changes after its placer: reference: placed at hinterland, last changed at notice, polder19: placed at hinterland, last changed at notice",
+   "on": [
+    "reference",
+    "polder19"
+   ]
+  }
+ ]
+}

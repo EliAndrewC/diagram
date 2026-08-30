@@ -255,3 +255,59 @@ of them a documented KEEP** (`farmhouse_aspect_in_range`, `waivers_are_documente
 `waterward_strips_run_off_the_frame`). There is nothing dead left in the battery.
 
 **Sources:** none - a measurement of this repository.
+
+## R10 - the measurement ledger (T14/T15), and the two things it says loudest
+
+[`surviving-checks.md`](surviving-checks.md), built by `build_ledger.py` joining `make check-census`
+(which stage last changes each input) with `make firing-census` (what can still make it fail). It carries
+no verdicts - the discriminator is the GM's own from feature 141, **can any stage after the placer change
+what this check reads?**
+
+| the GM's reading | n |
+|---|---|
+| **a bug in the placement algorithm** - nothing after the placer can move its inputs, so a failure means the placer produced it wrong. Disposition: a unit test of the placer. | **11** |
+| **fold into a trial-and-error placer** - a later stage can undo the placer, so no unit test of it can carry the guarantee. Disposition: an accept condition inside the loop. | **116** |
+| **neither** - recorded as an observation | **20** |
+
+### R10a - the single biggest concrete win is LABELS, and it is one coherent class
+
+**Six of the eleven** in the placer-bug group are label or caption checks: `labels_within_image`,
+`no_label_overlaps`, `label_hugs_its_referent`, `labels_align_with_their_referent`,
+`caption_stands_beside_its_referent`, `no_caption_holds_the_frame_open`. Every one of them measures inputs
+that are placed at the `labels` stage and never touched again, on BOTH measured maps. That is six checks
+that re-measure what the label placer guaranteed, and they can go to unit tests of the label placer as a
+group rather than one at a time.
+
+The other five are `bridges_span_their_water`, `channel_gates_at_water_junctions`,
+`footbridges_reach_useful_ground`, `long_ditches_have_a_footbridge`, `wells_among_dwellings`.
+
+**CAUTION on the first of those, and it is the caution this whole ledger owes.** `bridges_span_their_water`
+carries the mechanical verdict "retire" AND was explicitly KEPT by feature 158, because `hamletgen/ways.py`
+records it catching the scripted placer **four separate times** on oblique crossings. That is the exact
+case `dev/gate.md` documents - *"the census's verdict is a CANDIDATE, not a RULING"* - appearing at the top
+of this group. Nothing here is actionable without the same read that saved it last time.
+
+### R10b - 75% of the "fold" group rests on ONE stage, and that deserves scrutiny
+
+Counting the last-changing stage across both measured maps for the 116 fold rows:
+
+| last-changing stage | count |
+|---|---|
+| `finish` | **174 (75%)** |
+| `notice` | 40 |
+| `windbreak` | 5 |
+| `hinterland` / `frame` / `water_frame` | 8 |
+
+So three quarters of the evidence that a check measures a LATER fact is the terminal stage. `finish` is not
+purely a serializer - `hamletgen/driver.py` records that it *"flushes the deferred tree canopies, seats the
+deferred captions, and splices the shared water block"*, and seating a deferred caption is genuinely a
+later placement. But it is not obvious that every one of those 174 rows is a real move rather than a
+write-out artifact, and the answer is per-feature rather than per-stage.
+
+**This is a question for the discussion, not a finding.** Stated plainly: the discriminator works, and its
+"yes" answers are dominated by one stage whose behavior is mixed. If `finish` turns out to move only
+captions and canopies, a large part of the fold group is really placer-guaranteed and the win is much
+bigger than eleven checks. Measuring that is a stage-level question - what does `finish` actually mutate -
+and it is the obvious next measurement if the GM wants one before ruling.
+
+**Sources:** none - a measurement of this repository.

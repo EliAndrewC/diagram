@@ -155,6 +155,15 @@ def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--out", required=True, help="path stem: <stem>.md and <stem>.json are written")
     a = ap.parse_args(argv)
+    # A RELATIVE --out IS RESOLVED FROM THE REPO ROOT, not from the cwd (feature 163). `make
+    # check-census` runs from the skill directory, and every ledger this tool has ever written lives
+    # under `specs/` at the REPO root - so its own default OUT (`specs/141-.../ledger`) could not be
+    # written from the target that carries it: the run rolled the reference and a polder stage by
+    # stage, then died on FileNotFoundError at the write. Found by pointing OUT at a new feature's
+    # directory; the 141 run must have been driven by hand from elsewhere. Same resolution as
+    # `tools/firing_census.py`, so the two ledgers are addressed the same way.
+    if not os.path.isabs(a.out):
+        a.out = os.path.abspath(os.path.join(HERE, "..", "..", "..", a.out))
     sys.path.insert(0, HERE)
     from l7r.diagram import hamletgen as hg
     from l7r.diagram.check_village import gate
@@ -179,7 +188,16 @@ def main(argv: list[str] | None = None) -> int:
         buf = io.StringIO()
         with redirect_stdout(buf):
             gate(M, verbose=True)
-        ran[name] = {ln.split()[1] for ln in buf.getvalue().splitlines() if ln.startswith(("PASS ", "FAIL "))}
+        # NORMALIZE THE EMITTED NAME (feature 163). Two checks are emitted with an INDEX -
+        # `check(f"stream_source_anchored[{idx}]", ...)` - so a literal comparison against the check
+        # roster says no scripted map ever ran them, and this census labeled both stream anchors
+        # NO-SCRIPTED-EXECUTOR ("a legacy-tier check") while the gate fires them on every hamlet that
+        # has a stream. `firing_census` had the identical bug and is where the one definition lives;
+        # importing it rather than restating it is the rule this directory already keeps - a
+        # diagnostic OBSERVES, it never restates (tools/CLAUDE.md).
+        from l7r.diagram.tools.firing_census import base_name
+
+        ran[name] = {base_name(ln.split()[1]) for ln in buf.getvalue().splitlines() if ln.startswith(("PASS ", "FAIL "))}
     live = ran["reference"] | ran["polder19"]
     rows: list[dict[str, Any]] = []
     for c in sorted(inputs):

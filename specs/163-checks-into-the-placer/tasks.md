@@ -103,13 +103,13 @@ finding and is therefore `physical` with its three boxes.
 
 ## Phase 4 - measure what survives (US2, P2 - EVIDENCE ONLY, no changes and no verdicts)
 
-- [ ] **T14** Build `surviving-checks.md`: one row per surviving check carrying the MEASUREMENT and no
+- [x] **T14** Build `surviving-checks.md`: one row per surviving check carrying the MEASUREMENT and no
       category - which stage last changes each input, what the placer guarantees, who besides the gate
       reads the verdict, and what the record shows it has caught. Reuse feature 141's `make check-census`
       for the stage measurement; do not restate it by hand.
       measure: `make check-census`
       research: procedure
-- [ ] **T15** Against each row, state the evidence for the GM's own two readings - **a bug in the placement
+- [x] **T15** Against each row, state the evidence for the GM's own two readings - **a bug in the placement
       algorithm**, or **fold it into a trial-and-error placer** - and record "neither, because X" where the
       measurement shows that. Where a later stage can invalidate an earlier one, NAME that stage, because
       that fact is what the discussion turns on; point at `hamletgen/driver.py`'s `farmhouses_reach_a_way`

@@ -55,13 +55,32 @@ def reading_for(row: dict, fires: dict) -> tuple[str, str]:
              `farmhouses_reach_a_way` in hamletgen/driver.py as the worked precedent.
     """
     stages = row.get("stages") or {}
-    settles = row.get("verdict") == "RETIRE-CANDIDATE"  # 141's own name for "inputs settle at their placer"
+    verdict = row.get("verdict")
     readers = row.get("readers") or []
-    if readers:
-        return FOLD, f"a generator already branches on this verdict: {', '.join(readers)} - it is an accept condition today"
+    fired = fires.get(row.get("check"), {}).get("verdict")
+
+    # THE TWO CENSUSES ARBITRATE EACH OTHER, and neither is sufficient alone.
+    # `check-census` reads the MANIFEST, so "every input is absent on both scripted maps" is what a
+    # VACUOUS check looks like AND what a PASSING one looks like: `all_ink_is_ruled_on`'s inputs
+    # (`unclassed_ink`, `unregistered_classes`) are empty precisely because the map is correct. The
+    # firing census settles it - if something can still make the check FAIL, it is not vacuous.
+    if verdict == "VACUOUS-ON-SCRIPTED" and fired != "NEVER-FIRES":
+        return FOLD, f"check-census reads its inputs as absent on both scripted maps, but the firing census has it FIRING ({fired}) - the inputs are empty because a correct map has nothing to report, which is what PASSING looks like"
+    if verdict == "VACUOUS-ON-SCRIPTED":
+        return NEITHER, "inputs absent on both scripted maps AND nothing makes it fire - the one row where both censuses agree it does nothing"
+    if verdict == "NO-SCRIPTED-EXECUTOR":
+        return NEITHER, "no scripted map runs it - a tier this engine cannot yet produce. Not a deletion candidate under the GM's 2026-08-30 ruling; a class for the discussion"
+    # A READER IS A CONSUMER WHOSE BEHAVIOR BRANCHES ON THE VERDICT - and `readers` is not that field.
+    # It also lists every test that names the check and every waiver that mentions it, tagged "(test)"
+    # and "(waiver)"; `check_census`'s own docstring says so. Keying on the field NAME instead of its
+    # CONTENTS put all eleven retire-candidates into `fold` and left `placer bug` at zero - the same
+    # "two correct things, never compared" shape this feature has now hit four times in the engine.
+    gen_readers = [r for r in readers if not r.endswith(("(test)", "(waiver)"))]
+    if gen_readers:
+        return FOLD, f"a generator ALREADY branches on this verdict: {', '.join(gen_readers)} - it is an accept condition today, not an audit"
     if not row.get("keys"):
         return NEITHER, "reads no manifest key the census can see (derived entirely) - judge by hand"
-    if settles:
+    if verdict == "RETIRE-CANDIDATE":  # 141's own name for "every input settles at the stage that placed it"
         return BUG, f"every input settles at the stage that placed it ({_stage_text(stages)}) - nothing after the placer can move it"
     return FOLD, f"an input changes after its placer ({_stage_text(stages)}) - the placer cannot guarantee the finished state"
 
