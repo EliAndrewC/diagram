@@ -426,6 +426,8 @@ citybudget:     ## the city/capital space-budget planner
 hooks-test:     ## run every scripts/test-*-hooks.sh, and prove each guard still has a companion
 	@root=$$(git rev-parse --show-toplevel); gitdir=$$(git rev-parse --absolute-git-dir); fail=""; n=0; skipped=0; \
 	: "(GUARD_EDIT_OK: the freshness cache's directory, asked of git instead of assumed - see the note beside its mkdir below; feature 157)"; \
+	: "(GUARD_EDIT_OK: feature 172 - one work directory for the fan-out's logs and exit codes)"; \
+	work=$$(mktemp -d); trap 'rm -rf "$$work"' EXIT; \
 	for h in $$root/scripts/*-hooks.sh $$root/scripts/review-gate.sh $$root/scripts/gate-stamp.py $$root/scripts/sync-with-main.sh; do \
 	  : "(GUARD_EDIT_OK: sync-with-main.sh joins the roster - its route decision is a guard, feature 130 T031)"; \
 	  b=$$(basename $$h); case $$b in test-*) continue ;; esac; \
@@ -436,16 +438,38 @@ hooks-test:     ## run every scripts/test-*-hooks.sh, and prove each guard still
 	    printf 'fires - or whether it fires on correct work, which is the more expensive failure.\n\n'; \
 	    fail="$$fail $$b"; continue; \
 	  fi; \
-	  deps="$$h $$root/scripts/$$t $$root/scripts/_hookmatch.py $$root/scripts/test_hooks_cases.py $$root/scripts/_guardlog.sh $$root/scripts/_gatecost.py"; \
-	  : "(GUARD_EDIT_OK: feature 162 - the two new shared helpers join the freshness key, exactly as _hookmatch.py does: a suite that was green against one version of them is not green against another)"; \
-	  case $$b in sync-with-main.sh|review-gate.sh|gate-stamp.py) deps="$$root/scripts/*.sh $$root/scripts/*.py";; esac; \
+	  : "(GUARD_EDIT_OK: feature 172 - THE DEPENDENCY SET IS DERIVED, TRANSITIVELY. It was a fixed list"; \
+	  : " naming all four shared helpers for every suite, so a one-line _gatecost.py fix re-ran 21 suites"; \
+	  : " when two reference it. scripts/_hookdeps.py follows the real reference graph, and follows it"; \
+	  : " THROUGH helpers: _guardlog.sh calls _hookmatch.py since feature 170, so a guard naming only the"; \
+	  : " former still depends on the latter. Direct-only would UNDER-run and pass a suite a change had"; \
+	  : " broken, which is worse than the over-running it replaces. Measured in specs/172/research.md:"; \
+	  : " _gatecost.py 21 -> 2, test_hooks_cases.py 21 -> 3, and _hookmatch.py/_guardlog.sh still 20/19,"; \
+	  : " which is why this feature also runs the suites in parallel.)"; \
+	  deps=$$(python3 "$$root/scripts/_hookdeps.py" --deps "$$b" | sed "s|[^ ]*|$$root/scripts/&|g"); \
 	  : "(GUARD_EDIT_OK: fixing a guard that FIRES ON CORRECT WORK - the per-suite freshness cache resolved its own path as \$$root/.git/hooks-test, and in a LINKED WORKTREE .git is a FILE, so every one of the 19 suites failed with 'Directory nonexistent'. A detached worktree is exactly where constitution XIII requires the regression baseline to be taken, so the mandated procedure could not produce a green hooks-test on ANY commit. Asking git for the path fixes it in both layouts; the roster, the failure path and the stamp are unchanged. Feature 157.)"; \
 	  sha=$$(cat $$deps 2>/dev/null | sha256sum | cut -c1-16); mkdir -p "$$gitdir/hooks-test"; \
 	  if [ -z "$(HOOKS_ALL)" ] && [ "$$(cat "$$gitdir/hooks-test/$$b" 2>/dev/null)" = "$$sha" ]; then skipped=$$((skipped+1)); continue; fi; \
-	  n=$$((n+1)); \
-	  "$$root/scripts/$$t" >/tmp/ht.$$$$ 2>&1 && printf '%s' "$$sha" > "$$gitdir/hooks-test/$$b" || { printf '\n\033[1mHOOK TESTS FAILED: %s\033[0m\n' "$$b"; sed 's/^/  /' /tmp/ht.$$$$; fail="$$fail $$b"; }; \
-	  rm -f /tmp/ht.$$$$; \
+	  n=$$((n+1)); printf '%s %s %s\n' "$$b" "$$t" "$$sha" >> "$$work/todo"; \
 	done; \
+	: "(GUARD_EDIT_OK: feature 172 - FAN OUT, THEN COLLECT. The suites ran one after another for 94 s"; \
+	: " against 17 s for the whole Python suite, which pytest runs in parallel. Each builds its fixtures"; \
+	: " in its own mktemp -d and, since feature 170, isolates its own GUARD_LOG_DIR; the three that use"; \
+	: " HOME point it at their own temp; nothing writes host-wide state. Each job writes its own log and"; \
+	: " its own exit code, so every failure is still reported together, with the suite that produced it."; \
+	: " A suite that turns out to need serializing gets serialized - never retried, because a retry"; \
+	: " hides a real race behind a green result.)"; \
+	if [ -s "$$work/todo" ]; then \
+	  mkdir -p "$$gitdir/hooks-test"; \
+	  xargs -P $(HOOKS_JOBS) -L1 -a "$$work/todo" "$$root/scripts/_hookrun.sh" "$$work" "$$gitdir" || true; \
+	  for rc in "$$work"/*.rc; do \
+	    [ -f "$$rc" ] || continue; \
+	    b=$$(basename "$$rc" .rc); \
+	    if [ "$$(cat "$$rc")" != ok ]; then \
+	      printf '\n\033[1mHOOK TESTS FAILED: %s\033[0m\n' "$$b"; sed 's/^/  /' "$$work/$$b.log"; fail="$$fail $$b"; \
+	    fi; \
+	  done; \
+	fi; \
 	if [ -n "$$fail" ]; then printf '\n\033[1mhooks-test FAILED:%s\033[0m\n\n' "$$fail"; exit 1; fi; \
 	python3 "$$root/scripts/gate-stamp.py" --write hooks; \
 	printf 'hooks-test: %s guard suites green, %s unchanged since they last went green (hooks area stamped)\n' "$$n" "$$skipped"
@@ -658,6 +682,12 @@ LOGESCAPE = @root=$$(git rev-parse --show-toplevel) && bash -c '. "$$0/scripts/_
     printf "BLOCKED: %s needs a REASON (two words, eight characters) - it is what a later audit reads.\n" "$$1" >&2; \
     guard_log make blocked "$$2" "$$1-no-reason"; exit 2; }; \
   guard_log make escaped "$$2" "$$(printf "%s" "$$1" | tr "[:upper:]_" "[:lower:]-")"' "$$root"
+
+# GUARD_EDIT_OK: feature 172 - how many guard suites run at once. 22 cores here; the suites are shell
+# and git rather than CPU-bound, so the ceiling is IO and process startup, not arithmetic. Overridable
+# for a box with fewer, and for bisecting a suite that misbehaves under concurrency (HOOKS_JOBS=1 is
+# the old serial behavior exactly).
+HOOKS_JOBS ?= 8
 
 QUICK_BUDGET = 60
 
