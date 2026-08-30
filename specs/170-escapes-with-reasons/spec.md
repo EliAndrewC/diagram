@@ -166,9 +166,8 @@ already the mirror, no `cd` in the command - the guard returns 0.
 
 So the guard reads the session's working directory, which the hook payload already carries (
 `clone-sync-hooks.sh` reads the same `cwd` field). When the session's cwd is main's tree and not a
-clone under it, a command that writes or commits is refused exactly as if the `cd` were in the command
-- and a command that merely ENTERS the mirror gets a free warning saying the cwd is now main's tree,
-because at that moment nothing has gone wrong yet and the session is one command away from it.
+clone under it, a command that writes or commits is refused exactly as if the `cd` were in the command.
+A READ from main's tree, and a `cd` into it, produce nothing at all.
 
 **This is the correction to a claim this session made to the GM**, who asked directly whether the new
 tooling would have prevented the reported error. The honest answer is that it prevents the
@@ -180,7 +179,7 @@ single-command shape and not the one that actually happened; FR-005 is what make
 - **SC-002**: every permitted escape produces a firing-log entry whose detail is the reason - proved by driving each guard, not by reading the source.
 - **SC-003**: `make audit` can answer "every escape taken, with its stated reason" from the log alone.
 - **SC-004**: a finished, unsurfaced background run is reported at the next prompt and at turn end, with its exit status and age; an acknowledged one is not reported again.
-- **SC-005**: no guard refuses anything it did not refuse before, except a bare escape token.
+- **SC-005**: no guard refuses anything it did not refuse before, except a bare escape token and the main-tree write newly refused by FR-005. (Round 4 caught the first version contradicting FR-005 outright - an implementer building a test from it would have asserted that FR-005 must fail.)
 - **SC-006**: a write issued while the session's cwd is main's tree - with no `cd` in the command - is refused; the same write from a clone, and a READ from main's tree, are untouched. Both shapes of the reported incident are fixture cases.
 - **SC-007**: `make hooks-test` and `make done` green.
 
@@ -192,6 +191,7 @@ single-command shape and not the one that actually happened; FR-005 is what make
 | two words and eight characters | excludes a bare token and `GATE_OK: ok` while admitting a true short reason like "CI is down"; the 15-character first draft would have refused that, and justified itself by the RETIRED map-waiver rule | FR-001 |
 | the recorded detail is the REASON | the GM's audit is reading the reasons, not the commands | FR-002 |
 | the finished-run check REPORTS rather than blocks | the failure was a session not KNOWING; blocking a turn would punish the wrong thing | FR-004 |
+| the free warning on ENTERING the mirror is CUT | round 4's ruling, asked for and taken: it prevents nothing (a session that ignores it is refused anyway, one that heeds it would have been), it crosses this spec's own OUT line, and a hook that fires on a read-only `cd` into main is the mechanism the GM priced and DECLINED on 2026-08-17 - *"a hook that fires on nearly every correct command trains sessions to pattern-match past it"* - whose reopen condition it does not meet. The REFUSAL on the write stays; that is the incident | FR-005 |
 | the mirror guard reads the session's CWD | the 2026-08-17 leak is real and MEASURED in this harness; a guard reading only the command text cannot see the shape that actually happened | FR-005 |
 
 ## Review history

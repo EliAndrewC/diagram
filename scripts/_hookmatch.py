@@ -107,8 +107,17 @@ def classify(cmd: str) -> str:
     # through the channel it guards is a worse defect) - what changed in feature 169 is the MATCH.
     # `grep -rn GUARD_EDIT_OK scripts/` used to classify the whole command as `ok`, which switched
     # this guard off for the rest of that command.
-    if not cmd or escape_used(cmd, "GUARD_EDIT_OK"):
+    if not cmd:
         return "ok"
+    # GUARD_EDIT_OK: feature 170 - A DISTINCT VERDICT, so the escape can be RECORDED. It used to
+    # return plain `ok` - the same value a command that matched nothing returns - so `make-only`
+    # could not tell an escape from an ordinary permitted command and recorded neither. That was
+    # feature 169's R13, deferred with a sketch because it changes this function's return contract;
+    # the audit that deferral asked for found two consumers, and only `make-only` dispatches on the
+    # whole value (`gate-hooks.sh` compares one arm), whose `case` falls through to a permit - so a
+    # new value is safe by construction and the arm that records it is explicit.
+    if escape_used(cmd, "GUARD_EDIT_OK"):
+        return "guard-edit-ok"
     raw = cmd
     c = _strip_quotes(_strip_heredocs(cmd))
 
@@ -241,8 +250,16 @@ def escape_reason(text: str, token: str) -> str:
 
 
 def reason_is_enough(reason: str) -> bool:
-    """Does the reason clear the floor? Deliberately generous - see the note above."""
-    return len(reason) >= _REASON_CHARS and len(reason.split()) >= _REASON_WORDS
+    """Does the reason clear the floor? Deliberately generous - see the note above.
+
+    A HYPHENATED COMPOUND COUNTS AS THE WORDS IT IS MADE OF. The repository's own documented vector
+    for `HOST_GIT_OK` is `read-only`, which is one whitespace-word, nine characters, and a perfectly
+    informative reason for touching the GM's repository - a bare word-count refused it, and refusing
+    the form the project itself documents is the failure this whole feature is about. Splitting on
+    hyphens and slashes admits `read-only` while still refusing `required`, `manual` and `because`,
+    which are one word however you split them and say nothing.
+    """
+    return len(reason) >= _REASON_CHARS and len(re.split(r"[\s\-/]+", reason.strip())) >= _REASON_WORDS
 
 
 def escape_used(cmd: str, token: str) -> bool:

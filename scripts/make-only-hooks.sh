@@ -100,6 +100,14 @@ TAIL
 }
 
 case "$VERDICT" in
+  guard-edit-ok)
+    # GUARD_EDIT_OK: feature 170 - THE LAST SILENT PERMIT IN THIS GUARD. The escape used to return a
+    # plain `ok` and leave no trace, so `make audit` could not show that this rule had been worked
+    # around at all. It records now, with the reason as the detail, and refuses a bare token like
+    # every other escape (GM 2026-08-30: *"we have no way to audit later when this workaround was
+    # taken and whether the stated reasons were valid use cases"*).
+    escape_or_refuse make-only GUARD_EDIT_OK guard-edit-ok "$HERE"
+    exit 0 ;;
   foreign-makefile)
     block "a make driven by a named makefile. This project's targets are in its own Makefile, and a foreign one is the documented way to walk past every guard here." "make <target>   (from .claude/skills/diagram)" ;;
   engine-entry-point)

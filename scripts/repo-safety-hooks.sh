@@ -34,7 +34,17 @@ INPUT=$(cat)
 # unquoted word, so the first fix for this defect still disarmed the mount guard. `_hookmatch.py
 # escape` also drops search-command segments and `for VAR in` word lists, which is the whole point of
 # putting the rule in one place instead of writing it a twelfth time.
-RS_ESCAPED=$(printf '%s' "$INPUT" | "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/_hookmatch.py" escape HOST_GIT_OK 2>/dev/null)
+RS_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+# GUARD_EDIT_OK: feature 170 - AND IT MUST SAY WHY, AND BE RECORDED. This escape was silent: the only
+# `guard_log` call in this file records BLOCKS (`case "$VERDICT" in ok) ;; *) ...`), so an `ok`
+# verdict reached BY ESCAPE looked exactly like an ordinary permitted command - on the guard over
+# `/host-l7r-repo`, the GM's own repository. Found by the round-2 review of feature 170, which derived
+# the census from the tree instead of reading the session's list. `escape_or_refuse` records it with
+# the reason and permits, or refuses a bare token; `RS_ESCAPED` then tells the verdict process below.
+# shellcheck source=/dev/null
+. "$RS_DIR/_guardlog.sh"
+RS_ESCAPED=""
+if escape_or_refuse repo-safety HOST_GIT_OK host-git-ok "$RS_DIR"; then RS_ESCAPED=yes; fi
 export RS_ESCAPED
 
 VERDICT=$(printf '%s' "$INPUT" | python3 -c '
