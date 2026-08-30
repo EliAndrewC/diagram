@@ -683,11 +683,20 @@ LOGESCAPE = @root=$$(git rev-parse --show-toplevel) && bash -c '. "$$0/scripts/_
     guard_log make blocked "$$2" "$$1-no-reason"; exit 2; }; \
   guard_log make escaped "$$2" "$$(printf "%s" "$$1" | tr "[:upper:]_" "[:lower:]-")"' "$$root"
 
-# GUARD_EDIT_OK: feature 172 - how many guard suites run at once. 22 cores here; the suites are shell
-# and git rather than CPU-bound, so the ceiling is IO and process startup, not arithmetic. Overridable
-# for a box with fewer, and for bisecting a suite that misbehaves under concurrency (HOOKS_JOBS=1 is
-# the old serial behavior exactly).
-HOOKS_JOBS ?= 8
+# GUARD_EDIT_OK: feature 172, corrected - how many guard suites run at once, FOLLOWING THE SAME RULE
+# AS `XDIST_WORKERS` (GM 2026-08-30, who asked whether it did: it did not). It shipped as a flat 8,
+# which over-subscribes a box with fewer cores and, worse, leaves the 36-vCPU CodeBuild builder using
+# 8 - a knob that ignores the machine it is on in both directions.
+#
+# `xargs -P` needs a NUMBER where pytest accepts `auto`, so the remote arm is `CPU_COUNT` rather than
+# the literal `auto` that `XDIST_WORKERS` uses; the local arm is the same `min(CPU_COUNT, 8)`.
+#
+# There is a ceiling this shares with nothing else: more jobs than SUITES buys nothing, and past that
+# the wall clock is the longest single suite (measured: 194 s serial, 63 s at 8 - not 24 s, because
+# `test-sync-with-main.sh` and `test-clone-sync-hooks.sh` build real git trees and dominate the tail).
+# HOOKS_JOBS=1 is the old serial behavior exactly, which is how to bisect a suite that misbehaves
+# under concurrency.
+HOOKS_JOBS ?= $(if $(CODEBUILD_BUILD_ID),$(CPU_COUNT),$(shell [ "$(CPU_COUNT)" -lt 8 ] && echo "$(CPU_COUNT)" || echo 8))
 
 QUICK_BUDGET = 60
 

@@ -195,3 +195,37 @@ day-long leak.)
 Two things this session did right, and they are the reason it took ten minutes rather than an hour:
 the failure was **not** dismissed as "probably the overlap" - the suite was re-run against the pushed
 state before anything else was said - and the fix was **not** a retry.
+
+## R11 - the job count ignored the project's own convention, in both directions
+
+The GM asked whether `HOOKS_JOBS` follows the rule the rest of the repository uses - capped at 8
+locally, all processors on AWS. It did not. It shipped as a flat `?= 8`, chosen from a measurement on
+this box and from nothing else.
+
+`XDIST_WORKERS` (Makefile) is the convention:
+
+    CPU_COUNT     ?= $(shell nproc 2>/dev/null || echo 8)
+    XDIST_WORKERS  = $(if $(CODEBUILD_BUILD_ID),auto,$(shell [ "$(CPU_COUNT)" -lt 8 ] && echo "$(CPU_COUNT)" || echo 8))
+
+A flat 8 is wrong at BOTH ends: it over-subscribes a machine with fewer cores, and it leaves the
+36-vCPU CodeBuild builder running eight jobs. `HOOKS_JOBS` follows the same rule now, verified by
+reading the EXPANDED recipe rather than the variable definition (`make -p` prints the recursive
+definition, which looks identical in every environment and proves nothing):
+
+    local, 22 cores                      xargs -P 8
+    CPU_COUNT=2                          xargs -P 2
+    CODEBUILD_BUILD_ID set, 22 cores     xargs -P 22
+    CODEBUILD_BUILD_ID set, 36 vCPU      xargs -P 36
+
+**One deliberate difference, stated at the point of change**: `xargs -P` needs a NUMBER where pytest
+accepts the literal `auto`, so the remote arm expands `CPU_COUNT` rather than passing `auto` through.
+
+**And a ceiling this knob has that `XDIST_WORKERS` does not**: more jobs than SUITES buys nothing, and
+past a handful the wall clock is the longest single suite. 194 s serial became 63 s at 8 rather than
+24 s, because `test-sync-with-main.sh` and `test-clone-sync-hooks.sh` build real git trees and own the
+tail. So the CodeBuild arm will not be 36/8 times faster than the local one; it will be a little
+faster and then flat.
+
+The general lesson, which is why this is recorded rather than just fixed: **a new knob should adopt
+the project's existing convention for its kind, not a number that happened to measure well on the box
+it was written on.** Nothing in the tooling would have caught this - the GM did.
