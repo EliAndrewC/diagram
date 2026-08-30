@@ -1,0 +1,1477 @@
+{
+ "all_ink_is_ruled_on": {
+  "destination": "placer-test",
+  "fires": "FIRES",
+  "owning_stage": [
+   "water_frame"
+  ],
+  "segment": "_seg_0614_500__all_ink_is_ruled_on",
+  "urban_body": false,
+  "why": "owned by the stage that PLACES its inputs: water_frame (re-keyed at R3 - `finish` only annotates)"
+ },
+ "aqueduct_taps_water_lands_dry": {
+  "destination": "placer-test",
+  "fires": "FIRES-HAND-ONLY",
+  "owning_stage": [
+   "crossings",
+   "field"
+  ],
+  "segment": "_seg_0412__towpath_hugs_the_bank",
+  "urban_body": false,
+  "why": "owned by the stage that PLACES its inputs: crossings, field (re-keyed at R3 - `finish` only annotates)"
+ },
+ "bamboo_stands_clear_of_paddies": {
+  "destination": "placer-test",
+  "fires": "FIRES-HAND-ONLY",
+  "owning_stage": [
+   "bamboo"
+  ],
+  "segment": "_seg_0618_502__bamboo_stands_clear_of_paddies",
+  "urban_body": false,
+  "why": "owned by the stage that PLACES its inputs: bamboo (re-keyed at R3 - `finish` only annotates)"
+ },
+ "bridges_span_their_water": {
+  "destination": "placer-test",
+  "fires": "FIRES-HAND-ONLY",
+  "owning_stage": [
+   "crossings"
+  ],
+  "segment": "_seg_0414__bridges_span_their_water",
+  "urban_body": false,
+  "why": "owned by the stage that PLACES its inputs: crossings (re-keyed at R3 - `finish` only annotates)"
+ },
+ "bund_beans_on_bunds": {
+  "destination": "placer-test",
+  "fires": "FIRES",
+  "owning_stage": [
+   "field",
+   "sink"
+  ],
+  "segment": "_seg_0532__bund_beans_on_bunds",
+  "urban_body": false,
+  "why": "owned by the stage that PLACES its inputs: field, sink (re-keyed at R3 - `finish` only annotates)"
+ },
+ "byre_form_declared": {
+  "destination": "placer-test",
+  "fires": "FIRES",
+  "owning_stage": [
+   "appurtenances"
+  ],
+  "segment": "_seg_0609__byres_stand_in_their_declared_form",
+  "urban_body": false,
+  "why": "owned by the stage that PLACES its inputs: appurtenances (re-keyed at R3 - `finish` only annotates)"
+ },
+ "byres_meet_their_target": {
+  "destination": "placer-test",
+  "fires": "FIRES",
+  "owning_stage": [
+   "appurtenances"
+  ],
+  "segment": "_seg_0609__byres_stand_in_their_declared_form",
+  "urban_body": false,
+  "why": "owned by the stage that PLACES its inputs: appurtenances (re-keyed at R3 - `finish` only annotates)"
+ },
+ "canopy_clear_of_watercourses": {
+  "destination": "placer-test",
+  "fires": "FIRES-HAND-ONLY",
+  "owning_stage": [
+   "windbreak"
+  ],
+  "segment": "_seg_0444__canopy_clear_of_watercourses",
+  "urban_body": false,
+  "why": "owned by the stage that PLACES its inputs: windbreak (re-keyed at R3 - `finish` only annotates)"
+ },
+ "caption_stands_beside_its_referent": {
+  "destination": "placer-test",
+  "fires": "FIRES",
+  "owning_stage": [
+   "labels"
+  ],
+  "segment": "_seg_0614_501__caption_stands_beside_its_referent",
+  "urban_body": false,
+  "why": "owned by the stage that PLACES its inputs: labels (re-keyed at R3 - `finish` only annotates)"
+ },
+ "captions_clear_the_ways_they_stand_on": {
+  "destination": "placer-test",
+  "fires": "FIRES",
+  "owning_stage": [
+   "labels"
+  ],
+  "segment": "_seg_0617__captions_clear_the_ways_they_stand_on",
+  "urban_body": false,
+  "why": "owned by the stage that PLACES its inputs: labels (re-keyed at R3 - `finish` only annotates)"
+ },
+ "channel_gates_at_water_junctions": {
+  "destination": "placer-test",
+  "fires": "FIRES-HAND-ONLY",
+  "owning_stage": [
+   "crossings",
+   "field"
+  ],
+  "segment": "_seg_0478__channel_gates_at_water_junctions",
+  "urban_body": false,
+  "why": "owned by the stage that PLACES its inputs: crossings, field (re-keyed at R3 - `finish` only annotates)"
+ },
+ "channels_flow_downhill": {
+  "destination": "placer-test",
+  "fires": "FIRES-HAND-ONLY",
+  "owning_stage": [
+   "windbreak"
+  ],
+  "segment": "_seg_0460__channels_flow_downhill",
+  "urban_body": false,
+  "why": "owned by the stage that PLACES its inputs: windbreak (re-keyed at R3 - `finish` only annotates)"
+ },
+ "channels_join_not_cross_at_fork": {
+  "destination": "placer-test",
+  "fires": "FIRES-HAND-ONLY",
+  "owning_stage": [
+   "field"
+  ],
+  "segment": "_seg_0324__field_ditches_terminate",
+  "urban_body": false,
+  "why": "owned by the stage that PLACES its inputs: field (re-keyed at R3 - `finish` only annotates)"
+ },
+ "channels_join_streams_at_confluence": {
+  "destination": "placer-test",
+  "fires": "FIRES-HAND-ONLY",
+  "owning_stage": [
+   "field"
+  ],
+  "segment": "_seg_0446__channels_join_streams_at_confluence",
+  "urban_body": false,
+  "why": "owned by the stage that PLACES its inputs: field (re-keyed at R3 - `finish` only annotates)"
+ },
+ "channels_join_water_not_cross": {
+  "destination": "placer-test",
+  "fires": "FIRES-HAND-ONLY",
+  "owning_stage": [
+   "field"
+  ],
+  "segment": "_seg_0472__channels_join_water_not_cross",
+  "urban_body": false,
+  "why": "owned by the stage that PLACES its inputs: field (re-keyed at R3 - `finish` only annotates)"
+ },
+ "city_has_kosatsuba": {
+  "destination": "HAND",
+  "fires": "FIRES-HAND-ONLY",
+  "owning_stage": [],
+  "segment": "_seg_0546__hamlet_has_kosatsuba",
+  "urban_body": true,
+  "why": "no stage data - needs a judgment call, not a rule"
+ },
+ "city_streets_reach_their_neighbors": {
+  "destination": "placer-test",
+  "fires": "FIRES-HAND-ONLY",
+  "owning_stage": [
+   "track"
+  ],
+  "segment": "_seg_0406__city_streets_reach_their_neighbors",
+  "urban_body": false,
+  "why": "owned by the stage that PLACES its inputs: track (re-keyed at R3 - `finish` only annotates)"
+ },
+ "cluster_abuts_fields": {
+  "destination": "static-test",
+  "fires": "FIRES-HAND-ONLY",
+  "owning_stage": [
+   "-"
+  ],
+  "segment": "_seg_0232__cluster_abuts_fields",
+  "urban_body": false,
+  "why": "reads no manifest key - it asserts a property of the CODE, not of a map"
+ },
+ "cluster_shape_matches_the_drawing": {
+  "destination": "placer-test",
+  "fires": "FIRES",
+  "owning_stage": [
+   "homesteads"
+  ],
+  "segment": "_seg_0615__cluster_shape_matches_the_drawing",
+  "urban_body": false,
+  "why": "owned by the stage that PLACES its inputs: homesteads (re-keyed at R3 - `finish` only annotates)"
+ },
+ "comb_floor_ends_at_the_collector": {
+  "destination": "placer-test",
+  "fires": "FIRES",
+  "owning_stage": [
+   "field"
+  ],
+  "segment": "_seg_0600__comb_floor_ends_at_the_collector",
+  "urban_body": false,
+  "why": "owned by the stage that PLACES its inputs: field (re-keyed at R3 - `finish` only annotates)"
+ },
+ "comb_supply_commands_both_flanks": {
+  "destination": "placer-test",
+  "fires": "FIRES",
+  "owning_stage": [
+   "field"
+  ],
+  "segment": "_seg_0324_500__comb_supply_commands_both_flanks",
+  "urban_body": false,
+  "why": "owned by the stage that PLACES its inputs: field (re-keyed at R3 - `finish` only annotates)"
+ },
+ "commons_clear_of_paddies": {
+  "destination": "placer-test",
+  "fires": "FIRES-HAND-ONLY",
+  "owning_stage": [
+   "windbreak"
+  ],
+  "segment": "_seg_0285_094__commons_clear_of_paddies",
+  "urban_body": true,
+  "why": "owned by the stage that PLACES its inputs: windbreak (re-keyed at R3 - `finish` only annotates)"
+ },
+ "copse_stands_clear_of_the_belt": {
+  "destination": "placer-test",
+  "fires": "FIRES",
+  "owning_stage": [
+   "windbreak"
+  ],
+  "segment": "_seg_0616__copse_stands_clear_of_the_belt",
+  "urban_body": false,
+  "why": "owned by the stage that PLACES its inputs: windbreak (re-keyed at R3 - `finish` only annotates)"
+ },
+ "crop_not_held_open_by_one_feature": {
+  "destination": "static-test",
+  "fires": "FIRES-HAND-ONLY",
+  "owning_stage": [
+   "-"
+  ],
+  "segment": "_seg_0038__crop_not_held_open_by_one_feature",
+  "urban_body": false,
+  "why": "reads no manifest key - it asserts a property of the CODE, not of a map"
+ },
+ "delivery_ditches_taper": {
+  "destination": "placer-test",
+  "fires": "FIRES-HAND-ONLY",
+  "owning_stage": [
+   "field"
+  ],
+  "segment": "_seg_0324__field_ditches_terminate",
+  "urban_body": false,
+  "why": "owned by the stage that PLACES its inputs: field (re-keyed at R3 - `finish` only annotates)"
+ },
+ "drain_flows_downhill": {
+  "destination": "placer-test",
+  "fires": "FIRES-HAND-ONLY",
+  "owning_stage": [
+   "field"
+  ],
+  "segment": "_seg_0523_012__drain_flows_downhill",
+  "urban_body": false,
+  "why": "owned by the stage that PLACES its inputs: field (re-keyed at R3 - `finish` only annotates)"
+ },
+ "drain_runs_cross_slope": {
+  "destination": "placer-test",
+  "fires": "FIRES-HAND-ONLY",
+  "owning_stage": [
+   "field"
+  ],
+  "segment": "_seg_0523_016__drain_runs_cross_slope",
+  "urban_body": false,
+  "why": "owned by the stage that PLACES its inputs: field (re-keyed at R3 - `finish` only annotates)"
+ },
+ "drainage_discharges_downhill": {
+  "destination": "placer-test",
+  "fires": "FIRES",
+  "owning_stage": [
+   "field"
+  ],
+  "segment": "_seg_0523_013__drainage_discharges_downhill",
+  "urban_body": false,
+  "why": "owned by the stage that PLACES its inputs: field (re-keyed at R3 - `finish` only annotates)"
+ },
+ "drainage_junction_smooth": {
+  "destination": "placer-test",
+  "fires": "FIRES",
+  "owning_stage": [
+   "field"
+  ],
+  "segment": "_seg_0537__drainage_junction_smooth",
+  "urban_body": false,
+  "why": "owned by the stage that PLACES its inputs: field (re-keyed at R3 - `finish` only annotates)"
+ },
+ "dry_plot_furrows_vary": {
+  "destination": "placer-test",
+  "fires": "FIRES",
+  "owning_stage": [
+   "field",
+   "water_frame"
+  ],
+  "segment": "_seg_0317__dry_plot_furrows_vary",
+  "urban_body": false,
+  "why": "owned by the stage that PLACES its inputs: field, water_frame (re-keyed at R3 - `finish` only annotates)"
+ },
+ "dry_plots_clear_of_paddies": {
+  "destination": "placer-test",
+  "fires": "FIRES-HAND-ONLY",
+  "owning_stage": [
+   "field"
+  ],
+  "segment": "_seg_0213__no_structure_on_paddy",
+  "urban_body": false,
+  "why": "owned by the stage that PLACES its inputs: field (re-keyed at R3 - `finish` only annotates)"
+ },
+ "every_feature_classified_for_matrix": {
+  "destination": "static-test",
+  "fires": "FIRES-HAND-ONLY",
+  "owning_stage": [
+   "-"
+  ],
+  "segment": "_seg_0067__every_feature_classified_for_matrix",
+  "urban_body": false,
+  "why": "reads no manifest key - it asserts a property of the CODE, not of a map"
+ },
+ "every_feature_classified_for_overlap": {
+  "destination": "static-test",
+  "fires": "FIRES-HAND-ONLY",
+  "owning_stage": [
+   "-"
+  ],
+  "segment": "_seg_0140__every_feature_classified_for_overlap",
+  "urban_body": false,
+  "why": "reads no manifest key - it asserts a property of the CODE, not of a map"
+ },
+ "every_solid_feature_classified_for_labels": {
+  "destination": "static-test",
+  "fires": "FIRES-HAND-ONLY",
+  "owning_stage": [
+   "-"
+  ],
+  "segment": "_seg_0142__every_solid_feature_classified_for_labels",
+  "urban_body": false,
+  "why": "reads no manifest key - it asserts a property of the CODE, not of a map"
+ },
+ "farmhouse_aspect_in_range": {
+  "destination": "static-test",
+  "fires": "NEVER-FIRES",
+  "owning_stage": [
+   "-"
+  ],
+  "segment": "_seg_0285_099__farmhouse_sizes_vary",
+  "urban_body": true,
+  "why": "reads no manifest key - it asserts a property of the CODE, not of a map"
+ },
+ "farmhouse_sizes_vary": {
+  "destination": "static-test",
+  "fires": "FIRES-HAND-ONLY",
+  "owning_stage": [
+   "-"
+  ],
+  "segment": "_seg_0285_099__farmhouse_sizes_vary",
+  "urban_body": true,
+  "why": "reads no manifest key - it asserts a property of the CODE, not of a map"
+ },
+ "farmhouses_reach_a_way": {
+  "destination": "placer-test",
+  "fires": "FIRES",
+  "owning_stage": [
+   "track"
+  ],
+  "segment": "_seg_0610__farmhouses_reach_a_way",
+  "urban_body": false,
+  "why": "owned by the stage that PLACES its inputs: track (re-keyed at R3 - `finish` only annotates)"
+ },
+ "farmhouses_shed_separately": {
+  "destination": "placer-test",
+  "fires": "FIRES",
+  "owning_stage": [
+   "homesteads"
+  ],
+  "segment": "_seg_0606__farmhouses_shed_separately",
+  "urban_body": true,
+  "why": "owned by the stage that PLACES its inputs: homesteads (re-keyed at R3 - `finish` only annotates)"
+ },
+ "features_do_not_overlap": {
+  "destination": "static-test",
+  "fires": "FIRES",
+  "owning_stage": [
+   "-"
+  ],
+  "segment": "_seg_0063__features_do_not_overlap",
+  "urban_body": false,
+  "why": "reads no manifest key - it asserts a property of the CODE, not of a map"
+ },
+ "field_ditch_tips_land_on_the_trunk": {
+  "destination": "placer-test",
+  "fires": "FIRES-HAND-ONLY",
+  "owning_stage": [
+   "field"
+  ],
+  "segment": "_seg_0324__field_ditches_terminate",
+  "urban_body": false,
+  "why": "owned by the stage that PLACES its inputs: field (re-keyed at R3 - `finish` only annotates)"
+ },
+ "field_ditches_reach_source_and_sink": {
+  "destination": "placer-test",
+  "fires": "FIRES-HAND-ONLY",
+  "owning_stage": [
+   "field"
+  ],
+  "segment": "_seg_0324__field_ditches_terminate",
+  "urban_body": false,
+  "why": "owned by the stage that PLACES its inputs: field (re-keyed at R3 - `finish` only annotates)"
+ },
+ "field_ditches_terminate": {
+  "destination": "placer-test",
+  "fires": "FIRES-HAND-ONLY",
+  "owning_stage": [
+   "field"
+  ],
+  "segment": "_seg_0324__field_ditches_terminate",
+  "urban_body": false,
+  "why": "owned by the stage that PLACES its inputs: field (re-keyed at R3 - `finish` only annotates)"
+ },
+ "field_ponds_sunk_into_one_plot": {
+  "destination": "placer-test",
+  "fires": "FIRES",
+  "owning_stage": [
+   "field"
+  ],
+  "segment": "_seg_0577_500__field_ponds_sunk_into_one_plot",
+  "urban_body": false,
+  "why": "owned by the stage that PLACES its inputs: field (re-keyed at R3 - `finish` only annotates)"
+ },
+ "fields_clear_of_road": {
+  "destination": "placer-test",
+  "fires": "FIRES-HAND-ONLY",
+  "owning_stage": [
+   "track"
+  ],
+  "segment": "_seg_0332__fields_clear_of_road",
+  "urban_body": false,
+  "why": "owned by the stage that PLACES its inputs: track (re-keyed at R3 - `finish` only annotates)"
+ },
+ "fields_show_water_source": {
+  "destination": "placer-test",
+  "fires": "FIRES-HAND-ONLY",
+  "owning_stage": [
+   "appurtenances"
+  ],
+  "segment": "_seg_0453__fields_show_water_source",
+  "urban_body": false,
+  "why": "owned by the stage that PLACES its inputs: appurtenances (re-keyed at R3 - `finish` only annotates)"
+ },
+ "flooded_plots_read_as_basins": {
+  "destination": "placer-test",
+  "fires": "FIRES",
+  "owning_stage": [
+   "field"
+  ],
+  "segment": "_seg_0601__flooded_plots_read_as_basins",
+  "urban_body": false,
+  "why": "owned by the stage that PLACES its inputs: field (re-keyed at R3 - `finish` only annotates)"
+ },
+ "footbridges_reach_useful_ground": {
+  "destination": "placer-test",
+  "fires": "FIRES-HAND-ONLY",
+  "owning_stage": [
+   "crossings"
+  ],
+  "segment": "_seg_0415__long_ditches_have_a_footbridge",
+  "urban_body": false,
+  "why": "owned by the stage that PLACES its inputs: crossings (re-keyed at R3 - `finish` only annotates)"
+ },
+ "funerary_clear_of_fields": {
+  "destination": "placer-test",
+  "fires": "FIRES-HAND-ONLY",
+  "owning_stage": [
+   "field"
+  ],
+  "segment": "_seg_0322__funerary_clear_of_fields",
+  "urban_body": false,
+  "why": "owned by the stage that PLACES its inputs: field (re-keyed at R3 - `finish` only annotates)"
+ },
+ "gardens_clear_of_channels": {
+  "destination": "placer-test",
+  "fires": "FIRES-HAND-ONLY",
+  "owning_stage": [
+   "homesteads"
+  ],
+  "segment": "_seg_0285_039__gardens_clear_of_channels",
+  "urban_body": true,
+  "why": "owned by the stage that PLACES its inputs: homesteads (re-keyed at R3 - `finish` only annotates)"
+ },
+ "groves_clear_of_lanes": {
+  "destination": "placer-test",
+  "fires": "FIRES-HAND-ONLY",
+  "owning_stage": [
+   "windbreak"
+  ],
+  "segment": "_seg_0509__groves_clear_of_lanes",
+  "urban_body": false,
+  "why": "owned by the stage that PLACES its inputs: windbreak (re-keyed at R3 - `finish` only annotates)"
+ },
+ "hamlet_has_kosatsuba": {
+  "destination": "placer-test",
+  "fires": "FIRES-HAND-ONLY",
+  "owning_stage": [
+   "notice"
+  ],
+  "segment": "_seg_0546__hamlet_has_kosatsuba",
+  "urban_body": true,
+  "why": "owned by the stage that PLACES its inputs: notice (re-keyed at R3 - `finish` only annotates)"
+ },
+ "hamlet_has_no_headman": {
+  "destination": "static-test",
+  "fires": "FIRES-HAND-ONLY",
+  "owning_stage": [
+   "-"
+  ],
+  "segment": "_seg_0243__village_has_headman",
+  "urban_body": false,
+  "why": "reads no manifest key - it asserts a property of the CODE, not of a map"
+ },
+ "households_consistent": {
+  "destination": "static-test",
+  "fires": "FIRES-HAND-ONLY",
+  "owning_stage": [
+   "-"
+  ],
+  "segment": "_seg_0542__households_consistent",
+  "urban_body": false,
+  "why": "reads no manifest key - it asserts a property of the CODE, not of a map"
+ },
+ "houses_clear_of_lanes": {
+  "destination": "placer-test",
+  "fires": "FIRES-HAND-ONLY",
+  "owning_stage": [
+   "track"
+  ],
+  "segment": "_seg_0496__houses_clear_of_lanes",
+  "urban_body": false,
+  "why": "owned by the stage that PLACES its inputs: track (re-keyed at R3 - `finish` only annotates)"
+ },
+ "houses_face_south": {
+  "destination": "static-test",
+  "fires": "FIRES-HAND-ONLY",
+  "owning_stage": [
+   "-"
+  ],
+  "segment": "_seg_0241__houses_face_south",
+  "urban_body": false,
+  "why": "reads no manifest key - it asserts a property of the CODE, not of a map"
+ },
+ "inwall_drains_gated_at_cutoff": {
+  "destination": "placer-test",
+  "fires": "FIRES-HAND-ONLY",
+  "owning_stage": [
+   "crossings",
+   "field"
+  ],
+  "segment": "_seg_0481__inwall_drains_gated_at_cutoff",
+  "urban_body": false,
+  "why": "owned by the stage that PLACES its inputs: crossings, field (re-keyed at R3 - `finish` only annotates)"
+ },
+ "irrigation_channels_hairline": {
+  "destination": "placer-test",
+  "fires": "FIRES-HAND-ONLY",
+  "owning_stage": [
+   "field"
+  ],
+  "segment": "_seg_0217__irrigation_channels_hairline",
+  "urban_body": false,
+  "why": "owned by the stage that PLACES its inputs: field (re-keyed at R3 - `finish` only annotates)"
+ },
+ "kosatsuba_by_the_road": {
+  "destination": "placer-test",
+  "fires": "FIRES",
+  "owning_stage": [
+   "notice"
+  ],
+  "segment": "_seg_0546__hamlet_has_kosatsuba",
+  "urban_body": true,
+  "why": "owned by the stage that PLACES its inputs: notice (re-keyed at R3 - `finish` only annotates)"
+ },
+ "kosatsuba_faces_the_road": {
+  "destination": "placer-test",
+  "fires": "FIRES-HAND-ONLY",
+  "owning_stage": [
+   "notice"
+  ],
+  "segment": "_seg_0546__hamlet_has_kosatsuba",
+  "urban_body": true,
+  "why": "owned by the stage that PLACES its inputs: notice (re-keyed at R3 - `finish` only annotates)"
+ },
+ "label_hugs_its_referent": {
+  "destination": "placer-test",
+  "fires": "FIRES-HAND-ONLY",
+  "owning_stage": [
+   "labels"
+  ],
+  "segment": "_seg_0263__label_hugs_its_referent",
+  "urban_body": false,
+  "why": "owned by the stage that PLACES its inputs: labels (re-keyed at R3 - `finish` only annotates)"
+ },
+ "labels_align_with_their_referent": {
+  "destination": "placer-test",
+  "fires": "FIRES",
+  "owning_stage": [
+   "labels"
+  ],
+  "segment": "_seg_0267_500__labels_align_with_their_referent",
+  "urban_body": false,
+  "why": "owned by the stage that PLACES its inputs: labels (re-keyed at R3 - `finish` only annotates)"
+ },
+ "labels_within_image": {
+  "destination": "placer-test",
+  "fires": "FIRES-HAND-ONLY",
+  "owning_stage": [
+   "labels"
+  ],
+  "segment": "_seg_0277__labels_within_image",
+  "urban_body": false,
+  "why": "owned by the stage that PLACES its inputs: labels (re-keyed at R3 - `finish` only annotates)"
+ },
+ "lane_ends_front_different_houses": {
+  "destination": "placer-test",
+  "fires": "FIRES",
+  "owning_stage": [
+   "track"
+  ],
+  "segment": "_seg_0611__lane_ends_front_different_houses",
+  "urban_body": false,
+  "why": "owned by the stage that PLACES its inputs: track (re-keyed at R3 - `finish` only annotates)"
+ },
+ "lanes_bend_like_paths": {
+  "destination": "placer-test",
+  "fires": "FIRES",
+  "owning_stage": [
+   "track"
+  ],
+  "segment": "_seg_0619_501__lanes_bend_like_paths",
+  "urban_body": false,
+  "why": "owned by the stage that PLACES its inputs: track (re-keyed at R3 - `finish` only annotates)"
+ },
+ "lanes_clear_of_dry_plots": {
+  "destination": "placer-test",
+  "fires": "FIRES-HAND-ONLY",
+  "owning_stage": [
+   "track"
+  ],
+  "segment": "_seg_0283__lanes_clear_of_dry_plots",
+  "urban_body": false,
+  "why": "owned by the stage that PLACES its inputs: track (re-keyed at R3 - `finish` only annotates)"
+ },
+ "lanes_do_not_break_mid_run": {
+  "destination": "placer-test",
+  "fires": "FIRES",
+  "owning_stage": [
+   "appurtenances"
+  ],
+  "segment": "_seg_0612__lanes_do_not_break_mid_run",
+  "urban_body": false,
+  "why": "owned by the stage that PLACES its inputs: appurtenances (re-keyed at R3 - `finish` only annotates)"
+ },
+ "lanes_form_one_network": {
+  "destination": "placer-test",
+  "fires": "FIRES",
+  "owning_stage": [
+   "track"
+  ],
+  "segment": "_seg_0619_500__lanes_form_one_network",
+  "urban_body": false,
+  "why": "owned by the stage that PLACES its inputs: track (re-keyed at R3 - `finish` only annotates)"
+ },
+ "lanes_reach_something": {
+  "destination": "placer-test",
+  "fires": "FIRES",
+  "owning_stage": [
+   "track"
+  ],
+  "segment": "_seg_0607__lanes_reach_something",
+  "urban_body": false,
+  "why": "owned by the stage that PLACES its inputs: track (re-keyed at R3 - `finish` only annotates)"
+ },
+ "long_ditches_have_a_footbridge": {
+  "destination": "placer-test",
+  "fires": "FIRES",
+  "owning_stage": [
+   "crossings"
+  ],
+  "segment": "_seg_0415__long_ditches_have_a_footbridge",
+  "urban_body": false,
+  "why": "owned by the stage that PLACES its inputs: crossings (re-keyed at R3 - `finish` only annotates)"
+ },
+ "map_frame_hugs_its_content": {
+  "destination": "static-test",
+  "fires": "FIRES-HAND-ONLY",
+  "owning_stage": [
+   "-"
+  ],
+  "segment": "_seg_0390__map_frame_hugs_its_content",
+  "urban_body": false,
+  "why": "reads no manifest key - it asserts a property of the CODE, not of a map"
+ },
+ "margins_form_continuous_ring": {
+  "destination": "placer-test",
+  "fires": "FIRES-HAND-ONLY",
+  "owning_stage": [
+   "windbreak"
+  ],
+  "segment": "_seg_0268__margins_form_continuous_ring",
+  "urban_body": false,
+  "why": "owned by the stage that PLACES its inputs: windbreak (re-keyed at R3 - `finish` only annotates)"
+ },
+ "marsh_on_low_ground": {
+  "destination": "placer-test",
+  "fires": "FIRES-HAND-ONLY",
+  "owning_stage": [
+   "field",
+   "sink"
+  ],
+  "segment": "_seg_0523_002__marsh_on_low_ground",
+  "urban_body": false,
+  "why": "owned by the stage that PLACES its inputs: field, sink (re-keyed at R3 - `finish` only annotates)"
+ },
+ "matrix_debts_still_owed": {
+  "destination": "static-test",
+  "fires": "FIRES-HAND-ONLY",
+  "owning_stage": [
+   "-"
+  ],
+  "segment": "_seg_0065__matrix_debts_still_owed",
+  "urban_body": false,
+  "why": "reads no manifest key - it asserts a property of the CODE, not of a map"
+ },
+ "no_caption_holds_the_frame_open": {
+  "destination": "placer-test",
+  "fires": "FIRES-HAND-ONLY",
+  "owning_stage": [
+   "labels"
+  ],
+  "segment": "_seg_0008__no_caption_holds_the_frame_open",
+  "urban_body": false,
+  "why": "owned by the stage that PLACES its inputs: labels (re-keyed at R3 - `finish` only annotates)"
+ },
+ "no_farmhouse_stands_on_a_lane": {
+  "destination": "placer-test",
+  "fires": "FIRES-HAND-ONLY",
+  "owning_stage": [
+   "track"
+  ],
+  "segment": "_seg_0619__no_farmhouse_stands_on_a_lane",
+  "urban_body": false,
+  "why": "owned by the stage that PLACES its inputs: track (re-keyed at R3 - `finish` only annotates)"
+ },
+ "no_label_overlaps": {
+  "destination": "placer-test",
+  "fires": "FIRES-HAND-ONLY",
+  "owning_stage": [
+   "labels"
+  ],
+  "segment": "_seg_0260__no_label_overlaps",
+  "urban_body": false,
+  "why": "owned by the stage that PLACES its inputs: labels (re-keyed at R3 - `finish` only annotates)"
+ },
+ "no_structure_on_paddy": {
+  "destination": "placer-test",
+  "fires": "FIRES-HAND-ONLY",
+  "owning_stage": [
+   "field"
+  ],
+  "segment": "_seg_0213__no_structure_on_paddy",
+  "urban_body": false,
+  "why": "owned by the stage that PLACES its inputs: field (re-keyed at R3 - `finish` only annotates)"
+ },
+ "no_structure_on_stream": {
+  "destination": "placer-test",
+  "fires": "FIRES-HAND-ONLY",
+  "owning_stage": [
+   "field"
+  ],
+  "segment": "_seg_0201__no_structure_on_stream",
+  "urban_body": false,
+  "why": "owned by the stage that PLACES its inputs: field (re-keyed at R3 - `finish` only annotates)"
+ },
+ "no_structure_on_torii": {
+  "destination": "placer-test",
+  "fires": "FIRES-HAND-ONLY",
+  "owning_stage": [
+   "water_frame"
+  ],
+  "segment": "_seg_0154__no_structure_on_torii",
+  "urban_body": false,
+  "why": "owned by the stage that PLACES its inputs: water_frame (re-keyed at R3 - `finish` only annotates)"
+ },
+ "paddy_basins_are_worth_their_bund": {
+  "destination": "placer-test",
+  "fires": "FIRES",
+  "owning_stage": [
+   "water_frame"
+  ],
+  "segment": "_seg_0608__paddy_basins_are_worth_their_bund",
+  "urban_body": false,
+  "why": "owned by the stage that PLACES its inputs: water_frame (re-keyed at R3 - `finish` only annotates)"
+ },
+ "paddy_bunds_clear_the_collector": {
+  "destination": "placer-test",
+  "fires": "FIRES",
+  "owning_stage": [
+   "field"
+  ],
+  "segment": "_seg_0523_019__paddy_bunds_clear_the_collector",
+  "urban_body": false,
+  "why": "owned by the stage that PLACES its inputs: field (re-keyed at R3 - `finish` only annotates)"
+ },
+ "paddy_bunds_clear_the_supply_channels": {
+  "destination": "placer-test",
+  "fires": "FIRES",
+  "owning_stage": [
+   "field"
+  ],
+  "segment": "_seg_0595__paddy_bunds_clear_the_supply_channels",
+  "urban_body": false,
+  "why": "owned by the stage that PLACES its inputs: field (re-keyed at R3 - `finish` only annotates)"
+ },
+ "paddy_bunds_do_not_stagger": {
+  "destination": "placer-test",
+  "fires": "FIRES",
+  "owning_stage": [
+   "water_frame"
+  ],
+  "segment": "_seg_0614__paddy_bunds_do_not_stagger",
+  "urban_body": false,
+  "why": "owned by the stage that PLACES its inputs: water_frame (re-keyed at R3 - `finish` only annotates)"
+ },
+ "paddy_fan_has_floor": {
+  "destination": "placer-test",
+  "fires": "FIRES-HAND-ONLY",
+  "owning_stage": [
+   "field"
+  ],
+  "segment": "_seg_0122__paddy_fan_has_floor",
+  "urban_body": false,
+  "why": "owned by the stage that PLACES its inputs: field (re-keyed at R3 - `finish` only annotates)"
+ },
+ "paddy_plot_rings_overcount_stays_marginal": {
+  "destination": "placer-test",
+  "fires": "FIRES",
+  "owning_stage": [
+   "water_frame"
+  ],
+  "segment": "_seg_0605__paddy_plot_rings_overcount_stays_marginal",
+  "urban_body": false,
+  "why": "owned by the stage that PLACES its inputs: water_frame (re-keyed at R3 - `finish` only annotates)"
+ },
+ "paddy_plot_seams_shared": {
+  "destination": "placer-test",
+  "fires": "FIRES",
+  "owning_stage": [
+   "field"
+  ],
+  "segment": "_seg_0603__paddy_plot_seams_shared",
+  "urban_body": false,
+  "why": "owned by the stage that PLACES its inputs: field (re-keyed at R3 - `finish` only annotates)"
+ },
+ "paddy_plots_are_workable_basins": {
+  "destination": "placer-test",
+  "fires": "FIRES",
+  "owning_stage": [
+   "water_frame"
+  ],
+  "segment": "_seg_0604__paddy_plots_are_workable_basins",
+  "urban_body": false,
+  "why": "owned by the stage that PLACES its inputs: water_frame (re-keyed at R3 - `finish` only annotates)"
+ },
+ "polder_channels_clear_of_dike": {
+  "destination": "placer-test",
+  "fires": "FIRES-HAND-ONLY",
+  "owning_stage": [
+   "windbreak"
+  ],
+  "segment": "_seg_0581__polder_dike_is_earthwork",
+  "urban_body": false,
+  "why": "owned by the stage that PLACES its inputs: windbreak (re-keyed at R3 - `finish` only annotates)"
+ },
+ "polder_dike_gapped_at_sluices": {
+  "destination": "placer-test",
+  "fires": "FIRES-HAND-ONLY",
+  "owning_stage": [
+   "windbreak"
+  ],
+  "segment": "_seg_0581__polder_dike_is_earthwork",
+  "urban_body": false,
+  "why": "owned by the stage that PLACES its inputs: windbreak (re-keyed at R3 - `finish` only annotates)"
+ },
+ "polder_dike_is_earthwork": {
+  "destination": "placer-test",
+  "fires": "FIRES-HAND-ONLY",
+  "owning_stage": [
+   "windbreak"
+  ],
+  "segment": "_seg_0581__polder_dike_is_earthwork",
+  "urban_body": false,
+  "why": "owned by the stage that PLACES its inputs: windbreak (re-keyed at R3 - `finish` only annotates)"
+ },
+ "polder_edges_wander": {
+  "destination": "placer-test",
+  "fires": "FIRES-HAND-ONLY",
+  "owning_stage": [
+   "windbreak"
+  ],
+  "segment": "_seg_0581__polder_dike_is_earthwork",
+  "urban_body": false,
+  "why": "owned by the stage that PLACES its inputs: windbreak (re-keyed at R3 - `finish` only annotates)"
+ },
+ "polder_fills_its_bbox": {
+  "destination": "static-test",
+  "fires": "FIRES-HAND-ONLY",
+  "owning_stage": [
+   "-"
+  ],
+  "segment": "_seg_0579__polder_fills_its_bbox",
+  "urban_body": false,
+  "why": "reads no manifest key - it asserts a property of the CODE, not of a map"
+ },
+ "polder_floor_is_ring_interior": {
+  "destination": "placer-test",
+  "fires": "FIRES-HAND-ONLY",
+  "owning_stage": [
+   "windbreak"
+  ],
+  "segment": "_seg_0581__polder_dike_is_earthwork",
+  "urban_body": false,
+  "why": "owned by the stage that PLACES its inputs: windbreak (re-keyed at R3 - `finish` only annotates)"
+ },
+ "pond_clear_of_field": {
+  "destination": "placer-test",
+  "fires": "FIRES-HAND-ONLY",
+  "owning_stage": [
+   "appurtenances"
+  ],
+  "segment": "_seg_0515__pond_clear_of_field",
+  "urban_body": false,
+  "why": "owned by the stage that PLACES its inputs: appurtenances (re-keyed at R3 - `finish` only annotates)"
+ },
+ "pond_clear_of_paddies": {
+  "destination": "placer-test",
+  "fires": "FIRES-HAND-ONLY",
+  "owning_stage": [
+   "appurtenances"
+  ],
+  "segment": "_seg_0333__pond_clear_of_paddies",
+  "urban_body": false,
+  "why": "owned by the stage that PLACES its inputs: appurtenances (re-keyed at R3 - `finish` only annotates)"
+ },
+ "pond_connected_to_field": {
+  "destination": "placer-test",
+  "fires": "FIRES-HAND-ONLY",
+  "owning_stage": [
+   "appurtenances"
+  ],
+  "segment": "_seg_0513__pond_connected_to_field",
+  "urban_body": false,
+  "why": "owned by the stage that PLACES its inputs: appurtenances (re-keyed at R3 - `finish` only annotates)"
+ },
+ "pond_fed_from_edge": {
+  "destination": "placer-test",
+  "fires": "FIRES-HAND-ONLY",
+  "owning_stage": [
+   "appurtenances"
+  ],
+  "segment": "_seg_0512__pond_fed_from_edge",
+  "urban_body": false,
+  "why": "owned by the stage that PLACES its inputs: appurtenances (re-keyed at R3 - `finish` only annotates)"
+ },
+ "pond_fill_covers_channel_mouths": {
+  "destination": "placer-test",
+  "fires": "FIRES-HAND-ONLY",
+  "owning_stage": [
+   "field",
+   "sink"
+  ],
+  "segment": "_seg_0474__pond_fill_covers_channel_mouths",
+  "urban_body": false,
+  "why": "owned by the stage that PLACES its inputs: field, sink (re-keyed at R3 - `finish` only annotates)"
+ },
+ "religious_clear_of_ring_and_towers": {
+  "destination": "placer-test",
+  "fires": "FIRES-HAND-ONLY",
+  "owning_stage": [
+   "windbreak"
+  ],
+  "segment": "_seg_0167__religious_clear_of_ring_and_towers",
+  "urban_body": false,
+  "why": "owned by the stage that PLACES its inputs: windbreak (re-keyed at R3 - `finish` only annotates)"
+ },
+ "remote_shrine_has_own_well": {
+  "destination": "placer-test",
+  "fires": "FIRES-HAND-ONLY",
+  "owning_stage": [
+   "appurtenances"
+  ],
+  "segment": "_seg_0285_006__settlement_has_wells",
+  "urban_body": true,
+  "why": "owned by the stage that PLACES its inputs: appurtenances (re-keyed at R3 - `finish` only annotates)"
+ },
+ "roads_clear_of_marsh": {
+  "destination": "placer-test",
+  "fires": "FIRES-HAND-ONLY",
+  "owning_stage": [
+   "track"
+  ],
+  "segment": "_seg_0332__fields_clear_of_road",
+  "urban_body": false,
+  "why": "owned by the stage that PLACES its inputs: track (re-keyed at R3 - `finish` only annotates)"
+ },
+ "scalebar_matches_declared_scale": {
+  "destination": "placer-test",
+  "fires": "FIRES-HAND-ONLY",
+  "owning_stage": [
+   "labels"
+  ],
+  "segment": "_seg_0267__title_clear_of_features",
+  "urban_body": false,
+  "why": "owned by the stage that PLACES its inputs: labels (re-keyed at R3 - `finish` only annotates)"
+ },
+ "scatter_respects_swept_clearings": {
+  "destination": "placer-test",
+  "fires": "FIRES-HAND-ONLY",
+  "owning_stage": [
+   "windbreak"
+  ],
+  "segment": "_seg_0274__scatter_respects_swept_clearings",
+  "urban_body": false,
+  "why": "owned by the stage that PLACES its inputs: windbreak (re-keyed at R3 - `finish` only annotates)"
+ },
+ "scrub_clear_of_urban_fabric": {
+  "destination": "placer-test",
+  "fires": "FIRES-HAND-ONLY",
+  "owning_stage": [
+   "hinterland"
+  ],
+  "segment": "_seg_0437__scrub_clear_of_urban_fabric",
+  "urban_body": false,
+  "why": "owned by the stage that PLACES its inputs: hinterland (re-keyed at R3 - `finish` only annotates)"
+ },
+ "settlement_declares_a_land_fall": {
+  "destination": "placer-test",
+  "fires": "FIRES-HAND-ONLY",
+  "owning_stage": [
+   "field"
+  ],
+  "segment": "_seg_0558__settlement_declares_a_land_fall",
+  "urban_body": false,
+  "why": "owned by the stage that PLACES its inputs: field (re-keyed at R3 - `finish` only annotates)"
+ },
+ "settlement_dwellings_watered": {
+  "destination": "placer-test",
+  "fires": "FIRES-HAND-ONLY",
+  "owning_stage": [
+   "appurtenances"
+  ],
+  "segment": "_seg_0285_006__settlement_has_wells",
+  "urban_body": true,
+  "why": "owned by the stage that PLACES its inputs: appurtenances (re-keyed at R3 - `finish` only annotates)"
+ },
+ "settlement_has_wells": {
+  "destination": "placer-test",
+  "fires": "FIRES-HAND-ONLY",
+  "owning_stage": [
+   "appurtenances"
+  ],
+  "segment": "_seg_0285_006__settlement_has_wells",
+  "urban_body": true,
+  "why": "owned by the stage that PLACES its inputs: appurtenances (re-keyed at R3 - `finish` only annotates)"
+ },
+ "settlement_records_cluster_seeding": {
+  "destination": "placer-test",
+  "fires": "FIRES",
+  "owning_stage": [
+   "water_frame"
+  ],
+  "segment": "_seg_0598__nucleated_records_cluster_seeding",
+  "urban_body": false,
+  "why": "owned by the stage that PLACES its inputs: water_frame (re-keyed at R3 - `finish` only annotates)"
+ },
+ "shrine_halls_clear_of_lanes": {
+  "destination": "placer-test",
+  "fires": "FIRES-HAND-ONLY",
+  "owning_stage": [
+   "track"
+  ],
+  "segment": "_seg_0502__shrine_halls_clear_of_lanes",
+  "urban_body": false,
+  "why": "owned by the stage that PLACES its inputs: track (re-keyed at R3 - `finish` only annotates)"
+ },
+ "sluice_gates_on_water": {
+  "destination": "placer-test",
+  "fires": "FIRES-HAND-ONLY",
+  "owning_stage": [
+   "crossings",
+   "field"
+  ],
+  "segment": "_seg_0412__towpath_hugs_the_bank",
+  "urban_body": false,
+  "why": "owned by the stage that PLACES its inputs: crossings, field (re-keyed at R3 - `finish` only annotates)"
+ },
+ "stream_end_anchored": {
+  "destination": "placer-test",
+  "fires": "FIRES-HAND-ONLY",
+  "owning_stage": [
+   "appurtenances"
+  ],
+  "segment": "_seg_0308__stream_source_anchored",
+  "urban_body": false,
+  "why": "owned by the stage that PLACES its inputs: appurtenances (re-keyed at R3 - `finish` only annotates)"
+ },
+ "stream_source_anchored": {
+  "destination": "placer-test",
+  "fires": "FIRES-HAND-ONLY",
+  "owning_stage": [
+   "appurtenances"
+  ],
+  "segment": "_seg_0308__stream_source_anchored",
+  "urban_body": false,
+  "why": "owned by the stage that PLACES its inputs: appurtenances (re-keyed at R3 - `finish` only annotates)"
+ },
+ "streams_avoid_fields": {
+  "destination": "placer-test",
+  "fires": "FIRES-HAND-ONLY",
+  "owning_stage": [
+   "appurtenances"
+  ],
+  "segment": "_seg_0309__streams_avoid_fields",
+  "urban_body": false,
+  "why": "owned by the stage that PLACES its inputs: appurtenances (re-keyed at R3 - `finish` only annotates)"
+ },
+ "structures_clear_of_dike": {
+  "destination": "placer-test",
+  "fires": "FIRES-HAND-ONLY",
+  "owning_stage": [
+   "windbreak"
+  ],
+  "segment": "_seg_0581__polder_dike_is_earthwork",
+  "urban_body": false,
+  "why": "owned by the stage that PLACES its inputs: windbreak (re-keyed at R3 - `finish` only annotates)"
+ },
+ "structures_clear_of_trees": {
+  "destination": "placer-test",
+  "fires": "FIRES-HAND-ONLY",
+  "owning_stage": [
+   "hinterland"
+  ],
+  "segment": "_seg_0028__structures_clear_of_trees",
+  "urban_body": false,
+  "why": "owned by the stage that PLACES its inputs: hinterland (re-keyed at R3 - `finish` only annotates)"
+ },
+ "tanning_yards_on_water": {
+  "destination": "placer-test",
+  "fires": "FIRES-HAND-ONLY",
+  "owning_stage": [
+   "crossings",
+   "field"
+  ],
+  "segment": "_seg_0412__towpath_hugs_the_bank",
+  "urban_body": false,
+  "why": "owned by the stage that PLACES its inputs: crossings, field (re-keyed at R3 - `finish` only annotates)"
+ },
+ "title_clear_of_features": {
+  "destination": "placer-test",
+  "fires": "FIRES-HAND-ONLY",
+  "owning_stage": [
+   "labels"
+  ],
+  "segment": "_seg_0267__title_clear_of_features",
+  "urban_body": false,
+  "why": "owned by the stage that PLACES its inputs: labels (re-keyed at R3 - `finish` only annotates)"
+ },
+ "title_has_placard": {
+  "destination": "placer-test",
+  "fires": "FIRES-HAND-ONLY",
+  "owning_stage": [
+   "labels"
+  ],
+  "segment": "_seg_0267__title_clear_of_features",
+  "urban_body": false,
+  "why": "owned by the stage that PLACES its inputs: labels (re-keyed at R3 - `finish` only annotates)"
+ },
+ "torii_clear_of_halls_towers_ring": {
+  "destination": "placer-test",
+  "fires": "FIRES-HAND-ONLY",
+  "owning_stage": [
+   "windbreak"
+  ],
+  "segment": "_seg_0162__torii_clear_of_halls_towers_ring",
+  "urban_body": false,
+  "why": "owned by the stage that PLACES its inputs: windbreak (re-keyed at R3 - `finish` only annotates)"
+ },
+ "torii_clear_of_walls": {
+  "destination": "static-test",
+  "fires": "FIRES-HAND-ONLY",
+  "owning_stage": [
+   "-"
+  ],
+  "segment": "_seg_0164__torii_clear_of_walls",
+  "urban_body": false,
+  "why": "reads no manifest key - it asserts a property of the CODE, not of a map"
+ },
+ "town_has_kosatsuba": {
+  "destination": "HAND",
+  "fires": "FIRES-HAND-ONLY",
+  "owning_stage": [],
+  "segment": "_seg_0546__hamlet_has_kosatsuba",
+  "urban_body": true,
+  "why": "no stage data - needs a judgment call, not a rule"
+ },
+ "towpath_hugs_the_bank": {
+  "destination": "placer-test",
+  "fires": "FIRES-HAND-ONLY",
+  "owning_stage": [
+   "crossings",
+   "field"
+  ],
+  "segment": "_seg_0412__towpath_hugs_the_bank",
+  "urban_body": false,
+  "why": "owned by the stage that PLACES its inputs: crossings, field (re-keyed at R3 - `finish` only annotates)"
+ },
+ "tree_crowns_not_subsumed": {
+  "destination": "placer-test",
+  "fires": "FIRES",
+  "owning_stage": [
+   "hinterland"
+  ],
+  "segment": "_seg_0618_503__tree_crowns_not_subsumed",
+  "urban_body": false,
+  "why": "owned by the stage that PLACES its inputs: hinterland (re-keyed at R3 - `finish` only annotates)"
+ },
+ "village_groves_visibly_stocked": {
+  "destination": "placer-test",
+  "fires": "FIRES",
+  "owning_stage": [
+   "windbreak"
+  ],
+  "segment": "_seg_0618__village_groves_visibly_stocked",
+  "urban_body": false,
+  "why": "owned by the stage that PLACES its inputs: windbreak (re-keyed at R3 - `finish` only annotates)"
+ },
+ "village_has_kosatsuba": {
+  "destination": "HAND",
+  "fires": "FIRES-HAND-ONLY",
+  "owning_stage": [],
+  "segment": "_seg_0546__hamlet_has_kosatsuba",
+  "urban_body": true,
+  "why": "no stage data - needs a judgment call, not a rule"
+ },
+ "village_windbreak_embraces_cluster": {
+  "destination": "placer-test",
+  "fires": "FIRES-HAND-ONLY",
+  "owning_stage": [
+   "windbreak"
+  ],
+  "segment": "_seg_0285_083__village_windbreak_present",
+  "urban_body": true,
+  "why": "owned by the stage that PLACES its inputs: windbreak (re-keyed at R3 - `finish` only annotates)"
+ },
+ "village_windbreak_is_continuous": {
+  "destination": "placer-test",
+  "fires": "FIRES",
+  "owning_stage": [
+   "windbreak"
+  ],
+  "segment": "_seg_0613__village_windbreak_is_continuous",
+  "urban_body": false,
+  "why": "owned by the stage that PLACES its inputs: windbreak (re-keyed at R3 - `finish` only annotates)"
+ },
+ "village_windbreak_present": {
+  "destination": "placer-test",
+  "fires": "FIRES-HAND-ONLY",
+  "owning_stage": [
+   "windbreak"
+  ],
+  "segment": "_seg_0285_083__village_windbreak_present",
+  "urban_body": true,
+  "why": "owned by the stage that PLACES its inputs: windbreak (re-keyed at R3 - `finish` only annotates)"
+ },
+ "village_windbreak_scales_with_cluster": {
+  "destination": "placer-test",
+  "fires": "FIRES-HAND-ONLY",
+  "owning_stage": [
+   "windbreak"
+  ],
+  "segment": "_seg_0285_083__village_windbreak_present",
+  "urban_body": true,
+  "why": "owned by the stage that PLACES its inputs: windbreak (re-keyed at R3 - `finish` only annotates)"
+ },
+ "waivers_are_documented": {
+  "destination": "static-test",
+  "fires": "NEVER-FIRES",
+  "owning_stage": [
+   "-"
+  ],
+  "segment": "_seg_0591__waivers_are_documented",
+  "urban_body": false,
+  "why": "reads no manifest key - it asserts a property of the CODE, not of a map"
+ },
+ "waivers_are_live": {
+  "destination": "static-test",
+  "fires": "NEVER-FIRES",
+  "owning_stage": [
+   "-"
+  ],
+  "segment": "_seg_0593__waivers_are_live",
+  "urban_body": false,
+  "why": "reads no manifest key - it asserts a property of the CODE, not of a map"
+ },
+ "water_channels_join_not_cross": {
+  "destination": "placer-test",
+  "fires": "FIRES-HAND-ONLY",
+  "owning_stage": [
+   "field"
+  ],
+  "segment": "_seg_0326__water_channels_join_not_cross",
+  "urban_body": false,
+  "why": "owned by the stage that PLACES its inputs: field (re-keyed at R3 - `finish` only annotates)"
+ },
+ "water_channels_obtuse_turns": {
+  "destination": "placer-test",
+  "fires": "FIRES-HAND-ONLY",
+  "owning_stage": [
+   "field"
+  ],
+  "segment": "_seg_0315__water_channels_obtuse_turns",
+  "urban_body": false,
+  "why": "owned by the stage that PLACES its inputs: field (re-keyed at R3 - `finish` only annotates)"
+ },
+ "watercourse_ends_reach_water": {
+  "destination": "placer-test",
+  "fires": "FIRES-HAND-ONLY",
+  "owning_stage": [
+   "field"
+  ],
+  "segment": "_seg_0445__watercourse_ends_reach_water",
+  "urban_body": false,
+  "why": "owned by the stage that PLACES its inputs: field (re-keyed at R3 - `finish` only annotates)"
+ },
+ "watercourses_wider_than_ditches": {
+  "destination": "placer-test",
+  "fires": "FIRES-HAND-ONLY",
+  "owning_stage": [
+   "field"
+  ],
+  "segment": "_seg_0218__watercourses_wider_than_ditches",
+  "urban_body": false,
+  "why": "owned by the stage that PLACES its inputs: field (re-keyed at R3 - `finish` only annotates)"
+ },
+ "waterside_works_follow_the_bank": {
+  "destination": "placer-test",
+  "fires": "FIRES-HAND-ONLY",
+  "owning_stage": [
+   "field"
+  ],
+  "segment": "_seg_0365__waterside_works_follow_the_bank",
+  "urban_body": false,
+  "why": "owned by the stage that PLACES its inputs: field (re-keyed at R3 - `finish` only annotates)"
+ },
+ "waterward_strips_run_off_the_frame": {
+  "destination": "placer-test",
+  "fires": "NEVER-FIRES",
+  "owning_stage": [
+   "field",
+   "sink"
+  ],
+  "segment": "_seg_0594_500__waterward_strips_run_off_the_frame",
+  "urban_body": false,
+  "why": "owned by the stage that PLACES its inputs: field, sink (re-keyed at R3 - `finish` only annotates)"
+ },
+ "waterways_merge_at_crossings": {
+  "destination": "placer-test",
+  "fires": "FIRES-HAND-ONLY",
+  "owning_stage": [
+   "field"
+  ],
+  "segment": "_seg_0426__waterways_merge_at_crossings",
+  "urban_body": false,
+  "why": "owned by the stage that PLACES its inputs: field (re-keyed at R3 - `finish` only annotates)"
+ },
+ "ways_clear_of_castle_moat": {
+  "destination": "placer-test",
+  "fires": "FIRES-HAND-ONLY",
+  "owning_stage": [
+   "track"
+  ],
+  "segment": "_seg_0409__ways_clear_of_castle_moat",
+  "urban_body": false,
+  "why": "owned by the stage that PLACES its inputs: track (re-keyed at R3 - `finish` only annotates)"
+ },
+ "ways_cross_water_on_a_deck": {
+  "destination": "placer-test",
+  "fires": "FIRES-HAND-ONLY",
+  "owning_stage": [
+   "crossings"
+  ],
+  "segment": "_seg_0387__ways_cross_water_on_a_deck",
+  "urban_body": false,
+  "why": "owned by the stage that PLACES its inputs: crossings (re-keyed at R3 - `finish` only annotates)"
+ },
+ "ways_not_inside_road_beds": {
+  "destination": "placer-test",
+  "fires": "FIRES-HAND-ONLY",
+  "owning_stage": [
+   "track"
+  ],
+  "segment": "_seg_0401__ways_not_inside_road_beds",
+  "urban_body": false,
+  "why": "owned by the stage that PLACES its inputs: track (re-keyed at R3 - `finish` only annotates)"
+ },
+ "wells_among_dwellings": {
+  "destination": "placer-test",
+  "fires": "FIRES-HAND-ONLY",
+  "owning_stage": [
+   "appurtenances"
+  ],
+  "segment": "_seg_0279__wells_among_dwellings",
+  "urban_body": false,
+  "why": "owned by the stage that PLACES its inputs: appurtenances (re-keyed at R3 - `finish` only annotates)"
+ },
+ "wells_clear_of_trees": {
+  "destination": "placer-test",
+  "fires": "FIRES-HAND-ONLY",
+  "owning_stage": [
+   "windbreak"
+  ],
+  "segment": "_seg_0285_005__wells_clear_of_trees",
+  "urban_body": true,
+  "why": "owned by the stage that PLACES its inputs: windbreak (re-keyed at R3 - `finish` only annotates)"
+ },
+ "wells_off_the_wet_toe": {
+  "destination": "placer-test",
+  "fires": "FIRES-HAND-ONLY",
+  "owning_stage": [
+   "appurtenances"
+  ],
+  "segment": "_seg_0523_004__wells_off_the_wet_toe",
+  "urban_body": false,
+  "why": "owned by the stage that PLACES its inputs: appurtenances (re-keyed at R3 - `finish` only annotates)"
+ },
+ "woodland_commons_on_dry_ground": {
+  "destination": "placer-test",
+  "fires": "FIRES",
+  "owning_stage": [
+   "hinterland"
+  ],
+  "segment": "_seg_0599__woodland_commons_on_dry_ground",
+  "urban_body": false,
+  "why": "owned by the stage that PLACES its inputs: hinterland (re-keyed at R3 - `finish` only annotates)"
+ },
+ "woodland_commons_visibly_stocked": {
+  "destination": "placer-test",
+  "fires": "FIRES",
+  "owning_stage": [
+   "hinterland"
+  ],
+  "segment": "_seg_0602__woodland_commons_visibly_stocked",
+  "urban_body": false,
+  "why": "owned by the stage that PLACES its inputs: hinterland (re-keyed at R3 - `finish` only annotates)"
+ },
+ "woodland_commons_within_the_frame": {
+  "destination": "placer-test",
+  "fires": "FIRES",
+  "owning_stage": [
+   "hinterland"
+  ],
+  "segment": "_seg_0597__woodland_commons_within_the_frame",
+  "urban_body": false,
+  "why": "owned by the stage that PLACES its inputs: hinterland (re-keyed at R3 - `finish` only annotates)"
+ }
+}

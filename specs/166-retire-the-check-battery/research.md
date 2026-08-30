@@ -45,3 +45,45 @@ because the GM's standing ruling is that maps may move. Here there is no differe
 future seed does move, the cause is already written down at the point of change in `driver.py`.
 
 **Sources:** none - a measurement of this repository.
+
+## R3 - `finish` places nothing and moves nothing, so 87 checks were attributed to the wrong owner
+
+Feature 163's R10b left this open: 75% of the battery's "a later stage changed my input" evidence rested
+on the single `finish` stage, and whether that stage genuinely MOVES features or merely writes them out
+decided how much of the battery was really placer-guaranteed. T06 made it urgent - the destination ledger
+put **87 of 127** placer-owned checks under `finish`, which is not a batch, it is the whole job.
+
+**Measured by snapshotting the manifest either side of `finish`, on three maps across both archetypes**
+(Inashiro seed 4 nucleated, Polder seed 19, a second nucleated at seed 31):
+
+| | Inashiro 4 | Polder 19 | seed 31 |
+|---|---|---|---|
+| lists that GREW (a feature placed) | **NONE** | **NONE** | **NONE** |
+| records whose GEOMETRY moved | **NONE** | **NONE** | **NONE** |
+| annotation-only fields touched | `z`, `bedz`, `sheenz`, `keepout_chords` | same | same |
+
+`finish` adds 8 keys on the reference map and every one is bookkeeping - `ink_classes`,
+`unclassed_ink`, `unregistered_classes`, the `*_zmin`/`*_zmax` draw-order bounds, `field_chains`. It
+mutates 5 and the mutations are `z` on lanes, `bedz`/`sheenz` on water, and a derived `keepout_chords`
+index. **Sixty-four keys it does not touch at all.** Not one record's `pts`, `poly`, `outline`, `x`, `y`,
+`w`, `h`, `rot` or `parts` differs before and after.
+
+**So `finish` is a draw-order annotator and a serializer, not a placer**, and "last changed at finish" is
+an artifact of z-order bookkeeping. The 87 checks it appeared to own are owned by whichever stage PLACED
+their inputs.
+
+**Two consequences.**
+
+1. The destination ledger is re-keyed on the stage that PLACES each input, not the stage that last touches
+   it. The migration batches only mean something under that keying.
+2. **The GM's prediction is confirmed and feature 163's headline was wrong.** 163 reported 11 checks as
+   "placer bug" against 116 to "fold into a trial-and-error placer", and the fold bucket's evidence was
+   three-quarters this stage. It was bookkeeping. The GM said *"I'd be really, really surprised if our win
+   is actually only eleven checks"*, and the surprise was warranted.
+
+The honest note on scope: the checks that read what `finish` genuinely CREATES - `all_ink_is_ruled_on` and
+its neighbors, reading `unclassed_ink` / `unregistered_classes` - are still owned by `finish`, because
+those keys do not exist before it runs. That is a handful, not 87, and they are the ink-classification
+completeness ratchets that T14 sends to static tests anyway.
+
+**Sources:** none - a measurement of this repository.

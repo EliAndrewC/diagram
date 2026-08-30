@@ -41,7 +41,7 @@ historical finding still has a home - and carry the three boxes.
 
 ## Phase 2 - classify all 147 (US2, P1)
 
-- [ ] **T06** Build the destination ledger: one row per check - owning placer (from feature 163's
+- [x] **T06** Build the destination ledger: one row per check - owning placer (from feature 163's
       `surviving-checks.md`), destination (placer unit test / seed-sweep / static code test / drop), and for
       a drop the covering test or the reason. Zero unaccounted for. Nothing is deleted in this task.
       research: procedure
