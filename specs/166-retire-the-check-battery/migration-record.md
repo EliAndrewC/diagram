@@ -72,6 +72,9 @@ box" - measuring the wrong one made every seat look illegal and the fallback too
 
 | `wells_off_the_wet_toe` | `tests/settlement/test_well_ground.py` (water, pond, dry plot, and the DRAWN-head margin) | the pond arm of `_well_ground_clear` removed -> RED |
 
+| `pond_clear_of_field` | `tests/settlement/test_well_ground.py` (pond section) | `self.ellipses.append` removed from `pond()` -> RED |
+| `pond_clear_of_paddies` | same module - one registry, so one guarantee serves both | same mutation -> RED |
+
 ## Already carried by an existing test - dropped against it, not rewritten
 
 | check | carried by | proof |

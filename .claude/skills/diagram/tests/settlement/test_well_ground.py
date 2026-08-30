@@ -59,3 +59,30 @@ def test_the_refusal_is_measured_against_the_DRAWN_head_not_a_point() -> None:
     assert vr > 0, "the drawn head has a radius"
     assert not s._well_ground_clear(600.0 + 100.0 + vr * 0.5, 600.0), "the head laps the pond's rim"
     assert s._well_ground_clear(600.0 + 100.0 + vr * 3.0, 600.0), "and clear of it by its own width, it is fine"
+
+
+# ---- the pond reserves its own water (feature 166) ------------------------------------------------
+# Carries the placement side of `pond_clear_of_field` and `pond_clear_of_paddies`: nothing is seated in
+# open water, and the pond makes that true by registering its ellipse where every placer already looks.
+
+
+def test_a_drawn_pond_registers_the_ellipse_that_placement_consults() -> None:
+    """Both halves of the chain, as with every other reservation in this engine: drawing the pond must
+    REGISTER it, and the placer must consult the registry. A test of either alone passes while the other
+    rots."""
+    s = _s()
+    before = len(s.ellipses)
+    s.pond(600.0, 600.0, 120.0, 80.0)
+    assert len(s.ellipses) == before + 1, "a drawn pond reserves its water"
+    assert s.M["pond"] == [600.0, 600.0, 120.0, 80.0], "and records it for the manifest"
+
+
+def test_nothing_is_seated_in_the_pond() -> None:
+    """`pond_clear_of_field` / `pond_clear_of_paddies`, from the placement side. `_in_blocked` reads the
+    ellipse registry, so a pond refuses ground to everything that asks - not only to the features whose
+    own check happened to mention it."""
+    s = _s()
+    s.pond(600.0, 600.0, 120.0, 80.0)
+    assert s._in_blocked(600.0, 600.0), "the middle of the water"
+    assert s._in_blocked(690.0, 600.0), "and inside its rim"
+    assert not s._in_blocked(600.0, 1100.0), "dry ground elsewhere is free"
