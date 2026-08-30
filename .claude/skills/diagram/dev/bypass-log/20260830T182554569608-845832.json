@@ -1,0 +1,7 @@
+{
+  "utc": "2026-08-30T18:25:54Z",
+  "target": "bypass-audit FULL",
+  "commit": "881ce58b",
+  "outcome": "permitted",
+  "why": "feature 166 acceptance and pre-push verdict: the coverage floors are DEFERRED to FULL, and this feature deleted 339k lines including tests/full/test_coverage_carriers.py, so the floors must be RE-DERIVED before anything is pushed (spec T22). ANSWERED BY THE SESSION, not the GM - authorized 2026-08-25 in the GM's own words: 'all of them look like things that you should be capable of kicking off'."
+}
