@@ -1,5 +1,11 @@
 # The GM's request, verbatim
 
+**Renumbered 164 -> 166 within minutes of the claim.** Two peer sessions had taken 164 and 165 while this
+one was working, and the sync-in that should have surfaced them reported "Already up to date" because they
+landed between it and the commit. The claim protocol (CLAUDE.md, "spec numbers are CLAIMED IN MAIN") says
+to renumber rather than negotiate, which is what happened - the duplicate 164 existed on main for one push
+and was corrected in the next.
+
 Captured BEFORE `spec.md` is written (constitution XVI). Nothing here is edited. This feature is the
 CONCLUSION of feature 163: 163 asked which checks still fire and retired the dead ones; this one acts on
 the answer 163's own ledger forced, which is that the post-placement battery should not exist at all.
