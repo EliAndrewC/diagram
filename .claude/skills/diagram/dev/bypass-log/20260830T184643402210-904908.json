@@ -1,0 +1,7 @@
+{
+  "utc": "2026-08-30T18:46:43Z",
+  "target": "bypass-audit FULL",
+  "commit": "634ebfab",
+  "outcome": "permitted",
+  "why": "feature 166 acceptance, third FULL run: the first found four failures and the second two, all now fixed (cohort pin re-homed, two feature-161 flat paths, the surface pin, and a FULL-only environment leak in the switches fixture). The coverage floors are deferred to FULL and this feature deleted the coverage carriers, so they must be re-derived before the push (T22). ANSWERED BY THE SESSION, not the GM - authorized 2026-08-25: 'all of them look like things that you should be capable of kicking off'."
+}

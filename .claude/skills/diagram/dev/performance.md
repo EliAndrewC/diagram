@@ -134,11 +134,11 @@ convergence draws a different map.
 ## When a check is slow, INDEX it - do not coarsen it
 
 The gate's cost is dominated by a handful of checks that ask a local question with a global scan.
-Profile before guessing (`cProfile` around `check_village.gate` on `tango.json`, the worst case):
+Profile before guessing (`cProfile` around the retired `check_village.gate` on `tango.json`, the worst case - kept because the SHAPE of the finding outlived the battery):
 2026-07-25 found `city_fan_heads_quilted` testing ~3,000 canal-side samples against EVERY plot
 polygon and ditch (14M `seg_dist` calls, ~58% of a 17s city gate) and `structures_clear_of_dry_plots`
 testing every structure against every dry plot (3.5M `segments_cross` calls). Both were fixed with
-`GridIndex` (a uniform-grid spatial index in `check_village/common_02_overlap_policy.py`): insert each feature
+`GridIndex` (a uniform-grid spatial index in `l7r/diagram/overlap/matrix.py`): insert each feature
 under the cells its influence bbox touches, query the cell, then run the SAME exact test on the few
 candidates. Result: Tango 17.3s -> 2.9s, whole-pool gate 34.1s -> 11.8s, `make done` ~2min -> 77s,
 with **byte-identical verdicts on all 695 manifests** (pool + regression corpus).
@@ -175,7 +175,7 @@ Two rules, and the second is the one that is easy to half-do:
    the insert leaves the query iterating exactly the same billions of cells - which is precisely the
    half-fix that shipped first here and looked plausible for a whole turn.
 
-`test_matrix_survives_geometry_far_off_the_canvas` in `tests/check_village/` is the guard, timed rather
+`test_matrix_survives_geometry_far_off_the_canvas` is the guard, timed rather
 than structural on purpose: the failure mode is unbounded work, and the correct-vs-broken margin is
 a fraction of a second against effectively forever.
 

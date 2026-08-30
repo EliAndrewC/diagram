@@ -159,12 +159,31 @@ def fixture_skill(tmp_path: Path) -> Path:
 
 
 def make(skill: Path, *args: str) -> subprocess.CompletedProcess[str]:
-    # MAKEFLAGS IS STRIPPED (feature 145): under `make test-full` the parent make exports `COV_FLOORS=1` through MAKEFLAGS, and the fixture's make then
-    # inherited it - no `-m "not rolls_map"`, no `--ignore=tests/full` - so these two tests failed in every FULL run and passed everywhere else.
-    return subprocess.run(["make", "--no-print-directory", "-C", str(skill), *args], capture_output=True, text=True, stdin=subprocess.DEVNULL, env={**os.environ, "MAKEFLAGS": "", "MFLAGS": ""})
+    # THE PARENT RUN'S VARIABLES ARE STRIPPED, and the list is one variable wider than it was.
+    #
+    # MAKEFLAGS (feature 145): under `make test-full` the parent make exports `COV_FLOORS=1` through
+    # MAKEFLAGS, and the fixture's make then inherited it - no `-m "not rolls_map"`, no
+    # `--ignore=tests/full` - so these two tests failed in every FULL run and passed everywhere else.
+    #
+    # FULL and REF_WHY (feature 166): the same defect one variable over, and it hid for the same reason -
+    # it can only be seen from inside a FULL run. A variable set on make's COMMAND LINE is exported into
+    # the environment of its recipes, so `make done FULL=1` puts FULL=1 in os.environ, the fixture's own
+    # `make done` inherits it, and that make meets the FULL prompt with no terminal to answer it and
+    # refuses. Clearing MAKEFLAGS never touched it, because FULL arrives as a plain environment variable
+    # rather than through the flags. Measured 2026-08-30: this is why the target failed on both FULL runs
+    # of feature 166 and passes at every other scope.
+    return subprocess.run(
+        ["make", "--no-print-directory", "-C", str(skill), *args],
+        capture_output=True,
+        text=True,
+        stdin=subprocess.DEVNULL,
+        env={**os.environ, "MAKEFLAGS": "", "MFLAGS": "", "FULL": "", "REF_WHY": ""},
+    )
 
 
-LOCKED_TARGETS = ("cohort", "tripwire", "test-full", "cache-audit", "regressions", "perf", "perf-gate", "done FULL=1", "ci-check FULL=1", "ci-check TARGET=cohort", "ci-merge FULL=1", "maps SCOPE=all")
+# `regressions` left this list with feature 166: the target rebuilt the frozen negative-fixture corpus,
+# and the corpus was a set of bad manifests each proving one retired check still fired.
+LOCKED_TARGETS = ("cohort", "tripwire", "test-full", "cache-audit", "perf", "perf-gate", "done FULL=1", "ci-check FULL=1", "ci-check TARGET=cohort", "ci-merge FULL=1", "maps SCOPE=all")
 
 
 def test_make_test_defers_the_map_rolling_tests_under_the_lock(fixture_skill: Path, monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]) -> None:

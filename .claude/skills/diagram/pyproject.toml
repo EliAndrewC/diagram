@@ -3,7 +3,7 @@
 # (100% coverage). Wired so Constitution Principle X is enforced for the whole skill, not missed.
 #
 # Principle X (feature 005, GM-directed 2026-07-13): the Mode B engine (settlement.py,
-# check_village.py, waterfields.py) is brought to FULL compliance - no grace period. ruff lint +
+# waterfields.py) is brought to FULL compliance - no grace period. ruff lint +
 # format apply now; typing is pyrefly with the mypy-strict rule set (feature 142; the per-module
 # mypy ratchet that preceded it is fully retired - every engine module is strict).
 
@@ -27,10 +27,10 @@ select = ["E", "F", "I", "UP", "B", "SIM"]
 ignore = ["E501"]   # long descriptive lines are house style; the formatter caps wrapping via line-length
 
 [tool.ruff.lint.per-file-ignores]
-# the package __init__ re-exports the consumed legacy `import check_village` surface via star
+# the package __init__ re-exports the overlap taxonomy and matrix surface via star
 # imports (feature 027, superseding 024's verbatim roster): F403 because the stars ARE the
 # re-export mechanism there, F401 for the aliased explicit block
-"l7r/diagram/check_village/__init__.py" = ["F401", "F403"]
+"l7r/diagram/overlap/__init__.py" = ["F401", "F403"]
 # same rationale for the settlement package split (feature 025)
 "l7r/diagram/settlement/__init__.py" = ["F401"]
 # the _geom package split (feature 117) re-exports its surface the 027 way rather than with a
@@ -66,7 +66,7 @@ quote-style = "preserve"
 [tool.pyrefly]
 python-version = "3.14"
 search-path = ["."]                      # `l7r` is a namespace portion: module roots start here
-project-includes = ["l7r/diagram/settlement", "l7r/diagram/check_village", "l7r/diagram/waterfields", "l7r/diagram/hamletgen", "l7r/diagram/sitegen", "l7r/diagram/ci", "l7r/diagram/switches.py", "l7r/diagram/compound.py", "l7r/diagram/citybudget.py", "l7r/diagram/tools/pack_audit.py", "l7r/diagram/tools/why_placed.py", "l7r/diagram/tools/scatter_audit.py", "l7r/diagram/tools/timings.py", "l7r/diagram/tools/perf_bands.py", "l7r/diagram/tools/perf_review.py", "l7r/diagram/tools/perf_profile.py", "l7r/diagram/pipeline/pool_index.py", "l7r/diagram/pipeline/poolmaps.py"]
+project-includes = ["l7r/diagram/settlement", "l7r/diagram/overlap", "l7r/diagram/waterfields", "l7r/diagram/hamletgen", "l7r/diagram/sitegen", "l7r/diagram/ci", "l7r/diagram/switches.py", "l7r/diagram/compound.py", "l7r/diagram/citybudget.py", "l7r/diagram/tools/pack_audit.py", "l7r/diagram/tools/why_placed.py", "l7r/diagram/tools/scatter_audit.py", "l7r/diagram/tools/timings.py", "l7r/diagram/tools/perf_bands.py", "l7r/diagram/tools/perf_review.py", "l7r/diagram/tools/perf_profile.py", "l7r/diagram/pipeline/pool_index.py", "l7r/diagram/pipeline/poolmaps.py"]
 replace-imports-with-any = ["boto3", "boto3.*", "botocore", "botocore.*"]
 
 # The mypy-strict rule set, enabled by NAME rather than pyrefly's `strict` preset: that preset also
@@ -123,7 +123,7 @@ markers = [
 # not under the 100% rule (the by-hand audits and drivers - cache_audit, cohort_audit, crop_map,
 # timings, make_regressions, gencache, regen). Naming the measured modules one by one keeps that
 # boundary explicit instead of making a new tool silently owe 100% coverage the day it lands.
-source = ["l7r.diagram._invocation", "l7r.diagram.switches", "l7r.diagram.ci", "l7r.diagram.check_village", "l7r.diagram.settlement", "l7r.diagram.hamletgen", "l7r.diagram.sitegen", "l7r.diagram.waterfields", "l7r.diagram.interactive", "l7r.diagram.compound", "l7r.diagram.citybudget", "l7r.diagram.tools.pack_audit", "l7r.diagram.tools.site_justice", "l7r.diagram.tools.scatter_audit", "l7r.diagram.tools.perf_bands", "l7r.diagram.tools.perf_review", "l7r.diagram.tools.hamlet_floor", "l7r.diagram.pipeline.rollcache", "l7r.diagram.pipeline.render_cache", "l7r.diagram.pipeline.pool_index", "l7r.diagram.pipeline.poolmaps"]
+source = ["l7r.diagram._invocation", "l7r.diagram.switches", "l7r.diagram.ci", "l7r.diagram.overlap", "l7r.diagram.settlement", "l7r.diagram.hamletgen", "l7r.diagram.sitegen", "l7r.diagram.waterfields", "l7r.diagram.interactive", "l7r.diagram.compound", "l7r.diagram.citybudget", "l7r.diagram.tools.pack_audit", "l7r.diagram.tools.scatter_audit", "l7r.diagram.tools.perf_bands", "l7r.diagram.tools.perf_review", "l7r.diagram.tools.hamlet_floor", "l7r.diagram.pipeline.rollcache", "l7r.diagram.pipeline.render_cache", "l7r.diagram.pipeline.pool_index", "l7r.diagram.pipeline.poolmaps"]
 # `waterfields` and `interactive` joined the measured set with feature 145: both are on the hamlet path (the field
 # engine, the interactive page) and the derived floor (tools/hamlet_floor.py) judges every hamlet-path module, so
 # every one of them has to be MEASURED - a module coverage never traced would pass the floor as an empty row.

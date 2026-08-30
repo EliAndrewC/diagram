@@ -33,7 +33,9 @@ def test_a_map_is_immune_to_an_upstream_change_in_the_number_of_random_draws():
 
     from l7r.diagram import settlement
 
-    gen = os.path.join(HERE, "pool", "hamlets", "kashikawa.gen.py")
+    gen = os.path.join(
+        HERE, "pool", "hamlets", "kashikawa", "kashikawa.gen.py"
+    )  # feature 161 moved every map into a per-map folder; this literal kept the flat path and stopped matching SILENTLY (found by feature 166's FULL run, fixed on sight per constitution XIV)
 
     def once(perturb):
         orig = settlement.Settlement.meta

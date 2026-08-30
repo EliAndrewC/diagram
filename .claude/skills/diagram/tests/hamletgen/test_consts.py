@@ -1,8 +1,8 @@
 """Guards on the researched constants - the couplings that are stated in prose and would otherwise
 drift silently."""
 
-from l7r.diagram.check_village.segments_07c_moats_drains_and_edges import _WEB_REACH
 from l7r.diagram.hamletgen.consts import BUNDLE_PITCH, MIN_WEB_GAP, WEB_CLEARANCE, WEB_REACH_FT
+from l7r.diagram.hamletgen.ways import WEB_REACH_FT as _WEB_REACH
 
 
 def test_the_web_reach_is_one_bundle_pitch_in_the_generator_and_in_the_gate() -> None:

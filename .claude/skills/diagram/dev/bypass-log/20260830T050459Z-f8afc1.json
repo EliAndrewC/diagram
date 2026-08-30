@@ -1,0 +1,6 @@
+{
+  "utc": "20260830T050459Z",
+  "guard": "pair-hooks",
+  "what": "gate alone",
+  "reason": "settlement-review is not owed, and unlike the earlier closes this one was in genuine doubt until measured: T03 changed the re-roll ladder"
+}

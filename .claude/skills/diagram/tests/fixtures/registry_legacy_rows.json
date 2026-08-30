@@ -1899,58 +1899,6 @@
       "always": false
     },
     {
-      "name": "_seg_0267__title_clear_of_features",
-      "free": [
-        "M",
-        "_lb2",
-        "_thit_now",
-        "check",
-        "fdef",
-        "ftpx",
-        "k",
-        "lb2",
-        "pcx",
-        "pcy",
-        "prx",
-        "pry",
-        "s",
-        "sb",
-        "tb",
-        "thit",
-        "ttl"
-      ],
-      "writes": [
-        "_lb2",
-        "_thit_now",
-        "fdef",
-        "ftpx",
-        "k",
-        "lb2",
-        "pcx",
-        "pcy",
-        "prx",
-        "pry",
-        "s",
-        "sb",
-        "tb",
-        "tc",
-        "thit"
-      ],
-      "checks": [
-        "scalebar_matches_declared_scale",
-        "title_clear_of_features",
-        "title_has_placard"
-      ],
-      "needs": [
-        "M",
-        "check",
-        "thit",
-        "ttl"
-      ],
-      "meta": false,
-      "always": false
-    },
-    {
       "name": "_seg_0267_500__labels_align_with_their_referent",
       "free": [
         "M",
@@ -2680,25 +2628,6 @@
         "gardens",
         "scale",
         "waterlines"
-      ],
-      "meta": false,
-      "always": false
-    },
-    {
-      "name": "_seg_0285_039__gardens_clear_of_channels",
-      "free": [
-        "check",
-        "g_on_water",
-        "scale"
-      ],
-      "writes": [],
-      "checks": [
-        "gardens_clear_of_channels"
-      ],
-      "needs": [
-        "check",
-        "g_on_water",
-        "scale"
       ],
       "meta": false,
       "always": false
@@ -8166,30 +8095,6 @@
       "needs": [
         "M",
         "check"
-      ],
-      "meta": false,
-      "always": false
-    },
-    {
-      "name": "_seg_0618_502__bamboo_stands_clear_of_paddies",
-      "free": [
-        "M",
-        "check",
-        "meta",
-        "scale",
-        "bamboo_stands_clear_of_paddies_bad"
-      ],
-      "writes": [
-        "bamboo_stands_clear_of_paddies_bad"
-      ],
-      "checks": [
-        "bamboo_stands_clear_of_paddies"
-      ],
-      "needs": [
-        "M",
-        "bamboo_stands_clear_of_paddies_bad",
-        "check",
-        "scale"
       ],
       "meta": false,
       "always": false

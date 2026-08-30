@@ -205,20 +205,15 @@ OPERATIONS: dict[str, tuple[str, str]] = {
     "l7r.diagram.tools.perf_review": ("perf-review", "cheap"),  # feature 129: the review records and the push-time check
     "l7r.diagram.switches": ("switches", "cheap"),  # feature 132: the iteration switches - remote off, scope locked
     "l7r.diagram.tools.perf_profile": ("perf-profile", "expensive"),  # feature 129: tier 2 - cProfile of one stage of one seed
-    "l7r.diagram.tools.check_census": ("check-census", "expensive"),
-    "l7r.diagram.tools.firing_census": ("firing-census", "cheap"),  # feature 163: gates the recorded manifests; rolls no map, so the scope lock has nothing to refuse
     "l7r.diagram.tools.hamlet_floor": (
         "hamlet-floor",
         "cheap",
     ),  # feature 145: the derived 100% floor on the hamlet path; rolls only what is not yet recorded  # feature 141: the check census rolls the reference and a polder stage by stage
     "l7r.diagram.tools.cache_audit": ("cache-audit", "expensive"),
-    "l7r.diagram.tools.make_regressions": ("regressions", "expensive"),
     "l7r.diagram.tools.placement_stages": ("placement-stages", "expensive"),
     "l7r.diagram.tools.why_placed": ("why-placed", "expensive"),
     "l7r.diagram.compound": ("compound", "expensive"),
-    "l7r.diagram.check_village": ("gate-manifest", "cheap"),
     "l7r.diagram.citybudget": ("citybudget", "cheap"),
-    "l7r.diagram.tools.site_justice": ("site-justice", "cheap"),
     "l7r.diagram.tools.crop_map": ("crop", "cheap"),
     "l7r.diagram.tools.polder_probe": ("polder-probe", "cheap"),  # 0.2 s: the polder block alone, no render (feature 151)
     "l7r.diagram.tools.overlap_audit": ("overlap-audit", "cheap"),  # reads one finished map and its ink
@@ -228,7 +223,6 @@ OPERATIONS: dict[str, tuple[str, str]] = {
     "l7r.diagram.tools.scatter_audit": ("scatter-audit", "cheap"),
     "l7r.diagram.tools.sun_audit": ("sun-audit", "cheap"),
     "l7r.diagram.tools.family_census": ("family-census", "cheap"),  # feature 150: a read-only manifest census
-    "l7r.diagram.tools.new_check": ("new-check", "cheap"),
     "l7r.diagram.tools.timings": ("timings", "cheap"),
 }
 

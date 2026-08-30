@@ -1,0 +1,7 @@
+{
+  "utc": "2026-08-30T18:55:07Z",
+  "target": "bypass-audit FULL",
+  "commit": "406b0240",
+  "outcome": "permitted",
+  "why": "feature 166 acceptance, fourth FULL run: every test now passes and the only remaining failure was COVERAGE on perf_review (the deleted carriers' branches), now re-derived as real tests rather than exempted. This run is the T22 verification that the floors hold. ANSWERED BY THE SESSION, not the GM - authorized 2026-08-25: 'all of them look like things that you should be capable of kicking off'."
+}

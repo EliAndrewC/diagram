@@ -1,0 +1,6 @@
+{
+  "utc": "20260830T044908Z",
+  "guard": "pair-hooks",
+  "what": "gate alone",
+  "reason": "no map can move from this delta, and it is verified rather than assumed: T02 ADDS three functions and one constant to hamletgen and nothing in any generation path calls them - driver.py still reads the gate, which is what T03 changes. grep over l7r/ and pool/ returns no caller outside ways.py itself. No manifest, gen or render is touched. GM 2026-08-29: settlement-review is not per-map and they read the map themselves."
+}

@@ -2149,3 +2149,68 @@ rule wearing a standoff's clothes) raised trunks-in-a-tread from 0 to 7 on Sawad
 and 0 to 2 on Kashikawa. That oversized margin is keeping canopy off by accident and trunks off on
 purpose; relax it and the second goes with the first. The fix has to be at the SCATTER - the drawn
 crown positions - not at the margin. `research: rendering`.
+
+## THE DECLARED FIXTURE PREVALENCE IS NOT WHAT THE MAP DRAWS (found 2026-08-30, feature 166's acceptance review)
+
+**The measurement, over all five live hamlets.** `meta.farm_fixtures` declares a per-household share
+for each farmstead fixture. Comparing that against what is actually seated, as a binomial tail
+`P(X <= seated | n = households, p = declared)`:
+
+| map | fixture | declared | expected | seated | P(<= seated) |
+|---|---|---|---|---|---|
+| Kuwabata | persimmon | 0.928 | 14.8 | 2 | 1.05e-14 |
+| Mizuguchi | privy | 0.917 | 11.0 | 3 | 3.26e-08 |
+| Inashiro | persimmon | 0.822 | 12.3 | 5 | 3.98e-05 |
+| Inashiro | coop | 0.689 | 10.3 | 3 | 1.35e-04 |
+| Sawada | persimmon | 0.900 | 17.1 | 11 | 2.73e-04 |
+| Inashiro | woodpile | 0.864 | 13.0 | 7 | 3.07e-04 |
+| Sawada | woodpile | 0.815 | 15.5 | 9 | 8.38e-04 |
+| ... | | | | | |
+
+**15 of 35 (map, fixture) pairs** fall below a 1% tail. This is not sampling noise; it is candidates
+refusing a seat and being dropped silently.
+
+**WHY IT MATTERS BEYOND THE PICTURE.** The interactive map quotes the reader a share the sheet does not
+have. That is the one failure the record doctrine forbids outright - a reader told a figure the drawing
+contradicts - and it is worse than an admitted guess, because the number looks measured.
+
+**WHY IT IS DEFERRED RATHER THAN FIXED IN FEATURE 166** (constitution XIV's architectural clause, which
+requires the measurement, the mechanism and a sketch - all three are here). The honest fix changes what
+the placer SEATS, which moves every live map and is a placement-engine change rather than a migration.
+It is also NOT a regression from retiring the check battery: the battery had no prevalence rule at all,
+which the acceptance review verified independently. It was first caught on 2026-08-29 for `manure` alone
+and was recorded, not fixed; this is the same defect, measured properly and found to be general.
+
+**MECHANISM.** `homesteads.farm_fixtures` rolls a per-hamlet share from `FIXTURE_BANDS`, then walks the
+households offering each a seat from the per-kind seat table in the house frame. A household whose seat
+candidates are all blocked (by the yard, the garden, a lane, a neighbor's eave) contributes nothing and
+the shortfall is invisible - the rolled share is recorded, the achieved one is not.
+
+**SKETCH, in the order the work should go:**
+
+1. **Record the realized share** next to the declared one, so nothing lies while the seating is being
+   worked on. This is small, moves no map, and removes the false claim from the modal immediately.
+2. **Widen the seat search** for the three worst kinds (persimmon, coop, woodpile), which are dooryard
+   features with more legal ground available than the seat table currently offers.
+3. **Reconcile the knob**: where a share genuinely cannot be seated at a hamlet's density, the ROLL
+   should draw from what is seatable rather than the placer silently missing its target.
+
+**And the general lesson, which is the acceptance review's real finding:** a per-map STATISTICAL
+property - a realized rate against a declared knob - was invisible to the retired battery *and* is
+invisible to its successors, because the battery ran per manifest while `tests/gate/` runs seed tests on
+a cached roll. That gap is closed by a ratchet in `tests/full/` over the live pool; see the entry below.
+
+## SEED 45'S WINDBREAK PIN NEEDS THE FULL COHORT TO VERIFY (feature 166, 2026-08-30)
+
+`GATE_COHORT_EXPECTED` held seed 45 against `village_windbreak_is_continuous`. Seed 45 is a FULL-cohort
+member, so the gate scope never rolls it, and the pin could not be moved into a gate test the way seed
+43's kink was.
+
+**What was NOT done, deliberately.** I wrote a continuity heuristic to check it and the heuristic flagged
+ALL FOUR gate seeds, which means it does not describe the rule - a belt's clumps are not simply
+consecutive along its long axis. A pin asserted from a measure I have not validated is worse than no pin,
+because it looks like verification. So the instance is ledgered here rather than re-asserted.
+
+**To close it:** roll the FULL cohort, read the belt on seed 45 against the real continuity predicate the
+belt placer uses, and either fix the placer or carry the seed as a strict xfail beside seed 43's in
+`tests/gate/test_cohort_lane_rules.py`'s successor.
