@@ -21,6 +21,7 @@ from .consts import (
     CLUSTER_SPAN_FACTOR,
     FOOTPATH_FABRIC_GAP,
     LANE_CLEARANCE,
+    LANE_JOIN_FT,
     MIN_WEB_GAP,
     POLDER_ARCHETYPES,
     SPUR_SETBACK,
@@ -4285,3 +4286,78 @@ def shallow_crossing(a: Pt, b: Pt, p: Pt, q: Pt, limit_deg: float = 42.0) -> boo
     ux, uy = unit(b[0] - a[0], b[1] - a[1])
     vx, vy = unit(q[0] - p[0], q[1] - p[1])
     return abs(math.degrees(math.asin(max(-1.0, min(1.0, ux * vy - uy * vx))))) < limit_deg
+
+
+# ---- WHICH HOUSES THE LANE NETWORK ACTUALLY SERVES (feature 166) --------------------------------
+# Lifted out of the retired `farmhouses_reach_a_way` gate check, whose body this is. The generator's
+# re-roll ladder used to obtain this by running the whole battery and PARSING its printed output; it
+# now asks here.
+#
+# LIFTED, NOT RE-DERIVED, and that distinction is the whole reason this code looks like the check
+# rather than like its neighbors. `driver.py` records what happened the last time someone wrote a
+# reach measure from scratch: it "was wrong on five of six seeds... it over-counted and never read
+# zero", so anything steered by it was steered by noise.
+#
+# AND IT DOES NOT REUSE `_components`, WHICH IS THE NEAR-MISS THAT WOULD HAVE MOVED MAPS.
+# `_components` joins two ways when an END of one comes within tolerance of the other's tread.
+# This rule joins them when ANY VERTEX does. The stricter predicate yields a smaller network, so
+# more houses read as unserved, so the ladder re-rolls maps it used to keep. Two connectivity
+# helpers that look interchangeable and are not - the exact shape `dev/gate.md` collects under
+# "MEASURE WHAT THE RULE MEASURES".
+
+
+def lanes_share_tread(p: Poly, q: Poly, join: float = LANE_JOIN_FT) -> bool:
+    """Do two drawn treads come within `join` anywhere - by ANY vertex of either against the other's run?
+
+    Lifted from the check's own inner `_fw_touch` so it can be tested with two lists of tuples instead
+    of a settlement (the project's standing rule on closures that are hard to reach)."""
+    return any(seg_dist(v[0], v[1], a, b) <= join for v in p for a, b in zip(q, q[1:], strict=False)) or any(seg_dist(v[0], v[1], a, b) <= join for v in q for a, b in zip(p, p[1:], strict=False))
+
+
+def served_network(lanes: Sequence[Mapping[str, Any]], join: float = LANE_JOIN_FT) -> list[tuple[Pt, Pt]]:
+    """The segments of the CONNECTED network - the component containing the settlement's link to the world.
+
+    THE NETWORK, NOT ANY LINE ON THE GROUND. The rule this serves is that every house in a nucleated
+    cluster is reached by the INTERCONNECTED system of lanes, so a house served only by an isolated stub
+    is not served. The component is grown from the connector if one is drawn, else from the longest lane;
+    a check satisfiable by an island rewards drawing an island."""
+    ways = [[(float(x), float(y)) for x, y in (ln.get("pts") or [])] for ln in lanes]
+    seed = next((i for i, ln in enumerate(lanes) if ln.get("connector")), None)
+    if seed is None and ways:
+        seed = max(range(len(ways)), key=lambda i: sum(math.dist(a, b) for a, b in zip(ways[i], ways[i][1:], strict=False)))
+    main = set() if seed is None else {seed}
+    grew = True
+    while grew:
+        grew = False
+        for i, p in enumerate(ways):
+            if i in main or len(p) < 2:
+                continue
+            if any(lanes_share_tread(p, ways[j], join) for j in main if len(ways[j]) >= 2):
+                main.add(i)
+                grew = True
+    return [(a, b) for i in sorted(main) for a, b in zip(ways[i], ways[i][1:], strict=False)]
+
+
+def unreached_houses(M: Mapping[str, Any], reach: float = WEB_REACH_FT) -> list[tuple[int, int, int]]:
+    """(x, y, distance) for every farmhouse the connected lane network does not reach. [] when the rule
+    does not apply to this map.
+
+    FORM-CONDITIONAL, NOT WAIVED, and the condition is carried verbatim from the check. The rule's own
+    justification is about ONE form - every house in the NUCLEATED village is reached by the lane network -
+    and a DISPERSED hamlet has no internal network by definition, so the rule is not about it. A waiver
+    would have been the wrong tool: a waiver says "this map breaks a rule that is true of it"; a dispersed
+    hamlet does not break this rule, the rule does not apply. Defaults to nucleated so a map that declares
+    no form keeps its old treatment."""
+    meta = M.get("meta") or {}
+    if not meta.get("generated_by") or meta.get("settlement_form", "nucleated") == "dispersed":
+        return []
+    segs = served_network(M.get("lanes") or [])
+    if not segs:
+        return []
+    far: list[tuple[int, int, int]] = []
+    for h in M.get("houses") or []:
+        cx, cy = float(h["x"]), float(h["y"])  # x, y ARE the center here - the manifest's convention
+        d = min(seg_dist(cx, cy, a, b) for a, b in segs)
+        if d > reach:
+            far.append((round(cx), round(cy), round(d)))
+    return far

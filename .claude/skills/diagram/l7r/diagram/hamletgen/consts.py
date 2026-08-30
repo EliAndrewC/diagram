@@ -205,6 +205,14 @@ MIN_WEB_GAP = 2.0 * WEB_FABRIC_GAP + 4.0  # 18 ft: both neighbors' clearance, pl
 # derived from a researched constant instead of chosen to make today's maps pass.
 WEB_REACH_FT = 100.0  # == BUNDLE_PITCH; asserted in tests rather than imported, since BUNDLE_PITCH is defined below
 
+# How close two drawn treads must come to count as ONE network (feature 166, lifted out of the retired
+# `farmhouses_reach_a_way` check, which held it as `_LANE_JOIN`). Its recorded why, carried verbatim from
+# the check because it is the reason the number is 40 and not something else: it is the same figure
+# `lanes_reach_something` used for "this end has met another way", deliberately - the two rules are about
+# the same fact from opposite ends, and letting them disagree would let a lane be connected for one and
+# isolated for the other.
+LANE_JOIN_FT = 40.0
+
 # How far off a lane's centerline a frontage seat is offered. This is a PLACEMENT decision and is
 # deliberately not derived from LANE_CLEARANCE, which is the corridor rule: fronting a lane excuses
 # a seat from the corridor's setback (that is what `skip` means to `_near_corridor`), so the row's

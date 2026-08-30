@@ -25,7 +25,7 @@ ordering below is what keeps the tree green throughout.
 
 | | label | total | median | worst | notes |
 |---|---|---|---|---|---|
-| before | `166-start` | | | | UNMODIFIED code, before the first edit |
+| before | `166-start` | **121.3s** | **26.8s** | **46.8s** | UNMODIFIED code at 11692b03, in the detached worktree /tmp/base166, on an idle box. Gate green there: 2786 passed, 2 skipped, 160.1 s |
 | after | `166-end` | | | | before the push |
 
 This feature REMOVES the battery from every roll (`hamletgen.generate` runs it in-process), so a decrease
