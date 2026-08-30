@@ -53,6 +53,12 @@ only (`already-verified` short-circuits excluded, since they measure nothing):
 "we are losing an optimization" rather than "the gate is the slowest it has ever been", and it explains
 why nobody flinched: every day still felt better than the week before.
 
+> **NOTE, added after the spec review.** The sentence below argues for a bar that "follows the best-known
+> value". **The SPEC DECLINED that mechanism**: FR-003 pins the baseline and moves it only by a committed
+> edit, because a baseline that follows automatically follows a degradation UPWARD as readily as downward -
+> which is exactly the shape R4 describes. Read this as the argument against a FIXED CONSTANT, which it
+> is, not as advocacy for a self-updating one. Where the two differ, the spec is the authority.
+
 **This is the argument for a RATCHET rather than a fixed ceiling.** A constant chosen on 08-24 would have
 been ~350 s and would still be passing today at 135 s, silently, while the gate got 4x worse than its own
 best. Only a bar that follows the best-known value catches this shape.

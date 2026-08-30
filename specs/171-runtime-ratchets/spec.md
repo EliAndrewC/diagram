@@ -146,7 +146,8 @@ would fire on noise and be escaped within a day, which is worse than no bar.
 
 What it buys is the one thing that matters right now: `done` **cannot get twice as slow again** without
 somebody stopping. The real number arrives with the efficiency work, which re-pins it; at 35 s the GM's
-45 s takes over automatically via FR-004's cap.
+45 s takes over automatically (FR-002 bullet 2 - not FR-004's cap; the two agree at exactly 35 s, but
+the rule that governs from there down is FR-002's).
 
 **For the GM, if they want a different call:** the alternative is to arm `quick` now and leave `done`
 unarmed until the efficiency work stabilizes it, on the grounds that a 201 s bar over a target whose
@@ -258,6 +259,12 @@ OVER-BROADLY, item 4's consequence missed. 5 further items, all accepted:
 its own text is self-contradicting on the point - "up to **three** times (raised from three by the GM on
 2026-08-30); if the FIFTH round still returns changes, STOP and escalate". The escalation trigger is
 unambiguous, so round 4 was taken rather than escalating. The stale word is flagged separately.)*
+
+**Round 5** (`spec-fidelity`): **FAITHFUL.** All three round-4 fixes confirmed real; the request carried
+clause by clause; every author decision labeled with whose it is; nothing missing, and nothing that
+overturns a case the GM stated. Two asides applied without re-review at the reviewer's direction: D1's
+stale attribution of the 45 s to FR-004's cap (it has come from FR-002 bullet 2 since round 4 - the
+outcome was right, the named mechanism was not), and a clarifying note on research.md R3.
 
 **Round 4** (`spec-fidelity`): all five round-3 fixes confirmed real; 1 live item + 1 mechanical, both
 accepted:
