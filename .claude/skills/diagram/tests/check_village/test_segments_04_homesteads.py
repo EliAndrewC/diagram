@@ -21,17 +21,6 @@ from tests.check_village._builders import (
 # ---- the matrix debt register rots loudly ------------------------------------------------------
 
 
-def test_gardens_clear_of_channels_fires_when_a_garden_sits_on_a_ditch():
-    # a drain ditch runs straight through the garden's footprint - a raised-bed saien in a running ditch
-    M = {
-        "meta": {"scale": "village"},
-        "houses": [{"x": 500, "y": 500, "w": 44, "h": 29, "kind": "plain", "rot": 0}],
-        "gardens": [{"x": 540, "y": 500, "w": 24, "h": 16, "rot": 0, "of": [500, 500]}],
-        "field_ditches": [{"poly": [[540, 480], [540, 520]], "role": "drain", "w": 6, "field": "f"}],
-    }
-    assert "gardens_clear_of_channels" in f_only(M, "gardens_clear_of_channels")
-
-
 def test_farmhouses_shed_separately_passes_at_an_ordinary_nucleated_spacing():
     # The rule must not fire on a tight-but-honest nucleus: the scripted hamlets sit at 23-29 ft.
     far = {

@@ -218,17 +218,6 @@ def _seg_0285_038__cx(
     return _kept(locals(), ('cx', 'cy', 'e', 'g_on_water', 'gc', 'gd', 'k', 'whw', 'wp', 'wx', 'wy'))
 
 
-def _seg_0285_039__gardens_clear_of_channels(*, check: Any = _UNBOUND, g_on_water: Any = _UNBOUND, scale: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 0285.039 (gardens_clear_of_channels) - body verbatim from _seg_0285__wells_clear_of_shrine_and_torii (feature 024 per-check split; guards re-evaluated in the body, see split_oversized.py)."""
-    if scale in ('town', 'village', 'hamlet') and scale in ('town', 'village', 'hamlet', 'city'):
-        check(
-            "gardens_clear_of_channels",
-            not g_on_water,
-            f"kitchen garden(s) overlap an irrigation channel/ditch: {g_on_water[:3]} - a raised-bed saien sits on dry ground, never in a running feeder channel, field ditch, or stream",
-        )
-    return _kept(locals(), ())
-
-
 # the garden and the farmhouse's STOREHOUSE/shed must never overlap - the shed sits on a wall the
 # garden does not use (west for a dispersed farm, the shaded north for a nucleated one). The shed is
 # a recorded annex (M['farm_sheds']), so read its actual footprint straight from there.

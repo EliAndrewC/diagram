@@ -499,3 +499,38 @@ def test_the_allotted_yard_knob_issues_every_household_the_same_yard() -> None:
 
     # ...and the allotted figure is the median itself, neither tilted by the house nor jittered
     assert abs(issued.pop() - allotted.YARD_MEDIAN_TSUBO * allotted.TSUBO_FT2) < 1e-3
+
+
+def test_a_garden_is_refused_on_a_no_build_corridor() -> None:
+    """THE PLACER'S GUARANTEE that the retired `gardens_clear_of_channels` check used to re-measure on
+    the finished map (feature 166).
+
+    A raised-bed saien sits on dry ground, never in a running feeder channel, field ditch or stream. The
+    placer already refuses it: every watercourse registers a no-build CORRIDOR, and `_garden_fits`
+    consults `_near_corridor` before anything else about the ground. Asserting it here is the same rule
+    measured where it is made."""
+    from l7r.diagram.settlement import Settlement
+
+    s = Settlement(1000, 1000, seed=1)
+    s.meta(name="G", scale="hamlet", ftpx=1, down_deg=90)
+    yard = (900.0, 900.0, 30.0, 20.0)  # far away, so only the corridor can refuse
+    assert s._garden_fits(500.0, 500.0, 22.0, 24.0, 480.0, 480.0, yard), "open dry ground takes a garden"
+
+    s.corridors.append(([(400.0, 500.0), (600.0, 500.0)], 33.0))  # a watercourse runs through it
+    assert not s._garden_fits(500.0, 500.0, 22.0, 24.0, 480.0, 480.0, yard), "and a garden in the channel is refused"
+
+
+def test_a_watercourse_registers_the_corridor_the_garden_consults() -> None:
+    """The other half of the chain, so the pair proves the whole rule rather than half of it: the garden
+    refusing a corridor is only the guarantee if a drawn channel actually REGISTERS one. `water_ways`
+    appends `(poly, 33)` for a channel and a wider band for a stream - the check this replaces trusted
+    that link implicitly, and a test that asserted only the refusal would still pass if channels stopped
+    registering."""
+    from l7r.diagram.settlement import Settlement
+
+    s = Settlement(1000, 1000, seed=1)
+    s.meta(name="G", scale="hamlet", ftpx=1, down_deg=90)
+    before = len(s.corridors)
+    s.channel((200.0, 300.0), (800.0, 300.0), frm={"kind": "stream"}, to={"kind": "field", "name": "f"})
+    assert len(s.corridors) > before, "a drawn channel must register a no-build corridor"
+    assert s._near_corridor(500.0, 300.0), "and that corridor covers the water it protects"

@@ -21,17 +21,19 @@ import pytest
 
 from l7r.diagram.check_village import driver
 
-# A garden sitting squarely on a drain ditch - the smallest manifest that reliably fails one named
-# check. Borrowed from test_segments_04_homesteads.py so the fixture and the check stay in step.
-_GARDEN_ON_A_DITCH = {
+# Two farmhouses closer than the 8 ft eave gap - the smallest manifest that reliably fails one named
+# check. (It was a garden on a drain ditch until feature 166 retired `gardens_clear_of_channels`; this
+# file tests the JOURNAL, not any particular check, so it just needs one that still fires.)
+_TWO_HOUSES_TOO_CLOSE = {
     "meta": {"scale": "village", "name": "Journal-test"},
-    "houses": [{"x": 500, "y": 500, "w": 44, "h": 29, "kind": "plain", "rot": 0}],
-    "gardens": [{"x": 540, "y": 500, "w": 24, "h": 16, "rot": 0, "of": [500, 500]}],
-    "field_ditches": [{"poly": [[540, 480], [540, 520]], "role": "drain", "w": 6, "field": "f"}],
+    "houses": [
+        {"x": 500, "y": 500, "w": 44, "h": 29, "kind": "plain", "rot": 0},
+        {"x": 546, "y": 500, "w": 44, "h": 29, "kind": "plain", "rot": 0},
+    ],
 }
-_CHECK = "gardens_clear_of_channels"
+_CHECK = "farmhouses_shed_separately"
 # 60+ characters of real reason, which is what `waivers_are_documented` demands of a live waiver.
-_REASON = "The ditch here is a covered culvert under the raised bed, laid when the lane was cut."
+_REASON = "These two steadings share a wall by inheritance - one longhouse split between brothers, never re-roofed."
 
 
 @pytest.fixture(autouse=True)
@@ -108,27 +110,27 @@ def test_flush_verdicts_returns_none_with_nothing_recorded(tmp_path):
 
 def test_a_failing_check_is_journaled_as_fail_against_the_map_that_failed_it(monkeypatch, tmp_path):
     monkeypatch.setenv(driver.VERDICT_JOURNAL_ENV, str(tmp_path))
-    assert _CHECK in _gate(_GARDEN_ON_A_DITCH)
+    assert _CHECK in _gate(_TWO_HOUSES_TOO_CLOSE)
     assert (_CHECK, "FAIL", "Journal-test") in driver._VERDICTS
 
 
 def test_a_waived_check_is_journaled_as_waive_because_a_waive_is_a_suppressed_fail(monkeypatch, tmp_path):
     monkeypatch.setenv(driver.VERDICT_JOURNAL_ENV, str(tmp_path))
-    waived = {**_GARDEN_ON_A_DITCH, "meta": {**_GARDEN_ON_A_DITCH["meta"], "waivers": {_CHECK: _REASON}}}
+    waived = {**_TWO_HOUSES_TOO_CLOSE, "meta": {**_TWO_HOUSES_TOO_CLOSE["meta"], "waivers": {_CHECK: _REASON}}}
     assert _CHECK not in _gate(waived)  # a waiver keeps it out of the failure list...
     assert (_CHECK, "WAIVE", "Journal-test") in driver._VERDICTS  # ...and the journal still sees it fire
 
 
 def test_a_passing_check_is_never_journaled(monkeypatch, tmp_path):
     monkeypatch.setenv(driver.VERDICT_JOURNAL_ENV, str(tmp_path))
-    clean = {**_GARDEN_ON_A_DITCH, "field_ditches": []}
+    clean = {**_TWO_HOUSES_TOO_CLOSE, "houses": [_TWO_HOUSES_TOO_CLOSE["houses"][0]]}
     assert _CHECK not in _gate(clean)
     assert set() == driver._VERDICTS
 
 
 def test_a_map_with_no_name_journals_a_placeholder_rather_than_crashing(monkeypatch, tmp_path):
     monkeypatch.setenv(driver.VERDICT_JOURNAL_ENV, str(tmp_path))
-    unnamed = {**_GARDEN_ON_A_DITCH, "meta": {"scale": "village"}}
+    unnamed = {**_TWO_HOUSES_TOO_CLOSE, "meta": {"scale": "village"}}
     _gate(unnamed)
     assert (_CHECK, "FAIL", "<unnamed>") in driver._VERDICTS
 
@@ -140,9 +142,9 @@ def test_the_journal_changes_no_verdict(monkeypatch, tmp_path):
     """Feature 132 forbids an environment variable that changes what a map rolls. This one may exist
     because it changes only what is recorded - so the verdicts must be identical with it set and unset."""
     monkeypatch.delenv(driver.VERDICT_JOURNAL_ENV, raising=False)
-    off = _gate(_GARDEN_ON_A_DITCH)
+    off = _gate(_TWO_HOUSES_TOO_CLOSE)
     monkeypatch.setenv(driver.VERDICT_JOURNAL_ENV, str(tmp_path))
-    on = _gate(_GARDEN_ON_A_DITCH)
+    on = _gate(_TWO_HOUSES_TOO_CLOSE)
     assert off == on == {_CHECK}
 
 
@@ -150,9 +152,9 @@ def test_the_journal_leaves_the_manifest_untouched(monkeypatch, tmp_path):
     """gate() mutates the manifest it is handed (DEFAULT_MANIFEST merge, theater_stage normalization);
     what it must NOT do is mutate it DIFFERENTLY because the journal is on."""
     monkeypatch.delenv(driver.VERDICT_JOURNAL_ENV, raising=False)
-    a = {**_GARDEN_ON_A_DITCH}
+    a = {**_TWO_HOUSES_TOO_CLOSE}
     driver.gate(a, verbose=False, only={_CHECK})
     monkeypatch.setenv(driver.VERDICT_JOURNAL_ENV, str(tmp_path))
-    b = {**_GARDEN_ON_A_DITCH}
+    b = {**_TWO_HOUSES_TOO_CLOSE}
     driver.gate(b, verbose=False, only={_CHECK})
     assert a == b

@@ -2685,25 +2685,6 @@
       "always": false
     },
     {
-      "name": "_seg_0285_039__gardens_clear_of_channels",
-      "free": [
-        "check",
-        "g_on_water",
-        "scale"
-      ],
-      "writes": [],
-      "checks": [
-        "gardens_clear_of_channels"
-      ],
-      "needs": [
-        "check",
-        "g_on_water",
-        "scale"
-      ],
-      "meta": false,
-      "always": false
-    },
-    {
       "name": "_seg_0285_057__groves",
       "free": [
         "M",
