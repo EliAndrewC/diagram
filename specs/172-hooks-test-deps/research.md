@@ -127,3 +127,18 @@ the first suite ever ran.
 **The rule for the next mechanical split**: assert that the union of the parts defines every name the
 whole defined, before trusting any behavioral comparison. Behavior tests check the paths you thought
 of; a name census checks the ones you did not.
+
+## R8 - the parallel collector's reporting was verified by an accident
+
+FR-002 requires that a parallel run still report **every** failure together, with the suite that
+produced each - the property the serial loop had. That was verified by the run that went red when the
+split dropped its two constants: twelve suites failed at once, and the collector listed all twelve in
+one line with each suite's own output beneath its own heading.
+
+    hooks-test FAILED: clone-sync-hooks.sh discard-hooks.sh gate-hooks.sh guard-file-hooks.sh
+    main-tree-hooks.sh make-only-hooks.sh measure-hooks.sh no-branch-hooks.sh no-poll-hooks.sh
+    repo-safety-hooks.sh review-gate.sh source-block-hooks.sh
+
+A deliberate fixture would have planted one failure; the accident planted twelve, concurrently, which
+is the stronger test of a fan-out collector - it proves the per-job log and exit-code files do not
+collide under load, which is the failure a single planted failure could not have shown.
