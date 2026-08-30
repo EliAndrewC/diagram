@@ -9,10 +9,11 @@ FIRE by removing the code it guards - the project's rule for adding a guard, app
 
 ## Phase 0 - the baseline (Principle XIII)
 
-- [ ] T01 `make hooks-test` on the unmodified clone; any failure is pre-existing, ledgered, and
-      re-checked against the clone before it is called that
+- [x] T01 baseline on the unmodified clone, 2026-08-30: **`make hooks-test` GREEN, exit 0** -
+      *"0 guard suites green, 19 unchanged since they last went green"*, every suite fresh against
+      the guard scripts as they stand. Nothing pre-existing to ledger
       research: procedure
-      verify: the recorded log, quoted here when the task is ticked
+      verify: /tmp/164-base-hooks.log, quoted above
 
 ## Phase 1 - the shared decisions, unit-testable
 
