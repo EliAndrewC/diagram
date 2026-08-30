@@ -433,7 +433,8 @@ hooks-test:     ## run every scripts/test-*-hooks.sh, and prove each guard still
 	    printf 'fires - or whether it fires on correct work, which is the more expensive failure.\n\n'; \
 	    fail="$$fail $$b"; continue; \
 	  fi; \
-	  deps="$$h $$root/scripts/$$t $$root/scripts/_hookmatch.py $$root/scripts/test_hooks_cases.py"; \
+	  deps="$$h $$root/scripts/$$t $$root/scripts/_hookmatch.py $$root/scripts/test_hooks_cases.py $$root/scripts/_guardlog.sh $$root/scripts/_gatecost.py"; \
+	  : "(GUARD_EDIT_OK: feature 161 - the two new shared helpers join the freshness key, exactly as _hookmatch.py does: a suite that was green against one version of them is not green against another)"; \
 	  case $$b in sync-with-main.sh|review-gate.sh|gate-stamp.py) deps="$$root/scripts/*.sh $$root/scripts/*.py";; esac; \
 	  : "(GUARD_EDIT_OK: fixing a guard that FIRES ON CORRECT WORK - the per-suite freshness cache resolved its own path as \$$root/.git/hooks-test, and in a LINKED WORKTREE .git is a FILE, so every one of the 19 suites failed with 'Directory nonexistent'. A detached worktree is exactly where constitution XIII requires the regression baseline to be taken, so the mandated procedure could not produce a green hooks-test on ANY commit. Asking git for the path fixes it in both layouts; the roster, the failure path and the stamp are unchanged. Feature 157.)"; \
 	  sha=$$(cat $$deps 2>/dev/null | sha256sum | cut -c1-16); mkdir -p "$$gitdir/hooks-test"; \
@@ -489,6 +490,12 @@ perf-gate:      ## require the feature's -start bookend, take -end, and FAIL on 
 # (GUARD_EDIT_OK: the audit gains "Remote spend" - feature 130, FR-020)
 audit:          ## how the gate has actually been used - every run, every bypass, and remote spend
 	@python3 -m l7r.diagram.ci remote-spend
+# GUARD_EDIT_OK: feature 161 - FIXING A DEFECT FOUND WHILE WORKING (Principle XIV). `make audit` died
+# with a KeyError on any bypass entry written by `pair-hooks.sh`, which records `guard`/`reason`/`what`
+# rather than `outcome`/`why` (feature 151, 2026-08-29). 63 of the 88 entries in this clone carry that
+# schema, so the audit the constitution requires as a feature's closing step has been unrunnable since
+# the day pair-hooks landed - and it failed AFTER printing the run log, which is why it read as a
+# normal tail of output. Both schemas are read now; neither is rewritten.
 	@python3 -c "import json,glob,collections,os; \
 rows=sorted((json.load(open(f)) for f in glob.glob('dev/run-log/*.json')),key=lambda r:r.get('utc','')); \
 print(chr(10)+'\033[1mGate runs\033[0m (dev/run-log/)'); \
@@ -497,7 +504,21 @@ c=collections.Counter(r['scope'] for r in rows); \
 print(f\"  {len(rows)} runs: \"+', '.join(f'{k}={v}' for k,v in sorted(c.items()))) if rows else None; \
 b=sorted((json.load(open(f)) for f in glob.glob('dev/bypass-log/*.json')),key=lambda r:r.get('utc','')); \
 print(chr(10)+'\033[1mBypasses\033[0m (dev/bypass-log/) - a FULL run is only justified at the END of a feature'); \
-[print(f\"  {r['utc']}  {r.get('outcome','?'):<10} {r['why'][:76]}\") for r in b[-15:]] or print('  (none yet)'); \
+'GUARD_EDIT_OK: feature 161 - read BOTH bypass-log schemas (see the note above this recipe)'; \
+[print(f\"  {r['utc']}  {(r.get('outcome') or r.get('guard') or '?'):<10} {(r.get('why') or r.get('reason') or r.get('what') or '')[:76]}\") for r in b[-15:]] or print('  (none yet)'); \
+print()"
+# GUARD_EDIT_OK: feature 161 adds the GUARD CENSUS to this audit (GM 2026-08-30: *"I notice I've been
+# seeing a lot of this in the output of my claude code sessions over time"*). Answering that took a
+# replay of 715 MB of transcripts, because no guard recorded when it fired. Now two of them do, and
+# the escape rate is the number that matters: a guard escaped more often than it is obeyed is costing
+# a round trip to prevent nothing, which is what retired the quick+done refusal.
+	@python3 -c "import json,glob,os,collections; \
+rows=[json.load(open(f)) for f in glob.glob(os.path.expanduser(os.environ.get('GUARD_LOG_DIR','~/.claude/guard-log')+'/*.json'))]; \
+print('\033[1mGuard firings\033[0m (~/.claude/guard-log/, feature 161 - measure and gate only)'); \
+by=collections.defaultdict(collections.Counter); \
+[by[r['guard']].update([r['event']]) for r in rows]; \
+[print(f\"  {g:<8} \"+', '.join(f'{k}={v}' for k,v in sorted(c.items()))+(f\"   escape rate {c['escaped']/max(1,c['escaped']+c['blocked']):.0%}\" if c['blocked'] or c['escaped'] else '')) for g,c in sorted(by.items())] or print('  (none recorded yet)'); \
+print(f\"  {len(rows)} entries\"+(f\", {min(r['utc'] for r in rows)} to {max(r['utc'] for r in rows)}\" if rows else '')); \
 print()"
 	@printf '\033[1mFiles past the ~1,000-line bar\033[0m (constitution X clause 13 - a QUESTION, not a limit)\n'
 	@find l7r tests -name '*.py' -exec wc -l {} + 2>/dev/null | awk '$$1>1000 && $$2!="total"{printf "  %5d  %s\n",$$1,$$2}' | sort -rn | head -12
@@ -510,7 +531,13 @@ print()"
 help:           ## list every target with its one-line purpose
 	@printf '\n\033[1mOperations\033[0m - everything runs through one of these.\n\n'
 	@grep -hE '^[a-z][a-z0-9-]*:.*##' $(MAKEFILE_LIST) | sed 's/:.*##/\t/' | sort | awk -F'\t' '{printf "  \033[1m%-18s\033[0m %s\n", $$1, $$2}'
-	@printf '\nTimes: quick ~33s | reference ~26s | done ~5.5min (NOT the quick one) | done FULL=1 ~6min\n'
+# GUARD_EDIT_OK: feature 161 - the help line stops quoting durations typed in by hand (GM 2026-08-30:
+# *"those numbers for `make quick` are wrong and outdated"*; this line still said done ~5.5min while
+# the run log's median was 137 s). The one number worth printing is asked of the recorded runs.
+	@cost=$$(../../../scripts/_gatecost.py done 2>/dev/null); \
+	 printf '\nCheapest first: quick | reference | done (NOT the quick one) | done FULL=1'; \
+	 [ -n "$$cost" ] && printf '   -   `make done` median %s s over its recent recorded runs (`make audit`)' "$$cost"; \
+	 printf '\n'
 	@printf 'Remote (paid, CodeBuild): ci-status (free) | ci-check [FULL=1|TARGET=op] | ci-merge (the push) | ci-image - see dev/loop.md\n\n'
 
 # ---- THE CODEBUILD TARGETS (feature 130 - GUARD_EDIT_OK: adding four new PAID operations) -------
@@ -685,7 +712,8 @@ bypass-audit:
 	  printf "exactly how feature 126 ran the full gate THREE times against a standing instruction to\n"; \
 	  printf "run only the reference settlement. Every bypass was logged and none was stopped.\n\n"; \
 	  printf "  \033[1mmake reference\033[0m   Inashiro seed 4 alone, ~60 s - almost always what you want\n"; \
-	  printf "  \033[1mmake done\033[0m        reference + lint/types + 3,420 tests, ~5.5 min (NOT the quick one)\n\n"; \
+	  printf "  \033[1mmake done\033[0m        reference + lint/types + the suite (NOT the quick one)\n\n"; \
+	  : "(GUARD_EDIT_OK: feature 161 - the prompt stops quoting a hand-typed 5.5 min; make audit has the real history)"; \
 	  printf "If you truly need the FULL set, run it in the FOREGROUND and answer the prompt.\n\n"; \
 	  $(LOGBYPASS) refused "$$why"; \
 	  exit 1; \

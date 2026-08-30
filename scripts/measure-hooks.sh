@@ -46,7 +46,22 @@ set -euo pipefail
 MODE=${1:-}
 INPUT=$(cat 2>/dev/null || true)
 STATE_DIR=${MEASURE_STATE_DIR:-/tmp/claude-measure}
-BUDGET=${MEASURE_BUDGET:-2}   # two in a row is a before/after pair; the third is the habit this stops
+HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+# GUARD_EDIT_OK: feature 161, at the GM's request - this guard now records what it does, and asks the
+# run log what a target costs instead of quoting a number typed in August.
+# shellcheck source=/dev/null
+. "$HERE/_guardlog.sh"
+# THE BUDGET IS ONE (GM 2026-08-30): *"should we make it so we start blocking at 2 in a row instead of
+# 3 in a row?"* So the SECOND expensive measurement in a streak is refused, not the third.
+#
+# WHAT THAT COSTS, recorded rather than hidden. Replaying this project's transcripts through this
+# state machine (specs/161-guard-block-economics/measure/replay.py) says the tighter budget roughly
+# doubles the firings - 30 -> 56 over the recorded history - and 5 of the 9 real firings so far ended
+# with the measurement running anyway (4 via MEASURE_OK). A firing spends a model round trip, so a
+# budget only pays through DETERRENCE. What makes this one pay is the reminder below, which arrives
+# on the FIRST run and costs nothing at all. If the escape rate stays above about half once the
+# firing log can measure it, this number is the thing to revisit - which is why it is one line.
+BUDGET=${MEASURE_BUDGET:-1}
 
 json_str() { printf '%s' "$INPUT" | grep -o "\"$1\"[[:space:]]*:[[:space:]]*\"[^\"]*\"" | head -1 | sed 's/.*:[[:space:]]*"//; s/"$//'; }
 json_cmd() { printf '%s' "$INPUT" | tr '\n' ' ' | sed -n 's/.*"command"[[:space:]]*:[[:space:]]*"\(.*\)".*/\1/p' | head -1; }
@@ -74,7 +89,9 @@ case "$MODE" in
         ;;
     esac
     [ "$TOOL" = Bash ] || exit 0
-    case "$CMD" in *MEASURE_OK*) : > "$STATE"; exit 0 ;; esac
+    # GUARD_EDIT_OK: feature 161 - the escape is RECORDED, so the escape rate is a total rather than
+    # an impression. The escape itself is unchanged; nothing is blocked that was not blocked before.
+    case "$CMD" in *MEASURE_OK*) guard_log measure escaped "$(guard_cmd)"; : > "$STATE"; exit 0 ;; esac
     case "$CMD" in *"git commit"*) : > "$STATE"; exit 0 ;; esac
 
     case "$CMD" in
@@ -82,12 +99,18 @@ case "$MODE" in
         N=$(( $(count) + 1 ))
         if [ "$N" -gt "$BUDGET" ]; then
           : > "$STATE"   # block ONCE - re-issuing goes straight through, so this cannot deadlock
+          # GUARD_EDIT_OK: feature 161 - the budget dropped to 1 at the GM's request, so the message
+          # names the SECOND run rather than the third, and the firing is recorded.
+          guard_log measure blocked "$(guard_cmd)"
           cat >&2 <<'MSG'
-BLOCKED: that is the third EXPENSIVE measurement in a row with no engine change and no commit between.
+BLOCKED: that is the second EXPENSIVE measurement in a row with no engine change and no commit between.
 
-`make test-full` costs 2.5-4 minutes; `make quick` costs ~4 seconds, `make test-file` 1-3, and
-`make cov-file` about the same. Measured on feature 146: 20 test-full runs, about an hour, almost all of it
-re-deriving a coverage worklist the session already had written down.
+This is the expensive one; `make quick`, `make test-file` and `make cov-file` are the cheap loop and are
+never blocked, however often they run. Measured on feature 146: 20 test-full runs, about an hour, almost all
+of it re-deriving a coverage worklist the session already had written down.
+(GUARD_EDIT_OK: feature 161 - the durations that used to be quoted here are gone rather than restated. A
+number typed into a guard message in August is wrong in September and nothing tells anybody; `make audit`
+and `scripts/_gatecost.py` answer from the run log instead.)
 
 Do this instead:
  - ASKING WHICH LINES A TEST REACHES? That is what the third run is usually for, and this is the slowest way
@@ -107,6 +130,27 @@ MSG
           exit 2
         fi
         printf '%s' "$N" > "$STATE"
+        # THE REMINDER ARRIVES ON THE FIRST RUN, NOT AT THE FIRST FAILURE (GM 2026-08-30,
+        # GUARD_EDIT_OK: a new non-blocking behavior, nothing newly refused). *"should the output of
+        # the FIRST successful expensive measurement emit a reminder about this so that you don't
+        # need to wait until the first failure ... That might inform future sessions before they see
+        # the failure."*
+        #
+        # A block costs a model round trip. `additionalContext` on an ALLOWED call costs nothing and
+        # reaches the model just as surely - so the teaching happens where it is free, and the block
+        # is left to be the thing that catches a session which was told and carried on anyway.
+        # Once per streak: the counter is what distinguishes the first run from the rest.
+        if [ "$N" -eq 1 ]; then
+          guard_log measure reminded "$(guard_cmd)"
+          COST=$("$HERE/_gatecost.py" done full 2>/dev/null || true)
+          COST_LINE=""
+          [ -n "$COST" ] && COST_LINE="The last runs of this measurement recorded a median of ${COST} s. "
+          REMIND="REMINDER (measure-hooks, once per batch of work): this is the expensive measurement. ${COST_LINE}The NEXT one in this streak is refused unless an engine edit or a git commit comes between - a test edit deliberately does not reset it, because writing one test and re-measuring is the loop this guard exists to stop (measured on feature 146: about an hour of re-deriving a coverage worklist the session already had). Work from the list instead: write the whole batch, run \`make quick\` or \`make test-file FILE=...\` between edits, and ask \`make cov-file FILE=... MOD=...\` which lines one test file actually reaches - it is the only command here that answers that, and the commonest wrong answer is that the test covered the guard ABOVE the branch it was aimed at."
+          REMIND="$REMIND" python3 -c '
+import json, os
+print(json.dumps({"hookSpecificOutput": {"hookEventName": "PreToolUse",
+                                         "additionalContext": os.environ["REMIND"]}}))'
+        fi
         exit 0
         ;;
     esac

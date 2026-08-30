@@ -69,13 +69,51 @@ run "$(bash_ev 'pytest test_settlement.py -k foo')"
 check "another session is unaffected" ok $?
 teardown
 
-echo "8. quick and done never share a command (GM 2026-08-26)"
+# GUARD_EDIT_OK: feature 161 - the REFUSAL IS RETIRED and its two vectors go with it, deleted rather
+# than left passing vacuously (GM 2026-08-30: *"does that mean our tooling should detect when both are
+# being run and then combine them into `make done` automatically instead of rejecting?"*). Measured
+# cause: 37 firings of that refusal, 23 escaped with GATE_OK in the very next call, to save one warm
+# `make quick`. What replaces it is a REWRITE, and what it must never do is guess - so the vectors
+# below check both halves: the shapes it rebuilds, and the shapes it leaves alone.
+echo "8. quick and done in one command are COMBINED, not rejected (GM 2026-08-30)"
 setup
-run "$(bash_ev 'make quick 2>&1 | tail -2; make done 2>&1 | tail -2')"; check "quick + done in one command -> blocked" blocked $?
-run "$(bash_ev 'make done 2>&1 | tail -1 && make quick')"; check "done + quick in one command -> blocked" blocked $?
+rewrote() { # command, expected rewritten command
+  got=$("$HOOK" pretool <<<"$(bash_ev "$1")" 2>/dev/null | python3 -c 'import json,sys
+try: print(json.load(sys.stdin)["hookSpecificOutput"]["updatedInput"]["command"])
+except Exception: pass' 2>/dev/null)
+  if [ "$got" = "$2" ]; then echo "  ok    $1  ->  $2"; PASS=$((PASS+1));
+  else echo "  FAIL  $1  ->  ${got:-<nothing>}  (expected $2)"; FAIL=$((FAIL+1)); fi
+}
+untouched() { # a command the rewrite must NOT touch
+  got=$("$HOOK" pretool <<<"$(bash_ev "$1")" 2>/dev/null)
+  if printf '%s' "$got" | grep -q updatedInput; then echo "  FAIL  rewrote a command it should have left alone: $1"; FAIL=$((FAIL+1));
+  else echo "  ok    left alone: $1"; PASS=$((PASS+1)); fi
+}
+rewrote 'make quick && make done' 'make done'
+rewrote 'make quick done' 'make done'
+rewrote 'make quick 2>&1 | tail -2; make done 2>&1 | tail -2' 'make done 2>&1 | tail -2'
+rewrote 'make done 2>&1 | tail -1 && make quick' 'make done 2>&1 | tail -1'
+rewrote 'cd /x && make quick ALL=1 && make done' 'cd /x && make done'
+rewrote '( cd /x/.claude/skills/diagram && make quick && make done )' '( cd /x/.claude/skills/diagram && make done )'
+rewrote 'make -C /x quick && make -C /x done' 'make -C /x done'
+untouched 'make quick'
+untouched 'make done'
+untouched 'make -C done quick'   # `-C`'s ARGUMENT is not a goal; this call names one target, not two
+untouched 'GATE_OK: comparing the two; make quick; make done'
+run "$(bash_ev 'make quick 2>&1 | tail -2; make done 2>&1 | tail -2')"; check "...and nothing is refused any more" ok $?
 run "$(bash_ev 'make quick')"; check "quick alone ok" ok $?
 run "$(bash_ev 'make done')"; check "done alone ok" ok $?
-run "$(bash_ev 'GATE_OK: comparing the two; make quick; make done')"; check "escape with a reason" ok $?
+teardown
+
+echo "8b. the rewrite is RECORDED, and never fires on a mention (feature 161)"
+setup
+GL=$(mktemp -d); export GUARD_LOG_DIR="$GL"
+run "$(bash_ev 'make quick && make done')"
+grep -lq '"event": "rewrote"' "$GL"/*.json 2>/dev/null && { echo "  ok    a rewrote entry was written"; PASS=$((PASS+1)); } || { echo "  FAIL  the rewrite was not recorded"; FAIL=$((FAIL+1)); }
+rm -rf "$GL"; unset GUARD_LOG_DIR
+untouched 'grep -n "make quick.*make done" docs/iteration-loop.md'
+untouched 'git commit -m "make quick while iterating, make done once at the end"'
+untouched 'echo "make quick; make done" > /tmp/notes.txt'
 teardown
 
 echo "9. a MENTION is not an INVOCATION (GM 2026-08-29: the small follow-up)"

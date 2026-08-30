@@ -59,14 +59,24 @@ VERDICT=$("$HERE/_hookmatch.py" 2>/dev/null || echo ok)
 block() { # reason, then the make target to use instead
   printf 'BLOCKED: %s\n\n' "$1" >&2
   printf 'Run this instead:  %s\n\n' "$2" >&2
+  # GUARD_EDIT_OK: feature 161 - the LADDER LOSES ITS HARDCODED NUMBERS (GM 2026-08-30: *"I think
+  # those numbers for `make quick` are wrong and outdated"*). They were: this message quoted "done
+  # ~75 s locked / ~4.5 min unlocked (measured 2026-08-26)" while the scope had been UNLOCKED since
+  # 2026-08-27 and the gate's own run log put the median at 111 s. The ordering is what a session
+  # needs here and it does not go stale; the one number worth stating is asked of the recorded runs
+  # at the moment it is printed, and omitted when the log cannot answer.
+  DONE_COST=$("$HERE/_gatecost.py" done 2>/dev/null || true)
   cat >&2 <<'TAIL'
 Every operation in this project goes through a make target, so the expensive ones can ask whether
-the cheap one would do first. The scale, so the choice is informed rather than habitual:
+the cheap one would do first. Cheapest first, so the choice is informed rather than habitual:
 
-    make reference    ~26 s    one seed of the reference hamlet - answers most questions
-    make quick        ~33 s    lint, types, and every test that does not roll a map, stops at first
-    make done         ~75 s locked / ~4.5 min unlocked (measured 2026-08-26) - reference + lint/types + the suite; NOT the quick check
-    make done FULL=1  ~6 min   + every pool map + the seeds 41-44 ratchet; prompts, cancels by default
+    make reference    one seed of the reference hamlet - answers most questions
+    make quick        lint, types, and every test that does not roll a map, stops at the first
+    make done         reference + lint/types + the suite; NOT the quick check
+    make done FULL=1  + every pool map + the seeds 41-44 ratchet; prompts, cancels by default
+TAIL
+  [ -n "$DONE_COST" ] && printf '\n`make done` has cost a median of %s s over its recent recorded runs (`make audit` for the history).\n' "$DONE_COST" >&2
+  cat >&2 <<'TAIL'
 
 If this fired on correct work, that is a BUG in the hook and worth fixing rather than working
 around - put GUARD_EDIT_OK in the command with a reason, and say what it false-positived on.
@@ -82,7 +92,8 @@ case "$VERDICT" in
   engine-entry-point)
     block "an engine entry point run outside make." "make <target>   (see future-work/ and the Makefile for the operation list)" ;;
   bare-pytest)
-    block "pytest run directly rather than through make. The suite is ~4.5 minutes unlocked and its coverage floors only hold under the make targets that set them up." "make quick   (~33 s, stops at the first failure)  or  make done   (~75 s with scope locked, ~4.5 min unlocked)" ;;
+    # GUARD_EDIT_OK: feature 161 - the two hardcoded durations are gone (see the note in block()).
+    block "pytest run directly rather than through make. Its coverage floors only hold under the make targets that set them up." "make quick   (stops at the first failure)  or  make done   (the gate)" ;;
   inline-override)
     block "an override supplied on the command line, which skips the prompt whose default answer is CANCEL. That prompt is the whole mechanism: it exists to be answered, not pre-empted." "make <target>   without the override, and answer the prompt if it appears" ;;
   guard-write)

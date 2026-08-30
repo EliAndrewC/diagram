@@ -38,6 +38,10 @@ INPUT=$(cat 2>/dev/null || true)
 STATE_DIR=${GATE_STATE_DIR:-/tmp/claude-gate}
 
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"   # `_hookmatch.py` lives beside this hook
+# GUARD_EDIT_OK: feature 161 - this guard now RECORDS what it does (blocked, rewrote, escaped), so
+# "is it worth what it costs" is a total rather than an impression. See scripts/_guardlog.sh.
+# shellcheck source=/dev/null
+. "$HERE/_guardlog.sh"
 
 json_str() { printf '%s' "$INPUT" | grep -o "\"$1\"[[:space:]]*:[[:space:]]*\"[^\"]*\"" | head -1 | sed 's/.*:[[:space:]]*"//; s/"$//'; }
 # The command can contain escaped quotes and newlines, so take everything between "command":" and
@@ -72,25 +76,55 @@ case "$MODE" in
     # reach for the escape as a matter of routine, which costs more than the duplication it prevents.
     TARGETS=" $(printf '%s' "$INPUT" | "$HERE/_hookmatch.py" targets 2>/dev/null | tr '\n' ' ')"
 
-    # QUICK AND DONE NEVER SHARE A COMMAND (GM 2026-08-26). `make quick` is a strict subset of the
-    # locked `make done` (~70 s), so chaining them re-runs ~30 s of the same tests for nothing -
-    # measured three times in one 11-minute task, 1.5 min of pure duplication. The habit came from
-    # when `done` cost 4.5 min; it costs 70 s now. Run `quick` while iterating, `done` once at the end.
-    case "$TARGETS" in
-      *" quick "*)
-        case "$TARGETS" in *" done "*)
-        echo "BLOCKED: \`make quick\` and \`make done\` in ONE command. \`quick\` is a subset of \`done\` (~70 s with scope locked), so this re-runs ~30 s of the same tests for nothing (measured 2026-08-26: 3 times in one task, 1.5 min). Run \`make quick\` while iterating, \`make done\` ONCE when you think it is finished - never both. (GATE_OK with a reason if you truly need both.)" >&2
-        exit 2 ;;
-        esac
-        ;;
-    esac
+    # QUICK AND DONE IN ONE COMMAND ARE COMBINED, NOT REJECTED (GM 2026-08-30, feature 161).
+    #
+    # GUARD_EDIT_OK: FIXING A GUARD THAT FIRES ON CORRECT WORK, at the GM's request and on measured
+    # evidence. From 2026-08-26 to 2026-08-30 this refused such a command with exit 2. The refusal
+    # was measured over this project's own transcripts and it did not pay: **37 firings, 23 of them
+    # escaped with `GATE_OK` in the very next call** - 62% of the time the guard spent a round trip
+    # and prevented nothing, which is the shape `CLAUDE.md` names as teaching a session to bypass
+    # every guard. What it was protecting is one warm `make quick`, measured at 4.1 s (25.3 s cold),
+    # against a round trip the GM prices in their own words: *"bouncing back a command forces another
+    # pass through the LLM engine, which also takes time."*
+    #
+    # So the hook REWRITES instead. A `PreToolUse` hook may return `updatedInput` (the command the
+    # session actually runs) and `additionalContext` (a line the model reads), both at exit 0 and
+    # both free - verified against the installed harness before this was written, not read off a
+    # document. `_hookmatch.py combine` decides: it returns the command with the `quick` work removed
+    # when it can rebuild the shape exactly, and NOTHING when it cannot - a heredoc, an unbalanced
+    # fragment, a rewrite that would not leave `done` standing alone. Silence means the command goes
+    # through UNCHANGED. The guard never guesses at a session's command, because a wrong rewrite
+    # costs the session its command while the fallback costs 4.1 s.
+    COMBINED=$(printf '%s' "$INPUT" | "$HERE/_hookmatch.py" combine 2>/dev/null || true)
+    if [ -n "$COMBINED" ]; then
+      guard_log gate rewrote "$(guard_cmd)"
+      printf '%s' "$INPUT" | REWRITTEN="$COMBINED" python3 -c '
+import json, os, sys
+payload = json.load(sys.stdin).get("tool_input", {})
+payload["command"] = os.environ["REWRITTEN"]
+print(json.dumps({"hookSpecificOutput": {
+    "hookEventName": "PreToolUse",
+    "updatedInput": payload,
+    "additionalContext": (
+        "`make quick` was dropped from this command and `make done` runs alone: done is a superset "
+        "(the same lint, format and typecheck, and a strict superset of the tests), so nothing you "
+        "asked has gone unasked. Combined rather than refused because a refusal would have cost a "
+        "model round trip to save one warm quick (4.1 s measured)."),
+}}))'
+      exit 0
+    fi
     # the GATE itself
     case "$TARGETS" in
       *" done "*)
         if [ -f "$STATE" ]; then
           WAS=$(cat "$STATE" 2>/dev/null || true)
           rm -f "$STATE"          # block ONCE - re-issuing the gate goes straight through
-          echo "BLOCKED: the only local test run since your last edit was a \`-k\` SUBSET (${WAS:-pytest -k ...}). A subset selects the tests you were THINKING about; the ones a change breaks are the ones you were not - which is exactly how a session ran \`-k \"kura_side or punishment\"\`, went to the gate, and lost a full 3.9-minute gate cycle to a test in the SAME file it had not selected. Run the WHOLE test file(s) for the modules you touched first - \`python3 -m pytest test_<mod>.py -q -n auto --no-cov\`, ~45s - then run the gate. (.claude/skills/diagram/CLAUDE.md, 'Before the gate, run the WHOLE affected test file'. Override: put GATE_OK in the command with a reason.)" >&2
+          # GUARD_EDIT_OK: feature 161 - the message loses its two hardcoded durations ("a full
+          # 3.9-minute gate cycle", "~45s") and names the make target rather than a bare pytest line.
+          # The incident that set this rule is still recorded in the WHY at the top of this file,
+          # where a date sits beside it; a number inside a MESSAGE has nothing to date it and goes
+          # stale unremarked, which is the defect the GM caught in the other message here.
+          echo "BLOCKED: the only local test run since your last edit was a \`-k\` SUBSET (${WAS:-pytest -k ...}). A subset selects the tests you were THINKING about; the ones a change breaks are the ones you were not - which is exactly how a session ran \`-k \"kura_side or punishment\"\`, went to the gate, and lost a whole gate cycle to a test in the SAME file it had not selected. Run the WHOLE test file(s) for the modules you touched first - \`make test-file FILE=tests/.../test_<mod>.py\` - then run the gate. (.claude/skills/diagram/CLAUDE.md, 'Before the gate, run the WHOLE affected test file'. Override: put GATE_OK in the command with a reason.)" >&2
           exit 2
         fi
         exit 0

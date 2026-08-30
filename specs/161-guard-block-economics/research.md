@@ -91,6 +91,27 @@ ignoring `tests/gate`, `tests/full`, `tests/tier_town`, `tests/tier_city` and (w
 deselected test takes its coverage with it"* - measured on 2026-08-24, when deselecting two files
 dropped a module from 100% to 52% on code nothing had changed.
 
+### The alternative that would make the GM's proposal work literally, priced
+
+The decline above is only honest if the other road is priced too: make `quick` PRODUCE coverage
+data, so the subset it ran genuinely transfers and `done` can deselect it.
+
+- **Measured anchor** (one file, `tests/settlement/test_houses.py`): `make test-file` 3.07 s
+  (8 workers, `--no-cov`) against `make cov-file` 4.08 s (coverage, and serial - so the comparison is
+  conflated and this is an upper bound on the tracing cost rather than a clean reading of it). What
+  it establishes is the direction and the order of magnitude: tracing is a tens-of-percent tax on the
+  loop whose whole value is that it answers in about four seconds.
+- **The structural half, which decides it regardless of the number**: what `done` could deselect is
+  exactly the set testmon SELECTED, and that set is small BY CONSTRUCTION - it is why `quick` costs
+  4.1 s while `done`'s test phase costs tens of seconds. `done` would still run the whole remaining
+  tree under coverage and would additionally have to combine two coverage datasets produced by
+  different processes with different worker counts, which this Makefile already records as the slow
+  half of a traced run ("xdist's coverage combine is the slow half" - the reason `cov-file` is
+  serial). The transferable prize is the small part; the machinery to transfer it lands on the large
+  part.
+- **Ruling**: rejected. It makes the fast loop slow, which is the reason `quick` exists, to transfer
+  the smallest share of the gate.
+
 **DECLINED, with its price** (the project's rule for recording an accepted limitation and the
 alternatives that were rejected): a cross-process stamp letting `done` skip `lint`/`format`/
 `typecheck` after a green `quick`. It would save **1.8 s of a 137 s gate**, 1.3%. Against that it
@@ -139,7 +160,28 @@ file listings, settings dumps and this kind of audit quoting the name. A guard l
 exact and free.
 
 FR-006 is that log, in the form `dev/run-log/README.md` already argues for: one file per entry,
-because *"an append-only shared log conflicts on EVERY concurrent push"*.
+because *"an append-only shared log conflicts on EVERY concurrent push"*. It covers the TWO guards
+this feature touches and no others: `batching-hooks.sh` firing 119 times is a finding to put to the
+GM as its own question, not a reason to edit ten guards and their ten companion tests inside a
+feature about two of them (`spec-fidelity`, round 1).
 
 **Sources:** this repository's own `dev/run-log/`, `dev/switches.json` and Claude Code transcripts;
 no external source is cited because no claim here is about the world outside this repository.
+
+## R7 - a question for the GM: the gate rolls a map before it lints
+
+Found while planning this feature, measured, and NOT acted on here - `spec-fidelity` ruled it
+unrequested in round 2, and it is right: the GM's request is about what a guard does when it fires,
+not about what `make done` runs in what order.
+
+`make done` runs `reference` - **29 s measured** - before `lint`, `format` and `typecheck`, which
+cost **1.8 s together**. So a lint error is reported 29 seconds after it could have been. The run log
+records **7 gate runs that failed on lint, format or typecheck**, each of which paid the roll first.
+
+Reversing the order (static phases, then `reference`, then the rest) does not weaken the doctrine
+that the reference settlement gates everything expensive: the phases moved ahead of it are cheaper
+than it by a factor of 16, and everything expensive still stands behind it.
+
+It wants a one-line ruling. If the GM says yes it is a Makefile reorder plus a test, in minutes.
+
+**Sources:** `dev/run-log/`, and the timings measured in this clone on 2026-08-30.

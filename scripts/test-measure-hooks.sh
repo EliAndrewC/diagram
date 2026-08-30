@@ -23,13 +23,14 @@ check() { # label expected(ok|blocked) rc
   fi
 }
 
-echo "1. THE MOTIVATING CASE: measure, write one test, measure, write one test, measure"
+# GUARD_EDIT_OK: feature 161 - the budget is 1 now (GM 2026-08-30: *"should we make it so we start
+# blocking at 2 in a row instead of 3 in a row?"*), so the vectors move from "the third" to "the
+# second". Nothing else about the state machine changed and every other vector below is untouched.
+echo "1. THE MOTIVATING CASE: measure, write one test, measure"
 setup
 run "$(bash_ev 'make test-full')"; check "the first measurement is allowed" ok $?
 run "$(edit_ev '/diagram/.claude/skills/diagram/tests/settlement/test_geom.py')"
-run "$(bash_ev 'make test-full')"; check "the second is allowed (a before/after pair is legitimate)" ok $?
-run "$(edit_ev '/diagram/.claude/skills/diagram/tests/settlement/test_geom.py')"
-run "$(bash_ev 'make test-full')"; check "the THIRD is BLOCKED" blocked $?
+run "$(bash_ev 'make test-full')"; check "the SECOND is BLOCKED" blocked $?
 grep -q "Measure ONCE" /tmp/mt.err && { echo "  ok    the message says what to do instead"; PASS=$((PASS+1)); } || { echo "  FAIL  message unhelpful"; FAIL=$((FAIL+1)); }
 grep -q "make quick" /tmp/mt.err && { echo "  ok    the message names the cheap loop"; PASS=$((PASS+1)); } || { echo "  FAIL  message does not name make quick"; FAIL=$((FAIL+1)); }
 # ...AND THE COMMAND THAT ANSWERS THE BLOCKED QUESTION. A session reaching for `make test-full` a third time
@@ -71,17 +72,56 @@ run "$(bash_ev 'make test-full  # MEASURE_OK: re-run after fixing the red this v
 run "$(bash_ev 'make test-full')"; check "...and it reset the count, so the next one is fine too" ok $?
 teardown
 
+# GUARD_EDIT_OK: feature 161 - both sequences lose one run, for the same reason as section 1: at a
+# budget of 1 the SECOND is the blocked one, and a third would be allowed again (the block clears the
+# counter so it can never deadlock).
 echo "6. FULL=1 counts too - it is the same expensive run"
 setup
-run "$(bash_ev 'make done FULL=1')"; run "$(bash_ev 'make done FULL=1')"
-run "$(bash_ev 'make done FULL=1')"; check "the third done FULL=1 is BLOCKED" blocked $?
+run "$(bash_ev 'make done FULL=1')"
+run "$(bash_ev 'make done FULL=1')"; check "the second done FULL=1 is BLOCKED" blocked $?
 teardown
 
 echo "7. a MENTION is treated as a run (the stated limitation), and fails safe"
 setup
-run "$(bash_ev 'grep -rn \"make test-full\" docs/')"; run "$(bash_ev 'grep -rn \"make test-full\" docs/')"
-run "$(bash_ev 'grep -rn \"make test-full\" docs/')"; check "a third mention blocks - the known false positive" blocked $?
+run "$(bash_ev 'grep -rn \"make test-full\" docs/')"
+run "$(bash_ev 'grep -rn \"make test-full\" docs/')"; check "a second mention blocks - the known false positive" blocked $?
 run "$(bash_ev 'grep -rn \"make test-full\" docs/  # MEASURE_OK: a grep, not a run')"; check "...and MEASURE_OK clears it" ok $?
+teardown
+
+# GUARD_EDIT_OK: feature 161 - two NEW behaviors, both non-blocking: the reminder that arrives on the
+# first run (so a session is told before it is ever refused) and the firing log that makes "is this
+# guard worth what it costs" a total. Neither refuses anything that was not refused before.
+echo "9. the REMINDER arrives on the FIRST successful measurement, not at the first failure"
+setup
+FIRST=$("$HOOK" pretool <<<"$(bash_ev 'make test-full')" 2>/dev/null)
+printf '%s' "$FIRST" | grep -q '"additionalContext"' && { echo "  ok    the first run carries a reminder"; PASS=$((PASS+1)); } || { echo "  FAIL  no reminder on the first run"; FAIL=$((FAIL+1)); }
+printf '%s' "$FIRST" | python3 -c 'import json,sys; json.load(sys.stdin)' 2>/dev/null && { echo "  ok    ...as valid JSON on stdout"; PASS=$((PASS+1)); } || { echo "  FAIL  the reminder is not valid JSON"; FAIL=$((FAIL+1)); }
+printf '%s' "$FIRST" | grep -q 'make cov-file' && { echo "  ok    ...naming the command that answers the usual question"; PASS=$((PASS+1)); } || { echo "  FAIL  the reminder does not name make cov-file"; FAIL=$((FAIL+1)); }
+SECOND=$("$HOOK" pretool <<<"$(bash_ev 'make test-full')" 2>/dev/null || true)
+printf '%s' "$SECOND" | grep -q '"additionalContext"' && { echo "  FAIL  the reminder repeated on the blocked run"; FAIL=$((FAIL+1)); } || { echo "  ok    it is not repeated - a reminder that repeats is skimmed"; PASS=$((PASS+1)); }
+CHEAP=$("$HOOK" pretool <<<"$(bash_ev 'make quick')" 2>/dev/null)
+[ -z "$CHEAP" ] && { echo "  ok    the cheap loop gets no reminder at all"; PASS=$((PASS+1)); } || { echo "  FAIL  make quick was given a reminder"; FAIL=$((FAIL+1)); }
+teardown
+
+echo "10. every firing is RECORDED (feature 161)"
+setup
+GL=$(mktemp -d); export GUARD_LOG_DIR="$GL"
+run "$(bash_ev 'make test-full')"                  # reminded
+run "$(bash_ev 'make test-full')"                  # blocked
+run "$(bash_ev 'make test-full  # MEASURE_OK: the record')"   # escaped
+for want in reminded blocked escaped; do
+  grep -lq "\"event\": \"$want\"" "$GL"/*.json 2>/dev/null && { echo "  ok    a $want entry was written"; PASS=$((PASS+1)); } || { echo "  FAIL  no $want entry in the guard log"; FAIL=$((FAIL+1)); }
+done
+grep -hq '"detail": "make test-full"' "$GL"/*.json 2>/dev/null && { echo "  ok    the entry records the command, parsed rather than greedily matched"; PASS=$((PASS+1)); } || { echo "  FAIL  the recorded detail is not the command"; FAIL=$((FAIL+1)); }
+rm -rf "$GL"; unset GUARD_LOG_DIR
+teardown
+
+echo "11. a log that cannot be written never takes the guard down with it"
+setup
+export GUARD_LOG_DIR=/proc/nonexistent/guard-log
+run "$(bash_ev 'make test-full')"; check "the first run still succeeds with an unwritable log" ok $?
+run "$(bash_ev 'make test-full')"; check "...and the second is still blocked" blocked $?
+unset GUARD_LOG_DIR
 teardown
 
 echo "8. status reports the count"

@@ -330,3 +330,22 @@ selection: **ctrace 16.2 s wall / 1 m 30 s CPU against sysmon 20.1 s / 1 m 59 s*
 tables byte-identical. The premise was wrong too - the "coverage doubles the gate" reading came from
 a baseline whose roll cache was cold; on a warm tree the tracer's share is small.
 
+
+## `setsid` alone does not detach a long make run - `setsid --fork` does (2026-08-30, feature 161)
+
+A `make done` started as `setsid nohup bash -c '...' &` from a Bash tool call died three minutes in
+with `make: *** [Makefile:86: done] Terminated`, in the middle of `hooks-test`, having passed lint,
+format and typecheck. Nothing in the repository killed it: the only guard that sends a signal is
+`idle-tests-hooks.sh`'s abort path, and its test suite is fully fixtured (`IDLE_FIXTURE=1`,
+`IDLE_HOME`), so it can only ever kill pids it started itself.
+
+The cause is in `setsid(1)`, not here: **`setsid` only forks when it is already a process-group
+leader**. Started from a shell's background job it is NOT one, so it calls `setsid()` in its own
+process and execs - which leaves the run as a live child of the tool call's shell. `ps` showed that
+shell still alive minutes later, waiting on it. When the harness reaped that shell, the run went with
+it.
+
+**Use `setsid --fork`**, which forks unconditionally and lets the parent shell exit at once. The
+`dev/loop.md` rule ("detach long make runs; never pipe them to `tail`") is right and stays; this is
+the missing flag in it. The cost of the missing flag, once: a three-minute gate cycle plus the turns
+that read its truncated log and concluded, wrongly at first, that a guard had killed it.

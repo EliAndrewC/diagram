@@ -107,6 +107,95 @@ def classify(cmd: str) -> str:
     return "ok"
 
 
+# ---- COMBINE, DO NOT REJECT (feature 161) ---------------------------------------------------
+#
+# WHY (GM 2026-08-30): *"does that mean our tooling should detect when both are being run and then
+# combine them into `make done` automatically instead of rejecting?"* It does. `gate-hooks.sh` used
+# to refuse a command naming both targets, and the refusal cost a round trip - measured over this
+# project's transcripts, 37 firings of which 23 were escaped with `GATE_OK` in the very next call,
+# so 62% of the time the guard spent a turn and prevented nothing. A `PreToolUse` hook may instead
+# return the command REWRITTEN (`updatedInput`), which costs nothing at all.
+_SEP = re.compile(r"(\s*(?:&&|\|\||;|\n)\s*)")
+_MAKE_HEAD = re.compile(r"^(?:[A-Za-z_][A-Za-z0-9_]*=\S*\s+)*(?:\$\(MAKE\)|make)\b")
+# EVERY GOAL OF ONE MAKE CALL, not just the first. `targets()` answers "which targets does this
+# command invoke" and stops at the first goal of each call, which is enough for a yes/no guard and is
+# NOT enough to rewrite `make quick done` - the shape the GM asked to be combined. Kept local so the
+# eleven other guards keep the matcher they were tested against.
+# The `[./~]\S*` arm exists so a PATH argument does not end the scan: `make -C /x quick` would
+# otherwise stop at `/x` and never see the goal behind it, and the rewrite would silently decline a
+# command it understands perfectly well. _TAKES_ARG below is what keeps that path from counting as a
+# goal itself.
+_GOALS = re.compile(
+    _POS + r"(?:\$\(MAKE\)|make)((?:\s+(?:-\S+|[A-Za-z_][A-Za-z0-9_]*=\S*|[./~]\S*|[a-z][\w-]*))*)"
+)
+# `-C dir` and `-f file` take an ARGUMENT, and the argument is not a goal. Without this, `make -C done
+# quick` reads as a call carrying both goals and the rewrite would "combine" it into `make -C done`,
+# which runs the default target somewhere else entirely. No such command exists in this repository
+# today; a rewrite that must never guess does not get to rely on that.
+_TAKES_ARG = ("-C", "-f", "--directory", "--file", "--makefile", "-o", "--old-file", "-W")
+
+
+def _goals(seg: str) -> set[str]:
+    out = set()
+    for m in _GOALS.finditer(_strip_quotes(_strip_heredocs(seg))):
+        skip = False
+        for word in m.group(1).split():
+            if skip:
+                skip = False
+                continue
+            if word in _TAKES_ARG:
+                skip = True
+                continue
+            if re.fullmatch(r"[a-z][\w-]*", word):
+                out.add(word)
+    return out
+
+
+def _balanced(text: str) -> bool:
+    return text.count("(") == text.count(")") and text.count('"') % 2 == 0 and text.count("'") % 2 == 0
+
+
+def combine(cmd: str) -> str | None:
+    """`cmd` with the `make quick` work removed, when it invokes BOTH quick and done.
+
+    None means "leave it alone": the shape is not one that can be rebuilt exactly, so the command
+    goes through UNCHANGED rather than being guessed at. A guessed rewrite costs a session its
+    command; the fallback costs one warm `quick` (4.1 s). `done` is a superset of `quick` - it runs
+    the same lint, format and typecheck and a strict superset of the tests - so dropping `quick`
+    never drops a question that was asked.
+    """
+    if not cmd or "GATE_OK" in cmd or "<<" in cmd:
+        return None
+    if "quick" not in _goals(cmd) or "done" not in _goals(cmd):
+        return None
+    parts = _SEP.split(cmd)                       # [seg, sep, seg, sep, ...]
+    segs, seps = parts[0::2], parts[1::2]
+    kept: list[tuple[str, str]] = []
+    dropped = False
+    for i, seg in enumerate(segs):
+        sep = seps[i] if i < len(seps) else ""
+        got = _goals(seg)
+        makeish = bool(_MAKE_HEAD.match(seg.strip())) and _balanced(seg)
+        if makeish and "quick" in got and "done" not in got:
+            dropped = True                        # a whole segment whose work `done` supersedes
+            continue
+        if makeish and got >= {"quick", "done"}:
+            rebuilt = re.sub(r"\s+quick\b", "", seg, count=1)
+            if _goals(rebuilt) != got - {"quick"}:
+                return None
+            kept.append((rebuilt, sep))
+            dropped = True
+            continue
+        kept.append((seg, sep))
+    if not dropped:
+        return None
+    out = "".join(s + (p if j < len(kept) - 1 else "") for j, (s, p) in enumerate(kept))
+    out = out.strip().rstrip("&|; \n").strip()
+    if not out or out == cmd or "done" not in _goals(out) or "quick" in _goals(out):
+        return None
+    return out
+
+
 if __name__ == "__main__":
     try:
         payload = json.load(sys.stdin).get("tool_input", {}).get("command", "")
@@ -116,5 +205,12 @@ if __name__ == "__main__":
     # that need to know WHICH; with no argument it prints the make-only classification as it always has.
     if len(sys.argv) > 1 and sys.argv[1] == "targets":
         print("\n".join(sorted(targets(payload))))
+    # `_hookmatch.py combine` prints the command with the `make quick` work removed when it invokes
+    # BOTH quick and done, and prints NOTHING when the shape is one it cannot rebuild exactly. Silence
+    # means "leave the session's command alone", which is always the safe answer.
+    elif len(sys.argv) > 1 and sys.argv[1] == "combine":
+        got = combine(payload)
+        if got:
+            print(got)
     else:
         print(classify(payload))
