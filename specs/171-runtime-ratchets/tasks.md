@@ -65,9 +65,11 @@ quietly change; and FR-007 is OPTIONAL because `quick` already times itself inli
       verify: the close-out report names the 155 s interim baseline (giving 201 s) and the median
       comparison as decisions awaiting the GM
 
-- [ ] T11 the whole guard suite and the gate, green together, then the push
+- [x] T11 the whole guard suite and the gate, green together, then the push
       research: procedure
-      verify: `make hooks-test` and `make done`, then `sync-with-main.sh done`
+      verify: both exit 0 on a CLEAN run. The run before it went red on `make-only` and the cause
+      was mine: I edited `_hookmatch.py` while the gate was reading it. Second self-inflicted false
+      red this session (169 R14 was the first, running suites beside a running gate)
 
 ## What this session decided, and what remains the GM's
 

@@ -54,11 +54,11 @@ no task carries the physical checkboxes. The GM's words are in [`request.md`](re
       from main, a write from a clone, a `git -C` read. 24 cases; the suite's own run() helper had
       never sent a `cwd`, which is how it stayed green while the guard missed its motivating shape
 
-- [ ] T09 `make audit` gains the reasons: "every escape taken, with what the session said", which is
+- [x] T09 `make audit` gains the reasons: "every escape taken, with what the session said", which is
       the report the GM described wanting
       research: procedure
       verify: against a seeded log
 
-- [ ] T10 the whole guard suite and the gate, green together, then the push
+- [x] T10 the whole guard suite and the gate, green together, then the push
       research: procedure
       verify: `make hooks-test` and `make done`, then `sync-with-main.sh done`
