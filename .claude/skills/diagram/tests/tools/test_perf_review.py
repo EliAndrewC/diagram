@@ -184,9 +184,7 @@ def test_a_corrupt_review_record_is_skipped_not_fatal(log: Path) -> None:
     (log / "20260825T020000Z-129-review-local-c.json").write_text("{not json at all", encoding="utf-8")
     (log / "20260825T030000Z-129-review-local-d.json").write_text("", encoding="utf-8")
     got = pr._records(log)
-    assert [d["_file"] for d in got] == ["20260825T040000Z-129-review-local-a.json"], (
-        f"the two corrupt records were not stepped over cleanly: {[d.get('_file') for d in got]}"
-    )
+    assert [d["_file"] for d in got] == ["20260825T040000Z-129-review-local-a.json"], f"the two corrupt records were not stepped over cleanly: {[d.get('_file') for d in got]}"
 
 
 def test_a_snapshot_for_another_feature_is_not_paired_with_this_one(log: Path) -> None:
