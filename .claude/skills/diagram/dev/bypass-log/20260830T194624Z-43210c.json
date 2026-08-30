@@ -1,0 +1,6 @@
+{
+  "utc": "20260830T194624Z",
+  "guard": "pair-hooks",
+  "what": "gate alone",
+  "reason": "feature 169 is guards, their suites, docs and specs - VERIFIED not assumed: git diff over my commits (3ae2e73f..HEAD) returns nothing under pool/, legacy-hand-authored-pool/, settlement/, hamletgen/ or waterfields/, so no map, manifest, generator or render can have moved. The engine content in this gate arrived from main with feature 166, which is that session"
+}

@@ -120,9 +120,7 @@ def test_every_recording_branch_names_a_rule_rather_than_defaulting() -> None:
             continue  # a single-branch guard may let the rule default to its event
         for call in calls:
             body = call.split("guard_log ", 1)[1]
-            assert len(body.split('"')) > 2 or len(body.split()) >= 4, (
-                f"{guard.name} logs without a rule slug, so its branches cannot be told apart: {call.strip()}"
-            )
+            assert len(body.split('"')) > 2 or len(body.split()) >= 4, f"{guard.name} logs without a rule slug, so its branches cannot be told apart: {call.strip()}"
 
 
 def test_every_suite_of_a_recording_guard_isolates_the_firing_log() -> None:
@@ -171,18 +169,17 @@ _ESCAPES = {
     "NO_BRANCH_OK": ("command", "routes through _hookmatch.py escape"),
     "MAIN_TREE_OK": ("command", "routes through _hookmatch.py escape"),
     "HOST_GIT_OK": ("command", "routes through _hookmatch.py escape, via RS_ESCAPED"),
-    "PAIR_OK": ("command", "the Bash branch routes through the matcher; the AGENT-PROMPT branch is the "
-                           "one stated exclusion - a prompt is prose with no command grammar, and "
-                           "blanking its quoted regions would break the GM's own PAIR_OK=\"reason\" form"),
+    "PAIR_OK": (
+        "command",
+        "the Bash branch routes through the matcher; the AGENT-PROMPT branch is the "
+        "one stated exclusion - a prompt is prose with no command grammar, and "
+        "blanking its quoted regions would break the GM's own PAIR_OK=\"reason\" form",
+    ),
     "GUARD_EDIT_OK": ("command", "classify() routes through escape_used; also a marker in edit CONTENT"),
-    "SOURCE_EDIT_OK": ("content", "matched in an Edit's new_string, never in a command - the marker in "
-                                  "the text IS the escape, so a 'mention' is the intended use"),
-    "REVIEW_GATE_OK": ("environment", "read as ${REVIEW_GATE_OK:-} at push time; an environment "
-                                      "variable cannot be set by mentioning it in a command"),
-    "GATE_STAMP_OK": ("environment", "read as ${GATE_STAMP_OK:-} at push time; same ground as "
-                                     "REVIEW_GATE_OK. Missed by three drafts of the spec (round 3)"),
-    "REF_OK": ("make-variable", "a make override, already anchored positionally by _hookmatch.py:116 "
-                                "- it must appear as REF_OK= at a command position"),
+    "SOURCE_EDIT_OK": ("content", "matched in an Edit's new_string, never in a command - the marker in the text IS the escape, so a 'mention' is the intended use"),
+    "REVIEW_GATE_OK": ("environment", "read as ${REVIEW_GATE_OK:-} at push time; an environment variable cannot be set by mentioning it in a command"),
+    "GATE_STAMP_OK": ("environment", "read as ${GATE_STAMP_OK:-} at push time; same ground as REVIEW_GATE_OK. Missed by three drafts of the spec (round 3)"),
+    "REF_OK": ("make-variable", "a make override, already anchored positionally by _hookmatch.py:116 - it must appear as REF_OK= at a command position"),
     "SWEEP_OK": ("not-an-escape", "a Makefile MACRO that runs the scope check; nothing overrides"),
     "REMOTE_OK": ("not-an-escape", "a Makefile MACRO that runs the remote check; nothing overrides"),
 }
@@ -242,7 +239,4 @@ def test_no_guard_decides_a_command_escape_with_a_bare_substring_test() -> None:
                     continue
                 if re.search(rf"\*{token}[=*]", line) or re.search(rf'["\']{token}["\'] not in \w+', line):
                     offenders.append(f"{guard.name}: {line.strip()[:90]}")
-    assert not offenders, (
-        "these decide a command escape by substring, so a mention of the token escapes the guard: "
-        + "; ".join(offenders)
-    )
+    assert not offenders, "these decide a command escape by substring, so a mention of the token escapes the guard: " + "; ".join(offenders)
