@@ -1,0 +1,6 @@
+{
+  "utc": "20260830T005723Z",
+  "guard": "pair-hooks",
+  "what": "gate alone",
+  "reason": "settlement-review is N/A for this delta on the GM"
+}

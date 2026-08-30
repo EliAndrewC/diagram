@@ -73,7 +73,7 @@ def test_the_probe_agrees_with_the_rolled_map() -> None:
     """THE GUARD AGAINST A SECOND IMPLEMENTATION. Kuwabata is seed 21, 16 households, mosaic - the probe
     builds the same block, so its parcel count and acreage must be the map's. If this ever fails, the probe
     has drifted from the engine and every number it prints is a guess."""
-    man = json.loads((SKILL / "pool" / "hamlets" / "kuwabata.json").read_text())
+    man = json.loads((SKILL / "pool" / "hamlets" / "kuwabata" / "kuwabata.json").read_text())
     m, secs = pp.probe(seed=21, households=16, pond_layout="mosaic")
     assert m["parcels"] == len(man["fields"][0]["plot_rings"])
     assert m["overlaps"] == [], "the shipped map has no parcel across a channel; the probe must agree"

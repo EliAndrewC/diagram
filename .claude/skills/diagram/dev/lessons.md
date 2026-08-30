@@ -330,3 +330,59 @@ selection: **ctrace 16.2 s wall / 1 m 30 s CPU against sysmon 20.1 s / 1 m 59 s*
 tables byte-identical. The premise was wrong too - the "coverage doubles the gate" reading came from
 a baseline whose roll cache was cold; on a warm tree the tracer's share is small.
 
+
+## A directory-prune tuple keyed on NAMES is a trap for any new top-level tree (feature 161, 2026-08-30)
+
+`render_cache.engine_fingerprint()` and `gencache.engine_files()` both walk the skill directory and
+decide what counts as ENGINE SOURCE by pruning directories BY NAME:
+
+```python
+dirnames[:] = sorted(d for d in dirnames if d not in ("pool", "wip", "tests", "__pycache__") ...)
+```
+
+Feature 161 added a second pool tree, `legacy-hand-authored-pool/`. It is not the string `pool`, so
+without being added to both tuples its 18 frozen generators would have been collected as engine
+modules and folded into every map's cache key. What that costs, in order of how long it takes to
+notice: every live map's stamp goes stale at once, so the next render-sync regenerates the whole
+pool for nothing; and thereafter any edit to a frozen exhibit invalidates every live map's cache -
+precisely backwards, since the freeze exists so those files cost nothing. **Nothing would have gone
+red.** Both outcomes look exactly like a cache working normally, and the synthetic skill dir in
+`tests/pipeline/test_render_cache.py` cannot see a tree it does not build.
+
+The fix is to prune `poolmaps.TREES` rather than a literal, so the list has one home. The general
+shape: **when you add a top-level directory, grep for tuples of directory names before anything
+else** - they are invisible to every test that builds its own fixture tree.
+
+Note the companion trap points the OTHER WAY. `ci/delta.py`'s `_ENGINE_DIRS` also names `pool/`,
+and there the legacy tree had to be ADDED, because that list answers a different question: not "is
+this engine source" (a map generator is not) but "does a change here owe the paid gate". Two lists,
+same literal, opposite corrections.
+
+## "The record already covers it" is worth checking against what the check can actually SEE (feature 161)
+
+`tests/test_villages.py`'s stale-render sweep ends in `assert checked` and its message says *"no
+LIVE hamlet render to check"*. That message had not described the test's behavior since the
+2026-08-16 freeze committed the exhibits' renders: a live map's `.svg`/`.png` are gitignored and
+absent from a clean checkout, so **every render it actually checks is a FROZEN exhibit** - measured
+2026-08-30, 8 of 8. Splitting the trees while it still walked the live pool alone would have taken
+`checked` to zero and turned the assertion red.
+
+Two things worth carrying forward. First, the assertion is the only reason this surfaced loudly; had
+it merely `continue`d over an empty list, the split would have silently retired a guard against
+exactly the kind of staleness it exists to catch, which is the "a check that never runs looks
+exactly like a check that passes" failure in its purest form. Second, **the code and its own message
+disagreed, and only counting the files on disk said which one was true** - reading the test would
+have confirmed the wrong belief.
+
+## A git worktree's `.git` is a FILE, and the baseline procedure lives in one (feature 161)
+
+Principle XIII mandates taking the regression baseline in a detached worktree. In a worktree `.git`
+is a file containing a `gitdir:` line, so any code doing `root / ".git" / name` raises
+`NotADirectoryError` there. `scripts/gate-stamp.py` did exactly that and crashed once per area
+during this feature's own baseline - the gate ran and passed, only the recording failed, and it
+failed noisily-but-non-fatally, which is the shape that gets scrolled past in a long log.
+
+`git rev-parse --git-common-dir` is the answer, in both a checkout and a worktree. Worth knowing
+that the file-not-directory case was already half-handled in that same module (`_cache_path` guarded
+`.is_dir()` and quietly gave up), which is why only one of the two paths crashed: **a guard applied
+at one call site and not its sibling reads as "handled" until the other one runs.**
