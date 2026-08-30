@@ -8,7 +8,7 @@ measured off the finished map at 3 px = 1 ft) back through the perimeter-first p
 ([`../compound.py`](../../compound.py), feature 008), to test whether the placer composes
 Ochiba the way the GM hand-composed it.
 
-Regenerate: `python3 pool/magistracies/ochiba-roundtrip-test.gen.py` (from the skill dir). The program lives
+Regenerate: `python3 pool/magistracies/ochiba-roundtrip-test/ochiba-roundtrip-test.gen.py` (from the skill dir). The program lives
 in [`ochiba-roundtrip-test.gen.py`](ochiba-roundtrip-test.gen.py) as `ochiba_program()`.
 
 Garden pavilions and point features (bath, wells, latrines, porch, privy, fire-tubs) are NOT

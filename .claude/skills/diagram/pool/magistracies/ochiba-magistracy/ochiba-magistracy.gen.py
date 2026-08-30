@@ -8,7 +8,7 @@ with no gen wrapper is a one-off hand render that silently goes stale (the
 county-magistracy-example png did exactly that; caught 2026-07-24). This gen writes
 nothing but the png - the tracked svg is never touched.
 
-Run:  python3 pool/magistracies/ochiba-magistracy.gen.py   (from anywhere)
+Run:  python3 pool/magistracies/ochiba-magistracy/ochiba-magistracy.gen.py   (from anywhere)
 """
 
 from __future__ import annotations

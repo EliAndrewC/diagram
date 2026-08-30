@@ -8,7 +8,7 @@ every `pool/*/*.gen.py` from its own directory, so wrapping the program in a gen
 gitignored png fresh in main. Before this gen existed the png was a one-off hand render and
 silently went stale (caught 2026-07-24).
 
-Run:  python3 pool/magistracies/county-magistracy-example.gen.py   (from the skill dir)
+Run:  python3 pool/magistracies/county-magistracy-example/county-magistracy-example.gen.py   (from the skill dir)
 """
 
 from __future__ import annotations

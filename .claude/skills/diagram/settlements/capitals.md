@@ -252,7 +252,7 @@ Nagahara supplies most of the vocabulary already (`s.dock`, `s.jetty`, `s.canal`
 
 ## The first worked example: Shiro Daika (planned)
 
-The Daika domain is a **Bayushi vassal house of the Scorpion**, already established in the pool - [`legacy-hand-authored-pool/towns/ubame/ubame.gen.py`](../pool/towns/ubame.gen.py) is one of its county towns, in Moriguchi province, and its charcoal road runs "west toward Shiro Daika."
+The Daika domain is a **Bayushi vassal house of the Scorpion**, already established in the pool - [`legacy-hand-authored-pool/towns/ubame/ubame.gen.py`](../legacy-hand-authored-pool/towns/ubame/ubame.gen.py) is one of its county towns, in Moriguchi province, and its charcoal road runs "west toward Shiro Daika."
 
 - **Clan:** Scorpion, so the two sovereign temples are **Benten and Jurojin** (`CLAN_FORTUNES`).
 - **Borders the Crab to the SOUTH**, so `wall_defense="siege"` - built to survive one even after a long peace.
@@ -266,7 +266,7 @@ Confirmed against the campaign map (Shiro Daika sits in Daika's red territory we
 | Way | Bearing | Goes to |
 |---|---|---|
 | **Imperial road** | enters the **SOUTH gate**, runs N-S through the city | south into the domain; beyond the north gate it bends **northwest toward Shiro Kyo** |
-| domain trunk road | **east** | Fox lands / the Kitsune Mori - the same charcoal road [`legacy-hand-authored-pool/towns/ubame/ubame.gen.py`](../pool/towns/ubame.gen.py) draws running "west toward Shiro Daika" |
+| domain trunk road | **east** | Fox lands / the Kitsune Mori - the same charcoal road [`legacy-hand-authored-pool/towns/ubame/ubame.gen.py`](../legacy-hand-authored-pool/towns/ubame/ubame.gen.py) draws running "west toward Shiro Daika" |
 | domain trunk road | **southwest** | the heart of the Daika domain |
 
 So **four gates**: south (Imperial), north (Imperial), east, southwest. Only the Imperial road is labeled.

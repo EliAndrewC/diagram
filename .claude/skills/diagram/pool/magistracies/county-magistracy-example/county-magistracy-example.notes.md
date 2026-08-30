@@ -7,7 +7,7 @@ and buildings sized in feet with wall tags), and `place()` + `emit_svg()` compos
 
 **Program type**: magistrate's manor (county magistracy) - the generic worked example.
 
-Regenerate: `python3 pool/magistracies/county-magistracy-example.gen.py` (from the skill dir).
+Regenerate: `python3 pool/magistracies/county-magistracy-example/county-magistracy-example.gen.py` (from the skill dir).
 
 Purpose: demonstrate that the toolchain can get the COMPOSITION right - buildings ring the
 walls (~56% perimeter-hugging), the garden -> oshirasu -> forecourt court-spine is held open

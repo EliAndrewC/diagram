@@ -7,7 +7,7 @@ render-sync regenerates every `pool/*/*.gen.py` from its own directory, and a re
 with no gen wrapper is a one-off hand render that silently goes stale. This gen writes
 nothing but the png - the tracked svg is never touched.
 
-Run:  python3 pool/magistracies/ubame-magistracy.gen.py   (from anywhere)
+Run:  python3 pool/magistracies/ubame-magistracy/ubame-magistracy.gen.py   (from anywhere)
 """
 
 from __future__ import annotations

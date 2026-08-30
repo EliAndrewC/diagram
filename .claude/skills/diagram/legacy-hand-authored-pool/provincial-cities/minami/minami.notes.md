@@ -3,7 +3,7 @@
 Mode B provincial city, 1 px = 3 ft, walled, `wall_defense="peaceful"`, river port on the
 Hayakawa, Fox clan (Nanke lineage), population **2,600**. Feature `specs/016-minami-provincial-city`.
 
-`ALL CHECKS PASSED`; `check_village.py pool/provincial-cities/minami.json --capacity` reads
+`ALL CHECKS PASSED`; `check_village.py legacy-hand-authored-pool/provincial-cities/minami/minami.json --capacity` reads
 **SIZED_AND_PACKED**, and the map draws **exactly 520** dwellings against its 520 target - the
 population check allows NO band (see below).
 

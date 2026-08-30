@@ -6,7 +6,7 @@ seed, a household count, the land's fall and where the runoff goes, and every po
 the intake, the field's size, the cluster, the lanes, the connector track, the pond, the woods, the
 windbreak - is derived from those by the pipeline. Nothing here is a coordinate.
 
-It is deliberately the same BRIEF as `pool/hamlets/ikegami.gen.py`: ~15 households, land falling due
+It is deliberately the same BRIEF as `legacy-hand-authored-pool/hamlets/ikegami/ikegami.gen.py`: ~15 households, land falling due
 south, a brook off the northern high ground feeding the head of one comb field, and the field
 draining at its low foot into a tameike. Ikegami is 239 lines of authored geometry; this is nine.
 Read the two maps side by side - that comparison is the experiment.

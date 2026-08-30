@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """ochiba-roundtrip-test.gen.py - round-trip TEST of the perimeter-first placer (feature 008).
 
-Encode the EXISTING hand-authored Ochiba magistracy (pool/magistracies/ochiba-magistracy.svg) as a
+Encode the EXISTING hand-authored Ochiba magistracy (pool/magistracies/ochiba-magistracy/ochiba-magistracy.svg) as a
 feet-first CompoundProgram - its real envelope, its real court-spine, and its real building
 masses measured off the finished SVG at 3 px = 1 ft - then run it through compound.place()
 and compound.emit_svg(). The point is not to replace Ochiba but to see whether the placer,
@@ -12,7 +12,7 @@ Garden pavilions and point features (bath, wells, latrines, porch, privy, fire-t
 massed perimeter buildings - they are hand-placed in the final map regardless - so they are
 omitted here; the placer only arranges the wall-ranging masses.
 
-Run:  python3 pool/magistracies/ochiba-roundtrip-test.gen.py   (from the skill dir)
+Run:  python3 pool/magistracies/ochiba-roundtrip-test/ochiba-roundtrip-test.gen.py   (from the skill dir)
 """
 
 from __future__ import annotations

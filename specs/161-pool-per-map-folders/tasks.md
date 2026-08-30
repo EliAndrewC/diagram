@@ -169,7 +169,7 @@ Each of these keeps the suite green, because the surface describes whatever tree
 - [x] T36 SC-006: rebuild the index, open it, and check every thumbnail, notes link and interactive
       link resolves - in the CLONE, where the renders actually are (research R8)
       research: rendering
-- [ ] T37 **`make done` green, ONCE, at the end** (SC-005). Zero new failures against T01's
+- [x] T37 **`make done` green, ONCE, at the end** (SC-005). Zero new failures against T01's
       2737 passed / 0 failed. The map sweep gates the same five scripted maps
       research: rendering
 - [x] T38 update `dev/lessons.md` with the two findings a future session would otherwise re-discover:

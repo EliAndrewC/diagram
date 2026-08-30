@@ -4,7 +4,7 @@
 easternmost of Moriguchi's five counties and the one the road from the Kitsune Mori arrives in.
 Canon: `l7r.md`, "The Kurogi and the dynasty province of Moriguchi". Its magistrate is Bayushi no
 Daika Koharu, whose compound is the separate Mode A sheet
-[`pool/magistracies/ubame-magistracy.svg`](../magistracies/ubame-magistracy.svg).
+[`pool/magistracies/ubame-magistracy/ubame-magistracy.svg`](../magistracies/ubame-magistracy.svg).
 
 **Why it exists**: the GM asked for a third pool town to test the placement algorithms and the
 automated checks on fresh geometry. It is deliberately the third **combination** - Hoshizora is
