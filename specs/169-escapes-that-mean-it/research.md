@@ -276,3 +276,14 @@ catch a regression. Half an hour, including the gate.
 
 **Scope note.** This is not one of the five findings the GM approved; it was found at the end of this
 feature by using the escape.
+
+## R14 - a false RED I caused myself, in the way the doctrine already names
+
+While `make hooks-test` was running detached, I ran nine guard suites standalone "to check". One went
+red (`test-gate-hooks`, 1 of 37); re-run alone immediately afterwards, it passed. The suites share
+state - stamp files, `.git/` scratch, the guard log - so two runs of the same suite overlap.
+
+`CLAUDE.md` already says this for the test bed - *"Never run a pytest BESIDE a running gate - two
+writers on the same pool maps is a source of false RED"* - and the same holds for the guard suites.
+The cost here was small (one turn, and a moment believing a regression existed that did not), but the
+shape is the expensive one: a false red invites a "fix" to working code.
