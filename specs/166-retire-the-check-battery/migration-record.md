@@ -79,6 +79,10 @@ box" - measuring the wrong one made every seat look illegal and the fallback too
 
 | `lanes_clear_of_dry_plots` | `tests/hamletgen/test_lane_clipping.py` (`clip_to_clear`, whose obstacle list is envelope + crops + fabric + wet toe together) | clipping disabled -> RED |
 
+| `delivery_ditches_taper` | `tests/waterfields/test_comb_topology.py` (4 seeds) | `_canal_ft` made to return one weight -> RED |
+| `water_channels_obtuse_turns` | same module | - |
+| `field_ditches_terminate` | same module (the builder's half: there IS a run to land) | - |
+
 ## Already carried by an existing test - dropped against it, not rewritten
 
 | check | carried by | proof |
