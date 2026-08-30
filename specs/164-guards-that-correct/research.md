@@ -179,7 +179,7 @@ fired:
 |---|---|---|
 | `no-poll` | the command writing `spec.md`, whose text quotes the shape the guard forbids | one round trip |
 | `measure-hooks` | a command whose prose names a gate target; it spent a budget slot on text | one budget slot |
-| `house-style` | `plan.md` NAMING the one British word the correction table deliberately excludes | one round trip |
+| `house-style` | `plan.md` NAMING a British spelling as an EXAMPLE, in a sentence about how the correction table treats it | one round trip |
 
 `gate-hooks` stopped making this mistake on 2026-08-29 by asking `_hookmatch.py`, which anchors a
 match to a command position. Two of the three above are the same fix. The third is different in kind

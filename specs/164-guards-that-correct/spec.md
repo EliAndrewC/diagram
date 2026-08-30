@@ -4,7 +4,9 @@
 
 **Created**: 2026-08-30
 
-**Status**: Draft - awaiting `spec-fidelity`
+**Status**: **FAITHFUL** - `spec-fidelity` round 3 (2026-08-30). Rounds 1 and 2 returned CHANGES
+REQUIRED (four items, then two plus an aside); all were applied and the history is at the bottom of
+this file. Implementation proceeds.
 
 **Input**: [`request.md`](request.md), verbatim and unedited. That file is the authority for this
 specification.
@@ -127,7 +129,9 @@ An em-dash or en-dash becomes a hyphen, and a British spelling on the project's 
 American form, IN the edit payload, with one line saying what was corrected. Every word on the guard's own detection list has exactly one American form in
 `CLAUDE.md`'s table, INCLUDING the British verb spelling of "practice", which the first draft carved
 out as a judgment call: the project's rule gives one spelling for both the noun and the verb, so the
-substitution is as mechanical as the rest (`spec-fidelity` round 2). An edit still violating house
+substitution is as mechanical as the rest (`spec-fidelity` round 2). The archaic territory word that
+`CLAUDE.md` tells every session to *"silently fix"* to "domain" is corrected here too, for the same
+reason and on the project's own instruction (`spec-fidelity` round 3). An edit still violating house
 style after the corrections is refused exactly as today.
 
 **THE GM'S OWN WRITING IS NEVER CORRECTED, and today's exemption does not cover it**
@@ -198,6 +202,27 @@ guard about data loss is not retuned on a session's own judgment, so it goes to 
 | a backgrounded busy-wait is NOT permitted here | it changes what the guard forbids, so it goes to the GM like `discard` | FR-002, `research.md` R5 |
 | the GM's verbatim `request.md` is never mechanically corrected | Principle V; today's exemption does not cover that filename | FR-004 |
 | the Makefile's refusals are enumerated, not dismissed as a class | `spec-fidelity` round 1 | Scope, `research.md` R6 |
-| a mention is not an invocation, for `no-poll` too | measured false positive, on this feature's own spec | FR-002, R3 |
+| a mention is not an invocation - for `no-poll`, `measure-hooks` and `house-style` | measured, three times on this feature's own documents | FR-002, FR-004, `research.md` R7 |
 | eight guards stay refusals | recorded limitation, with the reason for each | FR-008, R3 |
 | `discard`'s 5-of-5 escape rate goes to the GM | escalation, not a fix | FR-008 |
+
+## Review history
+
+- **Round 1** (`spec-fidelity`, 2026-08-30): CHANGES REQUIRED, 4 items. FR-001 justified the rewrite
+  with two claims that are false against the files it named - the refusal never mentions the one-file
+  target, and that target runs `--no-cov`, so the rewrite does not "set the coverage floors up".
+  FR-002 permitted a backgrounded `sleep` loop, which is a change to what the guard FORBIDS rather
+  than a rewrite, and applied a standard to `discard` that it did not apply to itself. FR-004's
+  "the GM's own writing is exempt exactly as today" was false: the exemption covers `gm-request.md`
+  and not `specs/*/request.md`, so a silent correction would have altered the GM's verbatim words
+  (Principle V). And the Scope section dismissed the Makefile's refusals as a class, on the exact
+  half of the request the GM spelled out. All four applied.
+- **Round 2** (`spec-fidelity`, 2026-08-30): CHANGES REQUIRED, 2 items plus an aside. The Makefile
+  enumeration had been written but the Scope sentence citing it still generalized - and said the
+  opposite of what the research had found, which was "one converts, and here it is". And
+  `measure-hooks` was filed under "stays a refusal" while FR-002 changes its matcher. The aside was
+  right too: the British verb spelling of "practice" is an exact substitution under this project's
+  own rule, so the carve-out excluding it was unfounded. All three applied.
+- **Round 3** (`spec-fidelity`, 2026-08-30): **FAITHFUL**, with three non-blocking asides - a stale
+  clause in R7, a Decisions pointer aimed at the wrong research section, and one further exact
+  substitution the project already instructs sessions to make silently. All three applied here.
