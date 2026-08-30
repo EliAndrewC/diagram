@@ -1,6 +1,7 @@
 # Feature 172 - `hooks-test` Costs What It Should
 
-**Status**: specified 2026-08-30. [`request.md`](request.md) is the authority;
+**Status**: **APPROVED** 2026-08-30 - `spec-fidelity` round 4 returned FAITHFUL, having verified every
+stated number against the tree with the deriver itself rather than accepting them. Specified 2026-08-30. [`request.md`](request.md) is the authority;
 [`research.md`](research.md) holds the measurements taken BEFORE specifying, which reshaped it.
 
 ## The feature, in one sentence
@@ -145,9 +146,9 @@ under-runs is the one failure mode that matters here.
 - **SC-003**: touching the make/rewrite module re-runs **5 of 21** - the 3 guards that use it (`gate`, `make-only`, `pair`) plus the same 2 whole-tree entries.
 - **SC-004**: touching `_guardlog.sh` still re-runs **20 of 21**, and `_hm_escape.py` likewise - the derivation must NOT get these "right" by under-running. This is the number that must NOT fall.
 - **SC-005**: a full `hooks-test` (every suite stale) is measurably faster than the same set run serially, measured on the SAME content in this clone rather than against a figure from another session's run - and reports every failure together as it does today. Measured: **194 s serial, 63 s parallel**, all 21 green both ways.
-- **SC-008**: the command-shape module, which after the split both other families depend on, is named as having the widest blast radius of the three - the first draft noted this for the escape family only.
 - **SC-006**: every suite that runs concurrently has been checked for shared state; any that cannot is serialized with its reason recorded.
 - **SC-007**: `make hooks-test` and `make done` green, and no suite's assertions changed.
+- **SC-008**: the command-shape module, which after the split both other families depend on, is named as having the widest blast radius of the three - the first draft noted this for the escape family only.
 
 ## Decisions Recorded
 
@@ -161,4 +162,15 @@ under-runs is the one failure mode that matters here.
 ## Review history
 
 Constitution XVI: reviewed against [`request.md`](request.md) by an independent `spec-fidelity`
-subagent, up to five rounds.
+subagent, up to five rounds. **Four rounds; FAITHFUL at round 4.**
+
+| round | verdict | what it found |
+|---|---|---|
+| 1 | CHANGES REQUIRED | `request.md` carried only two of the four GM messages, so FR-002 and FR-003 had NO authorizing GM words in the file the spec calls its authority - the gap was covered by the session's paraphrase. It went to the transcript to find them and noted the acceptance existed in exactly one place, which is not a durable record. Also: FR-003 split one of the GM's "those two files" without saying why the other was left, and three whole-tree rows were preserved by hand |
+| 2 | CHANGES REQUIRED | the deriver propagated a HARDCODED five-name roster - in the feature about deriving - so the split's own three leaves were invisible and a guard calling a leaf would have re-run ZERO suites. And `_globs_tree` matched only the literal `scripts/*.sh`, which in `gate-stamp.py` appears solely in its DOCSTRING, making that row true by accident of wording |
+| 3 | CHANGES REQUIRED | `review-gate.sh` was held whole-tree under the sentence written for `sync-with-main.sh` - measured, it reaches exactly two scripts, both statically visible, so one justification had been stretched over two unlike things, keeping for that suite the over-running this feature exists to end. And the success criteria were stated in a guards-only unit the tooling never reports |
+| 4 | **FAITHFUL** | verified all five stated numbers against the tree with the deriver, and confirmed the two `classify` call sites really do reach the leaf. Four RECORD defects, all fixed before the push: `--all` had silently lost a suite when round 3 changed the held set; `CLAUDE.md`, a test docstring and research R9 all carried the superseded 5-and-6 figures |
+
+**One item was DECLINED after verification**: round 2 asked for the review cap to be changed from five
+back to three. The GM raised it to five on 2026-08-30 and both the constitution and `CLAUDE.md` say
+five, in this clone and on main - the reviewer was reading the rule as it stood before the change.

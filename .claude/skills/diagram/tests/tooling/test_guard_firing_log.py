@@ -287,10 +287,7 @@ def test_every_escape_token_has_at_least_one_recording_permit_site() -> None:
     recorded_guards = {g for g, _rule in sites}
     # the three that were silent when this feature began, named so the test says what it is for
     for guard in ("make-only-hooks.sh", "repo-safety-hooks.sh", "sync-with-main.sh"):
-        assert guard in recorded_guards, (
-            f"{guard} permits an escape and records nothing - the defect feature 170 exists to close. "
-            f"Recording guards found: {sorted(recorded_guards)}"
-        )
+        assert guard in recorded_guards, f"{guard} permits an escape and records nothing - the defect feature 170 exists to close. Recording guards found: {sorted(recorded_guards)}"
 
 
 def test_no_escape_class_is_quietly_exempt_from_the_reason_floor() -> None:
@@ -307,7 +304,4 @@ def test_no_escape_class_is_quietly_exempt_from_the_reason_floor() -> None:
                 continue
             for line in f.read_text().splitlines():
                 if token in line and _PERMIT.search(line):
-                    raise AssertionError(
-                        f"{token} is classified `not-an-escape` but {f.name} records a permit on it - "
-                        "either it is an escape and owes a reason, or the classification is wrong"
-                    )
+                    raise AssertionError(f"{token} is classified `not-an-escape` but {f.name} records a permit on it - either it is an escape and owes a reason, or the classification is wrong")

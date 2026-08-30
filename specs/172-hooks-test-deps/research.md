@@ -158,3 +158,17 @@ quietly wrong in the flattering direction.
 Corrected to the measured figures. The win is undiminished and worth stating in its true form: **5 of
 21 instead of 21 of 21**, and the three that always run are three of the slower ones, which is a real
 part of what a targeted change still costs.
+
+### R9 addendum - those figures were superseded by round 3, the same day
+
+R9's 5 and 6 were measured while `review-gate.sh` was still held whole-tree. Round 3 measured the
+justification false of it - it reaches exactly two scripts, both statically visible - so it derives
+now, and the constant on every targeted change is TWO entries rather than three:
+
+    _gatecost.py       4 of 21     (2 consumers + sync-with-main.sh + gate-stamp.py)
+    make/rewrite       5 of 21     (3 guards + the same two)
+    _guardlog.sh      20 of 21     - and this is the number that must NOT fall
+
+The measurement in R9 is left standing rather than overwritten, because it was true of the tree it was
+taken on and the correction is the more useful record: a number in a document is only ever true of a
+version of the code, and this one lasted about an hour.

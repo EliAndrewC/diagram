@@ -48,9 +48,10 @@ feature's own premise, are in [`research.md`](research.md).
       verify: `tests/tooling/test_hook_deps.py`, 9 checks. The transitive assertion is what caught the
       Python-import under-run that the split itself created (R5)
 
-- [ ] T08 the whole guard suite and the gate, green together, then the push
+- [x] T08 the whole guard suite and the gate, green together, then the push
       research: procedure
-      verify: `make hooks-test` and `make done`, then `sync-with-main.sh done`
+      verify: `make hooks-test` exit 0 in 60 s with every suite forced stale, and `make done` exit 0,
+      re-run after each review round's changes; then `sync-with-main.sh done`
 
 ## What this feature did NOT achieve, stated plainly
 

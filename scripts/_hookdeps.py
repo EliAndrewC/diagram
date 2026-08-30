@@ -19,6 +19,11 @@ replaces, because over-running is merely slow. Measured over the real graph:
     _gatecost.py          2 of 21          (was 21 - saves 19)
     test_hooks_cases.py   3 of 21          (was 21 - saves 18)
 
+THOSE FIGURES ARE THE MOTIVATION, MEASURED BEFORE THE SPLIT - not the current state. After
+`_hookmatch.py` became three leaves the live numbers are `_gatecost.py` 4 of 21, the make/rewrite
+family 5, and `_guardlog.sh`/`_hm_escape.py` 20 (the two whole-tree entries are in every count).
+`specs/172-hooks-test-deps/research.md` R5 and R9 carry the current table.
+
 So the refinement pays on the two helpers that are rarely touched and barely pays on the two that
 churn - which is why feature 172 also runs the suites in parallel. Recorded here so nobody re-derives
 the disappointment.
@@ -183,9 +188,14 @@ def key_for(guard: str) -> str:
 
 if __name__ == "__main__":
     if len(sys.argv) > 1 and sys.argv[1] == "--all":
-        # `<guard> <sha>` per line, one process for every suite - the freshness phase runs this once.
-        guards = sorted(p.name for p in HERE.glob("*-hooks.sh") if not p.name.startswith("test-"))
-        for g in guards + sorted(HELD_WHOLE_TREE | {"gate-stamp.py"}):
+        # `<guard> <sha>` per line for THE MAKEFILE'S ROSTER - `scripts/*-hooks.sh` plus the three it
+        # names explicitly. Round 4 caught this enumerating `HELD_WHOLE_TREE | {gate-stamp.py}`, which
+        # silently lost `review-gate.sh` the moment round 3 stopped holding it: a roster derived from
+        # the wrong thing, in the feature about deriving. It matches the Makefile now, and the test
+        # below pins the count.
+        roster = sorted(p.name for p in HERE.glob("*-hooks.sh") if not p.name.startswith("test-"))
+        roster += ["review-gate.sh", "gate-stamp.py", "sync-with-main.sh"]
+        for g in roster:
             print(g, key_for(g))
     elif len(sys.argv) > 2 and sys.argv[1] == "--deps":
         print(" ".join(deps_for(sys.argv[2])))

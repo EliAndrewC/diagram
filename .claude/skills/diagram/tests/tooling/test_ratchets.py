@@ -88,8 +88,7 @@ def test_done_switches_to_the_run_and_the_gm_s_forty_five_once_the_baseline_reac
     earlier draft compared an unbounded median here and that run would have passed - silently
     overturning the GM's own worked example.
     """
-    pinned = ratchet.Ratchet(target="done", baseline=35, reason="the efficiency work landed",
-                             hard_ceiling=45, hard_at_or_below=35, compare="median")
+    pinned = ratchet.Ratchet(target="done", baseline=35, reason="the efficiency work landed", hard_ceiling=45, hard_at_or_below=35, compare="median")
     ceiling, mode = ratchet.ceiling_for(pinned)
     assert (ceiling, mode) == (45, "run"), "at or below 35 the GM's 45 is fixed AND the run is judged"
 
@@ -97,8 +96,7 @@ def test_done_switches_to_the_run_and_the_gm_s_forty_five_once_the_baseline_reac
 def test_the_ceiling_does_not_auto_tighten_below_a_number_the_gm_stated() -> None:
     """At a 25 s baseline the derivation would give 32 s. The GM stated 45. A mechanism that tightened
     past their figure without being asked is the same overreach as one that loosens past it."""
-    pinned = ratchet.Ratchet(target="done", baseline=25, reason="hypothetical",
-                             hard_ceiling=45, hard_at_or_below=35, compare="median")
+    pinned = ratchet.Ratchet(target="done", baseline=25, reason="hypothetical", hard_ceiling=45, hard_at_or_below=35, compare="median")
     assert ratchet.ceiling_for(pinned)[0] == 45
 
 
@@ -158,15 +156,15 @@ def test_the_median_ignores_short_circuits_failures_and_other_scopes(tmp_path) -
     log = tmp_path / ".claude/skills/diagram/dev/run-log"
     log.mkdir(parents=True)
     rows = (
-        [("green", "reference", 100)] * 3           # the only evidence about duration
+        [("green", "reference", 100)] * 3  # the only evidence about duration
         + [("already-verified", "reference", 0)] * 9  # short-circuits: no work done
-        + [("failed:test", "reference", 4)] * 3       # died early: not evidence of speed
-        + [("green", "full", 900)] * 3                # a different scope entirely
+        + [("failed:test", "reference", 4)] * 3  # died early: not evidence of speed
+        + [("green", "full", 900)] * 3  # a different scope entirely
     )
     for i, (result, scope, secs) in enumerate(rows):
-        (log / f"2026083{i // 10}T{i:06d}-{i}.json").write_text(json.dumps(
-            {"utc": f"2026-08-30T{i:02d}:00:00Z", "target": "done", "scope": scope,
-             "seconds": secs, "result": result, "commit": "abc1234"}))
+        (log / f"2026083{i // 10}T{i:06d}-{i}.json").write_text(
+            json.dumps({"utc": f"2026-08-30T{i:02d}:00:00Z", "target": "done", "scope": scope, "seconds": secs, "result": result, "commit": "abc1234"})
+        )
 
     got = gatecost.median_seconds("done", "reference", cwd=str(tmp_path))
     assert got == 100, f"the median took the excluded rows into account: {got}"

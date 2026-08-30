@@ -28,10 +28,7 @@ def test_a_dependency_reached_only_through_another_helper_still_counts() -> None
     """
     deps = hookdeps.deps_for("readme-hooks.sh")
     assert "_guardlog.sh" in deps, "the direct reference"
-    assert "_hm_escape.py" in deps, (
-        "reached only THROUGH _guardlog.sh - a direct-only derivation under-runs here, which is the "
-        "one failure mode worse than the over-running this feature replaces"
-    )
+    assert "_hm_escape.py" in deps, "reached only THROUGH _guardlog.sh - a direct-only derivation under-runs here, which is the one failure mode worse than the over-running this feature replaces"
     assert "_hm_shape.py" in deps, "and one hop further: the escape family stands on the shape primitives"
 
 
@@ -75,11 +72,12 @@ def test_the_refinement_actually_narrows_the_two_helpers_it_was_built_for() -> N
 def test_the_whole_tree_pair_is_the_constant_on_every_targeted_change() -> None:
     """What a targeted change ACTUALLY costs, which the first success criteria understated.
 
-    SC-002 and SC-003 were written from the derivation over guards alone - two suites and three. A
-    real incremental run reports five and six, because `sync-with-main.sh`, `review-gate.sh` and
-    `gate-stamp.py` re-run for ANY script change and always will: two are held whole-tree deliberately
-    (they resolve script paths at run time, which no static reader follows) and one derives there
-    (it reads the whole directory).
+    SC-002 and SC-003 were written from the derivation over guards alone - two suites and three. Over
+    the roster the tooling actually reports, it is FOUR and FIVE: `sync-with-main.sh` and
+    `gate-stamp.py` re-run for ANY script change and always will - the first is held whole-tree
+    deliberately (it resolves script paths at run time, which no static reader follows) and the second
+    derives there (it reads the whole directory). `review-gate.sh` was a third until round 3 measured
+    it and found the justification false of it.
 
     Asserted so the constant stays visible: if this pair ever stops re-running, the derivation has
     started under-running on the suites that read or drive the whole tree. (It was a TRIO until round 3
@@ -87,9 +85,7 @@ def test_the_whole_tree_pair_is_the_constant_on_every_targeted_change() -> None:
     """
     for guard in ("sync-with-main.sh", "gate-stamp.py"):
         deps = hookdeps.deps_for(guard)
-        assert "_gatecost.py" in deps and "_hm_make.py" in deps, (
-            f"{guard} should re-run for any script change - it no longer depends on all of them"
-        )
+        assert "_gatecost.py" in deps and "_hm_make.py" in deps, f"{guard} should re-run for any script change - it no longer depends on all of them"
 
 
 def test_the_helpers_that_churn_are_NOT_narrowed_and_that_is_correct() -> None:
@@ -122,9 +118,7 @@ def test_the_key_changes_when_a_dependency_changes(tmp_path, monkeypatch) -> Non
         return real(name) + ("\nECHO_CHANGED=1\n" if name == "_hm_escape.py" else "")
 
     monkeypatch.setattr(hookdeps, "_text", fake)
-    assert hookdeps.key_for("readme-hooks.sh") != before, (
-        "the key ignored a change to a transitive dependency"
-    )
+    assert hookdeps.key_for("readme-hooks.sh") != before, "the key ignored a change to a transitive dependency"
 
 
 def test_every_shared_helper_on_disk_is_known_to_the_deriver() -> None:
@@ -151,10 +145,7 @@ def test_a_filename_in_prose_is_not_a_dependency() -> None:
     assert "_hm_make.py" in code, "the invocation must survive stripping"
     guards = sorted(p.name for p in SCRIPTS.glob("*-hooks.sh") if not p.name.startswith("test-"))
     make_family = [g for g in guards if "_hm_make.py" in hookdeps.deps_for(g)]
-    assert len(make_family) <= 5, (
-        f"the make/rewrite family should reach a handful of guards, not {len(make_family)} - "
-        "has a mention started counting as a dependency again?"
-    )
+    assert len(make_family) <= 5, f"the make/rewrite family should reach a handful of guards, not {len(make_family)} - has a mention started counting as a dependency again?"
 
 
 def test_gate_stamp_derives_to_the_whole_tree_from_the_code_not_the_prose() -> None:

@@ -158,6 +158,14 @@ t = re.sub(r"<<\s*.?(\w+).?.*?\n\1", " ", t, flags=re.S)   # heredocs
 t = re.sub(r"\x27[^\x27]*\x27|\"[^\"]*\"", " ", t)          # quoted strings
 print(t)
 ' 2>/dev/null || printf '%s' "$cmd")"
+  # GUARD_EDIT_OK: feature 172 - A DRY RUN IS NOT AN INVOCATION. `make -n done` PRINTS the recipe and
+  # executes nothing, so it starts no gate and owes no review - and this guard refused one, mine,
+  # while I was checking that a recipe was wired up correctly. Same mention-versus-invocation family
+  # as the rest: `-n`, `--dry-run`, `--just-print`, `--recon`, and `-q`/`--question`, which only asks
+  # whether a target is up to date.
+  case " $stripped " in
+    *" make -n "*|*" make --dry-run "*|*" make --just-print "*|*" make --recon "*|*" make -q "*|*" make --question "*) return 1 ;;
+  esac
   printf '%s' "$stripped" | grep -Eq "$INVOKES_GATE"
 }
 
