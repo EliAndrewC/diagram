@@ -54,6 +54,11 @@ box" - measuring the wrong one made every seat look illegal and the fallback too
 | `settlement_records_cluster_seeding` | same module | the shape record removed from `homesteads.py` -> RED |
 | `byre_form_declared` | same module | allowed forms read off the engine, not guessed |
 
+| `polder_fills_its_bbox` | `tests/waterfields/test_polder_geometry.py` (4 seeds) | - |
+| `polder_floor_is_ring_interior` | same module | - |
+| `polder_edges_wander` | same module | `lwander` made to return (0, 0) -> RED |
+| `polder_dike_gapped_at_sluices` | same module | - |
+
 ## Already carried by an existing test - dropped against it, not rewritten
 
 | check | carried by | proof |
