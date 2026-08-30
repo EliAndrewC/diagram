@@ -117,6 +117,17 @@ done:
 	if [ -n "$$fail" ]; then $(LOGRUN) $(DONE_NAME) "$(if $(FULL),full,reference)" "$$(( $$(date +%s) - $$T0 ))" "failed:$$fail"; $(STATE) failed-gate $(DONE_NAME); printf '\n\033[1mGATE FAILED:%s\033[0m (every phase ran - fix them together, then re-run once)\n' "$$fail"; exit 1; fi; \
 	root=$$(git rev-parse --show-toplevel 2>/dev/null) && [ -n "$$root" ] && python3 "$$root/scripts/gate-stamp.py" --write diagram || true; \
 	$(LOGRUN) $(DONE_NAME) "$(if $(FULL),full,reference)" "$$(( $$(date +%s) - $$T0 ))" green; \
+	: "(GUARD_EDIT_OK: feature 171 - THE RATCHET RUNS AFTER THE RECORD, deliberately: this run is part"; \
+	: " of the median it is judged against, and a gate that fails without having logged what it did"; \
+	: " would hide the very number the next session needs. It judges the MEDIAN in today's regime, so"; \
+	: " one slow run cannot fail the gate - the GM's own worked example is about a sustained level.)"; \
+	root=$$(git rev-parse --show-toplevel); \
+	: "(GUARD_EDIT_OK: feature 171 FR-009 - LIKE WITH LIKE. The scope is passed, so a reference-scope"; \
+	: " run is judged against reference-scope runs. _gatecost already excludes anything that is not"; \
+	: " green, which is what keeps a short-circuited 'already-verified' at seconds=0 out of the median"; \
+	: " - a naive average over every row would be dragged toward zero and lower everybody's bar.)"; \
+	med=$$(python3 "$$root/scripts/_gatecost.py" $(DONE_NAME) "$(if $(FULL),full,reference)" 2>/dev/null | grep -oE '^[0-9]+' | head -1); \
+	python3 "$$root/scripts/_ratchet.py" $(DONE_NAME) "$$(( $$(date +%s) - $$T0 ))" "$${med:-}" || exit 1; \
 	$(STATE) green-local $(DONE_NAME); \
 	$(if $(FULL),printf '\n\033[1mgate green (FULL - every pool map re-gated, seeds 41-44 rolled)\033[0m\n',printf '\n\033[1mgate green\033[0m (reference settlement + non-map tests; `make done FULL=1` also rolls the other pool maps)\n')
 
@@ -707,6 +718,8 @@ quick:
 	@start=$$(date +%s); $(EXHAUSTIVE_ENV) python3 -m pytest -n $(XDIST_WORKERS) --dist worksteal $(TESTMON) -q --no-cov -x --ff -m "not rolls_map" $(TIER_SELECT) $(QUICK_TREE); ec=$$?; \
 	  el=$$(( $$(date +%s) - start )); \
 	  if [ $$ec -ne 0 ]; then exit $$ec; fi; \
+	  : "(GUARD_EDIT_OK: feature 171 - the RATCHET, which is the same check against a number that means something)"; \
+	  root=$$(git rev-parse --show-toplevel); python3 "$$root/scripts/_ratchet.py" quick "$$el" || exit 1; \
 	  if [ $$el -gt $(QUICK_BUDGET) ]; then \
 	    printf '\n\033[1mquick took %ss, over its %ss budget.\033[0m\n' "$$el" "$(QUICK_BUDGET)"; \
 	    printf 'Something slow is running that should not be. Find it:  \033[1mmake durations\033[0m\n'; \

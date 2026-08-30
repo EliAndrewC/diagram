@@ -31,7 +31,14 @@ def _logs(cwd: str) -> list[str]:
     out = []
     top = subprocess.run(["git", "-C", cwd, "rev-parse", "--show-toplevel"],
                          capture_output=True, text=True).stdout.strip()
-    for root in (top, "/diagram"):
+    # GUARD_EDIT_OK: feature 171 - THE MIRROR IS DERIVED, NOT HARDCODED. This read `"/diagram"`
+    # literally, which is the one thing this repository's guards all avoid (feature 131 moved the
+    # repository once already, and every hook derives its root from git). Two consequences, and the
+    # second is why it surfaced: a checkout anywhere else read the WRONG tree's run log, and a test
+    # could not isolate itself - a fixture with its own log still got the live median mixed in, which
+    # is how a test can quietly measure production.
+    mirror = top.split("/.clones/")[0] if "/.clones/" in top else top
+    for root in dict.fromkeys((top, mirror)):   # dedupe, order preserved
         if root:
             out.append(os.path.join(root, ".claude/skills/diagram/dev/run-log/*.json"))
     return out
