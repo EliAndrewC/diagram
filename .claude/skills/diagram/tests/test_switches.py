@@ -174,7 +174,9 @@ def make(skill: Path, *args: str) -> subprocess.CompletedProcess[str]:
     # of feature 166 and passes at every other scope.
     return subprocess.run(
         ["make", "--no-print-directory", "-C", str(skill), *args],
-        capture_output=True, text=True, stdin=subprocess.DEVNULL,
+        capture_output=True,
+        text=True,
+        stdin=subprocess.DEVNULL,
         env={**os.environ, "MAKEFLAGS": "", "MFLAGS": "", "FULL": "", "REF_WHY": ""},
     )
 

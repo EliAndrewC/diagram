@@ -154,3 +154,52 @@ def test_unreadable_files_are_skipped_and_the_clone_is_named(log: Path) -> None:
     name = next(log.glob("*-review-129-explanation-*")).name
     assert name.endswith("-local-myclone.json")
     assert pr.feature_number("adhoc") == ""
+
+
+# ---------------------------------------------------------------------------------------------------
+# THE TWO SKIP BRANCHES THE DELETED COVERAGE CARRIERS USED TO REACH (feature 166)
+# ---------------------------------------------------------------------------------------------------
+#
+# `tests/full/test_coverage_carriers.py` replayed frozen subjects through the whole gate so deep
+# branches executed, and it went with the check battery. Two branches in `perf_review` lost their only
+# reader with it. They are RE-DERIVED here as real tests rather than exempted, because a coverage floor
+# lowered to match a deletion stops being a floor - and both branches are behavior somebody depends on,
+# not filler: a malformed file in an append-only log directory must not take the review down.
+
+
+def test_a_corrupt_review_record_is_skipped_not_fatal(log: Path) -> None:
+    """`_records`' ValueError arm. `dev/perf-log/` is append-only history written by several sessions at
+    once, and a half-written or truncated file is a real thing to find there - a run killed mid-write
+    leaves one. The reader must step over it and return the records it CAN parse, because the
+    alternative is that one bad byte anywhere in the history blocks every future push.
+
+    The same reasoning the guard-log rule states one directory over: a log that cannot be WRITTEN must
+    not take the guard down. Here it is a log that cannot be READ.
+
+    (Written against `_records` after a first draft asserted it of `_snapshots` - a different function
+    with a different glob and no `_file` key. The two sit ten lines apart and both read this directory.)"""
+    band(log, 0.0)
+    good = {"kind": "explanation", "verdict": "pending", "feature": "129", "environment": "local"}
+    (log / "20260825T040000Z-129-review-local-a.json").write_text(json.dumps(good), encoding="utf-8")
+    (log / "20260825T020000Z-129-review-local-c.json").write_text("{not json at all", encoding="utf-8")
+    (log / "20260825T030000Z-129-review-local-d.json").write_text("", encoding="utf-8")
+    got = pr._records(log)
+    assert [d["_file"] for d in got] == ["20260825T040000Z-129-review-local-a.json"], (
+        f"the two corrupt records were not stepped over cleanly: {[d.get('_file') for d in got]}"
+    )
+
+
+def test_a_snapshot_for_another_feature_is_not_paired_with_this_one(log: Path) -> None:
+    """`pairs` line 89. The log holds every feature's bookends together, so the label filter is what keeps
+    feature 129's verdict from being computed against feature 166's numbers. A pair built across features
+    would compare two different engines and report the difference as a regression in whichever one was
+    being reviewed."""
+    band(log, 0.0)
+    snap(log, "166-start", {1: 999.0, 2: 999.0}, "20260830T000000Z")
+    snap(log, "166-end", {1: 1.0, 2: 1.0}, "20260830T010000Z")
+    got = pr.pairs(log, F)
+    assert "local" in got, "the feature's own pair went missing"
+    for env, verdict in got.items():
+        assert verdict is not None, f"{env}: no verdict from this feature's own bookends"
+    # the smoking gun: 999 -> 1 across features would be an enormous 'improvement' if the filter leaked
+    assert pr.pairs(log, "166-x").keys() == {"local"}, "feature 166's own pair should still resolve on its own"
