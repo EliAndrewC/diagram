@@ -25,6 +25,15 @@
             "statusMessage": "Checking for stalled background agents..."
           }
         ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/diagram/scripts/finished-run-hooks.sh prompt",
+            "timeout": 10
+          }
+        ]
       }
     ],
     "PreToolUse": [
@@ -204,6 +213,15 @@
           {
             "type": "command",
             "command": "/diagram/scripts/pair-hooks.sh stop"
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/diagram/scripts/finished-run-hooks.sh stop",
+            "timeout": 10
           }
         ]
       }
