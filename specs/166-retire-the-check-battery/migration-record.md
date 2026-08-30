@@ -90,6 +90,16 @@ box" - measuring the wrong one made every seat look illegal and the fallback too
 | `hamlet_has_kosatsuba` | `tests/settlement/test_structures.py` (the `place_kosatsuba` suite) | board never placed -> RED |
 | `caption seating (lane clearance)` | `tests/settlement/test_structures.py` | `pick_caption_seat` renamed out from under its callers -> RED |
 
+| `village_has_kosatsuba` / `town_has_kosatsuba` / `city_has_kosatsuba` | `tests/settlement/test_structures.py` (the `place_kosatsuba` suite) | board never placed -> RED (proved earlier in this feature) |
+
+*Why one entry for three:* `place_kosatsuba` is tier-agnostic - the GM's 2026-07-24 ruling is that EVERY
+settlement tier carries the board, and the placer auto-sites it from the same manifest route fields at every
+scale. The three check names are one guarantee wearing three scale labels, so one proof serves them. What
+differs by tier is the COUNT (a city draws the set: the principal board plus one per main gate), and that is
+`city_kosatsuba_per_gate`, a separate rule still owed.
+
+| `ways_cross_water_on_a_deck` | `tests/settlement/test_bridge_sources.py` | the one-deck dedup removed from `bridge()` -> RED; undrawn conduits offered -> RED |
+
 ## Still owed
 
 The remaining checks, by group, are in `destinations.json`. The split that governs the work:

@@ -1,61 +1,75 @@
-"""THE ONE SOURCE both sides of the bridging rules read (feature 020), tested directly (feature 158).
+"""What must be bridged, and the one deck that bridges it (feature 166).
 
-`bridge_carried_ways` and `bridge_crossed_waters` exist so the generator's `bridges()` and the gate
-cannot build the way / water sets separately and be wrong together - which is what happened before
-them: both omitted `M["roads"]`, the river and a castle's own moat, agreed perfectly, and left four
-of six crossings on the first capital unbridged with a GREEN gate.
+Carries `ways_cross_water_on_a_deck` and the shared-source guarantee the bridge family rests on.
 
-They are tested here rather than through a gate segment because feature 158 retired
-`bridges_align_with_their_way`, and its derivation (`_seg_0335` / `_seg_0336`) was the only thing in
-the suite that called `bridge_carried_ways` at all. The doctrine for a hamlet-path module that loses
-its exerciser is to bring it up BY TESTS, not to keep a retired check alive to run it - and a plain
-function taking a dict is exactly the shape feature 146 says to prefer anyway.
+FEATURE 020'S LESSON, AND WHY THESE TWO FUNCTIONS EXIST AT ALL. The generator's `bridges()` and the
+validator's crossing check used to build their way/water sets SEPARATELY, and both omitted the same three
+things - `M["roads"]` (every road but the Imperial one), the river, and a castle's own moat. So they agreed
+perfectly and were both wrong: four of six crossings on the first capital were unbridged behind a green
+gate. Re-adding the missing keys on both sides would have reproduced the same silent symmetry the next
+time a key was added, so the sets are derived ONCE and consumed by both.
+
+That makes this the case showing the skill's "placement and its check must read the SAME manifest source"
+rule guarantees AGREEMENT, not CORRECTNESS - which is worth carrying into a feature that is retiring every
+check, because it is the argument for testing the SOURCE rather than either consumer.
 """
 
 from __future__ import annotations
 
-from typing import Any
+from l7r.diagram.settlement import Settlement
+from l7r.diagram.settlement._knobs import bridge_crossed_waters
 
-from l7r.diagram.settlement import bridge_carried_ways, bridge_crossed_waters
 
-
-def test_every_kind_of_way_a_bridge_may_have_to_carry_is_in_the_set() -> None:
-    """Each branch, with the widths the manifest declares AND the defaults it omits - the defaults are
-    the half that goes wrong silently, because a missing width reads as a way of no width at all."""
-    M: dict[str, Any] = {
-        "road": [[0, 0], [100, 0]],
-        "road_width": 34,
-        "roads": [{"pts": [[0, 50], [100, 50]], "w": 20}, {"pts": [[0, 60], [100, 60]]}],  # the second takes the default
-        "ring_road": [[0, 100], [100, 100]],
-        "town_streets": [{"pts": [[0, 150], [100, 150]], "w": 18}],
-        "lanes": [{"pts": [[0, 200], [100, 200]], "w": 5}, {"pts": [[0, 210], [100, 210]]}],
+def test_every_kind_of_watercourse_is_offered_for_bridging() -> None:
+    """A way crossing a ditch needs a plank exactly as a way crossing a stream needs a bridge. The set
+    is what both sides read, so an omission here is invisible on both."""
+    M = {
+        "streams": [{"poly": [(0, 0), (100, 0)], "w": 9}],
+        "channels": [{"poly": [(0, 50), (100, 50)], "w": 4.2}],
+        "field_ditches": [{"poly": [(0, 100), (100, 100)], "w": 4.2}],
+        "canals": [{"poly": [(0, 150), (100, 150)], "w": 12}],
     }
-    widths = [w for _pts, w in bridge_carried_ways(M)]
-    assert widths == [34, 20, 26, 8, 18, 5, 6], "the Imperial road, every other trunk road, the ring, the streets and the lanes, in that order"
-    assert bridge_carried_ways({}) == [], "a manifest with no ways carries nothing"
+    waters = bridge_crossed_waters(M)
+    assert len(waters) == 4, f"one of the four kinds was dropped: {len(waters)} offered"
 
 
-def test_every_kind_of_water_a_way_may_have_to_be_carried_over_is_in_the_set() -> None:
-    """Same for the water side, including the two cases the docstring calls out: an UNDRAWN channel is
-    a buried conduit with no seam to bridge, and the river rides in `pts` rather than `poly`."""
-    M: dict[str, Any] = {
-        "streams": [{"poly": [[0, 0], [10, 0]], "w": 11}, {"poly": [[0, 5], [10, 5]]}],
-        "channels": [{"poly": [[0, 10], [10, 10]], "w": 6}, {"poly": [[0, 15], [10, 15]], "drawn": False}],
-        "field_ditches": [{"poly": [[0, 20], [10, 20]]}],
-        "canals": [{"poly": [[0, 25], [10, 25]], "w": 14}],
-        "moat": [[0, 30], [10, 30]],
-        "moat_width": 24,
-        "river": {"pts": [[0, 35], [10, 35]]},
-        "castles": [{"moat": [[0, 40], [10, 40]]}, {}],  # the second castle has no moat of its own
-        "aqueducts": [{"poly": [[0, 45], [10, 45]]}],
-    }
-    widths = [w for _pts, w in bridge_crossed_waters(M)]
-    assert widths == [11, 9, 6, 4.2, 14, 24, 40, 26, 8], "the buried channel is absent; every default is its documented one"
-    assert bridge_crossed_waters({}) == []
+def test_an_undrawn_channel_is_not_bridged() -> None:
+    """A buried conduit leaves no seam on the ground, so there is nothing to carry a way over. Bridging
+    one would draw a plank across bare earth."""
+    M = {"channels": [{"poly": [(0, 0), (100, 0)], "w": 4.2, "drawn": False}]}
+    assert bridge_crossed_waters(M) == [], "a buried conduit was offered for bridging"
+
+    M["channels"][0]["drawn"] = True
+    assert len(bridge_crossed_waters(M)) == 1, "and a drawn one is offered"
 
 
-def test_a_river_recorded_only_as_a_poly_is_still_water() -> None:
-    """The fallback arm. `s.river` writes `pts`, so `poly` never occurs in a real manifest - but the
-    function reads both, and a branch nothing exercises is a branch nobody has seen work."""
-    assert [w for _p, w in bridge_crossed_waters({"river": {"poly": [[0, 0], [9, 0]], "w": 33}})] == [33]
-    assert bridge_crossed_waters({"river": {}}) == [], "a river record with no line is not water to bridge"
+def test_a_watercourse_carries_its_own_width_into_the_set() -> None:
+    """The span has to reach both banks, so the width travels with the water rather than being guessed
+    at the far end. A default is applied where the record omits it."""
+    M = {"streams": [{"poly": [(0, 0), (100, 0)], "w": 30}], "channels": [{"poly": [(0, 9), (9, 9)]}]}
+    widths = sorted(w for _pts, w in bridge_crossed_waters(M))
+    assert 30 in widths, "the stream's own width"
+    assert all(w > 0 for w in widths), "and a positive default where the record omitted one"
+
+
+def test_one_crossing_gets_one_deck() -> None:
+    """`ways_cross_water_on_a_deck`, and the defect it was written for. Minami carried two decks over the
+    Hayakawa 3 px apart, and three hamlets each carried two footplanks at the SAME point - a way that
+    crosses a stream where a channel joins it is ONE bridge on the ground. The dedup lives in `bridge()`
+    so every caller is covered: the road pass, the plank pass, and any gen that hand-places a deck."""
+    s = Settlement(1000, 1000, seed=1)
+    s.meta(name="Bridgely", scale="hamlet", ftpx=1, down_deg=90)
+    s.bridge(500.0, 500.0, 0.0, 40.0, 12.0)
+    assert len(s.M["bridges"]) == 1
+    s.bridge(502.0, 500.0, 0.0, 40.0, 12.0)  # the same crossing, 2 px away
+    assert len(s.M["bridges"]) == 1, "a second deck was drawn over the same crossing"
+
+
+def test_two_genuinely_distinct_crossings_both_draw() -> None:
+    """The tolerance scales with the deck so it cannot swallow a real neighbour: two footplanks a few px
+    apart on DIFFERENT waters must both appear. A dedup that ate them would be worse than the doubling."""
+    s = Settlement(1000, 1000, seed=1)
+    s.meta(name="Bridgely", scale="hamlet", ftpx=1, down_deg=90)
+    s.bridge(500.0, 500.0, 0.0, 40.0, 12.0)
+    s.bridge(700.0, 500.0, 0.0, 40.0, 12.0)
+    assert len(s.M["bridges"]) == 2
