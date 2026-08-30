@@ -33,7 +33,7 @@ historical finding still has a home - and carry the three boxes.
       the Phase 4 deletion rather than a Phase 1 task. Recorded rather than silently reordered.
       verify: `make quick`
       research: procedure
-- [ ] **T05** Re-roll all five live hamlets; compare each manifest byte-for-byte against before. DIAGNOSE
+- [x] **T05** Re-roll all five live hamlets; compare each manifest byte-for-byte against before. DIAGNOSE
       any difference in writing before Phase 2 starts. If a map moved, a `settlement-review` is owed and
       this is the task that owes it.
       measure: `make maps`
