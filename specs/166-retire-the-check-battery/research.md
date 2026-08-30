@@ -87,3 +87,55 @@ those keys do not exist before it runs. That is a handful, not 87, and they are 
 completeness ratchets that T14 sends to static tests anyway.
 
 **Sources:** none - a measurement of this repository.
+
+## R11 - T22: THE COVERAGE FLOORS, MEASURED RATHER THAN ASSUMED
+
+The FULL run reports the hamlet-path floor at **99.28%**, ~90 lines across 11 modules, and
+`perf_review.py` at 98%. T22's bar is that a floor is RE-DERIVED, never lowered - so the question is
+which of those lines this feature cost. Answered by measurement, in four parts.
+
+### 1. The coverage carriers I deleted were ALREADY DEAD
+
+`tests/full/test_coverage_carriers.py` replayed eight frozen pool maps through the whole gate. In the
+BASELINE worktree at `95847698` (the commit before this feature, battery intact) **all eight fail with
+`FileNotFoundError`**: they read `pool/<tier>/<name>.json`, and feature 161 moved every map into a
+per-map folder under `legacy-hand-authored-pool/`. They had been dead since that landed.
+
+**So deleting the file cost no coverage at all**, because it was providing none. This is the same
+"path patterns outside the walk" failure as the two flat `*.gen.py` literals, three files over.
+
+### 2. `perf_review.py`'s two branches WERE a real loss - and are re-derived
+
+Lines 69-70 (`_records`' corrupt-file skip) and 89 (`pairs`' label filter) lost their only reader with
+the carriers. Both are re-derived as real tests in `tests/tools/test_perf_review.py`, not exempted:
+`make cov-file` now reports 167 statements, 0 missed, 100%.
+
+### 3. The hamlet-path floor's ~90 lines are NOT this feature's
+
+The other deletion that could have cost coverage is `tests/check_village/`. Probed directly, in the
+baseline worktree, against the two largest blocks in the floor's missing set:
+
+| probe | result |
+|---|---|
+| `test_common_geometry.py` vs `settlement/_geom/primitives.py` | 11% - **108-125 listed as Missing** |
+| `test_driver_and_fixtures.py` (runs every check) vs `settlement/_knobs.py` | 38% - **562-602 and 725-758 listed as Missing** |
+
+The battery's own broadest test was not the reader for those lines either. The floor gap predates this
+feature, which is consistent with the fourth finding.
+
+### 4. `make done FULL=1` HAS NEVER BEEN GREEN in the recorded history
+
+Four FULL-scope runs exist in `dev/run-log/`: one on 2026-08-25 (five days before this feature) and the
+three this feature ran. **None is green.** The FULL-only floors have not been satisfied by any recorded
+run, so treating today's number as a regression from today's change would be wrong.
+
+### What is therefore owed, and to whom
+
+- **This feature owes nothing further on coverage**: the one real loss is re-derived, and no floor was
+  lowered. The `--omit` list swapped `check_village/` for `overlap/`, which is the deleted package's
+  successor holding the same taxonomy - a rename, not a widening.
+- **Somebody owes the FULL gate a feature.** Bringing it green means ~90 hamlet-path lines, the four
+  `ci/` modules and `switches.py` (whose `tooling` tests are deselected when the stamp is fresh, so
+  their lines go uncovered without anything being deleted), and the stale-path class feature 161 left
+  behind. That is a tooling feature, not part of retiring a check battery, and it is recorded here
+  rather than smuggled into this one.

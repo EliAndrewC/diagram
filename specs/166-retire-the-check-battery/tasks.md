@@ -120,11 +120,11 @@ that batch. A batch is not done until its replacements have each been seen red.
 
 ## Phase 6 - verify
 
-- [ ] **T22** Coverage floors RE-DERIVED, not lowered. A drop is a coverage loss on code that is STAYING
+- [X] **T22** Coverage floors RE-DERIVED, not lowered. A drop is a coverage loss on code that is STAYING
       and is a sentence to the GM, never a quiet reduction.
       measure: `make hamlet-floor`
       research: procedure
-- [ ] **T23** `make verify` (gate + its paired review). Fix everything it lists, then re-run once. Then
+- [X] **T23** `make verify` (gate + its paired review). Fix everything it lists, then re-run once. Then
       `make maps` - reference, then the tier.
       research: procedure
 - [ ] **T24** `make perf LABEL=166-end` and `make perf-report AGAINST=166-start`. A decrease is expected
