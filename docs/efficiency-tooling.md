@@ -34,7 +34,7 @@ than on time:
 |---|---|---|
 | `ci verified-done` | the WHOLE gate, in ~0 s | any change to engine `.py` (compared as its docstring-stripped AST) or to pool gens/manifests. Docs, tests, the Makefile, config and `scripts/` never re-open it - **nor do comments, docstrings or formatting inside engine Python** |
 | `gate-stamp --fresh hooks` | the `hooks-test` phase | a change to any guard script. The phase itself runs its suites in PARALLEL since feature 172 - measured on identical content, every suite forced stale: **194 s serial, 63 s parallel** |
-| per-suite freshness | any of the 21 guard suites | **its DERIVED dependency set** (feature 172): its own guard and test, plus every shared helper reachable from them TRANSITIVELY, read from code rather than prose. A `_gatecost.py` change re-runs 2 suites where it used to re-run all 21; a make/rewrite change 3. The escape family still reaches 17, because every guard reaches its escape - and that is what the parallelism is for |
+| per-suite freshness | any of the 21 guard suites | **its DERIVED dependency set** (feature 172): its own guard and test, plus every shared helper reachable from them TRANSITIVELY, read from code rather than prose. A `_gatecost.py` change re-runs 5 suites where it used to re-run all 21, and a make/rewrite change 6 - measured on real incremental runs; three of those five are the whole-tree suites, which re-run for any script change and always will. The escape family still reaches 17, because every guard reaches its escape - and that is what the parallelism is for |
 | `ci tooling-fresh` | `tests/tooling` inside `make quick` | a change to the tooling those tests drive |
 
 Measured: **48 of 314 recorded `make done` runs short-circuited entirely**, at 0 s each.
