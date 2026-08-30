@@ -104,3 +104,26 @@ Measured on this clone, same content, every suite forced stale:
 3.1x. Not the theoretical 8x, because the suites are uneven - the slowest few dominate the wall clock
 once the rest have finished, and two of them (`test-sync-with-main.sh`, `test-clone-sync-hooks.sh`)
 build real git trees. Raising `HOOKS_JOBS` past 8 cannot beat the longest single suite.
+
+## R7 - the split dropped two constants, and the equivalence test did not catch it
+
+`hooks-test` went red on five suites after the split: every escape that needed a REASON was refused,
+because `_REASON_WORDS, _REASON_CHARS = 2, 8` never made it into `_hm_escape.py`. The splitter
+selected top-level nodes by name and its `name_of` handled only single-`Name` targets - a TUPLE
+assignment returned None and was silently skipped.
+
+**Two safeguards were in place and neither caught it**, which is the part worth recording:
+
+- the 320-comparison equivalence check compared `escape_used` and `escape_reason` against the
+  pre-split module - but not `reason_is_enough`, which is the one function that reads those constants.
+  A function-by-function equivalence check is only as complete as its function list.
+- the leaves all PARSED, because a name defined nowhere is a runtime `NameError`, not a syntax error.
+
+What did catch it: running the suites. The audit that should have run alongside the split is the one
+run afterwards - compare the set of top-level NAMES in the original against the union of the leaves,
+which reported exactly `['_REASON_CHARS', '_REASON_WORDS']` and would have taken ten seconds before
+the first suite ever ran.
+
+**The rule for the next mechanical split**: assert that the union of the parts defines every name the
+whole defined, before trusting any behavioral comparison. Behavior tests check the paths you thought
+of; a name census checks the ones you did not.

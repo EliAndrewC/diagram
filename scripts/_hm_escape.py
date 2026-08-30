@@ -23,6 +23,21 @@ _SEARCHERS = ("grep", "egrep", "fgrep", "rg", "ack", "ag", "ripgrep")
 
 _FOR_IN = re.compile(r"\bfor\s+\w+\s+in\b[^;\n]*(?:;|\n|$)")
 
+# THE REASON FLOOR (feature 170, GM 2026-08-30): *"should we just always record that they happened and
+# force the Claude Code session, which is performing the workaround to specify why they are doing it?
+# Otherwise, we have no way to audit later when this workaround was taken and whether the stated
+# reasons were valid use cases."* Every guard documented "with a reason" and every guard accepted a
+# BARE token, so the audit the GM describes could not be run: there was often no reason to read.
+#
+# TWO WORDS AND EIGHT CHARACTERS, and the number matters less than what it excludes. It rejects a bare
+# token and `GATE_OK: ok`; it admits `CI is down`, which is ten characters and a perfectly good reason.
+# The first draft said fifteen characters and justified itself by the map waiver's sixty - a mechanism
+# this repository RETIRED (`dev/gate.md`: "Waivers are gone") - and would have refused that true short
+# reason. This is a floor on EFFORT, not on quality: no tool can grade a reason, and the audit is a
+# person reading them.
+_REASON_WORDS, _REASON_CHARS = 2, 8
+
+
 def escape_reason(text: str, token: str) -> str:
     """The reason the session gave for this escape, or "" if it gave none.
 
