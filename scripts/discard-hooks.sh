@@ -36,7 +36,13 @@ try: print(json.load(sys.stdin).get("tool_input",{}).get("command",""))
 except Exception: print("")' 2>/dev/null || true)
 [ -n "$CMD" ] || exit 0
 
-case "$CMD" in *DISCARD_OK*) exit 0 ;; esac
+# GUARD_EDIT_OK: feature 168 - this guard RECORDS what it does (GM 2026-08-30). Nothing it refuses or
+# permits changes; the escape especially is recorded, because the escape RATE is what this project
+# acts on - `discard` was escaped in 5 of 5 firings, which is how its merge-verb narrowing was found.
+DG_HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+# shellcheck source=/dev/null
+. "$DG_HERE/_guardlog.sh"
+case "$CMD" in *DISCARD_OK*) guard_log discard escaped "$(guard_cmd)" discard-ok; exit 0 ;; esac
 case "$CMD" in *"git checkout"*|*"git restore"*|*"git -C"*) ;; *) exit 0 ;; esac
 
 # Parse every git invocation in the command (they may be chained with && ; |) and collect the
@@ -134,4 +140,5 @@ If you mean it: commit first (mid-task commits inside your clone are always fine
 DISCARD_OK in the command with a note saying why. If you did not mean it, the command was carrying
 text the shell read as an instruction - rewrite it without the checkout.
 (scripts/discard-hooks.sh; feature 133 T33)" >&2
+guard_log discard blocked "$(guard_cmd)" would-discard-dirty   # GUARD_EDIT_OK: feature 168
 exit 2

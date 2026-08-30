@@ -71,7 +71,12 @@ try:
 except Exception:
     print("* False")')"
 
-[ "$NEW" = "True" ] && exit 0
+# GUARD_EDIT_OK: feature 168 - the escape is recorded (its rate is what this project acts on), and so
+# is the refusal below. Nothing about what this guard forbids changes.
+GF2_HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+# shellcheck source=/dev/null
+. "$GF2_HERE/_guardlog.sh"
+[ "$NEW" = "True" ] && { guard_log guard-file escaped "$FILE" guard-edit-ok; exit 0; }
 
 case "$FILE" in
   */.claude/skills/diagram/Makefile|*/scripts/*-hooks.sh|*/.claude/settings.json) ;;
@@ -102,4 +107,5 @@ Before you do, check which of these you are actually doing:
 
 (scripts/guard-file-hooks.sh; feature 127)
 TAIL
+guard_log guard-file blocked "$FILE" no-marker   # GUARD_EDIT_OK: feature 168
 exit 2

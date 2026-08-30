@@ -25,7 +25,13 @@ RANGE="${1:-origin/main..HEAD}"
 ROOT="$(git rev-parse --show-toplevel)"
 cd "$ROOT" || exit 0
 
-[ -n "${REVIEW_GATE_OK:-}" ] && { printf 'review-gate: BYPASSED - %s\n' "$REVIEW_GATE_OK"; exit 0; }
+# GUARD_EDIT_OK: feature 168 - this gate records what it does, escape included (GM 2026-08-30). It
+# refuses two different things - a spec with no fidelity verdict, and a re-rolled map with no review
+# logged - so the rule slug says which. Nothing it refuses changes.
+RG_HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+# shellcheck source=/dev/null
+. "$RG_HERE/_guardlog.sh"
+[ -n "${REVIEW_GATE_OK:-}" ] && { guard_log review-gate escaped "$REVIEW_GATE_OK" review-gate-ok; printf 'review-gate: BYPASSED - %s\n' "$REVIEW_GATE_OK"; exit 0; }
 
 changed=$(git diff --name-only "$RANGE" 2>/dev/null || true)
 [ -z "$changed" ] && exit 0
@@ -111,6 +117,13 @@ if [ -n "$fail" ]; then
   printf '\n\033[1mreview-gate FAILED:%s\033[0m\n' "$fail"
   printf 'If a case is genuinely exempt - a superseded spec, a mechanical sweep across every map -\n'
   printf 'set REVIEW_GATE_OK="<reason>" so the reason ships with the push.\n\n'
+  # GUARD_EDIT_OK: feature 168 - the rule names WHICH half refused: an unreviewed spec, an unreviewed
+  # map, or both.
+  case "$fail" in
+    *spec.md*json*|*json*spec.md*) guard_log review-gate blocked "$fail" spec-and-map ;;
+    *spec.md*)                     guard_log review-gate blocked "$fail" spec-no-verdict ;;
+    *)                             guard_log review-gate blocked "$fail" map-no-review ;;
+  esac
   exit 1
 fi
 printf 'review-gate: clean\n'

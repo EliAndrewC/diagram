@@ -11,6 +11,11 @@ set -uo pipefail
 HERE=$(cd "$(dirname "$0")" && pwd)
 HOOK=$HERE/clone-sync-hooks.sh
 SYNC=$HERE/sync-with-main.sh
+# GUARD_EDIT_OK: feature 168 - clone-sync-hooks.sh now RECORDS its five refusals, so this suite
+# writes into a throwaway log rather than the session's real one; otherwise `make audit`'s census
+# counts fixture firings as things that happened to a session.
+GUARD_LOG_ROOT=$(mktemp -d); export GUARD_LOG_DIR="$GUARD_LOG_ROOT"
+trap 'rm -rf "$GUARD_LOG_ROOT"' EXIT
 TMP=$(mktemp -d)
 # NB: cleanup is done EXPLICITLY at the end, NOT via a `trap ... EXIT` - an EXIT trap also fires in
 # the forked subshells that `&` background jobs and pipelines create, which would rm the fixtures
@@ -200,6 +205,45 @@ OUT=$(printf '{"session_id":"sid-fj"}' \
       | CLONE_MAIN="$FMAIN4" CLONE_GITHUB="$FMAIN4" CLONE_SESSIONS_DIR="$SESS" "$HOOK" prompt 2>&1)
 case $OUT in *"feature.json is TRACKED"*) printf 'FAIL  warning fires on an UNTRACKED pointer\n      out: %s\n' "$OUT"; FAILED=1 ;;
              *) printf 'ok    silent when the pointer is untracked\n' ;; esac
+
+# A STRAY COMMIT IN THE MIRROR IS NAMED AS SUCH, NOT REPORTED AS THE CLONE BEING STALE (feature 168).
+# The mirror only ever fast-forwards from GitHub, so its HEAD is normally main's tip - but a bare
+# `cd /diagram` that leaks into the next command commits INTO it, and then every clean clone is told
+# it is stale and sent at `sync-in`, which fetches GitHub, finds nothing new and reports success.
+# Happened twice on 2026-08-30. Here the mirror HAS an origin/main and its HEAD is ahead of it.
+GH=$TMP/github.git; git init -q --bare "$GH"
+git -C "$GH" symbolic-ref HEAD refs/heads/main   # without this the clone lands on `master` and has no origin/main
+SEED=$TMP/seed; git init -q "$SEED"; git -C "$SEED" config user.email t@t; git -C "$SEED" config user.name t
+echo a > "$SEED/f"; git -C "$SEED" add f; git -C "$SEED" commit -qm a
+git -C "$SEED" branch -M main; git -C "$SEED" push -q "$GH" main
+FSTRAY=$TMP/main-stray; git clone -q "$GH" "$FSTRAY"; git -C "$FSTRAY" config user.email t@t; git -C "$FSTRAY" config user.name t
+mkdir -p "$FSTRAY/.clones"; git clone -q "$FSTRAY" "$FSTRAY/.clones/miscellaneous"
+# the control FIRST, on the very same fixture: mirror at origin/main, clone at the tip
+OUT=$(printf '{"session_id":"sid-me","tool_input":{"file_path":"%s/.clones/miscellaneous/a.txt"}}' "$FSTRAY" \
+      | CLONE_MAIN="$FSTRAY" CLONE_SESSIONS_DIR="$SESS" "$HOOK" pretool 2>&1); check "mirror at origin/main, clone at tip -> allowed" 0 $?
+echo stray > "$FSTRAY/f"; git -C "$FSTRAY" commit -qam "stray commit made in the mirror"   # the leak
+OUT=$(printf '{"session_id":"sid-me","tool_input":{"file_path":"%s/.clones/miscellaneous/a.txt"}}' "$FSTRAY" \
+      | CLONE_MAIN="$FSTRAY" CLONE_SESSIONS_DIR="$SESS" "$HOOK" pretool 2>&1); RC=$?
+check "stray commit in the mirror -> blocked" 2 $RC
+case "$OUT" in
+  *"STRAY COMMIT"*) printf 'ok    the refusal names the stray commit rather than blaming the clone\n' ;;
+  *) printf 'FAIL  a stray mirror commit was reported as a stale clone\n      out: %s\n' "$OUT"; FAILED=1 ;;
+esac
+case "$OUT" in
+  *"NOT fix"*) printf 'ok    it says sync-in cannot fix this\n' ;;
+  *) printf 'FAIL  the refusal still sends the session at sync-in, which cannot help\n      out: %s\n' "$OUT"; FAILED=1 ;;
+esac
+# and a clone that is genuinely stale against a CLEAN mirror still gets the ordinary refusal
+git -C "$FSTRAY" reset -q --hard origin/main; git -C "$FSTRAY" commit -q --allow-empty -m real
+git -C "$FSTRAY" push -q "$GH" main; git -C "$FSTRAY" fetch -q origin
+OUT=$(printf '{"session_id":"sid-me","tool_input":{"file_path":"%s/.clones/miscellaneous/a.txt"}}' "$FSTRAY" \
+      | CLONE_MAIN="$FSTRAY" CLONE_SESSIONS_DIR="$SESS" "$HOOK" pretool 2>&1); RC=$?
+check "genuinely stale clone against a clean mirror -> still the sync-in block" 2 $RC
+case "$OUT" in
+  *"STRAY COMMIT"*) printf 'FAIL  a genuinely stale clone was reported as a stray mirror commit\n'; FAILED=1 ;;
+  *"stale base"*)   printf 'ok    a genuinely stale clone still gets the sync-in refusal\n' ;;
+  *) printf 'FAIL  unexpected refusal for a stale clone\n      out: %s\n' "$OUT"; FAILED=1 ;;
+esac
 
 [ -n "${LIVE_PID:-}" ] && kill "$LIVE_PID" 2>/dev/null; true
 rm -rf "$TMP"

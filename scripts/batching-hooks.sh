@@ -143,6 +143,16 @@ case "$MODE" in
         echo " - NEVER pad with no-op turns to age the window - a wasted turn costs the same round trip as recon, and only quick single reads are ever blocked (heredocs, &&/; folds, pytest/make/git-commit runs always pass), so there is nothing to game."
         echo "Then continue. The bar re-arms at $REARM serial turns of the last $WINDOW and decays back to $THRESHOLD as you batch. (CLAUDE.md 'Batch into fewer, bigger turns'; measured 2026-08-08: 147 of 162 round trips single-call - 22.7 min of latency for 4.0 min of work; 2026-08-10: 49 of 52 blocks hit already-substantive calls, hence the shape test.)"
       } >&2
+      # GUARD_EDIT_OK: feature 168 - THE LOUDEST GUARD FINALLY RECORDS (GM 2026-08-30). 119 firings in
+      # six days, more than every other guard combined, and not one of them written down - so nobody
+      # could price it the way features 162 and 164 priced the guards they changed. The rule slug
+      # separates the block from the notice that now precedes it by one turn. No python: this hook
+      # fires on every Read/Grep/Glob and its startup cost is why it parses nothing, but a BLOCK is
+      # rare and already costs a round trip, so one process here is free.
+      BH_HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+      # shellcheck source=/dev/null
+      . "$BH_HERE/_guardlog.sh"
+      guard_log batching blocked "$N of the last ${#HIST} turns were single quick calls" serial-recon
       exit 2
     fi
     # A NEW TURN APPENDS ITS OWN (provisional) ENTRY HERE, after the check above has read the

@@ -73,6 +73,14 @@ if "HOST_GIT_OK" not in cmd:
 print("ok")
 ')
 
+# GUARD_EDIT_OK: feature 168 - every refusal is recorded, and the RULE is the verdict that produced it
+# (`force-push`, `history-rewrite`, `host-git-write`). This guard has three rules and had no record at
+# all, so "repo-safety fired" could not say which. Nothing it refuses changes, and the two rules with
+# no escape still have none.
+RS_HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+# shellcheck source=/dev/null
+. "$RS_HERE/_guardlog.sh"
+case "$VERDICT" in ok) ;; *) guard_log repo-safety blocked "$(guard_cmd)" "$VERDICT" ;; esac
 case "$VERDICT" in
   force-push)
     cat >&2 <<'TAIL'

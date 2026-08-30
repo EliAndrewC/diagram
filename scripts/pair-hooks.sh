@@ -187,6 +187,7 @@ print(str(pathlib.Path(tp).parent / sid / "subagents") if tp and sid else "")
 
   if [ "$tool" = "Bash" ] && is_gate_invocation "$cmd"; then
     case "$cmd" in *PAIR_OK=*)
+      guard_log pair escaped "$cmd" pair-ok-gate   # GUARD_EDIT_OK: feature 168 - the rate, beside the reason
       log_bypass "$(printf '%s' "$cmd" | sed -n 's/.*PAIR_OK=["\x27]\{0,1\}\([^"\x27]*\).*/\1/p')" "gate alone"
       [ -n "$key" ] && write_pairing "$(pairing_file)" waived_key "$key"   # ...and the stop branch honors it
       exit 0;;
@@ -231,11 +232,14 @@ print(json.dumps({"hookSpecificOutput": {
     printf 'One-sided case (docs, tests, a guard script, an unattended run)? Take it deliberately:\n' >&2
     printf '    PAIR_OK="<why this needs no review>" <your command>\n' >&2
     printf '(the reason lands in dev/bypass-log/ where make bypass-audit reads it; GM 2026-08-29)\n' >&2
+    guard_log pair blocked "$cmd" gate-without-review   # GUARD_EDIT_OK: feature 168
     exit 2
   fi
 
   if [ "$tool" = "Agent" ] && { [ "$atype" = "settlement-review" ] || [ "$atype" = "building-review" ]; }; then
-    case "$prompt" in *PAIR_OK*) log_bypass "named in the dispatch" "review alone"; exit 0;; esac
+    # GUARD_EDIT_OK: feature 168 - the escape is recorded as well as logged to the bypass log; the two
+    # answer different questions (that one carries the REASON, this one makes the RATE computable).
+    case "$prompt" in *PAIR_OK*) guard_log pair escaped "$atype" pair-ok-review; log_bypass "named in the dispatch" "review alone"; exit 0;; esac
     if gate_running_or_fresh "$key"; then
       [ -n "$key" ] && write_pairing "$(pairing_file)" review_key "$key"
       exit 0
@@ -245,6 +249,7 @@ print(json.dumps({"hookSpecificOutput": {
     printf 'record matches it, so the review would be adjudicating a map the suite has not checked.\n\n' >&2
     printf '    make verify        # starts the gate, then dispatch the review in the same turn\n\n' >&2
     printf 'Deliberately one-sided? Put PAIR_OK and the reason in the dispatch prompt.\n' >&2
+    guard_log pair blocked "$atype" review-without-gate   # GUARD_EDIT_OK: feature 168
     exit 2
   fi
   exit 0
@@ -272,6 +277,7 @@ print(str(pathlib.Path(tp).parent / sid / "subagents") if tp and sid else "")
   write_pairing "$(pairing_file)" stop_told "$key"
   printf 'PAIRING HALF-OPEN: the gate went green on this content and no settlement-review looked at it.\n' >&2
   printf 'Dispatch one now, or record why it is not owed: PAIR_OK="<reason>" on your next gate run.\n' >&2
+  guard_log pair blocked "stop" half-open-pairing   # GUARD_EDIT_OK: feature 168
   exit 2
 }
 

@@ -8,6 +8,10 @@
 # must never be blocked.
 set -uo pipefail
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+# GUARD_EDIT_OK: feature 168 - this guard records its firings now, so the suite writes its fixtures to
+# a throwaway log rather than into the census `make audit` reads.
+GUARD_LOG_ROOT=$(mktemp -d); export GUARD_LOG_DIR="$GUARD_LOG_ROOT"
+trap 'rm -rf "$GUARD_LOG_ROOT"' EXIT
 HOOK="$HERE/readme-hooks.sh"
 PASS=0; FAIL=0
 

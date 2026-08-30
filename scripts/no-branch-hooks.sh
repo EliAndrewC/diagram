@@ -34,7 +34,12 @@ try: print(json.load(sys.stdin).get("tool_input",{}).get("command",""))
 except Exception: print("")' 2>/dev/null || true)
 [ -n "$CMD" ] || exit 0
 
-case "$CMD" in *NO_BRANCH_OK*) exit 0 ;; esac
+# GUARD_EDIT_OK: feature 168 - records what it does, escape included (GM 2026-08-30). Nothing about
+# what this guard refuses changes.
+NB_HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+# shellcheck source=/dev/null
+. "$NB_HERE/_guardlog.sh"
+case "$CMD" in *NO_BRANCH_OK*) guard_log no-branch escaped "$(guard_cmd)" no-branch-ok; exit 0 ;; esac
 
 # Only branch CREATION. Switching to an existing branch, listing, and deleting are all fine - a
 # session cleaning up someone's leftover branch must not be blocked from doing it.
@@ -69,4 +74,5 @@ If you genuinely need a branch (a throwaway bisect, recovering another session's
 NO_BRANCH_OK in the command with a note saying why.
 
 (scripts/no-branch-hooks.sh; GM 2026-07-27)" >&2
+guard_log no-branch blocked "$(guard_cmd)" branch-creation   # GUARD_EDIT_OK: feature 168
 exit 2

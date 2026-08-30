@@ -99,9 +99,15 @@ done:
 	  printf '\n\033[1mgate green\033[0m (already verified - nothing the gate exercises has changed since the last green run)\n'; exit 0; \
 	fi; \
 	$(if $(FULL),$(MAKE) --no-print-directory bypass-audit REF_WHY="$(REF_WHY)" || exit 1;,) \
-	$(if $(REF_OK),$(LOGBYPASS) permitted "REF_OK - reference step skipped: $(REF_WHY)"; printf '\nreference step SKIPPED (REF_OK, logged to dev/bypass-log/)\n';,$(MAKE) --no-print-directory reference || exit 1;) \
 	T0=$$(date +%s); fail=""; \
-	for phase in lint format typecheck hooks-test $(if $(FULL),test-full perf-gate,test); do \
+	: "(GUARD_EDIT_OK: feature 168 - THE CHEAP CHECKS RUN FIRST, at the GM's ruling 2026-08-30. The three static phases cost 1.8 s together against the reference roll's 29 s, so a session that has broken something ruff cannot fix hears about it in seconds rather than half a minute. The GM authorized this ON PRINCIPLE and predicted, correctly, that it buys almost nothing: both static phases AUTOCORRECT (ruff check --fix, ruff format), so they rarely fail at all, and only 8 of 317 recorded gate runs failed on one without also failing the suite - about 4 minutes recovered across the entire history. Do not later credit this reorder with a saving it does not deliver. It does not weaken 'the reference settlement gates everything expensive': what moved ahead of the roll is 16x cheaper than it, and every expensive phase still stands behind it.)"; \
+	for phase in lint format typecheck; do \
+	  printf '\n\033[1m== %s ==\033[0m\n' "$$phase"; \
+	  $(MAKE) --no-print-directory $$phase || fail="$$fail $$phase"; \
+	done; \
+	if [ -n "$$fail" ]; then $(LOGRUN) $(DONE_NAME) "$(if $(FULL),full,reference)" "$$(( $$(date +%s) - $$T0 ))" "failed:$$fail"; $(STATE) failed-gate $(DONE_NAME); printf '\n\033[1mGATE FAILED:%s\033[0m (the static checks run FIRST now, so the map roll has not happened - fix these and re-run)\n' "$$fail"; exit 1; fi; \
+	$(if $(REF_OK),$(LOGBYPASS) permitted "REF_OK - reference step skipped: $(REF_WHY)"; printf '\nreference step SKIPPED (REF_OK, logged to dev/bypass-log/)\n';,$(MAKE) --no-print-directory reference || exit 1;) \
+	for phase in hooks-test $(if $(FULL),test-full perf-gate,test); do \
 	  printf '\n\033[1m== %s ==\033[0m\n' "$$phase"; \
 	  if [ "$$phase" = hooks-test ] && root=$$(git rev-parse --show-toplevel 2>/dev/null) && python3 "$$root/scripts/gate-stamp.py" --fresh hooks; then \
 	    printf 'hooks-test: already green against exactly these guard scripts - skipped (gate-stamp --fresh hooks; 84 s measured 2026-08-26)\n'; continue; fi; \
@@ -502,7 +508,20 @@ rows=[json.load(open(f)) for f in glob.glob(os.path.expanduser(os.environ.get('G
 print('\033[1mGuard firings\033[0m (~/.claude/guard-log/) - what each guard did: blocked, rewrote, reminded, escaped'); \
 by=collections.defaultdict(collections.Counter); \
 [by[r['guard']].update([r['event']]) for r in rows]; \
-[print(f\"  {g:<8} \"+', '.join(f'{k}={v}' for k,v in sorted(c.items()))+(f\"   escape rate {c['escaped']/max(1,c['escaped']+c['blocked']):.0%}\" if c['blocked'] or c['escaped'] else '')) for g,c in sorted(by.items())] or print('  (none recorded yet)'); \
+'GUARD_EDIT_OK: feature 168 - the census gains the RULE breakdown; everything else prints as before.'; \
+'The by-rule line is SUPPRESSED when it carries nothing the line above did not: entries recorded before'; \
+'this feature default their rule to their event, so a guard whose whole history predates the slug would'; \
+'otherwise print `by rule: blocked=16, permitted=4` directly under `blocked=16, permitted=4`. A census'; \
+'line that restates the line above it trains a reader to skip both. (GUARD_EDIT_OK: this is the'; \
+'display half of FR-004, and it changes what the census PRINTS, never what any guard does.)'; \
+rules=collections.defaultdict(collections.Counter); \
+[rules[r['guard']].update([r.get('rule') or r['event']]) for r in rows]; \
+[ (print(f\"  {g:<12} \"+', '.join(f'{k}={v}' for k,v in sorted(c.items()))+(f\"   escape rate {c['escaped']/max(1,c['escaped']+c['blocked']):.0%}\" if c['blocked'] or c['escaped'] else '')), \
+   (print('               by rule: '+', '.join(f'{k}={v}' for k,v in rules[g].most_common(4))) if len(rules[g])>1 and set(rules[g])-set(c) else None)) for g,c in sorted(by.items())] or print('  (none recorded yet)'); \
+'GUARD_EDIT_OK: repairing my own break - a trailing `# comment` appended to the line above landed'; \
+'MID-EXPRESSION, between the list comprehension and its `or print(...)`, because the whole census is'; \
+'one python -c continuation. Nothing in a python -c block takes a shell comment; the reason lives in'; \
+'the bare-string lines above instead.'; \
 print(f\"  {len(rows)} entries\"+(f\", {min(r['utc'] for r in rows)} to {max(r['utc'] for r in rows)}\" if rows else '')); \
 print()"
 	@printf '\033[1mFiles past the ~1,000-line bar\033[0m (constitution X clause 13 - a QUESTION, not a limit)\n'

@@ -1,0 +1,6 @@
+{
+  "utc": "20260830T134213Z",
+  "guard": "pair-hooks",
+  "what": "gate alone",
+  "reason": "a deliberate RED experiment proving the reorder: a planted syntax error must fail before the map roll. No review is owed for a gate that is expected to fail."
+}

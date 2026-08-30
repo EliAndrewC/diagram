@@ -7,6 +7,9 @@ pass=0 fail=0
 ok() { pass=$((pass+1)); }
 bad() { fail=$((fail+1)); echo "FAIL: $1"; }
 TMP=$(mktemp -d); trap 'rm -rf "$TMP"' EXIT
+# GUARD_EDIT_OK: feature 168 - the `prompt` branch now records a stall, so it records into TMP and
+# the trap above cleans it; the session's real log stays a record of what happened to a session.
+export GUARD_LOG_DIR="$TMP/guard-log"
 D="$TMP/sess/subagents"; mkdir -p "$D"
 rec() { printf '{"type":"%s","message":{"role":"%s","content":"x"}}\n' "$1" "$1"; }
 # 1. stalled: last record `user`, mtime 10 min old
