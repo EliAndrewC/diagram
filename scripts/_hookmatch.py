@@ -212,6 +212,12 @@ def escape_used(cmd: str, token: str) -> bool:
         # `sudo`/`command`/`git` may stand in front of the searcher; skip them to find the real head
         head = next((w for w in words if w not in ("sudo", "command", "git", "time", "env")), "")
         if os.path.basename(head) in _SEARCHERS:
+            # ...but a COMMENT in that segment is still the session talking, not a search pattern.
+            # `tail -f log | grep -q done  # POLL_OK: an external port` puts the escape in the LAST
+            # segment, whose head is `grep`; dropping it whole would refuse a legitimate escape,
+            # which is the failure this repository fears most in a guard. Found by reading the
+            # matcher against `no-poll`'s real vectors rather than by a test.
+            kept.append(seg.split("#", 1)[1] if "#" in seg else "")
             continue
         kept.append(seg)
     return token in " ".join(kept)

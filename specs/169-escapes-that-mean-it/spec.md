@@ -47,30 +47,31 @@ any change to what a guard REFUSES, except where a requirement below says so exp
 
 A guard treats its escape token as used only when the session actually put it in the command as an
 escape - not when the command greps for it, quotes it in a commit message, or carries it inside a
-heredoc that is editing a document about guards. All ELEVEN tokens are covered - the ten that exist plus `MAIN_TREE_OK`, which FR-006 creates:
-`GATE_OK`, `MEASURE_OK`, `POLL_OK`, `DISCARD_OK`, `NO_BRANCH_OK`, `PAIR_OK`, `REVIEW_GATE_OK`,
-`SOURCE_EDIT_OK`, `GUARD_EDIT_OK`, `HOST_GIT_OK`, `MAIN_TREE_OK`.
+heredoc that is editing a document about guards. **THE CENSUS IS DERIVED FROM THE TREE, NOT WRITTEN HERE.** Three drafts of this requirement each
+asserted a complete list of "every guard's escape token" and each was short by one - `HOST_GIT_OK`
+found by the round-2 review, `GATE_STAMP_OK` by round 3. The reviewer's diagnosis was that the census
+was being produced from memory of the guards rather than derived, and that a fourth attempt by the
+same author would miss the next one too. It was right, so the list is no longer kept in prose: it
+lives in `tests/tooling/test_guard_firing_log.py`, which enumerates every `*_OK` token in
+`scripts/` and the skill Makefile and FAILS on any that is not classified. A number in this document
+would go stale the day someone adds a guard; a derived check cannot.
 
-**`HOST_GIT_OK` was missed by this spec's own first two drafts** and found by the round-2 review,
-which noticed that its own audit command would have disarmed the guard it was auditing.
-`repo-safety-hooks.sh` matches it against the RAW command while the sanitized copy it built fourteen
-lines earlier - heredocs and quoted strings blanked, for exactly this reason - sat unused. It guards
-git writes against `/host-l7r-repo`, the GM's own repository, and it is the one escape in the file
-that stands beside two rules that deliberately have none. The GM's request says *"every guard's
-escape token"*, so an exclusion here would be theirs to approve, not this feature's.
+The classification has four kinds, and only the first needs code:
 
-**`pair-hooks.sh`'s AGENT-PROMPT branch is deliberately OUT**, and this is the one place the rule
-does not reach. `PAIR_OK` on a Bash command routes through the matcher like the rest; the same token
-in a subagent's dispatch PROMPT does not, because a prompt is prose with no command grammar - there
-is no "invocation position" in a sentence, and the matcher blanks quoted regions, which prose carries
-for ordinary reasons. Converting it would trade a known false-permit for an unknown false-refusal on
-the guard that decides whether a settlement review is owed. The exclusion is stated at the point of
-change as well as here.
+| kind | tokens | why it is safe |
+|---|---|---|
+| **command** - must route through `_hookmatch.py escape` | `GATE_OK`, `MEASURE_OK`, `POLL_OK`, `DISCARD_OK`, `NO_BRANCH_OK`, `PAIR_OK` (Bash branch), `HOST_GIT_OK`, `GUARD_EDIT_OK`, `MAIN_TREE_OK` | converted by this feature; a second check fails the build if any guard decides a command escape by substring again |
+| **content** | `SOURCE_EDIT_OK` | matched inside an Edit's `new_string`, never in a command - the marker in the text IS the escape, so a "mention" is the intended use |
+| **environment** | `REVIEW_GATE_OK`, `GATE_STAMP_OK` | read as `${TOKEN:-}` at push time; an environment variable cannot be set by naming it in a command, so there is nothing to convert |
+| **make-variable / not an escape** | `REF_OK`; `SWEEP_OK`, `REMOTE_OK` | `REF_OK` is a make override already anchored positionally by `_hookmatch.py`; the other two are Makefile macros that override nothing |
 
-**A feature whose whole purpose is that an escape means a session escaped must not ship an escape
-exempt from its own rule.** `MAIN_TREE_OK` is matched as an invocation through `_hookmatch.py` like
-the other nine, and records like the other nine (feature 168: every acting branch records, with a
-rule slug).
+**One exclusion, and it is stated rather than assumed**: `pair-hooks.sh`'s AGENT-PROMPT branch. The
+same token on a Bash command routes through the matcher; in a subagent's dispatch PROMPT it does not,
+because a prompt is prose with no command grammar - there is no invocation position in a sentence,
+and the matcher blanks quoted regions, which would break the GM's own documented
+`PAIR_OK="<reason>"` form. That would disable an escape channel the GM named, on the guard that
+decides whether a settlement review is owed. Adjudicated as a genuine exception by the round-3 review
+under Principle XVI; the residual false-permit is disclosed here and at the point of change.
 
 **The escape is still checked FIRST.** `CLAUDE.md`'s rule - *"check the ESCAPE FIRST or the guard
 cannot be repaired through the channel it guards"* - is not weakened here: what changes is how the
@@ -171,7 +172,7 @@ or on any command naming a clone. The declined candidate (a) is not revived - no
 
 ## Success Criteria
 
-- **SC-001**: for each of the eleven tokens (`HOST_GIT_OK` and `MAIN_TREE_OK` included; `pair`'s agent-prompt branch excluded, per FR-001), a command that MENTIONS it (a grep, a quoted commit message, a heredoc body) produces no `escaped` entry and no state change; a command that USES it as an escape still escapes exactly as before.
+- **SC-001**: for every token the DERIVED census finds (a new one fails the build until classified; `pair`'s agent-prompt branch is the one stated exclusion), a command that MENTIONS it (a grep, a quoted commit message, a heredoc body) produces no `escaped` entry and no state change; a command that USES it as an escape still escapes exactly as before.
 - **SC-002**: a mention of `MEASURE_OK` or `GATE_OK` leaves the guard's state file untouched, proved by driving the guard to the edge of its threshold, sending a mention, and observing that the next expensive command is still refused.
 - **SC-003**: running every guard suite leaves the live census with zero new entries, and a test fails if a recording guard's suite stops isolating the log.
 - **SC-004**: every `guard_log` call in every guard passes a rule slug, proved by a DERIVED check over the guard tree rather than a hand-written list.
@@ -193,5 +194,22 @@ or on any command naming a clone. The declined candidate (a) is not revived - no
 
 ## Review history
 
-Constitution XVI: this spec is reviewed against [`request.md`](request.md) by an independent
-`spec-fidelity` subagent before implementation.
+Constitution XVI: reviewed against [`request.md`](request.md) by an independent `spec-fidelity`
+subagent. **Three rounds, and the third still returned changes - which under Principle XVI is an
+ESCALATION to the GM, not a fourth self-review round.**
+
+| round | verdict | what it found |
+|---|---|---|
+| 1 | CHANGES REQUIRED | FR-006's warrant was FALSE: it claimed to meet `CLAUDE.md`'s stated condition for reopening the hook the GM declined in 2026-08-17, when that condition names the read-only mislabeled-tree diagnostic which FR-006 excludes by construction. Also confirmed, when asked directly, that all five findings are in scope and that it would have flagged a spec building only three |
+| 2 | CHANGES REQUIRED | the token census was incomplete and its completeness claim false - `HOST_GIT_OK` disarms the `/host-l7r-repo` mount guard on a mention, found because the reviewer noticed its OWN audit command would have disarmed it. Also: the `pair` prompt branch needed an explicit in-or-out ruling |
+| 3 | CHANGES REQUIRED | the census was short AGAIN - `GATE_STAMP_OK`, a twelfth token. Adjudicated the `pair` prompt exclusion LEGITIMATE under Principle XVI. Its diagnosis, quoted because it is the useful part: *"three drafts have each asserted a complete census ... and each has been short by one, found by the reviewer and not by the author. That is a persistent blind spot in how the census is being produced - it is being written from memory of the guards rather than derived from the tree"* |
+
+**What the escalation asks the GM.** The mechanical remedy the reviewer named is implemented rather
+than argued: the census is now DERIVED (FR-001), so it cannot be short again, and a new token fails
+the build until classified. Two things are still the GM's, and both are in the close-out report:
+
+1. **May any escape be excluded from FR-001's rule?** This feature excludes exactly one - `pair`'s
+   agent-prompt branch - with the reason above and an independent adjudication. The four
+   environment/content/make-variable tokens need no conversion by construction, not by exemption.
+2. **FR-006's warrant was wrong when the GM approved it** (SC-007). They were told the shape *"is the
+   condition CLAUDE.md set for reopening it"*. It is not, and the 2026-08-17 rule stays unenforced.

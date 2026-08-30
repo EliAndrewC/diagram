@@ -148,3 +148,101 @@ def test_every_suite_of_a_recording_guard_isolates_the_firing_log() -> None:
         if "GUARD_LOG_DIR" not in text:
             missing.append(suite.name)
     assert not missing, f"these suites drive a recording guard but write into the real census: {missing}"
+
+
+# ---------------------------------------------------------------------------------------------
+# THE ESCAPE CENSUS IS DERIVED, NOT WRITTEN FROM MEMORY (feature 169).
+#
+# WHY THIS EXISTS AND NOT A LIST IN A DOCUMENT: three drafts of this feature's spec each asserted a
+# complete census of "every guard's escape token", and each was short by one - `HOST_GIT_OK` found by
+# the round-2 review, `GATE_STAMP_OK` by round 3. The reviewer's diagnosis was that the census was
+# being written from memory of the guards rather than derived from the tree, and that a fourth
+# attempt by the same author would miss the next one too. It was right, so the list moved here.
+#
+# A NEW `*_OK` token now fails this test until someone classifies it, and a guard that decides a
+# COMMAND escape with a bare substring test fails it too - which is the defect the whole feature
+# exists to remove, and the one a future guard would most naturally reintroduce.
+_ESCAPES = {
+    # token: (kind, why this kind is safe)
+    "GATE_OK": ("command", "routes through _hookmatch.py escape"),
+    "MEASURE_OK": ("command", "routes through _hookmatch.py escape"),
+    "POLL_OK": ("command", "routes through _hookmatch.py escape"),
+    "DISCARD_OK": ("command", "routes through _hookmatch.py escape"),
+    "NO_BRANCH_OK": ("command", "routes through _hookmatch.py escape"),
+    "MAIN_TREE_OK": ("command", "routes through _hookmatch.py escape"),
+    "HOST_GIT_OK": ("command", "routes through _hookmatch.py escape, via RS_ESCAPED"),
+    "PAIR_OK": ("command", "the Bash branch routes through the matcher; the AGENT-PROMPT branch is the "
+                           "one stated exclusion - a prompt is prose with no command grammar, and "
+                           "blanking its quoted regions would break the GM's own PAIR_OK=\"reason\" form"),
+    "GUARD_EDIT_OK": ("command", "classify() routes through escape_used; also a marker in edit CONTENT"),
+    "SOURCE_EDIT_OK": ("content", "matched in an Edit's new_string, never in a command - the marker in "
+                                  "the text IS the escape, so a 'mention' is the intended use"),
+    "REVIEW_GATE_OK": ("environment", "read as ${REVIEW_GATE_OK:-} at push time; an environment "
+                                      "variable cannot be set by mentioning it in a command"),
+    "GATE_STAMP_OK": ("environment", "read as ${GATE_STAMP_OK:-} at push time; same ground as "
+                                     "REVIEW_GATE_OK. Missed by three drafts of the spec (round 3)"),
+    "REF_OK": ("make-variable", "a make override, already anchored positionally by _hookmatch.py:116 "
+                                "- it must appear as REF_OK= at a command position"),
+    "SWEEP_OK": ("not-an-escape", "a Makefile MACRO that runs the scope check; nothing overrides"),
+    "REMOTE_OK": ("not-an-escape", "a Makefile MACRO that runs the remote check; nothing overrides"),
+}
+
+_TOKEN = re.compile(r"\b[A-Z][A-Z0-9]*(?:_[A-Z0-9]+)*_OK\b")
+
+
+def _tree_tokens() -> set[str]:
+    files = list(SCRIPTS.glob("*.sh")) + list(SCRIPTS.glob("*.py"))
+    files.append(pathlib.Path(__file__).resolve().parents[2] / "Makefile")
+    found: set[str] = set()
+    for f in files:
+        if f.exists():
+            found |= set(_TOKEN.findall(f.read_text()))
+    return found
+
+
+def test_the_escape_census_is_derived_from_the_tree() -> None:
+    """Every `*_OK` token in the guard tree is classified - a new one fails until someone says what
+    kind it is. Three spec drafts each missed a different token; this cannot."""
+    unclassified = _tree_tokens() - set(_ESCAPES)
+    assert not unclassified, (
+        f"new escape token(s) with no classification: {sorted(unclassified)}. Add each to _ESCAPES "
+        "saying whether it is matched in a COMMAND (and so must route through _hookmatch.py escape), "
+        "in edit CONTENT, as an ENVIRONMENT variable, or is not an escape at all."
+    )
+    stale = set(_ESCAPES) - _tree_tokens()
+    assert not stale, f"classified but no longer in the tree: {sorted(stale)}"
+
+
+def test_no_guard_decides_a_command_escape_with_a_bare_substring_test() -> None:
+    """The defect feature 169 removed, and the one a new guard would most naturally reintroduce.
+
+    A `case "$CMD" in *TOKEN*)` or an `if "TOKEN" in cmd` decides a COMMAND escape by substring, so a
+    grep for the token, or a commit message quoting it, escapes the guard - and in `measure` and
+    `gate` also resets the state that decides whether the NEXT expensive command is refused.
+    """
+    offenders = []
+    for guard in SCRIPTS.glob("*hooks*"):
+        if guard.name.startswith("test") or guard.suffix not in (".sh", ".py"):
+            continue
+        for line in guard.read_text().splitlines():
+            if line.strip().startswith("#"):
+                continue
+            # A line only counts if it DECIDES - substring-tests a token and then acts on it. The
+            # first draft of this check flagged the `sed` that extracts the reason for the bypass log
+            # (it reads `PAIR_OK=`, it decides nothing), which is the mention-versus-invocation
+            # mistake being made by the very check that exists to prevent it.
+            if not re.search(r"guard_log|exit 0|return 0", line):
+                continue
+            # ...and `$prompt` is the ONE declared exclusion (see PAIR_OK in _ESCAPES): a subagent
+            # dispatch prompt is prose, with no command grammar for the matcher to anchor on.
+            if 'case "$prompt"' in line:
+                continue
+            for token, (kind, _why) in _ESCAPES.items():
+                if kind != "command" or token not in line:
+                    continue
+                if re.search(rf"\*{token}[=*]", line) or re.search(rf'["\']{token}["\'] not in \w+', line):
+                    offenders.append(f"{guard.name}: {line.strip()[:90]}")
+    assert not offenders, (
+        "these decide a command escape by substring, so a mention of the token escapes the guard: "
+        + "; ".join(offenders)
+    )

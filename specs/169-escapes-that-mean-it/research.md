@@ -160,3 +160,36 @@ That is not a failure of the fix. `.claude/settings.json` points every hook at *
 a clone. The census will stop recording phantom escapes for every session in the container at the
 moment this lands, and not before - which is also the cleanest available confirmation that the defect
 was real and is being fixed at the right layer.
+
+## R10 - the census was written from memory three times; now it is derived
+
+Three drafts of FR-001 each claimed a complete list of "every guard's escape token". Each was short
+by one, and each was caught by the reviewer rather than by the author:
+
+| round | missed | what it guards |
+|---|---|---|
+| 1 -> 2 | `HOST_GIT_OK` | git writes against `/host-l7r-repo`, the GM's own repository |
+| 2 -> 3 | `GATE_STAMP_OK` | the push-time rule that nothing lands which a green gate did not see |
+
+Round 3 declined to review a fourth draft and escalated, with the diagnosis that matters more than
+either token: the census *"is being written from memory of the guards rather than derived from the
+tree"*, so a fourth attempt would miss the next one too.
+
+**The remedy is mechanical, and it is the same one this feature already applied twice** (FR-003's
+suite-isolation check and FR-004's slug check both replaced hand-lists that had each missed a guard
+within a day). `tests/tooling/test_guard_firing_log.py` now enumerates every `*_OK` token in
+`scripts/` and the skill Makefile and fails on any that is not classified as `command`, `content`,
+`environment`, `make-variable` or `not-an-escape`. A second check fails the build if any guard decides
+a COMMAND escape by substring again - the exact shape every guard carried before this feature, and the
+one a new guard would most naturally reintroduce.
+
+Both were proved to fire: removing `GATE_STAMP_OK` from the classification turns the census check red
+naming that token, and the substring check flagged two real lines on its first run against live code
+(one a true positive - the declared prose exclusion - and one a FALSE positive, a `sed` that extracts
+the bypass reason and decides nothing, which is the mention-versus-invocation mistake being made by
+the very check that exists to prevent it; the check now requires the line to ACT).
+
+The four unconverted tokens are unconverted by CONSTRUCTION, not by exemption: `SOURCE_EDIT_OK` is a
+marker inside edit content, `REVIEW_GATE_OK` and `GATE_STAMP_OK` are environment variables that a
+mention cannot set, and `REF_OK` is a make override already anchored positionally. The single real
+exclusion is `pair`'s agent-prompt branch, adjudicated legitimate by the round-3 review.
