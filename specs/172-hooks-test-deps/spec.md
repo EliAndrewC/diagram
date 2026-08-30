@@ -52,6 +52,18 @@ followed transitively through the shared helpers - shell references (`. _guardlo
 `"$X/_hookmatch.py" mode`) and Python imports alike. A suite re-runs when anything in ITS set changed
 and not otherwise.
 
+**The set of shared helpers is itself DERIVED** - every `_*.py` / `_*.sh` in `scripts/` plus the shared
+test runner - not a list. Round 2 caught the first implementation propagating a hardcoded five-name
+roster, which the split's own three new leaves were invisible to: a guard calling a leaf directly
+would have re-run ZERO suites when that leaf changed. A hardcoded list of shared files, in the feature
+whose subject is deriving instead of listing.
+
+**And a MENTION is not a dependency.** The graph is read from CODE, not raw text: `#` comments go, and
+in Python so do docstrings (via `ast`, docstrings only - other string literals stay, because
+`spec_from_file_location(..., "_ratchet.py")` is a real reference expressed as a string). Without
+this the split delivered nothing at all, because this repository comments heavily and nearly every
+guard NAMES `_hookmatch.py` in its prose. Measured at each stage in `research.md` R4.
+
 **Transitive is not optional and is the whole subtlety.** `_guardlog.sh`'s `escape_or_refuse` calls
 `_hookmatch.py` (feature 170), so a guard that names only `_guardlog.sh` depends on `_hookmatch.py`
 whether it says so or not. A direct-reference-only derivation would under-run and pass a suite that a
@@ -61,8 +73,10 @@ change had broken - which is worse than today's over-running, because today's is
 caught the first draft preserving three rows by hand - a carve-out asserted rather than derived, which
 would keep for those three exactly the over-running the GM asked to end. Measured:
 
-- **`gate-stamp.py` DERIVES to the whole tree.** It reads `scripts/*.sh scripts/*.py`, so the rule
-  "a file that reads the whole directory depends on the whole of it" picks it up with no special case.
+- **`gate-stamp.py` DERIVES to the whole tree**, by a text match on the path glob AS THE CODE WRITES
+  IT - `("scripts", ("*.sh", "*.py"))` - and is pinned by a test. Round 2 caught the first version
+  matching only the literal `scripts/*.sh`, which in that file appears solely in its DOCSTRING: the
+  row was true by accident of wording, and a reword would have dropped the suite from 56 files to 4.
 - **`sync-with-main.sh` and `review-gate.sh` are held there deliberately**, and the reason is a LIMIT
   OF REFERENCE-GRAPH DERIVATION rather than a preference: their suites exercise the push path end to
   end, and that path resolves script paths at RUN TIME from `$ROOT` and `$MAIN` against trees the
@@ -113,7 +127,9 @@ file is cut. FR-002 is the only thing that helps there.
 ### FR-004 - the derivation is checked, not trusted
 
 A test asserts the derived set against the real reference graph, and specifically that a suite whose
-guard reaches a helper only THROUGH another helper still depends on it. A derivation that silently
+guard reaches a helper only THROUGH another helper still depends on it; that every shared helper ON
+DISK is reachable by the deriver (so a new leaf cannot be invisible to it); and that `gate-stamp.py`
+still derives to the whole tree. A derivation that silently
 under-runs is the one failure mode that matters here.
 
 ## Success Criteria

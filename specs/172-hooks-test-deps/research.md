@@ -69,3 +69,38 @@ Final, guards only, against 21 of 21 for every shared file before the feature:
 the same failure mode as a guard, and it is not "is the answer plausible" but "is the thing I am
 matching an INVOCATION or a MENTION". Three of the four attempts above were plausible and wrong, and
 only measuring the resulting blast radius told them apart.
+
+## R5 - the final numbers, and one more under-run the tests caught
+
+After the split, comment/docstring stripping, and one more fix, the guard-only blast radius:
+
+| shared file | guards | before the feature |
+|---|---|---|
+| `_hm_make.py` | **3** (gate, make-only, pair) | 21 |
+| `_gatecost.py` | **2** | 21 |
+| `test_hooks_cases.py` | **3** | 21 |
+| `_hm_shape.py` | 17 | 21 |
+| `_hm_escape.py` | 17 | 21 |
+| `_guardlog.sh` | 17 | 21 |
+
+This is exactly the outcome predicted to the GM before the work started: the make/rewrite family drops
+to three, and the shape family stays wide **because the escape family stands on it and every guard
+reaches its escape**. No arrangement of files changes that, which is why the feature also parallelizes.
+
+**The last fix was an under-run my own test caught, and it is the sharpest instance of this feature's
+lesson.** `_hm_escape.py` imports `from _hm_shape import _strip_quotes` - and a Python import NEVER
+writes the extension, so a filename match could not see it. The deriver reported `_hm_shape.py` as
+depended on by 3 guards when the true answer is 17: it would have skipped fourteen suites that a
+change to the shape primitives can break. Created by this feature's own split, in the feature built to
+prevent exactly that, and caught only because FR-004 demanded an assertion on the transitive case.
+
+## R6 - what parallelism actually bought
+
+Measured on this clone, same content, every suite forced stale:
+
+    serial    194 s   (21 of 21 green)
+    parallel   63 s   (21 of 21 green)   HOOKS_JOBS=8 on a 22-core box
+
+3.1x. Not the theoretical 8x, because the suites are uneven - the slowest few dominate the wall clock
+once the rest have finished, and two of them (`test-sync-with-main.sh`, `test-clone-sync-hooks.sh`)
+build real git trees. Raising `HOOKS_JOBS` past 8 cannot beat the longest single suite.

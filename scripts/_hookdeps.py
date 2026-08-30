@@ -147,7 +147,15 @@ def closure(seeds: set[str]) -> set[str]:
         seen.add(name)
         body = _code(name)   # CODE, not text: a filename in a comment is a mention, not a dependency
         for helper in _SHARED:
-            if helper != name and helper in body and helper not in seen:
+            if helper == name or helper in seen:
+                continue
+            # A PYTHON IMPORT NEVER WRITES THE EXTENSION. `from _hm_shape import _strip_quotes` is a
+            # real dependency that a filename match cannot see, and this feature's own split created
+            # exactly that edge - caught by `test_a_dependency_reached_only_through_another_helper`,
+            # which is the assertion FR-004 exists for. Matching the bare stem as a word covers the
+            # import forms without matching a longer name that merely contains it.
+            stem = helper[:-3] if helper.endswith(".py") else helper
+            if helper in body or (helper.endswith(".py") and re.search(rf"\b{re.escape(stem)}\b", body)):
                 stack.append(helper)
     return seen
 
