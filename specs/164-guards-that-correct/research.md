@@ -167,3 +167,27 @@ rather than a change. Every other Makefile refusal asks for a DECISION - a reaso
 a procedure - and a decision is the one thing a rewrite cannot supply.
 
 **Sources:** `.claude/skills/diagram/Makefile`, `l7r/diagram/switches.py`, `scripts/review-gate.sh`.
+
+## R7 - a mention is not an invocation, and three guards still cannot tell
+
+The class this repository has been bitten by eight times before, met three more times WHILE writing
+this feature - each one costing a round trip, each on a document whose subject is the guard that
+fired:
+
+| guard | what it fired on | cost |
+|---|---|---|
+| `no-poll` | the command writing `spec.md`, whose text quotes the shape the guard forbids | one round trip |
+| `measure-hooks` | a command whose prose names a gate target; it spent a budget slot on text | one budget slot |
+| `house-style` | `plan.md` NAMING the one British word the correction table deliberately excludes | one round trip |
+
+`gate-hooks` stopped making this mistake on 2026-08-29 by asking `_hookmatch.py`, which anchors a
+match to a command position. Two of the three above are the same fix. The third is different in kind
+and worth stating: `house-style` reads PROSE, not commands, so command-position anchoring does not
+apply - what distinguishes a word being USED from a word being NAMED there is the backtick code span
+this repository's own prose already uses for exactly that purpose.
+
+Its exemption list has the same gap from the other side: it exempts the files that must quote the
+RULE (`CLAUDE.md`, the constitution, the style doc, the hook and its test) but not a spec or plan
+DISCUSSING it, which is the document this feature had to write.
+
+**Sources:** this session's transcript; `scripts/_hookmatch.py`; `scripts/house-style-hooks.sh`.
