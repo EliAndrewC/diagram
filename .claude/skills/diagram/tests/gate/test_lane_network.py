@@ -88,9 +88,7 @@ def test_every_lane_belongs_to_one_network(lanes) -> None:
 
     for i in range(len(ways)):
         for j in range(i + 1, len(ways)):
-            touch = any(_min_dist(q, ways[j]) <= JOIN_TOL for q in (ways[i][0], ways[i][-1])) or any(
-                _min_dist(q, ways[i]) <= JOIN_TOL for q in (ways[j][0], ways[j][-1])
-            )
+            touch = any(_min_dist(q, ways[j]) <= JOIN_TOL for q in (ways[i][0], ways[i][-1])) or any(_min_dist(q, ways[i]) <= JOIN_TOL for q in (ways[j][0], ways[j][-1]))
             if touch:
                 parent[find(i)] = find(j)
     roots = {find(i) for i in range(len(ways))}
@@ -121,7 +119,7 @@ def test_no_lane_doubles_back_or_kinks(lanes) -> None:
                 bad.append(("doubles back", round(p[k][0]), round(p[k][1])))
             elif deg >= 50.0:
                 turns.append((k, deg))
-        for (ka, _da), (kb, _db) in zip(turns, turns[1:]):
+        for (ka, _da), (kb, _db) in zip(turns, turns[1:], strict=False):
             if sum(math.dist(p[j], p[j + 1]) for j in range(ka, kb)) <= BEND_RUN_FT:
                 bad.append(("kinks", round(p[ka][0]), round(p[ka][1])))
     assert not bad, f"lane(s) do not bend like paths: {bad[:4]}"

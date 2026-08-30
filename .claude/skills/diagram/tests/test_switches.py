@@ -164,7 +164,9 @@ def make(skill: Path, *args: str) -> subprocess.CompletedProcess[str]:
     return subprocess.run(["make", "--no-print-directory", "-C", str(skill), *args], capture_output=True, text=True, stdin=subprocess.DEVNULL, env={**os.environ, "MAKEFLAGS": "", "MFLAGS": ""})
 
 
-LOCKED_TARGETS = ("cohort", "tripwire", "test-full", "cache-audit", "regressions", "perf", "perf-gate", "done FULL=1", "ci-check FULL=1", "ci-check TARGET=cohort", "ci-merge FULL=1", "maps SCOPE=all")
+# `regressions` left this list with feature 166: the target rebuilt the frozen negative-fixture corpus,
+# and the corpus was a set of bad manifests each proving one retired check still fired.
+LOCKED_TARGETS = ("cohort", "tripwire", "test-full", "cache-audit", "perf", "perf-gate", "done FULL=1", "ci-check FULL=1", "ci-check TARGET=cohort", "ci-merge FULL=1", "maps SCOPE=all")
 
 
 def test_make_test_defers_the_map_rolling_tests_under_the_lock(fixture_skill: Path, monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]) -> None:

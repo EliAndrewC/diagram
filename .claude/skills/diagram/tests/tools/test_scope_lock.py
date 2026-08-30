@@ -10,7 +10,7 @@ import pytest
 
 from l7r.diagram import switches
 from l7r.diagram.pipeline import regen
-from l7r.diagram.tools import cache_audit, cohort_audit, make_regressions, mapcheck, perf_snapshot
+from l7r.diagram.tools import cache_audit, cohort_audit, mapcheck, perf_snapshot
 
 LOCKED = switches.Switches(switches.Axis("on"), switches.Axis("reference", "test lock", "t", "2026-08-25T00:00:00Z"))
 
@@ -51,7 +51,8 @@ def test_regen_refuses_a_list_but_not_one_map(locked: None, monkeypatch: pytest.
 def test_cache_audit_and_regressions_and_perf_refuse(locked: None, monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]) -> None:
     rolled_nothing(monkeypatch)
     assert cache_audit.main(["--all"]) == 2 and "cache-audit --all" in capsys.readouterr().err
-    assert make_regressions.main() == 2 and "regressions" in capsys.readouterr().err
+    # `make regressions` went with the check battery (feature 166): the corpus it rebuilt was a set of
+    # frozen bad manifests, each proving one retired check still fired.
     assert perf_snapshot.main(["--record", "--label", "x"]) == 2 and "perf --record" in capsys.readouterr().err
     monkeypatch.setattr(perf_snapshot, "report", lambda against: 0)
     assert perf_snapshot.main(["--report"]) == 0  # reading the log is not a roll

@@ -16,8 +16,6 @@ houses; and none of it is a crop anchor, so it bleeds off the frame and the crop
 
 from __future__ import annotations
 
-import math
-
 from l7r.diagram.settlement import Settlement
 
 FIELD = [(700.0, 700.0), (1300.0, 700.0), (1300.0, 1300.0), (700.0, 1300.0)]
@@ -90,6 +88,4 @@ def test_the_cover_does_not_hold_the_frame_open() -> None:
     covered.crop_to_content(margin=30)
     after = covered.M["meta"]["view"]
 
-    assert after[2] <= before[2] + 1 and after[3] <= before[3] + 1, (
-        f"the hinterland widened the frame from {before[2]:.0f}x{before[3]:.0f} to {after[2]:.0f}x{after[3]:.0f}"
-    )
+    assert after[2] <= before[2] + 1 and after[3] <= before[3] + 1, f"the hinterland widened the frame from {before[2]:.0f}x{before[3]:.0f} to {after[2]:.0f}x{after[3]:.0f}"

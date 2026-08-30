@@ -349,9 +349,7 @@ def test_a_wider_cluster_gets_a_longer_belt() -> None:
     def _span(belt):
         return max(p[0] for p in belt) - min(p[0] for p in belt)
 
-    assert _span(hg.belt_polygon(wide, plan)) > _span(hg.belt_polygon(narrow, plan)), (
-        "a twelve-house cluster got no more belt than a three-house one"
-    )
+    assert _span(hg.belt_polygon(wide, plan)) > _span(hg.belt_polygon(narrow, plan)), "a twelve-house cluster got no more belt than a three-house one"
 
 
 def test_the_belt_is_one_band_rather_than_scattered_pieces() -> None:

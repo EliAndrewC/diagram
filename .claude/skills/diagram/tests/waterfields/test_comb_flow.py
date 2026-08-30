@@ -59,5 +59,5 @@ def test_the_drain_is_a_real_run_at_every_fall(down_deg: float) -> None:
     vacuously - the drain has to BE there before which way it runs can matter."""
     net = build_comb(2400, 2400, (300.0, 300.0), seed=5, down_deg=down_deg)
     pts = [tuple(p) for p in net["drain"]]
-    span = sum(math.dist(a, b) for a, b in zip(pts, pts[1:]))
+    span = sum(math.dist(a, b) for a, b in zip(pts, pts[1:], strict=False))
     assert span > 200.0, f"down_deg {down_deg:.0f}: the drain is only {span:.0f} px long"

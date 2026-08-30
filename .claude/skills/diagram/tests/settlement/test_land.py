@@ -6,7 +6,7 @@ import random
 
 import pytest
 
-from l7r.diagram import check_village, settlement
+from l7r.diagram import overlap, settlement
 from l7r.diagram.settlement import Settlement
 from tests._scope import full_or
 from tests.settlement._builders import _crop_settlement, _hamlet_with_field, _nuc_village, _town
@@ -380,14 +380,14 @@ def test_dike_top_houses_seats_a_single_file_on_the_crest():
     dk = s.M["dikes"][0]
     # the crest centerline is recorded, and every crest point sits on the band
     assert len(dk["crest"]) >= 60
-    assert all(check_village.poly_dist(cx, cy, dk["outline"]) <= 6 for cx, cy in dk["crest"])
+    assert all(overlap.poly_dist(cx, cy, dk["outline"]) <= 6 for cx, cy in dk["crest"])
     st = random.getstate()
     n = s.dike_top_houses(8, seed=11, span=(0.0, 0.25), gap_clear=60.0)  # the top (north) run, which carries both sluice gaps
     assert random.getstate() == st  # stream-neutral: the helper never ripples the map's main rng
     tagged = [h for h in s.M["houses"] if h.get("on_dike")]
     assert n == len(tagged) and 4 <= n < 8  # the sluice-gap skips cost sites - nobody builds over the notch
     for h in tagged:
-        assert check_village.poly_dist(h["x"], h["y"], dk["outline"]) <= 14  # seated on the band
+        assert overlap.poly_dist(h["x"], h["y"], dk["outline"]) <= 14  # seated on the band
         assert all(math.hypot(h["x"] - gx, h["y"] - gy) >= 60 for gx, gy in ((500, 300), (700, 300)))
         assert h["platform"][0] > h["w"] and h["platform"][1] > h["h"]  # the widened-crest pad outsizes the house
     assert s.M["meta"]["settlement_form"] == "dike_top"  # the helper declares the form

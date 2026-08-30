@@ -70,9 +70,7 @@ def test_a_trailing_runner_does_not_hold_the_frame_open() -> None:
     trailing.crop_to_content(margin=30)
     after = _view(trailing)
 
-    assert after[2] <= before[2] + 1 and after[3] <= before[3] + 1, (
-        f"the lane dragged the frame from {before[2]:.0f}x{before[3]:.0f} to {after[2]:.0f}x{after[3]:.0f}"
-    )
+    assert after[2] <= before[2] + 1 and after[3] <= before[3] + 1, f"the lane dragged the frame from {before[2]:.0f}x{before[3]:.0f} to {after[2]:.0f}x{after[3]:.0f}"
 
 
 def test_a_set_apart_hard_feature_IS_included() -> None:

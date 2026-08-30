@@ -25,7 +25,7 @@ def _net(seed: int):
 
 
 def _turns(pts):
-    for a, b, c in zip(pts, pts[1:], pts[2:]):
+    for a, b, c in zip(pts, pts[1:], pts[2:], strict=False):
         v1 = (b[0] - a[0], b[1] - a[1])
         v2 = (c[0] - b[0], c[1] - b[1])
         n1 = math.hypot(*v1) or 1.0
@@ -69,7 +69,7 @@ def test_every_channel_is_a_real_run_rather_than_a_stub(seed: int) -> None:
     for ch in net["channels"]:
         pts = [tuple(p) for p in ch["pts"]]
         assert len(pts) >= 2, f"seed {seed}: a {ch.get('role')} channel with {len(pts)} point(s)"
-        span = sum(math.dist(a, b) for a, b in zip(pts, pts[1:]))
+        span = sum(math.dist(a, b) for a, b in zip(pts, pts[1:], strict=False))
         assert span > 1.0, f"seed {seed}: a {ch.get('role')} channel of zero length"
 
 

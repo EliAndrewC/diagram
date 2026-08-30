@@ -26,7 +26,7 @@ import sys
 
 import pytest
 
-from l7r.diagram import check_village
+from l7r.diagram.overlap import point_in_poly
 from l7r.diagram.pipeline import gencache, poolmaps
 
 HERE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))  # the skill root; the tests live one level down in tests/
@@ -197,7 +197,12 @@ def _regen_and_gate(gen):
             f"in GEN_TIME_BUDGETS with the reason recorded beside it."
         )
     assert os.path.exists(manifest), f"{os.path.basename(gen)} produced no manifest"
-    return check_village.main(manifest) == 0
+    # THE SWEEP NO LONGER GATES (feature 166). It used to end by running the whole check battery on
+    # the manifest it had just produced, which is the architecture this feature retired: a generator
+    # is proven by its placers' own tests, not audited afresh on every map it draws. What the sweep
+    # still proves - and the only thing it ever proved that the battery did not - is that every
+    # shipped generator RUNS, inside its time budget, and emits a manifest.
+    return True
 
 
 def test_at_least_one_village_exists():
@@ -250,7 +255,7 @@ def _channels_under_plots(svgpath):
     for m in re.finditer(r'<path d="M([^"]+)" fill="none" stroke="#(?:6C9CBE|7C9EB0)"', svg):
         coords = [tuple(map(float, p.split(","))) for p in m.group(1).replace(" L", ";").split(";")]
         mid = coords[len(coords) // 2]
-        if any(pos > m.start() and check_village.point_in_poly(mid[0], mid[1], pts) for pos, pts in plots):
+        if any(pos > m.start() and point_in_poly(mid[0], mid[1], pts) for pos, pts in plots):
             covered.append((round(mid[0]), round(mid[1])))
     return covered
 

@@ -76,13 +76,13 @@ def test_a_hit_still_runs_current_checks(tmp_path, monkeypatch, clean_gatehit):
     Path(gencache.CACHE_DIR, "toy", "toy.json").write_text('{"meta": {}}')
     manifest, how, _ = gencache.gate_obtain(str(gen))
     assert how == "HIT" and Path(manifest).read_text() == '{"meta": {}}'
-    from l7r.diagram import check_village
-
-    try:
-        rc = check_village.main(manifest)
-    except Exception:
-        rc = 1
-    assert rc != 0, "the current check battery must judge a served manifest - a hit is not a verdict"
+    # A HIT IS NOT A VERDICT, and since feature 166 there is no verdict to be had here at all: the
+    # served manifest is a stub the cache handed back, and what this test proves is that the cache
+    # served it verbatim rather than regenerating. It used to end by running the check battery on the
+    # stub and demanding a non-zero exit; with the battery retired, the assertion above - HIT, and the
+    # bytes are the ones that were written - is the whole guarantee, and it was always the load-bearing
+    # half.
+    assert how == "HIT"
 
 
 @pytest.mark.tooling

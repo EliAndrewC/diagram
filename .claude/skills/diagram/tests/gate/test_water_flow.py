@@ -165,8 +165,7 @@ def test_every_stream_end_is_anchored_to_what_it_declares(rolled) -> None:
     _plan, M = rolled
     streams = M.get("streams") or []
     assert streams, "the roll drew no stream"
-    view = M["meta"].get("view")
-    W, H = (M["meta"].get("w") or 0), (M["meta"].get("h") or 0)
+    W, H = float(M["meta"]["W"]), float(M["meta"]["H"])
     judged = 0
     for st in streams:
         poly, frm, to = st["poly"], st.get("frm"), st.get("to")

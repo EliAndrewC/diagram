@@ -163,9 +163,11 @@ def test_no_bund_is_drawn_across_the_collector(comb) -> None:
                 a = (float(ring[k][0]), float(ring[k][1]))
                 b = (float(ring[(k + 1) % n][0]), float(ring[(k + 1) % n][1]))
                 # a SEGMENT that starts one side of the drain and ends the other has crossed it
-                if min(_seg_dist(a[0], a[1], pts[i], pts[i + 1]) for i in range(len(pts) - 1)) < half * 0.5 and min(
-                    _seg_dist(b[0], b[1], pts[i], pts[i + 1]) for i in range(len(pts) - 1)
-                ) < half * 0.5 and math.dist(a, b) > 2 * half:
+                if (
+                    min(_seg_dist(a[0], a[1], pts[i], pts[i + 1]) for i in range(len(pts) - 1)) < half * 0.5
+                    and min(_seg_dist(b[0], b[1], pts[i], pts[i + 1]) for i in range(len(pts) - 1)) < half * 0.5
+                    and math.dist(a, b) > 2 * half
+                ):
                     across.append((round(a[0]), round(a[1])))
     assert not across, f"{len(across)} paddy bund(s) run across the collector rather than along it: {across[:4]}"
 
@@ -321,4 +323,3 @@ def test_the_waterward_reed_strip_runs_off_the_frame(polder) -> None:
         if not any(reach[f] for f in faces if f in reach):
             short.append((round(min(xs)), round(min(ys))))
     assert not short, f"waterside reed strip(s) stop inside the frame: {short[:4]}"
-

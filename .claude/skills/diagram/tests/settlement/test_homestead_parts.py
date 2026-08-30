@@ -1,6 +1,6 @@
 """Split from test_settlement.py by feature 025 - see tests/settlement/CLAUDE.md for the index."""
 
-from l7r.diagram import check_village
+from l7r.diagram import overlap
 from l7r.diagram.settlement import Settlement
 from tests.settlement._builders import _crop_settlement, _nuc_village, _scatter_base_points, _town
 
@@ -328,13 +328,13 @@ def test_village_grove_copse_skips_dry_crop_plots():
 
 def test_every_roofed_feature_is_a_canopy_keepout():
     """THE RATCHET behind "no tree is drawn on a roof". The canopy keep-out was a hand list until a
-    reviewer found scrub on a theater stage; settlement.py cannot import check_village (circular),
+    reviewer found scrub on a theater stage; the roster lives in `l7r.diagram.overlap` since feature 166,
     so the roofed set is written out - and this holds it against the real overlap registry. Every
     solid feature must be either a canopy keep-out or explicitly named open-air ground, so a new
     feature cannot silently fall outside both the way `theater_stage` did."""
 
     classified = set(Settlement._CANOPY_STRUCT_KEYS) | set(Settlement._CANOPY_OPEN_AIR_KEYS)
-    missing = sorted(k for k in check_village._OVERLAP_STRUCTS if k not in classified)
+    missing = sorted(k for k in overlap._OVERLAP_STRUCTS if k not in classified)
     assert not missing, (
         f"solid feature(s) {missing} are neither a canopy keep-out nor declared open-air ground - add them to Settlement._CANOPY_ROOFED_KEYS (a tree may not stand on a roof) or to _CANOPY_OPEN_AIR_KEYS with the reason"
     )

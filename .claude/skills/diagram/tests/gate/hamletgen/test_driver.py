@@ -6,7 +6,6 @@ import re
 
 import pytest
 
-from l7r.diagram import check_village
 from l7r.diagram import hamletgen as hg
 from l7r.diagram.pipeline import rollcache
 from tests._scope import FULL
@@ -117,7 +116,6 @@ def test_a_map_that_strands_a_farmhouse_is_re_rolled_with_that_ground_forbidden(
         # imported `gate` inside the function - the note is kept because the reasoning still applies to
         # any future seam: patch the namespace that does the CALLING.)
         monkeypatch.setattr(hg.driver, "unreached_houses", fake_unreached)
-        monkeypatch.setattr(check_village, "gate", lambda M, verbose=True, only=None: [])
         seen: list[list[tuple[float, float]]] = []
         real_build = hg.driver.build
 
@@ -160,15 +158,11 @@ def test_a_re_roll_that_does_not_help_is_not_kept(monkeypatch, tmp_path) -> None
 
         monkeypatch.setattr(hg.driver, "unreached_houses", fake_unreached)
 
-        def fake_gate(M, verbose=True, only=None):  # type: ignore[no-untyped-def]
-            # Still PRINTS, because `Report.fail_lines` is scraped from the gate's stdout and this test
-            # asserts on it. That reporting path is the battery's, not the ladder's, and it goes in this
-            # feature's Phase 4 along with `Report.failures` - which is why the stub keeps it alive now
-            # rather than the assertion being dropped to make the test pass.
-            print("FAIL farmhouses_reach_a_way  -> 1 farmhouse(s) at [(100, 100, 200)] - omission")
-            return ["farmhouses_reach_a_way"]
-
-        monkeypatch.setattr(check_village, "gate", fake_gate)
+        # NO GATE STUB ANY MORE (feature 166 Phase 4). This used to patch `check_village.gate` with a
+        # fake that PRINTED a FAIL line, because `Report.fail_lines` was scraped from the gate's stdout.
+        # The driver now writes both `failures` and `fail_lines` itself from the reach predicate, so the
+        # only seam this test needs is the one above - and the assertions below are unchanged except for
+        # the count the report now carries.
         # WITH AN OUT PATH, because rejecting a re-roll leaves THAT roll's files on disk - the keeper has
         # to be re-emitted, and it cannot be done by finishing the kept Settlement a second time (that
         # splices the water block twice and its `</g>` closes the <svg> root early; see `_roll`). So the
@@ -179,7 +173,7 @@ def test_a_re_roll_that_does_not_help_is_not_kept(monkeypatch, tmp_path) -> None
 
     # served from the roll cache keyed to this test's source (feature 135): three 10-household rolls, ~57 s fresh
     failures, n_rolls, fail_lines, svg = rollcache.keyed_to(test_a_re_roll_that_does_not_help_is_not_kept, produce)[0]
-    assert failures == ["farmhouses_reach_a_way"]  # the FIRST roll's verdict is kept, not the worse one
+    assert failures == ["farmhouses_reach_a_way[1]"]  # the FIRST roll's verdict is kept, not the worse one
     assert n_rolls == 3  # roll, rejected re-roll, then the keeper re-emitted
     assert fail_lines and "farmhouses_reach_a_way" in fail_lines[0]
     assert svg.count("<svg") == 1 and svg.count("</svg>") == 1  # finished exactly once...

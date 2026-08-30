@@ -7,11 +7,15 @@
 # (GUARD_EDIT_OK: feature 132 adds the iteration switches - a new guard and five new operations)
 .PHONY: done lint format typecheck test test-full guard perf perf-report maps reference bypass-audit quick durations test-file audit perf-gate hooks-test explain \
 	 switches ci-off ci-on scope-lock scope-unlock _switch \
-	 map cohort tripwire hamlet cache-audit regressions placement-stages pool-index pool-index-if-stale compound render-sync idle-tests \
-	 gate-manifest why-placed site-justice crop jogs pack-audit scatter-audit sun-audit new-check timings citybudget help \
+	 map cohort tripwire hamlet cache-audit placement-stages pool-index pool-index-if-stale compound render-sync idle-tests \
+	 why-placed crop jogs pack-audit scatter-audit sun-audit timings citybudget help \
 	 notes-census \
 	 ci-status ci-check ci-merge ci-image commit-permitted \
-	 perf-explain perf-confirm perf-audit perf-signoff perf-review perf-profile check-census firing-census firing-census-suite
+	 perf-explain perf-confirm perf-audit perf-signoff perf-review perf-profile
+# GUARD_EDIT_OK: feature 166 - REMOVING operations, never loosening one. The check battery is retired,
+# so the seven targets that drove it or its corpus (gate-manifest, regressions, new-check, site-justice,
+# check-census, firing-census, firing-census-suite) name tools that no longer exist. A target pointing at
+# a deleted module fails with a traceback instead of a refusal, which is the worst kind of guard.
 
 # ---- THE PERFORMANCE BANDS (feature 129 - GUARD_EDIT_OK: adding the review-record operations) ----
 # Any increase (total OR any seed, per ENVIRONMENT) owes a written explanation and a perf-audit
@@ -31,17 +35,6 @@ perf-signoff:   ## band 3 - the GM, at a terminal   WHY="..."
 	@$(PERF_REVIEW) signoff --why "$(WHY)" --as GM --environment "$(or $(ENV),local)"
 perf-review:    ## does every environment's newest bookend pair carry the records its band owes? (the push runs this)
 	@$(PERF_REVIEW) check
-check-census:   ## feature 141: which checks re-measure a placer's guarantee (the ledger)   OUT=specs/141-checks-and-corpus-audit/ledger
-	$(RUN).tools.check_census --out "$(or $(OUT),specs/141-checks-and-corpus-audit/ledger)"
-
-firing-census-suite: ## feature 163: the census PLUS the suite sweep - the firing no artifact glob can see
-	@rm -rf $(CURDIR)/.firing-journal && mkdir -p $(CURDIR)/.firing-journal
-	-@$(MAKE) --no-print-directory test JOURNAL=$(CURDIR)/.firing-journal
-	@$(MAKE) --no-print-directory firing-census SUITE=$(CURDIR)/.firing-journal
-
-firing-census:  ## feature 163: which checks does the CURRENT implementation still make fire?   SUITE=<journal dir>
-	$(RUN).tools.firing_census --out "$(or $(OUT),specs/163-checks-into-the-placer/firing-census)" $(if $(SUITE),--suite "$(SUITE)",)
-
 perf-profile:   ## tier 2 evidence: cProfile ONE stage of ONE seed   SEED=25 STAGE=web
 	$(RUN).tools.perf_profile --seed "$(SEED)" --stage "$(STAGE)"
 
@@ -315,12 +308,6 @@ cache-audit:    ## does using the generation cache change any map?
 	$(SWEEP_OK)
 	$(REF_FIRST)
 	$(RUN).tools.cache_audit $(ARGS)
-# (GUARD_EDIT_OK: feature 132 - cache-audit and regressions roll many maps, so the scope lock refuses them first)
-regressions:    ## rebuild the frozen negative-fixture corpus
-	$(SWEEP_OK)
-	$(REF_FIRST)
-	$(RUN).tools.make_regressions $(ARGS)
-
 placement-stages: ## re-plate the stage-by-stage walk-through page
 	$(REF_FIRST)
 	$(RUN).tools.placement_stages $(ARGS)
@@ -354,9 +341,6 @@ render-sync:    ## regenerate MAIN's renders (called by sync-with-main.sh; not f
 	$(RUN).pipeline.render_cache $(ARGS)
 
 # --- cheap: they READ a recorded artifact ----------------------------------------------------
-gate-manifest:  ## run the check battery on an existing manifest   M=pool/hamlets/inashiro/inashiro.json
-	$(RUN).check_village $(or $(M),pool/hamlets/inashiro/inashiro.json) $(ARGS)
-
 overlap-audit:  ## does A overlap B on a finished map (records AND drawn ink)   M=pool/hamlets/x/x.json [FAMILIES=...]
 	$(RUN).tools.overlap_audit $(M) $(if $(FAMILIES),--families $(FAMILIES),)
 
@@ -365,9 +349,6 @@ polder-probe:   ## the polder block ALONE with its geometry metrics, no map   SE
 
 why-placed:     ## who placed this, and what refused to        GEN=... AT=x,y | REFUSED=x,y
 	$(RUN).tools.why_placed $(GEN) $(if $(AT),--at $(AT),)$(if $(REFUSED),--refused $(REFUSED),)
-
-site-justice:   ## where can this feature legally go?
-	$(RUN).tools.site_justice $(ARGS)
 
 crop:           ## crop a rendered map in manifest coordinates
 	$(RUN).tools.crop_map $(ARGS)
@@ -390,10 +371,6 @@ sun-audit:      ## the sun rules and the belt's page presence, off the manifest 
 family-census:  ## which feature families one manifest records that another does not   A=pool/hamlets/inashiro/inashiro.json B=pool/hamlets/kuwabata/kuwabata.json
 	$(RUN).tools.family_census --a $(or $(A),pool/hamlets/inashiro/inashiro.json) --b $(or $(B),pool/hamlets/kuwabata/kuwabata.json)
 	@: "(GUARD_EDIT_OK: feature 150 - a read-only manifest census, the measured answer to 'does the converted map carry every reference-hamlet family')"
-
-new-check:      ## scaffold a gate check: segment stub, sorted fixture entry, test stub   NAME=... FILE=segments_*.py TEST=test_segments_*.py
-	@test -n "$(NAME)" -a -n "$(FILE)" -a -n "$(TEST)" || { printf 'make new-check NAME=<check_name> FILE=l7r/diagram/check_village/segments_XX.py TEST=tests/check_village/test_segments_XX.py\n'; exit 2; }
-	$(RUN).tools.new_check --name $(NAME) --file $(FILE) --test $(TEST)
 
 timings:        ## where the generation loop's time goes
 	$(RUN).tools.timings $(ARGS)
@@ -916,13 +893,10 @@ GATE_EXHAUSTIVE_ENV = L7R_TESTS_EXHAUSTIVE=1 $(if $(COV_FLOORS),L7R_COV_FLOORS=1
 # before collection instead of after it.
 TIER_SELECT = $(if $(COV_FLOORS),,$(if $(filter reference,$(SCOPE_STATE)),--tier $(REFERENCE_TIER) --ignore=tests/tier_town --ignore=tests/tier_city,))
 
-# THE FIRING CENSUS SWEEP (feature 163). A check can be made to FAIL by a test's inline hand-BUILT
-# manifest, which no glob over pool/ can see - `gardens_clear_of_channels` is the specimen: the
-# artifact census reads it NEVER-FIRES while tests/check_village/test_segments_04_homesteads.py
-# makes it fail on every run. So the sweep runs the SUITE with the gate's verdict journal on.
-# It changes what is RECORDED and nothing else (feature 132's rule); the guard that says so is
-# tests/check_village/test_verdict_journal.py, which asserts the verdicts are identical either way.
-JOURNAL_ENV = $(if $(JOURNAL),DIAGRAM_VERDICT_JOURNAL=$(JOURNAL),)
+# GUARD_EDIT_OK: feature 166 - the firing census sweep is retired with the battery it counted. It ran
+# the SUITE with the gate's verdict journal on, because a check could be made to fail by a test's
+# inline hand-BUILT manifest that no glob over pool/ could see. There are no checks to count.
+JOURNAL_ENV =
 
 # (GUARD_EDIT_OK: feature 132 - test-full rolls every pool map, so the scope lock refuses it before `test` starts)
 test-full:
@@ -969,7 +943,7 @@ test:
 	fi; \
 	python3 -m coverage combine --append >/dev/null 2>&1 || true; \
 	cov_ec=0; \
-	python3 -m coverage report -m --omit='*/settlement/*,*/waterfields/*,*/interactive/*,*/check_village/*' --fail-under=100 || { echo "COVERAGE: a module other than settlement/, waterfields/, interactive/ and check_village/ is under 100% - the table above names it and its missing lines (those four are judged by the settlement ratchet and the hamlet-path floor below; check_village joined them under feature 145 - its city and capital segments lost their coverage carriers with feature 141 s corpus cut, and the GM ruled on 2026-08-28 that other tiers owe no floor while nothing exercises them)"; cov_ec=1; }; \
+	python3 -m coverage report -m --omit='*/settlement/*,*/waterfields/*,*/interactive/*,*/overlap/*' --fail-under=100 || { echo "COVERAGE: a module other than settlement/, waterfields/, interactive/ and overlap/ is under 100% - the table above names it and its missing lines (those four are judged by the settlement ratchet and the hamlet-path floor below; GUARD_EDIT_OK: feature 166 - check_village/ is deleted and overlap/ takes its place in this list, holding the taxonomy that moved out of it, whose town/city/capital rows nothing exercises while no generator produces those tiers - the GM's 2026-08-28 ruling that other tiers owe no floor)"; cov_ec=1; }; \
 	python3 -m coverage report --include='*/settlement/*' --fail-under=$(SETTLEMENT_COV_FLOOR) || { echo "COVERAGE: settlement/ (package combined) fell below its $(SETTLEMENT_COV_FLOOR)% ratchet floor (see the comment above SETTLEMENT_COV_FLOOR in this Makefile; 'python3 -m coverage report -m --include=*/settlement/*' shows the missing lines)"; cov_ec=1; }; \
 	python3 -m l7r.diagram.tools.hamlet_floor || cov_ec=1; \
 	exit $$cov_ec
