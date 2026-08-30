@@ -4,7 +4,10 @@
 
 **Created**: 2026-08-30
 
-**Status**: Draft - awaiting `spec-fidelity`
+**Status**: **FAITHFUL** on substance - `spec-fidelity` round 1 (2026-08-30) returned CHANGES
+REQUIRED with a single item, a Scope line that forbade the very format-version bump FR-001 and SC-003
+depend on. Applied, along with its aside about dependencies outside the skill root. A confirming read
+is recorded below.
 
 **Input**: [`request.md`](request.md), verbatim and unedited. That file is the authority for this
 specification, and it records the two conditions the ruling sets and the measurements that answer
@@ -52,10 +55,16 @@ change that property.
 **IN scope**: how `l7r/diagram/pipeline/gencache.py` records and re-reads a dependency's path, the
 matching read in `rollcache.py`, and a seeding step that gives a new clone a usable cache.
 
-**OUT of scope**: what the key HASHES (every engine file's module hash, every recorded function's
-source, the interpreter, the renderer, the dependency state and the format version all stay exactly
-as they are); the testmon database, which the GM ruled stays per-clone; the pool render cache; any
-change to when a roll is produced rather than served.
+**OUT of scope**: the testmon database, which the GM ruled stays per-clone; the pool render cache;
+any change to when a roll is produced rather than served; and what the key HASHES - every engine
+file's module hash, every recorded function's source, the interpreter, the renderer and the
+dependency state all stay exactly as they are.
+
+**The format version is the one exception, and it is bumped once** (FR-001). That bump is the
+mechanism by which entries written in the old absolute-path format are IGNORED rather than re-keyed
+under the new lookup rule, which is the single case FR-002 exists to prevent - so a scope line
+forbidding it would forbid the safety mechanism its own requirement depends on. `spec-fidelity`
+round 1 caught exactly that.
 
 ## Requirements
 
@@ -68,6 +77,13 @@ differs - which is what it already does within one checkout.
 
 The format version is bumped, so every entry written by the old absolute-path format is ignored
 rather than misread. Existing caches are not migrated: they simply miss once and are reproduced.
+
+**A dependency OUTSIDE the skill root stays absolute**, and deliberately: the recorder sees every file
+a roll reads, which includes fonts, installed packages and the GM's own notes mount. Those have no
+meaningful root-relative form, they are the same files for every clone on this machine, and hashing
+them by absolute path is both correct and portable across siblings - which is the only portability
+this feature needs, since FR-003 seeds from a sibling. Only paths inside the skill root are
+relativized (`spec-fidelity` round 1 raised this case).
 
 ### FR-002 - the safe-direction property is preserved and PROVED
 
