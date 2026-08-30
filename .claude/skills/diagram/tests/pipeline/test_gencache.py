@@ -17,6 +17,7 @@ from __future__ import annotations
 import glob
 import json
 import os
+import shutil
 import sys
 import textwrap
 from pathlib import Path
@@ -344,3 +345,75 @@ def test_an_entry_never_keeps_coverage_it_did_not_just_record(tmp_path, monkeypa
     gencache.store(str(gen), deps, coverage_data=str(cov))
     stamp.unlink()
     assert not gencache._coverage_stamp_matches(str(gen)), "an unstamped entry is regenerated, never replayed"
+
+
+_REAL_ENGINE_RELS = [gencache._rel(p) for p in gencache.engine_files()]
+
+
+# ---- FEATURE 167: A CACHE ONE CLONE BUILDS IS USABLE BY ANOTHER --------------------------------
+#
+# WHY (GM 2026-08-30). A fresh clone paid about two minutes re-rolling maps a sibling had already
+# rolled from identical source - 30 s for the reference settlement and 122 s for the map-rolling gate
+# tests, against 1 s and 21 s warm. The cause was that a dependency was recorded as an ABSOLUTE path
+# and `key_for` looked it up while walking this tree's own files, so across roots every per-function
+# part silently dropped out of the key and a copied cache could never match.
+#
+# The direction of failure is what these tests really guard. A key that wrongly MATCHES would let the
+# gate serve a roll produced by different code - the only failure here that could pass a map the suite
+# never checked. So each test below pins a MISS as firmly as it pins a hit.
+
+
+def test_a_dependency_inside_the_skill_is_recorded_relative_and_outside_it_absolute():
+    inside = os.path.join(gencache.HERE, "l7r/diagram/settlement/houses.py")
+    assert gencache._rel(inside) == "l7r/diagram/settlement/houses.py"
+    assert gencache._abs(gencache._rel(inside)) == inside
+    # a font, an installed package, the GM's notes mount: no meaningful root-relative form, and the
+    # same file for every clone on this machine, so it stays absolute
+    for outside in ("/usr/share/fonts/x.ttf", "/host-l7r-repo/setting/l7r.md", "/usr/lib/python3/x.py"):
+        assert gencache._rel(outside) == outside
+        assert gencache._abs(outside) == outside
+
+
+def test_the_key_survives_a_change_of_ROOT_but_not_a_change_of_SOURCE(monkeypatch, tmp_path):
+    """The whole feature, in one assertion pair: same sources under a different root key the same;
+    a changed source keys differently."""
+    real = os.path.join(gencache.HERE, "l7r/diagram/settlement/houses.py")
+    deps = {"functions": [[gencache._rel(real), "place_houses"]], "files": []}
+    here_key = gencache.key_for(b"subject", deps)
+
+    # a second "clone": the same engine sources, reachable at a different absolute path
+    other = tmp_path / "elsewhere"
+    shutil.copytree(os.path.join(gencache.HERE, "l7r"), other / "l7r")
+    monkeypatch.setattr(gencache, "HERE", str(other))
+    monkeypatch.setattr(gencache, "engine_files", lambda: [str(other / rel) for rel in _REAL_ENGINE_RELS])
+    assert gencache.key_for(b"subject", deps) == here_key, "the same sources under another root must key the same"
+
+    # ...and the safe direction: change one recorded function's source and the key must move
+    target = other / "l7r/diagram/settlement/houses.py"
+    target.write_text(target.read_text() + "\n\ndef place_houses_extra() -> None:\n    pass\n", encoding="utf-8")
+    assert gencache.key_for(b"subject", deps) != here_key, "a changed engine source must NOT key the same"
+
+
+def test_an_old_absolute_format_entry_cannot_be_re_keyed_under_the_new_rule():
+    """Format 1 recorded absolute paths. Re-reading one under the new lookup would silently drop its
+    per-function parts, which is the shape that could serve a stale roll - so it must key differently,
+    and FORMAT_VERSION is bumped so it is discarded outright."""
+    real = os.path.join(gencache.HERE, "l7r/diagram/settlement/houses.py")
+    relative = {"functions": [[gencache._rel(real), "place_houses"]], "files": []}
+    absolute = {"functions": [[real, "place_houses"]], "files": []}
+    assert gencache.key_for(b"s", absolute) != gencache.key_for(b"s", relative)
+    assert gencache.FORMAT_VERSION != "1"
+
+
+def test_a_data_file_is_hashed_from_THIS_tree_not_from_the_recorded_path(monkeypatch, tmp_path):
+    """The one way this change could have turned a safe miss into a wrong hit: hashing the recorded
+    path would read the PRODUCING clone's copy of a data file rather than this clone's."""
+    data = tmp_path / "root" / "sub" / "d.json"
+    data.parent.mkdir(parents=True)
+    data.write_text("one", encoding="utf-8")
+    monkeypatch.setattr(gencache, "HERE", str(tmp_path / "root"))
+    monkeypatch.setattr(gencache, "engine_files", lambda: [])
+    deps = {"functions": [], "files": ["sub/d.json"]}
+    before = gencache.key_for(b"s", deps)
+    data.write_text("two", encoding="utf-8")
+    assert gencache.key_for(b"s", deps) != before, "the key must follow THIS tree's data file"
