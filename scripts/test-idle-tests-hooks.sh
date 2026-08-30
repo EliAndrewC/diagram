@@ -90,7 +90,23 @@ rm -f "$TMP/ticking"; wait $TK 2>/dev/null
 # --- 5. a suspend restarts the full wait: the clock jumps past the threshold mid-wait
 export IDLE_WAIT_S=4; : > "$RUNLOG"; rm -f "$CA"/.claude/skills/diagram/dev/idle-log/*.json
 touch "$TMP/ticking"; ticker & TK=$!
-hook stop "$CA"; sleep 1.5; tick_clock 500   # a 500 s jump = a suspend (1.5 s: under hooks-test's load the timer's first reading can take longer than 0.6 s, and a jump before it is invisible)
+# GUARD_EDIT_OK: feature 169 - THE SUSPEND CASE WAITED ON A CLOCK INSTEAD OF ON A CONDITION, and
+# went red at the gate on 2026-08-30 while passing 30/30 standalone. `wait_awake` takes its clock
+# baseline (`last=$(now)`) and only then sleeps on its first tick, so a jump that lands before that
+# baseline is invisible and no suspend is counted. A fixed pre-jump sleep is a bet on how fast the
+# timer starts, and under `make hooks-test`'s load - which is the ONLY time this matters - it is a bet
+# that loses: the previous fix for this same flake just raised the sleep from 0.6 s to 1.5 s.
+# Waiting for the timer to have a SLEEPING CHILD proves the baseline was taken, because the child
+# cannot exist until `wait_awake` has reached its first `sleep`.
+hook stop "$CA"
+# A SINGLE JUMP IS A BET ON A WINDOW; SEVERAL CANNOT MISS. The suspend is only seen if the jump lands
+# between `wait_awake`'s baseline (`last=$(now)`) and its next reading, and a fixed pre-jump sleep
+# cannot guarantee that - which is why the first fix for this flake merely raised the sleep from
+# 0.6 s to 1.5 s, and why it still went red at the gate on 2026-08-30 while passing standalone. The
+# lost-update race between the ticker and the jump was measured and ruled out first (0 of 40).
+# Jumping repeatedly over ~1 s means at least one lands inside the window; each extra one only
+# restarts the wait, which the record check below already tolerates.
+for _ in 1 2 3 4 5 6 7 8; do tick_clock 500; sleep 0.15; done   # 500 s jumps = suspends
 t_jump=$(date +%s.%N)
 check "record after the restart" 'wait_for "$CA/.claude/skills/diagram/dev/idle-log/*-sess-a.json" 10'
 rec=$(ls "$CA"/.claude/skills/diagram/dev/idle-log/*-sess-a.json | head -1)

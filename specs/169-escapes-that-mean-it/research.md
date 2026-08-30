@@ -193,3 +193,28 @@ The four unconverted tokens are unconverted by CONSTRUCTION, not by exemption: `
 marker inside edit content, `REVIEW_GATE_OK` and `GATE_STAMP_OK` are environment variables that a
 mention cannot set, and `REF_OK` is a make override already anchored positionally. The single real
 exclusion is `pair`'s agent-prompt branch, adjudicated legitimate by the round-3 review.
+
+## R11 - a flaky gate test, fixed at its cause (Principle XIV)
+
+`make hooks-test` went red on `test-idle-tests-hooks.sh` case 5, "the suspend was counted", while the
+same suite passed 30/30 standalone. Measured before touching anything: my delta contains no
+idle-tests file, and standalone the suite passed - so not a regression. Left alone it would have cost
+a gate cycle every second or third run, for this feature and every future one.
+
+**The mechanism.** `wait_awake` takes a clock baseline (`last=$(now)`) and only then sleeps on its
+first tick; a suspend is detected as drift between two readings. The test simulated a suspend with one
+`tick_clock 500` after a fixed `sleep 1.5`. That is a bet that the timer has reached its baseline but
+not its next reading - and a fixed sleep cannot guarantee either end. The previous fix for this same
+flake had simply raised the sleep from 0.6 s to 1.5 s, with a comment saying load was the cause.
+
+**One hypothesis measured and REJECTED before fixing anything.** The clock is a file, and both the
+0.1 s ticker and the jump do a read-modify-write on it, so a lost update looked like the obvious
+culprit. Reproduced in isolation, 40 runs: **0 lost**. Had I "fixed" that, I would have changed
+working code and left the flake.
+
+**The fix**: jump repeatedly (8 x 500 s over ~1.2 s) instead of once. At least one lands inside the
+window; extra ones only restart the wait, which the record check already tolerates. Measured after:
+five consecutive clean runs where the failure rate had been roughly one in two.
+
+The general form, which is why this is written down: **a test that waits a fixed time and then asserts
+on a race is not slow, it is wrong.** Wait for the condition, or make the stimulus unmissable.
