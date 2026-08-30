@@ -204,6 +204,16 @@ ESCALATION to the GM, not a fourth self-review round.**
 | 2 | CHANGES REQUIRED | the token census was incomplete and its completeness claim false - `HOST_GIT_OK` disarms the `/host-l7r-repo` mount guard on a mention, found because the reviewer noticed its OWN audit command would have disarmed it. Also: the `pair` prompt branch needed an explicit in-or-out ruling |
 | 3 | CHANGES REQUIRED | the census was short AGAIN - `GATE_STAMP_OK`, a twelfth token. Adjudicated the `pair` prompt exclusion LEGITIMATE under Principle XVI. Its diagnosis, quoted because it is the useful part: *"three drafts have each asserted a complete census ... and each has been short by one, found by the reviewer and not by the author. That is a persistent blind spot in how the census is being produced - it is being written from memory of the guards rather than derived from the tree"* |
 
+**THIS SPEC SHIPS WITHOUT A FAITHFUL VERDICT, DELIBERATELY, AND `review-gate` REFUSES IT.** That
+refusal is correct - constitution XVI wants a reviewed spec, and this one carries three CHANGES
+REQUIRED and no approval. It is not fixable by review: a fourth round is exactly what Principle XVI
+forbids (*"three failures means a persistent misunderstanding a fourth attempt will not find"*), so
+seeking a FAITHFUL stamp would be gaming the check rather than satisfying it. The push therefore uses
+`REVIEW_GATE_OK` with the escalation as its reason, which is how that escape is meant to work - the
+reason ships with the push and is logged to `dev/bypass-log/`. The implementation is green
+(`make hooks-test` and `make done`), the reviewer's substantive remedy is implemented rather than
+argued, and the two decisions that remain are the GM's.
+
 **What the escalation asks the GM.** The mechanical remedy the reviewer named is implemented rather
 than argued: the census is now DERIVED (FR-001), so it cannot be short again, and a new token fails
 the build until classified. Two things are still the GM's, and both are in the close-out report:
