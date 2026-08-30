@@ -27,7 +27,18 @@ Thumbnails are relative ``<img>`` links to the pool pngs, so the page works from
 ``file://`` open of main's tree; a map whose render is not present says so instead of showing a
 broken image.
 
-Standalone run (from the skill dir): ``python3 -m l7r.diagram.pipeline.pool_index [--pool <dir>]``.
+ONE PAGE OVER BOTH TREES (feature 161, the GM asked and answered 2026-08-30). The pool split into
+``pool/`` (live: scripted settlements + Mode A plans) and ``legacy-hand-authored-pool/`` (the 18
+FROZEN hand-authored exhibits), and the GM chose to keep browsing everything from one page rather
+than open two. So the live sections come first, then the frozen ones under their own banner, and the
+legacy rows link ACROSS with ``../legacy-hand-authored-pool/...`` - which is what resolves from a
+plain ``file://`` open of ``pool/index.html``, the way the GM actually reads it.
+
+Which tree a section belongs to is stated in the heading rather than left to the Method column: the
+whole point of the split is that a frozen exhibit and a live map are different things, and a reader
+should not have to read a cell to tell them apart.
+
+Standalone run (from the skill dir): ``python3 -m l7r.diagram.pipeline.pool_index [--skill-dir <dir>]``.
 """
 
 from __future__ import annotations
@@ -37,12 +48,14 @@ import html
 import json
 import os
 
+from . import poolmaps
+
 SKILL_DIR = os.path.abspath(
     os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", "..")
 )  # the skill root; this module lives in l7r/diagram/pipeline/ - FOUR levels up since feature 119, not two
 
 # Known tiers, in the order the GM reads the pool (smallest settlement first, Mode A last). A
-# folder not listed here still gets a section, appended alphabetically after these.
+# tier not listed here still gets a section, appended alphabetically after these.
 TIER_SECTIONS: tuple[tuple[str, str], ...] = (
     ("hamlets", "Hamlets"),
     ("villages", "Villages"),
@@ -52,11 +65,24 @@ TIER_SECTIONS: tuple[tuple[str, str], ...] = (
     ("magistracies", "Magistracies (Mode A compound plans)"),
 )
 
-# Folders holding Mode A compound plans: tracked svg source, no JSON manifest, 3 px = 1 ft.
+# Tiers holding Mode A compound plans: tracked svg source, no JSON manifest, 3 px = 1 ft.
 MODE_A_DIRS = frozenset({"magistracies"})
 
-# Not maps: negative fixtures and interpreter droppings.
-SKIP_DIRS = frozenset({"regressions", "__pycache__"})
+# What each tree is called on the page, and the one line that says what it IS. The banner is not
+# decoration: a frozen exhibit and a live map look identical in a table, and the difference (one is
+# regenerated every gate, the other can never change again) is the reason the trees were split.
+TREE_BANNERS: dict[str, tuple[str, str]] = {
+    poolmaps.LIVE_TREE: (
+        "The live pool",
+        "Regenerated and re-gated on every run. Scripted settlements, plus the Mode A compound plans that are hand-authored by design.",
+    ),
+    poolmaps.LEGACY_TREE: (
+        "Frozen hand-authored exhibits",
+        "Never regenerated, never re-gated (GM 2026-08-16). Their renders are committed write-once: "
+        "once the engine drifted, nothing could faithfully rebuild them. A map leaves this tree only "
+        "by being converted to scripted generation.",
+    ),
+}
 
 COLUMNS: tuple[str, ...] = ("Map", "Name", "Method", "Subtype", "Scale", "Size", "Knobs", "Notes")
 
@@ -94,6 +120,9 @@ p.lede { color: #6b6355; margin-top: 0; }
 nav { margin: 0.6rem 0 0; color: #6b6355; }
 nav a { margin-right: 0.9rem; }
 h2 { border-bottom: 2px solid #d8cfc0; padding-bottom: 0.2rem; margin-top: 2.2rem; }
+h2.tree { border-bottom-width: 4px; margin-top: 3rem; }
+h3 { margin-top: 1.8rem; }
+h2.tree + p.lede { margin: 0.3rem 0 0; max-width: 60rem; }
 .tablewrap { overflow-x: auto; }
 table { border-collapse: collapse; width: 100%; }
 th, td { border: 1px solid #d8cfc0; padding: 0.45rem 0.6rem; text-align: left;
@@ -120,9 +149,9 @@ def _fmt_val(v: object) -> str:
     return str(v)
 
 
-def _load_meta(dirpath: str, stem: str) -> dict[str, object]:
+def _load_meta(b: poolmaps.MapBundle) -> dict[str, object]:
     """A map's manifest meta, or {} when the JSON is absent (see _row for how that is reported)."""
-    path = os.path.join(dirpath, stem + ".json")
+    path = b.path(".json")
     if not os.path.exists(path):
         return {}
     with open(path) as fh:
@@ -130,9 +159,9 @@ def _load_meta(dirpath: str, stem: str) -> dict[str, object]:
     return dict(meta)
 
 
-def _mode_a_program(dirpath: str, stem: str) -> str:
+def _mode_a_program(b: poolmaps.MapBundle) -> str:
     """The '**Program type**: ...' line from a Mode A map's notes, or '' if the notes lack one."""
-    path = os.path.join(dirpath, stem + ".notes.md")
+    path = b.path(".notes.md")
     if not os.path.exists(path):
         return ""
     with open(path) as fh:
@@ -165,14 +194,31 @@ def _knobs(meta: dict[str, object]) -> str:
     return "; ".join(f"{k}={_fmt_val(v)}" for k, v in sorted(knobs.items()))
 
 
-def _row(dirname: str, dirpath: str, stem: str) -> dict[str, str]:
+def href(b: poolmaps.MapBundle, ext: str, index_dir: str) -> str:
+    """One bundle file's href, relative to the page's own directory and HTML-escaped.
+
+    Lifted to module level rather than left a closure inside `_row` so it can be tested with a plain
+    bundle and a directory - the cross-tree case (`../legacy-hand-authored-pool/...`) is the whole
+    reason FR-018 exists, and it should not need a whole pool to assert.
+    """
+    return html.escape(os.path.relpath(b.path(ext), index_dir))
+
+
+def _row(b: poolmaps.MapBundle, index_dir: str) -> dict[str, str]:
     """One map's cells, keyed by column name; '' marks an empty cell (rendered as a dash, and a
-    column empty across a whole section is dropped). Values are final HTML."""
-    meta = _load_meta(dirpath, stem)
+    column empty across a whole section is dropped). Values are final HTML.
+
+    Every href is computed RELATIVE TO `index_dir` - the directory the page is written into - so a
+    legacy row comes out as `../legacy-hand-authored-pool/...` and resolves from a plain `file://`
+    open, which is how the GM reads it (FR-018). Deriving the links rather than joining a hardcoded
+    prefix is what keeps both trees correct from ONE expression.
+    """
+    meta = _load_meta(b)
+    stem = b.stem
     name = str(meta.get("name") or stem.replace("-", " ").title())
-    if dirname in MODE_A_DIRS:
+    if b.tier in MODE_A_DIRS:
         method = "Mode A compound"
-        subtype = html.escape(_mode_a_program(dirpath, stem))
+        subtype = html.escape(_mode_a_program(b))
         scale = html.escape("1/3 ft/px (3 px = 1 ft)")
         size = knobs = ""
     elif not meta:
@@ -192,16 +238,13 @@ def _row(dirname: str, dirpath: str, stem: str) -> dict[str, str]:
         elif meta.get("population"):
             size = html.escape(f"pop {meta['population']}")
         knobs = html.escape(_knobs(meta))
-    png = f"{dirname}/{stem}.png"
-    if os.path.exists(os.path.join(dirpath, stem + ".png")):
-        thumb = f'<a href="{html.escape(png)}" target="_blank" rel="noopener"><img src="{html.escape(png)}" alt="{html.escape(name)}" loading="lazy"></a>'
-    else:
-        thumb = "<span>render not synced</span>"
-    notes = f"{dirname}/{stem}.notes.md"
-    notes_cell = f'<a href="{html.escape(notes)}">notes</a>' if os.path.exists(os.path.join(dirpath, stem + ".notes.md")) else ""
-    page = f"{dirname}/{stem}.html"  # the interactive page (feature 134), linked beside the notes when the render is synced
-    if os.path.exists(os.path.join(dirpath, stem + ".html")):
-        notes_cell = (notes_cell + " | " if notes_cell else "") + f'<a href="{html.escape(page)}">interactive</a>'
+    png, notes, page = (href(b, ext, index_dir) for ext in (".png", ".notes.md", ".html"))
+    # A live map's renders are gitignored, so "not synced" is the NORMAL state in a clean checkout -
+    # say so rather than showing a broken image.
+    thumb = f'<a href="{png}" target="_blank" rel="noopener"><img src="{png}" alt="{html.escape(name)}" loading="lazy"></a>' if os.path.exists(b.path(".png")) else "<span>render not synced</span>"
+    notes_cell = f'<a href="{notes}">notes</a>' if os.path.exists(b.path(".notes.md")) else ""
+    if os.path.exists(b.path(".html")):  # the interactive page (feature 134), beside the notes when the render is synced
+        notes_cell = (notes_cell + " | " if notes_cell else "") + f'<a href="{page}">interactive</a>'
     return {
         "Map": thumb,
         "Name": html.escape(name),
@@ -229,29 +272,48 @@ def _table(rows: list[dict[str, str]]) -> str:
     return '<div class="tablewrap"><table>' + "".join(out) + "</table></div>"
 
 
-def _sections(pool_dir: str) -> list[tuple[str, str]]:
-    """(folder, heading) pairs: the known tiers in reading order, then any unknown map folder
-    appended alphabetically so a new tier is never silently missing from the index."""
-    known = [d for d, _ in TIER_SECTIONS]
-    present = sorted(d for d in os.listdir(pool_dir) if os.path.isdir(os.path.join(pool_dir, d)) and d not in SKIP_DIRS)
-    sections = [(d, title) for d, title in TIER_SECTIONS if d in present]
-    sections += [(d, d.replace("-", " ").title()) for d in present if d not in known]
-    return sections
+def _sections(bundles: list[poolmaps.MapBundle]) -> list[tuple[str, str, str]]:
+    """(tree, tier, heading) in reading order: the known tiers first, then any UNKNOWN tier appended
+    alphabetically, so a new tier can never be silently missing from the index.
+
+    Grouped by tree so the live pool is read first and the frozen exhibits sit under their own
+    banner. A tier that exists in both trees (`hamlets` does) yields one section per tree, which is
+    why the tree is part of the key and of the anchor id."""
+    out: list[tuple[str, str, str]] = []
+    known = [t for t, _ in TIER_SECTIONS]
+    for tree in poolmaps.TREES:
+        present = sorted({b.tier for b in bundles if b.tree == tree})
+        out += [(tree, tier, title) for tier, title in TIER_SECTIONS if tier in present]
+        out += [(tree, tier, tier.replace("-", " ").title()) for tier in present if tier not in known]
+    return out
 
 
-def build_index(pool_dir: str) -> str:
-    """The whole page, deterministically from the pool's files (so a rebuild with no pool change
-    is byte-identical - no timestamps)."""
+def _anchor(tree: str, tier: str) -> str:
+    """The section's id. `hamlets` exists in BOTH trees, so the tree has to be in the anchor or the
+    two sections would collide and the nav would jump to the wrong one."""
+    return tier if tree == poolmaps.LIVE_TREE else f"{tree}-{tier}"
+
+
+def build_index(skill_dir: str) -> str:
+    """The whole page, over BOTH trees, deterministically from their files (so a rebuild with no
+    change is byte-identical - no timestamps)."""
+    bundles = poolmaps.bundles(skill_dir=skill_dir)
+    index_dir = os.path.join(skill_dir, poolmaps.LIVE_TREE)  # the page lives in pool/, so links are relative to it
     body: list[str] = []
     nav: list[str] = []
-    for dirname, heading in _sections(pool_dir):
-        dirpath = os.path.join(pool_dir, dirname)
-        stems = sorted(f[: -len(".gen.py")] for f in os.listdir(dirpath) if f.endswith(".gen.py"))
-        if not stems:
+    seen_trees: set[str] = set()
+    for tree, tier, heading in _sections(bundles):
+        rows = [b for b in bundles if b.tree == tree and b.tier == tier]
+        if not rows:
             continue
-        nav.append(f'<a href="#{html.escape(dirname)}">{html.escape(heading)}</a>')
-        body.append(f'<h2 id="{html.escape(dirname)}">{html.escape(heading)}</h2>')
-        body.append(_table([_row(dirname, dirpath, s) for s in stems]))
+        if tree not in seen_trees:  # the banner that says WHICH TREE, once, before its first section (FR-017)
+            seen_trees.add(tree)
+            title, lede = TREE_BANNERS[tree]
+            body.append(f'<h2 class="tree">{html.escape(title)}</h2><p class="lede">{html.escape(lede)}</p>')
+        anchor = _anchor(tree, tier)
+        nav.append(f'<a href="#{html.escape(anchor)}">{html.escape(heading)}</a>')
+        body.append(f'<h3 id="{html.escape(anchor)}">{html.escape(heading)}</h3>')
+        body.append(_table([_row(b, index_dir) for b in rows]))
     out = [
         "<!doctype html>",
         '<html lang="en"><head><meta charset="utf-8">',
@@ -260,7 +322,7 @@ def build_index(pool_dir: str) -> str:
         f"<style>{_CSS}</style>",
         "</head><body>",
         "<h1>L7R Diagram Pool</h1>",
-        '<p class="lede">Every map in the pool, by tier. Scripted maps carry <code>meta.generated_by</code>; everything else is hand-authored. Click a thumbnail for the full render.</p>',
+        '<p class="lede">Every map in both trees, by tier. Scripted maps carry <code>meta.generated_by</code>; everything else is hand-authored. Click a thumbnail for the full render.</p>',
         "<nav>" + "".join(nav) + "</nav>",
         *body,
         "</body></html>",
@@ -268,18 +330,20 @@ def build_index(pool_dir: str) -> str:
     return "\n".join(out) + "\n"
 
 
-def write_index(pool_dir: str) -> str:
-    path = os.path.join(pool_dir, "index.html")
+def write_index(skill_dir: str) -> str:
+    """Write the page into the LIVE tree (`pool/index.html`) - it covers both trees, but it lives
+    where the GM has always opened it, and the legacy rows link across (FR-016/FR-018)."""
+    path = os.path.join(skill_dir, poolmaps.LIVE_TREE, "index.html")
     with open(path, "w") as fh:
-        fh.write(build_index(pool_dir))
+        fh.write(build_index(skill_dir))
     return path
 
 
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description="Rebuild the pool's index.html.")
-    ap.add_argument("--pool", default=os.path.join(SKILL_DIR, "pool"), help="pool directory to index")
+    ap.add_argument("--skill-dir", default=SKILL_DIR, help="skill dir holding both pool trees")
     args = ap.parse_args(argv)
-    print(f"pool-index: wrote {write_index(args.pool)}")
+    print(f"pool-index: wrote {write_index(args.skill_dir)}")
     return 0
 
 

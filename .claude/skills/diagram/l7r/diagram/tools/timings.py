@@ -40,6 +40,8 @@ from dataclasses import dataclass, field
 from datetime import date
 from pathlib import Path
 
+from l7r.diagram.pipeline import poolmaps
+
 HERE = Path(__file__).resolve().parents[3]  # the skill root; this module lives in l7r/diagram/tools/ - FOUR levels up since feature 119, not two
 LEDGER = HERE / "timings.md"
 PY = sys.executable
@@ -208,7 +210,8 @@ def context() -> dict[str, str]:
         "resvg": first_line(["resvg", "--version"]),
         "commit": first_line(["git", "rev-parse", "--short", "HEAD"]),
         "tests": tests,
-        "maps": str(len(list((HERE / "pool").glob("*/*.gen.py")))),
+        # BOTH trees: this is a census of what the repository holds, not of what rolls.
+        "maps": str(len(poolmaps.bundles(skill_dir=str(HERE)))),
     }
 
 

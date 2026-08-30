@@ -66,6 +66,8 @@ from collections.abc import Callable
 from pathlib import Path
 from typing import Any
 
+from . import poolmaps
+
 HERE = os.path.abspath(
     os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", "..")
 )  # the SKILL ROOT, not this package: every path below is relative to it. FOUR levels up since feature 119 (l7r/diagram/pipeline/), not two
@@ -114,7 +116,9 @@ def engine_files() -> list[str]:
     dirs and the tests/ tree; skip test files and the non-engine modules."""
     out: list[str] = []
     for dirpath, dirnames, filenames in os.walk(HERE):
-        dirnames[:] = sorted(d for d in dirnames if d not in ("pool", "wip", "tests", "__pycache__", ".gencache") and not d.startswith(("test_", ".")))
+        # PRUNED BY NAME - see render_cache.engine_fingerprint for the full note. `poolmaps.TREES`
+        # so that adding a pool tree can never silently pull map sources into the engine key.
+        dirnames[:] = sorted(d for d in dirnames if d not in (*poolmaps.TREES, "wip", "tests", "__pycache__", ".gencache") and not d.startswith(("test_", ".")))
         # dotFILES are excluded like dot-dirs: a hidden .py is never an engine module, it is a
         # transient (an editor swap, a tool's scratch driver). The gate's own miss drivers used to
         # land here as `.gatecov-*-driver.py` and every concurrent key computation counted them as
