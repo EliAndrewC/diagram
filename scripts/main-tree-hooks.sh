@@ -100,6 +100,13 @@ if [ "$STANDING_IN_MAIN" = no ]; then
 fi
 
 # ...and does it then WRITE? A read in main is legitimate and stays legitimate.
+#
+# GUARD_EDIT_OK: feature 172 - A REDIRECT TO /dev/null IS NOT A WRITE, and neither is `2>&1`. The
+# write test matches `>`, so every `2>/dev/null` in an ordinary READ - which is most reads in this
+# repository - looked like a write, and the guard refused a plain `grep ... 2>/dev/null` of mine while
+# I stood in main. Third false positive this session from a pattern that matches a character rather
+# than a thing (`->` in prose, `make -n`, and now this). They are discarded before the test.
+SCAN=$(printf '%s' "$SCAN" | sed -E 's#[0-9]*>&[0-9-]##g; s#[0-9]*>[[:space:]]*/dev/null##g')
 WRITES='git[[:space:]]+(commit|add|merge|rebase|reset|checkout|restore|rm|mv|apply|am|stash|cherry-pick|push|pull|clean|tag|branch[[:space:]]+-)'
 WRITES="$WRITES|(^|[[:space:]])(vim|vi|nano|emacs|sed[[:space:]]+-i|tee|touch|mkdir|rmdir|rm|mv|cp|chmod|chown|ln|truncate|install)[[:space:]]"
 WRITES="$WRITES|>[^&]|>>|python3?[[:space:]]+-c|make[[:space:]]"
