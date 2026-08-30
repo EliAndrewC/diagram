@@ -1,6 +1,9 @@
 # Feature 171 - runtime ratchets: a test target that gets slower FAILS
 
-**Status**: specified by `diagram-testing`, to be implemented by the `Diagram tooling` session.
+**Status**: **APPROVED** (`spec-fidelity` FAITHFUL at round 5, recorded below by its author) and
+**IMPLEMENTED** 2026-08-30 by the `Diagram tooling` session. Specified by `diagram-testing`; the
+implementation notes, and the two decisions that remain the GM's, are in
+[`tasks.md`](tasks.md).
 **The GM's words**: [`request.md`](request.md). **The evidence**: [`research.md`](research.md).
 **Review**: `spec-fidelity`, rounds 1-4. See "Review history" for each round's items and their fixes.
 
