@@ -88,7 +88,9 @@ FIRE by removing the code it guards - the project's rule for adding a guard, app
       research: procedure
       verify: purge the real log, run every suite, count it - 0 before and 0 after
       DONE: every conversion calls `guard_log`; every suite isolates `GUARD_LOG_DIR`. Audited: 0 fixture entries in the real census before and after running all seven suites (24 leaked on the first pass)
-- [ ] T12 `make hooks-test`, then `make done`, compared against T01
+- [x] T12 `make hooks-test`: **19 guard suites green, exit 0** - exactly the 19 T01 recorded, so no
+      regression. Every suite re-ran rather than being skipped, because the shared helpers changed.
+      `make done` recorded below
       research: procedure
       verify: both green, no new failure against the baseline
 - [ ] T13 update `CLAUDE.md`'s guard table for every converted guard, and audit `dev/bypass-log/`
