@@ -1,10 +1,20 @@
 # T08 - the FR-006 placer read, for every NEVER-FIRES candidate
 
 The census produces a candidate; this read produces the ruling (feature 158, and the round-1 spec
-review which cut the "soft-failing placer keeps its check" clause). Two outcomes only: **evidence that
-the CURRENT placer is missed** reclassifies the check FIRING, or **no such evidence** and it is deleted.
+review which cut the "soft-failing placer keeps its check" clause). Three outcomes, after the GM's ruling
+of 2026-08-30 named the deletion set itself:
 
-**Nothing has been deleted.** T10-T13 are held pending the GM's ruling on the escalated spec.
+- **evidence that the CURRENT placer is missed** -> reclassify the check FIRING, to the ledger;
+- **no such evidence AND the check is dead** (a name no scale can emit, or a tier no generator can
+  produce) -> delete;
+- **neither** -> to the FR-009 ledger with everything else. The GM's words: *"delete the 5 dead ones ...
+  then go straight into the case-by-case pass over the rest."*
+
+**OUTCOME: 5 deleted, 4 to the ledger, 0 reclassified.** The five were the two PHANTOM names and the three
+TIER-DEAD ones (groups A and B below); the four in group C are "the rest" and went to the ledger, kept.
+An earlier version of this file said "two outcomes only ... no such evidence and it is deleted", and that
+its four keeps were held pending a ruling - both were superseded by the ruling and are corrected here,
+because group C below always contradicted that opening.
 
 Nine candidates, after the census's own defect was fixed (R7: two of the original eleven were an
 artifact of indexed check names, not dead checks). Grouped by what the read found.
@@ -40,10 +50,10 @@ a different check, in a different segment, with no such branch.
 
 **This is a DEFECT IN THE PIN, not only a census finding** (constitution XIV). Two names in the live
 roster correspond to no reachable check, so every count this repository has published of "how many checks
-there are" is two high. The fix belongs with the deletion (T10) and is held with it. The general form is
+there are" is two high. **FIXED in T10**: `registry_analysis._bases_of` now expands a tier-keyed name over the segment's OWN admitted scales (`_DERIVATION_VERSION` 3), and `_seg_0243` was rewritten to emit a CONSTANT name under `if scale == "hamlet":`. The general form is
 worth more than the two instances: **`registry_analysis` enumerates a dynamic check name across every
 scale without evaluating the condition that guards it**, so any future `check(f"{scale}_...")` behind a
-scale branch will mint phantom names the same way. Three segments build a name at runtime today
+scale branch WOULD have minted phantom names the same way, until that fix. Three segments build a name at runtime today
 (`grep 'check(\s*f"' segments_*.py` is the whole population).
 
 ---

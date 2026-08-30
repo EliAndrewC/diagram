@@ -120,11 +120,14 @@ and the spec review was explicit that it licenses nothing more. **There are two 
   fixture, a waiver - means the census was WRONG. Reclassify the check FIRING and route it to the Phase 3
   ledger. `bridges_span_their_water` is the worked precedent: the mechanical census called it retire, and
   `hamletgen/ways.py` records it catching the scripted placer four separate times.
-- **No such evidence** - delete, the way feature 146 established: the segment BODY, not a stubbed call;
+- **No such evidence, AND the check is dead** (a name no scale can emit, or a tier no generator can
+  produce) - delete, the way feature 146 established: the segment BODY, not a stubbed call;
   any helper whose chain reaches no other live check; the name's row in
   `tests/fixtures/gate_check_names.json`; its tests; and any frozen fixture whose only purpose was that
   check. A placer that merely DECLINES rather than guarantees is not evidence and does not save a check -
   a runtime net standing behind a possibly-wrong placer is the architecture this feature retires.
+- **A NEVER-FIRES check that is neither dead nor a recorded miss goes to the Phase 3 LEDGER**, per the
+  GM's 2026-08-30 ruling, which named the deletion set itself. Four of the nine candidates landed here.
 - **Frozen-fixture-only evidence is classified apart, and since the GM's 2026-08-30 amendment to FR-003 it
   is NOT a deletion criterion.** A check whose only proof of teeth is a hand-era manifest still fires as far
   as this feature is concerned; it goes to the Phase 3 ledger, not to the deletion. Only a check nothing at

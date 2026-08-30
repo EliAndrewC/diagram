@@ -57,8 +57,10 @@ finding and is therefore `physical` with its three boxes.
 - [x] **T08** For every NEVER-FIRES candidate, read the placer that produces the feature it judges and
       grep `dev/`, `specs/` and the commit log for what the check has actually caught. **Two outcomes,
       no third** (FR-006): evidence that the CURRENT placer misses it reclassifies the check FIRING and
-      routes it to T14's ledger; no such evidence and it is deleted. A placer that merely DECLINES is not
-      evidence and does not save a check. Record the placer read and the outcome per candidate.
+      routes it to T14's ledger; no such evidence AND the check is dead (a name no scale can emit, a tier
+      no generator can produce) and it is deleted; neither of those and it goes to T14's ledger with
+      everything else - the GM's 2026-08-30 ruling names the deletion set itself. Record the placer read
+      and the outcome per candidate. OUTCOME: 5 deleted, 4 to the ledger, 0 reclassified.
       research: procedure
 - [x] **T09** Check every DELETE candidate against `research/`: if the check is the only operative
       statement of a historical finding, record where that finding still stands (the `research/` entry,

@@ -69,9 +69,10 @@ The GM wants the dead weight gone first, before any architectural argument. A se
 every live gate check and asks, by EXECUTION rather than by reading, whether anything the engine can
 PRODUCE TODAY makes that check emit a FAIL - a live pool map, a map the current generators can roll, a
 scripted negative fixture built from today's placers, or a recorded miss of the current placer. Evidence
-that exists only as a frozen hand-era manifest of a shape no generator can produce is not the current
-implementation firing (FR-003). A check for which the answer is "no" is deleted, along with its segment
-body, its tests, its fixture entries and its pin.
+that exists only as a hand-era manifest or a hand-BUILT test dict is classified apart and routed to the
+FR-009 ledger - not deleted (FR-003, as the GM amended it on 2026-08-30). **Only a check that NOTHING at
+all makes fail is a deletion candidate**, and that one takes the FR-006 placer read first; what survives
+that read is deleted with its segment body, its tests, its fixture entries and its pin.
 
 **Why this priority**: It is the GM's stated first task, it is self-contained, and it needs no ruling from
 anyone - a check that cannot be shown to fire anywhere is not load-bearing by construction.
@@ -82,8 +83,11 @@ geometry, so any render diff is diagnosed before the deletion lands.
 
 **Acceptance Scenarios**:
 
-1. **Given** the 152 live check names, **When** the census runs, **Then** every name is classified as
-   FIRES (with the artifact or test that makes it fire named) or NEVER-FIRES, with no name unclassified.
+1. **Given** the live check names, **When** the census runs, **Then** every name is classified into one of
+   THREE outcomes, with no name unclassified: **FIRES** (the current implementation makes it fail, artifact
+   named), **FIRES-HAND-ONLY** (only a hand-era or hand-built manifest does - to the FR-009 ledger), or
+   **NEVER-FIRES** (nothing does - to the FR-006 read). A two-way split would collapse hand-only into
+   never-fires and hand 103 checks to the deletion task.
 2. **Given** a NEVER-FIRES check, **When** its segment, tests, fixture entries and pin are deleted,
    **Then** `make done` is green and every pool render is compared byte-for-byte, any diff diagnosed.
 3. **Given** a check the census calls NEVER-FIRES, **When** its placer is read and the record grepped,
@@ -178,8 +182,10 @@ discussion before any such change is made, so the work is named here only so the
   Passing on every map is not firing. **A hand-BUILT manifest in a test is recorded as evidence too, and
   classified apart**: this repository's established way of exercising a check no live generator reaches is
   a small hand-built manifest (`dev/gate.md`), so a check that only such a manifest makes fail has proven
-  TEETH without proving the current implementation produces the fault. It is not deleted on the census's
-  word; it goes to the FR-006 placer read like every other candidate.
+  TEETH without proving the current implementation produces the fault. It is classified `FIRES-HAND-ONLY`
+  and routed to the FR-009 ledger per FR-003: **it is NOT a deletion candidate and does NOT take the FR-006
+  read.** (An earlier draft sent it to FR-006, whose second outcome is deletion - which would have put 103
+  of the 147 checks on the block, the exact thing the GM's 2026-08-30 ruling forbids.)
 - **FR-002**: The census MUST establish each verdict by EXECUTION - running the gate against the artifact
   and reading the verdict - not by grepping for the check's name. A name appearing in a test file is not
   evidence that the test makes the check fail.
@@ -214,11 +220,19 @@ discussion before any such change is made, so the work is named here only so the
     separate times.)
   - **No such evidence** - it is deleted, per the GM's first task.
 
-  There is no third outcome. In particular, a placer that fails SOFTLY - declining a placement rather than
-  guaranteeing correctness - does NOT by itself save a check that has never caught anything: a runtime
-  safety net standing behind a placer that might be wrong is precisely the architecture the GM says does
-  not need to exist. (Feature 158's "the census's verdict is a candidate, not a ruling" licenses the
-  investigation; it does not license a keep.)
+  **AMENDED BY THE GM, 2026-08-30.** The ruling enumerates the deletion set itself - *"delete the 5 dead
+  ones (2 phantom names that can't be emitted at any scale, 3 that only run on tiers no generator can
+  produce), then go straight into the case-by-case pass over the rest"* - so a NEVER-FIRES check the read
+  finds is NEITHER genuinely dead NOR a recorded placer miss goes to the FR-009 ledger with everything
+  else, rather than being deleted. What is deleted is what is DEAD: a name no scale can emit, or a check
+  whose only tier no generator can produce.
+
+  **This is not round 1's carve-out returning, and the difference is who is deciding.** Round 1 struck a
+  clause letting the SESSION keep a check on its own judgment that a placer "fails softly". Here the GM
+  named the deletion set. The four checks the read actually kept - the two waiver meta-checks (the hatch
+  they guard is currently shut, which is the argument FOR them), `farmhouse_aspect_in_range` (a measured
+  11% margin, so the placer does not guarantee it) and `waterward_strips_run_off_the_frame` (35 px of
+  headroom, written last week for a review finding) - are in "the rest", not in the set.
 - **FR-007**: Deleting a check MUST remove its segment body, any helper whose chain reaches no other live
   check, its entry in the name pin, its tests, and any frozen fixture whose only purpose was that check.
   (Feature 146: stubbing the call is not removing the check.)
@@ -248,8 +262,9 @@ implementation note in the plan.)*
 - **Check**: one named rule in the gate battery (152 live names today), implemented by one or more
   registry segments.
 - **Firing evidence**: an artifact-plus-verdict pair showing a named check emitting FAIL or WAIVE.
-- **Census ledger**: one row per check - name, firing evidence (or its absence), the placer read, and
-  the outcome (FIRING with its evidence, or DELETED).
+- **Census ledger**: one row per check - name, firing evidence (or its absence), the placer read where one
+  was owed, and the outcome: **FIRES**, **FIRES-HAND-ONLY** (to the ledger), or **NEVER-FIRES** (to the
+  FR-006 read, and thence deleted or kept).
 - **Measurement row**: for a surviving check - which stage last changes each input, what the placer
   guarantees, who reads the verdict, what it is recorded as having caught - and the evidence for each of
   the GM's two readings. It carries no verdict; the verdict is the GM's.
@@ -260,9 +275,11 @@ implementation note in the plan.)*
 
 - **SC-001**: Every one of the 152 live check names carries a census verdict with named evidence; zero are
   unclassified.
-- **SC-002**: Every check the census calls NEVER-FIRES is either deleted, or reclassified FIRING with the
-  recorded evidence that the CURRENT placer misses it - none survives on the strength of a placer that
-  merely declines, and none is left in the battery unexamined.
+- **SC-002**: Every check the census calls NEVER-FIRES has had the FR-006 read and one of three recorded
+  outcomes: **deleted** because it is dead (a name no scale can emit, or a tier no generator can produce);
+  **reclassified FIRING** on recorded evidence that the current placer misses it; or **routed to the
+  FR-009 ledger** because it is neither. None is left in the battery unexamined, and none is deleted for
+  any reason but being dead.
 - **SC-003**: After the deletions the gate is green on all five live hamlets, and every pool render is
   either byte-identical or its diff is diagnosed in writing with the cause.
 - **SC-004**: The ledger covers 100% of surviving checks; each row states the measurement and the evidence
