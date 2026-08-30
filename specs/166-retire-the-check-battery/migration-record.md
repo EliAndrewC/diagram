@@ -103,6 +103,10 @@ differs by tier is the COUNT (a city draws the set: the principal board plus one
 | `sluice_gates_on_water` | `tests/settlement/test_sluice_gates.py` | the gate's `sluice_gates` append removed -> RED |
 | `channel_gates_at_water_junctions` (recording half) | same module | same mutation -> RED; the span mutation -> RED |
 
+| `map_frame_hugs_its_content` | `tests/settlement/test_crop_framing.py` | `crop_to_content` made a no-op -> RED |
+| `crop_not_held_open_by_one_feature` | same module (a trailing lane must not widen the frame) | same mutation -> RED |
+| `no_caption_holds_the_frame_open` | same module - one frame rule, three checks | same mutation -> RED |
+
 ## Battery-internal - they go WITH the battery, and owe no destination
 
 These four do not state a rule about a map. They state that the battery's OWN classification tables are
