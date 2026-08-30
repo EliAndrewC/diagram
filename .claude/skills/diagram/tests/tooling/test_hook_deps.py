@@ -64,6 +64,25 @@ def test_the_refinement_actually_narrows_the_two_helpers_it_was_built_for() -> N
     assert len(cases) <= 5, f"test_hooks_cases.py's blast radius grew to {cases}"
 
 
+def test_the_whole_tree_trio_is_the_constant_on_every_targeted_change() -> None:
+    """What a targeted change ACTUALLY costs, which the first success criteria understated.
+
+    SC-002 and SC-003 were written from the derivation over guards alone - two suites and three. A
+    real incremental run reports five and six, because `sync-with-main.sh`, `review-gate.sh` and
+    `gate-stamp.py` re-run for ANY script change and always will: two are held whole-tree deliberately
+    (they resolve script paths at run time, which no static reader follows) and one derives there
+    (it reads the whole directory).
+
+    Asserted so the constant stays visible: if this trio ever stops re-running, the derivation has
+    started under-running on the three suites that exercise the push path end to end.
+    """
+    for guard in ("sync-with-main.sh", "review-gate.sh", "gate-stamp.py"):
+        deps = hookdeps.deps_for(guard)
+        assert "_gatecost.py" in deps and "_hm_make.py" in deps, (
+            f"{guard} should re-run for any script change - it no longer depends on all of them"
+        )
+
+
 def test_the_helpers_that_churn_are_NOT_narrowed_and_that_is_correct() -> None:
     """The disappointment, asserted so it is not mistaken for a bug later.
 
