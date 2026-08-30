@@ -66,12 +66,22 @@ RATCHETS = {
     "done": Ratchet(
         target="done",
         baseline=155,
-        reason="DECISION D1, the spec author's and not the GM's: the interim baseline while done is "
-               "above the 35 s the GM reasoned from. Pin a real 35 s here when the efficiency work "
-               "lands and the ceiling becomes the GM's fixed 45 s automatically",
+        reason="D1, RATIFIED BY THE GM 2026-08-30: the interim baseline while done is above the 35 s "
+               "they reasoned from, giving a 201 s ceiling. Proposed by the diagram-testing session, "
+               "put to the GM with the alternative (leave done unarmed until the efficiency work "
+               "stabilizes it), and accepted with one condition: RE-PIN IT once real post-172 runs "
+               "exist. The 155 s came from a window spanning 2026-08-29/30 which predates the "
+               "parallel hooks-test, and every done run since has short-circuited, so no post-172 "
+               "full-gate measurement exists yet. A too-loose bar still catches a doubling; an "
+               "unarmed target catches nothing, which is how the 4x slowdown went unnoticed",
         hard_ceiling=45,
         hard_at_or_below=35,   # not yet - today's baseline is 155
-        compare="median",      # DECISION D2, the spec author's; see the module docstring, point 3
+        compare="median",      # D2, RATIFIED BY THE GM 2026-08-30, and BOUNDED TO THIS REGIME: while
+                               # the baseline is above 35 s the median of recent green same-scope runs
+                               # is judged, because 7 of the last 25 sit at or above the 201 s ceiling
+                               # and a per-run bar would fire on 28% of NORMAL runs. At 35 s the GM's
+                               # own per-run reading takes over (`ceiling_for`), which is what their
+                               # worked example says. See the module docstring, point 3.
     ),
     # FR-006: wired, and OFF. One row away from working, and that row off - the GM has said they do
     # not want the lengthy AWS runs happening at all right now.
