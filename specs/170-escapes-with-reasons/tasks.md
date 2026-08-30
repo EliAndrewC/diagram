@@ -46,11 +46,13 @@ no task carries the physical checkboxes. The GM's words are in [`request.md`](re
       silent; and a RUNNING one is never reported as finished
 
 - [x] T08 FR-005: `main-tree-hooks.sh` reads the session's `cwd` from the hook payload, so a write
-      issued while STANDING IN main's tree is refused even with no `cd` in the command; a command that
-      merely enters the mirror gets a free warning
+      issued while STANDING IN main's tree is refused even with no `cd` in the command. (The free warning
+      on merely ENTERING the mirror was CUT at round 4's ruling - it prevents nothing and is the shape
+      of the hook the GM declined in 2026-08-17)
       research: procedure
       verify: both shapes of the real incident as fixture cases, plus the correct-work half - a read
-      from main, a write from a clone, a `git -C` read
+      from main, a write from a clone, a `git -C` read. 24 cases; the suite's own run() helper had
+      never sent a `cwd`, which is how it stayed green while the guard missed its motivating shape
 
 - [ ] T09 `make audit` gains the reasons: "every escape taken, with what the session said", which is
       the report the GM described wanting
