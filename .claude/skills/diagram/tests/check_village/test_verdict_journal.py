@@ -55,13 +55,13 @@ def _gate(M):
 def test_record_verdict_is_a_no_op_when_the_journal_directory_is_unset(monkeypatch):
     monkeypatch.delenv(driver.VERDICT_JOURNAL_ENV, raising=False)
     assert driver.record_verdict("x", "FAIL", "somewhere") is False
-    assert driver._VERDICTS == set()
+    assert set() == driver._VERDICTS
 
 
 def test_record_verdict_records_when_the_journal_directory_is_set(monkeypatch, tmp_path):
     monkeypatch.setenv(driver.VERDICT_JOURNAL_ENV, str(tmp_path))
     assert driver.record_verdict("x", "FAIL", "somewhere") is True
-    assert driver._VERDICTS == {("x", "FAIL", "somewhere")}
+    assert {("x", "FAIL", "somewhere")} == driver._VERDICTS
 
 
 def test_record_verdict_registers_the_flush_exactly_once(monkeypatch, tmp_path):
@@ -82,7 +82,8 @@ def test_flush_verdicts_writes_one_file_per_process(monkeypatch, tmp_path):
     driver.record_verdict("a_check", "FAIL", "Inashiro")
     path = driver.flush_verdicts()
     assert path is not None
-    assert json.loads(open(path, encoding="utf-8").read()) == [["a_check", "FAIL", "Inashiro"], ["b_check", "WAIVE", "Kuwabata"]]
+    with open(path, encoding="utf-8") as fh:
+        assert json.load(fh) == [["a_check", "FAIL", "Inashiro"], ["b_check", "WAIVE", "Kuwabata"]]
 
 
 def test_flush_verdicts_creates_the_directory_it_was_given(tmp_path):
@@ -122,7 +123,7 @@ def test_a_passing_check_is_never_journaled(monkeypatch, tmp_path):
     monkeypatch.setenv(driver.VERDICT_JOURNAL_ENV, str(tmp_path))
     clean = {**_GARDEN_ON_A_DITCH, "field_ditches": []}
     assert _CHECK not in _gate(clean)
-    assert driver._VERDICTS == set()
+    assert set() == driver._VERDICTS
 
 
 def test_a_map_with_no_name_journals_a_placeholder_rather_than_crashing(monkeypatch, tmp_path):

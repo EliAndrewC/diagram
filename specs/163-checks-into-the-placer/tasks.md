@@ -11,7 +11,7 @@ finding and is therefore `physical` with its three boxes.
 
 ## Phase 0 - baseline (blocking)
 
-- [ ] **T01** Take the regression baseline and the opening perf bookend on UNMODIFIED code:
+- [x] **T01** Take the regression baseline and the opening perf bookend on UNMODIFIED code:
       `git worktree add --detach /tmp/base163 HEAD`, run `make done` there, and record the result in
       `research.md` R4. Check each worktree failure against the clone before calling it pre-existing -
       a fresh worktree carries no gitignored artifacts (the recorded 2026-08-24 trap). Then
@@ -20,34 +20,34 @@ finding and is therefore `physical` with its three boxes.
 
 ## Phase 1 - the census (US1, P1)
 
-- [ ] **T02** Add the verdict journal to `check_village`'s `check()` emitter: under one environment
+- [x] **T02** Add the verdict journal to `check_village`'s `check()` emitter: under one environment
       variable, append `<check> <verdict> <source>` to a journal file; otherwise no behavior change at
       all. Shape it on `hamletgen/driver.py`'s `STAGE_PROFILE_ENV` - it changes what is RECORDED, never
       what a map rolls (feature 132), and a test asserts a manifest is byte-identical with it set and unset.
       verify: `make quick`
       research: procedure
-- [ ] **T03** Write `l7r/diagram/tools/firing_census.py`: drive the journal over the five live pool maps
+- [x] **T03** Write `l7r/diagram/tools/firing_census.py`: drive the journal over the five live pool maps
       and every frozen fixture in `pool/regressions/`, union the verdicts, and emit
       `specs/163-checks-into-the-placer/firing-census.{md,json}` - one row per live check name with
       FIRES (naming the artifact) or NEVER-FIRES. Add it to pyproject's coverage exclusion list beside
       `check_census.py`, as a by-hand diagnostic, and say so in its docstring.
       research: procedure
-- [ ] **T04** Extend the census to the two sources a glob cannot see: the scripted negative fixtures, and
+- [x] **T04** Extend the census to the two sources a glob cannot see: the scripted negative fixtures, and
       the WHOLE pytest suite run once with the journal on (inline manifests in `tests/check_village/`
       are the reason - a check made to fail by a hand-built dict fires, and no artifact records it).
       research: procedure
-- [ ] **T05** Prove the instrument (FR-005). A test that (a) the census names a check independently known
+- [x] **T05** Prove the instrument (FR-005). A test that (a) the census names a check independently known
       to fire, (b) it goes RED if the journal comes back empty, and (c) it goes RED if a name a frozen
       fixture pins is missing from the FIRES set. Prove each assertion fires by deleting the code under
       it and watching the test go red - a census that silently classifies nothing is indistinguishable
       from a clean bill of health (`dev/gate.md`).
       verify: `make quick`
       research: procedure
-- [ ] **T06** Add the `firing-census` target to the skill Makefile with its help line - because everything
+- [x] **T06** Add the `firing-census` target to the skill Makefile with its help line - because everything
       in this skill runs through `make` and it is enforced (feature 127), not because reusable tooling was
       requested; the spec review removed that requirement.
       research: procedure
-- [ ] **T07** Run the census and record the result. State the NEVER-FIRES set against R2's 9-to-57 floor;
+- [x] **T07** Run the census and record the result. State the NEVER-FIRES set against R2's 9-to-57 floor;
       a result outside that band is a broken census and is diagnosed before anything is deleted.
       measure: `make firing-census`
       research: procedure

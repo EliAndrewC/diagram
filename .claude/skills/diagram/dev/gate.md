@@ -242,6 +242,16 @@ its best and the check IS the guarantee. `make check-census` measures this per c
 snapshots (the ledger in `specs/141-checks-and-corpus-audit/`); a kept check proves it fires on a
 scripted negative fixture (`tests/gate/test_scripted_fixtures.py`), not on a frozen manifest.
 
+**AND "IT IS NAMED IN A TEST" IS NOT "IT FIRES" (feature 163, 2026-08-30).** `make firing-census` asks the
+other half of the question - which checks does anything the engine can produce TODAY still make FAIL - and it
+reads the gate's OWN emitter (`driver.py`'s verdict journal, which records every FAIL and every WAIVE)
+rather than grepping for a check's name. The measurement that justifies the cost: a name-based census called
+59 checks dead, and folding in one run of the suite with the journal on moved 48 of them out, because a
+check made to fail only by a test's inline hand-BUILT manifest is invisible to any glob over `pool/`. The
+cheap version of that census would have deleted 48 working checks. Its evidence is CLASSIFIED, never pooled -
+`live-map` and `scripted-fixture` are the current engine firing, `hand-fixture` and `test` are not - which is
+the same distinction that retired `bridges_align_with_their_way` and kept `bridges_span_their_water`.
+
 **AND THE CENSUS'S VERDICT IS A CANDIDATE, NOT A RULING (feature 158, 2026-08-29).** It reads the
 manifest, so it can see a later stage changing an input and it CANNOT see a placer that fails
 softly - the two look identical from outside. Before you retire a candidate, read the placer and

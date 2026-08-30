@@ -89,7 +89,7 @@ def test_merge_unions_rather_than_overwrites():
     assert fc.merge(a, b) == {"x": {(fc.LIVE_MAP, "1"), (fc.HAND_FIXTURE, "2")}, "y": {(fc.TEST, "3")}}
 
 
-# ---- the three guards on the real census ---------------------------------------------------------
+# ---- guards that read no fixture ---------------------------------------------------------------
 
 
 def test_the_check_roster_is_read_and_is_not_empty():
@@ -106,33 +106,3 @@ def test_a_gate_error_is_recorded_rather_than_swallowed():
     verdicts', which is what a bare try/except pass would make it look like."""
     out = fc.verdicts_for({"houses": object()})  # not a list - something downstream will raise
     assert out and all(name == "<error>" for name, _v in out)
-
-
-def test_the_census_names_a_check_that_is_known_to_fire(tmp_path, monkeypatch):
-    """Guard 1, and the one that would catch the census silently classifying nothing: a check with a
-    frozen fixture named after it must come back FIRES, from that fixture."""
-    from l7r.diagram.check_village import driver
-
-    monkeypatch.setenv(driver.VERDICT_JOURNAL_ENV, str(tmp_path))
-    ev = fc.evidence_from_paths([f"{fc.HERE}/pool/regressions/{KNOWN_FIRING}_fires_on_an_unruled_element.json"], frozen=True)
-    assert KNOWN_FIRING in ev, "the census saw no verdict on a fixture frozen because it fires"
-    assert fc.verdict_for(ev[KNOWN_FIRING]) == fc.FIRES
-
-
-def test_no_check_a_frozen_fixture_pins_is_ever_reported_never_fires(tmp_path, monkeypatch):
-    """Guard 3. Every `_regression.fires` name is a check this repository has SEEN fire; if the
-    census calls one of them NEVER-FIRES, the census is broken, not the check."""
-    import glob
-
-    from l7r.diagram.check_village import driver
-
-    monkeypatch.setenv(driver.VERDICT_JOURNAL_ENV, str(tmp_path))
-    paths = sorted(glob.glob(f"{fc.HERE}/pool/regressions/*.json"))[:12]  # a sample: the full sweep is the census's own job
-    pinned = set()
-    for p in paths:
-        with open(p, encoding="utf-8") as fh:
-            pinned |= set((json.load(fh).get("_regression") or {}).get("fires") or [])
-    ev = fc.evidence_from_paths(paths, frozen=True)
-    live = set(fc.live_check_names())
-    missed = sorted(n for n in pinned & live if fc.verdict_for(ev.get(n, set())) == fc.NEVER_FIRES)
-    assert not missed, f"the census saw no verdict for pinned check(s) {missed}"

@@ -106,3 +106,47 @@ sweep, which is inside the spirit of that band and above its top - the differenc
 NAME appearing in a test as evidence, and this counts a check actually being made to FAIL.
 
 **Sources:** none - a measurement of this repository.
+
+## R6 - the census with the suite sweep folded in: the answer to the GM's first task
+
+`make firing-census-suite` - the 5 live maps, the 105 frozen fixtures, and the whole pytest suite run
+with the gate's verdict journal on (2,767 passed, 162.8 s; 7 xdist workers each wrote a journal).
+**1,029 verdicts observed.**
+
+| verdict | before the sweep | after | meaning |
+|---|---|---|---|
+| `FIRES` | 40 | **40** | the CURRENT implementation makes it fail - every one from a scripted-era fixture |
+| `FIRES-HAND-ONLY` | 53 | **101** | only a hand-era artifact or a hand-BUILT test manifest makes it fail |
+| `NEVER-FIRES` | 59 | **11** | nothing in the repository makes it fail |
+
+**The sweep moved 48 checks out of NEVER-FIRES, and that is the measurement that justifies FR-002.** A
+census built on globbing `pool/` would have reported 59 dead checks; 48 of them are made to fail by a
+test's inline hand-built manifest that no artifact glob can see. Had the census been built the cheap
+way, this feature would have deleted 48 working checks.
+
+The eleven with no firing evidence anywhere:
+
+    capital_has_kosatsuba      capital_has_no_headman     city_has_no_headman
+    farmhouse_aspect_in_range  stream_end_anchored        stream_source_anchored
+    town_has_no_headman        village_has_no_headman     waivers_are_documented
+    waivers_are_live           waterward_strips_run_off_the_frame
+
+**Every one is a CANDIDATE, not a verdict** (FR-006, feature 158), and two of the eleven show why the
+placer read is not a formality:
+
+- **`waivers_are_documented` and `waivers_are_live`** are the two meta-checks that keep the waiver hatch
+  from rotting - a waiver must carry 60+ characters of real reason, and must name a check that actually
+  failed. They never fire because **no live map carries a waiver** (R3). Deleting them would remove the
+  only guard on the escape hatch every other rule can be excused through, and it would do so precisely
+  BECAUSE the hatch is currently unused. They are also the checks `dev/gate.md` records as deliberately
+  un-waivable, *"or the hatch would swallow its own guard"*.
+- **`village_has_no_headman`** is the case the round-3 spec review predicted before the census ran: it
+  comes back NEVER-FIRES, and `roll_village` is a live mixin that still serves that scale, whose sibling
+  `village_has_kosatsuba` is made to fire by a three-line hand-built manifest in the tree today.
+
+And the two names the review used to break the "legacy tier" grouping both land where it said they would:
+`ways_clear_of_castle_moat` is `FIRES-HAND-ONLY` (a test makes it fail - it has no scale guard at all),
+not a tier casualty, and `gardens_clear_of_channels` moved from NEVER-FIRES to `FIRES-HAND-ONLY` on the
+sweep, exactly as predicted when the gap was found.
+
+**Sources:** none - a measurement of this repository.

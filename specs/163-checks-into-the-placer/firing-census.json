@@ -2,12 +2,12 @@
  "artifacts": {
   "frozen": 105,
   "live": 5,
-  "suite_journal": false
+  "suite_journal": true
  },
  "counts": {
   "FIRES": 40,
-  "FIRES-HAND-ONLY": 53,
-  "NEVER-FIRES": 59
+  "FIRES-HAND-ONLY": 101,
+  "NEVER-FIRES": 11
  },
  "rows": {
   "all_ink_is_ruled_on": {
@@ -15,21 +15,40 @@
     [
      "scripted-fixture",
      "pool/regressions/all_ink_is_ruled_on_fires_on_an_unruled_element.json"
+    ],
+    [
+     "test",
+     "suite:Inashiro"
     ]
    ],
    "verdict": "FIRES"
   },
   "aqueduct_taps_water_lands_dry": {
-   "evidence": [],
-   "verdict": "NEVER-FIRES"
+   "evidence": [
+    [
+     "test",
+     "suite:<unnamed>"
+    ]
+   ],
+   "verdict": "FIRES-HAND-ONLY"
   },
   "bamboo_stands_clear_of_paddies": {
-   "evidence": [],
-   "verdict": "NEVER-FIRES"
+   "evidence": [
+    [
+     "test",
+     "suite:<unnamed>"
+    ]
+   ],
+   "verdict": "FIRES-HAND-ONLY"
   },
   "bridges_span_their_water": {
-   "evidence": [],
-   "verdict": "NEVER-FIRES"
+   "evidence": [
+    [
+     "test",
+     "suite:<unnamed>"
+    ]
+   ],
+   "verdict": "FIRES-HAND-ONLY"
   },
   "bund_beans_on_bunds": {
    "evidence": [
@@ -40,6 +59,14 @@
     [
      "scripted-fixture",
      "pool/regressions/bund_beans_on_bunds_fires_on_water_buried_beads_inashiro.json"
+    ],
+    [
+     "test",
+     "suite:<unnamed>"
+    ],
+    [
+     "test",
+     "suite:Inashiro"
     ]
    ],
    "verdict": "FIRES"
@@ -181,6 +208,14 @@
     [
      "scripted-fixture",
      "pool/regressions/woodland_commons_within_the_frame_fires_on_offframe_coppice_sawada.json"
+    ],
+    [
+     "test",
+     "suite:Inashiro"
+    ],
+    [
+     "test",
+     "suite:Sawada"
     ]
    ],
    "verdict": "FIRES"
@@ -322,6 +357,14 @@
     [
      "scripted-fixture",
      "pool/regressions/woodland_commons_within_the_frame_fires_on_offframe_coppice_sawada.json"
+    ],
+    [
+     "test",
+     "suite:Inashiro"
+    ],
+    [
+     "test",
+     "suite:Sawada"
     ]
    ],
    "verdict": "FIRES"
@@ -331,6 +374,10 @@
     [
      "hand-fixture",
      "pool/regressions/canopy_clear_of_watercourses_fires_on_a_clump_in_the_stream.json"
+    ],
+    [
+     "test",
+     "suite:<unnamed>"
     ]
    ],
    "verdict": "FIRES-HAND-ONLY"
@@ -516,6 +563,10 @@
     [
      "scripted-fixture",
      "pool/regressions/woodland_commons_within_the_frame_fires_on_offframe_coppice_sawada.json"
+    ],
+    [
+     "test",
+     "suite:Kuwabata"
     ]
    ],
    "verdict": "FIRES"
@@ -605,19 +656,36 @@
     [
      "scripted-fixture",
      "pool/regressions/paddy_plots_are_workable_basins_fires_on_the_fan_toe_sunburst_mizuguchi.json"
+    ],
+    [
+     "test",
+     "suite:<unnamed>"
+    ],
+    [
+     "test",
+     "suite:Inashiro"
     ]
    ],
    "verdict": "FIRES"
   },
   "channel_gates_at_water_junctions": {
-   "evidence": [],
-   "verdict": "NEVER-FIRES"
+   "evidence": [
+    [
+     "test",
+     "suite:<unnamed>"
+    ]
+   ],
+   "verdict": "FIRES-HAND-ONLY"
   },
   "channels_flow_downhill": {
    "evidence": [
     [
      "hand-fixture",
      "pool/regressions/channels_flow_downhill_fires_when_channel_runs_uphill.json"
+    ],
+    [
+     "test",
+     "suite:<unnamed>"
     ]
    ],
    "verdict": "FIRES-HAND-ONLY"
@@ -627,6 +695,10 @@
     [
      "hand-fixture",
      "pool/regressions/channels_join_not_cross_at_fork_fires_on_a_delivery_at_the_division.json"
+    ],
+    [
+     "test",
+     "suite:<unnamed>"
     ]
    ],
    "verdict": "FIRES-HAND-ONLY"
@@ -644,29 +716,57 @@
     [
      "hand-fixture",
      "pool/regressions/channels_join_streams_at_confluence_fires_when_the_mouth_dies_short.json"
+    ],
+    [
+     "test",
+     "suite:<unnamed>"
     ]
    ],
    "verdict": "FIRES-HAND-ONLY"
   },
   "channels_join_water_not_cross": {
-   "evidence": [],
-   "verdict": "NEVER-FIRES"
+   "evidence": [
+    [
+     "test",
+     "suite:<unnamed>"
+    ]
+   ],
+   "verdict": "FIRES-HAND-ONLY"
   },
   "city_has_kosatsuba": {
-   "evidence": [],
-   "verdict": "NEVER-FIRES"
+   "evidence": [
+    [
+     "test",
+     "suite:<unnamed>"
+    ]
+   ],
+   "verdict": "FIRES-HAND-ONLY"
   },
   "city_has_no_headman": {
    "evidence": [],
    "verdict": "NEVER-FIRES"
   },
   "city_streets_reach_their_neighbors": {
-   "evidence": [],
-   "verdict": "NEVER-FIRES"
+   "evidence": [
+    [
+     "test",
+     "suite:<unnamed>"
+    ]
+   ],
+   "verdict": "FIRES-HAND-ONLY"
   },
   "cluster_abuts_fields": {
-   "evidence": [],
-   "verdict": "NEVER-FIRES"
+   "evidence": [
+    [
+     "test",
+     "suite:<unnamed>"
+    ],
+    [
+     "test",
+     "suite:Inashiro"
+    ]
+   ],
+   "verdict": "FIRES-HAND-ONLY"
   },
   "cluster_shape_matches_the_drawing": {
    "evidence": [
@@ -817,6 +917,14 @@
     [
      "scripted-fixture",
      "pool/regressions/woodland_commons_within_the_frame_fires_on_offframe_coppice_sawada.json"
+    ],
+    [
+     "test",
+     "suite:Kashikawa"
+    ],
+    [
+     "test",
+     "suite:Sawada"
     ]
    ],
    "verdict": "FIRES"
@@ -838,6 +946,14 @@
     [
      "scripted-fixture",
      "pool/regressions/woodland_commons_within_the_frame_fires_on_offframe_coppice_sawada.json"
+    ],
+    [
+     "test",
+     "suite:<unnamed>"
+    ],
+    [
+     "test",
+     "suite:Mizuguchi"
     ]
    ],
    "verdict": "FIRES"
@@ -847,13 +963,30 @@
     [
      "scripted-fixture",
      "pool/regressions/comb_supply_commands_both_flanks_fires_on_the_pre_fix_inashiro.json"
+    ],
+    [
+     "test",
+     "suite:<unnamed>"
+    ],
+    [
+     "test",
+     "suite:Inashiro"
     ]
    ],
    "verdict": "FIRES"
   },
   "commons_clear_of_paddies": {
-   "evidence": [],
-   "verdict": "NEVER-FIRES"
+   "evidence": [
+    [
+     "test",
+     "suite:<unnamed>"
+    ],
+    [
+     "test",
+     "suite:Inashiro"
+    ]
+   ],
+   "verdict": "FIRES-HAND-ONLY"
   },
   "copse_stands_clear_of_the_belt": {
    "evidence": [
@@ -1008,19 +1141,32 @@
     [
      "scripted-fixture",
      "pool/regressions/woodland_commons_within_the_frame_fires_on_offframe_coppice_sawada.json"
+    ],
+    [
+     "test",
+     "suite:Inashiro"
     ]
    ],
    "verdict": "FIRES"
   },
   "crop_not_held_open_by_one_feature": {
-   "evidence": [],
-   "verdict": "NEVER-FIRES"
+   "evidence": [
+    [
+     "test",
+     "suite:<unnamed>"
+    ]
+   ],
+   "verdict": "FIRES-HAND-ONLY"
   },
   "delivery_ditches_taper": {
    "evidence": [
     [
      "hand-fixture",
      "pool/regressions/delivery_ditches_taper_fires_on_a_blunt_ditch.json"
+    ],
+    [
+     "test",
+     "suite:<unnamed>"
     ]
    ],
    "verdict": "FIRES-HAND-ONLY"
@@ -1030,6 +1176,10 @@
     [
      "hand-fixture",
      "pool/regressions/drain_flows_downhill_fires_when_outfall_is_uphill.json"
+    ],
+    [
+     "test",
+     "suite:<unnamed>"
     ]
    ],
    "verdict": "FIRES-HAND-ONLY"
@@ -1047,6 +1197,10 @@
     [
      "hand-fixture",
      "pool/regressions/drainage_discharges_downhill_fires_when_the_brook_runs_uphill.json"
+    ],
+    [
+     "test",
+     "suite:<unnamed>"
     ]
    ],
    "verdict": "FIRES-HAND-ONLY"
@@ -1064,6 +1218,14 @@
     [
      "scripted-fixture",
      "pool/regressions/drainage_discharges_downhill_fires_on_cohort_seed_2s_uphill_brook.json"
+    ],
+    [
+     "test",
+     "suite:<unnamed>"
+    ],
+    [
+     "test",
+     "suite:Cohort-02"
     ]
    ],
    "verdict": "FIRES"
@@ -1085,6 +1247,14 @@
     [
      "scripted-fixture",
      "pool/regressions/drainage_discharges_downhill_fires_on_cohort_seed_2s_uphill_brook.json"
+    ],
+    [
+     "test",
+     "suite:<unnamed>"
+    ],
+    [
+     "test",
+     "suite:Cohort-02"
     ]
    ],
    "verdict": "FIRES"
@@ -1250,6 +1420,10 @@
     [
      "scripted-fixture",
      "pool/regressions/woodland_commons_within_the_frame_fires_on_offframe_coppice_sawada.json"
+    ],
+    [
+     "test",
+     "suite:<unnamed>"
     ]
    ],
    "verdict": "FIRES"
@@ -1259,29 +1433,61 @@
     [
      "hand-fixture",
      "pool/regressions/dry_plots_clear_of_paddies_fires_on_a_hem_plot_in_the_rice.json"
+    ],
+    [
+     "test",
+     "suite:<unnamed>"
+    ],
+    [
+     "test",
+     "suite:Inashiro"
     ]
    ],
    "verdict": "FIRES-HAND-ONLY"
   },
   "every_feature_classified_for_matrix": {
-   "evidence": [],
-   "verdict": "NEVER-FIRES"
+   "evidence": [
+    [
+     "test",
+     "suite:Nowhere"
+    ]
+   ],
+   "verdict": "FIRES-HAND-ONLY"
   },
   "every_feature_classified_for_overlap": {
-   "evidence": [],
-   "verdict": "NEVER-FIRES"
+   "evidence": [
+    [
+     "test",
+     "suite:<unnamed>"
+    ]
+   ],
+   "verdict": "FIRES-HAND-ONLY"
   },
   "every_solid_feature_classified_for_labels": {
-   "evidence": [],
-   "verdict": "NEVER-FIRES"
+   "evidence": [
+    [
+     "test",
+     "suite:<unnamed>"
+    ]
+   ],
+   "verdict": "FIRES-HAND-ONLY"
   },
   "farmhouse_aspect_in_range": {
    "evidence": [],
    "verdict": "NEVER-FIRES"
   },
   "farmhouse_sizes_vary": {
-   "evidence": [],
-   "verdict": "NEVER-FIRES"
+   "evidence": [
+    [
+     "test",
+     "suite:<unnamed>"
+    ],
+    [
+     "test",
+     "suite:Inashiro"
+    ]
+   ],
+   "verdict": "FIRES-HAND-ONLY"
   },
   "farmhouses_reach_a_way": {
    "evidence": [
@@ -1412,6 +1618,26 @@
     [
      "scripted-fixture",
      "pool/regressions/woodland_commons_within_the_frame_fires_on_offframe_coppice_sawada.json"
+    ],
+    [
+     "test",
+     "suite:<unnamed>"
+    ],
+    [
+     "test",
+     "suite:Inashiro"
+    ],
+    [
+     "test",
+     "suite:Kashikawa"
+    ],
+    [
+     "test",
+     "suite:Mizuguchi"
+    ],
+    [
+     "test",
+     "suite:Sawada"
     ]
    ],
    "verdict": "FIRES"
@@ -1481,6 +1707,14 @@
     [
      "scripted-fixture",
      "pool/regressions/woodland_commons_within_the_frame_fires_on_offframe_coppice_sawada.json"
+    ],
+    [
+     "test",
+     "suite:<unnamed>"
+    ],
+    [
+     "test",
+     "suite:Mizuguchi"
     ]
    ],
    "verdict": "FIRES"
@@ -1494,6 +1728,22 @@
     [
      "scripted-fixture",
      "pool/regressions/drainage_discharges_downhill_fires_on_cohort_seed_2s_uphill_brook.json"
+    ],
+    [
+     "test",
+     "suite:<unnamed>"
+    ],
+    [
+     "test",
+     "suite:Cohort-02"
+    ],
+    [
+     "test",
+     "suite:Inashiro"
+    ],
+    [
+     "test",
+     "suite:Nowhere"
     ]
    ],
    "verdict": "FIRES"
@@ -1515,6 +1765,18 @@
     [
      "hand-fixture",
      "pool/regressions/water_channels_cross_the_polder_ring_enokida.json"
+    ],
+    [
+     "test",
+     "suite:<unnamed>"
+    ],
+    [
+     "test",
+     "suite:Enokida"
+    ],
+    [
+     "test",
+     "suite:Polder"
     ]
    ],
    "verdict": "FIRES-HAND-ONLY"
@@ -1564,13 +1826,30 @@
     [
      "hand-fixture",
      "pool/regressions/watercourse_ends_reach_water_fires_when_the_collector_dangles.json"
+    ],
+    [
+     "test",
+     "suite:<unnamed>"
+    ],
+    [
+     "test",
+     "suite:Nowhere"
+    ],
+    [
+     "test",
+     "suite:Polder"
     ]
    ],
    "verdict": "FIRES-HAND-ONLY"
   },
   "field_ditches_terminate": {
-   "evidence": [],
-   "verdict": "NEVER-FIRES"
+   "evidence": [
+    [
+     "test",
+     "suite:Polder"
+    ]
+   ],
+   "verdict": "FIRES-HAND-ONLY"
   },
   "field_ponds_sunk_into_one_plot": {
    "evidence": [
@@ -1609,6 +1888,10 @@
     [
      "scripted-fixture",
      "pool/regressions/woodland_commons_visibly_stocked_fires_on_the_ink_only_canopy_mizuguchi.json"
+    ],
+    [
+     "test",
+     "suite:Inashiro"
     ]
    ],
    "verdict": "FIRES"
@@ -1622,6 +1905,14 @@
     [
      "hand-fixture",
      "pool/regressions/ways_clear_of_paddies_and_marsh_fires_on_the_pre_fix_inashiro.json"
+    ],
+    [
+     "test",
+     "suite:<unnamed>"
+    ],
+    [
+     "test",
+     "suite:Inashiro"
     ]
    ],
    "verdict": "FIRES-HAND-ONLY"
@@ -1675,6 +1966,14 @@
     [
      "hand-fixture",
      "pool/regressions/watercourse_ends_reach_water_fires_when_the_collector_dangles.json"
+    ],
+    [
+     "test",
+     "suite:<unnamed>"
+    ],
+    [
+     "test",
+     "suite:Nowhere"
     ]
    ],
    "verdict": "FIRES-HAND-ONLY"
@@ -1684,26 +1983,48 @@
     [
      "scripted-fixture",
      "pool/regressions/flooded_plots_read_as_basins_fires_on_the_seam_needles_sawada.json"
+    ],
+    [
+     "test",
+     "suite:<unnamed>"
+    ],
+    [
+     "test",
+     "suite:Sawada"
     ]
    ],
    "verdict": "FIRES"
   },
   "footbridges_reach_useful_ground": {
-   "evidence": [],
-   "verdict": "NEVER-FIRES"
+   "evidence": [
+    [
+     "test",
+     "suite:<unnamed>"
+    ]
+   ],
+   "verdict": "FIRES-HAND-ONLY"
   },
   "funerary_clear_of_fields": {
    "evidence": [
     [
      "hand-fixture",
      "pool/regressions/funerary_clear_of_fields_fires_when_a_cremation_ground_sits_on_a_field.json"
+    ],
+    [
+     "test",
+     "suite:<unnamed>"
     ]
    ],
    "verdict": "FIRES-HAND-ONLY"
   },
   "gardens_clear_of_channels": {
-   "evidence": [],
-   "verdict": "NEVER-FIRES"
+   "evidence": [
+    [
+     "test",
+     "suite:<unnamed>"
+    ]
+   ],
+   "verdict": "FIRES-HAND-ONLY"
   },
   "groves_clear_of_lanes": {
    "evidence": [
@@ -1714,6 +2035,14 @@
     [
      "hand-fixture",
      "pool/regressions/groves_clear_of_lanes_fires_when_a_per_house_grove_sits_on_a_road.json"
+    ],
+    [
+     "test",
+     "suite:<unnamed>"
+    ],
+    [
+     "test",
+     "suite:Inashiro"
     ]
    ],
    "verdict": "FIRES-HAND-ONLY"
@@ -1799,6 +2128,14 @@
     [
      "hand-fixture",
      "pool/regressions/water_channels_join_not_cross_fires_on_a_stub_through_the_trunk.json"
+    ],
+    [
+     "test",
+     "suite:<unnamed>"
+    ],
+    [
+     "test",
+     "suite:Inashiro"
     ]
    ],
    "verdict": "FIRES-HAND-ONLY"
@@ -1808,30 +2145,65 @@
     [
      "hand-fixture",
      "pool/regressions/hamlet_has_no_headman_fires_when_a_hamlet_has_one.json"
+    ],
+    [
+     "test",
+     "suite:<unnamed>"
+    ],
+    [
+     "test",
+     "suite:Inashiro"
     ]
    ],
    "verdict": "FIRES-HAND-ONLY"
   },
   "households_consistent": {
-   "evidence": [],
-   "verdict": "NEVER-FIRES"
+   "evidence": [
+    [
+     "test",
+     "suite:<unnamed>"
+    ],
+    [
+     "test",
+     "suite:Inashiro"
+    ]
+   ],
+   "verdict": "FIRES-HAND-ONLY"
   },
   "houses_clear_of_lanes": {
    "evidence": [
     [
      "hand-fixture",
      "pool/regressions/houses_clear_of_lanes_fires_when_a_house_sits_on_the_tread.json"
+    ],
+    [
+     "test",
+     "suite:<unnamed>"
+    ],
+    [
+     "test",
+     "suite:Inashiro"
     ]
    ],
    "verdict": "FIRES-HAND-ONLY"
   },
   "houses_face_south": {
-   "evidence": [],
-   "verdict": "NEVER-FIRES"
+   "evidence": [
+    [
+     "test",
+     "suite:Inashiro"
+    ]
+   ],
+   "verdict": "FIRES-HAND-ONLY"
   },
   "inwall_drains_gated_at_cutoff": {
-   "evidence": [],
-   "verdict": "NEVER-FIRES"
+   "evidence": [
+    [
+     "test",
+     "suite:<unnamed>"
+    ]
+   ],
+   "verdict": "FIRES-HAND-ONLY"
   },
   "irrigation_channels_hairline": {
    "evidence": [
@@ -1842,6 +2214,10 @@
     [
      "hand-fixture",
      "pool/regressions/irrigation_channels_hairline_still_fires_on_a_fat_drain_culvert.json"
+    ],
+    [
+     "test",
+     "suite:<unnamed>"
     ]
    ],
    "verdict": "FIRES-HAND-ONLY"
@@ -1879,19 +2255,36 @@
     [
      "scripted-fixture",
      "pool/regressions/woodland_commons_visibly_stocked_fires_on_the_ink_only_canopy_mizuguchi.json"
+    ],
+    [
+     "test",
+     "suite:<unnamed>"
+    ],
+    [
+     "test",
+     "suite:Inashiro"
     ]
    ],
    "verdict": "FIRES"
   },
   "kosatsuba_faces_the_road": {
-   "evidence": [],
-   "verdict": "NEVER-FIRES"
+   "evidence": [
+    [
+     "test",
+     "suite:<unnamed>"
+    ]
+   ],
+   "verdict": "FIRES-HAND-ONLY"
   },
   "label_hugs_its_referent": {
    "evidence": [
     [
      "hand-fixture",
      "pool/regressions/label_hugs_its_referent_fires_on_a_caption_adrift_in_empty_ground.json"
+    ],
+    [
+     "test",
+     "suite:<unnamed>"
     ]
    ],
    "verdict": "FIRES-HAND-ONLY"
@@ -1909,6 +2302,14 @@
     [
      "scripted-fixture",
      "pool/regressions/lanes_form_one_network_fires_on_the_pre_fix_inashiro.json"
+    ],
+    [
+     "test",
+     "suite:<unnamed>"
+    ],
+    [
+     "test",
+     "suite:Inashiro"
     ]
    ],
    "verdict": "FIRES"
@@ -1922,6 +2323,14 @@
     [
      "hand-fixture",
      "pool/regressions/labels_within_image_uses_the_cropped_view.json"
+    ],
+    [
+     "test",
+     "suite:<unnamed>"
+    ],
+    [
+     "test",
+     "suite:Inashiro"
     ]
    ],
    "verdict": "FIRES-HAND-ONLY"
@@ -1943,6 +2352,18 @@
     [
      "scripted-fixture",
      "pool/regressions/lane_ends_front_different_houses_fires_on_mizuguchi_crows_foot.json"
+    ],
+    [
+     "test",
+     "suite:<unnamed>"
+    ],
+    [
+     "test",
+     "suite:Kashikawa"
+    ],
+    [
+     "test",
+     "suite:Mizuguchi"
     ]
    ],
    "verdict": "FIRES"
@@ -1952,13 +2373,26 @@
     [
      "scripted-fixture",
      "pool/regressions/lanes_bend_like_paths_fires_on_the_pre_fix_inashiro.json"
+    ],
+    [
+     "test",
+     "suite:<unnamed>"
+    ],
+    [
+     "test",
+     "suite:Inashiro"
     ]
    ],
    "verdict": "FIRES"
   },
   "lanes_clear_of_dry_plots": {
-   "evidence": [],
-   "verdict": "NEVER-FIRES"
+   "evidence": [
+    [
+     "test",
+     "suite:<unnamed>"
+    ]
+   ],
+   "verdict": "FIRES-HAND-ONLY"
   },
   "lanes_do_not_break_mid_run": {
    "evidence": [
@@ -1973,6 +2407,14 @@
     [
      "scripted-fixture",
      "pool/regressions/lanes_do_not_break_mid_run_fires_on_sawadas_broken_spine.json"
+    ],
+    [
+     "test",
+     "suite:<unnamed>"
+    ],
+    [
+     "test",
+     "suite:Sawada"
     ]
    ],
    "verdict": "FIRES"
@@ -2038,6 +2480,14 @@
     [
      "scripted-fixture",
      "pool/regressions/village_windbreak_is_continuous_fires_on_a_gapped_belt.json"
+    ],
+    [
+     "test",
+     "suite:<unnamed>"
+    ],
+    [
+     "test",
+     "suite:Inashiro"
     ]
    ],
    "verdict": "FIRES"
@@ -2055,6 +2505,14 @@
     [
      "scripted-fixture",
      "pool/regressions/paddy_plots_are_workable_basins_fires_on_the_fan_toe_sunburst_kashikawa.json"
+    ],
+    [
+     "test",
+     "suite:<unnamed>"
+    ],
+    [
+     "test",
+     "suite:Inashiro"
     ]
    ],
    "verdict": "FIRES"
@@ -2128,6 +2586,10 @@
     [
      "scripted-fixture",
      "pool/regressions/village_windbreak_is_continuous_fires_on_a_gapped_belt.json"
+    ],
+    [
+     "test",
+     "suite:<unnamed>"
     ]
    ],
    "verdict": "FIRES"
@@ -2137,6 +2599,14 @@
     [
      "hand-fixture",
      "pool/regressions/labels_within_image_uses_the_cropped_view.json"
+    ],
+    [
+     "test",
+     "suite:<unnamed>"
+    ],
+    [
+     "test",
+     "suite:Inashiro"
     ]
    ],
    "verdict": "FIRES-HAND-ONLY"
@@ -2338,6 +2808,10 @@
     [
      "hand-fixture",
      "pool/regressions/watercourses_wider_than_ditches_fires_when_a_creek_reads_like_a_ditch.json"
+    ],
+    [
+     "test",
+     "suite:<unnamed>"
     ]
    ],
    "verdict": "FIRES-HAND-ONLY"
@@ -2347,19 +2821,32 @@
     [
      "hand-fixture",
      "pool/regressions/marsh_on_low_ground_exempts_the_waterside_fringe.json"
+    ],
+    [
+     "test",
+     "suite:<unnamed>"
     ]
    ],
    "verdict": "FIRES-HAND-ONLY"
   },
   "matrix_debts_still_owed": {
-   "evidence": [],
-   "verdict": "NEVER-FIRES"
+   "evidence": [
+    [
+     "test",
+     "suite:Nowhere"
+    ]
+   ],
+   "verdict": "FIRES-HAND-ONLY"
   },
   "no_caption_holds_the_frame_open": {
    "evidence": [
     [
      "hand-fixture",
      "pool/regressions/village_windbreak_scales_with_cluster_fires_on_moritono_sparse_belt.json"
+    ],
+    [
+     "test",
+     "suite:<unnamed>"
     ]
    ],
    "verdict": "FIRES-HAND-ONLY"
@@ -2369,6 +2856,10 @@
     [
      "hand-fixture",
      "pool/regressions/houses_clear_of_lanes_fires_when_a_house_sits_on_the_tread.json"
+    ],
+    [
+     "test",
+     "suite:<unnamed>"
     ]
    ],
    "verdict": "FIRES-HAND-ONLY"
@@ -2378,6 +2869,14 @@
     [
      "hand-fixture",
      "pool/regressions/no_label_overlaps_fires_when_glyphs_cross.json"
+    ],
+    [
+     "test",
+     "suite:<unnamed>"
+    ],
+    [
+     "test",
+     "suite:Inashiro"
     ]
    ],
    "verdict": "FIRES-HAND-ONLY"
@@ -2391,17 +2890,39 @@
     [
      "hand-fixture",
      "pool/regressions/no_structure_on_paddy_fires_when_a_farmhouse_sinks_a_corner_into_the_crop.json"
+    ],
+    [
+     "test",
+     "suite:<unnamed>"
+    ],
+    [
+     "test",
+     "suite:Inashiro"
+    ],
+    [
+     "test",
+     "suite:Nowhere"
     ]
    ],
    "verdict": "FIRES-HAND-ONLY"
   },
   "no_structure_on_stream": {
-   "evidence": [],
-   "verdict": "NEVER-FIRES"
+   "evidence": [
+    [
+     "test",
+     "suite:<unnamed>"
+    ]
+   ],
+   "verdict": "FIRES-HAND-ONLY"
   },
   "no_structure_on_torii": {
-   "evidence": [],
-   "verdict": "NEVER-FIRES"
+   "evidence": [
+    [
+     "test",
+     "suite:Inashiro"
+    ]
+   ],
+   "verdict": "FIRES-HAND-ONLY"
   },
   "paddy_basins_are_worth_their_bund": {
    "evidence": [
@@ -2412,6 +2933,14 @@
     [
      "scripted-fixture",
      "pool/regressions/paddy_basins_are_worth_their_bund_fires_on_the_pre_floor_sawada.json"
+    ],
+    [
+     "test",
+     "suite:Mizuguchi"
+    ],
+    [
+     "test",
+     "suite:Sawada"
     ]
    ],
    "verdict": "FIRES"
@@ -2442,6 +2971,14 @@
     [
      "scripted-fixture",
      "pool/regressions/paddy_bunds_clear_the_supply_channels_fires_on_the_pre_fix_inashiro.json"
+    ],
+    [
+     "test",
+     "suite:Inashiro"
+    ],
+    [
+     "test",
+     "suite:Sawada"
     ]
    ],
    "verdict": "FIRES"
@@ -2519,6 +3056,10 @@
     [
      "scripted-fixture",
      "pool/regressions/village_windbreak_is_continuous_fires_on_a_gapped_belt.json"
+    ],
+    [
+     "test",
+     "suite:Inashiro"
     ]
    ],
    "verdict": "FIRES"
@@ -2544,6 +3085,18 @@
     [
      "hand-fixture",
      "pool/regressions/watercourse_ends_reach_water_fires_when_the_collector_dangles.json"
+    ],
+    [
+     "test",
+     "suite:<unnamed>"
+    ],
+    [
+     "test",
+     "suite:Inashiro"
+    ],
+    [
+     "test",
+     "suite:Nowhere"
     ]
    ],
    "verdict": "FIRES-HAND-ONLY"
@@ -2553,6 +3106,10 @@
     [
      "scripted-fixture",
      "pool/regressions/drainage_discharges_downhill_fires_on_cohort_seed_2s_uphill_brook.json"
+    ],
+    [
+     "test",
+     "suite:<unnamed>"
     ]
    ],
    "verdict": "FIRES"
@@ -2630,6 +3187,26 @@
     [
      "scripted-fixture",
      "pool/regressions/woodland_commons_within_the_frame_fires_on_offframe_coppice_sawada.json"
+    ],
+    [
+     "test",
+     "suite:<unnamed>"
+    ],
+    [
+     "test",
+     "suite:Inashiro"
+    ],
+    [
+     "test",
+     "suite:Kashikawa"
+    ],
+    [
+     "test",
+     "suite:Mizuguchi"
+    ],
+    [
+     "test",
+     "suite:Sawada"
     ]
    ],
    "verdict": "FIRES"
@@ -2723,6 +3300,22 @@
     [
      "scripted-fixture",
      "pool/regressions/woodland_commons_within_the_frame_fires_on_offframe_coppice_sawada.json"
+    ],
+    [
+     "test",
+     "suite:Inashiro"
+    ],
+    [
+     "test",
+     "suite:Kashikawa"
+    ],
+    [
+     "test",
+     "suite:Mizuguchi"
+    ],
+    [
+     "test",
+     "suite:Sawada"
     ]
    ],
    "verdict": "FIRES"
@@ -2740,6 +3333,14 @@
     [
      "hand-fixture",
      "pool/regressions/polder_floor_is_ring_interior.json"
+    ],
+    [
+     "test",
+     "suite:<unnamed>"
+    ],
+    [
+     "test",
+     "suite:Kuwabata"
     ]
    ],
    "verdict": "FIRES-HAND-ONLY"
@@ -2769,6 +3370,22 @@
     [
      "hand-fixture",
      "pool/regressions/structures_clear_of_dike_fires_on_a_house_on_the_dike.json"
+    ],
+    [
+     "test",
+     "suite:<unnamed>"
+    ],
+    [
+     "test",
+     "suite:Enokida"
+    ],
+    [
+     "test",
+     "suite:Kuwabata"
+    ],
+    [
+     "test",
+     "suite:Polder"
     ]
    ],
    "verdict": "FIRES-HAND-ONLY"
@@ -2786,6 +3403,14 @@
     [
      "hand-fixture",
      "pool/regressions/polder_field_must_fill_its_bbox.json"
+    ],
+    [
+     "test",
+     "suite:<unnamed>"
+    ],
+    [
+     "test",
+     "suite:Kuwabata"
     ]
    ],
    "verdict": "FIRES-HAND-ONLY"
@@ -2835,6 +3460,18 @@
     [
      "hand-fixture",
      "pool/regressions/structures_clear_of_dike_fires_on_a_house_on_the_dike.json"
+    ],
+    [
+     "test",
+     "suite:<unnamed>"
+    ],
+    [
+     "test",
+     "suite:Enokida"
+    ],
+    [
+     "test",
+     "suite:Kuwabata"
     ]
    ],
    "verdict": "FIRES-HAND-ONLY"
@@ -2844,6 +3481,10 @@
     [
      "hand-fixture",
      "pool/regressions/polder_field_must_fill_its_bbox.json"
+    ],
+    [
+     "test",
+     "suite:<unnamed>"
     ]
    ],
    "verdict": "FIRES-HAND-ONLY"
@@ -2869,6 +3510,18 @@
     [
      "hand-fixture",
      "pool/regressions/structures_clear_of_dike_fires_on_a_house_on_the_dike.json"
+    ],
+    [
+     "test",
+     "suite:<unnamed>"
+    ],
+    [
+     "test",
+     "suite:Enokida"
+    ],
+    [
+     "test",
+     "suite:Kuwabata"
     ]
    ],
    "verdict": "FIRES-HAND-ONLY"
@@ -2878,6 +3531,10 @@
     [
      "hand-fixture",
      "pool/regressions/pond_clear_of_field_fires_when_the_pond_sits_on_the_paddies.json"
+    ],
+    [
+     "test",
+     "suite:<unnamed>"
     ]
    ],
    "verdict": "FIRES-HAND-ONLY"
@@ -2895,6 +3552,10 @@
     [
      "hand-fixture",
      "pool/regressions/pond_clear_of_paddies_fires_when_the_pond_laps_the_crop.json"
+    ],
+    [
+     "test",
+     "suite:<unnamed>"
     ]
    ],
    "verdict": "FIRES-HAND-ONLY"
@@ -2916,6 +3577,10 @@
     [
      "hand-fixture",
      "pool/regressions/pond_fed_from_edge_fires_when_the_feeder_starts_mid_map.json"
+    ],
+    [
+     "test",
+     "suite:<unnamed>"
     ]
    ],
    "verdict": "FIRES-HAND-ONLY"
@@ -2925,6 +3590,10 @@
     [
      "hand-fixture",
      "pool/regressions/pond_fed_from_edge_fires_when_the_feeder_starts_mid_map.json"
+    ],
+    [
+     "test",
+     "suite:<unnamed>"
     ]
    ],
    "verdict": "FIRES-HAND-ONLY"
@@ -2946,17 +3615,35 @@
     [
      "hand-fixture",
      "pool/regressions/structures_clear_of_dike_fires_on_a_house_on_the_dike.json"
+    ],
+    [
+     "test",
+     "suite:<unnamed>"
+    ],
+    [
+     "test",
+     "suite:Inashiro"
     ]
    ],
    "verdict": "FIRES-HAND-ONLY"
   },
   "religious_clear_of_ring_and_towers": {
-   "evidence": [],
-   "verdict": "NEVER-FIRES"
+   "evidence": [
+    [
+     "test",
+     "suite:<unnamed>"
+    ]
+   ],
+   "verdict": "FIRES-HAND-ONLY"
   },
   "remote_shrine_has_own_well": {
-   "evidence": [],
-   "verdict": "NEVER-FIRES"
+   "evidence": [
+    [
+     "test",
+     "suite:<unnamed>"
+    ]
+   ],
+   "verdict": "FIRES-HAND-ONLY"
   },
   "roads_clear_of_marsh": {
    "evidence": [
@@ -2971,21 +3658,48 @@
     [
      "hand-fixture",
      "pool/regressions/ways_clear_of_paddies_and_marsh_fires_on_the_pre_fix_inashiro.json"
+    ],
+    [
+     "test",
+     "suite:<unnamed>"
+    ],
+    [
+     "test",
+     "suite:Inashiro"
     ]
    ],
    "verdict": "FIRES-HAND-ONLY"
   },
   "scalebar_matches_declared_scale": {
-   "evidence": [],
-   "verdict": "NEVER-FIRES"
+   "evidence": [
+    [
+     "test",
+     "suite:<unnamed>"
+    ],
+    [
+     "test",
+     "suite:Inashiro"
+    ]
+   ],
+   "verdict": "FIRES-HAND-ONLY"
   },
   "scatter_respects_swept_clearings": {
-   "evidence": [],
-   "verdict": "NEVER-FIRES"
+   "evidence": [
+    [
+     "test",
+     "suite:<unnamed>"
+    ]
+   ],
+   "verdict": "FIRES-HAND-ONLY"
   },
   "scrub_clear_of_urban_fabric": {
-   "evidence": [],
-   "verdict": "NEVER-FIRES"
+   "evidence": [
+    [
+     "test",
+     "suite:<unnamed>"
+    ]
+   ],
+   "verdict": "FIRES-HAND-ONLY"
   },
   "settlement_declares_a_land_fall": {
    "evidence": [
@@ -3072,6 +3786,10 @@
     [
      "hand-fixture",
      "pool/regressions/watercourse_ends_reach_water_fires_when_the_collector_dangles.json"
+    ],
+    [
+     "test",
+     "suite:<unnamed>"
     ]
    ],
    "verdict": "FIRES-HAND-ONLY"
@@ -3093,6 +3811,14 @@
     [
      "hand-fixture",
      "pool/regressions/structures_clear_of_dike.json"
+    ],
+    [
+     "test",
+     "suite:<unnamed>"
+    ],
+    [
+     "test",
+     "suite:Nowhere"
     ]
    ],
    "verdict": "FIRES-HAND-ONLY"
@@ -3114,6 +3840,14 @@
     [
      "hand-fixture",
      "pool/regressions/structures_clear_of_dike.json"
+    ],
+    [
+     "test",
+     "suite:<unnamed>"
+    ],
+    [
+     "test",
+     "suite:Nowhere"
     ]
    ],
    "verdict": "FIRES-HAND-ONLY"
@@ -3147,17 +3881,35 @@
     [
      "scripted-fixture",
      "pool/regressions/settlement_records_cluster_seeding_fires_on_the_untraced_knob_kashikawa.json"
+    ],
+    [
+     "test",
+     "suite:<unnamed>"
+    ],
+    [
+     "test",
+     "suite:Kashikawa"
     ]
    ],
    "verdict": "FIRES"
   },
   "shrine_halls_clear_of_lanes": {
-   "evidence": [],
-   "verdict": "NEVER-FIRES"
+   "evidence": [
+    [
+     "test",
+     "suite:<unnamed>"
+    ]
+   ],
+   "verdict": "FIRES-HAND-ONLY"
   },
   "sluice_gates_on_water": {
-   "evidence": [],
-   "verdict": "NEVER-FIRES"
+   "evidence": [
+    [
+     "test",
+     "suite:<unnamed>"
+    ]
+   ],
+   "verdict": "FIRES-HAND-ONLY"
   },
   "stream_end_anchored": {
    "evidence": [],
@@ -3176,6 +3928,10 @@
     [
      "hand-fixture",
      "pool/regressions/streams_avoid_fields_still_fires_when_a_drain_brook_reenters_the_field.json"
+    ],
+    [
+     "test",
+     "suite:<unnamed>"
     ]
    ],
    "verdict": "FIRES-HAND-ONLY"
@@ -3193,45 +3949,109 @@
     [
      "hand-fixture",
      "pool/regressions/structures_clear_of_dike_fires_on_a_house_on_the_dike.json"
+    ],
+    [
+     "test",
+     "suite:<unnamed>"
+    ],
+    [
+     "test",
+     "suite:Kuwabata"
+    ],
+    [
+     "test",
+     "suite:Polder"
     ]
    ],
    "verdict": "FIRES-HAND-ONLY"
   },
   "structures_clear_of_trees": {
-   "evidence": [],
-   "verdict": "NEVER-FIRES"
+   "evidence": [
+    [
+     "test",
+     "suite:<unnamed>"
+    ]
+   ],
+   "verdict": "FIRES-HAND-ONLY"
   },
   "tanning_yards_on_water": {
-   "evidence": [],
-   "verdict": "NEVER-FIRES"
+   "evidence": [
+    [
+     "test",
+     "suite:<unnamed>"
+    ]
+   ],
+   "verdict": "FIRES-HAND-ONLY"
   },
   "title_clear_of_features": {
-   "evidence": [],
-   "verdict": "NEVER-FIRES"
+   "evidence": [
+    [
+     "test",
+     "suite:<unnamed>"
+    ],
+    [
+     "test",
+     "suite:Inashiro"
+    ]
+   ],
+   "verdict": "FIRES-HAND-ONLY"
   },
   "title_has_placard": {
-   "evidence": [],
-   "verdict": "NEVER-FIRES"
+   "evidence": [
+    [
+     "test",
+     "suite:<unnamed>"
+    ],
+    [
+     "test",
+     "suite:Inashiro"
+    ]
+   ],
+   "verdict": "FIRES-HAND-ONLY"
   },
   "torii_clear_of_halls_towers_ring": {
-   "evidence": [],
-   "verdict": "NEVER-FIRES"
+   "evidence": [
+    [
+     "test",
+     "suite:<unnamed>"
+    ]
+   ],
+   "verdict": "FIRES-HAND-ONLY"
   },
   "torii_clear_of_walls": {
-   "evidence": [],
-   "verdict": "NEVER-FIRES"
+   "evidence": [
+    [
+     "test",
+     "suite:<unnamed>"
+    ]
+   ],
+   "verdict": "FIRES-HAND-ONLY"
   },
   "town_has_kosatsuba": {
-   "evidence": [],
-   "verdict": "NEVER-FIRES"
+   "evidence": [
+    [
+     "test",
+     "suite:<unnamed>"
+    ],
+    [
+     "test",
+     "suite:Nowhere"
+    ]
+   ],
+   "verdict": "FIRES-HAND-ONLY"
   },
   "town_has_no_headman": {
    "evidence": [],
    "verdict": "NEVER-FIRES"
   },
   "towpath_hugs_the_bank": {
-   "evidence": [],
-   "verdict": "NEVER-FIRES"
+   "evidence": [
+    [
+     "test",
+     "suite:<unnamed>"
+    ]
+   ],
+   "verdict": "FIRES-HAND-ONLY"
   },
   "tree_crowns_not_subsumed": {
    "evidence": [
@@ -3422,6 +4242,14 @@
     [
      "scripted-fixture",
      "pool/regressions/woodland_commons_within_the_frame_fires_on_offframe_coppice_sawada.json"
+    ],
+    [
+     "test",
+     "suite:<unnamed>"
+    ],
+    [
+     "test",
+     "suite:Inashiro"
     ]
    ],
    "verdict": "FIRES"
@@ -3431,6 +4259,10 @@
     [
      "scripted-fixture",
      "pool/regressions/captions_clear_the_ways_they_stand_on_fires_when_a_caption_notches_its_lane.json"
+    ],
+    [
+     "test",
+     "suite:<unnamed>"
     ]
    ],
    "verdict": "FIRES"
@@ -3576,6 +4408,10 @@
     [
      "hand-fixture",
      "pool/regressions/watercourses_wider_than_ditches_fires_when_a_creek_reads_like_a_ditch.json"
+    ],
+    [
+     "test",
+     "suite:<unnamed>"
     ]
    ],
    "verdict": "FIRES-HAND-ONLY"
@@ -3589,6 +4425,18 @@
     [
      "hand-fixture",
      "pool/regressions/village_windbreak_scales_with_cluster_fires_on_moritono_sparse_belt.json"
+    ],
+    [
+     "test",
+     "suite:<unnamed>"
+    ],
+    [
+     "test",
+     "suite:Inashiro"
+    ],
+    [
+     "test",
+     "suite:Moritono"
     ]
    ],
    "verdict": "FIRES-HAND-ONLY"
@@ -3610,19 +4458,44 @@
     [
      "scripted-fixture",
      "pool/regressions/village_windbreak_is_continuous_fires_on_a_gapped_belt.json"
+    ],
+    [
+     "test",
+     "suite:Inashiro"
     ]
    ],
    "verdict": "FIRES"
   },
   "village_windbreak_present": {
-   "evidence": [],
-   "verdict": "NEVER-FIRES"
+   "evidence": [
+    [
+     "test",
+     "suite:<unnamed>"
+    ],
+    [
+     "test",
+     "suite:Inashiro"
+    ]
+   ],
+   "verdict": "FIRES-HAND-ONLY"
   },
   "village_windbreak_scales_with_cluster": {
    "evidence": [
     [
      "hand-fixture",
      "pool/regressions/village_windbreak_scales_with_cluster_fires_on_moritono_sparse_belt.json"
+    ],
+    [
+     "test",
+     "suite:<unnamed>"
+    ],
+    [
+     "test",
+     "suite:Inashiro"
+    ],
+    [
+     "test",
+     "suite:Moritono"
     ]
    ],
    "verdict": "FIRES-HAND-ONLY"
@@ -3644,6 +4517,14 @@
     [
      "hand-fixture",
      "pool/regressions/water_channels_join_not_cross_fires_on_a_stub_through_the_trunk.json"
+    ],
+    [
+     "test",
+     "suite:<unnamed>"
+    ],
+    [
+     "test",
+     "suite:Enokida"
     ]
    ],
    "verdict": "FIRES-HAND-ONLY"
@@ -3653,6 +4534,10 @@
     [
      "hand-fixture",
      "pool/regressions/streams_avoid_fields_still_fires_when_a_drain_brook_reenters_the_field.json"
+    ],
+    [
+     "test",
+     "suite:Inashiro"
     ]
    ],
    "verdict": "FIRES-HAND-ONLY"
@@ -3702,6 +4587,10 @@
     [
      "hand-fixture",
      "pool/regressions/watercourse_ends_reach_water_fires_when_the_collector_dangles.json"
+    ],
+    [
+     "test",
+     "suite:<unnamed>"
     ]
    ],
    "verdict": "FIRES-HAND-ONLY"
@@ -3711,47 +4600,98 @@
     [
      "hand-fixture",
      "pool/regressions/watercourses_wider_than_ditches_fires_when_a_creek_reads_like_a_ditch.json"
+    ],
+    [
+     "test",
+     "suite:<unnamed>"
     ]
    ],
    "verdict": "FIRES-HAND-ONLY"
   },
   "waterside_works_follow_the_bank": {
-   "evidence": [],
-   "verdict": "NEVER-FIRES"
+   "evidence": [
+    [
+     "test",
+     "suite:<unnamed>"
+    ]
+   ],
+   "verdict": "FIRES-HAND-ONLY"
   },
   "waterward_strips_run_off_the_frame": {
    "evidence": [],
    "verdict": "NEVER-FIRES"
   },
   "waterways_merge_at_crossings": {
-   "evidence": [],
-   "verdict": "NEVER-FIRES"
+   "evidence": [
+    [
+     "test",
+     "suite:<unnamed>"
+    ]
+   ],
+   "verdict": "FIRES-HAND-ONLY"
   },
   "ways_clear_of_castle_moat": {
-   "evidence": [],
-   "verdict": "NEVER-FIRES"
+   "evidence": [
+    [
+     "test",
+     "suite:<unnamed>"
+    ]
+   ],
+   "verdict": "FIRES-HAND-ONLY"
   },
   "ways_cross_water_on_a_deck": {
-   "evidence": [],
-   "verdict": "NEVER-FIRES"
+   "evidence": [
+    [
+     "test",
+     "suite:<unnamed>"
+    ],
+    [
+     "test",
+     "suite:Inashiro"
+    ]
+   ],
+   "verdict": "FIRES-HAND-ONLY"
   },
   "ways_not_inside_road_beds": {
-   "evidence": [],
-   "verdict": "NEVER-FIRES"
+   "evidence": [
+    [
+     "test",
+     "suite:<unnamed>"
+    ]
+   ],
+   "verdict": "FIRES-HAND-ONLY"
   },
   "wells_among_dwellings": {
-   "evidence": [],
-   "verdict": "NEVER-FIRES"
+   "evidence": [
+    [
+     "test",
+     "suite:<unnamed>"
+    ],
+    [
+     "test",
+     "suite:Inashiro"
+    ]
+   ],
+   "verdict": "FIRES-HAND-ONLY"
   },
   "wells_clear_of_trees": {
-   "evidence": [],
-   "verdict": "NEVER-FIRES"
+   "evidence": [
+    [
+     "test",
+     "suite:<unnamed>"
+    ]
+   ],
+   "verdict": "FIRES-HAND-ONLY"
   },
   "wells_off_the_wet_toe": {
    "evidence": [
     [
      "hand-fixture",
      "pool/regressions/wells_off_the_wet_toe_fires_on_akagaharas_well_in_the_reeds.json"
+    ],
+    [
+     "test",
+     "suite:Akagahara"
     ]
    ],
    "verdict": "FIRES-HAND-ONLY"
@@ -3773,6 +4713,18 @@
     [
      "scripted-fixture",
      "pool/regressions/woodland_commons_on_dry_ground_fires_on_the_marsh_seated_parcel_sawada.json"
+    ],
+    [
+     "test",
+     "suite:<unnamed>"
+    ],
+    [
+     "test",
+     "suite:Inashiro"
+    ],
+    [
+     "test",
+     "suite:Sawada"
     ]
    ],
    "verdict": "FIRES"
@@ -3834,6 +4786,14 @@
     [
      "scripted-fixture",
      "pool/regressions/woodland_commons_within_the_frame_fires_on_offframe_coppice_sawada.json"
+    ],
+    [
+     "test",
+     "suite:<unnamed>"
+    ],
+    [
+     "test",
+     "suite:Mizuguchi"
     ]
    ],
    "verdict": "FIRES"
@@ -3871,10 +4831,18 @@
     [
      "scripted-fixture",
      "pool/regressions/woodland_commons_within_the_frame_fires_on_offframe_coppice_sawada.json"
+    ],
+    [
+     "test",
+     "suite:<unnamed>"
+    ],
+    [
+     "test",
+     "suite:Sawada"
     ]
    ],
    "verdict": "FIRES"
   }
  },
- "verdicts_observed": 797
+ "verdicts_observed": 1029
 }

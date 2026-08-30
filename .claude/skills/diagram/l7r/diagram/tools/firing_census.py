@@ -157,8 +157,7 @@ def render(result: dict[str, Any]) -> str:
         f"# Firing census - {len(result['rows'])} live checks against {a['live']} live maps and {a['frozen']} frozen fixtures",
         "",
         f"`{FIRES}` {c[FIRES]} | `{FIRES_HAND_ONLY}` {c[FIRES_HAND_ONLY]} | `{NEVER_FIRES}` {c[NEVER_FIRES]}"
-        f" - {result['verdicts_observed']} verdicts observed"
-        + (", suite journal folded in" if a["suite_journal"] else ", NO suite journal (run `make firing-census SUITE=...`)"),
+        f" - {result['verdicts_observed']} verdicts observed" + (", suite journal folded in" if a["suite_journal"] else ", NO suite journal (run `make firing-census SUITE=...`)"),
         "",
         "`FIRES` = the current implementation makes it fail. `FIRES-HAND-ONLY` = only a hand-era artifact",
         "does, which FR-003 treats as never-fires. Every non-`FIRES` row takes the FR-006 placer read",
