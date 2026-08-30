@@ -63,6 +63,22 @@ offered the smaller option (*"If you'd rather keep it to the refinement alone I'
 
 > I accept your proposal, so please proceed with that for feature 172.
 
-...given directly after the session's numbered three-part proposal: (1) derive real per-suite
-dependencies, transitively; (2) run the suites in parallel; (3) split `_hookmatch.py` by cohesion into
-three leaf modules with guards calling leaves directly. That is what "that" refers to.
+...given directly after the session's numbered three-part proposal. Round 3 asked for that proposal
+to be pasted rather than summarized, since "that" is what defines the accepted scope, so here it is in
+the session's own words:
+
+> ## What I propose for 172
+>
+> 1. **Derive real per-suite dependencies**, transitively (following both shell references and Python
+>    imports) - as you asked.
+> 2. **Run the suites in parallel** - the only thing that helps the wide case, and where the 94 s
+>    actually is.
+> 3. **Split `_hookmatch.py` by cohesion into three leaf modules, with guards calling leaves
+>    directly** - which makes (1) pay on the make/rewrite family.
+>
+> That ordering is deliberate: (2) is the biggest and most certain win, (1) is cheap, and (3) only
+> earns its keep because (1) exists.
+
+**That block is the SESSION's text, not the GM's** - it is reproduced so a later reader can see the
+scope the acceptance attaches to without going to a transcript. The GM's words in this file are the
+quoted messages above it.
