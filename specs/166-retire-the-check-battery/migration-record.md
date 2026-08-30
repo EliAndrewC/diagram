@@ -103,6 +103,30 @@ differs by tier is the COUNT (a city draws the set: the principal board plus one
 | `sluice_gates_on_water` | `tests/settlement/test_sluice_gates.py` | the gate's `sluice_gates` append removed -> RED |
 | `channel_gates_at_water_junctions` (recording half) | same module | same mutation -> RED; the span mutation -> RED |
 
+## Battery-internal - they go WITH the battery, and owe no destination
+
+These four do not state a rule about a map. They state that the battery's OWN classification tables are
+complete: that every feature type is classified for the overlap matrix, for the label groups, for the
+matrix policy, and that no matrix debt is outstanding. They are the battery auditing itself.
+
+| check | why no destination is owed |
+|---|---|
+| `every_feature_classified_for_overlap` | asserts `_OVERLAP_STRUCTS` covers every drawn feature - a `check_village` table |
+| `every_feature_classified_for_matrix` | asserts the `_MATRIX_*` policy covers every pairing - a `check_village` table |
+| `every_solid_feature_classified_for_labels` | asserts `_LABEL_GROUP` covers every glyph a caption can bury - a `check_village` table |
+| `matrix_debts_still_owed` | asserts the matrix's own debt register is empty - a `check_village` register |
+
+**Measured, not assumed.** Grepping every consumer of `_OVERLAP_STRUCTS`, `_LABEL_GROUP`, `OVERLAP_CLASS`
+and `_MATRIX_*` outside `check_village/` returns four hits, and **three are comments** (`castle_civic.py`,
+`city/waterfront.py`, `homestead_parts.py` each merely NAME a table while explaining why some feature is
+exempt). The one live consumer is a TEST: `tests/settlement/test_homestead_parts.py:337`, which reads
+`check_village._OVERLAP_STRUCTS` to assert the engine classifies every key in it - itself a
+battery-completeness assertion that happens to live in a settlement test.
+
+So when the battery goes, the tables go, and a rule about the tables has nothing left to be about. What
+Phase 4 owes here is not a replacement but a DELETION: that one test goes with them, and this row is the
+record of why, so a later reader does not mistake it for an oversight.
+
 ## Still owed
 
 The remaining checks, by group, are in `destinations.json`. The split that governs the work:
