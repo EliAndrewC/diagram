@@ -47,6 +47,40 @@ except Exception:
 # AN ESCAPE IS A BRANCH, and the one that matters most: the escape RATE is what this project has
 # actually acted on (feature 162 retired a refusal that was being escaped 62% of the time), and before
 # this feature it was computable for exactly one guard.
+# escape_or_refuse <guard> <token> <rule> <here-dir>
+#
+# THE ESCAPE, DECIDED IN ONE PLACE (feature 170, GM 2026-08-30: *"force the Claude Code session, which
+# is performing the workaround to specify why they are doing it ... otherwise, we have no way to audit
+# later when this workaround was taken and whether the stated reasons were valid use cases"*).
+#
+# Returns 0 when the session escaped WITH a reason - having recorded it, with the REASON as the entry's
+# detail, because reading the reasons is the audit. EXITS 2 when the token is there and the reason is
+# not: that is a refusal rather than a rewrite, because the missing thing is the session's reasoning
+# and no tool can supply it. Returns 1 when no escape was used, so the caller carries on.
+#
+# Every guard calls this instead of writing the rule a seventh time. `$INPUT` is the hook payload the
+# caller already read.
+escape_or_refuse() {
+  local guard=$1 token=$2 rule=$3 here=$4 reason
+  printf '%s' "${INPUT:-}" | "$here/_hookmatch.py" escape "$token" 2>/dev/null | grep -q yes || return 1
+  reason=$(printf '%s' "${INPUT:-}" | "$here/_hookmatch.py" escape-reason "$token" 2>/dev/null)
+  if [ -z "$reason" ]; then
+    {
+      printf 'BLOCKED: %s with no reason given.\n\n' "$token"
+      printf 'An escape is a workaround, and a workaround nobody can audit is indistinguishable from the\n'
+      printf 'rule not existing. Say why, in the command, and it ships with it:\n\n'
+      printf '    <your command>  # %s: <why this case is legitimate>\n\n' "$token"
+      printf 'Two words and eight characters is the whole bar - "CI is down" clears it. What it stops is a\n'
+      printf 'bare token and "%s: ok", which record that a rule was bypassed and nothing about why.\n' "$token"
+      printf '(GM 2026-08-30, feature 170; the reasons are what `make audit` shows you.)\n'
+    } >&2
+    guard_log "$guard" blocked "$(guard_cmd)" "${token}-no-reason"
+    exit 2
+  fi
+  guard_log "$guard" escaped "$reason" "$rule"
+  return 0
+}
+
 guard_log() {
   { GL_DIR=${GUARD_LOG_DIR:-$HOME/.claude/guard-log}
     mkdir -p "$GL_DIR" 2>/dev/null || return 0

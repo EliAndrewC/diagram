@@ -28,8 +28,8 @@ earlier because I never saw the notification"*.
 
 | finding | measured how | result |
 |---|---|---|
-| no guard requires a reason | read the escape branch of all six command guards | every one accepts a BARE token; all six document "with a reason" in prose only |
-| branches that permit without recording | used `GUARD_EDIT_OK` through `make-only` and read the log; then grepped every escape site for `guard_log` | **TWO**, not one. `make-only` (169 R13), and `GATE_STAMP_OK` at `sync-with-main.sh:231`, which prints its bypass to stderr and logs nothing - that file contains no `guard_log` call at all and never sources `_guardlog.sh`. Found by the round-1 review; I had specified only the first |
+| no guard requires a reason | read the escape branch of six command guards, then checked the derived census for the full set | every one read accepts a BARE token and documents "with a reason" in prose only. **The census classes NINE tokens as `command`** (`GATE_OK`, `MEASURE_OK`, `POLL_OK`, `DISCARD_OK`, `NO_BRANCH_OK`, `MAIN_TREE_OK`, `HOST_GIT_OK`, `PAIR_OK`, `GUARD_EDIT_OK`), so the six I read were a sample, not a census - stated because round 2 caught the row implying otherwise |
+| branches that permit without recording | drove the escapes and then DERIVED the list from the census rather than reading the guards | **THREE**, not one and not two. `make-only` (169 R13), and `GATE_STAMP_OK` at `sync-with-main.sh:231`, which prints its bypass to stderr and logs nothing - that file contains no `guard_log` call at all and never sources `_guardlog.sh`. Found by round 1. And `repo-safety-hooks.sh`'s `HOST_GIT_OK`, whose only `guard_log` call records blocks - found by round 2. Each of the three was found by someone other than the author |
 | the mirror `cd` half of the reported defect | drove `main-tree-hooks.sh` with the shape that actually occurred | **NOT prevented** - see FR-005. Feature 169's guard needs the `cd` and the write in ONE command; the real incident is a `cd` in one call and the write in the NEXT. What 169 added for that shape is after-the-fact DETECTION, not prevention: `sync-with-main.sh` dies on a mirror ahead of GitHub, and `clone-sync-hooks.sh` names the stray commit - both only once the commit exists |
 | does a bare `cd` leak across calls in this harness? | `cd /diagram` in one call, `pwd` in the next | **YES** for a path inside the project (`pwd` returned `/diagram`); a path outside it (`/tmp`) is reset with a notice. So the 2026-08-17 trap is live, and path-dependent |
 | the missed-notification half | searched the guard tree for anything that notices a finished run | nothing does - `agent-stall-hooks.sh` watches AGENTS, not background commands |
@@ -68,14 +68,23 @@ a person reading them.
 
 ### FR-002 - every escape records, with its reason as the detail
 
-No branch that permits an escape may be silent. There are TWO such branches, and the second was found
-by the round-1 review after this requirement had already been drafted around the first:
+No branch that permits an escape may be silent. There are **THREE** such branches. I specified one,
+round 1 found the second, and round 2 found the third - which is the fourth hand-written census in two
+features to come up short, and the reason the completeness of this requirement is DERIVED rather than
+listed: a check walks the census in `tests/tooling/test_guard_firing_log.py` and fails unless every
+token classified `command`, `content`, `environment` or `make-variable` produces an `escaped` entry
+when driven. The three are:
 
 1. **`sync-with-main.sh:231`** permits a `GATE_STAMP_OK` bypass of the green-gate rule - the rule that
    nothing is pushed which a gate did not see - and prints to stderr. The file has no `guard_log` call
    anywhere and never sources `_guardlog.sh`, so this escape is invisible to `make audit`. It is also
    the most consequential of the eleven, which is what makes its silence worst.
-2. **`make-only`** (feature 169 R13): `_hookmatch.py`'s
+2. **`repo-safety-hooks.sh`** permits a `HOST_GIT_OK` bypass of the guard over `/host-l7r-repo` - the
+   GM's OWN repository - and records nothing: its only `guard_log` call is
+   `case "$VERDICT" in ok) ;; *) guard_log repo-safety blocked ...`, so an `ok` verdict reached BY
+   ESCAPE is indistinguishable from an ordinary permitted command. Found by round 2, which derived
+   the census from the tree instead of reading my list.
+3. **`make-only`** (feature 169 R13): `_hookmatch.py`'s
 `classify()` returns plain `ok` for a `GUARD_EDIT_OK` command - the same value it returns for a
    command that matched nothing - so `make-only-hooks.sh` cannot tell the two apart and records
    neither. It returns a distinct verdict for the escape, and the guard records and permits.
@@ -145,7 +154,7 @@ single-command shape and not the one that actually happened; FR-005 is what make
 
 ## Success Criteria
 
-- **SC-001**: for every escape token, a bare use is refused with a message showing the compliant form; a use with a reason of 15+ characters is permitted exactly as before.
+- **SC-001**: for every escape token: a bare use is refused with a message showing the compliant form; a one-word or under-eight-character reason (`GATE_OK: ok`) is refused; a reason meeting the floor is permitted exactly as before; and **`CI is down` is permitted**, named here because it is the case the floor was chosen to admit and the case the retired 15-character version would have refused. (Round 2 caught the old number surviving in this criterion, which is what an implementer builds the test from.)
 - **SC-002**: every permitted escape produces a firing-log entry whose detail is the reason - proved by driving each guard, not by reading the source.
 - **SC-003**: `make audit` can answer "every escape taken, with its stated reason" from the log alone.
 - **SC-004**: a finished, unsurfaced background run is reported at the next prompt and at turn end, with its exit status and age; an acknowledged one is not reported again.

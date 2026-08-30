@@ -28,7 +28,14 @@ And, in the same message, on a defect another session reported about itself:
 > improvements, then I want to make sure that we do not miss this and that we address this as we are
 > able.
 
-The session's answer to that question, which is what this feature acts on: the FIRST error is now
-prevented (feature 169's `main-tree-hooks.sh` refuses a `cd` into the mirror root followed by a write
-or a commit, and `sync-with-main.sh` now detects the stranded commit instead of reporting success).
-The SECOND is not prevented by anything, and nothing in the repository would have caught it.
+The session's answer to that question - **corrected 2026-08-30, later the same day, because the first
+version of it was wrong** (the GM's quoted words above are untouched; this paragraph is the session's
+own and is amended in place rather than left to mislead the next reader):
+
+- The FIRST error is **NOT** prevented. Feature 169's `main-tree-hooks.sh` refuses a `cd` into the
+  mirror root followed by a write IN THE SAME COMMAND; the incident was a `cd` in one call and the
+  write in the NEXT, and a bare `cd` into a path inside the project does persist across calls -
+  measured. What 169 added for that shape is after-the-fact DETECTION (`sync-with-main.sh` dies on a
+  mirror ahead of GitHub; `clone-sync-hooks.sh` names the stray commit), which only fires once the
+  commit exists. FR-005 is what makes the answer yes.
+- The SECOND is not prevented by anything, and nothing in the repository would have caught it.
