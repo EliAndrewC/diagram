@@ -29,8 +29,8 @@ earlier because I never saw the notification"*.
 | finding | measured how | result |
 |---|---|---|
 | no guard requires a reason | read the escape branch of all six command guards | every one accepts a BARE token; all six document "with a reason" in prose only |
-| one branch still permits without recording | used `GUARD_EDIT_OK` through `make-only` and read the log | no entry (feature 169 R13, deferred with a sketch) |
-| the mirror `cd` half of the reported defect | drove `main-tree-hooks.sh` with the shape that actually occurred | **NOT prevented** - see FR-005. Feature 169's guard needs the `cd` and the write in ONE command; the real incident is a `cd` in one call and the write in the NEXT |
+| branches that permit without recording | used `GUARD_EDIT_OK` through `make-only` and read the log; then grepped every escape site for `guard_log` | **TWO**, not one. `make-only` (169 R13), and `GATE_STAMP_OK` at `sync-with-main.sh:231`, which prints its bypass to stderr and logs nothing - that file contains no `guard_log` call at all and never sources `_guardlog.sh`. Found by the round-1 review; I had specified only the first |
+| the mirror `cd` half of the reported defect | drove `main-tree-hooks.sh` with the shape that actually occurred | **NOT prevented** - see FR-005. Feature 169's guard needs the `cd` and the write in ONE command; the real incident is a `cd` in one call and the write in the NEXT. What 169 added for that shape is after-the-fact DETECTION, not prevention: `sync-with-main.sh` dies on a mirror ahead of GitHub, and `clone-sync-hooks.sh` names the stray commit - both only once the commit exists |
 | does a bare `cd` leak across calls in this harness? | `cd /diagram` in one call, `pwd` in the next | **YES** for a path inside the project (`pwd` returned `/diagram`); a path outside it (`/tmp`) is reset with a notice. So the 2026-08-17 trap is live, and path-dependent |
 | the missed-notification half | searched the guard tree for anything that notices a finished run | nothing does - `agent-stall-hooks.sh` watches AGENTS, not background commands |
 
@@ -44,35 +44,51 @@ question the GM has been asked); anything about the review cap.
 
 ### FR-001 - an escape without a REASON is refused
 
-Every escape token must be followed by a reason: `TOKEN: <why>` or `TOKEN="<why>"`, with at least 15
-characters of it. A bare token is refused, and the refusal shows the compliant form using the token
-the session actually reached for.
+Every escape token must be followed by a reason: `TOKEN: <why>` or `TOKEN="<why>"`, of **at least two
+words and eight characters**. A bare token is refused, and the refusal shows the compliant form using
+the token the session actually reached for.
 
 **This is a refusal and not a rewrite, deliberately.** The ladder in `CLAUDE.md` says a guard that can
 produce the compliant command should produce it - and here it cannot, because the missing thing is the
 session's REASON, which no tool can supply. That is the same ground on which nine of the Makefile's
 ten refusals stand.
 
-**Why 15 characters.** Long enough to exclude `GATE_OK: ok`, short enough that a real reason is never
-inconvenienced. The project's existing precedent is the map waiver, which demands 60+ characters; a
-command comment is a smaller thing than a map waiver, so this floor is lower. It is a floor on EFFORT,
-not a judgment of quality - no tool can grade a reason, and the audit the GM described is a person
-reading them.
+**Why two words and eight characters, and why NOT a longer character floor.** The first draft said 15
+characters and justified it by the map waiver's 60 - a mechanism this repository RETIRED
+(`dev/gate.md`: *"Waivers are gone, and the doctrine they carried is not"*), so the justification cited
+something that no longer exists, and nothing enforces a character floor anywhere today. The round-1
+review also put the real objection: a 15-character floor REFUSES A TRUE SHORT REASON. *"CI is down"* is
+ten characters and is a perfectly good reason; the GM's request licenses demanding a reason, not
+refusing a short true one.
+
+Two words and eight characters excludes exactly what it should - a bare token, `GATE_OK: ok`,
+`MEASURE_OK: yes` - and admits *"CI is down"*. It is a floor on EFFORT, not on quality: no tool can
+grade a reason, and the audit the GM described (*"whether the stated reasons were valid use cases"*) is
+a person reading them.
 
 ### FR-002 - every escape records, with its reason as the detail
 
-No branch that permits an escape may be silent. This closes feature 169's R13: `_hookmatch.py`'s
+No branch that permits an escape may be silent. There are TWO such branches, and the second was found
+by the round-1 review after this requirement had already been drafted around the first:
+
+1. **`sync-with-main.sh:231`** permits a `GATE_STAMP_OK` bypass of the green-gate rule - the rule that
+   nothing is pushed which a gate did not see - and prints to stderr. The file has no `guard_log` call
+   anywhere and never sources `_guardlog.sh`, so this escape is invisible to `make audit`. It is also
+   the most consequential of the eleven, which is what makes its silence worst.
+2. **`make-only`** (feature 169 R13): `_hookmatch.py`'s
 `classify()` returns plain `ok` for a `GUARD_EDIT_OK` command - the same value it returns for a
-command that matched nothing - so `make-only-hooks.sh` cannot tell the two apart and records neither.
-It returns a distinct verdict for the escape, and the guard records and permits.
+   command that matched nothing - so `make-only-hooks.sh` cannot tell the two apart and records
+   neither. It returns a distinct verdict for the escape, and the guard records and permits.
 
 The recorded detail is the REASON, not merely the command, because the audit the GM described -
 *"whether the stated reasons were valid use cases"* - is reading the reasons.
 
 ### FR-003 - the content, environment and make-variable escapes too
 
-The census feature 169 derived has four kinds beyond the command escapes, and none may be exempt from
-the reason requirement:
+The census feature 169 derived has four kinds beyond the command escapes. **Three of them owe a
+reason**; the fourth, `not-an-escape` (`SWEEP_OK`, `REMOTE_OK`), owes nothing because those are
+Makefile macros that permit nothing at all - there is no workaround to explain. The first draft of this
+requirement said "four kinds" and then listed three, which is the shape this review exists to catch:
 
 - **content markers** (`SOURCE_EDIT_OK`, `GUARD_EDIT_OK` in edit text): the marker is followed by its
   reason in the text, under the same floor.
@@ -80,6 +96,17 @@ the reason requirement:
   must meet the floor; an empty or trivial value is refused.
 - **the make override** (`REF_OK`): its companion `REF_WHY` already carries the reason, so it is
   brought under the same floor rather than left as the one exception.
+
+### FR-003b - the one branch the matcher does not reach still owes a reason
+
+`pair-hooks.sh`'s AGENT-PROMPT branch permits a `settlement-review` dispatch on a bare `PAIR_OK` in the
+prompt. Feature 169 deliberately left it out of the MATCHER (a prompt is prose with no command
+grammar) and the round-3 review adjudicated that exclusion legitimate - but that was about how the
+token is FOUND, and says nothing about whether a reason is owed. **A reason is owed.** The GM's rule is
+*"always record that they happened and force the session ... to specify why"*, with no exception for
+prose, and the GM's own documented form for this very token is `PAIR_OK="<reason>"`. So the branch
+keeps its prose matching and gains the reason floor: a bare `PAIR_OK` in a dispatch prompt is refused
+like any other bare token.
 
 ### FR-004 - a finished background run cannot be reported as running
 
@@ -131,7 +158,7 @@ single-command shape and not the one that actually happened; FR-005 is what make
 | decision | class | where |
 |---|---|---|
 | a bare escape token is REFUSED, not rewritten | the missing thing is the session's reason, which no tool can supply | FR-001 |
-| 15 characters | a floor on effort, not a judgment; the map waiver's 60 is the precedent, and a command comment is a smaller thing | FR-001 |
+| two words and eight characters | excludes a bare token and `GATE_OK: ok` while admitting a true short reason like "CI is down"; the 15-character first draft would have refused that, and justified itself by the RETIRED map-waiver rule | FR-001 |
 | the recorded detail is the REASON | the GM's audit is reading the reasons, not the commands | FR-002 |
 | the finished-run check REPORTS rather than blocks | the failure was a session not KNOWING; blocking a turn would punish the wrong thing | FR-004 |
 | the mirror guard reads the session's CWD | the 2026-08-17 leak is real and MEASURED in this harness; a guard reading only the command text cannot see the shape that actually happened | FR-005 |
