@@ -204,6 +204,13 @@ differs by tier is the COUNT (a city draws the set: the principal board plus one
 | `waterward_strips_run_off_the_frame` | same module (the reed strip must reach the view edge on a DECLARED waterward face) | added 2026-08-29 for a defect a fix introduced: the strip went from "drawn to the canvas edge" to a fixed depth band, and a band can end inside the view |
 | `paddy_plot_seams_shared` | **carried by `tests/gate/test_paddy_fabric.py`'s over-count ceiling** - the seam and the lap are two readings of the same fabric, and the ceiling is what holds the lap to a shared wall rather than a doubled one | - |
 
+| `bridges_span_their_water` | `tests/gate/test_crossings_and_cover.py` (a deck's span against the width of the water under it) | no crossing ever built -> RED |
+| `footbridges_reach_useful_ground` | same module (every plank on a recorded SUPPLY ditch, never the collector) | same mutation -> RED |
+| `long_ditches_have_a_footbridge` | same test, and the record is explicit about which half migrated. WHICH ditches have somewhere to cross TO is the PLACER's judgment (`channel_footbridges`), and the retired check re-derived it through its own copy of the predicate. Measured on the reference roll: 8 planks, all on a main or branch, none on the 1,183 px drain, and two supply ditches (310 px, 256 px) deliberately left unplanked - so the "every long ditch" form would call a correct placer decision a defect | same mutation -> RED |
+| `drainage_junction_smooth` | same module (no turn past 100 deg along a collector) | a collector turns DOWN the valley into the stream; water would not take a right angle |
+| `watercourse_ends_reach_water` | same module (a trunk end outside the crop joins another course or runs off the frame) | my first draft judged EVERY end and flagged a main whose tip sits 0.3 px off the field outline - the canal arriving, not dangling. The rule's own wording is "outside the crop", and the correction is recorded in the test |
+| `margins_form_continuous_ring` | same module (a 25 px sample grid over the rendered view; at most 35% uncovered) | the hinterland never filled -> RED |
+
 ## Battery-internal - they go WITH the battery, and owe no destination
 
 These four do not state a rule about a map. They state that the battery's OWN classification tables are
