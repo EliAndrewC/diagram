@@ -619,7 +619,7 @@ class HousesMixin:
         121). This expression used to be written out at both farmhouse record sites, and the bundle
         placer had no third copy at all - it cleared an AXIS-ALIGNED rect and the map then drew the
         house raked, which is the whole of the drawn-versus-placed divergence. Measured on
-        pool/hamlets/inashiro.json: the bundle's position and size match the drawn record to four
+        pool/hamlets/inashiro/inashiro.json: the bundle's position and size match the drawn record to four
         decimal places, and the rake alone pushes a corner up to 2.56 px outside the rect that was
         cleared - which is the 2.4 px `_on_a_tread`'s own docstring reports.
 

@@ -5,7 +5,7 @@ choosing the canvas, the sluice, the cluster center, the lane polylines, the pon
 woodland patches and the windbreak belt as literal coordinates, then iterates against
 `check_village.py` until the gate is green. That works, and it is slow. This module asks the GM's
 question - "could a script do each of those steps instead?" - and answers it for the SIMPLEST tier,
-the rice-farming hamlet, with `pool/hamlets/ikegami.gen.py` as the reference subject.
+the rice-farming hamlet, with `legacy-hand-authored-pool/hamlets/ikegami/ikegami.gen.py` as the reference subject.
 
 IT DOES NOT REPLACE ANYTHING. Nothing here is imported by `settlement.py`, `check_village.py`,
 `waterfields.py` or any pool generator, and no existing map changes by a byte. It is additive: a

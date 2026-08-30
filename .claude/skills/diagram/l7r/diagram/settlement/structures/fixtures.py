@@ -1035,7 +1035,7 @@ class PublicFixturesMixin:
         # attested placements are withheld at these tiers.
         #
         # TIER-SCOPED (FR-009), and this is a requirement rather than an assumption because the code
-        # says so: `pool/towns/hirameki.gen.py` calls `place_kosatsuba()`, so a TOWN comes through here.
+        # says so: `legacy-hand-authored-pool/towns/hirameki/hirameki.gen.py` calls `place_kosatsuba()`, so a TOWN comes through here.
         # Towns and cities keep the traffic objective they were sited under.
         placement = "center"
         if _scale in ("hamlet", "village"):

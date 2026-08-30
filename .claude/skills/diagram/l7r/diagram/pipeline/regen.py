@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 """Regenerate a map, skipping the work when nothing that map depends on has changed.
 
-    python3 -m l7r.diagram.pipeline.regen pool/hamlets/sawada.gen.py                # cached when possible
-    python3 -m l7r.diagram.pipeline.regen pool/*/*.gen.py                           # every LIVE map, fanned out
-    python3 -m l7r.diagram.pipeline.regen --no-cache pool/hamlets/inashiro.gen.py   # force the work
-    python3 -m l7r.diagram.pipeline.regen --jobs 1 pool/*/*.gen.py                  # serial
+    python3 -m l7r.diagram.pipeline.regen pool/hamlets/sawada/sawada.gen.py                # cached when possible
+    python3 -m l7r.diagram.pipeline.regen pool/*/*/*.gen.py                           # every LIVE map, fanned out
+    python3 -m l7r.diagram.pipeline.regen --no-cache pool/hamlets/inashiro/inashiro.gen.py   # force the work
+    python3 -m l7r.diagram.pipeline.regen --jobs 1 pool/*/*/*.gen.py                  # serial
 
 FROZEN legacy maps are skipped (printed as `FROZEN`), not regenerated: the hand-authored pool
 froze on 2026-08-16 (migration-plan.md "The accepted trade") and the engine has been free to
@@ -78,7 +78,7 @@ def main(argv: list[str]) -> int:
     if not gens:
         return 0
     # ONE MAP PER INVOCATION under the scope lock (feature 132, spec FR-010/FR-012). This module
-    # takes a LIST, and `pool/*/*.gen.py` is the documented whole-pool sweep - a glob expands in the
+    # takes a LIST, and `pool/*/*/*.gen.py` is the documented whole-pool sweep - a glob expands in the
     # shell before make sees it, so the module is the only place a globbed GEN can be caught.
     if len(gens) > 1:
         from l7r.diagram import switches

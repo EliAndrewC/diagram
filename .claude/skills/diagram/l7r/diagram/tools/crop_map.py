@@ -11,9 +11,9 @@ Taking MANY regions in one invocation is the point: the review loop is "crop eve
 see, then look at it all", not one crop per turn (see "Batch the rendered-map inspection" in this
 directory's CLAUDE.md).
 
-    python3 -m l7r.diagram.tools.crop_map pool/towns/hoshizora 1600,900,220 1200,400,150
-    python3 -m l7r.diagram.tools.crop_map pool/hamlets/moritono --box 2100,150,2418,760 --zoom 1.7
-    python3 -m l7r.diagram.tools.crop_map pool/villages/ueda --whole --zoom 0.5      # the whole map, downscaled
+    python3 -m l7r.diagram.tools.crop_map legacy-hand-authored-pool/towns/hoshizora/hoshizora 1600,900,220 1200,400,150
+    python3 -m l7r.diagram.tools.crop_map legacy-hand-authored-pool/hamlets/moritono/moritono --box 2100,150,2418,760 --zoom 1.7
+    python3 -m l7r.diagram.tools.crop_map legacy-hand-authored-pool/villages/ueda/ueda --whole --zoom 0.5      # the whole map, downscaled
 
 Regions are `x,y,radius` (a square centered on a manifest point) or `--box x0,y0,x1,y1`. Everything
 is clamped to the image, so a region near the edge crops to what exists instead of erroring. Prints
@@ -94,7 +94,7 @@ def main(argv: list[str]) -> int:
             regions.append((int(x - r), int(y - r), int(x + r), int(y + r)))
             i += 1
     if not base:
-        raise SystemExit("give a map path (without extension), e.g. pool/towns/hoshizora")
+        raise SystemExit("give a map path (without extension), e.g. legacy-hand-authored-pool/towns/hoshizora/hoshizora")
     if whole or not regions:
         ox, oy, vw, vh = view_box(base + ".svg")
         regions = [(int(ox), int(oy), int(ox + vw), int(oy + vh))]

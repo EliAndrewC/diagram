@@ -1,7 +1,7 @@
 """The pool discovery surface: which maps exist, in which tree, of which kind (feature 161).
 
 WHY THIS MODULE EXISTS AT ALL. Before feature 161, ten consumers each independently hardcoded the
-pool's two-level shape - a `glob("pool/*/*.gen.py")` in the render cache, the cache audit, the gate
+pool's two-level shape - a `glob("pool/*/*/*.gen.py")` in the render cache, the cache audit, the gate
 sweep and the timings census; an `os.listdir` plus a join in `mapcheck`; a `$(wildcard)` in the
 Makefile; a subprocess grep in `check_census`; a literal default path in `check_village.__main__`.
 Every one restated a fact that belongs in one place, and they drifted exactly as `poolmaps`' own

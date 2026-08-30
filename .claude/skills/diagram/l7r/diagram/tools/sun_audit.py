@@ -16,7 +16,7 @@ the frame rule are judged by:
     on the belt's side (the face rule), the median, the blank bands, and clumps whose recorded
     crown lies wholly off the page.
 
-Usage:  make sun-audit [M=pool/hamlets/inashiro.json]
+Usage:  make sun-audit [M=pool/hamlets/inashiro/inashiro.json]
 """
 
 from __future__ import annotations
@@ -131,7 +131,7 @@ def report(M: dict[str, Any]) -> str:
 
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description=__doc__.split("\n\n")[0])
-    ap.add_argument("manifest", nargs="?", default="pool/hamlets/inashiro.json")
+    ap.add_argument("manifest", nargs="?", default="pool/hamlets/inashiro/inashiro.json")
     a = ap.parse_args(argv)
     print(report(json.loads(Path(a.manifest).read_text())))
     return 0

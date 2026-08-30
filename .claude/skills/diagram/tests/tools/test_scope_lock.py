@@ -42,10 +42,10 @@ def test_cohort_refuses_first(locked: None, monkeypatch: pytest.MonkeyPatch, cap
 
 def test_regen_refuses_a_list_but_not_one_map(locked: None, monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]) -> None:
     rolled_nothing(monkeypatch)
-    assert regen.main(["pool/hamlets/a.gen.py", "pool/hamlets/b.gen.py", "--frozen-ok"]) == 2
+    assert regen.main(["pool/hamlets/a/a.gen.py", "pool/hamlets/b/b.gen.py", "--frozen-ok"]) == 2
     assert "regen of 2 maps" in capsys.readouterr().err
     monkeypatch.setattr(regen, "regen_captured", lambda gen, use_cache: ("REGENERATED", 1.0, ""))
-    assert regen.main(["pool/hamlets/a.gen.py", "--frozen-ok"]) == 0  # ONE map per invocation is the carve-out (FR-012)
+    assert regen.main(["pool/hamlets/a/a.gen.py", "--frozen-ok"]) == 0  # ONE map per invocation is the carve-out (FR-012)
 
 
 def test_cache_audit_and_regressions_and_perf_refuse(locked: None, monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]) -> None:
@@ -63,9 +63,9 @@ def test_mapcheck_locked_runs_the_reference_map_only_and_never_widens(locked: No
     monkeypatch.setattr(mapcheck, "_tripwire", lambda: (_ for _ in ()).throw(AssertionError("tripwire rolled under the lock")))
     monkeypatch.setattr(mapcheck, "_load", lambda: {"ok": True})  # a PASSED last run would normally widen
     monkeypatch.setattr(mapcheck, "_save", lambda ok, scope, failed: None)
-    monkeypatch.setattr(mapcheck, "_live_gens", lambda tier: ["pool/hamlets/inashiro.gen.py", "pool/hamlets/other.gen.py"])
+    monkeypatch.setattr(mapcheck, "_live_gens", lambda tier: ["pool/hamlets/inashiro/inashiro.gen.py", "pool/hamlets/other/other.gen.py"])
     assert mapcheck.main([]) == 0
-    assert ran == [["pool/hamlets/inashiro.gen.py"]]
+    assert ran == [["pool/hamlets/inashiro/inashiro.gen.py"]]
     assert "LOCKED" in capsys.readouterr().out
     assert mapcheck.main(["--scope", "all"]) == 1 and "make scope-unlock" in capsys.readouterr().err
 

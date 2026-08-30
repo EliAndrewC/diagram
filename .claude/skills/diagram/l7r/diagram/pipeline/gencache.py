@@ -285,7 +285,7 @@ def run_and_record(gen: str) -> dict[str, Any]:
             # it. Every Mode A gen ends `raise SystemExit(main())`, which is a normal successful
             # return for a script - but `runpy` runs it in THIS interpreter, so the exception
             # propagated out of regen.py and the batch stopped, silently, reporting exit 0. On
-            # 2026-08-08 `python3 -m l7r.diagram.pipeline.regen pool/*/*.gen.py` - the whole-pool invocation this
+            # 2026-08-08 `python3 -m l7r.diagram.pipeline.regen pool/*/*/*.gen.py` - the whole-pool invocation this
             # file's docstring recommends - therefore rebuilt the nine hamlets, hit the first
             # magistracy, and quit before a single town, village or city, looking for all the
             # world like it had done the lot. A non-zero code is a real failure and still

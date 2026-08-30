@@ -4,5 +4,5 @@ The build side of the skill, as opposed to the drawing side (`settlement/`, `wat
 `hamletgen/`, `compound.py`) and the checking side (`check_village/`). See CLAUDE.md in this
 directory. Run these as modules from the skill root:
 
-    python3 -m l7r.diagram.pipeline.regen pool/hamlets/sawada.gen.py
+    python3 -m l7r.diagram.pipeline.regen pool/hamlets/sawada/sawada.gen.py
 """

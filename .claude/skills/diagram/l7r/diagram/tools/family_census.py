@@ -13,7 +13,7 @@ A diagnostic OBSERVES (tools/CLAUDE.md): it prints what each manifest records an
 and it says nothing about whether an absence is right. That judgment - archetype reason and research
 pointer per absence - is the feature's to record (spec 139 "Decisions Recorded").
 
-    make family-census A=pool/hamlets/inashiro.json B=pool/hamlets/kuwabata.json
+    make family-census A=pool/hamlets/inashiro/inashiro.json B=pool/hamlets/kuwabata/kuwabata.json
 """
 
 from __future__ import annotations

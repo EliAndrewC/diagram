@@ -14,7 +14,7 @@ if __name__ == "__main__":
     here = os.path.abspath(
         os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", "..")
     )  # the skill root: __file__ moved one level down into the package (024) and two more under l7r/diagram/ (119)
-    # RE-POINTED at the live reference hamlet by feature 161. It used to be `pool/villages/kikuta.json`,
+    # RE-POINTED at the live reference hamlet by feature 161. It used to be `legacy-hand-authored-pool/villages/kikuta/kikuta.json`,
     # and `pool/villages/` ceased to exist when the hand-authored maps moved to
     # `legacy-hand-authored-pool/` - every village in the pool was frozen. Merely deepening the old
     # path would have aimed the validator's out-of-the-box behavior at a frozen exhibit in the other

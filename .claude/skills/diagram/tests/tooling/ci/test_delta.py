@@ -14,8 +14,8 @@ S = ".claude/skills/diagram/"
 
 ENGINE = [
     S + "l7r/diagram/settlement/houses.py",
-    S + "pool/hamlets/inashiro.gen.py",
-    S + "pool/hamlets/inashiro.json",
+    S + "pool/hamlets/inashiro/inashiro.gen.py",
+    S + "pool/hamlets/inashiro/inashiro.json",
 ]
 NOT_ENGINE = [
     # l7r/diagram/ci/ (feature 132 FR-025, the GM: "isn't it actually test code?"): tooling, DIRECT
@@ -34,9 +34,9 @@ NOT_ENGINE = [
     S + "settlements/water.md",
     S + "buildings/manor.md",
     S + "research/farms.md",
-    S + "pool/hamlets/inashiro.notes.md",
-    S + "pool/hamlets/inashiro.png",
-    S + "pool/hamlets/inashiro.svg",
+    S + "pool/hamlets/inashiro/inashiro.notes.md",
+    S + "pool/hamlets/inashiro/inashiro.png",
+    S + "pool/hamlets/inashiro/inashiro.svg",
     S + "timings.md",
     S + "l7r/diagram/settlement/CLAUDE.md",
     # how the gate RUNS, not what it tests (GM 2026-08-25): covered locally, never dispatched
@@ -103,8 +103,8 @@ def test_a_comment_only_engine_edit_routes_direct(repo: Path) -> None:
     assert d.files == (S + "l7r/diagram/m.py",) and d.engine == () and d.route == "DIRECT", d
     commit(repo, S + "l7r/diagram/m.py", '"""doc."""\n\nx = 4\n')  # a token that runs re-opens the route
     assert compute_delta(repo).route == "GATED"
-    commit(repo, S + "pool/hamlets/inashiro.json", "{}\n")  # a non-.py engine file has no semantic form: always engine
-    assert S + "pool/hamlets/inashiro.json" in compute_delta(repo).engine
+    commit(repo, S + "pool/hamlets/inashiro/inashiro.json", "{}\n")  # a non-.py engine file has no semantic form: always engine
+    assert S + "pool/hamlets/inashiro/inashiro.json" in compute_delta(repo).engine
 
 
 def test_a_clone_at_main_has_an_empty_delta(repo: Path) -> None:
