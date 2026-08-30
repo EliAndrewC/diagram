@@ -45,8 +45,10 @@ one coat:
 
 So the end state this feature aims at is that `check_village` stops being a validator and its 152 checks
 land in one of three places: a unit test of the placer, an in-loop feasibility predicate the placer calls,
-or a code-completeness test. That is the GM's proposal, and the three-way split is the thing worth agreeing
-on before any of it is built.
+or a code-completeness test. That is the GM's proposal restated in this engine's terms. **The three-way
+reading above is this session's opinion, offered because it was asked for - it is NOT the axis this feature
+sorts checks on.** The GM asked to decide the firing checks case by case, and the requirements below keep
+that decision theirs (FR-009).
 
 **One caution, stated once and then built around.** "Never fires" is not by itself a safe retirement test,
 and this repository has been burned by it twice in recorded incidents: an *"EXCUSE clause keyed on PRESENCE
@@ -72,8 +74,8 @@ is deleted, along with its segment body, its tests, its fixture entries and its 
 anyone - a check that cannot be shown to fire anywhere is not load-bearing by construction.
 
 **Independent Test**: Run the census, delete the named checks, and confirm the gate is still green on all
-five live hamlets with every pool render byte-identical. Deleting a check changes no geometry, so any
-render diff is a defect in the deletion.
+five live hamlets and every pool render compared byte-for-byte. Removing an audit should change no
+geometry, so any render diff is diagnosed before the deletion lands.
 
 **Acceptance Scenarios**:
 
@@ -81,9 +83,10 @@ render diff is a defect in the deletion.
    FIRES (with the artifact or test that makes it fire named) or NEVER-FIRES, with no name unclassified.
 2. **Given** a NEVER-FIRES check, **When** its segment, tests, fixture entries and pin are deleted,
    **Then** `make done` is green and no pool render changes by a byte.
-3. **Given** a check the census calls NEVER-FIRES whose placer is read and found to fail SOFTLY (it
-   declines rather than guarantees), **Then** the check is KEPT and the reason is recorded in the ledger -
-   the census produced a candidate, not a ruling.
+3. **Given** a check the census calls NEVER-FIRES, **When** its placer is read and the record grepped,
+   **Then** either evidence is found that the CURRENT placer misses it - in which case it is reclassified
+   FIRING with that evidence and routed to the ledger - or it is deleted. A placer that merely declines
+   rather than guarantees is not evidence and does not save the check.
 4. **Given** the census output, **When** a reader asks why a specific check was deleted, **Then** the
    ledger names the evidence that was looked for and not found.
 
@@ -136,8 +139,9 @@ discussion before any such change is made, so the work is named here only so the
   if we encountered a type of map, which is literally impossible to produce any longer"*. These cannot fire
   and cannot be made to fire; they are NEVER-FIRES.
 - **A check whose only firing evidence is a frozen manifest of a map no generator can produce.** The
-  fixture proves the check has teeth against a shape the engine can no longer make. The census records this
-  distinction; the disposition is the GM's at acceptance, not a silent deletion.
+  fixture proves the check has teeth against a shape the engine can no longer make - which is not the
+  current implementation firing. FR-003 makes this NEVER-FIRES and deletes the check with its fixture,
+  reason recorded; it is a rule applied, not a question parked.
 - **A check that fires only inside another check's fixture** (a fixture pinned to check A also trips
   check B). Incidental firing is recorded as such and does not by itself count as evidence that B earns
   its keep.
@@ -152,46 +156,76 @@ discussion before any such change is made, so the work is named here only so the
 
 ### Functional Requirements
 
-- **FR-001**: The census MUST define "fires" as: some artifact or test in this repository causes the check
-  to emit a FAIL (or a WAIVE, which is a suppressed FAIL) verdict. Passing on every map is not firing.
+- **FR-001**: The census MUST define "fires" against the CURRENT implementation, per the GM's own
+  qualifier (*"do not appear to ever actually fire with our current implementation"*, *"not catching
+  anything in this exact moment"*): a check FIRES when something the engine can PRODUCE TODAY makes it
+  emit a FAIL (or a WAIVE, which is a suppressed FAIL) - a live pool map, a map the current generators can
+  roll, a scripted negative fixture built from today's placers, or a recorded miss of the current placer.
+  Passing on every map is not firing.
 - **FR-002**: The census MUST establish each verdict by EXECUTION - running the gate against the artifact
   and reading the verdict - not by grepping for the check's name. A name appearing in a test file is not
   evidence that the test makes the check fail.
-- **FR-003**: The census MUST cover all five firing sources: the live pool maps, the frozen negative
+- **FR-003**: The census MUST cover all five sources of a verdict: the live pool maps, the frozen negative
   fixtures in `pool/regressions/`, the scripted negative fixtures, waivers declared on shipped maps, and
-  any test that asserts a check fires.
+  any test that asserts a check fires. **A frozen manifest of a shape the current generators cannot
+  produce is not the current implementation firing.** A check whose ONLY evidence is such a fixture is
+  NEVER-FIRES and is deleted WITH that fixture, the reason recorded. The repository has already ruled this
+  way on this exact subject: `bridges_align_with_their_way` was retired because *"every scrap of evidence
+  for it was two decks a person placed BY HAND on maps no generator can produce"* (`dev/gate.md`).
 - **FR-004**: The census MUST classify every live check name, leaving none unclassified, and MUST fail
   loudly rather than return an empty or partial result.
 - **FR-005**: The census MUST be proven to work by naming at least one check that is independently known
   to fire, and by a guard that goes red if the census silently classifies nothing.
 - **FR-006**: Before a NEVER-FIRES check is deleted, its placer MUST be read and the record grepped for
-  what the check has actually caught, and the finding recorded per check. A placer that fails SOFTLY -
-  declining a placement rather than guaranteeing correctness - keeps its check, with the reason written
-  down. (Feature 158: the census's verdict is a candidate, not a ruling.)
+  what the check has actually caught, and the finding recorded per check. This is VERIFICATION OF THE
+  CENSUS, not an appeal against the deletion, and it has exactly **two** outcomes:
+  - **Evidence found** that the check has caught, or can be made to catch, the CURRENT placer - a recorded
+    miss in the code or the record, a live map, a scripted negative fixture, a waiver. The census verdict
+    was WRONG: the check is reclassified **FIRING**, the evidence recorded, and it goes to the FR-009
+    ledger for the GM's discussion. (The worked precedent is `bridges_span_their_water`, which the
+    mechanical census called retire and `hamletgen/ways.py` records catching the scripted placer four
+    separate times.)
+  - **No such evidence** - it is deleted, per the GM's first task.
+
+  There is no third outcome. In particular, a placer that fails SOFTLY - declining a placement rather than
+  guaranteeing correctness - does NOT by itself save a check that has never caught anything: a runtime
+  safety net standing behind a placer that might be wrong is precisely the architecture the GM says does
+  not need to exist. (Feature 158's "the census's verdict is a candidate, not a ruling" licenses the
+  investigation; it does not license a keep.)
 - **FR-007**: Deleting a check MUST remove its segment body, any helper whose chain reaches no other live
   check, its entry in the name pin, its tests, and any frozen fixture whose only purpose was that check.
   (Feature 146: stubbing the call is not removing the check.)
-- **FR-008**: After the deletions, the gate MUST be green on all five live hamlets and every pool render
-  MUST be byte-identical to before. A render diff is a defect in the deletion, not an accepted change.
-- **FR-009**: The feature MUST produce a classification ledger covering every SURVIVING check, assigning
-  each to exactly one of: **placer-guaranteed** (nothing after the placer changes what it reads),
-  **emergent-across-stages** (a later stage can invalidate it - the ledger names that stage), or
-  **engine-completeness** (it tests a registry or a declaration, not a map).
+- **FR-008**: After the deletions, the gate MUST be green on all five live hamlets, and every pool render
+  MUST be compared byte-for-byte against before. Removing an audit should change no geometry, so a render
+  diff MUST be DIAGNOSED before the deletion lands. Once its cause is understood the deletion stands and
+  the map is allowed to move - the GM's standing ruling is *"I do not require any of these maps to
+  maintain bite identity now or at any time"* (feature 141).
+- **FR-009**: The feature MUST produce a ledger covering every SURVIVING check that RECORDS THE
+  MEASUREMENT rather than assigning a category: which stage last changes each of its inputs, what its
+  placer actually guarantees, who besides the gate reads its verdict, and what it is recorded as having
+  caught. Against that measurement the ledger states the GM's own two readings - **a bug in the placement
+  algorithm**, or **fold it into a trial-and-error placer** - with the evidence for each, and may record
+  "neither, because X" as an observation where that is what the measurement shows. The DECISION is the
+  GM's, case by case, in the discussion they asked for; this feature supplies the evidence, not the
+  verdict.
 - **FR-010**: The feature MUST NOT change any placement algorithm, fold any check into one, or convert any
   check into a unit test of a placer. Those changes are blocked on the GM's discussion, per the request.
-- **FR-011**: The feature MUST record what it cost the generator - the per-map wall time spent in the gate
-  before and after - so the discussion in User Story 2 is held against a number rather than an impression.
-- **FR-012**: The census tooling MUST be reusable, not a one-shot script that is thrown away, because the
-  same question is asked again after every disposition in User Story 3 lands.
+*(FR-011 and FR-012 were removed at spec review: recording the gate's wall-cost, and building the census
+to a reusable standard, are both things the GM did not ask for - and FR-012's justification rested on User
+Story 3, which this spec correctly declares blocked. If the cost number falls out for free it is reported
+in the wrap-up; if the census extends `make check-census` rather than a throwaway script, that is an
+implementation note in the plan.)*
 
 ### Key Entities
 
 - **Check**: one named rule in the gate battery (152 live names today), implemented by one or more
   registry segments.
 - **Firing evidence**: an artifact-plus-verdict pair showing a named check emitting FAIL or WAIVE.
-- **Census ledger**: one row per check - name, firing evidence (or its absence), the placer read, the
-  disposition, and the reason.
-- **Disposition**: placer-guaranteed, emergent-across-stages, or engine-completeness.
+- **Census ledger**: one row per check - name, firing evidence (or its absence), the placer read, and
+  the outcome (FIRING with its evidence, or DELETED).
+- **Measurement row**: for a surviving check - which stage last changes each input, what the placer
+  guarantees, who reads the verdict, what it is recorded as having caught - and the evidence for each of
+  the GM's two readings. It carries no verdict; the verdict is the GM's.
 
 ## Success Criteria *(mandatory)*
 
@@ -199,27 +233,26 @@ discussion before any such change is made, so the work is named here only so the
 
 - **SC-001**: Every one of the 152 live check names carries a census verdict with named evidence; zero are
   unclassified.
-- **SC-002**: Every check the census calls NEVER-FIRES is either deleted or kept with a written reason
-  naming the soft-failing placer that saves it - none is left in the battery unexamined.
-- **SC-003**: After the deletions the gate is green on all five live hamlets and every pool render is
-  byte-identical, so the change is provably behavior-preserving for the maps.
-- **SC-004**: The classification ledger covers 100% of surviving checks and each row states the
-  measurement, not an assertion.
-- **SC-005**: The per-map gate cost is recorded before and after, so the saving from the deletion is a
-  number.
-- **SC-006**: No placement algorithm changed in this feature; the diff touches checks, their tests, their
+- **SC-002**: Every check the census calls NEVER-FIRES is either deleted, or reclassified FIRING with the
+  recorded evidence that the CURRENT placer misses it - none survives on the strength of a placer that
+  merely declines, and none is left in the battery unexamined.
+- **SC-003**: After the deletions the gate is green on all five live hamlets, and every pool render is
+  either byte-identical or its diff is diagnosed in writing with the cause.
+- **SC-004**: The ledger covers 100% of surviving checks; each row states the measurement and the evidence
+  for the GM's two readings, and no row asserts a decision.
+- **SC-005**: No placement algorithm changed in this feature; the diff touches checks, their tests, their
   fixtures and the census tooling only.
 
 ## Decisions Recorded
 
 This feature changes no drawn output - no glyph, size, placement rule, distance or density. Deleting a
-check removes a rule from the AUDIT, not from the map: FR-008 requires every pool render to be
-byte-identical afterwards, which is the proof. The section is kept rather than deleted so the spec review
+check removes a rule from the AUDIT, not from the map: FR-008 requires every pool render to be compared
+byte-for-byte and any diff diagnosed, which is the proof. The section is kept rather than deleted so the spec review
 can see the judgment was made rather than skipped.
 
 | Decision | Class | Why | Recorded at |
 |---|---|---|---|
-| none - no rendering decision is made or changed | n/a | the feature retires audit code; FR-008 pins the renders byte-identical | this row |
+| none - no rendering decision is made or changed | n/a | the feature retires audit code; FR-008 compares every render byte-for-byte and diagnoses any diff | this row |
 
 Historical rules a deleted check ENCODED are a separate matter and are not lost by the deletion: the
 research finding and its sources live in `research/` and in the interactive map's modals (constitution XII),
@@ -237,6 +270,28 @@ stands.
   historical rule or its sources.
 - **The GM's discussion gates User Story 3.** This feature is complete, and lands, with the classification
   ledger delivered and no placer touched.
-- **No map is expected to move.** Feature 141's ruling that maps may move does not apply here, because
-  removing an audit cannot change what a generator draws - unless the check drives the re-roll ladder, and
-  `farmhouses_reach_a_way` (the only such check) is not a deletion candidate.
+- **No map is expected to move**, because removing an audit should not change what a generator draws -
+  the one check that steers a generator is `farmhouses_reach_a_way`, which drives the re-roll ladder and
+  is not a deletion candidate. If a map moves anyway the cause is diagnosed (FR-008) and then the map is
+  allowed to move, per the GM's standing ruling.
+
+## Review history
+
+### Round 1 - `spec-fidelity`, 2026-08-30: CHANGES REQUIRED, all six applied
+
+Reviewed against [`gm-request.md`](gm-request.md) verbatim (constitution XVI). The reviewer confirmed the
+blocked-User-Story-3 boundary as the most faithful part of the spec, and found six ways the draft
+preserved what the GM asked to remove or added what they did not ask for. Every one is accepted:
+
+| # | finding | change made |
+|---|---|---|
+| 1 | **FR-006's keep-clause was a carve-out contrary to the request.** *"A soft-failing placer with no recorded catch is a check that catches nothing"* - and preserving it on the grounds that the placer might be wrong is exactly the runtime safety net the GM says need not exist. Word-plausible, purpose-fatal, and the branch a session under deletion pressure reaches for. | FR-006 keeps its INVESTIGATION and loses its disposition: two outcomes only - evidence of the current placer being missed reclassifies the check FIRING, otherwise it is deleted. US1 scenario 3 and SC-002 rewritten to match. |
+| 2 | **FR-001/FR-003 dropped the GM's qualifier "with our current implementation".** A frozen hand-era manifest is not today's engine firing, and `bridges_align_with_their_way` was already retired on that exact reasoning. | FR-001 defines firing against what the engine can produce today; FR-003 makes frozen-fixture-only evidence NEVER-FIRES and deletes the fixture with the check. The edge case becomes a rule applied rather than a question parked. |
+| 3 | **FR-009 substituted a session taxonomy for the GM's case-by-case decision.** Sorting checks into three invented dispositions - and removing a whole class as "not about a map" - decides before the discussion the GM asked to have. | FR-009 now records the MEASUREMENT and states the GM's own two readings with their evidence; no check is assigned a category. The three-way reading stays in "The session's view" as opinion, explicitly labeled as not the axis the feature sorts on. Key Entities and SC-004 updated. |
+| 4 | **FR-011 (gate-cost recording) was unrequested.** | Removed with SC-005. The number is reported in the wrap-up if it falls out for free. |
+| 5 | **FR-012 (reusable census tooling) was unrequested**, and its justification rested on blocked User Story 3. | Removed. Reuse is an implementation note in the plan, not a requirement. |
+| 6 | **FR-008's "a render diff is not an accepted change" contradicted a standing GM ruling** - *"I do not require any of these maps to maintain bite identity now or at any time"* (feature 141). | The byte comparison stays as a diagnostic that must be explained; the absolute is dropped. Maps may move once the cause is understood. |
+
+The reviewer also passed on an aside for the GM: the three-way reading of the battery is *"a genuinely
+useful frame and worth hearing at the discussion - it just should not be built into the specification as
+the axis the checks get sorted on before that discussion happens."*
