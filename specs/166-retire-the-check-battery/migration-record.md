@@ -132,6 +132,18 @@ differs by tier is the COUNT (a city draws the set: the principal board plus one
 | `stream_end_anchored` | same module (same assertion, the far end) | same |
 | `fields_show_water_source` | same module (every paddy named by a channel or a field ditch) | asserted with the paddy population non-empty first |
 
+| `field_ditches_reach_source_and_sink` | `tests/gate/test_water_junctions.py` (the KUWABATA roll - the one live map that lays laterals) | the laterals shifted 40 px off their trunks -> RED |
+| `field_ditch_tips_land_on_the_trunk` | same test (both ends of every lateral) | same mutation -> RED. `polder.py` snaps both ends with `_onto(lat_xy[0], feeder_xy)` / `_onto(lat_xy[-1], drain_xy)` - the guarantee was always in the placer |
+| `channels_join_water_not_cross` | same module (a joiner crossing open water away from its own mouth) | asserted with both populations non-empty; a mouth ENDING on the bed is the confluence, not a crossing |
+| `water_channels_join_not_cross` | same test | same |
+| `channels_join_not_cross_at_fork` | same test | same |
+| `channels_join_streams_at_confluence` | same module (a channel DECLARING a stream must reach its bed) | the count of declaring channels is asserted first |
+| `waterways_merge_at_crossings` | same module (the recorded paint stack: the topmost sheen sits above every bed) | asserted on the recorded `bedz`/`sheenz`, because the dark seam is a compositing fact, not a position |
+| `pond_connected_to_field` | same module (the course the DECLARED `pond_role` requires must reach the water) | the required course population is asserted before the reach is |
+| `pond_fill_covers_channel_mouths` | same module (the fill's `bedz` above every joining mouth's) | the joining-mouth count is asserted first |
+| `field_ponds_sunk_into_one_plot` | same module (no bund or hem ring crosses the pond ellipse) | the field-pond population is asserted first |
+| `pond_fed_from_edge` | **DROP - no scripted executor.** Measured across every live map: not one pond is fed by a stream (Inashiro and Mizuguchi declare `pond_role=drainage` and are fed by the collector; the other three record no role). The rule is about a SOURCE pond fed by a brook from off-map, which only a hand-authored map produces. Its grounding - a pond's water comes from the edge, not from nowhere - is recorded here and in `settlements/water.md` | - |
+
 ## Battery-internal - they go WITH the battery, and owe no destination
 
 These four do not state a rule about a map. They state that the battery's OWN classification tables are
