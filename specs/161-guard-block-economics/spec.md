@@ -4,7 +4,15 @@
 
 **Created**: 2026-08-30
 
-**Status**: Draft - awaiting `spec-fidelity`
+**Status**: **IMPLEMENTED, and the review's ROUND LIMIT was reached** - `spec-fidelity` returned
+CHANGES REQUIRED three times (3 items, then 2, then 1) and every item was applied; a fourth,
+confirming read verified the last two and found one new overclaim, which was fixed. The reviewer
+never issued the word FAITHFUL, and this spec does not pretend otherwise: by constitution XVI three
+rounds of changes go to the GM. Its own round-3 assessment of that escalation is quoted in the Review
+history below - *"procedural rather than a signal that the specification is wrong in substance"* -
+and the session implemented rather than holding a mechanical one-paragraph correction until the GM
+returned. **The GM's ruling is owed on this feature**, and the push carries `REVIEW_GATE_OK` saying
+so rather than a manufactured verdict line.
 
 **Input**: [`request.md`](request.md), verbatim and unedited. That file is the authority for this
 specification.

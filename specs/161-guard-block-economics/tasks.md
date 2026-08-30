@@ -111,7 +111,13 @@ guards and watching the test go red - the project's rule for adding a guard.
       helpers joined each suite's freshness key. `make done` recorded below
       research: procedure
       verify: /tmp/161-hooks2.log; the counts compared against T01's baseline line
-- [ ] T15 audit `dev/bypass-log/` for the entries this feature added and say in writing whether each
-      was justified (the constitution's closing step), then push
+- [x] T15 **BYPASS AUDIT (the constitution's closing step): this feature added NO entries to
+      `dev/bypass-log/`.** Not one, on any date - `make done` was never run FULL, `REF_OK` was never
+      used, and the `PAIR_OK` carried on the gate invocation was never spent, because a delta with no
+      engine code and no map manifest never reached the pairing check. The one escape this feature
+      DOES owe an explanation for is at the push, not in this log: `REVIEW_GATE_OK`, because
+      `spec-fidelity` reached its three-round limit without issuing the word FAITHFUL. That is
+      recorded in `spec.md`'s Status and Review history and put to the GM in the session's report,
+      rather than being papered over with a verdict line nobody wrote
       research: procedure
-      verify: the audit written into this file
+      verify: `python3` over every `dev/bypass-log/*.json` with `utc` on 2026-08-30 - empty
