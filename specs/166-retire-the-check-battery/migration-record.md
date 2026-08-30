@@ -109,6 +109,10 @@ differs by tier is the COUNT (a city draws the set: the principal board plus one
 
 | `torii_clear_of_walls` | `tests/settlement/test_torii_seating.py` | `torii_seat_on_wall` made to never refuse -> RED; the true-scale box mutated to the legacy 19 -> RED |
 
+| `commons_clear_of_paddies` | `tests/settlement/test_hinterland_cover.py` (the scrub BANDS; the interior fill is excluded, with the reason recorded in the test) | `hinterland` made a no-op -> RED |
+| `marsh_on_low_ground` | same module (the toe sits below the field, oriented by `down_deg`) | same mutation -> RED |
+| `scrub_clear_of_urban_fabric` | same module (cover is not a crop anchor, so it bleeds off the frame) | same mutation -> RED |
+
 ## Battery-internal - they go WITH the battery, and owe no destination
 
 These four do not state a rule about a map. They state that the battery's OWN classification tables are
