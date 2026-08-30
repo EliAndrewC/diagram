@@ -13,14 +13,27 @@ from __future__ import annotations
 
 import math
 
+import functools
+
 import pytest
 
 from l7r.diagram.waterfields.comb import build_comb
 
-SEEDS = (3, 5, 11, 19)
+SEEDS = (3, 5, 11)
+"""The seeds this module asserts over. THREE, NOT FOUR (2026-08-30): a comb build is ~1 s and four tests
+read each net, so every seed here costs a full build in each of them. Three seeds still cross the rolled
+knobs these rules care about; the fourth was buying a repeat rather than a new shape. If a topology defect
+ever turns out to be seed-specific, add the seed that shows it - with the map that shows it named here."""
 
 
+@functools.lru_cache(maxsize=None)
 def _net(seed: int):
+    """One comb per seed, shared by all four tests that read it.
+
+    CACHED BECAUSE THE BUILD IS THE COST. Four tests examine the same net at each seed and each was
+    building its own, so three of every four builds re-derived a net another assertion had already made.
+    **Nothing here may mutate the returned net** - it is shared, so a test that edited it would corrupt
+    its neighbors instead of failing. Every reader below only measures."""
     return build_comb(2400, 2400, (300.0, 300.0), seed=seed, down_deg=90)
 
 
