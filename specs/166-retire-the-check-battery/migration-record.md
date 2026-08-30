@@ -107,6 +107,8 @@ differs by tier is the COUNT (a city draws the set: the principal board plus one
 | `crop_not_held_open_by_one_feature` | same module (a trailing lane must not widen the frame) | same mutation -> RED |
 | `no_caption_holds_the_frame_open` | same module - one frame rule, three checks | same mutation -> RED |
 
+| `torii_clear_of_walls` | `tests/settlement/test_torii_seating.py` | `torii_seat_on_wall` made to never refuse -> RED; the true-scale box mutated to the legacy 19 -> RED |
+
 ## Battery-internal - they go WITH the battery, and owe no destination
 
 These four do not state a rule about a map. They state that the battery's OWN classification tables are
