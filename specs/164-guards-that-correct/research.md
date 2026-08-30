@@ -226,3 +226,24 @@ verdict. That is the work, not an obstacle to it - a retired assertion deleted r
 passing vacuously is the project's own rule for guards.
 
 **Sources:** this session's own implementation, and the suites named above.
+
+## R9 - a FLAKY gate test, found by this feature's own gate run
+
+`tests/hamletgen/test_driver.py::test_the_stage_profile_prints_only_when_asked_and_rolls_the_same_map`
+failed the gate on a delta containing **no engine file at all** - guards, their suites and docs only.
+It then passed five runs out of five in isolation.
+
+The mechanism: the test monkeypatches two stub stages, neither of which does measurable work, and
+then asserts that the profile header names `stage_alpha` as the SLOWEST. `driver.build` picks that
+with `max(timings, key=...)` over two floats that are both ~0.0 s, so the winner is decided by
+machine noise - and under a loaded parallel gate run it was `stage_beta`. The test was asserting a
+coin flip.
+
+Fixed at the point of change (Principle XIV): the stage clock is injected, so alpha measures 0.10 s
+and beta 0.01 s - which is what the surrounding assertions have always MEANT, one stage over the
+0.05 s printing floor and one under it. No wall time is spent, and the tie cannot recur.
+
+Cost of the flake, once: a whole gate cycle (2.5 minutes) plus the turns to diagnose it, on a change
+that could not have caused it.
+
+**Sources:** /tmp/164-done.log, and the five isolated runs recorded in this session.

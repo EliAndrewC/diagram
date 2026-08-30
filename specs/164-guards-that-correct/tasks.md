@@ -90,10 +90,20 @@ FIRE by removing the code it guards - the project's rule for adding a guard, app
       DONE: every conversion calls `guard_log`; every suite isolates `GUARD_LOG_DIR`. Audited: 0 fixture entries in the real census before and after running all seven suites (24 leaked on the first pass)
 - [x] T12 `make hooks-test`: **19 guard suites green, exit 0** - exactly the 19 T01 recorded, so no
       regression. Every suite re-ran rather than being skipped, because the shared helpers changed.
-      `make done` recorded below
+      `make done`: **GREEN**, 2753 passed / 2 skipped / 0 failed. Its first run failed on ONE test -
+      `test_the_stage_profile_prints_only_when_asked_and_rolls_the_same_map`, on a delta with no
+      engine file in it - which turned out to be a FLAKY tie-break asserting a coin flip. Diagnosed,
+      fixed at the point of change and recorded as `research.md` R9
       research: procedure
       verify: both green, no new failure against the baseline
-- [ ] T13 update `CLAUDE.md`'s guard table for every converted guard, and audit `dev/bypass-log/`
-      for the entries this feature added, in writing
+- [x] T13 `CLAUDE.md`: every converted row rewritten, plus a new standing section - **a guard that
+      can produce the compliant command should produce it** - carrying the three-way ladder (REWRITE
+      / TEACH FREE / STAY A REFUSAL), the 280-firing measurement, and pointers to R3 and R6 for the
+      guards and Makefile refusals that cannot convert.
+      **BYPASS AUDIT** (the constitution's closing step): this feature added ONE kind of entry to
+      `dev/bypass-log/` - the `PAIR_OK` carried on its gate runs, whose reason is that a delta of
+      guard scripts, suites and docs has no map for a settlement-review to look at (GM 2026-08-29).
+      JUSTIFIED: `git diff --name-only origin/main` returns no `l7r/**` path and no manifest. No
+      `REF_OK`, no FULL run, no `MEASURE_OK`, no `GATE_OK`, no other override
       research: procedure
-      verify: the audit written into this file, and the table read back
+      verify: the audit above, and `git diff --name-only origin/main | grep -E "l7r/|pool/"` empty
