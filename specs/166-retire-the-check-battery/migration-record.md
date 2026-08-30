@@ -113,6 +113,8 @@ differs by tier is the COUNT (a city draws the set: the principal board plus one
 | `marsh_on_low_ground` | same module (the toe sits below the field, oriented by `down_deg`) | same mutation -> RED |
 | `scrub_clear_of_urban_fabric` | same module (cover is not a crop anchor, so it bleeds off the frame) | same mutation -> RED |
 
+| `drain_runs_cross_slope` | `tests/waterfields/test_comb_flow.py` (6 falls, plus rotation and a non-vacuous drain) | the drain made to ignore the fall -> RED |
+
 ## Battery-internal - they go WITH the battery, and owe no destination
 
 These four do not state a rule about a map. They state that the battery's OWN classification tables are
