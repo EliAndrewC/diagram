@@ -78,8 +78,12 @@ the measurements in [`research.md`](research.md).
       research: procedure
       verify: the report itself - the one requirement here that no test can tick
 
-- [x] T14 spec-fidelity round 3 returned CHANGES REQUIRED (a twelfth token), which under Principle
-      XVI is an ESCALATION to the GM rather than a fourth self-review round. The mechanical remedy
+- [x] T14 spec-fidelity round 3 returned CHANGES REQUIRED (a twelfth token). Under the THEN-CURRENT
+      three-round cap that was an escalation; the GM raised the cap to five on 2026-08-30 naming this
+      feature, and round 4 then returned FAITHFUL on fidelity with three accuracy defects in the
+      record (a count of nine that measures as six - in shipped code as well as the spec -
+      `GUARD_EDIT_OK` filed under one kind when it has two, and a review history citing the retired
+      rule). All three fixed. The mechanical remedy
       the reviewer named is implemented rather than argued - the census is DERIVED - and the two
       decisions that remain theirs go in the close-out report
       research: procedure

@@ -37,8 +37,17 @@ def pytest_addoption(parser):  # type: ignore[no-untyped-def]
     )
 
 
+@pytest.hookimpl(tryfirst=True)
 def pytest_collection_modifyitems(config, items):  # type: ignore[no-untyped-def]
-    """TIER RELEVANCE (GM 2026-08-26, feature 133 T17): while scope is locked to the reference hamlet,
+    """TRYFIRST, AND THE REASON IS A TARGET THAT RAN NOTHING (feature 170, found by feature 169's
+    round-4 review). The `tooling` marker below is added BY LOCATION, and pytest applies `-m` in its
+    own `pytest_collection_modifyitems`. Without `tryfirst` ours ran second, so `make tooling`
+    (`pytest -m tooling`) never saw the location-added markers and collected ZERO tests - exit 5,
+    every time, on the target whose whole job is to run that suite and record it green. Selecting by
+    PATH instead would have missed the source-marked tooling tests in `tests/gate/pipeline/`, so the
+    fix is the ordering rather than the selector.
+
+    TIER RELEVANCE (GM 2026-08-26, feature 133 T17): while scope is locked to the reference hamlet,
     a test tagged `tiers("town", "city")` cannot say anything about the map on the sheet - skip it.
     A test with no `tiers` marker is relevant to every tier and always runs."""
     from tests._scope import FULL

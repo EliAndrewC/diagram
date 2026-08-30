@@ -126,8 +126,8 @@ def test_every_recording_branch_names_a_rule_rather_than_defaulting() -> None:
 def test_every_suite_of_a_recording_guard_isolates_the_firing_log() -> None:
     """A suite that drives a recording guard must write into a throwaway log (feature 169).
 
-    Feature 168 added `GUARD_LOG_DIR` isolation to nine suites BY HAND and missed
-    `test-review-gate.sh`, because `review-gate.sh` is not a `*-hooks.sh` file. The cost was
+    Feature 168 added `GUARD_LOG_DIR` isolation to SIX suites BY HAND (measured from its own
+    commits, not remembered) and missed `test-review-gate.sh`, because `review-gate.sh` is not a `*-hooks.sh` file. The cost was
     measurable within a day: 24 of the live census's 113 entries were that suite's `specs/900-x`
     fixtures - in the census this project uses to decide which guards are worth their cost.
     """

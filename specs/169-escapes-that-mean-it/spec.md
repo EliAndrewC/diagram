@@ -60,7 +60,8 @@ The classification has four kinds, and only the first needs code:
 
 | kind | tokens | why it is safe |
 |---|---|---|
-| **command** - must route through `_hookmatch.py escape` | `GATE_OK`, `MEASURE_OK`, `POLL_OK`, `DISCARD_OK`, `NO_BRANCH_OK`, `PAIR_OK` (Bash branch), `HOST_GIT_OK`, `GUARD_EDIT_OK`, `MAIN_TREE_OK` | converted by this feature; a second check fails the build if any guard decides a command escape by substring again |
+| **command** - must route through `_hookmatch.py escape` | `GATE_OK`, `MEASURE_OK`, `POLL_OK`, `DISCARD_OK`, `NO_BRANCH_OK`, `PAIR_OK` (Bash branch), `HOST_GIT_OK`, `MAIN_TREE_OK` | converted by this feature; a second check fails the build if any guard decides a command escape by substring again |
+| **command AND content** | `GUARD_EDIT_OK` | two matchers, and only one is converted: `classify()` routes the COMMAND use through `escape_used`, while `guard-file-hooks.sh` matches the marker in an Edit's body as CONTENT - deliberately, on the same ground as `SOURCE_EDIT_OK` |
 | **content** | `SOURCE_EDIT_OK` | matched inside an Edit's `new_string`, never in a command - the marker in the text IS the escape, so a "mention" is the intended use |
 | **environment** | `REVIEW_GATE_OK`, `GATE_STAMP_OK` | read as `${TOKEN:-}` at push time; an environment variable cannot be set by naming it in a command, so there is nothing to convert |
 | **make-variable / not an escape** | `REF_OK`; `SWEEP_OK`, `REMOTE_OK` | `REF_OK` is a make override already anchored positionally by `_hookmatch.py`; the other two are Makefile macros that override nothing |
@@ -80,7 +81,9 @@ than the one being fixed.
 
 **The matcher is the one that already exists.** `scripts/_hookmatch.py` strips heredoc bodies and
 quoted regions for exactly this reason, and every blocking decision in the repository already routes
-through it. The escape branches are the last substring tests left.
+through it. The COMMAND escape branches are the last substring tests left. Two substring matches remain and are
+not violations: `guard-file`'s content match above, and `_hookmatch.combine()`'s `"GATE_OK" in cmd`,
+which fails SAFE - it declines a rewrite and permits nothing.
 
 ### FR-002 - a mention must not disarm a guard
 
@@ -94,13 +97,17 @@ This is the half that makes FR-001 a correctness fix rather than a reporting one
 
 ### FR-003 - no suite writes fixture firings into the live census
 
-`scripts/test-review-gate.sh` isolates `GUARD_LOG_DIR` for the whole file, as the other ten suites do
-since features 162/164/168. The census is the input to every future tuning decision, and 24 of its
+`scripts/test-review-gate.sh` isolates `GUARD_LOG_DIR` for the whole file, as the other suites already
+do (measured: 15 files isolate the log once this feature lands, the shared runner
+`test_hooks_cases.py` among them). The census is the input to every future tuning decision, and 24 of its
 113 entries are currently fixtures from this one suite.
 
 **And the rule is enforced rather than remembered**: a test asserts that every `test-*.sh` whose
-guard records also isolates the log. Feature 168 added the isolation to nine suites by hand and
-missed this one, because `review-gate.sh` is not a `*-hooks.sh` file - a hand-list again.
+guard records also isolates the log. Feature 168 added the isolation to SIX suites by hand
+(measured from its own two script-touching commits: `agent-stall`, `batching`, `clone-sync`, `discard`,
+`no-branch`, `readme`) and missed this one, because `review-gate.sh` is not a `*-hooks.sh` file - a
+hand-list again. The round-4 review caught this feature quoting `nine`, which is the same class of
+error as the census it exists to fix, in a document about that error.
 
 ### FR-004 - every recording branch names its rule, and the test covers every guard
 
@@ -195,22 +202,25 @@ or on any command naming a clone. The declined candidate (a) is not revived - no
 ## Review history
 
 Constitution XVI: reviewed against [`request.md`](request.md) by an independent `spec-fidelity`
-subagent. **Three rounds, and the third still returned changes - which under Principle XVI is an
-ESCALATION to the GM, not a fourth self-review round.**
+subagent. **Four rounds. The third returned changes and was an escalation under the THEN-CURRENT three-round
+cap; the GM raised that cap to five on 2026-08-30, naming this feature and this exact round-3 finding
+as the reason (`.specify/memory/constitution.md`, "AT MOST five rounds"). Round 4 then returned
+FAITHFUL on fidelity.**
 
 | round | verdict | what it found |
 |---|---|---|
 | 1 | CHANGES REQUIRED | FR-006's warrant was FALSE: it claimed to meet `CLAUDE.md`'s stated condition for reopening the hook the GM declined in 2026-08-17, when that condition names the read-only mislabeled-tree diagnostic which FR-006 excludes by construction. Also confirmed, when asked directly, that all five findings are in scope and that it would have flagged a spec building only three |
 | 2 | CHANGES REQUIRED | the token census was incomplete and its completeness claim false - `HOST_GIT_OK` disarms the `/host-l7r-repo` mount guard on a mention, found because the reviewer noticed its OWN audit command would have disarmed it. Also: the `pair` prompt branch needed an explicit in-or-out ruling |
 | 3 | CHANGES REQUIRED | the census was short AGAIN - `GATE_STAMP_OK`, a twelfth token. Adjudicated the `pair` prompt exclusion LEGITIMATE under Principle XVI. Its diagnosis, quoted because it is the useful part: *"three drafts have each asserted a complete census ... and each has been short by one, found by the reviewer and not by the author. That is a persistent blind spot in how the census is being produced - it is being written from memory of the guards rather than derived from the tree"* |
+| 4 | **FAITHFUL** on fidelity, CHANGES REQUIRED on the record | ran only because the GM raised the cap to five, citing this feature. Verified every requirement against the SHIPPED code, line by line: nothing missing, nothing extra. Found three accuracy defects in the record, all fixed above - a count of "nine suites" that measures as SIX (the same wrong number sat in shipped code, in the docstring of the very check that exists to stop hand-written lists); `GUARD_EDIT_OK` filed under one kind when it has two matchers and only one is converted; and a Review history resting on the three-round rule the GM had just retired |
 
-**THIS SPEC SHIPS WITHOUT A FAITHFUL VERDICT, DELIBERATELY, AND `review-gate` REFUSES IT.** That
-refusal is correct - constitution XVI wants a reviewed spec, and this one carries three CHANGES
-REQUIRED and no approval. It is not fixable by review: a fourth round is exactly what Principle XVI
-forbids (*"three failures means a persistent misunderstanding a fourth attempt will not find"*), so
-seeking a FAITHFUL stamp would be gaming the check rather than satisfying it. The push therefore uses
-`REVIEW_GATE_OK` with the escalation as its reason, which is how that escape is meant to work - the
-reason ships with the push and is logged to `dev/bypass-log/`. The implementation is green
+**THIS SPEC SHIPPED WITHOUT A FAITHFUL VERDICT, AND THAT IS THE HISTORICAL RECORD.** At push time the
+cap was three rounds, all three had returned CHANGES REQUIRED, and a fourth was forbidden - so
+`review-gate` refused, correctly, and the push used `REVIEW_GATE_OK` with the escalation as its
+reason, logged to `dev/bypass-log/`. The GM then raised the cap to five BECAUSE of this feature, and
+round 4 returned FAITHFUL on fidelity with three accuracy defects in the record, which are fixed
+above. The bypass stays in the history; what is corrected here is the claim that a fourth round was
+forbidden, which the constitution no longer says. The implementation is green
 (`make hooks-test` and `make done`), the reviewer's substantive remedy is implemented rather than
 argued, and the two decisions that remain are the GM's.
 
