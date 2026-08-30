@@ -356,6 +356,10 @@ survived two adversarial passes, and found four more defects. All four are appli
 | F3 | `research.md` still cited FR-011 and the old SC-005, both removed at round 1. Neither earlier round read that file. | Corrected. |
 | F4 | The "incidental firing" edge case read as a route to delete a check that demonstrably fired - *"the mirror of round 1's finding 1"*. | Separated: incidental firing IS firing under FR-001 and is never a deletion candidate; whether it EARNS ITS KEEP is FR-009's question and therefore the GM's. |
 
+**ESCALATION RESOLVED BY THE GM, 2026-08-30.** Asked what was waiting on them, the GM answered *"go"* -
+which covered both the escalation and the FR-003 deletion criterion (`gm-request.md`). The feature
+proceeded from T09. The record of what the procedure cost and bought is below, unchanged.
+
 **ESCALATED, per constitution XVI.** The procedure is three rounds, then stop and escalate rather than
 attempt a fourth. That is what this feature is doing: the fixes above are applied, and **implementation of
 the DELETION (T08-T13) is held until the GM rules.** The reviewer's own qualification is recorded here

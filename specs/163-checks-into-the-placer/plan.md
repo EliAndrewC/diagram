@@ -42,8 +42,22 @@ the first is not finished being planned.
 
 | | label | total | median | worst | notes |
 |---|---|---|---|---|---|
-| before | `163-start` | | | | taken on UNMODIFIED code, before the first edit (T01) |
-| after | `163-end` | | | | taken before the push (T16) |
+| before | `163-start` | **95.5s** | **24.4s** | **25.6s** | taken on UNMODIFIED code (b3917d5c) in the detached worktree `/tmp/base163`, on an idle box. Recorded as `...-163-start-base163.json` and copied into the clone's `dev/perf-log/`: the `environment` field is `local` in both trees with the same host and hostname, which is what `perf_snapshot` compares on, and the filename keeps `base163` because that is honestly where the measurement was taken |
+| after | `163-end` | **95.1s** | **24.4s** | **25.5s** | taken in the clone at 020dcb98, before the push |
+
+**Band 0 - no increase on the total or on any seed**, so nothing is owed under feature 129:
+
+    seed   4    23.7s ->   23.5s    -0.8%
+    seed  25    25.6s ->   25.5s    -0.4%
+    seed  39    21.0s ->   20.9s    -0.5%
+    seed  47    25.2s ->   25.2s    +0.0%
+    TOTAL       95.5s ->   95.1s    -0.4%
+
+Flat, as predicted before the number was seen, and the prediction is recorded because a bookend that
+merely confirms an expectation is worth less than one that could have refuted it. The delta adds one
+`os.environ` lookup per FAILING check - zero on a green map - and removes five names from a battery that
+runs inside every roll; the one real cost is a single registry re-derivation, `_DERIVATION_VERSION` having
+gone to 3. A -0.4% total is that cost being invisible against the noise floor, not a win to claim.
 
 `make perf LABEL=163-start` -> work -> `make perf LABEL=163-end` -> `make perf-report AGAINST=163-start`.
 This is the constitution's regression bookend, not FR-011 (which the review removed). This feature should

@@ -119,7 +119,7 @@ finding and is therefore `physical` with its three boxes.
 
 ## Phase 5 - gate, bookend, report
 
-- [ ] **T16** `make verify` (the gate and its paired review together, feature 151). Fix everything it
+- [x] **T16** `make verify` (the gate and its paired review together, feature 151). Fix everything it
       lists, then re-run once. Then `make perf LABEL=163-end` and `make perf-report AGAINST=163-start`;
       diagnose in writing, with the number, any seed that got SLOWER - a deletion that slows a roll means
       something was removed that the roll depended on. (The constitution's regression bookend; the spec
