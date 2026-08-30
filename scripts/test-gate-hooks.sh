@@ -5,6 +5,12 @@ set -uo pipefail
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 HOOK="$HERE/gate-hooks.sh"
 PASS=0; FAIL=0
+# GUARD_EDIT_OK: feature 162 - EVERY vector in this file writes its guard-log entries to a
+# throwaway directory. Without this the suite pollutes the real census (`make audit`), which
+# exists to answer whether a guard is worth what it costs: 160 entries appeared there within
+# minutes of the census landing, nearly all of them fixtures.
+GUARD_LOG_ROOT=$(mktemp -d); export GUARD_LOG_DIR="$GUARD_LOG_ROOT"
+trap 'rm -rf "$GUARD_LOG_ROOT"' EXIT
 
 setup() { STATE_DIR=$(mktemp -d); export GATE_STATE_DIR="$STATE_DIR"; }
 teardown() { rm -rf "$STATE_DIR"; }
@@ -110,7 +116,7 @@ setup
 GL=$(mktemp -d); export GUARD_LOG_DIR="$GL"
 run "$(bash_ev 'make quick && make done')"
 grep -lq '"event": "rewrote"' "$GL"/*.json 2>/dev/null && { echo "  ok    a rewrote entry was written"; PASS=$((PASS+1)); } || { echo "  FAIL  the rewrite was not recorded"; FAIL=$((FAIL+1)); }
-rm -rf "$GL"; unset GUARD_LOG_DIR
+rm -rf "$GL"; export GUARD_LOG_DIR="$GUARD_LOG_ROOT"   # GUARD_EDIT_OK: feature 162 - restore the FILE-level isolation, never unset it
 untouched 'grep -n "make quick.*make done" docs/iteration-loop.md'
 untouched 'git commit -m "make quick while iterating, make done once at the end"'
 untouched 'echo "make quick; make done" > /tmp/notes.txt'
@@ -143,5 +149,11 @@ run "$(bash_ev 'make done')"; check "...and the real gate is still blocked once"
 teardown
 
 echo
+# GUARD_EDIT_OK: feature 162 - THE SUITE MUST NOT WRITE TO THE REAL CENSUS. A section that borrows
+# GUARD_LOG_DIR has to hand it back; one that `unset` it silently dropped the file-level isolation and
+# every later vector wrote fixture events into `make audit`'s totals. Proved rather than remembered.
+if [ "${GUARD_LOG_DIR:-}" = "$GUARD_LOG_ROOT" ]; then echo "  ok    the guard log stayed isolated from the real census"; PASS=$((PASS+1));
+else echo "  FAIL  GUARD_LOG_DIR was left as '${GUARD_LOG_DIR:-<unset>}' - fixture events would land in make audit"; FAIL=$((FAIL+1)); fi
+
 if [ "$FAIL" -eq 0 ]; then echo "test-gate-hooks: all $PASS checks passed"; exit 0; fi
 echo "test-gate-hooks: $FAIL FAILED, $PASS passed"; exit 1

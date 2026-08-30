@@ -7,6 +7,12 @@ set -uo pipefail
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 HOOK="$HERE/measure-hooks.sh"
 PASS=0; FAIL=0
+# GUARD_EDIT_OK: feature 162 - EVERY vector in this file writes its guard-log entries to a
+# throwaway directory. Without this the suite pollutes the real census (`make audit`), which
+# exists to answer whether a guard is worth what it costs: 160 entries appeared there within
+# minutes of the census landing, nearly all of them fixtures.
+GUARD_LOG_ROOT=$(mktemp -d); export GUARD_LOG_DIR="$GUARD_LOG_ROOT"
+trap 'rm -rf "$GUARD_LOG_ROOT"' EXIT
 
 setup() { STATE_DIR=$(mktemp -d); export MEASURE_STATE_DIR="$STATE_DIR"; }
 teardown() { rm -rf "$STATE_DIR"; }
@@ -113,7 +119,7 @@ for want in reminded blocked escaped; do
   grep -lq "\"event\": \"$want\"" "$GL"/*.json 2>/dev/null && { echo "  ok    a $want entry was written"; PASS=$((PASS+1)); } || { echo "  FAIL  no $want entry in the guard log"; FAIL=$((FAIL+1)); }
 done
 grep -hq '"detail": "make test-full"' "$GL"/*.json 2>/dev/null && { echo "  ok    the entry records the command, parsed rather than greedily matched"; PASS=$((PASS+1)); } || { echo "  FAIL  the recorded detail is not the command"; FAIL=$((FAIL+1)); }
-rm -rf "$GL"; unset GUARD_LOG_DIR
+rm -rf "$GL"; export GUARD_LOG_DIR="$GUARD_LOG_ROOT"   # GUARD_EDIT_OK: feature 162 - restore the FILE-level isolation, never unset it
 teardown
 
 echo "11. a log that cannot be written never takes the guard down with it"
@@ -121,7 +127,7 @@ setup
 export GUARD_LOG_DIR=/proc/nonexistent/guard-log
 run "$(bash_ev 'make test-full')"; check "the first run still succeeds with an unwritable log" ok $?
 run "$(bash_ev 'make test-full')"; check "...and the second is still blocked" blocked $?
-unset GUARD_LOG_DIR
+export GUARD_LOG_DIR="$GUARD_LOG_ROOT"   # GUARD_EDIT_OK: feature 162 - restore the FILE-level isolation, never unset it
 teardown
 
 echo "8. status reports the count"
@@ -131,5 +137,11 @@ run "$(bash_ev 'make test-full')"
 teardown
 
 echo
+# GUARD_EDIT_OK: feature 162 - THE SUITE MUST NOT WRITE TO THE REAL CENSUS. A section that borrows
+# GUARD_LOG_DIR has to hand it back; one that `unset` it silently dropped the file-level isolation and
+# every later vector wrote fixture events into `make audit`'s totals. Proved rather than remembered.
+if [ "${GUARD_LOG_DIR:-}" = "$GUARD_LOG_ROOT" ]; then echo "  ok    the guard log stayed isolated from the real census"; PASS=$((PASS+1));
+else echo "  FAIL  GUARD_LOG_DIR was left as '${GUARD_LOG_DIR:-<unset>}' - fixture events would land in make audit"; FAIL=$((FAIL+1)); fi
+
 echo "measure-hooks: $PASS passed, $FAIL failed"
 [ "$FAIL" -eq 0 ]

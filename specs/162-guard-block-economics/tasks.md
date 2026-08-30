@@ -104,6 +104,21 @@ guards and watching the test go red - the project's rule for adding a guard.
       verify: the probe transcript, and reading the two edited passages back
 
       DONE: `CLAUDE.md`: the iteration-loop bullet, the make-ladder bullet, the `measure-hooks` guard row and a new row for the firing log; the skill's own `CLAUDE.md` lost its undated "~5.5 min" headline
+## Phase 6 - the defect the census found in itself
+
+- [x] T16 **THE SUITES WERE POLLUTING THE CENSUS THEY BUILT.** The first `make audit` after the
+      firing log landed showed 160 entries in 19 minutes, nearly all of them fixture events from
+      `make hooks-test` - which would have made "is this guard worth what it costs" unanswerable from
+      its own log, the one question it exists for. Two causes: only two sections isolated
+      `GUARD_LOG_DIR`, and those two handed it back with `unset`, which dropped the file-level
+      isolation so every later vector wrote to the real log. Both suites now export a throwaway root
+      once, restore it rather than unsetting, and ASSERT at the end that it was never left dropped;
+      the 160 fixture entries were purged (their `session` is the suites' own `m1`/`g1`, which is
+      what made them separable). Found by reading the census this feature added, not by a test
+      research: procedure
+      verify: purge, run both suites, count the real log - 0 before and 0 after; and the new
+      assertion goes red when a section leaves `GUARD_LOG_DIR` dropped
+
 ## Phase 5 - close
 
 - [x] T14 `make hooks-test`: **19 guard suites green, exit 0** - the same 19 the T01 baseline reported,
