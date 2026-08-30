@@ -75,16 +75,24 @@ ACREAGE_SHORT: dict[int, str] = {
 }
 
 GATE_COHORT_EXPECTED: dict[int, frozenset[str]] = {
-    # seed 42 (farmhouses_reach_a_way) and two of seed 43's three (lanes_form_one_network, title_clear_of_features)
-    # came up clean when feature 145 moved the maps (the field solver); 43's routed footpath still keeps a 36 px
-    # lattice step round a house corner that neither the chord nor the knee can take (research R2b) - the one pin left
-    43: frozenset({"lanes_bend_like_paths"}),
-    # seed 45 dropped `lanes_do_not_break_mid_run` on 2026-08-29 (feature 134 T50): the footpath router's
-    # clipped runs are simplified now, so the break that pin described is gone. A pinned check that passes
-    # is a STALE pin and `baseline_verdict` fails on it, which is the mechanism working - the pin only ever
-    # loosens otherwise. The windbreak entry stays; it is untouched by that work.
-    45: frozenset({"village_windbreak_is_continuous"}),  # measured 2026-08-28 when the FULL cohort grew to eight (feature 145); 46 re-rolls once and is clean, 47 and 48 are clean
-    # seed 44 pinned `houses_clear_of_paddies` until feature 141 retired that check (the placer's chains are the guarantee)
+    # EMPTY SINCE FEATURE 166, AND ITS TWO PINS MOVED RATHER THAN VANISHED. `Report.failures` no longer
+    # carries check-battery names - a roll's self-report is `farmhouses_reach_a_way` and nothing else -
+    # so `baseline_verdict` would read every other pinned name as a STALE PIN and fail on it. That is the
+    # mechanism working, not a bug in it: a pin nothing can read is not a pin.
+    #
+    # WHERE THE TWO WENT, and both were VERIFIED before being moved rather than assumed dead:
+    #   seed 43 `lanes_bend_like_paths` - STILL REAL. Rolled it and ran the re-homed predicate: one kink
+    #     at (991, 188), while seeds 41, 42 and 44 are clean. It is now held by
+    #     `tests/gate/test_cohort_lane_rules.py`, which runs the lane rules over the whole gate cohort
+    #     and carries seed 43 as a STRICT xfail - so it stays visible and the gate goes red the day the
+    #     router stops making it.
+    #   seed 45 `village_windbreak_is_continuous` - a FULL-cohort seed this gate scope never rolls. The
+    #     rule itself migrated with the rest of the belt rules; the seed-45 instance is ledgered in
+    #     `future-work/farming-communities.md` because verifying it needs the FULL cohort, and a pin
+    #     asserted from a heuristic I have not checked is worse than no pin (my first attempt at a
+    #     continuity measure flagged all four gate seeds, which is how I know).
+    # seed 42 and two of seed 43's three came up clean when feature 145 moved the maps (the field solver).
+    # seed 44 pinned `houses_clear_of_paddies` until feature 141 retired that check.
 }
 
 

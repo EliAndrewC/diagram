@@ -32,7 +32,7 @@ def test_the_real_pool_round_trips_through_the_cache():
     that is absent - so the dependency was this test's own bookkeeping, not the behavior it
     exercises. (Confirmed 2026-08-16 by running it in a fresh clone at the pre-reorganization
     commit: same failure, so it long predates the tests/ move.)"""
-    gen = os.path.join(HERE, "pool", "hamlets", "inashiro.gen.py")
+    gen = os.path.join(HERE, "pool", "hamlets", "inashiro", "inashiro.gen.py")  # feature 161 moved every map into a per-map folder; this literal kept the flat path and stopped matching SILENTLY (found by feature 166's FULL run, fixed on sight per constitution XIV)
     base = gen[: -len(".gen.py")]
     manifest = base + ".json"
     # nothing here creates a render (the gen runs under DIAGRAM_SKIP_RENDER), so restoring exactly

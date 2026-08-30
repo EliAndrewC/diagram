@@ -2199,3 +2199,18 @@ the shortfall is invisible - the rolled share is recorded, the achieved one is n
 property - a realized rate against a declared knob - was invisible to the retired battery *and* is
 invisible to its successors, because the battery ran per manifest while `tests/gate/` runs seed tests on
 a cached roll. That gap is closed by a ratchet in `tests/full/` over the live pool; see the entry below.
+
+## SEED 45'S WINDBREAK PIN NEEDS THE FULL COHORT TO VERIFY (feature 166, 2026-08-30)
+
+`GATE_COHORT_EXPECTED` held seed 45 against `village_windbreak_is_continuous`. Seed 45 is a FULL-cohort
+member, so the gate scope never rolls it, and the pin could not be moved into a gate test the way seed
+43's kink was.
+
+**What was NOT done, deliberately.** I wrote a continuity heuristic to check it and the heuristic flagged
+ALL FOUR gate seeds, which means it does not describe the rule - a belt's clumps are not simply
+consecutive along its long axis. A pin asserted from a measure I have not validated is worse than no pin,
+because it looks like verification. So the instance is ledgered here rather than re-asserted.
+
+**To close it:** roll the FULL cohort, read the belt on seed 45 against the real continuity predicate the
+belt placer uses, and either fix the placer or carry the seed as a strict xfail beside seed 43's in
+`tests/gate/test_cohort_lane_rules.py`'s successor.
