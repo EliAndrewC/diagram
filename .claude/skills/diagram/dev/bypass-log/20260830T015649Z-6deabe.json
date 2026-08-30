@@ -1,0 +1,6 @@
+{
+  "utc": "20260830T015649Z",
+  "guard": "pair-hooks",
+  "what": "gate alone",
+  "reason": "settlement-review is not owed: MEASURED, not asserted - git diff --stat over this feature"
+}
