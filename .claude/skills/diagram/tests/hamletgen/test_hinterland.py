@@ -292,3 +292,77 @@ def test_bamboo_blocked_keeps_its_pad_off_the_crop_edge() -> None:
     paddy = [(400.0, 400.0), (600.0, 400.0), (600.0, 600.0), (400.0, 600.0)]
     assert bamboo_blocked(390.0, 500.0, extent, nowhere, [], [], [(paddy, 20.0)], None, 30.0), "10 ft outside, inside a 20 ft pad"
     assert not bamboo_blocked(370.0, 500.0, extent, nowhere, [], [], [(paddy, 20.0)], None, 30.0), "30 ft outside, clear of the pad"
+
+
+# ---- the windbreak belt's own guarantees (feature 166) -------------------------------------------
+# Carrying `village_windbreak_present`, `_embraces_cluster`, `_scales_with_cluster` and
+# `_is_continuous`, which the retired battery re-measured on every finished map. A back-village grove
+# is planted where the houses are, so all four are properties of `belt_polygon`'s output RELATIVE to
+# the cluster it shelters - which is why they are asserted against a cluster built here rather than
+# against a rolled map.
+
+
+def _cluster(s, xs, y=700.0):
+    s.M["houses"] = [{"x": x, "y": y, "w": 46.0, "h": 28.0} for x in xs]
+
+
+def test_an_ordinary_cluster_gets_a_belt_at_all() -> None:
+    """`village_windbreak_present`. A settlement with no windbreak is a settlement nobody planted,
+    and the belt is the commonest piece of managed vegetation on a farming map."""
+    plan = a_plan()
+    s = Settlement(W=plan.W, H=plan.H, seed=plan.spec.seed)
+    _cluster(s, (600.0, 660.0, 720.0, 780.0, 840.0))
+    belt = hg.belt_polygon(s, plan)
+    assert belt and len(belt) >= 4, "an ordinary cluster must get a belt"
+
+
+def test_the_belt_stands_on_the_WINDWARD_side_of_the_cluster() -> None:
+    """`village_windbreak_embraces_cluster`. A belt downwind of the houses shelters nothing - it is
+    the wind it is planted against, so its side is the whole point rather than a detail."""
+    plan = a_plan()
+    s = Settlement(W=plan.W, H=plan.H, seed=plan.spec.seed)
+    xs = (600.0, 660.0, 720.0, 780.0, 840.0)
+    _cluster(s, xs)
+    belt = hg.belt_polygon(s, plan)
+    wx, wy = plan.wind
+    ccx, ccy = sum(xs) / len(xs), 700.0
+    bcx = sum(p[0] for p in belt) / len(belt)
+    bcy = sum(p[1] for p in belt) / len(belt)
+    # THE CONVENTION, measured rather than assumed: `plan.wind` points TOWARD the windward side (the
+    # direction the wind comes FROM), so the belt's centre offsets along +wind. Measured on this very
+    # fixture: wind (0, -1), cluster centre (720, 700), belt centre (720, 547) - 153 px along +wind.
+    # My first draft asserted the opposite sign and failed, which is the cheapest possible way to
+    # learn a convention and the reason it is written down here instead of remembered.
+    assert (bcx - ccx) * wx + (bcy - ccy) * wy > 0, "the belt sits downwind of the cluster it should shelter"
+
+
+def test_a_wider_cluster_gets_a_longer_belt() -> None:
+    """`village_windbreak_scales_with_cluster`. A belt that shelters three houses of a twenty-house
+    settlement fails the rule and deserves to: the band is sampled across the cluster's own windward
+    profile, so its length has to follow the cluster's width."""
+    plan = a_plan()
+    narrow = Settlement(W=plan.W, H=plan.H, seed=plan.spec.seed)
+    _cluster(narrow, (700.0, 740.0, 780.0))
+    wide = Settlement(W=plan.W, H=plan.H, seed=plan.spec.seed)
+    _cluster(wide, tuple(400.0 + 80.0 * i for i in range(12)))
+
+    def _span(belt):
+        return max(p[0] for p in belt) - min(p[0] for p in belt)
+
+    assert _span(hg.belt_polygon(wide, plan)) > _span(hg.belt_polygon(narrow, plan)), (
+        "a twelve-house cluster got no more belt than a three-house one"
+    )
+
+
+def test_the_belt_is_one_band_rather_than_scattered_pieces() -> None:
+    """`village_windbreak_is_continuous`. A windbreak with a hole in it funnels wind through the gap
+    rather than lifting it over, which is worse than no belt. The footprint is a single ring, and a
+    ring is continuous by construction - so what this pins is that it STAYS one, at constant depth,
+    rather than degenerating as the profile it follows gets ragged."""
+    plan = a_plan()
+    s = Settlement(W=plan.W, H=plan.H, seed=plan.spec.seed)
+    _cluster(s, (200.0, 260.0, 320.0, 1300.0, 1360.0, 1420.0))  # the gapped cluster, deliberately ragged
+    belt = hg.belt_polygon(s, plan)
+    assert belt, "even a gapped cluster gets a belt"
+    xs = [p[0] for p in belt]
+    assert max(xs) - min(xs) > 800.0, "the belt spans the whole ragged fringe rather than one lobe of it"

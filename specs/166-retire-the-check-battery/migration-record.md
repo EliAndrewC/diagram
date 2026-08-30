@@ -59,6 +59,11 @@ box" - measuring the wrong one made every seat look illegal and the fallback too
 | `polder_edges_wander` | same module | `lwander` made to return (0, 0) -> RED |
 | `polder_dike_gapped_at_sluices` | same module | - |
 
+| `village_windbreak_present` | `tests/hamletgen/test_hinterland.py` (belt suite) | `belt_polygon` made to return [] -> RED |
+| `village_windbreak_embraces_cluster` | same suite (the belt's centre projects along +wind) | same mutation -> RED |
+| `village_windbreak_scales_with_cluster` | same suite (a 12-house cluster gets more belt than a 3-house one) | same mutation -> RED |
+| `village_windbreak_is_continuous` | same suite (the belt spans a ragged fringe rather than one lobe) | same mutation -> RED |
+
 ## Already carried by an existing test - dropped against it, not rewritten
 
 | check | carried by | proof |
