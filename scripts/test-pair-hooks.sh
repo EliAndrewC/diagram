@@ -27,10 +27,20 @@ rc_pretool() { ( cd "$CLONE" && printf '%s' "$1" | "$HOOK" pretool >/dev/null 2>
 GATE=$(stdin_for Bash '{"command":"make done"}')
 REVIEW=$(stdin_for Agent '{"subagent_type":"settlement-review","prompt":"review the map"}')
 
-# --- 1. each half alone is refused ---------------------------------------------------------------
-check "the gate alone is refused" '[ "$(rc_pretool "$GATE")" -eq 2 ]'
-check "...naming the paired command" 'run_pretool "$GATE" | grep -q "make verify"'
-check "...and the override" 'run_pretool "$GATE" | grep -q "PAIR_OK"'
+# --- 1. neither half runs alone: the gate is CORRECTED into the pair, the review is refused --------
+# GUARD_EDIT_OK: feature 164 - the gate branch no longer spends a round trip telling the session to
+# type `make verify`; it rewrites the command into it (GM 2026-08-30). The RULE is unchanged - the
+# two still run together - but what used to not happen at all now happens correctly. 13 firings of
+# the old refusal, 7 escaped with PAIR_OK in the very next call.
+GATE_FULL=$(stdin_for Bash '{"command":"make done FULL=1"}')
+check "the gate alone is REWRITTEN into the paired command" 'run_pretool "$GATE" | python3 -c "
+import json,sys
+try: sys.exit(0 if json.load(sys.stdin)[\"hookSpecificOutput\"][\"updatedInput\"][\"command\"] == \"make verify\" else 1)
+except Exception: sys.exit(1)"'
+check "...and the correction says to dispatch the review in the same turn" 'run_pretool "$GATE" | grep -q "SAME TURN"'
+check "...and still names the override for a one-sided case" 'run_pretool "$GATE" | grep -q "PAIR_OK"'
+check "a shape that cannot convert is still REFUSED" '[ "$(rc_pretool "$GATE_FULL")" -eq 2 ]'
+check "...naming the paired command" 'run_pretool "$GATE_FULL" | grep -q "make verify"'
 check "a settlement-review alone is refused" '[ "$(rc_pretool "$REVIEW")" -eq 2 ]'
 
 # --- 2. a MENTION is not an invocation ------------------------------------------------------------

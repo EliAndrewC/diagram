@@ -62,9 +62,78 @@ if re.search(r"(^|/)(CLAUDE\.md|constitution\.md|l7r-style\.md|house-style-hooks
 # a SOURCE block inside the added text is the GM speaking; drop it before looking
 body = re.sub(r"<!--\s*SOURCE: GM NOTES.*?<!--\s*END SOURCE\s*-->", " ", body, flags=re.S | re.I)
 
+# GUARD_EDIT_OK: feature 164 - CORRECT THE TEXT INSTEAD OF REFUSING THE EDIT (GM 2026-08-30: *"a tool
+# could do a rewrite or return additional context or whatever"*). Both of the two rules here are exact
+# substitutions with no judgment in them, and a session refused for one of them just retypes the same
+# edit with the fix - measured: 3 firings, 3 identical re-edits. So the fix is applied and the session
+# is told. Three things the correction must never do, each one load-bearing:
+#
+#   - CORRECT THE GM OWN WORDS. The path exemptions above cover l7r.md and gm-request.md but NOT
+#     `specs/NNN-*/request.md`, which is where this repository records the GM verbatim requests -
+#     the authority for every spec. Silently rewriting those would breach Principle V, so a file
+#     recording the GM speaking stays on the REFUSAL path, where a person decides.
+#   - CORRECT A WORD THAT IS BEING NAMED RATHER THAN USED. A backtick span is how the project own
+#     prose marks a token it is discussing, and this guard refused feature 164 own plan for NAMING
+#     a British spelling in a sentence about how it is handled. Spans are held out of both the
+#     detection and the correction.
+#   - GUESS. Every pair below is CLAUDE.md own, one American form per word.
+SPAN = re.compile(r"\x60{3}.*?\x60{3}|\x60[^\x60]*\x60", re.S)  # a code span, written by codepoint: a literal backtick inside $( ) is command substitution
+PAIRS = {
+    "colour": "color", "colours": "colors", "centre": "center", "centres": "centers",
+    "centred": "centered", "behaviour": "behavior", "behaviours": "behaviors",
+    "neighbour": "neighbor", "neighbours": "neighbors", "neighbourhood": "neighborhood",
+    "analyse": "analyze", "analysed": "analyzed", "organise": "organize", "organised": "organized",
+    "recognise": "recognize", "recognised": "recognized", "defence": "defense",
+    "licence": "license", "practise": "practice", "sceptic": "skeptic", "storey": "story",
+    "whilst": "while", "travelled": "traveled", "modelled": "modeled", "programme": "program",
+    "metre": "meter", "litre": "liter", "mould": "mold", "plough": "plow", "kerb": "curb",
+    "draught": "draft", "ageing": "aging", "marvellous": "marvelous", "jewellery": "jewelry",
+    "skilful": "skillful", "artefact": "artifact", "demesne": "domain", "labelled": "labeled",
+    "labelling": "labeling", "judgement": "judgment", "catalogue": "catalog", "honour": "honor",
+    "honours": "honors", "grey": "gray",
+}
+
+
+def _match_case(src, dst):
+    if src.isupper():
+        return dst.upper()
+    if src[:1].isupper():
+        return dst[:1].upper() + dst[1:]
+    return dst
+
+
+def correct(text):
+    """The corrected text and what was corrected, leaving backtick spans exactly as they are."""
+    out, notes, last = [], [], 0
+    for m in SPAN.finditer(text):
+        piece, fixed_notes = _correct_plain(text[last:m.start()])
+        out.append(piece); notes += fixed_notes
+        out.append(m.group(0))               # a span is a MENTION: never touched
+        last = m.end()
+    piece, fixed_notes = _correct_plain(text[last:])
+    out.append(piece); notes += fixed_notes
+    return "".join(out), notes
+
+
+def _correct_plain(text):
+    notes = []
+    for dash, name in (("—", "em-dash"), ("–", "en-dash")):
+        if dash in text:
+            text = re.sub(r"\s*%s\s*" % dash, " - ", text)
+            notes.append(name + " -> hyphen")
+    for brit, amer in PAIRS.items():
+        pat = re.compile(r"\b%s\b" % brit, re.I)
+        if pat.search(text):
+            text = pat.sub(lambda m: _match_case(m.group(0), amer), text)
+            notes.append(brit + " -> " + amer)
+    return text, notes
+
+
+# what a session can actually see, with the spans held out
+visible = SPAN.sub(" ", body)
 hits = []
-if "—" in body: hits.append("em-dash (U+2014)")
-if "–" in body: hits.append("en-dash (U+2013)")
+if "—" in visible: hits.append("em-dash (U+2014)")
+if "–" in visible: hits.append("en-dash (U+2013)")
 BRIT = ("colour","colours","centre","centres","centred","behaviour","behaviours","neighbour",
         "neighbours","neighbourhood","analyse","analysed","organise","organised","recognise",
         "recognised","defence","licence","practise","sceptic","storey","whilst","travelled",
@@ -72,12 +141,49 @@ BRIT = ("colour","colours","centre","centres","centred","behaviour","behaviours"
         "marvellous","jewellery","skilful","artefact","demesne","labelled","labelling","judgement",
         "catalogue","honour","honours","grey")
 for w in BRIT:
-    if re.search(rf"\b{w}\b", body, re.I):
+    if re.search(rf"\b{w}\b", visible, re.I):
         hits.append(w)
-print(" | ".join(hits[:6]))
+if not hits:
+    print(""); raise SystemExit
+
+# THE GM SPEAKING IS NEVER CORRECTED - only refused, so a person decides (Principle V).
+GM_VERBATIM = re.search(r"specs/[^/]+/request\.md$", path) or path.endswith("gm-request.md")
+
+# CAN THE WHOLE EDIT BE FIXED MECHANICALLY? Only then is it corrected; a violation the table cannot
+# reach keeps the refusal, because a partial correction would hide what is left.
+fixed_fields, notes = {}, []
+for field in ("new_string", "content"):
+    if field in inp and isinstance(inp[field], str):
+        got, got_notes = correct(inp[field])
+        fixed_fields[field] = got
+        notes += got_notes
+leftover = SPAN.sub(" ", "".join(fixed_fields.values()))
+still_bad = "—" in leftover or "–" in leftover or any(
+    re.search(rf"\b{w}\b", leftover, re.I) for w in BRIT
+)
+
+if fixed_fields and notes and not still_bad and not GM_VERBATIM:
+    payload = dict(inp)
+    payload.update(fixed_fields)
+    print(json.dumps({"hookSpecificOutput": {
+        "hookEventName": "PreToolUse",
+        "updatedInput": payload,
+        "additionalContext": (
+            "House style was applied to this edit for you (" + ", ".join(notes[:6]) + "). "
+            "Both rules are exact substitutions from CLAUDE.md, so the correction is made rather "
+            "than the edit refused - a refusal costs a model round trip to say the same thing. "
+            "Text inside backticks was left alone: a word in a code span is being named, not used."),
+    }}))
+    raise SystemExit
+
+print(" | ".join(hits[:6]) + (" [the GM own words - not corrected, only reported]" if GM_VERBATIM else ""))
 ')
 
 [ -z "$REPORT" ] && exit 0
+# GUARD_EDIT_OK: feature 164 - a JSON verdict is a CORRECTION to pass through, not a report to block on.
+case "$REPORT" in
+  '{'*) printf '%s\n' "$REPORT"; exit 0 ;;
+esac
 
 cat >&2 <<TAIL
 BLOCKED: house style ($REPORT).

@@ -255,6 +255,34 @@ _PROCMATCH = re.compile(
 )
 
 
+def as_paired(cmd: str) -> str | None:
+    """`make done` as `make verify` - the paired command - or None to keep refusing.
+
+    `pair-hooks` refuses the gate when no review is beside it, and names `make verify` in the refusal.
+    That is a substitution, so it is performed: the gate still runs, and the session is told to
+    dispatch the review in the same turn. Only an invocation whose goals are EXACTLY `done` converts;
+    `make done FULL=1` and anything carrying another goal keep the refusal, because `verify` is not
+    defined to take them and a guard may not guess at what a session meant.
+    """
+    if not cmd or "FULL" in cmd:
+        return None
+    # TWO REWRITES MUST NOT RACE FOR ONE COMMAND. `gate-hooks` combines a `quick`+`done` command into
+    # `make done`; if this one also fired, the outcome would depend on hook order, and a guard whose
+    # result is unpredictable is worse than one that refuses. So a command naming `quick` is left to
+    # that conversion, and this one declines it.
+    if "quick" in _goals(cmd):
+        return None
+    segs = _SEP.split(cmd)[0::2]
+    hits = [s for s in segs if _MAKE_HEAD.match(s.strip()) and _goals(s) == {"done"}]
+    if len(hits) != 1:
+        return None
+    seg = hits[0]
+    rebuilt = re.sub(r"(?<=\s)done(?=\s|$)", "verify", seg, count=1)
+    if _goals(rebuilt) != {"verify"}:
+        return None
+    return cmd.replace(seg, rebuilt, 1)
+
+
 def bracket_pattern(cmd: str) -> str | None:
     """`cmd` with a literal process-match pattern bracketed, or None when there is nothing to fix."""
     m = _PROCMATCH.search(cmd)
@@ -301,6 +329,10 @@ if __name__ == "__main__":
     # matches its shapes against THIS answers "is it invoked" instead of "is it mentioned". Three
     # guards fired on this feature's own documents for naming the shapes they forbid; two of them are
     # fixed by running their existing patterns against this instead of the raw text.
+    elif len(sys.argv) > 1 and sys.argv[1] == "as-paired":
+        got = as_paired(payload)
+        if got:
+            print(got)
     elif len(sys.argv) > 1 and sys.argv[1] == "sanitize":
         print(_strip_quotes(_strip_heredocs(payload)))
     else:
