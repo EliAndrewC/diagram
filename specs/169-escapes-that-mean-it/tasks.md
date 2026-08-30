@@ -78,6 +78,7 @@ the measurements in [`research.md`](research.md).
       research: procedure
       verify: the report itself - the one requirement here that no test can tick
 
-- [ ] T13 the whole guard suite and the gate, green together, then the push
+- [x] T13 the whole guard suite and the gate, green together, then the push
       research: procedure
-      verify: `make hooks-test` and `make done`, then `sync-with-main.sh done`
+      verify: `make hooks-test` exit 0 and `make done` exit 0 together, after one red round
+      that `pair-hooks` caught (R8); then `sync-with-main.sh done`

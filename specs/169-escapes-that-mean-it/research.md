@@ -148,3 +148,15 @@ whether its escape line names the same variable the file assigns from `cat`. All
 
 **The rule this earns**: an escape is tested in BOTH directions, always. `tests/tooling/test_guard_firing_log.py`
 and each guard's own suite now do that for every token.
+
+## R9 - the live census still shows the defect, and that is the correct reading
+
+Checked after the gate went green: 63 entries landed in the live log during this feature's own
+implementation window, including 8 `gate gate-ok` and 4 `measure escaped` - for a session that never
+once escaped either guard. They are mentions: commit messages and spec text naming the tokens.
+
+That is not a failure of the fix. `.claude/settings.json` points every hook at **main's copy**
+(`/diagram/scripts/*.sh`), so the live guards are still the substring versions while this work sits in
+a clone. The census will stop recording phantom escapes for every session in the container at the
+moment this lands, and not before - which is also the cleanest available confirmation that the defect
+was real and is being fixed at the right layer.
