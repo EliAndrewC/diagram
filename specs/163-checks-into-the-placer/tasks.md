@@ -90,12 +90,12 @@ finding and is therefore `physical` with its three boxes.
 
 ## Phase 3 - verify the maps did not move (US1, P1)
 
-- [ ] **T12** Regenerate the REFERENCE hamlet (`make maps` picks its own scope) and compare the manifest
+- [x] **T12** Regenerate the REFERENCE hamlet (`make maps` picks its own scope) and compare the manifest
       and the render byte-for-byte against before the deletions. Removing an audit should change nothing,
       so any diff is DIAGNOSED here in writing (FR-008) - and once the cause is understood the deletion
       stands and the map is allowed to move, per the GM's standing ruling that no map owes byte identity.
       research: procedure
-- [ ] **T13** Then the POOL: all five live hamlets, same comparison and the same diagnose-then-accept rule.
+- [x] **T13** Then the POOL: all five live hamlets, same comparison and the same diagnose-then-accept rule.
       This is the second of the two steps constitution VI requires and is its own task with its own
       verification.
       research: procedure

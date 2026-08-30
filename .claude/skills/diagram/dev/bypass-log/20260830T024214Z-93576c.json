@@ -1,0 +1,6 @@
+{
+  "utc": "20260830T024214Z",
+  "guard": "pair-hooks",
+  "what": "gate alone",
+  "reason": "settlement-review is not owed and it is MEASURED, not asserted: git status over pool/ and legacy-hand-authored-pool/ is empty after this delta - no manifest, no gen, no render moved (T12/T13). The delta retires five dead check NAMES and fixes the registry analyzer that minted two of them; neither draws anything. Per the GM 2026-08-29, settlement-review is not per-map and they read the map themselves - here the map on the sheet is byte-identical to the one already reviewed."
+}
