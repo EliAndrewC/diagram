@@ -144,6 +144,15 @@ differs by tier is the COUNT (a city draws the set: the principal board plus one
 | `field_ponds_sunk_into_one_plot` | same module (no bund or hem ring crosses the pond ellipse) | the field-pond population is asserted first |
 | `pond_fed_from_edge` | **DROP - no scripted executor.** Measured across every live map: not one pond is fed by a stream (Inashiro and Mizuguchi declare `pond_role=drainage` and are fed by the collector; the other three record no role). The rule is about a SOURCE pond fed by a brook from off-map, which only a hand-authored map produces. Its grounding - a pond's water comes from the edge, not from nowhere - is recorded here and in `settlements/water.md` | - |
 
+| `lanes_form_one_network` | `tests/gate/test_lane_network.py` (union-find over the rolled lanes at the web's own 4 px join) | the lane web never laid -> RED; `lanes_share_tread` made to deny every join -> RED |
+| `lanes_bend_like_paths` | same module (a turn past 140 deg doubles back; two real turns inside 40 ft is a kink) | same mutations -> RED |
+| `lanes_reach_something` | same module (every non-connector end within 60 px of a way, a house or a field) | same mutations -> RED |
+| `lanes_do_not_break_mid_run` | same module (a long jump whose midpoint lands inside something solid) | the solid population is asserted first, so a break has something to be explained by |
+| `lane_ends_front_different_houses` | same module (no house discharges more than two lane ends) | the fronted-end count is asserted, so it cannot judge nothing |
+| `groves_clear_of_lanes` | same module (the TRUNK position, never the crown's reach - GM 2026-08-29: a woodland path is a path under trees) | the flat `(x, y, r)` packing is named at the point of use, because reading the third value is the mistake the rule warns against |
+| `fields_clear_of_road` | **DROP - no scripted executor.** `roadways` is derived from `M["road"]`, which is empty on every live map; no scripted generator lays an Imperial road. The grounding - a way's tread may not run under a drawn plot - is recorded here and in `settlements/ways.md` | - |
+| `roads_clear_of_marsh` | **DROP - same reason**, same `roadways` source. A road is routed around standing water rather than through it; recorded, not deleted | - |
+
 ## Battery-internal - they go WITH the battery, and owe no destination
 
 These four do not state a rule about a map. They state that the battery's OWN classification tables are
