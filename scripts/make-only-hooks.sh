@@ -54,7 +54,15 @@ HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 # positived on a grep, on a commit message, and on this hook's own test harness, all within an hour.
 # Matching is anchored to real command positions instead. Keeping it in a file also means it can be
 # unit-tested and read without bash quoting in the way.
-VERDICT=$("$HERE/_hookmatch.py" 2>/dev/null || echo ok)
+# GUARD_EDIT_OK: feature 164 - the payload is CAPTURED before it is classified, because this hook now
+# asks two questions of it (what is this, and can it be corrected) and stdin can only be read once.
+# The classification itself is unchanged: the same `_hookmatch.py` call, fed from the variable.
+INPUT=$(cat 2>/dev/null || true)
+VERDICT=$(printf '%s' "$INPUT" | "$HERE/_hookmatch.py" 2>/dev/null || echo ok)
+# ...and it now CORRECTS the one shape whose compliant form it can rebuild exactly, and records what
+# it did. See the bare-pytest case below.
+# shellcheck source=/dev/null
+. "$HERE/_guardlog.sh"
 
 block() { # reason, then the make target to use instead
   printf 'BLOCKED: %s\n\n' "$1" >&2
@@ -92,8 +100,39 @@ case "$VERDICT" in
   engine-entry-point)
     block "an engine entry point run outside make." "make <target>   (see future-work/ and the Makefile for the operation list)" ;;
   bare-pytest)
-    # GUARD_EDIT_OK: feature 162 - the two hardcoded durations are gone (see the note in block()).
-    block "pytest run directly rather than through make. Its coverage floors only hold under the make targets that set them up." "make quick   (stops at the first failure)  or  make done   (the gate)" ;;
+    # GUARD_EDIT_OK: feature 164 - CORRECT THE ONE SHAPE THAT HAS AN EXACT COMPLIANT FORM, at the
+    # GM's request (2026-08-30). A bare pytest of ONE test file is `make test-file` written the long
+    # way, so the hook writes it the short way instead of spending a round trip asking the session to.
+    # Every other shape - a filter, a coverage flag, a second path, a directory, a pipeline - still
+    # refuses, because `_hookmatch.py as-make-target` returns nothing for anything it cannot rebuild
+    # exactly, and a guard that guesses at a session's command costs more than one that refuses.
+    #
+    # TWO DEFECTS IN THE OLD MESSAGE, fixed here (Principle XIV, found while auditing):
+    #   - it gave COVERAGE FLOORS as the reason, which is false: `make test-file` runs `--no-cov`
+    #     exactly as a bare pytest does, and the floors are held by the gate targets. The true reason
+    #     is feature 127's - every operation goes through make, so the expensive ones can ask whether
+    #     the cheap one would do first.
+    #   - it named only the gate targets, never `make test-file`, the target this project added for
+    #     precisely the question "re-run the file I just changed" - missing from this message since 127.
+    FIXED=$(printf '%s' "$INPUT" | "$HERE/_hookmatch.py" as-make-target 2>/dev/null || true)
+    if [ -n "$FIXED" ]; then
+      guard_log make-only rewrote "$(guard_cmd)"
+      printf '%s' "$INPUT" | REWRITTEN="$FIXED" python3 -c '
+import json, os, sys
+payload = json.load(sys.stdin).get("tool_input", {})
+payload["command"] = os.environ["REWRITTEN"]
+print(json.dumps({"hookSpecificOutput": {
+    "hookEventName": "PreToolUse",
+    "updatedInput": payload,
+    "additionalContext": (
+        "That bare pytest was rewritten to `make test-file`, the target this project added for "
+        "running one file whole - everything here goes through make so an expensive run can ask "
+        "whether the cheap one would do first. Corrected rather than refused, because a refusal "
+        "costs a model round trip."),
+}}))'
+      exit 0
+    fi
+    block "pytest run directly rather than through make. Everything here goes through a make target, so an expensive run can ask whether the cheap one would do first - and a filter, a coverage flag or a second path is a shape this hook will not rewrite for you." "make test-file FILE=<one file>   (the whole file, no filter)  or  make quick   (stops at the first failure)  or  make done   (the gate)" ;;
   inline-override)
     block "an override supplied on the command line, which skips the prompt whose default answer is CANCEL. That prompt is the whole mechanism: it exists to be answered, not pre-empted." "make <target>   without the override, and answer the prompt if it appears" ;;
   guard-write)

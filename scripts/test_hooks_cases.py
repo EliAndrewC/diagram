@@ -17,10 +17,11 @@ own repair. The shared lesson has a name now: **a mention is not an invocation.*
 from __future__ import annotations
 
 import json
+import os
 import pathlib
+import tempfile
 import subprocess
 import sys
-import tempfile
 
 HERE = pathlib.Path(__file__).resolve().parent
 
@@ -65,11 +66,18 @@ REPO_SAFETY = [
 ]
 
 HOUSE_STYLE = [
-    ("a British spelling in a spec", edit("/r/specs/x/spec.md", new="the licence is granted"), "blocked"),
-    ("another, in prose", edit("/r/docs/a.md", new="the centre of the map"), "blocked"),
-    ("demesne", edit("/r/docs/a.md", new="the lord's demesne"), "blocked"),
-    ("an em-dash", edit("/r/docs/a.md", new="a dash \u2014 here"), "blocked"),
-    ("an en-dash", edit("/r/docs/a.md", new="a range 1\u20132"), "blocked"),
+    # GUARD_EDIT_OK: feature 164 - these five are CORRECTED now rather than refused (GM 2026-08-30).
+    # Both rules are exact substitutions from CLAUDE.md, and a session refused for one of them simply
+    # retyped the same edit with the fix - 3 firings, 3 identical re-edits. The rule is unchanged: an
+    # edit the table cannot fully fix still refuses, and the GM own writing is never corrected at all.
+    ("a British spelling in a spec", edit("/r/specs/x/spec.md", new="the licence is granted"), "rewritten:the license is granted"),
+    ("another, in prose", edit("/r/docs/a.md", new="the centre of the map"), "rewritten:the center of the map"),
+    ("the archaic territory word", edit("/r/docs/a.md", new="the lord demesne"), "rewritten:the lord domain"),
+    ("an em-dash", edit("/r/docs/a.md", new="a dash \u2014 here"), "rewritten:a dash - here"),
+    ("an en-dash", edit("/r/docs/a.md", new="a range 1\u20132"), "rewritten:a range 1 - 2"),
+    # ...and the two the correction must NEVER touch
+    ("a backticked MENTION is not a use", edit("/r/docs/a.md", new="the word `colour` is British"), "ok"),
+    ("the GM verbatim request is refused, not corrected", edit("/r/specs/164-x/request.md", new="fix the colour"), "blocked"),
     ("American spellings", edit("/r/docs/a.md", new="the center is gray, the color honors judgment"), "ok"),
     # the files that must QUOTE the forbidden words in order to state the rule
     ("CLAUDE.md stating the rule", edit("/r/CLAUDE.md", new="never write colour or centre"), "ok"),
@@ -110,13 +118,30 @@ def source_block_cases(tmp: pathlib.Path) -> list[tuple[str, str, str]]:
     ]
 
 
+LOGDIR = pathlib.Path(tempfile.mkdtemp(prefix="guardlog-fixtures-"))
+
+
 def run(hook: str, cases: list[tuple[str, str, str]]) -> int:
     script = HERE / f"{hook}-hooks.sh"
     bad = 0
     print(f"{hook}-hooks.sh")
     for label, payload, want in cases:
-        proc = subprocess.run([str(script), "pretool"], input=payload, capture_output=True, text=True, check=False)
+        # GUARD_EDIT_OK: feature 164 - fixtures never reach the real firing log; `make audit` exists
+        # to price a guard from what it really did, and a suite writing into it destroys that.
+        env = dict(os.environ, GUARD_LOG_DIR=str(LOGDIR))
+        proc = subprocess.run([str(script), "pretool"], input=payload, capture_output=True, text=True, check=False, env=env)
+        # GUARD_EDIT_OK: feature 164 - a guard has a THIRD verdict now. `rewritten:<text>` expects the
+        # hook to correct the payload rather than refuse it: exit 0 with a `updatedInput` whose edit
+        # carries <text>. A guard that can produce the compliant form spends no round trip asking for
+        # it, and the case file has to be able to say so.
         got = "blocked" if proc.returncode else "ok"
+        out = (proc.stdout or "").strip()
+        if not proc.returncode and out.startswith("{"):
+            try:
+                fixed = json.loads(out)["hookSpecificOutput"]["updatedInput"]
+                got = "rewritten:" + (fixed.get("new_string") or fixed.get("content") or fixed.get("command") or "")
+            except Exception:
+                pass
         ok = got == want
         bad += 0 if ok else 1
         print(f"  {'ok    ' if ok else 'FAIL  '} {label}" + ("" if ok else f"  (expected {want}, got {got})"))

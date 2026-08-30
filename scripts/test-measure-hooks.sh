@@ -17,7 +17,10 @@ trap 'rm -rf "$GUARD_LOG_ROOT"' EXIT
 setup() { STATE_DIR=$(mktemp -d); export MEASURE_STATE_DIR="$STATE_DIR"; }
 teardown() { rm -rf "$STATE_DIR"; }
 
-bash_ev() { printf '{"session_id":"m1","tool_name":"Bash","tool_input":{"command":"%s"}}' "$1"; }
+# GUARD_EDIT_OK: feature 164 - a REAL json encode. The old printf left a multi-line command as raw
+# newlines inside a JSON string, which is invalid JSON, so a hook doing a proper parse saw an empty
+# command and every heredoc vector here passed for the wrong reason.
+bash_ev() { CMD="$1" python3 -c 'import json,os; print(json.dumps({"session_id":"m1","tool_name":"Bash","tool_input":{"command":os.environ["CMD"]}}))'; }
 edit_ev() { printf '{"session_id":"m1","tool_name":"Edit","tool_input":{"file_path":"%s"}}' "$1"; }
 run() { "$HOOK" pretool <<<"$1" 2>/tmp/mt.err; }
 
@@ -87,11 +90,21 @@ run "$(bash_ev 'make done FULL=1')"
 run "$(bash_ev 'make done FULL=1')"; check "the second done FULL=1 is BLOCKED" blocked $?
 teardown
 
-echo "7. a MENTION is treated as a run (the stated limitation), and fails safe"
+# GUARD_EDIT_OK: feature 164 - THE MENTION FALSE POSITIVE IS FIXED, so this section inverts. It used
+# to assert the limitation ("a third mention blocks - the known false positive"); the shapes are
+# matched against the sanitized command now, so prose about a measurement is not a measurement. The
+# cost of the old reading was measured on feature 164's own work: writing its spec spent a budget
+# slot, which would have refused the next genuine run.
+echo "7. a MENTION is not a run (feature 164)"
 setup
 run "$(bash_ev 'grep -rn \"make test-full\" docs/')"
-run "$(bash_ev 'grep -rn \"make test-full\" docs/')"; check "a second mention blocks - the known false positive" blocked $?
-run "$(bash_ev 'grep -rn \"make test-full\" docs/  # MEASURE_OK: a grep, not a run')"; check "...and MEASURE_OK clears it" ok $?
+run "$(bash_ev 'grep -rn \"make test-full\" docs/')"
+run "$(bash_ev 'grep -rn \"make test-full\" docs/')"; check "three quoted mentions, none of them counted" ok $?
+run "$(bash_ev 'python3 - <<PY
+print(\"the gate is make done FULL=1 and it is expensive\")
+PY')"; check "a heredoc naming the full gate is prose, not a run" ok $?
+run "$(bash_ev 'make test-full')"; check "...and a REAL measurement still counts as the first" ok $?
+run "$(bash_ev 'make test-full')"; check "...with the second still blocked" blocked $?
 teardown
 
 # GUARD_EDIT_OK: feature 162 - two NEW behaviors, both non-blocking: the reminder that arrives on the

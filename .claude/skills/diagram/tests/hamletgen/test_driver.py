@@ -142,6 +142,16 @@ def test_the_stage_profile_prints_only_when_asked_and_rolls_the_same_map(monkeyp
     plan = hg.plan_site(hg.HamletSpec(name="Prof", seed=3, households=10))
     monkeypatch.setattr(driver, "STAGES", (stage_alpha, stage_beta))
 
+    # A DETERMINISTIC CLOCK, because the tie was decided by machine noise (feature 164, found when it
+    # failed the gate). Both stub stages do nothing measurable, so `max(timings)` picked whichever
+    # happened to record a larger float - and under a loaded parallel gate run that was `stage_beta`,
+    # while every isolated run gave `stage_alpha`. The test then asserted a coin flip: 5 of 5 passing
+    # locally, one failure at the gate, one whole gate cycle spent on it. The clock below makes alpha
+    # 0.10 s and beta 0.01 s, which is what the assertions have always MEANT - one stage over the
+    # 0.05 s floor and one under it - and it costs no wall time at all.
+    ticks = iter([0.0, 0.10, 0.10, 0.11])
+    monkeypatch.setattr(driver.time, "time", lambda: next(ticks, 0.11))
+
     monkeypatch.delenv(driver.STAGE_PROFILE_ENV, raising=False)
     quiet = driver.build(plan)
     assert capfd.readouterr().err == "", "an unasked-for profile is noise in every roll"

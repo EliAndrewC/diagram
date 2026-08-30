@@ -15,7 +15,10 @@ trap 'rm -rf "$GUARD_LOG_ROOT"' EXIT
 setup() { STATE_DIR=$(mktemp -d); export GATE_STATE_DIR="$STATE_DIR"; }
 teardown() { rm -rf "$STATE_DIR"; }
 
-bash_ev() { printf '{"session_id":"g1","tool_name":"Bash","tool_input":{"command":"%s"}}' "$1"; }
+# GUARD_EDIT_OK: feature 164 - a REAL json encode. The old printf left a multi-line command as raw
+# newlines inside a JSON string, which is invalid JSON, so a hook doing a proper parse saw an empty
+# command and every heredoc vector here passed for the wrong reason.
+bash_ev() { CMD="$1" python3 -c 'import json,os; print(json.dumps({"session_id":"g1","tool_name":"Bash","tool_input":{"command":os.environ["CMD"]}}))'; }
 edit_ev() { printf '{"session_id":"g1","tool_name":"Edit","tool_input":{"file_path":"%s"}}' "$1"; }
 run()  { "$HOOK" pretool <<<"$1" 2>/tmp/gt.err; }
 

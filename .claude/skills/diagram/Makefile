@@ -522,7 +522,7 @@ print()"
 # a round trip to prevent nothing, which is what retired the quick+done refusal.
 	@python3 -c "import json,glob,os,collections; \
 rows=[json.load(open(f)) for f in glob.glob(os.path.expanduser(os.environ.get('GUARD_LOG_DIR','~/.claude/guard-log')+'/*.json'))]; \
-print('\033[1mGuard firings\033[0m (~/.claude/guard-log/, feature 162 - measure and gate only)'); \
+print('\033[1mGuard firings\033[0m (~/.claude/guard-log/) - what each guard did: blocked, rewrote, reminded, escaped'); \
 by=collections.defaultdict(collections.Counter); \
 [by[r['guard']].update([r['event']]) for r in rows]; \
 [print(f\"  {g:<8} \"+', '.join(f'{k}={v}' for k,v in sorted(c.items()))+(f\"   escape rate {c['escaped']/max(1,c['escaped']+c['blocked']):.0%}\" if c['blocked'] or c['escaped'] else '')) for g,c in sorted(by.items())] or print('  (none recorded yet)'); \

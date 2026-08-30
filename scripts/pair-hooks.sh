@@ -42,6 +42,12 @@ find_root() { # the clone this command is about: the cwd's git root
   CLONE_ROOT="$(git rev-parse --show-toplevel 2>/dev/null || true)"
 }
 
+# GUARD_EDIT_OK: feature 164 - this guard now REWRITES the gate into the paired command, so it needs
+# the shared matcher beside it and the firing log.
+PAIR_HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+# shellcheck source=/dev/null
+. "$PAIR_HERE/_guardlog.sh"
+
 pairing_file() { printf '%s/.git/pairing-state.json' "${CLONE_ROOT:-.}"; }
 
 engine_key() { # the working tree's engine key, or "" when it cannot be computed
@@ -187,6 +193,33 @@ print(str(pathlib.Path(tp).parent / sid / "subagents") if tp and sid else "")
     esac
     if review_pending "$dir" || review_recorded "$key"; then
       [ -n "$key" ] && write_pairing "$(pairing_file)" gate_key "$key"
+      exit 0
+    fi
+    # GUARD_EDIT_OK: feature 164 - REWRITE INTO THE PAIRED COMMAND INSTEAD OF REFUSING (GM 2026-08-30).
+    # This branch named `make verify` in its own refusal and then spent a model round trip asking the
+    # session to type it. `make verify` IS this gate plus the line that dispatches the review, so the
+    # substitution is exact: the gate still runs, the pairing rule is unchanged, and what used to not
+    # happen at all now happens correctly. Measured cause: 13 firings, 7 of them escaped with PAIR_OK
+    # in the very next call. Only a plain `make done` converts - `_hookmatch.py as-paired` declines
+    # FULL, a second goal, or a command `gate-hooks` is already combining, because two rewrites racing
+    # for one command would make the outcome depend on hook order.
+    PAIRED=$(printf '%s' "$payload" | "$PAIR_HERE/_hookmatch.py" as-paired 2>/dev/null || true)
+    if [ -n "$PAIRED" ]; then
+      guard_log pair rewrote "$cmd"
+      printf '%s' "$payload" | REWRITTEN="$PAIRED" python3 -c '
+import json, os, sys
+payload = json.load(sys.stdin).get("tool_input", {})
+payload["command"] = os.environ["REWRITTEN"]
+print(json.dumps({"hookSpecificOutput": {
+    "hookEventName": "PreToolUse",
+    "updatedInput": payload,
+    "additionalContext": (
+        "Rewritten to `make verify`: the same gate, started together with the review it owes. "
+        "DISPATCH THE settlement-review IN THIS SAME TURN - verify prints which maps changed and "
+        "then runs the gate in the background, so the review is not sitting on the critical path. "
+        "If no review is owed for this delta, re-issue with PAIR_OK=\"<why>\" and the reason is "
+        "logged."),
+}}))'
       exit 0
     fi
     printf '\n\033[1mBLOCKED: the gate and the independent review run TOGETHER.\033[0m\n' >&2

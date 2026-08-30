@@ -120,6 +120,17 @@ case "$MODE" in
     fi
     BG=0; if is_background; then BG=1; fi
     N=$(serial_turns)
+    # GUARD_EDIT_OK: feature 164 - WARN ONE TURN BEFORE THE BLOCK (GM 2026-08-30: *"a tool could ...
+    # return additional context"*). This is the loudest guard in the repository - 127 firings in six
+    # days, more than every other guard combined - and each firing spends the round trip it exists to
+    # save. A line of `additionalContext` on an ALLOWED call costs nothing at all, so the playbook
+    # arrives while there is still time to batch instead of after the turn is already gone. The
+    # block, the rolling window, the backoff and the shape test are untouched; this only speaks
+    # earlier. No python: this hook fires on every Read/Grep/Glob and its startup cost is the reason
+    # it parses nothing, so the notice is a fixed string.
+    if [ "$CALLS" -eq 1 ] && [ "$BG" -eq 0 ] && [ "$N" -eq "$((REARM - 1))" ] && is_recon_call; then
+      printf '{"hookSpecificOutput":{"hookEventName":"PreToolUse","additionalContext":"BATCHING NOTICE (one turn before this is refused): %s of the last %s turns each made a single quick read-only call. The next recon-shaped call on its own is blocked. Send the lookups you already know you need TOGETHER - parallel tool calls in one message, or one command folding several greps - and fold the ACTION you will take into the same command as the read. Nothing is refused yet."}}\n' "$N" "${#HIST}"
+    fi
     if [ "$CALLS" -eq 1 ] && [ "$BG" -eq 0 ] && [ "$N" -ge "$REARM" ] && is_recon_call; then
       REARM=$((REARM * 2))
       if [ "$REARM" -gt "$WINDOW" ]; then REARM=$WINDOW; fi   # a bar above the window could never fire
