@@ -192,3 +192,37 @@ RULE (`CLAUDE.md`, the constitution, the style doc, the hook and its test) but n
 DISCUSSING it, which is the document this feature had to write.
 
 **Sources:** this session's transcript; `scripts/_hookmatch.py`; `scripts/house-style-hooks.sh`.
+
+## R8 - four defects the conversions found, each fixed where it was found
+
+Principle XIV, and every one of them was found by doing the work rather than by reading:
+
+1. **ORDER IS LOAD-BEARING in `no-poll`.** The correction was written first in the file, and in that
+   position it pre-empted the two refusals below it: the original 2026-07-25 command - a `for` loop,
+   a self-matching pattern and a disguised `sleep` on one line - was rewritten and ALLOWED. That is
+   the exact 10.9-minute busy-wait the guard exists to stop, re-opened by its own improvement. The
+   guard's own suite caught it on the first run. A rewrite may only reach a command the refusals have
+   already declined to take, so it runs last.
+2. **The guard-write detector missed the ordinary two-line python shape.** `_hookmatch.py` required
+   the guard filename ADJACENT to the write, so `p = pathlib.Path(".claude/settings.json")` followed
+   by `p.write_text(...)` matched nothing - and this session used exactly that to wire a hook into
+   `settings.json` while implementing this feature. Closed by tying the two halves through the
+   variable name, which keeps "proximity is the signal, presence never is" intact: a docstring naming
+   a hook is still legal.
+3. **Two test harnesses were emitting invalid JSON.** `bash_ev()` in the measure and gate suites
+   interpolated a command into a JSON string with `printf`, so any MULTI-LINE vector produced
+   unescaped newlines inside a string - invalid JSON. Every hook doing a real parse saw an EMPTY
+   command, which means both suites' heredoc vectors had been passing for the wrong reason since they
+   were written. They encode properly now, and the measure suite failed honestly the moment they did.
+4. **A suite conflated the hook's stdout with its exit code.** `batched_turn()` in the batching suite
+   echoed two exit codes on stdout while the hook's own stdout - which now carries a JSON notice -
+   flowed into the same capture, so three vectors failed on text where an integer belonged. The hook
+   was right; the harness was wrong.
+
+And one that is not a defect but a cost, recorded because it will recur: converting a guard INVERTS
+its own vectors. Five suites had assertions of the form "this is blocked" that had to become "this is
+corrected", and each one had to be re-read to be sure the rule had not quietly changed with the
+verdict. That is the work, not an obstacle to it - a retired assertion deleted rather than left
+passing vacuously is the project's own rule for guards.
+
+**Sources:** this session's own implementation, and the suites named above.
