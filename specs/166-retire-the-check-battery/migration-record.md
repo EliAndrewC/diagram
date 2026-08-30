@@ -1,28 +1,29 @@
-# FR-009: where each retired rule now lives
+# Feature 166 - the migration record (FR-009)
 
-One row per check. A check is not deleted until this file gives it a destination and the destination has
-been PROVEN - either a new test seen RED against the unfixed placer, or an existing test shown by mutation
-to already carry the rule.
+**Every rule the retired check battery held, and where it lives now.** This is the answer to "what
+happened to rule X" without a `git log` archaeology session, and it is the deliverable that makes the
+deletion reversible in the only sense that matters: nothing was lost silently.
 
-## The method, and why it is mutation rather than reading
+**142 rules across 145 rows, of which 19 are recorded DROPS** (a few rows carry two or three
+rules that share one placer and one proof, and say so). A drop is not "we decided this did not
+matter": it names the manifest key the rule reads, records that the key is empty on every live map, and
+keeps the rule's grounding where the next reader will meet it. Every other row names a test and, where a
+mutation was run, what was broken to prove the test carries the rule.
 
-Two questions have to be answered per check, and only one of them can be answered by reading:
+**HOW A ROW WAS EARNED.** Writing a replacement was never enough. For each rule the session read the
+retired segment's actual predicate (not its name, and not its message), measured the quantity on a real
+rolled map, wrote the assertion against the measurement, and - wherever a cheap mutation existed - broke
+the engine so the guarantee failed and confirmed the new test went RED. Where no mutation was cheap, the
+row says what makes the test non-vacuous instead, which is the other half of the same question.
 
-1. **Which placer guarantees this rule?** Read the check, read the placer. No shortcut.
-2. **Is the rule ALREADY carried by a test?** This looks answerable by reading and is not. A test that
-   *mentions* the subject may assert nothing about the rule; a test that never names it may guard it
-   exactly. `specs/166-retire-the-check-battery/covered_by.py` answers it by MUTATION: break the placer's
-   guarantee, run the suite with the battery's own tests excluded, and see whether anything goes red.
+**FOUR CORRECTIONS THE PROCESS CAUGHT IN THE SESSION'S OWN WORK**, recorded because they are the
+argument for doing it this way: the supply-bank test was weaker than the rule it replaced (corners, not
+edges; the centerline, not the band); `theta` on a dry plot is in radians and was compared in degrees; a
+notice board's `rot` is parallel to the way it faces, not perpendicular; and `field_ditches_reach_source_and_sink`
+asserted against the reference hamlet would have passed on an empty list for ever, because only
+Kuwabata lays laterals.
 
-The battery's own tests are excluded deliberately - they are what is being retired, so a rule only they
-catch is precisely a rule with no home yet.
-
-**This changed the shape of the work.** The plan assumed 101 migrations each needing a new test. The first
-probes show existing placer suites already carry some of them, and those drop against a named test instead.
-
-## Retired, with a new test written and proven
-
-| check | destination | proof |
+| rule | where it lives now | how the replacement was proven |
 |---|---|---|
 | `bamboo_stands_clear_of_paddies` | `tests/hamletgen/test_hinterland.py::test_bamboo_blocked_refuses_ground_inside_the_crop` + `_keeps_its_pad_off_the_crop_edge` | crop arm cut from `bamboo_blocked` -> both RED |
 | `gardens_clear_of_channels` | `tests/settlement/test_homestead_parts.py::test_a_garden_is_refused_on_a_no_build_corridor` + `test_a_watercourse_registers_the_corridor_the_garden_consults` | corridor arm cut from `_garden_fits` (line-targeted, enclosing `def` asserted) -> RED |
