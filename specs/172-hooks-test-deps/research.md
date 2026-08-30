@@ -142,3 +142,19 @@ one line with each suite's own output beneath its own heading.
 A deliberate fixture would have planted one failure; the accident planted twelve, concurrently, which
 is the stronger test of a fan-out collector - it proves the per-job log and exit-code files do not
 collide under load, which is the failure a single planted failure could not have shown.
+
+## R9 - the success criteria understated the cost, and the incremental run said so
+
+SC-002 and SC-003 were written from the derivation alone: `_gatecost.py` reaches two guards, the
+make/rewrite family three. A real incremental run - append a comment, run `hooks-test`, revert -
+reports **5** and **6** of 21.
+
+The difference is the three whole-tree suites (`sync-with-main.sh`, `review-gate.sh`,
+`gate-stamp.py`), which re-run for ANY script change and always will: two are held there deliberately
+because they resolve script paths at run time, and one derives there because it reads the whole
+directory. That trio is a constant on every targeted change, and criteria that ignored it were
+quietly wrong in the flattering direction.
+
+Corrected to the measured figures. The win is undiminished and worth stating in its true form: **5 of
+21 instead of 21 of 21**, and the three that always run are three of the slower ones, which is a real
+part of what a targeted change still costs.

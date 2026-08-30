@@ -135,8 +135,8 @@ under-runs is the one failure mode that matters here.
 ## Success Criteria
 
 - **SC-001**: with nothing changed, `hooks-test` still reports every suite unchanged and costs ~0 s.
-- **SC-002**: touching `_gatecost.py` re-runs 2 suites, not 21; touching `test_hooks_cases.py` re-runs 3.
-- **SC-003**: touching `_hookmatch.py`'s make/rewrite module re-runs the 3 guards that use it, not 21.
+- **SC-002**: touching `_gatecost.py` re-runs **5** suites of 21, not 21 - its two real consumers plus the three whole-tree suites, which re-run for any script change and always will. Stated as MEASURED rather than as the two the derivation alone would give: the whole-tree trio is a constant on every targeted change and a criterion that ignored it would be quietly wrong.
+- **SC-003**: touching the make/rewrite module re-runs **6** of 21 - the 3 guards that use it (`gate`, `make-only`, `pair`) plus the same whole-tree trio. Measured on a real incremental run, not derived.
 - **SC-004**: touching `_guardlog.sh` still re-runs ~19 - the derivation must NOT get this "right" by under-running.
 - **SC-005**: a full `hooks-test` (every suite stale) is measurably faster than the same set run serially, measured on the SAME content in this clone rather than against a figure from another session's run - and reports every failure together as it does today. Measured: **194 s serial, 63 s parallel**, all 21 green both ways.
 - **SC-008**: the command-shape module, which after the split both other families depend on, is named as having the widest blast radius of the three - the first draft noted this for the escape family only.
