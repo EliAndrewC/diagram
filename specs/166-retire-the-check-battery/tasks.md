@@ -130,6 +130,6 @@ that batch. A batch is not done until its replacements have each been seen red.
 - [X] **T24** `make perf LABEL=166-end` and `make perf-report AGAINST=166-start`. A decrease is expected
       (the battery ran inside every roll); any seed that got SLOWER is diagnosed in writing with the number.
       research: procedure
-- [ ] **T25** Report to the GM: what was deleted, where each rule went, what moved and why, and what the
+- [X] **T25** Report to the GM: what was deleted, where each rule went, what moved and why, and what the
       generator costs now.
       research: procedure
