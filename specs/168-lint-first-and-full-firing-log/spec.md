@@ -90,7 +90,14 @@ which added recording to five more. Measured in this tree now:
 | `make-only` | rewrote | its five refusal verdicts |
 | `pair` | rewrote | its two blocks and the stop branch |
 | `guard-file` | reminded | its block |
-| `batching`, `discard`, `no-branch`, `readme`, `repo-safety`, `source-block`, `clone-sync`, `agent-stall`, `idle-tests`, `review-gate` | nothing | every branch |
+| `batching`, `discard`, `no-branch`, `readme`, `repo-safety`, `source-block`, `clone-sync`, `agent-stall`, `review-gate` | nothing | every branch |
+
+**`idle-tests` is OUT OF CLASS, and the reason is stated rather than assumed**: it never refuses,
+rewrites or corrects a session's command - it is a RUNNER, whose branches (the host-wide lock, the
+one-run-per-idle rule, the suspend restart) decide what an unattended process does with its own time.
+Nothing it does costs a session a round trip, which is the cost this log exists to measure, and it
+already keeps its own record in `dev/idle-log/`. `agent-stall` IS in class: its stall report is a
+remind-shaped branch aimed at the session.
 
 So the work is mostly BRANCHES inside guards that already record, plus TEN scripts recording nothing
 at all - including `agent-stall`, `idle-tests` and `review-gate`, which the first draft did not

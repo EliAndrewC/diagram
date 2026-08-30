@@ -140,6 +140,14 @@ claim() { # record clone<-session_id so the prompt hook can find this session's 
 
 case $MODE in
   pretool)
+    # GUARD_EDIT_OK: feature 168 - this guard records what it does (GM 2026-08-30). It has FIVE
+    # refusals - a forbidden name, a name routed to another session's clone, a live claim, a stale
+    # HEAD - and no record at all, so nobody could tell which of them a session actually meets.
+    # `cs_block` records the rule and refuses exactly as before; nothing it forbids changes.
+    CS_HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+    # shellcheck source=/dev/null
+    . "$CS_HERE/_guardlog.sh"
+    cs_block() { guard_log clone-sync blocked "${2:-}" "$1"; }
     fp=$(field tool_input.file_path)
     case $fp in
       "$MAIN"/.clones/*/*) ;;
@@ -164,16 +172,19 @@ case $MODE in
     #     into the forbidden workspace. Either way, stop and make the GM name the session.
     if [ -n "$canon" ] && [ "$(basename "$canon")" = "gm-assistant" ]; then
       echo "BLOCKED: this session has no distinct name - it resolves to the FORBIDDEN '.clones/gm-assistant' ('gm-assistant' is the repository, not a session workspace). Ask the GM to /rename this session to something distinct, then work in .clones/<that-name>.   (CLAUDE.md 'Session clones' - 'gm-assistant' is a forbidden clone name)" >&2
+      cs_block forbidden-name-unnamed "$clone"   # GUARD_EDIT_OK: feature 168
       exit 2
     fi
     if [ "$(basename "$clone")" = "gm-assistant" ]; then
       echo "BLOCKED: '.clones/gm-assistant' is a FORBIDDEN clone name ('gm-assistant' is the repository, not a session). Work in .clones/<your-session-name>${canon:+ (this session resolves to $canon)}.   (CLAUDE.md 'Session clones' - 'gm-assistant' is a forbidden clone name)" >&2
+      cs_block forbidden-name "$clone"   # GUARD_EDIT_OK: feature 168
       exit 2
     fi
 
     # (1) NAME-ROUTING: a session may only edit in .clones/<its-own-name>. Unresolvable -> skip.
     if [ -n "$canon" ] && [ "$clone" != "$canon" ]; then
       echo "BLOCKED: this session's clone is $canon (resolved from its session name); the edit targets $clone. Two sessions must never share a working tree (the 2026-07-22 collision). Work in $canon - if it does not exist: git clone /gm-assistant $canon && cd $canon && git config user.name \"\$(git -C /gm-assistant config user.name)\" && git config user.email \"\$(git -C /gm-assistant config user.email)\" && scripts/sync-with-main.sh sync-in   (CLAUDE.md 'Session clones' - name-routing guard)" >&2
+      cs_block name-routing "$clone"   # GUARD_EDIT_OK: feature 168
       exit 2
     fi
 
@@ -188,6 +199,7 @@ case $MODE in
         [ "$(cat "$m" 2>/dev/null)" = "$clone" ] || continue
         if sid_is_live "$other"; then
           echo "BLOCKED: $clone is already occupied by another live session ($other) - two sessions must not share a working tree. Ask the GM to /rename one session distinctly and use its own clone.   (CLAUDE.md 'Session clones' - claim backstop)" >&2
+          cs_block live-claim "$clone"   # GUARD_EDIT_OK: feature 168
           exit 2
         fi
       done
@@ -207,6 +219,7 @@ case $MODE in
     main_head=$(git -C "$MAIN" rev-parse HEAD 2>/dev/null)
     if [ -n "$main_head" ] && ! git -C "$clone" merge-base --is-ancestor "$main_head" HEAD 2>/dev/null; then
       echo "BLOCKED: $clone has a clean tree (a new work unit) but its HEAD is behind main - new work must not build on a stale base. Run: cd $clone && scripts/sync-with-main.sh sync-in   (CLAUDE.md 'Session clones' / sync-in rule)" >&2
+      cs_block stale-head "$clone"   # GUARD_EDIT_OK: feature 168
       exit 2
     fi
     exit 0

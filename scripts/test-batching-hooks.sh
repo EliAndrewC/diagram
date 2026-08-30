@@ -5,6 +5,10 @@ set -uo pipefail
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 HOOK="$HERE/batching-hooks.sh"
 PASS=0; FAIL=0
+# GUARD_EDIT_OK: feature 168 - batching-hooks.sh now RECORDS, so this suite writes into a throwaway
+# log rather than the session's real one; otherwise `make audit`'s census counts fixture firings.
+GUARD_LOG_ROOT=$(mktemp -d); export GUARD_LOG_DIR="$GUARD_LOG_ROOT"
+trap 'rm -rf "$GUARD_LOG_ROOT"' EXIT
 
 setup() {  # fresh state dir + fast thresholds so the tests do not sleep for real
   STATE_DIR=$(mktemp -d)

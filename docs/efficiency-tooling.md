@@ -17,7 +17,7 @@ execution - so the number of sequential turns is the cost, not the speed of any 
 |---|---|---|
 | `make quick` | lint, types, and every test that does not roll a map | **4.1 s** warm / 25.3 s cold |
 | `make reference` | one seed of the reference hamlet, and nothing else | **29 s**, or ~0 on a roll-cache hit |
-| `make done` | reference + lint/format/types/hooks + the suite | **median 156 s** over the last 20 green runs |
+| `make done` | lint/format/types, THEN reference, then hooks + the suite (feature 168: the static phases run first, so a break ruff cannot fix is reported before a map is rolled) | **median 156 s** over the last 20 green runs |
 | `make done FULL=1` | + every pool map + the seeds 41-44 ratchet | minutes; prompts, and cancels by default |
 
 Re-measure any time: `make audit` prints every recorded run with its elapsed seconds, and
@@ -105,7 +105,7 @@ Without these, "is this guard worth what it costs" is an impression. With them i
 | record | answers |
 |---|---|
 | `dev/run-log/` | every gate run with its elapsed seconds, scope, result and commit - so a target that quietly gets slower shows up in history rather than in someone's memory |
-| `dev/guard-log/` + `make audit` | every block, rewrite, reminder and escape per guard, with the **escape rate**. A guard escaped more often than obeyed is costing a round trip to prevent nothing - that is what retired the quick+done refusal (62% escaped) |
+| `~/.claude/guard-log/` + `make audit` | every block, rewrite, reminder, permit and escape, per guard **and per RULE**, with the **escape rate**. A guard escaped more often than obeyed is costing a round trip to prevent nothing - that is what retired the quick+done refusal (62% escaped). Since feature 168 EVERY acting branch of every guard records, and the rule slug says which of a guard's rules is carrying the cost - "no-poll fired 32 times" cannot. It is HOST-WIDE and gitignored-by-absence rather than in a clone, because a hook fires for commands that name no working tree at all; the cost, stated rather than hidden, is that a container rebuild loses it |
 | `dev/bypass-log/` | every override with the reason someone will read |
 | `make durations`, `make check-census` | where the suite's time goes; which checks re-measure a placer's guarantee |
 | the perf bookends | a seed >5% slower must be diagnosed; a total >10% blocks as a regression |

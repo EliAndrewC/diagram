@@ -65,7 +65,8 @@ case "$MODE" in
         ;;
     esac
     [ "$TOOL" = Bash ] || exit 0
-    case "$CMD" in *GATE_OK*) rm -f "$STATE"; exit 0 ;; esac
+    # GUARD_EDIT_OK: feature 168 - the escape is recorded. Its RATE is the number this project acts on.
+    case "$CMD" in *GATE_OK*) guard_log gate escaped "$(guard_cmd)" gate-ok; rm -f "$STATE"; exit 0 ;; esac
 
     # WHICH TARGETS DOES THIS COMMAND ACTUALLY INVOKE? Asked of `_hookmatch.py`, which anchors the match
     # to a real command position and blanks heredoc bodies and quoted strings first. Until 2026-08-29 this
@@ -125,6 +126,7 @@ print(json.dumps({"hookSpecificOutput": {
           # where a date sits beside it; a number inside a MESSAGE has nothing to date it and goes
           # stale unremarked, which is the defect the GM caught in the other message here.
           echo "BLOCKED: the only local test run since your last edit was a \`-k\` SUBSET (${WAS:-pytest -k ...}). A subset selects the tests you were THINKING about; the ones a change breaks are the ones you were not - which is exactly how a session ran \`-k \"kura_side or punishment\"\`, went to the gate, and lost a whole gate cycle to a test in the SAME file it had not selected. Run the WHOLE test file(s) for the modules you touched first - \`make test-file FILE=tests/.../test_<mod>.py\` - then run the gate. (.claude/skills/diagram/CLAUDE.md, 'Before the gate, run the WHOLE affected test file'. Override: put GATE_OK in the command with a reason.)" >&2
+          guard_log gate blocked "$(guard_cmd)" k-subset-before-gate   # GUARD_EDIT_OK: feature 168
           exit 2
         fi
         exit 0

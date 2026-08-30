@@ -39,7 +39,10 @@ path = inp.get("file_path", "") or ""
 old = inp.get("old_string") or ""
 new = inp.get("content") or ""
 if "SOURCE_EDIT_OK" in (inp.get("new_string") or "") + new:
-    print(""); raise SystemExit
+    # GUARD_EDIT_OK: feature 168 - the escape is a BRANCH and gets recorded like any other, so it
+    # is announced to the shell rather than being indistinguishable from "nothing to guard here".
+    # It stays a permit: the exit code and what the session may do are unchanged.
+    print("ESCAPED"); raise SystemExit
 try:
     disk = pathlib.Path(path).read_text(encoding="utf-8")
 except Exception:
@@ -62,6 +65,15 @@ print("")
 ')
 
 [ -z "$REPORT" ] && exit 0
+# GUARD_EDIT_OK: feature 168 - an escaped edit of the GM's own writing is exactly the entry an audit
+# wants to be able to find, so it records and then permits.
+if [ "$REPORT" = "ESCAPED" ]; then
+  SB_HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+  # shellcheck source=/dev/null
+  . "$SB_HERE/_guardlog.sh"
+  guard_log source-block escaped "$(guard_cmd)" source-edit-ok
+  exit 0
+fi
 
 cat >&2 <<TAIL
 BLOCKED: $REPORT

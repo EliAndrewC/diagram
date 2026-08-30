@@ -21,11 +21,18 @@
 # takes everything to the last quote of the payload - deliberately, because every OTHER use is a
 # substring test where over-reading is safe. A log entry is read by a person, so it gets the real
 # thing; the parse costs a python start and only ever runs when something is being recorded.
+#
+# ... OR THE FILE PATH, when the tool has no command (feature 168). `readme`, `source-block` and
+# `guard-file`'s Read reminder all guard the Edit/Write/Read tools, whose payload carries `file_path`
+# and no `command` at all - so each of them was recording an entry with an EMPTY detail, which says
+# that something fired but not what on. One body, because the two are the same question: what did the
+# session try to do. (Found while auditing FR-002's coverage; fixed here per Principle XIV.)
 guard_cmd() {
   printf '%s' "${INPUT:-}" | python3 -c '
 import json, sys
 try:
-    print(json.load(sys.stdin).get("tool_input", {}).get("command", "")[:200])
+    ti = json.load(sys.stdin).get("tool_input", {}) or {}
+    print((ti.get("command") or ti.get("file_path") or "")[:200])
 except Exception:
     pass' 2>/dev/null || true
 }

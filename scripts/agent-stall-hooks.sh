@@ -72,6 +72,13 @@ except Exception: print("")')
     DIR="${TP%.jsonl}/subagents"
     out=$(report "$DIR")
     if [ -n "$out" ]; then
+      # GUARD_EDIT_OK: feature 168 - a stall REPORT is a remind-shaped branch, so it records (GM
+      # 2026-08-30). It refuses nothing and costs no round trip; what the entry buys is the rate at
+      # which background readers actually stall, which is the sort of thing this log exists to answer.
+      AS_HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+      # shellcheck source=/dev/null
+      . "$AS_HERE/_guardlog.sh"
+      guard_log agent-stall reminded "$out" stalled-agent
       printf 'agent-stall: %s\n' "$out"
       printf 'agent-stall: a stalled reader is not "still running" - act on it now (scripts/agent-stall-hooks.sh).\n'
     fi

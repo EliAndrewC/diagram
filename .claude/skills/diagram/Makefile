@@ -531,7 +531,11 @@ rows=[json.load(open(f)) for f in glob.glob(os.path.expanduser(os.environ.get('G
 print('\033[1mGuard firings\033[0m (~/.claude/guard-log/) - what each guard did: blocked, rewrote, reminded, escaped'); \
 by=collections.defaultdict(collections.Counter); \
 [by[r['guard']].update([r['event']]) for r in rows]; \
-[print(f\"  {g:<8} \"+', '.join(f'{k}={v}' for k,v in sorted(c.items()))+(f\"   escape rate {c['escaped']/max(1,c['escaped']+c['blocked']):.0%}\" if c['blocked'] or c['escaped'] else '')) for g,c in sorted(by.items())] or print('  (none recorded yet)'); \
+'GUARD_EDIT_OK: feature 168 - the census gains the RULE breakdown; everything else prints as before'; \
+rules=collections.defaultdict(collections.Counter); \
+[rules[r['guard']].update([r.get('rule') or r['event']]) for r in rows]; \
+[ (print(f\"  {g:<12} \"+', '.join(f'{k}={v}' for k,v in sorted(c.items()))+(f\"   escape rate {c['escaped']/max(1,c['escaped']+c['blocked']):.0%}\" if c['blocked'] or c['escaped'] else '')), \
+   (print('               by rule: '+', '.join(f'{k}={v}' for k,v in rules[g].most_common(4))) if len(rules[g])>1 else None)) for g,c in sorted(by.items())] or print('  (none recorded yet)'); \
 print(f\"  {len(rows)} entries\"+(f\", {min(r['utc'] for r in rows)} to {max(r['utc'] for r in rows)}\" if rows else '')); \
 print()"
 	@printf '\033[1mFiles past the ~1,000-line bar\033[0m (constitution X clause 13 - a QUESTION, not a limit)\n'

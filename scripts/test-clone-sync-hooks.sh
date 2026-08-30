@@ -11,6 +11,11 @@ set -uo pipefail
 HERE=$(cd "$(dirname "$0")" && pwd)
 HOOK=$HERE/clone-sync-hooks.sh
 SYNC=$HERE/sync-with-main.sh
+# GUARD_EDIT_OK: feature 168 - clone-sync-hooks.sh now RECORDS its five refusals, so this suite
+# writes into a throwaway log rather than the session's real one; otherwise `make audit`'s census
+# counts fixture firings as things that happened to a session.
+GUARD_LOG_ROOT=$(mktemp -d); export GUARD_LOG_DIR="$GUARD_LOG_ROOT"
+trap 'rm -rf "$GUARD_LOG_ROOT"' EXIT
 TMP=$(mktemp -d)
 # NB: cleanup is done EXPLICITLY at the end, NOT via a `trap ... EXIT` - an EXIT trap also fires in
 # the forked subshells that `&` background jobs and pipelines create, which would rm the fixtures
