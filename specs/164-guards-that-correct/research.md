@@ -162,9 +162,10 @@ as a class (`spec-fidelity` round 1 was right that "prompts for a person" is fal
 | the main-tree write guard | work moved into a clone | **no** - a procedure, not a command |
 | `review-gate` refusing the number claim | nothing - it is a false positive on a claim-only push | **YES**, and it is R4's question for the GM |
 
-So: one convertible refusal in the Makefile's whole surface, and it is already recorded as a question
-rather than a change. Every other Makefile refusal asks for a DECISION - a reason, an authorization,
-a procedure - and a decision is the one thing a rewrite cannot supply.
+So, of the ten: **seven** ask for a DECISION - a written reason, an authorization, a procedure - and
+a decision is the one thing a rewrite cannot supply. **Two** are not refusals a rewrite could apply
+to at all: the budget check REPORTS a run that already finished, and a gate failure is a test result.
+**One** is convertible, and it is already recorded as a question for the GM rather than a change.
 
 **Sources:** `.claude/skills/diagram/Makefile`, `l7r/diagram/switches.py`, `scripts/review-gate.sh`.
 

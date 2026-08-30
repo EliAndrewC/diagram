@@ -48,18 +48,26 @@ Bash payload carries `run_in_background`; an Edit's `new_string` can be rewritte
 ## Scope, stated exactly
 
 **IN scope**: `scripts/make-only-hooks.sh`, `no-poll-hooks.sh`, `pair-hooks.sh`,
-`house-style-hooks.sh`, `guard-file-hooks.sh`, `batching-hooks.sh`, their companion suites, and the
-firing log those conversions record into.
+`house-style-hooks.sh`, `guard-file-hooks.sh`, `batching-hooks.sh`, **`measure-hooks.sh`** (its
+matcher only - FR-002), their companion suites, and the firing log those conversions record into.
 
 **OUT of scope**: what any guard PROTECTS. No rule is relaxed by this feature: every command refused
 today is either corrected into the compliant form or still refused. The diagram engine, and anything
 about maps, are out of scope.
 
-**The Makefile's own refusals are out of scope too, and `research.md` R6 enumerates them one by one
-with the reason each cannot convert**, rather than asserting it as a class - `spec-fidelity` round 1
-was right that the first draft's "prompts for a person to answer" is false of several of them. What
-the enumeration finds: each Makefile refusal asks for a DECISION (a written reason, an authorization
-at a terminal, a procedure to run), and a decision is the one thing a substitution cannot supply.
+**The Makefile's own refusals are out of scope too, and `research.md` R6 enumerates all ten
+one by one** rather than asserting a class - `spec-fidelity` round 1 was right that the first
+draft's "prompts for a person to answer" is false of several. What the enumeration actually found,
+stated as it found it:
+
+- **seven** ask for a DECISION a substitution cannot supply: a written `REASON=`, an authorization
+  typed at a terminal, a procedure to run first.
+- **two** are not refusals a rewrite could apply to at all - `quick` over its budget REPORTS a run
+  that already happened, and a gate failure is a test result.
+- **one IS convertible**: `review-gate` refusing the number claim. It is out of scope here because
+  `research.md` R4 records it as the GM's decision between three priced options, not because it
+  cannot convert. That one row is the answer to the GM's own "is there a makefile command refusing
+  something a tool could rewrite" - and the answer is yes, once, and here it is.
 
 ## Requirements
 
@@ -116,10 +124,11 @@ correctly instead of not happening at all.
 ### FR-004 - `house-style` corrects the text instead of refusing the edit
 
 An em-dash or en-dash becomes a hyphen, and a British spelling on the project's own list becomes its
-American form, IN the edit payload, with one line saying what was corrected. A word whose American
-form depends on the sentence rather than on a substitution - `practise`, the noun-or-verb case - is
-never corrected, and an edit still violating house style after the mechanical corrections is refused
-exactly as today.
+American form, IN the edit payload, with one line saying what was corrected. Every word on the guard's own detection list has exactly one American form in
+`CLAUDE.md`'s table, INCLUDING the British verb spelling of "practice", which the first draft carved
+out as a judgment call: the project's rule gives one spelling for both the noun and the verb, so the
+substitution is as mechanical as the rest (`spec-fidelity` round 2). An edit still violating house
+style after the corrections is refused exactly as today.
 
 **THE GM'S OWN WRITING IS NEVER CORRECTED, and today's exemption does not cover it**
 (`spec-fidelity` round 1). The hook exempts by path - `/host-l7r-repo`, `l7r.md`, `gm-request.md` -
@@ -152,10 +161,16 @@ guard's own test suite may write into the real log (feature 162 T16).
 ### FR-008 - the refusals that must stay refusals are listed, with the reason
 
 `repo-safety`, `source-block`, `readme`, `discard`, `clone-sync`, `no-branch`, `measure` and
-`gate`'s `-k` subset rule are NOT converted, and `research.md` R3 records why for each: the action is
+`gate`'s `-k` subset rule keep their refusals, and `research.md` R3 records why for each: the action is
 destructive or irreversible, or the refusal is itself the content, or a substitution cannot know
 which of two outcomes was wanted. This list is part of the deliverable - an unlisted guard would
 otherwise be re-examined from scratch by the next session asking the GM's question.
+
+`measure` needs one line of its own, because "not converted" is not the whole truth about it: its
+BLOCK stays exactly as feature 162 left it - that block is the point - but its MATCHER moves to
+`_hookmatch.py` under FR-002, so it stops counting a mention as an invocation. The stale limitation
+comment in that file (*"a real command parse is not worth the false-negative risk"*) is replaced
+rather than left contradicting the code, since the parse now exists and is proven.
 
 **One finding is escalated rather than fixed**: `discard` was escaped in **5 of 5** firings. Either
 it fires on a shape it should not, or five sessions each knowingly discarded uncommitted work. A
