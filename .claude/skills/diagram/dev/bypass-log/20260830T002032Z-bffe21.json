@@ -1,0 +1,6 @@
+{
+  "utc": "20260830T002032Z",
+  "guard": "pair-hooks",
+  "what": "gate alone",
+  "reason": "regression BASELINE on unmodified code in a detached worktree (Principle XIII) - measuring what HEAD does before any edit; there is no delta for a settlement-review to read"
+}

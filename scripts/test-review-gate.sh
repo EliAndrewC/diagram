@@ -13,7 +13,8 @@ PASS=0; FAIL=0
 T=$(mktemp -d)
 trap 'rm -rf "$T"' EXIT
 
-POOL=".claude/skills/diagram/pool/hamlets"
+# The map fixture lives in its own folder, like every real map since feature 161.
+POOL=".claude/skills/diagram/pool/hamlets/m"
 
 # A repo whose `main` already holds $2 (the pre-existing state), then a `work` branch to change on.
 mkrepo() {

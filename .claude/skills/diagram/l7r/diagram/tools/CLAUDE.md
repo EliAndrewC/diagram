@@ -8,7 +8,7 @@ clever about what can reach a gen. See [`../pipeline/CLAUDE.md`](../pipeline/CLA
 
 Run them as modules, from the skill root:
 
-    python3 -m l7r.diagram.tools.why_placed pool/provincial-cities/nagahara.gen.py --at 1102.6,1429.5
+    python3 -m l7r.diagram.tools.why_placed legacy-hand-authored-pool/provincial-cities/nagahara/nagahara.gen.py --at 1102.6,1429.5
 
 Not `python3 tools/why_placed.py`. A package module run as a loose script puts `tools/` on
 `sys.path` instead of the skill root, so the same file can end up imported twice under two names.

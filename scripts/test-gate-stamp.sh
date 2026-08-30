@@ -77,5 +77,24 @@ git -C "$W" commit -qam guard3
 echo 'y = 1' > "$W/scripts/_helper.py"; git -C "$W" add -A; git -C "$W" commit -qm helper
 OUT=$(cd "$W" && python3 "$STAMP" --check origin/main 2>&1); check "new scripts/*.py, stamp predates it -> refused" 1 $?
 
+# A GIT WORKTREE: `.git` is a FILE there, not a directory (feature 161, 2026-08-30). This is not a
+# curiosity - constitution Principle XIII MANDATES a detached worktree for the regression baseline,
+# so `make done` in the tree the procedure tells you to create used to crash write_stamp with
+# `NotADirectoryError: .../.git/gate-green-hooks`, once per area. The gate ran and passed; only the
+# recording failed, noisily but non-fatally, which is the shape that gets scrolled past.
+WT="$W-worktree"
+rm -rf "$WT"
+git -C "$W" worktree add --detach -q "$WT" HEAD
+[ -f "$WT/.git" ] || { echo "FAIL  a worktree's .git should be a FILE - the fixture no longer reproduces the trap"; FAILED=1; }
+COMMON=$(git -C "$WT" rev-parse --git-common-dir)
+case $COMMON in /*) : ;; *) COMMON="$WT/$COMMON" ;; esac
+# DELETE any stamp an earlier case left behind, or the "it landed" assertion below passes on the
+# unfixed script by finding someone else's file - a check that cannot fail is not a check.
+rm -f "$COMMON/gate-green-hooks"
+( cd "$WT" && python3 "$STAMP" --write hooks ); check "--write inside a worktree (.git is a FILE) -> 0, no crash" 0 $?
+[ -f "$COMMON/gate-green-hooks" ]; check "the worktree's stamp lands in the shared git dir" 0 $?
+( cd "$WT" && python3 "$STAMP" --fresh hooks ); check "--fresh inside a worktree reads the stamp it just wrote" 0 $?
+git -C "$W" worktree remove --force "$WT"
+
 echo -----
 if [ "$FAILED" -eq 0 ]; then echo "all gate-stamp tests passed"; exit 0; else echo "SOME TESTS FAILED"; exit 1; fi

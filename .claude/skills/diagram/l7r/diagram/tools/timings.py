@@ -40,6 +40,8 @@ from dataclasses import dataclass, field
 from datetime import date
 from pathlib import Path
 
+from l7r.diagram.pipeline import poolmaps
+
 HERE = Path(__file__).resolve().parents[3]  # the skill root; this module lives in l7r/diagram/tools/ - FOUR levels up since feature 119, not two
 LEDGER = HERE / "timings.md"
 PY = sys.executable
@@ -121,8 +123,8 @@ def bench_cache(outdir: str) -> Result:
     hold and reports it as the cache's speed. The subject moved from frozen Minami to Sawada at
     the 2026-08-16 legacy freeze - a frozen map just prints FROZEN in 0.1 s, which the first
     post-freeze ledger block duly recorded as the finding."""
-    cold, ok_a, _ = sh([PY, "-m", "l7r.diagram.pipeline.regen", "--no-cache", "pool/hamlets/sawada.gen.py"], NO_RENDER)
-    warm, ok_b, out = sh([PY, "-m", "l7r.diagram.pipeline.regen", "pool/hamlets/sawada.gen.py"], NO_RENDER)
+    cold, ok_a, _ = sh([PY, "-m", "l7r.diagram.pipeline.regen", "--no-cache", "pool/hamlets/sawada/sawada.gen.py"], NO_RENDER)
+    warm, ok_b, out = sh([PY, "-m", "l7r.diagram.pipeline.regen", "pool/hamlets/sawada/sawada.gen.py"], NO_RENDER)
     hit = "CACHED" in out
     return Result(
         "map_regen_sawada",
@@ -208,7 +210,8 @@ def context() -> dict[str, str]:
         "resvg": first_line(["resvg", "--version"]),
         "commit": first_line(["git", "rev-parse", "--short", "HEAD"]),
         "tests": tests,
-        "maps": str(len(list((HERE / "pool").glob("*/*.gen.py")))),
+        # BOTH trees: this is a census of what the repository holds, not of what rolls.
+        "maps": str(len(poolmaps.bundles(skill_dir=str(HERE)))),
     }
 
 

@@ -62,7 +62,6 @@ from __future__ import annotations
 
 import argparse
 import ast
-import glob
 import json
 import os
 import pathlib
@@ -103,9 +102,9 @@ SWEEP_TIMEOUT_BASE, SWEEP_TIMEOUT_PER_MAP = 60, 180
 
 def gens(all_maps: bool) -> list[str]:
     out = []
-    for gen in sorted(glob.glob(os.path.join(HERE, "pool", "*", "*.gen.py"))):
-        if poolmaps.classify(gen) != "scripted":
-            continue  # frozen legacy maps are never regenerated; compound gens have no manifest
+    # LIVE TREE ONLY, scripted only: a frozen map is never regenerated, so it has no cache to
+    # audit, and a compound gen has no manifest (feature 161 - the tree is now stated, not implied).
+    for gen in poolmaps.gens(trees=(poolmaps.LIVE_TREE,), kinds={"scripted"}, skill_dir=HERE):
         if all_maps or os.path.basename(gen)[: -len(".gen.py")] in SUBSET:
             out.append(gen)
     return out

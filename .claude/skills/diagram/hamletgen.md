@@ -15,7 +15,7 @@ canvas, the sluice, the cluster center, the lane polylines, the pond rectangle, 
 and the windbreak belt as literal coordinates, then iterates against `check_village/` until the
 gate goes green. It works. It is slow. *"It might be faster to create a scripted process."*
 
-The instruction was to try it on the simplest tier - a rice hamlet, with `pool/hamlets/ikegami` as
+The instruction was to try it on the simplest tier - a rice hamlet, with `legacy-hand-authored-pool/hamlets/ikegami/ikegami` as
 the reference subject - and to build something with **tunable knobs** rather than one map's worth of
 special cases, on the understanding that unusual places (the GM's example: a hamlet on red clay)
 would still be generated normally and then modified by hand.
@@ -46,7 +46,7 @@ footprint, the wells - is derived from geometry already on the map, or rolled fr
 ## It builds on the knob engine; it does not replace it
 
 `Settlement.roll_village` (feature 005) already rolls a gate-passing hamlet from a seed, and
-`pool/hamlets/honda` and `shimizu` are the shipped proof. **That work is the foundation of this
+`legacy-hand-authored-pool/hamlets/honda/honda` and `shimizu` are the shipped proof. **That work is the foundation of this
 one.** What this module adds is the gap between what `roll_village` produces and what an authored
 map like Ikegami contains:
 

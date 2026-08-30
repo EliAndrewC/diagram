@@ -20,11 +20,26 @@ their own idea of what the pool contains - this module is so they cannot drift a
   design and still actively maintained.
 - **unknown** - anything else. `tests/test_villages.py`'s ratchet fails the suite by name on these,
   because a map in the pool that no test regenerates is a map with no gate.
+
+SINCE FEATURE 161 THIS MODULE ALSO OWNS THE WALK, not just the classification, and for the same
+reason. The pool is two trees of `<tree>/<tier>/<map>/<map>.gen.py`: `pool/` for what is LIVE
+(scripted settlements + Mode A compound plans) and `legacy-hand-authored-pool/` for the 18 FROZEN
+hand-authored exhibits. Ten consumers used to hardcode the old two-level shape independently - four
+globs, an `os.listdir`, a `$(wildcard)`, a subprocess grep, a literal default path - and they drifted
+exactly as this module's first paragraph predicted: `mapcheck._live_gens` records that Kuwabata was
+converted to `hamletgen` and left in `LEGACY_FROZEN_GENS`, so `regen.py` (which asks `classify`)
+regenerated it while `make maps` (which read the list) never rolled it.
+
+`bundles()` is the surface they all call now. Its load-bearing argument is `trees`, NOT the file
+listing: a consumer must say which tree its job concerns, because getting that wrong is SILENT - a
+sweep over too few maps is green. The contract, with the per-consumer table of who asks for what, is
+`specs/161-pool-per-map-folders/contracts/pool-discovery.md`.
 """
 
 from __future__ import annotations
 
 import os
+from dataclasses import dataclass
 
 # Scripted-generation engine modules. A gen that imports one of these is a LIVE scripted map; add
 # each new engine (a future village/town generator) here and its maps join the sweep automatically.
@@ -91,3 +106,95 @@ def classify(gen: str) -> str:
     if base in LEGACY_FROZEN_GENS:
         return "legacy"
     return "unknown"
+
+
+# The two trees, live first. A tier name may appear in BOTH (hamlets does): the tree, not the tier,
+# is what says whether a map is regenerated - which is the distinction the old flat layout could not
+# express and the reorganization exists to make visible.
+LIVE_TREE = "pool"
+LEGACY_TREE = "legacy-hand-authored-pool"
+TREES: tuple[str, ...] = (LIVE_TREE, LEGACY_TREE)
+
+# Directories inside a tree that are not tiers of maps. `regressions/` holds ~107 negative check
+# fixtures - one file each, no bundle, no render, no index row - and `__pycache__` is an interpreter
+# dropping. Excluded HERE rather than in each consumer so the index and the sweeps cannot disagree
+# about what counts as a map (they previously each carried their own copy of this list).
+NOT_TIERS = frozenset({"regressions", "__pycache__"})
+
+_SKILL_DIR = os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", ".."))
+
+
+@dataclass(frozen=True)
+class MapBundle:
+    """One map and the folder that holds it: `<tree>/<tier>/<stem>/<stem>.gen.py` and its siblings.
+
+    A map is IDENTIFIED by its `.gen.py`; every other file in the bundle is optional on disk. That
+    is not a technicality - a live map's `.svg`/`.png`/`.html` are gitignored, so a clean checkout
+    has none of them, and the only renders most checks can actually see are the FROZEN exhibits,
+    whose renders are committed write-once. See `path()`.
+    """
+
+    gen: str
+    stem: str
+    tier: str
+    tree: str
+    directory: str
+
+    def path(self, ext: str) -> str:
+        """Where this bundle's `<stem><ext>` sits - whether or not it exists.
+
+        Answers about the LAYOUT, never about presence, because the caller that wants a render
+        usually has to handle its absence anyway (a clean checkout simply has none).
+        """
+        return os.path.join(self.directory, self.stem + ext)
+
+    @property
+    def kind(self) -> str:
+        """'scripted' | 'legacy' | 'compound' | 'unknown' - `classify` on this bundle's gen."""
+        return classify(self.gen)
+
+
+def bundles(
+    *,
+    trees: tuple[str, ...] = TREES,
+    kinds: frozenset[str] | set[str] | None = None,
+    skill_dir: str = _SKILL_DIR,
+) -> list[MapBundle]:
+    """Every map bundle in `trees`, optionally filtered to `kinds`, in a deterministic order.
+
+    Sorted by (tree, tier, stem) with the live tree first, so a listing built from this is stable
+    and two consumers can never disagree about order.
+
+    `trees` DEFAULTS TO BOTH on purpose. The two failure directions are not symmetric: a consumer
+    that collects too much trips its own assertions, while one that collects too little is simply
+    green - so the default is the one that misses nothing, and narrowing is a deliberate act. The
+    per-consumer answers are tabulated in the contract; feature 161's own research (R9) found the
+    single place where under-collecting would have been LOUD rather than silent, and recorded that
+    its loudness was luck.
+
+    A tree that is absent from disk contributes nothing rather than raising: `pool/capitals/` does
+    not exist yet, and a test fixture that builds one tree must not have to build the other.
+    """
+    out: list[MapBundle] = []
+    for tree in trees:
+        root = os.path.join(skill_dir, tree)
+        if not os.path.isdir(root):
+            continue
+        for tier in sorted(os.listdir(root)):
+            tier_dir = os.path.join(root, tier)
+            if tier in NOT_TIERS or not os.path.isdir(tier_dir):
+                continue
+            for stem in sorted(os.listdir(tier_dir)):
+                map_dir = os.path.join(tier_dir, stem)
+                gen = os.path.join(map_dir, stem + ".gen.py")
+                if stem in NOT_TIERS or not os.path.isdir(map_dir) or not os.path.isfile(gen):
+                    continue
+                out.append(MapBundle(gen=gen, stem=stem, tier=tier, tree=tree, directory=map_dir))
+    if kinds is not None:
+        out = [b for b in out if b.kind in kinds]
+    return out
+
+
+def gens(**kw: object) -> list[str]:
+    """The `.gen.py` paths of `bundles(**kw)` - the shape most existing consumers already wanted."""
+    return [b.gen for b in bundles(**kw)]  # type: ignore[arg-type]

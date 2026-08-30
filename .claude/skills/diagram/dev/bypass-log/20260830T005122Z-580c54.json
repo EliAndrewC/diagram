@@ -1,0 +1,6 @@
+{
+  "utc": "20260830T005122Z",
+  "guard": "pair-hooks",
+  "what": "gate alone",
+  "reason": "settlement-review is N/A for this delta and the GM ruled on exactly this case (2026-08-29): they read the map themselves, and REVIEW_GATE_OK is for a manifest that moved only because the engine did. Here NO manifest moved at all - feature 161 is a directory restructuring, FR-007 forbids re-rolling, and git records all 36 exhibit renders plus every manifest as R100 byte-identical renames. There is no changed ink for a reviewer to read."
+}

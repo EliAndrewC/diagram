@@ -10,7 +10,7 @@ rank-graded samurai districts, retainer terraces, commoner machi), the public we
 towers and the kido mesh are feature 021's - the packs flow around the ground reserved here.
 
 THE HOUSE. Daika is a Bayushi vassal house of the SCORPION, seated here; Ubame county (see
-pool/towns/ubame.gen.py) is one of its county seats, out in Moriguchi province, and the charcoal
+legacy-hand-authored-pool/towns/ubame/ubame.gen.py) is one of its county seats, out in Moriguchi province, and the charcoal
 road that leaves Ubame westward arrives at this city's EAST gate. Scorpion patron fortunes are
 Benten and Jurojin, so the two sovereign temples are theirs.
 

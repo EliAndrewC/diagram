@@ -573,7 +573,7 @@ def test_every_keep_clear_key_makes_its_holes() -> None:
 
     from l7r.diagram.interactive.page import HIT_KEEP_CLEAR, _keep_clear_clip
 
-    man = json.loads((Path(__file__).resolve().parents[2] / "pool/hamlets/kuwabata.json").read_text())
+    man = json.loads((Path(__file__).resolve().parents[2] / "pool/hamlets/kuwabata/kuwabata.json").read_text())
     for k in HIT_KEEP_CLEAR:
         assert man.get(k), f"{k} records nothing on this map, so the count below cannot see it go wrong"
     recs = [r for k in HIT_KEEP_CLEAR for r in man.get(k) or []]

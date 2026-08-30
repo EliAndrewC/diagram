@@ -51,7 +51,7 @@ GROSS_ACRES_PER_HOUSEHOLD = 1.3
 # THE OLD DIAGNOSIS WAS WRONG, so do not restore it from an old copy of this comment. It said the
 # drawn house "is offset from the seed point AND scaled by the wealth/length jitter - so the rect
 # the placer clears is neither the size nor the position of the rect the map draws." Measured across
-# pool/hamlets/inashiro.json: position and size match the drawn record to 0.0000 px. The divergence
+# pool/hamlets/inashiro/inashiro.json: position and size match the drawn record to 0.0000 px. The divergence
 # was the RAKE (`_house_rot`, +/-5 deg, up to 2.56 px of corner bulge) - and separately, 32 was the
 # PLAIN house's arithmetic while the nucleated path jitters a minka's length to 1.35x, because a
 # minka grew by adding bays along the ridge.

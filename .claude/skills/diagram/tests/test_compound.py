@@ -184,9 +184,11 @@ def test_main_writes_a_draft(tmp_path, capsys) -> None:
 
 def test_main_default_path(tmp_path, monkeypatch) -> None:
     monkeypatch.chdir(tmp_path)
-    (tmp_path / "pool" / "magistracies").mkdir(parents=True)
+    # The map bundle's own folder, like every real map since feature 161: compound.main writes
+    # its default output into it, and creating only the tier leaves nowhere to write.
+    (tmp_path / "pool" / "magistracies" / "county-magistracy-example").mkdir(parents=True)
     assert c.main([]) == 0
-    assert (tmp_path / "pool" / "magistracies" / "county-magistracy-example.svg").exists()
+    assert (tmp_path / "pool" / "magistracies" / "county-magistracy-example" / "county-magistracy-example.svg").exists()
 
 
 def test_main_reports_overflow(tmp_path, monkeypatch, capsys) -> None:

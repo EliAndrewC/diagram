@@ -216,7 +216,7 @@ used to carry was WRONG, so read the correction before quoting it anywhere.
 wealth/length jitter - so the rect the placer clears is neither the size nor the position of the
 rect that gets drawn."
 
-*What is true:* measured across `pool/hamlets/inashiro.json`, the bundle's house rect matches the
+*What is true:* measured across `pool/hamlets/inashiro/inashiro.json`, the bundle's house rect matches the
 drawn record's position and size to **0.0000 px**. `hw`/`hh` are computed with their jitter BEFORE
 `_place_bundle` is called, and `_bundle_geom` is rebuilt at the final slid position. **The
 divergence was the RAKE, and only the rake** - `_house_rot`'s +/-5 deg, worth up to **2.56 px** of

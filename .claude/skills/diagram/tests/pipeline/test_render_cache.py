@@ -27,8 +27,9 @@ FAKE_GEN = (
 )
 
 
-def _make_gen(pool: str, subdir: str, stem: str) -> str:
-    d = os.path.join(pool, subdir)
+def _make_gen(skill: str, tier: str, stem: str, tree: str = "pool") -> str:
+    """One map bundle in its OWN folder: <skill>/<tree>/<tier>/<stem>/<stem>.gen.py (feature 161)."""
+    d = os.path.join(skill, tree, tier, stem)
     os.makedirs(d, exist_ok=True)
     path = os.path.join(d, stem + ".gen.py")
     with open(path, "w") as fh:
@@ -76,7 +77,9 @@ def repo(tmp_path):
     with open(os.path.join(skill, "notes.md"), "w") as fh:
         fh.write("excluded: not python\n")
     with open(os.path.join(repo_dir, ".gitignore"), "w") as fh:
-        fh.write("skill/pool/villages/*.svg\nskill/pool/villages/*.png\nskill/pool/magistracies/*.png\n")
+        # The real rules are patterns over <tree>/<tier>/<map>/ since feature 161; mirror that
+        # depth here, or `is_cacheable` cannot tell Mode A from Mode B.
+        fh.write("skill/pool/*/*/*.svg\nskill/pool/*/*/*.png\nskill/pool/*/*/*.html\n!skill/pool/magistracies/*/*.svg\n")
     return repo_dir, skill, pool
 
 
@@ -148,16 +151,16 @@ def test_read_stamp_missing_and_unstamped(tmp_path):
 
 
 def test_is_cacheable_reads_gitignore(repo):
-    repo_dir, _, pool = repo
-    mode_b = _make_gen(pool, "villages", "hoshi")
-    mode_a = _make_gen(pool, "magistracies", "ochiba")
+    repo_dir, skill, _pool = repo
+    mode_b = _make_gen(skill, "villages", "hoshi")
+    mode_a = _make_gen(skill, "magistracies", "ochiba")
     assert rc.is_cacheable(mode_b, repo_dir) is True
     assert rc.is_cacheable(mode_a, repo_dir) is False
 
 
 def test_is_fresh_all_paths(repo):
-    _, skill, pool = repo
-    gen = _make_gen(pool, "villages", "hoshi")
+    _, skill, _pool = repo
+    gen = _make_gen(skill, "villages", "hoshi")
     fp = rc.engine_fingerprint(skill)
     svg = rc._predicted_svg(gen)
     png = svg[:-4] + ".png"
@@ -177,11 +180,11 @@ def test_is_fresh_all_paths(repo):
 
 
 def test_regen_pool_runs_stale_skips_fresh_and_exempts_mode_a(repo):
-    repo_dir, skill, pool = repo
+    repo_dir, skill, _pool = repo
     fp = rc.engine_fingerprint(skill)
-    stale = _make_gen(pool, "villages", "stale")
-    fresh = _make_gen(pool, "villages", "fresh")
-    mode_a = _make_gen(pool, "magistracies", "ochiba")
+    stale = _make_gen(skill, "villages", "stale")
+    fresh = _make_gen(skill, "villages", "fresh")
+    mode_a = _make_gen(skill, "magistracies", "ochiba")
     # pre-satisfy the fresh one so it is skipped (svg stamped correctly + png present)
     fsvg = rc._predicted_svg(fresh)
     with open(fsvg, "w") as fh:
@@ -192,7 +195,7 @@ def test_regen_pool_runs_stale_skips_fresh_and_exempts_mode_a(repo):
         fh.write("<!DOCTYPE html>")  # the interactive page is the third derived render (feature 134)
     rc.stamp_svg(fsvg, rc.input_hash(fresh, fp))
 
-    skipped, ran, frozen = rc.regen_pool(pool, repo_dir, skill_dir=skill, jobs=2)
+    skipped, ran, frozen = rc.regen_pool(skill, repo_dir, jobs=2)
 
     assert skipped == [fresh]
     assert ran == sorted([stale, mode_a])
@@ -208,21 +211,21 @@ def test_regen_pool_runs_stale_skips_fresh_and_exempts_mode_a(repo):
 
 
 def test_regen_pool_no_allow_main(repo):
-    repo_dir, skill, pool = repo
-    gen = _make_gen(pool, "villages", "m")
-    skipped, ran, frozen = rc.regen_pool(pool, repo_dir, skill_dir=skill, jobs=None, allow_main=False)
+    repo_dir, skill, _pool = repo
+    gen = _make_gen(skill, "villages", "m")
+    skipped, ran, frozen = rc.regen_pool(skill, repo_dir, jobs=None, allow_main=False)
     assert skipped == [] and ran == [gen] and frozen == []
     assert Path(rc._predicted_svg(gen)[:-4] + ".ran").read_text() == "unset"
 
 
 def test_main_reports_and_returns_zero(repo, capsys):
-    repo_dir, skill, pool = repo
-    _make_gen(pool, "villages", "m")
-    rv = rc.main(["--pool", pool, "--main-repo", repo_dir, "--skill-dir", skill, "--jobs", "2"])
+    repo_dir, skill, _pool = repo
+    _make_gen(skill, "villages", "m")
+    rv = rc.main(["--main-repo", repo_dir, "--skill-dir", skill, "--jobs", "2"])
     assert rv == 0
     out = capsys.readouterr().out
     assert "1 regenerated, 0 cached" in out
-    assert "regen  villages/m.gen.py" in out
+    assert "regen  pool/villages/m/m.gen.py" in out
 
 
 def test_regen_pool_never_reruns_a_frozen_legacy_map(repo, capsys):
@@ -231,22 +234,24 @@ def test_regen_pool_never_reruns_a_frozen_legacy_map(repo, capsys):
     main's exhibit renders can never be replaced by a drifted engine (a rerun would also rewrite
     the exhibit's tracked .json). A frozen map with a MISSING render is reported loudly by main()
     instead of healed, because healing it with today's engine IS the drift."""
-    repo_dir, skill, pool = repo
-    frozen_gen = _make_gen(pool, "villages", "minami")  # the basename is what puts it on the frozen list
-    live = _make_gen(pool, "villages", "live")
-    skipped, ran, frozen = rc.regen_pool(pool, repo_dir, skill_dir=skill, jobs=2)
+    repo_dir, skill, _pool = repo
+    # The basename is what puts it on the frozen list - and it now lives in the legacy TREE,
+    # which is where regen_pool has to look to warn about a missing exhibit at all (feature 161).
+    frozen_gen = _make_gen(skill, "villages", "minami", tree="legacy-hand-authored-pool")
+    live = _make_gen(skill, "villages", "live")
+    skipped, ran, frozen = rc.regen_pool(skill, repo_dir, jobs=2)
     assert frozen == [frozen_gen] and ran == [live] and skipped == []
     assert not os.path.exists(rc._predicted_svg(frozen_gen)), "the frozen gen must not even have been run"
-    assert rc.main(["--pool", pool, "--main-repo", repo_dir, "--skill-dir", skill]) == 0
+    assert rc.main(["--main-repo", repo_dir, "--skill-dir", skill]) == 0
     out = capsys.readouterr().out
     assert "1 frozen" in out and "WARNING: frozen map" in out and "minami.gen.py" in out and "NOT healed" in out
     assert "git checkout" in out  # the renders are committed exhibits, so checkout IS the restore path
 
 
 def test_main_no_allow_main_flag(repo):
-    repo_dir, skill, pool = repo
-    gen = _make_gen(pool, "villages", "m")
-    assert rc.main(["--pool", pool, "--main-repo", repo_dir, "--skill-dir", skill, "--no-allow-main"]) == 0
+    repo_dir, skill, _pool = repo
+    gen = _make_gen(skill, "villages", "m")
+    assert rc.main(["--main-repo", repo_dir, "--skill-dir", skill, "--no-allow-main"]) == 0
     assert Path(rc._predicted_svg(gen)[:-4] + ".ran").read_text() == "unset"
 
 
@@ -271,7 +276,7 @@ def test_every_live_pool_png_matches_its_own_svg_viewbox(pool_tier_glob):
     from l7r.diagram.pipeline import poolmaps
 
     checked = 0
-    for gen in sorted(glob.glob(os.path.join(HERE, "pool", pool_tier_glob, "*.gen.py"))):  # the tier's own maps under --tier
+    for gen in sorted(glob.glob(os.path.join(HERE, "pool", pool_tier_glob, "*", "*.gen.py"))):  # the tier's own maps under --tier
         if poolmaps.classify(gen) != "scripted":
             continue  # frozen legacy renders are committed exhibits; Mode A compounds have no viewBox contract here
         stem = gen[: -len(".gen.py")]
@@ -301,8 +306,8 @@ def test_main_derives_main_repo_from_this_checkout_when_not_given(tmp_path, monk
         return [], [], []
 
     monkeypatch.setattr(rc, "regen_pool", fake_regen)
-    monkeypatch.setattr(rc.pool_index, "write_index", lambda pool: os.path.join(pool, "index.html"))
-    assert rc.main(["--pool", str(tmp_path), "--skill-dir", str(tmp_path)]) == 0
+    monkeypatch.setattr(rc.pool_index, "write_index", lambda skill: os.path.join(skill, "index.html"))
+    assert rc.main(["--skill-dir", str(tmp_path)]) == 0
     here = os.path.dirname(os.path.abspath(rc.__file__))
     expected = subprocess.run(["git", "-C", here, "rev-parse", "--show-toplevel"], capture_output=True, text=True, check=True).stdout.strip()
     # `.git` is a directory in a clone and a FILE in a detached worktree (the baseline tree CLAUDE.md

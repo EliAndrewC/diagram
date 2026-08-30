@@ -188,7 +188,7 @@ class BundleFitMixin:
 
         WHAT ACTUALLY DIVERGES IS THE RAKE, and only the rake. The bundle's house rect matches the
         drawn record's position and size exactly (four decimal places, measured across
-        pool/hamlets/inashiro.json); `_house_rot` is what the renderer adds afterward, and an
+        pool/hamlets/inashiro/inashiro.json); `_house_rot` is what the renderer adds afterward, and an
         axis-aligned clearance ignores up to 2.56 px of corner bulge. Since the rake is
         position-seeded it is knowable at seat time, so this is an exact test and not an estimate.
 

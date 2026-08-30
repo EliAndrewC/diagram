@@ -18,7 +18,7 @@ greenlet==3.5.5
     # via playwright
 iniconfig==2.3.0
     # via pytest
-numpy==2.5.2
+numpy==2.5.1
     # via types-shapely
 packaging==26.2
     # via

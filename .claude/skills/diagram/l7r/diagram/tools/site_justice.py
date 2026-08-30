@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """Propose legal seats for the justice works (feature 015) on an existing Mode B manifest.
 
-    python3 -m l7r.diagram.tools.site_justice pool/provincial-cities/nagahara.json execution_ground
-    python3 -m l7r.diagram.tools.site_justice pool/towns/hirameki.json boundary_marker --ground 1620,1900
+    python3 -m l7r.diagram.tools.site_justice legacy-hand-authored-pool/provincial-cities/nagahara/nagahara.json execution_ground
+    python3 -m l7r.diagram.tools.site_justice legacy-hand-authored-pool/towns/hirameki/hirameki.json boundary_marker --ground 1620,1900
 
 WHY THIS EXISTS. Siting an execution ground by hand costs a regenerate-and-check cycle per guess,
 and the constraints interact: outside the wall, on the way out, past the boundary stone, clear of

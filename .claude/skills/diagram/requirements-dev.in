@@ -1,5 +1,12 @@
 # The quality gate (`make done`): lint, format, types, tests, coverage, parallel runner.
-# Re-lock: pip-compile --output-file=requirements-dev.txt requirements-dev.in
+# Re-lock: pip-compile -c requirements.txt --output-file=requirements-dev.txt requirements-dev.in
+#
+# THE `-c requirements.txt` IS LOAD-BEARING. setup-dev-env.sh installs both lockfiles in ONE pip
+# command, so a transitive dependency they SHARE must resolve to the same version in both or pip
+# refuses the whole install with ResolutionImpossible and a fresh container cannot be provisioned.
+# Measured 2026-08-30: the two files were compiled independently and drifted to numpy 2.5.1 (via
+# shapely, runtime) against numpy 2.5.2 (via types-shapely, dev). Constraining the dev compile to
+# the runtime lock is what stops the drift recurring on the next shared dep.
 ruff
 pyrefly      # THE type checker (feature 142) - Rust, one-shot, no daemon
 pytest

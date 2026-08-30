@@ -21,7 +21,7 @@ contradiction - this docstring said "seven" and meant the gate's number until a 
 measured it (2026-08-19) - `future-work/` "paddy bunds that step sideways" lists what
 refuses each and what it would take to reach zero.
 
-    python3 -m l7r.diagram.tools.jogs pool/hamlets/inashiro.json
+    python3 -m l7r.diagram.tools.jogs pool/hamlets/inashiro/inashiro.json
     python3 -m l7r.diagram.tools.jogs pool/hamlets/*.json --top 20
 
 Reads the recorded manifest - it does not run the gen - so it costs milliseconds and answers about

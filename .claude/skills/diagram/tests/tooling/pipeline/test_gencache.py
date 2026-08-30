@@ -18,7 +18,7 @@ from tests.pipeline.test_gencache import HERE, _fixture, _with_engine
 def test_a_gen_that_ends_by_exiting_does_not_kill_the_sweep(tmp_path, monkeypatch):
     """Every Mode A gen ends `raise SystemExit(main())` - a normal successful return for a script,
     but `runpy` runs it in THIS interpreter, so it used to propagate straight out of regen.py and
-    stop the batch dead at exit 0. `regen.py pool/*/*.gen.py` did the nine hamlets, hit the first
+    stop the batch dead at exit 0. `regen.py pool/*/*/*.gen.py` did the nine hamlets, hit the first
     magistracy, and reported success having skipped every town, village and city (2026-08-08)."""
     eng, gen, out = _fixture(tmp_path)
     _with_engine(monkeypatch, tmp_path, eng)
@@ -66,7 +66,7 @@ def test_a_foreign_parallel_coverage_file_reaches_the_report(tmp_path):
 
 @pytest.mark.tooling
 def test_regen_skips_frozen_legacy_maps():
-    """The 2026-08-16 legacy freeze, enforced at the ITERATION path: `regen.py pool/*/*.gen.py`
+    """The 2026-08-16 legacy freeze, enforced at the ITERATION path: `regen.py pool/*/*/*.gen.py`
     must not rewrite a frozen exhibit - the engine drifts freely now, so a re-run would replace
     committed artifacts with output nobody reviewed. The skip happens BEFORE any cache or
     generation work, and the message carries the policy and the `--frozen-ok` override (tips live
@@ -78,7 +78,7 @@ def test_regen_skips_frozen_legacy_maps():
 
     buf = io.StringIO()
     with contextlib.redirect_stdout(buf):
-        rc = regen.main([os.path.join(HERE, "pool", "towns", "hoshizora.gen.py")])
+        rc = regen.main([os.path.join(HERE, "legacy-hand-authored-pool", "towns", "hoshizora", "hoshizora.gen.py")])
     out = buf.getvalue()
     assert rc == 0
     assert "FROZEN" in out and "--frozen-ok" in out and "migration-plan.md" in out

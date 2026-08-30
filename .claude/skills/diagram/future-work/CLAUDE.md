@@ -45,7 +45,7 @@ estates and keeps are coming.
    measurement is a feeling, and this project's own history says a feeling is usually wrong about
    which fix will work.
 4. **Check the era before you act on an old entry.** Much of the city material predates scripted
-   generation and assumes a next hand-authored map. There will not be one: the 19 hand-authored maps
+   generation and assumes a next hand-authored map. There will not be one: the 18 hand-authored maps
    are FROZEN and conversion is the answer for every tier above hamlet
    ([`../migration-plan.md`](../migration-plan.md)). Those entries are annotated - the task is dead,
    the insight is an input to that tier's conversion.

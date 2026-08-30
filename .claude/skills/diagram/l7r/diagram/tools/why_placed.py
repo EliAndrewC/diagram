@@ -13,10 +13,10 @@ question too.
 Two modes, and they are the two halves of every placement puzzle:
 
     # WHO put a feature here? (and what else is recorded at that spot)
-    python3 -m l7r.diagram.tools.why_placed pool/provincial-cities/nagahara.gen.py --at 1102.6,1429.5
+    python3 -m l7r.diagram.tools.why_placed legacy-hand-authored-pool/provincial-cities/nagahara/nagahara.gen.py --at 1102.6,1429.5
 
     # WHY did nothing land here? (which observed test refused the candidates)
-    python3 -m l7r.diagram.tools.why_placed pool/provincial-cities/nagahara.gen.py --refused 1102.6,1429.5
+    python3 -m l7r.diagram.tools.why_placed legacy-hand-authored-pool/provincial-cities/nagahara/nagahara.gen.py --refused 1102.6,1429.5
 
 `--at` reports every manifest record appended within the radius, with the gen line and the
 `settlement/` call chain that produced it. `--refused` reports the `_fits` calls made near the

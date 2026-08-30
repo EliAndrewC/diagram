@@ -20,15 +20,21 @@ import pytest
 from l7r.diagram.tools.notes_census import BEGIN, END, block
 
 _HERE = os.path.dirname(os.path.abspath(__file__))
-_POOL = os.path.normpath(os.path.join(_HERE, "..", "pool"))
+_SKILL = os.path.normpath(os.path.join(_HERE, ".."))
 
 
 def _with_blocks() -> list[str]:
+    """Every map's notes file that carries a census block, in BOTH trees (feature 161).
+
+    A frozen exhibit's census block is as much a shipped claim as a live map's - it states counts
+    a reader can check against the manifest beside it - so the legacy tree is walked here too.
+    """
     out = []
-    for notes in sorted(glob.glob(os.path.join(_POOL, "*", "*.notes.md"))):
-        with open(notes, encoding="utf-8") as fh:
-            if BEGIN in fh.read():
-                out.append(notes)
+    for tree in ("pool", "legacy-hand-authored-pool"):
+        for notes in sorted(glob.glob(os.path.join(_SKILL, tree, "*", "*", "*.notes.md"))):
+            with open(notes, encoding="utf-8") as fh:
+                if BEGIN in fh.read():
+                    out.append(notes)
     return out
 
 

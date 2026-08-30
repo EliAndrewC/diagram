@@ -598,7 +598,7 @@ and Evolution of Traditional Villages in the Mountainous Area of Southwest Zheji
 
 **Sources:** `visit-toyama-sankyoson`, `mdpi-sho-fan-groundwater` (READ 2026-08-24)
 
-**Asked** in `pool/hamlets/akagahara.notes.md` as *"a GM ruling that would generalize to every
+**Asked** in `legacy-hand-authored-pool/hamlets/akagahara/akagahara.notes.md` as *"a GM ruling that would generalize to every
 dispersed map"*, after three east-row farms measured 501 / 622 / 741 ft from a well while
 `farm_wells_within_reach` (the 500 ft doctrine) is gated to town/city scale so nothing enforced it.
 **Researched 2026-08-24 instead of asked** - Principle XII puts the search pass ahead of the GM, and

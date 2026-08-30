@@ -33,7 +33,6 @@ from __future__ import annotations
 
 import argparse
 import concurrent.futures
-import glob
 import hashlib
 import os
 import re
@@ -80,7 +79,13 @@ def engine_fingerprint(skill_dir: str = SKILL_DIR) -> str:
     be in the fingerprint; test files are excluded because they never determine a render."""
     parts: list[bytes] = []
     for dirpath, dirnames, filenames in os.walk(skill_dir):
-        dirnames[:] = sorted(d for d in dirnames if d not in ("pool", "wip", "tests", "__pycache__") and not d.startswith(("test_", ".")))
+        # PRUNED BY NAME, so a NEW TOP-LEVEL TREE MUST BE ADDED HERE (feature 161). The legacy
+        # tree is map sources, not engine sources: if its 18 frozen gens entered this
+        # fingerprint, every live map's stamp would go stale at once and any future edit to a
+        # frozen exhibit would invalidate the whole live pool - backwards, since the freeze
+        # exists so those files cost nothing. Nothing would go red; both outcomes look exactly
+        # like a cache working normally. `poolmaps.TREES` is the list, so it cannot drift.
+        dirnames[:] = sorted(d for d in dirnames if d not in (*poolmaps.TREES, "wip", "tests", "__pycache__") and not d.startswith(("test_", ".")))
         rel_dir = os.path.relpath(dirpath, skill_dir)
         for name in sorted(filenames):
             if not name.endswith(".py") or name.startswith("test_") or name == os.path.basename(__file__):
@@ -144,14 +149,17 @@ def _is_fresh(gen_path: str, fingerprint: str) -> bool:
 
 
 def regen_pool(
-    pool_dir: str,
+    skill_dir: str,
     main_repo: str,
-    skill_dir: str = SKILL_DIR,
     jobs: int | None = None,
     allow_main: bool = True,
 ) -> tuple[list[str], list[str], list[str]]:
     """Regenerate the pool's derived renders in place, skipping any Mode B map whose stamp is fresh
     and never touching a FROZEN legacy map.
+
+    Walks BOTH trees (feature 161). The live tree is what actually regenerates; the legacy tree is
+    here because the missing-exhibit WARNING below is about frozen maps, and that job followed the
+    exhibits when they moved out of `pool/`.
 
     Returns (skipped, regenerated, frozen) as sorted lists of generator paths. Each generator runs
     from its OWN directory - Mode B gens are cwd-independent, Mode A gens write cwd-relative
@@ -159,7 +167,7 @@ def regen_pool(
     subprocesses (not this process): the generators import the engine, whose main-tree guard must
     stand down for this one sanctioned regen-in-main."""
     fingerprint = engine_fingerprint(skill_dir)
-    gens = sorted(glob.glob(os.path.join(pool_dir, "*", "*.gen.py")))
+    gens = poolmaps.gens(skill_dir=skill_dir)
     to_run: list[tuple[str, bool]] = []
     skipped: list[str] = []
     frozen: list[str] = []
@@ -202,9 +210,8 @@ def regen_pool(
 
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description="Regenerate the diagram pool renders, cache-short-circuited.")
-    ap.add_argument("--pool", default=os.path.join(SKILL_DIR, "pool"), help="pool directory to regenerate")
     ap.add_argument("--main-repo", default=None, help="git repo whose .gitignore decides Mode A vs B (default: the checkout this file is in)")
-    ap.add_argument("--skill-dir", default=SKILL_DIR, help="skill dir holding the engine sources (for the fingerprint)")
+    ap.add_argument("--skill-dir", default=SKILL_DIR, help="skill dir holding BOTH pool trees and the engine sources")
     ap.add_argument("--jobs", type=int, default=None, help="parallelism (default: cpu count)")
     ap.add_argument("--no-allow-main", action="store_true", help="do not set GM_ASSISTANT_ALLOW_MAIN for the generators")
     args = ap.parse_args(argv)
@@ -212,28 +219,27 @@ def main(argv: list[str] | None = None) -> int:
         here = os.path.dirname(os.path.abspath(__file__))
         args.main_repo = subprocess.run(["git", "-C", here, "rev-parse", "--show-toplevel"], capture_output=True, text=True, check=True).stdout.strip()
     skipped, ran, frozen = regen_pool(
-        args.pool,
+        args.skill_dir,
         args.main_repo,
-        skill_dir=args.skill_dir,
         jobs=args.jobs,
         allow_main=not args.no_allow_main,
     )
     print(f"render-cache: {len(ran)} regenerated, {len(skipped)} cached (fresh), {len(frozen)} frozen (legacy, never re-run)")
     for gen in ran:
-        print(f"  regen  {os.path.relpath(gen, args.pool)}")
+        print(f"  regen  {os.path.relpath(gen, args.skill_dir)}")
     for gen in frozen:
         svg = _predicted_svg(gen)
         missing = [p for p in (svg, svg[: -len(".svg")] + ".png") if not os.path.exists(p)]  # frozen exhibits predate the .html and never owe one
         if missing:
             print(
-                f"  WARNING: frozen map {os.path.relpath(gen, args.pool)} is MISSING {', '.join(os.path.basename(p) for p in missing)} - "
+                f"  WARNING: frozen map {os.path.relpath(gen, args.skill_dir)} is MISSING {', '.join(os.path.basename(p) for p in missing)} - "
                 f"a frozen exhibit's render cannot be faithfully regenerated once the engine has drifted, so it is NOT healed here; "
                 f"the frozen renders are committed (GM 2026-08-16), so restore the file with git checkout rather than re-running the gen"
             )
     # The pool index is derived from the same tree the renders live in, so refresh it whenever the
     # renders are refreshed - this is what keeps main's index.html current (GM 2026-08-15).
-    index_path = pool_index.write_index(args.pool)
-    print(f"render-cache: index refreshed ({os.path.relpath(index_path, args.pool)})")
+    index_path = pool_index.write_index(args.skill_dir)
+    print(f"render-cache: index refreshed ({os.path.relpath(index_path, args.skill_dir)})")
     return 0
 
 

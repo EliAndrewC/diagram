@@ -19,75 +19,33 @@ __pycache__
 # never cross-contaminate. Lives on the host mount, so it survives a container rebuild.
 .clones/
 
-# /diagram pool is foldered BY SUBJECT so tracking is per-folder (one deliberate per-file
-# exemption class: the FROZEN legacy exhibits, un-ignored by name below):
-#  - GENERATED settlement maps (Mode B: villages/hamlets/towns/provincial-cities) derive their
-#    .svg + .png from a .gen.py + .json - a to-scale village .svg is tens of MB (one primitive per
-#    crop row), so both derived artifacts are ignored and regenerated on demand
-#    (`python3 .claude/skills/diagram/pool/<type>/<map>.gen.py`).
-#  - HAND-AUTHORED Mode A compound plans (magistracies/) have NO generator - the .svg IS the source,
-#    KB-sized - so it stays tracked; only its .png render is ignored.
-#  - regressions/ holds tracked fixture .svgs (no ignore line -> tracked).
-# A NEW settlement type would add its two lines here; a new magistracy .svg is auto-tracked.
-#  - the interactive .html (feature 150) is a third derived render, written beside the .svg by every
-#    Mode B run and refreshed by render-sync exactly like the .png.
-.claude/skills/diagram/pool/villages/*.svg
-.claude/skills/diagram/pool/villages/*.png
-.claude/skills/diagram/pool/villages/*.html
-.claude/skills/diagram/pool/hamlets/*.svg
-.claude/skills/diagram/pool/hamlets/*.png
-.claude/skills/diagram/pool/hamlets/*.html
-.claude/skills/diagram/pool/towns/*.svg
-.claude/skills/diagram/pool/towns/*.png
-.claude/skills/diagram/pool/towns/*.html
-.claude/skills/diagram/pool/provincial-cities/*.svg
-.claude/skills/diagram/pool/provincial-cities/*.png
-.claude/skills/diagram/pool/provincial-cities/*.html
-.claude/skills/diagram/pool/magistracies/*.png
-# EXCEPTION - the FROZEN legacy exhibits (GM 2026-08-16). The 19 hand-authored Mode B maps froze
-# when scripted generation became the method (migration-plan.md "The accepted trade"): their gens
-# are never re-run, so their renders stopped being derived-and-reproducible - once the engine
-# drifts, they are historical artifacts nothing can faithfully rebuild. They are therefore
-# COMMITTED, write-once (~195 MB, one time; they can never change again). WHEN A MAP IS CONVERTED
-# to the scripted approach, remove its physical renders from git again (git rm the .svg/.png and
-# delete its two ! lines here) - a converted map's renders are derived by a live generator and
-# belong ignored like every other live map's.
-!.claude/skills/diagram/pool/hamlets/akagahara.svg
-!.claude/skills/diagram/pool/hamlets/akagahara.png
-!.claude/skills/diagram/pool/hamlets/enokida.svg
-!.claude/skills/diagram/pool/hamlets/enokida.png
-!.claude/skills/diagram/pool/hamlets/honda.svg
-!.claude/skills/diagram/pool/hamlets/honda.png
-!.claude/skills/diagram/pool/hamlets/ikegami.svg
-!.claude/skills/diagram/pool/hamlets/ikegami.png
-!.claude/skills/diagram/pool/hamlets/moritono.svg
-!.claude/skills/diagram/pool/hamlets/moritono.png
-!.claude/skills/diagram/pool/hamlets/shimizu.svg
-!.claude/skills/diagram/pool/hamlets/shimizu.png
-!.claude/skills/diagram/pool/hamlets/tanada.svg
-!.claude/skills/diagram/pool/hamlets/tanada.png
-!.claude/skills/diagram/pool/hamlets/yatsuda.svg
-!.claude/skills/diagram/pool/hamlets/yatsuda.png
-!.claude/skills/diagram/pool/villages/hikari-no-sato.svg
-!.claude/skills/diagram/pool/villages/hikari-no-sato.png
-!.claude/skills/diagram/pool/villages/hoshigaoka.svg
-!.claude/skills/diagram/pool/villages/hoshigaoka.png
-!.claude/skills/diagram/pool/villages/kikuta.svg
-!.claude/skills/diagram/pool/villages/kikuta.png
-!.claude/skills/diagram/pool/villages/ueda.svg
-!.claude/skills/diagram/pool/villages/ueda.png
-!.claude/skills/diagram/pool/towns/hirameki.svg
-!.claude/skills/diagram/pool/towns/hirameki.png
-!.claude/skills/diagram/pool/towns/hoshizora.svg
-!.claude/skills/diagram/pool/towns/hoshizora.png
-!.claude/skills/diagram/pool/towns/ubame.svg
-!.claude/skills/diagram/pool/towns/ubame.png
-!.claude/skills/diagram/pool/provincial-cities/minami.svg
-!.claude/skills/diagram/pool/provincial-cities/minami.png
-!.claude/skills/diagram/pool/provincial-cities/nagahara.svg
-!.claude/skills/diagram/pool/provincial-cities/nagahara.png
-!.claude/skills/diagram/pool/provincial-cities/tango.svg
-!.claude/skills/diagram/pool/provincial-cities/tango.png
+# /diagram POOL - TWO TREES WITH OPPOSITE POLICIES, which is why these rules are patterns rather
+# than the 49 hand-written lines they replaced (feature 161).
+#
+#   pool/<tier>/<map>/            LIVE. Regenerated and re-gated every run, so every render is
+#                                 DERIVED and ignored - a to-scale .svg is tens of MB (one
+#                                 primitive per crop row) and rebuilds on demand with
+#                                 `make map GEN=pool/<tier>/<map>/<map>.gen.py`.
+#   legacy-hand-authored-pool/    FROZEN exhibits (GM 2026-08-16). Their gens are never re-run, so
+#                                 once the engine drifted their renders stopped being reproducible:
+#                                 they are historical artifacts nothing can faithfully rebuild, and
+#                                 are therefore COMMITTED write-once (~195 MB, one time - they can
+#                                 never change again). NOTHING here is ignored; that is the whole
+#                                 rule, and it is why the 36 per-file `!` un-ignore lines this
+#                                 block used to carry are gone.
+#
+# Before the split the two policies were interleaved in one directory, so each exhibit had to be
+# exempted BY NAME. Separating the trees turned a per-file exemption list into a per-tree rule.
+# WHEN A MAP IS CONVERTED to scripted generation it MOVES TREES (git mv into pool/), and its
+# renders become derived and ignored automatically - no ignore line to add or delete either way.
+#
+# The one exception inside the live tree: a Mode A compound plan has no generator that draws it
+# from data - its .svg IS the source, KB-sized - so magistracy .svg stays tracked and only its .png
+# is derived.
+.claude/skills/diagram/pool/*/*/*.svg
+.claude/skills/diagram/pool/*/*/*.png
+.claude/skills/diagram/pool/*/*/*.html
+!.claude/skills/diagram/pool/magistracies/*/*.svg
 # The pool's browsable index - derived from the manifests/notes by pool_index.py and rewritten by
 # render-sync (render_cache.py) so it stays current in main beside the renders it embeds.
 .claude/skills/diagram/pool/index.html

@@ -146,8 +146,44 @@ _cache_tables: dict[Path, dict[str, str]] = {}
 _cache_dirty: set[int] = set()
 
 
+def _git_dir(root: Path) -> Path | None:
+    """The directory to keep this repository's gate state in, or None if it cannot be determined.
+
+    NOT `root / ".git"`. **In a git WORKTREE, `.git` is a FILE**, not a directory - it contains a
+    single `gitdir: /path/to/real/.git/worktrees/<name>` line - so writing a path underneath it
+    raises `NotADirectoryError`. That matters here rather than being a curiosity, because
+    constitution Principle XIII MANDATES a detached worktree for the regression baseline
+    (`git worktree add --detach`), so `make done` in the very tree the procedure tells you to
+    create used to crash this module once per area (measured 2026-08-30, feature 161: the gate ran
+    and passed, only the recording failed, and it failed noisily-but-non-fatally - the shape that
+    gets scrolled past).
+
+    `git rev-parse --git-common-dir` resolves to the SHARED git directory in both a plain checkout
+    and a worktree, which is the right place for a stamp: it is keyed on content, and a worktree
+    and its parent checking out the same content deserve the same answer.
+
+    The `.is_dir()` guard that used to be inline here was doing half of this job already - it
+    recognized that `.git` might not be a directory and simply gave up on the cache - which is why
+    only the STAMP path crashed and the cache path did not.
+    """
+    out = subprocess.run(
+        ["git", "-C", str(root), "rev-parse", "--git-common-dir"],
+        capture_output=True,
+        text=True,
+    )
+    if out.returncode != 0:
+        return None
+    d = Path(out.stdout.strip())
+    if not d.is_absolute():
+        d = root / d
+    return d if d.is_dir() else None
+
+
 def _cache_path(root: Path | None) -> Path | None:
-    return (root / ".git" / _CACHE_NAME) if root is not None and (root / ".git").is_dir() else None
+    if root is None:
+        return None
+    d = _git_dir(root)
+    return (d / _CACHE_NAME) if d is not None else None
 
 
 def _cache_table(root: Path | None) -> dict[str, str]:
@@ -183,8 +219,11 @@ def hash_files(files: list[Path], root: Path | None = None) -> str:
     return h.hexdigest()
 
 
-def _stamp_path(root: Path, area: str) -> Path:
-    return root / ".git" / f"gate-green-{area}"
+def _stamp_path(root: Path, area: str) -> Path | None:
+    """Where `area`'s green stamp lives, or None when there is no git directory to put it in.
+    See `_git_dir` - this must NOT assume `root / ".git"` is a directory."""
+    d = _git_dir(root)
+    return (d / f"gate-green-{area}") if d is not None else None
 
 
 def write_stamp(area: str) -> int:
@@ -192,7 +231,10 @@ def write_stamp(area: str) -> int:
     if root is None:
         return 0
     area_path, patterns = AREAS[area]
-    _stamp_path(root, area).write_text(hash_files(_area_files(root, area_path, patterns), root))
+    stamp = _stamp_path(root, area)
+    if stamp is None:
+        return 0  # no git dir to record into; the gate still ran, there is just nowhere to say so
+    stamp.write_text(hash_files(_area_files(root, area_path, patterns), root))
     return 0
 
 
@@ -206,6 +248,8 @@ def fresh(area: str, root: Path | None = None) -> int:
         return 1
     area_path, patterns = AREAS[area]
     stamp = _stamp_path(root, area)
+    if stamp is None:
+        return 1  # no git dir to have recorded a stamp in - treat as NOT fresh, never as fresh
     return 0 if stamp.is_file() and stamp.read_text().strip() == hash_files(_area_files(root, area_path, patterns), root) else 1
 
 
@@ -222,7 +266,7 @@ def check(base: str, root: Path | None = None) -> int:
         stamp = _stamp_path(root, area)
         want = hash_files(_area_files(root, area_path, patterns), root)
         gate = "make hooks-test" if area == "hooks" else "make done"
-        if not stamp.is_file():
+        if stamp is None or not stamp.is_file():
             bad.append(f"{area}: no green gate has been recorded at all ({gate} stamps it)")
         elif stamp.read_text().strip() != want:
             bad.append(f"{area}: the last green gate ran against DIFFERENT code than you are pushing ({gate} again)")
