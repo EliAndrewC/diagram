@@ -211,3 +211,47 @@ correspond to no reachable check, so every published count of "how many checks t
 branch. The fix belongs with T10 and is held with it.
 
 **Sources:** none - a measurement of this repository.
+
+## R9 - the retirement, and the derivation defect it exposed (T09-T11)
+
+The GM's ruling of 2026-08-30 (*"go"*, accepting the recommendation in `gm-request.md`) set the criterion:
+`FIRES-HAND-ONLY` is NOT a deletion criterion. Only the genuinely dead go. **Five names, 152 -> 147.**
+
+**T09, orphaned citations: none.** Grepped `research/`, `settlements/`, `buildings/`, `SKILL.md` and
+`dev/` for all five names - zero hits, so no historical finding loses its only operative statement.
+
+**T10/T11, what was actually removed, and how.** Not five deletions - two code changes:
+
+- **`_seg_0243`** was rewritten from `if scale == "village": pass; else: check(f"{scale}_has_no_headman", ...)`
+  to `if scale == "hamlet": check("hamlet_has_no_headman", ...)`. That retires four names at once - the
+  phantom `village_has_no_headman` and the three tier-dead ones - and replaces a tier-keyed name with a
+  CONSTANT, so this segment can never mint a name again. It also gains a `scales` guard it did not have
+  (feature 145's benefit: the segment is no longer entered at four of five scales).
+- **`registry_analysis._bases_of`** now expands `f"{scale}_..."` over the segment's OWN admitted scales
+  instead of all five (`_DERIVATION_VERSION` 2 -> 3). That retires `capital_has_kosatsuba`.
+
+**The second one is a defect in the derived registry, not a cleanup** (constitution XIV). The analyzer
+already computed each segment's admitted scales - feature 145 added exactly that - and the tier-keyed name
+expansion never consulted it. So a segment guarded `scale in ("town", "city", "village", "hamlet")` minted
+`capital_has_kosatsuba`, a name no manifest at any scale can make the gate emit. **The two facts were
+computed independently, in the same function, and never compared.** Any future `check(f"{scale}_...")`
+behind a scale guard would have minted more the same way.
+
+Worth stating plainly because it is the same shape twice in one feature: the census's own indexed-name bug
+(R7) and this one are both **two correct computations that were never put beside each other.** Neither was
+a wrong calculation.
+
+Cost of the phantoms, before they were found: two names sat in the live pin, so every published count of
+"how many checks there are" was high by two, and the firing census handed both to a deletion task as
+though they were dead checks rather than names of nothing.
+
+**Guards.** `tests/check_village/test_registry_derive.py` holds the frozen legacy oracle; two rows (0243,
+0546) were hand-edited, `checks` only, with the reason in its docstring - the established procedure, and
+the fourth such edit since feature 109. The census's own guard proves no dynamically-named check
+normalizes to a name the pin does not carry.
+
+**After the retirement:** 147 checks, 40 `FIRES`, 103 `FIRES-HAND-ONLY`, and **4 `NEVER-FIRES` - every one
+of them a documented KEEP** (`farmhouse_aspect_in_range`, `waivers_are_documented`, `waivers_are_live`,
+`waterward_strips_run_off_the_frame`). There is nothing dead left in the battery.
+
+**Sources:** none - a measurement of this repository.

@@ -1,6 +1,6 @@
-# Firing census - 152 live checks against 5 live maps and 105 frozen fixtures
+# Firing census - 147 live checks against 5 live maps and 105 frozen fixtures
 
-`FIRES` 40 | `FIRES-HAND-ONLY` 103 | `NEVER-FIRES` 9 - 1029 verdicts observed, suite journal folded in
+`FIRES` 40 | `FIRES-HAND-ONLY` 103 | `NEVER-FIRES` 4 - 1029 verdicts observed, suite journal folded in
 
 `FIRES` = the current implementation makes it fail. `FIRES-HAND-ONLY` = only a hand-era artifact
 does, which FR-003 treats as never-fires. Every non-`FIRES` row takes the FR-006 placer read
@@ -8,12 +8,7 @@ before anything is deleted - the census produces a candidate, not a ruling (feat
 
 | check | verdict | evidence |
 |---|---|---|
-| `capital_has_kosatsuba` | **NEVER-FIRES** | - |
-| `capital_has_no_headman` | **NEVER-FIRES** | - |
-| `city_has_no_headman` | **NEVER-FIRES** | - |
 | `farmhouse_aspect_in_range` | **NEVER-FIRES** | - |
-| `town_has_no_headman` | **NEVER-FIRES** | - |
-| `village_has_no_headman` | **NEVER-FIRES** | - |
 | `waivers_are_documented` | **NEVER-FIRES** | - |
 | `waivers_are_live` | **NEVER-FIRES** | - |
 | `waterward_strips_run_off_the_frame` | **NEVER-FIRES** | - |

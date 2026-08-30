@@ -75,7 +75,7 @@ _NEEDS_OVERRIDES: dict[str, tuple[str, ...]] = {
 
 _PKG_DIR = Path(__file__).resolve().parent
 _CACHE_PATH = _PKG_DIR.parent / ".gencache" / "registry_rows.json"
-_DERIVATION_VERSION = 2  # feature 145 added `scales`; bump to invalidate caches when the derivation scheme itself changes
+_DERIVATION_VERSION = 3  # feature 163: a tier-keyed name expands only over the segment's OWN scales; bump to invalidate caches when the derivation scheme itself changes
 
 
 def _segment_functions() -> dict[str, Callable[..., dict[str, Any]]]:

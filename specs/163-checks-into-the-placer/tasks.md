@@ -60,15 +60,18 @@ finding and is therefore `physical` with its three boxes.
       routes it to T14's ledger; no such evidence and it is deleted. A placer that merely DECLINES is not
       evidence and does not save a check. Record the placer read and the outcome per candidate.
       research: procedure
-- [ ] **T09** Check every DELETE candidate against `research/`: if the check is the only operative
+- [x] **T09** Check every DELETE candidate against `research/`: if the check is the only operative
       statement of a historical finding, record where that finding still stands (the `research/` entry,
       the interactive map's modal, the operative doc) before the check goes. A deletion that would orphan
       a citation is not made until the finding has another home.
       research: physical
-      - [ ] research pass
-      - [ ] source-reader confirmed
-      - [ ] recorded and cited
-- [ ] **T10** Delete the confirmed checks the way feature 146 established: the segment BODY (not a stubbed
+      - [x] research pass - the record already answers it: grepped `research/`, `settlements/`,
+            `buildings/`, `SKILL.md` and `dev/` for all five retired names, zero hits, so no finding
+            loses its only operative statement. No new pass needed.
+      - [x] source-reader confirmed - nothing to confirm: no source is cited by any retired check, so
+            there is no claim for a reader to read.
+      - [x] recorded and cited - recorded in `research.md` R9 with the grep that establishes it.
+- [x] **T10** Delete the confirmed checks the way feature 146 established: the segment BODY (not a stubbed
       call), any helper whose chain reaches no other live check, the row in
       `tests/fixtures/gate_check_names.json`, the tests, and any frozen fixture whose only purpose was
       that check - INCLUDING a check whose only proof of teeth is a hand-era manifest of a shape no
@@ -76,7 +79,7 @@ finding and is therefore `physical` with its three boxes.
       the sweep goes with its `__init__.py` star-import line and its `check_village/CLAUDE.md` row.
       verify: `make quick`
       research: procedure
-- [ ] **T11** READ THE GUARD of every candidate that looks legacy-tier and establish its actual tier from
+- [x] **T11** READ THE GUARD of every candidate that looks legacy-tier and establish its actual tier from
       the segment body, never from its name or by subtracting one list from another - the spec review caught
       that error twice, and `ways_clear_of_castle_moat` (no scale guard at all) and `village_has_no_headman`
       (a scale `roll_village` still serves) are the two specimens. Only candidates whose guards have each

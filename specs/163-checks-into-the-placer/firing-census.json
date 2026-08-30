@@ -7,7 +7,7 @@
  "counts": {
   "FIRES": 40,
   "FIRES-HAND-ONLY": 103,
-  "NEVER-FIRES": 9
+  "NEVER-FIRES": 4
  },
  "rows": {
   "all_ink_is_ruled_on": {
@@ -382,14 +382,6 @@
    ],
    "verdict": "FIRES-HAND-ONLY"
   },
-  "capital_has_kosatsuba": {
-   "evidence": [],
-   "verdict": "NEVER-FIRES"
-  },
-  "capital_has_no_headman": {
-   "evidence": [],
-   "verdict": "NEVER-FIRES"
-  },
   "caption_stands_beside_its_referent": {
    "evidence": [
     [
@@ -741,10 +733,6 @@
     ]
    ],
    "verdict": "FIRES-HAND-ONLY"
-  },
-  "city_has_no_headman": {
-   "evidence": [],
-   "verdict": "NEVER-FIRES"
   },
   "city_streets_reach_their_neighbors": {
    "evidence": [
@@ -4074,10 +4062,6 @@
    ],
    "verdict": "FIRES-HAND-ONLY"
   },
-  "town_has_no_headman": {
-   "evidence": [],
-   "verdict": "NEVER-FIRES"
-  },
   "towpath_hugs_the_bank": {
    "evidence": [
     [
@@ -4449,10 +4433,6 @@
     ]
    ],
    "verdict": "FIRES-HAND-ONLY"
-  },
-  "village_has_no_headman": {
-   "evidence": [],
-   "verdict": "NEVER-FIRES"
   },
   "village_windbreak_embraces_cluster": {
    "evidence": [

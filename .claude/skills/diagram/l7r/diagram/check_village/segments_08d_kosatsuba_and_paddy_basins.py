@@ -44,7 +44,13 @@ def _seg_0546__hamlet_has_kosatsuba(
     st: Any = _UNBOUND,
     uncovered_kb: Any = _UNBOUND,
 ) -> dict[str, Any]:
-    """Gate segment 546 (capital_has_kosatsuba, city_has_kosatsuba, city_kosatsuba_per_gate, hamlet_has_kosatsuba, kosatsuba_by_the_road, kosatsuba_faces_the_road, kosatsuba_on_a_main_way, town_has_kosatsuba, village_has_kosatsuba) - body verbatim from the legacy gate() (feature 022)."""
+    """Gate segment 546 (city_has_kosatsuba, city_kosatsuba_per_gate, hamlet_has_kosatsuba, kosatsuba_by_the_road, kosatsuba_faces_the_road, kosatsuba_on_a_main_way, town_has_kosatsuba, village_has_kosatsuba) - body verbatim from the legacy gate() (feature 022).
+
+    `capital_has_kosatsuba` was in this list and was never a check (feature 163): the guard below
+    admits town/city/village/hamlet, so `f"{scale}_has_kosatsuba"` can never be built with
+    scale='capital'. The derived registry minted the name anyway by expanding the f-string over all
+    five scales without consulting the guard it had itself derived; it now uses the segment's own
+    scales, so no phantom can be minted here again."""
     if scale in ("town", "city", "village", "hamlet") and meta.get("kosatsuba", True):
         # THE OFFICIAL NOTICE BOARD (kosatsuba), default-on at EVERY settlement tier
         # (GM 2026-07-24, from the town deep audit; ported to cities, then to villages
