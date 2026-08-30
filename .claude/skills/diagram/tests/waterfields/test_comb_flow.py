@@ -21,6 +21,7 @@ import math
 
 import pytest
 
+from l7r.diagram.pipeline import rollcache
 from l7r.diagram.waterfields.comb import build_comb
 
 FALLS = (0.0, 45.0, 90.0, 180.0)
@@ -31,15 +32,19 @@ axis-aligned fall, an oblique one, and a reversed one - 0 / 45 / 90 / 180 give a
 270 removes a second oblique and a second axis, neither of which tests anything the first does not."""
 
 
-@functools.lru_cache(maxsize=None)
-def _net(down_deg: float, seed: int = 5):
+@functools.cache
+def _net(down_deg: float, seed: int = 5):  # noqa: D401
     """One comb per (fall, seed), shared by every test that reads it.
 
     CACHED BECAUSE A BUILD IS THE WHOLE COST HERE. Three tests examine the SAME drain at each fall, and
     each was building its own - so two of every three builds were re-deriving a net an assertion had
     already produced. **Nothing here may mutate the returned net**: it is shared, so a test that edited it
     would corrupt its neighbors rather than fail. Every reader below only measures."""
-    return build_comb(2400, 2400, (300.0, 300.0), seed=seed, down_deg=down_deg)
+    # SHARED ACROSS WORKERS, not just within one (2026-08-30). `lru_cache` alone only helps when two
+    # tests reading the same net land on the SAME xdist worker, and with `--dist worksteal` they usually
+    # do not - so each of the eight processes was rebuilding its own copy. `rollcache.obtain` keys on the
+    # engine as well as these parameters, so the build is paid once per (fall, seed) per code change.
+    return rollcache.obtain(f"comb-flow:{down_deg}:{seed}", lambda: build_comb(2400, 2400, (300.0, 300.0), seed=seed, down_deg=down_deg))[0]
 
 
 def _drain_bearing(down_deg: float, seed: int = 5) -> tuple[float, float]:

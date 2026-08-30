@@ -52,11 +52,13 @@ def test_the_fit_gives_a_saturated_best_aspect_the_full_search_it_was_denied() -
     than the full search would - and that is the map whose acreage the household ratchet then judges. So the
     best aspect is re-searched without the probe, and kept only if it actually scores better."""
     from l7r.diagram.hamletgen.water import fit_field
+    from l7r.diagram.pipeline import rollcache
 
     from ._builders import a_plan
 
     plan = a_plan()
     plan.target_acres = 500.0  # far past what this envelope holds at any aspect, so every aspect saturates
+
     # A COARSE PLOT GRID, WHICH IS WHAT THIS TEST'S TIME WAS MADE OF (feature 158, 2026-08-29). The
     # branch under test is `fit_field`'s: no aspect landed the target, so the best one is re-searched
     # without the probe. Nothing in it depends on how many plots a carve lays - only on the target
@@ -67,8 +69,15 @@ def test_the_fit_gives_a_saturated_best_aspect_the_full_search_it_was_denied() -
     # and rejected: shrinking `plan.envelope` from 600 px through 400, 300, 200 and 150 changes
     # nothing at all - same 1,985 plots, same 0.891 - because the envelope is not what clamps this
     # fan (specs/158-hamlet-test-cost/research.md R3).
-    net = fit_field(plan, (700.0, 300.0), 3, 138.0, (78.0, 90.0))
-    assert net["plots"], "a fan still comes back"
+    # CACHED (2026-08-30). Coarsening the grid took this from 39 s to 11 s and it was STILL the slowest
+    # test in the suite and its critical path on eight workers. `fit_field` is deterministic over plain
+    # numbers, so the answer can be served: the search is paid only when this test's source or the engine
+    # changes. `produce` returns plain data, never the net, which is what `keyed_to` requires.
+    def produce():  # type: ignore[no-untyped-def]
+        return bool(fit_field(plan, (700.0, 300.0), 3, 138.0, (78.0, 90.0))["plots"])
+
+    got = rollcache.keyed_to(test_the_fit_gives_a_saturated_best_aspect_the_full_search_it_was_denied, produce)[0]
+    assert got, "a fan still comes back"
 
 
 def test_a_house_the_pass_already_failed_is_not_re_tried_against_the_same_ways() -> None:

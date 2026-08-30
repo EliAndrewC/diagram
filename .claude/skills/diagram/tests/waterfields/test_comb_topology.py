@@ -11,12 +11,12 @@ returns plain data, so the whole family runs in about a second across several se
 
 from __future__ import annotations
 
-import math
-
 import functools
+import math
 
 import pytest
 
+from l7r.diagram.pipeline import rollcache
 from l7r.diagram.waterfields.comb import build_comb
 
 SEEDS = (3, 5, 11)
@@ -26,7 +26,7 @@ knobs these rules care about; the fourth was buying a repeat rather than a new s
 ever turns out to be seed-specific, add the seed that shows it - with the map that shows it named here."""
 
 
-@functools.lru_cache(maxsize=None)
+@functools.cache
 def _net(seed: int):
     """One comb per seed, shared by all four tests that read it.
 
@@ -34,7 +34,10 @@ def _net(seed: int):
     building its own, so three of every four builds re-derived a net another assertion had already made.
     **Nothing here may mutate the returned net** - it is shared, so a test that edited it would corrupt
     its neighbors instead of failing. Every reader below only measures."""
-    return build_comb(2400, 2400, (300.0, 300.0), seed=seed, down_deg=90)
+    # SHARED ACROSS WORKERS - see the note in test_comb_flow.py's `_net`. `lru_cache` only helps within
+    # one xdist process; `rollcache.obtain` keys on the engine too, so the build is paid once per seed
+    # per code change however the tests are distributed.
+    return rollcache.obtain(f"comb-topology:{seed}", lambda: build_comb(2400, 2400, (300.0, 300.0), seed=seed, down_deg=90))[0]
 
 
 def _turns(pts):
