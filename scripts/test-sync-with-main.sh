@@ -13,6 +13,10 @@ HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 SYNC="$HERE/sync-with-main.sh"
 PASS=0; FAIL=0
 T=$(mktemp -d); trap 'rm -rf "$T"' EXIT
+# GUARD_EDIT_OK: feature 170 - sync-with-main.sh RECORDS now (its GATE_STAMP_OK escape was the third
+# silent permit), so this suite writes into a throwaway log rather than the live census. Caught by the
+# derived isolation check the moment the guard started recording, which is the point of deriving it.
+export GUARD_LOG_DIR="$T/guard-log"
 export GIT_AUTHOR_NAME=t GIT_AUTHOR_EMAIL=t@t GIT_COMMITTER_NAME=t GIT_COMMITTER_EMAIL=t@t HOME=$T
 
 check() { # label expected-rc actual-rc

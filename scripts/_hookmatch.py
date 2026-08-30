@@ -501,6 +501,15 @@ if __name__ == "__main__":
         payload = json.loads(RAW).get("tool_input", {}).get("command", "")
     except Exception:
         payload = ""
+    # GUARD_EDIT_OK: feature 170 - THE TEXT A GUARD JUDGES IS NOT ALWAYS A COMMAND. `guard-file` and
+    # `source-block` match their markers in an Edit's body, so the reason lives there too. One
+    # fallback, so the reason floor is defined once for commands and content alike.
+    try:
+        _ti = json.loads(RAW).get("tool_input", {}) or {}
+        CONTENT = (_ti.get("new_string") or "") + (_ti.get("content") or "")
+    except Exception:
+        CONTENT = ""
+    TEXT = payload or CONTENT
     # `_hookmatch.py targets` prints the make targets the command invokes, one per line, for the hooks
     # that need to know WHICH; with no argument it prints the make-only classification as it always has.
     if len(sys.argv) > 1 and sys.argv[1] == "targets":
@@ -552,8 +561,9 @@ if __name__ == "__main__":
         # `escape-reason <TOKEN>` - prints the reason when the escape is USED and the reason clears
         # the floor; prints nothing otherwise. One call answers both questions a guard has to ask, so
         # a guard cannot accidentally check one and not the other (feature 170).
-        _r = escape_reason(payload, sys.argv[2])
-        if escape_used(payload, sys.argv[2]) and reason_is_enough(_r):
+        # TEXT, not `payload`: a marker in an Edit's body owes a reason exactly as a command does.
+        _r = escape_reason(TEXT, sys.argv[2])
+        if (escape_used(TEXT, sys.argv[2]) or (CONTENT and sys.argv[2] in CONTENT)) and reason_is_enough(_r):
             print(_r)
     elif len(sys.argv) > 2 and sys.argv[1] == "escape":
         # `escape <TOKEN>` - prints `yes` when the token was USED as an escape, nothing when it was

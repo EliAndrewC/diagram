@@ -71,7 +71,19 @@ if [ "$REPORT" = "ESCAPED" ]; then
   SB_HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
   # shellcheck source=/dev/null
   . "$SB_HERE/_guardlog.sh"
-  guard_log source-block escaped "$(guard_cmd)" source-edit-ok
+  # GUARD_EDIT_OK: feature 170 - and the reason is not optional HERE of all places. This escape
+  # permits an edit to the GM's OWN WRITING, which the constitution says only they may change, so
+  # "the GM told me to" is the least a later audit can be given (GM 2026-08-30).
+  SB_REASON=$(printf '%s' "$INPUT" | "$SB_HERE/_hookmatch.py" escape-reason SOURCE_EDIT_OK 2>/dev/null)
+  if [ -z "$SB_REASON" ]; then
+    printf 'BLOCKED: SOURCE_EDIT_OK with no reason given.\n\n' >&2
+    printf 'This escape permits an edit to the GM S OWN WRITING (constitution V: only they may change\n' >&2
+    printf 'it). Say what they told you, in the edit, so the record shows it:\n\n' >&2
+    printf '    SOURCE_EDIT_OK: <what the GM asked for, in their words>\n\n' >&2
+    guard_log source-block blocked "$(guard_cmd)" SOURCE_EDIT_OK-no-reason
+    exit 2
+  fi
+  guard_log source-block escaped "$SB_REASON" source-edit-ok
   exit 0
 fi
 

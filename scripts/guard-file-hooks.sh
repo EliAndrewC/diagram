@@ -79,7 +79,23 @@ except Exception:
 GF2_HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 # shellcheck source=/dev/null
 . "$GF2_HERE/_guardlog.sh"
-[ "$NEW" = "True" ] && { guard_log guard-file escaped "$FILE" guard-edit-ok; exit 0; }
+# GUARD_EDIT_OK: feature 170 - the marker must carry a REASON, not merely be present. The repository's
+# own convention already writes it that way (135 of the tree's occurrences use the colon form), so this
+# makes the convention the rule, through the same floor every command guard uses.
+if [ "$NEW" = "True" ]; then
+  GF_REASON=$(printf '%s' "$INPUT" | "$GF2_HERE/_hookmatch.py" escape-reason GUARD_EDIT_OK 2>/dev/null)
+  if [ -z "$GF_REASON" ]; then
+    printf 'BLOCKED: GUARD_EDIT_OK with no reason given.\n\n' >&2
+    printf 'The marker is what puts your intent in the diff, where the GM reads it - a bare marker puts\n' >&2
+    printf 'nothing there. Write it the way the rest of the tree does:\n\n' >&2
+    printf '    # GUARD_EDIT_OK: <why this edit to a guard is legitimate>\n\n' >&2
+    printf 'Two words and eight characters is the whole bar (GM 2026-08-30, feature 170).\n' >&2
+    guard_log guard-file blocked "$FILE" GUARD_EDIT_OK-no-reason
+    exit 2
+  fi
+  guard_log guard-file escaped "$GF_REASON" guard-edit-ok
+  exit 0
+fi
 
 case "$FILE" in
   */.claude/skills/diagram/Makefile|*/scripts/*-hooks.sh|*/.claude/settings.json) ;;

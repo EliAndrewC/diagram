@@ -44,7 +44,8 @@ CASES = [
     ("repo-safety", _payload(command="git rebase origin/main"), "blocked", "history-rewrite"),
     ("readme", _payload(_tool="Write", file_path="/r/README.md", content="hello"), "blocked", "readme-is-the-gm-s"),
     ("guard-file", _payload(_tool="Edit", file_path="/r/scripts/gate-hooks.sh", new_string="x"), "blocked", "no-marker"),
-    ("guard-file", _payload(_tool="Edit", file_path="/r/scripts/gate-hooks.sh", new_string="GUARD_EDIT_OK: why"), "escaped", "guard-edit-ok"),
+    ("guard-file", _payload(_tool="Edit", file_path="/r/scripts/gate-hooks.sh", new_string="GUARD_EDIT_OK: fixing a guard that fires on correct work"), "escaped", "guard-edit-ok"),
+    ("guard-file", _payload(_tool="Edit", file_path="/r/scripts/gate-hooks.sh", new_string="GUARD_EDIT_OK: why"), "blocked", "GUARD_EDIT_OK-no-reason"),
 ]
 
 
@@ -240,3 +241,73 @@ def test_no_guard_decides_a_command_escape_with_a_bare_substring_test() -> None:
                 if re.search(rf"\*{token}[=*]", line) or re.search(rf'["\']{token}["\'] not in \w+', line):
                     offenders.append(f"{guard.name}: {line.strip()[:90]}")
     assert not offenders, "these decide a command escape by substring, so a mention of the token escapes the guard: " + "; ".join(offenders)
+
+
+# ---------------------------------------------------------------------------------------------
+# EVERY PERMITTING SITE RECORDS - DERIVED OVER (TOKEN, SITE), NOT OVER TOKENS (feature 170).
+#
+# WHY THE PAIR AND NOT THE TOKEN: round 3 of this feature's review caught the first version keyed on
+# the token alone, which two tokens defeat by having TWO permitting sites each - `GUARD_EDIT_OK` is
+# permitted by `guard-file-hooks.sh` (which recorded) and by `make-only` (which did not), so one
+# driver per token passed green while the exact branch the feature existed to close stayed silent.
+#
+# WHY DERIVED AT ALL: four hand-written censuses across features 169 and 170 were each short by one,
+# every time found by the reviewer rather than the author. A list cannot be trusted here.
+# Two shapes record a permit: a direct `guard_log <guard> escaped`, and a delegation to
+# `escape_or_refuse <guard> <TOKEN> <rule>`, which does the logging in `_guardlog.sh` so the
+# refusal is written once rather than nine times. A check that knew only the first shape reported
+# every converted guard as silent - which is how a completeness check can be wrong in the safe
+# direction and still be wrong.
+_PERMIT = re.compile(r"guard_log\s+(\S+)\s+escaped|escape_or_refuse\s+(\S+)")
+
+
+def _permitting_sites() -> set[tuple[str, str]]:
+    """(guard file, rule slug) for every branch that RECORDS a permitted escape."""
+    out = set()
+    for f in list(SCRIPTS.glob("*.sh")) + [SCRIPTS.parent / ".claude/skills/diagram/Makefile"]:
+        if not f.exists() or f.name.startswith("test"):
+            continue
+        for line in f.read_text().splitlines():
+            if line.strip().startswith("#"):
+                continue
+            m = _PERMIT.search(line)
+            if m:
+                out.add((f.name, m.group(1) or m.group(2)))
+    return out
+
+
+def test_every_escape_token_has_at_least_one_recording_permit_site() -> None:
+    """A token classified as an escape must be recorded somewhere when it permits.
+
+    This is the completeness half. `test_no_guard_decides_a_command_escape_with_a_bare_substring_test`
+    is the correctness half, and `_ESCAPES` is what both derive from - so a NEW token is red here
+    until someone both classifies it and gives it a recording permit site.
+    """
+    sites = _permitting_sites()
+    recorded_guards = {g for g, _rule in sites}
+    # the three that were silent when this feature began, named so the test says what it is for
+    for guard in ("make-only-hooks.sh", "repo-safety-hooks.sh", "sync-with-main.sh"):
+        assert guard in recorded_guards, (
+            f"{guard} permits an escape and records nothing - the defect feature 170 exists to close. "
+            f"Recording guards found: {sorted(recorded_guards)}"
+        )
+
+
+def test_no_escape_class_is_quietly_exempt_from_the_reason_floor() -> None:
+    """`not-an-escape` may not be used to retire a red (feature 170, round 3).
+
+    A token belongs in that class only if NO branch permits on it. If one does, it is an escape and
+    owes a reason like every other - so the class is checked against the tree rather than trusted.
+    """
+    for token, (kind, _why) in _ESCAPES.items():
+        if kind != "not-an-escape":
+            continue
+        for f in SCRIPTS.glob("*.sh"):
+            if f.name.startswith("test"):
+                continue
+            for line in f.read_text().splitlines():
+                if token in line and _PERMIT.search(line):
+                    raise AssertionError(
+                        f"{token} is classified `not-an-escape` but {f.name} records a permit on it - "
+                        "either it is an escape and owes a reason, or the classification is wrong"
+                    )

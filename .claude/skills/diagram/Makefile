@@ -106,7 +106,8 @@ done:
 	  $(MAKE) --no-print-directory $$phase || fail="$$fail $$phase"; \
 	done; \
 	if [ -n "$$fail" ]; then $(LOGRUN) $(DONE_NAME) "$(if $(FULL),full,reference)" "$$(( $$(date +%s) - $$T0 ))" "failed:$$fail"; $(STATE) failed-gate $(DONE_NAME); printf '\n\033[1mGATE FAILED:%s\033[0m (the static checks run FIRST now, so the map roll has not happened - fix these and re-run)\n' "$$fail"; exit 1; fi; \
-	$(if $(REF_OK),$(LOGBYPASS) permitted "REF_OK - reference step skipped: $(REF_WHY)"; printf '\nreference step SKIPPED (REF_OK, logged to dev/bypass-log/)\n';,$(MAKE) --no-print-directory reference || exit 1;) \
+	: "(GUARD_EDIT_OK: feature 170 - REF_OK reaches the firing log as well as the bypass log)"; \
+	$(if $(REF_OK),$(LOGESCAPE) REF_OK "$(REF_WHY)"; $(LOGBYPASS) permitted "REF_OK - reference step skipped: $(REF_WHY)"; printf '\nreference step SKIPPED (REF_OK, logged to dev/bypass-log/ and the firing log)\n';,$(MAKE) --no-print-directory reference || exit 1;) \
 	for phase in hooks-test $(if $(FULL),test-full perf-gate,test); do \
 	  printf '\n\033[1m== %s ==\033[0m\n' "$$phase"; \
 	  if [ "$$phase" = hooks-test ] && root=$$(git rev-parse --show-toplevel 2>/dev/null) && python3 "$$root/scripts/gate-stamp.py" --fresh hooks; then \
@@ -628,6 +629,18 @@ LOGBYPASS = python3 -c "import json,os,subprocess,sys,time; \
   ts=time.strftime('%Y%m%dT%H%M%S',time.gmtime())+'%06d'%(time.time_ns()//1000%1000000); \
   os.makedirs('dev/bypass-log',exist_ok=True); \
   open(f'dev/bypass-log/{ts}-{os.getpid()}.json','w').write(json.dumps({'utc':time.strftime('%Y-%m-%dT%H:%M:%SZ',time.gmtime()),'target':'$(MAKECMDGOALS)$(if $(FULL), FULL,)','commit':h,'outcome':sys.argv[1],'why':sys.argv[2]},indent=2)+chr(10))"
+
+# GUARD_EDIT_OK: feature 170 - REF_OK IS AN ESCAPE, SO IT REACHES THE FIRING LOG TOO. It recorded to
+# `dev/bypass-log/` only, and `make audit` reads `~/.claude/guard-log/`, so the one escape that skips
+# the reference settlement was invisible to the census the GM asked to be able to audit. Round 3 of
+# this feature's review caught it and the ruling was two records rather than a weaker success
+# criterion: the bypass-log entry stays, and this adds the firing-log one with REF_WHY as its detail.
+# It also holds REF_WHY to the same floor as every other escape - two words, eight characters.
+LOGESCAPE = @root=$$(git rev-parse --show-toplevel) && bash -c '. "$$0/scripts/_guardlog.sh"; \
+  printf "%s" "$$2" | python3 "$$0/scripts/_hookmatch.py" reason-ok >/dev/null || { \
+    printf "BLOCKED: %s needs a REASON (two words, eight characters) - it is what a later audit reads.\n" "$$1" >&2; \
+    guard_log make blocked "$$2" "$$1-no-reason"; exit 2; }; \
+  guard_log make escaped "$$2" "$$(printf "%s" "$$1" | tr "[:upper:]_" "[:lower:]-")"' "$$root"
 
 QUICK_BUDGET = 60
 
