@@ -67,7 +67,7 @@ is destructive or the refusal is itself the content.
 | **`no-poll-hooks`** | burning wall clock watching a job the harness will notify you about | refuses a busy-wait; **corrects** a self-matching `pgrep` to the bracket form; **permits** a backgrounded loop whose condition reads a FILE (the `setsid --fork` shape). Escape `POLL_OK` |
 | **`pair-hooks`** | the independent review running AFTER the gate, adding its whole runtime to the wall clock | **rewrites** a lone `make done` into `make verify`. Escape `PAIR_OK` |
 
-**Every guard's ESCAPE is an invocation too, since feature 169.** All eleven tokens go through
+**Every guard's ESCAPE is an invocation too, since feature 169.** Every token matched in a COMMAND goes through
 `_hookmatch.py escape <TOKEN>`; before that they were bare substring tests, so a grep for a token or a
 commit message quoting it escaped the guard - and, in `measure` and `gate`, also reset the state that
 decides whether the NEXT expensive command is refused. `main-tree-hooks` joined the roster in the same

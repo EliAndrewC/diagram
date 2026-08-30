@@ -290,9 +290,14 @@ question measured **280 refusals in six days across eleven guards**, and the lad
 **AN ESCAPE IS AN INVOCATION TOO** (feature 169, 2026-08-30). Every guard's BLOCKING decision has
 been anchored through [`scripts/_hookmatch.py`](scripts/_hookmatch.py) since 2026-08-25, and every
 guard's ESCAPE was still a bare `case "$CMD" in *TOKEN*)` - so a `grep` for a token, a commit message
-quoting it, or a heredoc editing a document about guards counted as an escape. All eleven tokens now
-go through `_hookmatch.py escape <TOKEN>`, which blanks heredocs and quoted strings, drops
-search-command segments and drops `for VAR in` word lists. Two reasons it mattered: the escape RATE is
+quoting it, or a heredoc editing a document about guards counted as an escape. Every token matched in a COMMAND now
+goes through `_hookmatch.py escape <TOKEN>`, which blanks heredocs and quoted strings, drops
+search-command segments and drops `for VAR in` word lists. **The census of which tokens those are is
+DERIVED** (`tests/tooling/test_guard_firing_log.py`): it enumerates every `*_OK` in `scripts/` and the
+skill Makefile and fails on any that is not classified as `command`, `content` (a marker inside edit
+text), `environment` (read as `${TOKEN:-}`, which a mention cannot set), `make-variable` or
+`not-an-escape` - because three drafts of that list written by hand were each short by one. A second
+check fails the build if a guard ever decides a command escape by substring again. Two reasons it mattered: the escape RATE is
 the statistic this project acts on, and every one of the six recorded `measure escaped` entries was a
 mention - but also **`measure` clears its repeat-measurement counter on that branch and `gate` removes
 its state file**, so a session grepping for a token to learn how the escape works thereby switched the
