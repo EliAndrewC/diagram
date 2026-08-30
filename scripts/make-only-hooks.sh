@@ -58,7 +58,7 @@ HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 # asks two questions of it (what is this, and can it be corrected) and stdin can only be read once.
 # The classification itself is unchanged: the same `_hookmatch.py` call, fed from the variable.
 INPUT=$(cat 2>/dev/null || true)
-VERDICT=$(printf '%s' "$INPUT" | "$HERE/_hookmatch.py" 2>/dev/null || echo ok)
+VERDICT=$(printf '%s' "$INPUT" | "$HERE/_hm_make.py" 2>/dev/null || echo ok)
 # ...and it now CORRECTS the one shape whose compliant form it can rebuild exactly, and records what
 # it did. See the bare-pytest case below.
 # shellcheck source=/dev/null

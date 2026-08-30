@@ -43,11 +43,19 @@ def test_every_suite_depends_on_its_own_guard_and_its_own_test() -> None:
         assert f"test-{guard}" in deps, f"{guard}'s suite does not depend on its own test file"
 
 
-def test_the_orchestrating_three_still_depend_on_everything() -> None:
-    """`sync-with-main.sh`, `review-gate.sh` and `gate-stamp.py` drive the other scripts, so any script
-    is an input to what their suites assert. Feature 135's judgment, deliberately unchanged - the
-    refinement must not "optimize" these into missing a real dependency."""
-    for guard in ("sync-with-main.sh", "review-gate.sh", "gate-stamp.py"):
+def test_the_orchestrating_two_still_depend_on_everything() -> None:
+    """`sync-with-main.sh` and `gate-stamp.py` depend on the whole tree, for two DIFFERENT reasons.
+
+    `gate-stamp.py` DERIVES there: it reads `scripts/*.sh` and `scripts/*.py`. `sync-with-main.sh` is
+    HELD there, because its suite drives the push path and that path resolves script paths at run time
+    from `$ROOT` and `$MAIN` - an edge no static reader follows.
+
+    `review-gate.sh` was a third until round 3 of this feature's review measured it: it reaches exactly
+    two scripts, both statically visible, and its suite drives only itself. One justification had been
+    stretched over two unlike things, keeping for that suite the over-running the feature exists to
+    end. It derives now, to five files.
+    """
+    for guard in ("sync-with-main.sh", "gate-stamp.py"):
         deps = hookdeps.deps_for(guard)
         assert len(deps) > 20, f"{guard} should depend on the whole script tree, got {len(deps)}"
         assert "_hookmatch.py" in deps and "_guardlog.sh" in deps
@@ -64,7 +72,7 @@ def test_the_refinement_actually_narrows_the_two_helpers_it_was_built_for() -> N
     assert len(cases) <= 5, f"test_hooks_cases.py's blast radius grew to {cases}"
 
 
-def test_the_whole_tree_trio_is_the_constant_on_every_targeted_change() -> None:
+def test_the_whole_tree_pair_is_the_constant_on_every_targeted_change() -> None:
     """What a targeted change ACTUALLY costs, which the first success criteria understated.
 
     SC-002 and SC-003 were written from the derivation over guards alone - two suites and three. A
@@ -73,10 +81,11 @@ def test_the_whole_tree_trio_is_the_constant_on_every_targeted_change() -> None:
     (they resolve script paths at run time, which no static reader follows) and one derives there
     (it reads the whole directory).
 
-    Asserted so the constant stays visible: if this trio ever stops re-running, the derivation has
-    started under-running on the three suites that exercise the push path end to end.
+    Asserted so the constant stays visible: if this pair ever stops re-running, the derivation has
+    started under-running on the suites that read or drive the whole tree. (It was a TRIO until round 3
+    measured `review-gate.sh` and found it reaches two scripts, both statically visible.)
     """
-    for guard in ("sync-with-main.sh", "review-gate.sh", "gate-stamp.py"):
+    for guard in ("sync-with-main.sh", "gate-stamp.py"):
         deps = hookdeps.deps_for(guard)
         assert "_gatecost.py" in deps and "_hm_make.py" in deps, (
             f"{guard} should re-run for any script change - it no longer depends on all of them"

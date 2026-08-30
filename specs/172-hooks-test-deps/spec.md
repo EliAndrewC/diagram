@@ -41,7 +41,9 @@ proposal that leads with the part the measurement points at.
 ## Scope, stated exactly
 
 **IN**: the three parts below. **OUT**: changing what any suite ASSERTS; the `make done` engine-key
-short-circuit (a different mechanism, already working); the perf ratchets of feature 171.
+short-circuit (a different mechanism, already working); the perf ratchets of feature 171; and **the
+Python test suite** - the other of the GM's *"those two of the slowest tests"*, which this feature
+deliberately does not serve and which belongs to the efficiency work.
 
 ## Requirements
 
@@ -77,13 +79,16 @@ would keep for those three exactly the over-running the GM asked to end. Measure
   IT - `("scripts", ("*.sh", "*.py"))` - and is pinned by a test. Round 2 caught the first version
   matching only the literal `scripts/*.sh`, which in that file appears solely in its DOCSTRING: the
   row was true by accident of wording, and a reword would have dropped the suite from 56 files to 4.
-- **`sync-with-main.sh` and `review-gate.sh` are held there deliberately**, and the reason is a LIMIT
-  OF REFERENCE-GRAPH DERIVATION rather than a preference: their suites exercise the push path end to
-  end, and that path resolves script paths at RUN TIME from `$ROOT` and `$MAIN` against trees the
-  fixture builds. A static reader cannot see which scripts a run will reach - `sync-with-main.sh`
-  names 11 siblings and reaches more. Over-running two suites is the safe side of an edge the
-  derivation cannot see, and they are among the slowest, which is exactly why it is said out loud
-  rather than quietly narrowed.
+- **`sync-with-main.sh` ALONE is held there deliberately**, and the reason is a LIMIT OF
+  REFERENCE-GRAPH DERIVATION rather than a preference: its suite exercises the push path end to end,
+  and that path resolves script paths at RUN TIME from `$ROOT` and `$MAIN` against trees the fixture
+  builds. It names 11 siblings and reaches more. Over-running one suite is the safe side of an edge
+  the derivation cannot see.
+- **`review-gate.sh` WAS held under that same sentence, and round 3 measured the sentence false of
+  it**: it reaches exactly two scripts, both statically visible, and its suite drives only itself -
+  everything else it touches is DATA, which a hold over `scripts/` does not cover anyway. One
+  justification stretched over two unlike things, keeping for that suite exactly the over-running this
+  feature exists to end. It derives now, to five files.
 
 ### FR-002 - the suites run in PARALLEL
 
@@ -103,7 +108,8 @@ suite is serialized rather than retried - a retry hides a real race behind a gre
 ### FR-003 - `_hookmatch.py` is split by COHESION, and guards call the LEAF
 
 Into three modules along the families the measurement found: the escape family, the command-shape
-family, the make/rewrite family. Guards invoke the module they use directly, because a split behind an
+family, the make/rewrite family. Guards invoke the module they use directly - all of them, including the two
+`classify` call sites that round 3 found still going through the umbrella - because a split behind an
 umbrella that imports everything changes no dependency set at all - the closure is what matters, not
 the file count.
 
@@ -135,9 +141,9 @@ under-runs is the one failure mode that matters here.
 ## Success Criteria
 
 - **SC-001**: with nothing changed, `hooks-test` still reports every suite unchanged and costs ~0 s.
-- **SC-002**: touching `_gatecost.py` re-runs **5** suites of 21, not 21 - its two real consumers plus the three whole-tree suites, which re-run for any script change and always will. Stated as MEASURED rather than as the two the derivation alone would give: the whole-tree trio is a constant on every targeted change and a criterion that ignored it would be quietly wrong.
-- **SC-003**: touching the make/rewrite module re-runs **6** of 21 - the 3 guards that use it (`gate`, `make-only`, `pair`) plus the same whole-tree trio. Measured on a real incremental run, not derived.
-- **SC-004**: touching `_guardlog.sh` still re-runs ~19 - the derivation must NOT get this "right" by under-running.
+- **SC-002**: **stated over the whole 21-entry roster, which is the unit the tooling reports in.** Touching `_gatecost.py` re-runs **4 of 21** - its 2 real consumers plus the 2 whole-tree entries (`sync-with-main.sh`, `gate-stamp.py`) that re-run for ANY script change and always will. `test_hooks_cases.py`: **5 of 21**. Round 3 caught the first version stating a guards-only figure that the tooling never reports, so a reader checking it would have concluded the feature missed its own criterion.
+- **SC-003**: touching the make/rewrite module re-runs **5 of 21** - the 3 guards that use it (`gate`, `make-only`, `pair`) plus the same 2 whole-tree entries.
+- **SC-004**: touching `_guardlog.sh` still re-runs **20 of 21**, and `_hm_escape.py` likewise - the derivation must NOT get these "right" by under-running. This is the number that must NOT fall.
 - **SC-005**: a full `hooks-test` (every suite stale) is measurably faster than the same set run serially, measured on the SAME content in this clone rather than against a figure from another session's run - and reports every failure together as it does today. Measured: **194 s serial, 63 s parallel**, all 21 green both ways.
 - **SC-008**: the command-shape module, which after the split both other families depend on, is named as having the widest blast radius of the three - the first draft noted this for the escape family only.
 - **SC-006**: every suite that runs concurrently has been checked for shared state; any that cannot is serialized with its reason recorded.

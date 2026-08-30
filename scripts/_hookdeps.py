@@ -41,14 +41,20 @@ HERE = pathlib.Path(__file__).resolve().parent
 #   `gate-stamp.py` DERIVES to the whole tree: it globs `scripts/*.sh scripts/*.py`, so `_globs_tree`
 #   below picks it up with no special case at all.
 #
-#   `sync-with-main.sh` and `review-gate.sh` are held here DELIBERATELY, and the reason is a limit of
-#   reference-graph derivation rather than a preference: their suites exercise the push path end to
-#   end, and that path resolves paths at RUN TIME from `$ROOT` and `$MAIN` (`sync-with-main.sh:43`,
-#   `:53-55`), against trees the fixture builds. A static reader cannot see which scripts a run will
-#   reach; it names 11 siblings and reaches more. Over-running two suites is the safe side of a
-#   derivation that cannot see the edge, and these two are among the slowest, which is precisely why
-#   the honest thing is to say so rather than to quietly narrow them.
-HELD_WHOLE_TREE = {"sync-with-main.sh", "review-gate.sh"}
+#   `sync-with-main.sh` ALONE is held here, and the reason is a limit of reference-graph derivation
+#   rather than a preference: its suite exercises the push path end to end, and that path resolves
+#   script paths at RUN TIME from `$ROOT` and `$MAIN` (`:43`, `:53-55`) against trees the fixture
+#   builds. A static reader cannot see which scripts a run will reach; it names 11 siblings and
+#   reaches more. Over-running one suite is the safe side of an edge the derivation cannot see.
+#
+#   `review-gate.sh` WAS held here too, under that same sentence, and round 3 of this feature's review
+#   showed the sentence is false of it: it reaches exactly two scripts, both statically visible
+#   (`. "$RG_HERE/_guardlog.sh"` and `"$RG_HERE/_hm_escape.py" reason-ok`), and its suite drives only
+#   `review-gate.sh` itself inside its own fixtures. Everything else it touches is DATA - specs and
+#   manifests - which a whole-tree hold over `scripts/` does not cover anyway. One argument stretched
+#   over two unlike things, keeping for that suite exactly the over-running this feature exists to end.
+#   It derives now.
+HELD_WHOLE_TREE = {"sync-with-main.sh"}
 
 
 def _globs_tree(name: str) -> bool:

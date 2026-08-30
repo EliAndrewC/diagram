@@ -147,7 +147,7 @@ print(json.dumps({"hookSpecificOutput": {
     # was blocked for a subset nobody had run. Seventh false positive of this shape in one day. The
     # matcher decides whether pytest is actually INVOKED: at a command position (`bare-pytest`), or
     # through the make targets that run tests.
-    VERDICT=$(printf '%s' "$INPUT" | "$HERE/_hookmatch.py" 2>/dev/null || echo ok)
+    VERDICT=$(printf '%s' "$INPUT" | "$HERE/_hm_make.py" 2>/dev/null || echo ok)
     RUNS_TESTS=no
     [ "$VERDICT" = "bare-pytest" ] && RUNS_TESTS=yes
     case "$TARGETS" in *" test-file "*|*" test "*|*" quick "*) RUNS_TESTS=yes ;; esac
