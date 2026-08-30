@@ -34,7 +34,7 @@ than on time:
 |---|---|---|
 | `ci verified-done` | the WHOLE gate, in ~0 s | any change to engine `.py` (compared as its docstring-stripped AST) or to pool gens/manifests. Docs, tests, the Makefile, config and `scripts/` never re-open it - **nor do comments, docstrings or formatting inside engine Python** |
 | `gate-stamp --fresh hooks` | the `hooks-test` phase (~84 s) | a change to any guard script |
-| per-suite freshness | any of the 19 guard suites | that guard, its test, or the shared helpers (`_hookmatch.py`, `_guardlog.sh`, `_gatecost.py`, `test_hooks_cases.py`) |
+| per-suite freshness | any of the 20 guard suites | that guard, its test, or the shared helpers (`_hookmatch.py`, `_guardlog.sh`, `_gatecost.py`, `test_hooks_cases.py`) |
 | `ci tooling-fresh` | `tests/tooling` inside `make quick` | a change to the tooling those tests drive |
 
 Measured: **48 of 314 recorded `make done` runs short-circuited entirely**, at 0 s each.
@@ -66,6 +66,13 @@ is destructive or the refusal is itself the content.
 | **`make-only-hooks`** | reaching an expensive path around `make`, where the cheap question cannot be asked first | refuses a bare interpreter or pytest and NAMES the target; **rewrites** a one-file bare pytest into `make test-file FILE=...` |
 | **`no-poll-hooks`** | burning wall clock watching a job the harness will notify you about | refuses a busy-wait; **corrects** a self-matching `pgrep` to the bracket form; **permits** a backgrounded loop whose condition reads a FILE (the `setsid --fork` shape). Escape `POLL_OK` |
 | **`pair-hooks`** | the independent review running AFTER the gate, adding its whole runtime to the wall clock | **rewrites** a lone `make done` into `make verify`. Escape `PAIR_OK` |
+
+**Every guard's ESCAPE is an invocation too, since feature 169.** All eleven tokens go through
+`_hookmatch.py escape <TOKEN>`; before that they were bare substring tests, so a grep for a token or a
+commit message quoting it escaped the guard - and, in `measure` and `gate`, also reset the state that
+decides whether the NEXT expensive command is refused. `main-tree-hooks` joined the roster in the same
+feature: a bare `cd` into the mirror root followed by a write or a commit, which none of the three
+existing main-write guards could see because none of them sees a `git commit`.
 
 The other six (`discard`, `guard-file`, `repo-safety`, `source-block`, `readme`, `clone-sync`,
 `no-branch`) are protective rather than economic and stay refusals by design; the reason for each is

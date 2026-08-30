@@ -192,7 +192,12 @@ print(str(pathlib.Path(tp).parent / sid / "subagents") if tp and sid else "")
     # consequential permit of the nine. The prompt-side branch below is deliberately NOT converted:
     # an agent prompt is prose, not a shell command, and the matcher blanks quoted regions, which
     # prose carries for ordinary reasons.
-    if [ -n "$(printf '%s' "$INPUT" | "$PAIR_HERE/_hookmatch.py" escape PAIR_OK= 2>/dev/null)" ]; then
+    # GUARD_EDIT_OK: feature 169 - `$payload`, not `$INPUT`. This file names its stdin `payload`;
+    # `$INPUT` is empty here, so the waiver branch never fired and four of its own cases went red.
+    # Second time in this feature that an escape was silently disabled by the wrong variable name
+    # (no-poll's was `$HERE` vs `$NP_HERE`), which is the argument for testing an escape in BOTH
+    # directions rather than only checking that mentions are rejected.
+    if [ -n "$(printf '%s' "$payload" | "$PAIR_HERE/_hookmatch.py" escape PAIR_OK= 2>/dev/null)" ]; then
       guard_log pair escaped "$cmd" pair-ok-gate
       log_bypass "$(printf '%s' "$cmd" | sed -n 's/.*PAIR_OK=["\x27]\{0,1\}\([^"\x27]*\).*/\1/p')" "gate alone"
       [ -n "$key" ] && write_pairing "$(pairing_file)" waived_key "$key"   # ...and the stop branch honors it

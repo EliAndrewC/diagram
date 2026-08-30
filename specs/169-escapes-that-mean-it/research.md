@@ -126,3 +126,25 @@ and an ordinary commit with no `cd`. Two more prove a MENTION of the pattern - i
 in a heredoc - is not an invocation, which is this feature's own rule applied to itself.
 
 Proved to fire by neutering the block in a copy and watching the case that must fail pass.
+
+## R8 - the same slip, twice, and what it says about testing an escape
+
+An escape branch converted to the shared matcher reads its stdin from a variable, and TWICE in this
+feature I named the wrong one:
+
+- `no-poll-hooks.sh` uses `$NP_HERE` for its own directory (`$HERE` is not defined until twelve lines
+  later). The path was empty, the matcher never ran, and **the escape stopped working entirely**.
+- `pair-hooks.sh` names its stdin `payload`, not `INPUT`. The waiver branch never fired, and four of
+  its own cases went red at the gate.
+
+Both were caught, and neither by inspection. The first was caught because the new suite asserts that a
+REAL escape still escapes, not merely that a mention does not; a check written the obvious way -
+"prove the mention no longer escapes" - passes against a branch that has been disabled altogether,
+which is the worse failure of the two, since the escape is what lets a guard be repaired through the
+channel it guards. The second was caught by `hooks-test`.
+
+After the second, the class was closed rather than the instance: every converted guard was audited for
+whether its escape line names the same variable the file assigns from `cat`. All six agree.
+
+**The rule this earns**: an escape is tested in BOTH directions, always. `tests/tooling/test_guard_firing_log.py`
+and each guard's own suite now do that for every token.
