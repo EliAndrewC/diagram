@@ -1,0 +1,6 @@
+{
+  "utc": "20260830T122028Z",
+  "guard": "pair-hooks",
+  "what": "gate alone",
+  "reason": "settlement-review is not owed and it is measured: git status over pool/ and legacy-hand-authored-pool/ is EMPTY after both retirements (checked immediately before this run and pasted above). Retiring a check deletes audit code and cannot change what a generator draws - the one part of this feature that CAN move a map was T03, and T05 already proved it did not, re-rolling all five hamlets byte-identical. GM 2026-08-29: settlement-review is not per-map and they read the map themselves."
+}

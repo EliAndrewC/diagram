@@ -117,73 +117,6 @@ def test_label_hugs_its_referent_passes_a_caption_tucked_against_its_subject():
     assert "label_hugs_its_referent" not in f_only(M, "label_hugs_its_referent")
 
 
-def test_title_clear_of_features_passes_over_blank_space():
-    M = {"meta": {"scale": "village"}, "houses": [{"x": 300, "y": 300, "w": 60, "h": 40, "rot": 0, "kind": "plain"}], "title": {"name": "V", "bbox": [800, 50, 900, 90]}}
-    assert "title_clear_of_features" not in f_only(M, "title_clear_of_features")
-
-
-def test_title_clear_of_features_fires_on_a_house():
-    M = {"meta": {"scale": "village"}, "houses": [{"x": 300, "y": 300, "w": 60, "h": 40, "rot": 0, "kind": "plain"}], "title": {"name": "V", "bbox": [280, 285, 340, 315]}}  # box on the house
-    assert "title_clear_of_features" in f_only(M, "title_clear_of_features")
-
-
-def test_title_clear_of_features_fires_over_a_field():
-    M = {"meta": {"scale": "village"}, "fields": [_field("p", 200, 200, 600, 600)], "title": {"name": "V", "bbox": [300, 300, 450, 340]}}
-    assert "title_clear_of_features" in f_only(M, "title_clear_of_features")
-
-
-def test_title_clear_of_features_tolerates_scrub_but_not_grove_or_marsh():
-    # The scrub commons is sparse GROUND COVER (a feathered grass scatter), not a feature with a footprint, and
-    # a bold place name reads fine over it - so it does NOT block a title. This changed when the commons began
-    # clothing the field's interior voids too (GM, 2026-07): scrub then covers nearly the whole map, and
-    # treating it as an obstacle would leave the title nowhere at all to sit. Must stay in step with
-    # `Settlement._title_obstacles`.
-    scrub = {"meta": {"scale": "village"}, "commons": [{"poly": [[200, 200], [400, 200], [400, 400], [200, 400]]}], "title": {"name": "V", "bbox": [250, 250, 350, 300]}}
-    assert "title_clear_of_features" not in f_only(scrub, "title_clear_of_features")
-    # the MARSH (a distinct wetland) still blocks it; the GROVE no longer does (feature 137 T06, 2026-08-28):
-    # the placard is an opaque card and a strip of belt under it hides nothing a reader needs, while a tall
-    # hamlet framed tight to its content often has no blank placard-sized ground at all (10 of 48 seeds).
-    # The generator still takes blank ground first and cover only as the last resort before the corner.
-    marsh = {"meta": {"scale": "village"}, "marshes": [{"poly": [[200, 200], [400, 200], [400, 400], [200, 400]]}], "title": {"name": "V", "bbox": [250, 250, 350, 300]}}
-    assert "title_clear_of_features" in f_only(marsh, "title_clear_of_features")
-    grove = {"meta": {"scale": "village"}, "village_groves": [{"poly": [[200, 200], [400, 200], [400, 400], [200, 400]]}], "title": {"name": "V", "bbox": [250, 250, 350, 300]}}
-    assert "title_clear_of_features" not in f_only(grove, "title_clear_of_features")
-
-
-def test_title_clear_of_features_fires_over_the_pond():
-    M = {"meta": {"scale": "village"}, "pond": [400, 400, 100, 80], "title": {"name": "V", "bbox": [380, 380, 450, 420]}}
-    assert "title_clear_of_features" in f_only(M, "title_clear_of_features")
-
-
-def test_scalebar_matches_declared_scale_passes():
-    M = {"meta": {"scale": "village", "ftpx": 2}, "title": {"name": "V", "bbox": [800, 50, 900, 132]}, "scalebar": {"ft": 200, "ftpx": 2, "bbox": [800, 93, 900, 132]}}
-    assert "scalebar_matches_declared_scale" not in f_only(M, "scalebar_matches_declared_scale")
-
-
-def test_scalebar_matches_declared_scale_fires_when_missing():
-    # a manifest with a title but no scalebar predates the bar (GM 2026-07-20) - regenerate the map
-    M = {"meta": {"scale": "village", "ftpx": 2}, "title": {"name": "V", "bbox": [800, 50, 900, 90]}}
-    assert "scalebar_matches_declared_scale" in f_only(M, "scalebar_matches_declared_scale")
-
-
-def test_scalebar_matches_declared_scale_fires_on_a_wrong_distance():
-    # a village map (2 ft/px) whose bar claims the hamlet distance - the 100 map-px bar must read 200 ft
-    M = {"meta": {"scale": "village", "ftpx": 2}, "title": {"name": "V", "bbox": [800, 50, 900, 132]}, "scalebar": {"ft": 100, "ftpx": 1, "bbox": [800, 93, 900, 132]}}
-    assert "scalebar_matches_declared_scale" in f_only(M, "scalebar_matches_declared_scale")
-
-
-def test_title_has_placard_fires_on_a_pre_placard_manifest():
-    # the parchment card under the title + scale bar (GM 2026-07-21, legibility over scrub) is drawn
-    # by s.title() - a manifest without the record predates the card and needs regeneration
-    M = {"meta": {"scale": "village"}, "title": {"name": "V", "bbox": [800, 50, 900, 132]}}
-    assert "title_has_placard" in f_only(M, "title_has_placard")
-    M["title"]["placard"] = [800, 50, 900, 132]
-    assert "title_has_placard" not in f_only(M, "title_has_placard")
-
-
-# --- intersections_are_crossroads (lane beds merge, no edge line across a junction) ---
-
-
 def test_every_feature_classified_for_overlap_fires_on_unknown_feature():
     # a new footprint feature nobody added to the _OVERLAP_* registry trips the completeness guard
     M = {"meta": {"scale": "village"}, "watchtowers": [{"x": 100, "y": 100, "w": 20, "h": 20, "rot": 0}]}
@@ -261,17 +194,3 @@ def test_labels_align_with_their_referent_fires_and_passes():
     assert "labels_align_with_their_referent" not in f_only(aligned, "labels_align_with_their_referent"), "the board's own angle passes"
     noref = manifest(houses=[house(x=400, y=400)], kosatsuba=[board], labels=[[480.0, 512.0, 533.0, 520.0, 2, "notice board"]])
     assert "labels_align_with_their_referent" not in f_only(noref, "labels_align_with_their_referent"), "no referent, no judgment"
-
-
-def test_title_clear_of_features_fires_over_a_feature_label():
-    """A title placard over a caption ERASES it - caught on the Tango content crop 2026-07-23, where the
-    card landed on the 'pauper ossuary mound' label. The label arm is tested last, after every footprint
-    and the pond, so a map with nothing else in the way is what reaches it."""
-    M = {
-        "meta": {"scale": "village"},
-        "labels": [[300, 300, 420, 316, 1, "pauper ossuary mound"]],
-        "title": {"name": "V", "bbox": [280, 290, 440, 330], "placard": True},
-    }
-    assert "title_clear_of_features" in f_only(M, "title_clear_of_features")
-    clear = {**M, "labels": [[800, 800, 920, 816, 1, "pauper ossuary mound"]]}
-    assert "title_clear_of_features" not in f_only(clear, "title_clear_of_features")

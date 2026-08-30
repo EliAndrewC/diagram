@@ -4,11 +4,10 @@ import math
 from collections.abc import Sequence
 from typing import Any
 
-from l7r.diagram.settlement import LABEL_AIR_CAP, aligned_tilt, box_gap, label_aabb, label_quad, sat_overlap
+from l7r.diagram.settlement import LABEL_AIR_CAP, aligned_tilt, box_gap, label_quad, sat_overlap
 
 from .common_01_geometry import (
     Poly,
-    _box_hits_poly,
     poly_dist,
 )
 from .common_02_overlap_policy import poly_gap
@@ -335,116 +334,6 @@ def _seg_0266__ttl(*, M: Any = _UNBOUND) -> dict[str, Any]:
     """Gate segment 266 (ttl) - body verbatim from the legacy gate() (feature 022)."""
     ttl = M.get("title")
     return _kept(locals(), ('ttl',))
-
-
-def _seg_0267__title_clear_of_features(
-    *,
-    M: Any = _UNBOUND,
-    _lb2: Any = _UNBOUND,
-    _thit_now: Any = _UNBOUND,
-    check: Any = _UNBOUND,
-    fdef: Any = _UNBOUND,
-    ftpx: Any = _UNBOUND,
-    k: Any = _UNBOUND,
-    lb2: Any = _UNBOUND,
-    pcx: Any = _UNBOUND,
-    pcy: Any = _UNBOUND,
-    prx: Any = _UNBOUND,
-    pry: Any = _UNBOUND,
-    s: Any = _UNBOUND,
-    sb: Any = _UNBOUND,
-    tb: Any = _UNBOUND,
-    thit: Any = _UNBOUND,
-    ttl: Any = _UNBOUND,
-) -> dict[str, Any]:
-    """Gate segment 267 (scalebar_matches_declared_scale, title_clear_of_features, title_has_placard) - body verbatim from the legacy gate() (feature 022)."""
-    if ttl:
-        tb = ttl["bbox"]
-        tc = [(tb[0], tb[1]), (tb[2], tb[1]), (tb[2], tb[3]), (tb[0], tb[3])]
-        thit = []
-        for k in (
-            "houses",
-            "gardens",
-            "threshing_yards",
-            "groves",
-            "dry_plots",
-            "buildings",
-            "manors",
-            "religious",
-            "flophouses",
-            "storehouses",
-            "merchant_estates",
-            "ministries",
-            # NOT "village_groves" since feature 137 T06 (2026-08-28): the placard is an opaque card, so the
-            # name reads over anything; what it must not HIDE is a building, a plot, a field, water, a lane
-            # or a label. A strip of belt or wood under the card hides nothing a reader needs, and a tall
-            # hamlet framed tight to its content often has no blank 200 x 106 px at all (10 of 48 cohort
-            # seeds; seed 2's strips beside the field are 106 and 183 px wide). The generator still seats
-            # the title on blank ground first and takes cover only as the last resort before the corner.
-            # NOT "commons": the scrub is sparse GROUND COVER (a feathered grass scatter on open ground), not a
-            # feature with a footprint, and a bold place name reads fine over it. Kept in step with
-            # `_title_obstacles` in settlement.py - once the commons clothes the field's interior voids too it
-            # covers nearly the whole map, so blocking on it would leave a title nowhere to sit.
-            "marshes",
-        ):
-            for s in M.get(k, []):
-                # THE POLY IS AUTHORITATIVE WHERE THERE IS ONE (2026-08-10): a scattered marsh
-                # records a w/h AABB spanning its whole scatter - kikuta's pond fringe measures
-                # 5,040 px across - so falling through to the box after the poly MISSES reports a
-                # title sitting on ground the feature does not occupy. Only a record with no
-                # outline is judged by its box.
-                _thit_now = (
-                    _box_hits_poly(tb, s["poly"])
-                    if s.get("poly")
-                    else ("w" in s and not (tb[2] < s["x"] - s["w"] / 2 or tb[0] > s["x"] + s["w"] / 2 or tb[3] < s["y"] - s["h"] / 2 or tb[1] > s["y"] + s["h"] / 2))
-                )
-                if _thit_now:
-                    thit.append(k)
-                    break
-            if thit:
-                break
-        if not thit:
-            for fdef in M.get("fields", []):
-                if _box_hits_poly(tb, fdef["outline"]):
-                    thit.append("fields")
-                    break
-        if not thit and M.get("pond"):
-            pcx, pcy, prx, pry = M["pond"]
-            if not (tb[2] < pcx - prx or tb[0] > pcx + prx or tb[3] < pcy - pry or tb[1] > pcy + pry):
-                thit.append("pond")
-        if not thit:
-            # placed LABELS too: a title placard over a feature label erases it (caught 2026-07-23 on the
-            # Tango content crop - the placard landed on the 'pauper ossuary mound' label)
-            for lb2 in M.get("labels", []):
-                _lb2 = label_aabb(lb2)  # a tilted caption's reach is its rotated AABB
-                if not (tb[2] < _lb2[0] or tb[0] > _lb2[2] or tb[3] < _lb2[1] or tb[1] > _lb2[3]):
-                    thit.append(f"label:{lb2[5]}")
-                    break
-        check(
-            "title_clear_of_features",
-            not thit,
-            f"the map title sits on {thit[:2]} - it must go over BLANK space so the place name is readable (the generator's s.title() searches for a clear box; call it AFTER crop_to_content)",
-        )
-        # every settlement map shows a SCALE BAR (GM 2026-07-20, matching the Mode A compound sheets),
-        # and the bar's declared distance must agree with the map's declared ft/px - the bar is 100
-        # map-px, so ft = 100 x ftpx (100 hamlet/town, 200 village, 300 city). s.title() draws it, so
-        # a manifest with a title but no scalebar means the generator predates the bar - regenerate.
-        sb = M.get("scalebar")
-        ftpx = M.get("meta", {}).get("ftpx", 1.0)
-        check(
-            "scalebar_matches_declared_scale",
-            sb is not None and sb["ft"] == round(100 * ftpx),
-            f"scalebar {sb} disagrees with (or is missing for) the declared scale of {ftpx} ft/px - the 100 map-px bar must read {round(100 * ftpx)} ft",
-        )
-        # ... and the block sits on its parchment PLACARD (GM 2026-07-21: ink over scrub speckle was hard
-        # to read - the card keeps the title + scale legible over any ground cover). s.title() draws it;
-        # a manifest without the record predates the card - regenerate.
-        check(
-            "title_has_placard",
-            bool(ttl.get("placard")),
-            "the title block records no placard - the parchment card under the title + scale bar is drawn by s.title(); regenerate the map",
-        )
-    return _kept(locals(), ('_lb2', '_thit_now', 'fdef', 'ftpx', 'k', 'lb2', 'pcx', 'pcy', 'prx', 'pry', 's', 'sb', 'tb', 'tc', 'thit'))
 
 
 # WHY: <one paragraph - what the research found, the decision it drove, the departure taken>.

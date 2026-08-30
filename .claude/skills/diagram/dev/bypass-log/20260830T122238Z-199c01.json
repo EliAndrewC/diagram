@@ -1,0 +1,6 @@
+{
+  "utc": "20260830T122238Z",
+  "guard": "pair-hooks",
+  "what": "gate alone",
+  "reason": "settlement-review is not owed and it is MEASURED: git status over pool/ and legacy-hand-authored-pool/ returned 0 changed artifacts immediately before this run. Retiring a check deletes audit code and cannot change what a generator draws; the one part of this feature that CAN move a map was T03"
+}
