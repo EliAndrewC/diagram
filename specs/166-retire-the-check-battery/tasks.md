@@ -15,17 +15,22 @@ historical finding still has a home - and carry the three boxes.
 
 ## Phase 1 - cut the generator's dependency (US1, P1) - THE ONLY PART THAT CAN MOVE A MAP
 
-- [ ] **T02** Lift `farmhouses_reach_a_way`'s reach measure out of the check into a predicate `hamletgen`
+- [x] **T02** Lift `farmhouses_reach_a_way`'s reach measure out of the check into a predicate `hamletgen`
       owns, with unit tests. Do NOT re-derive it: `driver.py` records that a hand-rolled reach measure was
       wrong on five of six seeds and never read zero. Lift the check's own body.
       verify: `make quick`
       research: procedure
-- [ ] **T03** Replace the ladder's accept criterion (`len(f2) <= len(failures)` over the gate's whole
+- [x] **T03** Replace the ladder's accept criterion (`len(f2) <= len(failures)` over the gate's whole
       failure list). State what replaces it AND its reasoning at the point of change - a global quality
       proxy is being exchanged for a local one, and that is a decision, not a refactor.
       research: procedure
 - [ ] **T04** `hamletgen` imports nothing from `check_village`. Prove it: a test that the module graph is
       clean, not a grep in a commit message.
+      **MOVED TO PHASE 4** (discovered at T03 by reading the consumers, which is what the ordering is for):
+      the ladder no longer NEEDS the gate, but `generate()` still calls it to populate `Report.failures`
+      and `Report.fail_lines`, and those have live consumers - `tools/mapcheck.py`'s tripwire and
+      `tools/cohort_audit.py`. Both are battery apparatus and die with it, so cutting the import is part of
+      the Phase 4 deletion rather than a Phase 1 task. Recorded rather than silently reordered.
       verify: `make quick`
       research: procedure
 - [ ] **T05** Re-roll all five live hamlets; compare each manifest byte-for-byte against before. DIAGNOSE

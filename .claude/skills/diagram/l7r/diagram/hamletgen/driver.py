@@ -29,7 +29,7 @@ from .plan import HamletSpec, SitePlan, plan_site
 from .pondstock import stage_pond_stock
 from .sink import stage_sink
 from .water import stage_field, stage_water_frame, stage_waterward
-from .ways import stage_seat, stage_track, stage_web
+from .ways import stage_seat, stage_track, stage_web, unreached_houses
 
 # THE PIPELINE. Read top to bottom: this is the generator.
 #
@@ -225,7 +225,6 @@ def generate(spec: HamletSpec, out_base: str | None = None, render: bool = True)
     guard("l7r.diagram.hamletgen")
 
     import io
-    import re
     import tempfile
     from contextlib import redirect_stdout
 
@@ -268,10 +267,10 @@ def generate(spec: HamletSpec, out_base: str | None = None, render: bool = True)
         buf = io.StringIO()
         with redirect_stdout(buf):
             red = sorted(gate(s2.M))
-        seats = []
-        for line in buf.getvalue().splitlines():
-            if "FAIL" in line and "farmhouses_reach_a_way" in line:
-                seats = [(float(a), float(b)) for a, b, _c in re.findall(r"\((\d+), (\d+), (\d+)\)", line)]
+        # SEATS COME FROM THE PREDICATE NOW (feature 166 T02), not from a regex over the gate's printed
+        # message. The predicate is the check's own body, lifted to `ways.unreached_houses` - not
+        # re-derived, because a hand-rolled reach measure was wrong on five of six seeds (see below).
+        seats = [(float(x), float(y)) for x, y, _d in unreached_houses(s2.M)]
         return s2, red, seats, [ln.strip()[:400] for ln in buf.getvalue().splitlines() if ln.startswith("FAIL")]
 
     # A MAP THAT STRANDS A FARMHOUSE IS RE-ROLLED WITH THAT GROUND FORBIDDEN. The seats a hamlet
@@ -291,13 +290,32 @@ def generate(spec: HamletSpec, out_base: str | None = None, render: bool = True)
     attempt = kept_attempt = 1
     after: list[str] = []  # the checks that forced each re-roll, in order
     for _ in range(4):
-        if "farmhouses_reach_a_way" not in failures or not seats:
+        # THE LOOP'S ENTRY IS THE PREDICATE TOO (feature 166 T03). It used to also require the gate to
+        # have NAMED `farmhouses_reach_a_way`, which is the same dependency in the entry condition that
+        # the accept criterion had in the exit: the ladder could not run without the battery telling it
+        # to. `seats` is non-empty exactly when houses are stranded, so it is the whole condition.
+        if not seats:
             break
         avoid = avoid + seats
         after = after + ["farmhouses_reach_a_way"]
         attempt += 1
         _s2, f2, seats2, lines2 = _roll(avoid, out_base, attempt, after)
-        if len(f2) <= len(failures):
+        # THE ACCEPT CRITERION IS THE REACH COUNT, NOT THE GATE'S TOTAL (feature 166 T03).
+        #
+        # It used to be `len(f2) <= len(failures)`: keep a re-roll only if the battery's WHOLE failure
+        # list got no longer. That is a global quality proxy, and it becomes uncomputable when the
+        # battery goes - so this is a decision, not a refactor, and it is the one place this feature can
+        # move a map. What it costs is measured at T05 by re-rolling every live hamlet and comparing
+        # byte-for-byte.
+        #
+        # WHY THE REACH COUNT IS THE RIGHT REPLACEMENT, and not merely the available one: this loop
+        # exists to fix stranded farmhouses and nothing else. Judging its re-rolls by the total made an
+        # unrelated defect elsewhere veto a genuine reach fix - and the rejection then KEEPS the map
+        # with the stranded house, which is the worse of the two on the only axis the loop is about.
+        # Under this feature's architecture every other defect belongs to the placer that caused it and
+        # is caught by that placer's own test, so a reach loop that optimizes reach is correct rather
+        # than merely convenient.
+        if len(seats2) <= len(seats):
             failures, seats, lines, kept, kept_attempt = f2, seats2, lines2, list(avoid), attempt
         else:
             stale = True

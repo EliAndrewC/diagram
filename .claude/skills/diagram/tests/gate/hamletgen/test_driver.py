@@ -96,24 +96,28 @@ def test_a_map_that_strands_a_farmhouse_is_re_rolled_with_that_ground_forbidden(
     whether a way can reach a steading depends on fabric that does not exist when seats are chosen;
     observing it on the finished map does not have that problem.
 
-    The gate is the oracle at every step - the seats are read off its own FAIL line rather than
+    THE ORACLE MOVED (feature 166 T02/T03). The seats used to be read off the gate's own printed FAIL
+    line; they now come from `ways.unreached_houses`, which is that check's body LIFTED - not
     recomputed, because a hand-rolled reach measure was tried and over-counted on five of six seeds.
-    So this drives the loop by faking the ORACLE, not by faking geometry."""
+    So this still drives the loop by faking the ORACLE rather than by faking geometry; the oracle is
+    just no longer the battery. That the old version of this test stopped working when the seam moved is
+    the point: it was pinned to the dependency this feature removes."""
 
     def produce():  # type: ignore[no-untyped-def]
         calls: list[int] = []
 
-        def fake_gate(M, verbose=True, only=None):  # type: ignore[no-untyped-def]
+        def fake_unreached(M, reach=None):  # type: ignore[no-untyped-def]
             calls.append(1)
-            if len(calls) == 1:  # the first roll strands two houses; the gate names them
-                print("FAIL farmhouses_reach_a_way  -> 2 farmhouse(s) at [(1262, 848, 211), (1397, 890, 287)] - omission")
-                return ["farmhouses_reach_a_way"]
+            if len(calls) == 1:  # the first roll strands two houses; the predicate names them
+                return [(1262, 848, 211), (1397, 890, 287)]
             return []
 
-        # PATCH THE SOURCE MODULE, not `hg.driver`: `generate` imports `gate` INSIDE the function, so
-        # the name is re-fetched from `check_village` on every call and a package-level patch is
-        # invisible to it.
-        monkeypatch.setattr(check_village, "gate", fake_gate)
+        # PATCH `hg.driver`, not `ways`: the driver imports the predicate at module level, so the name it
+        # calls is its OWN. (The old test had to patch `check_village` instead, because `generate`
+        # imported `gate` inside the function - the note is kept because the reasoning still applies to
+        # any future seam: patch the namespace that does the CALLING.)
+        monkeypatch.setattr(hg.driver, "unreached_houses", fake_unreached)
+        monkeypatch.setattr(check_village, "gate", lambda M, verbose=True, only=None: [])
         seen: list[list[tuple[float, float]]] = []
         real_build = hg.driver.build
 
@@ -130,24 +134,39 @@ def test_a_map_that_strands_a_farmhouse_is_re_rolled_with_that_ground_forbidden(
     assert failures == []  # the re-roll's verdict is the one reported
     assert len(seen) == 2  # one roll, then exactly one re-roll
     assert seen[0] == []  # the first roll forbids nothing
-    assert (1262.0, 848.0) in seen[1]  # the re-roll forbids what the GATE named
+    assert (1262.0, 848.0) in seen[1]  # the re-roll forbids what the PREDICATE named
     assert (1397.0, 890.0) in seen[1]
 
 
 @pytest.mark.rolls_map
 def test_a_re_roll_that_does_not_help_is_not_kept(monkeypatch, tmp_path) -> None:  # type: ignore[no-untyped-def]
-    """The retry is self-limiting: a re-roll is kept only if the gate's verdict is no longer than the
-    one it replaces. Without that a map could be re-rolled into a WORSE state and shipped, which is
-    the opposite of the point."""
+    """The retry is self-limiting: a re-roll is kept only if it strands NO MORE houses than the roll it
+    replaces. Without that a map could be re-rolled into a worse state and shipped, which is the opposite
+    of the point.
+
+    THE CRITERION CHANGED (feature 166 T03) and this test changed with it. It used to be the gate's whole
+    failure list getting no longer - a global quality proxy that becomes uncomputable when the battery
+    goes. It is now the reach count, because this loop exists to fix stranded farmhouses and judging its
+    re-rolls by an unrelated total let a defect elsewhere veto a genuine reach fix, KEEPING the map with
+    the stranded house."""
 
     def produce():  # type: ignore[no-untyped-def]
         rolls: list[int] = []
 
-        def fake_gate(M, verbose=True, only=None):  # type: ignore[no-untyped-def]
+        def fake_unreached(M, reach=None):  # type: ignore[no-untyped-def]
             rolls.append(1)
+            # the RE-ROLL strands MORE than the roll it would replace, so it must be rejected
+            return [(100, 100, 200)] if len(rolls) == 1 else [(100, 100, 200), (900, 900, 300)]
+
+        monkeypatch.setattr(hg.driver, "unreached_houses", fake_unreached)
+
+        def fake_gate(M, verbose=True, only=None):  # type: ignore[no-untyped-def]
+            # Still PRINTS, because `Report.fail_lines` is scraped from the gate's stdout and this test
+            # asserts on it. That reporting path is the battery's, not the ladder's, and it goes in this
+            # feature's Phase 4 along with `Report.failures` - which is why the stub keeps it alive now
+            # rather than the assertion being dropped to make the test pass.
             print("FAIL farmhouses_reach_a_way  -> 1 farmhouse(s) at [(100, 100, 200)] - omission")
-            # the RE-ROLL comes back worse than the roll it would replace
-            return ["farmhouses_reach_a_way"] if len(rolls) == 1 else ["farmhouses_reach_a_way", "another_rule"]
+            return ["farmhouses_reach_a_way"]
 
         monkeypatch.setattr(check_village, "gate", fake_gate)
         # WITH AN OUT PATH, because rejecting a re-roll leaves THAT roll's files on disk - the keeper has
