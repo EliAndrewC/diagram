@@ -88,6 +88,14 @@ check "redirect over settings.json"           blocked "cat > .claude/settings.js
 check "append to a hook script"               blocked "echo x >> scripts/no-poll-hooks.sh"
 check "the escape, with a reason"             ok      "sed -i 's/a/b/' scripts/gate-hooks.sh  # GUARD_EDIT_OK: it fired on correct work"
 check "READING a guard file is not writing"   ok      "grep -n done .claude/skills/diagram/Makefile"
+# GUARD_EDIT_OK: feature 169 - two live false positives, both matched against the RAW command.
+# The first REFUSED A COMMAND THAT WROTE NOTHING: an arrow in printed prose reads as a redirect.
+check "an arrow in prose is not a redirect"   ok      "printf '5 mirror cd+write -> scripts/main-tree-hooks.sh (new)\n'"
+check "a hook named in a commit message"      ok      "git commit -m 'edit scripts/gate-hooks.sh later'"
+check "a stderr redirect is not a write"      ok      "make done 2> /tmp/log"
+check "a heredoc DISCUSSING a hook"           ok      "cat <<'EOF' > /tmp/notes
+see scripts/gate-hooks.sh
+EOF"
 check "writing a NON-guard file"              ok      "python3 - <<PY
 import pathlib; pathlib.Path('notes.md').write_text(x)
 PY"

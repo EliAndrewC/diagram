@@ -32,12 +32,23 @@ _PY = r"(?:\S*/)?python3?"
 
 # a guard file, as the TARGET of a write - the filename adjacent to the operator that writes it
 _GUARD = r"[\w./-]*(?:Makefile|[\w-]*-hooks\.sh|settings\.json)"
-_GUARD_WRITE = (
-    rf">>?\s*{_GUARD}(?:\s|$)",                    # cat > Makefile ; echo x >> scripts/a-hooks.sh
+# GUARD_EDIT_OK: feature 169 - TWO FALSE POSITIVES, one of which blocked a command that wrote
+# nothing at all. These were matched against the RAW command, so:
+#   * `printf '... -> scripts/main-tree-hooks.sh (new) ...'` was refused, because the ARROW in a
+#     printf string reads as a redirect. Fixed by `(?<![-\w])`: `->` and `2>` are not `>`.
+#   * a guard filename inside a QUOTED STRING is prose, not a target. The shell patterns now match
+#     the sanitized command (heredoc bodies and quoted strings blanked), which is what every other
+#     decision in this file already does.
+# The python-write patterns keep matching RAW on purpose: there the filename IS inside quotes -
+# `Path("...settings.json").write_text(...)` - so sanitizing would blank the very thing they detect.
+# Fourth and fifth time this repository has made the mention-versus-invocation mistake in this one
+# function; proximity is the signal, presence never is.
+_GUARD_WRITE_SHELL = (
+    rf"(?<![-\w])>>?\s*{_GUARD}(?:\s|$)",         # cat > Makefile ; echo x >> scripts/a-hooks.sh
     rf"sed\s+-i\b[^;|&]*?{_GUARD}(?:\s|$)",        # sed -i 's/a/b/' scripts/a-hooks.sh
     rf"tee\s+(?:-a\s+)?{_GUARD}(?:\s|$)",          # tee Makefile
-    rf"{_GUARD}[\"\']\s*\)?\s*\)?\s*\.write_text",  # Path("...Makefile").write_text(
 )
+_GUARD_WRITE_PY = (rf"{_GUARD}[\"\']\s*\)?\s*\)?\s*\.write_text",)  # Path("...Makefile").write_text(
 # GUARD_EDIT_OK: feature 164 - THE VARIABLE ROUTE, found by walking through it. The patterns above
 # need the guard filename ADJACENT to the write, so the ordinary two-line python shape slips past:
 #
@@ -125,7 +136,11 @@ def classify(cmd: str) -> str:
     # an ordinary test file whose DOCSTRING mentioned a hook by name. Third time this feature has
     # made the mention-versus-invocation mistake - a grep, a commit message, and now a docstring -
     # which is worth stating plainly: proximity is the signal, presence never is.
-    if any(re.search(pat, raw) for pat in _GUARD_WRITE) or _guard_write_via_name(raw):
+    if (
+        any(re.search(pat, c) for pat in _GUARD_WRITE_SHELL)          # sanitized: see feature 169
+        or any(re.search(pat, raw) for pat in _GUARD_WRITE_PY)        # raw: the name lives in quotes
+        or _guard_write_via_name(raw)
+    ):
         return "guard-write"
     return "ok"
 

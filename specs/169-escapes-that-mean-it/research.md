@@ -218,3 +218,33 @@ five consecutive clean runs where the failure rate had been roughly one in two.
 
 The general form, which is why this is written down: **a test that waits a fixed time and then asserts
 on a race is not slow, it is wrong.** Wait for the condition, or make the stimulus unmissable.
+
+## R12 - the guard-write detector refused a command that wrote nothing
+
+Found by being blocked by it, three times, while assembling this feature's own notes.
+`make-only-hooks.sh` classified a `printf` of prose containing an ARROW followed by a hook filename
+as a **guard-write** and refused it. The command wrote nothing at all: the pattern is
+`>>?\s*<guard filename>`, and an arrow ends in the redirect character.
+
+Two causes, both the same family as everything else in this feature:
+
+1. **An arrow is not a redirect.** Fixed with a `(?<![-\w])` lookbehind, which also stops `2>`
+   counting as one.
+2. **The patterns matched the RAW command**, so a guard filename inside a quoted string counted. The
+   shell patterns now match the sanitized command, as every other decision in that file already does.
+   The python-write patterns keep matching raw ON PURPOSE - there the filename lives inside quotes
+   (`Path("...settings.json").write_text(...)`), so sanitizing would blank the thing they detect.
+
+Ten cases now cover both directions in `test-make-only-hooks.sh`, and the four mention cases were
+proved to have TEETH rather than assumed: classified against main's current copy they return
+`guard-write`, against this clone's `ok`.
+
+**The first version of that proof was worthless**, which is the part worth keeping. Its vector named
+`scripts/test-review-gate.sh` - not a `-hooks.sh` file, so the pattern never matched it and main's
+copy returned `ok`. The case would have passed forever without ever reproducing the defect. Third
+fixture in two features to fail this way (`specs/167` R6 has six more); the tell each time is a check
+that passes on its FIRST run against unfixed code.
+
+**And the guard then blocked the commit of its own fix** - the message quoted the offending vector -
+which is why `CLAUDE.md` requires the escape to be checked FIRST. The escape was used, with the
+reason, exactly as designed.
