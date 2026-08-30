@@ -38,6 +38,9 @@ tilted caption's reach is its rotated quad, which is the quantity both rules mea
 `dev/gate.md` records being got wrong ("a tilted caption as a ROTATED QUAD" vs "an axis-aligned bounding
 box" - measuring the wrong one made every seat look illegal and the fallback took a worse one).
 
+| `no_structure_on_paddy` | `tests/settlement/test_field_keepout.py` (point, gap and rect arms) | `_field_blocks_point` and `_field_blocks_rect` each short-circuited -> RED |
+| `dry_plots_clear_of_paddies` | same module - one segment emits both, and one keep-out guarantees both | same mutations -> RED |
+
 ## Already carried by an existing test - dropped against it, not rewritten
 
 | check | carried by | proof |
