@@ -217,18 +217,16 @@ def generate(spec: HamletSpec, out_base: str | None = None, render: bool = True)
     reported a broken pond on every map with a pond, and the maps were fine. So the finish always
     runs; a cohort member with nowhere to go finishes into a scratch directory and is thrown away.
 
-    The gate then runs IN-PROCESS on that finished manifest, which is what makes it cheap to roll a
-    dozen hamlets and ask how many of them are actually correct."""
+    The roll then reports on ITSELF (feature 166): the only verdict a finished map can give that no
+    placer already guarantees is whether its ways reach every house it seated, because reachability
+    depends on fabric that does not exist when the seats are chosen. Everything else the retired
+    battery measured here is now a property proven once, at the placer that makes it."""
     # FR-008: an expensive operation refuses IN-PROCESS too, not only at the CLI. Without this,
     # `python3 -c "from ... import generate; generate(...)"` walks past every command-shape guard - a
     # bypass that needs no git diff and reads perfectly as diligence.
     guard("l7r.diagram.hamletgen")
 
-    import io
     import tempfile
-    from contextlib import redirect_stdout
-
-    from l7r.diagram.check_village import gate
 
     plan = plan_site(spec)
     rolled: dict[str, SitePlan] = {}  # the plan the LAST roll built on - the kept attempt rolls last, so the report reads it
@@ -264,14 +262,22 @@ def generate(spec: HamletSpec, out_base: str | None = None, render: bool = True)
         else:
             with tempfile.TemporaryDirectory() as tmp:
                 s2.finish(os.path.join(tmp, "scratch"), render=False)
-        buf = io.StringIO()
-        with redirect_stdout(buf):
-            red = sorted(gate(s2.M))
-        # SEATS COME FROM THE PREDICATE NOW (feature 166 T02), not from a regex over the gate's printed
-        # message. The predicate is the check's own body, lifted to `ways.unreached_houses` - not
-        # re-derived, because a hand-rolled reach measure was wrong on five of six seeds (see below).
+        # THE GENERATOR REPORTS ON ITSELF NOW (feature 166). This used to run the whole check battery
+        # in-process on the finished manifest and take its verdict as the map's. There is no battery:
+        # every rule it held is either a property some placer guarantees by construction, proven by
+        # that placer's own test, or a recorded drop. What remains for a ROLL to say about itself is
+        # the one thing no placer can promise in advance - whether the ways it drew actually reach
+        # every house it seated - because reachability depends on fabric that does not exist when the
+        # seats are chosen.
+        #
+        # The predicate is `ways.unreached_houses`, the retired check's own body lifted to the engine
+        # (T02) rather than re-derived: a hand-rolled reach measure was tried and was wrong on five of
+        # six seeds (see future-work 2b), over-counting and never reading zero, so anything steered by
+        # it was steered by noise.
         seats = [(float(x), float(y)) for x, y, _d in unreached_houses(s2.M)]
-        return s2, red, seats, [ln.strip()[:400] for ln in buf.getvalue().splitlines() if ln.startswith("FAIL")]
+        red = [f"farmhouses_reach_a_way[{len(seats)}]"] if seats else []
+        lines = [f"FAIL farmhouses_reach_a_way  -> {len(seats)} farmhouse(s) stand off the connected way network, at {[(round(x), round(y)) for x, y in seats[:4]]}"] if seats else []
+        return s2, red, seats, lines
 
     # A MAP THAT STRANDS A FARMHOUSE IS RE-ROLLED WITH THAT GROUND FORBIDDEN. The seats a hamlet
     # offers are not all equally servable, and which ones are cannot be known until the ways are
@@ -280,9 +286,8 @@ def generate(spec: HamletSpec, out_base: str | None = None, render: bool = True)
     # on the finished map and not seat there next time. Measured on cohort seed 5: two unreached
     # houses, then one, then none - it converges in two rounds.
     #
-    # The gate is the oracle at every step, per this package's own doctrine, and the retry is
-    # self-limiting: it runs only for a map that already failed, and it keeps a re-roll only if the
-    # verdict is strictly shorter.
+    # The retry is self-limiting: it runs only for a map that stranded a house, and it keeps a
+    # re-roll only if the reach count got no worse.
     _s, failures, seats, lines = _roll((), out_base)
     avoid: list[tuple[float, float]] = []
     kept: list[tuple[float, float]] = []  # the avoid list that produced the map we are keeping
@@ -385,8 +390,18 @@ def cohort(count: int, first_seed: int = 1, households: int | None = None, jobs:
 # feature ids and is not part of the identity). Keep this pinned to the FITTED cohort only - the
 # held-out range is measured, never tuned, so pinning it would defeat its purpose.
 COHORT_BASELINE: dict[int, frozenset[str]] = {
-    # seed 22 pinned `field_ringed` until feature 141 retired that check (the GM's cut); the pin describes only live checks
-    24: frozenset({"paddy_bunds_clear_the_supply_channels"}),
+    # EMPTY SINCE FEATURE 166, AND ITS LAST PIN WAS STALE. A cohort report now carries the
+    # generator's own self-report - `farmhouses_reach_a_way` and nothing else - because every other
+    # rule the battery measured here is proven at the placer that makes it.
+    #
+    # THE PIN WAS CHECKED BEFORE IT WAS DELETED, and the check is the finding. This dict held seed 24
+    # against `paddy_bunds_clear_the_supply_channels`; rolling that cohort member and putting it
+    # through the battery one last time returned an EMPTY verdict. The defect was fixed at some point
+    # and the pin went on excusing a seed that no longer needed it - which is precisely the "STALE
+    # PIN ... Blocking" case `baseline_verdict` below exists to catch, unnoticed because the 24-seed
+    # cohort runs only under FULL and the idle runs, not at the ordinary gate.
+    #
+    # Seed 22 pinned `field_ringed` until feature 141 retired that check (the GM's cut).
 }
 COHORT_BASELINE_SIZE = 24  # the pin describes exactly `--batch 24` from seed 1
 

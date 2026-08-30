@@ -214,6 +214,24 @@ differs by tier is the COUNT (a city draws the set: the principal board plus one
 | `features_do_not_overlap` | `tests/gate/test_no_feature_overlaps.py`, on BOTH archetypes; the taxonomy and matrix MOVED into the engine at `l7r/diagram/overlap/` | `matrix_policy` made to forbid every pair -> RED. The classified-extent count is asserted (>100) so it cannot pass on a map the matrix could not read |
 | `scatter_respects_swept_clearings` | same module - an ordering rule wearing an overlap rule's clothes: cover drawn over a reserved clearing is exactly a forbidden pair, and the matrix is what notices | same mutation -> RED |
 
+### Two corrections made while the battery was still alive to answer
+
+**The supply-bank test was WEAKER than the rule it replaced, and the battery caught it.** My first draft
+sampled plot-ring CORNERS and fired on `gap < 0` (a bund past the centerline). The retired rule walks each
+ring EDGE at a 3 px step and fires at `gap < halfw + BANK_MARGIN - 0.15` - the band plus the abutment. Both
+differences matter: a junction wedge can keep every corner dry while its two long edges converge THROUGH
+the canal (settlement-review found exactly that on Sawada, 2026-08-15), and a centerline bar would pass a
+bund drawn down the INSIDE of the water, which is the defect the GM reported. `_bund_edge_intrusions` now
+carries the rule as written, and the docstring records why each half is there.
+
+**`COHORT_BASELINE`'s last pin was STALE, and it was verified before being deleted.** The dict held seed 24
+against `paddy_bunds_clear_the_supply_channels`. Rolling that cohort member and putting it through the
+battery one last time returned an EMPTY verdict: the defect was fixed at some point and the pin went on
+excusing a seed that no longer needed it. That is precisely the "STALE PIN ... Blocking" case
+`baseline_verdict` exists to catch, and it went unnoticed because the 24-seed cohort runs only under FULL
+and the idle runs, never at the ordinary gate. Recorded rather than silently dropped, because a migration
+that loses a pin on the way past looks exactly like one that fixed the defect.
+
 ## Battery-internal - they go WITH the battery, and owe no destination
 
 These four do not state a rule about a map. They state that the battery's OWN classification tables are

@@ -31,6 +31,7 @@ import pytest
 from l7r.diagram import hamletgen as hg
 from l7r.diagram.pipeline import rollcache
 from l7r.diagram.waterfields.banks import supply_bank_clearance
+from l7r.diagram.waterfields.frame import BANK_MARGIN
 
 INASHIRO = hg.HamletSpec(name="Inashiro", seed=4, households=15, down_deg=90, water_sink="pond")
 KUWABATA = hg.HamletSpec(name="Kuwabata", seed=21, households=16, down_deg=90, field_archetype="mulberry_dike_fishpond", pond_layout="mosaic", dike_crop="mulberry")
@@ -71,6 +72,50 @@ def _point_in(pt, ring) -> bool:
     return inside
 
 
+def _bund_edge_intrusions(field, supplies) -> list[tuple[int, int]]:
+    """Every point on a plot-ring EDGE that lies inside a supply stroke's drawn band.
+
+    EDGES, NOT JUST VERTICES, and that is a correction settlement-review found on Sawada
+    (2026-08-15): a junction wedge can keep every CORNER dry while its two long edges converge
+    THROUGH the canal. My first draft of this test sampled corners only, and reported the reference
+    hamlet clean by a measure that could not see the shape the rule was written for.
+
+    THE BAR IS THE BAND PLUS THE ABUTMENT, NOT THE CENTERLINE. `supply_bank_clearance` returns the
+    distance to the centerline with the stroke's local half-width beside it; the bund must stand off
+    by that half-width plus `BANK_MARGIN` (0.75 - half a drawn bund stroke, so bund and ditch ABUT
+    rather than overlap). A test that only forbade crossing the centerline would pass a bund drawn
+    down the inside of the water, which is exactly the defect the GM reported."""
+    out: dict[tuple[int, int], None] = {}
+    for fd in supplies:
+        pts = [(float(p[0]), float(p[1])) for p in (fd.get("poly") or [])]
+        if len(pts) < 2:
+            continue
+        w0 = float(fd.get("w", 2.0))
+        w1 = float(fd.get("w_tail", w0))
+        cum = _cum(pts)
+        reach = max(w0, w1) / 2 + BANK_MARGIN + 1.0
+        x0 = min(p[0] for p in pts) - reach
+        x1 = max(p[0] for p in pts) + reach
+        y0 = min(p[1] for p in pts) - reach
+        y1 = max(p[1] for p in pts) + reach
+        for ring in field["plot_rings"]:
+            n = len(ring)
+            for i in range(n):
+                ax, ay = float(ring[i][0]), float(ring[i][1])
+                bx, by = float(ring[(i + 1) % n][0]), float(ring[(i + 1) % n][1])
+                if max(ax, bx) < x0 or min(ax, bx) > x1 or max(ay, by) < y0 or min(ay, by) > y1:
+                    continue  # bbox prefilter: prunes only, decides nothing
+                steps = max(1, int(math.hypot(bx - ax, by - ay) / 3.0))
+                for k in range(steps + 1):
+                    t = k / steps
+                    x, y = ax + t * (bx - ax), ay + t * (by - ay)
+                    gap, halfw, past, _foot, _nrm = supply_bank_clearance((x, y), pts, w0, w1, cum)
+                    if not past and gap < halfw + BANK_MARGIN - 0.15:
+                        out[(round(x), round(y))] = None
+                        break
+    return list(out)
+
+
 @pytest.fixture(scope="module")
 def comb():
     return rollcache.hamlet(INASHIRO)
@@ -95,24 +140,8 @@ def test_no_bund_is_drawn_down_the_middle_of_a_supply_channel(comb) -> None:
     assert field, "the roll carved no plot rings, so this rule would judge nothing"
     supplies = [d for d in (M.get("field_ditches") or []) if d.get("role") in ("main", "branch") and d.get("field") == field.get("name")]
     assert supplies, "the fan has no supply channel, so this rule would judge nothing"
-    judged, inside = 0, []
-    for fd in supplies:
-        pts = [(float(p[0]), float(p[1])) for p in (fd.get("poly") or [])]
-        if len(pts) < 2:
-            continue
-        w0 = float(fd.get("w", 2.0))
-        w1 = float(fd.get("w_tail", w0))
-        cum = _cum(pts)
-        for ring in field["plot_rings"]:
-            for q in ring:
-                _gap, _half, on_span, _a, _b = supply_bank_clearance((float(q[0]), float(q[1])), pts, w0, w1, cum)
-                if not on_span:
-                    continue
-                judged += 1
-                if _gap < 0:
-                    inside.append((round(float(q[0])), round(float(q[1]))))
-    assert judged, "no bund vertex fell along a supply stroke's span, so this rule judged nothing"
-    assert not inside, f"{len(inside)} bund vertex/vertices are drawn INSIDE a supply channel's stroke: {inside[:4]}"
+    inside = _bund_edge_intrusions(field, supplies)
+    assert not inside, f"{len(inside)} bund point(s) are drawn inside a supply channel's stroke: {inside[:4]}"
 
 
 def test_no_bund_is_drawn_across_the_collector(comb) -> None:
@@ -292,3 +321,4 @@ def test_the_waterward_reed_strip_runs_off_the_frame(polder) -> None:
         if not any(reach[f] for f in faces if f in reach):
             short.append((round(min(xs)), round(min(ys))))
     assert not short, f"waterside reed strip(s) stop inside the frame: {short[:4]}"
+
