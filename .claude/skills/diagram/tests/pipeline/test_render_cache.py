@@ -313,3 +313,42 @@ def test_main_derives_main_repo_from_this_checkout_when_not_given(tmp_path, monk
     # `.git` is a directory in a clone and a FILE in a detached worktree (the baseline tree CLAUDE.md
     # prescribes), so test for existence: the assertion is "this is a git checkout", not its shape
     assert seen["main_repo"] == expected and os.path.exists(os.path.join(expected, ".git"))
+
+
+def test_stale_flat_renders_finds_the_pre_161_leftovers_and_nothing_else(repo):
+    """A render left at the OLD flat path is REPORTED, not deleted (feature 161).
+
+    The case is real and hits every tree that had rendered a map before the move: a live map's
+    renders are gitignored, so they were never in the commit that moved everything into per-map
+    folders - they just stayed put, beside the new folder, no longer ignored and no longer written.
+    """
+    _, skill, _pool = repo
+    gen = _make_gen(skill, "villages", "hoshi")
+    d = os.path.dirname(gen)
+    assert rc.stale_flat_renders(skill) == [], "a clean tree has no leftovers"
+
+    # the pre-161 shape: <tree>/<tier>/<map>.<ext>, beside the map's own folder
+    flat_png = os.path.join(os.path.dirname(d), "hoshi.png")
+    Path(flat_png).write_bytes(b"OLD")
+    assert rc.stale_flat_renders(skill) == [flat_png]
+
+    # a render INSIDE the map's folder is the current layout and must never be reported
+    Path(os.path.join(d, "hoshi.png")).write_bytes(b"NEW")
+    assert rc.stale_flat_renders(skill) == [flat_png]
+
+    # a loose render whose map does not exist is something else (a draft, a hand copy): left alone
+    Path(os.path.join(os.path.dirname(d), "nosuchmap.png")).write_bytes(b"?")
+    assert rc.stale_flat_renders(skill) == [flat_png]
+
+    Path(flat_png).unlink()
+    assert rc.stale_flat_renders(skill) == []
+
+
+def test_main_names_a_stale_flat_render_and_says_it_is_safe_to_delete(repo, capsys):
+    repo_dir, skill, _pool = repo
+    _make_gen(skill, "villages", "hoshi")
+    flat = os.path.join(skill, "pool", "villages", "hoshi.svg")
+    Path(flat).write_text("<svg/>")
+    assert rc.main(["--main-repo", repo_dir, "--skill-dir", skill]) == 0
+    out = capsys.readouterr().out
+    assert "ORPHAN" in out and "pool/villages/hoshi.svg" in out and "safe to delete" in out

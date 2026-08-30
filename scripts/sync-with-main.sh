@@ -44,6 +44,9 @@ elif [ "$(basename "$(dirname "$ROOT")")" = ".clones" ]; then MAIN=$(dirname "$(
 else MAIN=$ROOT; fi
 LOCK=$MAIN/.clones/.sync.lock   # keep this NAME: it is the cross-session lock convention in CLAUDE.md - renaming it stops serializing against sessions still on the old name (renamed ONCE, 2026-08-28, from the "ritual" name the GM retired; a clone syncs in every turn, so the window was minutes)
 POOL=.claude/skills/diagram/pool
+# The FROZEN tree is checked alongside it: render-sync must never rewrite an exhibit, and the
+# dirty-pool warning below is what would say so (feature 161).
+LEGACY_POOL=.claude/skills/diagram/legacy-hand-authored-pool
 SKILL_DIR=.claude/skills/diagram
 RENDER_CACHE_MOD=l7r.diagram.pipeline.render_cache   # run as a MODULE from SKILL_DIR: it imports its package siblings relatively
 
@@ -322,13 +325,17 @@ render_sync() {
   # operation in the repo invoked outside make, and it was exempted in an early draft of the spec on
   # the grounds that render-sync is a LEGITIMATE caller. The fidelity review rejected that: legitimate
   # WORK does not imply a legitimate INVOCATION ROUTE, and compliance cost exactly this line.
-  (cd "$MAIN/$SKILL_DIR" && flock "$LOCK" env GM_ASSISTANT_ALLOW_MAIN=1 make --no-print-directory render-sync ARGS="--pool $MAIN/$POOL --main-repo $MAIN")
+  (cd "$MAIN/$SKILL_DIR" && flock "$LOCK" env GM_ASSISTANT_ALLOW_MAIN=1 make --no-print-directory render-sync ARGS="--skill-dir $MAIN/$SKILL_DIR --main-repo $MAIN")
+  # --skill-dir, not --pool: since feature 161 the pool is TWO trees under the skill dir
+  # (pool/ live, legacy-hand-authored-pool/ frozen), and render_cache walks both from that one
+  # root - it warns about a frozen exhibit whose render is missing, and that job followed the
+  # exhibits out of pool/.
   # A generator writes its TRACKED .json (and a Mode A its tracked .svg) alongside the gitignored
   # renders; a deterministic gen reproduces those byte-identically, so main stays clean. If any
   # tracked pool file is left dirty, a generator is nondeterministic - surface it loudly (it would
   # also block the next session's updateInstead push), but do not auto-revert: the GM decides.
   local dirty
-  dirty=$(git -C "$MAIN" status --porcelain -- "$POOL" | grep -E '^[ MARC]M ' || true)
+  dirty=$(git -C "$MAIN" status --porcelain -- "$POOL" "$LEGACY_POOL" | grep -E '^[ MARC]M ' || true)
   if [ -n "$dirty" ]; then
     echo "sync-with-main: WARNING - regen left tracked pool files dirty in main (a generator is nondeterministic):" >&2
     printf '%s\n' "$dirty" >&2
