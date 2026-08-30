@@ -61,9 +61,7 @@ NP_HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 # GUARD_EDIT_OK: feature 169 - $NP_HERE, not $HERE. This branch sits at line 60 and `HERE` is not
 # defined until line 72, so the path was empty and the escape silently stopped working - caught by
 # the new suite within a minute, which is why the escape is tested in BOTH directions.
-if [ -n "$(printf '%s' "$INPUT" | "$NP_HERE/_hookmatch.py" escape POLL_OK 2>/dev/null)" ]; then
-  guard_log no-poll escaped "$(guard_cmd)" poll-ok; exit 0
-fi
+if escape_or_refuse no-poll POLL_OK poll-ok "$NP_HERE"; then exit 0; fi   # GUARD_EDIT_OK: feature 170
 
 # GUARD_EDIT_OK: feature 164 - A MENTION IS NOT AN INVOCATION, and this guard was the last common
 # offender. It matches substrings, so it refused the very command that was WRITING feature 164's

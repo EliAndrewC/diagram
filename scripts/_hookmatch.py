@@ -220,12 +220,24 @@ def escape_reason(text: str, token: str) -> str:
     for `PAIR_OK`), and `TOKEN=why`. A bare `TOKEN` yields "". A `TOKEN:` reason runs to the end of its
     line, because that is how a trailing comment is written.
     """
-    m = re.search(rf"{re.escape(token)}\s*[:=]\s*(.*)", text)
+    m = re.search(rf"{re.escape(token)}(\s*[:=]|\s|$)(.*)", text)
     if not m:
         return ""
-    rest = m.group(1)
-    q = re.match(r"""(["'])(.*?)\1""", rest)
-    return (q.group(2) if q else rest.split("\n")[0]).strip().strip("\"'")
+    sep, rest = m.group(1).strip(), m.group(2)
+    q = re.match(r"""\s*(["'])(.*?)\1""", rest)
+    if q:
+        return q.group(2).strip()
+    # AN ASSIGNMENT'S REASON IS ITS VALUE, NOT THE REST OF THE LINE (feature 170). `MEASURE_OK=1 make
+    # test-full` must be refused - `1` is not a reason - but taking the rest of the line would read it
+    # as "1 make test-full" and pass. A comment (`TOKEN: why`) or a bare note (`TOKEN why`) runs to the
+    # end of the line, because that is how a trailing comment is written; an unquoted `=` takes one
+    # shell word, because that is what an assignment IS. The suites of `discard` and `no-branch` are
+    # what found the other half of this: both carry vectors in the `TOKEN why` form with no colon at
+    # all, which the first draft refused - a guard refusing correct work, from the feature whose whole
+    # subject is guards that fire on the wrong thing.
+    if sep == "=":
+        return rest.strip().split()[0].strip("\"'") if rest.strip() else ""
+    return rest.split("\n")[0].strip().strip("\"'")
 
 
 def reason_is_enough(reason: str) -> bool:

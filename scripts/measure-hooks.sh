@@ -103,9 +103,9 @@ case "$MODE" in
     # tokens), so `make audit` reported a 100% escape rate for a guard nobody had escaped. Worse, the
     # branch clears $STATE - the repeat-measurement counter - so a session that merely GREPPED for the
     # token switched the guard off for its next expensive run. The escape is still checked first.
-    if [ -n "$(printf '%s' "$INPUT" | "$HERE/_hookmatch.py" escape MEASURE_OK 2>/dev/null)" ]; then
-      guard_log measure escaped "$(guard_cmd)" measure-ok; : > "$STATE"; exit 0
-    fi
+    # GUARD_EDIT_OK: feature 170 - and it must say WHY. The counter reset stays on the PERMIT path:
+    # a refused bare token must not clear the state that decides whether the NEXT run is refused.
+    if escape_or_refuse measure MEASURE_OK measure-ok "$HERE"; then : > "$STATE"; exit 0; fi
     case "$CMD" in *"git commit"*) : > "$STATE"; exit 0 ;; esac
 
     # GUARD_EDIT_OK: feature 164 - the shapes are matched against the SANITIZED command (see the note

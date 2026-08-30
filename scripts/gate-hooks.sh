@@ -70,9 +70,9 @@ case "$MODE" in
     # `case "$CMD" in *GATE_OK*)`, so a grep for the token, or a commit message quoting it, both
     # escaped the guard AND ran `rm -f "$STATE"`, silently disarming it for the next command. The
     # escape is still checked FIRST; only the match changed.
-    if [ -n "$(printf '%s' "$INPUT" | "$HERE/_hookmatch.py" escape GATE_OK 2>/dev/null)" ]; then
-      guard_log gate escaped "$(guard_cmd)" gate-ok; rm -f "$STATE"; exit 0
-    fi
+    # GUARD_EDIT_OK: feature 170 - and it must say WHY. The state removal stays on the PERMIT path,
+    # so a refused bare token does not disarm the guard on its way out.
+    if escape_or_refuse gate GATE_OK gate-ok "$HERE"; then rm -f "$STATE"; exit 0; fi
 
     # WHICH TARGETS DOES THIS COMMAND ACTUALLY INVOKE? Asked of `_hookmatch.py`, which anchors the match
     # to a real command position and blanks heredoc bodies and quoted strings first. Until 2026-08-29 this

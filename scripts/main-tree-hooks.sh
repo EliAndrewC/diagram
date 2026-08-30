@@ -43,10 +43,7 @@ except Exception: pass' 2>/dev/null)
 
 # THE ESCAPE IS CHECKED FIRST (CLAUDE.md: a guard that cannot be repaired through the channel it
 # guards is a worse defect than the one it prevents).
-if [ -n "$(printf '%s' "$INPUT" | "$MT_HERE/_hookmatch.py" escape MAIN_TREE_OK 2>/dev/null)" ]; then
-  guard_log main-tree escaped "$(guard_cmd)" main-tree-ok
-  exit 0
-fi
+if escape_or_refuse main-tree MAIN_TREE_OK main-tree-ok "$MT_HERE"; then exit 0; fi   # GUARD_EDIT_OK: feature 170
 
 # THE MIRROR ROOT IS DERIVED FROM GIT, never hardcoded (feature 131 moved this repository once
 # already, and every guard here derives its root). From a clone, main is two levels up from

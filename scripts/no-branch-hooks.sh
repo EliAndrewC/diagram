@@ -39,10 +39,10 @@ except Exception: print("")' 2>/dev/null || true)
 NB_HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 # shellcheck source=/dev/null
 . "$NB_HERE/_guardlog.sh"
-# GUARD_EDIT_OK: feature 169 - the escape is an INVOCATION, not a mention (was `case *NO_BRANCH_OK*`).
-if [ -n "$(printf '%s' "$INPUT" | "$NB_HERE/_hookmatch.py" escape NO_BRANCH_OK 2>/dev/null)" ]; then
-  guard_log no-branch escaped "$(guard_cmd)" no-branch-ok; exit 0
-fi
+# GUARD_EDIT_OK: feature 169 - an INVOCATION, not a mention; feature 170 - and it must say WHY.
+# `escape_or_refuse` records the reason and permits, or refuses a bare token; it returns 1 when no
+# escape was used, which is why this is an `if` and not a bare call.
+if escape_or_refuse no-branch NO_BRANCH_OK no-branch-ok "$NB_HERE"; then exit 0; fi
 
 # Only branch CREATION. Switching to an existing branch, listing, and deleting are all fine - a
 # session cleaning up someone's leftover branch must not be blocked from doing it.
