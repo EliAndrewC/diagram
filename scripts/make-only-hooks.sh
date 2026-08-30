@@ -117,7 +117,7 @@ case "$VERDICT" in
     # GM's request (2026-08-30). A bare pytest of ONE test file is `make test-file` written the long
     # way, so the hook writes it the short way instead of spending a round trip asking the session to.
     # Every other shape - a filter, a coverage flag, a second path, a directory, a pipeline - still
-    # refuses, because `_hookmatch.py as-make-target` returns nothing for anything it cannot rebuild
+    # refuses, because `_hm_make.py as-make-target` returns nothing for anything it cannot rebuild
     # exactly, and a guard that guesses at a session's command costs more than one that refuses.
     #
     # TWO DEFECTS IN THE OLD MESSAGE, fixed here (Principle XIV, found while auditing):
@@ -127,7 +127,7 @@ case "$VERDICT" in
     #     the cheap one would do first.
     #   - it named only the gate targets, never `make test-file`, the target this project added for
     #     precisely the question "re-run the file I just changed" - missing from this message since 127.
-    FIXED=$(printf '%s' "$INPUT" | "$HERE/_hookmatch.py" as-make-target 2>/dev/null || true)
+    FIXED=$(printf '%s' "$INPUT" | "$HERE/_hm_make.py" as-make-target 2>/dev/null || true)
     if [ -n "$FIXED" ]; then
       guard_log make-only rewrote "$(guard_cmd)"
       printf '%s' "$INPUT" | REWRITTEN="$FIXED" python3 -c '

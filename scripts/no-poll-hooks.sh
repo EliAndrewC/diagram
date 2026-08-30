@@ -66,14 +66,14 @@ if escape_or_refuse no-poll POLL_OK poll-ok "$NP_HERE"; then exit 0; fi   # GUAR
 # GUARD_EDIT_OK: feature 164 - A MENTION IS NOT AN INVOCATION, and this guard was the last common
 # offender. It matches substrings, so it refused the very command that was WRITING feature 164's
 # specification, because that text quotes the shapes it forbids - and it did the same to a plan and
-# to a set of test vectors, four times in one session. `_hookmatch.py sanitize` blanks heredoc bodies
+# to a set of test vectors, four times in one session. `_hm_shape.py sanitize` blanks heredoc bodies
 # and quoted strings, which is where prose travels; every pattern below now runs against that, so a
 # command that TALKS about a busy-wait passes and one that RUNS one does not. Same fix `gate-hooks`
 # took on 2026-08-29, same reason, and CLAUDE.md's standing rule for guards: match INVOCATIONS.
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 # shellcheck source=/dev/null
 . "$HERE/_guardlog.sh"
-SCAN=$(printf '%s' "$INPUT" | "$HERE/_hookmatch.py" sanitize 2>/dev/null || printf '%s' "$CMD")
+SCAN=$(printf '%s' "$INPUT" | "$HERE/_hm_shape.py" sanitize 2>/dev/null || printf '%s' "$CMD")
 [ -n "$SCAN" ] || SCAN="$CMD"
 
 block() {  # reason, alternative, RULE
@@ -109,9 +109,9 @@ if printf '%s' "$SCAN" | grep -Eq '(^|[;&|[:space:]])(while|until|for)[[:space:]
   # "permit whenever backgrounded" and DECLINED it as usable for a general bypass, so the condition
   # must read a file in one of three forms and may contain no command substitution, no pipeline and
   # no OUTPUT redirection - without that last clause `until curl ... > /tmp/out` qualifies and
-  # `>/dev/null` on any condition becomes the bypass the GM refused. `_hookmatch.py file-wait` holds
+  # `>/dev/null` on any condition becomes the bypass the GM refused. `_hm_shape.py file-wait` holds
   # the decision, where it is unit-testable; a foreground loop never reaches it.
-  if [ "$(printf '%s' "$INPUT" | "$HERE/_hookmatch.py" file-wait 2>/dev/null)" = "yes" ]; then
+  if [ "$(printf '%s' "$INPUT" | "$HERE/_hm_shape.py" file-wait 2>/dev/null)" = "yes" ]; then
     guard_log no-poll permitted "$(guard_cmd)" detached-file-wait   # GUARD_EDIT_OK: feature 168, the rule slug
     exit 0
   fi
@@ -144,10 +144,10 @@ fi
 # GUARD_EDIT_OK: feature 164 - THE FIX IS APPLIED, NOT RECOMMENDED. This branch refused the command
 # and then told the session, in prose, to use the bracket trick. That recommendation is a mechanical
 # substitution, so the hook performs it: the command runs, correctly, and no round trip is spent
-# (GM 2026-08-30). `_hookmatch.py bracket` returns nothing for a pattern that is already bracketed or
+# (GM 2026-08-30). `_hm_shape.py bracket` returns nothing for a pattern that is already bracketed or
 # built from a variable - neither can match its own command line - so those are untouched as before.
 if printf '%s' "$SCAN" | grep -Eq '\b(pgrep|pkill)\b[^|;&]*[[:space:]]-[a-zA-Z]*f'; then
-  FIXED=$(printf '%s' "$INPUT" | "$HERE/_hookmatch.py" bracket 2>/dev/null || true)
+  FIXED=$(printf '%s' "$INPUT" | "$HERE/_hm_shape.py" bracket 2>/dev/null || true)
   if [ -n "$FIXED" ]; then
     guard_log no-poll rewrote "$(guard_cmd)"
     printf '%s' "$INPUT" | REWRITTEN="$FIXED" python3 -c '

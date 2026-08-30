@@ -83,7 +83,7 @@ GF2_HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 # own convention already writes it that way (135 of the tree's occurrences use the colon form), so this
 # makes the convention the rule, through the same floor every command guard uses.
 if [ "$NEW" = "True" ]; then
-  GF_REASON=$(printf '%s' "$INPUT" | "$GF2_HERE/_hookmatch.py" escape-reason GUARD_EDIT_OK 2>/dev/null)
+  GF_REASON=$(printf '%s' "$INPUT" | "$GF2_HERE/_hm_escape.py" escape-reason GUARD_EDIT_OK 2>/dev/null)
   if [ -z "$GF_REASON" ]; then
     printf 'BLOCKED: GUARD_EDIT_OK with no reason given.\n\n' >&2
     printf 'The marker is what puts your intent in the diff, where the GM reads it - a bare marker puts\n' >&2

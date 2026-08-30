@@ -26,6 +26,7 @@ the disappointment.
 
 from __future__ import annotations
 
+import ast
 import hashlib
 import pathlib
 import re
@@ -51,15 +52,38 @@ HELD_WHOLE_TREE = {"sync-with-main.sh", "review-gate.sh"}
 
 
 def _globs_tree(name: str) -> bool:
-    """Does this file read the whole scripts directory? Then it depends on the whole of it."""
-    body = _text(name)
-    return "scripts/*.sh" in body or "scripts/*.py" in body
+    """Does this file read the whole scripts directory? Then it depends on the whole of it.
+
+    IT MUST MATCH THE GLOB AS THE CODE EXPRESSES IT, not as the prose describes it. The first version
+    tested for the literal `scripts/*.sh`, which in `gate-stamp.py` appears only in the module
+    DOCSTRING; the line that actually globs is `"hooks": ("scripts", ("*.sh", "*.py"))`. So the row
+    was right by accident of wording and a docstring reword would silently have dropped that suite
+    from the whole tree to four files. Caught by round 2 of this feature's review.
+    """
+    body = _code(name) or _text(name)
+    if "scripts/*.sh" in body or "scripts/*.py" in body:
+        return True
+    # the tuple form: a directory named "scripts" paired with a glob over shell and python
+    return bool(re.search(r'"scripts"\s*,\s*\(\s*"\*\.sh"\s*,\s*"\*\.py"', body))
 
 # A reference is a file NAME appearing in another file's text. That covers every shape this tree
 # uses - `. "$X/_guardlog.sh"`, `"$X/_hookmatch.py" escape`, `spec_from_file_location(..., "_ratchet.py")`
 # and a python import - without parsing four languages. It over-approximates (a name in a comment
 # counts), which is the safe direction here: over-running costs time, under-running costs correctness.
-_SHARED = ("_hookmatch.py", "_guardlog.sh", "_gatecost.py", "test_hooks_cases.py", "_hookdeps.py")
+#
+# AND THE HELPER SET IS ITSELF DERIVED (feature 172, caught by this feature's own change). It was a
+# hardcoded tuple naming the four helpers that existed when it was written. The split then added
+# `_hm_shape.py`, `_hm_escape.py` and `_hm_make.py`, the closure did not know them, and the derivation
+# silently reported that NO guard depends on the escape family - through which every guard reaches its
+# escape. A hardcoded list of shared files, in the feature whose whole subject is deriving instead of
+# listing. So: every `_*.py` / `_*.sh` helper in this directory, plus the shared test runner.
+def _shared() -> tuple[str, ...]:
+    names = {p.name for p in HERE.glob("_*.py")} | {p.name for p in HERE.glob("_*.sh")}
+    names.add("test_hooks_cases.py")
+    return tuple(sorted(names))
+
+
+_SHARED = _shared()
 
 
 def _text(name: str) -> str:
@@ -68,6 +92,48 @@ def _text(name: str) -> str:
         return p.read_text()
     except OSError:
         return ""
+
+
+def _code(name: str) -> str:
+    """The file with its COMMENTS REMOVED - a mention is not a dependency (feature 172).
+
+    Found by measuring the split and getting nothing: `_hm_make.py` still showed 17 of 18 guards. The
+    reason is that this repository comments heavily, and nearly every guard SAYS "detection lives in
+    `_hookmatch.py`" in prose - so a scan of raw text made every guard depend on every leaf, and the
+    split it was built to reward looked worthless.
+
+    That is the same mention-versus-invocation mistake the guards themselves have made six times, now
+    in the thing that decides what they depend on. Whole-line comments and inline `#` comments both
+    go; the risk of stripping a `#` inside a string is over-running one suite, which is the safe
+    direction here and the same trade the rest of this module makes.
+    """
+    raw = _text(name)
+    if name.endswith(".py"):
+        # DOCSTRINGS GO TOO, and only docstrings. Every leaf of the feature-172 split opens with
+        # "Split out of `_hookmatch.py`", which is a triple-quoted string rather than a `#` comment -
+        # so stripping comments alone still made every guard depend on the umbrella, and through it on
+        # all three leaves. Other string literals STAY: `spec_from_file_location(..., "_ratchet.py")`
+        # is a real reference expressed as a string, and dropping those would under-run.
+        try:
+            tree = ast.parse(raw)
+            drop: set[int] = set()
+            for node in ast.walk(tree):
+                if isinstance(node, (ast.Module, ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef)):
+                    body = getattr(node, "body", None)
+                    if body and isinstance(body[0], ast.Expr) and isinstance(body[0].value, ast.Constant) \
+                            and isinstance(body[0].value.value, str):
+                        drop.update(range(body[0].lineno, (body[0].end_lineno or body[0].lineno) + 1))
+            raw = "\n".join(ln for i, ln in enumerate(raw.splitlines(), 1) if i not in drop)
+        except SyntaxError:
+            pass
+    out = []
+    for line in raw.splitlines():
+        if line.lstrip().startswith("#"):
+            continue
+        if " #" in line:
+            line = line.split(" #", 1)[0]
+        out.append(line)
+    return "\n".join(out)
 
 
 def closure(seeds: set[str]) -> set[str]:
@@ -79,7 +145,7 @@ def closure(seeds: set[str]) -> set[str]:
         if name in seen:
             continue
         seen.add(name)
-        body = _text(name)
+        body = _code(name)   # CODE, not text: a filename in a comment is a mention, not a dependency
         for helper in _SHARED:
             if helper != name and helper in body and helper not in seen:
                 stack.append(helper)

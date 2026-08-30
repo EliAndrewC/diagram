@@ -197,7 +197,7 @@ print(str(pathlib.Path(tp).parent / sid / "subagents") if tp and sid else "")
     # Second time in this feature that an escape was silently disabled by the wrong variable name
     # (no-poll's was `$HERE` vs `$NP_HERE`), which is the argument for testing an escape in BOTH
     # directions rather than only checking that mentions are rejected.
-    if [ -n "$(printf '%s' "$payload" | "$PAIR_HERE/_hookmatch.py" escape PAIR_OK= 2>/dev/null)" ]; then
+    if [ -n "$(printf '%s' "$payload" | "$PAIR_HERE/_hm_escape.py" escape PAIR_OK= 2>/dev/null)" ]; then
       guard_log pair escaped "$cmd" pair-ok-gate
       log_bypass "$(printf '%s' "$cmd" | sed -n 's/.*PAIR_OK=["\x27]\{0,1\}\([^"\x27]*\).*/\1/p')" "gate alone"
       [ -n "$key" ] && write_pairing "$(pairing_file)" waived_key "$key"   # ...and the stop branch honors it
@@ -212,10 +212,10 @@ print(str(pathlib.Path(tp).parent / sid / "subagents") if tp and sid else "")
     # session to type it. `make verify` IS this gate plus the line that dispatches the review, so the
     # substitution is exact: the gate still runs, the pairing rule is unchanged, and what used to not
     # happen at all now happens correctly. Measured cause: 13 firings, 7 of them escaped with PAIR_OK
-    # in the very next call. Only a plain `make done` converts - `_hookmatch.py as-paired` declines
+    # in the very next call. Only a plain `make done` converts - `_hm_make.py as-paired` declines
     # FULL, a second goal, or a command `gate-hooks` is already combining, because two rewrites racing
     # for one command would make the outcome depend on hook order.
-    PAIRED=$(printf '%s' "$payload" | "$PAIR_HERE/_hookmatch.py" as-paired 2>/dev/null || true)
+    PAIRED=$(printf '%s' "$payload" | "$PAIR_HERE/_hm_make.py" as-paired 2>/dev/null || true)
     if [ -n "$PAIRED" ]; then
       guard_log pair rewrote "$cmd"
       printf '%s' "$payload" | REWRITTEN="$PAIRED" python3 -c '

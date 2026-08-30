@@ -45,3 +45,27 @@ Each suite builds its fixtures in its own `mktemp -d`, and since feature 170 eac
 `GUARD_LOG_DIR`. That is the argument that parallelizing is safe; it is not proof, and two suites
 (`test-sync-with-main.sh`, `test-clone-sync-hooks.sh`) manipulate git trees and a host-wide lock.
 Verify before relying on it.
+
+## R4 - the split delivered nothing three times before it delivered anything
+
+Each failure was found by MEASURING the blast radius after the change rather than by assuming the
+split had worked, and each was the same mistake wearing a different coat.
+
+| attempt | measured | cause |
+|---|---|---|
+| after splitting into three leaves | `_hm_make.py` **17 of 18** guards | the deriver's `_SHARED` roster was a HARDCODED list of the four helpers that existed when it was written. The three new leaves were invisible to the closure, so it reported that no guard depends on the escape family - through which every guard reaches its escape. A hardcoded list, in the feature whose subject is deriving instead of listing |
+| after deriving the roster | still **17 of 18** | the closure scanned RAW TEXT, and this repository comments heavily: nearly every guard says *"detection lives in `_hookmatch.py`"* in prose. A mention counted as a dependency - the same mention-versus-invocation mistake the guards have made six times, now in the thing that decides what they depend on |
+| after stripping `#` comments | still **17 of 18** | each leaf's own DOCSTRING opens *"Split out of `_hookmatch.py`"*, and a docstring is not a `#` comment. Stripped via `ast`, and only docstrings: other string literals stay, because `spec_from_file_location(..., "_ratchet.py")` is a real reference expressed as a string and dropping those would UNDER-run |
+| after stripping docstrings | **3 of 18** | the split finally pays |
+
+Final, guards only, against 21 of 21 for every shared file before the feature:
+
+    _hm_make.py     3   (gate, make-only, pair)          _gatecost.py         2
+    _hm_shape.py    3   (main-tree, measure, no-poll)    test_hooks_cases.py  3
+    _hm_escape.py  17   - correct: every guard reaches its escape through `_guardlog.sh`
+    _guardlog.sh   17   - correct, same reason
+
+**The lesson, which is this repository's oldest one in a new place**: a dependency deriver has exactly
+the same failure mode as a guard, and it is not "is the answer plausible" but "is the thing I am
+matching an INVOCATION or a MENTION". Three of the four attempts above were plausible and wrong, and
+only measuring the resulting blast radius told them apart.

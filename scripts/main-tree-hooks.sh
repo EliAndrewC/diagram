@@ -56,9 +56,9 @@ esac
 [ -n "$MAIN" ] || exit 0
 
 # Does the command cd INTO the mirror root itself? Not a clone under it, and not a read of a path.
-# `_hookmatch.py sanitize` blanks heredoc bodies and quoted strings first, so a `cd /diagram` inside
+# `_hm_shape.py sanitize` blanks heredoc bodies and quoted strings first, so a `cd /diagram` inside
 # a commit message or a document is a MENTION - the rule this whole feature is about.
-SCAN=$(printf '%s' "$INPUT" | "$MT_HERE/_hookmatch.py" sanitize 2>/dev/null || printf '%s' "$CMD")
+SCAN=$(printf '%s' "$INPUT" | "$MT_HERE/_hm_shape.py" sanitize 2>/dev/null || printf '%s' "$CMD")
 
 # GUARD_EDIT_OK: feature 170 FR-005 - fixing a guard that MISSED the shape it was built for, which
 # is the legitimate case this marker exists for.

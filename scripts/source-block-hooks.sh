@@ -74,7 +74,7 @@ if [ "$REPORT" = "ESCAPED" ]; then
   # GUARD_EDIT_OK: feature 170 - and the reason is not optional HERE of all places. This escape
   # permits an edit to the GM's OWN WRITING, which the constitution says only they may change, so
   # "the GM told me to" is the least a later audit can be given (GM 2026-08-30).
-  SB_REASON=$(printf '%s' "$INPUT" | "$SB_HERE/_hookmatch.py" escape-reason SOURCE_EDIT_OK 2>/dev/null)
+  SB_REASON=$(printf '%s' "$INPUT" | "$SB_HERE/_hm_escape.py" escape-reason SOURCE_EDIT_OK 2>/dev/null)
   if [ -z "$SB_REASON" ]; then
     printf 'BLOCKED: SOURCE_EDIT_OK with no reason given.\n\n' >&2
     printf 'This escape permits an edit to the GM S OWN WRITING (constitution V: only they may change\n' >&2
