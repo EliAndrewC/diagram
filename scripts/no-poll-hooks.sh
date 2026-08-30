@@ -50,7 +50,14 @@ except Exception: print("")' 2>/dev/null || true)
 [ -n "$CMD" ] || exit 0
 
 # Explicit, visible opt-out for a real external-state wait.
-case "$CMD" in *POLL_OK*) exit 0 ;; esac
+# GUARD_EDIT_OK: feature 168 - THE ESCAPE IS RECORDED. The escape rate is the number this project has
+# actually acted on (162 retired a refusal that was escaped 62% of the time), and it was computable
+# for one guard only. The escape itself is unchanged: nothing newly refused, nothing newly permitted.
+# Sourced here rather than below, because this branch exits before the later sourcing.
+NP_HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+# shellcheck source=/dev/null
+. "$NP_HERE/_guardlog.sh"
+case "$CMD" in *POLL_OK*) guard_log no-poll escaped "$(guard_cmd)" poll-ok; exit 0 ;; esac
 
 # GUARD_EDIT_OK: feature 164 - A MENTION IS NOT AN INVOCATION, and this guard was the last common
 # offender. It matches substrings, so it refused the very command that was WRITING feature 164's
@@ -65,8 +72,11 @@ HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 SCAN=$(printf '%s' "$INPUT" | "$HERE/_hookmatch.py" sanitize 2>/dev/null || printf '%s' "$CMD")
 [ -n "$SCAN" ] || SCAN="$CMD"
 
-block() {
-  guard_log no-poll blocked "$(guard_cmd)"
+block() {  # reason, alternative, RULE
+  # GUARD_EDIT_OK: feature 168 - the entry names WHICH rule fired, because this guard enforces three
+  # and "no-poll fired 32 times" cannot say which one is carrying the cost. Nothing about what it
+  # refuses changes.
+  guard_log no-poll blocked "$(guard_cmd)" "${3:-block}"
   echo "BLOCKED (no-poll): $1
 
 $2
@@ -98,12 +108,12 @@ if printf '%s' "$SCAN" | grep -Eq '(^|[;&|[:space:]])(while|until|for)[[:space:]
   # `>/dev/null` on any condition becomes the bypass the GM refused. `_hookmatch.py file-wait` holds
   # the decision, where it is unit-testable; a foreground loop never reaches it.
   if [ "$(printf '%s' "$INPUT" | "$HERE/_hookmatch.py" file-wait 2>/dev/null)" = "yes" ]; then
-    guard_log no-poll permitted "$(guard_cmd)"
+    guard_log no-poll permitted "$(guard_cmd)" detached-file-wait   # GUARD_EDIT_OK: feature 168, the rule slug
     exit 0
   fi
   block "this is a busy-wait loop (a loop containing \`sleep\`)." \
     "Waiting in a loop burns wall-clock at full model-turn cost and, for anything the harness tracks, it
-is pure waste: a backgrounded Bash command notifies you the moment it exits."
+is pure waste: a backgrounded Bash command notifies you the moment it exits." busy-wait-loop
 fi
 
 # ---- 3. sleep invoked in a form that only exists to dodge the harness's foreground-sleep guard ----
@@ -111,8 +121,9 @@ if printf '%s' "$SCAN" | grep -Eq '(^|[;&|(]|[[:space:]])([\\]|(command|env|busy
   block "\`sleep\` was invoked in a form that evades the harness's foreground-sleep block." \
     "The harness blocks foreground \`sleep\` on purpose; \`command sleep\`, \`/bin/sleep\` and \`env sleep\`
 are the same thing wearing a hat. Whatever you were about to wait for, there is a better signal for
-it - a completion notification for harness-tracked work, or POLL_OK for genuinely external state."
+it - a completion notification for harness-tracked work, or POLL_OK for genuinely external state." disguised-sleep
 fi
+# (GUARD_EDIT_OK: feature 168 - the rule slug above; nothing about what this refuses changes)
 
 # ---- 4. a STANDALONE self-matching process match: corrected, not refused ------------------------
 #

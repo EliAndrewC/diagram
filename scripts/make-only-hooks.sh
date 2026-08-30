@@ -65,6 +65,11 @@ VERDICT=$(printf '%s' "$INPUT" | "$HERE/_hookmatch.py" 2>/dev/null || echo ok)
 . "$HERE/_guardlog.sh"
 
 block() { # reason, then the make target to use instead
+  # GUARD_EDIT_OK: feature 168 - every refusal is recorded, and the RULE is the verdict that produced
+  # it (`bare-pytest`, `foreign-makefile`, `engine-entry-point`, `inline-override`, `guard-write`).
+  # Before this, only the rewrite was recorded, so this guard's five refusals were invisible to
+  # `make audit` - and a rule is the unit a future improvement acts on, not a script.
+  guard_log make-only blocked "$(guard_cmd)" "$VERDICT"
   printf 'BLOCKED: %s\n\n' "$1" >&2
   printf 'Run this instead:  %s\n\n' "$2" >&2
   # GUARD_EDIT_OK: feature 162 - the LADDER LOSES ITS HARDCODED NUMBERS (GM 2026-08-30: *"I think

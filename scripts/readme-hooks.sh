@@ -73,4 +73,10 @@ the GM writes it.
 
 (scripts/readme-hooks.sh; constitution XVII, GM 2026-08-24)
 TAIL
+# GUARD_EDIT_OK: feature 168 - records what it does (GM 2026-08-30). One rule, one slug; nothing
+# about what this guard refuses changes.
+RM_HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+# shellcheck source=/dev/null
+. "$RM_HERE/_guardlog.sh"
+guard_log readme blocked "$(guard_cmd)" readme-is-the-gm-s
 exit 2

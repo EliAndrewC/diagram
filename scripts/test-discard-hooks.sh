@@ -5,6 +5,11 @@
 set -u
 HOOK="$(cd "$(dirname "$0")" && pwd)/discard-hooks.sh"
 pass=0 fail=0
+# GUARD_EDIT_OK: feature 168 - this guard records its firings now, so the suite writes its fixtures to
+# a throwaway log. A census polluted by its own tests answers nothing, and that has happened once (24
+# entries, feature 162 T16).
+GUARD_LOG_ROOT=$(mktemp -d); export GUARD_LOG_DIR="$GUARD_LOG_ROOT"
+trap 'rm -rf "$GUARD_LOG_ROOT"' EXIT
 
 TMP=$(mktemp -d)
 trap 'rm -rf "$TMP"' EXIT

@@ -30,16 +30,26 @@ except Exception:
     pass' 2>/dev/null || true
 }
 
+# guard_log <guard> <event> <detail> [rule]
+#
+# THE RULE IS THE FOURTH FIELD (feature 168, GM 2026-08-30: *"the firing log should record more data
+# for us to be able to use to make improvements in the future"*). Several guards enforce more than one
+# thing, and "no-poll fired 32 times" cannot say which of its three rules is carrying the cost - the
+# unit a future improvement acts on is a RULE, not a script. Absent, it records as the event.
+#
+# AN ESCAPE IS A BRANCH, and the one that matters most: the escape RATE is what this project has
+# actually acted on (feature 162 retired a refusal that was being escaped 62% of the time), and before
+# this feature it was computable for exactly one guard.
 guard_log() {
   { GL_DIR=${GUARD_LOG_DIR:-$HOME/.claude/guard-log}
     mkdir -p "$GL_DIR" 2>/dev/null || return 0
     GL_TS=$(date -u +%Y%m%dT%H%M%S%6N 2>/dev/null || date -u +%Y%m%dT%H%M%S)
     GL_F="$GL_DIR/$GL_TS-$$.json"
-    python3 - "$GL_F" "$1" "$2" "$3" "${SID:-unknown}" <<'PY' 2>/dev/null || true
+    python3 - "$GL_F" "$1" "$2" "$3" "${SID:-unknown}" "${4:-}" <<'PY' 2>/dev/null || true
 import json, sys, time
-path, guard, event, detail, session = sys.argv[1:6]
+path, guard, event, detail, session, rule = sys.argv[1:7]
 json.dump({"utc": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()), "guard": guard,
-           "event": event, "session": session, "detail": detail[:200]},
+           "event": event, "rule": rule or event, "session": session, "detail": detail[:200]},
           open(path, "w"), indent=2)
 PY
   } >/dev/null 2>&1 || true

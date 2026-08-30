@@ -82,4 +82,10 @@ the reason is in the diff.
 
 (scripts/source-block-hooks.sh; constitution V)
 TAIL
+# GUARD_EDIT_OK: feature 168 - records what it does (GM 2026-08-30). Nothing about what this guard
+# refuses changes, and the GM's own writing is no more editable than it was.
+SB_HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+# shellcheck source=/dev/null
+. "$SB_HERE/_guardlog.sh"
+guard_log source-block blocked "$(guard_cmd)" gm-source-block
 exit 2

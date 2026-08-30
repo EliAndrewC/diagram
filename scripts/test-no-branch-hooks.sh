@@ -5,6 +5,9 @@
 set -u
 HOOK="$(cd "$(dirname "$0")" && pwd)/no-branch-hooks.sh"
 pass=0 fail=0
+# GUARD_EDIT_OK: feature 168 - fixtures never reach the real firing log (see feature 162 T16).
+GUARD_LOG_ROOT=$(mktemp -d); export GUARD_LOG_DIR="$GUARD_LOG_ROOT"
+trap 'rm -rf "$GUARD_LOG_ROOT"' EXIT
 
 run() {  # run <command-string> -> sets RC
   printf '{"tool_input":{"command":%s}}' "$(python3 -c 'import json,sys; print(json.dumps(sys.argv[1]))' "$1")" \
