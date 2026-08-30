@@ -17,10 +17,11 @@ own repair. The shared lesson has a name now: **a mention is not an invocation.*
 from __future__ import annotations
 
 import json
+import os
 import pathlib
+import tempfile
 import subprocess
 import sys
-import tempfile
 
 HERE = pathlib.Path(__file__).resolve().parent
 
@@ -117,12 +118,18 @@ def source_block_cases(tmp: pathlib.Path) -> list[tuple[str, str, str]]:
     ]
 
 
+LOGDIR = pathlib.Path(tempfile.mkdtemp(prefix="guardlog-fixtures-"))
+
+
 def run(hook: str, cases: list[tuple[str, str, str]]) -> int:
     script = HERE / f"{hook}-hooks.sh"
     bad = 0
     print(f"{hook}-hooks.sh")
     for label, payload, want in cases:
-        proc = subprocess.run([str(script), "pretool"], input=payload, capture_output=True, text=True, check=False)
+        # GUARD_EDIT_OK: feature 164 - fixtures never reach the real firing log; `make audit` exists
+        # to price a guard from what it really did, and a suite writing into it destroys that.
+        env = dict(os.environ, GUARD_LOG_DIR=str(LOGDIR))
+        proc = subprocess.run([str(script), "pretool"], input=payload, capture_output=True, text=True, check=False, env=env)
         # GUARD_EDIT_OK: feature 164 - a guard has a THIRD verdict now. `rewritten:<text>` expects the
         # hook to correct the payload rather than refuse it: exit 0 with a `updatedInput` whose edit
         # carries <text>. A guard that can produce the compliant form spends no round trip asking for

@@ -27,6 +27,42 @@ MODE="${1:-pretool}"
 
 INPUT=$(cat)
 
+# GUARD_EDIT_OK: feature 164 - SAY IT WHEN THE FILE IS OPENED, not after the edit is written
+# (GM 2026-08-30: *"a tool could ... return additional context"*). Measured: 29 firings of the block
+# below, and 28 were followed by the SAME edit again carrying the marker - a round trip each, spent
+# telling a session something it could have known before it started writing. A Read of a guard file
+# now carries that one line, free, and the refusal stays exactly as it was for anyone who edits
+# without it.
+TOOL=$(printf '%s' "$INPUT" | python3 -c 'import json,sys
+try: print(json.load(sys.stdin).get("tool_name",""))
+except Exception: print("")' 2>/dev/null || true)
+if [ "$TOOL" = "Read" ]; then
+  printf '%s' "$INPUT" | python3 -c '
+import json, re, sys
+try:
+    path = json.load(sys.stdin).get("tool_input", {}).get("file_path", "") or ""
+except Exception:
+    raise SystemExit
+guard = re.search(r"(/\.claude/skills/diagram/Makefile|/scripts/[\w-]+-hooks\.sh|/\.claude/settings\.json|/dev/switches\.json)$", path)
+if guard and not re.search(r"/scripts/test-[\w-]+-hooks\.sh$", path):
+    print(json.dumps({"hookSpecificOutput": {
+        "hookEventName": "PreToolUse",
+        "additionalContext": (
+            "This is a GUARD file. An edit to it is refused unless the edit itself contains "
+            "GUARD_EDIT_OK and a short reason - put the intent in the diff, where the GM reads it. "
+            "Say which you are doing: fixing a guard that fires on correct work, adding a guard or "
+            "an operation, or making a guard stop blocking something you want (that last one is what "
+            "the rule exists to catch)."),
+    }}))
+' 2>/dev/null || true
+  # GUARD_EDIT_OK: feature 164 - the teach-at-Read is recorded too, so its worth is a total
+  GF_HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+  # shellcheck source=/dev/null
+  . "$GF_HERE/_guardlog.sh"
+  guard_log guard-file reminded "$(guard_cmd)"
+  exit 0
+fi
+
 read -r FILE NEW <<<"$(printf '%s' "$INPUT" | python3 -c 'import json,sys
 try:
     d = json.load(sys.stdin).get("tool_input", {})

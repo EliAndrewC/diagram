@@ -55,6 +55,23 @@ serial_turn; check "next call allowed (no deadlock)" ok $?
 serial_turn; check "and the one after that" ok $?
 teardown
 
+# GUARD_EDIT_OK: feature 164 - THE WARNING ARRIVES ONE TURN BEFORE THE BLOCK. This is the loudest
+# guard in the repository (127 firings in six days, more than every other guard combined) and each
+# firing spends the round trip it exists to save; a notice on an ALLOWED call spends nothing.
+echo "2b. the notice arrives one turn early, and refuses nothing (feature 164)"
+setup
+serial_turn; serial_turn                       # window "11" - one turn below the bar of 3
+sleep 0.35                                     # a NEW turn: without the gap this is call 2 of the last one
+NOTICE=$("$HOOK" pretool <<<"$(ev Read)" 2>/dev/null); RC=$?
+check "the turn below the bar is still allowed" ok $RC
+printf '%s' "$NOTICE" | grep -q "BATCHING NOTICE" && { echo "  ok    ...and it carries the notice"; PASS=$((PASS+1)); } || { echo "  FAIL  no notice one turn before the block"; FAIL=$((FAIL+1)); }
+printf '%s' "$NOTICE" | python3 -c 'import json,sys; json.load(sys.stdin)' 2>/dev/null && { echo "  ok    ...as valid JSON"; PASS=$((PASS+1)); } || { echo "  FAIL  the notice is not valid JSON"; FAIL=$((FAIL+1)); }
+teardown
+setup
+QUIET=$("$HOOK" pretool <<<"$(ev Read)" 2>/dev/null)
+printf '%s' "$QUIET" | grep -q "BATCHING NOTICE" && { echo "  FAIL  a notice on the first turn of all"; FAIL=$((FAIL+1)); } || { echo "  ok    a quiet session gets no notice"; PASS=$((PASS+1)); }
+teardown
+
 echo "3. a batched turn is never interrupted below the threshold"
 # NOTE the semantics this pins down: PreToolUse must decide on the FIRST call of a turn, when it
 # cannot yet know whether a second call is coming in the same message. So a batch that begins
@@ -63,9 +80,13 @@ echo "3. a batched turn is never interrupted below the threshold"
 # what prompts the batch. Below the threshold a batch is never interrupted, which is the common case.
 setup
 batched_turn() {  # two calls in one turn; echoes the rc of each
+  # GUARD_EDIT_OK: feature 164 - the hook's own STDOUT is discarded here. It carries a JSON notice one
+  # turn before a block now, and this helper claims to echo the two exit codes and nothing else - so
+  # without the redirect the notice landed in the caller's `read` and three vectors failed on text
+  # where an integer belonged. The hook's behavior was correct; the harness was conflating the two.
   sleep 0.35
-  "$HOOK" pretool <<<"$(ev Read)" 2>/tmp/bt.err; local r1=$?
-  "$HOOK" pretool <<<"$(ev Grep)" 2>/dev/null;   local r2=$?
+  "$HOOK" pretool <<<"$(ev Read)" >/dev/null 2>/tmp/bt.err; local r1=$?
+  "$HOOK" pretool <<<"$(ev Grep)" >/dev/null 2>/dev/null;   local r2=$?
   "$HOOK" posttool <<<"$(ev Read)" >/dev/null 2>&1
   "$HOOK" posttool <<<"$(ev Grep)" >/dev/null 2>&1
   echo "$r1 $r2"

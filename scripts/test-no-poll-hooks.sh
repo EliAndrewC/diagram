@@ -4,6 +4,13 @@
 set -uo pipefail
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 HOOK="$HERE/no-poll-hooks.sh"
+# GUARD_EDIT_OK: feature 164 - this guard RECORDS its firings now (feature 162's log), so the suite
+# must write its fixtures to a throwaway directory. Without it the suite pollutes `make audit`, whose
+# whole purpose is to price a guard from real firings: 24 fixture entries appeared there the first
+# time these conversions ran their suites.
+GUARD_LOG_ROOT=$(mktemp -d); export GUARD_LOG_DIR="$GUARD_LOG_ROOT"
+trap 'rm -rf "$GUARD_LOG_ROOT"' EXIT
+
 PASS=0; FAIL=0
 
 run() {  # feed a Bash command through the hook, return its exit code

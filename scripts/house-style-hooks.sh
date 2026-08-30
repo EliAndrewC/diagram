@@ -180,10 +180,15 @@ print(" | ".join(hits[:6]) + (" [the GM own words - not corrected, only reported
 ')
 
 [ -z "$REPORT" ] && exit 0
-# GUARD_EDIT_OK: feature 164 - a JSON verdict is a CORRECTION to pass through, not a report to block on.
+# GUARD_EDIT_OK: feature 164 - a JSON verdict is a CORRECTION to pass through, not a report to block on,
+# and either way the firing is recorded so `make audit` can price this guard like the others.
+HS_HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+# shellcheck source=/dev/null
+. "$HS_HERE/_guardlog.sh"
 case "$REPORT" in
-  '{'*) printf '%s\n' "$REPORT"; exit 0 ;;
+  '{'*) guard_log house-style rewrote "$(guard_cmd)"; printf '%s\n' "$REPORT"; exit 0 ;;
 esac
+guard_log house-style blocked "$(guard_cmd)"
 
 cat >&2 <<TAIL
 BLOCKED: house style ($REPORT).

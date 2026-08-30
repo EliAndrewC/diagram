@@ -37,6 +37,24 @@ _GUARD_WRITE = (
     rf"tee\s+(?:-a\s+)?{_GUARD}(?:\s|$)",          # tee Makefile
     rf"{_GUARD}[\"\']\s*\)?\s*\)?\s*\.write_text",  # Path("...Makefile").write_text(
 )
+# GUARD_EDIT_OK: feature 164 - THE VARIABLE ROUTE, found by walking through it. The patterns above
+# need the guard filename ADJACENT to the write, so the ordinary two-line python shape slips past:
+#
+#     p = pathlib.Path(".claude/settings.json")
+#     p.write_text(json.dumps(d))          # <- writes a guard file, matched nothing
+#
+# This session used exactly that to wire a hook into settings.json while implementing this feature.
+# Proximity is still the signal rather than presence (a docstring naming a hook must stay legal), so
+# the two halves are tied by the VARIABLE NAME: a name bound to a guard path, and that same name
+# writing. `_guard_write_via_name` is separate from the tuple above because it needs two matches.
+_GUARD_BIND = re.compile(rf"(\w+)\s*=\s*(?:pathlib\.)?Path\(\s*[\"'][^\"']*{_GUARD}[\"']\s*\)")
+
+
+def _guard_write_via_name(raw: str) -> bool:
+    for m in _GUARD_BIND.finditer(raw):
+        if re.search(rf"\b{re.escape(m.group(1))}\.write_text\s*\(", raw):
+            return True
+    return False
 
 
 def _strip_heredocs(cmd: str) -> str:
@@ -102,7 +120,7 @@ def classify(cmd: str) -> str:
     # an ordinary test file whose DOCSTRING mentioned a hook by name. Third time this feature has
     # made the mention-versus-invocation mistake - a grep, a commit message, and now a docstring -
     # which is worth stating plainly: proximity is the signal, presence never is.
-    if any(re.search(pat, raw) for pat in _GUARD_WRITE):
+    if any(re.search(pat, raw) for pat in _GUARD_WRITE) or _guard_write_via_name(raw):
         return "guard-write"
     return "ok"
 

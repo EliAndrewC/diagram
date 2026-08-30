@@ -4,6 +4,13 @@
 # (GUARD_EDIT_OK: the companion of a NEW guard, feature 151, GM 2026-08-29)
 set -u
 HOOK="$(cd "$(dirname "$0")" && pwd)/pair-hooks.sh"
+# GUARD_EDIT_OK: feature 164 - this guard RECORDS its firings now (feature 162's log), so the suite
+# must write its fixtures to a throwaway directory. Without it the suite pollutes `make audit`, whose
+# whole purpose is to price a guard from real firings: 24 fixture entries appeared there the first
+# time these conversions ran their suites.
+GUARD_LOG_ROOT=$(mktemp -d); export GUARD_LOG_DIR="$GUARD_LOG_ROOT"
+trap 'rm -rf "$GUARD_LOG_ROOT"' EXIT
+
 WATCH="$(cd "$(dirname "$0")" && pwd)/agent-stall-hooks.sh"
 pass=0 fail=0
 ok() { pass=$((pass+1)); }
