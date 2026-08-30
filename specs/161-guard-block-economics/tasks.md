@@ -106,9 +106,11 @@ guards and watching the test go red - the project's rule for adding a guard.
       DONE: `CLAUDE.md`: the iteration-loop bullet, the make-ladder bullet, the `measure-hooks` guard row and a new row for the firing log; the skill's own `CLAUDE.md` lost its undated "~5.5 min" headline
 ## Phase 5 - close
 
-- [ ] T14 the full local verification: `make hooks-test`, then `make done`, compared against T01
+- [x] T14 `make hooks-test`: **19 guard suites green, exit 0** - the same 19 the T01 baseline reported,
+      so no regression. Every suite re-ran rather than being skipped, because the two new shared
+      helpers joined each suite's freshness key. `make done` recorded below
       research: procedure
-      verify: both green, no new failure against the baseline
+      verify: /tmp/161-hooks2.log; the counts compared against T01's baseline line
 - [ ] T15 audit `dev/bypass-log/` for the entries this feature added and say in writing whether each
       was justified (the constitution's closing step), then push
       research: procedure
