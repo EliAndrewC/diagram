@@ -248,3 +248,31 @@ that passes on its FIRST run against unfixed code.
 **And the guard then blocked the commit of its own fix** - the message quoted the offending vector -
 which is why `CLAUDE.md` requires the escape to be checked FIRST. The escape was used, with the
 reason, exactly as designed.
+
+## R13 - DEFERRED with its measurement: make-only's escape permits without recording
+
+**Measured.** Using `GUARD_EDIT_OK` to commit through `make-only-hooks.sh` produced no entry in the
+firing log. Checked directly: the guard log gained nothing at the moment of a successful escape.
+
+**Mechanism.** `_hookmatch.py classify()` returns `"ok"` for an escaped command - the same value it
+returns for the overwhelmingly common case of a command that matched nothing at all - and
+`make-only-hooks.sh` only records on a verdict that acts. So the escape is invisible to `make audit`,
+while feature 168's rule is that every acting branch records, escapes above all, because the escape
+RATE is what this project acts on.
+
+**Why it is DEFERRED rather than fixed here** (constitution XIV allows a deferral only as a
+deliverable, with the measurement, the mechanism and a sketch - this is that). The fix changes
+`classify()`'s RETURN CONTRACT, and `make-only-hooks.sh` dispatches on that value with a `case` whose
+default is a refusal. A new return value that any branch mishandles turns a permit into a block for
+every session in the container. That is a change worth making deliberately, at the start of a piece of
+work with its own gate cycle, rather than appended to a feature that already carries nine commits, an
+escalated spec and two other defects fixed by being blocked by them.
+
+**Sketch.** Return a distinct `"guard-edit-ok"` from `classify()` when `escape_used(cmd,
+"GUARD_EDIT_OK")`; in `make-only-hooks.sh` add that arm BEFORE the default, logging
+`guard_log make-only escaped "$(guard_cmd)" guard-edit-ok` and exiting 0; audit every other consumer
+of `classify()` for a default-refuses `case` (there is at least one). Its suite has 41 cases and would
+catch a regression. Half an hour, including the gate.
+
+**Scope note.** This is not one of the five findings the GM approved; it was found at the end of this
+feature by using the escape.
