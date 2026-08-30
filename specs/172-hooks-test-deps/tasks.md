@@ -59,4 +59,4 @@ The GM's reason for asking - *"it would have paid off a lot over the last couple
 not true of the dependency refinement alone, and the final numbers say so: the escape family and
 `_guardlog.sh` remain at 17 of 18 guards, because every guard reaches its escape through them and the
 escape stands on the shape primitives. What pays on those days is the parallelism (194 s -> 63 s), and
-what the refinement buys is the `_gatecost.py`-shaped change: 21 suites down to 2.
+what the refinement buys is the `_gatecost.py`-shaped change: 21 suites down to **4** over the roster the tooling reports (2 real consumers plus the 2 whole-tree entries that re-run on any script change).
