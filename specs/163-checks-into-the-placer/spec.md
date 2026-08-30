@@ -154,11 +154,16 @@ discussion before any such change is made, so the work is named here only so the
   inference from its name or by subtracting one list from another**, and this spec got that wrong twice
   before the review caught it: `ways_clear_of_castle_moat` carries NO scale guard at all (it is DATA-gated
   on castle-moat records and iterates lanes, so any manifest with a moat and a way fires it - the classic
-  `dev/gate.md` "a check that never RUNS looks exactly like a check that passes" shape), and
-  `village_has_no_headman` is a VILLAGE-scale check that `roll_village` is a live mixin for, whose sibling
-  `village_has_kosatsuba` is already made to fire by a three-line hand-built manifest in the tree today.
-  So there is no pre-approved class deletion: every candidate takes the FR-006 placer read, and a group is
-  formed only from candidates whose guards have each been read and whose tier has no live generator.
+  `dev/gate.md` "a check that never RUNS looks exactly like a check that passes" shape). So there is no
+  pre-approved class deletion: every candidate takes the FR-006 placer read, and a group is formed only
+  from candidates whose guards have each been read and whose tier has no live generator.
+
+  **The rule survived its own second specimen being wrong, which is the best evidence for it.** A review
+  round offered `village_has_no_headman` alongside the moat check, on the ground that `roll_village` is a
+  live mixin serving that scale. Reading the guard - the very thing this rule demands - showed otherwise:
+  at village scale `_seg_0243` takes a `pass` branch and emits nothing, so the name cannot be built at ANY
+  scale, and it was deleted as one of the two phantoms (`placer-reads.md` group A, measured by running the
+  gate at all five scales). The reading has to go one level PAST the scale, into the branch.
 - **A check whose only firing evidence is a frozen manifest of a map no generator can produce.** The
   fixture proves the check has teeth against a shape the engine can no longer make - which is not the
   current implementation firing, and the census classifies it apart on exactly that ground. Under the GM's
@@ -190,7 +195,8 @@ discussion before any such change is made, so the work is named here only so the
   TEETH without proving the current implementation produces the fault. It is classified `FIRES-HAND-ONLY`
   and routed to the FR-009 ledger per FR-003: **it is NOT a deletion candidate and does NOT take the FR-006
   read.** (An earlier draft sent it there, back when FR-006 deleted on absence of evidence - which would
-  have put 103 of the 147 live checks on the block, the exact thing the GM's 2026-08-30 ruling forbids.)
+  have put 103 of the 152 checks then live on the block - 103 of the 147 that survive the retirement - the
+  exact thing the GM's 2026-08-30 ruling forbids.)
 - **FR-002**: The census MUST establish each verdict by EXECUTION - running the gate against the artifact
   and reading the verdict - not by grepping for the check's name. A name appearing in a test file is not
   evidence that the test makes the check fail.
@@ -443,3 +449,44 @@ change what this check reads?"* - so the ledger applying it is what was asked fo
 the two guardrails that are genuinely the GM's: no change is made on the strength of the sort, and the
 ruling is theirs, check by check. Propagated to US2's body, its scenarios 1 and 4, the Independent Test,
 Key Entities and SC-004 - *"all six, this time, or the next round finds the seventh."*
+
+### Round 6 - independent re-review, 2026-08-30: **FAITHFUL**
+
+Verdict: FAITHFUL. `spec-fidelity` verified every round-5 finding landed as a REPLACEMENT rather than an
+addition, item by item, and ran its own forbidden-phrase sweep: *"No operative sentence carries a retracted
+disposition."* It confirmed the propagation is complete this time - every route for `FIRES-HAND-ONLY` sends
+it to the ledger and none to deletion; deletion is gated on DEAD-ness in all five places that state it; and
+the delivered artifacts agree with the requirements.
+
+It answered the question this round was pointed at - whether applying round 5 had made FR-009 too
+permissive: *"No. The discriminator FR-009 applies is in the GM's own accepted text, not the session's.
+What the GM reserved is stated twice in their words: the case-by-case decision, and 'before any changes
+like that are made'. FR-009 keeps both explicitly... Applying the GM's own stated test and reporting where
+it points is evidence preparation, not the ruling."*
+
+And it confirmed the stop against the DIFF rather than the prose: *"Not one file under `hamletgen/`,
+`settlement/`, `waterfields/` or `pool/`."* The build matches every requirement - 152 -> 147, five deleted
+all on the DEAD ground, four routed to the ledger, 103 hand-only none deleted, 147 rows measured.
+
+**Two accuracy notes it raised, neither a fidelity defect, both folded in before this was recorded.** The
+sharper one is worth keeping visible: the Edge Cases and T11 still cited `village_has_no_headman` as a
+live village-scale check, which is the claim a review round made and this feature's own measurement
+REFUTED. The rule those passages teach - read the guard, never infer from the name - is right, and is
+exactly what caught its own illustration being wrong; the illustration is now corrected and the episode
+recorded, because a rule whose second specimen it disproved is better evidence for the rule than a tidy
+one would have been.
+
+### What six rounds cost, and what they bought
+
+Every round returned changes, and it is worth being precise about what kind. Rounds 1-3 caught defects of
+INTENT: a carve-out contrary to the GM's instruction, a user story still requiring what its own requirement
+forbade, and two false claims about the codebase that would each have deleted a live check. Rounds 4-6
+caught one defect, three times, and it was editorial rather than substantive: **the session kept writing
+each correction BESIDE the superseded sentence instead of replacing it.** Round 5 named it exactly - *"the
+ADDITIONS landed, four RETRACTIONS did not"* - and the fix was to replace rather than annotate, then prove
+it with a sweep.
+
+The lesson for the next session is not "review more"; it is **when a ruling supersedes a requirement,
+DELETE the requirement and write the new one, then grep the tree for the old wording.** An amendment left
+sitting above the sentence it amends reads as complete to its author and as a contradiction to everyone
+else, and the artifacts a feature DELIVERS carry the stale text out to their readers.

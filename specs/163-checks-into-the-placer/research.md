@@ -140,9 +140,11 @@ placer read is not a formality:
   only guard on the escape hatch every other rule can be excused through, and it would do so precisely
   BECAUSE the hatch is currently unused. They are also the checks `dev/gate.md` records as deliberately
   un-waivable, *"or the hatch would swallow its own guard"*.
-- **`village_has_no_headman`** is the case the round-3 spec review predicted before the census ran: it
-  comes back NEVER-FIRES, and `roll_village` is a live mixin that still serves that scale, whose sibling
-  `village_has_kosatsuba` is made to fire by a three-line hand-built manifest in the tree today.
+- **`village_has_no_headman`** comes back NEVER-FIRES. A review round predicted it could be made to fire,
+  because `roll_village` is a live mixin serving that scale - and **R8 corrects that**: reading the guard
+  showed `_seg_0243` takes a `pass` branch at village scale and emits nothing, so the name is unreachable
+  at every scale. It was deleted as a phantom. (Its sibling `village_has_kosatsuba` IS made to fire by a
+  hand-built manifest, and is a different check in a different segment with no such branch.)
 
 And the two names the review used to break the "legacy tier" grouping both land where it said they would:
 `ways_clear_of_castle_moat` is `FIRES-HAND-ONLY` (a test makes it fail - it has no scale guard at all),

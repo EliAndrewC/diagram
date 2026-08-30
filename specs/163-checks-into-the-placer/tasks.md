@@ -84,8 +84,10 @@ finding and is therefore `physical` with its three boxes.
       research: procedure
 - [x] **T11** READ THE GUARD of every candidate that looks legacy-tier and establish its actual tier from
       the segment body, never from its name or by subtracting one list from another - the spec review caught
-      that error twice, and `ways_clear_of_castle_moat` (no scale guard at all) and `village_has_no_headman`
-      (a scale `roll_village` still serves) are the two specimens. Only candidates whose guards have each
+      that error, and `ways_clear_of_castle_moat` (no scale guard at all) is the specimen. Read one level
+      PAST the scale, into the branch: `village_has_no_headman` was offered as a second specimen on the
+      ground that `roll_village` serves that scale, and reading the guard showed the segment takes a `pass`
+      branch there and emits nothing at all. Only candidates whose guards have each
       been read AND whose tier no live generator reaches may be presented as a group; the grouping presents
       individually verified verdicts to the GM, it never substitutes for T08's read.
       research: procedure
