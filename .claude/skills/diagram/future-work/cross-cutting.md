@@ -186,6 +186,16 @@ spec records that rather than rounding. What is left, from `specs/146-the-hamlet
   web (`close_seams`, `_carve_sector`, `_dry_fields`), or a check branch needing a manifest shape the
   reference does not carry.
 
+**UPDATE 2026-08-30 (feature 166): the floor now reads 99.28%, ~90 lines** - it improved from 128 as a
+side effect of retiring the check battery, and 166 verified the residue is NOT a consequence of that
+deletion (it probed the two largest blocks against the battery's own tests and found them Missing there
+too). The composition is unchanged in shape: `hamletgen/ways.py` 25, `settlement/_knobs.py` 24,
+`_geom/primitives.py` 16, `structures/fixtures.py` 9, the rest in ones and twos.
+
+**AND THE FLOOR IS NOT ACTUALLY BEING ENFORCED** - see 2h below, which is the reason this entry has been
+open across three features without anyone noticing it was never checked. Read 2h first; this entry is the
+worklist, 2h is why nothing was failing over it.
+
 `research: rendering`. Whoever picks this up: the worklist is generated straight off the FULL run's
 hamlet-floor table, and `make hamlet-floor` lists the modules under it.
 
@@ -242,3 +252,51 @@ because either branch is a sweep across six files rather than a fix at a point o
 feature 157 DID fix, at the point of change, is the narrow half that was its own: the comment that
 asserted the dead check, and `_blocked`'s hand-listed victim families, which had fallen behind the
 map exactly the way the registry's own docstring warns.
+
+## 2h. `make done FULL=1` HAS NEVER BEEN GREEN - and nothing says so out loud (found 2026-08-30, feature 166)
+
+**The measurement.** `dev/run-log/` records four FULL-scope runs in the project's history: one on
+2026-08-25 and the three feature 166 ran on 2026-08-30. **None is green.** The reference-scope
+`make done` is green routinely and is what the push actually requires, so nothing has ever forced the
+FULL scope to pass, and its failures have quietly accumulated.
+
+**Why it matters.** FULL is the ONLY scope that enforces the coverage floors and collects
+`tests/full/`. So the floors this project believes it holds - the 100% rule outside the four exempt
+packages, and the derived hamlet-path floor - are not actually being enforced by anything a session
+runs. A floor nobody checks is not a floor.
+
+**Three classes of failure, all found in one sitting, all pre-existing:**
+
+1. **Stale path literals from feature 161's map move.** `tests/full/test_coverage_carriers.py` (all
+   eight carriers), `test_gencache.py` and `test_villages.py` read `pool/<tier>/<name>.json` and
+   `pool/hamlets/<name>.gen.py`, and 161 moved every map into a per-map folder. They stopped matching
+   SILENTLY. Feature 166 fixed the two `.gen.py` literals and deleted the carriers (which the battery
+   retirement made redundant), so this class may now be empty - but the LESSON is the standing one in
+   [`../../../docs/session-clones.md`](../../../docs/session-clones.md): a layout change leaves path
+   patterns outside the walk, and they fail silently.
+2. **A FULL-only environment leak** (fixed by 166, recorded because the SHAPE will recur). A variable
+   set on make's COMMAND LINE is exported to recipes as a plain environment variable, so
+   `make done FULL=1` puts `FULL=1` into `os.environ` and a fixture's nested `make` inherits it. Feature
+   145 fixed exactly this for `COV_FLOORS` by clearing `MAKEFLAGS` - which does not touch it, because it
+   is not a flag. The next variable added to the FULL path is the third instance unless it is added to
+   the strip list in `tests/test_switches.py`'s `make()`.
+3. **The `tooling` deselection against the coverage floor.** `ci/` and `switches.py` tests are
+   deselected when the tooling stamp is fresh, so their lines are uncovered in the coverage report
+   without anything having been deleted. The floor and the selection disagree about what a run covers.
+
+**What is left after 166.** (The worklist itself is the older entry above, "The hamlet coverage
+floor's last 128 lines" - these two are one thread: that entry is WHAT to cover, this one is why nothing
+has been failing over it.) The hamlet-path floor stands at **99.28%**, ~90 lines across 11 modules
+(`hamletgen/ways.py` 25, `settlement/_knobs.py` 24, `_geom/primitives.py` 16, `structures/fixtures.py`
+9, and the rest in ones and twos). Feature 166 probed the two largest blocks against the retired
+battery's own tests and found them listed as Missing THERE too, so this predates the deletion and is
+not a consequence of it. Bringing it up is a TESTS job (spec FR-002's rule: bring the floor up by
+tests, never by widening the omit list).
+
+**Why this is its own feature and not a tail on someone else's.** It is three unrelated causes plus
+~90 lines of genuinely untested engine code, and the work is tooling rather than cartography - no map
+changes. Doing it inside a map feature is how it stayed invisible for as long as it has.
+
+**Where to start:** run `make done FULL=1` and read the whole failure list before fixing anything; it
+reports every phase. The evidence and the two probes are in
+`specs/166-retire-the-check-battery/research.md` R11.
