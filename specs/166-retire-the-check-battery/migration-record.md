@@ -187,6 +187,13 @@ differs by tier is the COUNT (a city draws the set: the principal board plus one
 | `waivers_are_documented` | **DROP - the mechanism is retired with the battery.** A waiver is a declaration that one map may break one gate rule; with no gate there is no waiver to document. The doctrine it protected - an exemption is written down with its reason, or it is not an exemption - moves to `dev/gate.md`'s successor section | - |
 | `waivers_are_live` | **DROP - same.** It caught a waiver naming a rule that no longer fires; there are no waivers to go stale | - |
 
+| `caption_stands_beside_its_referent` | `tests/gate/test_captions_and_boards.py` (every caption records a referent box) | the label phase never run -> RED |
+| `label_hugs_its_referent` | same module (box-to-box gap under 120 px) | same mutation -> RED |
+| `labels_align_with_their_referent` | same module (the caption's angle vs its subject's `rot`, modulo 180) | same mutation -> RED |
+| `captions_clear_the_ways_they_stand_on` | same module (the caption's four corners and its center against every lane's tread) | same mutation -> RED |
+| `kosatsuba_by_the_road` | same module (the board within 90 px of a way) | the notice board never posted -> RED |
+| `kosatsuba_faces_the_road` | same module (`rot` PARALLEL to the nearest way's bearing) | same mutation -> RED. MEASURED, not guessed: the first draft asserted the perpendicular and read 90 deg off; the reference roll has rot -95.2 against a way bearing of -95.2, and the measurement is recorded in the test |
+
 ## Battery-internal - they go WITH the battery, and owe no destination
 
 These four do not state a rule about a map. They state that the battery's OWN classification tables are
