@@ -151,9 +151,13 @@ a spec describing the old layout).
   `inashiro/inashiro.gen.py`, not `inashiro/gen.py`. (GM decision, asked and answered 2026-08-30.)
 - **FR-003**: A map's directory MUST hold every artifact belonging to that map and nothing else:
   the generator, the manifest, the notes, and the SVG/PNG/HTML renders where they exist.
-- **FR-004**: Maps that `poolmaps.classify()` calls `legacy` MUST move out of `pool/` into a sibling
+- **FR-004**: Maps that `poolmaps.classify()` calls `legacy` MUST move out of `pool/` into a
   `legacy-hand-authored-pool/` directory, keeping their tier directory and gaining a per-map
   directory inside it.
+- **FR-004a**: `legacy-hand-authored-pool/` MUST be a SIBLING of `pool/`, inside the skill directory
+  (`.claude/skills/diagram/legacy-hand-authored-pool/`). The GM settled this in the follow-up on the
+  index, which names the cross-link as `../legacy-hand-authored-pool/` - relative to
+  `pool/index.html`, that path resolves to exactly this location.
 - **FR-005**: Maps that classify `scripted` or `compound` MUST stay under `pool/`, gaining a per-map
   directory.
 - **FR-006**: `pool/regressions/` MUST keep its present flat shape. Its contents are negative
@@ -181,6 +185,21 @@ a spec describing the old layout).
   live tree ONLY where their job is the live pool. Specifically: the render cache, the pool index
   and the notes census concern both trees; the gate's regeneration sweep and the cache audit concern
   the live pool only, because a frozen map is never regenerated.
+- **FR-013b**: The **stale-render sweep** (`tests/test_villages.py`'s PNG-versus-viewBox check) MUST
+  cover BOTH trees. It ends in `assert checked`, and the maps it can actually check in a clean
+  checkout are exactly the FROZEN exhibits - a live map's renders are gitignored and absent. Measured
+  2026-08-30 on the baseline: 8 of the 8 renders it checks under `pool/hamlets/` are the frozen
+  exhibits, and the 5 scripted hamlets have none. Left walking `pool/hamlets/` alone, the sweep would
+  find zero renders after the move and `assert checked` would FAIL - a regression this feature would
+  otherwise have introduced into a test whose whole job is catching a silent staleness.
+- **FR-013a**: The classification **ratchet** (`tests/test_villages.py`'s "every pool gen is
+  classified" test) MUST cover BOTH trees, and this is distinct from the regeneration sweep in the
+  same file, which stays live-only. The ratchet makes two assertions over every Mode B and Mode A
+  gen - that none classifies `unknown`, and that no name declared in `LEGACY_FROZEN_GENS` or
+  `COMPOUND_GENS` is absent from the tree - and after the move the presence half MUST resolve
+  `LEGACY_FROZEN_GENS` against `legacy-hand-authored-pool/`. A ratchet narrowed to the live pool
+  would silently drop 18 of the 23 Mode B maps from its coverage, or turn red on the stale-name
+  assertion; both outcomes defeat the guard that every map in the repository is accounted for.
 - **FR-014**: `regen.py`'s one-map-per-invocation scope-lock refusal MUST still fire on a
   whole-pool glob at the new depth.
 - **FR-015**: The repository's ignore rules MUST keep ignoring derived renders for live maps, keep
@@ -202,10 +221,32 @@ a spec describing the old layout).
   folder still getting a section rather than vanishing, and a settlement-tier map with no manifest
   reported in red rather than guessed at.
 
+**Everything else that names a pool path**
+
+- **FR-020a**: Every literal pool path, glob or path PATTERN in code, tooling, guard scripts, test
+  fixtures and configuration MUST be updated to the new tree, and each MUST state whether
+  `legacy-hand-authored-pool/` remains inside its reach. The GM asked for "anything in the codebase
+  which references or relies on the old directory structure", and the dangerous members of this
+  class are the ones that neither walk the pool nor read as prose - they match a pattern, and after
+  the move they simply stop matching, silently and with nothing turning red. This explicitly
+  includes, at minimum:
+  - `scripts/review-gate.sh`'s changed-manifest pattern
+    (`^\.claude/skills/diagram/pool/.*\.json$`), which is how "a re-rolled map has a review logged
+    beside it" is enforced. Unchanged, it silently stops covering the legacy tree.
+  - `l7r/diagram/ci/delta.py`'s `_ENGINE_DIRS` entry `("pool/", (".gen.py", ".json"))`, which
+    decides the DIRECT-versus-GATED merge route. Unchanged, everything under
+    `legacy-hand-authored-pool/` silently stops counting as engine content.
+  - The `Makefile`'s `$(wildcard pool/*/*.json)`, its `git diff -- '.claude/skills/diagram/pool/*/*.json'`,
+    and the `GEN=` / `M=` / `A=` / `B=` default arguments.
+  - Guard-script test fixtures that construct pool paths: `scripts/test-review-gate.sh`,
+    `scripts/test-sync-with-main.sh`, `scripts/test-make-only-hooks.sh`.
+
 **The documentation**
 
-- **FR-020**: Every path in the repository's prose that names a pool file or folder MUST name a path
-  that exists after the move, or be explicitly marked as historical.
+- **FR-020**: Every path in the repository's PROSE that names a pool file or folder MUST name a path
+  that exists after the move, or be explicitly marked as historical. This includes prose outside the
+  pool that describes the pool's shape - `wip/README.md`'s "sweeps `pool/*/*.gen.py`" is such a
+  sentence.
 - **FR-021**: `migration-plan.md` MUST record the new layout, since it is the standing plan a session
   reads before touching the pool and it describes the freeze that this split makes visible.
 - **FR-022**: The reasoning behind the split MUST be recorded where a future session will meet it -
@@ -244,7 +285,10 @@ a spec describing the old layout).
   link resolving from a `file://` open.
 - **SC-007**: A repository-wide search for the old two-level pool paths returns only deliberately
   historical references.
-- **SC-008**: Adding a new map to either tree requires no new ignore rule.
+- **SC-008** *(non-blocking note, not an acceptance criterion)*: if FR-015's SHOULD is achieved,
+  adding a new map to either tree requires no new ignore rule. Recorded as an observation to make
+  after the fact rather than a bar to clear, because the GM asked for the ignore rules to keep
+  WORKING, not for them to be re-expressed. Only FR-015's MUST is binding.
 
 ## Decisions Recorded
 
@@ -268,10 +312,23 @@ it.
   sentence's own example (magistracies) and its stated reason (small enough that a scripted process
   buys nothing) make the intent unambiguous, and `migration-plan.md` section 1 already rules Mode A
   out of the migration's scope. Mode A plans stay in `pool/`.
+
+  **And the reading is not load-bearing**, which is the part a future reader should not have to
+  re-derive: BOTH readings produce the identical partition. The preceding sentence already disposes
+  of settlements unambiguously ("move every settlement which is hand-authored out of `pool/`"), and
+  magistracies are not settlements. Checked against the record, no map exists on which the two
+  readings disagree - `migration-plan.md` section 4 lists village, town and provincial city as
+  NOT STARTED conversions (so every legacy map does have plans to become scripted) and declares
+  Mode A "out of scope ... hand-authored by design" (so no Mode A plan does). The operative
+  requirements FR-004 and FR-005 are anchored on `poolmaps.classify()` rather than on the reworded
+  phrase, so nothing in the implementation depends on the wording at all.
 - **`legacy-hand-authored-pool/` is a sibling of `pool/`**, inside the skill directory - the plain
   reading of "out of the `pool/` directory and into a `legacy-hand-authored-pool/` directory".
-- **`wip/` is out of scope.** The capital-tier draft (`shiro-daika`) and the cohort HTML already sit
-  outside `pool/`, and the capital tier is unfinished. Nothing about it changes here.
+- **`wip/`'s CONTENTS are not relocated.** The capital-tier draft (`shiro-daika`) and the cohort
+  HTML already sit outside `pool/`, the GM never named them, and the capital tier is unfinished - so
+  no draft moves trees. But references that `wip/` MAKES to pool paths are updated like any other
+  (FR-020): `wip/README.md` opens by describing the sweep as `pool/*/*.gen.py`, which is exactly the
+  kind of sentence the GM's third paragraph names.
 - **The renders' bytes are what matters, not their mtimes.** Moving a file does not change its
   content; some tooling keys on mtime (the index's staleness check) and may legitimately rebuild
   once after the move.
@@ -280,3 +337,42 @@ it.
   `requirements-dev.txt` 2.5.2 via types-shapely), and `setup-dev-env.sh` installs both in one pip
   command - so a fresh container could not be provisioned at all. Fixed where found, per Principle
   XIV, with the dev lockfile constrained to the runtime lock so the drift cannot recur.
+
+## Review history
+
+Constitution XVI: the spec is reviewed against the GM's own words, by someone other than its author,
+before implementation. The `spec-fidelity` agent was given the GM's request VERBATIM (not the plan -
+a spec graded against its own plan is being checked for self-consistency, which a wrong spec passes).
+
+### Round 1 - 2026-08-30 - CHANGES REQUIRED
+
+The review was asked to weight one item highest: whether reading the GM's "Diagrams which have no
+plans to become hand-authored" as "no plans to become SCRIPTED" was a session substituting its own
+judgment for the GM's - the Principle XVI failure mode. **That item cleared.** The GM disambiguated
+their own sentence in the same breath (the parenthetical names magistracies, which *are*
+hand-authored, so the literal reading makes the GM's own example impossible), both readings produce
+the identical partition, and no map exists on which they disagree.
+
+Four changes were required, and all four were applied:
+
+1. **FR-020 narrowed the GM's third paragraph to PROSE.** The class that neither walks the pool nor
+   reads as prose - a literal path PATTERN - was uncovered, and its members fail *silently*: after
+   the move `scripts/review-gate.sh`'s `^\.claude/skills/diagram/pool/.*\.json$` simply stops
+   matching, so the "a re-rolled map has a review logged beside it" guard quietly stops covering the
+   legacy tree, and `ci/delta.py`'s `_ENGINE_DIRS` quietly stops classifying it as engine content.
+   Neither turns anything red. -> **FR-020a added**, enumerating the guard scripts, the merge-route
+   classifier, the Makefile patterns and the guard-script test fixtures; FR-020 kept as the prose
+   clause. This was a genuine gap in the author's recon, not a wording quibble.
+2. **FR-013 left the classification RATCHET unplaced**, and "the live pool only" would have shrunk
+   it from 23 Mode B maps to 5 or turned it red on its stale-name assertion. -> **FR-013a added**:
+   the ratchet covers BOTH trees and is distinct from the regeneration sweep in the same file.
+3. **The `wip/` assumption overreached.** "Nothing about it changes here" is true of relocation and
+   false of references - `wip/README.md` describes the sweep as `pool/*/*.gen.py`. -> narrowed to
+   contents-not-relocated, references-updated-like-any-other.
+4. **SC-008 promoted FR-015's SHOULD into a binding acceptance criterion** the GM did not ask for -
+   the GM asked that the ignore rules keep WORKING, not that they be re-expressed. -> restated as an
+   explicitly non-blocking note; only FR-015's MUST binds.
+
+Both non-blocking suggestions were also taken: the sibling placement of `legacy-hand-authored-pool/`
+was promoted from an Assumption to **FR-004a**, and the Assumptions entry now records that the
+hand-authored/scripted reading is not load-bearing.
