@@ -45,6 +45,9 @@ box" - measuring the wrong one made every seat look illegal and the fallback too
 | `houses_clear_of_lanes` | same module | lane's `corridors.append` removed -> RED |
 | `no_farmhouse_stands_on_a_lane` | same module (the `width/2 + 11` setback, which is what clears building CORNERS) | same mutations -> RED |
 
+| `irrigation_channels_hairline` | `tests/settlement/test_water_width_ladder.py` | channel default width raised off the floor -> RED |
+| `watercourses_wider_than_ditches` | same module (the ladder's ORDER, which is the part that is not a legibility deviation) | same mutation -> RED |
+
 ## Already carried by an existing test - dropped against it, not rewritten
 
 | check | carried by | proof |
