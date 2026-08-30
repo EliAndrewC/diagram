@@ -125,7 +125,7 @@ finding and is therefore `physical` with its three boxes.
       something was removed that the roll depended on. (The constitution's regression bookend; the spec
       review removed the gate-cost REQUIREMENT, so the saving is reported, not required.)
       research: procedure
-- [ ] **T17** Report to the GM: what the census found, what was deleted, what the deletion saved (gate
+- [x] **T17** Report to the GM: what the census found, what was deleted, what the deletion saved (gate
       seconds per map, lines, fixtures - reported because it is interesting, not because it was required),
       which checks the census called never-fires and the placer read RECLASSIFIED as firing with their
       evidence, and the `surviving-checks.md` ledger. **Then STOP.** The case-by-case work on firing checks is the GM's
