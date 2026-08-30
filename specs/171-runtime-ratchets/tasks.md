@@ -92,8 +92,14 @@ forward unchanged and surfaced at close-out:
 - **D2**: comparing the MEDIAN rather than the run while that interim regime holds, because at 201 s a
   per-run bar would fire on 28% of normal runs.
 
-One consequence worth the GM's attention, raised by the handoff author and confirmed here: `make
-tooling` was collecting ZERO tests until this session fixed it, so `done`'s historical medians measured
-a suite that was skipping work. Any baseline pinned from runs before that lands is measuring something
-different, and the 35 s the GM wants to return to may itself have been measuring less than it appeared.
-That is the efficiency work's question, not this feature's.
+One thing the handoff author and I both got wrong, and the measurement that settles it: we each
+suspected `done`'s historical medians had been measuring a suite that skipped work, because `make
+tooling` was collecting ZERO tests until this session fixed it. **They were not.** `make done` ran
+2317 passed / 2 skipped / 1 xfailed BOTH before and after that fix - the `-m tooling` breakage was in
+the CLI filter only, and `done` never selected by that path. The narrower true statement, which is
+worth keeping: the standalone `make tooling` target measured nothing, so anything citing THAT target
+as evidence was reading a dead instrument. It does not touch `done`'s medians, and the 35 s the GM
+wants to return to is not called into question by it.
+
+Recorded because the inference was plausible, was made independently by two sessions, and was wrong -
+and because the counts that disprove it took one grep of two log files.

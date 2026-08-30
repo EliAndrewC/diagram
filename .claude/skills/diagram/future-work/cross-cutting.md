@@ -300,3 +300,30 @@ changes. Doing it inside a map feature is how it stayed invisible for as long as
 **Where to start:** run `make done FULL=1` and read the whole failure list before fixing anything; it
 reports every phase. The evidence and the two probes are in
 `specs/166-retire-the-check-battery/research.md` R11.
+
+## `hooks-test` is 94 s of a 135 s gate, and it runs its suites SERIALLY (found 2026-08-30)
+
+Measured by the `diagram-testing` session while investigating where `make done`'s time goes, and
+recorded here because it is the largest single lever in the repository right now:
+
+    lint        0 s      format      0 s      typecheck   1 s
+    reference   0 s (cache HIT; ~29-37 s on a miss)
+    test       17 s      <- 2,286 pytest tests
+    hooks-test 94 s      <- 19 shell suites, FIVE AND A HALF TIMES the whole Python suite
+
+Fully cached the gate is ~18 s; today's ~135 s median is essentially 18 + `hooks-test` + a reference
+miss. **The gate did not get slower because anything backslid** - it got slower because four days of
+work (162, 164, 168, 169, 170, 171) have all been GUARD work, and guard work is the one area whose
+verification is the most expensive. The per-suite freshness cache is returning nothing (`0 unchanged`
+on a recent run) for the same reason: 29 guard scripts changed on main in half a day, so there is
+nothing stable to hit. The cache is working; there is simply no hit to be had.
+
+**The lever**: `hooks-test` runs 19 shell suites one after another. pytest runs 2,286 tests in 13.8 s
+by running them in parallel. Nothing about the shell suites obviously requires serialization -
+each builds its own fixtures in its own `mktemp -d`, and since feature 170 each isolates its own
+`GUARD_LOG_DIR` - but that is a claim to verify rather than assume: some drive git repos, and
+`test-sync-with-main.sh` and `test-clone-sync-hooks.sh` in particular manipulate trees whose paths
+they derive. Check for shared state before parallelizing, and expect at least one suite that cannot be.
+
+Not opened as a feature here; the GM has been told, and the efficiency work is a conversation they
+said comes after 171.
