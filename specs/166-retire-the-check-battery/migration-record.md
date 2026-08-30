@@ -115,6 +115,15 @@ differs by tier is the COUNT (a city draws the set: the principal board plus one
 
 | `drain_runs_cross_slope` | `tests/waterfields/test_comb_flow.py` (6 falls, plus rotation and a non-vacuous drain) | the drain made to ignore the fall -> RED |
 
+| `paddy_fan_has_floor` | `tests/gate/test_paddy_fabric.py` (a rolled comb fan) | the ditched-paddy floor set emptied -> RED |
+| `comb_floor_ends_at_the_collector` | same module; the engine's own `floor_overhang` | `floor_overhang` made to report a long overhang -> RED |
+| `comb_supply_commands_both_flanks` | same module (cross-slope extent vs delivery reach, per flank) | asserted with a non-vacuity floor on both flank extents |
+| `paddy_plots_are_workable_basins` | same module; the engine's own `pointed_ring` at 15 deg | `pointed_ring` made to call every ring a needle -> RED |
+| `flooded_plots_read_as_basins` | same module (the PICTURE record matched to its ring) | same mutation -> RED; the match count is asserted so it cannot judge nothing |
+| `paddy_basins_are_worth_their_bund` | same module; the ratio to the fan's OWN design cell | `_GATE_MIN_AREA` raised past every basin -> RED |
+| `paddy_plot_rings_overcount_stays_marginal` | same module (ring-area sum vs shapely union) | the 4% ceiling is ~1.6x the worst live map |
+| `paddy_bunds_do_not_stagger` | same module; the engine's own `jog_vertices` | `close_seams` made to stop straightening its own steps -> RED |
+
 ## Battery-internal - they go WITH the battery, and owe no destination
 
 These four do not state a rule about a map. They state that the battery's OWN classification tables are
