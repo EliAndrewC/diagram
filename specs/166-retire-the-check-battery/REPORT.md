@@ -67,10 +67,25 @@ changed: none"*.
    tip within 0.16 px of its trunk. Asserted against Inashiro it would have been silent for ever. The
    test rolls Kuwabata and says why.
 
-## What this changed about the loop
+## What this changed about the loop, measured
 
-The battery ran on every generated map, for ever. Its successors run once per code change, against
-cached rolls. The reference-scope gate is 36 s.
+The battery ran INSIDE every roll - `generate()` gated the manifest it had just finished - so every map
+the project has ever produced paid for it. The bookends say what that cost:
+
+| | 166-start | 166-end | |
+|---|---|---|---|
+| seed 4 | 46.8s | 14.0s | **-70.1%** |
+| seed 25 | 28.2s | 15.7s | -44.3% |
+| seed 39 | 21.0s | 12.7s | -39.5% |
+| seed 47 | 25.3s | 15.3s | -39.5% |
+| **total** | **121.3s** | **57.7s** | **-52.4%** |
+
+Band 0: no increase on the total or on any seed, so the review ladder owes nothing. **Generation is
+twice as fast**, and the reference-scope gate is 36 s.
+
+That number is the GM's own argument arriving as arithmetic: the checks were not free insurance running
+beside the generator, they were half of what the generator cost, re-establishing on every map a set of
+facts the placers already guarantee.
 
 ## What is NOT done, and is the GM's call
 
