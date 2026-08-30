@@ -31,7 +31,20 @@ cd "$ROOT" || exit 0
 RG_HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 # shellcheck source=/dev/null
 . "$RG_HERE/_guardlog.sh"
-[ -n "${REVIEW_GATE_OK:-}" ] && { guard_log review-gate escaped "$REVIEW_GATE_OK" review-gate-ok; printf 'review-gate: BYPASSED - %s\n' "$REVIEW_GATE_OK"; exit 0; }
+# GUARD_EDIT_OK: feature 170 - this escape already RECORDED; now it must also say something. An
+# environment variable's VALUE is its reason, and `REVIEW_GATE_OK=1` explains nothing to the person
+# auditing later, which is the whole point (GM 2026-08-30).
+if [ -n "${REVIEW_GATE_OK:-}" ]; then
+  if ! python3 "$RG_HERE/_hookmatch.py" reason-ok <<<"$REVIEW_GATE_OK" >/dev/null; then
+    guard_log review-gate blocked "$REVIEW_GATE_OK" REVIEW_GATE_OK-no-reason
+    printf 'review-gate: REVIEW_GATE_OK needs a REASON, not just a value - two words and eight characters.\n' >&2
+    printf 'It ships with the push and is what a later audit reads, so say what makes this case exempt.\n' >&2
+    exit 1
+  fi
+  guard_log review-gate escaped "$REVIEW_GATE_OK" review-gate-ok
+  printf 'review-gate: BYPASSED - %s\n' "$REVIEW_GATE_OK"
+  exit 0
+fi
 
 changed=$(git diff --name-only "$RANGE" 2>/dev/null || true)
 [ -z "$changed" ] && exit 0

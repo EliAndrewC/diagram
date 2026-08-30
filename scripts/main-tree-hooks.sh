@@ -59,7 +59,29 @@ esac
 # `_hookmatch.py sanitize` blanks heredoc bodies and quoted strings first, so a `cd /diagram` inside
 # a commit message or a document is a MENTION - the rule this whole feature is about.
 SCAN=$(printf '%s' "$INPUT" | "$MT_HERE/_hookmatch.py" sanitize 2>/dev/null || printf '%s' "$CMD")
-printf '%s' "$SCAN" | grep -qE "(^|[;&|]|&&)[[:space:]]*cd[[:space:]]+\"?${MAIN}/?\"?([[:space:]]*(;|&&|\||$))" || exit 0
+
+# GUARD_EDIT_OK: feature 170 FR-005 - fixing a guard that MISSED the shape it was built for, which
+# is the legitimate case this marker exists for.
+#
+# ...OR IS THE SESSION ALREADY STANDING IN THE MIRROR? A bare `cd` into a path inside the project
+# PERSISTS into the next Bash call - measured 2026-08-30 by doing it, and the next call's `pwd` was
+# the mirror. So the incident this guard was built for - *"I let a bare `cd /diagram` leak into the
+# next command and stranded a commit in the mirror"* - puts the `cd` in one command and the write in
+# the NEXT, and a guard reading only the command text returns 0 on it. This one did. The hook payload
+# carries the session's cwd (`clone-sync-hooks.sh` reads the same field), so ask where the command
+# will actually RUN rather than only what it says.
+CWD=$(printf '%s' "$INPUT" | python3 -c 'import json,sys
+try: print(json.load(sys.stdin).get("cwd", ""))
+except Exception: pass' 2>/dev/null)
+STANDING_IN_MAIN=no
+case "${CWD%/}" in
+  "$MAIN"/.clones/*) STANDING_IN_MAIN=no ;;    # a clone under the mirror is a workspace - checked FIRST
+  "$MAIN"|"$MAIN"/*) STANDING_IN_MAIN=yes ;;   # the mirror root, or anywhere else inside main's tree
+esac
+
+if [ "$STANDING_IN_MAIN" = no ]; then
+  printf '%s' "$SCAN" | grep -qE "(^|[;&|]|&&)[[:space:]]*cd[[:space:]]+\"?${MAIN}/?\"?([[:space:]]*(;|&&|\||$))" || exit 0
+fi
 
 # ...and does it then WRITE? A read in main is legitimate and stays legitimate.
 WRITES='git[[:space:]]+(commit|add|merge|rebase|reset|checkout|restore|rm|mv|apply|am|stash|cherry-pick|push|pull|clean|tag|branch[[:space:]]+-)'

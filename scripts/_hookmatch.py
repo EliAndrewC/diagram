@@ -543,6 +543,11 @@ if __name__ == "__main__":
             print("yes")
     elif len(sys.argv) > 1 and sys.argv[1] == "sanitize":
         print(_strip_quotes(_strip_heredocs(payload)))
+    elif len(sys.argv) > 1 and sys.argv[1] == "reason-ok":
+        # `reason-ok` - reads a REASON on stdin (not a payload) and exits 0 when it clears the floor.
+        # For the ENVIRONMENT escapes, where the variable's value IS the reason and there is no
+        # command to parse: `REVIEW_GATE_OK`, `GATE_STAMP_OK` (feature 170).
+        sys.exit(0 if reason_is_enough(RAW.strip()) else 1)
     elif len(sys.argv) > 2 and sys.argv[1] == "escape-reason":
         # `escape-reason <TOKEN>` - prints the reason when the escape is USED and the reason clears
         # the floor; prints nothing otherwise. One call answers both questions a guard has to ask, so

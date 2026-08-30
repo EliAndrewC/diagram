@@ -1,6 +1,7 @@
 # Feature 170 - Escapes Carry a Reason, and a Finished Run Is Not "Waiting"
 
-**Status**: specified 2026-08-30. [`request.md`](request.md) is the authority.
+**Status**: **APPROVED** 2026-08-30 - `spec-fidelity` round 5 returned FAITHFUL with nothing
+blocking. Specified 2026-08-30. [`request.md`](request.md) is the authority.
 
 ## The feature, in one sentence
 
@@ -175,7 +176,7 @@ single-command shape and not the one that actually happened; FR-005 is what make
 
 ## Success Criteria
 
-- **SC-001**: for every escape token: a bare use is refused with a message showing the compliant form; a one-word or under-eight-character reason (`GATE_OK: ok`) is refused; a reason meeting the floor is permitted exactly as before; and **`CI is down` is permitted**, named here because it is the case the floor was chosen to admit and the case the retired 15-character version would have refused. (Round 2 caught the old number surviving in this criterion, which is what an implementer builds the test from.)
+- **SC-001**: for every escape token (the thirteen; not the two `not-an-escape` macros, which permit nothing): a bare use is refused with a message showing the compliant form; a one-word or under-eight-character reason (`GATE_OK: ok`) is refused; a reason meeting the floor is permitted exactly as before; and **`CI is down` is permitted**, named here because it is the case the floor was chosen to admit and the case the retired 15-character version would have refused. (Round 2 caught the old number surviving in this criterion, which is what an implementer builds the test from.)
 - **SC-002**: every permitted escape produces a firing-log entry whose detail is the reason - proved by driving each guard, not by reading the source.
 - **SC-003**: `make audit` can answer "every escape taken, with its stated reason" from the log alone.
 - **SC-004**: a finished, unsurfaced background run is reported at the next prompt and at turn end, with its exit status and age; an acknowledged one is not reported again.
@@ -197,4 +198,19 @@ single-command shape and not the one that actually happened; FR-005 is what make
 ## Review history
 
 Constitution XVI: reviewed against [`request.md`](request.md) by an independent `spec-fidelity`
-subagent before implementation, up to five rounds (raised from three by the GM on 2026-08-30).
+subagent, up to five rounds (raised from three by the GM on 2026-08-30 - this is the second feature
+to use the raised cap, and the first to have needed all five).
+
+| round | verdict | what it found |
+|---|---|---|
+| 1 | CHANGES REQUIRED | five items. The two that mattered: my claim that the reported `cd` error was "ALREADY prevented" was false, and a SECOND silent permit (`GATE_STAMP_OK`, in a file with no `guard_log` call at all). Also that the 15-character floor cited the RETIRED map-waiver rule and would have refused a true short reason |
+| 2 | CHANGES REQUIRED | a THIRD silent permit - `repo-safety`'s `HOST_GIT_OK`, the guard over the GM's own repository - found by deriving the census from the tree instead of reading my list. And SC-001 still carried the retired 15-character floor, where an implementer builds the test from |
+| 3 | CHANGES REQUIRED | the derived check was keyed on the TOKEN, which `GUARD_EDIT_OK` and `PAIR_OK` defeat by having TWO permitting sites each - one driver per token passes green while the branch this feature exists to close stays silent. And `REF_OK` records to `dev/bypass-log/`, never through `guard_log`, so SC-003 was unachievable for it |
+| 4 | CHANGES REQUIRED | ruled, when asked directly, that FR-005's free warning on merely ENTERING the mirror was scope I had invented: it prevents nothing, crosses this spec's own OUT line, and is the shape of the hook the GM declined in 2026-08-17. Cut. And SC-005 contradicted FR-005 outright |
+| 5 | **FAITHFUL** | nothing blocking; confirmed nothing built exceeds the spec |
+
+**What five rounds bought, since the GM asked to watch this number**: three silent permits, of which I
+had found one; a false claim I had already made to the GM; a floor that would have refused true short
+reasons; a completeness check that would have passed while leaving the target branch silent; and one
+piece of scope I invented and was told to cut. Every one of them was found by the reviewer, not the
+author.

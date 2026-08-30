@@ -228,7 +228,20 @@ push_cmd() {
   # docs-only push still skips the gate (CLAUDE.md) and a webapp change is not blocked by the
   # diagram gate. Selftest FIRST, same reason check-duplicate-defs does it: a checker that cannot
   # prove it still bites is the failure mode that motivated it.
+  # GUARD_EDIT_OK: feature 170 - THE THIRD SILENT PERMIT, and the worst of them. This bypasses the
+  # rule that nothing lands which a green gate did not see, and it recorded NOTHING: this file has no
+  # `guard_log` call anywhere and never sourced `_guardlog.sh`, so `make audit` could not show that
+  # the push guard had ever been worked around. Found by the round-2 review of this feature, which
+  # derived the census from the tree rather than reading the session's list. The reason must also
+  # clear the floor now - an environment variable's VALUE is its reason (GM 2026-08-30).
   if [ -n "${GATE_STAMP_OK:-}" ]; then
+    # shellcheck source=/dev/null
+    . "$ROOT/scripts/_guardlog.sh"
+    if ! python3 "$ROOT/scripts/_hookmatch.py" reason-ok <<<"$GATE_STAMP_OK" >/dev/null; then
+      guard_log sync-with-main blocked "$GATE_STAMP_OK" GATE_STAMP_OK-no-reason
+      die "GATE_STAMP_OK needs a REASON, not just a value: two words and eight characters, e.g. GATE_STAMP_OK=\"the gate is green on this content, the stamp predates a docs-only commit\". An escape nobody can audit is indistinguishable from the rule not existing (GM 2026-08-30, feature 170)."
+    fi
+    guard_log sync-with-main escaped "$GATE_STAMP_OK" gate-stamp-ok
     echo "sync-with-main: green-gate guard BYPASSED - $GATE_STAMP_OK" >&2
   else
     python3 "$ROOT/scripts/gate-stamp.py" --selftest >/dev/null || die "gate-stamp selftest failed - the guard itself is broken; fix scripts/gate-stamp.py before pushing"

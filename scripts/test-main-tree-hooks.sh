@@ -21,8 +21,11 @@ echo a > "$MAIN/f"; git -C "$MAIN" add f; git -C "$MAIN" commit -qm a
 mkdir -p "$MAIN/.clones"; git clone -q "$MAIN" "$MAIN/.clones/worker"
 
 run() { # run <cwd> <command> -> RC, and OUT for the message
-  OUT=$(cd "$1" && printf '{"session_id":"t","tool_name":"Bash","tool_input":{"command":%s}}' \
-        "$(python3 -c 'import json,sys; print(json.dumps(sys.argv[1]))' "$2")" | "$HOOK" pretool 2>&1); RC=$?
+  # GUARD_EDIT_OK: feature 170 - the payload carries `cwd`, which is what FR-005 reads. The fixture
+  # always passed a cwd implicitly (by `cd`), and the guard could not see it - which is exactly how a
+  # suite can be green while the guard misses the shape it was built for.
+  OUT=$(cd "$1" && printf '{"session_id":"t","cwd":"%s","tool_name":"Bash","tool_input":{"command":%s}}' \
+        "$1" "$(python3 -c 'import json,sys; print(json.dumps(sys.argv[1]))' "$2")" | "$HOOK" pretool 2>&1); RC=$?
 }
 check() { if [ "$2" = "$3" ]; then printf 'ok    %s (rc=%s)\n' "$1" "$3"; PASS=$((PASS+1));
           else printf 'FAIL  %s (expected rc=%s, got rc=%s)\n      out: %s\n' "$1" "$2" "$3" "$OUT"; FAIL=$((FAIL+1)); fi; }
@@ -65,6 +68,25 @@ run "$MAIN/.clones/worker" "cd $MAIN && git commit -am x  # MAIN_TREE_OK: render
 check "a real escape -> allowed" 0 "$RC"
 run "$MAIN/.clones/worker" "grep -rn MAIN_TREE_OK scripts/ && cd $MAIN && git commit -am x"
 check "the escape token merely GREPPED for -> still refused" 2 "$RC"
+
+echo "--- 4b. THE SHAPE THAT ACTUALLY HAPPENED: standing in the mirror, no cd in the command (170 FR-005) ---"
+# Feature 169 shipped claiming to prevent the reported incident and did not: a bare `cd` into a path
+# inside the project persists into the NEXT Bash call (measured), so the real incident is a cd in one
+# command and the write in another. Every case below returned 0 before FR-005.
+run "$MAIN" "git add -A && git commit -m work"
+check "a commit while STANDING IN the mirror -> refused" 2 "$RC"
+run "$MAIN" "echo x > notes.md"
+check "a redirect while standing in the mirror -> refused" 2 "$RC"
+run "$MAIN" "git log --oneline -5"
+check "a READ while standing in the mirror -> allowed" 0 "$RC"
+run "$MAIN" "git status --short"
+check "git status while standing in the mirror -> allowed" 0 "$RC"
+run "$MAIN/.clones/worker" "git add -A && git commit -m work"
+check "the same write from a CLONE under the mirror -> allowed" 0 "$RC"
+run "$MAIN" "git commit -am x  # MAIN_TREE_OK: render-sync by hand"
+check "standing in the mirror, escaped WITH a reason -> allowed" 0 "$RC"
+run "$MAIN" "git commit -am x  # MAIN_TREE_OK"
+check "standing in the mirror, escape with NO reason -> refused" 2 "$RC"
 
 echo "--- 5. it records, with a rule slug (feature 168) ---"
 rules=$(python3 -c "
