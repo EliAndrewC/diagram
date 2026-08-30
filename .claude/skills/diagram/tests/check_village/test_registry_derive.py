@@ -26,6 +26,17 @@ explicit roster used to provide (clause 14: move the safety property into tests 
    each computes a value that no surviving segment declares as an input, so the gate has been running
    them on every map for nothing. The cut was proved CLOSED before it was made - no surviving segment
    reads a name that only a deleted segment writes.
+   2026-08-30, feature 163 - TWO rows edited (0243, 0546), `checks` only, five names retired. Four of
+   the five were PHANTOMS OR TIER-DEAD and one of those was a defect in this very derivation: a
+   tier-keyed name (`f"{scale}_has_kosatsuba"`) expanded over all five scales without consulting the
+   segment's OWN guard, which the same derivation had already computed - so `capital_has_kosatsuba` was
+   minted for a segment whose guard excludes capital, and could never be emitted by any manifest. The
+   expansion now uses the segment's scales (`_DERIVATION_VERSION` 3). 0243's four
+   (`village_has_no_headman` phantom, `capital`/`city`/`town_has_no_headman` tier-dead) went with a
+   rewrite of its body from `if scale == "village": pass; else: check(f"{scale}_...")` to a constant
+   name under `if scale == "hamlet":` - which is why 0243 also gained a `scales` guard it did not have.
+   A retirement is the edit this oracle cannot catch drifting, so it is spelled out: these five names
+   are gone from `gate_check_names.json` (152 -> 147) and no segment emits them.
 2. Order: the fixture's order is a subsequence of the derived order - the execution contract.
 3. Structural invariants: literal-return shape, unique keys, needs within free, META_CHECKS.
 4. Fire-proofs: every guard demonstrably fails on a synthetic violation (a checker never seen

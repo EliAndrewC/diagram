@@ -84,14 +84,23 @@ def _mutation_targets(node: ast.AST) -> set[str]:
     return out
 
 
-def _bases_of(a: ast.expr) -> list[str] | None:
+def _bases_of(a: ast.expr, scales: tuple[str, ...] | None = None) -> list[str] | None:
     """All check base names an expression can evaluate to, or None if opaque. Handles literals,
     f-strings with a constant prefix, f-strings keyed on the tier (`f"{scale}_..."` expands over
-    the five scales), and conditional expressions over resolvable branches."""
+    `scales`, defaulting to all five), and conditional expressions over resolvable branches.
+
+    EXPAND OVER THE SEGMENT'S OWN SCALES, NOT ALL FIVE (feature 163). `f"{scale}_has_kosatsuba"`
+    sits inside a segment whose leading guard is `scale in ("town", "city", "village", "hamlet")`,
+    and expanding it over every scale minted `capital_has_kosatsuba` - a name no manifest at any
+    scale can make the gate emit, because the guard the analyzer had ALREADY derived excludes
+    capital. The two facts were computed independently and never compared; this passes one into
+    the other. Phantom names are not harmless: they sit in the live pin, so every count of "how
+    many checks there are" is high by their number, and a census of what fires hands them to a
+    deletion task as though they were dead checks rather than names of nothing."""
     if isinstance(a, ast.Constant) and isinstance(a.value, str):
         return [a.value.split("[")[0]]
     if isinstance(a, ast.IfExp):
-        yes, no = _bases_of(a.body), _bases_of(a.orelse)
+        yes, no = _bases_of(a.body, scales), _bases_of(a.orelse, scales)
         return yes + no if yes is not None and no is not None else None
     if isinstance(a, ast.JoinedStr) and a.values:
         first = a.values[0]
@@ -99,7 +108,7 @@ def _bases_of(a: ast.expr) -> list[str] | None:
             return [str(first.value).split("[")[0].rstrip("[")]
         if isinstance(first, ast.FormattedValue) and isinstance(first.value, ast.Name) and first.value.id == "scale":
             suffix = "".join(str(v.value) for v in a.values[1:] if isinstance(v, ast.Constant))
-            return [f"{s}{suffix}".split("[")[0] for s in SCALES]
+            return [f"{s}{suffix}".split("[")[0] for s in (scales or SCALES)]
     return None
 
 
@@ -124,15 +133,18 @@ def _module_emissions(tree: ast.Module) -> dict[str, list[str]]:
     return out
 
 
-def _check_names(node: ast.AST, emissions: dict[str, list[str]]) -> tuple[list[str], int]:
+def _check_names(node: ast.AST, emissions: dict[str, list[str]], scales: tuple[str, ...] | None = None) -> tuple[list[str], int]:
     """(base names from check() calls, count of opaque ones). A Name argument resolves through a
     same-segment `nm = ...` assignment; calls into emitting module helpers contribute their names;
     anything still opaque makes the segment ALWAYS-RUN in targeted mode (conservative: run more,
-    never miss)."""
+    never miss).
+
+    `scales` is the segment's own admitted scales, threaded into `_bases_of` so a `f"{scale}_..."`
+    name expands only over scales the segment can actually run at (feature 163)."""
     assigned: dict[str, list[str]] = {}
     for n in ast.walk(node):
         if isinstance(n, ast.Assign) and len(n.targets) == 1 and isinstance(n.targets[0], ast.Name):
-            b = _bases_of(n.value)
+            b = _bases_of(n.value, scales)
             if b is not None:
                 assigned[n.targets[0].id] = b
     bases: list[str] = []
@@ -143,7 +155,7 @@ def _check_names(node: ast.AST, emissions: dict[str, list[str]]) -> tuple[list[s
                 bases += emissions[n.func.id]
             if n.func.id == "check" and n.args:
                 a = n.args[0]
-                b = _bases_of(a)
+                b = _bases_of(a, scales)
                 if b is None and isinstance(a, ast.Name):
                     b = assigned.get(a.id)
                 if b is not None:
@@ -367,10 +379,13 @@ def _derive_fields_uncached(pkg_dir: Path) -> dict[str, _SegFields]:
         via = set().union(*(helper_mut.get(c, set()) for c in loads), set())
         exposed = _exposed_reads(stmts, set())[0]
         needs = tuple(sorted(((exposed & gate_locals) | (muts & gate_locals) | via) & set(sigs[nm])))
+        # DERIVE THE SCALES FIRST, then use them (feature 163): the tier-keyed name expansion in
+        # `_bases_of` must not mint a name for a scale this segment's own guard excludes.
+        seg_scales = _guard_scales(segdefs[nm])
         checks: list[str] = []
         opaque = 0
         for st in stmts:
-            c, o = _check_names(st, emissions)
+            c, o = _check_names(st, emissions, seg_scales)
             checks += c
             opaque += o
         out[nm] = _SegFields(
@@ -380,6 +395,6 @@ def _derive_fields_uncached(pkg_dir: Path) -> dict[str, _SegFields]:
             needs=needs,
             meta=bool(META_NAMES & loads),
             always=bool(opaque),
-            scales=_guard_scales(segdefs[nm]),
+            scales=seg_scales,
         )
     return out

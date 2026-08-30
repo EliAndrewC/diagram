@@ -1756,11 +1756,7 @@
       ],
       "writes": [],
       "checks": [
-        "capital_has_no_headman",
-        "city_has_no_headman",
-        "hamlet_has_no_headman",
-        "town_has_no_headman",
-        "village_has_no_headman"
+        "hamlet_has_no_headman"
       ],
       "needs": [
         "check",
@@ -7493,7 +7489,6 @@
         "uncovered_kb"
       ],
       "checks": [
-        "capital_has_kosatsuba",
         "city_has_kosatsuba",
         "hamlet_has_kosatsuba",
         "kosatsuba_by_the_road",

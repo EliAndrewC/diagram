@@ -11,7 +11,7 @@
 	 gate-manifest why-placed site-justice crop jogs pack-audit scatter-audit sun-audit new-check timings citybudget help \
 	 notes-census \
 	 ci-status ci-check ci-merge ci-image commit-permitted \
-	 perf-explain perf-confirm perf-audit perf-signoff perf-review perf-profile check-census
+	 perf-explain perf-confirm perf-audit perf-signoff perf-review perf-profile check-census firing-census firing-census-suite
 
 # ---- THE PERFORMANCE BANDS (feature 129 - GUARD_EDIT_OK: adding the review-record operations) ----
 # Any increase (total OR any seed, per ENVIRONMENT) owes a written explanation and a perf-audit
@@ -33,6 +33,14 @@ perf-review:    ## does every environment's newest bookend pair carry the record
 	@$(PERF_REVIEW) check
 check-census:   ## feature 141: which checks re-measure a placer's guarantee (the ledger)   OUT=specs/141-checks-and-corpus-audit/ledger
 	$(RUN).tools.check_census --out "$(or $(OUT),specs/141-checks-and-corpus-audit/ledger)"
+
+firing-census-suite: ## feature 163: the census PLUS the suite sweep - the firing no artifact glob can see
+	@rm -rf $(CURDIR)/.firing-journal && mkdir -p $(CURDIR)/.firing-journal
+	-@$(MAKE) --no-print-directory test JOURNAL=$(CURDIR)/.firing-journal
+	@$(MAKE) --no-print-directory firing-census SUITE=$(CURDIR)/.firing-journal
+
+firing-census:  ## feature 163: which checks does the CURRENT implementation still make fire?   SUITE=<journal dir>
+	$(RUN).tools.firing_census --out "$(or $(OUT),specs/163-checks-into-the-placer/firing-census)" $(if $(SUITE),--suite "$(SUITE)",)
 
 perf-profile:   ## tier 2 evidence: cProfile ONE stage of ONE seed   SEED=25 STAGE=web
 	$(RUN).tools.perf_profile --seed "$(SEED)" --stage "$(STAGE)"
@@ -908,6 +916,14 @@ GATE_EXHAUSTIVE_ENV = L7R_TESTS_EXHAUSTIVE=1 $(if $(COV_FLOORS),L7R_COV_FLOORS=1
 # before collection instead of after it.
 TIER_SELECT = $(if $(COV_FLOORS),,$(if $(filter reference,$(SCOPE_STATE)),--tier $(REFERENCE_TIER) --ignore=tests/tier_town --ignore=tests/tier_city,))
 
+# THE FIRING CENSUS SWEEP (feature 163). A check can be made to FAIL by a test's inline hand-BUILT
+# manifest, which no glob over pool/ can see - `gardens_clear_of_channels` is the specimen: the
+# artifact census reads it NEVER-FIRES while tests/check_village/test_segments_04_homesteads.py
+# makes it fail on every run. So the sweep runs the SUITE with the gate's verdict journal on.
+# It changes what is RECORDED and nothing else (feature 132's rule); the guard that says so is
+# tests/check_village/test_verdict_journal.py, which asserts the verdicts are identical either way.
+JOURNAL_ENV = $(if $(JOURNAL),DIAGRAM_VERDICT_JOURNAL=$(JOURNAL),)
+
 # (GUARD_EDIT_OK: feature 132 - test-full rolls every pool map, so the scope lock refuses it before `test` starts)
 test-full:
 	$(SWEEP_OK)
@@ -943,7 +959,7 @@ test:
 # fixed slice up front, so on a suite whose tests range from 5 ms to 4 s the last worker finishes ~5 s after
 # the rest; worksteal lets idle workers take from busy ones. Measured on quick: 27.5 s -> 22.0 s wall.
 	@$(if $(COV_SCOPE),printf 'coverage: %s\n' "$(COV_SCOPE)";,)
-	@if python3 -c "import xdist" >/dev/null 2>&1; then $(GATE_EXHAUSTIVE_ENV) $(FULL_ENV) python3 -m pytest -n $(XDIST_WORKERS) --dist worksteal $(COV_SCOPE) $(FULL_TREE_IGNORE) $(ROLL_DESELECT) $(TIER_SELECT); else $(GATE_EXHAUSTIVE_ENV) $(FULL_ENV) python3 -m pytest $(COV_SCOPE) $(FULL_TREE_IGNORE) $(ROLL_DESELECT) $(TIER_SELECT); fi; ec=$$?; \
+	@if python3 -c "import xdist" >/dev/null 2>&1; then $(GATE_EXHAUSTIVE_ENV) $(FULL_ENV) $(JOURNAL_ENV) python3 -m pytest -n $(XDIST_WORKERS) --dist worksteal $(COV_SCOPE) $(FULL_TREE_IGNORE) $(ROLL_DESELECT) $(TIER_SELECT); else $(GATE_EXHAUSTIVE_ENV) $(FULL_ENV) $(JOURNAL_ENV) python3 -m pytest $(COV_SCOPE) $(FULL_TREE_IGNORE) $(ROLL_DESELECT) $(TIER_SELECT); fi; ec=$$?; \
 	traced=$(if $(filter --no-cov,$(COV_SCOPE)),,1); \
 	if [ $$ec -ne 0 ]; then [ -n "$$traced" ] && { python3 ../../../scripts/uncovered-in-diff.py || true; }; exit $$ec; fi; \
 	if [ -z "$(COV_FLOORS)" ]; then \

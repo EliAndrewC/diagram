@@ -242,6 +242,38 @@ its best and the check IS the guarantee. `make check-census` measures this per c
 snapshots (the ledger in `specs/141-checks-and-corpus-audit/`); a kept check proves it fires on a
 scripted negative fixture (`tests/gate/test_scripted_fixtures.py`), not on a frozen manifest.
 
+**AND "IT IS NAMED IN A TEST" IS NOT "IT FIRES" (feature 163, 2026-08-30).** `make firing-census` asks the
+other half of the question - which checks does anything the engine can produce TODAY still make FAIL - and it
+reads the gate's OWN emitter (`driver.py`'s verdict journal, which records every FAIL and every WAIVE)
+rather than grepping for a check's name. The measurement that justifies the cost: a name-based census called
+59 checks dead, and folding in one run of the suite with the journal on moved 48 of them out, because a
+check made to fail only by a test's inline hand-BUILT manifest is invisible to any glob over `pool/`. The
+**AND THE 2026-08-30 ADDITION TO THE TABLE ABOVE: TWO CORRECT COMPUTATIONS THAT WERE NEVER PUT BESIDE EACH
+OTHER.** The nine rows in "MEASURE WHAT THE RULE MEASURES" are each a correct measurement of the WRONG
+QUANTITY. Feature 163 produced four more in a single day, and they are a distinct sub-shape worth naming
+separately, because the tell is different: in every one, BOTH quantities were correct and the defect was
+that nothing compared them.
+
+| what was computed | what else was computed | what it cost |
+|---|---|---|
+| the check names the gate EMITS (`stream_source_anchored[0]`) | the check names the pin CARRIES (`stream_source_anchored`) | the firing census called both stream anchors dead and handed them to a deletion task |
+| each segment's admitted SCALES (feature 145) | the tier-keyed names `f"{scale}_..."` expands to | `capital_has_kosatsuba` minted for a segment whose guard excludes capital - a phantom in the live pin |
+| `--out`, a path relative to the REPO root | the cwd `make` actually runs the tool in (the SKILL root) | `check-census` rolled two maps stage by stage, then died at the write; its own default OUT could never have worked |
+| the check names `check_census` sees the gate emit | the roster it compares them against | both stream anchors labeled "no scripted executor - a legacy-tier check" while the gate fires them on every hamlet with a stream |
+
+Three of the four are the SAME two facts (emitted name vs pinned name) found in three different places, which
+is what a missing shared definition looks like. `firing_census.base_name` is now that definition and
+`check_census` imports it rather than restating it.
+
+**The discipline that catches this one is not "measure what the rule measures" - it is: when your code
+computes two things about the same object, make it USE one in the other, or state in a comment why it does
+not.** The scales derivation and the name expansion sat in the same function, one screen apart, for two
+features.
+
+cheap version of that census would have deleted 48 working checks. Its evidence is CLASSIFIED, never pooled -
+`live-map` and `scripted-fixture` are the current engine firing, `hand-fixture` and `test` are not - which is
+the same distinction that retired `bridges_align_with_their_way` and kept `bridges_span_their_water`.
+
 **AND THE CENSUS'S VERDICT IS A CANDIDATE, NOT A RULING (feature 158, 2026-08-29).** It reads the
 manifest, so it can see a later stage changing an input and it CANNOT see a placer that fails
 softly - the two look identical from outside. Before you retire a candidate, read the placer and

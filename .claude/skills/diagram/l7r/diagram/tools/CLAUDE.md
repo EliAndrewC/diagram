@@ -34,6 +34,7 @@ Not `python3 tools/why_placed.py`. A package module run as a loose script puts `
 | Rebuild the frozen negative-fixture corpus in `pool/regressions/` | `make_regressions` |
 | Which modules are on the HAMLET PATH and owe 100% coverage? (derived from the scripted rolls' records; the full run enforces it) | `hamlet_floor` (`make hamlet-floor`) |
 | What does the map look like after each placement stage, and why is that stage there? | `placement_stages` |
+| Which gate checks does anything the engine can produce TODAY still make FAIL - as opposed to which are merely NAMED in a test? | `firing_census` (`make firing-census`, `make firing-census-suite`) |
 
 Each module's own docstring carries the WHY it exists, usually with the incident that produced it.
 Read that before extending one. The skill's [`../CLAUDE.md`](../../../CLAUDE.md) carries the operational
@@ -82,8 +83,9 @@ with the same shape:
 ## Coverage
 
 `pack_audit`, `site_justice` and `scatter_audit` are under the 100% rule - they are pure logic over
-a parsed artifact, and their verdicts ship. `cache_audit`, `cohort_audit`, `crop_map`, `timings`
-and `make_regressions` are not: they are drivers whose whole behavior is subprocess orchestration.
+a parsed artifact, and their verdicts ship. `cache_audit`, `cohort_audit`, `crop_map`, `timings`,
+`check_census`, `firing_census` and `make_regressions` are not: they are drivers whose whole behavior is
+subprocess orchestration or one-shot audits whose verdicts a person reads and acts on.
 The measured set is named module-by-module in `pyproject.toml` rather than by directory, so that
 boundary stays explicit instead of becoming a side effect of which folder a file lands in - a new
 tool dropped in here does not silently owe 100% coverage on the day it arrives.

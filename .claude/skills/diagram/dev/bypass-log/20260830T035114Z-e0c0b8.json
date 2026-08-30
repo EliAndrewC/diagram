@@ -1,0 +1,6 @@
+{
+  "utc": "20260830T035114Z",
+  "guard": "pair-hooks",
+  "what": "gate alone",
+  "reason": "settlement-review is not owed, measured not asserted: git status over pool/ and legacy-hand-authored-pool/ is empty across this entire feature, and spec-fidelity round 6 independently confirmed the engine diff touches not one file under hamletgen/, settlement/, waterfields/ or pool/. No manifest, no gen, no render changed at any point. GM 2026-08-29: settlement-review is not per-map and they read the map themselves - the map on the sheet is byte-identical to the one already reviewed."
+}

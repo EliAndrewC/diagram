@@ -1,0 +1,6 @@
+{
+  "utc": "20260830T014849Z",
+  "guard": "pair-hooks",
+  "what": "gate alone",
+  "reason": "no map moved: this delta adds a read-only verdict journal and a census tool, and no manifest or render changes - the GM"
+}

@@ -151,12 +151,29 @@ def _seg_0242__h_2(*, h: Any = _UNBOUND, houses: Any = _UNBOUND) -> dict[str, An
 
 
 def _seg_0243__village_has_headman(*, check: Any = _UNBOUND, headman: Any = _UNBOUND, scale: Any = _UNBOUND) -> dict[str, Any]:
-    """Gate segment 243 (capital_has_no_headman, city_has_no_headman, hamlet_has_no_headman, town_has_no_headman, village_has_headman, village_has_no_headman) - body verbatim from the legacy gate() (feature 022)."""
-    if scale == "village":
-        pass  # `` retired under feature 141 (the GM's cut); the segment stays for the check it keeps or the value it writes
-    else:
-        # hamlets fall under the village district headman; towns are run by the magistrate
-        check(f"{scale}_has_no_headman", headman is None, f"a {scale} has no peasant headman of its own")
+    """Gate segment 243 (hamlet_has_no_headman) - a hamlet falls under the village district headman.
+
+    FOUR NAMES RETIRED HERE (feature 163, the GM's ruling of 2026-08-30). This body used to read
+    `if scale == "village": pass; else: check(f"{scale}_has_no_headman", ...)`, and that shape minted
+    four names nothing could ever fail:
+
+      - `village_has_no_headman` was a PHANTOM. The emitting branch requires `scale != "village"`, so
+        that exact string could never be built - proven by running the gate at all five scales and
+        reading what it emitted. It reached the live pin because the derived registry expanded the
+        f-string across every scale without evaluating the branch around it. The `pass` was feature
+        141's retirement of `village_has_headman`, which left the name behind.
+      - `capital_has_no_headman`, `city_has_no_headman`, `town_has_no_headman` were reachable, but only
+        on tiers feature 158 left with no producible artifact - the same trade the GM took there:
+        *"there is no reason to see what would happen if we encountered a type of map, which is
+        literally impossible to produce any longer"*. When the town tier converts to scripted
+        generation, this guard is re-derived with it.
+
+    So the guard is now the whole body and the name is a CONSTANT: nothing here can mint a name again.
+    The function keeps its historical label - the registry key is the `0243`, the part after `__` is
+    only a label, and `tests/fixtures/registry_legacy_rows.json` is keyed on it."""
+    if scale == "hamlet":
+        # hamlets fall under the village district headman - they have no headman of their own
+        check("hamlet_has_no_headman", headman is None, "a hamlet has no peasant headman of its own")
     return _kept(locals(), ())
 
 

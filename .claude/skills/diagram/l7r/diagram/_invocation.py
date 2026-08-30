@@ -206,6 +206,7 @@ OPERATIONS: dict[str, tuple[str, str]] = {
     "l7r.diagram.switches": ("switches", "cheap"),  # feature 132: the iteration switches - remote off, scope locked
     "l7r.diagram.tools.perf_profile": ("perf-profile", "expensive"),  # feature 129: tier 2 - cProfile of one stage of one seed
     "l7r.diagram.tools.check_census": ("check-census", "expensive"),
+    "l7r.diagram.tools.firing_census": ("firing-census", "cheap"),  # feature 163: gates the recorded manifests; rolls no map, so the scope lock has nothing to refuse
     "l7r.diagram.tools.hamlet_floor": (
         "hamlet-floor",
         "cheap",

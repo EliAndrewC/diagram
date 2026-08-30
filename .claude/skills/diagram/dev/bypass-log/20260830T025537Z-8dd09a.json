@@ -1,0 +1,6 @@
+{
+  "utc": "20260830T025537Z",
+  "guard": "pair-hooks",
+  "what": "gate alone",
+  "reason": "settlement-review is not owed, and it is measured rather than asserted: git status over pool/ and legacy-hand-authored-pool/ is empty across this entire feature - no manifest, no gen, no render changed at any point. The delta is the check battery, the registry analyzer and three by-hand diagnostics; none of it draws. Per the GM 2026-08-29, settlement-review is not per-map and they read the map themselves - here the map on the sheet is byte-identical to the one already reviewed."
+}
