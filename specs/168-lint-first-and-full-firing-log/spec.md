@@ -11,9 +11,10 @@
 ## The feature, in one sentence
 
 Two things the GM picked off a list of three: the gate runs its 1.8 s of static checks before its
-29 s map roll, on principle rather than for a saving, and the firing log stops covering two guards
-out of twelve so that the next question of the form *"is this guard worth what it costs"* can be
-answered from the record instead of from a transcript replay.
+29 s map roll, on principle rather than for a saving, and every guard BRANCH that refuses, corrects
+or teaches records what it did - naming the RULE that fired, not merely the script - so that the next
+question of the form *"is this guard worth what it costs"* is answered from the record instead of
+from a transcript replay.
 
 ## Why this exists (the GM's words - `request.md` is the authority)
 
@@ -44,8 +45,9 @@ one.
 
 ## Scope, stated exactly
 
-**IN scope**: the phase order of `make done`; `scripts/_guardlog.sh` and the ten guards that do not
-yet record; the census `make audit` prints; the companion suites of every guard touched.
+**IN scope**: the phase order of `make done`; `scripts/_guardlog.sh` and every guard BRANCH that acts
+without recording (FR-002 derives the set); the rule breakdown in the census; the companion suites of
+every guard touched.
 
 **OUT of scope**: what any guard FORBIDS or CORRECTS - not one refusal changes; which phases the gate
 runs, or what any of them do; the gate's rising median, which the GM has handed to another session;
@@ -68,31 +70,60 @@ It does not weaken the rule that the reference settlement gates everything expen
 moved ahead of it are cheaper than it by a factor of 16, and everything expensive still stands
 behind it.
 
-### FR-002 - every guard that refuses or corrects records what it did
+### FR-002 - the criterion, not a hand-list: every branch that acts records
 
-The ten guards that do not yet write to the firing log do so: `batching`, `no-branch`, `discard`,
-`guard-file`, `repo-safety`, `source-block`, `readme`, `clone-sync`, `review-gate` and the
-`pair` stop branch. Each records the same shape the two existing ones do - guard, event, session,
-and the command or path it fired on.
+**Every branch of every guard that BLOCKS, REWRITES, REMINDS, PERMITS or IS ESCAPED records one
+entry**, and the
+in-scope set is DERIVED from `scripts/*-hooks.sh` plus `review-gate.sh` at implementation time rather
+than copied from a list in this document.
 
-`batching` is the reason this is worth doing: 119 firings in six days, more than every other guard
-combined, and not one of them recorded.
+`spec-fidelity` round 1 caught the first draft asserting "two guards out of twelve" and naming ten
+that "do not yet write to the firing log" - a census that predates this session's own feature 164,
+which added recording to five more. Measured in this tree now:
 
-### FR-003 - a firing says WHICH RULE fired, not only which guard
+| already records | on which branches | still uncovered |
+|---|---|---|
+| `measure` | blocked, escaped, reminded | - |
+| `no-poll` | blocked, permitted, rewrote | - |
+| `house-style` | blocked, rewrote | - |
+| `gate` | rewrote | its `-k` subset BLOCK |
+| `make-only` | rewrote | its five refusal verdicts |
+| `pair` | rewrote | its two blocks and the stop branch |
+| `guard-file` | reminded | its block |
+| `batching`, `discard`, `no-branch`, `readme`, `repo-safety`, `source-block`, `clone-sync`, `agent-stall`, `idle-tests`, `review-gate` | nothing | every branch |
 
-Each entry carries a short rule slug naming the branch that fired, because several guards enforce
-more than one thing and "no-poll fired 32 times" cannot tell anybody which of its three rules is
-carrying the cost. `no-poll` distinguishes its busy-wait, disguised-sleep and process-match rules;
-`repo-safety` its force-push, history-rewrite and host-repo rules; `make-only` its five verdicts;
-and so on for any guard with more than one branch.
+So the work is mostly BRANCHES inside guards that already record, plus TEN scripts recording nothing
+at all - including `agent-stall`, `idle-tests` and `review-gate`, which the first draft did not
+mention (`spec-fidelity` rounds 1 and 2 found each of those omissions in a hand-written census, which
+is why the set is derived rather than listed).
+
+**AN ESCAPE IS A BRANCH, and it is the one that matters most.** `measure` records `escaped` for
+`MEASURE_OK`; nothing else records its escape at all, so the escape RATE - the number this project
+has actually acted on, and the reason feature 162 retired a refusal that was escaped 62% of the
+time - is computable for exactly one guard today. A branch that lets a command through on
+`GATE_OK`, `PAIR_OK`, `DISCARD_OK`, `NO_BRANCH_OK`, `REVIEW_GATE_OK`, `SOURCE_EDIT_OK`,
+`GUARD_EDIT_OK` or `POLL_OK` records like any other.
+
+`batching` remains the reason this is worth doing: **119 firings in six days**, more than every other
+guard combined, none of them recorded.
+
+### FR-003 - an entry names the RULE that fired
+
+Every entry written under FR-002 carries a short rule slug naming the branch, because several guards
+enforce more than one thing and *"no-poll fired 32 times"* cannot say which of its three rules is
+carrying the cost. `no-poll` distinguishes busy-wait, disguised-sleep and process-match; `repo-safety`
+force-push, history-rewrite and host-repo; `make-only` its five verdicts; `clone-sync` its five
+refusals. A guard with a single branch records that one slug.
 
 This is the GM's *"record more data for us to be able to use to make improvements in the future"*: the
 unit a future improvement acts on is a RULE, not a script.
 
-### FR-004 - the census reports it
+### FR-004 - the census gains the rule breakdown, and nothing else
 
-`make audit` reports, per guard: firings by event, the escape rate, and the rules that fired most.
-A guard with one rule prints as it does today.
+`make audit` ALREADY prints, per guard, firings by event and the escape rate (feature 162) - so the
+delta is one line, not a new report: the rules that fired most, for any guard with more than one. A
+single-rule guard prints exactly as it does today, and an empty log prints as it does today.
+`spec-fidelity` round 1 caught this requirement re-specifying work that is already done.
 
 ### FR-005 - no suite writes fixture events into the real log
 
@@ -104,7 +135,7 @@ own tests answers nothing, and that has already happened once (24 entries).
 
 - **SC-001**: `make done` runs lint, format and typecheck before rolling the reference settlement, and a failure in any of them is reported without the roll.
 - **SC-002**: the gate's phases and their contents are otherwise unchanged, and `make done` is green.
-- **SC-003**: each of the ten guards writes an entry when it fires, with the rule slug set.
+- **SC-003**: every branch that blocks, rewrites, reminds, permits or is escaped writes an entry when it fires, with the rule slug set - proved by driving each guard's own suite and counting entries by rule, not by reading the source. In particular each escape token (`GATE_OK`, `PAIR_OK`, `DISCARD_OK`, `NO_BRANCH_OK`, `REVIEW_GATE_OK`, `SOURCE_EDIT_OK`, `GUARD_EDIT_OK`, `POLL_OK`, `MEASURE_OK`) produces an `escaped` entry.
 - **SC-004**: `make audit` prints the per-rule breakdown, and prints sensibly when the log is empty.
 - **SC-005**: running every guard suite leaves the real firing log with zero new entries.
 - **SC-006**: not one guard refuses, permits or corrects anything it did not before - every companion suite is green with its existing vectors unchanged apart from the log isolation.
@@ -114,6 +145,6 @@ own tests answers nothing, and that has already happened once (24 entries).
 | decision | class | where |
 |---|---|---|
 | static phases before the map roll | GM ruling, taken on principle with the measured saving (~4 min historically) stated rather than inflated | FR-001 |
-| all twelve guards record | GM ruling; `batching` alone fired 119 times unrecorded | FR-002 |
+| the in-scope set is a CRITERION, derived at implementation time | a hand-list went stale inside one session - the first draft described the tree as it was before feature 164 | FR-002 |
 | an entry names the RULE, not just the guard | the GM's "record more data ... to make improvements"; a future fix acts on a rule | FR-003 |
 | the gate's rising median is NOT touched here | the GM handed it to another session | Scope |
