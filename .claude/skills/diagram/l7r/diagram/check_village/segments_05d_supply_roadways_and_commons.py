@@ -3,8 +3,8 @@
 import math
 from typing import Any
 
-from .common_01_geometry import Poly, Pt, point_in_poly, seg_dist, seg_intersect, segments_cross
-from .common_02_overlap_policy import in_ellipse
+from l7r.diagram.overlap.taxonomy import Poly, Pt, point_in_poly, seg_dist, seg_intersect, segments_cross
+from l7r.diagram.overlap.matrix import in_ellipse
 from .common_03_capacity import _UNBOUND, _kept
 
 # WATERCOURSES JOIN, THEY DO NOT CROSS (GM 2026-07-24, Enokida: "many of the irrigated channels

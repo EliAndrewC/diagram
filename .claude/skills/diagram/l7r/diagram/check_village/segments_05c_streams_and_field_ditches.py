@@ -4,7 +4,7 @@ import math
 from collections.abc import Sequence
 from typing import Any
 
-from .common_01_geometry import Poly, Pt, point_in_poly, rect_corners, seg_dist, segments_cross
+from l7r.diagram.overlap.taxonomy import Poly, Pt, point_in_poly, rect_corners, seg_dist, segments_cross
 from .common_03_capacity import _UNBOUND, _kept
 
 # natural streams: those that declare anchors must connect them (e.g. a forest

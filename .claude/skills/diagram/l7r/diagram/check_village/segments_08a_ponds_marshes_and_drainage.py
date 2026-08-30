@@ -5,8 +5,8 @@ from typing import Any
 
 from l7r.diagram.waterfields import drain_bank_clearance, polyline_cum
 
-from .common_01_geometry import Pt, point_in_poly, seg_dist
-from .common_02_overlap_policy import in_ellipse
+from l7r.diagram.overlap.taxonomy import Pt, point_in_poly, seg_dist
+from l7r.diagram.overlap.matrix import in_ellipse
 from .common_03_capacity import _UNBOUND, _kept
 
 # THE POND CONNECTS TO THE FIELD's WATER, matching its role. A SOURCE pond (the default) must FEED the

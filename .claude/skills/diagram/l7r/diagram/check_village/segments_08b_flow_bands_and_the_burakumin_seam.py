@@ -5,8 +5,8 @@ from typing import Any
 
 from l7r.diagram.waterfields import BANK_MARGIN, polyline_cum, supply_bank_clearance
 
-from .common_01_geometry import Poly, point_in_poly, seg_dist
-from .common_02_overlap_policy import GridIndex
+from l7r.diagram.overlap.taxonomy import Poly, point_in_poly, seg_dist
+from l7r.diagram.overlap.matrix import GridIndex
 from .common_03_capacity import _UNBOUND, _kept
 
 

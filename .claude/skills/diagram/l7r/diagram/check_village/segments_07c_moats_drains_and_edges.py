@@ -3,8 +3,8 @@
 import math
 from typing import Any
 
-from .common_01_geometry import Pt, _struct_rect, point_in_poly, rect_corners, seg_dist, seg_to_rect_dist, segments_cross
-from .common_02_overlap_policy import in_ellipse
+from l7r.diagram.overlap.taxonomy import Pt, _struct_rect, point_in_poly, rect_corners, seg_dist, seg_to_rect_dist, segments_cross
+from l7r.diagram.overlap.matrix import in_ellipse
 from .common_03_capacity import _UNBOUND, _kept
 
 # WATER JOINS WATER AT A CONFLUENCE, NEVER CROSSES IT (GM 2026-07-23, feature 014 endgame: "I can

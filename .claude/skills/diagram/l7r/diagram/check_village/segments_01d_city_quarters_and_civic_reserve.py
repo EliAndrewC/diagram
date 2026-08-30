@@ -7,7 +7,7 @@ segment put its whole body under the hamlet floor. Execution order is by the seg
 
 from typing import Any
 
-from .common_01_geometry import (
+from l7r.diagram.overlap.taxonomy import (
     point_in_poly,
     sweep_hi,
 )

@@ -5,7 +5,7 @@ import json
 import os
 from typing import Any
 
-from .common_01_geometry import Manifest, load
+from l7r.diagram.overlap.taxonomy import Manifest, load
 from .common_03_capacity import DEFAULT_MANIFEST, WAIVER_META_CHECKS
 from .registry import _SEG_DEPS, GATE_SEGMENTS, META_CHECKS
 

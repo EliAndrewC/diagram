@@ -7,8 +7,8 @@ from l7r.diagram.settlement import LABEL_MIN_AIR
 from l7r.diagram.settlement.structures.fixtures import KOSATSUBA_VERGE_FT
 from l7r.diagram.waterfields import dedup_ring, floor_overhang, pointed_ring
 
-from .common_01_geometry import Poly, clip_to_convex, convex_hull, point_in_poly, poly_area, seg_closest, seg_dist
-from .common_02_overlap_policy import GridIndex
+from l7r.diagram.overlap.taxonomy import Poly, clip_to_convex, convex_hull, point_in_poly, poly_area, seg_closest, seg_dist
+from l7r.diagram.overlap.matrix import GridIndex
 from .common_03_capacity import _UNBOUND, _kept
 
 # A magistrate's manor sits at the EDGE of its settlement; its gate faces what it fronts - the

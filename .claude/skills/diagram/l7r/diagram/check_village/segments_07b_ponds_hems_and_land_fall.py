@@ -3,8 +3,8 @@
 import math
 from typing import Any
 
-from .common_01_geometry import Poly, point_in_poly, seg_dist, unit_dir
-from .common_02_overlap_policy import in_ellipse
+from l7r.diagram.overlap.taxonomy import Poly, point_in_poly, seg_dist, unit_dir
+from l7r.diagram.overlap.matrix import in_ellipse
 from .common_03_capacity import _UNBOUND, _kept
 
 # NEAR-RING BAND CAP (2026-07-23): on a WALLED CITY the near ring is the ground within ~800 real ft

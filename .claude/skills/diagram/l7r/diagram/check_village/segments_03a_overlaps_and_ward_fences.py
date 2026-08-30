@@ -6,7 +6,7 @@ from typing import Any
 
 from l7r.diagram.settlement import sat_overlap, torii_wall_conflicts
 
-from .common_01_geometry import (
+from l7r.diagram.overlap.taxonomy import (
     _LABEL_CLASSIFIED,
     _OVERLAP_CLASSIFIED,
     _OVERLAP_SINGLETONS,

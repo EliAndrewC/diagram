@@ -5,7 +5,7 @@ from typing import Any
 
 from l7r.diagram.settlement import label_aabb, paddy_wet_rings, ring_touches
 
-from .common_01_geometry import (
+from l7r.diagram.overlap.taxonomy import (
     _box_hits_poly,
     kiln_quarters,
     point_in_poly,

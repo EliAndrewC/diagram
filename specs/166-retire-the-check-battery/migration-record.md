@@ -211,6 +211,9 @@ differs by tier is the COUNT (a city draws the set: the principal board plus one
 | `watercourse_ends_reach_water` | same module (a trunk end outside the crop joins another course or runs off the frame) | my first draft judged EVERY end and flagged a main whose tip sits 0.3 px off the field outline - the canal arriving, not dangling. The rule's own wording is "outside the crop", and the correction is recorded in the test |
 | `margins_form_continuous_ring` | same module (a 25 px sample grid over the rendered view; at most 35% uncovered) | the hinterland never filled -> RED |
 
+| `features_do_not_overlap` | `tests/gate/test_no_feature_overlaps.py`, on BOTH archetypes; the taxonomy and matrix MOVED into the engine at `l7r/diagram/overlap/` | `matrix_policy` made to forbid every pair -> RED. The classified-extent count is asserted (>100) so it cannot pass on a map the matrix could not read |
+| `scatter_respects_swept_clearings` | same module - an ordering rule wearing an overlap rule's clothes: cover drawn over a reserved clearing is exactly a forbidden pair, and the matrix is what notices | same mutation -> RED |
+
 ## Battery-internal - they go WITH the battery, and owe no destination
 
 These four do not state a rule about a map. They state that the battery's OWN classification tables are

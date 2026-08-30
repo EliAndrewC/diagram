@@ -6,11 +6,11 @@ from typing import Any
 
 from l7r.diagram.settlement import LABEL_AIR_CAP, aligned_tilt, box_gap, label_quad, sat_overlap
 
-from .common_01_geometry import (
+from l7r.diagram.overlap.taxonomy import (
     Poly,
     poly_dist,
 )
-from .common_02_overlap_policy import poly_gap
+from l7r.diagram.overlap.matrix import poly_gap
 from .common_03_capacity import _UNBOUND, _kept
 
 # WHY (farmers build close to the fields they work): settlements.md "Historical grounding". The invariant

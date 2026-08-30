@@ -2,12 +2,12 @@
 
 from typing import Any
 
-from .common_01_geometry import (
+from l7r.diagram.overlap.taxonomy import (
     _MATRIX_OUTSTANDING,
     _MX_NOT_GEOMETRY,
     OVERLAP_CLASS,
 )
-from .common_02_overlap_policy import matrix_violations
+from l7r.diagram.overlap.matrix import matrix_violations
 from .common_03_capacity import (
     _UNBOUND,
     _kept,

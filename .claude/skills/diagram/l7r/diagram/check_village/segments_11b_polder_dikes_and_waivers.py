@@ -3,7 +3,7 @@
 import math
 from typing import Any
 
-from .common_01_geometry import point_in_poly, seg_dist
+from l7r.diagram.overlap.taxonomy import point_in_poly, seg_dist
 from .common_03_capacity import _UNBOUND, WAIVER_META_CHECKS, WAIVER_MIN_REASON, _kept
 
 # A polder's PERIMETER DIKE is an irregular hand-piled EARTHWORK, not a ruled line (GM 2026-07-22,

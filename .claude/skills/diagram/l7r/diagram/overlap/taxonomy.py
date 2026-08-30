@@ -1,4 +1,4 @@
-"""Shared gate helpers (geometry): Manifest, Pt, Poly, Check, load, rect_corners, _struct_rect, _box_hits_poly, ... - bodies verbatim from check_village.py (feature 024 package split; SCC-packed, see split_package.py)."""
+"""Overlap taxonomy (was: shared gate helpers (geometry): Manifest, Pt, Poly, Check, load, rect_corners, _struct_rect, _box_hits_poly, ... - bodies verbatim from check_village.py (feature 024 package split; SCC-packed, see split_package.py)."""
 
 import json
 import math

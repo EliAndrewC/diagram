@@ -5,7 +5,7 @@ from typing import Any
 
 from l7r.diagram.settlement import FARMHOUSE_EAVE_GAP_FT, surface_water_dist
 
-from .common_01_geometry import (
+from l7r.diagram.overlap.taxonomy import (
     _OVERLAP_STRUCTS,
     _struct_rect,
     point_in_poly,
@@ -14,7 +14,7 @@ from .common_01_geometry import (
     segments_cross,
     within_edge_gap,
 )
-from .common_02_overlap_policy import in_ellipse
+from l7r.diagram.overlap.matrix import in_ellipse
 from .common_03_capacity import _UNBOUND, _kept
 
 

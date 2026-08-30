@@ -4,7 +4,7 @@ from typing import Any
 
 from l7r.diagram.waterfields import hem_on_paddy
 
-from .common_01_geometry import (
+from l7r.diagram.overlap.taxonomy import (
     Poly,
     point_in_poly,
     seg_dist,

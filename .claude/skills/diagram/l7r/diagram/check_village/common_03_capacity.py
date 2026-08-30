@@ -6,7 +6,7 @@ from l7r.diagram.dwellings import BUSINESS_KINDS as BUSINESS_KINDS
 from l7r.diagram.dwellings import DWELLING_KINDS as DWELLING_KINDS
 from l7r.diagram.dwellings import HOUSEHOLD as HOUSEHOLD
 
-from .common_01_geometry import Manifest
+from l7r.diagram.overlap.taxonomy import Manifest
 
 # DWELLING_KINDS, BUSINESS_KINDS and HOUSEHOLD are RE-EXPORTED above, from the leaf
 # `l7r/diagram/dwellings.py`. They moved there because the interactive page's place card needs the

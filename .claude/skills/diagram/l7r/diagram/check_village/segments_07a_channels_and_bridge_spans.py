@@ -3,8 +3,8 @@
 import math
 from typing import Any
 
-from .common_01_geometry import Poly, Pt, point_in_poly, poly_dist, seg_dist, seg_intersect, segments_cross
-from .common_02_overlap_policy import FOOT_BANK_REACH, _ditch_plankable, _footbridge_useful_ground
+from l7r.diagram.overlap.taxonomy import Poly, Pt, point_in_poly, poly_dist, seg_dist, seg_intersect, segments_cross
+from l7r.diagram.overlap.matrix import FOOT_BANK_REACH, _ditch_plankable, _footbridge_useful_ground
 from .common_03_capacity import _UNBOUND, _kept
 
 # WATER-SERVICE FURNITURE SITS ON ITS WATER (GM 2026-08-10, four features caught beached

@@ -5,7 +5,7 @@ from typing import Any
 
 from l7r.diagram.settlement import bridge_crossed_waters
 
-from .common_01_geometry import seg_dist
+from l7r.diagram.overlap.taxonomy import seg_dist
 from .common_03_capacity import _UNBOUND, _kept
 
 # A DECK LANDS PAST ITS BANKS (GM 2026-08-09, tightened from ends-reach-the-edge): every

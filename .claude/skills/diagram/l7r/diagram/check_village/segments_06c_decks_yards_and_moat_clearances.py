@@ -3,7 +3,7 @@
 import math
 from typing import Any
 
-from .common_01_geometry import Pt, seg_closest, seg_dist, segments_cross
+from l7r.diagram.overlap.taxonomy import Pt, seg_closest, seg_dist, segments_cross
 from .common_03_capacity import _UNBOUND, _kept
 
 

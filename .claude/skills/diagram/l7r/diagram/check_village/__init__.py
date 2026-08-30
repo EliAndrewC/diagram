@@ -35,23 +35,23 @@ different objects), and the consumed surface (census:
 specs/027-init-star-imports/census.md) keeps resolving.
 """
 
-from .common_01_geometry import *
-from .common_01_geometry import (
+from l7r.diagram.overlap.taxonomy import *
+from l7r.diagram.overlap.taxonomy import (
     _LABEL_EXEMPT as _LABEL_EXEMPT,
 )
-from .common_01_geometry import (
+from l7r.diagram.overlap.taxonomy import (
     _LABEL_GROUP as _LABEL_GROUP,
 )
-from .common_01_geometry import (
+from l7r.diagram.overlap.taxonomy import (
     _MATRIX_OUTSTANDING as _MATRIX_OUTSTANDING,
 )
-from .common_01_geometry import (
+from l7r.diagram.overlap.taxonomy import (
     _OVERLAP_EXEMPT as _OVERLAP_EXEMPT,
 )
-from .common_01_geometry import (
+from l7r.diagram.overlap.taxonomy import (
     _OVERLAP_STRUCTS as _OVERLAP_STRUCTS,
 )
-from .common_02_overlap_policy import *
+from l7r.diagram.overlap.matrix import *
 from .common_03_capacity import *
 from .common_04_urban_policy import _ward_interior as _ward_interior
 from .common_04_urban_policy import city_capacity as city_capacity

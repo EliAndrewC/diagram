@@ -2,8 +2,8 @@
 
 from typing import Any
 
-from .common_01_geometry import Pt, point_in_poly, seg_dist
-from .common_02_overlap_policy import edge_dist, in_ellipse
+from l7r.diagram.overlap.taxonomy import Pt, point_in_poly, seg_dist
+from l7r.diagram.overlap.matrix import edge_dist, in_ellipse
 from .common_03_capacity import _UNBOUND, _kept
 
 # PRECINCT: a graveyard is a temple parish ground - it sits by a temple. (At CITY scale only an

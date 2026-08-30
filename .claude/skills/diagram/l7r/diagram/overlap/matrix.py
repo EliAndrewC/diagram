@@ -1,4 +1,4 @@
-"""Shared gate helpers (overlap policy): matrix_violations, check_ring_road_clear, matrix_extents, GridIndex, forest_reveal_x, torii_halfbox, FOREST_REVEAL_FT, CANOPY_STRUCT_KEYS, ... - bodies verbatim from check_village.py (feature 024 package split; SCC-packed, see split_package.py)."""
+"""The overlap MATRIX (was: shared gate helpers, overlap policy): matrix_violations, check_ring_road_clear, matrix_extents, GridIndex, forest_reveal_x, torii_halfbox, FOREST_REVEAL_FT, CANOPY_STRUCT_KEYS, ... - bodies verbatim from check_village.py (feature 024 package split; SCC-packed, see split_package.py)."""
 
 import math
 from collections.abc import Mapping
@@ -7,7 +7,7 @@ from typing import Any
 from l7r.diagram.settlement import sat_overlap
 from l7r.diagram.waterfields import taper_w, worth_planking
 
-from .common_01_geometry import (
+from .taxonomy import (
     _MATRIX_PARENT_FIELD,
     _MATRIX_PERMISSIVE,
     _MX_FIXTURE_BOX,

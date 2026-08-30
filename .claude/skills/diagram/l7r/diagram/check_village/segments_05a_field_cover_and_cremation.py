@@ -2,7 +2,7 @@
 
 from typing import Any
 
-from .common_01_geometry import point_in_poly
+from l7r.diagram.overlap.taxonomy import point_in_poly
 from .common_03_capacity import _UNBOUND, _kept
 
 

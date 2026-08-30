@@ -4,7 +4,7 @@ import math
 from collections.abc import Sequence
 from typing import Any
 
-from .common_01_geometry import (
+from l7r.diagram.overlap.taxonomy import (
     Manifest,
     Poly,
     Pt,
@@ -15,7 +15,7 @@ from .common_01_geometry import (
     seg_dist,
     sweep_hi,
 )
-from .common_02_overlap_policy import in_ellipse
+from l7r.diagram.overlap.matrix import in_ellipse
 from .common_03_capacity import DWELLING_KINDS, RESERVE_CAP_FRAC, RHO_CANONICAL
 
 

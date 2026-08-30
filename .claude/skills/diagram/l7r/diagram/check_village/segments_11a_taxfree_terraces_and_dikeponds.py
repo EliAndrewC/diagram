@@ -4,7 +4,7 @@ from typing import Any
 
 from l7r.diagram.settlement import seg_in_ellipse_core
 
-from .common_01_geometry import poly_area
+from l7r.diagram.overlap.taxonomy import poly_area
 from .common_03_capacity import _UNBOUND, _kept
 
 # Tax-free (temple/monk glebe) plots are OPTIONAL - marking them on the map is a choice, not a

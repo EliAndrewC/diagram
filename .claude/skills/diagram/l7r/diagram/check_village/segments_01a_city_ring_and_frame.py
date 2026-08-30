@@ -5,7 +5,7 @@ from typing import Any
 
 from l7r.diagram.settlement import crop_boxes
 
-from .common_02_overlap_policy import CANOPY_STRUCT_KEYS, GridIndex, matrix_extents
+from l7r.diagram.overlap.matrix import CANOPY_STRUCT_KEYS, GridIndex, matrix_extents
 from .common_03_capacity import (
     _UNBOUND,
     _kept,
