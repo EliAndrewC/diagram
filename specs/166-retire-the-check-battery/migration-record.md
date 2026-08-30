@@ -100,6 +100,9 @@ differs by tier is the COUNT (a city draws the set: the principal board plus one
 
 | `ways_cross_water_on_a_deck` | `tests/settlement/test_bridge_sources.py` | the one-deck dedup removed from `bridge()` -> RED; undrawn conduits offered -> RED |
 
+| `sluice_gates_on_water` | `tests/settlement/test_sluice_gates.py` | the gate's `sluice_gates` append removed -> RED |
+| `channel_gates_at_water_junctions` (recording half) | same module | same mutation -> RED; the span mutation -> RED |
+
 ## Still owed
 
 The remaining checks, by group, are in `destinations.json`. The split that governs the work:
