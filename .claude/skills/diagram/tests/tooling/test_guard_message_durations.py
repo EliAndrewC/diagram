@@ -1,4 +1,4 @@
-"""No guard MESSAGE states how long a command takes (feature 161, GM 2026-08-30).
+"""No guard MESSAGE states how long a command takes (feature 162, GM 2026-08-30).
 
 *"Also I think those numbers for `make quick` are wrong and outdated, though the attempt to get a
 savings is still worthwhile."* They were, and worse than outdated: `gate-hooks.sh` said the gate cost

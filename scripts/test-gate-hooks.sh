@@ -69,7 +69,7 @@ run "$(bash_ev 'pytest test_settlement.py -k foo')"
 check "another session is unaffected" ok $?
 teardown
 
-# GUARD_EDIT_OK: feature 161 - the REFUSAL IS RETIRED and its two vectors go with it, deleted rather
+# GUARD_EDIT_OK: feature 162 - the REFUSAL IS RETIRED and its two vectors go with it, deleted rather
 # than left passing vacuously (GM 2026-08-30: *"does that mean our tooling should detect when both are
 # being run and then combine them into `make done` automatically instead of rejecting?"*). Measured
 # cause: 37 firings of that refusal, 23 escaped with GATE_OK in the very next call, to save one warm
@@ -105,7 +105,7 @@ run "$(bash_ev 'make quick')"; check "quick alone ok" ok $?
 run "$(bash_ev 'make done')"; check "done alone ok" ok $?
 teardown
 
-echo "8b. the rewrite is RECORDED, and never fires on a mention (feature 161)"
+echo "8b. the rewrite is RECORDED, and never fires on a mention (feature 162)"
 setup
 GL=$(mktemp -d); export GUARD_LOG_DIR="$GL"
 run "$(bash_ev 'make quick && make done')"

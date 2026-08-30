@@ -331,7 +331,7 @@ tables byte-identical. The premise was wrong too - the "coverage doubles the gat
 a baseline whose roll cache was cold; on a warm tree the tracer's share is small.
 
 
-## A directory-prune tuple keyed on NAMES is a trap for any new top-level tree (feature 161, 2026-08-30)
+## A directory-prune tuple keyed on NAMES is a trap for any new top-level tree (feature 162, 2026-08-30)
 
 `render_cache.engine_fingerprint()` and `gencache.engine_files()` both walk the skill directory and
 decide what counts as ENGINE SOURCE by pruning directories BY NAME:
@@ -340,7 +340,7 @@ decide what counts as ENGINE SOURCE by pruning directories BY NAME:
 dirnames[:] = sorted(d for d in dirnames if d not in ("pool", "wip", "tests", "__pycache__") ...)
 ```
 
-Feature 161 added a second pool tree, `legacy-hand-authored-pool/`. It is not the string `pool`, so
+Feature 162 added a second pool tree, `legacy-hand-authored-pool/`. It is not the string `pool`, so
 without being added to both tuples its 18 frozen generators would have been collected as engine
 modules and folded into every map's cache key. What that costs, in order of how long it takes to
 notice: every live map's stamp goes stale at once, so the next render-sync regenerates the whole
@@ -358,7 +358,7 @@ and there the legacy tree had to be ADDED, because that list answers a different
 this engine source" (a map generator is not) but "does a change here owe the paid gate". Two lists,
 same literal, opposite corrections.
 
-## "The record already covers it" is worth checking against what the check can actually SEE (feature 161)
+## "The record already covers it" is worth checking against what the check can actually SEE (feature 162)
 
 `tests/test_villages.py`'s stale-render sweep ends in `assert checked` and its message says *"no
 LIVE hamlet render to check"*. That message had not described the test's behavior since the
@@ -374,7 +374,7 @@ exactly like a check that passes" failure in its purest form. Second, **the code
 disagreed, and only counting the files on disk said which one was true** - reading the test would
 have confirmed the wrong belief.
 
-## A git worktree's `.git` is a FILE, and the baseline procedure lives in one (feature 161)
+## A git worktree's `.git` is a FILE, and the baseline procedure lives in one (feature 162)
 
 Principle XIII mandates taking the regression baseline in a detached worktree. In a worktree `.git`
 is a file containing a `gitdir:` line, so any code doing `root / ".git" / name` raises
@@ -386,7 +386,7 @@ failed noisily-but-non-fatally, which is the shape that gets scrolled past in a 
 that the file-not-directory case was already half-handled in that same module (`_cache_path` guarded
 `.is_dir()` and quietly gave up), which is why only one of the two paths crashed: **a guard applied
 at one call site and not its sibling reads as "handled" until the other one runs.**
-## `setsid` alone does not detach a long make run - `setsid --fork` does (2026-08-30, feature 161)
+## `setsid` alone does not detach a long make run - `setsid --fork` does (2026-08-30, feature 162)
 
 A `make done` started as `setsid nohup bash -c '...' &` from a Bash tool call died three minutes in
 with `make: *** [Makefile:86: done] Terminated`, in the middle of `hooks-test`, having passed lint,

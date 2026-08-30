@@ -1,6 +1,6 @@
 # Implementation Plan: What a Guard Block Costs, and What It Saves
 
-**Feature**: 161-guard-block-economics | **Spec**: [`spec.md`](spec.md) | **Created**: 2026-08-30
+**Feature**: 162-guard-block-economics | **Spec**: [`spec.md`](spec.md) | **Created**: 2026-08-30
 
 ## The mechanism this feature turns on, PROVED before it was planned
 

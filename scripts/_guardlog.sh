@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
-# _guardlog.sh - what a guard did, recorded so the next tuning starts from a total (feature 161).
+# _guardlog.sh - what a guard did, recorded so the next tuning starts from a total (feature 162).
 #
 # WHY (GM 2026-08-30): *"I notice I've been seeing a lot of this in the output of my claude code
 # sessions over time ... Given how expensive that is, should we make it so we start blocking at 2 in
 # a row instead of 3 in a row?"* Answering that took a replay of 715 MB of session transcripts,
 # because no guard in this repository records anything when it fires. `docs/review-ledger.md` exists
 # so that "is it pulling its weight" is a TOTAL for the review subagents; this is the same thing for
-# the two guards feature 161 touches.
+# the two guards feature 162 touches.
 #
 #   guard_log <guard> <blocked|escaped|rewrote|reminded> <detail>
 #

@@ -1,6 +1,6 @@
 # Feature Specification: What a Guard Block Costs, and What It Saves
 
-**Feature Branch**: none - this project does not use feature branches (`SPECIFY_FEATURE=161-guard-block-economics`)
+**Feature Branch**: none - this project does not use feature branches (`SPECIFY_FEATURE=162-guard-block-economics`)
 
 **Created**: 2026-08-30
 

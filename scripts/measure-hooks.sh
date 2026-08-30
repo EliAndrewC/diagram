@@ -47,7 +47,7 @@ MODE=${1:-}
 INPUT=$(cat 2>/dev/null || true)
 STATE_DIR=${MEASURE_STATE_DIR:-/tmp/claude-measure}
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-# GUARD_EDIT_OK: feature 161, at the GM's request - this guard now records what it does, and asks the
+# GUARD_EDIT_OK: feature 162, at the GM's request - this guard now records what it does, and asks the
 # run log what a target costs instead of quoting a number typed in August.
 # shellcheck source=/dev/null
 . "$HERE/_guardlog.sh"
@@ -55,7 +55,7 @@ HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 # 3 in a row?"* So the SECOND expensive measurement in a streak is refused, not the third.
 #
 # WHAT THAT COSTS, recorded rather than hidden. Replaying this project's transcripts through this
-# state machine (specs/161-guard-block-economics/measure/replay.py) says the tighter budget roughly
+# state machine (specs/162-guard-block-economics/measure/replay.py) says the tighter budget roughly
 # doubles the firings - 30 -> 56 over the recorded history - and 5 of the 9 real firings so far ended
 # with the measurement running anyway (4 via MEASURE_OK). A firing spends a model round trip, so a
 # budget only pays through DETERRENCE. What makes this one pay is the reminder below, which arrives
@@ -89,7 +89,7 @@ case "$MODE" in
         ;;
     esac
     [ "$TOOL" = Bash ] || exit 0
-    # GUARD_EDIT_OK: feature 161 - the escape is RECORDED, so the escape rate is a total rather than
+    # GUARD_EDIT_OK: feature 162 - the escape is RECORDED, so the escape rate is a total rather than
     # an impression. The escape itself is unchanged; nothing is blocked that was not blocked before.
     case "$CMD" in *MEASURE_OK*) guard_log measure escaped "$(guard_cmd)"; : > "$STATE"; exit 0 ;; esac
     case "$CMD" in *"git commit"*) : > "$STATE"; exit 0 ;; esac
@@ -99,7 +99,7 @@ case "$MODE" in
         N=$(( $(count) + 1 ))
         if [ "$N" -gt "$BUDGET" ]; then
           : > "$STATE"   # block ONCE - re-issuing goes straight through, so this cannot deadlock
-          # GUARD_EDIT_OK: feature 161 - the budget dropped to 1 at the GM's request, so the message
+          # GUARD_EDIT_OK: feature 162 - the budget dropped to 1 at the GM's request, so the message
           # names the SECOND run rather than the third, and the firing is recorded.
           guard_log measure blocked "$(guard_cmd)"
           cat >&2 <<'MSG'
@@ -108,7 +108,7 @@ BLOCKED: that is the second EXPENSIVE measurement in a row with no engine change
 This is the expensive one; `make quick`, `make test-file` and `make cov-file` are the cheap loop and are
 never blocked, however often they run. Measured on feature 146: 20 test-full runs, about an hour, almost all
 of it re-deriving a coverage worklist the session already had written down.
-(GUARD_EDIT_OK: feature 161 - the durations that used to be quoted here are gone rather than restated. A
+(GUARD_EDIT_OK: feature 162 - the durations that used to be quoted here are gone rather than restated. A
 number typed into a guard message in August is wrong in September and nothing tells anybody; `make audit`
 and `scripts/_gatecost.py` answer from the run log instead.)
 

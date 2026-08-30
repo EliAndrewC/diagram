@@ -59,7 +59,7 @@ VERDICT=$("$HERE/_hookmatch.py" 2>/dev/null || echo ok)
 block() { # reason, then the make target to use instead
   printf 'BLOCKED: %s\n\n' "$1" >&2
   printf 'Run this instead:  %s\n\n' "$2" >&2
-  # GUARD_EDIT_OK: feature 161 - the LADDER LOSES ITS HARDCODED NUMBERS (GM 2026-08-30: *"I think
+  # GUARD_EDIT_OK: feature 162 - the LADDER LOSES ITS HARDCODED NUMBERS (GM 2026-08-30: *"I think
   # those numbers for `make quick` are wrong and outdated"*). They were: this message quoted "done
   # ~75 s locked / ~4.5 min unlocked (measured 2026-08-26)" while the scope had been UNLOCKED since
   # 2026-08-27 and the gate's own run log put the median at 111 s. The ordering is what a session
@@ -92,7 +92,7 @@ case "$VERDICT" in
   engine-entry-point)
     block "an engine entry point run outside make." "make <target>   (see future-work/ and the Makefile for the operation list)" ;;
   bare-pytest)
-    # GUARD_EDIT_OK: feature 161 - the two hardcoded durations are gone (see the note in block()).
+    # GUARD_EDIT_OK: feature 162 - the two hardcoded durations are gone (see the note in block()).
     block "pytest run directly rather than through make. Its coverage floors only hold under the make targets that set them up." "make quick   (stops at the first failure)  or  make done   (the gate)" ;;
   inline-override)
     block "an override supplied on the command line, which skips the prompt whose default answer is CANCEL. That prompt is the whole mechanism: it exists to be answered, not pre-empted." "make <target>   without the override, and answer the prompt if it appears" ;;

@@ -38,7 +38,7 @@ INPUT=$(cat 2>/dev/null || true)
 STATE_DIR=${GATE_STATE_DIR:-/tmp/claude-gate}
 
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"   # `_hookmatch.py` lives beside this hook
-# GUARD_EDIT_OK: feature 161 - this guard now RECORDS what it does (blocked, rewrote, escaped), so
+# GUARD_EDIT_OK: feature 162 - this guard now RECORDS what it does (blocked, rewrote, escaped), so
 # "is it worth what it costs" is a total rather than an impression. See scripts/_guardlog.sh.
 # shellcheck source=/dev/null
 . "$HERE/_guardlog.sh"
@@ -76,7 +76,7 @@ case "$MODE" in
     # reach for the escape as a matter of routine, which costs more than the duplication it prevents.
     TARGETS=" $(printf '%s' "$INPUT" | "$HERE/_hookmatch.py" targets 2>/dev/null | tr '\n' ' ')"
 
-    # QUICK AND DONE IN ONE COMMAND ARE COMBINED, NOT REJECTED (GM 2026-08-30, feature 161).
+    # QUICK AND DONE IN ONE COMMAND ARE COMBINED, NOT REJECTED (GM 2026-08-30, feature 162).
     #
     # GUARD_EDIT_OK: FIXING A GUARD THAT FIRES ON CORRECT WORK, at the GM's request and on measured
     # evidence. From 2026-08-26 to 2026-08-30 this refused such a command with exit 2. The refusal
@@ -119,7 +119,7 @@ print(json.dumps({"hookSpecificOutput": {
         if [ -f "$STATE" ]; then
           WAS=$(cat "$STATE" 2>/dev/null || true)
           rm -f "$STATE"          # block ONCE - re-issuing the gate goes straight through
-          # GUARD_EDIT_OK: feature 161 - the message loses its two hardcoded durations ("a full
+          # GUARD_EDIT_OK: feature 162 - the message loses its two hardcoded durations ("a full
           # 3.9-minute gate cycle", "~45s") and names the make target rather than a bare pytest line.
           # The incident that set this rule is still recorded in the WHY at the top of this file,
           # where a date sits beside it; a number inside a MESSAGE has nothing to date it and goes

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""What a make target has ACTUALLY been costing, from the recorded runs (feature 161).
+"""What a make target has ACTUALLY been costing, from the recorded runs (feature 162).
 
     _gatecost.py done          -> e.g. "137" (seconds), or nothing at all
     _gatecost.py done full     -> the same question for one recorded SCOPE

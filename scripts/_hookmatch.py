@@ -107,7 +107,7 @@ def classify(cmd: str) -> str:
     return "ok"
 
 
-# ---- COMBINE, DO NOT REJECT (feature 161) ---------------------------------------------------
+# ---- COMBINE, DO NOT REJECT (feature 162) ---------------------------------------------------
 #
 # WHY (GM 2026-08-30): *"does that mean our tooling should detect when both are being run and then
 # combine them into `make done` automatically instead of rejecting?"* It does. `gate-hooks.sh` used

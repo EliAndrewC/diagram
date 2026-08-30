@@ -1,4 +1,4 @@
-# Tasks: What a Guard Block Costs, and What It Saves (feature 161)
+# Tasks: What a Guard Block Costs, and What It Saves (feature 162)
 
 Every task here is `research: procedure`: this feature changes how the TOOLING behaves - what a
 guard does when it fires, what a make target runs first, what gets recorded. Nothing here is a claim

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Replay this project's Claude Code transcripts to price a guard.
 
-Feature 161. Every number in ../research.md comes from here. Run it from anywhere:
+Feature 162. Every number in ../research.md comes from here. Run it from anywhere:
 
     python3 measure/replay.py budgets   # R1: blocks and runs at each measure-hook budget
     python3 measure/replay.py blocks    # R3: what a session did in the turn after each block
