@@ -260,3 +260,35 @@ def test_a_rotated_parcel_is_measured_by_the_bbox_the_check_measures() -> None:
     # wholly outside keeps nothing
     assert not parcel_bbox_ok(-500.0, 500.0, 100.0, 100.0, *axis, frame)
     assert 0.0 < WOODLAND_BBOX_FLOOR < 1.0
+
+
+def test_bamboo_blocked_refuses_ground_inside_the_crop() -> None:
+    """THE PLACER'S OWN GUARANTEE, which the retired `bamboo_stands_clear_of_paddies` check used to
+    re-measure on the finished map (feature 166).
+
+    A take-yabu grows on the dry margin above the rice, never in it. The placer already refuses it: a
+    candidate whose sample lands inside a crop polygon (a flooded paddy OR a dry plot - the distinction
+    cost a settlement-review finding on Mizuguchi, where a stand 12.2 ft inside a soybean plot passed a
+    gate that read paddy outlines alone) is blocked. Asserting that here, on two polygons and a point,
+    is the same guarantee measured where it is made instead of once per map afterwards."""
+    from l7r.diagram.hamletgen.hinterland import bamboo_blocked
+
+    extent = (1000.0, 1000.0)
+    nowhere = (0.0, 0.0, 0.0, 0.0)
+    paddy = [(400.0, 400.0), (600.0, 400.0), (600.0, 600.0), (400.0, 600.0)]
+
+    assert bamboo_blocked(500.0, 500.0, extent, nowhere, [], [], [(paddy, 0.0)], None, 30.0), "a culm standing in the rice"
+    assert not bamboo_blocked(300.0, 300.0, extent, nowhere, [], [], [(paddy, 0.0)], None, 30.0), "the dry margin is open ground"
+
+
+def test_bamboo_blocked_keeps_its_pad_off_the_crop_edge() -> None:
+    """The refusal is not merely 'inside the outline' - the seat scan holds a pad clear of it, so a stand
+    hugging the bund is refused too. Without the pad a culm drawn to its full width overhangs the water it
+    is supposed to stand above."""
+    from l7r.diagram.hamletgen.hinterland import bamboo_blocked
+
+    extent = (1000.0, 1000.0)
+    nowhere = (0.0, 0.0, 0.0, 0.0)
+    paddy = [(400.0, 400.0), (600.0, 400.0), (600.0, 600.0), (400.0, 600.0)]
+    assert bamboo_blocked(390.0, 500.0, extent, nowhere, [], [], [(paddy, 20.0)], None, 30.0), "10 ft outside, inside a 20 ft pad"
+    assert not bamboo_blocked(370.0, 500.0, extent, nowhere, [], [], [(paddy, 20.0)], None, 30.0), "30 ft outside, clear of the pad"

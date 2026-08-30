@@ -8171,30 +8171,6 @@
       "always": false
     },
     {
-      "name": "_seg_0618_502__bamboo_stands_clear_of_paddies",
-      "free": [
-        "M",
-        "check",
-        "meta",
-        "scale",
-        "bamboo_stands_clear_of_paddies_bad"
-      ],
-      "writes": [
-        "bamboo_stands_clear_of_paddies_bad"
-      ],
-      "checks": [
-        "bamboo_stands_clear_of_paddies"
-      ],
-      "needs": [
-        "M",
-        "bamboo_stands_clear_of_paddies_bad",
-        "check",
-        "scale"
-      ],
-      "meta": false,
-      "always": false
-    },
-    {
       "name": "_seg_0618_503__tree_crowns_not_subsumed",
       "free": [
         "M",

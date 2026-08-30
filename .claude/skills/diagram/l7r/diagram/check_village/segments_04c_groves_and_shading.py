@@ -643,34 +643,6 @@ def _seg_0617__captions_clear_the_ways_they_stand_on(*, M: Any = _UNBOUND, check
 # gate time, not at import), and keep the `_kept` tuple a LITERAL of the names this body binds.
 
 
-def _seg_0618_502__bamboo_stands_clear_of_paddies(
-    *,
-    M: Any = _UNBOUND,
-    check: Any = _UNBOUND,
-    meta: Any = _UNBOUND,
-    scale: Any = _UNBOUND,
-    bamboo_stands_clear_of_paddies_bad: Any = _UNBOUND,
-) -> dict[str, Any]:
-    """Gate segment (bamboo_stands_clear_of_paddies) - no vertex of a bamboo stand lies inside a paddy outline: a take-yabu stands on the dry margin above the rice, never in it (feature 133 T47)."""
-    if scale in ("hamlet", "village", "town"):
-        bamboo_stands_clear_of_paddies_bad = []
-        _bcp_fields = [[(float(a), float(b)) for a, b in f["outline"]] for f in (M.get("fields") or []) if f.get("outline")]
-        # THE DRY CROP IS CROP TOO (settlement-review, Mizuguchi, feature 145): this read paddy outlines alone, so a
-        # take-yabu standing 12.2 ft inside a soybean plot passed the gate green. The placer refuses both now
-        # (hamletgen.bamboo_seats); the check measures both, so placement and its check read the same ground.
-        _bcp_fields += [[(float(a), float(b)) for a, b in (o.get("poly") or [])] for o in (M.get("dry_plots") or []) if len(o.get("poly") or []) >= 3]
-        for _b in M.get("bamboo_stands") or []:
-            _bp = [(float(a), float(c)) for a, c in (_b.get("poly") or [])]
-            if any(point_in_poly(q[0], q[1], fp) for fp in _bcp_fields for q in _bp):
-                bamboo_stands_clear_of_paddies_bad.append((round(float(_b["x"])), round(float(_b["y"]))))
-        check(
-            "bamboo_stands_clear_of_paddies",
-            not bamboo_stands_clear_of_paddies_bad,
-            f"bamboo stand(s) at {bamboo_stands_clear_of_paddies_bad[:3]} stand in the crop (a flooded paddy or a dry plot) - a take-yabu grows on the margin, not among the beans; the seat scan keeps 12 ft off the outline (hamletgen.bamboo_seats)",
-        )
-    return _kept(locals(), ("bamboo_stands_clear_of_paddies_bad",))
-
-
 # WHY: <one paragraph - what the research found, the decision it drove, the departure taken>.
 # Declare EVERY input the body reads as a keyword parameter (an undeclared one is a NameError at
 # gate time, not at import), and keep the `_kept` tuple a LITERAL of the names this body binds.

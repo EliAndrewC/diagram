@@ -412,14 +412,6 @@ def test_village_groves_visibly_stocked_fires_on_a_grove_that_was_never_drawn():
     assert "village_groves_visibly_stocked" not in check_village.gate(degenerate, verbose=False, only=only)
 
 
-def test_bamboo_stands_clear_of_paddies_fires_and_passes():
-    """A take-yabu stands on the dry margin, never in the rice (feature 133 T47)."""
-    stand = {"x": 500.0, "y": 300.0, "w": 48.0, "h": 34.0, "rot": 0, "role": "homestead", "poly": [[476, 283], [524, 283], [524, 317], [476, 317]]}
-    paddy = [_field("f", 500, 300, 900, 700)]  # the stand's south-east corner lies in it
-    assert "bamboo_stands_clear_of_paddies" in f_only(manifest(houses=[house(x=400, y=400)], fields=paddy, bamboo_stands=[stand]), "bamboo_stands_clear_of_paddies")
-    assert "bamboo_stands_clear_of_paddies" not in f_only(manifest(houses=[house(x=400, y=400)], fields=[_field("f", 600, 400, 900, 700)], bamboo_stands=[stand]), "bamboo_stands_clear_of_paddies")
-
-
 def test_a_hilltop_shrine_needs_no_dug_well_of_its_own():
     """`remote_shrine_has_own_well`'s HILL arm (feature 158). A shrine set apart from the houses keeps
     its own draw-point for temizu - unless it stands on the hill, where it takes a spring or a rock
