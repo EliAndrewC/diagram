@@ -147,6 +147,15 @@ are gone from it.
   the unfixed code. A check dropped without a replacement MUST record the covering test or the reason.
 - **FR-005**: Where a check body is the sole operative statement of a research finding, that finding MUST be
   written into `research/` before the check is deleted.
+
+  **This binds hardest on the URBAN rules, and per rule rather than per class** (the GM's 2026-08-30
+  question, `gm-request.md`). Measured: 39 segments carry an `if URBAN:` branch, 544 lines of code and 163
+  of prose, and NONE of the 39 cites where its finding is recorded. Spot-checks show the knowledge is in
+  `settlements/` and `research/` and is fuller there than in the check - but one spot-check (`wall
+  thickness`) came back empty, so **each urban rule MUST be confirmed to have a documented home before its
+  check goes, and the confirmation recorded**. A class-level assumption is exactly what this requirement
+  exists to prevent. Unlike a hamlet rule, an urban rule has no placer to migrate INTO, so the document is
+  the only thing that will carry it until those tiers are scripted.
 - **FR-006**: `check_village/`, its tests, the frozen fixture corpus, the gate's Makefile targets and its
   `_invocation` registration MUST be removed, and no file in the tree may reference them.
 - **FR-007**: The coverage floors MUST be re-derived after the deletion, not assumed to hold. **Re-derived
@@ -260,3 +269,26 @@ The countermeasure is mechanical and costs seconds: **after striking a requireme
 its distinctive words - not the FR section - and assert zero hits outside quotations and the Review
 history.** That sweep is now run as part of applying any finding, and its result is stated with the fix. It
 would have caught all four instances.
+
+### Round 3 - `spec-fidelity`, 2026-08-30: **FAITHFUL**
+
+Verdict: FAITHFUL - *"Implement it. No further round is needed."* The reviewer swept the whole file rather
+than the FR list for the struck cost requirement and found **zero operative hits**, confirming round 2's
+fix independently of this session's own claim; walked both GM messages clause by clause and found every one
+carried and every requirement serving a clause; and verified the three figures the scope rests on
+(`check_village/` at 52 files / 14,575 lines, and exactly 105 `.json` fixtures in `pool/regressions/`).
+
+**Two changes were made AFTER this verdict, and are flagged rather than folded in silently**, since a
+FAITHFUL verdict is on the text that was read:
+
+1. The GM sent a third message - recorded verbatim in `gm-request.md` - confirming the town and city checks
+   should go now, and asking whether any logic in them needs converting into placement algorithms first.
+   The spec already deleted them, so nothing in the mandate changed.
+2. **FR-005 gained an urban clause**, driven by the measurement that answered that question: 39 segments
+   carry an urban rule and none of them cites where its finding is recorded, and while spot-checks show the
+   knowledge is in `settlements/`/`research/` and fuller there, one came back empty. So the confirmation is
+   per rule and recorded, never per class. This narrows an existing requirement rather than adding one.
+
+The reviewer's own aside, left as an implementation call: `pool/regressions/` also holds two non-fixture
+files (`city_density_broken_nagahara.notes.md`, `mode-a-forbidden-apparatus.svg`) that "the 105 frozen
+negative fixtures" does not name; whether they go with the corpus is decided at implementation.

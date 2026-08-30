@@ -39,3 +39,30 @@ battery is never built again.
 The session also stated one assumption for the GM to override: where a check body is the sole operative
 statement of a research finding, the finding is preserved in `research/` before the code goes - the rule
 survives, the runtime check does not.
+
+## 2026-08-30, the GM on the town and city checks (after the spec was FAITHFUL at round 3)
+
+> Oh, actually, I am okay with these automated checks for towns and cities being deleted now. Now that I think about it, that is probably better. Because we basically just proven that the automated checks aren't needed. And, essentially, what will be required of us when the time comes to create a scripted process for towns and cities is to have placement algorithms which will straightforwardly be correct and not require these sorts of automated checks. Right? or is there logic in the automated checks which will need to be converted into placement algorithms, and therefore, we should not delete the code just yet? What do you think?
+
+**The session MEASURED the question rather than answering it from impression**, and the measurement is what
+FR-005's urban clause rests on:
+
+- The urban rules are not in the 11 tier-guarded segments. They are spread across **39 segments** whose
+  bodies carry an `if URBAN:` branch - **544 lines of code and 163 of prose** - and **none of the 39 cites
+  where its finding is recorded.**
+- But the knowledge is not trapped in them. Spot-checking the prose-heaviest (`kosatsuba`, 66 lines of
+  comment in the check body), `settlements/urban-features.md` carries the whole doctrine MORE FULLY than
+  the check does, including the exact rule the check enforces - *"the presence floor is gates + 1"* - with
+  a link onward to the research entry. `ministries` and `flophouse` are likewise documented across
+  `settlements/` and `research/`.
+- **So the check bodies RESTATE the rule; they do not hold it.** The logic in them is trivial - an overlap
+  test, a distance, a count. The value was the number and the reasoning, and those are in the docs.
+
+**One spot-check came back empty** (`wall thickness` found nothing in `research/` or `settlements/`), which
+is why the confirmation is per-rule and recorded rather than assumed for the class.
+
+**And the honest gap, stated to the GM rather than discovered later:** for hamlets a deleted check's rule
+lands in a placer unit test immediately; for towns and cities there is no placer yet, so those rules are
+**advisory documentation until someone writes one**. That is the GM's architecture working as intended -
+the doc is what a future placer author reads, and their placer gets a test - but it is a real gap in the
+interval.
