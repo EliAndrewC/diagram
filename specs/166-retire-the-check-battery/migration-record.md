@@ -48,6 +48,12 @@ box" - measuring the wrong one made every seat look illegal and the fallback too
 | `irrigation_channels_hairline` | `tests/settlement/test_water_width_ladder.py` | channel default width raised off the floor -> RED |
 | `watercourses_wider_than_ditches` | same module (the ladder's ORDER, which is the part that is not a legibility deviation) | same mutation -> RED |
 
+| `settlement_declares_a_land_fall` | `tests/gate/test_generator_contracts.py` | a map declaring neither a fall nor per-field falls fails the assertion |
+| `households_consistent` | same module | seated count against the spec's ask |
+| `farmhouse_sizes_vary` | same module (effective footprint, so BOTH size encodings count) | - |
+| `settlement_records_cluster_seeding` | same module | the shape record removed from `homesteads.py` -> RED |
+| `byre_form_declared` | same module | allowed forms read off the engine, not guessed |
+
 ## Already carried by an existing test - dropped against it, not rewritten
 
 | check | carried by | proof |
