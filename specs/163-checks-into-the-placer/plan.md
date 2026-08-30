@@ -5,8 +5,8 @@
 ## Summary
 
 Two deliverables, in the GM's order. **US1**: a census that establishes BY EXECUTION which of the 152
-live gate checks can be made to fail by anything in this repository, then deletes the ones that cannot,
-with their segments, helpers, tests, fixtures and pins. **US2**: a MEASUREMENT ledger over every
+live gate checks anything the engine can PRODUCE TODAY still makes fail, then deletes the ones nothing
+does, with their segments, helpers, tests, fixtures and pins. **US2**: a MEASUREMENT ledger over every
 surviving check - what last changes each input, what the placer guarantees, who reads the verdict, what it
 is recorded as having caught - stated against the GM's own two readings (a placer bug, or fold it into a
 trial-and-error placer) and handed over as the input to the case-by-case discussion they asked for. The
@@ -58,7 +58,7 @@ the number, because a deletion that slows a roll means something was removed tha
 | **I, II** | N/A - no UI in this repository |
 | **III, IV, VII, VIII, IX** | N/A - this feature generates no pool content and writes no in-world prose |
 | **V** | PASS - no SOURCE block is touched |
-| **VI (verify before done)** | PASS - `make done` green; `make maps` at T12/T13; FR-008's byte-identical render check is the map-level proof, and a `settlement-review` is not owed because no manifest moves (the GM's 2026-08-29 ruling: they read the map themselves, and here the map does not change at all) |
+| **VI (verify before done)** | PASS - `make done` green; `make maps` at T12/T13; FR-008's byte-for-byte render comparison with every diff DIAGNOSED is the map-level proof, and a `settlement-review` is not owed while no manifest moves (the GM's 2026-08-29 ruling: they read the map themselves). If a diff turns out to be real and explained, the map is allowed to move and the review question is revisited then |
 | **X (Python discipline, NON-NEGOTIABLE)** | PASS - ruff + pyrefly + pytest + the coverage floors. The census tool is a by-hand diagnostic and joins `tools/check_census.py` in pyproject's coverage exclusion list, stated here so it is a decision rather than an omission. No file grows past ~1,000 lines; the deletion SHRINKS `check_village/`, and a segment file emptied by the sweep is removed with its `__init__.py` star-import line and its `CLAUDE.md` row |
 | **XII (historical grounding, NON-NEGOTIABLE)** | N/A for the opening bookend - this feature changes nothing a generator asserts about the world. The CLOSING obligation is inverted and is real: a deleted check may be the only operative statement of a research finding. T09 checks each deletion against `research/` and records where the finding still stands, per the spec's Decisions Recorded note |
 | **XIII (no known regressions, NON-NEGOTIABLE)** | PASS - baseline in a detached worktree at T01 (`git worktree add --detach /tmp/base163 HEAD`), never a stash, and each worktree failure checked against the clone before being called pre-existing (the gitignored-artifact trap). Zero new failures at merge |
@@ -113,10 +113,12 @@ and the spec review was explicit that it licenses nothing more. **There are two 
   a runtime net standing behind a possibly-wrong placer is the architecture this feature retires.
 - **Frozen-fixture-only evidence is not the current implementation firing** (FR-003). A check whose only
   proof of teeth is a hand-era manifest of a shape no generator can roll goes, with its fixture.
-- **The legacy-tier group is separated out.** Six of the nine names in R2 (`capital_has_kosatsuba`,
-  `*_has_no_headman`, ...) can only run on town / city / capital / village maps, and feature 158 deleted
-  the last artifacts at those tiers. They cannot fire and cannot be made to. They are listed as their own
-  group in the ledger so the GM can rule on them as a class.
+- **There is no pre-approved class deletion, and an earlier draft of this plan had one.** A check's tier
+  is established by READING ITS GUARD, not by subtracting lists: the review found `ways_clear_of_castle_moat`
+  carries no scale guard at all, and `village_has_no_headman` sits at a scale `roll_village` still serves.
+  So every candidate takes the FR-006 read, and a GROUP is formed only out of candidates whose guards have
+  each been read and whose tier no live generator reaches - the grouping is a way of PRESENTING a set of
+  individually verified verdicts to the GM, never a way of skipping the verification.
 
 ## Phase 3 - measure what survives (US2, FR-009)
 

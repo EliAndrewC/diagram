@@ -54,21 +54,24 @@ that decision theirs (FR-009).
 and this repository has been burned by it twice in recorded incidents: an *"EXCUSE clause keyed on PRESENCE
 cannot fire on ABSENCE"* (four instances in one day), and *"the check PASSES on the very artifact it was
 written for"*. A check that never fires is what a working check looks like AND what a neutered check looks
-like. The distinguishing question is not "has it fired" but "can anything after the placer change what it
-reads" - which feature 141 already built the tool for (`make check-census`) and feature 158 already
-qualified (*"the census's verdict is a CANDIDATE, not a RULING"*). This spec therefore builds the census
-the GM asked for LITERALLY, and adds one read of the placer per candidate before the deletion lands
-(FR-006) rather than substituting a different test for the one the GM named.
+like. So the census's own answer is VERIFIED before it is acted on: FR-006 puts one read of the placer and
+the record behind each candidate, and that read can only correct the census (evidence that the current
+placer is missed reclassifies the check FIRING) or confirm it. It does NOT substitute a different test for
+the one the GM named - the test stays "does it fire against the current implementation", which is exactly
+what was asked for. Feature 141's `make check-census` measures a related but different thing (which stage
+last changes an input), and it earns its place in the FR-009 ledger rather than in the deletion decision.
 
 ## User Scenarios & Testing *(mandatory)*
 
 ### User Story 1 - Delete the checks that never fire (Priority: P1)
 
 The GM wants the dead weight gone first, before any architectural argument. A session runs a census over
-every live gate check and asks, by EXECUTION rather than by reading, whether anything in the repository
-can make that check produce a FAIL: a live pool map, a frozen negative fixture, a scripted negative
-fixture, a waiver on a shipped map, or a test that asserts it fires. A check for which the answer is "no"
-is deleted, along with its segment body, its tests, its fixture entries and its pin.
+every live gate check and asks, by EXECUTION rather than by reading, whether anything the engine can
+PRODUCE TODAY makes that check emit a FAIL - a live pool map, a map the current generators can roll, a
+scripted negative fixture built from today's placers, or a recorded miss of the current placer. Evidence
+that exists only as a frozen hand-era manifest of a shape no generator can produce is not the current
+implementation firing (FR-003). A check for which the answer is "no" is deleted, along with its segment
+body, its tests, its fixture entries and its pin.
 
 **Why this priority**: It is the GM's stated first task, it is self-contained, and it needs no ruling from
 anyone - a check that cannot be shown to fire anywhere is not load-bearing by construction.
@@ -82,7 +85,7 @@ geometry, so any render diff is diagnosed before the deletion lands.
 1. **Given** the 152 live check names, **When** the census runs, **Then** every name is classified as
    FIRES (with the artifact or test that makes it fire named) or NEVER-FIRES, with no name unclassified.
 2. **Given** a NEVER-FIRES check, **When** its segment, tests, fixture entries and pin are deleted,
-   **Then** `make done` is green and no pool render changes by a byte.
+   **Then** `make done` is green and every pool render is compared byte-for-byte, any diff diagnosed.
 3. **Given** a check the census calls NEVER-FIRES, **When** its placer is read and the record grepped,
    **Then** either evidence is found that the CURRENT placer misses it - in which case it is reclassified
    FIRING with that evidence and routed to the ledger - or it is deleted. A placer that merely declines
@@ -92,29 +95,31 @@ geometry, so any render diff is diagnosed before the deletion lands.
 
 ---
 
-### User Story 2 - Classify every surviving check for the GM's discussion (Priority: P2)
+### User Story 2 - Measure every surviving check for the GM's discussion (Priority: P2)
 
-With the dead checks gone, every check that DOES fire is classified into the three dispositions above -
-placer-guaranteed, emergent-across-stages, engine-completeness - with the measurement behind each
-classification, so the GM can hold the case-by-case discussion they asked for against evidence rather than
-against a session's opinion.
+With the dead checks gone, every check that DOES fire is MEASURED - which stage last changes each of its
+inputs, what its placer guarantees, who besides the gate reads its verdict, what the record shows it has
+caught - and the evidence is stated against the GM's own two readings: a bug in the placement algorithm, or
+fold it into a trial-and-error placer. The ledger assigns no category and reaches no verdict, so the GM can
+hold the case-by-case discussion they asked for against evidence rather than against a session's sort.
 
 **Why this priority**: The GM explicitly named this as the step after the deletion, and explicitly said it
 is *"a discussion we should stop and have before any changes like that are made"*. So the deliverable here
-is a REPORT, not a change.
+is EVIDENCE, not a change and not a decision.
 
-**Independent Test**: The classification ledger exists, covers every surviving check, and each row carries
-the measurement (which stage last changes each input; who reads the verdict; what the placer actually
-guarantees) rather than an assertion.
+**Independent Test**: The ledger exists, covers every surviving check, and each row carries the measurement
+and the evidence for each of the GM's two readings rather than an assertion or a category.
 
 **Acceptance Scenarios**:
 
-1. **Given** the surviving checks, **When** the classification runs, **Then** each is in exactly one of the
-   three dispositions with its measurement recorded.
-2. **Given** a check classified emergent-across-stages, **Then** the ledger names the stage that can
-   invalidate the earlier stage's work, because that is the fact that makes it emergent.
-3. **Given** the finished ledger, **When** the session reports to the GM, **Then** no placer has been
-   changed and no check has been folded into one.
+1. **Given** the surviving checks, **When** the measurement runs, **Then** every one of them has a row
+   carrying its measurement, and no row assigns the check to a category.
+2. **Given** a check whose measurement shows a later stage can invalidate an earlier stage's work, **Then**
+   the ledger NAMES that stage, because that is the fact the GM's discussion turns on.
+3. **Given** a check the measurement fits neither of the GM's two readings, **Then** the ledger records
+   "neither, because X" as an observation for the discussion rather than forcing it into a reading.
+4. **Given** the finished ledger, **When** the session reports to the GM, **Then** no placer has been
+   changed, no check has been folded into one, and no check has been assigned a disposition.
 
 ---
 
@@ -133,18 +138,26 @@ discussion before any such change is made, so the work is named here only so the
 
 ### Edge Cases
 
-- **A check with no scripted executor at all.** Nine legacy-tier checks (`capital_has_kosatsuba`,
-  `*_has_no_headman`, ...) run only on town / city / capital / village maps, and feature 158 deleted the
-  frozen exhibits that were the only things at those tiers - *"there is no reason to see what would happen
-  if we encountered a type of map, which is literally impossible to produce any longer"*. These cannot fire
-  and cannot be made to fire; they are NEVER-FIRES.
+- **A check that looks legacy-tier.** Some checks read as belonging only to town / city / capital /
+  village maps, and feature 158 deleted the frozen exhibits that were the only artifacts at those tiers -
+  *"there is no reason to see what would happen if we encountered a type of map, which is literally
+  impossible to produce any longer"*. **A check's tier is ESTABLISHED BY READING ITS GUARD, never by
+  inference from its name or by subtracting one list from another**, and this spec got that wrong twice
+  before the review caught it: `ways_clear_of_castle_moat` carries NO scale guard at all (it is DATA-gated
+  on castle-moat records and iterates lanes, so any manifest with a moat and a way fires it - the classic
+  `dev/gate.md` "a check that never RUNS looks exactly like a check that passes" shape), and
+  `village_has_no_headman` is a VILLAGE-scale check that `roll_village` is a live mixin for, whose sibling
+  `village_has_kosatsuba` is already made to fire by a three-line hand-built manifest in the tree today.
+  So there is no pre-approved class deletion: every candidate takes the FR-006 placer read, and a group is
+  formed only from candidates whose guards have each been read and whose tier has no live generator.
 - **A check whose only firing evidence is a frozen manifest of a map no generator can produce.** The
   fixture proves the check has teeth against a shape the engine can no longer make - which is not the
   current implementation firing. FR-003 makes this NEVER-FIRES and deletes the check with its fixture,
   reason recorded; it is a rule applied, not a question parked.
 - **A check that fires only inside another check's fixture** (a fixture pinned to check A also trips
-  check B). Incidental firing is recorded as such and does not by itself count as evidence that B earns
-  its keep.
+  check B). Incidental firing IS firing under FR-001 and the check is not a deletion candidate: whether it
+  EARNS ITS KEEP is FR-009's question and therefore the GM's, in the discussion. The census records the
+  firing as incidental so the ledger can say so; it never converts "incidental" into "delete".
 - **A meta check that cannot be run in isolation.** `META_CHECKS` (`waivers_are_live`,
   `waivers_are_documented`) raise rather than run under `gate(M, only=...)`, so the census must reach them
   through a full gate run or they will be silently unmeasured - the exact failure mode `dev/gate.md`
@@ -161,7 +174,11 @@ discussion before any such change is made, so the work is named here only so the
   anything in this exact moment"*): a check FIRES when something the engine can PRODUCE TODAY makes it
   emit a FAIL (or a WAIVE, which is a suppressed FAIL) - a live pool map, a map the current generators can
   roll, a scripted negative fixture built from today's placers, or a recorded miss of the current placer.
-  Passing on every map is not firing.
+  Passing on every map is not firing. **A hand-BUILT manifest in a test is recorded as evidence too, and
+  classified apart**: this repository's established way of exercising a check no live generator reaches is
+  a small hand-built manifest (`dev/gate.md`), so a check that only such a manifest makes fail has proven
+  TEETH without proving the current implementation produces the fault. It is not deleted on the census's
+  word; it goes to the FR-006 placer read like every other candidate.
 - **FR-002**: The census MUST establish each verdict by EXECUTION - running the gate against the artifact
   and reading the verdict - not by grepping for the check's name. A name appearing in a test file is not
   evidence that the test makes the check fail.
@@ -268,7 +285,7 @@ stands.
   only ever fired on one of them has no live executor.
 - **A deleted check's research finding survives in `research/`**, so deleting the check does not delete the
   historical rule or its sources.
-- **The GM's discussion gates User Story 3.** This feature is complete, and lands, with the classification
+- **The GM's discussion gates User Story 3.** This feature is complete, and lands, with the measurement
   ledger delivered and no placer touched.
 - **No map is expected to move**, because removing an audit should not change what a generator draws -
   the one check that steers a generator is `farmhouses_reach_a_way`, which drives the re-roll ladder and
@@ -295,3 +312,52 @@ preserved what the GM asked to remove or added what they did not ask for. Every 
 The reviewer also passed on an aside for the GM: the three-way reading of the battery is *"a genuinely
 useful frame and worth hearing at the discussion - it just should not be built into the specification as
 the axis the checks get sorted on before that discussion happens."*
+
+### Round 2 - independent re-review, 2026-08-30: CHANGES REQUIRED, all applied
+
+Round 2 was pointed at the exact failure this project's review procedure exists to catch: *"a Review
+history that claims a change the FRs do not carry"*. It confirmed all six round-1 changes landed **in the
+FR bodies** and found that three sections had been skipped when they were propagated, plus a factual slip.
+
+| # | residue | change made |
+|---|---|---|
+| C1 | **User Story 2 was entirely un-updated** and still required the sort FR-009 forbids - its acceptance scenario 1 still read *"each is in exactly one of the three dispositions"*, the precise phrase round 1 ordered dropped. *"An implementer works from acceptance scenarios. As it stands the spec's scenarios require the sort its FR forbids."* | US2 retitled and rewritten end to end onto the measurement frame, with a fourth scenario for the "neither, because X" case and a scenario asserting no check is assigned a disposition. |
+| C2 | US1 acceptance scenario 2 still carried the byte-identity absolute. | Restated as compared byte-for-byte with any diff diagnosed. |
+| C3 | The US1 body still defined firing as *"anything in the repository"*, without the current-implementation qualifier. | Aligned with FR-001/FR-003, naming the frozen-hand-era case explicitly. |
+| C4 | The rationale paragraph in "The session's view" now argued AGAINST the corrected requirements - it said the distinguishing question *"is not 'has it fired'"*, when after correction that is exactly the spec's test. *"This is the paragraph a future session reads for the why."* | Reworded: the placer read VERIFIES the census (FR-006's two outcomes), it does not replace its test. `make check-census` earns its place in the FR-009 ledger, not in the deletion decision. |
+| C5 | **A factual slip that would have licensed deleting three live-tier checks unverified.** The edge case said NINE legacy-tier checks cannot be made to fire; `research.md`, `plan.md` and T11 all say six. The other three - `farmhouse_aspect_in_range`, `stream_end_anchored`, `stream_source_anchored` - are HAMLET-tier and the live generators run them on every roll. | Corrected to six, and the three hamlet-tier names routed through the ordinary FR-006 placer read like any other candidate. |
+| plan | Two residues of the same defect one level down: the Summary's *"by anything in this repository"* and the Constitution Check's *"FR-008's byte-identical render check"*. | Both corrected. |
+
+Round 2 also answered the two questions it was asked to press on: the corrections did NOT over-swing
+(*"FR-003 is faithful, not over-broad"* - FR-006's first branch is a real escape hatch and the cited
+precedent runs both ways), and the stop holds (*"FR-010, US3, US2 scenario 3, SC-005, tasks T17 and the
+'Blocked' section all close the same door. Faithful."*).
+
+### Round 3 - independent re-review, 2026-08-30: CHANGES REQUIRED, all applied - AND ESCALATED
+
+Round 3 confirmed every round-2 item landed, confirmed the GM-facing contract (census by execution,
+delete what does not fire, measure the rest, stop before touching a placer) has held since round 1 and
+survived two adversarial passes, and found four more defects. All four are applied:
+
+| # | finding | change made |
+|---|---|---|
+| F1 | **The "six legacy-tier checks" group was obtained by ARITHMETIC, never by reading a guard - and it was wrong in composition and in claim.** `ways_clear_of_castle_moat` carries NO scale guard at all: it is DATA-gated on castle-moat records and iterates lanes, so any manifest with a moat and a way fires it - the classic `dev/gate.md` "a check that never RUNS looks exactly like a check that passes" shape, not a tier casualty. And `village_has_no_headman` sits at a scale `roll_village` still serves, whose sibling `village_has_kosatsuba` is already made to fire by a three-line hand-built manifest in the tree. T11 would have deleted a check under a false premise, bypassing FR-006. | The pre-approved class deletion is GONE. A check's tier is established by READING ITS GUARD; a group may be formed only from candidates whose guards have each been read and whose tier no live generator reaches, and the grouping presents individually verified verdicts rather than substituting for T08's read. Applied in the spec's edge case, `plan.md` Phase 2 and T11. |
+| F2 | **FR-001 and FR-003 disagreed about the hand-BUILT manifest.** FR-001's list omitted it while FR-003 counted "any test that asserts a check fires" - so the census could call NEVER-FIRES a check a test in the tree demonstrably makes FAIL. | FR-001 now records a hand-built manifest as evidence and classifies it APART: proven teeth, unproven that the current implementation produces the fault, so it goes to the FR-006 read rather than to deletion. |
+| F3 | `research.md` still cited FR-011 and the old SC-005, both removed at round 1. Neither earlier round read that file. | Corrected. |
+| F4 | The "incidental firing" edge case read as a route to delete a check that demonstrably fired - *"the mirror of round 1's finding 1"*. | Separated: incidental firing IS firing under FR-001 and is never a deletion candidate; whether it EARNS ITS KEEP is FR-009's question and therefore the GM's. |
+
+**ESCALATED, per constitution XVI.** The procedure is three rounds, then stop and escalate rather than
+attempt a fourth. That is what this feature is doing: the fixes above are applied, and **implementation of
+the DELETION (T08-T13) is held until the GM rules.** The reviewer's own qualification is recorded here
+because it is what the GM is being asked to weigh: *"F1-F4 are not a persistent misunderstanding of the
+request. The GM-facing contract ... has been faithful since round 1's corrections and survived two
+adversarial passes. F1 is a factual error about the codebase, discoverable by reading four segment guards;
+F2 an internal inconsistency between two FRs; F3 a stale cross-reference; F4 a clause. All four are
+mechanical corrections with no judgment call in them, and none reopens a decision either earlier round
+settled."*
+
+What the three rounds cost, and what they bought, since that is the honest measure of the procedure: they
+caught one carve-out contrary to the GM's instruction (round 1, FR-006 - which this session had itself
+flagged as a suspected carve-out), one whole user story left carrying the requirement its own FR forbade
+(round 2, C1), and two factual claims about the codebase that would each have deleted a live check on a
+false premise (round 2 C5, round 3 F1). Every one of the four would have reached the implementation.

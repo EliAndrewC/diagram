@@ -76,10 +76,13 @@ finding and is therefore `physical` with its three boxes.
       the sweep goes with its `__init__.py` star-import line and its `check_village/CLAUDE.md` row.
       verify: `make quick`
       research: procedure
-- [ ] **T11** Handle the legacy-tier group as a class: the checks that can only run on town / city /
-      capital / village maps, which feature 158 left without a single possible subject. List them in the
-      ledger as their own group with the ruling that removed their artifacts, so the GM sees them as one
-      decision rather than six.
+- [ ] **T11** READ THE GUARD of every candidate that looks legacy-tier and establish its actual tier from
+      the segment body, never from its name or by subtracting one list from another - the spec review caught
+      that error twice, and `ways_clear_of_castle_moat` (no scale guard at all) and `village_has_no_headman`
+      (a scale `roll_village` still serves) are the two specimens. Only candidates whose guards have each
+      been read AND whose tier no live generator reaches may be presented as a group; the grouping presents
+      individually verified verdicts to the GM, it never substitutes for T08's read.
+      research: procedure
       research: procedure
 
 ## Phase 3 - verify the maps did not move (US1, P1)

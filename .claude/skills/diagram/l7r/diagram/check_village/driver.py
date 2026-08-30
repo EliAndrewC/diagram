@@ -1,10 +1,61 @@
 """gate() - the registry driver - plus the twin-detector helpers and the CLI main() (feature 024 package split; bodies verbatim)."""
 
+import atexit
+import json
+import os
 from typing import Any
 
 from .common_01_geometry import Manifest, load
 from .common_03_capacity import DEFAULT_MANIFEST, WAIVER_META_CHECKS
 from .registry import _SEG_DEPS, GATE_SEGMENTS, META_CHECKS
+
+# ---- THE VERDICT JOURNAL (feature 163) ----------------------------------------------------------
+# The census asks which checks anything the engine can produce TODAY still makes fail, and `check()`
+# inside gate() is the SINGLE point where every verdict is emitted - so that is where firing is
+# observed. The alternative, grepping test files for a check's name, is what FR-002 forbids: a name
+# appearing in a test is not evidence that the test makes the check FAIL, and 140 of the 152 live
+# names appear in one while only ~95 have a negative fixture of any kind.
+#
+# The variable changes what is RECORDED, never what a map rolls - the same shape as hamletgen's
+# STAGE_PROFILE_ENV, which feature 132 permits for exactly that reason, and it carries the same
+# guard: a test asserts the manifest and the failure list are identical with it set and unset.
+#
+# It names a DIRECTORY and each process writes its own file, because the census drives the whole
+# pytest suite under `-n auto`; a shared append from a dozen workers interleaves and loses rows.
+VERDICT_JOURNAL_ENV = "DIAGRAM_VERDICT_JOURNAL"
+_VERDICTS: set[tuple[str, str, str]] = set()
+_FLUSH_REGISTERED = False
+
+
+def record_verdict(name: str, verdict: str, source: str) -> bool:
+    """Note that check `name` emitted `verdict` ("FAIL" or "WAIVE") on map `source`.
+
+    A no-op returning False unless the journal directory is set, so an ordinary gate run pays one
+    `os.environ` lookup per non-passing check and nothing else. Returning the bool is what makes the
+    off-by-default branch testable without reading a file back."""
+    global _FLUSH_REGISTERED
+    if not os.environ.get(VERDICT_JOURNAL_ENV):
+        return False
+    _VERDICTS.add((name, verdict, source))
+    if not _FLUSH_REGISTERED:
+        atexit.register(flush_verdicts)
+        _FLUSH_REGISTERED = True
+    return True
+
+
+def flush_verdicts(directory: str | None = None) -> str | None:
+    """Write this process's journal, returning its path - or None when there is nothing to write.
+
+    Registered with atexit on the first record rather than called by the gate, because the interesting
+    driver is a whole pytest run and no single point in one knows when the last gate() has finished."""
+    d = directory or os.environ.get(VERDICT_JOURNAL_ENV)
+    if not d or not _VERDICTS:
+        return None
+    os.makedirs(d, exist_ok=True)
+    path = os.path.join(d, f"verdicts-{os.getpid()}.json")
+    with open(path, "w", encoding="utf-8") as fh:
+        json.dump(sorted(_VERDICTS), fh)
+    return path
 
 
 def gate(M: Manifest, verbose: bool = True, only: set[str] | None = None) -> list[str]:
@@ -45,7 +96,10 @@ def gate(M: Manifest, verbose: bool = True, only: set[str] | None = None) -> lis
 
     def check(name: str, ok: Any, detail: str = "") -> None:
         _ran.add(name)
-        if not ok and name in _waivers and name not in WAIVER_META_CHECKS:
+        _is_waived = not ok and name in _waivers and name not in WAIVER_META_CHECKS
+        if not ok:  # feature 163: a WAIVE is a suppressed FAIL, so the journal records both as FIRING
+            record_verdict(name, "WAIVE" if _is_waived else "FAIL", str(meta.get("name") or "<unnamed>"))
+        if _is_waived:
             _waived[name] = _waivers[name]
             if verbose:
                 print(f"WAIVE {name}  -> waived: {_waivers[name]}")

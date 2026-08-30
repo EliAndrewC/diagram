@@ -1,8 +1,9 @@
 # Research: what the check battery actually costs, and what already fires
 
-Measured 2026-08-30 in `.clones/diagram-testing` at `c33315db`, before any change. These are the
-BASELINE numbers FR-011 and SC-005 are measured against, and the floor the User Story 1 census has to
-beat.
+Measured 2026-08-30 in `.clones/diagram-testing` at `c33315db`, before any change. These are the baseline
+numbers the wrap-up reports and the floor the User Story 1 census has to beat. (An earlier draft said they
+were what FR-011 and SC-005 measure against; both were removed at spec review as unrequested, and the
+constitution's own perf bookends - not a requirement of this feature - are what guard a regression.)
 
 ## R1 - the per-map cost is small; the SURFACE is the cost
 
@@ -64,5 +65,44 @@ frozen hand-authored exhibit. So on the live pool the battery is fully green wit
 which is what makes the GM's *"our automated checks are not catching anything in this exact moment"*
 literally true today - and what makes "never fires" so weak a test on its own, since a battery that
 catches nothing is what both a correct generator and a neutered battery produce.
+
+**Sources:** none - a measurement of this repository.
+
+## R4 - the constitution XIII regression baseline
+
+Taken 2026-08-30 on UNMODIFIED code in a detached worktree (`git worktree add --detach /tmp/base163 HEAD`),
+never a stash, per Principle XIII:
+
+    /tmp/base163/.claude/skills/diagram $ make done
+    2753 passed, 2 skipped in 144.51s
+    gate green (reference settlement + non-map tests)
+
+Zero pre-existing failures, so there is no ledger to carry and every failure after this point is this
+feature's. The worktree carried no gitignored-artifact failures this time - the trap recorded on
+2026-08-24 (2 such failures from missing pool PNGs) did not recur, because the tests that read renders
+are in `tests/full/`, which `make done` deselects.
+
+**Sources:** none - a measurement of this repository.
+
+## R5 - the first firing census, before the suite sweep
+
+`make firing-census` over the 5 live maps and the 105 frozen fixtures, 797 verdicts observed:
+
+| verdict | count | meaning |
+|---|---|---|
+| `FIRES` | 40 | the current implementation makes it fail (all 40 from scripted-era fixtures; **zero live maps fail anything**) |
+| `FIRES-HAND-ONLY` | 53 | only a hand-era frozen manifest makes it fail |
+| `NEVER-FIRES` | 59 | nothing in the pool or the corpus makes it fail |
+
+**This is NOT yet the answer, and the instrument says so** - the ledger's own header prints `NO suite
+journal`. The proof that it matters is in the tree already: `gardens_clear_of_channels` reads NEVER-FIRES
+here, and `tests/check_village/test_segments_04_homesteads.py` makes it fail from a hand-built manifest on
+every run. That is exactly the FR-002 gap between "no artifact makes it fail" and "nothing makes it fail",
+and closing it is T04's whole job. Read this table as the floor: 59 is the largest the NEVER-FIRES set can
+be, and the suite sweep can only shrink it.
+
+The static pre-count in R2 guessed the candidate set at 9-57 and the measured floor is 59 before the
+sweep, which is inside the spirit of that band and above its top - the difference is that R2 counted a
+NAME appearing in a test as evidence, and this counts a check actually being made to FAIL.
 
 **Sources:** none - a measurement of this repository.
