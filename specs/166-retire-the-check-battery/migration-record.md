@@ -153,6 +153,20 @@ differs by tier is the COUNT (a city draws the set: the principal board plus one
 | `fields_clear_of_road` | **DROP - no scripted executor.** `roadways` is derived from `M["road"]`, which is empty on every live map; no scripted generator lays an Imperial road. The grounding - a way's tread may not run under a drawn plot - is recorded here and in `settlements/ways.md` | - |
 | `roads_clear_of_marsh` | **DROP - same reason**, same `roadways` source. A road is routed around standing water rather than through it; recorded, not deleted | - |
 
+| `woodland_commons_visibly_stocked` | `tests/gate/test_settlement_cover.py` (crowns recorded, at least five) | `stage_woodland` made to seat nothing -> RED |
+| `woodland_commons_on_dry_ground` | same module (a 5x5 sample grid against the drawn marshes) | same mutation -> RED; the marsh population is asserted first |
+| `woodland_commons_within_the_frame` | same module (70% of the parcel's box inside the recorded view) | same mutation -> RED |
+| `village_groves_visibly_stocked` | same module (1.5 clumps per 100k sq px) | `stage_windbreak` made to plant nothing -> RED |
+| `copse_stands_clear_of_the_belt` | same module (no copse clump inside a belt clump's canopy radius) | same mutation -> RED |
+| `canopy_clear_of_watercourses` | same module (clump centers against every channel and stream) | same mutation -> RED |
+| `cluster_abuts_fields` | `tests/gate/test_cluster_and_homes.py` (nearest house within 60 px; the far side allowed a cluster-span) | measured on the reference roll: nearest 33 px, farthest 242 |
+| `cluster_shape_matches_the_drawing` | same module (the DRAWN aspect inside the rolled shape's band, or an explicit unhonored note) | a knob that never binds looks exactly like one that always does - the motivating case is in the docstring |
+| `byres_meet_their_target` | same module (seated >= declared target) | `stage_appurtenances` made to seat nothing -> RED |
+| `farmhouses_shed_separately` | same module (the 8 ft eave gap, wall to wall) | the engine's own `FARMHOUSE_EAVE_GAP_FT`, which survives the battery |
+| `farmhouse_aspect_in_range` | same module (2.7:1; live worst 2.37, so ~11% of margin) | a live guard on a real regression, not a re-measurement of a guarantee |
+| `wells_among_dwellings` | same module (95 px to a dwelling's EDGE, never its center) | `place_wells` made to dig nothing -> RED |
+| `settlement_dwellings_watered` | same module (760 ft to a well or open water, via the engine's `surface_water_dist`) | same mutation -> RED |
+
 ## Battery-internal - they go WITH the battery, and owe no destination
 
 These four do not state a rule about a map. They state that the battery's OWN classification tables are
