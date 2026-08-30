@@ -54,7 +54,14 @@ report() { # report <dir> [seen-file] -> prints "STALLED <id> <age>s" per stalle
       if [ "$t" = "user" ]; then
         if [ -n "$seen" ] && grep -qx "$id" "$seen" 2>/dev/null; then continue; fi
         [ -n "$seen" ] && echo "$id" >> "$seen"
-        printf 'STALLED %s: transcript unchanged for %ss, last record a tool_result with no reply - stop it (TaskStop) and relaunch its batch, or read the rest yourself in a NEW background agent; never in a foreground WebFetch batch; then `agent-stall-hooks.sh ack <dir> <id>`\n' "$id" "$age"
+        # GUARD_EDIT_OK: feature 166 - fixing a guard that kept firing on a stall the session HAD handled.
+        # The message said `ack <dir> <id>` without saying WHICH dir, and the natural guess is the tasks
+        # dir the task-notification names. `ack` writes to "$dir/../stall-ack/$id", so acking with the
+        # tasks dir creates the marker somewhere `prompt` never looks and SILENTLY does nothing - the
+        # stall is then re-reported at every prompt for ever. Measured 2026-08-30: four re-reports of one
+        # agent that had been stopped 20 minutes earlier. So the message now prints the exact command,
+        # with the directory the hook actually scans already in it.
+        printf 'STALLED %s: transcript unchanged for %ss, last record a tool_result with no reply - stop it (TaskStop) and relaunch its batch, or read the rest yourself in a NEW background agent; never in a foreground WebFetch batch; then run exactly: scripts/agent-stall-hooks.sh ack %s %s\n' "$id" "$age" "$dir" "$id"
       fi
     elif [ -n "$seen" ]; then
       grep -qx "$id" "$seen" 2>/dev/null && sed -i "/^$id\$/d" "$seen"
