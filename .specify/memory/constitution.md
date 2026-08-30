@@ -1503,12 +1503,22 @@ its own plan is being tested for self-consistency, which a wrong spec passes
 comfortably. The question is: does this specification implement what was actually
 asked, and does it add anything that was not?
 
-**AT MOST three rounds, and stop at the first clean verdict.** A `FAITHFUL` verdict
+**AT MOST five rounds, and stop at the first clean verdict.** A `FAITHFUL` verdict
 on round one ends the review - there is no quota to fill and re-reviewing a spec the
 reviewer has already passed buys nothing. A `CHANGES REQUIRED` verdict means: revise,
-re-review. If the THIRD review still returns changes, STOP and put it to the GM.
-Three failures to express a request as a specification is a persistent
-misunderstanding, and a fourth attempt by the same session will not locate it.
+re-review. If the FIFTH review still returns changes, STOP and put it to the GM.
+
+**Raised from three on 2026-08-30 (GM), and the reason is what the cap is FOR.** It
+exists to catch a persistent misunderstanding that further attempts will not locate -
+not to stop a review that is still converging on new, smaller findings each round. On
+feature 169 the cap bound at exactly the wrong moment: round 3's only blocking item
+was one more missed escape token in a hand-written census, and the remedy (derive the
+census instead of writing it) was mechanical and already identified. A fourth round
+would very likely have passed. So the question the cap should ask is not "how many
+rounds" but "is this the SAME misunderstanding again" - and five rounds gives that
+question room while still ending an argument that is going nowhere. The GM asked that
+the new number be watched: if features start hitting five, the cap is not the problem
+and the way specs are being drafted is.
 
 **A scope-expansion finding is an ordinary finding.** "This spec does more than was
 asked" goes through the same revise-and-re-review loop as anything else; it is not a
