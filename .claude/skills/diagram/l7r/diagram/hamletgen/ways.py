@@ -4032,8 +4032,14 @@ def clip_to_clear(pts: Poly, obstacles: Sequence[Poly], margin: float, step: flo
     Used on the cluster's lane arms. Dragging an offending VERTEX back toward the cluster was tried
     first and is not reliable: a vertex deep inside a large hem plot may not escape in the steps
     allowed, and it distorts the skeleton on the way. Truncating is both simpler and more honest -
-    the lane ends where the crop begins, which is what a village lane does. Always returns at least
-    a two-point line so the caller still has a lane."""
+    the lane ends where the crop begins, which is what a village lane does.
+
+    AN ARM WITH NOWHERE TO GO RETURNS NOTHING, and this line used to say the opposite (feature 166:
+    "Always returns at least a two-point line so the caller still has a lane"). It was true of the
+    FIRST version, which fell back to the original first segment - and that fallback drew a lane
+    blocked immediately in full and unclipped, doing the exact opposite of this function's job. The
+    fallback went; the sentence describing it did not. A run shorter than 70 px is dropped, so the
+    caller must handle an empty result rather than assuming a lane."""
     if not obstacles and not lines:
         return pts
 

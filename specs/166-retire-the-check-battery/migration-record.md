@@ -77,6 +77,8 @@ box" - measuring the wrong one made every seat look illegal and the fallback too
 
 | `farmhouses_reach_a_way` | `tests/hamletgen/test_unreached_houses.py` (11 unit tests) PLUS `tests/gate/test_reach_predicate_matches_the_check.py` (equivalence on 5 live maps and their perturbed copies) | done at T02 - the check's body LIFTED, with the equivalence test that dies with the check |
 
+| `lanes_clear_of_dry_plots` | `tests/hamletgen/test_lane_clipping.py` (`clip_to_clear`, whose obstacle list is envelope + crops + fabric + wet toe together) | clipping disabled -> RED |
+
 ## Already carried by an existing test - dropped against it, not rewritten
 
 | check | carried by | proof |
