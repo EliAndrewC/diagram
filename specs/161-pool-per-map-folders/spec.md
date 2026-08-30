@@ -164,7 +164,7 @@ a spec describing the old layout).
   fixtures, not maps, and have no per-map bundle to fold.
 - **FR-007**: The move MUST be a pure relocation. Every relocated file's bytes MUST be unchanged,
   except a `.gen.py` whose own path arithmetic must deepen (FR-010) and a document whose text names
-  a path (FR-016). No map may be re-rolled, and no manifest or render may be rewritten, as part of
+  a path (FR-020). No map may be re-rolled, and no manifest or render may be rewritten, as part of
   this feature.
 - **FR-008**: The 18 frozen maps' committed `.svg` and `.png` exhibits MUST remain in git across the
   move, recorded as renames.
@@ -240,6 +240,19 @@ a spec describing the old layout).
     and the `GEN=` / `M=` / `A=` / `B=` default arguments.
   - Guard-script test fixtures that construct pool paths: `scripts/test-review-gate.sh`,
     `scripts/test-sync-with-main.sh`, `scripts/test-make-only-hooks.sh`.
+  - **`pyproject.toml`'s `[tool.ruff] extend-exclude = ["pool"]`.** This one is LOAD-BEARING on
+    FR-007, FR-009 and SC-004, and its failure is destructive rather than merely silent:
+    `legacy-hand-authored-pool` does not match the pattern `pool` (verified 2026-08-30), the frozen
+    gens are tracked so `respect-gitignore` does not cover them, and `make done`'s `lint` and
+    `format` phases run `ruff check --fix .` and `ruff format .`, both of which REWRITE IN PLACE and
+    do not fail. Left unchanged, this feature's own first gate run reformats all 18 frozen
+    hand-authored generators - the gate itself breaching the byte-identity the freeze exists to
+    protect.
+  - `pyproject.toml`'s `[tool.coverage.run] omit = [..., "pool/*/*.gen.py"]` - depth-sensitive, and
+    the legacy gens leave `pool/` entirely. Currently moot because `source` is an explicit module
+    list, which is exactly why nothing would turn red.
+  - The `Makefile`'s index-staleness trigger, `find pool -newer pool/index.html ...`. FR-016 makes
+    the index cover both trees, so a change in the legacy tree must be able to make it stale.
 
 **The documentation**
 
@@ -376,3 +389,38 @@ Four changes were required, and all four were applied:
 Both non-blocking suggestions were also taken: the sibling placement of `legacy-hand-authored-pool/`
 was promoted from an Assumption to **FR-004a**, and the Assumptions entry now records that the
 hand-authored/scripted reading is not load-bearing.
+
+### Round 2 - 2026-08-30 - FAITHFUL
+
+All four round-1 findings confirmed resolved in substance, and the "at minimum" in FR-020a confirmed
+as doing its job (the enumeration reads as a floor, not a closed checklist). No new scope and no
+internal contradiction was introduced by the round-1 edits; FR-013a/FR-013b were checked against
+FR-012/FR-013 and FR-020a against FR-015, and both pairs hold. The three points round 1 cleared -
+the hand-authored/scripted reading, the `pool/regressions/` exemption, the numpy Assumption - all
+still clear.
+
+The review returned four further sites under FR-020a's existing general MUST. They are
+implementation targets rather than spec changes, and are now named in FR-020a because one of them is
+serious enough to deserve naming:
+
+- **`[tool.ruff] extend-exclude = ["pool"]`** - the highest-value find of either round. It is not a
+  path that stops matching quietly; it is a path whose failure makes **this feature's own mandatory
+  gate rewrite the 18 frozen exhibits**, breaching FR-007, FR-009 and SC-004 through the very run
+  that is supposed to verify them. Confirmed by test: `fnmatch("legacy-hand-authored-pool", "pool")`
+  is False.
+- `[tool.coverage.run] omit`'s `pool/*/*.gen.py`, depth-sensitive and currently moot.
+- The `Makefile`'s `find pool -newer pool/index.html` staleness trigger, which must watch both trees
+  now that the index covers both.
+- `render_cache.engine_fingerprint()` and `gencache.engine_files()`, already the plan's top risk
+  (research R4). The review added a sharpening worth keeping: these must be settled in the OPPOSITE
+  direction from FR-020a's `ci/delta.py` bullet - `delta.py` keeps counting the legacy tree as
+  engine content for the merge route, while these two must prune it, because their whole purpose is
+  that map generators are *not* engine source.
+
+Checked and explicitly clear: `[tool.pyrefly] project-includes` (an explicit module list),
+`testpaths`, `scripts/check-duplicate-defs.py` (scans all of `.claude/skills/`, so its file set is
+unchanged), and `scripts/gate-stamp.py`'s diagram area (`*.py` under the skill, likewise unchanged).
+
+One drafting nit was raised and fixed: FR-007's parenthetical cited FR-016 where it meant FR-020.
+
+**Verdict: FAITHFUL. Implementation may begin.**
