@@ -119,7 +119,7 @@ This project uses spec-driven development governed by [`.specify/memory/constitu
   Before implementation, hand the finished `spec.md` and the GM's request AS WRITTEN to
   an independent subagent: does this specify what was asked, and does it add anything
   that was not? Not the plan - a spec graded against its own plan is being checked for
-  self-consistency, which a wrong spec passes. Adjust and re-review up to **three**
+  self-consistency, which a wrong spec passes. Adjust and re-review up to **five**
   times (raised from three by the GM on 2026-08-30); if the FIFTH round still returns
   changes, STOP and escalate, because that many failures means a persistent
   misunderstanding another attempt will not find. The cap exists to end an argument
