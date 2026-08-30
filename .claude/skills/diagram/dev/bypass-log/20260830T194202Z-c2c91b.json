@@ -1,0 +1,6 @@
+{
+  "utc": "20260830T194202Z",
+  "guard": "pair-hooks",
+  "what": "gate alone",
+  "reason": "the paired settlement-review for this engine key completed earlier this session (bounded scope, verdict needs-work, both findings triaged); review-gate reports clean"
+}
