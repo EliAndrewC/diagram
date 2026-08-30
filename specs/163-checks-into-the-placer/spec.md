@@ -152,8 +152,9 @@ discussion before any such change is made, so the work is named here only so the
   formed only from candidates whose guards have each been read and whose tier has no live generator.
 - **A check whose only firing evidence is a frozen manifest of a map no generator can produce.** The
   fixture proves the check has teeth against a shape the engine can no longer make - which is not the
-  current implementation firing. FR-003 makes this NEVER-FIRES and deletes the check with its fixture,
-  reason recorded; it is a rule applied, not a question parked.
+  current implementation firing, and the census classifies it apart on exactly that ground. Under the GM's
+  2026-08-30 amendment to FR-003 that classification does NOT delete it: the row goes to the FR-009 ledger
+  for the case-by-case discussion, like every other check that still fires.
 - **A check that fires only inside another check's fixture** (a fixture pinned to check A also trips
   check B). Incidental firing IS firing under FR-001 and the check is not a deletion candidate: whether it
   EARNS ITS KEEP is FR-009's question and therefore the GM's, in the discussion. The census records the
@@ -185,10 +186,19 @@ discussion before any such change is made, so the work is named here only so the
 - **FR-003**: The census MUST cover all five sources of a verdict: the live pool maps, the frozen negative
   fixtures in `pool/regressions/`, the scripted negative fixtures, waivers declared on shipped maps, and
   any test that asserts a check fires. **A frozen manifest of a shape the current generators cannot
-  produce is not the current implementation firing.** A check whose ONLY evidence is such a fixture is
-  NEVER-FIRES and is deleted WITH that fixture, the reason recorded. The repository has already ruled this
-  way on this exact subject: `bridges_align_with_their_way` was retired because *"every scrap of evidence
-  for it was two decks a person placed BY HAND on maps no generator can produce"* (`dev/gate.md`).
+  produce is not the current implementation firing**, and the census must CLASSIFY it apart from evidence
+  that is - the repository has already ruled this way on this exact subject: `bridges_align_with_their_way`
+  was retired because *"every scrap of evidence for it was two decks a person placed BY HAND on maps no
+  generator can produce"* (`dev/gate.md`).
+
+  **AMENDED BY THE GM, 2026-08-30 (`gm-request.md`): hand-era-only evidence is NOT a deletion criterion.**
+  This clause used to end "...is NEVER-FIRES and is deleted WITH that fixture". Measured, that would have
+  put 103 of the 152 checks on the block, and the session's recommendation - which the GM accepted with
+  *"go"* - was that "has anything made this fail lately" is the right test for finding DEAD code and the
+  wrong test for everything else. The classification stays, because it is a real distinction the ledger
+  reports; the DISPOSITION changes: a `FIRES-HAND-ONLY` check goes to the FR-009 ledger for the GM's
+  case-by-case discussion, exactly like a `FIRES` one. Only a check nothing at all makes fail is a
+  deletion candidate, and even that one takes the FR-006 placer read first.
 - **FR-004**: The census MUST classify every live check name, leaving none unclassified, and MUST fail
   loudly rather than return an empty or partial result.
 - **FR-005**: The census MUST be proven to work by naming at least one check that is independently known

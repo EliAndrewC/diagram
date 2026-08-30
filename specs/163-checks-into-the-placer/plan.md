@@ -111,8 +111,10 @@ and the spec review was explicit that it licenses nothing more. **There are two 
   `tests/fixtures/gate_check_names.json`; its tests; and any frozen fixture whose only purpose was that
   check. A placer that merely DECLINES rather than guarantees is not evidence and does not save a check -
   a runtime net standing behind a possibly-wrong placer is the architecture this feature retires.
-- **Frozen-fixture-only evidence is not the current implementation firing** (FR-003). A check whose only
-  proof of teeth is a hand-era manifest of a shape no generator can roll goes, with its fixture.
+- **Frozen-fixture-only evidence is classified apart, and since the GM's 2026-08-30 amendment to FR-003 it
+  is NOT a deletion criterion.** A check whose only proof of teeth is a hand-era manifest still fires as far
+  as this feature is concerned; it goes to the Phase 3 ledger, not to the deletion. Only a check nothing at
+  all makes fail is a candidate, and even that takes the FR-006 read first.
 - **There is no pre-approved class deletion, and an earlier draft of this plan had one.** A check's tier
   is established by READING ITS GUARD, not by subtracting lists: the review found `ways_clear_of_castle_moat`
   carries no scale guard at all, and `village_has_no_headman` sits at a scale `roll_village` still serves.

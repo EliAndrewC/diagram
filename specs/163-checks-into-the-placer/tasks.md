@@ -74,9 +74,10 @@ finding and is therefore `physical` with its three boxes.
 - [x] **T10** Delete the confirmed checks the way feature 146 established: the segment BODY (not a stubbed
       call), any helper whose chain reaches no other live check, the row in
       `tests/fixtures/gate_check_names.json`, the tests, and any frozen fixture whose only purpose was
-      that check - INCLUDING a check whose only proof of teeth is a hand-era manifest of a shape no
-      generator can roll (FR-003: that is not the current implementation firing). A segment file emptied by
-      the sweep goes with its `__init__.py` star-import line and its `check_village/CLAUDE.md` row.
+      that check. NOT a check whose only proof of teeth is a hand-era manifest - the GM's 2026-08-30
+      amendment to FR-003 makes hand-era-only evidence a classification, never a deletion criterion. A
+      segment file emptied by the sweep goes with its `__init__.py` star-import line and its
+      `check_village/CLAUDE.md` row.
       verify: `make quick`
       research: procedure
 - [x] **T11** READ THE GUARD of every candidate that looks legacy-tier and establish its actual tier from
