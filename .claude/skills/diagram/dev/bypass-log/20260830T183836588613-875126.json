@@ -1,0 +1,7 @@
+{
+  "utc": "2026-08-30T18:38:36Z",
+  "target": "bypass-audit FULL",
+  "commit": "237e6ff4",
+  "outcome": "permitted",
+  "why": "feature 166 acceptance, re-run after fixing all four failures the first FULL run found (seed-43 cohort pin re-homed, two feature-161 flat paths, the pty artifact). The coverage floors are deferred to FULL and this feature deleted the coverage carriers, so the floors must be re-derived before the push (T22). ANSWERED BY THE SESSION, not the GM - authorized 2026-08-25 in the GM's own words: 'all of them look like things that you should be capable of kicking off'."
+}

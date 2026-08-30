@@ -159,9 +159,24 @@ def fixture_skill(tmp_path: Path) -> Path:
 
 
 def make(skill: Path, *args: str) -> subprocess.CompletedProcess[str]:
-    # MAKEFLAGS IS STRIPPED (feature 145): under `make test-full` the parent make exports `COV_FLOORS=1` through MAKEFLAGS, and the fixture's make then
-    # inherited it - no `-m "not rolls_map"`, no `--ignore=tests/full` - so these two tests failed in every FULL run and passed everywhere else.
-    return subprocess.run(["make", "--no-print-directory", "-C", str(skill), *args], capture_output=True, text=True, stdin=subprocess.DEVNULL, env={**os.environ, "MAKEFLAGS": "", "MFLAGS": ""})
+    # THE PARENT RUN'S VARIABLES ARE STRIPPED, and the list is one variable wider than it was.
+    #
+    # MAKEFLAGS (feature 145): under `make test-full` the parent make exports `COV_FLOORS=1` through
+    # MAKEFLAGS, and the fixture's make then inherited it - no `-m "not rolls_map"`, no
+    # `--ignore=tests/full` - so these two tests failed in every FULL run and passed everywhere else.
+    #
+    # FULL and REF_WHY (feature 166): the same defect one variable over, and it hid for the same reason -
+    # it can only be seen from inside a FULL run. A variable set on make's COMMAND LINE is exported into
+    # the environment of its recipes, so `make done FULL=1` puts FULL=1 in os.environ, the fixture's own
+    # `make done` inherits it, and that make meets the FULL prompt with no terminal to answer it and
+    # refuses. Clearing MAKEFLAGS never touched it, because FULL arrives as a plain environment variable
+    # rather than through the flags. Measured 2026-08-30: this is why the target failed on both FULL runs
+    # of feature 166 and passes at every other scope.
+    return subprocess.run(
+        ["make", "--no-print-directory", "-C", str(skill), *args],
+        capture_output=True, text=True, stdin=subprocess.DEVNULL,
+        env={**os.environ, "MAKEFLAGS": "", "MFLAGS": "", "FULL": "", "REF_WHY": ""},
+    )
 
 
 # `regressions` left this list with feature 166: the target rebuilt the frozen negative-fixture corpus,

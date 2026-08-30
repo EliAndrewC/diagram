@@ -89,6 +89,7 @@ CONSUMED_PUBLIC = [
     "centroid",
     "clip_to_clear",
     "cohort",
+    "cohort_specs",  # feature 166: tests/gate/test_cohort_lane_rules.py rolls the gate cohort by its own specs
     "connector_track",
     "crosses_disc",
     "crosses_poly",
