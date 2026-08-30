@@ -53,7 +53,15 @@ sess 1002 sid-town "Diagram (town)"       # named -> canon .clones/diagram-town
 sess 1003 sid-unnamed "Auto Title" derived  # derived title -> unnamed -> canon .clones/gm-assistant
 
 # a LIVE process whose /proc cmdline names claude (via exec -a), and a DEAD one
-bash -c 'exec -a claude-fake-live sleep 300' & LIVE_PID=$!
+# GUARD_EDIT_OK: feature 172 - THE FIXTURE'S "LIVE" PROCESS MUST OUTLIVE THE SUITE, and 300 s did not.
+# On 2026-08-30 a `hooks-test` run took 304 s under load; this process exited at 300, so by the time
+# the claim-backstop case ran the "live" session was genuinely dead, the guard correctly ALLOWED the
+# edit, and the case reported a failure that was really a stopwatch. One run in dozens, and only ever
+# under load - which is exactly when a session is least able to tell a flake from a regression.
+# An hour is comfortably longer than any suite (the slowest recorded run of the whole set is 304 s)
+# and short enough that a suite killed HARD, where the trap below never runs, leaves nothing
+# lingering for a day.
+bash -c 'exec -a claude-fake-live sleep 3600' & LIVE_PID=$!
 sess "$LIVE_PID" sid-live-other "Diagram (city)"
 bash -c 'exec -a claude-fake-dead sleep 300' & DEAD_PID=$!
 sess "$DEAD_PID" sid-dead-other "Diagram (hamlet)"

@@ -172,3 +172,26 @@ now, and the constant on every targeted change is TWO entries rather than three:
 The measurement in R9 is left standing rather than overwritten, because it was true of the tree it was
 taken on and the correction is the more useful record: a number in a document is only ever true of a
 version of the code, and this one lasted about an hour.
+
+## R10 - a suite that fails only when the suite is slow
+
+A late-arriving verification - dispatched before the last two fixes and overlapping them - reported
+`clone-sync-hooks.sh` red after **304 s**, on one case: *"canonical clone claimed by a LIVE other
+session -> blocked (expected rc=2, got rc=0)"*. The suite passed standalone immediately afterwards,
+and had passed in every 60 s parallel run.
+
+**It was a stopwatch, not a regression.** The fixture spawns a fake live session with `sleep 300` and
+later asserts that the guard refuses an edit claimed by it. In a 304-second run that process had
+already exited, so the "live" session was genuinely dead, the guard correctly ALLOWED the edit, and
+the case reported failure.
+
+The coupling is the defect: a fixture whose validity depends on a fixed sleep outlasting the entire
+suite fails exactly when the suite is slow - which is under load, which is precisely when a session is
+least able to tell a flake from a real regression. Raised to an hour: comfortably longer than any
+suite, and short enough that a suite killed hard, where the cleanup trap never runs, leaves nothing
+lingering for a day. (86400 was the first fix and was worse: it traded a rare false red for a rare
+day-long leak.)
+
+Two things this session did right, and they are the reason it took ten minutes rather than an hour:
+the failure was **not** dismissed as "probably the overlap" - the suite was re-run against the pushed
+state before anything else was said - and the fix was **not** a retry.
