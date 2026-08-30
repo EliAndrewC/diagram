@@ -120,8 +120,13 @@ This project uses spec-driven development governed by [`.specify/memory/constitu
   an independent subagent: does this specify what was asked, and does it add anything
   that was not? Not the plan - a spec graded against its own plan is being checked for
   self-consistency, which a wrong spec passes. Adjust and re-review up to **three**
-  times; if the third round still returns changes, STOP and escalate, because three
-  failures means a persistent misunderstanding a fourth attempt will not find. The
+  times (raised from three by the GM on 2026-08-30); if the FIFTH round still returns
+  changes, STOP and escalate, because that many failures means a persistent
+  misunderstanding another attempt will not find. The cap exists to end an argument
+  going nowhere, NOT to cut off a review still finding new, smaller things each round -
+  which is what it did on feature 169, where round 3's only item was one more missed
+  token in a hand-written list. **Watch the new number**: if features start hitting
+  five, the drafting is the problem, not the cap. The
   motivating case is feature 126's FR-003, which said "farmhouses before lanes EXCEPT
   the connector and the field spur" when the GM had said "farmhouses before lanes".
 - **One constitution for the whole repo, deliberately** (GM 2026-08-15): spec-kit's Constitution
