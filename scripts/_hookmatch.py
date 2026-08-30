@@ -196,6 +196,80 @@ def combine(cmd: str) -> str | None:
     return out
 
 
+# ---- CORRECT, DO NOT REFUSE (feature 164) ----------------------------------------------------
+#
+# GUARD_EDIT_OK: new shared decisions for the guards, at the GM's request (2026-08-30): *"are there
+# places where a makefile command is refusing to do something but a tool could do a rewrite or return
+# additional context or whatever?"* There are. The audit found 280 refusals in six days, each one
+# spending a model round trip; where the guard already KNOWS the compliant command - it names it in
+# its own refusal - it may as well produce it. These decisions live here rather than in the hooks so
+# they can be tested with plain strings instead of through bash quoting.
+
+# What `make test-file` runs: pytest with workers, `-q` and `--no-cov` on ONE file. A flag that target
+# already supplies, or one that only asks for less output, is safe to drop. Anything that changes
+# WHICH tests run or HOW they are measured is not, so those keep the refusal - the same never-guess
+# rule feature 162 set for the quick/done rewrite.
+_DROPPABLE = re.compile(
+    r"^(-q|-qq|--quiet|-x|--exitfirst|--no-cov|--no-header|-p|no:cacheprovider|-n|auto|\d+"
+    r"|--dist|worksteal|-v|--tb=\S+|--color=\S+)$"
+)
+_TESTPATH = re.compile(r"^[\w./-]+/test_[\w-]+\.py$|^test_[\w-]+\.py$")
+_PYTEST_RUN = re.compile(r"(?:\S*/)?python3?\s+(?:-\S+\s+)*-m\s+pytest\s+|(?:^|\s)pytest\s+")
+
+
+def as_make_target(cmd: str) -> str | None:
+    """A bare pytest of ONE test file as `make test-file FILE=...`, or None to keep refusing.
+
+    None means the shape is not one that can be rebuilt exactly - a filter, a coverage flag, a second
+    path, a directory, a pipeline - and the guard refuses it as it always has. What the rewrite
+    preserves is feature 127's invariant, that every test invocation goes through a make target; it
+    does NOT preserve coverage floors, because neither this command nor the target holds them.
+    """
+    m = _PYTEST_RUN.search(cmd)
+    if not m:
+        return None
+    head, tail = cmd[: m.start()], cmd[m.end() :]
+    if any(sep in tail for sep in ("|", ">", "&&", ";", "<<")):
+        return None                       # a pipeline or a chain: not ours to rebuild
+    # `( cd <abs> && ... )` is this project's own convention for a command needing a cwd, so the
+    # closing paren is part of the shape rather than an argument. Kept and re-appended verbatim.
+    close = ""
+    if tail.rstrip().endswith(")"):
+        tail, close = tail.rstrip()[:-1], " )"
+    paths, unknown = [], []
+    for word in tail.split():
+        if _TESTPATH.match(word):
+            paths.append(word)
+        elif not _DROPPABLE.match(word):
+            unknown.append(word)
+    if len(paths) != 1 or unknown:
+        return None
+    return f"{head}make test-file FILE={paths[0]}{close}"
+
+
+# The bracket trick, APPLIED rather than recommended: `no-poll` refuses a literal process-matching
+# pattern because it matches the searching shell itself, then names the fix in prose. The fix is
+# mechanical, so it is performed.
+_PROCMATCH = re.compile(
+    r"\b(pgrep|pkill)\b((?:\s+-[a-zA-Z]+)*\s+-[a-zA-Z]*f[a-zA-Z]*)\s+(['\"]?)([^'\"|;&]+)\3"
+)
+
+
+def bracket_pattern(cmd: str) -> str | None:
+    """`cmd` with a literal process-match pattern bracketed, or None when there is nothing to fix."""
+    m = _PROCMATCH.search(cmd)
+    if not m:
+        return None
+    pat = m.group(4)
+    if not pat.strip() or "[" in pat or "$" in pat:
+        return None                       # already bracketed, or built from a variable: cannot self-match
+    first, rest = pat[0], pat[1:]
+    if not first.isalnum():
+        return None
+    quoted = m.group(3) or "'"
+    return cmd[: m.start()] + f"{m.group(1)}{m.group(2)} {quoted}[{first}]{rest}{quoted}" + cmd[m.end() :]
+
+
 if __name__ == "__main__":
     try:
         payload = json.load(sys.stdin).get("tool_input", {}).get("command", "")
@@ -212,5 +286,22 @@ if __name__ == "__main__":
         got = combine(payload)
         if got:
             print(got)
+    # GUARD_EDIT_OK: feature 164 - the two corrections. Each prints the corrected command, or nothing
+    # at all, and silence always means "leave the session's command exactly as it is".
+    elif len(sys.argv) > 1 and sys.argv[1] == "as-make-target":
+        got = as_make_target(payload)
+        if got:
+            print(got)
+    elif len(sys.argv) > 1 and sys.argv[1] == "bracket":
+        got = bracket_pattern(payload)
+        if got:
+            print(got)
+    # GUARD_EDIT_OK: feature 164 - THE COMMAND WITH ITS PROSE BLANKED, for the guards that still match
+    # substrings. A heredoc body and a quoted string are payload, never commands, so a hook that
+    # matches its shapes against THIS answers "is it invoked" instead of "is it mentioned". Three
+    # guards fired on this feature's own documents for naming the shapes they forbid; two of them are
+    # fixed by running their existing patterns against this instead of the raw text.
+    elif len(sys.argv) > 1 and sys.argv[1] == "sanitize":
+        print(_strip_quotes(_strip_heredocs(payload)))
     else:
         print(classify(payload))

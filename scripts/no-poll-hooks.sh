@@ -52,7 +52,21 @@ except Exception: print("")' 2>/dev/null || true)
 # Explicit, visible opt-out for a real external-state wait.
 case "$CMD" in *POLL_OK*) exit 0 ;; esac
 
+# GUARD_EDIT_OK: feature 164 - A MENTION IS NOT AN INVOCATION, and this guard was the last common
+# offender. It matches substrings, so it refused the very command that was WRITING feature 164's
+# specification, because that text quotes the shapes it forbids - and it did the same to a plan and
+# to a set of test vectors, four times in one session. `_hookmatch.py sanitize` blanks heredoc bodies
+# and quoted strings, which is where prose travels; every pattern below now runs against that, so a
+# command that TALKS about a busy-wait passes and one that RUNS one does not. Same fix `gate-hooks`
+# took on 2026-08-29, same reason, and CLAUDE.md's standing rule for guards: match INVOCATIONS.
+HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+# shellcheck source=/dev/null
+. "$HERE/_guardlog.sh"
+SCAN=$(printf '%s' "$INPUT" | "$HERE/_hookmatch.py" sanitize 2>/dev/null || printf '%s' "$CMD")
+[ -n "$SCAN" ] || SCAN="$CMD"
+
 block() {
+  guard_log no-poll blocked "$(guard_cmd)"
   echo "BLOCKED (no-poll): $1
 
 $2
@@ -68,38 +82,58 @@ what you are waiting for.
   exit 2
 }
 
-# ---- 1. pgrep/pkill -f with a LITERAL pattern: self-matching by construction ---------------------
-# The pattern is part of this very command line, so pgrep -f finds this shell and reports "running"
-# forever. A pattern built from a variable ($VAR - the literal text on the command line is the
-# variable name) or written with the bracket trick ([m]ake) does not self-match, so both are allowed.
-if printf '%s' "$CMD" | grep -Eq '\b(pgrep|pkill)\b[^|;&]*[[:space:]]-[a-zA-Z]*f'; then
-  PAT=$(printf '%s' "$CMD" | grep -Eo '\b(pgrep|pkill)\b[^|;&]*' | head -1)
-  case "$PAT" in
-    *'$'* | *'['*) ;; # variable or bracket-trick pattern: cannot match its own command line
-    *) block "\`pgrep -f\` / \`pkill -f\` with a literal pattern always matches ITS OWN shell." \
-        "The pattern you are searching for is an argument of the command line you are running, so pgrep
-finds this very process and reports the job as still running - the loop can never exit early. That
-exact bug cost 10.9 minutes on 2026-07-25.
-
-If you genuinely need to test whether a PID is alive, use \`kill -0 <pid>\` or read /proc/<pid>; to
-match a command line without self-matching, use the bracket trick (pgrep -f '[m]ake done')." ;;
-  esac
-fi
-
 # ---- 2. a loop containing a sleep: a busy-wait ---------------------------------------------------
 SLEEP_RE='(^|[;&|(]|[[:space:]]|\bdo\b|\bthen\b)[\\]?((command|env|busybox)[[:space:]]+)?(/(bin|usr/bin)/)?sleep[[:space:]]+[0-9.]'
-if printf '%s' "$CMD" | grep -Eq '(^|[;&|[:space:]])(while|until|for)[[:space:]]' && printf '%s' "$CMD" | grep -Eq "$SLEEP_RE"; then
+if printf '%s' "$SCAN" | grep -Eq '(^|[;&|[:space:]])(while|until|for)[[:space:]]' && printf '%s' "$SCAN" | grep -Eq "$SLEEP_RE"; then
   block "this is a busy-wait loop (a loop containing \`sleep\`)." \
     "Waiting in a loop burns wall-clock at full model-turn cost and, for anything the harness tracks, it
 is pure waste: a backgrounded Bash command notifies you the moment it exits."
 fi
 
 # ---- 3. sleep invoked in a form that only exists to dodge the harness's foreground-sleep guard ----
-if printf '%s' "$CMD" | grep -Eq '(^|[;&|(]|[[:space:]])([\\]|(command|env|busybox)[[:space:]]+|/(bin|usr/bin)/)sleep[[:space:]]+[0-9.]'; then
+if printf '%s' "$SCAN" | grep -Eq '(^|[;&|(]|[[:space:]])([\\]|(command|env|busybox)[[:space:]]+|/(bin|usr/bin)/)sleep[[:space:]]+[0-9.]'; then
   block "\`sleep\` was invoked in a form that evades the harness's foreground-sleep block." \
     "The harness blocks foreground \`sleep\` on purpose; \`command sleep\`, \`/bin/sleep\` and \`env sleep\`
 are the same thing wearing a hat. Whatever you were about to wait for, there is a better signal for
 it - a completion notification for harness-tracked work, or POLL_OK for genuinely external state."
+fi
+
+# ---- 4. a STANDALONE self-matching process match: corrected, not refused ------------------------
+#
+# ORDER IS LOAD-BEARING HERE, and this guard's own suite proved it (feature 164). The correction used
+# to sit FIRST, and in that position it pre-empted both refusals above: the original 2026-07-25
+# command - a `for` loop, a self-matching pattern and a disguised `sleep` on one line - was rewritten
+# and ALLOWED, which is precisely the 10.9-minute busy-wait this guard exists to stop. So a rewrite
+# may only reach a command the refusals have already declined to take, and it runs last. What
+# survives to here is a process match with no loop and no sleep around it: a legitimate question
+# ("is it still running?") asked in a way that answers itself wrongly.
+# The pattern is part of this very command line, so pgrep -f finds this shell and reports "running"
+# forever. A pattern built from a variable ($VAR - the literal text on the command line is the
+# variable name) or written with the bracket trick ([m]ake) does not self-match, so both are allowed.
+# GUARD_EDIT_OK: feature 164 - THE FIX IS APPLIED, NOT RECOMMENDED. This branch refused the command
+# and then told the session, in prose, to use the bracket trick. That recommendation is a mechanical
+# substitution, so the hook performs it: the command runs, correctly, and no round trip is spent
+# (GM 2026-08-30). `_hookmatch.py bracket` returns nothing for a pattern that is already bracketed or
+# built from a variable - neither can match its own command line - so those are untouched as before.
+if printf '%s' "$SCAN" | grep -Eq '\b(pgrep|pkill)\b[^|;&]*[[:space:]]-[a-zA-Z]*f'; then
+  FIXED=$(printf '%s' "$INPUT" | "$HERE/_hookmatch.py" bracket 2>/dev/null || true)
+  if [ -n "$FIXED" ]; then
+    guard_log no-poll rewrote "$(guard_cmd)"
+    printf '%s' "$INPUT" | REWRITTEN="$FIXED" python3 -c '
+import json, os, sys
+payload = json.load(sys.stdin).get("tool_input", {})
+payload["command"] = os.environ["REWRITTEN"]
+print(json.dumps({"hookSpecificOutput": {
+    "hookEventName": "PreToolUse",
+    "updatedInput": payload,
+    "additionalContext": (
+        "The process-match pattern was bracketed for you: a literal pattern is an argument of the "
+        "command line being searched, so it always finds the searching shell itself and the wait "
+        "never ends. Corrected rather than refused - the refusal used to cost a round trip to say "
+        "the same thing."),
+}}))'
+    exit 0
+  fi
 fi
 
 exit 0

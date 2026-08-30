@@ -35,10 +35,16 @@
 # ESCAPE HATCH: put MEASURE_OK in the command with a reason - a legitimate re-run after fixing a red
 # (the measurement failed and you fixed the cause), or a deliberate before/after pair for a record.
 #
-# LIMITATION, stated rather than hidden: the classifier is a substring test, like its siblings, so a
-# command that merely MENTIONS `make test-full` (a grep, a doc edit quoting it) counts as a run. That
-# direction fails safe - it costs at most one block, which MEASURE_OK clears - and a real command
-# parse is not worth the false-negative risk.
+# GUARD_EDIT_OK: feature 164 - FIXING A GUARD THAT FIRES ON CORRECT WORK. A MENTION IS NOT AN
+# INVOCATION. This file used to record the opposite as an accepted limitation: *"the classifier is a
+# substring test ... a command that merely MENTIONS a full run counts as one ... a real command parse
+# is not worth the false-negative risk."* That trade-off was made before `_hookmatch.py` existed. It
+# does now, `gate-hooks` has used it since 2026-08-29, and the cost of the old reading was measured on
+# this feature's own work: a command writing PROSE that named a gate target spent a budget slot, so
+# the next genuine measurement would have been refused for something nobody ran. The patterns below
+# match the SANITIZED command - heredoc bodies and quoted strings blanked, which is where prose
+# travels - so a document about the guard passes and a measurement does not. The BLOCK itself, its
+# budget and its escape are untouched: that block is the point.
 #
 # Wired from .claude/settings.json. Tested by scripts/test-measure-hooks.sh.
 set -euo pipefail
@@ -94,7 +100,12 @@ case "$MODE" in
     case "$CMD" in *MEASURE_OK*) guard_log measure escaped "$(guard_cmd)"; : > "$STATE"; exit 0 ;; esac
     case "$CMD" in *"git commit"*) : > "$STATE"; exit 0 ;; esac
 
-    case "$CMD" in
+    # GUARD_EDIT_OK: feature 164 - the shapes are matched against the SANITIZED command (see the note
+    # at the top). `SCAN` falls back to the raw command if the matcher cannot be reached, so a broken
+    # helper makes this guard stricter rather than blind.
+    SCAN=$(printf '%s' "$INPUT" | "$HERE/_hookmatch.py" sanitize 2>/dev/null || printf '%s' "$CMD")
+    [ -n "$SCAN" ] || SCAN="$CMD"
+    case "$SCAN" in
       *"make test-full"*|*"make -C"*test-full*|*"done FULL=1"*)
         N=$(( $(count) + 1 ))
         if [ "$N" -gt "$BUDGET" ]; then
