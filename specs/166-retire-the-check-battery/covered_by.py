@@ -16,6 +16,21 @@ carried by the battery alone, and retiring it needs a new test written first.
 
 The battery's own tests are excluded deliberately: they are what is being retired, so a rule they alone
 catch is exactly a rule with no home yet.
+
+THE RESULT IS ASYMMETRIC, AND READING IT SYMMETRICALLY IS THE TRAP THIS TOOL CAN SET.
+
+  NOT COVERED is a VERDICT. Nothing outside the battery notices the guarantee break, so the rule has no
+  home and a new test is owed. That conclusion is sound.
+
+  COVERED is only a FILTER. It says SOME test went red when the predicate broke - not that THIS check's
+  rule is asserted anywhere. Break `_in_blocked` and a house-placement test goes red; that proves the
+  predicate is exercised, and says nothing about whether "a garden is clear of a channel" is checked by
+  anything. Mutating a shared predicate and reading a red as coverage of every rule that leans on it is
+  the same "measure what the rule measures" error the whole feature keeps turning up, one level higher.
+
+So: use NOT COVERED to find the rules that certainly need a test, and treat COVERED as "a specific
+assertion may exist - go find it and name it in the migration record, or write one". A drop is recorded
+against a NAMED test, never against a green probe.
 """
 
 from __future__ import annotations
