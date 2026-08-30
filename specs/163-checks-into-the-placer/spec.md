@@ -71,8 +71,9 @@ PRODUCE TODAY makes that check emit a FAIL - a live pool map, a map the current 
 scripted negative fixture built from today's placers, or a recorded miss of the current placer. Evidence
 that exists only as a hand-era manifest or a hand-BUILT test dict is classified apart and routed to the
 FR-009 ledger - not deleted (FR-003, as the GM amended it on 2026-08-30). **Only a check that NOTHING at
-all makes fail is a deletion candidate**, and that one takes the FR-006 placer read first; what survives
-that read is deleted with its segment body, its tests, its fixture entries and its pin.
+all makes fail is a deletion candidate**, and that one takes the FR-006 placer read first; what that read
+finds DEAD is deleted with its segment body, its tests, its fixture entries and its pin, and what it finds
+merely unfired goes to the ledger.
 
 **Why this priority**: It is the GM's stated first task, it is self-contained, and it needs no ruling from
 anyone - a check that cannot be shown to fire anywhere is not load-bearing by construction.
@@ -88,14 +89,16 @@ geometry, so any render diff is diagnosed before the deletion lands.
    named), **FIRES-HAND-ONLY** (only a hand-era or hand-built manifest does - to the FR-009 ledger), or
    **NEVER-FIRES** (nothing does - to the FR-006 read). A two-way split would collapse hand-only into
    never-fires and hand 103 checks to the deletion task.
-2. **Given** a NEVER-FIRES check, **When** its segment, tests, fixture entries and pin are deleted,
-   **Then** `make done` is green and every pool render is compared byte-for-byte, any diff diagnosed.
+2. **Given** a check the FR-006 read finds DEAD, **When** its segment, tests, fixture entries and pin are
+   deleted, **Then** `make done` is green and every pool render is compared byte-for-byte, any diff diagnosed.
 3. **Given** a check the census calls NEVER-FIRES, **When** its placer is read and the record grepped,
-   **Then** either evidence is found that the CURRENT placer misses it - in which case it is reclassified
-   FIRING with that evidence and routed to the ledger - or it is deleted. A placer that merely declines
-   rather than guarantees is not evidence and does not save the check.
+   **Then** exactly one of three things is recorded: evidence that the CURRENT placer misses it, and it is
+   reclassified FIRING and routed to the ledger; or no such evidence AND the check is DEAD (a name no scale
+   can emit, a tier no live generator can produce), and it is deleted; or neither, and it goes to the
+   FR-009 ledger with every other surviving check.
 4. **Given** the census output, **When** a reader asks why a specific check was deleted, **Then** the
-   ledger names the evidence that was looked for and not found.
+   ledger names both the evidence that was looked for and not found AND the ground on which the check is
+   DEAD - because absence of evidence alone is not a deletion reason.
 
 ---
 
@@ -104,26 +107,28 @@ geometry, so any render diff is diagnosed before the deletion lands.
 With the dead checks gone, every check that DOES fire is MEASURED - which stage last changes each of its
 inputs, what its placer guarantees, who besides the gate reads its verdict, what the record shows it has
 caught - and the evidence is stated against the GM's own two readings: a bug in the placement algorithm, or
-fold it into a trial-and-error placer. The ledger assigns no category and reaches no verdict, so the GM can
-hold the case-by-case discussion they asked for against evidence rather than against a session's sort.
+fold it into a trial-and-error placer, applying the GM's own discriminator (can any stage after the placer
+change what this check reads?). The ledger points; it does not decide. No change is made on the strength of
+the sort, and the ruling stays the GM's, check by check, in the discussion they asked for.
 
 **Why this priority**: The GM explicitly named this as the step after the deletion, and explicitly said it
 is *"a discussion we should stop and have before any changes like that are made"*. So the deliverable here
 is EVIDENCE, not a change and not a decision.
 
 **Independent Test**: The ledger exists, covers every surviving check, and each row carries the measurement
-and the evidence for each of the GM's two readings rather than an assertion or a category.
+and which of the GM's two readings it points at - with no placer changed on the strength of it.
 
 **Acceptance Scenarios**:
 
 1. **Given** the surviving checks, **When** the measurement runs, **Then** every one of them has a row
-   carrying its measurement, and no row assigns the check to a category.
+   carrying its measurement and the reading that measurement points at, with the measurement stated so the
+   GM can disagree with the pointer.
 2. **Given** a check whose measurement shows a later stage can invalidate an earlier stage's work, **Then**
    the ledger NAMES that stage, because that is the fact the GM's discussion turns on.
 3. **Given** a check the measurement fits neither of the GM's two readings, **Then** the ledger records
    "neither, because X" as an observation for the discussion rather than forcing it into a reading.
 4. **Given** the finished ledger, **When** the session reports to the GM, **Then** no placer has been
-   changed, no check has been folded into one, and no check has been assigned a disposition.
+   changed and no check has been folded into one - whatever reading any row points at.
 
 ---
 
@@ -184,8 +189,8 @@ discussion before any such change is made, so the work is named here only so the
   a small hand-built manifest (`dev/gate.md`), so a check that only such a manifest makes fail has proven
   TEETH without proving the current implementation produces the fault. It is classified `FIRES-HAND-ONLY`
   and routed to the FR-009 ledger per FR-003: **it is NOT a deletion candidate and does NOT take the FR-006
-  read.** (An earlier draft sent it to FR-006, whose second outcome is deletion - which would have put 103
-  of the 147 checks on the block, the exact thing the GM's 2026-08-30 ruling forbids.)
+  read.** (An earlier draft sent it there, back when FR-006 deleted on absence of evidence - which would
+  have put 103 of the 147 live checks on the block, the exact thing the GM's 2026-08-30 ruling forbids.)
 - **FR-002**: The census MUST establish each verdict by EXECUTION - running the gate against the artifact
   and reading the verdict - not by grepping for the check's name. A name appearing in a test file is not
   evidence that the test makes the check fail.
@@ -199,7 +204,7 @@ discussion before any such change is made, so the work is named here only so the
 
   **AMENDED BY THE GM, 2026-08-30 (`gm-request.md`): hand-era-only evidence is NOT a deletion criterion.**
   This clause used to end "...is NEVER-FIRES and is deleted WITH that fixture". Measured, that would have
-  put 103 of the 152 checks on the block, and the session's recommendation - which the GM accepted with
+  put 103 of the 152 checks then live on the block, and the session's recommendation - which the GM accepted with
   *"go"* - was that "has anything made this fail lately" is the right test for finding DEAD code and the
   wrong test for everything else. The classification stays, because it is a real distinction the ledger
   reports; the DISPOSITION changes: a `FIRES-HAND-ONLY` check goes to the FR-009 ledger for the GM's
@@ -211,21 +216,23 @@ discussion before any such change is made, so the work is named here only so the
   to fire, and by a guard that goes red if the census silently classifies nothing.
 - **FR-006**: Before a NEVER-FIRES check is deleted, its placer MUST be read and the record grepped for
   what the check has actually caught, and the finding recorded per check. This is VERIFICATION OF THE
-  CENSUS, not an appeal against the deletion, and it has exactly **two** outcomes:
+  CENSUS, not an appeal against the deletion, and it has **three** outcomes:
   - **Evidence found** that the check has caught, or can be made to catch, the CURRENT placer - a recorded
     miss in the code or the record, a live map, a scripted negative fixture, a waiver. The census verdict
     was WRONG: the check is reclassified **FIRING**, the evidence recorded, and it goes to the FR-009
     ledger for the GM's discussion. (The worked precedent is `bridges_span_their_water`, which the
     mechanical census called retire and `hamletgen/ways.py` records catching the scripted placer four
     separate times.)
-  - **No such evidence** - it is deleted, per the GM's first task.
+  - **No such evidence, AND the check is DEAD** - a name no scale can emit, or a check whose only tier no
+    live generator can produce. It is deleted, per the GM's first task.
+  - **Neither** - no recorded miss, and not dead. It goes to the FR-009 ledger with every other surviving
+    check, for the GM's case-by-case pass. **Absence of firing evidence does not, by itself, delete.**
 
-  **AMENDED BY THE GM, 2026-08-30.** The ruling enumerates the deletion set itself - *"delete the 5 dead
+  **THE DELETION SET IS THE GM'S OWN ENUMERATION, 2026-08-30.** The ruling names it - *"delete the 5 dead
   ones (2 phantom names that can't be emitted at any scale, 3 that only run on tiers no generator can
-  produce), then go straight into the case-by-case pass over the rest"* - so a NEVER-FIRES check the read
-  finds is NEITHER genuinely dead NOR a recorded placer miss goes to the FR-009 ledger with everything
-  else, rather than being deleted. What is deleted is what is DEAD: a name no scale can emit, or a check
-  whose only tier no generator can produce.
+  produce), then go straight into the case-by-case pass over the rest"* - which is where the third outcome
+  above comes from. An earlier draft of this requirement said "there is no third outcome" and deleted on
+  absence of evidence alone; that would have deleted four checks the ruling placed in "the rest".
 
   **This is not round 1's carve-out returning, and the difference is who is deciding.** Round 1 struck a
   clause letting the SESSION keep a check on its own judgment that a placer "fails softly". Here the GM
@@ -241,14 +248,20 @@ discussion before any such change is made, so the work is named here only so the
   diff MUST be DIAGNOSED before the deletion lands. Once its cause is understood the deletion stands and
   the map is allowed to move - the GM's standing ruling is *"I do not require any of these maps to
   maintain bite identity now or at any time"* (feature 141).
-- **FR-009**: The feature MUST produce a ledger covering every SURVIVING check that RECORDS THE
-  MEASUREMENT rather than assigning a category: which stage last changes each of its inputs, what its
-  placer actually guarantees, who besides the gate reads its verdict, and what it is recorded as having
-  caught. Against that measurement the ledger states the GM's own two readings - **a bug in the placement
-  algorithm**, or **fold it into a trial-and-error placer** - with the evidence for each, and may record
-  "neither, because X" as an observation where that is what the measurement shows. The DECISION is the
-  GM's, case by case, in the discussion they asked for; this feature supplies the evidence, not the
-  verdict.
+- **FR-009**: The feature MUST produce a ledger covering every SURVIVING check that records the
+  MEASUREMENT - which stage last changes each of its inputs, what its placer guarantees, who besides the
+  gate reads its verdict, what it is recorded as having caught - and applies **the GM's own discriminator**
+  to it: *"can any stage after the placer change what this check reads? If no, it's re-measuring something
+  the placer guaranteed... If yes, it's checking a real emergent property and it stays."* Each row states
+  which of the GM's two readings its measurement points at - **a bug in the placement algorithm** or **fold
+  it into a trial-and-error placer** - or "neither, because X" where the measurement shows that, with the
+  measurement behind it.
+
+  **Two guardrails, and they are the GM's, not a prohibition on sorting.** (a) NO CHANGE is made on the
+  strength of the sort - FR-010 and US3 hold regardless of which reading a row points at. (b) The RULING is
+  the GM's, check by check, in the discussion they asked for; the ledger supplies the evidence and the
+  pointer, never the decision. An earlier draft of this requirement forbade the ledger to sort at all,
+  which was stricter than the ruling allows and which the delivered ledger correctly does not obey.
 - **FR-010**: The feature MUST NOT change any placement algorithm, fold any check into one, or convert any
   check into a unit test of a placer. Those changes are blocked on the GM's discussion, per the request.
 *(FR-011 and FR-012 were removed at spec review: recording the gate's wall-cost, and building the census
@@ -267,14 +280,15 @@ implementation note in the plan.)*
   FR-006 read, and thence deleted or kept).
 - **Measurement row**: for a surviving check - which stage last changes each input, what the placer
   guarantees, who reads the verdict, what it is recorded as having caught - and the evidence for each of
-  the GM's two readings. It carries no verdict; the verdict is the GM's.
+  the GM's two readings, and which of them the measurement points at. The POINTER is not the ruling: no
+  change follows from it, and the decision is the GM's, check by check.
 
 ## Success Criteria *(mandatory)*
 
 ### Measurable Outcomes
 
-- **SC-001**: Every one of the 152 live check names carries a census verdict with named evidence; zero are
-  unclassified.
+- **SC-001**: Every live check name carries a census verdict with named evidence; zero are unclassified.
+  (152 at the census, 147 after the retirement.)
 - **SC-002**: Every check the census calls NEVER-FIRES has had the FR-006 read and one of three recorded
   outcomes: **deleted** because it is dead (a name no scale can emit, or a tier no generator can produce);
   **reclassified FIRING** on recorded evidence that the current placer misses it; or **routed to the
@@ -282,8 +296,8 @@ implementation note in the plan.)*
   any reason but being dead.
 - **SC-003**: After the deletions the gate is green on all five live hamlets, and every pool render is
   either byte-identical or its diff is diagnosed in writing with the cause.
-- **SC-004**: The ledger covers 100% of surviving checks; each row states the measurement and the evidence
-  for the GM's two readings, and no row asserts a decision.
+- **SC-004**: The ledger covers 100% of surviving checks; each row states the measurement and which of the
+  GM's two readings it points at, and no placer is changed on the strength of any row.
 - **SC-005**: No placement algorithm changed in this feature; the diff touches checks, their tests, their
   fixtures and the census tooling only.
 
@@ -392,3 +406,40 @@ caught one carve-out contrary to the GM's instruction (round 1, FR-006 - which t
 flagged as a suspected carve-out), one whole user story left carrying the requirement its own FR forbade
 (round 2, C1), and two factual claims about the codebase that would each have deleted a live check on a
 false premise (round 2 C5, round 3 F1). Every one of the four would have reached the implementation.
+
+### Round 4 - independent re-review of the AMENDED spec, 2026-08-30: CHANGES REQUIRED, all applied
+
+The GM's ruling changed the deletion criterion, so the spec a reviewer now reads is not the one rounds 1-3
+read - a new question rather than a fourth attempt at the same misunderstanding. Round 4 found six places
+where the amendment had landed in FR-003 and stopped: FR-001 still routed the 103 hand-only checks into
+FR-006 (whose second outcome was deletion - round 3's F2 inverted); the US1 body still delivered the
+superseded deletion while CITING FR-003 for it; US1 scenario 1 and Key Entities offered a TWO-way
+classification that collapses hand-only into never-fires; FR-006 and SC-002 would have deleted four checks
+the ruling placed in "the rest" and the build correctly kept; the plan's Phase 2 and T08 carried the same
+gap; and two DELIVERED artifacts (`firing-census.md`, `placer-reads.md`) stated the superseded criterion to
+their reader. All applied.
+
+### Round 5 - requested by the GM, 2026-08-30: CHANGES REQUIRED, all applied
+
+The session had committed to stopping after round 4 and reported that; the GM answered *"Do another review
+round"*. Round 5 confirmed FR-006's amendment is faithful and NOT round 1's carve-out returning (*"round 1
+struck a clause letting the SESSION keep a check on its own reading... here the criterion is the GM's own
+enumeration, and the build matches it exactly and nothing more"*), and confirmed the stop holds by reading
+the engine diff rather than the prose (*"not one file under `settlement/`, `hamletgen/` or `waterfields/`"*).
+
+Its finding was one sentence long and it is the sharpest diagnosis of this session's editing in five
+rounds: **"the ADDITIONS landed, four RETRACTIONS did not"** - the new rule had been written BESIDE the
+superseded sentence instead of replacing it, so the operative text still stated the disposition the GM
+changed. FR-006 still opened "it has exactly two outcomes" above three bullets; the plan still said "There
+are two outcomes and no third" above three; T08 said "Two outcomes, no third" and then listed three; and
+US1 scenario 3 still deleted on absence of evidence, which would have removed two of the four checks the
+GM's "the rest" kept. Every one is now REPLACED rather than annotated, and a forbidden-phrase sweep over
+the spec, the plan, the tasks and all five delivered artifacts proves none survived.
+
+Round 5 also DECIDED the item round 4 had raised as an aside and not required: **FR-009's "assigns no
+category" had to go**, and in the direction of the ruling rather than of the artifact. The GM's accepted
+recommendation supplies the discriminator in their own accepted words - *"can any stage after the placer
+change what this check reads?"* - so the ledger applying it is what was asked for. What FR-009 keeps are
+the two guardrails that are genuinely the GM's: no change is made on the strength of the sort, and the
+ruling is theirs, check by check. Propagated to US2's body, its scenarios 1 and 4, the Independent Test,
+Key Entities and SC-004 - *"all six, this time, or the next round finds the seventh."*

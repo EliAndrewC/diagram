@@ -112,7 +112,7 @@ that the test makes the check FAIL. So the census instruments the emitter instea
 ## Phase 2 - verify the census, then delete (US1, FR-006 to FR-008)
 
 Feature 158's rule licenses an INVESTIGATION here - the census's verdict is a candidate, not a ruling -
-and the spec review was explicit that it licenses nothing more. **There are two outcomes and no third.**
+and the spec review was explicit that it licenses nothing more. **There are THREE outcomes**, the third being the GM's own (2026-08-30).
 
 - Per candidate: read the placer that produces the feature the check judges, and grep the record
   (`dev/`, `specs/`, commit messages) for what the check has actually caught. Record the finding.

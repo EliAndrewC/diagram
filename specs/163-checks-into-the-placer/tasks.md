@@ -55,8 +55,8 @@ finding and is therefore `physical` with its three boxes.
 ## Phase 2 - read the placer, then delete (US1, P1)
 
 - [x] **T08** For every NEVER-FIRES candidate, read the placer that produces the feature it judges and
-      grep `dev/`, `specs/` and the commit log for what the check has actually caught. **Two outcomes,
-      no third** (FR-006): evidence that the CURRENT placer misses it reclassifies the check FIRING and
+      grep `dev/`, `specs/` and the commit log for what the check has actually caught. **Three outcomes**
+      (FR-006, as the GM's 2026-08-30 ruling set them): evidence that the CURRENT placer misses it reclassifies the check FIRING and
       routes it to T14's ledger; no such evidence AND the check is dead (a name no scale can emit, a tier
       no generator can produce) and it is deleted; neither of those and it goes to T14's ledger with
       everything else - the GM's 2026-08-30 ruling names the deletion set itself. Record the placer read
@@ -88,7 +88,6 @@ finding and is therefore `physical` with its three boxes.
       (a scale `roll_village` still serves) are the two specimens. Only candidates whose guards have each
       been read AND whose tier no live generator reaches may be presented as a group; the grouping presents
       individually verified verdicts to the GM, it never substitutes for T08's read.
-      research: procedure
       research: procedure
 
 ## Phase 3 - verify the maps did not move (US1, P1)
