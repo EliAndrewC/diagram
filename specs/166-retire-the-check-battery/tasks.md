@@ -101,9 +101,27 @@ that batch. A batch is not done until its replacements have each been seen red.
       body now has a documented home (FR-005). The urban rules bind hardest - they have no placer. Record
       the confirmation per rule; a class-level assumption is what this task exists to prevent.
       research: physical
-      - [ ] research pass
-      - [ ] source-reader confirmed
-      - [ ] recorded and cited
+      - [X] research pass - THE RECORD ALREADY ANSWERS IT, and the pointers are the answer. Each of the
+            19 dropped rules was checked against a documented home and the home was checked to actually
+            contain its subject: `research/religion-and-death.md` (torii, shrine halls, the funerary
+            clearances, the remote shrine's well), `research/urban-features.md` (tanning yards),
+            `research/cities/river-cities.md` (towpaths, waterside works), `research/cities/fabric.md`
+            (city streets), `research/cities/defenses.md` (in-wall drains), `settlements/ways.md` (roads
+            on marsh, road beds), `settlements/water.md` (the source pond's feeder, the aqueduct tap, the
+            castle moat) and `dev/gate.md` (the two waiver meta-checks). Every pointer is in the
+            migration record, per rule, not per class - which is what this task exists to prevent.
+      - [X] source-reader confirmed - NOT APPLICABLE, and the reason is recorded rather than the box
+            being ticked past. A `source-reader` verifies that a cited page says what a NEW claim says it
+            says. This task makes no new claim about how a place was built: it confirms that findings
+            ALREADY researched, cited and registered in `research/SOURCES.md` still have a home now that
+            the check bodies restating them are deleted. Dispatching a reader would re-verify citations
+            this feature did not touch.
+      - [X] recorded and cited - the per-rule table in
+            `specs/166-retire-the-check-battery/migration-record.md`, whose 19 DROP rows each carry the
+            grounding and its pointer. ONE POINTER I WROTE WAS WRONG and was caught by checking rather
+            than by assuming: `ways_clear_of_castle_moat` was pointed at `research/cities/defenses.md`,
+            which contains no mention of a moat at all; the moat's research is in `settlements/water.md`
+            (24 mentions), because a moat is water before it is a defense.
 - [X] **T19** Rewrite `dev/gate.md` to carry the successor doctrine in the GM's own words (FR-010): when
       towns, provincial cities and capitals are scripted, their rules are written directly as tests of the
       placer that owns them, and a post-placement battery is not rebuilt. A session looking up "how do I

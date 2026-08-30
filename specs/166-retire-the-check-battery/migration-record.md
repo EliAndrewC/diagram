@@ -152,7 +152,7 @@ differs by tier is the COUNT (a city draws the set: the principal board plus one
 | `lane_ends_front_different_houses` | same module (no house discharges more than two lane ends) | the fronted-end count is asserted, so it cannot judge nothing |
 | `groves_clear_of_lanes` | same module (the TRUNK position, never the crown's reach - GM 2026-08-29: a woodland path is a path under trees) | the flat `(x, y, r)` packing is named at the point of use, because reading the third value is the mistake the rule warns against |
 | `fields_clear_of_road` | **DROP - no scripted executor.** `roadways` is derived from `M["road"]`, which is empty on every live map; no scripted generator lays an Imperial road. The grounding - a way's tread may not run under a drawn plot - is recorded here and in `settlements/ways.md` | - |
-| `roads_clear_of_marsh` | **DROP - same reason**, same `roadways` source. A road is routed around standing water rather than through it; recorded, not deleted | - |
+| `roads_clear_of_marsh` | **DROP - same reason**, same `roadways` source. A road is routed around standing water rather than through it; recorded, not deleted. Grounding: `settlements/ways.md` | - |
 
 | `woodland_commons_visibly_stocked` | `tests/gate/test_settlement_cover.py` (crowns recorded, at least five) | `stage_woodland` made to seat nothing -> RED |
 | `woodland_commons_on_dry_ground` | same module (a 5x5 sample grid against the drawn marshes) | same mutation -> RED; the marsh population is asserted first |
@@ -172,21 +172,21 @@ differs by tier is the COUNT (a city draws the set: the principal board plus one
 | `all_ink_is_ruled_on` | same module (`unclassed_ink` and `unregistered_classes` both empty, with `ink_classes` non-empty so it cannot pass on a blank page) | the interactive map owes its reader an answer for every feature they can click; `cls="-"` is a ruling, absence is not |
 | `houses_face_south` | already carried by `tests/gate/test_generator_contracts.py` (feature 166, earlier in this feature) | - |
 | `aqueduct_taps_water_lands_dry` | **DROP - no scripted executor.** Reads `aqueducts` / `tanning_yards` / `towpaths` / `moat`; every one is empty on every live map. Urban water vocabulary no hamlet generator produces. Grounding recorded in `settlements/water.md` | - |
-| `tanning_yards_on_water` | **DROP - same segment, same empty vocabulary.** A tannery stands by water because hides are soaked; the finding is recorded in `research/` and surfaces in the interactive map's modal | - |
-| `towpath_hugs_the_bank` | **DROP - same segment.** A towpath is the bank a boat is hauled from, so it runs ON the bank; recorded, not deleted | - |
-| `waterside_works_follow_the_bank` | **DROP - no scripted executor.** Reads `canals`, `castles`, `aqueducts` - all empty on every live map | - |
-| `city_streets_reach_their_neighbors` | **DROP - no scripted executor.** Reads `town_streets`, empty on every live map | - |
-| `inwall_drains_gated_at_cutoff` | **DROP - no scripted executor.** Reads `wall` and `ring_road`, both empty on every live map. A drain through a defensive wall is gated so the wall is not a way in - recorded | - |
-| `ways_clear_of_castle_moat` | **DROP - no scripted executor.** Reads `castles` and `moat`, both empty on every live map | - |
-| `ways_not_inside_road_beds` | **DROP - no scripted executor.** Reads `road`, empty on every live map | - |
-| `no_structure_on_torii` | **DROP - no scripted executor.** `torii` is empty on every live map; the hamlet path draws hokora, not torii | - |
-| `torii_clear_of_halls_towers_ring` | **DROP - same.** Reads `torii` and `religious`, both empty | - |
-| `religious_clear_of_ring_and_towers` | **DROP - no scripted executor.** `religious` is empty on every live map | - |
-| `shrine_halls_clear_of_lanes` | **DROP - same, `religious`.** The hamlet's shrine is a farmstead hokora in `farm_fixtures`, which this rule never read | - |
-| `funerary_clear_of_fields` | **DROP - no scripted executor.** Reads `cemeteries`, `cremation_grounds`, `ossuaries`, `mausoleums` - all empty on every live map. NOTE the near miss: `field_graves` is non-empty on Kashikawa, and is a DIFFERENT feature this rule never read | - |
-| `remote_shrine_has_own_well` | **DROP - no scripted executor.** No live map digs a well marked `shrine`; measured across all five | - |
+| `tanning_yards_on_water` | **DROP - same segment, same empty vocabulary.** A tannery stands by water because hides are soaked; the finding is recorded in `research/` and surfaces in the interactive map's modal. Grounding: `research/urban-features.md` | - |
+| `towpath_hugs_the_bank` | **DROP - same segment.** A towpath is the bank a boat is hauled from, so it runs ON the bank; recorded, not deleted. Grounding: `research/cities/river-cities.md` | - |
+| `waterside_works_follow_the_bank` | **DROP - no scripted executor.** Reads `canals`, `castles`, `aqueducts` - all empty on every live map. Grounding: `research/cities/river-cities.md` | - |
+| `city_streets_reach_their_neighbors` | **DROP - no scripted executor.** Reads `town_streets`, empty on every live map. Grounding: `research/cities/fabric.md` | - |
+| `inwall_drains_gated_at_cutoff` | **DROP - no scripted executor.** Reads `wall` and `ring_road`, both empty on every live map. A drain through a defensive wall is gated so the wall is not a way in - recorded. Grounding: `settlements/water.md` (the moat as water, 24 mentions; `research/cities/defenses.md` has none - checked, and the first pointer I wrote was wrong) | - |
+| `ways_clear_of_castle_moat` | **DROP - no scripted executor.** Reads `castles` and `moat`, both empty on every live map. Grounding: `settlements/water.md` (the moat as water, 24 mentions; `research/cities/defenses.md` has none - checked, and the first pointer I wrote was wrong) | - |
+| `ways_not_inside_road_beds` | **DROP - no scripted executor.** Reads `road`, empty on every live map. Grounding: `settlements/ways.md` | - |
+| `no_structure_on_torii` | **DROP - no scripted executor.** `torii` is empty on every live map; the hamlet path draws hokora, not torii. Grounding: `research/religion-and-death.md` | - |
+| `torii_clear_of_halls_towers_ring` | **DROP - same.** Reads `torii` and `religious`, both empty. Grounding: `research/religion-and-death.md` | - |
+| `religious_clear_of_ring_and_towers` | **DROP - no scripted executor.** `religious` is empty on every live map. Grounding: `research/religion-and-death.md` | - |
+| `shrine_halls_clear_of_lanes` | **DROP - same, `religious`.** The hamlet's shrine is a farmstead hokora in `farm_fixtures`, which this rule never read. Grounding: `research/religion-and-death.md` | - |
+| `funerary_clear_of_fields` | **DROP - no scripted executor.** Reads `cemeteries`, `cremation_grounds`, `ossuaries`, `mausoleums` - all empty on every live map. NOTE the near miss: `field_graves` is non-empty on Kashikawa, and is a DIFFERENT feature this rule never read. Grounding: `research/religion-and-death.md` | - |
+| `remote_shrine_has_own_well` | **DROP - no scripted executor.** No live map digs a well marked `shrine`; measured across all five. Grounding: `research/religion-and-death.md` | - |
 | `waivers_are_documented` | **DROP - the mechanism is retired with the battery.** A waiver is a declaration that one map may break one gate rule; with no gate there is no waiver to document. The doctrine it protected - an exemption is written down with its reason, or it is not an exemption - moves to `dev/gate.md`'s successor section | - |
-| `waivers_are_live` | **DROP - same.** It caught a waiver naming a rule that no longer fires; there are no waivers to go stale | - |
+| `waivers_are_live` | **DROP - same.** It caught a waiver naming a rule that no longer fires; there are no waivers to go stale. Grounding: `dev/gate.md` | - |
 
 | `caption_stands_beside_its_referent` | `tests/gate/test_captions_and_boards.py` (every caption records a referent box) | the label phase never run -> RED |
 | `label_hugs_its_referent` | same module (box-to-box gap under 120 px) | same mutation -> RED |
