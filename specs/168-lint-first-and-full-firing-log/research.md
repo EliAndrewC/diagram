@@ -141,3 +141,23 @@ mirror still gets the ordinary `sync-in` refusal.
 The rule both of those teach, and it is the one this session keeps re-learning: **assert on the
 artifact the code must PRODUCE, not on the absence of a failure.** A test that asserts an exit code
 passes for the wrong reason; a test that asserts the text cannot.
+
+## R8 - a commit message is not a safe place for backticks
+
+Recorded because it happened at the very end of this feature and cost a cleanup, and because the
+project's own doctrine already warns about the shape one step to the left of it.
+
+`git commit -m "...`git init --bare`..."` - a DOUBLE-quoted shell string - runs every backtick span
+as a command substitution. This message quoted four commands as prose, so the shell ran them: the
+harmless ones printed nothing, `sync-in` failed with "command not found", and **`git init --bare`
+executed in the clone root**, creating `HEAD`, `config`, `description`, `hooks/`, `info/`, `objects/`
+and `refs/` there as untracked files. Nothing was lost - the real `.git` was untouched, `core.bare`
+stayed false, the mirror stayed at `origin/main` - and the seven paths were removed after confirming
+none was tracked and the only non-empty file among them was git's own `info/exclude`. The message
+that landed is missing its backticked spans, and it stays that way: this repository never rewrites
+history, so there is no `--amend`.
+
+The rule: **write a commit message through `git commit -F -` with a quoted heredoc (`<<'MSG'`), or
+keep backticks out of it.** This is the same family as the doctrine in `CLAUDE.md` about heredoc'd
+python that contains quoted python - a quoting slip in the wrapper, where the failure lands in the
+PATCHER rather than in the thing being patched. Here it landed in the working tree.
