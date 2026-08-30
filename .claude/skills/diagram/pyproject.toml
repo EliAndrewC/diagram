@@ -13,7 +13,14 @@ target-version = "py314"
 # The engine uses intentionally long, descriptive single-line check calls; 200 keeps `ruff format`
 # from wrapping them (only ~17 lines exceed it) while still normalizing spacing/comments.
 line-length = 200
-extend-exclude = ["pool"]   # generated per-map gens are scripts, formatted by their own authors
+# BOTH POOL TREES. A map generator is a script formatted by its own author, not engine source -
+# and for the FROZEN tree this is load-bearing rather than stylistic (feature 161): those 18
+# exhibits are committed write-once, so `ruff format .` and `ruff check --fix .` - which the
+# gate runs, in place, without failing - would silently rewrite artifacts that can never be
+# faithfully regenerated. Measured 2026-08-30 with the tree named but this list not yet
+# updated: 18 files would be reformatted and 16 lint errors auto-fixed. `legacy-hand-authored-pool`
+# does not match the pattern `pool`, so the new tree had to be named here explicitly.
+extend-exclude = ["pool", "legacy-hand-authored-pool"]
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "UP", "B", "SIM"]
@@ -120,7 +127,9 @@ source = ["l7r.diagram._invocation", "l7r.diagram.switches", "l7r.diagram.ci", "
 # `waterfields` and `interactive` joined the measured set with feature 145: both are on the hamlet path (the field
 # engine, the interactive page) and the derived floor (tools/hamlet_floor.py) judges every hamlet-path module, so
 # every one of them has to be MEASURED - a module coverage never traced would pass the floor as an empty row.
-omit = ["*/tests/*", "pool/*/*.gen.py"]
+# Map generators are not measured code. Depths follow the per-map folders (feature 161), and the
+# frozen tree is named because it left `pool/` entirely.
+omit = ["*/tests/*", "pool/*/*/*.gen.py", "legacy-hand-authored-pool/*/*/*.gen.py"]
 
 # COVERAGE ENFORCEMENT LIVES IN THE MAKEFILE since the 2026-08-16 legacy freeze, not here. The
 # hand-authored pool maps are frozen and their gens never run, so the above-hamlet wings of

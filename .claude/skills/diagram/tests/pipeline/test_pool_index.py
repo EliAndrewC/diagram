@@ -1,15 +1,19 @@
 """Unit tests for pool_index.py - the pool/index.html generator.
 
 The synthetic-pool tests pin every branch (positive Mode A classification, the manifest-missing
-warning, the derived columns, per-section column pruning, the unknown-folder section, missing
+warning, the derived columns, per-section column pruning, the unknown-tier section, missing
 renders/notes); the real-pool test at the bottom pins the one property that matters against the
 actual pool: every generator in it appears in the index.
+
+Since feature 161 the fixture builds BOTH trees at `<skill>/<tree>/<tier>/<map>/`, because the page
+covers both and the cross-tree link is the interesting case: a legacy row has to come out as
+`../legacy-hand-authored-pool/...` to resolve from a plain `file://` open of `pool/index.html`.
 """
 
-import glob
 import os
 
 from l7r.diagram.pipeline import pool_index as pi
+from l7r.diagram.pipeline import poolmaps
 
 
 def _mk(path: str, content: str = "") -> str:
@@ -19,38 +23,62 @@ def _mk(path: str, content: str = "") -> str:
     return path
 
 
+def _map(skill: str, tier: str, stem: str, ext: str, content: str = "", tree: str = "pool") -> str:
+    """One file of one map bundle, in the map's own folder."""
+    return _mk(os.path.join(skill, tree, tier, stem, stem + ext), content)
+
+
 def _mini_pool(tmp_path):
-    pool = str(tmp_path / "pool")
+    """A skill dir with both trees. Returns the SKILL dir - the index spans two trees now, so a
+    single pool directory is no longer the unit it is built from."""
+    skill = str(tmp_path)
+    pool = os.path.join(skill, "pool")
     _mk(
-        os.path.join(pool, "hamlets", "aoi.json"),
+        os.path.join(pool, "hamlets", "aoi", "aoi.json"),
         '{"meta": {"name": "Aoi & Co", "scale": "hamlet", "ftpx": 1.0, "generated_by": "hamletgen",'
         ' "households": 15, "field_archetype": "valley_paddy", "land_use_overlay": "lotus",'
         ' "nucleated": false, "lane_skeleton": "spine", "waivers": {"some_check": "a reason"},'
         ' "capital_dir": [1, 2], "water_source": "head_center", "water_source_position": "head_center"}}',
     )
-    _mk(os.path.join(pool, "hamlets", "aoi.gen.py"))
-    _mk(os.path.join(pool, "hamlets", "aoi.notes.md"), "# Design notes: Aoi\n")
-    _mk(os.path.join(pool, "hamlets", "aoi.png"), "png")
-    _mk(os.path.join(pool, "hamlets", "burned.gen.py"))  # settlement map with NO manifest
-    _mk(
-        os.path.join(pool, "towns", "beni.json"),
+    _map(skill, "hamlets", "aoi", ".gen.py")
+    _map(skill, "hamlets", "aoi", ".notes.md", "# Design notes: Aoi\n")
+    _map(skill, "hamlets", "aoi", ".png", "png")
+    _map(skill, "hamlets", "burned", ".gen.py")  # settlement map with NO manifest
+    _map(
+        skill,
+        "towns",
+        "beni",
+        ".json",
         '{"meta": {"scale": "town", "ftpx": 1, "walled": true, "population": 900, "settlement_form": "dispersed"}}',
     )
-    _mk(os.path.join(pool, "towns", "beni.gen.py"))
-    _mk(os.path.join(pool, "magistracies", "kiku-magistracy.gen.py"))
-    _mk(
-        os.path.join(pool, "magistracies", "kiku-magistracy.notes.md"),
+    _map(skill, "towns", "beni", ".gen.py")
+    _map(skill, "magistracies", "kiku-magistracy", ".gen.py")
+    _map(
+        skill,
+        "magistracies",
+        "kiku-magistracy",
+        ".notes.md",
         "# Design notes\n\n**Program type**: magistrate's manor (county magistracy) - see buildings.md.\n",
     )
-    _mk(os.path.join(pool, "forts", "castle.gen.py"))
-    _mk(os.path.join(pool, "forts", "castle.json"), '{"meta": {"name": "Castle", "walled": false}}')
-    _mk(os.path.join(pool, "regressions", "bad.gen.py"))
+    _map(skill, "forts", "castle", ".gen.py")  # an UNKNOWN tier still gets a section
+    _map(skill, "forts", "castle", ".json", '{"meta": {"name": "Castle", "walled": false}}')
+    _mk(os.path.join(pool, "regressions", "bad.json"))  # a negative fixture, not a map
     os.makedirs(os.path.join(pool, "villages"))  # present but empty -> no section
-    return pool
+    # A FROZEN exhibit in the other tree: the cross-tree link is what FR-018 is about.
+    _map(skill, "villages", "furu", ".gen.py", tree=poolmaps.LEGACY_TREE)
+    _map(skill, "villages", "furu", ".json", '{"meta": {"name": "Furu", "scale": "village", "ftpx": 2}}', tree=poolmaps.LEGACY_TREE)
+    _map(skill, "villages", "furu", ".png", "png", tree=poolmaps.LEGACY_TREE)
+    return skill
 
 
-def _section(page: str, dirname: str) -> str:
-    start = page.index(f'<h2 id="{dirname}"')
+def _bundle(skill: str, tier: str, stem: str, tree: str = poolmaps.LIVE_TREE) -> poolmaps.MapBundle:
+    """A bundle pointing at files that may not exist - which is the case these tests are about."""
+    d = os.path.join(skill, tree, tier, stem)
+    return poolmaps.MapBundle(gen=os.path.join(d, stem + ".gen.py"), stem=stem, tier=tier, tree=tree, directory=d)
+
+
+def _section(page: str, tier: str, tree: str = poolmaps.LIVE_TREE) -> str:
+    start = page.index(f'<h3 id="{pi._anchor(tree, tier)}"')
     return page[start : page.index("</table>", start)]
 
 
@@ -68,10 +96,11 @@ def test_knobs_drops_the_duplicate_water_source_position():
 
 
 def test_mode_a_program_variants(tmp_path):
-    pool = str(tmp_path)
-    assert pi._mode_a_program(pool, "missing") == ""
-    _mk(os.path.join(pool, "plain.notes.md"), "# notes with no program line\n")
-    assert pi._mode_a_program(pool, "plain") == ""
+    """No notes file at all, and a notes file with no `**Program type**:` line - both give ''."""
+    skill = str(tmp_path)
+    assert pi._mode_a_program(_bundle(skill, "magistracies", "missing")) == ""
+    _map(skill, "magistracies", "plain", ".notes.md", "# notes with no program line\n")
+    assert pi._mode_a_program(_bundle(skill, "magistracies", "plain")) == ""
 
 
 def test_subtype_composition():
@@ -81,8 +110,8 @@ def test_subtype_composition():
 
 
 def test_index_contents(tmp_path):
-    pool = _mini_pool(tmp_path)
-    page = pi.build_index(pool)
+    skill = _mini_pool(tmp_path)
+    page = pi.build_index(skill)
 
     # Mode B, scripted: name escaped, method, subtype, size, knobs (waivers by check name).
     assert "Aoi &amp; Co" in page
@@ -94,10 +123,13 @@ def test_index_contents(tmp_path):
     assert "waivers=some_check" in page
     assert "capital_dir=1, 2" in page
     assert "water_source_position" not in page  # identical to water_source -> deduplicated
-    assert 'src="hamlets/aoi.png"' in page
+    # Links are relative to the page's own directory (pool/), so a live map is a plain relative path.
+    assert 'src="hamlets/aoi/aoi.png"' in page
     # Map thumbnails open in a new tab; in-page nav anchors (pinned above) do not.
-    assert '<a href="hamlets/aoi.png" target="_blank" rel="noopener">' in page
-    assert 'href="hamlets/aoi.notes.md"' in page
+    assert '<a href="hamlets/aoi/aoi.png" target="_blank" rel="noopener">' in page
+    assert 'href="hamlets/aoi/aoi.notes.md"' in page
+    # ...and a FROZEN exhibit links ACROSS, which is what resolves from a file:// open (FR-018).
+    assert 'src="../legacy-hand-authored-pool/villages/furu/furu.png"' in page
 
     # A settlement-tier map with no manifest is reported as WRONG, never guessed at.
     assert "manifest missing" in _section(page, "hamlets")
@@ -129,36 +161,41 @@ def test_index_contents(tmp_path):
     assert "#villages" not in page
 
     # Sections: known tiers in reading order, the unknown folder appended, empty/skip dirs absent.
-    assert page.index('<h2 id="hamlets"') < page.index('<h2 id="towns"') < page.index('<h2 id="magistracies"')
-    assert page.index('<h2 id="magistracies"') < page.index('<h2 id="forts"')
+    # Tier order within a tree; the tree BANNER (an h2) precedes its tiers (h3s).
+    assert page.index('<h3 id="hamlets"') < page.index('<h3 id="towns"') < page.index('<h3 id="magistracies"')
+    assert page.index('<h2 class="tree">The live pool') < page.index('<h3 id="hamlets"')
+    # ...and the whole live tree precedes the frozen one, which is the reading order the GM chose.
+    assert page.index('<h3 id="magistracies"') < page.index('<h2 class="tree">Frozen hand-authored exhibits')
+    # The frozen villages section exists in the OTHER tree, and its anchor carries the tree so the
+    # two `villages` sections cannot collide.
+    assert '<h3 id="legacy-hand-authored-pool-villages"' in page
+    assert page.index('<h3 id="magistracies"') < page.index('<h3 id="forts"')
     assert "<h2>Villages</h2>" not in page
     assert "Regressions" not in page and "bad" not in page
 
 
 def test_build_is_deterministic(tmp_path):
-    pool = _mini_pool(tmp_path)
-    assert pi.build_index(pool) == pi.build_index(pool)
+    skill = _mini_pool(tmp_path)
+    assert pi.build_index(skill) == pi.build_index(skill)
 
 
 def test_main_writes_the_file(tmp_path, capsys):
-    pool = _mini_pool(tmp_path)
-    assert pi.main(["--pool", pool]) == 0
+    skill = _mini_pool(tmp_path)
+    assert pi.main(["--skill-dir", skill]) == 0
     out = capsys.readouterr().out
     assert "pool-index: wrote" in out
-    with open(os.path.join(pool, "index.html")) as fh:
-        assert '<h2 id="hamlets">Hamlets</h2>' in fh.read()
+    # The page is written into the LIVE tree, where the GM has always opened it.
+    with open(os.path.join(skill, poolmaps.LIVE_TREE, "index.html")) as fh:
+        assert '<h3 id="hamlets">Hamlets</h3>' in fh.read()
 
 
 def test_real_pool_every_gen_is_indexed():
-    pool = os.path.join(pi.SKILL_DIR, "pool")
-    page = pi.build_index(pool)
-    gens = glob.glob(os.path.join(pool, "*", "*.gen.py"))
-    assert gens, "the real pool has generators"
-    for gen in gens:
-        d = os.path.basename(os.path.dirname(gen))
-        stem = os.path.basename(gen)[: -len(".gen.py")]
-        if d in pi.SKIP_DIRS:
-            continue
-        assert f"{d}/{stem}.notes.md" in page or stem in page, f"{d}/{stem} missing from the index"
+    """Every map in BOTH trees appears on the one page (FR-016)."""
+    page = pi.build_index(pi.SKILL_DIR)
+    bundles = poolmaps.bundles()
+    assert bundles, "the real pool has generators"
+    assert any(b.tree == poolmaps.LEGACY_TREE for b in bundles), "the frozen exhibits are indexed too"
+    for b in bundles:
+        assert b.stem in page, f"{b.tree}/{b.tier}/{b.stem} missing from the index"
     # And no real map is in the manifest-missing state (a red cell here means a map lost its json).
     assert "manifest missing" not in page

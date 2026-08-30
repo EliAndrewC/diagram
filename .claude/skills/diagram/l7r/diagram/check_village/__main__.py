@@ -14,7 +14,14 @@ if __name__ == "__main__":
     here = os.path.abspath(
         os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", "..")
     )  # the skill root: __file__ moved one level down into the package (024) and two more under l7r/diagram/ (119)
-    default = os.path.join(here, "pool", "villages", "kikuta.json")
+    # RE-POINTED at the live reference hamlet by feature 161. It used to be `pool/villages/kikuta.json`,
+    # and `pool/villages/` ceased to exist when the hand-authored maps moved to
+    # `legacy-hand-authored-pool/` - every village in the pool was frozen. Merely deepening the old
+    # path would have aimed the validator's out-of-the-box behavior at a frozen exhibit in the other
+    # tree, which is a worse answer than a missing file: the checker would run, and silently judge a
+    # map nobody is working on. Inashiro is the map a session running `check_village` with no
+    # argument almost certainly means.
+    default = os.path.join(here, "pool", "hamlets", "inashiro", "inashiro.json")
     args = [a for a in sys.argv[1:] if not a.startswith("--")]
     path = args[0] if args else default
     if "--capacity" in sys.argv[1:]:
