@@ -68,3 +68,32 @@ quietly change; and FR-007 is OPTIONAL because `quick` already times itself inli
 - [ ] T11 the whole guard suite and the gate, green together, then the push
       research: procedure
       verify: `make hooks-test` and `make done`, then `sync-with-main.sh done`
+
+## What this session decided, and what remains the GM's
+
+**Mine, recorded here rather than in the handoff's spec, which is the other session's document:**
+
+- **FR-007 DECLINED** (T09). `make quick` writes no run-log entry - measured n=0 against `done`'s 337 -
+  but it times itself inline, so the GM's 15 s bar does not need one. Revisit when a target needs the
+  median comparison. The handoff author agreed when asked.
+- **The gate's ratchet runs AFTER the run is logged.** This run belongs in the median it is judged
+  against, and a gate that failed without recording what it did would hide the number the next session
+  needs to diagnose it.
+- **Two defects fixed on the way** (Principle XIV): `_gatecost.py` hardcoded the mirror as `/diagram`,
+  so a checkout elsewhere read the wrong tree's log and no test could isolate itself - my own FR-009
+  fixture had a seeded log and still got the live median mixed in, which is a test quietly measuring
+  production. And the median ignored scope, which FR-009 forbids.
+
+**THE GM'S, and neither is adopted silently** - both are the handoff author's decisions, carried
+forward unchanged and surfaced at close-out:
+
+- **D1**: the 155 s interim baseline for `done`, which yields the 201 s ceiling in force today. It is
+  an interim number standing in for a 35 s baseline that does not exist yet.
+- **D2**: comparing the MEDIAN rather than the run while that interim regime holds, because at 201 s a
+  per-run bar would fire on 28% of normal runs.
+
+One consequence worth the GM's attention, raised by the handoff author and confirmed here: `make
+tooling` was collecting ZERO tests until this session fixed it, so `done`'s historical medians measured
+a suite that was skipping work. Any baseline pinned from runs before that lands is measuring something
+different, and the 35 s the GM wants to return to may itself have been measuring less than it appeared.
+That is the efficiency work's question, not this feature's.
