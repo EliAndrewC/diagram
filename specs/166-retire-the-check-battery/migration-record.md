@@ -75,6 +75,8 @@ box" - measuring the wrong one made every seat look illegal and the fallback too
 | `pond_clear_of_field` | `tests/settlement/test_well_ground.py` (pond section) | `self.ellipses.append` removed from `pond()` -> RED |
 | `pond_clear_of_paddies` | same module - one registry, so one guarantee serves both | same mutation -> RED |
 
+| `farmhouses_reach_a_way` | `tests/hamletgen/test_unreached_houses.py` (11 unit tests) PLUS `tests/gate/test_reach_predicate_matches_the_check.py` (equivalence on 5 live maps and their perturbed copies) | done at T02 - the check's body LIFTED, with the equivalence test that dies with the check |
+
 ## Already carried by an existing test - dropped against it, not rewritten
 
 | check | carried by | proof |
