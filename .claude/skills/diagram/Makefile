@@ -523,6 +523,12 @@ rules=collections.defaultdict(collections.Counter); \
 'MID-EXPRESSION, between the list comprehension and its `or print(...)`, because the whole census is'; \
 'one python -c continuation. Nothing in a python -c block takes a shell comment; the reason lives in'; \
 'the bare-string lines above instead.'; \
+'GUARD_EDIT_OK: feature 170 - THE REASONS, which is the report the GM asked for: we have no way to'; \
+'audit later when this workaround was taken and whether the stated reasons were valid use cases.'; \
+'Every escape entry carries the session s stated reason as its detail now, so the census shows them.'; \
+'Newest first, capped at eight so the census stays a census; the log itself holds the rest.'; \
+esc=[r for r in rows if r['event']=='escaped']; \
+[print('\033[1m  escapes taken, with what the session said\033[0m')] and [print(f\"    {r['utc'][5:16]}  {r['guard']:<12} {(r['detail'] or '(no reason recorded)')[:88]}\") for r in sorted(esc,key=lambda r:r['utc'],reverse=True)[:8]] if esc else None; \
 print(f\"  {len(rows)} entries\"+(f\", {min(r['utc'] for r in rows)} to {max(r['utc'] for r in rows)}\" if rows else '')); \
 print()"
 	@printf '\033[1mFiles past the ~1,000-line bar\033[0m (constitution X clause 13 - a QUESTION, not a limit)\n'
