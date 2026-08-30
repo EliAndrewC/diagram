@@ -1,0 +1,6 @@
+{
+  "utc": "20260830T182422Z",
+  "guard": "pair-hooks",
+  "what": "gate alone",
+  "reason": "feature 166 acceptance: settlement-review dispatched beside this run (the first one stalled and was relaunched)"
+}

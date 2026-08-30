@@ -1,0 +1,6 @@
+{
+  "utc": "20260830T182325Z",
+  "guard": "pair-hooks",
+  "what": "gate alone",
+  "reason": "feature 166 acceptance: the paired settlement-review stalled after 4h with no output and was stopped; re-dispatching it beside this run"
+}
