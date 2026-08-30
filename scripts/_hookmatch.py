@@ -197,6 +197,42 @@ _SEARCHERS = ("grep", "egrep", "fgrep", "rg", "ack", "ag", "ripgrep")
 _FOR_IN = re.compile(r"\bfor\s+\w+\s+in\b[^;\n]*(?:;|\n|$)")
 
 
+# THE REASON FLOOR (feature 170, GM 2026-08-30): *"should we just always record that they happened and
+# force the Claude Code session, which is performing the workaround to specify why they are doing it?
+# Otherwise, we have no way to audit later when this workaround was taken and whether the stated
+# reasons were valid use cases."* Every guard documented "with a reason" and every guard accepted a
+# BARE token, so the audit the GM describes could not be run: there was often no reason to read.
+#
+# TWO WORDS AND EIGHT CHARACTERS, and the number matters less than what it excludes. It rejects a bare
+# token and `GATE_OK: ok`; it admits `CI is down`, which is ten characters and a perfectly good reason.
+# The first draft said fifteen characters and justified itself by the map waiver's sixty - a mechanism
+# this repository RETIRED (`dev/gate.md`: "Waivers are gone") - and would have refused that true short
+# reason. This is a floor on EFFORT, not on quality: no tool can grade a reason, and the audit is a
+# person reading them.
+_REASON_WORDS, _REASON_CHARS = 2, 8
+
+
+def escape_reason(text: str, token: str) -> str:
+    """The reason the session gave for this escape, or "" if it gave none.
+
+    Accepts every form the repository actually uses, measured rather than assumed: `TOKEN: why` (135
+    occurrences, the marker convention), `TOKEN="why"` and `TOKEN='why'` (the GM's own documented form
+    for `PAIR_OK`), and `TOKEN=why`. A bare `TOKEN` yields "". A `TOKEN:` reason runs to the end of its
+    line, because that is how a trailing comment is written.
+    """
+    m = re.search(rf"{re.escape(token)}\s*[:=]\s*(.*)", text)
+    if not m:
+        return ""
+    rest = m.group(1)
+    q = re.match(r"""(["'])(.*?)\1""", rest)
+    return (q.group(2) if q else rest.split("\n")[0]).strip().strip("\"'")
+
+
+def reason_is_enough(reason: str) -> bool:
+    """Does the reason clear the floor? Deliberately generous - see the note above."""
+    return len(reason) >= _REASON_CHARS and len(reason.split()) >= _REASON_WORDS
+
+
 def escape_used(cmd: str, token: str) -> bool:
     """Did the session put `token` in this command AS AN ESCAPE, or merely mention it?
 
@@ -478,6 +514,13 @@ if __name__ == "__main__":
             print("yes")
     elif len(sys.argv) > 1 and sys.argv[1] == "sanitize":
         print(_strip_quotes(_strip_heredocs(payload)))
+    elif len(sys.argv) > 2 and sys.argv[1] == "escape-reason":
+        # `escape-reason <TOKEN>` - prints the reason when the escape is USED and the reason clears
+        # the floor; prints nothing otherwise. One call answers both questions a guard has to ask, so
+        # a guard cannot accidentally check one and not the other (feature 170).
+        _r = escape_reason(payload, sys.argv[2])
+        if escape_used(payload, sys.argv[2]) and reason_is_enough(_r):
+            print(_r)
     elif len(sys.argv) > 2 and sys.argv[1] == "escape":
         # `escape <TOKEN>` - prints `yes` when the token was USED as an escape, nothing when it was
         # only mentioned. Every guard's escape branch asks this instead of `case "$CMD" in *TOKEN*)`.

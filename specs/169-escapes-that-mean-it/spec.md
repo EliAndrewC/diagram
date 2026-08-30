@@ -1,6 +1,8 @@
 # Feature 169 - Escapes That Mean It
 
-**Status**: specified 2026-08-30. The GM's request is [`request.md`](request.md) and it is the
+**Status**: **APPROVED** 2026-08-30 - `spec-fidelity` round 5 returned FAITHFUL with no blocking
+items, having verified every requirement against the shipped code and re-measured round 4's three
+corrections rather than taking them on trust. Specified 2026-08-30. The GM's request is [`request.md`](request.md) and it is the
 authority; where this document and that one differ, that one is right.
 
 ## The feature, in one sentence
@@ -98,8 +100,10 @@ This is the half that makes FR-001 a correctness fix rather than a reporting one
 ### FR-003 - no suite writes fixture firings into the live census
 
 `scripts/test-review-gate.sh` isolates `GUARD_LOG_DIR` for the whole file, as the other suites already
-do (measured: 15 files isolate the log once this feature lands, the shared runner
-`test_hooks_cases.py` among them). The census is the input to every future tuning decision, and 24 of its
+do (measured: 15 files under `scripts/` isolate the log once this feature lands, the shared runner
+`test_hooks_cases.py` among them; 16 across the whole tree, since `tests/tooling/test_guard_firing_log.py`
+passes `GUARD_LOG_DIR` in its subprocess env. Round 5 asked for the qualifier - in a feature about
+counts written from memory, an unqualified number is the seam). The census is the input to every future tuning decision, and 24 of its
 113 entries are currently fixtures from this one suite.
 
 **And the rule is enforced rather than remembered**: a test asserts that every `test-*.sh` whose
@@ -213,6 +217,7 @@ FAITHFUL on fidelity.**
 | 2 | CHANGES REQUIRED | the token census was incomplete and its completeness claim false - `HOST_GIT_OK` disarms the `/host-l7r-repo` mount guard on a mention, found because the reviewer noticed its OWN audit command would have disarmed it. Also: the `pair` prompt branch needed an explicit in-or-out ruling |
 | 3 | CHANGES REQUIRED | the census was short AGAIN - `GATE_STAMP_OK`, a twelfth token. Adjudicated the `pair` prompt exclusion LEGITIMATE under Principle XVI. Its diagnosis, quoted because it is the useful part: *"three drafts have each asserted a complete census ... and each has been short by one, found by the reviewer and not by the author. That is a persistent blind spot in how the census is being produced - it is being written from memory of the guards rather than derived from the tree"* |
 | 4 | **FAITHFUL** on fidelity, CHANGES REQUIRED on the record | ran only because the GM raised the cap to five, citing this feature. Verified every requirement against the SHIPPED code, line by line: nothing missing, nothing extra. Found three accuracy defects in the record, all fixed above - a count of "nine suites" that measures as SIX (the same wrong number sat in shipped code, in the docstring of the very check that exists to stop hand-written lists); `GUARD_EDIT_OK` filed under one kind when it has two matchers and only one is converted; and a Review history resting on the three-round rule the GM had just retired |
+| 5 | **FAITHFUL** | re-measured round 4's corrections from feature 168's own commits rather than trusting them (six suites, 15 files, both `GUARD_EDIT_OK` matchers, the raised cap) and confirmed each. No blocking items. One polish note applied: "15 files" now says "under `scripts/`", because the count is 16 tree-wide |
 
 **THIS SPEC SHIPPED WITHOUT A FAITHFUL VERDICT, AND THAT IS THE HISTORICAL RECORD.** At push time the
 cap was three rounds, all three had returned CHANGES REQUIRED, and a fourth was forbidden - so
