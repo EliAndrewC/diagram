@@ -31,8 +31,46 @@ changed=$(git diff --name-only "$RANGE" 2>/dev/null || true)
 [ -z "$changed" ] && exit 0
 fail=""
 
+# THE NUMBER CLAIM IS NOT AN IMPLEMENTATION (feature 165, the GM's ruling 2026-08-30).
+#
+# GUARD_EDIT_OK. Two rules in this repository contradicted each other, and the contradiction had a
+# price. `CLAUDE.md` requires a feature number to be claimed by pushing the new `specs/NNN-slug/`
+# THE MOMENT `spec.md` is written - *"the locked pull+push makes the claim atomic"* - because several
+# sessions allocate numbers at once. This gate refused that push, every time, for lacking a fidelity
+# verdict that a spec written one minute ago cannot possibly carry. Measured on 2026-08-30: one
+# session lost the number 161 to a peer while its spec was in review, renumbered to 162, then lost
+# 163 the same way; the second renumber swept 67 files, 51 of them wrongly.
+#
+# So a delta that is EXACTLY one new spec directory - every path under it, every one of them an
+# ADDITION, and nothing anywhere else - passes check 1. The reviewed-before-implementation property
+# is untouched by construction: no implementation can be present in a delta that contains nothing but
+# a new spec directory, and the moment one other file joins it the verdict is required again. A
+# MODIFIED existing spec is judged exactly as before, so a spec cannot be smuggled past by editing it
+# after the claim.
+claim_only=""
+spec_dirs=$(printf '%s\n' "$changed" | sed -n 's|^\(specs/[^/]*\)/.*|\1|p' | sort -u)
+if [ -n "$spec_dirs" ] && [ "$(printf '%s\n' "$spec_dirs" | wc -l)" -eq 1 ] \
+   && ! printf '%s\n' "$changed" | grep -qv '^specs/' \
+   && ! git diff --name-status "$RANGE" -- "$spec_dirs" 2>/dev/null | awk '{print $1}' | grep -qv '^A$' \
+   && git diff --name-status "$RANGE" -- "$spec_dirs/spec.md" 2>/dev/null | grep -q '^A'; then
+  # THE SPEC ITSELF MUST BE ONE OF THE NEW FILES. "every changed file is an addition" is not enough:
+  # adding only `tasks.md` to a spec directory that already exists in main satisfies that too, and
+  # that is the IMPLEMENTATION push, which owes the verdict. The suite caught this shape.
+  claim_only=1
+  printf 'review-gate: NUMBER CLAIM - %s alone, every file new. The fidelity verdict is owed before\n' "$spec_dirs"
+  printf '             implementation, not before the number is reserved (feature 165, GM 2026-08-30).\n'
+fi
+
 # --- 1. every spec.md being shipped carries a fidelity verdict --------------------------------
-for spec in $(printf '%s\n' "$changed" | grep -E '^specs/[^/]+/spec\.md$' || true); do
+# WHICH SPECS ARE JUDGED. Not only the ones whose `spec.md` changed: ANY delta touching a feature
+# directory brings that feature's spec under the check. Without that, the claim exemption below opens
+# a hole one step removed from itself - claim the number with an unreviewed spec, then push the
+# implementation, whose delta touches `tasks.md` and the code but not `spec.md`, and check 1 never
+# looks at the spec again. Judging the directory closes it: every later push for that feature carries
+# the verdict requirement with it. (Feature 165; the exemption is the GM's ruling, the hole is this
+# session's own finding while implementing it.)
+touched_specs=$(printf '%s\n' "$changed" | sed -n 's|^\(specs/[^/]*\)/.*|\1/spec.md|p' | sort -u)
+for spec in $([ -z "$claim_only" ] && printf '%s\n' "$touched_specs" || true); do
   [ -f "$spec" ] || continue
   # A VERDICT, not a MENTION (feature 156, 2026-08-29). The check used to be a bare `grep FAITHFUL`,
   # which two shapes satisfied without a review having passed: a spec whose only occurrence is "NOT

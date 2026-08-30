@@ -86,6 +86,35 @@ print("hello")
 PY
 while :; do sleep 5; done'
 
+# GUARD_EDIT_OK: feature 165 - THE ONE WAIT THAT IS NOT A BUSY-WAIT (the GM ruling, 2026-08-30). A
+# BACKGROUNDED loop watching a FILE is the harness own documented shape for a single completion
+# notification, and the only way to wait on a run detached with `setsid --fork`. The boundary is
+# CLOSED and narrower than the ruling words, because the GM was offered "permit whenever
+# backgrounded" and declined it as usable for a general bypass - so these vectors carry the
+# discriminating cases `spec-fidelity` demanded, not just the happy one.
+echo "5. the detached-run wait, and nothing wider (feature 165)"
+bgrun() {  # feed a Bash command with run_in_background set, return the exit code
+  python3 -c 'import json,sys; print(json.dumps({"session_id":"t1","tool_name":"Bash","tool_input":{"command":sys.argv[1],"run_in_background":sys.argv[2]=="1"}}))' "$1" "$2" \
+    | "$HOOK" pretool 2>/tmp/np.err
+}
+bgcheck() { # label, expected, command, background(1|0)
+  bgrun "$3" "$4"; local rc=$?
+  if { [ "$2" = ok ] && [ "$rc" -eq 0 ]; } || { [ "$2" = blocked ] && [ "$rc" -ne 0 ]; }; then
+    echo "  ok      $1"; PASS=$((PASS+1))
+  else
+    echo "  FAIL    $1 (expected $2, rc=$rc)"; FAIL=$((FAIL+1))
+  fi
+}
+bgcheck "a backgrounded watch on a log file" ok "until grep -q 'gate green' /tmp/gate.log; do sleep 10; done" 1
+bgcheck "a backgrounded file test" ok "until [ -s /tmp/gate.log ]; do sleep 5; done" 1
+bgcheck "the SAME watch in the foreground is still refused" blocked "until grep -q 'gate green' /tmp/gate.log; do sleep 10; done" 0
+bgcheck "a backgrounded NETWORK wait" blocked "until curl -sf https://host/x; do sleep 5; done" 1
+bgcheck "...even with an output redirect (a redirect is not a file read)" blocked "until curl -sf https://host/x > /tmp/out; do sleep 5; done" 1
+bgcheck "a backgrounded PROCESS check through a pipe" blocked "until ps aux | grep -q make; do sleep 5; done" 1
+bgcheck "a command substitution in the condition" blocked "until [ -n \"\$(pgrep -f make)\" ]; do sleep 5; done" 1
+bgcheck "an output redirect on an otherwise real file watch" blocked "until grep -q x /tmp/a.log >/dev/null; do sleep 5; done" 1
+bgcheck "a disguised bare sleep, backgrounded" blocked "command sleep 30" 1
+
 echo "3. legitimate commands are NOT blocked (no false positives)"
 check "the gate itself" ok 'make done'
 check "pytest" ok 'python3 -m pytest test_settlement.py -n auto'

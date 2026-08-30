@@ -85,6 +85,22 @@ what you are waiting for.
 # ---- 2. a loop containing a sleep: a busy-wait ---------------------------------------------------
 SLEEP_RE='(^|[;&|(]|[[:space:]]|\bdo\b|\bthen\b)[\\]?((command|env|busybox)[[:space:]]+)?(/(bin|usr/bin)/)?sleep[[:space:]]+[0-9.]'
 if printf '%s' "$SCAN" | grep -Eq '(^|[;&|[:space:]])(while|until|for)[[:space:]]' && printf '%s' "$SCAN" | grep -Eq "$SLEEP_RE"; then
+  # GUARD_EDIT_OK: feature 165 - THE ONE WAIT THAT IS NOT A BUSY-WAIT, at the GM's ruling
+  # (2026-08-30). A BACKGROUNDED loop watching a FILE is the harness's own documented shape for a
+  # single completion notification, and the only way to wait on a run detached with `setsid --fork` -
+  # which this repository now requires for a long `make` run, because a non-detached one gets reaped.
+  # This guard fired on exactly that twice on the day of the ruling.
+  #
+  # THE BOUNDARY IS CLOSED AND NARROWER THAN THE RULING'S WORDS, deliberately. The GM was offered
+  # "permit whenever backgrounded" and DECLINED it as usable for a general bypass, so the condition
+  # must read a file in one of three forms and may contain no command substitution, no pipeline and
+  # no OUTPUT redirection - without that last clause `until curl ... > /tmp/out` qualifies and
+  # `>/dev/null` on any condition becomes the bypass the GM refused. `_hookmatch.py file-wait` holds
+  # the decision, where it is unit-testable; a foreground loop never reaches it.
+  if [ "$(printf '%s' "$INPUT" | "$HERE/_hookmatch.py" file-wait 2>/dev/null)" = "yes" ]; then
+    guard_log no-poll permitted "$(guard_cmd)"
+    exit 0
+  fi
   block "this is a busy-wait loop (a loop containing \`sleep\`)." \
     "Waiting in a loop burns wall-clock at full model-turn cost and, for anything the harness tracks, it
 is pure waste: a backgrounded Bash command notifies you the moment it exits."

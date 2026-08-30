@@ -68,6 +68,30 @@ for piece in re.split(r"&&|\|\||;|\|", cmd):
         continue  # branch creation: no-branch-hooks.sh
     if sub == "restore" and "--staged" in args and "--worktree" not in args and "-W" not in args:
         continue  # index only; the worktree keeps its changes
+    # GUARD_EDIT_OK: feature 165 - A MERGE OWN CONFLICT-RESOLUTION VERB IS NOT A DISCARD. The GM
+    # ruled on this (2026-08-30) on measured evidence: of this guard five recorded firings, ONE was
+    # a `git checkout --ours` mid-merge. While `MERGE_HEAD` exists, `--ours` / `--theirs` picks a
+    # SIDE of a conflict, which is the normal way to resolve one - and the "uncommitted work" this
+    # guard protects is a session own edits, which a conflicted file content is not. Outside a merge
+    # those flags mean something else entirely and are refused exactly as before, as is a plain
+    # `git checkout -- <path>` on a dirty file INSIDE one. The wider option - trusting the flags
+    # without the merge test - was never on the table.
+    #
+    # `git checkout --ours .` (whole-tree) is permitted here too, and safely: git skips every
+    # non-conflicted path with "does not have our version", so nothing uncommitted can be lost that
+    # way. Written down here because spec-fidelity asked for it at the point of change.
+    #
+    # NOTE FOR THE NEXT EDITOR: this whole parser lives inside a shell single-quoted string, so an
+    # APOSTROPHE here ends the program and the hook dies with a syntax error. That has now cost two
+    # separate features a debugging cycle each.
+    if any(a in ("--ours", "--theirs") for a in args):
+        gitdir = subprocess.run(
+            ["git", "-C", repo, "rev-parse", "--git-dir"], capture_output=True, text=True
+        ).stdout.strip()
+        if gitdir and os.path.exists(os.path.join(repo, gitdir) if not os.path.isabs(gitdir) else gitdir):
+            head = os.path.join(repo, gitdir, "MERGE_HEAD") if not os.path.isabs(gitdir) else os.path.join(gitdir, "MERGE_HEAD")
+            if os.path.exists(head):
+                continue  # a merge is in progress: this is resolution, not a discard
     paths = []
     seen_dashdash = False
     for a in args:

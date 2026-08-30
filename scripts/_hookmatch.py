@@ -301,6 +301,49 @@ def as_paired(cmd: str) -> str | None:
     return cmd.replace(seg, rebuilt, 1)
 
 
+# ---- THE ONE WAIT THAT IS NOT A BUSY-WAIT (feature 165, the GM's ruling 2026-08-30) ------------
+#
+# `no-poll` refuses every loop containing `sleep`, and it is right about the foreground: that is the
+# 10.9-minute incident it was built for. It is wrong about ONE shape - a BACKGROUNDED loop watching a
+# FILE, which is the harness's own documented way to get a single completion notification and the only
+# way to wait on a run detached with `setsid --fork`. It fired on exactly that twice on 2026-08-30.
+#
+# THE BOUNDARY IS DELIBERATELY CLOSED, and it is narrower than the ruling's words. The GM was offered
+# "permit it whenever backgrounded" and DECLINED it as usable for a general bypass, so a condition
+# qualifies only in these three forms, and only with no way to smuggle other work inside it:
+_FILE_TEST = re.compile(r"(?:^|\s)(?:test|\[)\s+[^;]*-(?:e|f|s|r|d|w|x)\s+\S", re.M)
+# the match target must be a PATH OPERAND and the LAST thing in the condition - either something with
+# a directory in it or something with an extension. The first cut allowed only ONE directory segment,
+# so `/tmp/164-done.log` - the exact command this ruling exists for - did not qualify.
+_GREP_PATH = re.compile(r"(?:^|\s)grep\b[^|;<>]*\s(?:(?:~?[\w.-]*/)+[\w.-]+|[\w.-]+\.[\w-]+)\s*$", re.M)
+_IN_REDIR = re.compile(r"<\s*(?:\./|/|~/)?[\w./-]+")
+_LOOP_HEAD = re.compile(r"\b(?:until|while)\b(.*?)(?:;\s*do\b|\bdo\b)", re.S)
+
+
+def file_watching_wait(payload: dict) -> bool:
+    """Is this the ONE wait shape the GM permitted - backgrounded, and watching a file?
+
+    Everything else stays refused, including a backgrounded loop that waits on a network call or a
+    process. An OUTPUT redirection is not a file read: without that rule `until curl ... > /tmp/out`
+    qualifies and `>/dev/null` on any condition at all becomes a general bypass, which is the exact
+    risk the GM named when declining the wider option.
+    """
+    inp = payload.get("tool_input") or {}
+    if not inp.get("run_in_background"):
+        return False
+    cmd = inp.get("command", "") or ""
+    heads = _LOOP_HEAD.findall(cmd)
+    if not heads:
+        return False
+    for cond in heads:
+        # nothing may hide inside the condition
+        if "$(" in cond or "`" in cond or "|" in cond or ">" in cond:
+            return False
+        if not (_FILE_TEST.search(cond) or _GREP_PATH.search(cond) or _IN_REDIR.search(cond)):
+            return False
+    return True
+
+
 def bracket_pattern(cmd: str) -> str | None:
     """`cmd` with a literal process-match pattern bracketed, or None when there is nothing to fix."""
     m = _PROCMATCH.search(cmd)
@@ -317,8 +360,11 @@ def bracket_pattern(cmd: str) -> str | None:
 
 
 if __name__ == "__main__":
+    # GUARD_EDIT_OK: feature 165 - the raw payload is kept as well as the command, because one mode
+    # (`file-wait`) needs a field beside it (`run_in_background`). Every other mode is unchanged.
+    RAW = sys.stdin.read()
     try:
-        payload = json.load(sys.stdin).get("tool_input", {}).get("command", "")
+        payload = json.loads(RAW).get("tool_input", {}).get("command", "")
     except Exception:
         payload = ""
     # `_hookmatch.py targets` prints the make targets the command invokes, one per line, for the hooks
@@ -351,6 +397,16 @@ if __name__ == "__main__":
         got = as_paired(payload)
         if got:
             print(got)
+    # GUARD_EDIT_OK: feature 165 - prints `yes` for the one wait shape the GM permitted (backgrounded,
+    # watching a file) and nothing otherwise. Reads the WHOLE payload, because the decision needs
+    # `run_in_background` as well as the command.
+    elif len(sys.argv) > 1 and sys.argv[1] == "file-wait":
+        try:
+            whole = json.loads(RAW)
+        except Exception:
+            whole = {}
+        if file_watching_wait(whole):
+            print("yes")
     elif len(sys.argv) > 1 and sys.argv[1] == "sanitize":
         print(_strip_quotes(_strip_heredocs(payload)))
     else:
