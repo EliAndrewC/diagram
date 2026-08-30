@@ -71,14 +71,30 @@ a person reading them.
 No branch that permits an escape may be silent. There are **THREE** such branches. I specified one,
 round 1 found the second, and round 2 found the third - which is the fourth hand-written census in two
 features to come up short, and the reason the completeness of this requirement is DERIVED rather than
-listed: a check walks the census in `tests/tooling/test_guard_firing_log.py` and fails unless every
-token classified `command`, `content`, `environment` or `make-variable` produces an `escaped` entry
-when driven. The three are:
+listed.
+
+**THE CHECK IS KEYED ON (TOKEN, PERMITTING SITE), NOT ON THE TOKEN.** Round 3 caught the first version
+keyed on the token alone, which several tokens defeat by having TWO permitting sites: `GUARD_EDIT_OK`
+is permitted by `guard-file-hooks.sh` (which records) AND by `make-only` (which does not), so one
+driver per token passes green while the exact branch this feature exists to close stays silent;
+`PAIR_OK` has the same shape across its Bash and agent-prompt branches. So: every branch anywhere in
+`scripts/` or the Makefile that exits permissively on an escape token must produce its OWN `escaped`
+entry, the driver table is derived from `_ESCAPES` **with no skip or xfail hatch** so a newly
+classified token is red until it is driven, and the `not-an-escape` class may not be used to retire a
+red - a token belongs there only if NO branch permits on it.
+
+**And the count in this prose is not the specification** - the set is whatever the check derives.
+Three are known today and are named as examples, because a fixed number in a document is the thing an
+implementer builds to, and a hand-written census has now been short by one four times in two
+features:
 
 1. **`sync-with-main.sh:231`** permits a `GATE_STAMP_OK` bypass of the green-gate rule - the rule that
    nothing is pushed which a gate did not see - and prints to stderr. The file has no `guard_log` call
-   anywhere and never sources `_guardlog.sh`, so this escape is invisible to `make audit`. It is also
-   the most consequential of the eleven, which is what makes its silence worst.
+   anywhere and never sources `_guardlog.sh`, so this escape is invisible to `make audit`. It is also the most
+   consequential permit in the repository - it guards the rule that nothing lands which a gate did not
+   see - which is what makes its silence worst. (Round 3 struck an unsourced "of the eleven" here: the
+   census holds fifteen tokens, thirteen of them escapes, nine classified `command`. In a spec whose
+   recurring failure is a miscounted census, an unsourced number invites the next one.)
 2. **`repo-safety-hooks.sh`** permits a `HOST_GIT_OK` bypass of the guard over `/host-l7r-repo` - the
    GM's OWN repository - and records nothing: its only `guard_log` call is
    `case "$VERDICT" in ok) ;; *) guard_log repo-safety blocked ...`, so an `ok` verdict reached BY
@@ -104,7 +120,13 @@ requirement said "four kinds" and then listed three, which is the shape this rev
 - **environment escapes** (`REVIEW_GATE_OK`, `GATE_STAMP_OK`): the variable's VALUE is the reason and
   must meet the floor; an empty or trivial value is refused.
 - **the make override** (`REF_OK`): its companion `REF_WHY` already carries the reason, so it is
-  brought under the same floor rather than left as the one exception.
+  brought under the same floor rather than left as the one exception. **And it must also reach the
+  firing log**: today the Makefile records it with `$(LOGBYPASS) permitted "REF_OK - ..."`, which
+  writes to `dev/bypass-log/` and never through `guard_log`, so `make audit` cannot see it and
+  SC-003 is unachievable for it. The ruling, because the alternative was to weaken SC-003: `REF_OK`
+  emits a `guard_log ... escaped` entry with `REF_WHY` as its detail, and keeps its bypass-log entry
+  as well. One escape, two records, and the audit the GM asked for answerable from the log alone.
+  Round 3 caught this - it would otherwise have been the FOURTH short census in two features.
 
 ### FR-003b - the one branch the matcher does not reach still owes a reason
 
