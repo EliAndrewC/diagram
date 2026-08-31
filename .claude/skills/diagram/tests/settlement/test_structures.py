@@ -5,6 +5,7 @@ import math
 import pytest
 
 from l7r.diagram.settlement import Settlement
+from l7r.diagram.settlement.structures.fixtures._helpers import kosatsuba_anchor
 from tests.settlement._builders import _city, _crop_settlement, _estate_settlement, _scatter_base_points, _town, _ward_city_with_samurai
 
 
@@ -757,3 +758,23 @@ def test_a_field_name_caption_goes_through_the_phase_too():
     rec = s.M["labels"][-1]
     assert rec[5] == "Higashi-da"
     assert any("letter-spacing" in ln and "Higashi-da" in ln for ln in s.toplabels), "the markup it always drew"
+
+
+def test_kosatsuba_anchor_walks_the_imperial_road_and_ignores_a_run_too_short_to_walk() -> None:
+    """Feature 174: the two unreached statements in the fixtures helpers.
+
+    `M["road"]` is the Imperial road - a town/city key no scripted hamlet records, so the branch that
+    adds it to the approach runs had never executed. The `len(run) < 2` skip beside it is the same
+    shape: a recorded way with one point is not a walk. Both asserted, plus the case where the road
+    IS the run that wins, so the test would fail if the branch simply stopped adding it.
+    """
+    houses = [{"x": 500.0, "y": 500.0, "role": "headman"}, {"x": 540.0, "y": 500.0}]
+    M = {
+        "houses": houses,
+        "road": [(0.0, 500.0), (1000.0, 500.0)],
+        "roads": [{"pts": [(500.0, 0.0)]}],  # a single point: not a walk, and must not raise
+    }
+    got = kosatsuba_anchor(M, "entrance")
+    assert got is not None, "the Imperial road reaches the houses and anchors the board"
+    assert abs(got[1] - 500.0) < 1e-6, "the anchor sits on the road's own line"
+    assert kosatsuba_anchor({"houses": houses, "roads": [{"pts": [(500.0, 0.0)]}]}, "entrance") is None, "a one-point run alone leaves nothing to walk"
