@@ -79,12 +79,23 @@ and the floors are deferred to `FULL`. The peer session's report of `_invocation
 NOTHING. There are only two ways to have one, and they trade against the GM's other stated goal
 (iteration speed):
 
-- **release the scope lock**, so `make done` runs the whole suite - it has been on since 2026-08-25
-  for feature 133's reference-hamlet period, which ended long ago (we are at 174); or
+- **release the scope lock**, so `make done` runs the whole suite; or
 - **put the hard floor on the run the PUSH requires**, leaving `make done` cheap.
 
+**CORRECTION (round 3, 2026-08-31).** The first option was written as though the scope lock were
+still on. It is not, and has not been since **2026-08-27T23:50:47Z** (`dev/switches.json`; feature
+133's reference-hamlet period ended long ago). So there was never a lock to release, and the three
+deselections R3 was reasoning about are not all in force today: `ROLL_DESELECT` and `TIER_SELECT` are
+both gated on `$(filter reference,$(SCOPE_STATE))` (`Makefile:982, 1026`), so under today's unlocked
+scope the live deselections are the `tests/full` ignore and the tooling skip - both of which
+`COV_FLOORS=1` also turns off. The conclusion below is UNCHANGED and now rests on the smaller true
+fact: `COV_FLOORS=1` is the single switch that ends every deselection in force, whichever those are,
+which is why the floor and the full sweep cannot be separated.
+
 The GM's own words point at the second - *"we literally cannot complete our make done in order to
-merge back into main"* - i.e. the thing that gates MERGING must enforce it.
+merge back into main"* - i.e. the thing that gates MERGING must enforce it. FR-003 goes further than
+this paragraph did and puts the floor on `make done` ITSELF, which is what the sentence literally
+says; the run the push requires is then floored as a consequence, not instead.
 
 ## R4 - FULL has never been green, so there is no baseline to restore to
 
