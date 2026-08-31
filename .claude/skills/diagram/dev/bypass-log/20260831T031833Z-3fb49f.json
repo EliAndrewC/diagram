@@ -1,0 +1,6 @@
+{
+  "utc": "20260831T031833Z",
+  "guard": "pair-hooks",
+  "what": "gate alone",
+  "reason": "no map changed - verified: zero manifests differ across the whole 174 delta, and the only engine change is 181 lines DELETED (dead code orphaned by feature 166) plus a one-word comment fix. Those deletions already had an independent adversarial review, which confirmed all 8 SAFE against the roll records"
+}
