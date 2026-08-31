@@ -131,15 +131,21 @@ source = ["l7r.diagram._invocation", "l7r.diagram.switches", "l7r.diagram.ci", "
 # frozen tree is named because it left `pool/` entirely.
 omit = ["*/tests/*", "pool/*/*/*.gen.py", "legacy-hand-authored-pool/*/*/*.gen.py"]
 
-# COVERAGE ENFORCEMENT LIVES IN THE MAKEFILE since the 2026-08-16 legacy freeze, not here. The
-# hand-authored pool maps are frozen and their gens never run, so the above-hamlet wings of
-# settlement.py (towns, cities, the capital) are exercised by nothing until those tiers convert to
-# scripted generation. A single global `fail_under = 100` therefore cannot hold; the Makefile's
-# `test` target enforces 100% on every module EXCEPT settlement.py and a RATCHET floor on
-# settlement.py (raise it as tiers convert - see the comment there). `show_missing` stays off so
-# settlement.py's known hole does not print a screen of line ranges on every run; for the module
-# you are editing, `python3 -m coverage report -m --include='*/<file>'` after a suite run, and a
-# failed gate still prints exactly the changed-but-uncovered lines via uncovered-in-diff.py.
+# COVERAGE ENFORCEMENT LIVES IN THE MAKEFILE, not here - it is the gate that has to fail, and the
+# floor is applied LAST so a run's own failures are reported before the coverage table.
+#
+# WHAT THIS COMMENT USED TO SAY, and why it is wrong now (feature 174, 2026-08-31): "A single global
+# `fail_under = 100` therefore cannot hold" - because the 2026-08-16 legacy freeze left the
+# above-hamlet wings of settlement/ exercised by nothing, so the Makefile ran 100% on every module
+# EXCEPT settlement/ plus a 94% ratchet on it. **It holds now.** Feature 174 covered those wings by
+# TESTS rather than by waiting for the tier conversions, the ratchet and the `--omit` list both
+# retired, and the gate enforces one flat 100% over the whole measured set - 20,682 statements,
+# 0 missing. This paragraph is kept rather than deleted because a stale claim of exactly this kind is
+# what let the ratchet survive six review rounds: the spec said it was gone while the Makefile said
+# otherwise, and nobody re-read either until someone measured.
+#
+# `show_missing` stays off here so the Makefile controls when line ranges print; the gate passes `-m`
+# itself, and a failed gate additionally prints the changed-but-uncovered lines via uncovered-in-diff.py.
 [tool.coverage.report]
 show_missing = false
 exclude_also = [
