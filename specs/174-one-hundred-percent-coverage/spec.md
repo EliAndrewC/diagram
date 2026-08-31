@@ -142,13 +142,22 @@ stated here so the GM reads the same number the gate does.
 So under FR-003 exactly as written, a session that cannot cover a line may write `# pragma: no cover`
 on it and the gate goes green. That IS a mechanism by which `make done` completes below a true 100%.
 
-**This is OUT of scope for feature 174, and it is stated here rather than closed, because the
-question is the GM's**: does *"there will no longer be any mechanism by which this can be
-accomplished"* reach the pragma, or only the ratchets and the push routes? The two answers are very
-different pieces of work - auditing 131 sites and deciding a rule for new ones, against the ratchet
-removal this feature actually did - and the stop-and-ask calculus says a wrong guess here is
-expensive to unwind. What this feature guarantees meanwhile: it added none, and D10 holds that no
-line was pragma'd to reach the number.
+**RULED BY THE GM, 2026-08-31**: *"If there is `# pragma: no cover` code that cannot happen then we
+should delete all of those cases, because dead code is bad, and it's better to remove it from the
+codebase."* Carried out, and the method is the part worth keeping: classifying by what each pragma's
+comment CLAIMS is not evidence, because a comment is an assertion written once and never re-checked.
+So all 131 were STRIPPED and the whole corpus run against this feature's own new floor, which then
+NAMED every line nothing executes. That inverted the picture - **78 of the 131 were hiding lines the
+corpus already runs**, and reading the comments alone would have deleted live code while keeping dead
+code. Of the 53 genuinely unreached: **13 were dead and are deleted**; 24 are error handling or
+structural terminals whose removal converts a graceful skip into a crash or returns `None` where the
+signature promises a value, and they are KEPT, each now carrying why it is not deletable; 16 are live
+rescues or external systems whose comments say *"no cohort map currently"* - today's seeds miss them,
+which is not the same as cannot happen. Result: **130 -> 76 sites, 469 -> 385 excluded lines, 2.99% ->
+2.30% of the floored tree**, 40 engine lines deleted, 2,716 tests green and no manifest moved. Full
+working in [`pragma-census.md`](pragma-census.md). **The open half is stated there and is the GM's**:
+whether the 24 error-handling guards are meant too, which trades a silent skip for a crash on
+malformed input.
 
 ### FR-004 - `waterfields/hill.py` is COVERED BY TESTS, not exempted and not asked about
 
