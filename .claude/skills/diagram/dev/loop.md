@@ -370,3 +370,57 @@ the pack/wall ratio alone; the ratio is a symptom of non-parallelizable work, no
 `L7R_TESTS_FULL=1` on purpose: a served roll executes none of the code, and FULL is where the coverage
 floors are enforced. Any "optimization" that restores caching in FULL buys its speed by not running the
 code the floors exist to check.
+
+## DOES FULL GENERATE MORE DISTINCT HAMLETS THAN THE CODE PATHS NEED? MEASURED: NO (2026-08-31)
+
+The GM's question: *"if we are generating a given number of hamlets which is higher than the number of
+distinct hamlets which need to be generated in order to exercise all of the different code paths ... then
+we should be able to reduce the number of generations."* Sound reasoning, so it was measured rather than
+argued: each distinct spec was rolled under `coverage.py` and its covered engine lines differenced against
+the union of every other spec's.
+
+| spec | unique lines | cost |
+|---|---|---|
+| inashiro (the reference) | 66 | 15.0 s |
+| polder seed 8 | 29 | 39.8 s |
+| clamped (pond -> offmap fallback) | 28 | 15.4 s |
+| woodland-shrink | 23 | 8.3 s |
+| polder seed 12, fall 0 | 13 | 38.9 s |
+| kuwabata | 7 | 22.0 s |
+| dikepond | 7 | 22.1 s |
+| polder seed 19, fall 90 | **1** | 30.4 s |
+| OneHouse | 0 | 13.5 s |
+| LaneOnly | 0 | 15.8 s |
+
+**EIGHT OF TEN CARRY LINES NOTHING ELSE REACHES, so there is no surplus to cut.** Note how narrow some of
+the margins are - kuwabata and dikepond differ only by `dike_crop` and each still holds 7 lines the other
+does not.
+
+**AND THE TWO ZEROES ARE NOT REMOVABLE EITHER - the census produced a candidate and the read overturned
+it**, exactly as `tests/CLAUDE.md` records for the check census. Three separate reasons, each of which
+alone is decisive:
+
+1. **They are only "redundant" against EACH OTHER.** The test asks "is X inside the union of the others",
+   and they cover the same lines, so each is inside the other. Measured against everything except its
+   twin, EACH holds **185 lines** nothing else covers. At most one could ever go.
+2. **They assert different things.** `LaneOnly` asserts the frontage pass SEATS the hamlet when the field
+   row is silenced; `OneHouse` asserts it STOPS once the households are housed. Identical coverage, and
+   neither assertion is made anywhere else - line coverage cannot see the difference between them.
+3. **They are not even the same map.** `OneHouse` mutates `households` to 1 after `plan_site`, and the
+   spec `name` sets the title placard's width (`hinterland` `_bw = max(s._text_width(plan.spec.name, 30) ...)`),
+   which reserves ground the coppice scan competes for. Two specs differing only in name are different maps.
+
+**SO THE REDUNDANCY IN FULL IS REPEATED IDENTICAL ROLLS, NOT SURPLUS VARIETY.** The Inashiro spec appears
+in eleven gate test files and Kuwabata in three; that is what the run-scoped cross-worker share removes.
+The variety itself is already lean.
+
+**The one weak ratio, recorded rather than acted on:** polder seed 19 at fall 90 costs 30.4 s for a single
+line, `hamletgen/ways.py:2107` - the inner splice-refusal branch, whose comment records that refusing
+outright was measured and was WORSE (cohort seed 18 traded `features_do_not_overlap` for
+`lanes_form_one_network`). It is a real branch with recorded reasoning, so it stays. If someone wants that
+30 s back, the task is to find a CHEAPER spec that also reaches line 2107 - not to drop the coverage.
+
+**METHOD NOTE for whoever runs this again.** Line coverage is weaker than branch coverage: a spec adding
+no new LINE may still take a different path through lines others hit. Treat a zero as a candidate and read
+the test before touching it. And beware the operator-precedence trap in the joint-removability check -
+`set(a) | set(b) - rest` is `a | (b - rest)`, not `(a | b) - rest`, and the wrong one reads plausible.
