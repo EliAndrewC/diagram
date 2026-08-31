@@ -244,3 +244,17 @@ def test_the_real_process_tree_is_not_the_idle_context(skill: Path) -> None:
 
     _marker(skill, os.getppid())
     assert not sw.idle_context(skill)
+
+
+def test_the_idle_subcommand_prints_a_BARE_FLAG_the_Makefile_can_read(capsys) -> None:
+    """Feature 174. `switches idle` is how a shell asks whether this process descends from the idle
+    timer (feature 136) - the answer gates the scope-lock relaxation, and it is deliberately `1`/`0`
+    rather than prose so a Makefile can test it directly.
+
+    A session's own process does NOT descend from the timer, which is the whole point: the
+    relaxation is unforgeable by a session (`switches.idle_context`).
+    """
+    from l7r.diagram import switches
+
+    assert switches.main(["idle"]) == 0
+    assert capsys.readouterr().out.strip() == "0", "this process is not the idle timer's child"
