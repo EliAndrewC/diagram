@@ -201,6 +201,9 @@ def cmd_plan(path: str) -> int:
     if plan["kind"] == "names":
         owner = assign_by_name(nodes, plan["modules"])
         order = [m for m, _, _ in plan["modules"]]
+    elif plan["kind"] == "lines":
+        owner = assign_by_line(nodes, plan["cuts"])
+        order = [m for _, m, _ in sorted(plan["cuts"])]
     else:
         owner = assign_modules(nodes, plan["cuts"])
         order = [m for _, m, _ in plan["cuts"]]
@@ -214,14 +217,51 @@ def cmd_plan(path: str) -> int:
         if owner[a] != owner[b]:
             cross.setdefault((owner[a], owner[b]), set()).add(nm)
     bad = [(u, v) for (u, v) in cross if order.index(v) > order.index(u)]
+    # A LINEAR SCRIPT'S SECOND BINDING IS INVISIBLE ACROSS A CUT. `shiro-daika.gen.py` executes 346
+    # drawing statements at module level and rebinds six short-lived names (`_qnx`, `_MKB`, ...).
+    # Imports resolve to the module that defines a name FIRST, so if the two bindings land either
+    # side of a cut, a later part silently reads the stale one - and the map draws wrong rather than
+    # failing. Refuse instead: move the cut so both bindings stay together.
+    # ...but a REBIND is only a hazard if the second part READS the name before rebinding it. When
+    # the rebind comes first, the module owns the name locally, the import is never synthesized (the
+    # emitter excludes locally-bound names) and nothing stale is reachable. `shiro-daika.gen.py`'s
+    # `_qnx`/`_qny` are exactly that shape - a scratch normal vector recomputed in a later section -
+    # so the check reports them and passes. What it refuses is a part that reads the old value and
+    # then replaces it, which is the one arrangement that draws a wrong map in silence.
+    straddle: list[str] = []
+    fatal: list[str] = []
+    bound: dict[str, dict[str, int]] = {}
+    for i, n in enumerate(nodes):
+        for nm in toplevel_names(n):
+            bound.setdefault(nm, {}).setdefault(owner[i], n.lineno)
+    first_read: dict[tuple[str, str], int] = {}
+    for i, n in enumerate(nodes):
+        seg = ast.get_source_segment(src.text, n) or ""
+        for nm in reads_of(seg):
+            first_read.setdefault((owner[i], nm), n.lineno)
+    for nm, mods in sorted(bound.items()):
+        if len(mods) < 2:
+            continue
+        where = ", ".join(sorted(mods))
+        late = [m for m, ln in mods.items() if first_read.get((m, nm), 10**9) < ln]
+        if late:
+            fatal.append(f"{nm} - {', '.join(sorted(late))} READS it before rebinding it")
+        else:
+            straddle.append(f"{nm} ({where}; each part rebinds before use, so nothing stale is reachable)")
     for m in order:
         print(f"  {sizes[m]:5d}  {m}.py")
     print(f"  {sum(sizes.values()):5d}  total (monolith body)")
     for (u, v), names in sorted(cross.items()):
         arrow = "FORWARD" if order.index(v) > order.index(u) else "back"
         print(f"    {u} -> {v} [{arrow}]: {', '.join(sorted(names))[:100]}")
+    if straddle:
+        print(f"    REBOUND ACROSS A CUT: {'; '.join(straddle)}")
     if bad:
         print(f"\n  {len(bad)} FORWARD edge(s) - these are import cycles; move the cut.")
+        return 1
+    if fatal:
+        print("    STALE-READ HAZARD: " + "; ".join(fatal))
+        print(f"\n  {len(fatal)} name(s) read from an earlier part and then rebound - move the cut.")
         return 1
     over = [m for m in order if sizes[m] > 1000]
     if over:
@@ -255,6 +295,24 @@ def _plan_mixin(src: Source, plan: dict) -> int:
         return 1
     print("\n  methods reach each other through self. - no cross-module imports to cycle")
     return 0
+
+
+def assign_by_line(nodes: list[ast.stmt], cuts: list[tuple[int, str, str]]) -> list[str]:
+    """Statement index -> module, by the LINE each section starts at.
+
+    `wip/shiro-daika.gen.py` needs this: its sections open with a drawing call, which binds no name,
+    so there is no marquee to cut on - but the file carries a banner comment above every one of
+    them, and those banners are what a reader navigates by.
+    """
+    starts = sorted(cuts, key=lambda c: c[0])
+    owner: list[str] = []
+    for n in nodes:
+        here = starts[0][1]
+        for line, module, _ in starts:
+            if n.lineno >= line:
+                here = module
+        owner.append(here)
+    return owner
 
 
 def assign_modules(nodes: list[ast.stmt], cuts: list[tuple[str, str, str]]) -> list[str]:
@@ -491,7 +549,7 @@ def cmd_apply(path: str) -> int:
     src = Source(path)
     plan = PLANS[rel(path)]
     pkg = plan.get("pkg", path[:-3])
-    order = [m for m, _, _ in plan["modules"]] if plan["kind"] == "names" else [m for _, m, _ in plan["cuts"]]
+    order = [m for m, _, _ in plan["modules"]] if plan["kind"] == "names" else [m for _, m, _ in (sorted(plan["cuts"]) if plan["kind"] == "lines" else plan["cuts"])]
     hdr_doc = plan["doc"]
     os.makedirs(pkg, exist_ok=True)
     written: dict[str, int] = {}
@@ -550,7 +608,11 @@ def cmd_apply(path: str) -> int:
         nodes = src.body_nodes()
         SOURCE_TEXT[0] = src.text
         entries = src.contiguous(nodes, src.header_end)
-        owner = assign_by_name(nodes, plan["modules"]) if plan["kind"] == "names" else assign_modules(nodes, plan["cuts"])
+        owner = (
+            assign_by_name(nodes, plan["modules"]) if plan["kind"] == "names"
+            else assign_by_line(nodes, plan["cuts"]) if plan["kind"] == "lines"
+            else assign_modules(nodes, plan["cuts"])
+        )
         groups: dict[str, list[str]] = {m: [] for m in order}
         names_of: dict[str, set[str]] = {m: set() for m in order}
         for n, (_, seg), m in zip(nodes, entries, owner, strict=True):
@@ -558,7 +620,7 @@ def cmd_apply(path: str) -> int:
             names_of[m] |= set(toplevel_names(n))
         joined = "".join("".join(groups[m]) for m in order)
         whole = "".join(seg for _, seg in entries)
-        if plan["kind"] == "names":
+        if plan["kind"] in ("names", "lines"):
             # a by-name split REORDERS the layers, so the bodies are a permutation of the monolith's
             # slices rather than a concatenation of them - assert the multiset instead, which still
             # proves no source line was dropped or duplicated
@@ -590,12 +652,25 @@ def cmd_apply(path: str) -> int:
         for n in sorted(surface):
             by_mod.setdefault(earlier[n], []).append(n)
         passthrough = "\n".join(_deepen(_one_name_import(src.import_binds[n], n)) for n in imported)
-        init = (
-            src.docstring().rstrip("\n") + "\n\n"
-            + "\n".join(f"from .{m} import " + ", ".join(f"{n} as {n}" for n in sorted(ns)) for m, ns in sorted(by_mod.items()))
-            + ("\n" + passthrough if passthrough else "")
-            + "\n"
-        )
+        if plan.get("chain"):
+            # A LINEAR SCRIPT, so importing a part EXECUTES it. Each part already imports names from
+            # the one before, which forces the order by itself; naming them here in order as well
+            # makes that contract readable instead of emergent, and guarantees it for a part that
+            # happens to read nothing from its predecessor.
+            init = (
+                src.docstring().rstrip("\n") + "\n\n"
+                + "# Importing this package DRAWS THE MAP: each part executes at import, in this order,\n"
+                + "# and each imports from the one above it, so the order is enforced by Python itself\n"
+                + "# rather than by this list. See CLAUDE.md in this directory for what each part holds.\n"
+                + "".join(f"from . import {m} as {m}  # noqa: F401\n" for m in order)
+            )
+        else:
+            init = (
+                src.docstring().rstrip("\n") + "\n\n"
+                + "\n".join(f"from .{m} import " + ", ".join(f"{n} as {n}" for n in sorted(ns)) for m, ns in sorted(by_mod.items()))
+                + ("\n" + passthrough if passthrough else "")
+                + "\n"
+            )
         with open(os.path.join(pkg, "__init__.py"), "w") as fh:
             fh.write(init)
 

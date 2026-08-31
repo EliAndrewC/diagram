@@ -165,6 +165,36 @@ PLANS = {
         ],
     },
 
+    # ---- wip/shiro-daika.gen.py: 1,592 -> seven parts + a driver ---------------------------------
+    # THE ONLY LINEAR SCRIPT of the ten: 346 of its statements are drawing calls at module level,
+    # only 358 of its 1,592 lines sit in a function, and the whole thing mutates one Settlement in
+    # order. So the parts are SEQUENTIAL, cut at the file's own section banners, and importing the
+    # package draws the map - each part imports from the one above it, which is what enforces the
+    # order. `--plan` refuses any cut that would put the two bindings of a rebound name either side
+    # of it, because that failure draws a WRONG map rather than raising.
+    #
+    # The spec first proposed exempting this file under clause 13's ordered-data carve-out;
+    # `spec-fidelity` rejected that (it defines six functions with real algorithms, and "execution
+    # order is a contract" is true of nearly every imperative module here), so it splits like the
+    # rest. See specs/173/spec.md FR-007.
+    "wip/shiro-daika.gen.py": {
+        "kind": "lines",
+        "chain": True,
+        "pkg": "/diagram/.clones/diagram-tooling/.claude/skills/diagram/wip/shiro_daika",
+        "title": "the domain capital of the Daika house, part by part",
+        "was": 1592,
+        "doc": '"""Part of the Shiro Daika map, split from shiro-daika.gen.py by feature 173.\n\nImporting this module EXECUTES this part of the drawing. See CLAUDE.md in this directory.\n"""\n\n',
+        "cuts": [
+            (56, "frame", "the wall and what it is an OUTPUT of - the budget, the rampart and its four gates, the river, the moat and patrol road, the ways and the kagi-no-te, the ote-suji"),
+            (203, "castle", "the castle and the sovereign ground around it - the two gates, the circulating moat, the aqueduct and towpath, the bridges, the government ward, the Imperial Magistrate's compound, the eight lineage compounds, the two sovereign temples and the teramachi rim"),
+            (407, "wharf", "the collecting-and-disbursing end of the domain's rice - the wharf, its jetties and granaries, the quay face, and the budget reconciliation that closes feature 020"),
+            (478, "housing", "FEATURE 021: the machi street mesh and the yashiki band - 53 walled compounds of Ranks 8-12 wrapping the castle, and the retainer terraces"),
+            (610, "trades", "the private dojos, the merchant estates, the trade works and the gate caravan program, and the castle's firebreak ring"),
+            (768, "civic", "what the packs must flow around - the kido mesh, the fire towers, and the public wells on their derived grids"),
+            (1190, "fields", "the farmland outside the wall - the comb fields, the ring fields, the furrows and the topographic channels, and the finish"),
+        ],
+    },
+
     # ---- waterfields/seams.py: 1,069 -> three ---------------------------------------------------
     # A chain, not a residue bucket: the pockets are found, then planted or traded away, then the
     # whole thing is driven by close_seams. Cuts follow the chain, so every edge points backwards.
