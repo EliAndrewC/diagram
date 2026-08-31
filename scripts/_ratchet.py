@@ -74,10 +74,15 @@ RATCHETS = {
                "own request the gate's test phase is now `test-full` on both branches, because the "
                "100% floor cannot be held over a partial suite. The 403 s ceiling derives; the GM's "
                "45 s and its 35 s trigger are untouched, and take over unchanged if the efficiency "
-               "work ever brings the gate back down. KNOWN AND ACCEPTED: the median is taken over "
-               "recent green runs, most of which are still cheap pre-174 ones, so the bar will not "
-               "bite until they age out - loose for a while beats unarmed, which is how the 4x "
-               "slowdown went unnoticed in the first place",
+               "work ever brings the gate back down. TWO NUMBERS WERE MEASURED AND BOTH WERE "
+               "CONTENDED, which is stated rather than averaged away: 310 s (the run that did all "
+               "the work and then failed at the floor) and 622 s (green), each sharing the box with "
+               "foreground `make test-file` runs from the same session. 310 is pinned as the cleaner "
+               "of the two; RE-PIN FROM AN IDLE RUN when one exists - `make idle-tests` produces "
+               "exactly that. KNOWN AND ACCEPTED meanwhile: the median is taken over recent green "
+               "runs, most of which are still cheap pre-174 ones, so the bar will not bite until "
+               "they age out - loose for a while beats unarmed, which is how the 4x slowdown went "
+               "unnoticed in the first place, and the median is also what absorbs one noisy run",
         hard_ceiling=45,
         hard_at_or_below=35,   # not yet - today's baseline is 155
         compare="median",      # D2, RATIFIED BY THE GM 2026-08-30, and BOUNDED TO THIS REGIME: while
