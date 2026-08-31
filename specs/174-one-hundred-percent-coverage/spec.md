@@ -123,12 +123,21 @@ the pragma, and the spec's silence read as coverage.
 
 **Measured in this clone at HEAD, and verified by the session rather than taken from the review:**
 
+SITES are the wrong unit and were the first number taken - one pragma can hide a line or a whole
+function - so the LINES are measured too, with coverage's own file reporter under this project's
+`pyproject.toml` excludes:
+
 | | count |
 |---|---|
-| `pragma: no cover` sites under `l7r/` | **131** |
-| ...inside the tree the hard `--fail-under=100` already covers | **90**, across 32 files |
-| largest single files | `hamletgen/homesteads/wells.py` 22, `hamletgen/sink.py` 14, `hamletgen/water.py` 7 |
+| `pragma: no cover` sites under `l7r/` | **131** (90 of them inside the tree the hard floor covers, across 32 files) |
+| **excluded LINES, engine-wide** | **469**, against 22,470 measured statements |
+| **excluded LINES inside the hard-floor tree** | **281**, against 9,118 measured statements - **2.99% of that tree's code is not measured at all** |
+| largest single files | `ci/dispatch.py` 70, `hamletgen/homesteads/wells.py` 23, `hamletgen/sink.py` 15, `tools/cache_audit.py` 10, `pipeline/gencache.py` 10 |
 | added or removed by feature 174 | **net zero** - one `+` and one `-`, the same line moving with a lifted function |
+
+So "100.00% of 20,646" is 100% of what coverage MEASURES, and 469 lines are outside that. The
+feature's own claim is exact and its scope is narrower than the bare percentage sounds; both are
+stated here so the GM reads the same number the gate does.
 
 So under FR-003 exactly as written, a session that cannot cover a line may write `# pragma: no cover`
 on it and the gate goes green. That IS a mechanism by which `make done` completes below a true 100%.
