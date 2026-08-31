@@ -656,3 +656,26 @@ def test_the_ring_road_is_NOT_a_town_street_because_its_wall_side_is_bare_by_des
     s.ring_road([(300.0, 300.0), (1300.0, 300.0), (1300.0, 1300.0), (300.0, 1300.0)])
     assert s.M.get("ring_road"), "recorded under its own key"
     assert not s.M.get("town_streets"), "and NOT as a town street, which would owe frontage"
+
+
+def test_a_closed_rampart_JOINS_its_last_run_into_its_first() -> None:
+    """`_gapped_ring` draws a wall with a genuine OPENING at each gate, "so the rampart can render
+    OVER the ground lanes yet still let the road show THROUGH the gate - rather than painting a land
+    rect over the wall (which would erase the road too, once on top)".
+
+    On a CLOSED ring whose first vertex is not itself a gate, the last run continues into the first,
+    or the wall would carry a seam at vertex 0 that no gate put there. That is why ONE mid-ring gate
+    yields ONE run rather than two: the gap is at the gate, and the ring closes behind it.
+
+    A GATE IS A RING VERTEX, not a point on an edge - `isg` tests vertices. A test passing a
+    mid-edge point gets no gaps at all and would pass while exercising nothing, which is how this
+    test was first written.
+    """
+    s = Settlement(1600, 1600, seed=15)
+    s.meta(name="C", scale="city")
+    ring = [(300.0, 300.0), (800.0, 300.0), (1300.0, 300.0), (1300.0, 800.0), (1300.0, 1300.0), (300.0, 1300.0)]
+
+    assert s._gapped_ring(ring, [(800.0, 300.0)]).count("M") == 1, "one gate on a closed ring: one run, joined at vertex 0"
+    assert s._gapped_ring(ring, [(800.0, 300.0), (1300.0, 800.0)]).count("M") == 2, "two gates cut it into two runs"
+    assert s._gapped_ring(ring, [(300.0, 300.0)]).count("M") == 1, "a ring gated AT vertex 0 needs no join"
+    assert s._gapped_ring(ring, []).count("M") == 1, "and an ungated wall is one unbroken run"
