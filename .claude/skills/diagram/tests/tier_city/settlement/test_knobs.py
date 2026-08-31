@@ -5,6 +5,8 @@ locked to another tier; the gate collects everything. Helpers stay in the source
 import pytest
 
 from l7r.diagram import settlement
+import math
+
 from l7r.diagram.settlement.city.knobs import machi_mouths, moat_swept_tap
 
 
@@ -75,3 +77,23 @@ def test_a_moat_offtake_is_SWEPT_DOWNSTREAM_rather_than_tapped_square() -> None:
 
     on_ring = min(seg_dist(tapped[0], tapped[1], ring[i], ring[(i + 1) % len(ring)]) for i in range(len(ring)))
     assert on_ring < 1.0, f"the tap sits on the moat ring itself ({tapped})"
+
+
+def test_a_DRAIN_lands_walking_DOWNSTREAM_and_is_CAPPED_however_far_the_caller_allows() -> None:
+    """Same geometry, mirrored. An OFFTAKE leaves the ring so its rim end walks UPSTREAM and the
+    throat runs with the current; a DRAIN ARRIVES, so its landing walks the other way.
+
+    A landing is additionally held to 90 px of set-back whatever the caller asked for: walk further
+    and the culvert's sink end finishes closer to the drain's HEAD than to its tail, which flips the
+    outfall attribution `drain_flows_downhill` reads (Nagahara's fnn2 did exactly that). Driven with
+    an unreachable `want_deg` so the walk always runs to its limit, which is what makes the limit
+    itself visible: the offtake keeps walking as `max_back` is raised and the landing does not."""
+    ring = [(200.0, 200.0), (1000.0, 200.0), (1000.0, 1000.0), (200.0, 1000.0)]
+    kw = {"inlet": (1000.0, 200.0), "outlet": (1000.0, 1000.0), "other": (1400.0, 900.0), "near": (1000.0, 600.0), "want_deg": -1.0}
+
+    leaving = [moat_swept_tap(ring, max_back=mb, **kw) for mb in (90.0, 220.0, 1000.0)]
+    assert len(set(leaving)) == 3, f"an offtake walks further the more set-back it is allowed: {leaving}"
+
+    landing = [moat_swept_tap(ring, max_back=mb, arriving=True, **kw) for mb in (90.0, 220.0, 1000.0)]
+    assert len(set(landing)) == 1, f"a landing stops at its own 90 px cap and ignores the rest: {landing}"
+    assert landing[0] != leaving[1], "and the two ends do not land on the same point"

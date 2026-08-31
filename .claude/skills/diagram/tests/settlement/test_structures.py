@@ -1040,3 +1040,34 @@ def test_seg_hits_rect_clips_a_segment_against_a_rect_on_every_slab(a: tuple[flo
 
     assert seg_hits_rect(a, b, 0.0, 0.0, 100.0, 100.0) is hits, why
     assert seg_hits_rect(b, a, 0.0, 0.0, 100.0, 100.0) is hits, f"and reversed: {why}"
+
+
+@pytest.mark.parametrize(
+    ("key", "extra"),
+    [
+        ("moat", {"moat_width": 22}),
+        ("road", {"road_width": 30}),
+        ("ring_road", {"ring_road_width": 7}),
+    ],
+)
+def test_a_compound_wall_may_not_stand_in_a_moat_a_road_or_the_ring_road(key: str, extra: dict) -> None:
+    """`_estate_wall_clear` sweeps the whole street net and the whole water net, and each kind is its
+    own branch reading its own width key. A test map that carries only streets and alleys leaves the
+    rest of them unexercised - which is how a compound wall could have been laid down the middle of a
+    ring road with every existing test green."""
+    s = _town()
+    through = [[100.0, 500.0], [900.0, 500.0]]
+    assert s._estate_wall_clear(500.0, 500.0, 120.0, 90.0), "clear ground to begin with"
+    s.M[key] = through
+    s.M.update(extra)
+    assert not s._estate_wall_clear(500.0, 500.0, 120.0, 90.0), f"a wall may line a {key}, never stand in its cleared band"
+    assert s._estate_wall_clear(500.0, 200.0, 120.0, 90.0), "and a compound well clear of it is fine"
+
+
+def test_a_compound_wall_may_not_stand_in_a_RIVER() -> None:
+    """The river is recorded as a dict with its own `pts`/`w`, unlike the moat and the roads, so it is
+    a separate branch and a separate test."""
+    s = _town()
+    assert s._estate_wall_clear(500.0, 500.0, 120.0, 90.0)
+    s.M["river"] = {"pts": [[100.0, 500.0], [900.0, 500.0]], "w": 40.0}
+    assert not s._estate_wall_clear(500.0, 500.0, 120.0, 90.0)
