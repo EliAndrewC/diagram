@@ -42,3 +42,52 @@ def test_pack_core_skips_the_street_facing_band():
 
     for b in s.M["buildings"]:
         assert _m.hypot(0, b["y"] - 500) > 76 or not (100 <= b["x"] <= 900)
+
+
+# ---- feature 174: the four TOWN-tier ways and focal features --------------------------------------
+# `town_ways.py` was 21% covered (30 of 38 statements) because feature 145 moved these OUT of the
+# module every hamlet executes, precisely so a hamlet roll would not be judged on them - and then
+# nothing else ran them. Each is a direct call, and each records a FOCAL feature or a corridor that
+# later placement must respect, which is what these tests pin.
+
+
+def test_an_ancestral_hall_records_itself_as_a_focal_feature_and_reserves_its_ground() -> None:
+    """Research D2: the ancestral hall was the ritual and governance center of a Huizhou/Hakka
+    lineage village, its single most prominent structure - so a village that HAS one reads
+    unmistakably by it. That means it must both be recorded as focal and BLOCK, or a later pack
+    would seat houses across the grandest building in the settlement."""
+    s = _town()
+    s.ancestral_hall(500.0, 500.0)
+    assert s.M["ancestral_halls"], "recorded under its own key"
+    assert "ancestral_hall" in s.M["meta"]["focal_features"], "and declared focal"
+    assert not s._fits(500.0, 500.0, 12.0, 12.0), "its footprint is reserved"
+
+
+def test_a_water_mouth_is_a_focal_pavilion_at_the_stream_exit() -> None:
+    """The fengshui shuikou: the guarded outlet where the village stream leaves, marked by a small
+    hexagonal pavilion to 'lock in' the qi of the departing water."""
+    s = _town()
+    s.water_mouth(300.0, 700.0)
+    assert s.M["water_mouths"], "recorded under its own key"
+    assert "water_mouth" in s.M["meta"]["focal_features"]
+
+
+def test_a_market_is_an_OPEN_CLEARING_that_still_reserves_its_court() -> None:
+    """ "a widening in the lane fabric, not a building" - so nothing is drawn as a solid hall, but
+    the court is reserved all the same: a market nobody can stand in is not a market."""
+    s = _town()
+    s.market(600.0, 400.0)
+    assert s.M["markets"], "recorded under its own key"
+    assert "market" in s.M["meta"]["focal_features"]
+    assert not s._fits(600.0, 400.0, 12.0, 12.0), "the clearing is held open against later packs"
+
+
+def test_an_alley_is_drawn_at_the_LINEWORK_FLOOR_rather_than_to_true_scale() -> None:
+    """The roji doctrine, stated in its own docstring: a real generous roji is 3-6 ft and ours
+    carries a whole block core at ~10 ft, which at city scale lands on the 4 px linework floor - "a
+    roji is drawn at the minimum visible width, never to (invisible) true scale"."""
+    s = _town()
+    before = len(s.M.get("alleys") or [])
+    s.alley([(100.0, 100.0), (400.0, 100.0)])
+    assert len(s.M["alleys"]) == before + 1
+    assert s.M["alleys"][-1]["w"] == pytest.approx(s.lw(10)), "the linework floor decides, not the true 10 ft"
