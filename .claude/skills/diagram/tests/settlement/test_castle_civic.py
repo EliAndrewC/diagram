@@ -147,3 +147,19 @@ def test_hanko_records_into_the_martial_halls_family():
     s2.hanko(700, 700, label="Hanko")  # a one-word name keeps the single line
     s2.place_labels()  # feature 157: the LABEL PHASE
     assert any(len(L) > 5 and L[5] == "Hanko" for L in s2.M["labels"])
+
+
+def test_the_TITLE_PLACARD_is_an_obstacle_the_caption_ladder_must_clear() -> None:
+    """The title is a label like any other and captions seat AFTER it, so a caption that ignored it
+    would sit on the place name. It is recorded as `M['title']` rather than in `M['labels']`, which is
+    why it is a branch of its own - and why a map with no title never exercised it."""
+    s = _ladder_map()
+    box = (400.0, 400.0, 500.0, 440.0)
+    free = s._best_label_spot(box, "market", 10)
+
+    s.M["title"] = {"bbox": [340.0, 440.0, 560.0, 500.0]}  # squarely over the below-seat the ladder just chose
+    with_title = s._best_label_spot(box, "market", 10)
+    assert with_title != free, "the ladder steps off the placard"
+    lx, ly = with_title
+    x0, y0, x1, y1 = s._label_box(lx, ly, "market", 10)
+    assert x1 < 340.0 or x0 > 560.0 or y1 < 440.0 or y0 > 500.0, f"and the caption clears it entirely: {(x0, y0, x1, y1)}"

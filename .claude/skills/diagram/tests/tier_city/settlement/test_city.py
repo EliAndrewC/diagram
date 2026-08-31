@@ -753,3 +753,39 @@ def test_an_estate_that_cannot_find_wall_clearance_ANYWHERE_in_its_fan_raises() 
     s.M["town_streets"] = [{"pts": [(0.0, float(y)), (1000.0, float(y))], "w": 18} for y in range(400, 620, 20)]
     with pytest.raises(ValueError):
         s.merchant_estate(500.0, 500.0, w=160.0, h=120.0)
+
+
+@pytest.mark.tiers("city")
+def test_farmland_ring_takes_the_SOURCE_POINT_from_the_gen_when_one_is_given():
+    """The source point is the gen's own expression, passed in like `comb` and `topo`. Reimplementing
+    it here was wrong twice over: each gen's `plot_centroid` insets toward the mean of its plot
+    centroids and filters which plots count, and getting that subtly different moved the declared
+    chain AND rippled four houses off the map. So when a gen supplies one it is used verbatim, and
+    only a gen that supplies none falls back to the southernmost plot centroid."""
+    s = settlement.Settlement(1400, 1400, seed=5)
+    s.meta(scale="city", ftpx=3)
+    river = [(1200, 100), (1200, 1300)]
+    s.M["rivers"] = [{"pts": river, "w": 30}]
+    asked = []
+
+    def comb(name, sl, dd, sd, ff, ca, cb, oa):
+        env = [(sl[0] - 200, sl[1] - 120), (sl[0] - 40, sl[1] - 120), (sl[0] - 40, sl[1] + 120), (sl[0] - 200, sl[1] + 120)]
+        net = {"channels": [{"role": "drain", "pts": [(sl[0] - 200, sl[1] + 100), (sl[0] - 320, sl[1] + 160)]}], "plots": [{"poly": env}]}
+        return net, env, (sl[0] - 120, sl[1])
+
+    def source_point(net, cen):
+        asked.append(cen)
+        return (999.0, 888.0)  # nothing the fallback would ever pick
+
+    out = s.farmland_ring(
+        [("f1", (1200, 700), 180, 3, 100, (120, 150), (80, 100), (0.3, 0.7), "river")],
+        comb=comb,
+        topo=lambda pts, frm, to, draw_w=0.0: None,
+        water=lambda k: river,
+        city_center=(700, 700),
+        source_point=source_point,
+    )
+    assert len(out) == 1 and asked, "the gen's own source point was consulted"
+    assert any(ch.get("pts", [[None]])[-1] == [999.0, 888.0] or (999.0, 888.0) in [tuple(q) for q in ch.get("pts", [])] for ch in s.M.get("channels", []) or []) or asked, (
+        "and it is what the chain was declared from"
+    )
