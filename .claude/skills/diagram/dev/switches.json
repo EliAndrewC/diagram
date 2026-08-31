@@ -1,9 +1,9 @@
 {
   "remote": {
-    "state": "off",
-    "why": "GM 2026-08-25: iterate on the reference hamlet (feature 133) with nothing dispatched to AWS; reusable setting, release with make ci-on",
+    "state": "on",
+    "why": "GM 2026-08-31: 'why don't we go ahead and turn AWS back on and then do a run there and just kinda see how it goes? I'm curious.' - measuring whether FULL scales better on homogeneous CodeBuild vCPUs than on this hybrid P/E-core laptop",
     "who": "Eli Courtwright",
-    "utc": "2026-08-25T20:50:09Z"
+    "utc": "2026-08-31T03:15:14Z"
   },
   "scope": {
     "state": "unlocked",

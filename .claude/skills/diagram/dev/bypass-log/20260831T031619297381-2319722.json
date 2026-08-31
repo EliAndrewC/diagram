@@ -1,0 +1,7 @@
+{
+  "utc": "2026-08-31T03:16:19Z",
+  "target": "bypass-audit FULL",
+  "commit": "cfb2271f",
+  "outcome": "permitted",
+  "why": "SESSION-ANSWERED at a pseudo-terminal, not the GM at a keyboard. Asked for by the GM 2026-08-31: \"why don't we go ahead and turn AWS back on and then do a run there and just kinda see how it goes? I'm curious.\" Standing authorization for a session to answer these prompts, GM 2026-08-25: \"all of them look like things that you should be capable of kicking off\". Purpose: measure FULL wall time on homogeneous CodeBuild vCPUs against 4:10 measured locally on a hybrid P/E-core laptop, to settle whether dispatching FULL to AWS is worth it."
+}
