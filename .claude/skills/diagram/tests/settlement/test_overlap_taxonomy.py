@@ -9,10 +9,17 @@ record dict, so they take direct tests.
 from __future__ import annotations
 
 import json
-import math
 
 import pytest
 
+from l7r.diagram.overlap.matrix import (
+    GridIndex,
+    edge_dist,
+    forest_reveal_x,
+    poly_gap,
+    polyline_len,
+    torii_halfbox,
+)
 from l7r.diagram.overlap.taxonomy import (
     OVERLAP_CLASS,
     _box_hits_poly,
@@ -140,3 +147,89 @@ def test_every_class_in_the_taxonomy_is_one_the_policy_engine_can_decide() -> No
     for cls in classes:
         key = next(k for k, v in OVERLAP_CLASS.items() if v == cls)
         assert matrix_policy(key, "houses") != "unclassified", f"{cls} is classified, so it must not abstain"
+
+
+# ---- feature 174: the matrix module's index and its mirrored geometry ----------------------------
+
+
+def test_the_grid_index_PRUNES_and_never_decides() -> None:
+    """Its contract, in its own words: a query returns "a superset of the true neighbors, so the
+    caller still runs its exact test - the index prunes, it never decides".
+
+    Profiled 2026-07-25 after a feature spent an hour and the gate was suspected: `city_fan_heads_quilted`
+    was testing ~3,000 sample points against every plot on the map, 14M segment-distance calls and
+    ~58% of Tango's 17 s gate.
+
+    The property that matters is the SUPERSET one, so it is asserted from both sides: everything
+    near is returned, and something merely in the same cell is returned too (which is why the caller
+    must still run the exact test).
+    """
+    idx = GridIndex(100.0)
+    idx.add(0.0, 0.0, 10.0, 10.0, "corner")
+    idx.add(90.0, 90.0, 95.0, 95.0, "same cell, far side")
+    idx.add(5000.0, 5000.0, 5010.0, 5010.0, "elsewhere")
+
+    got = idx.near(5.0, 5.0)
+    assert "corner" in got, "the item at the query point is returned"
+    assert "same cell, far side" in got, "and so is one merely sharing its cell - the caller decides"
+    assert "elsewhere" not in got, "but a far item is pruned"
+
+
+def test_an_item_spanning_cells_is_found_from_every_cell_it_touches() -> None:
+    """ "Each item is inserted under every cell its influence bbox touches" - a long wall found only
+    from its own corner would be an index that decides by omission."""
+    idx = GridIndex(50.0)
+    idx.add(0.0, 0.0, 500.0, 10.0, "a long wall")
+    assert "a long wall" in idx.near(10.0, 5.0)
+    assert "a long wall" in idx.near(480.0, 5.0), "found from the far end too"
+    assert idx.near(10.0, 400.0) == [], "and not from a cell it never reaches"
+
+
+def test_near_rect_returns_each_item_ONCE_however_many_cells_it_shares() -> None:
+    """Its docstring's own promise. A duplicate would make any caller that COUNTS its results wrong,
+    which is exactly the shape of the checks this index was built for."""
+    idx = GridIndex(50.0)
+    idx.add(0.0, 0.0, 500.0, 500.0, "one big thing")
+    got = idx.near_rect(0.0, 0.0, 400.0, 400.0)
+    assert got.count("one big thing") == 1, f"spans many cells, returned once: {got}"
+
+
+def test_a_canvas_filling_forest_reveals_only_its_TREE_LINE_to_the_crop() -> None:
+    """The crop rule: a wood is drawn to the canvas edge, but holding the frame open for identical
+    crowns deeper in is wasted image - so only the tree line plus `reveal` px counts.
+
+    `crop_hugs_content` gates how tight the crop is and must measure by exactly this rule, which is
+    why the function exists rather than each caller doing its own thing.
+    """
+    forest = [(0.0, 0.0), (900.0, 0.0), (900.0, 900.0), (0.0, 900.0)]
+    edge = [(300.0, 100.0), (320.0, 500.0)]
+    xs = forest_reveal_x(forest, edge, 40.0, 1000.0)
+    assert max(xs) == pytest.approx(360.0), "the tree line plus the reveal, not the canvas edge"
+    assert max(forest_reveal_x(forest, [], 40.0, 1000.0)) == pytest.approx(900.0), "with no tree line, the wood's own extent"
+
+
+def test_a_torii_halfbox_is_derived_from_the_SPAN_at_the_maps_scale() -> None:
+    """It replaced a legacy fixed +/-19 px box - the pre-true-scale glyph, ~5x oversized. So the
+    box must move with ftpx, which a fixed box could not do."""
+    fine = torii_halfbox(1.0)
+    coarse = torii_halfbox(2.0)
+    assert fine[0] > coarse[0], "the same 16 ft arch is fewer pixels on a coarser map"
+    assert fine[2] > fine[1], "and it reaches further DOWN than up - the glyph is not centered"
+
+
+def test_poly_gap_is_zero_for_every_way_two_polygons_can_meet() -> None:
+    """Overlap, containment and a bare edge crossing are three separate clauses, and a shape can
+    meet another by the third with no vertex of either inside the other."""
+    square = [(0.0, 0.0), (100.0, 0.0), (100.0, 100.0), (0.0, 100.0)]
+    assert poly_gap(square, [(200.0, 0.0), (300.0, 0.0), (300.0, 100.0), (200.0, 100.0)]) == pytest.approx(100.0)
+    assert poly_gap(square, [(50.0, 50.0), (150.0, 50.0), (150.0, 150.0), (50.0, 150.0)]) == 0.0, "overlapping"
+    assert poly_gap(square, [(40.0, 40.0), (60.0, 40.0), (60.0, 60.0), (40.0, 60.0)]) == 0.0, "contained"
+    assert poly_gap(square, [(-10.0, 40.0), (110.0, 40.0), (110.0, 60.0), (-10.0, 60.0)]) == 0.0, "a band crossing it"
+
+
+def test_edge_dist_and_polyline_len() -> None:
+    square = [(0.0, 0.0), (10.0, 0.0), (10.0, 10.0), (0.0, 10.0)]
+    assert edge_dist(5.0, 25.0, square) == pytest.approx(15.0), "to the nearest EDGE, inside or out"
+    assert edge_dist(5.0, 5.0, square) == pytest.approx(5.0), "a point inside still measures to the wall"
+    assert polyline_len([(0.0, 0.0), (3.0, 4.0), (3.0, 14.0)]) == pytest.approx(15.0)
+    assert polyline_len([(1.0, 1.0)]) == 0.0, "a single point has no length"
