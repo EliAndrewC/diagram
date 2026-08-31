@@ -1,7 +1,8 @@
 # Feature 174 - One Hundred Percent, Enforced
 
-**Status**: Draft - specified 2026-08-31, after the measurements in [`research.md`](research.md) and
-partway through the closures they made possible. [`request.md`](request.md) is the authority.
+**Status**: Draft - rewritten 2026-08-31 against `spec-fidelity` round 1 (CHANGES REQUIRED, seven
+items, all applied below) and against measurements the first draft did not have.
+[`request.md`](request.md) is the authority; [`research.md`](research.md) holds every number.
 
 ## The feature, in one sentence
 
@@ -9,98 +10,147 @@ The coverage floor becomes a hard 100% that a merge cannot get past, on a run th
 
 ## Why this exists (the GM's words)
 
-> I think the time has come to begin once again enforcing one hundred percent code coverage ... moved
-> back up to one hundred percent with the standard `fail_under = 100` configuration option set so
-> that in the future, we literally cannot complete our make done in order to merge back into main,
-> and there will no longer be any mechanism by which this can be accomplished.
+> ...moved back up to one hundred percent with the standard `fail_under = 100` configuration option
+> set so that in the future, we literally cannot complete our make done in order to merge back into
+> main, and there will no longer be any mechanism by which this can be accomplished.
 
-They exempted `make quick` themselves, and gave the reason: it exists to run the things iteration
-needs, which is less than all of the code.
+They exempted `make quick` themselves and gave the reason. They also asked, mid-feature, whether a
+CHEAPER test set could reach 100% - answered in R5 and in FR-005 below.
 
-## What the measurement changed about the request (R1-R4, and one correction to the GM)
+## The GM's premises, measured (R1-R7)
 
-**The GM's "close to one hundred percent" is RIGHT, and the session's first reading of it was wrong.**
-A full run measures **99.28%** on the hamlet path - **89 statements** across 11 modules. The session
-initially reported that ~60% of the engine sat outside the hard floor; that is true of the global
-`--fail-under=100` check and misleading, because the derived hamlet-path floor covers those same
-trees by a different rule. The correction was issued unprompted and is recorded here because the
-wrong figure would have made this feature look structural when it is arithmetic.
-
-**Two premises did not survive** (R2, R3):
-
-- the 94% ratchet is NOT refactor debris. Its own comment, dated the day it was set, says the frozen
-  pool maps leave "the above-hamlet wings of settlement.py (towns, cities, the capital) ... exercised
-  by nothing until those tiers convert to scripted generation". **You cannot cover code no generator
-  produces**, so this feature does not try to; that is the migration plan's work.
-- **`fail_under = 100` cannot sit on `make done` as scoped today.** It deselects three ways - the
-  scope lock's `-m "not rolls_map"`, `--tier hamlet`, and the whole of `tests/tooling/` when the
-  tooling stamp is fresh - and a deselected test takes its coverage with it. The Makefile says so:
-  the floor was removed rather than "leaving a floor in place that could never be met".
-
-**And there is nothing to restore to** (R4): 5 FULL runs are recorded, all failed. This floor has
-never been met in this repository's history. The feature establishes it rather than re-enabling it.
+| premise | verdict |
+|---|---|
+| *"make done is close to one hundred percent"* | **RIGHT.** 97.26% over the whole measured set (565 of 20,618) as this spec is written, from 96.07% at the start of the feature. The first draft answered 99.28%, which was the hamlet path alone - one of three floors - and the session corrected it to the GM unprompted |
+| *"we have some ratchets somewhere that enforce less than one hundred percent"* | **RIGHT, and FR-006 names them**: `SETTLEMENT_COV_FLOOR = 94` and the `--omit='*/settlement/*,*/waterfields/*,*/interactive/*,*/overlap/*'` list |
+| *"we turned this off because we were doing a large refactor"* | **PARTLY.** True of feature 166's check-battery retirement; NOT true of the 94 ratchet, whose own comment (2026-08-16) says the frozen pool maps leave the town/city/capital wings "exercised by nothing until those tiers convert" |
+| *"a cheaper, less valuable test set could get there faster"* | **NO - and the lever is elsewhere.** The whole suite runs in 50 s untraced and 237 s traced: the TESTS are not the expense, the coverage TRACING is. Dropping the end-to-end sweeps would save ~6 s and lose their bug-finding (R5) |
 
 ## Scope, stated exactly
 
-**IN**: closing the 89, and putting a hard 100% on a run that deselects nothing, with the push
-requiring that run. **OUT**: the town/city/capital wings (no generator produces them); `make quick`
-(the GM exempted it); converting any tier.
+**IN**: closing every uncovered statement in the measured set; deleting what is dead rather than
+covering it; naming the run that carries the floor and pricing the alternative; and turning
+`fail_under = 100` on LAST. **OUT**: `make quick` (the GM exempted it); converting any settlement
+tier.
 
 ## Requirements
 
-### FR-001 - the 89 are closed BY TESTS, and by unit tests wherever one will do
+### FR-001 - the census is the WHOLE measured set, not one floor
 
-Not by pragmas, not by omissions, not by the `PARKED` mechanism in `hamlet_floor.py` - which exists,
-which the constitution's own note calls "an invitation", and which this feature deliberately does not
-use. Where a line needs a map roll to reach, that is stated and the roll is justified; where a
-function is hard to test, it is LIFTED (GM 2026-08-28), not exempted.
+565 uncovered statements over 182 files, in four buckets, each with its own route:
 
-**Status: 64 of 89 closed, none needing a roll.** `convex_hull` 16; the `_knobs` town/city branches
-and `crop_boxes`' city block 24; `_geom/walls.py` 5; `ways/checks.py` 2, `ways/clearance.py` 2,
-`ways/sweeps.py` 1; `finish.py` 3; `plan.py` 2, `wet.py` 2, `_seg_x` 1, `place.py` 1,
-`nearer_own_house` 1, `kosatsuba_anchor` 2; and 2 by a peer session in `ways/touch.py`.
+| bucket | now | route |
+|---|---|---|
+| the hamlet path's remainder | **25** | 4 fallback rungs inside long drawing methods - constructed geometry or a lift |
+| the existing hard floor's own misses | **33** | unit tests; `ci/`, `switches.py`, `pool_index.py`, CLI entry points |
+| the four exempt trees | **~507** | mostly TOWN/CITY drawing methods, which unit-test cheaply - proven below |
+| **dead code** | **0 left found** | ~91 statements deleted (8 functions + 3 constants + `pt_to_rect`) |
 
-**The 25 that remain are a different class** and are listed so the cost is visible rather than
-implied: `ways/serve.py` 9 (the fold fallback inside a 400-line straggler search), `ways/touch.py` 8
-(the orphan-link rungs), `ways/smooth.py` 1 (a knot collapse), `structures/fixtures/boards.py` 7 (a
-caption-placement fallback ladder). Each needs constructed geometry or a testability refactor.
+**The exempt trees are the cheapest work, not the hardest** - the opposite of what the first draft
+assumed. Measured: `town_ways.py` 21% -> **100%** with one test file; `civic_grounds/lodging.py` 46%
+-> **99%** with three tests; `shrines_wells/shrines.py` 52% -> 71%. None needed a map roll. Every
+test pins a documented RULE (a flophouse derives its angle from its road, asserted by rotating the
+road; a market clearing draws no building yet still reserves its court).
 
-### FR-002 - a census is MEASURED, never tallied
+### FR-002 - a census is MEASURED against a pushed tree, never tallied
 
-Every count in this feature comes from a full run against a pushed tree. Two sessions working the
-same floor produced two wrong numbers within an hour by adding up claims: the peer's summary said
-minus six where its own posted rows said minus two (repairs of its own damage counted as gains), and
-this session's own tally said 61 closed where the measurement said 60 - a test that passed while
-covering nothing, because the function returned at an earlier guard. **The floor rests on the
-measurement; the arithmetic is only ever a plan.**
+Kept from the first draft, and the review was right that the request does not ask for it - so it is
+labeled: **this is a method requirement the session added, and the GM may strike it.** It is here
+because it failed three times in one day: a peer's summary said minus six where its own rows said
+minus two; this session's tally said 61 closed where the measurement said 60 (a test that passed
+while covering nothing, having returned at an earlier guard); and a `make test-file` run BESIDE a
+running `test-full` corrupted a measurement into reporting 44% for a tree at 95% (R6).
 
-### FR-003 - the floor is hard, and sits on a run that deselects nothing
+### FR-003 - the run that carries the floor, NAMED, with the alternative priced
 
-`fail_under = 100`, no ratchet, no per-module exemption list. It runs where nothing is deselected,
-and the PUSH requires that run - which is what makes "no mechanism by which this can be accomplished"
-true, since `make done` at reference scope is what gates merging today and it cannot carry the floor.
-`make quick` keeps no floor at all.
+The floor goes on **`make test COV_FLOORS=1`** - the target `test-full` already invokes. That one
+variable switches off all three of `make done`'s remaining deselections (`--ignore=tests/full`, the
+`tooling-fresh` skip, and diff-scoped `COV_SCOPE`), so nothing is deselected and no coverage is lost
+to selection.
 
-### FR-004 - what the floor MEASURES is stated, not implied
+**The literal instruction priced, because the GM named `make done` and cost is theirs to weigh**:
+carrying the floor on `make done` itself means running it with `COV_FLOORS=1`, measured at **237 s
+against its 89 s median** - +148 s per gate, with the end-to-end sweeps INCLUDED rather than
+sacrificed. Both figures carry the hybrid-CPU caveat in R6.
 
-The measured set is the hamlet path as `tools/hamlet_floor.py` already derives it - every module the
-scripted rolls execute - plus the modules already held at a hard 100%. The town/city/capital wings
-are outside it because no generator produces them; that exclusion is DERIVED from the roll records,
-never a hand-maintained list, so it shrinks by itself as tiers convert.
+**What the GM cannot see from the text and must**: `make done FULL=1` prompts and cancels by default,
+writes a `dev/bypass-log/` entry, is refused under a scope lock, and has never been green in 5
+recorded runs. `make test-full` does none of that - it does not prompt and costs nothing.
+
+### FR-004 - what the floor MEASURES is an open question for the GM, with its size
+
+The first draft excluded the town/city/capital wings on the ground that "no generator produces
+them". **That ground is disproved by this feature's own commits** - 24 town/city statements closed by
+unit test on day one, then `town_ways.py` to 100%. The exclusion is therefore NOT taken.
+
+What remains genuinely un-coverable-by-test is smaller and specific: **`waterfields/hill.py`, 99
+statements**, whose two engines (`build_terraces`, `build_ribbon`) are called only by two FROZEN
+exhibit maps and are listed in `migration-plan.md` as *"NOT STARTED | engine builder exists"*. It is
+pending conversion work, not dead code - the session called it dead, was wrong, and did not delete
+it. **Covering it means writing tests for code no live map runs.** That is the GM's call: cover it,
+exempt it by name with the migration plan as the reason, or convert the tiers.
+
+### FR-005 - the answer to the GM's cheap-tests question, recorded as a decision
+
+A cheaper, less valuable test set is NOT the route to 100%, and the measurement says why: the suite
+is 50 s untraced and 237 s traced. **The expense is the tracing, paid once per gate whatever runs.**
+So the end-to-end sweeps stay - they cost ~6 s of the total and buy the bug-finding the GM correctly
+values above coverage.
+
+### FR-006 - what becomes of the two ratchets, stated
+
+- **`SETTLEMENT_COV_FLOOR = 94`**: retired when `settlement/` reaches 100%, not before. Until then it
+  stays and is RAISED as the number climbs (its own comment: "RAISE the floor as each tier converts;
+  NEVER lower it"). It is at 97% now, so the floor may already rise.
+- **the `--omit` list** (`settlement/`, `waterfields/`, `interactive/`, `overlap/`): dissolved, one
+  tree at a time, as each reaches 100%. A tree leaves the omit list the day it can.
+
+Neither is replaced by a new exemption. FR-004's `hill.py` question is the only one outstanding.
+
+### FR-007 - dead code is DELETED, not covered - and deadness is proven, not grepped
+
+~91 statements went this way. The proof standard is the one the independent reviewer used, after the
+session's own grep-based claim about `hill.py` proved wrong: **the roll records** (`.gencache/rolls/*/meta.json`)
+say which functions actually EXECUTE, and pre-deletion archaeology (`git grep <name> <pre-166>`) says
+who used to call them. A grep for callers is a negative statement about what is written; the roll
+record is a positive one about what runs. **Check the frozen `.gen.py` trees explicitly** - that is
+the channel that made `hill.py` live and that a live-code grep misses.
+
+### FR-008 - the floor goes on LAST
+
+`fail_under = 100` is set only once the measured set meets it. Setting it earlier leaves the gate
+permanently red, and a red gate everyone routes around is how the ratchets arrived in the first place.
 
 ## Success criteria
 
-1. A full run reports 100% on the measured set, with no ratchet and no parked lines.
+1. The measured set reports 100%, with no ratchet and no parked lines.
 2. A run below the floor cannot complete, and the push cannot land without that run.
-3. Every one of the 89 is closed by a test that asserts the behaviour, not by an exemption.
+3. Every closure is a test that asserts BEHAVIOR; every exemption is a deletion or a GM ruling.
 4. `make quick` is unchanged.
+5. The `--omit` list and `SETTLEMENT_COV_FLOOR` are both gone.
 
 ## Decisions recorded
 
 | # | decision | class |
 |---|---|---|
-| D1 | the 94% ratchet's gap is unconverted TIERS, not refactor debris - so this feature does not chase it | measured |
-| D2 | the floor cannot sit on `make done` at reference scope; it goes where nothing is deselected | measured |
-| D3 | no `PARKED`, no pragma, no omit list for the 89 | decided |
-| D4 | counts are measured against a pushed tree, never tallied across sessions | decided, after two wrong tallies |
-| D5 | the search heuristic: where a function can DECLINE as well as act, coverage usually has the acting - assert the decline beside the action | method |
+| D1 | the exempt trees are cheap to cover, not hard - the first draft's exclusion is withdrawn | measured, reversed |
+| D2 | the floor sits on a run that deselects nothing; `make done`'s literal cost is priced at +148 s for the GM to weigh | measured |
+| D3 | no `PARKED`, no pragma, no new omit entry | decided |
+| D4 | counts are measured against a pushed tree, never tallied (three failures in one day) | decided; FR-002 labeled as session-added |
+| D5 | where a function can DECLINE as well as act, coverage usually has the acting - assert the decline beside the action | method |
+| D6 | `waterfields/hill.py` (99) is pending conversion work, NOT dead - the session's contrary claim was wrong and is recorded | corrected |
+| D7 | deadness is proven by the roll records and pre-deletion archaeology, never by a caller grep | method, after the D6 error |
+
+## Review history
+
+Constitution XVI: reviewed against [`request.md`](request.md) by an independent `spec-fidelity`
+subagent.
+
+| round | verdict | what it found |
+|---|---|---|
+| 1 | CHANGES REQUIRED | **Seven items, all applied in this rewrite.** The spec had been written PARTWAY THROUGH implementation - disclosed to the reviewer, who confirmed the ordering showed: its scope was drawn around the work in flight (the 89 the session was already closing), and both exclusions landed exactly on work not yet started. Also: FR-003 named no run and never priced the literal instruction; FR-004's exclusion was disproved by the feature's own commits; the R3 deselection table was stale (the scope lock has been OFF since 2026-08-27); 35 statements inside the existing hard floor were missing from the census; FR-002 was unrequested; the two ratchets the GM's first sentence names were never addressed; and the "close to 100%" answer quoted the hamlet path (99.28%) rather than the whole set (96.07%) |
+
+**The ordering was wrong and is recorded as such**: implementation began before the spec existed,
+contrary to Principle XVI. The rewrite above is drawn from the request and the measurements rather
+than from the work already done, which is why FR-004 now REVERSES the first draft's exclusion and
+FR-001's census grew from 89 to 565.
