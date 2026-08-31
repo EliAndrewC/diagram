@@ -61,34 +61,56 @@ minus two; this session's tally said 61 closed where the measurement said 60 (a 
 while covering nothing, having returned at an earlier guard); and a `make test-file` run BESIDE a
 running `test-full` corrupted a measurement into reporting 44% for a tree at 95% (R6).
 
-### FR-003 - the run that carries the floor, NAMED, with the alternative priced
+### FR-003 - the floor is enforced on `make done` ITSELF, because that is what the request says
 
-The floor goes on **`make test COV_FLOORS=1`** - the target `test-full` already invokes. That one
-variable switches off all three of `make done`'s remaining deselections (`--ignore=tests/full`, the
-`tooling-fresh` skip, and diff-scoped `COV_SCOPE`), so nothing is deselected and no coverage is lost
-to selection.
+> ...so that in the future, we literally cannot complete our **make done** in order to merge back
+> into main, and there will no longer be any mechanism by which this can be accomplished.
 
-**The literal instruction priced, because the GM named `make done` and cost is theirs to weigh**:
-carrying the floor on `make done` itself means running it with `COV_FLOORS=1`, measured at **237 s
-against its 89 s median** - +148 s per gate, with the end-to-end sweeps INCLUDED rather than
-sacrificed. Both figures carry the hybrid-CPU caveat in R6.
+**`fail_under = 100` is enforced on a plain `make done`.** Round 2 caught the first rewrite naming
+`make test COV_FLOORS=1` instead - which changes NOTHING, because that is already where all three
+floors live (`Makefile:1021-1023, 1058-1067`). Verified in the tree, a plain `make done` today:
 
-**What the GM cannot see from the text and must**: `make done FULL=1` prompts and cancels by default,
-writes a `dev/bypass-log/` entry, is refused under a scope lock, and has never been green in 5
-recorded runs. `make test-full` does none of that - it does not prompt and costs nothing.
+- runs `test` with `COV_FLOORS` empty (`Makefile:111`, the phase loop `hooks-test $(if $(FULL),test-full perf-gate,test)`)
+  and prints *"coverage floors: deferred to `make done FULL=1`"*;
+- **stamps green anyway**, and `sync-with-main.sh:255`'s `gate-stamp.py --check` is the whole of what
+  the push demands.
 
-### FR-004 - what the floor MEASURES is an open question for the GM, with its size
+So a merge below 100% is available today and would have stayed available under the first rewrite.
+That is the clause the GM wrote the request around, and the spec had left it standing.
 
-The first draft excluded the town/city/capital wings on the ground that "no generator produces
-them". **That ground is disproved by this feature's own commits** - 24 town/city statements closed by
-unit test on day one, then `town_ways.py` to 100%. The exclusion is therefore NOT taken.
+**The cost is stated, not used as a reason to decline**: +148 s per gate (89 s -> 237 s, R5, with
+R6's hybrid-CPU caveat). An expensive request is still the request. **If the GM would rather have
+the cheap gate, the amendment is theirs to make** - the floor moves to the run the push requires and
+`make done` stays at 89 s - and this requirement is written so that choice is a one-line change
+rather than a redesign.
 
-What remains genuinely un-coverable-by-test is smaller and specific: **`waterfields/hill.py`, 99
-statements**, whose two engines (`build_terraces`, `build_ribbon`) are called only by two FROZEN
-exhibit maps and are listed in `migration-plan.md` as *"NOT STARTED | engine builder exists"*. It is
-pending conversion work, not dead code - the session called it dead, was wrong, and did not delete
-it. **Covering it means writing tests for code no live map runs.** That is the GM's call: cover it,
-exempt it by name with the migration plan as the reason, or convert the tiers.
+### FR-003a - the OTHER routes below the floor, named and closed
+
+Success criterion 2 says "no mechanism", and round 2 was right that no requirement delivered it. A
+route to main below the floor is closed only when each of these is closed:
+
+| route | what it is | disposition |
+|---|---|---|
+| the FULL-only deferral | `COV_FLOORS` empty on a plain `make done` | closed by FR-003 |
+| `already-verified` | `make done` short-circuits on a green record for the same engine content | a record taken BEFORE the floor existed must not satisfy a push after it; the verification key must move when the floor does |
+| `GATE_STAMP_OK` | the push's documented escape (`sync-with-main.sh:244-252`) | KEPT - it is feature 170's audited escape, needs a written reason, and is logged. An escape that says why is the project's own answer; removing it is not this feature's call |
+| `REF_OK` | the reference-scope bypass | stated and left as it is; it does not reach the coverage phase |
+
+### FR-004 - `waterfields/hill.py` is COVERED BY TESTS, not exempted and not asked about
+
+The first draft excluded the town/city wings as un-producible; this feature's own commits disproved
+that, and the second draft then put `hill.py` (99 statements) to the GM as a three-option question.
+**Round 2 was right that this is the same mistake in a smaller box**, and the request forecloses it:
+there is no carve-out in it, and the stop-and-ask calculus does not authorize the interrupt - 99
+statements of unit tests are cheap to unwind, and the GM starts work and leaves.
+
+It is also more tractable than what has already been closed: `build_terraces` and `build_ribbon` are
+pure geometry builders taking plain numbers, both are already named in the public-surface census
+(`tests/waterfields/test_surface.py:75-76`), and both frozen exhibit gens supply a WORKING CALL
+verbatim (`tanada.gen.py:35`, `yatsuda.gen.py:38`) to copy.
+
+**It is not dead code** - the session claimed that, was wrong (D6), and the migration plan lists both
+archetypes as "NOT STARTED | engine builder exists". So it is covered like any other engine module.
 
 ### FR-005 - the answer to the GM's cheap-tests question, recorded as a decision
 

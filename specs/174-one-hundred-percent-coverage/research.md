@@ -4,6 +4,8 @@ Taken 2026-08-31 in the clone `diagram-tooling`, before a line of the feature wa
 stated three premises; two are checkable and one of them does not survive. Recorded rather than
 quietly inherited, per the feature-172 precedent.
 
+## R1 - SUPERSEDED (see the correction at its end)
+
 ## R1 - the floor was not LOWERED; its SCOPE was narrowed
 
 The Makefile's coverage phase is three checks, not one:
@@ -14,8 +16,15 @@ coverage report --include='*/settlement/*'                --fail-under=$(SETTLEM
 python3 -m l7r.diagram.tools.hamlet_floor                                                        # derived, 100%
 ```
 
-So a hard `--fail-under=100` already exists and already passes - over **88 files / ~9,710
-statements**. What sits outside it is **115 files / ~14,447 statements**: `settlement/`,
+So a hard `--fail-under=100` already exists over a subset of the tree.
+
+**CORRECTION (2026-08-31, spec review round 2).** Two things in the sentence that followed were
+wrong and are struck: that check does NOT pass - the clean run reports `Coverage failure: total of
+99 is less than fail-under=100`, 54 missing at the time, 33 now - and the file/statement counts
+quoted here (88 files / ~9,710, and 115 / ~14,447 below) do not reconcile with the measured set
+(**182 files / 20,618 statements**, R7's clean run). They were counted by walking the tree with an
+AST rather than by reading the coverage report, and they are not the same population. **Use the
+measured numbers; these are kept only so the error is visible.** What sits outside it is **115 files / ~14,447 statements**: `settlement/`,
 `waterfields/`, `interactive/`, `overlap/`.
 
 **But those are not unmeasured** - they are measured by a different rule. `make hamlet-floor` derives,
