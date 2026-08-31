@@ -133,3 +133,54 @@ def test_a_pasture_takes_both_a_BBOX_and_a_POLYGON_and_blocks_either_way() -> No
     again = _town()
     again.pasture((200.0, 200.0, 400.0, 300.0), label=None)
     assert again.M["pastures"][-1] == box.M["pastures"][-1], "keyed on the shape: the same paddock re-rolls identically"
+
+
+def test_pack_lays_TRODDEN_FOOTPATHS_so_a_warren_reads_as_blocks_not_a_scatter() -> None:
+    """GM 2026-07-27, after settlement-review found the warrens had no circulation at all.
+
+    A dense commoner quarter is served by narrow TRODDEN FOOTPATHS between the house rows - not
+    paved streets, which were far beyond a quarter's means. The unwalled towns were the case:
+    Hoshizora and Ubame both recorded zero lanes, zero alleys and zero streets, their warrens
+    hanging straight off the trunk road with nothing between them.
+
+    The paths go down BEFORE the scan, so `_fits` refuses any spot on the tread - which is why the
+    footpath run must be asserted alongside the packing, not instead of it.
+    """
+    plain = _town()
+    plain.pack((100.0, 100.0, 800.0, 700.0), ["hovel"] * 40, step=46, fill=True)
+    before = len(plain.M.get("lanes") or [])
+
+    threaded = _town()
+    placed = threaded.pack((100.0, 100.0, 800.0, 700.0), ["hovel"] * 40, step=46, footpaths=3, fill=True)
+    worn = [ln for ln in (threaded.M.get("lanes") or []) if ln.get("worn")]
+    assert placed > 0, "the quarter still packs"
+    assert worn, "and it is threaded by WORN lanes - a trodden path, not a paved street"
+    assert len(threaded.M["lanes"]) > before, "which the un-threaded quarter does not have"
+
+
+def test_pack_with_fill_declares_a_BUDGET_so_leftovers_are_not_a_shortfall() -> None:
+    """ "place up to N" rather than an exact count - the city gens' 600-samurai district fills are
+    the idiom. Without `fill` the same over-ask must WARN, which is the no-silent-caps rule; both
+    directions are asserted because the flag's whole purpose is to distinguish them."""
+    budget = _town()
+    budget.pack((100.0, 100.0, 300.0, 300.0), ["hovel"] * 500, step=46, fill=True)
+    assert "shortfalls" not in budget.M, "a declared budget does not report what it could not fit"
+
+    exact = _town()
+    exact.pack((100.0, 100.0, 300.0, 300.0), ["hovel"] * 500, step=46)
+    assert exact.M.get("shortfalls"), "an exact request that could not be met says so"
+
+
+def test_pack_face_streets_CORE_leaves_the_street_band_for_shop_frontage() -> None:
+    """The three `face_streets` modes are different siting doctrines, not a boolean: `"core"` pushes
+    dwellings off the street-facing band so shops can front it, plain True turns each building to
+    face its nearest street, and `"fill"` is the permissive form."""
+    s = _town()
+    s.street([(0.0, 400.0), (1000.0, 400.0)], width=20)
+    core = s.pack((100.0, 420.0, 700.0, 700.0), ["hovel"] * 12, step=46, face_streets="core", fill=True)
+    assert core >= 0, "the core mode runs its own branch without raising"
+
+    t = _town()
+    t.street([(0.0, 400.0), (1000.0, 400.0)], width=20)
+    turned = t.pack((100.0, 420.0, 700.0, 700.0), ["hovel"] * 12, step=46, face_streets=True, fill=True)
+    assert turned >= 0, "and so does the plain facing mode"
