@@ -110,14 +110,14 @@ def test_the_refusal_prints_the_procedure(tmp_path: pathlib.Path, capsys) -> Non
     assert cfs.main([str(root)]) == 1
     err = capsys.readouterr().err
     for expected in (
-        "clause 13",                      # the rule
-        "DIRECTORY-MODULE",               # the prescribed shape
-        "CLAUDE.md",                      # the index
-        "look here when",                 # the index format
-        "structures/",                    # a named exemplar that exists
-        "ORDERED DATA",                   # carve-out one
-        "DERIVED ROSTER",                 # carve-out two
-        "hamletgen/ways.py",              # the GM's own worked example
+        "clause 13",  # the rule
+        "DIRECTORY-MODULE",  # the prescribed shape
+        "CLAUDE.md",  # the index
+        "look here when",  # the index format
+        "structures/",  # a named exemplar that exists
+        "ORDERED DATA",  # carve-out one
+        "DERIVED ROSTER",  # carve-out two
+        "hamletgen/ways.py",  # the GM's own worked example
     ):
         assert expected in err, f"the refusal must name {expected!r}"
 
