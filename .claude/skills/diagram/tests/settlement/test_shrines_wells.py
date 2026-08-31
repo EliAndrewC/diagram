@@ -490,3 +490,37 @@ def test_a_hall_EXTENDS_a_short_torii_list_along_its_own_line() -> None:
     one.meta(name="C", scale="city")
     one.shrine_hall(700.0, 400.0, "Temple of Bishamon", torii=[(700.0, 520.0)], torii_count=3)
     assert len(one.M["torii"]) == 3, "and a single authored seat still gives the run its direction"
+
+
+def test_drawing_a_wall_THROUGH_an_existing_arch_is_refused() -> None:
+    """The draw-order half of the torii/wall rule. `_avenue_short_of_walls` handles a wall already
+    drawn; this handles the reverse - a wall laid LATER across an arch that is already standing.
+
+    "a wall is a continuous barrier and a torii is a freestanding gateway, so an arch never stands in
+    one (a way through a wall is a GATE: the city gate, a ward kido)". The engine refuses rather than
+    drawing the contradiction, exactly as the merchant-estate wall does when its slide fan runs out.
+    """
+    s = Settlement(1400, 1400, seed=10)
+    s.meta(name="C", scale="city")
+    s.manor(700.0, 700.0, 300.0, 200.0, "a manor")  # its wall runs x = 550..850 at y = 600
+    s.M["torii"] = [(700.0, 600.0)]  # an arch standing squarely in that wall
+    with pytest.raises(ValueError, match="runs through torii"):
+        s._assert_walls_clear_of_torii("a test wall")
+
+    clear = Settlement(1400, 1400, seed=10)
+    clear.meta(name="C", scale="city")
+    clear.manor(700.0, 700.0, 300.0, 200.0, "a manor")
+    clear.M["torii"] = [(200.0, 200.0)]
+    clear._assert_walls_clear_of_torii("a test wall")  # an arch well clear raises nothing
+
+
+def test_an_avenue_at_the_threshold_handles_a_single_arch_and_an_empty_run() -> None:
+    """`_avenue_at_threshold` sets the innermost arch's standoff from the hall's FRONT - the nearest
+    point of its footprint, not its centre. Two degenerate inputs it must survive: no seats at all
+    (nothing to place) and ONE seat (no authored pitch to read, so the standard pitch stands in).
+    """
+    s = Settlement(1400, 1400, seed=10)
+    s.meta(name="C", scale="city")
+    assert s._avenue_at_threshold(700.0, 400.0, 120.0, 82.0, []) == [], "no arches, nothing to move"
+    one = s._avenue_at_threshold(700.0, 400.0, 120.0, 82.0, [(700.0, 560.0)])
+    assert len(one) == 1, "a single arch is still seated, at the standard pitch"
