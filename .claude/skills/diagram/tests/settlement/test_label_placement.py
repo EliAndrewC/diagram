@@ -149,3 +149,35 @@ def test_a_short_word_never_stands_alone_on_a_wrapped_line() -> None:
     s = _hamlet()
     for lines in (s._caption_lines("Shrine of Benten", 400.0, 300.0, 12.0, "middle", 0.0),):
         assert all(len(ln) > 3 or len(lines) == 1 for ln in lines), f"a short word stands alone in {lines}"
+
+
+def test_a_caption_seat_slides_along_the_AXIS_it_is_given_rather_than_the_box_cardinals() -> None:
+    """Feature 174. `_best_label_spot` has two candidate generators: with an `axis` it offers seats
+    PERPENDICULAR to the subject and slides ALONG it (a caption for a lane or a wall follows the
+    thing it names), and without one it walks the four cardinals off the box, sliding along its LONG
+    side - below, above, then the ends.
+
+    Both are asserted, and the box's own shape decides which cardinals come first: a TALL box offers
+    left/right before the ends, a wide one below/above.
+    """
+    s = Settlement(1200, 1200, seed=17)
+    s.meta(name="C", scale="city")
+
+    wide = s._best_label_spot((500.0, 500.0, 700.0, 540.0), "a caption", 9.0)
+    tall = s._best_label_spot((500.0, 500.0, 540.0, 700.0), "a caption", 9.0)
+    assert wide != tall, "the box's long side decides which way the seats are offered"
+
+    along = s._best_label_spot((500.0, 500.0, 700.0, 540.0), "a caption", 9.0, axis=(1.0, 0.0), slides=(0.0, 30.0))
+    assert along is not None, "an axis-given caption still finds a seat"
+
+
+def test_a_TILTED_caption_measures_its_neighbours_on_their_TRUE_QUADS() -> None:
+    """A rotated building's axis-aligned box overstates its reach, so a tilted candidate measures
+    the real quads instead - the correction that stopped a -32 degree caption's far end reaching a
+    threshing yard the level box had cleared (feature 150, settlement-review of Kuwabata).
+    """
+    s = Settlement(1200, 1200, seed=17)
+    s.meta(name="C", scale="city")
+    s.building(600.0, 600.0, 120.0, 40.0, "kura", 35.0)  # a rotated neighbour
+    seat = s._best_label_spot((400.0, 560.0, 520.0, 600.0), "a caption", 9.0, tilt=-32.0)
+    assert seat is not None, "a tilted caption is seated against the rotated neighbour's true quad"
