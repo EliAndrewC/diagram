@@ -4,7 +4,7 @@ import math
 
 import pytest
 
-from l7r.diagram.settlement import Settlement
+from l7r.diagram.settlement import Settlement, point_in_poly, rot_rect, seg_dist
 from l7r.diagram.settlement.structures.fixtures._helpers import first_clear_seat, kosatsuba_anchor
 from tests.settlement._builders import _city, _crop_settlement, _estate_settlement, _scatter_base_points, _town, _ward_city_with_samurai
 
@@ -1071,3 +1071,56 @@ def test_a_compound_wall_may_not_stand_in_a_RIVER() -> None:
     assert s._estate_wall_clear(500.0, 500.0, 120.0, 90.0)
     s.M["river"] = {"pts": [[100.0, 500.0], [900.0, 500.0]], "w": 40.0}
     assert not s._estate_wall_clear(500.0, 500.0, 120.0, 90.0)
+
+
+def test_a_range_stays_INSIDE_its_ward_fence_and_clear_of_the_fence_ink() -> None:
+    """A servant range is its household's nagaya, drawn along its master's frontage inside the ward.
+    Two separate holds, and a house parked mid-ward exercises neither: the whole range must lie
+    inside the fence, and it must also stand clear of the fence's own INK - "inside the interior
+    polygon" is the fence LINE, and the palisade is stroked, so a range flush to the boundary is
+    geometrically inside it and still drawn through it (city_ward_fence_clear_of_structures).
+
+    The house is seated at the ward's inner CORNER, where a range reaching either way runs at the
+    boundary - measured, not guessed: mid-ward seats reach neither branch."""
+    s = _ward_city_with_samurai((600.0, 600.0, "samurai", 0.0))
+    assert s.servant_ranges() == 1, "a house with room gets its range"
+
+    corner = _ward_city_with_samurai((405.0, 410.0, "samurai", 0.0))
+    corner.servant_ranges()
+    fence = next(wd["boundary"] for wd in corner.M["wards"])
+    for r in [b for b in corner.M["buildings"] if b["kind"] == "servant"]:
+        near = min(seg_dist(r["x"], r["y"], fence[i], fence[i + 1]) for i in range(len(fence) - 1))
+        assert near >= max(r["w"], r["h"]) / 2 + corner._WARD_STROKE, f"no range is laid through the palisade: {r}"
+
+
+def test_a_range_is_withheld_when_a_NEIGHBOR_would_touch_it_closer_than_its_host() -> None:
+    """It has to read as ITS OWN household's range: a range tucked against the next lot's building is
+    an annex of the wrong house, the same defect the merchant kura had. Nothing may touch it more
+    closely than the house it belongs to.
+
+    The lone range lands at (619.3, 604.2); the sliver below is laid along that flank, closer to it
+    than its host's own 0.6 px of daylight."""
+    lone = _ward_city_with_samurai((600.0, 600.0, "samurai", 0.0))
+    assert lone.servant_ranges() == 1
+
+    crowded = _ward_city_with_samurai((600.0, 600.0, "samurai", 0.0))
+    crowded.building(619.27, 607.1, 18.0, 0.6, "shrine")
+    crowded.servant_ranges()
+    for r in [b for b in crowded.M["buildings"] if b["kind"] == "servant"]:
+        host = next(o for o in crowded.M["buildings"] if o["kind"] == "samurai")
+        gap_host = math.dist((r["x"], r["y"]), (host["x"], host["y"]))
+        assert all(math.dist((r["x"], r["y"]), (o["x"], o["y"])) >= gap_host for o in crowded.M["buildings"] if o["kind"] == "shrine"), r
+
+
+def test_a_range_never_walls_a_NEIGHBORS_DOORWAY() -> None:
+    """A range is service accommodation on its household's own ground, never a wall across the next
+    house's entrance - the ground behind a house is often the roji the row behind it faces. The
+    neighbor here stands just north of the range's seat with its door face opening onto it (the door
+    geometry is sampled the way `city_house_doors_unblocked` samples it, so the two agree)."""
+    s = _ward_city_with_samurai((600.0, 600.0, "samurai", 0.0))
+    s.building(619.0, 597.0, 10.0, 5.0, "shrine")  # its door face opens south, into the range's seat
+    s.servant_ranges()
+    door = next(o for o in s.M["buildings"] if o["kind"] == "shrine")
+    for r in [b for b in s.M["buildings"] if b["kind"] == "servant"]:
+        quad = rot_rect(r["x"], r["y"], r["w"], r["h"], r.get("rot", 0.0))
+        assert not point_in_poly(door["x"], door["y"] + door["h"] / 2 + 0.8, quad), f"the doorway stays open: {r}"
