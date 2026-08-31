@@ -862,3 +862,36 @@ def test_blocks_any_door_is_the_MIRROR_of_door_is_clear_and_answers_the_other_wa
 
     assert s._blocks_any_door(_quad(600.0, 610.0, 16.0, 8.0)) is True, "squarely in front of that house's door"
     assert s._blocks_any_door(_quad(600.0, 200.0, 16.0, 8.0)) is False, "and far away it blocks nobody"
+
+
+def test_a_servant_range_is_refused_by_each_of_the_grounds_it_must_stay_clear_of() -> None:
+    """Feature 174. `servant_ranges` walks a ladder of refusals, and each one is a documented rule
+    rather than a guard for its own sake. This exercises three of them by placing the obstruction
+    and watching the count fall to zero, against a baseline that succeeds.
+
+    - THE ROADBED: "a range is a building on the verge, not an obstruction in the roadbed", so a
+      street laid along the house's flank refuses every seat on it.
+    - THE WARD FENCE'S OWN INK: being inside the interior polygon means inside the fence LINE, and
+      the palisade is stroked 5 px wide - a range flush to the boundary is geometrically inside and
+      still drawn THROUGH it (city_ward_fence_clear_of_structures).
+    - `self.bound`: a range must lie inside whatever bound the tier set, not merely inside the ward.
+    """
+    base = _ward_city_with_samurai((600, 600, "samurai", 0.0))
+    assert base.servant_ranges() > 0, "the baseline seats a range at all - without this the rest proves nothing"
+
+    roadbed = _ward_city_with_samurai((600, 600, "samurai", 0.0))
+    roadbed.M["town_streets"] = [{"pts": [(400.0, 600.0), (800.0, 600.0)], "w": 40}]
+    assert roadbed.servant_ranges() == 0, "no range stands in the roadbed"
+
+    bounded = _ward_city_with_samurai((600, 600, "samurai", 0.0))
+    bounded.bound = [(0.0, 0.0), (10.0, 0.0), (10.0, 10.0), (0.0, 10.0)]  # a bound the house is nowhere near
+    assert bounded.servant_ranges() == 0, "and none outside the tier's bound"
+
+
+def test_servant_ranges_with_no_samurai_ward_attaches_NOTHING() -> None:
+    """The first guard: servants are a samurai-ward institution, so a map with no such interior has
+    nowhere to put them - the answer is zero, not an error and not a range in a commoner quarter."""
+    s = Settlement(1000, 1000, seed=1)
+    s.meta(name="W", scale="city", ftpx=3)
+    s.building(500.0, 500.0, 30.0, 20.0, "samurai", 0.0)
+    assert s.servant_ranges() == 0
