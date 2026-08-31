@@ -245,3 +245,30 @@ def test_a_bridge_closes_a_hole_and_refuses_to_close_a_loop() -> None:
     assert hg.ways._bridge_collinear_breaks(loop, [], [], []) == 0, "the walk round is already short"
     hole = _StubSettlement(lanes=[[(0.0, 900.0), (0.0, 940.0)], [(200.0, 500.0), (400.0, 500.0)], [(425.0, 500.0), (500.0, 560.0)]])
     assert hg.ways._bridge_collinear_breaks(hole, [], [], []) == 1, "nothing connects these ends: bridge it"
+
+
+def test_a_nub_is_KEPT_when_dropping_it_would_push_the_lane_into_the_fabric() -> None:
+    """The refusal half of `_drop_end_nubs`, which no map in the suite reaches.
+
+    Removing an end nub STRAIGHTENS the lane, and a straightened lane can lie closer to a farmhouse
+    than the doglegged one did - measured on Kashikawa, where this pass took a house corner from 3.18
+    ft clear of a tread to 0.69 ft inside it. So the pass judges the RESULT: the nub is only worth
+    removing if what replaces it is clear, and where it is not, the lane is put back exactly as it was.
+
+    Here the dogleg holds the lane at y=5 while the straightened run cuts the corner toward y=2.5, and
+    the fabric sits just below it - so the rewrite is refused and the nub survives.
+    """
+    from l7r.diagram.hamletgen.ways.sweeps import _drop_end_nubs
+
+    lane = [(0.0, 0.0), (2.0, 5.0), (100.0, 5.0)]  # a leading nub: 5.4 ft then a 68 degree turn
+    s = _StubSettlement(lanes=[lane])
+    fabric = [[(45.0, -3.0), (55.0, -3.0), (55.0, 1.0), (45.0, 1.0)]]  # under the STRAIGHTENED line, not the dogleg
+    _drop_end_nubs(s, fabric)
+    assert [tuple(p) for p in s.M["lanes"][0]["pts"]] == [(0.0, 0.0), (2.0, 5.0), (100.0, 5.0)], (
+        "the nub must survive: dropping it would put the tread nearer the fabric than the dogleg was"
+    )
+    # ...and with nothing to foul, the very same nub IS dropped - so the assertion above is about the
+    # fabric and not about the nub being unrecognized.
+    s2 = _StubSettlement(lanes=[lane])
+    _drop_end_nubs(s2, [])
+    assert [tuple(p) for p in s2.M["lanes"][0]["pts"]] == [(0.0, 0.0), (100.0, 5.0)], "with clear ground the nub goes"
