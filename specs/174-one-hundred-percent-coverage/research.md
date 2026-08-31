@@ -93,3 +93,36 @@ first time rather than re-enable it.
 
 **Sources**: a tooling finding, not a physical one - constitution XII's source obligation does not
 attach. Every claim is a measurement of this repository, reproducible by the command beside it.
+
+## R5 - WHAT THE CHEAP VERSION WOULD COST, measured (the GM's question, 2026-08-31)
+
+> I wonder whether we are able to reach one hundred percent code coverage on make done with a less
+> expensive version of the tests even if what we would be testing is less valuable than the full
+> tests ... one hundred percent code coverage is different from the kind of end to end testing, which
+> is being done in the full tests, which is more valuable and will catch more actual bugs.
+
+Four numbers, all taken on the same tree within an hour:
+
+| run | wall | what it is |
+|---|---|---|
+| `make done` today | **89 s** (median of 283) | the iteration gate: no floors, `tests/full` ignored, tooling skipped, coverage traced only over the diff |
+| the whole suite, NO coverage at all (`make durations`, `L7R_TESTS_FULL=1`) | **50 s** | 2,435 tests. **Every test in the repository, including the expensive tree, runs in 50 s when nothing is traced** |
+| `tests/full` alone, under the gate's own tracing | **56 s** | 25 tests - the pool-map rolls |
+| `make test COV_FLOORS=1` (the literal ask) | **237 s** | the whole suite + full coverage tracing + both floors |
+
+**The finding that answers the question: the tests are not the expense - the COVERAGE TRACING is.**
+The entire suite runs in 50 s untraced and 237 s traced, so ~185 s of the 237 is measurement
+overhead, not testing. The `tests/full` tree the gate currently ignores is 56 s of the total, and
+only ~6 s of that is its tests; the rest is tracing them.
+
+**So the GM's premise is right and the cheap version exists, but the lever is not the one either of
+us named.** Dropping the expensive END-TO-END tests would save ~6 s of run time and lose the
+bug-finding they buy. What costs 2.7x is asking coverage to watch everything - and that price is
+paid once per gate regardless of which tests run.
+
+**What this rules in**: `make done` CAN carry a hard 100% floor for **+148 s** (89 -> 237), with the
+end-to-end sweeps included rather than sacrificed. What it rules out is the idea that a cheaper,
+less valuable test set would get there faster - the tests were never the cost.
+
+**Sources**: measurements of this repository on 2026-08-31, each reproducible by the command in the
+row beside it.
