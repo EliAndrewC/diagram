@@ -8,10 +8,11 @@ import runpy
 
 import pytest
 
+from l7r.diagram.pipeline import gencache
 from tests.test_villages import GENERATORS, HERE, _channels_under_plots, _regen_and_gate, _typical_cell_acres
 
 
-@pytest.mark.rolls_map  # three real Kashikawa rolls, 214 s (feature 135 R3) - un-marked until now because it rolls through runpy
+@pytest.mark.rolls_map  # ONE real Kashikawa roll - three at feature 135, two at 158, one since 2026-08-31 (see the comment on the rolls below); marked because it rolls through runpy, which no marker can see
 def test_a_map_is_immune_to_an_upstream_change_in_the_number_of_random_draws():
     """THE RATCHET for positional/scoped randomness (GM 2026-08-08).
 
@@ -56,14 +57,34 @@ def test_a_map_is_immune_to_an_upstream_change_in_the_number_of_random_draws():
         with open(gen[: -len(".gen.py")] + ".json") as fh:
             return fh.read()
 
-    # TWO ROLLS, NOT THREE (feature 158). The claim needs one perturbed roll and one clean one; the
-    # third existed only to leave the committed manifest as the unperturbed run wrote it, and running
-    # the PERTURBED one first does that for free. Measured 2026-08-29: 214 s -> ~143 s, the largest
-    # single item in the full tier.
+    # ONE ROLL, NOT TWO (2026-08-31; three at feature 135, two at 158 - "the largest single item in
+    # the full tier" at 214 s, then ~143 s). The claim needs a PERTURBED roll and a CLEAN one, and
+    # the clean one is precisely what the verified gate cache already holds: `gate_obtain` is keyed
+    # on ENGINE CONTENT, so a HIT is a clean roll of exactly this code and a MISS rolls it once
+    # right here. That makes this never worse than the roll it replaces and free whenever the sweep
+    # has already served kashikawa - which, being in this same tree, it has.
+    #
+    # This is the GM's own statement of the rule (2026-08-30): "we are essentially using a cache,
+    # but we are building the cache as part of the test run in order to ensure that the process that
+    # builds the cache is part of what's being tested." The MISS path is that build.
+    #
+    # WHY THE CLEAN SIDE IS THE ONE TO CACHE, and not the perturbed side: the perturbation is the
+    # experiment. Serving it from any cache would assert the ratchet against a manifest no perturbed
+    # run produced, which is the one substitution that would make this test vacuous.
+    clean_path, how, _ = gencache.gate_obtain(gen)
+    with open(clean_path) as fh:
+        clean = fh.read()
     perturbed = once(1)
-    clean = once(0)
-    assert perturbed == clean, "an upstream change in the number of random draws re-rolled the map - see CLAUDE.md 'RANDOMNESS IS POSITIONAL OR SCOPED'"
-    # ...and the clean roll ran LAST, so the committed manifest on disk is the unperturbed one.
+    # The perturbed roll has just overwritten the committed manifest. Putting the clean bytes back is
+    # what the second roll used to be for - the pool artifact on disk must be the unperturbed one.
+    with open(clean_path, "w") as fh:
+        fh.write(clean)
+    assert perturbed == clean, (
+        "an upstream change in the number of random draws re-rolled the map - see CLAUDE.md "
+        f"'RANDOMNESS IS POSITIONAL OR SCOPED'. (The clean side was served {how!r}. If that says "
+        "'HIT' and you believe the committed manifest is merely STALE rather than the draw order "
+        "wrong, re-run with GATE_NO_CACHE=1, which forces the clean side to roll for real.)"
+    )
 
 
 @pytest.mark.rolls_map
