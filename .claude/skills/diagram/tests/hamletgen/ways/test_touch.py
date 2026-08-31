@@ -2,6 +2,8 @@
 
 import math
 
+import pytest
+
 from l7r.diagram import hamletgen as hg
 
 from ._builders import _StubSettlement
@@ -173,3 +175,30 @@ def test_along_samples_carry_the_REMAINDER_across_a_vertex() -> None:
     # draws, and so the lanes of any map that reaches it, which is not a coverage feature's to spend.
     assert _along_samples([(0.0, float(y)) for y in range(0, 201, 10)]) == [(0.0, 0.0), (0.0, 200.0)]
     assert _along_samples([(5.0, 5.0), (5.0, 5.0)]) == [(5.0, 5.0), (5.0, 5.0)], f"a zero-length way is its own two ends ({_ALONG_STEP_FT:.0f} ft of nothing)"
+
+
+def test_an_end_is_NOT_moved_onto_a_junction_when_the_rewrite_rule_refuses(monkeypatch: pytest.MonkeyPatch) -> None:
+    """END MEETS END: two lanes whose ends stand near each other are one lane with a hole in it, and
+    the honest join runs the other lane's end onto this one. But the move is still a REWRITE, so it
+    goes through the same rule every rewrite does - JUDGE THE RESULT, NOT JUST THE MOVE. A link that
+    is itself legal can leave a tread nearer a garden than the router ever put it (cohort seed 18:
+    footpaths drawn 5.2 ft clear came out of the pass at 1.21), or fold a bend feet would never wear.
+
+    The rule is driven directly rather than through geometry: what is under test is that a refusal is
+    HONORED - the lane keeps the points it had - not the rule's own arithmetic, which
+    `test_clearance.py` owns."""
+    from l7r.diagram.hamletgen.ways import touch as T
+
+    lanes = [[(0.0, 0.0), (0.0, 600.0)], [(60.0, 300.0), (200.0, 300.0)], [(60.0, 330.0), (190.0, 330.0), (200.0, 330.0)]]
+    allowed = _StubSettlement(lanes=[list(ln) for ln in lanes], houses=[(150.0, 320.0)])
+    allowed.M.setdefault("meta", {"ftpx": 1})
+    T._touch_junctions(allowed, [], [], [])
+    assert len(allowed.M["lanes"]) == 2, "with the rule permitting, the ends run together and the three lanes become two"
+
+    monkeypatch.setattr(T, "may_write", lambda *_a, **_k: False)
+    refused = _StubSettlement(lanes=[list(ln) for ln in lanes], houses=[(150.0, 320.0)])
+    refused.M.setdefault("meta", {"ftpx": 1})
+    T._touch_junctions(refused, [], [], [])
+    assert len(refused.M["lanes"]) == 3, "and with it refusing, no end is moved onto another, so all three stand"
+    kept = [tuple(p) for p in refused.M["lanes"][2]["pts"]]
+    assert all(q in kept for q in lanes[2]), f"the lane keeps every point it had - it is reached, never rewritten: {kept}"

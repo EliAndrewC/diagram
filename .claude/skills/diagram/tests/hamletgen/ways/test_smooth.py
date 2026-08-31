@@ -7,7 +7,9 @@ file exists for is the collapse guard below - a lane whose every vertex falls in
 
 from __future__ import annotations
 
-from l7r.diagram.hamletgen.ways.smooth import _smooth_web
+import math
+
+from l7r.diagram.hamletgen.ways.smooth import _KNOT_FT, _smooth_web
 
 from ._builders import _StubSettlement
 
@@ -30,3 +32,20 @@ def test_smooth_web_survives_a_lane_whose_every_vertex_falls_inside_the_knot() -
     s = _StubSettlement(lanes=[connector, run, collapsing])
     changed = _smooth_web(s, [], [], [])
     assert isinstance(changed, int), "the pass returns its count rather than raising IndexError on _q[-2]"
+
+
+def test_a_lane_whose_every_VERTEX_falls_inside_the_knot_is_left_exactly_as_it_was() -> None:
+    """Ends of different lanes within `_KNOT_FT` are ONE junction, and each lane's own vertices inside
+    that radius collapse onto the node. A stub of a lane shorter than the knot therefore collapses to
+    a single point - and a single point has no neighbor vertex to aim the touch at.
+
+    Found at the T99 unlock on a tripwire seed, as an IndexError on `_q[-2]`. Such a lane is left as
+    it was drawn rather than rewritten to nothing, so the assertion is that it comes out unchanged."""
+    stub = [(1.0, 301.0), (1.5, 301.5)]
+    assert math.dist(stub[0], stub[1]) < _KNOT_FT, "the whole lane fits inside one knot"
+    s = _StubSettlement(lanes=[[(0.0, 0.0), (0.0, 600.0)], [(0.0, 300.0), (60.0, 300.0)], list(stub)], houses=[(50.0, 320.0)])
+    s.M.setdefault("meta", {"ftpx": 1})
+
+    _smooth_web(s, [], [], [])  # the regression this guards is an IndexError on `_q[-2]`, so reaching here is half the test
+    assert s.M["lanes"][2]["pts"] == [], "the stub is not rewritten to a one-point lane; the debris sweep drops it"
+    assert tuple(s.M["lanes"][1]["pts"][0]) == (1.0, 301.0), "and its neighbor's end is pulled onto the knot's node"
