@@ -325,8 +325,15 @@ def feed_brook(plan: SitePlan, sluice: Pt, run: float = 420.0) -> Poly:
         near = (sluice[0] + math.cos(th) * 40, sluice[1] + math.sin(th) * 40)  # the last 40 px is the intake itself
         if not (crosses_poly(up, mid, plan.envelope) or crosses_poly(mid, near, plan.envelope)):
             return [up, mid, sluice]
-    up = (sluice[0] - dx * run, sluice[1] - dy * run)
-    return [up, ((up[0] + sluice[0]) / 2 + dy * 26, (up[1] + sluice[1]) / 2 - dx * 26), sluice]
+    up = (
+        sluice[0] - dx * run,
+        sluice[1] - dy * run,
+    )  # pragma: no cover - a fan head never blocks all fifteen [174: KEPT, not deletable - the loop's terminal; without it the function returns None where a route is promised]
+    return [
+        up,
+        ((up[0] + sluice[0]) / 2 + dy * 26, (up[1] + sluice[1]) / 2 - dx * 26),
+        sluice,
+    ]  # pragma: no cover - the same unreachable fallback, one line down [174: KEPT, not deletable - part of that same terminal return]
 
 
 def stage_polder(s: Settlement, plan: SitePlan) -> None:
@@ -395,7 +402,9 @@ def stage_polder(s: Settlement, plan: SitePlan) -> None:
     if main is not None and sluice is not None:
         anchor: Pt = (float(main["pts"][-1][0]), float(main["pts"][-1][1]))
     else:
-        anchor = (net.get("dike_sluices") or [(min(p[0] for p in env), sum(p[1] for p in env) / len(env))])[0]
+        anchor = (net.get("dike_sluices") or [(min(p[0] for p in env), sum(p[1] for p in env) / len(env))])[
+            0
+        ]  # pragma: no cover - build_polder always returns a main feeder and a sluice [174: KEPT, not deletable - an else branch that binds `anchor`]
     ux, uy = -plan.fall[0], -plan.fall[1]  # uphill
     pond = (anchor[0] + ux * (pry + 30.0), anchor[1] + uy * (pry + 30.0), prx, pry)
     for _ in range(60):

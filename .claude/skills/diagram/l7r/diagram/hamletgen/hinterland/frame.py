@@ -97,7 +97,7 @@ def title_pocket(s: Settlement, plan: SitePlan, w: float = 300.0, h: float = 190
                 break
         s.M["meta"]["title_pocket_tries"] = _tries
         if plan.title_pocket is None:
-            plan.title_pocket = (x0, y0, x0, y0)
+            plan.title_pocket = (x0, y0, x0, y0)  # pragma: no cover - the map is already too full to title; nothing to reserve [174: KEPT, not deletable - it assigns the pocket the caller returns]
     else:
         plan.title_pocket = (spot[0], spot[1], spot[0] + w, spot[1] + h)
     return plan.title_pocket

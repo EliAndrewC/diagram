@@ -29,8 +29,6 @@ class WellGroundMixin:
         for key, dw in (("streams", 9.0), ("channels", 2.5), ("field_ditches", 1.5), ("canals", 14.0)):
             for rec in recs[key]:
                 pts = rec.get("poly") or rec.get("pts")
-                if not pts:
-                    continue
                 hw = float(rec.get("w") or dw) / 2
                 for i in range(len(pts) - 1):
                     (ax, ay), (bx, by) = pts[i], pts[i + 1]
@@ -39,8 +37,6 @@ class WellGroundMixin:
         dry = []
         for dp in recs["dry_plots"]:
             poly = dp.get("poly")
-            if not poly:
-                continue
             dry.append((poly, min(q[0] for q in poly), min(q[1] for q in poly), max(q[0] for q in poly), max(q[1] for q in poly)))
         wet = [(r, min(q[0] for q in r), min(q[1] for q in r), max(q[0] for q in r), max(q[1] for q in r)) for r in paddy_wet_rings(self.M)]
         grids = PointGrid(), PointGrid(), PointGrid()

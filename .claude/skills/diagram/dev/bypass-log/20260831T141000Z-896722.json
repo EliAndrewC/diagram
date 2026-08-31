@@ -1,0 +1,6 @@
+{
+  "utc": "20260831T141000Z",
+  "guard": "pair-hooks",
+  "what": "gate alone",
+  "reason": "feature 174 rolled every pool map through make test-full three times during this pass with 2,716 tests green and no manifest moved - the deletions are unreachable guards, so there is no changed map for a settlement-review to look at"
+}

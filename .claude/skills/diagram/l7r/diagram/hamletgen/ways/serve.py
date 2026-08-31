@@ -61,8 +61,6 @@ def _lay_web_lane(s: Settlement, run: Poly, hard: list[Poly], walls: list[Poly],
     # the end out from under the link that was drawn to it - which left a 187 ft lane whose start
     # stood 178 ft from any way, the exact dangling tread `lanes_reach_something` exists to catch.
     run = _trim_to_service(run, segs, houses)
-    if len(run) < 2:
-        return False
     if segs:
         # SHARING A CORRIDOR IS SHADOWING, whether the two lines are parallel or crossing. The test
         # was written against `MIN_WEB_GAP` (the room a lane needs to pass BETWEEN two steadings),
@@ -182,8 +180,6 @@ def _serve_stragglers(s: Settlement, plan: SitePlan, hard: list[Poly], fabric: l
     for _pass in range(4):
         lanes = [[(float(x), float(y)) for x, y in ln["pts"]] for ln in s.M.get("lanes", [])]
         segs = [(a, b) for ln in lanes for a, b in zip(ln, ln[1:], strict=False)]
-        if not segs:
-            return
         added = 0
         for h in list(s.M.get("houses", [])):
             c = (float(h["x"]), float(h["y"]))

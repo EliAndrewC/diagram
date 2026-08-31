@@ -524,7 +524,10 @@ class CombMixin:
                 _cx_in = sum(q[0] for q in _env_in) / _n_in
                 _cy_in = sum(q[1] for q in _env_in) / _n_in
                 if _nx_in * (_q_in[0] - _cx_in) + _ny_in * (_q_in[1] - _cy_in) > 0:  # point it INWARD
-                    _nx_in, _ny_in = (
+                    (
+                        _nx_in,
+                        _ny_in,
+                    ) = (  # pragma: no cover - the winding-order guard; build_polder winds its envelope so the raw edge normal already points inward [174: KEPT, not deletable - it flips a normal - removing it changes geometry, not just a skip]
                         -_nx_in,
                         -_ny_in,
                     )

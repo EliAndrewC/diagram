@@ -199,7 +199,7 @@ class ToriiAvenueMixin:
                     f = (target - acc) / sl
                     return (ascent[i][0] + (ascent[i + 1][0] - ascent[i][0]) * f, ascent[i][1] + (ascent[i + 1][1] - ascent[i][1]) * f)
                 acc += sl
-            return cast(Pt, ascent[-1])
+            return cast(Pt, ascent[-1])  # pragma: no cover - defensive: t is capped at 0.86, never past the last segment [174: KEPT, not deletable - a terminal return]
 
         dstr = 'M' + ' L'.join(f'{x},{y}' for x, y in ascent)
         self.add(f'<path d="{dstr}" fill="none" stroke="#B89A6A" stroke-width="8" opacity="0.7"/>')

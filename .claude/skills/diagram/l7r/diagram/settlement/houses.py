@@ -539,9 +539,11 @@ class HousesMixin:
                             (street[i + 1][1] - street[i][1]) / sl,
                         )
                     acc += sl
-                i = len(seg) - 1
-                sl = seg[i] or 1
-                return (
+                i = (
+                    len(seg) - 1
+                )  # pragma: no cover - defensive: the while-guard keeps d < total, so a segment always matches [174: KEPT, not deletable - a terminal return; the signature promises a 4-tuple]
+                sl = seg[i] or 1  # pragma: no cover - as above [174: KEPT, not deletable - as above]
+                return (  # pragma: no cover - as above [174: KEPT, not deletable - as above]
                     street[-1][0],
                     street[-1][1],
                     (street[-1][0] - street[-2][0]) / sl,

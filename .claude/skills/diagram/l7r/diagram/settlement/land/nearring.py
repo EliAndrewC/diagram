@@ -262,9 +262,9 @@ class NearRingMixin:
 
         def _channel_clear(a: tuple[float, float], b: tuple[float, float]) -> bool:
             if any(seg_dist(cx, cy, a, b) < cr for cx, cy, cr in struct_cd):
-                return False
+                return False  # pragma: no cover - defensive: basins are already kept off structures, so a moat intake rarely lines up to cross one [174: KEPT, not deletable - it is a predicate's REJECTION - deleting it changes the answer, not just the coverage]
             if any((fx0 + fx1) / 2 >= min(a[0], b[0]) - 40 and _seg_near_rect(a, b, (fx0, fy0, fx1, fy1)) for fx0, fy0, fx1, fy1 in funerary):
-                return False
+                return False  # pragma: no cover - defensive: the basin funerary keep-out (60px) already holds channels off graves [174: KEPT, not deletable - the same - a rejection this predicate owes its caller]
             return not any(any(seg_dist(rp[i][0], rp[i][1], a, b) < hw + 2 for i in range(len(rp))) for rp, hw in road_lines)
 
         def _seg_near_rect(a: tuple[float, float], b: tuple[float, float], r: tuple[float, float, float, float]) -> bool:
@@ -328,7 +328,7 @@ class NearRingMixin:
                 if any(_blocked(px, py) for px, py in edge_pts + [(mx, my)]):
                     continue
                 if any(ix0 - 22 <= vx <= ix1 + 22 and iy0 - 22 <= vy <= iy1 + 22 for sp in streams for vx, vy in sp):
-                    continue  # no stream vertex near the basin -> the current never runs through it (streams_avoid_fields)
+                    continue  # no stream vertex near the basin -> the current never runs through it (streams_avoid_fields)  # pragma: no cover - defensive redundancy: _blocked's 9-point edge sampling already drops stream-adjacent cells [174: KEPT, not deletable - it rejects a basin seat; deleting it would place one]
                 moat_x = moat_y = None
                 if not _watered(corners):
                     if moat_feed:

@@ -150,7 +150,11 @@ class WallsMixin:
                 t = arc / seg
                 return a[0] + ex * t, a[1] + ey * t, (math.degrees(math.atan2(ey, ex)) + 90) % 180 - 90
             arc -= seg
-        return pts[0][0], pts[0][1], 0.0
+        return (
+            pts[0][0],
+            pts[0][1],
+            0.0,
+        )  # pragma: no cover - defensive: arc is taken mod perimeter and the segments sum to it, so the loop always returns first [174: KEPT, not deletable - a terminal return; the signature promises a tuple]
 
     @staticmethod
     def _wall_arc_of(pts: Any, pt: Any) -> float:

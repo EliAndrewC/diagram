@@ -133,7 +133,7 @@ class WaterClipMixin:
             while i + 1 < len(out) and foot(out[i + 1])[1] < hw:
                 i += 1
             if i + 1 >= len(out):
-                return out
+                return out  # pragma: no cover - defensive: a tap never lies wholly in the river [174: KEPT, not deletable - a terminal return]
             f, _d = foot(out[i])
             nxt = out[i + 1]
             ux, uy = nxt[0] - f[0], nxt[1] - f[1]

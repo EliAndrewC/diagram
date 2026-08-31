@@ -56,9 +56,11 @@ class WaterfrontMixin:
                     f = (d - acc) / sl
                     return (a[0] + (b[0] - a[0]) * f, a[1] + (b[1] - a[1]) * f, (b[0] - a[0]) / sl, (b[1] - a[1]) / sl)
                 acc += sl
-            a, b = segs[-1]
-            sl = lens[-1] or 1.0
-            return (b[0], b[1], (b[0] - a[0]) / sl, (b[1] - a[1]) / sl)
+            a, b = segs[
+                -1
+            ]  # pragma: no cover - defensive: every caller asks for a fraction strictly inside the run, so the loop always matches [174: KEPT, not deletable - a terminal return; the signature promises a 4-tuple]
+            sl = lens[-1] or 1.0  # pragma: no cover - as above [174: KEPT, not deletable - as above]
+            return (b[0], b[1], (b[0] - a[0]) / sl, (b[1] - a[1]) / sl)  # pragma: no cover - as above [174: KEPT, not deletable - as above]
 
         landings = []
         posts = []

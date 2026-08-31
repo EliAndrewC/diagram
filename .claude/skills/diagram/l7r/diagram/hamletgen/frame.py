@@ -183,7 +183,9 @@ def stage_notice(s: Settlement, plan: SitePlan) -> None:
             if best is not None:
                 s.kosatsuba(best[1], best[2], rot=best[3])
             else:
-                s.M["kosatsuba"].append(board)
+                s.M["kosatsuba"].append(
+                    board
+                )  # pragma: no cover - no verge inside the cloud takes a board; keep the engine's seat rather than none [174: KEPT, not deletable - an else branch that binds the seat this method returns]
 
 
 def _nearest_way_bearing(s: Settlement, x: float, y: float) -> float | None:
