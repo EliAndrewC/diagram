@@ -85,3 +85,47 @@ def test_open_seat_disc_uses_the_true_radius_of_a_round_candidate():
     loose, exact = seat(False), seat(True)
     assert exact is not None, "the exact disc reach must find the gap the half-diagonal refuses"
     assert loose is None or math.hypot(exact[0] - 300, exact[1] - 300) <= math.hypot(loose[0] - 300, loose[1] - 300)
+
+
+# ---- feature 174: the three shrine glyphs no hamlet draws ----------------------------------------
+# 56 of the module's 116 statements. A hamlet has no shrine at all (the kind follows settlement
+# scale: villages have shrines, towns monasteries, cities temples), so these three had never run.
+# Each is a direct drawing call, and each carries a REAL rule worth pinning rather than a line count.
+
+
+def test_the_hill_records_its_own_footprint_and_its_summit_separately() -> None:
+    """The keep-outs downstream code reads: `M['hill']` is the whole mound (the not-hill predicate
+    inflates it), `M['summit']` the crown a shrine may stand on. They are different ellipses, and
+    the hill is also pushed onto `ellipses`, which is what makes it block placement."""
+    s = Settlement(1200, 1200, seed=3)
+    s.hill(600.0, 600.0, 200.0, 150.0)
+    assert s.M["hill"] == [600.0, 628.0, 200.0, 150.0], "the base ring, offset south of the center"
+    assert s.M["summit"][2] < s.M["hill"][2], "the summit is the small crown, not the mound"
+    assert (600.0, 628.0, 200.0, 150.0) in s.ellipses, "and the mound blocks placement"
+
+
+def test_a_village_shrine_is_drawn_in_REAL_FEET_not_pixels() -> None:
+    """GM 2026-07-21. The old signature took fixed PIXELS with a 104x68 default - a latent footgun
+    that would have drawn a 208x136 ft monastery-sized hall on any village taking the default
+    civic_shrine path. The defaults are ~62x42 REAL FEET now, converted through `px()`.
+
+    Asserted at two scales, because a test at one ftpx cannot tell feet from pixels.
+    """
+    one = Settlement(1000, 1000, seed=1)
+    two = Settlement(1000, 1000, seed=1)
+    two.meta(ftpx=2)  # the scale is declared through meta(), not the constructor
+    assert one.px(62) == 62.0 and two.px(62) == 31.0, "the same real hall is drawn smaller on a coarser map"
+    one.shrine(500.0, 500.0)
+    two.shrine(500.0, 500.0)
+    assert one.out and two.out, "and both draw their hall"
+
+
+def test_a_small_shrine_is_recorded_as_RELIGIOUS_and_not_as_a_dwelling() -> None:
+    """A wayside shrine is non-residential: it goes to `M['religious']` as kind `small_shrine`, so
+    it is neither housing nor a full temple owed a torii avenue."""
+    s = Settlement(1000, 1000, seed=5)
+    s.small_shrine(400.0, 400.0)
+    rec = s.M["religious"][-1]
+    assert rec["kind"] == "small_shrine"
+    assert (rec["w"], rec["h"]) == (s.px(32), s.px(24)), "~32x24 ft, converted at the map's ftpx"
+    assert not s.M.get("houses"), "and it is not counted as a dwelling"
