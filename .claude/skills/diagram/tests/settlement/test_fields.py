@@ -661,3 +661,69 @@ def test_the_dry_hem_stops_at_the_bank_of_a_watercourse_that_was_there_first():
     ink = "".join(s.out)
     assert "600.0,600.0" in ink, "the dry plot is drawn"
     assert "100.0,100.0" not in ink, "the one over the stream is not"
+
+
+# ---- feature 174: the overlay plot picker, tested DIRECTLY -----------------------------------------
+# GM 2026-08-31: "the make done tests are doing the straightforward branch coverage thing while our
+# full tests are doing the more traditional end to end testing thing... if that would require
+# 'duplication' to reach one hundred percent code coverage, then I think that is okay."
+#
+# The test above builds a real comb and applies each overlay end to end - the second kind. These are
+# the first kind: `_pick_overlay_plots` takes a plain list and a seeded Random, so its two spreading
+# doctrines can be asserted as the RESEARCH says they behave, without a map.
+
+
+def _plots(n: int, spacing: float = 100.0):
+    """n plots in a row, far enough apart that "nearest neighbor" is unambiguous."""
+    return [{"poly": [(i * spacing, 0.0), (i * spacing + 10.0, 0.0), (i * spacing + 10.0, 10.0), (i * spacing, 10.0)], "i": i} for i in range(n)]
+
+
+def test_a_dike_pond_conversion_spreads_as_PATCHES_from_where_someone_started() -> None:
+    """Research D2, and the reason this is clustered at all: the 桑基魚塘 conversion was 挖塘培基 -
+    dig one low plot into a pond, pile the spoil into a dike around it - a single-plot job one
+    household did in one dry season. It spread as a patchwork radiating from where someone started,
+    not as an even sprinkle. (Shunde grew 40,084 -> 58,094 mu over 61 years, plot by plot.)
+
+    Asserted as CONTIGUITY, which is the observable consequence: the picked plots form far fewer
+    runs than an even scatter of the same count would.
+    """
+    import random as _random
+
+    eligible = _plots(30)
+    picked = Settlement._pick_overlay_plots(eligible, 9, clustered=True, rng=_random.Random(4))
+    idx = sorted(p["i"] for p in picked)
+    runs = 1 + sum(1 for a, b in zip(idx, idx[1:], strict=False) if b != a + 1)
+    assert len(picked) == 9
+    assert runs <= 3, f"patches, not a sprinkle: {runs} runs across {idx}"
+
+
+def test_the_lotus_overlay_draws_EVENLY_because_the_wet_bottom_is_already_contiguous() -> None:
+    """ "the wet bottom is already contiguous by nature, so an even draw from the eligible set lands
+    contiguously without extra help" - so the unclustered branch is a plain sample, and asserting it
+    is what stops the clustered rule being applied to everything."""
+    import random as _random
+
+    eligible = _plots(30)
+    picked = Settlement._pick_overlay_plots(eligible, 9, clustered=False, rng=_random.Random(4))
+    assert len(picked) == 9
+    assert len({p["i"] for p in picked}) == 9, "nine distinct plots, no repeats"
+
+
+def test_asking_for_every_eligible_plot_returns_them_ALL_without_sampling() -> None:
+    """The short-circuit: `take >= len(eligible)`. A sample of everything is still everything, but
+    going through the patch-growing loop for it would be a needless walk - and the loop's own
+    termination depends on there being an unpicked plot left."""
+    import random as _random
+
+    eligible = _plots(5)
+    assert Settlement._pick_overlay_plots(eligible, 5, clustered=True, rng=_random.Random(1)) == eligible
+    assert Settlement._pick_overlay_plots(eligible, 99, clustered=False, rng=_random.Random(1)) == eligible
+
+
+def test_the_patch_seeds_are_A_HANDFUL_not_everyone_at_once() -> None:
+    """`n_seeds = max(1, round(take / 9))` - "a handful of households started digging, not everyone
+    at once". A small take must still get at least one seed, which is the `max(1, ...)`."""
+    import random as _random
+
+    picked = Settlement._pick_overlay_plots(_plots(20), 2, clustered=True, rng=_random.Random(2))
+    assert len(picked) == 2, "even a two-plot conversion has a seed to grow from"
