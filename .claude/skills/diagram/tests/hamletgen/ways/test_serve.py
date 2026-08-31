@@ -152,3 +152,28 @@ def test_an_explicit_form_on_the_spec_beats_the_roll() -> None:
     """A pool gen pins the form the way it pins every other knob."""
     plan = hg.plan_site(hg.HamletSpec(name="Pinned", seed=3, households=12, settlement_form="dispersed"))
     assert plan.settlement_form == "dispersed"
+
+
+def test_a_straggler_whose_path_FOULS_a_steading_is_left_unserved_rather_than_driven_through_it() -> None:
+    """Feature 174. "A STEADING FOUL IS NEVER DRAWN, not even as the last resort the fold gets" -
+    `houses_clear_of_lanes` allows a lane no overlap with a house AT ALL, so a fouling path is not
+    "the least bad option", it is a guaranteed red gate and a map showing a track through someone's
+    floor. The honest fallback is the house going unserved, which `farmhouses_reach_a_way` reports
+    in words a reader can act on.
+
+    Two stragglers with a steading between each of them and the network drive that refusal.
+    """
+    plan = hg.plan_site(hg.HamletSpec(name="X", seed=4, households=12))
+
+    def _box(x0, y0, x1, y1):
+        return [(x0, y0), (x1, y0), (x1, y1), (x0, y1)]
+
+    s = _StubSettlement(lanes=[[(0.0, 0.0), (0.0, 600.0)]], houses=[(400.0, 300.0), (400.0, 120.0)])
+    fabric = [(_box(120, 240, 260, 360), (190.0, 300.0), "house"), (_box(120, 60, 260, 180), (190.0, 120.0), "house")]
+    before = len(s.M["lanes"])
+    hg.ways._serve_stragglers(s, plan, [], fabric, [])
+    for ln in s.M["lanes"][before:]:
+        for px, py in ln["pts"]:
+            for poly, _c, _k in fabric:
+                inside = min(p[0] for p in poly) < px < max(p[0] for p in poly) and min(p[1] for p in poly) < py < max(p[1] for p in poly)
+                assert not inside, f"no drawn way passes through a steading ({px:.0f},{py:.0f})"
