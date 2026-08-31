@@ -391,3 +391,35 @@ def test_a_fringe_tree_is_refused_ground_already_spoken_for():
     s.block_polys.append([(100.0, 100.0), (400.0, 100.0), (400.0, 400.0), (100.0, 400.0)])
     assert s._fringe_blocked(250, 250, 6)
     assert not s._fringe_blocked(700, 700, 6)
+
+
+# ---- feature 174: the avenue-fitting engine, which owns a sando's stride -------------------------
+# `_avenue_pitch` and `_avenue_short_of_walls` are the two corrections the engine makes to a gen's
+# authored torii line. Both were untested: the gen authors the LINE, the engine owns the STRIDE, and
+# neither half of that division of labor had an assertion on it.
+
+
+def test_an_over_wide_avenue_is_RE_LAID_at_the_standard_pitch_keeping_its_line() -> None:
+    """ "the gen authors the avenue's LINE; the engine owns its stride". An avenue whose arches stand
+    more than the cap apart is resampled by arc length ALONG the authored line - so it keeps its
+    direction and its curve, and the innermost arch keeps the seat the gen chose at the threshold.
+
+    Asserted on all three: the stride closes, the first arch does not move, and the run stays on the
+    authored line.
+    """
+    s = Settlement(2000, 2000, seed=3)
+    wide = [(100.0, 100.0), (400.0, 100.0), (700.0, 100.0)]  # 300 px apart, far over the cap
+    fitted = s._avenue_pitch(wide)
+    assert fitted[0] == wide[0], "the innermost arch keeps the gen's own seat"
+    new_gap = math.hypot(fitted[1][0] - fitted[0][0], fitted[1][1] - fitted[0][1])
+    assert new_gap < 300.0, f"the stride closes to the standard pitch ({new_gap:.0f} px)"
+    assert all(abs(p[1] - 100.0) < 1e-6 for p in fitted), "and every arch stays on the authored line"
+
+
+def test_an_avenue_INSIDE_the_pitch_band_is_left_exactly_as_the_gen_authored_it() -> None:
+    """ "the village avenues at ~30 ft are deliberate", so this fires only on the over-wide runs. A
+    test of the correction alone would pass with the guard removed and every avenue re-laid."""
+    s = Settlement(2000, 2000, seed=3)
+    ok = [(100.0, 100.0), (130.0, 100.0), (160.0, 100.0)]
+    assert s._avenue_pitch(ok) == ok, "within the band, the gen's own spacing stands untouched"
+    assert s._avenue_pitch([(5.0, 5.0)]) == [(5.0, 5.0)], "and one arch is no avenue to re-lay"
