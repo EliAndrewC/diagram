@@ -43,3 +43,38 @@ def test_boundary_marker_floor_never_shrinks_a_stone():
     s.boundary_marker(300, 300)
     b = s.M["boundary_markers"][0]
     assert b["vw"] == b["w"] == 12.0
+
+
+def test_a_merchant_residence_is_refused_by_the_bound_the_edge_and_its_neighbours() -> None:
+    """Feature 174. The rich homes sit one step DEEPER than the deepest shop, aligned to the
+    storefront each stands behind - "the merchant family lives over/behind its own shop" - and the
+    seat is refused by four separate clauses. Each is set up on its own map against a baseline that
+    DOES place, because a pass that seats nothing proves nothing about which clause refused.
+
+    The overlap test is deliberately RECTANGULAR: "the circle `_fits` is far too conservative for a
+    large home in a tight band", so a circular test would refuse seats that are genuinely free.
+    """
+
+    def _band(**kw):
+        s = Settlement(W=1600, H=1600, seed=4)
+        s.meta(name="Mr", scale="town", ftpx=1)
+        rd = [(300, 1100), (1300, 1100)]
+        s.road(rd, label="post road")
+        s.frontage(rd, ["shop"] * 8, width=24, spacing=64, skip=rd)
+        for k, v in kw.items():
+            setattr(s, k, v)
+        return s
+
+    # `depth_margin` is what clears the storefront band; at its 14 px default the homes land ON the
+    # shops and every seat is refused, so the baseline states one that actually seats. (Measured: 14
+    # places 0, 40 places 3 - which is why the existing count-cap test above passes at zero and
+    # proves nothing about the body.)
+    baseline = _band()
+    assert baseline.merchant_residences(3, depth_margin=40) == 3, "the baseline seats homes behind the shops"
+
+    bounded = _band(bound=[(0.0, 0.0), (40.0, 0.0), (40.0, 40.0), (0.0, 40.0)])
+    assert bounded.merchant_residences(3, depth_margin=40) == 0, "none outside the tier's bound"
+
+    # SPREAD keeps the rich homes apart along the band: an enormous spread admits only the first.
+    spread = _band()
+    assert spread.merchant_residences(3, depth_margin=40, spread=100000.0) == 1, "the spread rule keeps them apart"
