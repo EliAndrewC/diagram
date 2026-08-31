@@ -96,6 +96,19 @@ route to main below the floor is closed only when each of these is closed:
 | `GATE_STAMP_OK` | the push's documented escape (`sync-with-main.sh:244-252`) | KEPT - it is feature 170's audited escape, needs a written reason, and is logged. An escape that says why is the project's own answer; removing it is not this feature's call |
 | `REF_OK` | the reference-scope bypass | stated and left as it is; it does not reach the coverage phase |
 
+### FR-003b - two claims the second draft made about these targets were FALSE
+
+Recorded because they were the argument FR-003 rested on, and both were checked and are wrong:
+
+- *"`make test-full` is not refused under a scope lock"* - **false.** `Makefile:1022` gives it
+  `$(SWEEP_OK)`, and the comment above it says so: *"test-full rolls every pool map, so the scope
+  lock refuses it before `test` starts"*.
+- *"`make done FULL=1` has never been green in 5 recorded runs"* - **misattributed.** Four of the
+  five rows read `failed: test-full`; the never-green record belongs to `test-full` at least as much.
+
+What IS true and worth the GM's attention: `done FULL=1` prompts and cancels by default and writes a
+`dev/bypass-log/` entry, where `test-full` does neither.
+
 ### FR-004 - `waterfields/hill.py` is COVERED BY TESTS, not exempted and not asked about
 
 The first draft excluded the town/city wings as un-producible; this feature's own commits disproved
@@ -171,6 +184,8 @@ subagent.
 | round | verdict | what it found |
 |---|---|---|
 | 1 | CHANGES REQUIRED | **Seven items, all applied in this rewrite.** The spec had been written PARTWAY THROUGH implementation - disclosed to the reviewer, who confirmed the ordering showed: its scope was drawn around the work in flight (the 89 the session was already closing), and both exclusions landed exactly on work not yet started. Also: FR-003 named no run and never priced the literal instruction; FR-004's exclusion was disproved by the feature's own commits; the R3 deselection table was stale (the scope lock has been OFF since 2026-08-27); 35 statements inside the existing hard floor were missing from the census; FR-002 was unrequested; the two ratchets the GM's first sentence names were never addressed; and the "close to 100%" answer quoted the hamlet path (99.28%) rather than the whole set (96.07%) |
+
+| 2 | CHANGES REQUIRED | **The central one: FR-003 was a no-op.** It named `make test COV_FLOORS=1` as the run to carry the floor - which is already where all three floors live, so the requirement changed nothing about `make done`, nothing about the push, and nothing about what a merge demands. Verified: a plain `make done` runs `test` with `COV_FLOORS` empty, stamps green anyway, and `gate-stamp.py --check` is the whole of what the push demands - so the mechanism the GM's request names would have survived the feature intact. The reviewer read that as the ordering pull surviving at the one requirement carrying the request's core, and that is the right diagnosis. Also: no requirement delivered success criterion 2's "no mechanism" (now FR-003a); FR-004 replaced a wrong exclusion with a question the request already forecloses (now decided); two stated facts about `test-full` were false (now FR-003b); and `research.md` R1 and R3 were stale while the spec declared research.md held every number (corrected in place) |
 
 **The ordering was wrong and is recorded as such**: implementation began before the spec existed,
 contrary to Principle XVI. The rewrite above is drawn from the request and the measurements rather
