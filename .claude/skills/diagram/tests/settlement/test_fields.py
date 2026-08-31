@@ -727,3 +727,49 @@ def test_the_patch_seeds_are_A_HANDFUL_not_everyone_at_once() -> None:
 
     picked = Settlement._pick_overlay_plots(_plots(20), 2, clustered=True, rng=_random.Random(2))
     assert len(picked) == 2, "even a two-plot conversion has a seed to grow from"
+
+
+def test_the_leftover_form_VEGETABLES_erases_the_bund_and_tills_the_ground() -> None:
+    """Feature 150 B2, and the research behind the knob: what the leftover parcels of a wholesale
+    conversion read as. Fei records vegetables under the mulberry; the gazetteers record no rice
+    inside a converted district. So "vegetables" is not a decoration - it is one of the three
+    attested readings, and it draws TILLED EARTH with the bund erased rather than textured paddy.
+
+    Asserted against the default: the same conversion with `leftover="rice"` draws paddy, so the two
+    must differ in what they emit.
+    """
+    net = _comb(1300, 1700, (520, 220), full_or(2, 5), down_deg=90, field_fall=760, offtakes_a=(0.32, 0.7), offtakes_b=())
+    rng = __import__("random")
+
+    veg = Settlement(1400, 1800, seed=3)
+    veg.meta(name="LUV", scale="village", ftpx=1, down_deg=90)
+    veg.apply_land_use(net, "mulberry_fishpond", rng.Random(1), fraction=0.9, eligible="all", leftover="vegetables")
+
+    rice = Settlement(1400, 1800, seed=3)
+    rice.meta(name="LUR", scale="village", ftpx=1, down_deg=90)
+    rice.apply_land_use(net, "mulberry_fishpond", rng.Random(1), fraction=0.9, eligible="all", leftover="rice")
+
+    assert "vegetable ground" in "".join(str(c) for c in veg.out_cls), "the leftovers are drawn as vegetable ground"
+    assert "vegetable ground" not in "".join(str(c) for c in rice.out_cls), "which the rice form does not do"
+
+
+def test_a_SUGARCANE_dike_is_drawn_in_ROWS_ALONG_it_not_as_a_scatter() -> None:
+    """settlement-review: a scatter read as rough grass. Cane is sett-planted in furrows down the
+    bank's LENGTH, so the texture is ruled rows running with the dike - three rows of near-continuous
+    dashes, each dash following the loop's own direction.
+
+    `DIKE_CROPS` holds four forms and only mulberry had a test; this covers the one whose drawing is
+    a different SHAPE rather than a different colour.
+    """
+    net = _comb(1300, 1700, (520, 220), full_or(2, 5), down_deg=90, field_fall=760, offtakes_a=(0.32, 0.7), offtakes_b=())
+    s = Settlement(1400, 1800, seed=3)
+    s.meta(name="LUC", scale="village", ftpx=1, down_deg=90)
+    n = s.apply_land_use(net, "mulberry_fishpond", __import__("random").Random(1), dike_crop="sugarcane")
+    mulberry = Settlement(1400, 1800, seed=3)
+    mulberry.meta(name="LUM", scale="village", ftpx=1, down_deg=90)
+    mulberry.apply_land_use(net, "mulberry_fishpond", __import__("random").Random(1))
+
+    assert n > 0, "the conversion still happens"
+    # The crop is not recorded on the land_use row - it is a DRAWING difference, so that is what is
+    # asserted: the same conversion emits different ink for cane than for mulberry.
+    assert s.out != mulberry.out, "cane is drawn in rows along the dike, mulberry as a scatter of crowns"
