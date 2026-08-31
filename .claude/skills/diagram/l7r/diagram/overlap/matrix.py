@@ -32,8 +32,6 @@ def matrix_violations(M: Mapping[str, Any]) -> list[tuple[str, str, float, float
     its own), two annexes of one household may abut, a supply channel may reach the field it feeds,
     and a trade work's private well stands inside its own court."""
     ext = matrix_extents(M)
-    if not ext:
-        return []  # pragma: no cover - every real map draws something
     priv = {(round(w_["x"], 1), round(w_["y"], 1)) for w_ in M.get("wells", []) or [] if w_.get("private")}
     polys = [p for _k, p, _i, _pa in ext]
     boxes = [(min(q[0] for q in p), min(q[1] for q in p), max(q[0] for q in p), max(q[1] for q in p)) for p in polys]
@@ -176,14 +174,14 @@ def matrix_extents(M: Mapping[str, Any]) -> list[tuple[str, list[tuple[float, fl
             for r2_ in recs:
                 pl2 = r2_.get("poly") or r2_.get("pts")
                 if not pl2:
-                    continue  # pragma: no cover - defensive: every linear record carries a path
+                    continue
                 par = r2_.get(pfield) if pfield else None
                 for q in _mx_stroke(pl2, float(r2_.get("w") or _MX_LINE_W[k]) / 2):
                     out.append((k, q, None, par))
         else:
             for o_ in recs:
                 if not isinstance(o_, dict):
-                    continue  # pragma: no cover - defensive: classified keys store dicts
+                    continue
                 par = o_.get(pfield) if pfield else None
                 pid = tuple(par) if isinstance(par, list) else par
                 if "x" in o_ and (o_.get("w") or o_.get("vw")):

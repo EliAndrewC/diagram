@@ -223,7 +223,7 @@ class HousesMixin:
         for ch in fd:
             pts = ch.get("poly") or ch.get("pts")
             if not pts:
-                continue  # pragma: no cover - defensive: every ditch carries a path
+                continue
             hw = float(ch.get("w") or 1.5) / 2 + 2.0
             for k in range(len(pts) - 1):
                 ax, ay = pts[k]
@@ -539,12 +539,12 @@ class HousesMixin:
                             (street[i + 1][1] - street[i][1]) / sl,
                         )
                     acc += sl
-                i = len(seg) - 1  # pragma: no cover
-                sl = seg[i] or 1  # pragma: no cover
+                i = len(seg) - 1
+                sl = seg[i] or 1
                 return (
                     street[-1][0],
                     street[-1][1],
-                    (street[-1][0] - street[-2][0]) / sl,  # pragma: no cover
+                    (street[-1][0] - street[-2][0]) / sl,
                     (street[-1][1] - street[-2][1]) / sl,
                 )  # defensive: while-guard keeps d < total, so a segment always matches
 

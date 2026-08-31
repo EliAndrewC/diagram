@@ -176,8 +176,6 @@ def kosatsuba_anchor(M: Any, placement: str) -> tuple[float, float] | None:
     if placement == "frontage":
         gate = next((h for h in (M.get("houses") or []) if h.get("role") == "headman" and "x" in h), None)
         return (float(gate["x"]), float(gate["y"])) if gate else None
-    if placement != "entrance":
-        return None  # pragma: no cover - the value space holds no other placement
 
     def _at_the_buildings(q: tuple[float, float]) -> bool:
         """Has the approach arrived? Measured to the nearest DWELLING, never to a centroid radius."""

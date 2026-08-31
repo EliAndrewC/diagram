@@ -83,3 +83,14 @@ def test_the_run_to_the_frame_is_measured_on_every_axis(down_deg, start, expect)
 
 
 # ---- end to end ---------------------------------------------------------------------------------
+
+
+def test_the_pond_setback_search_gives_up_at_its_own_limit() -> None:
+    """The search walks downhill from the outfall until the pond's rim clears the field, and it is
+    BOUNDED - without the bound a fan whose envelope never clears would search forever. Production
+    fans always clear ("a fan is never 900 px deep past its own outfall"), which is why the terminal
+    was excluded from coverage rather than tested; but the function's own domain reaches it in one
+    call, and a bound nothing exercises is a bound nobody knows still holds."""
+    plan = a_plan()
+    plan.envelope = [(-5000.0, -5000.0), (5000.0, -5000.0), (5000.0, 5000.0), (-5000.0, 5000.0)]
+    assert hg.sink.pond_setback(plan, (0.0, 0.0), 20.0, 14.0, step=50.0, limit=300.0) == 300.0

@@ -271,7 +271,7 @@ def tail_dangles(net: Mapping[str, Any], margin: float = 18.0) -> bool:
     """Does any supply-canal end fall outside the fan's planted extent? See `fit_field`."""
     xs = [v[0] for p in net["plots"] for v in p["poly"]]
     ys = [v[1] for p in net["plots"] for v in p["poly"]]
-    if not xs:  # pragma: no cover - a fan with no plots fails long before this
+    if not xs:
         return True
     x0, y0, x1, y1 = min(xs) - margin, min(ys) - margin, max(xs) + margin, max(ys) + margin
     # ONLY the supply canals ("main"), and only their FREE ends.
@@ -325,8 +325,8 @@ def feed_brook(plan: SitePlan, sluice: Pt, run: float = 420.0) -> Poly:
         near = (sluice[0] + math.cos(th) * 40, sluice[1] + math.sin(th) * 40)  # the last 40 px is the intake itself
         if not (crosses_poly(up, mid, plan.envelope) or crosses_poly(mid, near, plan.envelope)):
             return [up, mid, sluice]
-    up = (sluice[0] - dx * run, sluice[1] - dy * run)  # pragma: no cover - a fan head never blocks all fifteen
-    return [up, ((up[0] + sluice[0]) / 2 + dy * 26, (up[1] + sluice[1]) / 2 - dx * 26), sluice]  # pragma: no cover - the same unreachable fallback, one line down
+    up = (sluice[0] - dx * run, sluice[1] - dy * run)
+    return [up, ((up[0] + sluice[0]) / 2 + dy * 26, (up[1] + sluice[1]) / 2 - dx * 26), sluice]
 
 
 def stage_polder(s: Settlement, plan: SitePlan) -> None:
@@ -394,7 +394,7 @@ def stage_polder(s: Settlement, plan: SitePlan) -> None:
     # (`watercourse_ends_reach_water`, 5 cohort maps). Same point, or the two disagree.
     if main is not None and sluice is not None:
         anchor: Pt = (float(main["pts"][-1][0]), float(main["pts"][-1][1]))
-    else:  # pragma: no cover - build_polder always returns a main feeder and a sluice
+    else:
         anchor = (net.get("dike_sluices") or [(min(p[0] for p in env), sum(p[1] for p in env) / len(env))])[0]
     ux, uy = -plan.fall[0], -plan.fall[1]  # uphill
     pond = (anchor[0] + ux * (pry + 30.0), anchor[1] + uy * (pry + 30.0), prx, pry)
@@ -463,9 +463,7 @@ def stage_polder(s: Settlement, plan: SitePlan) -> None:
                 if segments_cross(tuple(pts[i]), tuple(pts[i + 1]), a, b):
                     hit = seg_intersect(tuple(pts[i]), tuple(pts[i + 1]), a, b)
                     if hit is not None and not any(math.hypot(hit[0] - g[0], hit[1] - g[1]) < 30 for g in gaps):
-                        gaps.append(
-                            hit
-                        )  # pragma: no cover - no polder seed yet runs a channel through its dike away from the two sluices `build_polder` names; the guard stays because its laterals can, and an ungapped crossing draws the earthwork over running water
+                        gaps.append(hit)
     # ...and UNLABELED on this tier. `perimeter_dike` captions itself 8 px above the band it picks,
     # and the band is not in the crop's hard set (`_CROP_HARD`), so on some bearings that caption
     # lands outside the frame (`labels_within_image`, seen at down_deg=270). Adding `dikes` to the
@@ -570,7 +568,7 @@ def fit_polder(plan: SitePlan, seed: int, tolerance: float = 0.06, rounds: int =
         else:
             hi = rows - 1
         if lo > hi:
-            break  # pragma: no cover - the bisection exhausts its bracket without meeting tolerance; every seed tried lands inside 6% within the rounds allowed, and the guard is what stops a runaway if a future cell size widens the gap between grid steps
+            break
     assert best is not None
     clean_polder_parcels(best)  # the parcel/channel cleanup runs on the WINNER only (feature 150 T55) - see clean_polder_parcels for the 15 s -> 41 s it costs on all 45 candidates
     return best
@@ -758,7 +756,7 @@ def stage_waterward(s: Settlement, plan: SitePlan) -> None:
     and showed one up to 40 px wide wherever the ring wanders inward from its outermost point. `marsh()`
     keeps the scatter off the band itself and off every pond bank in the same change: the strip is the
     REGION, the keep-out is the guarantee - the two halves of one rule."""
-    if plan.field_archetype not in POLDER_ARCHETYPES or not s.M.get("dikes"):  # pragma: no cover - polders always draw their dike
+    if plan.field_archetype not in POLDER_ARCHETYPES or not s.M.get("dikes"):
         return
     pts = [p for dk in s.M["dikes"] for p in dk.get("outline", [])]
     x0, x1 = min(p[0] for p in pts), max(p[0] for p in pts)

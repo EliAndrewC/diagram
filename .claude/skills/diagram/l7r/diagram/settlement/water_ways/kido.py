@@ -79,7 +79,7 @@ class KidoMixin:
                 blocked = any(seg_dist(cx, cy, pts[i], pts[i + 1]) < clear for pts, clear in runs for i in range(len(pts) - 1) for (cx, cy) in gc)
                 if not blocked and not any(sat_overlap(gc, tq) for tq in towers) and not any(sat_overlap(gc, q) for q in fq):
                     return roof, posts, cand, to_corners
-        return roof, posts, guard, to_corners  # pragma: no cover - nowhere clear within 36px of the opening on either flank; keep the traditional seat and let kido_guard_box_clear_of_lanes report it
+        return roof, posts, guard, to_corners
 
     def kido_seat(self: Settlement, x: float, y: float, boundary: Any) -> tuple[float, int]:  # type: ignore[misc]
         """The (bar angle, guard flank) a kido seated at (x, y) on the ward fence `boundary` will

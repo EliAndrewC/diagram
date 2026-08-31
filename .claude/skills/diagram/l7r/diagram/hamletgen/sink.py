@@ -28,7 +28,7 @@ def drain_outfall(s: Settlement, name: str) -> Pt | None:
         if ditch.get("role") == "drain" and ditch.get("field") == name:
             pts = ditch["poly"]
             return (float(pts[-1][0]), float(pts[-1][1]))
-    return None  # pragma: no cover - build_comb always emits a drain collector for a comb fan
+    return None
 
 
 # THE SPAN THE GATE MEASURES A JUNCTION OVER. `drainage_junction_smooth` does not read a watercourse's
@@ -64,7 +64,6 @@ def drain_heading(s: Settlement, name: str, span: float = GATE_FLOW_SPAN) -> Pt 
                 if math.hypot(float(q[0]) - float(end[0]), float(q[1]) - float(end[1])) >= span:
                     break
             return unit(float(end[0]) - float(ref[0]), float(end[1]) - float(ref[1]))
-    return None  # pragma: no cover - drain_outfall found the same record a line earlier
 
 
 def edge_run(plan: SitePlan, frm: Pt) -> float:
@@ -76,7 +75,7 @@ def edge_run(plan: SitePlan, frm: Pt) -> float:
         spans.append(((plan.W if dx > 0 else 0.0) - frm[0]) / dx)
     if abs(dy) > 1e-6:
         spans.append(((plan.H if dy > 0 else 0.0) - frm[1]) / dy)
-    return max(0.0, min(spans)) if spans else 0.0  # pragma: no cover - the fall is never the zero vector
+    return max(0.0, min(spans)) if spans else 0.0
 
 
 def pond_clear_of_crop(plan: SitePlan, center: Pt, prx: float, pry: float) -> bool:
@@ -110,7 +109,7 @@ def pond_setback(plan: SitePlan, out: Pt, prx: float, pry: float, step: float = 
         if clear:
             return d + 12.0
         d += step
-    return limit  # pragma: no cover - a fan is never 900px deep past its own outfall
+    return limit
 
 
 def stage_sink(s: Settlement, plan: SitePlan) -> None:
@@ -126,7 +125,7 @@ def stage_sink(s: Settlement, plan: SitePlan) -> None:
     carries the runoff off the frame, which is what most valleys do and what the GM's brief allows."""
     name = f"{plan.spec.name.lower()}-paddies"
     out = drain_outfall(s, name)
-    if out is None:  # pragma: no cover - build_comb always emits a drain collector for a comb fan
+    if out is None:
         return
     dx, dy = plan.fall
     if plan.water_sink != "pond":

@@ -27,7 +27,7 @@ def belt_polygon(s: Settlement, plan: SitePlan) -> Poly:
     shape - which is what a back-village grove does, being planted where the houses are - and stays
     a band of constant depth, so `village_grove` still fills it as a belt rather than a blob."""
     houses = s.M.get("houses", [])
-    if len(houses) < 3:  # pragma: no cover - fewer houses than this fails the gate first
+    if len(houses) < 3:
         return []
     wx, wy = plan.wind
     px, py = -wy, wx  # across the wind

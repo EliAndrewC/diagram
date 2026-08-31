@@ -203,3 +203,11 @@ def test_a_saturated_aspect_stops_after_the_probe_instead_of_bisecting_a_fan_it_
     (bad, err), net = _fit_at_aspect(plan, (700.0, 300.0), 3, 138.0, (78.0, 90.0), 1.0, 0.06, 9, probe=True)
     assert not bad and err > 0.5, "the best legal fan is kept, and it is nowhere near the ask"
     assert net["plots"], "and it is a real fan, not an empty one"
+
+
+def test_a_fan_with_no_plots_counts_as_DANGLING() -> None:
+    """`tail_dangles` asks whether a supply canal ends outside the planted extent. With no plots
+    there is no extent, so nothing can be inside one - the honest answer is True, and a fan in that
+    state is refused rather than drawn. Production reaches it only through a fan that has already
+    failed, which is why it was excluded; the function answers it directly."""
+    assert hg.water.tail_dangles({"plots": [], "channels": []}) is True

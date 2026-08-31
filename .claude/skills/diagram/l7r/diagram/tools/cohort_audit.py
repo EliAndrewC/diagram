@@ -31,7 +31,7 @@ from collections.abc import Sequence
 HERE = os.path.abspath(
     os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", "..")
 )  # the skill root; this module lives in l7r/diagram/tools/ - FOUR levels up since feature 119, not two
-if HERE not in sys.path:  # pragma: no cover - a script, run from anywhere
+if HERE not in sys.path:
     sys.path.insert(0, HERE)
 
 from l7r.diagram import hamletgen as hg  # noqa: E402

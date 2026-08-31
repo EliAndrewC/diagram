@@ -193,7 +193,7 @@ def split_sources(path: str) -> tuple[str, dict[str, str], set[str]]:
             tmp = f"{disk}.tmp{os.getpid()}"
             Path(tmp).write_text(json.dumps([result[0], result[1], sorted(result[2])]), encoding="utf-8")
             os.replace(tmp, disk)
-        except OSError:  # pragma: no cover - a read-only tree loses the memo, never the answer
+        except OSError:
             pass
     _SPLIT_MEMO[memo] = result
     return result
@@ -205,7 +205,7 @@ _SPLIT_MEMO: dict[tuple[str, str], tuple[str, dict[str, str], set[str]]] = {}
 def _split_sources(src: bytes) -> tuple[str, dict[str, str], set[str]]:
     try:
         tree = ast.parse(src)
-    except SyntaxError:  # pragma: no cover - defensive: a broken file regenerates everything
+    except SyntaxError:
         return _sha(src), {}, set()
     lines = src.decode("utf-8", "replace").splitlines(keepends=True)
     funcs: dict[str, str] = {}
@@ -236,7 +236,7 @@ def _renderer_version() -> str:
     try:
         out = subprocess.run(["resvg", "--version"], capture_output=True, text=True, timeout=10)
         return out.stdout.strip() or "unknown"
-    except OSError, subprocess.SubprocessError:  # pragma: no cover - defensive: resvg absent
+    except OSError, subprocess.SubprocessError:
         return "absent"
 
 
@@ -258,7 +258,7 @@ def _deps_state() -> str:
         dists = sorted({f"{d.name}=={d.version}" for d in importlib.metadata.distributions()})
         fonts = [f"font:{os.path.basename(p)}={_sha(Path(p).read_bytes())}" for p in sorted(glob.glob(os.path.join(_FONT_DIR, "*.ttf")))]
         return _sha("\n".join(dists + fonts).encode())
-    except Exception:  # pragma: no cover - defensive: conservative degradation, never staleness
+    except Exception:
         return "unresolvable-" + os.urandom(8).hex()
 
 
@@ -353,7 +353,7 @@ def record(run: Callable[[], object]) -> dict[str, Any]:
             path = os.path.abspath(file)
             if "r" in mode and "w" not in mode and "a" not in mode and not path.endswith(OUTPUT_SUFFIXES) and os.path.isfile(path) and not path.startswith(_KERNEL_FS):
                 files.add(path)
-        except TypeError:  # pragma: no cover - defensive: open() on a file descriptor
+        except TypeError:
             pass
         return real_open(file, mode, *a, **k)
 

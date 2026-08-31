@@ -55,13 +55,13 @@ def _lay_web_lane(s: Settlement, run: Poly, hard: list[Poly], walls: list[Poly],
     `MIN_WEB_GAP` keeps the web's own cuts apart; nothing was keeping a cut off the lanes already
     there."""
     segs = _net_segs(s)
-    if len(run) < 2:  # pragma: no cover - clear_runs never returns a single point
+    if len(run) < 2:
         return False
     # TRIM FIRST, JOIN SECOND. The join is computed from the run's ENDS, so trimming afterwards moves
     # the end out from under the link that was drawn to it - which left a 187 ft lane whose start
     # stood 178 ft from any way, the exact dangling tread `lanes_reach_something` exists to catch.
     run = _trim_to_service(run, segs, houses)
-    if len(run) < 2:  # pragma: no cover - a run always keeps two points
+    if len(run) < 2:
         return False
     if segs:
         # SHARING A CORRIDOR IS SHADOWING, whether the two lines are parallel or crossing. The test
@@ -183,7 +183,7 @@ def _serve_stragglers(s: Settlement, plan: SitePlan, hard: list[Poly], fabric: l
         lanes = [[(float(x), float(y)) for x, y in ln["pts"]] for ln in s.M.get("lanes", [])]
         segs = [(a, b) for ln in lanes for a, b in zip(ln, ln[1:], strict=False)]
         if not segs:
-            return  # pragma: no cover - a hamlet always has its skeleton
+            return
         added = 0
         for h in list(s.M.get("houses", [])):
             c = (float(h["x"]), float(h["y"]))

@@ -70,8 +70,6 @@ class FieldFeaturesMixin:
             return  # open water IS its fabric - no obstacle tiles among it (research D4)
         rng = random.Random((self.seed ^ 0x9AD1) & 0xFFFFFFFF)
         plots = net["plots"]
-        if not plots:  # pragma: no cover - a drawn field always has plots
-            return
         low = [p for p in plots if p.get("low")]
         # POND: a low pocket held as open water - and it is the ONE in-field feature the feature-012
         # research puts in the flat wet MIDDLE rather than at the margin. Its organizing finding:

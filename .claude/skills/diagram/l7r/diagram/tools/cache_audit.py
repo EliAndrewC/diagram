@@ -143,7 +143,7 @@ def executed_lines(paths: list[str]) -> dict[str, set[int]]:
     subprocess.run([sys.executable, "-m", "coverage", "json", "-o", out], cwd=HERE, env=env, capture_output=True)
     try:
         files = json.loads(pathlib.Path(out).read_text())["files"]
-    except OSError, KeyError, json.JSONDecodeError:  # pragma: no cover - defensive
+    except OSError, KeyError, json.JSONDecodeError:
         return {}
     finally:
         shutil.rmtree(tmp, ignore_errors=True)
@@ -269,7 +269,7 @@ def main(argv: list[str]) -> int:
             path.write_text(mutate(originals[rel], site))
             try:
                 ast.parse(path.read_text())
-            except SyntaxError:  # pragma: no cover - defensive
+            except SyntaxError:
                 path.write_text(originals[rel])
                 skipped += 1
                 continue

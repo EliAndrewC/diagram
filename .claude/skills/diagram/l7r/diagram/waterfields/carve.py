@@ -681,7 +681,7 @@ def _dry_fields(
         # UNREACHABLE for a real (non-empty) canal, and kept to satisfy the type: the loop above returns
         # on `i == len(seglen) - 1` whatever arc-length is asked for, so the only way past it is a canal
         # with no segments at all - and a fan with no supply canal never carves (feature 146).
-        return a_pts[-1]  # pragma: no cover - see above
+        return a_pts[-1]
 
     bounds = [0.0]
     while bounds[-1] < total - plot * 0.6:

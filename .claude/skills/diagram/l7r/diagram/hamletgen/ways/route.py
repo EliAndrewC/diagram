@@ -37,7 +37,7 @@ def _route(start: Pt, goal: Pt, hard: list[Poly], walls: Sequence[Poly], water: 
     caret a review found on Mizuguchi: a 38 ft mark drawn 71 ft from the house it served, touching
     nothing, to cure a one-foot violation."""
     span = math.dist(start, goal)
-    if span < 1.0:  # pragma: no cover - the caller never routes to where it already is
+    if span < 1.0:
         return [start, goal]
     # THE SEARCH BOX HAS TO BE BIG ENOUGH FOR THE DETOUR, not just for the gap. A path between two
     # steadings needs a little room either side; a link that has to get AROUND a paddy needs as much

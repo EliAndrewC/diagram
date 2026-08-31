@@ -56,9 +56,9 @@ class WaterfrontMixin:
                     f = (d - acc) / sl
                     return (a[0] + (b[0] - a[0]) * f, a[1] + (b[1] - a[1]) * f, (b[0] - a[0]) / sl, (b[1] - a[1]) / sl)
                 acc += sl
-            a, b = segs[-1]  # pragma: no cover - defensive: every caller below asks for a
-            sl = lens[-1] or 1.0  # pragma: no cover   fraction strictly inside the run, so the
-            return (b[0], b[1], (b[0] - a[0]) / sl, (b[1] - a[1]) / sl)  # pragma: no cover  loop always matches
+            a, b = segs[-1]
+            sl = lens[-1] or 1.0
+            return (b[0], b[1], (b[0] - a[0]) / sl, (b[1] - a[1]) / sl)
 
         landings = []
         posts = []

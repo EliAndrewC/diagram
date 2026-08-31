@@ -96,7 +96,7 @@ def title_pocket(s: Settlement, plan: SitePlan, w: float = 300.0, h: float = 190
             if plan.title_pocket_outside:
                 break
         s.M["meta"]["title_pocket_tries"] = _tries
-        if plan.title_pocket is None:  # pragma: no cover - the map is already too full to title; nothing to reserve
+        if plan.title_pocket is None:
             plan.title_pocket = (x0, y0, x0, y0)
     else:
         plan.title_pocket = (spot[0], spot[1], spot[0] + w, spot[1] + h)

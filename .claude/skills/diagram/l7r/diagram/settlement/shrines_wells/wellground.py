@@ -30,7 +30,7 @@ class WellGroundMixin:
             for rec in recs[key]:
                 pts = rec.get("poly") or rec.get("pts")
                 if not pts:
-                    continue  # pragma: no cover - defensive: every watercourse carries a path
+                    continue
                 hw = float(rec.get("w") or dw) / 2
                 for i in range(len(pts) - 1):
                     (ax, ay), (bx, by) = pts[i], pts[i + 1]
@@ -40,7 +40,7 @@ class WellGroundMixin:
         for dp in recs["dry_plots"]:
             poly = dp.get("poly")
             if not poly:
-                continue  # pragma: no cover - defensive: every dry plot carries an outline
+                continue
             dry.append((poly, min(q[0] for q in poly), min(q[1] for q in poly), max(q[0] for q in poly), max(q[1] for q in poly)))
         wet = [(r, min(q[0] for q in r), min(q[1] for q in r), max(q[0] for q in r), max(q[1] for q in r)) for r in paddy_wet_rings(self.M)]
         grids = PointGrid(), PointGrid(), PointGrid()

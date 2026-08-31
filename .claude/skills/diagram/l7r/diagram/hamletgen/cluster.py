@@ -185,7 +185,7 @@ def seat_cluster(plan: SitePlan, dry_plots: Sequence[Poly] = (), drain: Poly | N
             score -= 2.5 * back_fouled(mid, (nx, ny), dep, dry_plots)
         if best is None or score > best[0]:
             best = (score, mid, (nx, ny))
-    if best is None:  # pragma: no cover - a fan always leaves one buildable flank; belt and braces
+    if best is None:
         raise ValueError("no field margin is clear of the drain and the dry hem - the fan has no buildable flank")
     _, anchor, out = best
     along = (-out[1], out[0])

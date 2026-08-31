@@ -83,7 +83,7 @@ class _margin_frame:  # noqa: N801 - used as a callable coordinate map, not as a
             walked += math.dist(env[hi % n_env], env[(hi + 1) % n_env])
             hi += 1
         pts = [env[i % n_env] for i in range(lo, hi + 1)]
-        if len(pts) < 2:  # pragma: no cover - a band always spans several outline vertices
+        if len(pts) < 2:
             pts = [(seat["cx"], seat["cy"]), (seat["cx"] + ax, seat["cy"] + ay)]
         self.pts = pts
         self.cum = [0.0]

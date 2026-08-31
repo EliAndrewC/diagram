@@ -375,3 +375,12 @@ def test_a_DEGENERATE_segment_is_its_own_closest_point() -> None:
     a way pinched to one point by an earlier pass - would raise. It answers the point itself."""
     assert seg_closest(50.0, 90.0, (10.0, 10.0), (10.0, 10.0)) == (10.0, 10.0)
     assert seg_dist(13.0, 14.0, (10.0, 10.0), (10.0, 10.0)) == pytest.approx(5.0)
+
+
+def test_matrix_extents_SKIPS_a_record_that_carries_no_geometry() -> None:
+    """The extractor sweeps every classified key on the manifest, and a record that carries no path -
+    or is not a record at all - has no extent to compare. Production never emits either shape, which
+    is why both skips were excluded from coverage; the extractor's own domain reaches them directly,
+    and a sweep that crashed on a malformed record would take the whole overlap matrix down with it."""
+    assert matrix_extents({"meta": {"W": 100, "H": 100}, "streams": [{"w": 4.0}]}) == [], "a linear record with no poly and no pts"
+    assert matrix_extents({"meta": {"W": 100, "H": 100}, "houses": ["not a record at all"]}) == [], "and a non-dict in a classified key"

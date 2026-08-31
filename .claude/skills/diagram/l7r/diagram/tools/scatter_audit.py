@@ -252,7 +252,7 @@ def main(argv: list[str] | None = None) -> int:
     return 1 if report["violations"] else 0
 
 
-if __name__ == "__main__":  # pragma: no cover - CLI entry
+if __name__ == "__main__":
     from l7r.diagram._invocation import guard
 
     # REFUSE unless invoked through this project's make (feature 127). At the TOP of the

@@ -124,7 +124,7 @@ def archive(raw: str) -> str:
         subprocess.run(["git", "-C", work, "commit", "-q", "-m", f"profile {os.path.basename(raw)}"], check=True, capture_output=True, text=True)
         subprocess.run(["git", "-C", work, "push", "-q", "origin", "HEAD"], check=True, capture_output=True, text=True, timeout=120, env=env)
         return f"archived {os.path.basename(raw)} to {url}"
-    except (subprocess.CalledProcessError, subprocess.TimeoutExpired) as e:  # pragma: no cover - the remote's failure modes
+    except (subprocess.CalledProcessError, subprocess.TimeoutExpired) as e:
         detail = (getattr(e, "stderr", "") or str(e)).strip()[-300:]
         return f"archive FAILED ({detail}) - the derived table is committed here regardless (FR-011b)"
 

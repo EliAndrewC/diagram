@@ -256,7 +256,7 @@ def _kosatsuba_seat_ok(v: Any, ctx: Mapping[str, Any]) -> bool:
         return bool(ctx.get("has_approach"))
     if v == "frontage":
         return bool(ctx.get("has_headman_house"))
-    return False  # pragma: no cover - an unregistered value cannot reach here through `allowed`
+    return False
 
 
 register_knob(Knob("kosatsuba_seat", ["center", "entrance", "frontage"], default="center", typing_rule=_kosatsuba_seat_ok))

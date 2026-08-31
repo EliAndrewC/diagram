@@ -527,7 +527,7 @@ class CombMixin:
                     _nx_in, _ny_in = (
                         -_nx_in,
                         -_ny_in,
-                    )  # pragma: no cover - the winding-order guard. `build_polder` winds its envelope so the raw edge normal already points inward (measured: dot -324 and -355 on the two seeds that need the pull), but a ring wound the other way would send the mouth OUT of the field, so the orientation is asserted rather than assumed
+                    )
                 din = (_q_in[0] + _nx_in * 14.0, _q_in[1] + _ny_in * 14.0)
             start = pond_rec if pond_rec else (sluice[0], sluice[1])
             frm = {"kind": "pond"} if pond_rec else {"kind": "stream"}

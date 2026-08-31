@@ -79,7 +79,7 @@ DEFAULT_SEEDS = (4, 25, 39, 47)
 def _git(*args: str) -> str:
     try:
         return subprocess.run(["git", "-C", SKILL, *args], capture_output=True, text=True, timeout=10).stdout.strip()
-    except Exception:  # pragma: no cover - a snapshot must never fail the gate it rides on
+    except Exception:
         return ""
 
 

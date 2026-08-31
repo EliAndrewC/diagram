@@ -178,7 +178,7 @@ def _lay_skeleton(s: Settlement, plan: SitePlan, frame: _margin_frame, arcs: Seq
         arm = s.trim_off_marsh(arm)
         if len(arm) >= 2:
             if _arm_crossing_accidental(arm, raw_arms[ai], kept):
-                continue  # pragma: no cover - no rolled map currently trips the drop; the decision logic is unit-tested via _arm_crossing_accidental
+                continue
             kept.append((arm, raw_arms[ai]))
             s.lane(arm, width=5, clearance=LANE_CLEARANCE, worn=True)
     s.M["meta"]["lane_skeleton"] = plan.lane_skeleton
@@ -218,7 +218,7 @@ def stage_web(s: Settlement, plan: SitePlan) -> None:
     reader sees is the difference the research actually attests."""
     houses = [h for h in s.M.get("houses", []) if h.get("role") != "headman" or True]
     if len(houses) < 2 or not plan.envelope:
-        return  # pragma: no cover - every hamlet seats several houses
+        return
     # A DISPERSED HAMLET HAS NO INTERNAL LANE NETWORK AT ALL, and that is the form, not a shortfall.
     # Tonami's farmsteads stand in the middle of their own holdings; what joins them to the world is
     # the connector out to the road, which `stage_track` has already drawn, and what joins them to
@@ -535,7 +535,7 @@ def _reachable_runs(cands: Sequence[Poly], seed_segs: Sequence[tuple[Pt, Pt]]) -
             continue
         if any(seg_dist(q[0], q[1], u, v) <= _LANE_JOIN_FT for q in r for u, v in seed_segs):
             reached.add(i)
-    if seed_box is None:  # pragma: no cover - a hamlet always has a skeleton by now
+    if seed_box is None:
         reached = {0}
     frontier = list(reached)
     while frontier:

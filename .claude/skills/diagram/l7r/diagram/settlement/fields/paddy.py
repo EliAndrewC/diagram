@@ -205,7 +205,7 @@ class PaddyMixin:
                 stack.append(a)
                 stack.append(b)
             else:
-                out.append(poly)  # pragma: no cover - defensive: a line cutting a convex polygon yields two >=3-gons except the measure-zero exact-tangent case
+                out.append(poly)
         return out + stack
 
     def _taxfree_plots(self: Settlement, interior: Any, taxfree: int) -> None:  # type: ignore[misc]
@@ -419,7 +419,7 @@ class PaddyMixin:
             self._wf_ditch(name, drain_pts, 3.0, "drain")  # continuous DRAIN along the low edge
             for li in laterals:
                 if not (0 < li < len(ub) - 1):
-                    continue  # pragma: no cover - defensive: laterals are built strictly inside (0, len(ub)-1)
+                    continue
                 ut = ub[li]
                 t, bt = self._wf_bnd(smoothed, fmin, fmax, ut, fmin, 6), self._wf_bnd(smoothed, fmin, fmax, ut, fmax, -6)
                 if t is None or bt is None:
@@ -482,7 +482,7 @@ class PaddyMixin:
 
         def smooth(pts: Poly) -> Poly:  # kill acute turns where the boundary bends sharply
             if len(pts) < 3:
-                return pts  # pragma: no cover - defensive: a real field spans many u-columns, so main/drain always have >=3 sampled points
+                return pts
             for _ in range(3):
                 pts = [pts[0]] + [((pts[i - 1][0] + pts[i][0] + pts[i + 1][0]) / 3, (pts[i - 1][1] + pts[i][1] + pts[i + 1][1]) / 3) for i in range(1, len(pts) - 1)] + [pts[-1]]
             return pts

@@ -39,7 +39,7 @@ def front_row(plan: SitePlan, count: int, standoff: float = 46.0) -> list[Pt]:
     # describe the sheet.
     _rowspan = CLUSTER_ROW_SPAN.get(plan.cluster_shape or "crescent", CLUSTER_SPAN_FACTOR)
     span = [(i, p) for i, p in enumerate(env) if abs((p[0] - seat["anchor"][0]) * ax + (p[1] - seat["anchor"][1]) * ay) <= seat["lat"] * _rowspan]
-    if len(span) < 2:  # pragma: no cover - a band always spans several outline vertices
+    if len(span) < 2:
         return []
     span.sort(key=lambda ip: (ip[1][0] - seat["anchor"][0]) * ax + (ip[1][1] - seat["anchor"][1]) * ay)
     # SAMPLE BY DENSITY, NOT BY HOUSEHOLD COUNT (2026-08-17). `count` is what the caller still WANTS

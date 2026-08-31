@@ -224,7 +224,7 @@ class DikeMixin:
         n_gates = 0
         for dk in self.M.get("dikes", []):
             crest = [(float(c[0]), float(c[1])) for c in dk.get("crest") or []]
-            if len(crest) < 4:  # pragma: no cover - a recorded dike always carries its crest
+            if len(crest) < 4:
                 continue
             n = len(crest)
             for gx, gy in [(float(g[0]), float(g[1])) for g in dk.get("gaps") or []]:

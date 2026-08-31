@@ -84,7 +84,7 @@ def bamboo_seats(s: Settlement, plan: SitePlan) -> list[Poly]:
         near = min(env, key=lambda q: math.hypot(q[0] - home_target[0], q[1] - north))
         d = math.hypot(near[0] - ecx, near[1] - ecy) or 1.0
         thicket_target = (near[0] + (near[0] - ecx) / d * px(50.0), near[1] + (near[1] - ecy) / d * px(50.0))
-    else:  # pragma: no cover - a hamlet always has its field
+    else:
         thicket_target = home_target
     rects: list[tuple[float, float, float, float, float]] = []  # (x, y, w, h, pad)
     for key, pad in (("houses", 10.0), ("threshing_yards", 8.0), ("gardens", 8.0), ("farm_sheds", 8.0), ("byres", 8.0), ("wells", 14.0), ("kosatsuba", 12.0)):

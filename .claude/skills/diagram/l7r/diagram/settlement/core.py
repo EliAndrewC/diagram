@@ -618,7 +618,7 @@ class Settlement(
         ]  # `extra` (x0, y0, x1, y1): ground reserved as content - the title pocket a full sheet had to make room for (feature 150; `_crop_boxes` keys x0, x1, y0, y1)
         hx = [v for b in _boxes for v in (b[0], b[1])]
         hy = [v for b in _boxes for v in (b[2], b[3])]
-        if not hx:  # pragma: no cover - crop is called only after the hard features are placed
+        if not hx:
             return
         # clamp the frame to the canvas: never open the view PAST the map edge (an EDGE feature like the forest
         # fills to the canvas edge, so its side must be the frame edge with no margin gap - else it reads as

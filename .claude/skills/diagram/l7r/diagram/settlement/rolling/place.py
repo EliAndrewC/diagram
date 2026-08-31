@@ -183,7 +183,7 @@ class PlacerMixin:
             score = (sum(self._garden_shaded(g) for g in geom["gardens"]), rank)  # fewest shaded beds first, then preference
             if best is None or score < best[0]:
                 best = (score, geom)
-        if best is None:  # pragma: no cover - the slide only rests where some garden side fits, so best is set
+        if best is None:
             return None
         return cx, cy, best[1]
 

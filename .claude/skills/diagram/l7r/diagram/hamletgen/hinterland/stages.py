@@ -79,7 +79,7 @@ def stage_windbreak(s: Settlement, plan: SitePlan) -> None:
 
     Drawn LATE, after the ground cover and the woods, so its per-crown filter sees every structure
     already standing and no tree is drawn on a roof."""
-    if not plan.belt:  # pragma: no cover - stage_woodland always computes it first
+    if not plan.belt:
         return
     # ...DENTED AROUND THE TITLE'S POCKET. `stage_woodland` reserves blank ground for the map's name
     # (`title_pocket`) and keeps the woods out of it, but the BELT is drawn later and honors

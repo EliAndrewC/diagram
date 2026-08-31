@@ -330,7 +330,5 @@ def stage_appurtenances(s: Settlement, plan: SitePlan) -> None:
     the houses that actually landed, not off the declared household count: a byre is roughly one per
     four or five households, and the wells cover the cluster's real extent."""
     houses = s.M.get("houses", [])
-    if not houses:  # pragma: no cover - a hamlet with no houses fails the gate long before here
-        return
     place_wells(s, plan, houses)
     s.draft_byres(fraction=0.22, gap=60)

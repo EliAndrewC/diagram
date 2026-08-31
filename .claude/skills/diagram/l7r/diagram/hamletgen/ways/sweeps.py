@@ -188,7 +188,7 @@ def _bridge_collinear_breaks(s: Settlement, hard: list[Poly], walls: Sequence[Po
             if _alt is not None and _alt <= _BRIDGE_DETOUR * max(gap, 1.0):
                 continue
             # A BRIDGE IS A JOIN LINK, AND THE DEBRIS FLOOR WOULD SILENTLY REFUSE IT. The
-            # `# pragma: no cover` that stood here said "a bridge is always longer than the debris
+            # `
             # floor", true only while the candidate floor was 30 ft. `joins` carries the right
             # reasoning already: the floor asks what a run EARNS in service, and a bridge earns
             # nothing by that measure because the houses are served by the pieces it joins.

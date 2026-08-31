@@ -34,7 +34,7 @@ def avenue_along(seats: list[Pt], gaps: list[float], dist: float) -> Pt:
             t = d / gaps[i] if gaps[i] else 0.0
             return (seats[i][0] + (seats[i + 1][0] - seats[i][0]) * t, seats[i][1] + (seats[i + 1][1] - seats[i][1]) * t)
         d -= gaps[i]  # this segment is wholly behind us - carry the remainder into the next
-    return seats[-1]  # pragma: no cover - unreachable: the i == len-2 branch always returns
+    return seats[-1]
 
 
 class ToriiAvenueMixin:
@@ -199,7 +199,7 @@ class ToriiAvenueMixin:
                     f = (target - acc) / sl
                     return (ascent[i][0] + (ascent[i + 1][0] - ascent[i][0]) * f, ascent[i][1] + (ascent[i + 1][1] - ascent[i][1]) * f)
                 acc += sl
-            return cast(Pt, ascent[-1])  # pragma: no cover - defensive: t is capped at 0.86, never past the last segment
+            return cast(Pt, ascent[-1])
 
         dstr = 'M' + ' L'.join(f'{x},{y}' for x, y in ascent)
         self.add(f'<path d="{dstr}" fill="none" stroke="#B89A6A" stroke-width="8" opacity="0.7"/>')

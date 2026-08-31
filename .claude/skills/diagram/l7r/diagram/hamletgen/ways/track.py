@@ -173,7 +173,7 @@ def _thread_the_fabric(s: Settlement, plan: SitePlan, run: Poly, gap: float = TR
             # hand back a run known to cross the steadings, and because a real cluster (not a fixture)
             # can present an obstacle the swing clears where the straight line does not.
             if len(cand) >= 2 and not _crosses_fabric(cand, fabric, gap):
-                return cand  # pragma: no cover - see above
+                return cand
         # A DEAD END, MEASURED (feature 134 T50): a ladder that walked run[0] outward too, on the
         # theory that the offending leg was the first one and nothing above can move it. It changed
         # no map, because this function was never the one at fault - see `_pull_back_to_service`,
