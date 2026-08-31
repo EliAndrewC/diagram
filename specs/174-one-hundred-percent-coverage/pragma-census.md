@@ -64,3 +64,47 @@ The middle option nobody has costed: rule only on **new** pragmas (a gate check 
 not rise), leaving the 131 as a ledgered inheritance. That is cheap, it stops the drift, and it is
 the same shape as the ratchets this feature just removed - which is why it is offered as a
 possibility rather than a recommendation.
+
+---
+
+## THE GM RULED, 2026-08-31, and this is what carrying it out found
+
+> *"If there is `# pragma: no cover` code that cannot happen then we should delete all of those
+> cases, because dead code is bad, and it's better to remove it from the codebase."*
+
+**The census above could not answer this by itself, and the method matters more than the count.**
+Classifying by what each pragma's comment CLAIMS is not evidence - a comment is an assertion about
+the code, written once and never re-checked. So all 131 were STRIPPED and the whole corpus run
+against the new 100% floor, which then named every line nothing executes. That is the only reading
+that is measured rather than asserted, and it inverted the picture:
+
+| | |
+|---|---|
+| pragmas that were hiding lines the corpus ALREADY runs | **78** - stale, protecting nothing |
+| genuinely unreached | **53** |
+
+Reading the comments alone would have deleted live code and kept dead code.
+
+### The 53, and what each turned out to be
+
+| | | disposition |
+|---|---|---|
+| **13** | genuinely dead: a guard re-testing a filter one loop above it (`hamletgen/frame.py`), an enum check after the enum is exhausted, `return None` after a loop that always returns, `if not plots` before code that handles empty | **DELETED** |
+| **24** | NOT dead code - error handling and structural terminals. `if not pts: continue` stands before `len(pts)`, so removing it does not remove a branch, it converts a graceful skip into a crash; several are a function's final `return` where the signature promises a tuple, so deleting one returns `None` from a `-> float`; three are a predicate's REJECTION, where removal changes the answer rather than the coverage | **KEPT**, each now carrying its reason AND why it is not deletable |
+| **16** | live rescues and external systems - the well ring-probe rescue, the least-bad brook route, the real AWS transport. Their comments say *"no cohort map currently"*, which is "today's seeds miss it", not "it cannot happen" | **KEPT** - deleting a working safety net is not what the ruling asked |
+
+### Measured outcome
+
+| | before | after |
+|---|---|---|
+| pragma sites | 130 | **76** |
+| excluded LINES engine-wide | 469 | **385** |
+| excluded lines inside the floored tree | 281 (2.99%) | **216 (2.30%)** |
+| engine lines deleted | - | **40** |
+
+2,716 tests pass and no map manifest moved, which is the evidence the deletions were safe: every
+deleted line was reached by nothing, on any seed the corpus rolls.
+
+**The open half, which is the GM's**: whether the 24 error-handling guards are also meant. Deleting
+those trades a silent skip for a crash on malformed input. That is a real trade rather than a
+cleanup, so it was not assumed in either direction.
