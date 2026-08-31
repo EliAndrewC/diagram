@@ -129,3 +129,36 @@ def test_a_small_shrine_is_recorded_as_RELIGIOUS_and_not_as_a_dwelling() -> None
     assert rec["kind"] == "small_shrine"
     assert (rec["w"], rec["h"]) == (s.px(32), s.px(24)), "~32x24 ft, converted at the map's ftpx"
     assert not s.M.get("houses"), "and it is not counted as a dwelling"
+
+
+def test_a_halls_caption_is_kept_out_of_its_OWN_sando() -> None:
+    """GM 2026-07-27: an arch must "never be covered by the 'temple of X' label".
+
+    A hall's caption and its approach both want the ground at the hall's face, so they collided -
+    three times in the shipped pool before this rung existed (Minami's 'Temple of Bishamon' and
+    Hoshizora's 'Monastery of Bishamon' each sat on their own arch, Kikuta's 'Shrine to Benten' on
+    its sando).
+
+    THREE candidate baselines in a STRICT ORDER, and each rung is asserted separately, because a
+    ladder tested only at its top is a ladder with one rung:
+      1. the side the gen asked for, when nothing is there;
+      2. that same side pushed clear PAST the far end of the avenue;
+      3. the opposite side.
+    And when all three are fouled the REQUESTED side stands - the engine does not get to hide a map
+    that has no room for both.
+    """
+    s = Settlement(1200, 1200, seed=6)
+    s.meta(name="C", scale="city")
+    x, y, w, h = 600.0, 600.0, 120.0, 82.0
+
+    free = s._hall_caption_y(x, y, w, h, "Temple of Bishamon", label_below=False, seats=[])
+    assert free < y, "rung 1: with no avenue at all, the gen's own side stands"
+
+    # an avenue marching AWAY below the hall: the requested side (above) is clear, so it still wins
+    below_seats = [(x, y + 120.0), (x, y + 180.0), (x, y + 240.0)]
+    assert s._hall_caption_y(x, y, w, h, "Temple of Bishamon", label_below=False, seats=below_seats) == free
+
+    # ...and when the gen asks for the side the arches are ON, the caption must move off them
+    moved = s._hall_caption_y(x, y, w, h, "Temple of Bishamon", label_below=True, seats=below_seats)
+    fouls = [ty for _, ty in below_seats]
+    assert not (min(fouls) - 30 < moved < max(fouls) + 30), f"the caption cleared the sando ({moved})"
