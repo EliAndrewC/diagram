@@ -111,9 +111,9 @@ def reset_shared() -> None:
     the second then got `BYPASS-SHARED-RUN` where it asserted `BYPASS`.
     """
     _SHARED_BYPASS.clear()
-    run_dir = _run_share_path(("", ""))
+    run_dir = _run_share_dir()  # ...not `_run_share_path(("", ""))`, whose dummy key is explained there
     if run_dir is not None:
-        shutil.rmtree(os.path.dirname(run_dir), ignore_errors=True)
+        shutil.rmtree(run_dir, ignore_errors=True)
 
 
 def _run_share_path(key: tuple[str, str]) -> str | None:
@@ -139,13 +139,29 @@ def _run_share_path(key: tuple[str, str]) -> str | None:
     it makes the EXISTING opt-in (`hamlet()`, whose callers all ask for the identical artifact through the
     identical produce) reach across workers instead of stopping at the process boundary.
     """
+    directory = _run_share_dir()
+    if directory is None:
+        return None
+    # `_share_key` returns a TUPLE (subject, producer-identity), not a string - so it is repr'd
+    # rather than encoded. Caught by the FULL run, which was the only scope that exercised this.
+    return os.path.join(directory, hashlib.sha256(repr(key).encode()).hexdigest()[:24] + ".pickle")
+
+
+def _run_share_dir() -> str | None:
+    """The directory holding THIS RUN's shared payloads, or None when there is no run to scope to.
+
+    **LIFTED OUT so that removing the store does not have to invent a key** (2026-08-31). `reset_shared`
+    used to ask for `_run_share_path(("", ""))` and take its `dirname` - a dummy key, passed only to get
+    at the directory it happens to live in. That couples deletion to the KEY's shape, and the key's
+    shape has already broken once here: `_share_key` returns a tuple, an earlier draft called `.encode()`
+    on it, and only the FULL run exercised the path at all. Had that draft shipped, `reset_shared` would
+    have raised while clearing rather than while storing - the same bug wearing a different hat, in the
+    function whose whole job is cleaning up after the other one."""
     uid = os.environ.get("PYTEST_XDIST_TESTRUNUID")
     if not uid:
         return None
     safe = "".join(ch if ch.isalnum() or ch in "-_" else "_" for ch in uid)[:64]
-    # `_share_key` returns a TUPLE (subject, producer-identity), not a string - so it is repr'd
-    # rather than encoded. Caught by the FULL run, which was the only scope that exercised this.
-    return os.path.join(tempfile.gettempdir(), f"l7r-runshare-{safe}", hashlib.sha256(repr(key).encode()).hexdigest()[:24] + ".pickle")
+    return os.path.join(tempfile.gettempdir(), f"l7r-runshare-{safe}")
 
 
 def obtain[T](subject: str, produce: Callable[[], T], share: bool = False) -> tuple[T, str]:
