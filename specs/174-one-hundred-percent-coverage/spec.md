@@ -125,6 +125,34 @@ verbatim (`tanada.gen.py:35`, `yatsuda.gen.py:38`) to copy.
 **It is not dead code** - the session claimed that, was wrong (D6), and the migration plan lists both
 archetypes as "NOT STARTED | engine builder exists". So it is covered like any other engine module.
 
+### FR-004a - DUPLICATION BETWEEN THE TWO SUITES IS THE DESIGN, not waste (GM 2026-08-31)
+
+The GM's ruling, when told that some residual coverage comes from gate tests whose lines are reached
+only because a set of seeds happens to hit them:
+
+> if it only happens to be the case that code is exercised because we have selected a set of random
+> seeds, which happens to cover everything, then that probably is fine for the full tests, but I do
+> not think it would be a problem to write a more targeted version of such a test for our make done
+> tests. because at that point, the make done tests are doing the straightforward branch coverage
+> thing while our full tests are doing the more traditional end to end testing thing. So if that
+> would require "duplication" to reach one hundred percent code coverage, then I think that is okay.
+
+**So the two suites have different jobs and may cover the same line for different reasons:**
+
+| suite | job | what a line being covered there means |
+|---|---|---|
+| the gate (`make done`) | **branch coverage** | someone wrote a test that names this branch and asserts what it does |
+| FULL | **end-to-end** | a real map exercised it, which is the stronger evidence that it WORKS |
+
+A line reached only by a lucky seed is covered in the second sense and not the first, and this
+feature closes it in the first sense - with a targeted unit test - rather than counting the seed.
+That is why the count can go DOWN as tests are added: a branch can be "covered" today and still owe
+a test that says what it is for.
+
+**Where a case is borderline, the GM offers guidance rather than the session guessing** (their own
+offer). The borderline shape is a line whose only honest test IS the whole map - and the answer so
+far, on every case met, has been that a targeted test exists.
+
 ### FR-005 - the answer to the GM's cheap-tests question, recorded as a decision
 
 A cheaper, less valuable test set is NOT the route to 100%, and the measurement says why: the suite
