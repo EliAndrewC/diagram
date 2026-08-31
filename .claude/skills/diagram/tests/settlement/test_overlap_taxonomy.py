@@ -287,3 +287,55 @@ def test_matrix_extents_reads_a_records_DRAWN_extent() -> None:
     assert ext, "the house is extracted"
     poly = ext[0][1]
     assert max(p[0] for p in poly) - min(p[0] for p in poly) == pytest.approx(20.0), "the DRAWN width, not the recorded one"
+
+
+def test_matrix_extents_extracts_each_feature_family_in_ITS_OWN_vocabulary() -> None:
+    """Feature 174. `matrix_extents` is a dispatch over how each key records its shape, and a family
+    it cannot read is INVISIBLE to the matrix in both directions - the recurring trap this file's
+    own docstrings record. Four shapes, four branches, all asserted here:
+
+      - a WARD is a fence LINE, stroked at a hair's width (2.5), because a fence is thin and a
+        generous stroke "would manufacture defects out of houses that merely front it";
+      - a KIDO records `parts`, and its GUARD BOX is separated out under its own key so it excuses
+        nothing but its own glyph;
+      - a TORII is a glyph box derived from the span at the map's scale (`torii_halfbox`);
+      - a LINEAR feature (road, moat, ring road, wall, lane) is stroked at its recorded width.
+    """
+    M = {
+        "meta": {"W": 2000, "H": 2000, "ftpx": 1},
+        "wards": [{"name": "n", "boundary": [(100.0, 100.0), (500.0, 100.0), (500.0, 400.0)]}],
+        "torii": [(800.0, 800.0)],
+        "road": [(0.0, 1200.0), (2000.0, 1200.0)],
+        "road_width": 30.0,
+    }
+    got = {k for k, _p, _i, _pa in matrix_extents(M)}
+    assert "wards" in got, "a ward's fence line is extracted"
+    assert "torii" in got, "an arch's glyph box is extracted"
+    assert "road" in got, "and a road is stroked at its recorded width"
+
+    road_quads = [p for k, p, _i, _pa in matrix_extents(M) if k == "road"]
+    spread = max(q[1] for quad in road_quads for q in quad) - min(q[1] for quad in road_quads for q in quad)
+    assert spread == pytest.approx(30.0), "the road's full width, from its half-width stroke"
+
+
+def test_a_kido_GUARD_BOX_is_extracted_under_its_own_key() -> None:
+    """ "so it excuses nothing but its own glyph" - the guard box is a separate feature for the
+    matrix's purposes, and giving it the kido's key would let it inherit the kido's permissions."""
+    guard = [(500.0, 500.0), (520.0, 500.0), (520.0, 520.0), (500.0, 520.0)]
+    other = [(600.0, 500.0), (640.0, 500.0), (640.0, 508.0), (600.0, 508.0)]
+    M = {"meta": {"W": 2000, "H": 2000, "ftpx": 1}, "kido": [{"x": 510.0, "y": 510.0, "guard": guard, "parts": [guard, other]}]}
+    keys = [k for k, _p, _i, _pa in matrix_extents(M)]
+    assert "kido_guard_box" in keys, "the guard box is its own feature"
+    assert "kido" in keys, "and the bar itself is still the kido"
+
+
+def test_a_feature_wholly_off_the_canvas_meets_nothing() -> None:
+    """The index box is clamped to the canvas, so a record drawn entirely outside it collapses to an
+    empty box - and nothing on the map can meet it. Without the skip it would be indexed at a
+    degenerate box and compared against everything."""
+    M = {
+        "meta": {"W": 1000, "H": 1000},
+        "houses": [{"x": 500.0, "y": 500.0, "w": 40.0, "h": 30.0, "rot": 0.0}],
+        "storehouses": [{"x": -5000.0, "y": -5000.0, "w": 40.0, "h": 30.0, "rot": 0.0}],
+    }
+    assert matrix_violations(M) == [], "the off-canvas record accuses nobody"
