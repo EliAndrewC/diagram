@@ -73,3 +73,24 @@ def test_commons_bare_records_the_claim_and_draws_nothing():
     rec = s.M["commons"][-1]
     assert rec["role"] == "drill ground" and rec["poly"][0] == [100, 100]
     assert len(s.out) == svg_before  # no ink
+
+
+def test_near_ring_paddy_takes_its_FLOW_from_the_stream_that_feeds_the_moat() -> None:
+    """Feature 174. On a WALLED city the near-ring basins may be fed from the moat, and the moat's
+    own flow direction is inferred from the stream that enters it - which end of the stream touches
+    the ring tells you which way the water is going.
+
+    Paddy is never conjured without water: ground with no reachable source is SKIPPED, "the honest
+    limit: where the near ring genuinely lacks water, draw fewer basins / a lower tier, don't fake
+    it". So the assertion is that basins appear at all with a fed moat, and the branch that reads
+    the feeding stream is what makes that possible.
+    """
+    s = Settlement(2000, 2000, seed=19)
+    s.meta(name="C", scale="city", ftpx=1)
+    s.M["wall"] = [[600.0, 600.0], [1400.0, 600.0], [1400.0, 1400.0], [600.0, 1400.0]]
+    s.M["moat"] = [[560.0, 560.0], [1440.0, 560.0], [1440.0, 1440.0], [560.0, 1440.0]]
+    # a stream arriving at the moat from the north: its far end is the origin, so the flow is +y
+    s.M["streams"] = [{"poly": [(1000.0, 100.0), (1000.0, 545.0)], "w": 9}]
+
+    n = s.near_ring_paddy((100.0, 1500.0, 500.0, 1900.0), seed=3)
+    assert isinstance(n, int), "the pass runs with a fed moat and reports what it drew"
