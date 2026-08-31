@@ -97,6 +97,7 @@ route to main below the floor is closed only when each of these is closed:
 | `already-verified` | `make done` short-circuits on a green record for the same engine content | a record taken BEFORE the floor existed must not satisfy a push after it; the verification key must move when the floor does |
 | `GATE_STAMP_OK` | the push's documented escape (`sync-with-main.sh:244-252`) - when set, `gate-stamp.py --check` does not run AT ALL, so a push can land with no green gate | KEPT - it is feature 170's audited escape, needs a written reason, and is logged; it is not coverage-specific (it covers the guard-script gate too), and the GM did not ask to gut it. **This is the one part of the GM's sentence the feature does not deliver, and it is RAISED WITH THEM once the implementation works** (Principle XVI: carry on, then raise it), rather than claimed as met in the success criteria |
 | `REF_OK` | the reference-scope bypass | stated and left as it is; it does not reach the coverage phase |
+| `[tool.coverage.run] source` | 19 engine files / **1,843 statements** (`tools/` audits and drivers, `pipeline/gencache.py`) are outside the measured set, so they carry no coverage obligation and a new `tools/` module carries none the day it lands | **STATED AND LEFT**, like `REF_OK` and the DIRECT route. The GM asked for `fail_under = 100` and for the ratchets to go, not for the measured surface to be widened - so leaving it is defensible; claiming it does not exist is not. Round 8 found this row missing |
 | the `--omit` list + the 94% `SETTLEMENT_COV_FLOOR` | four trees (13,357 statements) sat outside the 100% report under a 94% ratchet, so a merge could land with settlement/ ~620 statements down | **CLOSED by FR-006** - both retired in this feature once their own condition was met. Round 7 found this row missing and two success criteria claiming it already closed; it was the GM's FIRST sentence and the largest hole of the five |
 | a delta with no engine Python | tests, the Makefile, `scripts/` and docs take the DIRECT route, which runs no gate at all | STATED AND LEFT, like `REF_OK`. It is the GM's own ruling (feature 132 FR-024/FR-025: a tests-only change owes no build and no local gate) and this request does not reopen it. The exposure is bounded: the next engine change anybody makes meets the floor, red |
 
@@ -166,7 +167,7 @@ ring-probe rescue alone is 27 comment lines):
 | **so exclusions that were hiding lines the corpus ALREADY runs** | **356** - stale, protecting nothing |
 | dead sites found in the 113 and DELETED | **13** (40 engine lines) |
 | pragma comment lines | **130 -> 76** |
-| excluded lines after | **469 -> 385**; inside the floored tree 281 of 9,118 (3.08%) -> 216 of 9,168 (2.36%) |
+| excluded lines after | **469 -> 385**; inside the floored tree 281 of 9,118 (3.08%) -> 216 of 9,168 filesystem-tree lines (2.36%) |
 
 Reading the comments alone would have deleted live code and kept dead code. Of what the measurement
 showed genuinely unreached: **13 were dead and are deleted**; the rest are error handling or
@@ -268,12 +269,20 @@ permanently red, and a red gate everyone routes around is how the ratchets arriv
 
 ## Success criteria
 
-1. The measured set is now the WHOLE engine - 20,682 statements, 0 missing - with no ratchet, no
-   omit list and no parked lines. **What "the measured set"
+1. The measured set reports 100% - **20,682 statements, 0 missing** - with no ratchet and no parked
+   lines. It is **not** the whole engine, and round 8 caught this criterion claiming it was: an
+   earlier, accurate wording was replaced by a stronger one while fixing round 7. **What "the
+   measured set"
    excludes is stated, not implied**: coverage does not count a line carrying `# pragma: no cover`.
-   After the GM's ruling (FR-009) the engine holds **76** such comment lines, excluding **385** lines,
-   down from 130 and 469. What remains the GM's is named there and is NOT claimed settled: the 24
-   error-handling guards, whose removal trades a silent skip for a crash.
+   After the GM's ruling (FR-009) the engine holds **76** such comment lines; inside the measured set
+   they exclude **327** lines of 20,682 (1.58%), down from 130 comment lines. And it excludes a
+   SECOND, larger thing this feature did not change: `[tool.coverage.run] source` in `pyproject.toml`
+   names the measured modules one by one, leaving **19 engine files / 1,843 statements** unmeasured
+   (`tools/` audits and drivers, `pipeline/gencache.py`), so the engine is 22,525 statements of which
+   20,682 are measured. That boundary is a deliberate pre-existing decision - its own comment says a
+   new tool should not "silently owe 100% coverage the day it lands" - and it is STATED here rather
+   than claimed away, exactly as the pragma was. What remains the GM's: the 24 error-handling guards,
+   and whether the measured surface should widen.
 2. A run below the floor cannot complete. Of the routes FR-003a enumerates, **two are deliberately
    left open** and neither is claimed away here: feature 170's `GATE_STAMP_OK`, which skips the
    stamp check entirely but demands a written reason and is logged where `make audit` reads it; and
@@ -282,7 +291,9 @@ permanently red, and a red gate everyone routes around is how the ratchets arriv
 3. Every closure is a test that asserts BEHAVIOR; every exemption is a deletion or a GM ruling.
 4. `make quick` is unchanged.
 5. The `--omit` list and `SETTLEMENT_COV_FLOOR` are both gone - **done**: the gate's coverage phase
-   is a single `--fail-under=100` over the whole tree, with nothing omitted and no ratchet beside it.
+   is a single `--fail-under=100` over the whole MEASURED set, with no per-tree omit and no ratchet
+   beside it. (`pyproject.toml` still omits tests and the map generators, which are not engine code,
+   and its `source` list is the measured-surface boundary described in SC1.)
    Round 7 caught that this, the GM's FIRST sentence, had been left undone while two criteria claimed
    it met; retiring them was the last substantive act of the feature.
 
@@ -335,4 +346,5 @@ subagent.
 contrary to Principle XVI. The rewrite above is drawn from the request and the measurements rather
 than from the work already done, which is why FR-004 now REVERSES the first draft's exclusion and
 FR-001's census grew from 89 to 565.
-| 7 | CHANGES REQUIRED | **The verdict round found the largest hole of all, and it was the GM's own first sentence.** The `--omit` list and `SETTLEMENT_COV_FLOOR = 94` were STILL LIVE in the Makefile: the 100% floor this feature put on `make done` covered 9,168 statements while 13,357 more sat under a 94% ratchet, so settlement/ could have shed ~620 statements and the gate would still have gone green. Two success criteria asserted both were gone, FR-003a's route table omitted it, and FR-006 made retirement conditional on a threshold that had ALREADY been met (settlement/ measured 10,342 statements, 0 missing). Both are now retired and the coverage phase is one `--fail-under=100` over the whole tree - 20,682 statements, 0 missing, nothing omitted. Also fixed: "~113 genuinely unreached" mixed the pre- and post-deletion eras (~73 after the 40 deleted lines), and the derived percentages did not reproduce (3.08% -> 2.36%, the raw line counts having always been exact). The lesson the ledger should keep: six rounds went into the spec's PROSE while the requirement's own subject sat unimplemented, because every round after the first graded the words rather than re-checking the Makefile |
+| 7 | CHANGES REQUIRED | **The verdict round found the largest hole of all, and it was the GM's own first sentence.** The `--omit` list and `SETTLEMENT_COV_FLOOR = 94` were STILL LIVE in the Makefile: the 100% floor this feature put on `make done` covered 7,325 statements while 13,357 more sat under a 94% ratchet, so settlement/ could have shed ~620 statements and the gate would still have gone green. Two success criteria asserted both were gone, FR-003a's route table omitted it, and FR-006 made retirement conditional on a threshold that had ALREADY been met (settlement/ measured 10,342 statements, 0 missing). Both are now retired and the coverage phase is one `--fail-under=100` over the whole MEASURED set - 20,682 statements, 0 missing, no per-tree omit and no ratchet. (Round 8 then caught this row, SC1 and SC5 all saying "the whole engine"/"nothing omitted", which overstates: `[tool.coverage.run] source` leaves 19 engine files / 1,843 statements unmeasured by a pre-existing decision this feature did not change.) Also fixed: "~113 genuinely unreached" mixed the pre- and post-deletion eras (~73 after the 40 deleted lines), and the derived percentages did not reproduce (3.08% -> 2.36%, the raw line counts having always been exact). The lesson the ledger should keep: six rounds went into the spec's PROSE while the requirement's own subject sat unimplemented, because every round after the first graded the words rather than re-checking the Makefile |
+| 8 | CHANGES REQUIRED | **The same substitution, a fifth time, and this one reached the GM's report.** Fixing round 7 replaced an ACCURATE success criterion ("The measured set reports 100%, with no ratchet and no parked lines") with a stronger false one ("the measured set is now the WHOLE engine"). Measured: `[tool.coverage.run] source` names the measured modules one by one and leaves **19 engine files / 1,843 statements** outside - `tools/` audits and drivers plus `pipeline/gencache.py` - so the engine is 22,525 statements of which 20,682 are measured. That exclusion is LARGER than the pragma one the feature escalated to the GM at round 5, on the very grounds that "the spec's silence read as coverage". SC1, SC5, the round-7 row and `SKILL.md` all corrected; FR-003a gains a seventh route, stated-and-left, since the GM asked for the ratchets to go and not for the measured surface to widen. Two count errors from the same root cause also fixed: the old floored report covered **7,325** statements, not 9,168, and the exclusions inside the measured set are **327 of 20,682 (1.58%)**, not 385 - the census had counted excluded lines across the filesystem tree, including files coverage never reports at all |
