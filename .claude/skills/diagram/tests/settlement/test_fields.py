@@ -773,3 +773,26 @@ def test_a_SUGARCANE_dike_is_drawn_in_ROWS_ALONG_it_not_as_a_scatter() -> None:
     # The crop is not recorded on the land_use row - it is a DRAWING difference, so that is what is
     # asserted: the same conversion emits different ink for cane than for mulberry.
     assert s.out != mulberry.out, "cane is drawn in rows along the dike, mulberry as a scatter of crowns"
+
+
+def test_every_attested_DIKE_CROP_draws_a_form_that_tells_it_from_the_others() -> None:
+    """`DIKE_CROPS` holds four distinct plantings and each is a different SHAPE at fit zoom, which is
+    the whole reason they are separate forms rather than four colours:
+
+      - mulberry: a scatter of crowns
+      - sugarcane: ruled rows down the bank's length (a scatter read as rough grass - settlement-review)
+      - banana: STOOLS IN CLUMPS, three to five pseudostems with gaps between mats, "the form that
+        tells it from the fruit dike at fit zoom" (settlement-review)
+      - fruit: an orchard's single crowns at a regular pitch
+
+    So the test is that no two draw the same ink - which is the property a reader depends on, and
+    the one a fifth crop added as a colour would break.
+    """
+    net = _comb(1300, 1700, (520, 220), full_or(2, 5), down_deg=90, field_fall=760, offtakes_a=(0.32, 0.7), offtakes_b=())
+    ink = {}
+    for crop in ("mulberry", "sugarcane", "banana", "fruit"):
+        s = Settlement(1400, 1800, seed=3)
+        s.meta(name=f"LU{crop}", scale="village", ftpx=1, down_deg=90)
+        s.apply_land_use(net, "mulberry_fishpond", __import__("random").Random(1), dike_crop=crop)
+        ink[crop] = "".join(s.out)
+    assert len(set(ink.values())) == 4, f"four crops, four distinguishable plantings: {[k for k in ink]}"
