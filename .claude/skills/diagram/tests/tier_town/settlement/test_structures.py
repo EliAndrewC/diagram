@@ -238,3 +238,23 @@ def test_a_LABELLED_road_defers_its_caption_to_the_finish_pass() -> None:
     plain = _town()
     plain.road([(0.0, 500.0), (1000.0, 500.0)])
     assert not getattr(plain, "_road_label", None), "an unlabelled road holds nothing"
+
+
+def test_a_pasture_carries_a_caption_at_its_center_or_at_the_seat_the_gen_names() -> None:
+    """Every other pasture test passes `label=None`, so the caption branch - the one a map actually
+    uses - was never drawn. The default seat is the shape's own middle; a gen that needs the caption
+    elsewhere (a long thin grazing strip whose middle is under the herd) names the seat itself."""
+    s = _town()
+    s.pasture((200.0, 200.0, 400.0, 300.0), label="common grazing")
+    seat = _queued_label_seat(s, "common grazing")
+    assert seat == pytest.approx((300.0, 250.0), abs=12.0), f"the default seat is the middle of the drawn shape: {seat}"
+
+    s2 = _town()
+    s2.pasture((200.0, 200.0, 400.0, 300.0), label="common grazing", label_xy=(210.0, 190.0))
+    assert _queued_label_seat(s2, "common grazing") == (210.0, 190.0), "and a gen may name the seat itself"
+
+
+def _queued_label_seat(s: object, text: str) -> tuple[float, float]:
+    """A caption's seat, read off the label QUEUE. Captions are seated at finish time, so `M["labels"]`
+    is empty until then and a test that reads it passes while asserting nothing."""
+    return next((args[0], args[1]) for kind, args in s._label_queue if kind == "text" and args[2] == text)

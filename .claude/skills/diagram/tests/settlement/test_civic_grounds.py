@@ -636,3 +636,29 @@ def test_a_LABELLED_stable_yard_captions_itself() -> None:
     s.flush_stable_yards()
     s.place_labels()
     assert any("wagon yard" in str(lb[5]) for lb in s.M["labels"] if len(lb) > 5), "the yard is named when asked"
+
+
+def test_a_SINGLE_granary_records_the_legacy_dict_and_a_second_call_replaces_it() -> None:
+    """`append=True` (the capital's two granaries) is the newer form; the default records one
+    `M['granary']` dict, which is what every hamlet, village and town map carries and what the checks
+    that name a settlement's granary read. Both shapes exist on purpose, so both are asserted."""
+    s = _town()
+    s.granary(400, 400, n=3, w=20, h=12, gap=8, label="village granary")
+    assert "granaries" not in s.M, "the default form does not build the list"
+    assert s.M["granary"]["n"] == 3 and s.M["granary"]["label"] == "village granary"
+    assert len(s.M["granary"]["stores"]) == 3
+
+
+def test_merchant_storehouses_stops_at_COUNT_and_keeps_a_kura_off_the_road() -> None:
+    """A kura is an annex tucked behind its own shopfront, so it is placed only for a MINORITY of
+    businesses - the count is the knob - and never on a road bed. The road is its own branch beside
+    the streets and alleys, and a town whose only linework is a road left it unexercised."""
+    s = _town()
+    s.M["buildings"] = [{"x": 300.0 + 70 * i, "y": 500.0, "w": 26.0, "h": 34.0, "rot": 0.0, "kind": "merchant"} for i in range(8)]
+    assert s.merchant_storehouses(count=3) == 3, "it attaches exactly the count asked for, not one per shop"
+
+    onroad = _town()
+    onroad.M["buildings"] = [{"x": 300.0 + 70 * i, "y": 500.0, "w": 26.0, "h": 34.0, "rot": 0.0, "kind": "merchant"} for i in range(8)]
+    onroad.M["road"] = [[100.0, 478.0], [900.0, 478.0]]  # running right along the BACKS of the shops (rot 0 faces -y)
+    onroad.M["road_width"] = 30
+    assert onroad.merchant_storehouses(count=3) == 0, "and none of them may sit in the roadbed"
