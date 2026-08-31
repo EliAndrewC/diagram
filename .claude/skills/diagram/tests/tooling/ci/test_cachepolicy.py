@@ -42,3 +42,14 @@ def test_the_expiry_outlives_the_gap_between_runs() -> None:
     so that changing one without the other fails."""
     assert cachepolicy.EXPIRE_AFTER_DAYS > 7, "a week expires caches that are merely between builds"
     assert cachepolicy.EXPIRE_AFTER_DAYS <= 30, "past a month an abandoned key is just sitting there"
+
+
+def test_the_stated_expiry_is_documented_as_NOT_the_effective_one() -> None:
+    """MEASURED ON THE BUCKET 2026-08-31, and the reason this module's number can mislead: the bucket
+    already carried `expire-ci-junk`, Prefix '' , Days 14. S3 applies the SHORTEST expiration among
+    overlapping rules, so a cache object dies at 14 days and editing the constant alone will not move
+    it. The docstring must keep saying so - a future reader who tunes 30 without knowing about the
+    catch-all will believe they changed something they did not."""
+    doc = cachepolicy.__doc__ or ""
+    assert "expire-ci-junk" in doc, "the catch-all that actually decides the expiry must stay named here"
+    assert "SHORTEST" in doc, "the S3 overlap rule is the whole reason 30 is not effective"

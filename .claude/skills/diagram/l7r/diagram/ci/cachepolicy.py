@@ -25,9 +25,33 @@ quarter. If remote runs become rare enough that a month passes between builds of
 cost of being wrong is one cold build, not a failure - the cache is an optimization (FR-007).
 
 **SCOPED TO THE CACHE PREFIX, AND NOTHING ELSE.** The CI bucket also holds `verified/` (the records a
-build writes, which are evidence and must not expire), `go/` (build release signals), `image/` (the
-custom-image marker) and the mailbox. A rule without a prefix filter would delete all of them. The
-prefix is asserted in `tests/tooling/ci/test_cachepolicy.py`.
+build writes, which are evidence), `go/` (build release signals), `image/` (the custom-image marker)
+and the mailbox. A rule without a prefix filter would delete all of them. The prefix is asserted in
+`tests/tooling/ci/test_cachepolicy.py`.
+
+**THE 30 DAYS ABOVE IS NOT THE EFFECTIVE EXPIRY, and the reason is worth knowing before anyone tunes
+it.** When this rule was applied (2026-08-31) the bucket already carried a catch-all:
+
+    expire-ci-junk   Enabled   Filter {'Prefix': ''}   Expiration {'Days': 14}
+
+**S3 applies the SHORTEST expiration among overlapping rules**, so a cache object actually dies at 14
+days, not 30, and changing the constant above alone will not move it. That rule was PRESERVED rather
+than replaced - `put_bucket_lifecycle_configuration` overwrites the whole document, so the applying
+script reads first and merges by rule ID.
+
+**This rule still earns its place at 14 days**: the catch-all has no `AbortIncompleteMultipartUpload`,
+and a dead multipart's parts are billed while invisible in a normal listing - the quietest form of the
+GM's "sticks around forever", and a real path at ~110 MB.
+
+**Two open questions for the GM, raised and NOT decided here** (they concern a rule that reaches
+prefixes this feature does not own):
+
+1. 14 days may expire a cache that is merely between builds during a quiet fortnight - the exact
+   argument used above to reject a 7-day expiry. The cost is one cold build, not a failure (FR-007).
+2. `expire-ci-junk` also expires **`verified/`** at 14 days. Those records are what
+   `tree-not-already-verified` reads to avoid paying for a build that already passed, so after a
+   fortnight the same engine content is re-verified at full price. That may well be deliberate; it is
+   recorded here because nothing else in the repository mentions it.
 """
 
 from __future__ import annotations
