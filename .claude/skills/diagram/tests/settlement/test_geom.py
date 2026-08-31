@@ -11,6 +11,7 @@ import pytest
 from l7r.diagram import settlement
 from l7r.diagram.settlement import Settlement, seg_dist
 from l7r.diagram.settlement._geom.primitives import convex_hull, edge_dist, point_in_poly
+from l7r.diagram.settlement._geom.walls import _box_hits_run, torii_wall_conflicts, wall_runs
 from tests.settlement._builders import _IDX_POLY, _cap020, _ladder_map, _max_turn_deg, _memo_city, _ward_city_with_samurai
 
 
@@ -637,3 +638,35 @@ def test_convex_hull_of_collinear_points_keeps_only_the_ends() -> None:
     """The `cross(...) <= 0` pop is what drops a point that adds no area - both loops exercise it."""
     hull = convex_hull([(0.0, 0.0), (1.0, 1.0), (2.0, 2.0), (3.0, 3.0)])
     assert set(hull) == {(0.0, 0.0), (3.0, 3.0)}, "the two interior collinear points carry no area"
+
+
+# ---- feature 174: the five unreached statements in _geom/walls.py --------------------------------
+
+
+def test_wall_runs_walls_the_governors_mansion() -> None:
+    """A city-tier compound: the key is read like a manor's, and no hamlet records one."""
+    runs = wall_runs({"governor_mansion": {"x": 100.0, "y": 100.0, "w": 60.0, "h": 40.0}})
+    labels = [lbl for lbl, _, _ in runs]
+    assert "the governor's mansion wall" in labels
+    assert not wall_runs({"governor_mansion": {"x": 1.0, "y": 1.0}}), "a compound with no footprint carries no wall"
+
+
+def test_box_hits_run_catches_a_run_that_ENDS_inside_the_box_crossing_no_edge() -> None:
+    """The docstring's own case: "a run that merely ends inside the box (crossing no edge) counts".
+
+    Its sibling - a run that crosses an edge - is exercised by every walled map; this vertex-inside
+    branch is not, and a test asserting only the crossing would pass with this branch deleted.
+    """
+    box = (0.0, 0.0, 10.0, 10.0)
+    assert _box_hits_run(box, [(5.0, 5.0), (50.0, 50.0)], 0.5), "the first vertex sits inside the box"
+    assert not _box_hits_run(box, [(50.0, 50.0), (60.0, 60.0)], 0.5), "a run wholly outside is not a hit"
+
+
+def test_torii_wall_conflicts_names_the_wall_an_arch_is_standing_in() -> None:
+    """The whole-manifest form. Its empty answer is exercised by every clean map; the branch that
+    REPORTS one is not, so the conflict is built on purpose - a manor wall with an arch on it."""
+    M = {"meta": {"ftpx": 1}, "manors": [{"x": 100.0, "y": 100.0, "w": 60.0, "h": 40.0}], "torii": [(70.0, 100.0)]}
+    bad = torii_wall_conflicts(M)
+    assert bad and bad[0][0] == 70.0 and bad[0][1] == 100.0, "the arch's own coordinates, rounded"
+    assert "manor" in bad[0][2], "and the label of the wall it stands in"
+    assert torii_wall_conflicts({"meta": {"ftpx": 1}, "manors": M["manors"], "torii": [(400.0, 400.0)]}) == [], "an arch clear of every wall is not a conflict"

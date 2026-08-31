@@ -381,3 +381,15 @@ def test_place_keys_names_exactly_what_the_card_reads() -> None:
     for k in qualifiers:
         assert where_sentences("hamlet", {"district": "D", "town": "T", k: "X"}) != where_sentences("hamlet", {"district": "D", "town": "T"}), f"{k} is not read"
     assert reads | qualifiers == set(PLACE_KEYS), f"PLACE_KEYS and the card disagree: {set(PLACE_KEYS) ^ (reads | qualifiers)}"
+
+
+def test_the_card_names_the_households_when_the_arithmetic_would_not_work() -> None:
+    """Feature 174, closing the one unreached statement in this module.
+
+    The comment at that branch records the reason (settlement-review 2026-08-29): `settlements.md`
+    permits ~0.7 houses per household at village scale, so a card reading "66 farmhouses, population
+    ~350" invites a reader to divide and get 5.3. The households are named only when the two differ -
+    both sides asserted, since a test of the naming alone would pass with the condition inverted.
+    """
+    assert size_sentence(KINDS["village"], {"scale": "village", "households": 70}, 66) == "66 farmhouses, about 70 households, population ~350"
+    assert size_sentence(KINDS["village"], {"scale": "village", "households": 66}, 66) == "66 farmhouses, population ~330", "equal counts divide cleanly, so the households go unsaid"

@@ -9,6 +9,7 @@ from __future__ import annotations
 import re
 
 from l7r.diagram.settlement import Settlement
+from l7r.diagram.settlement.land.wet import _clipped_to_open_ground
 
 _FRINGE = [(300.0, 300.0), (500.0, 300.0), (500.0, 500.0), (300.0, 500.0)]
 
@@ -208,3 +209,15 @@ def test_keyholing_skips_a_hole_too_small_to_walk() -> None:
         interiors = [_H()]
 
     assert _keyholed(_Degenerate()) == [(0.0, 0.0), (100.0, 0.0), (100.0, 100.0), (0.0, 100.0)]
+
+
+def test_an_outline_shapely_cannot_build_is_returned_unclipped() -> None:
+    """Feature 174: the `except (ValueError, GEOSException)` path - refuse to clip rather than fail.
+
+    A two-point ring is not a polygon, so `ShapelyPolygon` raises before any difference is taken. The
+    contract is that the caller gets its own outline back untouched, not an exception and not an
+    empty result - a marsh that cannot be clipped is still a marsh.
+    """
+    poly = [(0.0, 0.0), (10.0, 0.0)]
+    dikes = [{"outline": [(0.0, 0.0), (5.0, 0.0), (5.0, 5.0)]}]
+    assert _clipped_to_open_ground(poly, dikes) == poly, "the outline is handed back as it came in"

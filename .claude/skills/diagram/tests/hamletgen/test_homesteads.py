@@ -8,6 +8,7 @@ import math
 import pytest
 
 from l7r.diagram import hamletgen as hg
+from l7r.diagram.hamletgen.homesteads.fixtures import nearer_own_house
 from l7r.diagram.settlement import Settlement
 
 from ._builders import SQUARE, a_plan
@@ -228,3 +229,16 @@ def test_a_linear_hamlet_strings_its_houses_along_the_connector() -> None:
     s.M["lanes"] = [{"pts": [[cx_ - 620, cy_], [cx_ + 620, cy_]], "w": 6, "connector": True}]
     stage_homesteads(s, plan)
     assert len(s.M["houses"]) == 10
+
+
+def test_nearer_own_house_with_no_other_houses_is_unambiguously_its_owners() -> None:
+    """Feature 174: the no-neighbors branch, lifted out to take two tuples rather than a settlement.
+
+    Its own docstring says that is why it exists. With nobody else to be nearer to, the seat scores
+    rank 0 and a NEGATIVE margin - the sign convention the sort depends on - so the margin's sign is
+    asserted, not just the rank.
+    """
+    rank, dmine, margin = nearer_own_house((30.0, 40.0, 0.0, 0.0), 0.0, 0.0, 1.0, 0.0, ())
+    assert rank == 0
+    assert dmine == pytest.approx(50.0), "3-4-5 from its own house"
+    assert margin == pytest.approx(-50.0), "negative: unambiguously this house's"
