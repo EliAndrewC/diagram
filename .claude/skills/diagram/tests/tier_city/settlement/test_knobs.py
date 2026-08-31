@@ -5,8 +5,6 @@ locked to another tier; the gate collects everything. Helpers stay in the source
 import pytest
 
 from l7r.diagram import settlement
-import math
-
 from l7r.diagram.settlement.city.knobs import machi_mouths, moat_swept_tap
 
 
