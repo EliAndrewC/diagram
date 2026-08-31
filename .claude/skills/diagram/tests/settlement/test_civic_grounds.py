@@ -576,3 +576,51 @@ def test_a_stable_yards_hitching_rail_is_set_back_off_the_ROADBED_and_runs_ALONG
     assert on_the_verge, f"the road rail is placed: {[round(r['y'], 1) for r in rails]}"
     assert all(r["y"] > 350.0 for r in on_the_verge), "set back off the roadbed, on the yard side"
     assert all(abs(r["ty"]) < abs(r["tx"]) for r in on_the_verge), "and running ALONG the level road"
+
+
+def test_a_stable_yards_furniture_is_refused_by_each_keep_out_in_turn() -> None:
+    """Feature 174. `_YardCtx.clear` is the yard's one placement predicate and each clause is a
+    different kind of ground the furniture may not stand on: outside (or ON) the city wall, inside a
+    recorded keep-out box, on a corridor, inside a field, or on a watercourse.
+
+    The yard's troughs, rails and heaps all ask this question, so a clause that stops working
+    silently puts a trough in a stream. Each is set up on its own map, because a yard that lands
+    nothing proves nothing - every case below is asserted against a baseline that DOES place.
+    """
+    baseline = _crop_settlement()
+    baseline.animal_ground(500.0, 400.0, r=90)
+    baseline.flush_stable_yards()
+    base_yd = baseline.M["stable_yards"][-1]
+    assert base_yd.get("rails") or base_yd.get("heaps"), "the baseline yard furnishes itself"
+
+    # A CITY WALL: furniture may not stand outside it, nor within 9 px of its line.
+    # A rampart SMALLER than the yard: every seat the yard would use lies outside it or within 9 px
+    # of its line, so the yard furnishes NOTHING rather than speckling the wall. (A wall merely
+    # around the yard refuses nothing and leaves this branch unexercised - which is how the first
+    # version of this case was written.)
+    walled = _crop_settlement()
+    walled.M["wall"] = [[480.0, 380.0], [520.0, 380.0], [520.0, 420.0], [480.0, 420.0]]
+    walled.animal_ground(500.0, 400.0, r=90)
+    walled.flush_stable_yards()
+    w_yd = walled.M["stable_yards"][-1]
+    assert not (w_yd.get("rails") or w_yd.get("heaps")), "no furniture may stand outside the rampart or on its line"
+    assert w_yd.get("troughs") == 0, "and the watering point is refused for the same reason"
+
+    # A FIELD over the yard: cultivated ground is not yard ground.
+    farmed = _crop_settlement()
+    farmed.field_polys.append([(300.0, 380.0), (700.0, 380.0), (700.0, 420.0), (300.0, 420.0)])
+    farmed.animal_ground(500.0, 400.0, r=90)
+    farmed.flush_stable_yards()
+    f_yd = farmed.M["stable_yards"][-1]
+    for key in ("rails", "heaps"):
+        for item in f_yd.get(key) or []:
+            assert not (380.0 < item["y"] < 420.0 and 300.0 < item["x"] < 700.0), f"{key} clear of the cultivated strip"
+
+    # A WATERCOURSE through it.
+    wet = _crop_settlement()
+    wet.stream([(300.0, 400.0), (700.0, 400.0)], width=12)
+    wet.animal_ground(500.0, 400.0, r=90)
+    wet.flush_stable_yards()
+    for key in ("rails", "heaps"):
+        for item in wet.M["stable_yards"][-1].get(key) or []:
+            assert abs(item["y"] - 400.0) > 6.0, f"{key} clear of the stream"
