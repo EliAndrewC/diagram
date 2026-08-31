@@ -20,6 +20,23 @@ if TYPE_CHECKING:
     from ..core import Settlement
 
 
+def avenue_along(seats: list[Pt], gaps: list[float], dist: float) -> Pt:
+    """The point `dist` along the authored avenue line, measured by ARC LENGTH.
+
+    LIFTED OUT OF `_avenue_pitch`'s closure (GM 2026-08-28, feature 146). The walk that steps past a
+    segment - `d -= gaps[i]` - only runs for an avenue of three or more seats whose stride outruns the
+    first gap, and reaching that through a whole shrine placement meant it was a branch no test could
+    name. Here it is three lists and a float.
+    """
+    d = dist
+    for i in range(len(seats) - 1):
+        if d <= gaps[i] or i == len(seats) - 2:  # the last segment also carries any run PAST the authored line
+            t = d / gaps[i] if gaps[i] else 0.0
+            return (seats[i][0] + (seats[i + 1][0] - seats[i][0]) * t, seats[i][1] + (seats[i + 1][1] - seats[i][1]) * t)
+        d -= gaps[i]  # this segment is wholly behind us - carry the remainder into the next
+    return seats[-1]  # pragma: no cover - unreachable: the i == len-2 branch always returns
+
+
 class ToriiAvenueMixin:
     def _assert_walls_clear_of_torii(self: Settlement, what: str) -> None:  # type: ignore[misc]
         """Re-ask the torii/wall question the moment a WALL is on the page. A wall drawn AFTER an
@@ -49,17 +66,8 @@ class ToriiAvenueMixin:
         if max(gaps) <= self.px(16.0) * TORII_PITCH_MAX_SPANS:
             return seats
 
-        def along(dist: float) -> Pt:
-            d = dist
-            for i in range(len(seats) - 1):
-                if d <= gaps[i] or i == len(seats) - 2:  # the last segment also carries any run PAST the authored line
-                    t = d / gaps[i] if gaps[i] else 0.0
-                    return (seats[i][0] + (seats[i + 1][0] - seats[i][0]) * t, seats[i][1] + (seats[i + 1][1] - seats[i][1]) * t)
-                d -= gaps[i]
-            return seats[-1]  # pragma: no cover - unreachable: the i == len-2 branch always returns
-
         step = self.px(TORII_PITCH_FT)
-        return [along(step * i) for i in range(len(seats))]
+        return [avenue_along(seats, gaps, step * i) for i in range(len(seats))]
 
     def _avenue_at_threshold(self: Settlement, x: float, y: float, w: float, h: float, seats: list[Pt]) -> list[Pt]:  # type: ignore[misc]
         """Seat a sando's INNERMOST arch ONE PITCH off the hall's front, sliding the whole run in along

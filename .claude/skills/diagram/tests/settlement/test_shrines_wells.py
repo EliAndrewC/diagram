@@ -524,3 +524,19 @@ def test_an_avenue_at_the_threshold_handles_a_single_arch_and_an_empty_run() -> 
     assert s._avenue_at_threshold(700.0, 400.0, 120.0, 82.0, []) == [], "no arches, nothing to move"
     one = s._avenue_at_threshold(700.0, 400.0, 120.0, 82.0, [(700.0, 560.0)])
     assert len(one) == 1, "a single arch is still seated, at the standard pitch"
+
+
+def test_avenue_along_walks_PAST_a_whole_segment_to_reach_a_far_point() -> None:
+    """Resampling by arc length is what lets an over-wide avenue be re-laid at the standard stride
+    while keeping the gen's direction and curve. The step that carries the remainder into the next
+    segment is the whole of that: an avenue bent at a corner must resample AROUND the bend, not fly
+    across it. Asserted on a right-angle line, where a straight-line reading is visibly wrong."""
+    from l7r.diagram.settlement.shrines_wells.torii import avenue_along
+
+    seats = [(0.0, 0.0), (100.0, 0.0), (100.0, 100.0)]
+    gaps = [100.0, 100.0]
+    assert avenue_along(seats, gaps, 0.0) == (0.0, 0.0), "the innermost arch keeps its authored seat"
+    assert avenue_along(seats, gaps, 40.0) == pytest.approx((40.0, 0.0)), "inside the first leg"
+    assert avenue_along(seats, gaps, 150.0) == pytest.approx((100.0, 50.0)), "and past it, AROUND the corner"
+    assert avenue_along(seats, gaps, 260.0) == pytest.approx((100.0, 160.0)), "a run past the authored line continues on the last leg's bearing"
+    assert avenue_along([(0.0, 0.0), (0.0, 0.0)], [0.0], 5.0) == (0.0, 0.0), "a zero-length gap divides by nothing"
