@@ -801,3 +801,43 @@ def test_a_LABELED_theater_stage_captions_its_whole_rotated_extent() -> None:
     turned.place_labels()
     placed = [lb for lb in turned.M["labels"] if len(lb) > 5 and "turned stage" in lb[5]]
     assert placed, "a rotated stage is captioned too"
+
+
+def test_a_pack_SHORTFALL_is_printed_AND_recorded_never_silently_dropped(capsys) -> None:
+    """Feature 174, and the rule's two recorded defects.
+
+    GM 2026-08-05: *"we definitely want that to be visible"*. A placement helper that silently drops
+    what does not fit is how authored-vs-landed drift happens - Hirameki's gate market authored 12
+    businesses and landed 4 with nothing said (2026-07-24 town audit), and a later map shipped 88 of
+    its 118 merchant households, noticed only during an unrelated perf investigation.
+
+    So BOTH halves are asserted: the print, which the gen author sees, and the manifest record,
+    which survives the terminal. And the record must carry NO geometry key - it is a diagnostic, not
+    a drawn feature, and the overlap classifier keys off exactly those names.
+    """
+    s = _town()
+    s._shortfall("rowpack", (100.0, 200.0), 4, ["shop", "shop", "kura"])
+    printed = capsys.readouterr().out
+    assert "ROWPACK SHORTFALL" in printed and "placed 4/7" in printed, printed
+    assert "shop x2" in printed and "kura x1" in printed, "and it says WHAT was dropped"
+
+    rec = s.M["shortfalls"][-1]
+    assert (rec["by"], rec["placed"], rec["wanted"]) == ("rowpack", 4, 7)
+    assert rec["at"] == [100.0, 200.0]
+    assert not ({"x", "y", "pts", "poly", "outline", "boundary"} & set(rec)), "a diagnostic must not look like a drawn feature"
+
+
+def test_a_pack_that_placed_EVERYTHING_records_no_shortfall_at_all() -> None:
+    """The mirror branch: an empty leftover list is silence, not a zero-row. A standing empty record
+    would train a reader to ignore the key."""
+    s = _town()
+    s._shortfall("pack", (0.0, 0.0), 9, [])
+    assert "shortfalls" not in s.M
+
+
+def test_a_shortfall_at_a_POLYLINE_flattens_its_coordinates_for_the_record() -> None:
+    """`where` is a point for a pack and a run of points for a frontage, and the record has to
+    carry either - the branch exists because both callers exist."""
+    s = _town()
+    s._shortfall("frontage", [(10.0, 20.0), (30.0, 40.0)], 1, ["stall"])
+    assert s.M["shortfalls"][-1]["at"] == [10.0, 20.0, 30.0, 40.0], "flattened, not nested"
