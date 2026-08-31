@@ -796,3 +796,17 @@ def test_every_attested_DIKE_CROP_draws_a_form_that_tells_it_from_the_others() -
         s.apply_land_use(net, "mulberry_fishpond", __import__("random").Random(1), dike_crop=crop)
         ink[crop] = "".join(s.out)
     assert len(set(ink.values())) == 4, f"four crops, four distinguishable plantings: {[k for k in ink]}"
+
+
+def test_an_unknown_dike_crop_or_leftover_form_is_REFUSED_at_the_call() -> None:
+    """The two validators beside the knobs. A misspelling must fail loudly at the call rather than
+    silently draw the default - the same no-silent-default rule the spec validators carry, applied
+    where the value arrives as an argument instead of on a spec.
+    """
+    net = _comb(1300, 1700, (520, 220), full_or(2, 5), down_deg=90, field_fall=760, offtakes_a=(0.32, 0.7), offtakes_b=())
+    s = Settlement(1400, 1800, seed=3)
+    s.meta(name="LUX", scale="village", ftpx=1, down_deg=90)
+    with pytest.raises(ValueError, match="dike_crop"):
+        s.apply_land_use(net, "mulberry_fishpond", __import__("random").Random(1), dike_crop="kiwi")
+    with pytest.raises(ValueError, match="leftover"):
+        s.apply_land_use(net, "mulberry_fishpond", __import__("random").Random(1), leftover="fallow")
