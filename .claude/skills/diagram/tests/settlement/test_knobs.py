@@ -310,3 +310,12 @@ def test_web_cuts_falls_back_when_no_gap_is_wide_enough():
 
 def test_web_cuts_on_an_empty_row_is_empty():
     assert settlement.web_cuts([], 100.0, 20.0) == []
+
+
+def test_an_unregistered_notice_board_placement_is_not_available() -> None:
+    """The availability table answers per placement, and the fall-through is the honest answer for a
+    value the table does not know. `allowed` never offers one - which is why it was excluded - but
+    the predicate is called with a bare string and must not claim an unknown placement is available."""
+    from l7r.diagram.settlement._knobs import _kosatsuba_seat_ok
+
+    assert _kosatsuba_seat_ok("a placement nobody registered", {"has_approach": True, "has_headman_house": True}) is False

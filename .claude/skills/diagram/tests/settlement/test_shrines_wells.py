@@ -562,3 +562,13 @@ def test_an_avenue_is_PULLED_BACK_so_its_walk_stops_short_of_a_wall() -> None:
     assert len(out) == len(seats), "no arch is dropped; the stride tightens instead"
     strides = [out[i + 1][1] - out[i][1] for i in range(len(out) - 1)]
     assert max(strides) - min(strides) < 1e-6, f"and it tightens EVENLY, not one arch out of step: {strides}"
+
+
+def test_avenue_along_answers_the_LAST_seat_when_there_is_no_segment_to_walk() -> None:
+    """An avenue of fewer than two seats has no segment, so the walk's loop never runs and the
+    function answers the only seat there is. `_avenue_pitch` guards this before calling, which is why
+    the terminal was excluded from coverage - but the function is public to its module and its own
+    domain reaches it in one call, and a terminal nothing exercises is one nobody knows still holds."""
+    from l7r.diagram.settlement.shrines_wells.torii import avenue_along
+
+    assert avenue_along([(7.0, 9.0)], [], 100.0) == (7.0, 9.0)

@@ -221,3 +221,15 @@ def test_an_outline_shapely_cannot_build_is_returned_unclipped() -> None:
     poly = [(0.0, 0.0), (10.0, 0.0)]
     dikes = [{"outline": [(0.0, 0.0), (5.0, 0.0), (5.0, 5.0)]}]
     assert _clipped_to_open_ground(poly, dikes) == poly, "the outline is handed back as it came in"
+
+
+def test_the_hard_ground_sweep_SKIPS_a_ditch_that_carries_no_path() -> None:
+    """`_hard_ground` sweeps every recorded watercourse, and a record carrying neither `poly` nor
+    `pts` has no line for a placer to keep clear of. Production always writes one - which is why the
+    skip was excluded from coverage - but the sweep is what would raise, and it would take the whole
+    placement pass down with it."""
+    s = _s()
+    s.M["field_ditches"] = [{"w": 3.0}, {"poly": [[100.0, 100.0], [200.0, 100.0]], "w": 3.0}]
+    s._hard_cache = None if hasattr(s, "_hard_cache") else None
+    hard = s._hard_ground()
+    assert hard, "the ditch that HAS a path is still folded in; the pathless one is simply skipped"

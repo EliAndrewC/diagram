@@ -141,8 +141,6 @@ def stage_notice(s: Settlement, plan: SitePlan) -> None:
             _ranked = [ln for ln in _lanes if not ln.get("web")] or _lanes
             best: tuple[float, float, float, float] | None = None
             for lane in _ranked:
-                if lane.get("connector"):
-                    continue
                 pts = lane["pts"]
                 for i in range(len(pts) - 1):
                     (ax, ay), (bx, by) = pts[i], pts[i + 1]

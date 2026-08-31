@@ -203,3 +203,18 @@ def test_a_straggler_served_only_by_a_BENT_path_takes_the_least_bad_fold(monkeyp
     hg.ways.serve._serve_stragglers(s, plan, [], [], [])
 
     assert len(s.M["lanes"]) > before, "the house is served by the folded path rather than left stranded"
+
+
+def test_a_web_lane_of_fewer_than_two_points_is_never_laid() -> None:
+    """A run must be a LINE to be a lane. The guard fires twice - once on the run as offered, and
+    again after `_trim_to_service` has cut it back, because trimming is what can reduce a real run to
+    a single point. Both were excluded from coverage on the grounds that the callers never offer one;
+    the function is the one that has to be sure, and it answers False rather than recording a lane
+    with no length."""
+    from l7r.diagram.hamletgen.ways.serve import _lay_web_lane
+    from tests.hamletgen.ways._builders import _StubSettlement
+
+    s = _StubSettlement(lanes=[[(0.0, 0.0), (0.0, 400.0)]], houses=[(80.0, 200.0)])
+    s.M.setdefault("meta", {"ftpx": 1})
+    assert _lay_web_lane(s, [(50.0, 50.0)], [], [], []) is False, "a single point is not a run"
+    assert _lay_web_lane(s, [], [], [], []) is False, "and neither is nothing at all"
