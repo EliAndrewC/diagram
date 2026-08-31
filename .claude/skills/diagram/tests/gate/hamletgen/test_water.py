@@ -75,7 +75,10 @@ def test_a_dike_pond_hamlet_is_ponds_in_a_diked_block_with_wet_flanks() -> None:
     dike-pond conversion. Asserts what the archetype is responsible for beyond the polder: the
     overlay record, the dike-pond parcels, the declared arrangement, and the waterward fringe
     (declared AND wet, so `polder_waterward_flanks_wet` has teeth rather than skipping)."""
-    plan, M = rollcache.hamlet(hg.HamletSpec(name="Dikepond", seed=21, households=16, down_deg=90, field_archetype="mulberry_dike_fishpond", pond_layout="mosaic"))
+    # THE KUWABATA SPEC, SHARED WITH THE THREE GATE FILES THAT ALREADY ROLL IT (2026-08-31). This test
+    # was a spec of its own differing only in leaving `dike_crop` to roll (seed 21 gives sugarcane), and
+    # it asserts nothing about the crop. Measured: Kuwabata's map carries every assertion below.
+    plan, M = rollcache.hamlet(hg.HamletSpec(name="Kuwabata", seed=21, households=16, down_deg=90, field_archetype="mulberry_dike_fishpond", pond_layout="mosaic", dike_crop="mulberry"))
     m = M["meta"]
     assert m["field_archetype"] == "mulberry_dike_fishpond" and m["pond_layout"] == "mosaic"
     assert any(r["overlay"] == "mulberry_fishpond" and r["count"] >= 20 for r in M["land_use"])
