@@ -371,7 +371,15 @@ the pack/wall ratio alone; the ratio is a symptom of non-parallelizable work, no
 floors are enforced. Any "optimization" that restores caching in FULL buys its speed by not running the
 code the floors exist to check.
 
-## DOES FULL GENERATE MORE DISTINCT HAMLETS THAN THE CODE PATHS NEED? MEASURED: NO (2026-08-31)
+## IS ANY ONE HAMLET REDUNDANT? MEASURED: NO (2026-08-31) - BUT READ THE SECTION AFTER THIS ONE
+
+**This answers the narrower of two questions, and it is not the one that found the savings.** It asks
+whether any single spec's covered lines are wholly contained in the union of the others - a SUBSUMPTION
+test, which finds a hamlet that could simply be deleted. The answer is no. The GM then pointed out that
+this is not what they had asked: the useful question is whether two hamlets could be COMBINED into one
+that satisfies both their tests, which subsumption cannot see, because two hamlets can each carry unique
+lines and still be mergeable. That question is answered in "THE PACKING QUESTION" below, and it did find
+savings. Keep both: this section is why no hamlet can be dropped OUTRIGHT.
 
 The GM's question: *"if we are generating a given number of hamlets which is higher than the number of
 distinct hamlets which need to be generated in order to exercise all of the different code paths ... then
@@ -424,3 +432,62 @@ outright was measured and was WORSE (cohort seed 18 traded `features_do_not_over
 no new LINE may still take a different path through lines others hit. Treat a zero as a candidate and read
 the test before touching it. And beware the operator-precedence trap in the joint-removability check -
 `set(a) | set(b) - rest` is `a | (b - rest)`, not `(a | b) - rest`, and the wrong one reads plausible.
+
+## THE PACKING QUESTION: COULD TWO HAMLETS BE COMBINED INTO ONE? (2026-08-31)
+
+The GM's correction of the section above, in their own words: *"I am not asking whether two of the
+hamlets are identical or even whether the differences are required. Rather, I am saying, do there exist
+two or more hamlets ... which could be combined into a single hamlet while exercising all of the branches
+that all of the tests need."* Their worked example: if `test_foo` uses pattern `A B C D E F` and relies
+only on `A B C`, and `test_bar` uses `U V W X Y Z` and relies only on `X Y Z`, then ONE hamlet with
+`A B C X Y Z` serves both and a whole generation disappears.
+
+**THE METHOD, which is different from the subsumption test above.** For each expensive hamlet, record
+what its tests REQUIRE - not what its spec happens to set - and split the requirements in two:
+
+- **Declared knobs** (archetype, settlement form, households, pond layout). Mutually exclusive WITHIN a
+  dimension; a hamlet supplies one value per dimension, so requirements from DIFFERENT dimensions pack
+  into one hamlet for free. A test needing `linear` and a test needing `valley_paddy` can share.
+- **Emergent conditions** ("the reservoir must have to WALK", "the pond must be one the canvas cannot
+  hold", "the field row must offer nothing"). These pin a SEED, and two of them share a hamlet only if
+  some seed satisfies both - a search, not a given.
+
+The floor is then: for each mutually-exclusive dimension, the count of distinct values required; the
+minimum is at least the largest such count, and larger where emergent conditions collide.
+
+**THE ANSWER HERE: 11 rolled, floor about 8-9.** Three archetypes are required (valley paddy, polder
+grid, mulberry dike-fishpond), two settlement forms, two household counts - and those pack. What holds
+the number up is SEVEN emergent conditions: the reservoir walk, the pond clamp, the woodland ladder, the
+frontage pass seating, the frontage pass stopping at one household, cloud seeding, and the keep-out chord
+band.
+
+**HOW TO TEST A CANDIDATE MERGE - roll each candidate and run every assertion set against every map.**
+Do not reason about it; the probe is twenty lines and it answers exactly. The polder matrix:
+
+| | carries seed 8's | carries seed 19's | carries seed 12's |
+|---|---|---|---|
+| seed 12, fall 0 | YES | **NO** (keepout 50 > 48) | YES |
+| seed 8 | YES | **NO** (keepout 50 > 48) | YES |
+| seed 19, fall 90 | YES | YES | YES |
+
+**SEED 8 WAS DROPPED** - 39.8 s, the most expensive polder in the suite - because its test asserts only
+what every polder owes and names no seed, and seed 19 carries all of it.
+
+**SEED 12 WAS KEPT THOUGH THE MATRIX SAYS SEED 19 CARRIES IT, and this is the trap the method must not
+walk into.** Seed 12 exists because it NEEDS the reservoir walk; seeds 3, 8, 19 and 22 clear on the first
+try. Seed 19 therefore PASSES seed 12's assertion without ever exercising the mechanism the assertion is
+about - and a rule that never runs looks exactly like a rule that passes. **An assertion matrix is
+necessary and not sufficient: before merging, read WHY the seed was chosen.** Where the docstring says a
+seed was picked to force a path, that seed is load-bearing however green the matrix looks.
+
+**AND THE SECOND CONSTRAINT, which is the one actually holding the count up: the 100% COVERAGE FLOOR.**
+Assertion requirements permit a merge; coverage may not, because the dropped map's lines have to come
+from somewhere. Seed 8 covered 29 lines nothing else did. The general remedy is the one the weak-ratio
+fix used - cover the branch with a UNIT TEST rather than a map roll:
+
+**THE WEAK RATIO, FIXED AT ITS CAUSE.** Polder seed 19 cost 30.4 s and uniquely covered ONE line -
+post-split `ways/touch.py:420`, the `if not _spliced(...)` condition - while line 421, the refusal body
+under it, was covered by NO map in the suite. A 30 s roll that reaches a guard but never the branch
+beneath it is paying map prices for unit-test work. `_join_piece` is module level, so the branch took a
+direct test: fabric beside the LINK but not the PIECE, so the splice is refused and the link is drawn as
+its own lane. Milliseconds, deterministic, and it closes a floor breach no roll was ever going to close.
