@@ -423,3 +423,32 @@ def test_an_avenue_INSIDE_the_pitch_band_is_left_exactly_as_the_gen_authored_it(
     ok = [(100.0, 100.0), (130.0, 100.0), (160.0, 100.0)]
     assert s._avenue_pitch(ok) == ok, "within the band, the gen's own spacing stands untouched"
     assert s._avenue_pitch([(5.0, 5.0)]) == [(5.0, 5.0)], "and one arch is no avenue to re-lay"
+
+
+def test_an_avenue_is_pulled_BACK_whole_rather_than_having_one_arch_shoved_aside() -> None:
+    """A sando is a single approach and cannot continue on the far side of a barrier, so an avenue
+    reaching a wall is SHORTENED - "scale every seat's offset from the first arch by the largest
+    factor that keeps the run clear - rather than shove one arch out of step with its neighbors
+    (which would just straddle the wall)".
+
+    Two invariants, both asserted, because they are what distinguishes a pull-back from a nudge:
+    the first arch never moves, and the run stays collinear.
+    """
+    s = Settlement(1200, 1200, seed=8)
+    s.meta(name="C", scale="city")
+    s.manor(600.0, 300.0, 200.0, 140.0, "a manor")  # a walled compound the avenue would otherwise march into
+    seats = [(600.0, 700.0), (600.0, 600.0), (600.0, 500.0), (600.0, 420.0)]
+    out = s._avenue_short_of_walls(list(seats))
+
+    assert out[0] == seats[0], "the innermost arch, nearest its hall, never moves"
+    assert all(abs(p[0] - 600.0) < 1e-6 for p in out), "and the run stays on its own line - a pull-back, not a shove"
+
+
+def test_an_avenue_with_no_walls_drawn_yet_is_left_exactly_as_it_was() -> None:
+    """ "Only walls ALREADY DRAWN are visible here" - the draw-order rule. A wall laid LATER across
+    an arch is caught by the wall methods' own assertion, not by this pass, so this one must not
+    invent a correction when there is nothing to correct."""
+    s = Settlement(1200, 1200, seed=8)
+    s.meta(name="C", scale="city")
+    seats = [(600.0, 700.0), (600.0, 600.0), (600.0, 500.0)]
+    assert s._avenue_short_of_walls(list(seats)) == seats
