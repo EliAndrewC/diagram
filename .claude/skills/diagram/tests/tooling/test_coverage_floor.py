@@ -56,12 +56,21 @@ def test_COV_FLOORS_stays_OFF_by_default_because_make_quick_was_exempted() -> No
     assert re.search(r"^COV_FLOORS =\s*$", MAKEFILE, re.M), "COV_FLOORS is empty by default"
 
 
-def test_the_floor_phase_asks_coverage_for_ONE_HUNDRED_and_reports_every_floor_together() -> None:
-    """`--fail-under=100` is the number the GM asked for, in the place it is read. The three floors
-    also still report TOGETHER (feature 145): a first floor that `exit 1`s hides every floor after
-    it, which once made the hamlet floor unreachable for a day."""
-    assert "--fail-under=100" in MAKEFILE, "the global floor is 100, not a ratchet"
-    assert MAKEFILE.count("cov_ec=1") >= 3, "each floor records its own failure instead of exiting"
+def test_the_floor_phase_asks_coverage_for_ONE_HUNDRED_over_the_WHOLE_TREE() -> None:
+    """`--fail-under=100` is the number the GM asked for, in the place it is read - and it is asked
+    over everything. Their FIRST sentence was about the ratchets (*"we have some ratchets somewhere
+    that enforce less than one hundred percent"*), and this is the assertion that they are gone:
+    no `--omit` on the floored report, and no `SETTLEMENT_COV_FLOOR` beside it. Before feature 174
+    that report omitted four trees holding 13,357 statements and handed them to a 94% ratchet, so
+    `settlement/` could shed ~620 statements with the gate still green.
+
+    The floors also still report TOGETHER (feature 145): a first floor that `exit 1`s hides every
+    floor after it, which once made the hamlet floor unreachable for a day."""
+    floored = next(ln for ln in MAKEFILE.splitlines() if "--fail-under=100" in ln)
+    assert "--omit" not in floored, f"the 100% report covers the whole tree: {floored[:120]}"
+    assert "SETTLEMENT_COV_FLOOR" not in MAKEFILE.replace(floored, ""), "and no ratchet stands beside it"
+    assert MAKEFILE.count("cov_ec=1") >= 2, "each floor records its own failure instead of exiting"
+    assert "hamlet_floor" in MAKEFILE, "the finer hamlet-path floor stays - it sits UNDER the 100%, not beside it"
     assert "exit $$cov_ec" in MAKEFILE, "and the phase exits non-zero once, at the end"
 
 
