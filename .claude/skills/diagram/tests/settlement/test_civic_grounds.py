@@ -498,3 +498,59 @@ def test_yard_ctx_construction_draws_no_rng():
     before = random.getstate()
     _YardCtx(s, 500.0, 500.0, 72.0)
     assert random.getstate() == before
+
+
+# ---- feature 174: the two lodging works, which only a TOWN draws ----------------------------------
+# `flophouse` and `inn` were wholly uncovered (94 statements at 46%) because no scripted generator
+# produces a town yet. Both are ordinary drawing methods on a Settlement, so both take a direct call
+# rather than waiting for the tier to convert - the same route that closed the _knobs town/city
+# branches. What is asserted is the RULE each carries, not that the lines ran.
+
+
+def test_a_flophouse_DERIVES_its_angle_from_the_road_it_fronts() -> None:
+    """GM 2026-08-11, after every flophouse on every map came out level while the roads ran at
+    138-167 degrees: a roadside work's angle is derived from its way at draw time, never pinned.
+
+    Asserted by rotating the ROAD and watching the building follow - a test that pinned one angle
+    would pass with the derivation replaced by that constant.
+    """
+    s = _town()
+    s.M["road"] = [(0.0, 0.0), (1000.0, 1000.0)]  # a 45-degree road
+    s.flophouse(480.0, 520.0)
+    rot_diagonal = s.M["flophouses"][-1]["rot"]
+    assert abs(rot_diagonal - 45.0) < 1.0, "the doss-house fronts the road it stands on"
+
+    s2 = _town()
+    s2.M["road"] = [(0.0, 500.0), (1000.0, 500.0)]  # the same board, a level road
+    s2.flophouse(480.0, 520.0)
+    assert abs(s2.M["flophouses"][-1]["rot"]) < 1.0, "re-route the road and the flophouse turns with it"
+
+    assert s.M["flophouses"][-1]["w"] == s.px(104), "real size ~104x46 ft, converted at the map's ftpx"
+
+
+def test_a_flophouse_SNAPS_onto_the_way_a_gen_only_roughly_named() -> None:
+    """`_way_seat_near`'s purpose in its own words: "a gen names roughly where the doss-house
+    belongs and the engine puts it on the road, which is the only way the two stay together when the
+    road moves". The seat, the distance and the bearing are all read off the nearest way."""
+    s = _town()
+    s.M["road"] = [(0.0, 400.0), (1000.0, 400.0)]
+    sx, sy, dist, bearing = s._way_seat_near(300.0, 460.0)
+    assert (sx, sy) == (300.0, 400.0), "the nearest POINT on the way, not one of its ends"
+    assert dist == pytest.approx(60.0) and abs(bearing) < 1e-9
+
+    far = _town()
+    far.M["road"] = []
+    assert far._way_seat_near(300.0, 460.0)[2] == float("inf"), "no way at all leaves nothing to snap to"
+
+
+def test_an_inn_is_recorded_as_a_NON_RESIDENTIAL_building_and_fronts_its_road() -> None:
+    """It records to `M['buildings']` with kind 'inn' rather than to a lodging key of its own, which
+    is what keeps it out of the housing counts; and `rot` lies it parallel to a diagonal road with
+    its noren entrance facing the roadbed."""
+    s = _town()
+    s.inn(500.0, 500.0, rot=30.0)
+    rec = s.M["buildings"][-1]
+    assert rec["kind"] == "inn"
+    assert (rec["w"], rec["h"]) == (s.px(66), s.px(48)), "real size ~66x48 ft at the map's ftpx"
+    assert rec["rot"] == 30.0, "the tilt is the caller's - an inn fronts the road it was sited on"
+    assert not s._fits(500.0, 500.0, 20.0, 20.0), "and it blocks placement, so a pack flows around it"
