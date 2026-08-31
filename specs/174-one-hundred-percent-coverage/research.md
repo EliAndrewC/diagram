@@ -149,3 +149,39 @@ The peer flagged a live consequence worth checking separately: `_ratchet.py` fai
 hard 15 s on the run itself, so a quick run whose heaviest tests land on E-cores while another
 session is busy could fail as a false regression. Not measured here; recorded so it is not
 rediscovered from scratch.
+
+## R7 - the dead-code deletion, independently verified (and one claim of mine corrected)
+
+An adversarial reviewer was asked to break the 8 deletions of commit `3650e055`, having been told
+that I had called `waterfields/hill.py` dead an hour earlier and been wrong. **All 8 SAFE**, on
+evidence stronger than the grep I used:
+
+- **the executed-function record**, which is the check I should have run first: `.gencache/rolls/*/meta.json`
+  records every engine function a roll actually ran, and **no roll record executes anything in
+  `l7r/diagram/overlap/`** - the generation path never enters that package. That is a positive
+  statement about what runs, where a grep is only a negative one about what is written.
+- **pre-166 archaeology** (`git grep <name> 70bfa4f7^`): every consumer of every one lived inside
+  `check_village/`, which feature 166 deleted.
+- the frozen `.gen.py` channel - the one that made `hill.py` live - is **empty** for all 8.
+
+**A correction to my own commit message.** It says the only consumers were
+`check_village/test_common_geometry.py`. That is narrower than the truth: `unit_dir`'s real consumer
+was the check SEGMENT `segments_07b::channels_flow_downhill`, `in_ellipse` had five segment
+consumers, `sweep_hi` two, and `kiln_quarters` / `seg_to_rect_dist` / `clip_to_convex` one each. The
+conclusion holds - all of those are deleted - but the stated reason was too narrow, and the record
+should say what was actually true. (History is never rewritten here, so the correction lives here.)
+
+**`_ditch_plankable` was the special case and 166 already answered it.** The footbridge rule still
+has teeth in the PLACER - `settlement/city/bridges.py::_plank_reaches_useful_ground` implements the
+both-banks useful-ground test, and `tests/gate/test_crossings_and_cover.py` says in as many words
+that *"the retired check re-derived it through its own copy of the predicate"*. `_ditch_plankable`
+was that copy. Deleting the copy while keeping the prose is right.
+
+**Three things the deletion ORPHANED, fixed in the follow-up commit** (Principle XIV - a defect found
+in the course of the work is fixed in that work):
+
+- `FOOT_ABUTMENT`, `FOOT_BANK_REACH`, `FOOT_VILLAGE_REACH` (`overlap/matrix.py`): the two deleted
+  functions were their only consumers, so the deletion made them dead.
+- the comment above them still said *"the placement engine enforces it, these checks re-verify from
+  the manifest"* - pointing at functions that no longer exist.
+- `pt_to_rect` (`overlap/taxonomy.py`): `seg_to_rect_dist` was its only call site.
