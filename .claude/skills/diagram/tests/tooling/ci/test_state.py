@@ -177,3 +177,37 @@ def test_a_failed_done_does_not_vouch_for_the_tooling(repo: Path) -> None:
     build.write_text("quick:\n\techo v2\n", encoding="utf-8")
     red = state.write(repo, state.FAILED, "done")
     assert red.tooling == green.tooling != state.tooling_hash(repo), "a failed gate must not vouch for tooling it did not prove"
+
+
+def test_the_state_file_of_a_WORKTREE_lands_in_its_own_gitdir(tmp_path: Path) -> None:
+    """Feature 174, and a defect's guard: in a `git worktree` `.git` is a FILE reading
+    `gitdir: <path>`, and writing under it raised NotADirectoryError - which is how feature 134's
+    baseline (`make done` in a detached worktree, the way constitution XIII asks for it) failed
+    before the first test ran.
+
+    Both spellings of the pointer are exercised, because a relative gitdir is what git actually
+    writes for a worktree inside the repository, and it is the branch that needs resolving.
+    """
+    from l7r.diagram.ci.state import STATE_FILE, _state_file
+
+    plain = tmp_path / "clone"
+    (plain / ".git").mkdir(parents=True)
+    assert _state_file(plain) == plain / STATE_FILE, "a plain clone keeps its state under .git/"
+
+    absolute = tmp_path / "wt-abs"
+    absolute.mkdir()
+    real = tmp_path / "gitdir-abs"
+    real.mkdir()
+    (absolute / ".git").write_text(f"gitdir: {real}\n")
+    assert _state_file(absolute) == real / Path(STATE_FILE).name, "a worktree's state lives in its OWN gitdir"
+
+    relative = tmp_path / "wt-rel"
+    relative.mkdir()
+    (tmp_path / "gitdir-rel").mkdir()
+    (relative / ".git").write_text("gitdir: ../gitdir-rel\n")
+    assert _state_file(relative) == (tmp_path / "gitdir-rel" / Path(STATE_FILE).name).resolve(), "a relative pointer is resolved against the worktree"
+
+    malformed = tmp_path / "wt-bad"
+    malformed.mkdir()
+    (malformed / ".git").write_text("not a gitdir pointer\n")
+    assert _state_file(malformed) == malformed / STATE_FILE, "anything else falls back to the plain path"

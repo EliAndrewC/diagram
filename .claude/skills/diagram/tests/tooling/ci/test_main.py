@@ -214,3 +214,17 @@ def test_remote_off_refusals_leave_would_have_entries(remote_off: Path, monkeypa
 
 def test_remote_ok_passes_when_remote_is_on(roots: Path) -> None:
     assert cli.main(["remote-ok", "ci-check"]) == 0
+
+
+def test_the_tooling_freshness_subcommands_round_trip(roots: Path, capsys: pytest.CaptureFixture[str]) -> None:
+    """Feature 174: `tooling-fresh` and `tooling-green` - the pair `make quick` uses to decide
+    whether to collect `tests/tooling/` at all.
+
+    Both directions asserted: fresh is FALSE (exit 1) before anything is recorded, TRUE (exit 0)
+    once `tooling-green` records the hash. A test of one direction alone passes with the comparison
+    inverted, which is the whole point of the exit code.
+    """
+    assert cli.main(["tooling-fresh"]) == 1, "nothing recorded yet, so the tooling is not vouched for"
+    assert cli.main(["tooling-green"]) == 0
+    assert "recorded green" in capsys.readouterr().out
+    assert cli.main(["tooling-fresh"]) == 0, "and now it is - `make quick` may skip the tooling tests"

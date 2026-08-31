@@ -7,7 +7,7 @@ from pathlib import Path
 
 import pytest
 
-from l7r.diagram.ci.delta import Delta, compute_delta, engine_key, engine_key_worktree, is_engine
+from l7r.diagram.ci.delta import SKILL, Delta, compute_delta, engine_key, engine_key_worktree, is_engine
 from tests.tooling.ci.conftest import commit, git
 
 S = ".claude/skills/diagram/"
@@ -196,3 +196,15 @@ def test_coverage_scope_names_only_the_changed_engine_modules(repo: Path, monkey
     assert coverage_scope(repo) == ["l7r/diagram", "l7r/diagram/settlement", "l7r/diagram/sitegen"]
     assert main(["cov-scope"]) == 0
     assert capsys.readouterr().out.strip() == "-o addopts=--cov=l7r/diagram --cov=l7r/diagram/settlement --cov=l7r/diagram/sitegen"
+
+
+def test_a_maps_notes_and_the_non_engine_directories_are_not_engine_code() -> None:
+    """Feature 174: the two early exits in `is_engine`, which decide the ROUTE a push takes.
+
+    A `.notes.md` beside a map and anything under the non-engine directories are docs: they take the
+    DIRECT route and owe no build. Asserted beside a path that IS engine code, so the test would fail
+    if the function simply started answering False.
+    """
+    assert not is_engine(f"{SKILL}pool/hamlets/inashiro/inashiro.notes.md"), "a map's notes are prose"
+    assert not is_engine(f"{SKILL}tests/settlement/test_core.py"), "tests are not engine code (feature 132 FR-024)"
+    assert is_engine(f"{SKILL}l7r/diagram/settlement/core.py"), "...but the engine itself is"
