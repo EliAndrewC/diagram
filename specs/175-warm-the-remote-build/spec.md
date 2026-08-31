@@ -1,6 +1,6 @@
 # Feature 175 - Warm the remote build
 
-**Status**: specified, awaiting `spec-fidelity` review (constitution XVI)
+**Status**: FAITHFUL (`spec-fidelity`, round 2) - cleared for implementation (constitution XVI)
 **Request**: `request.md` (the GM's words, verbatim) · **Measurements**: `research.md`
 
 ## Why
@@ -112,3 +112,39 @@ deviation** or **guess**:
 - D3 the lifecycle expiry and why that number (FR-006)
 - D4 the .html ruling and how it was settled (FR-008)
 - D5 whether the cache paid, measured (FR-009, FR-010)
+
+## Review history
+
+Constitution XVI: reviewed against the GM's own words in `request.md`, by an agent that did not write
+it, before any implementation. Two rounds.
+
+**Round 1 - CHANGES REQUIRED (4).** The author asked the reviewer to attack three specific things and
+was wrong about which mattered.
+
+1. **Item 2 had no FR at all** - the failure the author did NOT suspect. *"Figuring out exactly how
+   much we do want to upload"* and *"figuring out exactly what needs to go there"* are two questions
+   said in one breath; the draft answered the second three times (FR-002/003/004) and the first
+   nowhere, leaving it to an SC that read "smaller than the naive 221 MB" - satisfiable by excluding
+   one file. Fixed by FR-002a and D1a: measured on the BUILT cache, per mode, and a figure summed from
+   the research table explicitly does not count.
+2. **FR-010 let the session close the feature unshipped** - the one the author DID suspect and flagged
+   for attack. The reviewer's argument was sharper than the author's doubt: *"it does not pay" is a
+   fact about a SET, not about caching*, and R6.2's risk is the ~110 MB of `.svg`, not the 184 KB
+   manifest. Now: narrow and re-measure first; if nothing pays, report to the GM and HOLD.
+3. **FR-008 was one-directional** - "settle before EXCLUDING", whose cheapest compliant path was to
+   INCLUDE 65 MB of `.html` and settle nothing.
+4. **FR-004's "MUST account for the run MODE"** was satisfiable by writing a sentence.
+
+The reviewer also ruled FR-003 and FR-004 were NOT added scope, against the author's own worry that
+excluding things might be self-serving: the GM assigned the question and *"an answer to 'what needs to
+go there' is necessarily a set of inclusions and exclusions."*
+
+**Round 2 - FAITHFUL.** All four landed as requirements rather than prose. Both open questions the
+author declined to settle alone were ruled on: SC-006 stays (a cost display that silently stops being
+true is a defect this feature would introduce - Principle XIV), and `image.yml` may stay uncached but
+earns one Scope Out line so a later reader does not re-open it. Verdict: *"implement it."*
+
+**The reviewer's aside for the GM**, recorded because it is a real limit on SC-001: remote runs are
+infrequent (24 in the month this was written), so a cache that pays handsomely on a back-to-back pair
+may still be cold most of the time it matters. The expected HIT RATE belongs beside the warm
+before/after, or the measurement flatters itself.
