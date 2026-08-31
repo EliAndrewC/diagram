@@ -240,4 +240,26 @@ def test_a_file_ADDED_or_DELETED_since_the_base_counts_as_changed(repo: Path) ->
     git(repo, "add", "-A")
     git(repo, "commit", "-qm", "add an engine file")
 
-    assert d._semantically_changed(repo, newfile, "origin/main"), "a file absent from the base is a change"
+    base = git(repo, "rev-parse", "HEAD~1").strip()
+    # ARGUMENT ORDER IS (root, base, path). Written the other way round the call still PASSED, because
+    # "origin/main" does not end in ".py" and the function answers True at its first line - a green
+    # test exercising nothing (found while closing this branch for feature 174).
+    assert d._semantically_changed(repo, base, newfile), "a file absent from the base is a change"
+    git(repo, "rm", "-q", newfile)
+    git(repo, "commit", "-qm", "delete it again")
+    assert d._semantically_changed(repo, base, newfile), "and so is one deleted since the base"
+
+
+def test_coverage_scope_answers_EMPTY_where_there_is_no_origin_main_yet(repo: Path) -> None:
+    """A detached worktree and a fresh fixture have no `origin/main`, so `git merge-base` exits
+    non-zero. The scope is then whatever the WORKING TREE changed - never an exception, because the
+    gate computes its coverage scope before it runs anything."""
+    from l7r.diagram.ci import delta as d
+
+    git(repo, "update-ref", "-d", "refs/remotes/origin/main")
+    assert d.coverage_scope(repo) == [], "a clean tree with no base names nothing"
+
+    m = repo / SKILL / "l7r" / "diagram" / "settlement" / "fresh.py"
+    m.parent.mkdir(parents=True, exist_ok=True)
+    m.write_text("x = 1\n")
+    assert d.coverage_scope(repo) == ["l7r/diagram/settlement"], "an untracked engine module still counts"

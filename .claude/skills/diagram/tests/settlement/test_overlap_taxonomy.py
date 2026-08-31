@@ -32,6 +32,8 @@ from l7r.diagram.overlap.taxonomy import (
     matrix_policy,
     poly_area,
     poly_dist,
+    seg_closest,
+    seg_dist,
     seg_intersect,
     segments_cross,
 )
@@ -339,3 +341,37 @@ def test_a_feature_wholly_off_the_canvas_meets_nothing() -> None:
         "storehouses": [{"x": -5000.0, "y": -5000.0, "w": 40.0, "h": 30.0, "rot": 0.0}],
     }
     assert matrix_violations(M) == [], "the off-canvas record accuses nobody"
+
+
+def test_two_annexes_of_ONE_household_may_abut_and_two_of_different_ones_may_not() -> None:
+    """The second conditional permission that cannot live in `matrix_policy` (gardens/gardens is
+    FORBIDDEN there - asserted below, because the permission would be vacuous if the class pair
+    already allowed it). A household's shed and its garden crowd each other inside one yard; two
+    households' do not, because that is a boundary being crossed."""
+    assert matrix_policy("gardens", "gardens") is None, "the CLASS pair is forbidden - the permission is per-record"
+    house = {"x": 200.0, "y": 200.0, "w": 100.0, "h": 60.0, "rot": 0.0}
+    neighbor = {"x": 600.0, "y": 600.0, "w": 100.0, "h": 60.0, "rot": 0.0}
+    a = {"x": 230.0, "y": 205.0, "w": 40.0, "h": 30.0, "rot": 0.0, "of": [200.0, 200.0]}
+
+    one = {"meta": {"W": 1000, "H": 1000}, "houses": [house], "gardens": [a, {**a, "x": 240.0}]}
+    assert matrix_violations(one) == [], "one household's two annexes may abut"
+
+    two = {"meta": {"W": 1000, "H": 1000}, "houses": [house, neighbor], "gardens": [a, {**a, "x": 240.0, "of": [600.0, 600.0]}]}
+    assert ("gardens", "gardens") in {(ka, kb) for ka, kb, _x, _y in matrix_violations(two)}, "two households' may not"
+
+
+def test_a_PRIVATE_well_stands_inside_its_own_court_and_a_public_one_does_not() -> None:
+    """A trade work's own well is sunk in its court, so it lies on the work that owns it; a well on
+    the common ground is a well in the middle of somebody's building. The `private` flag is the
+    whole difference, so both halves are asserted from the same geometry."""
+    house = {"x": 200.0, "y": 200.0, "w": 100.0, "h": 60.0, "rot": 0.0}
+    on_the_house = {"x": 210.0, "y": 205.0}
+    assert matrix_violations({"meta": {"W": 1000, "H": 1000}, "houses": [house], "wells": [{**on_the_house, "private": True}]}) == []
+    assert matrix_violations({"meta": {"W": 1000, "H": 1000}, "houses": [house], "wells": [on_the_house]}), "a public well may not"
+
+
+def test_a_DEGENERATE_segment_is_its_own_closest_point() -> None:
+    """`seg_closest` divides by the segment's squared length, so a segment whose two ends coincide -
+    a way pinched to one point by an earlier pass - would raise. It answers the point itself."""
+    assert seg_closest(50.0, 90.0, (10.0, 10.0), (10.0, 10.0)) == (10.0, 10.0)
+    assert seg_dist(13.0, 14.0, (10.0, 10.0), (10.0, 10.0)) == pytest.approx(5.0)

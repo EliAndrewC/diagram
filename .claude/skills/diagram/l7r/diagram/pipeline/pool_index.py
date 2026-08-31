@@ -303,9 +303,8 @@ def build_index(skill_dir: str) -> str:
     nav: list[str] = []
     seen_trees: set[str] = set()
     for tree, tier, heading in _sections(bundles):
+        # never empty: `_sections` only yields a (tree, tier) pair that some bundle is already in
         rows = [b for b in bundles if b.tree == tree and b.tier == tier]
-        if not rows:
-            continue
         if tree not in seen_trees:  # the banner that says WHICH TREE, once, before its first section (FR-017)
             seen_trees.add(tree)
             title, lede = TREE_BANNERS[tree]
