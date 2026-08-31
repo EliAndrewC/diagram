@@ -157,7 +157,7 @@ Before declaring done (Mode A):
 - [ ] Self-review pass after first render (read the PNG)
 - [ ] Design notes written to `pool/<subject>.notes.md` (knob settings, particulars, deliberate choices)
 - [ ] `building-review` subagent pass: iterate until no findings, or remaining findings overruled with rationale recorded in the notes file's Review log
-- [ ] `size-audit` subagent pass ([`/.claude/agents/size-audit.md`](../../agents/size-audit.md)): every feature checked in real feet against independently researched historical anchors - documented tolerances get RE-VERIFIED, not assumed (a wrong size once laundered itself into the docs as a tolerance). It runs [`tools/pack_audit.py`](l7r/diagram/tools/pack_audit.py) for the packing/whitespace sweep (coverage %, largest vacant rectangle, aligned building gaps)
+- [ ] `size-audit` subagent pass ([`/.claude/agents/size-audit.md`](../../agents/size-audit.md)): every feature checked in real feet against independently researched historical anchors - documented tolerances get RE-VERIFIED, not assumed (a wrong size once laundered itself into the docs as a tolerance). It runs [`tools/pack_audit.py`](l7r/diagram/tools/pack_audit/CLAUDE.md) for the packing/whitespace sweep (coverage %, largest vacant rectangle, aligned building gaps)
 - [ ] `.svg`, `.png`, and `.notes.md` all saved in `pool/`
 - [ ] Historical-accuracy review offered to the GM at completion
 

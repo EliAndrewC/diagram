@@ -1,0 +1,6 @@
+{
+  "utc": "20260831T011849Z",
+  "guard": "pair-hooks",
+  "what": "gate alone",
+  "reason": "settlement-review ran on this delta (3 findings, all fixed in 0819fc04); this is the re-run its own fixes require"
+}
