@@ -278,3 +278,27 @@ def test_a_title_never_covers_a_placed_label() -> None:
     assert rects.count((400.0, 400.0, 560.0, 424.0)) == 2, "pinning the duplication so a fix is a deliberate change, not a surprise"
     assert s._box_clear(410.0, 405.0, 500.0, 420.0, obs) is False, "and a placard over it is refused"
     assert s._box_clear(1500.0, 1200.0, 1600.0, 1240.0, obs) is True, "clear ground elsewhere still takes one"
+
+
+def test_a_caption_wrapped_onto_two_lines_never_leaves_a_short_word_standing_alone() -> None:
+    """Feature 174: the one unreached statement in the caption wrapper.
+
+    Wrapping only happens when the single-line form is BLOCKED, so the blocker is placed on purpose.
+    With five words and a one-letter first word, the cut that would leave "A" on its own is skipped -
+    which is the rule the line encodes. Asserted by the shape of the ANSWER rather than by the
+    coverage number: no returned line is three characters or fewer.
+    """
+    # TWO NARROW BLOCKERS FLANKING THE LINE, not one wide band. A band wide enough to block the
+    # one-line form also blocks every wrapped form, and the wrapper then returns the text unwrapped
+    # as its last resort - which covers the line but asserts nothing about the rule. The flanks block
+    # the 24-character single line (about 132 px wide at size 10) and clear the best two-line cut
+    # (14 characters, about 77 px), so the wrap actually happens.
+    s = Settlement(W=1000, H=1000, seed=1)
+    s.M["labels"] = [
+        [430.0, 490.0, 460.0, 505.0, 5, "left flank"],
+        [540.0, 490.0, 570.0, 505.0, 5, "right flank"],
+    ]
+    lines = s._caption_lines("A Long Village Name Here", 500.0, 500.0, 10.0, "middle", 0.0)
+    assert len(lines) >= 2, "the single-line form was blocked, so it wrapped"
+    assert all(len(ln) > 3 for ln in lines), "no short word left standing alone - the rule this test is for"
+    assert " ".join(lines).split() == ["A", "Long", "Village", "Name", "Here"], "every word kept, in order"
