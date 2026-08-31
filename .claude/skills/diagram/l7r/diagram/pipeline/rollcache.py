@@ -116,7 +116,6 @@ def reset_shared() -> None:
         shutil.rmtree(os.path.dirname(run_dir), ignore_errors=True)
 
 
-
 def _run_share_path(key: tuple[str, str]) -> str | None:
     """Where a shared payload lives for THIS RUN, or None when there is no run to scope it to.
 
