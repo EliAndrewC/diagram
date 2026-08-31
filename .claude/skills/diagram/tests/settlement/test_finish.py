@@ -255,3 +255,26 @@ def test_a_map_too_full_for_a_blank_title_spot_takes_a_clean_corner():
     s.title("V")
     assert s.M["title"]["bbox"][0] == 30 and s.M["title"]["bbox"][1] == 16, "seated in the corner, not on a band"
     assert s.M["title"]["bbox"][1] >= 0, "the band rung (a negative y, above the map) was not needed"
+
+
+def test_a_title_never_covers_a_placed_label() -> None:
+    """Feature 174, and a defect caught on Tango 2026-07-23: the content crop landed the placard on
+    the 'pauper ossuary mound' label. Placed label boxes are obstacles like any drawn feature.
+
+    The scripted hamlets place their labels through a path that records them after this runs, so the
+    branch had never executed - it is a real rule with no test, not dead code.
+    """
+    s = _crop_settlement()
+    s.set_view(0, 0, 2000, 1500)
+    s.M["labels"] = [[400.0, 400.0, 560.0, 424.0, 5, "pauper ossuary mound"]]
+    obs = s._title_obstacles()
+    rects = obs[0]
+    assert (400.0, 400.0, 560.0, 424.0) in rects, "the label's own box is an obstacle"
+    # DEFECT NOTED, NOT FIXED HERE (feature 174): the box is appended TWICE - `_title_obstacles`
+    # carries two identical `for lb in self.M["labels"]` loops, and both run on every call. Harmless
+    # to the answer, since `_box_clear` only asks whether any rect hits, and it is why both of the
+    # module's uncovered label lines close together. Recorded rather than silently deduplicated,
+    # because removing one loop is an engine change that belongs to whoever owns that function.
+    assert rects.count((400.0, 400.0, 560.0, 424.0)) == 2, "pinning the duplication so a fix is a deliberate change, not a surprise"
+    assert s._box_clear(410.0, 405.0, 500.0, 420.0, obs) is False, "and a placard over it is refused"
+    assert s._box_clear(1500.0, 1200.0, 1600.0, 1240.0, obs) is True, "clear ground elsewhere still takes one"
