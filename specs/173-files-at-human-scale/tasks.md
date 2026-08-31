@@ -115,3 +115,15 @@ specifying are in [`research.md`](research.md).
       research: procedure
       verify: `make verify` reports **"maps whose manifest changed: none"** - the refactor moved no
       map. Gate + the paired independent review run together
+
+- [x] T18 the surface a split must preserve is VERIFIED rather than derived - `tests/test_package_surfaces.py`
+      resolves every `from l7r.diagram... import NAME` in the tree against the live module
+      research: procedure
+      verify: the mover derives the re-export list by GREP, and its regex stopped at the first
+      newline - so a parenthesized multi-line import contributed only its first line and
+      `_COMMONS_FLOOR_FT` silently left `hinterland`'s surface. It took a full gate to find, because
+      the one test that imports it lives in `tests/gate/`, which `make quick` never selects. The
+      grep is fixed AND is no longer the verification. Proven to fire by removing the re-export.
+      Not in `tests/tooling/`: that tree is marked `tooling` by LOCATION and skipped while the
+      tooling hash is unchanged, which is exactly wrong for a check about the engine's packages -
+      the first draft sat there and collected zero tests

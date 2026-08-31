@@ -137,8 +137,12 @@ def test_the_selftest_passes() -> None:
 def test_the_repository_itself_is_under_the_bar() -> None:
     """The rule holds on this tree - the half of feature 173 that was the actual work.
 
-    This is not redundant with `make lint`: it keeps the bar true for anyone running the suite
-    alone, and it fails with the offending names rather than with a make error.
+    NOTE WHERE THIS RUNS. Everything in `tests/tooling/` is marked `tooling` by location and is
+    skipped while the tooling hash is unchanged, so this assertion does NOT run on a gate whose only
+    change was engine code. That is fine, and it is not the enforcement: `make lint` runs
+    `check-file-scale.py` over the whole tree on EVERY gate and every push, unconditionally. This
+    exists to fail with the offending filenames for someone running the suite alone, and to prove
+    the checker still agrees with the tree at the moment the checker itself changes.
     """
     over, _, scanned = cfs.run(str(REPO))
     assert scanned > 100, "the scan found almost nothing - wrong root?"

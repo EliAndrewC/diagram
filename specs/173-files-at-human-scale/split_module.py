@@ -449,8 +449,15 @@ def consumed_surface(module_path: str, own_names: set[str]) -> set[str]:
                 continue
             if stem not in body:
                 continue
-            for m in re.finditer(rf"from\s+[.\w]*\b{re.escape(stem)}\s+import\s+\(?([^)\n]+)\)?", body):
-                for piece in m.group(1).split(","):
+            # `[^)\n]` STOPPED AT THE FIRST NEWLINE, so a parenthesized multi-line import - the
+            # form ruff produces for anything over the line length - contributed only its first
+            # line. One name was lost that way (`_COMMONS_FLOOR_FT`, imported by
+            # tests/gate/hamletgen/test_woodland_shrink_147.py across two lines) and it took a gate
+            # run to find, because nothing else in the tree imports it. `[\s\S]` inside the parens
+            # spans lines; the unparenthesized branch still stops at the newline, which is correct
+            # for it. Better still, the VERIFICATION is no longer this grep - see below.
+            for m in re.finditer(rf"from\s+[.\w]*\b{re.escape(stem)}\s+import\s+(?:\(([\s\S]*?)\)|([^\n]+))", body):
+                for piece in (m.group(1) or m.group(2) or "").split(","):
                     name = piece.strip().split(" as ")[0].strip()
                     if name and name != "*":
                         want.add(name)
