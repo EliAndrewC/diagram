@@ -459,7 +459,7 @@ def _one_name_import(stmt: str, name: str) -> str:
     return stmt.strip()
 
 
-def _synth_imports(body: str, src: "Source", local: set[str], earlier: dict[str, str], wrap: bool, self_type: str | None, plan_core: str = "core") -> str:
+def _synth_imports(body: str, src: "Source", local: set[str], earlier: dict[str, str], wrap: bool, self_type: str | None, plan_core: str = "from ..core import Settlement") -> str:
     reads = reads_of(body, wrap=wrap) - local
     blocks: list[str] = []
     std = sorted({_deepen(src.import_binds[n]) for n in reads if n in src.import_binds})
@@ -478,7 +478,7 @@ def _synth_imports(body: str, src: "Source", local: set[str], earlier: dict[str,
         # redefinition ruff will not merge.
         have = any("TYPE_CHECKING" in b for b in blocks)
         lead = "" if have else "from typing import TYPE_CHECKING\n\n"
-        blocks.append(f"{lead}if TYPE_CHECKING:\n    from ..{plan_core} import {self_type}")
+        blocks.append(f"{lead}if TYPE_CHECKING:\n    {plan_core}")
     return "\n".join(b for b in blocks if b)
 
 
@@ -511,7 +511,7 @@ def cmd_apply(path: str) -> int:
         helper_entries = src.contiguous(pre, src.header_end)
         helper_body = "".join(seg for _, seg in helper_entries)
         helper_names = {nm for n in pre for nm in toplevel_names(n)}
-        write(helpers_mod, hdr_doc + _synth_imports(helper_body, src, helper_names, {}, False, plan["self"]) + "\n\n" + helper_body.lstrip("\n"))
+        write(helpers_mod, hdr_doc + _synth_imports(_deepen(helper_body), src, helper_names, {}, False, plan["self"], plan["self_import"]) + "\n\n" + _deepen(helper_body).lstrip("\n"))
         earlier = dict.fromkeys(helper_names, helpers_mod)
 
         methods = [n for n in cls.body if isinstance(n, ast.FunctionDef)]
@@ -525,12 +525,22 @@ def cmd_apply(path: str) -> int:
         for _marquee, m, _look in plan["cuts"]:
             sub = plan["classes"][m]
             classes.append((m, sub))
-            body = _annotate_self("".join(groups[m]), plan["self"])
-            text = hdr_doc + _synth_imports(body, src, set(), earlier, True, plan["self"]) + "\n\n\nclass " + sub + ":\n" + body.lstrip("\n")
+            body = _deepen(_annotate_self("".join(groups[m]), plan["self"]))
+            text = hdr_doc + _synth_imports(body, src, set(), earlier, True, plan["self"], plan["self_import"]) + "\n\n\nclass " + sub + ":\n" + body.lstrip("\n")
             write(m, text)
+        # THE MODULE-LEVEL HELPERS ARE PART OF THE SURFACE TOO. `water_ways.fan_rival` and
+        # `fixtures.pick_caption_seat` are exactly the functions the project's own rule lifted OUT of
+        # closures so they could be unit-tested (GM 2026-08-28), so the tests import them by name -
+        # and a package that re-exported only the mixin class would break every one of them.
+        consumed = consumed_surface(path, helper_names | set(src.import_binds))
+        surface = sorted({n for n in helper_names if not n.startswith("_")} | (consumed & helper_names))
+        passthrough = sorted(consumed & set(src.import_binds))
         init = (
             src.docstring().rstrip("\n") + "\n\n"
-            + "\n".join(f"from .{m} import {c}" for m, c in classes) + "\n\n\n"
+            + "\n".join(f"from .{m} import {c}" for m, c in classes) + "\n"
+            + (f"from .{helpers_mod} import " + ", ".join(f"{n} as {n}" for n in surface) + "\n" if surface else "")
+            + ("".join(_deepen(_one_name_import(src.import_binds[n], n)) + "\n" for n in passthrough))
+            + "\n\n"
             + f"class {plan['class']}(\n" + "".join(f"    {c},\n" for _, c in classes) + "):\n"
             + f'    """The composed surface. No members of its own - see this package\'s CLAUDE.md."""\n'
         )

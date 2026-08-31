@@ -93,6 +93,61 @@ PLANS = {
         ],
     },
 
+    # ---- the three MIXIN files -------------------------------------------------------------------
+    # Methods reach each other through `self.` on the composed Settlement, so a sub-mixin needs no
+    # import of its siblings and the cuts can be contiguous - the settlement/structures/ pattern
+    # (feature 114). `__init__.py` composes the original class name back, so settlement/core.py's
+    # import and its position in the `class Settlement(...)` base list never move.
+    "l7r/diagram/settlement/water_ways.py": {
+        "kind": "mixin",
+        "class": "WaterWaysMixin",
+        "self": "Settlement",
+        "self_import": "from ..core import Settlement",
+        "helpers": "_helpers",
+        "doc": '"""Split from settlement/water_ways.py by feature 173 - see this package\'s CLAUDE.md for the index."""\n\n',
+        "classes": {"focal": "FocalMixin", "water": "WaterBodiesMixin", "clipping": "WaterClipMixin", "lanes": "LanesMixin", "kido": "KidoMixin", "wards": "WardsMixin"},
+        "cuts": [
+            ("note_focal", "focal", "the focal features a settlement is built around - the mill, the secondary shrine, and the block they reserve"),
+            ("_flow_record", "water", "the water bodies themselves: `stream`, `river`, `channel`, and the flow record every one of them writes"),
+            ("_clip_to_pond", "clipping", "clipping a way or a channel to water it must not cross - pond, moat, river and stream, plus `field_channel`"),
+            ("lane", "lanes", "lanes and streets: drawing one, re-inking it, and `trim_lane_stubs`, the pass that pulls back the ends that serve nothing"),
+            ("_kido_rects", "kido", "the kido barrier - its rectangles, its seat, the reservation it keeps clear, and the mesh that places them all"),
+            ("_ward_ends_on_wall", "wards", "wards and quarters - the boundary that must end on a wall, the ward itself, and the reserves a quarter draws"),
+        ],
+    },
+
+    "l7r/diagram/settlement/homestead_parts.py": {
+        "kind": "mixin",
+        "class": "HomesteadPartsMixin",
+        "self": "Settlement",
+        "self_import": "from ..core import Settlement",
+        "helpers": "_helpers",
+        "doc": '"""Split from settlement/homestead_parts.py by feature 173 - see this package\'s CLAUDE.md for the index."""\n\n',
+        "classes": {"yards": "ThreshingYardsMixin", "gardens": "GardensMixin", "groves": "GrovesMixin", "stands": "StandsMixin", "keepouts": "KeepoutsMixin", "farmstead": "FarmsteadMixin"},
+        "cuts": [
+            ("_draw_threshing_yard", "yards", "the threshing yard: its size from the house's, whether it fits, where it goes, and how it is drawn"),
+            ("_draw_garden", "gardens", "the kitchen garden and the farm shed it shares a corner with - dimensions, fit, and the spot search"),
+            ("_windward", "groves", "the homestead grove (yashikirin): which way the wind comes from, whether this house gets one, the L-belt arms, and the drawing"),
+            ("bamboo_stand", "stands", "the two big stands - the household bamboo stand and `village_grove`, the settlement-scale windbreak"),
+            ("_corridor_buffers", "keepouts", "what a grove or a stand may NOT cover: corridor buffers, watercourses, canopy crowns and the urban keepouts"),
+            ("_attach_grove", "farmstead", "the three farmstead helpers feature 120 moved here - attaching a grove, finding appurtenances, and the nudge sequence"),
+        ],
+    },
+
+    "l7r/diagram/settlement/structures/fixtures.py": {
+        "kind": "mixin",
+        "class": "PublicFixturesMixin",
+        "self": "Settlement",
+        "self_import": "from ...core import Settlement",
+        "helpers": "_helpers",
+        "doc": '"""Split from settlement/structures/fixtures.py by feature 173 - see this package\'s CLAUDE.md for the index."""\n\n',
+        "classes": {"boards": "BoardsMixin", "siting": "FixtureSitingMixin"},
+        "cuts": [
+            ("fire_tower", "boards", "the drawn fixtures themselves - the fire tower, the kosatsuba notice board, and the caption engine the board carries"),
+            ("fixture_clear_of_water", "siting", "WHERE a fixture goes: the water and lane-clearance probes, and the two placement passes (`place_kosatsuba`, `place_punishment_spot`)"),
+        ],
+    },
+
     # ---- waterfields/seams.py: 1,069 -> three ---------------------------------------------------
     # A chain, not a residue bucket: the pockets are found, then planted or traded away, then the
     # whole thing is driven by close_seams. Cuts follow the chain, so every edge points backwards.
