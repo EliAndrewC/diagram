@@ -404,3 +404,25 @@ it.
 `dev/loop.md` rule ("detach long make runs; never pipe them to `tail`") is right and stays; this is
 the missing flag in it. The cost of the missing flag, once: a three-minute gate cycle plus the turns
 that read its truncated log and concluded, wrongly at first, that a guard had killed it.
+
+## BACKTICKS IN A DOUBLE-QUOTED `git commit -m` ARE COMMAND SUBSTITUTION (2026-08-31)
+
+`git commit -m "... `make explain` ..."` does not quote that span - the shell RUNS it and splices the
+output in. Measured on commit `302074b7`, whose message was meant to read *"so `from l7r.diagram
+import check_village` still resolved here"* and reads *"so  still resolved here"*: the shell executed
+`from l7r.diagram import check_village`, got `from: command not found` on stderr, and substituted
+nothing.
+
+**The damage here was cosmetic and the hazard is not.** A message containing a backticked command
+that IS valid would execute it, silently, with the session's full permissions, at the moment of
+commit - and the guards do not see it, because the command they inspect is a `git commit`. This
+project writes long, code-quoting commit messages by policy, which is exactly the shape that meets
+it.
+
+**So: `-m` gets a single-quoted string, or a `$(printf ...)`, or a heredoc - never a double-quoted
+string containing backticks.** The messages in this repository use `$(printf "...\n...")`, which is
+safe for the same reason it is fiddly: everything is escaped deliberately.
+
+**And history cannot be rewritten here** (constitution VI), so a damaged message stays damaged. The
+content survived only because it was also written at the point of change - which is the argument for
+that rule restated: the commit message is a POINTER to the record, never the record itself.
