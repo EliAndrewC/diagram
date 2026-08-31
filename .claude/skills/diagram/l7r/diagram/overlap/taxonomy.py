@@ -691,18 +691,6 @@ def seg_dist(px: float, py: float, a: Pt, b: Pt) -> float:
     return math.hypot(px - cx, py - cy)
 
 
-def pt_to_rect(px: float, py: float, rect: dict[str, Any]) -> float:
-    """Shortest distance from a point to a (possibly rotated) rectangle footprint; 0 if the point is inside.
-    Un-rotates the point into the rect's local frame, clamps to the half-extents, and measures the overhang."""
-    a = math.radians(rect.get("rot", 0))
-    ca, sa = math.cos(a), math.sin(a)
-    dx, dy = px - rect["x"], py - rect["y"]
-    lx, ly = dx * ca + dy * sa, -dx * sa + dy * ca  # local coords (rect axis-aligned here)
-    ox = max(abs(lx) - rect["w"] / 2, 0.0)
-    oy = max(abs(ly) - rect["h"] / 2, 0.0)
-    return math.hypot(ox, oy)
-
-
 # the 2 patron fortunes of each Great Clan - a town defaults to one monastery for each
 # The recognized justifications for a city carrying MORE than two major temples
 # (settlements/religion-and-death.md). A fixed vocabulary rather than free text: the doctrine

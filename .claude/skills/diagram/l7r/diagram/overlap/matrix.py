@@ -269,9 +269,6 @@ def torii_halfbox(ftpx: float, span_ft: float = 16.0) -> tuple[float, float, flo
     return s2 + pad, s2 * 7.0 / 19.0 + pad, s2 * 17.0 / 19.0 + pad
 
 
-# STANDALONE plank-footbridge usefulness (mirrors settlement.PLANK_BANK_REACH / PLANK_VILLAGE_REACH /
-# PLANK_ABUTMENT - keep in sync). A footplank is worth building only if BOTH banks reach ground someone
-# walks to; the placement engine (channel_footbridges) enforces it, these checks re-verify from the manifest.
 FOREST_REVEAL_FT = 110.0  # mirrors settlement.FOREST_REVEAL_FT - how deep the crop reveals a canvas-filling wood
 
 # Mirrors settlement._CANOPY_STRUCT_KEYS (keep in sync): every ROOFED structure a tree may not be drawn on.
@@ -316,12 +313,6 @@ DOJO_PER_SAMURAI = 200
 DOJO_RANGE_FT = 90.0
 
 DOJO_QUARTER_PX = 260.0
-
-FOOT_ABUTMENT = 6.0  # deck = local ditch width + this abutment (settlement.PLANK_ABUTMENT)
-
-FOOT_BANK_REACH = 11.0  # px past the abutment where a bank opens onto the terrain it lands on
-
-FOOT_VILLAGE_REACH = 55.0  # a bank within this of a dwelling reaches the village (a place worth crossing to)
 
 
 def poly_gap(a: Poly, b: Poly) -> float:
