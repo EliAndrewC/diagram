@@ -2,6 +2,40 @@
 # buildspecOverride by l7r/diagram/ci/dispatch.py; the projects themselves hold only a placeholder.
 # Everything real is in buildspec/run.sh, shared with merge.yml; MODE is the only difference.
 version: 0.2
+# THE GENERATION CACHE TRAVELS BETWEEN BUILDS (feature 175). Without this every build cloned into a
+# fresh container with an empty `.gencache/`, so every `gate_obtain` that HITs on a laptop MISSED here
+# and regenerated the map for real - the remote gate did strictly MORE work than the local one for the
+# same commit. The GM's ruling: "rather than just saying that AWS is slower, we should note that that
+# means in our current implementation, we're not optimizing the AWS code runs as much as we should."
+#
+# WHAT IS CACHED, and why each line (spec FR-002/FR-003/FR-008, decisions D1/D4):
+#   *.json      the manifest - what the gate actually judges
+#   *.svg       read by `_channels_under_plots`, the z-order audit in full/test_villages.py
+#   coverage.*  replayed into the run on a HIT; without it `gate_obtain` cannot hit at all
+#   meta.json   the key and dep list `load()` re-checks
+#   ast/        `compute_key`'s parsed-source memo, 1.4 MB
+#
+# WHAT IS NOT, and why NOT (do not "helpfully" add these):
+#   *.png   a gate-built entry HAS none - the regen child runs DIAGRAM_SKIP_RENDER=1 - and
+#           `gencache.load()` DELETES a standing output its entry lacks. Caching a raster would seed a
+#           container with one no remote roll produces, re-creating the 2026-08-17 defect where four
+#           maps shipped a PNG from the previous roll beside a current .json and .svg, all three with
+#           matching mtimes, past two review rounds.
+#   *.html  ~13 MB per map, ~65 MB total, and SETTLED as unread by the gate: no test in
+#           tests/ or tests/full/ reads a pool map's page, `pool_index` links it only
+#           `if os.path.exists(...)`, and `render_cache`'s missing-render check looks at .svg and .png
+#           only ("frozen exhibits predate the .html and never owe one").
+#   rolls/  the ROLL cache. A FULL build neither reads nor WRITES it - `rollcache.bypassed()` is true
+#           under L7R_TESTS_FULL=1 and `obtain` returns before storing - so the set differs by mode on
+#           its own, with no filter to keep in step. A reference build does use it, which is why the
+#           cache LOCATION is per-scope (dispatch.py) rather than shared.
+cache:
+  paths:
+    - 'repo/.claude/skills/diagram/.gencache/*/*.json'
+    - 'repo/.claude/skills/diagram/.gencache/*/*.svg'
+    - 'repo/.claude/skills/diagram/.gencache/*/coverage.*'
+    - 'repo/.claude/skills/diagram/.gencache/ast/**/*'
+    - 'repo/.claude/skills/diagram/.gencache/rolls/**/*'
 env:
   variables:
     MODE: check

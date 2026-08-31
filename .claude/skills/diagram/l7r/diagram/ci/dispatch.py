@@ -50,6 +50,30 @@ class AwsClient(Protocol):
     def delete_object(self, bucket: str, key: str) -> None: ...
 
 
+def cache_location(bucket: str, project: str, scope: str) -> str:
+    """Where CodeBuild keeps the generation cache for this project and scope (feature 175).
+
+    **THE OBJECT COUNT IS BOUNDED BY CONSTRUCTION, and that is the whole point of this function.**
+    CodeBuild writes one archive per cache `location`, so keying on (project, scope) means the cache
+    can ever hold `2 projects x {full, reference}` = FOUR objects, no matter how many builds, commits
+    or branches run through it. The GM named the opposite as the failure to avoid: *"if we were
+    uploading many megabytes worth of content to Amazon S3 on every run and then never cleaning it
+    up, then that would be bad."* A location containing the commit SHA would do exactly that - one
+    object per commit, for ever - so it is forbidden by spec FR-005 and asserted against in
+    `tests/tooling/ci/test_cache.py`.
+
+    **The scope is in the key rather than shared** because the two scopes want different contents: a
+    reference build reads the roll cache (`make reference` calls `rollcache.report`) while a FULL
+    build neither reads nor writes it (`rollcache.bypassed()` is true under `L7R_TESTS_FULL=1` and
+    `obtain` returns before storing). Sharing one location would have a reference build's `rolls/`
+    ride along in every FULL restore, unread - 54 MB on the laptop that measured it.
+
+    A lifecycle rule on the bucket expires these; see `specs/175-warm-the-remote-build/` D3. The
+    bucket is the CI bucket that already holds the mailbox and go-signals, so there is one bucket,
+    one policy, and one place to look."""
+    return f"{bucket}/cache/{project}/{scope}"
+
+
 class AccessDenied(Exception):
     """An AWS AccessDeniedException, with the operation it named."""
 
@@ -310,6 +334,10 @@ def run(ctx: Context) -> Outcome:
     if ctx.client.get_object(ctx.secrets.ci_bucket, "image/latest.txt") is not None:
         image_kw = {"imageOverride": f"{ctx.secrets.ecr_image}:latest", "imagePullCredentialsTypeOverride": "SERVICE_ROLE"}
     ctx.events.append("image:custom" if image_kw else "image:stock")
+    # THE CACHE TRAVELS WITH THE CALL, for the same reason the buildspec does (feature 175): a cache
+    # configured on the PROJECT is state nobody can review, while an override is reviewable in a diff.
+    cache_kw: dict[str, Any] = {"cacheOverride": {"type": "S3", "location": cache_location(ctx.secrets.ci_bucket, project, ctx.scope)}}
+    ctx.events.append(f"cache:{ctx.scope}")
     try:
         started = ctx.client.start_build(
             projectName=project,
@@ -317,6 +345,7 @@ def run(ctx: Context) -> Outcome:
             environmentVariablesOverride=env,
             computeTypeOverride=ctx.compute,
             **image_kw,
+            **cache_kw,
         )
     except AccessDenied as e:
         ctx.events.append("start_build:denied")
