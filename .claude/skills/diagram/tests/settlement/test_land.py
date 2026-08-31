@@ -9,7 +9,7 @@ import pytest
 from l7r.diagram import overlap, settlement
 from l7r.diagram.settlement import Settlement
 from tests._scope import full_or
-from tests.settlement._builders import _crop_settlement, _hamlet_with_field, _nuc_village, _town
+from tests.settlement._builders import _city, _crop_settlement, _hamlet_with_field, _nuc_village, _town
 
 
 def test_marsh_draws_wet_scatter_and_records_it():
@@ -628,3 +628,47 @@ def test_a_dike_cut_with_no_watercourse_in_reach_seats_its_gate_on_the_cut_itsel
     snapped.M["dikes"] = [{"crest": crest, "gaps": [(500.0, 200.0)], "outline": crest}]
     snapped.M["streams"] = [{"poly": [(495.0, 100.0), (495.0, 300.0)], "bedz": 0}]
     assert snapped.dike_gates() == 1
+
+
+def test_near_ring_cropland_leaves_a_GROVE_CLUMP_uncovered() -> None:
+    """A homestead grove's clumps are drawn canopy, so a dry plot laid over one buries it
+    (`groves_clear_of_dry_plots`). The cell is rejected on the clump's own point with a 12 px hem,
+    not on the grove's belt outline - a belt is mostly air, and rejecting the whole belt would leave
+    a bare ring around every homestead."""
+    s = _town()
+    clear = s.near_ring_cropland((0, 0, 600, 600), density="dense", seed=3)
+
+    g = _town()
+    g.M["village_groves"] = [{"clumps": [(x, y) for x in range(120, 520, 60) for y in range(120, 520, 60)]}]
+    grown_over = g.near_ring_cropland((0, 0, 600, 600), density="dense", seed=3)
+    assert grown_over < clear, f"the clumps cost the tiler cells: {grown_over} of {clear}"
+    for p in g.M["dry_plots"]:
+        xs = [q[0] for q in p["poly"]]
+        ys = [q[1] for q in p["poly"]]
+        box = (min(xs) - 12, min(ys) - 12, max(xs) + 12, max(ys) + 12)
+        assert not any(box[0] <= cx <= box[2] and box[1] <= cy <= box[3] for cx, cy in ((x, y) for x in range(120, 520, 60) for y in range(120, 520, 60))), p["crop"]
+
+
+def test_a_paddy_basin_sets_BACK_from_funerary_ground_in_BOTH_of_its_recorded_shapes() -> None:
+    """Funerary ground is recorded two ways - a cremation ground as a box with `x`/`w`/`h`, a cemetery
+    as a `poly` - and `funerary_set_back_from_water` holds for both. Only the box form was exercised,
+    so a cemetery drawn as a polygon set a paddy back from nothing at all."""
+
+    def _seeded(**funerary):
+        s = _city()
+        s.M["streams"] = [{"poly": [[0.0, 300.0], [1200.0, 300.0]], "w": 8.0}]
+        s.M.update(funerary)
+        return s, s.near_ring_paddy((0, 0, 600, 600), seed=4)
+
+    _clear, n_clear = _seeded()
+    assert n_clear > 0, "the ground carries basins to begin with"
+
+    poly_form, n_poly = _seeded(cemeteries=[{"poly": [(100.0, 0.0), (400.0, 0.0), (400.0, 300.0), (100.0, 300.0)]}])
+    assert n_poly < n_clear, f"a POLY graveyard costs the basins ground: {n_poly} of {n_clear}"
+    for f in [f for f in poly_form.M.get("fields", []) if f.get("kind") == "paddy"]:
+        xs = [q[0] for q in f["outline"]]
+        ys = [q[1] for q in f["outline"]]
+        assert max(xs) < 40.0 or min(xs) > 460.0 or min(ys) > 360.0, f"60 px of set-back from the graves: {(min(xs), min(ys), max(xs), max(ys))}"
+
+    _box_form, n_box = _seeded(cremation_grounds=[{"x": 250.0, "y": 150.0, "w": 300.0, "h": 300.0}])
+    assert n_box < n_clear, f"and so does the BOX form: {n_box} of {n_clear}"
