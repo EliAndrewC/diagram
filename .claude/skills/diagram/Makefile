@@ -1013,7 +1013,12 @@ TIER_SELECT = $(if $(COV_FLOORS),,$(if $(filter reference,$(SCOPE_STATE)),--tier
 JOURNAL_ENV =
 
 # (GUARD_EDIT_OK: feature 132 - test-full rolls every pool map, so the scope lock refuses it before `test` starts)
-test-full:
+# GUARD_EDIT_OK: DOCUMENTATION ONLY - `test-full` had no `##` string, so it was invisible in `make help`
+# while `measure-hooks.sh` refuses a second one by name and `tests/CLAUDE.md` names it as a tree's runner.
+# A target a session is told about only by a REFUSAL is one it will misunderstand: this session described
+# it to the GM as running less than the full suite, having read `tests/CLAUDE.md`'s "done FULL=1 and the
+# AWS check only" row, when in fact COV_FLOORS=1 switches every deselection OFF. Nothing executable changes.
+test-full:      ## EVERY test, nothing deselected, + all three coverage floors - `done FULL=1`'s test phase without its static checks / reference roll / perf-gate
 	$(SWEEP_OK)
 	@$(MAKE) --no-print-directory test COV_FLOORS=1
 
