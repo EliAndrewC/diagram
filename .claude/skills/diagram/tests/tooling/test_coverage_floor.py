@@ -41,9 +41,9 @@ def test_a_plain_make_done_runs_the_FLOORED_test_phase_on_both_branches() -> Non
     100% floor over a partial suite. That is why the phase is `test-full` whether or not FULL is set,
     and why a phase list that reverts to a bare `test` on the plain branch is the regression this
     guards: it would restore the *"coverage floors: deferred"* path the GM's request abolished."""
-    phases = re.search(r"for phase in (.+?); do", _done_recipe())
-    assert phases, "the gate runs a phase loop"
-    line = phases.group(1)
+    loops = re.findall(r"for phase in (.+?); do", _done_recipe())
+    assert len(loops) == 2, f"the gate runs the static checks first, then the suite: {loops}"
+    line = loops[1]  # the first loop is lint/format/typecheck, which runs BEFORE the map roll is paid for
     assert "test-full" in line, f"the floored phase runs on the plain branch too: {line}"
     assert not re.search(r"\btest\b(?!-full)", line.replace("hooks-test", "")), f"and the unfloored `test` phase is NOT in the list: {line}"
     assert "$(if $(FULL),perf-gate,)" in line, f"FULL adds the perf bookends, which is what still distinguishes it: {line}"
