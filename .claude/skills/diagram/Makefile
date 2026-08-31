@@ -751,8 +751,19 @@ cov-file:       ## which lines of MOD does ONE test file reach?   FILE=tests/set
 #
 # Deliberately NOT reference-first: it IS the reference map, and gating it behind itself is the
 # circularity this target exists to break.
-explain:        ## why a map is failing - every check with its message.   SEED=27 for a cohort seed
-	@SEED=$(or $(SEED),4) python3 .explain.py
+# GUARD_EDIT_OK: RETIRED WITH THE BATTERY IT REPORTED (feature 166's leftover, found 2026-08-31 by the
+# first remote build since 2026-08-25). `make explain` was "why a map is failing - every check with its
+# message", and it ran `check_village`'s gate; feature 166 deleted that battery and its five tools and
+# seven targets, and missed this one because it is a DOTFILE (`.explain.py`, hidden so
+# `gencache.engine_files()` prunes it) and so matched no sweep. Nothing replaces it: a rule about a map
+# is a test of the placer now, and the per-map questions go to `make why-placed`, `make overlap-audit`
+# and `make sun-audit`.
+#
+# WHY NOBODY NOTICED FOR A DAY: `l7r/diagram/check_village/` survived on disk in every existing clone as
+# an empty-but-for-`__pycache__` directory. That is an importable PEP 420 namespace package, so
+# `from l7r.diagram import check_village` still RESOLVED locally while failing in a fresh clone -
+# `tests/test_package_surfaces.py` passed here and failed on CodeBuild. A deleted package leaves a
+# phantom behind; deleting the tracked files is not the same as removing the directory.
 
 durations:
 	@python3 -m pytest -n $(XDIST_WORKERS) -q --no-cov $(if $(FULL),,--ignore=tests/full) $(if $(MARK),-m "$(MARK)",-m "not rolls_map") --durations=$(or $(N),12) 2>&1 | grep -E "^[0-9.]+s (call|setup)|passed|failed" | head -$$(( $(or $(N),12) + 2 ))
