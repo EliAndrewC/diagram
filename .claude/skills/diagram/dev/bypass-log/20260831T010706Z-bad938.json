@@ -1,0 +1,6 @@
+{
+  "utc": "20260831T010706Z",
+  "guard": "pair-hooks",
+  "what": "gate alone",
+  "reason": "engine change is rollcache"
+}

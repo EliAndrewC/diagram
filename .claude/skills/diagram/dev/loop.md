@@ -250,3 +250,123 @@ THE MEASUREMENT TRAP THIS WORK WALKED THREE TIMES, and the reason a shared tool 
 VERTEX-only test misses what passes BETWEEN the vertices - a stream running between a farmhouse's corners,
 a lateral crossing a parcel between its outline points, a blade read as a disc round its base. Every
 overlap question here is now asked in both directions by one implementation.
+
+## WHERE THE GATE'S TEST PHASE ACTUALLY SPENDS ITS TIME (measured 2026-08-30)
+
+The GM asked for a breakdown after `make done`'s median went 35 s -> 135 s over three days. The answer
+was not in the tests at all - it was `hooks-test` (94 s against the whole Python suite's 17 s), which
+became feature 172. What follows is the test phase itself, profiled and then chipped at.
+
+### The phase budget, on a warm clone
+
+| phase | cost |
+|---|---|
+| lint / format / typecheck | ~1 s together |
+| reference roll | 0 s on a cache hit, ~29-37 s on a miss |
+| `hooks-test` | 0 s while stamped; 194 s serial / 63 s parallel after feature 172 |
+| `test` | **10-11 s** (was 15.4 s) |
+
+### What four passes at the slowest test bought
+
+    step                      wall     CPU   slowest test
+    0 start                 15.35s   97.7s     11.50s
+    1 comb tests trimmed    16.63s   81.7s     13.40s
+    2 + woodland cached     13.60s   77.8s      8.20s
+    3 + seed_branches       12.33s   67.1s      3.24s
+    4 + comb nets shared    10.37s   47.2s      2.95s
+    5 + test_fields shared  ~11.0s   ~49s       2.9s   (inside the noise band; see below)
+
+**Every one was the same shape: one expensive construction repeated.** A `build_comb` is 0.5 s and a
+deepcopy of the result is 0.0018 s - 272x cheaper - so a test file calling it ten times across five
+distinct argument sets was paying for nine builds it did not need.
+
+### THE TRAP, WHICH BIT TWICE
+
+**A per-process cache shares almost nothing under `--dist worksteal`.** `functools.lru_cache` and a
+module-level dict both help only when two tests reading the same subject land on the SAME xdist worker,
+which they usually do not. Both attempts CUT CPU AND RAISED WALL - step 1 above went 15.35 -> 16.63 s,
+and `test_fields`' dict version went 4.48 -> 4.76 s. Only `rollcache.obtain`, which is keyed on the
+engine and backed by disk, shares across workers: that took `test_fields` to 0.57 s.
+
+And if the shared subject is MUTATED downstream, hand out a deepcopy - `draw_comb_field` rewrites
+`bund_beans` and `threads` on the net it is given, so a shared net by reference would make one test's
+draw change what the next test builds on, surfacing as an unrelated failure that depends on ordering.
+
+### THE WALL IS NOT TEST-BOUND ANY MORE, and here is the arithmetic
+
+    measured wall                                    ~10.4 s
+    best-case PERFECT 8-worker packing of the tests    5.9 s
+    collect + startup                                  1.9 s
+    remainder (sub-5 ms tests + scheduling slack)      ~2.6 s
+
+Deleting every test over 1 s would take the packed time to 4.3 s, and deleting the whole top 20 to
+3.2 s - so the slow-test list is worth far less than its headline suggests. **On N workers, a CPU
+reduction moves the wall only if it shortens the longest item.**
+
+### COLLECTION IS NOT IMPORTS, so a second directory split would buy nothing
+
+Startup+collection is 1.9 s and very stable (1.88 / 1.91 / 1.98). Of that:
+
+- importing all 145 collected test modules: **150 ms**
+- importing the engine (`settlement`, `hamletgen`, `waterfields`, `overlap`): **76 ms**
+- bare interpreter: 14 ms
+- **the other ~1.6 s is xdist process orchestration**: ~740 ms base + ~130 ms per worker, linear
+  (measured at 2/4/8/12 workers: 970 / 1228 / 1739 / 2309 ms)
+
+The tests/ directory split (feature 135) already did its job - module import is 12% of startup. There is
+no second pass in it.
+
+### WORKER COUNT: 12 MEASURES FASTER THAN 8, AND 8 IS STILL RIGHT
+
+Best-of-2 wall for the gate's own selection: 8 -> 10.49 s, **12 -> 9.69 s**, 16 -> 10.05 s, 22 ->
+10.61 s on a 22-core box. Twelve is about 0.8 s better, which is INSIDE this box's run-to-run spread
+(+/-1.8 s, because several sessions gate at once) - and it buys that by taking cores from those other
+sessions. The GM chose 8 on 2026-08-26 for exactly that reason (*"the laptop runs several sessions at
+once"*), and a 0.8 s gain that externalizes CPU onto a peer is not worth reopening it.
+
+### MEASUREMENT DISCIPLINE THIS ESTABLISHED
+
+**Suite-level timings on this box cannot be read from single runs.** The spread is about 1.8 s wall and
+2.4 s CPU. A 3.9 s CPU saving is ~0.5 s of wall across 8 workers and simply cannot be seen. Measure the
+FILE (`make test-file`, or the per-file CPU in `make durations N=3000`), where the numbers are clean, and
+take a median of at least three runs before claiming anything about the suite.
+
+## `make done FULL=1`: MAP ROLLS DO NOT PARALLELIZE, SO ONLY FEWER OR CHEAPER ROLLS HELP (measured 2026-08-31)
+
+FULL's test phase is ~172 s, and it is stable: four runs gave 170.3 / 172.2 / 173 / 179 s, two of them on
+an idle box (load 1.36) and two while another session was gating. **Contention is not the story.**
+
+    wall                 172 s
+    CPU (sum of tests)   209 s
+    perfect 8-worker pack 48 s   <- and 48 s is the single longest test, which sets that floor
+
+The 3.6x gap between the pack and the wall looks like idle workers. IT IS NOT. Two measurements settle it:
+
+- **`-n 1` is FASTER than `-n 8`** on the heaviest file: 54 s against 63 s. More workers made it worse.
+- **A single map roll is single-threaded** - `hg.build` uses 1.02 cores (wall 8.16 s, process CPU 8.34 s) -
+  so eight rolls *ought* to run concurrently on 22 cores. They do not: the 48 s test takes about 61 s when
+  five siblings run alongside, a 27% slowdown. Memory bandwidth and page cache, not CPU.
+
+So the arithmetic closes without any idleness: wall ~= heavy-roll CPU (162 s, effectively serial) + the
+light suite packed (~10 s). Nothing is waiting; the box cannot run these rolls at once.
+
+**WHAT THIS RULES OUT.** Scheduling work, `--dist` tuning and raising the worker count are all worthless
+here, and raising workers is actively harmful. A first pass at this profile concluded the opposite from
+the pack/wall ratio alone; the ratio is a symptom of non-parallelizable work, not of bad scheduling.
+
+**WHAT IS LEFT, in order:**
+
+1. **Fewer rolls.** FULL rolls the same maps repeatedly - kashikawa three times (the immunity ratchet does
+   a perturbed AND a clean roll, and the pool sweep rolls it again), inashiro at least twice (sweep plus
+   the gencache round-trip). Sharing the clean rolls is worth roughly 40 s of the 172 s and costs no
+   sensitivity. The obstacle is that these tests write to the same pool paths.
+2. **Cheaper rolls.** Roll cost is strongly superlinear in households: 10 hh 7.8 s, 11 hh 9.2 s, 12 hh
+   13.1 s, and the immunity subject (kashikawa, 20 hh) is ~24 s per roll. A smaller subject would be a
+   large win - but `tests/full/test_villages.py` records a deliberate argument for a LARGE subject
+   (*"a hamlet alone would not have held the original line"*), so shrinking it trades ratchet sensitivity
+   for speed and is the GM's call, not a session's.
+
+**AND THE CACHING THAT FIXED THE GATE CANNOT BE USED HERE.** `rollcache` bypasses serving under
+`L7R_TESTS_FULL=1` on purpose: a served roll executes none of the code, and FULL is where the coverage
+floors are enforced. Any "optimization" that restores caching in FULL buys its speed by not running the
+code the floors exist to check.

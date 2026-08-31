@@ -37,6 +37,7 @@ import inspect
 import json
 import os
 import pickle
+import shutil
 import tempfile
 from collections.abc import Callable
 from pathlib import Path
@@ -101,8 +102,50 @@ def _share_key(subject: str, produce: Callable[[], Any]) -> tuple[str, str]:
 
 
 def reset_shared() -> None:
-    """Forget every shared bypass payload. For a test that means to watch a roll happen again."""
+    """Forget every shared payload - the process dict AND this run's on-disk store.
+
+    BOTH, and the second half was a real hole rather than tidiness. The run store outlives a single test,
+    so a test that expects to PRODUCE would silently be handed a sibling's payload if an earlier test in
+    the same run had used the same subject and call site. `tests/pipeline/test_rollcache.py`'s
+    parametrized bypass test is exactly that shape and caught it: the first parameter wrote `shared-toy`,
+    the second then got `BYPASS-SHARED-RUN` where it asserted `BYPASS`.
+    """
     _SHARED_BYPASS.clear()
+    run_dir = _run_share_path(("", ""))
+    if run_dir is not None:
+        shutil.rmtree(os.path.dirname(run_dir), ignore_errors=True)
+
+
+def _run_share_path(key: tuple[str, str]) -> str | None:
+    """Where a shared payload lives for THIS RUN, or None when there is no run to scope it to.
+
+    THE POINT, AND WHY IT IS NOT THE CACHE FULL BYPASSES (GM 2026-08-31): *"what we are essentially doing
+    is using a cache, but it's just that we are building the cache as part of the test run in order to
+    ensure that the process that builds the cache is part of what's being tested."* A `rollcache` HIT
+    serves an entry produced by an EARLIER run, so nothing executes and no coverage is recorded - which is
+    exactly why the FULL run bypasses serving. A payload produced by THIS run and reused within it is a
+    different thing: the code ran, its lines are recorded, and coverage is combined across xdist workers
+    at the end, so one execution covers the lines for every worker.
+
+    `PYTEST_XDIST_TESTRUNUID` is set by xdist in each worker (`xdist/remote.py`) and is shared by every
+    worker of one run and by no other run, so the store cannot outlive the run that built it. Without
+    xdist there is no id and this returns None: the per-process dict above is then the whole mechanism,
+    exactly as before.
+
+    WHY THIS IS SCOPED TO CALLERS THAT ALREADY OPT IN. Feature 147 turned sharing on for `obtain`
+    generally and had to turn it back off: the hamlet-path coverage floor went NON-DETERMINISTIC
+    (`hinterland.py` 503-504 flipped between otherwise identical runs), because different call sites take
+    different branches and which one produced varied with scheduling. Nothing here widens that envelope -
+    it makes the EXISTING opt-in (`hamlet()`, whose callers all ask for the identical artifact through the
+    identical produce) reach across workers instead of stopping at the process boundary.
+    """
+    uid = os.environ.get("PYTEST_XDIST_TESTRUNUID")
+    if not uid:
+        return None
+    safe = "".join(ch if ch.isalnum() or ch in "-_" else "_" for ch in uid)[:64]
+    # `_share_key` returns a TUPLE (subject, producer-identity), not a string - so it is repr'd
+    # rather than encoded. Caught by the FULL run, which was the only scope that exercised this.
+    return os.path.join(tempfile.gettempdir(), f"l7r-runshare-{safe}", hashlib.sha256(repr(key).encode()).hexdigest()[:24] + ".pickle")
 
 
 def obtain[T](subject: str, produce: Callable[[], T], share: bool = False) -> tuple[T, str]:
@@ -116,10 +159,21 @@ def obtain[T](subject: str, produce: Callable[[], T], share: bool = False) -> tu
         cached = _SHARED_BYPASS.get(key)
         if cached is not None:
             return pickle.loads(cached), "BYPASS-SHARED"  # noqa: S301 - our own bytes, dumped below
+        run_path = _run_share_path(key)
+        if run_path is not None and os.path.exists(run_path):
+            with contextlib.suppress(OSError, EOFError, pickle.UnpicklingError):
+                with open(run_path, "rb") as fh:
+                    payload_from_run = pickle.load(fh)  # noqa: S301 - written by a sibling worker of this run
+                _SHARED_BYPASS[key] = pickle.dumps(payload_from_run)
+                return payload_from_run, "BYPASS-SHARED-RUN"
         payload = produce()
         # an unpicklable payload shares nothing rather than sharing wrongly - the next caller rolls
         with contextlib.suppress(pickle.PicklingError, TypeError, RecursionError):
-            _SHARED_BYPASS[key] = pickle.dumps(payload)
+            blob = pickle.dumps(payload)
+            _SHARED_BYPASS[key] = blob
+            if run_path is not None:
+                os.makedirs(os.path.dirname(run_path), exist_ok=True)
+                _place(blob, run_path)
         return payload, "BYPASS"
     entry = _entry(subject)
     meta_path, payload_path = os.path.join(entry, "meta.json"), os.path.join(entry, "payload.pickle")
