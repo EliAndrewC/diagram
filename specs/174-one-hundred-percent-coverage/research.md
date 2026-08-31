@@ -146,6 +146,19 @@ pytest BESIDE a running gate"* and gives a different reason (two writers on the 
 coverage data file is a second, quieter reason for the same rule. **Discard such a run; do not
 diagnose it.**
 
+**WHICH COMMAND COLLIDES, EXACTLY** (measured after making the same mistake TWICE, 2026-08-31):
+
+| command | flag | safe beside a running measurement? |
+|---|---|---|
+| `make test-file FILE=...` | `--no-cov` | **YES** - it records no coverage, so it cannot collide |
+| `make cov-file FILE=... MOD=...` | `--cov=$(MOD)` | **NO** - it writes `.coverage` and corrupts the run in flight |
+
+The first corruption reported **44%** for a tree at 95%; the second reported **6,375 uncovered** for
+a tree at 338. Both look exactly like catastrophic regressions and neither is one. The reflex that
+caused it both times is asking `cov-file` "did my test close the line?" the moment a test passes -
+which is the right question and the wrong moment. **Use `test-file` to prove a test passes while a
+measurement runs; ask `cov-file` only when nothing else is running.**
+
 **PER-TEST TIMINGS ON THIS BOX CARRY A HYBRID-CPU DISTORTION** (peer session, 2026-08-31). `lscpu`
 reports an Intel Core Ultra 7 155H: 22 CPUs, P-cores plus E-cores. Under xdist a worker may land on
 either, and a batch's wall time is set by its slowest worker - so a test that "got slower" may simply
