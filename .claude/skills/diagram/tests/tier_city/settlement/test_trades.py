@@ -5,6 +5,7 @@ locked to another tier; the gate collects everything. Helpers stay in the source
 import pytest
 
 from l7r.diagram.settlement import Settlement
+from tests.settlement._builders import _city
 
 
 @pytest.mark.tiers("city")
@@ -32,3 +33,40 @@ def test_bathhouses_roll_follows_the_population_formula():
     s4 = city_(2, 4000)
     with pytest.raises(ValueError, match="vetted seats"):
         s4.bathhouses([(300, 300)])  # a guaranteed 2 needs 2 seats
+
+
+# ---- feature 174: the three trade works with no test at all ---------------------------------------
+# `dye_yard`, `oil_press` and `pawnshop` are city works, and no scripted generator produces a city -
+# so all three were unreached. Each records through the shared `_trade_record`, and what is worth
+# pinning is the thing each one's docstring says makes it that trade: its GROUND, not its workshop.
+
+
+def test_a_dye_yard_records_GROUND_larger_than_the_workshop_that_fits_a_shophouse() -> None:
+    """Its docstring's own claim: "the workshop fits a shophouse - the GROUND does not", because the
+    drying frames need open air. So the recorded footprint has to exceed a shophouse's, which is
+    what stops a later pack from seating a house across the drying ground."""
+    s = _city()
+    s.dye_yard(600.0, 600.0)
+    rec = s.M["dye_yards"][-1]
+    assert rec["w"] > s.px(48) and rec["h"] > s.px(32), "the yard is bigger than the shopfront on it"
+    assert not s._fits(600.0, 600.0, 10.0, 10.0), "and it blocks - the drying ground is not free ground"
+
+
+def test_an_oil_press_reserves_the_beam_swing_beyond_its_barn() -> None:
+    """The wedge-and-beam press is a massive timber machine whose working radius is part of the
+    premises, so the recorded width exceeds the 54 ft barn it stands in."""
+    s = _city()
+    s.oil_press(700.0, 500.0)
+    rec = s.M["oil_presses"][-1]
+    assert rec["w"] > s.px(54), "the barn plus the swing, not the barn alone"
+    assert rec["h"] == s.px(30)
+
+
+def test_a_pawnshop_is_a_shopfront_whose_TELL_is_its_storage() -> None:
+    """A pledge is bulky, so the depth behind the shopfront is the trade's signature - the recorded
+    height exceeds the plain 32 ft shop depth while the frontage stays shop-sized."""
+    s = _city()
+    s.pawnshop(400.0, 400.0)
+    rec = s.M["pawnshops"][-1]
+    assert rec["h"] > s.px(32), "the storehouse behind the counter"
+    assert rec["w"] < rec["h"] * 4, "but the frontage is still an ordinary shop's"
