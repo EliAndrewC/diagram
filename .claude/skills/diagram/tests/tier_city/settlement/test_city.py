@@ -627,3 +627,32 @@ def test_crop_city_takes_the_AGGRESSIVE_margin_by_default_with_per_side_override
     assert wide_west[0] < tight[0], "the override pushes the WEST edge out"
     assert wide_west[1] == tight[1], "and leaves the north where it was"
     assert wide_west[2] > tight[2], "so the view is wider"
+
+
+def test_the_ring_road_is_a_CLOSED_LOOP_inset_from_the_rampart() -> None:
+    """The Chinese "follow-the-wall street" (順城街) - a patrol/access road offset `inset` px inside
+    the wall, leaving the wall-clear zone a fortified city keeps for moving troops along it.
+
+    It returns its loop for use as `s.bound`, which is what makes the quarters pack INSIDE it and
+    off the wall - so the returned polygon is the contract, not just the drawn ink.
+    """
+    s = Settlement(1600, 1600, seed=14)
+    s.meta(name="C", scale="city")
+    wall = [(300.0, 300.0), (1300.0, 300.0), (1300.0, 1300.0), (300.0, 1300.0)]
+    loop = s.ring_road(wall, inset=40)
+
+    assert loop and len(loop) >= 4, "a closed loop is returned for the packs to bound against"
+    assert min(p[0] for p in loop) > 300.0, "inset from the west rampart"
+    assert max(p[0] for p in loop) < 1300.0, "and from the east - it lies INSIDE the wall"
+    assert s.M["ring_road"], "and it is recorded"
+
+
+def test_the_ring_road_is_NOT_a_town_street_because_its_wall_side_is_bare_by_design() -> None:
+    """A fortification road is exempt from the must-be-built-up rule: its wall side is bare by
+    design and stretches run behind fields and compounds. Recording it as a town street would put it
+    under a frontage rule it is meant to be outside of - so the KEY it lands in is the assertion."""
+    s = Settlement(1600, 1600, seed=14)
+    s.meta(name="C", scale="city")
+    s.ring_road([(300.0, 300.0), (1300.0, 300.0), (1300.0, 1300.0), (300.0, 1300.0)])
+    assert s.M.get("ring_road"), "recorded under its own key"
+    assert not s.M.get("town_streets"), "and NOT as a town street, which would owe frontage"
