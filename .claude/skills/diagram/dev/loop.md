@@ -330,3 +330,43 @@ once"*), and a 0.8 s gain that externalizes CPU onto a peer is not worth reopeni
 2.4 s CPU. A 3.9 s CPU saving is ~0.5 s of wall across 8 workers and simply cannot be seen. Measure the
 FILE (`make test-file`, or the per-file CPU in `make durations N=3000`), where the numbers are clean, and
 take a median of at least three runs before claiming anything about the suite.
+
+## `make done FULL=1`: MAP ROLLS DO NOT PARALLELIZE, SO ONLY FEWER OR CHEAPER ROLLS HELP (measured 2026-08-31)
+
+FULL's test phase is ~172 s, and it is stable: four runs gave 170.3 / 172.2 / 173 / 179 s, two of them on
+an idle box (load 1.36) and two while another session was gating. **Contention is not the story.**
+
+    wall                 172 s
+    CPU (sum of tests)   209 s
+    perfect 8-worker pack 48 s   <- and 48 s is the single longest test, which sets that floor
+
+The 3.6x gap between the pack and the wall looks like idle workers. IT IS NOT. Two measurements settle it:
+
+- **`-n 1` is FASTER than `-n 8`** on the heaviest file: 54 s against 63 s. More workers made it worse.
+- **A single map roll is single-threaded** - `hg.build` uses 1.02 cores (wall 8.16 s, process CPU 8.34 s) -
+  so eight rolls *ought* to run concurrently on 22 cores. They do not: the 48 s test takes about 61 s when
+  five siblings run alongside, a 27% slowdown. Memory bandwidth and page cache, not CPU.
+
+So the arithmetic closes without any idleness: wall ~= heavy-roll CPU (162 s, effectively serial) + the
+light suite packed (~10 s). Nothing is waiting; the box cannot run these rolls at once.
+
+**WHAT THIS RULES OUT.** Scheduling work, `--dist` tuning and raising the worker count are all worthless
+here, and raising workers is actively harmful. A first pass at this profile concluded the opposite from
+the pack/wall ratio alone; the ratio is a symptom of non-parallelizable work, not of bad scheduling.
+
+**WHAT IS LEFT, in order:**
+
+1. **Fewer rolls.** FULL rolls the same maps repeatedly - kashikawa three times (the immunity ratchet does
+   a perturbed AND a clean roll, and the pool sweep rolls it again), inashiro at least twice (sweep plus
+   the gencache round-trip). Sharing the clean rolls is worth roughly 40 s of the 172 s and costs no
+   sensitivity. The obstacle is that these tests write to the same pool paths.
+2. **Cheaper rolls.** Roll cost is strongly superlinear in households: 10 hh 7.8 s, 11 hh 9.2 s, 12 hh
+   13.1 s, and the immunity subject (kashikawa, 20 hh) is ~24 s per roll. A smaller subject would be a
+   large win - but `tests/full/test_villages.py` records a deliberate argument for a LARGE subject
+   (*"a hamlet alone would not have held the original line"*), so shrinking it trades ratchet sensitivity
+   for speed and is the GM's call, not a session's.
+
+**AND THE CACHING THAT FIXED THE GATE CANNOT BE USED HERE.** `rollcache` bypasses serving under
+`L7R_TESTS_FULL=1` on purpose: a served roll executes none of the code, and FULL is where the coverage
+floors are enforced. Any "optimization" that restores caching in FULL buys its speed by not running the
+code the floors exist to check.

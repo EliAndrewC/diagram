@@ -16,7 +16,6 @@ from tests._scope import full_or
 from tests.settlement._builders import _inwall_settlement, _town, _village
 
 
-
 def _comb(*args, **kw):
     """`build_comb` memoized on its arguments, handing every caller its OWN deep copy.
 
@@ -40,6 +39,7 @@ def _comb(*args, **kw):
 
     key = f"test_fields-comb:{args!r}:{sorted(kw.items())!r}"
     return copy.deepcopy(rollcache.obtain(key, lambda: build_comb(*args, **kw))[0])
+
 
 def test_ring_big_falls_back_to_plain_when_capped():
     s = _town()
