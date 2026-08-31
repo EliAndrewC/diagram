@@ -354,3 +354,16 @@ def test_parse_bases_resolves_a_crowns_group_TRANSLATE_into_its_true_position() 
     svg = f'<circle cx="5" cy="7" r="9" fill="{fill}"/><g transform="translate(100,200)"><circle cx="5" cy="7" r="9" fill="{fill}"/></g>'
     crowns = sorted(sa.parse_bases(svg, families=("crown",))["crown"])
     assert crowns == [(5.0, 7.0), (105.0, 207.0)], "the untranslated crown keeps its own coordinates; the translated one is moved"
+
+
+def test_adjudicate_flags_scrub_standing_IN_A_MARSH_but_lets_grass_grade_into_its_feather():
+    """Feature 133 T12 (GM 2026-08-26: "the marshland is not supposed to overlap with the scrubland
+    rendering"). Reeds are the marsh's own cover; a scrub base inside a marsh polygon is dry-ground
+    cover drawn under wet ground - before the fix Inashiro carried thousands of them across its whole
+    toe band and pond fringe. Grass is the one exception: it thins INTO the reeds over the feather,
+    the same soft edge `cover.py` draws, so a blade near the rim is clean and a dot there is not."""
+    m = _manifest(marshes=[{"poly": [[200, 200], [400, 200], [400, 400], [200, 400]]}])
+    svg = _one_dot_svg(300.0, 300.0) + _one_dot_svg(500.0, 300.0)
+    report = sa.adjudicate(sa.parse_bases(svg), m, "t")
+    assert [(v["family"], v["keepout"]) for v in report["violations"]] == [("dot", "marsh")], "the bog dot, and only it"
+    assert "marsh" in report["families_checked"]["keepouts"]
