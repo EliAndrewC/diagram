@@ -44,7 +44,8 @@ tier.
 | the hamlet path's remainder | **25** | 4 fallback rungs inside long drawing methods - constructed geometry or a lift |
 | the existing hard floor's own misses | **33** | unit tests; `ci/`, `switches.py`, `pool_index.py`, CLI entry points |
 | the four exempt trees | **~507** | mostly TOWN/CITY drawing methods, which unit-test cheaply - proven below |
-| **dead code** | **0 left found** | ~91 statements deleted (8 functions + 3 constants + `pt_to_rect`) |
+| **dead code**, coverage pass | **0 left found** | ~91 statements deleted (8 functions + 3 constants + `pt_to_rect`) |
+| **dead code**, pragma pass (FR-009) | **13 sites** | found only AFTER the GM's ruling sent the pragmas to be measured - so "0 left found" was true of what the coverage pass could see and was disproved by this feature's own later work. 40 engine lines |
 
 **The exempt trees are the cheapest work, not the hardest** - the opposite of what the first draft
 assumed. Measured: `town_ways.py` 21% -> **100%** with one test file; `civic_grounds/lodging.py` 46%
@@ -123,17 +124,18 @@ the pragma, and the spec's silence read as coverage.
 
 **Measured in this clone at HEAD, and verified by the session rather than taken from the review:**
 
+**AS MEASURED BEFORE THE RULING WAS CARRIED OUT** (the after-figures are two paragraphs down).
 SITES are the wrong unit and were the first number taken - one pragma can hide a line or a whole
 function - so the LINES are measured too, with coverage's own file reporter under this project's
 `pyproject.toml` excludes:
 
 | | count |
 |---|---|
-| `pragma: no cover` sites under `l7r/` | **131** (90 of them inside the tree the hard floor covers, across 32 files) |
+| `pragma: no cover` COMMENT LINES under `l7r/` | **130** (131 grep hits less one prose mention in `tools/hamlet_floor.py`, which names the token in a docstring and is not a pragma) |
 | **excluded LINES, engine-wide** | **469**, against 22,470 measured statements |
 | **excluded LINES inside the hard-floor tree** | **281**, against 9,118 measured statements - **2.99% of that tree's code is not measured at all** |
 | largest single files | `ci/dispatch.py` 70, `hamletgen/homesteads/wells.py` 23, `hamletgen/sink.py` 15, `tools/cache_audit.py` 10, `pipeline/gencache.py` 10 |
-| added or removed by feature 174 | **net zero** - one `+` and one `-`, the same line moving with a lifted function |
+| added or removed by the coverage pass | **net zero** - one `+` and one `-`, the same line moving with a lifted function |
 
 So "100.00% of 20,646" is 100% of what coverage MEASURES, and 469 lines are outside that. The
 feature's own claim is exact and its scope is narrower than the bare percentage sounds; both are
@@ -144,20 +146,39 @@ on it and the gate goes green. That IS a mechanism by which `make done` complete
 
 **RULED BY THE GM, 2026-08-31**: *"If there is `# pragma: no cover` code that cannot happen then we
 should delete all of those cases, because dead code is bad, and it's better to remove it from the
-codebase."* Carried out, and the method is the part worth keeping: classifying by what each pragma's
+codebase."* Carried out. The method is the part worth keeping: classifying by what each pragma's
 comment CLAIMS is not evidence, because a comment is an assertion written once and never re-checked.
-So all 131 were STRIPPED and the whole corpus run against this feature's own new floor, which then
-NAMED every line nothing executes. That inverted the picture - **78 of the 131 were hiding lines the
-corpus already runs**, and reading the comments alone would have deleted live code while keeping dead
-code. Of the 53 genuinely unreached: **13 were dead and are deleted**; 24 are error handling or
+So all 130 were STRIPPED and the whole corpus run against this feature's own new floor, which then
+NAMED every line nothing executes.
+
+**Counted in coverage's own unit, EXCLUDED LINES, because pragma comment lines and excluded lines are
+not the same thing and an earlier draft of this paragraph mixed them** (round 6 caught it: a
+"78 stale / 53 unreached" pair matched comment lines to statements through a +/-2 line window and did
+not reconcile with the tree - one pragma on a `class` or a block hides many lines, and the well
+ring-probe rescue alone is 27 comment lines):
+
+| | |
+|---|---|
+| excluded lines before | **469** |
+| ...still uncovered when ALL exclusions were stripped | **113** |
+| **so exclusions that were hiding lines the corpus ALREADY runs** | **356** - stale, protecting nothing |
+| dead sites found in the 113 and DELETED | **13** (40 engine lines) |
+| pragma comment lines | **130 -> 76** |
+| excluded lines after | **469 -> 385** (2.99% -> 2.30% of the floored tree) |
+
+Reading the comments alone would have deleted live code and kept dead code. Of what the measurement
+showed genuinely unreached: **13 were dead and are deleted**; the rest are error handling or
 structural terminals whose removal converts a graceful skip into a crash or returns `None` where the
-signature promises a value, and they are KEPT, each now carrying why it is not deletable; 16 are live
-rescues or external systems whose comments say *"no cohort map currently"* - today's seeds miss them,
-which is not the same as cannot happen. Result: **130 -> 76 sites, 469 -> 385 excluded lines, 2.99% ->
-2.30% of the floored tree**, 40 engine lines deleted, 2,716 tests green and no manifest moved. Full
-working in [`pragma-census.md`](pragma-census.md). **The open half is stated there and is the GM's**:
-whether the 24 error-handling guards are meant too, which trades a silent skip for a crash on
-malformed input.
+signature promises a value, and live rescues and external systems whose comments say *"no cohort map
+currently"* - today's seeds miss them, which is not the same as cannot happen. Each survivor now
+carries why it stays. Full working in [`pragma-census.md`](pragma-census.md).
+
+**Two things are NOT claimed settled, and both are the GM's.** (1) Whether the 24 error-handling
+guards are meant too, which trades a silent skip for a crash on malformed input. (2) **The restored
+exclusions are block-scoped and therefore over-broad**: 385 lines are excluded where only ~113 are
+genuinely unreached, because a pragma on a rescue routine or a transport class covers the executed
+lines inside it as well. That was true before this feature and is still true; narrowing them is
+available work, and it is named here rather than left for a future reader to rediscover.
 
 ### FR-004 - `waterfields/hill.py` is COVERED BY TESTS, not exempted and not asked about
 
@@ -242,9 +263,10 @@ permanently red, and a red gate everyone routes around is how the ratchets arriv
 ## Success criteria
 
 1. The measured set reports 100%, with no ratchet and no parked lines. **What "the measured set"
-   excludes is stated, not implied**: coverage does not count a line carrying `# pragma: no cover`,
-   and 131 such sites stand in the engine (90 of them inside the tree this floor covers). This
-   feature added none - see FR-009, which puts them to the GM rather than deciding them.
+   excludes is stated, not implied**: coverage does not count a line carrying `# pragma: no cover`.
+   After the GM's ruling (FR-009) the engine holds **76** such comment lines, excluding **385** lines,
+   down from 130 and 469. What remains the GM's is named there and is NOT claimed settled: the 24
+   error-handling guards, whose removal trades a silent skip for a crash.
 2. A run below the floor cannot complete. Of the routes FR-003a enumerates, **two are deliberately
    left open** and neither is claimed away here: feature 170's `GATE_STAMP_OK`, which skips the
    stamp check entirely but demands a written reason and is logged where `make audit` reads it; and
@@ -272,8 +294,12 @@ by the implementation. Class is the spec-time shorthand for D1-D7 and constituti
 | D7 | deadness is proven by the roll records and pre-deletion archaeology, never by a caller grep | method, after the D6 error | recorded at spec time, before the implementation ran |
 | D8 | The floor is enforced by making `done`'s test phase `test-full` on BOTH branches, not by adding a second, cheaper floored phase | deviation | The floors live behind `COV_FLOORS=1`, which is the SAME switch that turns off `--ignore=tests/full`, the roll deselect and the tier select. A deselected test takes its coverage with it (measured 2026-08-24 and still true), so a "cheap floored phase" reports holes that are not there, on every run - the fastest way to teach a session to read a red gate as normal. Declined: a second floor at a lower number (that is a ratchet, not the 100% the GM asked for) |
 | D9 | The gate's wall clock went up and that was reported, not used to decline | deviation | The GM's request names the cost implicitly - a floor over the whole tree needs the whole tree traced. `make quick` is untouched, which is where the iteration loop actually lives, and the GM exempted it themselves. If they would rather have the cheap gate, moving the floor back is a one-line change to the phase list |
-| D10 | No `pragma: no cover` was added to reach 100% | accurate | A pragma moves the number without moving the coverage, which is the one outcome that would make the floor a lie. No pragma was added and none removed - the feature's diff is net zero on them, its one `+` and one `-`
-being the same line travelling with a lifted function. What this decision does NOT do is govern the **131** that already stand (90 inside the tree this floor covers, across 32 files); an earlier draft of this row said "the two pre-existing pragmas", wrong by 129, and round 5 caught it. FR-009 puts them to the GM. Where a line was genuinely unreachable it was DELETED (`pool_index.py`'s empty-rows guard, which `_sections` makes impossible), and where it was merely hard to reach the closure around it was lifted out |
+| D10 | No `pragma: no cover` was added to reach 100% | accurate | A pragma moves the number without moving the coverage, which is the one outcome that would make the floor a lie. No pragma was added TO REACH THE NUMBER - the coverage half of this feature is net zero on them, its
+one `+` and one `-` being the same line travelling with a lifted function. The GM then ruled on the
+existing ones (FR-009) and that ruling WAS carried out here: **130 comment lines -> 76**, 13 dead
+sites deleted (40 engine lines), 469 -> 385 excluded lines. Two earlier drafts of this row were wrong
+and each was caught by review - "the two pre-existing pragmas" (wrong by 128, round 5) and "net zero"
+(true of the coverage pass, false of the feature, round 6). Where a line was genuinely unreachable it was DELETED (`pool_index.py`'s empty-rows guard, which `_sections` makes impossible), and where it was merely hard to reach the closure around it was lifted out |
 | D11 | Five closures were lifted to module level rather than reached through a whole map roll | accurate | The GM's own doctrine (2026-08-28, feature 146): an inner function that is hard to test gets lifted out, its captured values become parameters, and the inner caller delegates so there is ONE body. Each of the five now takes plain tuples and lists; `_detour_links` and `_fine_lattice_links` previously needed a hamlet stranded at exactly the right distance |
 | D12 | The along-sampler's exact-divisor gap is RECORDED, not corrected | deviation | Where every segment divides `_ALONG_STEP_FT` exactly, the carried remainder lands on `t == seg` and the strict `<` misses it, so such a way offers only its two ends. Correcting it moves the links that rung draws, and so the lanes of any map that reaches it. A coverage feature does not get to change map output; the behavior is pinned by a test and stated on the function, so the next reader meets a decision rather than a bug |
 | D13 | `GATE_RECIPE` salts the stamp key | accurate | FR-003a. `sync-with-main.sh --check` is the whole of what the push demands, and every stamp written before this feature certifies a run that was ALLOWED to finish below the floor. Salting retires them all at once. Declined: adding the Makefile to the hashed area, which would re-key the gate on every unrelated Makefile edit |

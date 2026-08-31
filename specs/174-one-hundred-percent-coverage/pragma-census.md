@@ -85,25 +85,39 @@ that is measured rather than asserted, and it inverted the picture:
 
 Reading the comments alone would have deleted live code and kept dead code.
 
-### The 53, and what each turned out to be
+### Counted in ONE unit, because the first draft of this section mixed two
 
-| | | disposition |
-|---|---|---|
-| **13** | genuinely dead: a guard re-testing a filter one loop above it (`hamletgen/frame.py`), an enum check after the enum is exhausted, `return None` after a loop that always returns, `if not plots` before code that handles empty | **DELETED** |
-| **24** | NOT dead code - error handling and structural terminals. `if not pts: continue` stands before `len(pts)`, so removing it does not remove a branch, it converts a graceful skip into a crash; several are a function's final `return` where the signature promises a tuple, so deleting one returns `None` from a `-> float`; three are a predicate's REJECTION, where removal changes the answer rather than the coverage | **KEPT**, each now carrying its reason AND why it is not deletable |
-| **16** | live rescues and external systems - the well ring-probe rescue, the least-bad brook route, the real AWS transport. Their comments say *"no cohort map currently"*, which is "today's seeds miss it", not "it cannot happen" | **KEPT** - deleting a working safety net is not what the ruling asked |
+Round 6 of `spec-fidelity` caught it: a "78 stale / 53 unreached" pair matched pragma COMMENT LINES to
+uncovered STATEMENTS through a +/-2 line window, and did not reconcile with the tree - one pragma on a
+`class` or a block hides many lines, and the well ring-probe rescue alone is 27 comment lines. In
+coverage's own unit:
 
-### Measured outcome
+| | |
+|---|---|
+| excluded lines before | **469** |
+| ...still uncovered when ALL exclusions were stripped | **113** |
+| **exclusions hiding lines the corpus ALREADY runs** | **356** |
+| dead sites found and DELETED | **13** (40 engine lines) |
+| pragma comment lines | **130 -> 76** (131 grep hits less one prose mention in `tools/hamlet_floor.py`) |
+| excluded lines after | **385** (2.99% -> 2.30% of the floored tree) |
 
-| | before | after |
-|---|---|---|
-| pragma sites | 130 | **76** |
-| excluded LINES engine-wide | 469 | **385** |
-| excluded lines inside the floored tree | 281 (2.99%) | **216 (2.30%)** |
-| engine lines deleted | - | **40** |
+### What the genuinely-unreached turned out to be
+
+| | disposition |
+|---|---|
+| a guard re-testing a filter one loop above it (`hamletgen/frame.py`), an enum check after the enum is exhausted, `return None` after a loop that always returns, `if not plots` before code that handles empty | **DELETED** - 13 sites |
+| error handling and structural terminals: `if not pts: continue` stands before `len(pts)`, so removing it converts a graceful skip into a crash; several are a terminal return where the signature promises a value; three are a predicate's REJECTION, where removal changes the answer | **KEPT**, each carrying why it is not deletable |
+| live rescues and external systems - the well ring-probe rescue, the least-bad brook route, the real AWS transport. *"no cohort map currently"* is "today's seeds miss it", not "cannot happen" | **KEPT** |
 
 2,716 tests pass and no map manifest moved, which is the evidence the deletions were safe: every
 deleted line was reached by nothing, on any seed the corpus rolls.
+
+### A residue this pass did NOT fix, named so it is not rediscovered
+
+The restored exclusions are **block-scoped and therefore over-broad**: 385 lines are excluded where
+only ~113 are genuinely unreached, because a pragma on a rescue routine or a transport class covers
+the executed lines inside it as well. That was true before this feature and is still true. Narrowing
+each to the lines actually unreached is available work; it is not what the ruling asked for.
 
 **The open half, which is the GM's**: whether the 24 error-handling guards are also meant. Deleting
 those trades a silent skip for a crash on malformed input. That is a real trade rather than a
