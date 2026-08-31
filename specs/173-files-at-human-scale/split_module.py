@@ -196,9 +196,14 @@ def cmd_plan(path: str) -> int:
     if plan["kind"] == "mixin":
         return _plan_mixin(src, plan)
     nodes = src.body_nodes()
+    SOURCE_TEXT[0] = src.text
     home, edges = reference_graph(src, nodes)
-    owner = assign_modules(nodes, plan["cuts"])
-    order = [m for _, m, _ in plan["cuts"]]
+    if plan["kind"] == "names":
+        owner = assign_by_name(nodes, plan["modules"])
+        order = [m for m, _, _ in plan["modules"]]
+    else:
+        owner = assign_modules(nodes, plan["cuts"])
+        order = [m for _, m, _ in plan["cuts"]]
     sizes = {m: 0 for m in order}
     prev = src.header_end
     for i, n in enumerate(nodes):
@@ -386,6 +391,18 @@ def _deepen(stmt: str) -> str:
     return re.sub(r"^(\s*from\s+)(\.)", r"\1..", stmt, flags=re.M)
 
 
+
+def _one_name_import(stmt: str, name: str) -> str:
+    """`from x import a, b, c` -> `from x import <name> as <name>`; `import x` -> itself.
+
+    The explicit `as` form is what pyrefly's no-implicit-reexport rule requires of a re-export.
+    """
+    m = re.match(r"^\s*from\s+([.\w]+)\s+import\b", stmt)
+    if m:
+        return f"from {m.group(1)} import {name} as {name}"
+    return stmt.strip()
+
+
 def _synth_imports(body: str, src: "Source", local: set[str], earlier: dict[str, str], wrap: bool, self_type: str | None, plan_core: str = "core") -> str:
     reads = reads_of(body, wrap=wrap) - local
     blocks: list[str] = []
@@ -417,8 +434,8 @@ def _annotate_self(seg: str, self_type: str) -> str:
 def cmd_apply(path: str) -> int:
     src = Source(path)
     plan = PLANS[rel(path)]
-    pkg = path[:-3]
-    order = [m for _, m, _ in plan["cuts"]]
+    pkg = plan.get("pkg", path[:-3])
+    order = [m for m, _, _ in plan["modules"]] if plan["kind"] == "names" else [m for _, m, _ in plan["cuts"]]
     hdr_doc = plan["doc"]
     os.makedirs(pkg, exist_ok=True)
     written: dict[str, int] = {}
@@ -465,15 +482,23 @@ def cmd_apply(path: str) -> int:
             fh.write(init)
     else:
         nodes = src.body_nodes()
+        SOURCE_TEXT[0] = src.text
         entries = src.contiguous(nodes, src.header_end)
-        owner = assign_modules(nodes, plan["cuts"])
+        owner = assign_by_name(nodes, plan["modules"]) if plan["kind"] == "names" else assign_modules(nodes, plan["cuts"])
         groups: dict[str, list[str]] = {m: [] for m in order}
         names_of: dict[str, set[str]] = {m: set() for m in order}
         for n, (_, seg), m in zip(nodes, entries, owner, strict=True):
             groups[m].append(seg)
             names_of[m] |= set(toplevel_names(n))
         joined = "".join("".join(groups[m]) for m in order)
-        assert joined == "".join(seg for _, seg in entries), "contiguous slices did not reproduce the body"
+        whole = "".join(seg for _, seg in entries)
+        if plan["kind"] == "names":
+            # a by-name split REORDERS the layers, so the bodies are a permutation of the monolith's
+            # slices rather than a concatenation of them - assert the multiset instead, which still
+            # proves no source line was dropped or duplicated
+            assert sorted(seg for _, seg in entries) == sorted(s for m in order for s in groups[m]), "a slice was lost or duplicated"
+        else:
+            assert joined == whole, "contiguous slices did not reproduce the body"
         earlier: dict[str, str] = {}
         for m in order:
             body = "".join(groups[m])
@@ -481,13 +506,23 @@ def cmd_apply(path: str) -> int:
             write(m, text)
             earlier.update(dict.fromkeys(names_of[m], m))
         own = set(earlier)
-        surface = consumed_surface(path, own)
+        consumed = consumed_surface(path, own | set(src.import_binds))
+        # THE PACKAGE MUST REPRODUCE THE MODULE NAMESPACE, not just the names someone imports by
+        # name. Two consumers proved it on `hamletgen/ways.py`: `hamletgen/__init__.py` does
+        # `from .ways import *`, which re-exports every PUBLIC name whether or not anything is
+        # recorded as importing it; and the tests read `hg.ways.seg_dist` and `hg.ways.WEB_REACH_FT`
+        # - names the monolith IMPORTED rather than defined, which were in its namespace all the
+        # same. Export both, or the split is silently narrowing a public surface.
+        surface = {n for n in own if not n.startswith("_")} | (consumed & own)
+        imported = sorted(consumed & set(src.import_binds))
         by_mod: dict[str, list[str]] = {}
         for n in sorted(surface):
             by_mod.setdefault(earlier[n], []).append(n)
+        passthrough = "\n".join(_deepen(_one_name_import(src.import_binds[n], n)) for n in imported)
         init = (
             src.docstring().rstrip("\n") + "\n\n"
             + "\n".join(f"from .{m} import " + ", ".join(f"{n} as {n}" for n in sorted(ns)) for m, ns in sorted(by_mod.items()))
+            + ("\n" + passthrough if passthrough else "")
             + "\n"
         )
         with open(os.path.join(pkg, "__init__.py"), "w") as fh:
