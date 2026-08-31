@@ -40,5 +40,14 @@ def test_served_network_grows_from_the_LONGEST_lane_when_no_connector_is_drawn()
 def test_unreached_houses_is_empty_when_no_lane_network_was_drawn() -> None:
     """The rule does not apply to a map with no ways - a dispersed hamlet draws none by design, so
     the answer is 'no complaint', not 'every house unreached'."""
-    M = {"houses": [{"x": 0.0, "y": 0.0}, {"x": 900.0, "y": 900.0}], "lanes": []}
-    assert unreached_houses(M) == []
+    # `meta.generated_by` is what makes the rule APPLY at all - without it the function returns at
+    # its first guard and never reaches the one this test is for. (Measured: the first version of
+    # this test passed while covering nothing, which a FULL run caught and the assertion did not.)
+    meta = {"generated_by": "hamletgen", "settlement_form": "nucleated"}
+    M = {"meta": meta, "houses": [{"x": 0.0, "y": 0.0}, {"x": 900.0, "y": 900.0}], "lanes": []}
+    assert unreached_houses(M) == [], "no network drawn, so the rule has nothing to measure against"
+    assert unreached_houses({"meta": {**meta, "settlement_form": "dispersed"}, "houses": M["houses"]}) == [], "a dispersed hamlet has no internal network by definition"
+    reached = {"meta": meta, "houses": [{"x": 50.0, "y": 0.0}], "lanes": [{"pts": [(0.0, 0.0), (100.0, 0.0)], "connector": True}]}
+    assert unreached_houses(reached) == [], "a house on the network is not reported"
+    stranded = {"meta": meta, "houses": [{"x": 50.0, "y": 5000.0}], "lanes": [{"pts": [(0.0, 0.0), (100.0, 0.0)], "connector": True}]}
+    assert unreached_houses(stranded) == [(50, 5000, 5000)], "and one the network does not reach IS"
