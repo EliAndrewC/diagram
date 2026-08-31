@@ -18,6 +18,12 @@ that says whether it helped.
 **Out**: what the gate verifies. This feature removes REPEATED WORK, never CHECKS. Any change that
 would let a remote run verify less than the same local run is out of scope and fails the request.
 
+**Out**: `buildspec/image.yml`. The image build runs no gate and warms no gencache, so it is outside
+this feature's domain rather than carved out of it; Docker layer caching is a different optimization
+and nobody asked for it. Stated because research R1 reports "no `cache:` block exists in any
+buildspec" and names all three - without this line a later reader sees two of three treated and
+re-opens the question. (`spec-fidelity` round 2, recommended not required.)
+
 ## Functional requirements
 
 - **FR-001** The `check` and `merge` buildspecs MUST declare an S3-backed CodeBuild cache, and the
