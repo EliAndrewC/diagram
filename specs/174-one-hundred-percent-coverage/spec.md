@@ -111,6 +111,36 @@ Recorded because they were the argument FR-003 rested on, and both were checked 
 What IS true and worth the GM's attention: `done FULL=1` prompts and cancels by default and writes a
 `dev/bypass-log/` entry, where `test-full` does neither.
 
+### FR-009 - the PRAGMA is named, counted, and left to the GM
+
+Round 5's finding, and the one thing in five rounds that this session should not decide for itself.
+
+`# pragma: no cover` is the third exclusion mechanism in this spec's own vocabulary (D10 names it
+beside `PARKED` and the `--omit` list), and it is the one D10 calls fatal in the GM's terms: *a
+pragma moves the number without moving the coverage, which is the one outcome that would make the
+floor a lie*. FR-003a enumerates ROUTES TO MAIN; FR-006 dissolves the two RATCHETS. Neither reaches
+the pragma, and the spec's silence read as coverage.
+
+**Measured in this clone at HEAD, and verified by the session rather than taken from the review:**
+
+| | count |
+|---|---|
+| `pragma: no cover` sites under `l7r/` | **131** |
+| ...inside the tree the hard `--fail-under=100` already covers | **90**, across 32 files |
+| largest single files | `hamletgen/homesteads/wells.py` 22, `hamletgen/sink.py` 14, `hamletgen/water.py` 7 |
+| added or removed by feature 174 | **net zero** - one `+` and one `-`, the same line moving with a lifted function |
+
+So under FR-003 exactly as written, a session that cannot cover a line may write `# pragma: no cover`
+on it and the gate goes green. That IS a mechanism by which `make done` completes below a true 100%.
+
+**This is OUT of scope for feature 174, and it is stated here rather than closed, because the
+question is the GM's**: does *"there will no longer be any mechanism by which this can be
+accomplished"* reach the pragma, or only the ratchets and the push routes? The two answers are very
+different pieces of work - auditing 131 sites and deciding a rule for new ones, against the ratchet
+removal this feature actually did - and the stop-and-ask calculus says a wrong guess here is
+expensive to unwind. What this feature guarantees meanwhile: it added none, and D10 holds that no
+line was pragma'd to reach the number.
+
 ### FR-004 - `waterfields/hill.py` is COVERED BY TESTS, not exempted and not asked about
 
 The first draft excluded the town/city wings as un-producible; this feature's own commits disproved
@@ -170,7 +200,12 @@ values above coverage.
 - **the `--omit` list** (`settlement/`, `waterfields/`, `interactive/`, `overlap/`): dissolved, one
   tree at a time, as each reaches 100%. A tree leaves the omit list the day it can.
 
-Neither is replaced by a new exemption, and **no exemption question remains outstanding** - `hill.py` is covered by tests like any other engine module (FR-004). The sentence that used to stand here reserved that question; it was a survival from the second draft, which round 2 struck and round 4 found still standing.
+Neither is replaced by a new exemption, and **no question remains outstanding about the two this
+requirement governs** - the `--omit` list and `SETTLEMENT_COV_FLOOR`. `hill.py` is covered by tests
+like any other engine module (FR-004). The sentence that used to stand here reserved the `hill.py`
+question, a survival from the second draft that round 2 struck and round 4 found still standing; the
+unqualified "no exemption question remains" that replaced it was round 5's finding, because the
+THIRD exclusion mechanism - the pragma - is not this requirement's and is not closed (FR-009).
 
 ### FR-007 - dead code is DELETED, not covered - and deadness is proven, not grepped
 
@@ -188,7 +223,10 @@ permanently red, and a red gate everyone routes around is how the ratchets arriv
 
 ## Success criteria
 
-1. The measured set reports 100%, with no ratchet and no parked lines.
+1. The measured set reports 100%, with no ratchet and no parked lines. **What "the measured set"
+   excludes is stated, not implied**: coverage does not count a line carrying `# pragma: no cover`,
+   and 131 such sites stand in the engine (90 of them inside the tree this floor covers). This
+   feature added none - see FR-009, which puts them to the GM rather than deciding them.
 2. A run below the floor cannot complete. Of the routes FR-003a enumerates, **two are deliberately
    left open** and neither is claimed away here: feature 170's `GATE_STAMP_OK`, which skips the
    stamp check entirely but demands a written reason and is logged where `make audit` reads it; and
@@ -216,7 +254,8 @@ by the implementation. Class is the spec-time shorthand for D1-D7 and constituti
 | D7 | deadness is proven by the roll records and pre-deletion archaeology, never by a caller grep | method, after the D6 error | recorded at spec time, before the implementation ran |
 | D8 | The floor is enforced by making `done`'s test phase `test-full` on BOTH branches, not by adding a second, cheaper floored phase | deviation | The floors live behind `COV_FLOORS=1`, which is the SAME switch that turns off `--ignore=tests/full`, the roll deselect and the tier select. A deselected test takes its coverage with it (measured 2026-08-24 and still true), so a "cheap floored phase" reports holes that are not there, on every run - the fastest way to teach a session to read a red gate as normal. Declined: a second floor at a lower number (that is a ratchet, not the 100% the GM asked for) |
 | D9 | The gate's wall clock went up and that was reported, not used to decline | deviation | The GM's request names the cost implicitly - a floor over the whole tree needs the whole tree traced. `make quick` is untouched, which is where the iteration loop actually lives, and the GM exempted it themselves. If they would rather have the cheap gate, moving the floor back is a one-line change to the phase list |
-| D10 | No `pragma: no cover` was added to reach 100% | accurate | A pragma moves the number without moving the coverage, which is the one outcome that would make the floor a lie. The two pre-existing pragmas were left as they are. Where a line was genuinely unreachable it was DELETED (`pool_index.py`'s empty-rows guard, which `_sections` makes impossible), and where it was merely hard to reach the closure around it was lifted out |
+| D10 | No `pragma: no cover` was added to reach 100% | accurate | A pragma moves the number without moving the coverage, which is the one outcome that would make the floor a lie. No pragma was added and none removed - the feature's diff is net zero on them, its one `+` and one `-`
+being the same line travelling with a lifted function. What this decision does NOT do is govern the **131** that already stand (90 inside the tree this floor covers, across 32 files); an earlier draft of this row said "the two pre-existing pragmas", wrong by 129, and round 5 caught it. FR-009 puts them to the GM. Where a line was genuinely unreachable it was DELETED (`pool_index.py`'s empty-rows guard, which `_sections` makes impossible), and where it was merely hard to reach the closure around it was lifted out |
 | D11 | Five closures were lifted to module level rather than reached through a whole map roll | accurate | The GM's own doctrine (2026-08-28, feature 146): an inner function that is hard to test gets lifted out, its captured values become parameters, and the inner caller delegates so there is ONE body. Each of the five now takes plain tuples and lists; `_detour_links` and `_fine_lattice_links` previously needed a hamlet stranded at exactly the right distance |
 | D12 | The along-sampler's exact-divisor gap is RECORDED, not corrected | deviation | Where every segment divides `_ALONG_STEP_FT` exactly, the carried remainder lands on `t == seg` and the strict `<` misses it, so such a way offers only its two ends. Correcting it moves the links that rung draws, and so the lanes of any map that reaches it. A coverage feature does not get to change map output; the behavior is pinned by a test and stated on the function, so the next reader meets a decision rather than a bug |
 | D13 | `GATE_RECIPE` salts the stamp key | accurate | FR-003a. `sync-with-main.sh --check` is the whole of what the push demands, and every stamp written before this feature certifies a run that was ALLOWED to finish below the floor. Salting retires them all at once. Declined: adding the Makefile to the hashed area, which would re-key the gate on every unrelated Makefile edit |
