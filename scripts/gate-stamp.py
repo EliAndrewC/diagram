@@ -44,7 +44,10 @@ from pathlib import Path
 # area name -> (repo-relative root, glob patterns the area's gate covers). Each area's gate stamps it
 # on success: `make done` stamps `diagram`, `make hooks-test` stamps `hooks` (and `done` runs it).
 AREAS: dict[str, tuple[str, tuple[str, ...]]] = {
-    "diagram": (".claude/skills/diagram", ("*.py",)),  # the webapp area lives in gm-assistant since feature 131
+    "diagram": (
+        ".claude/skills/diagram",
+        ("*.py",),
+    ),  # the webapp area lives in gm-assistant since feature 131
     "hooks": ("scripts", ("*.sh", "*.py")),
 }
 # Subtrees an area does NOT hash. tests/ (feature 132 FR-024, the GM's ruling 2026-08-25, asked and
@@ -57,7 +60,9 @@ EXCLUDE: dict[str, tuple[str, ...]] = {"diagram": ("tests/", "l7r/diagram/ci/")}
 
 
 def _git(*args: str, cwd: Path | None = None) -> str:
-    return subprocess.run(["git", *args], cwd=cwd, capture_output=True, text=True, check=True).stdout
+    return subprocess.run(
+        ["git", *args], cwd=cwd, capture_output=True, text=True, check=True
+    ).stdout
 
 
 def _root() -> Path | None:
@@ -71,17 +76,36 @@ def _area_files(root: Path, area_path: str, patterns: tuple[str, ...]) -> list[P
     """Tracked AND untracked-but-not-ignored files under `area_path` matching `patterns` - a new
     module nobody has added yet is still code the gate ran on, and omitting it would let an
     untracked file slip past."""
-    out = _git("ls-files", "-co", "--exclude-standard", "--", *(f"{area_path}/{pat}" for pat in patterns), cwd=root)
-    return sorted({root / line for line in out.splitlines() if line.strip() and not _excluded(line, area_path)})
+    out = _git(
+        "ls-files",
+        "-co",
+        "--exclude-standard",
+        "--",
+        *(f"{area_path}/{pat}" for pat in patterns),
+        cwd=root,
+    )
+    return sorted(
+        {
+            root / line
+            for line in out.splitlines()
+            if line.strip() and not _excluded(line, area_path)
+        }
+    )
 
 
 def _excluded(path: str, area_path: str) -> bool:
     area = next((a for a, (p, _pats) in AREAS.items() if p == area_path), None)
-    return any(path.startswith(f"{area_path}/{sub}") for sub in EXCLUDE.get(area or "", ()))
+    return any(
+        path.startswith(f"{area_path}/{sub}") for sub in EXCLUDE.get(area or "", ())
+    )
 
 
 def _matches(path: str, area_path: str, patterns: tuple[str, ...]) -> bool:
-    return path.startswith(area_path + "/") and not _excluded(path, area_path) and any(path.endswith(pat.lstrip("*")) for pat in patterns)
+    return (
+        path.startswith(area_path + "/")
+        and not _excluded(path, area_path)
+        and any(path.endswith(pat.lstrip("*")) for pat in patterns)
+    )
 
 
 def semantic_bytes(data: bytes, name: str) -> bytes:
@@ -105,7 +129,15 @@ def semantic_bytes(data: bytes, name: str) -> bytes:
         return data
     for node in ast.walk(tree):
         body = getattr(node, "body", None)
-        if isinstance(node, ast.Module | ast.ClassDef | ast.FunctionDef | ast.AsyncFunctionDef) and body and isinstance(body[0], ast.Expr) and isinstance(body[0].value, ast.Constant) and isinstance(body[0].value.value, str):
+        if (
+            isinstance(
+                node, ast.Module | ast.ClassDef | ast.FunctionDef | ast.AsyncFunctionDef
+            )
+            and body
+            and isinstance(body[0], ast.Expr)
+            and isinstance(body[0].value, ast.Constant)
+            and isinstance(body[0].value.value, str)
+        ):
             del body[0]
     return ast.dump(tree).encode()
 
@@ -125,7 +157,9 @@ def content_id(data: bytes, name: str, root: Path | None = None) -> str:
     `already verified` answer went from 1 s to 14 s), and the raw sha -> semantic id map is a pure
     function, so it is computed once per distinct file content and read back forever after. Without a
     repository root the id is computed directly - correctness never depends on the cache."""
-    raw = git_blob_id(data)  # the cache is keyed by GIT's own blob id, so `ls-tree`/`hash-object` answer a hit without reading the file (T27)
+    raw = git_blob_id(
+        data
+    )  # the cache is keyed by GIT's own blob id, so `ls-tree`/`hash-object` answer a hit without reading the file (T27)
     if not name.endswith(".py"):
         return raw
     table = _cache_table(root)
@@ -208,13 +242,32 @@ def _flush_cache(root: Path | None) -> None:
         _cache_dirty.discard(id(_cache_tables[path]))
 
 
+# GUARD_EDIT_OK: feature 174 - THE GATE'S OWN STANDARD IS PART OF THE KEY (FR-003a), which makes the
+# stamp harder to satisfy, never easier. A stamp says "the gate has seen exactly this code and
+# passed"; it is worthless the moment the gate starts asking for something the recorded run was never
+# asked. Feature 174 put the 100% coverage floor on a plain `make done` (GM 2026-08-31), so every
+# stamp written before it certifies a run that was ALLOWED to finish below the floor - and
+# `sync-with-main.sh`'s `--check` is the whole of what the push demands. Bumping this string retires
+# every such record at once, which is exactly the intent. Bump it whenever the gate's STANDARD
+# changes; never for a change in the code the gate runs over - that is what the file hashes are for.
+GATE_RECIPE = "2026-08-31/174-coverage-floor-on-done"
+
+
 def hash_files(files: list[Path], root: Path | None = None) -> str:
-    """Content hash of `files`, order-independent (each path is hashed with its own SEMANTIC id)."""
+    """Content hash of `files`, order-independent (each path is hashed with its own SEMANTIC id),
+    salted with `GATE_RECIPE` so a record taken under an older gate standard cannot satisfy a
+    newer one."""
     h = hashlib.sha256()
+    h.update(GATE_RECIPE.encode())
+    h.update(b"\0")
     for path in sorted(files):
         h.update(str(path).encode())
         h.update(b"\0")
-        h.update(content_id(path.read_bytes(), path.name, root).encode() if path.is_file() else b"<missing>")
+        h.update(
+            content_id(path.read_bytes(), path.name, root).encode()
+            if path.is_file()
+            else b"<missing>"
+        )
         h.update(b"\0")
     return h.hexdigest()
 
@@ -250,7 +303,13 @@ def fresh(area: str, root: Path | None = None) -> int:
     stamp = _stamp_path(root, area)
     if stamp is None:
         return 1  # no git dir to have recorded a stamp in - treat as NOT fresh, never as fresh
-    return 0 if stamp.is_file() and stamp.read_text().strip() == hash_files(_area_files(root, area_path, patterns), root) else 1
+    return (
+        0
+        if stamp.is_file()
+        and stamp.read_text().strip()
+        == hash_files(_area_files(root, area_path, patterns), root)
+        else 1
+    )
 
 
 def check(base: str, root: Path | None = None) -> int:
@@ -267,17 +326,33 @@ def check(base: str, root: Path | None = None) -> int:
         want = hash_files(_area_files(root, area_path, patterns), root)
         gate = "make hooks-test" if area == "hooks" else "make done"
         if stamp is None or not stamp.is_file():
-            bad.append(f"{area}: no green gate has been recorded at all ({gate} stamps it)")
+            bad.append(
+                f"{area}: no green gate has been recorded at all ({gate} stamps it)"
+            )
         elif stamp.read_text().strip() != want:
-            bad.append(f"{area}: the last green gate ran against DIFFERENT code than you are pushing ({gate} again)")
+            bad.append(
+                f"{area}: the last green gate ran against DIFFERENT code than you are pushing ({gate} again)"
+            )
     if not bad:
         return 0
-    print("gate-stamp: refusing to push Python that no green gate has seen (constitution Principle XIII):", file=sys.stderr)
+    print(
+        "gate-stamp: refusing to push Python that no green gate has seen (constitution Principle XIII):",
+        file=sys.stderr,
+    )
     for line in bad:
         print(f"  {line}", file=sys.stderr)
-    print("gate-stamp: run the named gate in .claude/skills/diagram and push again - it stamps on success.", file=sys.stderr)
-    print("gate-stamp: a cohort/sweep regression is NOT covered here; check it separately.", file=sys.stderr)
-    print("gate-stamp: escape hatch, with a reason: GATE_STAMP_OK='<why this push is safe>'", file=sys.stderr)
+    print(
+        "gate-stamp: run the named gate in .claude/skills/diagram and push again - it stamps on success.",
+        file=sys.stderr,
+    )
+    print(
+        "gate-stamp: a cohort/sweep regression is NOT covered here; check it separately.",
+        file=sys.stderr,
+    )
+    print(
+        "gate-stamp: escape hatch, with a reason: GATE_STAMP_OK='<why this push is safe>'",
+        file=sys.stderr,
+    )
     return 1
 
 
@@ -296,39 +371,68 @@ def selftest() -> int:
             return 1
         a.write_text("x = 2\n")
         if hash_files([a, b]) == before:
-            print("gate-stamp selftest: a changed .py did NOT change the hash", file=sys.stderr)
+            print(
+                "gate-stamp selftest: a changed .py did NOT change the hash",
+                file=sys.stderr,
+            )
             return 1
         a.unlink()
         if hash_files([a, b]) == before:
-            print("gate-stamp selftest: a deleted .py did NOT change the hash", file=sys.stderr)
+            print(
+                "gate-stamp selftest: a deleted .py did NOT change the hash",
+                file=sys.stderr,
+            )
             return 1
         # the hash is blind to comments, docstrings and formatting, and only to those
         a.write_text("def f(x):\n    return x + 1\n")
         code = hash_files([a, b])
-        a.write_text('"""module doc"""\n\n# a comment\n\ndef f(x):\n    """f doc"""\n    return  x+1  # trailing\n')
+        a.write_text(
+            '"""module doc"""\n\n# a comment\n\ndef f(x):\n    """f doc"""\n    return  x+1  # trailing\n'
+        )
         if hash_files([a, b]) != code:
-            print("gate-stamp selftest: a comment/docstring/format-only edit CHANGED the hash", file=sys.stderr)
+            print(
+                "gate-stamp selftest: a comment/docstring/format-only edit CHANGED the hash",
+                file=sys.stderr,
+            )
             return 1
         a.write_text("def f(x):\n    return x + 2\n")
         if hash_files([a, b]) == code:
-            print("gate-stamp selftest: a one-token code change did NOT change the hash", file=sys.stderr)
+            print(
+                "gate-stamp selftest: a one-token code change did NOT change the hash",
+                file=sys.stderr,
+            )
             return 1
         c = Path(tmp) / "c.json"
         c.write_text("{}\n")
         j = hash_files([a, b, c])
         c.write_text("{} \n")
         if hash_files([a, b, c]) == j:
-            print("gate-stamp selftest: a non-.py file is hashed by its bytes and must move on any edit", file=sys.stderr)
+            print(
+                "gate-stamp selftest: a non-.py file is hashed by its bytes and must move on any edit",
+                file=sys.stderr,
+            )
             return 1
     return 0
 
 
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description=__doc__)
-    ap.add_argument("--write", choices=sorted(AREAS), help="record a green gate for this area (diagram: make done; hooks: make hooks-test)")
-    ap.add_argument("--check", metavar="BASE", help="refuse changed-Python areas with no matching stamp (BASE is usually origin/main)")
+    ap.add_argument(
+        "--write",
+        choices=sorted(AREAS),
+        help="record a green gate for this area (diagram: make done; hooks: make hooks-test)",
+    )
+    ap.add_argument(
+        "--check",
+        metavar="BASE",
+        help="refuse changed-Python areas with no matching stamp (BASE is usually origin/main)",
+    )
     ap.add_argument("--selftest", action="store_true")
-    ap.add_argument("--fresh", choices=sorted(AREAS), help="exit 0 if this area's stamp matches its current files (nothing to re-run)")
+    ap.add_argument(
+        "--fresh",
+        choices=sorted(AREAS),
+        help="exit 0 if this area's stamp matches its current files (nothing to re-run)",
+    )
     args = ap.parse_args(argv)
     if args.selftest:
         return selftest()

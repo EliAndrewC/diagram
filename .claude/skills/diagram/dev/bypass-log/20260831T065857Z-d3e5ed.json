@@ -1,0 +1,6 @@
+{
+  "utc": "20260831T065857Z",
+  "guard": "pair-hooks",
+  "what": "gate alone",
+  "reason": "feature 174 changed no engine drawing code - the delta is tests, the Makefile phase list and the gate-stamp key, so no map manifest moves and there is nothing for a settlement-review to look at; this run exists to MEASURE the new gate"
+}

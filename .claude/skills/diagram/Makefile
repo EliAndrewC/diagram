@@ -108,7 +108,14 @@ done:
 	if [ -n "$$fail" ]; then $(LOGRUN) $(DONE_NAME) "$(if $(FULL),full,reference)" "$$(( $$(date +%s) - $$T0 ))" "failed:$$fail"; $(STATE) failed-gate $(DONE_NAME); printf '\n\033[1mGATE FAILED:%s\033[0m (the static checks run FIRST now, so the map roll has not happened - fix these and re-run)\n' "$$fail"; exit 1; fi; \
 	: "(GUARD_EDIT_OK: feature 170 - REF_OK reaches the firing log as well as the bypass log)"; \
 	$(if $(REF_OK),$(LOGESCAPE) REF_OK "$(REF_WHY)"; $(LOGBYPASS) permitted "REF_OK - reference step skipped: $(REF_WHY)"; printf '\nreference step SKIPPED (REF_OK, logged to dev/bypass-log/ and the firing log)\n';,$(MAKE) --no-print-directory reference || exit 1;) \
-	for phase in hooks-test $(if $(FULL),test-full perf-gate,test); do \
+	: "GUARD_EDIT_OK: feature 174 makes the merge gate STRICTER, not looser - the GM's own request (2026-08-31)" ; \
+	: "is that a plain make done cannot finish below 100% coverage, 'and there will no longer be any mechanism" ; \
+	: "by which this can be accomplished'. The floors live behind COV_FLOORS=1, which is also what switches every" ; \
+	: "deselection off, and a deselected test takes its coverage with it - so no arrangement holds a 100% floor" ; \
+	: "over a partial suite, and the test phase becomes test-full on BOTH branches. The cost (the gate now runs" ; \
+	: "the whole sweep) was stated to the GM rather than used to decline. FULL=1 still adds the perf bookends" ; \
+	: "and the L7R_TESTS_FULL signal, which is what still distinguishes it." ; \
+	for phase in hooks-test test-full $(if $(FULL),perf-gate,); do \
 	  printf '\n\033[1m== %s ==\033[0m\n' "$$phase"; \
 	  if [ "$$phase" = hooks-test ] && root=$$(git rev-parse --show-toplevel 2>/dev/null) && python3 "$$root/scripts/gate-stamp.py" --fresh hooks; then \
 	    printf 'hooks-test: already green against exactly these guard scripts - skipped (gate-stamp --fresh hooks; 84 s measured 2026-08-26)\n'; continue; fi; \
@@ -1055,6 +1062,16 @@ test-full:      ## EVERY test, nothing deselected, + all three coverage floors -
 # wrote, which is where holes actually come from - but the global invariant is a FULL-run guarantee
 # now, not a per-run one. That is the price of having a cheap gate at all, and it was paid
 # deliberately rather than by leaving a floor in place that could never be met.
+#
+# SUPERSEDED FOR `make done` BY FEATURE 174 (GUARD_EDIT_OK: the gate gets STRICTER; GM 2026-08-31).
+# The reasoning above is kept because it is still TRUE - it is the argument the GM overruled, not one
+# that was wrong. Their request was for the floor at the merge gate itself: "we literally cannot
+# complete our make done in order to merge back into main, and there will no longer be any mechanism
+# by which this can be accomplished." The two facts above (a deselected test takes its coverage with
+# it; the reference scope deselects) mean the only way to hold a 100% floor is to stop deselecting -
+# so `done`'s test phase is `test-full` on both branches. `COV_FLOORS` stays the switch and stays
+# empty by default, because `make test` is still run directly and by `make quick`, which the GM
+# exempted in the same request ("I don't think we need to do this for our make quick").
 COV_FLOORS =
 
 test:
