@@ -50,7 +50,18 @@ def _public_clashes(modules: list[types.ModuleType]) -> list[tuple[str, str, str
     seen: dict[str, tuple[str, object]] = {}
     clashes: list[tuple[str, str, str]] = []
     for mod in modules:
-        for name, obj in vars(mod).items():
+        # WHAT A STAR IMPORT ACTUALLY TAKES, which is `__all__` when the module defines one. This
+        # matters from feature 173: a submodule package binds its own submodule names in its
+        # namespace as a side effect of `from .x import Name`, so `hinterland` and `homesteads` both
+        # carry a `bamboo` and a `stages` - and read from raw `vars()` those look like a clash the
+        # parent's star import would suffer. It cannot: both packages declare `__all__` (derived,
+        # excluding modules), so neither name is exported at all. Reading `__all__` here makes this
+        # test measure the hazard it is named for rather than a superset of it - and it still fires
+        # on every module without one, which is all the flat ones (test_guard_fires_on_synthetic_clash).
+        exported = getattr(mod, "__all__", None)
+        names = list(exported) if exported is not None else [n for n in vars(mod) if not n.startswith("_")]
+        for name in names:
+            obj = getattr(mod, name, None)
             if name.startswith("_"):
                 continue
             if name in seen:

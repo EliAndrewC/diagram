@@ -177,6 +177,10 @@ _ESCAPES = {
         "blanking its quoted regions would break the GM's own PAIR_OK=\"reason\" form",
     ),
     "GUARD_EDIT_OK": ("command", "classify() routes through escape_used; also a marker in edit CONTENT"),
+    "FILE_SIZE_OK": (
+        "content",
+        "feature 173: the justification header INSIDE an oversize file, read by scripts/check-file-scale.py from the file's first 40 lines - never matched in a command, so a mention in one escapes nothing. It carries its own reason floor (40 characters) rather than _hookmatch.py's eight",
+    ),
     "SOURCE_EDIT_OK": ("content", "matched in an Edit's new_string, never in a command - the marker in the text IS the escape, so a 'mention' is the intended use"),
     "REVIEW_GATE_OK": ("environment", "read as ${REVIEW_GATE_OK:-} at push time; an environment variable cannot be set by mentioning it in a command"),
     "GATE_STAMP_OK": ("environment", "read as ${GATE_STAMP_OK:-} at push time; same ground as REVIEW_GATE_OK. Missed by three drafts of the spec (round 3)"),

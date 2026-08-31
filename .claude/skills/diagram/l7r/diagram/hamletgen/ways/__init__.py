@@ -3,6 +3,14 @@
 Split from hamletgen.py by feature 111; bodies verbatim. See hamletgen/CLAUDE.md.
 """
 
+# `from .x import Name` binds `x` itself as an attribute of this package, so a `from <pkg> import *`
+# in a parent carries the SUBMODULE NAMES too. Feature 173 made that bite: `hamletgen/__init__.py`
+# star-imports both `hinterland` and `homesteads`, and both packages have a `bamboo.py` and a
+# `stages.py` - so the second star silently shadowed the first, which
+# `tests/hamletgen/test_surface.py::test_no_public_name_clashes` caught. `__all__` says what this
+# package actually exports; it is DERIVED here rather than listed, per clause 14.
+import types as _types
+
 from l7r.diagram.settlement import seg_dist as seg_dist
 
 from ..consts import WEB_REACH_FT as WEB_REACH_FT
@@ -76,3 +84,5 @@ from .track import stage_track as stage_track
 from .web import _lay_skeleton as _lay_skeleton
 from .web import _reachable_runs as _reachable_runs
 from .web import stage_web as stage_web
+
+__all__ = [_n for _n, _v in sorted(globals().items()) if not _n.startswith("_") and not isinstance(_v, _types.ModuleType)]

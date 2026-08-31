@@ -533,7 +533,13 @@ def test_the_relocated_farmstead_helpers_live_in_homestead_parts_not_in_land():
     from l7r.diagram.settlement.land import LandMixin
 
     land_names = set().union(*(_own(c) for c in LandMixin.__mro__))
-    assert _own(HomesteadPartsMixin) >= _RELOCATED_TO_HOMESTEAD_PARTS, f"not relocated: {sorted(_RELOCATED_TO_HOMESTEAD_PARTS - _own(HomesteadPartsMixin))}"
+    # THE MRO, not the class body: feature 173 split homestead_parts.py into a package whose
+    # `HomesteadPartsMixin` composes seven sub-mixins and has no members of its own by design (the
+    # settlement/structures/ pattern). The three helpers live on `farmstead.py`'s sub-mixin, which is
+    # the same surface on the composed Settlement - which is what this test is actually about. Read
+    # the way `land_names` above has always been read.
+    parts_names = set().union(*(_own(c) for c in HomesteadPartsMixin.__mro__))
+    assert parts_names >= _RELOCATED_TO_HOMESTEAD_PARTS, f"not relocated: {sorted(_RELOCATED_TO_HOMESTEAD_PARTS - parts_names)}"
     assert not (_RELOCATED_TO_HOMESTEAD_PARTS & land_names), f"still in land/: {sorted(_RELOCATED_TO_HOMESTEAD_PARTS & land_names)}"
 
 
