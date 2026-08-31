@@ -15,7 +15,7 @@ from ..consts import (
 )
 from .clearance import _bends_badly, _clear_touch, may_write
 from .fabric import _LANE_JOIN_FT, _draw_web
-from .geom import _TOUCH_GAP, _components, _stop_at_network, _unretrace, fabric_clearance, polyline_len
+from .geom import _TOUCH_GAP, _components, _stop_at_network, _unretrace, polyline_len
 from .route import _route, _unjog
 from .sweeps import _FINE_CELL, _LINK_DIRECTNESS, _SERVE_FT
 
@@ -55,9 +55,6 @@ def _touch_junctions(
     # fabric than it already was, or than its own keep-out allows - whichever is the more forgiving,
     # so a lane already inside the bar is never made worse but is not required to fix itself either.
     _fab = [poly for poly in walls if len(poly) >= 3]
-
-    def _clearance(pts: Sequence[Pt]) -> float:
-        return fabric_clearance(pts, _fab)
 
     def _may_write(idx: int, new_pts: Sequence[Pt], lane_list: Sequence[Mapping[str, Any]]) -> bool:
         """This lane's rewrite rule - see `may_write`, which holds the body."""
