@@ -264,9 +264,7 @@ def test_a_nub_is_KEPT_when_dropping_it_would_push_the_lane_into_the_fabric() ->
     s = _StubSettlement(lanes=[lane])
     fabric = [[(45.0, -3.0), (55.0, -3.0), (55.0, 1.0), (45.0, 1.0)]]  # under the STRAIGHTENED line, not the dogleg
     _drop_end_nubs(s, fabric)
-    assert [tuple(p) for p in s.M["lanes"][0]["pts"]] == [(0.0, 0.0), (2.0, 5.0), (100.0, 5.0)], (
-        "the nub must survive: dropping it would put the tread nearer the fabric than the dogleg was"
-    )
+    assert [tuple(p) for p in s.M["lanes"][0]["pts"]] == [(0.0, 0.0), (2.0, 5.0), (100.0, 5.0)], "the nub must survive: dropping it would put the tread nearer the fabric than the dogleg was"
     # ...and with nothing to foul, the very same nub IS dropped - so the assertion above is about the
     # fabric and not about the nub being unrecognized.
     s2 = _StubSettlement(lanes=[lane])

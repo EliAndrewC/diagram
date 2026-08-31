@@ -1,6 +1,7 @@
 """Split from test_ways.py by feature 173 - see this directory's CLAUDE.md."""
 
 from l7r.diagram import hamletgen as hg
+from l7r.diagram.hamletgen.ways.clearance import existing_walk
 from l7r.diagram.settlement import point_in_poly
 
 from .._builders import SQUARE
@@ -143,3 +144,20 @@ def test_a_nub_at_the_TAIL_of_a_way_is_dropped_too() -> None:
     clean = [[(0.0, 0.0), (100.0, 0.0), (200.0, 0.0)]]
     assert hg.ways.drop_end_nubs(clean) == []
     assert clean[0] == [(0.0, 0.0), (100.0, 0.0), (200.0, 0.0)]
+
+
+def test_existing_walk_is_zero_when_both_ends_snap_to_the_same_junction() -> None:
+    """Feature 174: two points within `touch` of each other are the same node, so the walk is zero -
+    not None, which would read as 'no route' and make a redundant bridge look necessary."""
+    assert existing_walk([[(0.0, 0.0), (100.0, 0.0)]], (0.0, 0.0), (1.0, 0.0), 5.0) == 0.0
+    assert existing_walk([[(0.0, 0.0), (100.0, 0.0)]], (0.0, 0.0), (100.0, 0.0), 5.0) == 100.0, "distinct ends still walk the way"
+
+
+def test_existing_walk_ignores_a_heap_entry_a_better_route_has_already_beaten() -> None:
+    """The stale-entry skip in the search. A triangle whose direct edge is longer than the two-hop
+    route pushes the far end twice; the improved entry pops first and the stale one must be dropped
+    rather than overwriting the answer with the worse distance."""
+    a, b, c = (0.0, 0.0), (100.0, 0.0), (50.0, 1.0)
+    ways = [[a, b], [a, c], [c, b]]  # direct 100.0 against about 50.0 + 50.0 through c
+    got = existing_walk(ways, a, b, 2.0)
+    assert got is not None and got <= 100.0 + 1e-9, "the shortest of the two routes, never the stale one"
