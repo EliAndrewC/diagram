@@ -56,7 +56,7 @@ Every `*.py` in the repository, excluding:
 - `legacy-hand-authored-pool/` - frozen write-once exhibits, already outside ruff, coverage and
   every re-run (feature 161). Three of them are over the bar and must stay untouched.
 - `.clones/` - other sessions' working trees, which this clone does not judge.
-- `specs/` - the feature record, including six retired one-shot splitters kept as history (R2). A
+- `specs/` - the feature record, including fourteen retired one-shot splitters kept as history (R2). A
   record of what was done is not code that a session loads to work.
 - `.git/`, `__pycache__/`, and any path already ignored by git.
 
@@ -117,7 +117,7 @@ deleting the rule and watching a test go red.
 already exists rather than inventing - the target shape and the two carve-outs from clause 13/14,
 the "look here when" index format taken from the fourteen exemplars, the four residue-bucket vs
 chain shapes those exemplars fall into, the verbatim-move discipline and import regeneration from
-the six retired splitters (R1), and the four things a split can break from R4 (draw order, the
+the fourteen retired splitters (R1), and the four things a split can break from R4 (draw order, the
 per-module coverage floors, the deferred-floor limit, and the path literals in `pyproject.toml` /
 `.gitignore` / `gate-stamp.py` that stop matching silently). The check's failure message points here
 and the constitution's clause 13 gains the pointer.
@@ -192,6 +192,6 @@ A split that changes a manifest is a defect in that split, not an accepted cost.
 | D2 | the `lint` phase beside `check-duplicate-defs.py`, not a pytest and not a new phase (R3) | decided |
 | D3 | the carve-out survives, needs a 40-character reason, and is printed by `make audit` | decided |
 | D4 | `wip/shiro-daika.gen.py` takes the carve-out; the other nine split | **flagged to review** |
-| D5 | `specs/` is excluded - a record of past work, including six retired splitters, is not loaded code | decided |
+| D5 | `specs/` is excluded - a record of past work, including fourteen retired splitters, is not loaded code | decided |
 | D6 | clause 12 (function size) is out of scope; it is also unimplemented and was not asked for | deferred |
 | D7 | the per-module coverage consequence of a split lands at `FULL=1`, which has never been green - inherited limit, stated not created (R4) | accepted |

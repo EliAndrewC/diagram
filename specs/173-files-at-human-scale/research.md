@@ -35,12 +35,23 @@ behind the name. What actually carries the detail is the exemplars, of which the
 Since this feature's failure message will send a session to the prescribed manner, the manner has to
 be readable in one place. FR-006 writes it down.
 
-There is also a **retired mechanical toolchain** nobody wrote down: six one-shot splitters under
-`specs/`, each deleted-in-place at the end of its feature -
-`024-human-scale-files/split_package.py` (388 lines, the most general: verbatim contiguous line
-ranges, per-module import regeneration from free-name analysis, a hard failure on any forward
-cross-module reference so the package cannot cycle), plus `025`'s `split_settlement.py`, `116`,
-`117`, `118`, `120`. Each was rebuilt from scratch. That is the second undocumented thing, and the
+There is also a **retired mechanical toolchain** nobody wrote down: **fourteen** one-shot splitters
+under `specs/`, across thirteen features (023, 024 x2, 025 x2, 112, 113, 114, 115, 116, 117, 118,
+120, 122), 3,392 lines in total, each written for one split and left behind as a record. Two
+lineages, and this feature needs both:
+
+- `024-human-scale-files/split_package.py` (388 lines, the most general) for a MODULE-LEVEL file:
+  everything moves verbatim by contiguous line ranges, so concatenating the generated bodies
+  reproduces the monolith's definition order exactly; only imports are regenerated, per module,
+  from free-name analysis - deliberately over-importing rather than under-importing, with `ruff
+  --fix` removing the excess and a genuine miss exploding as `NameError` on the next run; and a
+  cross-module reference that points FORWARD is a hard failure, so the package cannot cycle.
+- `025-human-scale-splits/split_settlement.py` (253 lines) for a MIXIN file: methods split into
+  mixin classes by contiguous ranges, each gaining an explicit `self: "Settlement"` annotation and
+  `if TYPE_CHECKING: from .core import Settlement`; class-body attribute assignments stay with the
+  composed class. Three of this feature's ten files are exactly this shape.
+
+Each was rebuilt from scratch, thirteen times. That is the second undocumented thing, and the
 reason the ten refactors below are cheaper than they look.
 
 ## R2 - the census, and how it differs from what the tooling says
