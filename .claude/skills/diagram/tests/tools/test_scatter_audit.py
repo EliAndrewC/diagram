@@ -317,3 +317,23 @@ def test_a_family_that_parses_nothing_the_manifest_records_is_a_LOUD_failure(tmp
     err = capsys.readouterr().err
     assert "parsed 0 crown bases" in err and "records 2" in err and "0% coverage" in err
     assert "treat the AUDIT as broken" in err, "it must accuse the tool, not clear the map"
+
+
+def test_parse_bases_honours_the_families_filter_and_stops_before_the_crown_transform() -> None:
+    """Feature 174: the `families` argument, which every caller so far leaves at its default.
+
+    Its purpose is the comment's own: "a crown guard need not scan 220k blades". Three branches
+    close together - the blade/reed skip, the dot and pine guards, and the early return before the
+    crown transform resolution, which is the expensive half. Asserted by what comes back, so the
+    test would fail if the filter simply stopped filtering.
+    """
+    # the REAL markers, copied from the module's own patterns (`_BLADE_GROUP`, `_DOT`) - an
+    # invented colour parses as nothing, which would make this test pass by finding zero of everything
+    svg = '<g stroke="#A7A860"><line x1="10" y1="20" x2="12" y2="16"/></g><circle cx="30" cy="40" r="1.1" fill="#94A063"/>'
+    only_dots = sa.parse_bases(svg, families=("dot",))
+    assert only_dots["dot"], "the family that was asked for is parsed"
+    assert only_dots["blade"] == [], "and the ones that were not are left empty rather than scanned"
+    assert only_dots["crown"] == [], "the crown transform pass is skipped entirely"
+
+    everything = sa.parse_bases(svg)
+    assert everything["dot"] and everything["blade"], "the default still parses every family"
