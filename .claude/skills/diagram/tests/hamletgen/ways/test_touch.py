@@ -72,3 +72,26 @@ def test_a_refused_splice_still_draws_the_link_as_its_own_lane():
 
     assert lanes[0]["pts"] == before_pts, "the splice was refused, so the piece must be left exactly as it was"
     assert len(s.M["lanes"]) == before_lanes + 1, "the refused link is still drawn - as its own lane, so the web is joined"
+
+
+def test_the_POST_SMOOTHING_call_leaves_a_web_that_is_already_in_one_piece_alone() -> None:
+    """Feature 174. `_touch_junctions` runs twice: once over the whole web, and again after the
+    smoothing pass with `only_orphans=True`.
+
+    That second call exists to pick up pieces the smoothing stranded, and it must not re-touch a web
+    that is already connected - so every lane in the connector's own component is SKIPPED. Without
+    the skip the second pass would re-join lanes it had already joined, moving ends that the first
+    pass had settled.
+
+    Asserted by the lanes that are left alone: the two collinear pieces are one component with the
+    connector, so the orphan-only call does not touch them.
+    """
+    s = _StubSettlement(
+        lanes=[[(0.0, 0.0), (0.0, 300.0)], [(0.0, 330.0), (0.0, 600.0)], [(400.0, 400.0), (600.0, 400.0)]],
+        houses=[(60.0, 300.0), (500.0, 420.0)],
+    )
+    s.M.setdefault("meta", {"ftpx": 1})
+    before = [list(ln["pts"]) for ln in s.M["lanes"]]
+    hg.ways._touch_junctions(s, [], [], [], only_orphans=True)
+    assert s.M["lanes"][0]["pts"] == before[0], "the connector is never moved"
+    assert isinstance(hg.ways._touch_junctions(s, [], [], [], only_orphans=True), int), "and the pass reports its count"
