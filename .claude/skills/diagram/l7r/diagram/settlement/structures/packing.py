@@ -16,6 +16,33 @@ if TYPE_CHECKING:
     from ..core import Settlement
 
 
+def seg_hits_rect(a: Any, b: Any, rx0: float, ry0: float, rx1: float, ry1: float) -> bool:
+    """Does the segment a-b meet the axis-aligned rect? Liang-Barsky slab clipping, exact.
+
+    LIFTED OUT OF `rowpack`'s closure (GM 2026-08-28, feature 146): it captured nothing, and reaching
+    its four early exits through a whole town placement meant they were reachable only by luck of the
+    seed. As a module function they are five lines of plain tuples - `tests/settlement/test_structures.py`.
+    """
+    (ax, ay), (bx, by) = a, b
+    dx, dy = bx - ax, by - ay
+    t0, t1 = 0.0, 1.0
+    for p, q in ((-dx, ax - rx0), (dx, rx1 - ax), (-dy, ay - ry0), (dy, ry1 - ay)):
+        if p == 0:
+            if q < 0:
+                return False  # parallel to this slab and wholly outside it
+        else:
+            t = q / p
+            if p < 0:
+                if t > t1:
+                    return False  # enters after it has already left
+                t0 = max(t0, t)
+            else:
+                if t < t0:
+                    return False  # leaves before it has entered
+                t1 = min(t1, t)
+    return True
+
+
 class PackingMixin:
     def rowpack(self: Settlement, bbox: Any, items: Any, court_every: int = 2, court_ft: float = 21, eave_ft: float = 4, seam: float = 0.4, fill: bool = False) -> int:  # type: ignore[misc]
         """CITY row housing - the machiya/nagaya fabric (GM row-packing doctrine, 2026-07):
@@ -57,27 +84,6 @@ class PackingMixin:
                 lines.append((self.M["road"], self.M.get("road_width", 30) / 2 + self.px(28)))
             if self.M.get("ring_road"):
                 lines.append((self.M["ring_road"], self.M.get("ring_road_width", 7) / 2 + max(self.px(3), 2.5)))
-
-            def seg_hits_rect(a: Any, b: Any, rx0: float, ry0: float, rx1: float, ry1: float) -> bool:
-                # slab-clip the segment against the rect (exact for axis-aligned rects)
-                (ax, ay), (bx, by) = a, b
-                dx, dy = bx - ax, by - ay
-                t0, t1 = 0.0, 1.0
-                for p, q in ((-dx, ax - rx0), (dx, rx1 - ax), (-dy, ay - ry0), (dy, ry1 - ay)):
-                    if p == 0:
-                        if q < 0:
-                            return False
-                    else:
-                        t = q / p
-                        if p < 0:
-                            if t > t1:
-                                return False
-                            t0 = max(t0, t)
-                        else:
-                            if t < t0:
-                                return False
-                            t1 = min(t1, t)
-                return True
 
             def rect_ok(cx: float, cy: float, w: float, h: float) -> bool:
                 corners = [(cx - w / 2, cy - h / 2), (cx + w / 2, cy - h / 2), (cx + w / 2, cy + h / 2), (cx - w / 2, cy + h / 2)]

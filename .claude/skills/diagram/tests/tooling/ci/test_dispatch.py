@@ -5,6 +5,7 @@ only ever with the id this dispatcher was given."""
 from __future__ import annotations
 
 import json
+from typing import Any
 from pathlib import Path
 
 import pytest
@@ -431,3 +432,45 @@ def test_the_build_log_is_STREAMED_line_by_line_to_the_session(repo: Path) -> No
     assert any(n == "get_log_events" for n, _ in client.calls), "the dispatcher asks for the build's log"
     streamed = [ln for ln in lines if ln.startswith("  | ")]
     assert streamed, f"and prints each event prefixed as the build's own voice: {lines[-6:]}"
+
+
+def test_a_STALE_IMAGE_is_named_by_its_changed_inputs_and_the_dispatch_still_goes(repo: Path) -> None:
+    """The image is a derived artifact in ECR with no link back to the files it came from, so the
+    marker's commit is diffed against HEAD over the recipe and the two lockfiles. It WARNS: a stale
+    image is usually harmless and a rebuild costs the GM about a dollar on a target only they may
+    authorize, so the build starts anyway and the line says which file went out of date."""
+    engine_delta_with_green(repo, False)
+    (repo / "Dockerfile.ci").write_text("FROM base\n")
+    git(repo, "add", "-A")
+    git(repo, "commit", "-qm", "the recipe the image was built from")
+    built_at = git(repo, "rev-parse", "HEAD").strip()
+    (repo / "Dockerfile.ci").write_text("FROM base\nRUN apt-get install resvg\n")
+    git(repo, "add", "-A")
+    git(repo, "commit", "-qm", "the recipe moved on")
+
+    client = FakeClient(artifacts={"image/latest.txt": f"{built_at} 2026-08-25".encode()})
+    c, lines = ctx(repo, client=client)
+    assert dispatch.run(c).rc == 0, "a stale image never refuses the dispatch"
+    assert "image:stale" in c.events
+    assert any("Dockerfile.ci" in ln for ln in lines), f"and the line names the file that went stale: {lines}"
+
+
+def test_the_log_DRAIN_prints_the_pages_CloudWatch_still_held_when_the_build_ended(repo: Path) -> None:
+    """Build 93af6342's log jumped from wait-go to POST_BUILD with the failing command's output
+    missing: the poll returned the moment the status was terminal, leaving pages unread. The drain
+    keeps reading until a page comes back empty, and this asserts it PRINTS what it finds - a drain
+    that read the pages and dropped them would fix nothing."""
+
+    class _TwoPages(FakeClient):
+        def get_log_events(self, group: str, stream: str, token: str | None) -> dict[str, Any]:
+            self.calls.append(("get_log_events", (group, stream, token)))
+            self._log_pages += 1
+            if self._log_pages > 2:
+                return {"events": [], "nextForwardToken": token}
+            return {"events": [{"message": f"page {self._log_pages} line\n"}], "nextForwardToken": f"t{self._log_pages}"}
+
+    client = _TwoPages(statuses=["SUCCEEDED"])
+    c, lines = ctx(repo, client=client)
+    dispatch.stream(c, "gm-assistant-check:uuid-1")
+    assert "  | page 1 line" in lines, "the page the main poll read"
+    assert "  | page 2 line" in lines, "and the page only the drain would have reached"

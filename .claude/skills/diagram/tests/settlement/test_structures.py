@@ -1014,3 +1014,29 @@ def test_the_ladders_rung_SHORT_CIRCUITS_in_the_order_the_four_call_sites_relied
     assert calls == ["hug0", "hug1", "blocked1", "hug2", "blocked2", "clearance2"], calls
     assert "blocked0" not in calls, "a seat over the hug cap is never asked whether it is blocked"
     assert "clearance1" not in calls, "and a blocked seat is never measured - the expensive probe is last"
+
+
+@pytest.mark.parametrize(
+    ("a", "b", "hits", "why"),
+    [
+        ((0.0, 50.0), (200.0, 50.0), True, "straight through the middle"),
+        ((0.0, 50.0), (200.0, 50.0), True, "and the reverse direction is the same segment"),
+        ((0.0, 500.0), (200.0, 500.0), False, "horizontal, wholly below the rect (the p == 0 slab)"),
+        ((50.0, -500.0), (50.0, -400.0), False, "vertical, wholly above it (the other p == 0 slab)"),
+        ((300.0, 50.0), (400.0, 50.0), False, "beyond the right edge: it enters after it has left"),
+        ((-400.0, 50.0), (-300.0, 50.0), False, "short of the left edge: it leaves before it enters"),
+        ((50.0, 50.0), (60.0, 60.0), True, "a segment wholly INSIDE still hits"),
+        ((-50.0, -50.0), (50.0, 50.0), True, "a diagonal clipped by two slabs at once"),
+    ],
+)
+def test_seg_hits_rect_clips_a_segment_against_a_rect_on_every_slab(a: tuple[float, float], b: tuple[float, float], hits: bool, why: str) -> None:
+    """The exact rect-vs-polyline test `rowpack` uses instead of sampling corners - a lane crossing
+    BETWEEN two corners is invisible to a corner sample, which is why this is not point-based.
+
+    Each of the four early exits is a separate row, because they are the branches a seed reaches only
+    by luck: a segment parallel to a slab and outside it, one that enters after it leaves, and one
+    that leaves before it enters."""
+    from l7r.diagram.settlement.structures.packing import seg_hits_rect
+
+    assert seg_hits_rect(a, b, 0.0, 0.0, 100.0, 100.0) is hits, why
+    assert seg_hits_rect(b, a, 0.0, 0.0, 100.0, 100.0) is hits, f"and reversed: {why}"
