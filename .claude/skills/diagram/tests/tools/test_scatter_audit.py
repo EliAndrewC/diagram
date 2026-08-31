@@ -337,3 +337,20 @@ def test_parse_bases_honours_the_families_filter_and_stops_before_the_crown_tran
 
     everything = sa.parse_bases(svg)
     assert everything["dot"] and everything["blade"], "the default still parses every family"
+
+
+def test_parse_bases_resolves_a_crowns_group_TRANSLATE_into_its_true_position() -> None:
+    """Feature 174, and the defect the module's own docstring records (Mizuguchi, settlement-review
+    2026-08-18): ~78% of the crown family was adjudicated in the wrong place while a count guard
+    passed, because a crown drawn inside `<g transform="translate(tx,ty)">` records its coordinates
+    relative to the group. The offset lookup is what resolves it.
+
+    Both branches of that lookup: a crown INSIDE a translated span takes the offset, and one outside
+    every span takes (0, 0). A test of the inside case alone would pass with the fallback broken.
+    """
+    from l7r.diagram.settlement._geom import CROWN_FILLS
+
+    fill = CROWN_FILLS[0]
+    svg = f'<circle cx="5" cy="7" r="9" fill="{fill}"/><g transform="translate(100,200)"><circle cx="5" cy="7" r="9" fill="{fill}"/></g>'
+    crowns = sorted(sa.parse_bases(svg, families=("crown",))["crown"])
+    assert crowns == [(5.0, 7.0), (105.0, 207.0)], "the untranslated crown keeps its own coordinates; the translated one is moved"
