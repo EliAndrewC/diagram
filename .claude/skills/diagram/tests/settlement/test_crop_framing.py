@@ -16,6 +16,7 @@ drawn and simply CLIP at the edge, trailing off as "more wild ground this way".
 from __future__ import annotations
 
 from l7r.diagram.settlement import Settlement
+from l7r.diagram.settlement._knobs import crop_boxes
 
 
 def _s() -> Settlement:
@@ -86,3 +87,58 @@ def test_a_set_apart_hard_feature_IS_included() -> None:
     _seat(s, 1600.0, 1600.0)  # a set-apart steading, still HARD content
     s.crop_to_content(margin=30)
     assert _view(s)[2] > _view(near)[2], "a set-apart hard feature must widen the frame, not be cut off"
+
+
+# ---- feature 174: the two crop_boxes branches no roll reaches -------------------------------------
+# Sixteen of the 89 statements in the 2026-08-31 hamlet-path baseline were here: the `add` helper's
+# RAW-POLYGON branch and the whole `if city:` block. Both are unreachable by a hamlet roll - the
+# first because no hamlet records an area key as a bare ring, the second because no generator
+# produces a city - so both take a hand-built manifest. `crop_boxes` is a pure function of one, which
+# is what makes that cheap.
+
+_FT = 1.0
+_W = _H = 1000.0
+
+
+def test_crop_boxes_frames_an_area_key_recorded_as_a_bare_RING() -> None:
+    """Some area keys (forest_patches, pastures) record a raw polygon rather than a dict.
+
+    The branch exists because such a record is drawn ground and sets the frame like any other; it
+    had no test because the scripted hamlets record every one of their areas as a dict.
+    """
+    ring = [(10.0, 20.0), (60.0, 20.0), (60.0, 90.0), (10.0, 90.0)]
+    got = crop_boxes({"groves": [ring]}, False, _FT, _W, _H)
+    assert (10.0, 60.0, 20.0, 90.0, "groves[0]") in got, "the ring's own extent, labeled by key and index"
+
+
+def test_crop_boxes_city_frames_its_satellites_its_moat_and_its_labels() -> None:
+    M = {
+        "flophouses": [{"x": 100.0, "y": 200.0, "w": 20.0, "h": 10.0}],
+        "moat": [(0.0, 0.0), (500.0, 0.0), (500.0, 500.0)],
+        "labels": [[10.0, 12.0, 90.0, 30.0, 5, "Hirokoji"]],
+    }
+    got = crop_boxes(M, True, _FT, _W, _H)
+    assert (90.0, 110.0, 195.0, 205.0, "flophouses[0]") in got, "a w/h record becomes a centered box"
+    assert (0.0, 0.0, 0.0, 0.0, "moat") in got and (500.0, 500.0, 0.0, 0.0, "moat") in got, "every moat vertex holds the frame"
+    assert (10.0, 90.0, 12.0, 30.0, "label 'Hirokoji'") in got, "a placed label box is framed and named by its text"
+
+
+def test_crop_boxes_city_excludes_the_extramural_shop_string_but_keeps_one_inside_the_wall() -> None:
+    """The slice doctrine (GM 2026-07-24): the gate-market / wharf stall string CLIPS at the frame.
+
+    Excluding it is conditional on the wall - a shop with no wall recorded, or one standing inside
+    the wall, still frames. All three cases are asserted, because the branch that skips is one line
+    and the branch that does not is the rest of the function.
+    """
+    wall = [(0.0, 0.0), (400.0, 0.0), (400.0, 400.0), (0.0, 400.0)]
+    outside = {"x": 900.0, "y": 900.0, "w": 10.0, "h": 10.0, "kind": "shop"}
+    inside = {"x": 200.0, "y": 200.0, "w": 10.0, "h": 10.0, "kind": "shop"}
+    kura = {"x": 950.0, "y": 950.0, "w": 10.0, "h": 10.0, "kind": "kura"}
+
+    labeled = [b[4] for b in crop_boxes({"buildings": [outside, inside, kura], "wall": wall}, True, _FT, _W, _H)]
+    assert "buildings[0]" not in labeled, "the extramural shop clips at the edge rather than holding the frame"
+    assert "buildings[1]" in labeled, "a shop INSIDE the wall frames like anything else"
+    assert "buildings[2]" in labeled, "only a shop is excluded - an extramural kura still frames"
+
+    no_wall = [b[4] for b in crop_boxes({"buildings": [outside]}, True, _FT, _W, _H)]
+    assert "buildings[0]" in no_wall, "with no wall recorded there is nothing to be outside of"

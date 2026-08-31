@@ -10,6 +10,7 @@ import pytest
 
 from l7r.diagram import settlement
 from l7r.diagram.settlement import Settlement, seg_dist
+from l7r.diagram.settlement._geom.primitives import convex_hull, edge_dist, point_in_poly
 from tests.settlement._builders import _IDX_POLY, _cap020, _ladder_map, _max_turn_deg, _memo_city, _ward_city_with_samurai
 
 
@@ -594,3 +595,45 @@ def test_street_runs_honors_a_manifest_that_carries_only_the_singular_lane() -> 
     assert street_runs({"lane": [(50, 50), (60, 60)]}) == [[(50.0, 50.0), (60.0, 60.0)]]
     assert street_runs({}) == []
     assert street_runs({"lanes": [{"pts": []}]}) == [], "a lane record with no points is not a run"
+
+
+# ---- feature 174: convex_hull, the last unreached function in this module -------------------------
+# It is re-exported by `overlap/taxonomy.py` and, since feature 166 deleted the check battery that
+# used it, called by nothing a roll executes - so all 16 of its statements sat uncovered in the
+# 2026-08-31 baseline. A pure function of a point list is the cheapest thing in this repository to
+# test (GM 2026-08-28: "unit tests be much simpler if you're just calling functions that take simple
+# inputs and outputs"), so it gets tests rather than a roll or an exemption.
+
+
+def test_convex_hull_returns_the_extreme_points_and_drops_the_interior_ones() -> None:
+    pts = [(0.0, 0.0), (10.0, 0.0), (10.0, 10.0), (0.0, 10.0), (5.0, 5.0), (2.0, 3.0)]
+    hull = convex_hull(pts)
+    assert set(hull) == {(0.0, 0.0), (10.0, 0.0), (10.0, 10.0), (0.0, 10.0)}, "the two interior points are not on the hull"
+    assert len(hull) == 4, "a corner is not repeated and the ring is not closed"
+
+
+def test_convex_hull_encloses_every_input_point() -> None:
+    """The property that matters to its consumer, asserted rather than the vertex order."""
+    pts = [(1.0, 2.0), (4.0, 0.0), (9.0, 3.0), (7.0, 8.0), (2.0, 7.0), (5.0, 4.0), (3.0, 3.0)]
+    hull = convex_hull(pts)
+    for p in pts:
+        assert point_in_poly(p[0], p[1], hull) or edge_dist(p[0], p[1], hull) < 1e-6, f"{p} fell outside its own hull"
+
+
+def test_convex_hull_of_fewer_than_three_unique_points_returns_them_as_is() -> None:
+    """The documented degenerate case - a hull of zero area, returned rather than refused."""
+    assert convex_hull([(1.0, 1.0)]) == [(1.0, 1.0)]
+    assert convex_hull([(2.0, 2.0), (1.0, 1.0)]) == [(1.0, 1.0), (2.0, 2.0)], "sorted, and both kept"
+    assert convex_hull([(1.0, 1.0), (1.0, 1.0), (1.0, 1.0)]) == [(1.0, 1.0)], "duplicates are one point"
+    assert convex_hull([]) == []
+
+
+def test_convex_hull_rounds_to_the_millimetre_before_deduplicating() -> None:
+    """`round(x, 3)` is what makes two points from different float paths the same point."""
+    assert convex_hull([(1.0, 1.0), (1.0000001, 1.0000001)]) == [(1.0, 1.0)]
+
+
+def test_convex_hull_of_collinear_points_keeps_only_the_ends() -> None:
+    """The `cross(...) <= 0` pop is what drops a point that adds no area - both loops exercise it."""
+    hull = convex_hull([(0.0, 0.0), (1.0, 1.0), (2.0, 2.0), (3.0, 3.0)])
+    assert set(hull) == {(0.0, 0.0), (3.0, 3.0)}, "the two interior collinear points carry no area"

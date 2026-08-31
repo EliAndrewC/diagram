@@ -9,8 +9,10 @@ straight line, a bund gets drawn inside the water.
 
 import math
 
+import pytest
+
 from l7r.diagram.waterfields import supply_bank_clearance, taper_pieces, taper_w
-from l7r.diagram.waterfields.frame import CANAL_A_FT, DELIVERY_FT, DELIVERY_PARENT_FRAC, DRAIN_FT, MIN_CHANNEL_PX, _drain_bank, _Frame, chan_px
+from l7r.diagram.waterfields.frame import CANAL_A_FT, DELIVERY_FT, DELIVERY_PARENT_FRAC, DRAIN_FT, MIN_CHANNEL_PX, _drain_bank, _Frame, _seg_x, chan_px
 
 
 def _linear(w0: float, w1: float, t: float) -> float:
@@ -227,3 +229,16 @@ def test_the_collector_bank_follows_the_same_law_as_its_stroke() -> None:
     # the half-width at mid-run, before the margin and the slope correction, is the sqrt law's
     assert mid > (taper_w(chan_px(DRAIN_FT[0], g), chan_px(DRAIN_FT[1], g), 0.5) / 2)
     assert bank(lo) < mid < bank(hi)  # and it still grows monotonically toward the outfall
+
+
+def test_seg_x_returns_nothing_for_segments_that_cannot_meet() -> None:
+    """Feature 174: the parallel/degenerate guard - the one statement in this module no roll reached.
+
+    Its positive branch is exercised by every comb fan; only the refusal was unreached, so the
+    crossing case is asserted beside it rather than leaving the guard proved by its absence alone.
+    """
+    assert _seg_x((0.0, 0.0), (10.0, 0.0), (0.0, 5.0), (10.0, 5.0)) is None, "parallel segments never meet"
+    assert _seg_x((0.0, 0.0), (10.0, 0.0), (0.0, 0.0), (10.0, 0.0)) is None, "collinear is the same degenerate determinant"
+    assert _seg_x((0.0, 0.0), (0.0, 0.0), (0.0, 5.0), (10.0, 5.0)) is None, "a zero-length segment has no direction"
+    hit = _seg_x((0.0, 0.0), (10.0, 0.0), (5.0, -5.0), (5.0, 5.0))
+    assert hit is not None and hit[0] == pytest.approx(5.0) and hit[1] == pytest.approx(0.0), "the crossing case still works"

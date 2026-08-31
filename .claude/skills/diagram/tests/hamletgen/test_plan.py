@@ -8,6 +8,7 @@ import math
 import pytest
 
 from l7r.diagram import hamletgen as hg
+from l7r.diagram.hamletgen.consts import COPSE_SITINGS, KOSATSUBA_SITINGS
 
 from ._builders import a_plan
 
@@ -251,3 +252,21 @@ def test_a_pond_whose_bank_cannot_hold_the_fixture_is_passed_over() -> None:
     assert placed <= 2, "the pond whose bank is under the houses can hold nothing"
     for rec in (s.M.get("pig_sties") or []) + (s.M.get("duck_pens") or []):
         assert rec.get("pond") != 0, "the pond whose bank could not hold a fixture was skipped"
+
+
+def test_the_copse_and_kosatsuba_sitings_pin_and_refuse_a_value_the_generator_cannot_draw() -> None:
+    """Feature 174: the last two unvalidated-in-test knob validators on the spec.
+
+    Both accept a legal value and refuse an illegal one. Asserting only the refusal would pass with
+    the whole `if` inverted, which is the mirror-branch trap the peer session hit on `drop_end_nubs`
+    the same day - so each pin is asserted beside its refusal.
+    """
+    for value in COPSE_SITINGS:
+        assert hg.plan_site(hg.HamletSpec(name="X", seed=3, households=16, copse_siting=value)).copse_siting == value
+    with pytest.raises(ValueError, match="copse_siting"):
+        hg.HamletSpec(name="X", seed=1, copse_siting="in_the_paddy")
+
+    for value in KOSATSUBA_SITINGS:
+        assert hg.plan_site(hg.HamletSpec(name="X", seed=3, households=16, kosatsuba_siting=value)).kosatsuba_siting == value
+    with pytest.raises(ValueError, match="kosatsuba_siting"):
+        hg.HamletSpec(name="X", seed=1, kosatsuba_siting="on_the_shrine")

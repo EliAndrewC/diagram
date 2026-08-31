@@ -17,7 +17,7 @@ check, because it is the argument for testing the SOURCE rather than either cons
 from __future__ import annotations
 
 from l7r.diagram.settlement import Settlement
-from l7r.diagram.settlement._knobs import bridge_crossed_waters
+from l7r.diagram.settlement._knobs import bridge_carried_ways, bridge_crossed_waters
 
 
 def test_every_kind_of_watercourse_is_offered_for_bridging() -> None:
@@ -73,3 +73,63 @@ def test_two_genuinely_distinct_crossings_both_draw() -> None:
     s.bridge(500.0, 500.0, 0.0, 40.0, 12.0)
     s.bridge(700.0, 500.0, 0.0, 40.0, 12.0)
     assert len(s.M["bridges"]) == 2
+
+
+# ---- feature 174: the TOWN/CITY keys of both sources, from plain manifests ------------------------
+# Eight of the 89 statements in the 2026-08-31 hamlet-path baseline were these branches. They are
+# unreached not because they are wrong but because no scripted generator produces a town or a city
+# yet, so no roll carries a `road`, a `ring_road`, a `moat` or an aqueduct. That makes them the exact
+# case this file's own docstring argues for: test the SOURCE, with a manifest built by hand, rather
+# than wait for a consumer that cannot run. A dict is the whole fixture.
+
+
+def test_bridge_carried_ways_carries_the_imperial_road_and_every_other_trunk_road() -> None:
+    M = {
+        "road": [(0.0, 0.0), (100.0, 0.0)],
+        "roads": [{"pts": [(0.0, 50.0), (100.0, 50.0)]}, {"pts": [(0.0, 80.0), (100.0, 80.0)], "w": 18}],
+    }
+    got = bridge_carried_ways(M)
+    assert got[0] == ([(0.0, 0.0), (100.0, 0.0)], 30), "the Imperial road takes the 30 ft default"
+    assert got[1] == ([(0.0, 50.0), (100.0, 50.0)], 26), "another trunk road takes the 26 ft default"
+    assert got[2][1] == 18, "an explicit width wins over the default"
+    assert len(got) == 3
+
+
+def test_bridge_carried_ways_takes_its_widths_from_the_manifest_when_it_states_them() -> None:
+    M = {"road": [(0.0, 0.0), (1.0, 0.0)], "road_width": 44, "ring_road": [(0.0, 9.0), (1.0, 9.0)], "ring_road_width": 11}
+    assert bridge_carried_ways(M) == [([(0.0, 0.0), (1.0, 0.0)], 44), ([(0.0, 9.0), (1.0, 9.0)], 11)]
+
+
+def test_bridge_carried_ways_carries_town_streets() -> None:
+    """A town street records its own width - there is no default, so the key is read as `st["w"]`."""
+    M = {"town_streets": [{"pts": [(0.0, 0.0), (60.0, 0.0)], "w": 20}]}
+    assert bridge_carried_ways(M) == [([(0.0, 0.0), (60.0, 0.0)], 20)]
+
+
+def test_bridge_crossed_waters_counts_a_city_moat_and_an_aqueduct() -> None:
+    M = {
+        "moat": [(0.0, 0.0), (10.0, 0.0), (10.0, 10.0)],
+        "aqueducts": [{"poly": [(0.0, 5.0), (10.0, 5.0)]}, {"poly": [(0.0, 6.0), (10.0, 6.0)], "w": 3}],
+    }
+    got = bridge_crossed_waters(M)
+    assert ([(0.0, 0.0), (10.0, 0.0), (10.0, 10.0)], 22) in got, "the city moat takes the 22 ft default"
+    assert ([(0.0, 5.0), (10.0, 5.0)], 8) in got, "an open supply cut is a seam like any channel"
+    assert ([(0.0, 6.0), (10.0, 6.0)], 3) in got
+
+
+def test_bridge_crossed_waters_reads_the_river_by_its_recorded_spelling() -> None:
+    """`s.river` records `pts`; the `poly` spelling never occurs in a real manifest but is accepted.
+
+    The comment at that branch says a reader of `poly` alone "is a check that never runs" - so both
+    spellings are asserted here, which is the only place either is exercised.
+    """
+    assert bridge_crossed_waters({"river": {"pts": [(0.0, 0.0), (9.0, 0.0)]}}) == [([(0.0, 0.0), (9.0, 0.0)], 40)]
+    assert bridge_crossed_waters({"river": {"poly": [(1.0, 1.0), (2.0, 2.0)], "w": 12}}) == [([(1.0, 1.0), (2.0, 2.0)], 12)]
+    assert bridge_crossed_waters({"river": [(0.0, 0.0)]}) == [], "a bare list is not the recorded shape"
+    assert bridge_crossed_waters({"river": {}}) == [], "a river with neither spelling contributes nothing"
+
+
+def test_bridge_crossed_waters_counts_a_castles_own_moat_but_not_a_castle_without_one() -> None:
+    M = {"castles": [{"moat": [(0.0, 0.0), (5.0, 0.0)]}, {"moat": [(9.0, 9.0), (9.0, 4.0)], "moat_width": 30}, {}]}
+    got = bridge_crossed_waters(M)
+    assert got == [([(0.0, 0.0), (5.0, 0.0)], 26), ([(9.0, 9.0), (9.0, 4.0)], 30)], "the moatless castle adds nothing"
