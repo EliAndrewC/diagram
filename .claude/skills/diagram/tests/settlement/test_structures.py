@@ -841,3 +841,24 @@ def test_a_shortfall_at_a_POLYLINE_flattens_its_coordinates_for_the_record() -> 
     s = _town()
     s._shortfall("frontage", [(10.0, 20.0), (30.0, 40.0)], 1, ["stall"])
     assert s.M["shortfalls"][-1]["at"] == [10.0, 20.0, 30.0, 40.0], "flattened, not nested"
+
+
+def test_blocks_any_door_is_the_MIRROR_of_door_is_clear_and_answers_the_other_way() -> None:
+    """Feature 174. `_door_is_clear` asks "does MY footprint have a doorway"; `_blocks_any_door`
+    asks "would my footprint stand in SOMEONE ELSE'S". They are the same geometry from the two
+    sides, and only the first had a test.
+
+    Its own docstring names the case that needs it: "the ground behind a house is often the roji the
+    row BEHIND it faces" - so a seat that looks like open ground is someone's doorway.
+
+    Both answers asserted, since a predicate that always says True blocks every seat on the map and
+    one that always says False is the defect it was written to prevent.
+    """
+    s = _ward_city_with_samurai()
+    s.building(600.0, 600.0, 20.0, 10.0, "monk_house", 0.0)
+
+    def _quad(cx, cy, w, h):
+        return [(cx - w / 2, cy - h / 2), (cx + w / 2, cy - h / 2), (cx + w / 2, cy + h / 2), (cx - w / 2, cy + h / 2)]
+
+    assert s._blocks_any_door(_quad(600.0, 610.0, 16.0, 8.0)) is True, "squarely in front of that house's door"
+    assert s._blocks_any_door(_quad(600.0, 200.0, 16.0, 8.0)) is False, "and far away it blocks nobody"
