@@ -41,8 +41,9 @@ shape that TODO names, not one this session invented.
 
 ## Scope, stated exactly
 
-**IN**: the check, its wiring, the written procedure, the constitution and `CLAUDE.md` amendments
-that follow from gating a rule that was explicitly not gated, and the ten refactors.
+**IN**: the check, its wiring, the constitution and `CLAUDE.md` amendments that follow from gating a
+rule that was explicitly not gated, and the ten refactors. **No new document is written** - see
+FR-006.
 
 **OUT**: clause 12 (functions past ~1,000 logical statements), the OTHER half of the same
 deferred-TODO block, which nothing implements - a separate rule, a separate measurement, not asked
@@ -78,8 +79,8 @@ extension and path only - never by whether a file is imported - so nothing hides
 On failure the check prints, for each offending file: its path, its line count, and how far over.
 Then one message that says the responsible clone must split the file before this work can merge,
 names the prescribed shape (a directory-module whose `CLAUDE.md` indexes the subfiles with a "look
-here when" line each), points at the written procedure of FR-006, gives the worked example the GM
-gave - `hamletgen/ways.py` becomes `hamletgen/ways/` with sub-modules - and names the two carve-outs
+here when" line each), points at constitution Principle X clause 13, `CLAUDE.md`'s "Files stay at
+human scale" and one named exemplar package (FR-006), gives the worked example the GM gave - `hamletgen/ways.py` becomes `hamletgen/ways/` with sub-modules - and names the two carve-outs
 so a reader whose file is genuinely ordered data or a derived roster is not sent to do the wrong
 work. It states no duration (feature 171's rule).
 
@@ -193,8 +194,10 @@ Three places currently say, in terms, that this rule is deliberately unenforced.
 GM's own prior rulings and all three are superseded by this request:
 
 - **constitution Principle X clause 13** - "this is an ask-the-question line, not a mandate". It
-  becomes a gated line, with the carve-outs intact and a pointer to `docs/file-splitting.md`. A
-  MINOR version bump with the amendment recorded in the constitution's own history block.
+  becomes a gated line, with both carve-outs intact, pointing at the three carriers FR-006 names -
+  its own wording, `CLAUDE.md`'s "Files stay at human scale", and the exemplar packages. **No new
+  document**, per FR-006. Its v1.6.1 deferred-TODO entry is marked closed by this feature. A MINOR
+  version bump with the amendment recorded in the constitution's own history block.
 - **`CLAUDE.md`'s "Deliberately NOT enforced" paragraph** - which names file size explicitly: "File
   size past ~1,000 lines is REPORTED by `make audit`, never gated". It moves to the enforcement
   table as a new row.

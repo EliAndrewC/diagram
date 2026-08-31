@@ -50,6 +50,33 @@ PLANS = {
         ],
     },
 
+    # ---- hamletgen/hinterland.py: 1,100 -> five --------------------------------------------------
+    # Same shape as ways.py: stage_hinterland stands first and calls three things defined below it.
+    "l7r/diagram/hamletgen/hinterland.py": {
+        "kind": "names",
+        "doc": '"""Split from hamletgen/hinterland.py by feature 173 - see this package\'s CLAUDE.md for the index."""\n\n',
+        "modules": [
+            ("frame", ["content_box", "title_pocket"], "the drawn frame's own geometry - the content box and the pocket the title sits in, which both the bamboo seats and the windbreak must keep clear of"),
+            ("parcels", ["parcel_bbox_ok", "fit_square_parcel", "_parcel_outline", "_clear_gap", "_near_line", "open_ground_patches"], "open ground: whether a parcel fits, how big a square one can be, its drawn outline, and `open_ground_patches` - the search that places them all"),
+            ("bamboo", ["bamboo_blocked", "bamboo_seats"], "where a bamboo thicket may stand and the seats found for it"),
+            ("belt", ["belt_polygon"], "the shelter belt's polygon - the one shape the woodland and windbreak stages both draw from"),
+            ("stages", ["stage_hinterland", "stage_bamboo", "stage_woodland", "stage_windbreak"], "STAGES: the four entry points the roll calls, in the order it calls them. Read this first to see what the modules above are for"),
+        ],
+    },
+
+    # ---- hamletgen/homesteads.py: 1,330 -> five --------------------------------------------------
+    "l7r/diagram/hamletgen/homesteads.py": {
+        "kind": "names",
+        "doc": '"""Split from hamletgen/homesteads.py by feature 173 - see this package\'s CLAUDE.md for the index."""\n\n',
+        "modules": [
+            ("seats", ["front_row", "lane_frontage", "cluster_aspect", "_seat_allowed"], "where a homestead may sit - the front row, the lane frontage that fronts it, the cluster's aspect ratio, and whether a seat is allowed at all"),
+            ("bamboo", ["_strip_blocked", "household_bamboo"], "the household bamboo strip: whether a strip is blocked, and the per-household placement"),
+            ("fixtures", ["nearer_own_house", "_roll", "farmstead_fixtures", "_trunk_blocked"], "what stands in a farmstead's yard - the privy/well/heap/coop pass, its weighted roll, and the two ownership and trunk probes it leans on"),
+            ("wells", ["well_target", "place_wells"], "the public wells - how many a settlement of this size wants, and the pass that seats them"),
+            ("stages", ["stage_homesteads", "stage_appurtenances"], "STAGES 5 and 6 - the homesteads themselves and what stands among them. Read this first"),
+        ],
+    },
+
     # ---- waterfields/seams.py: 1,069 -> three ---------------------------------------------------
     # A chain, not a residue bucket: the pockets are found, then planted or traded away, then the
     # whole thing is driven by close_seams. Cuts follow the chain, so every edge points backwards.

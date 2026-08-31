@@ -7,7 +7,7 @@ than inherited.
 
 ## R1 - IS the manner prescribed? (the GM's explicit question)
 
-**Yes, but it is one sentence plus fourteen worked exemplars, not a procedure.**
+**Yes, but it is one sentence plus eighteen worked package indexes, not a procedure.**
 
 The prescription is constitution Principle X **clause 13** (added v1.6.0, GM-directed 2026-08-15;
 extended v1.6.1 to cover test files):
