@@ -30,9 +30,19 @@ would let a remote run verify less than the same local run is out of scope and f
   seeding a container with rasters no remote roll produces re-creates the 2026-08-17 defect in which
   four maps shipped a PNG from the previous roll beside a current `.json` and `.svg`, with matching
   mtimes, past two review rounds.
-- **FR-004** The cached set MUST account for the run MODE. `rollcache` is bypassed under
-  `L7R_TESTS_FULL=1`, so `.gencache/rolls/` (54 MB, 24% of the directory) is never read by a FULL
-  build, while a `reference`-scope build does read it (`make reference` calls `rollcache.report`).
+- **FR-002a** The total bytes the cache uploads and restores MUST be **measured on the ACTUAL built
+  cache object**, stated in MB **per run mode** (FULL and reference separately, per FR-004), and
+  recorded in Decisions Recorded against the naive 221 MB. A figure summed from the research table
+  does not satisfy this - it must come from the artifact that exists. *(This is the GM's item 2,
+  "figuring out exactly how much we do want to upload", which is a DIFFERENT question from item 4's
+  "what needs to go there"; the first draft of this spec answered item 4 three times and item 2
+  nowhere. Found by `spec-fidelity`, round 1.)*
+- **FR-004** The cached set MUST differ by run mode where the read path differs. Specifically, a
+  FULL-scope build MUST NOT upload or restore `.gencache/rolls/` (`rollcache.bypassed()` is true
+  under `L7R_TESTS_FULL=1`; 54 MB, 24% of the directory, never read), and a reference-scope build
+  MUST include it (`make reference` calls `rollcache.report`). If a single mode-independent set is
+  chosen instead, that choice MUST be justified with the MEASURED cost of the bytes the other mode
+  never reads.
 - **FR-005** The cache key MUST be bounded - the number of distinct S3 objects the cache can ever
   hold MUST NOT grow with the number of commits, builds or branches. A key containing the commit SHA
   is specifically forbidden: it is the GM's named failure ("uploading many megabytes worth of
@@ -42,23 +52,32 @@ would let a remote run verify less than the same local run is out of scope and f
   in the spec's Decisions Recorded with the reasoning for the number chosen.
 - **FR-007** A cache miss, a cache-restore failure, an absent bucket or an expired object MUST NOT
   fail a build. The cache is an optimization; its failure mode is a slow build, never a red one.
-- **FR-008** The `.html` question MUST be SETTLED before the artifact is excluded (research R6.1).
-  "No reader was found" is not "no reader exists", and because `load()` DELETES an output its entry
-  lacks, a wrong exclusion is destructive rather than merely lossy.
+- **FR-008** Whether any gate test reads a pool map's `.html` MUST be SETTLED before the cached set
+  is fixed, **in either direction** (research R6.1). Excluding it unsettled is destructive - `load()`
+  DELETES an output its entry lacks, so "no reader was found" is not "no reader exists". *Including*
+  it unsettled adds ~65 MB (13 MB x 5) to every upload and restore and answers FR-002a by assertion.
+  The ruling and how it was established go in D4.
 - **FR-009** The feature MUST report a measured before/after: remote wall time and cost for the same
   scope, cold versus warm, on comparable commits. A predicted saving does not satisfy this - three
   performance predictions made in this repository on 2026-08-31 were each overturned by measurement.
-- **FR-010** If the measurement shows the cache does not pay - restore costing more than the
-  regeneration it saves (research R6.2) - the feature MUST report that and MUST NOT ship the cache
-  merely because it was built.
+- **FR-010** If the measurement shows a cached set does not pay, the feature MUST first **NARROW the
+  set under FR-002 and re-measure**. R6.2's doubt concerns the ~110 MB of `.svg`, not the 184 KB
+  manifest or the 96 KB `coverage.data`: "it does not pay" is a fact about a SET, not about caching.
+  A cache that measurably makes the remote build slower MUST NOT ship. If NO cached set pays, the
+  feature MUST report the measurement to the GM and HOLD - the session MUST NOT close the feature as
+  delivered with no cache, because the instruction was *"please proceed with implementing that
+  feature"*. *(The first draft let the session end the feature unshipped on a measurement it took
+  and graded itself. Found by `spec-fidelity`, round 1; constitution XV - when a scope does not
+  work, narrow it, do not stop.)*
 
 ## Success criteria
 
 - **SC-001** A second remote run of the same scope, on a commit whose engine content is unchanged,
   is measurably faster than the first, and the difference is attributable to cache hits rather than
   to noise.
-- **SC-002** The uploaded payload is smaller than the naive 221 MB, and the spec states what was
-  excluded and on what evidence.
+- **SC-002** The uploaded payload size is **stated in MB for each run mode, measured on the built
+  cache**, together with what was excluded and the evidence for each exclusion. (The first draft
+  said only "smaller than the naive 221 MB", which excluding a single file would satisfy.)
 - **SC-003** The number of S3 objects the cache holds is bounded and stated; running N more builds
   does not create N more objects.
 - **SC-004** A build with the cache deleted from S3 still passes, and takes about the cold time.
@@ -81,6 +100,8 @@ To be completed during implementation, per constitution XII - each as **accurate
 deviation** or **guess**:
 
 - D1 the cached set and the evidence for each inclusion/exclusion (FR-002, FR-003, FR-004)
+- D1a **the measured size of the built cache, in MB, per run mode**, against the naive 221 MB - the
+  GM's item 2, and a figure read off the artifact rather than summed from research (FR-002a)
 - D2 the cache key and why it is bounded (FR-005)
 - D3 the lifecycle expiry and why that number (FR-006)
 - D4 the .html ruling and how it was settled (FR-008)
