@@ -220,3 +220,21 @@ def test_face_streets_FILL_jitters_the_block_core_instead_of_facing_anything() -
     # `r` and re-bases it), so what this asserts is the SPREAD, which is the observable difference.
     assert max(rots) - min(rots) <= 13.0, f"clustered within the +/-6 jitter, not fanned out to face streets: {rots[:4]}"
     assert len(set(rots)) > 1, "and jittered rather than stamped at one angle"
+
+
+def test_a_LABELLED_road_defers_its_caption_to_the_finish_pass() -> None:
+    """The GM's label doctrine: "a label that can sit in empty ground, should; otherwise cover as
+    little as possible". A road is drawn FIRST, when the map is still empty, so it cannot yet know
+    which side of itself is free - the caption is deferred to `finish()`, which sees the built map.
+
+    Only the Imperial road is labelled at all (the project's own rule: an ordinary road's course is
+    already visible), which is why this path exists on `road` and nowhere else.
+    """
+    s = _town()
+    s.road([(0.0, 500.0), (1000.0, 500.0)], label="the Imperial road")
+    assert getattr(s, "_road_label", None), "the caption is held for the finish pass"
+    assert s._road_label[0] == "the Imperial road"
+
+    plain = _town()
+    plain.road([(0.0, 500.0), (1000.0, 500.0)])
+    assert not getattr(plain, "_road_label", None), "an unlabelled road holds nothing"

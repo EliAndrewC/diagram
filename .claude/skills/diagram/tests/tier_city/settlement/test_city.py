@@ -718,3 +718,38 @@ def test_row_housing_refuses_a_seat_outside_the_canvas_or_outside_the_BOUND() ->
     bounded.bound = [(100.0, 100.0), (140.0, 100.0), (140.0, 140.0), (100.0, 140.0)]
     bounded.rowpack((600.0, 600.0, 1200.0, 1100.0), ["laborer"] * 20, fill=True)
     assert not [b for b in bounded.M["buildings"] if b["kind"] == "laborer"], "nor outside the tier's bound"
+
+
+def test_the_merchant_estate_roll_refuses_rather_than_placing_fewer() -> None:
+    """The no-silent-caps rule again: the count is ROLLED from the settlement's scale on a dedicated
+    RNG (so a map that rolls its old count stays byte-identical), and if the roll wants more
+    compounds than the gen supplied vetted seats for, that is an authoring error to fix rather than
+    a shortfall to absorb.
+
+    Both directions: enough seats places them all and records the roll; too few raises.
+    """
+    s = Settlement(1600, 1600, seed=22)
+    s.meta(name="C", scale="city")
+    seats = [(300.0 + 200.0 * i, 300.0, "south") for i in range(6)]
+    n = s.merchant_estates(seats)
+    assert n > 0 and len(s.M["merchant_estates"]) == n
+    assert s.M["meta"]["merchant_estate_roll"] == n, "the roll is recorded, so a stale hand count cannot ship"
+
+    tight = Settlement(1600, 1600, seed=22)
+    tight.meta(name="C", scale="city")
+    with pytest.raises(ValueError, match="merchant_estates rolled"):
+        tight.merchant_estates(seats[:0])
+
+
+def test_an_estate_that_cannot_find_wall_clearance_ANYWHERE_in_its_fan_raises() -> None:
+    """A compound nudges along a fan of offsets to clear the walls around it, and if no offset works
+    it refuses. Drawing it anyway would put a walled estate through a rampart - the one thing the
+    nudge exists to prevent."""
+    # `_estate_wall_clear` reads WATER, FIRE TOWERS and the STREET NET - "a compound wall may LINE a
+    # street, never stand IN its cleared band" - not `M["wall"]`, so the obstruction has to be one
+    # of those. A grid of streets through the whole fan leaves no offset clear.
+    s = Settlement(1000, 1000, seed=22)
+    s.meta(name="C", scale="city")
+    s.M["town_streets"] = [{"pts": [(0.0, float(y)), (1000.0, float(y))], "w": 18} for y in range(400, 620, 20)]
+    with pytest.raises(ValueError):
+        s.merchant_estate(500.0, 500.0, w=160.0, h=120.0)
