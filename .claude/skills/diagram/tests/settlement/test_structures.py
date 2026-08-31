@@ -984,3 +984,33 @@ def test_the_caption_ladders_rung_is_the_same_question_with_a_lower_bar_each_tim
     # refused at 20 and is taken at 10 - "give up the MARGIN, never the 2 ft the rule asks".
     assert first_clear_seat(seats, hug, 20.0, blocked, clearance, 10.0)[0] == "middling", "the floor rung finds what the target refused"
     assert first_clear_seat([], hug, 20.0, blocked, clearance, 1.0) is None, "and no seats at all is no seat"
+
+
+def test_the_ladders_rung_SHORT_CIRCUITS_in_the_order_the_four_call_sites_relied_on() -> None:
+    """The property the lift had to preserve and the test above does not check (found by review):
+    the predicates run `hug <= cap`, then `not blocked`, then `clearance >= want`, and each is only
+    asked if the one before it passed.
+
+    It matters because `_box_clearance` is the expensive one - it calls `_caption_lines` and walks
+    every lane - so a reordering would make the caption search markedly slower on exactly the maps
+    that have the most lanes. Counted rather than asserted by outcome, because a reordering gives
+    the same ANSWER and only costs time.
+    """
+    calls: list[str] = []
+
+    def hug(q):
+        calls.append(f"hug{q}")
+        return 90.0 if q == 0 else 5.0
+
+    def blocked(q):
+        calls.append(f"blocked{q}")
+        return q == 1
+
+    def clearance(q):
+        calls.append(f"clearance{q}")
+        return 30.0
+
+    assert first_clear_seat([0, 1, 2], hug, 20.0, blocked, clearance, 20.0) == 2
+    assert calls == ["hug0", "hug1", "blocked1", "hug2", "blocked2", "clearance2"], calls
+    assert "blocked0" not in calls, "a seat over the hug cap is never asked whether it is blocked"
+    assert "clearance1" not in calls, "and a blocked seat is never measured - the expensive probe is last"

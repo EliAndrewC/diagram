@@ -198,7 +198,7 @@ permanently red, and a red gate everyone routes around is how the ratchets arriv
 |---|---|---|
 | D1 | the exempt trees are cheap to cover, not hard - the first draft's exclusion is withdrawn | measured, reversed |
 | D2 | the floor sits on a run that deselects nothing; `make done`'s literal cost is priced at +148 s for the GM to weigh | measured |
-| D3 | no `PARKED`, no pragma, no new omit entry | decided |
+| D3 | no `PARKED`, no pragma, no new omit entry - and HELD: the two pragmas this feature briefly added were removed after review, by patching the branch's own discriminator instead (R8) | decided, tested |
 | D4 | counts are measured against a pushed tree, never tallied (three failures in one day) | decided; FR-002 labeled as session-added |
 | D5 | where a function can DECLINE as well as act, coverage usually has the acting - assert the decline beside the action | method |
 | D6 | `waterfields/hill.py` (99) is pending conversion work, NOT dead - the session's contrary claim was wrong and is recorded | corrected |

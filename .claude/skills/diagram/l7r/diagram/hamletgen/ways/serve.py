@@ -539,14 +539,7 @@ def _serve_stragglers(s: Settlement, plan: SitePlan, hard: list[Poly], fabric: l
                     _bad = (_fouls, _bends_badly(path))
                     if _fouls:
                         continue
-                    # pragma-marked below, and the reason is NOT "dead code" (feature 174): a real
-                    # cohort seed reaches this - seed 21's footpath turned 90 degrees and then 60
-                    # within 34 ft, which is the case the fold exists for - but no CONSTRUCTED
-                    # geometry does, across eleven tried. `_route` straightens what it finds and
-                    # `_unjog` straightens it again, so a candidate that yields a run AND bends badly
-                    # needs a whole real map to arise. The GM's own division of labour applies (2026-08-31):
-                    # the FULL suite covers this end-to-end; the gate's branch coverage cannot reach it.
-                    if _bad != (False, False):  # pragma: no cover - see the note above: real seeds reach it, constructed geometry does not
+                    if _bad != (False, False):
                         if _folded is None or _bad < _folded_rank:
                             _folded, _folded_rank = path, _bad
                         continue
@@ -554,7 +547,7 @@ def _serve_stragglers(s: Settlement, plan: SitePlan, hard: list[Poly], fabric: l
                     added += 1
                     _served = True
                     break
-            if not _served and _folded is not None:  # pragma: no cover - the fold's own draw; reachable only with a folded candidate (see above)
+            if not _served and _folded is not None:
                 _draw_web(s, _folded, 3, houses=[c])
                 added += 1
                 _served = True

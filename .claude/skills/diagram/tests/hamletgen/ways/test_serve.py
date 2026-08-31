@@ -177,3 +177,29 @@ def test_a_straggler_whose_path_FOULS_a_steading_is_left_unserved_rather_than_dr
             for poly, _c, _k in fabric:
                 inside = min(p[0] for p in poly) < px < max(p[0] for p in poly) and min(p[1] for p in poly) < py < max(p[1] for p in poly)
                 assert not inside, f"no drawn way passes through a steading ({px:.0f},{py:.0f})"
+
+
+def test_a_straggler_served_only_by_a_BENT_path_takes_the_least_bad_fold(monkeypatch) -> None:
+    """Feature 174. The fold is the last resort: when every candidate path bends the way
+    `lanes_bend_like_paths` refuses, the LEAST bad one is drawn rather than leaving the house
+    unserved - "the first that works at all remains the fallback, so no house that is served today
+    goes unserved".
+
+    The recorded instance is cohort seed 16, whose footpath kept a 71-then-61 degree fold. No
+    constructed geometry reaches it - eleven were tried - because `_route` straightens what it finds
+    and `_unjog` straightens it again, so a candidate that yields a run AND bends badly needs a
+    whole real map to arise.
+
+    So the PREDICATE is patched rather than the geometry contrived: `_bends_badly` is the branch's
+    only discriminator, and forcing it True is the honest way to ask "and if every path bends, what
+    then?". That is a unit test of the fold, not a simulation of seed 16 - the end-to-end evidence
+    stays with the FULL suite, exactly the division of labour the GM set on 2026-08-31.
+    """
+    plan = hg.plan_site(hg.HamletSpec(name="X", seed=4, households=12))
+    s = _StubSettlement(lanes=[[(0.0, 0.0), (0.0, 600.0)]], houses=[(400.0, 300.0)])
+    before = len(s.M["lanes"])
+
+    monkeypatch.setattr(hg.ways.serve, "_bends_badly", lambda pts: True)
+    hg.ways.serve._serve_stragglers(s, plan, [], [], [])
+
+    assert len(s.M["lanes"]) > before, "the house is served by the folded path rather than left stranded"

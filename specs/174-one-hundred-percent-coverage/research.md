@@ -207,3 +207,38 @@ in the course of the work is fixed in that work):
 - the comment above them still said *"the placement engine enforces it, these checks re-verify from
   the manifest"* - pointing at functions that no longer exist.
 - `pt_to_rect` (`overlap/taxonomy.py`): `seg_to_rect_dist` was its only call site.
+
+
+## R8 - the four engine restructures, independently reviewed (and what the review corrected)
+
+The feature made four engine edits whose purpose was to remove conditional bodies no constructed
+geometry could reach. An adversarial reviewer was asked to break them; all four came back SAFE, with
+the reasoning checked rather than the artifact:
+
+- **`first_clear_seat`** keeps the predicate chain byte-for-byte and still short-circuits, so purity
+  does not matter - and the three probes were confirmed read-only anyway.
+- **the `or` collapses in `boards.py`** rest on a fact worth writing down: **the only falsy tuple in
+  Python is `()`**, and every seat producer here returns a 2-element tuple literal or an element of
+  one. `(0, 0)` is truthy, so `or` is exactly `is not None` on this domain.
+- **the `serve.py` collapses** rest on an invariant the reviewer verified by induction: `_fallback_hit`
+  is written in exactly two places and can only ever hold `None` or a non-empty list.
+
+**Three findings, all acted on:**
+
+1. **The pragmas are GONE.** The reviewer noted that `# pragma: no cover` on an `if` header excludes
+   the whole clause, so any statement a future session adds inside it would be silently exempt from
+   the very floor this feature installs - and that two pragmas contradicted the spec's own D3 ("no
+   pragma"). The fix was not a better pragma: `_bends_badly` is the branch's only discriminator, so
+   **patching the predicate** reaches the whole fold. A unit test of the fold, with the end-to-end
+   evidence left where it belongs.
+2. **A misattributed measurement.** The pragma comment cited cohort seed 21; that measurement belongs
+   to a DIFFERENT branch eight lines away. The fold's own recorded instance is **seed 16** (a
+   71-then-61 degree fold). This file's own standing warning is against exactly that - "an unmeasured
+   number quoted as a passing measurement" - and the surviving test now cites seed 16.
+3. **A test that did not test what the lift protected.** The rung's four outcomes were asserted but
+   not its short-circuit ORDER, so a reordering would have passed. It is counted now, and the reason
+   is the cost: `_box_clearance` calls `_caption_lines` and walks every lane, so it must stay last.
+
+Also fixed: `settlements/ways.md` still named `_ditch_plankable` as the live mechanism. That went
+stale when feature 166 deleted the check battery; the sentence now names the placer that really
+enforces it.
