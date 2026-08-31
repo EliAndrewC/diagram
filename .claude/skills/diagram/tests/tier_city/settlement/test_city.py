@@ -554,3 +554,50 @@ def test_a_tower_is_nudged_INWARD_so_its_footing_stays_on_the_berm() -> None:
 
     same = s._berm_nudge(500.0, 500.0, 40.0, 500.0, 500.0)
     assert same == pytest.approx((500.0, 500.0)), "a tower already at the centroid has nowhere to be nudged"
+
+
+# ---- feature 174: rowpack, the machiya/nagaya fabric ---------------------------------------------
+
+
+def test_row_housing_alternates_which_way_each_row_of_a_PAIR_faces() -> None:
+    """The GM's row-packing doctrine (2026-07-18): a PAIR of rows faces each other across the roji -
+    the first faces UP (rot 180), the second DOWN (rot 0) - so every door opens outward onto court
+    ground rather than into the back of the row in front.
+
+    Asserted as the SET of rotations, which is what a blind terrace would fail: a fabric all facing
+    one way has one rotation, not two.
+    """
+    s = Settlement(1600, 1600, seed=11)
+    s.meta(name="C", scale="city")
+    placed = s.rowpack((200.0, 200.0, 1200.0, 900.0), ["laborer"] * 60, fill=True)
+    assert placed > 0
+    rots = {b["rot"] for b in s.M["buildings"] if b["kind"] == "laborer"}
+    assert rots == {0.0, 180.0}, f"rows face each other across the roji: {rots}"
+
+
+def test_row_housing_keeps_CLEAR_of_the_street_and_alley_ground_it_would_otherwise_pave() -> None:
+    """The shop rows own the street frontage, so the machiya fabric is held off streets, alleys and
+    the road - each by its own clearance, the alley's being tightest (a roji is narrow) and the
+    street's widest.
+
+    Asserted POSITIONALLY, which is where the rule actually shows: with `fill=True` and room to
+    spare the same number of units land either way, and what the clearance changes is WHERE they
+    may stand. (Measured: nothing lands within 73 px of a town street's line.)
+
+    The key read is `town_streets` - a fact worth pinning, since a test that called `s.street()` and
+    expected this clearance would pass while exercising nothing.
+    """
+    s = Settlement(1600, 1600, seed=11)
+    s.meta(name="C", scale="city")
+    s.M["town_streets"] = [{"pts": [(0.0, 550.0), (1600.0, 550.0)], "w": 18}]
+    s.rowpack((200.0, 200.0, 1200.0, 900.0), ["laborer"] * 400, fill=True)
+    ys = [b["y"] for b in s.M["buildings"] if b["kind"] == "laborer"]
+    assert ys, "the district still fills"
+    assert min(abs(y - 550.0) for y in ys) > 37.0, "the street's frontage is left to the shop rows"
+
+    alley = Settlement(1600, 1600, seed=11)
+    alley.meta(name="C", scale="city")
+    alley.M["alleys"] = [{"pts": [(0.0, 550.0), (1600.0, 550.0)], "w": 10}]
+    alley.rowpack((200.0, 200.0, 1200.0, 900.0), ["laborer"] * 400, fill=True)
+    a_ys = [b["y"] for b in alley.M["buildings"] if b["kind"] == "laborer"]
+    assert min(abs(y - 550.0) for y in a_ys) > 5.0, "a roji is narrow, but the fabric still leaves it walkable"
