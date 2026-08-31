@@ -1,6 +1,7 @@
 """Split from test_ways.py by feature 173 - see this directory's CLAUDE.md."""
 
 from l7r.diagram import hamletgen as hg
+from l7r.diagram.hamletgen.ways.sweeps import _keep_the_route_wide
 from l7r.diagram.settlement import Settlement
 
 from .._builders import a_plan
@@ -270,3 +271,13 @@ def test_a_nub_is_KEPT_when_dropping_it_would_push_the_lane_into_the_fabric() ->
     s2 = _StubSettlement(lanes=[lane])
     _drop_end_nubs(s2, [])
     assert [tuple(p) for p in s2.M["lanes"][0]["pts"]] == [(0.0, 0.0), (100.0, 5.0)], "with clear ground the nub goes"
+
+
+def test_keep_the_route_wide_skips_a_neighbour_lane_too_short_to_have_ends() -> None:
+    """Feature 174: a recorded lane of one point has no end to join to, and must be stepped over
+    rather than indexed. Its mirror - a two-point neighbour, which IS considered - is asserted
+    beside it, so the test would fail if the guard simply rejected everything."""
+    s = _StubSettlement(lanes=[[(0.0, 0.0), (100.0, 0.0)], [(120.0, 0.0)]])
+    assert _keep_the_route_wide(s, [], [], []) == 0, "the one-point lane offers nothing to join and raises nothing"
+    s2 = _StubSettlement(lanes=[[(0.0, 0.0), (100.0, 0.0)], [(120.0, 0.0), (220.0, 0.0)]])
+    _keep_the_route_wide(s2, [], [], [])  # the two-point neighbour IS walked - no exception, same call shape
