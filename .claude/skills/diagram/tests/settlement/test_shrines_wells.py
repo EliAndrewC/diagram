@@ -540,3 +540,25 @@ def test_avenue_along_walks_PAST_a_whole_segment_to_reach_a_far_point() -> None:
     assert avenue_along(seats, gaps, 150.0) == pytest.approx((100.0, 50.0)), "and past it, AROUND the corner"
     assert avenue_along(seats, gaps, 260.0) == pytest.approx((100.0, 160.0)), "a run past the authored line continues on the last leg's bearing"
     assert avenue_along([(0.0, 0.0), (0.0, 0.0)], [0.0], 5.0) == (0.0, 0.0), "a zero-length gap divides by nothing"
+
+
+def test_an_avenue_is_PULLED_BACK_so_its_walk_stops_short_of_a_wall() -> None:
+    """A sando is a single approach and cannot continue on the far side of a barrier, so an avenue
+    marching at a wall is shortened rather than left straddling it. The honest correction is to pull
+    the whole run BACK - scale every seat's offset from the first arch - rather than shove one arch
+    out of step with its neighbors, which would just straddle the wall with a kink in it.
+
+    Two separate holds, and only the first had a test: no ARCH may stand in a wall, and the WALK the
+    arches stand on must stay on one side of every wall. The second is what catches a run whose seats
+    all clear the wall while the line between two of them crosses it."""
+    s = Settlement(1400, 1400, seed=9)
+    s.meta(name="C", scale="city")
+    s.manor(700.0, 700.0, 600.0, 600.0, "a manor")  # its walls run x, y = 400..1000
+
+    seats = [(700.0, 300.0), (700.0, 380.0), (700.0, 460.0)]  # the last arch stands inside the manor
+    out = s._avenue_short_of_walls(list(seats))
+    assert out[0] == seats[0], "the arch nearest the hall never moves - that is the pull-back's own rule"
+    assert max(y for _x, y in out) < 400.0, f"and the whole run, walk included, stops short of the wall: {out}"
+    assert len(out) == len(seats), "no arch is dropped; the stride tightens instead"
+    strides = [out[i + 1][1] - out[i][1] for i in range(len(out) - 1)]
+    assert max(strides) - min(strides) < 1e-6, f"and it tightens EVENLY, not one arch out of step: {strides}"

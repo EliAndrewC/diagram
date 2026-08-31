@@ -1124,3 +1124,29 @@ def test_a_range_never_walls_a_NEIGHBORS_DOORWAY() -> None:
     for r in [b for b in s.M["buildings"] if b["kind"] == "servant"]:
         quad = rot_rect(r["x"], r["y"], r["w"], r["h"], r.get("rot", 0.0))
         assert not point_in_poly(door["x"], door["y"] + door["h"] / 2 + 0.8, quad), f"the doorway stays open: {r}"
+
+
+def test_rowpack_lays_a_walkable_ROJI_between_pairs_and_a_court_only_every_few_rows() -> None:
+    """The row cadence is three gaps, not one: the back-to-back eave gap INSIDE a pair, a walkable
+    roji BETWEEN pairs so both pair-fronts have entrance ground, and a full idobata court every
+    `court_every` rows. At the default `court_every=2` the court falls on every pair boundary and the
+    roji branch never runs, which is why a wider cadence had never been drawn."""
+    s = _town()
+    n = s.rowpack((200.0, 200.0, 700.0, 700.0), ["laborer"] * 60, court_every=4)
+    assert n > 0
+    ys = sorted({round(b["y"], 1) for b in s.M["buildings"] if b["kind"] == "laborer"})
+    gaps = sorted({round(ys[i + 1] - ys[i], 1) for i in range(len(ys) - 1)})
+    assert len(gaps) >= 3, f"three distinct row gaps - eave, roji, court: {gaps}"
+
+
+def test_rowpack_steps_a_terrace_PAST_blocked_ground_rather_than_building_on_it() -> None:
+    """A row runs until something is in the way; the placer scans past the obstacle and picks the
+    terrace up again, so a reserved pocket mid-row costs the row its middle and not its whole length.
+    Every corner AND the center of each unit is tested, because a corner sample alone would walk a
+    house's edge over a reservation."""
+    s = _town()
+    s.block_polys.append([(400.0, 190.0), (500.0, 190.0), (500.0, 710.0), (400.0, 710.0)])
+    n = s.rowpack((200.0, 200.0, 700.0, 700.0), ["laborer"] * 60)
+    assert n > 0, "the ground either side of the reservation still builds"
+    for b in [b for b in s.M["buildings"] if b["kind"] == "laborer"]:
+        assert b["x"] + b["w"] / 2 <= 400.0 or b["x"] - b["w"] / 2 >= 500.0, f"nothing stands on the reservation: {b}"
