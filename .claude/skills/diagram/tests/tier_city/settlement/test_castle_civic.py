@@ -67,3 +67,51 @@ def test_ministry_label_inside_stacks_two_lines_on_the_glyph():
     s2.ministry(700, 700, "Records Hall", label_inside=True)  # a non-"Ministry of" office keeps one line
     s2.place_labels()  # feature 157: the LABEL PHASE
     assert any(len(L) > 5 and L[5] == "Records Hall" for L in s2.M["labels"])
+
+
+# ---- feature 174: the private dojos, whose COUNT is a GM formula ----------------------------------
+
+
+def test_the_dojo_count_follows_the_SAMURAI_cohort_not_the_population() -> None:
+    """GM 2026-07-25, the bathhouse pattern applied to a samurai-driven institution: ONE dojo per
+    full 200 samurai, plus a chance of one extra equal to the remainder fraction, floored at 1.
+
+    WHY the samurai count and not the population: a dojo serves samurai and nobody else. The two
+    happen to track at a 10% samurai share, but that is an arithmetic accident - if a city's share
+    is ever declared away from 10%, this follows the samurai and the bathhouses do not.
+
+    A 4,000-seat city (~400 samurai) keeps exactly 2, which is the case with no roll in it.
+    """
+    s = Settlement(2000, 2000, seed=5)
+    s.meta(name="C", scale="city", population=4000)
+    seats = [(300.0 + 200.0 * i, 300.0) for i in range(4)]
+    n = s.dojos(seats)
+    assert n == 2, "400 samurai is two full 200s and no remainder"
+    assert len(s.M["dojos"]) == n and s.M["meta"]["dojo_roll"] == n, "and the roll is recorded, so a stale hand count cannot ship"
+
+
+def test_the_dojo_count_is_FLOORED_at_one_because_the_private_tail_is_never_empty() -> None:
+    """ "Floored at 1 - the private tail is never empty at this tier." A small provincial city still
+    has a machi-dojo, so the formula may not round it away."""
+    s = Settlement(2000, 2000, seed=5)
+    s.meta(name="C", scale="city", population=600)
+    assert s.dojos([(300.0, 300.0), (500.0, 300.0)]) >= 1
+
+
+def test_too_few_vetted_seats_RAISES_rather_than_silently_placing_fewer() -> None:
+    """The no-silent-caps rule: the gen author supplies vetted seats, and if the roll wants more
+    than they supplied that is an authoring error to fix, not a shortfall to absorb - the samurai
+    band can ask for up to 2."""
+    s = Settlement(2000, 2000, seed=5)
+    s.meta(name="C", scale="city", population=4000)
+    with pytest.raises(ValueError, match="dojos rolled"):
+        s.dojos([(300.0, 300.0)])
+
+
+def test_a_private_dojo_records_itself_and_blocks() -> None:
+    """The single-dojo drawing call underneath the roll."""
+    s = Settlement(1000, 1000, seed=3)
+    s.meta(name="C", scale="city")
+    s.dojo(500.0, 500.0)
+    assert s.M["dojos"], "recorded under its own key"
+    assert not s._fits(500.0, 500.0, 8.0, 8.0), "and it holds its lot"
