@@ -5,7 +5,6 @@ from collections.abc import Mapping
 from typing import Any
 
 from l7r.diagram.settlement import sat_overlap
-from l7r.diagram.waterfields import taper_w, worth_planking
 
 from .taxonomy import (
     _MATRIX_PARENT_FIELD,
@@ -13,7 +12,6 @@ from .taxonomy import (
     _MX_FIXTURE_BOX,
     _MX_LINE_W,
     OVERLAP_CLASS,
-    Manifest,
     Poly,
     _mx_rect,
     _mx_same,
@@ -326,59 +324,6 @@ FOOT_BANK_REACH = 11.0  # px past the abutment where a bank opens onto the terra
 FOOT_VILLAGE_REACH = 55.0  # a bank within this of a dwelling reaches the village (a place worth crossing to)
 
 
-def _footbridge_useful_ground(M: Manifest) -> Any:
-    """Return good(x, y) -> True when (x, y) sits on ground a field-worker walks TO: cultivated field
-    (wet paddy / dry crop), the village (a dwelling within reach), or a walked polder dike. A plank whose
-    far bank fails this opens onto reed marsh / scrub / off-map and connects the fields to nowhere."""
-    crop = [f["outline"] for f in M.get("fields", []) if f.get("outline")]
-    crop += [d["poly"] for d in M.get("dry_plots", [])]
-    dikes = [dk["outline"] for dk in M.get("dikes", []) if dk.get("outline")]
-    houses = M.get("houses", [])
-
-    def good(x: float, y: float) -> bool:
-        return any(point_in_poly(x, y, p) for p in crop) or any(point_in_poly(x, y, p) for p in dikes) or any((x - h["x"]) ** 2 + (y - h["y"]) ** 2 < FOOT_VILLAGE_REACH**2 for h in houses)
-
-    return good
-
-
-def _ditch_plankable(pts: Poly, w: float, good: Any, w_tail: float, ftpx: float) -> bool:
-    """True if some point along the ditch has USEFUL ground (per `good`) on BOTH banks - i.e. it separates
-    two places worth crossing between, so it warrants a footplank. A MARGIN/toe ditch (cultivation on one
-    side, marsh/scrub on the other for its whole run) is not plankable and needs no plank (GM 2026-07-22).
-
-    ...AND ENOUGH WATER AT THAT SAME POINT to be worth a board rather than a stride (`worth_planking`,
-    2026-08-17). Both conditions at ONE sample, deliberately: testing them independently lets a ditch
-    qualify because it is wide at its head and crossable at its tail, and then the placer - which must
-    satisfy both AT THE SEAT - finds nowhere legal and the check demands a plank nobody can lay. That
-    is exactly what happened on cohort seeds 41 and 43 when the width rule was added to the placer
-    alone. Both extra arguments are REQUIRED rather than defaulted: a default would let a future
-    caller silently opt out of half the rule, which is the shape of every check-that-never-runs
-    incident in this skill's notes."""
-    seg = [math.hypot(pts[i + 1][0] - pts[i][0], pts[i + 1][1] - pts[i][1]) for i in range(len(pts) - 1)]
-    total = sum(seg)  # always >= FB_MIN at the one call site (the long-ditch loop pre-filters by length)
-    reach = (w + FOOT_ABUTMENT) / 2 + FOOT_BANK_REACH
-    step = max(8.0, total / 40)
-    s = 0.0
-    while s <= total:
-        acc = 0.0
-        for i, sl in enumerate(seg):
-            if acc + sl >= s or i == len(seg) - 1:
-                fr = (s - acc) / sl if sl else 0.0
-                ax, ay = pts[i]
-                bx, by = pts[i + 1]
-                px, py = ax + (bx - ax) * fr, ay + (by - ay) * fr
-                a = math.radians(math.degrees(math.atan2(by - ay, bx - ax)) + 90.0)  # deck axis, across the ditch
-                ux, uy = math.cos(a), math.sin(a)
-                if good(px + ux * reach, py + uy * reach) and good(px - ux * reach, py - uy * reach):
-                    _lw = taper_w(w, w_tail, s / total if total else 0.0)
-                    if worth_planking(_lw, _lw, ftpx):
-                        return True
-                break
-            acc += sl
-        s += step
-    return False
-
-
 def poly_gap(a: Poly, b: Poly) -> float:
     """Minimum distance between two polygons; 0.0 if they overlap, touch, or one contains the other."""
     na, nb = len(a), len(b)
@@ -391,11 +336,6 @@ def poly_gap(a: Poly, b: Poly) -> float:
 
 def edge_dist(px: float, py: float, poly: Poly) -> float:
     return min(seg_dist(px, py, poly[i], poly[(i + 1) % len(poly)]) for i in range(len(poly)))
-
-
-def in_ellipse(px: float, py: float, e: Any, scale: float = 1.0) -> bool:
-    cx, cy, rx, ry = e
-    return bool(((px - cx) / (rx * scale)) ** 2 + ((py - cy) / (ry * scale)) ** 2 <= 1.0)
 
 
 def polyline_len(poly: Poly) -> float:

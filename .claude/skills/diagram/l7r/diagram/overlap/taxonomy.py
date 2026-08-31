@@ -53,16 +53,6 @@ def _box_hits_poly(box: tuple[float, float, float, float], poly: Poly) -> bool:
     )
 
 
-def sweep_hi(lo: float, hi: float, step: float, cap: int = 500) -> float:
-    """Clamp a grid-sweep's upper bound so a MALFORMED coordinate (a stray vertex millions of px
-    off the map) cannot blow the sweep up to billions of cells and make the validator appear to
-    hang. A real settlement spans at most ~1,000-3,000 px (a few hundred steps at the 8px cell,
-    well under `cap`), so this never truncates a valid map - but garbage input is bounded to `cap`
-    steps per axis (<= 250k cells, a couple of seconds), so the check FAILS the bad manifest (via
-    city_geometry_within_canvas) instead of looping forever. A validator must never hang on bad input."""
-    return min(hi, lo + step * cap)
-
-
 def poly_area(pts: Poly) -> float:
     """Absolute polygon area (shoelace) of a list of (x, y) vertices."""
     n = len(pts)
@@ -72,48 +62,6 @@ def poly_area(pts: Poly) -> float:
         x1, y1 = pts[(i + 1) % n]
         s += x0 * y1 - x1 * y0
     return abs(s) / 2.0
-
-
-def clip_to_convex(subject: Poly, clip: Poly) -> Poly:
-    """Sutherland-Hodgman clip of an arbitrary `subject` polygon by a CONVEX `clip` polygon, as a
-    vertex list (empty when the two do not meet). Exact for a convex clip - which is why the one
-    consumer (`paddy_plot_rings_overcount_stays_marginal`) passes a `convex_hull`: clipping against
-    a hull can only OVER-state the intersection, and that check wants an upper bound. A non-convex
-    SUBJECT is fine; the result may carry degenerate edges along the clip boundary and they
-    contribute nothing to `poly_area`.
-
-    The clip is re-oriented rather than assumed, and the crossing point is solved from the two
-    signed side values (`sc / (sc - sd)`) rather than from an edge-vs-edge determinant: the branch
-    only runs when the signs differ, so that denominator is nonzero by the very comparison that
-    reached it - no guard, and no division-by-zero to defend against on degenerate geometry."""
-    if len(clip) < 3:
-        return []
-    s = 0.0
-    for i in range(len(clip)):
-        x0, y0 = clip[i]
-        x1, y1 = clip[(i + 1) % len(clip)]
-        s += x0 * y1 - x1 * y0
-    if s < 0:
-        clip = clip[::-1]
-    out: list[Pt] = [(float(p[0]), float(p[1])) for p in subject]
-    for i in range(len(clip)):
-        if not out:
-            return []
-        ax, ay = clip[i]
-        bx, by = clip[(i + 1) % len(clip)]
-        ex, ey = bx - ax, by - ay
-        side = [ex * (p[1] - ay) - ey * (p[0] - ax) for p in out]
-        nxt: list[Pt] = []
-        for j, c in enumerate(out):
-            d = out[(j + 1) % len(out)]
-            sc, sd = side[j], side[(j + 1) % len(out)]
-            if sc >= 0:
-                nxt.append(c)
-            if (sc >= 0) != (sd >= 0):
-                t = sc / (sc - sd)
-                nxt.append((c[0] + t * (d[0] - c[0]), c[1] + t * (d[1] - c[1])))
-        out = nxt
-    return out
 
 
 # ---- overlap classification registry ---------------------------------------------------------------
@@ -755,19 +703,6 @@ def pt_to_rect(px: float, py: float, rect: dict[str, Any]) -> float:
     return math.hypot(ox, oy)
 
 
-def seg_to_rect_dist(a: Pt, b: Pt, rect: dict[str, Any]) -> float:
-    """Shortest distance between segment a-b and a (possibly rotated) rectangle; 0 if they touch/cross. Needed
-    where a thin corridor can thread THROUGH a wide footprint BETWEEN its corners - corner-sampling misses that.
-    Standard convex result: 0 on intersection, else min(endpoint-to-rect, rect-corner-to-segment)."""
-    corners = rect_corners(rect)
-    for i in range(4):
-        if segments_cross(a, b, corners[i], corners[(i + 1) % 4]):
-            return 0.0
-    if pt_to_rect(a[0], a[1], rect) == 0 or pt_to_rect(b[0], b[1], rect) == 0:
-        return 0.0
-    return min(min(pt_to_rect(a[0], a[1], rect), pt_to_rect(b[0], b[1], rect)), min(seg_dist(cx, cy, a, b) for cx, cy in corners))
-
-
 # the 2 patron fortunes of each Great Clan - a town defaults to one monastery for each
 # The recognized justifications for a city carrying MORE than two major temples
 # (settlements/religion-and-death.md). A fixed vocabulary rather than free text: the doctrine
@@ -790,26 +725,6 @@ CLAN_FORTUNES = {
     "scorpion": {"Benten", "Jurojin"},
     "unicorn": {"Fukurokujin", "Jurojin"},
 }
-
-
-def unit_dir(spec: Any) -> tuple[float, float] | None:
-    """A cardinal name or [dx,dy] vector -> a unit vector in map coords (+y=south). None if bad."""
-    DIRS = {
-        "north": (0, -1),
-        "south": (0, 1),
-        "east": (1, 0),
-        "west": (-1, 0),
-        "northeast": (0.7071, -0.7071),
-        "northwest": (-0.7071, -0.7071),
-        "southeast": (0.7071, 0.7071),
-        "southwest": (-0.7071, 0.7071),
-    }
-    if spec is None:
-        return None
-    if isinstance(spec, str):
-        return DIRS.get(spec.lower())
-    dl = math.hypot(spec[0], spec[1]) or 1
-    return (spec[0] / dl, spec[1] / dl)
 
 
 def segments_cross(a: Pt, b: Pt, c: Pt, d: Pt) -> bool:
@@ -845,21 +760,6 @@ def poly_dist(px: float, py: float, poly: Poly) -> float:
     if point_in_poly(px, py, poly):
         return 0.0
     return min(seg_dist(px, py, poly[i], poly[(i + 1) % len(poly)]) for i in range(len(poly)))
-
-
-def kiln_quarters(k: Mapping[str, Any]) -> list[dict[str, Any]]:
-    """A kiln works' own cottages as footprint records, ROTATION INCLUDED.
-
-    One helper rather than two call sites unpacking the list by index, because they had already
-    drifted apart once in spirit: `kiln_keeps_fire_gap` and `wells_among_dwellings` both rebuilt the
-    record inline and both dropped the rotation, so a works drawn at rot=270 was adjudicated as a
-    box at the right place with the wrong orientation (Tango's 69 ft fire gap measured 62 ft). Same
-    lesson as `solid_structs` one level down: a record that two checks unpack by hand is a record
-    that will be unpacked differently by the third.
-
-    A record with only four elements predates the rotation and is read as rot=0 - which is what
-    every kiln works was before the maps started passing `rot` on 2026-07-27."""
-    return [{"x": q[0], "y": q[1], "w": q[2], "h": q[3], "rot": (q[4] if len(q) > 4 else 0.0)} for q in k.get("quarters", []) or []]
 
 
 def edge_gap(a: Mapping[str, Any], b: Mapping[str, Any]) -> float:
