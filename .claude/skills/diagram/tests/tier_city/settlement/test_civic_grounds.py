@@ -114,3 +114,56 @@ def test_a_wall_running_ALONG_a_ward_fence_is_re_stamped_over_it() -> None:
     assert capped is not None, "a rampart along the fence line caps it"
 
     assert s._ward_fence_cap((100.0, 900.0), (600.0, 900.0)) is None, "one nowhere near a fence caps nothing"
+
+
+def test_a_burial_ground_DERIVES_its_shape_from_whether_it_is_a_parish_plot() -> None:
+    """Researched 2026-07-23, written up in settlements.md 'shape of the common ground'.
+
+    Japan's commoner burial grounds - Kyoto's burial fields, village sanmai, Edo's packed temple
+    yards - were unplotted and TERRAIN-FOLLOWING, never surveyed. Song China's state pauper
+    cemeteries (louzeyuan, 1104 on) WERE surveyed walled compounds with numbered rowed plots.
+
+    So `organic` defaults to "not parish": a non-parish COMMON ground is an irregular earthen plot,
+    a parish precinct plot stays a ruled rectangle - and a specific ordered city may pass
+    `organic=False` to draw the Chinese form deliberately. All three paths are asserted, because the
+    DERIVATION is the rule and a test of one form alone would pass with it hard-coded.
+    """
+    common = Settlement(1200, 1200, seed=23)
+    common.meta(name="C", scale="city")
+    common.cemetery(600.0, 600.0, 200.0, 140.0, parish=False)
+
+    parish = Settlement(1200, 1200, seed=23)
+    parish.meta(name="C", scale="city")
+    parish.cemetery(600.0, 600.0, 200.0, 140.0, parish=True)
+
+    assert common.out != parish.out, "a common ground is drawn irregular, a parish plot ruled"
+
+    deliberate = Settlement(1200, 1200, seed=23)
+    deliberate.meta(name="C", scale="city")
+    deliberate.cemetery(600.0, 600.0, 200.0, 140.0, parish=False, organic=False)
+    assert deliberate.out == parish.out, "and an ordered city may ask for the surveyed Chinese form"
+
+
+def test_a_cramped_burial_ground_may_put_its_label_ABOVE_or_slide_it_along() -> None:
+    """ "a cramped intramural ground whose label would otherwise spill onto its temple" - a parish
+    graveyard often sits shoulder to shoulder with its temple and the two captions can meet, so the
+    caption may go above the plot, or be slid ALONG it while still hugging it."""
+    below = Settlement(1200, 1200, seed=23)
+    below.meta(name="C", scale="city")
+    below.cemetery(600.0, 600.0, 200.0, 140.0, label="burial ground")
+    below.place_labels()
+    b_y = [lb[1] for lb in below.M["labels"] if len(lb) > 5 and "burial" in str(lb[5])]
+
+    above = Settlement(1200, 1200, seed=23)
+    above.meta(name="C", scale="city")
+    above.cemetery(600.0, 600.0, 200.0, 140.0, label="burial ground", label_above=True)
+    above.place_labels()
+    a_y = [lb[1] for lb in above.M["labels"] if len(lb) > 5 and "burial" in str(lb[5])]
+
+    assert b_y and a_y and a_y[0] < b_y[0], "label_above lifts the caption clear of the temple below"
+
+    slid = Settlement(1200, 1200, seed=23)
+    slid.meta(name="C", scale="city")
+    slid.cemetery(600.0, 600.0, 200.0, 140.0, label="burial ground", label_xy=(680.0, 690.0))
+    slid.place_labels()
+    assert any("burial" in str(lb[5]) for lb in slid.M["labels"] if len(lb) > 5), "and label_xy slides it along the plot"
