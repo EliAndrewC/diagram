@@ -927,3 +927,33 @@ def test_a_servant_range_keeps_off_a_ROAD_an_ALLEY_and_a_RING_ROAD_alike() -> No
     alleyed = _ward_city_with_samurai((600, 600, "samurai", 0.0))
     alleyed.M["alleys"] = [{"pts": [(400.0, 600.0), (800.0, 600.0)], "w": 40}]
     assert alleyed.servant_ranges() == 0, "nor in an alley"
+
+
+def test_a_TILTED_board_caption_walks_its_whole_fallback_ladder() -> None:
+    """Feature 174. The caption ladder in `boards.py` is four rungs deep and every one of them was
+    added because a previous version shipped a defect:
+
+      - the SATISFICE rung, because an unbounded `max(..., key=box_clearance)` has no lateral term;
+      - the HUG CAP, for the same reason one rung down;
+      - the FLOOR rung ("give up the MARGIN, never the 2 ft the rule asks");
+      - and only then the old thirty-seat search, "so a board with genuinely nowhere to put its
+        caption behaves as it always has".
+
+    Measured across 48 cohort seeds, six boards took the unbounded fallback and every one landed at
+    the coarse ladder's own +/-38.9 px lateral against bounds of 10.7-11.3 - "the GM's Kuwabata
+    defect, reproduced by the fallback on maps nobody had looked at".
+
+    A board TILTED beside a lane with its ground built up on both sides drives the ladder past its
+    early rungs, which a board on open ground never does.
+    """
+    s = Settlement(1200, 1200, seed=21)
+    s.meta(name="T", scale="town")
+    s.lane([(200.0, 600.0), (1000.0, 600.0)], width=16)
+    for i in range(10):  # frontage on both sides, so the easy seats are taken
+        s.building(360.0 + i * 36, 636.0, 32.0, 22.0, "kura", 0.0)
+        s.building(360.0 + i * 36, 566.0, 32.0, 22.0, "kura", 0.0)
+    s.kosatsuba(600.0, 612.0, rot=-32.0)
+    s.place_labels()
+
+    captions = [lb for lb in s.M["labels"] if len(lb) > 5 and "notice board" in str(lb[5])]
+    assert captions, "the board is captioned even where every easy seat is taken"
