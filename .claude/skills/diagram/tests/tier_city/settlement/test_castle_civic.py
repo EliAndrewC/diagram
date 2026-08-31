@@ -115,3 +115,43 @@ def test_a_private_dojo_records_itself_and_blocks() -> None:
     s.dojo(500.0, 500.0)
     assert s.M["dojos"], "recorded under its own key"
     assert not s._fits(500.0, 500.0, 8.0, 8.0), "and it holds its lot"
+
+
+def test_the_provincial_martial_hall_draws_its_ARCHERY_LANE_beside_the_hall() -> None:
+    """The state training institution, one per provincial city - distinct from the private machi-dojo
+    by having a lane long enough for the 92 ft shot (the dojo's docstring records that there is no
+    room for one on a 76 ft lot, and that the butt is the state hall's to keep).
+
+    So the lane is the thing that makes it the state hall, and it is what gets asserted.
+    """
+    s = Settlement(1400, 1400, seed=7)
+    s.meta(name="C", scale="city")
+    s.martial_hall(700.0, 700.0)
+    assert s.M["martial_halls"], "recorded under its own key"
+    assert not s._fits(700.0, 700.0, 10.0, 10.0), "and it holds its ground against later packs"
+    ink = "".join(s.out)
+    assert "#E3D9BE" in ink, "the archery lane's band is drawn - what tells the state hall from a machi-dojo"
+
+
+def test_a_town_rampart_gate_puts_its_guard_station_on_the_TOP_layer() -> None:
+    """ "a street running through the gate passes UNDER it, not over it" - so the gatehouse is drawn
+    on the top layer rather than with the wall, and the guard station is recorded so a later check
+    can find it.
+
+    The guardtower is optional and both ways are asserted: a gate without one must still record its
+    station, or the wall would appear ungarrisoned.
+    """
+    s = Settlement(1400, 1400, seed=7)
+    s.meta(name="C", scale="city")
+    s.wall([(200.0, 200.0), (1200.0, 200.0), (1200.0, 1200.0)], gate=(700.0, 200.0))
+    assert s.M["gate_structs"], "the guard station is recorded"
+    assert s.M["gate_structs"][0]["z"] > 0, "and drawn on the top layer, so a street passes under it"
+
+    plain = Settlement(1400, 1400, seed=7)
+    plain.meta(name="C", scale="city")
+    plain.wall([(200.0, 200.0), (1200.0, 200.0)], gate=(700.0, 200.0), guardtower=False)
+    assert plain.M["gate_structs"], "a gate with no tower still has its station"
+    # the gate's furniture goes to the WALL and TOP streams, not `out` - a street passes under the
+    # gatehouse, which is what `add_top` is for
+    assert len(plain.top) < len(s.top), "and puts less on the top layer than one with a tower"
+    assert s.walls, "the rampart itself is on the wall stream"
