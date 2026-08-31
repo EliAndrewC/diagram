@@ -134,6 +134,20 @@ deviation** or **guess**:
   attributable rather than noise (SC-001). SC-004 also holds: the cold run, with the object deleted,
   ran normally and failed on a map rather than on the missing cache.
 
+**THE FULL-SCOPE CACHE: SIZE MEASURED, TIMING STILL OWED (2026-08-31).** Applying the buildspec's own
+globs to a locally FULL-populated `.gencache/` selects **144.1 MiB** of its 217 MiB, excluding 72.9 MiB
+of `.png`/`.html`. Of that, `rolls/` is **51.9 MiB** and a FULL build writes NONE of it
+(`rollcache.bypassed()`), so the FULL payload is about **92 MiB** - the five pool maps' gate entries
+plus `ast`. That is **33x the reference scope's 2.78 MiB**, which makes R6.2 concrete: restoring 92 MiB
+is a real cost to weigh against regenerating five maps, and FR-010 says narrow the set and re-measure
+if it does not pay.
+
+The TIMING half cannot be taken on demand: `ci-check` requires an engine-path delta (`route-is-gated`,
+computed and with no local override), and there is none owed - a scan for surviving references to the
+deleted battery came back clean, so no genuine engine change was available to serve as one. It rides
+on the next real engine change, which is the correct place for it: a build that verifies nothing is
+exactly what that condition exists to refuse.
+
 **NOT MEASURED, and owed before anyone quotes a FULL figure:** the FULL-scope cache, which would hold
 the five pool maps' gate entries rather than one reference roll. It should save more, and that is a
 prediction rather than a result - this session had four predictions overturned by measurement in one
