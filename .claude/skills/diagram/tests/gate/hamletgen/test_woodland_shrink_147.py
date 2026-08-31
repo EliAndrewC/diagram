@@ -43,7 +43,7 @@ def test_the_woodland_shrink_ladder_is_walked_on_a_real_site(monkeypatch) -> Non
             walked.append(got)
         return got
 
-    monkeypatch.setattr(hinterland, "fit_square_parcel", _spy)
+    monkeypatch.setattr(hinterland.parcels, "fit_square_parcel", _spy)  # feature 173: patch the module the CALLER resolves the name in
 
     spec = hg.driver.cohort_specs(8, first_seed=41)[0]
     plan = hg.plan_site(spec)

@@ -227,6 +227,9 @@ def cmd_plan(path: str) -> int:
     if over:
         print(f"\n  still over the bar: {', '.join(over)}")
         return 1
+    patched = patched_through_module(src.path, set(home))
+    for name, where in sorted(patched.items()):
+        print(f"    MONKEYPATCHED through the module: {name} (in {', '.join(sorted(set(where)))}) - the patch target moves with it")
     print("\n  acyclic, every module under the bar")
     return 0
 
@@ -316,19 +319,37 @@ def assign_by_name(nodes: list[ast.stmt], modules: list[tuple[str, list[str], st
                 owner[i] = home[nm]
                 break
 
-    # a constant goes where it is first NEEDED, which needs the readers resolved first
-    readers: dict[str, set[str]] = {}
-    for i, n in enumerate(nodes):
-        if owner[i] is None:
-            continue
-        for nm in reads_of(ast.get_source_segment(SOURCE_TEXT[0], n) or ""):
-            readers.setdefault(nm, set()).add(owner[i])
-    for i in unlisted:
-        for nm in defines[i]:
-            users = readers.get(nm, set())
-            if users:
-                owner[i] = min(users, key=order.index)
+    # A constant goes where it is first NEEDED - and that is a FIXED POINT, not one pass. A constant
+    # read only by ANOTHER unplaced constant has no owned reader on the first sweep, so a single
+    # pass leaves it to fall through to its neighbor's module, which is how `pack_audit.py`'s
+    # `WALL_STROKE` (read by `_WALL_GROUP_RE`, itself unplaced) landed in `checks` while `parse`
+    # read it - one forward edge, caught by `--plan`. Iterate until nothing moves.
+    segs = [ast.get_source_segment(SOURCE_TEXT[0], n) or "" for n in nodes]
+    reads = [reads_of(s) for s in segs]
+    while True:
+        readers: dict[str, set[str]] = {}
+        for i in range(len(nodes)):
+            if owner[i] is None:
+                continue
+            for nm in reads[i]:
+                readers.setdefault(nm, set()).add(owner[i])
+        moved = False
+        for i in unlisted:
+            for nm in defines[i]:
+                users = readers.get(nm, set())
+                if not users:
+                    continue
+                want = min(users, key=order.index)
+                # a constant may only move EARLIER, and must be free to: `WALL_STROKE` is read by a
+                # regex constant that is itself unplaced on the first sweep, so pass 1 sees only its
+                # `checks` reader and pass 2 discovers the earlier `parse` one. Freezing after the
+                # first placement leaves the forward edge in place.
+                if owner[i] is None or order.index(want) < order.index(owner[i]):
+                    owner[i] = want
+                    moved = True
                 break
+        if not moved:
+            break
     # bare-string docstrings follow the statement above them; anything still unplaced does too
     for i, n in enumerate(nodes):
         if owner[i] is None:
@@ -357,7 +378,7 @@ def consumed_surface(module_path: str, own_names: set[str]) -> set[str]:
     stem = os.path.basename(module_path)[:-3]
     want: set[str] = set()
     for root, dirs, files in os.walk(REPO):
-        dirs[:] = [d for d in dirs if d not in {".git", "__pycache__", ".clones", "legacy-hand-authored-pool"}]
+        dirs[:] = [d for d in dirs if d not in {".git", "__pycache__", ".clones", "legacy-hand-authored-pool", "specs"}]
         for fn in files:
             if not fn.endswith(".py"):
                 continue
@@ -375,9 +396,44 @@ def consumed_surface(module_path: str, own_names: set[str]) -> set[str]:
                     name = piece.strip().split(" as ")[0].strip()
                     if name and name != "*":
                         want.add(name)
-            for m in re.finditer(rf"\b{re.escape(stem)}\.(\w+)", body):
-                want.add(m.group(1))
+            # AN ALIAS DEFEATS A BARE-STEM GREP. `tests/tools/test_pack_audit.py` reads
+            # `from l7r.diagram.tools import pack_audit as pa` and then says `pa._luma` 91 times, so
+            # a search for `pack_audit.` finds nothing and fourteen private names silently leave the
+            # surface. Resolve every alias the importer gave this module and search those too.
+            names = {stem} | set(re.findall(rf"import\s+{re.escape(stem)}\s+as\s+(\w+)", body))
+            for alias in names:
+                for m in re.finditer(rf"\b{re.escape(alias)}\.(\w+)", body):
+                    want.add(m.group(1))
     return want & own_names
+
+
+def patched_through_module(module_path: str, own_names: set[str]) -> dict[str, list[str]]:
+    """Names something MONKEYPATCHES through the module object - the split's quietest hazard.
+
+    `monkeypatch.setattr(hinterland, "WOODLAND_BBOX_FLOOR", 1.01)` works on a monolith because the
+    reader and the patch target are the same namespace. After a split the reader holds its own bound
+    copy in a submodule, the patch lands on the package, and the test goes green-to-red for a reason
+    that has nothing to do with the code. Reported by `--plan` so the cut is made knowing it.
+    """
+    stem = os.path.basename(module_path)[:-3]
+    out: dict[str, list[str]] = {}
+    for root, dirs, files in os.walk(REPO):
+        dirs[:] = [d for d in dirs if d not in {".git", "__pycache__", ".clones", "legacy-hand-authored-pool", "specs"}]
+        for fn in files:
+            if not fn.endswith(".py") or os.path.abspath(os.path.join(root, fn)) == os.path.abspath(module_path):
+                continue
+            try:
+                body = open(os.path.join(root, fn)).read()
+            except OSError:
+                continue
+            if stem not in body:
+                continue
+            aliases = {stem} | set(re.findall(rf"import\s+{re.escape(stem)}\s+as\s+(\w+)", body))
+            for alias in aliases:
+                for m in re.finditer(rf"setattr\(\s*{re.escape(alias)}\s*,\s*[\"'](\w+)[\"']", body):
+                    if m.group(1) in own_names:
+                        out.setdefault(m.group(1), []).append(os.path.relpath(os.path.join(root, fn), REPO))
+    return out
 
 
 # ---- emission ------------------------------------------------------------------------------------
@@ -388,7 +444,7 @@ def _deepen(stmt: str) -> str:
     resolves to a module that does not exist, and the failure arrives as an ImportError at run time
     rather than as anything the mover noticed.
     """
-    return re.sub(r"^(\s*from\s+)(\.)", r"\1..", stmt, flags=re.M)
+    return re.sub(r"^([ \t]*from\s+)(\.)", r"\1..", stmt, flags=re.M)
 
 
 
@@ -501,7 +557,12 @@ def cmd_apply(path: str) -> int:
             assert joined == whole, "contiguous slices did not reproduce the body"
         earlier: dict[str, str] = {}
         for m in order:
-            body = "".join(groups[m])
+            # A DEFERRED IMPORT INSIDE A FUNCTION BODY IS A RELATIVE IMPORT TOO. `place_wells` holds
+            # `from .hinterland import belt_polygon` deliberately (a later stage; module-level would
+            # invert the pipeline's reading order), and moving the body one level down breaks it -
+            # as a ModuleNotFoundError at CALL time, not import time, so nothing catches it until
+            # that branch runs.
+            body = _deepen("".join(groups[m]))
             text = hdr_doc + _synth_imports(body, src, names_of[m], earlier, False, None) + "\n\n" + body.lstrip("\n")
             write(m, text)
             earlier.update(dict.fromkeys(names_of[m], m))

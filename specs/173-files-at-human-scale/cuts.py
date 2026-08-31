@@ -77,6 +77,22 @@ PLANS = {
         ],
     },
 
+    # ---- tools/pack_audit.py: 1,225 -> four ------------------------------------------------------
+    # Not a chain and not a residue bucket: a PARSER plus twenty independent checks, each a
+    # dataclass and a function that reads the parsed plan and answers one question. The cut is by
+    # role - parse, measure, judge, report - and the twenty checks stay together because a session
+    # adding the twenty-first wants to read its neighbors.
+    "l7r/diagram/tools/pack_audit.py": {
+        "kind": "names",
+        "doc": '"""Split from tools/pack_audit.py by feature 173 - see this package\'s CLAUDE.md for the index."""\n\n',
+        "modules": [
+            ("parse", ["_luma", "_bold_char_w", "_parse_labels", "_wall_bands", "parse_svg", "Rect", "Label", "ParsedPlan"], "the SVG reader: the fill/stroke/pattern vocabulary, the four record types (`Rect`, `Label`, `ParsedPlan`), and `parse_svg`, which turns a Mode A sheet into them"),
+            ("grids", ["_blank", "_paint", "_Grids", "_grids", "coverage", "_perimeter_band", "perimeter_hugging_pct", "_max_rect", "top_vacant_rects", "region_density"], "the raster measurements - the occupancy grids and everything derived by counting cells: coverage, perimeter hugging, the largest vacant rectangles, per-region density"),
+            ("checks", ["_point_rect_dist", "_overlap_px", "_dark_hit", "_gate_openings", "_blocked", "fire_water_adrift", "tubs_in_buildings", "tubs_on_wells", "occluded_foreground", "orphan_group_labels", "wall_openings", "passage_blockers", "notice_board_adrift", "dark_on_dark_labels", "overlapping_labels", "floating_doors", "structures_on_walls", "aligned_gaps", "gap_tag"], "the twenty audits themselves - one function per question asked of a plan, each with its own result record. Add a new check here"),
+            ("report", ["format_report", "main"], "the printed report and the CLI entry point - the only place the checks above are composed into an order"),
+        ],
+    },
+
     # ---- waterfields/seams.py: 1,069 -> three ---------------------------------------------------
     # A chain, not a residue bucket: the pockets are found, then planted or traded away, then the
     # whole thing is driven by close_seams. Cuts follow the chain, so every edge points backwards.

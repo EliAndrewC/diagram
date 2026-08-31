@@ -147,7 +147,7 @@ def test_a_seat_whose_rotated_parcel_cannot_fit_the_window_is_dropped(monkeypatc
     # layer further in. So prove the setup DOES seat parcels first; only then does taking them away
     # mean the drop path ran.
     assert _scan(), "the control scan seated nothing, so a later empty result would prove nothing"
-    monkeypatch.setattr(hinterland, "WOODLAND_BBOX_FLOOR", 1.01)
+    monkeypatch.setattr(hinterland.parcels, "WOODLAND_BBOX_FLOOR", 1.01)  # feature 173: the floor and its reader both live in hinterland/parcels.py now
     assert _scan() == [], "an unsatisfiable window floor must drop every parcel, not draw one the crop will cut off"
 
 

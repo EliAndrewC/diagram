@@ -25,8 +25,8 @@ def test_the_cluster_seeds_cloud_still_seats_a_hamlet_when_the_rows_offer_nothin
     from l7r.diagram.hamletgen import homesteads as HS
 
     def produce():  # type: ignore[no-untyped-def]
-        monkeypatch.setattr(HS, "front_row", lambda plan, count, standoff=46.0: [])
-        monkeypatch.setattr(HS, "lane_frontage", lambda s, seat, step=86.0: [])
+        monkeypatch.setattr(HS.stages, "front_row", lambda plan, count, standoff=46.0: [])
+        monkeypatch.setattr(HS.stages, "lane_frontage", lambda s, seat, step=86.0: [])
         plan = hg.plan_site(hg.HamletSpec(name="CloudOnly", seed=7, households=10))
         s = hg.build(plan)
         return plan.placed, plan.cluster_shape, s.M["meta"]
@@ -52,7 +52,7 @@ def test_lane_frontage_seats_the_hamlet_when_the_field_row_offers_nothing(monkey
     from l7r.diagram.hamletgen import homesteads as HS
 
     def produce():  # type: ignore[no-untyped-def]
-        monkeypatch.setattr(HS, "front_row", lambda plan, count, standoff=46.0: [])
+        monkeypatch.setattr(HS.stages, "front_row", lambda plan, count, standoff=46.0: [])
         # THE FRONTAGE PASS IS LINEAR-ONLY SINCE FEATURE 126. The internal lanes it used to walk are
         # drawn two stages later now, so for a nucleated or dispersed hamlet this pass has nothing to
         # offer and is skipped; for a LINEAR one it fronts the connector, which is the one way that
@@ -95,7 +95,7 @@ def test_the_linear_frontage_pass_stops_once_the_households_are_housed(monkeypat
     from l7r.diagram.hamletgen import homesteads as HS
 
     def produce():  # type: ignore[no-untyped-def]
-        monkeypatch.setattr(HS, "front_row", lambda plan, count, standoff=46.0: [])
+        monkeypatch.setattr(HS.stages, "front_row", lambda plan, count, standoff=46.0: [])
         plan = hg.plan_site(hg.HamletSpec(name="OneHouse", seed=5, households=10, settlement_form="linear"))
         object.__setattr__(plan.spec, "households", 1)  # frozen, and `replace` would re-run the band validator
         s = hg.build(plan)
