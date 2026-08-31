@@ -76,3 +76,41 @@ def test_a_pauper_ossuary_mound_stays_inside_its_researched_BAND_at_every_scale(
     drawn_px = rec.get("w") or rec.get("vw")
     real_ft = drawn_px * 3
     assert real_ft <= 40.0, f"inside the 10-30 ft band with a little slack for the stroke floor, not a 276 ft kofun ({real_ft:.0f} ft)"
+
+
+def test_a_mausoleum_opens_its_precinct_wall_on_the_side_the_gate_faces() -> None:
+    """A walled CRYPT PRECINCT - the ruling clan's ancestral mausoleum. Three of its four walls are
+    solid and the fourth carries the gate gap, so `gate_dir` decides which one is broken.
+
+    Asserted by turning the gate: the same precinct drawn facing south and facing west must differ,
+    which a fixed gap would not do. The precinct wall is ~2 ft with a 2 px cartographic floor (GM
+    2026-07-19's to-scale rule), so the wall itself is thin whatever the map's scale.
+    """
+    south = Settlement(1200, 1200, seed=4)
+    south.meta(name="C", scale="city")
+    south.mausoleum(600.0, 600.0, 200.0, 160.0, gate_dir="south")
+
+    west = Settlement(1200, 1200, seed=4)
+    west.meta(name="C", scale="city")
+    west.mausoleum(600.0, 600.0, 200.0, 160.0, gate_dir="west")
+
+    assert south.M["mausoleums"] and west.M["mausoleums"], "both recorded"
+    assert south.out != west.out, "the gate gap moves with gate_dir - a fixed gap would draw the same wall twice"
+    assert not south._fits(600.0, 600.0, 10.0, 10.0), "and the precinct blocks placement"
+
+
+def test_a_wall_running_ALONG_a_ward_fence_is_re_stamped_over_it() -> None:
+    """A city rampart laid along a neighborhood fence must cap it: without the re-stamp the ward's
+    own ends run UNDER the rampart, which reads as a fence passing through a wall.
+
+    Both directions asserted - a wall on the fence caps it, one nowhere near it does not - because a
+    cap that always fires is the same defect in the other direction.
+    """
+    s = Settlement(1200, 1200, seed=4)
+    s.meta(name="C", scale="city")
+    s.ward("north ward", [(100.0, 100.0), (600.0, 100.0), (600.0, 400.0), (100.0, 400.0)], gates=[])
+
+    capped = s._ward_fence_cap((100.0, 100.0), (600.0, 100.0))
+    assert capped is not None, "a rampart along the fence line caps it"
+
+    assert s._ward_fence_cap((100.0, 900.0), (600.0, 900.0)) is None, "one nowhere near a fence caps nothing"
