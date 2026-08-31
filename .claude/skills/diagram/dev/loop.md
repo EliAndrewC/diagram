@@ -491,3 +491,31 @@ under it, was covered by NO map in the suite. A 30 s roll that reaches a guard b
 beneath it is paying map prices for unit-test work. `_join_piece` is module level, so the branch took a
 direct test: fabric beside the LINK but not the PIECE, so the splice is refused and the link is drawn as
 its own lane. Milliseconds, deterministic, and it closes a floor breach no roll was ever going to close.
+
+### THE SECOND MERGE CANDIDATE WAS DECLINED, AND WHY IT DIFFERS FROM THE POLDER ONE
+
+Kuwabata and Dikepond are the same seed, archetype and pond layout, differing only in whether
+`dike_crop` is PINNED to mulberry or rolled (seed 21 rolls sugarcane). The assertion matrix says merge:
+
+| | carries Dikepond's assertions |
+|---|---|
+| Kuwabata (`dike_crop='mulberry'`) | YES |
+| Dikepond (`dike_crop='sugarcane'`) | YES |
+
+**It was declined anyway, on the coverage side, and the distinction is worth keeping.** The polder
+merge cost four lines and each was a clean SEMANTIC branch - the tail half of `drop_end_nubs`, the
+refusal half of `_drop_end_nubs` - so each took a targeted unit test that says something true about the
+code and will outlive the merge. The dikepond merge's cost is not like that. `dike_crop` does not
+BRANCH the drawing: `_mulberry_rows` takes `crop` and only passes it to `DIKE_CROP_CLASS[...]`, a dict
+lookup that picks a CSS class. Both maps draw through the same lines. What differs is the RNG STREAM -
+pinning the knob changes what is drawn from it - so the two maps diverge downstream and land on
+different INCIDENTAL geometry branches, which is where their 7-unique-lines-each come from.
+
+**Incidental coverage is the kind you cannot replace with a unit test**, because there is no branch to
+name: the line is reached because this map's geometry happened to go that way. So the trade is ~22 s
+against ~7 lines that would have to be re-covered by finding another map that happens to reach them -
+which is the thing this whole exercise is trying to stop doing.
+
+**THE RULE: merge where the dropped map's unique lines are SEMANTIC branches you can name and test;
+decline where they are incidental to that map's geometry.** The assertion matrix tells you a merge is
+POSSIBLE; what the dropped lines ARE tells you whether it is worth it.
