@@ -37,3 +37,38 @@ def test_a_final_pass_junction_ends_the_lane_where_it_first_meets_the_way() -> N
     pts = [tuple(q) for q in s.M["lanes"][1]["pts"]]
     assert len(pts) == 2 and pts[0] == (300.0, 60.0), pts
     assert abs(pts[-1][1]) < 0.01 and 155.0 <= pts[-1][0] <= 170.0, pts
+
+
+def test_a_refused_splice_still_draws_the_link_as_its_own_lane():
+    """THE SPLICE-REFUSAL BRANCH, tested directly because no map in the suite takes it.
+
+    `_join_piece` prefers to EXTEND the orphan piece by splicing the link onto it, but the splice is
+    judged on its RESULT: `_unretrace`/`_unjog` take chords of their own across ground the piece never
+    occupied, so a splice can end up nearer the fabric than the piece was. When it does, the link is
+    drawn as its own lane instead - the web is joined either way, and what is lost is only the tidiness
+    of one lane rather than two. Refusing outright was measured and was worse (cohort seed 18 traded
+    `features_do_not_overlap` for `lanes_form_one_network`).
+
+    WHY THIS IS A UNIT TEST AND NOT A SEED. The polder at seed 19 was rolled for 30.4 s and covered
+    exactly one line of this file - the `if not _spliced(...)` CONDITION - while the refusal body
+    beneath it stayed uncovered by every map in the suite, which is the shape the 100% floor exists to
+    catch. A 30 s roll that reaches a guard but never the branch under it is paying map prices for
+    unit-test work: the fabric is placed here in three lines, deterministically, in milliseconds.
+    """
+    from l7r.diagram.hamletgen.ways.touch import _join_piece
+
+    way = [(0.0, 0.0), (100.0, 0.0)]  # the orphan piece, lying along y=0
+    v = (100.0, 0.0)  # the link leaves the piece's END, so the splice is attempted
+    link = [(100.0, 0.0), (100.0, 100.0)]  # ...running north, away from the piece
+    # FABRIC BESIDE THE LINK, NOT THE PIECE: the piece is ~40 ft clear of it, the spliced run ~1 ft, so
+    # `_spliced` refuses ("no nearer than it already was, or than its own keep-out asks").
+    walls = [[(101.0, 40.0), (104.0, 40.0), (104.0, 60.0), (101.0, 60.0)]]
+    s = _StubSettlement(lanes=[[(500.0, 500.0), (600.0, 500.0)]])
+    lanes = [{"pts": [list(p) for p in way], "w": 5}]
+    before_pts = [list(p) for p in lanes[0]["pts"]]
+    before_lanes = len(s.M["lanes"])
+
+    _join_piece(s, lanes, 0, way, v, link, [], walls, [], [])
+
+    assert lanes[0]["pts"] == before_pts, "the splice was refused, so the piece must be left exactly as it was"
+    assert len(s.M["lanes"]) == before_lanes + 1, "the refused link is still drawn - as its own lane, so the web is joined"

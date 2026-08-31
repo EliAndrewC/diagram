@@ -123,3 +123,23 @@ def test_a_rewrite_may_leave_a_lane_no_worse_than_it_found_it() -> None:
     assert hg.ways.may_write(straight, folded, 3.0, []) is False
     # ...but a lane that was already folded is not required to unfold itself
     assert hg.ways.may_write(folded, list(folded), 3.0, []) is True
+
+
+def test_a_nub_at_the_TAIL_of_a_way_is_dropped_too() -> None:
+    """`drop_end_nubs` checks BOTH ends, by reversing between the two checks - and the second check
+    needs its own test, because only one map in the suite ever presented a trailing nub.
+
+    The shape: a long straight run whose LAST point doubles back a few feet. The head is clean (its
+    first stretch is 100 ft, far over `_NUB_FT` = 9), so a test that only ever fed a leading nub would
+    pass identically with the second check deleted. Here the tail turns 90 degrees over 3 ft, which is
+    inside both bands, so the nub goes and the way comes back in its DRAWN orientation - the reverse
+    after the second check is unconditional for exactly that reason.
+    """
+    ways = [[(0.0, 0.0), (100.0, 0.0), (200.0, 0.0), (200.0, 3.0)]]
+    hit = hg.ways.drop_end_nubs(ways)
+    assert hit == [0], "the way carries a trailing nub, so its index is reported as changed"
+    assert ways[0] == [(0.0, 0.0), (100.0, 0.0), (200.0, 3.0)], "the nub vertex goes and the orientation is preserved"
+    # ...and a way clean at both ends is left exactly alone (the non-vacuity half: prove the rule can decline)
+    clean = [[(0.0, 0.0), (100.0, 0.0), (200.0, 0.0)]]
+    assert hg.ways.drop_end_nubs(clean) == []
+    assert clean[0] == [(0.0, 0.0), (100.0, 0.0), (200.0, 0.0)]

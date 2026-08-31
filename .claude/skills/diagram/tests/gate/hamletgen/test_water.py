@@ -43,8 +43,21 @@ def test_a_polder_hamlet_draws_its_grid_dike_and_reservoir() -> None:
     things the substrate is already responsible for and which no other test covers: that the grid is
     solved to the acreage the households imply, that every household is seated, that the defining
     perimeter dike exists, and that the header reservoir sits OUTSIDE the crop rather than in it,
-    which two earlier versions of the siting got wrong in two different ways."""
-    plan, M = rollcache.hamlet(hg.HamletSpec(name="Polder", seed=8, households=16, field_archetype="polder_grid"))
+    which two earlier versions of the siting got wrong in two different ways.
+
+    SEED 19, SHARED WITH THE KEEP-OUT TEST BELOW (2026-08-31, GM: *"do there exist two or more hamlets
+    ... which could be combined into a single hamlet while exercising all of the branches that all of
+    the tests need"*). This test was rolled on seed 8 and asserts only what EVERY polder owes - the
+    archetype declared, the grid solved to the acreage, every household seated, the perimeter dike, a
+    gate at every cut, the reservoir outside the crop. None of that names a seed, so it does not need
+    one of its own. Measured before the change: seed 19 carries all of these assertions, and seed 8 was
+    the most expensive polder in the suite at 39.8 s.
+
+    WHY SEED 12 BELOW IS NOT ALSO FOLDED IN, though it passes these same assertions: its value is that
+    it NEEDS the reservoir walk, and an assertion that passes because the pond never had to move looks
+    identical to one that passes because the walk worked. Merging on assertions alone would have made
+    that test vacuous - the exact failure `tests/CLAUDE.md` warns about."""
+    plan, M = rollcache.hamlet(hg.HamletSpec(name="Polder", seed=19, households=16, field_archetype="polder_grid", down_deg=90))
     assert plan.field_archetype == "polder_grid"
     assert M["meta"]["field_archetype"] == "polder_grid"
     assert abs(plan.acres - plan.target_acres) / plan.target_acres < 0.12, f"{plan.acres:.1f} acres against a {plan.target_acres:.1f} target"
