@@ -228,3 +228,23 @@ def test_a_PRIMARY_hall_is_recorded_as_the_settlements_own_shrine() -> None:
     # manifest is read - a test that reads M["labels"] straight after the call finds nothing
     s.place_labels()
     assert any("tutelary" in str(lb) for lb in s.M["labels"]), "and its sublabel is drawn beneath it"
+
+
+def test_a_LABELLED_forest_captions_itself_at_the_middle_of_the_wood() -> None:
+    """The wood's own caption, sited by default at the middle of the ground it fills - and slid by
+    `label_xy` where a gen wants it elsewhere. Both, because the default is a computation and the
+    override is the escape from it."""
+    s = Settlement(1400, 1400, seed=12)
+    s.meta(name="C", scale="city")
+    edge = [(800.0, 100.0), (820.0, 700.0), (810.0, 1300.0)]
+    s.forest(edge, label="the Kitsune Mori")
+    s.place_labels()
+    got = [lb for lb in s.M["labels"] if len(lb) > 5 and "Kitsune" in str(lb[5])]
+    assert got, "the wood is named"
+
+    placed = Settlement(1400, 1400, seed=12)
+    placed.meta(name="C", scale="city")
+    placed.forest(edge, label="the Kitsune Mori", label_xy=(1100.0, 300.0))
+    placed.place_labels()
+    put = [lb for lb in placed.M["labels"] if len(lb) > 5 and "Kitsune" in str(lb[5])]
+    assert put and put[0][:2] != got[0][:2], "and label_xy puts the caption where the gen asked"

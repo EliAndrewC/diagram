@@ -624,3 +624,15 @@ def test_a_stable_yards_furniture_is_refused_by_each_keep_out_in_turn() -> None:
     for key in ("rails", "heaps"):
         for item in wet.M["stable_yards"][-1].get(key) or []:
             assert abs(item["y"] - 400.0) > 6.0, f"{key} clear of the stream"
+
+
+def test_a_LABELLED_stable_yard_captions_itself() -> None:
+    """The yard's own caption - the only thing on it that names the ground rather than furnishing
+    it, so it is drawn only when a gen asks for one."""
+    # the LABEL belongs to `animal_ground` (the standalone caravan ground), not to `stables` - the
+    # yard behind an inn takes its name from the inn
+    s = _crop_settlement()
+    s.animal_ground(500.0, 400.0, r=80, label="wagon yard")
+    s.flush_stable_yards()
+    s.place_labels()
+    assert any("wagon yard" in str(lb[5]) for lb in s.M["labels"] if len(lb) > 5), "the yard is named when asked"
