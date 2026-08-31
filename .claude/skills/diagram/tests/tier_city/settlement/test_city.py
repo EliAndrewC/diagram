@@ -496,3 +496,61 @@ def test_every_city_member_resolves_on_settlement_itself():
     # what consumers actually rely on: the name reaching Settlement, not merely CityMixin
     unreachable = sorted(n for n in _CITY_SURFACE if not hasattr(Settlement, n))
     assert not unreachable, f"not resolvable on Settlement: {unreachable}"
+
+
+# ---- feature 174: the wall's arc-walking geometry, tested directly --------------------------------
+# Branch-coverage tests. The end-to-end suite draws a whole city wall with its towers; these say what
+# each helper promises, on a ring a reader can check by hand.
+
+_SQUARE_RING = [(0.0, 0.0), (100.0, 0.0), (100.0, 100.0), (0.0, 100.0)]
+
+
+def test_the_wall_perimeter_closes_the_ring() -> None:
+    """It walks vertex 0 back to vertex 0 - a ring, not a polyline, so the closing edge counts."""
+    assert Settlement._wall_perimeter(_SQUARE_RING) == pytest.approx(400.0)
+
+
+def test_a_point_at_arc_length_walks_the_ring_FORWARD_and_wraps() -> None:
+    """Used to seat mural towers at even spacing. The tangent comes back with the point, because a
+    tower is set square to the wall it straddles."""
+    x, y, tan = Settlement._wall_point_at_arc(_SQUARE_RING, 50.0)
+    assert (x, y) == pytest.approx((50.0, 0.0)), "halfway along the first edge"
+    assert tan == pytest.approx(0.0), "which runs level"
+
+    x2, y2, tan2 = Settlement._wall_point_at_arc(_SQUARE_RING, 150.0)
+    assert (x2, y2) == pytest.approx((100.0, 50.0)), "and on into the second edge"
+    assert abs(tan2) == pytest.approx(90.0), "which runs vertical"
+
+    wrapped = Settlement._wall_point_at_arc(_SQUARE_RING, 450.0)
+    assert wrapped[:2] == pytest.approx((50.0, 0.0)), "past the perimeter it wraps, so a gate anywhere can anchor a run"
+
+
+def test_the_arc_of_a_point_finds_where_on_the_RING_it_sits() -> None:
+    """The inverse, used to locate a gate tower as an anchor when filling mural towers between
+    anchors - so the two must round-trip."""
+    assert Settlement._wall_arc_of(_SQUARE_RING, (50.0, 0.0)) == pytest.approx(50.0)
+    assert Settlement._wall_arc_of(_SQUARE_RING, (100.0, 50.0)) == pytest.approx(150.0)
+    assert Settlement._wall_arc_of(_SQUARE_RING, (55.0, -8.0)) == pytest.approx(55.0), "a point NEAR the wall snaps onto it"
+
+    arc = 220.0
+    px, py, _ = Settlement._wall_point_at_arc(_SQUARE_RING, arc)
+    assert Settlement._wall_arc_of(_SQUARE_RING, (px, py)) == pytest.approx(arc), "the two round-trip"
+
+
+def test_a_tower_is_nudged_INWARD_so_its_footing_stays_on_the_berm() -> None:
+    """A tower straddles the wall but its FOOTING stays on the berm: centered on the wall line, a
+    38-40 px tower pokes its outer face into a close-set moat's bed. `city_wall` runs BEFORE
+    `s.moat`, so it cannot measure the bed - the nudge is sized to clear the tightest gap in the
+    pool (Tango's 24, moat half 11, so a 13 px berm) with about 4 px to spare.
+
+    Asserted as the DIRECTION and the amount: the tower moves toward the ring's centroid, by half
+    its width less the 6 px projection the slanted-stretch rotation needs.
+    """
+    s = Settlement(1000, 1000, seed=1)
+    nx, ny = s._berm_nudge(100.0, 500.0, 40.0, 500.0, 500.0)
+    assert ny == pytest.approx(500.0), "straight in along the radius"
+    assert nx == pytest.approx(114.0), "half the 40 px tower, less the 6 px outer projection"
+    assert nx > 100.0, "INWARD, toward the centroid - the direction is the whole point"
+
+    same = s._berm_nudge(500.0, 500.0, 40.0, 500.0, 500.0)
+    assert same == pytest.approx((500.0, 500.0)), "a tower already at the centroid has nowhere to be nudged"
