@@ -5,7 +5,7 @@ import math
 import pytest
 
 from l7r.diagram.settlement import Settlement
-from l7r.diagram.settlement.structures.fixtures._helpers import kosatsuba_anchor
+from l7r.diagram.settlement.structures.fixtures._helpers import first_clear_seat, kosatsuba_anchor
 from tests.settlement._builders import _city, _crop_settlement, _estate_settlement, _scatter_base_points, _town, _ward_city_with_samurai
 
 
@@ -957,3 +957,30 @@ def test_a_TILTED_board_caption_walks_its_whole_fallback_ladder() -> None:
 
     captions = [lb for lb in s.M["labels"] if len(lb) > 5 and "notice board" in str(lb[5])]
     assert captions, "the board is captioned even where every easy seat is taken"
+
+
+def test_the_caption_ladders_rung_is_the_same_question_with_a_lower_bar_each_time() -> None:
+    """Feature 174, and the doctrine's own remedy (GM 2026-08-28) for a branch no constructed map
+    could reach: `first_clear_seat` was lifted out of `_draw_board_caption`, where the identical
+    expression appeared FOUR times and the rung that SUCCEEDS at the floor after failing at the
+    target sat behind a narrow band of clearance that eight map geometries failed to hit.
+
+    As a lifted function it is three lambdas. All four outcomes are asserted:
+      - a seat that passes everything is taken;
+      - one over the hug cap is skipped;
+      - one that is blocked is skipped;
+      - and the FLOOR rung finds a seat the TARGET rung refused, which is the whole point of the
+        ladder having a second rung at all.
+    """
+    seats = [("far", 90.0, False, 30.0), ("blocked", 5.0, True, 30.0), ("middling", 5.0, False, 12.0), ("good", 6.0, False, 30.0)]
+    hug = lambda q: q[1]  # noqa: E731 - three one-line probes read better inline than as defs
+    blocked = lambda q: q[2]  # noqa: E731
+    clearance = lambda q: q[3]  # noqa: E731
+
+    assert first_clear_seat(seats, hug, 20.0, blocked, clearance, 20.0)[0] == "good", "the first seat clearing every bar"
+    assert first_clear_seat(seats, hug, 20.0, blocked, clearance, 40.0) is None, "nothing clears an impossible target"
+
+    # THE SECOND RUNG: the same seats, judged at the floor instead of the target. "middling" was
+    # refused at 20 and is taken at 10 - "give up the MARGIN, never the 2 ft the rule asks".
+    assert first_clear_seat(seats, hug, 20.0, blocked, clearance, 10.0)[0] == "middling", "the floor rung finds what the target refused"
+    assert first_clear_seat([], hug, 20.0, blocked, clearance, 1.0) is None, "and no seats at all is no seat"

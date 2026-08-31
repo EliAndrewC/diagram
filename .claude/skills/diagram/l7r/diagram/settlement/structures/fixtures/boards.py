@@ -16,7 +16,7 @@ from ..._geom import (
     tilt_caption_seat,
 )
 from ..._knobs import KOSATSUBA_MARKER_MIN_PX
-from ._helpers import CAPTION_LANE_FLOOR_FT, CAPTION_LANE_TARGET_FT, pick_caption_seat
+from ._helpers import CAPTION_LANE_FLOOR_FT, CAPTION_LANE_TARGET_FT, first_clear_seat, pick_caption_seat
 
 if TYPE_CHECKING:
     from ...core import Settlement
@@ -488,7 +488,7 @@ class BoardsMixin:
                 # no pool gen passes `label_above` to `kosatsuba()` - but the two branches now honor the
                 # caller's constraint the same way.
                 _tld = [_q for _, _q in _ranked if not label_above or _q[1] < y]
-                _seat = next((_q for _q in _tld if _hug(_q) <= _hug_cap and not _blocked(_q) and _box_clearance(_q) >= _lane_target), None)
+                _seat = first_clear_seat(_tld, _hug, _hug_cap, _blocked, _box_clearance, _lane_target)
                 if _seat is not None:
                     _lx, _ly = _seat
                 else:
@@ -507,14 +507,15 @@ class BoardsMixin:
                     # 12.4, 17.7, 28.3, 28.4, 32.3 and 36.3 px along their own baselines, against bounds
                     # of 10.7-11.3. They are the GM's Kuwabata defect, reproduced by the fallback on maps
                     # nobody had looked at.
+                    # ONE EXPRESSION, so the ladder has no separate success BODY per rung (feature
+                    # 174). Each rung is `first_clear_seat` with a lower bar, and the last resort is
+                    # exactly the old thirty-seat search - "a board with genuinely nowhere to put its
+                    # caption behaves as it always has". Written as a chain because a rung's success
+                    # body is unreachable by construction: the discriminator between the target and
+                    # the floor is a narrow band of clearance that eight map geometries failed to
+                    # hit, and the rung itself is unit-tested on the lifted function instead.
                     _floor = self.px(CAPTION_LANE_FLOOR_FT)
-                    _seat = next((_q for _q in _tld if _hug(_q) <= _hug_cap and not _blocked(_q) and _box_clearance(_q) >= _floor), None)
-                    if _seat is not None:
-                        _lx, _ly = _seat
-                    else:
-                        # ...and if even the floor is unreachable, exactly the old thirty-seat search, so
-                        # a board with genuinely nowhere to put its caption behaves as it always has.
-                        _lx, _ly = _pick(_tilted)
+                    _lx, _ly = first_clear_seat(_tld, _hug, _hug_cap, _blocked, _box_clearance, _floor) or _pick(_tilted)
             else:
                 # THE HALO MUST NOT NOTCH THE WAY THE BOARD STANDS ON (settlement-review on Inashiro,
                 # 2026-08-19). The caption is drawn with a 3 px background halo
@@ -583,16 +584,13 @@ class BoardsMixin:
                 # it is both stricter where it matters and honest about the ground a caption may use.
                 # It stays the filter on the coarse fallback below, where it always was.
                 _lvl = [_q for _, _q in _ranked if not label_above or _q[1] < y]
-                _seat = next((_q for _q in _lvl if _hug(_q) <= _hug_cap and not _blocked(_q) and _box_clearance(_q) >= _lane_target), None)
+                _seat = first_clear_seat(_lvl, _hug, _hug_cap, _blocked, _box_clearance, _lane_target)
                 if _seat is None:  # the same rung the tilted branch takes: give up the MARGIN, never the 2 ft the rule asks
                     _floor = self.px(CAPTION_LANE_FLOOR_FT)
-                    _seat = next((_q for _q in _lvl if _hug(_q) <= _hug_cap and not _blocked(_q) and _box_clearance(_q) >= _floor), None)
-                if _seat is not None:
-                    _lx, _ly = _seat
-                elif _ok:
-                    _lx, _ly = _pick(_ok)
-                else:
-                    _lx, _ly = (x, y - hh - 11) if label_above else (x, y + hh + 11)
+                    _seat = first_clear_seat(_lvl, _hug, _hug_cap, _blocked, _box_clearance, _floor)
+                # ...and the same chain on this branch (feature 174): the rung, then the coarse
+                # search, then the plain default below or above the board.
+                _lx, _ly = _seat or (_pick(_ok) if _ok else ((x, y - hh - 11) if label_above else (x, y + hh + 11)))
             # OUTSIDE the branch chain - all three seats (hand, tilted, chosen) draw their caption here.
             # It sat one level deeper for one revision and a TILTED board silently lost its label
             # entirely: Kashikawa's rot=145.7 takes the `elif _t` branch, never reached the call, and

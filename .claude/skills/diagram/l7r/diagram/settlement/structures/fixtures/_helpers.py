@@ -34,6 +34,31 @@ if TYPE_CHECKING:
     pass
 
 
+def first_clear_seat(
+    seats: Sequence[Any],
+    hug: Callable[[Any], float],
+    hug_cap: float,
+    blocked: Callable[[Any], bool],
+    clearance: Callable[[Any], float],
+    want: float,
+) -> Any:
+    """ONE RUNG of the caption ladder: the first seat that clears the hug cap, is unblocked, and
+    keeps at least `want` of clearance from the way it stands on.
+
+    LIFTED OUT OF `_draw_board_caption` (feature 174, GM 2026-08-28: "If something is only available
+    as an inner function in a closure, then you can move it out into its own function to make it
+    more unit testable... Dropping the test is not one of the options"). The identical expression
+    appeared FOUR times in that method - the tilted branch's target and floor rungs, and the level
+    branch's two - and the rung that SUCCEEDS at the floor after failing at the target could not be
+    reached by any of eight constructed map geometries, because the discriminator is a narrow band
+    of clearance between the two thresholds. As one lifted body it is three lambdas to test.
+
+    The four call sites now differ only in their seat list and their `want`, which is the whole of
+    what the ladder is: the same question asked with a lower bar each time.
+    """
+    return next((q for q in seats if hug(q) <= hug_cap and not blocked(q) and clearance(q) >= want), None)
+
+
 def pick_caption_seat(
     seats: Sequence[Pt],
     at: Pt,
