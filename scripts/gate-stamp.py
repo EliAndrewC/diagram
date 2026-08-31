@@ -250,7 +250,13 @@ def _flush_cache(root: Path | None) -> None:
 # `sync-with-main.sh`'s `--check` is the whole of what the push demands. Bumping this string retires
 # every such record at once, which is exactly the intent. Bump it whenever the gate's STANDARD
 # changes; never for a change in the code the gate runs over - that is what the file hashes are for.
-GATE_RECIPE = "2026-08-31/174-coverage-floor-on-done"
+GATE_RECIPE = "2026-08-31/174-whole-tree-100-no-ratchet"
+# Bumped a second time within feature 174, and the reason is the mechanism catching its own author:
+# retiring the `--omit` list and `SETTLEMENT_COV_FLOOR` made the gate STRICTER without touching a line
+# of engine code, so the short-circuit answered "already verified - nothing the gate exercises has
+# changed" and skipped the very run that would have tested the new standard. Nothing the gate
+# EXERCISES had changed; what the gate DEMANDS had. That is the distinction this constant exists to
+# carry, and the first bump's own comment says so - "bump it whenever the gate's STANDARD changes".
 
 
 def hash_files(files: list[Path], root: Path | None = None) -> str:

@@ -1,0 +1,6 @@
+{
+  "utc": "20260831T143634Z",
+  "guard": "pair-hooks",
+  "what": "gate alone",
+  "reason": "feature 174: engine code unchanged since the 14:18 green gate - this run exists to exercise the STRICTER coverage floor after the ratchets were retired, and no map manifest can move"
+}
