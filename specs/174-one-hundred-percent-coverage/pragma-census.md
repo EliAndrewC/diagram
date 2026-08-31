@@ -12,7 +12,7 @@ front of you. **Nothing here presumes the answer.** Measured in this clone at HE
 | `pragma: no cover` sites under `l7r/` | **131** |
 | ...inside the tree the hard `--fail-under=100` covers | **90**, across 32 files |
 | excluded LINES engine-wide | **469** against 22,470 measured statements |
-| excluded LINES inside the hard-floor tree | **281** against 9,118 - **2.99% of that tree is not measured** |
+| excluded LINES inside the hard-floor tree | **281** against 9,118 - **3.08% of that tree is not measured** |
 | added by feature 174 | **none** (its one `+` and one `-` are the same line moving with a lifted function) |
 
 Sites are the wrong unit and were the first number taken; the lines come from coverage's own
@@ -99,7 +99,7 @@ coverage's own unit:
 | **exclusions hiding lines the corpus ALREADY runs** | **356** |
 | dead sites found and DELETED | **13** (40 engine lines) |
 | pragma comment lines | **130 -> 76** (131 grep hits less one prose mention in `tools/hamlet_floor.py`) |
-| excluded lines after | **385** (2.99% -> 2.30% of the floored tree) |
+| excluded lines after | **385**; inside the floored tree 281 of 9,118 (3.08%) -> 216 of 9,168 (2.36%) |
 
 ### What the genuinely-unreached turned out to be
 
@@ -115,7 +115,8 @@ deleted line was reached by nothing, on any seed the corpus rolls.
 ### A residue this pass did NOT fix, named so it is not rediscovered
 
 The restored exclusions are **block-scoped and therefore over-broad**: 385 lines are excluded where
-only ~113 are genuinely unreached, because a pragma on a rescue routine or a transport class covers
+only ~73 are genuinely unreached (the 113 was measured BEFORE the 40 deleted engine lines went),
+because a pragma on a rescue routine or a transport class covers
 the executed lines inside it as well. That was true before this feature and is still true. Narrowing
 each to the lines actually unreached is available work; it is not what the ruling asked for.
 

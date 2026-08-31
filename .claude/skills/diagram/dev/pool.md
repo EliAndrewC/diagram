@@ -58,7 +58,7 @@ The consequences, so nobody rediscovers them one gate failure at a time:
   regression corpus replays frozen fixtures through them), but NEW rules ship un-gated.
 - **Coverage is per-module now.** The above-hamlet wings of the `settlement/` package (towns, cities, the
   capital) are exercised by nothing until their tiers convert, so the Makefile enforces 100% on
-  every module except the `settlement/` package (combined), which holds a RATCHET floor (`SETTLEMENT_COV_FLOOR`) -
+  every module including the `settlement/` package - its 94% ratchet retired with feature 174 -
   raise it as tiers convert, never lower it (same discipline as the retired mypy ratchet).
 - **Frozen manifests remain legal READ-ONLY fixtures** (test_checks reads hikari-no-sato.json;
   citybudget prices the tango/nagahara programs) - frozen bytes never change, so those tests stay

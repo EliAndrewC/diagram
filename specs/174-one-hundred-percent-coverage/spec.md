@@ -97,6 +97,7 @@ route to main below the floor is closed only when each of these is closed:
 | `already-verified` | `make done` short-circuits on a green record for the same engine content | a record taken BEFORE the floor existed must not satisfy a push after it; the verification key must move when the floor does |
 | `GATE_STAMP_OK` | the push's documented escape (`sync-with-main.sh:244-252`) - when set, `gate-stamp.py --check` does not run AT ALL, so a push can land with no green gate | KEPT - it is feature 170's audited escape, needs a written reason, and is logged; it is not coverage-specific (it covers the guard-script gate too), and the GM did not ask to gut it. **This is the one part of the GM's sentence the feature does not deliver, and it is RAISED WITH THEM once the implementation works** (Principle XVI: carry on, then raise it), rather than claimed as met in the success criteria |
 | `REF_OK` | the reference-scope bypass | stated and left as it is; it does not reach the coverage phase |
+| the `--omit` list + the 94% `SETTLEMENT_COV_FLOOR` | four trees (13,357 statements) sat outside the 100% report under a 94% ratchet, so a merge could land with settlement/ ~620 statements down | **CLOSED by FR-006** - both retired in this feature once their own condition was met. Round 7 found this row missing and two success criteria claiming it already closed; it was the GM's FIRST sentence and the largest hole of the five |
 | a delta with no engine Python | tests, the Makefile, `scripts/` and docs take the DIRECT route, which runs no gate at all | STATED AND LEFT, like `REF_OK`. It is the GM's own ruling (feature 132 FR-024/FR-025: a tests-only change owes no build and no local gate) and this request does not reopen it. The exposure is bounded: the next engine change anybody makes meets the floor, red |
 
 
@@ -134,7 +135,7 @@ function - so the LINES are measured too, with coverage's own file reporter unde
 |---|---|
 | `pragma: no cover` COMMENT LINES under `l7r/` | **130** (131 grep hits less one prose mention in `tools/hamlet_floor.py`, which names the token in a docstring and is not a pragma) |
 | **excluded LINES, engine-wide** | **469**, against 22,470 measured statements |
-| **excluded LINES inside the hard-floor tree** | **281**, against 9,118 measured statements - **2.99% of that tree's code is not measured at all** |
+| **excluded LINES inside the hard-floor tree** | **281**, against 9,118 measured statements - **3.08% of that tree's code is not measured at all** |
 | largest single files | `ci/dispatch.py` 70, `hamletgen/homesteads/wells.py` 23, `hamletgen/sink.py` 15, `tools/cache_audit.py` 10, `pipeline/gencache.py` 10 |
 | added or removed by the coverage pass | **net zero** - one `+` and one `-`, the same line moving with a lifted function |
 
@@ -165,7 +166,7 @@ ring-probe rescue alone is 27 comment lines):
 | **so exclusions that were hiding lines the corpus ALREADY runs** | **356** - stale, protecting nothing |
 | dead sites found in the 113 and DELETED | **13** (40 engine lines) |
 | pragma comment lines | **130 -> 76** |
-| excluded lines after | **469 -> 385** (2.99% -> 2.30% of the floored tree) |
+| excluded lines after | **469 -> 385**; inside the floored tree 281 of 9,118 (3.08%) -> 216 of 9,168 (2.36%) |
 
 Reading the comments alone would have deleted live code and kept dead code. Of what the measurement
 showed genuinely unreached: **13 were dead and are deleted**; the rest are error handling or
@@ -176,8 +177,9 @@ carries why it stays. Full working in [`pragma-census.md`](pragma-census.md).
 
 **Two things are NOT claimed settled, and both are the GM's.** (1) Whether the 24 error-handling
 guards are meant too, which trades a silent skip for a crash on malformed input. (2) **The restored
-exclusions are block-scoped and therefore over-broad**: 385 lines are excluded where only ~113 are
-genuinely unreached, because a pragma on a rescue routine or a transport class covers the executed
+exclusions are block-scoped and therefore over-broad**: 385 lines are excluded where only ~73 are
+genuinely unreached (113 measured BEFORE the 40 deleted engine lines went - round 7 caught the two eras
+being mixed), because a pragma on a rescue routine or a transport class covers the executed
 lines inside it as well. That was true before this feature and is still true; narrowing them is
 available work, and it is named here rather than left for a future reader to rediscover.
 
@@ -236,7 +238,10 @@ values above coverage.
 
 - **`SETTLEMENT_COV_FLOOR = 94`**: retired when `settlement/` reaches 100%, not before. Until then it
   stays and is RAISED as the number climbs (its own comment: "RAISE the floor as each tier converts;
-  NEVER lower it"). It is at 97% now, so the floor may already rise.
+  NEVER lower it"). **It reached 100% under this feature** - 10,342 statements, 0 missing - so the
+ratchet's own condition was met and it did not merely rise, it RETIRED, together with the `--omit`
+list that kept four trees out of the 100% report. A ratchet whose condition is met is not a ratchet,
+it is a hole: settlement/ could have shed ~620 statements and still passed.
 - **the `--omit` list** (`settlement/`, `waterfields/`, `interactive/`, `overlap/`): dissolved, one
   tree at a time, as each reaches 100%. A tree leaves the omit list the day it can.
 
@@ -263,7 +268,8 @@ permanently red, and a red gate everyone routes around is how the ratchets arriv
 
 ## Success criteria
 
-1. The measured set reports 100%, with no ratchet and no parked lines. **What "the measured set"
+1. The measured set is now the WHOLE engine - 20,682 statements, 0 missing - with no ratchet, no
+   omit list and no parked lines. **What "the measured set"
    excludes is stated, not implied**: coverage does not count a line carrying `# pragma: no cover`.
    After the GM's ruling (FR-009) the engine holds **76** such comment lines, excluding **385** lines,
    down from 130 and 469. What remains the GM's is named there and is NOT claimed settled: the 24
@@ -275,7 +281,10 @@ permanently red, and a red gate everyone routes around is how the ratchets arriv
    which this request does not reopen. Both are stated in FR-003a, and the first is put to the GM.
 3. Every closure is a test that asserts BEHAVIOR; every exemption is a deletion or a GM ruling.
 4. `make quick` is unchanged.
-5. The `--omit` list and `SETTLEMENT_COV_FLOOR` are both gone.
+5. The `--omit` list and `SETTLEMENT_COV_FLOOR` are both gone - **done**: the gate's coverage phase
+   is a single `--fail-under=100` over the whole tree, with nothing omitted and no ratchet beside it.
+   Round 7 caught that this, the GM's FIRST sentence, had been left undone while two criteria claimed
+   it met; retiring them was the last substantive act of the feature.
 
 ## Decisions recorded
 
@@ -326,3 +335,4 @@ subagent.
 contrary to Principle XVI. The rewrite above is drawn from the request and the measurements rather
 than from the work already done, which is why FR-004 now REVERSES the first draft's exclusion and
 FR-001's census grew from 89 to 565.
+| 7 | CHANGES REQUIRED | **The verdict round found the largest hole of all, and it was the GM's own first sentence.** The `--omit` list and `SETTLEMENT_COV_FLOOR = 94` were STILL LIVE in the Makefile: the 100% floor this feature put on `make done` covered 9,168 statements while 13,357 more sat under a 94% ratchet, so settlement/ could have shed ~620 statements and the gate would still have gone green. Two success criteria asserted both were gone, FR-003a's route table omitted it, and FR-006 made retirement conditional on a threshold that had ALREADY been met (settlement/ measured 10,342 statements, 0 missing). Both are now retired and the coverage phase is one `--fail-under=100` over the whole tree - 20,682 statements, 0 missing, nothing omitted. Also fixed: "~113 genuinely unreached" mixed the pre- and post-deletion eras (~73 after the 40 deleted lines), and the derived percentages did not reproduce (3.08% -> 2.36%, the raw line counts having always been exact). The lesson the ledger should keep: six rounds went into the spec's PROSE while the requirement's own subject sat unimplemented, because every round after the first graded the words rather than re-checking the Makefile |

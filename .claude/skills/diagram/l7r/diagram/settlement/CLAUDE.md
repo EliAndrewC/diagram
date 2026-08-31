@@ -62,10 +62,12 @@ test in the suite patches a settlement module-level name (census in
 
 **Two floors since feature 145 (GM 2026-08-28), and a placement rule for other-tier code.** Every module of this package that a scripted hamlet
 roll executes owes 100% - the set is DERIVED from the roll cache's records (`make hamlet-floor` lists it;
-`tools/hamlet_floor.py` carries the why) and enforced by `make done FULL=1`; a town/city-only module owes
-nothing there. The package-wide ratchet below still applies to everything.
+`tools/hamlet_floor.py` carries the why) and enforced by the gate; a town/city-only module owes
+nothing there.
 
-The package holds the 94% RATCHET floor from the 2026-08-16 legacy freeze (see
-`SETTLEMENT_COV_FLOOR` in the Makefile): the uncovered town/city/capital wings live mostly in
-`city/`, `castle_civic.py`, and parts of `structures/`/`civic_grounds/`, and re-cover as
-those tiers convert to scripted generation. Raise the floor with each conversion; never lower it.
+**The 94% ratchet is GONE (feature 174, 2026-08-31).** The package held a `SETTLEMENT_COV_FLOOR`
+from the 2026-08-16 legacy freeze because the town/city/capital wings were exercised by nothing
+until those tiers converted. Feature 174 covered them BY TESTS instead of waiting for the
+conversion - settlement/ measures 10,342 statements, 0 missing - so the ratchet's own condition was
+met and it retired, along with the `--omit` list that kept this package out of the 100% report. The
+package is now under the same single floor as everything else: **100%, on a plain `make done`.**

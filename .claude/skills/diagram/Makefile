@@ -937,15 +937,20 @@ typecheck:
 # 2026-07-20 on 22 cores), plain serial pytest otherwise - xdist is a speedup, not a requirement.
 # The coverage gate combines worker data, so the coverage requirement holds either way.
 #
-# COVERAGE IS ENFORCED PER-MODULE since the 2026-08-16 legacy freeze (migration-plan.md "The
-# accepted trade"): the hand-authored pool maps are frozen and their gens never run, so the
-# above-hamlet wings of settlement.py (towns, cities, the capital) are exercised by nothing until
-# those tiers convert to scripted generation. Every other measured module holds 100%; settlement.py
-# holds a RATCHET floor - the same discipline as the retired mypy per-module ratchet. RAISE the
-# floor as each tier converts (village -> town -> city re-cover their wings); NEVER lower it.
-# 94 = measured 94.4% (447 of 8043 statements unreached) on 2026-08-16, the day of the freeze:
-# the scripted hamlets + unit tests already reach everything but the town/city/capital wings.
-SETTLEMENT_COV_FLOOR = 94
+# COVERAGE IS ONE FLOOR OVER THE WHOLE TREE (GUARD_EDIT_OK: feature 174 - this is the STRICTER
+# arrangement, and retiring a ratchet is the thing the GM asked for first: "we have some ratchets
+# somewhere that enforce less than one hundred percent, but I think we want to enforce one hundred
+# percent coverage in whatever the relevant place is", 2026-08-31).
+#
+# WHAT WAS HERE, and why it is gone. From the 2026-08-16 legacy freeze (migration-plan.md "The
+# accepted trade") settlement/ held a RATCHET floor of 94, and settlement/, waterfields/,
+# interactive/ and overlap/ were omitted from the 100% report: the hand-authored pool maps were
+# frozen, so the above-hamlet wings were exercised by nothing. The freeze's own terms said RAISE the
+# floor as each tier converts and never lower it - and feature 174 converted the lot by TESTS rather
+# than by tiers. Measured on its green run: settlement/ 10,342 statements 0 missing; waterfields/ +
+# interactive/ + overlap/ 3,015 statements 0 missing. A ratchet whose condition is met is no longer a
+# ratchet, it is a hole - settlement/ could have shed ~620 statements and still passed - so both
+# retired the day they could. Do not reintroduce either: bring the code up, or take the GM's ruling.
 
 # The `coverage combine --append` below sweeps in the gate-cache parallel data files (hit replays
 # and miss-subprocess recordings, feature 026) that pytest-cov's own end-of-session combine may or
@@ -1090,8 +1095,7 @@ test:
 	fi; \
 	python3 -m coverage combine --append >/dev/null 2>&1 || true; \
 	cov_ec=0; \
-	python3 -m coverage report -m --omit='*/settlement/*,*/waterfields/*,*/interactive/*,*/overlap/*' --fail-under=100 || { echo "COVERAGE: a module other than settlement/, waterfields/, interactive/ and overlap/ is under 100% - the table above names it and its missing lines (those four are judged by the settlement ratchet and the hamlet-path floor below; GUARD_EDIT_OK: feature 166 - check_village/ is deleted and overlap/ takes its place in this list, holding the taxonomy that moved out of it, whose town/city/capital rows nothing exercises while no generator produces those tiers - the GM's 2026-08-28 ruling that other tiers owe no floor)"; cov_ec=1; }; \
-	python3 -m coverage report --include='*/settlement/*' --fail-under=$(SETTLEMENT_COV_FLOOR) || { echo "COVERAGE: settlement/ (package combined) fell below its $(SETTLEMENT_COV_FLOOR)% ratchet floor (see the comment above SETTLEMENT_COV_FLOOR in this Makefile; 'python3 -m coverage report -m --include=*/settlement/*' shows the missing lines)"; cov_ec=1; }; \
+	python3 -m coverage report -m --fail-under=100 || { echo "COVERAGE: a module is under 100% - the table above names it and its missing lines. GUARD_EDIT_OK: feature 174 makes this STRICTER. It used to omit settlement/, waterfields/, interactive/ and overlap/ and hand them to a 94% ratchet, which is precisely what the GM asked to end (2026-08-31: 'we have some ratchets somewhere that enforce less than one hundred percent, but I think we want to enforce one hundred percent coverage in whatever the relevant place is'). The omit list and SETTLEMENT_COV_FLOOR both retired the day their own condition was met - measured on this feature's green run, settlement/ 10,342 statements 0 missing, the other three trees 3,015 statements 0 missing. The hamlet-path floor below STAYS: it is a finer check (feature 145), not a weaker one"; cov_ec=1; }; \
 	python3 -m l7r.diagram.tools.hamlet_floor || cov_ec=1; \
 	exit $$cov_ec
 # ALL THREE FLOORS REPORT TOGETHER (GUARD_EDIT_OK: feature 145) - the same rule as the test phase: a first floor that
@@ -1101,5 +1105,7 @@ test:
 # coverage on the scripted procedure and anything related to it ... automatic rather than something that we just
 # remember to maintain"): every module the scripted rolls execute - derived from the roll cache's records of the
 # reference, the three gate polders and the cohort's ratchet seeds, never a hand list - must be at 100%; town/city-only
-# modules owe nothing here, and the settlement ratchet above stays. The module set: `make hamlet-floor`. The why:
+# modules owe nothing here. (GUARD_EDIT_OK: feature 174 - this line used to end "and the settlement ratchet above
+# stays"; that ratchet is retired, so what stays above is the flat 100% floor over the whole tree, and this finer
+# per-module check sits UNDER it rather than beside it.) The module set: `make hamlet-floor`. The why:
 # tools/hamlet_floor.py.

@@ -88,7 +88,7 @@ longer need to hold the legacy pool byte-identical**, so new rules ship un-flagg
 byte-identity criterion below is retired. The known cost, accepted out loud: the above-hamlet wings
 of the `settlement/` package (towns, cities, the capital) are exercised by nothing until their tiers convert,
 so the coverage gate holds 100% on every module except the `settlement/` package, which carries a RATCHET
-floor in the Makefile (`SETTLEMENT_COV_FLOOR`) - raise it as each tier converts, never lower it.
+floor in the Makefile. **Retired by feature 174 (2026-08-31)**: the wings were covered BY TESTS rather than by waiting for the conversion, so settlement/ reached 100% and the ratchet's own condition was met. The gate now holds ONE floor - 100% over the whole tree.
 A frozen map's defects against post-freeze rules are expected, not bugs; the fix is conversion.
 The frozen maps' renders (svg + png, ~195 MB) are **committed as write-once exhibits** (GM
 2026-08-16, un-ignored by name in `.gitignore`), because nothing can faithfully re-derive them
@@ -171,7 +171,7 @@ document is deliberately NOT a spec-kit feature: it outlives all of them.
    conversion may regenerate or overwrite a frozen map's committed artifacts (`git status` under
    `pool/` stays clean apart from the maps you meant to change). When the conversion of a TIER
    lands, its legacy exemplars stay frozen as exhibits; raise the Makefile's
-   `SETTLEMENT_COV_FLOOR` to cover the tier's newly re-exercised engine wing. And when a legacy
+   the coverage floor, which is now a flat 100% over the whole tree (feature 174 retired the ratchet). And when a legacy
    MAP is itself converted (superseded by a scripted version), **move its folder into `pool/`**
    (`git mv legacy-hand-authored-pool/<tier>/<map> pool/<tier>/<map>`). Its renders stop being
    committed exhibits and become derived-and-ignored by the move alone: since feature 161 the ignore
