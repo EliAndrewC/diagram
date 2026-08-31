@@ -65,15 +65,19 @@ RATCHETS = {
     ),
     "done": Ratchet(
         target="done",
-        baseline=155,
-        reason="D1, RATIFIED BY THE GM 2026-08-30: the interim baseline while done is above the 35 s "
-               "they reasoned from, giving a 201 s ceiling. Proposed by the diagram-testing session, "
-               "put to the GM with the alternative (leave done unarmed until the efficiency work "
-               "stabilizes it), and accepted with one condition: RE-PIN IT once real post-172 runs "
-               "exist. The 155 s came from a window spanning 2026-08-29/30 which predates the "
-               "parallel hooks-test, and every done run since has short-circuited, so no post-172 "
-               "full-gate measurement exists yet. A too-loose bar still catches a doubling; an "
-               "unarmed target catches nothing, which is how the 4x slowdown went unnoticed",
+        baseline=310,
+        reason="GUARD_EDIT_OK: RE-PINNED BY FEATURE 174 (2026-08-31), which is the condition the GM "
+               "attached to D1 when they ratified it on 2026-08-30 - re-pin once real runs exist. "
+               "Two things had to happen together and both have: the first post-172 full-gate "
+               "measurement was taken (310 s, `dev/run-log/`), and feature 174 CHANGED WHAT `done` "
+               "DOES, so the 155 s it replaces no longer measures the same target at all. On the GM's "
+               "own request the gate's test phase is now `test-full` on both branches, because the "
+               "100% floor cannot be held over a partial suite. The 403 s ceiling derives; the GM's "
+               "45 s and its 35 s trigger are untouched, and take over unchanged if the efficiency "
+               "work ever brings the gate back down. KNOWN AND ACCEPTED: the median is taken over "
+               "recent green runs, most of which are still cheap pre-174 ones, so the bar will not "
+               "bite until they age out - loose for a while beats unarmed, which is how the 4x "
+               "slowdown went unnoticed in the first place",
         hard_ceiling=45,
         hard_at_or_below=35,   # not yet - today's baseline is 155
         compare="median",      # D2, RATIFIED BY THE GM 2026-08-30, and BOUNDED TO THIS REGIME: while

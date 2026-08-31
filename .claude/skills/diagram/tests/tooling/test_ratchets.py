@@ -47,7 +47,7 @@ def test_the_derivation_reproduces_the_gm_s_own_numbers() -> None:
     assert ratchet.derive_ceiling(35, hard=45) == 45, "the GM's done figure"
 
 
-@pytest.mark.parametrize("baseline", [11, 12, 20, 35, 100, 155])
+@pytest.mark.parametrize("baseline", [11, 12, 20, 35, 100, 155, 310])
 def test_the_derivation_never_computes_a_ceiling_above_the_gm_s_number(baseline: int) -> None:
     """The `min()` is load-bearing and is not to be removed.
 
@@ -75,10 +75,11 @@ def test_done_uses_the_median_while_its_baseline_is_above_the_gm_s_thirty_five()
     the handoff author's decision D2 - recorded as theirs, and the GM's to overturn."""
     _c, mode = ratchet.ceiling_for(ratchet.RATCHETS["done"])
     assert mode == "median"
-    ok, _ = ratchet.verdict("done", seconds=400, median=150)
+    ceiling, _m = ratchet.ceiling_for(ratchet.RATCHETS["done"])
+    ok, _ = ratchet.verdict("done", seconds=ceiling * 2, median=ceiling - 1)
     assert ok, "a single slow run is not evidence in this regime - the median is"
-    ok201, msg = ratchet.verdict("done", seconds=10, median=201)
-    assert not ok201 and "201s ceiling" in msg
+    over, msg = ratchet.verdict("done", seconds=10, median=ceiling)
+    assert not over and f"{ceiling}s ceiling" in msg, msg
 
 
 def test_done_switches_to_the_run_and_the_gm_s_forty_five_once_the_baseline_reaches_thirty_five() -> None:
