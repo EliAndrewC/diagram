@@ -1,5 +1,7 @@
 """Split from hamletgen/ways.py by feature 173 - see this package's CLAUDE.md for the index."""
 
+from __future__ import annotations
+
 import math
 from collections.abc import Sequence
 

@@ -64,13 +64,21 @@ while not os.path.isdir(os.path.join(_D, "l7r", "diagram")):
     _D = _up
 sys.path.insert(0, _D)
 
-# Importing this package DRAWS THE MAP: each part executes at import, in this order, and each
-# imports from the one above it, so the order is enforced by Python itself rather than by this list.
-# See CLAUDE.md in this directory for what each part holds.
-from . import castle as castle  # noqa: E402,F401
-from . import civic as civic  # noqa: E402,F401
-from . import fields as fields  # noqa: E402,F401
+# Importing this package DRAWS THE MAP: each part executes at import, in this order. The order
+# is enforced by the parts themselves - each imports `s` from the one above it (see the note at
+# the top of any of them) - and this list is the readable statement of the same contract.
+#
+# `isort: off` IS LOAD-BEARING. ruff's I rule sorts an import block alphabetically, and it did:
+# the first cut of this split shipped `castle, civic, fields, frame, housing, trades, wharf`,
+# which ran `fields` - and so `s.finish()` - fourth of seven. Nothing caught it, because no test
+# rolls a wip map and the only symptom is a wrong picture. The chained imports would now defeat
+# a re-sort on their own; this keeps the list itself readable in the order it actually runs.
+# isort: off
 from . import frame as frame  # noqa: E402,F401
+from . import castle as castle  # noqa: E402,F401
+from . import wharf as wharf  # noqa: E402,F401
 from . import housing as housing  # noqa: E402,F401
 from . import trades as trades  # noqa: E402,F401
-from . import wharf as wharf  # noqa: E402,F401
+from . import civic as civic  # noqa: E402,F401
+from . import fields as fields  # noqa: E402,F401
+# isort: on

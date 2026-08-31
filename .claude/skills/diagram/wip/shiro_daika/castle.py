@@ -5,6 +5,13 @@ Importing this module EXECUTES this part of the drawing. See CLAUDE.md in this d
 
 import math
 
+# THE ORDER IS A CONTRACT, AND THIS IMPORT IS WHAT HOLDS IT. `s` comes from the part IMMEDIATELY
+# ABOVE this one, not from `frame`, so Python cannot execute this part until that one has
+# finished drawing. The first cut of this split had every part import from `frame`, which
+# constrained only that `frame` ran first - and `ruff`'s isort then sorted the list in
+# `__init__.py` ALPHABETICALLY, so `fields` (which calls `s.finish()`) ran fourth of seven and
+# the wharf, the yashiki band and the trade works drew into a map already written to disk.
+# Caught by settlement-review, 2026-08-31; invisible to the gate, which rolls no wip map.
 from .frame import CX, CY, MOAT, NRING, RX, RY, s
 
 # ---- THE CASTLE. North of center so the ceremonial approach has room to run south to the gate;

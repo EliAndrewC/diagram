@@ -3,7 +3,14 @@
 Importing this module EXECUTES this part of the drawing. See CLAUDE.md in this directory.
 """
 
-from .frame import s
+# THE ORDER IS A CONTRACT, AND THIS IMPORT IS WHAT HOLDS IT. `s` comes from the part IMMEDIATELY
+# ABOVE this one, not from `frame`, so Python cannot execute this part until that one has
+# finished drawing. The first cut of this split had every part import from `frame`, which
+# constrained only that `frame` ran first - and `ruff`'s isort then sorted the list in
+# `__init__.py` ALPHABETICALLY, so `fields` (which calls `s.finish()`) ran fourth of seven and
+# the wharf, the yashiki band and the trade works drew into a map already written to disk.
+# Caught by settlement-review, 2026-08-31; invisible to the gate, which rolls no wip map.
+from .wharf import s
 
 # ---- BUDGET RECONCILIATION (feature 021, T002 - BEFORE any pack runs). From the recorded
 # budget block: band targets yashiki 53 / detached 133 / terrace 79 (ranges of ~8 cells ->

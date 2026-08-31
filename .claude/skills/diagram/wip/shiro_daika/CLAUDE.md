@@ -6,9 +6,17 @@ still runs the same way - it is a 19-line driver now, and importing this package
 
 **THE ONE LINEAR SCRIPT of the ten files that feature 173 split.** 346 of the monolith's statements
 were drawing calls at module level and only 358 of its 1,592 lines sat inside a function, so these
-parts are SEQUENTIAL, not a library: importing a part EXECUTES it. Each part imports the names it
-needs from the part above, which is what enforces the order - `__init__.py` names them in order as
-well so the contract is readable rather than emergent. Cut at the file's own section banners.
+parts are SEQUENTIAL, not a library: importing a part EXECUTES it. Each part imports `s` from the
+part IMMEDIATELY above it, which is what enforces the order; `__init__.py` states the same order
+readably, behind `# isort: off`. Cut at the file's own section banners, and the table below is in
+execution order.
+
+**THAT CONTRACT WAS BROKEN ON THE FIRST CUT, and the way it broke is the thing to remember.** Every
+part imported from `frame`, which constrains only that `frame` runs first - so the real order came
+from the list in `__init__.py`, and `ruff`'s isort sorted that list ALPHABETICALLY. `fields`, which
+holds `s.finish()`, ran fourth of seven, and the wharf, the yashiki band and the trade works drew
+into a map that had already been written to disk. The gate was green throughout: no test rolls a wip
+map, so the only symptom was a wrong picture. Found by settlement-review, 2026-08-31.
 
 The spec first proposed exempting this file under clause 13's ordered-data carve-out.
 `spec-fidelity` rejected that: it defines six functions with real algorithms, and "execution order is

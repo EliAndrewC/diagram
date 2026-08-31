@@ -9,7 +9,15 @@ import os
 from l7r.diagram.settlement import moat_swept_tap
 from l7r.diagram.waterfields import AZE, BEAN_GREEN, aze_w, build_comb, hem_on_paddy
 
-from .frame import MOAT, PLOT_ACROSS, RIVER, ROW_STEP, s
+# THE ORDER IS A CONTRACT, AND THIS IMPORT IS WHAT HOLDS IT. `s` comes from the part IMMEDIATELY
+# ABOVE this one, not from `frame`, so Python cannot execute this part until that one has
+# finished drawing. The first cut of this split had every part import from `frame`, which
+# constrained only that `frame` ran first - and `ruff`'s isort then sorted the list in
+# `__init__.py` ALPHABETICALLY, so `fields` (which calls `s.finish()`) ran fourth of seven and
+# the wharf, the yashiki band and the trade works drew into a map already written to disk.
+# Caught by settlement-review, 2026-08-31; invisible to the gate, which rolls no wip map.
+from .civic import s
+from .frame import MOAT, PLOT_ACROSS, RIVER, ROW_STEP
 
 # the wharf works and the aqueduct now anchor the frame's east; a modest uniform margin still
 # shows each road running off the edge, and the south side carries the Imperial road caption,
@@ -421,4 +429,11 @@ s.crop_city(
     margin=36
 )  # ~110 real ft of edge (GM 2026-08-10: 400 ft of empty margin was too much)  # the south=240/east=700 overrides padded dead margin onto both flanks (GM 2026-08-10); the aggressive default frames the real content
 s.title("Shiro Daika")
-s.finish(os.path.splitext(os.path.abspath(__file__))[0].replace(".gen", ""), png_width=4600)
+# THE OUTPUT IS NAMED FOR THE MAP, NOT FOR THIS FILE. Verbatim in the monolith this read
+# `os.path.splitext(os.path.abspath(__file__))[0].replace(".gen", "")`, where `__file__` was
+# `wip/shiro-daika.gen.py` and the stem came out `wip/shiro-daika`. Moved here it became
+# `wip/shiro_daika/fields`, so the map wrote itself into its own source package under the name
+# of a module - and, because a single `*` in .gitignore does not cross `/`, straight into a
+# commit. This is the shape a "verbatim move" cannot preserve: code that reads its own location
+# at run time. State the stem instead of deriving it (settlement-review, 2026-08-31).
+s.finish(os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "shiro-daika"), png_width=4600)

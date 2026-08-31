@@ -30,6 +30,8 @@ are the actionable set.
 Usage:  python3 -m l7r.diagram.tools.pack_audit pool/<subject>.svg [more.svg ...]
 """
 
+from __future__ import annotations
+
 from .checks import DARK_MIN_OVERLAP_PX as DARK_MIN_OVERLAP_PX
 from .checks import DOOR_FLUSH_TOL_PX as DOOR_FLUSH_TOL_PX
 from .checks import DOOR_NEAR_PX as DOOR_NEAR_PX

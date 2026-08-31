@@ -1,5 +1,7 @@
 """Split from hamletgen/hinterland.py by feature 173 - see this package's CLAUDE.md for the index."""
 
+from __future__ import annotations
+
 import random
 
 from l7r.diagram.settlement import Settlement, point_in_poly, seg_dist

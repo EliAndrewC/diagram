@@ -1,5 +1,7 @@
 """Split from tools/pack_audit.py by feature 173 - see this package's CLAUDE.md for the index."""
 
+from __future__ import annotations
+
 from dataclasses import dataclass
 
 from .parse import ParsedPlan, Rect

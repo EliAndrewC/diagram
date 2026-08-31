@@ -64,9 +64,16 @@ top_up-improvement.md
 # DRAFT maps parked outside pool/ (see .claude/skills/diagram/wip/README.md): a map that is not
 # yet green cannot live in pool/, because test_villages.py sweeps pool/*/*.gen.py and would turn
 # `make done` red for every session. Its derived render is ignored exactly like a pool render.
+# A SINGLE `*` DOES NOT CROSS `/` (feature 173): `wip/shiro-daika.gen.py` became the
+# `wip/shiro_daika/` package, its render moved one directory down, and these four patterns
+# silently stopped matching - 8.7 MB of derived PNG/SVG/JSON/HTML landed in a commit before
+# the settlement-review caught it. The `**` forms cover any depth wip/ grows to next.
 .claude/skills/diagram/wip/*.svg
+.claude/skills/diagram/wip/**/*.svg
 .claude/skills/diagram/wip/*.png
+.claude/skills/diagram/wip/**/*.png
 .claude/skills/diagram/wip/*.json
+.claude/skills/diagram/wip/**/*.json
 
 # Spec-kit's ACTIVE-FEATURE pointer - per-workspace state, never shared. It was tracked until
 # 2026-08-16, when a peer session's /speckit-specify commit repointed it mid-chain and the merge
@@ -82,3 +89,4 @@ development-secrets.ini
 # feature 129: raw cProfile output stays out of this repository (FR-011a); the derived table is committed
 .claude/skills/diagram/dev/perf-raw/
 .claude/skills/diagram/wip/*.html
+.claude/skills/diagram/wip/**/*.html

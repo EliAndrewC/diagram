@@ -3,6 +3,8 @@
 Split from hamletgen.py by feature 111; bodies verbatim. See hamletgen/CLAUDE.md.
 """
 
+from __future__ import annotations
+
 # `from .x import Name` binds `x` itself as an attribute of this package, so a `from <pkg> import *`
 # in a parent carries the SUBMODULE NAMES too. Feature 173 made that bite: `hamletgen/__init__.py`
 # star-imports both `hinterland` and `homesteads`, and both packages have a `bamboo.py` and a
