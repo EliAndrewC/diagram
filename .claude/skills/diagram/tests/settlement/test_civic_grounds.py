@@ -557,31 +557,22 @@ def test_an_inn_is_recorded_as_a_NON_RESIDENTIAL_building_and_fronts_its_road() 
 
 
 def test_a_stable_yards_hitching_rail_is_set_back_off_the_ROADBED_and_runs_ALONG_it() -> None:
-    """Feature 174, branch coverage for the road-parallel edge rail.
+    """GM 2026-07-24: the rail is probed at its FULL extent - both tips plus the post reach, not just
+    its centre - because "a tip on the roadbed or against the rampart is exactly what the rail exists
+    to prevent". A centre-only probe passes a rail whose end lies in the road.
 
-    GM 2026-07-24: the rail is probed at its FULL extent - both tips plus the post reach, not just
-    its center - because "a tip on the roadbed or against the rampart is exactly what the rail exists
-    to prevent". A center-only probe passes a rail whose end lies in the road.
-
-    Asserted by what lands: with a road beside the yard a rail is drawn, it sits off the roadbed on
-    the yard side, and it runs parallel to the road rather than across it.
+    THE ROAD MUST BE NEARER THAN THE YARD'S OWN RADIUS for this branch to run at all (`best_seg[0] <
+    r`). The first version of this test put a road 100 px from an r=80 yard, found the INTERIOR rails
+    in the range it was looking at, and passed while the road-rail branch never fired - which is the
+    failure mode this whole feature keeps meeting, and the argument for measuring coverage per test
+    rather than trusting a green assertion.
     """
     s = _crop_settlement()
-    s.road([(0.0, 300.0), (2000.0, 300.0)], width=26)
+    s.road([(0.0, 350.0), (2000.0, 350.0)], width=26)  # 50 px from the yard centre, inside its r=80
     s.animal_ground(500.0, 400.0, r=80)
     s.flush_stable_yards()
     rails = s.M["stable_yards"][-1].get("rails") or []
-    assert rails, "a yard beside a road gets rails"
-    # the EDGE rail is the one set back off the roadbed, between the road and the yard centre
-    edge = [r for r in rails if 300.0 < r["y"] < 400.0]
-    assert edge, f"one rail stands between the roadbed and the yard centre: {[round(r['y'], 1) for r in rails]}"
-    assert all(abs(r["ty"]) < abs(r["tx"]) for r in edge), "and it runs ALONG the level road, not across it"
-
-
-# NOT ASSERTED, and the reason is recorded rather than the test left failing: a second test claimed
-# the edge rail's TANGENT follows a vertical road. It does not - with a vertical road the yard's
-# rails all came back horizontal (tx=1.00), which means what landed were the INTERIOR rails and the
-# road-parallel edge rail was refused for that geometry. Whether that is right is a question for
-# whoever owns `_yard_road_rail`; what is wrong is asserting a behaviour I had not observed. The
-# test above asserts only what was measured: with a level road, a rail stands between the roadbed
-# and the yard centre and runs along it. (feature 174)
+    on_the_verge = [r for r in rails if abs(r["y"] - 350.0) < 40.0]
+    assert on_the_verge, f"the road rail is placed: {[round(r['y'], 1) for r in rails]}"
+    assert all(r["y"] > 350.0 for r in on_the_verge), "set back off the roadbed, on the yard side"
+    assert all(abs(r["ty"]) < abs(r["tx"]) for r in on_the_verge), "and running ALONG the level road"
