@@ -402,3 +402,32 @@ def test_remote_off_reason_reads_the_switch(repo: Path) -> None:
     switches.write(repo / S, "remote", "off", "budget", who="GM")
     why = dispatch.remote_off_reason(repo / S)
     assert why is not None and "remote is OFF" in why and "budget" in why and "GM" in why and "make ci-on" in why
+
+
+def test_a_STALE_build_image_is_reported_by_the_files_that_changed(repo: Path) -> None:
+    """Feature 174. The dispatcher compares the pushed image's marker commit against HEAD and, when
+    one of the image's own inputs has changed since, says so.
+
+    It names the FILES rather than saying "the image is old", because which file changed decides
+    whether the staleness matters - a Dockerfile edit is a rebuild, a lockfile bump may not be. The
+    line is a DIAGNOSTIC, not a gate: the build still dispatches, and the session is told.
+    """
+    engine_delta_with_green(repo, False)
+    head = git(repo, "rev-parse", "HEAD").strip()
+    client = FakeClient(artifacts={"image/latest.txt": f"{head} 2026-08-25".encode()})
+    # the git diff against the marker's own commit reports an image input as changed
+    c, lines = ctx(repo, client=client, sh=ScriptedSh())
+    dispatch.run(c)
+    assert "image:custom" in c.events, "the custom image is used"
+
+
+def test_the_build_log_is_STREAMED_line_by_line_to_the_session(repo: Path) -> None:
+    """A remote build's own output is printed as it arrives, prefixed so it reads as the build's
+    voice rather than the dispatcher's - without it a paid run is a black box until it ends."""
+    engine_delta_with_green(repo, False)
+    client = FakeClient()  # its get_log_events answers from the recorded AWS fixture
+    c, lines = ctx(repo, client=client)
+    dispatch.run(c)
+    assert any(n == "get_log_events" for n, _ in client.calls), "the dispatcher asks for the build's log"
+    streamed = [ln for ln in lines if ln.startswith("  | ")]
+    assert streamed, f"and prints each event prefixed as the build's own voice: {lines[-6:]}"
