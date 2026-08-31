@@ -13,9 +13,33 @@ the Makefile collects TREES, and where you put a test is the whole decision.
 |---|---|---|
 | `tests/` (with its mirrored packages) | `make quick`, `make done`, the full run | it is a UNIT form: milliseconds to ~0.5 s, no map rolled, no tooling run. The quick suite's 60 s budget is the bar |
 | `tests/gate/` | `make done` and the full run - never quick | it earns MERGE time: a real roll of one representative spec (served from the roll cache while nothing it executes changed - `l7r/diagram/pipeline/rollcache.py`), the bad-map corpus, a proof of tooling |
-| `tests/full/` | `make done FULL=1` and the AWS check only | it is a SWEEP or a CARRIER: every pool map, every seed of a cohort, a determinism test that must roll twice for real, a fixture replayed only to carry coverage, a real-map cache round trip. The full run is where the coverage floors are enforced - including the derived 100% floor on every module the scripted hamlet rolls execute (feature 145, `make hamlet-floor`) - and where no cache serves a roll |
+| `tests/full/` | `make test-full`, `make done FULL=1` and the AWS check | it is a SWEEP or a CARRIER: every pool map, every seed of a cohort, a determinism test that must roll twice for real, a fixture replayed only to carry coverage, a real-map cache round trip. The full run is where the coverage floors are enforced - including the derived 100% floor on every module the scripted hamlet rolls execute (feature 145, `make hamlet-floor`) - and where no cache serves a roll |
 | `tests/tooling/` | the gate and the full run; quick ONLY when the tooling changed since the last green gate; skipped at the gate too while it is unchanged (never in FULL) | it RUNS the make/ci/pipeline tooling (make in a fixture, git repos in tmp, coverage subprocesses) |
 | `tests/tier_town/`, `tests/tier_city/` | the gate and the full run; quick once the scope lock moves to that tier | it is relevant to that tier only |
+
+## WHICH TARGET RUNS WHICH TREE - the table above read the other way round
+
+The table says where to PUT a test. This one says what each command actually collects, because the
+names do not say it and a session got it wrong on 2026-08-31, in the direction that matters: it told
+the GM `make test-full` ran less than the whole suite.
+
+| command | `tests/` | `gate/` | `full/` | `tooling/` | `tier_*/` | floors |
+|---|---|---|---|---|---|---|
+| `make quick` | yes | no | no | only if the tooling changed | no | no |
+| `make done` | yes | yes | no | only if its stamp is stale | under the lock, no | no - deferred |
+| **`make test-full`** | **yes** | **yes** | **yes** | **yes** | **yes** | **all three** |
+| `make done FULL=1` | as `test-full` - it RUNS `test-full` | | | | | all three |
+
+**`make test-full` DESELECTS NOTHING.** Everything is keyed on `COV_FLOORS`, which it sets, and each
+deselection is written `$(if $(COV_FLOORS),,<the deselection>)` - present only when it is EMPTY:
+`FULL_TREE_IGNORE`, `ROLL_DESELECT` and `TIER_SELECT` all switch off, `L7R_TESTS_FULL=1` and
+`EXHAUSTIVE` switch on. The tooling ignore is not even in that family - it lives only in `QUICK_TREE`,
+so `make quick` is the ONLY target that ever skips a tooling test.
+
+**So what does `done FULL=1` add over `test-full`? NOT MORE TESTS.** It adds the non-test phases:
+`lint`, `format`, `typecheck`, the reference map roll, `hooks-test`, `perf-gate` - and the paid-run
+prompt. The pool sweep is NOT one of them; it is `full/test_villages.py::test_village_passes_gate`, a
+pytest test, and `test-full` runs it. **`test-full` = the full TESTS; `done FULL=1` = the full GATE.**
 
 The marker on a test (`rolls_map`, `tooling`, `tiers`) is the exact filter within a tree; the tree
 is the collection scope. `make quick` announces how many `rolls_map` tests it did not run; the gate
