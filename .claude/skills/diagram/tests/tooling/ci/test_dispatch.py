@@ -154,7 +154,10 @@ def test_check_dispatches_exactly_one_build_and_records_it(repo: Path, monkeypat
     uuid = out.build_id.split(":")[-1]
     assert ("put_object", f"go/{uuid}") in client.calls, "the build is released only after the reference check, and the key is the uuid the build polls"
     assert ("delete_object", f"go/{uuid}") in client.calls, "the fake build never consumes its signal, so the dispatcher's leftover cleanup removes it"
-    assert c.events == ["lint:0", "push:0", "image:stock", f"start_build:{out.build_id}", "reference:0", "go", "go:cleaned"]
+    # `cache:<scope>` since feature 175 - the generation cache is configured per (project, scope), and
+    # the event records WHICH cache the build was pointed at. It sits beside `image:` because both are
+    # start_build overrides decided just before the call.
+    assert c.events == ["lint:0", "push:0", "image:stock", "cache:reference", f"start_build:{out.build_id}", "reference:0", "go", "go:cleaned"]
     assert "imageOverride" not in kw, "no image marker in the bucket: the stock image bootstraps"
     logs = [json.loads(p.read_text(encoding="utf-8")) for p in (repo / S / "dev" / "run-log").glob("*.json")]
     assert len(logs) == 1 and logs[0]["where"] == "codebuild" and logs[0]["build_id"] == out.build_id and logs[0]["result"] == "SUCCEEDED" and logs[0]["minutes"] == 1.0

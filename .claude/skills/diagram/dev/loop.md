@@ -539,3 +539,47 @@ you can name and test, decline where they are incidental to that map's geometry 
 HYPOTHESIS and was not what happened.** The incidental lines it worried about turned out to be covered
 by other tests, so the merge was free. Keep the distinction as a thing to CHECK; do not use it to
 decline a merge without running the measurement, which costs one FULL run and answers exactly.
+
+## A TIMING FROM THIS BOX IS NOT A TIMING - THE CORES ARE NOT THE SAME SPEED (measured 2026-08-31)
+
+The GM asked why our map rolls do not parallelize, and correctly ruled out the obvious answer:
+*"I thought that our parallelization was actually letting us use different CPUs ... xdist dispatches
+to workers, which are actually different processes so that the global interpreter lock isn't an
+issue."* That is right. The GIL is not involved. **The cores are not the same speed.**
+
+`lscpu -e=CPU,CORE,MAXMHZ` on this container's host - an Intel Core Ultra 7 155H, 22 logical CPUs
+over 16 physical cores - reports three tiers:
+
+    cpu0-11    4500-4800 MHz   P-cores (6 physical, hyperthreaded)
+    cpu12-19   3800 MHz        E-cores (8)
+    cpu20-21   2500 MHz        LP-E cores (2)
+
+And the SAME roll (`GATE_NO_CACHE=1 make reference`, pinned with `taskset`, idle box):
+
+| pinned to | clock | wall | vs P-core |
+|---|---|---|---|
+| cpu1 (P) | 4800 MHz | **15.7 s** | - |
+| cpu16 (E) | 3800 MHz | **21.0 s** | 1.34x |
+| cpu20 (LP-E) | 2500 MHz | **32.1 s** | **2.04x** |
+
+**A roll is twice as slow on a low-power core as on a performance core**, which is more than the
+1.92x clock ratio - so IPC differs too, and the gap is not recoverable by reading the MHz.
+
+**WHAT THIS MEANS FOR EVERY NUMBER IN THIS FILE.** `-n 8` spawns eight workers and the scheduler
+places them; a batch's wall time is set by its SLOWEST worker, so one test drawing an LP-E core can
+double that batch. Consequences, in order of how much they will mislead you:
+
+1. **A test that "got slower" may simply have landed on a slower core.** Before believing a
+   regression, re-run it - and prefer a pinned or repeated measurement over a single reading.
+2. **Adding workers has diminishing and then NEGATIVE returns here**, because the marginal worker
+   goes to a slower core while the fast ones gain a hyperthread sibling. This is why "more parallel"
+   has not helped the roll phase, and it is NOT a statement about Python or the GIL.
+3. **The `quick` ratchet is a hard 15 s on the RUN ITSELF** (`_ratchet.py`), not on a median. On a
+   busy box, an unlucky placement is a plausible false failure that would read as a regression.
+   Not yet observed - flagged, not measured.
+4. **It says nothing about CodeBuild.** Remote vCPUs are homogeneous, so this effect does not exist
+   there; do NOT carry a conclusion about parallel scaling from this laptop to the build.
+
+**The method, when a timing matters: idle box, `taskset` to pin, and say which core class you
+pinned to.** An unpinned single reading on this hardware carries a 2x uncertainty band, which is
+wider than most of the differences this file records.

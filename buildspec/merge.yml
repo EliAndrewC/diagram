@@ -2,6 +2,18 @@
 # except MODE, which makes run.sh fast-forward-push the verified merge result to main and delete
 # the mailbox. A non-fast-forward rejection fails the build ("main moved; re-run") - no retry.
 version: 0.2
+# The generation cache, identical to check.yml's - see that file for what each line is and, more
+# importantly, for what is deliberately absent (`*.png`, `*.html`) and why adding either would be a
+# defect rather than an improvement. Kept in both files rather than shared because a buildspec is
+# passed whole as `buildspecOverride`; if these two ever disagree,
+# `tests/tooling/ci/test_cache.py` fails.
+cache:
+  paths:
+    - 'repo/.claude/skills/diagram/.gencache/*/*.json'
+    - 'repo/.claude/skills/diagram/.gencache/*/*.svg'
+    - 'repo/.claude/skills/diagram/.gencache/*/coverage.*'
+    - 'repo/.claude/skills/diagram/.gencache/ast/**/*'
+    - 'repo/.claude/skills/diagram/.gencache/rolls/**/*'
 env:
   variables:
     MODE: merge
