@@ -238,3 +238,24 @@ A split that changes a manifest is a defect in that split, not an accepted cost.
 | D5 | `specs/` is excluded - a record of past work, including fourteen retired splitters, is not loaded code | decided |
 | D6 | clause 12 (function size) is out of scope - the other half of the same deferred TODO, not asked for | deferred |
 | D7 | the per-module coverage consequence of a split lands at `FULL=1`, which has never been green - inherited limit, stated not created (R4) | accepted |
+
+## Review history
+
+Constitution XVI: reviewed against [`request.md`](request.md) by an independent `spec-fidelity`
+subagent, up to five rounds. **Three rounds; FAITHFUL at round 3.**
+
+| round | verdict | what it found |
+|---|---|---|
+| 1 | CHANGES REQUIRED | **The one that mattered: D4.** The spec proposed exempting `wip/shiro-daika.gen.py` under clause 13's ordered-data carve-out. The reviewer READ the file instead of the spec's description of it and returned NOT LEGITIMATE on three grounds - it defines six functions with real algorithms (`_well_blocks` is 55 lines with a nested helper; `_point_in` is point-in-polygon) and threads mutable engine state, so it is a program, not a dataset; "execution order is a contract" is true of nearly every imperative module here, `hamletgen/ways.py` above all, so admitting it lets the carve-out swallow the rule; and the file is tracked, un-gitignored and inside the lint and type toolchain, so it is not the frozen-exhibit case FR-002 excludes by path. Also: FR-006 wrote a procedure document the GM had asked to be TOLD about, not asked for; and three counts were wrong |
+| 2 | CHANGES REQUIRED | the residue of round 1's own fixes - three places still named the cut `docs/file-splitting.md`, including inside a CONSTITUTION amendment, which would have left the feature either writing the document after all or amending the constitution to point at a file that will never exist. Verified independently that all three doctrine statements FR-008 amends really do say the rule is ungated, so FR-008 is a consequence of the request rather than an expansion. Also caught `research.md` R1's headline still saying fourteen exemplars where its own body said eighteen |
+| 3 | **FAITHFUL** | grepped for any surviving reference to a procedure document and found only the three that RECORD the rejected option, which this project requires be kept. Re-verified every checkable claim against the tree rather than accepting it: 18 package indexes beside an `__init__.py`, 13 with the literal "look here when" header and exactly the 5 named routing under a different one; the constitution's v1.6.1 deferred TODO at line 328; that the GM's `nl -b a` census equals raw `wc -l`; and that the pasted census has exactly ten rows over 1,000. Stated plainly that the trend was convergence, not a persistent misunderstanding: one substantive error, then its own residue, then nothing |
+
+**The carve-out therefore ships with ZERO files using it**, which is the outcome the mechanism wanted:
+a rule with a stated exit, rather than a rule with a hole opened by its own author on day one.
+
+**Separately, `settlement-review` audited the delta after implementation** and caught three errors the
+green gate structurally could not reach - the `wip/shiro_daika/` parts executing in alphabetical
+order because ruff's isort sorted the list `__init__.py` relied on (so `s.finish()` ran fourth of
+seven and 383 lines of the map never drew), a `__file__`-derived output path, and a `.gitignore` glob
+that stopped matching when the file became a directory. All three fixed; the row is in
+[`docs/review-ledger.md`](../../docs/review-ledger.md).
