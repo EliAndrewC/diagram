@@ -198,3 +198,33 @@ def test_a_forest_is_DETERMINISTIC_so_it_never_perturbs_house_placement() -> Non
     b.meta(name="C", scale="city")
     b.forest(edge)
     assert a.M["forest"] == b.M["forest"], "the same wood twice, identically"
+
+
+def test_a_STEEP_hill_draws_emphasized_downslope_hachures() -> None:
+    """ "closely-spaced, longer ticks read as a steep, undefendable-on-foot slope" - the flag exists
+    so a hill that a map's story says cannot be climbed reads that way at a glance, rather than
+    being told to the reader in prose."""
+    gentle = Settlement(1200, 1200, seed=3)
+    gentle.hill(600.0, 600.0, 200.0, 150.0)
+
+    steep = Settlement(1200, 1200, seed=3)
+    steep.hill(600.0, 600.0, 200.0, 150.0, steep=True)
+    assert len(steep.out) > len(gentle.out), "the steep hill carries its extra hachures"
+    assert steep.M["hill"] == gentle.M["hill"], "and is the same mound - only its shading differs"
+
+
+def test_a_PRIMARY_hall_is_recorded_as_the_settlements_own_shrine() -> None:
+    """`M["shrine"]` is what the torii checks key on, so exactly one hall per settlement claims it -
+    a secondary monastery must not overwrite the tutelary shrine's entry."""
+    s = Settlement(1400, 1400, seed=3)
+    s.meta(name="C", scale="city")
+    s.shrine_hall(400.0, 400.0, "Monastery of Jurojin")
+    assert not s.M.get("shrine"), "an ordinary hall claims nothing (the key is present but empty)"
+
+    s.shrine_hall(900.0, 900.0, "Temple of Benten", primary=True, sublabel="the county's tutelary")
+    assert s.M["shrine"], "the primary hall records the settlement's shrine box"
+    assert abs(s.M["shrine"][0] - (900.0 - s.M["religious"][-1]["w"] / 2)) < 1.0, "as its own footprint"
+    # captions are QUEUED and drawn in the label phase (feature 157), so the phase is run before the
+    # manifest is read - a test that reads M["labels"] straight after the call finds nothing
+    s.place_labels()
+    assert any("tutelary" in str(lb) for lb in s.M["labels"]), "and its sublabel is drawn beneath it"
