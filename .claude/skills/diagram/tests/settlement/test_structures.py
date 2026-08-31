@@ -895,3 +895,35 @@ def test_servant_ranges_with_no_samurai_ward_attaches_NOTHING() -> None:
     s.meta(name="W", scale="city", ftpx=3)
     s.building(500.0, 500.0, 30.0, 20.0, "samurai", 0.0)
     assert s.servant_ranges() == 0
+
+
+def test_servant_ranges_sweeps_SINGLETON_records_as_well_as_lists() -> None:
+    """`_solid_records` walks the manifest rather than a hand list of keys - "the first cut here
+    tested only `buildings` and `houses`", and the sweep is what stops a new feature type being
+    invisible to the range placer.
+
+    Two record SHAPES exist and both must be swept: most keys hold a LIST of dicts, but the
+    singletons (`governor_mansion`, `theater_stage` before it became a list) hold ONE dict. A sweep
+    that handles only lists walks straight past the governor's mansion.
+    """
+    s = _ward_city_with_samurai((600, 600, "samurai", 0.0))
+    s.M["governor_mansion"] = {"x": 600.0, "y": 640.0, "w": 120.0, "h": 90.0, "rot": 0.0}
+    assert s.servant_ranges() == 0, "a singleton record blocks the ground behind the house like any other solid"
+
+
+def test_a_servant_range_keeps_off_a_ROAD_an_ALLEY_and_a_RING_ROAD_alike() -> None:
+    """ "a range is a building on the verge, not an obstruction in the roadbed" - and the verge is
+    read from four keys, not one. Each is asserted on its own map, because a bed list that silently
+    lost a key would still pass a test that only laid a town street.
+    """
+    for key, record in (
+        ("road", [(400.0, 600.0), (800.0, 600.0)]),
+        ("ring_road", [(400.0, 600.0), (800.0, 600.0)]),
+    ):
+        s = _ward_city_with_samurai((600, 600, "samurai", 0.0))
+        s.M[key] = record
+        assert s.servant_ranges() == 0, f"no range stands in the {key}"
+
+    alleyed = _ward_city_with_samurai((600, 600, "samurai", 0.0))
+    alleyed.M["alleys"] = [{"pts": [(400.0, 600.0), (800.0, 600.0)], "w": 40}]
+    assert alleyed.servant_ranges() == 0, "nor in an alley"
