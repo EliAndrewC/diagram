@@ -181,3 +181,36 @@ def test_a_TILTED_caption_measures_its_neighbours_on_their_TRUE_QUADS() -> None:
     s.building(600.0, 600.0, 120.0, 40.0, "kura", 35.0)  # a rotated neighbour
     seat = s._best_label_spot((400.0, 560.0, 520.0, 600.0), "a caption", 9.0, tilt=-32.0)
     assert seat is not None, "a tilted caption is seated against the rotated neighbour's true quad"
+
+
+def test_label_hits_counts_a_caption_against_every_LINEAR_feature_it_could_lie_on() -> None:
+    """`_label_hits` is the score `_best_label_spot` minimises, and it counts the caption against
+    each family separately - the wall, the moat, the road and the streams. A family it does not
+    count is one a caption may be laid across for free.
+
+    Each is asserted on its own, because they are separate clauses: a test with one feature present
+    passes with the other three deleted.
+    """
+
+    def _hits(**M_extra):
+        s = Settlement(1200, 1200, seed=18)
+        s.meta(name="C", scale="city")
+        s.M.update(M_extra)
+        return s._label_hits(600.0, 600.0, "a caption", 9.0)
+
+    assert _hits() == 0, "a caption over open ground hits nothing"
+    assert _hits(wall=[(300.0, 600.0), (900.0, 600.0)]) > 0, "one laid across the rampart hits it"
+    assert _hits(moat=[(300.0, 600.0), (900.0, 600.0)]) > 0, "and across the moat"
+    assert _hits(road=[(300.0, 600.0), (900.0, 600.0)], road_width=30.0) > 0, "and across the road"
+    assert _hits(streams=[{"poly": [(300.0, 600.0), (900.0, 600.0)], "w": 9}]) > 0, "and across a stream"
+
+
+def test_label_hits_counts_a_gate_STRUCTURE_a_caption_would_cover() -> None:
+    """The gatehouse and the wall towers are recorded boxes rather than lines, so they are counted
+    by containment rather than by distance - a caption over a guard station is as bad as one over
+    the wall it stands on."""
+    s = Settlement(1200, 1200, seed=18)
+    s.meta(name="C", scale="city")
+    s.M["gate_structs"] = [{"x": 600.0, "y": 600.0, "w": 96.0, "h": 46.0}]
+    assert s._label_hits(600.0, 600.0, "a caption", 9.0) > 0, "the caption covers the guard station"
+    assert s._label_hits(200.0, 200.0, "a caption", 9.0) == 0, "and clear of it, nothing is hit"
