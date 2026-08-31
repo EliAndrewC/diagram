@@ -86,7 +86,19 @@ TRIPWIRE_SEEDS = (27, 33, 37, 41, 47)
 TRIPWIRE_EXPECTED: dict[int, frozenset[str]] = {
     # feature 137 (2026-08-28): rows come OUT as the fixes land - 37 fixed and 27/47 shrunk by the orphan joiner's ladder (T03);
     # 27 fixed by the splice fixes (a join link stops at the first way it meets; no retrace, no lattice jog)
-    47: frozenset({"lanes_form_one_network", "lanes_reach_something", "long_ditches_have_a_footbridge"}),
+    #
+    # EMPTY SINCE 2026-08-31, and NOT because the last map was fixed. Seed 47's row pinned
+    # `lanes_form_one_network`, `lanes_reach_something` and `long_ditches_have_a_footbridge` - three
+    # CHECK-BATTERY checks, and feature 166 deleted the battery. A report now carries only what the
+    # driver self-reports, so the seed comes back CLEAN, and `tripwire_verdict`'s stale-pin branch
+    # fires exactly as designed: "CLEAN but pinned as expected [...] - STALE PIN, drop its row".
+    #
+    # WHY IT TOOK A REMOTE BUILD TO SEE IT. `mapcheck` chooses its own scope from how the last run
+    # went, and on a laptop whose last run passed it rolls the POOL TIER - which never reaches these
+    # seeds. Two CodeBuild runs, with no such state, took the seed path and failed on it twice. This
+    # is the third feature-166 leftover found the same way (`.explain.py`, the phantom
+    # `check_village/` directory, this), and all three shared one shape: a reference to the battery
+    # that no local run happened to execute.
 }
 
 

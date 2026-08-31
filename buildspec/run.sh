@@ -23,7 +23,22 @@ SKILL=.claude/skills/diagram
 echo "== fetch: $GITHUB_REPO @ $MAILBOX ($GIT_SHA), mode=$MODE target='$MAKE_TARGET' scope=$CI_SCOPE"
 # the buildspec's install phase already cloned once (to fetch this script); reuse it - a blob:none
 # clone of this repository measured ~56 s on the first real build, and paying it twice is waste
+# THE CACHE ARRIVES BEFORE THE SOURCE (feature 175). CodeBuild restores its S3 cache during
+# DOWNLOAD_SOURCE, and the cached paths live under `repo/.claude/skills/diagram/.gencache/` - so on any
+# build after the first, `repo/` ALREADY EXISTS holding nothing but the generation cache. `mv bootstrap
+# repo` then moves bootstrap INSIDE it as `repo/bootstrap` instead of renaming, and `cd repo` lands in a
+# directory with no `.git`: build a48b730d died at the next git call with exit 128, one billed minute.
+# So the restored cache is set aside, the clone proceeds exactly as before, and the cache is laid back
+# down on top of the checkout. `cp -a` rather than `mv` for the return leg because the tree it merges
+# into already exists.
+# MOVE THE WHOLE DIRECTORY, never `repo/*`: the cached tree's top entry is `.claude`, and a glob does
+# not match a leading dot. The first draft of this used `mv repo/* "$tmp"/` and silently dropped the
+# entire cache while looking like it had preserved it - caught by a local simulation rather than by
+# another billed build, which is the only reason it is not a fifth failed dispatch.
+restored=""
+if [ -d repo ] && [ ! -d repo/.git ]; then mv repo .cache-restore && restored=1; fi
 if [ -d bootstrap/.git ]; then mv bootstrap repo; else git clone -q --filter=blob:none "https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPO}" repo; fi
+if [ -n "$restored" ]; then cp -a .cache-restore/. repo/ && rm -rf .cache-restore && echo "== cache: generation cache laid over the checkout"; fi
 cd repo
 git checkout -q -- . 2>/dev/null || true
 git config user.name "gm-assistant-ci"; git config user.email "ci@gm-assistant.invalid"

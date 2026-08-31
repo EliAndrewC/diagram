@@ -32,7 +32,7 @@ from pathlib import Path
 from typing import Any, Protocol
 
 from l7r.diagram import switches
-from l7r.diagram.ci import config, decision, door, features, runlog, state
+from l7r.diagram.ci import config, decision, door, features, imagecheck, runlog, state
 from l7r.diagram.ci.delta import compute_delta, engine_key
 
 ShResult = tuple[int, str]
@@ -331,9 +331,23 @@ def run(ctx: Context) -> Outcome:
     # take. Measured the hard way: the first real dispatch (build 6913a24d, 2026-08-25) carried an
     # unconditional override and died in PROVISIONING with "manifest unknown" - one billed minute.
     image_kw: dict[str, Any] = {}
-    if ctx.client.get_object(ctx.secrets.ci_bucket, "image/latest.txt") is not None:
+    marker = ctx.client.get_object(ctx.secrets.ci_bucket, "image/latest.txt")
+    if marker is not None:
         image_kw = {"imageOverride": f"{ctx.secrets.ecr_image}:latest", "imagePullCredentialsTypeOverride": "SERVICE_ROLE"}
     ctx.events.append("image:custom" if image_kw else "image:stock")
+    # IS THE PUSHED IMAGE STILL BUILT FROM THIS TREE'S RECIPE? (feature 175). A stale image cost three
+    # days of a broken gated push route in 2026-08, and nothing could say so: the image is a DERIVED
+    # ARTIFACT in ECR with no link back to the files it came from. The marker already records the
+    # commit it was built at, so the answer is one `git diff` over the recipe and the lockfiles.
+    # WARNS, never refuses - see `imagecheck` for why a block would be worse than the disease.
+    if marker is not None:
+        built_at = imagecheck.marker_commit(marker.decode("utf-8", "replace"))
+        if built_at:
+            rc, changed = ctx.sh(["git", "diff", "--name-only", built_at, "HEAD", "--", *imagecheck.IMAGE_INPUTS], ctx.root, None)
+            line = imagecheck.staleness_line(imagecheck.stale_inputs(changed.split())) if rc == 0 else None
+            if line:
+                ctx.out(f"ci: {line}")
+                ctx.events.append("image:stale")
     # THE CACHE TRAVELS WITH THE CALL, for the same reason the buildspec does (feature 175): a cache
     # configured on the PROJECT is state nobody can review, while an override is reviewable in a diff.
     cache_kw: dict[str, Any] = {"cacheOverride": {"type": "S3", "location": cache_location(ctx.secrets.ci_bucket, project, ctx.scope)}}

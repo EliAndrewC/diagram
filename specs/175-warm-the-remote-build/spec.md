@@ -105,6 +105,54 @@ re-opens the question. (`spec-fidelity` round 2, recommended not required.)
 To be completed during implementation, per constitution XII - each as **accurate**, **deliberate
 deviation** or **guess**:
 
+**MEASURED 2026-08-31 on real builds, not fixtures.**
+
+- **D1 the cached set** - ACCURATE. Cached: the manifest, the `.svg` the z-order audit reads,
+  `coverage.*` (without which `gate_obtain` cannot HIT at all), `meta.json`, `ast/`, `rolls/`.
+  Excluded: `.png` (a gate-built entry HAS none - `DIAGRAM_SKIP_RENDER=1` - and `load()` deletes a
+  standing output its entry lacks, which is the 2026-08-17 stale-raster defect) and `.html` (~65 MB;
+  no test in `tests/` or `tests/full/` reads a pool map's page, `pool_index` links it only
+  `if os.path.exists(...)`, `render_cache` checks `.svg`/`.png` only).
+- **D1a the measured size** - ACCURATE, read off the built object, not summed from research:
+  **2.78 MiB** (reference gate) and **2.53 MiB** (tripwire). Against the naive 221 MB local
+  directory that is ~1%. The local figure was never the payload: **CodeBuild's cache is populated BY
+  THE BUILD**, so what travels is what a gate-built remote run produces - which has no `.png` at all.
+- **D2 the key** - ACCURATE. `cache/<project>/<scope>` (`dispatch.cache_location`), so at most
+  `2 projects x {full, reference}` = FOUR objects however many builds run. CodeBuild appends its own
+  UUID (`cache/gm-assistant-check/reference/3f24faba-...`), and that UUID is **stable per location**:
+  three separate uploads produced ONE object, verified by listing the prefix.
+- **D3 the expiry** - GUESS, and NOT the effective number. 30 days was reasoned from the gap between
+  builds; the bucket already carried `expire-ci-junk` (Prefix `''`, 14 days) and **S3 applies the
+  SHORTEST overlapping expiration**, so objects die at 14. The rule still earns its place: the
+  catch-all has no `AbortIncompleteMultipartUpload` and this one does.
+- **D4 the `.html` ruling** - ACCURATE, settled in the direction of exclusion, evidence in D1.
+- **D5 does it pay?** - **YES, MEASURED.** Two `TARGET=tripwire` builds on identical content, the
+  second with the cache the first left: BUILD phase **189 s -> 158 s (-31 s, -16.4%)**, billed
+  **5 min -> 4 min ($0.40 -> $0.32, -20%)**. Both failed at the same point (seed47), so the compared
+  work is identical. The 31 s is about one reference-map roll, which is exactly what a
+  reference-scope cache holds - **the saving matches the mechanism**, which is what makes it
+  attributable rather than noise (SC-001). SC-004 also holds: the cold run, with the object deleted,
+  ran normally and failed on a map rather than on the missing cache.
+
+**THE FULL-SCOPE CACHE: SIZE MEASURED, TIMING STILL OWED (2026-08-31).** Applying the buildspec's own
+globs to a locally FULL-populated `.gencache/` selects **144.1 MiB** of its 217 MiB, excluding 72.9 MiB
+of `.png`/`.html`. Of that, `rolls/` is **51.9 MiB** and a FULL build writes NONE of it
+(`rollcache.bypassed()`), so the FULL payload is about **92 MiB** - the five pool maps' gate entries
+plus `ast`. That is **33x the reference scope's 2.78 MiB**, which makes R6.2 concrete: restoring 92 MiB
+is a real cost to weigh against regenerating five maps, and FR-010 says narrow the set and re-measure
+if it does not pay.
+
+The TIMING half cannot be taken on demand: `ci-check` requires an engine-path delta (`route-is-gated`,
+computed and with no local override), and there is none owed - a scan for surviving references to the
+deleted battery came back clean, so no genuine engine change was available to serve as one. It rides
+on the next real engine change, which is the correct place for it: a build that verifies nothing is
+exactly what that condition exists to refuse.
+
+**NOT MEASURED, and owed before anyone quotes a FULL figure:** the FULL-scope cache, which would hold
+the five pool maps' gate entries rather than one reference roll. It should save more, and that is a
+prediction rather than a result - this session had four predictions overturned by measurement in one
+day.
+
 - D1 the cached set and the evidence for each inclusion/exclusion (FR-002, FR-003, FR-004)
 - D1a **the measured size of the built cache, in MB, per run mode**, against the naive 221 MB - the
   GM's item 2, and a figure read off the artifact rather than summed from research (FR-002a)

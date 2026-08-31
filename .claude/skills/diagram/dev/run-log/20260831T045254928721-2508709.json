@@ -1,0 +1,14 @@
+{
+  "utc": "2026-08-31T04:52:54Z",
+  "target": "ci-check",
+  "scope": "operation",
+  "seconds": 260,
+  "result": "FAILED",
+  "commit": "53d0915a",
+  "where": "codebuild",
+  "build_id": "gm-assistant-check:8f856349-4cf2-4931-a202-91831d2ec693",
+  "minutes": 5.0,
+  "cost_usd": 0.4,
+  "compute": "BUILD_GENERAL1_XLARGE",
+  "reason": "tripwire"
+}

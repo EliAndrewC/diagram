@@ -1,0 +1,7 @@
+{
+  "utc": "2026-08-31T04:25:28Z",
+  "target": "ci-image",
+  "commit": "5796dd99",
+  "outcome": "permitted",
+  "why": "SESSION-ANSWERED at a pseudo-terminal, not the GM at a keyboard. GM 2026-08-31 authorized this rebuild in their own words: \"I do agree that we should rebuild the image, though. especially since the gated push route is currently broken for everyone\", and clarified the standing rule: \"The intention behind something being mine to run is that it should only happen on my authorization, not that it should be impossible for you to kick it off.\" CAUSE, measured: the ECR image was built 2026-08-25 (marker cad3bdac, 2026-08-25T11:46:54Z) and feature 142 replaced mypy with pyrefly on 2026-08-28, so every remote build fails at typecheck with Error 127 - pyrefly is not on PATH. Dockerfile.ci line 26 already verifies pyrefly; only the pushed image is stale. Found by build 2880f0eb, the first dispatch since remote was switched off on 2026-08-25 - the gate could not have failed visibly while remote was off."
+}
