@@ -1,13 +1,36 @@
 # Feature 173 - the GM's request, verbatim
 
 The GM opened with the census from their own laptop, of every `.py` under the skill outside
-`legacy-hand-authored-pool`, sorted by raw line count, tail -20 - topped by
-`hamletgen/ways.py` at 4,369 lines.
+`legacy-hand-authored-pool`, sorted by raw line count, `tail -20`. It is reproduced in full below
+rather than summarized, because the question of WHICH FILES the GM was looking at when they wrote
+"we will need to actually do these refactors" decides the scope of the work (spec review round 1).
 
 > This project has a set of guidelines that revolve around not letting files grow too large, but it
 > looks like we have allowed that to drift:
 >
-> [the census]
+> ```
+> eli@mujina:~/l7r/diagram$ for fname in `find .claude/skills/diagram/ -name \*.py | grep -v legacy-hand-authored`; do echo `nl -b a $fname | tail -n 1 | awk '{print $1}'` $fname; done | sort --numeric | tail -n 20
+> 779 .claude/skills/diagram/l7r/diagram/interactive/page.py
+> 791 .claude/skills/diagram/l7r/diagram/settlement/trades.py
+> 810 .claude/skills/diagram/l7r/diagram/settlement/_knobs.py
+> 817 .claude/skills/diagram/l7r/diagram/hamletgen/water.py
+> 903 .claude/skills/diagram/l7r/diagram/settlement/castle_civic.py
+> 904 .claude/skills/diagram/tests/tools/test_pack_audit.py
+> 906 .claude/skills/diagram/l7r/diagram/interactive/classes.py
+> 932 .claude/skills/diagram/l7r/diagram/overlap/taxonomy.py
+> 936 .claude/skills/diagram/l7r/diagram/waterfields/carve.py
+> 976 .claude/skills/diagram/l7r/diagram/settlement/houses.py
+> 1069 .claude/skills/diagram/l7r/diagram/waterfields/seams.py
+> 1100 .claude/skills/diagram/l7r/diagram/hamletgen/hinterland.py
+> 1130 .claude/skills/diagram/l7r/diagram/settlement/water_ways.py
+> 1212 .claude/skills/diagram/l7r/diagram/settlement/structures/fixtures.py
+> 1225 .claude/skills/diagram/l7r/diagram/tools/pack_audit.py
+> 1330 .claude/skills/diagram/l7r/diagram/hamletgen/homesteads.py
+> 1353 .claude/skills/diagram/l7r/diagram/settlement/homestead_parts.py
+> 1541 .claude/skills/diagram/tests/hamletgen/test_ways.py
+> 1592 .claude/skills/diagram/wip/shiro-daika.gen.py
+> 4369 .claude/skills/diagram/l7r/diagram/hamletgen/ways.py
+> ```
 >
 > I think the solution is to build checks for this into our tooling. one of the things that can run
 > whenever we do a make done can be to check the size of our files. And if any of them are too large,

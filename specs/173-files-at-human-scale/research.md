@@ -25,15 +25,31 @@ with two carve-outs stated in the same clause and the next one:
 
 `CLAUDE.md` mirrors this operationally under "Files stay at human scale", and the phrase
 "slim-index / load-on-demand doc pattern" appears **only in the constitution** - there is no doc
-behind the name. What actually carries the detail is the exemplars, of which the tree holds
-**fourteen** package indexes under the skill (`settlement/`, `settlement/_geom/`, `city/`,
-`civic_grounds/`, `fields/`, `land/`, `rolling/`, `shrines_wells/`, `structures/`, `hamletgen/`,
-`waterfields/`, `interactive/`, `pipeline/`, `sitegen/`, `tools/`, `ci/`, `tests/`,
-`tests/settlement/`), every one of them carrying a "look here when" table.
+behind the name. What actually carries the detail is the exemplars: **eighteen** package `CLAUDE.md`
+indexes, counted as those sitting beside an `__init__.py`.
+
+**Thirteen use the clause's literal wording**, a two-column table headed `| file | look here when |`:
+`hamletgen/`, `interactive/`, `settlement/`, `settlement/_geom/`, `city/`, `civic_grounds/`,
+`fields/`, `land/`, `rolling/`, `shrines_wells/`, `structures/`, `sitegen/`, `waterfields/`. **Five
+route the reader under a different header** and are worth naming rather than glossing, because the
+GM's question was whether the convention is really there: `ci/` (`| module | what it is for |`),
+`pipeline/` (`| module | what it is | measured for coverage |`), `tools/`
+(`| You are asking | Reach for |`), `tests/` (`| tree | runs under | put a test here when |`) and
+`tests/settlement/` (`| module | tests for |`). Every one is a routing table answering "which file
+do I load"; four of the five are indexes over things that are not subsystems of one engine, which is
+why their columns differ.
+
+**And the check is already OWED.** The constitution's v1.6.1 deferred-TODO block, GM-directed
+2026-08-16, records it: *"Automated file-length check (flags source files past the threshold lacking
+a justification header) - recorded alongside clause 12's deferred expression-counting gate check"*
+(`.specify/memory/constitution.md:328`). So the marker-with-a-reason design of FR-004 is the shape
+the constitution itself specified, not one this session invented, and this feature closes half of a
+two-week-old TODO.
 
 **So the answer to the GM is: present, and by example excellent; as instruction, one sentence.**
-Since this feature's failure message will send a session to the prescribed manner, the manner has to
-be readable in one place. FR-006 writes it down.
+That is enough to follow, and the failure message can point at it - which is what FR-006 does, after
+spec review cut back a first draft that proposed writing a new procedure document the GM had not
+asked for.
 
 There is also a **retired mechanical toolchain** nobody wrote down: **fourteen** one-shot splitters
 under `specs/`, across thirteen features (023, 024 x2, 025 x2, 112, 113, 114, 115, 116, 117, 118,
@@ -130,19 +146,23 @@ Read before proposing the ten refactors, because two of the three risks are real
 
 Eight of the ten are ordinary code and split cleanly. Two are worth stating in advance:
 
-- **`wip/shiro-daika.gen.py`** is a hand-authored Mode B draw script for one map - a linear sequence
-  of drawing calls whose statement ORDER IS the draw order, unreferenced by the Makefile, unmeasured
-  by coverage, and parked mid-feature (021). This is the clause-13 ordered-data carve-out almost
-  verbatim. Splitting it would fragment one map's draw order across files for no token saving, since
-  a session resuming feature 021 loads the whole thing either way.
+- **`wip/shiro-daika.gen.py`** looked like the clause-13 ordered-data carve-out: a hand-authored Mode
+  B draw script for one map, unreferenced by the Makefile, unmeasured by coverage, parked mid-feature
+  (021). **The spec proposed the carve-out for it and `spec-fidelity` rejected it, correctly.** The
+  file is not a dataset: it defines six functions with real logic (`_well_blocks`, a 55-line
+  algorithm with a nested helper; `_point_in`, a point-in-polygon routine) and threads mutable
+  engine state through itself. "Execution order is a contract" is true of nearly every imperative
+  module in this repository - `hamletgen/ways.py` above all, the file the GM named as the worked
+  example of one that MUST split - so admitting it here would let the carve-out swallow the rule.
+  Two of the supporting claims also failed checking: the file is tracked, is NOT gitignored (only
+  `wip/*.svg|png|json|html` are) and has no `pyproject.toml` entry, so unlike the three frozen
+  exhibits it is live source inside the lint and type toolchain. It splits.
 - **`l7r/diagram/tools/pack_audit.py`** is a parser plus ~20 INDEPENDENT audit checks, each a
-  dataclass and a function. That is the opposite: not one ordered thing, twenty unordered ones.
+  dataclass and a function. Not one ordered thing, twenty unordered ones - it splits easily.
 
-The spec proposes the carve-out for the first and a split for the second, and flags the first to
-`spec-fidelity` explicitly, because the GM's request says *"we will need to actually do these
-refactors"* and taking a carve-out on one of the ten is the kind of quiet "X except where Y" that
-constitution Principle XVI exists to catch. **Using a carve-out the rule itself states is applying
-the rule; the check is whether this file is really the case the carve-out describes.**
+**The lesson worth keeping**: using a carve-out the rule itself states IS applying the rule, but the
+test is whether the file is really the case the carve-out describes, and the author of the split is
+not a reliable judge of that. Ten of ten split; the FR-004 mechanism ships with nothing using it.
 
 **Sources**: this is a TOOLING finding, not a physical one - nothing here concerns how a place was
 built, farmed or lived in, so the constitution XII source obligation does not attach. Every claim

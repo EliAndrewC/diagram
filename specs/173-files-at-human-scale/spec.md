@@ -1,6 +1,6 @@
 # Feature 173 - Files Stay at Human Scale, Enforced
 
-**Status**: Draft - specified 2026-08-31. [`request.md`](request.md) is the authority;
+**Status**: Draft - specified 2026-08-31; revised after `spec-fidelity` round 1 (four required changes, all applied: the one proposed carve-out reversed, FR-006 cut back to pointing at what exists, three counts corrected, the GM's census restored verbatim to `request.md`). [`request.md`](request.md) is the authority;
 [`research.md`](research.md) holds the measurements taken BEFORE specifying.
 
 ## The feature, in one sentence
@@ -26,17 +26,27 @@ And on the scope of the work:
 
 The GM also asked a question, which R1 answers: whether the guidelines really do prescribe the split
 and the per-directory `CLAUDE.md` index. **They do - in one sentence of constitution clause 13, plus
-fourteen worked exemplars.** That is enough to follow and not enough to point a failure message at,
-which is why FR-006 exists.
+eighteen worked package indexes**, thirteen of which use the literal "look here when" wording the
+clause names and five of which route the reader under a different header (`ci/`, `pipeline/`,
+`tools/`, `tests/`, `tests/settlement/`). So: present, followable, and prescribed by example rather
+than by instruction. FR-006 records what the failure message points AT, and deliberately writes no
+new document.
+
+**And the check itself is already owed.** The constitution's own v1.6.1 deferred-TODO block, added
+GM-directed on 2026-08-16, records exactly this work: *"Automated file-length check (flags source
+files past the threshold lacking a justification header) - recorded alongside clause 12's deferred
+expression-counting gate check"* (`.specify/memory/constitution.md:328`). This feature closes a TODO
+the constitution has carried for two weeks, and the marker-with-a-reason design of FR-004 is the
+shape that TODO names, not one this session invented.
 
 ## Scope, stated exactly
 
 **IN**: the check, its wiring, the written procedure, the constitution and `CLAUDE.md` amendments
 that follow from gating a rule that was explicitly not gated, and the ten refactors.
 
-**OUT**: clause 12 (functions past ~1,000 logical statements), which the constitution also describes
-as an automated check and which nothing implements - a separate rule, a separate measurement, not
-asked for. Non-Python files: the census, the constitution's wording ("a source file", "a test
+**OUT**: clause 12 (functions past ~1,000 logical statements), the OTHER half of the same
+deferred-TODO block, which nothing implements - a separate rule, a separate measurement, not asked
+for. Non-Python files: the census, the constitution's wording ("a source file", "a test
 file") and the GM's own command are all about code, and `CLAUDE.md` and the constitution are
 themselves far past 1,000 lines by the GM's own hand. Splitting anything not over the bar.
 
@@ -91,10 +101,16 @@ limitation" rule). No machine can judge whether a file really is one cohesive or
 determined session can write a plausible sentence and pass. Two stricter designs were considered and
 declined: (a) a recorded roster of permitted files, which is clause 14's own antipattern - a
 hand-maintained list restating what the files already say - and which goes stale silently; (b) no
-carve-out at all, which contradicts the constitution clause this feature enforces and would force
-`wip/shiro-daika.gen.py`'s draw order to be fragmented across files for no token saving. What is
-kept instead is VISIBILITY: the reason is in the file, in git history, and in `make audit`. Chosen
-by the session, 2026-08-31; reopen it if the census of carve-outs ever grows past a handful.
+carve-out at all, which would delete a clause of the constitution nobody asked to delete, and which
+the constitution's own deferred TODO forecloses by specifying a check that "flags source files past
+the threshold LACKING A JUSTIFICATION HEADER". What is kept instead is VISIBILITY: the reason is in
+the file, in git history, and in `make audit`.
+
+**The mechanism ships with ZERO files using it, and that is the point.** Spec review round 1 rejected
+this feature's one proposed carve-out (below), so nothing in the tree takes the marker on the day it
+lands. A carve-out that is available and unexercised is a rule with a stated exit; a carve-out
+exercised by its own author on the day it ships is a rule with a hole. Chosen by the session,
+2026-08-31; reopen it if the census of carve-outs ever grows past a handful.
 
 ### FR-005 - where it runs
 
@@ -111,22 +127,26 @@ It carries its own suite (`scripts/test-check-file-scale.sh` for the guard tree,
 `tests/tooling/test_file_scale.py` for the unit assertions), and each assertion is proven to FIRE by
 deleting the rule and watching a test go red.
 
-### FR-006 - the prescribed manner is written down, once
+### FR-006 - the failure message points at what already exists; no new document is written
 
-`docs/file-splitting.md`: the procedure a session follows when the check fires. It records what
-already exists rather than inventing - the target shape and the two carve-outs from clause 13/14,
-the "look here when" index format taken from the fourteen exemplars, the four residue-bucket vs
-chain shapes those exemplars fall into, the verbatim-move discipline and import regeneration from
-the fourteen retired splitters (R1), and the four things a split can break from R4 (draw order, the
-per-module coverage floors, the deferred-floor limit, and the path literals in `pyproject.toml` /
-`.gitignore` / `gate-stamp.py` that stop matching silently). The check's failure message points here
-and the constitution's clause 13 gains the pointer.
+The GM asked to be TOLD whether the prescription is present. It is (R1), so the message routes the
+reader to the three things that already carry it - constitution Principle X clause 13, `CLAUDE.md`'s
+"Files stay at human scale", and one named exemplar package (`settlement/structures/`, whose own
+docstring explains the residue-bucket shape and why `StructuresMixin` exists) - and this feature
+writes no procedure manual.
+
+**This is a scope REDUCTION made at spec review.** The first draft specified a new
+`docs/file-splitting.md` gathering the split discipline and the fourteen retired splitters' method.
+The reviewer's objection stands: the GM asked a question, not for a manual, and a substantial new
+engineering document is scope the request does not contain. The material is not lost - it is in
+`research.md` R1 and R4, where the next session that splits a file will find it, and where the GM
+can read it and ask for the document if they want one.
 
 ### FR-007 - the ten refactors
 
-Every file in R2's census is brought under the bar. The move is VERBATIM - a split changes where a
-definition's text lives, never what it does - and each new package gets a `CLAUDE.md` with a "look
-here when" table naming every module. Nine are splits; one takes the FR-004 carve-out:
+Every file in R2's census is brought under the bar - **all ten of them, by splitting**. The move is
+VERBATIM - a split changes where a definition's text lives, never what it does - and each new
+package gets a `CLAUDE.md` with a "look here when" table naming every module.
 
 | file | disposition |
 |---|---|
@@ -139,17 +159,33 @@ here when" table naming every module. Nine are splits; one takes the FR-004 carv
 | `settlement/water_ways.py` (1,130) | -> `settlement/water_ways/` |
 | `hamletgen/hinterland.py` (1,100) | -> `hamletgen/hinterland/` |
 | `waterfields/seams.py` (1,069) | -> `waterfields/seams/` |
-| `wip/shiro-daika.gen.py` (1,592) | **the FR-004 carve-out** - see the decision below |
+| `wip/shiro-daika.gen.py` (1,592) | -> `wip/shiro_daika/` - see the reversed decision below |
 
-**The one carve-out, argued rather than assumed.** `wip/shiro-daika.gen.py` is one map's
-hand-authored draw script: a linear sequence of drawing calls whose statement order IS the draw
-order, parked mid-feature (021), named by no Makefile target and measured by no coverage floor. It
-is clause 13's "one cohesive ordered dataset ... whose row order IS the execution contract" as
-nearly as a file can be, and splitting it would scatter one map's draw order across modules while
-saving a resuming session nothing, since that session loads the whole map either way. It therefore
-takes the marker and the written reason, and appears in `make audit` forever after. **This is put to
-`spec-fidelity` explicitly**, because the GM said "we will need to actually do these refactors" and
-a session quietly exempting one of ten is the exact shape Principle XVI exists to catch.
+**The carve-out this spec first proposed was PUT TO REVIEW AND REJECTED, and the rejection is
+recorded rather than quietly dropped.** The first draft gave `wip/shiro-daika.gen.py` the FR-004
+marker on the argument that a hand-authored map draw script is clause 13's "one cohesive ordered
+dataset". `spec-fidelity` read the file instead of the description and returned NOT LEGITIMATE on
+three grounds, all of which check out:
+
+- **It is not what the carve-out describes.** It defines six functions with real logic - `_well_blocks`
+  is a 55-line algorithm with a nested helper that cuts street bands out of a quarter's bbox and grids
+  each surviving rectangle; `_point_in` is a point-in-polygon routine - and threads mutable engine
+  state through the file (`s.bound` saved and restored twice, `s.placed`, `s.block_polys`). That is a
+  program in which statement order matters, which is true of nearly every imperative module here,
+  `hamletgen/ways.py` included. **If "execution order is a contract" qualifies a file, the carve-out
+  swallows the rule.**
+- **It fails the purpose test.** The GM's "we will need to actually do these refactors" refers to the
+  census they had just pasted, in which this file sits second. Exempting one of ten is the "X except
+  where Y" Principle XVI names.
+- **Two supporting claims did not survive checking.** The file is tracked and NOT gitignored (only
+  `wip/*.svg|png|json|html` are), and `pyproject.toml` has no `wip` entry - so unlike the three
+  `legacy-hand-authored-pool` exhibits FR-002 excludes by path, it is live source inside the lint and
+  type toolchain. It is not frozen; it is unfinished.
+
+**So it splits like the other nine**, into `wip/shiro_daika/` (the hyphen cannot be a package name).
+The session's own argument is left standing above so the next reader can see what was tried and why
+it was wrong - the answer to "is a work-in-progress draft a different case?" was that the GM invited
+that as a QUESTION in this very request, not as a carve-out written into the spec.
 
 ### FR-008 - the doctrine that said "not gated" is amended, not left contradicting itself
 
@@ -180,9 +216,12 @@ A split that changes a manifest is a defect in that split, not an accepted cost.
 2. `make done` passes on the tree as this feature leaves it.
 3. Every file in the repository outside the FR-002 exclusions is at or under 1,000 lines, or carries
    an FR-004 marker with a reason `make audit` prints.
-4. Nine new packages exist, each with a `CLAUDE.md` "look here when" table naming every module.
+4. Ten new packages exist, each with a `CLAUDE.md` "look here when" table naming every module.
 5. Every map manifest in the pool is byte-identical to the pre-split baseline.
-6. A reader who hits the failure message can complete the split from `docs/file-splitting.md` alone.
+6. A reader who hits the failure message is routed to clause 13, `CLAUDE.md`'s "Files stay at human
+   scale", and a named exemplar package - each of which exists today and none of which this feature
+   writes.
+7. No file in the tree carries an `FILE_SIZE_OK:` marker on the day this lands.
 
 ## Decisions recorded
 
@@ -190,8 +229,9 @@ A split that changes a manifest is a defect in that split, not an accepted cost.
 |---|---|---|
 | D1 | raw lines, not logical statements - clause 13's own unit, because the cost is tokens | prescribed |
 | D2 | the `lint` phase beside `check-duplicate-defs.py`, not a pytest and not a new phase (R3) | decided |
-| D3 | the carve-out survives, needs a 40-character reason, and is printed by `make audit` | decided |
-| D4 | `wip/shiro-daika.gen.py` takes the carve-out; the other nine split | **flagged to review** |
+| D3 | the carve-out survives, needs a 40-character reason, and is printed by `make audit` - the shape the constitution's own v1.6.1 TODO specified ("lacking a justification header") | prescribed |
+| D8 | no new procedure document; the message points at clause 13, `CLAUDE.md` and one exemplar package | reduced at review |
+| D4 | `wip/shiro-daika.gen.py` splits like the other nine - the carve-out this spec proposed for it was put to `spec-fidelity` and REJECTED; FR-004's mechanism ships with zero files using it | **reversed at review** |
 | D5 | `specs/` is excluded - a record of past work, including fourteen retired splitters, is not loaded code | decided |
-| D6 | clause 12 (function size) is out of scope; it is also unimplemented and was not asked for | deferred |
+| D6 | clause 12 (function size) is out of scope - the other half of the same deferred TODO, not asked for | deferred |
 | D7 | the per-module coverage consequence of a split lands at `FULL=1`, which has never been green - inherited limit, stated not created (R4) | accepted |
