@@ -902,3 +902,29 @@ def test_perimeter_band_equals_the_ray_walk_it_replaced() -> None:
         depth = rng.randint(1, 6)
         g = SimpleNamespace(w=w, h=h, inside=inside, divider=divider)
         assert pa._perimeter_band(g, depth) == ray_walk(inside, divider, w, h, depth), f"trial {trial}: w={w} h={h} depth={depth}"
+
+
+def test_the_package_keeps_its_python_dash_m_entry_point(monkeypatch, tmp_path, capsys) -> None:
+    """Feature 174, closing the module feature 173 created.
+
+    Splitting `pack_audit.py` into a package moved the `if __name__ == "__main__"` block out of the
+    file that used to carry it, and a package is only runnable as `-m` if it has a `__main__.py`.
+    Without this module `make pack-audit` breaks and the operations registry reports the row as
+    naming a module that is gone - which is exactly how it was caught.
+
+    Nothing imports a `__main__.py` during an ordinary test run, so it is executed here deliberately,
+    through `runpy`, with the make-only guard satisfied the way the guard's own tests satisfy it.
+    """
+    import runpy
+
+    from l7r.diagram import _invocation
+
+    monkeypatch.setattr(_invocation, "via_make", lambda: True)  # the guard's own suite does the same
+    svg = tmp_path / "plan.svg"
+    svg.write_text(_svg(_rect(0, 0, 100, 100, COURT)))
+    monkeypatch.setattr("sys.argv", ["pack_audit", str(svg)])
+
+    with pytest.raises(SystemExit) as exit_info:
+        runpy.run_module("l7r.diagram.tools.pack_audit", run_name="__main__")
+    assert exit_info.value.code in (0, None), "the CLI ran and exited cleanly"
+    assert capsys.readouterr().out, "and printed its report"
