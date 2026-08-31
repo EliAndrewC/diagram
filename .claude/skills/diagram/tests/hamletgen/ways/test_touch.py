@@ -95,3 +95,25 @@ def test_the_POST_SMOOTHING_call_leaves_a_web_that_is_already_in_one_piece_alone
     hg.ways._touch_junctions(s, [], [], [], only_orphans=True)
     assert s.M["lanes"][0]["pts"] == before[0], "the connector is never moved"
     assert isinstance(hg.ways._touch_junctions(s, [], [], [], only_orphans=True), int), "and the pass reports its count"
+
+
+def test_an_end_ALREADY_STANDING_on_the_network_is_a_junction_not_a_free_end() -> None:
+    """Feature 137 T03, cohort seed 07: a door path whose end sat on another lane was linked onward
+    to a SECOND way, and the link ran back over the first lane's tread - a 9 ft zigzag at the
+    junction. `_by_way` excludes the ways this lane MEETS, so the earlier test cannot see it; this
+    clause is the one that can.
+
+    Two lanes whose ends stand near each other are the shape that reaches it.
+    """
+    s = _StubSettlement(
+        lanes=[[(0.0, 0.0), (0.0, 600.0)], [(60.0, 300.0), (200.0, 300.0)], [(60.0, 330.0), (200.0, 330.0)]],
+        houses=[(150.0, 320.0)],
+    )
+    s.M.setdefault("meta", {"ftpx": 1})
+    n = hg.ways._touch_junctions(s, [], [], [])
+    assert n == 2, "two ends are touched onto the network"
+    # The two parallel lanes are SPLICED - one end runs onto the other - which is the join this
+    # clause guards: without it the second lane would have been linked onward to the trunk as well,
+    # and the link would have run back over the first lane's tread (the 9 ft zigzag of seed 07).
+    ends = {tuple(p) for ln in s.M["lanes"] for p in ln["pts"]}
+    assert (200.0, 300.0) in ends, "the shared junction is a single point, not two ends a few feet apart"
