@@ -1,0 +1,6 @@
+{
+  "utc": "20260831T144131Z",
+  "guard": "pair-hooks",
+  "what": "gate alone",
+  "reason": "feature 174: the only change since the last run is a test file assertion; engine code unchanged since the 14:18 green gate, so no map manifest can move and there is nothing new for a settlement-review"
+}
