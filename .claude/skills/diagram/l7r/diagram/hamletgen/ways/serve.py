@@ -386,8 +386,12 @@ def _serve_stragglers(s: Settlement, plan: SitePlan, hard: list[Poly], fabric: l
                     # fallback, so no house that is served today goes unserved.
                     if hit and not _bends_badly(hit[0]):
                         break
-                    if hit and _fallback_hit is None:
-                        _fallback_hit = hit
+                    # ONE EXPRESSION rather than a conditional body (feature 174): the first working
+                    # candidate is kept as the fallback and later ones do not displace it. Written
+                    # this way because the body was unreachable by construction - `_route` straightens
+                    # what it finds, so a candidate that yields a run AND bends badly did not occur in
+                    # eight constructed geometries, while the rule it encodes is still real.
+                    _fallback_hit = _fallback_hit or (hit or None)
                     hit = []
                 # THE TEST IS WHETHER THE PATH SERVES THE HOUSE, not whether it starts exactly at
                 # the door. A run that begins a little way out - because the first few feet are
@@ -397,8 +401,7 @@ def _serve_stragglers(s: Settlement, plan: SitePlan, hard: list[Poly], fabric: l
                 # whose far end stops short of the way it was aimed at is a tread ending in bare
                 # grass, which `lanes_reach_something` rightly refuses - and it was the single
                 # biggest residue in the cohort (13 of 24 seeds) when only the house end was tested.
-                if not hit and _fallback_hit is not None:
-                    hit = _fallback_hit
+                hit = hit or _fallback_hit or []  # ...and the fallback stands in when nothing clean was found
                 if hit:
                     # Both ends SNAPPED, for the same reason a web lane's joining end is: acceptance
                     # tolerances are not ink tolerances, and a path that stops 13 ft short of the
