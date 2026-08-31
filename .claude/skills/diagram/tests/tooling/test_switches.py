@@ -132,3 +132,33 @@ def test_the_directory_decides_when_a_test_runs(fixture_skill: Path, monkeypatch
     assert "--ignore=tests/full" in gate and "--ignore=tests/gate" not in gate and "L7R_TESTS_FULL=1" not in gate
     assert "--ignore=tests/full" not in full and "--ignore=tests/gate" not in full and "L7R_TESTS_FULL=1" in full and "COV_FLOORS=1" in full
     assert "--deselect" not in gate and "--deselect" not in full  # no file list can go stale again (research R6)
+
+
+# ---- feature 174: the /proc readers, which no test could reach through the real filesystem -------
+# Both take their reader as an argument or read one file, so both are testable without a live
+# process tree - which is why they get unit tests rather than an exemption.
+
+
+def test_ancestors_stops_at_init_and_gives_up_on_a_pid_that_is_gone(tmp_path, monkeypatch) -> None:
+    """The two OSError/`ppid <= 0` exits. A pid whose /proc entry has vanished mid-walk is the
+    ordinary case on a busy box, and the walk must stop rather than raise."""
+    from l7r.diagram import switches
+
+    assert switches._ancestors(1) == [], "pid 1 has no parent to walk to"
+    assert switches._ancestors(2**30) == [], "a pid with no /proc entry gives up rather than raising"
+
+
+def test_cmdline_of_a_dead_pid_is_empty_not_an_exception() -> None:
+    """Its own OSError branch: a process that exits between listing and reading is normal."""
+    from l7r.diagram import switches
+
+    assert switches._cmdline(2**30) == ""
+    assert switches._cmdline(1), "a live pid still yields its command line"
+
+
+def test_idle_context_is_false_outside_a_git_tree(tmp_path) -> None:
+    """The `if not top` exit - `git rev-parse` prints nothing outside a repository, and the answer
+    must be a plain False rather than a Path built on an empty string."""
+    from l7r.diagram import switches
+
+    assert switches.idle_context(tmp_path) is False
