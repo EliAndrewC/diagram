@@ -16,6 +16,8 @@ from l7r.diagram.overlap.matrix import (
     GridIndex,
     edge_dist,
     forest_reveal_x,
+    matrix_extents,
+    matrix_violations,
     poly_gap,
     polyline_len,
     torii_halfbox,
@@ -233,3 +235,55 @@ def test_edge_dist_and_polyline_len() -> None:
     assert edge_dist(5.0, 5.0, square) == pytest.approx(5.0), "a point inside still measures to the wall"
     assert polyline_len([(0.0, 0.0), (3.0, 4.0), (3.0, 14.0)]) == pytest.approx(15.0)
     assert polyline_len([(1.0, 1.0)]) == 0.0, "a single point has no length"
+
+
+def test_matrix_violations_reports_a_forbidden_overlap_and_says_WHERE() -> None:
+    """Two SOLID features on the same ground is the case the whole matrix exists for. The answer
+    carries the point, because a reader needs to find it on the sheet."""
+    M = {
+        "meta": {"W": 1000, "H": 1000},
+        "houses": [{"x": 200.0, "y": 200.0, "w": 100.0, "h": 60.0, "rot": 0.0}],
+        "storehouses": [{"x": 220.0, "y": 210.0, "w": 100.0, "h": 60.0, "rot": 0.0}],
+    }
+    bad = matrix_violations(M)
+    assert bad, "two solids on the same ground is forbidden"
+    ka, kb, x, y = bad[0]
+    assert {ka, kb} == {"houses", "storehouses"}
+    assert 150 < x < 300 and 150 < y < 300, f"and it says where to look: {(x, y)}"
+
+
+def test_an_annex_may_lie_on_its_OWN_parent_and_only_its_own() -> None:
+    """The conditional permission that cannot live in `matrix_policy`, because it depends on the two
+    RECORDS rather than their classes: a garden belongs to a house, so it may lie on THAT house -
+    and on no other. Both halves asserted, since the permission is worthless if it is unconditional.
+
+    The parent is carried in the key `_MATRIX_PARENT_FIELD` names for that record type - `of` for a
+    garden - not in a generic "parent". A test using the wrong spelling gets `parent_id = None` and
+    silently exercises the FORBIDDEN path while claiming to test the permitted one.
+    """
+    house = {"x": 200.0, "y": 200.0, "w": 100.0, "h": 60.0, "rot": 0.0}
+    stranger = {"x": 600.0, "y": 600.0, "w": 100.0, "h": 60.0, "rot": 0.0}
+
+    own = {
+        "meta": {"W": 1000, "H": 1000},
+        "houses": [house],
+        "gardens": [{"x": 210.0, "y": 205.0, "w": 40.0, "h": 30.0, "rot": 0.0, "of": [200.0, 200.0]}],
+    }
+    assert matrix_violations(own) == [], "a garden on its own house is by design"
+
+    foreign = {
+        "meta": {"W": 1000, "H": 1000},
+        "houses": [house, stranger],
+        "gardens": [{"x": 210.0, "y": 205.0, "w": 40.0, "h": 30.0, "rot": 0.0, "of": [600.0, 600.0]}],
+    }
+    assert matrix_violations(foreign), "...but a garden on SOMEONE ELSE's house is a defect"
+
+
+def test_matrix_extents_reads_a_records_DRAWN_extent() -> None:
+    """The distinction the gate test's own header calls out: drawn extents, not recorded envelopes.
+    A record carrying `vw`/`vh` is measured by the ink a reader sees."""
+    M = {"meta": {"W": 1000, "H": 1000}, "houses": [{"x": 100.0, "y": 100.0, "w": 200.0, "h": 100.0, "rot": 0.0, "vw": 20.0, "vh": 10.0}]}
+    ext = matrix_extents(M)
+    assert ext, "the house is extracted"
+    poly = ext[0][1]
+    assert max(p[0] for p in poly) - min(p[0] for p in poly) == pytest.approx(20.0), "the DRAWN width, not the recorded one"
