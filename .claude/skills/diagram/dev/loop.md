@@ -492,7 +492,25 @@ beneath it is paying map prices for unit-test work. `_join_piece` is module leve
 direct test: fabric beside the LINK but not the PIECE, so the splice is refused and the link is drawn as
 its own lane. Milliseconds, deterministic, and it closes a floor breach no roll was ever going to close.
 
-### THE SECOND MERGE CANDIDATE WAS DECLINED, AND WHY IT DIFFERS FROM THE POLDER ONE
+### THE SECOND MERGE WAS PREDICTED TO COST COVERAGE, AND MEASUREMENT SAID IT COSTS NOTHING
+
+**Read this one for the method failure, not the merge.** Everything below the next heading was written
+to justify DECLINING this merge on a predicted coverage cost. The merge was then made and measured, and
+the prediction was simply wrong: the per-module missing lists came back BYTE-IDENTICAL and the
+hamlet-path floor unchanged at 99.30%. Dikepond now shares Kuwabata's roll and the suite sits at NINE
+hamlets, which is the floor.
+
+**Why the prediction was wrong, since the reasoning looked sound.** The per-spec measurement said
+Dikepond covered 7 lines "nothing else covers" - but that was measured against the other SPECS only. A
+line no other spec reaches may still be reached by another TEST, and most of these were. *"Unique among
+the maps"* is not *"covered only by this map"*, and the difference is the whole prediction.
+
+**THE RULE THAT SURVIVES: measure the merge, do not model it.** A candidate merge costs one FULL run to
+settle exactly. Three predictions were made in this feature about what coverage would do - two about
+this merge, one about the polder merge - and measurement overturned all three, in both directions (the
+polder merge cost four lines nobody predicted; this one cost the seven that were).
+
+### THE ARGUMENT THAT WAS MADE FOR DECLINING IT - KEPT BECAUSE IT WAS PLAUSIBLE AND WRONG
 
 Kuwabata and Dikepond are the same seed, archetype and pond layout, differing only in whether
 `dike_crop` is PINNED to mulberry or rolled (seed 21 rolls sugarcane). The assertion matrix says merge:
@@ -502,7 +520,7 @@ Kuwabata and Dikepond are the same seed, archetype and pond layout, differing on
 | Kuwabata (`dike_crop='mulberry'`) | YES |
 | Dikepond (`dike_crop='sugarcane'`) | YES |
 
-**It was declined anyway, on the coverage side, and the distinction is worth keeping.** The polder
+**On that basis it WAS declined - and the basis was wrong; see the correction above.** The polder
 merge cost four lines and each was a clean SEMANTIC branch - the tail half of `drop_end_nubs`, the
 refusal half of `_drop_end_nubs` - so each took a targeted unit test that says something true about the
 code and will outlive the merge. The dikepond merge's cost is not like that. `dike_crop` does not
@@ -516,6 +534,8 @@ name: the line is reached because this map's geometry happened to go that way. S
 against ~7 lines that would have to be re-covered by finding another map that happens to reach them -
 which is the thing this whole exercise is trying to stop doing.
 
-**THE RULE: merge where the dropped map's unique lines are SEMANTIC branches you can name and test;
-decline where they are incidental to that map's geometry.** The assertion matrix tells you a merge is
-POSSIBLE; what the dropped lines ARE tells you whether it is worth it.
+**The rule this argument proposed** - merge where the dropped map's unique lines are semantic branches
+you can name and test, decline where they are incidental to that map's geometry - **is a reasonable
+HYPOTHESIS and was not what happened.** The incidental lines it worried about turned out to be covered
+by other tests, so the merge was free. Keep the distinction as a thing to CHECK; do not use it to
+decline a merge without running the measurement, which costs one FULL run and answers exactly.
