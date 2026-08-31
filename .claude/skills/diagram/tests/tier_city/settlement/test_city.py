@@ -601,3 +601,29 @@ def test_row_housing_keeps_CLEAR_of_the_street_and_alley_ground_it_would_otherwi
     alley.rowpack((200.0, 200.0, 1200.0, 900.0), ["laborer"] * 400, fill=True)
     a_ys = [b["y"] for b in alley.M["buildings"] if b["kind"] == "laborer"]
     assert min(abs(y - 550.0) for y in a_ys) > 5.0, "a roji is narrow, but the fabric still leaves it walkable"
+
+
+def test_crop_city_takes_the_AGGRESSIVE_margin_by_default_with_per_side_overrides() -> None:
+    """GM 2026-07-23: "I would like the aggressive crop to be the default for all cities unless I
+    state otherwise". A new city gen calls `s.crop_city()` bare and adds only the farm-band override
+    for its satellite-less flank.
+
+    The override exists because a flank with no satellite to anchor the frame - Tango's west, where
+    nothing but fans lies beyond the moat - would otherwise re-create the pre-2026-07-23 sliver crop.
+    So both are asserted: the bare call crops tight, and a per-side override widens THAT side only.
+    """
+
+    def _city_with_content(**kw):
+        s = Settlement(1600, 1600, seed=13)
+        s.meta(name="C", scale="city")
+        s.building(700.0, 700.0, 120.0, 90.0, "kura", 0.0)
+        s.building(900.0, 800.0, 120.0, 90.0, "kura", 0.0)
+        s.crop_city(**kw)
+        return s.M["meta"]["view"]
+
+    tight = _city_with_content()
+    wide_west = _city_with_content(west=200)
+
+    assert wide_west[0] < tight[0], "the override pushes the WEST edge out"
+    assert wide_west[1] == tight[1], "and leaves the north where it was"
+    assert wide_west[2] > tight[2], "so the view is wider"

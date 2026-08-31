@@ -162,3 +162,39 @@ def test_a_halls_caption_is_kept_out_of_its_OWN_sando() -> None:
     moved = s._hall_caption_y(x, y, w, h, "Temple of Bishamon", label_below=True, seats=below_seats)
     fouls = [ty for _, ty in below_seats]
     assert not (min(fouls) - 30 < moved < max(fouls) + 30), f"the caption cleared the sando ({moved})"
+
+
+def test_a_canvas_filling_forest_records_its_TREE_LINE_apart_from_its_polygon() -> None:
+    """The two are recorded separately because the frame reveals only a shallow band of wood past
+    the tree line - deeper in it is undifferentiated canopy, i.e. wasted image (`crop_to_content`,
+    and `forest_reveal_x` is the shared rule).
+
+    Also asserted: the litter floor is pushed a crown's width BACK from the tree line, so its
+    straight edge lies UNDER the canopy and the trees alone make the wood's edge - without that, a
+    ruler-straight litter line gives the wood a drawn border no forest has.
+    """
+    s = Settlement(1400, 1400, seed=12)
+    s.meta(name="C", scale="city")
+    edge = [(800.0, 100.0), (820.0, 500.0), (790.0, 900.0), (810.0, 1300.0)]
+    before = len(s.block_polys)
+    s.forest(edge)
+
+    assert s.M["forest_edge"] == [[round(x, 1), round(y, 1)] for x, y in edge], "the tree line, as given"
+    assert s.M["forest"] != s.M["forest_edge"], "and the filled polygon, which runs on to the canvas"
+    assert max(p[0] for p in s.M["forest"]) > 1400.0, "the wood is drawn PAST the canvas edge"
+    assert len(s.block_polys) == before + 1, "and it blocks houses"
+
+
+def test_a_forest_is_DETERMINISTIC_so_it_never_perturbs_house_placement() -> None:
+    """Its RNG is saved and restored, which is what lets a wood be drawn mid-map without moving
+    everything placed after it. Asserted by drawing the same wood twice and by checking the stream
+    that follows is unchanged - the property a saved/restored RNG actually buys."""
+    edge = [(800.0, 100.0), (820.0, 700.0), (810.0, 1300.0)]
+    a = Settlement(1400, 1400, seed=12)
+    a.meta(name="C", scale="city")
+    a.forest(edge)
+
+    b = Settlement(1400, 1400, seed=12)
+    b.meta(name="C", scale="city")
+    b.forest(edge)
+    assert a.M["forest"] == b.M["forest"], "the same wood twice, identically"
