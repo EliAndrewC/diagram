@@ -186,3 +186,18 @@ def test_two_different_producers_never_share_one_toy_subject(tmp_path, monkeypat
 
     assert rollcache.obtain("same-name", produce, share=True) == ({"value": 7}, "BYPASS")
     assert rollcache.obtain("same-name", other, share=True) == ({"value": 99}, "BYPASS"), "a different producer is a different roll"
+
+
+def test_a_run_with_no_xdist_id_has_no_shared_store(monkeypatch: pytest.MonkeyPatch) -> None:
+    """WITHOUT xdist there is no run to scope a shared payload to, so `_run_share_path` returns None
+    and the per-process dict above it is the whole mechanism - exactly as it was before cross-worker
+    sharing landed.
+
+    This branch needs a test written FOR it because no suite run can reach it: the gate and the full
+    run both use `-n 8`, where xdist sets `PYTEST_XDIST_TESTRUNUID` in every worker, so the id is
+    always present and the early return is dead ground. It was the one line of the sharing change
+    that the 100% floor caught (FULL, 2026-08-31) - and the floor only runs in FULL, so a green
+    `make done` could not have seen it.
+    """
+    monkeypatch.delenv("PYTEST_XDIST_TESTRUNUID", raising=False)
+    assert rollcache._run_share_path(("subject", "producer")) is None
