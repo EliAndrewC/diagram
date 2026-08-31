@@ -15,6 +15,8 @@ pass-rate ratchet without carrying the coverage on its back.
 
 from __future__ import annotations
 
+import pytest
+
 from l7r.diagram.settlement import Settlement
 
 
@@ -47,6 +49,7 @@ def test_a_wellhead_may_not_be_sunk_in_the_reed_toe_below_the_crop() -> None:
     assert not s._well_ground_clear(700.0, 850.0), "downslope of the collector, inside the toe: reed bog"
 
 
+@pytest.mark.rolls_map  # it PRODUCES under the FULL bypass (feature 166's caching): the marker guard is right
 def test_the_fit_gives_a_saturated_best_aspect_the_full_search_it_was_denied() -> None:
     """The probe stops each saturated aspect after two carves, which leaves the WINNING aspect less refined
     than the full search would - and that is the map whose acreage the household ratchet then judges. So the
