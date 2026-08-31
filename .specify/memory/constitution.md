@@ -1,7 +1,37 @@
 <!--
 SYNC IMPACT REPORT
 ==================
-Version change: 2.12.0 → 2.13.0
+Version change: 2.13.0 → 2.14.0
+
+Version 2.14.0 (amended 2026-08-31, feature 173): Principle X clause 13 (Files Stay at
+Human Scale) becomes GATED. It has been an ask-the-question line since v1.6.0 and the
+question stopped being asked - the GM found ten files past the bar from their own laptop,
+one of them at 4,369 lines, and ruled: *"one of the things that can run whenever we do a
+make done can be to check the size of our files. And if any of them are too large, which
+is to say over one thousand lines of code, then we fail the gate with a message that
+explains that the clone responsible for this work must split up the file in the manner
+prescribed in our project guidelines."* Both carve-outs survive unchanged - clause 13's
+ordered data, now stated in the file as `FILE_SIZE_OK: <reason>` and enumerated by
+`make audit`, and clause 14's derived roster. Enforcement, not a new rule: MINOR per the
+versioning policy.
+
+This CLOSES the v1.6.1 deferred TODO "Automated file-length check (flags source files past
+the threshold lacking a justification header)", which is why the marker-with-a-reason shape
+is the one specified rather than one the implementing session invented. Clause 12's
+deferred expression-counting check on FUNCTIONS remains owed and untouched.
+
+Sections updated:
+  - Core Principles: Principle X clause 13's closing sentences.
+
+Templates requiring review/update:
+  ✅ CLAUDE.md - "Files stay at human scale" says GATED; the file-size row
+                              moves out of "Deliberately NOT enforced" and
+                              into the enforcement table.
+  ✅ .claude/skills/diagram/Makefile - `lint` runs the check; the `audit`
+                              section reports the carve-outs instead of
+                              saying the rule is ungated on purpose.
+
+PRIOR (2.12.0 → 2.13.0):
 
 Version 2.13.0 (amended 2026-08-28, feature 134): Principle XII gains "A SOURCE CARRIES ITS
 LINK" - every SOURCES.md key records the URL where the source can be read (or an explicit
@@ -924,17 +954,32 @@ any single rule is reason enough to refuse "done" status.
     tests get no exemption. The target shape is a directory-module whose
     CLAUDE.md indexes the subfiles with a "look here when" line each,
     per the project's slim-index / load-on-demand doc pattern, so a
-    future session loads only the part it needs. Like clause 12 this is
-    an ask-the-question line, not a mandate: over-fragmentation damages
-    design more than length does, and a file that is one cohesive
-    ordered dataset (a registry whose row order IS the execution
-    contract) may stay large - with an inline justification at the top
-    saying why. The failure mode is the same GROWTH pattern as clause
-    12: no single edit crosses the line, so the line must be checked
-    rather than felt. Motivating case: `check_village.py` reached
-    35,603 lines one check at a time and cost a full context window to
+    future session loads only the part it needs. The failure mode is
+    the same GROWTH pattern as clause 12: no single edit crosses the
+    line, so the line must be checked rather than felt - and since
+    v2.14.0 (GM-directed, 2026-08-31, feature 173) it IS.
+    `scripts/check-file-scale.py` runs in the diagram Makefile's `lint`
+    phase and in `sync-with-main.sh` at push time, so a Python file past
+    1,000 RAW lines fails the gate and both routes to main. Unlike
+    clause 12 this is therefore no longer an ask-the-question line: the
+    question was not in fact being asked, and ten files had drifted past
+    the bar - one to 4,369 lines - before the GM found them from their
+    own laptop.
+    THE CARVE-OUT SURVIVES, because over-fragmentation damages design
+    more than length does: a file that is one cohesive ordered dataset
+    (a registry whose row order IS the execution contract) may stay
+    large. It says so in its own first 40 lines, as
+    `FILE_SIZE_OK: <reason>`, the reason being at least 40 characters
+    because a whole-file exemption is argued rather than tokenized; and
+    `make audit` lists every file that takes it, because a carve-out
+    nobody can enumerate is a carve-out nobody revisits. What the check
+    canNOT do is judge whether a file really IS ordered data. What holds
+    that line is that the reason stands in the file, in the history and
+    in the audit. Motivating case: `check_village.py` reached 35,603
+    lines one check at a time and cost a full context window to
     consult; feature 024 split it into the `check_village/` package,
-    the exemplar of the practice.
+    the exemplar of the practice - and feature 173 split the ten that
+    had drifted since, `hamletgen/ways.py` into eleven layers.
 
 14. **Rosters that restate code are derived, not maintained** (added
     v1.7.0, GM-directed 2026-08-16): when a file's bulk is a

@@ -566,13 +566,19 @@ esc=[r for r in rows if r['event']=='escaped']; \
 [print('\033[1m  escapes taken, with what the session said\033[0m')] and [print(f\"    {r['utc'][5:16]}  {r['guard']:<12} {(r['detail'] or '(no reason recorded)')[:88]}\") for r in sorted(esc,key=lambda r:r['utc'],reverse=True)[:8]] if esc else None; \
 print(f\"  {len(rows)} entries\"+(f\", {min(r['utc'] for r in rows)} to {max(r['utc'] for r in rows)}\" if rows else '')); \
 print()"
-	@printf '\033[1mFiles past the ~1,000-line bar\033[0m (constitution X clause 13 - a QUESTION, not a limit)\n'
-	@find l7r tests -name '*.py' -exec wc -l {} + 2>/dev/null | awk '$$1>1000 && $$2!="total"{printf "  %5d  %s\n",$$1,$$2}' | sort -rn | head -12
-	@printf '  Each asks: should this become a package of subfiles with its own CLAUDE.md index? An\n'
-	@printf '  ordered-data REGISTRY may stay large with an inline justification - the only carve-out,\n'
-	@printf '  and it protects rows stating real DECISIONS, never a roster derived from code elsewhere.\n'
-	@printf '  Reported rather than gated on purpose: five files already exceed it and the rule prompts\n'
-	@printf '  a question rather than forbidding a size.\n\n'
+# GUARD_EDIT_OK: feature 173 - this section stops being a REPORT of a question and becomes the audit
+# of a GATED rule. Three things were wrong with it, and all three are why the drift went unnoticed
+# long enough for the GM to find it from their own laptop: it said "five files already exceed it"
+# when TEN did; it said "Reported rather than gated on purpose", which is the sentence the GM retired
+# on 2026-08-31; and it scanned `l7r tests` only, so `wip/shiro-daika.gen.py` at 1,592 lines and all
+# of `scripts/` were invisible to the very report meant to catch this. It asks the CHECKER now, over
+# the checker's own scope, so the report and the gate can never again disagree about what is over.
+	@printf '\033[1mFiles past the ~1,000-line bar\033[0m (constitution X clause 13 - GATED since feature 173)\n'
+	@python3 ../../../scripts/check-file-scale.py --list ../../..
+	@printf '  A file over the bar FAILS `make lint`, and so `make done` and the push. The one way out\n'
+	@printf '  is clause 13'"'"'s ordered-data carve-out, stated IN the file as `FILE_SIZE_OK: <reason>` and\n'
+	@printf '  listed above with its reason - a carve-out nobody can enumerate is one nobody revisits.\n'
+	@printf '  If the bulk is a roster restating code elsewhere, clause 14 says DERIVE it, do not split.\n\n'
 
 help:           ## list every target with its one-line purpose
 	@printf '\n\033[1mOperations\033[0m - everything runs through one of these.\n\n'
@@ -893,6 +899,15 @@ lint:
 	python3 -m ruff check --fix .
 	python3 ../../../scripts/check-duplicate-defs.py --selftest
 	python3 ../../../scripts/check-duplicate-defs.py ../../..
+# GUARD_EDIT_OK: feature 173 - THE ~1,000-LINE BAR IS GATED (GM 2026-08-31: *"one of the things that
+# can run whenever we do a make done can be to check the size of our files ... then we fail the
+# gate"*). It sits in `lint` beside check-duplicate-defs because it is the same class of thing - a
+# repo-wide static structural rule with a selftest that runs first - and because `lint` runs FIRST at
+# the gate (feature 168), so an oversize file is reported before the map roll is paid for. It costs
+# 0.04 s over the tree. Closes half of the constitution's own v1.6.1 deferred TODO; the other half,
+# clause 12's expression count on FUNCTIONS, is still owed.
+	python3 ../../../scripts/check-file-scale.py --selftest
+	python3 ../../../scripts/check-file-scale.py ../../..
 
 format:
 	python3 -m ruff format .

@@ -221,6 +221,13 @@ push_cmd() {
   # first: a checker that cannot prove it still bites is the failure mode that motivated it.
   python3 "$ROOT/scripts/check-duplicate-defs.py" --selftest >/dev/null || die "check-duplicate-defs selftest failed - the guard itself is broken; fix scripts/check-duplicate-defs.py before pushing"
   python3 "$ROOT/scripts/check-duplicate-defs.py" "$ROOT" || die "duplicate top-level definitions (above) - a later def silently shadows the earlier; fix before pushing"
+  # GUARD_EDIT_OK: feature 173 - the ~1,000-line bar (constitution Principle X clause 13), held on
+  # BOTH routes. The gate holds it too (the skill Makefile's `lint`), but a docs- or tests-only delta
+  # takes the DIRECT route and runs no gate at all - and a file crosses the bar one edit at a time,
+  # which is precisely why the clause says the line must be CHECKED rather than felt. Selftest first,
+  # same reason check-duplicate-defs does it.
+  python3 "$ROOT/scripts/check-file-scale.py" --selftest >/dev/null || die "check-file-scale selftest failed - the guard itself is broken; fix scripts/check-file-scale.py before pushing"
+  python3 "$ROOT/scripts/check-file-scale.py" "$ROOT" || die "a Python file is past the ~1,000-line bar (above) - constitution Principle X clause 13, gated since feature 173"
   # GREEN-GATE GUARD (constitution Principle XIII, GM 2026-08-17). The principle's enforcement
   # clause says this procedure "does not run to completion on a red or regressed state" - which was
   # ASPIRATIONAL until now: nothing here knew whether a gate had run, so compliance was a session

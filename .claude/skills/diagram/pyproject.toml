@@ -66,7 +66,7 @@ quote-style = "preserve"
 [tool.pyrefly]
 python-version = "3.14"
 search-path = ["."]                      # `l7r` is a namespace portion: module roots start here
-project-includes = ["l7r/diagram/settlement", "l7r/diagram/overlap", "l7r/diagram/waterfields", "l7r/diagram/hamletgen", "l7r/diagram/sitegen", "l7r/diagram/ci", "l7r/diagram/switches.py", "l7r/diagram/compound.py", "l7r/diagram/citybudget.py", "l7r/diagram/tools/pack_audit.py", "l7r/diagram/tools/why_placed.py", "l7r/diagram/tools/scatter_audit.py", "l7r/diagram/tools/timings.py", "l7r/diagram/tools/perf_bands.py", "l7r/diagram/tools/perf_review.py", "l7r/diagram/tools/perf_profile.py", "l7r/diagram/pipeline/pool_index.py", "l7r/diagram/pipeline/poolmaps.py"]
+project-includes = ["l7r/diagram/settlement", "l7r/diagram/overlap", "l7r/diagram/waterfields", "l7r/diagram/hamletgen", "l7r/diagram/sitegen", "l7r/diagram/ci", "l7r/diagram/switches.py", "l7r/diagram/compound.py", "l7r/diagram/citybudget.py", "l7r/diagram/tools/pack_audit", "l7r/diagram/tools/why_placed.py", "l7r/diagram/tools/scatter_audit.py", "l7r/diagram/tools/timings.py", "l7r/diagram/tools/perf_bands.py", "l7r/diagram/tools/perf_review.py", "l7r/diagram/tools/perf_profile.py", "l7r/diagram/pipeline/pool_index.py", "l7r/diagram/pipeline/poolmaps.py"]
 replace-imports-with-any = ["boto3", "boto3.*", "botocore", "botocore.*"]
 
 # The mypy-strict rule set, enabled by NAME rather than pyrefly's `strict` preset: that preset also

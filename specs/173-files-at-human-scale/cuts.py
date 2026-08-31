@@ -12,6 +12,8 @@ PLANS = {
     # edges. The modules below are LAYERS, emitted bottom-up, and `--plan` proves every edge points
     # backwards. Constants place themselves with their first reader (see assign_by_name).
     "l7r/diagram/hamletgen/ways.py": {
+        "title": "the lane web, the track and what makes a path legal",
+        "was": 4369,
         "kind": "names",
         "doc": '"""Split from hamletgen/ways.py by feature 173 - see this package\'s CLAUDE.md for the index."""\n\n',
         "modules": [
@@ -53,6 +55,8 @@ PLANS = {
     # ---- hamletgen/hinterland.py: 1,100 -> five --------------------------------------------------
     # Same shape as ways.py: stage_hinterland stands first and calls three things defined below it.
     "l7r/diagram/hamletgen/hinterland.py": {
+        "title": "the ground between everything",
+        "was": 1100,
         "kind": "names",
         "doc": '"""Split from hamletgen/hinterland.py by feature 173 - see this package\'s CLAUDE.md for the index."""\n\n',
         "modules": [
@@ -66,6 +70,8 @@ PLANS = {
 
     # ---- hamletgen/homesteads.py: 1,330 -> five --------------------------------------------------
     "l7r/diagram/hamletgen/homesteads.py": {
+        "title": "the homesteads and what stands among them",
+        "was": 1330,
         "kind": "names",
         "doc": '"""Split from hamletgen/homesteads.py by feature 173 - see this package\'s CLAUDE.md for the index."""\n\n',
         "modules": [
@@ -83,6 +89,8 @@ PLANS = {
     # role - parse, measure, judge, report - and the twenty checks stay together because a session
     # adding the twenty-first wants to read its neighbors.
     "l7r/diagram/tools/pack_audit.py": {
+        "title": "the Mode A sheet audit",
+        "was": 1225,
         "kind": "names",
         "doc": '"""Split from tools/pack_audit.py by feature 173 - see this package\'s CLAUDE.md for the index."""\n\n',
         "modules": [
@@ -99,6 +107,9 @@ PLANS = {
     # (feature 114). `__init__.py` composes the original class name back, so settlement/core.py's
     # import and its position in the `class Settlement(...)` base list never move.
     "l7r/diagram/settlement/water_ways.py": {
+        "title": "water, lanes, kido and wards",
+        "was": 1130,
+        "helpers_look": "the module-level helpers the mixins and the tests share - `junction_floor`, `fan_rival`, `_pull_back` and the two angle/length measures",
         "kind": "mixin",
         "class": "WaterWaysMixin",
         "self": "Settlement",
@@ -117,6 +128,9 @@ PLANS = {
     },
 
     "l7r/diagram/settlement/homestead_parts.py": {
+        "title": "yards, gardens, groves and stands",
+        "was": 1353,
+        "helpers_look": "the module-level helper `_belt_axis`",
         "kind": "mixin",
         "class": "HomesteadPartsMixin",
         "self": "Settlement",
@@ -135,6 +149,9 @@ PLANS = {
     },
 
     "l7r/diagram/settlement/structures/fixtures.py": {
+        "title": "the public fixtures and their siting",
+        "was": 1212,
+        "helpers_look": "the module-level helpers lifted out for unit testing (GM 2026-08-28) - `pick_caption_seat`, `kosatsuba_affordances`, `kosatsuba_anchor`",
         "kind": "mixin",
         "class": "PublicFixturesMixin",
         "self": "Settlement",
@@ -152,6 +169,8 @@ PLANS = {
     # A chain, not a residue bucket: the pockets are found, then planted or traded away, then the
     # whole thing is driven by close_seams. Cuts follow the chain, so every edge points backwards.
     "l7r/diagram/waterfields/seams.py": {
+        "title": "closing a carved comb fan into one shared-bund fabric",
+        "was": 1069,
         "kind": "module",
         "doc": '"""Split from waterfields/seams.py by feature 173 - see this package\'s CLAUDE.md for the index."""\n\n',
         "cuts": [

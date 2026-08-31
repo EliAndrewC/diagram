@@ -9,7 +9,9 @@ helpers), the branches the four demos do not happen to take, and the failure mod
 loud (a household count outside the tier band, a nonsense compass quarter).
 
 So: a rule about SHAPE goes here; a rule about a MAP belongs in the pool. Which MODULE it goes in
-mirrors `hamletgen/` exactly - a test for `hamletgen/ways.py` lives in `test_ways.py`.
+mirrors `hamletgen/` exactly - a test for `hamletgen/hinterland/` lives in `test_hinterland.py`, and
+where the subject is a PACKAGE big enough to have been split, so is its suite: `hamletgen/ways/`'s
+tests live in `tests/hamletgen/ways/`, one file per submodule (feature 173).
 """
 
 import os
