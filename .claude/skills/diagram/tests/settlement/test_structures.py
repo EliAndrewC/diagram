@@ -778,3 +778,26 @@ def test_kosatsuba_anchor_walks_the_imperial_road_and_ignores_a_run_too_short_to
     assert got is not None, "the Imperial road reaches the houses and anchors the board"
     assert abs(got[1] - 500.0) < 1e-6, "the anchor sits on the road's own line"
     assert kosatsuba_anchor({"houses": houses, "roads": [{"pts": [(500.0, 0.0)]}]}, "entrance") is None, "a one-point run alone leaves nothing to walk"
+
+
+def test_a_LABELED_theater_stage_captions_its_whole_rotated_extent() -> None:
+    """Feature 174: the labeled path, which the test above deliberately avoids by passing None.
+
+    Two things it pins. The default size is the town-calibrated ~150x105 ft stage-plus-viewing-ground
+    (the caller may state one, and the test above does, so the DEFAULT had never run). And the
+    caption is placed against the ROTATED extent: the comment at that branch records why a plain
+    reach correction dropped Tango's caption onto a monk house, so the half-extents are recomputed
+    through the rotation rather than taken from the unrotated box.
+    """
+    s = Settlement(1200, 1200, seed=9)
+    s.theater_stage(600.0, 600.0, label="temple stage")
+    rec = s.M["theater_stage"][-1]
+    assert (rec["w"], rec["h"]) == (s.px(150), s.px(105)), "the default is real feet at the map's ftpx"
+    s.place_labels()
+    assert any("temple stage" in lb[5] for lb in s.M["labels"] if len(lb) > 5), "the caption reached the sheet"
+
+    turned = Settlement(1200, 1200, seed=9)
+    turned.theater_stage(600.0, 600.0, rot=90.0, label="turned stage")
+    turned.place_labels()
+    placed = [lb for lb in turned.M["labels"] if len(lb) > 5 and "turned stage" in lb[5]]
+    assert placed, "a rotated stage is captioned too"
