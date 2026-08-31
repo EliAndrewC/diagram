@@ -452,3 +452,41 @@ def test_an_avenue_with_no_walls_drawn_yet_is_left_exactly_as_it_was() -> None:
     s.meta(name="C", scale="city")
     seats = [(600.0, 700.0), (600.0, 600.0), (600.0, 500.0)]
     assert s._avenue_short_of_walls(list(seats)) == seats
+
+
+def test_an_avenue_that_CANNOT_be_shortened_clear_of_a_wall_RAISES() -> None:
+    """The search floors out "once the stride would close to one rail-span, since arches that touch
+    are no avenue at all" - and then it refuses rather than drawing arches inside a wall.
+
+    Measured on the TRUE 16 ft span, not `torii_halfbox`: that box carries a 2 px stroke pad which
+    at 3 ft/px is nearly as wide as the arch itself, and using it left a 30 ft-pitch city avenue
+    with almost no room to shorten.
+    """
+    s = Settlement(1400, 1400, seed=9)
+    s.meta(name="C", scale="city")
+    s.manor(700.0, 700.0, 600.0, 600.0, "a manor")  # its walls run x,y = 400..1000
+
+    # THE FIRST ARCH NEVER MOVES - that is the pull-back's own rule - so an avenue whose innermost
+    # seat sits ON a wall cannot be rescued by any scale factor, and the engine says so rather than
+    # drawing an arch inside a wall. (Seats merely INSIDE the walls violate nothing and come back
+    # unchanged, which is how this test was first written and why it did not raise.)
+    with pytest.raises(ValueError, match="cannot be shortened"):
+        s._avenue_short_of_walls([(700.0, 400.0), (700.0, 500.0), (700.0, 600.0)])
+
+
+def test_a_hall_EXTENDS_a_short_torii_list_along_its_own_line() -> None:
+    """A gen may author fewer arch seats than the rolled count wants; the engine continues the run
+    at the authored stride rather than refusing or stopping short.
+
+    Two branches, both asserted: with two or more seats the stride is the LAST authored gap, and
+    with only ONE the direction is taken from the hall itself at the standard pitch.
+    """
+    two = Settlement(1400, 1400, seed=9)
+    two.meta(name="C", scale="city")
+    two.shrine_hall(700.0, 400.0, "Temple of Bishamon", torii=[(700.0, 520.0), (700.0, 590.0)], torii_count=4)
+    assert len(two.M["torii"]) == 4, "the run is extended to the count the roll asked for"
+
+    one = Settlement(1400, 1400, seed=9)
+    one.meta(name="C", scale="city")
+    one.shrine_hall(700.0, 400.0, "Temple of Bishamon", torii=[(700.0, 520.0)], torii_count=3)
+    assert len(one.M["torii"]) == 3, "and a single authored seat still gives the run its direction"
