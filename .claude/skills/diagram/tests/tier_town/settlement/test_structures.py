@@ -80,3 +80,32 @@ def test_place_punishment_spot_needs_a_street_to_site_on():
     # declines rather than dropping it somewhere arbitrary (the presence check then fires).
     s = _town()
     assert s.place_punishment_spot() is None
+
+
+# ---- feature 174: the bell-and-drum tower, which only a WALLED SEAT has -------------------------
+
+
+def test_a_drum_tower_records_a_square_footprint_on_the_TOP_layer() -> None:
+    """GM 2026-07-24: the timekeeping/curfew institution of a walled seat - morning bell, evening
+    drum, the dusk gate-closing that starts the street curfew. A county seat has exactly ONE
+    combined tower; the paired gulou/zhonglou on an axis is capital grammar.
+
+    Two things worth pinning. It is SQUARE (a masonry platform, county tier ~60-80 ft), and it goes
+    on the TOP layer - a tower is the tallest thing in the settlement and nothing is drawn over it.
+    """
+    s = _town()
+    z = s.drum_tower(500.0, 500.0)
+    rec = s.M["drum_towers"][-1]
+    assert rec["w"] == rec["h"], "a masonry platform is square"
+    assert rec["z"] == z and z > 0, "drawn on the top layer, and the caller gets its index"
+    assert rec["label"] == "drum tower"
+    assert not s._fits(500.0, 500.0, 8.0, 8.0), "and it blocks - the tower stands in the street plan"
+
+
+def test_a_drum_tower_takes_an_explicit_width_over_its_tier_default() -> None:
+    """A capital's tower is not a county seat's, so the size is the caller's when they state one."""
+    s = _town()
+    s.drum_tower(400.0, 400.0, tw=120.0, label="bell tower")
+    rec = s.M["drum_towers"][-1]
+    assert (rec["w"], rec["h"]) == (120.0, 120.0)
+    assert rec["label"] == "bell tower"
