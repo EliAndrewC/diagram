@@ -99,11 +99,11 @@ taken during, are in [`research.md`](research.md).
 
 - [x] T13 FR-009: answer the GM's ruling by MEASUREMENT, not by reading the comments
       research: procedure
-      verify: all 131 pragmas stripped and the whole corpus run against this feature's own new floor,
-      which then named every line nothing executes. **78 of the 131 were hiding lines the corpus
-      already runs** - stale, protecting nothing. Classifying by what each comment CLAIMED would have
-      deleted live code and kept dead code, which is why the census in `pragma-census.md` leads with
-      the method rather than the count
+      verify: all 130 pragmas stripped and the whole corpus run against this feature's own new floor,
+      which then named every line nothing executes. Counted in coverage's own unit: of **469** excluded
+      lines only **113** were still uncovered, so **356 exclusions were hiding lines the corpus already
+      runs**. Classifying by what each comment CLAIMED would have deleted live code and kept dead code,
+      which is why `pragma-census.md` leads with the method rather than the count
 
 - [x] T14 delete the dead code the ruling names, and say what is NOT dead
       research: procedure
@@ -112,11 +112,12 @@ taken during, are in [`research.md`](research.md).
       that handles empty). 24 KEPT as error handling or structural terminals - `if not pts: continue`
       stands before `len(pts)`, so removal converts a graceful skip into a crash, and several are a
       terminal return where the signature promises a value - each now carrying why it is not
-      deletable. 16 KEPT as live rescues or external systems ("no cohort map currently" is not
-      "cannot happen"). **130 -> 76 sites, 469 -> 385 excluded lines, 2.99% -> 2.30% of the floored
-      tree, 40 engine lines gone**; 2,716 tests green and no manifest moved, which is the evidence the
-      deletions were safe. The open half - whether the 24 error-handling guards are meant too - is
-      recorded for the GM rather than assumed
+      deletable. The live rescues and external systems are KEPT too ("no cohort map currently" is not
+      "cannot happen"). **130 -> 76 pragma comment lines, 469 -> 385 excluded lines, 2.99% -> 2.30% of
+      the floored tree, 40 engine lines gone**; 2,716 tests green and no manifest moved, which is the
+      evidence the deletions were safe. TWO things recorded for the GM rather than assumed: whether the
+      24 error-handling guards are meant too, and that the restored exclusions are block-scoped and so
+      over-broad (385 excluded where ~113 are unreached)
 
 - [x] T15 the gate green under the new standard, after the deletions
       research: procedure
