@@ -155,3 +155,55 @@ def test_a_town_rampart_gate_puts_its_guard_station_on_the_TOP_layer() -> None:
     # gatehouse, which is what `add_top` is for
     assert len(plain.top) < len(s.top), "and puts less on the top layer than one with a tower"
     assert s.walls, "the rampart itself is on the wall stream"
+
+
+@pytest.mark.parametrize("gate_dir", ["north", "south", "west", "east"])
+def test_a_castles_gate_opens_on_whichever_side_it_is_given(gate_dir: str) -> None:
+    """The enceinte's wall is broken on ONE side and solid on the other three, and the two axes are
+    separate branches - a horizontal wall gaps in x, a vertical one in y. All four are exercised
+    because a test of one axis passes with the other inverted.
+
+    THE INTERIOR IS EMPTY AND THAT IS NOT A SIMPLIFICATION (GM 2026-08-08): the castle is the
+    subject of its own Mode A sheet, so nothing is ever drawn inside - which is why the wall and its
+    gate are the whole of what there is to assert.
+    """
+    s = Settlement(1600, 1600, seed=16)
+    s.meta(name="C", scale="capital")
+    s.castle(800.0, 800.0, 400.0, 320.0, gate_dir=gate_dir)
+    assert s.M["castles"], "recorded"
+    assert s.walls, "the enceinte is drawn on the wall stream"
+
+
+def test_a_castle_may_carry_a_KARAMETE_rear_gate_with_its_own_tower() -> None:
+    """The karamete is the back gate, opposite the ote-mon. It records a gate TOWER of its own, and
+    the tower's box turns with the side it is on - a west or east gate's tower is tall rather than
+    wide, because it straddles a vertical wall.
+    """
+    south = Settlement(1600, 1600, seed=16)
+    south.meta(name="C", scale="capital")
+    south.castle(800.0, 800.0, 400.0, 320.0, gate_dir="south", karamete_dir="north")
+    tower = [t for t in south.M["castle_towers"] if t["kind"] == "gate_tower"]
+    assert tower, "the rear gate carries its own tower"
+    assert tower[0]["w"] > tower[0]["h"], "on a horizontal wall the tower is wider than tall"
+
+    west = Settlement(1600, 1600, seed=16)
+    west.meta(name="C", scale="capital")
+    west.castle(800.0, 800.0, 400.0, 320.0, gate_dir="south", karamete_dir="west")
+    # BOTH gates record a gate_tower - the ote-mon's and the karamete's - so the karamete is picked
+    # by its POSITION, not by taking the first row. (Taking [0] reads the south gate's tower and
+    # asserts the wrong thing about the right key.)
+    wt = [t for t in west.M["castle_towers"] if t["kind"] == "gate_tower" and t["x"] < 800.0]
+    assert wt and wt[0]["h"] > wt[0]["w"], "and on a vertical wall it is turned the other way"
+
+
+def test_a_castle_with_BAILEYS_draws_its_outer_wards() -> None:
+    """`baileys=True` adds the concentric outer enceintes at the given fractions - the ni-no-maru
+    and san-no-maru of a real castle - so the drawing must grow with them."""
+    plain = Settlement(1600, 1600, seed=16)
+    plain.meta(name="C", scale="capital")
+    plain.castle(800.0, 800.0, 400.0, 320.0)
+
+    walled = Settlement(1600, 1600, seed=16)
+    walled.meta(name="C", scale="capital")
+    walled.castle(800.0, 800.0, 400.0, 320.0, baileys=True)
+    assert len(walled.walls) > len(plain.walls), "the outer wards add their own enceintes"
