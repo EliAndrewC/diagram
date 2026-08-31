@@ -679,3 +679,42 @@ def test_a_closed_rampart_JOINS_its_last_run_into_its_first() -> None:
     assert s._gapped_ring(ring, [(800.0, 300.0), (1300.0, 800.0)]).count("M") == 2, "two gates cut it into two runs"
     assert s._gapped_ring(ring, [(300.0, 300.0)]).count("M") == 1, "a ring gated AT vertex 0 needs no join"
     assert s._gapped_ring(ring, []).count("M") == 1, "and an ungated wall is one unbroken run"
+
+
+def test_row_housing_holds_off_the_ROAD_and_the_RING_ROAD_as_well_as_the_streets() -> None:
+    """The machiya fabric's clearance list reads four keys, and each is a separate line in it. The
+    ring road takes a TIGHTER clearance than a town street - it is a fortification road whose wall
+    side is bare by design, so the fabric may come closer to it than to a frontage street.
+    """
+    road = Settlement(1600, 1600, seed=20)
+    road.meta(name="C", scale="city")
+    road.M["road"] = [(0.0, 700.0), (1600.0, 700.0)]
+    road.M["road_width"] = 30.0
+    road.rowpack((200.0, 300.0, 1200.0, 1100.0), ["laborer"] * 200, fill=True)
+    ys = [b["y"] for b in road.M["buildings"] if b["kind"] == "laborer"]
+    assert ys and min(abs(y - 700.0) for y in ys) > 30.0, "the fabric stands off the Imperial road"
+
+    ring = Settlement(1600, 1600, seed=20)
+    ring.meta(name="C", scale="city")
+    ring.M["ring_road"] = [(0.0, 700.0), (1600.0, 700.0)]
+    ring.rowpack((200.0, 300.0, 1200.0, 1100.0), ["laborer"] * 200, fill=True)
+    r_ys = [b["y"] for b in ring.M["buildings"] if b["kind"] == "laborer"]
+    assert r_ys and min(abs(y - 700.0) for y in r_ys) > 3.0, "and off the patrol road, at its own tighter clearance"
+
+
+def test_row_housing_refuses_a_seat_outside_the_canvas_or_outside_the_BOUND() -> None:
+    """Two refusals in `rect_ok`, both of which would otherwise put a dwelling where no reader can
+    see it: the drawn canvas has a margin no building may cross, and `s.bound` is the tier's own
+    envelope - on a walled city that is the ring road's loop, which is what keeps the quarters off
+    the wall.
+    """
+    edge = Settlement(600, 600, seed=20)
+    edge.meta(name="C", scale="city")
+    edge.rowpack((-200.0, -200.0, 40.0, 40.0), ["laborer"] * 20, fill=True)
+    assert not [b for b in edge.M["buildings"] if b["kind"] == "laborer"], "nothing is seated off the canvas"
+
+    bounded = Settlement(1600, 1600, seed=20)
+    bounded.meta(name="C", scale="city")
+    bounded.bound = [(100.0, 100.0), (140.0, 100.0), (140.0, 140.0), (100.0, 140.0)]
+    bounded.rowpack((600.0, 600.0, 1200.0, 1100.0), ["laborer"] * 20, fill=True)
+    assert not [b for b in bounded.M["buildings"] if b["kind"] == "laborer"], "nor outside the tier's bound"
