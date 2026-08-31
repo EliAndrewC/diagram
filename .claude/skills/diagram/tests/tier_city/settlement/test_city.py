@@ -767,6 +767,7 @@ def test_farmland_ring_takes_the_SOURCE_POINT_from_the_gen_when_one_is_given():
     river = [(1200, 100), (1200, 1300)]
     s.M["rivers"] = [{"pts": river, "w": 30}]
     asked = []
+    chords: list = []
 
     def comb(name, sl, dd, sd, ff, ca, cb, oa):
         env = [(sl[0] - 200, sl[1] - 120), (sl[0] - 40, sl[1] - 120), (sl[0] - 40, sl[1] + 120), (sl[0] - 200, sl[1] + 120)]
@@ -780,12 +781,11 @@ def test_farmland_ring_takes_the_SOURCE_POINT_from_the_gen_when_one_is_given():
     out = s.farmland_ring(
         [("f1", (1200, 700), 180, 3, 100, (120, 150), (80, 100), (0.3, 0.7), "river")],
         comb=comb,
-        topo=lambda pts, frm, to, draw_w=0.0: None,
+        topo=lambda pts, frm, to, draw_w=0.0: chords.append((pts, frm.get("kind"), to.get("kind"))),
         water=lambda k: river,
         city_center=(700, 700),
         source_point=source_point,
     )
     assert len(out) == 1 and asked, "the gen's own source point was consulted"
-    assert any(ch.get("pts", [[None]])[-1] == [999.0, 888.0] or (999.0, 888.0) in [tuple(q) for q in ch.get("pts", [])] for ch in s.M.get("channels", []) or []) or asked, (
-        "and it is what the chain was declared from"
-    )
+    source_chord = next(pts for pts, frm, to in chords if to == "field")
+    assert source_chord[-1] == (999.0, 888.0), f"and the chain was declared to END on it: {source_chord}"
