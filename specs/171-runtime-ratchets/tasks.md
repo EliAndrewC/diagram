@@ -86,13 +86,16 @@ quietly change; and FR-007 is OPTIONAL because `quick` already times itself inli
   fixture had a seeded log and still got the live median mixed in, which is a test quietly measuring
   production. And the median ignored scope, which FR-009 forbids.
 
-**THE GM'S, and neither is adopted silently** - both are the handoff author's decisions, carried
-forward unchanged and surfaced at close-out:
+**RATIFIED BY THE GM, 2026-08-30** - both were the handoff author's decisions, carried forward
+unchanged, put to the GM at close-out with the alternatives, and accepted:
 
-- **D1**: the 155 s interim baseline for `done`, which yields the 201 s ceiling in force today. It is
-  an interim number standing in for a 35 s baseline that does not exist yet.
+- **D1**: the 155 s interim baseline for `done`, which yields the 201 s ceiling in force today.
+  Accepted **with a condition: re-pin once real post-172 runs exist**, because the 155 s predates
+  feature 172's parallel `hooks-test` and every `done` since has short-circuited, so the post-172
+  cost is not yet measured. The declined alternative was leaving `done` unarmed until then.
 - **D2**: comparing the MEDIAN rather than the run while that interim regime holds, because at 201 s a
-  per-run bar would fire on 28% of normal runs.
+  per-run bar would fire on 28% of normal runs. Accepted as a bounded departure from the GM's own
+  phrasing: their per-run reading governs `quick` now and `done` from 35 s down.
 
 One thing the handoff author and I both got wrong, and the measurement that settles it: we each
 suspected `done`'s historical medians had been measuring a suite that skipped work, because `make

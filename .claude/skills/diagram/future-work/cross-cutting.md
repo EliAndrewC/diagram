@@ -327,3 +327,26 @@ they derive. Check for shared state before parallelizing, and expect at least on
 
 Not opened as a feature here; the GM has been told, and the efficiency work is a conversation they
 said comes after 171.
+
+## RE-PIN `done`'s ratchet baseline once post-172 runs exist (the GM's condition, 2026-08-30)
+
+The GM ratified feature 171's D1 - the 155 s interim baseline giving a 201 s ceiling - **with a
+condition**: re-pin it once real post-172 measurements exist.
+
+**Why it is owed.** The 155 s is the median of green reference-scope `done` runs from a window
+spanning 2026-08-29/30. That window predates feature 172, which took `hooks-test` from 94 s serial to
+0 s when guards are unchanged - and `hooks-test` was the single largest phase of the gate. So the
+baseline describes a gate that no longer exists.
+
+**Why it has not been done already**: every `done` run since 172 landed has short-circuited as
+`already-verified` (unchanged engine content), so there is no post-172 full-gate measurement to pin
+to. The next ordinary engine change produces one.
+
+**How to do it**: take the median of the green reference-scope runs recorded AFTER feature 172
+(`scripts/_gatecost.py done reference`, or `make audit`), pin it in `scripts/_ratchet.py`'s `done` row
+WITH a written reason (FR-010 requires one in either direction), and let FR-004 derive the new
+ceiling. If the new baseline is 35 s or less, nothing further is needed: the GM's own 45 s per-run
+rule takes over automatically, which is the regime the whole feature was built to hand off to.
+
+**Do not** lower the baseline to a single lucky fast run - the same window discipline applies, and the
+distribution is wide (25 s to 334 s in the pre-172 window, driven by cold roll caches and a shared box).

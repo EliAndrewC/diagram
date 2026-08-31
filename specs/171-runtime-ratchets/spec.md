@@ -2,7 +2,7 @@
 
 **Status**: **APPROVED** (`spec-fidelity` FAITHFUL at round 5, recorded below by its author) and
 **IMPLEMENTED** 2026-08-30 by the `Diagram tooling` session. Specified by `diagram-testing`; the
-implementation notes, and the two decisions that remain the GM's, are in
+implementation notes, and the two decisions the GM ratified on 2026-08-30, are in
 [`tasks.md`](tasks.md).
 **The GM's words**: [`request.md`](request.md). **The evidence**: [`research.md`](research.md).
 **Review**: `spec-fidelity`, rounds 1-4. See "Review history" for each round's items and their fixes.
@@ -133,7 +133,13 @@ tiers, no `AS=` role, no sign-off. The perf ladder guards a different thing at a
 
 ## Decisions this spec makes (and whose they are)
 
-**D1 - `make done`'s interim pinned baseline is 155 s. This is the spec author's decision, not the GM's.**
+**D1 - `make done`'s interim pinned baseline is 155 s. Proposed by the spec author; RATIFIED BY THE GM
+on 2026-08-30, with one condition: RE-PIN once real post-172 runs exist.** The condition matters
+because the 155 s came from a window spanning 2026-08-29/30, which predates feature 172's parallel
+`hooks-test` - and no post-172 full-gate measurement exists yet, because every `done` run since has
+short-circuited as `already-verified`. The GM was given the alternative (leave `done` unarmed until
+the efficiency work stabilizes it) and declined it, on the author's own reasoning: an unarmed target
+is how the slowdown went unnoticed. The original argument, unchanged:
 
 The GM's 45 s cannot be armed today: `done` runs ~135 s and every run would fail, blocking all work. The
 GM's phrasing was conditional (*"if they were down to thirty five seconds, then..."*). So an interim
@@ -158,8 +164,11 @@ median is ~135 s today (155 s across the last 25 green reference runs) leaves a 
 anything fires - and is 5.7x the 35 s the GM was reasoning from. The author chose to arm it anyway because "nearly vacuous" still stops a doubling, and an
 unarmed target is how this happened in the first place.
 
-**D2 - `done` is judged on a MEDIAN of recent runs, not on the single run. This is the spec author's
-decision, not the GM's, and it departs from how the GM phrased it.**
+**D2 - `done` is judged on a MEDIAN of recent runs, not on the single run. Proposed by the spec
+author; RATIFIED BY THE GM on 2026-08-30.** It departs from how the GM phrased it, and they accepted
+that departure knowing so, because it is BOUNDED to the interim: their literal per-run reading governs
+`quick` today and governs `done` the moment its baseline reaches 35 s. The original argument,
+unchanged:
 
 The GM's words are per-run twice (*"if it takes even as much as fifteen seconds"*, *"if they take forty
 five seconds to run"*), and `quick` is held to exactly that (FR-001). `done` is not, and the reason is
