@@ -20,6 +20,82 @@ from .route import _route, _unjog
 from .sweeps import _FINE_CELL, _LINK_DIRECTNESS, _SERVE_FT
 
 
+def _detour_links(cands: Sequence[tuple[float, Pt, Pt]], hard: Any, walls: Any, water: Any) -> list[tuple[float, Pt, Poly]]:
+    """RUNG 3 of the orphan join: route each candidate (vertex -> foot) pair, taking a wider box and a
+    longer leash when the direct plan fails, and stop at the first `_SHORTEST_OF` that route at all.
+
+    THE SHORTEST ROUTE WINS, NOT THE NEAREST TARGET (feature 137 T03, cohort seed 03): the nearest
+    vertex by air was 44 ft off across a garden, and the only route to it walked round the garden AND
+    a shed - a U of 66 + 36 + 54 ft enclosing the shed, which `lanes_bend_like_paths` reads as a
+    zigzag. The next candidate, 60 ft off, was an L through the 17 ft slot between the two.
+
+    LIFTED OUT OF `_touch_junctions` (GM 2026-08-28, feature 146): the cap that stops the search at
+    three routable targets, and the reach that ends it, are the branches that decide how much routing
+    a stranded piece costs, and reaching them through a whole hamlet roll meant they were reachable
+    only on a seed that happened to strand a way at the right distance.
+    """
+    found: list[tuple[float, Pt, Poly]] = []
+    for d, v, q in cands:
+        if d > _ORPHAN_REACH:
+            break  # sorted by air distance: nothing further out is worth a route
+        link = _route(v, q, hard, walls, water, gap=_TOUCH_GAP, pad_mult=2.0, cell=6.0)
+        if not link:  # the DETOUR: around the yard or the house that walls the slot - a wider box, a longer leash
+            link = _route(v, q, hard, walls, water, gap=WEB_FABRIC_GAP, pad_mult=5.0, cell=10.0)
+        if link and polyline_len(link) <= _DETOUR_DIRECTNESS * max(d, 1.0):
+            found.append((polyline_len(link), v, link))
+            if len(found) >= _SHORTEST_OF:
+                break  # three routable targets is enough to choose the shortest from
+    return found
+
+
+def _along_samples(w: Poly) -> list[Pt]:
+    """The points every `_ALONG_STEP_FT` along a way, its two ends included. The remainder carries
+    across a vertex (`_acc`), so a way of many short segments is sampled at the same true pitch as one
+    long one rather than once per segment.
+
+    KNOWN LIMITATION, measured 2026-08-31 (feature 174): where EVERY segment divides `_ALONG_STEP_FT`
+    exactly, the carried remainder lands on `t == seg` and the strict `<` misses it, so such a way
+    offers only its two ends. Left as it is: correcting it would move the links this rung draws and so
+    the lanes of any map that reaches it - a map change, which a coverage feature does not get to make.
+    `tests/hamletgen/ways/test_touch.py` pins the behavior so the next reader meets it as a decision
+    rather than as a bug."""
+    out: list[Pt] = [w[0], w[-1]]
+    acc = 0.0
+    for a, b in zip(w, w[1:], strict=False):
+        seg = math.dist(a, b)
+        t = _ALONG_STEP_FT - acc
+        while t < seg:
+            out.append((a[0] + (b[0] - a[0]) * t / seg, a[1] + (b[1] - a[1]) * t / seg))
+            t += _ALONG_STEP_FT
+        acc = (acc + seg) % _ALONG_STEP_FT if seg else acc
+    return out
+
+
+def _fine_lattice_links(way: Poly, main_ways: Sequence[Poly], hard: Any, walls: Any, water: Any) -> list[tuple[float, Pt, Poly]]:
+    """RUNG 4: AIM ALONG THE WAY, FINELY. The rungs above ask a way for its NEAREST point and plan on
+    a lattice that charges 4 ft of slop to the corridor; this one offers the whole way as targets and
+    plans at `_FINE_CELL`, which is what threads a slot the coarse lattice cannot see.
+
+    LIFTED with `_detour_links` and for the same reason - it only runs for a piece that every earlier
+    rung failed to join, which no cheap roll produces on purpose."""
+    along: list[tuple[float, Pt, Pt]] = []
+    for w in main_ways:
+        for q in _along_samples(w):
+            v = min(way, key=lambda z, _q=q: math.dist(z, _q))
+            along.append((math.dist(v, q), v, q))
+    along.sort(key=lambda c: c[0])
+    found: list[tuple[float, Pt, Poly]] = []
+    for d, v, q in along[:_ALONG_CANDS]:
+        if d > _ORPHAN_REACH:
+            break
+        link = _route(v, q, hard, walls, water, gap=WEB_FABRIC_GAP, pad_mult=2.0, cell=_FINE_CELL)
+        if link and polyline_len(link) <= _DETOUR_DIRECTNESS * max(d, 1.0):
+            found.append((polyline_len(link), v, link))
+            if len(found) >= _SHORTEST_OF:
+                break
+    return found
+
+
 def _touch_junctions(
     s: Settlement,
     hard: list[Poly],
@@ -282,43 +358,9 @@ def _touch_junctions(
                 # `lanes_bend_like_paths` reads as a zigzag. The next candidate, 60 ft off, was an L
                 # through the 17 ft slot between the two. So the first `_SHORTEST_OF` candidates that
                 # route at all are compared by the length of their ROUTE, and the shortest is drawn.
-                found: list[tuple[float, Pt, Poly]] = []
-                for d, v, q in cands[:12]:
-                    if d > _ORPHAN_REACH:
-                        break
-                    link = _route(v, q, hard, walls, water, gap=_TOUCH_GAP, pad_mult=2.0, cell=6.0)
-                    if not link:  # (3) the DETOUR: around the yard or the house that walls the slot - a wider box, a longer leash
-                        link = _route(v, q, hard, walls, water, gap=WEB_FABRIC_GAP, pad_mult=5.0, cell=10.0)
-                    if link and polyline_len(link) <= _DETOUR_DIRECTNESS * max(d, 1.0):
-                        found.append((polyline_len(link), v, link))
-                        if len(found) >= _SHORTEST_OF:
-                            break
+                found: list[tuple[float, Pt, Poly]] = _detour_links(cands[:12], hard, walls, water)
                 if not found:
-                    # (4) AIM ALONG THE WAY, FINELY. See `_ALONG_STEP_FT`: the rungs above ask a way for
-                    # its nearest point and plan on a lattice that charges 4 ft of slop to the corridor.
-                    _along: list[tuple[float, Pt, Pt]] = []
-                    for w in _main_ways:
-                        _samples: list[Pt] = [w[0], w[-1]]
-                        _acc = 0.0
-                        for a, b in zip(w, w[1:], strict=False):
-                            _seg = math.dist(a, b)
-                            _t = _ALONG_STEP_FT - _acc
-                            while _t < _seg:
-                                _samples.append((a[0] + (b[0] - a[0]) * _t / _seg, a[1] + (b[1] - a[1]) * _t / _seg))
-                                _t += _ALONG_STEP_FT
-                            _acc = (_acc + _seg) % _ALONG_STEP_FT if _seg else _acc
-                        for q in _samples:
-                            v = min(ways[i], key=lambda z, _q=q: math.dist(z, _q))
-                            _along.append((math.dist(v, q), v, q))
-                    _along.sort(key=lambda c: c[0])
-                    for d, v, q in _along[:_ALONG_CANDS]:
-                        if d > _ORPHAN_REACH:
-                            break
-                        link = _route(v, q, hard, walls, water, gap=WEB_FABRIC_GAP, pad_mult=2.0, cell=_FINE_CELL)
-                        if link and polyline_len(link) <= _DETOUR_DIRECTNESS * max(d, 1.0):
-                            found.append((polyline_len(link), v, link))
-                            if len(found) >= _SHORTEST_OF:
-                                break
+                    found = _fine_lattice_links(ways[i], _main_ways, hard, walls, water)
                 if found:
                     _len, v, link = min(found, key=lambda t: t[0])
                     _join_piece(s, lanes, i, ways[i], v, link, hard, walls, water, main_segs)

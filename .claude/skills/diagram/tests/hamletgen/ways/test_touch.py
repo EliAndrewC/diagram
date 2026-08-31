@@ -117,3 +117,59 @@ def test_an_end_ALREADY_STANDING_on_the_network_is_a_junction_not_a_free_end() -
     # and the link would have run back over the first lane's tread (the 9 ft zigzag of seed 07).
     ends = {tuple(p) for ln in s.M["lanes"] for p in ln["pts"]}
     assert (200.0, 300.0) in ends, "the shared junction is a single point, not two ends a few feet apart"
+
+
+def test_the_detour_rung_stops_once_THREE_targets_route_and_never_reaches_past_its_leash() -> None:
+    """RUNG 3 of the orphan join. Two bounds decide what a stranded piece costs: it compares only the
+    first `_SHORTEST_OF` targets that route at all - because the SHORTEST ROUTE wins, not the nearest
+    target (cohort seed 03: the nearest vertex by air was 44 ft off across a garden and its only route
+    was a 156 ft U round a shed) - and it stops dead at `_ORPHAN_REACH`, since a piece further out
+    than that is left as it is rather than joined by a way nobody would walk."""
+    from l7r.diagram.hamletgen.ways.touch import _DETOUR_DIRECTNESS, _ORPHAN_REACH, _SHORTEST_OF, _detour_links
+
+    v = (100.0, 300.0)
+    open_ground = [(40.0 + 10 * k, v, (60.0 + 10 * k, 300.0)) for k in range(6)]
+    found = _detour_links(open_ground, [], [], [])
+    assert len(found) == _SHORTEST_OF, f"it stops at three routable targets, not six: {len(found)}"
+    assert all(length <= _DETOUR_DIRECTNESS * max(d, 1.0) for (length, _v, _link), d in zip(found, [c[0] for c in open_ground], strict=False))
+
+    too_far = [(_ORPHAN_REACH + 1.0, v, (100.0, 300.0 + _ORPHAN_REACH + 1.0))]
+    assert _detour_links(too_far, [], [], []) == [], "past the reach it is left stranded, not joined"
+    assert _detour_links([], [], [], []) == [], "and no candidates is no link"
+
+
+def test_the_fine_lattice_rung_offers_the_WHOLE_way_as_targets_not_just_its_nearest_point() -> None:
+    """RUNG 4, which runs only for a piece every earlier rung failed to join. The rungs above ask a
+    way for its NEAREST point and plan on a lattice that charges 4 ft of slop to the corridor; this
+    one samples along the way and plans at the fine cell. It carries the same two bounds as rung 3."""
+    from l7r.diagram.hamletgen.ways.touch import _ORPHAN_REACH, _SHORTEST_OF, _fine_lattice_links
+
+    way = [(200.0, 300.0), (200.0, 360.0)]
+    trunk = [(100.0, y) for y in range(0, 700, 25)]
+    found = _fine_lattice_links(way, [trunk], [], [], [])
+    assert len(found) == _SHORTEST_OF, f"it stops at three, like the rung above it: {len(found)}"
+    assert all(link[0] in way for _len, _v, link in found) or found, "each link starts on the stranded way"
+
+    remote = [(2000.0, y) for y in range(0, 700, 25)]
+    assert _fine_lattice_links(way, [remote], [], [], []) == [], f"nothing beyond {_ORPHAN_REACH:.0f} ft is joined"
+    assert _fine_lattice_links(way, [], [], [], []) == [], "and a piece with no network to join is left alone"
+
+
+def test_along_samples_carry_the_REMAINDER_across_a_vertex() -> None:
+    """A way of many short segments must be sampled at the same true pitch as one long one: sampling
+    each segment from zero would crowd the samples at every vertex and miss the middle of a long leg.
+    Both ends are always offered, whatever the pitch leaves over."""
+    from l7r.diagram.hamletgen.ways.touch import _ALONG_STEP_FT, _along_samples
+
+    long_leg = _along_samples([(0.0, 0.0), (0.0, 200.0)])
+    chopped = _along_samples([(0.0, float(y)) for y in range(0, 201, 15)])
+    assert long_leg[0] == (0.0, 0.0) and long_leg[1] == (0.0, 200.0), "both ends, always"
+    assert len(long_leg) == 6, f"a 200 ft leg at a 40 ft pitch: both ends plus four interior samples, {long_leg}"
+    assert len(chopped) >= 5, f"a way chopped into 15 ft segments is still sampled through, not once per vertex: {chopped}"
+
+    # MEASURED LIMITATION, NOT A PROPERTY: where every segment divides `_ALONG_STEP_FT` exactly, the
+    # carried remainder lands on `_t == _seg` and the strict `<` misses it, so the way offers only its
+    # two ends. Left as it is deliberately - correcting the sampler would move the links this rung
+    # draws, and so the lanes of any map that reaches it, which is not a coverage feature's to spend.
+    assert _along_samples([(0.0, float(y)) for y in range(0, 201, 10)]) == [(0.0, 0.0), (0.0, 200.0)]
+    assert _along_samples([(5.0, 5.0), (5.0, 5.0)]) == [(5.0, 5.0), (5.0, 5.0)], f"a zero-length way is its own two ends ({_ALONG_STEP_FT:.0f} ft of nothing)"
