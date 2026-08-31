@@ -1,7 +1,7 @@
 # Feature 174 - One Hundred Percent, Enforced
 
-**Status**: Draft - rewritten 2026-08-31 against `spec-fidelity` round 1 (CHANGES REQUIRED, seven
-items, all applied below) and against measurements the first draft did not have.
+**Status**: 2026-08-31, after four `spec-fidelity` rounds (1: seven items; 2: FR-003 was a no-op;
+3: three items; 4: two) - every item applied, each round's findings in the Review history below.
 [`request.md`](request.md) is the authority; [`research.md`](research.md) holds every number.
 
 ## The feature, in one sentence
@@ -170,7 +170,7 @@ values above coverage.
 - **the `--omit` list** (`settlement/`, `waterfields/`, `interactive/`, `overlap/`): dissolved, one
   tree at a time, as each reaches 100%. A tree leaves the omit list the day it can.
 
-Neither is replaced by a new exemption. FR-004's `hill.py` question is the only one outstanding.
+Neither is replaced by a new exemption, and **no exemption question remains outstanding** - `hill.py` is covered by tests like any other engine module (FR-004). The sentence that used to stand here reserved that question; it was a survival from the second draft, which round 2 struck and round 4 found still standing.
 
 ### FR-007 - dead code is DELETED, not covered - and deadness is proven, not grepped
 
@@ -189,10 +189,11 @@ permanently red, and a red gate everyone routes around is how the ratchets arriv
 ## Success criteria
 
 1. The measured set reports 100%, with no ratchet and no parked lines.
-2. A run below the floor cannot complete, and the only remaining way to land without that run is
-   feature 170's `GATE_STAMP_OK`, which demands a written reason of at least two words and is
-   logged where `make audit` reads it. That residue is stated rather than claimed away - see
-   FR-003a, which keeps it deliberately and owes the GM the question.
+2. A run below the floor cannot complete. Of the routes FR-003a enumerates, **two are deliberately
+   left open** and neither is claimed away here: feature 170's `GATE_STAMP_OK`, which skips the
+   stamp check entirely but demands a written reason and is logged where `make audit` reads it; and
+   the DIRECT route for a delta with no engine Python, which is the GM's own feature-132 ruling and
+   which this request does not reopen. Both are stated in FR-003a, and the first is put to the GM.
 3. Every closure is a test that asserts BEHAVIOR; every exemption is a deletion or a GM ruling.
 4. `make quick` is unchanged.
 5. The `--omit` list and `SETTLEMENT_COV_FLOOR` are both gone.
@@ -231,13 +232,11 @@ subagent.
 | round | verdict | what it found |
 |---|---|---|
 | 1 | CHANGES REQUIRED | **Seven items, all applied in this rewrite.** The spec had been written PARTWAY THROUGH implementation - disclosed to the reviewer, who confirmed the ordering showed: its scope was drawn around the work in flight (the 89 the session was already closing), and both exclusions landed exactly on work not yet started. Also: FR-003 named no run and never priced the literal instruction; FR-004's exclusion was disproved by the feature's own commits; the R3 deselection table was stale (the scope lock has been OFF since 2026-08-27); 35 statements inside the existing hard floor were missing from the census; FR-002 was unrequested; the two ratchets the GM's first sentence names were never addressed; and the "close to 100%" answer quoted the hamlet path (99.28%) rather than the whole set (96.07%) |
-
 | 2 | CHANGES REQUIRED | **The central one: FR-003 was a no-op.** It named `make test COV_FLOORS=1` as the run to carry the floor - which is already where all three floors live, so the requirement changed nothing about `make done`, nothing about the push, and nothing about what a merge demands. Verified: a plain `make done` runs `test` with `COV_FLOORS` empty, stamps green anyway, and `gate-stamp.py --check` is the whole of what the push demands - so the mechanism the GM's request names would have survived the feature intact. The reviewer read that as the ordering pull surviving at the one requirement carrying the request's core, and that is the right diagnosis. Also: no requirement delivered success criterion 2's "no mechanism" (now FR-003a); FR-004 replaced a wrong exclusion with a question the request already forecloses (now decided); two stated facts about `test-full` were false (now FR-003b); and `research.md` R1 and R3 were stale while the spec declared research.md held every number (R1 corrected in place; **R3 was NOT, and round 3 caught the false claim that it had been** - corrected there) |
+| 3 | CHANGES REQUIRED | **Three items, all applied, and all smaller than round 2's** - which is the pattern the five-round cap exists to permit rather than cut off (CLAUDE.md, GM 2026-08-30). (a) Success criterion 2 claimed "the push cannot land without that run" while FR-003a's own table KEEPS `GATE_STAMP_OK`, which skips `gate-stamp.py --check` entirely - the criterion asserted something the spec itself contradicted one section earlier. SC2 now states the residue, and FR-003a says it is raised with the GM rather than claimed as met. (b) The round-2 row said `research.md` R1 and R3 were "corrected in place"; only R1 was, and R3 still asserted the scope lock was on when it has been OFF since 2026-08-27 - the same finding recorded as fixed and not fixed. R3 carries its own correction now, and the round-2 row says what actually happened. (c) The spec had grown TWO `Decisions Recorded` sections with colliding ids (D1, D3 and D6 each meant two different things), so no cross-reference in this feature or any later one resolved; merged into one table with one numbering. The reviewer also named a fifth route to main below the floor - a delta with no engine Python takes the DIRECT route and runs no gate - which is now a stated-and-left row in FR-003a, since it is the GM's own feature-132 ruling and this request does not reopen it |
+| 4 | CHANGES REQUIRED | **Two items, both new and both smaller again.** (a) THE ROUND-3 FIX SUBSTITUTED A NEW OVERCLAIM FOR THE OLD ONE - the exact failure the reviewer was asked to watch for. SC2's rewrite said `GATE_STAMP_OK` was "the only remaining way" to land without the floored run, while the same edit had just ADDED a second open row to FR-003a: a delta with no engine Python takes the DIRECT route and runs no gate. So the criterion again asserted a completeness the spec disproved two sections above it. SC2 now names both open routes and claims neither closed. (b) FR-006 still ended "FR-004's `hill.py` question is the only one outstanding" - a survival from the second draft that round 2 struck, and one that reads as this spec holding an exemption question open against a request that permits none, directly contradicting FR-004's own title. Also applied, from the reviewer's asides: the Status line was three rounds stale, and the Review history had fragmented into three headerless tables - cosmetic, but it is the record of exactly what round 3 was about |
 
 **The ordering was wrong and is recorded as such**: implementation began before the spec existed,
 contrary to Principle XVI. The rewrite above is drawn from the request and the measurements rather
 than from the work already done, which is why FR-004 now REVERSES the first draft's exclusion and
 FR-001's census grew from 89 to 565.
-
-
-| 3 | CHANGES REQUIRED | **Three items, all applied, and all smaller than round 2's** - which is the pattern the five-round cap exists to permit rather than cut off (CLAUDE.md, GM 2026-08-30). (a) Success criterion 2 claimed "the push cannot land without that run" while FR-003a's own table KEEPS `GATE_STAMP_OK`, which skips `gate-stamp.py --check` entirely - the criterion asserted something the spec itself contradicted one section earlier. SC2 now states the residue, and FR-003a says it is raised with the GM rather than claimed as met. (b) The round-2 row said `research.md` R1 and R3 were "corrected in place"; only R1 was, and R3 still asserted the scope lock was on when it has been OFF since 2026-08-27 - the same finding recorded as fixed and not fixed. R3 carries its own correction now, and the round-2 row says what actually happened. (c) The spec had grown TWO `Decisions Recorded` sections with colliding ids (D1, D3 and D6 each meant two different things), so no cross-reference in this feature or any later one resolved; merged into one table with one numbering. The reviewer also named a fifth route to main below the floor - a delta with no engine Python takes the DIRECT route and runs no gate - which is now a stated-and-left row in FR-003a, since it is the GM's own feature-132 ruling and this request does not reopen it |
