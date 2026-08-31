@@ -126,3 +126,26 @@ less valuable test set would get there faster - the tests were never the cost.
 
 **Sources**: measurements of this repository on 2026-08-31, each reproducible by the command in the
 row beside it.
+
+## R6 - TWO MEASUREMENT HAZARDS, both hit in one session
+
+**A concurrent pytest CORRUPTS a running coverage measurement.** A `make test-full` was running while
+this session ran `make test-file` and `make cov-file` beside it; both write the same `.coverage` data
+file, and the run reported **44%** where the same tree had measured **95%** minutes earlier. It looks
+exactly like a catastrophic regression. The skill's own dev-loop doc already says *"Never run a
+pytest BESIDE a running gate"* and gives a different reason (two writers on the same pool maps); the
+coverage data file is a second, quieter reason for the same rule. **Discard such a run; do not
+diagnose it.**
+
+**PER-TEST TIMINGS ON THIS BOX CARRY A HYBRID-CPU DISTORTION** (peer session, 2026-08-31). `lscpu`
+reports an Intel Core Ultra 7 155H: 22 CPUs, P-cores plus E-cores. Under xdist a worker may land on
+either, and a batch's wall time is set by its slowest worker - so a test that "got slower" may simply
+have landed on an E-core, and two runs of identical code can differ materially. **This qualifies
+R5's cost numbers** (89 s / 237 s): the RATIO is large enough to survive the noise, but neither
+figure is a precise constant, and any future ratchet tuned on this box inherits the same lottery.
+Coverage RESULTS - which lines executed - are unaffected; only the timings are.
+
+The peer flagged a live consequence worth checking separately: `_ratchet.py` fails `make quick` at a
+hard 15 s on the run itself, so a quick run whose heaviest tests land on E-cores while another
+session is busy could fail as a false regression. Not measured here; recorded so it is not
+rediscovered from scratch.
