@@ -184,3 +184,39 @@ def test_pack_face_streets_CORE_leaves_the_street_band_for_shop_frontage() -> No
     t.street([(0.0, 400.0), (1000.0, 400.0)], width=20)
     turned = t.pack((100.0, 420.0, 700.0, 700.0), ["hovel"] * 12, step=46, face_streets=True, fill=True)
     assert turned >= 0, "and so does the plain facing mode"
+
+
+def test_a_footpath_run_BROKEN_by_an_obstacle_keeps_the_longest_clear_stretch() -> None:
+    """Feature 174, branch coverage. The path is laid by scanning across the district and keeping
+    the longest unobstructed run - "emit only if enough of it survives to read as a path rather than
+    a stub" (it must reach 40% of the district's width).
+
+    A building planted mid-scan breaks the run in two, which is the branch: the scan must keep the
+    longer half rather than the first half or the whole span.
+    """
+    s = _town()
+    s.building(450.0, 300.0, 60.0, 60.0, "kura", 0.0)  # squarely in the way, left of centre
+    s.pack((100.0, 100.0, 900.0, 700.0), ["hovel"] * 30, step=46, footpaths=3, fill=True)
+    worn = [ln for ln in (s.M.get("lanes") or []) if ln.get("worn")]
+    assert worn, "the district is still threaded despite the obstruction"
+    for ln in worn:
+        xs = [p[0] for p in ln["pts"]]
+        assert max(xs) - min(xs) >= 0.4 * 800.0, "each emitted path reads as a path, not a stub"
+
+
+def test_face_streets_FILL_jitters_the_block_core_instead_of_facing_anything() -> None:
+    """The third mode: deep in a block core there is no frontage to face, so tenement housing takes
+    the district's own rotation with a small jitter. Distinct from `"core"`, which PUSHES off the
+    street band, and from plain True, which turns each building toward its nearest street."""
+    s = _town()
+    s.street([(0.0, 200.0), (1000.0, 200.0)], width=20)
+    placed = s.pack((100.0, 400.0, 800.0, 700.0), ["hovel"] * 20, step=46, rot=30.0, face_streets="fill", fill=True)
+    assert placed > 0, "the core still fills"
+    rots = [b["rot"] for b in s.M["buildings"] if b["kind"] == "hovel"]
+    assert rots, "and records what it placed"
+    # A JITTER, NOT A FACING SPREAD - which is the whole distinction from `face_streets=True`, where
+    # buildings turn toward whichever street is nearest and the rotations fan out. The base is the
+    # open-face rotation rather than the district's own (`open_face_rot` runs after the mode picks
+    # `r` and re-bases it), so what this asserts is the SPREAD, which is the observable difference.
+    assert max(rots) - min(rots) <= 13.0, f"clustered within the +/-6 jitter, not fanned out to face streets: {rots[:4]}"
+    assert len(set(rots)) > 1, "and jittered rather than stamped at one angle"
