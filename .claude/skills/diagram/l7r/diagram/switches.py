@@ -147,17 +147,30 @@ def read(skill: Path) -> Switches:
 IDLE_TIMER_MARK = "idle-tests-hooks.sh"
 
 
-def _ancestors(pid: int) -> list[int]:
-    """The pid chain from `pid` up to init, read from /proc."""
+def _proc_status(pid: int) -> str:
+    """`/proc/<pid>/status`, or "" when it cannot be read (the process exited under us)."""
+    try:
+        return Path(f"/proc/{pid}/status").read_text()
+    except OSError:
+        return ""
+
+
+def _ancestors(pid: int, status_of: Callable[[int], str] = _proc_status) -> list[int]:
+    """The pid chain from `pid` up to init.
+
+    `status_of` is injected for the same reason `idle_context` injects this function: the walk's two
+    EXITS depend on the shape of the live process tree, so which of them a test reaches is decided by
+    the machine rather than by the test. Feature 174 measured that directly - the `ppid <= 0` exit was
+    covered by one `make test-full` and missed by the very next `make done` on identical code, because
+    a reparented process came and went between them. Injected, both exits are three lines of dict."""
     out: list[int] = []
     while pid > 1 and len(out) < 64:
-        try:
-            status = Path(f"/proc/{pid}/status").read_text()
-        except OSError:
-            break
+        status = status_of(pid)
+        if not status:
+            break  # the process is gone; the chain ends where we can still read it
         ppid = next((int(line.split()[1]) for line in status.splitlines() if line.startswith("PPid:")), 0)
         if ppid <= 0:
-            break
+            break  # a process reporting no parent - init, or one whose parent went away
         out.append(ppid)
         pid = ppid
     return out

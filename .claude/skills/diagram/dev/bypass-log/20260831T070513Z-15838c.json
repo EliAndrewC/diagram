@@ -1,0 +1,6 @@
+{
+  "utc": "20260831T070513Z",
+  "guard": "pair-hooks",
+  "what": "gate alone",
+  "reason": "feature 174 changed no engine drawing code - the delta is tests, the gate"
+}

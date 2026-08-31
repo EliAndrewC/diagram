@@ -258,3 +258,25 @@ def test_the_idle_subcommand_prints_a_BARE_FLAG_the_Makefile_can_read(capsys) ->
 
     assert switches.main(["idle"]) == 0
     assert capsys.readouterr().out.strip() == "0", "this process is not the idle timer's child"
+
+
+def test_the_ancestor_walk_ends_at_INIT_at_a_VANISHED_process_and_at_its_own_depth_cap() -> None:
+    """Three exits, and which one a live process tree happens to reach is the machine's decision, not
+    the test's. Feature 174 measured that: the "no parent" exit was covered by one `make test-full`
+    and missed by the very next `make done` on identical code, because a reparented process came and
+    went between the two runs. So the reader is injected and each exit is driven directly."""
+    from l7r.diagram import switches as sw
+
+    tree = {5: "PPid:\t4\n", 4: "PPid:\t3\n", 3: "PPid:\t1\n"}
+    assert sw._ancestors(5, status_of=lambda p: tree.get(p, "")) == [4, 3, 1], "the chain up to init"
+
+    orphan = {5: "PPid:\t0\n"}
+    assert sw._ancestors(5, status_of=lambda p: orphan.get(p, "")) == [], "a process reporting no parent ends the walk"
+
+    gone = {5: "PPid:\t4\n"}
+    assert sw._ancestors(5, status_of=lambda p: gone.get(p, "")) == [4], "a process that exited under us ends it where it can still be read"
+
+    loop = dict.fromkeys(range(2, 200), "PPid:\t2\n")
+    assert len(sw._ancestors(199, status_of=lambda p: loop.get(p, ""))) == 64, "and the depth cap holds against a cycle"
+
+    assert sw._proc_status(-1) == "", "the real reader answers empty rather than raising for a pid that is not there"
