@@ -109,3 +109,27 @@ def test_a_drum_tower_takes_an_explicit_width_over_its_tier_default() -> None:
     rec = s.M["drum_towers"][-1]
     assert (rec["w"], rec["h"]) == (120.0, 120.0)
     assert rec["label"] == "bell tower"
+
+
+def test_a_pasture_takes_both_a_BBOX_and_a_POLYGON_and_blocks_either_way() -> None:
+    """Feature 174: `pasture` had no test. It accepts two shapes - a 4-number bbox or a ring of
+    points - and the branch that tells them apart is the whole reason its rng scope is keyed the way
+    it is (the comment records a 2026-08-08 divergence at draw #70 of 24,615, where re-shaping a
+    paddock changed the draw sequence for everything after it).
+
+    Both shapes asserted, and the scoping asserted by its OBSERVABLE property: the same shape draws
+    the same paddock twice, which is what "never otherwise" means.
+    """
+    box = _town()
+    before = len(box.block_polys)
+    box.pasture((200.0, 200.0, 400.0, 300.0), label=None)
+    assert box.M["pastures"], "a bbox pasture is recorded as a ring of points"
+    assert len(box.block_polys) == before + 1, "and registers a no-build polygon - grazing land is not free ground"
+
+    ring = _town()
+    ring.pasture([(600.0, 600.0), (900.0, 600.0), (900.0, 800.0), (600.0, 800.0)], label=None)
+    assert ring.M["pastures"], "a polygon pasture is recorded too - the other branch of the shape test"
+
+    again = _town()
+    again.pasture((200.0, 200.0, 400.0, 300.0), label=None)
+    assert again.M["pastures"][-1] == box.M["pastures"][-1], "keyed on the shape: the same paddock re-rolls identically"
