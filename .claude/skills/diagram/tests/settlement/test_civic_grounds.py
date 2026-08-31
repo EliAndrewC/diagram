@@ -662,3 +662,21 @@ def test_merchant_storehouses_stops_at_COUNT_and_keeps_a_kura_off_the_road() -> 
     onroad.M["road"] = [[100.0, 478.0], [900.0, 478.0]]  # running right along the BACKS of the shops (rot 0 faces -y)
     onroad.M["road_width"] = 30
     assert onroad.merchant_storehouses(count=3) == 0, "and none of them may sit in the roadbed"
+
+
+def test_the_yard_keeps_only_the_footprints_that_could_REACH_it() -> None:
+    """The keep-out list is built by sweeping every solid kind on the map, and a town's manifest is
+    mostly buildings nowhere near this yard. The cull is a bbox test with 50 px of slack past the
+    disc - deliberately generous, because the watering point may sit at a well just OUTSIDE the rim -
+    and a yard on an otherwise empty map never exercised the reject half of it."""
+    from l7r.diagram.settlement.civic_grounds._yardctx import _YardCtx
+
+    s = _town()
+    s.M["buildings"] = [
+        {"x": 520.0, "y": 500.0, "w": 30.0, "h": 20.0, "rot": 0.0},  # inside the yard
+        {"x": 600.0, "y": 500.0, "w": 30.0, "h": 20.0, "rot": 0.0},  # just outside the rim, inside the +50 slack
+        {"x": 1300.0, "y": 1300.0, "w": 30.0, "h": 20.0, "rot": 0.0},  # the far side of the sheet
+    ]
+    ctx = _YardCtx(s, 500.0, 500.0, 72.0)
+    assert len(ctx.keep) == 2, f"the far building is culled and the two near it are kept: {ctx.keep}"
+    assert all(box[0] < 700.0 for box in ctx.keep), "and nothing from the far side of the sheet is in the list"
