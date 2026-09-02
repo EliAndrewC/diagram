@@ -27,7 +27,7 @@ its roof over blocked ground. If a feature must keep whole footprints out, `plac
 (distance-based) is the registry that does it; `block_polys` alone is not enough.
 
 **SEE IT BEFORE YOU READ IT.** `dev/placement-stages/hamlet-placement.html` is Inashiro rolled one
-stage at a time, with a plate of the map after each of the thirteen stages and a note on why that
+stage at a time, with a plate of the map after each of its stages (eighteen at feature 176) and a note on why that
 stage sits where it does. Regenerate it with `python3 -m l7r.diagram.tools.placement_stages` whenever
 `STAGES` changes - it is generated, never hand-edited, and its per-stage prose is keyed by function
 name so a renamed or new stage shows up as missing rather than silently inheriting its neighbour's.

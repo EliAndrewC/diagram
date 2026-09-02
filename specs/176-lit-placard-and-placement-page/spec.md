@@ -1,6 +1,6 @@
 # Feature 176 - The lit placard keeps its name; the placement page catches up
 
-**Status**: DRAFT - awaiting `spec-fidelity` (constitution XVI)
+**Status**: FAITHFUL (`spec-fidelity`, round 1) - cleared for implementation (constitution XVI). Two asides recorded below.
 **Request**: `request.md` (the GM's words, verbatim, two messages)
 
 ## Why
@@ -69,3 +69,12 @@ All rendering-class decisions (nothing physical is decided here):
 - **D3** The stale docstring on `stage_waterward` ("Called from `stage_hinterland`" - it has been its
   own stage 5 since feature 150) is corrected in passing (Principle XIV: a defect found is fixed in the
   work that found it). Docstring-only, so it re-keys nothing.
+
+## Review asides (`spec-fidelity` round 1, FAITHFUL)
+
+1. D1 resolves *"I would like for the font color to change"* as the name KEEPING the ink and no
+   longer being overridden to gold - the color changes relative to what the GM saw (gold on gold),
+   but the lit name looks identical to the unlit one. If the GM wants the lit name visibly distinct,
+   that is a one-line follow-up in `page.css`. Reported with the work.
+2. The module docstring of `tools/placement_stages.py` still said "thirteen function names" and its
+   size comment "thirteen plates"; both corrected in this feature (same class of stale prose as D3).

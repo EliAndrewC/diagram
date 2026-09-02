@@ -12,7 +12,7 @@ the rice paddy fields, and then at whatever later stage, we have added the house
 It is the COMPANION to `dev/placement.md`, not a duplicate of it, and the split is deliberate. That
 document is the rulebook a session loads before changing where something is placed - the registries,
 the CENTER-vs-FOOTPRINT trap, the reserve/fill rule. This is the picture: what the map actually looks
-like after each stage, so the sequence can be SEEN rather than reconstructed from thirteen function
+like after each stage, so the sequence can be SEEN rather than reconstructed from eighteen function
 names. A reader who has looked at the plates knows immediately why the web cannot run before the
 houses, because the plate before it is visibly empty of the things it has to thread between.
 
@@ -119,8 +119,9 @@ NOTES: dict[str, tuple[str, str]] = {
         "and zigzags - a worn path minimizes its turns, and a bend sits at a plot corner.",
     ),
     "stage_notice": (
-        "The notice board - the LAST thing placed",
-        "The kosatsuba is deliberately last, after even the crop and the title, and the reason is about the "
+        "The notice board - the last FEATURE placed",
+        "The kosatsuba is deliberately the last map feature, after even the crop and the title - only the "
+        "label phase follows it, and that phase places captions, not features - and the reason is about the "
         "settlement rather than about the drawing (GM 2026-08-29): \u201cwhere you put the notice board on the "
         "map does depend on what other features already exist ... the real humans that live in the society "
         "that decide where the notice board will go will look around at the things which already exist and "
@@ -133,9 +134,40 @@ NOTES: dict[str, tuple[str, str]] = {
         "map\u2019s own seed over the placements the record attests and the map can site (feature 154). "
         "Placing it last also fixed a defect by construction: sited among the trees it used to claim a ~55 ft "
         "cleared disc, and an entrance seat on a windward fringe punched a 40 ft hole in the shelter belt that "
-        "nothing replanted. Nothing is placed after the board now, so it displaces nothing - and the GM\u2019s "
+        "nothing replanted. No feature is placed after the board now, so it displaces nothing - and the GM\u2019s "
         "ruling is that it never should have: \u201chumans would not need to clear any amount of space in order "
         "to put up a notice board at the side of a path.\u201d It may stand under a canopy at the wood\u2019s edge.",
+    ),
+    "stage_labels": (
+        "The labels - the final phase, after the last feature",
+        "Every caption on the map is placed here, against the finished sheet, and nothing comes after it "
+        "(feature 157, GM 2026-08-29): \u201cadd a phase at the very end of every settlement creation process, "
+        "which is putting down the labels for things. Thus, after the final map feature is added, which on a "
+        "hamlet is the notice board, there is a final phase in which we add labels for whatever map features "
+        "get labels. This is because how we place labels will always depend on what else is on the map.\u201d "
+        "No feature draws its own caption any more: a stage that wants one queues it (`label()`), and this "
+        "stage drains the queue (`Settlement.place_labels`) once every feature a caption might have to avoid "
+        "exists. It draws no feature and reserves no ground, so it can only ever be last - the same argument "
+        "that put the notice board after the frame, taken one step further. The plate is the previous one "
+        "with its captions on, which on a hamlet is exactly what the stage is.",
+    ),
+    "stage_waterward": (
+        "A polder\u2019s waterward fringe",
+        "The reed strips outside the dike, on the flanks that face the water (feature 150). It needs the "
+        "SEAT - which flank is landward is a fact about where the village stands - and it RESERVES ground, "
+        "so it runs here rather than in the hinterland with the rest of the wild cover: laid there, it was "
+        "drawn over a connector that had already been routed through it; laid before the houses and the "
+        "track, both treat it as the wet ground it is. A valley hamlet such as this one draws nothing here, "
+        "which is why the plate is a card: the stage decides for a polder and is silent everywhere else.",
+    ),
+    "stage_pond_stock": (
+        "Pig sties and duck pens on the ponds",
+        "A dike-pond hamlet\u2019s livestock fixtures (feature 150 A3/A4): duck pens at the corners of the "
+        "grow-out ponds nearest the houses, pig sties on the dikes of the next nearest - pens first, because "
+        "ducks are driven out to the water and penned back every day while pigs are fed where they stand, "
+        "so the pens take the shortest walk. It runs after the appurtenances because each fixture is sited "
+        "relative to the houses as placed, and before the lane web because it reserves ground the web must "
+        "thread around, like the byres and wells before it. Nothing on a valley hamlet, hence the card.",
     ),
     "stage_hinterland": (
         "The marsh, then scrub and rough grazing",
@@ -209,7 +241,7 @@ def _plate(snap: Settlement, out_dir: str, stem: str, width: int) -> tuple[str, 
         if w > width:
             im = im.resize((width, max(1, round(h * width / w))), Image.LANCZOS)
         # PALETTISED, because these are flat-color maps and this page is COMMITTED. At full render
-        # size thirteen plates come to 96 MB, which is not a documentation asset, it is a liability -
+        # size the plates came to 96 MB (thirteen of them then, eighteen now), which is not a documentation asset, it is a liability -
         # and the whole point is that the page lives in the repo and is re-run when `STAGES` changes.
         # An adaptive 128-color palette is visually indistinguishable on flat fills and hard strokes
         # while cutting each plate by roughly an order of magnitude.

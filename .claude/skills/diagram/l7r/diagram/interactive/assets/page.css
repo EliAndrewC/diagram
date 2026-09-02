@@ -41,6 +41,14 @@ g.f.on:not([fill="none"]), g.f.on *:not([fill="none"]) { fill: var(--hl) !import
    their own, so the whole dike went one flat gold. Placed after the rule above so it wins. */
 g.f.on.planted[stroke]:not([stroke="none"]), g.f.on.planted *[stroke]:not([stroke="none"]) { stroke: var(--hl-planted-stroke) !important; }
 g.f.on.planted:not([fill="none"]), g.f.on.planted *:not([fill="none"]) { fill: var(--hl-planted) !important; }
+/* THE NAME STAYS READABLE ON THE LIT PLACARD (GM 2026-09-02: "I should be able to see and read the
+   name of the hamlet while the title card is highlighted ... whatever color has changed to must have
+   decent contrast with the highlighted background color"). The placard's card and its name share the
+   class `place` (finish.py), so the fill rule above painted BOTH gold and the name vanished into its
+   own card. The text keeps the map's ink instead: #2D2A24 on the #FFC83D highlight is a 9.2:1
+   contrast ratio, well past the 4.5:1 WCAG AA bar for body text. Placed after the fill rules so it
+   wins; scoped to the placard because that is the one lit class whose text sits on its own fill. */
+g.f.on.f-place text { fill: var(--ink) !important; }
 /* The explanation is a NON-modal dialog over our own shade (see page.js `open`): a modal one makes
    the whole map inert and costs a full restyle of the 175,000-element tree per open and close. */
 #shade { position: fixed; inset: 0; background: rgba(45, 42, 36, 0.45); z-index: 9; }
