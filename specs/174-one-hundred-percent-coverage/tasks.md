@@ -142,7 +142,7 @@ taken during, are in [`research.md`](research.md).
 
 - [x] T18 FR-010: `source = ["l7r"]` and every one of the 19 to 100%
       research: procedure
-      verify: measured surface 20,682 -> **22,525 statements**; 14 modules given tests (five were
+      verify: measured surface 20,682 -> **22,520 statements** (measured, not tallied); 14 modules given tests (five were
       already at 100% once measured); three docstrings claiming exemption removed. Each suite is
       aimed at what its module would silently get WRONG - `cache_audit`'s vacuous-trial skip,
       `mapcheck`'s locked-scope refusal, `cohort_audit`'s reference gate, `perf_snapshot`'s

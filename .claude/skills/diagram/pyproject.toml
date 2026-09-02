@@ -148,8 +148,8 @@ omit = ["*/tests/*", "pool/*/*/*.gen.py", "legacy-hand-authored-pool/*/*/*.gen.p
 # above-hamlet wings of settlement/ exercised by nothing, so the Makefile ran 100% on every module
 # EXCEPT settlement/ plus a 94% ratchet on it. **It holds now.** Feature 174 covered those wings by
 # TESTS rather than by waiting for the tier conversions, the ratchet and the `--omit` list both
-# retired, and the gate enforces one flat 100% over the whole measured set - 20,682 statements,
-# 0 missing. This paragraph is kept rather than deleted because a stale claim of exactly this kind is
+# retired, and the gate enforces one flat 100% over the WHOLE ENGINE - 22,520 statements, 0 missing
+# (the surface widened again on 2026-09-02; see the note on `source` below). This paragraph is kept rather than deleted because a stale claim of exactly this kind is
 # what let the ratchet survive six review rounds: the spec said it was gone while the Makefile said
 # otherwise, and nobody re-read either until someone measured.
 #
