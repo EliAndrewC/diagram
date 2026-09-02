@@ -179,10 +179,16 @@ def _synthetic() -> tuple[list[str], list[Any]]:
     tags.append("village lane")
     strings.append('<g stroke="#A7A860" stroke-width="0.8"><line x1="20" y1="180" x2="21" y2="184"/><line x1="30" y1="182" x2="31" y2="186"/></g>')  # two scrub blades in one corner
     tags.append("scrub and rough grazing")
-    # the title placard the way finish.py emits it: the card, then the name over it, both `place`
-    strings.append('<g><rect x="150" y="10" width="120" height="40" rx="7" fill="#F7F0DC" stroke="#8C7A55" stroke-width="1.6"/></g>')
+    # the title placard the way finish.py emits it: the card, then the name over it, both `place`.
+    # ON EMPTY GROUND (feature 174, 2026-09-02): it was first placed at x=150 y=10, which is exactly
+    # where the windbreak rect sits (150-180, 10-30) - and being appended last it is drawn ON TOP of
+    # it. `test_a_sibling_link_lights_the_other_class...` force-clicks the windbreak group, the event
+    # lands on whatever is topmost there, and the map answered with a neighbouring class instead. The
+    # band y=105..145 is clear of the feature row (y 10-30), the paddy and notice board (y 60-95), the
+    # lane (y 150) and the scrub blades (y ~180).
+    strings.append('<g><rect x="150" y="105" width="120" height="40" rx="7" fill="#F7F0DC" stroke="#8C7A55" stroke-width="1.6"/></g>')
     tags.append(PLACE)
-    strings.append('<text x="210" y="36" text-anchor="middle" font-size="16" font-weight="bold" fill="#2D2A24">Synthetic</text>')
+    strings.append('<text x="210" y="131" text-anchor="middle" font-size="16" font-weight="bold" fill="#2D2A24">Synthetic</text>')
     tags.append(PLACE)
     strings.append("</svg>")
     tags.append(None)
