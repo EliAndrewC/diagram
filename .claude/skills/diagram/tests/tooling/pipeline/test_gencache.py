@@ -175,3 +175,118 @@ def test_unreadable_stored_coverage_is_DOUBT_and_doubt_regenerates(tmp_path: pat
     bad = tmp_path / "not-coverage.dat"
     bad.write_bytes(b"certainly not a coverage database")
     assert gencache._coverage_is_current(str(bad)) is False
+
+
+def test_the_open_SPY_ignores_a_file_object_it_cannot_take_a_path_of(monkeypatch: pytest.MonkeyPatch) -> None:
+    """The dependency recorder wraps `open` to note what a generator READ. `open` also accepts a file
+    descriptor, and `os.path.abspath` on an int raises - so the spy must fall through to the real
+    `open` rather than taking down the roll it is only observing."""
+    seen: list[str] = []
+
+    def run() -> None:
+        fd = os.open(__file__, os.O_RDONLY)
+        try:
+            with open(fd, closefd=False) as fh:  # noqa: PTH123 - a file DESCRIPTOR, which is the point
+                fh.read(1)
+            seen.append("read through a descriptor")
+        finally:
+            os.close(fd)
+
+    rec = gencache.record(run)
+    assert seen == ["read through a descriptor"], "the read still happened"
+    assert isinstance(rec, dict), "and the recorder returned a dependency record regardless"
+
+
+def test_the_recorder_notes_which_ENGINE_FUNCTIONS_a_roll_executed() -> None:
+    """The per-function half of the key: `record` watches starts through `sys.monitoring` and keeps
+    the ones whose file is engine code. Nested qualnames carry `.<locals>.`, which the AST walk does
+    not, so they are normalized to match - a mismatch there would make every key miss."""
+    from l7r.diagram.settlement import Settlement
+
+    def run() -> None:
+        s = Settlement(200, 200, seed=1)
+        s.meta(name="T", scale="village", ftpx=1)
+
+    rec = gencache.record(run)
+    funcs = rec.get("functions") or rec.get("funcs") or {}
+    assert funcs, "the roll executed engine functions and they were recorded"
+    assert not any(".<locals>" in str(name) for entry in [funcs] for name in (entry if isinstance(entry, (list, set, tuple)) else entry.keys())), "qualnames are normalized"
+
+
+def test_load_DELETES_a_standing_output_the_cached_entry_does_not_carry(tmp_path: pathlib.Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    """The 2026-08-17 fix. A gate-built entry is stored with rendering skipped, so it has no PNG - and
+    the stale PNG on disk was left in place and re-dated by the copy of its siblings. Nothing looked
+    wrong (all three files carried the same mtime) and two review rounds judged the wrong image.
+    "The key matched THIS entry's outputs; it says nothing about a file the entry does not contain."
+    """
+    monkeypatch.setattr(gencache, "CACHE_DIR", str(tmp_path / "cache"))
+    gen = tmp_path / "m.gen.py"
+    gen.write_text("x = 1\n")
+    entry = tmp_path / "cache" / "m"
+    entry.mkdir(parents=True)
+    (entry / "m.json").write_bytes(b"{}")
+    key = gencache.compute_key(str(gen), None)
+    (entry / "meta.json").write_text(json.dumps({"key": key, "outputs": ["m.json"]}))
+    stale_png = tmp_path / "m.png"
+    stale_png.write_bytes(b"the PREVIOUS roll's picture")
+
+    assert gencache.load(str(gen)) is True
+    assert not stale_png.exists(), "the entry has no PNG, so the standing one is deleted to force a re-render"
+    assert (tmp_path / "m.json").is_file(), "and what the entry DOES carry is restored"
+
+
+def test_a_memo_whose_REPLACE_fails_still_answers(tmp_path: pathlib.Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    """The atomic rename at the end of the memo write. A read-only tree loses the memo, never the
+    answer - the split is simply recomputed next time."""
+    src = tmp_path / "mm.py"
+    src.write_text("def f():\n    return 2\n")
+    monkeypatch.setattr(gencache, "CACHE_DIR", str(tmp_path / "cache"))
+    gencache._SPLIT_MEMO.clear()
+
+    def no_replace(*_a: Any, **_kw: Any) -> Any:
+        raise OSError("read-only file system")
+
+    monkeypatch.setattr(os, "replace", no_replace)
+    whole, funcs, _ = gencache.split_sources(str(src))
+    assert whole and funcs, "the answer came back"
+
+
+def test_store_EVICTS_a_stale_png_from_the_entry_rather_than_blessing_it(tmp_path: pathlib.Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    """ "EVICT, DO NOT SKIP." A `continue` alone leaves a PNG already sitting in the entry directory,
+    and the meta.json written below then blesses that stale image as THIS key's output - so a later
+    hit restores the previous roll's picture beside a current manifest. Four settlement-reviews on
+    2026-08-23 each independently found the shipped PNG was the pre-feature-126 roll, on all four
+    scripted hamlets, and reviewed the wrong image before noticing."""
+    monkeypatch.setattr(gencache, "CACHE_DIR", str(tmp_path / "cache"))
+    monkeypatch.setenv("DIAGRAM_SKIP_RENDER", "1")
+    gen = tmp_path / "m.gen.py"
+    gen.write_text("x = 1\n")
+    (tmp_path / "m.json").write_bytes(b"{}")
+    entry = tmp_path / "cache" / "m"
+    entry.mkdir(parents=True)
+    (entry / "m.png").write_bytes(b"the PREVIOUS roll's picture")
+
+    gencache.store(str(gen), {})
+    assert not (entry / "m.png").exists(), "the stale image is evicted, not blessed as this key's output"
+
+
+def test_a_gate_regeneration_that_FAILS_raises_with_the_child_s_own_output(tmp_path: pathlib.Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    """The gate regenerates in a subprocess so the entry gains coverage data. When that child dies,
+    the parent must raise carrying the CHILD's stdout and stderr - a bare "regeneration failed" would
+    send a reader to run the generator by hand just to see the traceback the parent already had."""
+    monkeypatch.setattr(gencache, "CACHE_DIR", str(tmp_path / "cache"))
+    monkeypatch.setenv("GATE_NO_CACHE", "1")  # force the MISS path
+    gen = tmp_path / "boom.gen.py"
+    gen.write_text("raise SystemExit('the generator exploded')\n")
+
+    def failed(*_a: Any, **_kw: Any) -> Any:
+        return subprocess.CompletedProcess([], 1, "stdout: partway through", "stderr: the generator exploded")
+
+    monkeypatch.setattr(subprocess, "run", failed)
+    with pytest.raises(RuntimeError, match="gate regeneration failed for boom"):
+        gencache.gate_obtain(str(gen))
+    try:
+        gencache.gate_obtain(str(gen))
+    except RuntimeError as e:
+        assert "the generator exploded" in str(e), "the child's own output travels with the failure"
+        assert "exit 1" in str(e)

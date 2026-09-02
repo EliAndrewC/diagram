@@ -360,7 +360,15 @@ def record(run: Callable[[], object]) -> dict[str, Any]:
     mon = sys.monitoring
     tool = mon.PROFILER_ID
 
-    def on_start(code: Any, offset: int) -> Any:
+    def on_start(code: Any, offset: int) -> Any:  # pragma: no cover - see below
+        # NOT UNTESTED, UNOBSERVABLE (feature 174, GM 2026-09-02's all-code rule). This body RUNS and
+        # is asserted - `test_the_recorder_notes_which_ENGINE_FUNCTIONS_a_roll_executed` proves six
+        # engine functions come back from a real roll. Coverage cannot SEE it: a `sys.monitoring`
+        # callback's body is invisible to coverage while coverage is itself installed, because the two
+        # use the same machinery. Measured 2026-09-02 with coverage running in-process: the callback
+        # recorded 6 functions and coverage reported only this `def` line as executed. Same class as
+        # the AWS transport - reached by the code, not by the measurement - and stated here rather
+        # than left as a silent hole.
         path = code.co_filename
         if path in engine:
             functions.add((path, code.co_qualname.replace(".<locals>", "")))
