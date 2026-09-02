@@ -890,10 +890,15 @@ any single rule is reason enough to refuse "done" status.
    hundred percent code coverage, period. That was not previously the
    case. We now want that to be the case always. For tools, for our
    settlement generation, for the automated checks on our hand drawn
-   diagrams, for everything."* `pytest --cov-fail-under=100` is the
-   enforcement gate, and it is enforced **in the standard manner** -
-   `fail_under = 100` in the config, a floor on the gate, no per-module
-   ratchet and no hand-maintained roster of what is measured.
+   diagrams, for everything."* The enforcement gate is
+   `coverage report --fail-under=100` in the skill Makefile, over the
+   whole engine. (`pytest-cov` is never given the flag and
+   `[tool.coverage.report]` deliberately omits `fail_under`, so the floor
+   runs LAST and a run's own failures are reported before the coverage
+   table; the GM's *"for example ... and such"* leaves the place open.)
+   It is enforced **in the standard manner** - a floor on the gate, the
+   measured surface DERIVED (`source = ["l7r"]`), no per-module ratchet
+   and no hand-maintained roster of what is measured.
 
    **The failure this replaces was a MEASURED SURFACE that had to be
    opted into.** `[tool.coverage.run] source` used to name the measured
