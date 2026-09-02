@@ -83,3 +83,95 @@ def test_regen_skips_frozen_legacy_maps():
     assert rc == 0
     assert "FROZEN" in out and "--frozen-ok" in out and "migration-plan.md" in out
     assert "REGENERATED" not in out and "CACHED" not in out, out
+
+
+# ---- feature 174: the defensive branches, under the GM's 2026-09-02 all-code rule ---------------
+# Every one of these is a DEGRADATION path: the cache's job is to be invisible when it works and to
+# get out of the way when it cannot. A cache that raised would take the whole map roll with it, so
+# each of these answers "regenerate" rather than propagating.
+import json
+import pathlib
+from typing import Any
+
+
+def test_a_path_that_cannot_be_made_RELATIVE_is_recorded_absolute(monkeypatch: pytest.MonkeyPatch) -> None:
+    """A different drive or an unresolvable pair. The key still has to be computable, so the absolute
+    path is recorded rather than the dependency being dropped - dropping it would make two different
+    trees hash identically."""
+
+    def unrelatable(*_a: Any, **_kw: Any) -> str:
+        raise ValueError("path is on mount 'C:', start on mount '/'")
+
+    monkeypatch.setattr(os.path, "relpath", unrelatable)
+    assert gencache._rel("/somewhere/else/x.py") == "/somewhere/else/x.py"
+
+
+def test_source_that_does_not_PARSE_hashes_as_bytes_with_no_split(monkeypatch: pytest.MonkeyPatch) -> None:
+    """Unparseable is still content: it gets a whole-file hash and contributes no per-function
+    entries, so a syntactically broken engine file invalidates everything rather than nothing."""
+    whole, funcs, names = gencache._split_sources(b"def broken(:\n")
+    assert whole and funcs == {} and names == set()
+
+
+def test_a_memo_that_cannot_be_WRITTEN_still_returns_its_answer(tmp_path: pathlib.Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    """A read-only tree loses the memo, never the answer - the same rule the module states for its
+    other OSError. The split is recomputed next time; nothing is wrong except that it costs more."""
+    src = tmp_path / "m.py"
+    src.write_text("def f():\n    return 1\n")
+
+    real = pathlib.Path.write_text
+
+    def readonly(self: Any, *a: Any, **k: Any) -> Any:
+        if self.suffix == ".tmp" or "split" in str(self):
+            raise OSError("read-only file system")
+        return real(self, *a, **k)
+
+    monkeypatch.setattr(pathlib.Path, "write_text", readonly)
+    whole, funcs, _names = gencache.split_sources(str(src))
+    assert whole and funcs, "the answer came back regardless"
+
+
+def test_an_ABSENT_renderer_is_recorded_as_absent_rather_than_crashing(monkeypatch: pytest.MonkeyPatch) -> None:
+    """The renderer version is part of the key, because a resvg upgrade can change the PNG. When
+    resvg is not installed the honest key component is the string "absent" - it still distinguishes
+    that state from any installed version."""
+
+    def no_resvg(*_a: Any, **_kw: Any) -> Any:
+        raise OSError("no such binary")
+
+    monkeypatch.setattr(subprocess, "run", no_resvg)
+    assert gencache._renderer_version() == "absent"
+
+
+def test_an_UNRESOLVABLE_dependency_state_forces_a_miss_every_time(monkeypatch: pytest.MonkeyPatch) -> None:
+    """The one branch that deliberately returns a value that can never match: if the installed
+    packages cannot be read, the safe answer is "this is a different environment from every other",
+    which regenerates. Guessing "same as last time" would serve a map built against other libraries."""
+    import glob as _glob
+
+    def boom(*_a: Any, **_kw: Any) -> Any:
+        raise RuntimeError("importlib.metadata is unhappy")
+
+    monkeypatch.setattr(_glob, "glob", boom)
+    gencache._deps_state.cache_clear()
+    a = gencache._deps_state()
+    gencache._deps_state.cache_clear()
+    b = gencache._deps_state()
+    assert a.startswith("unresolvable-") and b.startswith("unresolvable-")
+    assert a != b, "and two resolutions never agree, so such a state can never hit"
+    gencache._deps_state.cache_clear()
+
+
+def test_load_MISSES_when_the_entry_has_no_metadata(tmp_path: pathlib.Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    """A half-written entry - killed mid-store, or hand-deleted - must miss rather than raise."""
+    monkeypatch.setattr(gencache, "CACHE_DIR", str(tmp_path))
+    (tmp_path / "x").mkdir()  # an entry directory with no meta.json in it
+    assert gencache.load("x.gen.py") is False
+
+
+def test_unreadable_stored_coverage_is_DOUBT_and_doubt_regenerates(tmp_path: pathlib.Path) -> None:
+    """The comment says it outright: "unreadable stored coverage IS doubt, and doubt regenerates".
+    A cache that resolved doubt in its own favour is the failure mode this whole module fears."""
+    bad = tmp_path / "not-coverage.dat"
+    bad.write_bytes(b"certainly not a coverage database")
+    assert gencache._coverage_is_current(str(bad)) is False
