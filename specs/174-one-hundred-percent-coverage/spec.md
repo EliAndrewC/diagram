@@ -115,6 +115,40 @@ Recorded because they were the argument FR-003 rested on, and both were checked 
 What IS true and worth the GM's attention: `done FULL=1` prompts and cancels by default and writes a
 `dev/bypass-log/` entry, where `test-full` does neither.
 
+### FR-010 - THE MEASURED SURFACE IS THE WHOLE ENGINE, AND IT IS DERIVED
+
+**GM 2026-09-02, ruling on FR-003a's `[tool.coverage.run] source` row**: *"a new tool absolutely
+should silently owe one hundred percent coverage the day it lands. Going forward, we want one
+hundred percent code coverage, period. That was not previously the case. We now want that to be the
+case always. For tools, for our settlement generation, for the automated checks on our hand drawn
+diagrams, for everything."* And, on the nineteen modules the old roster excluded: *"I agree that
+none of that is abandoned code. Therefore, it should all have tests, and we should require one
+hundred percent code coverage for it."*
+
+**What the roster had been hiding**: 19 engine files, **1,843 statements**, carrying no coverage
+obligation at all - `tools/` audits and drivers plus `pipeline/gencache.py`. Two of them
+(`dwellings.py`, `l7r/diagram/__init__.py`) were not tools at all; they fell out because the roster
+listed SUBPACKAGES and nothing covered top-level modules. Nobody had decided they were exempt.
+
+**Nothing was deleted.** The audit put to the GM found every one of the seventeen real tools wired to
+a make target with a stated reason, and two of them - `pipeline/gencache.py` and `pipeline/regen.py`,
+263 and 56 statements - are load-bearing infrastructure that runs on every map build and was merely
+filed under "tools". The GM agreed and ruled that all of it gets tests.
+
+| | |
+|---|---|
+| `[tool.coverage.run] source` | a hand-maintained roster -> **`["l7r"]`**. Derived, so a new file under `l7r/` owes coverage the day it lands and nobody has to remember |
+| measured statements | 20,682 -> **22,525** |
+| modules brought from unmeasured to 100% | **19** (five were already there once measured; fourteen needed tests) |
+| docstrings claiming *"not under the 100% rule"* | 3, all removed |
+
+**One stated exclusion, and it is not "cannot happen"**: `gencache`'s `sys.monitoring` callback RUNS
+and is asserted (a test proves six engine functions come back from a real roll), but coverage cannot
+SEE it - a monitoring callback's body is invisible to coverage while coverage is itself installed,
+because the two use the same machinery. Measured 2026-09-02: the callback recorded 6 functions while
+coverage reported only its `def` line. That is unreachable by the MEASUREMENT, the same class as the
+AWS transport, and it is stated at the point of change with the measurement rather than left silent.
+
 ### FR-009 - the PRAGMA is named, counted, and left to the GM
 
 Round 5's finding, and the one thing in five rounds that this session should not decide for itself.

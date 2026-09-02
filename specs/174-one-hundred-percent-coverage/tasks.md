@@ -122,3 +122,28 @@ taken during, are in [`research.md`](research.md).
 - [x] T15 the gate green under the new standard, after the deletions
       research: procedure
       verify: `make done` green in 537 s with the 100% floor enforced on the plain branch
+
+## The measured surface (GM 2026-09-02)
+
+- [x] T16 FR-010: the guidelines FIRST, as the GM asked - a new tool owes 100% the day it lands
+      research: procedure
+      verify: constitution **v2.15.0** (Principle X clause 5 rewritten round the GM's words, plus the
+      two supporting clauses that still said "target 100% on pure logic" and "100% on every measured
+      module except the ratcheted settlement/ package"); `CLAUDE.md` carries it as NON-NEGOTIABLE;
+      and `pyproject.toml`'s comment - which had argued the GM's exact opposite, "instead of making a
+      new tool silently owe 100% coverage the day it lands" - now records that they reversed it
+
+- [x] T17 audit the 19 modules and put them to the GM before touching them
+      research: procedure
+      verify: all 17 real tools wired to a make target with a stated reason; `pipeline/gencache.py`
+      (263) and `regen.py` (56) load-bearing infrastructure merely filed under "tools"; `dwellings.py`
+      and `__init__.py` not tools at all - excluded only because the roster listed subpackages. The
+      GM ruled none of it abandoned and all of it owed tests
+
+- [x] T18 FR-010: `source = ["l7r"]` and every one of the 19 to 100%
+      research: procedure
+      verify: measured surface 20,682 -> **22,525 statements**; 14 modules given tests (five were
+      already at 100% once measured); three docstrings claiming exemption removed. Each suite is
+      aimed at what its module would silently get WRONG - `cache_audit`'s vacuous-trial skip,
+      `mapcheck`'s locked-scope refusal, `cohort_audit`'s reference gate, `perf_snapshot`'s
+      retroactive baseline, `crop_map`'s world-to-pixel conversion asserted on real pixels
