@@ -14,6 +14,13 @@ worth pinning are the ones that were learned by getting them wrong:
 The stage list is stubbed: the point is the page's logic, and rolling eighteen real stages to test
 an HTML writer would cost minutes per run.
 
+ALSO, from feature 176 (landed on main while this feature was in flight, and merged here rather than
+either side being dropped): the page is written from `NOTES`, and a stage added to `STAGES` without a
+note renders "(no note yet)" with nothing red. The GM, 2026-09-02: *"I think the hamlet placement
+order HTML file is outdated. For example, it does not mention anything about adding labels being its
+own final step."* It did not, because `stage_labels` had no entry - so the roster of notes is held to
+the roster of stages in BOTH directions, below.
+
 `tooling`: it renders and writes files.
 """
 
@@ -25,7 +32,9 @@ from typing import Any
 import pytest
 
 from l7r.diagram.hamletgen import HamletSpec
+from l7r.diagram.hamletgen.driver import STAGES
 from l7r.diagram.tools import placement_stages as ps
+from l7r.diagram.tools.placement_stages import NOTES
 
 pytestmark = pytest.mark.tooling
 
@@ -166,3 +175,23 @@ def test_the_skill_root_is_put_on_sys_path_when_it_is_not_already_there(monkeypa
     monkeypatch.setattr(sys, "path", [p for p in sys.path if Path(p).resolve() != Path(ps.SKILL).resolve()])
     reloaded = importlib.reload(ps)
     assert Path(reloaded.SKILL).resolve() in [Path(p).resolve() for p in sys.path]
+
+
+# ---- feature 176: the NOTES roster is held to the STAGES roster, both ways ---------------------
+
+
+def test_every_stage_has_a_note():
+    missing = [stage.__name__ for stage in STAGES if stage.__name__ not in NOTES]
+    assert missing == [], f"stages the placement page would render as '(no note yet)': {missing}"
+
+
+def test_every_note_names_a_stage():
+    stages = {stage.__name__ for stage in STAGES}
+    orphans = sorted(set(NOTES) - stages)
+    assert orphans == [], f"notes for stages that no longer exist: {orphans}"
+
+
+def test_every_note_has_a_title_and_a_why():
+    for name, (title, why) in NOTES.items():
+        assert title.strip() and why.strip(), name
+        assert "(no note yet)" not in title, name

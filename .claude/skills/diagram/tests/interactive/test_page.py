@@ -170,6 +170,45 @@ def test_the_page_is_self_contained() -> None:
     assert "<h1>" not in page and 'class="hint"' not in page, "no page header - the map carries its own placard (GM 2026-08-28)"
 
 
+def _css_token(css: str, name: str) -> str:
+    m = re.search(rf"{re.escape(name)}:\s*(#[0-9A-Fa-f]{{6}})\s*;", css)
+    assert m, f"{name} is not defined as a hex color in page.css"
+    return m.group(1)
+
+
+def _luminance(hex_color: str) -> float:
+    """WCAG relative luminance of an sRGB hex color."""
+
+    def channel(v: int) -> float:
+        c = v / 255
+        return c / 12.92 if c <= 0.03928 else ((c + 0.055) / 1.055) ** 2.4
+
+    r, g, b = (int(hex_color[i : i + 2], 16) for i in (1, 3, 5))
+    return 0.2126 * channel(r) + 0.7152 * channel(g) + 0.0722 * channel(b)
+
+
+def contrast_ratio(a: str, b: str) -> float:
+    la, lb = sorted((_luminance(a), _luminance(b)), reverse=True)
+    return (la + 0.05) / (lb + 0.05)
+
+
+def test_the_placard_name_keeps_a_readable_color_when_the_card_is_lit() -> None:
+    """Feature 176 (GM 2026-09-02): "I should be able to see and read the name of the hamlet while the
+    title card is highlighted ... whatever color has changed to must have decent contrast with the
+    highlighted background color." The card and the name share the class `place`, so the gold fill rule
+    would paint both; a later rule keeps the name in the map's ink. "Decent" is the WCAG AA bar for
+    normal text, 4.5:1, read from the two colors the stylesheet actually declares."""
+    page = _page()
+    css = re.search(r"<style>(.*?)</style>", page, re.S)
+    assert css, "the stylesheet is inlined"
+    rule = re.search(r"g\.f\.on\.f-place text\s*\{\s*fill:\s*var\(--ink\)\s*!important;\s*\}", css.group(1))
+    assert rule, "the lit placard's name keeps --ink (page.css)"
+    gold_fill = re.search(r"g\.f\.on:not\(\[fill=\"none\"\]\).*?\{ fill: var\(--hl\)", css.group(1))
+    assert gold_fill and gold_fill.start() < rule.start(), "the name's rule comes AFTER the gold fill rule (and is more specific), so it wins"
+    ratio = contrast_ratio(_css_token(css.group(1), "--ink"), _css_token(css.group(1), "--hl"))
+    assert ratio >= 4.5, f"ink on the highlight is {ratio:.1f}:1, under the 4.5:1 AA bar"
+
+
 def test_the_page_embeds_only_the_present_classes() -> None:
     page = _page()
     blob = re.search(r'<script id="classes" type="application/json">(.*?)</script>', page, re.S)

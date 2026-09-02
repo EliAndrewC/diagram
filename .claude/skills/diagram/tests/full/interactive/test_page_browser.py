@@ -22,7 +22,7 @@ from typing import Any
 
 import pytest
 
-from l7r.diagram.interactive.classes import CLASSES
+from l7r.diagram.interactive.classes import CLASSES, PLACE
 from l7r.diagram.interactive.page import render_page
 from l7r.diagram.interactive.tags import Split
 
@@ -179,6 +179,11 @@ def _synthetic() -> tuple[list[str], list[Any]]:
     tags.append("village lane")
     strings.append('<g stroke="#A7A860" stroke-width="0.8"><line x1="20" y1="180" x2="21" y2="184"/><line x1="30" y1="182" x2="31" y2="186"/></g>')  # two scrub blades in one corner
     tags.append("scrub and rough grazing")
+    # the title placard the way finish.py emits it: the card, then the name over it, both `place`
+    strings.append('<g><rect x="150" y="10" width="120" height="40" rx="7" fill="#F7F0DC" stroke="#8C7A55" stroke-width="1.6"/></g>')
+    tags.append(PLACE)
+    strings.append('<text x="210" y="36" text-anchor="middle" font-size="16" font-weight="bold" fill="#2D2A24">Synthetic</text>')
+    tags.append(PLACE)
     strings.append("</svg>")
     tags.append(None)
     return strings, tags
@@ -235,6 +240,18 @@ def test_the_label_and_its_subject_are_one(synthetic: Page) -> None:
     synthetic.page.mouse.click(2, 2)  # the backdrop
     synthetic.page.wait_for_timeout(50)
     assert not synthetic.dialog()["open"], "a click outside the modal closes it"
+
+
+def test_the_lit_placard_keeps_its_name_readable(synthetic: Page) -> None:
+    """Feature 176 (GM 2026-09-02): "I should be able to see and read the name of the hamlet while the
+    title card is highlighted." The card goes gold like any lit class; the name stays in the ink."""
+    assert synthetic.hover_class(PLACE) == {PLACE: 2}, "the card and its name light together"
+    card = synthetic.js(f"() => getComputedStyle(document.querySelector('g.f[data-k=\"{PLACE}\"] rect')).fill")
+    name = synthetic.js(f"() => getComputedStyle(document.querySelector('g.f[data-k=\"{PLACE}\"] text')).fill")
+    assert card == "rgb(255, 200, 61)", f"the lit card is the highlight gold, got {card}"
+    assert name == "rgb(45, 42, 36)", f"the name on the lit card is the map's ink, got {name}"
+    synthetic.clear()
+    assert synthetic.js(f"() => getComputedStyle(document.querySelector('g.f[data-k=\"{PLACE}\"] rect')).fill") == "rgb(247, 240, 220)", "and the card is its own parchment again"
 
 
 def test_the_split_fill_and_stroke_highlight_apart(synthetic: Page) -> None:

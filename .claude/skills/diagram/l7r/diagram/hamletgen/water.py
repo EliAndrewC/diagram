@@ -746,8 +746,10 @@ def dike_face(pts: Sequence[Pt], flank: str, lo: float, hi: float, bins: int = 3
 def stage_waterward(s: Settlement, plan: SitePlan) -> None:
     """The reed fringe along every water-facing flank of a polder dike, and its declaration.
 
-    Called from `stage_hinterland` BEFORE the engine's own toe marsh and scrub, so the scatter keeps
-    out of it. Each strip hugs the dike's outer face (reeds auto-skip the band and the ponds via the
+    Its own stage since feature 150 - `STAGES` position 5, after the seat and BEFORE the houses and the
+    track, because the strip RESERVES wet ground both must avoid (laid in the hinterland it was drawn
+    over a connector already routed through it; `driver.py` records the move). The hinterland's own toe
+    marsh and scrub come later and keep out of it. Each strip hugs the dike's outer face (reeds auto-skip the band and the ponds via the
     keep-outs) and runs off the frame - it is wild ground continuing, not a feature with an edge,
     so `crop_to_content` ignores it. `meta.waterward` declares the flanks for
     `polder_waterward_flanks_wet`, which samples 28 px outside the dike's extreme on each and wants
