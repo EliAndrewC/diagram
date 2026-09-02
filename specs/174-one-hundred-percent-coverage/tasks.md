@@ -147,3 +147,20 @@ taken during, are in [`research.md`](research.md).
       aimed at what its module would silently get WRONG - `cache_audit`'s vacuous-trial skip,
       `mapcheck`'s locked-scope refusal, `cohort_audit`'s reference gate, `perf_snapshot`'s
       retroactive baseline, `crop_map`'s world-to-pixel conversion asserted on real pixels
+
+- [x] T19 the whole gate green under the WIDENED standard
+      research: procedure
+      verify: `make done` green - **22,520 statements, 0 missing, 100%** over the whole engine with
+      `source = ["l7r"]`, no `--omit`, no ratchet; the hamlet-path floor 12,402 / 0 missing beside it.
+      Round 9 noted there was no green gate at HEAD and no task asserting one; this is both
+
+- [x] T20 a defect in ANOTHER feature, surfaced by this one's widened gate (Principle XIV)
+      research: procedure
+      verify: feature 176 landed mid-flight and its gate went green because on main `make done` SKIPS
+      `tests/full/` - so `test_a_sibling_link_lights_the_other_class...` never ran. Under this
+      feature's gate it fails. Baselined on unmodified `origin/main` first: it fails there too, so it
+      is not a regression of ours. Cause: 176's title placard is at x=150 y=10 and the synthetic
+      windbreak rect is at 150-180, 10-30 - the placard is appended last and drawn ON TOP, so a
+      force-click on the windbreak answered with a neighbouring class. Moved to clear ground
+      (y=105..145); 19 of 19 pass. **The floor caught a live failure in shipped code on its first
+      contact with another feature**
