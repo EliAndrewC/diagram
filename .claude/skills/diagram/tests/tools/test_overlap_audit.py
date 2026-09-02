@@ -75,3 +75,97 @@ def test_a_family_this_map_cannot_answer_is_unmeasured_not_zero() -> None:
     assert res["footprints-water"]["status"] == "unmeasured"
     assert res["ink-mounds"]["status"] == "unmeasured"
     assert res["parcels-channels"]["status"] == "unmeasured"
+
+
+# ---- feature 174: the remaining branches and the CLI --------------------------------------------
+def test_a_record_with_no_geometry_at_all_contributes_no_points() -> None:
+    """The extractor sweeps whatever the manifest holds; a record carrying neither a polygon nor an
+    x/y is not a shape and must not be read as one at the origin."""
+    assert oa._pts({"label": "a note"}) == []
+
+
+def test_a_channel_that_FEEDS_a_field_is_excluded_when_intake_bands_are_not_wanted() -> None:
+    """`parcels-channels` asks whether a plot ring is crossed by a channel - but the channel that
+    FEEDS the field is supposed to reach it. Counting the intake would report every irrigated field
+    as a defect, which is the wolf-crying that gets an audit switched off."""
+    M = {"channels": [{"pts": [[0, 0], [100, 0]], "w": 4, "to": {"kind": "field"}}, {"pts": [[0, 50], [100, 50]], "w": 4}]}
+    assert len(oa._bands(M, intake=True)) == 2
+    assert len(oa._bands(M, intake=False)) == 1, "the field's own intake is not a crossing"
+
+
+def test_a_channel_that_only_reaches_a_rings_EDGE_is_a_mouth_not_a_crossing() -> None:
+    """A run that touches an END of the channel is where it enters or leaves - drawing an outfall
+    into a paddy is the design, not a defect. Only a run with channel on BOTH sides is a crossing."""
+    ring = [(0.0, 0.0), (100.0, 0.0), (100.0, 100.0), (0.0, 100.0)]
+    through = [([(-50.0, 50.0), (150.0, 50.0)], 3.0)]
+    assert oa._crossed_by(ring, through) is not None, "in one side and out the other"
+    mouth = [([(50.0, 50.0), (150.0, 50.0)], 3.0)]
+    assert oa._crossed_by(ring, mouth) is None, "it starts inside: a mouth"
+    outside = [([(0.0, 500.0), (100.0, 500.0)], 3.0)]
+    assert oa._crossed_by(ring, outside) is None, "and one that never enters is nothing at all"
+
+
+def test_ink_in_the_POND_is_reported_as_pond_and_ink_on_a_channel_as_channel() -> None:
+    """The two water sources are named separately in the hit, because they are fixed differently -
+    a scatter dot in the pond is a keep-out failure, one on a channel is a corridor failure."""
+    M = {"pond": [100.0, 100.0, 40.0, 30.0], "channels": [{"pts": [[0, 400], [500, 400]], "w": 6}]}
+    svg = '<circle cx="100" cy="100" r="3" fill="#9FBBAE"/><circle cx="250" cy="400" r="3" fill="#9FBBAE"/>'
+    res = oa.audit(M, svg, families=("ink-water",))
+    where = {h[2] for h in res["ink-water"]["hits"]}
+    assert res["ink-water"]["status"] == "FAIL"
+    assert where == {"pond", "channel"}, f"both sources named: {res['ink-water']['hits']}"
+
+
+def test_a_family_whose_INPUTS_the_map_does_not_carry_is_unmeasured_not_ok() -> None:
+    """The distinction the whole report rests on: "this map has no channels" must not read as "this
+    map's channels are clean". A check that never runs looks exactly like a check that passes."""
+    res = oa.audit({}, None, families=oa.FAMILIES)
+    assert {r["status"] for r in res.values()} == {"unmeasured"}
+
+
+def test_main_reads_the_svg_beside_the_manifest_and_says_so_when_there_is_none(tmp_path, capsys) -> None:
+    """The ink families cannot be read without the SVG, and a reader must not take their silence for
+    a pass - so their absence is stated in as many words."""
+    import json
+
+    man = tmp_path / "m.json"
+    man.write_text(json.dumps({"pond": [100.0, 100.0, 40.0, 30.0]}))
+    assert oa.main([str(man)]) == 0
+    out = capsys.readouterr().out
+    assert "no SVG beside the manifest" in out and "unmeasured" in out
+
+    (tmp_path / "m.svg").write_text('<circle cx="100" cy="100" r="3" fill="#9FBBAE"/>')
+    assert oa.main([str(man)]) == 1, "with the SVG the dot in the pond is found, and the rc says so"
+    assert "FAIL" in capsys.readouterr().out
+
+
+def test_main_takes_a_subset_of_families(tmp_path, capsys) -> None:
+    import json
+
+    man = tmp_path / "m.json"
+    man.write_text(json.dumps({}))
+    assert oa.main([str(man), "--families", "ink-water"]) == 0
+    out = capsys.readouterr().out
+    assert "ink-water" in out and "footprints-water" not in out
+
+
+def test_a_reed_BLADE_is_judged_on_both_ends_of_the_segment_it_is_drawn_as(tmp_path) -> None:
+    """A blade is a line, not a dot: a disc round its base would miss one leaning out over the water
+    and would flag one merely rooted near it. Both ends are tested, and the pond is named."""
+    M = {"pond": [100.0, 100.0, 40.0, 30.0]}
+    svg = '<g stroke="#6E9377" stroke-width="0.8"><line x1="300" y1="300" x2="100" y2="100"/></g>'
+    res = oa.audit(M, svg, families=("ink-water",))
+    assert res["ink-water"]["status"] == "FAIL"
+    assert res["ink-water"]["hits"][0][0] == "reed blade" and res["ink-water"]["hits"][0][2] == "pond"
+
+
+def test_main_prints_ok_for_a_family_that_was_measured_and_found_clean(tmp_path, capsys) -> None:
+    """The third status. `unmeasured` and `FAIL` both have their own line; a family that really ran
+    and really passed has to say so, or a clean map is indistinguishable from an unread one."""
+    import json
+
+    man = tmp_path / "m.json"
+    man.write_text(json.dumps({"pond": [100.0, 100.0, 10.0, 10.0]}))
+    (tmp_path / "m.svg").write_text('<circle cx="900" cy="900" r="3" fill="#9FBBAE"/>')
+    assert oa.main([str(man), "--families", "ink-water"]) == 0
+    assert "ok" in capsys.readouterr().out

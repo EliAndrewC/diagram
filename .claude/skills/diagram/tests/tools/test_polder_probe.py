@@ -82,3 +82,39 @@ def test_the_probe_agrees_with_the_rolled_map() -> None:
     # parallel, because a stopwatch inside a loaded test run measures the load. This catches only a
     # catastrophe - the probe having quietly become a map roll.
     assert secs < 20.0, f"the probe is the FAST path and took {secs:.1f}s - has it started rolling a map?"
+
+
+# ---- feature 174: the CLI, under the GM's 2026-09-02 all-code rule ------------------------------
+def test_a_non_polder_archetype_is_refused_and_NAMES_the_ones_there_are() -> None:
+    """The probe measures the polder block; asked for an archetype that has no polder it says so and
+    lists the alternatives, rather than building something and reporting meaningless geometry."""
+    import pytest as _pytest
+
+    with _pytest.raises(SystemExit, match="is not a polder archetype"):
+        pp.probe(21, archetype="valley_paddy")
+
+
+def test_main_reports_every_seed_and_its_rc_is_the_VERDICT_not_the_run(monkeypatch, capsys) -> None:
+    """`--seeds` gives one table over several blocks, and the exit code is what a caller gates on:
+    0 only when every seed passed. A probe that exited 0 after printing FAIL lines would be worse
+    than one that did not run."""
+    metrics = {
+        "parcels": 12,
+        "overlaps": [],
+        "berm_min": 3.1,
+        "berm_median": 4.0,
+        "acres": 2.2,
+        "acres_target": 2.0,
+        "vertices_min": 9,
+        "squares_mean": 0.1,
+        "ring_points": (4, 8, 12),
+    }
+    monkeypatch.setattr(pp, "probe", lambda seed, *a, **kw: (metrics, 0.5))
+    monkeypatch.setattr(pp, "verdict", lambda _m: [])
+    assert pp.main(["--seeds", "21,22"]) == 0
+    out = capsys.readouterr().out
+    assert "seed 21" in out and "seed 22" in out and "12 parcels" in out
+
+    monkeypatch.setattr(pp, "verdict", lambda _m: ["berm too thin"])
+    assert pp.main(["--seed", "21"]) == 1, "a failing verdict fails the run"
+    assert "FAIL" in capsys.readouterr().out
