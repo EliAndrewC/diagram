@@ -13,7 +13,6 @@ took the gate down because a remote was unreachable would be uninstalled within 
 
 from __future__ import annotations
 
-import os
 import subprocess
 import sys
 from pathlib import Path

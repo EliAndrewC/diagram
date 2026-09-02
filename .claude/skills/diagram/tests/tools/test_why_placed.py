@@ -9,7 +9,10 @@ the tracer into unrelated maps.
 
 from __future__ import annotations
 
+import pytest
+
 from l7r.diagram import settlement
+from l7r.diagram.settlement import Settlement
 from l7r.diagram.tools import why_placed as W
 
 GEN = """
@@ -165,9 +168,6 @@ def test_main_requires_a_target(tmp_path):
 # Each rung is driven here by stubbing the underlying predicate BEFORE the context is entered, which
 # is what the wrapper captures - so what is exercised is the ladder's ORDER, which is the part a
 # reader relies on: a candidate refused by two things is reported by the first, most specific one.
-import pytest
-
-from l7r.diagram.settlement import Settlement
 
 
 @pytest.mark.parametrize(

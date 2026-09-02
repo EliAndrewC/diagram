@@ -4,9 +4,12 @@ locked to another tier; the gate collects everything. Helpers stay in the source
 
 from __future__ import annotations
 
+import json
 import os
+import pathlib
 import subprocess
 import sys
+from typing import Any
 
 import pytest
 
@@ -89,9 +92,6 @@ def test_regen_skips_frozen_legacy_maps():
 # Every one of these is a DEGRADATION path: the cache's job is to be invisible when it works and to
 # get out of the way when it cannot. A cache that raised would take the whole map roll with it, so
 # each of these answers "regenerate" rather than propagating.
-import json
-import pathlib
-from typing import Any
 
 
 def test_a_path_that_cannot_be_made_RELATIVE_is_recorded_absolute(monkeypatch: pytest.MonkeyPatch) -> None:

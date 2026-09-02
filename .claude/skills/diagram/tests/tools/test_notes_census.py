@@ -1,8 +1,5 @@
 # ---- feature 174: the census body and the rewriter ----------------------------------------------
 import json as _json
-import os as _os
-
-import pytest as _pytest
 
 from l7r.diagram.tools import notes_census as nc
 

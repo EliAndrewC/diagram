@@ -1,5 +1,13 @@
 """The tripwire's expected-failure pin (feature 133 T91, the GM's waiver)."""
 
+import json
+import os
+import subprocess
+import sys
+from typing import Any
+
+import pytest
+
 from l7r.diagram.tools import mapcheck as mc
 
 
@@ -20,13 +28,7 @@ def test_tripwire_verdict_reads_the_pin_like_the_cohort_baseline(monkeypatch):
 # `mapcheck` picks its OWN scope from how the last run went, and that is the whole reason `make maps`
 # has no second command: "the earlier two-command version relied on the session choosing right, and
 # it did not". So the state machine is what these tests pin.
-import json
-import os
-import subprocess
-import sys
-from typing import Any
 
-import pytest
 
 pytestmark = pytest.mark.tooling
 

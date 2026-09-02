@@ -10,8 +10,13 @@ passed throughout that.
 from __future__ import annotations
 
 import json
+import json as _json
 import os
+import platform as _platform
+import subprocess as _subprocess
+from pathlib import Path as _Path
 from typing import Any
+from typing import Any as _Any
 
 import pytest
 
@@ -90,12 +95,6 @@ def test_a_review_record_in_the_log_dir_does_not_break_the_trend(logdir: Any, ca
 
 
 # ---- feature 174: the recorder and the CLI ------------------------------------------------------
-import json as _json
-import os as _os
-import platform as _platform
-import subprocess as _subprocess
-from pathlib import Path as _Path
-from typing import Any as _Any
 
 
 def test_a_worktree_reports_its_OWN_directory_rather_than_claiming_to_be_main(monkeypatch) -> None:

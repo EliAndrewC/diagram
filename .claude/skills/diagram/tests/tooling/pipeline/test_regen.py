@@ -11,7 +11,6 @@ reaches the terminal in one piece rather than interleaved with its siblings'.
 from __future__ import annotations
 
 import concurrent.futures
-from pathlib import Path
 from typing import Any
 
 import pytest
