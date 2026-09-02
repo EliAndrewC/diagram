@@ -365,6 +365,34 @@ and each was caught by review - "the two pre-existing pragmas" (wrong by 128, ro
 | D15 | The `done` ratchet was re-pinned rather than disarmed | accurate | The GM's condition on D1 of feature 171 (2026-08-30) was to RE-PIN once real runs exist. This feature deliberately changes what `done` does, so the old baseline measures a different target. The hard ceiling (45 s) and its `hard_at_or_below` trigger (35 s) are untouched - those are the GM's own numbers and not this feature's to move |
 | D16 | `tests/settlement/test_structures.py` was split when feature 173's check failed on it | accurate | The rule fired on this feature's own work, which is the rule working. One file per submodule of the subject, the mapping DERIVED from which package names each test exercises, with its own "look here when" index - the same shape `tests/hamletgen/ways/` took. Declined: `FILE_SIZE_OK`, which is for ordered data and a derived roster, and a test suite is neither |
 
+### FR-011 - THE DOCS ARE CHECKED AGAINST THE CONFIG, NOT AGAINST A PROOFREADER
+
+Rounds 8-13 were one failure repeated in eight files: an item settled here while a sentence asserting
+the old state stood in a document a session reads before acting. Two of those were not merely stale
+but would have caused wrong action - `CLAUDE.md` and `settlements.md` each told a reader the floor is
+`fail_under = 100` in `[tool.coverage.report]`, which `pytest-cov` reads, so acting on it would fire
+the global floor on every partial run (`make test-file`, and `make quick`, which the GM exempted) and
+destroy the ordering that puts the floor last.
+
+Six rounds found instances by hand and every one of them missed others. The fourth exemption claim
+was missed by the grep that found the first three because it said "NOT UNDER THE COVERAGE GATE" where
+they said "not under the 100% rule". **A proofreader is the wrong instrument; the check asks the
+config.** `tests/tooling/test_docs_match_the_mechanism.py`:
+
+| rule | what it asks |
+|---|---|
+| no operative doc PRESCRIBES a coverage key the config does not set | reads `[tool.coverage.report]` from `pyproject.toml` and asserts `fail_under` is absent, then that no listed doc names it as the mechanism |
+| the floor the docs describe is the one the Makefile runs | the positive half - `coverage report -m --fail-under=100`, with no `--omit` |
+| no engine module claims exemption | any wording, over every `.py` under `l7r/` - the claim, not one phrase |
+| no operative doc calls the floors DEFERRED | the state the GM's request abolished |
+
+A DESCRIPTION is never flagged, only a prescription: each rule reads a +/-2 line window for a
+negation, because the disclaimer regularly wraps onto the neighbouring line - the constitution's own
+clause 5 does exactly that, and the first cut of this check fired on it. Each of the three rules was
+proved to fire by reintroducing the violation and watching it go red.
+
+**It found one instance the thirteen review rounds had not**, and it costs no round trip.
+
 ## Review history
 
 Constitution XVI: reviewed against [`request.md`](request.md) by an independent `spec-fidelity`
