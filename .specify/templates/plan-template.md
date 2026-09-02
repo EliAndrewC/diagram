@@ -115,8 +115,11 @@ approval before /speckit-tasks may run.
   code, the plan MUST commit to: `ruff check` + `ruff format --check`
   passing, the strict type check (pyrefly with the mypy-strict rule set, feature 142) passing on production modules, red-green TDD
   for new non-trivial behavior (test exists and fails before
-  implementation lands), `pytest` passing with
-  `--cov-fail-under=100` on pure-logic packages, external boundaries
+  implementation lands), the coverage floor passing - **100% over the
+  WHOLE engine, no opt-in** (`coverage report --fail-under=100`; Principle
+  X clause 5 as the GM globalized it on 2026-09-02: a new module owes 100%
+  the day it lands, and the measured surface is derived rather than
+  rostered), external boundaries
   tested via saved fixtures (not transport-layer mocks), pinned
   dependencies via `requirements.in` → `requirements.txt` (or `uv.lock`),
   no swallowed exceptions, no `print` in production paths, behavior-named

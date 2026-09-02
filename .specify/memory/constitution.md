@@ -1,7 +1,21 @@
 <!--
 SYNC IMPACT REPORT
 ==================
-Version change: 2.13.0 → 2.14.0
+Version change: 2.14.0 → 2.15.0
+
+Version 2.15.0 (amended 2026-09-02, feature 174): Principle X clause 5 (100% line
+coverage) becomes 100% ON EVERYTHING, WITH NO OPT-IN. The GM: *"a new tool absolutely
+should silently owe one hundred percent coverage the day it lands. Going forward, we want
+one hundred percent code coverage, period ... For tools, for our settlement generation,
+for the automated checks on our hand drawn diagrams, for everything."* What this replaces
+is a MEASURED SURFACE that had to be opted into - `[tool.coverage.run] source` named the
+measured modules one by one, so 19 engine files and 1,843 statements carried no obligation
+at all, and the config's own comment argued FOR that in the sentence the GM reversed. The
+surface is now derived (`source = ["l7r"]`), the 94% `settlement/` ratchet and the
+four-tree `--omit` are retired, and the floor is one `coverage report --fail-under=100`
+over 22,520 statements on a plain `make done`. Templates touched: plan-template.md's
+Constitution Check, which still required the floor "on pure-logic packages".
+
 
 Version 2.14.0 (amended 2026-08-31, feature 173): Principle X clause 13 (Files Stay at
 Human Scale) becomes GATED. It has been an ask-the-question line since v1.6.0 and the

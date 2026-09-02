@@ -99,7 +99,7 @@ coverage's own unit:
 | **exclusions hiding lines the corpus ALREADY runs** | **356** |
 | dead sites found and DELETED | **13** (40 engine lines) |
 | pragma comment lines | **130 -> 76** (131 grep hits less one prose mention in `tools/hamlet_floor.py`) |
-| excluded lines after | **385** counted over the filesystem tree, **327 of 20,682 (1.58%) inside the MEASURED set** - round 8 caught the census counting files coverage never reports, which is why two of its "largest" entries (`tools/cache_audit.py`, `pipeline/gencache.py`) are outside `[tool.coverage.run] source` altogether; inside the floored tree 281 of 9,118 (3.08%) -> 216 of 9,168 (2.36%) |
+| excluded lines after | **SUPERSEDED by the 2026-09-02 widening - see spec SC1 for the current 77 comment lines / 398 excluded of 22,520.** As measured for THIS pass: **385** counted over the filesystem tree, **327 of 20,682 (1.58%) inside the MEASURED set** - round 8 caught the census counting files coverage never reports, which is why two of its "largest" entries (`tools/cache_audit.py`, `pipeline/gencache.py`) are outside `[tool.coverage.run] source` altogether; inside the floored tree 281 of 9,118 (3.08%) -> 216 of 9,168 (2.36%) |
 
 ### What the genuinely-unreached turned out to be
 
