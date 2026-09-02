@@ -127,11 +127,12 @@ markers = [
 # lands" - and that opt-in cost 19 engine files / 1,843 statements no obligation at all, invisible
 # because a roster nobody re-reads looks like a decision that was made once and still holds.
 #
-# THE MEASURED SURFACE IS NOW DERIVED, NOT LISTED: coverage duty follows from being engine code. The
-# list below is retained only until feature 174's audit of those 19 modules is settled with the GM
-# (some may be deleted rather than tested); the moment that lands it becomes `source = ["l7r"]` and
-# stops being something anybody maintains.
-source = ["l7r.diagram._invocation", "l7r.diagram.switches", "l7r.diagram.ci", "l7r.diagram.overlap", "l7r.diagram.settlement", "l7r.diagram.hamletgen", "l7r.diagram.sitegen", "l7r.diagram.waterfields", "l7r.diagram.interactive", "l7r.diagram.compound", "l7r.diagram.citybudget", "l7r.diagram.tools.pack_audit", "l7r.diagram.tools.scatter_audit", "l7r.diagram.tools.perf_bands", "l7r.diagram.tools.perf_review", "l7r.diagram.tools.hamlet_floor", "l7r.diagram.pipeline.rollcache", "l7r.diagram.pipeline.render_cache", "l7r.diagram.pipeline.pool_index", "l7r.diagram.pipeline.poolmaps"]
+# THE MEASURED SURFACE IS DERIVED, NOT LISTED: coverage duty follows from being engine code, so this
+# is `source = ["l7r"]` and there is no roster for anyone to forget. The GM settled the 19 modules the
+# old roster had excluded on 2026-09-02 - *"I agree that none of that is abandoned code. Therefore, it
+# should all have tests, and we should require one hundred percent code coverage for it"* - so none
+# was deleted and all were brought up by tests. If you add a file under `l7r/`, it is measured.
+source = ["l7r"]  # THE WHOLE ENGINE. Not a roster - see the note above (GM 2026-09-02).
 # `waterfields` and `interactive` joined the measured set with feature 145: both are on the hamlet path (the field
 # engine, the interactive page) and the derived floor (tools/hamlet_floor.py) judges every hamlet-path module, so
 # every one of them has to be MEASURED - a module coverage never traced would pass the floor as an empty row.
