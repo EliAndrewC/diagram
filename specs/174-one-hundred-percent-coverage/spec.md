@@ -72,7 +72,7 @@ running `test-full` corrupted a measurement into reporting 44% for a tree at 95%
 > ...so that in the future, we literally cannot complete our **make done** in order to merge back
 > into main, and there will no longer be any mechanism by which this can be accomplished.
 
-**`fail_under = 100` is enforced on a plain `make done`.** Round 2 caught the first rewrite naming
+**The 100% floor is enforced on a plain `make done`** (mechanically `coverage report --fail-under=100` in the skill Makefile - NOT a `fail_under` in `[tool.coverage.report]`, which `pytest-cov` would read and fire on every partial run; see SC5). Round 2 caught the first rewrite naming
 `make test COV_FLOORS=1` instead - which changes NOTHING, because that is already where all three
 floors live (`Makefile:1021-1023, 1058-1067`). Verified in the tree, a plain `make done` today:
 
