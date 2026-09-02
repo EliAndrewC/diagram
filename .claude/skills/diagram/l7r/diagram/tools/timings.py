@@ -21,9 +21,14 @@ the wrong tool for a standing record that has to stay cheap enough to actually r
 Run it after performance work, after adding a tier or archetype, and whenever a loop feels slow. It
 APPENDS - never rewrite or prune old blocks, since the trend is the product.
 
-NOT UNDER THE COVERAGE GATE, following `cohort_audit.py`'s precedent: this module's whole behavior is
-shelling out to the gate and reading a wall clock, so a unit test could only assert that a mock was
-called. It IS under mypy --strict, per the pyproject policy that new modules start strict.
+UNDER THE COVERAGE GATE like everything else (GM 2026-09-02: *"a new tool absolutely should silently
+owe one hundred percent coverage the day it lands ... for everything"*). This paragraph used to claim
+the opposite - "NOT UNDER THE COVERAGE GATE, following `cohort_audit.py`'s precedent" - on the
+grounds that a module whose whole behavior is shelling out and reading a wall clock could only be
+tested against a mock. That turned out to be false in the ordinary way: `sh()` is the single
+subprocess seam, and stubbing it makes every `bench_*` a pure function from canned timings to a
+`Result`, which is what `tests/tools/test_timings.py` does. The precedent it cited is gone too -
+`cohort_audit.py`'s own claim was removed in the same pass.
 """
 
 from __future__ import annotations

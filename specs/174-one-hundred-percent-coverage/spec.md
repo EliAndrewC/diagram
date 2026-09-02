@@ -144,7 +144,7 @@ filed under "tools". The GM agreed and ruled that all of it gets tests.
 | `[tool.coverage.run] source` | a hand-maintained roster -> **`["l7r"]`**. Derived, so a new file under `l7r/` owes coverage the day it lands and nobody has to remember |
 | measured statements | 20,682 -> **22,520**, measured on the tree. An earlier draft said 22,525, which is 20,682 + 1,843 - a sum of two separately-dated measurements, exactly what D4 forbids. Round 9 caught it |
 | modules brought from unmeasured to 100% | **19** (five were already there once measured; fourteen needed tests) |
-| docstrings claiming *"not under the 100% rule"* | 3, all removed |
+| docstrings claiming exemption | **4**, all removed - three said *"not under the 100% rule"* and were found by that phrase; the fourth, `tools/timings.py`, said *"NOT UNDER THE COVERAGE GATE"* and was missed by the grep that found the others. Round 13 caught it, which is the case for the mechanical check this feature keeps recommending |
 
 **One stated exclusion, and it is not "cannot happen"**: `gencache`'s `sys.monitoring` callback RUNS
 and is asserted (a test proves six engine functions come back from a real roll), but coverage cannot
